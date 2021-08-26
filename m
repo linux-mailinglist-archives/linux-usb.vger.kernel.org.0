@@ -2,86 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C84E3F8638
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Aug 2021 13:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 988503F8640
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Aug 2021 13:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242059AbhHZLPx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Aug 2021 07:15:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57148 "EHLO mail.kernel.org"
+        id S241879AbhHZLSW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Aug 2021 07:18:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57610 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241883AbhHZLPu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Aug 2021 07:15:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 48A9F60F25;
-        Thu, 26 Aug 2021 11:15:02 +0000 (UTC)
+        id S233736AbhHZLSV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 26 Aug 2021 07:18:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A3E3610A4;
+        Thu, 26 Aug 2021 11:17:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1629976503;
-        bh=l34iZ6OiUVG6vmzegiT/WRNXQh5qJnN85muDTV61VIo=;
+        s=korg; t=1629976654;
+        bh=rj+1dxJfAFKdj8Dhrnrr16eUI58mr8w3p7l4glHVvx0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mL4+d1KRYd2xWMSSSMk4xdPCFBT/uF9nD3GvQfOqlpQqJYS6cGPpyaq17NNebjsm1
-         UYCPQYdr6c0pNbCubO8BIZLsbUjJ9cKJJgyRBqh1nhHrI3SzETz4YPd0dKbBufBnnI
-         +CTvXRD1WRnu6S/dT1F3cUnX7TpW9ARJsONXBxPE=
-Date:   Thu, 26 Aug 2021 13:14:57 +0200
+        b=NaMxParJDyi+yixAw+EbULYF6f5FIuXp59gnMDB9xGPA4AqozC6ZkuNhfV1DshSYD
+         ANt4pSy4OgJaw1Pn5ktDc+378vF0A9NGubMsZMolPilYHc0YIQdmNTTw2x20NN4jYG
+         e/N++lLUB5pXl63NzhSON1rfDsLDQnr2VWaPduFw=
+Date:   Thu, 26 Aug 2021 13:17:30 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chris.chiu@canonical.com
-Subject: Re: [RFC PATCH 1/5] usb: core: hcd: Modularize HCD stop
- configuration in usb_stop_hcd()
-Message-ID: <YSd3sVYxptQP8WVN@kroah.com>
-References: <20210824105302.25382-1-kishon@ti.com>
- <20210824105302.25382-2-kishon@ti.com>
- <YSTu5KCQV242XuXV@kroah.com>
- <bb64fbf9-4342-7d36-de4f-0ab719b8f479@ti.com>
+To:     Jeaho Hwang <jhhwang@rtst.co.kr>
+Cc:     Peter Chen <peter.chen@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, team-linux@rtst.co.kr,
+        mkbyeon@lselectric.co.kr, khchoib@lselectric.co.kr
+Subject: Re: [PATCH v2] usb: chipidea: add loop timeout for hw_ep_set_halt()
+Message-ID: <YSd4Sp25RtT1b+rm@kroah.com>
+References: <20210817064353.GA669425@ubuntu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bb64fbf9-4342-7d36-de4f-0ab719b8f479@ti.com>
+In-Reply-To: <20210817064353.GA669425@ubuntu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 24, 2021 at 08:48:45PM +0530, Kishon Vijay Abraham I wrote:
-> Hi Greg,
+On Tue, Aug 17, 2021 at 03:43:53PM +0900, Jeaho Hwang wrote:
+> If ctrl EP priming is failed (very rare case in standard linux),
+> hw_ep_set_halt goes infinite loop. waiting 100 times was enough
+> for zynq7000.
 > 
-> On 24/08/21 6:36 pm, Greg Kroah-Hartman wrote:
-> > On Tue, Aug 24, 2021 at 04:22:58PM +0530, Kishon Vijay Abraham I wrote:
-> >> No functional change. Since configuration to stop HCD is invoked from
-> >> multiple places, group all of them in usb_stop_hcd().
-> >>
-> >> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
-> >> ---
-> >>  drivers/usb/core/hcd.c | 42 +++++++++++++++++++++++++-----------------
-> >>  1 file changed, 25 insertions(+), 17 deletions(-)
-> >>
-> >> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> >> index 0f8b7c93310e..c036ba5311b3 100644
-> >> --- a/drivers/usb/core/hcd.c
-> >> +++ b/drivers/usb/core/hcd.c
-> >> @@ -2760,6 +2760,29 @@ static void usb_put_invalidate_rhdev(struct usb_hcd *hcd)
-> >>  	usb_put_dev(rhdev);
-> >>  }
-> >>  
-> >> +/**
-> >> + * usb_stop_hcd - Halt the HCD
-> >> + * @hcd: the usb_hcd that has to be halted
-> >> + *
-> >> + * Stop the timer and invoke ->stop() callback on the HCD
-> >> + */
-> >> +static void usb_stop_hcd(struct usb_hcd *hcd)
-> >> +{
-> >> +	if (!hcd)
-> >> +		return;
-> > 
-> > That's impossible to hit, so no need to check for it, right?
+> Signed-off-by: Jeaho Hwang <jhhwang@rtst.co.kr>
 > 
-> Patch 3 of this series adds support for registering roothub of shared
-> HCD. So after that patch there can be a case where shared_hcd is NULL.
-> The other option would be to check for non-null value in hcd and then
-> invoke usb_stop_hcd().
+> diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+> index 8834ca613721..d73fadb18f32 100644
+> --- a/drivers/usb/chipidea/udc.c
+> +++ b/drivers/usb/chipidea/udc.c
+> @@ -209,6 +209,9 @@ static int hw_ep_prime(struct ci_hdrc *ci, int num, int dir, int is_ctrl)
+>  	return 0;
+>  }
+>  
+> +/* enough for zynq7000 evaluation board */
+> +#define HW_EP_SET_HALT_COUNT_MAX 100
+> +
+>  /**
+>   * hw_ep_set_halt: configures ep halt & resets data toggle after clear (execute
+>   *                 without interruption)
+> @@ -221,6 +224,7 @@ static int hw_ep_prime(struct ci_hdrc *ci, int num, int dir, int is_ctrl)
+>   */
+>  static int hw_ep_set_halt(struct ci_hdrc *ci, int num, int dir, int value)
+>  {
+> +	int count = HW_EP_SET_HALT_COUNT_MAX;
+>  	if (value != 0 && value != 1)
 
-Then add the check when you need it please.
+You need a blank line after "int count..."
+
+
+>  		return -EINVAL;
+>  
+> @@ -232,9 +236,9 @@ static int hw_ep_set_halt(struct ci_hdrc *ci, int num, int dir, int value)
+>  		/* data toggle - reserved for EP0 but it's in ESS */
+>  		hw_write(ci, reg, mask_xs|mask_xr,
+>  			  value ? mask_xs : mask_xr);
+> -	} while (value != hw_ep_get_halt(ci, num, dir));
+> +	} while (value != hw_ep_get_halt(ci, num, dir) && --count > 0);
+>  
+> -	return 0;
+> +	return count ? 0 : -EAGAIN;
+
+Please spell this out:
+	if (count)
+		return 0;
+	return -EAGAIN;
+
+And will the caller properly handle this?
 
 thanks,
 
