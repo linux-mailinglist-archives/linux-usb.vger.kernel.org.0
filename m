@@ -2,130 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8883F80C5
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Aug 2021 04:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8063F821A
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Aug 2021 07:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238061AbhHZC4n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 22:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237675AbhHZC4m (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 22:56:42 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF759C0613D9
-        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 19:55:55 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id q3so879433plx.4
-        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 19:55:55 -0700 (PDT)
+        id S238952AbhHZFff (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Aug 2021 01:35:35 -0400
+Received: from mail-bn8nam12on2083.outbound.protection.outlook.com ([40.107.237.83]:42081
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229760AbhHZFfe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 26 Aug 2021 01:35:34 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R1jPtOzGG1sCDlU55mn+KEEfCyVrLnYiZVhjr0C5zv1/PIS4gLid6kli2cDXtqfGQKwEBI6B4FyzkLV7+AbPAz+/buyjVMVh9chJyAFuebbTWEWrYOa56e6rguCNuVKpdKn7acPvs0DrVFu7ICdoW/+0mqSb0dXm/gAaVwHdv3bY3EJbuX1LcLZp+pWtrgn5P+TVwlVzQLjERbmc2zcB1pI092CwMlmz3mTC7u87g2Fdtvdo30v4OvGhyxC2N618CEJLubcEztV2xWnWHh7mGKlh4IakM0KWyxlUF8KGQvMHW7p3q9/uhQ++8SgKGh/Eou7rdFvNcNKnoi7OJo7DEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZfYb2ve4Pk8gRao25tAb2FrILnj1bH81kWiwjdS34W8=;
+ b=KpTMHKaoTipsITs/2s2/7RqG83Bgo8+btfaI44o8R2pTW43GMqkEJulwT3dATzIK027qqJmbWCDWkdNRguVYrkgP7iITYiDczSaPbSwq4Qm/+RAxmYJ5uvz0xxpkBh6wzXxxM5yuNYijYfOPum+ig2EewWZ0TkgN2WLL1jXQXIdW6N3SOYabKMbcPhMKlVWGO/2Sgdf5UOtdEe8vjv6jRV6ZPbKotxTXDYmLthlsPZi0olxZNwfrOnk/hAwuPeJ2npgXrlGOEOSVEPNNSYV5uK1Mh2RVMn3UFzS4MbqrXXOg+9KSLZznDQOl94CcTVRyOV/E7ny9ShqJmgGPucYfWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=XZJy3B7m2q1WQYxMFNJqVt+qoddOU66BMzkNgwutOWg=;
-        b=BqMyQF/pRrF5xvz5gMLvg1PjbQE0frktW1h8fThSOxAyiiCfj3dL0xTey26htEbkAU
-         qVk4YC/4pxXxGHnr1GTo9bAoMJ4eX1tti5O7V1wnRrIafIwyVqmUZ2m6I0wxB2W1enrU
-         HYOhVAex2Ke6zlvt61UNmgKkPh0dFb29lz983ZdH0aQ73RTHtAt7M1/VCP+x5TO9AjAI
-         IJ3QFiGrCxXaLSKuBsbiYJZ42RDh74ChanCbedOwOUd6kuh7jO/uAx7AqCUeER3jlnSQ
-         JtlHN1LIH4ywCIyB5pTCzFG5gUqpfLooaOTxS3rQYlWnLCOQf96ZEpwgb/6YUmVVCCWa
-         uEzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XZJy3B7m2q1WQYxMFNJqVt+qoddOU66BMzkNgwutOWg=;
-        b=ZFx9spjE+kuCVRzbz7sWyo+uqI6tWAL1DY0T/MLFSGdE3XFs6yDDVHtH9GBjH2UZu0
-         FfDAX4Q6J+m9rKB+Z1qaKxmQXHDHnJrZVbCjHi6J91tBjHwQ/rIUK+ppKpSMt9NFXhfS
-         QUORhjI/thFMZyp4rbS8GaiPUXMogQ1bvyuU2tjJpDN/ew7MlR005mc0cNezWYwDQ8R4
-         GCUfn9uVm5cbcV8g4ZBX1bqUS4fEpWxd7Rt3iL4CxsPXlM0mCc6YRlMyb7YLGbVUIDcJ
-         wW7Pe7YRjm/xbOY24UkJAhPEDawscKYWGZwCMA4J4/r737B8iaR/zHsFfNQNcf2fZ1Dl
-         lNtg==
-X-Gm-Message-State: AOAM531fartylNojoucKm76CKuMhbyaF2mjss0Ccea0fmz5ipIi33I82
-        avW+ngAp5Cms64BgZyDOUxyxOw==
-X-Google-Smtp-Source: ABdhPJxp/UrPyXCwFMVDb4P8xsIyAd9gtXZ72kFLG9qw2YDutl/4rgLBxJGBT6WkpyrCaGfD2F0KiA==
-X-Received: by 2002:a17:90b:3144:: with SMTP id ip4mr14265346pjb.22.1629946555282;
-        Wed, 25 Aug 2021 19:55:55 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id 22sm1308517pgn.88.2021.08.25.19.55.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Aug 2021 19:55:54 -0700 (PDT)
-Date:   Thu, 26 Aug 2021 08:25:50 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
-Message-ID: <20210826025550.sshd7xl3gsuendoi@vireshk-i7>
-References: <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
- <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
- <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
- <f1314a47-9e8b-58e1-7c3f-0afb1ec8e70a@gmail.com>
- <20210819061617.r4kuqxafjstrv3kt@vireshk-i7>
- <CAPDyKFpg8ixT4AEjzVLTwQR7Nn9CctjnLCDS5GwkOrAERquyxw@mail.gmail.com>
- <20210820051843.5mueqpnjbqt3zdzc@vireshk-i7>
- <b887de8c-a40b-a62e-8abf-698e67cdb70c@gmail.com>
- <ed70e422-e0e9-8c2a-7ce6-e39cb6fd8108@gmail.com>
- <20210826025427.exdinwkuavyfcp3f@vireshk-i7>
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZfYb2ve4Pk8gRao25tAb2FrILnj1bH81kWiwjdS34W8=;
+ b=JNlI/r81rEPtJ3GNzd9jUgpsIBlz487LmsLf+IN8UxmusZP9l28PSNhalkII93/+8871Jonew6adnwEMqHw0H2nCJESkh+sv2dOYodpf1Oa1oIdOFP6z+Aj70aTE6l2gsYPdKFDwLKDYejhARXv8W+QFZd8uc98agyh01zMZAyc=
+Received: from BN9PR03CA0746.namprd03.prod.outlook.com (2603:10b6:408:110::31)
+ by BYAPR02MB5030.namprd02.prod.outlook.com (2603:10b6:a03:6b::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.24; Thu, 26 Aug
+ 2021 05:34:44 +0000
+Received: from BN1NAM02FT064.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:110:cafe::eb) by BN9PR03CA0746.outlook.office365.com
+ (2603:10b6:408:110::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.17 via Frontend
+ Transport; Thu, 26 Aug 2021 05:34:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT064.mail.protection.outlook.com (10.13.2.170) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4457.17 via Frontend Transport; Thu, 26 Aug 2021 05:34:44 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Wed, 25 Aug 2021 22:34:37 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Wed, 25 Aug 2021 22:34:37 -0700
+Envelope-to: git@xilinx.com,
+ devicetree@vger.kernel.org,
+ linux-usb@vger.kernel.org
+Received: from [10.140.6.39] (port=50130 helo=xhdsgoud40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <shubhrajyoti.datta@xilinx.com>)
+        id 1mJ828-0007Kt-9d; Wed, 25 Aug 2021 22:34:36 -0700
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+To:     <devicetree@vger.kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <manish.narani@xilinx.com>,
+        <git@xilinx.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Subject: [PATCH] dt-binding: usb: xilinx: Convert binding to YAML
+Date:   Thu, 26 Aug 2021 11:04:33 +0530
+Message-ID: <20210826053433.1599019-1-shubhrajyoti.datta@xilinx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210826025427.exdinwkuavyfcp3f@vireshk-i7>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 94f8d3f1-3fce-40fb-d72b-08d9685335c3
+X-MS-TrafficTypeDiagnostic: BYAPR02MB5030:
+X-Microsoft-Antispam-PRVS: <BYAPR02MB50308337620D7652F90123ADAAC79@BYAPR02MB5030.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:2512;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: k+mr/FSyomj3HeZTiMmatpXOjALchIiWxdhyUT8Vn922aNluoTLlhdyJlY3hrqrvLp3gZ+yQSpGSV75L4jMzqO3agwrtuvGttNgPqX/2dtbiRpj/SV17mtDPpuIRaR3bPfvx6/qjicO92gVqmY7gftczq1+73djIaL2xepYlfvWCOSE+k10jRDO8JVMKquuPxs3wPOBcm07Ji/VVkPKvch5V/PveT3XalxyGUMftF5ZPUjft+lk41d1YongqwrKx1mrCnV8GVr8MwJzR8nfyDsJjQBs86zhZjo3aXperN0BrgXnYnjHstsvEvV0vM9OmYuyoYiPxiNA0mOC2t71HPwrFS6Y1ibjDyNNiOVDZ0fpKOMHnhIhmvLxKermYZmWq4GGknGkIb87srlAueaxXRVfxf7Lgn8PIY9M8jPuG5eUsVaVNLrKrrcyLaQDZGRHnq8cZs7GMO1YraFaaonHozShe0Dr+8k+QzOJDFa8lL8ESbhK4WO69kHhiHZYCRQOvhy/dSkyAPEl6/p9vozHa3yM9/d+GDf2rHoVXxgSzA2QB+l3sbvKHGiSCXzSWjbOPxmRehLWz4cvnnDmVwBqm8RL/azUnM1iUOr9v6mCptesPQHtavwbVIAqYhmqcp4jD4QCfKOGtq9vVTX/MTEQJj+B6qMA2zuRujo+d2OldcuBu81d1ztEnSIGs7lYFDjqZ1VbcihFcFwyjYsRH6azhBOPuG/PduVccFp4jqsV2Rtg4H3YfOaDYDyO3q1LKggA11uSFnOuDU7elCEP5FHg9KNwGnQx5v9SWF9h9aVIM2PVwo7j4SM1GynnOyWOiwyLFepQMAccJ0V7kXCDv2W99RzYdezuJcHjm1jtpYV9U2zQ=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(136003)(376002)(396003)(346002)(39860400002)(36840700001)(46966006)(966005)(316002)(44832011)(9786002)(47076005)(70206006)(2616005)(26005)(82740400003)(1076003)(70586007)(54906003)(36860700001)(2906002)(8936002)(6916009)(7696005)(107886003)(82310400003)(336012)(8676002)(5660300002)(426003)(83380400001)(36906005)(450100002)(4326008)(7636003)(478600001)(36756003)(356005)(6666004)(186003)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2021 05:34:44.1917
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 94f8d3f1-3fce-40fb-d72b-08d9685335c3
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT064.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5030
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 26-08-21, 08:24, Viresh Kumar wrote:
-> On 25-08-21, 18:41, Dmitry Osipenko wrote:
-> > Thinking a bit more about this, I got a nicer variant which actually works in all cases for Tegra.
-> > 
-> > Viresh / Ulf, what do you think about this:
-> 
-> This is what I have been suggesting from day 1 :)
-> 
-> https://lore.kernel.org/linux-staging/20210818055849.ybfajzu75ecpdrbn@vireshk-i7/
-> 
->  "
->   And if it is all about just syncing the genpd core, then can the
->   genpd core do something like what clk framework does? i.e. allow a
->   new optional genpd callback, get_performance_state() (just like
->   set_performance_state()), which can be called initially by the core
->   to get the performance to something other than zero.
->  "
-> 
-> Looks good to me :)
+Convert the current udc xilinx binding from text format to YAML
+format/DT schema, and delete the legacy text binding file.
 
-When you refresh this stuff, please send only 3-4 patches to update
-the core stuff and show an example. Once we finalize with the
-interface, you can update all the users. Else this is just noise for
-everyone else.
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+---
+ .../devicetree/bindings/usb/udc-xilinx.txt    | 18 --------
+ .../devicetree/bindings/usb/xlnx,usb2.yaml    | 41 +++++++++++++++++++
+ 2 files changed, 41 insertions(+), 18 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/udc-xilinx.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/xlnx,usb2.yaml
 
+diff --git a/Documentation/devicetree/bindings/usb/udc-xilinx.txt b/Documentation/devicetree/bindings/usb/udc-xilinx.txt
+deleted file mode 100644
+index 47b4e397a08d..000000000000
+--- a/Documentation/devicetree/bindings/usb/udc-xilinx.txt
++++ /dev/null
+@@ -1,18 +0,0 @@
+-Xilinx USB2 device controller
+-
+-Required properties:
+-- compatible		: Should be "xlnx,usb2-device-4.00.a"
+-- reg			: Physical base address and size of the USB2
+-			  device registers map.
+-- interrupts		: Should contain single irq line of USB2 device
+-			  controller
+-- xlnx,has-builtin-dma	: if DMA is included
+-
+-Example:
+- 		axi-usb2-device@42e00000 {
+-                        compatible = "xlnx,usb2-device-4.00.a";
+-                        interrupts = <0x0 0x39 0x1>;
+-                        reg = <0x42e00000 0x10000>;
+-                        xlnx,has-builtin-dma;
+-                };
+-
+diff --git a/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml b/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml
+new file mode 100644
+index 000000000000..b8acc415eaf1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml
+@@ -0,0 +1,41 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/xlnx,usb2.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Xilinx udc controller
++
++maintainers:
++  - Manish Narani <manish.narani@xilinx.com>
++
++properties:
++  compatible:
++    const: xlnx,usb2-device-4.00.a
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  xlnx,has-builtin-dma:
++    description:
++      If present, hardware has dma capability.
++    type: boolean
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    axi-usb2-device@42e00000 {
++        compatible = "xlnx,usb2-device-4.00.a";
++        interrupts = <0x0 0x39 0x1>;
++        reg = <0xee000000 0xc00>;
++        xlnx,has-builtin-dma;
++    };
 -- 
-viresh
+2.25.1
+
