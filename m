@@ -2,98 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 379D43F8367
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Aug 2021 09:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205903F836D
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Aug 2021 09:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240449AbhHZHyN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Aug 2021 03:54:13 -0400
-Received: from mga02.intel.com ([134.134.136.20]:26270 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232926AbhHZHyJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Aug 2021 03:54:09 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10087"; a="204893108"
-X-IronPort-AV: E=Sophos;i="5.84,352,1620716400"; 
-   d="scan'208";a="204893108"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2021 00:53:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,352,1620716400"; 
-   d="scan'208";a="598398861"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 26 Aug 2021 00:53:20 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 26 Aug 2021 10:53:19 +0300
-Date:   Thu, 26 Aug 2021 10:53:19 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: How to proceed: usci_acpi: PPM init failed (-110)
-Message-ID: <YSdIb+f+/cbRyBs1@kuha.fi.intel.com>
-References: <20210823180626.tb6m7h5tp6adhvt2@fastboi.localdomain>
- <YSTI51ilGLJLYlQz@kuha.fi.intel.com>
- <20210824164942.6pakfzf2crnxes7w@fastboi.localdomain>
- <YSX5Gewqat7zbEXY@kuha.fi.intel.com>
- <20210825092138.jmhbjx2innikurw2@fastboi.localdomain>
+        id S240273AbhHZH5i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Aug 2021 03:57:38 -0400
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:57308
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240144AbhHZH5g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Aug 2021 03:57:36 -0400
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CF5D040779
+        for <linux-usb@vger.kernel.org>; Thu, 26 Aug 2021 07:56:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1629964608;
+        bh=JkuOywfaMdggVS4bli5HwaEPziu1ePITpUpnYUIyGCI=;
+        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+         In-Reply-To:Content-Type;
+        b=g22iNUSHDQaFmPf/CoDp+boL3nHL5VNgVryPPaHHFnG6GRMvgeqvRL1OifX0z9qzs
+         WCySZHPrR2BiNRrhXK2JNaRTCDvaO+y1t3ooW9qUsSE/monVc0sfRh0+X+neMFQQ0c
+         OqDDyTL0HwbFwYb/1NAvMJvTybt7gLVsX6EFzyM9SlytirmjXyCOQHiOMPU5KToJKe
+         GS6iREV+xibE0OPa8Zbd+OTUO5L0R3aZm1x8HDuODkMzsWiQyjaKmZncOVGYtvMZE9
+         McKHXNl2/4/AdCWdsBg3+dnAYgAu0+DVva4aKn8KIfb3/Qar1GgaqUy9rbJVmDizTg
+         WrQHf9j2Xw1uw==
+Received: by mail-ed1-f70.google.com with SMTP id d12-20020a50fe8c0000b02903a4b519b413so1096783edt.9
+        for <linux-usb@vger.kernel.org>; Thu, 26 Aug 2021 00:56:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JkuOywfaMdggVS4bli5HwaEPziu1ePITpUpnYUIyGCI=;
+        b=VTaMCJd6/xfnQ3InXJ3Mgkaenp1I7oVcNcLT9SW82NRs+rUhbUYGNZ92pKLHBGMDXy
+         WohZ07zRwNNXfmgXFnMmIg2quIYjRVItkZAO08LKI7Qwmnexvzhz7WPoU+ZtQ7jkI9df
+         dcM0o9yFWPrJe8yuGCA38KjQIHplTFYbV2SL2OFQ4Woe0CJd7nRIOCbDaORB3+G2CFwd
+         kTcw4hnuCRttqQZIzVJRACqbNmxyXoRP+Q0sp+UlPx04PQ8leWt25u1bNw5XPG9Wujif
+         JY5EvQtzBBV8BESY+cN9U/F5OuPiBJJvQwLtCj/serJn8cs6c+SauP3KO9djE1cPmgpT
+         MVMA==
+X-Gm-Message-State: AOAM533ajCHtFS7Lj91Pux9qqo2zfdNnBr2MaQ08O0v+1gDG1v8ckPG6
+        x64OkgsRx9EVyqEGXUdsm+WH97+iIfs5v7gruUgMopJzgCf2FxrG5ZOl9kDUixHv6daN1WqjGLJ
+        bW1AwCNmuhC1qmSIt1cOVN8LykpN2/8J16X+hkQ==
+X-Received: by 2002:a5d:4f8d:: with SMTP id d13mr2266835wru.315.1629964598143;
+        Thu, 26 Aug 2021 00:56:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx7z+KnpYY98pYyEqMF/A3NX8jxv23cu1YJnDvJUhoXHCtlFAZyyEs+2CZ1T1jeMVjcwD6U+g==
+X-Received: by 2002:a5d:4f8d:: with SMTP id d13mr2266775wru.315.1629964597932;
+        Thu, 26 Aug 2021 00:56:37 -0700 (PDT)
+Received: from [192.168.0.103] ([79.98.113.122])
+        by smtp.gmail.com with ESMTPSA id z19sm8834614wma.0.2021.08.26.00.56.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Aug 2021 00:56:37 -0700 (PDT)
+Subject: Re: [PATCH v16 3/7] ARM: configs: Explicitly enable USB_XHCI_PLATFORM
+ where needed
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     devicetree@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Bastien Nocera <hadess@hadess.net>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Jens Axboe <axboe@kernel.dk>, Johan Hovold <johan@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Lionel Debieve <lionel.debieve@st.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mark Brown <broonie@kernel.org>,
+        =?UTF-8?Q?Martin_J=c3=bccker?= <martin.juecker@gmail.com>,
+        Olivier Moysan <olivier.moysan@st.com>,
+        Robert Richter <rric@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Lindgren <tony@atomide.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        William Cohen <wcohen@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>
+References: <20210813195228.2003500-1-mka@chromium.org>
+ <20210813125146.v16.3.I010d5725652b981ebbafba0b260190fe4b995a40@changeid>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <d6f17e48-4cb5-d665-4770-a4cf0440f85b@canonical.com>
+Date:   Thu, 26 Aug 2021 09:56:34 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
+In-Reply-To: <20210813125146.v16.3.I010d5725652b981ebbafba0b260190fe4b995a40@changeid>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210825092138.jmhbjx2innikurw2@fastboi.localdomain>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Samuel,
-
-On Wed, Aug 25, 2021 at 11:21:38AM +0200, Samuel Čavoj wrote:
-> > You said that enabling the notifications with Set Notifications Enable
-> > fails, so can you try this:
-> > 
-> >         UcsiControl.exe Send 0 00010005
+On 13/08/2021 21:52, Matthias Kaehlcke wrote:
+> The dependency of USB_DWC3 and USB_XHCI_MVEBU on USB_XHCI_PLATFORM
+> is being changed from 'select' to 'depends on' by another patch.
+> With that patch the defconfigs that enable one of these host
+> controllers also need to select USB_XHCI_PLATFORM explicitly
+> to keep the resulting config unchanged.
 > 
-> the command finishes instantly and does not seem to produce any error.
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
 > 
->     PS C:\Program Files (x86)\USBTest\x64> .\UcsiControl.exe Send 0 00010005
->     COMMAND:
->     AsUInt64: 10005
->     Command: 5
->     DataLength: 0
->     
->     MESSAGE IN is empty.
+> Changes in v16:
+> - patch added to the series
+> 
+>  arch/arm/configs/exynos_defconfig    | 1 +
 
-Thanks for testing that. So UCSI is definitely working on this
-platform. I guess the ACPI notifications are simply not going through.
 
-Can you check if there are any events coming from the EC with the
-following commands:
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-        % modprobe -r ucsi_acpi
-        % modprobe -r typec_ucsi
-        % grep -i acpi /proc/interrupts
-        ...
-        % modprobe typec_ucsi
-        % modprobe ucsi_acpi
-        % grep -i acpi /proc/interrupts
-        ...
 
-See if the number of interrupts increases considerable, or at all. The
-ucsi drivers need to be modules of course in order for that to work.
-
-Maybe there is something special that the OS should do with the EC on
-your board... There is a weird message in your dmesg.
-
-        "ACPI: EC: interrupt blocked"
-
-I don't know if it's relevant at all in this case, but I've just never
-seen that. I'm not an EC or ACPI expert, but I think that you only see
-that if the EC event interrupt is a GPIO. I would expect there to be
-also a message:
-
-        "ACPI: EC: interrupt unblocked"
-
-But as said, I'm really not an EC expert. We probable need to ask the
-ACPI guys about this, but let's first check the interrupts.
-
-thanks,
-
--- 
-heikki
+Best regards,
+Krzysztof
