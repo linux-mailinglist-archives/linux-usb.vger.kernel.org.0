@@ -2,90 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 988503F8640
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Aug 2021 13:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 936F63F8653
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Aug 2021 13:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241879AbhHZLSW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Aug 2021 07:18:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57610 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233736AbhHZLSV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Aug 2021 07:18:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A3E3610A4;
-        Thu, 26 Aug 2021 11:17:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1629976654;
-        bh=rj+1dxJfAFKdj8Dhrnrr16eUI58mr8w3p7l4glHVvx0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NaMxParJDyi+yixAw+EbULYF6f5FIuXp59gnMDB9xGPA4AqozC6ZkuNhfV1DshSYD
-         ANt4pSy4OgJaw1Pn5ktDc+378vF0A9NGubMsZMolPilYHc0YIQdmNTTw2x20NN4jYG
-         e/N++lLUB5pXl63NzhSON1rfDsLDQnr2VWaPduFw=
-Date:   Thu, 26 Aug 2021 13:17:30 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jeaho Hwang <jhhwang@rtst.co.kr>
-Cc:     Peter Chen <peter.chen@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, team-linux@rtst.co.kr,
-        mkbyeon@lselectric.co.kr, khchoib@lselectric.co.kr
-Subject: Re: [PATCH v2] usb: chipidea: add loop timeout for hw_ep_set_halt()
-Message-ID: <YSd4Sp25RtT1b+rm@kroah.com>
-References: <20210817064353.GA669425@ubuntu>
+        id S242021AbhHZLYh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Aug 2021 07:24:37 -0400
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:60715 "EHLO
+        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241887AbhHZLYg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Aug 2021 07:24:36 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id E56E45C010E;
+        Thu, 26 Aug 2021 07:23:48 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 26 Aug 2021 07:23:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=xhPeWgw2JhcQ2s7hwE0vCi4jbgo
+        eiwq015e2qX2II3U=; b=y8friRw+kq1I1NUdW6b4Nx/Ic6OgieoopOT1mRpmWEK
+        7aa2JYqsV66qZTlJ66hNjiwWCWjwxkv7kZz0petNudza+JQzsmDb2JUcED5QoSQl
+        oZ0Lt5n2O3sI81L9ba4HLg0o+GVnkWt7uVVxgS4HoJz0qznxFDuK2BYX7F4J/YvX
+        9PDoKipEmYN5F9qyUbJCsLCLv+n4kgYYXV8QTNV27Z7vsyRCFR89QYqDBpMf9Dyx
+        kAXU0OZbivcX8hVQDbikCg382RrbDA98ANpAXPUFAcN4jCfaDc1m4g0p3n5h2KEw
+        riwbreoXQjpDzqWLrgnClL98qgfaQdkS8y8iFNWcBwA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=xhPeWg
+        w2JhcQ2s7hwE0vCi4jbgoeiwq015e2qX2II3U=; b=X+efeJc3C7EdFdMCEZZTul
+        7hGkYj9j5UkgGwFK6t1P49NoN1vYNEJxTzlMf1Eaprs7YyZslOrbHJQHa/a3nvkM
+        ZH7B0WC3g4lyOLGR1MQb1v/gGxjFV31hvGmYXp5bnGA9f/4yJNLYGl0fRth8qWjo
+        cZQR/O6Svv1/13zalrEBPhNPQdH3z/BsFOeP6LNpabBe0XEyMfnzqnsjLKpuhpsT
+        khyI83eKl2kGBwptYguyqXhrVf7b2drqiwF9Iba0j/t/2QKKGOBe0B2yUFv/JBDl
+        MzM2BKb5d5UxW2zbmtRazYx8K+UMta3cmChtymNRFNMPf029+zF4Mj/VvEx5XApw
+        ==
+X-ME-Sender: <xms:xHknYRnDLDqXOM0ru4pUoW_9qQl2FOJvEi3Em2udy2BuqF0IXsxeIQ>
+    <xme:xHknYc2jWc3sZzxQk43_J4QnjCIJXE5oMZFZC9eub2Y4nM4Xl8CeIx4I0icYYZuvK
+    OGCIxmuqKUleQ>
+X-ME-Received: <xmr:xHknYXpEsbbVRuGu9fGubLHsj-Lqq6NKiiZn-tRgOv-EUOWykokTWDGn>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudduuddgfeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
+    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:xHknYRkwWz5L6YEUM9YbXfRJvR88v8DJp0nCYi8ZMAzJFnZBczVbJQ>
+    <xmx:xHknYf20WbuWGOWKeSbXb-Y-syZEdsxcpuN8ZOORwSO9LiYlEN2qbA>
+    <xmx:xHknYQv67x1_SAfh7QfW20vc64yMmGDM_ERl62GKP7yQOHHO6ZU3Tw>
+    <xmx:xHknYYI_gsRLBFCWiLL6E8073SwHGYHoeiTTnkHFOcvhPVQ7J4oNJA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 26 Aug 2021 07:23:45 -0400 (EDT)
+Date:   Thu, 26 Aug 2021 13:23:32 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Niklas Lantau <niklaslantau@gmail.com>
+Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Usb: storage: usb: removed useless cast of void*
+Message-ID: <YSd5tKoxq2yABc+U@kroah.com>
+References: <20210821121134.23205-1-niklaslantau@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210817064353.GA669425@ubuntu>
+In-Reply-To: <20210821121134.23205-1-niklaslantau@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 17, 2021 at 03:43:53PM +0900, Jeaho Hwang wrote:
-> If ctrl EP priming is failed (very rare case in standard linux),
-> hw_ep_set_halt goes infinite loop. waiting 100 times was enough
-> for zynq7000.
-> 
-> Signed-off-by: Jeaho Hwang <jhhwang@rtst.co.kr>
-> 
-> diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-> index 8834ca613721..d73fadb18f32 100644
-> --- a/drivers/usb/chipidea/udc.c
-> +++ b/drivers/usb/chipidea/udc.c
-> @@ -209,6 +209,9 @@ static int hw_ep_prime(struct ci_hdrc *ci, int num, int dir, int is_ctrl)
->  	return 0;
->  }
->  
-> +/* enough for zynq7000 evaluation board */
-> +#define HW_EP_SET_HALT_COUNT_MAX 100
-> +
->  /**
->   * hw_ep_set_halt: configures ep halt & resets data toggle after clear (execute
->   *                 without interruption)
-> @@ -221,6 +224,7 @@ static int hw_ep_prime(struct ci_hdrc *ci, int num, int dir, int is_ctrl)
->   */
->  static int hw_ep_set_halt(struct ci_hdrc *ci, int num, int dir, int value)
->  {
-> +	int count = HW_EP_SET_HALT_COUNT_MAX;
->  	if (value != 0 && value != 1)
+On Sat, Aug 21, 2021 at 02:11:34PM +0200, Niklas Lantau wrote:
+> Removed useless cast of a void* and changed __us to data
 
-You need a blank line after "int count..."
+Why did you do two different things in the same patch?
 
-
->  		return -EINVAL;
->  
-> @@ -232,9 +236,9 @@ static int hw_ep_set_halt(struct ci_hdrc *ci, int num, int dir, int value)
->  		/* data toggle - reserved for EP0 but it's in ESS */
->  		hw_write(ci, reg, mask_xs|mask_xr,
->  			  value ? mask_xs : mask_xr);
-> -	} while (value != hw_ep_get_halt(ci, num, dir));
-> +	} while (value != hw_ep_get_halt(ci, num, dir) && --count > 0);
->  
-> -	return 0;
-> +	return count ? 0 : -EAGAIN;
-
-Please spell this out:
-	if (count)
-		return 0;
-	return -EAGAIN;
-
-And will the caller properly handle this?
+If you want to work on coding style cleanups, I recommend starting in
+the drivers/staging/ area to gain experience before venturing out into
+the rest of the kernel.
 
 thanks,
 
