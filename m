@@ -2,86 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A57313F8D2E
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Aug 2021 19:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A753F8E86
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Aug 2021 21:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243193AbhHZRkI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Aug 2021 13:40:08 -0400
-Received: from mxout03.lancloud.ru ([45.84.86.113]:34410 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbhHZRkH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Aug 2021 13:40:07 -0400
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 75737208E9CB
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH] usb: core: hcd: merge repetitive strings in
- usb_hcd_request_irqs()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>
-References: <f6ee0fdf-097b-797f-3f8c-beea7c73496e@omp.ru>
- <YSd76/cyZo6xLq7A@kroah.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <3d811f11-cd42-08f4-73a5-642e1c82045c@omp.ru>
-Date:   Thu, 26 Aug 2021 20:39:17 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S243436AbhHZTPF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Aug 2021 15:15:05 -0400
+Received: from mailfilter04-out40.webhostingserver.nl ([195.211.73.157]:61566
+        "EHLO mailfilter04-out40.webhostingserver.nl" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237981AbhHZTPD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Aug 2021 15:15:03 -0400
+X-Greylist: delayed 969 seconds by postgrey-1.27 at vger.kernel.org; Thu, 26 Aug 2021 15:15:03 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=exalondelft.nl; s=whs1;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+         from;
+        bh=67cnWy3rW/WRnFpQePp6vVIJLxw7FP6uaLsSK01XjKk=;
+        b=LkpAVlIBxEC0Tl02Rax81B/yHLLCoLYqsROgvkNUu1r75o3tmc1N0/SOg0G4ZwtdARAFQ7ES0Lvpf
+         rYiwxxXvztzsmoeDTA4dV9vBDUoWZbdWnGJKYadL+aZGlZLVtTa4kBVGuk9Eo//1+mqpVdzqkCjdpw
+         xZfqeGX3yQ7/H/KEtrDVKdg0jdQkhacaLxonW/0ktY/+snjRRKBkFm3f7mrzScexeoISLsJyIBhncS
+         tbW4yqKOqZRJALibjYS90HNnqhMx1UI44OShRAI5Pi0KXo3tsq7LSiHQmWRgkGa35EJbEifMlKjVxG
+         nY1ylJoJqSdiENSsubR7W7ln9vMx2mA==
+X-Halon-ID: 8ac6b3ea-069f-11ec-8938-001a4a4cb95f
+Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
+        by mailfilter04.webhostingserver.nl (Halon) with ESMTPSA
+        id 8ac6b3ea-069f-11ec-8938-001a4a4cb95f;
+        Thu, 26 Aug 2021 20:58:04 +0200 (CEST)
+Received: from [2001:981:6fec:1:f9ad:97f3:2f9b:d8ba] (helo=localhost.localdomain)
+        by s198.webhostingserver.nl with esmtpa (Exim 4.94.2)
+        (envelope-from <ftoth@exalondelft.nl>)
+        id 1mJKZh-009E4p-KA; Thu, 26 Aug 2021 20:58:03 +0200
+From:   Ferry Toth <ftoth@exalondelft.nl>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ferry Toth <ftoth@exalondelft.nl>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jack Pham <jackp@codeaurora.org>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     Lorenzo Colitti <lorenzo@google.com>,
+        Wesley Cheng <wcheng@codeaurora.org>, robh+dt@kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        frowand.list@gmail.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, heikki.krogerus@linux.intel.com,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Pavel Hofman <pavel.hofman@ivitera.com>
+Subject: [PATCH v2 0/3] Revert "usb: gadget: u_audio: add real feedback implementation"
+Date:   Thu, 26 Aug 2021 20:57:36 +0200
+Message-Id: <20210826185739.3868-1-ftoth@exalondelft.nl>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <YSd76/cyZo6xLq7A@kroah.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Transfer-Encoding: 8bit
+X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/26/21 2:32 PM, Greg Kroah-Hartman wrote:
-[...]
->> Two dev_info() calls in usb_hcd_request_irqs() have the same "io " strings
->> needlessly repeated. Merge these strings into the format strings of those
->> dev_info() calls...
->>
->> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->>
->> ---
->> The patch is against the 'usb-next' branch of Greg KH's 'usb.git' repo...
->>
->>  drivers/usb/core/hcd.c |   12 ++++++------
->>  1 file changed, 6 insertions(+), 6 deletions(-)
->>
->> Index: usb/drivers/usb/core/hcd.c
->> ===================================================================
->> --- usb.orig/drivers/usb/core/hcd.c
->> +++ usb/drivers/usb/core/hcd.c
->> @@ -2730,16 +2730,16 @@ static int usb_hcd_request_irqs(struct u
->>  			return retval;
->>  		}
->>  		hcd->irq = irqnum;
->> -		dev_info(hcd->self.controller, "irq %d, %s 0x%08llx\n", irqnum,
->> -				(hcd->driver->flags & HCD_MEMORY) ?
->> -					"io mem" : "io base",
->> -					(unsigned long long)hcd->rsrc_start);
->> +		dev_info(hcd->self.controller, "irq %d, io %s 0x%08llx\n",
->> +				irqnum, (hcd->driver->flags & HCD_MEMORY) ?
->> +					"mem" : "base",
->> +				(unsigned long long)hcd->rsrc_start);
-> 
-> This now makes it harder to grep for messages in the kernel source :(
+Although there is a patch resolving this issue (see 
+https://lore.kernel.org/linux-usb/1jilzsy8g7.fsf@starbuckisacylon.baylibre.com/T/#u)
+it needs a little work and will not be ready for v5.14.0 release. Until then
+revert the series.
 
-   Mhm, maybe...
+v2:
+- Added SoB (Balbi)
 
-> As this saves almost no memory, I'll just ignore this patch.
 
-   I also didn't find the current strings adequate -- I'd understand "io mem" vs "io port",
-not what it is now...
+Ferry Toth (3):
+  Revert "usb: gadget: u_audio: add real feedback implementation"
+  Revert "usb: gadget: f_uac2: add adaptive sync support for capture"
+  Revert "usb: gadget: f_uac2/u_audio: add feedback endpoint support"
 
-> thanks,
-> 
-> greg k-h
+ .../ABI/testing/configfs-usb-gadget-uac2      |   2 -
+ Documentation/usb/gadget-testing.rst          |   2 -
+ drivers/usb/gadget/function/f_uac2.c          | 144 +----------
+ drivers/usb/gadget/function/u_audio.c         | 225 +-----------------
+ drivers/usb/gadget/function/u_audio.h         |  12 -
+ drivers/usb/gadget/function/u_uac2.h          |   4 -
+ 6 files changed, 6 insertions(+), 383 deletions(-)
 
-MBR, Sergey
+-- 
+2.30.2
+
