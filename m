@@ -2,58 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 684863F9964
+	by mail.lfdr.de (Postfix) with ESMTP id B0C4A3F9965
 	for <lists+linux-usb@lfdr.de>; Fri, 27 Aug 2021 15:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245182AbhH0NNE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Aug 2021 09:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
+        id S245184AbhH0NNF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Aug 2021 09:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245181AbhH0NND (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Aug 2021 09:13:03 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5D2C061757
-        for <linux-usb@vger.kernel.org>; Fri, 27 Aug 2021 06:12:14 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id i6so10375133wrv.2
-        for <linux-usb@vger.kernel.org>; Fri, 27 Aug 2021 06:12:14 -0700 (PDT)
+        with ESMTP id S245175AbhH0NNF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Aug 2021 09:13:05 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20004C061757
+        for <linux-usb@vger.kernel.org>; Fri, 27 Aug 2021 06:12:16 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id i6so10375249wrv.2
+        for <linux-usb@vger.kernel.org>; Fri, 27 Aug 2021 06:12:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Y607GohRHj140++t/bVDBujNiOGNimlRlENuyUmlv6A=;
-        b=C7nHbTlLc3gN7Gb40cRm587VXiYRlYZ658KbJSCQKnUt2qaC+wZj2VuXMXwZitUvWR
-         ds0YTO69ytKcQ+VgvECBLfaS0z/0kK6iuRZR5ciXJgYIiGrehm5b5RDl/UD/luN0o152
-         Zcx8ReLeowxhaFd3SzlLgcg4joVUIPOz0cDZHo5ksnkL2kTJWg3j9BVIRrzm78B5Ya/G
-         UH6Yz70jO8MjyXZmssK2eiWpxoJSkfmbJQmv55rCZdDPoUopVwyUxoGgEAr7hArIKtdN
-         CcuUX8AaSmYYkEFy6gJLg4WlA3TI9umdMNXysQJtlHad9SzFOFUnyxbtIH2zKmnnCi6n
-         gmKQ==
+        bh=V0J3NHw/qq4gMRkEFJJLpm8VQ/DzEM7Z7FaIoqZdQD4=;
+        b=pJySKRulcv5lUPYaZoaC3c3+3Z2rLhxSTgN/cMgDUZP+2Yg06k8wc4dtl6h75fZS45
+         cUnKoX9PM03lXNJFHTBXB5IMUOlSXSPS/yu8fq3JoEz94i7/bNuJF6TyYrgD0pteGFM3
+         sttCDcMbDd4mC+/9Lg3KplYNRQ/DliozBikRFQMUdmU0Vuiqxn9+TSUFC/y2vAKiQhMC
+         Bqidm7Y0ZhZRauifSQ+ngRj30Dn29D1MLGNu4UEqws1vgMtJvnMspAxZd6OGf/+uVp/k
+         2rgDy1tguv9jMGE8cD6KQgUDKl1C672jrN4aenMXakHGQjSEygBdGxZwNp8BJJRcCs5u
+         0iQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Y607GohRHj140++t/bVDBujNiOGNimlRlENuyUmlv6A=;
-        b=s8alcoSHc+XeR2Tksg2NED7SwfSyv2kACF5+eo4cjJI/SwnFnGfLpzgokcnRZlf2MF
-         7AhDots65QDZ3blVbHoERyORGvF96AvZk7MQbfAq5x3+daRbxRds3hCdGRxoIoxlbamo
-         0KozF/s7mhM2KRHqoD4f8rkRxlbCbYROwCqk/kl8W9KBzNklQNef4YBjCTd22J/9cd8U
-         LAmzegkHvHg1brd4ZM4s1Ka9tbdIusYxTfCIp7RzvSVwwesxCih9gcb7Obq4B2wUZD1l
-         3AkxTfw0KcClZJ+RE4d53Vg22qIbSiaYdsM6EKf0w3sx+wOOOzjuUwCBDA0zdW7SiCCd
-         lGXg==
-X-Gm-Message-State: AOAM5310a4hP8BNt85RFGt+7dGkkmkvm6rJ7hnfEBliv7COzP2s/JlSb
-        BumU3Uv/2YMH7HcLpC1nVbLJbA==
-X-Google-Smtp-Source: ABdhPJwuQ5Lrm61jHa42oQ5QVtvrE853g6AoAP4z2i2mSMvAZrhOnrvy9h2oSn3Dp6NRw0RlsuzTng==
-X-Received: by 2002:adf:9f51:: with SMTP id f17mr8469983wrg.301.1630069933001;
-        Fri, 27 Aug 2021 06:12:13 -0700 (PDT)
+        bh=V0J3NHw/qq4gMRkEFJJLpm8VQ/DzEM7Z7FaIoqZdQD4=;
+        b=M977sX5SDpaFyDNnQ4nug1DRy8gitX0AJhKyDwKzPTvtdlatScTGX+pCrmKSokuS02
+         YZk1JXhq435t86rSWfydSByYoneZkES1ALenUtxc3qKq0rddZI1M+x1PJ1mVnbE1liz+
+         n/rpoypzQRDT3gUJR67J3HTZF33OfWPhO4jdhSWIryuuMS8AM1Yeeeafs2AlMmLFPIgn
+         Q6tDmvbpoEYw+XXpG8VPD674V+qhckEvtGTxVUC3ryPLYNf291Fh8x6Q7Nr2Wk4rDLoR
+         CWJAslx+cWPgDVd+TfaHjXSL4RurfVOXew7EMGFPbzqW2frDTSHS4lkBOk6lKRIwfreO
+         lPtg==
+X-Gm-Message-State: AOAM531j8KbW92BPP+kHLW+NI13thnaUByHYfyNKid2WTsXwgP7AJluQ
+        3DG6UcB5lL+31xxRoaUg0YhAeMr3yH5Cag==
+X-Google-Smtp-Source: ABdhPJys6trwbMQO795pFCRhjCojobJ97adECkTTbAxZRihQuSHc6qBMnrrcx+cuTPb+R3o/eqH0ig==
+X-Received: by 2002:adf:c40d:: with SMTP id v13mr7975652wrf.388.1630069934721;
+        Fri, 27 Aug 2021 06:12:14 -0700 (PDT)
 Received: from arch-thunder.local (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
-        by smtp.gmail.com with ESMTPSA id c7sm5279349wmq.13.2021.08.27.06.12.12
+        by smtp.gmail.com with ESMTPSA id c7sm5279349wmq.13.2021.08.27.06.12.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Aug 2021 06:12:12 -0700 (PDT)
+        Fri, 27 Aug 2021 06:12:14 -0700 (PDT)
 From:   Rui Miguel Silva <rui.silva@linaro.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>
 Cc:     linux-usb@vger.kernel.org, Rui Miguel Silva <rui.silva@linaro.org>
-Subject: [PATCH v2 2/5] usb: isp1760: fix qtd fill length
-Date:   Fri, 27 Aug 2021 14:11:51 +0100
-Message-Id: <20210827131154.4151862-3-rui.silva@linaro.org>
+Subject: [PATCH v2 3/5] usb: isp1760: write to status and address register
+Date:   Fri, 27 Aug 2021 14:11:52 +0100
+Message-Id: <20210827131154.4151862-4-rui.silva@linaro.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210827131154.4151862-1-rui.silva@linaro.org>
 References: <20210827131154.4151862-1-rui.silva@linaro.org>
@@ -63,35 +63,87 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When trying to send bulks bigger than the biggest block size
-we need to split them over several qtd. Fix this limiting the
-maximum qtd size to largest block size.
+We were already writing directly the port status register to
+trigger changes in isp1763. The same is needed in other IP
+from the family, including also to setup the read address
+before reading from device.
 
 Reported-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 Signed-off-by: Rui Miguel Silva <rui.silva@linaro.org>
 Tested-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 ---
- drivers/usb/isp1760/isp1760-hcd.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/usb/isp1760/isp1760-hcd.c | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/usb/isp1760/isp1760-hcd.c b/drivers/usb/isp1760/isp1760-hcd.c
-index b3a55c5d2155..fba21122bb00 100644
+index fba21122bb00..79d571f1429b 100644
 --- a/drivers/usb/isp1760/isp1760-hcd.c
 +++ b/drivers/usb/isp1760/isp1760-hcd.c
-@@ -1829,9 +1829,11 @@ static void packetize_urb(struct usb_hcd *hcd,
- 			goto cleanup;
+@@ -182,7 +182,7 @@ struct urb_listitem {
+ 	struct urb *urb;
+ };
  
- 		if (len > mem->blocks_size[ISP176x_BLOCK_NUM - 1])
--			len = mem->blocks_size[ISP176x_BLOCK_NUM - 1];
-+			this_qtd_len = mem->blocks_size[ISP176x_BLOCK_NUM - 1];
-+		else
-+			this_qtd_len = len;
+-static const u32 isp1763_hc_portsc1_fields[] = {
++static const u32 isp176x_hc_portsc1_fields[] = {
+ 	[PORT_OWNER]		= BIT(13),
+ 	[PORT_POWER]		= BIT(12),
+ 	[PORT_LSTATUS]		= BIT(10),
+@@ -205,27 +205,28 @@ static u32 isp1760_hcd_read(struct usb_hcd *hcd, u32 field)
+ }
  
--		this_qtd_len = qtd_fill(qtd, buf, len);
-+		this_qtd_len = qtd_fill(qtd, buf, this_qtd_len);
- 		list_add_tail(&qtd->qtd_list, head);
+ /*
+- * We need, in isp1763, to write directly the values to the portsc1
++ * We need, in isp176x, to write directly the values to the portsc1
+  * register so it will make the other values to trigger.
+  */
+ static void isp1760_hcd_portsc1_set_clear(struct isp1760_hcd *priv, u32 field,
+ 					  u32 val)
+ {
+-	u32 bit = isp1763_hc_portsc1_fields[field];
+-	u32 port_status = readl(priv->base + ISP1763_HC_PORTSC1);
++	u32 bit = isp176x_hc_portsc1_fields[field];
++	u16 portsc1_reg = priv->is_isp1763 ? ISP1763_HC_PORTSC1 :
++		ISP176x_HC_PORTSC1;
++	u32 port_status = readl(priv->base + portsc1_reg);
  
- 		len -= this_qtd_len;
+ 	if (val)
+-		writel(port_status | bit, priv->base + ISP1763_HC_PORTSC1);
++		writel(port_status | bit, priv->base + portsc1_reg);
+ 	else
+-		writel(port_status & ~bit, priv->base + ISP1763_HC_PORTSC1);
++		writel(port_status & ~bit, priv->base + portsc1_reg);
+ }
+ 
+ static void isp1760_hcd_write(struct usb_hcd *hcd, u32 field, u32 val)
+ {
+ 	struct isp1760_hcd *priv = hcd_to_priv(hcd);
+ 
+-	if (unlikely(priv->is_isp1763 &&
+-		     (field >= PORT_OWNER && field <= PORT_CONNECT)))
++	if (unlikely((field >= PORT_OWNER && field <= PORT_CONNECT)))
+ 		return isp1760_hcd_portsc1_set_clear(priv, field, val);
+ 
+ 	isp1760_field_write(priv->fields, field, val);
+@@ -367,8 +368,7 @@ static void isp1760_mem_read(struct usb_hcd *hcd, u32 src_offset, void *dst,
+ {
+ 	struct isp1760_hcd *priv = hcd_to_priv(hcd);
+ 
+-	isp1760_hcd_write(hcd, MEM_BANK_SEL, ISP_BANK_0);
+-	isp1760_hcd_write(hcd, MEM_START_ADDR, src_offset);
++	isp1760_reg_write(priv->regs, ISP176x_HC_MEMORY, src_offset);
+ 	ndelay(100);
+ 
+ 	bank_reads8(priv->base, src_offset, ISP_BANK_0, dst, bytes);
+@@ -496,8 +496,7 @@ static void isp1760_ptd_read(struct usb_hcd *hcd, u32 ptd_offset, u32 slot,
+ 	u16 src_offset = ptd_offset + slot * sizeof(*ptd);
+ 	struct isp1760_hcd *priv = hcd_to_priv(hcd);
+ 
+-	isp1760_hcd_write(hcd, MEM_BANK_SEL, ISP_BANK_0);
+-	isp1760_hcd_write(hcd, MEM_START_ADDR, src_offset);
++	isp1760_reg_write(priv->regs, ISP176x_HC_MEMORY, src_offset);
+ 	ndelay(90);
+ 
+ 	bank_reads8(priv->base, src_offset, ISP_BANK_0, (void *)ptd,
 -- 
 2.33.0
 
