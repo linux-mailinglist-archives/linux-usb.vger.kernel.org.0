@@ -2,211 +2,233 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8799F3F92F6
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Aug 2021 05:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC773F93C8
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Aug 2021 06:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244166AbhH0DcI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Aug 2021 23:32:08 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:45402 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S244113AbhH0DcD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Aug 2021 23:32:03 -0400
-X-UUID: a6a4fe2c41db48988ffccc418319a87f-20210827
-X-UUID: a6a4fe2c41db48988ffccc418319a87f-20210827
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1643678091; Fri, 27 Aug 2021 11:31:07 +0800
-Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
- mtkexhb02.mediatek.inc (172.21.101.103) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 27 Aug 2021 11:31:06 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 27 Aug 2021 11:31:06 +0800
-Received: from mtkslt301.mediatek.inc (10.21.14.114) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 27 Aug 2021 11:31:06 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Mathias Nyman <mathias.nyman@intel.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, "Ikjoon Jang" <ikjn@chromium.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: [PATCH next v3] usb: xhci-mtk: allow bandwidth table rollover
-Date:   Fri, 27 Aug 2021 11:31:05 +0800
-Message-ID: <20210827033105.26595-1-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        id S233857AbhH0Et5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Aug 2021 00:49:57 -0400
+Received: from mga07.intel.com ([134.134.136.100]:27134 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229645AbhH0Et5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Aug 2021 00:49:57 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10088"; a="281613343"
+X-IronPort-AV: E=Sophos;i="5.84,355,1620716400"; 
+   d="scan'208";a="281613343"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2021 21:49:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,355,1620716400"; 
+   d="scan'208";a="495523075"
+Received: from lkp-server01.sh.intel.com (HELO 4fbc2b3ce5aa) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Aug 2021 21:49:07 -0700
+Received: from kbuild by 4fbc2b3ce5aa with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mJTne-0001yM-G4; Fri, 27 Aug 2021 04:49:06 +0000
+Date:   Fri, 27 Aug 2021 12:48:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ d98a30ccdc839947c9233369744341d1fa54439c
+Message-ID: <61286e91.+MpenbAwvbL31Vik%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-xhci-mtk has 64 slots for periodic bandwidth calculations and each
-slot represents byte budgets on a microframe. When an endpoint's
-allocation sits on the boundary of the table, byte budgets' slot
-can be rolled over but the current implementation doesn't.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: d98a30ccdc839947c9233369744341d1fa54439c  usb: mtu3: fix random remote wakeup
 
-This patch allows the microframe index rollover and prevent
-out-of-bounds array access.
+elapsed time: 1008m
 
-Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+configs tested: 173
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20210826
+i386                 randconfig-c001-20210827
+powerpc                 mpc834x_itx_defconfig
+sh                         microdev_defconfig
+arm                       netwinder_defconfig
+arm                         mv78xx0_defconfig
+ia64                      gensparse_defconfig
+powerpc                    amigaone_defconfig
+m68k                       m5249evb_defconfig
+arm                            mmp2_defconfig
+powerpc                       eiger_defconfig
+powerpc                 canyonlands_defconfig
+nds32                            alldefconfig
+powerpc                    ge_imp3a_defconfig
+sh                          rsk7269_defconfig
+powerpc                 mpc837x_mds_defconfig
+arm                      integrator_defconfig
+m68k                            q40_defconfig
+x86_64                           allyesconfig
+sh                             sh03_defconfig
+arm                           spitz_defconfig
+arm                       multi_v4t_defconfig
+um                           x86_64_defconfig
+powerpc                   lite5200b_defconfig
+riscv                    nommu_virt_defconfig
+arm                         vf610m4_defconfig
+arm                          collie_defconfig
+sh                          rsk7264_defconfig
+arm                      pxa255-idp_defconfig
+powerpc                    gamecube_defconfig
+arm                        spear3xx_defconfig
+arm                             mxs_defconfig
+x86_64                           alldefconfig
+m68k                            mac_defconfig
+sh                          rsk7201_defconfig
+ia64                          tiger_defconfig
+s390                          debug_defconfig
+powerpc                 mpc8272_ads_defconfig
+arc                            hsdk_defconfig
+arm                           h5000_defconfig
+arm                            mps2_defconfig
+powerpc                 mpc836x_mds_defconfig
+powerpc                     akebono_defconfig
+arm                             ezx_defconfig
+powerpc                 mpc85xx_cds_defconfig
+riscv                    nommu_k210_defconfig
+sh                          landisk_defconfig
+arm                           corgi_defconfig
+sh                ecovec24-romimage_defconfig
+mips                            e55_defconfig
+arm                        oxnas_v6_defconfig
+sh                          sdk7780_defconfig
+mips                          malta_defconfig
+arm                          ep93xx_defconfig
+ia64                             alldefconfig
+powerpc                        icon_defconfig
+arm                       aspeed_g4_defconfig
+sh                           se7724_defconfig
+powerpc                    mvme5100_defconfig
+arm                     am200epdkit_defconfig
+mips                      pistachio_defconfig
+xtensa                  nommu_kc705_defconfig
+arm                         shannon_defconfig
+arm                             pxa_defconfig
+powerpc                      pmac32_defconfig
+mips                        vocore2_defconfig
+powerpc                     pseries_defconfig
+arm                           omap1_defconfig
+powerpc                  storcenter_defconfig
+arm                       spear13xx_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a005-20210826
+x86_64               randconfig-a006-20210826
+x86_64               randconfig-a001-20210826
+x86_64               randconfig-a003-20210826
+x86_64               randconfig-a004-20210826
+x86_64               randconfig-a002-20210826
+i386                 randconfig-a006-20210826
+i386                 randconfig-a001-20210826
+i386                 randconfig-a002-20210826
+i386                 randconfig-a005-20210826
+i386                 randconfig-a003-20210826
+i386                 randconfig-a004-20210826
+x86_64               randconfig-a014-20210827
+x86_64               randconfig-a015-20210827
+x86_64               randconfig-a016-20210827
+x86_64               randconfig-a013-20210827
+x86_64               randconfig-a012-20210827
+x86_64               randconfig-a011-20210827
+arc                  randconfig-r043-20210827
+riscv                randconfig-r042-20210827
+s390                 randconfig-r044-20210827
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+i386                 randconfig-c001-20210826
+s390                 randconfig-c005-20210826
+arm                  randconfig-c002-20210826
+riscv                randconfig-c006-20210826
+powerpc              randconfig-c003-20210826
+x86_64               randconfig-c007-20210826
+mips                 randconfig-c004-20210826
+s390                 randconfig-c005-20210827
+i386                 randconfig-c001-20210827
+arm                  randconfig-c002-20210827
+riscv                randconfig-c006-20210827
+powerpc              randconfig-c003-20210827
+x86_64               randconfig-c007-20210827
+mips                 randconfig-c004-20210827
+x86_64               randconfig-a005-20210827
+x86_64               randconfig-a001-20210827
+x86_64               randconfig-a006-20210827
+x86_64               randconfig-a003-20210827
+x86_64               randconfig-a004-20210827
+x86_64               randconfig-a002-20210827
+x86_64               randconfig-a014-20210826
+x86_64               randconfig-a015-20210826
+x86_64               randconfig-a016-20210826
+x86_64               randconfig-a013-20210826
+x86_64               randconfig-a012-20210826
+x86_64               randconfig-a011-20210826
+i386                 randconfig-a011-20210826
+i386                 randconfig-a016-20210826
+i386                 randconfig-a012-20210826
+i386                 randconfig-a014-20210826
+i386                 randconfig-a013-20210826
+i386                 randconfig-a015-20210826
+hexagon              randconfig-r041-20210826
+hexagon              randconfig-r045-20210826
+riscv                randconfig-r042-20210826
+s390                 randconfig-r044-20210826
+
 ---
-v3: fix conficts with usb-testing branch
-v2: new patch
----
- drivers/usb/host/xhci-mtk-sch.c | 54 ++++++++++-----------------------
- drivers/usb/host/xhci-mtk.h     |  3 +-
- 2 files changed, 18 insertions(+), 39 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
-index f0ceede85ea5..134f4789bd89 100644
---- a/drivers/usb/host/xhci-mtk-sch.c
-+++ b/drivers/usb/host/xhci-mtk-sch.c
-@@ -416,15 +416,14 @@ static u32 get_max_bw(struct mu3h_sch_bw_info *sch_bw,
- {
- 	u32 max_bw = 0;
- 	u32 bw;
--	int i;
--	int j;
-+	int i, j, k;
- 
- 	for (i = 0; i < sch_ep->num_esit; i++) {
- 		u32 base = offset + i * sch_ep->esit;
- 
- 		for (j = 0; j < sch_ep->num_budget_microframes; j++) {
--			bw = sch_bw->bus_bw[base + j] +
--					sch_ep->bw_budget_table[j];
-+			k = XHCI_MTK_BW_INDEX(base + j);
-+			bw = sch_bw->bus_bw[k] + sch_ep->bw_budget_table[j];
- 			if (bw > max_bw)
- 				max_bw = bw;
- 		}
-@@ -436,18 +435,16 @@ static void update_bus_bw(struct mu3h_sch_bw_info *sch_bw,
- 	struct mu3h_sch_ep_info *sch_ep, bool used)
- {
- 	u32 base;
--	int i;
--	int j;
-+	int i, j, k;
- 
- 	for (i = 0; i < sch_ep->num_esit; i++) {
- 		base = sch_ep->offset + i * sch_ep->esit;
- 		for (j = 0; j < sch_ep->num_budget_microframes; j++) {
-+			k = XHCI_MTK_BW_INDEX(base + j);
- 			if (used)
--				sch_bw->bus_bw[base + j] +=
--					sch_ep->bw_budget_table[j];
-+				sch_bw->bus_bw[k] += sch_ep->bw_budget_table[j];
- 			else
--				sch_bw->bus_bw[base + j] -=
--					sch_ep->bw_budget_table[j];
-+				sch_bw->bus_bw[k] -= sch_ep->bw_budget_table[j];
- 		}
- 	}
- }
-@@ -457,7 +454,7 @@ static int check_fs_bus_bw(struct mu3h_sch_ep_info *sch_ep, int offset)
- 	struct mu3h_sch_tt *tt = sch_ep->sch_tt;
- 	u32 tmp;
- 	int base;
--	int i, j;
-+	int i, j, k;
- 
- 	for (i = 0; i < sch_ep->num_esit; i++) {
- 		base = offset + i * sch_ep->esit;
-@@ -467,7 +464,8 @@ static int check_fs_bus_bw(struct mu3h_sch_ep_info *sch_ep, int offset)
- 		 * the hub will always delay one uframe to send data
- 		 */
- 		for (j = 0; j < sch_ep->num_budget_microframes; j++) {
--			tmp = tt->fs_bus_bw[base + j] + sch_ep->bw_budget_table[j];
-+			k = XHCI_MTK_BW_INDEX(base + j);
-+			tmp = tt->fs_bus_bw[k] + sch_ep->bw_budget_table[j];
- 			if (tmp > FS_PAYLOAD_MAX)
- 				return -ESCH_BW_OVERFLOW;
- 		}
-@@ -542,16 +540,18 @@ static void update_sch_tt(struct mu3h_sch_ep_info *sch_ep, bool used)
- {
- 	struct mu3h_sch_tt *tt = sch_ep->sch_tt;
- 	u32 base;
--	int i, j;
-+	int i, j, k;
- 
- 	for (i = 0; i < sch_ep->num_esit; i++) {
- 		base = sch_ep->offset + i * sch_ep->esit;
- 
--		for (j = 0; j < sch_ep->num_budget_microframes; j++)
-+		for (j = 0; j < sch_ep->num_budget_microframes; j++) {
-+			k = XHCI_MTK_BW_INDEX(base + j);
- 			if (used)
--				tt->fs_bus_bw[base + j] += sch_ep->bw_budget_table[j];
-+				tt->fs_bus_bw[k] += sch_ep->bw_budget_table[j];
- 			else
--				tt->fs_bus_bw[base + j] -= sch_ep->bw_budget_table[j];
-+				tt->fs_bus_bw[k] -= sch_ep->bw_budget_table[j];
-+		}
- 	}
- 
- 	if (used)
-@@ -573,27 +573,9 @@ static int load_ep_bw(struct mu3h_sch_bw_info *sch_bw,
- 	return 0;
- }
- 
--static u32 get_esit_boundary(struct mu3h_sch_ep_info *sch_ep)
--{
--	u32 boundary = sch_ep->esit;
--
--	if (sch_ep->sch_tt) { /* LS/FS with TT */
--		/*
--		 * tune for CS, normally esit >= 8 for FS/LS,
--		 * not add one for other types to avoid access array
--		 * out of boundary
--		 */
--		if (sch_ep->ep_type == ISOC_OUT_EP && boundary > 1)
--			boundary--;
--	}
--
--	return boundary;
--}
--
- static int check_sch_bw(struct mu3h_sch_ep_info *sch_ep)
- {
- 	struct mu3h_sch_bw_info *sch_bw = sch_ep->bw_info;
--	const u32 esit_boundary = get_esit_boundary(sch_ep);
- 	const u32 bw_boundary = get_bw_boundary(sch_ep->speed);
- 	u32 offset;
- 	u32 worst_bw;
-@@ -606,10 +588,6 @@ static int check_sch_bw(struct mu3h_sch_ep_info *sch_ep)
- 	 * and find a microframe where its worst bandwidth is minimum.
- 	 */
- 	for (offset = 0; offset < sch_ep->esit; offset++) {
--
--		if ((offset + sch_ep->num_budget_microframes) > esit_boundary)
--			break;
--
- 		ret = check_sch_tt(sch_ep, offset);
- 		if (ret)
- 			continue;
-diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
-index 9c54a597e66b..4b1ea89f959a 100644
---- a/drivers/usb/host/xhci-mtk.h
-+++ b/drivers/usb/host/xhci-mtk.h
-@@ -25,7 +25,8 @@
-  * round down to the limit value, that means allocating more
-  * bandwidth to it.
-  */
--#define XHCI_MTK_MAX_ESIT	64
-+#define XHCI_MTK_MAX_ESIT	(1 << 6)
-+#define XHCI_MTK_BW_INDEX(x)	((x) & (XHCI_MTK_MAX_ESIT - 1))
- 
- /**
-  * @fs_bus_bw: array to keep track of bandwidth already used for FS
--- 
-2.18.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
