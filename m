@@ -2,209 +2,181 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C773F96EE
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Aug 2021 11:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 998B93F96B2
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Aug 2021 11:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244824AbhH0J1Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Aug 2021 05:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
+        id S232917AbhH0JPS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Aug 2021 05:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244818AbhH0J1X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Aug 2021 05:27:23 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3BBC0613CF
-        for <linux-usb@vger.kernel.org>; Fri, 27 Aug 2021 02:26:35 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id g138so3433711wmg.4
-        for <linux-usb@vger.kernel.org>; Fri, 27 Aug 2021 02:26:34 -0700 (PDT)
+        with ESMTP id S232282AbhH0JPR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Aug 2021 05:15:17 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EF1C0613CF
+        for <linux-usb@vger.kernel.org>; Fri, 27 Aug 2021 02:14:28 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id u6so4538577pfi.0
+        for <linux-usb@vger.kernel.org>; Fri, 27 Aug 2021 02:14:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version:content-transfer-encoding;
-        bh=wF0uIDIgShpTPEd9rqT4PGDU/K6VDBXfaZiEIVdnuIE=;
-        b=bzX8KF9YCz5YCsnxGdeyeJ9my4fTQkap0yMExSSko9O4L6nHW697Tj3RhGHvPQ48x6
-         H025eJF6ANFelWU621QnI5yOG5+mNsmbTB13ogTtYu+Q5NnOo+OmXgwW0yyHtg44kzwc
-         EIbyIGcOafi5DQoPAKVTiT1z1l9FkYJbtPEDCKuAmoVHcjIMtqn4ukTXhckzl/7zDVK+
-         cjROwr50JnNg3T9bWeHGieAdpmRg31Nhj8qxfB906IQ/oy75VWZJf1vprMTvOepmVAyO
-         KyDYmYSbqeCLLlKOGsK4q/f910Q03R9/qqVFzntt9O3EU9WaG8vR1LGEO1CMAH7IiGKK
-         Q5zg==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=bul2XBNYr2W7qjEGBkEooccb8RDlBWjlNLT/gh1cvl0=;
+        b=SEeQltv+gWkf4WKKwQtBVy+3a+FHo9EYzZ02BCgRVgIX5Ze2aIGZkyfFX3+Ohe+ocF
+         w99OdsCZNeFD9ZJYjy7PIWvca6d92r4NTXWtHtsrK+hzsLzSqrODu9Ost5G7ejp5sh0d
+         fTQRiyX2LVkUHtC7HFWv9Wo/mxC2twW2WMKbA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version:content-transfer-encoding;
-        bh=wF0uIDIgShpTPEd9rqT4PGDU/K6VDBXfaZiEIVdnuIE=;
-        b=qDTTSB4svevmdMBK3imKF017PuHHORZ+MSSPkKu2CKrUbwvaMoEV47Op+rrKSHKp45
-         NIIAN4yqsavXSJ+iEdciIJfkhYna/EXrTL49FB2Ydg3WebQlaSIBxg1eiZwEfz3G6Gc+
-         VXp0/CFkOQK8qUYI1aW3UeRk3US+kh0Zv7u8D4ZtF1jfkmQ/hcdf8Li+faGLAYXGPeRE
-         UexkJutPKLQZtnCKBy4jYpMGy6u4clLxb9QA3FsMMItudiDFma/XWggoHo0niK/SWLEu
-         mNDdaXJ0ibVDdz6jgmu53h25xkBM2d4hSQbett+a8RB/J3QbBYwN91iLhJPCl4FlB7hH
-         PAhQ==
-X-Gm-Message-State: AOAM530rqP1foFbnVnUfUd5BB4DyYPFmUU4Tk2v5+c70U5hisyzrr8X4
-        4iAobkqF1VQYaNZVeFIbhJf1Sw==
-X-Google-Smtp-Source: ABdhPJwELYQZOkqrkNnnr6bHsLe7bUcq0F3gy7Bs5kj7+uCuI5HrXHevEblv8SQp3623pFUYW54bDw==
-X-Received: by 2002:a05:600c:1c11:: with SMTP id j17mr18123424wms.138.1630056393495;
-        Fri, 27 Aug 2021 02:26:33 -0700 (PDT)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id o21sm4844926wms.32.2021.08.27.02.26.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Aug 2021 02:26:33 -0700 (PDT)
-References: <20210824201433.11385-1-ftoth@exalondelft.nl>
- <20210825092107.124419-1-jbrunet@baylibre.com>
- <79bd686d-5c1f-982c-344a-17c10b64a231@gmail.com>
- <9709a13f-46f5-ad53-3d19-86b4954bb0f8@synopsys.com>
- <1jbl5ky7a4.fsf@starbuckisacylon.baylibre.com>
- <a2bbb7eb-f952-bc35-6a58-68b15515c716@synopsys.com>
-User-agent: mu4e 1.6.4; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Ferry Toth <fntoth@gmail.com>,
-        Ferry Toth <ftoth@exalondelft.nl>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Pavel Hofman <pavel.hofman@ivitera.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jack Pham <jackp@codeaurora.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: gadget: f_uac2: fixup feedback endpoint stop
-Date:   Fri, 27 Aug 2021 10:38:12 +0200
-In-reply-to: <a2bbb7eb-f952-bc35-6a58-68b15515c716@synopsys.com>
-Message-ID: <1jk0k7w853.fsf@starbuckisacylon.baylibre.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=bul2XBNYr2W7qjEGBkEooccb8RDlBWjlNLT/gh1cvl0=;
+        b=Ru6Y5+U6RnZ8Jzc1yC5rWrc7zaAgtWN038fuCSGh0iRUt2h2ipIXhD8KPV9VVwpdlM
+         6RJ/ObVKiS1xGSZOMwrbHYktz4qr3fTz7qZzt/iYZvCsi1IldnyzwUi+OlaRHK64SGyU
+         v5jflBu/vtfptEZPgUPCymTYc9LaHN4AbQib1kTiG4VtBUWKolFbVQTUwVkJTdkY6e8j
+         7zHXixr/wEK9ZhRLPqjDcezcWyMIPiQm1QI92kna98n4gdvNGx6to+ziU2ZD3iG8vInb
+         Fin7uyvp1hXhc3XsOaY8NT3t4OOdB5RFe2Jxi3xVIsAn8ufte4psXR6QnKOZL0f81QsN
+         66AQ==
+X-Gm-Message-State: AOAM5335Bv97w4qajgvhis7PPkJ40U3zvmE5XQvPPLftpaAhMgGaw8+M
+        +kan44jYTjxCHbZhMSkYyMRg881z7kytwhzu+wK0zw==
+X-Google-Smtp-Source: ABdhPJwmxL3HzsVntC18e8cdVE9YrLF+iRuENEYMaXfgIc8qYHjOL7VABV1L2+5PpXzA+c+19W4vykGQJyghGL/+P9w=
+X-Received: by 2002:a63:5559:: with SMTP id f25mr7035771pgm.299.1630055668026;
+ Fri, 27 Aug 2021 02:14:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20210826025144.51992-1-chunfeng.yun@mediatek.com>
+ <20210826025144.51992-3-chunfeng.yun@mediatek.com> <CAATdQgBD+dTtBie-cNKRJbfxEpc3haqjfUu1k26mTk8pCSOEww@mail.gmail.com>
+ <72ee7a203d8a49e6e43a954b45133470ee6d5c16.camel@mediatek.com>
+In-Reply-To: <72ee7a203d8a49e6e43a954b45133470ee6d5c16.camel@mediatek.com>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Fri, 27 Aug 2021 17:14:17 +0800
+Message-ID: <CAATdQgA+4VC7J1LMZYOZMV-OTjMGjO=9bJZ7uaCu_MMF-20T1w@mail.gmail.com>
+Subject: Re: [PATCH next v2 3/6] usb: xhci-mtk: update fs bus bandwidth by bw_budget_table
+To:     =?UTF-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= 
+        <Chunfeng.Yun@mediatek.com>
+Cc:     "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        =?UTF-8?B?WWFxaWkgV3UgKOatpuS6muWlhyk=?= <Yaqii.Wu@mediatek.com>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        =?UTF-8?B?RWRkaWUgSHVuZyAo5rSq5q2j6ZGrKQ==?= 
+        <Eddie.Hung@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-On Fri 27 Aug 2021 at 00:50, Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
-
->>>>> diff --git a/drivers/usb/gadget/function/u_audio.c
->>>>> b/drivers/usb/gadget/function/u_audio.c
->>>>> index 018dd0978995..63d9340f008e 100644
->>>>> --- a/drivers/usb/gadget/function/u_audio.c
->>>>> +++ b/drivers/usb/gadget/function/u_audio.c
->>>>> @@ -230,7 +230,13 @@ static void u_audio_iso_fback_complete(struct
->>>>> usb_ep *ep,
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int status =3D req->status;
->>>>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* i/f shutting down */
->>>>> -=C2=A0=C2=A0=C2=A0 if (!prm->fb_ep_enabled || req->status =3D=3D -ES=
-HUTDOWN)
->>>>> +=C2=A0=C2=A0=C2=A0 if (!prm->fb_ep_enabled) {
->>>
->>> prm->fb_ep_enabled is not protected. Potential race problem here?
->>=20
->> Given how the variable is used, I don't think so.
->> Could you please detail ?
->>=20
+On Fri, Aug 27, 2021 at 2:49 PM Chunfeng Yun (=E4=BA=91=E6=98=A5=E5=B3=B0)
+<Chunfeng.Yun@mediatek.com> wrote:
 >
-> I'm thinking of this scenario:
+> On Thu, 2021-08-26 at 19:54 +0800, Ikjoon Jang wrote:
+> > Hi Chunfeng,
+> >
+> > On Thu, Aug 26, 2021 at 10:52 AM Chunfeng Yun <
+> > chunfeng.yun@mediatek.com> wrote:
+> > >
+> > > Use @bw_budget_table[] to update fs bus bandwidth due to
+> > > not all microframes consume @bw_cost_per_microframe, see
+> > > setup_sch_info().
+> > >
+> > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > > ---
+> > > v2: new patch, move from another series
+> > > ---
+> > >  drivers/usb/host/xhci-mtk-sch.c | 17 +++++++----------
+> > >  1 file changed, 7 insertions(+), 10 deletions(-)
+> > >
+> > > diff --git a/drivers/usb/host/xhci-mtk-sch.c
+> > > b/drivers/usb/host/xhci-mtk-sch.c
+> > > index cffcaf4dfa9f..83abd28269ca 100644
+> > > --- a/drivers/usb/host/xhci-mtk-sch.c
+> > > +++ b/drivers/usb/host/xhci-mtk-sch.c
+> > > @@ -458,8 +458,8 @@ static int check_fs_bus_bw(struct
+> > > mu3h_sch_ep_info *sch_ep, int offset)
+> > >                  * Compared with hs bus, no matter what ep type,
+> > >                  * the hub will always delay one uframe to send
+> > > data
+> > >                  */
+> > > -               for (j =3D 0; j < sch_ep->cs_count; j++) {
+> > > -                       tmp =3D tt->fs_bus_bw[base + j] + sch_ep-
+> > > >bw_cost_per_microframe;
+> > > +               for (j =3D 0; j < sch_ep->num_budget_microframes;
+> > > j++) {
+> > > +                       tmp =3D tt->fs_bus_bw[base + j] + sch_ep-
+> > > >bw_budget_table[j];
+> >
+> > I'm worrying about this case with two endpoints,
+> > * EP1OUT: isochronous, maxpacket=3D192: bw_budget_table[] =3D { 188, 18=
+8,
+> > 0, ... }
+> > * EP2IN: interrupt, maxpacket=3D64: bw_budget_table[] =3D { 0, 0, 64, 6=
+4,
+> > ... }
+> > (Is this correct bw_budget_table contents for those eps?)
+> Yes, ep1out isoc use two uframe, ep2in intr use a extra cs;
+> >
+> > I'm not sure if it's okay for those two endpoints to be allocated
+> > on the same u-frame slot.
+> > Can you please check if this is okay for xhci-mtk?
+> Already test it this afternoon, can transfer data rightly on our dvt
+> env.
 >
-> Since free_ep_fback() is called in a separate thread,
-> u_audio_iso_fback_complete() can come in the middle after
-> prm->fb_ep_enabled is cleared but before the usb_ep_dequeue(). So the
-> request may be freed before being accessed again in usb_ep_dequeue().
->
+> > (I feel like I already asked the same questions many times.)
+> Yes, as said before, prefer to use bw_budget_table[], if there is
+> issue, we can fix it by building this table.
 
-You are right - there is short window of opportunity.
-Looks like a 2nd separate issue affecting all u_audio endpoints. (Would
-be solved by reverting the feedback series)
+So do you mean such an allocation shouldn't be a problem by IP design?
 
-Fix seems fairly simple.
+This patch starts to allow such an allocation (again).
+But i remember my earlier tests showed that when those two eps
+in the above example are allocated on the same u-frame slot,
+xhci-mtk puts "SSPLIT for EP2" between
+"SSPLIT-start and SSPLIT-end for EP1OUT transaction",
+which is a spec violation. Hub will generate bit stuffing errors on the
+full-speed bus.
 
->> (I don't think this is really related to the current problem though)
->
-> It's related to how we go about to solve the problem right?
->
-> Can we just check for the req->status for -ECONNRESET and -ESHUTDOWN and
-> free the request? Those 2 statuses should be for when the request is
-> cancelled and when the endpoint is disabled.
->
-
-The same problem happened on the data endpoint while feedback was being
-reviewed. This is why data got fixed, and the feedback endpoint did not.
-
-As explained in the description, the fix is merely aligning what is
-done for the different endpoints here.
-
-Some of the people who have worked on this are no USB expert (myself
-included) so I'm sure things can be improved. I'd suggest to take the
-rework u_audio as a 2nd step.
-
->>=20
->>>
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(req->buf);
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 usb_ep_free_request(ep, r=
-eq);
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return;
->>>>> +=C2=A0=C2=A0=C2=A0 }
->>>>> +
->>>>> +=C2=A0=C2=A0=C2=A0 if (req->status =3D=3D -ESHUTDOWN)
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return;
->>>>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
->>>>> @@ -421,9 +427,10 @@ static inline void free_ep_fback(struct
->>>>> uac_rtd_params *prm, struct usb_ep *ep)
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 prm->fb_ep_enabled =3D false;
->>>>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (prm->req_fback) {
->>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 usb_ep_dequeue(ep, prm->r=
-eq_fback);
->>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(prm->req_fback->buf=
-);
->>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 usb_ep_free_request(ep, p=
-rm->req_fback);
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (usb_ep_dequeue(ep, pr=
-m->req_fback)) {
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 k=
-free(prm->req_fback->buf);
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u=
-sb_ep_free_request(ep, prm->req_fback);
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 prm->req_fback=
- =3D NULL;
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>>> =C2=A0=20
->>>
->>> On a separate note, I notice that f_uac2 only queues a single feedback
->>> request at a time for isoc endpoint? Even though the interval is 1ms,
->>> this will easily cause data drop.
->>>
->>> Also, you're ignoring other request error status and still processing
->>> bogus data on request completion? That doesn't seem right.
->>=20
->> Gadget is sendind the feedback data, not processing it. Every data sent
->
-> Ah ok.. I missed that it's IN request.
->
->> is OK.  Yes, packets can be missed with the current implementation,
->> meaning the feedback value is not reported as often as initially
->> intended. On slower HW, packets are also missed with 2 requests queued,
->
-> 2 is still too low. From our HW testing, minimum should be 4 to minimize
-> data loss at 1ms interval.
-
-Maybe 4 should be the default then ?
 
 >
->> not only on the feedback endpoint but also on the playback
->> endpoint. Picking the approriate value is not straight forward. For the
->> feedback endpoint it isn't big deal because, according to the spec, if
->> the feedback is not sent, the host shall assume the value hasn't
->> changed. This why the whole thing works as it is.
->
-> Why do this when we can avoid it.
-
-Because it was not known at the time
-
-> We know that there will be data drop
-> with the way it's implemented now. There's no option to adjust the
-> number of feedback requests either.
->
->>=20
->> I admit things still aren't perfect, but there is progress ...
->>=20
-> Thanks for the updates to audio/f_uac2. It's been a long time since
-> anyone working on it.
->
-> BR,
-> Thinh
-
+> Thanks
+> >
+> >
+> > >                         if (tmp > FS_PAYLOAD_MAX)
+> > >                                 return -ESCH_BW_OVERFLOW;
+> > >                 }
+> > > @@ -534,21 +534,18 @@ static void update_sch_tt(struct
+> > > mu3h_sch_ep_info *sch_ep, bool used)
+> > >  {
+> > >         struct mu3h_sch_tt *tt =3D sch_ep->sch_tt;
+> > >         u32 base, num_esit;
+> > > -       int bw_updated;
+> > >         int i, j;
+> > >
+> > >         num_esit =3D XHCI_MTK_MAX_ESIT / sch_ep->esit;
+> > >
+> > > -       if (used)
+> > > -               bw_updated =3D sch_ep->bw_cost_per_microframe;
+> > > -       else
+> > > -               bw_updated =3D -sch_ep->bw_cost_per_microframe;
+> > > -
+> > >         for (i =3D 0; i < num_esit; i++) {
+> > >                 base =3D sch_ep->offset + i * sch_ep->esit;
+> > >
+> > > -               for (j =3D 0; j < sch_ep->cs_count; j++)
+> > > -                       tt->fs_bus_bw[base + j] +=3D bw_updated;
+> > > +               for (j =3D 0; j < sch_ep->num_budget_microframes;
+> > > j++)
+> > > +                       if (used)
+> > > +                               tt->fs_bus_bw[base + j] +=3D sch_ep-
+> > > >bw_budget_table[j];
+> > > +                       else
+> > > +                               tt->fs_bus_bw[base + j] -=3D sch_ep-
+> > > >bw_budget_table[j];
+> > >         }
+> > >
+> > >         if (used)
+> > > --
+> > > 2.18.0
+> > >
