@@ -2,113 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2856A3FA0E1
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Aug 2021 22:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2043F3FA13B
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Aug 2021 23:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbhH0Uuv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Aug 2021 16:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbhH0Uuu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Aug 2021 16:50:50 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C118C0613D9;
-        Fri, 27 Aug 2021 13:50:01 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id u14so16380403ejf.13;
-        Fri, 27 Aug 2021 13:50:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KasoWwT+Q4gofr9QBSjUL1Cy40NSgOuJugmN8Oq4nsE=;
-        b=By+JlkafpyWxPZomHEu2Y2TyodMM0TU543YMHcTvIy2L+aTaEoRyk2J8dVpk3WVub1
-         mPAadkKwt7guXNRr++RlV7BPEbFDe3XIrlT1RGF8s3D97H9h+xCDFGSKPhiToPLMhI9V
-         O4unzIRx3Q8C7zMZeU7kKlMdzZeEoTEFA2Iis/zM8d5U5Cff9dG57YR+JyQbHS9PtT13
-         JoIs0zChUHjvQfxC1f5T+5VjOOK60YCHl8p8q8jX73tu1jNxp2B1a9ttlDHMv1Xb+GiZ
-         c6LlNlwSmoDgiQV9WS5vMk9VLkBM1XYhwuT3bp/4gcuK+2cN56FpoXLz8dCzEdyzivdw
-         XHMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=KasoWwT+Q4gofr9QBSjUL1Cy40NSgOuJugmN8Oq4nsE=;
-        b=EBsVbeSqHKX+d0pt7utjdjk8mtD3QJLY/IW7VhtOqY3RM5hbXus1IYK8N5A3MoYokn
-         LQTUV30LNeJtLk0T6a8/7p+4QsXJkksAREzzP9Un4icsP0kJ4daDmQEo1xKj2wxrw/F8
-         V8Cq+jKqkBaxA8Mh67ppTDfMf9vsyqS7YW5Z9WzGyYgUUOc07+3+/nprBTzSSmBrHH0y
-         lPg7d3OOHzQYOnrBOK7Uw5/IQ6KRo+d3XOva0zGMY0LFJ8Qr5FGDg49HfjbhqoNwMkqH
-         KDrI3t7Bkf8/PTxvKdZK45jnOJOjykGD6yuoEw4oGkHMzNK0y1oxlruXhhTMfLaLsSPX
-         PAVA==
-X-Gm-Message-State: AOAM530YS6Q3FkiF/h8nZeSyF6Kd1XGl7E1sYk4RJwa/jY2/zk9OLjZS
-        yD2mJZWFxa1AUwbiaoRtq3g=
-X-Google-Smtp-Source: ABdhPJx2+g1sK5VxQEGFGoscts265WqnlDMr+9lMq3kOysNCtnz5SSqKD5X7moIfAQoTeiuOzLkNxA==
-X-Received: by 2002:a17:906:3589:: with SMTP id o9mr11975443ejb.150.1630097398595;
-        Fri, 27 Aug 2021 13:49:58 -0700 (PDT)
-Received: from ?IPv6:2001:981:6fec:1:1b32:912f:78cc:6c61? ([2001:981:6fec:1:1b32:912f:78cc:6c61])
-        by smtp.gmail.com with ESMTPSA id k6sm3810520edv.77.2021.08.27.13.49.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Aug 2021 13:49:58 -0700 (PDT)
-Subject: Re: [PATCH v2 0/3] Revert "usb: gadget: u_audio: add real feedback
- implementation"
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ferry Toth <ftoth@exalondelft.nl>
-Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jack Pham <jackp@codeaurora.org>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
-        Lorenzo Colitti <lorenzo@google.com>,
-        Wesley Cheng <wcheng@codeaurora.org>, robh+dt@kernel.org,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        frowand.list@gmail.com, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, heikki.krogerus@linux.intel.com,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Pavel Hofman <pavel.hofman@ivitera.com>
-References: <20210826185739.3868-1-ftoth@exalondelft.nl>
- <YSiiAsrCaxOn8myU@kroah.com>
-From:   Ferry Toth <fntoth@gmail.com>
-Message-ID: <1faf1ad0-25eb-4d78-98d5-4612b8b8f3be@gmail.com>
-Date:   Fri, 27 Aug 2021 22:49:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S232010AbhH0Vm5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Aug 2021 17:42:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60326 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231696AbhH0Vm5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Aug 2021 17:42:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id EE14D60FD9
+        for <linux-usb@vger.kernel.org>; Fri, 27 Aug 2021 21:42:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630100528;
+        bh=5Cae24qZt2N331JF4F+7DWdTesJYJtXjN57xfoWrlbo=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=Ok9lItOSDQZ2fnj2Zk/ivqLqfqMDFNBAVahP0n7un5pvxJuLMi045ow3Q04i2SxfA
+         ort9YVVN0cO9bXcGABr6gUzzz8UGtCCWUtYk4H+yAW7Tezwz4qRU5KdLgx7HqZ4z6w
+         E6PVIFcEd4XuJNpK6k3KLyiDyqsZksX2R8uHI9hV3MF3+tURsiW1Al6n/qfjM3pIFV
+         gfd7BwhX9DRPK09JVrWcclkaMUWyl9H+eh429EZ51Wy0VmdIYDUMBdFl8zsLeIsFmX
+         no/tHQ4BW5blAEYQMxW8yGrbhvtSrUcCFi01oDxFM1dyByIJIz97QvhVZpWs4gNvRb
+         rWOAZFZoAbVAg==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id D802960EBD; Fri, 27 Aug 2021 21:42:07 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214173] Built-in Renesas uPD720202 fails to initialize on
+ Thinkpad T14 Gen 1 AMD
+Date:   Fri, 27 Aug 2021 21:42:07 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: milan.plzik@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-214173-208809-N9RscArnK6@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214173-208809@https.bugzilla.kernel.org/>
+References: <bug-214173-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <YSiiAsrCaxOn8myU@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
-Op 27-08-2021 om 10:27 schreef Greg Kroah-Hartman:
-> On Thu, Aug 26, 2021 at 08:57:36PM +0200, Ferry Toth wrote:
->> Although there is a patch resolving this issue (see
->> https://lore.kernel.org/linux-usb/1jilzsy8g7.fsf@starbuckisacylon.baylibre.com/T/#u)
->> it needs a little work and will not be ready for v5.14.0 release. Until then
->> revert the series.
-> 
-> revert the series for what?  5.14-final needs these reverts?  Or are
-> these for 5.15-rc1?
-> 
-> confused,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214173
 
-Apologies. Yes, the idea was to revert for 5.14-final as the series 
-creates a regression.
+--- Comment #1 from Milan Plzik (milan.plzik@gmail.com) ---
+After doing some more testing, it turns out that even the dual-boot windows
+wasn't able to use the USB controller correctly -- apparently there was a
+damage to the EEPROM of the USB controller (first 0x84 bytes of the firmware
+were followed by zeroes). Using a [firmware upload
+tool](https://github.com/markusj/upd72020x-load) I was able to test and
+re-upload correct firmware.
 
-However, an updated patch "usb: gadget: f_uac2: fixup feedback endpoint 
-stop"
-https://lore.kernel.org/linux-usb/1jfsuvw817.fsf@starbuckisacylon.baylibre.com/T/#m922149b7e74204c8ed1bed2c624910ab4eafd43c
-now has been acked by Felipe.
+--=20
+You may reply to this email to add a comment.
 
-If we can get that it for 5.14-final it would be less messy.
-
-Can we?
-
-> greg k-h
-> 
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
