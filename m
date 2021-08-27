@@ -2,145 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 066AD3F9F5C
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Aug 2021 20:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 121EB3FA0C0
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Aug 2021 22:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbhH0S6u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Aug 2021 14:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
+        id S231781AbhH0UmA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Aug 2021 16:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbhH0S6t (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Aug 2021 14:58:49 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4F8C061757;
-        Fri, 27 Aug 2021 11:58:00 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id x11so16038008ejv.0;
-        Fri, 27 Aug 2021 11:58:00 -0700 (PDT)
+        with ESMTP id S231774AbhH0Ul6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Aug 2021 16:41:58 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BECC0613D9;
+        Fri, 27 Aug 2021 13:41:08 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id h9so16453084ejs.4;
+        Fri, 27 Aug 2021 13:41:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pFgF/5yzy8h/uQFvUpdFC8Vraw1yd6xUZU7Dag6hLSI=;
-        b=oGwTmpZvNFI0ClOuczO7mD72azHgn5pORuZzoy5WZJ5awI1Z8ek+8eziGsqBlsEAzI
-         B5c9aXmt9S+RmWrb6i22fwzsCs5S+2UFPetrJ9nfO3usGqRt+HAJTzY0jCPi42x4nuQd
-         gXPKjW84VACZ7QymK38tiYwJMFW9HCwsbKc9RDjzCvY5P6tRRwBSaicIJq2bXgdfdU5v
-         +CImNQ5JpHS0uZ4gjdKe0mJzs6adzchFLAQJwHvCzJjiBdSzY0ZYoA8RXvGn28Klaxit
-         xIS5aaLfzDTuhUkunysnhRQ3u0rwHCJI2dUNv9hM7Teq5XdjV8B2LtWrBq8uIe5qYY3w
-         5E0Q==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Xf357nAIQp/DfI8J7kSV68oMUuTmpfBnw0jmnOXe50I=;
+        b=i02ToSDhvCjpWFC6uRaCryi7/LoA9thyo2fw2FYBXwihADlLwRKxiCF9v7WVJ2Lhx2
+         Y6fDfyjsiUQ8qOYfRkHPMBjsv9fl+BjwnQ05CYN93sRhl313UTNCM1nrbMdzmnwk11yj
+         AXMWlfG1rT4eEiQXnKW0e4F01vXUsUTngUz0Mxkdc9UHWEyyxJAP5Gkn2YiSCoIYdTk0
+         lxz4AJ+PBklLOYq4T2r+kIUwLER4I7N7QS3RTdTaf4he83kFr6v3ZO0hBnl1ODAbMp2U
+         JUR40l2FbOcle4Ah7uIX0nOL8oQH66GsFwICiI8/XlnWt7z1Y2sHiCuS9ENrQqBpK5Jj
+         ImbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pFgF/5yzy8h/uQFvUpdFC8Vraw1yd6xUZU7Dag6hLSI=;
-        b=eZKFWJ9FmKTWOXbEL+LhOLS8jkydqfzw496GoLY+pBPgx0JOz2HLFRb+315e8DosCU
-         fiOGO4/uLmHXc8oSvUnbBRRRJ69JnN/mDVA5mI1kAEBq2UHnKWvy4YOAQOQuMw+JUl2A
-         g9qmU4xfZ1gzuwKR5bsdf5g+vQsV7rmR4e/bb88vwPWVy2C8kLDB8kCGOgGihQJWZ/Ff
-         xbYhmjvvcoum/dae725sABHDlxNBBxJDgrcFKZRtEQ06GSGbFW1ir33OYBDDFIshDThp
-         kr0pP+g8X0fydriDKS7qXOsMaVZTO1yCXgbtDsIXHHWnSAiNJGVY+Tc7G3D8dA9UIYTL
-         lztg==
-X-Gm-Message-State: AOAM532lqwFNdW9MmZ/vnrk/HJskcJ8UDd6b+LN5YEK2eTJfsZnGDGS8
-        1NG+6owDnahhmPd7FW7aW3JOOIpBjKJ2CaOJp4J9voiK3DcWnw==
-X-Google-Smtp-Source: ABdhPJz6iozh/3D2nGo2kcbEHGLGPEI5fUuzht04Z7PM9AgJzjkjGN+KjfBctNQzrCntj3g3cO59qg+X5JPu+zUt2zI=
-X-Received: by 2002:a17:906:93ef:: with SMTP id yl15mr11692083ejb.229.1630090678983;
- Fri, 27 Aug 2021 11:57:58 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Xf357nAIQp/DfI8J7kSV68oMUuTmpfBnw0jmnOXe50I=;
+        b=H65stQ3GDPDBXRsv4LGA50oMFS+znfkP531+fr//9w7H2v2PU+f8RoeLWmqv6s2kU0
+         kODDxOjEUrOpQVkHxbpVo4hzmbvFlWnVEpnvIRnb/ITozqjffHa9EadYLDLbj2NSeE+h
+         y2/BdFUEDSf0BJvwTUUHDbbvM7jMnLpzs/QahCZt+Fe+Uy2UgUYGpFg3enVXatxMeW7G
+         VGBayLGMtp132V4Ve6+c5g2IXZ8Tq6zVAbjyHHMYgf+XhamsUMt3kdxysix/KnyJ+UVw
+         E04AM3Bn/UpzMo18GNYB5o+SdU3VEYishesylE6sQfd0Wbwow753caW0XOJzVnmjgkr9
+         W5yQ==
+X-Gm-Message-State: AOAM5321eZR7uUF2i4nlMS7DHQsbyUmcdUUZwXWake/9Nwdb7E3I6FWB
+        uw084xlEQGuej1RjFuDay44=
+X-Google-Smtp-Source: ABdhPJzzLZMz6eEGyk7vQVVUp9Qi6qWAHt1bt9JJN1w4oRxyhxemJFY2E+i7IWTJQYI/Nw7Zrd1BGg==
+X-Received: by 2002:a17:907:3e05:: with SMTP id hp5mr11988313ejc.527.1630096867440;
+        Fri, 27 Aug 2021 13:41:07 -0700 (PDT)
+Received: from ?IPv6:2001:981:6fec:1:1b32:912f:78cc:6c61? ([2001:981:6fec:1:1b32:912f:78cc:6c61])
+        by smtp.gmail.com with ESMTPSA id s17sm3863006edt.69.2021.08.27.13.41.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Aug 2021 13:41:06 -0700 (PDT)
+Subject: Re: [PATCH v2 1/3] Revert "usb: gadget: u_audio: add real feedback
+ implementation"
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ferry Toth <ftoth@exalondelft.nl>
+Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jack Pham <jackp@codeaurora.org>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
+        Lorenzo Colitti <lorenzo@google.com>,
+        Wesley Cheng <wcheng@codeaurora.org>, robh+dt@kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        frowand.list@gmail.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, heikki.krogerus@linux.intel.com,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Pavel Hofman <pavel.hofman@ivitera.com>
+References: <20210826185739.3868-1-ftoth@exalondelft.nl>
+ <20210826185739.3868-2-ftoth@exalondelft.nl> <YSiiTrW/ZF2PyGWd@kroah.com>
+From:   Ferry Toth <fntoth@gmail.com>
+Message-ID: <605f5ae5-365d-80be-42a4-8d273a20c3d7@gmail.com>
+Date:   Fri, 27 Aug 2021 22:41:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20210630173042.186394-1-aford173@gmail.com> <20210630173042.186394-2-aford173@gmail.com>
- <CAMuHMdXoWZMj8+LhUPSpqa4t-G1WrW-wfOy3XzEDe0ihSKQkCw@mail.gmail.com> <TY2PR01MB3692DA5F92178F1ECC31BACDD8009@TY2PR01MB3692.jpnprd01.prod.outlook.com>
-In-Reply-To: <TY2PR01MB3692DA5F92178F1ECC31BACDD8009@TY2PR01MB3692.jpnprd01.prod.outlook.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Fri, 27 Aug 2021 13:57:48 -0500
-Message-ID: <CAHCN7xJrP9Aug6jQzWqdSZ3Tr1_A9qhssc6SYW0rS-VE9Yg9PA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] usb: renesas_usbhs: Enable support for more than two clks
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YSiiTrW/ZF2PyGWd@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 1, 2021 at 6:34 AM Yoshihiro Shimoda
-<yoshihiro.shimoda.uh@renesas.com> wrote:
->
-> Hi Adam, Geert-san,
->
-> > From: Geert Uytterhoeven, Sent: Thursday, July 1, 2021 6:07 PM
-> <snip>
-> > To: Adam Ford <aford173@gmail.com>
-> > Cc: USB list <linux-usb@vger.kernel.org>; Adam Ford-BE <aford@beaconembedded.com>; Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org>; Rob Herring <robh+dt@kernel.org>; Magnus Damm <magnus.damm@gmail.com>; Yoshihiro Shimoda
-> > <yoshihiro.shimoda.uh@renesas.com>; open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS
-> > <devicetree@vger.kernel.org>; Linux Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux-Renesas
-> > <linux-renesas-soc@vger.kernel.org>
-> > Subject: Re: [PATCH 2/3] usb: renesas_usbhs: Enable support for more than two clks
-> >
-> > Hi Adam,
-> >
-> > Thanks for your patch!
-> >
-> > On Wed, Jun 30, 2021 at 7:30 PM Adam Ford wrote:
-> <snip>
-> > > diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
-> > > index 3af91b2b8f76..255e4bd68ed3 100644
-> > > --- a/drivers/usb/renesas_usbhs/common.c
-> > > +++ b/drivers/usb/renesas_usbhs/common.c
-> <snip>
-> > > @@ -309,11 +311,13 @@ static int usbhsc_clk_get(struct device *dev, struct usbhs_priv *priv)
-> > >          * To backward compatibility with old DT, this driver checks the return
-> > >          * value if it's -ENOENT or not.
-> > >          */
-> > > -       priv->clks[1] = of_clk_get(dev_of_node(dev), 1);
-> > > -       if (PTR_ERR(priv->clks[1]) == -ENOENT)
-> > > -               priv->clks[1] = NULL;
-> > > -       else if (IS_ERR(priv->clks[1]))
-> > > -               return PTR_ERR(priv->clks[1]);
-> > > +       for (i = 1; i < ARRAY_SIZE(priv->clks); i++) {
-> > > +               priv->clks[1] = of_clk_get(dev->of_node, i);
->
-> s/clks[1]/[i]/
->
-> > > +               if (PTR_ERR(priv->clks[i]) == -ENOENT)
-> > > +                       priv->clks[i] = NULL;
-> > > +               else if (IS_ERR(priv->clks[i]))
-> > > +                       return PTR_ERR(priv->clks[i]);
-> > > +       }
-> >
-> > This is identical to the current code, as ARRAY_SIZE(priv->clks) == 2.
-> > Probably you wanted to increase usbhs_priv.clks[], too?
+Op 27-08-2021 om 10:29 schreef Greg Kroah-Hartman:
+> On Thu, Aug 26, 2021 at 08:57:37PM +0200, Ferry Toth wrote:
+>> This reverts commit e89bb4288378b85c82212b60dc98ecda6b3d3a70.
+>>
+>> The commit is part of a series with commit
+>> 24f779dac8f3efb9629adc0e486914d93dc45517 causing a BUG on dwc3
+>> hardware, at least on Intel Merrifield platform when configured
+>> through configfs:
+>> BUG: kernel NULL pointer dereference, address: 0000000000000008
+>> ...
+>> RIP: 0010:dwc3_gadget_del_and_unmap_request+0x19/0xe0
+>> ...
+>> Call Trace:
+>>   dwc3_remove_requests.constprop.0+0x12f/0x170
+>>   __dwc3_gadget_ep_disable+0x7a/0x160
+>>   dwc3_gadget_ep_disable+0x3d/0xd0
+>>   usb_ep_disable+0x1c/0x70
+>>   u_audio_stop_capture+0x79/0x120 [u_audio]
+>>   afunc_set_alt+0x73/0x80 [usb_f_uac2]
+>>   composite_setup+0x224/0x1b90 [libcomposite]
+>>
+>> Pavel's suggestion to add
+>> `echo "adaptive" > functions/uac2.usb0/c_sync` to the configfs script
+>> resolves the issue.
+>> Thinh suggests "the crash is probably because of f_uac2 prematurely
+>> freeing feedback request before its completion. usb_ep_dequeue() is
+>> asynchronous. dwc2() may treat it as a synchronous call so you didn't
+>> get a crash."
+>>
+>> Revert as this is a regression and the kernel shouldn't crash depending
+>> on configuration parameters.
+> 
+> Are these normal configuration options in the wild, or is this just
+> something that you "can do"?
 
-Thanks for the review.  Sorry for my delayed response.  I broke my
-wrist on the evening on June 30, and I was on medical leave for 6
-weeks.  I am now trying to get caught up to where I was.
->
-> I think so.
-> # I realized the clks array is only 2, so that this driver cannot
-> # enable usb2_clksel...
->
-> > Does it make sense to start using the clk_bulk*() API?
->
-> clk_bulk*() API seems to need clock-names property.
-> Is my understanding correct? However, the hsusb nodes doesn't
-> have the property for now...
+It's a work around suggested by Pavel, a line that can be added to 
+configfs script.
 
-The usb2_clksel has the names "ehci_ohci" and "hs-usb-if" for <&cpg
-CPG_MOD 703> and <&cpg CPG_MOD 704>, respectively.
+>> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
+> 
+> I need an ack from the original authors to revert all this...
 
-What if I add the clock-names property, then switch to the clk_bulk
-IO?  I think we can just turn them all on together if that's
-acceptable
+A fix has appeared:
+https://lore.kernel.org/linux-usb/1jfsuvw817.fsf@starbuckisacylon.baylibre.com/T/#m922149b7e74204c8ed1bed2c624910ab4eafd43c
 
-adam
+This has been acked by Felipe. If we can get that in 5.14.0 it would be 
+preferable to reverting this series.
 
+> thanks,
+> 
+> greg k-h
+> 
 
->
-> Best regards,
-> Yoshihiro Shimoda
->
