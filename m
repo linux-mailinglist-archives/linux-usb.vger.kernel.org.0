@@ -2,58 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A44B43F95EA
+	by mail.lfdr.de (Postfix) with ESMTP id ED90A3F95EB
 	for <lists+linux-usb@lfdr.de>; Fri, 27 Aug 2021 10:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244502AbhH0IW1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Aug 2021 04:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
+        id S244530AbhH0IWa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Aug 2021 04:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232409AbhH0IW0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Aug 2021 04:22:26 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43BE7C061757
-        for <linux-usb@vger.kernel.org>; Fri, 27 Aug 2021 01:21:38 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id g135so3309769wme.5
-        for <linux-usb@vger.kernel.org>; Fri, 27 Aug 2021 01:21:38 -0700 (PDT)
+        with ESMTP id S244505AbhH0IW3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Aug 2021 04:22:29 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A25C061757
+        for <linux-usb@vger.kernel.org>; Fri, 27 Aug 2021 01:21:40 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id v20-20020a1cf714000000b002e71f4d2026so6892834wmh.1
+        for <linux-usb@vger.kernel.org>; Fri, 27 Aug 2021 01:21:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4quR9ThIRPYQbS8Ifbodvt1W0T6Q/h5o2e7waNnSENc=;
-        b=FlLhaZownM7wlqV75LN/q8RevQYUBQoiCG/qB3gPu7NzIMm5VRLHwORCgbic9v6f9o
-         0hEmxoGdrcgZHidumlo7S5VbEuWzqPsXCyvk4M5o9s5csuashKfUWMxDhLwTuwM2GHyI
-         ET2/etOlnr8qxNrD/+6aiuyeEIyVucOHCJUVvjYsbZsT9VtNomNO0M/8594yzqg4Gpue
-         iipmWEvniNpKvmb3yVtIH60XkuLoV4ZbgQzWyX5roTACKmUPmOShq0r9aAYwt7ak2r86
-         HNbXE2JSmxawDCOTqjnRVBvlu839Oa5ftsxdeidk2vLbXB1DLbfDeXzwuhwNSRwPmwJq
-         xj5A==
+        bh=62h6uRc5/FuReu7rXAOF6mghumi9ejQXLtu8FgRmxU8=;
+        b=Hgm8OaMBtNQZ93naj2XxwwN2zicDzre60pSwmXjyVgZg5WnAiuMv4WC11F4p2zL033
+         k/xmSJQnzX4iZ9OLv+UiF+Z/NxSG1d5iydT+bSUjv/I831hqrv5mCkh/hbNNq5WvFhW9
+         CFOrmVRETPY9VOYTN10KPCUt17pkJM7UdOcbUQnUvf/WbimPZV6X9JzGpebcvcqEGLUG
+         0DcCVXSMhqzfO9LCQ2Kgn9sz8rT+zldMThy4xzJDuxUZkJGck6iK1bj6+E4TWloB1/e/
+         rPFiZdzVvaf39kSaGk75COlohOQf2OuhLsL98h/N0wj+WHn4GcJdHAIFEjTDxGAJUIxy
+         79FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4quR9ThIRPYQbS8Ifbodvt1W0T6Q/h5o2e7waNnSENc=;
-        b=gGPZRQCkFbMlWiHhx5v9AbnnNKajQTpOcAxIsgIZcdL8cpWNXWDEhM+dAHKgeatFsz
-         bxuDcarCBAvPZyO1pmBKE66AZNb6XS+mhs0o8vUVpLUta83FFrP1tG/kI4n4xQKooENB
-         wuAtAdh7gmQ/cTf7vxmEnqaiQKwd/QGUDydozU5qgXDh9LBnqmXn0QE7/TCipiVNFRQo
-         L5bTQYZzUouoBOb1s+GLFie2wj05aPT4ZDfrFsmDftj3x99Mv5jcTTAdv3Ws4bwpCdBj
-         yJDGlARw6YvsL794QVmV0XZV5TPBqgRCxlLwW3NylTcqP/WUNRys7E0CUWdWiqdq67oO
-         dxfw==
-X-Gm-Message-State: AOAM531PjHmlkpVDavAW2f3XxDh5DA3rYcxx2azmjyDzQSA++z84EeVZ
-        5YDa2tjva0ixRe1UEb9CSqrXmAZ1Bf9HFQ==
-X-Google-Smtp-Source: ABdhPJwOd8aHMqciNWJJ8h4LCZK37/gZNfbaS86EAAbN4yiSllDMG81r2fDINycBJ1Yk237J7SKRfQ==
-X-Received: by 2002:a1c:2702:: with SMTP id n2mr7551425wmn.78.1630052496922;
-        Fri, 27 Aug 2021 01:21:36 -0700 (PDT)
+        bh=62h6uRc5/FuReu7rXAOF6mghumi9ejQXLtu8FgRmxU8=;
+        b=F1IogyJ2AnPil4cbrsLlouInca4PdReuEqCXVxLo9FP7Bo+wSxQjeTnPG/PzgpLBKU
+         peAr7GLtf1nVBCUYBcN8KuuUifR0WwWGsFzCV93PXlowu+MSrDrzSk28Ykb9JrmuCA71
+         csajkBhLayTdtKM+SNGOjb7lMzrW2mE+uOvJymkJpQTng9ZMmDRJ3bgaqRpPcPeMQfLd
+         SYM/4I0q7GDIzZor5W/KfE8N7qNqDEDaZcS0aJFu6ADcIxjsQr5buSulZi5egH6mrpj0
+         g3KgNCL9OqCEHvAajGS6C16eDtRuHH4YyN0Kwr0L7Zo3D2IQmz0eaCYjmCGgqUBe6tYN
+         4TbQ==
+X-Gm-Message-State: AOAM532hQQPfb/OCuUsc9aa3GmQ7h2vU/loQNygFCf0/PoURwraf83cm
+        ODIuJDnuH5ShyHW+imSAKi/cEg==
+X-Google-Smtp-Source: ABdhPJwbZ4MFzQnE2KhOZmlaTFeYifgvxwquhjmWF9xXEh68kV9BNfSrHhlOxApRZ5ymhRIbOWcW4Q==
+X-Received: by 2002:a1c:a181:: with SMTP id k123mr17994280wme.90.1630052498920;
+        Fri, 27 Aug 2021 01:21:38 -0700 (PDT)
 Received: from arch-thunder.local (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
-        by smtp.gmail.com with ESMTPSA id y1sm5177725wmq.43.2021.08.27.01.21.36
+        by smtp.gmail.com with ESMTPSA id y1sm5177725wmq.43.2021.08.27.01.21.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Aug 2021 01:21:36 -0700 (PDT)
+        Fri, 27 Aug 2021 01:21:38 -0700 (PDT)
 From:   Rui Miguel Silva <rui.silva@linaro.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Dietmar Eggemann <deggeman@gmx.de>
 Cc:     linux-usb@vger.kernel.org, Rui Miguel Silva <rui.silva@linaro.org>
-Subject: [PATCH 1/5] usb: isp1760: fix memory pool initialization
-Date:   Fri, 27 Aug 2021 09:21:08 +0100
-Message-Id: <20210827082112.4061086-2-rui.silva@linaro.org>
+Subject: [PATCH 2/5] usb: isp1760: fix qtd fill length
+Date:   Fri, 27 Aug 2021 09:21:09 +0100
+Message-Id: <20210827082112.4061086-3-rui.silva@linaro.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210827082112.4061086-1-rui.silva@linaro.org>
 References: <20210827082112.4061086-1-rui.silva@linaro.org>
@@ -63,32 +63,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The loops to setup the memory pool were skipping some
-blocks, that was not visible on the ISP1763 because it has
-fewer blocks than the ISP1761. But won testing on that IP
-from the family that would be an issue.
+When trying to send bulks bigger than the biggest block size
+we need to split them over several qtd. Fix this limiting the
+maximum qtd size to largest block size.
 
 Reported-by: Dietmar Eggemann <deggeman@gmx.de>
 Signed-off-by: Rui Miguel Silva <rui.silva@linaro.org>
 ---
- drivers/usb/isp1760/isp1760-hcd.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/isp1760/isp1760-hcd.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/isp1760/isp1760-hcd.c b/drivers/usb/isp1760/isp1760-hcd.c
-index bf8ab3fe2e5a..b3a55c5d2155 100644
+index b3a55c5d2155..fba21122bb00 100644
 --- a/drivers/usb/isp1760/isp1760-hcd.c
 +++ b/drivers/usb/isp1760/isp1760-hcd.c
-@@ -588,8 +588,8 @@ static void init_memory(struct isp1760_hcd *priv)
+@@ -1829,9 +1829,11 @@ static void packetize_urb(struct usb_hcd *hcd,
+ 			goto cleanup;
  
- 	payload_addr = PAYLOAD_OFFSET;
+ 		if (len > mem->blocks_size[ISP176x_BLOCK_NUM - 1])
+-			len = mem->blocks_size[ISP176x_BLOCK_NUM - 1];
++			this_qtd_len = mem->blocks_size[ISP176x_BLOCK_NUM - 1];
++		else
++			this_qtd_len = len;
  
--	for (i = 0, curr = 0; i < ARRAY_SIZE(mem->blocks); i++) {
--		for (j = 0; j < mem->blocks[i]; j++, curr++) {
-+	for (i = 0, curr = 0; i < ARRAY_SIZE(mem->blocks); i++, curr += j) {
-+		for (j = 0; j < mem->blocks[i]; j++) {
- 			priv->memory_pool[curr + j].start = payload_addr;
- 			priv->memory_pool[curr + j].size = mem->blocks_size[i];
- 			priv->memory_pool[curr + j].free = 1;
+-		this_qtd_len = qtd_fill(qtd, buf, len);
++		this_qtd_len = qtd_fill(qtd, buf, this_qtd_len);
+ 		list_add_tail(&qtd->qtd_list, head);
+ 
+ 		len -= this_qtd_len;
 -- 
 2.33.0
 
