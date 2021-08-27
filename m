@@ -2,94 +2,209 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 651733F9619
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Aug 2021 10:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C773F96EE
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Aug 2021 11:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244543AbhH0IaA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Aug 2021 04:30:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44000 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232048AbhH0I36 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 27 Aug 2021 04:29:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D255E60F92;
-        Fri, 27 Aug 2021 08:29:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1630052949;
-        bh=BU9TRzkMG53KIKBgnqTa/wiySOBfMjCnl6DVJZAWeR8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AkxzV2bWozX+avMROB8UwIqZy81fYWziObSlO5YoQPeCWrvnzwnTkH9hZoql89feF
-         OQZ+indgwfTFbxp6FK7hde02GgkG/34BwW47EzC1Wt3i9pWpdX0pgQpcW4WIFvO4uZ
-         eL7yE5pzmJQNXzFdEcumG9p0BgwRatKXIdJ8IGa8=
-Date:   Fri, 27 Aug 2021 10:29:02 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ferry Toth <ftoth@exalondelft.nl>
-Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
+        id S244824AbhH0J1Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Aug 2021 05:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244818AbhH0J1X (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Aug 2021 05:27:23 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3BBC0613CF
+        for <linux-usb@vger.kernel.org>; Fri, 27 Aug 2021 02:26:35 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id g138so3433711wmg.4
+        for <linux-usb@vger.kernel.org>; Fri, 27 Aug 2021 02:26:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version:content-transfer-encoding;
+        bh=wF0uIDIgShpTPEd9rqT4PGDU/K6VDBXfaZiEIVdnuIE=;
+        b=bzX8KF9YCz5YCsnxGdeyeJ9my4fTQkap0yMExSSko9O4L6nHW697Tj3RhGHvPQ48x6
+         H025eJF6ANFelWU621QnI5yOG5+mNsmbTB13ogTtYu+Q5NnOo+OmXgwW0yyHtg44kzwc
+         EIbyIGcOafi5DQoPAKVTiT1z1l9FkYJbtPEDCKuAmoVHcjIMtqn4ukTXhckzl/7zDVK+
+         cjROwr50JnNg3T9bWeHGieAdpmRg31Nhj8qxfB906IQ/oy75VWZJf1vprMTvOepmVAyO
+         KyDYmYSbqeCLLlKOGsK4q/f910Q03R9/qqVFzntt9O3EU9WaG8vR1LGEO1CMAH7IiGKK
+         Q5zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version:content-transfer-encoding;
+        bh=wF0uIDIgShpTPEd9rqT4PGDU/K6VDBXfaZiEIVdnuIE=;
+        b=qDTTSB4svevmdMBK3imKF017PuHHORZ+MSSPkKu2CKrUbwvaMoEV47Op+rrKSHKp45
+         NIIAN4yqsavXSJ+iEdciIJfkhYna/EXrTL49FB2Ydg3WebQlaSIBxg1eiZwEfz3G6Gc+
+         VXp0/CFkOQK8qUYI1aW3UeRk3US+kh0Zv7u8D4ZtF1jfkmQ/hcdf8Li+faGLAYXGPeRE
+         UexkJutPKLQZtnCKBy4jYpMGy6u4clLxb9QA3FsMMItudiDFma/XWggoHo0niK/SWLEu
+         mNDdaXJ0ibVDdz6jgmu53h25xkBM2d4hSQbett+a8RB/J3QbBYwN91iLhJPCl4FlB7hH
+         PAhQ==
+X-Gm-Message-State: AOAM530rqP1foFbnVnUfUd5BB4DyYPFmUU4Tk2v5+c70U5hisyzrr8X4
+        4iAobkqF1VQYaNZVeFIbhJf1Sw==
+X-Google-Smtp-Source: ABdhPJwELYQZOkqrkNnnr6bHsLe7bUcq0F3gy7Bs5kj7+uCuI5HrXHevEblv8SQp3623pFUYW54bDw==
+X-Received: by 2002:a05:600c:1c11:: with SMTP id j17mr18123424wms.138.1630056393495;
+        Fri, 27 Aug 2021 02:26:33 -0700 (PDT)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id o21sm4844926wms.32.2021.08.27.02.26.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Aug 2021 02:26:33 -0700 (PDT)
+References: <20210824201433.11385-1-ftoth@exalondelft.nl>
+ <20210825092107.124419-1-jbrunet@baylibre.com>
+ <79bd686d-5c1f-982c-344a-17c10b64a231@gmail.com>
+ <9709a13f-46f5-ad53-3d19-86b4954bb0f8@synopsys.com>
+ <1jbl5ky7a4.fsf@starbuckisacylon.baylibre.com>
+ <a2bbb7eb-f952-bc35-6a58-68b15515c716@synopsys.com>
+User-agent: mu4e 1.6.4; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Ferry Toth <fntoth@gmail.com>,
+        Ferry Toth <ftoth@exalondelft.nl>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
         Felipe Balbi <balbi@kernel.org>,
-        Jack Pham <jackp@codeaurora.org>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
-        Lorenzo Colitti <lorenzo@google.com>,
-        Wesley Cheng <wcheng@codeaurora.org>, robh+dt@kernel.org,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        frowand.list@gmail.com, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, heikki.krogerus@linux.intel.com,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
         Pavel Hofman <pavel.hofman@ivitera.com>
-Subject: Re: [PATCH v2 1/3] Revert "usb: gadget: u_audio: add real feedback
- implementation"
-Message-ID: <YSiiTrW/ZF2PyGWd@kroah.com>
-References: <20210826185739.3868-1-ftoth@exalondelft.nl>
- <20210826185739.3868-2-ftoth@exalondelft.nl>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jack Pham <jackp@codeaurora.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: f_uac2: fixup feedback endpoint stop
+Date:   Fri, 27 Aug 2021 10:38:12 +0200
+In-reply-to: <a2bbb7eb-f952-bc35-6a58-68b15515c716@synopsys.com>
+Message-ID: <1jk0k7w853.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210826185739.3868-2-ftoth@exalondelft.nl>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 26, 2021 at 08:57:37PM +0200, Ferry Toth wrote:
-> This reverts commit e89bb4288378b85c82212b60dc98ecda6b3d3a70.
-> 
-> The commit is part of a series with commit
-> 24f779dac8f3efb9629adc0e486914d93dc45517 causing a BUG on dwc3
-> hardware, at least on Intel Merrifield platform when configured
-> through configfs:
-> BUG: kernel NULL pointer dereference, address: 0000000000000008
-> ...
-> RIP: 0010:dwc3_gadget_del_and_unmap_request+0x19/0xe0
-> ...
-> Call Trace:
->  dwc3_remove_requests.constprop.0+0x12f/0x170
->  __dwc3_gadget_ep_disable+0x7a/0x160
->  dwc3_gadget_ep_disable+0x3d/0xd0
->  usb_ep_disable+0x1c/0x70
->  u_audio_stop_capture+0x79/0x120 [u_audio]
->  afunc_set_alt+0x73/0x80 [usb_f_uac2]
->  composite_setup+0x224/0x1b90 [libcomposite]
-> 
-> Pavel's suggestion to add
-> `echo "adaptive" > functions/uac2.usb0/c_sync` to the configfs script
-> resolves the issue.
-> Thinh suggests "the crash is probably because of f_uac2 prematurely
-> freeing feedback request before its completion. usb_ep_dequeue() is
-> asynchronous. dwc2() may treat it as a synchronous call so you didn't
-> get a crash."
-> 
-> Revert as this is a regression and the kernel shouldn't crash depending
-> on configuration parameters.
 
-Are these normal configuration options in the wild, or is this just
-something that you "can do"?
+On Fri 27 Aug 2021 at 00:50, Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
 
-> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
+>>>>> diff --git a/drivers/usb/gadget/function/u_audio.c
+>>>>> b/drivers/usb/gadget/function/u_audio.c
+>>>>> index 018dd0978995..63d9340f008e 100644
+>>>>> --- a/drivers/usb/gadget/function/u_audio.c
+>>>>> +++ b/drivers/usb/gadget/function/u_audio.c
+>>>>> @@ -230,7 +230,13 @@ static void u_audio_iso_fback_complete(struct
+>>>>> usb_ep *ep,
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int status =3D req->status;
+>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* i/f shutting down */
+>>>>> -=C2=A0=C2=A0=C2=A0 if (!prm->fb_ep_enabled || req->status =3D=3D -ES=
+HUTDOWN)
+>>>>> +=C2=A0=C2=A0=C2=A0 if (!prm->fb_ep_enabled) {
+>>>
+>>> prm->fb_ep_enabled is not protected. Potential race problem here?
+>>=20
+>> Given how the variable is used, I don't think so.
+>> Could you please detail ?
+>>=20
+>
+> I'm thinking of this scenario:
+>
+> Since free_ep_fback() is called in a separate thread,
+> u_audio_iso_fback_complete() can come in the middle after
+> prm->fb_ep_enabled is cleared but before the usb_ep_dequeue(). So the
+> request may be freed before being accessed again in usb_ep_dequeue().
+>
 
-I need an ack from the original authors to revert all this...
+You are right - there is short window of opportunity.
+Looks like a 2nd separate issue affecting all u_audio endpoints. (Would
+be solved by reverting the feedback series)
 
-thanks,
+Fix seems fairly simple.
 
-greg k-h
+>> (I don't think this is really related to the current problem though)
+>
+> It's related to how we go about to solve the problem right?
+>
+> Can we just check for the req->status for -ECONNRESET and -ESHUTDOWN and
+> free the request? Those 2 statuses should be for when the request is
+> cancelled and when the endpoint is disabled.
+>
+
+The same problem happened on the data endpoint while feedback was being
+reviewed. This is why data got fixed, and the feedback endpoint did not.
+
+As explained in the description, the fix is merely aligning what is
+done for the different endpoints here.
+
+Some of the people who have worked on this are no USB expert (myself
+included) so I'm sure things can be improved. I'd suggest to take the
+rework u_audio as a 2nd step.
+
+>>=20
+>>>
+>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(req->buf);
+>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 usb_ep_free_request(ep, r=
+eq);
+>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return;
+>>>>> +=C2=A0=C2=A0=C2=A0 }
+>>>>> +
+>>>>> +=C2=A0=C2=A0=C2=A0 if (req->status =3D=3D -ESHUTDOWN)
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return;
+>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
+>>>>> @@ -421,9 +427,10 @@ static inline void free_ep_fback(struct
+>>>>> uac_rtd_params *prm, struct usb_ep *ep)
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 prm->fb_ep_enabled =3D false;
+>>>>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (prm->req_fback) {
+>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 usb_ep_dequeue(ep, prm->r=
+eq_fback);
+>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(prm->req_fback->buf=
+);
+>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 usb_ep_free_request(ep, p=
+rm->req_fback);
+>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (usb_ep_dequeue(ep, pr=
+m->req_fback)) {
+>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 k=
+free(prm->req_fback->buf);
+>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u=
+sb_ep_free_request(ep, prm->req_fback);
+>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 prm->req_fback=
+ =3D NULL;
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>>>>> =C2=A0=20
+>>>
+>>> On a separate note, I notice that f_uac2 only queues a single feedback
+>>> request at a time for isoc endpoint? Even though the interval is 1ms,
+>>> this will easily cause data drop.
+>>>
+>>> Also, you're ignoring other request error status and still processing
+>>> bogus data on request completion? That doesn't seem right.
+>>=20
+>> Gadget is sendind the feedback data, not processing it. Every data sent
+>
+> Ah ok.. I missed that it's IN request.
+>
+>> is OK.  Yes, packets can be missed with the current implementation,
+>> meaning the feedback value is not reported as often as initially
+>> intended. On slower HW, packets are also missed with 2 requests queued,
+>
+> 2 is still too low. From our HW testing, minimum should be 4 to minimize
+> data loss at 1ms interval.
+
+Maybe 4 should be the default then ?
+
+>
+>> not only on the feedback endpoint but also on the playback
+>> endpoint. Picking the approriate value is not straight forward. For the
+>> feedback endpoint it isn't big deal because, according to the spec, if
+>> the feedback is not sent, the host shall assume the value hasn't
+>> changed. This why the whole thing works as it is.
+>
+> Why do this when we can avoid it.
+
+Because it was not known at the time
+
+> We know that there will be data drop
+> with the way it's implemented now. There's no option to adjust the
+> number of feedback requests either.
+>
+>>=20
+>> I admit things still aren't perfect, but there is progress ...
+>>=20
+> Thanks for the updates to audio/f_uac2. It's been a long time since
+> anyone working on it.
+>
+> BR,
+> Thinh
+
