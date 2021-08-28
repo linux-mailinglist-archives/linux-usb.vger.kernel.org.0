@@ -2,162 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9AB3FA34F
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Aug 2021 05:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA8A3FA4D5
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Aug 2021 11:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233183AbhH1DLJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Aug 2021 23:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbhH1DLI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Aug 2021 23:11:08 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE94C061796
-        for <linux-usb@vger.kernel.org>; Fri, 27 Aug 2021 20:10:18 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id b6so13219707wrh.10
-        for <linux-usb@vger.kernel.org>; Fri, 27 Aug 2021 20:10:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rtst-co-kr.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=y527krCDKEsx0ChQP3KqPNsQAyNPKFXncMJNmo17VWs=;
-        b=dgsNlA3g3eXW2MkNa/+cZhqT/7ECRL9+46yAuRJlZUpoh6PhGCsQjdIeqz7GTF+eHc
-         HRySG3VjgQeTYhUzXiPQTl75oX8CdG8yOTMeSTC3wB1S0PJmtzMR306lXDSOnTbjFoSc
-         npvri3Z14MKg+/w5U6LIDi8RnQyVG4yiHS3rwzMMZWWkCB78vElcBedD7UXx00WvD82J
-         x+QAX4sAoIb0gUO8bafwUqgxVIL0EOE8qn+hUeRTHBuauk3fzs+6tMUS3NSsJOjzt31R
-         9vktrqUdkfSdfWGZGvilAQyUIZUv8JQwVK65cbk3mx34028K12a92Cmzz0Konq40iebJ
-         yDvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=y527krCDKEsx0ChQP3KqPNsQAyNPKFXncMJNmo17VWs=;
-        b=jnkZG16wbjR5CPblc0N5oe+kI8j2cUJCCIqXF5t4ZfSwzRZu46OUzwSaFmbbjqGjbO
-         2W6C89Q6WY8shqRabPQkew5QaRSQ9zDfBbpTgwrrK5P9VEZDmcYCjFWDbx7kfBEpiz7u
-         bpBYAtPj9h5vjskJDT0uw/NLwesjUesU7jWjD2XFb5xfdSPbeahDIkU3ekImoOciGbFF
-         AlKrFLZTZIBkHZb+sAxCo10ojZk7vX8U4o6oSpov6+FPlHC2Pqj3EKux4lMhyCMf8DvE
-         +uGg0vn5biVfLI8TUGjTHQhmOQ01IBpQI8ciKVOVc1u9kR6j2MD6sT8rnJJVBMumpDG7
-         gIHg==
-X-Gm-Message-State: AOAM532rrnHo1VctaPpKZOxCGlbD72JoObvzGrnAeYo+UROf4VoRTO3K
-        I6UBR08X6JDbHcaSl/qAygY88nvLlPGAQL6ZtEJE4A==
-X-Google-Smtp-Source: ABdhPJy9gONy2gALGHWfXhx9Yau7+ZLZy0pqdCTKgLmcruFnoO3c99DOpMYDV7uYMmyyOTty7ZcEeGcN2Gp2tvByCfo=
-X-Received: by 2002:adf:ba4d:: with SMTP id t13mr13576388wrg.424.1630120216876;
- Fri, 27 Aug 2021 20:10:16 -0700 (PDT)
+        id S233707AbhH1JtZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 28 Aug 2021 05:49:25 -0400
+Received: from mga17.intel.com ([192.55.52.151]:39364 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233682AbhH1JtZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 28 Aug 2021 05:49:25 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10089"; a="198319733"
+X-IronPort-AV: E=Sophos;i="5.84,359,1620716400"; 
+   d="scan'208";a="198319733"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2021 02:48:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,359,1620716400"; 
+   d="scan'208";a="599634133"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 28 Aug 2021 02:48:33 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Sat, 28 Aug 2021 12:48:32 +0300
+Date:   Sat, 28 Aug 2021 12:48:32 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Ulrich Huber <ulrich@huberulrich.de>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: ucsi_acpi GET_CONNECTOR_STATUS failed (-5)
+Message-ID: <YSoGcC4Z1EP0S3KQ@kuha.fi.intel.com>
+References: <b36249c5-776a-9338-bb9f-ae6a5c446860@huberulrich.de>
+ <YSX7hZnCoFSXTFJe@kuha.fi.intel.com>
+ <0e77017d-9358-a691-6293-234fcbab6a31@huberulrich.de>
+ <a7f971ef-c3aa-aadc-e453-4c667a414131@huberulrich.de>
+ <YSekP0+tq6ISq6my@kuha.fi.intel.com>
+ <3fe6d701-bc14-9b26-a5af-aa38fe7c585e@huberulrich.de>
 MIME-Version: 1.0
-References: <20210817064353.GA669425@ubuntu> <CAJk_X9gbnx5edLmxKUfZYyDMQYKeotO3undgQygmp1skn2HjSQ@mail.gmail.com>
- <20210826230658.GB4335@Peter> <CAJk_X9i68vPWDEf2x6WtV73XRCuhyZF_26KtK=J+Z76ZyQe8PQ@mail.gmail.com>
- <20210828013811.GA3590@Peter>
-In-Reply-To: <20210828013811.GA3590@Peter>
-From:   Jeaho Hwang <jhhwang@rtst.co.kr>
-Date:   Sat, 28 Aug 2021 12:10:05 +0900
-Message-ID: <CAJk_X9i=rJ88eHoW5fyzvO83neeP0qDUYKi+-1OkrgD96b4GdQ@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: chipidea: add loop timeout for hw_ep_set_halt()
-To:     Peter Chen <peter.chen@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux team <team-linux@rtst.co.kr>,
-        =?UTF-8?B?67OA66y06rSRKEJ5ZW9uIE1vbyBLd2FuZykv7J6Q64+Z7ZmU7JewKUF1dG9tYXRpb24gUGxhdGZvcm0=?=
-         =?UTF-8?B?7Jew6rWs7YyA?= <mkbyeon@lselectric.co.kr>,
-        =?UTF-8?B?7LWc6riw7ZmNKENob2kgS2kgSG9uZykv7J6Q64+Z7ZmU7JewKUF1dG9tYXRpb24gUGxhdGZvcm3sl7A=?=
-         =?UTF-8?B?6rWs7YyA?= <khchoib@lselectric.co.kr>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3fe6d701-bc14-9b26-a5af-aa38fe7c585e@huberulrich.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-2021=EB=85=84 8=EC=9B=94 28=EC=9D=BC (=ED=86=A0) =EC=98=A4=EC=A0=84 10:38, =
-Peter Chen <peter.chen@kernel.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> On 21-08-27 10:35:05, Jeaho Hwang wrote:
-> > 2021=EB=85=84 8=EC=9B=94 27=EC=9D=BC (=EA=B8=88) =EC=98=A4=EC=A0=84 8:0=
-8, Peter Chen <peter.chen@kernel.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
-> > >
-> > > On 21-08-24 17:31:44, Jeaho Hwang wrote:
-> > > > 2021=EB=85=84 8=EC=9B=94 17=EC=9D=BC (=ED=99=94) =EC=98=A4=ED=9B=84=
- 3:44, Jeaho Hwang <jhhwang@rtst.co.kr>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=
-=B1:
-> > > > >
-> > > > > If ctrl EP priming is failed (very rare case in standard linux),
-> > > > > hw_ep_set_halt goes infinite loop. waiting 100 times was enough
-> > > > > for zynq7000.
-> > > > >
-> > > >
-> > > > Hi Peter.
-> > > > I found from zynq7000 TRM that the hardware clears Stall bit if a
-> > > > setup packet is received on a control endpoint.
-> > > > I think hw_ep_set_halt goes infinite loop since:
-> > > >
-> > > > 1. hw_ep_prime for control EP which is called from
-> > > > isr_tr_complete_handler -> isr_setup_status_phase is failed due to =
-a
-> > > > setup packet received.
-> > >
-> > > How do you know that? Do you observe the new setup packet on the bus
-> > > before the current status stage? Usually, the host doesn't begin new =
-setup
-> > > transfer before current setup transfer has finished.
-> > >
-> > > Peter
-> > >
-> >
-> > I found an error return from the second ENDPTSETUPSTAT checking
-> > routine, then setting the stall bit(TXS) kept failing. So I guessed it
-> > is due to a setup packet received.
-> > I didn't observe the setup packet by e.g. HW probes. Any other reason
-> > to produce that symptom?
->
-> I guess two possible reasons for that:
-> - The new setup is coming after priming
-> - The interrupt occurs after prime, and when the back from interrupt,
-> other thread for USB transfer is scheduled, eg, usb_ep_queue from RNDIS
->
-> From your experiments and observation, it seems the first reason is not p=
-ossible.
+On Thu, Aug 26, 2021 at 09:50:58PM +0200, Ulrich Huber wrote:
+> I just got around to test your patches. They seem to solve the issue
+> completely! Whatever I tried, the behavior of the port stayed consistent and
+> no error messages appeared in the log.
+> 
+> I'll continue using the patch for now and will notify you, should any issue
+> appear.
 
-I will check if any other thread calls udc. but the only workload
-using RNDIS was the host side ping sender.
-Thanks for the advice.
+Great! If there are no problems, I'll send them to Greg after the next
+-rc1.
 
-> Did your get failure with UP system?
+thanks,
 
-I'm sorry I don't understand what UP system means.
-
->
-> Peter
->
-> >
-> > For reminder, only reproduced on preemp_rt kernel and with Windows(10)
-> > RNDIS host.
-> >
-> > thanks.
-> >
-> >
-> > > > 2. in isr_tr_complete_handler it tries to call _ep_set_halt if eith=
-er
-> > > > isr_tr_complete_low or isr_setup_status_phase returns error.
-> > > > 3. Since the control EP got a setup packet, HW resets TXS bit just =
-as
-> > > > the driver sets inside hw_ep_set_halt so it goes infinite loop.
-> > > >
-> > > > Does it make sense? If it is right, we shouldn't call _ep_set_halt =
-if
-> > > > the err is -EAGAIN, which could be returned ONLY due to the setup
-> > > > packet issue described above.
-> > > > And the loop timeout is not required anymore.
-> > > >
-> > > > Can I ask your opinion on this, Peter and USB experts?
-> > > >
-> > > > Thanks.
-> > > >
->
-> --
->
-> Thanks,
-> Peter Chen
->
-
-
---=20
-=ED=99=A9=EC=9E=AC=ED=98=B8, Jay Hwang, linux team manager of RTst
-010-7242-1593
+-- 
+heikki
