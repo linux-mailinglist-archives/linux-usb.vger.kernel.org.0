@@ -2,94 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F163FB483
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Aug 2021 13:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE2D3FB872
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Aug 2021 16:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236445AbhH3LZ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Aug 2021 07:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235387AbhH3LZ5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Aug 2021 07:25:57 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9B8C061575
-        for <linux-usb@vger.kernel.org>; Mon, 30 Aug 2021 04:25:04 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id c206so6732964ybb.12
-        for <linux-usb@vger.kernel.org>; Mon, 30 Aug 2021 04:25:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=He9kpFQwq1I68wdOjeNvE0LON5OL4PlSGVKoCJBAUEM=;
-        b=qQJD2ydFBFh/fJIeCKxJxg2bUm/4zf5iSvOQk1WdZENpB2RiRKiJ7dn9L+yATAzznJ
-         PD2ru/Trl/xxOUKCuvkQ+oBa0CJnekiUWzUatsc7vxDvvqFL9cguxhaMEQPYCXquGK1O
-         xMIoi3OUEQfH5GvGC526pAZXD2Mj1Yrtiicz4QbTKIAvmQ20P000aUjIxEsHVsamXh5j
-         hrtHZa09JJnbff04JYl2Y7gME54XY3KQfJTGG+WgnWgRQnkE6EUCFRtwCzB6qOwBdAo6
-         9/xrB6BsHKyS49y7pzZlWg2UXYchjBGvZMnmgankP+7B+k7MXTcP6q4CR98/92EcpD0D
-         ITOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=He9kpFQwq1I68wdOjeNvE0LON5OL4PlSGVKoCJBAUEM=;
-        b=klSaWho96kk53tdi7SdwfBS95MgzmR9MbgSmOtrMZMr8/KITojluf3/BrO71WQ6N+y
-         L/Q/EKTTy9iH1oITuOw0ARskYxwSmswO6DAWtjCvIgZVYY8hrhXfFx5HzdU4Lr1636wb
-         ramiVBq8kW6UF6y3Vb1raUtDjRxZwnGIzf3mXu5UTpappotZhlxo6thZe2hGB+egue4v
-         L+JzUhdqGT42fghaTxrd1zVwDNhJVmGKTXr0Cv5NaKBrUn7BAWBWzdRKddZWd3VxmuvV
-         u+RDY/ReDof2emwyOV/BQn4GIQrR8DA5Ufq2dP3qo38JGwOx9YUqF+X/L/0oDmYTx9QG
-         099Q==
-X-Gm-Message-State: AOAM533H8DLqNUfMXjF1DXPhcx73no0/W5CbLB3KnEAGeWaL3gMp9jEv
-        PzjTxu47BoBihr43HUg9+cd0eVMD2kuosi1DRBU=
-X-Google-Smtp-Source: ABdhPJw+HWdq2CC6MJwEm9aql5YlU9WXU1m59u0fmfifNs1W18vXLWeumMGunQFnLpB65RH2nFv+sBzjZ3gl2jIOS/8=
-X-Received: by 2002:a25:2cc:: with SMTP id 195mr24296525ybc.436.1630322703501;
- Mon, 30 Aug 2021 04:25:03 -0700 (PDT)
+        id S237203AbhH3OrK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Aug 2021 10:47:10 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:35319 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S231757AbhH3OrJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Aug 2021 10:47:09 -0400
+Received: (qmail 333900 invoked by uid 1000); 30 Aug 2021 10:46:13 -0400
+Date:   Mon, 30 Aug 2021 10:46:13 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg KH <greg@kroah.com>,
+        syzbot <syzbot+ada0f7d3d9fd2016d927@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] USB: core: Make usb_start_wait_urb() interruptible
+Message-ID: <20210830144613.GA332514@rowland.harvard.edu>
+References: <20210828180358.GA291431@rowland.harvard.edu>
+ <0000000000000f37f405caa41e79@google.com>
+ <20210829015825.GA297712@rowland.harvard.edu>
+ <YSyPQqMPHRiUvYEx@hovoldconsulting.com>
 MIME-Version: 1.0
-Received: by 2002:a25:3a45:0:0:0:0:0 with HTTP; Mon, 30 Aug 2021 04:25:02
- -0700 (PDT)
-Reply-To: mrskade@hotmail.com
-From:   mrs kadi <mrsalice50@gmail.com>
-Date:   Mon, 30 Aug 2021 01:25:02 -1000
-Message-ID: <CAJj02D2YMTL_TfUqugFMqh6sbaa7rgFncMQGXO7WuByPRJNCuQ@mail.gmail.com>
-Subject: Compliment of the day
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YSyPQqMPHRiUvYEx@hovoldconsulting.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear sir/madam
+On Mon, Aug 30, 2021 at 09:56:50AM +0200, Johan Hovold wrote:
+> On Sat, Aug 28, 2021 at 09:58:25PM -0400, Alan Stern wrote:
+> > This patch fixes the problem by converting the uninterruptible wait to
+> > an interruptible one.  For the most part this won't affect calls to
+> > usb_start_wait_urb(), because they are made by kernel threads and so
+> > can't receive most signals.
+> > 
+> > But in some cases such calls may occur in user threads in contexts
+> > other than usbfs ioctls.  A signal in these circumstances could cause
+> > a USB transfer to fail when otherwise it wouldn't.  The outcome
+> > wouldn't be too dreadful, since USB transfers can fail at any time and
+> > the system is prepared to handle these failures gracefully.  In
+> > theory, for example, a signal might cause a driver's probe routine to
+> > fail; in practice if the user doesn't want a probe to fail then he
+> > shouldn't send interrupt signals to the probing process.
+> 
+> While probe() triggered through sysfs or by module loading is one
+> example, the USB msg helpers are also called in a lot of other
+> user-thread contexts such as open() calls etc. It might even be that the
+> majority of these calls can be done from user threads (post
+> enumeration).
 
-My name is Mrs Kadi Hamanin.I have decided to seek a confidential
-co-operation with you for the execution of the deal described
-hereunder for our mutual benefit. I Hope you will keep it a secret due
-to the nature of the transaction. During the course of our audit last
-month, I discovered an unclaimed/abandoned fund total US$3.5 million
-in a bank account that belongs to a customer who unfortunately lost
-his life and entire family in a car accident.
+Could be.  It's not a well defined matter; it depends on what drivers 
+are in use and how they are used.
 
-Now our bank has been waiting for any of the relatives to come-up for
-the claim but nobody has done that. I personally has been unsuccessful
-in locating any of the relatives, now, I sincerely seek your consent
-to present you as the next of kin / Will Beneficiary to the deceased
-so that the proceeds of this account valued at {US$3.5 Million United
-State Dollars} can be paid to you, which we will share in these
-percentages ratio, 60% to me and 40% to you. All I request is your
-utmost sincere co- operation; trust and maximum confidentiality to
-achieve this project successfully. I have carefully mapped out the
-moralities for execution of this transaction under a legitimate
-arrangement to protect you from any breach of the law both in your
-country and here in my country when the fund is being transferred to
-your bank account.
+Consider that a control message in a driver is likely to use the 
+default USB_CTRL_[GS]ET_TIMEOUT value of 5 seconds.  Does it make sense 
+to allow uninterruptible wait states to last as long as that?
 
-I will have to provide the entire relevant document that will be
-requested to indicate that you are the rightful beneficiary of this
-legacy and our bank will release the fund to you without any further
-delay, upon your consideration and acceptance of this offer, please
-send me the following information as stated below so we can proceed
-and get this fund transferred to your designated bank account
-immediately. I know much about the existence of this fund and the
-secrets surrounding this money.
+And to what extent does it matter if we make these delays 
+interruptible?  A signal delivered during a system call will be fielded 
+when the call returns if not earlier; the only difference will be that 
+now some USB messages may be aborted.  For things like SIGINT or 
+SIGTERM this seems reasonable.  (I'm not so sure about things like 
+SIGALRM, SIGIO, or SIGSTOP, though.)
 
--Your Full Name:
--Your Contact Address:
--Your direct Mobile telephone Number:
--Your Date of Birth:
+> > Overall, then, making these delays interruptible seems to be an
+> > acceptable risk.
+> 
+> Possibly, but changing the API like this to fix the usbfs ioctls seems
+> like using a bit of a too big hammer to me, especially when backporting
+> to stable.
+
+Perhaps the stable backport could be delayed for a while (say, one 
+release cycle).
+
+Do you have alternative suggestions?  I don't think we want special 
+interruptible versions of usb_control_msg() and usb_bulk_msg() just for 
+use by usbfs.
+
+Alan Stern
