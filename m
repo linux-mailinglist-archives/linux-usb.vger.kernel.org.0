@@ -2,154 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D24783FB303
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Aug 2021 11:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F163FB483
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Aug 2021 13:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235641AbhH3JUV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Aug 2021 05:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
+        id S236445AbhH3LZ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Aug 2021 07:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235258AbhH3JUV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Aug 2021 05:20:21 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3E9C061575
-        for <linux-usb@vger.kernel.org>; Mon, 30 Aug 2021 02:19:27 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 79-20020a1c0452000000b002e6cf79e572so14182945wme.1
-        for <linux-usb@vger.kernel.org>; Mon, 30 Aug 2021 02:19:27 -0700 (PDT)
+        with ESMTP id S235387AbhH3LZ5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Aug 2021 07:25:57 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9B8C061575
+        for <linux-usb@vger.kernel.org>; Mon, 30 Aug 2021 04:25:04 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id c206so6732964ybb.12
+        for <linux-usb@vger.kernel.org>; Mon, 30 Aug 2021 04:25:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=Kak39hRCW/zGxMNdH5YFQMMLorXe5QQMuaf9kMAooZw=;
-        b=JyRQu4fejwHuGUaBSLG0Se8AF/uny9/eB7XVI9gJMBIuOr04VJ3o2u2ujH3cqd3Emd
-         M+d+nCQeDsyNOpM2dPDQjYELPLxdVLUkdOX/v/W9iyG5y8yrNqGfRZVApIDmRVXNB5Sv
-         cXsfxDv6SEjq4f4lU7pwbhY4X7u3Mz1uz30QHNlVcqEiUn+n29N2RH3Ehpr9k0t6/J6E
-         vEgt0TrdZTuEVl8cRfFR/bmKLjFc1fvXHHE3rY6H8WAxnGIZLREolowATkQCO3F4iyTa
-         jFsNzDkETfXp714KJuwJqggCLVfqQhwb3lza/whn2SpF4OPlE10BboSmRydsVR97Rl5N
-         bdKQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=He9kpFQwq1I68wdOjeNvE0LON5OL4PlSGVKoCJBAUEM=;
+        b=qQJD2ydFBFh/fJIeCKxJxg2bUm/4zf5iSvOQk1WdZENpB2RiRKiJ7dn9L+yATAzznJ
+         PD2ru/Trl/xxOUKCuvkQ+oBa0CJnekiUWzUatsc7vxDvvqFL9cguxhaMEQPYCXquGK1O
+         xMIoi3OUEQfH5GvGC526pAZXD2Mj1Yrtiicz4QbTKIAvmQ20P000aUjIxEsHVsamXh5j
+         hrtHZa09JJnbff04JYl2Y7gME54XY3KQfJTGG+WgnWgRQnkE6EUCFRtwCzB6qOwBdAo6
+         9/xrB6BsHKyS49y7pzZlWg2UXYchjBGvZMnmgankP+7B+k7MXTcP6q4CR98/92EcpD0D
+         ITOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=Kak39hRCW/zGxMNdH5YFQMMLorXe5QQMuaf9kMAooZw=;
-        b=ZEMPTIuOoeZZ2Z+feskiQBfqnlyv3ZCHTgPM5CgvjNwPUteegOAx8qLo5U7A8cmknr
-         pbPGAwv8EeYT5S5AcOu6VXqve1dwKUsYB+4Bt8JfKV8z/ymkki8huRqkjLxl4e5Zg/kf
-         Ff3mM3kz1yHG5MUftR8YMx8chEz0ntpMt0eqWMZ7a1PFvuSY5QhORyL3skexeK7MlMAQ
-         qkeaxWQI6g+KGzQAG+d+UfGwbvsCFFuOzo29NIYz1PuvD8H9ygX0q/115OgG5c52k1eU
-         hvxlyJ3VCnjfk2uqWF2fTE00cQ2yqjBCLICLAXNrtiCTvmkP/Au9mLXjqqextaOGSitj
-         sDFw==
-X-Gm-Message-State: AOAM532tmJL9Rm2Sr3l6LvXpguivCCKGjdqSO6kxCJAAhdhjad8q2EJY
-        pjfRcWYgnK9a70c69bSpTuWenw==
-X-Google-Smtp-Source: ABdhPJwFqMwCyidKMOqm8PiJzqLhGkt0459dz/o2vtJu2TJzDaMEyV3nqryr/URN4CH0gT0k9eofFA==
-X-Received: by 2002:a7b:c850:: with SMTP id c16mr31863954wml.22.1630315166179;
-        Mon, 30 Aug 2021 02:19:26 -0700 (PDT)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id z14sm6460003wmi.24.2021.08.30.02.19.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Aug 2021 02:19:25 -0700 (PDT)
-References: <20210827092927.366482-1-jbrunet@baylibre.com>
- <3c62d031-7334-3984-e002-f3eef1fa3b3b@synopsys.com>
-User-agent: mu4e 1.6.4; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jack Pham <jackp@codeaurora.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: gadget: u_audio: fix race condition on endpoint stop
-Date:   Mon, 30 Aug 2021 11:10:25 +0200
-In-reply-to: <3c62d031-7334-3984-e002-f3eef1fa3b3b@synopsys.com>
-Message-ID: <1jr1ebguht.fsf@starbuckisacylon.baylibre.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=He9kpFQwq1I68wdOjeNvE0LON5OL4PlSGVKoCJBAUEM=;
+        b=klSaWho96kk53tdi7SdwfBS95MgzmR9MbgSmOtrMZMr8/KITojluf3/BrO71WQ6N+y
+         L/Q/EKTTy9iH1oITuOw0ARskYxwSmswO6DAWtjCvIgZVYY8hrhXfFx5HzdU4Lr1636wb
+         ramiVBq8kW6UF6y3Vb1raUtDjRxZwnGIzf3mXu5UTpappotZhlxo6thZe2hGB+egue4v
+         L+JzUhdqGT42fghaTxrd1zVwDNhJVmGKTXr0Cv5NaKBrUn7BAWBWzdRKddZWd3VxmuvV
+         u+RDY/ReDof2emwyOV/BQn4GIQrR8DA5Ufq2dP3qo38JGwOx9YUqF+X/L/0oDmYTx9QG
+         099Q==
+X-Gm-Message-State: AOAM533H8DLqNUfMXjF1DXPhcx73no0/W5CbLB3KnEAGeWaL3gMp9jEv
+        PzjTxu47BoBihr43HUg9+cd0eVMD2kuosi1DRBU=
+X-Google-Smtp-Source: ABdhPJw+HWdq2CC6MJwEm9aql5YlU9WXU1m59u0fmfifNs1W18vXLWeumMGunQFnLpB65RH2nFv+sBzjZ3gl2jIOS/8=
+X-Received: by 2002:a25:2cc:: with SMTP id 195mr24296525ybc.436.1630322703501;
+ Mon, 30 Aug 2021 04:25:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+Received: by 2002:a25:3a45:0:0:0:0:0 with HTTP; Mon, 30 Aug 2021 04:25:02
+ -0700 (PDT)
+Reply-To: mrskade@hotmail.com
+From:   mrs kadi <mrsalice50@gmail.com>
+Date:   Mon, 30 Aug 2021 01:25:02 -1000
+Message-ID: <CAJj02D2YMTL_TfUqugFMqh6sbaa7rgFncMQGXO7WuByPRJNCuQ@mail.gmail.com>
+Subject: Compliment of the day
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Dear sir/madam
 
-On Fri 27 Aug 2021 at 23:59, Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+My name is Mrs Kadi Hamanin.I have decided to seek a confidential
+co-operation with you for the execution of the deal described
+hereunder for our mutual benefit. I Hope you will keep it a secret due
+to the nature of the transaction. During the course of our audit last
+month, I discovered an unclaimed/abandoned fund total US$3.5 million
+in a bank account that belongs to a customer who unfortunately lost
+his life and entire family in a car accident.
 
-> Jerome Brunet wrote:
->> If the endpoint completion callback is call right after the ep_enabled flag
->> is cleared and before usb_ep_dequeue() is call, we could do a double free
->> on the request and the associated buffer.
->> 
->> Fix this by clearing ep_enabled after all the endpoint requests have been
->> dequeued.
->> 
->> Fixes: 7de8681be2cd ("usb: gadget: u_audio: Free requests only after callback")
->> Reported-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
->> ---
->>  drivers/usb/gadget/function/u_audio.c | 8 ++++----
->>  1 file changed, 4 insertions(+), 4 deletions(-)
->> 
->> diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
->> index 63d9340f008e..9e5c950612d0 100644
->> --- a/drivers/usb/gadget/function/u_audio.c
->> +++ b/drivers/usb/gadget/function/u_audio.c
->> @@ -394,8 +394,6 @@ static inline void free_ep(struct uac_rtd_params *prm, struct usb_ep *ep)
->>  	if (!prm->ep_enabled)
->>  		return;
->>  
->> -	prm->ep_enabled = false;
->> -
->>  	audio_dev = uac->audio_dev;
->>  	params = &audio_dev->params;
->>  
->> @@ -413,6 +411,8 @@ static inline void free_ep(struct uac_rtd_params *prm, struct usb_ep *ep)
->>  		}
->>  	}
->>  
->> +	prm->ep_enabled = false;
->> +
->
-> Hm... this looks a little odd. If the cancelled request completes before
-> prm->ep_enabled = false, then the audio driver will re-queue the
-> request. It will eventually be freed later when the endpoint is disabled
-> and when the controller driver completes and gives back any outstanding
-> request. But is this what you intended? If it is, why even usb_ep_dequeue()?
->
+Now our bank has been waiting for any of the relatives to come-up for
+the claim but nobody has done that. I personally has been unsuccessful
+in locating any of the relatives, now, I sincerely seek your consent
+to present you as the next of kin / Will Beneficiary to the deceased
+so that the proceeds of this account valued at {US$3.5 Million United
+State Dollars} can be paid to you, which we will share in these
+percentages ratio, 60% to me and 40% to you. All I request is your
+utmost sincere co- operation; trust and maximum confidentiality to
+achieve this project successfully. I have carefully mapped out the
+moralities for execution of this transaction under a legitimate
+arrangement to protect you from any breach of the law both in your
+country and here in my country when the fund is being transferred to
+your bank account.
 
-Yes, it is what I intended. It's a quick way to address the problem you
-have reported.
+I will have to provide the entire relevant document that will be
+requested to indicate that you are the rightful beneficiary of this
+legacy and our bank will release the fund to you without any further
+delay, upon your consideration and acceptance of this offer, please
+send me the following information as stated below so we can proceed
+and get this fund transferred to your designated bank account
+immediately. I know much about the existence of this fund and the
+secrets surrounding this money.
 
-> Also, another concern I have is I don't see any lock or memory barrier
-> when writing/reading prm->ep_enabled. Are we always reading
-> prm->ep_enabled in the right order as we expected?
->
-> Would it be simpler to free the request base on the request completion
-> status as suggested?
-
-I can see that it would be better. It would use the framework the way it
-was intended which is certainly better. I just can't do it right now.
-
->
-> BR,
-> Thinh
->
->>  	if (usb_ep_disable(ep))
->>  		dev_err(uac->card->dev, "%s:%d Error!\n", __func__, __LINE__);
->>  }
->> @@ -424,8 +424,6 @@ static inline void free_ep_fback(struct uac_rtd_params *prm, struct usb_ep *ep)
->>  	if (!prm->fb_ep_enabled)
->>  		return;
->>  
->> -	prm->fb_ep_enabled = false;
->> -
->>  	if (prm->req_fback) {
->>  		if (usb_ep_dequeue(ep, prm->req_fback)) {
->>  			kfree(prm->req_fback->buf);
->> @@ -434,6 +432,8 @@ static inline void free_ep_fback(struct uac_rtd_params *prm, struct usb_ep *ep)
->>  		prm->req_fback = NULL;
->>  	}
->>  
->> +	prm->fb_ep_enabled = false;
->> +
->>  	if (usb_ep_disable(ep))
->>  		dev_err(uac->card->dev, "%s:%d Error!\n", __func__, __LINE__);
->>  }
->> 
-
+-Your Full Name:
+-Your Contact Address:
+-Your direct Mobile telephone Number:
+-Your Date of Birth:
