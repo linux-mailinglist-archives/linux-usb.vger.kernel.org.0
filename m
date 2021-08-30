@@ -2,84 +2,236 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB10A3FAE56
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Aug 2021 22:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 889543FB014
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Aug 2021 05:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233841AbhH2UKO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 29 Aug 2021 16:10:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36758 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231417AbhH2UKN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 29 Aug 2021 16:10:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 6F34960F42
-        for <linux-usb@vger.kernel.org>; Sun, 29 Aug 2021 20:09:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1630267761;
-        bh=qH2USJKYm76sL7DFX7v6l3dh4Yl9B94ZUu2YSmVQlHY=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=aHXSKiHu7J7Ir+Gb5Tib7m9W9zPLdgDr6uf2DO68kwJtTVJiJmwd22Ebdq4oE3RRQ
-         DXp5+ARWp/TCpy47b+OzKG0rIL8BQLgw0S5wazoKT76cLlN2wOt/7RNskAbTNfM/RH
-         JtXAJqTJ9p0IpqVTZWKGFjAoYo3PqjoFOAA4uxrTyUGYXkedgc+7fPkwkQFSvPOJQX
-         jtLPiMpPJmNG/Bx1kw8B++AfD6MD4rS5FeuvxPH44YPUFKd9JxpfLtUWK6pk6lEwms
-         fqWvF3wPDG22hsUBa/TpTjQH+uiqDvY4NnppU+/mGXZkMw+QyCsEu1uRiNZlFKFZnN
-         Da087K7D7KOOQ==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 65DA660F49; Sun, 29 Aug 2021 20:09:21 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 207887] USB keyboard (and other devices) connected to Thinkpad
- Dock hangs after a while
-Date:   Sun, 29 Aug 2021 20:09:20 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: iam@valdikss.org.ru
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-207887-208809-g7eLh39mUe@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-207887-208809@https.bugzilla.kernel.org/>
-References: <bug-207887-208809@https.bugzilla.kernel.org/>
+        id S230191AbhH3Du3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 29 Aug 2021 23:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229548AbhH3Du2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Aug 2021 23:50:28 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FED7C061575
+        for <linux-usb@vger.kernel.org>; Sun, 29 Aug 2021 20:49:35 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id d5so2762852pjx.2
+        for <linux-usb@vger.kernel.org>; Sun, 29 Aug 2021 20:49:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Xd5yJwKt1hvq4WFoSQExGBW6PX7FM9F2aTtlw2PPNgY=;
+        b=ODVUQWj14e/o8PyewpgAxwqPLPtNZxpcvYC7MQqgubN1OZCRQtPlikZPOuHN8zA+IJ
+         AmMTMTtAN7CuB0VSOA/tB8UnW3E3LRwBSCrC4hUcaQenqGasINce2kIBeYcVbtSdJ9cu
+         1Q8b8N+K08CnfXfINsRxo+rpJvIGJR1Y7DLjM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Xd5yJwKt1hvq4WFoSQExGBW6PX7FM9F2aTtlw2PPNgY=;
+        b=bvD1SmooCG3TFg+e1EOEJ/KtBRKBsxGXoVR3Qu2TqTCZ25Bpf5ztcRAkOQzgPNQYhr
+         PwPbErPbXsOrHV/TgJR4kfzDtnejyziR7n7VlzWGQwGjmxqUvWlhF52sYvNmdaYZQXxe
+         zRIJfsWF/2JIzCZEuY9QpA//AGeq0a+qVHF7xHPJKAgdhrJfUvLLRySc7Xh0dy4eGX8G
+         tT0qndG1iGYx1A5gS92HW51Tm2dPKE+AMcLxB0xnpQuwYXAUco/jk7oPTqKIosQ5TZyd
+         TCyDKQWUmJhYZeqG8w+mmScyyxSHJvATeuaaJd/8WQthQMGT1p9JHD1c+0EurUTtKffQ
+         Jfvg==
+X-Gm-Message-State: AOAM5329CPPu+fMtxMAZjlLY1U9qWyb7vJLki2HcmzDOzirmNcGkE31n
+        AZw6ly+bTaWrKzOwsKWFCgC8DmdwGuIfOnt4A2gbCg==
+X-Google-Smtp-Source: ABdhPJxmwutWcvcGGTYek4J59y438R2Xw4VTIh9M3kBeplPDNHz99ge8PjQssGX5CCkpqjUVqqBAm7H1m2cmZJsH460=
+X-Received: by 2002:a17:902:8c83:b029:129:17e5:a1cc with SMTP id
+ t3-20020a1709028c83b029012917e5a1ccmr19994569plo.49.1630295374896; Sun, 29
+ Aug 2021 20:49:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210826025144.51992-1-chunfeng.yun@mediatek.com>
+ <20210826025144.51992-3-chunfeng.yun@mediatek.com> <CAATdQgBD+dTtBie-cNKRJbfxEpc3haqjfUu1k26mTk8pCSOEww@mail.gmail.com>
+ <72ee7a203d8a49e6e43a954b45133470ee6d5c16.camel@mediatek.com>
+ <CAATdQgA+4VC7J1LMZYOZMV-OTjMGjO=9bJZ7uaCu_MMF-20T1w@mail.gmail.com> <18cb18d7d0ea4a3bb46921aca88c53646f1b3764.camel@mediatek.com>
+In-Reply-To: <18cb18d7d0ea4a3bb46921aca88c53646f1b3764.camel@mediatek.com>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Mon, 30 Aug 2021 11:49:24 +0800
+Message-ID: <CAATdQgDKuO+bM7_tMy59ghhhjrgCp53kHgYbgEciriHNF3uKuA@mail.gmail.com>
+Subject: Re: [PATCH next v2 3/6] usb: xhci-mtk: update fs bus bandwidth by bw_budget_table
+To:     =?UTF-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= 
+        <Chunfeng.Yun@mediatek.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        =?UTF-8?B?WWFxaWkgV3UgKOatpuS6muWlhyk=?= <Yaqii.Wu@mediatek.com>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        =?UTF-8?B?RWRkaWUgSHVuZyAo5rSq5q2j6ZGrKQ==?= 
+        <Eddie.Hung@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D207887
+On Fri, Aug 27, 2021 at 5:49 PM Chunfeng Yun (=E4=BA=91=E6=98=A5=E5=B3=B0)
+<Chunfeng.Yun@mediatek.com> wrote:
+>
+> On Fri, 2021-08-27 at 17:14 +0800, Ikjoon Jang wrote:
+> > On Fri, Aug 27, 2021 at 2:49 PM Chunfeng Yun (=E4=BA=91=E6=98=A5=E5=B3=
+=B0)
+> > <Chunfeng.Yun@mediatek.com> wrote:
+> > >
+> > > On Thu, 2021-08-26 at 19:54 +0800, Ikjoon Jang wrote:
+> > > > Hi Chunfeng,
+> > > >
+> > > > On Thu, Aug 26, 2021 at 10:52 AM Chunfeng Yun <
+> > > > chunfeng.yun@mediatek.com> wrote:
+> > > > >
+> > > > > Use @bw_budget_table[] to update fs bus bandwidth due to
+> > > > > not all microframes consume @bw_cost_per_microframe, see
+> > > > > setup_sch_info().
+> > > > >
+> > > > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > > > > ---
+> > > > > v2: new patch, move from another series
+> > > > > ---
+> > > > >  drivers/usb/host/xhci-mtk-sch.c | 17 +++++++----------
+> > > > >  1 file changed, 7 insertions(+), 10 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/usb/host/xhci-mtk-sch.c
+> > > > > b/drivers/usb/host/xhci-mtk-sch.c
+> > > > > index cffcaf4dfa9f..83abd28269ca 100644
+> > > > > --- a/drivers/usb/host/xhci-mtk-sch.c
+> > > > > +++ b/drivers/usb/host/xhci-mtk-sch.c
+> > > > > @@ -458,8 +458,8 @@ static int check_fs_bus_bw(struct
+> > > > > mu3h_sch_ep_info *sch_ep, int offset)
+> > > > >                  * Compared with hs bus, no matter what ep
+> > > > > type,
+> > > > >                  * the hub will always delay one uframe to send
+> > > > > data
+> > > > >                  */
+> > > > > -               for (j =3D 0; j < sch_ep->cs_count; j++) {
+> > > > > -                       tmp =3D tt->fs_bus_bw[base + j] + sch_ep-
+> > > > > > bw_cost_per_microframe;
+> > > > >
+> > > > > +               for (j =3D 0; j < sch_ep->num_budget_microframes;
+> > > > > j++) {
+> > > > > +                       tmp =3D tt->fs_bus_bw[base + j] + sch_ep-
+> > > > > > bw_budget_table[j];
+> > > >
+> > > > I'm worrying about this case with two endpoints,
+> > > > * EP1OUT: isochronous, maxpacket=3D192: bw_budget_table[] =3D { 188=
+,
+> > > > 188,
+> > > > 0, ... }
+> > > > * EP2IN: interrupt, maxpacket=3D64: bw_budget_table[] =3D { 0, 0, 6=
+4,
+> > > > 64,
+> > > > ... }
+> > > > (Is this correct bw_budget_table contents for those eps?)
+> > >
+> > > Yes, ep1out isoc use two uframe, ep2in intr use a extra cs;
+> > > >
+> > > > I'm not sure if it's okay for those two endpoints to be allocated
+> > > > on the same u-frame slot.
+> > > > Can you please check if this is okay for xhci-mtk?
+> > >
+> > > Already test it this afternoon, can transfer data rightly on our
+> > > dvt
+> > > env.
+> > >
+> > > > (I feel like I already asked the same questions many times.)
+> > >
+> > > Yes, as said before, prefer to use bw_budget_table[], if there is
+> > > issue, we can fix it by building this table.
+> >
+> > So do you mean such an allocation shouldn't be a problem by IP
+> > design?
+> Yes, at least on our dvt platform
 
-ValdikSS (iam@valdikss.org.ru) changed:
+Did you check that your side also has a similar allocation
+(SSPLIT-all sits between SSPLIT-start ~ -end for another ep)?
+My audio headset doesn't work properly with this scheme.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |iam@valdikss.org.ru
+>
+> >
+> > This patch starts to allow such an allocation (again).
+> > But i remember my earlier tests showed that when those two eps
+> > in the above example are allocated on the same u-frame slot,
+> > xhci-mtk puts "SSPLIT for EP2" between
+> > "SSPLIT-start and SSPLIT-end for EP1OUT transaction",
+> > which is a spec violation.
+>
+> Which section in usb2.0 spec?
 
---- Comment #17 from ValdikSS (iam@valdikss.org.ru) ---
-(In reply to Marco Trevisan (Trevi=C3=B1o) from comment #5)
-> (In reply to Alan Stern from comment #4)
-> > What happens if you remove the jumper, so as to disable the USB storage=
- on
-> > the keyboard?
->=20
-> Sorry, I probably didn't explain this properly.
-> The I always keep the jumper in "off" state (so there's no USB storage
-> active), but I'm not sure if that's advertised anyways at HW level.
+I think that's just a basic rule - if software wants to send 192 bytes
+through a full-speed bus, HC should send OUT/DATA 192 bytes
+continuously without inserting any other packets during that 192 bytes.
+and usb2 11.14.2 mentions that TT has separated
+Start-Split and Complete-Split buffers
+but not tracked each transaction per endpoint basis.
 
-Just out of the blue, do you have pktcdvd module loaded?
+>
+> > Hub will generate bit stuffing errors on the
+> > full-speed bus.
+> which platform?
 
---=20
-You may reply to this email to add a comment.
+I remember it was mt8173.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+And for bit stuffing errors I mentioned in the earlier mail.
+when I read the spec again, 11.21 mentions that bit stuffing error
+is generated when _a microframe_ should be passed without
+corresponding SSPLIT-mid/end. So this is not the case and also
+I'm not sure what will happen on the full-speed bus, sorry.
+In my case what I can be sure of is that the audio output was
+broken with those allotments.
+
+What is the xhci-mtk's policy when there are more than two EPs
+marked as the same u-frame offset like in the above example?
+
+>
+> >
+> >
+> > >
+> > > Thanks
+> > > >
+> > > >
+> > > > >                         if (tmp > FS_PAYLOAD_MAX)
+> > > > >                                 return -ESCH_BW_OVERFLOW;
+> > > > >                 }
+> > > > > @@ -534,21 +534,18 @@ static void update_sch_tt(struct
+> > > > > mu3h_sch_ep_info *sch_ep, bool used)
+> > > > >  {
+> > > > >         struct mu3h_sch_tt *tt =3D sch_ep->sch_tt;
+> > > > >         u32 base, num_esit;
+> > > > > -       int bw_updated;
+> > > > >         int i, j;
+> > > > >
+> > > > >         num_esit =3D XHCI_MTK_MAX_ESIT / sch_ep->esit;
+> > > > >
+> > > > > -       if (used)
+> > > > > -               bw_updated =3D sch_ep->bw_cost_per_microframe;
+> > > > > -       else
+> > > > > -               bw_updated =3D -sch_ep->bw_cost_per_microframe;
+> > > > > -
+> > > > >         for (i =3D 0; i < num_esit; i++) {
+> > > > >                 base =3D sch_ep->offset + i * sch_ep->esit;
+> > > > >
+> > > > > -               for (j =3D 0; j < sch_ep->cs_count; j++)
+> > > > > -                       tt->fs_bus_bw[base + j] +=3D bw_updated;
+> > > > > +               for (j =3D 0; j < sch_ep->num_budget_microframes;
+> > > > > j++)
+> > > > > +                       if (used)
+> > > > > +                               tt->fs_bus_bw[base + j] +=3D
+> > > > > sch_ep-
+> > > > > > bw_budget_table[j];
+> > > > >
+> > > > > +                       else
+> > > > > +                               tt->fs_bus_bw[base + j] -=3D
+> > > > > sch_ep-
+> > > > > > bw_budget_table[j];
+> > > > >
+> > > > >         }
+> > > > >
+> > > > >         if (used)
+> > > > > --
+> > > > > 2.18.0
+> > > > >
