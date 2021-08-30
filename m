@@ -2,236 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 889543FB014
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Aug 2021 05:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B91C3FB065
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Aug 2021 06:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbhH3Du3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 29 Aug 2021 23:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbhH3Du2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Aug 2021 23:50:28 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FED7C061575
-        for <linux-usb@vger.kernel.org>; Sun, 29 Aug 2021 20:49:35 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id d5so2762852pjx.2
-        for <linux-usb@vger.kernel.org>; Sun, 29 Aug 2021 20:49:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Xd5yJwKt1hvq4WFoSQExGBW6PX7FM9F2aTtlw2PPNgY=;
-        b=ODVUQWj14e/o8PyewpgAxwqPLPtNZxpcvYC7MQqgubN1OZCRQtPlikZPOuHN8zA+IJ
-         AmMTMTtAN7CuB0VSOA/tB8UnW3E3LRwBSCrC4hUcaQenqGasINce2kIBeYcVbtSdJ9cu
-         1Q8b8N+K08CnfXfINsRxo+rpJvIGJR1Y7DLjM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Xd5yJwKt1hvq4WFoSQExGBW6PX7FM9F2aTtlw2PPNgY=;
-        b=bvD1SmooCG3TFg+e1EOEJ/KtBRKBsxGXoVR3Qu2TqTCZ25Bpf5ztcRAkOQzgPNQYhr
-         PwPbErPbXsOrHV/TgJR4kfzDtnejyziR7n7VlzWGQwGjmxqUvWlhF52sYvNmdaYZQXxe
-         zRIJfsWF/2JIzCZEuY9QpA//AGeq0a+qVHF7xHPJKAgdhrJfUvLLRySc7Xh0dy4eGX8G
-         tT0qndG1iGYx1A5gS92HW51Tm2dPKE+AMcLxB0xnpQuwYXAUco/jk7oPTqKIosQ5TZyd
-         TCyDKQWUmJhYZeqG8w+mmScyyxSHJvATeuaaJd/8WQthQMGT1p9JHD1c+0EurUTtKffQ
-         Jfvg==
-X-Gm-Message-State: AOAM5329CPPu+fMtxMAZjlLY1U9qWyb7vJLki2HcmzDOzirmNcGkE31n
-        AZw6ly+bTaWrKzOwsKWFCgC8DmdwGuIfOnt4A2gbCg==
-X-Google-Smtp-Source: ABdhPJxmwutWcvcGGTYek4J59y438R2Xw4VTIh9M3kBeplPDNHz99ge8PjQssGX5CCkpqjUVqqBAm7H1m2cmZJsH460=
-X-Received: by 2002:a17:902:8c83:b029:129:17e5:a1cc with SMTP id
- t3-20020a1709028c83b029012917e5a1ccmr19994569plo.49.1630295374896; Sun, 29
- Aug 2021 20:49:34 -0700 (PDT)
+        id S232206AbhH3ETc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Aug 2021 00:19:32 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:16867 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231842AbhH3ETZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Aug 2021 00:19:25 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1630297110; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=1o0FmZbIKug3vf0o+NtUykmzlIUNMLcvxSthEnoYj3U=; b=Lng2sY1dApkr6QXH59Ly7pEd0pz2EhZUnYOxNn62+0Tswg7mWeeCzjImtIEKEnhQ08sava88
+ oJFNzMqF775ww8PH97P9QRx4R8JNSmJq5mABHY20/yv3TA34vzf9nKjoVuBUg9FIB/0UJqzz
+ AIV+IDIHQZayvdCMs0+XwRkIMew=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 612c5c13cd680e8969fc1e84 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 30 Aug 2021 04:18:27
+ GMT
+Sender: sanm=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 51511C43635; Mon, 30 Aug 2021 04:18:26 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.5 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [192.168.0.104] (unknown [124.123.190.217])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sanm)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1289BC4338F;
+        Mon, 30 Aug 2021 04:18:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 1289BC4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: Regarding usb dwc3 core shutdown callback
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pratham Pratap <prathampratap@codeaurora.org>,
+        Jack Pham <jackp@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Doug Anderson <dianders@chromium.org>
+References: <e34c8e16-6521-c6e4-f3ed-9d8520d4ece2@codeaurora.org>
+ <87bl63yqq8.fsf@kernel.org>
+ <eb975a76-1482-f502-4dc1-7993cc3f30d0@codeaurora.org>
+ <87eeaga39m.fsf@kernel.org>
+From:   Sandeep Maheswaram <sanm@codeaurora.org>
+Message-ID: <7a6bf94b-91cd-15d5-dd9c-798e7a927727@codeaurora.org>
+Date:   Mon, 30 Aug 2021 09:48:16 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20210826025144.51992-1-chunfeng.yun@mediatek.com>
- <20210826025144.51992-3-chunfeng.yun@mediatek.com> <CAATdQgBD+dTtBie-cNKRJbfxEpc3haqjfUu1k26mTk8pCSOEww@mail.gmail.com>
- <72ee7a203d8a49e6e43a954b45133470ee6d5c16.camel@mediatek.com>
- <CAATdQgA+4VC7J1LMZYOZMV-OTjMGjO=9bJZ7uaCu_MMF-20T1w@mail.gmail.com> <18cb18d7d0ea4a3bb46921aca88c53646f1b3764.camel@mediatek.com>
-In-Reply-To: <18cb18d7d0ea4a3bb46921aca88c53646f1b3764.camel@mediatek.com>
-From:   Ikjoon Jang <ikjn@chromium.org>
-Date:   Mon, 30 Aug 2021 11:49:24 +0800
-Message-ID: <CAATdQgDKuO+bM7_tMy59ghhhjrgCp53kHgYbgEciriHNF3uKuA@mail.gmail.com>
-Subject: Re: [PATCH next v2 3/6] usb: xhci-mtk: update fs bus bandwidth by bw_budget_table
-To:     =?UTF-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= 
-        <Chunfeng.Yun@mediatek.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        =?UTF-8?B?WWFxaWkgV3UgKOatpuS6muWlhyk=?= <Yaqii.Wu@mediatek.com>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        =?UTF-8?B?RWRkaWUgSHVuZyAo5rSq5q2j6ZGrKQ==?= 
-        <Eddie.Hung@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <87eeaga39m.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 27, 2021 at 5:49 PM Chunfeng Yun (=E4=BA=91=E6=98=A5=E5=B3=B0)
-<Chunfeng.Yun@mediatek.com> wrote:
+Hi,
+
+On 8/26/2021 4:13 PM, Felipe Balbi wrote:
+> Hi,
 >
-> On Fri, 2021-08-27 at 17:14 +0800, Ikjoon Jang wrote:
-> > On Fri, Aug 27, 2021 at 2:49 PM Chunfeng Yun (=E4=BA=91=E6=98=A5=E5=B3=
-=B0)
-> > <Chunfeng.Yun@mediatek.com> wrote:
-> > >
-> > > On Thu, 2021-08-26 at 19:54 +0800, Ikjoon Jang wrote:
-> > > > Hi Chunfeng,
-> > > >
-> > > > On Thu, Aug 26, 2021 at 10:52 AM Chunfeng Yun <
-> > > > chunfeng.yun@mediatek.com> wrote:
-> > > > >
-> > > > > Use @bw_budget_table[] to update fs bus bandwidth due to
-> > > > > not all microframes consume @bw_cost_per_microframe, see
-> > > > > setup_sch_info().
-> > > > >
-> > > > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > > > > ---
-> > > > > v2: new patch, move from another series
-> > > > > ---
-> > > > >  drivers/usb/host/xhci-mtk-sch.c | 17 +++++++----------
-> > > > >  1 file changed, 7 insertions(+), 10 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/usb/host/xhci-mtk-sch.c
-> > > > > b/drivers/usb/host/xhci-mtk-sch.c
-> > > > > index cffcaf4dfa9f..83abd28269ca 100644
-> > > > > --- a/drivers/usb/host/xhci-mtk-sch.c
-> > > > > +++ b/drivers/usb/host/xhci-mtk-sch.c
-> > > > > @@ -458,8 +458,8 @@ static int check_fs_bus_bw(struct
-> > > > > mu3h_sch_ep_info *sch_ep, int offset)
-> > > > >                  * Compared with hs bus, no matter what ep
-> > > > > type,
-> > > > >                  * the hub will always delay one uframe to send
-> > > > > data
-> > > > >                  */
-> > > > > -               for (j =3D 0; j < sch_ep->cs_count; j++) {
-> > > > > -                       tmp =3D tt->fs_bus_bw[base + j] + sch_ep-
-> > > > > > bw_cost_per_microframe;
-> > > > >
-> > > > > +               for (j =3D 0; j < sch_ep->num_budget_microframes;
-> > > > > j++) {
-> > > > > +                       tmp =3D tt->fs_bus_bw[base + j] + sch_ep-
-> > > > > > bw_budget_table[j];
-> > > >
-> > > > I'm worrying about this case with two endpoints,
-> > > > * EP1OUT: isochronous, maxpacket=3D192: bw_budget_table[] =3D { 188=
-,
-> > > > 188,
-> > > > 0, ... }
-> > > > * EP2IN: interrupt, maxpacket=3D64: bw_budget_table[] =3D { 0, 0, 6=
-4,
-> > > > 64,
-> > > > ... }
-> > > > (Is this correct bw_budget_table contents for those eps?)
-> > >
-> > > Yes, ep1out isoc use two uframe, ep2in intr use a extra cs;
-> > > >
-> > > > I'm not sure if it's okay for those two endpoints to be allocated
-> > > > on the same u-frame slot.
-> > > > Can you please check if this is okay for xhci-mtk?
-> > >
-> > > Already test it this afternoon, can transfer data rightly on our
-> > > dvt
-> > > env.
-> > >
-> > > > (I feel like I already asked the same questions many times.)
-> > >
-> > > Yes, as said before, prefer to use bw_budget_table[], if there is
-> > > issue, we can fix it by building this table.
-> >
-> > So do you mean such an allocation shouldn't be a problem by IP
-> > design?
-> Yes, at least on our dvt platform
+> Sandeep Maheswaram <sanm@codeaurora.org> writes:
+>>> (why isn't this email plain/text? Content Type was set to multipart
+>>> alternative, please configure your email client correctly :-)
+>>>
+>>> While at that, also make sure to break lines at 80-columns)
+>>>
+>>> Sandeep Maheswaram <sanm@codeaurora.org> writes:
+>>>> Hi,
+>>>>
+>>>> Earlier I have posted the patch for usb dwc3 core shutdown callback
+>>>>
+>>>> https://lore.kernel.org/linux-arm-msm/1618380209-20114-1-git-send-email-sanm@codeaurora.org/
+>>>>
+>>>> and it was reverted due to issues.
+>>> Right, as should be expected when we find regressions
+>>>
+>>>> https://lore.kernel.org/linux-usb/20210603151742.298243-1-alexandru.elisei@arm.com/
+>>>>
+>>>> As we already have shutdown callback in xhci plat driver where we halt
+>>>> the controller, so there will be no transactions with usb devices.
+>>>>
+>>>> https://lore.kernel.org/linux-usb/20200306092328.41253-1-ran.wang_1@nxp.com/
+>>>>
+>>>> So I think dwc3 core shutdown may not be required at least when we are
+>>>> using host mode. Let me know your opinion about this.
+>>> If that's the case, then sure. Please validate the condition, though,
+>>> and kindly report back on your findings
+>> I have enabled couple of logs in shutdown path and see no URBs
+>> enqueued after xhci shut down.
+>>
+>> Hope this is enough for validation . Please suggest if anything more I
+>> could do.
+> how about writing a little script to kexec into another kernel for a few
+> hundred iterations and make sure things still work after all that?
 
-Did you check that your side also has a similar allocation
-(SSPLIT-all sits between SSPLIT-start ~ -end for another ep)?
-My audio headset doesn't work properly with this scheme.
+Currently kexec is not supported on qcom devices.  Anything we can do 
+apart from kexec?
 
->
-> >
-> > This patch starts to allow such an allocation (again).
-> > But i remember my earlier tests showed that when those two eps
-> > in the above example are allocated on the same u-frame slot,
-> > xhci-mtk puts "SSPLIT for EP2" between
-> > "SSPLIT-start and SSPLIT-end for EP1OUT transaction",
-> > which is a spec violation.
->
-> Which section in usb2.0 spec?
 
-I think that's just a basic rule - if software wants to send 192 bytes
-through a full-speed bus, HC should send OUT/DATA 192 bytes
-continuously without inserting any other packets during that 192 bytes.
-and usb2 11.14.2 mentions that TT has separated
-Start-Split and Complete-Split buffers
-but not tracked each transaction per endpoint basis.
-
->
-> > Hub will generate bit stuffing errors on the
-> > full-speed bus.
-> which platform?
-
-I remember it was mt8173.
-
-And for bit stuffing errors I mentioned in the earlier mail.
-when I read the spec again, 11.21 mentions that bit stuffing error
-is generated when _a microframe_ should be passed without
-corresponding SSPLIT-mid/end. So this is not the case and also
-I'm not sure what will happen on the full-speed bus, sorry.
-In my case what I can be sure of is that the audio output was
-broken with those allotments.
-
-What is the xhci-mtk's policy when there are more than two EPs
-marked as the same u-frame offset like in the above example?
-
->
-> >
-> >
-> > >
-> > > Thanks
-> > > >
-> > > >
-> > > > >                         if (tmp > FS_PAYLOAD_MAX)
-> > > > >                                 return -ESCH_BW_OVERFLOW;
-> > > > >                 }
-> > > > > @@ -534,21 +534,18 @@ static void update_sch_tt(struct
-> > > > > mu3h_sch_ep_info *sch_ep, bool used)
-> > > > >  {
-> > > > >         struct mu3h_sch_tt *tt =3D sch_ep->sch_tt;
-> > > > >         u32 base, num_esit;
-> > > > > -       int bw_updated;
-> > > > >         int i, j;
-> > > > >
-> > > > >         num_esit =3D XHCI_MTK_MAX_ESIT / sch_ep->esit;
-> > > > >
-> > > > > -       if (used)
-> > > > > -               bw_updated =3D sch_ep->bw_cost_per_microframe;
-> > > > > -       else
-> > > > > -               bw_updated =3D -sch_ep->bw_cost_per_microframe;
-> > > > > -
-> > > > >         for (i =3D 0; i < num_esit; i++) {
-> > > > >                 base =3D sch_ep->offset + i * sch_ep->esit;
-> > > > >
-> > > > > -               for (j =3D 0; j < sch_ep->cs_count; j++)
-> > > > > -                       tt->fs_bus_bw[base + j] +=3D bw_updated;
-> > > > > +               for (j =3D 0; j < sch_ep->num_budget_microframes;
-> > > > > j++)
-> > > > > +                       if (used)
-> > > > > +                               tt->fs_bus_bw[base + j] +=3D
-> > > > > sch_ep-
-> > > > > > bw_budget_table[j];
-> > > > >
-> > > > > +                       else
-> > > > > +                               tt->fs_bus_bw[base + j] -=3D
-> > > > > sch_ep-
-> > > > > > bw_budget_table[j];
-> > > > >
-> > > > >         }
-> > > > >
-> > > > >         if (used)
-> > > > > --
-> > > > > 2.18.0
-> > > > >
