@@ -2,180 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E99AA3FB0FD
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Aug 2021 08:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EBDE3FB1E0
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Aug 2021 09:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbhH3GCd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Aug 2021 02:02:33 -0400
-Received: from mga01.intel.com ([192.55.52.88]:64275 "EHLO mga01.intel.com"
+        id S233839AbhH3HYx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Aug 2021 03:24:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33670 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231911AbhH3GCc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 30 Aug 2021 02:02:32 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10091"; a="240449993"
-X-IronPort-AV: E=Sophos;i="5.84,362,1620716400"; 
-   d="scan'208";a="240449993"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2021 23:01:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,362,1620716400"; 
-   d="scan'208";a="689136135"
-Received: from lkp-server01.sh.intel.com (HELO 4fbc2b3ce5aa) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Aug 2021 23:01:17 -0700
-Received: from kbuild by 4fbc2b3ce5aa with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mKaM8-0004u2-Lo; Mon, 30 Aug 2021 06:01:16 +0000
-Date:   Mon, 30 Aug 2021 14:00:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 068fdad20454f815e61e6f6eb9f051a8b3120e88
-Message-ID: <612c7402.cdUoDD+ONQ1cbbqP%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S233726AbhH3HYw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 30 Aug 2021 03:24:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7F1FE60FC0;
+        Mon, 30 Aug 2021 07:23:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630308239;
+        bh=1kwa9P1J5AkDdW4mh3bIT4Z1ij9OVS1cy0X3yxbwL9c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rucou6W/LjoP+nNu9OGkzi4IhIavOi4IYQvmoxzMZOCxjEyXUQSMDKRZ9H4UQohTX
+         f6waQefsbF0Wj/XAPlc4wyfbLx0g38j6MXfx8BshQ797G1GVDEsTd9MYvSHhoRS2ec
+         qAVEXOSz0gunCbQlztFVjqwYPZE8EeN4CRPa210tCbA3N7kjlgsX6+sq51mmnjYPXT
+         b+O3ECFyEeE4zxx3BlfVDt7Rvx6GwLJVz0+y6RIYL8eGMAQI8c68VfiNhwyvjS1pzI
+         YfrycD/lk0WaUJ35nu0FhhBscnn6N/+Nm8ToKdrT85IyycHQ2+J4A1qXog4oBL/CoO
+         BekmV17GFo42A==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mKbe1-00057v-VW; Mon, 30 Aug 2021 09:23:50 +0200
+Date:   Mon, 30 Aug 2021 09:23:49 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Robert Marko <robert.marko@sartura.hr>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] USB: serial: pl2303: fix GL type detection
+Message-ID: <YSyHhf0zH96qaI0W@hovoldconsulting.com>
+References: <20210826110239.5269-1-robert.marko@sartura.hr>
+ <YSd2D92RL9pJMdQY@hovoldconsulting.com>
+ <CA+HBbNFx45eapEZ3wiNCC5X+cvrJoCF01jaHTvj835P79AoN-Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <CA+HBbNFx45eapEZ3wiNCC5X+cvrJoCF01jaHTvj835P79AoN-Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 068fdad20454f815e61e6f6eb9f051a8b3120e88  usb: gadget: u_audio: fix race condition on endpoint stop
+On Thu, Aug 26, 2021 at 01:09:20PM +0200, Robert Marko wrote:
+> On Thu, Aug 26, 2021 at 1:08 PM Johan Hovold <johan@kernel.org> wrote:
+> >
+> > On Thu, Aug 26, 2021 at 01:02:39PM +0200, Robert Marko wrote:
+> > > At least some PL2303GL have a bcdDevice of 0x405 instead of 0x100 as the
+> > > datasheet claims. Add it to the list of known release numbers for the
+> > > HXN (G) type.
+> > >
+> > > Fixes: 894758d0571d ("USB: serial: pl2303: tighten type HXN (G) detection")
+> > > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> >
+> > Thanks for the patch, looks good.
+> >
+> > Could you post the output of lsusb -v for your device as well for
+> > completeness?
+> 
+> Sure, here it is:
+> Bus 001 Device 003: ID 067b:23d3 Prolific Technology, Inc. USB-Serial Controller
 
-elapsed time: 3827m
+Thanks! Now applied.
 
-configs tested: 122
-configs skipped: 4
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arc                              allyesconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-i386                 randconfig-c001-20210829
-mips                 randconfig-c004-20210829
-nios2                         10m50_defconfig
-sparc                       sparc64_defconfig
-arm                     am200epdkit_defconfig
-sh                        sh7757lcr_defconfig
-powerpc                 mpc836x_mds_defconfig
-mips                         tb0219_defconfig
-powerpc                 mpc8272_ads_defconfig
-arm                           sunxi_defconfig
-m68k                        m5307c3_defconfig
-powerpc                mpc7448_hpc2_defconfig
-arm                        multi_v5_defconfig
-powerpc                      ppc44x_defconfig
-mips                        nlm_xlp_defconfig
-sh                          kfr2r09_defconfig
-arm                           sama5_defconfig
-sparc                            alldefconfig
-parisc                generic-32bit_defconfig
-arm                        keystone_defconfig
-arm                          pxa168_defconfig
-mips                         rt305x_defconfig
-arc                     haps_hs_smp_defconfig
-arm                        shmobile_defconfig
-mips                           rs90_defconfig
-arm                            hisi_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a014-20210829
-x86_64               randconfig-a016-20210829
-x86_64               randconfig-a015-20210829
-x86_64               randconfig-a012-20210829
-x86_64               randconfig-a013-20210829
-x86_64               randconfig-a011-20210829
-x86_64               randconfig-a014-20210827
-x86_64               randconfig-a015-20210827
-x86_64               randconfig-a016-20210827
-x86_64               randconfig-a013-20210827
-x86_64               randconfig-a012-20210827
-x86_64               randconfig-a011-20210827
-i386                 randconfig-a011-20210829
-i386                 randconfig-a016-20210829
-i386                 randconfig-a012-20210829
-i386                 randconfig-a014-20210829
-i386                 randconfig-a013-20210829
-i386                 randconfig-a015-20210829
-i386                 randconfig-a016-20210830
-i386                 randconfig-a011-20210830
-i386                 randconfig-a015-20210830
-i386                 randconfig-a014-20210830
-i386                 randconfig-a012-20210830
-i386                 randconfig-a013-20210830
-arc                  randconfig-r043-20210829
-riscv                randconfig-r042-20210829
-s390                 randconfig-r044-20210829
-arc                  randconfig-r043-20210827
-riscv                randconfig-r042-20210827
-s390                 randconfig-r044-20210827
-s390                 randconfig-r044-20210830
-arc                  randconfig-r043-20210830
-riscv                randconfig-r042-20210830
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a001-20210829
-x86_64               randconfig-a006-20210829
-x86_64               randconfig-a005-20210829
-x86_64               randconfig-a003-20210829
-x86_64               randconfig-a004-20210829
-x86_64               randconfig-a002-20210829
-i386                 randconfig-a001-20210829
-i386                 randconfig-a006-20210829
-i386                 randconfig-a002-20210829
-i386                 randconfig-a005-20210829
-i386                 randconfig-a004-20210829
-i386                 randconfig-a003-20210829
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Johan
