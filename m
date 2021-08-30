@@ -2,112 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A17E3FBCEC
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Aug 2021 21:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7D43FBD45
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Aug 2021 22:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233414AbhH3Tdw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Aug 2021 15:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35156 "EHLO
+        id S234632AbhH3UI7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Aug 2021 16:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbhH3Tdv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Aug 2021 15:33:51 -0400
-X-Greylist: delayed 572 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 30 Aug 2021 12:32:57 PDT
-Received: from mail.itouring.de (mail.itouring.de [IPv6:2a01:4f8:a0:4463::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FD1C061575;
-        Mon, 30 Aug 2021 12:32:57 -0700 (PDT)
-Received: from tux.applied-asynchrony.com (p5b07ea1c.dip0.t-ipconnect.de [91.7.234.28])
-        by mail.itouring.de (Postfix) with ESMTPSA id 7EF0512944D;
-        Mon, 30 Aug 2021 21:23:22 +0200 (CEST)
-Received: from [192.168.100.221] (hho.applied-asynchrony.com [192.168.100.221])
-        by tux.applied-asynchrony.com (Postfix) with ESMTP id 37EBCF01618;
-        Mon, 30 Aug 2021 21:23:22 +0200 (CEST)
-Subject: Re: [REGRESSION][BISECTED] flood of "hid-generic ... control queue
- full" since v5.14-rc1
-To:     Michal Kubecek <mkubecek@suse.cz>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-References: <20210816130059.3yxtdvu2r7wo4uu3@lion.mk-sys.cz>
- <YRpnfJ719DwPu2B0@kroah.com> <20210816141347.zougsudwe5tqgkpt@lion.mk-sys.cz>
- <20210816143856.GA121345@rowland.harvard.edu>
- <20210816191249.7g2mk5thwpio7cfc@lion.mk-sys.cz>
-From:   =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>
-Organization: Applied Asynchrony, Inc.
-Message-ID: <97d5cdb9-0372-7e8b-dc61-610198f8664f@applied-asynchrony.com>
-Date:   Mon, 30 Aug 2021 21:23:22 +0200
+        with ESMTP id S234606AbhH3UI7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Aug 2021 16:08:59 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48276C06175F
+        for <linux-usb@vger.kernel.org>; Mon, 30 Aug 2021 13:08:05 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id m11so13165124ioo.6
+        for <linux-usb@vger.kernel.org>; Mon, 30 Aug 2021 13:08:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0RtSe3tPXjpOd0ru72YE33BChLV62/Ie8i3PXYdqo+I=;
+        b=YN8ribrXpRm7FNv4ZI5E2n4zz36a4faIdX+Ua6lNeUTqzla9RlyJBG3EfB0uEdskEn
+         BNNB7hsiTrDVB5euYOicZNKvhwFmChfyxLtoz8W3VfmuQom3evvkZbMwP/+DW3+985lE
+         lPJGcJFB+PNRcH82klgyMod8NN8UM9GXgbJ+c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0RtSe3tPXjpOd0ru72YE33BChLV62/Ie8i3PXYdqo+I=;
+        b=SILgXM+lNr44M1/ZVr3JhBt5CuGy9Hixym54UeDy1FDSIHeYd9X1U9l7FOYOr8cLee
+         +0X5s1Ac7/PHt/dRKhaM91TNS8mr3pi/R/hoW0rLleHHMcDBnqHjjWJ1s/SLK78ovWgz
+         7SHMoO949WTyiVHVWI6BqiRmiwtVe/cdW9I6WJuQoRRHPfNbEhRjzM5twhHmdGP7/0XO
+         3NWuQEKeGWKkLheicjCCULiAaEsJfHTSDhbQiI/a2BY+ZJtpTEBTMTLr5TyGCZWAZogP
+         g5F6f2RMJOcvJlJsSh1SYPep3U80Xf/cKeZwQRurCA2Hl9gvIVKGGvNxtd4JMRB0C9SI
+         4uwA==
+X-Gm-Message-State: AOAM532do8VwV3Xotc2mLeowHm8v7PzIT+aWnilWIE8poQMY80CBQ2s/
+        OQUlPnVz8zlmWfvjd8TvlM4WeJ5efcxtuQ==
+X-Google-Smtp-Source: ABdhPJwMdZIE2IZHm3xmUMNiLBMYHj1Xwmye1ustgG2X1/bYqyzxkh/o9noc6hdgJYICQiAl7BUaKQ==
+X-Received: by 2002:a6b:b4ce:: with SMTP id d197mr19495173iof.69.1630354084475;
+        Mon, 30 Aug 2021 13:08:04 -0700 (PDT)
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com. [209.85.166.50])
+        by smtp.gmail.com with ESMTPSA id p16sm9151694ilg.32.2021.08.30.13.08.03
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Aug 2021 13:08:03 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id a15so21527194iot.2
+        for <linux-usb@vger.kernel.org>; Mon, 30 Aug 2021 13:08:03 -0700 (PDT)
+X-Received: by 2002:a5d:8acf:: with SMTP id e15mr19403264iot.184.1630354083438;
+ Mon, 30 Aug 2021 13:08:03 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210816191249.7g2mk5thwpio7cfc@lion.mk-sys.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1630346073-7099-1-git-send-email-sanm@codeaurora.org> <1630346073-7099-2-git-send-email-sanm@codeaurora.org>
+In-Reply-To: <1630346073-7099-2-git-send-email-sanm@codeaurora.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 30 Aug 2021 13:07:50 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XjRMdB=iHDcMATWDq5CSRGdh1ZBCftjrZvTfMk_Nqgvg@mail.gmail.com>
+Message-ID: <CAD=FV=XjRMdB=iHDcMATWDq5CSRGdh1ZBCftjrZvTfMk_Nqgvg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] dt-bindings: usb: qcom,dwc3: Add multi-pd bindings
+ for dwc3 qcom
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Pratham Pratap <prathampratap@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-08-16 21:12, Michal Kubecek wrote:
-> On Mon, Aug 16, 2021 at 10:38:56AM -0400, Alan Stern wrote:
->> On Mon, Aug 16, 2021 at 04:13:47PM +0200, Michal Kubecek wrote:
->>> Looking at the code, the primary problem seems to be that the "else"
->>> branch in hid_submit_ctrl() recalculates transfer_buffer_length to
->>> a rounded up value but assigns the original length to wLength.
->>
->> Looks like you found the bug.  Fixing it might be as simple as setting
->> len = padlen in that "else" branch.  You could then combine the
->> transfer_buffer_length assignment with the one in the "if" branch and
->> hoist them out after the entire "if" statement.
-> 
-> With the patch below, there are no errors and the UPS communication
-> works correctly and so do other HID devices. But I would prefere someone
-> familiar with HID code to confirm that this is what we want and what
-> would be the right way to handle usb_submit_urb() errors.
-> 
-> Michal
-> 
-> diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-> index 06130dc431a0..ef240ef63a66 100644
-> --- a/drivers/hid/usbhid/hid-core.c
-> +++ b/drivers/hid/usbhid/hid-core.c
-> @@ -377,27 +377,26 @@ static int hid_submit_ctrl(struct hid_device *hid)
->   	len = hid_report_len(report);
->   	if (dir == USB_DIR_OUT) {
->   		usbhid->urbctrl->pipe = usb_sndctrlpipe(hid_to_usb_dev(hid), 0);
-> -		usbhid->urbctrl->transfer_buffer_length = len;
->   		if (raw_report) {
->   			memcpy(usbhid->ctrlbuf, raw_report, len);
->   			kfree(raw_report);
->   			usbhid->ctrl[usbhid->ctrltail].raw_report = NULL;
->   		}
->   	} else {
-> -		int maxpacket, padlen;
-> +		int maxpacket;
->   
->   		usbhid->urbctrl->pipe = usb_rcvctrlpipe(hid_to_usb_dev(hid), 0);
->   		maxpacket = usb_maxpacket(hid_to_usb_dev(hid),
->   					  usbhid->urbctrl->pipe, 0);
->   		if (maxpacket > 0) {
-> -			padlen = DIV_ROUND_UP(len, maxpacket);
-> -			padlen *= maxpacket;
-> -			if (padlen > usbhid->bufsize)
-> -				padlen = usbhid->bufsize;
-> +			len = DIV_ROUND_UP(len, maxpacket);
-> +			len *= maxpacket;
-> +			if (len > usbhid->bufsize)
-> +				len = usbhid->bufsize;
->   		} else
-> -			padlen = 0;
-> -		usbhid->urbctrl->transfer_buffer_length = padlen;
-> +			len = 0;
->   	}
-> +	usbhid->urbctrl->transfer_buffer_length = len;
->   	usbhid->urbctrl->dev = hid_to_usb_dev(hid);
->   
->   	usbhid->cr->bRequestType = USB_TYPE_CLASS | USB_RECIP_INTERFACE | dir;
-> 
+Hi,
 
-Got the same flood of messages when trying 5.14.0, found this thread, applied
-the patch & rebuilt, problem is gone & UPS still working fine. Yay.
+On Mon, Aug 30, 2021 at 10:55 AM Sandeep Maheswaram <sanm@codeaurora.org> wrote:
+>
+> Add multi pd bindings to set performance state for cx domain
+> to maintain minimum corner voltage for USB clocks.
+>
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> ---
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> index e70afc4..838d9c4 100644
+> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> @@ -41,7 +41,18 @@ properties:
+>
+>    power-domains:
+>      description: specifies a phandle to PM domain provider node
+> -    maxItems: 1
+> +    minItems: 1
+> +    items:
+> +      - description: optional,cx power domain
+> +      - description: USB gdsc power domain
 
-cheers
-Holger
+You need to re-order the above. The optional one needs to be second, not first.
+
+
+> +  power-domain-names:
+> +     items:
+> +      - const: cx
+> +      - const: usb_gdsc
+
+Why do you need the names at all? The ordering of power-domains is
+well defined and there are no holes in it and there are no legacy
+reasons for having the names (like there are for clocks), so you
+should drop. This is much like reg-names and I always point people to
+this message from Rob Herring about reg-names:
+
+https://lore.kernel.org/r/CAL_Jsq+MMunmVWqeW9v2RyzsMKP+=kMzeTHNMG4JDHM7Fy0HBg@mail.gmail.com/
+
+You'll have to change your driver to use dev_pm_domain_attach_by_id()
+but that should be fine.
+
+-Doug
