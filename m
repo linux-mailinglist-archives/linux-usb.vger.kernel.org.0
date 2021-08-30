@@ -2,49 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B91C3FB065
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Aug 2021 06:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 082CD3FB084
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Aug 2021 06:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232206AbhH3ETc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Aug 2021 00:19:32 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:16867 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbhH3ETZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Aug 2021 00:19:25 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1630297110; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=1o0FmZbIKug3vf0o+NtUykmzlIUNMLcvxSthEnoYj3U=; b=Lng2sY1dApkr6QXH59Ly7pEd0pz2EhZUnYOxNn62+0Tswg7mWeeCzjImtIEKEnhQ08sava88
- oJFNzMqF775ww8PH97P9QRx4R8JNSmJq5mABHY20/yv3TA34vzf9nKjoVuBUg9FIB/0UJqzz
- AIV+IDIHQZayvdCMs0+XwRkIMew=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 612c5c13cd680e8969fc1e84 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 30 Aug 2021 04:18:27
- GMT
-Sender: sanm=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 51511C43635; Mon, 30 Aug 2021 04:18:26 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [192.168.0.104] (unknown [124.123.190.217])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sanm)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1289BC4338F;
-        Mon, 30 Aug 2021 04:18:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 1289BC4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: Regarding usb dwc3 core shutdown callback
-To:     Felipe Balbi <balbi@kernel.org>
+        id S231248AbhH3EsA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Aug 2021 00:48:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57030 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230506AbhH3Er6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 30 Aug 2021 00:47:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8EDF5604D7;
+        Mon, 30 Aug 2021 04:47:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630298825;
+        bh=EzNbbLzp89C4vwZ1VHzMWl9Ex04tosDHheiya+MiwzU=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=Bp7P8EHL35CXk34jRCKx/CRQ+4YsNxY0iG8ADCTlMfC/4eM7SjwV6gZo6rGy7rGgC
+         kUzsx/F19Xdxq2bcLUExWEp5YZW/bo4+6LL02XP61rJusoKLQHLF7Pl1idiWMyCKyh
+         B8H1lRlkJSPJYgnvc7R9udnCTKbwOwgBqx5LrN07MJlhTotLmmYH/QddQ9Znm8Bsln
+         6IAoYEH4NdhNEpPmuInGKme7m3dob+OIIRArrfISMjZsRl04kksdfXbsZqrKU+5y5S
+         lUxLHFxgY1VH3RqRW+0CPPxcgh3K11tzY3PIq8UPfYMjCAmxOZ5/cfJp/O6BKoF2Gc
+         jc970nR9qCeFg==
+References: <e34c8e16-6521-c6e4-f3ed-9d8520d4ece2@codeaurora.org>
+ <87bl63yqq8.fsf@kernel.org>
+ <eb975a76-1482-f502-4dc1-7993cc3f30d0@codeaurora.org>
+ <87eeaga39m.fsf@kernel.org>
+ <7a6bf94b-91cd-15d5-dd9c-798e7a927727@codeaurora.org>
+User-agent: mu4e 1.6.5; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mathias Nyman <mathias.nyman@intel.com>,
         linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
@@ -54,65 +40,67 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Stephen Boyd <swboyd@chromium.org>,
         Matthias Kaehlcke <mka@chromium.org>,
         Doug Anderson <dianders@chromium.org>
-References: <e34c8e16-6521-c6e4-f3ed-9d8520d4ece2@codeaurora.org>
- <87bl63yqq8.fsf@kernel.org>
- <eb975a76-1482-f502-4dc1-7993cc3f30d0@codeaurora.org>
- <87eeaga39m.fsf@kernel.org>
-From:   Sandeep Maheswaram <sanm@codeaurora.org>
-Message-ID: <7a6bf94b-91cd-15d5-dd9c-798e7a927727@codeaurora.org>
-Date:   Mon, 30 Aug 2021 09:48:16 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+Subject: Re: Regarding usb dwc3 core shutdown callback
+Date:   Mon, 30 Aug 2021 07:45:57 +0300
+In-reply-to: <7a6bf94b-91cd-15d5-dd9c-798e7a927727@codeaurora.org>
+Message-ID: <87r1ebczei.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <87eeaga39m.fsf@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
 
-On 8/26/2021 4:13 PM, Felipe Balbi wrote:
+Sandeep Maheswaram <sanm@codeaurora.org> writes:
+
 > Hi,
 >
-> Sandeep Maheswaram <sanm@codeaurora.org> writes:
->>> (why isn't this email plain/text? Content Type was set to multipart
->>> alternative, please configure your email client correctly :-)
->>>
->>> While at that, also make sure to break lines at 80-columns)
->>>
->>> Sandeep Maheswaram <sanm@codeaurora.org> writes:
->>>> Hi,
->>>>
->>>> Earlier I have posted the patch for usb dwc3 core shutdown callback
->>>>
->>>> https://lore.kernel.org/linux-arm-msm/1618380209-20114-1-git-send-email-sanm@codeaurora.org/
->>>>
->>>> and it was reverted due to issues.
->>> Right, as should be expected when we find regressions
->>>
->>>> https://lore.kernel.org/linux-usb/20210603151742.298243-1-alexandru.elisei@arm.com/
->>>>
->>>> As we already have shutdown callback in xhci plat driver where we halt
->>>> the controller, so there will be no transactions with usb devices.
->>>>
->>>> https://lore.kernel.org/linux-usb/20200306092328.41253-1-ran.wang_1@nxp.com/
->>>>
->>>> So I think dwc3 core shutdown may not be required at least when we are
->>>> using host mode. Let me know your opinion about this.
->>> If that's the case, then sure. Please validate the condition, though,
->>> and kindly report back on your findings
->> I have enabled couple of logs in shutdown path and see no URBs
->> enqueued after xhci shut down.
+> On 8/26/2021 4:13 PM, Felipe Balbi wrote:
+>> Hi,
 >>
->> Hope this is enough for validation . Please suggest if anything more I
->> could do.
-> how about writing a little script to kexec into another kernel for a few
-> hundred iterations and make sure things still work after all that?
+>> Sandeep Maheswaram <sanm@codeaurora.org> writes:
+>>>> (why isn't this email plain/text? Content Type was set to multipart
+>>>> alternative, please configure your email client correctly :-)
+>>>>
+>>>> While at that, also make sure to break lines at 80-columns)
+>>>>
+>>>> Sandeep Maheswaram <sanm@codeaurora.org> writes:
+>>>>> Hi,
+>>>>>
+>>>>> Earlier I have posted the patch for usb dwc3 core shutdown callback
+>>>>>
+>>>>> https://lore.kernel.org/linux-arm-msm/1618380209-20114-1-git-send-ema=
+il-sanm@codeaurora.org/
+>>>>>
+>>>>> and it was reverted due to issues.
+>>>> Right, as should be expected when we find regressions
+>>>>
+>>>>> https://lore.kernel.org/linux-usb/20210603151742.298243-1-alexandru.e=
+lisei@arm.com/
+>>>>>
+>>>>> As we already have shutdown callback in xhci plat driver where we halt
+>>>>> the controller, so there will be no transactions with usb devices.
+>>>>>
+>>>>> https://lore.kernel.org/linux-usb/20200306092328.41253-1-ran.wang_1@n=
+xp.com/
+>>>>>
+>>>>> So I think dwc3 core shutdown may not be required at least when we are
+>>>>> using host mode. Let me know your opinion about this.
+>>>> If that's the case, then sure. Please validate the condition, though,
+>>>> and kindly report back on your findings
+>>> I have enabled couple of logs in shutdown path and see no URBs
+>>> enqueued after xhci shut down.
+>>>
+>>> Hope this is enough for validation . Please suggest if anything more I
+>>> could do.
+>> how about writing a little script to kexec into another kernel for a few
+>> hundred iterations and make sure things still work after all that?
+>
+> Currently kexec is not supported on qcom devices.=C2=A0 Anything we can do
+> apart from kexec?
 
-Currently kexec is not supported on qcom devices.  Anything we can do 
-apart from kexec?
+Sure about that? I've been using kexec with 8150 for quite a while.
 
-
+--=20
+balbi
