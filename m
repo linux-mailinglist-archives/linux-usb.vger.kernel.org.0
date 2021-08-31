@@ -2,117 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1353FC533
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Aug 2021 11:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D82C3FC56C
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Aug 2021 12:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240776AbhHaJwq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Aug 2021 05:52:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:20539 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240790AbhHaJwk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Aug 2021 05:52:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1630403505;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=boUrZKhLp0JiMUKIan6Po3HbNkfH+6C/uMe+4QjtHEA=;
-        b=KAsbVUmRBDLMl44mp5fcXtjKIxDkG677VO92DtSGxauElYcZCNqwYk3RSEOD+Qciz2vsNh
-        2SEVWSUwL6ZPk6WcmXgKnyYyj/UgD+y+rzlWcoPa5yANeOxITt2CrNQYcuIQT+ouhRUdiz
-        hQVlU8jYsFjsYhmo4vxBydoRxwoxAns=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-62-42hEWH35Mxy3yFVUZ3HYpg-1; Tue, 31 Aug 2021 05:51:44 -0400
-X-MC-Unique: 42hEWH35Mxy3yFVUZ3HYpg-1
-Received: by mail-pl1-f199.google.com with SMTP id h5-20020a170902704500b00137e251c362so805837plt.10
-        for <linux-usb@vger.kernel.org>; Tue, 31 Aug 2021 02:51:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=boUrZKhLp0JiMUKIan6Po3HbNkfH+6C/uMe+4QjtHEA=;
-        b=PQc47gc2Rf/+useYU1L81qDhHApnTr/UuLszxAMKbTCkWcYbD4Cyd4+ufaIN2bA8PD
-         nTcQaYpOrjn/cUFYnqPlbe0UxSjZ8yhMDbX+PN9a/PzezmHy0WldqJ+8qwTcohpfzuzR
-         uDiQHp7TrEuH8ZjTWJEUjUHmhf53OIE603BsMaDlEHYsDbEwcpfQ4OcSYZzQs65gLY/J
-         +a9Rw/a/sIkHmMNCna9zeIhwRe4Nzu9zgJ14NfmOhcz8r+zhmI+RHhES+R4CEULMX3Fp
-         p2gr3m5Z2dw4ebas12Ohs4Kb+qCOrKQsBIoySqZ6kL6ikFxHstXBzpLCdMDQvtLKsHG7
-         JkpA==
-X-Gm-Message-State: AOAM533tp/q4fh+pBE062fzmQuCC/49Q55juZl9H171d2xvFewbTxCoj
-        Iza+TEQwbSlA25PT1DfU9uQzQr8ETdNnfF/zPqdZn1RiAfV8lq9x2EYjkXG+1HMQ27KlFUodOxd
-        j577thQzQ5QRiFKdB1zPgxLQqTV7QVZGzH0Ju
-X-Received: by 2002:a17:90b:120a:: with SMTP id gl10mr4426087pjb.234.1630403503182;
-        Tue, 31 Aug 2021 02:51:43 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzojti8W56GvxIsdVgucUtiiapsjjuPzxBecCRiM0JFpL3yj4lfl53tJeN7sS3PHQ/XJHKcnklFe+XbA8OBY18=
-X-Received: by 2002:a17:90b:120a:: with SMTP id gl10mr4426067pjb.234.1630403502897;
- Tue, 31 Aug 2021 02:51:42 -0700 (PDT)
+        id S234263AbhHaKHw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Aug 2021 06:07:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54886 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234016AbhHaKHv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 31 Aug 2021 06:07:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3730A60ED4;
+        Tue, 31 Aug 2021 10:06:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630404416;
+        bh=vBKj8uLJxXcc2UxAjZBzgmrjt3MP7Hx4Rn0LTrR9SKs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Jd5y8gtr575FEWEXQIWvnm7S5Q9EBtNbVle0NpYLuKHgS57VHdU22KGqtGKaUszfY
+         4wmxD02J8sx84exsS4PS/QJ7hHtkEbxtgX3Y/y+I1gWwGOvWATRcAkQVEFIbDT61Gs
+         JA+0IgG1AAh5gdmH4/BtBWhk+5mKM8gVGlGPu4G91EVyxp6aglobZhYDjUST6QaoWJ
+         W+2P/jDCpEEi22wBj2XQ44jN/GixPW2+KuBT/TNF+5uFkk14PtMbvwGWCh0j0pxmnH
+         kphenuIjA4bezBs07J4jSytKi1+tCfRnUqcIf5Cl5UXlTpSZGabZpT9DwQarQVb5Ye
+         BwIiufD9SOKEQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mL0fJ-0007gZ-R4; Tue, 31 Aug 2021 12:06:49 +0200
+Date:   Tue, 31 Aug 2021 12:06:49 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB-serial fix for 5.15-rc1
+Message-ID: <YS3/OWl4ZlpRs1Eb@hovoldconsulting.com>
 MIME-Version: 1.0
-References: <20210819195300.GA8613@rowland.harvard.edu> <000000000000c322ab05c9f2e880@google.com>
- <20210820140620.GA35867@rowland.harvard.edu> <nycvar.YFH.7.76.2108241351490.15313@cbobk.fhfr.pm>
-In-Reply-To: <nycvar.YFH.7.76.2108241351490.15313@cbobk.fhfr.pm>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 31 Aug 2021 11:51:31 +0200
-Message-ID: <CAO-hwJ+i4MqOj0umUW9kFgYSZLt3QMb6hDZHQwb8AKH9pKxSTg@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in hid_submit_ctrl/usb_submit_urb
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        syzbot <syzbot+9b57a46bf1801ce2a2ca@syzkaller.appspotmail.com>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 24, 2021 at 1:54 PM Jiri Kosina <jikos@kernel.org> wrote:
->
-> On Fri, 20 Aug 2021, Alan Stern wrote:
->
-> > > syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-> >
-> > That's good to know.  Still, I suspect there's a better way of handling
-> > this condition.
-> >
-> > In particular, does it make sense to accept descriptors for input or
-> > feature reports with length zero?  I can't imagine what good such
-> > reports would do.
->
-> I quickly went through drivers + some hidraw users, and can't spot any use
-> case for it.
->
-> > On the other hand, I'm not familiar enough with the code to know the
-> > right way to reject these descriptors and reports.  It looks like the
-> > HID subsystem was not designed with this sort of check in mind.
-> >
-> > Benjamin and Jiri, what do you think?  Is it okay to allow descriptors
-> > for zero-length reports and just pretend they have length 1 (as the
-> > patch tested by syzbot did), or should we instead reject them during
-> > probing?
->
-> I think it's a good band-aid for 5.14 (or 5.14-stable if we don't make
-> it), and if it turns out to break something (which I don't expect), than
-> we can look into rejecting already during probe.
->
-> Benjamin, is there a way to run this quickly through your HID regression
-> testing machinery?
->
+The following changes since commit df7b16d1c00ecb3da3a30c999cdb39f273c99a2f:
 
-I have finally been able to test this patch:
-- the testsuite is still passing (of course, this is not hid-core related)
-- Logitech unify receivers are fine (according to the automated tests)
-- Gaming mice with hidraw calls works (with libratbag in userspace)
-- Wacom Intuos Pro still works (so the usbhid calls to enable the
-tablet mode are still OK)
+  Revert "USB: serial: ch341: fix character loss at high transfer rates" (2021-08-25 09:13:33 +0200)
 
-->
-Tested-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+are available in the Git repository at:
 
-Alan, would you mind resending the patch with the various tags with a
-commit description? (unless I missed it...)
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.15-rc1
 
-Cheers,
-Benjamin
+for you to fetch changes up to dcf097e7d21fbdfbf20e473ac155f4d154018374:
 
+  USB: serial: pl2303: fix GL type detection (2021-08-30 09:21:55 +0200)
+
+----------------------------------------------------------------
+USB-serial fix for 5.15-rc1
+
+Here's a single fix for a pl2303 type detection regression, and which
+has been in linux-next over night.
+
+----------------------------------------------------------------
+Robert Marko (1):
+      USB: serial: pl2303: fix GL type detection
+
+ drivers/usb/serial/pl2303.c | 1 +
+ 1 file changed, 1 insertion(+)
