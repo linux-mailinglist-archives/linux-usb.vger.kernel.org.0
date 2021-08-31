@@ -2,103 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3DF3FC882
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Aug 2021 15:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBC03FC8B0
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Aug 2021 15:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237752AbhHaNnd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Aug 2021 09:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237059AbhHaNnb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Aug 2021 09:43:31 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C1EC061575;
-        Tue, 31 Aug 2021 06:42:35 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id b7so24847104iob.4;
-        Tue, 31 Aug 2021 06:42:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/T4oXxIZKVXcXuK4xo4FO0eUgZsswaNawbX1ar73vJY=;
-        b=YTCuGPHaE/M2F5PZEGC2L/zzZfxy8dVhvnvzZYwmm3xf/Gi20rmsGYkpJDmB90B4GE
-         4bpFmfkAv2xpClmwba0vZOETrmpy+Jt5aPHvLEa/EWIUVsU9vARzdaHo17c1Ky/3nOcn
-         4UDb4aTJxLkkDsl5GD9o45Z5T8qdupa/rudoBBguEqQV85qCZ4xY6tCkW7/WrK9RhuCH
-         +qItJnHKxj1EuTt/5U3we6rWvlpyPDRPMnWvTC9c8m6QsgQQHeVlv4sUkwXrlh0SX/IN
-         prZ47i+a4W74xrFP8hdS3ftnYHW5mGCm2ca2ZWiDldixcHFDj2u0u1qHlWzMNo2Lw8xJ
-         IAXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/T4oXxIZKVXcXuK4xo4FO0eUgZsswaNawbX1ar73vJY=;
-        b=KXQjDSTP0qQdxiy0XAbUe61kUcma1a86qRU9uqEoirtFwN0nCcCAsXCOZKOXt1nlZp
-         SRHTnai+MIXhPWE5a5KdgKFGvLlrsAERydZcxGmZ8FIOxRQ4DhXXXmS0ATEZpPrN/SA3
-         Ijvq/RNC+17PAel36pdvaCom2VRtWae9RSgO/iqpmBw8Mkb38nKJSN+ozBjgucJuEYhm
-         B0dYo7ia1lQQSdkl5TOOjdTkHmLt43OpVi0LxgaeeP5IY9y8xY9t2VFyzEOGrsYLLEQq
-         Cyu2aiXRo82ig5qyadMeIkC8TS/BS9KZ9AaZDbULBJoPKeYLqdlrYHFtgv762fN8tgwA
-         T78Q==
-X-Gm-Message-State: AOAM5320JST4x3J1kbrkXCokYVUN6FvlJV+n54zOB20TnxZ3ntba+uL6
-        K3R3k0K2Q+4m5StU4AGJ0SCcawxg8Mv7SQv6zA0=
-X-Google-Smtp-Source: ABdhPJw4lII5+mP2IjiI7gw8j7KxgaPU/kBhn676pl7jR3vSimgmTPlFzm6EAay+u/ZodVqWYPpPEyk5+ENo17HBD/0=
-X-Received: by 2002:a05:6602:2597:: with SMTP id p23mr22902651ioo.195.1630417355164;
- Tue, 31 Aug 2021 06:42:35 -0700 (PDT)
+        id S239340AbhHaNtp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Aug 2021 09:49:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44092 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239133AbhHaNtl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 31 Aug 2021 09:49:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D65C96056B;
+        Tue, 31 Aug 2021 13:48:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630417726;
+        bh=Oouc9A4uNZj96CyIQ8qjGv2+WlOXL4lK4PcLQ4g4pIA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jF0ceW1YuwolhOzsOLURKnrlG+v5SmmgMscEo78jcaLgn3du0DAb0zC1FuS1H6jAg
+         hzaIvbCcCjFVzFwuGLK4N43hRGhz0cAlg1vNYkEcggzHdIB84kRmzpDV501W50m6cV
+         +iBGBlXnWQ/r40WN69QDgw6zoncpVyragqk89y62sctGLfAlOaK1tJNQQw2hv5we+3
+         vX35wjVsZd532IU7L39JvQj+c5l422JrcX+RGmu6NWLWiglvwpJe0gwsHl77bYRC3k
+         oksyn3Yi8uXvJW9AqYmAVeKZqnSnc1IkOBI3/1MjSBeS/Pr/B9ScoAx+AIhGsocxJB
+         /J82VQN2vAMSA==
+Date:   Tue, 31 Aug 2021 06:48:45 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     syzbot <syzbot+6a916267d9bc5fa2d9a6@syzkaller.appspotmail.com>
+Cc:     andrew@lunn.ch, davem@davemloft.net, hkallweit1@gmail.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux@armlinux.org.uk, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        Oleksij Rempel <linux@rempel-privat.de>
+Subject: Re: [syzbot] KASAN: null-ptr-deref Read in phy_disconnect
+Message-ID: <20210831064845.1a8f5c14@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <0000000000006a17f905cad88525@google.com>
+References: <0000000000006a17f905cad88525@google.com>
 MIME-Version: 1.0
-References: <0c5910979f39225d5d8fe68c9ab1c147c68ddee1.1629314734.git.christophe.jaillet@wanadoo.fr>
- <f8a4a6897deb0c8cb2e576580790303550f15fcd.1629314734.git.christophe.jaillet@wanadoo.fr>
- <c56617ff-5d74-9b07-4bcc-25f3dd2aca64@gmail.com>
-In-Reply-To: <c56617ff-5d74-9b07-4bcc-25f3dd2aca64@gmail.com>
-From:   Alan Cooper <alcooperx@gmail.com>
-Date:   Tue, 31 Aug 2021 09:42:37 -0400
-Message-ID: <CAOGqxeXrkv2-7CX34QMQgmtkOwQo2fmmDYbKxJ3hUNAB3gXkEQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] usb: bdc: Fix a resource leak in the error handling
- path of 'bdc_probe()'
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        ": Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 20, 2021 at 4:03 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
->
->
->
-> On 8/18/2021 9:32 PM, Christophe JAILLET wrote:
-> > If an error occurs after a successful 'clk_prepare_enable()' call, it must
-> > be undone by a corresponding 'clk_disable_unprepare()' call.
-> > This call is already present in the remove function.
-> >
-> > Add this call in the error handling path and reorder the code so that the
-> > 'clk_prepare_enable()' call happens later in the function.
-> > The goal is to have as much managed resources functions as possible
-> > before the 'clk_prepare_enable()' call in order to keep the error handling
-> > path simple.
-> >
-> > While at it, remove the now unneeded 'clk' variable.
-> >
-> > Fixes: c87dca047849 ("usb: bdc: Add clock enable for new chips with a separate BDC clock")
-> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->
-> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
->
-> > ---
-> > Review with care.
-> > I don't like shuffling code like that because of possible side effect.
-> > Moving the code related to this clk looks fine to me, but who knows...
->
-> There are no register accesses until bdc_phy_init() gets called, so this
-> looks fine to me. Al knows this code better than I do though, so it
-> would be better to wait for his Acked-by tag.
+On Tue, 31 Aug 2021 03:36:23 -0700 syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    9c1587d99f93 usb: isp1760: otg control register access
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> console output: https://syzkaller.appspot.com/x/log.txt?x=16907291300000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=24756feea212a6b0
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6a916267d9bc5fa2d9a6
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=166de449300000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12c5ddce300000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+6a916267d9bc5fa2d9a6@syzkaller.appspotmail.com
+> 
+> asix 1-1:0.0 eth1: register 'asix' at usb-dummy_hcd.0-1, ASIX AX88178 USB 2.0 Ethernet, 8a:c0:d1:1e:27:4c
+> usb 1-1: USB disconnect, device number 2
+> asix 1-1:0.0 eth1: unregister 'asix' usb-dummy_hcd.0-1, ASIX AX88178 USB 2.0 Ethernet
+> general protection fault, probably for non-canonical address 0xdffffc00000000c3: 0000 [#1] SMP KASAN
+> KASAN: null-ptr-deref in range [0x0000000000000618-0x000000000000061f]
+> CPU: 1 PID: 32 Comm: kworker/1:1 Not tainted 5.14.0-rc7-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Workqueue: usb_hub_wq hub_event
+> RIP: 0010:phy_is_started include/linux/phy.h:947 [inline]
+> RIP: 0010:phy_disconnect+0x22/0x110 drivers/net/phy/phy_device.c:1097
+> Code: 0f 1f 84 00 00 00 00 00 55 48 89 fd 53 e8 46 33 68 fe 48 8d bd 18 06 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e c5 00 00 00 8b 9d 18 06 00 00
+> RSP: 0018:ffffc900001a7780 EFLAGS: 00010206
+> RAX: dffffc0000000000 RBX: ffff88811a410bc0 RCX: 0000000000000000
+> RDX: 00000000000000c3 RSI: ffffffff82d9305a RDI: 0000000000000618
+> RBP: 0000000000000000 R08: 0000000000000055 R09: 0000000000000000
+> R10: ffffffff814c05fb R11: 0000000000000000 R12: ffff8881063cc300
+> R13: ffffffff83870d90 R14: ffffffff86805a20 R15: ffffffff868059e0
+> FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fb4c30b3008 CR3: 00000001021e1000 CR4: 00000000001506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  ax88772_unbind+0x51/0x90 drivers/net/usb/asix_devices.c:816
+>  usbnet_disconnect+0x103/0x270 drivers/net/usb/usbnet.c:1618
+>  usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:458
+>  __device_release_driver+0x3bd/0x6f0 drivers/base/dd.c:1201
+>  device_release_driver_internal drivers/base/dd.c:1232 [inline]
+>  device_release_driver+0x26/0x40 drivers/base/dd.c:1255
+>  bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:529
+>  device_del+0x502/0xd40 drivers/base/core.c:3543
+>  usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1419
+>  usb_disconnect.cold+0x27a/0x78e drivers/usb/core/hub.c:2225
+>  hub_port_connect drivers/usb/core/hub.c:5199 [inline]
+>  hub_port_connect_change drivers/usb/core/hub.c:5488 [inline]
+>  port_event drivers/usb/core/hub.c:5634 [inline]
+>  hub_event+0x1c9c/0x4330 drivers/usb/core/hub.c:5716
+>  process_one_work+0x98d/0x15b0 kernel/workqueue.c:2276
+>  process_scheduled_works kernel/workqueue.c:2338 [inline]
+>  worker_thread+0x85c/0x11f0 kernel/workqueue.c:2424
+>  kthread+0x3c0/0x4a0 kernel/kthread.c:319
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+> Modules linked in:
+> ---[ end trace d08c08ba92f8f06f ]---
+> RIP: 0010:phy_is_started include/linux/phy.h:947 [inline]
+> RIP: 0010:phy_disconnect+0x22/0x110 drivers/net/phy/phy_device.c:1097
+> Code: 0f 1f 84 00 00 00 00 00 55 48 89 fd 53 e8 46 33 68 fe 48 8d bd 18 06 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e c5 00 00 00 8b 9d 18 06 00 00
+> RSP: 0018:ffffc900001a7780 EFLAGS: 00010206
+> RAX: dffffc0000000000 RBX: ffff88811a410bc0 RCX: 0000000000000000
+> RDX: 00000000000000c3 RSI: ffffffff82d9305a RDI: 0000000000000618
+> RBP: 0000000000000000 R08: 0000000000000055 R09: 0000000000000000
+> R10: ffffffff814c05fb R11: 0000000000000000 R12: ffff8881063cc300
+> R13: ffffffff83870d90 R14: ffffffff86805a20 R15: ffffffff868059e0
+> FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fb4c30b3008 CR3: 00000001021e1000 CR4: 00000000001506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> ----------------
+> Code disassembly (best guess):
+>    0:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+>    7:	00
+>    8:	55                   	push   %rbp
+>    9:	48 89 fd             	mov    %rdi,%rbp
+>    c:	53                   	push   %rbx
+>    d:	e8 46 33 68 fe       	callq  0xfe683358
+>   12:	48 8d bd 18 06 00 00 	lea    0x618(%rbp),%rdi
+>   19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+>   20:	fc ff df
+>   23:	48 89 fa             	mov    %rdi,%rdx
+>   26:	48 c1 ea 03          	shr    $0x3,%rdx
+> * 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+>   2e:	84 c0                	test   %al,%al
+>   30:	74 08                	je     0x3a
+>   32:	3c 03                	cmp    $0x3,%al
+>   34:	0f 8e c5 00 00 00    	jle    0xff
+>   3a:	8b 9d 18 06 00 00    	mov    0x618(%rbp),%ebx
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
 
-This is safe.
-Acked-by: Al Cooper <alcooperx@gmail.com>
-
-> --
-> Florian
+Oleksij may know.
