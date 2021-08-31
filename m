@@ -2,106 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E52E43FC493
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Aug 2021 11:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1823FC4EC
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Aug 2021 11:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240538AbhHaJBV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Aug 2021 05:01:21 -0400
-Received: from mout.gmx.net ([212.227.15.15]:60013 "EHLO mout.gmx.net"
+        id S240544AbhHaJPC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Aug 2021 05:15:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42874 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240405AbhHaJBU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 31 Aug 2021 05:01:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1630400404;
-        bh=geC6jummpH913xck4Kqq+pCIvyvdgzsG+yQCENcEc+s=;
-        h=X-UI-Sender-Class:Date:In-Reply-To:References:Subject:Reply-to:To:
-         CC:From;
-        b=Xsy/hFufawuOyGmFd7sn0YqHyxwGH4xVnvk3ZGxPY+YJu/+kel2khtWFfKEqUsU8n
-         F45N3CUY2pTtTWA7Jd98NvwRZKiVEJjZXQklRqLLQ6dZRP6tid5ZMwxUP9fvm3PHmW
-         ObTr6DRjaX7DHxZLGYvQX/fj5VREzvkVHeEjeeRQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from frank-s9 ([80.245.77.109]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mqb1W-1mpdTv3F6O-00mYGr; Tue, 31
- Aug 2021 11:00:04 +0200
-Date:   Tue, 31 Aug 2021 10:59:56 +0200
-User-Agent: K-9 Mail for Android
-In-Reply-To: <16f980b95e1f32bb8eb32448f1615bafdc51b792.camel@mediatek.com>
-References: <20210822041333.5264-1-mans0n@gorani.run> <20210830155903.13907-1-mans0n@gorani.run> <20210830155903.13907-2-mans0n@gorani.run> <16f980b95e1f32bb8eb32448f1615bafdc51b792.camel@mediatek.com>
+        id S240521AbhHaJPC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 31 Aug 2021 05:15:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 09E386023F;
+        Tue, 31 Aug 2021 09:14:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630401247;
+        bh=IAgHR91hKhEicj3zgg8Vg+lZRalB+3Ppldexn4sH1GQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JwfUu1H/yTWW5uUUqExro8s28ISrHZV5+3i/NtOQKqk4QYTmnjV7LdRutCWaH4Nni
+         l8vmwTulK3TiiT6sF5+YnleuetkhopVYAkcItAE2HXLVboyKZpjSutMjZwyMta2sgi
+         Eqy/3b1wTsmhBNar5BjWj2V4s6gShxD8hlxRqbMe5adJoY/4gFPQ+Ip10/g7mP8gtD
+         73yOaS6Vyzv+HOBKsfwXgiTsOGZTk+Wc22AkieDR99iNBB5hmpZiaR2Guek848NrYX
+         bSDkeOiJwIwec1qIxqoRxPGH5ck8ZhZjkuhN3E227Meoud7goJbmSPzGbtTked05TB
+         iE9cG7AmcecyA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mKzqB-0007T2-Ur; Tue, 31 Aug 2021 11:14:00 +0200
+Date:   Tue, 31 Aug 2021 11:13:59 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg KH <greg@kroah.com>,
+        syzbot <syzbot+ada0f7d3d9fd2016d927@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] USB: core: Make usb_start_wait_urb() interruptible
+Message-ID: <YS3y14DBrg0+n/iI@hovoldconsulting.com>
+References: <20210828180358.GA291431@rowland.harvard.edu>
+ <0000000000000f37f405caa41e79@google.com>
+ <20210829015825.GA297712@rowland.harvard.edu>
+ <YSyPQqMPHRiUvYEx@hovoldconsulting.com>
+ <20210830144613.GA332514@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4 1/2] arm: dts: mt7623: add musb device nodes
-Reply-to: frank-w@public-files.de
-To:     linux-mediatek@lists.infradead.org,
-        =?UTF-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= 
-        <Chunfeng.Yun@mediatek.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "mans0n@gorani.run" <mans0n@gorani.run>
-CC:     "b-liu@ti.com" <b-liu@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
-From:   Frank Wunderlich <frank-w@public-files.de>
-Message-ID: <14C40B35-3607-49C6-970B-441F9093125A@public-files.de>
-X-Provags-ID: V03:K1:BwjuzFFpOwqolvGter7ofmISuM0KzZzqIugWamQrsY4X2p7n8CT
- RxQJjEoq7gUemkMcDiTQdFGTh7hpvJ9aQks+j19YeRfHjoLxuR3b6XQ/31He+ZeVjTU7mRl
- 3MWVjzmO2fOo7Rw0gIQEuLxRAh6fuN9jdzfIujJLjqRAC5WPkDopaGLao0YQCZgh8Zj3Wg7
- Rqio26/e4xvFl3yk5BqmQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Ztp2H4ZVSy8=:z0bvrzrU2U8eBz8ElEB1NC
- EJqvvijFZl0MEaOGXjlQhIt8taxLXDaxxGFqBMEjHpe9/hR4acAbuvLAq2L78kZbKBHFxKsGj
- dE77eCzSuX2EpBGpmFJVVSpZXQTQuO0izMRIiD/NuEpHezU3XLwODph8B6JQ1UCB3iUtnvGtD
- JUBMAllF7kJkkWoDeweeLYfS8oEOE5blvAOK0oitvSWvWpn/VdHWsSGXP1P199nAJOwwXjtbh
- /LyYH9Ki+CNrwAeadYqjhfp0bJmpAUKMYtZ9A4g5FodVc2Lt4vF2yIo/UWfsOh/t/2u9Exl7j
- HN8unWP432SqGjjTFgcbTrhWEyyBrvgE7ry61X3/5PPtRrtW20Mm1xm9uumd6pmDU7dpCCs8i
- c8rxNT+vaScfXijznBJU6I1+0TbxM86HRjtUJWjpCosdO5VH1LRL1XNiMhbVOXGfgW/jqpCrz
- 2NoYbFV19IVaeG5weJlD7Q1J+ZRjryAaUj2uithLm/6nV0Ll7wL645ags20b5yvXaha99c/lE
- /Keh1oqfSQOq4zg3z0gQ0y4GEHHm5Ed7f/p3zI4jCOE5iXv+7jnbmAXF2JQ1MnUqc3tlhDJ5X
- ubjvIwThd8zT8hMMQgkZbaF25yyhvOYm62d0ZNCSo9kqkZWplpMl2OooWsMUljLoZ9eiEuxMd
- bTRL5pgfhxSsuac9bxy1D6sORV7nHto+S//P16U/qG27RiDvVk/zAoB/WfSDdTvg5FIn5DUBQ
- JbSPqnjRFzLPgY5fJOG8mMytYYTySzdOoKuA29GBkuF7DJZ/pDARVnjbEu2dPnkTZCg/9LGs0
- ogObwccsGfqw7a2t0T9MmClYixFtXXXnGjkmM2MfP3iRajcGvicNN2IS4ARWTdXvHWSr8jcjQ
- C88WHczCEInQyZgLItg1Re5kptMt4Vq0zqSTOKKI4ol/2f7rhYuK1/d0S+FQ7jZK3biVhUm51
- GHxi+8/EZC7yJ0CMJNU6Z7sAbG20OMbDln5nAL3MAPE94SQCW/mHD6UNqR1Fz0WPxFxzQzU7E
- auNvNSY0jO8c91S1Z6Df4u1/2Ty0yHOaSqwSj1L6Ohq/CGzYtc09fIEkLKFOvOe3SXg5+5AQI
- STrBcra9Z4eYKy3JUPwIX0nDIF1EjqJ3U5QQeoUuJ1l6qNiijqC/FOBqQ==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210830144613.GA332514@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am 31=2E August 2021 08:27:18 MESZ schrieb "Chunfeng Yun (=E4=BA=91=E6=98=
-=A5=E5=B3=B0)" <Chunfeng=2EYun@mediatek=2Ecom>:
+On Mon, Aug 30, 2021 at 10:46:13AM -0400, Alan Stern wrote:
+> On Mon, Aug 30, 2021 at 09:56:50AM +0200, Johan Hovold wrote:
+> > On Sat, Aug 28, 2021 at 09:58:25PM -0400, Alan Stern wrote:
+> > > This patch fixes the problem by converting the uninterruptible wait to
+> > > an interruptible one.  For the most part this won't affect calls to
+> > > usb_start_wait_urb(), because they are made by kernel threads and so
+> > > can't receive most signals.
+> > > 
+> > > But in some cases such calls may occur in user threads in contexts
+> > > other than usbfs ioctls.  A signal in these circumstances could cause
+> > > a USB transfer to fail when otherwise it wouldn't.  The outcome
+> > > wouldn't be too dreadful, since USB transfers can fail at any time and
+> > > the system is prepared to handle these failures gracefully.  In
+> > > theory, for example, a signal might cause a driver's probe routine to
+> > > fail; in practice if the user doesn't want a probe to fail then he
+> > > shouldn't send interrupt signals to the probing process.
+> > 
+> > While probe() triggered through sysfs or by module loading is one
+> > example, the USB msg helpers are also called in a lot of other
+> > user-thread contexts such as open() calls etc. It might even be that the
+> > majority of these calls can be done from user threads (post
+> > enumeration).
+> 
+> Could be.  It's not a well defined matter; it depends on what drivers 
+> are in use and how they are used.
 
->Is the dt-binding patch applied?=20
->It's better to put it into this series due to the new
->compatible "mediatek,mt7623-musb" is used for the first time=2E
->
->Reviewed-by: Chunfeng Yun <chunfeng=2Eyun@mediatek=2Ecom>
+Right, but the commit message seemed to suggest that these helpers being
+run from interruptible threads was the exception.
 
-Hi,
+> Consider that a control message in a driver is likely to use the 
+> default USB_CTRL_[GS]ET_TIMEOUT value of 5 seconds.  Does it make sense 
+> to allow uninterruptible wait states to last as long as that?
 
-I don't see [1] (ack from rob) in [2]/[3]
+Perhaps sometimes? I don't have a use case at hand, but I haven't
+reviewed all drivers either.
 
-@sungbo: please leave dt-bindings patch in series=2E
-You need no new version only for adding tags (acked,tested or reviewed)=2E
-Only for code-changes,but then add tags from previous versions=2E
+The comment above usb_start_wait_urb() (which also needs to be updated,
+by the way) even suggests that drivers should "implement their own
+interruptible routines" so perhaps this has just gone unnoticed for 20
+odd years. And the question then becomes, why didn't we use
+interruptible sleep from the start?
 
-Imho it is better to take my musb patch [4]
-into the series as well to make depency cleaner
+And trying to answer that I find that that's precisely what we did, but
+for some reason it was changed to uninterruptible sleep in v2.4.11
+without a motivation (that I could easily find spelled out).
 
-[1] https://patchwork=2Ekernel=2Eorg/project/linux-mediatek/patch/20210808=
-123840=2E176738-2-mans0n@gorani=2Erun/
-[2] https://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/robh/linux=2Egit/l=
-og/?h=3Dfor-next
-[3] https://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/matthias=2Ebgg/lin=
-ux=2Egit/log/?h=3Dfor-next
-[4] https://patchwork=2Ekernel=2Eorg/project/linux-mediatek/patch/20210830=
-145958=2E108605-1-linux@fw-web=2Ede/
-regards Frank
+> And to what extent does it matter if we make these delays 
+> interruptible?  A signal delivered during a system call will be fielded 
+> when the call returns if not earlier; the only difference will be that 
+> now some USB messages may be aborted.  For things like SIGINT or 
+> SIGTERM this seems reasonable.  (I'm not so sure about things like 
+> SIGALRM, SIGIO, or SIGSTOP, though.)
+
+I'm not saying I'm necessarily against the change. It just seemed a bit
+rushed to change the (stable) API like this while claiming it won't
+affect most call sites.
+
+> > > Overall, then, making these delays interruptible seems to be an
+> > > acceptable risk.
+> > 
+> > Possibly, but changing the API like this to fix the usbfs ioctls seems
+> > like using a bit of a too big hammer to me, especially when backporting
+> > to stable.
+> 
+> Perhaps the stable backport could be delayed for a while (say, one 
+> release cycle).
+
+That might work.
+
+> Do you have alternative suggestions?  I don't think we want special 
+> interruptible versions of usb_control_msg() and usb_bulk_msg() just for 
+> use by usbfs.
+
+usbfs could carry a temporary local implementation as the documentation
+for usb_start_wait_urb() currently suggests. I assume we can't limit the
+usbfs timeouts.
+
+Johan
