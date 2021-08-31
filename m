@@ -2,107 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E233FCB2A
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Aug 2021 18:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 274F73FCC07
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Aug 2021 19:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239708AbhHaQEG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Aug 2021 12:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232770AbhHaQEG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Aug 2021 12:04:06 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EA8C061575
-        for <linux-usb@vger.kernel.org>; Tue, 31 Aug 2021 09:03:10 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id m9so4155547wrb.1
-        for <linux-usb@vger.kernel.org>; Tue, 31 Aug 2021 09:03:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7XBdzsYcfbAFFqMK3EvyshaLCCtQzDoAHeCo4vRDzBk=;
-        b=U2NQZcE9sbylaQm7A212jXABQnE6zq4llRL9giQ1oSim9XnSoDaIrUdZQtmDAYCef2
-         qH+mKL6Un4oR1eqL8k3tdcC6Vdr7eYdTy9SvNOUWe9r1KQ/PDMPq6CW56bU3kKBJE0Eb
-         +Gc4BnDz90lUEOlibsPH0yOkbzNNzZlz04c4Y8SdtYx3z9yBsNQXXjUKYQPURhG78V0T
-         r4qXFpBl9x5cSrC+8ynWc0zbfqBX6GaRtEc/04tH8geF2KbipdZXuo460UN7fu6MvRD4
-         cdqcwwPE14SetlEYksVcIm6X1WX2LTj8xPvRBe9r759WIVYSAZ/EAovnjF19RxczbX2/
-         9bDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7XBdzsYcfbAFFqMK3EvyshaLCCtQzDoAHeCo4vRDzBk=;
-        b=kHidEOWEgezfbsA/0LOUXx3XvvdtRUrjOpXe0QKJPASn00OD6ufgXITKFNvhoQ+EZs
-         Tt2u24JbhLgTyuL4jLXGfIR+3Pp838LaL9p38eMYQaJRpjzIwjJ1zusHrVqzDAvmcn4g
-         udRNsMOwzXZix2tY70i6wOuWTpphDUsJftZDtqSJ6YlI/hNRHPcSWistqvN0AxnJzYxK
-         oOKrGWYSjwNuZYA0PU5lQoaf0JGtazWiFNB0W0S+hT3uU0Jj1CfbAnyUQ8zx959Zqc40
-         R4lKdkKmhtZmVsQ65kHg5Q2iYzvQ5Iw0Ph4O7a52h0cl4SU0/tliMQi3jSEajooxs/VL
-         3yXw==
-X-Gm-Message-State: AOAM531bwMFE9rjQNGhXc022hD5GAHadyBasPJ+eNE3XDLnVvCgxP7XM
-        AUGkJjhvsNGvf9dB+bU9TFwTuQ==
-X-Google-Smtp-Source: ABdhPJxEYWLoI/kN0++wwJOdGNvSlwCszZpaaIv4lwVhp82x2hX4zEmr5fFlmRI1HIg4LFVmoWaogg==
-X-Received: by 2002:adf:db07:: with SMTP id s7mr33301533wri.106.1630425789457;
-        Tue, 31 Aug 2021 09:03:09 -0700 (PDT)
-Received: from buildbot.pitowers.org ([2a00:1098:3142:14:ae1f:6bff:fedd:de54])
-        by smtp.gmail.com with ESMTPSA id v13sm19245579wrf.55.2021.08.31.09.03.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Aug 2021 09:03:08 -0700 (PDT)
-From:   Phil Elwell <phil@raspberrypi.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Bell <jonathan@raspberrypi.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] xhci: guard accesses to ep_state in xhci_endpoint_reset()
-Date:   Tue, 31 Aug 2021 17:02:59 +0100
-Message-Id: <20210831160259.2392459-1-phil@raspberrypi.com>
-X-Mailer: git-send-email 2.25.1
+        id S233834AbhHaRGL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Aug 2021 13:06:11 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:33041 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S240535AbhHaREf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Aug 2021 13:04:35 -0400
+Received: (qmail 373237 invoked by uid 1000); 31 Aug 2021 13:03:38 -0400
+Date:   Tue, 31 Aug 2021 13:03:38 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Johan Hovold <johan@kernel.org>, Oliver Neukum <oneukum@suse.com>
+Cc:     Greg KH <greg@kroah.com>,
+        syzbot <syzbot+ada0f7d3d9fd2016d927@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] USB: core: Make usb_start_wait_urb() interruptible
+Message-ID: <20210831170338.GA371511@rowland.harvard.edu>
+References: <20210828180358.GA291431@rowland.harvard.edu>
+ <0000000000000f37f405caa41e79@google.com>
+ <20210829015825.GA297712@rowland.harvard.edu>
+ <YSyPQqMPHRiUvYEx@hovoldconsulting.com>
+ <20210830144613.GA332514@rowland.harvard.edu>
+ <YS3y14DBrg0+n/iI@hovoldconsulting.com>
+ <YS4OKKox+gZZZ/vV@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YS4OKKox+gZZZ/vV@hovoldconsulting.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jonathan Bell <jonathan@raspberrypi.com>
+On Tue, Aug 31, 2021 at 01:10:32PM +0200, Johan Hovold wrote:
+> On Tue, Aug 31, 2021 at 11:13:59AM +0200, Johan Hovold wrote:
+> > On Mon, Aug 30, 2021 at 10:46:13AM -0400, Alan Stern wrote:
+> 
+> > > Consider that a control message in a driver is likely to use the 
+> > > default USB_CTRL_[GS]ET_TIMEOUT value of 5 seconds.  Does it make sense 
+> > > to allow uninterruptible wait states to last as long as that?
+> > 
+> > Perhaps sometimes? I don't have a use case at hand, but I haven't
+> > reviewed all drivers either.
+> > 
+> > The comment above usb_start_wait_urb() (which also needs to be updated,
+> > by the way) even suggests that drivers should "implement their own
+> > interruptible routines" so perhaps this has just gone unnoticed for 20
+> > odd years. And the question then becomes, why didn't we use
+> > interruptible sleep from the start?
+> > 
+> > And trying to answer that I find that that's precisely what we did, but
+> > for some reason it was changed to uninterruptible sleep in v2.4.11
+> > without a motivation (that I could easily find spelled out).
+> 
+> Here it is:
+> 
+> 	https://lore.kernel.org/lkml/20010818013101.A7058@devserv.devel.redhat.com/
+> 
+> It's rationale does not seem valid anymore (i.e. the NULL deref), but
+> the example is still instructive.
+> 
+> If you close for example a v4l application you still expect the device
+> to be shut down orderly but with interruptible sleep all control
+> requests during shutdown will be aborted immediately.
+> 
+> Similar for USB serial devices which would for example fail to deassert
+> DTR/RTS, etc. (I just verified with the patch applied.)
 
-See https://github.com/raspberrypi/linux/issues/3981
+On Tue, Aug 31, 2021 at 01:02:11PM +0200, Oliver Neukum wrote:
+> Upon further considerations forcing user space to handle signals also
+> breaks the API, albeit in a more subtle manner. I'd suggest that we use
+> wait_event_killable_timeout(). And do it the way Alan initially disliked,
+> that is code a version for use by usbfs.
+>
+> Thus we'd avoid the issue of having an unkillable process, but we do
+> not impose a need to handle signals.
 
-Two read-modify-write cycles on ep->ep_state are not guarded by
-xhci->lock. Fix these.
+Okay, I'll play it safe and rewrite the patch, adding special-purpose 
+routines just for usbfs.
 
-Signed-off-by: Jonathan Bell <jonathan@raspberrypi.com>
----
- drivers/usb/host/xhci.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Will wait_event_killable_timeout() prevent complaints about tasks being 
+blocked for too long (the reason syzbot reported this in the first 
+place)?
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index f3dabd02382c2..902f410874e8e 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -3213,10 +3213,13 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
- 		return;
- 
- 	/* Bail out if toggle is already being cleared by a endpoint reset */
-+	spin_lock_irqsave(&xhci->lock, flags);
- 	if (ep->ep_state & EP_HARD_CLEAR_TOGGLE) {
- 		ep->ep_state &= ~EP_HARD_CLEAR_TOGGLE;
-+		spin_unlock_irqrestore(&xhci->lock, flags);
- 		return;
- 	}
-+	spin_unlock_irqrestore(&xhci->lock, flags);
- 	/* Only interrupt and bulk ep's use data toggle, USB2 spec 5.5.4-> */
- 	if (usb_endpoint_xfer_control(&host_ep->desc) ||
- 	    usb_endpoint_xfer_isoc(&host_ep->desc))
-@@ -3302,8 +3305,10 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
- 	xhci_free_command(xhci, cfg_cmd);
- cleanup:
- 	xhci_free_command(xhci, stop_cmd);
-+	spin_lock_irqsave(&xhci->lock, flags);
- 	if (ep->ep_state & EP_SOFT_CLEAR_TOGGLE)
- 		ep->ep_state &= ~EP_SOFT_CLEAR_TOGGLE;
-+	spin_unlock_irqrestore(&xhci->lock, flags);
- }
- 
- static int xhci_check_streams_endpoint(struct xhci_hcd *xhci,
--- 
-2.25.1
-
+Alan Stern
