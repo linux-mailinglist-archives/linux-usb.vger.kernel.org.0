@@ -2,77 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 763093FC3BC
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Aug 2021 10:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8373FC463
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Aug 2021 11:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239876AbhHaHbh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Aug 2021 03:31:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46410 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239824AbhHaHbg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 31 Aug 2021 03:31:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 20B0960F91;
-        Tue, 31 Aug 2021 07:30:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1630395042;
-        bh=58gahRqJCVkZ6Ws/NXcX/rfwRVKeEn+0OjYE684NjAU=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=YORRbvpt6ZHHPi0bEl/Amlmr7mRdYiNda3iiPdliD0gkW/E4Dyu766dZpEjA9xaZv
-         4EX0RhqVVF0lx4IJ6vPWfoMcvQAMPW5+IEobZY4mKmNAAJSCmcgPagEtSEzzfE3xtV
-         AmSNclUmSP43p3haiMfspUk9uzA5lN8VSTaYOPWXPgn5FcgYB68H2pVscrX/jH+FwF
-         vmU6EgVmG1btuXl0kvW3Sv2rQWppfr/g7MVJ+BVnrsPCW1driRtRhQv+PlgPP1JTey
-         QR20KZbrA1cMPi6CRQiG/NjlyM5aJsgiHWxpdGe+sNNinTAasPzew7Hurr4/5t7n6z
-         XDuniX/irTzXg==
-References: <f5ea5bc3664a98a684ad4b699a1ac610e847176f.1630389452.git.baruch@tkos.co.il>
- <9f399bdf1ff752e31ab7497e3d5ce19bbb3ff247.1630389452.git.baruch@tkos.co.il>
-User-agent: mu4e 1.6.5; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Baruch Siach <baruch@tkos.co.il>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Balaji Prakash J <bjagadee@codeaurora.org>,
-        Rob Herring <robh@kernel.org>,
-        Kathiravan T <kathirav@codeaurora.org>,
-        Jack Pham <jackp@codeaurora.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] usb: dwc3: reference clock period configuration
-Date:   Tue, 31 Aug 2021 10:27:45 +0300
-In-reply-to: <9f399bdf1ff752e31ab7497e3d5ce19bbb3ff247.1630389452.git.baruch@tkos.co.il>
-Message-ID: <87ilzmcbqa.fsf@kernel.org>
+        id S240365AbhHaIiF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Aug 2021 04:38:05 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:14440 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240361AbhHaIiE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Aug 2021 04:38:04 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GzL6x5NG3zbfyZ;
+        Tue, 31 Aug 2021 16:33:13 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 31 Aug 2021 16:37:08 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Tue, 31 Aug
+ 2021 16:37:07 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <hminas@synopsys.com>
+Subject: [PATCH -next] usb: dwc2: check return value after calling platform_get_resource()
+Date:   Tue, 31 Aug 2021 16:42:36 +0800
+Message-ID: <20210831084236.1359677-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-Baruch Siach <baruch@tkos.co.il> writes:
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/usb/dwc2/hcd.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> From: Balaji Prakash J <bjagadee@codeaurora.org>
->
-> Set reference clock period when it differs from dwc3 default hardware
-> set.
->
-> We could calculate clock period based on reference clock frequency. But
-> this information is not always available. This is the case of PCI bus
-> attached USB host. For that reason we use a custom property.
->
-> Tested (USB2 only) on IPQ6010 SoC based board with 24 MHz reference
-> clock while hardware default is 19.2 MHz.
->
-> Nacked-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Balaji Prakash J <bjagadee@codeaurora.org>
-> [ baruch: rewrite commit message; drop GFLADJ code; remove 'quirk-' from
->   property name; mention tested hardware ]
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Acked-by: Felipe Balbi <balbi@kernel.org>
-
-
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index 2a7828971d05..a215ec9e172e 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -5191,6 +5191,10 @@ int dwc2_hcd_init(struct dwc2_hsotg *hsotg)
+ 	hcd->has_tt = 1;
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res) {
++		retval = -EINVAL;
++		goto error1;
++	}
+ 	hcd->rsrc_start = res->start;
+ 	hcd->rsrc_len = resource_size(res);
+ 
 -- 
-balbi
+2.25.1
+
