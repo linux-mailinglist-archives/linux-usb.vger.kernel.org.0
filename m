@@ -2,88 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F29EF3FC57D
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Aug 2021 12:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9923FC5E9
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Aug 2021 13:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240907AbhHaKPH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Aug 2021 06:15:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57140 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240855AbhHaKPH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 31 Aug 2021 06:15:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 776CA60F91;
-        Tue, 31 Aug 2021 10:14:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1630404852;
-        bh=KPzIm1z3ky3vkzx9TJGTllQ8fK86500cOGtHZD5Kv2s=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QF7kLuY7W0ktJsQJshQi4ost8P9fh00iWjrgw5r9epbgRqys728XnEizujd2l8PJK
-         TDjaGS5wMy79Ii/X3AV9+VA/l3GQllvFkXIttqEUH5yuv1K8Sp3jAIXrjgSc2M/eP/
-         w/mqYHQQh/2hDsY7h0xklEGxnvxNPXcHUhNVgIN+sKtr9MB2q4F5Y1bL/OwTQNgiT1
-         PMgc7GbVgL2SGy1R7axFFeC0t+BgB1vYk++NQW1hoTOKnR+cjsRnDggx6aUptyj2PB
-         fK8yJNNA4jAO3Noy5H9KojGSbLm+f+m2Xw+eNO1znS2qGO34jP6/4XZtk7qTIh66+I
-         FcN81SYjSnghw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mL0mL-0007kQ-Po; Tue, 31 Aug 2021 12:14:05 +0200
-Date:   Tue, 31 Aug 2021 12:14:05 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB-serial updates for 5.15-rc1
-Message-ID: <YS4A7ZJYrhRXb+PN@hovoldconsulting.com>
+        id S241042AbhHaKhb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Aug 2021 06:37:31 -0400
+Received: from mail-il1-f198.google.com ([209.85.166.198]:50060 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234124AbhHaKhS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Aug 2021 06:37:18 -0400
+Received: by mail-il1-f198.google.com with SMTP id a15-20020a92444f000000b0022473393120so10963759ilm.16
+        for <linux-usb@vger.kernel.org>; Tue, 31 Aug 2021 03:36:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=C7KJHTkk1c0zJenAnvPa15dENwUnMi0hsUVHukHuBPg=;
+        b=N+WBKVZSSFosmTRMa1yVR40Q89I0QyUZmRLY7tXAZjVyIU5xfaU8IMqCjAbMATLsH/
+         hN06m84FcTfAaFnkMgvFDBhkwlr1G/d4zoCflngwlku0dJzIlV4ymUwbvCYO/GFRbSOW
+         32D8Vi1NjVc+Szgv8yZjshr/TPRbETtSFdvMyGEI1fbio3z/qQ2y+rQNow80FeOPPBje
+         nSoNWctYkp2G+QPoUhCL/W1a5zoBUszdx55NzZNxmta+qEBh+bVjizZkXCjywjkAmrOK
+         rBWP3e0j2YofBGYS+gksEOCLWMsAtl1KntLdlumdkySCL7D1tkQBJw5a7V9t+9wKAL0Z
+         gWBQ==
+X-Gm-Message-State: AOAM530MytrulLSNOdYhFRHChNuvfxfLslZ04kLf8SSIdIOVxfU579lO
+        foCrJ/84aNSNAWM2clH/EKuigoPEltbhcafBYnhRQXgh4gPq
+X-Google-Smtp-Source: ABdhPJwPMhVubij/wMLaajXgQa0Pywx7cTmBuLR4tb2OIWWWNKeEPkoY0pICaC3/QBL0ks9YjgX1H/B0Eo7NX4GBKncageVP74FJ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Received: by 2002:a05:6602:2436:: with SMTP id g22mr22469045iob.109.1630406183621;
+ Tue, 31 Aug 2021 03:36:23 -0700 (PDT)
+Date:   Tue, 31 Aug 2021 03:36:23 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006a17f905cad88525@google.com>
+Subject: [syzbot] KASAN: null-ptr-deref Read in phy_disconnect
+From:   syzbot <syzbot+6a916267d9bc5fa2d9a6@syzkaller.appspotmail.com>
+To:     andrew@lunn.ch, davem@davemloft.net, hkallweit1@gmail.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux@armlinux.org.uk,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit ff1176468d368232b684f75e82563369208bc371:
+Hello,
 
-  Linux 5.14-rc3 (2021-07-25 15:35:14 -0700)
+syzbot found the following issue on:
 
-are available in the Git repository at:
+HEAD commit:    9c1587d99f93 usb: isp1760: otg control register access
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=16907291300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=24756feea212a6b0
+dashboard link: https://syzkaller.appspot.com/bug?extid=6a916267d9bc5fa2d9a6
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=166de449300000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12c5ddce300000
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.15-rc1-2
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6a916267d9bc5fa2d9a6@syzkaller.appspotmail.com
 
-for you to fetch changes up to a65ab973c1669d3edc27719527bb3906f7b09918:
+asix 1-1:0.0 eth1: register 'asix' at usb-dummy_hcd.0-1, ASIX AX88178 USB 2.0 Ethernet, 8a:c0:d1:1e:27:4c
+usb 1-1: USB disconnect, device number 2
+asix 1-1:0.0 eth1: unregister 'asix' usb-dummy_hcd.0-1, ASIX AX88178 USB 2.0 Ethernet
+general protection fault, probably for non-canonical address 0xdffffc00000000c3: 0000 [#1] SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000618-0x000000000000061f]
+CPU: 1 PID: 32 Comm: kworker/1:1 Not tainted 5.14.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:phy_is_started include/linux/phy.h:947 [inline]
+RIP: 0010:phy_disconnect+0x22/0x110 drivers/net/phy/phy_device.c:1097
+Code: 0f 1f 84 00 00 00 00 00 55 48 89 fd 53 e8 46 33 68 fe 48 8d bd 18 06 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e c5 00 00 00 8b 9d 18 06 00 00
+RSP: 0018:ffffc900001a7780 EFLAGS: 00010206
+RAX: dffffc0000000000 RBX: ffff88811a410bc0 RCX: 0000000000000000
+RDX: 00000000000000c3 RSI: ffffffff82d9305a RDI: 0000000000000618
+RBP: 0000000000000000 R08: 0000000000000055 R09: 0000000000000000
+R10: ffffffff814c05fb R11: 0000000000000000 R12: ffff8881063cc300
+R13: ffffffff83870d90 R14: ffffffff86805a20 R15: ffffffff868059e0
+FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fb4c30b3008 CR3: 00000001021e1000 CR4: 00000000001506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ ax88772_unbind+0x51/0x90 drivers/net/usb/asix_devices.c:816
+ usbnet_disconnect+0x103/0x270 drivers/net/usb/usbnet.c:1618
+ usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:458
+ __device_release_driver+0x3bd/0x6f0 drivers/base/dd.c:1201
+ device_release_driver_internal drivers/base/dd.c:1232 [inline]
+ device_release_driver+0x26/0x40 drivers/base/dd.c:1255
+ bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:529
+ device_del+0x502/0xd40 drivers/base/core.c:3543
+ usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1419
+ usb_disconnect.cold+0x27a/0x78e drivers/usb/core/hub.c:2225
+ hub_port_connect drivers/usb/core/hub.c:5199 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5488 [inline]
+ port_event drivers/usb/core/hub.c:5634 [inline]
+ hub_event+0x1c9c/0x4330 drivers/usb/core/hub.c:5716
+ process_one_work+0x98d/0x15b0 kernel/workqueue.c:2276
+ process_scheduled_works kernel/workqueue.c:2338 [inline]
+ worker_thread+0x85c/0x11f0 kernel/workqueue.c:2424
+ kthread+0x3c0/0x4a0 kernel/kthread.c:319
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+Modules linked in:
+---[ end trace d08c08ba92f8f06f ]---
+RIP: 0010:phy_is_started include/linux/phy.h:947 [inline]
+RIP: 0010:phy_disconnect+0x22/0x110 drivers/net/phy/phy_device.c:1097
+Code: 0f 1f 84 00 00 00 00 00 55 48 89 fd 53 e8 46 33 68 fe 48 8d bd 18 06 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e c5 00 00 00 8b 9d 18 06 00 00
+RSP: 0018:ffffc900001a7780 EFLAGS: 00010206
+RAX: dffffc0000000000 RBX: ffff88811a410bc0 RCX: 0000000000000000
+RDX: 00000000000000c3 RSI: ffffffff82d9305a RDI: 0000000000000618
+RBP: 0000000000000000 R08: 0000000000000055 R09: 0000000000000000
+R10: ffffffff814c05fb R11: 0000000000000000 R12: ffff8881063cc300
+R13: ffffffff83870d90 R14: ffffffff86805a20 R15: ffffffff868059e0
+FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fb4c30b3008 CR3: 00000001021e1000 CR4: 00000000001506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+   7:	00
+   8:	55                   	push   %rbp
+   9:	48 89 fd             	mov    %rdi,%rbp
+   c:	53                   	push   %rbx
+   d:	e8 46 33 68 fe       	callq  0xfe683358
+  12:	48 8d bd 18 06 00 00 	lea    0x618(%rbp),%rdi
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+  2e:	84 c0                	test   %al,%al
+  30:	74 08                	je     0x3a
+  32:	3c 03                	cmp    $0x3,%al
+  34:	0f 8e c5 00 00 00    	jle    0xff
+  3a:	8b 9d 18 06 00 00    	mov    0x618(%rbp),%ebx
 
-  USB: serial: replace symbolic permissions by octal permissions (2021-08-26 09:38:27 +0200)
 
-----------------------------------------------------------------
-USB-serial updates for 5.15-rc1
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Here are the USB serial updates for 5.15-rc1, including:
-
- - a couple of fixes for cp210x termios error handling
- - retrieval of fw revisions for more cp210x types
- - a switch to octal permissions for all module-parameter definitions
-
-Included are also various clean ups.
-
-All have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Johan Hovold (7):
-      USB: serial: io_edgeport: drop unused descriptor helper
-      USB: serial: cp210x: fix control-characters error handling
-      USB: serial: cp210x: fix flow-control error handling
-      USB: serial: cp210x: clean up control-request timeout
-      USB: serial: cp210x: clean up set-chars request
-      USB: serial: cp210x: clean up type detection
-      USB: serial: cp210x: determine fw version for CP2105 and CP2108
-
-Utkarsh Verma (1):
-      USB: serial: replace symbolic permissions by octal permissions
-
- drivers/usb/serial/cp210x.c      | 77 +++++++++++++++++-----------------------
- drivers/usb/serial/cypress_m8.c  |  6 ++--
- drivers/usb/serial/ftdi_sio.c    |  2 +-
- drivers/usb/serial/garmin_gps.c  |  2 +-
- drivers/usb/serial/io_edgeport.c | 33 -----------------
- drivers/usb/serial/io_ti.c       |  4 +--
- drivers/usb/serial/ipaq.c        |  4 +--
- drivers/usb/serial/iuu_phoenix.c | 10 +++---
- drivers/usb/serial/sierra.c      |  2 +-
- 9 files changed, 47 insertions(+), 93 deletions(-)
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
