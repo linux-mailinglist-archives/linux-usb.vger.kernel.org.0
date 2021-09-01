@@ -2,115 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0A43FD384
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Sep 2021 07:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 536693FD3AC
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Sep 2021 08:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242361AbhIAF5O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Sep 2021 01:57:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48416 "EHLO mail.kernel.org"
+        id S242180AbhIAGIx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Sep 2021 02:08:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54000 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242368AbhIAF5D (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 Sep 2021 01:57:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8909C60F23;
-        Wed,  1 Sep 2021 05:56:06 +0000 (UTC)
+        id S242085AbhIAGIw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Sep 2021 02:08:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C1356601FF;
+        Wed,  1 Sep 2021 06:07:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1630475767;
-        bh=3XoMMABazip5Pdie/ihLagEB12j+RZRXKFqHWEuJJqo=;
+        s=korg; t=1630476476;
+        bh=No6ncwSGz8o2JhsYuJWAErOYKNB3kmd3bp4xzS8BY1s=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VQhvNiA/sL8Ckc5/WmosrGpCT++CEu5Pf4OqFDk9/tEPyRoCoKlY7xxqXv+MqcnA2
-         g22CYIsw9AJPS3ABlqgXdZzeRY+gAk5bSrWknUkBUglDHCY7VxwueqJPacMQRMpR2V
-         ZWsaXOd6ycdiIizZzDZCAMtUV3218qzZKwtohTr4=
-Date:   Wed, 1 Sep 2021 07:56:04 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "faizel.kb" <faizel.kb@dicortech.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: testusb: Fix for showing the connection speed
-Message-ID: <YS8V9Jz/MivXiaZc@kroah.com>
-References: <20210831174742.105621-1-faizel.kb@dicortech.com>
+        b=BNEx/JfF2ABQ/F/3v60AiG0nGk9i76q3ZRQ2YknnYz8ks4krQqhvnIqTSsLoQ0Zsd
+         S8RVoWeDn9TsA4VJJmJbJXnKiT/+QMlW+zY2Q3QMlylhjhzjihcG3k2Lvu2X0fuzap
+         3oGQEH0v//D72aLY1XCbXPpxZ02x/XtMtCIDd5cs=
+Date:   Wed, 1 Sep 2021 08:07:53 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     neal_liu <neal_liu@aspeedtech.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Tony Prisk <linux@prisktech.co.nz>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Tao Ren <rentao.bupt@gmail.com>, BMC-SW@aspeedtech.com
+Subject: Re: [PATCH v2] usb: ehci: handshake CMD_RUN instead of STS_HALT
+Message-ID: <YS8YuX9laah5d/NY@kroah.com>
+References: <20210901035041.10810-1-neal_liu@aspeedtech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210831174742.105621-1-faizel.kb@dicortech.com>
+In-Reply-To: <20210901035041.10810-1-neal_liu@aspeedtech.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 31, 2021 at 11:17:42PM +0530, faizel.kb wrote:
-> 'testusb' application which uses 'usbtest' driver reports 'unknown speed'
-> from the function 'find_testdev'. The variable 'entry->speed' was not
-> updated from  the application. The IOCTL mentioned in the FIXME comment can
-> only report whether the connection is low speed or not. Speed is read using
-> the IOCTL USBDEVFS_GET_SPEED which reports the proper speed grade.  The
-> call is implemented in the function 'handle_testdev' where the file
-> descriptor was availble locally. Sample output is given below where 'high
-> speed' is printed as the connected speed.
+On Wed, Sep 01, 2021 at 11:50:41AM +0800, neal_liu wrote:
+> Retitle.
 > 
-> sudo ./testusb -a
-> high speed      /dev/bus/usb/001/011    0
-> /dev/bus/usb/001/011 test 0,    0.000015 secs
-> /dev/bus/usb/001/011 test 1,    0.194208 secs
-> /dev/bus/usb/001/011 test 2,    0.077289 secs
-> /dev/bus/usb/001/011 test 3,    0.170604 secs
-> /dev/bus/usb/001/011 test 4,    0.108335 secs
-> /dev/bus/usb/001/011 test 5,    2.788076 secs
-> /dev/bus/usb/001/011 test 6,    2.594610 secs
-> /dev/bus/usb/001/011 test 7,    2.905459 secs
-> /dev/bus/usb/001/011 test 8,    2.795193 secs
-> /dev/bus/usb/001/011 test 9,    8.372651 secs
-> /dev/bus/usb/001/011 test 10,    6.919731 secs
-> /dev/bus/usb/001/011 test 11,   16.372687 secs
-> /dev/bus/usb/001/011 test 12,   16.375233 secs
-> /dev/bus/usb/001/011 test 13,    2.977457 secs
-> /dev/bus/usb/001/011 test 14 --> 22 (Invalid argument)
-> /dev/bus/usb/001/011 test 17,    0.148826 secs
-> /dev/bus/usb/001/011 test 18,    0.068718 secs
-> /dev/bus/usb/001/011 test 19,    0.125992 secs
-> /dev/bus/usb/001/011 test 20,    0.127477 secs
-> /dev/bus/usb/001/011 test 21 --> 22 (Invalid argument)
-> /dev/bus/usb/001/011 test 24,    4.133763 secs
-> /dev/bus/usb/001/011 test 27,    2.140066 secs
-> /dev/bus/usb/001/011 test 28,    2.120713 secs
-> /dev/bus/usb/001/011 test 29,    0.507762 secs
+> For Aspeed, HCHalted status depends on not only Run/Stop but also
+> ASS/PSS status.
+> Handshake CMD_RUN on startup instead.
 > 
-> Signed-off-by: faizel.kb <faizel.kb@dicortech.com>
+> Signed-off-by: neal_liu <neal_liu@aspeedtech.com>
 > ---
->  tools/usb/testusb.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
+>  drivers/usb/host/ehci-hcd.c      | 11 ++++++++++-
+>  drivers/usb/host/ehci-platform.c |  6 ++++++
+>  drivers/usb/host/ehci.h          |  1 +
+>  3 files changed, 17 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/usb/testusb.c b/tools/usb/testusb.c
-> index ee8208b2f946..69c3ead25313 100644
-> --- a/tools/usb/testusb.c
-> +++ b/tools/usb/testusb.c
-> @@ -265,12 +265,6 @@ static int find_testdev(const char *name, const struct stat *sb, int flag)
->  	}
->  
->  	entry->ifnum = ifnum;
-> -
-> -	/* FIXME update USBDEVFS_CONNECTINFO so it tells about high speed etc */
-> -
-> -	fprintf(stderr, "%s speed\t%s\t%u\n",
-> -		speed(entry->speed), entry->name, entry->ifnum);
-> -
->  	entry->next = testdevs;
->  	testdevs = entry;
->  	return 0;
-> @@ -299,6 +293,14 @@ static void *handle_testdev (void *arg)
->  		return 0;
->  	}
->  
-> +	status  =  ioctl(fd, USBDEVFS_GET_SPEED, NULL);
-> +	if (status < 0)
-> +		fprintf(stderr, "USBDEVFS_GET_SPEED failed %d\n", status);
-> +	else
-> +		dev->speed = status;
-> +	fprintf(stderr, "%s speed\t%s\t%u\n",
-> +			speed(dev->speed), dev->name, dev->ifnum);
+> diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
+> index 10b0365f3439..01c022e46aa2 100644
+> --- a/drivers/usb/host/ehci-hcd.c
+> +++ b/drivers/usb/host/ehci-hcd.c
+> @@ -634,7 +634,16 @@ static int ehci_run (struct usb_hcd *hcd)
+>  	/* Wait until HC become operational */
+>  	ehci_readl(ehci, &ehci->regs->command);	/* unblock posted writes */
+>  	msleep(5);
+> -	rc = ehci_handshake(ehci, &ehci->regs->status, STS_HALT, 0, 100 * 1000);
 > +
->  restart:
->  	for (i = 0; i < TEST_CASES; i++) {
->  		if (dev->test != -1 && dev->test != i)
+> +	/* For Aspeed, STS_HALT also depends on ASS/PSS status.
+> +	 * Skip this check on startup.
+> +	 */
+> +	if (ehci->is_aspeed)
+> +		rc = ehci_handshake(ehci, &ehci->regs->command, CMD_RUN,
+> +				    1, 100 * 1000);
+> +	else
+> +		rc = ehci_handshake(ehci, &ehci->regs->status, STS_HALT,
+> +				    0, 100 * 1000);
+>  
+>  	up_write(&ehci_cf_port_reset_rwsem);
+>  
+> diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
+> index c70f2d0b4aaf..c3dc906274d9 100644
+> --- a/drivers/usb/host/ehci-platform.c
+> +++ b/drivers/usb/host/ehci-platform.c
+> @@ -297,6 +297,12 @@ static int ehci_platform_probe(struct platform_device *dev)
+>  					  "has-transaction-translator"))
+>  			hcd->has_tt = 1;
+>  
+> +		if (of_device_is_compatible(dev->dev.of_node,
+> +					    "aspeed,ast2500-ehci") ||
+> +		    of_device_is_compatible(dev->dev.of_node,
+> +					    "aspeed,ast2600-ehci"))
+> +			ehci->is_aspeed = 1;
+> +
+>  		if (soc_device_match(quirk_poll_match))
+>  			priv->quirk_poll = true;
+>  
+> diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
+> index 80bb823aa9fe..fdd073cc053b 100644
+> --- a/drivers/usb/host/ehci.h
+> +++ b/drivers/usb/host/ehci.h
+> @@ -219,6 +219,7 @@ struct ehci_hcd {			/* one per controller */
+>  	unsigned		need_oc_pp_cycle:1; /* MPC834X port power */
+>  	unsigned		imx28_write_fix:1; /* For Freescale i.MX28 */
+>  	unsigned		spurious_oc:1;
+> +	unsigned		is_aspeed:1;
+>  
+>  	/* required for usb32 quirk */
+>  	#define OHCI_CTRL_HCFS          (3 << 6)
 > -- 
-> 2.25.1
+> 2.17.1
 > 
 
 Hi,
@@ -130,6 +124,12 @@ as indicated below:
   the Signed-off-by: line, or the From: line (both of which have to
   match).  Please read the kernel file, Documentation/SubmittingPatches
   for how to do this correctly.
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
 
 If you wish to discuss this problem further, or you have questions about
 how to resolve this issue, please feel free to respond to this email and
