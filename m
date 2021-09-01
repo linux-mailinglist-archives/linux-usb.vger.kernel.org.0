@@ -2,84 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1223FD660
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Sep 2021 11:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A35423FD6BB
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Sep 2021 11:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243498AbhIAJTx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Sep 2021 05:19:53 -0400
-Received: from mga07.intel.com ([134.134.136.100]:22160 "EHLO mga07.intel.com"
+        id S243557AbhIAJ1U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Sep 2021 05:27:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50658 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243485AbhIAJTv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 Sep 2021 05:19:51 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10093"; a="282408953"
-X-IronPort-AV: E=Sophos;i="5.84,368,1620716400"; 
-   d="scan'208";a="282408953"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2021 02:18:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,368,1620716400"; 
-   d="scan'208";a="476059938"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga008.jf.intel.com with ESMTP; 01 Sep 2021 02:18:33 -0700
-To:     Phil Elwell <phil@raspberrypi.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Bell <jonathan@raspberrypi.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210831160259.2392459-1-phil@raspberrypi.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] xhci: guard accesses to ep_state in xhci_endpoint_reset()
-Message-ID: <3830571c-566c-ef13-bc08-60206a634253@linux.intel.com>
-Date:   Wed, 1 Sep 2021 12:21:08 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.8.1
+        id S243418AbhIAJ1U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Sep 2021 05:27:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 85E9060462;
+        Wed,  1 Sep 2021 09:26:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1630488383;
+        bh=pqLXY4HtrR+J0Jdtegd/3av7bnGcsxFJPqwBnp716Vw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cDWR4Ox1Uj5CAp+emITgvgRtQT/K2gSvoFh+Qmdxm6lexS/oZ9Ik1NL9CtHuOtGIJ
+         xOMq/TDG4XZxkRCKgeKoE0dzvY6UbQpW4DKPDEr3PK4TW5cS7YrbbIlbAPtDrmZ2FH
+         bfbK1RO1mj5wnPaHOX0xD1tAFS3GMeoUlnck0qps=
+Date:   Wed, 1 Sep 2021 11:26:21 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Salvatore Bonaccorso <carnil@debian.org>
+Cc:     Benjamin Berg <benjamin@sipsolutions.net>,
+        linux-usb@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, Benjamin Berg <bberg@redhat.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Ian Turner <vectro@vectro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: Re: [PATCH 0/2] UCSI race condition resulting in wrong port state
+Message-ID: <YS9HPQV3O6D9N7L/@kroah.com>
+References: <20201009144047.505957-1-benjamin@sipsolutions.net>
+ <20201028091043.GC1947336@kroah.com>
+ <20201106104725.GC2785199@kroah.com>
+ <YR+nwZtz9CQuyTn+@lorien.valinor.li>
+ <YSDtCea3a9cuaEG3@kroah.com>
+ <YSD5JlFfAGyq5Fpk@eldamar.lan>
 MIME-Version: 1.0
-In-Reply-To: <20210831160259.2392459-1-phil@raspberrypi.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YSD5JlFfAGyq5Fpk@eldamar.lan>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 31.8.2021 19.02, Phil Elwell wrote:
-> From: Jonathan Bell <jonathan@raspberrypi.com>
+On Sat, Aug 21, 2021 at 03:01:26PM +0200, Salvatore Bonaccorso wrote:
+> Hi Greg,
 > 
-> See https://github.com/raspberrypi/linux/issues/3981
-
-Thanks, so in a nutshell the issue looks something like:
-
-[827586.220071] xhci_hcd 0000:01:00.0: WARN Cannot submit Set TR Deq Ptr
-[827586.220087] xhci_hcd 0000:01:00.0: A Set TR Deq Ptr command is pending.
-[827723.160680] INFO: task usb-storage:93 blocked for more than 122 seconds.
-
-The blocked task is probably because xhci driver failed to give back the
-URB after failing to submit a "Set TR Deq Ptr" command. This part should
-be fixed in:
-https://lore.kernel.org/r/20210820123503.2605901-4-mathias.nyman@linux.intel.com
-which is currently in usb-next, and should be in 5.15-rc1 and future 5.12+ stable.
-
+> On Sat, Aug 21, 2021 at 02:09:45PM +0200, Greg Kroah-Hartman wrote:
+> > On Fri, Aug 20, 2021 at 03:01:53PM +0200, Salvatore Bonaccorso wrote:
+> > > Hi Greg,
+> > > 
+> > > On Fri, Nov 06, 2020 at 11:47:25AM +0100, Greg Kroah-Hartman wrote:
+> > 
+> > Note, you are responding to an email from a very long time ago...
 > 
-> Two read-modify-write cycles on ep->ep_state are not guarded by
-> xhci->lock. Fix these.
+> Yeah, was sort of purpose :) (to try to retain the original context of
+> the question of if the commits should be backported to stable series,
+> which back then had no need raised)
+> > 
+> > > > Due to the lack of response, I guess they don't need to go to any stable
+> > > > kernel, so will queue them up for 5.11-rc1.
+> > > 
+> > > At least one user in Debian (https://bugs.debian.org/992004) would be
+> > > happy to have those backported as well to the 5.10.y series (which we
+> > > will pick up).
+> > > 
+> > > So if Benjamin ack's this, this would be great to have in 5.10.y.
+> > 
+> > What are the git commit ids?  Just ask for them to be applied to stable
+> > like normal...
 > 
+> Right, aplogies. The two commits were
+> 47ea2929d58c35598e681212311d35b240c373ce and
+> 217504a055325fe76ec1142aa15f14d3db77f94f.
+> 
+> 47ea2929d58c ("usb: typec: ucsi: acpi: Always decode connector change information")
+> 217504a05532 ("usb: typec: ucsi: Work around PPM losing change information")
+> 
+> and in the followup Benjamin Berg mentioned to pick as well
+> 
+> 8c9b3caab3ac26db1da00b8117901640c55a69dd
+> 
+> 8c9b3caab3ac ("usb: typec: ucsi: Clear pending after acking connector change"
+> 
+> a related fix later on.
 
-This is probably one cause for the "Warn Cannot submit Set TR Deq Ptr A Set TR
-Deq Ptr command is pending" message.
-Another possibility is that with UAS and streams we have several transfer rings
-per endpoint, meaning that if two TDs on separate stream rings on the same 
-endpoint both stall, or are cancelled we could see this message.
+All now queued up, thanks.
 
-The SET_DEQ_PENDING flag in ep->ep_state should probably be per ring, not per
-endpoint. Then we also need a "rings_with_pending_set_deq" counter per endpoint
-to keep track when all set_tr_deq commands complete, and we can restart the endpoint  
-
-Anyway, my patch linked above together with this patch should make these errors
-a lot more harmless.
-
-Let me know if you can trigger the issue with both these patches applied.
-
-I'll add your patch to the queue as well.
-
-Thanks
--Mathias
+greg k-h
