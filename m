@@ -2,141 +2,263 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1653FD51F
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Sep 2021 10:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 855A13FD68E
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Sep 2021 11:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242975AbhIAIR2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Sep 2021 04:17:28 -0400
-Received: from de-smtp-delivery-102.mimecast.com ([194.104.111.102]:51435 "EHLO
-        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242915AbhIAIR0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Sep 2021 04:17:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1630484188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9Tsly7kigHdycumP6tsdOPtuxkyuTpYK7gatD6Uf6f8=;
-        b=BL5kb2Ja4HvEwrjibnvEIIpLcfsHmKPqp/BWZaDl5W2cqo8vaLmu3SbshIVbm03fD4DwGO
-        tVDrLWpqRfTU8an8ATMomeM68md+r/QNoZLWpaProIn/r9r+C+2jkWro5sdNOWs27Z7+2H
-        ynoSS0+G0pKB9diTMpJ0b2DZFDQk0D8=
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com
- (mail-db8eur05lp2109.outbound.protection.outlook.com [104.47.17.109])
- (Using TLS) by relay.mimecast.com with ESMTP id
- de-mta-22-_QtXGhVdMiCbo6VaLyO2rg-1; Wed, 01 Sep 2021 10:16:27 +0200
-X-MC-Unique: _QtXGhVdMiCbo6VaLyO2rg-1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W9bCPAn5RUVVS9V7pIGV2Ac1CG8AunEXNxjsENLcqp0c88oRPs+se3Rv6/SlXBrDnttGGp7s4byoGTGNR6dGHtHBFhnT2OfFX4W0NJXWrrVgbtXgGQN43NHsCIHL+i5IgzZ2zEmJ4+umSfnbyqT5iHJzeZZNTESGB/tvTOGzrQMfhZHalC5Vxj70SARBYHe9wpwd++4kK1YyiEBoQIAgORaOZj0dRIY65dqc0Z9/vuSeKISVCEBni2dEyukxwOnIVteWOB//uV2pjd0Rz0hgoxz+/zdgkus00LiS3XvoJFFrvgWrb6ONCBxPWytmpK8XG2OtC8iaBui3sc8ZCLQ4tQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tdRaD0khsZJK3XB/958PUB1TTUuhgOPoZo9vtofyXOw=;
- b=dfe1wSVFJy2htUh35I4Gqcz6XFrg/Ppb+j0lyXkyS0fO/Gz9fMjhuYTaEAMsXvan62pXTFO7pYj6IQ5Jyb6h8NptAiNGL+9Im3slGppUJYTOYQy2T7J3dlg9zD/1uHJBviPzBaqxfUdR4SUcS1Dwu1ZtOx0M6tZtSg/+xB7CytvGUIyyr/H8CoGGsT8PyvZFTYSn5u3h8Zk6rhhKRRM1gzR+MgYTF4W2ACTe1TS+e3Mz0FuS/4vEuUOKIGbhrJzoj4yGL8iN+szZkzgnKIRqY7dI1BbugJoUQd6vtYMEFlwBxiM9WZvbj8Gw2fqH6A8u4HBmzpY39ctyfjYk65KRUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=suse.com;
-Received: from DB7PR04MB5050.eurprd04.prod.outlook.com (2603:10a6:10:22::23)
- by DBBPR04MB7676.eurprd04.prod.outlook.com (2603:10a6:10:20e::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.23; Wed, 1 Sep
- 2021 08:16:25 +0000
-Received: from DB7PR04MB5050.eurprd04.prod.outlook.com
- ([fe80::4cc0:191d:5c04:8ede]) by DB7PR04MB5050.eurprd04.prod.outlook.com
- ([fe80::4cc0:191d:5c04:8ede%7]) with mapi id 15.20.4457.025; Wed, 1 Sep 2021
- 08:16:25 +0000
-Subject: Re: [PATCH] USB: core: Make usb_start_wait_urb() interruptible
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Johan Hovold <johan@kernel.org>
-CC:     Greg KH <greg@kroah.com>,
-        syzbot <syzbot+ada0f7d3d9fd2016d927@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com,
-        USB mailing list <linux-usb@vger.kernel.org>
-References: <20210828180358.GA291431@rowland.harvard.edu>
- <0000000000000f37f405caa41e79@google.com>
- <20210829015825.GA297712@rowland.harvard.edu>
- <YSyPQqMPHRiUvYEx@hovoldconsulting.com>
- <20210830144613.GA332514@rowland.harvard.edu>
- <YS3y14DBrg0+n/iI@hovoldconsulting.com>
- <YS4OKKox+gZZZ/vV@hovoldconsulting.com>
- <20210831170338.GA371511@rowland.harvard.edu>
-From:   Oliver Neukum <oneukum@suse.com>
-Message-ID: <b9aba74f-b0bc-01b4-4d6d-33619375b909@suse.com>
-Date:   Wed, 1 Sep 2021 10:16:22 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
-In-Reply-To: <20210831170338.GA371511@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-ClientProxiedBy: PR3P191CA0041.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:102:55::16) To DB7PR04MB5050.eurprd04.prod.outlook.com
- (2603:10a6:10:22::23)
+        id S243569AbhIAJVB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Sep 2021 05:21:01 -0400
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:51177 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243566AbhIAJU5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Sep 2021 05:20:57 -0400
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 6F365580B24;
+        Wed,  1 Sep 2021 05:20:00 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 01 Sep 2021 05:20:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm3; bh=NE9AUAjhoU4hV
+        oBIJpvEmvndGMXYqbykLIA62gBCqIE=; b=pRlwnYEdf+7wSiJ6R1UnMt0jfhAAx
+        iVpi7GmR4SvybcUbEsdeGpv9xBU4b/xQBi1yNDig3B8xtzf4slb1Q5kSeNx8lQP2
+        F5/OsN8VhrZyGQwtgwMA+a7iYqqxXgQz34u0mvTXv+j5LwxdvvIbIWQI+tYSRK90
+        gJ04zdFmwVp0pUd+CWV+aoSD+ani4DNo4viXv0J4glRaJUTOyah+2SCmacxGVypE
+        BacgeN1iNGjX3fbceu9DCslRtiqnhtYOzYTexfzu41lJqB14yk0BA537IjDpjym/
+        FNij1mAQ7y1zlMup0Cjf7lGMGOqkt9XQ+paVqUi50QrepA/KCxDQlWzKw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; bh=NE9AUAjhoU4hVoBIJpvEmvndGMXYqbykLIA62gBCqIE=; b=qg7Gg/Vr
+        s0YSypUS/C4XP0ecBKzOm3aRX4lBRjvaA70XeWz3Us0e9flJpk1OOYRZjMR+zEQP
+        oP8fBOhpN1UoGIrE//drKD5gWm9LxgBBN61un1Lu588kY4bde5sqs82PGN0xGVL8
+        Fb6GFBQCbxMWPzXTsapuTIDWfwuVgDiPLhjhGQkO0YRbJ40uK0RigzrvQhU+3LEz
+        i8+TtBXZ6VP3wCQtyMMonb0P+C4Wg9s20UUuQdHC6CTiJ1I+Y1+I7Ebj8QPb2sLB
+        xqCm2MRgmuE0UQaTFQw4nDT4dA94fCToHzC+gG426/nTNn2mQbMGsNTObQHAmsws
+        aXd367SEnbbD9Q==
+X-ME-Sender: <xms:wEUvYTDd3GZg_7KknJLALkZ-9pyw8JXEURufBVeywbiNp6FVr-OJPw>
+    <xme:wEUvYZhp-QqWbQWhyB_mnDD_ZUH37jeW5yvUEuKw2CPSfnAbx7jjQ0TDO1IXzQlLF
+    yYBNEQ1SARZJeYqvMY>
+X-ME-Received: <xmr:wEUvYendkOCaLUId4QD_4toymxyrrOaJhezieNcIsc2IJaPhIRuylDNA0agkJNURFK2KcRu-2_TzHXeUT5gCtsoQFGUpODgA1txw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddruddvfedgudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    govehorghsthgrlhdqhfeguddvqddtvdculdduhedtmdenucfjughrpefhvffufffkofgj
+    fhgggfestdekredtredttdenucfhrhhomhepofgrgihimhgvucftihhprghrugcuoehmrg
+    igihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtthgvrhhnpeevjeeijedtvefg
+    fffgjeeugffguedtleetkeegteeufedtuddttdfgfffhgfeuffenucffohhmrghinhepug
+    gvvhhitggvthhrvggvrdhorhhgnecuvehluhhsthgvrhfuihiivgepheenucfrrghrrghm
+    pehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:wEUvYVw-vaoxzc2J43PipFp84V6RFxg_FubMjIdiAvozk1PwMEz19g>
+    <xmx:wEUvYYT5rTmsitBBGIDWLfkICosc_NgK0BLytWm4q1_ZSO0eJnAHXA>
+    <xmx:wEUvYYZx1ttXh1inMTCic22V10Uozs9mh9y4WjMEWIJt5bRrNarNAA>
+    <xmx:wEUvYR-uTrPZYiftxFOW67HwxR8Q4kvWVwKFup8qC4333HPfovf7nw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 1 Sep 2021 05:19:59 -0400 (EDT)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        =?UTF-8?q?Jernej=20=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com,
+        Dongjin Kim <tobetter@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v2 36/52] dt-bindings: usb: Convert SMSC USB3503 binding to a schema
+Date:   Wed,  1 Sep 2021 11:18:36 +0200
+Message-Id: <20210901091852.479202-37-maxime@cerno.tech>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210901091852.479202-1-maxime@cerno.tech>
+References: <20210901091852.479202-1-maxime@cerno.tech>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (2001:a61:3ba1:6d01:4428:c443:677c:c419) by PR3P191CA0041.EURP191.PROD.OUTLOOK.COM (2603:10a6:102:55::16) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.19 via Frontend Transport; Wed, 1 Sep 2021 08:16:24 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8fdb9703-cd3a-4955-edc0-08d96d20ca20
-X-MS-TrafficTypeDiagnostic: DBBPR04MB7676:
-X-Microsoft-Antispam-PRVS: <DBBPR04MB7676BD36E0151243F9667C1BC7CD9@DBBPR04MB7676.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GqV5Sq5kwa7RBW4ysGfHeVwo4M80d1uk/lDUbOLroKjWuibuUIiGXobnySW2+F7RYawg1ttHmeoUdQZHD7ZNUp3L5pq4GXKrwzLIhAVwVPxm9VkUFeoFcxZu0CssQyTqU/yPpjOOP3XZSxThxQpjgIsPBVa3WnH+hEJ3Ad3hlVBRa4IomgYdRSJBnzDg9nxN4PiG7wOR+0j6KxIXge6wBMw8N64GyGRrMOtOTzx1gC57OYr3Ux2O5ko44ItCuWWNvs5P8m3wF76F89NP7O5Puee0MumGClls1JfmPyWO+G5gQei9jsliLh0m6i5II78DMOxZWasJni2RCWWjjjwmDptcsqdCJI1cQx00MMLtZ5O3QsFg7wdjRwDDP58PPlHvPGCsH3fac8V6YPZBYX4i3Qzm8Di/4OeqhJXpCqULBCSCTDyKWjFbSczq02APUFX6TaV+8c7yEeTI0YLqWMw+O3uDMIA2xVQQeQ5FM8BesPWIcxb60SAVqVzuYVKUu+t/kxuHVtMO+8xnmRqDEB+Z5OU3XKazWRIPy2TBRsIMYxLUzkc3cJ+dw2vRW69r1+LIoQbTpH7BEPoFttleL/A63sa5LohQ0U1zBhqVitJ9nNvRJo7860iTszXYbLtdawJ5vOXLwjBHyJqSsZTSrvqByILUEiBuq6pyoVg4/p76lpaeX5AnjYxlD554HS8/+h2H4CvFujpZMZ4bpRNfFHIvJMRuAoxdzJVdYDKb/TqEbTc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5050.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(376002)(346002)(366004)(396003)(136003)(4744005)(2906002)(53546011)(110136005)(86362001)(31696002)(54906003)(6506007)(5660300002)(36756003)(2616005)(186003)(83380400001)(31686004)(66946007)(38100700002)(316002)(6512007)(8676002)(66556008)(66476007)(6486002)(8936002)(4326008)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+7/ChWTpk4Y200E7eNNCJKBT+3vqzB+32HnXpXioi3s8ptEnEbqwws6kshyr?=
- =?us-ascii?Q?njSn29YXqassJWN4LE0blvraEbeiwPa35ko71iWsWvjzdZYPfIQ7Az22sPQH?=
- =?us-ascii?Q?g6U95w3bHRcixGkKejSwEPT3wgWKwnQr4fcY0/x/XD9z3UsTVNx64dcsupgx?=
- =?us-ascii?Q?R2KRvRdUtAkf36HxZRq87iU3B1yeiC5vMJWRJXyZ9EjkRtnoUEz76EKpQEux?=
- =?us-ascii?Q?Itxzbpb27Re+CzcC8BW753bQaJEEbYpR+X+QP2lYvBc6fla0VELWsryaUiAW?=
- =?us-ascii?Q?NxxzEJRhQnAcyWPRgW+hdZsqXLIUJcty4Wdt1P6pe7q5RzHTtC7hPSUwU6IR?=
- =?us-ascii?Q?DpDWwZpXYtQcF9/MR+GydOrNKy0fKp2nV0l5yn2lLlgGVe6f5PMQzmJM6brD?=
- =?us-ascii?Q?tC9MtrBZ0Ayg+6aVTgfg2CZNFFn0TwiJ953WhR3lzBeRyRhituXTEJ2llQ/Q?=
- =?us-ascii?Q?gzdChSSWZwRebqcgOiuZxlRt1ivESPsbsia+Hi3VsZRqRZ7fIiZmOkQiPD4K?=
- =?us-ascii?Q?SSjIumS8dYLW9rk/vrk3tNLU/cUcVjf76t7KHJ6pp9HlSKweauPQrFjfyxVH?=
- =?us-ascii?Q?nGhr/wsSPtjY+708cDwex061KtpYTTD9jaORkAVPouHBF1wZEAoRb2Do0ZYN?=
- =?us-ascii?Q?nrz8KdwthbxO5XmAc2LNV/MCANul7UP+8x5uYNhM7wD8k3D6fzgY8YGw+Yhi?=
- =?us-ascii?Q?/7VZDBHq0/ZxQRIwbeRIHD2uxIa+pzaZ8MSSZCOiTlTsnCSjP7r1pR66ecV8?=
- =?us-ascii?Q?M+ZYs0j8x1kYIBW3fhNl3dPlASXrl1YkDmEOSQChKvztaH0f9kNhaAszDJ2i?=
- =?us-ascii?Q?B3+8GudYgsD6Y2Wy10RMfmbGJMpSuz4pCuu3i9Bd1QpyFnJ+xYMNYY8x3MmD?=
- =?us-ascii?Q?XzpD+OU91tjRoFETL/INH7yDT/vOaKNOuaM8xx/ACvsVSenPdaGZcp57c+W3?=
- =?us-ascii?Q?gxjZl6MPhLjwnQqoHFfAvbcOxGHa92hkA3hdlk+WfDJvZlIC/ALPY5QZNnYD?=
- =?us-ascii?Q?ta1i9gX3KOlD9TCdOmUVMe5Qa9b+yJzdgNiXQ49vdCgjmLWodO4L8xt57h+9?=
- =?us-ascii?Q?Gxg3cOdVjsdkxluN769BzDYeErcatQ2G/qle5n5cSUqLnn5jUYjkbFeyLeDo?=
- =?us-ascii?Q?uLjZ26nhx0aUBg4Dd6Ru14cIr4mvk6VTcIh2AVwTQgPWGYZ03qumN4Zwac9/?=
- =?us-ascii?Q?sR4A6v0ndC2zPlWJTrvkibdGcL0mQGQdcksyhpVwAZgFDWOTHKQQOul3srV3?=
- =?us-ascii?Q?v1pq5S+A5zFjHF1i3ikJiB6BPq2rXe48KnH4FaW/9b9nQ5rRnMO5TR/62WYJ?=
- =?us-ascii?Q?JD8c1id4vH2erRhlJSvSbTdYlO5k5+A+UNKTWjPcfo4yrJys1YHEt1fNoYiF?=
- =?us-ascii?Q?TmH1juw7JtHhRyHTYebNi45AWlMW?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8fdb9703-cd3a-4955-edc0-08d96d20ca20
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5050.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2021 08:16:25.0660
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M4Ry13XnHxoM89L7GNCaN/3h/FCG6I7kpgxCddZn6KEVgc2IXf6mlTfA6qWMTuy43FS/OjTcfwP0OFWmdsWONQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7676
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The SMSC USB3503 USB Hub Controller is supported by Linux thanks to
+its device tree binding.
 
-On 31.08.21 19:03, Alan Stern wrote:
->
-> Will wait_event_killable_timeout() prevent complaints about tasks being=20
-> blocked for too long (the reason syzbot reported this in the first=20
-> place)?
+Now that we have the DT validation in place, let's convert the device
+tree bindings for that driver over to a YAML schema.
 
-Very good question. TASK_KILLABLE is its own task state, so I'd say
-if it doesn't the test suite needs to be fixed.
+Cc: Dongjin Kim <tobetter@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-=C2=A0=C2=A0=C2=A0 Regards
-=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Oliver
+---
+
+Changes from v1:
+  - Added maximum number of items for clocks and gpios
+  - Fixed the example node name
+---
+ .../devicetree/bindings/usb/smsc,usb3503.yaml | 108 ++++++++++++++++++
+ .../devicetree/bindings/usb/usb3503.txt       |  39 -------
+ 2 files changed, 108 insertions(+), 39 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/smsc,usb3503.yaml
+ delete mode 100644 Documentation/devicetree/bindings/usb/usb3503.txt
+
+diff --git a/Documentation/devicetree/bindings/usb/smsc,usb3503.yaml b/Documentation/devicetree/bindings/usb/smsc,usb3503.yaml
+new file mode 100644
+index 000000000000..39228a506b93
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/smsc,usb3503.yaml
+@@ -0,0 +1,108 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/smsc,usb3503.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: SMSC USB3503 High-Speed Hub Controller Device Tree Bindings
++
++maintainers:
++  - Dongjin Kim <tobetter@gmail.com>
++
++properties:
++  compatible:
++    enum:
++      - smsc,usb3503
++      - smsc,usb3503a
++
++  reg:
++    maxItems: 1
++
++  connect-gpios:
++    maxItems: 1
++    description: >
++      GPIO for connect
++
++  intn-gpios:
++    maxItems: 1
++    description: >
++      GPIO for interrupt
++
++  reset-gpios:
++    maxItems: 1
++    description: >
++      GPIO for reset
++
++  disabled-ports:
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    minItems: 1
++    maxItems: 3
++    items:
++      minimum: 1
++      maximum: 3
++    description: >
++      Specifies the ports unused using their port number. Do not describe this
++      property if all ports have to be enabled.
++
++  initial-mode:
++    enum: [1, 2]
++    description: >
++      Specifies initial mode. 1 for Hub mode, 2 for standby mode.
++
++  clocks:
++    maxItems: 1
++    description: >
++      Clock used for driving REFCLK signal. If not provided the driver assumes
++      that clock signal is always available, its rate is specified by REF_SEL
++      pins and a value from the primary reference clock frequencies table is
++      used.
++
++  clock-names:
++    const: refclk
++
++  refclk-frequency:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: >
++      Frequency of the REFCLK signal as defined by REF_SEL pins. If not
++      provided, driver will not set rate of the REFCLK signal and assume that a
++      value from the primary reference clock frequencies table is used.
++
++required:
++  - compatible
++
++additionalProperties: false
++
++examples:
++  - |
++      i2c {
++          #address-cells = <1>;
++          #size-cells = <0>;
++        
++          usb-hub@8 {
++              compatible = "smsc,usb3503";
++              reg = <0x08>;
++              connect-gpios = <&gpx3 0 1>;
++              disabled-ports = <2 3>;
++              intn-gpios = <&gpx3 4 1>;
++              reset-gpios = <&gpx3 5 1>;
++              initial-mode = <1>;
++              clocks = <&clks 80>;
++              clock-names = "refclk";
++          };
++      };
++
++  - |
++      #include <dt-bindings/gpio/gpio.h>
++
++      usb-hub {
++          /* I2C is not connected */
++          compatible = "smsc,usb3503";
++          initial-mode = <1>; /* initialize in HUB mode */
++          disabled-ports = <1>;
++          intn-gpios = <&pio 7 5 GPIO_ACTIVE_HIGH>; /* PH5 */
++          reset-gpios = <&pio 4 16 GPIO_ACTIVE_LOW>; /* PE16 */
++          connect-gpios = <&pio 4 17 GPIO_ACTIVE_HIGH>; /* PE17 */
++          refclk-frequency = <19200000>;
++      };
++
++...
+diff --git a/Documentation/devicetree/bindings/usb/usb3503.txt b/Documentation/devicetree/bindings/usb/usb3503.txt
+deleted file mode 100644
+index 057dd384d473..000000000000
+--- a/Documentation/devicetree/bindings/usb/usb3503.txt
++++ /dev/null
+@@ -1,39 +0,0 @@
+-SMSC USB3503 High-Speed Hub Controller
+-
+-Required properties:
+-- compatible: Should be "smsc,usb3503" or "smsc,usb3503a".
+-
+-Optional properties:
+-- reg: Specifies the i2c slave address, it is required and should be 0x08
+-       if I2C is used.
+-- connect-gpios: Should specify GPIO for connect.
+-- disabled-ports: Should specify the ports unused.
+-	'1' or '2' or '3' are available for this property to describe the port
+-	number. 1~3 property values are possible to be described.
+-	Do not describe this property if all ports have to be enabled.
+-- intn-gpios: Should specify GPIO for interrupt.
+-- reset-gpios: Should specify GPIO for reset.
+-- initial-mode: Should specify initial mode.
+-                (1 for HUB mode, 2 for STANDBY mode)
+-- refclk: Clock used for driving REFCLK signal (optional, if not provided
+-	the driver assumes that clock signal is always available, its
+-	rate is specified by REF_SEL pins and a value from the primary
+-	reference clock frequencies table is used). Use clocks and
+-	clock-names in order to assign it
+-- refclk-frequency: Frequency of the REFCLK signal as defined by REF_SEL
+-	pins (optional, if not provided, driver will not set rate of the
+-	REFCLK signal and assume that a value from the primary reference
+-	clock frequencies table is used)
+-
+-Examples:
+-	usb3503@8 {
+-		compatible = "smsc,usb3503";
+-		reg = <0x08>;
+-		connect-gpios = <&gpx3 0 1>;
+-		disabled-ports = <2 3>;
+-		intn-gpios = <&gpx3 4 1>;
+-		reset-gpios = <&gpx3 5 1>;
+-		initial-mode = <1>;
+-		clocks = <&clks 80>;
+-		clock-names = "refclk";
+-	};
+-- 
+2.31.1
 
