@@ -2,92 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A35423FD6BB
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Sep 2021 11:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF87A3FDC00
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Sep 2021 15:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243557AbhIAJ1U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Sep 2021 05:27:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50658 "EHLO mail.kernel.org"
+        id S1346063AbhIAMqW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Sep 2021 08:46:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42970 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243418AbhIAJ1U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 Sep 2021 05:27:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 85E9060462;
-        Wed,  1 Sep 2021 09:26:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1630488383;
-        bh=pqLXY4HtrR+J0Jdtegd/3av7bnGcsxFJPqwBnp716Vw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cDWR4Ox1Uj5CAp+emITgvgRtQT/K2gSvoFh+Qmdxm6lexS/oZ9Ik1NL9CtHuOtGIJ
-         xOMq/TDG4XZxkRCKgeKoE0dzvY6UbQpW4DKPDEr3PK4TW5cS7YrbbIlbAPtDrmZ2FH
-         bfbK1RO1mj5wnPaHOX0xD1tAFS3GMeoUlnck0qps=
-Date:   Wed, 1 Sep 2021 11:26:21 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Salvatore Bonaccorso <carnil@debian.org>
-Cc:     Benjamin Berg <benjamin@sipsolutions.net>,
-        linux-usb@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, Benjamin Berg <bberg@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Ian Turner <vectro@vectro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH 0/2] UCSI race condition resulting in wrong port state
-Message-ID: <YS9HPQV3O6D9N7L/@kroah.com>
-References: <20201009144047.505957-1-benjamin@sipsolutions.net>
- <20201028091043.GC1947336@kroah.com>
- <20201106104725.GC2785199@kroah.com>
- <YR+nwZtz9CQuyTn+@lorien.valinor.li>
- <YSDtCea3a9cuaEG3@kroah.com>
- <YSD5JlFfAGyq5Fpk@eldamar.lan>
+        id S245055AbhIAMmg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Sep 2021 08:42:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id ED3D7611F0;
+        Wed,  1 Sep 2021 12:37:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630499869;
+        bh=Vz1TA47llC7a59hhyNGoaeEiKl47puwT1GS5TQq5ado=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=YdxJ445rGLT787Ao50jV8Np6uKoGqrJdbGH9KahNCNKH/45AAoVWJAx5KWZdNEg/7
+         JMEGKO849LZKAoBLVIwYNSuQEmPNjT939maSN46cIfLRHKn56Q9eGLg0IMzcc8MiAO
+         MBr+YdTOrCy2We2dTlXfDnbNwmm582bhnn6iOlPY5RSIacLhnBuK+DdR22fUwuXQP0
+         N1UY7QoOcDuWzgBg201DHlnLGb1CTSo4wLgNg9lJYmlqrFhpYTJBOWi1gjYf68l28+
+         cSp5H5BVsu1v+P6hskX8HYLCzadfrpX/jVZqHfWZ2u+jMxvjpET9odm57F6+YAI7SB
+         rVmXtHwMQIJhw==
+References: <20210901091852.479202-1-maxime@cerno.tech>
+ <20210901091852.479202-38-maxime@cerno.tech>
+User-agent: mu4e 1.6.5; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 37/52] dt-bindings: usb: dwc3: Fix usb-phy check
+Date:   Wed, 01 Sep 2021 15:36:35 +0300
+In-reply-to: <20210901091852.479202-38-maxime@cerno.tech>
+Message-ID: <87a6kwcvzb.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YSD5JlFfAGyq5Fpk@eldamar.lan>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Aug 21, 2021 at 03:01:26PM +0200, Salvatore Bonaccorso wrote:
-> Hi Greg,
-> 
-> On Sat, Aug 21, 2021 at 02:09:45PM +0200, Greg Kroah-Hartman wrote:
-> > On Fri, Aug 20, 2021 at 03:01:53PM +0200, Salvatore Bonaccorso wrote:
-> > > Hi Greg,
-> > > 
-> > > On Fri, Nov 06, 2020 at 11:47:25AM +0100, Greg Kroah-Hartman wrote:
-> > 
-> > Note, you are responding to an email from a very long time ago...
-> 
-> Yeah, was sort of purpose :) (to try to retain the original context of
-> the question of if the commits should be backported to stable series,
-> which back then had no need raised)
-> > 
-> > > > Due to the lack of response, I guess they don't need to go to any stable
-> > > > kernel, so will queue them up for 5.11-rc1.
-> > > 
-> > > At least one user in Debian (https://bugs.debian.org/992004) would be
-> > > happy to have those backported as well to the 5.10.y series (which we
-> > > will pick up).
-> > > 
-> > > So if Benjamin ack's this, this would be great to have in 5.10.y.
-> > 
-> > What are the git commit ids?  Just ask for them to be applied to stable
-> > like normal...
-> 
-> Right, aplogies. The two commits were
-> 47ea2929d58c35598e681212311d35b240c373ce and
-> 217504a055325fe76ec1142aa15f14d3db77f94f.
-> 
-> 47ea2929d58c ("usb: typec: ucsi: acpi: Always decode connector change information")
-> 217504a05532 ("usb: typec: ucsi: Work around PPM losing change information")
-> 
-> and in the followup Benjamin Berg mentioned to pick as well
-> 
-> 8c9b3caab3ac26db1da00b8117901640c55a69dd
-> 
-> 8c9b3caab3ac ("usb: typec: ucsi: Clear pending after acking connector change"
-> 
-> a related fix later on.
 
-All now queued up, thanks.
+Maxime Ripard <maxime@cerno.tech> writes:
 
-greg k-h
+> The original binding was allowing any combination of usb2-phy and
+> usb3-phy in the phys and phy-names properties.
+>
+> However, the current binding enforces that those properties must be a
+> list of usb2-phy and usb3-phy, with exactly one element, effectively
+> making usb2-phy the only value being valid.
+>
+> Let's rework the properties description to allow either one or two
+> element picked with values either usb2-phy or usb3-phy. The rest of the
+> tooling makes sure that we don't get any duplicate value, so this should
+> be what we want.
+>
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> index 078fb7889593..c1c970073681 100644
+> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> @@ -73,15 +73,15 @@ properties:
+>  
+>    phys:
+>      minItems: 1
+> -    items:
+> -      - description: USB2/HS PHY
+> -      - description: USB3/SS PHY
+> +    maxItems: 2
+
+I'm not sure you should enforce a maximum of 2 PHYs. Some systems may
+use more than one USB2 PHY to take care of different parts of the USB
+link.
+
+IIRC N900 was a USB2-only system which shipped with two USB2 PHYs: one
+handling the communication proper and one handling charger detection and
+the like.
+
+-- 
+balbi
