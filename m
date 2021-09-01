@@ -2,106 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 079D13FE02E
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Sep 2021 18:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56CA3FE142
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Sep 2021 19:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344076AbhIAQmI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Sep 2021 12:42:08 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:32785 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S245406AbhIAQmG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Sep 2021 12:42:06 -0400
-Received: (qmail 406198 invoked by uid 1000); 1 Sep 2021 12:41:07 -0400
-Date:   Wed, 1 Sep 2021 12:41:07 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     neal_liu <neal_liu@aspeedtech.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tony Prisk <linux@prisktech.co.nz>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Tao Ren <rentao.bupt@gmail.com>, BMC-SW@aspeedtech.com
-Subject: Re: [PATCH v2] usb: ehci: handshake CMD_RUN instead of STS_HALT
-Message-ID: <20210901164107.GD404634@rowland.harvard.edu>
-References: <20210901035041.10810-1-neal_liu@aspeedtech.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210901035041.10810-1-neal_liu@aspeedtech.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1344787AbhIARkP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Sep 2021 13:40:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39102 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233404AbhIARkG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Sep 2021 13:40:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 472596109E;
+        Wed,  1 Sep 2021 17:39:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630517949;
+        bh=RvZzLjVG9If/8CyrStP59uIXDObIypszX2lNH2HT9QM=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=NpRPRf9H616DE8FMiR7bFYggF/8QzLTFuewwz+cKM/iU371wKtIGRxZ7j9QTEllZ4
+         2JXAJiU4qHt8LXH/6pL7RELkCtj63nPY+iZCk6/PvRv5crTFJa5DBxrOWqIM8fXXI3
+         ZbvEk6zGtTKxuFOMWVTEx2iuFb2LyKHgLWRRLiM2TEijvVZ30YLT/Wsp0VbOg+zFfv
+         pPQmuUZdbSdzNJG9NaN9l3UpB23GQ62vR5eFq3np6619GVjNqCEh6qO2uU7Kii6NPD
+         bx3euVFW0wRJjlRdIsgICwQvmmdcYAsuVrU/M0xIxWrM4t9TVJiPEsBm2+C8gobUw9
+         ReWRCdwh5Ugjw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4121460173;
+        Wed,  1 Sep 2021 17:39:09 +0000 (UTC)
+Subject: Re: [GIT PULL] USB / Thunderbolt changes for 5.15-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YS+LiD1qkhHDCeHe@kroah.com>
+References: <YS+LiD1qkhHDCeHe@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YS+LiD1qkhHDCeHe@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.15-rc1
+X-PR-Tracked-Commit-Id: 9c1587d99f9305aa4f10b47fcf1981012aa5381f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 07281a257a6868b900da5de1eda808c9e20253f1
+Message-Id: <163051794926.15355.5631507440060228607.pr-tracker-bot@kernel.org>
+Date:   Wed, 01 Sep 2021 17:39:09 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 01, 2021 at 11:50:41AM +0800, neal_liu wrote:
-> Retitle.
-> 
-> For Aspeed, HCHalted status depends on not only Run/Stop but also
-> ASS/PSS status.
-> Handshake CMD_RUN on startup instead.
-> 
-> Signed-off-by: neal_liu <neal_liu@aspeedtech.com>
+The pull request you sent on Wed, 1 Sep 2021 16:17:44 +0200:
 
-I'm still a little doubtful about doing this, but if you guys say it works 
-for your hardware then I guess it's okay.
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.15-rc1
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/07281a257a6868b900da5de1eda808c9e20253f1
 
-> ---
->  drivers/usb/host/ehci-hcd.c      | 11 ++++++++++-
->  drivers/usb/host/ehci-platform.c |  6 ++++++
->  drivers/usb/host/ehci.h          |  1 +
->  3 files changed, 17 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
-> index 10b0365f3439..01c022e46aa2 100644
-> --- a/drivers/usb/host/ehci-hcd.c
-> +++ b/drivers/usb/host/ehci-hcd.c
-> @@ -634,7 +634,16 @@ static int ehci_run (struct usb_hcd *hcd)
->  	/* Wait until HC become operational */
->  	ehci_readl(ehci, &ehci->regs->command);	/* unblock posted writes */
->  	msleep(5);
-> -	rc = ehci_handshake(ehci, &ehci->regs->status, STS_HALT, 0, 100 * 1000);
-> +
-> +	/* For Aspeed, STS_HALT also depends on ASS/PSS status.
-> +	 * Skip this check on startup.
-> +	 */
-> +	if (ehci->is_aspeed)
-> +		rc = ehci_handshake(ehci, &ehci->regs->command, CMD_RUN,
-> +				    1, 100 * 1000);
-> +	else
-> +		rc = ehci_handshake(ehci, &ehci->regs->status, STS_HALT,
-> +				    0, 100 * 1000);
->  
->  	up_write(&ehci_cf_port_reset_rwsem);
->  
-> diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
-> index c70f2d0b4aaf..c3dc906274d9 100644
-> --- a/drivers/usb/host/ehci-platform.c
-> +++ b/drivers/usb/host/ehci-platform.c
-> @@ -297,6 +297,12 @@ static int ehci_platform_probe(struct platform_device *dev)
->  					  "has-transaction-translator"))
->  			hcd->has_tt = 1;
->  
-> +		if (of_device_is_compatible(dev->dev.of_node,
-> +					    "aspeed,ast2500-ehci") ||
-> +		    of_device_is_compatible(dev->dev.of_node,
-> +					    "aspeed,ast2600-ehci"))
-> +			ehci->is_aspeed = 1;
-> +
->  		if (soc_device_match(quirk_poll_match))
->  			priv->quirk_poll = true;
->  
-> diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
-> index 80bb823aa9fe..fdd073cc053b 100644
-> --- a/drivers/usb/host/ehci.h
-> +++ b/drivers/usb/host/ehci.h
-> @@ -219,6 +219,7 @@ struct ehci_hcd {			/* one per controller */
->  	unsigned		need_oc_pp_cycle:1; /* MPC834X port power */
->  	unsigned		imx28_write_fix:1; /* For Freescale i.MX28 */
->  	unsigned		spurious_oc:1;
-> +	unsigned		is_aspeed:1;
->  
->  	/* required for usb32 quirk */
->  	#define OHCI_CTRL_HCFS          (3 << 6)
-> -- 
-> 2.17.1
-> 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
