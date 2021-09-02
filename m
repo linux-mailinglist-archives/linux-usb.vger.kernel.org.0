@@ -2,61 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 706A03FF51B
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Sep 2021 22:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B563FF5A7
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Sep 2021 23:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344631AbhIBUrO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Sep 2021 16:47:14 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:48663 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243511AbhIBUrN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Sep 2021 16:47:13 -0400
-Received: by mail-io1-f70.google.com with SMTP id z26-20020a05660200da00b005b86e36a1f4so2273943ioe.15
-        for <linux-usb@vger.kernel.org>; Thu, 02 Sep 2021 13:46:14 -0700 (PDT)
+        id S1347318AbhIBVgK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Sep 2021 17:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35138 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233964AbhIBVgK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Sep 2021 17:36:10 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E62C061575
+        for <linux-usb@vger.kernel.org>; Thu,  2 Sep 2021 14:35:11 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id d5so2309061pjx.2
+        for <linux-usb@vger.kernel.org>; Thu, 02 Sep 2021 14:35:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rZo8FGyq826/edgB5aTUTgdsaT4zxrIOEH1ImqabAS8=;
+        b=TINlKxTdPyI2ka6gReNyKly27eHKKmVgGhCpWguOuckyckz76M4pHqdsmq/EV/oa6B
+         Jwz/gGcg0BCPhIydGuMyhB0Zt59SGbQUzWAHptCxsv72HGUGEL14Rp7AvUUodNf/pnA4
+         leuMJJ0nXG/zb1WX+1pAvQVBrtRjvxXMKxSHI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=vZddxkmzzNUqs8xRQqKBJZn3gzD87BQVYbHyMNSJKX0=;
-        b=eEVOn7ZUDRertLfXkBAsAXE04mFAHOhz6JHTwYxwr9o5BBV63twS/vFzbjNLq/TGKQ
-         fBkqzDh+pWqG+lzYE1NjmHZzThp8gnyU1RtoORBtybZxdUeW11J1h9ifogkX0E3d27Q0
-         9P0oYXYasYAzxdoGUbyniGN7n5NXpMoJYrEP1YqiujlW3MOfZqplcPaL/YZoviQP4lbJ
-         jiNtHL3vhX9Fk3VZ8yaR+JvW1h6emd42uz+nBwnj5PwpPZ6HwuMeFLOuajvjMms2djSx
-         JYTx+kK8Reke462RNiOsi8/jTavRJDzbfLMox+wJJZXpUtkeIc+XQHPP+cJG8OrvMyG4
-         obdw==
-X-Gm-Message-State: AOAM532OYfogWClnNvu9YiyAEVldDTYLnfNKsiUoDe5FXqiIQdu3PINI
-        utuZB1TYtq9NwmG/cY8L8UJJ799jyUhEp4HVPFoJup6qLRRM
-X-Google-Smtp-Source: ABdhPJxBp06Vus/lGmmaHSEye35bdz53/shEn/WIWJXsVKGgQMpYtb+dAiMQZDJeOF8ZK3xYam4JOHxRRS7J0C0O1zGTkLFKqZbn
-MIME-Version: 1.0
-X-Received: by 2002:a5d:9409:: with SMTP id v9mr223494ion.170.1630615574684;
- Thu, 02 Sep 2021 13:46:14 -0700 (PDT)
-Date:   Thu, 02 Sep 2021 13:46:14 -0700
-In-Reply-To: <20210902200406.GB442125@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001827b505cb0946a5@google.com>
-Subject: Re: [syzbot] INFO: task hung in do_proc_bulk
-From:   syzbot <syzbot+ada0f7d3d9fd2016d927@syzkaller.appspotmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rZo8FGyq826/edgB5aTUTgdsaT4zxrIOEH1ImqabAS8=;
+        b=o/M7Hq2L2au+v8HKLcKGV0H7L6eXStJWfOucOVeCw5uEHO7g7atCfw06XOM+rpC87d
+         ws1uEIgAjA1isU85PgJ2Xc7owkSB5+l9XcmrGwgwEpAGxSrXtMP7MeoBd/llMCEZOhjk
+         dz3vWL+3U/j2+HZfHqNG2eud4bz9V41uw666YpiCvOlPx0i3qpEHAYHAZucq7jVQQq1q
+         7xhno8eiV2BjFx55NyRIeLu6onIVSr1b3u3Pm78C8xXfs5wrt0ntDIiKpWgIh0KIeAm2
+         jo5uQm+ZBpooP+Zww4KYWyBwEEjCpuAGRrfuQAW2m0IjfxIPlyrZIm6sAY6TPsurJFl7
+         YH/g==
+X-Gm-Message-State: AOAM531p5oSmT2Ect5lJjYO625G2YAuoz47zll9d7j+Sbe5UhnCmc1Ay
+        tNzHZzGwi7DRFQxGOHI4DsMAbg==
+X-Google-Smtp-Source: ABdhPJzQOvfTpzOq1ClKc1uXfPueFHStXXBbor891Tz5Yow77W7tNyj6y0uUOQtGpXTumjGt4NteMw==
+X-Received: by 2002:a17:90a:1a0c:: with SMTP id 12mr6260318pjk.208.1630618511061;
+        Thu, 02 Sep 2021 14:35:11 -0700 (PDT)
+Received: from pmalani2.mtv.corp.google.com ([2620:15c:202:201:d082:352a:f346:411a])
+        by smtp.gmail.com with ESMTPSA id c68sm3167872pfc.150.2021.09.02.14.35.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Sep 2021 14:35:10 -0700 (PDT)
+From:   Prashant Malani <pmalani@chromium.org>
 To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+        linux-pm@vger.kernel.org, bleung@chromium.org,
+        heikki.krogerus@linux.intel.com, badhri@google.com
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>
+Subject: [RFC PATCH 0/3] Type C partner power supply and PDO support.
+Date:   Thu,  2 Sep 2021 14:34:56 -0700
+Message-Id: <20210902213500.3795948-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.33.0.153.gba50c8fa24-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+We'd like to expose the USB PD Power Source/Sink capabilities provided
+by a partner (SOP) to userspace. Towards that end,
+here is a short series which adds the capabilities to the power supply
+class. We also add a function to the Type C connector class
+to register a power supply device for a connected partner.
 
-Reported-and-tested-by: syzbot+ada0f7d3d9fd2016d927@syzkaller.appspotmail.com
+I'm sending this out as an RFC to get some initial feedback from the
+relevant groups. Once we can settle on an approach, I can resend the
+series with a sample implementation in the Chrome OS Type C port driver
+(cros-ec-typec).
 
-Tested on:
+Thanks!
 
-commit:         d5ae8d7f Revert "media: dvb header files: move some he..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2fd902af77ff1e56
-dashboard link: https://syzkaller.appspot.com/bug?extid=ada0f7d3d9fd2016d927
-compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.1
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=112280a3300000
+Prashant Malani (3):
+  usb: pd: Increase max PDO objects to 13
+  power: supply: Add support for PDOs props
+  usb: typec: Add partner power registration call
 
-Note: testing is done by a robot and is best-effort only.
+ Documentation/ABI/testing/sysfs-class-power | 30 +++++++++++++++++++++
+ drivers/power/supply/power_supply_sysfs.c   | 18 ++++++++++++-
+ drivers/usb/typec/class.c                   | 18 ++++++++++++-
+ drivers/usb/typec/class.h                   |  2 ++
+ include/linux/power_supply.h                |  5 ++++
+ include/linux/usb/pd.h                      |  8 +++++-
+ include/linux/usb/typec.h                   |  5 ++++
+ 7 files changed, 83 insertions(+), 3 deletions(-)
+
+-- 
+2.33.0.153.gba50c8fa24-goog
+
