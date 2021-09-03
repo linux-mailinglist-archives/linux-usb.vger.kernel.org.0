@@ -2,81 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9181340061F
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Sep 2021 21:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40794400750
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Sep 2021 23:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349941AbhICTvE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Sep 2021 15:51:04 -0400
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:42543 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349849AbhICTvC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Sep 2021 15:51:02 -0400
-Received: by mail-ot1-f41.google.com with SMTP id c19-20020a9d6153000000b0051829acbfc7so351604otk.9;
-        Fri, 03 Sep 2021 12:50:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=adO0q2xojlRhu+hTivxEp5qcD5z43wRia32fqm7lDXE=;
-        b=CwXVei6iKAoqhnZ2lQDZC6mjyKS6hSZvUUmmpZdBGMVc22vY6S9n6Y5O9q0/tysenP
-         yszLhZEXEA5MU6CJ1iPARqzVXRRixxNPx+CWCOkFifEcsgu4pvIIxisVfOjKxXImV0oc
-         lE73gvPR1Nol7W9fgAWDNzqjqpSsnLaTII9Ck3sIYvs36gy0SY9BLk8c9Ocr63/jN959
-         zjsWpQKQfjomX4UfH8nByBXM9NHOoVFrOy3sSkwBzucwbF1I3AKAA6SY7L2nxJWvolIM
-         Zvls/lkIjuCnwmq6ulFmDeylS+L+ND0vYJkOznxnoTNrJWgfwn4JKx6yHO09FZ/xnOSd
-         z2lA==
-X-Gm-Message-State: AOAM5308IikU0iKrSX8yWshMHdcG+VVkEhf27f5Erjr7hJpYR1WvSC7r
-        O0qTYbPMR9hD+Le3C1xiDg==
-X-Google-Smtp-Source: ABdhPJxg332Jb+bksr1+OzYKP9iAy50ZOL/mKwypYYT5SygdFDC0w976PxaviG2MfREjTwK8C6iJjw==
-X-Received: by 2002:a9d:4a8d:: with SMTP id i13mr645831otf.180.1630698602202;
-        Fri, 03 Sep 2021 12:50:02 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id d10sm32451ooj.24.2021.09.03.12.50.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Sep 2021 12:50:01 -0700 (PDT)
-Received: (nullmailer pid 3345809 invoked by uid 1000);
-        Fri, 03 Sep 2021 19:50:00 -0000
-Date:   Fri, 3 Sep 2021 14:50:00 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        linux-sunxi@googlegroups.com, linux-usb@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 37/52] dt-bindings: usb: dwc3: Fix usb-phy check
-Message-ID: <YTJ8aAZZueF8DNtt@robh.at.kernel.org>
-References: <20210901091852.479202-1-maxime@cerno.tech>
- <20210901091852.479202-38-maxime@cerno.tech>
+        id S235751AbhICVNm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Sep 2021 17:13:42 -0400
+Received: from mxout01.lancloud.ru ([45.84.86.81]:56862 "EHLO
+        mxout01.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232927AbhICVNl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Sep 2021 17:13:41 -0400
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru CE0B320AD28C
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: [PATCH] usb: core: hcd: fix strings in usb_hcd_request_irqs()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>
+Organization: Open Mobile Platform
+Message-ID: <266e454f-0288-9992-807f-1c6489375460@omp.ru>
+Date:   Sat, 4 Sep 2021 00:12:35 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210901091852.479202-38-maxime@cerno.tech>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 01 Sep 2021 11:18:37 +0200, Maxime Ripard wrote:
-> The original binding was allowing any combination of usb2-phy and
-> usb3-phy in the phys and phy-names properties.
-> 
-> However, the current binding enforces that those properties must be a
-> list of usb2-phy and usb3-phy, with exactly one element, effectively
-> making usb2-phy the only value being valid.
-> 
-> Let's rework the properties description to allow either one or two
-> element picked with values either usb2-phy or usb3-phy. The rest of the
-> tooling makes sure that we don't get any duplicate value, so this should
-> be what we want.
-> 
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
+Two dev_info() calls in usb_hcd_request_irqs() mistreat the I/O base
+address, calling it "io base".  While fixing this, make indenataion
+of the argument lists more sane... 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+
+---
+The patch is against the 'usb-linus' branch of Greg KH's 'usb.git' repo...
+
+ drivers/usb/core/hcd.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+Index: usb/drivers/usb/core/hcd.c
+===================================================================
+--- usb.orig/drivers/usb/core/hcd.c
++++ usb/drivers/usb/core/hcd.c
+@@ -2732,14 +2732,14 @@ static int usb_hcd_request_irqs(struct u
+ 		hcd->irq = irqnum;
+ 		dev_info(hcd->self.controller, "irq %d, %s 0x%08llx\n", irqnum,
+ 				(hcd->driver->flags & HCD_MEMORY) ?
+-					"io mem" : "io base",
+-					(unsigned long long)hcd->rsrc_start);
++					"io mem" : "io port",
++				(unsigned long long)hcd->rsrc_start);
+ 	} else {
+ 		hcd->irq = 0;
+ 		if (hcd->rsrc_start)
+ 			dev_info(hcd->self.controller, "%s 0x%08llx\n",
+ 					(hcd->driver->flags & HCD_MEMORY) ?
+-					"io mem" : "io base",
++						"io mem" : "io port",
+ 					(unsigned long long)hcd->rsrc_start);
+ 	}
+ 	return 0;
