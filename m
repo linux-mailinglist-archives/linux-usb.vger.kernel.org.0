@@ -2,335 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 646C8400457
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Sep 2021 19:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9CA400480
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Sep 2021 20:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349713AbhICRyO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Sep 2021 13:54:14 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:47431 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231483AbhICRyN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Sep 2021 13:54:13 -0400
-Received: (qmail 468934 invoked by uid 1000); 3 Sep 2021 13:53:12 -0400
-Date:   Fri, 3 Sep 2021 13:53:12 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <greg@kroah.com>
-Cc:     syzbot <syzbot+ada0f7d3d9fd2016d927@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com,
-        USB mailing list <linux-usb@vger.kernel.org>
-Subject: [PATCH v2] USB: core: Make do_proc_control() and do_proc_bulk()
- killable
-Message-ID: <20210903175312.GA468440@rowland.harvard.edu>
+        id S1350365AbhICSGX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Sep 2021 14:06:23 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:20510 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350353AbhICSGU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 3 Sep 2021 14:06:20 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1630692320; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=aGdZtz9MTWWljqht2uCxkXmCJ8HbWsZNCst2R0IK2Cc=; b=R3hJAKgRgDgWlNjHPI+k3OPcO8tHwNpS/gtqgwncilh53BQ+/T6wzkBTcJx+iv/Xk5dVaLtn
+ mr/Ryxit9CwXFaA6JQ1wkyuMERqCHJ22fHDVJ0Olim/9IXMD6xpYoL4Ffc31mLhdma52Vkyr
+ 0w7hlOkc4fB0tEYamiTp4VEkNyI=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 613263d940d2129ac14742e9 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 03 Sep 2021 18:05:13
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 06533C4360C; Fri,  3 Sep 2021 18:05:12 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 42D33C4338F;
+        Fri,  3 Sep 2021 18:05:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 42D33C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Date:   Fri, 3 Sep 2021 11:05:07 -0700
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-pm@vger.kernel.org, bleung@chromium.org,
+        heikki.krogerus@linux.intel.com, badhri@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>
+Subject: Re: [RFC PATCH 1/3] usb: pd: Increase max PDO objects to 13
+Message-ID: <20210903180507.GB3515@jackp-linux.qualcomm.com>
+References: <20210902213500.3795948-1-pmalani@chromium.org>
+ <20210902213500.3795948-2-pmalani@chromium.org>
+ <20210903064701.GA3515@jackp-linux.qualcomm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210903064701.GA3515@jackp-linux.qualcomm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The USBDEVFS_CONTROL and USBDEVFS_BULK ioctls invoke
-usb_start_wait_urb(), which contains an uninterruptible wait with a
-user-specified timeout value.  If timeout value is very large and the
-device being accessed does not respond in a reasonable amount of time,
-the kernel will complain about "Task X blocked for more than N
-seconds", as found in testing by syzbot:
+On Thu, Sep 02, 2021 at 11:47:01PM -0700, Jack Pham wrote:
+> Hi Prashant,
+> 
+> On Thu, Sep 02, 2021 at 02:34:58PM -0700, Prashant Malani wrote:
+> > Increase the max number of PDO objects to 13, to accommodate the extra
+> > PDOs added as a part of EPR (Extended Power Range) operation introduced
+> > in the USB PD Spec Rev 3.1, v 1.0. See Figure 6-54 for details.
+> > 
+> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> > ---
+> >  include/linux/usb/pd.h | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
+> > index 96b7ff66f074..7e8bdca1ce6e 100644
+> > --- a/include/linux/usb/pd.h
+> > +++ b/include/linux/usb/pd.h
+> > @@ -201,7 +201,13 @@ struct pd_message {
+> >  } __packed;
+> >  
+> >  /* PDO: Power Data Object */
+> > -#define PDO_MAX_OBJECTS		7
+> > +
+> > +/*
+> > + * The EPR (Extended Power Range) structure is a superset of the SPR (Standard Power Range)
+> > + * capabilities structure, so set the max number of PDOs to 13 instead of 7. On SPR-only systems,
+> > + * objects 8 through 13 will just be empty.
+> > + */
+> > +#define PDO_MAX_OBJECTS		13
+> 
+> Hmm this might break the recent change I made to UCSI in commit
+> 1f4642b72be7 ("usb: typec: ucsi: Retrieve all the PDOs instead of just
+> the first 4").
+> 
+>  520 static void ucsi_get_src_pdos(struct ucsi_connector *con, int is_partner)
+>  521 {
+>  522         int ret;
+>  523
+>  524         /* UCSI max payload means only getting at most 4 PDOs at a time */
+>  525         ret = ucsi_get_pdos(con, 1, con->src_pdos, 0, UCSI_MAX_PDOS);
+>  526         if (ret < 0)
+>  527                 return;
+>  528
+>  529         con->num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
+>  530         if (con->num_pdos < UCSI_MAX_PDOS)
+>  531                 return;
+>  532
+>  533         /* get the remaining PDOs, if any */
+>  534         ret = ucsi_get_pdos(con, 1, con->src_pdos, UCSI_MAX_PDOS,
+>  535                             PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
+> 				 ^^^^^^^^^^^^^^^
+> This routine calls the UCSI GET_PDOS command for up to 4 PDOs at a time
+> since that's the most the return payload can carry.  Currently this
+> assumes that we'd only need to request the PPM at most twice to retrieve
+> all the PDOs for up to a maximum of 7 (first request for 4 then again if
+> needed for the remaining 3).  I'm not sure if any existing UCSI FW would
+> be updatable to support more than 7 PDOs in the future, much less
+> support EPR.  In fact, current UCSI 1.2 spec [1] Table 4-34 mentions PDO
 
-INFO: task syz-executor.0:8700 blocked for more than 143 seconds.
-      Not tainted 5.14.0-rc7-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor.0  state:D stack:23192 pid: 8700 ppid:  8455 flags:0x00004004
-Call Trace:
- context_switch kernel/sched/core.c:4681 [inline]
- __schedule+0xc07/0x11f0 kernel/sched/core.c:5938
- schedule+0x14b/0x210 kernel/sched/core.c:6017
- schedule_timeout+0x98/0x2f0 kernel/time/timer.c:1857
- do_wait_for_common+0x2da/0x480 kernel/sched/completion.c:85
- __wait_for_common kernel/sched/completion.c:106 [inline]
- wait_for_common kernel/sched/completion.c:117 [inline]
- wait_for_completion_timeout+0x46/0x60 kernel/sched/completion.c:157
- usb_start_wait_urb+0x167/0x550 drivers/usb/core/message.c:63
- do_proc_bulk+0x978/0x1080 drivers/usb/core/devio.c:1236
- proc_bulk drivers/usb/core/devio.c:1273 [inline]
- usbdev_do_ioctl drivers/usb/core/devio.c:2547 [inline]
- usbdev_ioctl+0x3441/0x6b10 drivers/usb/core/devio.c:2713
-...
+Sorry, forgot the footnote with the link to the spec:
+[1] https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/usb-type-c-ucsi-spec.pdf
 
-To fix this problem, this patch replaces usbfs's calls to
-usb_control_msg() and usb_bulk_msg() with special-purpose code that
-does essentially the same thing (as recommended in the comment for
-usb_start_wait_urb()), except that it always uses a killable wait and
-it uses GFP_KERNEL rather than GFP_NOIO.
-
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Suggested-by: Oliver Neukum <oneukum@suse.com>
-Reported-and-tested-by: syzbot+ada0f7d3d9fd2016d927@syzkaller.appspotmail.com
-
----
-
-v2: Don't make usb_start_wait_urb() interruptible.  Instead copy the
-code into usbfs and make it killable.
-
-
-[as1964b]
-
-
- drivers/usb/core/devio.c |  144 ++++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 111 insertions(+), 33 deletions(-)
-
-Index: usb-devel/drivers/usb/core/devio.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/devio.c
-+++ usb-devel/drivers/usb/core/devio.c
-@@ -32,6 +32,7 @@
- #include <linux/usb.h>
- #include <linux/usbdevice_fs.h>
- #include <linux/usb/hcd.h>	/* for usbcore internals */
-+#include <linux/usb/quirks.h>
- #include <linux/cdev.h>
- #include <linux/notifier.h>
- #include <linux/security.h>
-@@ -1102,14 +1103,55 @@ static int usbdev_release(struct inode *
- 	return 0;
- }
- 
-+static void usbfs_blocking_completion(struct urb *urb)
-+{
-+	complete((struct completion *) urb->context);
-+}
-+
-+/*
-+ * Much like usb_start_wait_urb, but returns status separately from
-+ * actual_length and uses a killable wait.
-+ */
-+static int usbfs_start_wait_urb(struct urb *urb, int timeout,
-+		unsigned int *actlen)
-+{
-+	DECLARE_COMPLETION_ONSTACK(ctx);
-+	unsigned long expire;
-+	int rc;
-+
-+	urb->context = &ctx;
-+	urb->complete = usbfs_blocking_completion;
-+	*actlen = 0;
-+	rc = usb_submit_urb(urb, GFP_KERNEL);
-+	if (unlikely(rc))
-+		return rc;
-+
-+	expire = (timeout ? msecs_to_jiffies(timeout) : MAX_SCHEDULE_TIMEOUT);
-+	rc = wait_for_completion_killable_timeout(&ctx, expire);
-+	if (rc <= 0) {
-+		usb_kill_urb(urb);
-+		*actlen = urb->actual_length;
-+		if (urb->status != -ENOENT)
-+			;	/* Completed before it was killed */
-+		else if (rc < 0)
-+			return -EINTR;
-+		else
-+			return -ETIMEDOUT;
-+	}
-+	*actlen = urb->actual_length;
-+	return urb->status;
-+}
-+
- static int do_proc_control(struct usb_dev_state *ps,
- 		struct usbdevfs_ctrltransfer *ctrl)
- {
- 	struct usb_device *dev = ps->dev;
- 	unsigned int tmo;
- 	unsigned char *tbuf;
--	unsigned wLength;
-+	unsigned int wLength, actlen;
- 	int i, pipe, ret;
-+	struct urb *urb = NULL;
-+	struct usb_ctrlrequest *dr = NULL;
- 
- 	ret = check_ctrlrecip(ps, ctrl->bRequestType, ctrl->bRequest,
- 			      ctrl->wIndex);
-@@ -1122,51 +1164,63 @@ static int do_proc_control(struct usb_de
- 			sizeof(struct usb_ctrlrequest));
- 	if (ret)
- 		return ret;
-+
-+	ret = -ENOMEM;
- 	tbuf = (unsigned char *)__get_free_page(GFP_KERNEL);
--	if (!tbuf) {
--		ret = -ENOMEM;
-+	if (!tbuf)
- 		goto done;
--	}
-+	urb = usb_alloc_urb(0, GFP_NOIO);
-+	if (!urb)
-+		goto done;
-+	dr = kmalloc(sizeof(struct usb_ctrlrequest), GFP_NOIO);
-+	if (!dr)
-+		goto done;
-+
-+	dr->bRequestType = ctrl->bRequestType;
-+	dr->bRequest = ctrl->bRequest;
-+	dr->wValue = cpu_to_le16(ctrl->wValue);
-+	dr->wIndex = cpu_to_le16(ctrl->wIndex);
-+	dr->wLength = cpu_to_le16(ctrl->wLength);
-+
- 	tmo = ctrl->timeout;
- 	snoop(&dev->dev, "control urb: bRequestType=%02x "
- 		"bRequest=%02x wValue=%04x "
- 		"wIndex=%04x wLength=%04x\n",
- 		ctrl->bRequestType, ctrl->bRequest, ctrl->wValue,
- 		ctrl->wIndex, ctrl->wLength);
--	if ((ctrl->bRequestType & USB_DIR_IN) && ctrl->wLength) {
-+
-+	if ((ctrl->bRequestType & USB_DIR_IN) && wLength) {
- 		pipe = usb_rcvctrlpipe(dev, 0);
--		snoop_urb(dev, NULL, pipe, ctrl->wLength, tmo, SUBMIT, NULL, 0);
-+		usb_fill_control_urb(urb, dev, pipe, (unsigned char *) dr, tbuf,
-+				wLength, NULL, NULL);
-+		snoop_urb(dev, NULL, pipe, wLength, tmo, SUBMIT, NULL, 0);
- 
- 		usb_unlock_device(dev);
--		i = usb_control_msg(dev, pipe, ctrl->bRequest,
--				    ctrl->bRequestType, ctrl->wValue, ctrl->wIndex,
--				    tbuf, ctrl->wLength, tmo);
-+		i = usbfs_start_wait_urb(urb, tmo, &actlen);
- 		usb_lock_device(dev);
--		snoop_urb(dev, NULL, pipe, max(i, 0), min(i, 0), COMPLETE,
--			  tbuf, max(i, 0));
--		if ((i > 0) && ctrl->wLength) {
--			if (copy_to_user(ctrl->data, tbuf, i)) {
-+		snoop_urb(dev, NULL, pipe, actlen, i, COMPLETE, tbuf, actlen);
-+		if (!i && actlen) {
-+			if (copy_to_user(ctrl->data, tbuf, actlen)) {
- 				ret = -EFAULT;
--				goto done;
-+				goto recv_fault;
- 			}
- 		}
- 	} else {
--		if (ctrl->wLength) {
--			if (copy_from_user(tbuf, ctrl->data, ctrl->wLength)) {
-+		if (wLength) {
-+			if (copy_from_user(tbuf, ctrl->data, wLength)) {
- 				ret = -EFAULT;
- 				goto done;
- 			}
- 		}
- 		pipe = usb_sndctrlpipe(dev, 0);
--		snoop_urb(dev, NULL, pipe, ctrl->wLength, tmo, SUBMIT,
--			tbuf, ctrl->wLength);
-+		usb_fill_control_urb(urb, dev, pipe, (unsigned char *) dr, tbuf,
-+				wLength, NULL, NULL);
-+		snoop_urb(dev, NULL, pipe, wLength, tmo, SUBMIT, tbuf, wLength);
- 
- 		usb_unlock_device(dev);
--		i = usb_control_msg(dev, pipe, ctrl->bRequest,
--				    ctrl->bRequestType, ctrl->wValue, ctrl->wIndex,
--				    tbuf, ctrl->wLength, tmo);
-+		i = usbfs_start_wait_urb(urb, tmo, &actlen);
- 		usb_lock_device(dev);
--		snoop_urb(dev, NULL, pipe, max(i, 0), min(i, 0), COMPLETE, NULL, 0);
-+		snoop_urb(dev, NULL, pipe, actlen, i, COMPLETE, NULL, 0);
- 	}
- 	if (i < 0 && i != -EPIPE) {
- 		dev_printk(KERN_DEBUG, &dev->dev, "usbfs: USBDEVFS_CONTROL "
-@@ -1174,8 +1228,15 @@ static int do_proc_control(struct usb_de
- 			   current->comm, ctrl->bRequestType, ctrl->bRequest,
- 			   ctrl->wLength, i);
- 	}
--	ret = i;
-+	ret = (i < 0 ? i : actlen);
-+
-+ recv_fault:
-+	/* Linger a bit, prior to the next control message. */
-+	if (dev->quirks & USB_QUIRK_DELAY_CTRL_MSG)
-+		msleep(200);
-  done:
-+	kfree(dr);
-+	usb_free_urb(urb);
- 	free_page((unsigned long) tbuf);
- 	usbfs_decrease_memory_usage(PAGE_SIZE + sizeof(struct urb) +
- 			sizeof(struct usb_ctrlrequest));
-@@ -1195,10 +1256,11 @@ static int do_proc_bulk(struct usb_dev_s
- 		struct usbdevfs_bulktransfer *bulk)
- {
- 	struct usb_device *dev = ps->dev;
--	unsigned int tmo, len1, pipe;
--	int len2;
-+	unsigned int tmo, len1, len2, pipe;
- 	unsigned char *tbuf;
- 	int i, ret;
-+	struct urb *urb = NULL;
-+	struct usb_host_endpoint *ep;
- 
- 	ret = findintfep(ps->dev, bulk->ep);
- 	if (ret < 0)
-@@ -1206,14 +1268,17 @@ static int do_proc_bulk(struct usb_dev_s
- 	ret = checkintf(ps, ret);
- 	if (ret)
- 		return ret;
-+
-+	len1 = bulk->len;
-+	if (len1 < 0 || len1 >= (INT_MAX - sizeof(struct urb)))
-+		return -EINVAL;
-+
- 	if (bulk->ep & USB_DIR_IN)
- 		pipe = usb_rcvbulkpipe(dev, bulk->ep & 0x7f);
- 	else
- 		pipe = usb_sndbulkpipe(dev, bulk->ep & 0x7f);
--	if (!usb_maxpacket(dev, pipe, !(bulk->ep & USB_DIR_IN)))
--		return -EINVAL;
--	len1 = bulk->len;
--	if (len1 >= (INT_MAX - sizeof(struct urb)))
-+	ep = usb_pipe_endpoint(dev, pipe);
-+	if (!ep || !usb_endpoint_maxp(&ep->desc))
- 		return -EINVAL;
- 	ret = usbfs_increase_memory_usage(len1 + sizeof(struct urb));
- 	if (ret)
-@@ -1223,17 +1288,29 @@ static int do_proc_bulk(struct usb_dev_s
- 	 * len1 can be almost arbitrarily large.  Don't WARN if it's
- 	 * too big, just fail the request.
- 	 */
-+	ret = -ENOMEM;
- 	tbuf = kmalloc(len1, GFP_KERNEL | __GFP_NOWARN);
--	if (!tbuf) {
--		ret = -ENOMEM;
-+	if (!tbuf)
- 		goto done;
-+	urb = usb_alloc_urb(0, GFP_KERNEL);
-+	if (!urb)
-+		goto done;
-+
-+	if ((ep->desc.bmAttributes & USB_ENDPOINT_XFERTYPE_MASK) ==
-+			USB_ENDPOINT_XFER_INT) {
-+		pipe = (pipe & ~(3 << 30)) | (PIPE_INTERRUPT << 30);
-+		usb_fill_int_urb(urb, dev, pipe, tbuf, len1,
-+				NULL, NULL, ep->desc.bInterval);
-+	} else {
-+		usb_fill_bulk_urb(urb, dev, pipe, tbuf, len1, NULL, NULL);
- 	}
-+
- 	tmo = bulk->timeout;
- 	if (bulk->ep & 0x80) {
- 		snoop_urb(dev, NULL, pipe, len1, tmo, SUBMIT, NULL, 0);
- 
- 		usb_unlock_device(dev);
--		i = usb_bulk_msg(dev, pipe, tbuf, len1, &len2, tmo);
-+		i = usbfs_start_wait_urb(urb, tmo, &len2);
- 		usb_lock_device(dev);
- 		snoop_urb(dev, NULL, pipe, len2, i, COMPLETE, tbuf, len2);
- 
-@@ -1253,12 +1330,13 @@ static int do_proc_bulk(struct usb_dev_s
- 		snoop_urb(dev, NULL, pipe, len1, tmo, SUBMIT, tbuf, len1);
- 
- 		usb_unlock_device(dev);
--		i = usb_bulk_msg(dev, pipe, tbuf, len1, &len2, tmo);
-+		i = usbfs_start_wait_urb(urb, tmo, &len2);
- 		usb_lock_device(dev);
- 		snoop_urb(dev, NULL, pipe, len2, i, COMPLETE, NULL, 0);
- 	}
- 	ret = (i < 0 ? i : len2);
-  done:
-+	usb_free_urb(urb);
- 	kfree(tbuf);
- 	usbfs_decrease_memory_usage(len1 + sizeof(struct urb));
- 	return ret;
-
+> offset valid values are 0-7 and anything else "shall not be used", so I
+> don't know how UCSI will eventually cope with EPR without a spec update.
+> 
+> So if this macro changes to 13 then this call would result in a call to
+> the UCSI GET_PDOS command passing num_pdos == 13-4 = 9 which would
+> probably result in an error from the PPM FW.  So we might need to retain
+> the maximum value of 7 PDOs at least for UCSI here.  Maybe that means
+> this UCSI driver needs to carry its own definition of
+> UCSI_MAX_TOTAL_PDOS=7 instead of using PDO_MAX_OBJECTS?
+> 
+> Jack
+-- 
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
