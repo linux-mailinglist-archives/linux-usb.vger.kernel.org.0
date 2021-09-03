@@ -2,85 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0726040060F
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Sep 2021 21:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C428340061A
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Sep 2021 21:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349516AbhICTs0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Sep 2021 15:48:26 -0400
-Received: from mail-ot1-f52.google.com ([209.85.210.52]:37610 "EHLO
-        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbhICTsZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Sep 2021 15:48:25 -0400
-Received: by mail-ot1-f52.google.com with SMTP id i3-20020a056830210300b0051af5666070so366369otc.4;
-        Fri, 03 Sep 2021 12:47:25 -0700 (PDT)
+        id S239176AbhICTux (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Sep 2021 15:50:53 -0400
+Received: from mail-oo1-f48.google.com ([209.85.161.48]:35431 "EHLO
+        mail-oo1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234588AbhICTux (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Sep 2021 15:50:53 -0400
+Received: by mail-oo1-f48.google.com with SMTP id y3-20020a4ab403000000b00290e2a52c71so24046oon.2;
+        Fri, 03 Sep 2021 12:49:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=07KAWclyrje+6M7j3aAbAIOd4SS2KMhKwYrzm5BDuco=;
-        b=P7z5c9ZPquqL6hNqBZEs30Z/PAyi7/J+X+tfzeSPcgRqM1zod+25IMj7lJkqpBG+04
-         3JXqDsBTl8zueCy+A6SFsb18XxtoDainRQSdPJbbN6aYPKjk0Hlj59iqf9GwMWFSSu1t
-         5hD3gJB/1vCKmGPrxd/z3wLkY/HyI45c8aP9bKKyy6Hhrn98qOM97/xb3RNtRIdhr8Fc
-         a//J0EF7RHrFM2bonZpWJanWEQ7he4G38gk900qv0kVFEXN8V3SkYFJhvUv2APREWt47
-         J7HeDPhA7XLBXcFWi45JHheFzp1HVy7ODCjPOVT18Su7AUjaoHCUbC1sjbQ/cgrsZ5Gd
-         9B9w==
-X-Gm-Message-State: AOAM533pXYrOMoiYEN1cnNFxjWeQsM3cVRTczf6Sv7ymjmiHLYshVHvy
-        rMXbybjzF2cvOoaxlZg+cNkaVvtz7A==
-X-Google-Smtp-Source: ABdhPJzOolETQqMqGylY5BEpdkIGwZEn+u2kDdqSBCUGchgizJzAul1x461BA9CgpPac9nP0bgUbrw==
-X-Received: by 2002:a9d:450c:: with SMTP id w12mr628461ote.18.1630698444806;
-        Fri, 03 Sep 2021 12:47:24 -0700 (PDT)
+        bh=grquTj9le7LyKwa10qtUsy6uhDA/Og3HGD4G7QWDUb4=;
+        b=XAspmNGbVMjLw7N0oCcgv5jYCaIOtX7WwPdUY5ACqHintGBLOOEbt++nSI/Ui53+4p
+         trUbKJKMrTEV3Z/K8pNWHF1MUPaiuHv4eLqvL4JE+Av+WmLKPjHilPo82Z4S5QVFfGqM
+         cSZMraa6yS1qww8C6vudS2ssRAMF/NTsTgoV6uNFNz40ZxzlRa6c/lT6MAWMmlqGBZrA
+         1TLdyBnYX7FKsio74Go6knBnF/K0M592T4znNZuh+xzHojpRDK/nvtVdvnxhvH0ZpmiL
+         WaYC6HVeSWEloZuas9zqVcw7A3RUKScABRW/I3Uga3wu5cLCJLSffNGXPA46W67O8MXK
+         xhYw==
+X-Gm-Message-State: AOAM531pc3/FLZ2uhJmpEUCYNAkAo3b8XuLOyd/qtIqbJUqSHctTZZXX
+        ZXOvjgCKkAjTihdggTWDdFqmvEdVVA==
+X-Google-Smtp-Source: ABdhPJzE4B+wXlgP6ywfh4wkKs8nUK6ytNyELJgMM6mJAhKo1xm4kn1xnsFaeB53y4uB+huAG1XsjA==
+X-Received: by 2002:a4a:bd17:: with SMTP id n23mr4344751oop.54.1630698592341;
+        Fri, 03 Sep 2021 12:49:52 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id v29sm30949ooe.31.2021.09.03.12.47.23
+        by smtp.gmail.com with ESMTPSA id 14sm66624otl.50.2021.09.03.12.49.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Sep 2021 12:47:24 -0700 (PDT)
-Received: (nullmailer pid 3342276 invoked by uid 1000);
-        Fri, 03 Sep 2021 19:47:23 -0000
-Date:   Fri, 3 Sep 2021 14:47:23 -0500
+        Fri, 03 Sep 2021 12:49:51 -0700 (PDT)
+Received: (nullmailer pid 3345524 invoked by uid 1000);
+        Fri, 03 Sep 2021 19:49:50 -0000
+Date:   Fri, 3 Sep 2021 14:49:50 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Dongjin Kim <tobetter@gmail.com>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-sunxi@googlegroups.com,
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Maxime Ripard <maxime@cerno.tech>, devicetree@vger.kernel.org,
+        Frank Rowand <frowand.list@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
         Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH v2 36/52] dt-bindings: usb: Convert SMSC USB3503 binding
- to a schema
-Message-ID: <YTJ7y9dCERQu03/+@robh.at.kernel.org>
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 37/52] dt-bindings: usb: dwc3: Fix usb-phy check
+Message-ID: <YTJ8Xry7IAMIdpEn@robh.at.kernel.org>
 References: <20210901091852.479202-1-maxime@cerno.tech>
- <20210901091852.479202-37-maxime@cerno.tech>
+ <20210901091852.479202-38-maxime@cerno.tech>
+ <87a6kwcvzb.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210901091852.479202-37-maxime@cerno.tech>
+In-Reply-To: <87a6kwcvzb.fsf@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 01 Sep 2021 11:18:36 +0200, Maxime Ripard wrote:
-> The SMSC USB3503 USB Hub Controller is supported by Linux thanks to
-> its device tree binding.
+On Wed, Sep 01, 2021 at 03:36:35PM +0300, Felipe Balbi wrote:
 > 
-> Now that we have the DT validation in place, let's convert the device
-> tree bindings for that driver over to a YAML schema.
+> Maxime Ripard <maxime@cerno.tech> writes:
 > 
-> Cc: Dongjin Kim <tobetter@gmail.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> > The original binding was allowing any combination of usb2-phy and
+> > usb3-phy in the phys and phy-names properties.
+> >
+> > However, the current binding enforces that those properties must be a
+> > list of usb2-phy and usb3-phy, with exactly one element, effectively
+> > making usb2-phy the only value being valid.
+> >
+> > Let's rework the properties description to allow either one or two
+> > element picked with values either usb2-phy or usb3-phy. The rest of the
+> > tooling makes sure that we don't get any duplicate value, so this should
+> > be what we want.
+> >
+> > Cc: Felipe Balbi <balbi@kernel.org>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: linux-usb@vger.kernel.org
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> > ---
+> >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > index 078fb7889593..c1c970073681 100644
+> > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > @@ -73,15 +73,15 @@ properties:
+> >  
+> >    phys:
+> >      minItems: 1
+> > -    items:
+> > -      - description: USB2/HS PHY
+> > -      - description: USB3/SS PHY
+> > +    maxItems: 2
 > 
-> ---
-> 
-> Changes from v1:
->   - Added maximum number of items for clocks and gpios
->   - Fixed the example node name
-> ---
->  .../devicetree/bindings/usb/smsc,usb3503.yaml | 108 ++++++++++++++++++
->  .../devicetree/bindings/usb/usb3503.txt       |  39 -------
->  2 files changed, 108 insertions(+), 39 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/usb/smsc,usb3503.yaml
->  delete mode 100644 Documentation/devicetree/bindings/usb/usb3503.txt
-> 
+> I'm not sure you should enforce a maximum of 2 PHYs. Some systems may
+> use more than one USB2 PHY to take care of different parts of the USB
+> link.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+It was already limited to 2. This change doesn't change that.
+
+Rob
