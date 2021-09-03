@@ -2,432 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B52F03FF8F0
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Sep 2021 04:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A95133FFA90
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Sep 2021 08:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346353AbhICCq2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Sep 2021 22:46:28 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:17399 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346212AbhICCqU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Sep 2021 22:46:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1630637121; x=1662173121;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dX+jcg8R6aHLtBd18L0WCyLAw4Wv/PKnFOIqfh3jJcU=;
-  b=VTfLrCTBccIDQ8gSkfq3Ykff5zmlP+rhGGkpq+K/U4ZMd+GNnF3TBwse
-   a5k3rwSdqUSEjsafKFrvTLDett+3VdRqfoIOBNx0HL15gi0r0T3pxgWVv
-   qB8qJfHdK+i0JUSZ6yX2qQ3/2K6OdRDt2dXFN09eCmaQMahwJ9+fjOAAf
-   I=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 02 Sep 2021 19:45:21 -0700
-X-QCInternal: smtphost
-Received: from nalasex01b.na.qualcomm.com ([10.47.209.197])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2021 19:45:21 -0700
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Thu, 2 Sep 2021 19:45:19 -0700
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH v2 5/5] usb: gadget: configfs: add some trace event
-Date:   Fri, 3 Sep 2021 10:44:52 +0800
-Message-ID: <1630637092-30230-6-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1630637092-30230-1-git-send-email-quic_linyyuan@quicinc.com>
-References: <1630637092-30230-1-git-send-email-quic_linyyuan@quicinc.com>
+        id S1346777AbhICGsR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Sep 2021 02:48:17 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:18725 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232218AbhICGsR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 3 Sep 2021 02:48:17 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1630651637; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=3VvJri0NRu6wRUG/Jmb1SKwER+ZomJ6JBNYYtrrS0Tg=; b=d0kaGNPw4CL998MsrxIybzT6lTtLgfnH7AdwCdbfm8WtU7FznyfvhVrHCgw34MoJ+HQfnw5Y
+ pkVu9cPyAIENA2AVI7yz2sNDORPPjy11pf0e0ewkn11oNSB7NXIDnrfGGdQ6r59bcg51+kOz
+ 68EOHV2ZG3dPuZTElaLyS1RYy10=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 6131c4edc603a0154f342605 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 03 Sep 2021 06:47:09
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 16B4EC43618; Fri,  3 Sep 2021 06:47:09 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C35D6C4338F;
+        Fri,  3 Sep 2021 06:47:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org C35D6C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Date:   Thu, 2 Sep 2021 23:47:01 -0700
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-pm@vger.kernel.org, bleung@chromium.org,
+        heikki.krogerus@linux.intel.com, badhri@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>
+Subject: Re: [RFC PATCH 1/3] usb: pd: Increase max PDO objects to 13
+Message-ID: <20210903064701.GA3515@jackp-linux.qualcomm.com>
+References: <20210902213500.3795948-1-pmalani@chromium.org>
+ <20210902213500.3795948-2-pmalani@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210902213500.3795948-2-pmalani@chromium.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-add UDC, cfg link/unlink and some attributes trace
-to better trace gadget issues.
+Hi Prashant,
 
-Reported-by: kernel test robot <lkp@intel.com>
-Suggested-by: Felipe Balbi <balbi@kernel.org>
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
-v2: fix sparse warning
+On Thu, Sep 02, 2021 at 02:34:58PM -0700, Prashant Malani wrote:
+> Increase the max number of PDO objects to 13, to accommodate the extra
+> PDOs added as a part of EPR (Extended Power Range) operation introduced
+> in the USB PD Spec Rev 3.1, v 1.0. See Figure 6-54 for details.
+> 
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> ---
+>  include/linux/usb/pd.h | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
+> index 96b7ff66f074..7e8bdca1ce6e 100644
+> --- a/include/linux/usb/pd.h
+> +++ b/include/linux/usb/pd.h
+> @@ -201,7 +201,13 @@ struct pd_message {
+>  } __packed;
+>  
+>  /* PDO: Power Data Object */
+> -#define PDO_MAX_OBJECTS		7
+> +
+> +/*
+> + * The EPR (Extended Power Range) structure is a superset of the SPR (Standard Power Range)
+> + * capabilities structure, so set the max number of PDOs to 13 instead of 7. On SPR-only systems,
+> + * objects 8 through 13 will just be empty.
+> + */
+> +#define PDO_MAX_OBJECTS		13
 
- drivers/usb/gadget/Makefile         |   1 +
- drivers/usb/gadget/configfs.c       |  19 +++++
- drivers/usb/gadget/configfs_trace.c |  43 ++++++++++
- drivers/usb/gadget/configfs_trace.h | 164 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 227 insertions(+)
- create mode 100644 drivers/usb/gadget/configfs_trace.c
- create mode 100644 drivers/usb/gadget/configfs_trace.h
+Hmm this might break the recent change I made to UCSI in commit
+1f4642b72be7 ("usb: typec: ucsi: Retrieve all the PDOs instead of just
+the first 4").
 
-diff --git a/drivers/usb/gadget/Makefile b/drivers/usb/gadget/Makefile
-index 130dad7..8e9c2b8 100644
---- a/drivers/usb/gadget/Makefile
-+++ b/drivers/usb/gadget/Makefile
-@@ -9,5 +9,6 @@ ccflags-y				+= -I$(srctree)/drivers/usb/gadget/udc
- obj-$(CONFIG_USB_LIBCOMPOSITE)	+= libcomposite.o
- libcomposite-y			:= usbstring.o config.o epautoconf.o
- libcomposite-y			+= composite.o functions.o configfs.o u_f.o
-+libcomposite-y			+= configfs_trace.o
- 
- obj-$(CONFIG_USB_GADGET)	+= udc/ function/ legacy/
-diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index 0fd0a30..23d2619 100644
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -9,6 +9,7 @@
- #include "configfs.h"
- #include "u_f.h"
- #include "u_os_desc.h"
-+#include "configfs_trace.h"
- 
- int check_user_usb_string(const char *name,
- 		struct usb_gadget_strings *stringtab_dev)
-@@ -138,6 +139,7 @@ static ssize_t gadget_dev_desc_bcdDevice_store(struct config_item *item,
- 	if (ret)
- 		return ret;
- 
-+	trace_gadget_dev_desc_bcdDevice_store(to_gadget_info(item));
- 	to_gadget_info(item)->cdev.desc.bcdDevice = cpu_to_le16(bcdDevice);
- 	return len;
- }
-@@ -156,6 +158,7 @@ static ssize_t gadget_dev_desc_bcdUSB_store(struct config_item *item,
- 		return ret;
- 
- 	to_gadget_info(item)->cdev.desc.bcdUSB = cpu_to_le16(bcdUSB);
-+	trace_gadget_dev_desc_bcdUSB_store(to_gadget_info(item));
- 	return len;
- }
- 
-@@ -168,6 +171,7 @@ static ssize_t gadget_dev_desc_UDC_show(struct config_item *item, char *page)
- 	mutex_lock(&gi->lock);
- 	udc_name = gi->composite.gadget_driver.udc_name;
- 	ret = sprintf(page, "%s\n", udc_name ?: "");
-+	trace_gadget_dev_desc_UDC_show(gi);
- 	mutex_unlock(&gi->lock);
- 
- 	return ret;
-@@ -177,6 +181,7 @@ static int unregister_gadget(struct gadget_info *gi)
- {
- 	int ret;
- 
-+	trace_unregister_gadget(gi);
- 	if (!gi->composite.gadget_driver.udc_name)
- 		return -ENODEV;
- 
-@@ -204,6 +209,8 @@ static ssize_t gadget_dev_desc_UDC_store(struct config_item *item,
- 	if (name[len - 1] == '\n')
- 		name[len - 1] = '\0';
- 
-+	trace_gadget_dev_desc_UDC_store(gi);
-+
- 	mutex_lock(&gi->lock);
- 
- 	if (!strlen(name)) {
-@@ -224,6 +231,8 @@ static ssize_t gadget_dev_desc_UDC_store(struct config_item *item,
- 		}
- 	}
- 	mutex_unlock(&gi->lock);
-+
-+	trace_gadget_dev_desc_UDC_store(gi);
- 	return len;
- err:
- 	kfree(name);
-@@ -236,6 +245,7 @@ static ssize_t gadget_dev_desc_max_speed_show(struct config_item *item,
- {
- 	enum usb_device_speed speed = to_gadget_info(item)->composite.max_speed;
- 
-+	trace_gadget_dev_desc_max_speed_show(to_gadget_info(item));
- 	return sprintf(page, "%s\n", usb_speed_string(speed));
- }
- 
-@@ -265,6 +275,8 @@ static ssize_t gadget_dev_desc_max_speed_store(struct config_item *item,
- 
- 	gi->composite.gadget_driver.max_speed = gi->composite.max_speed;
- 
-+	trace_gadget_dev_desc_max_speed_store(gi);
-+
- 	mutex_unlock(&gi->lock);
- 	return len;
- err:
-@@ -396,6 +408,7 @@ static int config_usb_cfg_link(
- 	list_add_tail(&cf->list, &cfg->func_list);
- 	ret = 0;
- out:
-+	trace_config_usb_cfg_link(gi);
- 	mutex_unlock(&gi->lock);
- 	return ret;
- }
-@@ -428,10 +441,12 @@ static void config_usb_cfg_unlink(
- 			list_del(&cf->list);
- 			usb_put_function(cf->f);
- 			kfree(cf);
-+			trace_config_usb_cfg_unlink(gi);
- 			mutex_unlock(&gi->lock);
- 			return;
- 		}
- 	}
-+	trace_config_usb_cfg_unlink(gi);
- 	mutex_unlock(&gi->lock);
- 	WARN(1, "Unable to locate function to unbind\n");
- }
-@@ -446,6 +461,7 @@ static struct configfs_item_operations gadget_config_item_ops = {
- static ssize_t gadget_config_desc_MaxPower_show(struct config_item *item,
- 		char *page)
- {
-+	trace_gadget_config_desc_MaxPower_show(to_config_usb_cfg(item)->gi);
- 	return sprintf(page, "%u\n", to_config_usb_cfg(item)->c.MaxPower);
- }
- 
-@@ -460,12 +476,14 @@ static ssize_t gadget_config_desc_MaxPower_store(struct config_item *item,
- 	if (DIV_ROUND_UP(val, 8) > 0xff)
- 		return -ERANGE;
- 	to_config_usb_cfg(item)->c.MaxPower = val;
-+	trace_gadget_config_desc_MaxPower_store(to_config_usb_cfg(item)->gi);
- 	return len;
- }
- 
- static ssize_t gadget_config_desc_bmAttributes_show(struct config_item *item,
- 		char *page)
- {
-+	trace_gadget_config_desc_bmAttributes_show(to_config_usb_cfg(item)->gi);
- 	return sprintf(page, "0x%02x\n",
- 		to_config_usb_cfg(item)->c.bmAttributes);
- }
-@@ -484,6 +502,7 @@ static ssize_t gadget_config_desc_bmAttributes_store(struct config_item *item,
- 				USB_CONFIG_ATT_WAKEUP))
- 		return -EINVAL;
- 	to_config_usb_cfg(item)->c.bmAttributes = val;
-+	trace_gadget_config_desc_bmAttributes_store(to_config_usb_cfg(item)->gi);
- 	return len;
- }
- 
-diff --git a/drivers/usb/gadget/configfs_trace.c b/drivers/usb/gadget/configfs_trace.c
-new file mode 100644
-index 0000000..a39454f
---- /dev/null
-+++ b/drivers/usb/gadget/configfs_trace.c
-@@ -0,0 +1,43 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#include <linux/usb/composite.h>
-+#include "configfs.h"
-+
-+#define MAX_CONFIGURAITON_STR_LEN	512
-+
-+static char *config_to_string(struct gadget_info *gi)
-+{
-+	struct usb_configuration *uc;
-+	struct config_usb_cfg *cfg;
-+	struct config_usb_function *cf;
-+	static char cfg_str[MAX_CONFIGURAITON_STR_LEN];
-+	size_t len = MAX_CONFIGURAITON_STR_LEN;
-+	int n = 0;
-+
-+	cfg_str[0] = '\0';
-+
-+	list_for_each_entry(uc, &gi->cdev.configs, list) {
-+		cfg = container_of(uc, struct config_usb_cfg, c);
-+
-+		n += scnprintf(cfg_str + n, len - n,
-+			"group:%s,bConfigurationValue:%d,bmAttributes:%d,"
-+			"MaxPower:%d,",
-+			config_item_name(&cfg->group.cg_item),
-+			uc->bConfigurationValue,
-+			uc->bmAttributes,
-+			uc->MaxPower);
-+
-+		n += scnprintf(cfg_str + n, len - n, "function:[");
-+		list_for_each_entry(cf, &cfg->func_list, list)
-+			n += scnprintf(cfg_str + n, len - n, "%s", cf->f->name);
-+		n += scnprintf(cfg_str + n, len - n, "},");
-+	}
-+
-+	return cfg_str;
-+}
-+
-+#define CREATE_TRACE_POINTS
-+#include "configfs_trace.h"
-diff --git a/drivers/usb/gadget/configfs_trace.h b/drivers/usb/gadget/configfs_trace.h
-new file mode 100644
-index 0000000..7e8e181
---- /dev/null
-+++ b/drivers/usb/gadget/configfs_trace.h
-@@ -0,0 +1,164 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM configfs_gadget
-+
-+#if !defined(__GADGET_TRACE_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define __GADGET_TRACE_H
-+
-+#include <linux/tracepoint.h>
-+
-+DECLARE_EVENT_CLASS(log_gadget_info,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi),
-+	TP_STRUCT__entry(
-+		/* gadget_info */
-+		__string(gi_group, config_item_name(&gi->group.cg_item))
-+		__field(bool, unbind)
-+
-+		/* usb_composite_dev */
-+		__field(u8, b_vendor_code)
-+		__field(bool, suspended)
-+		__field(bool, setup_pending)
-+		__field(bool, os_desc_pending)
-+		__field(unsigned, deactivations)
-+		__field(int, delayed_status)
-+		__field(u16, bcdUSB)
-+		__field(u16, bcdDevice)
-+		__string(config, gi->cdev.config)
-+
-+		/* usb_composite_driver */
-+		__field(unsigned, max_speed)
-+		__field(bool, needs_serial)
-+
-+		/* usb_gadget_driver */
-+		__string(udc_name, gi->composite.gadget_driver.udc_name)
-+	),
-+	TP_fast_assign(
-+		__assign_str(gi_group, config_item_name(&gi->group.cg_item));
-+		__entry->unbind = gi->unbind;
-+
-+		__entry->b_vendor_code = gi->cdev.b_vendor_code;
-+		__entry->suspended = gi->cdev.suspended;
-+		__entry->setup_pending = gi->cdev.setup_pending;
-+		__entry->os_desc_pending = gi->cdev.os_desc_pending;
-+		__entry->deactivations = gi->cdev.deactivations;
-+		__entry->delayed_status = gi->cdev.delayed_status;
-+		__entry->bcdUSB = le16_to_cpu(gi->cdev.desc.bcdUSB);
-+		__entry->bcdDevice = le16_to_cpu(gi->cdev.desc.bcdDevice);
-+		__assign_str(config, config_to_string(gi));
-+
-+		__entry->max_speed = gi->composite.max_speed;
-+		__entry->needs_serial = gi->composite.needs_serial;
-+
-+		__assign_str(udc_name, gi->composite.gadget_driver.udc_name);
-+	),
-+	TP_printk("gi_group:%s,unbind:%d,"
-+		" - "
-+		"b_vendor_code:%d,suspended:%d,setup_pending:%d,"
-+		"os_desc_pending:%d,deactivations:%d,delayed_status:%d,"
-+		"bcdUSB:%04x,bcdDevice:%04x,config:%s,"
-+		" - "
-+		"max_speed:%d,needs_serial:%d,"
-+		" - "
-+		"udc_name:%s",
-+
-+		__get_str(gi_group),
-+		__entry->unbind,
-+
-+		__entry->b_vendor_code,
-+		__entry->suspended,
-+		__entry->setup_pending,
-+		__entry->os_desc_pending,
-+		__entry->deactivations,
-+		__entry->delayed_status,
-+		__entry->bcdUSB,
-+		__entry->bcdDevice,
-+		__get_str(config),
-+
-+		__entry->max_speed,
-+		__entry->needs_serial,
-+
-+		__get_str(udc_name)
-+		)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_dev_desc_bcdDevice_store,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_dev_desc_bcdUSB_store,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_dev_desc_UDC_show,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, unregister_gadget,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_dev_desc_UDC_store,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_dev_desc_max_speed_show,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_dev_desc_max_speed_store,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, config_usb_cfg_link,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, config_usb_cfg_unlink,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_config_desc_MaxPower_show,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_config_desc_MaxPower_store,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_config_desc_bmAttributes_show,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_config_desc_bmAttributes_store,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+#endif /* __GADGET_TRACE_H */
-+
-+/* this part has to be here */
-+
-+#undef TRACE_INCLUDE_PATH
-+#define TRACE_INCLUDE_PATH ../../drivers/usb/gadget
-+
-+#undef TRACE_INCLUDE_FILE
-+#define TRACE_INCLUDE_FILE configfs_trace
-+
-+#include <trace/define_trace.h>
+ 520 static void ucsi_get_src_pdos(struct ucsi_connector *con, int is_partner)
+ 521 {
+ 522         int ret;
+ 523
+ 524         /* UCSI max payload means only getting at most 4 PDOs at a time */
+ 525         ret = ucsi_get_pdos(con, 1, con->src_pdos, 0, UCSI_MAX_PDOS);
+ 526         if (ret < 0)
+ 527                 return;
+ 528
+ 529         con->num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
+ 530         if (con->num_pdos < UCSI_MAX_PDOS)
+ 531                 return;
+ 532
+ 533         /* get the remaining PDOs, if any */
+ 534         ret = ucsi_get_pdos(con, 1, con->src_pdos, UCSI_MAX_PDOS,
+ 535                             PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
+				 ^^^^^^^^^^^^^^^
+This routine calls the UCSI GET_PDOS command for up to 4 PDOs at a time
+since that's the most the return payload can carry.  Currently this
+assumes that we'd only need to request the PPM at most twice to retrieve
+all the PDOs for up to a maximum of 7 (first request for 4 then again if
+needed for the remaining 3).  I'm not sure if any existing UCSI FW would
+be updatable to support more than 7 PDOs in the future, much less
+support EPR.  In fact, current UCSI 1.2 spec [1] Table 4-34 mentions PDO
+offset valid values are 0-7 and anything else "shall not be used", so I
+don't know how UCSI will eventually cope with EPR without a spec update.
+
+So if this macro changes to 13 then this call would result in a call to
+the UCSI GET_PDOS command passing num_pdos == 13-4 = 9 which would
+probably result in an error from the PPM FW.  So we might need to retain
+the maximum value of 7 PDOs at least for UCSI here.  Maybe that means
+this UCSI driver needs to carry its own definition of
+UCSI_MAX_TOTAL_PDOS=7 instead of using PDO_MAX_OBJECTS?
+
+Jack
 -- 
-2.7.4
-
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
