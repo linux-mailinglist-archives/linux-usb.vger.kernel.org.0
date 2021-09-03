@@ -2,135 +2,423 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A95133FFA90
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Sep 2021 08:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0777F3FFF93
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Sep 2021 14:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346777AbhICGsR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Sep 2021 02:48:17 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:18725 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232218AbhICGsR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 3 Sep 2021 02:48:17 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1630651637; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=3VvJri0NRu6wRUG/Jmb1SKwER+ZomJ6JBNYYtrrS0Tg=; b=d0kaGNPw4CL998MsrxIybzT6lTtLgfnH7AdwCdbfm8WtU7FznyfvhVrHCgw34MoJ+HQfnw5Y
- pkVu9cPyAIENA2AVI7yz2sNDORPPjy11pf0e0ewkn11oNSB7NXIDnrfGGdQ6r59bcg51+kOz
- 68EOHV2ZG3dPuZTElaLyS1RYy10=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 6131c4edc603a0154f342605 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 03 Sep 2021 06:47:09
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 16B4EC43618; Fri,  3 Sep 2021 06:47:09 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id C35D6C4338F;
-        Fri,  3 Sep 2021 06:47:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org C35D6C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Date:   Thu, 2 Sep 2021 23:47:01 -0700
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-pm@vger.kernel.org, bleung@chromium.org,
-        heikki.krogerus@linux.intel.com, badhri@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sebastian Reichel <sre@kernel.org>
-Subject: Re: [RFC PATCH 1/3] usb: pd: Increase max PDO objects to 13
-Message-ID: <20210903064701.GA3515@jackp-linux.qualcomm.com>
-References: <20210902213500.3795948-1-pmalani@chromium.org>
- <20210902213500.3795948-2-pmalani@chromium.org>
+        id S1348939AbhICMK7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Sep 2021 08:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235253AbhICMK6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Sep 2021 08:10:58 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD60C061575;
+        Fri,  3 Sep 2021 05:09:58 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id u14so11608193ejf.13;
+        Fri, 03 Sep 2021 05:09:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9t7BISFv0I03oX7jwOW2q7/eSvx94vdwTNGMNuQyzcU=;
+        b=NWy6MW+fhULVENa1H1CB3SXySQFBLpgyHjNztGR5RfpEyJfCpLESvQcPhikyCZWkRX
+         Iy75yaCVNtrlBpBwZGq80MQWBkdjFnrDREC0EHoAkFhcK7+0CuF5XGpEvqOkjpWhwhMX
+         hTljS3EHuDFAVJybpBbrdU6BFXVV9LlxuVh93OkrPQ2sgNBWQ+Yku5aoagjlmdmuuoXv
+         P81jxLYlpRYaqNYG0e4wzUGi68IZeUkHBtr0sncOKvhhCu/oeiC+mJ1hEik5/loZGYdO
+         q+e7iS9lIW6cJeFLRCsopbY3VEYItTAuRZN0vxR1gaFcgbH5Vs9ZvNR8aHeKbYJq7ckH
+         M5GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9t7BISFv0I03oX7jwOW2q7/eSvx94vdwTNGMNuQyzcU=;
+        b=CqrO4Q2m+btpzP6hlmtIbet9zzIufH7sdbIs70FRULlIDJ3378ZAeOvxTnK8FlDtMS
+         yWhh3gcBDxWPYv6Sr8ceVCdgNVnQ/87xG251Gq7cA08jKLwTEWjhA0tEn2rYpq9hK3fI
+         JxWxYxahdvkLp6XERzfmEdn6WZcimJZ+xw6eb9auDAakqifVyKn3GdDJ4axwylEq1Faj
+         4PFvKUT8xIIQ0g/EuNd+lVXkvZtfiCC5eiRsLBlnVXNnb9AD5JNDwGNjCUM3SnKzQ7SF
+         TM5iM7Mew/5Rd1vCQ5fTEOX5BuydD0oXrVwSE4+Ccxl/jjjB6LxLT2ry3bCM1sOGbjMI
+         AlXA==
+X-Gm-Message-State: AOAM533y+Rh/3X9b6xhGBHFiqtwXd/+pKMgH6DwYXRUk6oB5qBrATQA4
+        QnxAh/k++saJaP41aVvKHXA=
+X-Google-Smtp-Source: ABdhPJx508WDDsSInT48QqZnW4KZ11HA8ghyLus0w84XSJlFRsRDrB9wQkY3Tkx7IeDVSxVEdw5/Vg==
+X-Received: by 2002:a17:906:6011:: with SMTP id o17mr3778622ejj.157.1630670997119;
+        Fri, 03 Sep 2021 05:09:57 -0700 (PDT)
+Received: from lenny.home-life.hub ([91.254.31.122])
+        by smtp.gmail.com with ESMTPSA id js21sm2660352ejc.35.2021.09.03.05.09.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Sep 2021 05:09:56 -0700 (PDT)
+From:   carlo <c.lobrano@gmail.com>
+To:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Carlo Lobrano <c.lobrano@gmail.com>
+Subject: [PATCH] net: usb: qmi_wwan: add Telit 0x1060 composition
+Date:   Fri,  3 Sep 2021 14:09:53 +0200
+Message-Id: <20210903120953.1073210-1-c.lobrano@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210902213500.3795948-2-pmalani@chromium.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Prashant,
+From: Carlo Lobrano <c.lobrano@gmail.com>
 
-On Thu, Sep 02, 2021 at 02:34:58PM -0700, Prashant Malani wrote:
-> Increase the max number of PDO objects to 13, to accommodate the extra
-> PDOs added as a part of EPR (Extended Power Range) operation introduced
-> in the USB PD Spec Rev 3.1, v 1.0. See Figure 6-54 for details.
-> 
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> ---
->  include/linux/usb/pd.h | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
-> index 96b7ff66f074..7e8bdca1ce6e 100644
-> --- a/include/linux/usb/pd.h
-> +++ b/include/linux/usb/pd.h
-> @@ -201,7 +201,13 @@ struct pd_message {
->  } __packed;
->  
->  /* PDO: Power Data Object */
-> -#define PDO_MAX_OBJECTS		7
-> +
-> +/*
-> + * The EPR (Extended Power Range) structure is a superset of the SPR (Standard Power Range)
-> + * capabilities structure, so set the max number of PDOs to 13 instead of 7. On SPR-only systems,
-> + * objects 8 through 13 will just be empty.
-> + */
-> +#define PDO_MAX_OBJECTS		13
+This patch adds support for Telit LN920 0x1060 composition
 
-Hmm this might break the recent change I made to UCSI in commit
-1f4642b72be7 ("usb: typec: ucsi: Retrieve all the PDOs instead of just
-the first 4").
+0x1060: tty, adb, rmnet, tty, tty, tty, tty
 
- 520 static void ucsi_get_src_pdos(struct ucsi_connector *con, int is_partner)
- 521 {
- 522         int ret;
- 523
- 524         /* UCSI max payload means only getting at most 4 PDOs at a time */
- 525         ret = ucsi_get_pdos(con, 1, con->src_pdos, 0, UCSI_MAX_PDOS);
- 526         if (ret < 0)
- 527                 return;
- 528
- 529         con->num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
- 530         if (con->num_pdos < UCSI_MAX_PDOS)
- 531                 return;
- 532
- 533         /* get the remaining PDOs, if any */
- 534         ret = ucsi_get_pdos(con, 1, con->src_pdos, UCSI_MAX_PDOS,
- 535                             PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
-				 ^^^^^^^^^^^^^^^
-This routine calls the UCSI GET_PDOS command for up to 4 PDOs at a time
-since that's the most the return payload can carry.  Currently this
-assumes that we'd only need to request the PPM at most twice to retrieve
-all the PDOs for up to a maximum of 7 (first request for 4 then again if
-needed for the remaining 3).  I'm not sure if any existing UCSI FW would
-be updatable to support more than 7 PDOs in the future, much less
-support EPR.  In fact, current UCSI 1.2 spec [1] Table 4-34 mentions PDO
-offset valid values are 0-7 and anything else "shall not be used", so I
-don't know how UCSI will eventually cope with EPR without a spec update.
+Signed-off-by: Carlo Lobrano <c.lobrano@gmail.com>
+---
 
-So if this macro changes to 13 then this call would result in a call to
-the UCSI GET_PDOS command passing num_pdos == 13-4 = 9 which would
-probably result in an error from the PPM FW.  So we might need to retain
-the maximum value of 7 PDOs at least for UCSI here.  Maybe that means
-this UCSI driver needs to carry its own definition of
-UCSI_MAX_TOTAL_PDOS=7 instead of using PDO_MAX_OBJECTS?
+Hi,
 
-Jack
+this is my first patch to the Linux kernel, hope is everything fine.
+
+Following is the lsusb output of this composition
+
+Thank you,
+Carlo
+
+
+Bus 001 Device 002: ID 1bc7:1060 Telit Wireless Solutions LN920
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.20
+  bDeviceClass            0 
+  bDeviceSubClass         0 
+  bDeviceProtocol         0 
+  bMaxPacketSize0        64
+  idVendor           0x1bc7 Telit Wireless Solutions
+  idProduct          0x1060 
+  bcdDevice            5.04
+  iManufacturer           1 
+  iProduct                2 
+  iSerial                 3 
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x018b
+    bNumInterfaces          7
+    bConfigurationValue     1
+    iConfiguration          4 
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower              896mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass    255 Vendor Specific Subclass
+      bInterfaceProtocol     48 
+      iInterface              0 
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass     66 
+      bInterfaceProtocol      1 
+      iInterface              5 
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        2
+      bAlternateSetting       0
+      bNumEndpoints           3
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass    255 Vendor Specific Subclass
+      bInterfaceProtocol     80 
+      iInterface              6 
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0008  1x 8 bytes
+        bInterval               9
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x8e  EP 14 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               6
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x0f  EP 15 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               2
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        3
+      bAlternateSetting       0
+      bNumEndpoints           3
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass    255 Vendor Specific Subclass
+      bInterfaceProtocol     96 
+      iInterface              0 
+      ** UNRECOGNIZED:  05 24 00 10 01
+      ** UNRECOGNIZED:  05 24 01 00 00
+      ** UNRECOGNIZED:  04 24 02 02
+      ** UNRECOGNIZED:  05 24 06 00 00
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x85  EP 5 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x000a  1x 10 bytes
+        bInterval               9
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x84  EP 4 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x03  EP 3 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        4
+      bAlternateSetting       0
+      bNumEndpoints           3
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass    255 Vendor Specific Subclass
+      bInterfaceProtocol     64 
+      iInterface              0 
+      ** UNRECOGNIZED:  05 24 00 10 01
+      ** UNRECOGNIZED:  05 24 01 00 00
+      ** UNRECOGNIZED:  04 24 02 02
+      ** UNRECOGNIZED:  05 24 06 00 00
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x87  EP 7 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x000a  1x 10 bytes
+        bInterval               9
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x86  EP 6 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x04  EP 4 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        5
+      bAlternateSetting       0
+      bNumEndpoints           3
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass    255 Vendor Specific Subclass
+      bInterfaceProtocol     64 
+      iInterface              0 
+      ** UNRECOGNIZED:  05 24 00 10 01
+      ** UNRECOGNIZED:  05 24 01 00 00
+      ** UNRECOGNIZED:  04 24 02 02
+      ** UNRECOGNIZED:  05 24 06 00 00
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x89  EP 9 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x000a  1x 10 bytes
+        bInterval               9
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x88  EP 8 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x05  EP 5 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        6
+      bAlternateSetting       0
+      bNumEndpoints           3
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass    255 Vendor Specific Subclass
+      bInterfaceProtocol     64 
+      iInterface              0 
+      ** UNRECOGNIZED:  05 24 00 10 01
+      ** UNRECOGNIZED:  05 24 01 00 00
+      ** UNRECOGNIZED:  04 24 02 02
+      ** UNRECOGNIZED:  05 24 06 00 00
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x8b  EP 11 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x000a  1x 10 bytes
+        bInterval               9
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x8a  EP 10 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x06  EP 6 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+---
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 6a2e4f884b12..33ada2c59952 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1354,6 +1354,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1031, 3)}, /* Telit LE910C1-EUX */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1040, 2)},	/* Telit LE922A */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1050, 2)},	/* Telit FN980 */
++	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1060, 2)},	/* Telit LN920 */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1100, 3)},	/* Telit ME910 */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1101, 3)},	/* Telit ME910 dual modem */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1200, 5)},	/* Telit LE920 */
 -- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.25.1
+
