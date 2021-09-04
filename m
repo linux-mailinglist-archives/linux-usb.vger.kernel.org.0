@@ -2,56 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F00E400AA1
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Sep 2021 13:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D2B8400BF0
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Sep 2021 17:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234848AbhIDJik convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sat, 4 Sep 2021 05:38:40 -0400
-Received: from static-ip-adsl-190.180.41.3.cotas.com.bo ([190.180.41.3]:42613
-        "EHLO mail.hiller.com.bo" rhost-flags-OK-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S234618AbhIDJik (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Sep 2021 05:38:40 -0400
-X-Greylist: delayed 904 seconds by postgrey-1.27 at vger.kernel.org; Sat, 04 Sep 2021 05:38:39 EDT
-Received: from svr-mbx.hiller.com.bo (192.168.0.7) by svr-mbx.hiller.com.bo
- (192.168.0.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7; Sat, 4 Sep 2021
- 05:17:39 -0400
-Received: from [23.175.48.200] (23.175.48.200) by svr-mbx.hiller.com.bo
- (192.168.0.7) with Microsoft SMTP Server id 15.2.922.7 via Frontend
- Transport; Sat, 4 Sep 2021 05:17:36 -0400
-Content-Type: text/plain; charset="iso-8859-1"
+        id S236810AbhIDPkm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Sep 2021 11:40:42 -0400
+Received: from informare.org ([217.11.52.70]:40642 "EHLO informare.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230312AbhIDPkm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 4 Sep 2021 11:40:42 -0400
+X-Greylist: delayed 400 seconds by postgrey-1.27 at vger.kernel.org; Sat, 04 Sep 2021 11:40:41 EDT
+Received: (qmail 13445 invoked from network); 4 Sep 2021 15:32:58 -0000
+Received: from unknown (HELO ?192.168.2.105?) (faber@faberman.de@87.133.154.214)
+  by 0 with ESMTPA; 4 Sep 2021 15:32:58 -0000
+To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+From:   Florian Faber <faber@faberman.de>
+Subject: [PATCH] usb: gadget: f_mass_storage: Shut down mass storage device
+ when USB connection is shut, down.
+Message-ID: <5f9fbabd-2e2c-9389-446d-3bd1dd954a82@faberman.de>
+Date:   Sat, 4 Sep 2021 17:32:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Your Grant
-To:     Recipients <uninfo@un.org>
-From:   UN <uninfo@un.org>
-Date:   Sat, 4 Sep 2021 00:22:21 -0700
-Reply-To: <dyari111020@gmail.com>
-Message-ID: <11318cb7-cde2-4c82-bced-dcafa00fae6b@svr-mbx.hiller.com.bo>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-UNITED NATIONS
-OFFICE OF THE DEPUTY SECRETARY GENERAL
-405 East 42nd Street,
-New York, NY
-United States of America.
+f_mass_storage continues to send out packets after the connection to the 
+USB host has been terminated, ignoring the error status.
 
+Signed-off-by: Florian Faber <faber@faberman.de>
 
+---
+  drivers/usb/gadget/function/f_mass_storage.c | 4 ++++
+  1 file changed, 4 insertions(+)
 
-Dear Sir/Madam,
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c 
+b/drivers/usb/gadget/function/f_mass_storage.c
+index 6ad669dde41c..1e73ba629e43 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -529,6 +529,10 @@ static int start_transfer(struct fsg_dev *fsg, 
+struct usb_ep *ep,
+  		/* We can't do much more than wait for a reset */
+  		req->status = rc;
 
-Following the devastating economic effects of the pandemic,the UN and other humanitarian organizations collaborated to alleviate the situation.
++		if (rc==-ESHUTDOWN) {
++			fsg->common->running = 0;
++		}
++
+  		/*
+  		 * Note: currently the net2280 driver fails zero-length
+  		 * submissions if DMA is enabled.
+-- 
+2.33.0
 
-We therefore organized an email Raffle Draw and luckily u were one of the winners .
-
-Unfortunately the report we got was that you were not responding to them necessitating their request for a cancellation and reallocation of same.
-
-My email to you was to confirm the veracity of the above claim
-
-
-Yours faithfully,
-Amina J. Mohammed
-(UN Deputy Sec,Gen)
+Flo
+-- 
+Machines can do the work, so people have time to think.
