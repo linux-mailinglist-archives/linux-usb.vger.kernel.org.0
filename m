@@ -2,58 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0308040116F
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Sep 2021 21:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63ED34011E4
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Sep 2021 00:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbhIEUAD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 Sep 2021 16:00:03 -0400
-Received: from informare.org ([217.11.52.70]:40650 "EHLO informare.org"
+        id S238385AbhIEVzY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Sep 2021 17:55:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56876 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229865AbhIEUAC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 5 Sep 2021 16:00:02 -0400
-Received: (qmail 6999 invoked from network); 5 Sep 2021 19:58:56 -0000
-Received: from unknown (HELO ?192.168.2.105?) (faber@faberman.de@87.133.154.214)
-  by 0 with ESMTPA; 5 Sep 2021 19:58:56 -0000
-Subject: Re: [PATCH] usb: core: Fix possible memleak in usb_add_gadget
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-References: <311d64c6-f0e2-da42-5619-1efe46df0007@faberman.de>
- <YTTahtscWqQyY0CU@kroah.com>
- <dda401c9-2a0c-19a8-871e-28f1a903bcd4@faberman.de>
- <YTTv6u2FXTJFrSFx@kroah.com>
-From:   Florian Faber <faber@faberman.de>
-Message-ID: <ba414322-f2fa-ed2c-c5c3-1dfeb2b71688@faberman.de>
-Date:   Sun, 5 Sep 2021 21:58:57 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S238309AbhIEVzX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 5 Sep 2021 17:55:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 1004160F21
+        for <linux-usb@vger.kernel.org>; Sun,  5 Sep 2021 21:54:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630878860;
+        bh=j6kq16kCTUMSgYzLx6q6EDU9qjssGMwwabPhVLgIanc=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=TBwE5aRHRVc3UHY6SauS01Tntoq3zwsbrmbcDYRzNMDTJtKE9DcFDyNneXuFt0rjW
+         jnj2n8TgnrIfS8E+sM8wHWxgfb63btJxCzAl+fQcUX3FEqgghY/p7hE+1l2wdsWyO+
+         gmiandLATEZvRJ8bDly60Q+pJVQ5C56LpPInTM/hZNVlc0GAZSiwOXIODufKa9JwSe
+         S04ymGQ13xmj82dXleyTMV7i8OoOq8HGSFbNSvHKCUQ2/hmiycBeeLgT65soWD2Rjt
+         jiFPor1KJFC2lPNrVDy8yHzdlhg2V6CbvLS4KUafgwyRp3/QBSFLtycIDG78SdYBLz
+         5RjZRGa0/Wq5A==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id EFC7C60F3A; Sun,  5 Sep 2021 21:54:19 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214313] APC UPS USB connection is causing hid-generic errors:
+ usb_submit_urb(ctrl) failed / control queue full
+Date:   Sun, 05 Sep 2021 21:54:19 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-214313-208809-OktIRCOiZD@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214313-208809@https.bugzilla.kernel.org/>
+References: <bug-214313-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <YTTv6u2FXTJFrSFx@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214313
 
+--- Comment #1 from Alan Stern (stern@rowland.harvard.edu) ---
+This problem has been fixed by commit 5049307d37a7 ("HID: usbhid: Fix flood=
+ of
+"control queue full" messages") in the current upstream tree.  The commit w=
+ill
+be part of 2.15-rc1 and it will appear in the earlier -stable kernels.
 
-On 9/5/21 6:27 PM, Greg KH wrote:
-> On Sun, Sep 05, 2021 at 05:16:36PM +0200, Florian Faber wrote:
->> This 'leak' was found by Klocwork and seemed plausible at first oversight.
->> Sorry for wasting your time and not checking it further.
-> 
-> What is "Klockwork"? 
+--=20
+You may reply to this email to add a comment.
 
-Some static code analysis tool. I did not know it either.
-
-> How can it miss the reference counted logic that
-> all drivers use in the kernel?
-
-Obviously it is not running like clockwork :)
-
-Anyway, got the problem fixed, sorry for the noise.
-
-
-Flo
--- 
-Machines can do the work, so people have time to think.
+You are receiving this mail because:
+You are watching the assignee of the bug.=
