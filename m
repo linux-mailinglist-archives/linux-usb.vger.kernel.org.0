@@ -2,162 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F41F401B53
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Sep 2021 14:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A0C401B5C
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Sep 2021 14:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241544AbhIFMoi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Sep 2021 08:44:38 -0400
-Received: from cable.insite.cz ([84.242.75.189]:34125 "EHLO cable.insite.cz"
+        id S242150AbhIFMpl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Sep 2021 08:45:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50226 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241553AbhIFMoi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 6 Sep 2021 08:44:38 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id 21927A1A3D401;
-        Mon,  6 Sep 2021 14:43:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1630932212; bh=JFldC+VRPHTIIhxyIRWMEy2290gelv6sZWXMlz2QFsY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Iewz6YuY6uhzfvdWsFgZfzil1nlBfcUd+tyV8XCspQPyA0L8IPCrnKkmFeSpeG5uX
-         37OCF9U51kC7UlZBq/rKpn4tUfxcGR5oIQBRS/mKyOLZ7FNBjvEffFKPeylhjdKtFc
-         LPj9kIRmi8C14l4Uu/KBbCdMePyj0hONRySNgaj4=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id VFfDWK2l8bmY; Mon,  6 Sep 2021 14:43:26 +0200 (CEST)
-Received: from [192.168.105.22] (ip28.insite.cz [81.0.237.28])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 49116A1A3D400;
-        Mon,  6 Sep 2021 14:43:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1630932206; bh=JFldC+VRPHTIIhxyIRWMEy2290gelv6sZWXMlz2QFsY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=nUrLxTbC6mLOyZj7aWaEbKobapOcCNHkhxgWWIbxUpvDF4VBpVOWwmy3r2Vxuqa24
-         XOMv1KLTs7ZiOqO73Hu8LZBHR6EP4A91y1MROVa5Z3M86yQt0kVPv6uHpP/yP+vRdO
-         iQ6GTJPi7gRzOHO+Vx1rB4Y32hFxfGv7AL5HTve4=
-Subject: Re: uac2/hid gadget issues on Win10 hosts
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     "N. Chen" <takhv1@gmail.com>, linux-usb@vger.kernel.org,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-References: <CADA1JhOe89Q7iQtb7vwK6utigpKfo+UfuW6o2GdMBMo5rAz7=A@mail.gmail.com>
- <9f719bb8-2a9a-4a97-f25a-660d38a29555@ivitera.com>
- <20210904074032.GC3515@jackp-linux.qualcomm.com>
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Message-ID: <b11414f0-1783-192e-2b79-066dd4c814d0@ivitera.com>
-Date:   Mon, 6 Sep 2021 14:43:25 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S242143AbhIFMpj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 6 Sep 2021 08:45:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1EA0460EE6;
+        Mon,  6 Sep 2021 12:44:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630932275;
+        bh=2LXqSReT8SHF8LfIKml+aOLX7rlWLst/LYZu0lXukhc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OjIvZZYJAPvK97M3PpNaRASfWP7+Kp2/rLXGUbvB7ocH0/0q288viavvI91HA45EL
+         aHiUIQjKJcvXh9KHxnn1Xe4XMtK7ETp3rLOqZcPktGEvuJuqkoPuCaQlbvNF/U1dt+
+         whuOL84Ga1APMLmhjpod1ZXJsBC1UBsJjr8aFZdBzeDSPAsTQx1FCcZCbUSYACyEBJ
+         hyxJHVTYpPBbWUCLoVexSRzgOvRHR8Q+yFQ+84y4wXi2HnOl7S4PPPwKfKDjLuCL1K
+         bSaHnN0B6zgZYM0fZU4LOgtbkC1b92kQtxtnVviFTvcswBaOkrq1wqs2SW6xbN66Hh
+         z56w29WXYR2MQ==
+Received: from johan by xi with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mNDz3-0005ny-Rk; Mon, 06 Sep 2021 14:44:22 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Oliver Neukum <oneukum@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>, stable@vger.kernel.org,
+        Jaejoong Kim <climbbb.kim@gmail.com>
+Subject: [PATCH] USB: cdc-acm: fix minor-number release
+Date:   Mon,  6 Sep 2021 14:43:39 +0200
+Message-Id: <20210906124339.22264-1-johan@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20210904074032.GC3515@jackp-linux.qualcomm.com>
-Content-Type: multipart/mixed;
- boundary="------------9AE2F847D221C996D486D5EB"
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------9AE2F847D221C996D486D5EB
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Transfer-Encoding: 7bit
+If the driver runs out of minor numbers it would release minor 0 and
+allow another device to claim the minor while still in use.
 
-Hi Jack,
+Fortunately, registering the tty class device of the second device would
+fail (with a stack dump) due to the sysfs name collision so no memory is
+leaked.
 
-Dne 04. 09. 21 v 9:40 Jack Pham napsal(a):
-> Hi Pavel,
-> 
-> On Mon, Aug 23, 2021 at 03:17:11PM +0200, Pavel Hofman wrote:
->> There is a problem with max packet size calculation for EP-IN. It has been
->> discussed here recently
->> https://www.spinics.net/lists/linux-usb/msg214615.html
->>
->> The simple change in the post above fixed Win10 enumeration for me and
->> another tester.
-> 
-> I faced the same error on Win10 and also tried the above patch and it
-> worked for me as well.  Are you planning to send a formal patch for it?
-> If so, you can add my
-> 
-> Tested-by: Jack Pham <jackp@codeaurora.org>
-> 
->> Also, there is a problem with feedback value calculation which Win10 ignores
->> and keeps sending the same amount of samples. The fix is to send number of
->> samples per the actual packet, not per microframe for USB2. I have not
->> posted the attached patch as the whole patchset will most likely be reverted
->> for 5.15 https://www.spinics.net/lists/linux-usb/msg216042.html and I wanted
->> to wait till the situation works out to avoid confusion. In the attached
->> patch just change the ->c_srate_active to ->c_srate (the patch is on top of
->> more changes for switching between multiple samplerates).
-> 
-> It doesn't look like any of the feedback EP changes got reverted for
-> 5.14 / 5.15-rc1 so it looks like the dust has settled.  Are you going to
-> send the below patch formally as well?
-> 
-
-Thanks for testing the patch. I did not want to intrude into Jerome's 
-plan. However, if Jerome is OK with the attached patch, I can submit it 
-formally and continue with submitting more patches for Win10 support.
-
-Thanks,
-
-Pavel.
-
---------------9AE2F847D221C996D486D5EB
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-usb-gadget-f_uac2-fixed-EP-IN-wMaxPacketSize.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="0001-usb-gadget-f_uac2-fixed-EP-IN-wMaxPacketSize.patch"
-
-From 26f5a49c2ddac2d5c52c4072bc756e7d15b47bc8 Mon Sep 17 00:00:00 2001
-From: Pavel Hofman <pavel.hofman@ivitera.com>
-Date: Mon, 6 Sep 2021 14:04:00 +0200
-Subject: [PATCH] usb: gadget: f_uac2: fixed EP-IN wMaxPacketSize
-
-Async feedback patches broke enumeration on Windows 10 previously fixed
-by commit 789ea77310f0 ("usb: gadget: f_uac2: always increase endpoint
-max_packet_size by one audio slot").
-
-While the existing calculation for EP OUT capture for async mode yields
-size+1 frame due to uac2_opts->fb_max > 0, playback side lost the +1
-feature.  Therefore the +1 frame addition must be re-introduced for
-playback. Win10 enumerates the device only when both EP IN and EP OUT
-max packet sizes are (at least) +1 frame.
-
-Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
-Tested-by: Henrik Enquist <henrik.enquist@gmail.com>
-Tested-by: Jack Pham <jackp@codeaurora.org>
+Fixes: cae2bc768d17 ("usb: cdc-acm: Decrement tty port's refcount if probe() fail")
+Cc: stable@vger.kernel.org      # 4.19
+Cc: Jaejoong Kim <climbbb.kim@gmail.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/usb/gadget/function/f_uac2.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ drivers/usb/class/cdc-acm.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-index ae29ff2b2b68..bdc7e6e78455 100644
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -584,11 +584,17 @@ static int set_ep_max_packet_size(const struct f_uac2_opts *uac2_opts,
- 		ssize = uac2_opts->c_ssize;
- 	}
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 4895325b16a4..5f0260bc4469 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -726,7 +726,8 @@ static void acm_port_destruct(struct tty_port *port)
+ {
+ 	struct acm *acm = container_of(port, struct acm, port);
  
--	if (!is_playback && (uac2_opts->c_sync == USB_ENDPOINT_SYNC_ASYNC))
-+	if (!is_playback && (uac2_opts->c_sync == USB_ENDPOINT_SYNC_ASYNC)) {
-+	  // Win10 requires max packet size + 1 frame
- 		srate = srate * (1000 + uac2_opts->fb_max) / 1000;
--
--	max_size_bw = num_channels(chmask) * ssize *
--		DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1)));
-+		// updated srate is always bigger, therefore DIV_ROUND_UP always yields +1
-+		max_size_bw = num_channels(chmask) * ssize *
-+			(DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1))));
-+	} else {
-+		// adding 1 frame provision for Win10
-+		max_size_bw = num_channels(chmask) * ssize *
-+			(DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1))) + 1);
+-	acm_release_minor(acm);
++	if (acm->minor != ACM_TTY_MINORS)
++		acm_release_minor(acm);
+ 	usb_put_intf(acm->control);
+ 	kfree(acm->country_codes);
+ 	kfree(acm);
+@@ -1323,8 +1324,10 @@ static int acm_probe(struct usb_interface *intf,
+ 	usb_get_intf(acm->control); /* undone in destruct() */
+ 
+ 	minor = acm_alloc_minor(acm);
+-	if (minor < 0)
++	if (minor < 0) {
++		acm->minor = ACM_TTY_MINORS;
+ 		goto err_put_port;
 +	}
- 	ep_desc->wMaxPacketSize = cpu_to_le16(min_t(u16, max_size_bw,
- 						    max_size_ep));
  
+ 	acm->minor = minor;
+ 	acm->dev = usb_dev;
 -- 
-2.25.1
+2.32.0
 
-
---------------9AE2F847D221C996D486D5EB--
