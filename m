@@ -2,408 +2,203 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE8B402202
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Sep 2021 04:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E1C4022E6
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Sep 2021 07:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237400AbhIGBK7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Sep 2021 21:10:59 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:13625 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbhIGBK7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Sep 2021 21:10:59 -0400
+        id S230052AbhIGErC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Sep 2021 00:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229502AbhIGErB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Sep 2021 00:47:01 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD73C061575;
+        Mon,  6 Sep 2021 21:45:31 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id t2-20020a4ae9a2000000b0028c7144f106so2551161ood.6;
+        Mon, 06 Sep 2021 21:45:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1630976994; x=1662512994;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7xCpDJf4ZB/Xw0WthmFzQHFRInOlDHpcBraNWp1+iio=;
-  b=jj4a82Qj3uhAynu/EJp5YKMaTpuFNPxz1z4/1xWtwOtoxqNldB+D1pcZ
-   P1YOch754Rx9wqoEGKNV9JEb8qYvmqifmnrNttTwVN8jzCbtFhZZ/EeoM
-   KqV4PKJDf+6AJer+lP9FQzVfazqnIUMZon5XDO4XrsYtDTVN5eXOAHvm2
-   E=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 06 Sep 2021 18:09:54 -0700
-X-QCInternal: smtphost
-Received: from nalasex01b.na.qualcomm.com ([10.47.209.197])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2021 18:09:53 -0700
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Mon, 6 Sep 2021 18:09:52 -0700
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH v5 3/3] usb: gadget: configfs: add some trace event
-Date:   Tue, 7 Sep 2021 09:09:37 +0800
-Message-ID: <1630976977-13938-4-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1630976977-13938-1-git-send-email-quic_linyyuan@quicinc.com>
-References: <1630976977-13938-1-git-send-email-quic_linyyuan@quicinc.com>
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N30J/t8m7J507GtQ1rrwHXHLv2qCiuN4IuHTSwb73DA=;
+        b=Y+YV/sFQEprZA7w1zW8eabH/Kq3gYQI3zG2RuTsj2q4Wy3z5fS50lB28gr3JpN+MWn
+         qRhEdqBrD2BknwkM22SHbcz/Ym+HD/GdJjqnh2t9DOspLZbqNM+uNEg+KKL9wGLa6QNg
+         y8nfLFKpC1jS7a9o6ennBLH34aaFJ7Rr4yDMHXly87ErH3HqMO3/P9ddRwT18AheFj6C
+         5Q6a6lnWOucYFf0Fuor9e6qK1qllwpwOxJA/3iqmEDD3tfWXCQc4J6eaUJ4UGYEC4YRg
+         bugV6oPnBIW7PunjcOlfAAWCbyl5DWrO6nBpxVFb/4TaPbt6TsCaqvB+vD6L8xXP3+/o
+         jCsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=N30J/t8m7J507GtQ1rrwHXHLv2qCiuN4IuHTSwb73DA=;
+        b=o104zg0W0q/vN5Xs1q64QZt6YiLeMhp8MWk9s0a/cnY0o7r4s4GrnFlVWZN4vRJfck
+         pSzKy3HLhmAsr16x6enxn8zTpz1cVBJhOXVWHZMEAc7m+cp3/6u6Af+VPeIg35IzNfi6
+         gl0tlDo+CPLhfsZ0JM6g8GUSvE1jWeM57J2OnE2bRj5eGWXcqpFyupkZQHKOGSff9uQm
+         FIZZ87mgELGc1VFMcjQEKaU6k2BBpx4lueAqO7T4NFpnHPZeOzx04RxZVErDxdifP1kF
+         952kH7g8IythjiKsKhJmZN08HhTHnD+hQbpq0/skymezp/EcVbW+O5JFMW7eEHhsmJQw
+         uv5w==
+X-Gm-Message-State: AOAM530vS2ebdaDUXHLnYgFVpYy0SVqezDDs9Q7nuA+WhrsD4/1vAiy1
+        AVncfcKNVNPS/3ctD2pXDLoLvo0VnIw=
+X-Google-Smtp-Source: ABdhPJwug+qXa3al0THmOlTXOggIObyypmbu8TJNIQBgRhKo0KPZr6xZKt9bESHrxGNDKq8O1TVKBA==
+X-Received: by 2002:a4a:6f4a:: with SMTP id i10mr16638744oof.64.1630989930322;
+        Mon, 06 Sep 2021 21:45:30 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x13sm2258036otk.42.2021.09.06.21.45.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Sep 2021 21:45:29 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] usb: ehci: Simplify platform driver registration
+Date:   Mon,  6 Sep 2021 21:45:27 -0700
+Message-Id: <20210907044527.2137211-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-add UDC, cfg link/unlink and some attributes trace
-to better trace gadget issues.
+Use platform_register_drivers() and platform_unregister_drivers() to
+register and unregister ehci platform drivers. This simplifies the code
+and prevents the following build errors seen with sparc:allmodconfig.
 
-Suggested-by: Felipe Balbi <balbi@kernel.org>
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+drivers/usb/host/ehci-hcd.c:1301: error:
+	"PLATFORM_DRIVER" redefined
+drivers/usb/host/ehci-sh.c:173:31: error:
+	'ehci_hcd_sh_driver' defined but not used
+
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-v3: build trace inside configfs.c
-v4: no change
-v5: lost v2 fix, add it again
+ drivers/usb/host/ehci-hcd.c | 75 +++++++++++--------------------------
+ 1 file changed, 21 insertions(+), 54 deletions(-)
 
- drivers/usb/gadget/configfs.c       |  54 ++++++++++++
- drivers/usb/gadget/configfs_trace.h | 167 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 221 insertions(+)
- create mode 100644 drivers/usb/gadget/configfs_trace.h
-
-diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index cea12c3..61a8908 100644
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -103,6 +103,42 @@ struct gadget_config_name {
- 	struct list_head list;
- };
+diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
+index 6bdc6d6bf74d..8a32a9531ad2 100644
+--- a/drivers/usb/host/ehci-hcd.c
++++ b/drivers/usb/host/ehci-hcd.c
+@@ -1278,29 +1278,42 @@ MODULE_LICENSE ("GPL");
  
-+#define MAX_CONFIGURAITON_STR_LEN	512
-+
-+static char *config_trace_string(struct gadget_info *gi)
-+{
-+	struct usb_configuration *uc;
-+	struct config_usb_cfg *cfg;
-+	struct config_usb_function *cf;
-+	static char trs[MAX_CONFIGURAITON_STR_LEN];
-+	size_t len = MAX_CONFIGURAITON_STR_LEN;
-+	int n = 0;
-+
-+	trs[0] = '\0';
-+
-+	list_for_each_entry(uc, &gi->cdev.configs, list) {
-+		cfg = container_of(uc, struct config_usb_cfg, c);
-+
-+		n += scnprintf(trs + n, len - n,
-+			"group:%s,bConfigurationValue:%d,bmAttributes:%d,"
-+			"MaxPower:%d,",
-+			config_item_name(&cfg->group.cg_item),
-+			uc->bConfigurationValue,
-+			uc->bmAttributes,
-+			uc->MaxPower);
-+
-+		n += scnprintf(trs + n, len - n, "function:[");
-+		list_for_each_entry(cf, &cfg->func_list, list)
-+			n += scnprintf(trs + n, len - n, "%s", cf->f->name);
-+		n += scnprintf(trs + n, len - n, "},");
-+	}
-+
-+	return trs;
-+}
-+
-+#define CREATE_TRACE_POINTS
-+#include "configfs_trace.h"
-+
- #define USB_MAX_STRING_WITH_NULL_LEN	(USB_MAX_STRING_LEN+1)
+ #ifdef CONFIG_USB_EHCI_SH
+ #include "ehci-sh.c"
+-#define PLATFORM_DRIVER		ehci_hcd_sh_driver
+ #endif
  
- static int usb_string_copy(const char *s, char **s_copy)
-@@ -210,6 +246,7 @@ static ssize_t gadget_dev_desc_bcdDevice_store(struct config_item *item,
- 	if (ret)
- 		return ret;
+ #ifdef CONFIG_PPC_PS3
+ #include "ehci-ps3.c"
+-#define	PS3_SYSTEM_BUS_DRIVER	ps3_ehci_driver
+ #endif
  
-+	trace_gadget_dev_desc_bcdDevice_store(to_gadget_info(item));
- 	to_gadget_info(item)->cdev.desc.bcdDevice = cpu_to_le16(bcdDevice);
- 	return len;
- }
-@@ -228,6 +265,7 @@ static ssize_t gadget_dev_desc_bcdUSB_store(struct config_item *item,
- 		return ret;
+ #ifdef CONFIG_USB_EHCI_HCD_PPC_OF
+ #include "ehci-ppc-of.c"
+-#define OF_PLATFORM_DRIVER	ehci_hcd_ppc_of_driver
+ #endif
  
- 	to_gadget_info(item)->cdev.desc.bcdUSB = cpu_to_le16(bcdUSB);
-+	trace_gadget_dev_desc_bcdUSB_store(to_gadget_info(item));
- 	return len;
- }
+ #ifdef CONFIG_XPS_USB_HCD_XILINX
+ #include "ehci-xilinx-of.c"
+-#define XILINX_OF_PLATFORM_DRIVER	ehci_hcd_xilinx_of_driver
+ #endif
  
-@@ -240,6 +278,7 @@ static ssize_t gadget_dev_desc_UDC_show(struct config_item *item, char *page)
- 	mutex_lock(&gi->lock);
- 	udc_name = gi->composite.gadget_driver.udc_name;
- 	ret = sprintf(page, "%s\n", udc_name ?: "");
-+	trace_gadget_dev_desc_UDC_show(gi);
- 	mutex_unlock(&gi->lock);
+ #ifdef CONFIG_SPARC_LEON
+ #include "ehci-grlib.c"
+-#define PLATFORM_DRIVER		ehci_grlib_driver
+ #endif
  
- 	return ret;
-@@ -249,6 +288,7 @@ static int unregister_gadget(struct gadget_info *gi)
++static struct platform_driver * const platform_drivers[] = {
++#ifdef CONFIG_USB_EHCI_SH
++	&ehci_hcd_sh_driver,
++#endif
++#ifdef CONFIG_PPC_PS3
++	&ps3_ehci_driver,
++#endif
++#ifdef CONFIG_USB_EHCI_HCD_PPC_OF
++	&ehci_hcd_ppc_of_driver,
++#endif
++#ifdef CONFIG_XPS_USB_HCD_XILINX
++	&ehci_hcd_xilinx_of_driver,
++#endif
++#ifdef CONFIG_SPARC_LEON
++	&ehci_grlib_driver,
++#endif
++};
++
+ static int __init ehci_hcd_init(void)
  {
- 	int ret;
+ 	int retval = 0;
+@@ -1324,47 +1337,12 @@ static int __init ehci_hcd_init(void)
+ 	ehci_debug_root = debugfs_create_dir("ehci", usb_debug_root);
+ #endif
  
-+	trace_unregister_gadget(gi);
- 	if (!gi->composite.gadget_driver.udc_name)
- 		return -ENODEV;
+-#ifdef PLATFORM_DRIVER
+-	retval = platform_driver_register(&PLATFORM_DRIVER);
++	retval = platform_register_drivers(platform_drivers, ARRAY_SIZE(platform_drivers));
+ 	if (retval < 0)
+ 		goto clean0;
+-#endif
+-
+-#ifdef PS3_SYSTEM_BUS_DRIVER
+-	retval = ps3_ehci_driver_register(&PS3_SYSTEM_BUS_DRIVER);
+-	if (retval < 0)
+-		goto clean2;
+-#endif
+-
+-#ifdef OF_PLATFORM_DRIVER
+-	retval = platform_driver_register(&OF_PLATFORM_DRIVER);
+-	if (retval < 0)
+-		goto clean3;
+-#endif
+-
+-#ifdef XILINX_OF_PLATFORM_DRIVER
+-	retval = platform_driver_register(&XILINX_OF_PLATFORM_DRIVER);
+-	if (retval < 0)
+-		goto clean4;
+-#endif
+-	return retval;
++	return 0;
  
-@@ -276,6 +316,8 @@ static ssize_t gadget_dev_desc_UDC_store(struct config_item *item,
- 	if (name[len - 1] == '\n')
- 		name[len - 1] = '\0';
+-#ifdef XILINX_OF_PLATFORM_DRIVER
+-	/* platform_driver_unregister(&XILINX_OF_PLATFORM_DRIVER); */
+-clean4:
+-#endif
+-#ifdef OF_PLATFORM_DRIVER
+-	platform_driver_unregister(&OF_PLATFORM_DRIVER);
+-clean3:
+-#endif
+-#ifdef PS3_SYSTEM_BUS_DRIVER
+-	ps3_ehci_driver_unregister(&PS3_SYSTEM_BUS_DRIVER);
+-clean2:
+-#endif
+-#ifdef PLATFORM_DRIVER
+-	platform_driver_unregister(&PLATFORM_DRIVER);
+ clean0:
+-#endif
+ #ifdef CONFIG_DYNAMIC_DEBUG
+ 	debugfs_remove(ehci_debug_root);
+ 	ehci_debug_root = NULL;
+@@ -1376,18 +1354,7 @@ module_init(ehci_hcd_init);
  
-+	trace_gadget_dev_desc_UDC_store(gi);
-+
- 	mutex_lock(&gi->lock);
- 
- 	if (!strlen(name)) {
-@@ -296,6 +338,8 @@ static ssize_t gadget_dev_desc_UDC_store(struct config_item *item,
- 		}
- 	}
- 	mutex_unlock(&gi->lock);
-+
-+	trace_gadget_dev_desc_UDC_store(gi);
- 	return len;
- err:
- 	kfree(name);
-@@ -308,6 +352,7 @@ static ssize_t gadget_dev_desc_max_speed_show(struct config_item *item,
+ static void __exit ehci_hcd_cleanup(void)
  {
- 	enum usb_device_speed speed = to_gadget_info(item)->composite.max_speed;
- 
-+	trace_gadget_dev_desc_max_speed_show(to_gadget_info(item));
- 	return sprintf(page, "%s\n", usb_speed_string(speed));
- }
- 
-@@ -337,6 +382,8 @@ static ssize_t gadget_dev_desc_max_speed_store(struct config_item *item,
- 
- 	gi->composite.gadget_driver.max_speed = gi->composite.max_speed;
- 
-+	trace_gadget_dev_desc_max_speed_store(gi);
-+
- 	mutex_unlock(&gi->lock);
- 	return len;
- err:
-@@ -468,6 +515,7 @@ static int config_usb_cfg_link(
- 	list_add_tail(&cf->list, &cfg->func_list);
- 	ret = 0;
- out:
-+	trace_config_usb_cfg_link(gi);
- 	mutex_unlock(&gi->lock);
- 	return ret;
- }
-@@ -500,10 +548,12 @@ static void config_usb_cfg_unlink(
- 			list_del(&cf->list);
- 			usb_put_function(cf->f);
- 			kfree(cf);
-+			trace_config_usb_cfg_unlink(gi);
- 			mutex_unlock(&gi->lock);
- 			return;
- 		}
- 	}
-+	trace_config_usb_cfg_unlink(gi);
- 	mutex_unlock(&gi->lock);
- 	WARN(1, "Unable to locate function to unbind\n");
- }
-@@ -518,6 +568,7 @@ static struct configfs_item_operations gadget_config_item_ops = {
- static ssize_t gadget_config_desc_MaxPower_show(struct config_item *item,
- 		char *page)
- {
-+	trace_gadget_config_desc_MaxPower_show(to_config_usb_cfg(item)->gi);
- 	return sprintf(page, "%u\n", to_config_usb_cfg(item)->c.MaxPower);
- }
- 
-@@ -532,12 +583,14 @@ static ssize_t gadget_config_desc_MaxPower_store(struct config_item *item,
- 	if (DIV_ROUND_UP(val, 8) > 0xff)
- 		return -ERANGE;
- 	to_config_usb_cfg(item)->c.MaxPower = val;
-+	trace_gadget_config_desc_MaxPower_store(to_config_usb_cfg(item)->gi);
- 	return len;
- }
- 
- static ssize_t gadget_config_desc_bmAttributes_show(struct config_item *item,
- 		char *page)
- {
-+	trace_gadget_config_desc_bmAttributes_show(to_config_usb_cfg(item)->gi);
- 	return sprintf(page, "0x%02x\n",
- 		to_config_usb_cfg(item)->c.bmAttributes);
- }
-@@ -556,6 +609,7 @@ static ssize_t gadget_config_desc_bmAttributes_store(struct config_item *item,
- 				USB_CONFIG_ATT_WAKEUP))
- 		return -EINVAL;
- 	to_config_usb_cfg(item)->c.bmAttributes = val;
-+	trace_gadget_config_desc_bmAttributes_store(to_config_usb_cfg(item)->gi);
- 	return len;
- }
- 
-diff --git a/drivers/usb/gadget/configfs_trace.h b/drivers/usb/gadget/configfs_trace.h
-new file mode 100644
-index 0000000..59d73d5
---- /dev/null
-+++ b/drivers/usb/gadget/configfs_trace.h
-@@ -0,0 +1,167 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM configfs_gadget
-+
-+#if !defined(__GADGET_TRACE_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define __GADGET_TRACE_H
-+
-+#include <linux/tracepoint.h>
-+
-+DECLARE_EVENT_CLASS(log_gadget_info,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi),
-+	TP_STRUCT__entry(
-+		/* gadget_info */
-+		__string(gi_group, config_item_name(&gi->group.cg_item))
-+		__field(bool, unbind)
-+		__field(bool, use_os_desc)
-+		__field(char, b_vendor_code)
-+
-+		/* usb_composite_dev */
-+		__field(bool, suspended)
-+		__field(bool, setup_pending)
-+		__field(bool, os_desc_pending)
-+		__field(unsigned, deactivations)
-+		__field(int, delayed_status)
-+		__field(u16, bcdUSB)
-+		__field(u16, bcdDevice)
-+		__string(config, gi->cdev.config)
-+
-+		/* usb_composite_driver */
-+		__field(unsigned, max_speed)
-+		__field(bool, needs_serial)
-+
-+		/* usb_gadget_driver */
-+		__string(udc_name, gi->composite.gadget_driver.udc_name)
-+	),
-+	TP_fast_assign(
-+		__assign_str(gi_group, config_item_name(&gi->group.cg_item));
-+		__entry->unbind = gi->unbind;
-+		__entry->use_os_desc = gi->use_os_desc;
-+		__entry->b_vendor_code = gi->b_vendor_code;
-+
-+		__entry->suspended = gi->cdev.suspended;
-+		__entry->setup_pending = gi->cdev.setup_pending;
-+		__entry->os_desc_pending = gi->cdev.os_desc_pending;
-+		__entry->deactivations = gi->cdev.deactivations;
-+		__entry->delayed_status = gi->cdev.delayed_status;
-+		__entry->bcdUSB = le16_to_cpu(gi->cdev.desc.bcdUSB);
-+		__entry->bcdDevice = le16_to_cpu(gi->cdev.desc.bcdDevice);
-+		__assign_str(config, config_trace_string(gi));
-+
-+		__entry->max_speed = gi->composite.max_speed;
-+		__entry->needs_serial = gi->composite.needs_serial;
-+
-+		__assign_str(udc_name, gi->composite.gadget_driver.udc_name);
-+	),
-+	TP_printk("gi_group:%s,unbind:%d,use_os_desc:%d,b_vendor_code:%d,"
-+		" - "
-+		"suspended:%d,setup_pending:%d,"
-+		"os_desc_pending:%d,deactivations:%d,delayed_status:%d,"
-+		"bcdUSB:%04x,bcdDevice:%04x,config:%s,"
-+		" - "
-+		"max_speed:%d,needs_serial:%d,"
-+		" - "
-+		"udc_name:%s",
-+
-+		__get_str(gi_group),
-+		__entry->unbind,
-+		__entry->use_os_desc,
-+		__entry->b_vendor_code,
-+
-+		__entry->suspended,
-+		__entry->setup_pending,
-+		__entry->os_desc_pending,
-+		__entry->deactivations,
-+		__entry->delayed_status,
-+		__entry->bcdUSB,
-+		__entry->bcdDevice,
-+		__get_str(config),
-+
-+		__entry->max_speed,
-+		__entry->needs_serial,
-+
-+		__get_str(udc_name)
-+		)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_dev_desc_bcdDevice_store,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_dev_desc_bcdUSB_store,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_dev_desc_UDC_show,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, unregister_gadget,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_dev_desc_UDC_store,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_dev_desc_max_speed_show,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_dev_desc_max_speed_store,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, config_usb_cfg_link,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, config_usb_cfg_unlink,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_config_desc_MaxPower_show,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_config_desc_MaxPower_store,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_config_desc_bmAttributes_show,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+DEFINE_EVENT(log_gadget_info, gadget_config_desc_bmAttributes_store,
-+	TP_PROTO(struct gadget_info *gi),
-+	TP_ARGS(gi)
-+);
-+
-+#endif /* __GADGET_TRACE_H */
-+
-+/* this part has to be here */
-+
-+#undef TRACE_INCLUDE_PATH
-+#define TRACE_INCLUDE_PATH ../../drivers/usb/gadget
-+
-+#undef TRACE_INCLUDE_FILE
-+#define TRACE_INCLUDE_FILE configfs_trace
-+
-+#include <trace/define_trace.h>
+-#ifdef XILINX_OF_PLATFORM_DRIVER
+-	platform_driver_unregister(&XILINX_OF_PLATFORM_DRIVER);
+-#endif
+-#ifdef OF_PLATFORM_DRIVER
+-	platform_driver_unregister(&OF_PLATFORM_DRIVER);
+-#endif
+-#ifdef PLATFORM_DRIVER
+-	platform_driver_unregister(&PLATFORM_DRIVER);
+-#endif
+-#ifdef PS3_SYSTEM_BUS_DRIVER
+-	ps3_ehci_driver_unregister(&PS3_SYSTEM_BUS_DRIVER);
+-#endif
++	platform_unregister_drivers(platform_drivers, ARRAY_SIZE(platform_drivers));
+ #ifdef CONFIG_DYNAMIC_DEBUG
+ 	debugfs_remove(ehci_debug_root);
+ #endif
 -- 
-2.7.4
+2.33.0
 
