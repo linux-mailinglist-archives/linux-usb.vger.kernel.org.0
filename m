@@ -2,100 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6A8402790
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Sep 2021 13:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B76402898
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Sep 2021 14:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237077AbhIGLHn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Sep 2021 07:07:43 -0400
-Received: from shasxm03.verisilicon.com ([101.89.135.44]:24792 "EHLO
-        shasxm03.verisilicon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233864AbhIGLHk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Sep 2021 07:07:40 -0400
-X-Greylist: delayed 325 seconds by postgrey-1.27 at vger.kernel.org; Tue, 07 Sep 2021 07:07:39 EDT
-Content-Language: zh-CN
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
-DKIM-Signature: v=1; a=rsa-sha256; d=Verisilicon.com; s=default;
-        c=simple/simple; t=1631012464; h=from:subject:to:date:message-id;
-        bh=8qMnRJTUJYIHlyVQ10arDHRdPjg32pyWTP0aqRWmAds=;
-        b=QTLd6f1uE6CDcHdTOIuNr3jXNu1ufb1ybgXFn3e7Z2xNUAjCk5I28YVCmdpO9RZrhGqmWsySYry
-        8Ylec0Y/YG0dAcbe4oSk4yy5QgXwKsVRM3Q5EKVuVs6f6dm1GqWYA9GEK+lCr+NEhrtwyL5iI/cw/
-        15thUHiJDSSfptTWTwM=
-Received: from SHASXM06.verisilicon.com ([fe80::59a8:ce34:dc14:ddda]) by
- SHASXM03.verisilicon.com ([fe80::938:4dda:a2f9:38aa%14]) with mapi id
- 14.03.0408.000; Tue, 7 Sep 2021 19:01:03 +0800
-From:   "Fang, Yuan" <Yuan.Fang@verisilicon.com>
-To:     "Fang, Yuan" <Yuan.Fang@verisilicon.com>,
+        id S1344336AbhIGMVn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Sep 2021 08:21:43 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:35969 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344699AbhIGMVO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 Sep 2021 08:21:14 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1631017208; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=5HlGghoP2b2ht8fi4G9mfxQrkVUoJI58Mvkt18+LJGM=; b=E2PKS55+oBzsdq3iszSYbCnh8g0jmMRh/Ngv7yg5jhNY5paGFJ8W4BgAMHRN8g0Dd3Fmo7/I
+ 8mWFlE3AyZgzd63trw+i31KLhgUKXflyMoFdCzGk4On6igi3zyUlm46F9HTrvGvnaWvDX71v
+ giqtJ3s+tRU/eghIhAe3q7uKXgU=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
+ 613758e91567234b8c943a58 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 07 Sep 2021 12:19:53
+ GMT
+Sender: rnayak=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 4675FC4314C; Tue,  7 Sep 2021 12:19:52 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.2 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.0
+Received: from [192.168.1.105] (unknown [49.207.193.119])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 339F4C43619;
+        Tue,  7 Sep 2021 12:19:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 339F4C43619
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [PATCH 1/3] dt-bindings: usb: qcom,dwc3: Add multi-pd bindings
+ for dwc3 qcom
+To:     Sandeep Maheswaram <sanm@codeaurora.org>,
+        Doug Anderson <dianders@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <balbi@kernel.org>,
-        Yuan Fang <fangyuanseu@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: =?gb2312?B?tPC4tDogW1BBVENIXSBkcml2ZXJzL3VzYi9kd2MzOiBTZXQgUEhZIHJlYWR5?=
- =?gb2312?Q?_after_soft_reset_done?=
-Thread-Topic: [PATCH] drivers/usb/dwc3: Set PHY ready after soft reset done
-Thread-Index: AQHXXpH16kk4ndlpHUqkheri6gWwB6sOQNqAgAexvOCAFHCLsIBujpBw
-Date:   Tue, 7 Sep 2021 11:01:02 +0000
-Message-ID: <678AD2A4F5F78445B722FED0965FE3278EF42D9A@SHASXM06.verisilicon.com>
-References: <20210611071805.9169-1-yuan.fang@verisilicon.com>
- <87r1h8zh8y.fsf@kernel.org>  
-Accept-Language: zh-CN, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.10.13.65]
-x-tm-as-product-ver: SMEX-11.0.0.4179-8.100.1062-25628.004
-x-tm-as-result: No--5.989200-0.000000-31
-x-tm-as-user-approved-sender: Yes
-x-tm-as-user-blocked-sender: No
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Pratham Pratap <prathampratap@codeaurora.org>
+References: <1630346073-7099-1-git-send-email-sanm@codeaurora.org>
+ <1630346073-7099-2-git-send-email-sanm@codeaurora.org>
+ <CAD=FV=XjRMdB=iHDcMATWDq5CSRGdh1ZBCftjrZvTfMk_Nqgvg@mail.gmail.com>
+ <1dc7aaaa-a8da-565b-664e-64f529a861b1@codeaurora.org>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <bfed78b2-38dd-444a-244f-76c280137a1d@codeaurora.org>
+Date:   Tue, 7 Sep 2021 17:49:42 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
+In-Reply-To: <1dc7aaaa-a8da-565b-664e-64f529a861b1@codeaurora.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgTWFpbnRhaW5lciwNCg0KTWF5IEkga25vdyB5b3VyIHRob3VnaHRzIG9uIHRoaXMgdG9waWM/
-DQpUaGFua3MgYSBsb3QuDQoNCg0KLS0tLS3Tyrz+1K28/i0tLS0tDQq3orz+yMs6IEZhbmcsIFl1
-YW4gDQq3osvNyrG85DogMjAyMcTqNtTCMjnI1SAxMDo0Mg0KytW8/sjLOiBGYW5nLCBZdWFuOyAn
-RmVsaXBlIEJhbGJpJzsgJ1l1YW4gRmFuZyc7ICdsaW51eC11c2JAdmdlci5rZXJuZWwub3JnJw0K
-1vfM4jogtPC4tDogW1BBVENIXSBkcml2ZXJzL3VzYi9kd2MzOiBTZXQgUEhZIHJlYWR5IGFmdGVy
-IHNvZnQgcmVzZXQgZG9uZQ0KDQpIaSBNYWludGFpbm5lciwNCg0KQ291bGQgeW91IHBsZWFzZSBz
-aGFyZSB5b3VyIHRob3VnaHRzIHdpdGggbWU/DQpUaGFua3MgYSBsb3QuDQoNCg0KLS0tLS3Tyrz+
-1K28/i0tLS0tDQq3orz+yMs6IEZhbmcsIFl1YW4NCreiy83KsbzkOiAyMDIxxOo21MIxNsjVIDEw
-OjU2DQrK1bz+yMs6ICdGZWxpcGUgQmFsYmknOyBZdWFuIEZhbmc7IGxpbnV4LXVzYkB2Z2VyLmtl
-cm5lbC5vcmcNCtb3zOI6ILTwuLQ6IFtQQVRDSF0gZHJpdmVycy91c2IvZHdjMzogU2V0IFBIWSBy
-ZWFkeSBhZnRlciBzb2Z0IHJlc2V0IGRvbmUNCg0KSGkgQmFsYmksDQoNCj4gSXQncyBtb3JlIHNh
-ZmUgdG8gc2V0IFBIWSByZWFkeSBhZnRlciBzb2Z0IHJlc2V0IGRvbmUNCj4NCj4gTGV0J3MgY29u
-c2lkZXIgYSB0ZXN0IGNhc2UgbGlrZSB0aGlzOg0KPiBJIGhhdmUgYSB1c2IgUEhZIHdoaWNoIGRv
-bid0IG5lZWQgU1cgaW5pdGlhbCBiZWZvcmUgYWNjZXNzIGl0LCBCdXQgaSANCj4gaGF2ZSBhIHdy
-b25nIFBIWSBjbG9jayBkZWZhdWx0IHNldHRpbmcgaW4gUEhZIHJlZ2lzdGVyIHdoaWNoIG1lYW5z
-IFBIWSANCj4gaXMgbm90IHJlYWR5IGluIGZhY3QuDQo+IGluIGR3YzNfY29yZV9pbml0LCBkd2Mz
-X2NvcmVfZ2V0X3BoeSB3aWxsIHJldHVybiAwIGRlc3BpdGUgdXNiIGdldCANCj4gUEhZcyB3aXRo
-IHJldHVybiAtRU5PREVWLCBhbmQgc2V0IHBoeXNfcmVhZHk9dHJ1ZQ0KDQo+IHlvdXIgUEhZIGRy
-aXZlciBzaG91bGRuJ3QgcmV0dXJuIC1FTk9ERVYgaGVyZS4gV2h5IGFyZSB5b3UgcmV0dXJuaW5n
-IC1FTk9ERVY/IFRoZSBQSFkgaXNuJ3QgcmVhZHkgYnV0IGl0IF9kb2VzXyBleGlzdC4NCg0KU29y
-cnkgZm9yIHRoZSBsYXRlIHJlcGx5LCBteSBleHBsYWluIG1heSBiZSBub3QgY2xlYXIsIGxldCBt
-ZSBkZXNjcmliZSBpdCBvbmNlIG1vcmUgMSwgSSBkb26hr3QgY29kaW5nIGEgUEhZIGRyaXZlciwg
-SSBoYXZlIGEgUEhZIHdoaWNoIGRvIE5PVCBuZWVkIFNXIG9wZXJhdGlvbiBBbGwgSSBzaG91bGQg
-ZG8gaXMgc2V0IHRoZSByZWxhdGVkIFBIWSBjdHJsIHJlZ3MgY29ycmVjdGx5LiBTbyBJIGRvIG5v
-dCByZXR1cm4gYW55dGhpbmcgdG8gZ2VuZXJpYyBQSFkgZnJhbWV3b3JrLg0KMiwgSW4gbXkgYWJv
-dmUgY2FzZSwgZHdjM19jb3JlX2dldF9waHkgd2lsbCByZXR1cm4gMCwgYW5kIHNldCBkd2MtPnBo
-eXNfcmVhZHk9dHJ1ZSwgQW5kIHRoZW4sIGR3YzNfY29yZV9zb2Z0X3Jlc2V0IHdpbGwgY29zdCBy
-ZXRyaWVzKjIwbXMgdG8gY2hlY2sgaWYgc29mdC1yZXNldCBpcyBkb25lICwgYW5kIHJldHVybiAt
-RVRJTUVET1VUIGlmIHRpbWUgb3V0LCBpcyB0aGF0IGNvcnJlY3Q/DQoNCk15IHBvaW50IGlzLCBp
-biB0aGlzIGNhc2UoUEhZIGRvIG5vdCBzZXQgY29ycmVjdGx5LCB3aGljaCBpcyBub3QgcmFyZSBk
-dXJpbmcgZGV2ZWxvcG1lbnQgc3RhZ2UgSSB0aGluayksIFBIWSBpbml0aWFsIGZhaWwgbGVkIHRv
-IHNvZnQtcmVzZXQgdGltZW91dCBidXQgZHdjLT5waHlzX3JlYWR5IGlzIHRydWUsIFNvIEkgdGhp
-bmsgaXMgbW9yZSBzYWZlIHRvIHNheSAiUEhZIGlzIHJlYWR5IiBhZnRlciBzb2Z0LXJlc2V0IGRv
-bmUsIHBsZWFzZSBsZXQgbWUga25vdyB5b3VyIG9waW5pb24sIHRoYW5rcyBhIGxvdA0KDQpZdWFu
-IEZhbmcNCiANCi0tLS0t08q8/tStvP4tLS0tLQ0Kt6K8/sjLOiBGZWxpcGUgQmFsYmkgW21haWx0
-bzpiYWxiaUBrZXJuZWwub3JnXQ0Kt6LLzcqxvOQ6IDIwMjHE6jbUwjExyNUgMjE6MDMNCsrVvP7I
-yzogWXVhbiBGYW5nOyBsaW51eC11c2JAdmdlci5rZXJuZWwub3JnDQqzrcvNOiBGYW5nLCBZdWFu
-DQrW98ziOiBSZTogW1BBVENIXSBkcml2ZXJzL3VzYi9kd2MzOiBTZXQgUEhZIHJlYWR5IGFmdGVy
-IHNvZnQgcmVzZXQgZG9uZQ0KDQpZdWFuIEZhbmcgPGZhbmd5dWFuc2V1QGdtYWlsLmNvbT4gd3Jp
-dGVzOg0KDQo+IEl0J3MgbW9yZSBzYWZlIHRvIHNldCBQSFkgcmVhZHkgYWZ0ZXIgc29mdCByZXNl
-dCBkb25lDQo+DQo+IExldCdzIGNvbnNpZGVyIGEgdGVzdCBjYXNlIGxpa2UgdGhpczoNCj4gSSBo
-YXZlIGEgdXNiIFBIWSB3aGljaCBkb24ndCBuZWVkIFNXIGluaXRpYWwgYmVmb3JlIGFjY2VzcyBp
-dCwgQnV0IGkgDQo+IGhhdmUgYSB3cm9uZyBQSFkgY2xvY2sgZGVmYXVsdCBzZXR0aW5nIGluIFBI
-WSByZWdpc3RlciB3aGljaCBtZWFucyBQSFkgDQo+IGlzIG5vdCByZWFkeSBpbiBmYWN0Lg0KPiBp
-biBkd2MzX2NvcmVfaW5pdCwgZHdjM19jb3JlX2dldF9waHkgd2lsbCByZXR1cm4gMCBkZXNwaXRl
-IHVzYiBnZXQgDQo+IFBIWXMgd2l0aCByZXR1cm4gLUVOT0RFViwgYW5kIHNldCBwaHlzX3JlYWR5
-PXRydWUNCg0KeW91ciBQSFkgZHJpdmVyIHNob3VsZG4ndCByZXR1cm4gLUVOT0RFViBoZXJlLiBX
-aHkgYXJlIHlvdSByZXR1cm5pbmcgLUVOT0RFVj8gVGhlIFBIWSBpc24ndCByZWFkeSBidXQgaXQg
-X2RvZXNfIGV4aXN0Lg0KDQotLQ0KYmFsYmkNCg==
+
+On 9/6/2021 2:45 PM, Sandeep Maheswaram wrote:
+> 
+> On 8/31/2021 1:37 AM, Doug Anderson wrote:
+>> Hi,
+>>
+>> On Mon, Aug 30, 2021 at 10:55 AM Sandeep Maheswaram <sanm@codeaurora.org> wrote:
+>>> Add multi pd bindings to set performance state for cx domain
+>>> to maintain minimum corner voltage for USB clocks.
+>>>
+>>> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+>>> ---
+>>>   Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 13 ++++++++++++-
+>>>   1 file changed, 12 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>> index e70afc4..838d9c4 100644
+>>> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>> @@ -41,7 +41,18 @@ properties:
+>>>
+>>>     power-domains:
+>>>       description: specifies a phandle to PM domain provider node
+>>> -    maxItems: 1
+>>> +    minItems: 1
+>>> +    items:
+>>> +      - description: optional,cx power domain
+>>> +      - description: USB gdsc power domain
+>> You need to re-order the above. The optional one needs to be second, not first.
+>>
+> I wanted to use required-opps for cx domain only. so I have put it first in order.
+
+You can always put a <> for the power-domains for which there are no required-opps
+
++			power-domain-names = "usb_gdsc", "cx";
++
++			required-opps = <>, <&rpmhpd_opp_nom>;
+
+>>> +  power-domain-names:
+>>> +     items:
+>>> +      - const: cx
+>>> +      - const: usb_gdsc
+>> Why do you need the names at all? The ordering of power-domains is
+>> well defined and there are no holes in it and there are no legacy
+>> reasons for having the names (like there are for clocks), so you
+>> should drop. This is much like reg-names and I always point people to
+>> this message from Rob Herring about reg-names:
+>>
+>> https://lore.kernel.org/r/CAL_Jsq+MMunmVWqeW9v2RyzsMKP+=kMzeTHNMG4JDHM7Fy0HBg@mail.gmail.com/
+>>
+>> You'll have to change your driver to use dev_pm_domain_attach_by_id()
+>> but that should be fine.
+>>
+>> -Doug
+> 
+> Ok..I will try using  dev_pm_domain_attach_by_id()
+> 
+> 
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
