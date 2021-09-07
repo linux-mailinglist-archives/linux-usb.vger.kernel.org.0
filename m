@@ -2,67 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B859D40262B
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Sep 2021 11:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5E44026CE
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Sep 2021 12:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbhIGJ2Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Sep 2021 05:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbhIGJ2P (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Sep 2021 05:28:15 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A7AC061575
-        for <linux-usb@vger.kernel.org>; Tue,  7 Sep 2021 02:27:09 -0700 (PDT)
-Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mNXNj-0007tQ-69; Tue, 07 Sep 2021 11:27:07 +0200
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] usb: typec: hd3ss3220: Use regmap_write_bits()
-Date:   Tue,  7 Sep 2021 11:27:06 +0200
-Message-Id: <20210907092706.31748-1-p.zabel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        id S244540AbhIGKJC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Sep 2021 06:09:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51068 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244488AbhIGKI7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 Sep 2021 06:08:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4052D6103B;
+        Tue,  7 Sep 2021 10:07:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1631009273;
+        bh=+rTMnNRtWYxCobMgvXyMT1FgdAV9c5G1Ihd3RSQuPMg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BGHOQT6FM8L5fFp/XsjmbcgW0Rh1558PlC/Py2N81EspQ17yfJn3EZLGCyPcbNian
+         xAK8hNpVgBhExTEfxun3lfU2/1X2Y/VtWNwypjYfZK8076f6y7X1rF/2s+LtjrIdD0
+         KvTtItpO2JREbY3WULxLtJWtRc3h3+FiBfJYXgUI=
+Date:   Tue, 7 Sep 2021 12:07:51 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kim Bak <kim.bak@gamereactor.dk>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Using g_mass_storage for large drives (2Tb+)
+Message-ID: <YTc59zX0kP51q0Fn@kroah.com>
+References: <50e07dc1-721f-b7a6-d207-2904e9161054@gamereactor.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <50e07dc1-721f-b7a6-d207-2904e9161054@gamereactor.dk>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use the regmap_write_bits() macro instead of regmap_update_bits_base().
-No functional change.
+On Tue, Sep 07, 2021 at 10:30:34AM +0200, Kim Bak wrote:
+> Hi
+> 
+> This looks like a developer list I'm sorry to bother you here as I'm not a
+> developer, I was looking for the linux-usb-user list but it seems to have
+> merged with this so i will ask my question here.
 
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
----
- drivers/usb/typec/hd3ss3220.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+Those lists merged well over a decade ago, November 2007.
 
-diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-index f633ec15b1a1..cd47c3597e19 100644
---- a/drivers/usb/typec/hd3ss3220.c
-+++ b/drivers/usb/typec/hd3ss3220.c
-@@ -125,11 +125,9 @@ static irqreturn_t hd3ss3220_irq(struct hd3ss3220 *hd3ss3220)
- 	int err;
- 
- 	hd3ss3220_set_role(hd3ss3220);
--	err = regmap_update_bits_base(hd3ss3220->regmap,
--				      HD3SS3220_REG_CN_STAT_CTRL,
--				      HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS,
--				      HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS,
--				      NULL, false, true);
-+	err = regmap_write_bits(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL,
-+				HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS,
-+				HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS);
- 	if (err < 0)
- 		return IRQ_NONE;
- 
--- 
-2.30.2
+> I'm trying to get the g_mass_storage module to export an 8Tb storage device,
+> either using a backing file or an iscsi mounted device, it seems to fail
+> anything more than 2Tb. Is the module limited to 512 bytes blocks or is
+> there a way to force larger blocks?
 
+This was already answered for you 5 days ago:
+	https://lore.kernel.org/r/20210902143959.GC432266@rowland.harvard.edu
+
+Did that not answer your question?  If so, please respond to that email.
+
+thanks,
+
+greg k-h
