@@ -2,69 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC789403EC9
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Sep 2021 20:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE07B403FD8
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Sep 2021 21:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348081AbhIHSDG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Sep 2021 14:03:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44082 "EHLO mail.kernel.org"
+        id S1350339AbhIHTfx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Sep 2021 15:35:53 -0400
+Received: from ixit.cz ([94.230.151.217]:48720 "EHLO ixit.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229789AbhIHSDF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 Sep 2021 14:03:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id CB10E6115C
-        for <linux-usb@vger.kernel.org>; Wed,  8 Sep 2021 18:01:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631124117;
-        bh=JA5QSy4DxGSptRR+Jcm/2MbcCAP3IErCCIopGCsg7cg=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=lcxKhXDFuP3tIuwkPfSSweIiZi8twA5ZcOQB0GHXAfG8B9xP7NcyMN4px6/qhejzb
-         cIBmAYxOVMO5ZfcJ75at4NrDPk5MXAtkvyYnbj3xgqJ9qT6758XVGIWJwiM4bAa2Zq
-         qXSL5OzhzQ/RmMZKoQCg1Svo5EeXyhtCBtC5cQK3viTobJ9XGTe0uhOQHjyZABZJPq
-         EKN+41EIz9QoCBwdD3U5MF8QYXbY1EuLDkGJNTmmBtJB/YusX/4YGexj+y5e9YPGn9
-         uxWk9JJRu2eqvc+bnDNhBnvxZ+NGUcS8utkDOYRt/xCoMbbNkT8TUHv5z5OJt/Mkmi
-         bgUpHCkNqhYJg==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id BEB2B610A8; Wed,  8 Sep 2021 18:01:57 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 214137] USB randomly stops working, starting with mouse
-Date:   Wed, 08 Sep 2021 18:01:57 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: yaomtc@protonmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-214137-208809-hqjMjKQI74@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-214137-208809@https.bugzilla.kernel.org/>
-References: <bug-214137-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S235043AbhIHTfx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 Sep 2021 15:35:53 -0400
+Received: from newone.lan (ixit.cz [94.230.151.217])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id 4A12024A25;
+        Wed,  8 Sep 2021 21:34:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1631129682;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qfKwqdN8/i0EQu0234+MgD/TXBnxpkNPG+kG+/L9/Fs=;
+        b=u6KJ5Xtey4caQ9eIorPd0Jg2bQcPyPYd6IaAHQUm4poeAkTL2SRWbpETaGH+UUkjhEN3qI
+        eVnDojk+E6F6L1iiN6y5nkTzyrBSmUnIkbQwYcRqJ7Dy4rQ5HCgG/nMMvLgVSZatFR8Cbd
+        EcnMK+i7RSSADlJhsPANpUDxVw55dbg=
+From:   David Heidelberg <david@ixit.cz>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Manu Gautam <mgautam@codeaurora.org>
+Cc:     linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Heidelberg <david@ixit.cz>
+Subject: [PATCH 1/2] dt-bindings: usb/qcom,dwc3: add ipq4019 compatible
+Date:   Wed,  8 Sep 2021 21:33:28 +0200
+Message-Id: <20210908193329.87992-1-david@ixit.cz>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214137
+Prequisite for getting rid of another warnings when building ipq4019.
 
---- Comment #6 from yaomtc@protonmail.com ---
-I ended up swapping in a new motherboard from AORUS. If ASUS ends up sendin=
-g it
-back to me and it still has the issue, I will get this data.
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
---=20
-You may reply to this email to add a comment.
+diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+index e70afc40edb2..19641380f922 100644
+--- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+@@ -13,6 +13,7 @@ properties:
+   compatible:
+     items:
+       - enum:
++          - qcom,ipq4019-dwc3
+           - qcom,msm8996-dwc3
+           - qcom,msm8998-dwc3
+           - qcom,sc7180-dwc3
+-- 
+2.33.0
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
