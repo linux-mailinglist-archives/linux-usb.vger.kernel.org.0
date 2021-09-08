@@ -2,169 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77527403830
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Sep 2021 12:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD788403BCB
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Sep 2021 16:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346312AbhIHKt7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Sep 2021 06:49:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52812 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231440AbhIHKt6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 Sep 2021 06:49:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 006EE61163;
-        Wed,  8 Sep 2021 10:48:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1631098130;
-        bh=dViuyiiozoC/WhPhQRNwqN73Ka18ZJIJwF6nPiWVHhA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dGXUNojfFA2QNJUYlBNAh39aqQDSOUjraHQL0wZfcAn+U8LmU4AdYKz1wnwvaJe/R
-         MHfz2cBL1Iiju/gd/NI9jJ6tVFDVMjeK2MEI9GQmz973DeAbnXUHled6l/QtXjkbW8
-         Fp5TwTh2yc1Y0qQhfn+6zeJYfTB3X+AjBqhw+ByE=
-Date:   Wed, 8 Sep 2021 12:48:47 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jung Daehwan <dh10.jung@samsung.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        "open list:USB GADGET/PERIPHERAL SUBSYSTEM" 
-        <linux-usb@vger.kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: usb: gadget: u_serial: check Null pointer in EP callback
-Message-ID: <YTiVD/py5d6rvSgU@kroah.com>
-References: <CGME20210806080835epcas2p2134b8b635e27d129a9e2f2f400a814fc@epcas2p2.samsung.com>
- <1628236406-185160-1-git-send-email-dh10.jung@samsung.com>
- <YQzu+Xy+3wAyXeDK@kroah.com>
- <000001d7a482$93438b20$b9caa160$@samsung.com>
- <20210908073235.GA13332@ubuntu>
- <20210908102129.GB13332@ubuntu>
+        id S1351797AbhIHOw4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Sep 2021 10:52:56 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:51835 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1349504AbhIHOwz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Sep 2021 10:52:55 -0400
+Received: (qmail 605560 invoked by uid 1000); 8 Sep 2021 10:51:46 -0400
+Date:   Wed, 8 Sep 2021 10:51:46 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Kishon Vijay Abraham I <kishon@ti.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chris.chiu@canonical.com, lokeshvutla@ti.com
+Subject: Re: [PATCH v3 1/3] usb: core: hcd: Add support for deferring roothub
+ registration
+Message-ID: <20210908145146.GB603644@rowland.harvard.edu>
+References: <20210908095312.985-1-kishon@ti.com>
+ <20210908095312.985-2-kishon@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210908102129.GB13332@ubuntu>
+In-Reply-To: <20210908095312.985-2-kishon@ti.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 08, 2021 at 07:21:29PM +0900, Jung Daehwan wrote:
-> On Fri, Aug 06, 2021 at 05:13:34PM +0200, Greg Kroah-Harman wrote:
-> > On Fri, Aug 06, 2021 at 04:53:26PM +0900, Daehwan Jung wrote:
-> > > From: taehyun cho <taehyun.cho@samsung.com>
-> > > 
-> > > Endpoint complete function in u_serial can be executed when 'gs_port' 
-> > > is Null. This situation happens when 'dwc3_gadget_pullup' returns 
-> > > ETIMEDOUT. The reason why ETIMEDOUT is returned is that whole system 
-> > > is out of order including interrupt regardless of USB.
-> > > 
-> > > pc : __lock_acquire+0x54/0x5ec
-> > > lr : lock_acquire+0xe8/0x198
-> > > sp : ffffffc03914b9d0
-> > > x29: ffffffc03914b9d0 x28: ffffff895f13b680
-> > > x27: 0000000000000000 x26: 0000000000000000
-> > > x25: 00000000000003c8 x24: 0000000000000080
-> > > x23: ffffffc010a8f650 x22: 0000000000000000
-> > > x21: 0000000000000000 x20: 0000000000000000
-> > > x19: ffffffc010a8f650 x18: ffffffc02d70a0b0
-> > > x17: 0000000000000000 x16: 00000000000229e0
-> > > x15: 0000000000000004 x14: 00000000000004f2
-> > > x13: ffffffc0120fe178 x12: 0000000000000003
-> > > x11: 00000000ffffffff x10: 0000000100000001
-> > > x9 : 0000000000000001 x8 : 00000000000003c8
-> > > x7 : 0000000000000000 x6 : ffffffc010a8f650
-> > > x5 : 0000000000000000 x4 : 0000000000000080
-> > > x3 : 0000000000000000 x2 : 0000000000000000
-> > > x1 : 0000000000000000 x0 : 00000000000003c8 Call trace:
-> > >  __lock_acquire+0x54/0x5ec
-> > >  lock_acquire+0xe8/0x198
-> > >  _raw_spin_lock+0x70/0x88
-> > >  gs_read_complete+0x48/0xac
-> > >  usb_gadget_giveback_request+0x48/0x80
-> > >  dwc3_gadget_giveback+0xcc/0xe8
-> > >  dwc3_remove_requests+0xa8/0x188
-> > >  __dwc3_gadget_ep_disable+0x98/0x110
-> > >  dwc3_gadget_ep_disable+0x50/0xbc
-> > >  usb_ep_disable+0x44/0x94
-> > >  gserial_disconnect+0xc0/0x250
-> > >  acm_free_func+0x30/0x48
-> > >  usb_put_function+0x34/0x68
-> > >  config_usb_cfg_unlink+0xdc/0xf8
-> > >  configfs_unlink+0x144/0x264
-> > >  vfs_unlink+0x134/0x218
-> > >  do_unlinkat+0x13c/0x2a0
-> > >  __arm64_sys_unlinkat+0x48/0x60
-> > >  el0_svc_common.llvm.10277270529376503802+0xb8/0x1b4
-> > >  do_el0_svc+0x24/0x8c
-> > >  el0_svc+0x10/0x1c
-> > >  el0_sync_handler+0x68/0xac
-> > >  el0_sync+0x18c/0x1c0
-> > > 
-> > > Signed-off-by: taehyun cho <taehyun.cho@samsung.com>
-> > > ---
-> > >  drivers/usb/gadget/function/u_serial.c | 18 ++++++++++++++++++
-> > >  1 file changed, 18 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/gadget/function/u_serial.c 
-> > > b/drivers/usb/gadget/function/u_serial.c
-> > > index 6f68cbe..af08a18 100644
-> > > --- a/drivers/usb/gadget/function/u_serial.c
-> > > +++ b/drivers/usb/gadget/function/u_serial.c
-> > > @@ -450,6 +450,15 @@ static void gs_read_complete(struct usb_ep *ep, 
-> > > struct usb_request *req)  {
-> > >  	struct gs_port	*port = ep->driver_data;
-> > >  
-> > > +	/*
-> > > +	 * Port became NULL when 'dwc3_gadget_pullup' returns ETIMEDOUT.
-> > > +	 * Return here to avoid panic.
-> > > +	 */
-> > > +	if (!port) {
-> > > +		pr_err("%s, failed to get port\n", __func__);
-> > > +		return;
-> > > +	}
-> > > +
-> > 
-> 	spin_lock(&port->port_lock);
-> 	...
-> 	spin_unlock(&port->port_lock);
-> > What prevents port from being null right after checking this?  Where is the
-> > lock to prevent this?
-> >
-> It tries to get lock first in gs_read_complete/gs_write_complete like above.
-> That's why the panic occured during getting lock but this issue is not related
-> to lock. We just want to prevent doing something after port becomes null.
-
-I do not understand, you are not protecting anything here, what happens
-if port becomes NULL right after checking it and before the lock?
-
-Either this needs to be tested like this, or it does not at all.  This
-change does not really fix the issue.
-
-
-> > >  	/* Queue all received data until the tty layer is ready for it. */
-> > >  	spin_lock(&port->port_lock);
-> > >  	list_add_tail(&req->list, &port->read_queue); @@ -461,6 +470,15 @@ 
-> > > static void gs_write_complete(struct usb_ep *ep, struct usb_request 
-> > > *req)  {
-> > >  	struct gs_port	*port = ep->driver_data;
-> > >  
-> > > +	/*
-> > > +	 * port became NULL when 'dwc3_gadget_pullup' returns ETIMEDOUT.
-> > > +	 * Return here to avoid panic.
-> > > +	 */
-> > > +	if (!port) {
-> > > +		pr_err("%s, failed to get port\n", __func__);
-> > > +		return;
-> > > +	}
-> > 
-> > Same here, where is the lock?
-> > 
-> > And why report an error, what can a user do about it?
-> > 
+On Wed, Sep 08, 2021 at 03:23:10PM +0530, Kishon Vijay Abraham I wrote:
+> It has been observed with certain PCIe USB cards (like Inateck connected
+> to AM64 EVM or J7200 EVM) that as soon as the primary roothub is
+> registered, port status change is handled even before xHC is running
+> leading to cold plug USB devices not detected. For such cases, registering
+> both the root hubs along with the second HCD is required. Add support for
+> deferring roothub registration in usb_add_hcd(), so that both primary and
+> secondary roothubs are registered along with the second HCD.
 > 
-> It could happen to access null pointer and occur whole system panic.
+> CC: stable@vger.kernel.org # 5.4+
+> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
+> Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Tested-by: Chris Chiu <chris.chiu@canonical.com>
+> ---
+>  drivers/usb/core/hcd.c  | 30 ++++++++++++++++++++++++------
+>  include/linux/usb/hcd.h |  2 ++
+>  2 files changed, 26 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> index 0f8b7c93310e..30bbf4ac4284 100644
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+> @@ -2775,6 +2775,7 @@ int usb_add_hcd(struct usb_hcd *hcd,
+>  {
+>  	int retval;
+>  	struct usb_device *rhdev;
+> +	struct usb_hcd *shared_hcd;
+>  
+>  	if (!hcd->skip_phy_initialization && usb_hcd_is_primary_hcd(hcd)) {
+>  		hcd->phy_roothub = usb_phy_roothub_alloc(hcd->self.sysdev);
+> @@ -2935,13 +2936,26 @@ int usb_add_hcd(struct usb_hcd *hcd,
+>  		goto err_hcd_driver_start;
+>  	}
+>  
+> +	/* starting here, usbcore will pay attention to the shared HCD roothub */
+> +	shared_hcd = hcd->shared_hcd;
+> +	if (!usb_hcd_is_primary_hcd(hcd) && shared_hcd && HCD_DEFER_RH_REGISTER(shared_hcd)) {
+> +		retval = register_root_hub(shared_hcd);
+> +		if (retval != 0)
+> +			goto err_register_root_hub;
+> +
+> +		if (shared_hcd->uses_new_polling && HCD_POLL_RH(shared_hcd))
+> +			usb_hcd_poll_rh_status(shared_hcd);
+> +	}
+> +
+>  	/* starting here, usbcore will pay attention to this root hub */
+> -	retval = register_root_hub(hcd);
+> -	if (retval != 0)
+> -		goto err_register_root_hub;
+> +	if (!HCD_DEFER_RH_REGISTER(hcd)) {
+> +		retval = register_root_hub(hcd);
+> +		if (retval != 0)
+> +			goto err_register_root_hub;
+>  
+> -	if (hcd->uses_new_polling && HCD_POLL_RH(hcd))
+> -		usb_hcd_poll_rh_status(hcd);
+> +		if (hcd->uses_new_polling && HCD_POLL_RH(hcd))
+> +			usb_hcd_poll_rh_status(hcd);
+> +	}
+>  
+>  	return retval;
+>  
+> @@ -2985,6 +2999,7 @@ EXPORT_SYMBOL_GPL(usb_add_hcd);
+>  void usb_remove_hcd(struct usb_hcd *hcd)
+>  {
+>  	struct usb_device *rhdev = hcd->self.root_hub;
+> +	unsigned rh_registered;
 
-Again, what is setting that pointer to NULL and why isn't it caught
-before this?  Shouldn't everything be properly torn down and the
-completions finished _before_ the port is set to NULL?
+This really should be a bool, not an unsigned.  (Relatively unimportant.)
 
-If not, then fix that issue, as this change will not fix the real
-problem here, only delay it.
+>  	dev_info(hcd->self.controller, "remove, state %x\n", hcd->state);
+>  
+> @@ -2995,6 +3010,8 @@ void usb_remove_hcd(struct usb_hcd *hcd)
+>  
+>  	dev_dbg(hcd->self.controller, "roothub graceful disconnect\n");
+>  	spin_lock_irq (&hcd_root_hub_lock);
+> +	if (hcd->rh_registered == 1)
+> +		rh_registered = 1;
 
-thanks,
+Just say: rh_registered = hcd->rh_registered
 
-greg k-h
+>  	hcd->rh_registered = 0;
+>  	spin_unlock_irq (&hcd_root_hub_lock);
+>  
+> @@ -3004,7 +3021,8 @@ void usb_remove_hcd(struct usb_hcd *hcd)
+>  	cancel_work_sync(&hcd->died_work);
+>  
+>  	mutex_lock(&usb_bus_idr_lock);
+> -	usb_disconnect(&rhdev);		/* Sets rhdev to NULL */
+> +	if (rh_registered == 1)
+
+Just say: if (rh_registered)
+
+> +		usb_disconnect(&rhdev);		/* Sets rhdev to NULL */
+
+Didn't the compiler warn about using a possibly uninitialized variable?
+
+The overall logic looks okay, apart from this one point.
+
+Alan Stern
+
+>  	mutex_unlock(&usb_bus_idr_lock);
+>  
+>  	/*
+> diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+> index 548a028f2dab..2c1fc9212cf2 100644
+> --- a/include/linux/usb/hcd.h
+> +++ b/include/linux/usb/hcd.h
+> @@ -124,6 +124,7 @@ struct usb_hcd {
+>  #define HCD_FLAG_RH_RUNNING		5	/* root hub is running? */
+>  #define HCD_FLAG_DEAD			6	/* controller has died? */
+>  #define HCD_FLAG_INTF_AUTHORIZED	7	/* authorize interfaces? */
+> +#define HCD_FLAG_DEFER_RH_REGISTER	8	/* Defer roothub registration */
+>  
+>  	/* The flags can be tested using these macros; they are likely to
+>  	 * be slightly faster than test_bit().
+> @@ -134,6 +135,7 @@ struct usb_hcd {
+>  #define HCD_WAKEUP_PENDING(hcd)	((hcd)->flags & (1U << HCD_FLAG_WAKEUP_PENDING))
+>  #define HCD_RH_RUNNING(hcd)	((hcd)->flags & (1U << HCD_FLAG_RH_RUNNING))
+>  #define HCD_DEAD(hcd)		((hcd)->flags & (1U << HCD_FLAG_DEAD))
+> +#define HCD_DEFER_RH_REGISTER(hcd) ((hcd)->flags & (1U << HCD_FLAG_DEFER_RH_REGISTER))
+>  
+>  	/*
+>  	 * Specifies if interfaces are authorized by default
+> -- 
+> 2.17.1
+> 
