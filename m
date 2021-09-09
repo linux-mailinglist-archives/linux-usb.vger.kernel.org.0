@@ -2,37 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C2C40541E
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 15:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C0F405752
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 15:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236076AbhIIM5P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Sep 2021 08:57:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46026 "EHLO mail.kernel.org"
+        id S1358453AbhIINdW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Sep 2021 09:33:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42434 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1354797AbhIIMxL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:53:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7724F63248;
-        Thu,  9 Sep 2021 11:57:42 +0000 (UTC)
+        id S1356217AbhIIM7A (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:59:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A69D1613E8;
+        Thu,  9 Sep 2021 11:58:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188663;
-        bh=ptQjnL0kBIp8Ti1DizB+0MUMdyYYKhAhFSwz+ynAHDc=;
+        s=k20201202; t=1631188726;
+        bh=wENsvrbL+pdXmz0efRsjHzzXhHlVlnNHUPkbemqW/NQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LMaPK4nMSRwoNd2MC1Z8lyxpmhpz2vD4kw0qmrCs3VyDQnZpCD+w+r+GhgRivhiQO
-         0X008j3jHBI3h+54atYCttmTjoNbNLVwQnSRTn5WqDvNCqpgM2ZNyj6Tj8Z6g5nnO3
-         pvSUPgmhQJqatpKd4uYNe50Ien9YVDr0a9TeZ7JspTpm8MA1zMpbO4qdKGOAJTLQ9f
-         7cF+fEvtXy1A5q5WWb0uXP3Dckd+sVmoKR0MrGfbSvKUuybG7gzvOz8qwPWgisoroh
-         J7Vmw/dh4WfJXbXiWAzIBQh36OefBL9ukKPj93B8jocmlNlhfV3JvqfwpQwW+5L2nD
-         kv40mvz+CtvnA==
+        b=oq2u1lX0/Zu7eIJazQDbtnnSMuOfD/6PMflYhPTcTb1rNfVyRszgX9yAufQEXJVQl
+         bwY0Vt+RFVNajjBH1/OhsjEUJgGnB7WJAI22kmO8RuK29QZ4XIJResvsNMzjqy1VHp
+         wsM/aI3BwaQiTs7IENF1LrHP/Lnpn2eQwwG1+KeWdHgCSknhIzil/qJTEo9lL7G602
+         FCEW7ViIzFgittN89jTL1uxyxQQQTO5Ocx2tuODb9WwFoK8KUgM/g/n4IN8ckT2A/v
+         XHNXiWYtcQC7w3AAHUlSqj73Fbv6AoJgEv/6d+Dv3uu2l/amahQqOhnW0SEVTq7A6V
+         FKG3LMMP6iwzg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jack Pham <jackp@codeaurora.org>,
-        Ronak Vijay Raheja <rraheja@codeaurora.org>,
-        Felipe Balbi <balbi@kernel.org>,
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 13/74] usb: gadget: composite: Allow bMaxPower=0 if self-powered
-Date:   Thu,  9 Sep 2021 07:56:25 -0400
-Message-Id: <20210909115726.149004-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 64/74] Revert "USB: xhci: fix U1/U2 handling for hardware with XHCI_INTEL_HOST quirk set"
+Date:   Thu,  9 Sep 2021 07:57:16 -0400
+Message-Id: <20210909115726.149004-64-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909115726.149004-1-sashal@kernel.org>
 References: <20210909115726.149004-1-sashal@kernel.org>
@@ -44,67 +42,93 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jack Pham <jackp@codeaurora.org>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-[ Upstream commit bcacbf06c891374e7fdd7b72d11cda03b0269b43 ]
+[ Upstream commit 2847c46c61486fd8bca9136a6e27177212e78c69 ]
 
-Currently the composite driver encodes the MaxPower field of
-the configuration descriptor by reading the c->MaxPower of the
-usb_configuration only if it is non-zero, otherwise it falls back
-to using the value hard-coded in CONFIG_USB_GADGET_VBUS_DRAW.
-However, there are cases when a configuration must explicitly set
-bMaxPower to 0, particularly if its bmAttributes also has the
-Self-Powered bit set, which is a valid combination.
+This reverts commit 5d5323a6f3625f101dbfa94ba3ef7706cce38760.
 
-This is specifically called out in the USB PD specification section
-9.1, in which a PDUSB device "shall report zero in the bMaxPower
-field after negotiating a mutually agreeable Contract", and also
-verified by the USB Type-C Functional Test TD.4.10.2 Sink Power
-Precedence Test.
+That commit effectively disabled Intel host initiated U1/U2 lpm for devices
+with periodic endpoints.
 
-The fix allows the c->MaxPower to be used for encoding the bMaxPower
-even if it is 0, if the self-powered bit is also set.  An example
-usage of this would be for a ConfigFS gadget to be dynamically
-updated by userspace when the Type-C connection is determined to be
-operating in Power Delivery mode.
+Before that commit we disabled host initiated U1/U2 lpm if the exit latency
+was larger than any periodic endpoint service interval, this is according
+to xhci spec xhci 1.1 specification section 4.23.5.2
 
-Co-developed-by: Ronak Vijay Raheja <rraheja@codeaurora.org>
-Acked-by: Felipe Balbi <balbi@kernel.org>
-Signed-off-by: Ronak Vijay Raheja <rraheja@codeaurora.org>
-Signed-off-by: Jack Pham <jackp@codeaurora.org>
-Link: https://lore.kernel.org/r/20210720080907.30292-1-jackp@codeaurora.org
+After that commit we incorrectly checked that service interval was smaller
+than U1/U2 inactivity timeout. This is not relevant, and can't happen for
+Intel hosts as previously set U1/U2 timeout = 105% * service interval.
+
+Patch claimed it solved cases where devices can't be enumerated because of
+bandwidth issues. This might be true but it's a side effect of accidentally
+turning off lpm.
+
+exit latency calculations have been revised since then
+
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20210820123503.2605901-5-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/composite.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/usb/host/xhci.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index d85bb3ba8263..a76ed4acb570 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -481,7 +481,7 @@ static u8 encode_bMaxPower(enum usb_device_speed speed,
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index c4e3760abd5b..bebab0ec2978 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -4580,19 +4580,19 @@ static u16 xhci_calculate_u1_timeout(struct xhci_hcd *xhci,
  {
- 	unsigned val;
+ 	unsigned long long timeout_ns;
  
--	if (c->MaxPower)
-+	if (c->MaxPower || (c->bmAttributes & USB_CONFIG_ATT_SELFPOWER))
- 		val = c->MaxPower;
- 	else
- 		val = CONFIG_USB_GADGET_VBUS_DRAW;
-@@ -891,7 +891,11 @@ static int set_config(struct usb_composite_dev *cdev,
+-	if (xhci->quirks & XHCI_INTEL_HOST)
+-		timeout_ns = xhci_calculate_intel_u1_timeout(udev, desc);
+-	else
+-		timeout_ns = udev->u1_params.sel;
+-
+ 	/* Prevent U1 if service interval is shorter than U1 exit latency */
+ 	if (usb_endpoint_xfer_int(desc) || usb_endpoint_xfer_isoc(desc)) {
+-		if (xhci_service_interval_to_ns(desc) <= timeout_ns) {
++		if (xhci_service_interval_to_ns(desc) <= udev->u1_params.mel) {
+ 			dev_dbg(&udev->dev, "Disable U1, ESIT shorter than exit latency\n");
+ 			return USB3_LPM_DISABLED;
+ 		}
  	}
  
- 	/* when we return, be sure our power usage is valid */
--	power = c->MaxPower ? c->MaxPower : CONFIG_USB_GADGET_VBUS_DRAW;
-+	if (c->MaxPower || (c->bmAttributes & USB_CONFIG_ATT_SELFPOWER))
-+		power = c->MaxPower;
++	if (xhci->quirks & XHCI_INTEL_HOST)
++		timeout_ns = xhci_calculate_intel_u1_timeout(udev, desc);
 +	else
-+		power = CONFIG_USB_GADGET_VBUS_DRAW;
++		timeout_ns = udev->u1_params.sel;
 +
- 	if (gadget->speed < USB_SPEED_SUPER)
- 		power = min(power, 500U);
- 	else
+ 	/* The U1 timeout is encoded in 1us intervals.
+ 	 * Don't return a timeout of zero, because that's USB3_LPM_DISABLED.
+ 	 */
+@@ -4644,19 +4644,19 @@ static u16 xhci_calculate_u2_timeout(struct xhci_hcd *xhci,
+ {
+ 	unsigned long long timeout_ns;
+ 
+-	if (xhci->quirks & XHCI_INTEL_HOST)
+-		timeout_ns = xhci_calculate_intel_u2_timeout(udev, desc);
+-	else
+-		timeout_ns = udev->u2_params.sel;
+-
+ 	/* Prevent U2 if service interval is shorter than U2 exit latency */
+ 	if (usb_endpoint_xfer_int(desc) || usb_endpoint_xfer_isoc(desc)) {
+-		if (xhci_service_interval_to_ns(desc) <= timeout_ns) {
++		if (xhci_service_interval_to_ns(desc) <= udev->u2_params.mel) {
+ 			dev_dbg(&udev->dev, "Disable U2, ESIT shorter than exit latency\n");
+ 			return USB3_LPM_DISABLED;
+ 		}
+ 	}
+ 
++	if (xhci->quirks & XHCI_INTEL_HOST)
++		timeout_ns = xhci_calculate_intel_u2_timeout(udev, desc);
++	else
++		timeout_ns = udev->u2_params.sel;
++
+ 	/* The U2 timeout is encoded in 256us intervals */
+ 	timeout_ns = DIV_ROUND_UP_ULL(timeout_ns, 256 * 1000);
+ 	/* If the necessary timeout value is bigger than what we can set in the
 -- 
 2.30.2
 
