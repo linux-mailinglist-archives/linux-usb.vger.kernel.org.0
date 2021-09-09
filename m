@@ -2,103 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C199D404108
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 00:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F6F40436D
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 04:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240501AbhIHWdn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Sep 2021 18:33:43 -0400
-Received: from ixit.cz ([94.230.151.217]:33150 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229997AbhIHWdm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 Sep 2021 18:33:42 -0400
-Received: from newone.lan (ixit.cz [94.230.151.217])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 7F21324BAF;
-        Wed,  8 Sep 2021 21:34:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1631129685;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SxiVdUlQ7fYzowAHt3rgwVXftn+wj1pzvOHK68gmgPY=;
-        b=wO7Wnqgjg6LHEVCOcSFU7TfunNi3wC6eu9Yxq4K/cUMaN6w+370N5Islyn6OVh/KXcO968
-        We/iE5hmciQjowr3x++aYKIp6wbcPe9/W3oFwIPdqHXJAS9N4IMbhM21e3BLFjk5MAC1n3
-        reB52BlboHn0lGO7q2Z1EKqAV1ypUwg=
-From:   David Heidelberg <david@ixit.cz>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Manu Gautam <mgautam@codeaurora.org>
-Cc:     linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Heidelberg <david@ixit.cz>
-Subject: [PATCH 2/2] ARM: dts: qcom: ipq4019: add dwc3 arch spec compatible
-Date:   Wed,  8 Sep 2021 21:33:29 +0200
-Message-Id: <20210908193329.87992-2-david@ixit.cz>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210908193329.87992-1-david@ixit.cz>
-References: <20210908193329.87992-1-david@ixit.cz>
+        id S233591AbhIICJz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Sep 2021 22:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231898AbhIICJy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Sep 2021 22:09:54 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B7BC061575
+        for <linux-usb@vger.kernel.org>; Wed,  8 Sep 2021 19:08:46 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id l11so530920lfe.1
+        for <linux-usb@vger.kernel.org>; Wed, 08 Sep 2021 19:08:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jF4r72yLaRggwcAjrtTZuOMrXDcg6PWuCWwtjX6fYkU=;
+        b=BkgmwTiZ9RWCEk1eof05JMutvd+MbIAC6f6DeiVFQSesCwh3LcZbB5oDj8uHgcoSPI
+         fuD5b0Eg8jF8uOhjbk9/9jBQ2z2oA1UsYPYsjgDCEe5AUBjbclunNe0sSlvha/ODeCAP
+         GMJHop4ScCftLOrnhTFt/2UQSDPZALnchjdtCBj2ToMGzMHOOTV1BwIw7vnze0tP6g+E
+         c9zg4QS/Swq7OFkslSwz7r/2RLyLqg436W4kerx+knjwSjnhfvioGzPFd2gFXiZ9HRp5
+         f1m5M0+RnbXgnjHmbq7m46n+z4NI1kMpsIEINg9MwSwB8x32kuxDBcQyzcYjmI3V0htE
+         Nr8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jF4r72yLaRggwcAjrtTZuOMrXDcg6PWuCWwtjX6fYkU=;
+        b=jck8t3m/wtEwgxC4f2sqA/SO6Ft90Vwnnmm3l4jsn/whm0JPTKWWLZ0VtyXLGN1wmm
+         YcS7Zi39nSyjCWQQsDEMNpV21wQZK9Gnusp4IesnGYVFtQSI+sEdxU9lYTu8OqJN0FF9
+         VCeXQ/a2L6YCTjwRbGo/Z8oaaWyj/d12/O7YdGu0BqohvEQwLiFB339klLIveJ7qBcML
+         NBM+27wd1toB8bJ3df8UQAMArt9gJ5K9uNgv3M7U7S76kVN8FiwfqhD4NaEOFPHKpttb
+         KUL+1euYnyT9lyq2VDkgyZWW0VTA/vK/N4ApHJQ1uV0JJXV8bM/eDF5Es7IdmRX9H6sX
+         gPxA==
+X-Gm-Message-State: AOAM5334E8mTrRqNGKJse7vit/WRZndSI4Emo3KiUjp3MartoFkfaTMX
+        povLTrsrw9zqPHHPz1s1v9s738nOqevP3tdqPPwy0g==
+X-Google-Smtp-Source: ABdhPJzyDfhvXgHemAhiLOvn9ZmKFmimLUs/B3MpBgZ3B6YYQJFcHfl7iG+mjq/eb/d8Qpdrhpz+YyUKPz6/jKpbtsk=
+X-Received: by 2002:a05:6512:3e11:: with SMTP id i17mr493133lfv.613.1631153324443;
+ Wed, 08 Sep 2021 19:08:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <1631068099-13559-1-git-send-email-jun.li@nxp.com>
+In-Reply-To: <1631068099-13559-1-git-send-email-jun.li@nxp.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Wed, 8 Sep 2021 19:08:31 -0700
+Message-ID: <CALAqxLXFaO-ABZ=Ryk9-gQLwA85vYafPMku27WY6Z2pLT2XCvQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc3: core: balance phy init and exit
+To:     Li Jun <jun.li@nxp.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Chen Yu <chenyu56@huawei.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        faqiang.zhu@nxp.com, dl-linux-imx <linux-imx@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-To be compilant with qcom,dwc3 definition
- - add compatible
- - rename dwc3@ to usb@
+On Tue, Sep 7, 2021 at 7:51 PM Li Jun <jun.li@nxp.com> wrote:
+>
+> After we start to do core soft reset while usb role switch,
+> the phy init is invoked at every switch to device mode, but
+> its counter part de-init is missing, this causes the actual
+> phy init can not be done when we really want to re-init phy
+> like system resume, because the counter maintained by phy
+> core is not 0. considering phy init is actually redundant for
+> role switch, so move out the phy init from core soft reset to
+> dwc3 core init where is the only place required.
+>
+> Fixes: f88359e1588b ("usb: dwc3: core: Do core softreset when switch mode")
+> Cc: <stable@vger.kernel.org>
+> Tested-by: faqiang.zhu <faqiang.zhu@nxp.com>
+> Signed-off-by: Li Jun <jun.li@nxp.com>
 
-No functional changes intended.
+Tested-by: John Stultz <john.stultz@linaro.org> #HiKey960
 
-Signed-off-by: David Heidelberg <david@ixit.cz>
----
- arch/arm/boot/dts/qcom-ipq4019.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-index a3ae5458ac68..25b7e10537df 100644
---- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-@@ -637,7 +637,7 @@ usb3_hs_phy: hsphy@a6000 {
- 		};
- 
- 		usb3: usb3@8af8800 {
--			compatible = "qcom,dwc3";
-+			compatible = "qcom,ipq4019-dwc3", "qcom,dwc3";
- 			reg = <0x8af8800 0x100>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-@@ -648,7 +648,7 @@ usb3: usb3@8af8800 {
- 			ranges;
- 			status = "disabled";
- 
--			dwc3@8a00000 {
-+			usb@8a00000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x8a00000 0xf8000>;
- 				interrupts = <GIC_SPI 132 IRQ_TYPE_LEVEL_HIGH>;
-@@ -669,7 +669,7 @@ usb2_hs_phy: hsphy@a8000 {
- 		};
- 
- 		usb2: usb2@60f8800 {
--			compatible = "qcom,dwc3";
-+			compatible = "qcom,ipq4019-dwc3", "qcom,dwc3";
- 			reg = <0x60f8800 0x100>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-@@ -680,7 +680,7 @@ usb2: usb2@60f8800 {
- 			ranges;
- 			status = "disabled";
- 
--			dwc3@6000000 {
-+			usb@6000000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x6000000 0xf8000>;
- 				interrupts = <GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH>;
--- 
-2.33.0
-
+thanks!
+-john
