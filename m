@@ -2,133 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F42A405642
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 15:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82934050B8
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 14:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345849AbhIINTC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Sep 2021 09:19:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35412 "EHLO mail.kernel.org"
+        id S1346551AbhIIMbm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Sep 2021 08:31:42 -0400
+Received: from mga17.intel.com ([192.55.52.151]:12573 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1355381AbhIINNS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Sep 2021 09:13:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AABB1632E2;
-        Thu,  9 Sep 2021 12:01:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188916;
-        bh=NkrhRnAGso2BthwGEsErc4p9dPma96S6+l5Hj0YIvMs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZGYALPJ2ol6Pe0ASuPvgcJQ4F2F0Yj2fwh+OGllmzt9CGGHSbrvCdNlilIa2hf/aZ
-         WVS9H/zNZ9TypI6w6Ofl5rJccqCT0Xdtp766ZfaLhYw4tD53T8PXs8RQKJWrzJfdof
-         N5fG6bGXXAC9BpaHFl36G8meEx8DnFIf1tiXNUn/2oYQNMmkTosetDhyhRaHTWi7L7
-         rKffN/qVsPRWgMphZvIzkiyD7P6395fb35q4aJAjESYOpBRwftqanPICiie2VC4b5s
-         dC98+I7mrI8KWs4RKWvdbm1SJIK1sjoGA/Ggv0t7gcQRNI2MnUfrBa3+HT/1KBoRs8
-         uV+HYZB9qumsg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 32/35] Revert "USB: xhci: fix U1/U2 handling for hardware with XHCI_INTEL_HOST quirk set"
-Date:   Thu,  9 Sep 2021 08:01:13 -0400
-Message-Id: <20210909120116.150912-32-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909120116.150912-1-sashal@kernel.org>
-References: <20210909120116.150912-1-sashal@kernel.org>
+        id S1353464AbhIIM2u (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:28:50 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10101"; a="200971333"
+X-IronPort-AV: E=Sophos;i="5.85,280,1624345200"; 
+   d="scan'208";a="200971333"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2021 05:19:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,280,1624345200"; 
+   d="scan'208";a="606806900"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 09 Sep 2021 05:19:50 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 09 Sep 2021 15:19:50 +0300
+Date:   Thu, 9 Sep 2021 15:19:50 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Ulrich Huber <ulrich@huberulrich.de>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: ucsi_acpi GET_CONNECTOR_STATUS failed (-5)
+Message-ID: <YTn75r/QUSjjQ0BV@kuha.fi.intel.com>
+References: <b36249c5-776a-9338-bb9f-ae6a5c446860@huberulrich.de>
+ <YSX7hZnCoFSXTFJe@kuha.fi.intel.com>
+ <0e77017d-9358-a691-6293-234fcbab6a31@huberulrich.de>
+ <a7f971ef-c3aa-aadc-e453-4c667a414131@huberulrich.de>
+ <YSekP0+tq6ISq6my@kuha.fi.intel.com>
+ <3fe6d701-bc14-9b26-a5af-aa38fe7c585e@huberulrich.de>
+ <YSoGcC4Z1EP0S3KQ@kuha.fi.intel.com>
+ <7e06ae23-1cdd-7fe5-8b56-d4a2f80809f2@huberulrich.de>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7e06ae23-1cdd-7fe5-8b56-d4a2f80809f2@huberulrich.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Hi Ulrich,
 
-[ Upstream commit 2847c46c61486fd8bca9136a6e27177212e78c69 ]
+On Sun, Aug 29, 2021 at 01:02:54PM +0200, Ulrich Huber wrote:
+> 
+> On 28.08.21 11:48, Heikki Krogerus wrote:
+> > On Thu, Aug 26, 2021 at 09:50:58PM +0200, Ulrich Huber wrote:
+> > > I just got around to test your patches. They seem to solve the issue
+> > > completely! Whatever I tried, the behavior of the port stayed consistent and
+> > > no error messages appeared in the log.
+> > > 
+> > > I'll continue using the patch for now and will notify you, should any issue
+> > > appear.
+> > Great! If there are no problems, I'll send them to Greg after the next
+> > -rc1.
+> 
+> It seems I just found one such problem. After waking from hibernation I get
+> the following entries in the kernel log:
+> 
+> Aug 29 11:55:31 lenovo-ulrich kernel: ucsi_acpi USBC000:00:
+> GET_CONNECTOR_STATUS failed (-5)
+> Aug 29 11:55:31 lenovo-ulrich kernel: ucsi_acpi USBC000:00:
+> GET_CONNECTOR_STATUS failed (-5)
+> Aug 29 11:55:31 lenovo-ulrich kernel: usb 3-6: reset high-speed USB device
+> number 3 using xhci_hcd
+> Aug 29 11:55:31 lenovo-ulrich kernel: ish-hid
+> {33AECD58-B679-4E54-9BD9-A04D34F0C226}: [hid-ish]: enum_devices_do>
+> Aug 29 11:55:31 lenovo-ulrich kernel: usb 3-10: reset full-speed USB device
+> number 4 using xhci_hcd
+> Aug 29 11:55:31 lenovo-ulrich kernel: usb 3-5: reset full-speed USB device
+> number 2 using xhci_hcd
+> 
+> It is obviously related with the system resetting the hardware after waking
+> up. Most likely the driver tries to communicate with the device while it is
+> in a state where it is not able to respond. I do not get this after each
+> hibernation, so far it is the first time I have seen this. I'll try to find
+> a way to reproduce this.
 
-This reverts commit 5d5323a6f3625f101dbfa94ba3ef7706cce38760.
+Any updates?
 
-That commit effectively disabled Intel host initiated U1/U2 lpm for devices
-with periodic endpoints.
+Would it make sense to go ahead with my series now anyway at this
+point since it seems to fix the other problems?
 
-Before that commit we disabled host initiated U1/U2 lpm if the exit latency
-was larger than any periodic endpoint service interval, this is according
-to xhci spec xhci 1.1 specification section 4.23.5.2
+thanks,
 
-After that commit we incorrectly checked that service interval was smaller
-than U1/U2 inactivity timeout. This is not relevant, and can't happen for
-Intel hosts as previously set U1/U2 timeout = 105% * service interval.
-
-Patch claimed it solved cases where devices can't be enumerated because of
-bandwidth issues. This might be true but it's a side effect of accidentally
-turning off lpm.
-
-exit latency calculations have been revised since then
-
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20210820123503.2605901-5-mathias.nyman@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/host/xhci.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index b1994b03341f..bd010f8caf87 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -4438,19 +4438,19 @@ static u16 xhci_calculate_u1_timeout(struct xhci_hcd *xhci,
- {
- 	unsigned long long timeout_ns;
- 
--	if (xhci->quirks & XHCI_INTEL_HOST)
--		timeout_ns = xhci_calculate_intel_u1_timeout(udev, desc);
--	else
--		timeout_ns = udev->u1_params.sel;
--
- 	/* Prevent U1 if service interval is shorter than U1 exit latency */
- 	if (usb_endpoint_xfer_int(desc) || usb_endpoint_xfer_isoc(desc)) {
--		if (xhci_service_interval_to_ns(desc) <= timeout_ns) {
-+		if (xhci_service_interval_to_ns(desc) <= udev->u1_params.mel) {
- 			dev_dbg(&udev->dev, "Disable U1, ESIT shorter than exit latency\n");
- 			return USB3_LPM_DISABLED;
- 		}
- 	}
- 
-+	if (xhci->quirks & XHCI_INTEL_HOST)
-+		timeout_ns = xhci_calculate_intel_u1_timeout(udev, desc);
-+	else
-+		timeout_ns = udev->u1_params.sel;
-+
- 	/* The U1 timeout is encoded in 1us intervals.
- 	 * Don't return a timeout of zero, because that's USB3_LPM_DISABLED.
- 	 */
-@@ -4502,19 +4502,19 @@ static u16 xhci_calculate_u2_timeout(struct xhci_hcd *xhci,
- {
- 	unsigned long long timeout_ns;
- 
--	if (xhci->quirks & XHCI_INTEL_HOST)
--		timeout_ns = xhci_calculate_intel_u2_timeout(udev, desc);
--	else
--		timeout_ns = udev->u2_params.sel;
--
- 	/* Prevent U2 if service interval is shorter than U2 exit latency */
- 	if (usb_endpoint_xfer_int(desc) || usb_endpoint_xfer_isoc(desc)) {
--		if (xhci_service_interval_to_ns(desc) <= timeout_ns) {
-+		if (xhci_service_interval_to_ns(desc) <= udev->u2_params.mel) {
- 			dev_dbg(&udev->dev, "Disable U2, ESIT shorter than exit latency\n");
- 			return USB3_LPM_DISABLED;
- 		}
- 	}
- 
-+	if (xhci->quirks & XHCI_INTEL_HOST)
-+		timeout_ns = xhci_calculate_intel_u2_timeout(udev, desc);
-+	else
-+		timeout_ns = udev->u2_params.sel;
-+
- 	/* The U2 timeout is encoded in 256us intervals */
- 	timeout_ns = DIV_ROUND_UP_ULL(timeout_ns, 256 * 1000);
- 	/* If the necessary timeout value is bigger than what we can set in the
 -- 
-2.30.2
-
+heikki
