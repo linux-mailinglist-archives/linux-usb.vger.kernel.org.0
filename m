@@ -2,115 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E010D4046F4
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 10:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E9D404706
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 10:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbhIIIYf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Sep 2021 04:24:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49360 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231206AbhIIIYe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Sep 2021 04:24:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0E6A960FE3;
-        Thu,  9 Sep 2021 08:23:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1631175805;
-        bh=6/mHkfBv8i+EEzeDDGxG5IazSKqcsb6ITzuwcgykfZM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PbettJBnPeYdw230nYTg/4tL0PAAv8NKbGhay7GfUfSlhcowppvFuQihzaipUO4aN
-         N3wXlQLACkCJRC+FGx6Rfwg4HxUES07tvdegp5SwfCL8sRh7J78K/UZPbprlWtuLv7
-         RBmiMl9O8fn3WFNpXp991vagErTZsS/KQ87b4oH0=
-Date:   Thu, 9 Sep 2021 10:23:23 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: dwc3: gadget: clear gadget pointer after exit
-Message-ID: <YTnEe1iV8EPCdsZV@kroah.com>
-References: <1631166347-25021-1-git-send-email-quic_linyyuan@quicinc.com>
- <YTmlbFw9DufQc6gU@kroah.com>
- <DM8PR02MB819856E1A159D7D3F820555FE3D59@DM8PR02MB8198.namprd02.prod.outlook.com>
- <YTm51tmCXRtKZIcx@kroah.com>
- <DM8PR02MB8198F1672DD3A8179B5DF097E3D59@DM8PR02MB8198.namprd02.prod.outlook.com>
+        id S231154AbhIII24 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Sep 2021 04:28:56 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:39923 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229564AbhIII2z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Sep 2021 04:28:55 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1631176066; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=KverK1f2Ijeh3HZLPtMkLmzKnx9/1mzuftZ68kmyPvA=; b=kbN9JHNcZliHeEl2rtKKm4jS1g/fXab1KkF90ieVNLUKWPVSUSRSI7hAJX391QHVtqJkfP2f
+ 6HnzCiIS1fnM8r0vCNqbpCY5PQ8Qq5mnXrSa0OGsRMCrKg3NJpznOgjKw7sduYZ1L3z6Zwic
+ 3dn4tCx0EwkFGDiO9c+aWXQWVtA=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
+ 6139c582e34848cb6a1c9e2b (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 09 Sep 2021 08:27:46
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id EEBF5C4361A; Thu,  9 Sep 2021 08:27:45 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C3084C4338F;
+        Thu,  9 Sep 2021 08:27:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org C3084C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     linux-usb@vger.kernel.org, Ferry Toth <fntoth@gmail.com>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Jack Pham <jackp@codeaurora.org>
+Subject: [PATCH v2 0/2] usb: gadget: f_uac2: Fixes for SuperSpeed
+Date:   Thu,  9 Sep 2021 01:26:49 -0700
+Message-Id: <20210909082651.11912-1-jackp@codeaurora.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM8PR02MB8198F1672DD3A8179B5DF097E3D59@DM8PR02MB8198.namprd02.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 09, 2021 at 08:02:19AM +0000, Linyu Yuan (QUIC) wrote:
-> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Sent: Thursday, September 9, 2021 3:38 PM
-> > To: Linyu Yuan (QUIC) <quic_linyyuan@quicinc.com>
-> > Cc: Felipe Balbi <balbi@kernel.org>; linux-usb@vger.kernel.org
-> > Subject: Re: [PATCH] usb: dwc3: gadget: clear gadget pointer after exit
-> > 
-> > On Thu, Sep 09, 2021 at 07:17:57AM +0000, Linyu Yuan (QUIC) wrote:
-> > >
-> > >
-> > > > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > Sent: Thursday, September 9, 2021 2:11 PM
-> > > > To: Linyu Yuan (QUIC) <quic_linyyuan@quicinc.com>
-> > > > Cc: Felipe Balbi <balbi@kernel.org>; linux-usb@vger.kernel.org
-> > > > Subject: Re: [PATCH] usb: dwc3: gadget: clear gadget pointer after exit
-> > > >
-> > > > On Thu, Sep 09, 2021 at 01:45:47PM +0800, Linyu Yuan wrote:
-> > > > > change device release function to clear gadget pointer.
-> > > >
-> > > > That does not properly describe what and why this change is needed.
-> > > >
-> > > > >
-> > > > > Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
-> > > > > ---
-> > > > >  drivers/usb/dwc3/gadget.c | 5 +++--
-> > > > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > > > > index 804b505..e2ab5f6 100644
-> > > > > --- a/drivers/usb/dwc3/gadget.c
-> > > > > +++ b/drivers/usb/dwc3/gadget.c
-> > > > > @@ -4188,9 +4188,10 @@ static int dwc3_gadget_get_irq(struct dwc3
-> > > > *dwc)
-> > > > >
-> > > > >  static void dwc_gadget_release(struct device *dev)
-> > > > >  {
-> > > > > -	struct usb_gadget *gadget = container_of(dev, struct usb_gadget,
-> > > > dev);
-> > > > > +	struct dwc3 *dwc = dev_get_platdata(dev);
-> > > >
-> > > > Are you sure this is the same?
-> > > Yes, in dwc3_gadget_init()
-> > > 	usb_initialize_gadget(dwc->dev, dwc->gadget, dwc_gadget_release);
-> > > 	dev				= &dwc->gadget->dev;
-> > > 	dev->platform_data		= dwc;
-> > >
-> > > here original code use follow container_of, it use same dev,
-> > > container_of(dev, struct usb_gadget, dev);
-> > > >
-> > > > >
-> > > > > -	kfree(gadget);
-> > > > > +	kfree(dwc->gadget);
-> > > > > +	dwc->gadget = NULL;
-> > > >
-> > > > Why set this to NULL?  Who cares about this now?  What changed to
-> > make
-> > > > it required?
-> > > It better to set to NULL for better understanding.
-> > 
-> > Understanding of what?  What issue does this fix?  You need a reason to
-> > make this, or any, kernel change.
-> Sorry, let explain, for example, when do role switch, we can check it value to make sure it switch complete,
-> If we do not set to NULL, it will be invalid.
+This series fixes SuperSpeed (and SuperSpeedPlus) functionality for the
+UAC2 function driver.  The first patch fixes enumeration failures due
+to a missing companion descriptor, while the second patch is necessary
+for actual data transfer functionality to work.
 
-Are you checking that already?  If not, there is no need for this.
+V2: Made this a series. Patch 1 revised to create a separate descriptor just
+    for the feedback endpoint. Patch 2 is new.
 
-Please see the kernel documentation for how to write a changelog text,
-otherwise we have no idea why you are wanting to make a change.
+Jack Pham (2):
+  usb: gadget: f_uac2: Add missing companion descriptor for feedback EP
+  usb: gadget: f_uac2: Populate SS descriptors' wBytesPerInterval
 
-Please fix this all up when resubmitting the patch.
+ drivers/usb/gadget/function/f_uac2.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
-thanks,
+-- 
+2.24.0
 
-greg k-h
