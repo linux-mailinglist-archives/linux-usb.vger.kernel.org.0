@@ -2,35 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61ED2405282
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 14:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3485405287
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 14:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347455AbhIIMnz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Sep 2021 08:43:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45812 "EHLO mail.kernel.org"
+        id S1347210AbhIIMoC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Sep 2021 08:44:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48338 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1354116AbhIIMg5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:36:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1CCBC61B7F;
-        Thu,  9 Sep 2021 11:54:03 +0000 (UTC)
+        id S1354383AbhIIMi7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:38:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7258E61BAA;
+        Thu,  9 Sep 2021 11:54:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188443;
-        bh=K/PGg6kLoihHZ8O6+cHlmGT+jLvgPdnTCFTMk7Bxex0=;
+        s=k20201202; t=1631188475;
+        bh=fIXSzeBeU3dLvLblzJEo+/rW3xAPrg7LD3uCRPt4XWY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=usw1XT50qS8GTYuAWeL0H2QXv3tVIGAOmHGzfEzFKy4F1mnGoh4DkJWAr3Hk/6RqS
-         iP/IDUqyjvtYYNdiP/SACye2SM/ozzQZ4GGdI9RvX3IUKRIdLbKRV4+hznIaVjlifk
-         BmFE1umTiHh8MmgncSdAbazgCV/3wxVQR7TylsfhReSLpMfTQfmQg29iAhGqWGot0/
-         n1RQoCQN2f0/ZkB9uch+SEzonHtBQqQnEcIg0PLCH03LaFCAenFDSIwJ6/qp8ulH0q
-         pp2TvRXOGJp+C44/i1QItqs26r3lzLzaT+ztlMpJ6XMSe6N00pD+0diCEzC/iVVOPc
-         IXtQa9n7d03eQ==
+        b=HinJO7mOcSxoXu3krUUlN8IVwoHTsvDzZkn/FbL1iiJ9STqM8xb32k5fR5dUm3dhi
+         BrJ/kpp8L1+ht54uUCv00eSwmNABoICRyX1Z9YbwZFCJwYaqiNoXhCDJxgxNwsTKex
+         HmItjOH5RUBpEQNDuxEw7cO2iCIfqgbWCsaHhBEN8ZHP/ZV96zXhO4g1Erv7TTLWHT
+         V0iSyWUOBZVQtblFXf9atLIMYbFMY0Td+6ZjHGKi1oJnIBp2F6j63zvZiNcqw2GyVx
+         IPa2A7kEj2NK7slOb1dv4IGUz5vJJ961l3TZxiaY73aVNaHS6bzwr9UGGRSPOvq09Q
+         epZd6R0WUmYsQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Li Jun <jun.li@nxp.com>, Zhipeng Wang <zhipeng.wang_1@nxp.com>,
-        Peter Chen <peter.chen@kernel.org>,
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 128/176] usb: chipidea: host: fix port index underflow and UBSAN complains
-Date:   Thu,  9 Sep 2021 07:50:30 -0400
-Message-Id: <20210909115118.146181-128-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 152/176] Revert "USB: xhci: fix U1/U2 handling for hardware with XHCI_INTEL_HOST quirk set"
+Date:   Thu,  9 Sep 2021 07:50:54 -0400
+Message-Id: <20210909115118.146181-152-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909115118.146181-1-sashal@kernel.org>
 References: <20210909115118.146181-1-sashal@kernel.org>
@@ -42,66 +42,93 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Li Jun <jun.li@nxp.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-[ Upstream commit e5d6a7c6cfae9e714a0e8ff64facd1ac68a784c6 ]
+[ Upstream commit 2847c46c61486fd8bca9136a6e27177212e78c69 ]
 
-If wIndex is 0 (and it often is), these calculations underflow and
-UBSAN complains, here resolve this by not decrementing the index when
-it is equal to 0, this copies the solution from commit 85e3990bea49
-("USB: EHCI: avoid undefined pointer arithmetic and placate UBSAN")
+This reverts commit 5d5323a6f3625f101dbfa94ba3ef7706cce38760.
 
-Reported-by: Zhipeng Wang <zhipeng.wang_1@nxp.com>
-Signed-off-by: Li Jun <jun.li@nxp.com>
-Link: https://lore.kernel.org/r/1624004938-2399-1-git-send-email-jun.li@nxp.com
-Signed-off-by: Peter Chen <peter.chen@kernel.org>
+That commit effectively disabled Intel host initiated U1/U2 lpm for devices
+with periodic endpoints.
+
+Before that commit we disabled host initiated U1/U2 lpm if the exit latency
+was larger than any periodic endpoint service interval, this is according
+to xhci spec xhci 1.1 specification section 4.23.5.2
+
+After that commit we incorrectly checked that service interval was smaller
+than U1/U2 inactivity timeout. This is not relevant, and can't happen for
+Intel hosts as previously set U1/U2 timeout = 105% * service interval.
+
+Patch claimed it solved cases where devices can't be enumerated because of
+bandwidth issues. This might be true but it's a side effect of accidentally
+turning off lpm.
+
+exit latency calculations have been revised since then
+
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20210820123503.2605901-5-mathias.nyman@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/chipidea/host.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/usb/host/xhci.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/usb/chipidea/host.c b/drivers/usb/chipidea/host.c
-index 48e4a5ca1835..f5f56ee07729 100644
---- a/drivers/usb/chipidea/host.c
-+++ b/drivers/usb/chipidea/host.c
-@@ -233,18 +233,26 @@ static int ci_ehci_hub_control(
- )
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index a8d97e23f601..c51391b45207 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -4666,19 +4666,19 @@ static u16 xhci_calculate_u1_timeout(struct xhci_hcd *xhci,
  {
- 	struct ehci_hcd	*ehci = hcd_to_ehci(hcd);
-+	unsigned int	ports = HCS_N_PORTS(ehci->hcs_params);
- 	u32 __iomem	*status_reg;
--	u32		temp;
-+	u32		temp, port_index;
- 	unsigned long	flags;
- 	int		retval = 0;
- 	struct device *dev = hcd->self.controller;
- 	struct ci_hdrc *ci = dev_get_drvdata(dev);
+ 	unsigned long long timeout_ns;
  
--	status_reg = &ehci->regs->port_status[(wIndex & 0xff) - 1];
-+	port_index = wIndex & 0xff;
-+	port_index -= (port_index > 0);
-+	status_reg = &ehci->regs->port_status[port_index];
- 
- 	spin_lock_irqsave(&ehci->lock, flags);
- 
- 	if (typeReq == SetPortFeature && wValue == USB_PORT_FEAT_SUSPEND) {
-+		if (!wIndex || wIndex > ports) {
-+			retval = -EPIPE;
-+			goto done;
-+		}
-+
- 		temp = ehci_readl(ehci, status_reg);
- 		if ((temp & PORT_PE) == 0 || (temp & PORT_RESET) != 0) {
- 			retval = -EPIPE;
-@@ -273,7 +281,7 @@ static int ci_ehci_hub_control(
- 			ehci_writel(ehci, temp, status_reg);
+-	if (xhci->quirks & XHCI_INTEL_HOST)
+-		timeout_ns = xhci_calculate_intel_u1_timeout(udev, desc);
+-	else
+-		timeout_ns = udev->u1_params.sel;
+-
+ 	/* Prevent U1 if service interval is shorter than U1 exit latency */
+ 	if (usb_endpoint_xfer_int(desc) || usb_endpoint_xfer_isoc(desc)) {
+-		if (xhci_service_interval_to_ns(desc) <= timeout_ns) {
++		if (xhci_service_interval_to_ns(desc) <= udev->u1_params.mel) {
+ 			dev_dbg(&udev->dev, "Disable U1, ESIT shorter than exit latency\n");
+ 			return USB3_LPM_DISABLED;
  		}
- 
--		set_bit((wIndex & 0xff) - 1, &ehci->suspended_ports);
-+		set_bit(port_index, &ehci->suspended_ports);
- 		goto done;
  	}
  
++	if (xhci->quirks & XHCI_INTEL_HOST)
++		timeout_ns = xhci_calculate_intel_u1_timeout(udev, desc);
++	else
++		timeout_ns = udev->u1_params.sel;
++
+ 	/* The U1 timeout is encoded in 1us intervals.
+ 	 * Don't return a timeout of zero, because that's USB3_LPM_DISABLED.
+ 	 */
+@@ -4730,19 +4730,19 @@ static u16 xhci_calculate_u2_timeout(struct xhci_hcd *xhci,
+ {
+ 	unsigned long long timeout_ns;
+ 
+-	if (xhci->quirks & XHCI_INTEL_HOST)
+-		timeout_ns = xhci_calculate_intel_u2_timeout(udev, desc);
+-	else
+-		timeout_ns = udev->u2_params.sel;
+-
+ 	/* Prevent U2 if service interval is shorter than U2 exit latency */
+ 	if (usb_endpoint_xfer_int(desc) || usb_endpoint_xfer_isoc(desc)) {
+-		if (xhci_service_interval_to_ns(desc) <= timeout_ns) {
++		if (xhci_service_interval_to_ns(desc) <= udev->u2_params.mel) {
+ 			dev_dbg(&udev->dev, "Disable U2, ESIT shorter than exit latency\n");
+ 			return USB3_LPM_DISABLED;
+ 		}
+ 	}
+ 
++	if (xhci->quirks & XHCI_INTEL_HOST)
++		timeout_ns = xhci_calculate_intel_u2_timeout(udev, desc);
++	else
++		timeout_ns = udev->u2_params.sel;
++
+ 	/* The U2 timeout is encoded in 256us intervals */
+ 	timeout_ns = DIV_ROUND_UP_ULL(timeout_ns, 256 * 1000);
+ 	/* If the necessary timeout value is bigger than what we can set in the
 -- 
 2.30.2
 
