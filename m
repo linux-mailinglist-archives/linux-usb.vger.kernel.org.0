@@ -2,121 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 967F24050B7
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 14:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 543E2405731
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 15:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237295AbhIIMbl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Sep 2021 08:31:41 -0400
-Received: from mail.huberulrich.de ([81.169.200.209]:57147 "EHLO
-        mail.huberulrich.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347758AbhIIMZs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Sep 2021 08:25:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; d=huberulrich.de; s=2017; c=relaxed/relaxed;
- q=dns/txt; h=from:date:to:cc:message-id:subject;
- bh=2TugKmgEtE9vw0PawSkcaKTNk9riZr/4V0gYGu4X0rg=;
- b=jQx8PfqOxS7DOS6smNUp9v6ryqwpL58UuiEYMae+RpIFMYA8bcg4NAHilubMl41Bia5/7U1DG4uDGpfaqzce2khbcuBq85TXxkOQN0ZS47CmQ0KLbSg6cT0cyTcqJSCN5itjZyucv0uWPokj5EfW+/dVQPcTpIt7rjbikH64Y90VoHzg0SKsp9M3vzYSzAwmdCKNY+U12BHlV7GCijx9EQFkzpQIPo5vyHWeTI235125/OcQhzRFSRf/qT9NLMR+Jk2wQk94ifMMmAL6r1QnhhFXqoW1HajfUKvVmnc/5q7+fnIjT/Wgizwk/Kg6cSVUf4h1G+OqmW4oPqGxZm7ghA==;
-DomainKey-Signature: a=rsa-sha1;
- b=XvcCfmJGNvdRvzQ9m+bBuR0fpkvK+zVJK5HgnnRLQ/iffBpSl2LrZsO7X3A4j+YJl6u53NfCXKfBFiimolQ2hTXVy7QPlxAh/1rLkjBEbuScVuToT+egQ7lCX3JvWeziOHJ/zTtGCYXC1t6hjkt9ufM3T2nPmCPKYx0mDhN3Tr1GU+h0IF1fzWwqeH7pgP5VFBZnJNxcZO+MIQIn4epg1klLbsFcT0UCXPPXYK5fMULzvXR4mhhBAaDlA1pkI74nAtYF7LPqQx4LPeyZ8EqkZd1NhRxYXAbp1PtGsmKjHL+QaQXaCeoYPVXCAEv2oB+cM4iEyskrIliwzFEB94QpQw==;
- c=nofws; q=dns; d=huberulrich.de; s=2017;
- h=subject:to:cc:from:message-id:date;
-Received: from [IPv6:2001:16b8:2d87:a600:b35f:b05b:32de:5183]
- (2001:16b8:2d87:a600:b35f:b05b:32de:5183) by mail.huberulrich.de (Axigen)
- with (ECDHE-RSA-AES128-GCM-SHA256 encrypted) ESMTPSA id 1F8772;
- Thu, 9 Sep 2021 12:24:34 +0000
-Subject: Re: ucsi_acpi GET_CONNECTOR_STATUS failed (-5)
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-References: <b36249c5-776a-9338-bb9f-ae6a5c446860@huberulrich.de>
- <YSX7hZnCoFSXTFJe@kuha.fi.intel.com>
- <0e77017d-9358-a691-6293-234fcbab6a31@huberulrich.de>
- <a7f971ef-c3aa-aadc-e453-4c667a414131@huberulrich.de>
- <YSekP0+tq6ISq6my@kuha.fi.intel.com>
- <3fe6d701-bc14-9b26-a5af-aa38fe7c585e@huberulrich.de>
- <YSoGcC4Z1EP0S3KQ@kuha.fi.intel.com>
- <7e06ae23-1cdd-7fe5-8b56-d4a2f80809f2@huberulrich.de>
- <YTn75r/QUSjjQ0BV@kuha.fi.intel.com>
-From:   Ulrich Huber <ulrich@huberulrich.de>
-Message-ID: <2b9b8209-d2d7-1cf1-ee48-490a77348ced@huberulrich.de>
-Date:   Thu, 9 Sep 2021 14:24:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+        id S1357773AbhIINcE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Sep 2021 09:32:04 -0400
+Received: from mga12.intel.com ([192.55.52.136]:7486 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1358347AbhIINHL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Sep 2021 09:07:11 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10101"; a="200306463"
+X-IronPort-AV: E=Sophos;i="5.85,280,1624345200"; 
+   d="scan'208";a="200306463"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2021 05:55:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,280,1624345200"; 
+   d="scan'208";a="606824869"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 09 Sep 2021 05:55:16 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 09 Sep 2021 15:55:15 +0300
+Date:   Thu, 9 Sep 2021 15:55:15 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
+Cc:     "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Liu, Kun" <Kun.Liu2@amd.com>
+Subject: Re: [RESEND PATCH 2/2] usb: dwc3: pci add property to allow user
+ space role switch
+Message-ID: <YToEM3NLebXmLNrY@kuha.fi.intel.com>
+References: <20210824192337.3100288-1-Nehal-Bakulchandra.shah@amd.com>
+ <87ilzu5ap0.fsf@kernel.org>
+ <YSXqsXmuom2fFiKN@kuha.fi.intel.com>
+ <YSXwkKJ53d/uwnhy@kuha.fi.intel.com>
+ <BL1PR12MB51443C94208DDE0AEBCB91A6F7C69@BL1PR12MB5144.namprd12.prod.outlook.com>
+ <YSef0Iyr3oDWv6Kt@kuha.fi.intel.com>
+ <a06b1b50-771c-312d-c91e-b6707c4b9401@amd.com>
 MIME-Version: 1.0
-In-Reply-To: <YTn75r/QUSjjQ0BV@kuha.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-Received-SPF: 
-X-AXIGEN-SPF-Result: Ok
-X-AXIGEN-DK-Result: Ok
-DomainKey-Status: good
-X-AXIGEN-DKIM-Result: Ok
-DKIM-Status: good
-X-AxigenSpam-Level: 4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a06b1b50-771c-312d-c91e-b6707c4b9401@amd.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+Hi,
 
-On 09.09.21 14:19, Heikki Krogerus wrote:
-> Hi Ulrich,
->
-> On Sun, Aug 29, 2021 at 01:02:54PM +0200, Ulrich Huber wrote:
->> On 28.08.21 11:48, Heikki Krogerus wrote:
->>> On Thu, Aug 26, 2021 at 09:50:58PM +0200, Ulrich Huber wrote:
->>>> I just got around to test your patches. They seem to solve the issue
->>>> completely! Whatever I tried, the behavior of the port stayed
-> consistent and
->>>> no error messages appeared in the log.
->>>>
->>>> I'll continue using the patch for now and will notify you, should
-> any issue
->>>> appear.
->>> Great! If there are no problems, I'll send them to Greg after the next
->>> -rc1.
->> It seems I just found one such problem. After waking from hibernation I
-> get
->> the following entries in the kernel log:
->>
->> Aug 29 11:55:31 lenovo-ulrich kernel: ucsi_acpi USBC000:00:
->> GET_CONNECTOR_STATUS failed (-5)
->> Aug 29 11:55:31 lenovo-ulrich kernel: ucsi_acpi USBC000:00:
->> GET_CONNECTOR_STATUS failed (-5)
->> Aug 29 11:55:31 lenovo-ulrich kernel: usb 3-6: reset high-speed USB
-> device
->> number 3 using xhci_hcd
->> Aug 29 11:55:31 lenovo-ulrich kernel: ish-hid
->> {33AECD58-B679-4E54-9BD9-A04D34F0C226}: [hid-ish]: enum_devices_do>
->> Aug 29 11:55:31 lenovo-ulrich kernel: usb 3-10: reset full-speed USB
-> device
->> number 4 using xhci_hcd
->> Aug 29 11:55:31 lenovo-ulrich kernel: usb 3-5: reset full-speed USB
-> device
->> number 2 using xhci_hcd
->>
->> It is obviously related with the system resetting the hardware after
-> waking
->> up. Most likely the driver tries to communicate with the device while it
-> is
->> in a state where it is not able to respond. I do not get this after each
->> hibernation, so far it is the first time I have seen this. I'll try to
-> find
->> a way to reproduce this.
-> Any updates?
+On Thu, Sep 02, 2021 at 06:15:55PM +0530, Shah, Nehal-bakulchandra wrote:
+> Hi Heikki,
+> On 8/26/2021 7:36 PM, Heikki Krogerus wrote:
+> > Hi Alexander,
+> > 
+> > On Wed, Aug 25, 2021 at 01:50:48PM +0000, Deucher, Alexander wrote:
+> > > I'm not a USB expert, but I think the idea was to pop up a message asking the
+> > > user what role they wanted when they plugged in USB cable?  Then based on
+> > > their input, the role could be changed.
+> > 
+> > What exactly is the ACPI/EC interrupt in this case?
+> > 
+> > Note, that simply selecting one role will only work if the partner
+> > device happens to be in the opposite role at the same time (actually,
+> > even that may not be enough). So for example by selecting host role
+> > will only work if the partner happens to be in device role. If the
+> > parter is also in host role, nothing happens, or both ends just fail
+> > to enumerate each other.
+> > 
+> > So you always have to negotiate the role with the partner one way or
+> > the other. Now we need to understand how that negotiation is handled
+> > (or is expected to be handled) on this platform.
+> > 
+> > Which type of connector are we talking about here? Is it USB Type-C,
+> > or is it something else?
+> > 
+> > thanks,
+> > 
+> Sorry for the delayed response due to few designed changes. Now we have more
+> clarity for the customer platform with respect to usage of DWC3 controller
+> driver. So it is type C controller which will be using ACPI based UCSI
+> driver. As UCSI driver has already role switch support we may not need this
+> patch. However we need your input to understand this,
+> 
+> con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode);
+> 
+> For this to work, how should be ACPI entry to be defined. Do you have sample
+> code, we had discussion on similar point in past but still need some clarity
+> if we have sample ACPI ASL Code. I remember something on this line from
+> previous discussion with following sample code.
+> 
+> /*
+>  * I2C1 is the I2C host, and PDC1 is the USB PD Controller (I2C slave
+> device).
+>  */
+> Scope (\_SB.PCI0.I2C1.PDC1)
+> {
+>         /* Each connector should have its own ACPI device entry (node). */
+>         Device (CON0)
+>         {
+>                 Name (_ADR, 0)
+> 
+>                 Name (_DSD, Package () {
+>                     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+>                     Package() {
+>                         Package () {"usb-role-switch", \_SB.PCI0.DWC3},
+>                     }
+>                 })
+>         }
+> }
 
-Whatever I tried, I can not manage to reproduce this issue. I haven't 
-seen it for quite some time as well.
+In your case, the dwc3 is also the USB host controller, no?
 
->
-> Would it make sense to go ahead with my series now anyway at this
-> point since it seems to fix the other problems?
+The ACPI guys tell me that in ACPI we should rely on the _PLD
+(Physical Location of Device) when determining to which USB Type-C
+connector any given USB port (or any other port - like DP) is
+connected to. Basically, the connector ACPI device node and the USB
+port ACPI device node share the same _PLD, and that's how we know they
+are connected. I'm already using that to create a symlink "connector"
+for every USB port here: drivers/usb/typec/port-mapper.c
 
-It would definitely make sense to go ahead with your series. Compared to 
-the behavior without this fix, the situation improved tremendously. That 
-hiccup I saw, does not degrade the connection as far as I can tell. At 
-least the connection status has been correct after the error occurred. 
-That was not the case without your fixes.
+I'm not actually sure how did the ACPI guys think this will work with
+USB device controllers, but if your controller is also the USB host
+controller, then you will have a separate device node for every
+port the host is controlling, and each of those will have the _PLD.
 
->
-> thanks,
->
+Can you send acpidump so I can take a look what you actually have
+under your dwc3 ACPI device node?
+
+        % acpidump -o my_acpi.dump
+
+We most likely do need to update the fwnode_usb_role_switch_get() api
+so that it also considers the _PLD, but your ACPI tables maybe
+already OK (big maybe).
+
+
+> So here is the another question , if we can not achieve this in BIOS , Can
+> we register the software node with quirk in DWC3 controller something like
+> this
+> 
+> static const struct software_node amd_dwc3_node[] = {
+> 	{ "amd-dwc3-usb-sw", NULL, amd_dwc3_props },
+> 	{},
+> };
+> 
+> if (dwc->use_sw_node_quirk) {
+> 		ret = software_node_register_nodes(amd_dwc3_node);
+> 		if (ret)
+> 			return ret;
+> 		dwc3_role_switch.fwnode = software_node_fwnode(&amd_dwc3_node[0]);
+> 	} else {
+> 		dwc3_role_switch.fwnode = dev_fwnode(dwc->dev);
+> 	}
+> 	
+> 
+> And in UCSI driver again with quirk,
+> 
+> swnode = software_node_find_by_name(NULL, "amd-dwc3-usb-sw");
+> 
+> fwnode = software_node_fwnode(swnode);
+> 
+> con->usb_role_sw = usb_role_switch_find_by_fwnode(fwnode);
+> 
+> 
+> Please provide your input that will help us .
+
+Let's first check if we can we use _PLD for this.
+
+
+thanks,
+
+-- 
+heikki
