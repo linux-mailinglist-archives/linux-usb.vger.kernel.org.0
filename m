@@ -2,92 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AEFA404802
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 11:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9156404801
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 11:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbhIIJtR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Sep 2021 05:49:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50648 "EHLO mail.kernel.org"
+        id S230145AbhIIJsL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Sep 2021 05:48:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50258 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233353AbhIIJtN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Sep 2021 05:49:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id ACBEA611BD;
-        Thu,  9 Sep 2021 09:48:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631180884;
-        bh=OdJ9hF8aF+EiFbO4nYWFpj9ePWRPK7plwXk/kGVvHMs=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=dTxXkeil9JfzGywlLvd2UoTIuIfw3FLQQoBC/zeMP3wrTrtwrwseDPKkXMmLRRHm/
-         u6klNYX6SXr4bACzE6up2ogUs08lvZWIfLvVAR6ndtm8t+mXOITbYBfBK2HBTbSrwc
-         8AHUkc3T1bCgjeZ5lwpiGY7vyDIm+FnhSwsC7Jvs1+ak2wKeQHoHDkzVoewdmWVWRG
-         qY3D294zmE/obSB7U5glHju8bu3t8D6hjKEuwe40OS+mFrKtKfs4lBkhzC6aPVqmwP
-         fH3vPHVhBY6Jg8plDzekFivH2mD8j4qmdxoBOMg/MooWaNlpuc3vzpFIO0exUOBvvG
-         //BSz2BCU8sJA==
-References: <1631166347-25021-1-git-send-email-quic_linyyuan@quicinc.com>
- <YTmlbFw9DufQc6gU@kroah.com>
- <DM8PR02MB819856E1A159D7D3F820555FE3D59@DM8PR02MB8198.namprd02.prod.outlook.com>
- <YTm51tmCXRtKZIcx@kroah.com>
- <DM8PR02MB8198F1672DD3A8179B5DF097E3D59@DM8PR02MB8198.namprd02.prod.outlook.com>
- <87bl52b0i9.fsf@kernel.org>
- <DM8PR02MB8198BC47C3C0598542B51A8BE3D59@DM8PR02MB8198.namprd02.prod.outlook.com>
-User-agent: mu4e 1.6.5; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
-To:     "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: dwc3: gadget: clear gadget pointer after exit
-Date:   Thu, 09 Sep 2021 12:44:59 +0300
-In-reply-to: <DM8PR02MB8198BC47C3C0598542B51A8BE3D59@DM8PR02MB8198.namprd02.prod.outlook.com>
-Message-ID: <877dfqaxm6.fsf@kernel.org>
+        id S233296AbhIIJsK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Sep 2021 05:48:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C84CD61101;
+        Thu,  9 Sep 2021 09:47:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1631180821;
+        bh=IeIl34G+4zJXdeYO6KwY3TwYftGDlNG2/wX6Cz/JieE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NBDLJUMqoPHKrQ4iqWyQkNoJulPC89s5fn3cxlgvf22ztVvsrnLrvCJ6Yg7zMHqnJ
+         5PdSA7VZtT216pnAFaA5t5cGf8jK0ftx8gKFM+ndyQ6Zz97EBnPnC7zE0CWbi1E3CI
+         2qMglZx6h7Yy8PO4ktV/PllxCsNLY8O645LRyvkQ=
+Date:   Thu, 9 Sep 2021 11:46:58 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: dwc3: gadget: clear gadget pointer after exit
+Message-ID: <YTnYEp1e9TaSFGa6@kroah.com>
+References: <1631179952-28023-1-git-send-email-quic_linyyuan@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1631179952-28023-1-git-send-email-quic_linyyuan@quicinc.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, Sep 09, 2021 at 05:32:32PM +0800, Linyu Yuan wrote:
+> when do role switch from device to host mode,
+> first disable device mode, currently there is no better way to
+> confirm when gadget was complete removed.
+> 
+> change device release function to clear gadget pointer,
+> this will confirm device stop complete when it is NULL.
 
-Hi,
+Where is this check happening?  If there is nothing in the tree today
+that checks for this, why is this needed?
 
-"Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com> writes:
->> >> > > Why set this to NULL?  Who cares about this now?  What changed to
->> >> make
->> >> > > it required?
->> >> > It better to set to NULL for better understanding.
->> >>
->> >> Understanding of what?  What issue does this fix?  You need a reason to
->> >> make this, or any, kernel change.
->> >
->> > Sorry, let explain, for example, when do role switch, we can check it
->> > value to make sure it switch complete,
->> >
->> > If we do not set to NULL, it will be invalid.
->> 
->> Using this pointer as a role switch flag seems fragile, though.
-> Hi Felipe,
->
-> I update a v2 patch, no, I didn't use this pointer for role switch,
-> just used to check role switch status, make sure it complete.
+Does this fix a specific commit in the past?  If so, what one?
 
-exactly, you're using it as a flag for role switch. But gadget pointer
-being invalid is not very indication of that :-) It could be that right
-now these two things correlate, but there's no guarantee. You end up
-writing code that has possibility of failing in the future ;-)
+thanks,
 
->     when do role switch from device to host mode,
->     first disable device mode, currently there is no better way to
->     confirm when gadget was complete removed.
-
-if ->udc_stop() finished running, you know for a fact that gadget was
-completely removed ;-) If you want to be doubly sure, you can somehow
-notify the UDC from the gadget_release() function, but that's a little
-more invasive change
-
->     change device release function to clear gadget pointer,
->     this will confirm device stop complete when it is NULL.
-
-And instead of checking for the pointer (which can be racy in some
-occasions), perhaps tell the UDC about it with a callback or something
-like that?
-
--- 
-balbi
+greg k-h
