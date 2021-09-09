@@ -2,37 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E5C404A15
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 13:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88592404BCF
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 13:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236807AbhIILoo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Sep 2021 07:44:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47266 "EHLO mail.kernel.org"
+        id S240688AbhIILxP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Sep 2021 07:53:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55120 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237891AbhIILnV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Sep 2021 07:43:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7647C61206;
-        Thu,  9 Sep 2021 11:42:01 +0000 (UTC)
+        id S241447AbhIILu7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Sep 2021 07:50:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5092C6135E;
+        Thu,  9 Sep 2021 11:43:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631187722;
-        bh=9dp2HsjXh0v3QGCZzbXCEO3dbuO7d+bUPgzfJXClYpg=;
+        s=k20201202; t=1631187840;
+        bh=6+FigFe1JfRp3EsUrqy4XkTFd6p4WNxKygRAKeaCjxE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Edmx1nPwlguFye9xoq4n+QkkdTGfCFldw+IpmR1In5hpK89uJKsk1/B381fkwJ27g
-         /XjGciN+zfTPHX5EenSYddUghOaGzY2jKWh6z94r4qyn8Vl4Otr/sB8eL/g+NhCjrC
-         63zsCRuzl67ZNQcMcpKUQCthc2q0pX/+AKhzkhzv47EQ8Xt4mBgE/n1l1QyS4tcKYU
-         RvksA4zBHnWLt+N+4l07arYRQxF311GPr7TQOU55ouq6iuXdKW/Pwp+XhfdjPZpGMM
-         /YWAcUjpD8WYmtIq7ZN7Rf64m09BedeTHOzjg1CPxn20cTpBoJiEke+KTZvlPWbq9u
-         lL84T+FgTGufg==
+        b=LiizHbSSrEO9pcSVyKt+0gJj9EBSUIxEt7HKK1VnOA6MYwtTk7/xSE5BdxwnWASDO
+         Nolo1VA7IIJQWmaMADuwX5XmRKl6O06K+VM9MZWDtKIYn1FKnUmFQ7L+LqXDmd5Wj7
+         o5HRftaQnmJpTPKiRYVRaXDR3wSpeCDrtmGQmnqq0+jblmHEUZ4CV1scQd8mvzTNq0
+         P9VdQl/iLEDbW1HygGnuEffPo/c5nfKUB4YhtUdTqfq66PK+TLRjGP9+u34Zg+hy6s
+         oZ7yIg5V1EE2xIxInU2SU4cjhdqrDq7NZFcPOWtnYZWCVkcDstvv7wzTTcybzDINVk
+         XN96yw2sc8iqg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jack Pham <jackp@codeaurora.org>,
-        Ronak Vijay Raheja <rraheja@codeaurora.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     Sanjay R Mehta <sanju.mehta@amd.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 043/252] usb: gadget: composite: Allow bMaxPower=0 if self-powered
-Date:   Thu,  9 Sep 2021 07:37:37 -0400
-Message-Id: <20210909114106.141462-43-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.14 134/252] thunderbolt: Fix port linking by checking all adapters
+Date:   Thu,  9 Sep 2021 07:39:08 -0400
+Message-Id: <20210909114106.141462-134-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909114106.141462-1-sashal@kernel.org>
 References: <20210909114106.141462-1-sashal@kernel.org>
@@ -44,67 +43,41 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jack Pham <jackp@codeaurora.org>
+From: Sanjay R Mehta <sanju.mehta@amd.com>
 
-[ Upstream commit bcacbf06c891374e7fdd7b72d11cda03b0269b43 ]
+[ Upstream commit 42716425ad7e1b6529ec61c260c11176841f4b5f ]
 
-Currently the composite driver encodes the MaxPower field of
-the configuration descriptor by reading the c->MaxPower of the
-usb_configuration only if it is non-zero, otherwise it falls back
-to using the value hard-coded in CONFIG_USB_GADGET_VBUS_DRAW.
-However, there are cases when a configuration must explicitly set
-bMaxPower to 0, particularly if its bmAttributes also has the
-Self-Powered bit set, which is a valid combination.
+In tb_switch_default_link_ports(), while linking of ports,
+only odd-numbered ports (1,3,5..) are considered and even-numbered
+ports are not considered.
 
-This is specifically called out in the USB PD specification section
-9.1, in which a PDUSB device "shall report zero in the bMaxPower
-field after negotiating a mutually agreeable Contract", and also
-verified by the USB Type-C Functional Test TD.4.10.2 Sink Power
-Precedence Test.
+AMD host router has lane adapters at 2 and 3 and link ports at adapter 2
+is not considered due to which lane bonding gets disabled.
 
-The fix allows the c->MaxPower to be used for encoding the bMaxPower
-even if it is 0, if the self-powered bit is also set.  An example
-usage of this would be for a ConfigFS gadget to be dynamically
-updated by userspace when the Type-C connection is determined to be
-operating in Power Delivery mode.
+Hence added a fix such that all ports are considered during
+linking of ports.
 
-Co-developed-by: Ronak Vijay Raheja <rraheja@codeaurora.org>
-Acked-by: Felipe Balbi <balbi@kernel.org>
-Signed-off-by: Ronak Vijay Raheja <rraheja@codeaurora.org>
-Signed-off-by: Jack Pham <jackp@codeaurora.org>
-Link: https://lore.kernel.org/r/20210720080907.30292-1-jackp@codeaurora.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/composite.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/thunderbolt/switch.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index 72a9797dbbae..504c1cbc255d 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -482,7 +482,7 @@ static u8 encode_bMaxPower(enum usb_device_speed speed,
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index 10d6b228cc94..eec59030c3a7 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -2443,7 +2443,7 @@ static void tb_switch_default_link_ports(struct tb_switch *sw)
  {
- 	unsigned val;
+ 	int i;
  
--	if (c->MaxPower)
-+	if (c->MaxPower || (c->bmAttributes & USB_CONFIG_ATT_SELFPOWER))
- 		val = c->MaxPower;
- 	else
- 		val = CONFIG_USB_GADGET_VBUS_DRAW;
-@@ -936,7 +936,11 @@ static int set_config(struct usb_composite_dev *cdev,
- 	}
+-	for (i = 1; i <= sw->config.max_port_number; i += 2) {
++	for (i = 1; i <= sw->config.max_port_number; i++) {
+ 		struct tb_port *port = &sw->ports[i];
+ 		struct tb_port *subordinate;
  
- 	/* when we return, be sure our power usage is valid */
--	power = c->MaxPower ? c->MaxPower : CONFIG_USB_GADGET_VBUS_DRAW;
-+	if (c->MaxPower || (c->bmAttributes & USB_CONFIG_ATT_SELFPOWER))
-+		power = c->MaxPower;
-+	else
-+		power = CONFIG_USB_GADGET_VBUS_DRAW;
-+
- 	if (gadget->speed < USB_SPEED_SUPER)
- 		power = min(power, 500U);
- 	else
 -- 
 2.30.2
 
