@@ -2,272 +2,448 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F23E4048A7
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 12:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF97F4048AD
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 12:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234134AbhIIKny (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Sep 2021 06:43:54 -0400
-Received: from mail-eopbgr1300100.outbound.protection.outlook.com ([40.107.130.100]:15031
-        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233654AbhIIKny (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Sep 2021 06:43:54 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iOq3uO27OkaNyXLBaGQt08B9IiOhWcVHAtpFppvj8bcNGo5Wfk7Yurt6VmnGe5iPHpVe8Wyq5XOIZaGD3thPCn8FVsu0vhOyD94bARf6ErJKyCHwVF/z9VfXDxxu4GWSa4VgKAZj2AebJltvPfP9NEp+DGPxSNG1hb5TcWRTSGMJ9fOVVTS+jRL3z/TYtHUsNurtbubXSo2b6Vr/tNnuhSJ/R6VclA51pumaWIgCzELh9iLr6/KYokgQ5K5m5M5J9WNYL4YQdqplX8PtdJ6BjkcaGexng9bZh7LXxNDQC+JpIsh3op1FySh8nDkcdBQECFzzWOn2JstDpx8f9EUaug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=iKPRtE9mxr9dpu1q9azfgaVhVJ0E2R3pRstw2JJrVOU=;
- b=HkHavtTOdnlTjkWmCiIZNTINZLIzn0mSkdxC+3mTAKmYegs1GuhI3GrB/+RwcYpF99qrZWRDuxta2Fybp5v6CrX7F5nC5eX5O7ayEKIyohpUo4OO+WFpOfI8X4h9NLip0AhxIjyxldeWf69b2L4TnLaTRLc/Npf/+xy/ye+tvfd4rtWl/Jbbc9zIlLHU7MfdpyiImiTSSCNQv6u+qEwPZ78kaaJXZfamera9ghGSbJmBMbHX4Fiix3fvPKRqzFGkAs/QkgM4m9QdAKJJOI3wKlMsxiPSy+f+QOArmtxIfzVEFAZOVBwgLbrpfXnC49mZrH0oPkWzQ+VVLw89gZy/MQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iKPRtE9mxr9dpu1q9azfgaVhVJ0E2R3pRstw2JJrVOU=;
- b=S8gnD1L2eDozXeRpeyilwlvvijua+FS2GAPVmQT/u/Yg+SKJFmFI3bLWN6ZeejPPFHS4PhCsCLHdIRI3AZZ2MkAunqn6m1AgonDbjl7vlvNCiKeQgGDI/LpHE3j6+ATmhCZDt7pH6m3gEVf9TrC+3pHA2yr0rQEhDnpiS8NUMVN1Gdqw2ifKLfBl/xke8oiWAZe8Vl97qK+RYljRknvOCEOKoY66KVxYqtCI7LhHGkr1QOyVlRuDLgrxL0FDTL+o14jnhg3dRt5MUzKOAg2/2THPeuYi/vRUvp9N67gIqUHwxv9NMit/tLDB/bycalr9+tPrVUGfMvMaVM1fba5VNA==
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
- by HK2PR0601MB1924.apcprd06.prod.outlook.com (2603:1096:202:c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.16; Thu, 9 Sep
- 2021 10:42:41 +0000
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::e129:fce0:90bf:3c79]) by HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::e129:fce0:90bf:3c79%3]) with mapi id 15.20.4478.026; Thu, 9 Sep 2021
- 10:42:41 +0000
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Tao Ren <rentao.bupt@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Tony Prisk <linux@prisktech.co.nz>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>
-Subject: RE: [PATCH v2] usb: ehci: handshake CMD_RUN instead of STS_HALT
-Thread-Topic: [PATCH v2] usb: ehci: handshake CMD_RUN instead of STS_HALT
-Thread-Index: AQHXnuRSuVZoYfgvf0W+qrh69Uwfh6uOsZ2AgAyMaACAAAnu8IAABN8AgABEF8A=
-Date:   Thu, 9 Sep 2021 10:42:40 +0000
-Message-ID: <HK0PR06MB32024D58192273F54B3F31F780D59@HK0PR06MB3202.apcprd06.prod.outlook.com>
-References: <20210901035041.10810-1-neal_liu@aspeedtech.com>
- <YS8YuX9laah5d/NY@kroah.com> <20210909054531.GA10391@taoren-ubuntu-R90MNF91>
- <HK0PR06MB3202E3A5457474212F8ECC9080D59@HK0PR06MB3202.apcprd06.prod.outlook.com>
- <YTmr5jtlFYNuQb/j@kroah.com>
-In-Reply-To: <YTmr5jtlFYNuQb/j@kroah.com>
-Accept-Language: en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ff32e8d0-fe2a-46da-566c-08d9737e8c9b
-x-ms-traffictypediagnostic: HK2PR0601MB1924:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <HK2PR0601MB1924530980D12D57AE76647280D59@HK2PR0601MB1924.apcprd06.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Nkp0zRWBiNe3gvQOyK+jdICqovjbrtxQj5Y9PgqfIHHKpY04+A4+QYz3iZ006SI71KkKNdSlXCCY0S1rL1ohcpcTcTRVUkuTYnloH3e4Q4BMTNyI8P1VEUTgjqiIvKgcg1WZ0DqYz1aBYvVC0wB4ftFarbj/MP6DeVP9JWrLUk/PaqhT3DZeYkiRRv4DRbSgPGKQ/DwEFj1qjacac9wF1K2w6eV8iP4HR4Zg0ovGyQzyN9W/Yyq0M+diQwn/ukQ5tkE2h5QCSzdIArCIz4Fkq5R23E76GOCCP58mZeTSmxWv4Jj9oUj/oNP0KEnatN6j34wZZ/NSTGjJZkaXjbh1H6EoUpaDkAsibhBmlvj7lsKo2VwaUzE21bQazBdzJXJeSzRrcN5TTxGJ+wB6XNtEmaNMsA1C7PafhkyI6YarNt0Nprm4krHgi8bP9B1Wqfu6a4DdHkRbuwhuALRkwGoOnk9PmXFnglPZ33cNlQNOnMN/ejmOQAsjw1WMBnD0NKqQLKibe/2dNljAltuHHFg+ep+jey5ecfw92krWJxjEsNpC2q19h2XXaxDp4cvAUrQQ9xW8so5lPAsnAXOvPDkDn508PHe5qrs26q7Jy7Vgf/bNPSbsSenWpOOBFys/wwQhS5SlcTrpM0aEdT90HD7jSSe3C9n8qnWJKKK+LfvOENrAv7XNrN//BSpjcnlTGfdggHPEvplpL45Gbo+0Q5qXrA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(39840400004)(396003)(366004)(346002)(376002)(86362001)(83380400001)(38070700005)(8936002)(2906002)(26005)(6506007)(53546011)(7696005)(4326008)(6916009)(33656002)(52536014)(71200400001)(186003)(122000001)(9686003)(5660300002)(478600001)(107886003)(8676002)(316002)(66946007)(54906003)(76116006)(55016002)(66446008)(64756008)(66556008)(38100700002)(66476007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?61WPROuDdEbPDY5D7kp2Cp1garIe8TmT81V2H57iD09qnWkaCmP4Ppzfb6KV?=
- =?us-ascii?Q?qpIDu5b8Nvkxsgz051KHZ/XeIRlKARQvQa8Mp9L21s+res9+4NPVRbx8ZluF?=
- =?us-ascii?Q?N4cIwufeOhQxT5rsPznpQkev1v1uHZu7+Yd5Vz7TFUExFe1bkAoliFpAL8g5?=
- =?us-ascii?Q?eDTx+/iDCua0tlL8aJt1oODZoi4qTKdiM29XPq4XsgSdbyqhmEVKl9Df8tP+?=
- =?us-ascii?Q?tuitdmBHuWYJRzPaRSN3qY07+iEB8p33y4c/mPTcde/7xHt2FHcZcPh4Ap+k?=
- =?us-ascii?Q?0/KhKaHf9Lt2XLFmVMff7wURPPQyNomZO83I3e+vznP6MsUa0cnhn7THZZ0T?=
- =?us-ascii?Q?xbFYneUmTH/cSsA6ePlxDB1itfQR0iExhHgzgJh9RfRfiHZdI1DmVyuc5++x?=
- =?us-ascii?Q?bxg+YKfUsnenGmbEITCitwMc55gyhFu5fji9EX86g0AGGIbEQSujho+E6IKd?=
- =?us-ascii?Q?xpwegak3HkXZBNKGndbRgOgrKHwGtJciXfnogFkCb5PLL943JspKqXXGWKXE?=
- =?us-ascii?Q?PeZR/JoOsqCpjmdlA8DVXu7OtN6rePhEMRSuPP5VzUIgGq/ktIcUP1mwngGb?=
- =?us-ascii?Q?2WICMNA2zxFzJXGPfEXFeMtCiRVn+V0+LX/VvKn8699AZUm6NEAYnMRrm0AA?=
- =?us-ascii?Q?r9HHVjAyUXi1vap4rMVmDjrRvSaFZGhKw68XpzgrC9T/jRITzvAQ7JhMRlFe?=
- =?us-ascii?Q?BJURYdt2+MY4Y6M+yEOkZezsh58WUDlbuN+yS/KlbdwoPS3/dRakqW74bVTZ?=
- =?us-ascii?Q?v0i97cB/Qbo8uX2HP7sSHhxti2hFbFj7d2orn0/sxWGKgrqWeZjYGgPIKMyj?=
- =?us-ascii?Q?tEWVz0NTaSXtmKycIHIwexpYAIHNAWgoTBqoe3/A4xGSGZeW0cP76GVUGwbD?=
- =?us-ascii?Q?rbtJ4F4PS913AEdfhv3lQ2D4f8NVbljzS1joi4uEw5ivCUYFJTyYewLicXNN?=
- =?us-ascii?Q?I+Z1T+H5lwJrW9P3nS8RD26vtkff//LoAcYCP47HDsKqX9IbXVOovwg6gWu3?=
- =?us-ascii?Q?fwPwsxK3apukmWJLkZWIiWIpqZ1CEEzKUxGBPXSh845fYOw0Z7bSN9VcWKkW?=
- =?us-ascii?Q?62WCEsiblWrYSdnPV5K3MlAMpr1M45zLxuT4tzFlSPI0hwpUD/NdxJJZsjOE?=
- =?us-ascii?Q?V3uloq/008e/l9cYss8IrsRv/Ifb4XFvqrfFC6dbrTYfUAt8sniAS5J5c/4X?=
- =?us-ascii?Q?c593qGdd1yBHdVSiYqmU/u/v5PzKK0q7EMdJHZbgCRzuStfq9UqDNztfU8A0?=
- =?us-ascii?Q?sCN+9p6oT2lhoEDWnL137ZR1xMHa0ZV9OvE0w/6kgDbWcmY1KHeL9674GxYM?=
- =?us-ascii?Q?567/7Ma2+2u1XAazTckiETo5?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff32e8d0-fe2a-46da-566c-08d9737e8c9b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Sep 2021 10:42:40.9321
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: naPTiD2+PUeU/2TjAzzo0x8Wjz78PtLirA5RT6lNVbxT1Er7PRksWbgKxARazCuDOGzWuliCnm+8fBK5Lxq3Xg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK2PR0601MB1924
+        id S234326AbhIIKq3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Sep 2021 06:46:29 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:41132 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233654AbhIIKq2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Sep 2021 06:46:28 -0400
+Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 33FCEC0D8B;
+        Thu,  9 Sep 2021 10:45:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1631184319; bh=QKosPAIyqu7iBfV18X43yhKaIJWKSF1xiLS5RGqOGDE=;
+        h=Date:From:Subject:To:Cc:From;
+        b=Ct5KDQKx0S4GhBIzftQhy3DMbHf6Uek4zksCnP/rjKNBWa3+aTQYAU94oiMD2SjIb
+         LcBD52YDIc57i78z5kle/l0tBIofRryOc16KOG7BWMkeauVgOck9jCsggWmGw8DjEL
+         cCZR67cBRfjt3vyt4qyCQGdcYGG+0XbqRljgnzmslMMHtAK9wb11i1++XuBaEpzhaE
+         4L/7EKA2WOz6xelBOMDfotrXD30ku4qwNzVLBuLZkKgHOCTeQk9xms6XNnPL9qmcHJ
+         t3qr/8oz0foV0OfxFrloiazoJooHpdXR2ZKJD14OHpdgsb+D63lzNzZ2VcAGWYkKd4
+         p7LrMTxuIkz8w==
+Received: from hminas-z420 (hminas-z420.internal.synopsys.com [10.116.75.77])
+        (using TLSv1 with cipher AES128-SHA (128/128 bits))
+        (Client did not present a certificate)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 04416A005C;
+        Thu,  9 Sep 2021 10:45:15 +0000 (UTC)
+Received: by hminas-z420 (sSMTP sendmail emulation); Thu, 09 Sep 2021 14:45:15 +0400
+Date:   Thu, 09 Sep 2021 14:45:15 +0400
+Message-Id: <95d1423adf4b0f68187c9894820c4b7e964a3f7f.1631175721.git.Minas.Harutyunyan@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Subject: [PATCH] usb: dwc2: gadget: Fix ISOC flow for BDMA and Slave
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> -----Original Message-----
-> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Sent: Thursday, September 9, 2021 2:39 PM
-> To: Neal Liu <neal_liu@aspeedtech.com>
-> Cc: Tao Ren <rentao.bupt@gmail.com>; Alan Stern
-> <stern@rowland.harvard.edu>; Tony Prisk <linux@prisktech.co.nz>;
-> linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org;
-> linux-arm-kernel@lists.infradead.org; BMC-SW <BMC-SW@aspeedtech.com>
-> Subject: Re: [PATCH v2] usb: ehci: handshake CMD_RUN instead of STS_HALT
->=20
-> On Thu, Sep 09, 2021 at 06:23:10AM +0000, Neal Liu wrote:
-> >
-> > > Hi Neal,
-> > >
-> > > On Wed, Sep 01, 2021 at 08:07:53AM +0200, Greg Kroah-Hartman wrote:
-> > > > On Wed, Sep 01, 2021 at 11:50:41AM +0800, neal_liu wrote:
-> > > > > Retitle.
-> > > > >
-> > > > > For Aspeed, HCHalted status depends on not only Run/Stop but
-> > > > > also ASS/PSS status.
-> > > > > Handshake CMD_RUN on startup instead.
-> > > > >
-> > > > > Signed-off-by: neal_liu <neal_liu@aspeedtech.com>
-> > > > > ---
-> > > > >  drivers/usb/host/ehci-hcd.c      | 11 ++++++++++-
-> > > > >  drivers/usb/host/ehci-platform.c |  6 ++++++
-> > > > >  drivers/usb/host/ehci.h          |  1 +
-> > > > >  3 files changed, 17 insertions(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/drivers/usb/host/ehci-hcd.c
-> > > > > b/drivers/usb/host/ehci-hcd.c index 10b0365f3439..01c022e46aa2
-> > > > > 100644
-> > > > > --- a/drivers/usb/host/ehci-hcd.c
-> > > > > +++ b/drivers/usb/host/ehci-hcd.c
-> > > > > @@ -634,7 +634,16 @@ static int ehci_run (struct usb_hcd *hcd)
-> > > > >  	/* Wait until HC become operational */
-> > > > >  	ehci_readl(ehci, &ehci->regs->command);	/* unblock posted write=
-s
-> > > */
-> > > > >  	msleep(5);
-> > > > > -	rc =3D ehci_handshake(ehci, &ehci->regs->status, STS_HALT, 0, 1=
-00 *
-> 1000);
-> > > > > +
-> > > > > +	/* For Aspeed, STS_HALT also depends on ASS/PSS status.
-> > > > > +	 * Skip this check on startup.
-> > > > > +	 */
-> > > > > +	if (ehci->is_aspeed)
-> > > > > +		rc =3D ehci_handshake(ehci, &ehci->regs->command, CMD_RUN,
-> > > > > +				    1, 100 * 1000);
-> > > > > +	else
-> > > > > +		rc =3D ehci_handshake(ehci, &ehci->regs->status, STS_HALT,
-> > > > > +				    0, 100 * 1000);
-> > > > >
-> > > > >  	up_write(&ehci_cf_port_reset_rwsem);
-> > > > >
-> > > > > diff --git a/drivers/usb/host/ehci-platform.c
-> > > > > b/drivers/usb/host/ehci-platform.c
-> > > > > index c70f2d0b4aaf..c3dc906274d9 100644
-> > > > > --- a/drivers/usb/host/ehci-platform.c
-> > > > > +++ b/drivers/usb/host/ehci-platform.c
-> > > > > @@ -297,6 +297,12 @@ static int ehci_platform_probe(struct
-> > > platform_device *dev)
-> > > > >  					  "has-transaction-translator"))
-> > > > >  			hcd->has_tt =3D 1;
-> > > > >
-> > > > > +		if (of_device_is_compatible(dev->dev.of_node,
-> > > > > +					    "aspeed,ast2500-ehci") ||
-> > > > > +		    of_device_is_compatible(dev->dev.of_node,
-> > > > > +					    "aspeed,ast2600-ehci"))
-> > > > > +			ehci->is_aspeed =3D 1;
-> > > > > +
-> > > > >  		if (soc_device_match(quirk_poll_match))
-> > > > >  			priv->quirk_poll =3D true;
-> > > > >
-> > > > > diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
-> > > > > index 80bb823aa9fe..fdd073cc053b 100644
-> > > > > --- a/drivers/usb/host/ehci.h
-> > > > > +++ b/drivers/usb/host/ehci.h
-> > > > > @@ -219,6 +219,7 @@ struct ehci_hcd {			/* one per
-> > > controller */
-> > > > >  	unsigned		need_oc_pp_cycle:1; /* MPC834X port power */
-> > > > >  	unsigned		imx28_write_fix:1; /* For Freescale i.MX28 */
-> > > > >  	unsigned		spurious_oc:1;
-> > > > > +	unsigned		is_aspeed:1;
-> > > > >
-> > > > >  	/* required for usb32 quirk */
-> > > > >  	#define OHCI_CTRL_HCFS          (3 << 6)
-> > > > > --
-> > > > > 2.17.1
-> > > > >
-> > > >
-> > > > Hi,
-> > > >
-> > > > This is the friendly patch-bot of Greg Kroah-Hartman.  You have
-> > > > sent him a patch that has triggered this response.  He used to
-> > > > manually respond to these common problems, but in order to save
-> > > > his sanity (he kept writing the same thing over and over, yet to
-> > > > different people), I was created.  Hopefully you will not take
-> > > > offence and will fix the problem in your patch and resubmit it so
-> > > > that it can be accepted into the Linux kernel tree.
-> > > >
-> > > > You are receiving this message because of the following common
-> > > > error(s) as indicated below:
-> > > >
-> > > > - It looks like you did not use your "real" name for the patch on e=
-ither
-> > > >   the Signed-off-by: line, or the From: line (both of which have to
-> > > >   match).  Please read the kernel file,
-> Documentation/SubmittingPatches
-> > > >   for how to do this correctly.
-> > > >
-> > > > - This looks like a new version of a previously submitted patch, bu=
-t you
-> > > >   did not list below the --- line any changes from the previous ver=
-sion.
-> > > >   Please read the section entitled "The canonical patch format" in =
-the
-> > > >   kernel file, Documentation/SubmittingPatches for what needs to be
-> done
-> > > >   here to properly describe this.
-> > > >
-> > > > If you wish to discuss this problem further, or you have questions
-> > > > about how to resolve this issue, please feel free to respond to
-> > > > this email and Greg will reply once he has dug out from the
-> > > > pending patches received from other developers.
-> > > >
-> > > > thanks,
-> > > >
-> > > > greg k-h's patch email bot
-> > >
-> > > Thank you Neal for the patch. I tried the fix on my CMM (AST2500)
-> > > and Fuji
-> > > (AST2600) BMC and it works on both platforms.
-> > >
-> > > Can you please address Greg's comments above and send out a new
-> version?
-> > > BTW, please don't forget to include Alan's Acked-by in the new versio=
-n.
-> > >
-> > > Reviewed-by: Tao Ren <rentao.bupt@gmail.com>
-> > > Tested-by: Tao Ren <rentao.bupt@gmail.com>
-> > >
-> > >
-> > > Cheers,
-> > >
-> > > Tao
-> >
-> > Sure! I'll try to fix Greg's comments on next patch. I think the proble=
-m is the
-> first one.
-> > And thanks for your review & test.
->=20
-> Both problems are real, please fix them.
+According USB spec each ISOC transaction should be performed in a
+designated for that transaction interval. On bus errors or delays
+in operating system scheduling of client software can result in no
+packet being transferred for a (micro)frame. An error indication
+should be returned as status to the client software in such a case.
 
-Thanks for pointing out.
+Current implementation in case of missed/dropped interval send same
+data in next possible interval instead of reporting missed isoc.
+
+This fix complete requests with -ENODATA if interval elapsed.
+
+HSOTG core in BDMA and Slave modes haven't HW support for
+(micro)frames tracking, this is why SW should care about tracking
+of (micro)frames. Because of that method and consider operating
+system scheduling delays, added few additional checking's of elapsed
+target (micro)frame:
+1. Immediately before enabling EP to start transfer.
+2. With any transfer completion interrupt.
+3. With incomplete isoc in/out interrupt.
+4. With EP disabled interrupt because of incomplete transfer.
+5. With OUT token received while EP disabled interrupt (for OUT
+transfers).
+6. With NAK replied to IN token interrupt (for IN transfers).
+
+As part of ISOC flow, additionally fixed 'current' and 'target' frame
+calculation functions. In HS mode SOF limits provided by DSTS register
+is 0x3fff, but in non HS mode this limit is 0x7ff.
+
+Tested by internal tool which also using for dwc3 testing.
+
+Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+---
+ drivers/usb/dwc2/gadget.c | 189 ++++++++++++++++++++++++++--------------------
+ 1 file changed, 106 insertions(+), 83 deletions(-)
+
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 837237e4bc96..f09cbdfac9df 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -115,10 +115,16 @@ static inline bool using_desc_dma(struct dwc2_hsotg *hsotg)
+  */
+ static inline void dwc2_gadget_incr_frame_num(struct dwc2_hsotg_ep *hs_ep)
+ {
++	struct dwc2_hsotg *hsotg = hs_ep->parent;
++	u16 limit = DSTS_SOFFN_LIMIT;
++
++	if (hsotg->gadget.speed != USB_SPEED_HIGH)
++		limit >>= 3;
++
+ 	hs_ep->target_frame += hs_ep->interval;
+-	if (hs_ep->target_frame > DSTS_SOFFN_LIMIT) {
++	if (hs_ep->target_frame > limit) {
+ 		hs_ep->frame_overrun = true;
+-		hs_ep->target_frame &= DSTS_SOFFN_LIMIT;
++		hs_ep->target_frame &= limit;
+ 	} else {
+ 		hs_ep->frame_overrun = false;
+ 	}
+@@ -136,10 +142,16 @@ static inline void dwc2_gadget_incr_frame_num(struct dwc2_hsotg_ep *hs_ep)
+  */
+ static inline void dwc2_gadget_dec_frame_num_by_one(struct dwc2_hsotg_ep *hs_ep)
+ {
++	struct dwc2_hsotg *hsotg = hs_ep->parent;
++	u16 limit = DSTS_SOFFN_LIMIT;
++
++	if (hsotg->gadget.speed != USB_SPEED_HIGH)
++		limit >>= 3;
++
+ 	if (hs_ep->target_frame)
+ 		hs_ep->target_frame -= 1;
+ 	else
+-		hs_ep->target_frame = DSTS_SOFFN_LIMIT;
++		hs_ep->target_frame = limit;
+ }
+ 
+ /**
+@@ -1018,6 +1030,12 @@ static void dwc2_gadget_start_isoc_ddma(struct dwc2_hsotg_ep *hs_ep)
+ 	dwc2_writel(hsotg, ctrl, depctl);
+ }
+ 
++static bool dwc2_gadget_target_frame_elapsed(struct dwc2_hsotg_ep *hs_ep);
++static void dwc2_hsotg_complete_request(struct dwc2_hsotg *hsotg,
++					struct dwc2_hsotg_ep *hs_ep,
++				       struct dwc2_hsotg_req *hs_req,
++				       int result);
++
+ /**
+  * dwc2_hsotg_start_req - start a USB request from an endpoint's queue
+  * @hsotg: The controller state.
+@@ -1170,14 +1188,19 @@ static void dwc2_hsotg_start_req(struct dwc2_hsotg *hsotg,
+ 		}
+ 	}
+ 
+-	if (hs_ep->isochronous && hs_ep->interval == 1) {
+-		hs_ep->target_frame = dwc2_hsotg_read_frameno(hsotg);
+-		dwc2_gadget_incr_frame_num(hs_ep);
+-
+-		if (hs_ep->target_frame & 0x1)
+-			ctrl |= DXEPCTL_SETODDFR;
+-		else
+-			ctrl |= DXEPCTL_SETEVENFR;
++	if (hs_ep->isochronous) {
++		if (!dwc2_gadget_target_frame_elapsed(hs_ep)) {
++			if (hs_ep->interval == 1) {
++				if (hs_ep->target_frame & 0x1)
++					ctrl |= DXEPCTL_SETODDFR;
++				else
++					ctrl |= DXEPCTL_SETEVENFR;
++			}
++			ctrl |= DXEPCTL_CNAK;
++		} else {
++			dwc2_hsotg_complete_request(hsotg, hs_ep, hs_req, -ENODATA);
++			return;
++		}
+ 	}
+ 
+ 	ctrl |= DXEPCTL_EPENA;	/* ensure ep enabled */
+@@ -1325,12 +1348,16 @@ static bool dwc2_gadget_target_frame_elapsed(struct dwc2_hsotg_ep *hs_ep)
+ 	u32 target_frame = hs_ep->target_frame;
+ 	u32 current_frame = hsotg->frame_number;
+ 	bool frame_overrun = hs_ep->frame_overrun;
++	u16 limit = DSTS_SOFFN_LIMIT;
++
++	if (hsotg->gadget.speed != USB_SPEED_HIGH)
++		limit >>= 3;
+ 
+ 	if (!frame_overrun && current_frame >= target_frame)
+ 		return true;
+ 
+ 	if (frame_overrun && current_frame >= target_frame &&
+-	    ((current_frame - target_frame) < DSTS_SOFFN_LIMIT / 2))
++	    ((current_frame - target_frame) < limit / 2))
+ 		return true;
+ 
+ 	return false;
+@@ -1713,11 +1740,9 @@ static struct dwc2_hsotg_req *get_ep_head(struct dwc2_hsotg_ep *hs_ep)
+  */
+ static void dwc2_gadget_start_next_request(struct dwc2_hsotg_ep *hs_ep)
+ {
+-	u32 mask;
+ 	struct dwc2_hsotg *hsotg = hs_ep->parent;
+ 	int dir_in = hs_ep->dir_in;
+ 	struct dwc2_hsotg_req *hs_req;
+-	u32 epmsk_reg = dir_in ? DIEPMSK : DOEPMSK;
+ 
+ 	if (!list_empty(&hs_ep->queue)) {
+ 		hs_req = get_ep_head(hs_ep);
+@@ -1733,9 +1758,6 @@ static void dwc2_gadget_start_next_request(struct dwc2_hsotg_ep *hs_ep)
+ 	} else {
+ 		dev_dbg(hsotg->dev, "%s: No more ISOC-OUT requests\n",
+ 			__func__);
+-		mask = dwc2_readl(hsotg, epmsk_reg);
+-		mask |= DOEPMSK_OUTTKNEPDISMSK;
+-		dwc2_writel(hsotg, mask, epmsk_reg);
+ 	}
+ }
+ 
+@@ -2306,19 +2328,6 @@ static void dwc2_hsotg_ep0_zlp(struct dwc2_hsotg *hsotg, bool dir_in)
+ 	dwc2_hsotg_program_zlp(hsotg, hsotg->eps_out[0]);
+ }
+ 
+-static void dwc2_hsotg_change_ep_iso_parity(struct dwc2_hsotg *hsotg,
+-					    u32 epctl_reg)
+-{
+-	u32 ctrl;
+-
+-	ctrl = dwc2_readl(hsotg, epctl_reg);
+-	if (ctrl & DXEPCTL_EOFRNUM)
+-		ctrl |= DXEPCTL_SETEVENFR;
+-	else
+-		ctrl |= DXEPCTL_SETODDFR;
+-	dwc2_writel(hsotg, ctrl, epctl_reg);
+-}
+-
+ /*
+  * dwc2_gadget_get_xfersize_ddma - get transferred bytes amount from desc
+  * @hs_ep - The endpoint on which transfer went
+@@ -2439,20 +2448,11 @@ static void dwc2_hsotg_handle_outdone(struct dwc2_hsotg *hsotg, int epnum)
+ 			dwc2_hsotg_ep0_zlp(hsotg, true);
+ 	}
+ 
+-	/*
+-	 * Slave mode OUT transfers do not go through XferComplete so
+-	 * adjust the ISOC parity here.
+-	 */
+-	if (!using_dma(hsotg)) {
+-		if (hs_ep->isochronous && hs_ep->interval == 1)
+-			dwc2_hsotg_change_ep_iso_parity(hsotg, DOEPCTL(epnum));
+-		else if (hs_ep->isochronous && hs_ep->interval > 1)
+-			dwc2_gadget_incr_frame_num(hs_ep);
+-	}
+-
+ 	/* Set actual frame number for completed transfers */
+-	if (!using_desc_dma(hsotg) && hs_ep->isochronous)
+-		req->frame_number = hsotg->frame_number;
++	if (!using_desc_dma(hsotg) && hs_ep->isochronous) {
++		req->frame_number = hs_ep->target_frame;
++		dwc2_gadget_incr_frame_num(hs_ep);
++	}
+ 
+ 	dwc2_hsotg_complete_request(hsotg, hs_ep, hs_req, result);
+ }
+@@ -2766,6 +2766,12 @@ static void dwc2_hsotg_complete_in(struct dwc2_hsotg *hsotg,
+ 		return;
+ 	}
+ 
++	/* Set actual frame number for completed transfers */
++	if (!using_desc_dma(hsotg) && hs_ep->isochronous) {
++		hs_req->req.frame_number = hs_ep->target_frame;
++		dwc2_gadget_incr_frame_num(hs_ep);
++	}
++
+ 	dwc2_hsotg_complete_request(hsotg, hs_ep, hs_req, 0);
+ }
+ 
+@@ -2826,23 +2832,18 @@ static void dwc2_gadget_handle_ep_disabled(struct dwc2_hsotg_ep *hs_ep)
+ 
+ 		dwc2_hsotg_txfifo_flush(hsotg, hs_ep->fifo_index);
+ 
+-		if (hs_ep->isochronous) {
+-			dwc2_hsotg_complete_in(hsotg, hs_ep);
+-			return;
+-		}
+-
+ 		if ((epctl & DXEPCTL_STALL) && (epctl & DXEPCTL_EPTYPE_BULK)) {
+ 			int dctl = dwc2_readl(hsotg, DCTL);
+ 
+ 			dctl |= DCTL_CGNPINNAK;
+ 			dwc2_writel(hsotg, dctl, DCTL);
+ 		}
+-		return;
+-	}
++	} else {
+ 
+-	if (dctl & DCTL_GOUTNAKSTS) {
+-		dctl |= DCTL_CGOUTNAK;
+-		dwc2_writel(hsotg, dctl, DCTL);
++		if (dctl & DCTL_GOUTNAKSTS) {
++			dctl |= DCTL_CGOUTNAK;
++			dwc2_writel(hsotg, dctl, DCTL);
++		}
+ 	}
+ 
+ 	if (!hs_ep->isochronous)
+@@ -2863,8 +2864,6 @@ static void dwc2_gadget_handle_ep_disabled(struct dwc2_hsotg_ep *hs_ep)
+ 		/* Update current frame number value. */
+ 		hsotg->frame_number = dwc2_hsotg_read_frameno(hsotg);
+ 	} while (dwc2_gadget_target_frame_elapsed(hs_ep));
+-
+-	dwc2_gadget_start_next_request(hs_ep);
+ }
+ 
+ /**
+@@ -2881,8 +2880,8 @@ static void dwc2_gadget_handle_ep_disabled(struct dwc2_hsotg_ep *hs_ep)
+ static void dwc2_gadget_handle_out_token_ep_disabled(struct dwc2_hsotg_ep *ep)
+ {
+ 	struct dwc2_hsotg *hsotg = ep->parent;
++	struct dwc2_hsotg_req *hs_req;
+ 	int dir_in = ep->dir_in;
+-	u32 doepmsk;
+ 
+ 	if (dir_in || !ep->isochronous)
+ 		return;
+@@ -2896,28 +2895,39 @@ static void dwc2_gadget_handle_out_token_ep_disabled(struct dwc2_hsotg_ep *ep)
+ 		return;
+ 	}
+ 
+-	if (ep->interval > 1 &&
+-	    ep->target_frame == TARGET_FRAME_INITIAL) {
++	if (ep->target_frame == TARGET_FRAME_INITIAL) {
+ 		u32 ctrl;
+ 
+ 		ep->target_frame = hsotg->frame_number;
+-		dwc2_gadget_incr_frame_num(ep);
++		if (ep->interval > 1) {
++			ctrl = dwc2_readl(hsotg, DOEPCTL(ep->index));
++			if (ep->target_frame & 0x1)
++				ctrl |= DXEPCTL_SETODDFR;
++			else
++				ctrl |= DXEPCTL_SETEVENFR;
+ 
+-		ctrl = dwc2_readl(hsotg, DOEPCTL(ep->index));
+-		if (ep->target_frame & 0x1)
+-			ctrl |= DXEPCTL_SETODDFR;
+-		else
+-			ctrl |= DXEPCTL_SETEVENFR;
++			dwc2_writel(hsotg, ctrl, DOEPCTL(ep->index));
++		}
++	}
++
++	while (dwc2_gadget_target_frame_elapsed(ep)) {
++		hs_req = get_ep_head(ep);
++		if (hs_req)
++			dwc2_hsotg_complete_request(hsotg, ep, hs_req, -ENODATA);
+ 
+-		dwc2_writel(hsotg, ctrl, DOEPCTL(ep->index));
++		dwc2_gadget_incr_frame_num(ep);
++		/* Update current frame number value. */
++		hsotg->frame_number = dwc2_hsotg_read_frameno(hsotg);
+ 	}
+ 
+-	dwc2_gadget_start_next_request(ep);
+-	doepmsk = dwc2_readl(hsotg, DOEPMSK);
+-	doepmsk &= ~DOEPMSK_OUTTKNEPDISMSK;
+-	dwc2_writel(hsotg, doepmsk, DOEPMSK);
++	if (!ep->req)
++		dwc2_gadget_start_next_request(ep);
++
+ }
+ 
++static void dwc2_hsotg_ep_stop_xfr(struct dwc2_hsotg *hsotg,
++				   struct dwc2_hsotg_ep *hs_ep);
++
+ /**
+  * dwc2_gadget_handle_nak - handle NAK interrupt
+  * @hs_ep: The endpoint on which interrupt is asserted.
+@@ -2935,7 +2945,9 @@ static void dwc2_gadget_handle_out_token_ep_disabled(struct dwc2_hsotg_ep *ep)
+ static void dwc2_gadget_handle_nak(struct dwc2_hsotg_ep *hs_ep)
+ {
+ 	struct dwc2_hsotg *hsotg = hs_ep->parent;
++	struct dwc2_hsotg_req *hs_req;
+ 	int dir_in = hs_ep->dir_in;
++	u32 ctrl;
+ 
+ 	if (!dir_in || !hs_ep->isochronous)
+ 		return;
+@@ -2977,13 +2989,29 @@ static void dwc2_gadget_handle_nak(struct dwc2_hsotg_ep *hs_ep)
+ 
+ 			dwc2_writel(hsotg, ctrl, DIEPCTL(hs_ep->index));
+ 		}
+-
+-		dwc2_hsotg_complete_request(hsotg, hs_ep,
+-					    get_ep_head(hs_ep), 0);
+ 	}
+ 
+-	if (!using_desc_dma(hsotg))
++	if (using_desc_dma(hsotg))
++		return;
++
++	ctrl = dwc2_readl(hsotg, DIEPCTL(hs_ep->index));
++	if (ctrl & DXEPCTL_EPENA)
++		dwc2_hsotg_ep_stop_xfr(hsotg, hs_ep);
++	else
++		dwc2_hsotg_txfifo_flush(hsotg, hs_ep->fifo_index);
++
++	while (dwc2_gadget_target_frame_elapsed(hs_ep)) {
++		hs_req = get_ep_head(hs_ep);
++		if (hs_req)
++			dwc2_hsotg_complete_request(hsotg, hs_ep, hs_req, -ENODATA);
++
+ 		dwc2_gadget_incr_frame_num(hs_ep);
++		/* Update current frame number value. */
++		hsotg->frame_number = dwc2_hsotg_read_frameno(hsotg);
++	}
++
++	if (!hs_ep->req)
++		dwc2_gadget_start_next_request(hs_ep);
+ }
+ 
+ /**
+@@ -3048,12 +3076,8 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,
+ 			 * need to look at completing IN requests here
+ 			 * if operating slave mode
+ 			 */
+-			if (hs_ep->isochronous && hs_ep->interval > 1)
+-				dwc2_gadget_incr_frame_num(hs_ep);
+-
+-			dwc2_hsotg_complete_in(hsotg, hs_ep);
+-			if (ints & DXEPINT_NAKINTRPT)
+-				ints &= ~DXEPINT_NAKINTRPT;
++			if (!hs_ep->isochronous || !(ints & DXEPINT_NAKINTRPT))
++				dwc2_hsotg_complete_in(hsotg, hs_ep);
+ 
+ 			if (idx == 0 && !hs_ep->req)
+ 				dwc2_hsotg_enqueue_setup(hsotg);
+@@ -3062,10 +3086,8 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,
+ 			 * We're using DMA, we need to fire an OutDone here
+ 			 * as we ignore the RXFIFO.
+ 			 */
+-			if (hs_ep->isochronous && hs_ep->interval > 1)
+-				dwc2_gadget_incr_frame_num(hs_ep);
+-
+-			dwc2_hsotg_handle_outdone(hsotg, idx);
++			if (!hs_ep->isochronous || !(ints & DXEPINT_OUTTKNEPDIS))
++				dwc2_hsotg_handle_outdone(hsotg, idx);
+ 		}
+ 	}
+ 
+@@ -4085,6 +4107,7 @@ static int dwc2_hsotg_ep_enable(struct usb_ep *ep,
+ 			mask |= DIEPMSK_NAKMSK;
+ 			dwc2_writel(hsotg, mask, DIEPMSK);
+ 		} else {
++			epctrl |= DXEPCTL_SNAK;
+ 			mask = dwc2_readl(hsotg, DOEPMSK);
+ 			mask |= DOEPMSK_OUTTKNEPDISMSK;
+ 			dwc2_writel(hsotg, mask, DOEPMSK);
+
+base-commit: 1b4f3dfb4792f03b139edf10124fcbeb44e608e6
+-- 
+2.11.0
+
