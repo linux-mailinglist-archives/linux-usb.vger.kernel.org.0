@@ -2,39 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F86404D90
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 14:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96819404E9C
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 14:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240250AbhIIMDP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Sep 2021 08:03:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40914 "EHLO mail.kernel.org"
+        id S1349612AbhIIMMx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Sep 2021 08:12:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47198 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244589AbhIIMBF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:01:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 61075611C2;
-        Thu,  9 Sep 2021 11:46:21 +0000 (UTC)
+        id S1348926AbhIIMFI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:05:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 85513617E2;
+        Thu,  9 Sep 2021 11:47:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631187982;
-        bh=duPwwRI/sNDMgI0iJIvYfwe7W+VcfgeQB0WN2/IEVJk=;
+        s=k20201202; t=1631188037;
+        bh=oDJoneOtl1EAMpSRKtctUaXR1DCkt7OaZMAUtHCkT4Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cRJIDLfJUioIq6WA0VoYyJyxa3Gbva8e7XTbiLuCSZaHB84jA31PAuQQAH6sQ+fRl
-         qnjOdVKPYRAkybE9G2lmJEwrqskUKD7og1GTSxNcrguzMt8XwtPXb40e06TYdRS9T/
-         L6uU2m2/LqM3jJnbqAIwbmF+XeZEmc20WKQc3CBCgL0Et/E4K7JSyqFznpjZYJF7Iy
-         WF3PPDSCZJp+S+zch7+wIF7E0iGbFEEKaxynAMYhj0M+MwyVMNHe/3NKlFQzAWxJHr
-         NKMzOSg+1SDz3BrAD2ENKqMcUFB6SpJVI7A3YYMr38QJ7EEDQe2RVrHy3CxZ88OPm3
-         bHJam4Ugz/3Ww==
+        b=LeLZLWsJm6tcPgf+XWPDJ/0jhg/8HFzrtK0pP7+PPJvSgNPO+7F/ZwKR7RuPClSDo
+         n3PQ0LLQn81smgnRNFhvRqgjkd474dOZy8Z5RHO74fXJnnbeOuSvHMI+vNrxUzwqNc
+         HP42bfKDBtnwz76WiRJ2U1gVT+XDRM9BuSzXxC60fvuy7Ku+47MOZ9aCUgeemiNqoJ
+         DwQ8tStzxOAxOGCO0ApyAm4fTYZGYsdrxOH9rZVBKLBF8L0Aj9ANLgVbpQXr5m0N7A
+         vWGaExvjXlVwipTKLC8pFj90hzkFkkQtEiIu6DsYKtZBGGAkw54adD5Lfolpiez6/l
+         uNaaFCQEkZopQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Rui Miguel Silva <rui.silva@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+Cc:     Kelly Devilliv <kelly.devilliv@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 243/252] usb: isp1760: otg control register access
-Date:   Thu,  9 Sep 2021 07:40:57 -0400
-Message-Id: <20210909114106.141462-243-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 032/219] usb: host: fotg210: fix the endpoint's transactional opportunities calculation
+Date:   Thu,  9 Sep 2021 07:43:28 -0400
+Message-Id: <20210909114635.143983-32-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909114106.141462-1-sashal@kernel.org>
-References: <20210909114106.141462-1-sashal@kernel.org>
+In-Reply-To: <20210909114635.143983-1-sashal@kernel.org>
+References: <20210909114635.143983-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,138 +42,140 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Rui Miguel Silva <rui.silva@linaro.org>
+From: Kelly Devilliv <kelly.devilliv@gmail.com>
 
-[ Upstream commit 9c1587d99f9305aa4f10b47fcf1981012aa5381f ]
+[ Upstream commit c2e898764245c852bc8ee4857613ba4f3a6d761d ]
 
-The set/clear of the otg control values is done writing to
-two different 16bit registers, however we setup the regmap
-width for isp1760/61 to 32bit value bits.
+Now that usb_endpoint_maxp() only returns the lowest
+11 bits from wMaxPacketSize, we should make use of the
+usb_endpoint_* helpers instead and remove the unnecessary
+max_packet()/hb_mult() macro.
 
-So, just access the clear register address (0x376)as the high
-part of the otg control register set (0x374), and write the
-values in one go to make sure they get clear/set.
-
-Reported-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Tested-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Signed-off-by: Rui Miguel Silva <rui.silva@linaro.org>
-Link: https://lore.kernel.org/r/20210827131154.4151862-6-rui.silva@linaro.org
+Signed-off-by: Kelly Devilliv <kelly.devilliv@gmail.com>
+Link: https://lore.kernel.org/r/20210627125747.127646-3-kelly.devilliv@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/isp1760/isp1760-core.c | 50 ++++++++++++++++--------------
- drivers/usb/isp1760/isp1760-regs.h | 16 ++++++++++
- 2 files changed, 42 insertions(+), 24 deletions(-)
+ drivers/usb/host/fotg210-hcd.c | 36 ++++++++++++++++------------------
+ 1 file changed, 17 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/usb/isp1760/isp1760-core.c b/drivers/usb/isp1760/isp1760-core.c
-index ff07e2890692..1f2ca22384b0 100644
---- a/drivers/usb/isp1760/isp1760-core.c
-+++ b/drivers/usb/isp1760/isp1760-core.c
-@@ -30,6 +30,7 @@ static int isp1760_init_core(struct isp1760_device *isp)
- {
- 	struct isp1760_hcd *hcd = &isp->hcd;
- 	struct isp1760_udc *udc = &isp->udc;
-+	u32 otg_ctrl;
+diff --git a/drivers/usb/host/fotg210-hcd.c b/drivers/usb/host/fotg210-hcd.c
+index 9c2eda0918e1..3b5d185c108a 100644
+--- a/drivers/usb/host/fotg210-hcd.c
++++ b/drivers/usb/host/fotg210-hcd.c
+@@ -2509,11 +2509,6 @@ static unsigned qh_completions(struct fotg210_hcd *fotg210,
+ 	return count;
+ }
  
- 	/* Low-level chip reset */
- 	if (isp->rst_gpio) {
-@@ -83,16 +84,17 @@ static int isp1760_init_core(struct isp1760_device *isp)
- 	 *
- 	 * TODO: Really support OTG. For now we configure port 1 in device mode
+-/* high bandwidth multiplier, as encoded in highspeed endpoint descriptors */
+-#define hb_mult(wMaxPacketSize) (1 + (((wMaxPacketSize) >> 11) & 0x03))
+-/* ... and packet size, for any kind of endpoint descriptor */
+-#define max_packet(wMaxPacketSize) ((wMaxPacketSize) & 0x07ff)
+-
+ /* reverse of qh_urb_transaction:  free a list of TDs.
+  * used for cleanup after errors, before HC sees an URB's TDs.
+  */
+@@ -2599,7 +2594,7 @@ static struct list_head *qh_urb_transaction(struct fotg210_hcd *fotg210,
+ 		token |= (1 /* "in" */ << 8);
+ 	/* else it's already initted to "out" pid (0 << 8) */
+ 
+-	maxpacket = max_packet(usb_maxpacket(urb->dev, urb->pipe, !is_input));
++	maxpacket = usb_maxpacket(urb->dev, urb->pipe, !is_input);
+ 
+ 	/*
+ 	 * buffer gets wrapped in one or more qtds;
+@@ -2713,9 +2708,11 @@ static struct fotg210_qh *qh_make(struct fotg210_hcd *fotg210, struct urb *urb,
+ 		gfp_t flags)
+ {
+ 	struct fotg210_qh *qh = fotg210_qh_alloc(fotg210, flags);
++	struct usb_host_endpoint *ep;
+ 	u32 info1 = 0, info2 = 0;
+ 	int is_input, type;
+ 	int maxp = 0;
++	int mult;
+ 	struct usb_tt *tt = urb->dev->tt;
+ 	struct fotg210_qh_hw *hw;
+ 
+@@ -2730,14 +2727,15 @@ static struct fotg210_qh *qh_make(struct fotg210_hcd *fotg210, struct urb *urb,
+ 
+ 	is_input = usb_pipein(urb->pipe);
+ 	type = usb_pipetype(urb->pipe);
+-	maxp = usb_maxpacket(urb->dev, urb->pipe, !is_input);
++	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
++	maxp = usb_endpoint_maxp(&ep->desc);
++	mult = usb_endpoint_maxp_mult(&ep->desc);
+ 
+ 	/* 1024 byte maxpacket is a hardware ceiling.  High bandwidth
+ 	 * acts like up to 3KB, but is built from smaller packets.
  	 */
--	if (((isp->devflags & ISP1760_FLAG_ISP1761) ||
--	     (isp->devflags & ISP1760_FLAG_ISP1763)) &&
--	    (isp->devflags & ISP1760_FLAG_PERIPHERAL_EN)) {
--		isp1760_field_set(hcd->fields, HW_DM_PULLDOWN);
--		isp1760_field_set(hcd->fields, HW_DP_PULLDOWN);
--		isp1760_field_set(hcd->fields, HW_OTG_DISABLE);
--	} else {
--		isp1760_field_set(hcd->fields, HW_SW_SEL_HC_DC);
--		isp1760_field_set(hcd->fields, HW_VBUS_DRV);
--		isp1760_field_set(hcd->fields, HW_SEL_CP_EXT);
-+	if (isp->devflags & ISP1760_FLAG_ISP1761) {
-+		if (isp->devflags & ISP1760_FLAG_PERIPHERAL_EN) {
-+			otg_ctrl = (ISP176x_HW_DM_PULLDOWN_CLEAR |
-+				    ISP176x_HW_DP_PULLDOWN_CLEAR |
-+				    ISP176x_HW_OTG_DISABLE);
-+		} else {
-+			otg_ctrl = (ISP176x_HW_SW_SEL_HC_DC_CLEAR |
-+				    ISP176x_HW_VBUS_DRV |
-+				    ISP176x_HW_SEL_CP_EXT);
-+		}
-+		isp1760_reg_write(hcd->regs, ISP176x_HC_OTG_CTRL, otg_ctrl);
+-	if (max_packet(maxp) > 1024) {
+-		fotg210_dbg(fotg210, "bogus qh maxpacket %d\n",
+-				max_packet(maxp));
++	if (maxp > 1024) {
++		fotg210_dbg(fotg210, "bogus qh maxpacket %d\n", maxp);
+ 		goto done;
  	}
  
- 	dev_info(isp->dev, "%s bus width: %u, oc: %s\n",
-@@ -235,20 +237,20 @@ static const struct reg_field isp1760_hc_reg_fields[] = {
- 	[HC_ISO_IRQ_MASK_AND]	= REG_FIELD(ISP176x_HC_ISO_IRQ_MASK_AND, 0, 31),
- 	[HC_INT_IRQ_MASK_AND]	= REG_FIELD(ISP176x_HC_INT_IRQ_MASK_AND, 0, 31),
- 	[HC_ATL_IRQ_MASK_AND]	= REG_FIELD(ISP176x_HC_ATL_IRQ_MASK_AND, 0, 31),
--	[HW_OTG_DISABLE]	= REG_FIELD(ISP176x_HC_OTG_CTRL_SET, 10, 10),
--	[HW_SW_SEL_HC_DC]	= REG_FIELD(ISP176x_HC_OTG_CTRL_SET, 7, 7),
--	[HW_VBUS_DRV]		= REG_FIELD(ISP176x_HC_OTG_CTRL_SET, 4, 4),
--	[HW_SEL_CP_EXT]		= REG_FIELD(ISP176x_HC_OTG_CTRL_SET, 3, 3),
--	[HW_DM_PULLDOWN]	= REG_FIELD(ISP176x_HC_OTG_CTRL_SET, 2, 2),
--	[HW_DP_PULLDOWN]	= REG_FIELD(ISP176x_HC_OTG_CTRL_SET, 1, 1),
--	[HW_DP_PULLUP]		= REG_FIELD(ISP176x_HC_OTG_CTRL_SET, 0, 0),
--	[HW_OTG_DISABLE_CLEAR]	= REG_FIELD(ISP176x_HC_OTG_CTRL_CLEAR, 10, 10),
--	[HW_SW_SEL_HC_DC_CLEAR]	= REG_FIELD(ISP176x_HC_OTG_CTRL_CLEAR, 7, 7),
--	[HW_VBUS_DRV_CLEAR]	= REG_FIELD(ISP176x_HC_OTG_CTRL_CLEAR, 4, 4),
--	[HW_SEL_CP_EXT_CLEAR]	= REG_FIELD(ISP176x_HC_OTG_CTRL_CLEAR, 3, 3),
--	[HW_DM_PULLDOWN_CLEAR]	= REG_FIELD(ISP176x_HC_OTG_CTRL_CLEAR, 2, 2),
--	[HW_DP_PULLDOWN_CLEAR]	= REG_FIELD(ISP176x_HC_OTG_CTRL_CLEAR, 1, 1),
--	[HW_DP_PULLUP_CLEAR]	= REG_FIELD(ISP176x_HC_OTG_CTRL_CLEAR, 0, 0),
-+	[HW_OTG_DISABLE_CLEAR]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 26, 26),
-+	[HW_SW_SEL_HC_DC_CLEAR]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 23, 23),
-+	[HW_VBUS_DRV_CLEAR]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 20, 20),
-+	[HW_SEL_CP_EXT_CLEAR]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 19, 19),
-+	[HW_DM_PULLDOWN_CLEAR]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 18, 18),
-+	[HW_DP_PULLDOWN_CLEAR]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 17, 17),
-+	[HW_DP_PULLUP_CLEAR]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 16, 16),
-+	[HW_OTG_DISABLE]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 10, 10),
-+	[HW_SW_SEL_HC_DC]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 7, 7),
-+	[HW_VBUS_DRV]		= REG_FIELD(ISP176x_HC_OTG_CTRL, 4, 4),
-+	[HW_SEL_CP_EXT]		= REG_FIELD(ISP176x_HC_OTG_CTRL, 3, 3),
-+	[HW_DM_PULLDOWN]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 2, 2),
-+	[HW_DP_PULLDOWN]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 1, 1),
-+	[HW_DP_PULLUP]		= REG_FIELD(ISP176x_HC_OTG_CTRL, 0, 0),
- };
+@@ -2751,8 +2749,7 @@ static struct fotg210_qh *qh_make(struct fotg210_hcd *fotg210, struct urb *urb,
+ 	 */
+ 	if (type == PIPE_INTERRUPT) {
+ 		qh->usecs = NS_TO_US(usb_calc_bus_time(USB_SPEED_HIGH,
+-				is_input, 0,
+-				hb_mult(maxp) * max_packet(maxp)));
++				is_input, 0, mult * maxp));
+ 		qh->start = NO_FRAME;
  
- static const struct reg_field isp1763_hc_reg_fields[] = {
-diff --git a/drivers/usb/isp1760/isp1760-regs.h b/drivers/usb/isp1760/isp1760-regs.h
-index 94ea60c20b2a..3a6751197e97 100644
---- a/drivers/usb/isp1760/isp1760-regs.h
-+++ b/drivers/usb/isp1760/isp1760-regs.h
-@@ -61,6 +61,7 @@
- #define ISP176x_HC_INT_IRQ_MASK_AND	0x328
- #define ISP176x_HC_ATL_IRQ_MASK_AND	0x32c
+ 		if (urb->dev->speed == USB_SPEED_HIGH) {
+@@ -2789,7 +2786,7 @@ static struct fotg210_qh *qh_make(struct fotg210_hcd *fotg210, struct urb *urb,
+ 			think_time = tt ? tt->think_time : 0;
+ 			qh->tt_usecs = NS_TO_US(think_time +
+ 					usb_calc_bus_time(urb->dev->speed,
+-					is_input, 0, max_packet(maxp)));
++					is_input, 0, maxp));
+ 			qh->period = urb->interval;
+ 			if (qh->period > fotg210->periodic_size) {
+ 				qh->period = fotg210->periodic_size;
+@@ -2852,11 +2849,11 @@ static struct fotg210_qh *qh_make(struct fotg210_hcd *fotg210, struct urb *urb,
+ 			 * to help them do so.  So now people expect to use
+ 			 * such nonconformant devices with Linux too; sigh.
+ 			 */
+-			info1 |= max_packet(maxp) << 16;
++			info1 |= maxp << 16;
+ 			info2 |= (FOTG210_TUNE_MULT_HS << 30);
+ 		} else {		/* PIPE_INTERRUPT */
+-			info1 |= max_packet(maxp) << 16;
+-			info2 |= hb_mult(maxp) << 30;
++			info1 |= maxp << 16;
++			info2 |= mult << 30;
+ 		}
+ 		break;
+ 	default:
+@@ -3926,6 +3923,7 @@ static void iso_stream_init(struct fotg210_hcd *fotg210,
+ 	int is_input;
+ 	long bandwidth;
+ 	unsigned multi;
++	struct usb_host_endpoint *ep;
  
-+#define ISP176x_HC_OTG_CTRL		0x374
- #define ISP176x_HC_OTG_CTRL_SET		0x374
- #define ISP176x_HC_OTG_CTRL_CLEAR	0x376
+ 	/*
+ 	 * this might be a "high bandwidth" highspeed endpoint,
+@@ -3933,14 +3931,14 @@ static void iso_stream_init(struct fotg210_hcd *fotg210,
+ 	 */
+ 	epnum = usb_pipeendpoint(pipe);
+ 	is_input = usb_pipein(pipe) ? USB_DIR_IN : 0;
+-	maxp = usb_maxpacket(dev, pipe, !is_input);
++	ep = usb_pipe_endpoint(dev, pipe);
++	maxp = usb_endpoint_maxp(&ep->desc);
+ 	if (is_input)
+ 		buf1 = (1 << 11);
+ 	else
+ 		buf1 = 0;
  
-@@ -179,6 +180,21 @@ enum isp176x_host_controller_fields {
- #define ISP176x_DC_IESUSP		BIT(3)
- #define ISP176x_DC_IEBRST		BIT(0)
+-	maxp = max_packet(maxp);
+-	multi = hb_mult(maxp);
++	multi = usb_endpoint_maxp_mult(&ep->desc);
+ 	buf1 |= maxp;
+ 	maxp *= multi;
  
-+#define ISP176x_HW_OTG_DISABLE_CLEAR	BIT(26)
-+#define ISP176x_HW_SW_SEL_HC_DC_CLEAR	BIT(23)
-+#define ISP176x_HW_VBUS_DRV_CLEAR	BIT(20)
-+#define ISP176x_HW_SEL_CP_EXT_CLEAR	BIT(19)
-+#define ISP176x_HW_DM_PULLDOWN_CLEAR	BIT(18)
-+#define ISP176x_HW_DP_PULLDOWN_CLEAR	BIT(17)
-+#define ISP176x_HW_DP_PULLUP_CLEAR	BIT(16)
-+#define ISP176x_HW_OTG_DISABLE		BIT(10)
-+#define ISP176x_HW_SW_SEL_HC_DC		BIT(7)
-+#define ISP176x_HW_VBUS_DRV		BIT(4)
-+#define ISP176x_HW_SEL_CP_EXT		BIT(3)
-+#define ISP176x_HW_DM_PULLDOWN		BIT(2)
-+#define ISP176x_HW_DP_PULLDOWN		BIT(1)
-+#define ISP176x_HW_DP_PULLUP		BIT(0)
-+
- #define ISP176x_DC_ENDPTYP_ISOC		0x01
- #define ISP176x_DC_ENDPTYP_BULK		0x02
- #define ISP176x_DC_ENDPTYP_INTERRUPT	0x03
 -- 
 2.30.2
 
