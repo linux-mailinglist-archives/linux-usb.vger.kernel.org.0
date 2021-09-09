@@ -2,176 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE54404655
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 09:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8DA64045B8
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Sep 2021 08:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352687AbhIIHjV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Sep 2021 03:39:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39434 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1352714AbhIIHjU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Sep 2021 03:39:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8905761101;
-        Thu,  9 Sep 2021 07:38:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1631173091;
-        bh=eCY1ICwIr1dBP9cTT2himiHoX0vnoGsm8u9kDNkM4Zc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yF2h3qhybkHF2QQymnXZqxTmnjJQmpSi57xKTBeTF7jqbLTOGTtZmnlS6DDuo/zC7
-         xiK/eQIlABu4XQsAngI172f4xBLdUlkZJXWa+Z84smDl0nm4BhVxkrtgg8VYjq7PJ4
-         5PB8xZz//bBTWK8JQ6XVFMEfHmdxWC5CFNwE6sHY=
-Date:   Thu, 9 Sep 2021 08:38:30 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Neal Liu <neal_liu@aspeedtech.com>
-Cc:     Tao Ren <rentao.bupt@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Tony Prisk <linux@prisktech.co.nz>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>
-Subject: Re: [PATCH v2] usb: ehci: handshake CMD_RUN instead of STS_HALT
-Message-ID: <YTmr5jtlFYNuQb/j@kroah.com>
-References: <20210901035041.10810-1-neal_liu@aspeedtech.com>
- <YS8YuX9laah5d/NY@kroah.com>
- <20210909054531.GA10391@taoren-ubuntu-R90MNF91>
- <HK0PR06MB3202E3A5457474212F8ECC9080D59@HK0PR06MB3202.apcprd06.prod.outlook.com>
+        id S232005AbhIIGnU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Sep 2021 02:43:20 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:37342 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233833AbhIIGnR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Sep 2021 02:43:17 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1896g5fq057002;
+        Thu, 9 Sep 2021 01:42:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1631169725;
+        bh=w8ba3lprUH64+lF9MNZzR+xLhmjlZzEh1UyopCn96mQ=;
+        h=From:To:CC:Subject:Date;
+        b=w8LclNiwep/bp0TisxVbmw8FKOjkMBmEKsCkWQGujPi+2jAQ9aIlyYFRVzEJ06ESX
+         zYg7nx6QvZHOJ2++bjuwdONyqLQnuOG5aUGNPmDNPOHmQtRcH+pT1zDqRHMIMLFJAz
+         vOSQ2RvhnasibULUc25YKGlSd2tT06u4fpaENCEw=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1896g4QN127481
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 9 Sep 2021 01:42:04 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 9
+ Sep 2021 01:42:04 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 9 Sep 2021 01:42:04 -0500
+Received: from a0393678-lt.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1896g04P062945;
+        Thu, 9 Sep 2021 01:42:01 -0500
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <chris.chiu@canonical.com>, Kishon Vijay Abraham I <kishon@ti.com>,
+        <lokeshvutla@ti.com>
+Subject: [PATCH v4 0/3] Fix cold plugged USB device on certain PCIe USB cards
+Date:   Thu, 9 Sep 2021 12:11:57 +0530
+Message-ID: <20210909064200.16216-1-kishon@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <HK0PR06MB3202E3A5457474212F8ECC9080D59@HK0PR06MB3202.apcprd06.prod.outlook.com>
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 09, 2021 at 06:23:10AM +0000, Neal Liu wrote:
-> 
-> > Hi Neal,
-> > 
-> > On Wed, Sep 01, 2021 at 08:07:53AM +0200, Greg Kroah-Hartman wrote:
-> > > On Wed, Sep 01, 2021 at 11:50:41AM +0800, neal_liu wrote:
-> > > > Retitle.
-> > > >
-> > > > For Aspeed, HCHalted status depends on not only Run/Stop but also
-> > > > ASS/PSS status.
-> > > > Handshake CMD_RUN on startup instead.
-> > > >
-> > > > Signed-off-by: neal_liu <neal_liu@aspeedtech.com>
-> > > > ---
-> > > >  drivers/usb/host/ehci-hcd.c      | 11 ++++++++++-
-> > > >  drivers/usb/host/ehci-platform.c |  6 ++++++
-> > > >  drivers/usb/host/ehci.h          |  1 +
-> > > >  3 files changed, 17 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/usb/host/ehci-hcd.c
-> > > > b/drivers/usb/host/ehci-hcd.c index 10b0365f3439..01c022e46aa2
-> > > > 100644
-> > > > --- a/drivers/usb/host/ehci-hcd.c
-> > > > +++ b/drivers/usb/host/ehci-hcd.c
-> > > > @@ -634,7 +634,16 @@ static int ehci_run (struct usb_hcd *hcd)
-> > > >  	/* Wait until HC become operational */
-> > > >  	ehci_readl(ehci, &ehci->regs->command);	/* unblock posted writes
-> > */
-> > > >  	msleep(5);
-> > > > -	rc = ehci_handshake(ehci, &ehci->regs->status, STS_HALT, 0, 100 * 1000);
-> > > > +
-> > > > +	/* For Aspeed, STS_HALT also depends on ASS/PSS status.
-> > > > +	 * Skip this check on startup.
-> > > > +	 */
-> > > > +	if (ehci->is_aspeed)
-> > > > +		rc = ehci_handshake(ehci, &ehci->regs->command, CMD_RUN,
-> > > > +				    1, 100 * 1000);
-> > > > +	else
-> > > > +		rc = ehci_handshake(ehci, &ehci->regs->status, STS_HALT,
-> > > > +				    0, 100 * 1000);
-> > > >
-> > > >  	up_write(&ehci_cf_port_reset_rwsem);
-> > > >
-> > > > diff --git a/drivers/usb/host/ehci-platform.c
-> > > > b/drivers/usb/host/ehci-platform.c
-> > > > index c70f2d0b4aaf..c3dc906274d9 100644
-> > > > --- a/drivers/usb/host/ehci-platform.c
-> > > > +++ b/drivers/usb/host/ehci-platform.c
-> > > > @@ -297,6 +297,12 @@ static int ehci_platform_probe(struct
-> > platform_device *dev)
-> > > >  					  "has-transaction-translator"))
-> > > >  			hcd->has_tt = 1;
-> > > >
-> > > > +		if (of_device_is_compatible(dev->dev.of_node,
-> > > > +					    "aspeed,ast2500-ehci") ||
-> > > > +		    of_device_is_compatible(dev->dev.of_node,
-> > > > +					    "aspeed,ast2600-ehci"))
-> > > > +			ehci->is_aspeed = 1;
-> > > > +
-> > > >  		if (soc_device_match(quirk_poll_match))
-> > > >  			priv->quirk_poll = true;
-> > > >
-> > > > diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h index
-> > > > 80bb823aa9fe..fdd073cc053b 100644
-> > > > --- a/drivers/usb/host/ehci.h
-> > > > +++ b/drivers/usb/host/ehci.h
-> > > > @@ -219,6 +219,7 @@ struct ehci_hcd {			/* one per
-> > controller */
-> > > >  	unsigned		need_oc_pp_cycle:1; /* MPC834X port power */
-> > > >  	unsigned		imx28_write_fix:1; /* For Freescale i.MX28 */
-> > > >  	unsigned		spurious_oc:1;
-> > > > +	unsigned		is_aspeed:1;
-> > > >
-> > > >  	/* required for usb32 quirk */
-> > > >  	#define OHCI_CTRL_HCFS          (3 << 6)
-> > > > --
-> > > > 2.17.1
-> > > >
-> > >
-> > > Hi,
-> > >
-> > > This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent
-> > > him a patch that has triggered this response.  He used to manually
-> > > respond to these common problems, but in order to save his sanity (he
-> > > kept writing the same thing over and over, yet to different people), I
-> > > was created.  Hopefully you will not take offence and will fix the
-> > > problem in your patch and resubmit it so that it can be accepted into
-> > > the Linux kernel tree.
-> > >
-> > > You are receiving this message because of the following common
-> > > error(s) as indicated below:
-> > >
-> > > - It looks like you did not use your "real" name for the patch on either
-> > >   the Signed-off-by: line, or the From: line (both of which have to
-> > >   match).  Please read the kernel file, Documentation/SubmittingPatches
-> > >   for how to do this correctly.
-> > >
-> > > - This looks like a new version of a previously submitted patch, but you
-> > >   did not list below the --- line any changes from the previous version.
-> > >   Please read the section entitled "The canonical patch format" in the
-> > >   kernel file, Documentation/SubmittingPatches for what needs to be done
-> > >   here to properly describe this.
-> > >
-> > > If you wish to discuss this problem further, or you have questions
-> > > about how to resolve this issue, please feel free to respond to this
-> > > email and Greg will reply once he has dug out from the pending patches
-> > > received from other developers.
-> > >
-> > > thanks,
-> > >
-> > > greg k-h's patch email bot
-> > 
-> > Thank you Neal for the patch. I tried the fix on my CMM (AST2500) and Fuji
-> > (AST2600) BMC and it works on both platforms.
-> > 
-> > Can you please address Greg's comments above and send out a new version?
-> > BTW, please don't forget to include Alan's Acked-by in the new version.
-> > 
-> > Reviewed-by: Tao Ren <rentao.bupt@gmail.com>
-> > Tested-by: Tao Ren <rentao.bupt@gmail.com>
-> > 
-> > 
-> > Cheers,
-> > 
-> > Tao
-> 
-> Sure! I'll try to fix Greg's comments on next patch. I think the problem is the first one.
-> And thanks for your review & test.
+Cold plugged USB device was not detected on certain PCIe USB cards
+(like Inateck card connected to AM64 EVM or connected to J7200 EVM).
 
-Both problems are real, please fix them.
+Re-plugging the USB device always gets it enumerated.
+
+This issue was discussed in
+https://lore.kernel.org/r/772e4001-178e-4918-032c-6e625bdded24@ti.com
+and
+https://bugzilla.kernel.org/show_bug.cgi?id=214021
+
+So the suggested solution is to register both root hubs along with the
+second hcd for xhci.
+
+RFC Patch series can be found at [1]
+v1 Patch series can be found at [3]
+v2 Patch series can be found at [4]
+v3 Patch series can be found at [5]
+
+Changes from RFC:
+1) Mathias identified potential issues with the RFC patch [2] and suggested
+   the solution to use HCD flags. This series implements it.
+
+Changes from v1:
+1) Fixed code comments pointed out by Alan Stern
+2) Renamed the HCD flag variable to "HCD_FLAG_DEFER_RH_REGISTER" from
+   "HCD_FLAG_DEFER_PRI_RH_REGISTER"
+
+Changes from v2:
+1) Fixed issue in error path handling pointed by Alan
+
+Changes from v3:
+1) Fix un-initialized variable usb_remove_hcd() and did some cleanup
+suggested by Alan
+
+[1] -> https://lore.kernel.org/linux-usb/20210824105302.25382-1-kishon@ti.com/
+[2] -> https://lore.kernel.org/linux-usb/06693934-28f2-d59e-b004-62cabd3f9e8e@linux.intel.com
+[3] -> https://lore.kernel.org/r/20210825105132.10420-1-kishon@ti.com
+[4] -> https://lore.kernel.org/r/20210826111426.751-1-kishon@ti.com
+[5] -> https://lore.kernel.org/r/20210908145146.GB603644@rowland.harvard.edu
+
+Kishon Vijay Abraham I (3):
+  usb: core: hcd: Add support for deferring roothub registration
+  xhci: Set HCD flag to defer primary roothub registration
+  usb: core: hcd: Modularize HCD stop configuration in usb_stop_hcd()
+
+ drivers/usb/core/hcd.c  | 68 +++++++++++++++++++++++++++--------------
+ drivers/usb/host/xhci.c |  1 +
+ include/linux/usb/hcd.h |  2 ++
+ 3 files changed, 48 insertions(+), 23 deletions(-)
+
+-- 
+2.17.1
+
