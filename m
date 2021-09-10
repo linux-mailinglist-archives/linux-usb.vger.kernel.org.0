@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF3640612F
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Sep 2021 02:41:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6229406133
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Sep 2021 02:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbhIJAmN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Sep 2021 20:42:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48616 "EHLO mail.kernel.org"
+        id S229802AbhIJAmO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Sep 2021 20:42:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49192 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234266AbhIJAXE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Sep 2021 20:23:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D16026058D;
-        Fri, 10 Sep 2021 00:21:53 +0000 (UTC)
+        id S234616AbhIJAXv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Sep 2021 20:23:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E1AD860FDA;
+        Fri, 10 Sep 2021 00:22:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631233314;
-        bh=qm+zJIDqg6LmllmM+B/hpGId9tdsJP52WsSqQ+S+tKg=;
+        s=k20201202; t=1631233361;
+        bh=bx/7sEXfpH473kVCqV2I/pzK6Ar+aOazJeQy7jumKVs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jD595yWX8Hiqr5Fx+RKBZ7JKvEKAg104AYGPEiyVCj0E3+Whp0DpstjeFxywU32Vw
-         8nbLCuGla+EAnUVP6NS5GOdr+5xw2zJCbDnheEaYNbbA3zmOvQ5Z/cxjr0Xj3ZDW4y
-         bR8XAe3JqMMsW/rvIgRDAviKL9to2MY/HQScNioW/HL8T89b1sFPvIRmXO7Kaezlmm
-         Epk9kCa9G9I2xX/1QgcCKzDWsXcXXYWhgl/xVgZ6q7L4TL4XSVPupweGTr1IG+T/Hb
-         8KSHQ7VQrGBtdWPavWUNFtMYFZhQv4MRaubDCkcPJepK4BfWmoi8+QZrVcW/kEG+a7
-         ulb+mx9JWcOnA==
+        b=OEpBxMmBXep8pacTqQHzrTBtgthzYlL1WfsQ2TZVcgQmutORe+3Nuw/godPLE+Wwq
+         02szbTRLNcGZqZwRQr5vBRYNrFOvuPh7xJICPqBpVYcZiR0zhu6AUMe+Q2OrNpE0tj
+         Kegv2Tv7Tcr2jNX1TUdQh06S8LLMBl/VWhbOBt6R4KScpvAfI9ayFCFDFRCgEUm+lQ
+         39EhSTC/ck1q60burJYR09P93z8MK1QwG1av/gq6W0n11LHVT6mX3lEvCqNpA/ys9j
+         Ake88GiOTiSUIM1WglICKrhhvd847wowJ5pDGcGtcXv+TeDE6IOW+QBHeMtI/Fgrj3
+         vQdwotNf+0BSA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
         syzbot+47b26cd837ececfc666d@syzkaller.appspotmail.com,
         Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>,
         linux-usb@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 08/37] HID: usbhid: free raw_report buffers in usbhid_stop
-Date:   Thu,  9 Sep 2021 20:21:13 -0400
-Message-Id: <20210910002143.175731-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 05/25] HID: usbhid: free raw_report buffers in usbhid_stop
+Date:   Thu,  9 Sep 2021 20:22:13 -0400
+Message-Id: <20210910002234.176125-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210910002143.175731-1-sashal@kernel.org>
-References: <20210910002143.175731-1-sashal@kernel.org>
+In-Reply-To: <20210910002234.176125-1-sashal@kernel.org>
+References: <20210910002234.176125-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -62,10 +62,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-index 1cfbbaf6901d..8537fcdb456d 100644
+index 6b6db57b49d6..e28227040c64 100644
 --- a/drivers/hid/usbhid/hid-core.c
 +++ b/drivers/hid/usbhid/hid-core.c
-@@ -503,7 +503,7 @@ static void hid_ctrl(struct urb *urb)
+@@ -506,7 +506,7 @@ static void hid_ctrl(struct urb *urb)
  
  	if (unplug) {
  		usbhid->ctrltail = usbhid->ctrlhead;
@@ -74,7 +74,7 @@ index 1cfbbaf6901d..8537fcdb456d 100644
  		usbhid->ctrltail = (usbhid->ctrltail + 1) & (HID_CONTROL_FIFO_SIZE - 1);
  
  		if (usbhid->ctrlhead != usbhid->ctrltail &&
-@@ -1221,9 +1221,20 @@ static void usbhid_stop(struct hid_device *hid)
+@@ -1224,9 +1224,20 @@ static void usbhid_stop(struct hid_device *hid)
  	mutex_lock(&usbhid->mutex);
  
  	clear_bit(HID_STARTED, &usbhid->iofl);
