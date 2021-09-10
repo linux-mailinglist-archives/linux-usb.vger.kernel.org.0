@@ -2,105 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A8F4066AB
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Sep 2021 07:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4564067C8
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Sep 2021 09:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbhIJFVa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Sep 2021 01:21:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42246 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230037AbhIJFV3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 10 Sep 2021 01:21:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 52C2B61051;
-        Fri, 10 Sep 2021 05:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631251219;
-        bh=FuY8GwM3s/D3E8hKfy4XmEywqcKGkGW5boPlme8HgLk=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=WyOKtj4Dv978O9862QIRpX5gXUXtg1SYfuRf/TNYcefJhXPCatW02kCgwK7JlADh7
-         KELPnIB5qbGHD9x+3l5UDiYfdx4SXvknVY+6KPd3gY6vpvbsoQS8uQVyybZ9p2wVK6
-         /nzF70LrEKgFcrSsMtDg1hOWehKFmAgMwC0HEdn26ldWvvt0eVsDM26b+lHUVWGk1a
-         wbnILPqNNpbnwbSaFHWwNwgNNPrihDqnNoLhbdXx7mIuvAghN5EhduiyJI/BG69/IG
-         oogXZi9CXapFMUn9fA3ILwdmueMbgAv49/8PeW4lLsj5sovfboddj8b6stZY/NjHKq
-         jTkCz/DquhZTQ==
-References: <20210909083120.15350-1-jackp@codeaurora.org>
- <87fsueb0ko.fsf@kernel.org>
- <20210909170236.GA20111@jackp-linux.qualcomm.com>
-User-agent: mu4e 1.6.5; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: gadget: Skip resizing EP's TX FIFO if
- already resized
-Date:   Fri, 10 Sep 2021 08:17:51 +0300
-In-reply-to: <20210909170236.GA20111@jackp-linux.qualcomm.com>
-Message-ID: <8735qdatwx.fsf@kernel.org>
+        id S231586AbhIJHiH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Sep 2021 03:38:07 -0400
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:25319 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231290AbhIJHiH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Sep 2021 03:38:07 -0400
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 18A7GoO4001125;
+        Fri, 10 Sep 2021 15:16:50 +0800 (GMT-8)
+        (envelope-from neal_liu@aspeedtech.com)
+Received: from NealLiu-PC01.aspeedtech.com (192.168.2.78) by
+ TWMBX02.aspeed.com (192.168.0.24) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 10 Sep 2021 15:36:23 +0800
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tony Prisk <linux@prisktech.co.nz>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     Neal Liu <neal_liu@aspeedtech.com>,
+        Tao Ren <rentao.bupt@gmail.com>, <BMC-SW@aspeedtech.com>
+Subject: [PATCH v4] usb: ehci: handshake CMD_RUN instead of STS_HALT
+Date:   Fri, 10 Sep 2021 15:36:19 +0800
+Message-ID: <20210910073619.26095-1-neal_liu@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.78]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 18A7GoO4001125
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+For Aspeed, HCHalted status depends on not only Run/Stop but also
+ASS/PSS status.
+Handshake CMD_RUN on startup instead.
 
-Hi Jack,
+Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Reviewed-by: Tao Ren <rentao.bupt@gmail.com>
+Tested-by: Tao Ren <rentao.bupt@gmail.com>
+---
+ drivers/usb/host/ehci-hcd.c      | 11 ++++++++++-
+ drivers/usb/host/ehci-platform.c |  6 ++++++
+ drivers/usb/host/ehci.h          |  1 +
+ 3 files changed, 17 insertions(+), 1 deletion(-)
 
-Jack Pham <jackp@codeaurora.org> writes:
->> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> > index 804b50548163..c647c76d7361 100644
->> > --- a/drivers/usb/dwc3/gadget.c
->> > +++ b/drivers/usb/dwc3/gadget.c
->> > @@ -747,6 +747,10 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
->> >  	if (!usb_endpoint_dir_in(dep->endpoint.desc) || dep->number <= 1)
->> >  		return 0;
->> >  
->> > +	/* bail if already resized */
->> > +	if (dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(dep->number >> 1)))
->> > +		return 0;
->> > +
->> 
->> heh, not to say "I told you so", but...
->> 
->> That being said, your test is not very good. The whole idea for resizing
->> the FIFOs is that in some applications we only use e.g. 2 endpoints and
->> there is considerable FIFO space left unused.
->> 
->> The goal is to use that unused FIFO space to squeeze more throughput out
->> of the pipe, since it amortizes SW latency.
->> 
->> This patch is essentially the same as reverting the original commit :-)
->
-> No, it's not quite the same as nullifying the resizing algorithm.  This
-> patch is predicated on a key part of the resizing algorithm where
-> dwc3_gadget_clear_tx_fifos() occurs upon receiving Set_Configuration in
-> ep0.c.  Which means that each new connection starts off with a blank
-> slate with all the GTXFIFOSIZ(n) registers cleared.  Then each EP gets
-> resized one at a time when usb_ep_enable() is called.
->
-> The problem this patch is fixing is avoiding *re-resizing*, the idea
-> being that if an EP was already resized once during a session (from
-> Set Configuration until the next reset or disconnect), then 
-> it should be good to go even if it gets disabled and re-enabled again.
+---
+Fix STS_HALT handshake failure for Aspeed 2500/2600 platform.
 
-that's not a safe assumption, though. What happens in cases where
-Configuration 1 is wildly different from Configuration 2? Say Config 1
-is a mass storage device and Config 2 is a collection of several CDC
-interfaces?
+Change since v3:
+- Add more description.
 
-> Since we lack any boolean state variable in struct dwc3_ep reflecting
-> whether it had already been resized, re-reading the GTXFIFOSIZ register
+Change since v2:
+- Use my "real" name for both the Signed-off-by: line and the From: line.
 
-it might be a better idea to introduce such a flag and make the
-intention clear. But in any case, I still think the assumption you're
-making is not very good.
+Change since v1:
+- Handshake CMD_RUN status on startup instead of easily skip it.
+---
 
-> is the next best equivalent.  Note also that this check occurs after
-> the if (!dwc->do_fifo_resize) check so this is applicable only if the
-> entire "tx-fifo-resize" mechanism is enabled.
-
-Right, that's fine :-)
-
+diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
+index 6bdc6d6bf74d..55f92d25336b 100644
+--- a/drivers/usb/host/ehci-hcd.c
++++ b/drivers/usb/host/ehci-hcd.c
+@@ -634,7 +634,16 @@ static int ehci_run (struct usb_hcd *hcd)
+ 	/* Wait until HC become operational */
+ 	ehci_readl(ehci, &ehci->regs->command);	/* unblock posted writes */
+ 	msleep(5);
+-	rc = ehci_handshake(ehci, &ehci->regs->status, STS_HALT, 0, 100 * 1000);
++
++	/* For Aspeed, STS_HALT also depends on ASS/PSS status.
++	 * Check CMD_RUN instead.
++	 */
++	if (ehci->is_aspeed)
++		rc = ehci_handshake(ehci, &ehci->regs->command, CMD_RUN,
++				    1, 100 * 1000);
++	else
++		rc = ehci_handshake(ehci, &ehci->regs->status, STS_HALT,
++				    0, 100 * 1000);
+ 
+ 	up_write(&ehci_cf_port_reset_rwsem);
+ 
+diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
+index c70f2d0b4aaf..c3dc906274d9 100644
+--- a/drivers/usb/host/ehci-platform.c
++++ b/drivers/usb/host/ehci-platform.c
+@@ -297,6 +297,12 @@ static int ehci_platform_probe(struct platform_device *dev)
+ 					  "has-transaction-translator"))
+ 			hcd->has_tt = 1;
+ 
++		if (of_device_is_compatible(dev->dev.of_node,
++					    "aspeed,ast2500-ehci") ||
++		    of_device_is_compatible(dev->dev.of_node,
++					    "aspeed,ast2600-ehci"))
++			ehci->is_aspeed = 1;
++
+ 		if (soc_device_match(quirk_poll_match))
+ 			priv->quirk_poll = true;
+ 
+diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
+index 80bb823aa9fe..fdd073cc053b 100644
+--- a/drivers/usb/host/ehci.h
++++ b/drivers/usb/host/ehci.h
+@@ -219,6 +219,7 @@ struct ehci_hcd {			/* one per controller */
+ 	unsigned		need_oc_pp_cycle:1; /* MPC834X port power */
+ 	unsigned		imx28_write_fix:1; /* For Freescale i.MX28 */
+ 	unsigned		spurious_oc:1;
++	unsigned		is_aspeed:1;
+ 
+ 	/* required for usb32 quirk */
+ 	#define OHCI_CTRL_HCFS          (3 << 6)
 -- 
-balbi
+2.25.1
+
