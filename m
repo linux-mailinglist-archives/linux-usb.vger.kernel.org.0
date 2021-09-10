@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05945406124
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Sep 2021 02:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8A8406129
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Sep 2021 02:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231961AbhIJASc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Sep 2021 20:18:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43958 "EHLO mail.kernel.org"
+        id S235241AbhIJAmF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Sep 2021 20:42:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46184 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230454AbhIJARl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Sep 2021 20:17:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AC4B1611AD;
-        Fri, 10 Sep 2021 00:16:30 +0000 (UTC)
+        id S233481AbhIJAT7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Sep 2021 20:19:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 94AF7610A3;
+        Fri, 10 Sep 2021 00:18:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631232991;
-        bh=v+xV+Z0mECTg1P4MjCoyaKUCGUkgrcvG+gffZb/JNE0=;
+        s=k20201202; t=1631233129;
+        bh=S2kBUEestuULlMUO4FoWwB67zsAW7zLe4FdjdnFH428=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eheWxWpnqMulvGFr7ryLJBbwxyXpk67zjAeOiQ3O4NTf7REarGXVutYLvZRBRoy9v
-         7wh6aHmSt1D+FfqoKMtPrEJ6I09aZv53HttFl0SryRiZHXfuaxYMpkacLUSt7PjxN7
-         Vwt/tmSCZVBrQr2HjEm4X25vcoPWGdQQx2aNY6ucBkk2WsYulrNCdPtv1S/ws9leCU
-         WgaoAQytj9rNqaRsar46NmX0ZSBPI1NGjdpCGhZfd+Cou5gFQJC98hwAmpWXa7rFJX
-         8TXupkmlwQSqTvDqq2KkMeo3uH9HuPVDvtKrf6yrDNCz+nG5fDV3tv4rRUbsdVTY12
-         d3T7UQqC7awtQ==
+        b=GkjB80vqXZvzaBcnQx+mOnkih9zwT0HJhiTfVTYxxeKHwLljfn9ZE8gLZj8aVMApG
+         XEmKhAfINP1Snznu2uSpBWCr2P/b5a68OtSrKeaqlJ1HTGRv+//zPjtQ29btyuxNTc
+         hCT9s1g6rlR0139DTjavvchJM1GtoAgYzNyL/4kQdBrrfRf+prFag+6IIrUWCcIP6i
+         bw6AJbh4/j9L/SLV9Kr4ETAmV7Z+yZFsqW8ZY/lWecWwrRP0lR7uLziWmcxEeqgBmE
+         0kjYkqJVWC8SQphh32KZ1IJuifxi1P3h8N7V8sGykbrv5fUuueXzd5lyNmqyY+2Oth
+         mVCYY0IVn2WDA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
         syzbot+47b26cd837ececfc666d@syzkaller.appspotmail.com,
         Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>,
         linux-usb@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 24/99] HID: usbhid: free raw_report buffers in usbhid_stop
-Date:   Thu,  9 Sep 2021 20:14:43 -0400
-Message-Id: <20210910001558.173296-24-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 20/88] HID: usbhid: free raw_report buffers in usbhid_stop
+Date:   Thu,  9 Sep 2021 20:17:12 -0400
+Message-Id: <20210910001820.174272-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210910001558.173296-1-sashal@kernel.org>
-References: <20210910001558.173296-1-sashal@kernel.org>
+In-Reply-To: <20210910001820.174272-1-sashal@kernel.org>
+References: <20210910001820.174272-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -62,7 +62,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-index 06130dc431a0..0bf123bf2ef8 100644
+index 4e9077363c96..9c970e63670e 100644
 --- a/drivers/hid/usbhid/hid-core.c
 +++ b/drivers/hid/usbhid/hid-core.c
 @@ -505,7 +505,7 @@ static void hid_ctrl(struct urb *urb)
