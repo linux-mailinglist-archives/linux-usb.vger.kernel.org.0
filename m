@@ -2,139 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12EB0406B35
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Sep 2021 14:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F37E2406C62
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Sep 2021 14:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232941AbhIJMN0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Sep 2021 08:13:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41920 "EHLO mail.kernel.org"
+        id S234203AbhIJMmn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Sep 2021 08:42:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36198 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232952AbhIJMNZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 10 Sep 2021 08:13:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D062D611C7;
-        Fri, 10 Sep 2021 12:12:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631275934;
-        bh=OGpeKe8qlKrKG2MWCkAbVaugcCWxiuy7ISiHVSw/oOs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UyAKLVfE0WPaM/hiFJaves446nQfPAhOHKZ16jHFcadokK40JHGWDQMxOm97sSx97
-         R+9yQUDk721dloiz72HxcwPVui90q1xUM/xy2RjumvzeXr7uIU9Pww6wDj+zLQPMGj
-         wedM0eGNh1VhjnCxmBJFscNtSn53joXGgp6r4f/ks4YFUkpa9SloagnVbEvUrIwcEu
-         9iiU6oZhEgOOafGrsgLnKaGAU6hyskjKgBRFCzu2vxoIC4k96nEXUkSehSdr+0Wmw0
-         FXVlDstzABo3OypSM9sdE+ALRDjHMkMvmq11ihLgxrL3Svf53/W7gt2baE8E4ll06p
-         Me+WWWvwYuFWg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mOfO2-0004s1-8h; Fri, 10 Sep 2021 14:12:06 +0200
-From:   Johan Hovold <johan@kernel.org>
+        id S233545AbhIJMmh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 10 Sep 2021 08:42:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7054B60E94;
+        Fri, 10 Sep 2021 12:41:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1631277686;
+        bh=Ny+TBmYm0Glx2ncjaBaqRJOzvS8UE8xM7y5YZjKFfVY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1ZI5+bC6IkGmQaSoxUudj5Ol8ZkgoStlRl7s3g4kiirHqqxwFP+ccQMYgOPzvixbp
+         XOybQxFkh0hzxy9NQzHMI1KONgViQ+wY4Z7pWRZp4cQpALPsNksyFgfLZbU8BkCFHw
+         o0g8Hmh0cz9F2Rnf/t3e2WyAYtsFQ2ef9RwWgQfM=
+Date:   Fri, 10 Sep 2021 14:41:24 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Johan Hovold <johan@kernel.org>
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] USB: serial: allow hung up ports to be suspended
-Date:   Fri, 10 Sep 2021 14:11:28 +0200
-Message-Id: <20210910121128.18664-3-johan@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210910121128.18664-1-johan@kernel.org>
+Subject: Re: [PATCH 0/2] USB: serial: allow hung up ports to be suspended
+Message-ID: <YTtSdGTYAv53XdoI@kroah.com>
 References: <20210910121128.18664-1-johan@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210910121128.18664-1-johan@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-User space can keep a tty open indefinitely and that should not prevent
-a hung up port and its USB device from being runtime suspended.
+On Fri, Sep 10, 2021 at 02:11:26PM +0200, Johan Hovold wrote:
+> User space can keep a tty open indefinitely and that should not prevent
+> a hung up port and its USB device from being runtime suspended.
+> 
+> Also clean up a few related error labels in a preparatory patch.
+> 
+> Johan
+> 
+> 
+> Johan Hovold (2):
+>   USB: serial: clean up core error labels
+>   USB: serial: allow hung up ports to be suspended
+> 
+>  drivers/usb/serial/usb-serial.c | 59 +++++++++++++++++----------------
+>  1 file changed, 30 insertions(+), 29 deletions(-)
+> 
+> -- 
+> 2.32.0
+> 
 
-Fix this by incrementing the PM usage counter when the port it activated
-and decrementing the counter when the port is shutdown rather than when
-the tty is installed and the last reference is dropped, respectively.
-
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/usb-serial.c | 31 +++++++++++++++++--------------
- 1 file changed, 17 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
-index abc657fec8c5..b357361d5d1e 100644
---- a/drivers/usb/serial/usb-serial.c
-+++ b/drivers/usb/serial/usb-serial.c
-@@ -208,8 +208,8 @@ void usb_serial_put(struct usb_serial *serial)
-  *
-  * This is the first place a new tty gets used.  Hence this is where we
-  * acquire references to the usb_serial structure and the driver module,
-- * where we store a pointer to the port, and where we do an autoresume.
-- * All these actions are reversed in serial_cleanup().
-+ * where we store a pointer to the port.  All these actions are reversed
-+ * in serial_cleanup().
-  */
- static int serial_install(struct tty_driver *driver, struct tty_struct *tty)
- {
-@@ -227,15 +227,11 @@ static int serial_install(struct tty_driver *driver, struct tty_struct *tty)
- 	if (!try_module_get(serial->type->driver.owner))
- 		goto err_put_serial;
- 
--	retval = usb_autopm_get_interface(serial->interface);
--	if (retval)
--		goto err_put_module;
--
- 	init_termios = (driver->termios[idx] == NULL);
- 
- 	retval = tty_standard_install(driver, tty);
- 	if (retval)
--		goto err_put_autopm;
-+		goto err_put_module;
- 
- 	mutex_unlock(&serial->disc_mutex);
- 
-@@ -247,8 +243,6 @@ static int serial_install(struct tty_driver *driver, struct tty_struct *tty)
- 
- 	return retval;
- 
--err_put_autopm:
--	usb_autopm_put_interface(serial->interface);
- err_put_module:
- 	module_put(serial->type->driver.owner);
- err_put_serial:
-@@ -265,10 +259,19 @@ static int serial_port_activate(struct tty_port *tport, struct tty_struct *tty)
- 	int retval;
- 
- 	mutex_lock(&serial->disc_mutex);
--	if (serial->disconnected)
-+	if (serial->disconnected) {
- 		retval = -ENODEV;
--	else
--		retval = port->serial->type->open(tty, port);
-+		goto out_unlock;
-+	}
-+
-+	retval = usb_autopm_get_interface(serial->interface);
-+	if (retval)
-+		goto out_unlock;
-+
-+	retval = port->serial->type->open(tty, port);
-+	if (retval)
-+		usb_autopm_put_interface(serial->interface);
-+out_unlock:
- 	mutex_unlock(&serial->disc_mutex);
- 
- 	if (retval < 0)
-@@ -304,6 +307,8 @@ static void serial_port_shutdown(struct tty_port *tport)
- 
- 	if (drv->close)
- 		drv->close(port);
-+
-+	usb_autopm_put_interface(port->serial->interface);
- }
- 
- static void serial_hangup(struct tty_struct *tty)
-@@ -352,8 +357,6 @@ static void serial_cleanup(struct tty_struct *tty)
- 	serial = port->serial;
- 	owner = serial->type->driver.owner;
- 
--	usb_autopm_put_interface(serial->interface);
--
- 	usb_serial_put(serial);
- 	module_put(owner);
- }
--- 
-2.32.0
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
