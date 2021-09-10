@@ -2,82 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B812D4072B3
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Sep 2021 22:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A4140745C
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Sep 2021 03:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234179AbhIJUuO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Sep 2021 16:50:14 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:51961 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S233498AbhIJUuO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Sep 2021 16:50:14 -0400
-Received: (qmail 50185 invoked by uid 1000); 10 Sep 2021 16:49:01 -0400
-Date:   Fri, 10 Sep 2021 16:49:01 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     cristian.birsan@microchip.com
-Cc:     gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
-        ada@thorsis.com, alexandre.belloni@bootlin.com,
-        ludovic.desroches@microchip.com, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] USB: host: ehci-atmel: Add support for HSIC phy
-Message-ID: <20210910204901.GA50170@rowland.harvard.edu>
-References: <20210910163842.1596407-1-cristian.birsan@microchip.com>
- <20210910163842.1596407-3-cristian.birsan@microchip.com>
+        id S235189AbhIKBVD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Sep 2021 21:21:03 -0400
+Received: from [179.51.96.33] ([179.51.96.33]:34298 "EHLO linux.local"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235165AbhIKBUv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 10 Sep 2021 21:20:51 -0400
+X-Greylist: delayed 43081 seconds by postgrey-1.27 at vger.kernel.org; Fri, 10 Sep 2021 21:20:50 EDT
+Received: from User (ce-1 [127.0.0.1])
+        by linux.local (Postfix) with SMTP id 47F1E57A91;
+        Fri, 10 Sep 2021 06:57:02 +0000 (GMT)
+Reply-To: <bgenjefffer@gmail.com>
+From:   "Dr Lis Harianto" <araiken@nike.eonet.ne.jp>
+Subject: Urgent
+Date:   Fri, 10 Sep 2021 15:30:57 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210910163842.1596407-3-cristian.birsan@microchip.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-Id: <20210910065703.47F1E57A91@linux.local>
+To:     undisclosed-recipients:;
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 10, 2021 at 07:38:42PM +0300, cristian.birsan@microchip.com wrote:
-> From: Cristian Birsan <cristian.birsan@microchip.com>
-> 
-> Add support for USB Host High Speed Port HSIC phy.
-> 
-> Signed-off-by: Cristian Birsan <cristian.birsan@microchip.com>
-> ---
+Hello Dear 
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+How are you doing today, please confirm if you are the owner of this email ID, and please reply immediately for urgent information 
 
->  drivers/usb/host/ehci-atmel.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/usb/host/ehci-atmel.c b/drivers/usb/host/ehci-atmel.c
-> index e893467d659c..05d41fd65f25 100644
-> --- a/drivers/usb/host/ehci-atmel.c
-> +++ b/drivers/usb/host/ehci-atmel.c
-> @@ -18,6 +18,8 @@
->  #include <linux/platform_device.h>
->  #include <linux/usb.h>
->  #include <linux/usb/hcd.h>
-> +#include <linux/usb/phy.h>
-> +#include <linux/usb/of.h>
->  
->  #include "ehci.h"
->  
-> @@ -25,6 +27,9 @@
->  
->  static const char hcd_name[] = "ehci-atmel";
->  
-> +#define EHCI_INSNREG(index)			((index) * 4 + 0x90)
-> +#define EHCI_INSNREG08_HSIC_EN			BIT(2)
-> +
->  /* interface and function clocks */
->  #define hcd_to_atmel_ehci_priv(h) \
->  	((struct atmel_ehci_priv *)hcd_to_ehci(h)->priv)
-> @@ -154,6 +159,9 @@ static int ehci_atmel_drv_probe(struct platform_device *pdev)
->  		goto fail_add_hcd;
->  	device_wakeup_enable(hcd->self.controller);
->  
-> +	if (of_usb_get_phy_mode(pdev->dev.of_node) == USBPHY_INTERFACE_MODE_HSIC)
-> +		writel(EHCI_INSNREG08_HSIC_EN, hcd->regs + EHCI_INSNREG(8));
-> +
->  	return retval;
->  
->  fail_add_hcd:
-> -- 
-> 2.25.1
-> 
+Thanks 
+
+Dr Lis Harianto
+
+M/D Zurike Medical Center
+
+2100 Maryachusetts Avenue, Cambridge 98747
+United State.
