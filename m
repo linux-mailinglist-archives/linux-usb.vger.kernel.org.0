@@ -2,107 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2593A406FD2
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Sep 2021 18:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EEEA407077
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Sep 2021 19:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbhIJQkW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Sep 2021 12:40:22 -0400
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:29242 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbhIJQkS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Sep 2021 12:40:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1631291947; x=1662827947;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=j3/W4EVBQOz9yH/HC2QsqbHvKVE/H182DHHZWWu1UyY=;
-  b=jfzkFq0GNThvjZggI1uphjeOs+v1r7kJU5I8pUR7z2Lu6kYwFd2nW6nd
-   8im4xRjocBal/NWgH6J4U6xuH7GNQ9lsMtWB37Q8kcRoeo80b620yNgx8
-   TVrhk6YZWL+Swxhd4elEf7sKPnARyp0WAQxZlCuZyyL5i/KXex9ldAY5t
-   fe3s+tJPoO8RMHalTY/gYsBUVoP4HhLwYTGrlaqLiuLjMYUrfQKtDlAgl
-   G3GShlHDWSd47wkmGB8JUvpUuAPyBOLwk4Xg4NZQCTS3og5z+FvUlMInC
-   LHJvwA+rB3Pk9IAP7d6EjnpkahRTTGAaqa4r+XXi8Uw3ELA97Vm/1Tr5t
-   A==;
-IronPort-SDR: /Z6pG8TEJkhA6tlDKFyAAC8ZuEQdHh4tI8jwvWJiG2D8RLvZn5k6CAmRhQr3TXQnThyePZlAIR
- G3EhUndK5ivhI2UqqbjSkq7HcMFt5Oiy91F8nMHYyN+uglu1W98gMGxVy1fhH+2EyH+aIta8iK
- ATqopXeLcNNquXhcmiHFFE/zamMF7DmYypAHpsV4V36wQ+99/a6fJndH+B/VsyOhv7zAmH7648
- 3v5SGkc77lioTj6KBDq3isEJE/N39UDTrxP5EqhOZXqMmzCcpfvhPuzyaSFhGPGD7H7Sk9FA7+
- obwAGh2txsTDsF8caim4IF7/
-X-IronPort-AV: E=Sophos;i="5.85,283,1624345200"; 
-   d="scan'208";a="128921696"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Sep 2021 09:39:06 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Fri, 10 Sep 2021 09:39:06 -0700
-Received: from plexus-g.actel.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
- Transport; Fri, 10 Sep 2021 09:39:04 -0700
-From:   <cristian.birsan@microchip.com>
-To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
-        <nicolas.ferre@microchip.com>, <ada@thorsis.com>,
-        <alexandre.belloni@bootlin.com>, <ludovic.desroches@microchip.com>
-CC:     <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Cristian Birsan <cristian.birsan@microchip.com>
-Subject: [PATCH 2/2] USB: host: ehci-atmel: Add support for HSIC phy
-Date:   Fri, 10 Sep 2021 19:38:42 +0300
-Message-ID: <20210910163842.1596407-3-cristian.birsan@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210910163842.1596407-1-cristian.birsan@microchip.com>
-References: <20210910163842.1596407-1-cristian.birsan@microchip.com>
+        id S231386AbhIJRWL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Sep 2021 13:22:11 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:56141 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231698AbhIJRWI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 10 Sep 2021 13:22:08 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1631294457; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=dTzyfUob5Y28g9uAV7eeIpiIEDAMZS2HBT7BgJCYXGw=; b=wJs0rL++SrzSO72sd9DFkJUFPWtIckLJNDttC1SXLdbCPkcPVVX+cwMNCZLOI98jIarrJxPM
+ TrgWpdZhUTJScbizeBBD6TEOQoS5+L+pETH0rv2Iyyhji5d8gWxqDgrUmJFPS+PyqFAUQSj2
+ dEwtEWY1laPFBzLsflTL1EjChNE=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 613b93f2e34848cb6acbdcbd (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 10 Sep 2021 17:20:50
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B6D7DC43460; Fri, 10 Sep 2021 17:20:50 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 62F56C43460;
+        Fri, 10 Sep 2021 17:20:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 62F56C43460
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Date:   Fri, 10 Sep 2021 10:20:44 -0700
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: gadget: Skip resizing EP's TX FIFO if already
+ resized
+Message-ID: <20210910172044.GA23733@jackp-linux.qualcomm.com>
+References: <20210909083120.15350-1-jackp@codeaurora.org>
+ <87fsueb0ko.fsf@kernel.org>
+ <20210909170236.GA20111@jackp-linux.qualcomm.com>
+ <8735qdatwx.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8735qdatwx.fsf@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Cristian Birsan <cristian.birsan@microchip.com>
+On Fri, Sep 10, 2021 at 08:17:51AM +0300, Felipe Balbi wrote:
+> 
+> Hi Jack,
+> 
+> Jack Pham <jackp@codeaurora.org> writes:
+> >> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> >> > index 804b50548163..c647c76d7361 100644
+> >> > --- a/drivers/usb/dwc3/gadget.c
+> >> > +++ b/drivers/usb/dwc3/gadget.c
+> >> > @@ -747,6 +747,10 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+> >> >  	if (!usb_endpoint_dir_in(dep->endpoint.desc) || dep->number <= 1)
+> >> >  		return 0;
+> >> >  
+> >> > +	/* bail if already resized */
+> >> > +	if (dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(dep->number >> 1)))
+> >> > +		return 0;
+> >> > +
+> >> 
+> >> heh, not to say "I told you so", but...
+> >> 
+> >> That being said, your test is not very good. The whole idea for resizing
+> >> the FIFOs is that in some applications we only use e.g. 2 endpoints and
+> >> there is considerable FIFO space left unused.
+> >> 
+> >> The goal is to use that unused FIFO space to squeeze more throughput out
+> >> of the pipe, since it amortizes SW latency.
+> >> 
+> >> This patch is essentially the same as reverting the original commit :-)
+> >
+> > No, it's not quite the same as nullifying the resizing algorithm.  This
+> > patch is predicated on a key part of the resizing algorithm where
+> > dwc3_gadget_clear_tx_fifos() occurs upon receiving Set_Configuration in
+> > ep0.c.  Which means that each new connection starts off with a blank
+> > slate with all the GTXFIFOSIZ(n) registers cleared.  Then each EP gets
+> > resized one at a time when usb_ep_enable() is called.
+> >
+> > The problem this patch is fixing is avoiding *re-resizing*, the idea
+> > being that if an EP was already resized once during a session (from
+> > Set Configuration until the next reset or disconnect), then 
+> > it should be good to go even if it gets disabled and re-enabled again.
+> 
+> that's not a safe assumption, though. What happens in cases where
+> Configuration 1 is wildly different from Configuration 2? Say Config 1
+> is a mass storage device and Config 2 is a collection of several CDC
+> interfaces?
 
-Add support for USB Host High Speed Port HSIC phy.
+The resizing algorithm operates only on one Configuration at a time.
+If a new Configuration is selected by the host, the algorithm starts
+over again, so all of the endpoints in the new config will need to be
+evaluated and resized again.  The number of total endpoints in a
+configuration (including across multiple Alt Settings) is taken into
+account to ensure there is enough room to guarantee each IN endpoint
+will have a minimum amount of FIFO space, but also allowing an
+opportunity for those endpoints who could benefit (based on their
+MaxBurst setting) to be allocated more.
 
-Signed-off-by: Cristian Birsan <cristian.birsan@microchip.com>
----
- drivers/usb/host/ehci-atmel.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+> > Since we lack any boolean state variable in struct dwc3_ep reflecting
+> > whether it had already been resized, re-reading the GTXFIFOSIZ register
+> 
+> it might be a better idea to introduce such a flag and make the
+> intention clear. But in any case, I still think the assumption you're
+> making is not very good.
 
-diff --git a/drivers/usb/host/ehci-atmel.c b/drivers/usb/host/ehci-atmel.c
-index e893467d659c..05d41fd65f25 100644
---- a/drivers/usb/host/ehci-atmel.c
-+++ b/drivers/usb/host/ehci-atmel.c
-@@ -18,6 +18,8 @@
- #include <linux/platform_device.h>
- #include <linux/usb.h>
- #include <linux/usb/hcd.h>
-+#include <linux/usb/phy.h>
-+#include <linux/usb/of.h>
- 
- #include "ehci.h"
- 
-@@ -25,6 +27,9 @@
- 
- static const char hcd_name[] = "ehci-atmel";
- 
-+#define EHCI_INSNREG(index)			((index) * 4 + 0x90)
-+#define EHCI_INSNREG08_HSIC_EN			BIT(2)
-+
- /* interface and function clocks */
- #define hcd_to_atmel_ehci_priv(h) \
- 	((struct atmel_ehci_priv *)hcd_to_ehci(h)->priv)
-@@ -154,6 +159,9 @@ static int ehci_atmel_drv_probe(struct platform_device *pdev)
- 		goto fail_add_hcd;
- 	device_wakeup_enable(hcd->self.controller);
- 
-+	if (of_usb_get_phy_mode(pdev->dev.of_node) == USBPHY_INTERFACE_MODE_HSIC)
-+		writel(EHCI_INSNREG08_HSIC_EN, hcd->regs + EHCI_INSNREG(8));
-+
- 	return retval;
- 
- fail_add_hcd:
+IMHO I think it's pretty straightforward, as the GTXFIFOSIZ(n) register
+must have a valid value for the EP to be operational.  The assumption is
+if it's 0, that means it was cleared by dwc3_gadget_clear_tx_fifos() and
+we haven't yet visited this EP for resizing.  So the check within this
+resize routine is basically a combination of the following:
+
+ if (dwc->do_fifo_resize && DWC3_GTXFIFOSIZ(N) != 0)
+    // this IN EP has been resized
+
+But I hear you about using an explicit flag as it would make it crystal
+clear to the reader.  I can prepare something for V2.
+
+> > is the next best equivalent.  Note also that this check occurs after
+> > the if (!dwc->do_fifo_resize) check so this is applicable only if the
+> > entire "tx-fifo-resize" mechanism is enabled.
+> 
+> Right, that's fine :-)
+
+Jack
 -- 
-2.25.1
-
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
