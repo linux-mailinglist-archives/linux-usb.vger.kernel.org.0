@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4714077FD
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Sep 2021 15:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D2D40780A
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Sep 2021 15:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236994AbhIKNWM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 11 Sep 2021 09:22:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49196 "EHLO mail.kernel.org"
+        id S237295AbhIKNWj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 11 Sep 2021 09:22:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51390 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237531AbhIKNTY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 11 Sep 2021 09:19:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CA4AF61373;
-        Sat, 11 Sep 2021 13:14:09 +0000 (UTC)
+        id S236927AbhIKNUl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 11 Sep 2021 09:20:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3C9736139D;
+        Sat, 11 Sep 2021 13:14:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631366050;
+        s=k20201202; t=1631366060;
         bh=hy3UwUA+8vvNry4bzehpyJHT56yOSvMuXzICl7nOmF8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DwghbapR+uWbzjY06S7KpUQ3QkCAsbaCoFlIvjc46K3q62GXAukALKBy7W+MCeu6c
-         QCVYr/oIU42TnT+QvnGbAzFiyrlnF9w1zWjpvtu/73STKMvvENzjvys7s0/fLDnmt4
-         a2vQ3foAUl6N07IU8IxlewcKvLoOVnEOf0kl5Ii1WPTGuym/CRbVWn76u6gGeV/HE9
-         l9sb+E38pj2B28HCYiWBAOACjYNwJ6qQRAPOAVsJ3iDbNPEh0Ci8LO456Vv8IhLOjG
-         voDlP5jiEACT8Wf3gLBrRo7NvRVB9LM6QqREQKkiejAjL8RSqGsMoesvWEajeqSNtc
-         XwiZBtCB+UpGQ==
+        b=DfGtI5kwJqfoM9fDWG6ZMBi0gRou3oUllX3awHqUcp4z1EmfWDyCPSltGfn2BXOwX
+         vEWNJ2+O0VrZcuGH18lfeipdRYWnOGoPPGCSNaBqI0Q4DomP9mSRlxuzjLxBrHrdsQ
+         lGFPHabgVrrzNYXJH/PxAWU2BIFKWHi36ISnpeDoUQqUQVP/aRq6W+xkiJxhfZd2Z1
+         15cZkJT2bF7UkUpeTBjLWaiWDOILrlTLfLX9J7Rej0V3G57BR0w8RfREQyd2iW2CUI
+         WIaSuVFevxqESCaApq9Rkn6OEZBgL97aIHE/TqQBXret3I6c/TG5In32PCfbqX+2J+
+         yQHn67tZWOg9A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Daniele Palmas <dnlplm@gmail.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 4/7] net: usb: cdc_mbim: avoid altsetting toggling for Telit LN920
-Date:   Sat, 11 Sep 2021 09:14:01 -0400
-Message-Id: <20210911131404.286005-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 4/5] net: usb: cdc_mbim: avoid altsetting toggling for Telit LN920
+Date:   Sat, 11 Sep 2021 09:14:13 -0400
+Message-Id: <20210911131415.286125-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210911131404.286005-1-sashal@kernel.org>
-References: <20210911131404.286005-1-sashal@kernel.org>
+In-Reply-To: <20210911131415.286125-1-sashal@kernel.org>
+References: <20210911131415.286125-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
