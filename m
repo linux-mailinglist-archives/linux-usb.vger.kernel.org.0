@@ -2,77 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6453407811
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Sep 2021 15:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BE034078E4
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Sep 2021 16:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236739AbhIKNWv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 11 Sep 2021 09:22:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47998 "EHLO mail.kernel.org"
+        id S229901AbhIKOlk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 11 Sep 2021 10:41:40 -0400
+Received: from mail.msweet.org ([173.255.209.91]:49606 "EHLO mail.msweet.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236968AbhIKNUq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 11 Sep 2021 09:20:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1141861247;
-        Sat, 11 Sep 2021 13:14:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631366067;
-        bh=+pym0QwsC8Fviq7aC3T+wd9qCQclUcQD/hEuj45WaZ8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qzuNiK022Zu0SR9EoDjSSB9L3frJe2dAN9JCDxoT/nv2i5ko/sBck2t98IEmIS1vp
-         8B41iu9sQEi/ygn3vo8dDNB1fvzo8lyUDTkKyErElH4rRV9LvXttMTxOX5QcR5qZ9k
-         t4jnxwvXEkSOnqyBqG1hXgKkMmvJ1RHrXGOhoCmuT5sLzazMuWF9NnkrvbX6OlgG59
-         pi/5yZi4OhIbMfgS0PX8nTg/xkmLsF8sG8Bhv9oAuhHHtoGdn85vz68iIjd5GhYFSc
-         NAjqs9qzEB93fGWUI8jgp+3XHh/k6qTzsKq3emQiBiUaHlRJ9zIi+Jnbu7s5CQBS/E
-         h6mEeE9R8vedQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Daniele Palmas <dnlplm@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 3/4] net: usb: cdc_mbim: avoid altsetting toggling for Telit LN920
-Date:   Sat, 11 Sep 2021 09:14:21 -0400
-Message-Id: <20210911131423.286235-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210911131423.286235-1-sashal@kernel.org>
-References: <20210911131423.286235-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S229643AbhIKOlk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 11 Sep 2021 10:41:40 -0400
+X-Greylist: delayed 534 seconds by postgrey-1.27 at vger.kernel.org; Sat, 11 Sep 2021 10:41:40 EDT
+Received: from smtpclient.apple (unknown [135.129.115.168])
+        by mail.msweet.org (Postfix) with ESMTPSA id 07EF2803B1;
+        Sat, 11 Sep 2021 14:31:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.msweet.org 07EF2803B1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=msweet.org;
+        s=default; t=1631370692;
+        bh=Nk4yW8o7fGfCyZZFbozVwzOS92fZC4GClCHPKEX2E34=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
+        b=mhf4SO7OwcrE5pv/RU1dBxzhbHxJCA7grGerRfuvF+XCAmb3MwDBi//ivvqaiYvqA
+         ZGFqZoDEH5k2nCZfPI9bQJSZnv+GUXmYIVZS/ruZ5bMNyf71BYfKLL5oKZatmlIbhO
+         nEf9XRuV6ccpE79gyepwXvJSTcIS8btkCZzTYjuE=
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.0.1.1.10\))
+Subject: Re: How to register a new "function" in configfs?
+From:   Michael Sweet <msweet@msweet.org>
+In-Reply-To: <CAHP4M8Vc+0eChmJDnLLa3ibuzGLOnc5hJ1Nk09794RHEJ7tEPw@mail.gmail.com>
+Date:   Sat, 11 Sep 2021 10:31:29 -0400
+Cc:     linux-usb@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <CE84D77A-93F8-43B2-A952-896D6BED2E6D@msweet.org>
+References: <CAHP4M8Vc+0eChmJDnLLa3ibuzGLOnc5hJ1Nk09794RHEJ7tEPw@mail.gmail.com>
+To:     Ajay Garg <ajaygargnsit@gmail.com>
+X-Mailer: Apple Mail (2.3693.0.1.1.10)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Daniele Palmas <dnlplm@gmail.com>
+Ajay,
 
-[ Upstream commit aabbdc67f3485b5db27ab4eba01e5fbf1ffea62c ]
+Quick question (as someone who has been down this road), do you need to =
+do a kernel driver or could you just use the functionfs support to =
+implement everything in userspace?  I found that path to be much easier =
+and less error-prone (and one of these days I'm going to be contributing =
+some documentation changes to make some things clearer...) and I was =
+able to get my IPP-USB implementation up and running very quickly.
 
-Add quirk CDC_MBIM_FLAG_AVOID_ALTSETTING_TOGGLE for Telit LN920
-0x1061 composition in order to avoid bind error.
 
-Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/cdc_mbim.c | 5 +++++
- 1 file changed, 5 insertions(+)
+> On Sep 11, 2021, at 1:43 AM, Ajay Garg <ajaygargnsit@gmail.com> wrote:
+>=20
+> Hi All.
+>=20
+> As a first step, I have been able to load a gadget on configfs, which
+> binds to the function "gser" (thus loading up the usb_f_serial module
+> when the gadget mounts). Things work well till here.
+>=20
+> Now, I have written a brand-new gadget-side device-driver, trying to
+> create a new function "gusb", via DECLARE_USB_FUNCTION_INIT.
+> However, now when I try to load the gadget for binding to "gusb", I
+> get the error that the function cannot be found.
+>=20
+> Seems that firing up a new gadget-side driver, that registers a new
+> function via DECLARE_USB_FUNCTION_INIT, is not enough to make the new
+> function visible across the kernel.
+>=20
+> Kindly let know what I am missing.
+> Will be grateful for pointers.
+>=20
+>=20
+> Thanks and Regards,
+> Ajay
+>=20
 
-diff --git a/drivers/net/usb/cdc_mbim.c b/drivers/net/usb/cdc_mbim.c
-index 4c8baba72933..d86132d41416 100644
---- a/drivers/net/usb/cdc_mbim.c
-+++ b/drivers/net/usb/cdc_mbim.c
-@@ -647,6 +647,11 @@ static const struct usb_device_id mbim_devs[] = {
- 	  .driver_info = (unsigned long)&cdc_mbim_info_avoid_altsetting_toggle,
- 	},
- 
-+	/* Telit LN920 */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(0x1bc7, 0x1061, USB_CLASS_COMM, USB_CDC_SUBCLASS_MBIM, USB_CDC_PROTO_NONE),
-+	  .driver_info = (unsigned long)&cdc_mbim_info_avoid_altsetting_toggle,
-+	},
-+
- 	/* default entry */
- 	{ USB_INTERFACE_INFO(USB_CLASS_COMM, USB_CDC_SUBCLASS_MBIM, USB_CDC_PROTO_NONE),
- 	  .driver_info = (unsigned long)&cdc_mbim_info_zlp,
--- 
-2.30.2
+________________________
+Michael Sweet
+
+
 
