@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF254076DA
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Sep 2021 15:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8F7407760
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Sep 2021 15:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235885AbhIKNNw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 11 Sep 2021 09:13:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37816 "EHLO mail.kernel.org"
+        id S235923AbhIKNQ7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 11 Sep 2021 09:16:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41100 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236214AbhIKNNf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 11 Sep 2021 09:13:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3BD6861205;
-        Sat, 11 Sep 2021 13:12:21 +0000 (UTC)
+        id S236095AbhIKNPJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 11 Sep 2021 09:15:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 39BA761153;
+        Sat, 11 Sep 2021 13:13:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631365942;
-        bh=2+f0q9COo9y3qm6fO0LOOCVmBLhraM8f7noOmNchM60=;
+        s=k20201202; t=1631365983;
+        bh=BP4d9d4bjOOYFK7CSlAnWJ5oSIt8LhI/0CCz34oz1K8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QLOJZ/XXMvXk2pBJXPQzQQuiZuaonu9ndVHDoDxfSBCNFUMYH3BOitVGPjNGujEQy
-         mNe75I9npaqEW4zMEEJ0MfcRf0Cmoq7li89mxOL4BapFlj6MHv0aVKcYa8BqdnqxVF
-         3Al0PNxpGsN5yn9y6D306Gk3CUYkK7aG9KXP0xb8zuPqG/IP88ASZ+0NGtZ/6/8xT/
-         zjRsqFjS1EEnkJm9LUJqpGsDKOmPdXEsV/e5xbzY6vTaWk3oyCFRUVXDPKrDmEICwv
-         J2mPEGRccyRFboqCCpPmd2KxxFwCOqhZDPAwZb1CPNXq2dTiA77cbgJX6phaLnFKFo
-         Yz0F5na88FnjQ==
+        b=JYwncPe2l7VA/zk7BnyoVRqHWgTdj301BNfEz1q7G6+iaA+GWHIMVuuhPlYMCYzGm
+         6SiThh+x4iOozkKz5kRUPOxUZe7UYJaqMDqs5EFPIIarvok3Rdqgo1wJKFzIxwFAUK
+         631llq2LiL3qpXVa4LKr6yI+poJP7j8RIgGVSWnVMv+o+2J0PXYKPvnOzvLuanB6pe
+         vreDHJkOYTmVkEzygcxGOTqKS3qp7i31jU1PfZCejmS4e23yIgGYfHKatxUWWOVefT
+         cEHqy1s6CDCJjkL70O4EP9hk8gdtT26vfgWcArPYvCDD2NTpkYGglx4/2TgFm7jep7
+         lcTmPuzsjEpmA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Daniele Palmas <dnlplm@gmail.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 24/32] net: usb: cdc_mbim: avoid altsetting toggling for Telit LN920
-Date:   Sat, 11 Sep 2021 09:11:41 -0400
-Message-Id: <20210911131149.284397-24-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 23/29] net: usb: cdc_mbim: avoid altsetting toggling for Telit LN920
+Date:   Sat, 11 Sep 2021 09:12:27 -0400
+Message-Id: <20210911131233.284800-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210911131149.284397-1-sashal@kernel.org>
-References: <20210911131149.284397-1-sashal@kernel.org>
+In-Reply-To: <20210911131233.284800-1-sashal@kernel.org>
+References: <20210911131233.284800-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,10 +58,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+)
 
 diff --git a/drivers/net/usb/cdc_mbim.c b/drivers/net/usb/cdc_mbim.c
-index 4c4ab7b38d78..82bb5ed94c48 100644
+index 5db66272fc82..ec3a97e079fc 100644
 --- a/drivers/net/usb/cdc_mbim.c
 +++ b/drivers/net/usb/cdc_mbim.c
-@@ -654,6 +654,11 @@ static const struct usb_device_id mbim_devs[] = {
+@@ -653,6 +653,11 @@ static const struct usb_device_id mbim_devs[] = {
  	  .driver_info = (unsigned long)&cdc_mbim_info_avoid_altsetting_toggle,
  	},
  
