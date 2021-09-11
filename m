@@ -2,84 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E6E3407A2A
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Sep 2021 20:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF2E407AF2
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Sep 2021 01:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233412AbhIKS7v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 11 Sep 2021 14:59:51 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:58142 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233408AbhIKS7t (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Sep 2021 14:59:49 -0400
-Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 1AD61C0887;
-        Sat, 11 Sep 2021 18:58:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1631386715; bh=iRdLnZD8c38q3+DUKejSeZbUyWBInQBjtmBi4XuIEJ4=;
-        h=Date:From:Subject:To:Cc:From;
-        b=hS29hD5LV8ReH8il00RU26ZKPzNA6iHO8AaiPkY1Cowe0HX9O1/C4+Z0/XxyAYck8
-         54RZT4braPuTObo/5QZ0ingHL2xtBHXaCauwvG9oB6YwRduIWubHfp74cktfk3o9XB
-         iE9XVicE+e5JDKpRx+kyglwUHaxy9/37USMR7aAPZ7IzxvY7NZi4jZqm59nmxNlWTO
-         ji78VUGS+aHA0sAlpSp7pPE85NRYNhw+mP6naQLjPz7n3duzFUwWRoJJs3JporuKRI
-         y+uwmGTxKI5Q5u2SQvzbAI/V4MSrAU2I6XZRJvGK2hD5raqzG2T52wRlhyANAr6ybS
-         0l0q8Ibq9VyNg==
-Received: from hminas-z420 (hminas-z420.internal.synopsys.com [10.116.75.77])
-        (using TLSv1 with cipher AES128-SHA (128/128 bits))
-        (Client did not present a certificate)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 5121BA005D;
-        Sat, 11 Sep 2021 18:58:30 +0000 (UTC)
-Received: by hminas-z420 (sSMTP sendmail emulation); Sat, 11 Sep 2021 22:58:30 +0400
-Date:   Sat, 11 Sep 2021 22:58:30 +0400
-Message-Id: <a36981accc26cd674c5d8f8da6164344b94ec1fe.1631386531.git.Minas.Harutyunyan@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: [PATCH v2] usb: dwc2: gadget: Fix ISOC transfer complete handling for DDMA
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+        id S231719AbhIKXxZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 11 Sep 2021 19:53:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45610 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234553AbhIKXxU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 11 Sep 2021 19:53:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 2D2E46101D
+        for <linux-usb@vger.kernel.org>; Sat, 11 Sep 2021 23:52:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631404327;
+        bh=30UdpLyxgMTEWFT8HH7LMHJqTPUchRU3SHMci6jzuBA=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=nC1ioL8y2pdN1zHmr1oEhLXwFQJfqTM6IGd2OWqrlhSv7qxupeZ/Z3vGi70IgTdxL
+         Vmr5I8QKarfgHcmUjouKYeRfjTMSkc7iP3xFQQWIIvpfb3JzI+gAzSvA0fgoLVeRTY
+         0WDTcfgeNActJlC4RG2smMyZX/8tKwrJ04o/cRWyp9puRlIBo4CLynGDVTltYltow+
+         0iyQ822R/Oc/idL/gmjQF6u2pjNJlZS7Ko2LPfwIlbvrX8D/C1ZlNHvWO3PEXproZO
+         djoKjp3a2AjnvT2cg1u6efKr9+RdJspYsQfRNFYvi1WM+gg/4HVsl6oFx7O22tFJD8
+         X4/2E3bGxuNkA==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 1AA9A606A5; Sat, 11 Sep 2021 23:52:07 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214137] USB randomly stops working, starting with mouse
+Date:   Sat, 11 Sep 2021 23:52:06 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: yaomtc@protonmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-214137-208809-fO65mj4esZ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214137-208809@https.bugzilla.kernel.org/>
+References: <bug-214137-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When last descriptor in a descriptor list completed with XferComplete
-interrupt, core switching to handle next descriptor and assert BNA
-interrupt. Both these interrupts are set while dwc2_hsotg_epint()
-handler called. Each interrupt should be handled separately: first
-XferComplete interrupt then BNA interrupt, otherwise last completed
-transfer will not be giveback to function driver as completed
-request.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214137
 
-Fixes: 729cac693eec ("usb: dwc2: Change ISOC DDMA flow")
-Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
----
- Changes in v2:
- - Fix typo in commit message
+--- Comment #7 from yaomtc@protonmail.com ---
+I replaced my Ryzen 7 1700X and B450 motherboard with a Ryzen 5 5600G and a
+B550 mobo. No issues so far. I think my 1st gen Ryzen might have had a
+compatibility issue with recent Linux kernels.
 
- drivers/usb/dwc2/gadget.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+--=20
+You may reply to this email to add a comment.
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index f09cbdfac9df..11d85a6e0b0d 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -3067,9 +3067,7 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,
- 
- 		/* In DDMA handle isochronous requests separately */
- 		if (using_desc_dma(hsotg) && hs_ep->isochronous) {
--			/* XferCompl set along with BNA */
--			if (!(ints & DXEPINT_BNAINTR))
--				dwc2_gadget_complete_isoc_request_ddma(hs_ep);
-+			dwc2_gadget_complete_isoc_request_ddma(hs_ep);
- 		} else if (dir_in) {
- 			/*
- 			 * We get OutDone from the FIFO, so we only
-
-base-commit: 353f497ca8c913cd25ae06c7f94e3b0ff4124dd8
--- 
-2.11.0
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
