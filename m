@@ -2,70 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF63D40792C
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Sep 2021 17:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D215A407A23
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Sep 2021 20:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232458AbhIKPsC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 11 Sep 2021 11:48:02 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:56789 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S232333AbhIKPsB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Sep 2021 11:48:01 -0400
-Received: (qmail 69147 invoked by uid 1000); 11 Sep 2021 11:46:48 -0400
-Date:   Sat, 11 Sep 2021 11:46:48 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Len Baker <len.baker@gmx.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>, linux-usb@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: ohci: Prefer struct_size over open coded arithmetic
-Message-ID: <20210911154648.GA68944@rowland.harvard.edu>
-References: <20210911112631.10004-1-len.baker@gmx.com>
+        id S233539AbhIKSpa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 11 Sep 2021 14:45:30 -0400
+Received: from mxout02.lancloud.ru ([45.84.86.82]:55410 "EHLO
+        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233408AbhIKSp3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Sep 2021 14:45:29 -0400
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 3D31E22EF8F9
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH] usb: dwc2: gadget: Fix ISOC transfer complete handling
+ for DDMA
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>
+CC:     John Youn <John.Youn@synopsys.com>
+References: <df7851e6416a7817140c2be65a479a2650d746d8.1631356397.git.Minas.Harutyunyan@synopsys.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <4fc52c99-cace-d290-21e3-549d5b3c00a2@omp.ru>
+Date:   Sat, 11 Sep 2021 21:44:13 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210911112631.10004-1-len.baker@gmx.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <df7851e6416a7817140c2be65a479a2650d746d8.1631356397.git.Minas.Harutyunyan@synopsys.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Sep 11, 2021 at 01:26:31PM +0200, Len Baker wrote:
-> As noted in the "Deprecated Interfaces, Language Features, Attributes,
-> and Conventions" documentation [1], size calculations (especially
-> multiplication) should not be performed in memory allocator (or similar)
-> function arguments due to the risk of them overflowing. This could lead
-> to values wrapping around and a smaller allocation being made than the
-> caller was expecting. Using those allocations could lead to linear
-> overflows of heap memory and other misbehaviors.
+Hello!
+
+On 11.09.2021 18:16, Minas Harutyunyan wrote:
+
+> When last descriptor in a descriptor list completed with XferComplete
+> interrupt, core switching to handle next descriptor and assert BNA
+> interrupt. This both interrupts are set while dwc2_hsotg_epint()
+
+    Both these...
+
+> handler called. Each interrupt should be handled separately: first
+> XferComplete interrupt then BNA interrupt, otherwise last completed
+> transfer will not be giveback to function driver as completed
+> request.
 > 
-> So, use the struct_size() helper to do the arithmetic instead of the
-> argument "size + count * size" in the kzalloc() function.
-> 
-> [1] https://www.kernel.org/doc/html/v5.14/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments
-> 
-> Signed-off-by: Len Baker <len.baker@gmx.com>
+> Fixes: 729cac693eec ("usb: dwc2: Change ISOC DDMA flow")
+> Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
 > ---
+>   drivers/usb/dwc2/gadget.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+> index 837237e4bc96..1c11fb89406d 100644
+> --- a/drivers/usb/dwc2/gadget.c
+> +++ b/drivers/usb/dwc2/gadget.c
+[...]
+> base-commit: 1b4f3dfb4792f03b139edf10124fcbeb44e608e6
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+    Hm?
 
->  drivers/usb/host/ohci-hcd.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
-> index 1f5e69314a17..666b1c665188 100644
-> --- a/drivers/usb/host/ohci-hcd.c
-> +++ b/drivers/usb/host/ohci-hcd.c
-> @@ -191,8 +191,7 @@ static int ohci_urb_enqueue (
->  	}
-> 
->  	/* allocate the private part of the URB */
-> -	urb_priv = kzalloc (sizeof (urb_priv_t) + size * sizeof (struct td *),
-> -			mem_flags);
-> +	urb_priv = kzalloc(struct_size(urb_priv, td, size), mem_flags);
->  	if (!urb_priv)
->  		return -ENOMEM;
->  	INIT_LIST_HEAD (&urb_priv->pending);
-> --
-> 2.25.1
-> 
+MBR, Sergei
