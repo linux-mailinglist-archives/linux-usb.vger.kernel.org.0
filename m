@@ -2,74 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E4C640753C
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Sep 2021 07:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EEBD407641
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Sep 2021 13:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbhIKFpP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 11 Sep 2021 01:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbhIKFpO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Sep 2021 01:45:14 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B91C061574
-        for <linux-usb@vger.kernel.org>; Fri, 10 Sep 2021 22:44:02 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id l16-20020a9d6a90000000b0053b71f7dc83so5329828otq.7
-        for <linux-usb@vger.kernel.org>; Fri, 10 Sep 2021 22:44:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=uw3Jcx9FvOKxcB8V9zigtl1nqlEYmKGQcJUOFoXjOq0=;
-        b=L961bxY70NpuOvRGM3uuwoWheEfh6DFMFMvOxxUYe8gzctwUY7SxSavSYzLsmLQNsF
-         ETkSOpdQa/we0tQlr0eclTUzviMoOOLr6jhjNpbMArH7N0PVNJB8F45CZuhsrDa3LIpL
-         JbkZe5iqG7BKjNRmASmT/fM1CnhWHyUgpNqeDlrhGIjRz+dhd1Gl0/gZrApBw6RalryY
-         wV3ILg34KVSmGclmdPyPJIFAtDUr6rfMuf3TeBHgYYEvqX0OFnHrkuWtXv3fOPIiuFbB
-         H7CyGkCrJXlqqz2o80rJQQfHRvqEm8ackdGSaSdvdmzLKKoEZ94D/RihG1G2+CJjcCL/
-         Q+wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=uw3Jcx9FvOKxcB8V9zigtl1nqlEYmKGQcJUOFoXjOq0=;
-        b=LwPu9uI0h35sWOVnQKT9B9dBIhEJA3PHue+GGOFRN+t0CpDVUaLIvSNRoJkdeuOVea
-         EjnYsU1BMJodp3XNcGqlxKOP83kqi/iKbux5cV2DKDd19HtlOnkHkmhxGcxKp/G9dxRu
-         lTLN+2y4GYz9hOdctfnMmpqgzagmYr1cE1K03Bdgk6PgfD3KRqE6SvnaVZjk+r4A+b5R
-         iZsRHrYDpNs4kKRwJW0g1PT2ulq7UfGe0GmThGXZxusVMF1z9ytmGHOHWYl3BTu3C9v/
-         bmhmluw9UBd1fJ38oaLKVIYUnQNwMv1D+jEhjv74u1hgbELJPT2isiREmeu191qky5Gd
-         mSag==
-X-Gm-Message-State: AOAM532SEb556fp+yqB8CkY4qr307HtmNYvS0hJt71yd77ZuFZoephE5
-        GceS02QvhFYMtPjq4JFN827imZSehoL6ukbqpa5cu9E4KVijMA==
-X-Google-Smtp-Source: ABdhPJy0vt7To+4Ln+M/n0NKoLAi6HImdV6zE86Tf7VU5FVWUcytE5CdYkJ6w3jVjo7vLi4OD/OXyfgwUuzJl8I0kPw=
-X-Received: by 2002:a9d:6b8b:: with SMTP id b11mr1048392otq.351.1631339041134;
- Fri, 10 Sep 2021 22:44:01 -0700 (PDT)
+        id S235697AbhIKL2C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 11 Sep 2021 07:28:02 -0400
+Received: from mout.gmx.net ([212.227.17.20]:57281 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230249AbhIKL2C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 11 Sep 2021 07:28:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1631359607;
+        bh=G8MUuBpNtnBNxQFmEG2ZlriHlD7R4/yuBbjO5Ngy/bk=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=J7+O/q5h+I2kZg3xNyRxgirD/9jSmAllZs6+S9q5aabZCbMLWPbDy/1smQhpOOFa5
+         LMamsWd5C5hj9F6PdbGIzFK+0RkEyuCkpqIhX3ZhgEm3+YnCaXz45KHbdXa/9PtCA+
+         k4wdX/bSl48iiBmCa4vyAAi25ZS3ApiifahMAf9w=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([79.150.72.99]) by mail.gmx.net
+ (mrgmx105 [212.227.17.174]) with ESMTPSA (Nemesis) id
+ 1My32F-1n8rk1313v-00zVbD; Sat, 11 Sep 2021 13:26:46 +0200
+From:   Len Baker <len.baker@gmx.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Len Baker <len.baker@gmx.com>, Kees Cook <keescook@chromium.org>,
+        linux-usb@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: ohci: Prefer struct_size over open coded arithmetic
+Date:   Sat, 11 Sep 2021 13:26:31 +0200
+Message-Id: <20210911112631.10004-1-len.baker@gmx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-From:   Ajay Garg <ajaygargnsit@gmail.com>
-Date:   Sat, 11 Sep 2021 11:13:48 +0530
-Message-ID: <CAHP4M8Vc+0eChmJDnLLa3ibuzGLOnc5hJ1Nk09794RHEJ7tEPw@mail.gmail.com>
-Subject: How to register a new "function" in configfs?
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:SOgd2+Qv+9I1QBgs75UshmVAAaFWc90Wg57FZNwfUUC6f8n5T8f
+ HJw96UmmQebgnfQYnnxxmXbKH1HcO8USYLODFrtqDgXlMR0vo7F6Titc4F19OUwwSQPMeBG
+ dfHe718u1e2BtEmh0rIxyDCq8ihyGbm6nIxKQYaaO3zjNkmBLJaDVgt7Jq/BhWEIvmRLZnW
+ IGGqhk3VDeYtW3tXO2eNA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8h8+1ruWDmA=:554Ej/I6jXV1JUfMIWrw5J
+ ake8jIw9w82IDeMl5cfWTP/XtoPS/DNg6V/FfRMlO/T87lQ1sbmSlPdXqCHzseAXJdJqOK1Wk
+ 1nWtgh7ZScL+XUy8ePANoIx2YFoaRTVvy02zEgvutD8e191gWOqC+tf2ShBvgGUxwjYonOio8
+ wKhdqLdmHrPgMoC6ILHH9GeUcJyagc7+jTWjJq6f7zXNhNTCvoq5Mg4FXQeNBwjDEPwXrWvJV
+ ynu6nAWULXw4+IUbwB9UuIpWWtukRCCiAx3x/YFHqta5GYvff3eAO37hEAHzqY06Hfk2LKmL7
+ lahEv5Jhf4MCAfhO5WhD2L6W6lsVSuAMYzUb0H7QKwMciskhNVuUMTUuFckvzbnkO1F+dNVzO
+ L6eP2aowal7nkAJFb/M3Cp9gbNNOG2kzLZVT8Fc+Ezj1C+A9lGklfWJEE2IsLAH45+vTdoNWM
+ MeXaWDLWBwYqxhrGWKc1L52tHsrDWdTcGQbHIUPeQ8k2T9o+iNGYXynEF+fK6GoaZ0WPwdV32
+ uavPGGoxnbAkyMYt52CLXbDPY0HWZXXj/+6s4weE54QrRvk33GPGj8kSvp2BMPVSFv9ZvIpoJ
+ 5nRO64TS4brSQuqZvoguBKbH6LbniTZDGt94A29iSEqINR4mTNxnUPJhWVvecsvpwuQ1f5RvP
+ FkstAC/yBkuJxS731Y7U0oWRMOYRhdUUc5B8BU4SH+Wh+qhHOzgynqLMu4sMDV5ZCQhTkgy36
+ z64Wyh1h9JXu6+eH/OXVAYyaWKesEUvTNG7p00B5qz9q90a/c/e0hQXFM8cBEzxqzNKidisAt
+ 1Mz2bo4OgEnJvtqTPNBLHiGSbMWk7QoV1fUk75ALnfjX8Wlb+S+/OaejTAafFiqEkI4htq+iR
+ FPEaJHYvCVUQVVLnE19KGftux1zL7XHxE+I0iAziMPs49BoeOSm461ysNhiPjWo3U4RwtTM0X
+ Km3oeuJ3tl1POnBt3fmq8/s1TWmkTu520VEGooSYAoarrXQ3hsBarkj2b7KnnWl8Y9X8nxU2K
+ Ieqz1ew2T8uFO/rZLUn2CYMmQflqpxMoimpHo682UKYm1M1U7TQZ1HML9DA8lgSZgKANy5ZRM
+ a7VcIcymeOjO20=
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi All.
+As noted in the "Deprecated Interfaces, Language Features, Attributes,
+and Conventions" documentation [1], size calculations (especially
+multiplication) should not be performed in memory allocator (or similar)
+function arguments due to the risk of them overflowing. This could lead
+to values wrapping around and a smaller allocation being made than the
+caller was expecting. Using those allocations could lead to linear
+overflows of heap memory and other misbehaviors.
 
-As a first step, I have been able to load a gadget on configfs, which
-binds to the function "gser" (thus loading up the usb_f_serial module
-when the gadget mounts). Things work well till here.
+So, use the struct_size() helper to do the arithmetic instead of the
+argument "size + count * size" in the kzalloc() function.
 
-Now, I have written a brand-new gadget-side device-driver, trying to
-create a new function "gusb", via DECLARE_USB_FUNCTION_INIT.
-However, now when I try to load the gadget for binding to "gusb", I
-get the error that the function cannot be found.
+[1] https://www.kernel.org/doc/html/v5.14/process/deprecated.html#open-cod=
+ed-arithmetic-in-allocator-arguments
 
-Seems that firing up a new gadget-side driver, that registers a new
-function via DECLARE_USB_FUNCTION_INIT, is not enough to make the new
-function visible across the kernel.
+Signed-off-by: Len Baker <len.baker@gmx.com>
+=2D--
+ drivers/usb/host/ohci-hcd.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Kindly let know what I am missing.
-Will be grateful for pointers.
+diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
+index 1f5e69314a17..666b1c665188 100644
+=2D-- a/drivers/usb/host/ohci-hcd.c
++++ b/drivers/usb/host/ohci-hcd.c
+@@ -191,8 +191,7 @@ static int ohci_urb_enqueue (
+ 	}
 
+ 	/* allocate the private part of the URB */
+-	urb_priv =3D kzalloc (sizeof (urb_priv_t) + size * sizeof (struct td *),
+-			mem_flags);
++	urb_priv =3D kzalloc(struct_size(urb_priv, td, size), mem_flags);
+ 	if (!urb_priv)
+ 		return -ENOMEM;
+ 	INIT_LIST_HEAD (&urb_priv->pending);
+=2D-
+2.25.1
 
-Thanks and Regards,
-Ajay
