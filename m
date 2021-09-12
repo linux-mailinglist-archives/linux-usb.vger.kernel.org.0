@@ -2,69 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF2E407AF2
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Sep 2021 01:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6527407C36
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Sep 2021 09:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbhIKXxZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 11 Sep 2021 19:53:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45610 "EHLO mail.kernel.org"
+        id S231528AbhILHmZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Sep 2021 03:42:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60124 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234553AbhIKXxU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 11 Sep 2021 19:53:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 2D2E46101D
-        for <linux-usb@vger.kernel.org>; Sat, 11 Sep 2021 23:52:07 +0000 (UTC)
+        id S229512AbhILHmZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 12 Sep 2021 03:42:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2BE9360F9F;
+        Sun, 12 Sep 2021 07:41:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631404327;
-        bh=30UdpLyxgMTEWFT8HH7LMHJqTPUchRU3SHMci6jzuBA=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=nC1ioL8y2pdN1zHmr1oEhLXwFQJfqTM6IGd2OWqrlhSv7qxupeZ/Z3vGi70IgTdxL
-         Vmr5I8QKarfgHcmUjouKYeRfjTMSkc7iP3xFQQWIIvpfb3JzI+gAzSvA0fgoLVeRTY
-         0WDTcfgeNActJlC4RG2smMyZX/8tKwrJ04o/cRWyp9puRlIBo4CLynGDVTltYltow+
-         0iyQ822R/Oc/idL/gmjQF6u2pjNJlZS7Ko2LPfwIlbvrX8D/C1ZlNHvWO3PEXproZO
-         djoKjp3a2AjnvT2cg1u6efKr9+RdJspYsQfRNFYvi1WM+gg/4HVsl6oFx7O22tFJD8
-         X4/2E3bGxuNkA==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 1AA9A606A5; Sat, 11 Sep 2021 23:52:07 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 214137] USB randomly stops working, starting with mouse
-Date:   Sat, 11 Sep 2021 23:52:06 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: yaomtc@protonmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-214137-208809-fO65mj4esZ@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-214137-208809@https.bugzilla.kernel.org/>
-References: <bug-214137-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        s=k20201202; t=1631432471;
+        bh=dxvDMpkQ3yQxWCwxYiRfx5jSXslSR/RnQtUPyMHSRqo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DisLCNZs/aBW5rj6m47JmQ1xlpByKg8xCbu4Lo92dhwwaiy1Uuoizta8w+Y8CW6x5
+         XDATZYfnXkbrHlCxZ6w33I1CO4sJZuaQ7l7DheiRfe8aw39eyGlq43DF3/pkakG0Rh
+         fYmqiLGtwEWmksMaFX3x0sjOIulgviEq8Xq9ZcZymh1UmIqS2Kb9h4vKfNrzs6TA3e
+         mM42qD5UA5YWqf5mVjADCwrutT9ttYPES6uGSBB+1yobzJCMcbiavJ45PrQbmY2P8k
+         uvH99kghj1OiQl1D9omgxtV9iJWyFBY5cQACMrG9GpFdHEMtVcCAwk9TolvhOcqj7r
+         o7E871QcS7brA==
+Date:   Sun, 12 Sep 2021 15:41:05 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Piyush Mehta <piyush.mehta@xilinx.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, git@xilinx.com, sgoud@xilinx.com,
+        michal.simek@xilinx.com
+Subject: Re: [PATCH] usb: chipidea: udc: make controller hardware endpoint
+ primed
+Message-ID: <20210912074105.GA4808@Peter>
+References: <20210908084321.375662-1-piyush.mehta@xilinx.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210908084321.375662-1-piyush.mehta@xilinx.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214137
+On 21-09-08 14:13:21, Piyush Mehta wrote:
+> Root-cause:
+> There is an issue like endpoint is not recognized as primed, when bus
+> have more pressure and the add dTD tripwire semaphore (ATDTW bit in
+> USBCMD register) that can cause the controller to ignore a dTD that is
+> added to a primed endpoint.
+> This issue observed with the Windows10 host machine.
+> 
+> Workaround:
+> The software must implement a periodic cycle, and check for each dTD,
+> if the endpoint is primed. It can do this by reading the corresponding
+> bits in the ENDPTPRIME and ENDPTSTAT registers. If these bits are read
+> at 0, the software needs to re-prime the endpoint by writing 1 to the
+> corresponding bit in the ENDPTPRIME register.
+> 
+> Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
+> ---
+>  drivers/usb/chipidea/udc.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+> index 8834ca6..d970f45 100644
+> --- a/drivers/usb/chipidea/udc.c
+> +++ b/drivers/usb/chipidea/udc.c
+> @@ -49,6 +49,8 @@ ctrl_endpt_in_desc = {
+>  	.wMaxPacketSize  = cpu_to_le16(CTRL_PAYLOAD_MAX),
+>  };
+>  
+> +static int reprime_dtd(struct ci_hdrc *ci, struct ci_hw_ep *hwep,
+> +		       struct td_node *node);
+>  /**
+>   * hw_ep_bit: calculates the bit number
+>   * @num: endpoint number
+> @@ -599,8 +601,15 @@ static int _hardware_enqueue(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq)
+>  
+>  		prevlastnode->ptr->next = cpu_to_le32(next);
+>  		wmb();
+> +
+> +		if (ci->rev == CI_REVISION_22) {
+> +			if (!hw_read(ci, OP_ENDPTSTAT, BIT(n)))
+> +				reprime_dtd(ci, hwep, prevlastnode);
+> +		}
+> +
 
---- Comment #7 from yaomtc@protonmail.com ---
-I replaced my Ryzen 7 1700X and B450 motherboard with a Ryzen 5 5600G and a
-B550 mobo. No issues so far. I think my 1st gen Ryzen might have had a
-compatibility issue with recent Linux kernels.
+Only for version 2.2?
 
---=20
-You may reply to this email to add a comment.
+>  		if (hw_read(ci, OP_ENDPTPRIME, BIT(n)))
+>  			goto done;
+> +
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+No blank line.
+
+>  		do {
+>  			hw_write(ci, OP_USBCMD, USBCMD_ATDTW, USBCMD_ATDTW);
+>  			tmp_stat = hw_read(ci, OP_ENDPTSTAT, BIT(n));
+> -- 
+> 2.7.4
+> 
+
+-- 
+
+Thanks,
+Peter Chen
+
