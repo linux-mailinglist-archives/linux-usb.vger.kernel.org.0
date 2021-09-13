@@ -2,89 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C52B409BFA
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Sep 2021 20:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 560AB409D21
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Sep 2021 21:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240341AbhIMSQu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Sep 2021 14:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
+        id S240589AbhIMTcX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Sep 2021 15:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239715AbhIMSQt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Sep 2021 14:16:49 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B40C061574
-        for <linux-usb@vger.kernel.org>; Mon, 13 Sep 2021 11:15:33 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id t18so16122453wrb.0
-        for <linux-usb@vger.kernel.org>; Mon, 13 Sep 2021 11:15:33 -0700 (PDT)
+        with ESMTP id S240112AbhIMTcW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Sep 2021 15:32:22 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69452C061574
+        for <linux-usb@vger.kernel.org>; Mon, 13 Sep 2021 12:31:06 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id u13-20020a17090abb0db0290177e1d9b3f7so256744pjr.1
+        for <linux-usb@vger.kernel.org>; Mon, 13 Sep 2021 12:31:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=62ELIcLks3gozGPuoYKYGXtj/qgh9+cNSh/1lUiecQA=;
-        b=K2imFpxQNIauTUdd8GljZRstjSkpHFGGySaVC7HaNTI6kf/uG/fdQHydlyfSajkuuQ
-         St+i7Wa23BbCDLywYOcfbRXkZ38F0sHhZOpGZ7T/aMPQzH+neAfJwor7C5v+fCOkF9ix
-         jts2CRljD7gWds0kPriqFpRDOa5YJBgHZmVldHaXFdBBBz8jnpRt8oGDGwMyrKnDZUun
-         28CbPqtOa530siOR+YFT8ae/sJvzc1Jchz0GwuWoe/3pC//bJF7lmzqLk6GyQuezwnLM
-         lO2SJazQgLUdge9ZaoqUFcu71JdTSm5Lgsfx1Tj9Co1VeOjHifrapv7UhNNrH33lumfg
-         icRQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=t8tfRr4pDfwNBQ7+2uutj5zJKW753YHlsVVOI6R4V1g=;
+        b=SsiOFCJ61FtdyEwlHuuUPngVYXdsKbEzdCt0gPMgprmMChpMxdMnX02ut+TP+jS5wY
+         jMF3dwWGOVCP+DRWrobbuKP5oamplIR5xnKsq4GAs1bZHSQn1SCTUGhsUlqSXuqU+qzG
+         c1i/CiVL0T34mL+WEqkCKmAgiL17FLGPaBmunrrcqcoSSfrbATEIZzjqfAeYtiEKiuyy
+         8Ycy3Ep3pkfNBZ3QG08EcilnQpmqjotvFGWcvrR3rjL8S3KYFwqGdVK878yfoRwo0lYa
+         ELWeakQGKAVw29XZfobwozmMZBsZgACMCPc3lCLLQlpK1ITY1wH4ekjAFicLvfFbcUBm
+         md4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=62ELIcLks3gozGPuoYKYGXtj/qgh9+cNSh/1lUiecQA=;
-        b=QyGOoxWcHpCycOkdVZZd2Sm/ir5htTV5ihP8EEhRmivGNH9XLRiLrcEm3mlliHs2vc
-         Mgpn53c4xgYwjqADB5KLPRrmYdiim2SFzTy6Rp8OwAszziG97dHXhp7sB/s2cayyUtyF
-         /GPwe+5ZTZ5hOkqeKpkRlnJDifdnsLBD4QizQAel6pF8Bo/1Jj20co0cuu6c3epOOFZs
-         H19TkgD9x+EMaVirWJ91UDouF3Vr+/Zhh1Vbd1QyRjUfcZYfT8LcbHG+DUbPAvtITdoU
-         w4yDqnBT2kqamKZwd6jPmh5GZth6BDy5RWHHiNR8rB7CBmVw63QGSv4WFVybc9aq9vgb
-         KXkw==
-X-Gm-Message-State: AOAM531tgxvYR6rtNRGtToXJgpbhjQYg4VIEInWsULy1DMxbNZZd1/E+
-        iJxmBHD5v4iCyJz4EqswSarBImgbzneR5g==
-X-Google-Smtp-Source: ABdhPJxK9HONfalGKJcdAYgEjEgU24NjHeL5ujUYJXURN14+OnmR4alAh6TyGl+Lwkf0KJlygDUOGA==
-X-Received: by 2002:adf:f884:: with SMTP id u4mr13704870wrp.411.1631556931806;
-        Mon, 13 Sep 2021 11:15:31 -0700 (PDT)
-Received: from napoleon2.. ([2a02:908:1980:80a0::a7df])
-        by smtp.gmail.com with ESMTPSA id y6sm660788wrp.46.2021.09.13.11.15.30
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=t8tfRr4pDfwNBQ7+2uutj5zJKW753YHlsVVOI6R4V1g=;
+        b=UvEwLpDCDtJGLbbCr+ro/c5CP1xfMHhc29+69rHg11XnUjQWxWfqm6+4GPbrDTSOcq
+         kzW6fCJ5BWa/53BjGnzhPLHrL9eAs8rRRaqbrH/6T2tVAtFuVVGjQFuIzaxDRKUmCxbi
+         25e+mghQ2u5IHMsMqnpecJtU6Alu+NnAgN0rgn6S4hCpXvG3Y0TbQeSkidZmD0f96TNs
+         DoGxTM9QaCpnI6r6li9bs3Yd7mqlYvFXOSGFb53OszhyKqMFU7K2bJQDlNxlAmUwm37O
+         +WOX0zsl2j6wUBz/h+6CUiHwgDfdECnh0cLvhcfiE/Fd9y43zmBBIZCb/IahrXIaCR4f
+         uomw==
+X-Gm-Message-State: AOAM533k3UONLP9X6NRLRGk96zJR24AB51YY3Y5I0P9Uj4obq5QZfBKJ
+        Nm1/qTdOPsDbkxbq9UPHDZxXTg==
+X-Google-Smtp-Source: ABdhPJxuwSI85i/xe46Nka94nE+DuxtOTejLTQJx8lZFP9sntveoLX/giHUgMr8cZ4l4bQo/v65q3g==
+X-Received: by 2002:a17:903:2c2:b029:101:9c88:d928 with SMTP id s2-20020a17090302c2b02901019c88d928mr11767178plk.62.1631561465400;
+        Mon, 13 Sep 2021 12:31:05 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:7b92:14a1:4f7c:6560])
+        by smtp.gmail.com with ESMTPSA id j17sm8126169pfn.148.2021.09.13.12.31.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Sep 2021 11:15:31 -0700 (PDT)
-From:   Julian Sikorski <belegdol@gmail.com>
-X-Google-Original-From: Julian Sikorski <belegdol+github@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     oneukum@suse.com, hdegoede@redhat.com,
-        Julian Sikorski <belegdol+github@gmail.com>
-Subject: [PATCH] Re-enable UAS for LaCie Rugged USB3-FW with fk quirk
-Date:   Mon, 13 Sep 2021 20:14:55 +0200
-Message-Id: <20210913181454.7365-1-belegdol+github@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 13 Sep 2021 12:31:04 -0700 (PDT)
+Date:   Mon, 13 Sep 2021 12:30:58 -0700
+From:   Benson Leung <bleung@google.com>
+To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "bleung@chromium.org" <bleung@chromium.org>,
+        "badhri@google.com" <badhri@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+Message-ID: <YT+m8jr8Ehe3R55G@google.com>
+References: <20210902213500.3795948-1-pmalani@chromium.org>
+ <20210902213500.3795948-3-pmalani@chromium.org>
+ <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
+ <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="EwOD/L4uVEvwhlPZ"
+Content-Disposition: inline
+In-Reply-To: <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Further testing has revealed that LaCie Rugged USB3-FW does work with
-uas as long as US_FL_NO_REPORT_OPCODES and US_FL_NO_SAME are enabled.
 
-Signed-off-by: Julian Sikorski <belegdol+github@gmail.com>
-Suggested-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/linux-usb/2167ea48-e273-a336-a4e0-10a4e883e75e@redhat.com/
----
- drivers/usb/storage/unusual_uas.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--EwOD/L4uVEvwhlPZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index c35a6db993f1..4051c8cd0cd8 100644
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -50,7 +50,7 @@ UNUSUAL_DEV(0x059f, 0x1061, 0x0000, 0x9999,
- 		"LaCie",
- 		"Rugged USB3-FW",
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
--		US_FL_IGNORE_UAS),
-+		US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
- 
- /*
-  * Apricorn USB3 dongle sometimes returns "USBSUSBSUSBS" in response to SCSI
--- 
-2.31.1
+Hi Adam and Heikki,
 
+On Mon, Sep 13, 2021 at 03:15:46PM +0000, Adam Thomson wrote:
+> On 13 September 2021 14:30, Heikki Krogerus wrote:
+> >
+> > My plan is to register a separate power supply for each PDO. So for
+> > every source PDO and every sink PDO a port has in its capabilities,
+> > you'll have a separate power supply registered, and the same for the
+> > partner when it's connected. With every connection there should always
+> > be one active (online) source psy and active sink psy (if the port is
+> > source, one of the port's source psys will be active and the partner
+> > will have the active sink psy, or vise versa - depending on the role).
+> >
+> > Each PDO represents a "Power Supply" so to me that approach just
+> > makes the most sense. It will require a bit of work in kernel, however
+> > in user space it should mean that we only have a single new attribute
+> > file for the power supplies named "pdo" that returns a single PDO.
+> >
+> > Let me know if you guys see any obvious problems with the idea.
+> > Otherwise, that is how we really need to do this. That will make
+> > things much more clear in user space. I have a feeling it will make
+> > things easier in kernel as well in the long run.
+> >
+> > Adding Adam and Guenter. It would be good if you guys could comment
+> > the idea as well.
+>=20
+> Hi Heikki,
+>=20
+> Thanks for CCing me. My two pence worth is that I always envisaged the PSY
+> representation as being 1 PSY for 1 power source. I consider this in a
+> similar manner to the Regulator framework, where 1 regulator can support =
+a range
+> of voltages and currents, but this is covered by 1 regulator instance as =
+it's
+> just a single output. For USB-PD we have a number of options for voltage/=
+current
+> combos, including PPS which is even lower granularity, but it's still onl=
+y one
+> port. I get the feeling that having PSY instances for each and every PDO =
+might
+> be a little confusing and these will never be concurrent.
+>=20
+> However, I'd be keen to understand further and see what restrictions/issu=
+es are
+> currently present as I probably don't have a complete view of this right =
+now. I
+> wouldn't want to dismiss something out of turn, especially when you obvio=
+usly
+> have good reason to suggest such an approach.
+
+I thought of one more potential downside to one-psy-per-pdo:
+
+Remember that a source or sink's Capabilities may dynamically change without
+a port disconnect, and this could make one-psy-per-pdo much more chatty with
+power supply deletions and re-registrations on load balancing events.
+
+At basically any time, a power source may send a new SRC_CAP to the sink wh=
+ich
+adjusts, deletes, or adds to the list of PDOs, without the connection state
+machine registering a disconnect.
+
+In a real world case, I have a charger in my kitchen that has 2 USB-C ports
+and supports a total of 30W output. When one device is plugged in:
+5V 3A, 9V 3A, 15V 2A
+However, when two devices are plugged in, each sees:
+5V 3A
+
+The load balancing event would result in two power supply deletions, whereas
+if it were a single psy per power supply (incorporating the list of PDO cho=
+ices)
+it would just be a single PROP_CHANGED event.
+
+It seems cleaner to me to have deletions and additions only possible when t=
+he
+thing is unplugged or plugged.
+
+Thanks,
+Benson
+
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
+
+--EwOD/L4uVEvwhlPZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYT+m8gAKCRBzbaomhzOw
+wtH2APoDV1gSfN+pPGCY8Vu2eranOxsb9iPXHEdCwBTAw09zaQEAsWkCmW/nU+5k
+DKM6H/4JTFwKE559RgzaBiVpAFgzaAo=
+=etoe
+-----END PGP SIGNATURE-----
+
+--EwOD/L4uVEvwhlPZ--
