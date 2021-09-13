@@ -2,182 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 560AB409D21
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Sep 2021 21:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C424D409ED7
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Sep 2021 23:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240589AbhIMTcX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Sep 2021 15:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240112AbhIMTcW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Sep 2021 15:32:22 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69452C061574
-        for <linux-usb@vger.kernel.org>; Mon, 13 Sep 2021 12:31:06 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id u13-20020a17090abb0db0290177e1d9b3f7so256744pjr.1
-        for <linux-usb@vger.kernel.org>; Mon, 13 Sep 2021 12:31:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=t8tfRr4pDfwNBQ7+2uutj5zJKW753YHlsVVOI6R4V1g=;
-        b=SsiOFCJ61FtdyEwlHuuUPngVYXdsKbEzdCt0gPMgprmMChpMxdMnX02ut+TP+jS5wY
-         jMF3dwWGOVCP+DRWrobbuKP5oamplIR5xnKsq4GAs1bZHSQn1SCTUGhsUlqSXuqU+qzG
-         c1i/CiVL0T34mL+WEqkCKmAgiL17FLGPaBmunrrcqcoSSfrbATEIZzjqfAeYtiEKiuyy
-         8Ycy3Ep3pkfNBZ3QG08EcilnQpmqjotvFGWcvrR3rjL8S3KYFwqGdVK878yfoRwo0lYa
-         ELWeakQGKAVw29XZfobwozmMZBsZgACMCPc3lCLLQlpK1ITY1wH4ekjAFicLvfFbcUBm
-         md4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=t8tfRr4pDfwNBQ7+2uutj5zJKW753YHlsVVOI6R4V1g=;
-        b=UvEwLpDCDtJGLbbCr+ro/c5CP1xfMHhc29+69rHg11XnUjQWxWfqm6+4GPbrDTSOcq
-         kzW6fCJ5BWa/53BjGnzhPLHrL9eAs8rRRaqbrH/6T2tVAtFuVVGjQFuIzaxDRKUmCxbi
-         25e+mghQ2u5IHMsMqnpecJtU6Alu+NnAgN0rgn6S4hCpXvG3Y0TbQeSkidZmD0f96TNs
-         DoGxTM9QaCpnI6r6li9bs3Yd7mqlYvFXOSGFb53OszhyKqMFU7K2bJQDlNxlAmUwm37O
-         +WOX0zsl2j6wUBz/h+6CUiHwgDfdECnh0cLvhcfiE/Fd9y43zmBBIZCb/IahrXIaCR4f
-         uomw==
-X-Gm-Message-State: AOAM533k3UONLP9X6NRLRGk96zJR24AB51YY3Y5I0P9Uj4obq5QZfBKJ
-        Nm1/qTdOPsDbkxbq9UPHDZxXTg==
-X-Google-Smtp-Source: ABdhPJxuwSI85i/xe46Nka94nE+DuxtOTejLTQJx8lZFP9sntveoLX/giHUgMr8cZ4l4bQo/v65q3g==
-X-Received: by 2002:a17:903:2c2:b029:101:9c88:d928 with SMTP id s2-20020a17090302c2b02901019c88d928mr11767178plk.62.1631561465400;
-        Mon, 13 Sep 2021 12:31:05 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:7b92:14a1:4f7c:6560])
-        by smtp.gmail.com with ESMTPSA id j17sm8126169pfn.148.2021.09.13.12.31.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Sep 2021 12:31:04 -0700 (PDT)
-Date:   Mon, 13 Sep 2021 12:30:58 -0700
-From:   Benson Leung <bleung@google.com>
-To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "bleung@chromium.org" <bleung@chromium.org>,
-        "badhri@google.com" <badhri@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
-Message-ID: <YT+m8jr8Ehe3R55G@google.com>
-References: <20210902213500.3795948-1-pmalani@chromium.org>
- <20210902213500.3795948-3-pmalani@chromium.org>
- <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
- <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+        id S242211AbhIMVJ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Sep 2021 17:09:56 -0400
+Received: from hosting.gsystem.sk ([212.5.213.30]:56728 "EHLO
+        hosting.gsystem.sk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231976AbhIMVJz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Sep 2021 17:09:55 -0400
+X-Greylist: delayed 423 seconds by postgrey-1.27 at vger.kernel.org; Mon, 13 Sep 2021 17:09:55 EDT
+Received: from gsql.ggedos.sk (off-20.infotel.telecom.sk [212.5.213.20])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by hosting.gsystem.sk (Postfix) with ESMTPSA id E799F7A0214;
+        Mon, 13 Sep 2021 23:01:35 +0200 (CEST)
+From:   Ondrej Zary <linux@zary.sk>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb-storage: Add quirk for ScanLogic SL11R-IDE older than 2.6c
+Date:   Mon, 13 Sep 2021 23:01:06 +0200
+Message-Id: <20210913210106.12717-1-linux@zary.sk>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EwOD/L4uVEvwhlPZ"
-Content-Disposition: inline
-In-Reply-To: <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+ScanLogic SL11R-IDE with firmware older than 2.6c (the latest one) has
+broken tag handling, preventing the device from working at all:
+usb 1-1: new full-speed USB device number 2 using uhci_hcd
+usb 1-1: New USB device found, idVendor=04ce, idProduct=0002, bcdDevice= 2.60
+usb 1-1: New USB device strings: Mfr=1, Product=1, SerialNumber=0
+usb 1-1: Product: USB Device
+usb 1-1: Manufacturer: USB Device
+usb-storage 1-1:1.0: USB Mass Storage device detected
+scsi host2: usb-storage 1-1:1.0
+usbcore: registered new interface driver usb-storage
+usb 1-1: reset full-speed USB device number 2 using uhci_hcd
+usb 1-1: reset full-speed USB device number 2 using uhci_hcd
+usb 1-1: reset full-speed USB device number 2 using uhci_hcd
+usb 1-1: reset full-speed USB device number 2 using uhci_hcd
 
---EwOD/L4uVEvwhlPZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Add US_FL_BULK_IGNORE_TAG to fix it. Also update my e-mail address.
 
-Hi Adam and Heikki,
+2.6c is the only firmware that claims Linux compatibility.
+The firmware can be upgraded using ezotgdbg utility:
+https://github.com/asciilifeform/ezotgdbg
 
-On Mon, Sep 13, 2021 at 03:15:46PM +0000, Adam Thomson wrote:
-> On 13 September 2021 14:30, Heikki Krogerus wrote:
-> >
-> > My plan is to register a separate power supply for each PDO. So for
-> > every source PDO and every sink PDO a port has in its capabilities,
-> > you'll have a separate power supply registered, and the same for the
-> > partner when it's connected. With every connection there should always
-> > be one active (online) source psy and active sink psy (if the port is
-> > source, one of the port's source psys will be active and the partner
-> > will have the active sink psy, or vise versa - depending on the role).
-> >
-> > Each PDO represents a "Power Supply" so to me that approach just
-> > makes the most sense. It will require a bit of work in kernel, however
-> > in user space it should mean that we only have a single new attribute
-> > file for the power supplies named "pdo" that returns a single PDO.
-> >
-> > Let me know if you guys see any obvious problems with the idea.
-> > Otherwise, that is how we really need to do this. That will make
-> > things much more clear in user space. I have a feeling it will make
-> > things easier in kernel as well in the long run.
-> >
-> > Adding Adam and Guenter. It would be good if you guys could comment
-> > the idea as well.
->=20
-> Hi Heikki,
->=20
-> Thanks for CCing me. My two pence worth is that I always envisaged the PSY
-> representation as being 1 PSY for 1 power source. I consider this in a
-> similar manner to the Regulator framework, where 1 regulator can support =
-a range
-> of voltages and currents, but this is covered by 1 regulator instance as =
-it's
-> just a single output. For USB-PD we have a number of options for voltage/=
-current
-> combos, including PPS which is even lower granularity, but it's still onl=
-y one
-> port. I get the feeling that having PSY instances for each and every PDO =
-might
-> be a little confusing and these will never be concurrent.
->=20
-> However, I'd be keen to understand further and see what restrictions/issu=
-es are
-> currently present as I probably don't have a complete view of this right =
-now. I
-> wouldn't want to dismiss something out of turn, especially when you obvio=
-usly
-> have good reason to suggest such an approach.
+Signed-off-by: Ondrej Zary <linux@zary.sk>
+---
+ drivers/usb/storage/unusual_devs.h | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-I thought of one more potential downside to one-psy-per-pdo:
+diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
+index efa972be2ee3..c6b3fcf90180 100644
+--- a/drivers/usb/storage/unusual_devs.h
++++ b/drivers/usb/storage/unusual_devs.h
+@@ -416,9 +416,16 @@ UNUSUAL_DEV(  0x04cb, 0x0100, 0x0000, 0x2210,
+ 		USB_SC_UFI, USB_PR_DEVICE, NULL, US_FL_FIX_INQUIRY | US_FL_SINGLE_LUN),
+ 
+ /*
+- * Reported by Ondrej Zary <linux@rainbow-software.org>
++ * Reported by Ondrej Zary <linux@zary.sk>
+  * The device reports one sector more and breaks when that sector is accessed
++ * Firmwares older than 2.6c (the latest one and the only that claims Linux
++ * support) have also broken tag handling
+  */
++UNUSUAL_DEV(  0x04ce, 0x0002, 0x0000, 0x026b,
++		"ScanLogic",
++		"SL11R-IDE",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_FIX_CAPACITY | US_FL_BULK_IGNORE_TAG),
+ UNUSUAL_DEV(  0x04ce, 0x0002, 0x026c, 0x026c,
+ 		"ScanLogic",
+ 		"SL11R-IDE",
+-- 
+Ondrej Zary
 
-Remember that a source or sink's Capabilities may dynamically change without
-a port disconnect, and this could make one-psy-per-pdo much more chatty with
-power supply deletions and re-registrations on load balancing events.
-
-At basically any time, a power source may send a new SRC_CAP to the sink wh=
-ich
-adjusts, deletes, or adds to the list of PDOs, without the connection state
-machine registering a disconnect.
-
-In a real world case, I have a charger in my kitchen that has 2 USB-C ports
-and supports a total of 30W output. When one device is plugged in:
-5V 3A, 9V 3A, 15V 2A
-However, when two devices are plugged in, each sees:
-5V 3A
-
-The load balancing event would result in two power supply deletions, whereas
-if it were a single psy per power supply (incorporating the list of PDO cho=
-ices)
-it would just be a single PROP_CHANGED event.
-
-It seems cleaner to me to have deletions and additions only possible when t=
-he
-thing is unplugged or plugged.
-
-Thanks,
-Benson
-
---=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
-
---EwOD/L4uVEvwhlPZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYT+m8gAKCRBzbaomhzOw
-wtH2APoDV1gSfN+pPGCY8Vu2eranOxsb9iPXHEdCwBTAw09zaQEAsWkCmW/nU+5k
-DKM6H/4JTFwKE559RgzaBiVpAFgzaAo=
-=etoe
------END PGP SIGNATURE-----
-
---EwOD/L4uVEvwhlPZ--
