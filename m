@@ -2,86 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2039B40B07B
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Sep 2021 16:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2473E40B0CA
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Sep 2021 16:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233461AbhINOXn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Sep 2021 10:23:43 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:57127 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S233358AbhINOXn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Sep 2021 10:23:43 -0400
-Received: (qmail 156518 invoked by uid 1000); 14 Sep 2021 10:22:24 -0400
-Date:   Tue, 14 Sep 2021 10:22:24 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Ondrej Zary <linux@zary.sk>
-Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb-storage: Add quirk for ScanLogic SL11R-IDE older
- than 2.6c
-Message-ID: <20210914142224.GB155245@rowland.harvard.edu>
-References: <20210913210106.12717-1-linux@zary.sk>
+        id S233703AbhINOgJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Sep 2021 10:36:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57448 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233823AbhINOeI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 14 Sep 2021 10:34:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9A1DD6113E;
+        Tue, 14 Sep 2021 14:32:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631629970;
+        bh=bx3eNw9JOL5+zZqI1OEY2aJtfPAlh9PS4CL694WVv58=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jfnoiHVxtBYsUSxOV6zLXSMXfjiZsRkW/G+dJeExP4I1rpLyg1xu+brEzSXipnnUQ
+         G63mVRCVPptiA1YRc1OkfLV3Sq+kOQf1j8O1LmnDKAQLWu9BoXE82mGjpZzuZXqpNo
+         Wufz0EQJT7oanxewUmhkJeBN59hgNK1m9UGiUm6gugfzRhzgV7nIA6lf+ycHcD0GOf
+         gFquyg6rQqabKsni1qxB8MHSIg4kMXd05oQeZ2HyW220DCSiytcSgVHZmrK2hlX7fX
+         Rjwll/xj1x/9c1ZtAiYZKjbTgnyHlT47ggTuS4P9ao26PM9XWCkfGgpEBkbRlrsaj5
+         rlIOKnnXeiP6A==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1mQ9UN-000KkD-8d; Tue, 14 Sep 2021 16:32:47 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Peter Rosin <peda@axentia.se>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Tony Luck <tony.luck@intel.com>, linux-usb@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org
+Subject: [PATCH v2 00/29] Change wildcards on ABI files
+Date:   Tue, 14 Sep 2021 16:32:15 +0200
+Message-Id: <cover.1631629496.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210913210106.12717-1-linux@zary.sk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 13, 2021 at 11:01:06PM +0200, Ondrej Zary wrote:
-> ScanLogic SL11R-IDE with firmware older than 2.6c (the latest one) has
-> broken tag handling, preventing the device from working at all:
-> usb 1-1: new full-speed USB device number 2 using uhci_hcd
-> usb 1-1: New USB device found, idVendor=04ce, idProduct=0002, bcdDevice= 2.60
-> usb 1-1: New USB device strings: Mfr=1, Product=1, SerialNumber=0
-> usb 1-1: Product: USB Device
-> usb 1-1: Manufacturer: USB Device
-> usb-storage 1-1:1.0: USB Mass Storage device detected
-> scsi host2: usb-storage 1-1:1.0
-> usbcore: registered new interface driver usb-storage
-> usb 1-1: reset full-speed USB device number 2 using uhci_hcd
-> usb 1-1: reset full-speed USB device number 2 using uhci_hcd
-> usb 1-1: reset full-speed USB device number 2 using uhci_hcd
-> usb 1-1: reset full-speed USB device number 2 using uhci_hcd
-> 
-> Add US_FL_BULK_IGNORE_TAG to fix it. Also update my e-mail address.
-> 
-> 2.6c is the only firmware that claims Linux compatibility.
-> The firmware can be upgraded using ezotgdbg utility:
-> https://github.com/asciilifeform/ezotgdbg
-> 
-> Signed-off-by: Ondrej Zary <linux@zary.sk>
-> ---
+The ABI files are meant to be parsed via a script (scripts/get_abi.pl).
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+A new improvement on it will allow it to help to detect if an ABI description
+is missing, or if the What: field won't match the actual location of the symbol.
 
->  drivers/usb/storage/unusual_devs.h | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-> index efa972be2ee3..c6b3fcf90180 100644
-> --- a/drivers/usb/storage/unusual_devs.h
-> +++ b/drivers/usb/storage/unusual_devs.h
-> @@ -416,9 +416,16 @@ UNUSUAL_DEV(  0x04cb, 0x0100, 0x0000, 0x2210,
->  		USB_SC_UFI, USB_PR_DEVICE, NULL, US_FL_FIX_INQUIRY | US_FL_SINGLE_LUN),
->  
->  /*
-> - * Reported by Ondrej Zary <linux@rainbow-software.org>
-> + * Reported by Ondrej Zary <linux@zary.sk>
->   * The device reports one sector more and breaks when that sector is accessed
-> + * Firmwares older than 2.6c (the latest one and the only that claims Linux
-> + * support) have also broken tag handling
->   */
-> +UNUSUAL_DEV(  0x04ce, 0x0002, 0x0000, 0x026b,
-> +		"ScanLogic",
-> +		"SL11R-IDE",
-> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> +		US_FL_FIX_CAPACITY | US_FL_BULK_IGNORE_TAG),
->  UNUSUAL_DEV(  0x04ce, 0x0002, 0x026c, 0x026c,
->  		"ScanLogic",
->  		"SL11R-IDE",
+In order for get_abi.pl to convert What: into regex, changes are needed on
+existing ABI files, as the conversion should not be ambiguous.
 
-Too bad the manufacturer didn't understand that 0x026c is not a valid 
-bcdDevice value...
+One alternative would be to convert everything into regexes, but this
+would generate a huge amount of patches/changes. So, instead, let's
+touch only the ABI files that aren't following the de-facto wildcard 
+standards already found on most of the ABI files, e. g.:
+
+	/.../
+	*
+	<foo>
+	(option1|option2)
+	X
+	Y
+	Z
+	[0-9] (and variants)
+
+A couple of the patches here came from v1, but most of the patches were
+written to address things like rcN, where N is a wildcard.
+
+We can't teach get_abi.pl to use an uppercase "N" letter to be a wildcard,
+as the USB ABI already uses "N" inside some of their symbols, like 
+bNumEndpoints.
+
+Mauro Carvalho Chehab (29):
+  ABI: sysfs-bus-usb: better document variable argument
+  ABI: sysfs-tty: better document module name parameter
+  ABI: sysfs-kernel-slab: use a wildcard for the cache name
+  ABI: security: fix location for evm and ima_policy
+  ABI: sysfs-class-tpm: use wildcards for pcr-* nodes
+  ABI: sysfs-bus-rapidio: use wildcards on What definitions
+  ABI: sysfs-class-cxl: place "not in a guest" at description
+  ABI: sysfs-class-devfreq-event: use the right wildcards on What
+  ABI: sysfs-class-mic: use the right wildcards on What definitions
+  ABI: pstore: Fix What field
+  ABI: sysfs-class-typec: fix a bad What field
+  ABI: sysfs-ata: use a proper wildcard for ata_*
+  ABI: sysfs-class-infiniband: use wildcards on What definitions
+  ABI: sysfs-bus-pci: use wildcards on What definitions
+  ABI: sysfs-bus-soundwire-master: use wildcards on What definitions
+  ABI: sysfs-bus-soundwire-slave: use wildcards on What definitions
+  ABI: sysfs-class-gnss: use wildcards on What definitions
+  ABI: sysfs-class-mei: use wildcards on What definitions
+  ABI: sysfs-class-mux: use wildcards on What definitions
+  ABI: sysfs-class-pwm: use wildcards on What definitions
+  ABI: sysfs-class-rc: use wildcards on What definitions
+  ABI: sysfs-class-rc-nuvoton: use wildcards on What definitions
+  ABI: sysfs-class-uwb_rc: use wildcards on What definitions
+  ABI: sysfs-class-uwb_rc-wusbhc: use wildcards on What definitions
+  ABI: sysfs-devices-platform-dock: use wildcards on What definitions
+  ABI: sysfs-devices-system-cpu: use wildcards on What definitions
+  ABI: sysfs-firmware-efi-esrt: use wildcards on What definitions
+  ABI: sysfs-platform-sst-atom: use wildcards on What definitions
+  ABI: sysfs-ptp: use wildcards on What definitions
+
+ .../ABI/stable/sysfs-class-infiniband         | 64 ++++++-------
+ Documentation/ABI/stable/sysfs-class-tpm      |  2 +-
+ Documentation/ABI/testing/evm                 |  4 +-
+ Documentation/ABI/testing/ima_policy          |  2 +-
+ Documentation/ABI/testing/pstore              |  3 +-
+ Documentation/ABI/testing/sysfs-ata           |  2 +-
+ Documentation/ABI/testing/sysfs-bus-pci       |  2 +-
+ Documentation/ABI/testing/sysfs-bus-rapidio   | 32 +++----
+ .../ABI/testing/sysfs-bus-soundwire-master    |  2 +-
+ .../ABI/testing/sysfs-bus-soundwire-slave     |  2 +-
+ Documentation/ABI/testing/sysfs-bus-usb       | 16 ++--
+ Documentation/ABI/testing/sysfs-class-cxl     | 15 ++-
+ .../ABI/testing/sysfs-class-devfreq-event     | 12 +--
+ Documentation/ABI/testing/sysfs-class-gnss    |  2 +-
+ Documentation/ABI/testing/sysfs-class-mei     | 18 ++--
+ Documentation/ABI/testing/sysfs-class-mic     | 24 ++---
+ Documentation/ABI/testing/sysfs-class-mux     |  2 +-
+ Documentation/ABI/testing/sysfs-class-pwm     | 20 ++--
+ Documentation/ABI/testing/sysfs-class-rc      | 14 +--
+ .../ABI/testing/sysfs-class-rc-nuvoton        |  2 +-
+ Documentation/ABI/testing/sysfs-class-typec   |  2 +-
+ Documentation/ABI/testing/sysfs-class-uwb_rc  | 26 ++---
+ .../ABI/testing/sysfs-class-uwb_rc-wusbhc     | 10 +-
+ .../ABI/testing/sysfs-devices-platform-dock   | 10 +-
+ .../ABI/testing/sysfs-devices-system-cpu      | 16 ++--
+ .../ABI/testing/sysfs-firmware-efi-esrt       | 16 ++--
+ Documentation/ABI/testing/sysfs-kernel-slab   | 94 +++++++++----------
+ .../ABI/testing/sysfs-platform-sst-atom       |  2 +-
+ Documentation/ABI/testing/sysfs-ptp           | 30 +++---
+ Documentation/ABI/testing/sysfs-tty           | 32 +++----
+ 30 files changed, 242 insertions(+), 236 deletions(-)
+
+-- 
+2.31.1
+
+
