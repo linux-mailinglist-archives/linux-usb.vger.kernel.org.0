@@ -2,70 +2,222 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8408640B7E2
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Sep 2021 21:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD6240B8B9
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Sep 2021 22:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233489AbhINTVD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Sep 2021 15:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233272AbhINTUz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Sep 2021 15:20:55 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369D9C061762
-        for <linux-usb@vger.kernel.org>; Tue, 14 Sep 2021 12:19:38 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id w144so622231oie.13
-        for <linux-usb@vger.kernel.org>; Tue, 14 Sep 2021 12:19:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=p4aiHjSt5PydyNP4yCr/hWcE1rXRRolEI3z5GimQKiQ=;
-        b=Zemn43lr2poy4K8eggMpxhiOpG05mXAnw6FKV5/fQpfVV3R0AX5iHJXV2trQPx/v+h
-         GrHzzWRSC+FrWUts3+o6/A1W8eml1SPP7QjzKKfuVEEHI2zM7uuY3Fx09b5usr/lkkjb
-         me6dmDPyffxPNH2XUIY2b81uaer96asbwB1cQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=p4aiHjSt5PydyNP4yCr/hWcE1rXRRolEI3z5GimQKiQ=;
-        b=a4EAdHFbngEawbLQyDWDZ19A8j0JCxEXbZKcXp5n78/YN7pkqkB1JKf4ufPe4gHeWk
-         gdrWy5Tnr3Apk7NGLVmOjJGxFD8Gq4A4UrIEFluUskmhJiWDJ67EENfJVaVTij+ZVS0i
-         4F9iBRTinTKqw5rviKbfsgUFpcUxmy4hJE+lFLuXwCICA5T5FNlMthcFesXDXfpI9Acn
-         GFiTPkm3nZNh4VYldkJ8E9QX5cp04lJ4B0r32LZ8xViw2GPcFdzNDmjjAl1pBhoMqwIg
-         AWVbrChoyXpyc6ixUVE5LVZStGTSG0qWP+hvZwZVuZhV1Kkovn8QJ6DmzFMvuf2MS+xE
-         xTxQ==
-X-Gm-Message-State: AOAM533MwCj5EEYSXX2Gm+h/QgDjBN6xEG3oa7JRM+hg3fFS3H75+YV2
-        e6PH7WKvgcqpnKLY0Lg43NEYDgxmdW0KM92TBT6XRw==
-X-Google-Smtp-Source: ABdhPJwW/rk+97bzsU+oU4ww0tVefOIdv/mV2ZiRt6IYFcucdG8dUrd+urFcvffUJbLKgBn39LtA+b31lg1iRxykZQE=
-X-Received: by 2002:aca:2310:: with SMTP id e16mr2706663oie.64.1631647177562;
- Tue, 14 Sep 2021 12:19:37 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 14 Sep 2021 12:19:37 -0700
+        id S233259AbhINUK7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Sep 2021 16:10:59 -0400
+Received: from mail.lvk.cs.msu.ru ([188.44.42.233]:40432 "EHLO
+        mail.lvk.cs.msu.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232545AbhINUK6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Sep 2021 16:10:58 -0400
+Received: from mail.lvk.cs.msu.ru (localhost.localdomain [127.0.0.1])
+        by mail.lvk.cs.msu.ru (Postfix) with ESMTP id A4FF310DBA9;
+        Tue, 14 Sep 2021 23:09:37 +0300 (MSK)
+X-Spam-Checker-Version: SpamAssassin 3.3.2 (2011-06-06) on spamd.lvknet
+X-Spam-Level: 
+X-Spam-ASN:  
+X-Spam-Status: No, score=-2.9 required=7.0 tests=ALL_TRUSTED=-1,BAYES_00=-1.9
+        autolearn=ham version=3.3.2
+Received: from blacky.home (nikaet.starlink.ru [94.141.168.29])
+        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        by mail.lvk.cs.msu.ru (Postfix) with ESMTPSA id 6986810DC0D;
+        Tue, 14 Sep 2021 23:09:37 +0300 (MSK)
+Received: from [192.168.112.17] (helo=cobook.home)
+        by blacky.home with smtp (Exim 4.80)
+        (envelope-from <yoush@cs.msu.su>)
+        id 1mQEdM-0001dc-8t; Tue, 14 Sep 2021 23:02:24 +0300
+Received: (nullmailer pid 24823 invoked by uid 1000);
+        Tue, 14 Sep 2021 20:09:36 -0000
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Petr Nechaev <petr.nechaev@cogentembedded.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Subject: [PATCH v2] usb: gadget: storage: add support for media larger than 2T
+Date:   Tue, 14 Sep 2021 23:09:17 +0300
+Message-Id: <20210914200917.24767-1-nikita.yoush@cogentembedded.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210914151329.GD155245@rowland.harvard.edu>
+References: <20210914151329.GD155245@rowland.harvard.edu>
 MIME-Version: 1.0
-In-Reply-To: <1631643550-29960-3-git-send-email-pmaliset@codeaurora.org>
-References: <1631643550-29960-1-git-send-email-pmaliset@codeaurora.org> <1631643550-29960-3-git-send-email-pmaliset@codeaurora.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Tue, 14 Sep 2021 12:19:37 -0700
-Message-ID: <CAE-0n51vOW4avQ1beq0_RSNHGpxF_2CP1SbqstWqQTdvwYmxdQ@mail.gmail.com>
-Subject: Re: [PATCH v7 2/4] arm64: dts: qcom: sc7280: Add PCIe and PHY related nodes
-To:     Prasad Malisetty <pmaliset@codeaurora.org>, agross@kernel.org,
-        bhelgaas@google.com, bjorn.andersson@linaro.org,
-        lorenzo.pieralisi@arm.com, robh+dt@kernel.org, svarbanov@mm-sol.com
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
-        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-AV-Checked: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Prasad Malisetty (2021-09-14 11:19:08)
-> Add PCIe controller and PHY nodes for sc7280 SOC.
->
-> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
-> ---
+This adds support for READ_CAPACITY(16), READ(16) and WRITE(16)
+commands, and fixes READ_CAPACITY command to return 0xffffffff if
+media size does not fit in 32 bits.
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+This makes f_mass_storage to export a 16T disk array correctly.
+
+Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+---
+ drivers/usb/gadget/function/f_mass_storage.c | 87 ++++++++++++++++++--
+ 1 file changed, 80 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+index 7c96c4665178..96de401f1282 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -619,7 +619,7 @@ static int sleep_thread(struct fsg_common *common, bool can_freeze,
+ static int do_read(struct fsg_common *common)
+ {
+ 	struct fsg_lun		*curlun = common->curlun;
+-	u32			lba;
++	u64			lba;
+ 	struct fsg_buffhd	*bh;
+ 	int			rc;
+ 	u32			amount_left;
+@@ -634,7 +634,10 @@ static int do_read(struct fsg_common *common)
+ 	if (common->cmnd[0] == READ_6)
+ 		lba = get_unaligned_be24(&common->cmnd[1]);
+ 	else {
+-		lba = get_unaligned_be32(&common->cmnd[2]);
++		if (common->cmnd[0] == READ_16)
++			lba = get_unaligned_be64(&common->cmnd[2]);
++		else		/* READ_10 or READ_12 */
++			lba = get_unaligned_be32(&common->cmnd[2]);
+ 
+ 		/*
+ 		 * We allow DPO (Disable Page Out = don't save data in the
+@@ -747,7 +750,7 @@ static int do_read(struct fsg_common *common)
+ static int do_write(struct fsg_common *common)
+ {
+ 	struct fsg_lun		*curlun = common->curlun;
+-	u32			lba;
++	u64			lba;
+ 	struct fsg_buffhd	*bh;
+ 	int			get_some_more;
+ 	u32			amount_left_to_req, amount_left_to_write;
+@@ -771,7 +774,10 @@ static int do_write(struct fsg_common *common)
+ 	if (common->cmnd[0] == WRITE_6)
+ 		lba = get_unaligned_be24(&common->cmnd[1]);
+ 	else {
+-		lba = get_unaligned_be32(&common->cmnd[2]);
++		if (common->cmnd[0] == WRITE_16)
++			lba = get_unaligned_be64(&common->cmnd[2]);
++		else		/* WRITE_10 or WRITE_12 */
++			lba = get_unaligned_be32(&common->cmnd[2]);
+ 
+ 		/*
+ 		 * We allow DPO (Disable Page Out = don't save data in the
+@@ -1146,6 +1152,7 @@ static int do_read_capacity(struct fsg_common *common, struct fsg_buffhd *bh)
+ 	u32		lba = get_unaligned_be32(&common->cmnd[2]);
+ 	int		pmi = common->cmnd[8];
+ 	u8		*buf = (u8 *)bh->buf;
++	u32		max_lba;
+ 
+ 	/* Check the PMI and LBA fields */
+ 	if (pmi > 1 || (pmi == 0 && lba != 0)) {
+@@ -1153,12 +1160,37 @@ static int do_read_capacity(struct fsg_common *common, struct fsg_buffhd *bh)
+ 		return -EINVAL;
+ 	}
+ 
+-	put_unaligned_be32(curlun->num_sectors - 1, &buf[0]);
+-						/* Max logical block */
+-	put_unaligned_be32(curlun->blksize, &buf[4]);/* Block length */
++	if (curlun->num_sectors < 0x100000000ULL)
++		max_lba = curlun->num_sectors - 1;
++	else
++		max_lba = 0xffffffff;
++	put_unaligned_be32(max_lba, &buf[0]);		/* Max logical block */
++	put_unaligned_be32(curlun->blksize, &buf[4]);	/* Block length */
+ 	return 8;
+ }
+ 
++static int do_read_capacity_16(struct fsg_common *common, struct fsg_buffhd *bh)
++{
++	struct fsg_lun  *curlun = common->curlun;
++	u64		lba = get_unaligned_be64(&common->cmnd[2]);
++	int		pmi = common->cmnd[14];
++	u8		*buf = (u8 *)bh->buf;
++
++	/* Check the PMI and LBA fields */
++	if (pmi > 1 || (pmi == 0 && lba != 0)) {
++		curlun->sense_data = SS_INVALID_FIELD_IN_CDB;
++		return -EINVAL;
++	}
++
++	put_unaligned_be64(curlun->num_sectors - 1, &buf[0]);
++							/* Max logical block */
++	put_unaligned_be32(curlun->blksize, &buf[8]);	/* Block length */
++
++	/* It is safe to keep other fields zeroed */
++	memset(&buf[12], 0, 32 - 12);
++	return 32;
++}
++
+ static int do_read_header(struct fsg_common *common, struct fsg_buffhd *bh)
+ {
+ 	struct fsg_lun	*curlun = common->curlun;
+@@ -1905,6 +1937,17 @@ static int do_scsi_command(struct fsg_common *common)
+ 			reply = do_read(common);
+ 		break;
+ 
++	case READ_16:
++		common->data_size_from_cmnd =
++				get_unaligned_be32(&common->cmnd[10]);
++		reply = check_command_size_in_blocks(common, 16,
++				      DATA_DIR_TO_HOST,
++				      (1<<1) | (0xff<<2) | (0xf<<10), 1,
++				      "READ(16)");
++		if (reply == 0)
++			reply = do_read(common);
++		break;
++
+ 	case READ_CAPACITY:
+ 		common->data_size_from_cmnd = 8;
+ 		reply = check_command(common, 10, DATA_DIR_TO_HOST,
+@@ -1957,6 +2000,25 @@ static int do_scsi_command(struct fsg_common *common)
+ 			reply = do_request_sense(common, bh);
+ 		break;
+ 
++	case SERVICE_ACTION_IN_16:
++		switch (common->cmnd[1] & 0x1f) {
++
++		case SAI_READ_CAPACITY_16:
++			common->data_size_from_cmnd =
++				get_unaligned_be32(&common->cmnd[10]);
++			reply = check_command(common, 16, DATA_DIR_TO_HOST,
++					      (1<<1) | (0xff<<2) | (0xf<<10) |
++					      (1<<14), 1,
++					      "READ CAPACITY(16)");
++			if (reply == 0)
++				reply = do_read_capacity_16(common, bh);
++			break;
++
++		default:
++			goto unknown_cmnd;
++		}
++		break;
++
+ 	case START_STOP:
+ 		common->data_size_from_cmnd = 0;
+ 		reply = check_command(common, 6, DATA_DIR_NONE,
+@@ -2028,6 +2090,17 @@ static int do_scsi_command(struct fsg_common *common)
+ 			reply = do_write(common);
+ 		break;
+ 
++	case WRITE_16:
++		common->data_size_from_cmnd =
++				get_unaligned_be32(&common->cmnd[10]);
++		reply = check_command_size_in_blocks(common, 16,
++				      DATA_DIR_FROM_HOST,
++				      (1<<1) | (0xff<<2) | (0xf<<10), 1,
++				      "WRITE(16)");
++		if (reply == 0)
++			reply = do_write(common);
++		break;
++
+ 	/*
+ 	 * Some mandatory commands that we recognize but don't implement.
+ 	 * They don't mean much in this setting.  It's left as an exercise
+-- 
+2.20.1
+
