@@ -2,90 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D23F640B734
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Sep 2021 20:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8408640B7E2
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Sep 2021 21:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbhINSxs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Sep 2021 14:53:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59480 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229869AbhINSxr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 Sep 2021 14:53:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D22F261155;
-        Tue, 14 Sep 2021 18:52:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631645550;
-        bh=SDdnorZEBnhPn/ZG3jdmhisa2ptkXBcD2EonNKefoFI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=S7RbtLB1qRbR4v4VwraXBQIZ8iwL+5gKk1PEM7/bXtVm8NkB+yUCArSQOk45dHKQq
-         peY2GS73m5H/HuM0rYE4HirMU2KMCAq8soy/9PDPCGiRBPK4jrxX5MWm3ugK2oF5MV
-         N0cTZUYo1RC7RmLFJ6AJi6/NCb6H1weXwigDOTiqNdwdOGuUmIMoieZACM2wG/pcOx
-         Nwa+hcljIyHBxrv7iGDYVqornqfXQKkPgCKHCybPanEHdZROfx6+bJo9X+1gOKNmIE
-         kN2H2ybS0ap0GUH4Kj4/uvT3ZSZVidMbt+Xj0ZhQpoRdFwIa8EAyC0/jA0IOoSMnjB
-         dDcR9uB5ijwEA==
-Date:   Tue, 14 Sep 2021 13:52:28 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Prasad Malisetty <pmaliset@codeaurora.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, bhelgaas@google.com,
-        robh+dt@kernel.org, swboyd@chromium.org, lorenzo.pieralisi@arm.com,
-        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dianders@chromium.org,
-        mka@chromium.org, vbadigan@codeaurora.org, sallenki@codeaurora.org,
-        manivannan.sadhasivam@linaro.org
-Subject: Re: [PATCH v7 4/4] PCI: qcom: Switch pcie_1_pipe_clk_src after PHY
- init in SC7280
-Message-ID: <20210914185228.GA1443558@bjorn-Precision-5520>
+        id S233489AbhINTVD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Sep 2021 15:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233272AbhINTUz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Sep 2021 15:20:55 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369D9C061762
+        for <linux-usb@vger.kernel.org>; Tue, 14 Sep 2021 12:19:38 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id w144so622231oie.13
+        for <linux-usb@vger.kernel.org>; Tue, 14 Sep 2021 12:19:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=p4aiHjSt5PydyNP4yCr/hWcE1rXRRolEI3z5GimQKiQ=;
+        b=Zemn43lr2poy4K8eggMpxhiOpG05mXAnw6FKV5/fQpfVV3R0AX5iHJXV2trQPx/v+h
+         GrHzzWRSC+FrWUts3+o6/A1W8eml1SPP7QjzKKfuVEEHI2zM7uuY3Fx09b5usr/lkkjb
+         me6dmDPyffxPNH2XUIY2b81uaer96asbwB1cQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=p4aiHjSt5PydyNP4yCr/hWcE1rXRRolEI3z5GimQKiQ=;
+        b=a4EAdHFbngEawbLQyDWDZ19A8j0JCxEXbZKcXp5n78/YN7pkqkB1JKf4ufPe4gHeWk
+         gdrWy5Tnr3Apk7NGLVmOjJGxFD8Gq4A4UrIEFluUskmhJiWDJ67EENfJVaVTij+ZVS0i
+         4F9iBRTinTKqw5rviKbfsgUFpcUxmy4hJE+lFLuXwCICA5T5FNlMthcFesXDXfpI9Acn
+         GFiTPkm3nZNh4VYldkJ8E9QX5cp04lJ4B0r32LZ8xViw2GPcFdzNDmjjAl1pBhoMqwIg
+         AWVbrChoyXpyc6ixUVE5LVZStGTSG0qWP+hvZwZVuZhV1Kkovn8QJ6DmzFMvuf2MS+xE
+         xTxQ==
+X-Gm-Message-State: AOAM533MwCj5EEYSXX2Gm+h/QgDjBN6xEG3oa7JRM+hg3fFS3H75+YV2
+        e6PH7WKvgcqpnKLY0Lg43NEYDgxmdW0KM92TBT6XRw==
+X-Google-Smtp-Source: ABdhPJwW/rk+97bzsU+oU4ww0tVefOIdv/mV2ZiRt6IYFcucdG8dUrd+urFcvffUJbLKgBn39LtA+b31lg1iRxykZQE=
+X-Received: by 2002:aca:2310:: with SMTP id e16mr2706663oie.64.1631647177562;
+ Tue, 14 Sep 2021 12:19:37 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 14 Sep 2021 12:19:37 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1631643550-29960-5-git-send-email-pmaliset@codeaurora.org>
+In-Reply-To: <1631643550-29960-3-git-send-email-pmaliset@codeaurora.org>
+References: <1631643550-29960-1-git-send-email-pmaliset@codeaurora.org> <1631643550-29960-3-git-send-email-pmaliset@codeaurora.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Tue, 14 Sep 2021 12:19:37 -0700
+Message-ID: <CAE-0n51vOW4avQ1beq0_RSNHGpxF_2CP1SbqstWqQTdvwYmxdQ@mail.gmail.com>
+Subject: Re: [PATCH v7 2/4] arm64: dts: qcom: sc7280: Add PCIe and PHY related nodes
+To:     Prasad Malisetty <pmaliset@codeaurora.org>, agross@kernel.org,
+        bhelgaas@google.com, bjorn.andersson@linaro.org,
+        lorenzo.pieralisi@arm.com, robh+dt@kernel.org, svarbanov@mm-sol.com
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
+        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 14, 2021 at 11:49:10PM +0530, Prasad Malisetty wrote:
-> On the SC7280, the clock source for gcc_pcie_1_pipe_clk_src
-> must be the TCXO while gdsc is enabled. After PHY init successful
-> clock source should switch to pipe clock for gcc_pcie_1_pipe_clk_src.
-> 
+Quoting Prasad Malisetty (2021-09-14 11:19:08)
+> Add PCIe controller and PHY nodes for sc7280 SOC.
+>
 > Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
 > ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 90 +++++++++++++++++++++++++++++-----
->  1 file changed, 79 insertions(+), 11 deletions(-)
-> 
-> +struct qcom_pcie_cfg {
-> +	const struct qcom_pcie_ops *ops;
-> +	bool pcie_1_pipe_clk_src_switch;
 
-This is OK, but all things being equal I like "unsigned int x:1" a
-little better.  Here's some background:
-
-  https://lore.kernel.org/r/CA+55aFzKQ6Pj18TB8p4Yr0M4t+S+BsiHH=BJNmn=76-NcjTj-g@mail.gmail.com/
-  https://lore.kernel.org/r/CA+55aFxnePDimkVKVtv3gNmRGcwc8KQ5mHYvUxY8sAQg6yvVYg@mail.gmail.com/
-
-> @@ -1467,6 +1531,7 @@ static int qcom_pcie_probe(struct platform_device *pdev)
->  	struct pcie_port *pp;
->  	struct dw_pcie *pci;
->  	struct qcom_pcie *pcie;
-> +	const struct qcom_pcie_cfg *pcie_cfg = NULL;
-
-No need to initialize this, since you always assign it before using
-it.
-
->  	int ret;
->  
->  	pcie = devm_kzalloc(dev, sizeof(*pcie), GFP_KERNEL);
-> @@ -1488,7 +1553,9 @@ static int qcom_pcie_probe(struct platform_device *pdev)
->  
->  	pcie->pci = pci;
->  
-> -	pcie->ops = of_device_get_match_data(dev);
-> +	pcie_cfg = of_device_get_match_data(dev);
-> +	pcie->ops = pcie_cfg->ops;
-> +	pcie->pcie_1_pipe_clk_src_switch = pcie_cfg->pcie_1_pipe_clk_src_switch;
->  
->  	pcie->reset = devm_gpiod_get_optional(dev, "perst", GPIOD_OUT_HIGH);
->  	if (IS_ERR(pcie->reset)) {
-
-Looks good, thanks for working on this!
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
