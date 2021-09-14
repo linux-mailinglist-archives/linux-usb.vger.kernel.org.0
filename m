@@ -2,70 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B220640B0C7
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Sep 2021 16:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0168A40B1CD
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Sep 2021 16:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233584AbhINOgI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Sep 2021 10:36:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57442 "EHLO mail.kernel.org"
+        id S234747AbhINOrH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Sep 2021 10:47:07 -0400
+Received: from mga09.intel.com ([134.134.136.24]:61010 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233856AbhINOeJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 Sep 2021 10:34:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BD2C96121D;
-        Tue, 14 Sep 2021 14:32:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631629970;
-        bh=0VhIU7oIW19mqtxZEKsJZTHlixOevr7iBll8y7c2BTg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XbeK0VC+l2SkgW03upKsvRJE39T0pqT2/VBXEJmCHnpC7CHgRNW20n4nK1IZRGPcy
-         iEfrkYaDQlfd5vMjCZZyMa35AWT5FP9SgoE2aHAUL8cgiWacOa2EsBXRBIw0m6NdNB
-         Ln4DK2d5GRa8gZpiGco85+lVmhYE1hThOBmwCaarcNa0vHa8DcyTer/AnOfdvHtutE
-         8y8NrtWmtH0j0pcFv9RcYMNknRBeBxtK71A0Is/z5zvDpUspkbiWDB6SDA745okEGC
-         AFkrFQDiocmrCR+tyW28uXpYMh+QlHmJMmFsESVHPy/l+OiyeOci7zuelsxxXR8c+Y
-         p69wxfmSWmsJw==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1mQ9UN-000Kku-RE; Tue, 14 Sep 2021 16:32:47 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH v2 11/29] ABI: sysfs-class-typec: fix a bad What field
-Date:   Tue, 14 Sep 2021 16:32:26 +0200
-Message-Id: <3284da746c7f2bf7c120913a35db51cc5650e2ea.1631629496.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1631629496.git.mchehab+huawei@kernel.org>
+        id S234311AbhINOqk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 14 Sep 2021 10:46:40 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10106"; a="222055181"
+X-IronPort-AV: E=Sophos;i="5.85,292,1624345200"; 
+   d="scan'208";a="222055181"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2021 07:45:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,292,1624345200"; 
+   d="scan'208";a="609651680"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 14 Sep 2021 07:45:19 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 14 Sep 2021 17:45:18 +0300
+Date:   Tue, 14 Sep 2021 17:45:18 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 11/29] ABI: sysfs-class-typec: fix a bad What field
+Message-ID: <YUC1fp24ssnVxNCx@kuha.fi.intel.com>
 References: <cover.1631629496.git.mchehab+huawei@kernel.org>
+ <3284da746c7f2bf7c120913a35db51cc5650e2ea.1631629496.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3284da746c7f2bf7c120913a35db51cc5650e2ea.1631629496.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The <partner> wildcard is missing the '<' character. Fix it.
+On Tue, Sep 14, 2021 at 04:32:26PM +0200, Mauro Carvalho Chehab wrote:
+> The <partner> wildcard is missing the '<' character. Fix it.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+>  Documentation/ABI/testing/sysfs-class-typec | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+> index 40122d915ae1..c09add32e596 100644
+> --- a/Documentation/ABI/testing/sysfs-class-typec
+> +++ b/Documentation/ABI/testing/sysfs-class-typec
+> @@ -200,7 +200,7 @@ Description:	USB Power Delivery Specification defines a set of product types
+>  		amc			Alternate Mode Controller
+>  		======================  ==========================
+>  
+> -What:		/sys/class/typec/<port>-partner>/identity/
+> +What:		/sys/class/typec/<port>-<partner>/identity/
+>  Date:		April 2017
+>  Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>  Description:
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- Documentation/ABI/testing/sysfs-class-typec | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It's just a typo. It should be <port>-partner, not <port>-<partner>.
 
-diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-index 40122d915ae1..c09add32e596 100644
---- a/Documentation/ABI/testing/sysfs-class-typec
-+++ b/Documentation/ABI/testing/sysfs-class-typec
-@@ -200,7 +200,7 @@ Description:	USB Power Delivery Specification defines a set of product types
- 		amc			Alternate Mode Controller
- 		======================  ==========================
- 
--What:		/sys/class/typec/<port>-partner>/identity/
-+What:		/sys/class/typec/<port>-<partner>/identity/
- Date:		April 2017
- Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
- Description:
+thanks,
+
 -- 
-2.31.1
-
+heikki
