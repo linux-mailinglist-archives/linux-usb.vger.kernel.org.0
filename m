@@ -2,116 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4294540AA6D
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Sep 2021 11:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A66D40AACD
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Sep 2021 11:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbhINJPg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Sep 2021 05:15:36 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:44032 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbhINJPg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Sep 2021 05:15:36 -0400
+        id S229854AbhINJ1X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Sep 2021 05:27:23 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:38768 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229551AbhINJ1V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Sep 2021 05:27:21 -0400
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 09E5B1FDD8;
-        Tue, 14 Sep 2021 09:14:18 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTP id C4A0522095;
+        Tue, 14 Sep 2021 09:26:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1631610858; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uKo4iuOq73+bUNtI4yKJlmudRKyHwvKMnK09aennftc=;
-        b=bfPz8iGJxaVHOCjIVpVMwtHnIo4pIR8piSYQLpWZ/igZotO2dIbhJXlLwZFGvRj1365wm4
-        S6c7yzZW61Z0UBRn+1RbAR2o6RudLIbAwG64WNz9GQ+9a1XirDeQ0EsPbkfhBCZiFymUfh
-        wdUoEnblJqI7BkA6jpZGYCZMDpROXEM=
+        t=1631611563; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=oJP5Hgn0wV1kbaF6/yb6lHz6NXZ6FhJcsm4BqlwB55s=;
+        b=fBut3+/sp5BYQ8IrsEowd/IeHG4Il6jc/Gg4/1XgvqA7d0wzDxq4r2KPYPb912k3aJOG4R
+        Z0zSKPBHEoNK/vaPqNxaIu2gp0AaVNTbwmQ9Y4v8DYZqjqvW8dDAqDFrZuzkokdVGmKR7R
+        WCJtP259Bum9OVJTFCo0f2ogSaJGy2c=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1631610858;
+        s=susede2_ed25519; t=1631611563;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uKo4iuOq73+bUNtI4yKJlmudRKyHwvKMnK09aennftc=;
-        b=QJvLKmdYUxFLXR8uHnZ0GkTnP+Eq+/VdFsJ7a2B6QrYQkk76XFhPDD8MRwTQocIj+t3qR1
-        itMljLJuVDgbh5DQ==
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=oJP5Hgn0wV1kbaF6/yb6lHz6NXZ6FhJcsm4BqlwB55s=;
+        b=jvEP3lpXJ38/zVth26ajMow8wilEaur2rRYv7gumOt+4GAe1zr6MaD4YwZOXquXXh+B41g
+        LaAZObtUHWcfceBQ==
 Received: from localhost.localdomain (unknown [10.100.201.122])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id CE9E3A3B98;
-        Tue, 14 Sep 2021 09:14:17 +0000 (UTC)
+        by relay2.suse.de (Postfix) with ESMTPS id 98D01A3B94;
+        Tue, 14 Sep 2021 09:26:03 +0000 (UTC)
 From:   Jiri Slaby <jslaby@suse.cz>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>, Oliver Neukum <oneukum@suse.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH 11/16] tty: drivers/usb/, stop using tty_flip_buffer_push
-Date:   Tue, 14 Sep 2021 11:14:10 +0200
-Message-Id: <20210914091415.17918-4-jslaby@suse.cz>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: remove dead e-mails
+Date:   Tue, 14 Sep 2021 11:26:03 +0200
+Message-Id: <20210914092603.18722-1-jslaby@suse.cz>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210914091415.17918-1-jslaby@suse.cz>
-References: <20210914091134.17426-1-jslaby@suse.cz>
- <20210914091415.17918-1-jslaby@suse.cz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since commit a9c3f68f3cd8d (tty: Fix low_latency BUG) in 2014,
-tty_flip_buffer_push() is only a wrapper to tty_schedule_flip(). We are
-going to remove the former, so call the latter directly in the rest of
-drivers/usb/.
+jacmet@sunsite.dk and linux@prisktech.co.nz are dead:
+* This is the qmail-send program at a.mx.sunsite.dk.
+  <jacmet@sunsite.dk>:
+  Sorry, no mailbox here by that name. (#5.1.1)
+* 4.1.2 <linux@prisktech.co.nz>: Recipient address rejected: Domain not
+  found
+
+Remove them from MAINTAINERS.
+
+CCing Peter with his (different) e-mail, he likely wants to update?
+
+Could not find an alternative e-mail for Tony (CCing usb & arm). Maybe
+someon knows how to contact him.
 
 Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Cc: Oliver Neukum <oneukum@suse.com>
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Mathias Nyman <mathias.nyman@intel.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-usb@vger.kernel.org
 ---
- drivers/usb/class/cdc-acm.c            | 2 +-
- drivers/usb/gadget/function/u_serial.c | 2 +-
- drivers/usb/host/xhci-dbgtty.c         | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ MAINTAINERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index 8bbd8e29e60d..eeea1ed7fd71 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -480,7 +480,7 @@ static void acm_process_read_urb(struct acm *acm, struct urb *urb)
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f800abca74b0..a2ae91e67aaf 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2803,7 +2803,6 @@ F:	arch/arm/mach-pxa/include/mach/vpac270.h
+ F:	arch/arm/mach-pxa/vpac270.c
  
- 	tty_insert_flip_string(&acm->port, urb->transfer_buffer,
- 			urb->actual_length);
--	tty_flip_buffer_push(&acm->port);
-+	tty_schedule_flip(&acm->port);
- }
+ ARM/VT8500 ARM ARCHITECTURE
+-M:	Tony Prisk <linux@prisktech.co.nz>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/i2c/i2c-wmt.txt
+@@ -19320,13 +19319,11 @@ S:	Maintained
+ F:	drivers/usb/misc/chaoskey.c
  
- static void acm_read_bulk_callback(struct urb *urb)
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index 6f68cbeeee7c..39fa27b63cbd 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -426,7 +426,7 @@ static void gs_rx_push(struct work_struct *work)
- 	 * so we won't get callbacks and can hold port_lock
- 	 */
- 	if (do_push)
--		tty_flip_buffer_push(&port->port);
-+		tty_schedule_flip(&port->port);
+ USB CYPRESS C67X00 DRIVER
+-M:	Peter Korsgaard <jacmet@sunsite.dk>
+ L:	linux-usb@vger.kernel.org
+ S:	Maintained
+ F:	drivers/usb/c67x00/
  
- 
- 	/* We want our data queue to become empty ASAP, keeping data
-diff --git a/drivers/usb/host/xhci-dbgtty.c b/drivers/usb/host/xhci-dbgtty.c
-index 6e784f2fc26d..48b7e7f52d75 100644
---- a/drivers/usb/host/xhci-dbgtty.c
-+++ b/drivers/usb/host/xhci-dbgtty.c
-@@ -344,7 +344,7 @@ static void dbc_rx_push(struct tasklet_struct *t)
- 	}
- 
- 	if (do_push)
--		tty_flip_buffer_push(&port->port);
-+		tty_schedule_flip(&port->port);
- 
- 	if (!list_empty(queue) && tty) {
- 		if (!tty_throttled(tty)) {
+ USB DAVICOM DM9601 DRIVER
+-M:	Peter Korsgaard <jacmet@sunsite.dk>
+ L:	netdev@vger.kernel.org
+ S:	Maintained
+ W:	http://www.linux-usb.org/usbnet
 -- 
 2.33.0
 
