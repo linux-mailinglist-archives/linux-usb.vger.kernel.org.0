@@ -2,108 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA4240AB97
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Sep 2021 12:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD51D40ABAB
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Sep 2021 12:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231408AbhINKXG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Sep 2021 06:23:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59404 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230274AbhINKXF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Sep 2021 06:23:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1631614908;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=a3/K72EH2i3eQqAABWvZtL9IFzpTOqC5lFDkzDQH+vM=;
-        b=isDHvqtJ/ogGZH/GaPk368XdLOpf8jff7mHS/hQ8taA+lNQzHzUNHXUFcUFfJ+mfv9oVn4
-        aKsaTWtri/Wv0MuloDwSQWc5xnyhlqtvj1BZS/64DhAmW3PLYqZEP4YcyXaDq7VzhzVOmd
-        kimD9XxhgT991S2UmsEDu947pAHfI+M=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-519-Va8zv1y_M9G4DtjB4Dx4qw-1; Tue, 14 Sep 2021 06:21:47 -0400
-X-MC-Unique: Va8zv1y_M9G4DtjB4Dx4qw-1
-Received: by mail-ed1-f71.google.com with SMTP id s12-20020a05640217cc00b003cde58450f1so6558590edy.9
-        for <linux-usb@vger.kernel.org>; Tue, 14 Sep 2021 03:21:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=a3/K72EH2i3eQqAABWvZtL9IFzpTOqC5lFDkzDQH+vM=;
-        b=4gHwrCCr+Qbk45tMlcdBldHbghTC2LfRQadIkLafwa5CL2kltom/Kn4fky9SV2ssCB
-         eO8Hyv/1oLGIQjyUiGBMKSslXaTEcHGzesECuYVPvWYuNCWWXQTRu4ESHuhKB+Bm59JD
-         TnM2MqfG348xabav4GvmgCh4XasVxIFemHBAVYWGgCBSf50+ymXHHzQ9+6ERZqJ7fgiu
-         kRJ7QG4ROwVMxY8aJ2CCGTUMDcfpmbbkNYAlDhZT/SrYU++uKlitawdkk/nfhRtkDpO6
-         lZvyE6mlMZZYjJ69Tk3QSf8+6smuEddEhlex2foWGckGRer96wV9XYbzoJ3wnG1xzATt
-         YBaw==
-X-Gm-Message-State: AOAM533NwYQBJmUfyOS74TRQ/W8iRnL2QP+xG0X9LYqa9y3JEtXcUqR7
-        s1LtpYi+DbcSR9iHkuaJznUyq+VYaAG1Iuow8BeNW21m9X3VC67wg/VD09GaBP/j7MmBeqyJDkO
-        jul7ZCenxP9QWGe/MIeg/
-X-Received: by 2002:a17:906:2691:: with SMTP id t17mr17633576ejc.522.1631614905765;
-        Tue, 14 Sep 2021 03:21:45 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz4r5O5J3l8hz0cNB/I51hOrk6uBaz1mecyH4C/0vGSwQXMQXdTtwrg8kcQrK3Co6VTO/j7fQ==
-X-Received: by 2002:a17:906:2691:: with SMTP id t17mr17633564ejc.522.1631614905619;
-        Tue, 14 Sep 2021 03:21:45 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id y13sm3273065ejl.125.2021.09.14.03.21.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Sep 2021 03:21:45 -0700 (PDT)
-Subject: Re: [PATCH] Re-enable UAS for LaCie Rugged USB3-FW with fk quirk
-To:     Julian Sikorski <belegdol@gmail.com>, linux-usb@vger.kernel.org
-Cc:     oneukum@suse.com, Julian Sikorski <belegdol+github@gmail.com>
-References: <20210913181454.7365-1-belegdol+github@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <0ee3da94-bbae-35d3-2d32-4ceef039a16d@redhat.com>
-Date:   Tue, 14 Sep 2021 12:21:44 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S231590AbhINKaP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Sep 2021 06:30:15 -0400
+Received: from mga05.intel.com ([192.55.52.43]:52961 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231527AbhINKaN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 14 Sep 2021 06:30:13 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10106"; a="307502397"
+X-IronPort-AV: E=Sophos;i="5.85,292,1624345200"; 
+   d="scan'208";a="307502397"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2021 03:28:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,292,1624345200"; 
+   d="scan'208";a="609558479"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 14 Sep 2021 03:28:50 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 14 Sep 2021 13:28:49 +0300
+Date:   Tue, 14 Sep 2021 13:28:49 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Benson Leung <bleung@google.com>
+Cc:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "bleung@chromium.org" <bleung@chromium.org>,
+        "badhri@google.com" <badhri@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+Message-ID: <YUB5Ya1/DbeKm1mS@kuha.fi.intel.com>
+References: <20210902213500.3795948-1-pmalani@chromium.org>
+ <20210902213500.3795948-3-pmalani@chromium.org>
+ <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
+ <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <YT+m8jr8Ehe3R55G@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20210913181454.7365-1-belegdol+github@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YT+m8jr8Ehe3R55G@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 9/13/21 8:14 PM, Julian Sikorski wrote:
-> Further testing has revealed that LaCie Rugged USB3-FW does work with
-> uas as long as US_FL_NO_REPORT_OPCODES and US_FL_NO_SAME are enabled.
+Mon, Sep 13, 2021 at 12:30:58PM -0700, Benson Leung kirjoitti:
+> Hi Adam and Heikki,
 > 
-> Signed-off-by: Julian Sikorski <belegdol+github@gmail.com>
-> Suggested-by: Hans de Goede <hdegoede@redhat.com>
-> Link: https://lore.kernel.org/linux-usb/2167ea48-e273-a336-a4e0-10a4e883e75e@redhat.com/
-
-Thanks, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-> ---
->  drivers/usb/storage/unusual_uas.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On Mon, Sep 13, 2021 at 03:15:46PM +0000, Adam Thomson wrote:
+> > On 13 September 2021 14:30, Heikki Krogerus wrote:
+> > >
+> > > My plan is to register a separate power supply for each PDO. So for
+> > > every source PDO and every sink PDO a port has in its capabilities,
+> > > you'll have a separate power supply registered, and the same for the
+> > > partner when it's connected. With every connection there should always
+> > > be one active (online) source psy and active sink psy (if the port is
+> > > source, one of the port's source psys will be active and the partner
+> > > will have the active sink psy, or vise versa - depending on the role).
+> > >
+> > > Each PDO represents a "Power Supply" so to me that approach just
+> > > makes the most sense. It will require a bit of work in kernel, however
+> > > in user space it should mean that we only have a single new attribute
+> > > file for the power supplies named "pdo" that returns a single PDO.
+> > >
+> > > Let me know if you guys see any obvious problems with the idea.
+> > > Otherwise, that is how we really need to do this. That will make
+> > > things much more clear in user space. I have a feeling it will make
+> > > things easier in kernel as well in the long run.
+> > >
+> > > Adding Adam and Guenter. It would be good if you guys could comment
+> > > the idea as well.
+> > 
+> > Hi Heikki,
+> > 
+> > Thanks for CCing me. My two pence worth is that I always envisaged the PSY
+> > representation as being 1 PSY for 1 power source. I consider this in a
+> > similar manner to the Regulator framework, where 1 regulator can support a range
+> > of voltages and currents, but this is covered by 1 regulator instance as it's
+> > just a single output. For USB-PD we have a number of options for voltage/current
+> > combos, including PPS which is even lower granularity, but it's still only one
+> > port. I get the feeling that having PSY instances for each and every PDO might
+> > be a little confusing and these will never be concurrent.
+> > 
+> > However, I'd be keen to understand further and see what restrictions/issues are
+> > currently present as I probably don't have a complete view of this right now. I
+> > wouldn't want to dismiss something out of turn, especially when you obviously
+> > have good reason to suggest such an approach.
 > 
-> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-> index c35a6db993f1..4051c8cd0cd8 100644
-> --- a/drivers/usb/storage/unusual_uas.h
-> +++ b/drivers/usb/storage/unusual_uas.h
-> @@ -50,7 +50,7 @@ UNUSUAL_DEV(0x059f, 0x1061, 0x0000, 0x9999,
->  		"LaCie",
->  		"Rugged USB3-FW",
->  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> -		US_FL_IGNORE_UAS),
-> +		US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
->  
->  /*
->   * Apricorn USB3 dongle sometimes returns "USBSUSBSUSBS" in response to SCSI
+> I thought of one more potential downside to one-psy-per-pdo:
 > 
+> Remember that a source or sink's Capabilities may dynamically change without
+> a port disconnect, and this could make one-psy-per-pdo much more chatty with
+> power supply deletions and re-registrations on load balancing events.
+> 
+> At basically any time, a power source may send a new SRC_CAP to the sink which
+> adjusts, deletes, or adds to the list of PDOs, without the connection state
+> machine registering a disconnect.
+> 
+> In a real world case, I have a charger in my kitchen that has 2 USB-C ports
+> and supports a total of 30W output. When one device is plugged in:
+> 5V 3A, 9V 3A, 15V 2A
+> However, when two devices are plugged in, each sees:
+> 5V 3A
+> 
+> The load balancing event would result in two power supply deletions, whereas
+> if it were a single psy per power supply (incorporating the list of PDO choices)
+> it would just be a single PROP_CHANGED event.
+> 
+> It seems cleaner to me to have deletions and additions only possible when the
+> thing is unplugged or plugged.
 
+I just argued to Adam that because the capabilities can change in
+reality at any time, just like you pointed out here, using a psy
+hierarchy instead of trying to handle everything with a single psy is
+not only more clear, it's actually safer, and definitely less "hacky"
+approach.
+
+I don't really see why would it be a problem to unregister and
+register the psys in the hierarchy be a problem?
+
+thanks,
+
+-- 
+heikki
