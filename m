@@ -2,194 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C062C40AB7B
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Sep 2021 12:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CA4240AB97
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Sep 2021 12:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231479AbhINKP2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Sep 2021 06:15:28 -0400
-Received: from mga09.intel.com ([134.134.136.24]:39614 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231389AbhINKP0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 Sep 2021 06:15:26 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10106"; a="221988087"
-X-IronPort-AV: E=Sophos;i="5.85,292,1624345200"; 
-   d="scan'208";a="221988087"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2021 03:14:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,292,1624345200"; 
-   d="scan'208";a="609554195"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 14 Sep 2021 03:14:03 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 14 Sep 2021 13:14:02 +0300
-Date:   Tue, 14 Sep 2021 13:14:02 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "bleung@chromium.org" <bleung@chromium.org>,
-        "badhri@google.com" <badhri@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
-Message-ID: <YUB16up3JDwi3HfI@kuha.fi.intel.com>
-References: <20210902213500.3795948-1-pmalani@chromium.org>
- <20210902213500.3795948-3-pmalani@chromium.org>
- <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
- <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+        id S231408AbhINKXG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Sep 2021 06:23:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59404 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230274AbhINKXF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Sep 2021 06:23:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1631614908;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=a3/K72EH2i3eQqAABWvZtL9IFzpTOqC5lFDkzDQH+vM=;
+        b=isDHvqtJ/ogGZH/GaPk368XdLOpf8jff7mHS/hQ8taA+lNQzHzUNHXUFcUFfJ+mfv9oVn4
+        aKsaTWtri/Wv0MuloDwSQWc5xnyhlqtvj1BZS/64DhAmW3PLYqZEP4YcyXaDq7VzhzVOmd
+        kimD9XxhgT991S2UmsEDu947pAHfI+M=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-519-Va8zv1y_M9G4DtjB4Dx4qw-1; Tue, 14 Sep 2021 06:21:47 -0400
+X-MC-Unique: Va8zv1y_M9G4DtjB4Dx4qw-1
+Received: by mail-ed1-f71.google.com with SMTP id s12-20020a05640217cc00b003cde58450f1so6558590edy.9
+        for <linux-usb@vger.kernel.org>; Tue, 14 Sep 2021 03:21:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=a3/K72EH2i3eQqAABWvZtL9IFzpTOqC5lFDkzDQH+vM=;
+        b=4gHwrCCr+Qbk45tMlcdBldHbghTC2LfRQadIkLafwa5CL2kltom/Kn4fky9SV2ssCB
+         eO8Hyv/1oLGIQjyUiGBMKSslXaTEcHGzesECuYVPvWYuNCWWXQTRu4ESHuhKB+Bm59JD
+         TnM2MqfG348xabav4GvmgCh4XasVxIFemHBAVYWGgCBSf50+ymXHHzQ9+6ERZqJ7fgiu
+         kRJ7QG4ROwVMxY8aJ2CCGTUMDcfpmbbkNYAlDhZT/SrYU++uKlitawdkk/nfhRtkDpO6
+         lZvyE6mlMZZYjJ69Tk3QSf8+6smuEddEhlex2foWGckGRer96wV9XYbzoJ3wnG1xzATt
+         YBaw==
+X-Gm-Message-State: AOAM533NwYQBJmUfyOS74TRQ/W8iRnL2QP+xG0X9LYqa9y3JEtXcUqR7
+        s1LtpYi+DbcSR9iHkuaJznUyq+VYaAG1Iuow8BeNW21m9X3VC67wg/VD09GaBP/j7MmBeqyJDkO
+        jul7ZCenxP9QWGe/MIeg/
+X-Received: by 2002:a17:906:2691:: with SMTP id t17mr17633576ejc.522.1631614905765;
+        Tue, 14 Sep 2021 03:21:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz4r5O5J3l8hz0cNB/I51hOrk6uBaz1mecyH4C/0vGSwQXMQXdTtwrg8kcQrK3Co6VTO/j7fQ==
+X-Received: by 2002:a17:906:2691:: with SMTP id t17mr17633564ejc.522.1631614905619;
+        Tue, 14 Sep 2021 03:21:45 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id y13sm3273065ejl.125.2021.09.14.03.21.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Sep 2021 03:21:45 -0700 (PDT)
+Subject: Re: [PATCH] Re-enable UAS for LaCie Rugged USB3-FW with fk quirk
+To:     Julian Sikorski <belegdol@gmail.com>, linux-usb@vger.kernel.org
+Cc:     oneukum@suse.com, Julian Sikorski <belegdol+github@gmail.com>
+References: <20210913181454.7365-1-belegdol+github@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <0ee3da94-bbae-35d3-2d32-4ceef039a16d@redhat.com>
+Date:   Tue, 14 Sep 2021 12:21:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+In-Reply-To: <20210913181454.7365-1-belegdol+github@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Mon, Sep 13, 2021 at 03:15:46PM +0000, Adam Thomson kirjoitti:
-> On 13 September 2021 14:30, Heikki Krogerus wrote:
+Hi,
+
+On 9/13/21 8:14 PM, Julian Sikorski wrote:
+> Further testing has revealed that LaCie Rugged USB3-FW does work with
+> uas as long as US_FL_NO_REPORT_OPCODES and US_FL_NO_SAME are enabled.
 > 
-> > > Add support for reporting Source and Sink Capabilities
-> > > Power Data Object (PDO) property. These are reported by USB
-> > > Power Delivery (PD) capable power sources.
-> > >
-> > > Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> > > ---
-> > >  Documentation/ABI/testing/sysfs-class-power | 30 +++++++++++++++++++++
-> > >  drivers/power/supply/power_supply_sysfs.c   | 18 ++++++++++++-
-> > >  include/linux/power_supply.h                |  5 ++++
-> > >  3 files changed, 52 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/Documentation/ABI/testing/sysfs-class-power
-> > b/Documentation/ABI/testing/sysfs-class-power
-> > > index ca830c6cd809..90d4198e6dfb 100644
-> > > --- a/Documentation/ABI/testing/sysfs-class-power
-> > > +++ b/Documentation/ABI/testing/sysfs-class-power
-> > > @@ -562,6 +562,36 @@ Description:
-> > >  			      "Unknown", "SDP", "DCP", "CDP", "ACA", "C", "PD",
-> > >  			      "PD_DRP", "PD_PPS", "BrickID"
-> > >
-> > > +What:
-> > 	/sys/class/power_supply/<supply_name>/source_cap_pdos
-> > > +Date:		September 2021
-> > > +Contact:	linux-pm@vger.kernel.org
-> > > +Description:
-> > > +		Reports the Source Capabilities Power Data Objects (PDO)
-> > reported by the USB
-> > > +		PD-capable power source. 13 PDOs are listed. PDOs 1-7 represent
-> > the Source Caps
-> > > +		for devices which only support Standard Power Range (SPR),
-> > whereas PDOs 8-13
-> > > +		are for Extended Power Range (EPR) capable sources.
-> > > +		NOTE: The EPR Source Caps message is a superset of the Source
-> > Cap message, so on
-> > > +		SPR-only sources, PDOs 8-13 will be 0.
-> > > +
-> > > +		Access: Read-Only
-> > > +
-> > > +		Valid values: Represented as a list of 13 32-bit PDO objects in
-> > hexadecimal format.
-> > > +
-> > > +What:
-> > 	/sys/class/power_supply/<supply_name>/sink_cap_pdos
-> > > +Date:		September 2021
-> > > +Contact:	linux-pm@vger.kernel.org
-> > > +Description:
-> > > +		Reports the Sink Capabilities Power Data Objects (PDO) reported
-> > by the USB
-> > > +		PD-capable power source. 13 PDOs are listed. PDOs 1-7 represent
-> > the Sink Caps
-> > > +		for devices which only support Standard Power Range (SPR),
-> > whereas PDOs 8-13
-> > > +		are for Extended Power Range (EPR) capable sinks.
-> > > +		NOTE: The EPR Sink Caps message is a superset of the Sink Cap
-> > message, so on
-> > > +		SPR-only sinks, PDOs 8-13 will be 0.
-> > > +
-> > > +		Access: Read-Only
-> > > +
-> > > +		Valid values: Represented as a list of 13 32-bit PDO objects in
-> > hexadecimal format.
-> >
-> > My plan is to register a separate power supply for each PDO. So for
-> > every source PDO and every sink PDO a port has in its capabilities,
-> > you'll have a separate power supply registered, and the same for the
-> > partner when it's connected. With every connection there should always
-> > be one active (online) source psy and active sink psy (if the port is
-> > source, one of the port's source psys will be active and the partner
-> > will have the active sink psy, or vise versa - depending on the role).
-> >
-> > Each PDO represents a "Power Supply" so to me that approach just
-> > makes the most sense. It will require a bit of work in kernel, however
-> > in user space it should mean that we only have a single new attribute
-> > file for the power supplies named "pdo" that returns a single PDO.
-> >
-> > Let me know if you guys see any obvious problems with the idea.
-> > Otherwise, that is how we really need to do this. That will make
-> > things much more clear in user space. I have a feeling it will make
-> > things easier in kernel as well in the long run.
-> >
-> > Adding Adam and Guenter. It would be good if you guys could comment
-> > the idea as well.
+> Signed-off-by: Julian Sikorski <belegdol+github@gmail.com>
+> Suggested-by: Hans de Goede <hdegoede@redhat.com>
+> Link: https://lore.kernel.org/linux-usb/2167ea48-e273-a336-a4e0-10a4e883e75e@redhat.com/
+
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+> ---
+>  drivers/usb/storage/unusual_uas.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Hi Heikki,
+> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+> index c35a6db993f1..4051c8cd0cd8 100644
+> --- a/drivers/usb/storage/unusual_uas.h
+> +++ b/drivers/usb/storage/unusual_uas.h
+> @@ -50,7 +50,7 @@ UNUSUAL_DEV(0x059f, 0x1061, 0x0000, 0x9999,
+>  		"LaCie",
+>  		"Rugged USB3-FW",
+>  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> -		US_FL_IGNORE_UAS),
+> +		US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
+>  
+>  /*
+>   * Apricorn USB3 dongle sometimes returns "USBSUSBSUSBS" in response to SCSI
 > 
-> Thanks for CCing me. My two pence worth is that I always envisaged the PSY
-> representation as being 1 PSY for 1 power source. I consider this in a
-> similar manner to the Regulator framework, where 1 regulator can support a range
-> of voltages and currents, but this is covered by 1 regulator instance as it's
-> just a single output. For USB-PD we have a number of options for voltage/current
-> combos, including PPS which is even lower granularity, but it's still only one
-> port. I get the feeling that having PSY instances for each and every PDO might
-> be a little confusing and these will never be concurrent.
-> 
-> However, I'd be keen to understand further and see what restrictions/issues are
-> currently present as I probably don't have a complete view of this right now. I
-> wouldn't want to dismiss something out of turn, especially when you obviously
-> have good reason to suggest such an approach.
 
-I'm not proposing that we drop the port-psys. I'm sorry if I've been
-unclear about that. The port-psy we can not drop because of several
-reasons. For starters, we still can not assume that USB PD is always
-supported.
-
-What I'm trying to propose is that we take advantage of the
-power-supply framework by building a "dynamic" hierarchy of power
-supplies that supply each other in order to represent the actual
-situation as closely as possible. For example, a port-psy that is
-supplied by port-Fixed-sink-psy that is supplied by
-port-partner-Fixed-source (that is supplied by port-partner-psy).
-Something like that. The only "static" part in the hierarchy is the
-port-psy, as everything else about it can change, even without
-disconnection.
-
-So the port-psy always either supplies another psy or is supplied by
-another psy in this hierarchy, depending on the role of the port. But
-most importantly, the properties of the port-psy itself are _newer_
-adjustable - they are read-only. The psy that supplies the port-psy
-can be adjustable, if it's for example PPS, but not the port-psy
-itself.
-
-The problem with having only a single psy per port (and possibly
-partners) is that it does not work well enough when the capabilities
-change, and the capabilities can really change at any moment, we don't
-need to disconnect for that to happen - simply by plugging another
-device to another port can change the power budget for your port and
-change your capabilities. The biggest problem is when we loose the
-ability to adjust the values if we for example loose the PPS that we
-were using in the middle of operation. The single psy has to attempt
-to handle the situation by adjusting something like the ranges of the
-properties, because it can't change the actual property set itself.
-That is hacky, and to be honest, a little bit risky, because it leaves
-us at the mercy of programmers completely unnecessarily.
-
-With my proposal, if the capabilities change, it only means we rebuild
-the psy hierarchy, and that's it. Nothing else needs to be done in
-kernel, and all changes are super visible and clear in user space.
-
-thanks,
-
--- 
-heikki
