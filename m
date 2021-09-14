@@ -2,221 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D579140B2B6
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Sep 2021 17:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6CA340B35C
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Sep 2021 17:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234382AbhINPPB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Sep 2021 11:15:01 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:47989 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S233617AbhINPOv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Sep 2021 11:14:51 -0400
-Received: (qmail 158190 invoked by uid 1000); 14 Sep 2021 11:13:29 -0400
-Date:   Tue, 14 Sep 2021 11:13:29 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Petr Nechaev <petr.nechaev@cogentembedded.com>
-Subject: Re: [PATCH] usb: gadget: storage: add support for media larger than
- 2T
-Message-ID: <20210914151329.GD155245@rowland.harvard.edu>
-References: <20210914052728.23369-1-nikita.yoush@cogentembedded.com>
+        id S234415AbhINPow (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Sep 2021 11:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234464AbhINPou (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Sep 2021 11:44:50 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D0BC061574
+        for <linux-usb@vger.kernel.org>; Tue, 14 Sep 2021 08:43:32 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id h16so29759930lfk.10
+        for <linux-usb@vger.kernel.org>; Tue, 14 Sep 2021 08:43:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=hGTkyEDRvYGLZ1dFXhXjbjEvPDL5vDaeery5Xl4bzkY=;
+        b=aH32scx0TN4qA7N38E95Yr41IQR/z8Py+WTiS+IIXepXSagUjAvsKOUcpUNropJYec
+         ER5Fh18t6UbCTpidyKbT6ejKpOpPjI+WuHg6W9CG1Kk6OcTBVppyLTEaepeMENcYyk/u
+         5jUiUCBuO5AiDEkEaUhn2Xyu3IqaNLj8qVEGD3eRH441JKsihY+hPKCJwi7g5UPQcejM
+         o2N8LYLJ7g64nyhWZdNpLIw46vIQrxilReSOFFCXSbuEGekeFgegOROks0aAJvWon669
+         LjsKJu17NuyM4AdZVelhmYLLLpuzpv5ww/cO1Rcc0tcJkEpN6W0SEkANSWhVMThXXvqJ
+         uddQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=hGTkyEDRvYGLZ1dFXhXjbjEvPDL5vDaeery5Xl4bzkY=;
+        b=j5q2Z4cEWjw1T/3n3LKWn3ideLua2ui2MDLHQTVTiGlt68baN2yxcwbztqUhgG6g0m
+         5YNcgALKWaGkjRp/NIsT9qIQf0YK7uJO7IGv/fAOxVVKJCRD55km56+gakcJcJ2MclLq
+         WDidMwEcFcQYezzMzI8H6hq1hOuuCzkTuAAX7Zr9SUGGXBrMlTObC9lF6sHmonR5raNH
+         GzqM1v5ONyv433BH2CCsHnDAYFRYzISwf8PGpQ0KJ8lWA+0hvrcfkx+yNgErEozGW+Vb
+         l78rGv/k/pkop13Bi9/iKstA2gN3NtxX22ixmGUtPmL30E2b6+45Ah2vkL6io4LKb7XS
+         +jTg==
+X-Gm-Message-State: AOAM530GzNo7rlU2uMKIFmZXLz0z7lz42pMq4cTike1SVapLgIAOPla+
+        RPxcipDl/4aRRt2aUFN1ZvWCqQSER9Xtq3F8RQ==
+X-Google-Smtp-Source: ABdhPJwDVDn2/0c55sy/Fn1RHLHnVnU5CqcBUdxEQj6j3pPOmsDfm0i33o9cTSMCTOilEgfygLL6xtvjS2fZBM0mEuc=
+X-Received: by 2002:a19:c38b:: with SMTP id t133mr13523268lff.196.1631634211166;
+ Tue, 14 Sep 2021 08:43:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210914052728.23369-1-nikita.yoush@cogentembedded.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a2e:a786:0:0:0:0:0 with HTTP; Tue, 14 Sep 2021 08:43:30
+ -0700 (PDT)
+Reply-To: monicalinbrownstatesarmy@gmail.com
+From:   Monica Lin Brown <priscajoseeha@gmail.com>
+Date:   Tue, 14 Sep 2021 15:43:30 +0000
+Message-ID: <CADRJ0FQjSdDcLBAr_K9m1TXQyp9dgbEw666dNsCZ2NyDAa8iWQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 14, 2021 at 08:27:28AM +0300, Nikita Yushchenko wrote:
-> This adds support for READ_CAPACITY(16), READ(16) and WRITE(16)
-> commands, and fixes READ_CAPACITY command to return 0xffffffff if
-> media size does not fit in 32 bits.
-> 
-> This makes f_mass_storage to export a 16T disk array correctly.
-> 
-> Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-> ---
->  drivers/usb/gadget/function/f_mass_storage.c | 70 ++++++++++++++++++--
->  1 file changed, 63 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-> index 7c96c4665178..b79737c19750 100644
-> --- a/drivers/usb/gadget/function/f_mass_storage.c
-> +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> @@ -619,7 +619,7 @@ static int sleep_thread(struct fsg_common *common, bool can_freeze,
->  static int do_read(struct fsg_common *common)
->  {
->  	struct fsg_lun		*curlun = common->curlun;
-> -	u32			lba;
-> +	u64			lba;
->  	struct fsg_buffhd	*bh;
->  	int			rc;
->  	u32			amount_left;
-> @@ -634,7 +634,10 @@ static int do_read(struct fsg_common *common)
->  	if (common->cmnd[0] == READ_6)
->  		lba = get_unaligned_be24(&common->cmnd[1]);
->  	else {
-> -		lba = get_unaligned_be32(&common->cmnd[2]);
-> +		if (common->cmnd[0] == READ_16)
-> +			lba = get_unaligned_be64(&common->cmnd[2]);
-> +		else
+-- 
+Hello,
 
-It would be good to put a comment here:
+I am Monica Lin Brown an U.S. ARMY, a member of the U.S. ARMY USARPAC
+Medical Team, which is currently in Camp Bucca Joint Operations Base
+in Umm Qasr, Iraq as part of the US contingent for peace keeping.
 
-		else	/* READ_10 or READ_12 */
+I wish to discuss a very confidential mutually beneficial proposition
+with you, but I want your consent before sending details for full
+explanation.
 
-Same for the WRITE_10/WRITE_12 case below.
+I sent an email to you exactly 1
+week ago and received no response. Please confirm if this email is
+still in use for a confidential discussion on a topic of mutual
+benefit. I am waiting for quick response
+Regards
+Thank you very much and God bless you.
 
-> +			lba = get_unaligned_be32(&common->cmnd[2]);
->  
->  		/*
->  		 * We allow DPO (Disable Page Out = don't save data in the
-> @@ -747,7 +750,7 @@ static int do_read(struct fsg_common *common)
->  static int do_write(struct fsg_common *common)
->  {
->  	struct fsg_lun		*curlun = common->curlun;
-> -	u32			lba;
-> +	u64			lba;
->  	struct fsg_buffhd	*bh;
->  	int			get_some_more;
->  	u32			amount_left_to_req, amount_left_to_write;
-> @@ -771,7 +774,10 @@ static int do_write(struct fsg_common *common)
->  	if (common->cmnd[0] == WRITE_6)
->  		lba = get_unaligned_be24(&common->cmnd[1]);
->  	else {
-> -		lba = get_unaligned_be32(&common->cmnd[2]);
-> +		if (common->cmnd[0] == WRITE_16)
-> +			lba = get_unaligned_be64(&common->cmnd[2]);
-> +		else
-> +			lba = get_unaligned_be32(&common->cmnd[2]);
->  
->  		/*
->  		 * We allow DPO (Disable Page Out = don't save data in the
-> @@ -1146,6 +1152,7 @@ static int do_read_capacity(struct fsg_common *common, struct fsg_buffhd *bh)
->  	u32		lba = get_unaligned_be32(&common->cmnd[2]);
->  	int		pmi = common->cmnd[8];
->  	u8		*buf = (u8 *)bh->buf;
-> +	u32		mlb;
-
-The Linux kernel does not suffer from a shortage of letters; you don't 
-have to struggle to conserve them.  This variable should be named 
-max_lba or something similar.  (Note: To readers in the US, "mlb" stands 
-for "Major League Baseball"!)
-
->  
->  	/* Check the PMI and LBA fields */
->  	if (pmi > 1 || (pmi == 0 && lba != 0)) {
-> @@ -1153,12 +1160,28 @@ static int do_read_capacity(struct fsg_common *common, struct fsg_buffhd *bh)
->  		return -EINVAL;
->  	}
->  
-> -	put_unaligned_be32(curlun->num_sectors - 1, &buf[0]);
-> -						/* Max logical block */
-> -	put_unaligned_be32(curlun->blksize, &buf[4]);/* Block length */
-> +	if (curlun->num_sectors < 0x100000000ULL)
-> +		mlb = curlun->num_sectors - 1;
-> +	else
-> +		mlb = 0xffffffff;
-> +	put_unaligned_be32(mlb, &buf[0]);		/* Max logical block */
-> +	put_unaligned_be32(curlun->blksize, &buf[4]);	/* Block length */
->  	return 8;
->  }
->  
-> +static int do_read_capacity_16(struct fsg_common *common, struct fsg_buffhd *bh)
-> +{
-> +	struct fsg_lun  *curlun = common->curlun;
-> +	u8		*buf = (u8 *)bh->buf;
-> +
-> +	put_unaligned_be64(curlun->num_sectors - 1, &buf[0]);
-> +							/* Max logical block */
-> +	put_unaligned_be32(curlun->blksize, &buf[8]);	/* Block length */
-> +	/* It is safe to keep other fields zeroed */
-
-Blank line preceding the comment, please.
-
-> +	memset(&buf[12], 0, 32 - 12);
-> +	return 32;
-> +}
-> +
->  static int do_read_header(struct fsg_common *common, struct fsg_buffhd *bh)
->  {
->  	struct fsg_lun	*curlun = common->curlun;
-> @@ -1905,6 +1928,17 @@ static int do_scsi_command(struct fsg_common *common)
->  			reply = do_read(common);
->  		break;
->  
-> +	case READ_16:
-> +		common->data_size_from_cmnd =
-> +				get_unaligned_be32(&common->cmnd[10]);
-> +		reply = check_command_size_in_blocks(common, 16,
-> +				      DATA_DIR_TO_HOST,
-> +				      (1<<1) | (0xff<<2) | (0xf<<10), 1,
-> +				      "READ(16)");
-> +		if (reply == 0)
-> +			reply = do_read(common);
-> +		break;
-> +
->  	case READ_CAPACITY:
->  		common->data_size_from_cmnd = 8;
->  		reply = check_command(common, 10, DATA_DIR_TO_HOST,
-> @@ -1914,6 +1948,17 @@ static int do_scsi_command(struct fsg_common *common)
->  			reply = do_read_capacity(common, bh);
->  		break;
->  
-> +	case SERVICE_ACTION_IN_16:
-
-I realize that this is the code for READ_CAPACITY_16, but the commands 
-should be kept in alphabetical order by symbol name.  So this belongs 
-lower down, after REQUEST_SENSE.
-
-> +		if ((common->cmnd[1] & 0x1f) != SAI_READ_CAPACITY_16)
-> +			goto unknown_cmnd;
-> +		common->data_size_from_cmnd = 32;
-
-This should be get_unaligned_be32(&common->cmnd[10]).
-
-> +		reply = check_command(common, 14, DATA_DIR_TO_HOST,
-
-16, not 14.
-
-> +				      (1<<1) | (1<<13), 1,
-
-Do you want to disallow nonzero values for the LBA field?  Then
-this should be (1<<1) | (0xf<<10) | (1<<14).  If you also want to 
-disallow nonzero values for the PMI bit, omit the (1<<14) part.
-
-> +				      "READ CAPACITY(16)");
-> +		if (reply == 0)
-> +			reply = do_read_capacity_16(common, bh);
-> +		break;
-> +
->  	case READ_HEADER:
->  		if (!common->curlun || !common->curlun->cdrom)
->  			goto unknown_cmnd;
-> @@ -2028,6 +2073,17 @@ static int do_scsi_command(struct fsg_common *common)
->  			reply = do_write(common);
->  		break;
->  
-> +	case WRITE_16:
-> +		common->data_size_from_cmnd =
-> +				get_unaligned_be32(&common->cmnd[10]);
-> +		reply = check_command_size_in_blocks(common, 16,
-> +				      DATA_DIR_FROM_HOST,
-> +				      (1<<1) | (0xff<<2) | (0xf<<10), 1,
-> +				      "WRITE(16)");
-> +		if (reply == 0)
-> +			reply = do_write(common);
-> +		break;
-> +
->  	/*
->  	 * Some mandatory commands that we recognize but don't implement.
->  	 * They don't mean much in this setting.  It's left as an exercise
-
-Please resubmit the patch with these changes.
-
-Alan Stern
+Regards,
+Monica Lin Brown.
