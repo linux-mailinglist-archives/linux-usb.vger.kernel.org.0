@@ -2,32 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 922B340BE5C
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Sep 2021 05:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A8440BE63
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Sep 2021 05:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232517AbhIODlz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Sep 2021 23:41:55 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:19978 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbhIODlv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Sep 2021 23:41:51 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4H8QqY74ryzbmWC;
-        Wed, 15 Sep 2021 11:36:25 +0800 (CST)
+        id S232804AbhIODpd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Sep 2021 23:45:33 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:16204 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229980AbhIODpc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Sep 2021 23:45:32 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4H8QzN68PQz1DGjR;
+        Wed, 15 Sep 2021 11:43:12 +0800 (CST)
 Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Wed, 15 Sep 2021 11:40:31 +0800
+ 15.1.2308.8; Wed, 15 Sep 2021 11:44:13 +0800
 Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
  (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Wed, 15 Sep
- 2021 11:40:31 +0800
+ 2021 11:44:12 +0800
 From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>
-Subject: [PATCH] usb: host: ohci-tmio: check return value after calling platform_get_resource()
-Date:   Wed, 15 Sep 2021 11:45:44 +0800
-Message-ID: <20210915034544.2398636-1-yangyingliang@huawei.com>
+CC:     <gregkh@linuxfoundation.org>, <b-liu@ti.com>
+Subject: [PATCH] usb: musb: tusb6010: check return value after calling platform_get_resource()
+Date:   Wed, 15 Sep 2021 11:49:25 +0800
+Message-ID: <20210915034925.2399823-1-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -45,23 +45,25 @@ we need check the return value.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/usb/host/ohci-tmio.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/musb/tusb6010.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/usb/host/ohci-tmio.c b/drivers/usb/host/ohci-tmio.c
-index 08ec2ab0d95a..68e769b82061 100644
---- a/drivers/usb/host/ohci-tmio.c
-+++ b/drivers/usb/host/ohci-tmio.c
-@@ -202,6 +202,9 @@ static int ohci_hcd_tmio_drv_probe(struct platform_device *dev)
- 	if (!cell)
- 		return -EINVAL;
+diff --git a/drivers/usb/musb/tusb6010.c b/drivers/usb/musb/tusb6010.c
+index c42937692207..e0347780907f 100644
+--- a/drivers/usb/musb/tusb6010.c
++++ b/drivers/usb/musb/tusb6010.c
+@@ -1103,6 +1103,11 @@ static int tusb_musb_init(struct musb *musb)
  
-+	if (!regs || !config || !sram)
-+		return -EINVAL;
-+
- 	if (irq < 0)
- 		return irq;
+ 	/* dma address for async dma */
+ 	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!mem) {
++		pr_debug("no async dma resource?\n");
++		ret = -ENODEV;
++		goto done;
++	}
+ 	musb->async = mem->start;
  
+ 	/* dma address for sync dma */
 -- 
 2.25.1
 
