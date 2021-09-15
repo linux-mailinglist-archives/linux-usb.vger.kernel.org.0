@@ -2,268 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C9140BDD8
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Sep 2021 04:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 922B340BE5C
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Sep 2021 05:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233988AbhIOCof (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Sep 2021 22:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbhIOCod (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Sep 2021 22:44:33 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5873AC061762
-        for <linux-usb@vger.kernel.org>; Tue, 14 Sep 2021 19:43:15 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id q11-20020a9d4b0b000000b0051acbdb2869so1595068otf.2
-        for <linux-usb@vger.kernel.org>; Tue, 14 Sep 2021 19:43:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tNmrdyHBY85C8s/wAkstNSGLnQN601xfdUuYWcdHIhM=;
-        b=DyMA4+7gLmsdBiTiE0z9HP894JM1HrHZrdGfm3HvfqosJWPO89OisfkTvwffxdVD6+
-         Zad5B7YYUkt8+/hNW9EXpFKgwT+bd77rOrTRRXOdGhgPoGBw7BS2SJglDR6DDug7KvGJ
-         z8LxKhmiGBKL/mu6bzYMBRKfMNx48hSELzrlKtvC6fgwmXOCGmcjEACaFiMbCTSjJDTy
-         Rgs3rVLU/nYyNJaqm3dCftRXoot1Jelt/pv4oeYCzG4+2SjMp2Z6iBnhGnOHs3VrKET2
-         R4mquCLlG9tmKP31w3yI8W850NBt+XZS3JWCxT8+VH6y1gEqxZfTaICEBUe4GoLIeATn
-         hijA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tNmrdyHBY85C8s/wAkstNSGLnQN601xfdUuYWcdHIhM=;
-        b=Hsh8tkY0SKHznCwWwFNVj64zc+EX2P86HZfmOnpKj1/eU+0FvuzTf/Gc+BMnIDAeZi
-         mPZN+WQThJ2yGWvkQR8BCPXPYT483WTgvBN/EgfMi9mBAsxQoo3+AyKsp113g/zu56Lf
-         huBUsmWbN2vaxuFjWzAfybJag+w/utldLqoUsq5pvd1Tn6xvbzEQBcyr3bXE1nQUIH4k
-         ljHu9sm1gwr2lGQktw37DQWxohHNeX2jpmmk61s/kSggc+Y0jRpwCaC3F6ncM3TrUErJ
-         FrrTCHdG7+m/NzFpUiW9VZMn3jNTpFx+Wnad3RMSTkBAQNKt8F4SLOX4Gx9zKT31JZvQ
-         WpHg==
-X-Gm-Message-State: AOAM5300lNH8VAk3SpaYCxVM6ueaNL9qF29PLC4DtxE/ZJZ1pk3Kj6jg
-        zmZeo8coglexHMoinioLKl1T3J/SZeJAaw==
-X-Google-Smtp-Source: ABdhPJzqQ3HdgDW2xWQDpyRLSFxaJF9zE9RR3EeLl1fWD+gRi6WH63pb7blLdz/zkO1cINCweaI8GQ==
-X-Received: by 2002:a05:6830:10c8:: with SMTP id z8mr17165664oto.175.1631673794569;
-        Tue, 14 Sep 2021 19:43:14 -0700 (PDT)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id s14sm2651965oiw.8.2021.09.14.19.43.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Sep 2021 19:43:14 -0700 (PDT)
-Date:   Tue, 14 Sep 2021 19:44:05 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Prasad Malisetty <pmaliset@codeaurora.org>
-Cc:     agross@kernel.org, bhelgaas@google.com, robh+dt@kernel.org,
-        swboyd@chromium.org, lorenzo.pieralisi@arm.com,
-        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dianders@chromium.org,
-        mka@chromium.org, vbadigan@codeaurora.org, sallenki@codeaurora.org,
-        manivannan.sadhasivam@linaro.org
-Subject: Re: [PATCH v7 4/4] PCI: qcom: Switch pcie_1_pipe_clk_src after PHY
- init in SC7280
-Message-ID: <YUFd9aTlTJ45b9Gg@ripper>
-References: <1631643550-29960-1-git-send-email-pmaliset@codeaurora.org>
- <1631643550-29960-5-git-send-email-pmaliset@codeaurora.org>
+        id S232517AbhIODlz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Sep 2021 23:41:55 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:19978 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230076AbhIODlv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Sep 2021 23:41:51 -0400
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4H8QqY74ryzbmWC;
+        Wed, 15 Sep 2021 11:36:25 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Wed, 15 Sep 2021 11:40:31 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Wed, 15 Sep
+ 2021 11:40:31 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>
+Subject: [PATCH] usb: host: ohci-tmio: check return value after calling platform_get_resource()
+Date:   Wed, 15 Sep 2021 11:45:44 +0800
+Message-ID: <20210915034544.2398636-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1631643550-29960-5-git-send-email-pmaliset@codeaurora.org>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue 14 Sep 11:19 PDT 2021, Prasad Malisetty wrote:
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-> On the SC7280, the clock source for gcc_pcie_1_pipe_clk_src
-> must be the TCXO while gdsc is enabled. After PHY init successful
-> clock source should switch to pipe clock for gcc_pcie_1_pipe_clk_src.
-> 
-> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
-> ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 90 +++++++++++++++++++++++++++++-----
->  1 file changed, 79 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 8a7a300..380c962 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -166,6 +166,9 @@ struct qcom_pcie_resources_2_7_0 {
->  	struct regulator_bulk_data supplies[2];
->  	struct reset_control *pci_reset;
->  	struct clk *pipe_clk;
-> +	struct clk *gcc_pcie_1_pipe_clk_src;
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/usb/host/ohci-tmio.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Afaict you have both 2 PCIe controllers on sc7280, so I think it seems
-more reasonable to shorted this to "pipe_clk_src".
+diff --git a/drivers/usb/host/ohci-tmio.c b/drivers/usb/host/ohci-tmio.c
+index 08ec2ab0d95a..68e769b82061 100644
+--- a/drivers/usb/host/ohci-tmio.c
++++ b/drivers/usb/host/ohci-tmio.c
+@@ -202,6 +202,9 @@ static int ohci_hcd_tmio_drv_probe(struct platform_device *dev)
+ 	if (!cell)
+ 		return -EINVAL;
+ 
++	if (!regs || !config || !sram)
++		return -EINVAL;
++
+ 	if (irq < 0)
+ 		return irq;
+ 
+-- 
+2.25.1
 
-> +	struct clk *phy_pipe_clk;
-> +	struct clk *ref_clk_src;
->  };
->  
->  union qcom_pcie_resources {
-> @@ -189,6 +192,11 @@ struct qcom_pcie_ops {
->  	int (*config_sid)(struct qcom_pcie *pcie);
->  };
->  
-> +struct qcom_pcie_cfg {
-> +	const struct qcom_pcie_ops *ops;
-> +	bool pcie_1_pipe_clk_src_switch;
-
-Perhaps something little bit more generic, like pipe_clk_need_muxing?
-
-> +};
-> +
->  struct qcom_pcie {
->  	struct dw_pcie *pci;
->  	void __iomem *parf;			/* DT parf */
-> @@ -197,6 +205,7 @@ struct qcom_pcie {
->  	struct phy *phy;
->  	struct gpio_desc *reset;
->  	const struct qcom_pcie_ops *ops;
-> +	bool pcie_1_pipe_clk_src_switch;
->  };
->  
->  #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
-> @@ -1167,6 +1176,20 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
->  	if (ret < 0)
->  		return ret;
->  
-> +	if (pcie->pcie_1_pipe_clk_src_switch) {
-
-This looks much better, now it will easily scale to other platforms that
-have inherited this need.
-
-> +		res->gcc_pcie_1_pipe_clk_src = devm_clk_get(dev, "pipe_mux");
-> +		if (IS_ERR(res->gcc_pcie_1_pipe_clk_src))
-> +			return PTR_ERR(res->gcc_pcie_1_pipe_clk_src);
-> +
-> +		res->phy_pipe_clk = devm_clk_get(dev, "phy_pipe");
-> +		if (IS_ERR(res->phy_pipe_clk))
-> +			return PTR_ERR(res->phy_pipe_clk);
-> +
-> +		res->ref_clk_src = devm_clk_get(dev, "ref");
-> +		if (IS_ERR(res->ref_clk_src))
-> +			return PTR_ERR(res->ref_clk_src);
-> +	}
-> +
->  	res->pipe_clk = devm_clk_get(dev, "pipe");
->  	return PTR_ERR_OR_ZERO(res->pipe_clk);
->  }
-> @@ -1185,6 +1208,10 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
->  		return ret;
->  	}
->  
-> +	/* Set TCXO as clock source for gcc_pcie_1_pipe_clk_src */
-> +	if (pcie->pcie_1_pipe_clk_src_switch)
-> +		clk_set_parent(res->gcc_pcie_1_pipe_clk_src, res->ref_clk_src);
-> +
->  	ret = clk_bulk_prepare_enable(res->num_clks, res->clks);
->  	if (ret < 0)
->  		goto err_disable_regulators;
-> @@ -1256,6 +1283,10 @@ static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
->  {
->  	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
->  
-> +	/* Set pipe clock as clock source for gcc_pcie_1_pipe_clk_src */
-> +	if (pcie->pcie_1_pipe_clk_src_switch)
-> +		clk_set_parent(res->gcc_pcie_1_pipe_clk_src, res->phy_pipe_clk);
-> +
->  	return clk_prepare_enable(res->pipe_clk);
->  }
->  
-> @@ -1456,6 +1487,39 @@ static const struct qcom_pcie_ops ops_1_9_0 = {
->  	.config_sid = qcom_pcie_config_sid_sm8250,
->  };
->  
-> +static const struct qcom_pcie_cfg apq8084_cfg = {
-> +	.ops = &ops_1_0_0,
-> +};
-> +
-> +static const struct qcom_pcie_cfg ipq8064_cfg = {
-> +	.ops = &ops_2_1_0,
-> +};
-> +
-> +static const struct qcom_pcie_cfg msm8996_cfg = {
-> +	.ops = &ops_2_3_2,
-> +};
-> +
-> +static const struct qcom_pcie_cfg ipq8074_cfg = {
-> +	.ops = &ops_2_3_3,
-> +};
-> +
-> +static const struct qcom_pcie_cfg ipq4019_cfg = {
-> +	.ops = &ops_2_4_0,
-> +};
-> +
-> +static const struct qcom_pcie_cfg sdm845_cfg = {
-> +	.ops = &ops_2_7_0,
-> +};
-> +
-> +static const struct qcom_pcie_cfg sm8250_cfg = {
-> +	.ops = &ops_1_9_0,
-> +};
-> +
-> +static const struct qcom_pcie_cfg sc7280_cfg = {
-> +	.ops = &ops_1_9_0,
-> +	.pcie_1_pipe_clk_src_switch = true,
-> +};
-> +
->  static const struct dw_pcie_ops dw_pcie_ops = {
->  	.link_up = qcom_pcie_link_up,
->  	.start_link = qcom_pcie_start_link,
-> @@ -1467,6 +1531,7 @@ static int qcom_pcie_probe(struct platform_device *pdev)
->  	struct pcie_port *pp;
->  	struct dw_pcie *pci;
->  	struct qcom_pcie *pcie;
-> +	const struct qcom_pcie_cfg *pcie_cfg = NULL;
-
-First use of this variable is an assignment, so I don't see a need for
-zero initialize it.
-
-Regards,
-Bjorn
-
->  	int ret;
->  
->  	pcie = devm_kzalloc(dev, sizeof(*pcie), GFP_KERNEL);
-> @@ -1488,7 +1553,9 @@ static int qcom_pcie_probe(struct platform_device *pdev)
->  
->  	pcie->pci = pci;
->  
-> -	pcie->ops = of_device_get_match_data(dev);
-> +	pcie_cfg = of_device_get_match_data(dev);
-> +	pcie->ops = pcie_cfg->ops;
-> +	pcie->pcie_1_pipe_clk_src_switch = pcie_cfg->pcie_1_pipe_clk_src_switch;
->  
->  	pcie->reset = devm_gpiod_get_optional(dev, "perst", GPIOD_OUT_HIGH);
->  	if (IS_ERR(pcie->reset)) {
-> @@ -1545,16 +1612,17 @@ static int qcom_pcie_probe(struct platform_device *pdev)
->  }
->  
->  static const struct of_device_id qcom_pcie_match[] = {
-> -	{ .compatible = "qcom,pcie-apq8084", .data = &ops_1_0_0 },
-> -	{ .compatible = "qcom,pcie-ipq8064", .data = &ops_2_1_0 },
-> -	{ .compatible = "qcom,pcie-ipq8064-v2", .data = &ops_2_1_0 },
-> -	{ .compatible = "qcom,pcie-apq8064", .data = &ops_2_1_0 },
-> -	{ .compatible = "qcom,pcie-msm8996", .data = &ops_2_3_2 },
-> -	{ .compatible = "qcom,pcie-ipq8074", .data = &ops_2_3_3 },
-> -	{ .compatible = "qcom,pcie-ipq4019", .data = &ops_2_4_0 },
-> -	{ .compatible = "qcom,pcie-qcs404", .data = &ops_2_4_0 },
-> -	{ .compatible = "qcom,pcie-sdm845", .data = &ops_2_7_0 },
-> -	{ .compatible = "qcom,pcie-sm8250", .data = &ops_1_9_0 },
-> +	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
-> +	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
-> +	{ .compatible = "qcom,pcie-ipq8064-v2", .data = &ipq8064_cfg },
-> +	{ .compatible = "qcom,pcie-apq8064", .data = &ipq8064_cfg },
-> +	{ .compatible = "qcom,pcie-msm8996", .data = &msm8996_cfg },
-> +	{ .compatible = "qcom,pcie-ipq8074", .data = &ipq8074_cfg },
-> +	{ .compatible = "qcom,pcie-ipq4019", .data = &ipq4019_cfg },
-> +	{ .compatible = "qcom,pcie-qcs404", .data = &ipq4019_cfg },
-> +	{ .compatible = "qcom,pcie-sdm845", .data = &sdm845_cfg },
-> +	{ .compatible = "qcom,pcie-sm8250", .data = &sm8250_cfg },
-> +	{ .compatible = "qcom,pcie-sc7280", .data = &sc7280_cfg },
->  	{ }
->  };
->  
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
-> 
