@@ -2,214 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0A4740B94E
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Sep 2021 22:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2155840BCF8
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Sep 2021 03:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233555AbhINUde (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Sep 2021 16:33:34 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:54479 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S233145AbhINUde (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Sep 2021 16:33:34 -0400
-Received: (qmail 169149 invoked by uid 1000); 14 Sep 2021 16:32:15 -0400
-Date:   Tue, 14 Sep 2021 16:32:15 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Petr Nechaev <petr.nechaev@cogentembedded.com>
-Subject: Re: [PATCH v2] usb: gadget: storage: add support for media larger
- than 2T
-Message-ID: <20210914203215.GA168961@rowland.harvard.edu>
-References: <20210914151329.GD155245@rowland.harvard.edu>
- <20210914200917.24767-1-nikita.yoush@cogentembedded.com>
+        id S231673AbhIOBPP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Sep 2021 21:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231365AbhIOBPP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Sep 2021 21:15:15 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1C6C061762
+        for <linux-usb@vger.kernel.org>; Tue, 14 Sep 2021 18:13:57 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id y3-20020a4ab403000000b00290e2a52c71so329777oon.2
+        for <linux-usb@vger.kernel.org>; Tue, 14 Sep 2021 18:13:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=fye5BxPOrlWKYYLZtsMn4MC6bBGJt02zFY1/zJ5TMGY=;
+        b=MZQHMBIYPJkDu38cafY9egRxkkGrq4MLPBCaGkD+OAZbzsyJ+myDA6eNNaxnxFbLNK
+         e2EEuRbKcsPnZhkfQStJtSPdAiI/TRJ74MQaIABJ66M3r0b0jHTWMOLNsdxI3ZjaJkDj
+         GLW4Mgju2/a2bbyeUetWD1ZtD6kLbB/Ia5VSs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=fye5BxPOrlWKYYLZtsMn4MC6bBGJt02zFY1/zJ5TMGY=;
+        b=q52uAeV7HmXSsONMhaaZInDhY1YEn0hb0b14E1rWHYJ5TW2gpHPSteLYffJaCmPedq
+         df12eFI2lghkgEkK7Az4SNDvI5B1HNL1fOmYYwBNkzXUlVQ9JgG4QtnFCb/P+5KnJzPC
+         eDipkW43bVKs/1JqZbiuXfvqzubssZHTzPCU1Gg81TYvK6xG7cnaIqqRf2Fza3P3dJEh
+         rgCBb9/Joz/8dOQhqvvBhEbtzxD7P+e2cmQz8cHQPv6/UUrnrQBnq7IJp5cry9960j8n
+         DvKmpT1rLJrq9LiAfG6gaOOszdI7DWHikRBUdc0H3MZy4jya2/ACuMgWXbVV8au6lqEL
+         lUww==
+X-Gm-Message-State: AOAM532fpIM80oGIJSi8yA1AmP91gIeTWVIpyS6kXteY6rMw9mNQZthZ
+        flL3ykJBt7yndFIclDrrfmJl+gniNeF4kI9/kT6evA==
+X-Google-Smtp-Source: ABdhPJyldbFleOsQkMUKsmWFviYenDiXUNcW52RTf+GR1ym674J9EKp24jVyBGbGyY6HVNG9Gnf0nQ9Nuzr5Xl9pln8=
+X-Received: by 2002:a4a:919e:: with SMTP id d30mr16454443ooh.8.1631668435971;
+ Tue, 14 Sep 2021 18:13:55 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 14 Sep 2021 18:13:55 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210914200917.24767-1-nikita.yoush@cogentembedded.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1631643550-29960-4-git-send-email-pmaliset@codeaurora.org>
+References: <1631643550-29960-1-git-send-email-pmaliset@codeaurora.org> <1631643550-29960-4-git-send-email-pmaliset@codeaurora.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Tue, 14 Sep 2021 18:13:55 -0700
+Message-ID: <CAE-0n52p+5rabienYNG_OQfiaLLCgaRj9vfeKR6s3-bCdzHDQA@mail.gmail.com>
+Subject: Re: [PATCH v7 3/4] arm64: dts: qcom: sc7280: Add PCIe nodes for IDP board
+To:     Prasad Malisetty <pmaliset@codeaurora.org>, agross@kernel.org,
+        bhelgaas@google.com, bjorn.andersson@linaro.org,
+        lorenzo.pieralisi@arm.com, robh+dt@kernel.org, svarbanov@mm-sol.com
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
+        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 14, 2021 at 11:09:17PM +0300, Nikita Yushchenko wrote:
-> This adds support for READ_CAPACITY(16), READ(16) and WRITE(16)
-> commands, and fixes READ_CAPACITY command to return 0xffffffff if
-> media size does not fit in 32 bits.
-> 
-> This makes f_mass_storage to export a 16T disk array correctly.
-> 
-> Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Quoting Prasad Malisetty (2021-09-14 11:19:09)
+> Enable PCIe controller and PHY for sc7280 IDP board.
+> Add specific NVMe GPIO entries for SKU1 and SKU2 support.
+>
+> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
 > ---
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dts  |  9 +++++++++
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 32 ++++++++++++++++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sc7280-idp2.dts |  9 +++++++++
+>  3 files changed, 50 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+> index 64fc22a..2cc6b0a 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+> @@ -61,6 +61,15 @@
+>         modem-init;
+>  };
+>
+> +&pcie1_default_state {
+> +       nvme-n {
+> +               pins = "gpio19";
+> +               function = "gpio";
+> +
+> +               bias-pull-up;
+> +       };
 
-You didn't mention here how this version of the patch differs from the 
-previous version.  Some people care about things like this.
+I don't think the style is to have a single container node anymore.
+Instead, each pin gets a different node and then pinctrl-0 has a list of
+phandles to the different nodes. qcom maintainers may have more input
+here.
 
-Nevertheless, the changes appear to be correct.
+Also, this should really go into a different section than here. I
+thought the style was to have a 'board specific' pinctrl section.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
->  drivers/usb/gadget/function/f_mass_storage.c | 87 ++++++++++++++++++--
->  1 file changed, 80 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-> index 7c96c4665178..96de401f1282 100644
-> --- a/drivers/usb/gadget/function/f_mass_storage.c
-> +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> @@ -619,7 +619,7 @@ static int sleep_thread(struct fsg_common *common, bool can_freeze,
->  static int do_read(struct fsg_common *common)
->  {
->  	struct fsg_lun		*curlun = common->curlun;
-> -	u32			lba;
-> +	u64			lba;
->  	struct fsg_buffhd	*bh;
->  	int			rc;
->  	u32			amount_left;
-> @@ -634,7 +634,10 @@ static int do_read(struct fsg_common *common)
->  	if (common->cmnd[0] == READ_6)
->  		lba = get_unaligned_be24(&common->cmnd[1]);
->  	else {
-> -		lba = get_unaligned_be32(&common->cmnd[2]);
-> +		if (common->cmnd[0] == READ_16)
-> +			lba = get_unaligned_be64(&common->cmnd[2]);
-> +		else		/* READ_10 or READ_12 */
-> +			lba = get_unaligned_be32(&common->cmnd[2]);
->  
->  		/*
->  		 * We allow DPO (Disable Page Out = don't save data in the
-> @@ -747,7 +750,7 @@ static int do_read(struct fsg_common *common)
->  static int do_write(struct fsg_common *common)
->  {
->  	struct fsg_lun		*curlun = common->curlun;
-> -	u32			lba;
-> +	u64			lba;
->  	struct fsg_buffhd	*bh;
->  	int			get_some_more;
->  	u32			amount_left_to_req, amount_left_to_write;
-> @@ -771,7 +774,10 @@ static int do_write(struct fsg_common *common)
->  	if (common->cmnd[0] == WRITE_6)
->  		lba = get_unaligned_be24(&common->cmnd[1]);
->  	else {
-> -		lba = get_unaligned_be32(&common->cmnd[2]);
-> +		if (common->cmnd[0] == WRITE_16)
-> +			lba = get_unaligned_be64(&common->cmnd[2]);
-> +		else		/* WRITE_10 or WRITE_12 */
-> +			lba = get_unaligned_be32(&common->cmnd[2]);
->  
->  		/*
->  		 * We allow DPO (Disable Page Out = don't save data in the
-> @@ -1146,6 +1152,7 @@ static int do_read_capacity(struct fsg_common *common, struct fsg_buffhd *bh)
->  	u32		lba = get_unaligned_be32(&common->cmnd[2]);
->  	int		pmi = common->cmnd[8];
->  	u8		*buf = (u8 *)bh->buf;
-> +	u32		max_lba;
->  
->  	/* Check the PMI and LBA fields */
->  	if (pmi > 1 || (pmi == 0 && lba != 0)) {
-> @@ -1153,12 +1160,37 @@ static int do_read_capacity(struct fsg_common *common, struct fsg_buffhd *bh)
->  		return -EINVAL;
->  	}
->  
-> -	put_unaligned_be32(curlun->num_sectors - 1, &buf[0]);
-> -						/* Max logical block */
-> -	put_unaligned_be32(curlun->blksize, &buf[4]);/* Block length */
-> +	if (curlun->num_sectors < 0x100000000ULL)
-> +		max_lba = curlun->num_sectors - 1;
-> +	else
-> +		max_lba = 0xffffffff;
-> +	put_unaligned_be32(max_lba, &buf[0]);		/* Max logical block */
-> +	put_unaligned_be32(curlun->blksize, &buf[4]);	/* Block length */
->  	return 8;
->  }
->  
-> +static int do_read_capacity_16(struct fsg_common *common, struct fsg_buffhd *bh)
-> +{
-> +	struct fsg_lun  *curlun = common->curlun;
-> +	u64		lba = get_unaligned_be64(&common->cmnd[2]);
-> +	int		pmi = common->cmnd[14];
-> +	u8		*buf = (u8 *)bh->buf;
+> +};
 > +
-> +	/* Check the PMI and LBA fields */
-> +	if (pmi > 1 || (pmi == 0 && lba != 0)) {
-> +		curlun->sense_data = SS_INVALID_FIELD_IN_CDB;
-> +		return -EINVAL;
-> +	}
-> +
-> +	put_unaligned_be64(curlun->num_sectors - 1, &buf[0]);
-> +							/* Max logical block */
-> +	put_unaligned_be32(curlun->blksize, &buf[8]);	/* Block length */
-> +
-> +	/* It is safe to keep other fields zeroed */
-> +	memset(&buf[12], 0, 32 - 12);
-> +	return 32;
-> +}
-> +
->  static int do_read_header(struct fsg_common *common, struct fsg_buffhd *bh)
->  {
->  	struct fsg_lun	*curlun = common->curlun;
-> @@ -1905,6 +1937,17 @@ static int do_scsi_command(struct fsg_common *common)
->  			reply = do_read(common);
->  		break;
->  
-> +	case READ_16:
-> +		common->data_size_from_cmnd =
-> +				get_unaligned_be32(&common->cmnd[10]);
-> +		reply = check_command_size_in_blocks(common, 16,
-> +				      DATA_DIR_TO_HOST,
-> +				      (1<<1) | (0xff<<2) | (0xf<<10), 1,
-> +				      "READ(16)");
-> +		if (reply == 0)
-> +			reply = do_read(common);
-> +		break;
-> +
->  	case READ_CAPACITY:
->  		common->data_size_from_cmnd = 8;
->  		reply = check_command(common, 10, DATA_DIR_TO_HOST,
-> @@ -1957,6 +2000,25 @@ static int do_scsi_command(struct fsg_common *common)
->  			reply = do_request_sense(common, bh);
->  		break;
->  
-> +	case SERVICE_ACTION_IN_16:
-> +		switch (common->cmnd[1] & 0x1f) {
-> +
-> +		case SAI_READ_CAPACITY_16:
-> +			common->data_size_from_cmnd =
-> +				get_unaligned_be32(&common->cmnd[10]);
-> +			reply = check_command(common, 16, DATA_DIR_TO_HOST,
-> +					      (1<<1) | (0xff<<2) | (0xf<<10) |
-> +					      (1<<14), 1,
-> +					      "READ CAPACITY(16)");
-> +			if (reply == 0)
-> +				reply = do_read_capacity_16(common, bh);
-> +			break;
-> +
-> +		default:
-> +			goto unknown_cmnd;
-> +		}
-> +		break;
-> +
->  	case START_STOP:
->  		common->data_size_from_cmnd = 0;
->  		reply = check_command(common, 6, DATA_DIR_NONE,
-> @@ -2028,6 +2090,17 @@ static int do_scsi_command(struct fsg_common *common)
->  			reply = do_write(common);
->  		break;
->  
-> +	case WRITE_16:
-> +		common->data_size_from_cmnd =
-> +				get_unaligned_be32(&common->cmnd[10]);
-> +		reply = check_command_size_in_blocks(common, 16,
-> +				      DATA_DIR_FROM_HOST,
-> +				      (1<<1) | (0xff<<2) | (0xf<<10), 1,
-> +				      "WRITE(16)");
-> +		if (reply == 0)
-> +			reply = do_write(common);
-> +		break;
-> +
->  	/*
->  	 * Some mandatory commands that we recognize but don't implement.
->  	 * They don't mean much in this setting.  It's left as an exercise
-> -- 
-> 2.20.1
-> 
+>  &pmk8350_vadc {
+>         pmr735a_die_temp {
+>                 reg = <PMR735A_ADC7_DIE_TEMP>;
