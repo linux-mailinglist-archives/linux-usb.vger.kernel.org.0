@@ -2,83 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 526DA40C42A
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Sep 2021 13:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D16D40C506
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Sep 2021 14:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237566AbhIOLLH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Sep 2021 07:11:07 -0400
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:57650 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237533AbhIOLLG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Sep 2021 07:11:06 -0400
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18FAPcFj026738;
-        Wed, 15 Sep 2021 07:09:46 -0400
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com with ESMTP id 3b2v0scanp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Sep 2021 07:09:46 -0400
-Received: from SCSQMBX11.ad.analog.com (SCSQMBX11.ad.analog.com [10.77.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 18FB9iNX056201
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 15 Sep 2021 07:09:45 -0400
-Received: from SCSQMBX11.ad.analog.com (10.77.17.10) by
- SCSQMBX11.ad.analog.com (10.77.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.858.5;
- Wed, 15 Sep 2021 04:09:43 -0700
-Received: from zeus.spd.analog.com (10.66.68.11) by scsqmbx11.ad.analog.com
- (10.77.17.10) with Microsoft SMTP Server id 15.2.858.5 via Frontend
- Transport; Wed, 15 Sep 2021 04:09:43 -0700
-Received: from ramonaalexandra-Precision-5520.ad.analog.com ([10.48.65.154])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 18FB9er9006373;
-        Wed, 15 Sep 2021 07:09:41 -0400
-From:   Ramona Alexandra Nechita <ramona.nechita@analog.com>
-To:     <linux-usb@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
-        Ramona Alexandra Nechita <ramona.nechita@analog.com>
-Subject: [PATCH] usb: host: Updated MAX3421 to MAX3421E in Kconfig
-Date:   Wed, 15 Sep 2021 14:09:37 +0300
-Message-ID: <20210915110937.17647-1-ramona.nechita@analog.com>
-X-Mailer: git-send-email 2.25.1
+        id S237393AbhIOMS3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Sep 2021 08:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56916 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232399AbhIOMS2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Sep 2021 08:18:28 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8450C061574;
+        Wed, 15 Sep 2021 05:17:09 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id t8so3580452wrq.4;
+        Wed, 15 Sep 2021 05:17:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kcS2XyyHq4ePpqFxgqBZYVU+YiIVDnpExo/3UThHlpY=;
+        b=feGAmNrkw6Q3FUFkc1YDFe6vPTegqPB5Ux8vOjTw69oc3voQyjgPEIVUL16kwAVNh7
+         UKEBbYRy5oC/aKNUJbuoVgs9aV7+llCcbWZ4rCaTt0xlvabNWmvtmnkJP9oaDVJsOjxY
+         rc3EfK/zU1FmEhKvz4AkSsdW07KjH2JRSzf4CQeeL/LkylXOHBCXbv5Sk921MBXPcIY+
+         HaD1NQlvUnfvxfjQE8dgmDXgg+i/Jp7FUClBQ0qylJ2Fra5RgIHZKxbvnyaxOP52M+Jj
+         sJI0UZjVC0ELCC9aPPrxjdrI3yFI8W5u8B60bvPtjLMDoM+/mPW3IaT9xgYrJTy1O2v+
+         4gEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kcS2XyyHq4ePpqFxgqBZYVU+YiIVDnpExo/3UThHlpY=;
+        b=2lcTMRSuVwTjS/6jUSSoTj/ERGU0I1BbZey9mVZUZ6AdWSBWRj0I7XwMtvV3yt9xrr
+         Dzzyy4MEJ0y65vy/wO6Fj7MGlKtYMEQHgT1UMG2NJEFzN6RwcLi9U4JnvWwbEgLJbqG6
+         kjlwgawW2HDYUcHnwpq2OEJWrN6p9OkGvX97Y+bkaWHjwkp6FYzw6QqV7pTUslMlIt6+
+         QziVqhsxRYkRiUXEZnowQ39r6rRFPaxeq73NabLizKGVPxojp3rDDNmBkbTxsDUHMB/0
+         6fvr9HoMNQ2XRAcwTrmfVhCGOn0sUQZYl3Q7KhCSeVfQsLGNIdSOC78KzipR8rlyF7Cs
+         B+sg==
+X-Gm-Message-State: AOAM530b/UiJzHoXGF8AqL1QV6Bwf81oVv2tsnStQkqkISog4asFCRvU
+        gkVqCIUJD6ku1/F/08RoUxk=
+X-Google-Smtp-Source: ABdhPJwXpvh6d2fHuiAIZ3Z+6VahDK/oZfdxpZp+tJJ4tHRqXbceS/l7pqyxeEemy07MJE6XoLS3KQ==
+X-Received: by 2002:adf:e684:: with SMTP id r4mr4763112wrm.229.1631708228396;
+        Wed, 15 Sep 2021 05:17:08 -0700 (PDT)
+Received: from CLU-56K1TB3.ad.garmin.com ([176.223.64.4])
+        by smtp.gmail.com with ESMTPSA id m1sm4028225wmq.10.2021.09.15.05.17.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Sep 2021 05:17:08 -0700 (PDT)
+From:   Razvan Heghedus <heghedus.razvan@gmail.com>
+Cc:     heghedus.razvan@gmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        Anant Thazhemadam <anant.thazhemadam@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: misc: ehset: Workaround for "special" hubs
+Date:   Wed, 15 Sep 2021 15:16:13 +0300
+Message-Id: <20210915121615.3790-1-heghedus.razvan@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: 9n9_xPIW_7Ey_3mqCTlwCf9F7JSLuyxN
-X-Proofpoint-GUID: 9n9_xPIW_7Ey_3mqCTlwCf9F7JSLuyxN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
- definitions=2021-09-15_02,2021-09-15_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 clxscore=1011 adultscore=0 mlxlogscore=894
- impostorscore=0 spamscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0
- phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109030001 definitions=main-2109150072
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-MAX3421 is supposed to be MAX3421E, Kconfig was modified
-accordingly.
+The USB2.0 spec chapter 11.24.2.13 says that the USB port which is going
+under test needs to be put in suspend state before sending the test
+command. Many hubs, don't enforce this precondition and they work fine
+without this step. But there are some "special" hubs, which requires to
+disable the port power before sending the test command.
 
-Signed-off-by: Ramona Alexandra Nechita <ramona.nechita@analog.com>
+Because the USB spec mention that the port should be suspended, also
+do this step before sending the test command. This could rise the
+problem with other hubs which are not compliant with the spec and the
+test command will not work if the port is suspend. If such hubs are
+found, a similar workaround like the disable part could be implemented
+to skip the suspend port command.
+
+Signed-off-by: Razvan Heghedus <heghedus.razvan@gmail.com>
 ---
- drivers/usb/host/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Changes in v2:
+  - style change regarding multi-line comments and a new black line
+    after local variable definitions
+  - No more corporate email annotation
+This time without that corporate email annotation.
+Also has a couple of style changes regardind multi-line comments and a
+black line after local variable definitions.
+ drivers/usb/misc/ehset.c | 81 ++++++++++++++++++++++++++++++++--------
+ 1 file changed, 65 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index 79b2e79dddd0..0ffa77163ae0 100644
---- a/drivers/usb/host/Kconfig
-+++ b/drivers/usb/host/Kconfig
-@@ -372,7 +372,7 @@ config USB_FOTG210_HCD
- 	  module will be called fotg210-hcd.
+diff --git a/drivers/usb/misc/ehset.c b/drivers/usb/misc/ehset.c
+index f87890f9cd26..b848bbdee802 100644
+--- a/drivers/usb/misc/ehset.c
++++ b/drivers/usb/misc/ehset.c
+@@ -18,6 +18,47 @@
+ #define TEST_SINGLE_STEP_GET_DEV_DESC		0x0107
+ #define TEST_SINGLE_STEP_SET_FEATURE		0x0108
  
- config USB_MAX3421_HCD
--	tristate "MAX3421 HCD (USB-over-SPI) support"
-+	tristate "MAX3421E HCD (USB-over-SPI) support"
- 	depends on USB && SPI
- 	---help---
- 	  The Maxim MAX3421E chip supports standard USB 2.0-compliant
++/*
++ * A list of USB hubs which requires to disable the power
++ * to the port before starting the testing procedures.
++ */
++static const struct usb_device_id ehset_hub_list[] = {
++	{USB_DEVICE(0x0424, 0x4502)},
++	{USB_DEVICE(0x0424, 0x4913)},
++	{USB_DEVICE(0x0451, 0x8027)},
++	{}
++};
++
++static int ehset_prepare_port_for_testing(struct usb_device *hub_udev, u16 portnum)
++{
++	int ret = 0;
++
++	/*
++	 * The USB2.0 spec chapter 11.24.2.13 says that the USB port which is
++	 * going under test needs to be put in suspend before sending the
++	 * test command. Most hubs don't enforce this precondition, but there
++	 * are some hubs which needs to disable the power to the port before
++	 * starting the test.
++	 */
++	if (usb_match_id(to_usb_interface(hub_udev->dev.parent), ehset_hub_list)) {
++		ret = usb_control_msg_send(hub_udev, 0, USB_REQ_CLEAR_FEATURE,
++					   USB_RT_PORT, USB_PORT_FEAT_ENABLE,
++					   portnum, NULL, 0, 1000, GFP_KERNEL);
++		/* Wait for the port to be disabled. It's an arbitrary value
++		 * which worked every time.
++		 */
++		msleep(100);
++	} else {
++		/* For the hubs which are compliant with the spec,
++		 * put the port in SUSPEND.
++		 */
++		ret = usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
++					   USB_RT_PORT, USB_PORT_FEAT_SUSPEND,
++					   portnum, NULL, 0, 1000, GFP_KERNEL);
++	}
++	return ret;
++}
++
+ static int ehset_probe(struct usb_interface *intf,
+ 		       const struct usb_device_id *id)
+ {
+@@ -30,28 +71,36 @@ static int ehset_probe(struct usb_interface *intf,
+ 
+ 	switch (test_pid) {
+ 	case TEST_SE0_NAK_PID:
+-		ret = usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
+-					   USB_RT_PORT, USB_PORT_FEAT_TEST,
+-					   (USB_TEST_SE0_NAK << 8) | portnum,
+-					   NULL, 0, 1000, GFP_KERNEL);
++		ret = ehset_prepare_port_for_testing(hub_udev, portnum);
++		if (!ret)
++			ret = usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
++						   USB_RT_PORT, USB_PORT_FEAT_TEST,
++						   (USB_TEST_SE0_NAK << 8) | portnum,
++						   NULL, 0, 1000, GFP_KERNEL);
+ 		break;
+ 	case TEST_J_PID:
+-		ret = usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
+-					   USB_RT_PORT, USB_PORT_FEAT_TEST,
+-					   (USB_TEST_J << 8) | portnum, NULL, 0,
+-					   1000, GFP_KERNEL);
++		ret = ehset_prepare_port_for_testing(hub_udev, portnum);
++		if (!ret)
++			ret = usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
++						   USB_RT_PORT, USB_PORT_FEAT_TEST,
++						   (USB_TEST_J << 8) | portnum, NULL, 0,
++						   1000, GFP_KERNEL);
+ 		break;
+ 	case TEST_K_PID:
+-		ret = usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
+-					   USB_RT_PORT, USB_PORT_FEAT_TEST,
+-					   (USB_TEST_K << 8) | portnum, NULL, 0,
+-					   1000, GFP_KERNEL);
++		ret = ehset_prepare_port_for_testing(hub_udev, portnum);
++		if (!ret)
++			ret = usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
++						   USB_RT_PORT, USB_PORT_FEAT_TEST,
++						   (USB_TEST_K << 8) | portnum, NULL, 0,
++						   1000, GFP_KERNEL);
+ 		break;
+ 	case TEST_PACKET_PID:
+-		ret = usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
+-					   USB_RT_PORT, USB_PORT_FEAT_TEST,
+-					   (USB_TEST_PACKET << 8) | portnum,
+-					   NULL, 0, 1000, GFP_KERNEL);
++		ret = ehset_prepare_port_for_testing(hub_udev, portnum);
++		if (!ret)
++			ret = usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
++						   USB_RT_PORT, USB_PORT_FEAT_TEST,
++						   (USB_TEST_PACKET << 8) | portnum,
++						   NULL, 0, 1000, GFP_KERNEL);
+ 		break;
+ 	case TEST_HS_HOST_PORT_SUSPEND_RESUME:
+ 		/* Test: wait for 15secs -> suspend -> 15secs delay -> resume */
 -- 
-2.25.1
+2.33.0
 
