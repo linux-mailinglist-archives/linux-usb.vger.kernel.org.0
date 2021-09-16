@@ -2,139 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C61D740DE38
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Sep 2021 17:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA8140DEB9
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Sep 2021 17:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239958AbhIPPh4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Sep 2021 11:37:56 -0400
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:46079 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239383AbhIPPhy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Sep 2021 11:37:54 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5656D5C01BC;
-        Thu, 16 Sep 2021 11:36:33 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Thu, 16 Sep 2021 11:36:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=fuwPpKvNrIJbLZMeCzwGqqtf/8R
-        8cW3M1HLE1J9gAO4=; b=lj1j1Mx0RqABBogl4HyTzY0DfNUGzwT9Ro+NuENyyc1
-        ou4quLsDn1QzIw8LXP1JL04nlzkIAX2AhdTWPRxunHoVsxhbRyLbs6w2a85Qvdnz
-        3QG7gIcjzjjAIzM8IqiMVOtFV3xqpTKi0bbGpvLL7DdgVUFYpTGTqihbMju89dt1
-        Q7DgtRSwq0NtIBsAmHufuGQVoUYouJdlml249F1oqjaazxEcAfL0CdknvpHTyXBE
-        0EgXkyYZ2QKPTt0GEOYV368bEgDN1MffNogc9A4mpBkvCMumQL1dzkak+J2eTI/1
-        5zIPEDuCr0QOu+oar+HNbU6ewtg7d4K6AP2TcvIoxbQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=fuwPpK
-        vNrIJbLZMeCzwGqqtf/8R8cW3M1HLE1J9gAO4=; b=o/IWsc4sU86jaEIbwJNX+o
-        mtI1sPyJCebwR4WNugPq5HatlRkPtVjctpcP8tya7zorw6HxjZs3HzoFG8zV1eSy
-        T1svXw3XrexcJvFWWb6uh7ZqCsKgHr9XhJ+aCisb0+dkRmXTuy3VyglDnZWG1OKr
-        BGKt2sq4SR1FxRmMWiDWJ0ChHiqFcE65fFmztqxC1qOvSr4ubx20BFo8JQD2qEb3
-        JNcmfeu/5X/OHlmEFqXS/ikXIZ+DZIncD0spSAxmvbLw4qPWvwVZGHAhorWhsOgb
-        28nopMV2NRkp4axxstOdyUyqT9ndyJAJqiD8mM1FqTxsMNJ821SL6zWbhSsij9sg
-        ==
-X-ME-Sender: <xms:gWRDYZfyTxWxAnSOgpThtcZWJoH7OQT-YJKYv24fgWD3w74QDwEjdA>
-    <xme:gWRDYXMQKMR-W4OkCc0ho6GIX4z18hyvFuH73cuK2nkmtjDb0m-XYXCnWBzpcdYnU
-    romdN3N8WYTfw>
-X-ME-Received: <xmr:gWRDYSirOl90h44CkaKb1nDoS9OY8AZekqpx3AcXYtR_ersTSvQebjOUkTkOUf8z4HC2fMB9Vm9FDtDDy0VtUnedYCFR_fGY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudehgedgkeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkfhggtggujgesthdtre
-    dttddtvdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheq
-    necuggftrfgrthhtvghrnhepveeuheejgfffgfeivddukedvkedtleelleeghfeljeeiue
-    eggeevueduudekvdetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghi
-    lhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:gWRDYS88hP-0Z9T3leTjN-AiP9JaMOD1xe4my1157O6E7-0lhgEmMA>
-    <xmx:gWRDYVue9xKS9NASKD7XplLrNfxU-qzrFi_pWH54sqtc6t_2rGFzDw>
-    <xmx:gWRDYRHLfvLKQ_rI7VBJ1H-nQALjgLVJth_YvT04hpRNZiprA_HAgA>
-    <xmx:gWRDYe77N2JtdlKurl19fZOUeUAq0Br_N99YlMr3c9CTdeYbfMqlDg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 16 Sep 2021 11:36:32 -0400 (EDT)
-Date:   Thu, 16 Sep 2021 17:36:30 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Andreas Bauer <andreas.bauer.nexus@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget/legacy/ether: assume saner default power mode
-Message-ID: <YUNkfp1kxOtfU4pX@kroah.com>
-References: <YUNbDyoTPa+5J9Od@ws2>
+        id S239253AbhIPPzK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Sep 2021 11:55:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42166 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231702AbhIPPzK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Sep 2021 11:55:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id AA26361164
+        for <linux-usb@vger.kernel.org>; Thu, 16 Sep 2021 15:53:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631807629;
+        bh=tn1L4N33mCcXrs4+EKWjgLKUXWyCWboQ2tAykEeJi10=;
+        h=From:To:Subject:Date:From;
+        b=vFe1PBTMhxAzrmD9Cy93Lm1Ini2OrP8spENMNytiVI2dWTQfI2Obu5kBalSfiyagq
+         bNu/CBTg7M/BayrgjLY4fOcro1FO+mY1udAlUrpIEL2Uph10hRbEnFMyB0IAgWfUVO
+         Rzy3bu/aQoiCsp3hZ7uoiTqNXd69NMUVbxDgGR7IZZ/VKQVtWTZhFVR1hu21J66hvB
+         fJSacWziIoDBiu96jVHk6MolNKRPKXo5ApdkceutMpwiZuwSZ/FRz4LTLzk773wXyZ
+         bHsHU5nzOoxina4Tw4aKi0D4X/pwYXQ1F9tJCPnUuI0zFM+lpIylHgIu8MhJbfocsa
+         cG9/uFq7V+Wow==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 9D362610A4; Thu, 16 Sep 2021 15:53:49 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214437] New: usb: hid: u2fzero: buffer overrun in
+ u2fzero_rng_read
+Date:   Thu, 16 Sep 2021 15:53:49 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: andrew@shadura.me
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-214437-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YUNbDyoTPa+5J9Od@ws2>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 16, 2021 at 09:56:15PM +0700, Andreas Bauer wrote:
-> 
-> I propose the included patch to the OTG USB ethernet gadget code:
-> 
->   Report default of bus powered and 500mA bMaxPower consumption.
-> 
-> Reason:
-> 
->   The USB spec requires all devices consuming more than 100mA from
->   the bus to report in this manner. Devices such as Rpi Zero can operate
->   in this mode and will then falsly report being self-powered when they
->   are not.
-> 
->   The more sane default is to report being 500mA bus-powered than being
->   self-powered
-> 
-> This patch was born from an issue within the Raspberry Pi Zero ecosystem,
-> therefore I would invite comment regarding other usage of this OTG code.
-> 
-> Best regards,
-> 
-> Andreas
-> 
-> $ diff -u linux-5.14.2/drivers/usb/gadget/legacy/ether.c.orig linux-5.14.2/drivers/usb/gadget/legacy/ether.c
-> --- linux-5.14.2/drivers/usb/gadget/legacy/ether.c.orig	2021-09-08 13:52:41.000000000 +0700
-> +++ linux-5.14.2/drivers/usb/gadget/legacy/ether.c	2021-09-16 21:25:06.782958554 +0700
-> @@ -296,7 +296,8 @@
->  	/* .label = f(hardware) */
->  	.bConfigurationValue	= 1,
->  	/* .iConfiguration = DYNAMIC */
-> -	.bmAttributes		= USB_CONFIG_ATT_SELFPOWER,
-> +	.bmAttributes		= 0,   /* bus powered implied */
-> +	.bMaxPower		= 250, /* 500mA in 2mA units */
->  };
->  
->  /*-------------------------------------------------------------------------*/
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214437
 
-Hi,
+            Bug ID: 214437
+           Summary: usb: hid: u2fzero: buffer overrun in u2fzero_rng_read
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.11.0
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: andrew@shadura.me
+        Regression: No
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Sometimes the driver crashes with a buffer overflow upon the device inserti=
+on.
+After the crash, often neither U2F nor RNG functionality is available.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+usb 2-2: USB disconnect, device number 18
+detected buffer overflow in memcpy
+------------[ cut here ]------------
+kernel BUG at lib/string.c:1149!
+invalid opcode: 0000 [#1] SMP PTI
+CPU: 1 PID: 61299 Comm: hwrng Tainted: G          IOE     5.11.0-25-generic
+#27-Ubuntu
+Hardware name: LENOVO 20CM001UUK/20CM001UUK, BIOS N10ET27W (1.04 ) 12/01/20=
+14
+RIP: 0010:fortify_panic+0x13/0x15
+Code: 35 96 77 36 01 48 c7 c7 6b 01 81 8a e8 d3 c3 fe ff 41 5c 41 5d 5d c3 =
+55
+48 89 fe 48 c7 c7 b8 01 81 8a 48 89 e5 e8 ba c3 fe ff <0f> 0b 48 c7 c7 90 f=
+7 48
+8a e8 df ff ff ff 48 c7 c7 98 f7 48 8a e8
+RSP: 0018:ffffb04803df3e28 EFLAGS: 00010246
+RAX: 0000000000000022 RBX: 0000000000000040 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffff8de3bdc58ac0 RDI: ffff8de3bdc58ac0
+RBP: ffffb04803df3e28 R08: 0000000000000000 R09: ffffb04803df3c20
+R10: ffffb04803df3c18 R11: ffffffff8af53588 R12: ffff8de089aa7440
+R13: ffff8de2c3862598 R14: 0000000000000000 R15: ffffb0480366f428
+FS:  0000000000000000(0000) GS:ffff8de3bdc40000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fa10098f000 CR3: 00000002bec10004 CR4: 00000000003706e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ u2fzero_rng_read.cold+0xc/0xc [hid_u2fzero]
+ hwrng_fillfn+0xd8/0x180
+ kthread+0x12f/0x150
+ ? enable_best_rng+0x70/0x70
+ ? __kthread_bind_mask+0x70/0x70
+ ret_from_fork+0x22/0x30
+Modules linked in: hid_u2fzero hid_generic usbhid hid usb_serial_simple
+usbserial ccm xt_nat veth nf_conntrack_netlink xfrm_user xfrm_algo xt_addrt=
+ype
+br_netfilter bridge stp llc vboxnetadp(OE) vboxnetflt(OE) vboxdrv(OE) bnep
+snd_seq_dummy snd_hrtimer ip6t_REJECT nf_reject_ipv6 ip6t_rpfilter xt_tcpudp
+ipt_REJECT nf_reject_ipv4 xt_conntrack nft_chain_nat xt_MASQUERADE nf_nat
+nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 nft_counter overlay ip6_tables
+nft_compat ip_set nf_tables nfnetlink nls_iso8859_1 binfmt_misc joydev
+intel_rapl_msr mei_hdcp snd_hda_codec_realtek snd_hda_codec_generic
+snd_hda_codec_hdmi uvcvideo snd_hda_intel btusb btrtl intel_rapl_common
+snd_intel_dspcfg soundwire_intel x86_pkg_temp_thermal
+soundwire_generic_allocation intel_powerclamp btbcm soundwire_cadence coret=
+emp
+snd_hda_codec btintel snd_hda_core cdc_mbim kvm_intel cdc_wdm snd_hwdep
+bluetooth cdc_ncm cdc_ether snd_seq_midi ecdh_generic soundwire_bus
+snd_seq_midi_event cdc_acm ecc usbnet mii kvm
+ rmi_smbus snd_soc_core snd_compress rapl rmi_core intel_cstate ac97_bus
+snd_rawmidi snd_pcm_dmaengine videobuf2_vmalloc snd_pcm input_leds iwlmvm
+videobuf2_memops mac80211 serio_raw wmi_bmof efi_pstore videobuf2_v4l2 liba=
+rc4
+videobuf2_common snd_seq iwlwifi snd_seq_device snd_timer videodev at24
+intel_pch_thermal mc cfg80211 thinkpad_acpi nvram ledtrig_audio mei_me mei =
+snd
+soundcore mac_hid sch_fq_codel pkcs8_key_parser msr parport_pc ppdev lp par=
+port
+ip_tables x_tables autofs4 btrfs blake2b_generic xor raid6_pq libcrc32c
+dm_crypt crct10dif_pclmul i915 rtsx_pci_sdmmc crc32_pclmul i2c_algo_bit
+ghash_clmulni_intel aesni_intel crypto_simd cryptd glue_helper lpc_ich
+drm_kms_helper syscopyarea sysfillrect psmouse sysimgblt fb_sys_fops cec ah=
+ci
+i2c_i801 libahci rc_core i2c_smbus e1000e rtsx_pci drm xhci_pci
+xhci_pci_renesas wmi video
+---[ end trace e7936f97d201c167 ]---
+RIP: 0010:fortify_panic+0x13/0x15
+Code: 35 96 77 36 01 48 c7 c7 6b 01 81 8a e8 d3 c3 fe ff 41 5c 41 5d 5d c3 =
+55
+48 89 fe 48 c7 c7 b8 01 81 8a 48 89 e5 e8 ba c3 fe ff <0f> 0b 48 c7 c7 90 f=
+7 48
+8a e8 df ff ff ff 48 c7 c7 98 f7 48 8a e8
+RSP: 0018:ffffb04803df3e28 EFLAGS: 00010246
+RAX: 0000000000000022 RBX: 0000000000000040 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffff8de3bdc58ac0 RDI: ffff8de3bdc58ac0
+RBP: ffffb04803df3e28 R08: 0000000000000000 R09: ffffb04803df3c20
+R10: ffffb04803df3c18 R11: ffffffff8af53588 R12: ffff8de089aa7440
+R13: ffff8de2c3862598 R14: 0000000000000000 R15: ffffb0480366f428
+FS:  0000000000000000(0000) GS:ffff8de3bdc40000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fa10098f000 CR3: 0000000194fa6005 CR4: 00000000003706e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-- Your patch does not have a Signed-off-by: line.  Please read the
-  kernel file, Documentation/SubmittingPatches and resend it after
-  adding that line.  Note, the line needs to be in the body of the
-  email, before the patch, not at the bottom of the patch or in the
-  email signature.
+--=20
+You may reply to this email to add a comment.
 
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what is needed in order to
-  properly describe the change.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+You are receiving this mail because:
+You are watching the assignee of the bug.=
