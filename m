@@ -2,208 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36AE940D3B8
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Sep 2021 09:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5C240D402
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Sep 2021 09:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234766AbhIPHYY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Sep 2021 03:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbhIPHYX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Sep 2021 03:24:23 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DB3C061574
-        for <linux-usb@vger.kernel.org>; Thu, 16 Sep 2021 00:23:03 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id w19so4987876pfn.12
-        for <linux-usb@vger.kernel.org>; Thu, 16 Sep 2021 00:23:03 -0700 (PDT)
+        id S231644AbhIPHru (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Sep 2021 03:47:50 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:22150 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229908AbhIPHrs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Sep 2021 03:47:48 -0400
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18G5RuYY019937;
+        Thu, 16 Sep 2021 07:46:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type :
+ content-transfer-encoding : in-reply-to : mime-version; s=corp-2021-07-09;
+ bh=P/J5cg21WpfRiaRmDvL6HgNH/0oHD5HlsO/TstnZo4g=;
+ b=acquziYiLCwFGx6YRb3i2fV8AG3SNhTv0iBCnaVwY0Jc0wzSBg4jmHXAiLEtSQsnNSsz
+ UbDC/QSvKIn8UKF3dxE2Mj2+F0r/k8Yf5riSjVj3WGH2qvZAbF0J+gqCJwP4M3vtr0Fr
+ QwwKLsd2caXV+Xz4rwTGpKjYeXs5dKjNuVp1Q0KpmQUA44MGdsX+tkf0UdG61CtsYjgC
+ vF/L3ZW9VLuhmEilDDfb+3JeWBrFD8068Suc7f7Qd0vqrIm800aaQongcY2jXYh9Ce4X
+ wQgtFc6v6VT/Nwum7+wlZW2A2/Z+0r36U5sQp1UN1O4xGdz9Tnp2CPUbmqMbZiJv9Us6 Vw== 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type :
+ content-transfer-encoding : in-reply-to : mime-version; s=corp-2020-01-29;
+ bh=P/J5cg21WpfRiaRmDvL6HgNH/0oHD5HlsO/TstnZo4g=;
+ b=COyDKij4h/Ot6Filx2j+6809QP+0OohkGeF15UYWQUwi1rQWlpj1KJZQZPH0VcztFnhm
+ l6QZKMrr02v+Tlnfxca+Ji1de8b93HMT86gXIOHFzcWUmWfx3lL9OBZMXhhpctWgNdHU
+ Y8kp7wfXzIoX+I03yBaYAO/+u2JvLXYqQWjhLIq/C2oOByiNpFKqArY8qRR9kPoWPVEN
+ xj7wT8fuvlG2uljt6U3+hTVSsf6WG/UalwkG0bnDNx5yXLQrCDVOSc0UJoPuk6cs54Gz
+ yI4JWkyH9iF/CyxC3/WN+q+nLvcJIY+wo56HloI5R/KiAPTeSYrHmTuDftlKIAOGlcYx og== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3b3tnhruqf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 16 Sep 2021 07:46:25 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 18G7jhhH089026;
+        Thu, 16 Sep 2021 07:46:24 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2103.outbound.protection.outlook.com [104.47.58.103])
+        by userp3020.oracle.com with ESMTP id 3b167use42-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 16 Sep 2021 07:46:24 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A7zgWJYb9gjyq/rl5nW3vhuLLBwdGHUeeRgBqWBYDHB/irMmG5kG+BCL0/DKxpA9bEb6IFk/azNFhqzC9l8RfH3zBup/QDLXS+3j6lTUzQli+vXzkWSx/KnmpHcIVEJUfB/ET1z4Ot737TOwiIO9UxerVHcV9FjAn/9xmHwVVrTDsNTGmVNdrng4mmBNIBRANSUD0YlWrp6XtTyHg1+9NedrsfFyWYVXAiBCdFtvvNeF4AgNZH5mBtvitKEaMyNHxH37MsKF7gvBduvpMpa+SqBojpczASIbkxkq/tQVHM/dJQ9wTf2SLissbVLKrSUfc5puUJwn7dcY4I1FjEnyHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=AB6HF1GYzyiokgQUUMSvFSk9SdV9BmRRrQpMZG19N14=;
+ b=odpufGA3QodsLs18UxfFWfl0bK1/vxpMDvXJ8niJo8H0BqDKfl/u6HArTgAXfYUSIIY09x92Vvf1sLnqYBm4cf6+XzQ45oTRauJZb6iFOgugm04I1hF+jVpFH4Toc3egDDTlH3sjq7IOegOuws4OCzuDOFPPvcJZlnE/2NXG9potooiM0gyyihfXmuq5EjTJ4l8ew4YTxHzIwPMXhuocvi89yk/p3Yv88Y5btbLy4jIrnVGZ6OrQ2I3EE+KfTAexX+AzcW5oiXj8mNPkxI0LViVvB1Z6/XXgm/4cpDUx6+phzsdC9HptDkVIO4+4xMaSMqali++ci4iJRQpFpI0wFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=h9+JjymWywjibzYahIE08Q7Lk+YbzJ8GWAwAgGuQw44=;
-        b=CAU4jQUppKg76S8sxSwN4FATl9tAoUi0pf7tVytHg2CWKGP6dmI4UmJ4aS6EeI3u4b
-         H5+6lrvJ+E6PWvkj22Of5x3zQcPjQaxWGMUShPwQm4Nzak1xjQfDZ4AOASyHjSpwpaHU
-         w8ZFS65wuMpJAqgLD3DS+RzAhWZvZ0N/wHT2VuvgUO2SrS55yuwsKGugQeUF6Ol2v2xM
-         mzFZJOQI1XxmTDcinj85Qj+GooSieocbQvWUvaH5nT6AUoIFSI10E5Uz+lHug7yGybOf
-         sullI8IOsVNPMSAWJIZToPeMcUz8ufMbAEQYiHJmBHGDHhNqP507mZ8X6rxecFZtHIhE
-         HoWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=h9+JjymWywjibzYahIE08Q7Lk+YbzJ8GWAwAgGuQw44=;
-        b=za8sYrp4dnouGOFX0PE1y9R8QV4h6ZoJLK1lPFGL61zpsSQPAmVkAgaLq0cQXhGw+h
-         8dOsJu/Ojyq6iTKstgC+2a82fpewiNzgmyvCoFqQ9/cPf54uEXVxOZI64f2jyTrLIcC/
-         up3E23hthhF6rHO6ay8aAw/Z46Pz0kjMr7o16SbWyGVlqGH8ozHPzt7ni00xrnEvIQ29
-         KgjNemSPK5+uYwqdBHge0pA3bYjH8L9pR1xwBy00JZEbuczHutDnV8ua8wYFa6EVDU6I
-         YqExuNxwhvx0lsAk/uHslrzDZyfB2qE1wmb4FEwIaeQikKYsfAToT6OV/DnwHrrNZNF0
-         lo9Q==
-X-Gm-Message-State: AOAM5306BrJqc6ZrOb43tWa+xi8zXZYZSs4DsSl/5EFd/1XGhc/HP5Tu
-        kDnz1P/6NdkRXj72K67WP1j2Dw==
-X-Google-Smtp-Source: ABdhPJxrw/i8/N4QcV/OPohGevkmBciVqntAoM3lzV9qrc0fJyPndAZSM9qimFhphx8j3XIivyK8ew==
-X-Received: by 2002:a65:6251:: with SMTP id q17mr3761839pgv.416.1631776982664;
-        Thu, 16 Sep 2021 00:23:02 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:ab:1cc3:dd84:94f3])
-        by smtp.gmail.com with ESMTPSA id c15sm1102192pfn.105.2021.09.16.00.23.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Sep 2021 00:23:01 -0700 (PDT)
-Date:   Thu, 16 Sep 2021 00:22:55 -0700
-From:   Benson Leung <bleung@google.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "bleung@chromium.org" <bleung@chromium.org>,
-        "badhri@google.com" <badhri@google.com>,
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AB6HF1GYzyiokgQUUMSvFSk9SdV9BmRRrQpMZG19N14=;
+ b=OxFfpRrRyQAeyXYnlWR+ZthVGMUmqifIis8qtETh+ytNrFdgi//Z9uZsXRcq2a5crwXZ0FRrWD2wIQ0Prw7jd6LLamtQqqxOja4TnLwGOjbejrIzPU1GQGKDjohl/JPmF344g4kbZVGRexeIlaebGEbJDLsXoLTCZhHrx3sz9jY=
+Authentication-Results: wanadoo.fr; dkim=none (message not signed)
+ header.d=none;wanadoo.fr; dmarc=none action=none header.from=oracle.com;
+Received: from CY4PR1001MB2358.namprd10.prod.outlook.com
+ (2603:10b6:910:4a::32) by CY4PR10MB1702.namprd10.prod.outlook.com
+ (2603:10b6:910:b::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14; Thu, 16 Sep
+ 2021 07:46:22 +0000
+Received: from CY4PR1001MB2358.namprd10.prod.outlook.com
+ ([fe80::95b6:2084:3b1c:27ba]) by CY4PR1001MB2358.namprd10.prod.outlook.com
+ ([fe80::95b6:2084:3b1c:27ba%7]) with mapi id 15.20.4523.014; Thu, 16 Sep 2021
+ 07:46:22 +0000
+Date:   Thu, 16 Sep 2021 10:46:04 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Bin Liu <b-liu@ti.com>, Felipe Balbi <felipe.balbi@nokia.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
-Message-ID: <YULwz8NsoA3+vrhA@google.com>
-References: <20210902213500.3795948-1-pmalani@chromium.org>
- <20210902213500.3795948-3-pmalani@chromium.org>
- <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
- <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
- <YUB16up3JDwi3HfI@kuha.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xat0VWzVRBLGhR0l"
+        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] usb: musb: tusb6010: uninitialized data in
+ tusb_fifo_write_unaligned()
+Message-ID: <20210916074604.GG2088@kadam>
+References: <20210915103659.GB7060@kili>
+ <e3ce24c3-477f-5a55-a89a-a0cdff564d8e@wanadoo.fr>
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YUB16up3JDwi3HfI@kuha.fi.intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e3ce24c3-477f-5a55-a89a-a0cdff564d8e@wanadoo.fr>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNXP275CA0032.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:18::20)
+ To CY4PR1001MB2358.namprd10.prod.outlook.com (2603:10b6:910:4a::32)
+MIME-Version: 1.0
+Received: from kadam (62.8.83.99) by JNXP275CA0032.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:18::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14 via Frontend Transport; Thu, 16 Sep 2021 07:46:18 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1c5cae47-93ab-441f-5ab5-08d978e61389
+X-MS-TrafficTypeDiagnostic: CY4PR10MB1702:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <CY4PR10MB1702A45F35A45317CE161C8D8EDC9@CY4PR10MB1702.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:421;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0Wrcdob2iUoZR2yeewaOtxu+vDDCtl2WrN4d66Wb0apPr18l7qYHtRm9VYNvxYITWDjf2AtuCAYwXnhX9fQNH+2nNMZLwsd75EwEE9PJ5q6rfgScVckQ/XiD3irVUeW+FhYx4ZIEe9cOuUaDjhHlGmiV8caSu/9MBdxgX5tytbXzqnbBXi/B37HO/Iv9yNjelR0EYcolH97dWLeTMV64CM5TNUivQvmgZC7yKZdaK7lm0nCTWyG8hZLmHHfXti9qEDK+tjv8ihDYjXfcYFCaTQXj88jYZeJgzPL7c8LK4nfJ5TWsErznVTeHrX3YiPfzMaMvIx6iJeAqq/bTvZ1aWczI1S/8zUbQlaLiPvDJSvX5AuEIZCK3as+iTS90UlVYckAS19ynHIMMmx5C6jKClIKvgCgM1TlJmWMGhqQxpflncw7ZBkX5jap/jLfifhTa1eysvOdW6G4LjuwEz/PqaPySxz8t1IiJcAncF0WRR49QkOtI99OV2EcDDN5ugzrlKfUwnMG6vNKzxnbbXmRw7uFrAdkjWAhtn2rzS55AL4Ag+BEjW5XMhY/1rviESV60qpk7C/82t9R+H6ZjEhPZ4aW2nPFVBu6s3kCDwBVHj+LVxeeW+9ydgjjqR2m3F3Eilga83sP6hqhBvGVDRw1wrcDdi0lsfbiLzHcIedLPqXQiPAMbx9nYu5rnaoCt8zNmoO6z3yeg29Xp5/J8hJFeKw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR1001MB2358.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(346002)(366004)(136003)(39860400002)(376002)(316002)(8936002)(66946007)(66556008)(9686003)(55016002)(86362001)(6496006)(52116002)(4744005)(54906003)(9576002)(66476007)(1076003)(33656002)(2906002)(6666004)(956004)(8676002)(38350700002)(38100700002)(186003)(26005)(5660300002)(4326008)(33716001)(44832011)(6916009)(66574015)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?yqNuLgaQ8se8Pu3LTJds+edGLmOD6TTnh8XaFrMeNr7c79hLZ+vnGNxqNU?=
+ =?iso-8859-1?Q?b92gHg01K43Me5Og/uOufRlWS9f8nYiKJndvd1LePrTbqzidU2LhQRlnBM?=
+ =?iso-8859-1?Q?Mnbnu6v2B4n8/RkF/Y9gs9hBj6LYoSQ22xC0Uh7qDPRHDG4wVkoKxF7LxN?=
+ =?iso-8859-1?Q?WLwKARoN48pq4pPNO66hxZGprIZz5JvTpDrEYxGjarM2KGTPQCGkyzECwe?=
+ =?iso-8859-1?Q?o+fw8t2hZImjb2nFly+1HJUPYnLjEStqSgeiamQdfsQfqyLU2y6HGU7rs1?=
+ =?iso-8859-1?Q?Z5L0uhXBna8bEeT2UG9WudepNMD8DihRSSIWqG5l/nDUNBMgm0hWZVY4n5?=
+ =?iso-8859-1?Q?O1Ic70LSVOjlXKiQpbg0OxVKF4YvaojHWJH3KZ7HGFwj1tqgvC6dmA9JWm?=
+ =?iso-8859-1?Q?0GPUQtUX3YO3fadpk5gw2Z7mxBmB+FIhGFH8gUgxgMh7r6Z6bxG9EDeKDL?=
+ =?iso-8859-1?Q?/hdxoB00AqAhQ62XSoV+Qr2eBJ6GmBk+PQCWkxIjAkbuXUEa4YK9RAJOhH?=
+ =?iso-8859-1?Q?e2ZydvYffi0gMLjqqk/TEWeSo/eRXBTfgKO6LqNSqkyyKHFKK/6CybCyD1?=
+ =?iso-8859-1?Q?+SK7GhR2sn1f1J7XlHq+oXpoeJ2V6W498m/wKwHx0ufAEZ7pTPE+5jzeqI?=
+ =?iso-8859-1?Q?VcrVeLIb4JccBDlIvlHLReh7pXfik6af+Coniv8dlGJSC3rCNpfgkdL0QY?=
+ =?iso-8859-1?Q?j2YyoZRuUMQnT0wepeXR6alZ+QitA0fGJI6ioilBBz095ylC5JZWQNAvY8?=
+ =?iso-8859-1?Q?e2MoSbUSvKkP/UHxhfHQ0x4RR1Vtw85tnGNX+3PsbjOW4wBcdlAWf07Ybj?=
+ =?iso-8859-1?Q?LBPAAjDm3LC7ytRgsjPvQ20s6CqWP/Q1IeoLlp1DYZb/MGEvP3HlXxRmGm?=
+ =?iso-8859-1?Q?D9mmtPz01lqUwt34EYvoUlmqcmH2AAYFbOq9MxT4lSbRTRgt0J3AjzdPwm?=
+ =?iso-8859-1?Q?2qP6OmrSzMkSnu4nSiESP13aMG4kM7KcjgUsOGQqL+RvZqSX9jXpYoTFYw?=
+ =?iso-8859-1?Q?QtX5ArRyeAVGnygOn408QH31FL9SCMKkzXREZo/W6fRHf6TCPdrlgFN3Gm?=
+ =?iso-8859-1?Q?8UJEciukhqqIhEMnQvz3hXqXrKGBSv43WRdPeiTfzSroYQfuCi+cNakWij?=
+ =?iso-8859-1?Q?V1sIJhonzOhodI/IXUjF7fTpb0Y/fgmod+K21nyFrk5KFBKsMlAJc2jA3Q?=
+ =?iso-8859-1?Q?xPUhvadqNhquEMCTf6bbMmZ8sXm8NliSRPE6F+78sBnmJMCGm/S6eXqdmR?=
+ =?iso-8859-1?Q?O+nNuuozABgFNESDUfZJZAAxG+YEa8BXDr1sF3yVT4Bv+d3mZGbDz+2GBH?=
+ =?iso-8859-1?Q?8vOHXffIgq7jPvToufM5wbnbcUryUQOduuJkgQAylhja+fk65jwKuvhnYL?=
+ =?iso-8859-1?Q?6rGYk2WJbC?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1c5cae47-93ab-441f-5ab5-08d978e61389
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR1001MB2358.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2021 07:46:22.3181
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jAP4gzHwEFPZwBlcKQe32904gEIIEr7lQw619VyGZ8caxQjDSWemREEhtweqZokZjdre7Kbji7sydY2vvOQxSTPrBrgjj/L1V3r0abGFbN8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1702
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10108 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 suspectscore=0
+ phishscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2109030001
+ definitions=main-2109160049
+X-Proofpoint-GUID: ykDM8bGuT5rueuOMi6YQzAEYp9hHyNhV
+X-Proofpoint-ORIG-GUID: ykDM8bGuT5rueuOMi6YQzAEYp9hHyNhV
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, Sep 15, 2021 at 07:49:40PM +0200, Christophe JAILLET wrote:
+> Le 15/09/2021 à 12:36, Dan Carpenter a écrit :
+> > This is writing to the first 1 - 3 bytes of "len" and then writing all
+> > four bytes to musb_writel().  The last byte is always going to be
+> > garbage.  Zero out the last bytes instead.
+> > 
+> > Fixes: 550a7375fe72 ("USB: Add MUSB and TUSB support")
+> > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > ---
+> >   drivers/usb/musb/tusb6010.c | 1 +
+> >   1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/usb/musb/tusb6010.c b/drivers/usb/musb/tusb6010.c
+> > index c42937692207..c510fb84faa6 100644
+> > --- a/drivers/usb/musb/tusb6010.c
+> > +++ b/drivers/usb/musb/tusb6010.c
+> > @@ -190,6 +190,7 @@ tusb_fifo_write_unaligned(void __iomem *fifo, const u8 *buf, u16 len)
+> >   	}
+> >   	if (len > 0) {
+> >   		/* Write the rest 1 - 3 bytes to FIFO */
+> > +		len = 0;
+> 
+> +		val = 0;
+> ?
 
---xat0VWzVRBLGhR0l
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Wow.  Duh!  My goodness...
 
-Hi Heikki,
+Thanks for catching that.
 
-On Tue, Sep 14, 2021 at 01:14:02PM +0300, Heikki Krogerus wrote:
-> Mon, Sep 13, 2021 at 03:15:46PM +0000, Adam Thomson kirjoitti:
-> >=20
-> > Hi Heikki,
-> >=20
-> > Thanks for CCing me. My two pence worth is that I always envisaged the =
-PSY
-> > representation as being 1 PSY for 1 power source. I consider this in a
-> > similar manner to the Regulator framework, where 1 regulator can suppor=
-t a range
-> > of voltages and currents, but this is covered by 1 regulator instance a=
-s it's
-> > just a single output. For USB-PD we have a number of options for voltag=
-e/current
-> > combos, including PPS which is even lower granularity, but it's still o=
-nly one
-> > port. I get the feeling that having PSY instances for each and every PD=
-O might
-> > be a little confusing and these will never be concurrent.
-> >=20
-> > However, I'd be keen to understand further and see what restrictions/is=
-sues are
-> > currently present as I probably don't have a complete view of this righ=
-t now. I
-> > wouldn't want to dismiss something out of turn, especially when you obv=
-iously
-> > have good reason to suggest such an approach.
->=20
-> I'm not proposing that we drop the port-psys. I'm sorry if I've been
-> unclear about that. The port-psy we can not drop because of several
-> reasons. For starters, we still can not assume that USB PD is always
-> supported.
->=20
-> What I'm trying to propose is that we take advantage of the
-> power-supply framework by building a "dynamic" hierarchy of power
-> supplies that supply each other in order to represent the actual
-> situation as closely as possible. For example, a port-psy that is
-> supplied by port-Fixed-sink-psy that is supplied by
-> port-partner-Fixed-source (that is supplied by port-partner-psy).
-> Something like that. The only "static" part in the hierarchy is the
-> port-psy, as everything else about it can change, even without
-> disconnection.
->=20
-> So the port-psy always either supplies another psy or is supplied by
-> another psy in this hierarchy, depending on the role of the port. But
-> most importantly, the properties of the port-psy itself are _newer_
-> adjustable - they are read-only. The psy that supplies the port-psy
-> can be adjustable, if it's for example PPS, but not the port-psy
-> itself.
->=20
-> The problem with having only a single psy per port (and possibly
-> partners) is that it does not work well enough when the capabilities
-> change, and the capabilities can really change at any moment, we don't
-> need to disconnect for that to happen - simply by plugging another
-> device to another port can change the power budget for your port and
-> change your capabilities. The biggest problem is when we loose the
-> ability to adjust the values if we for example loose the PPS that we
-> were using in the middle of operation. The single psy has to attempt
-> to handle the situation by adjusting something like the ranges of the
-> properties, because it can't change the actual property set itself.
-> That is hacky, and to be honest, a little bit risky, because it leaves
-> us at the mercy of programmers completely unnecessarily.
->=20
-> With my proposal, if the capabilities change, it only means we rebuild
-> the psy hierarchy, and that's it. Nothing else needs to be done in
-> kernel, and all changes are super visible and clear in user space.
->=20
+regards,
+dan carpenter
 
-Thanks for providing the clarification. So you're proposing a port-psy and a
-port-partner-psy that are connected to each other (one supplying the other).
-If PD is not present, those two will exist per port and partner, and there
-will be information about Type-C current (and possibly BC 1.2 and other
-methods?)
-
-Do you have an example hierarchy you could share that explains what it would
-look like in /sys/class/power_supply with PD with Source Caps and Sink Caps=
- on
-both sides?
-
-I think this all makes sense if the connector class is a read interface
-for this info. Have you considered how the type-c connector class and this =
-pd
-psy support will handle dynamic PDO changes for advertisement FROM the port=
-s?
-
-For example, let's say you wanted the kernel and user to manage two USB-C p=
-orts
-with higher power support (meaning, 5V, 9V, 15V, 20V capable), but then your
-kernel and user needs to edit the Source Caps on the fly based on load
-balancing.
-
-If caps are represented as a group of psys together, how do you as a kernel
-and user create an modify the set of Source_Caps you put out on a port?
-
-Thanks,
-Benson
-
-> thanks,
->=20
-> --=20
-> heikki
-
---=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
-
---xat0VWzVRBLGhR0l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYULwzwAKCRBzbaomhzOw
-wom1AQCNZ/hwtQBhee1O29UF9wqYqjzyNI6WzWJuXmz4sjeWhAEA74S5yLRF7Vq0
-kvMtyRkRQ+IMZkUJK8w4DM9wIFGXvA4=
-=qhlX
------END PGP SIGNATURE-----
-
---xat0VWzVRBLGhR0l--
