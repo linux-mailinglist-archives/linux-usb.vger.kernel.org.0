@@ -2,253 +2,208 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37EF040D2A4
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Sep 2021 06:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36AE940D3B8
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Sep 2021 09:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234309AbhIPEnC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Sep 2021 00:43:02 -0400
-Received: from mga14.intel.com ([192.55.52.115]:35399 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234310AbhIPEnA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 16 Sep 2021 00:43:00 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10108"; a="222141574"
-X-IronPort-AV: E=Sophos;i="5.85,297,1624345200"; 
-   d="scan'208";a="222141574"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2021 21:41:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,297,1624345200"; 
-   d="scan'208";a="553687505"
-Received: from lkp-server01.sh.intel.com (HELO 285e7b116627) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 15 Sep 2021 21:41:32 -0700
-Received: from kbuild by 285e7b116627 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mQjDH-0000jM-HN; Thu, 16 Sep 2021 04:41:31 +0000
-Date:   Thu, 16 Sep 2021 12:41:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- da546d6b748e570aa6e44acaa515cfc43baeaa0d
-Message-ID: <6142cadd.8FcDWDNge/21qGD/%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S234766AbhIPHYY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Sep 2021 03:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232254AbhIPHYX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Sep 2021 03:24:23 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DB3C061574
+        for <linux-usb@vger.kernel.org>; Thu, 16 Sep 2021 00:23:03 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id w19so4987876pfn.12
+        for <linux-usb@vger.kernel.org>; Thu, 16 Sep 2021 00:23:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=h9+JjymWywjibzYahIE08Q7Lk+YbzJ8GWAwAgGuQw44=;
+        b=CAU4jQUppKg76S8sxSwN4FATl9tAoUi0pf7tVytHg2CWKGP6dmI4UmJ4aS6EeI3u4b
+         H5+6lrvJ+E6PWvkj22Of5x3zQcPjQaxWGMUShPwQm4Nzak1xjQfDZ4AOASyHjSpwpaHU
+         w8ZFS65wuMpJAqgLD3DS+RzAhWZvZ0N/wHT2VuvgUO2SrS55yuwsKGugQeUF6Ol2v2xM
+         mzFZJOQI1XxmTDcinj85Qj+GooSieocbQvWUvaH5nT6AUoIFSI10E5Uz+lHug7yGybOf
+         sullI8IOsVNPMSAWJIZToPeMcUz8ufMbAEQYiHJmBHGDHhNqP507mZ8X6rxecFZtHIhE
+         HoWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=h9+JjymWywjibzYahIE08Q7Lk+YbzJ8GWAwAgGuQw44=;
+        b=za8sYrp4dnouGOFX0PE1y9R8QV4h6ZoJLK1lPFGL61zpsSQPAmVkAgaLq0cQXhGw+h
+         8dOsJu/Ojyq6iTKstgC+2a82fpewiNzgmyvCoFqQ9/cPf54uEXVxOZI64f2jyTrLIcC/
+         up3E23hthhF6rHO6ay8aAw/Z46Pz0kjMr7o16SbWyGVlqGH8ozHPzt7ni00xrnEvIQ29
+         KgjNemSPK5+uYwqdBHge0pA3bYjH8L9pR1xwBy00JZEbuczHutDnV8ua8wYFa6EVDU6I
+         YqExuNxwhvx0lsAk/uHslrzDZyfB2qE1wmb4FEwIaeQikKYsfAToT6OV/DnwHrrNZNF0
+         lo9Q==
+X-Gm-Message-State: AOAM5306BrJqc6ZrOb43tWa+xi8zXZYZSs4DsSl/5EFd/1XGhc/HP5Tu
+        kDnz1P/6NdkRXj72K67WP1j2Dw==
+X-Google-Smtp-Source: ABdhPJxrw/i8/N4QcV/OPohGevkmBciVqntAoM3lzV9qrc0fJyPndAZSM9qimFhphx8j3XIivyK8ew==
+X-Received: by 2002:a65:6251:: with SMTP id q17mr3761839pgv.416.1631776982664;
+        Thu, 16 Sep 2021 00:23:02 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:ab:1cc3:dd84:94f3])
+        by smtp.gmail.com with ESMTPSA id c15sm1102192pfn.105.2021.09.16.00.23.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Sep 2021 00:23:01 -0700 (PDT)
+Date:   Thu, 16 Sep 2021 00:22:55 -0700
+From:   Benson Leung <bleung@google.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "bleung@chromium.org" <bleung@chromium.org>,
+        "badhri@google.com" <badhri@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+Message-ID: <YULwz8NsoA3+vrhA@google.com>
+References: <20210902213500.3795948-1-pmalani@chromium.org>
+ <20210902213500.3795948-3-pmalani@chromium.org>
+ <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
+ <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <YUB16up3JDwi3HfI@kuha.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xat0VWzVRBLGhR0l"
+Content-Disposition: inline
+In-Reply-To: <YUB16up3JDwi3HfI@kuha.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: da546d6b748e570aa6e44acaa515cfc43baeaa0d  arm64: dts: qcom: ipq8074: remove USB tx-fifo-resize property
 
-elapsed time: 2584m
+--xat0VWzVRBLGhR0l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-configs tested: 191
-configs skipped: 3
+Hi Heikki,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+On Tue, Sep 14, 2021 at 01:14:02PM +0300, Heikki Krogerus wrote:
+> Mon, Sep 13, 2021 at 03:15:46PM +0000, Adam Thomson kirjoitti:
+> >=20
+> > Hi Heikki,
+> >=20
+> > Thanks for CCing me. My two pence worth is that I always envisaged the =
+PSY
+> > representation as being 1 PSY for 1 power source. I consider this in a
+> > similar manner to the Regulator framework, where 1 regulator can suppor=
+t a range
+> > of voltages and currents, but this is covered by 1 regulator instance a=
+s it's
+> > just a single output. For USB-PD we have a number of options for voltag=
+e/current
+> > combos, including PPS which is even lower granularity, but it's still o=
+nly one
+> > port. I get the feeling that having PSY instances for each and every PD=
+O might
+> > be a little confusing and these will never be concurrent.
+> >=20
+> > However, I'd be keen to understand further and see what restrictions/is=
+sues are
+> > currently present as I probably don't have a complete view of this righ=
+t now. I
+> > wouldn't want to dismiss something out of turn, especially when you obv=
+iously
+> > have good reason to suggest such an approach.
+>=20
+> I'm not proposing that we drop the port-psys. I'm sorry if I've been
+> unclear about that. The port-psy we can not drop because of several
+> reasons. For starters, we still can not assume that USB PD is always
+> supported.
+>=20
+> What I'm trying to propose is that we take advantage of the
+> power-supply framework by building a "dynamic" hierarchy of power
+> supplies that supply each other in order to represent the actual
+> situation as closely as possible. For example, a port-psy that is
+> supplied by port-Fixed-sink-psy that is supplied by
+> port-partner-Fixed-source (that is supplied by port-partner-psy).
+> Something like that. The only "static" part in the hierarchy is the
+> port-psy, as everything else about it can change, even without
+> disconnection.
+>=20
+> So the port-psy always either supplies another psy or is supplied by
+> another psy in this hierarchy, depending on the role of the port. But
+> most importantly, the properties of the port-psy itself are _newer_
+> adjustable - they are read-only. The psy that supplies the port-psy
+> can be adjustable, if it's for example PPS, but not the port-psy
+> itself.
+>=20
+> The problem with having only a single psy per port (and possibly
+> partners) is that it does not work well enough when the capabilities
+> change, and the capabilities can really change at any moment, we don't
+> need to disconnect for that to happen - simply by plugging another
+> device to another port can change the power budget for your port and
+> change your capabilities. The biggest problem is when we loose the
+> ability to adjust the values if we for example loose the PPS that we
+> were using in the middle of operation. The single psy has to attempt
+> to handle the situation by adjusting something like the ranges of the
+> properties, because it can't change the actual property set itself.
+> That is hacky, and to be honest, a little bit risky, because it leaves
+> us at the mercy of programmers completely unnecessarily.
+>=20
+> With my proposal, if the capabilities change, it only means we rebuild
+> the psy hierarchy, and that's it. Nothing else needs to be done in
+> kernel, and all changes are super visible and clear in user space.
+>=20
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20210916
-i386                 randconfig-c001-20210914
-um                           x86_64_defconfig
-riscv                            allyesconfig
-mips                             allyesconfig
-um                             i386_defconfig
-mips                             allmodconfig
-riscv                            allmodconfig
-sparc                            allyesconfig
-arc                              allyesconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-nds32                            alldefconfig
-parisc                generic-64bit_defconfig
-powerpc                          g5_defconfig
-mips                         mpc30x_defconfig
-powerpc                      acadia_defconfig
-sh                        sh7785lcr_defconfig
-sh                   sh7724_generic_defconfig
-sh                          kfr2r09_defconfig
-sh                     sh7710voipgw_defconfig
-mips                 decstation_r4k_defconfig
-riscv                            alldefconfig
-mips                malta_qemu_32r6_defconfig
-arm                        mvebu_v5_defconfig
-arm                         vf610m4_defconfig
-powerpc                      ppc40x_defconfig
-sh                          rsk7201_defconfig
-powerpc                    amigaone_defconfig
-powerpc                 mpc8540_ads_defconfig
-powerpc                 canyonlands_defconfig
-powerpc                     kmeter1_defconfig
-arm                         cm_x300_defconfig
-sh                          polaris_defconfig
-mips                        omega2p_defconfig
-arm                        multi_v5_defconfig
-arc                          axs103_defconfig
-arm                           corgi_defconfig
-m68k                        m5307c3_defconfig
-m68k                            mac_defconfig
-xtensa                          iss_defconfig
-arm                     eseries_pxa_defconfig
-powerpc                     redwood_defconfig
-powerpc                      obs600_defconfig
-powerpc                      bamboo_defconfig
-m68k                       bvme6000_defconfig
-arm                           sunxi_defconfig
-arm                         axm55xx_defconfig
-arm                           sama5_defconfig
-arm                          ixp4xx_defconfig
-arm                          lpd270_defconfig
-powerpc                 mpc836x_rdk_defconfig
-mips                  cavium_octeon_defconfig
-arm                         s5pv210_defconfig
-arm                         assabet_defconfig
-ia64                                defconfig
-powerpc                    mvme5100_defconfig
-arm                       cns3420vb_defconfig
-mips                        nlm_xlr_defconfig
-ia64                         bigsur_defconfig
-powerpc                 mpc837x_mds_defconfig
-powerpc                        icon_defconfig
-sh                                  defconfig
-riscv                    nommu_virt_defconfig
-i386                                defconfig
-x86_64               randconfig-c001-20210914
-arm                  randconfig-c002-20210914
-x86_64               randconfig-c001-20210916
-arm                  randconfig-c002-20210916
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-h8300                            allyesconfig
-arc                                 defconfig
-xtensa                           allyesconfig
-sh                               allmodconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-parisc                              defconfig
-s390                                defconfig
-s390                             allmodconfig
-i386                             allyesconfig
-sparc                               defconfig
-powerpc                           allnoconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-x86_64               randconfig-a002-20210915
-x86_64               randconfig-a003-20210915
-x86_64               randconfig-a004-20210915
-x86_64               randconfig-a006-20210915
-x86_64               randconfig-a005-20210915
-x86_64               randconfig-a001-20210915
-i386                 randconfig-a004-20210915
-i386                 randconfig-a005-20210915
-i386                 randconfig-a006-20210915
-i386                 randconfig-a002-20210915
-i386                 randconfig-a001-20210915
-i386                 randconfig-a003-20210915
-x86_64               randconfig-a013-20210914
-x86_64               randconfig-a016-20210914
-x86_64               randconfig-a012-20210914
-x86_64               randconfig-a011-20210914
-x86_64               randconfig-a014-20210914
-x86_64               randconfig-a015-20210914
-x86_64               randconfig-a016-20210916
-x86_64               randconfig-a013-20210916
-x86_64               randconfig-a012-20210916
-x86_64               randconfig-a011-20210916
-x86_64               randconfig-a014-20210916
-x86_64               randconfig-a015-20210916
-i386                 randconfig-a016-20210914
-i386                 randconfig-a015-20210914
-i386                 randconfig-a011-20210914
-i386                 randconfig-a012-20210914
-i386                 randconfig-a013-20210914
-i386                 randconfig-a014-20210914
-i386                 randconfig-a016-20210916
-i386                 randconfig-a015-20210916
-i386                 randconfig-a011-20210916
-i386                 randconfig-a012-20210916
-i386                 randconfig-a013-20210916
-i386                 randconfig-a014-20210916
-riscv                randconfig-r042-20210916
-s390                 randconfig-r044-20210916
-arc                  randconfig-r043-20210916
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+Thanks for providing the clarification. So you're proposing a port-psy and a
+port-partner-psy that are connected to each other (one supplying the other).
+If PD is not present, those two will exist per port and partner, and there
+will be information about Type-C current (and possibly BC 1.2 and other
+methods?)
 
-clang tested configs:
-riscv                randconfig-c006-20210914
-x86_64               randconfig-c007-20210914
-powerpc              randconfig-c003-20210914
-arm                  randconfig-c002-20210914
-i386                 randconfig-c001-20210914
-s390                 randconfig-c005-20210914
-riscv                randconfig-c006-20210916
-x86_64               randconfig-c007-20210916
-mips                 randconfig-c004-20210916
-powerpc              randconfig-c003-20210916
-arm                  randconfig-c002-20210916
-i386                 randconfig-c001-20210916
-s390                 randconfig-c005-20210916
-x86_64               randconfig-a002-20210916
-x86_64               randconfig-a003-20210916
-x86_64               randconfig-a006-20210916
-x86_64               randconfig-a004-20210916
-x86_64               randconfig-a005-20210916
-x86_64               randconfig-a001-20210916
-i386                 randconfig-a004-20210916
-i386                 randconfig-a005-20210916
-i386                 randconfig-a006-20210916
-i386                 randconfig-a002-20210916
-i386                 randconfig-a003-20210916
-i386                 randconfig-a001-20210916
-i386                 randconfig-a004-20210914
-i386                 randconfig-a005-20210914
-i386                 randconfig-a006-20210914
-i386                 randconfig-a002-20210914
-i386                 randconfig-a001-20210914
-i386                 randconfig-a003-20210914
-x86_64               randconfig-a013-20210915
-x86_64               randconfig-a016-20210915
-x86_64               randconfig-a012-20210915
-x86_64               randconfig-a011-20210915
-x86_64               randconfig-a014-20210915
-x86_64               randconfig-a015-20210915
-i386                 randconfig-a016-20210915
-i386                 randconfig-a015-20210915
-i386                 randconfig-a011-20210915
-i386                 randconfig-a012-20210915
-i386                 randconfig-a013-20210915
-i386                 randconfig-a014-20210915
-hexagon              randconfig-r045-20210914
-hexagon              randconfig-r041-20210914
-riscv                randconfig-r042-20210915
-hexagon              randconfig-r045-20210915
-s390                 randconfig-r044-20210915
-hexagon              randconfig-r041-20210915
+Do you have an example hierarchy you could share that explains what it would
+look like in /sys/class/power_supply with PD with Source Caps and Sink Caps=
+ on
+both sides?
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+I think this all makes sense if the connector class is a read interface
+for this info. Have you considered how the type-c connector class and this =
+pd
+psy support will handle dynamic PDO changes for advertisement FROM the port=
+s?
+
+For example, let's say you wanted the kernel and user to manage two USB-C p=
+orts
+with higher power support (meaning, 5V, 9V, 15V, 20V capable), but then your
+kernel and user needs to edit the Source Caps on the fly based on load
+balancing.
+
+If caps are represented as a group of psys together, how do you as a kernel
+and user create an modify the set of Source_Caps you put out on a port?
+
+Thanks,
+Benson
+
+> thanks,
+>=20
+> --=20
+> heikki
+
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
+
+--xat0VWzVRBLGhR0l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYULwzwAKCRBzbaomhzOw
+wom1AQCNZ/hwtQBhee1O29UF9wqYqjzyNI6WzWJuXmz4sjeWhAEA74S5yLRF7Vq0
+kvMtyRkRQ+IMZkUJK8w4DM9wIFGXvA4=
+=qhlX
+-----END PGP SIGNATURE-----
+
+--xat0VWzVRBLGhR0l--
