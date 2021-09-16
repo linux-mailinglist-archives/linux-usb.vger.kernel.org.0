@@ -2,60 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 600E640EA44
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Sep 2021 20:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93EA840EB15
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Sep 2021 21:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243043AbhIPSyA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Sep 2021 14:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349970AbhIPSxz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Sep 2021 14:53:55 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8EFC0617AE;
-        Thu, 16 Sep 2021 10:49:02 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrewsh)
-        with ESMTPSA id DA3E01F441F6
-Subject: Re: [PATCH] HID: u2fzero: ignore incomplete packets without data
-From:   Andrej Shadura <andrew.shadura@collabora.co.uk>
-To:     =?UTF-8?B?SmnFmcOtIEtvc2luYQ==?= <jikos@kernel.org>
-Cc:     linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
-        kernel@collabora.com,
-        Benjamin Tissoires <benjamin.tissoires@gmail.com>
-References: <20210916163311.11968-1-andrew.shadura@collabora.co.uk>
-Organization: Collabora
-Message-ID: <443b3e33-c9f3-09f7-b112-79559a5ff36f@collabora.co.uk>
-Date:   Thu, 16 Sep 2021 18:48:55 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S234920AbhIPTuj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Sep 2021 15:50:39 -0400
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:44940 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233659AbhIPTuh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Sep 2021 15:50:37 -0400
+Received: by mail-ot1-f53.google.com with SMTP id y63-20020a9d22c5000000b005453f95356cso2874995ota.11;
+        Thu, 16 Sep 2021 12:49:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0KsoWtKkhaXMiBJDC0/XxZwnXXQWFGw8B4mYJMIPHr0=;
+        b=SpxCjz1AW/J5PsTvzRCCmPvXqxsy2xGpwFm86c/Vd9vbTwvcR4iNTA4o8ZoXZVqMXO
+         XLxJNJ//imPrevRkKbeFs4T4DJDbFeMGJRxVnlCpnJlIjvtHlSy4T+bmF8ZP+XlLUAky
+         Drb5qdsWDgZf2P7EcB6PrmhGjm9KJcI+gaqIKgWS79+WfTfJjibFkBD61FawGjUuoRDj
+         6aYq8H+Uhc6PsYQnbtYW8DYp+uh3LoMJXnwTZWMfvL1qwpkdLuzMncu+u3CkCfPEhBjP
+         DisHrTMNBbYs4idMLZJ/E5wgURRcMU1VnpdlvcmYkc20Ve8BhWhP8atlAEr9RjFfz3+5
+         63Gw==
+X-Gm-Message-State: AOAM5302EB0H4T3gp1DNrZ8N/gvT83IHzyspEArfQWIAOnIjztPuyXVK
+        DKUiIZhQcg85kvcCUc880g==
+X-Google-Smtp-Source: ABdhPJxEEp/Qsw3alHt8zhmxwHRpVnbr0IilY/Bi03MDyZNTmeQPJrTz7p+nPBP14eKxCi6oX/vdRA==
+X-Received: by 2002:a9d:70cc:: with SMTP id w12mr6143201otj.306.1631821755916;
+        Thu, 16 Sep 2021 12:49:15 -0700 (PDT)
+Received: from robh.at.kernel.org (107-211-252-53.lightspeed.cicril.sbcglobal.net. [107.211.252.53])
+        by smtp.gmail.com with ESMTPSA id z7sm948074oti.65.2021.09.16.12.49.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Sep 2021 12:49:15 -0700 (PDT)
+Received: (nullmailer pid 1377102 invoked by uid 1000);
+        Thu, 16 Sep 2021 19:49:11 -0000
+Date:   Thu, 16 Sep 2021 14:49:11 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Lucas Stach <dev@lynxeye.de>, linux-mmc@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Nishanth Menon <nm@ti.com>, linux-pwm@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-tegra@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-staging@lists.linux.dev, dri-devel@lists.freedesktop.org,
+        linux-clk@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        linux-mtd@lists.infradead.org, Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        devicetree@vger.kernel.org, Stefan Agner <stefan@agner.ch>,
+        linux-spi@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v11 08/34] dt-bindings: host1x: Document Memory Client
+ resets of Host1x, GR2D and GR3D
+Message-ID: <YUOftwuVt7EqtA5I@robh.at.kernel.org>
+References: <20210912200832.12312-1-digetx@gmail.com>
+ <20210912200832.12312-9-digetx@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210916163311.11968-1-andrew.shadura@collabora.co.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210912200832.12312-9-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi again,
-
-On 16/09/2021 17:33, Andrej Shadura wrote:
-> Since the actual_length calculation is performed unsigned, packets
-> shorter than 7 bytes (e.g. packets without data or otherwise truncated)
-> or non-received packets ("zero" bytes) can cause buffer overflow.
+On Sun, 12 Sep 2021 23:08:06 +0300, Dmitry Osipenko wrote:
+> Memory Client should be blocked before hardware reset is asserted in order
+> to prevent memory corruption and hanging of memory controller.
 > 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=214437
-> Fixes: 42337b9d4d958("HID: add driver for U2F Zero built-in LED and RNG")
-> Signed-off-by: Andrej Shadura <andrew.shadura@collabora.co.uk>
+> Document Memory Client resets of Host1x, GR2D and GR3D hardware units.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  .../bindings/display/tegra/nvidia,tegra20-host1x.txt          | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
 
-Having sent the email I realised I forgot to describe the actual
-situation when I ran into this bug. It happened after I inserted and
-removed the device multiple times very quickly. I know it’s not
-extremely reliable way to reproduce it, and it rarely happened to me
-before for some reason, but on the current kernel (5.11.0) I was able to
-cause the crash every time I tried.
-
--- 
-Cheers,
-  Andrej
+Reviewed-by: Rob Herring <robh@kernel.org>
