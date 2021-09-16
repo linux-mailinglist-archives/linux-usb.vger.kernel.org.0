@@ -2,174 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7799D40E48E
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Sep 2021 19:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC7440E55B
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Sep 2021 19:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243981AbhIPREm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Sep 2021 13:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347636AbhIPRAL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Sep 2021 13:00:11 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CAFC0363C3
-        for <linux-usb@vger.kernel.org>; Thu, 16 Sep 2021 09:16:56 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id c21so18671085edj.0
-        for <linux-usb@vger.kernel.org>; Thu, 16 Sep 2021 09:16:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jHK/xqguCKv/MR4fwXjRmcM93cFgGl6Y32a4+3LOaBY=;
-        b=AEUDd7pV9a8fv9MoUDEB/1YV70rMjNiwVqjYNgqTmuPYQlb1B3XhWOa3d679adVJ1E
-         yucOpTQI81iMxVqcjE4I4GH8h1VX8cX9L+/GbDlsGNjaAVM+nDBZwolEYFKL46Asg7yf
-         aCV1dEkCnEnXFNAm1oYZ/DEX1e0ck8XCctPsdWmi/r2kKFhjLS04LvsSZDvd03uxy3Yi
-         MdVNYkbcdoL3QP80/FjoKc7utwQ48v5GgYsNiYjYmtHubR4bzdsBR9nMYbB9yjptvtWe
-         M09nZawvADViSrIUS5uN8IeAYk3n+awW2JwptYIlPhErLsMeiTVXUAtd+YBsP8EiEaef
-         qrgA==
+        id S1345471AbhIPRK7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Sep 2021 13:10:59 -0400
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:54314
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347849AbhIPRIc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Sep 2021 13:08:32 -0400
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 266CE402A1
+        for <linux-usb@vger.kernel.org>; Thu, 16 Sep 2021 17:05:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1631811935;
+        bh=xmMlFpxNYUGHhWNpAFsSQHnuFL2wu1djSf/pThsAMRw=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=eGe3R61HaZoCCT1DDDs/DtMbKqJBSYnUCvvdyOCbFV946wSmTgD5HUkNyv45HQmGo
+         QAquhlaryayFbXBOQ6TaBnV8wzSdY8/1FZUXjdeVUMuHY2q/Y1RKxcAbgV7gGm6MBy
+         4h++o4ptj+ywo0E1urNKqbXUQP0v08VtGFEs3MoUvqcNo1PldOCoEvj802xSzvVBw1
+         wUK12BFKUuU1HI0sF1fcYRrdJ6MfvnvBDSdLi9gwlZPuf8j8AIGyjR5IRy/ln2pGUF
+         9RvIabORyTFSQ6t0AfPcARYpLcRIBY82oT0yZPMyXkqEB6TTzJXjm6SwTMlWRmGZNC
+         WtZwvkN3NbOKA==
+Received: by mail-wm1-f72.google.com with SMTP id n30-20020a05600c3b9e00b002fbbaada5d7so2804387wms.7
+        for <linux-usb@vger.kernel.org>; Thu, 16 Sep 2021 10:05:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jHK/xqguCKv/MR4fwXjRmcM93cFgGl6Y32a4+3LOaBY=;
-        b=N8EW6H1TUovAFoYme2OUtUXpJvjIZt1vyAPw7bt9RhRC3boulxxRV7q52QaNt1i0pY
-         5BWuNOOyYFwtSArRrKsn/RMwlAIeKAWstp90auxVFUHdOSDXKoxG8ceOedkcajvad3/W
-         TdJqIZiR9w9u377Fzpgl3u4CjoFcwFEKRo5HTCgYcmwUYDk8Liq1gnYb0PpHDfkO8tNs
-         By2BvQUArGIZDw2NRmGAkTAD/ctEnlDNN1X0b+yJip6XdPYgyAU7KX4LbRTAciFgPBPU
-         V7yrywvrurgSPvudT9RkAfzj1VLgr47yfsA0TdF8pmFh26QGAXxxMPdONxqiRvjmgrf1
-         jo5Q==
-X-Gm-Message-State: AOAM5322PUHHIu+hmN1ytrC0pGqZg/GrwVZw+4anAi2KHeKOf9ko9a11
-        IBV/0F9p0JUfStfu8zLgi+qu4fJIUOeARKIyIByvVg==
-X-Google-Smtp-Source: ABdhPJywm65+5K+5MtjZwOa+gT94NK9qMFMnMUQZ9zRxmdOUE7/YQqlEaOPAkgsSWxQBRmlekY5+t6DIIQjKQFelvXE=
-X-Received: by 2002:a17:906:5ac5:: with SMTP id x5mr7074596ejs.271.1631809014344;
- Thu, 16 Sep 2021 09:16:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210902213500.3795948-1-pmalani@chromium.org>
- <20210902213500.3795948-3-pmalani@chromium.org> <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
- <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
- <YUB16up3JDwi3HfI@kuha.fi.intel.com> <YULwz8NsoA3+vrhA@google.com>
- <YUMbGp0aemx1HCHv@kuha.fi.intel.com> <DB9PR10MB46525E6CA4C6BB101059D93C80DC9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
-In-Reply-To: <DB9PR10MB46525E6CA4C6BB101059D93C80DC9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Thu, 16 Sep 2021 09:16:17 -0700
-Message-ID: <CAPTae5Kxmp0L35KnkYaHARrBmysX9wkMYZhGhJsu6tX4bcHuAA@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
-To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "bleung@chromium.org" <bleung@chromium.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xmMlFpxNYUGHhWNpAFsSQHnuFL2wu1djSf/pThsAMRw=;
+        b=SFQT9fkfXwo1rUILBS8LQnt1HiZAZJwMXUOwhAojVpEEFKpA/muGB5QLkzNB/3zW07
+         VhIc+06VC2/roX0V3N/aORhlDDLppaeTTAvDIHFgDT5/asWMWNk7q5Viox/Y25fQZ7h6
+         RI8mr5ThQ3v85UsvUv/ItEg2/eqlrLXXYpiUZaLTw1EsCIL2odDUc9zeZBhkAeGnAXBz
+         zV+oJd9QDLiSg1ixGYWjOjWFjl1oTxQKdE7hgeFCiwQdLpOhuOxWDLOZ2+QLEEucgCgP
+         7jBsvvOJFDlxVhYf+bfkBMqHBN1fI/f9uHMj1jV97Ti+Bic8S3Sts/KQTygrwlh/K4fw
+         i/Ww==
+X-Gm-Message-State: AOAM531VNQ5mrssiKA7qKbCZwIy2aUkPT9sBERfTLol9soC8XRia0781
+        Z+MxCG9z314IKzvBNGK2UDR+VO4gXjJAsAAeIZjM0cl7jttTnJvI6CuojwyjxVH3JhQHV29PYii
+        ZP+j34QELNucCWvZiZ7N95aDPBIVsYqB4ag8How==
+X-Received: by 2002:adf:e384:: with SMTP id e4mr7278487wrm.163.1631811934457;
+        Thu, 16 Sep 2021 10:05:34 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxmMz9cgr5kJ+3gR03Sf0NrO0bEAz5zD+KEznHUHd9k7UtPSJUPKB5wOA6I1DqE0hLK+jXvKg==
+X-Received: by 2002:adf:e384:: with SMTP id e4mr7278470wrm.163.1631811934335;
+        Thu, 16 Sep 2021 10:05:34 -0700 (PDT)
+Received: from kozik-lap.lan (lk.84.20.244.219.dc.cable.static.lj-kabel.net. [84.20.244.219])
+        by smtp.gmail.com with ESMTPSA id u25sm4425269wmm.5.2021.09.16.10.05.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Sep 2021 10:05:33 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+        Lubomir Rintel <lkundrak@v3.sk>, linux-usb@vger.kernel.org
+Subject: [PATCH] usb: host: ehci-mv: drop duplicated MODULE_ALIAS
+Date:   Thu, 16 Sep 2021 19:05:31 +0200
+Message-Id: <20210916170531.138335-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 16, 2021 at 7:12 AM Adam Thomson
-<Adam.Thomson.Opensource@diasemi.com> wrote:
->
-> On 16 September 2021 11:23, Heikki Krogerus wrote:
->
-> > > Thanks for providing the clarification. So you're proposing a port-psy and a
-> > > port-partner-psy that are connected to each other (one supplying the other).
-> > > If PD is not present, those two will exist per port and partner, and there
-> > > will be information about Type-C current (and possibly BC 1.2 and other
-> > > methods?)
-> >
-> > Yes, exactly.
-> >
-> > > Do you have an example hierarchy you could share that explains what it would
-> > > look like in /sys/class/power_supply with PD with Source Caps and Sink Caps on
-> > > both sides?
-> >
-> > I don't yet, but I'll prepare something. I did notice already that the
-> > power supply class does not seem to display the suppliers nor
-> > supplicants in sysfs. But we can always improve the class.
-> >
-> > I probable should not talk about "hierarchy". Maybe taking about
-> > simply "chain" of power supplies is more correct?
-> >
-> > > I think this all makes sense if the connector class is a read interface
-> > > for this info. Have you considered how the type-c connector class and this pd
-> > > psy support will handle dynamic PDO changes for advertisement FROM the
-> > ports?
-> > >
-> > > For example, let's say you wanted the kernel and user to manage two USB-C
-> > ports
-> > > with higher power support (meaning, 5V, 9V, 15V, 20V capable), but then your
-> > > kernel and user needs to edit the Source Caps on the fly based on load
-> > > balancing.
+There is one MODULE_ALIAS already.
 
-Adding a few more instances.
+Fixes: 0440fa3d1b4e ("USB: EHCI: make ehci-mv a separate driver")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ drivers/usb/host/ehci-mv.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Editing Source Caps on the fly is also applicable for handheld devices
-with just  one port !
-For instance, the phone might want to conserve power and limit the
-power supplied to the port partner by adjusting the source caps to
-limit battery drain based on the system conditions.
+diff --git a/drivers/usb/host/ehci-mv.c b/drivers/usb/host/ehci-mv.c
+index 8fd27249ad25..fa46d217dd10 100644
+--- a/drivers/usb/host/ehci-mv.c
++++ b/drivers/usb/host/ehci-mv.c
+@@ -258,8 +258,6 @@ static int mv_ehci_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-MODULE_ALIAS("mv-ehci");
+-
+ static const struct platform_device_id ehci_id_table[] = {
+ 	{"pxa-u2oehci", 0},
+ 	{"pxa-sph", 0},
+-- 
+2.30.2
 
-The sink caps can potentially change on the fly as well based on the
-charging phase the handheld device is in. For instance, in the last
-phase of charging (say when the battery is charged to greater than
-80%), it would not make much sense to step down voltage(power losses
-due to conversion) from greater than 5V to battery voltage(say ~4.4V).
-
-> > >
-> > > If caps are represented as a group of psys together, how do you as a kernel
-> > > and user create an modify the set of Source_Caps you put out on a port?
-> >
-> > My idea is to utilise the "present" property with the ports. You would
-> > always display all the possible supplies, but only the ones that you
-> > expose in your current capabilities will be present.
-> >
-> > The idea is also that the ports are always supplied by normal power
-> > supplies of type "battery", "AC" and what have you. Those you can use
-> > to see the maximum power your port can get, and to determine the
-> > currently available power by checking the other ports that consume the
-> > same supply.
-> >
-> > So if you need more power for one port, you most likely will need to
-> > attempt to adjust the power levels of the source PDO power supplies of
-> > the other ports that share the base supply (like battery), or possibly
-> > disable them, and that way enable (make present) more source supplies
-> > for your port. That is the idea, but I admit I have not thought of
-> > everything, so I'm not completely sure would it work exactly like
-> > that, but the power balancing should in any case be possible with the
-> > chain of power supplies one way or the other.
-> >
-> > I hope I understood your question correctly, and I hope I was able to
-> > give you an answer :-)
->
-> Thanks for the additional updates. So is the intention here to move control of
-> PDO selection away from TCPM, or add more flexibility to it? As I understand it
-> from previous efforts around all of this, the intention was that TCPM makes the
-> decision as to which PDO to select (and which APDO for PPS) based on the offered
-> capabilities of the source and the sink capabilities which are described in FW.
-> Am just trying to envisage the use-cases here and how the kernel/user is
-> involved in selecting PDOs/voltages/currents.
->
-> IIRC there used to be functions for updating source/sink capabilities but these
-> never had users and were subsequently removed. I guess this would be essentially
-> the functional replacement for those APIs?
->
-> Personally, I think the idea of source/sink PSY instances supplying each other
-> seems reasonable. Right now we represent the external PD/Type-C supply (partner)
-> through TCPM as a PSY instance which is always present for the associated port,
-> although obviously when no source partner exists we're marked as offline. For
-> the partner side I'm guessing the PSY instance will be dynamically
-> created/destroyed? From previous experience PSY classes have tended to be
-> statically included so would be interested in seeing what this looks like in
-> reality.
->
-> Am still unsure on using PSY to expose individual PDOs though and this still
-> feels quite heavyweight. I assume we're not wanting to expose everything in PDOs
-> really, just the voltage/current info? Feels like we should be able to do this
-> with individual properties which a user can be notified of changes to through
-> the normal prop notifier, rather than a collection of PSY class instances.
-> However, I'm happy to be convinced the other way so will await further
-> details. :)
