@@ -2,86 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2CF40F1A3
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 07:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBEFD40F1F5
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 08:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244881AbhIQFdU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Sep 2021 01:33:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48120 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229704AbhIQFdQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 Sep 2021 01:33:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 70B4760F6D;
-        Fri, 17 Sep 2021 05:31:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631856715;
-        bh=wmw9k01/AvuhnEyQwRWm6jRIXEaJDV2SvbYKsXBqtDg=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=m0mP+HfIDtTMb5L9/45deKc6VMDcjk5SqjgJfhf6zy4aiJ3gqe+YgpHdTLlAlwKvx
-         oe/v9jZjnQ7HXJf2b/IBClfIMRAYwTHq79I3p84DfV23bhp1pKqHHVwJdJmEe5an/6
-         /a16i2FcgpLl9gPgxxILatO+08jt8DwhpkYnEy9tQw88UDYnlcycqSxpeCRoJBl7bE
-         CWaxN0Q0Y0EgonEvg6jZKCLN32QD3v2NzM8srWUq5HA8nfYWpwBVy+o4SgGVoR4885
-         NaFBqhRrYCGhxGR00Sgo8RObh3q8VXKH6GZdWrKk9LkiD3EpXXuLajpD0kAMgXg2Iy
-         sDVMWMgaUXlNg==
-References: <YUNbDyoTPa+5J9Od@ws2>
-User-agent: mu4e 1.6.5; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Andreas Bauer <andreas.bauer.nexus@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget/legacy/ether: assume saner default power mode
-Date:   Fri, 17 Sep 2021 08:28:16 +0300
-In-reply-to: <YUNbDyoTPa+5J9Od@ws2>
-Message-ID: <87pmt7ahtj.fsf@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S245004AbhIQGMw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Sep 2021 02:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245016AbhIQGMu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Sep 2021 02:12:50 -0400
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6F8C0613D3
+        for <linux-usb@vger.kernel.org>; Thu, 16 Sep 2021 23:11:26 -0700 (PDT)
+Received: by mail-qt1-x849.google.com with SMTP id d20-20020ac81194000000b002a53ffbd04dso47999183qtj.12
+        for <linux-usb@vger.kernel.org>; Thu, 16 Sep 2021 23:11:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=3zrUVwbKEfBYS+g/qOMTeXZGXa+cM1Fx/id4TGcTnuY=;
+        b=aqjshXeHh7KYq65oIgapr0BQjil3sP1rDi7xaSzByT7HUdNhTaI1Ys3Wxlz/Z7g3Am
+         +hOjpH810t+0u4G9mpxQRBffRfJ62rH1ddXs4ULDpEQR6Ts6jBfJ0gjcpO4kVp8wCOHQ
+         Vl8iN8hld/46cAlQUMTAiAhB/6+eDCE1dhcnqKSrsGDeqrAxl6t2FhBn8Bsl4kzSxqNL
+         NAWZ+7xfiGeYj9Qd6nT39cNlAK7qfcwkxHdx1U+CIiom21GYWoJX+2VtAip3VlCuFz1w
+         jGyqNia1LYugFTCoMyC2dyRJTvbrZO/b7LutqymMpftkHK3U8/75gDv5A0e2jD9U6hVB
+         ilXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=3zrUVwbKEfBYS+g/qOMTeXZGXa+cM1Fx/id4TGcTnuY=;
+        b=qFfiz/IogMQ2GwClGoiEAGptfaAXuPyRdmHNLyGtcPnpTpK1OhQjwuCms/qEYEbVud
+         sd6SB5vH4/okMH+Rrc+uhUL+4H+XYHYxgKfETdUILjK5okQdlllQlO64JHEKOHnZ5ep6
+         TN+jXNXPrwW32/2lZB5hC8Q1v1sTehbQPsdmLzf2hFplUXRpXA5ifFFlSVHtRCf0Qkul
+         c66nC5abNYbeuzwG7bCi7nKACjkD3sFJsWiV3JbLU4g6i9DcIVWYAbGUcbRF7AtsBrlV
+         176guh03YQjZsfiXw0I7CdMZu5S63IplExuNYAp1U3dWZMM3yLSmG6mQwQli8iMko5gM
+         tKGQ==
+X-Gm-Message-State: AOAM531lrH5YQt+6HqAqY7wKQoHSrwp/j3sAj4XXGcvfmmj59GtpWGN6
+        bHi0IZ7/mm1WbKHcesyphYKgaXeYJAbqDBi1R4PnaQ==
+X-Google-Smtp-Source: ABdhPJycuTlpICuFt0WKNwqUbICZRKz0xI20vVDuhSpUpfdHDy2C99ZMkURQuV1YTT5+M888e29TyWCs6BP2z006i3tORQ==
+X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:201:4845:43ba:3ff5:2de1])
+ (user=brendanhiggins job=sendgmr) by 2002:ad4:522c:: with SMTP id
+ r12mr9348777qvq.17.1631859085422; Thu, 16 Sep 2021 23:11:25 -0700 (PDT)
+Date:   Thu, 16 Sep 2021 23:10:58 -0700
+Message-Id: <20210917061104.2680133-1-brendanhiggins@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.464.g1972c5931b-goog
+Subject: [PATCH v1 0/6] kunit: build kunit tests without structleak plugin
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     shuah@kernel.org, davidgow@google.com, arnd@arndb.de,
+        keescook@chromium.org, rafael@kernel.org, jic23@kernel.org,
+        lars@metafoo.de, ulf.hansson@linaro.org, andreas.noever@gmail.com,
+        michael.jamet@intel.com, mika.westerberg@linux.intel.com,
+        YehezkelShB@gmail.com, masahiroy@kernel.org,
+        michal.lkml@markovi.net, ndesaulniers@google.com
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        gregkh@linuxfoundation.org, linux-iio@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+The structleak plugin causes the stack frame size to grow immensely when
+used with KUnit; this is caused because KUnit allocates lots of
+moderately sized structs on the stack as part of its assertion macro
+implementation. For most tests with small to moderately sized tests
+cases there are never enough KUnit assertions to be an issue at all;
+even when a single test cases has many KUnit assertions, the compiler
+should never put all these struct allocations on the stack at the same
+time since the scope of the structs is so limited; however, the
+structleak plugin does not seem to respect the compiler doing the right
+thing and will still warn of excessive stack size in some cases.
 
-Andreas Bauer <andreas.bauer.nexus@gmail.com> writes:
+These patches are not a permanent solution since new tests can be added
+with huge test cases, but this serves as a stop gap to stop structleak
+from being used on KUnit tests which will currently result in excessive
+stack size.
 
-> I propose the included patch to the OTG USB ethernet gadget code:
->
->   Report default of bus powered and 500mA bMaxPower consumption.
->
-> Reason:
->
->   The USB spec requires all devices consuming more than 100mA from
->   the bus to report in this manner. Devices such as Rpi Zero can operate
->   in this mode and will then falsly report being self-powered when they
->   are not.
->
->   The more sane default is to report being 500mA bus-powered than being
->   self-powered
->
-> This patch was born from an issue within the Raspberry Pi Zero ecosystem,
-> therefore I would invite comment regarding other usage of this OTG code.
+Of the following patches, I think the thunderbolt patch may be
+unnecessary since Linus already fixed that test. Additionally, I was not
+able to reproduce the error on the sdhci-of-aspeed test. Nevertheless, I
+included these tests cases for completeness. Please see my discussion
+with Arnd for more context[1].
 
-Have a look at other commits to get examples of how to write commits for
-upstream. You're missing your Signed-off-by, adding extra unnecessary
-spaces and making your signature show up in the commit log. All of
-these are described in kernel documentation this
-(https://www.kernel.org/doc/html/latest/process/submitting-patches.html)
-is a good starting point.
+NOTE: Arnd did the legwork for most of these patches, but did not
+actually share code for some of them, so I left his Signed-off-by off of
+those patches as I don't want to misrepresent him. Arnd, please sign off
+on those patches at your soonest convenience.
 
-> $ diff -u linux-5.14.2/drivers/usb/gadget/legacy/ether.c.orig linux-5.14.2/drivers/usb/gadget/legacy/ether.c
-> --- linux-5.14.2/drivers/usb/gadget/legacy/ether.c.orig	2021-09-08 13:52:41.000000000 +0700
-> +++ linux-5.14.2/drivers/usb/gadget/legacy/ether.c	2021-09-16 21:25:06.782958554 +0700
-> @@ -296,7 +296,8 @@
->  	/* .label = f(hardware) */
->  	.bConfigurationValue	= 1,
->  	/* .iConfiguration = DYNAMIC */
-> -	.bmAttributes		= USB_CONFIG_ATT_SELFPOWER,
-> +	.bmAttributes		= 0,   /* bus powered implied */
-> +	.bMaxPower		= 250, /* 500mA in 2mA units */
+[1] https://lore.kernel.org/linux-arm-kernel/CAFd5g44udqkDiYBWh+VeDVJ=ELXeoXwunjv0f9frEN6HJODZng@mail.gmail.com/
 
-right, your "sane" default now prevents this gadget driver from working
-behind bus powered hubs. Considering that a linux-based device is likely
-to have its own battery, this is not really a sane default.
+Arnd Bergmann (1):
+  bitfield: build kunit tests without structleak plugin
 
-The default value of "self powered", seems much saner ;-)
+Brendan Higgins (5):
+  gcc-plugins/structleak: add makefile var for disabling structleak
+  iio/test-format: build kunit tests without structleak plugin
+  device property: build kunit tests without structleak plugin
+  thunderbolt: build kunit tests without structleak plugin
+  mmc: sdhci-of-aspeed: build kunit tests without structleak plugin
 
+ drivers/base/test/Makefile   | 2 +-
+ drivers/iio/test/Makefile    | 1 +
+ drivers/mmc/host/Makefile    | 1 +
+ drivers/thunderbolt/Makefile | 1 +
+ lib/Makefile                 | 2 +-
+ scripts/Makefile.gcc-plugins | 4 ++++
+ 6 files changed, 9 insertions(+), 2 deletions(-)
+
+
+base-commit: 316346243be6df12799c0b64b788e06bad97c30b
 -- 
-balbi
+2.33.0.464.g1972c5931b-goog
+
