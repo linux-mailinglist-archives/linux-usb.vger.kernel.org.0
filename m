@@ -2,96 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F4940F598
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 12:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5ECA40F5BF
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 12:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242019AbhIQKNp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Sep 2021 06:13:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45634 "EHLO mail.kernel.org"
+        id S242328AbhIQKSD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Sep 2021 06:18:03 -0400
+Received: from mga02.intel.com ([134.134.136.20]:56384 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232222AbhIQKNp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 Sep 2021 06:13:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4118560FA0;
-        Fri, 17 Sep 2021 10:12:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631873543;
-        bh=xY8J/j9qUaGYAGoqvQX5HhO1EN2JZ/E6yJSFEt2XZwc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gAacma7HG6O7VlmSYz4HuMuOUkiuQGtRQnzJbIJlRe70IcyRnEEHzc7f2i4scd4Ne
-         TV3okVfzInNNFuyV5+3XUQzJXM/KIRz/Qh8zeE5SrfwoYJz5/8VaHKlyKKbJ0WQhHB
-         JsH6uYXtEa81r3gxsUsVo6jKdN/0Sr0WU13uAPHp3tdwrzM1+vKZNy/vRQY19OBEPM
-         R0y3Me9EQc+2K6Y0ZRWpBR8l47CdyaAX3TlgJc09715UI3rWuVepikMic0pibf3DwV
-         yWj7V5plqjk+kqSYmdlA1NAJzVBWfQmOSCRFVcL5ADTn3ZvAOUGNcGCZpDErqWhv/9
-         qvvabsGOP473A==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mRAr1-0002eR-OZ; Fri, 17 Sep 2021 12:12:24 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        stable@vger.kernel.org
-Subject: [PATCH net] net: hso: fix muxed tty registration
-Date:   Fri, 17 Sep 2021 12:12:04 +0200
-Message-Id: <20210917101204.10147-1-johan@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        id S242104AbhIQKSC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 17 Sep 2021 06:18:02 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10109"; a="209998947"
+X-IronPort-AV: E=Sophos;i="5.85,301,1624345200"; 
+   d="scan'208";a="209998947"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2021 03:16:40 -0700
+X-IronPort-AV: E=Sophos;i="5.85,301,1624345200"; 
+   d="scan'208";a="472208475"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2021 03:16:33 -0700
+Received: by lahna (sSMTP sendmail emulation); Fri, 17 Sep 2021 13:16:30 +0300
+Date:   Fri, 17 Sep 2021 13:16:30 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     shuah@kernel.org, davidgow@google.com, arnd@arndb.de,
+        keescook@chromium.org, rafael@kernel.org, jic23@kernel.org,
+        lars@metafoo.de, ulf.hansson@linaro.org, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com,
+        masahiroy@kernel.org, michal.lkml@markovi.net,
+        ndesaulniers@google.com, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v1 4/6] thunderbolt: build kunit tests without structleak
+ plugin
+Message-ID: <YURq/qq32WnOaJag@lahna>
+References: <20210917061104.2680133-1-brendanhiggins@google.com>
+ <20210917061104.2680133-5-brendanhiggins@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210917061104.2680133-5-brendanhiggins@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If resource allocation and registration fail for a muxed tty device
-(e.g. if there are no more minor numbers) the driver should not try to
-deregister the never-registered (or already-deregistered) tty.
+On Thu, Sep 16, 2021 at 11:11:02PM -0700, Brendan Higgins wrote:
+> The structleak plugin causes the stack frame size to grow immensely when
+> used with KUnit:
+> 
+> drivers/thunderbolt/test.c:1529:1: error: the frame size of 1176 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+> 
+> Turn it off in this file.
+> 
+> Linus already split up tests in this file, so this change *should* be
+> redundant now.
+> 
+> Co-developed-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 
-Fix up the error handling to avoid dereferencing a NULL pointer when
-attempting to remove the character device.
-
-Fixes: 72dc1c096c70 ("HSO: add option hso driver")
-Cc: stable@vger.kernel.org	# 2.6.27
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/net/usb/hso.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
-index a57251ba5991..f97813a4e8d1 100644
---- a/drivers/net/usb/hso.c
-+++ b/drivers/net/usb/hso.c
-@@ -2719,14 +2719,14 @@ struct hso_device *hso_create_mux_serial_device(struct usb_interface *interface,
- 
- 	serial = kzalloc(sizeof(*serial), GFP_KERNEL);
- 	if (!serial)
--		goto exit;
-+		goto err_free_dev;
- 
- 	hso_dev->port_data.dev_serial = serial;
- 	serial->parent = hso_dev;
- 
- 	if (hso_serial_common_create
- 	    (serial, 1, CTRL_URB_RX_SIZE, CTRL_URB_TX_SIZE))
--		goto exit;
-+		goto err_free_serial;
- 
- 	serial->tx_data_length--;
- 	serial->write_data = hso_mux_serial_write_data;
-@@ -2742,11 +2742,9 @@ struct hso_device *hso_create_mux_serial_device(struct usb_interface *interface,
- 	/* done, return it */
- 	return hso_dev;
- 
--exit:
--	if (serial) {
--		tty_unregister_device(tty_drv, serial->minor);
--		kfree(serial);
--	}
-+err_free_serial:
-+	kfree(serial);
-+err_free_dev:
- 	kfree(hso_dev);
- 	return NULL;
- 
--- 
-2.32.0
-
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
