@@ -2,105 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C4540F2F0
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 09:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C164340F327
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 09:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235473AbhIQHRH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Sep 2021 03:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbhIQHRG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Sep 2021 03:17:06 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDD7C061574
-        for <linux-usb@vger.kernel.org>; Fri, 17 Sep 2021 00:15:45 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id q68so8743878pga.9
-        for <linux-usb@vger.kernel.org>; Fri, 17 Sep 2021 00:15:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xMt2sX2jDUgWXLfZ7hg6li8heCIlRZ77kIPAMfMjLIk=;
-        b=b+MWr328444hR5ErST+7YyQCNUPHWPLcx5tYY9KNkNGxKRFxNuuNkL5tsScUfovy21
-         ufvK29h2uVcGWvbtUCKRZiPL2l/iNpGsu0tfQdDqmrPwzEtfMKrhmfFiF9KcreLxLD5+
-         fZr+9VLhbBgHFjrDL/CSeg8JA8fBfDqDkra6iDbsCRhHSCbo3/tXmyjzSGF8pje/XAGd
-         5XugYbn3ipHBUA12w0hVqwiNADr9TCgkC+9byQ/H75qmJbwDtGJzkA9gKkHwohv/zNVg
-         yWVc2TZXXsx71mAmqoQZfd9fu+xaQsIiHXo2qem3u7TqdjYppXyNxI958FzAIv+jRCpP
-         qGqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xMt2sX2jDUgWXLfZ7hg6li8heCIlRZ77kIPAMfMjLIk=;
-        b=FkIlV/mztfd3uF8Vp9bcKhZdorz44Isrd2OmUThP8vA+u4Azj1F46mcqpYTrIm2DuS
-         4564YEBo9Gq61w9qgG5Y7uC5fxEDMYP63YJgC9SeFe3TNlg1TP6BfKGB64xaMBeFZt8e
-         8veuS0vvwd9lAhuSP6GufTTz0VlA2hrtu6nPLgn2zN1ZWIsfKnaGucyUSHpSDzjL+o1h
-         0IBXlZmdcq/Yy+rLIxllh/A/w+uStGWIed81bb4pRYi8mfK4vbt9rzHvTeR8hxR9Fqoy
-         VrtCfUcNBd5659ATQCOo7OPP3DrIKWQIjgoxXgNdnm5cxZj/ZKpYmeHUdnuEm9o2YJWc
-         AlIA==
-X-Gm-Message-State: AOAM532IAVp5xrxMzCZDaU7FmS4o1D5aXAHy5bIle/7DCooCOgMgetzp
-        bjhWQoG2G/xbztspIGzjlmzKvVFISYpBvLLbFvfVTA==
-X-Google-Smtp-Source: ABdhPJz+U8zYChBhGSmOz13MRU9O5Ydz8bjddYxEqQXk6joT5dKZX6j5UMh8iPtSKNoRLzrZ/vprcQ==
-X-Received: by 2002:a05:6a00:2444:b029:3cd:5af9:821e with SMTP id d4-20020a056a002444b02903cd5af9821emr9479741pfj.40.1631862944654;
-        Fri, 17 Sep 2021 00:15:44 -0700 (PDT)
-Received: from ws2 ([185.65.135.245])
-        by smtp.gmail.com with ESMTPSA id x10sm9567420pjv.57.2021.09.17.00.15.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Sep 2021 00:15:44 -0700 (PDT)
-From:   Andreas Bauer <andreas.bauer.nexus@gmail.com>
-X-Google-Original-From: Andreas Bauer <Andreas.Bauer.Nexus@gmail.com>
-Date:   Fri, 17 Sep 2021 14:15:33 +0700
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget/legacy/ether: assume saner default power mode
-Message-ID: <YURAlSpAWT0s9dVr@ws2>
-References: <YUNbDyoTPa+5J9Od@ws2>
- <87pmt7ahtj.fsf@kernel.org>
+        id S239569AbhIQHXu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Sep 2021 03:23:50 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:44499 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233839AbhIQHXt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Sep 2021 03:23:49 -0400
+Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MVvCn-1mHThU09DR-00RmsA; Fri, 17 Sep 2021 09:22:25 +0200
+Received: by mail-wr1-f48.google.com with SMTP id t8so13544371wrq.4;
+        Fri, 17 Sep 2021 00:22:24 -0700 (PDT)
+X-Gm-Message-State: AOAM533d2e3gdScN5QoJuVuHz2DYRF7zteoDv/ZILhs3R+Zs+um5rIPy
+        lA4Ip7+pWUtM25EzEtXnDMFfg6L652xbw9nxtxM=
+X-Google-Smtp-Source: ABdhPJzJsrzhqboheOkJF5DSOKul11PbpO1/TRN4PuVM4wUc/lsEjGqfYS2kGw1Iq3DVe/OqQTjG5Qdil3wWKPMut74=
+X-Received: by 2002:adf:f884:: with SMTP id u4mr9953811wrp.411.1631863344560;
+ Fri, 17 Sep 2021 00:22:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87pmt7ahtj.fsf@kernel.org>
+References: <20210917061104.2680133-1-brendanhiggins@google.com> <20210917061104.2680133-7-brendanhiggins@google.com>
+In-Reply-To: <20210917061104.2680133-7-brendanhiggins@google.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 17 Sep 2021 09:22:08 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a21j9yJe_X=kU6v2YgOnrhunRbPv+O6STSH71qTb7xnfg@mail.gmail.com>
+Message-ID: <CAK8P3a21j9yJe_X=kU6v2YgOnrhunRbPv+O6STSH71qTb7xnfg@mail.gmail.com>
+Subject: Re: [PATCH v1 6/6] bitfield: build kunit tests without structleak plugin
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>, David Gow <davidgow@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>, andreas.noever@gmail.com,
+        michael.jamet@intel.com,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        YehezkelShB@gmail.com, Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        gregkh <gregkh@linuxfoundation.org>, linux-iio@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-hardening@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:xGdJUU7Jbd4lvFcJi7VZTkYeXXOYuREu0Ya+f5SVA3D4fcQVzv5
+ sgRAiCMKKh3ytUEGmD6Dxf7aETOZ0X/pGgsz2AUIrp9kUt5lqMHR7GHL+Y2l01nZH4mzLRC
+ joVrXC9Ab/Y6xXXfTFeXn/bBIdvEQu3XMlqzqp9iyVUBeQ5WSddVw9o3hbB6el/wOUfnBy/
+ WeuyQDCELhT3LewzUbwBg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:aaLODG2UnWY=:8UNFcgwItep3KN1dO16puC
+ XIEYICuRxqJbEU5ER23X5Z6PR9LZVEIze8kIOAfxatbqRqyM2PPSFtCH9Igaph7MWx8xiEsW5
+ InUmTmeETPnUyvoTrIsYwyBBu4M7nHkfkN1VmhFCdizrpkGDyyddhpFuJcaPIPcsqDuIhTzi5
+ 0MAl8jixoNfMFCUpMQP4/RDpXbnHeKSf/tpJ7PMyp2vltwcMoeINfgF+3YNskF1bOCJK9qQB3
+ fKAnBvxBFhgTn6V9N5ByDxdiUDkdHK5h/XgpNDXbseTxaMpH9uWKvGCPx39I24X38EnfOme3c
+ TwpDCPSGWP5vRzaX3Q5iWlzNpHB0N5+wpfNWbwVTDG8oelEiWrmVXR94m9BlmDdlT50/FhJoB
+ ct0CHugb5GiJtqETF9YSXoKCsm3u4SQbXjmO2o+tiBX/l9OFP5t6MwmSWIdt3elXcpvnJqQLa
+ KLCvwLz7ra1d4eYfxTCxTBHdd+4+rOVi65uqRQx5fiUR/thIRAGduFtgg+rfxbpnJ43v3dWg3
+ PpCCK+ZVtqT+HCFDouRYyvIaO/6Wqiv95HHcFrzDsCReGfWd6HWHMB40R9RInPuTAGKQZQvTf
+ OIhHpTorZ4zAJNqhgZXMNx61Ws000Db8FJ37sTpRs3Ru/YmZSw+fU6jJmJvk+Vtt7GU4eucxn
+ 97CYR/u/EZOxUG50tu5ZPNz9bLt49JaQLdNMPQZS1K+QeH46LIvn0tgJsgidWXCeBSh7oRImO
+ LLleyzgY0c+YJMwy7qbf+oooD/oC0JLRq7emc0aqeUx6z43yeRCtQ0Xqu11DkdaI2wWQVr1id
+ +rSEvWF1itpoJYTMGv7VXeExWLmTIEf4reCMz5X9IQfMreMgoXpCFbTyCzJtNkP1pmFB6myNi
+ YSjsuQmyeXtyBgUgFYSw==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Fri, Sep 17, 2021 at 08:28:16AM +0300 schrieb Felipe Balbi:
+On Fri, Sep 17, 2021 at 8:11 AM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The structleak plugin causes the stack frame size to grow immensely:
+>
+> lib/bitfield_kunit.c: In function 'test_bitfields_constants':
+> lib/bitfield_kunit.c:93:1: error: the frame size of 7440 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
+>
+> Turn it off in this file.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> ---
+>  lib/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/lib/Makefile b/lib/Makefile
+> index 5efd1b435a37c..c93c4b59af969 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -351,7 +351,7 @@ obj-$(CONFIG_OBJAGG) += objagg.o
+>  obj-$(CONFIG_PLDMFW) += pldmfw/
+>
+>  # KUnit tests
+> -CFLAGS_bitfield_kunit.o := $(call cc-option,-Wframe-larger-than=10240)
+> +CFLAGS_bitfield_kunit.o := $(call cc-option,-Wframe-larger-than=10240) $(DISABLE_STRUCTLEAK_PLUGIN)
 
-> Have a look at other commits to get examples of how to write commits for
-> upstream. You're missing your Signed-off-by, adding extra unnecessary
-> spaces and making your signature show up in the commit log. All of
-> these are described in kernel documentation this
-> (https://www.kernel.org/doc/html/latest/process/submitting-patches.html)
-> is a good starting point.
+I think the  $(call cc-option,-Wframe-larger-than=10240) needs to be dropped
+here. This was not in my original patch and it is definitely broken on
+all architectures
+with 8KB stack size or less if the function needs that much. What is the amount
+of actual stack usage you observe without this? If we still get a warning, then
+I think this needs to be fixed in the code.
 
-I apologize, this was my first try at contributing based on what I 
-observed on this list. Will fix all mentioned points and consult the
-documentation before trying again.
-
-> > -	.bmAttributes		= USB_CONFIG_ATT_SELFPOWER,
-> > +	.bmAttributes		= 0,	/* bus powered implied */
-> > +	.bMaxPower		= 250,	/* 500mA in 2mA units */
-> 
-> right, your "sane" default now prevents this gadget driver from working
-> behind bus powered hubs. Considering that a linux-based device is likely
-> to have its own battery, this is not really a sane default.
-
-The linux-based battery-powered device I have here (Android) charges its
-battery and is thus bus-powered while in gadget mode.
-
-Are there really a lot of devices that use gadget mode and do NOT draw 
-power from the USB bus? Honest question, I don't know the answer.
-
-> The default value of "self powered", seems much saner ;-)
-
-It violates USB specification as is for most cases I reckon.  It also 
-maximize functionality when the host does not enforce USB spec which
-mostly seems to be the case.
-
-Would a CONFIG option here make sense to differentiate between 
-bus-powered devices and self-powered ones? This would probably affect
-most OTG drivers...
-
-regards,
-
-Andreas
+       Arnd
