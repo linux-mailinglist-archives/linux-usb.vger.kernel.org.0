@@ -2,192 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0EFF40FC36
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 17:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD2EA40FD20
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 17:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233320AbhIQP1W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Sep 2021 11:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49718 "EHLO
+        id S1344335AbhIQPtz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Sep 2021 11:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbhIQP1V (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Sep 2021 11:27:21 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF34C061574
-        for <linux-usb@vger.kernel.org>; Fri, 17 Sep 2021 08:25:59 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id t189so1908419oie.7
-        for <linux-usb@vger.kernel.org>; Fri, 17 Sep 2021 08:25:59 -0700 (PDT)
+        with ESMTP id S1344187AbhIQPtx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Sep 2021 11:49:53 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE71C061764
+        for <linux-usb@vger.kernel.org>; Fri, 17 Sep 2021 08:48:31 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id r2so9996034pgl.10
+        for <linux-usb@vger.kernel.org>; Fri, 17 Sep 2021 08:48:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2koZ04x2DtN9e//aryMeE1LzZuubx+x/O9XaETJf4J4=;
-        b=qUfMDQeH+WgQHKhRYH8dqZVy3VQQGMrdTVkTLCWpIJ3qSVB/4ZKWv0MfQJLogNdS5E
-         /gx05f+snZW1SZ+whZSNodzniyPIlx9LEcx8kUgdpvEn/kW2cTNzvjTYdOpq5ltkeMxI
-         35jt0/sw5CYXns62+cqx097Y/X1lsFW4hz16/wLBxS9gsZqj+Mvw2FNeRmEPqIpOoNgE
-         R3EBiB6pfSKZ4Xh+fBlHdtf58iSDvPRbDTSOSu961dGYzGcoSBWSQdl7spRlYE6exCib
-         GFdF6LM4vQjgP+0KEp96fCzMhKtd9s3X98wJDMz0e3ePzntig83gMkeX/XJJgxBh7RaZ
-         XogA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oU5/PdBksbt91dmMZ2AVGJIFzdhPLZCXzFzx+KRfDqk=;
+        b=KDzGJ0b9khD+pih/CbX22IId0YBoC/kJyqkzfoF/YleeZhZclne1J/L8CYza9hth1j
+         k0eN4rSOAq5jLCYYiXyLB+BiFSMlTE18J4j23xLqQ5cOJZDMocN7et1mYg4Ylouh4adS
+         7MMd1eKp8SzWcXGjhEgr5gwm/XDc/WeglPkC4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2koZ04x2DtN9e//aryMeE1LzZuubx+x/O9XaETJf4J4=;
-        b=Hkm+tBf8qhIURQBzMIlcd3ufv7VWq1IctDC9UZTEbuSMV1fWsGOBk7cwDNGD5rweOK
-         BIDUCmA3EubmeA7DMY7mxJi3gsUdkgCfE0dlbtqUKzZY9sfiQVo9pX6vpgQNodKpJaaW
-         xIhm/vpYcgbmzxgoeul2XEyBPbAdINEr7FE8g1dHNahs+V8zrwLA6v1tooqYNeZKdboG
-         R1VrsfJUqWMgPacaZcEuQ9giWUNwPCq+OJP2RCZugKDyNMU1KEXbeIwQmvMr9Zsjj9Xi
-         LvdOko6eyq8M+pFuWQE/FWt3A38JZczOht7to+Fw925RXxeEKffq/bcl78j2oKHBUvgE
-         OvuQ==
-X-Gm-Message-State: AOAM5333h7AJ9oV0PYt33UZrhn1JaEgC/9U6YUCv5WiCtGaWSlxySLKw
-        +C9D3d7MWnsj1VOYxs7pIcn3O/EPf04yd2KzUVN+QQsMcWaRYg==
-X-Google-Smtp-Source: ABdhPJx1T5bqoWOXufFx6vHynhp5lfGycAAGfa9lsAwhQbHFVgmd+cGTIT56Y6ieLvA/U+h4V3lyp28lZ1ZnaHmgP0Q=
-X-Received: by 2002:a05:6808:654:: with SMTP id z20mr4430964oih.118.1631892358960;
- Fri, 17 Sep 2021 08:25:58 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oU5/PdBksbt91dmMZ2AVGJIFzdhPLZCXzFzx+KRfDqk=;
+        b=gyK+eZghGtJ7kSdwIHhuPsxafPlyAWn2Jab1ZjUd7U1oqw9+EKLMM83kdG5JtbceIc
+         W7gwHHCwDkCTfLeZ8yA0fZI/PZrMsMWzcepK4j61yHcaOTi64oSV4PTQI9gzUUYySS7e
+         BEqbe5IfkIEb0bu9bF9vvwEuWhM7tR6Ryra/jYtAlAG/gHqtEXl4t0E9vRr5F+b/i+QG
+         q2FiwddA4HphISMjSyMA9OB0t3qGYX29eTmskVI+W8qyJv2X8g17dUU4AIMACTsJ3bm2
+         k8IHPoJvs61PAQj7LOtLbNPPZyUR78WNCDBUObIQb4VkuqToP5xGdDJ5Tgwe3hNt6A73
+         o81Q==
+X-Gm-Message-State: AOAM532o9LDO9IfM8L7jQ5ElbqhcBuo6rtQ5swp7LXq0B7b3ssXQGRSA
+        ihoUSGR5dhwVy7stMsV0v2qZsQ==
+X-Google-Smtp-Source: ABdhPJywPsJt5eForru+BeWv06Lmr+gWdQ+HZR8iE1hgtztL0deStFU6zzGj865eVc8KXipuQb3DZw==
+X-Received: by 2002:a63:da54:: with SMTP id l20mr10404254pgj.341.1631893710953;
+        Fri, 17 Sep 2021 08:48:30 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t68sm6925395pgc.59.2021.09.17.08.48.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Sep 2021 08:48:30 -0700 (PDT)
+Date:   Fri, 17 Sep 2021 08:48:29 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     shuah@kernel.org, davidgow@google.com, arnd@arndb.de,
+        rafael@kernel.org, jic23@kernel.org, lars@metafoo.de,
+        ulf.hansson@linaro.org, andreas.noever@gmail.com,
+        michael.jamet@intel.com, mika.westerberg@linux.intel.com,
+        YehezkelShB@gmail.com, masahiroy@kernel.org,
+        michal.lkml@markovi.net, ndesaulniers@google.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        gregkh@linuxfoundation.org, linux-iio@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v1 1/6] gcc-plugins/structleak: add makefile var for
+ disabling structleak
+Message-ID: <202109170808.629688A460@keescook>
+References: <20210917061104.2680133-1-brendanhiggins@google.com>
+ <20210917061104.2680133-2-brendanhiggins@google.com>
 MIME-Version: 1.0
-References: <CAHP4M8Vc+0eChmJDnLLa3ibuzGLOnc5hJ1Nk09794RHEJ7tEPw@mail.gmail.com>
- <CE84D77A-93F8-43B2-A952-896D6BED2E6D@msweet.org> <CAHP4M8VYhUDzvXO35=urBsz0suTA+0eMQ34f6-v9D0zE9fvDgQ@mail.gmail.com>
- <CAHP4M8W-z_L3r0kDbW943A6hm9y3gXzYJd=ZOpi+w9okS1zaaQ@mail.gmail.com> <3C27F76A-CE48-49E3-9078-CBE02B4E287E@msweet.org>
-In-Reply-To: <3C27F76A-CE48-49E3-9078-CBE02B4E287E@msweet.org>
-From:   Ajay Garg <ajaygargnsit@gmail.com>
-Date:   Fri, 17 Sep 2021 20:55:46 +0530
-Message-ID: <CAHP4M8WB3_Vf6p6=-yoA2MXa2Zun46DWL05MPra_VbOe6-uj5A@mail.gmail.com>
-Subject: Re: How to register a new "function" in configfs?
-To:     Michael Sweet <msweet@msweet.org>
-Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210917061104.2680133-2-brendanhiggins@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Michael, thanks for the reply.
+On Thu, Sep 16, 2021 at 11:10:59PM -0700, Brendan Higgins wrote:
+> KUnit and structleak don't play nice, so add a makefile variable for
+> enabling structleak when it complains.
+> 
+> Co-developed-by: Kees Cook <keescook@chromium.org>
 
-My gadget-driver is actually an almost copy of
-drivers/usb/gadget/function/f_serial.c, except that the above
-TTY-layer has been removed. I wrote this driver for my learning, to
-learn simply sending/receiving of bytes using a host-driver as the
-peer.
+For a C-d-b, also include a S-o-b:
 
-This test-driver of mine loads/works/communicates fine if
+Signed-off-by: Kees Cook <keescook@chromium.org>
 
-* I load my test-driver, exposing *gser* function.
-* I load the gadget using *gser* function.
+But otherwise, yes, this is good. :)
 
-However, if
+-Kees
 
-* I change the exposed function to something like *ajaytest* in my test-dri=
-ver.
-* Then load the driver (successfully).
-* Then try loading the gadget using *ajaytest* function, the gadget
-fails to load, saying "Function not found".
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> ---
+>  scripts/Makefile.gcc-plugins | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/scripts/Makefile.gcc-plugins b/scripts/Makefile.gcc-plugins
+> index 952e46876329a..4aad284800355 100644
+> --- a/scripts/Makefile.gcc-plugins
+> +++ b/scripts/Makefile.gcc-plugins
+> @@ -19,6 +19,10 @@ gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF)		\
+>  		+= -fplugin-arg-structleak_plugin-byref
+>  gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL)	\
+>  		+= -fplugin-arg-structleak_plugin-byref-all
+> +ifdef CONFIG_GCC_PLUGIN_STRUCTLEAK
+> +    DISABLE_STRUCTLEAK_PLUGIN += -fplugin-arg-structleak_plugin-disable
+> +endif
+> +export DISABLE_STRUCTLEAK_PLUGIN
+>  gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STRUCTLEAK)		\
+>  		+= -DSTRUCTLEAK_PLUGIN
+>  
+> -- 
+> 2.33.0.464.g1972c5931b-goog
+> 
 
-
-Let me see if I can post my code, probably on github, for a better public-v=
-iew.
-
-On Fri, Sep 17, 2021 at 7:47 PM Michael Sweet <msweet@msweet.org> wrote:
->
-> Ajay,
->
-> It is really hard to help further without seeing source code...
->
-> I assume you've verified that your gadget driver module is loaded?
->
-> And in your code:
->
-> - Did you use the MODULE_LICENSE, MODULE_AUTHOR, and MODULE_DESCRIPTION m=
-acros to define your driver metadata?
-> - Did you use the module_init and module_exit macros?
->
->
-> > On Sep 15, 2021, at 9:51 AM, Ajay Garg <ajaygargnsit@gmail.com> wrote:
-> >
-> > Any pointers, please?
-> >
-> > On Sat, 11 Sep 2021, 20:28 Ajay Garg, <ajaygargnsit@gmail.com> wrote:
-> > Hi Michael,
-> >
-> > Thanks for the reply.
-> >
-> > I am a bit of old-school, and would prefer things in one place only
-> > (in the kernel) :)
-> > Thus :
-> >
-> > a)
-> > I wish to have all the endpoints configuration/management in the
-> > kernel only (like done in drivers/usb/gadget/function/f_serial.c,
-> > drivers/usb/gadget/function/u_serial.c).
-> >
-> > b)
-> > Only the attributes like vendorId/productId would be in configfs, to
-> > help setup the device.
-> >
-> > c)
-> > No user-space management of kernel objects.
-> >
-> >
-> > Either-way, I think that my issue of "function exposure" would remain
-> > the same, irrespective of whether we use configfs for managing the
-> > kernel-objects (please correct me if I am wrong).
-> >
-> >
-> > Thanks again for your time, look forward to listening back !
-> >
-> >
-> > Thanks and Regards,
-> > Ajay
-> >
-> > On Sat, Sep 11, 2021 at 8:01 PM Michael Sweet <msweet@msweet.org> wrote=
-:
-> > >
-> > > Ajay,
-> > >
-> > > Quick question (as someone who has been down this road), do you need =
-to do a kernel driver or could you just use the functionfs support to imple=
-ment everything in userspace?  I found that path to be much easier and less=
- error-prone (and one of these days I'm going to be contributing some docum=
-entation changes to make some things clearer...) and I was able to get my I=
-PP-USB implementation up and running very quickly.
-> > >
-> > >
-> > > > On Sep 11, 2021, at 1:43 AM, Ajay Garg <ajaygargnsit@gmail.com> wro=
-te:
-> > > >
-> > > > Hi All.
-> > > >
-> > > > As a first step, I have been able to load a gadget on configfs, whi=
-ch
-> > > > binds to the function "gser" (thus loading up the usb_f_serial modu=
-le
-> > > > when the gadget mounts). Things work well till here.
-> > > >
-> > > > Now, I have written a brand-new gadget-side device-driver, trying t=
-o
-> > > > create a new function "gusb", via DECLARE_USB_FUNCTION_INIT.
-> > > > However, now when I try to load the gadget for binding to "gusb", I
-> > > > get the error that the function cannot be found.
-> > > >
-> > > > Seems that firing up a new gadget-side driver, that registers a new
-> > > > function via DECLARE_USB_FUNCTION_INIT, is not enough to make the n=
-ew
-> > > > function visible across the kernel.
-> > > >
-> > > > Kindly let know what I am missing.
-> > > > Will be grateful for pointers.
-> > > >
-> > > >
-> > > > Thanks and Regards,
-> > > > Ajay
-> > > >
-> > >
-> > > ________________________
-> > > Michael Sweet
-> > >
-> > >
-> > >
->
-> ________________________
-> Michael Sweet
->
->
->
+-- 
+Kees Cook
