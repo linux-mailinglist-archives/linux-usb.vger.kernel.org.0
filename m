@@ -2,83 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 058FA40F69D
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 13:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6856B40F6B6
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 13:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243823AbhIQLSA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Sep 2021 07:18:00 -0400
-Received: from m12-11.163.com ([220.181.12.11]:60466 "EHLO m12-11.163.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243123AbhIQLRx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 Sep 2021 07:17:53 -0400
-X-Greylist: delayed 905 seconds by postgrey-1.27 at vger.kernel.org; Fri, 17 Sep 2021 07:17:52 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=1GnoK
-        xIThZOcUjZN+LnKLkrBCV1Z2p0AxQde/xcbFFQ=; b=OWr9uc+9WUeESiGZu2Q4r
-        5J3Koq0W1uXnyFQRnfi50wbA3RegGSDmj5utpmnJDio7DkqGwPpf6q72KGT5kwcF
-        09hSJUUXfsRM/pVS0jYvoPcQoZPESX7PW/P6wUvkK+aQ6CN1GhmM0c/7HI/eclKV
-        U7YXu1dbx6+ZcQy9xwt4Iw=
-Received: from localhost.localdomain (unknown [117.136.79.132])
-        by smtp7 (Coremail) with SMTP id C8CowAD39Y13dURhnjK+xQ--.2421S2;
-        Fri, 17 Sep 2021 19:01:13 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     slark_xiao@163.com
-Subject: [PATCH] USB:serial:option Add Foxconn T99W265
-Date:   Fri, 17 Sep 2021 19:01:06 +0800
-Message-Id: <20210917110106.9852-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+        id S1343947AbhIQL3J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Sep 2021 07:29:09 -0400
+Received: from [49.81.129.78] ([49.81.129.78]:53081 "EHLO kh55hq.top"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S1343944AbhIQL3I (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 17 Sep 2021 07:29:08 -0400
+X-Greylist: delayed 1202 seconds by postgrey-1.27 at vger.kernel.org; Fri, 17 Sep 2021 07:29:07 EDT
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=kh55hq.top;
+ h=Message-ID:From:To:Subject:Date:MIME-Version:Content-Type:Content-Transfer-Encoding; i=info@kh55hq.top;
+ bh=ujj/aRwZXNQquyXAPMJ++SIlTdA=;
+ b=PNTi1aooB80fzdphcJx42ytTfz0xR67fWIOqMex5i3sPeylICY+jq91FiCkfpkUPAqISBNPPCDjf
+   0F6FH5Lgbe/v+XmuYovqCJTs+mjN5Vrq8e9A+BKyAYVrF8zPPHK/e64FQrTLRkrbN7kAbDBPSpF2
+   +Di7DgY5jGIkV5CyTZg=
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=kh55hq.top;
+ b=bQutUkEUPzdky7g3A2q6gk6/Lm4V7rjCSK0IpYXMG2gEX7lEgT7JLicFSuTuMPtDyYf80ra79brC
+   VrjuMpi+RH8PqVWqDuiCS0LfVtw4P4IZPdpNPgz6YkfvYieRrSEM1ZbIZojba3pkhIeqF3eXm3As
+   Vd+ZjUyrwb7yBXAEJnA=;
+Message-ID: <20210917190720156475@kh55hq.top>
+From:   =?utf-8?B?77yl77y077yj44K144O844OT44K544Gu44GK55+l44KJ44Gb?= 
+        <info@kh55hq.top>
+To:     <linux-usb@vger.kernel.org>
+Subject: =?utf-8?B?RVRD44K144O844OT44K5?=
+Date:   Fri, 17 Sep 2021 19:07:06 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: C8CowAD39Y13dURhnjK+xQ--.2421S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7urWftw15Wr48Gw43GFW5trb_yoW8Ww13pr
-        4qyry7uryDWayrXrykJrs5AFyrWan3t34fKasrA3WagFWIywsrt348tFyfZFnxKrs3Kr4q
-        vr4Dur47Kay8ArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07js8n5UUUUU=
-X-Originating-IP: [117.136.79.132]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiRxwRZFc7T2nDjQAAsq
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: base64
+X-mailer: Fzsbn 9
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Adding support for Foxconn device T99W265 for enumeration with
-PID 0xe0db.
+RVRD44K144O844OT44K544KS44GU5Yip55So44Gu44GK5a6i5qeYOg0KDQpFVEPjgrXjg7zjg5Pj
+grnjga/nhKHlirnjgavjgarjgorjgb7jgZfjgZ/jgIINCuW8leOBjee2muOBjeOCteODvOODk+OC
+ueOCkuOBlOWIqeeUqOOBhOOBn+OBoOOBjeOBn+OBhOWgtOWQiOOBr+OAgeS4i+iomOODquODs+OC
+r+OCiOOCiuips+e0sOOCkuOBlOeiuuiqjeOBj+OBoOOBleOBhOOAgg0KDQrkuIvoqJjjga7mjqXn
+tprjgYvjgonlgZzmraLljp/lm6DjgpLnorroqo3jgZfjgabjgY/jgaDjgZXjgYQNCg0KaHR0cHM6
+Ly9ldGMtbWVpc2FpLmpwLnRuLWluZm8udG9wDQoNCijnm7TmjqXjgqLjgq/jgrvjgrnjgafjgY3j
+garjgYTloLTlkIjjga/jgIHmiYvli5Xjgafjg5bjg6njgqbjgrbjgavjgrPjg5Tjg7zjgZfjgabp
+lovjgYTjgabjgY/jgaDjgZXjgYQpDQoNCuKAu+OBk+OBruODoeODvOODq+OBr+mAgeS/oeWwgueU
+qOOBp+OBmeOAgg0K44CA44GT44Gu44Ki44OJ44Os44K544Gr6YCB5L+h44GE44Gf44Gg44GE44Gm
+44KC6L+U5L+h44GE44Gf44GX44GL44Gt44G+44GZ44Gu44Gn44CB44GC44KJ44GL44GY44KB44GU
+5LqG5om/6aGY44GE44G+44GZ44CCDQrigLvjgarjgYrjgIHjgZTkuI3mmI7jgarngrnjgavjgaTj
+gY3jgb7jgZfjgabjga/jgIHjgYrmiYvmlbDjgafjgZnjgYzjgIENCiAgRVRD44K144O844OT44K5
+5LqL5YuZ5bGA44Gr44GK5ZWP44GE5ZCI44KP44Gb44GP44Gg44GV44GE44CCDQoNCuKWoEVUQ+WI
+qeeUqOeFp+S8muOCteODvOODk+OCueS6i+WLmeWxgA0K5bm05Lit54Sh5LyR44CAOTowMO+9njE4
+OjAwDQrjg4rjg5Pjg4DjgqTjg6Tjg6vjgIAwNTcwLTAxMDEzOQ0K77yI44OK44OT44OA44Kk44Ok
+44Or44GM44GU5Yip55So44GE44Gf44Gg44GR44Gq44GE44GK5a6i44GV44G+44CAMDQ1LTc0NC0x
+Mzcy77yJDQowNDUtNzQ0LTIzMw==
 
-usb-devices output for 0xe0db
-T:  Bus=04 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 19 Spd=5000 MxCh= 0
-D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=0489 ProdID=e0db Rev=05.04
-S:  Manufacturer=Microsoft
-S:  Product=Generic Mobile Broadband Adapter
-S:  SerialNumber=6c50f452
-C:  #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-I:  If#=0x4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-
-if0/1: MBIM, if2:Diag, if3:GNSS, if4: Modem
-
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- drivers/usb/serial/option.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 29c765cc8495..fde599fa2d73 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -2068,6 +2068,8 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
- 	{ USB_DEVICE(0x0489, 0xe0b5),						/* Foxconn T77W968 ESIM */
- 	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
-+	{ USB_DEVICE(0x0489, 0xe0db),						/* Foxconn T99W265 MBIM extension*/
-+	  .driver_info = RSVD(0) | RSVD(1) | RSVD(3) },
- 	{ USB_DEVICE(0x1508, 0x1001),						/* Fibocom NL668 (IOT version) */
- 	  .driver_info = RSVD(4) | RSVD(5) | RSVD(6) },
- 	{ USB_DEVICE(0x2cb7, 0x0104),						/* Fibocom NL678 series */
--- 
-2.25.1
 
