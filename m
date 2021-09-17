@@ -2,149 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2442040FA13
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 16:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BDBD40FA21
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 16:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbhIQOS6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Sep 2021 10:18:58 -0400
-Received: from mail.msweet.org ([173.255.209.91]:33628 "EHLO mail.msweet.org"
+        id S241989AbhIQO3a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Sep 2021 10:29:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44864 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231259AbhIQOS6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 Sep 2021 10:18:58 -0400
-Received: from smtpclient.apple (unknown [206.214.229.168])
-        by mail.msweet.org (Postfix) with ESMTPSA id C503D81FE8;
-        Fri, 17 Sep 2021 14:17:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.msweet.org C503D81FE8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=msweet.org;
-        s=default; t=1631888256;
-        bh=atiLdMkEoVobeO8+J8csYNRYvD8TmyH99ZP+5t/MaPM=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-        b=HU7toqUD9odeShLaYJJ2EJkSEDNNyAiGooh/HbF5FzZZ/o6ULfUFEh5/fZsuR2ZDA
-         z0vnCUFoKppeeoUEWjpTvzL+sA/xGDbtqNo2no5ZnfJfcq2Ue1sEOGRIkSnFPzNbsX
-         B80u6gMPE0g9yJjWgeSFarGSE2/qrrs2/4cSpxnw=
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.0.1.1.10\))
-Subject: Re: How to register a new "function" in configfs?
-From:   Michael Sweet <msweet@msweet.org>
-In-Reply-To: <CAHP4M8W-z_L3r0kDbW943A6hm9y3gXzYJd=ZOpi+w9okS1zaaQ@mail.gmail.com>
-Date:   Fri, 17 Sep 2021 10:17:33 -0400
-Cc:     linux-usb@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <3C27F76A-CE48-49E3-9078-CBE02B4E287E@msweet.org>
-References: <CAHP4M8Vc+0eChmJDnLLa3ibuzGLOnc5hJ1Nk09794RHEJ7tEPw@mail.gmail.com>
- <CE84D77A-93F8-43B2-A952-896D6BED2E6D@msweet.org>
- <CAHP4M8VYhUDzvXO35=urBsz0suTA+0eMQ34f6-v9D0zE9fvDgQ@mail.gmail.com>
- <CAHP4M8W-z_L3r0kDbW943A6hm9y3gXzYJd=ZOpi+w9okS1zaaQ@mail.gmail.com>
-To:     Ajay Garg <ajaygargnsit@gmail.com>
-X-Mailer: Apple Mail (2.3693.0.1.1.10)
+        id S241976AbhIQO32 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 17 Sep 2021 10:29:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C4DE611C8;
+        Fri, 17 Sep 2021 14:28:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631888886;
+        bh=+SIC8R+Fdj6ZV0cHf2K3KJw06p7qSyHtOS5C4HYuDO8=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=JnPW6tCmLtomIJ7kBfWltIm4n+9ZTu4bz55Uni5QTC4wdOf+MQsEmbi40NT6LJr8K
+         5CCEE/ZZQClVDET1jT3PIAFhycJMYYZfVkABgIhe+Qst5v8GVemBm9+UmqDKOhrYJB
+         wwEWqlXgIw+jRUqJT+t7zvQQG4kkYsoAUiEeuen5zWAbgbf2mPH23LzCPPXLWsxhFv
+         wpr2S7NpSkooHid+ipZ8sJmL4kFzudHFOivWSp2gOsR/o+7GWjfF1g5GUBcUlt4lrA
+         b81ms79K7NkjSC0XnGerKQpoVnsf5ZE6rBvelFAiJ9qItdRsoMBNeTtbttZ82D6p2Q
+         lyrX8p2lKH5UA==
+References: <20210818094726.3295093-1-shubhrajyoti.datta@xilinx.com>
+ <87v943f57a.fsf@kernel.org>
+ <MN2PR02MB66409E4F304BE48BBB76A2D0AADD9@MN2PR02MB6640.namprd02.prod.outlook.com>
+User-agent: mu4e 1.6.5; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Shubhrajyoti Datta <shubhraj@xilinx.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Michal Simek <michals@xilinx.com>, git <git@xilinx.com>
+Subject: Re: [PATCH] usb: gadget: udc-xilinx: Add clock support
+Date:   Fri, 17 Sep 2021 17:27:36 +0300
+In-reply-to: <MN2PR02MB66409E4F304BE48BBB76A2D0AADD9@MN2PR02MB6640.namprd02.prod.outlook.com>
+Message-ID: <87czp79szw.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Ajay,
 
-It is really hard to help further without seeing source code...
+Hi,
 
-I assume you've verified that your gadget driver module is loaded?
+Shubhrajyoti Datta <shubhraj@xilinx.com> writes:
+>> -----Original Message-----
+>> From: Felipe Balbi <balbi@kernel.org>
+>> Sent: Wednesday, August 18, 2021 3:24 PM
+>> To: Shubhrajyoti Datta <shubhraj@xilinx.com>
+>> Cc: linux-usb@vger.kernel.org; gregkh@linuxfoundation.org; Michal Simek
+>> <michals@xilinx.com>; git <git@xilinx.com>
+>> Subject: Re: [PATCH] usb: gadget: udc-xilinx: Add clock support
+>> 
+>> 
+>> Hi,
+>> 
+>> Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com> writes:
+>> > Currently the driver depends on the  bootloader to enable the clocks.
+>> > Add support for clocking. The patch enables the clock at  probe and
+>> > disables them at remove.
+>> >
+>> > Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+>> > ---
+>> >  drivers/usb/gadget/udc/udc-xilinx.c | 24 ++++++++++++++++++++++++
+>> >  1 file changed, 24 insertions(+)
+>> >
+>> > diff --git a/drivers/usb/gadget/udc/udc-xilinx.c
+>> > b/drivers/usb/gadget/udc/udc-xilinx.c
+>> > index fb4ffedd6f0d..30070a488c87 100644
+>> > --- a/drivers/usb/gadget/udc/udc-xilinx.c
+>> > +++ b/drivers/usb/gadget/udc/udc-xilinx.c
+>> > @@ -11,6 +11,7 @@
+>> >   * USB peripheral controller (at91_udc.c).
+>> >   */
+>> >
+>> > +#include <linux/clk.h>
+>> >  #include <linux/delay.h>
+>> >  #include <linux/device.h>
+>> >  #include <linux/dma-mapping.h>
+>> > @@ -171,6 +172,7 @@ struct xusb_ep {
+>> >   * @addr: the usb device base address
+>> >   * @lock: instance of spinlock
+>> >   * @dma_enabled: flag indicating whether the dma is included in the
+>> > system
+>> > + * @clk: pointer to struct clk
+>> >   * @read_fn: function pointer to read device registers
+>> >   * @write_fn: function pointer to write to device registers
+>> >   */
+>> > @@ -188,6 +190,7 @@ struct xusb_udc {
+>> >  	void __iomem *addr;
+>> >  	spinlock_t lock;
+>> >  	bool dma_enabled;
+>> > +	struct clk *clk;
+>> >
+>> >  	unsigned int (*read_fn)(void __iomem *);
+>> >  	void (*write_fn)(void __iomem *, u32, u32); @@ -2092,6 +2095,26 @@
+>> > static int xudc_probe(struct platform_device *pdev)
+>> >  	udc->gadget.ep0 = &udc->ep[XUSB_EP_NUMBER_ZERO].ep_usb;
+>> >  	udc->gadget.name = driver_name;
+>> >
+>> > +	udc->clk = devm_clk_get(&pdev->dev, "s_axi_aclk");
+>> > +	if (IS_ERR(udc->clk)) {
+>> > +		if (PTR_ERR(udc->clk) != -ENOENT) {
+>> > +			ret = PTR_ERR(udc->clk);
+>> > +			goto fail;
+>> > +		}
+>> > +
+>> > +		/*
+>> > +		 * Clock framework support is optional, continue on,
+>> > +		 * anyways if we don't find a matching clock
+>> > +		 */
+>> > +		udc->clk = NULL;
+>> 
+>> should it be, though? Might be a good idea to add fixed-clock instances to the
+>> boards still depending on clock framework. Maybe that can be done over time,
+>> but worth considering anyhow.
+>
+> But for backward compatibility , I think it will be good to have the
+> support instead of forcing the fixed-clock node.
 
-And in your code:
+you gotta explain that a little better. Care to do so?
 
-- Did you use the MODULE_LICENSE, MODULE_AUTHOR, and MODULE_DESCRIPTION =
-macros to define your driver metadata?
-- Did you use the module_init and module_exit macros?
-
-
-> On Sep 15, 2021, at 9:51 AM, Ajay Garg <ajaygargnsit@gmail.com> wrote:
->=20
-> Any pointers, please?
->=20
-> On Sat, 11 Sep 2021, 20:28 Ajay Garg, <ajaygargnsit@gmail.com> wrote:
-> Hi Michael,
->=20
-> Thanks for the reply.
->=20
-> I am a bit of old-school, and would prefer things in one place only
-> (in the kernel) :)
-> Thus :
->=20
-> a)
-> I wish to have all the endpoints configuration/management in the
-> kernel only (like done in drivers/usb/gadget/function/f_serial.c,
-> drivers/usb/gadget/function/u_serial.c).
->=20
-> b)
-> Only the attributes like vendorId/productId would be in configfs, to
-> help setup the device.
->=20
-> c)
-> No user-space management of kernel objects.
->=20
->=20
-> Either-way, I think that my issue of "function exposure" would remain
-> the same, irrespective of whether we use configfs for managing the
-> kernel-objects (please correct me if I am wrong).
->=20
->=20
-> Thanks again for your time, look forward to listening back !
->=20
->=20
-> Thanks and Regards,
-> Ajay
->=20
-> On Sat, Sep 11, 2021 at 8:01 PM Michael Sweet <msweet@msweet.org> =
-wrote:
-> >
-> > Ajay,
-> >
-> > Quick question (as someone who has been down this road), do you need =
-to do a kernel driver or could you just use the functionfs support to =
-implement everything in userspace?  I found that path to be much easier =
-and less error-prone (and one of these days I'm going to be contributing =
-some documentation changes to make some things clearer...) and I was =
-able to get my IPP-USB implementation up and running very quickly.
-> >
-> >
-> > > On Sep 11, 2021, at 1:43 AM, Ajay Garg <ajaygargnsit@gmail.com> =
-wrote:
-> > >
-> > > Hi All.
-> > >
-> > > As a first step, I have been able to load a gadget on configfs, =
-which
-> > > binds to the function "gser" (thus loading up the usb_f_serial =
-module
-> > > when the gadget mounts). Things work well till here.
-> > >
-> > > Now, I have written a brand-new gadget-side device-driver, trying =
-to
-> > > create a new function "gusb", via DECLARE_USB_FUNCTION_INIT.
-> > > However, now when I try to load the gadget for binding to "gusb", =
-I
-> > > get the error that the function cannot be found.
-> > >
-> > > Seems that firing up a new gadget-side driver, that registers a =
-new
-> > > function via DECLARE_USB_FUNCTION_INIT, is not enough to make the =
-new
-> > > function visible across the kernel.
-> > >
-> > > Kindly let know what I am missing.
-> > > Will be grateful for pointers.
-> > >
-> > >
-> > > Thanks and Regards,
-> > > Ajay
-> > >
-> >
-> > ________________________
-> > Michael Sweet
-> >
-> >
-> >
-
-________________________
-Michael Sweet
-
-
-
+-- 
+balbi
