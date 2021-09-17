@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D7340F200
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 08:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E36740F219
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 08:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245119AbhIQGM6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Sep 2021 02:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
+        id S245174AbhIQGNY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Sep 2021 02:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245071AbhIQGMx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Sep 2021 02:12:53 -0400
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12976C061768
-        for <linux-usb@vger.kernel.org>; Thu, 16 Sep 2021 23:11:31 -0700 (PDT)
-Received: by mail-qv1-xf49.google.com with SMTP id u8-20020a0cee88000000b00363b89e1c50so87161510qvr.16
-        for <linux-usb@vger.kernel.org>; Thu, 16 Sep 2021 23:11:31 -0700 (PDT)
+        with ESMTP id S245100AbhIQGMz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Sep 2021 02:12:55 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5258FC061766
+        for <linux-usb@vger.kernel.org>; Thu, 16 Sep 2021 23:11:33 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id h7-20020a37b707000000b003fa4d25d9d0so62494050qkf.17
+        for <linux-usb@vger.kernel.org>; Thu, 16 Sep 2021 23:11:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=I4FOT8yOHsLhfAzdZiAF0l/kcO/QKiXi6j8WbW9LXJI=;
-        b=UY3TinilJRju1u6lzAykebCAKMTWaSuBZvn8jYC8UK4+LbXvIlCflfwHlFEphBHs8B
-         1iFMgEZGban4DYDF7Ng4Bxjo8NRN9zOf3LLvDcjhZho+zGb8eIYgXkYwA0Otb0f/FShE
-         yCmK2uqakDDxdXMcri2Lg+CMzpqgtphiucDdAVEWrO4iTlv4H6bq8Gawab6VO22To9bF
-         X7RxLGWNSjvgLN+qQRj6LibXm4BaLGhu5Xy+N2dBaNZPk7IY2MX6VGtuGBV+XMHGYz17
-         gK2smKuDIdXkivtrGOnp7UxDzkVWma4nv+Xs6OV5VYWRjcuzPSQps0HL5bUHRRb0Qx+d
-         Iq5A==
+         :cc;
+        bh=09xEzYT+gOEMXKux86y0OboJKHhnFsj7tooXascaZws=;
+        b=idTj1foInP1ZjiSa8tzyXsAbvISX9h8D2okHQm47jLNzxI/gnljnhVQYgRp7gVyxij
+         CsbzwRxgqhnisizhrS+yfMH6UHQ4fCv6XeCSCXXwKBm8fIy/regcyzobSzoURswbI015
+         EhQaKFRWM6aq6l5B15meILrewxbaU6yp3g2Nl/72UnbQCanMYa7JpZscbFct1T1qwgHw
+         WQJVUe+4dvGKD1YQH+pOx77QCpeyZep2k1EX0iFtXgeHezV2k7OgPXfN3EKXyp8yiBcw
+         v4zOLgOsvCuCahcjEDuwXB5WMCghprYxDyANJW8IiN3wz2UXia2L39Jl4z728eSWNBky
+         tuvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=I4FOT8yOHsLhfAzdZiAF0l/kcO/QKiXi6j8WbW9LXJI=;
-        b=OUGrtXG/iHjG8RO2d0yh8Q6YdN8aZV7Pvdprrkp7oOur66t8gdSQO2UArMXW4spD30
-         gPAeH4zrSIMVMW2wYOJZZmk7cGKHHOt/QMZAxg7jRPZhZC6BSKnzxKJEy3BxeHK8VA0A
-         h9pvFW4atkgVAxtYvtw1nVCeF79J9aZLNwCcUa7gEj+vFLG/qE+17iEPa8y87F652Prs
-         vJW4vPOB6IRvnsG93n0G7CdRAGXL2sq2DWjIezVu3AXrFjlPpvj+3rwom9sCoYYRcXRF
-         3Z+OYNApADxRjrOo9ebLadAOaNlhCNTpLo4/4c9v9qGYnwwT7KsmdEYaQSPCjFn97GdU
-         ggSA==
-X-Gm-Message-State: AOAM533kz4siUTWCtwsN9CZQahFvosVUx+Y+tWzp0qiA4CYNT+4e69S8
-        QoMFGDInPAplZqkVXqkd5PeRmqhjeVanGpeU4cyyiQ==
-X-Google-Smtp-Source: ABdhPJxQU9dA2VoByCENV7Js4YP5bqWeXxiNL61cyojxtkYNrLzgmDJAwC0DC/PduGlki5LgIsdKe1pz5QUxEe86UMUTvA==
+         :references:subject:from:to:cc;
+        bh=09xEzYT+gOEMXKux86y0OboJKHhnFsj7tooXascaZws=;
+        b=3oDuw3NZe4sQ0l0dBRQCDm8HxJgrCaTujLTiHT2kY+n5TxOlWi5MjYMYYU2DmvEOSn
+         44Jyu8qnhDN5ef3H7E6qNY/QGoiWCyk0/YiUhDLJuMUX2dWp/XgE+qpufPMKQiiXJ6UH
+         EZG7pndtgTrn2AqjN7y353RfefCjU49TULfAHNOxqEL1BpRmAeUTWbkqAHGGsDa6fPWp
+         S34dVWNbNjCQlgPCvFTofz0L0oiYOEBULGfWtY8DPXqk+Zdsc8HopnngpLB00fQjsg2I
+         flV87oxDofhvRQNT4IWq1ljqSN3MvUMYwhF6xTSLtoQ6/pdv0nj4zOTlU13F79TYFJv9
+         Tywg==
+X-Gm-Message-State: AOAM533o0TAMmj15b7gGsOp76Mo6X8+9HkxDKwdKb0ghuoUV/d4mPTIc
+        2rINsvsiV2j5MZsY3wBwrTvmLhQvEYZe4PXvNID4DA==
+X-Google-Smtp-Source: ABdhPJypRsw47dQReFc9GVfIgcLEvPuWKVLfs9Zkoz23e3pfAoJ7NFelyWt9aLLvWQZohalclJUd3bgYSnBd8nu1IvZJKA==
 X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:201:4845:43ba:3ff5:2de1])
- (user=brendanhiggins job=sendgmr) by 2002:a25:6d43:: with SMTP id
- i64mr11100758ybc.252.1631859090133; Thu, 16 Sep 2021 23:11:30 -0700 (PDT)
-Date:   Thu, 16 Sep 2021 23:11:00 -0700
+ (user=brendanhiggins job=sendgmr) by 2002:a25:d747:: with SMTP id
+ o68mr11675107ybg.488.1631859092480; Thu, 16 Sep 2021 23:11:32 -0700 (PDT)
+Date:   Thu, 16 Sep 2021 23:11:01 -0700
 In-Reply-To: <20210917061104.2680133-1-brendanhiggins@google.com>
-Message-Id: <20210917061104.2680133-3-brendanhiggins@google.com>
+Message-Id: <20210917061104.2680133-4-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20210917061104.2680133-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.33.0.464.g1972c5931b-goog
-Subject: [PATCH v1 2/6] iio/test-format: build kunit tests without structleak plugin
+Subject: [PATCH v1 3/6] device property: build kunit tests without structleak plugin
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     shuah@kernel.org, davidgow@google.com, arnd@arndb.de,
         keescook@chromium.org, rafael@kernel.org, jic23@kernel.org,
@@ -65,7 +65,6 @@ Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
         Brendan Higgins <brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -73,28 +72,29 @@ X-Mailing-List: linux-usb@vger.kernel.org
 The structleak plugin causes the stack frame size to grow immensely when
 used with KUnit:
 
-../drivers/iio/test/iio-test-format.c: In function =E2=80=98iio_test_iio_fo=
-rmat_value_fixedpoint=E2=80=99:
-../drivers/iio/test/iio-test-format.c:98:1: warning: the frame size of 2336=
- bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+../drivers/base/test/property-entry-test.c:492:1: warning: the frame size of 2832 bytes is larger than 2048 bytes [-Wframe-larger-than=]
+../drivers/base/test/property-entry-test.c:322:1: warning: the frame size of 2080 bytes is larger than 2048 bytes [-Wframe-larger-than=]
+../drivers/base/test/property-entry-test.c:250:1: warning: the frame size of 4976 bytes is larger than 2048 bytes [-Wframe-larger-than=]
+../drivers/base/test/property-entry-test.c:115:1: warning: the frame size of 3280 bytes is larger than 2048 bytes [-Wframe-larger-than=]
 
 Turn it off in this file.
 
 Co-developed-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- drivers/iio/test/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/base/test/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iio/test/Makefile b/drivers/iio/test/Makefile
-index f1099b4953014..467519a2027e5 100644
---- a/drivers/iio/test/Makefile
-+++ b/drivers/iio/test/Makefile
-@@ -5,3 +5,4 @@
-=20
- # Keep in alphabetical order
- obj-$(CONFIG_IIO_TEST_FORMAT) +=3D iio-test-format.o
-+CFLAGS_iio-test-format.o +=3D $(DISABLE_STRUCTLEAK_PLUGIN)
---=20
+diff --git a/drivers/base/test/Makefile b/drivers/base/test/Makefile
+index 64b2f3d744d51..7f76fee6f989d 100644
+--- a/drivers/base/test/Makefile
++++ b/drivers/base/test/Makefile
+@@ -2,4 +2,4 @@
+ obj-$(CONFIG_TEST_ASYNC_DRIVER_PROBE)	+= test_async_driver_probe.o
+ 
+ obj-$(CONFIG_DRIVER_PE_KUNIT_TEST) += property-entry-test.o
+-CFLAGS_REMOVE_property-entry-test.o += -fplugin-arg-structleak_plugin-byref -fplugin-arg-structleak_plugin-byref-all
++CFLAGS_property-entry-test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
+-- 
 2.33.0.464.g1972c5931b-goog
 
