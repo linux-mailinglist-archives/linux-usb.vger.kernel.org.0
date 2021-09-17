@@ -2,92 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB2E40FE67
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 19:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A14340FE6F
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 19:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235207AbhIQRNu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Sep 2021 13:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46396 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232742AbhIQRNt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Sep 2021 13:13:49 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0978C061574
-        for <linux-usb@vger.kernel.org>; Fri, 17 Sep 2021 10:12:27 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id b7so9752883pfo.11
-        for <linux-usb@vger.kernel.org>; Fri, 17 Sep 2021 10:12:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pO0Yb3IpAcGP/Dt2jtIam9w3vyDIYJvDsQlZl6HHejM=;
-        b=OPyh4O24J7DpGeijzAXNDm5Dy0jm/LvXe14A8C1eWVh8iggQZ3pPhrkqI79MpH4mm+
-         5Qrb1b0RYgrBsFTH7+DjkZRy1XD9/g8nzwMguP9xcsks62OnjqWdz7NOsL/+zJyU5w1C
-         DVDUfcotaxx5eYR0yPtTCWkPPoueOLxpLGYhv/GfI1orfEERYFjbxvAPLspN/pkcXUzZ
-         gBMGwxmP/jCPkVsRED8vPMjf+AiRKWnMPAHZGGGUHS4yJSuBred9AlW6acOQa+A7N+NB
-         I2V/8nxGAg7bYSzm81bSjZcXU/JKZVjB2dsTPnAF3yDSM6gqZyiRAtnC906nzKjQ3qgR
-         SIoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pO0Yb3IpAcGP/Dt2jtIam9w3vyDIYJvDsQlZl6HHejM=;
-        b=zSnIkj7ZAsnF9t6qMKOPk/O2PQmS1W61msK0O1yJoIaZ93a/+CKPsreeY+QqGEmGiV
-         TsEaUXDwu/BCVpGsq82LxP96CP2oWLbcsDVs/NZj+4gmnsf+ee7D1wruQB6YOFLMr0aV
-         FJpuVVmSuvLflcm0nkbL2iCqNd1CMOXegrQAGnFfPMVFS7kC1U6zWeSrMDqQyuQw21nl
-         PlwDwBFu4Qn2RLibjsV7XGBd/VhtuSu2+BbOPe+sdPdvbjMakMo12lPhbANoMNug/a9y
-         IbtbT6lA6+L21QkcKUOpRiruVppVtJrkEYz6qsFN18HVMfFIezZ6IbuEYrV5AjGNjZUc
-         j5rA==
-X-Gm-Message-State: AOAM530zd5aoo+ERpGHpKwJC94kohF+W1KauVoK1lux9CGljfn/WO8bU
-        rlTRoJKfioB9YXDUDByyPbDd5BRVS28iWZGY
-X-Google-Smtp-Source: ABdhPJyx4vWWRSbdGGGBKJkVUGMPxin8gkPL9xsToYha8NcIgzBiUE3PCv1cB3nt60LhMK98lwvpmA==
-X-Received: by 2002:a05:6a00:174a:b0:433:9589:bdb5 with SMTP id j10-20020a056a00174a00b004339589bdb5mr11800681pfc.5.1631898747121;
-        Fri, 17 Sep 2021 10:12:27 -0700 (PDT)
-Received: from ws2 ([185.65.135.245])
-        by smtp.gmail.com with ESMTPSA id n22sm6654639pff.57.2021.09.17.10.12.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Sep 2021 10:12:26 -0700 (PDT)
-From:   Andreas Bauer <andreas.bauer.nexus@gmail.com>
-X-Google-Original-From: Andreas Bauer <Andreas.Bauer.Nexus@gmail.com>
-Date:   Sat, 18 Sep 2021 00:12:15 +0700
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget/legacy/ether: assume saner default power mode
-Message-ID: <YUTMbwQCgxPGsnN2@ws2>
-References: <YUNbDyoTPa+5J9Od@ws2>
- <87pmt7ahtj.fsf@kernel.org>
- <YURAlSpAWT0s9dVr@ws2>
- <87lf3va9hr.fsf@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87lf3va9hr.fsf@kernel.org>
+        id S244826AbhIQRRo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Sep 2021 13:17:44 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:19583 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244703AbhIQRRm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Sep 2021 13:17:42 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1631898980; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=UPaI+DiumQ4yDshfDZDc+a26L23AQLZ9XesRoMRN4sY=; b=D0ZSe3Aa8Tyg0xS75P9Ym8Ud94dD/S7RmFN14AM7EKbZXnpQhy7X0pcssUu73XTHEBlvk7cF
+ AsLQFddOzoHnC+CcElqlWF2T2/SvmHfAbSWCxCnmUGpNZjemCUGBKmPITxvgl5rVQ/xBlEeH
+ s0DWewnLF+4nYafK7smvWGXFj/o=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 6144cd54c1b30e2f0216132b (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 17 Sep 2021 17:16:04
+ GMT
+Sender: pmaliset=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 443C5C4361A; Fri, 17 Sep 2021 17:16:03 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from pmaliset-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmaliset)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 98BBBC4338F;
+        Fri, 17 Sep 2021 17:15:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 98BBBC4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Prasad Malisetty <pmaliset@codeaurora.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, bhelgaas@google.com,
+        robh+dt@kernel.org, swboyd@chromium.org, lorenzo.pieralisi@arm.com,
+        svarbanov@mm-sol.com
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
+        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org,
+        Prasad Malisetty <pmaliset@codeaurora.org>
+Subject: [PATCH v8 0/4] Add DT bindings and DT nodes for PCIe and PHY in SC7280
+Date:   Fri, 17 Sep 2021 22:45:43 +0530
+Message-Id: <1631898947-27433-1-git-send-email-pmaliset@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Fri, Sep 17, 2021 at 11:29:02AM +0300 schrieb Felipe Balbi:
+Changes added in v8:
+	
+	* Added seperate pinctrl state for NVMe LDO enable pin [v8 P3/4]
+	* Removed pointer initialization for pcie_cfg [v8 P4/4]
+	* Replaced bool pcie_pipe_clk_src with unsigned int:1 [v8 P4/4]
+	* Changed gcc_pcie_1_pipe_clk_src to pipe_clk_src
 
-> that's okay. It's because of this sort of thing that we've switched to a
-> configfs-based approach where we don't need to make assumptions about
-> the application. That's also why the pre-composed gadgets have been
-> moved to the "legacy" directory and we don't take changes to those
-> anymore, unless it's a bugfix, which $subject doesn't appear to be :)
+Changes added in v7:
 
-Ok... my intention was to fix something which is wrong, but as always
-in life, things are complicated. I will not pursue this further.
+    	* Removed two fallbacks qcom,pcie-sm8250 and snps,dw-pcie.
+    	* Replaced compatible method in get_resources_2_7_0 with
+      	  flag approach suggested by Bjorn Helgaas .
+    	* Setting gcc_pcie_1_clk_src as XO in init_2_7_0 for
+          gdsc enable.
+    	* Added specific NVMe GPIO entries for SKU1 and SKU2 support
+          in idp.dts and idp2.dts respectively.
+    	* Moved pcie_1 and pcie_1_phy board specific entries into common
+          board file sc7280-idp.dtsi file.
 
-Thanks for your input.
+Changes in v6:
 
-> We have configfs to cope with all of the possible variations, might want
-> to give that a shot?
-> 
-> https://www.kernel.org/doc/html/latest/usb/gadget_configfs.html
+	* Removed platform check while setting gcc_pcie_1_pipe_clk_src
+          as clk_set_parent will return 0 with nop if platform doesn't
+          need to switch pipe clk source.
+        * Moved wake-n gpio to board specific file sc7280-idp.dtsi
+        * Sorted gpio.h header entry in sc7280.dtsi file
 
-Never change a ru....
+Changes in v5:
 
-I will eventually give it a shot ;-)
+        * Re ordered PCIe, PHY nodes in Soc and board specific dtsi files.
+        * Removed ref_clk entry in current patch [PATCH v4 P4/4].
+        * I will add ref clk entry in suspend/ resume commits.
+        * Added boolean flag in Soc specific dtsi file to differentiate
+          SM8250 and SC7280 platforms. based on boolean flag, platforms will handle
+          the pipe clk handling.
 
-best regards,
+Changes in v4 as suggested by Bjorn:
 
-Andreas
+    	* Changed pipe clk mux name as gcc_pcie_1_pipe_clk_src.
+    	* Changed pipe_ext_src as phy_pipe_clk.
+    	* Updated commit message for [PATCH v4 4/4].
+
+Changes in v3:
+    	* Changed pipe clock names in dt bindings as pipe_mux and phy_pipe.
+    	* Moved reset and NVMe GPIO pin configs into board specific file.
+    	* Updated pipe clk mux commit message.
+
+Changes in v2:
+    	* Moved pcie pin control settings into IDP file.
+    	* Replaced pipe_clk_src with pipe_clk_mux in pcie driver
+    	* Included pipe clk mux setting change set in this series
+
+Prasad Malisetty (4):
+  dt-bindings: pci: qcom: Document PCIe bindings for SC7280
+  arm64: dts: qcom: sc7280: Add PCIe and PHY related nodes
+  arm64: dts: qcom: sc7280: Add PCIe nodes for IDP board
+  PCI: qcom: Switch pcie_1_pipe_clk_src after PHY init in SC7280
+
+ .../devicetree/bindings/pci/qcom,pcie.txt          |  17 +++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts            |   4 +
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |  40 +++++++
+ arch/arm64/boot/dts/qcom/sc7280-idp2.dts           |   4 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               | 120 +++++++++++++++++++++
+ drivers/pci/controller/dwc/pcie-qcom.c             |  90 ++++++++++++++--
+ 6 files changed, 264 insertions(+), 11 deletions(-)
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
