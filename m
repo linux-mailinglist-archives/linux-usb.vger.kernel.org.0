@@ -2,239 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0FA40FE76
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 19:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E2840FF8C
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 20:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245262AbhIQRRu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Sep 2021 13:17:50 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:18693 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245231AbhIQRRs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Sep 2021 13:17:48 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1631898986; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=Zu1K12QluoLKVTwKYphIXT2Esw/li/2lZxzpQpxCdFM=; b=EQFKBTKwmtudyFH0BZZnZA715h1lTbvYfBuKnSEt44jhI9jAYJezb2hWcVSnbo6mxXh/z/RI
- Wl9PLC45iovGM/zmluRrAE6Wb91D26ykH/w7TevSLxJb20rBfo2UgrByHTWJv2fGAcu1zRWy
- PjD/KbJ37nK5ecLD8k2b3jCGtPA=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 6144cd69e0f78151d623f49f (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 17 Sep 2021 17:16:25
- GMT
-Sender: pmaliset=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id E2761C4361A; Fri, 17 Sep 2021 17:16:24 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from pmaliset-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmaliset)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 06CD5C4360C;
-        Fri, 17 Sep 2021 17:16:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 06CD5C4360C
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Prasad Malisetty <pmaliset@codeaurora.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, bhelgaas@google.com,
-        robh+dt@kernel.org, swboyd@chromium.org, lorenzo.pieralisi@arm.com,
-        svarbanov@mm-sol.com
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
-        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org,
-        Prasad Malisetty <pmaliset@codeaurora.org>
-Subject: [PATCH v8 4/4] PCI: qcom: Switch pcie_1_pipe_clk_src after PHY init in SC7280
-Date:   Fri, 17 Sep 2021 22:45:47 +0530
-Message-Id: <1631898947-27433-5-git-send-email-pmaliset@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1631898947-27433-1-git-send-email-pmaliset@codeaurora.org>
-References: <1631898947-27433-1-git-send-email-pmaliset@codeaurora.org>
+        id S240839AbhIQSm0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Sep 2021 14:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38370 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240530AbhIQSmZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Sep 2021 14:42:25 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4C7C061574
+        for <linux-usb@vger.kernel.org>; Fri, 17 Sep 2021 11:41:02 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id d42so14952269lfv.10
+        for <linux-usb@vger.kernel.org>; Fri, 17 Sep 2021 11:41:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Cpak71tpwGIH8sDgLDrdJbMzVDQHoqt6rJZasCMwdzc=;
+        b=PPZqYKySWRBXLCmQqLignaVRzeemkJWbOSVm4Nk3LB3/dwYqxZT99gFitFC859Cqmo
+         5dHLqIWjBbL09xTf3eNTCSAzEfwW62QnHoObFrYVOWn0PPzzY6lksRvKhahbrO9bPfvT
+         /jfwN2l8iu/pKIRl254LqCHUDuwZMUECiAh00=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Cpak71tpwGIH8sDgLDrdJbMzVDQHoqt6rJZasCMwdzc=;
+        b=tCNZGbgAB9xX46DCXRvTARxM94IQaIKLZxllVb2/MF25FANEgw8ZI7W4sDFnMoV5qn
+         AAwEZ6ANlEoDVTn949xCU1cwBYfCd63eSrheaNkGXoWuRt/KvdE68h095mYbBRKKASmd
+         2OROFUjxmZzFnUNkAbo/ayrrBPgKHKlfuA+/O/+MlupngEohYQYKT/mcpexXt02sJGeP
+         59ZqX+rtIENjvYO/DzNTeDUyqCNOIwM+7AmVfEMCG9xeDizHOvpQQ+Zqu+TtesUdbZlM
+         rt8z/xPTPUUacYZPTSB0sv/IUBjASRu6wy8UQVrqZd8FxcdhltudAD5UhIiTtyhnfo04
+         D2fg==
+X-Gm-Message-State: AOAM532gPR4RNZQd1Sud31rG6ON1OivXpXuWWgreCQcmRSWEnoSLeZ5W
+        1fXRLzCP4bb/wvhUdh7bK49vV6X76t9aFJB2+zY=
+X-Google-Smtp-Source: ABdhPJyPYusvCq6VnyabOfiQ/ByzBNoIN1qMZ8WEDGCU2tM79/l328Ajoo0S8i1veeGDrvPRVFKjRA==
+X-Received: by 2002:a2e:a4ba:: with SMTP id g26mr10889739ljm.254.1631904060904;
+        Fri, 17 Sep 2021 11:41:00 -0700 (PDT)
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
+        by smtp.gmail.com with ESMTPSA id w19sm778525ljd.110.2021.09.17.11.41.00
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Sep 2021 11:41:00 -0700 (PDT)
+Received: by mail-lf1-f44.google.com with SMTP id g41so3472664lfv.1
+        for <linux-usb@vger.kernel.org>; Fri, 17 Sep 2021 11:41:00 -0700 (PDT)
+X-Received: by 2002:a19:ae15:: with SMTP id f21mr9099719lfc.402.1631904049054;
+ Fri, 17 Sep 2021 11:40:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210917061104.2680133-1-brendanhiggins@google.com>
+ <20210917061104.2680133-6-brendanhiggins@google.com> <202109170856.8DDB49112D@keescook>
+In-Reply-To: <202109170856.8DDB49112D@keescook>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 17 Sep 2021 11:40:33 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whck4RtO7yp-jKK8QQc0bCDZBkdHc=3pGiFsFjwnQ+-mw@mail.gmail.com>
+Message-ID: <CAHk-=whck4RtO7yp-jKK8QQc0bCDZBkdHc=3pGiFsFjwnQ+-mw@mail.gmail.com>
+Subject: Re: [PATCH v1 5/6] mmc: sdhci-of-aspeed: build kunit tests without
+ structleak plugin
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <shuah@kernel.org>, David Gow <davidgow@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rafael Wysocki <rafael@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>, andreas.noever@gmail.com,
+        michael.jamet@intel.com,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        YehezkelShB@gmail.com, Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On the SC7280, the clock source for gcc_pcie_1_pipe_clk_src
-must be the TCXO while gdsc is enabled. After PHY init successful
-clock source should switch to pipe clock for gcc_pcie_1_pipe_clk_src.
+On Fri, Sep 17, 2021 at 8:57 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> This isn't a stand-alone test object, so I'm less excited about
+> disabling STRUCTLEAK here.
 
-Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
----
- drivers/pci/controller/dwc/pcie-qcom.c | 90 +++++++++++++++++++++++++++++-----
- 1 file changed, 79 insertions(+), 11 deletions(-)
+Yeah, please don't do this for things that aren't pure tests. You're
+now disabling security measures (even if I hate the gcc plugins and
+hope they will go away).
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 8a7a300..6811db6 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -166,6 +166,9 @@ struct qcom_pcie_resources_2_7_0 {
- 	struct regulator_bulk_data supplies[2];
- 	struct reset_control *pci_reset;
- 	struct clk *pipe_clk;
-+	struct clk *pipe_clk_src;
-+	struct clk *phy_pipe_clk;
-+	struct clk *ref_clk_src;
- };
- 
- union qcom_pcie_resources {
-@@ -189,6 +192,11 @@ struct qcom_pcie_ops {
- 	int (*config_sid)(struct qcom_pcie *pcie);
- };
- 
-+struct qcom_pcie_cfg {
-+	const struct qcom_pcie_ops *ops;
-+	unsigned int pipe_clk_need_muxing:1;
-+};
-+
- struct qcom_pcie {
- 	struct dw_pcie *pci;
- 	void __iomem *parf;			/* DT parf */
-@@ -197,6 +205,7 @@ struct qcom_pcie {
- 	struct phy *phy;
- 	struct gpio_desc *reset;
- 	const struct qcom_pcie_ops *ops;
-+	unsigned int pipe_clk_need_muxing:1;
- };
- 
- #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
-@@ -1167,6 +1176,20 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
- 	if (ret < 0)
- 		return ret;
- 
-+	if (pcie->pipe_clk_need_muxing) {
-+		res->pipe_clk_src = devm_clk_get(dev, "pipe_mux");
-+		if (IS_ERR(res->pipe_clk_src))
-+			return PTR_ERR(res->pipe_clk_src);
-+
-+		res->phy_pipe_clk = devm_clk_get(dev, "phy_pipe");
-+		if (IS_ERR(res->phy_pipe_clk))
-+			return PTR_ERR(res->phy_pipe_clk);
-+
-+		res->ref_clk_src = devm_clk_get(dev, "ref");
-+		if (IS_ERR(res->ref_clk_src))
-+			return PTR_ERR(res->ref_clk_src);
-+	}
-+
- 	res->pipe_clk = devm_clk_get(dev, "pipe");
- 	return PTR_ERR_OR_ZERO(res->pipe_clk);
- }
-@@ -1185,6 +1208,10 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
- 		return ret;
- 	}
- 
-+	/* Set TCXO as clock source for pcie_pipe_clk_src */
-+	if (pcie->pipe_clk_need_muxing)
-+		clk_set_parent(res->pipe_clk_src, res->ref_clk_src);
-+
- 	ret = clk_bulk_prepare_enable(res->num_clks, res->clks);
- 	if (ret < 0)
- 		goto err_disable_regulators;
-@@ -1256,6 +1283,10 @@ static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
- {
- 	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
- 
-+	/* Set pipe clock as clock source for pcie_pipe_clk_src */
-+	if (pcie->pipe_clk_need_muxing)
-+		clk_set_parent(res->pipe_clk_src, res->phy_pipe_clk);
-+
- 	return clk_prepare_enable(res->pipe_clk);
- }
- 
-@@ -1456,6 +1487,39 @@ static const struct qcom_pcie_ops ops_1_9_0 = {
- 	.config_sid = qcom_pcie_config_sid_sm8250,
- };
- 
-+static const struct qcom_pcie_cfg apq8084_cfg = {
-+	.ops = &ops_1_0_0,
-+};
-+
-+static const struct qcom_pcie_cfg ipq8064_cfg = {
-+	.ops = &ops_2_1_0,
-+};
-+
-+static const struct qcom_pcie_cfg msm8996_cfg = {
-+	.ops = &ops_2_3_2,
-+};
-+
-+static const struct qcom_pcie_cfg ipq8074_cfg = {
-+	.ops = &ops_2_3_3,
-+};
-+
-+static const struct qcom_pcie_cfg ipq4019_cfg = {
-+	.ops = &ops_2_4_0,
-+};
-+
-+static const struct qcom_pcie_cfg sdm845_cfg = {
-+	.ops = &ops_2_7_0,
-+};
-+
-+static const struct qcom_pcie_cfg sm8250_cfg = {
-+	.ops = &ops_1_9_0,
-+};
-+
-+static const struct qcom_pcie_cfg sc7280_cfg = {
-+	.ops = &ops_1_9_0,
-+	.pipe_clk_need_muxing = true,
-+};
-+
- static const struct dw_pcie_ops dw_pcie_ops = {
- 	.link_up = qcom_pcie_link_up,
- 	.start_link = qcom_pcie_start_link,
-@@ -1467,6 +1531,7 @@ static int qcom_pcie_probe(struct platform_device *pdev)
- 	struct pcie_port *pp;
- 	struct dw_pcie *pci;
- 	struct qcom_pcie *pcie;
-+	const struct qcom_pcie_cfg *pcie_cfg;
- 	int ret;
- 
- 	pcie = devm_kzalloc(dev, sizeof(*pcie), GFP_KERNEL);
-@@ -1488,7 +1553,9 @@ static int qcom_pcie_probe(struct platform_device *pdev)
- 
- 	pcie->pci = pci;
- 
--	pcie->ops = of_device_get_match_data(dev);
-+	pcie_cfg = of_device_get_match_data(dev);
-+	pcie->ops = pcie_cfg->ops;
-+	pcie->pipe_clk_need_muxing = pcie_cfg->pipe_clk_need_muxing;
- 
- 	pcie->reset = devm_gpiod_get_optional(dev, "perst", GPIOD_OUT_HIGH);
- 	if (IS_ERR(pcie->reset)) {
-@@ -1545,16 +1612,17 @@ static int qcom_pcie_probe(struct platform_device *pdev)
- }
- 
- static const struct of_device_id qcom_pcie_match[] = {
--	{ .compatible = "qcom,pcie-apq8084", .data = &ops_1_0_0 },
--	{ .compatible = "qcom,pcie-ipq8064", .data = &ops_2_1_0 },
--	{ .compatible = "qcom,pcie-ipq8064-v2", .data = &ops_2_1_0 },
--	{ .compatible = "qcom,pcie-apq8064", .data = &ops_2_1_0 },
--	{ .compatible = "qcom,pcie-msm8996", .data = &ops_2_3_2 },
--	{ .compatible = "qcom,pcie-ipq8074", .data = &ops_2_3_3 },
--	{ .compatible = "qcom,pcie-ipq4019", .data = &ops_2_4_0 },
--	{ .compatible = "qcom,pcie-qcs404", .data = &ops_2_4_0 },
--	{ .compatible = "qcom,pcie-sdm845", .data = &ops_2_7_0 },
--	{ .compatible = "qcom,pcie-sm8250", .data = &ops_1_9_0 },
-+	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
-+	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
-+	{ .compatible = "qcom,pcie-ipq8064-v2", .data = &ipq8064_cfg },
-+	{ .compatible = "qcom,pcie-apq8064", .data = &ipq8064_cfg },
-+	{ .compatible = "qcom,pcie-msm8996", .data = &msm8996_cfg },
-+	{ .compatible = "qcom,pcie-ipq8074", .data = &ipq8074_cfg },
-+	{ .compatible = "qcom,pcie-ipq4019", .data = &ipq4019_cfg },
-+	{ .compatible = "qcom,pcie-qcs404", .data = &ipq4019_cfg },
-+	{ .compatible = "qcom,pcie-sdm845", .data = &sdm845_cfg },
-+	{ .compatible = "qcom,pcie-sm8250", .data = &sm8250_cfg },
-+	{ .compatible = "qcom,pcie-sc7280", .data = &sc7280_cfg },
- 	{ }
- };
- 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+             Linus
