@@ -2,79 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF6B540F198
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 07:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2CF40F1A3
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 07:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244857AbhIQF1L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Sep 2021 01:27:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46398 "EHLO mail.kernel.org"
+        id S244881AbhIQFdU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Sep 2021 01:33:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48120 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229704AbhIQF1L (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 Sep 2021 01:27:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 80134610D1;
-        Fri, 17 Sep 2021 05:25:48 +0000 (UTC)
+        id S229704AbhIQFdQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 17 Sep 2021 01:33:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 70B4760F6D;
+        Fri, 17 Sep 2021 05:31:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631856349;
-        bh=TALg6JvHavNoHAdcPmExgmEAS6Di8PdSRyieWhZbOE8=;
+        s=k20201202; t=1631856715;
+        bh=wmw9k01/AvuhnEyQwRWm6jRIXEaJDV2SvbYKsXBqtDg=;
         h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=f6dGy72x6U5KO9aOvfBIgbBqusJDYBwW5Dkule8jM5yxTRfmDj5qWqqHIKrrHIqZT
-         Xb9kLp7bgbWljLWp0IX/4Jg8EzlyaB31Ta4vaaEjNodBhmrzjCWZnvJOUaqO+8+Fyo
-         BTQ1AFYmQRR2syQafsz37o5NlhrxXN2WuxSlHvTf8L01dGpd1HE8LAkCgdkcB0Y3bU
-         pZtFL01flVwznkH4fPiEzU1/EZBWWSzMBPulXCsPPy4v0QLrlt26G/kAk0rUQvtEbh
-         wIdJy0Lk4FNinQErJ2/h6zm1cwPcexVUaK1/ESto9MPnvO3yzIY9HGlm1FEljaE0PY
-         +JVrOl4xQWrKQ==
-References: <20210917021852.2037-1-wcheng@codeaurora.org>
+        b=m0mP+HfIDtTMb5L9/45deKc6VMDcjk5SqjgJfhf6zy4aiJ3gqe+YgpHdTLlAlwKvx
+         oe/v9jZjnQ7HXJf2b/IBClfIMRAYwTHq79I3p84DfV23bhp1pKqHHVwJdJmEe5an/6
+         /a16i2FcgpLl9gPgxxILatO+08jt8DwhpkYnEy9tQw88UDYnlcycqSxpeCRoJBl7bE
+         CWaxN0Q0Y0EgonEvg6jZKCLN32QD3v2NzM8srWUq5HA8nfYWpwBVy+o4SgGVoR4885
+         NaFBqhRrYCGhxGR00Sgo8RObh3q8VXKH6GZdWrKk9LkiD3EpXXuLajpD0kAMgXg2Iy
+         sDVMWMgaUXlNg==
+References: <YUNbDyoTPa+5J9Od@ws2>
 User-agent: mu4e 1.6.5; emacs 27.2
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: gadget: Avoid starting DWC3 gadget during
- UDC unbind
-Date:   Fri, 17 Sep 2021 08:17:03 +0300
-In-reply-to: <20210917021852.2037-1-wcheng@codeaurora.org>
-Message-ID: <87y27vai3p.fsf@kernel.org>
+To:     Andreas Bauer <andreas.bauer.nexus@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget/legacy/ether: assume saner default power mode
+Date:   Fri, 17 Sep 2021 08:28:16 +0300
+In-reply-to: <YUNbDyoTPa+5J9Od@ws2>
+Message-ID: <87pmt7ahtj.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
 Hi,
 
-Wesley Cheng <wcheng@codeaurora.org> writes:
+Andreas Bauer <andreas.bauer.nexus@gmail.com> writes:
 
-> There is a race present where the DWC3 runtime resume runs in parallel
-> to the UDC unbind sequence.  This will eventually lead to a possible
-> scenario where we are enabling the run/stop bit, without a valid
-> composition defined.
+> I propose the included patch to the OTG USB ethernet gadget code:
 >
-> Thread#1 (handling UDC unbind):
-> usb_gadget_remove_driver()
-> -->usb_gadget_disconnect()
->   -->dwc3_gadget_pullup(0)
-> --> continue UDC unbind sequence
-> -->Thread#2 is running in parallel here
+>   Report default of bus powered and 500mA bMaxPower consumption.
 >
-> Thread#2 (handing next cable connect)
-> __dwc3_set_mode()
->   -->pm_runtime_get_sync()
->     -->dwc3_gadget_resume()
->       -->dwc->gadget_driver is NOT NULL yet
->       -->dwc3_gadget_run_stop(1)
->       --> _dwc3gadget_start()
-> ...
+> Reason:
 >
-> Fix this by tracking the pullup disable routine, and avoiding resuming
-> of the DWC3 gadget.  Once the UDC is re-binded, that will trigger the
-> pullup enable routine, which would handle enabling the DWC3 gadget.
+>   The USB spec requires all devices consuming more than 100mA from
+>   the bus to report in this manner. Devices such as Rpi Zero can operate
+>   in this mode and will then falsly report being self-powered when they
+>   are not.
 >
-> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>   The more sane default is to report being 500mA bus-powered than being
+>   self-powered
+>
+> This patch was born from an issue within the Raspberry Pi Zero ecosystem,
+> therefore I would invite comment regarding other usage of this OTG code.
 
-This looks okay to me, but needs to be tested by a few folks ;-)
+Have a look at other commits to get examples of how to write commits for
+upstream. You're missing your Signed-off-by, adding extra unnecessary
+spaces and making your signature show up in the commit log. All of
+these are described in kernel documentation this
+(https://www.kernel.org/doc/html/latest/process/submitting-patches.html)
+is a good starting point.
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
+> $ diff -u linux-5.14.2/drivers/usb/gadget/legacy/ether.c.orig linux-5.14.2/drivers/usb/gadget/legacy/ether.c
+> --- linux-5.14.2/drivers/usb/gadget/legacy/ether.c.orig	2021-09-08 13:52:41.000000000 +0700
+> +++ linux-5.14.2/drivers/usb/gadget/legacy/ether.c	2021-09-16 21:25:06.782958554 +0700
+> @@ -296,7 +296,8 @@
+>  	/* .label = f(hardware) */
+>  	.bConfigurationValue	= 1,
+>  	/* .iConfiguration = DYNAMIC */
+> -	.bmAttributes		= USB_CONFIG_ATT_SELFPOWER,
+> +	.bmAttributes		= 0,   /* bus powered implied */
+> +	.bMaxPower		= 250, /* 500mA in 2mA units */
+
+right, your "sane" default now prevents this gadget driver from working
+behind bus powered hubs. Considering that a linux-based device is likely
+to have its own battery, this is not really a sane default.
+
+The default value of "self powered", seems much saner ;-)
 
 -- 
 balbi
