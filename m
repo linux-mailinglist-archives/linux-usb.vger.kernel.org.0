@@ -2,101 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D22FD40F20E
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 08:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 925C640F257
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 08:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245228AbhIQGNJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Sep 2021 02:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245150AbhIQGNC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Sep 2021 02:13:02 -0400
-Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4C9C061764
-        for <linux-usb@vger.kernel.org>; Thu, 16 Sep 2021 23:11:40 -0700 (PDT)
-Received: by mail-qt1-x849.google.com with SMTP id x11-20020ac86b4b000000b00299d7592d31so86546590qts.0
-        for <linux-usb@vger.kernel.org>; Thu, 16 Sep 2021 23:11:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=I9e6scqKSds0IiJpDE0EGiO45/93pXNyGD5DuUXEd/4=;
-        b=ZGnu7bsUG8c4+ouWPO8+VzqsB82u7CgO47v+ThTR0fweLrffGOa51R5HLKqAHlRExO
-         9rFAyy+PKnFjGo1z2kUYy8Xgt1bC9Qd05ttcAk+NWE7UxEwoR+EDGJannIDm56RHXct3
-         UnDhbHbk1Cp+saWXfW8ErEcgjz3ZmKkqHUOtk5K0Z3bG8wPxVBaZyJYtZaNtp0ZYvP85
-         a2gdZUykSMuMrgh8f5vgCTo/cG7+8s9FQLO10KmFKdcsqbnWglo/vda/DqTqJa5XDvp4
-         mofUhZ7tqcMtYN5Q2FM9L9mZTp8VaY15xmD15ATeMJ+n/rm0WjR13KVVjKPW+8tdJLNP
-         iDeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=I9e6scqKSds0IiJpDE0EGiO45/93pXNyGD5DuUXEd/4=;
-        b=bZzS2yYbx/UGj1Zxco9v6acMbo7idM/jODOTBJ8OB/FyOwjCG4OGt2QQMg6drk1Z2z
-         TrKWl7IKUtwn3ulOpT63G0Ld1a0Cs0Xayo+thmLHOBOIDfb3sI4QothUfm64KhymdXC2
-         Mk0Y1F+x6i7gNZgIt/g4YZ/0Ue7Ct2PtzbMkQlRMTNu3s4HVJv4iCEbUoLBowfrm5Ufs
-         XmoG9ikvixin/viqyZh9l7gs9ktGGj6N+2EZh34dME+eSiCUUQNQCiOoLJKQqRdflFrB
-         crfUpCimOMxKBYAws5bctvJsLG6U4vW64VS4g104ecvKeAE3Nz5kGpkHQrLEzKpEfTkX
-         Mb7g==
-X-Gm-Message-State: AOAM5331it2/K1BwDq5YqwjF1ZvvF1yOBmxHX+j/QOJhk2A72u3N32Ob
-        RFgisxT9YoPsjPXOKd656tU70qTuJ9qv4yyLdYnWCA==
-X-Google-Smtp-Source: ABdhPJy9hOwDkvbV4NLyvh0qGcrMN7grCpA4gEVGgtpAr8OhFh/b/6LfxHBrVoqTc9/NxMbGI93vQBhA0PwmRN4wEK24qA==
-X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:201:4845:43ba:3ff5:2de1])
- (user=brendanhiggins job=sendgmr) by 2002:a25:adca:: with SMTP id
- d10mr11859759ybe.52.1631859099185; Thu, 16 Sep 2021 23:11:39 -0700 (PDT)
-Date:   Thu, 16 Sep 2021 23:11:04 -0700
-In-Reply-To: <20210917061104.2680133-1-brendanhiggins@google.com>
-Message-Id: <20210917061104.2680133-7-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20210917061104.2680133-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.33.0.464.g1972c5931b-goog
-Subject: [PATCH v1 6/6] bitfield: build kunit tests without structleak plugin
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     shuah@kernel.org, davidgow@google.com, arnd@arndb.de,
-        keescook@chromium.org, rafael@kernel.org, jic23@kernel.org,
-        lars@metafoo.de, ulf.hansson@linaro.org, andreas.noever@gmail.com,
-        michael.jamet@intel.com, mika.westerberg@linux.intel.com,
-        YehezkelShB@gmail.com, masahiroy@kernel.org,
-        michal.lkml@markovi.net, ndesaulniers@google.com
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        gregkh@linuxfoundation.org, linux-iio@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S232172AbhIQG3y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Sep 2021 02:29:54 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:20460 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231793AbhIQG3v (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 17 Sep 2021 02:29:51 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1631860110; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=71x/5CV+GloaODoruzokP4i9Sjebw7Bm1eLwxI/272A=; b=SC63itUGCiN+OY02Lqk9XG0vh9gYb8RIGDn1Y0LzaFro3J5MGE6vt39eD8S4+bh2yOkCY4HT
+ 3llOV6RZaTGPpt/gph2aYV+QKFft2OVCGGKGvlhlLHSuUs7qi9OktA9ZK3cNV5QcCMzk2prR
+ UhChOc5lJzhJGrAENw4vd2XhGGQ=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 6144357ce0f78151d6a4e6b3 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 17 Sep 2021 06:28:12
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 92C21C43460; Fri, 17 Sep 2021 06:28:12 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.4 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.0
+Received: from [192.168.1.26] (075-140-094-099.biz.spectrum.com [75.140.94.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B7A75C4338F;
+        Fri, 17 Sep 2021 06:28:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org B7A75C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [PATCH] usb: dwc3: gadget: Avoid starting DWC3 gadget during UDC
+ unbind
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210917021852.2037-1-wcheng@codeaurora.org>
+ <87y27vai3p.fsf@kernel.org>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <474148e5-37e2-ea0c-7d78-9e71155314d9@codeaurora.org>
+Date:   Thu, 16 Sep 2021 23:28:09 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <87y27vai3p.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi,
 
-The structleak plugin causes the stack frame size to grow immensely:
+On 9/16/2021 10:17 PM, Felipe Balbi wrote:
+> 
+> Hi,
+> 
+> Wesley Cheng <wcheng@codeaurora.org> writes:
+> 
+>> There is a race present where the DWC3 runtime resume runs in parallel
+>> to the UDC unbind sequence.  This will eventually lead to a possible
+>> scenario where we are enabling the run/stop bit, without a valid
+>> composition defined.
+>>
+>> Thread#1 (handling UDC unbind):
+>> usb_gadget_remove_driver()
+>> -->usb_gadget_disconnect()
+>>   -->dwc3_gadget_pullup(0)
+>> --> continue UDC unbind sequence
+>> -->Thread#2 is running in parallel here
+>>
+>> Thread#2 (handing next cable connect)
+>> __dwc3_set_mode()
+>>   -->pm_runtime_get_sync()
+>>     -->dwc3_gadget_resume()
+>>       -->dwc->gadget_driver is NOT NULL yet
+>>       -->dwc3_gadget_run_stop(1)
+>>       --> _dwc3gadget_start()
+>> ...
+>>
+>> Fix this by tracking the pullup disable routine, and avoiding resuming
+>> of the DWC3 gadget.  Once the UDC is re-binded, that will trigger the
+>> pullup enable routine, which would handle enabling the DWC3 gadget.
+>>
+>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
 
-lib/bitfield_kunit.c: In function 'test_bitfields_constants':
-lib/bitfield_kunit.c:93:1: error: the frame size of 7440 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
+Thanks, Felipe!
 
-Turn it off in this file.
+> 
+> This looks okay to me, but needs to be tested by a few folks ;-)
+> 
+> Acked-by: Felipe Balbi <balbi@kernel.org>
+> 
+Yes, would be good to get some functions using
+usb_gadget_activate/deactivate().  It should be OK for those situations
+as well, but just to make sure :)
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
----
- lib/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/lib/Makefile b/lib/Makefile
-index 5efd1b435a37c..c93c4b59af969 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -351,7 +351,7 @@ obj-$(CONFIG_OBJAGG) += objagg.o
- obj-$(CONFIG_PLDMFW) += pldmfw/
- 
- # KUnit tests
--CFLAGS_bitfield_kunit.o := $(call cc-option,-Wframe-larger-than=10240)
-+CFLAGS_bitfield_kunit.o := $(call cc-option,-Wframe-larger-than=10240) $(DISABLE_STRUCTLEAK_PLUGIN)
- obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
- obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
+Thanks
+Wesley Cheng
 -- 
-2.33.0.464.g1972c5931b-goog
-
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
