@@ -2,95 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 157854106F2
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Sep 2021 15:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E84F410735
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Sep 2021 16:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237074AbhIRNy2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Sep 2021 09:54:28 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:47841 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S236961AbhIRNy0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Sep 2021 09:54:26 -0400
-Received: (qmail 80311 invoked by uid 1000); 18 Sep 2021 09:53:01 -0400
-Date:   Sat, 18 Sep 2021 09:53:01 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Hao Sun <sunhao.th@gmail.com>, Shuah Khan <shuah@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        a.darwish@linutronix.de, johan@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        oneukum@suse.com
-Subject: Re: INFO: task hung in hub_port_init
-Message-ID: <20210918135301.GA79656@rowland.harvard.edu>
-References: <CACkBjsYQxQxGQwb3YS4obVWH3EODzqky5=nM3ADP7+13hBYgAA@mail.gmail.com>
- <20210913135459.GA120302@rowland.harvard.edu>
- <CACkBjsZcg0B=tF8cr54VqaJMVURD9R463epZqRQfesnoY=+L8g@mail.gmail.com>
- <20210918020245.GA69263@rowland.harvard.edu>
- <CACkBjsZPjO96NzLjKR2N7bYzBJRN6sPuaDpK6cvmGqKTd=Byow@mail.gmail.com>
+        id S239532AbhIRO67 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Sep 2021 10:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50888 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239085AbhIRO67 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Sep 2021 10:58:59 -0400
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98193C061574
+        for <linux-usb@vger.kernel.org>; Sat, 18 Sep 2021 07:57:35 -0700 (PDT)
+Received: by mail-ua1-x92f.google.com with SMTP id e20so8016311uam.11
+        for <linux-usb@vger.kernel.org>; Sat, 18 Sep 2021 07:57:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shantur-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=XoS+J3K7NduxwyLkch3X4LiuWC9AbSarqUpZadBKzuE=;
+        b=nA0HvJoSwepMzKkGd92WisUtYXZEGX5sr7qobDUQuS/eHNZ8osXHK4HBon9tfVoJNC
+         KPmSU/ZID79x/TIhfbyrTAduOE6WWQWCcUNPPd2ocfhx+SOWet44PlNLh9MKscKj0F5m
+         GAwt29vXJyw+9+cg3c1tM6j5fthzDJFiuZLWcMpJiRjJwq3WvitwG4sW3QSV3QIWQWFY
+         8djVJ85+dpMygOdgpPXIVovPAMjvVq4dAAsFUeLKDNtzpgnWQolUU5WW1k+SpBN/jyUy
+         QMBJI/i6o3PYpsyt/A7qimR9WaALphnqmjxT/NRmNv/VzwCM41yEZJ7Js6zfl2cFJFdT
+         tt+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=XoS+J3K7NduxwyLkch3X4LiuWC9AbSarqUpZadBKzuE=;
+        b=NqVgn0UudoJi6jAxTpIoYvq7Dtw2bQFu8y8c+OzHbLIly55NveNsl9KgVvEzieTAUD
+         2oqyh9HteokAixLRYOXdtpQ6Mb18wKZX0P5RBdF0Foik1GUokavUzp3IyXKyqixe/JgW
+         s/u5b1qvfo2jlG7a/jcw5Ahg4m9wdssHHO7/+DorU9jN/5iW9ed2rPSoTwPwIPpQZXWG
+         P9VodWQKD1XnQA6ztsHsKTgsZf4Y5SE8EW0oYoGMCUvfXBIQzrikEDR8E1GiSct/DK82
+         S99hOxmBPovazgppu9zeF1AhcvfL7zOdhF/LSufqKb82ChlhbZ9zqyvh64cHbahDh8Y3
+         QM+A==
+X-Gm-Message-State: AOAM532V3HSP//dh+nZdJGnO7nDIyaGvJ+PmE5KtdRV0PAxSSV6NOvgN
+        rqvRwsh0BpzytaAEbpjIybHTPrFIDzVPhE4EF+ZpSrgLPU0ga/8s
+X-Google-Smtp-Source: ABdhPJwje4n23CsC+iKuHQ1bFX85XuCsx0Trpx9/kv8txMMRgMCFCGU5WXZuXBven3uI9BUxLxmwzoBs4hKqkVLQJYU=
+X-Received: by 2002:ab0:2b13:: with SMTP id e19mr8329444uar.3.1631977054582;
+ Sat, 18 Sep 2021 07:57:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACkBjsZPjO96NzLjKR2N7bYzBJRN6sPuaDpK6cvmGqKTd=Byow@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   Shantur Rathore <i@shantur.com>
+Date:   Sat, 18 Sep 2021 15:57:24 +0100
+Message-ID: <CABEcMwVKFmie9Dx1PMRgY+yDWFN6TtTX0727aiWQvn971CbJwA@mail.gmail.com>
+Subject: dwc3 over pcie or with more than 1 udc
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Sep 18, 2021 at 10:17:26AM +0800, Hao Sun wrote:
-> Alan Stern <stern@rowland.harvard.edu> 于2021年9月18日周六 上午10:02写道：
-> >
-> > On Sat, Sep 18, 2021 at 09:56:52AM +0800, Hao Sun wrote:
-> > > Hi Alan,
-> > >
-> > > Alan Stern <stern@rowland.harvard.edu> 于2021年9月13日周一 下午9:55写道：
-> > > >
-> > > > On Mon, Sep 13, 2021 at 11:13:15AM +0800, Hao Sun wrote:
-> > > > > Hello,
-> > > > >
-> > > > > When using Healer to fuzz the Linux kernel, the following crash was triggered.
-> > > > >
-> > > > > HEAD commit: ac08b1c68d1b Merge tag 'pci-v5.15-changes'
-> > > > > git tree: upstream
-> > > > > console output:
-> > > > > https://drive.google.com/file/d/1ZeDIMe-DoY3fB32j2p5ifgpq-Lc5N74I/view?usp=sharing
-> > > > > kernel config: https://drive.google.com/file/d/1qrJUXD8ZIeAkg-xojzDpp04v9MtQ8RR6/view?usp=sharing
-> > > > > Syzlang reproducer:
-> > > > > https://drive.google.com/file/d/1tZe8VmXfxoPqlNpzpGOd-e5WCSWgbkxB/view?usp=sharing
-> > > > > Similar report:
-> > > > > https://groups.google.com/g/syzkaller-bugs/c/zX55CUzjBOY/m/uf91r0XqAgAJ
-> > > > >
-> > > > > Sorry, I don't have a C reproducer for this crash but have a Syzlang
-> > > > > reproducer. Also, hope the symbolized report can help.
-> > > > > Here are the instructions on how to execute Syzlang prog:
-> > > > > https://github.com/google/syzkaller/blob/master/docs/executing_syzkaller_programs.md
-> > > > >
-> > > > > If you fix this issue, please add the following tag to the commit:
-> > > > > Reported-by: Hao Sun <sunhao.th@gmail.com>
-> > > >
-> > > > There's not much hope of finding the cause of a problem like this
-> > > > without seeing the kernel log.
-> > > >
-> > >
-> > > Healer found another Syzlang prog to reproduce this task hang:
-> > > https://paste.ubuntu.com/p/HCNYbKJYtx/
-> > >
-> > > Also here is a very simple script to execute the reproducer:
-> > > https://paste.ubuntu.com/p/ZTGmvFSP6d/
-> > >
-> > > The `syz-execprog` and `syz-executor` are needed, so please build
-> > > Syzkaller first before running the script.
-> > > Hope this can help to find the root cause of the problem.
-> >
-> > I don't have time to install and figure out how to use Healer and
-> > Syzkaller.  But if you run the reproducer and post the kernel log,
-> > I'll take a look at it.
-> >
-> 
-> Just executed the reproducer, here is the full log:
-> https://paste.ubuntu.com/p/x43SqQy8PX/
+Hi all,
 
-The log indicates that the problem is related to the vhci-hcd driver 
-somehow.  I don't know why those "Module has invalid ELF structures" 
-errors keep appearing, starting in line 1946 of the log.
+I am trying to find a dwc3 compatible PCIe USB controller or a dwc3
+compatible device with more than one udc.
 
-Alan Stern
+Is there any such device supported in kernel?
+If yes, please let me know which one.
+
+Thanks in advance for your help.
+
+Kind regards,
+Shantur
