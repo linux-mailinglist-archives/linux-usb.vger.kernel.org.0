@@ -2,65 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E84F410735
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Sep 2021 16:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3FEA410775
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Sep 2021 17:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239532AbhIRO67 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Sep 2021 10:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239085AbhIRO67 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Sep 2021 10:58:59 -0400
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98193C061574
-        for <linux-usb@vger.kernel.org>; Sat, 18 Sep 2021 07:57:35 -0700 (PDT)
-Received: by mail-ua1-x92f.google.com with SMTP id e20so8016311uam.11
-        for <linux-usb@vger.kernel.org>; Sat, 18 Sep 2021 07:57:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shantur-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=XoS+J3K7NduxwyLkch3X4LiuWC9AbSarqUpZadBKzuE=;
-        b=nA0HvJoSwepMzKkGd92WisUtYXZEGX5sr7qobDUQuS/eHNZ8osXHK4HBon9tfVoJNC
-         KPmSU/ZID79x/TIhfbyrTAduOE6WWQWCcUNPPd2ocfhx+SOWet44PlNLh9MKscKj0F5m
-         GAwt29vXJyw+9+cg3c1tM6j5fthzDJFiuZLWcMpJiRjJwq3WvitwG4sW3QSV3QIWQWFY
-         8djVJ85+dpMygOdgpPXIVovPAMjvVq4dAAsFUeLKDNtzpgnWQolUU5WW1k+SpBN/jyUy
-         QMBJI/i6o3PYpsyt/A7qimR9WaALphnqmjxT/NRmNv/VzwCM41yEZJ7Js6zfl2cFJFdT
-         tt+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=XoS+J3K7NduxwyLkch3X4LiuWC9AbSarqUpZadBKzuE=;
-        b=NqVgn0UudoJi6jAxTpIoYvq7Dtw2bQFu8y8c+OzHbLIly55NveNsl9KgVvEzieTAUD
-         2oqyh9HteokAixLRYOXdtpQ6Mb18wKZX0P5RBdF0Foik1GUokavUzp3IyXKyqixe/JgW
-         s/u5b1qvfo2jlG7a/jcw5Ahg4m9wdssHHO7/+DorU9jN/5iW9ed2rPSoTwPwIPpQZXWG
-         P9VodWQKD1XnQA6ztsHsKTgsZf4Y5SE8EW0oYoGMCUvfXBIQzrikEDR8E1GiSct/DK82
-         S99hOxmBPovazgppu9zeF1AhcvfL7zOdhF/LSufqKb82ChlhbZ9zqyvh64cHbahDh8Y3
-         QM+A==
-X-Gm-Message-State: AOAM532V3HSP//dh+nZdJGnO7nDIyaGvJ+PmE5KtdRV0PAxSSV6NOvgN
-        rqvRwsh0BpzytaAEbpjIybHTPrFIDzVPhE4EF+ZpSrgLPU0ga/8s
-X-Google-Smtp-Source: ABdhPJwje4n23CsC+iKuHQ1bFX85XuCsx0Trpx9/kv8txMMRgMCFCGU5WXZuXBven3uI9BUxLxmwzoBs4hKqkVLQJYU=
-X-Received: by 2002:ab0:2b13:: with SMTP id e19mr8329444uar.3.1631977054582;
- Sat, 18 Sep 2021 07:57:34 -0700 (PDT)
+        id S239948AbhIRP4L convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sat, 18 Sep 2021 11:56:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44186 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237245AbhIRP4K (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 18 Sep 2021 11:56:10 -0400
+Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CB92261244;
+        Sat, 18 Sep 2021 15:54:40 +0000 (UTC)
+Date:   Sat, 18 Sep 2021 16:58:20 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     shuah@kernel.org, davidgow@google.com, arnd@arndb.de,
+        keescook@chromium.org, rafael@kernel.org, lars@metafoo.de,
+        ulf.hansson@linaro.org, andreas.noever@gmail.com,
+        michael.jamet@intel.com, mika.westerberg@linux.intel.com,
+        YehezkelShB@gmail.com, masahiroy@kernel.org,
+        michal.lkml@markovi.net, ndesaulniers@google.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        gregkh@linuxfoundation.org, linux-iio@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v1 2/6] iio/test-format: build kunit tests without
+ structleak plugin
+Message-ID: <20210918165820.076237b4@jic23-huawei>
+In-Reply-To: <20210917061104.2680133-3-brendanhiggins@google.com>
+References: <20210917061104.2680133-1-brendanhiggins@google.com>
+        <20210917061104.2680133-3-brendanhiggins@google.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-From:   Shantur Rathore <i@shantur.com>
-Date:   Sat, 18 Sep 2021 15:57:24 +0100
-Message-ID: <CABEcMwVKFmie9Dx1PMRgY+yDWFN6TtTX0727aiWQvn971CbJwA@mail.gmail.com>
-Subject: dwc3 over pcie or with more than 1 udc
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi all,
+On Thu, 16 Sep 2021 23:11:00 -0700
+Brendan Higgins <brendanhiggins@google.com> wrote:
 
-I am trying to find a dwc3 compatible PCIe USB controller or a dwc3
-compatible device with more than one udc.
+> The structleak plugin causes the stack frame size to grow immensely when
+> used with KUnit:
+> 
+> ../drivers/iio/test/iio-test-format.c: In function ‘iio_test_iio_format_value_fixedpoint’:
+> ../drivers/iio/test/iio-test-format.c:98:1: warning: the frame size of 2336 bytes is larger than 2048 bytes [-Wframe-larger-than=]
+> 
+> Turn it off in this file.
+> 
+> Co-developed-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 
-Is there any such device supported in kernel?
-If yes, please let me know which one.
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Thanks in advance for your help.
+> ---
+>  drivers/iio/test/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/iio/test/Makefile b/drivers/iio/test/Makefile
+> index f1099b4953014..467519a2027e5 100644
+> --- a/drivers/iio/test/Makefile
+> +++ b/drivers/iio/test/Makefile
+> @@ -5,3 +5,4 @@
+>  
+>  # Keep in alphabetical order
+>  obj-$(CONFIG_IIO_TEST_FORMAT) += iio-test-format.o
+> +CFLAGS_iio-test-format.o += $(DISABLE_STRUCTLEAK_PLUGIN)
 
-Kind regards,
-Shantur
