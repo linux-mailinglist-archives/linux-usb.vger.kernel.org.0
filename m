@@ -2,105 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB5C410641
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Sep 2021 14:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A1A41066C
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Sep 2021 14:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239540AbhIRMMC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Sep 2021 08:12:02 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:33867 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239483AbhIRMLs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Sep 2021 08:11:48 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id B238D580AAF;
-        Sat, 18 Sep 2021 08:10:11 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sat, 18 Sep 2021 08:10:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=2BUNai60PAsqa
-        HL0XWy7FY7EGOOjnzZDxxMpH7rQ3Q4=; b=cVOv97tqGpyIKyv/WBxbBDWMhKaDS
-        IbkB6ysOE+JWR2uz8bpqaINpYd4BoMZSXSmNprFA8wpMclhuDgxHeDRVGLQXrVQH
-        8XvfLhLDH0CooiZ+qOW4xSh64LAYe1U30Gi9kwQ0shgRaDP22EpueKs72Gf25+49
-        2+aNb12N79YhnNFuCtkFpUJ5WyShfRpLF9a+20KRVuIv1kQsG0OFMWpUBBtJPDUa
-        w/zjyco0rWTZaLOoNyYXtHdQ6+0GZIgezabYqpJXyHbbJOECKfVSksM3BCypDRIw
-        wrqdgwWdGeIJ3wEYAFLWIR9LAjmqPc08bgRBucyp1EbCnfMvjxonO238g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=2BUNai60PAsqaHL0XWy7FY7EGOOjnzZDxxMpH7rQ3Q4=; b=rAOhEJaM
-        b+VawphzSWGyilbd5N/OZzKVXbohQubTWXVoLyH7HLZSmY/Tz1Lh94ffobzmJEr8
-        DGui+HCRH185pDcpQL84iYtZK5LIVypfKIZAqP0bFSnKS2B9BW7RLbO9Ua5Mmh8H
-        gtS9YqoeBf4rMpge8Zu/BA9R5naxmGznVTsYu9jZM8jknHD1gX/2dDrS+X5JUC+c
-        cCv+ziWP5CZYvkuqcgqfIBJmLD3c5Hmqd9RhKZOeoPu9Y6IMUABP5H/cInWCMfyg
-        hWZHuwe8B/PZO9sKBkU9DXeSXqFFQ3jfdjnp8Aekg6DDwqbFsdsrE7zy7tFt2JqL
-        /c/D7glsV6jEOQ==
-X-ME-Sender: <xms:I9dFYb8i9xrLgZKHFdbEdxlIIopYm8r8nYDteszZn6kblTuCakSygw>
-    <xme:I9dFYXuBe3ZiklGnt8lWRrVUoInTq-5ak3TMBRkuqnJbNEZPfG6d6nfMm256KzOuh
-    dSU07CBJzagCWRROBM>
-X-ME-Received: <xmr:I9dFYZD7rmf04NG4SVShLbFQ1cBg_MvOfDYbxmuokadjLXJAAEpa5Vvol-IMKlD95SLOkB6HrAerP-2qJXBqad34VFEq-sBPrpxwtBai2nALyUEwqO0sUyEEIS4rHA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudehkedggeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcu
-    rfgvthgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvg
-    hrnheptedvkeetleeuffffhfekteetffeggffgveehieelueefvddtueffveevlefhfeej
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvg
-    hnsehsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:I9dFYXfoJ2nTU7_lLKFVztw8fid6sYfqfj4bBonKWXcV4kqLyvIBag>
-    <xmx:I9dFYQOp0FwhnU29U6hKJyO4bb5Fwcv1eZlYJxqgmbMnh3xhK8L3IA>
-    <xmx:I9dFYZlEW-YCa0x_RTnxw3Pzr-ysSDNjeFIwCpuIJqOmdXJfrZfJWA>
-    <xmx:I9dFYZmvn-cZGqHzT5RnRP7FhEZS7dNgEzQxTB84kFDKtSJuRNgjLw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 18 Sep 2021 08:10:09 -0400 (EDT)
-From:   Sven Peter <sven@svenpeter.dev>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Alexander Graf <graf@amazon.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Subject: [RFT PATCH 9/9] usb: typec: tipd: Remove FIXME about testing with I2C_FUNC_I2C
-Date:   Sat, 18 Sep 2021 14:09:34 +0200
-Message-Id: <20210918120934.28252-10-sven@svenpeter.dev>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20210918120934.28252-1-sven@svenpeter.dev>
-References: <20210918120934.28252-1-sven@svenpeter.dev>
+        id S235323AbhIRMeO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Sep 2021 08:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233144AbhIRMeG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Sep 2021 08:34:06 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F0DC061574
+        for <linux-usb@vger.kernel.org>; Sat, 18 Sep 2021 05:32:42 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id b21-20020a1c8015000000b003049690d882so11951454wmd.5
+        for <linux-usb@vger.kernel.org>; Sat, 18 Sep 2021 05:32:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=W4RY4WLV6Z4od8cR681FtunV24OGcqWnMGcwRnir/BM=;
+        b=mh2EHdZd8Lgok7eTuNhmO8OFQCe9T0g8f29nd0Eb1l6fR5TfXijDBiZOBXIJUH3lbx
+         GLBptHIMtLFl6ik2FENggkhduHMBtC5goqCdqWZWzdpsYBNb5pnW6tLJrIbUfnHoru2Z
+         rASfHhJCYTNY2iXKAs/dB4ufaILmsDNCXDSHPsX3roPHJakTtC3AmnfukJrlIdu8MV76
+         w+QM5/xN44w8hon8S+UWyzK1FcF3aD0p4A9ZS5P4NdVQuL6aAliZ1vBOZK3359UvAJy+
+         UWdhb6V3oUW9dY1DB9wVhAHu275s+qltvK7ZizxDzZ9Rw2kT7GdbbO+HI41hcB3HXFuj
+         V5Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=W4RY4WLV6Z4od8cR681FtunV24OGcqWnMGcwRnir/BM=;
+        b=amsTECPMi+WhbjJUYI42SquThMimMqjjcNb/pcMdAbx/t92wfX5nP5waXvd3FZ8eB5
+         XpMj7XziZz+6FaPY/amZirwFHM9HjsRYBpL1SmVhc5OwQWCIGdYT18/IsgCLNkVJ2gJH
+         borSqWnRQGzTmb8ignBfdysQH++B9P+Acsq8MtnQCcGac9X7rpF3JSf0nhSiUheu5fQ2
+         RZpoS4oRDrqKv+Z14gt3RswQCfL3ZE0i7nXQE0a6ZfR8R18WWP8ZQIU+TVDVzksxP2sI
+         JaTLTZwh5sQV2rlmtaMLlvOvlvbYEPoi49k2JZYXhWNau1VZ/6wNJmI+DM8T8HK6Rqqk
+         YjmQ==
+X-Gm-Message-State: AOAM531ThRBXgjZ7RjHYCnMVBYnw7FunF3SEWv1m9QwrPB7osH0pQwiA
+        yFdBl05vTOJzVDT+ISZtxh2/WSU+NHS7Lw==
+X-Google-Smtp-Source: ABdhPJxXpeuauUqnw39NsrhZLyduVst31IblqNwZ0zcc5rnnL+7u9tapF0g1h+qucnzuR1mjfda9MQ==
+X-Received: by 2002:a1c:21c3:: with SMTP id h186mr20275341wmh.18.1631968361368;
+        Sat, 18 Sep 2021 05:32:41 -0700 (PDT)
+Received: from eldamar (80-218-24-251.dclient.hispeed.ch. [80.218.24.251])
+        by smtp.gmail.com with ESMTPSA id i9sm14041056wmi.44.2021.09.18.05.32.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Sep 2021 05:32:40 -0700 (PDT)
+Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
+Date:   Sat, 18 Sep 2021 14:32:40 +0200
+From:   Salvatore Bonaccorso <carnil@debian.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>
+Subject: Re: [PATCH] Partially revert "usb: Kconfig: using select for
+ USB_COMMON dependency"
+Message-ID: <YUXcaBR3Yh4PqMxN@eldamar.lan>
+References: <20170418023639.GE4152decadent!org!uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20170418023639.GE4152decadent!org!uk>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Apple i2c bus uses I2C_FUNC_I2C and I've tested this quite
-extensivly in the past days. Remove the FIXME about that testing :-)
+Hi Greg,
 
-Signed-off-by: Sven Peter <sven@svenpeter.dev>
+This is a reply to a very old patch submission:
+
+On Tue, Apr 18, 2017 at 02:36:39AM +0000, Ben Hutchings wrote:
+> 
+> This reverts commit cb9c1cfc86926d0e86d19c8e34f6c23458cd3478 for
+> USB_LED_TRIG.  This config symbol has bool type and enables extra code
+> in usb_common itself, not a separate driver.  Enabling it should not
+> force usb_common to be built-in!
+> 
+> Fixes: cb9c1cfc8692 ("usb: Kconfig: using select for USB_COMMON dependency")
+> Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+> ---
+>  drivers/usb/Kconfig | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/Kconfig b/drivers/usb/Kconfig
+> index fbe493d44e81..8270abe6c677 100644
+> --- a/drivers/usb/Kconfig
+> +++ b/drivers/usb/Kconfig
+> @@ -154,8 +154,7 @@ source "drivers/usb/gadget/Kconfig"
+> =20
+>  config USB_LED_TRIG
+>  	bool "USB LED Triggers"
+> -	depends on LEDS_CLASS && LEDS_TRIGGERS
+> -	select USB_COMMON
+> +	depends on LEDS_CLASS && USB_COMMON && LEDS_TRIGGERS
+>  	help
+>  	  This option adds LED triggers for USB host and/or gadget activity.
+
+Was going through the series of patches we had applied in Debian and
+noticed while this was submitted by Ben back in 2017, it looks it was
+never applied or considered. Would that be something you could pick
+up? I'm inlining the original patch from Ben.
+
+Regards,
+Salvatore
+
+From: Ben Hutchings <ben@decadent.org.uk>
+Date: Wed, 11 Jan 2017 04:30:40 +0000
+Subject: Partially revert "usb: Kconfig: using select for USB_COMMON  dependency"
+
+This reverts commit cb9c1cfc86926d0e86d19c8e34f6c23458cd3478 for
+USB_LED_TRIG.  This config symbol has bool type and enables extra code
+in usb_common itself, not a separate driver.  Enabling it should not
+force usb_common to be built-in!
+
+Fixes: cb9c1cfc8692 ("usb: Kconfig: using select for USB_COMMON dependency")
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 ---
- drivers/usb/typec/tipd/core.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/usb/common/Kconfig | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index 26807c050662..3b6878e22ce9 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -673,9 +673,6 @@ static int tps6598x_probe(struct i2c_client *client)
- 	/*
- 	 * Checking can the adapter handle SMBus protocol. If it can not, the
- 	 * driver needs to take care of block reads separately.
--	 *
--	 * FIXME: Testing with I2C_FUNC_I2C. regmap-i2c uses I2C protocol
--	 * unconditionally if the adapter has I2C_FUNC_I2C set.
- 	 */
- 	if (i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
- 		tps->i2c_protocol = true;
--- 
-2.25.1
-
+diff --git a/drivers/usb/common/Kconfig b/drivers/usb/common/Kconfig
+index d611477aae41..196f4a397587 100644
+--- a/drivers/usb/common/Kconfig
++++ b/drivers/usb/common/Kconfig
+@@ -6,8 +6,7 @@ config USB_COMMON
+ 
+ config USB_LED_TRIG
+ 	bool "USB LED Triggers"
+-	depends on LEDS_CLASS && LEDS_TRIGGERS
+-	select USB_COMMON
++	depends on LEDS_CLASS && USB_COMMON && LEDS_TRIGGERS
+ 	help
+ 	  This option adds LED triggers for USB host and/or gadget activity.
+ 
