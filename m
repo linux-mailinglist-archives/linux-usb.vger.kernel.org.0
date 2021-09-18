@@ -2,96 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E2840FF8C
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Sep 2021 20:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A2E4102D4
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Sep 2021 03:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240839AbhIQSm0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Sep 2021 14:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38370 "EHLO
+        id S238731AbhIRB62 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Sep 2021 21:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240530AbhIQSmZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Sep 2021 14:42:25 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4C7C061574
-        for <linux-usb@vger.kernel.org>; Fri, 17 Sep 2021 11:41:02 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id d42so14952269lfv.10
-        for <linux-usb@vger.kernel.org>; Fri, 17 Sep 2021 11:41:02 -0700 (PDT)
+        with ESMTP id S233022AbhIRB60 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Sep 2021 21:58:26 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA182C061574;
+        Fri, 17 Sep 2021 18:57:03 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id r2so11287687pgl.10;
+        Fri, 17 Sep 2021 18:57:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Cpak71tpwGIH8sDgLDrdJbMzVDQHoqt6rJZasCMwdzc=;
-        b=PPZqYKySWRBXLCmQqLignaVRzeemkJWbOSVm4Nk3LB3/dwYqxZT99gFitFC859Cqmo
-         5dHLqIWjBbL09xTf3eNTCSAzEfwW62QnHoObFrYVOWn0PPzzY6lksRvKhahbrO9bPfvT
-         /jfwN2l8iu/pKIRl254LqCHUDuwZMUECiAh00=
+         :cc:content-transfer-encoding;
+        bh=DLTPW/hfQBEBoxi8tw2Sw1p9mg4aUgf8URr4JiL3FCk=;
+        b=Eymdlr9G0tSoHCXjKX4Nxga3jl3j7W27x1JiBCsAZkviBzZZhOQkLrElNdaKtSO2tK
+         QOUh3q4L8o/2jSU8HjoNVPSSMU/87cvWUGNwdeYVYVkXFx+lgLEdUHYpBgR1USgt5Nru
+         3NZTVENNMwx1FnYoFWAMTD45rtNZcENcdatQjdZeqiscYM49rA+rofP41PZayz3R4RUf
+         gn8/Yts2MC8ek9tiUAmw5kXTN1qhIpyMPaS09eb+eOyX3PgdV69L5BxxEzHHs7p92lLn
+         DRSXrB91q9Sn3Oxt5VowniUPCC/hN1rOhbNAj5lBbXynQxDyeiPBDx6bsPb2AJa5ksep
+         DbeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Cpak71tpwGIH8sDgLDrdJbMzVDQHoqt6rJZasCMwdzc=;
-        b=tCNZGbgAB9xX46DCXRvTARxM94IQaIKLZxllVb2/MF25FANEgw8ZI7W4sDFnMoV5qn
-         AAwEZ6ANlEoDVTn949xCU1cwBYfCd63eSrheaNkGXoWuRt/KvdE68h095mYbBRKKASmd
-         2OROFUjxmZzFnUNkAbo/ayrrBPgKHKlfuA+/O/+MlupngEohYQYKT/mcpexXt02sJGeP
-         59ZqX+rtIENjvYO/DzNTeDUyqCNOIwM+7AmVfEMCG9xeDizHOvpQQ+Zqu+TtesUdbZlM
-         rt8z/xPTPUUacYZPTSB0sv/IUBjASRu6wy8UQVrqZd8FxcdhltudAD5UhIiTtyhnfo04
-         D2fg==
-X-Gm-Message-State: AOAM532gPR4RNZQd1Sud31rG6ON1OivXpXuWWgreCQcmRSWEnoSLeZ5W
-        1fXRLzCP4bb/wvhUdh7bK49vV6X76t9aFJB2+zY=
-X-Google-Smtp-Source: ABdhPJyPYusvCq6VnyabOfiQ/ByzBNoIN1qMZ8WEDGCU2tM79/l328Ajoo0S8i1veeGDrvPRVFKjRA==
-X-Received: by 2002:a2e:a4ba:: with SMTP id g26mr10889739ljm.254.1631904060904;
-        Fri, 17 Sep 2021 11:41:00 -0700 (PDT)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
-        by smtp.gmail.com with ESMTPSA id w19sm778525ljd.110.2021.09.17.11.41.00
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Sep 2021 11:41:00 -0700 (PDT)
-Received: by mail-lf1-f44.google.com with SMTP id g41so3472664lfv.1
-        for <linux-usb@vger.kernel.org>; Fri, 17 Sep 2021 11:41:00 -0700 (PDT)
-X-Received: by 2002:a19:ae15:: with SMTP id f21mr9099719lfc.402.1631904049054;
- Fri, 17 Sep 2021 11:40:49 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DLTPW/hfQBEBoxi8tw2Sw1p9mg4aUgf8URr4JiL3FCk=;
+        b=JN45bbOMErIBy5ZM/snEhBklLOHEmdoEskt1a3UvqLqbiqofnXrnW+NFrfFLlLFwA9
+         MdtD62HYJ/v/S2D6BcXqGPVor92dXFj88I8S/buqkvCEcFn6DAkfW6dd7v1Uz23D4UDt
+         /mrVH80Ywdz7bHp4Srfb39MXr649QwDW3vD8Qeww0c4RFFkOJcdhakmXt4kULCJCOE06
+         5srLDQ8eM0z8I+eI46/x2T/99/enwJW9XGs3wbIquydMlv/xzXq2bjBGbFrWJnOjZVZk
+         Cmfug2sx4+BpnPEQ4ZFaexwwG6jOruWAB3CPl2Fi6VsJX/7ZW7O5GnUxb/A3yZLWtjIz
+         7sEg==
+X-Gm-Message-State: AOAM533EkORUOI7BvuJ3KUF+baUwjeDvz2yli0gO51ipVHVE4DyZ8x0M
+        l/ZPHbc0/CeNiKK1KbhnEUzbFe1ygJJ3nTswGQ==
+X-Google-Smtp-Source: ABdhPJyKZhG5q9XAq1VBNVECcq2ZYnbwAIQtVeJY8Yg36bqqS6wuC1AN1QkkOctwsHvtQ8bwPcBSDXyNNXpQV9xc7oY=
+X-Received: by 2002:a65:6389:: with SMTP id h9mr12469451pgv.83.1631930223073;
+ Fri, 17 Sep 2021 18:57:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210917061104.2680133-1-brendanhiggins@google.com>
- <20210917061104.2680133-6-brendanhiggins@google.com> <202109170856.8DDB49112D@keescook>
-In-Reply-To: <202109170856.8DDB49112D@keescook>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 17 Sep 2021 11:40:33 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whck4RtO7yp-jKK8QQc0bCDZBkdHc=3pGiFsFjwnQ+-mw@mail.gmail.com>
-Message-ID: <CAHk-=whck4RtO7yp-jKK8QQc0bCDZBkdHc=3pGiFsFjwnQ+-mw@mail.gmail.com>
-Subject: Re: [PATCH v1 5/6] mmc: sdhci-of-aspeed: build kunit tests without
- structleak plugin
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <shuah@kernel.org>, David Gow <davidgow@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rafael Wysocki <rafael@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>, andreas.noever@gmail.com,
-        michael.jamet@intel.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        YehezkelShB@gmail.com, Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
+References: <CACkBjsYQxQxGQwb3YS4obVWH3EODzqky5=nM3ADP7+13hBYgAA@mail.gmail.com>
+ <20210913135459.GA120302@rowland.harvard.edu>
+In-Reply-To: <20210913135459.GA120302@rowland.harvard.edu>
+From:   Hao Sun <sunhao.th@gmail.com>
+Date:   Sat, 18 Sep 2021 09:56:52 +0800
+Message-ID: <CACkBjsZcg0B=tF8cr54VqaJMVURD9R463epZqRQfesnoY=+L8g@mail.gmail.com>
+Subject: Re: INFO: task hung in hub_port_init
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        a.darwish@linutronix.de, johan@kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+        oneukum@suse.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 17, 2021 at 8:57 AM Kees Cook <keescook@chromium.org> wrote:
+Hi Alan,
+
+Alan Stern <stern@rowland.harvard.edu> =E4=BA=8E2021=E5=B9=B49=E6=9C=8813=
+=E6=97=A5=E5=91=A8=E4=B8=80 =E4=B8=8B=E5=8D=889:55=E5=86=99=E9=81=93=EF=BC=
+=9A
 >
-> This isn't a stand-alone test object, so I'm less excited about
-> disabling STRUCTLEAK here.
+> On Mon, Sep 13, 2021 at 11:13:15AM +0800, Hao Sun wrote:
+> > Hello,
+> >
+> > When using Healer to fuzz the Linux kernel, the following crash was tri=
+ggered.
+> >
+> > HEAD commit: ac08b1c68d1b Merge tag 'pci-v5.15-changes'
+> > git tree: upstream
+> > console output:
+> > https://drive.google.com/file/d/1ZeDIMe-DoY3fB32j2p5ifgpq-Lc5N74I/view?=
+usp=3Dsharing
+> > kernel config: https://drive.google.com/file/d/1qrJUXD8ZIeAkg-xojzDpp04=
+v9MtQ8RR6/view?usp=3Dsharing
+> > Syzlang reproducer:
+> > https://drive.google.com/file/d/1tZe8VmXfxoPqlNpzpGOd-e5WCSWgbkxB/view?=
+usp=3Dsharing
+> > Similar report:
+> > https://groups.google.com/g/syzkaller-bugs/c/zX55CUzjBOY/m/uf91r0XqAgAJ
+> >
+> > Sorry, I don't have a C reproducer for this crash but have a Syzlang
+> > reproducer. Also, hope the symbolized report can help.
+> > Here are the instructions on how to execute Syzlang prog:
+> > https://github.com/google/syzkaller/blob/master/docs/executing_syzkalle=
+r_programs.md
+> >
+> > If you fix this issue, please add the following tag to the commit:
+> > Reported-by: Hao Sun <sunhao.th@gmail.com>
+>
+> There's not much hope of finding the cause of a problem like this
+> without seeing the kernel log.
+>
 
-Yeah, please don't do this for things that aren't pure tests. You're
-now disabling security measures (even if I hate the gcc plugins and
-hope they will go away).
+Healer found another Syzlang prog to reproduce this task hang:
+https://paste.ubuntu.com/p/HCNYbKJYtx/
 
-             Linus
+Also here is a very simple script to execute the reproducer:
+https://paste.ubuntu.com/p/ZTGmvFSP6d/
+
+The `syz-execprog` and `syz-executor` are needed, so please build
+Syzkaller first before running the script.
+Hope this can help to find the root cause of the problem.
+
+Regards
+Hao
