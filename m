@@ -2,52 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F76410D34
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Sep 2021 21:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD59410D80
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Sep 2021 23:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231942AbhIST64 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Sep 2021 15:58:56 -0400
-Received: from informare.org ([217.11.52.70]:40664 "EHLO informare.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231913AbhIST64 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 19 Sep 2021 15:58:56 -0400
-Received: (qmail 9735 invoked from network); 19 Sep 2021 19:57:29 -0000
-Received: from unknown (HELO ?192.168.2.105?) (faber@faberman.de@87.133.230.47)
-  by 0 with ESMTPA; 19 Sep 2021 19:57:29 -0000
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org
-From:   Florian Faber <faber@faberman.de>
-Subject: [PATCH] usb: gadget: u_serial: Fix possible null pointer dereference
-Message-ID: <863b03b7-d00a-0af1-c21e-e2f7930bb0b3@faberman.de>
-Date:   Sun, 19 Sep 2021 21:57:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S232861AbhISVps (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Sep 2021 17:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229790AbhISVpr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Sep 2021 17:45:47 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6943AC061574;
+        Sun, 19 Sep 2021 14:44:21 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id i25so59315965lfg.6;
+        Sun, 19 Sep 2021 14:44:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KmmQo9yCnKliaxUNInvC5AnAL481vPCxkxWha5Jsvbs=;
+        b=nYg4yvJwdgA44mlUwO/yd72fmnOz5i8q5ZUuTZMEudlnNiIEWXwGH5alYS/u2aWNq5
+         sbTLUav6htammLkXLfFEQ+MKV/1VFSiQ6OKqfglpZj/EsGkdV1b2BBnm+An57yYMoAZR
+         iR8BG48I5PASCpuouIZOBPgbeo76HcSbYe0V2iNN7LrSHHYZWjoab9qqwDwDr9zAhZxS
+         VX2R906W2Orh04Q2KRyJ1QQx29O/1MtVMEZKuzoh0ZeoaRd0RxfIgiEfjoUmDL+gKPi3
+         1tt1kFjgRqaqds0boVI0TS4fZ+mCC1Z8FGxzwfXrAA939c4L/tyYJKxjm6G7olxrahPC
+         qcSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KmmQo9yCnKliaxUNInvC5AnAL481vPCxkxWha5Jsvbs=;
+        b=Cs+hoiJ4jRg/0y5+stvknLhS369uy30J0wrNRAoldNo4b1J1mxaOJjCPTCM+qS7dk8
+         DSzzN3WY1h7KSMxa7qzQ9e0ihNZm0ZczKz61EDMkzm64hOCNUZ1uYNmwKaDfD+/yOboP
+         35Q1IpZxPEHzL97vYcppbDP3wHBtLm+jf83GxL2tFrg+AAajjfOXvdzJKewfOCGsskw3
+         aS/HZqjTiD1J2+hY44QE8qnMGrz9KDs/CEz+4NgB+Mcr9LmGW8CsUPLaBGBTwOMdScK+
+         DqJzBwIDaortH+3rR+8L/JI7Bl4h808Y1oeHPz2PCDcHyDuYLmZ3oR9QHjCz+LYF+Dli
+         UI+w==
+X-Gm-Message-State: AOAM532oX2+sAYuqb1vsQsoutDOPBmUiXRD+/bMRWGgkwi46d9bOd35h
+        aZ4NN2cTn/C67s0qcaoa8SDxTOqHbCKQcJQEyEc=
+X-Google-Smtp-Source: ABdhPJyl6466HOEvRy+HxPHYWlwSyRgLWFmvaXSl3HM+E4SO875oJjT08qEESioJwGC/7Z+B3uoGacNONyTCUnfGjyU=
+X-Received: by 2002:ac2:561c:: with SMTP id v28mr16915165lfd.457.1632087859624;
+ Sun, 19 Sep 2021 14:44:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CAEyMn7YqrRttqvJzJLA+yVo6WtBZww6QcXT12MMCi+bhjP4pTg@mail.gmail.com>
+ <CAEyMn7ZhBfG7703YMr=EDQyf5mHDkLyET5iNqdXDOpJy9ti+rQ@mail.gmail.com>
+ <CAOMZO5CZKdc=AmG1eds9Oy_uwqXDWLwPXk74phCDWdjrzkRC4A@mail.gmail.com> <CAEyMn7YaQbLoVy_5Rb+hiwhEj-kbnmCwb0B_soa+Kf0D6iH6oA@mail.gmail.com>
+In-Reply-To: <CAEyMn7YaQbLoVy_5Rb+hiwhEj-kbnmCwb0B_soa+Kf0D6iH6oA@mail.gmail.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Sun, 19 Sep 2021 18:44:08 -0300
+Message-ID: <CAOMZO5CGuKQ0yVyoD86G3KnxoBd2fq+uCTTLoqVR-13Y5a-36Q@mail.gmail.com>
+Subject: Re: imx8mm board crash in drivers/usb/chipidea/ci_hdrc_imx.c
+To:     Heiko Thiery <heiko.thiery@gmail.com>
+Cc:     Peter Chen <peter.chen@nxp.com>, Jun Li <jun.li@nxp.com>,
+        Yu Kuai <yukuai3@huawei.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In gs_rx_push, tty can be null. tty_throttled accesses tty->flags without further testing, which would lead to a null pointer dereference.
+Hi Heiko,
 
-Signed-off-by: Florian Faber <faber@faberman.de>
----
-  drivers/usb/gadget/function/u_serial.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, Sep 19, 2021 at 4:33 PM Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index 6f68cbeeee7c..00512e7c7261 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -436,7 +436,7 @@ static void gs_rx_push(struct work_struct *work)
-  	 * We may leave non-empty queue only when there is a tty, and
-  	 * either it is throttled or there is no more room in flip buffer.
-  	 */
--	if (!list_empty(queue) && !tty_throttled(tty))
-+	if (tty && !list_empty(queue) && !tty_throttled(tty))
-  		schedule_delayed_work(&port->push, 1);
-  
-  	/* If we're still connected, refill the USB RX queue. */
--- 
+> > Does this patch help?
+> > https://pastebin.com/raw/yZKz1huL
+>
+> I can confirm that on the next-20210915 (that includes commit
+> 78e80c4b4238c1f5642b975859664fced4f9c69e) your provided patch solves
+> the problem.
+
+Thanks for testing it.
+
+> But is it explainable that in the version before the commit
+> 78e80c4b4238c1f5642b975859664fced4f9c69e the problem occurs in the
+> form I reported?
+
+I don't understand this problem either. I would suggest bisecting it.
