@@ -2,162 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5BD4113E8
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Sep 2021 14:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A2A41156A
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Sep 2021 15:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237399AbhITMDM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Sep 2021 08:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44874 "EHLO
+        id S239261AbhITNWh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Sep 2021 09:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233321AbhITMDL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Sep 2021 08:03:11 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5665C061574;
-        Mon, 20 Sep 2021 05:01:44 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id q11so28912404wrr.9;
-        Mon, 20 Sep 2021 05:01:44 -0700 (PDT)
+        with ESMTP id S239225AbhITNWg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Sep 2021 09:22:36 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37ADC061574;
+        Mon, 20 Sep 2021 06:21:09 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id p29so66937590lfa.11;
+        Mon, 20 Sep 2021 06:21:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/ne40pWRrx2CrzneTyBnCtWRrTGbYgrZIHpswHWcqFg=;
-        b=XQUOGT4c82LgLfAKQHMnG83GjfBn5NbeBgTZySjeCqPbRi/oPAEoMSZRRLjag6+hTP
-         KV6WTUmbgmxWt3zAO7q1YlAud6ZMu8v0ORNJs5Tbd06ExzfdJCqDQ6XxmPBULWEHvKzc
-         0b/QMImOjgmeJhBce1X3IDuPxmAGmjsI91Lrrzo0wgnuwqoEMvREmRKk8Hx0N/k9Lgsk
-         ypY16GdBGxl3w/CHqtp4+wAVDOWyJCmowywK9hOyJYQtpTfibBFKgnasY8MaRgjwITwh
-         pBn5kMGtDUqArcXygEp9xAvjxovdzHLqsFogf2Rf8uvGhqDDG51uWbzZRBaNxJx/nyX1
-         K+DA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u6GB2XJ25N7du6+keolf1xpjOAUOuO0nlhOfiMwGosc=;
+        b=WUl9raFZdZmVdrAFxYDDogwBxjqdYpNcL9Oh/UZvzQuu7Gfp5/W2NOpSfqiA51+3iv
+         KEcbq5YHwo87woY05cQBjhpmuHr1x7hFVZW0s5yJh9VD5JCCZY7oX9Rr0tfwgamm81AH
+         9vHPkw1gpBLMT3hICaOn6FAtG4zWmezf4MYTow3IpFOhkWvk2pkTK1EIRKQZNUkjxSRN
+         TCaa/Y2GBjiodXB5j+3AA1iNO/RADOPMmOnz5h1F+nlyTWBkfYW/MDYhK/1aJRLImjLl
+         PVSFEHcwNY5PpEkTL1P2/Nu+VDPYMQgAPHDe1MiBOpQU2nKXVEY/leq8x8vLIdwAVCEq
+         K/6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/ne40pWRrx2CrzneTyBnCtWRrTGbYgrZIHpswHWcqFg=;
-        b=xjy2zXw9iONUkJFIBsDYR3s+M8Jy5iPOMzd7ZxZVkCke5A0QYZqwtPHn9lpSlwP/N1
-         8xyRac2QoRQs5jwlTKZT2GpJTDNj5Vnd6ucH9AMAEZSA4lo2za/yDAJOEyUw+MNYEPUa
-         L+CzS2H1cgoIOfu2muOsB/WhDCY/6xsITJ0l7++RuSaIxowG4MculCOUjimXWTqygmA4
-         Q4PIymtwZkeXoN7+WXr1rnQ1G+LLisr8KXxme4YsON/waC729FEjBIc4oSmlFvA2Py8j
-         kSMrHatVowQ7dkB2U0bC4mVbfDJ5RIzTG7b/aXM1pwAqz/qzG7ahxE0UAcOp1qgMdG4u
-         sX9g==
-X-Gm-Message-State: AOAM5331vPLhfoKEhkQBbPfLVUwHSVTsH8wKEAcUs1bm/4WTLKYZgn21
-        pI6FwyL0DCvV393ndlEB9iWpR8OlB5o=
-X-Google-Smtp-Source: ABdhPJx69lUhsTXiVkcOUNtmVmoOBPXkrL/CXP1uxgR/bzPlKPCqAwWnBQwLvpTAC3aOmkWxW87b3g==
-X-Received: by 2002:a05:600c:4991:: with SMTP id h17mr29133387wmp.74.1632139303375;
-        Mon, 20 Sep 2021 05:01:43 -0700 (PDT)
-Received: from [192.168.2.177] ([206.204.146.29])
-        by smtp.gmail.com with ESMTPSA id h8sm18589623wmb.35.2021.09.20.05.01.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Sep 2021 05:01:42 -0700 (PDT)
-Message-ID: <fe15479d-7500-a48e-8658-936eca0fc099@gmail.com>
-Date:   Mon, 20 Sep 2021 14:01:41 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u6GB2XJ25N7du6+keolf1xpjOAUOuO0nlhOfiMwGosc=;
+        b=6pokcTIzILjMejCMjjSV0UqSLQKC41Xs1ygieLbj7f9BqXyTz7laKtH2My0xvbbTDJ
+         kWdMDX6O8l250A614KZ7A7P6pmxoDSenjzsVSGWUtASKQ/bQA6d4NBZFCHT8iyofRfpJ
+         t0Q/LFUhCo9LlPZctbMAORenEXGVIUid9VTACKcrHaRDyImbMlw7djuCNQJ7SiXjdkmL
+         a7XKUbraGvISJgSlapqw6MXXhCnZRBZVwmDXlpwNmbFzWs+ntjvj1ahDmwUtIbcoB8/X
+         e9T0QiO5ciluUV/NxTN8Wre11m1RL1tSylf1qRM4fELv05AO+g//yPC49u3lUjqXgpZ8
+         neYA==
+X-Gm-Message-State: AOAM530GW+/KR4aF6c3NtOJTtpuTCVRtiC0nn9tDOAnG28UdQEW3ookI
+        66dYWD9BcO0MWnN4EfSvJ0jIixlPEG/cbow/xS4=
+X-Google-Smtp-Source: ABdhPJx0qPnmu+9JXcNEtDd+hROg13K9h163miZ0QCh31ioY/3l77YNaz2O02/6GOiUyEKu42BKCwwQrPryXg+4Yl9Y=
+X-Received: by 2002:a05:6512:1284:: with SMTP id u4mr1063524lfs.395.1632144033466;
+ Mon, 20 Sep 2021 06:20:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.0.3
-Subject: Re: [PATCH v4 1/2] arm: dts: mt7623: add musb device nodes
-Content-Language: en-US
-To:     Sungbo Eo <mans0n@gorani.run>, linux-mediatek@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>, Bin Liu <b-liu@ti.com>,
+References: <20210902213500.3795948-1-pmalani@chromium.org>
+ <20210902213500.3795948-3-pmalani@chromium.org> <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
+ <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <YUB16up3JDwi3HfI@kuha.fi.intel.com> <YULwz8NsoA3+vrhA@google.com>
+ <YUMbGp0aemx1HCHv@kuha.fi.intel.com> <DB9PR10MB46525E6CA4C6BB101059D93C80DC9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <CAPTae5Kxmp0L35KnkYaHARrBmysX9wkMYZhGhJsu6tX4bcHuAA@mail.gmail.com>
+In-Reply-To: <CAPTae5Kxmp0L35KnkYaHARrBmysX9wkMYZhGhJsu6tX4bcHuAA@mail.gmail.com>
+From:   Rajaram R <rajaram.officemail@gmail.com>
+Date:   Mon, 20 Sep 2021 18:50:22 +0530
+Message-ID: <CAOiXhaLpe7gHw6c8pCZDNeOC31WfxFum5G1RNiEbEG2Fn=6oeQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "bleung@chromium.org" <bleung@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20210822041333.5264-1-mans0n@gorani.run>
- <20210830155903.13907-1-mans0n@gorani.run>
- <20210830155903.13907-2-mans0n@gorani.run>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20210830155903.13907-2-mans0n@gorani.run>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, Sep 17, 2021 at 6:25 AM Badhri Jagan Sridharan
+<badhri@google.com> wrote:
+>
+> On Thu, Sep 16, 2021 at 7:12 AM Adam Thomson
+> <Adam.Thomson.Opensource@diasemi.com> wrote:
+> >
+> > On 16 September 2021 11:23, Heikki Krogerus wrote:
+> >
+> > > > Thanks for providing the clarification. So you're proposing a port-psy and a
+> > > > port-partner-psy that are connected to each other (one supplying the other).
+> > > > If PD is not present, those two will exist per port and partner, and there
+> > > > will be information about Type-C current (and possibly BC 1.2 and other
+> > > > methods?)
+> > >
+> > > Yes, exactly.
 
 
-On 30/08/2021 17:59, Sungbo Eo wrote:
-> MT7623 has an musb controller that is compatible with the one from MT2701.
-> 
-> Signed-off-by: Sungbo Eo <mans0n@gorani.run>
-> Tested-by: Frank Wunderlich <frank-w@public-files.de>
+ As Benson mentioned PDOs contain more than power details like USB
+Suspend indicator etc or Type-C only devices as Badhri mentioned here
+may not integrate well with PSY class.  Additionally, it is also
+important to consider cable properties here for power as they also
+have a role to play in the power limits and necessitates change of
+existing PDOs or power limits. ( Type-C Monitor charging a computing
+system does not have captive cables)
 
-Applied to v5.15-next/dts32
+Given too many possibilities, would an approach similar to
+gadgetfs/configfs or cpu scaling say like "type-configfs" or "typec
+scaling" ABI framework that allows USB=C port management under one
+path /sys/class/typec that allows:
 
-Thanks
+- Provision to manage USB-C port power (  Power supply class should
+still represent power contract established, as remaining
+characteristics are nested with functional aspects and relevant on a
+power contract failure )
++ dynamically change Rp ( Rp(default) is required to enter USB suspend)
++ Set PDO Policy ( PPS, Fixed, etc)
++ Give back power
++ Expose complete PDO ( As we do for VDOs)
++ Change USB Suspend flag
 
-> ---
-> v4:
-> * add tested by Frank
-> 
-> v3:
-> * remove unnecessary status=okay from u2port2
-> 
-> v2:
-> * rename usb3 label to usb0
-> * move usb0 & u2phy1 nodes to the right sorted place
-> * disable u2phy1 by default
-> * correct u2port2 node name to match its reg address
-> ---
->   arch/arm/boot/dts/mt7623.dtsi  | 33 +++++++++++++++++++++++++++++++++
->   arch/arm/boot/dts/mt7623a.dtsi |  4 ++++
->   2 files changed, 37 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/mt7623.dtsi b/arch/arm/boot/dts/mt7623.dtsi
-> index 3c11f7cfcc40..21c8a291b74e 100644
-> --- a/arch/arm/boot/dts/mt7623.dtsi
-> +++ b/arch/arm/boot/dts/mt7623.dtsi
-> @@ -585,6 +585,39 @@ spi2: spi@11017000 {
->   		status = "disabled";
->   	};
->   
-> +	usb0: usb@11200000 {
-> +		compatible = "mediatek,mt7623-musb",
-> +			     "mediatek,mtk-musb";
-> +		reg = <0 0x11200000 0 0x1000>;
-> +		interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_LOW>;
-> +		interrupt-names = "mc";
-> +		phys = <&u2port2 PHY_TYPE_USB2>;
-> +		dr_mode = "otg";
-> +		clocks = <&pericfg CLK_PERI_USB0>,
-> +			 <&pericfg CLK_PERI_USB0_MCU>,
-> +			 <&pericfg CLK_PERI_USB_SLV>;
-> +		clock-names = "main","mcu","univpll";
-> +		power-domains = <&scpsys MT2701_POWER_DOMAIN_IFR_MSC>;
-> +		status = "disabled";
-> +	};
-> +
-> +	u2phy1: t-phy@11210000 {
-> +		compatible = "mediatek,mt7623-tphy",
-> +			     "mediatek,generic-tphy-v1";
-> +		reg = <0 0x11210000 0 0x0800>;
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +		status = "disabled";
-> +
-> +		u2port2: usb-phy@11210800 {
-> +			reg = <0 0x11210800 0 0x0100>;
-> +			clocks = <&topckgen CLK_TOP_USB_PHY48M>;
-> +			clock-names = "ref";
-> +			#phy-cells = <1>;
-> +		};
-> +	};
-> +
->   	audsys: clock-controller@11220000 {
->   		compatible = "mediatek,mt7623-audsys",
->   			     "mediatek,mt2701-audsys",
-> diff --git a/arch/arm/boot/dts/mt7623a.dtsi b/arch/arm/boot/dts/mt7623a.dtsi
-> index 0735a1fb8ad9..d304b62d24b5 100644
-> --- a/arch/arm/boot/dts/mt7623a.dtsi
-> +++ b/arch/arm/boot/dts/mt7623a.dtsi
-> @@ -35,6 +35,10 @@ &scpsys {
->   	clock-names = "ethif";
->   };
->   
-> +&usb0 {
-> +	power-domains = <&scpsys MT7623A_POWER_DOMAIN_IFR_MSC>;
-> +};
-> +
->   &usb1 {
->   	power-domains = <&scpsys MT7623A_POWER_DOMAIN_HIF>;
->   };
-> 
+- Provision for extended messages
++ Provides additional details regarding ports like Get Status etc.
+This shall allow us to take system level decisions.
+
+- Provision to manage USB-C modes
++ Provision to enter modes as provided by interface standards like UCSI
+
+With this user tools like Chrome OS "typecd" be able to use a single
+class and its ABIs to manage USB-C port power and mode. Kindly correct
+me if I am missing something here.
