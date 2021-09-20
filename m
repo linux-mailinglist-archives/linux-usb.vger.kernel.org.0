@@ -2,115 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 481BF4127CD
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Sep 2021 23:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D7D412A48
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 03:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237580AbhITVR3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Sep 2021 17:17:29 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:37146 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235349AbhITVPZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Sep 2021 17:15:25 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1632172438; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=4ijXYlmqoMPuqo2n4/kMk/32yQvABM55JAadYGLqsTw=; b=S8We6wO/2PVGYxxzMyPWcX3DhcnhZvhbmwpjEgRXE4clYguYWdHaicaHiRvBVzvbQYQITRSD
- j+jQbj76SUICXzrujoKaWGBtJR2iOpJGDciL6DxgEgm7NyQ6pqKj38HPz2Jl8t+cMgDDUGs6
- qH70yjCSnrrBPCaMjQE8GGNR4JY=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
- 6148f99565c3cc8c63e8b31c (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 20 Sep 2021 21:13:57
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 07FD0C43460; Mon, 20 Sep 2021 21:13:57 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [192.168.1.26] (075-140-094-099.biz.spectrum.com [75.140.94.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 835BAC43460;
-        Mon, 20 Sep 2021 21:13:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 835BAC43460
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: dwc3-qcom: tx-fifo-resize regression on Poco F1 (sdm845) with
- v5.15-rc1
-To:     Amit Pundir <amit.pundir@linaro.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jack Pham <jackp@codeaurora.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        John Stultz <john.stultz@linaro.org>,
-        linux-usb@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dt <devicetree@vger.kernel.org>
-References: <CAMi1Hd3k2snB4-=M57pVrMVom=a9_2a0DTFk-+Hzpubwk-Pr9Q@mail.gmail.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <64a2a428-8bb1-0078-2403-1ca8e28cf4b1@codeaurora.org>
-Date:   Mon, 20 Sep 2021 14:13:54 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S229989AbhIUBdf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Sep 2021 21:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229789AbhIUBd3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Sep 2021 21:33:29 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D22C0430CB
+        for <linux-usb@vger.kernel.org>; Mon, 20 Sep 2021 12:52:00 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id 97-20020a9d006a000000b00545420bff9eso18231104ota.8
+        for <linux-usb@vger.kernel.org>; Mon, 20 Sep 2021 12:52:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=QR+41d2CWnF6y8POX2yCYnotLJD1rZ1O8icCQ6F8e+Y=;
+        b=XuHIYliUFLKnsbgeeINNatgMmsCdIboPP8+sAg9LU+cvRVtTq7lOTS7H4haZNHxvM9
+         p1N88SB3352wydMgXNSFCzuDo1DZcDyV0oK/h/kEhNHzNJY4QOT/B0F4P7Or8YCoOR13
+         O91X05MpZ4Ws801ghrVoeaLbpMLQaIZh4DV4Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=QR+41d2CWnF6y8POX2yCYnotLJD1rZ1O8icCQ6F8e+Y=;
+        b=VZGibEq+FusXAfAb/UU4zjcsxLW/q7X9mo1kv5eBdeZR8Omr3/4j3ybd71A3cxfVh+
+         cFG+d324zKYvS6q3cT6/MXkzxHeTJIeGRVHLb5DoRZ5UyukKgaU/ahPJg++4M0z9IQaQ
+         s+sEhs5bsVmGxz5K1XIO11Aj5HMpplN7EnbREuUSpCqNDZ9pYfCsPtYtezaFv88NgLtF
+         Ws6APbz/Nv1uMyWqNex9ZGLJRS6H8DS7rPCZwV+4v0wPonvAG6uUDDrYS2daUobvwIM2
+         wrINShqZMQIG8J5JTwSD+pFFYEpXdL/OHQEGRuNkGtB51OtYU7GPZ0HJjjVGMDTBBjPx
+         dsyw==
+X-Gm-Message-State: AOAM5334JwRPNMv9qn62g0VJbcSlRDV5jsfhU33kMBXqXmjaf3mK+e2/
+        VBSkjBzeM6OpaNZujMvw63U6lZee9jngoyZOYqKeqQ==
+X-Google-Smtp-Source: ABdhPJwtIzCWSMh71giNnyYDptJRLaxEGCqlnvwoau2/hKz6p8Jc9WJ7gdkc0BAR/4i0a9R3CQlqSIDvb9uYW+loKUw=
+X-Received: by 2002:a05:6830:1212:: with SMTP id r18mr21399600otp.159.1632167519891;
+ Mon, 20 Sep 2021 12:51:59 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 20 Sep 2021 12:51:59 -0700
 MIME-Version: 1.0
-In-Reply-To: <CAMi1Hd3k2snB4-=M57pVrMVom=a9_2a0DTFk-+Hzpubwk-Pr9Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <1631898947-27433-4-git-send-email-pmaliset@codeaurora.org>
+References: <1631898947-27433-1-git-send-email-pmaliset@codeaurora.org> <1631898947-27433-4-git-send-email-pmaliset@codeaurora.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Mon, 20 Sep 2021 12:51:59 -0700
+Message-ID: <CAE-0n53N-7wGgGmqep6ZTAt14dYObq43cTak_BWAjy6XS0Gnig@mail.gmail.com>
+Subject: Re: [PATCH v8 3/4] arm64: dts: qcom: sc7280: Add PCIe nodes for IDP board
+To:     Prasad Malisetty <pmaliset@codeaurora.org>, agross@kernel.org,
+        bhelgaas@google.com, bjorn.andersson@linaro.org,
+        lorenzo.pieralisi@arm.com, robh+dt@kernel.org, svarbanov@mm-sol.com
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
+        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Amit,
+Quoting Prasad Malisetty (2021-09-17 10:15:46)
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> index 99f9ee5..ee00df0 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> @@ -199,6 +199,39 @@
+>         modem-init;
+>  };
+>
+> +&pcie1 {
+> +       status = "okay";
+> +
+> +       perst-gpio = <&tlmm 2 GPIO_ACTIVE_LOW>;
+> +       pinctrl-0 = <&pcie1_default_state &nvme_ldo_enable_pin>;
+> +};
+> +
+> +&pcie1_phy {
+> +       status = "okay";
+> +
+> +       vdda-phy-supply = <&vreg_l10c_0p8>;
+> +       vdda-pll-supply = <&vreg_l6b_1p2>;
+> +};
+> +
+> +&pcie1_default_state {
+> +       reset-n {
+> +               pins = "gpio2";
+> +               function = "gpio";
+> +
+> +               drive-strength = <16>;
+> +               output-low;
+> +               bias-disable;
+> +       };
+> +
+> +       wake-n {
+> +               pins = "gpio3";
+> +               function = "gpio";
+> +
+> +               drive-strength = <2>;
+> +               bias-pull-up;
+> +       };
 
-On 9/20/2021 1:45 PM, Amit Pundir wrote:
-> Hi Wesley, All,
-> 
-> I see a reboot loop on Xiaomi Pocophone F1 (sdm845) with TX FIFO
-> resize patches which landed in v5.15-rc1. Upstream commit cefdd52fa045
-> "usb: dwc3: dwc3-qcom: Enable tx-fifo-resize property by default" to
-> be specific, which switched on this feature by default.
-> 
-> At times the phone crashes into the fastboot mode after the reboot
-> loop, but mostly end up booting to UI after a while. This is what it
-> looks like https://people.linaro.org/~amit.pundir/beryllium-userdebug/PXL_20210920_162749483.mp4.
-> 
+I think the previous round of this series Bjorn was saying that these
+should be different nodes and tacked onto the pinctrl-0 list for the
+pcie1 device instead of adding them as subnodes of the "default state".
 
-I believe Android will attempt a number of bootup sequences and if it
-fails, it falls back to fastboot mode.  Are there any available logs you
-might be able to collect to see where the issue is?
+> +};
+> +
+>  &pmk8350_vadc {
+>         pmk8350_die_temp {
+>                 reg = <PMK8350_ADC7_DIE_TEMP>;
+> @@ -343,3 +376,10 @@
+>                 bias-pull-up;
+>         };
+>  };
+> +
+> +&tlmm {
+> +       nvme_ldo_enable_pin: nvme_ldo_enable_pin {
 
-> PocoF1 does support TX fifo resizing as I can see that in the
-> downstream dts. So maybe it is the tx-fifo-max-num which need to be
-> adjusted for the device? I couldn't find the tx-fifo-max-num
-> equivalent in the downstream tree though
-> https://github.com/MiCode/Xiaomi_Kernel_OpenSource/tree/dipper-q-oss/
-> 
+Please use dashes where you use underscores in node names
 
-I assume that you've already confirmed reverting that change resolves
-the constant reboots?
+       nvme_ldo_enable_pin: nvme-ldo-enable-pin {
 
-> Curious if you had any ideas what might be going wrong? For now I'll
-> keep digging around tx-fifo-max-num, but I figured I'd ask just in
-> case it's obvious to you.
-> 
+> +               function = "gpio";
+> +               bias-pull-up;
 
-The tx-fifo-max-num parameter should still be set to 6 for SDM845, which
-would be the same for more recent targets as well.
+Of course with that said, the name of this node makes it sound like this
+is a gpio controlled regulator. Why not use that binding then and enable
+the regulator either by default with regulator properties like
+regulator-always-on and regulator-boot-enable and/or reference it from
+the pcie device somehow so that it can be turned off during suspend?
 
-Thanks
-Wesley Cheng
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+> +       };
+> +};
