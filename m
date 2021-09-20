@@ -2,92 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 272FB41134E
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Sep 2021 13:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B25254113C0
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Sep 2021 13:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236171AbhITLHY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Sep 2021 07:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbhITLHY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Sep 2021 07:07:24 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733BBC061574;
-        Mon, 20 Sep 2021 04:05:57 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id g1so66644909lfj.12;
-        Mon, 20 Sep 2021 04:05:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PjCxldfRwru44yzVW0vVIwEYDHxb2Xe5XdKPGw3FlCQ=;
-        b=HPD2lHWqG6zDhxDAGvWl4FtxoAfAyQ9UcSxpszMNZ6ZIrXxW4h/+VP52vNkJpgBsBo
-         znQhwLj6GCtY1ml54rl+bIery2uaz5VrXMu/LesvMUXTpMgL3T4tXA1lUcY+LoBGNrgO
-         7q0gvpXHoFtf1ej9pjgV0JiCrod7l9iNKpwYhH8lf2c1WjAfiKtzv0DZYqQCQi/lbtPN
-         KkJo5fYnXW6eE8qd4xFcUGLHRFa6iOkP5frs49M53RqDKFNbQt9oqV1DtrdtFanITJCt
-         PQLQedlYCTsBhB4Bkk61EO/eAxEjvX+a96p9/XSCd9sxBzqMiCEZt1rOxdVqOSf4iPqQ
-         Akng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PjCxldfRwru44yzVW0vVIwEYDHxb2Xe5XdKPGw3FlCQ=;
-        b=OixGRQBu3e32ci2xSXYHYtIBdi8e+kSRjtnyAyQFsOUFIkcvDQ1u7UCD6UvY30Tnr8
-         rGh3xdkblnoftMFJgSmZTCfunrMbSIJpTdSjljR85GwghH3nq+aeInqr5rbpPdYoL7+P
-         tXo6US7zDdFz8j2taxYkFL8kIdZk5Zop3XWcxvgI9QFZw48GC31ssPAq98srHkm2XOvb
-         XFezymJeWjl1uOA6ZIWKJCphj/a5kOR95iiDxALn/ectHs3E3OyzQHR3Ov4AvgTfsi8L
-         peOEWYyETrJdf8q5w5BEwWjfAgZAD1WxtQ4PMwkfDUDnW0DgjJBsLjBJB5NIg3N/6lyP
-         mAyQ==
-X-Gm-Message-State: AOAM530L2j6211NzY83o3SUEUDad14cgsUOzMR+mZIrpRaAGtF5AFoa6
-        whp/YJl0RToXAANJr/HgL6YV4Ys8/ei7xL70xSY=
-X-Google-Smtp-Source: ABdhPJwRO0KgsOPqJA1Vmh2XK1AkjUGHw4AWY9f2Q1131kA6mlJudsn6DIV5deXJDhz0+IkhYjZpbv4AruoQGtWytQc=
-X-Received: by 2002:a2e:6e06:: with SMTP id j6mr22228990ljc.382.1632135955758;
- Mon, 20 Sep 2021 04:05:55 -0700 (PDT)
+        id S237275AbhITLtQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Sep 2021 07:49:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57228 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237371AbhITLtN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Sep 2021 07:49:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3872A60FED;
+        Mon, 20 Sep 2021 11:47:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632138466;
+        bh=dRbvVwTqXOM0lSL7IAKq5/DhxWoeDCAtnCtd4tGRFsU=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=DdywjbU6m9JCe83c4qyW6e6G3xri0mIHCDxV3RlTkRrROAawWcttytpvAesTsMfox
+         YN2BgygA8hd2w1j/O/mhf48TMShQnJkNgY0rqcZkac3RJ0QephuJnbeqMkPNCz2zWz
+         YTTPDUpksfUQ7eM59+YMfPnvbnF5ZykVFJaOdsGeqKDRm4MdwZj34F/bWws7cPonUK
+         RiNXcV7A1b/F50v7paVkqxdemr7jJ5flZyZvdhi5UvKaVUa4NOMFCnJVr8aYM8tm5P
+         OB7NXgaaCVMUfnq6Ioh4idKH3g3aMt3qVSgivvC4KysD8NZuv5EmMyQD24FHyUgrp9
+         ypDT76Yah1oOA==
+References: <CABEcMwVKFmie9Dx1PMRgY+yDWFN6TtTX0727aiWQvn971CbJwA@mail.gmail.com>
+User-agent: mu4e 1.6.6; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Shantur Rathore <i@shantur.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: dwc3 over pcie or with more than 1 udc
+Date:   Mon, 20 Sep 2021 14:45:53 +0300
+In-reply-to: <CABEcMwVKFmie9Dx1PMRgY+yDWFN6TtTX0727aiWQvn971CbJwA@mail.gmail.com>
+Message-ID: <871r5jsc2n.fsf@kernel.org>
 MIME-Version: 1.0
-References: <CAEyMn7YqrRttqvJzJLA+yVo6WtBZww6QcXT12MMCi+bhjP4pTg@mail.gmail.com>
- <CAEyMn7ZhBfG7703YMr=EDQyf5mHDkLyET5iNqdXDOpJy9ti+rQ@mail.gmail.com>
- <CAOMZO5CZKdc=AmG1eds9Oy_uwqXDWLwPXk74phCDWdjrzkRC4A@mail.gmail.com>
- <CAEyMn7YaQbLoVy_5Rb+hiwhEj-kbnmCwb0B_soa+Kf0D6iH6oA@mail.gmail.com>
- <CAOMZO5CGuKQ0yVyoD86G3KnxoBd2fq+uCTTLoqVR-13Y5a-36Q@mail.gmail.com>
- <CAEyMn7bN247-J=Qz-k3LZMVYb8pdYSP3BSCsNE9yyvfDfmdK0g@mail.gmail.com> <CAOMZO5DEg81E23QBpsv44BxytEhNNoXy-r5BbnubUJTERzWYLQ@mail.gmail.com>
-In-Reply-To: <CAOMZO5DEg81E23QBpsv44BxytEhNNoXy-r5BbnubUJTERzWYLQ@mail.gmail.com>
-From:   Heiko Thiery <heiko.thiery@gmail.com>
-Date:   Mon, 20 Sep 2021 13:05:43 +0200
-Message-ID: <CAEyMn7Yvc_tck=Hd8GE1a7uO8nRsrkdJ7b_jL6EY0-U6b=TjoQ@mail.gmail.com>
-Subject: Re: imx8mm board crash in drivers/usb/chipidea/ci_hdrc_imx.c
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Peter Chen <peter.chen@nxp.com>, Jun Li <jun.li@nxp.com>,
-        Yu Kuai <yukuai3@huawei.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+
 Hi,
 
-Am Mo., 20. Sept. 2021 um 12:52 Uhr schrieb Fabio Estevam <festevam@gmail.com>:
+Shantur Rathore <i@shantur.com> writes:
+> I am trying to find a dwc3 compatible PCIe USB controller or a dwc3
+> compatible device with more than one udc.
 >
-> Hi Heiko,
->
-> On Mon, Sep 20, 2021 at 6:17 AM Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> > Now it is clear to me. I used the dtb for my board that had already
-> > changed the phy node and tried to boot the "old" kernel 5.14. Thus no
-> > phy could be found. Nevertheless the kernel should not crash in case
-> > no phy was found.
->
-> Agreed. The patch I proposed earlier should fix the problem, correct?
-> https://pastebin.com/raw/yZKz1huL
+> Is there any such device supported in kernel?
+> If yes, please let me know which one.
 
-Yes this should do it.
+you can have as many dwc3 instances as you want. AM437x has two dwc3
+instances, so do several other TI and Qcom devices, albeit not on
+PCIe. Some recent Intel platforms have more than dwc3 in the die over
+(fake?) PCIe.
+
+In any case, there are no limitations (apart from memory and available
+PCIe ports) to having more than one dwc3 over PCIe. If you can find a
+discrete device like that, it's difficult to say.
 
 -- 
-Heiko
+balbi
