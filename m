@@ -2,140 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6483B411883
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Sep 2021 17:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 481BF4127CD
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Sep 2021 23:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238018AbhITPmx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Sep 2021 11:42:53 -0400
-Received: from mail-dm6nam12on2060.outbound.protection.outlook.com ([40.107.243.60]:54273
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237813AbhITPmw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Sep 2021 11:42:52 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QL6RC+grYs1i7PSQk4qU1KTkw0L6YWPMYE9AzVVljbnLt2nmYhgSHG5rzNWxJjMmjnuQILdS02siOOo5VexZrfYV7veUjkyn/tGB04V3mopuhIPK+mr9fD71ZGqb6ImK+GwFBAs892IEt4VMGh9xVAgUmYHEzkGhNp7lG2Axk7DoYrbF0fwjYL4a5+27sS9tN7Dw3v/DkEWYYI8vUVZ2M5ENJQapvxYIfNSR4dFJyXgQK3T/zH3KyDKWJCH/ADPfQkdaBQuiD6s0x8tN0iq1NPjA7s2+ylp4dpYxSQaI4/5JTisFYAFNGbmhBe+5WOCOY1EdFbciDE8qoRc2dlHGGA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=SHstRfTBCx1wPWNgFygVixGDitPKwyXgQhfS0FDabPY=;
- b=noDGU1T8cZw74AZJV8zLitpgUmAWzr2A1SirGnbcM9WUBtNu26pT0V3opDGcwpzb0jfqd7IShYpCMjlUwhO+W//BlRDPImzg9gC6H+qxUodGj1zcXL6ZDqzmxz42ns5JzoQMjKM+0r0pLoqEnWPl+a/ummN8ySAHWiJMIvl8IyNhZfPqe3G060BnP7mULYOsYyBxyVCT5gX1OyLLDxkMwnm8J8OZ0zPnVdJJ1X4Kvupqk/892RgmkG7rC38wcp16R8KbcbnEswz0zWI/mtl185iIFc2zCmLeaa3dI0Zwkbs7HlAjEGjnpat7UNCDQjQsZ6eC0BCL1nLtbAKqIf/s2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SHstRfTBCx1wPWNgFygVixGDitPKwyXgQhfS0FDabPY=;
- b=Q45R3tkT4SIV7X3m9oI5Kfh7mF0ibRc7GNd5TFZh+8xFElbPOd4257U272fVnNTrTfquitMD1Qs+2G5WU+z8xcAzggDZydlkLJplUIPjHzuCEp1OaJTjh9zcZnQpRuNtbmRJ4q/oRJhZMo2rMSwsmiQGktX6QvxnxYODgijI4aI=
-Received: from BN8PR04CA0008.namprd04.prod.outlook.com (2603:10b6:408:70::21)
- by BN8PR12MB3250.namprd12.prod.outlook.com (2603:10b6:408:99::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.17; Mon, 20 Sep
- 2021 15:41:22 +0000
-Received: from BN8NAM11FT019.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:70:cafe::9f) by BN8PR04CA0008.outlook.office365.com
- (2603:10b6:408:70::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14 via Frontend
- Transport; Mon, 20 Sep 2021 15:41:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT019.mail.protection.outlook.com (10.13.176.158) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4523.14 via Frontend Transport; Mon, 20 Sep 2021 15:41:22 +0000
-Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Mon, 20 Sep
- 2021 10:41:19 -0500
-From:   Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
-To:     <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Nehal Bakulchandra Shah" <Nehal-Bakulchandra.shah@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-Subject: [PATCH] usb: xhci: Enable runtime-pm by default on AMD Yellow Carp platform
-Date:   Mon, 20 Sep 2021 21:11:00 +0530
-Message-ID: <20210920154100.3195683-1-Nehal-Bakulchandra.shah@amd.com>
-X-Mailer: git-send-email 2.25.1
+        id S237580AbhITVR3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Sep 2021 17:17:29 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:37146 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235349AbhITVPZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Sep 2021 17:15:25 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1632172438; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=4ijXYlmqoMPuqo2n4/kMk/32yQvABM55JAadYGLqsTw=; b=S8We6wO/2PVGYxxzMyPWcX3DhcnhZvhbmwpjEgRXE4clYguYWdHaicaHiRvBVzvbQYQITRSD
+ j+jQbj76SUICXzrujoKaWGBtJR2iOpJGDciL6DxgEgm7NyQ6pqKj38HPz2Jl8t+cMgDDUGs6
+ qH70yjCSnrrBPCaMjQE8GGNR4JY=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 6148f99565c3cc8c63e8b31c (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 20 Sep 2021 21:13:57
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 07FD0C43460; Mon, 20 Sep 2021 21:13:57 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [192.168.1.26] (075-140-094-099.biz.spectrum.com [75.140.94.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 835BAC43460;
+        Mon, 20 Sep 2021 21:13:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 835BAC43460
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: dwc3-qcom: tx-fifo-resize regression on Poco F1 (sdm845) with
+ v5.15-rc1
+To:     Amit Pundir <amit.pundir@linaro.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jack Pham <jackp@codeaurora.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        John Stultz <john.stultz@linaro.org>,
+        linux-usb@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        dt <devicetree@vger.kernel.org>
+References: <CAMi1Hd3k2snB4-=M57pVrMVom=a9_2a0DTFk-+Hzpubwk-Pr9Q@mail.gmail.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <64a2a428-8bb1-0078-2403-1ca8e28cf4b1@codeaurora.org>
+Date:   Mon, 20 Sep 2021 14:13:54 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b4d3fe53-c3bc-4086-60b5-08d97c4d18e0
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3250:
-X-Microsoft-Antispam-PRVS: <BN8PR12MB3250DFA7D8C9EAC80F627786A0A09@BN8PR12MB3250.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3276;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rEPTe0MXQtJ2B47tTnzCdXpB8LkECTdDwTsWJ/+w01Qpe/WCDLR+7lr6tPT2Aa4ejIp1L1T5FEEsxslC96NFDvJ1sYEUDTpfPquPcSFQhnWGkE9GSEJjlKz1geyNqIS75LYySq8x8hY9ce9Wia2rYXMgbu720RYptbDlsftfhETgHlNpeBHh0xu8WZDKHFgbg0+FHBzr8Pvxbd3at2Yj/PrL2RFDqCI2XS+lkRioSXn+N3KJarmeNi+YlnuUiUtnwdbFhsbF7ULs6/2/7kvfY4VBLNKBYWVltc1siU1McsnLEUtoxa6Yf4DUfLw9WzdZUhlpwIyd58V245ScZqZM+5wp+3O9RockcagRifPps1ILDI9RxPEhgQHY5y+RYAEAfcKjN895cJDgSf+10L5W4IdFuWPL1AcICkq6nkE0fmOnFGUtOw0YIWwgnso4oXEbgFwvaxLWudyevLnliAInYc1SncTjCynOJUqxVo2NPnkAcUG2UY4BYBtinWUWh/dsTdm5IgSa2ypN1lPNAG4Bftzejq8e8ekWa5d21bzJCGB3e23TPMdsYoEH56ddlslQwyo5e4/GzrXy/ZY77O3qV/zifqLhceKxdHp0ZJQt9taFDQhvFk4JOxQKizhQOtV+lU4V028WXeDWexyU7lgfN5XRFe85rf5RSlXp04hUfsfdkE5LQfNJ41VEqfRABhBV2XvNKx3tA5dJjDNdoUzu+fa64fGOBXivb4vYSUcnACI=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(346002)(136003)(376002)(396003)(39860400002)(36840700001)(46966006)(36860700001)(8936002)(186003)(16526019)(82310400003)(54906003)(82740400003)(26005)(2616005)(1076003)(70206006)(70586007)(7696005)(2906002)(86362001)(47076005)(5660300002)(8676002)(478600001)(316002)(4326008)(6666004)(36756003)(336012)(426003)(110136005)(81166007)(356005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2021 15:41:22.0890
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b4d3fe53-c3bc-4086-60b5-08d97c4d18e0
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT019.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3250
+In-Reply-To: <CAMi1Hd3k2snB4-=M57pVrMVom=a9_2a0DTFk-+Hzpubwk-Pr9Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-AMD's Yellow Carp platform supports runtime power management for
-XHCI Controllers, so enable the same by default for all XHCI Controllers.
+Hi Amit,
 
-Signed-off-by: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
-Reviewed-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Reviewed-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
----
- drivers/usb/host/xhci-pci.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+On 9/20/2021 1:45 PM, Amit Pundir wrote:
+> Hi Wesley, All,
+> 
+> I see a reboot loop on Xiaomi Pocophone F1 (sdm845) with TX FIFO
+> resize patches which landed in v5.15-rc1. Upstream commit cefdd52fa045
+> "usb: dwc3: dwc3-qcom: Enable tx-fifo-resize property by default" to
+> be specific, which switched on this feature by default.
+> 
+> At times the phone crashes into the fastboot mode after the reboot
+> loop, but mostly end up booting to UI after a while. This is what it
+> looks like https://people.linaro.org/~amit.pundir/beryllium-userdebug/PXL_20210920_162749483.mp4.
+> 
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 2c9f25ca8edd..0e571d6af2ab 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -69,6 +69,12 @@
- #define PCI_DEVICE_ID_ASMEDIA_1142_XHCI			0x1242
- #define PCI_DEVICE_ID_ASMEDIA_2142_XHCI			0x2142
- #define PCI_DEVICE_ID_ASMEDIA_3242_XHCI			0x3242
-+#define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_1	0x161a
-+#define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_2	0x161b
-+#define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_3	0x161d
-+#define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_4	0x161e
-+#define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_5	0x15d6
-+#define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_6	0x15d7
- 
- static const char hcd_name[] = "xhci_hcd";
- 
-@@ -313,6 +319,15 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	     pdev->device == PCI_DEVICE_ID_AMD_PROMONTORYA_4))
- 		xhci->quirks |= XHCI_NO_SOFT_RETRY;
- 
-+	if (pdev->vendor == PCI_VENDOR_ID_AMD &&
-+	    (pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_1 ||
-+	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_2 ||
-+	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_3 ||
-+	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_4 ||
-+	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_5 ||
-+	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_6))
-+		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
-+
- 	if (xhci->quirks & XHCI_RESET_ON_RESUME)
- 		xhci_dbg_trace(xhci, trace_xhci_dbg_quirks,
- 				"QUIRK: Resetting on resume");
+I believe Android will attempt a number of bootup sequences and if it
+fails, it falls back to fastboot mode.  Are there any available logs you
+might be able to collect to see where the issue is?
+
+> PocoF1 does support TX fifo resizing as I can see that in the
+> downstream dts. So maybe it is the tx-fifo-max-num which need to be
+> adjusted for the device? I couldn't find the tx-fifo-max-num
+> equivalent in the downstream tree though
+> https://github.com/MiCode/Xiaomi_Kernel_OpenSource/tree/dipper-q-oss/
+> 
+
+I assume that you've already confirmed reverting that change resolves
+the constant reboots?
+
+> Curious if you had any ideas what might be going wrong? For now I'll
+> keep digging around tx-fifo-max-num, but I figured I'd ask just in
+> case it's obvious to you.
+> 
+
+The tx-fifo-max-num parameter should still be set to 6 for SDM845, which
+would be the same for more recent targets as well.
+
+Thanks
+Wesley Cheng
+
 -- 
-2.25.1
-
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
