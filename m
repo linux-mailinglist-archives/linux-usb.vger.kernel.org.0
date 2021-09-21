@@ -2,171 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1B2413169
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 12:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBED54131FD
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 12:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbhIUKU7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Sep 2021 06:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231550AbhIUKU6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Sep 2021 06:20:58 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C22C061757
-        for <linux-usb@vger.kernel.org>; Tue, 21 Sep 2021 03:19:26 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id b10so26196300ioq.9
-        for <linux-usb@vger.kernel.org>; Tue, 21 Sep 2021 03:19:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gxVjksGN/3yuclGhnmoWEQKT5gLNVLIOyY61uXcwmWI=;
-        b=vO46N99FpdRLkV1NF+gjE9qSMCIUZhOeIy/mhBx5gPsP926ONSii9PXt2deJ3DGL3e
-         NjIwdQOHkvYPd4Je03SklDs0b7KsYP4kBXjpK1TGDI3dgQe8P2djwcVqx5/y1K8c9zsB
-         mCX9S3NgX/2UoLP5azlPU7WExgd7yVRpONvUhrwD/09Hr+e9fRaQHJ8HnUJ715Znm7DN
-         Z7OHvsjM9YttYJcPUA485abYs9vP8yJ5zt5EJt7CuMP3zlnrxV8eEfWnhcLotbLwrXuk
-         sy1LU5Cz+yhgoFdFfChdHpOSm3m5AKYD4dNUes/f9eEjwCbOLNoyiziW05Z4RH7ftFJn
-         sEkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gxVjksGN/3yuclGhnmoWEQKT5gLNVLIOyY61uXcwmWI=;
-        b=iSIFf6nq2Hd14QD37e1Z1peboP6mxTCBZHnvznOsXTclri3Nbmfr1oyce/qxcYYvNZ
-         oOD5jLSisOZOtvd5KizRvbDqhessYZI7y1slTMml53DoW1rjuac7vFm68SKTpY0tq5P5
-         WTXG8iU+EZrnEBSIAC7B+AtOITwCY8wIOu62TC03OMPHpfBFv2syx2NgLepRdIVpFeer
-         AgAJkCMi1lSmRme42E3mfx73sExepJfSXG1mgMRWWy0pS/5o9yKaANH59szR/L62QQEN
-         fcL/35hKm4uyttqlZKAtZWSvUPUMzdaS/EV7si6R+uAnOr4iG0TIb1SmPDRBEKMSUfAK
-         F2ug==
-X-Gm-Message-State: AOAM532Vi/iaoQcnGv8jt/4StQcdBZTPfYr10RJMLo/tiO+mnoZwsAC9
-        Pdb9zD6bCeKfg3QlgV5VF0jMtwmc7unDqFhN2IUSqw==
-X-Google-Smtp-Source: ABdhPJz86aatVqFyHRCUhvImhsp2CKqHcGwOGrpQiGAsYeZo1977hFAgAenDq9K/oh27Yx/hhOzO2jV+sXZxluuCWfk=
-X-Received: by 2002:a02:908a:: with SMTP id x10mr23047196jaf.30.1632219565662;
- Tue, 21 Sep 2021 03:19:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAMi1Hd3k2snB4-=M57pVrMVom=a9_2a0DTFk-+Hzpubwk-Pr9Q@mail.gmail.com>
- <64a2a428-8bb1-0078-2403-1ca8e28cf4b1@codeaurora.org> <CAMi1Hd2MCxJgbHz9oGWe4L+MXNM3p+Xntpcg6t3TvZxwjJTy0Q@mail.gmail.com>
- <47a06078-dd41-7b3d-3de3-4e6c24211691@codeaurora.org>
-In-Reply-To: <47a06078-dd41-7b3d-3de3-4e6c24211691@codeaurora.org>
-From:   Amit Pundir <amit.pundir@linaro.org>
-Date:   Tue, 21 Sep 2021 15:48:49 +0530
-Message-ID: <CAMi1Hd1UtTECaDROGm7hE377Dp5qLzZeqBowmxoQJpOm9uQFHw@mail.gmail.com>
-Subject: Re: dwc3-qcom: tx-fifo-resize regression on Poco F1 (sdm845) with v5.15-rc1
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+        id S232169AbhIUKzL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Sep 2021 06:55:11 -0400
+Received: from mga12.intel.com ([192.55.52.136]:26569 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231969AbhIUKzK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Sep 2021 06:55:10 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10113"; a="202823384"
+X-IronPort-AV: E=Sophos;i="5.85,311,1624345200"; 
+   d="scan'208";a="202823384"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2021 03:53:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,311,1624345200"; 
+   d="scan'208";a="612931945"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 21 Sep 2021 03:53:38 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 Sep 2021 13:53:37 +0300
+Date:   Tue, 21 Sep 2021 13:53:37 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Cc:     Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "bleung@chromium.org" <bleung@chromium.org>,
+        "badhri@google.com" <badhri@google.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jack Pham <jackp@codeaurora.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        John Stultz <john.stultz@linaro.org>,
-        linux-usb@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dt <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+Message-ID: <YUm5sdbceMcDTvYj@kuha.fi.intel.com>
+References: <20210902213500.3795948-1-pmalani@chromium.org>
+ <20210902213500.3795948-3-pmalani@chromium.org>
+ <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
+ <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <YUB16up3JDwi3HfI@kuha.fi.intel.com>
+ <YULwz8NsoA3+vrhA@google.com>
+ <YUMbGp0aemx1HCHv@kuha.fi.intel.com>
+ <DB9PR10MB46525E6CA4C6BB101059D93C80DC9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DB9PR10MB46525E6CA4C6BB101059D93C80DC9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 21 Sept 2021 at 13:00, Wesley Cheng <wcheng@codeaurora.org> wrote:
->
-> Hi Amit,
->
-> On 9/21/2021 12:04 AM, Amit Pundir wrote:
-> > Hi Wesley,
-> >
-> > On Tue, 21 Sept 2021 at 02:44, Wesley Cheng <wcheng@codeaurora.org> wrote:
-> >>
-> >> Hi Amit,
-> >>
-> >> On 9/20/2021 1:45 PM, Amit Pundir wrote:
-> >>> Hi Wesley, All,
-> >>>
-> >>> I see a reboot loop on Xiaomi Pocophone F1 (sdm845) with TX FIFO
-> >>> resize patches which landed in v5.15-rc1. Upstream commit cefdd52fa045
-> >>> "usb: dwc3: dwc3-qcom: Enable tx-fifo-resize property by default" to
-> >>> be specific, which switched on this feature by default.
-> >>>
-> >>> At times the phone crashes into the fastboot mode after the reboot
-> >>> loop, but mostly end up booting to UI after a while. This is what it
-> >>> looks like https://people.linaro.org/~amit.pundir/beryllium-userdebug/PXL_20210920_162749483.mp4.
-> >>>
-> >>
-> >> I believe Android will attempt a number of bootup sequences and if it
-> >> fails, it falls back to fastboot mode.  Are there any available logs you
-> >> might be able to collect to see where the issue is?
-> >
-> > It is a stock phone with no UART access, so I can't get early crash
-> > logs unless I'm booted up to adb shell. I can try getting some info
-> > using pstore-ramoops but warm reset support for sdm845 was not
-> > upstreamed when I tried using that the last time.
-> >
->
-> I see, can we maybe avoid the actual resizing by commenting out the
-> following writel() calls, but let the fifo resize logic calculate the EPs?
->
-> void dwc3_gadget_clear_tx_fifos(struct dwc3 *dwc)
-> {
-> ...
->                 /* Don't change TXFRAMNUM on usb31 version */
->                 size = DWC3_IP_IS(DWC3) ? 0 :
->                         dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(num >> 1)) &
->                                    DWC31_GTXFIFOSIZ_TXFRAMNUM;
->                 /* Comment the dwc3_writel() */
->                 //dwc3_writel(dwc->regs, DWC3_GTXFIFOSIZ(num >> 1), size);
->
-> and
->
-> static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
-> {
-> ...
->         /* Comment the dwc3_writel() */
->         //dwc3_writel(dwc->regs, DWC3_GTXFIFOSIZ(dep->number >> 1), fifo_size);
->         dwc->num_ep_resized++;
->
-> Those 2 writel() would be the one that actually programs the TXFIFO
-> register.  I hope when commented out, no resize should actually happen
-> anymore.
->
-> With this, hopefully we can get some logs from the device at least :)
+On Thu, Sep 16, 2021 at 02:12:23PM +0000, Adam Thomson wrote:
+> On 16 September 2021 11:23, Heikki Krogerus wrote:
+> 
+> > > Thanks for providing the clarification. So you're proposing a port-psy and a
+> > > port-partner-psy that are connected to each other (one supplying the other).
+> > > If PD is not present, those two will exist per port and partner, and there
+> > > will be information about Type-C current (and possibly BC 1.2 and other
+> > > methods?)
+> > 
+> > Yes, exactly.
+> > 
+> > > Do you have an example hierarchy you could share that explains what it would
+> > > look like in /sys/class/power_supply with PD with Source Caps and Sink Caps on
+> > > both sides?
+> > 
+> > I don't yet, but I'll prepare something. I did notice already that the
+> > power supply class does not seem to display the suppliers nor
+> > supplicants in sysfs. But we can always improve the class.
+> > 
+> > I probable should not talk about "hierarchy". Maybe taking about
+> > simply "chain" of power supplies is more correct?
+> > 
+> > > I think this all makes sense if the connector class is a read interface
+> > > for this info. Have you considered how the type-c connector class and this pd
+> > > psy support will handle dynamic PDO changes for advertisement FROM the
+> > ports?
+> > >
+> > > For example, let's say you wanted the kernel and user to manage two USB-C
+> > ports
+> > > with higher power support (meaning, 5V, 9V, 15V, 20V capable), but then your
+> > > kernel and user needs to edit the Source Caps on the fly based on load
+> > > balancing.
+> > >
+> > > If caps are represented as a group of psys together, how do you as a kernel
+> > > and user create an modify the set of Source_Caps you put out on a port?
+> > 
+> > My idea is to utilise the "present" property with the ports. You would
+> > always display all the possible supplies, but only the ones that you
+> > expose in your current capabilities will be present.
+> > 
+> > The idea is also that the ports are always supplied by normal power
+> > supplies of type "battery", "AC" and what have you. Those you can use
+> > to see the maximum power your port can get, and to determine the
+> > currently available power by checking the other ports that consume the
+> > same supply.
 
-I can boot fine with above 2 writel() removed but I don't see EP
-counts being printed in the log anywhere and the only relevant
-message in dmesg I see is this:
+Going back here a bit... It now looks like this second part is not
+possible, which sucks, but it only means registering a separate object
+(psy) for each PDO is even more important.
 
-    Duplicate name in dwc3@a600000, renamed to "tx-fifo-resize#1"
+> > So if you need more power for one port, you most likely will need to
+> > attempt to adjust the power levels of the source PDO power supplies of
+> > the other ports that share the base supply (like battery), or possibly
+> > disable them, and that way enable (make present) more source supplies
+> > for your port. That is the idea, but I admit I have not thought of
+> > everything, so I'm not completely sure would it work exactly like
+> > that, but the power balancing should in any case be possible with the
+> > chain of power supplies one way or the other.
+> > 
+> > I hope I understood your question correctly, and I hope I was able to
+> > give you an answer :-)
+> 
+> Thanks for the additional updates. So is the intention here to move control of
+> PDO selection away from TCPM, or add more flexibility to it? As I understand it
+> from previous efforts around all of this, the intention was that TCPM makes the
+> decision as to which PDO to select (and which APDO for PPS) based on the offered
+> capabilities of the source and the sink capabilities which are described in FW.
+> Am just trying to envisage the use-cases here and how the kernel/user is
+> involved in selecting PDOs/voltages/currents.
 
-which is interesting because I don't see tx-fifo-resize property being
-set by any of the upstream sdm845 or relevant dtsi files.
+If we can leave the decision about the selection to TCPM, that would
+be great! I'm not against that at all. As I said, I have not though
+through the control aspect. Right now I'm mostly concerned about how
+we expose the information to the user. The only reason why I have
+considered the control part at all is because how ever we decide to
+expose the information to the user, it has to work with control as
+well.
 
+> IIRC there used to be functions for updating source/sink capabilities but these
+> never had users and were subsequently removed. I guess this would be essentially
+> the functional replacement for those APIs?
+> 
+> Personally, I think the idea of source/sink PSY instances supplying each other
+> seems reasonable. Right now we represent the external PD/Type-C supply (partner)
+> through TCPM as a PSY instance which is always present for the associated port,
+> although obviously when no source partner exists we're marked as offline. For
+> the partner side I'm guessing the PSY instance will be dynamically
+> created/destroyed? From previous experience PSY classes have tended to be
+> statically included so would be interested in seeing what this looks like in
+> reality.
 
->
-> >>
-> >>> PocoF1 does support TX fifo resizing as I can see that in the
-> >>> downstream dts. So maybe it is the tx-fifo-max-num which need to be
-> >>> adjusted for the device? I couldn't find the tx-fifo-max-num
-> >>> equivalent in the downstream tree though
-> >>> https://github.com/MiCode/Xiaomi_Kernel_OpenSource/tree/dipper-q-oss/
-> >>>
-> >>
-> >> I assume that you've already confirmed reverting that change resolves
-> >> the constant reboots?
-> >
-> > Yes reverting that change resolves the reboot loop issue. Speaking of
-> > which, since no other platform seem to be running into this issue and
-> > "tx-fifo-max-num" property is apparently not at fault either, is it
-> > reasonable to skip adding "tx-fifo-resize" property for PocoF1 using
-> > of_machine_is_compatible("xiaomi,beryllium") as a workaround?
-> >
->
-> Since SDM845 does technically support txfifo resize downstream, let me
-> see if I can figure out what is different on this particular device
-> after getting the logs.
->
-> Thanks
-> Wesley Cheng
->
-> --
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
+If there is anything that should be improved in the PSY class itself
+(and I'm sure there's plenty), then we improve it.
+
+> Am still unsure on using PSY to expose individual PDOs though and this still
+> feels quite heavyweight. I assume we're not wanting to expose everything in PDOs
+> really, just the voltage/current info? Feels like we should be able to do this
+> with individual properties which a user can be notified of changes to through
+> the normal prop notifier, rather than a collection of PSY class instances.
+> However, I'm happy to be convinced the other way so will await further
+> details. :)
+
+The final PSYs and the supply chains they create as well as the
+individual properties I'm more than happy to talk about, but having a
+separate object for the smallest thing that we can see (PDO) is the
+right thing to do here IMO. Trying to concatenate things into single
+objects especially in sysfs, despite how nice it always would seem,
+has taken me to the brink of disaster in the past far too many times.
+
+In this case we don't need to take the risk of having to duplicated
+information or in worst case deprecate something that is also exposed
+to the sysfs in the future.
+
+So the question is not why should we registers every individual PDO
+separately. The question is, why shouldn't we do that? And saying that
+it's "heavyweight" I'm afraid is not good enough. :-)
+
+Right now I simply don't see any other way that would be as flexible,
+or that could even handle all the different platforms in uniform way
+(this needs to work with TCPM, UCSI, and everything else), as
+registering separate object (psy) for every single PDO.
+
+thanks,
+
+-- 
+heikki
