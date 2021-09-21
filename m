@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD29A4133F5
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 15:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1244133FC
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 15:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbhIUNWo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Sep 2021 09:22:44 -0400
-Received: from mga01.intel.com ([192.55.52.88]:59828 "EHLO mga01.intel.com"
+        id S233032AbhIUNYe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Sep 2021 09:24:34 -0400
+Received: from mga11.intel.com ([192.55.52.93]:43128 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232889AbhIUNWo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Sep 2021 09:22:44 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10113"; a="245769648"
+        id S231658AbhIUNYe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Sep 2021 09:24:34 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10113"; a="220158710"
 X-IronPort-AV: E=Sophos;i="5.85,311,1624345200"; 
-   d="scan'208";a="245769648"
+   d="scan'208";a="220158710"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2021 06:21:15 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2021 06:23:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,311,1624345200"; 
-   d="scan'208";a="613003334"
+   d="scan'208";a="613003776"
 Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 21 Sep 2021 06:21:11 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 Sep 2021 16:21:11 +0300
-Date:   Tue, 21 Sep 2021 16:21:11 +0300
+  by fmsmga001.fm.intel.com with SMTP; 21 Sep 2021 06:23:01 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 Sep 2021 16:23:00 +0300
+Date:   Tue, 21 Sep 2021 16:23:00 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Sven Peter <sven@svenpeter.dev>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -35,51 +35,58 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mark Kettenis <mark.kettenis@xs4all.nl>,
         Alexander Graf <graf@amazon.com>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Subject: Re: [RFT PATCH 3/9] usb: typec: tipd: Allow irq controller selection
-Message-ID: <YUncRyVlyZ7ejN++@kuha.fi.intel.com>
+Subject: Re: [RFT PATCH 4/9] usb: typec: tipd: Add short-circuit for no irqs
+Message-ID: <YUnctHnzHHEJgp2m@kuha.fi.intel.com>
 References: <20210918120934.28252-1-sven@svenpeter.dev>
- <20210918120934.28252-4-sven@svenpeter.dev>
+ <20210918120934.28252-5-sven@svenpeter.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210918120934.28252-4-sven@svenpeter.dev>
+In-Reply-To: <20210918120934.28252-5-sven@svenpeter.dev>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Sep 18, 2021 at 02:09:28PM +0200, Sven Peter wrote:
-> TI TPS6598x chips come with two separate i2c buses which each have an
-> independent interrupt controller. When only a single controller is
-> connected both can just be used.
-> On Apple M1 machines the secondary bus is however connected to the system
-> management controller and we must not modify its configuration. Prepare
-> for that by allowing to chose which interrupt controller(s) are used.
-
-This is good, but...
-
+On Sat, Sep 18, 2021 at 02:09:29PM +0200, Sven Peter wrote:
+> If no interrupts are set in IntEventX directly skip to the end of the
+> interrupt handler and return IRQ_NONE instead of IRQ_HANDLED.
+> This possibly allows to detect spurious interrupts if the i2c bus is fast
+> enough.
+> 
 > Signed-off-by: Sven Peter <sven@svenpeter.dev>
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
->  drivers/usb/typec/tipd/core.c | 30 +++++++++++++++++++++---------
->  1 file changed, 21 insertions(+), 9 deletions(-)
+>  drivers/usb/typec/tipd/core.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index 656020e7f533..c2c399722c37 100644
+> index c2c399722c37..4a6d66250fef 100644
 > --- a/drivers/usb/typec/tipd/core.c
 > +++ b/drivers/usb/typec/tipd/core.c
-> @@ -78,6 +78,8 @@ static const char *const modes[] = {
->  #define INVALID_CMD(_cmd_)		(_cmd_ == 0x444d4321)
+> @@ -434,6 +434,8 @@ static irqreturn_t tps6598x_interrupt(int irq, void *data)
+>  	trace_tps6598x_irq(event1, event2);
 >  
->  struct tps6598x_hw {
-> +	bool use_int1;
-> +	bool use_int2;
->  };
-
-Wouldn't it be better to read that information from a device
-property/properties?
-
-Driver data is OK, but device property would be better. We don't have
-separate compatible for this on every board that uses it and we have
-also ACPI platforms.
+>  	event = event1 | event2;
+> +	if (!event)
+> +		goto err_unlock;
+>  
+>  	ret = tps6598x_read32(tps, TPS_REG_STATUS, &status);
+>  	if (ret) {
+> @@ -481,7 +483,9 @@ static irqreturn_t tps6598x_interrupt(int irq, void *data)
+>  err_unlock:
+>  	mutex_unlock(&tps->lock);
+>  
+> -	return IRQ_HANDLED;
+> +	if (event)
+> +		return IRQ_HANDLED;
+> +	return IRQ_NONE;
+>  }
+>  
+>  static int tps6598x_check_mode(struct tps6598x *tps)
+> -- 
+> 2.25.1
 
 thanks,
 
