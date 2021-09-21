@@ -2,135 +2,251 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA4D4137B9
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 18:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6FF41380F
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 19:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbhIUQny (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Sep 2021 12:43:54 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:53269 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229441AbhIUQnx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Sep 2021 12:43:53 -0400
-Received: (qmail 175480 invoked by uid 1000); 21 Sep 2021 12:42:21 -0400
-Date:   Tue, 21 Sep 2021 12:42:21 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
-Cc:     Tobias Jakobi <cubic2k@gmail.com>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: storage: add quirks for VIA VL817 USB3-SATA bridge
-Message-ID: <20210921164221.GA172450@rowland.harvard.edu>
-References: <20210921101752.4679-1-tjakobi@math.uni-bielefeld.de>
- <20210921151323.GA170347@rowland.harvard.edu>
- <cfb2d4e4-0e6a-69d5-01ac-dc1ab4d9d319@math.uni-bielefeld.de>
+        id S230077AbhIURKe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Sep 2021 13:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229696AbhIURKd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Sep 2021 13:10:33 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54AF8C061757
+        for <linux-usb@vger.kernel.org>; Tue, 21 Sep 2021 10:09:05 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id w19so39036pfn.12
+        for <linux-usb@vger.kernel.org>; Tue, 21 Sep 2021 10:09:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=n7HGmPYwL475PdtYm46wy9zSx3aGM/fXJUshwhN+SlM=;
+        b=EBGNZr04Sh+tbGaVPvAAdZ5Ir0X+RVOsM8s8+OSuzEJrbjn0YyjKTiFuqcQx3s+Fzp
+         Wmp4l5WktYW+gN3asE7UoNA3p5ZebYhMoMLKR/wbIpzMPux113AF9qx4jS0Ik/QqDhQs
+         CksYISDeY0hZPI/xyNpHfrWANy33TDBgE1Yk8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=n7HGmPYwL475PdtYm46wy9zSx3aGM/fXJUshwhN+SlM=;
+        b=mW5T/Kco1zE3mV9YQHCIgyYF+GOJ6LQczVXod2VrGyFdIs7Oi5qmMlyed/cZQIshAd
+         vSEjat+OIYlOCRbiGLA0lqVcic21EdkqCGqE5Ucu1mZMUacDXW5Bscoigk68eiMoa/XQ
+         oxhTD2Eh7G1msV8igmRQ+AOu6hinLUJAPp/FJkDfzF2w++QIn8PGQbnibGN0Uap3Xzlp
+         JuRYDT0ZiEeKrk7Std+R9hhqtc4lPX7p97u6TR77UEYejuGOVjZBU1djmcxgr0Z0YyNF
+         lswHecWCtvq2H5E8eLrjQ4/KAnWlj87s+g2Mr3U0XN15LIsFEWq1U6DqeQ4qUtCcqSMM
+         q9bA==
+X-Gm-Message-State: AOAM530WmCLtylUsCMSxv4yXykPECDXLtNgUn2pPv+RZwsbLZ4UwgIxW
+        yeDrP1NOfKIhEKSAKzjYepSXdQ==
+X-Google-Smtp-Source: ABdhPJwk5MxTN+l52NY4vcaU18EvzpQ49+tcjyE707C5yPkbyZlZeop5dVG7ahQWqeY1X+ZkbGx7/A==
+X-Received: by 2002:a05:6a00:26cc:b0:440:51c6:fa38 with SMTP id p12-20020a056a0026cc00b0044051c6fa38mr30406951pfw.45.1632244144756;
+        Tue, 21 Sep 2021 10:09:04 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:40f3:7953:e98e:68ab])
+        by smtp.gmail.com with UTF8SMTPSA id w4sm2874355pfb.3.2021.09.21.10.09.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Sep 2021 10:09:04 -0700 (PDT)
+Date:   Tue, 21 Sep 2021 10:08:59 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     devicetree@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Bastien Nocera <hadess@hadess.net>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Guido =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jens Axboe <axboe@kernel.dk>, Johan Hovold <johan@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Lionel Debieve <lionel.debieve@st.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mark Brown <broonie@kernel.org>,
+        Martin =?utf-8?Q?J=C3=BCcker?= <martin.juecker@gmail.com>,
+        Nishanth Menon <nm@ti.com>,
+        Olivier Moysan <olivier.moysan@st.com>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Robert Richter <rric@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Lindgren <tony@atomide.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        William Cohen <wcohen@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>
+Subject: Re: [PATCH v16 0/7] usb: misc: Add onboard_usb_hub driver
+Message-ID: <YUoRq1RrOIoiBJ5+@google.com>
+References: <20210813195228.2003500-1-mka@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cfb2d4e4-0e6a-69d5-01ac-dc1ab4d9d319@math.uni-bielefeld.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210813195228.2003500-1-mka@chromium.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 21, 2021 at 06:06:45PM +0200, Tobias Jakobi wrote:
-> Hi Alan,
+Hi Greg,
+
+are there any actions pending or can this land in usb-testing?
+
+I confirmed that this series can be rebased on top of v5.15-rc2
+without conflicts.
+
+Thanks
+
+m.
+
+On Fri, Aug 13, 2021 at 12:52:21PM -0700, Matthias Kaehlcke wrote:
+> This series adds:
+> - the onboard_usb_hub_driver
+> - glue in the xhci-plat driver to create and destroy the
+>   onboard_usb_hub platform devices if needed
+> - a device tree binding for the Realtek RTS5411 USB hub controller
+> - device tree changes that add RTS5411 entries for the QCA SC7180
+>   based boards trogdor and lazor
+> - a couple of stubs for platform device functions to avoid
+>   unresolved symbols with certain kernel configs
 > 
-> sorry but your analysis of the log is wrong. Nothing was disconnected or
-> unplugged when the device behaves this way. The enclosure is connected to
-> the power the entire time, and the same applies to the physical USB
-> connection to my system.
-
-That may be so, but if it is then the log extract you included with the 
-patch is very misleading.  For instance, you didn't include any part of 
-the log before and leading up to the line saying "usb 2-1.2: USB 
-disconnect, device number 4".  Thus there is no way for the reader to 
-tell what caused this event, whether it was a physical unplug or not.
-
-> To make things very clear: This happens in under five minutes after having
-> powered up the enclosure and starting a file transfer to the installed RAID.
-> After blacklisting UASP the enclosure works perfectly fine for hours. I hope
-> this clears things up.
-
-You didn't answer my question about using NO_ATA_1X instead of 
-IGNORE_UAS.  This is a perfect example of one of the dangers of 
-top-posting -- it makes it far too easy for people to miss important 
-points in the email they are replying to.  (Hint: Don't top-post!)
-
-Alan Stern
-
-> With best wishes,
-> Tobias
+> The main issue the driver addresses is that a USB hub needs to be
+> powered before it can be discovered. For discrete onboard hubs (an
+> example for such a hub is the Realtek RTS5411) this is often solved
+> by supplying the hub with an 'always-on' regulator, which is kind
+> of a hack. Some onboard hubs may require further initialization
+> steps, like changing the state of a GPIO or enabling a clock, which
+> requires even more hacks. This driver creates a platform device
+> representing the hub which performs the necessary initialization.
+> Currently it only supports switching on a single regulator, support
+> for multiple regulators or other actions can be added as needed.
+> Different initialization sequences can be supported based on the
+> compatible string.
 > 
-> On 9/21/21 5:13 PM, Alan Stern wrote:
-> > On Tue, Sep 21, 2021 at 12:17:52PM +0200, Tobias Jakobi wrote:
-> > > The VL817 is used in the RaidSonic Icy Box IB-3740-C31 enclosure. The enclosure
-> > > is advertised as having UASP support, but appears to have problems with 4Kn
-> > > drives (test was done with two Seagate Exos X, 12TB).
-> > > 
-> > > Disable UAS for the VL817 as it behaves highly unstable:
-> > > 
-> > > [Aug14 16:31] usb 2-1.2: USB disconnect, device number 4
-> > So first the drive was unplugged or disconnected...
-> > 
-> > > [  +0.007701] sd 4:0:0:0: [sdb] tag#4 uas_zap_pending 0 uas-tag 1 inflight: CMD
-> > > [  +0.000004] sd 4:0:0:0: [sdb] tag#4 CDB: opcode=0x2a 2a 00 00 37 63 da 00 00 80 00
-> > > [  +0.000022] sd 4:0:0:0: [sdb] tag#4 UNKNOWN(0x2003) Result: hostbyte=0x01 driverbyte=0x00 cmd_age=19s
-> > > [  +0.000001] sd 4:0:0:0: [sdb] tag#4 CDB: opcode=0x2a 2a 00 00 37 63 da 00 00 80 00
-> > > [  +0.000001] blk_update_request: I/O error, dev sdb, sector 29040336 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
-> > > [  +0.000028] blk_update_request: I/O error, dev sdb, sector 29041360 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
-> > > [  +0.000000] blk_update_request: I/O error, dev sdb, sector 16 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
-> > > [  +0.000005] md: super_written gets error=-5
-> > > [  +0.000002] md/raid1:md126: Disk failure on sdb, disabling device.
-> > >                md/raid1:md126: Operation continuing on 1 devices.
-> > > [  +0.000024] blk_update_request: I/O error, dev sdb, sector 29042384 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
-> > > [  +0.000222] sd 4:0:0:0: [sdb] Synchronizing SCSI cache
-> > > [  +0.078154] blk_update_request: I/O error, dev sdb, sector 29040336 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
-> > > [  +0.000025] blk_update_request: I/O error, dev sdb, sector 29040344 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
-> > > [  +0.007520] blk_update_request: I/O error, dev sdb, sector 29040352 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
-> > > [  +0.000021] blk_update_request: I/O error, dev sdb, sector 29040360 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
-> > > [  +0.000015] blk_update_request: I/O error, dev sdb, sector 29040368 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
-> > > [  +0.000009] blk_update_request: I/O error, dev sdb, sector 29040376 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
-> > > [  +0.023299] sd 4:0:0:0: [sdb] Synchronize Cache(10) failed: Result: hostbyte=0x07 driverbyte=0x00
-> > Then there was a bunch of errors, which is to be expected when a drive
-> > is suddenly disconnected...
-> > 
-> > > [  +1.893439] usb 2-1.2: new SuperSpeed Plus Gen 2x1 USB device number 7 using xhci_hcd
-> > > [  +0.024064] scsi host7: uas
-> > > [ +16.365880] scsi 7:0:0:0: Direct-Access     ST12000N M001G-2MV103     SB2D PQ: 0 ANSI: 6
-> > > [  +0.001192] sd 7:0:0:0: Attached scsi generic sg1 type 0
-> > > [  +0.000940] sd 7:0:0:0: [sde] 2929721344 4096-byte logical blocks: (12.0 TB/10.9 TiB)
-> > > [  +0.000130] sd 7:0:0:0: [sde] Write Protect is off
-> > > [  +0.000001] sd 7:0:0:0: [sde] Mode Sense: 2f 00 00 00
-> > > [  +0.000265] sd 7:0:0:0: [sde] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-> > > [  +0.000399] sd 7:0:0:0: [sde] Optimal transfer size 268431360 bytes
-> > > [  +0.120240] sd 7:0:0:0: [sde] Attached SCSI disk
-> > And then the drive reconnected, this time successfully.  How does this
-> > show that UAS was the reason for the problem?  Indeed, how does this
-> > show there was any problem at all?
-> > 
-> > > Signed-off-by: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
-> > > ---
-> > >   drivers/usb/storage/unusual_uas.h | 7 +++++++
-> > >   1 file changed, 7 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-> > > index bda0f2cdf093..7d83ecf835c6 100644
-> > > --- a/drivers/usb/storage/unusual_uas.h
-> > > +++ b/drivers/usb/storage/unusual_uas.h
-> > > @@ -125,6 +125,13 @@ UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
-> > >   		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> > >   		US_FL_NO_ATA_1X),
-> > > +/* Reported-by: Tobias Jakobi <tjakobi@math.uni-bielefeld.de> */
-> > > +UNUSUAL_DEV(0x2109, 0x0715, 0x0000, 0x9999,
-> > > +		"VIA",
-> > > +		"VL817",
-> > > +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> > > +		US_FL_IGNORE_UAS),
-> > > +
-> > >   /* Reported-by: Icenowy Zheng <icenowy@aosc.io> */
-> > >   UNUSUAL_DEV(0x2537, 0x1068, 0x0000, 0x9999,
-> > >   		"Norelsys",
-> > Instead of IGNORE_UAS, have you tried the NO_ATA_1X flag, which seems to
-> > help in the preceding entry (a different device from the same vendor)?
-> > 
-> > Alan Stern
+> Besides performing the initialization the driver can be configured
+> to power the hub off during system suspend. This can help to extend
+> battery life on battery powered devices which have no requirements
+> to keep the hub powered during suspend. The driver can also be
+> configured to leave the hub powered when a wakeup capable USB device
+> is connected when suspending, and power it off otherwise.
+> 
+> Changes in v16:
+> - added patch 'ARM: configs: Explicitly enable USB_XHCI_PLATFORM
+>   where needed' to keep arm32 defconfigs effectively unchanged
+> 
+> Changes in v15:
+> - adjusted dependencies of USB_DWC3_CORE to make sure it can only
+>   be enabled when at least one of USB_DWC3_HOST, USB_DWC3_GADGET
+>   or USB_DWC3_DUAL_ROLE is selectable
+> 
+> Changes in v14:
+> - rebased on top of v5.14-rc1
+> - dropped DT binding patch which landed in v5.13
+> 
+> Changes in v13:
+> - added patch "usb: Specify dependency on USB_XHCI_PLATFORM with
+>   'depends on'" to the series to avoid Kconfig conflicts
+> - added patch "arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM"
+>   to the series to keep effective defconfig unchanged
+> 
+> Changes in v12:
+> - onboard_hub driver: use IS_ENABLED(CONFIG_USB_ONBOARD_HUB_MODULE)
+>   in onboard_hub.h to also check for the driver built as module
+> - onboard_hub_driver: include onboard_hub.h again to make sure there
+>   are prototype declarations for the public functions
+> 
+> Changes in v11:
+> - support multiple onboard hubs connected to the same parent
+> - don't include ‘onboard_hub.h’ from the onboard hub driver
+> 
+> Changes in v10:
+> - always use of_is_onboard_usb_hub() stub unless ONBOARD_USB_HUB=y/m
+> - keep 'regulator-boot-on' property for pp3300_hub
+> 
+> Changes in v9:
+> - added dependency on ONBOARD_USB_HUB (or !!ONBOARD_USB_HUB) to
+>   USB_PLATFORM_XHCI
+> 
+> Changes in v7:
+> - updated DT binding
+> - series rebased on qcom/arm64-for-5.13
+> 
+> Changes in v6:
+> - updated summary
+> 
+> Changes in v5:
+> - cover letter added
+> 
+> Matthias Kaehlcke (7):
+>   usb: misc: Add onboard_usb_hub driver
+>   of/platform: Add stubs for of_platform_device_create/destroy()
+>   ARM: configs: Explicitly enable USB_XHCI_PLATFORM where needed
+>   arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM
+>   usb: Specify dependencies on USB_XHCI_PLATFORM with 'depends on'
+>   usb: host: xhci-plat: Create platform device for onboard hubs in
+>     probe()
+>   arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
+> 
+>  .../sysfs-bus-platform-onboard-usb-hub        |   8 +
+>  MAINTAINERS                                   |   7 +
+>  arch/arm/configs/exynos_defconfig             |   1 +
+>  arch/arm/configs/keystone_defconfig           |   1 +
+>  arch/arm/configs/multi_v7_defconfig           |   1 +
+>  arch/arm/configs/mvebu_v7_defconfig           |   1 +
+>  arch/arm/configs/omap2plus_defconfig          |   1 +
+>  arch/arm/configs/pxa_defconfig                |   1 +
+>  .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts |  19 +-
+>  .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts |  12 +-
+>  .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts |  19 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  19 +-
+>  arch/arm64/configs/defconfig                  |   1 +
+>  drivers/usb/cdns3/Kconfig                     |   2 +-
+>  drivers/usb/dwc3/Kconfig                      |   5 +-
+>  drivers/usb/host/Kconfig                      |   5 +-
+>  drivers/usb/host/xhci-plat.c                  |   6 +
+>  drivers/usb/host/xhci.h                       |   2 +
+>  drivers/usb/misc/Kconfig                      |  17 +
+>  drivers/usb/misc/Makefile                     |   1 +
+>  drivers/usb/misc/onboard_usb_hub.c            | 497 ++++++++++++++++++
+>  include/linux/of_platform.h                   |  22 +-
+>  include/linux/usb/onboard_hub.h               |  18 +
+>  23 files changed, 627 insertions(+), 39 deletions(-)
+>  create mode 100644 Documentation/ABI/testing/sysfs-bus-platform-onboard-usb-hub
+>  create mode 100644 drivers/usb/misc/onboard_usb_hub.c
+>  create mode 100644 include/linux/usb/onboard_hub.h
+> 
+> -- 
+> 2.33.0.rc1.237.g0d66db33f3-goog
 > 
