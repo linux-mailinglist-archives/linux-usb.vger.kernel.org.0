@@ -2,126 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EC81413165
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 12:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1B2413169
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 12:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbhIUKTf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Sep 2021 06:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
+        id S231491AbhIUKU7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Sep 2021 06:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbhIUKTe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Sep 2021 06:19:34 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3C8C061574
-        for <linux-usb@vger.kernel.org>; Tue, 21 Sep 2021 03:18:06 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id t18so37583227wrb.0
-        for <linux-usb@vger.kernel.org>; Tue, 21 Sep 2021 03:18:06 -0700 (PDT)
+        with ESMTP id S231550AbhIUKU6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Sep 2021 06:20:58 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C22C061757
+        for <linux-usb@vger.kernel.org>; Tue, 21 Sep 2021 03:19:26 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id b10so26196300ioq.9
+        for <linux-usb@vger.kernel.org>; Tue, 21 Sep 2021 03:19:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UD05AQRtTYhvfFSFPPBFmCBR7+c/rAE9QcA9diTWpv8=;
-        b=Uqohw1X5T2Upxwc83egnItXx5omS9SGb7xXXiZgkyUnqpN8tYWbNKNSTkUnCG7+bn0
-         38p4Sf+ilGqdiRwXpSNAb7ap+cWc0rztnsTINjRZmW2ULk5+e93i8QQptf3o7dUDb73d
-         EcWt9nQlNWIoSYxGIeRuWUyTwGbZQYfiX3rbkiLgmRS3alveHjir6ruO2u65AJ7LgFuX
-         VPE3j28zS5CfyY71gn5SsR2cpi6jhzf2gToWBLZkUM/yP9V/Jw1gGocjXgI8wRyj8wZ6
-         3s8ly2HC3CqcxPPQI+EoNlCl0R/1RqbpgAYK1NLPNYugN/7XO+RUZjhm0QdOgJSr7Q3w
-         lSxA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gxVjksGN/3yuclGhnmoWEQKT5gLNVLIOyY61uXcwmWI=;
+        b=vO46N99FpdRLkV1NF+gjE9qSMCIUZhOeIy/mhBx5gPsP926ONSii9PXt2deJ3DGL3e
+         NjIwdQOHkvYPd4Je03SklDs0b7KsYP4kBXjpK1TGDI3dgQe8P2djwcVqx5/y1K8c9zsB
+         mCX9S3NgX/2UoLP5azlPU7WExgd7yVRpONvUhrwD/09Hr+e9fRaQHJ8HnUJ715Znm7DN
+         Z7OHvsjM9YttYJcPUA485abYs9vP8yJ5zt5EJt7CuMP3zlnrxV8eEfWnhcLotbLwrXuk
+         sy1LU5Cz+yhgoFdFfChdHpOSm3m5AKYD4dNUes/f9eEjwCbOLNoyiziW05Z4RH7ftFJn
+         sEkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UD05AQRtTYhvfFSFPPBFmCBR7+c/rAE9QcA9diTWpv8=;
-        b=q/j/Lkke/8N0wbUgddNh4h+fDWOVvZld4GrJrFv154FLSXCJK7yBwOiUmlQN/cgJkM
-         DIWm+L7x6eqFbCHm9YSskO3c15vY8s6L9R/m8AtpitC/ndJljSiTSNQ9dMES+DuGGKM7
-         8UGGkOmzE1pfCrWo6H3+ppK6m3xK57q4dznIlysTi8i8w0isTGocCs5F7R1iXUZvnDIJ
-         dWk2bQcjk1DkFjRKkjcpWy5PYbP8A5FJgX3oaHm6oh5OOtL/5MRJWmsxNE5YxqItvI3G
-         7Rnju3wc1rbsY7K+S4C5oGGCCC3ZK6fKiG2R1TLSrbI9sP+wmNfY3i2VMCuEF/NnRbJu
-         MYnA==
-X-Gm-Message-State: AOAM530YvmU5ujdHv/phvHreAULf7QBD5NJHPmzROoU3NLmbRBmLOWwU
-        p9zn7ccBVljhuHjA6xcPMD4=
-X-Google-Smtp-Source: ABdhPJyl5wfaJnCDCshDEx+u1HVhrbVz+aSav8jJ4/CIzQsmB9lUp+R+s21qhpBpAWvKktmNrmqOSA==
-X-Received: by 2002:a5d:6c67:: with SMTP id r7mr17600197wrz.29.1632219484771;
-        Tue, 21 Sep 2021 03:18:04 -0700 (PDT)
-Received: from localhost (ip5f5afd21.dynamic.kabel-deutschland.de. [95.90.253.33])
-        by smtp.gmail.com with ESMTPSA id r25sm19216141wra.76.2021.09.21.03.18.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Sep 2021 03:18:04 -0700 (PDT)
-From:   Tobias Jakobi <cubic2k@gmail.com>
-X-Google-Original-From: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
-To:     stern@rowland.harvard.edu
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
-Subject: [PATCH] usb: storage: add quirks for VIA VL817 USB3-SATA bridge
-Date:   Tue, 21 Sep 2021 12:17:52 +0200
-Message-Id: <20210921101752.4679-1-tjakobi@math.uni-bielefeld.de>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gxVjksGN/3yuclGhnmoWEQKT5gLNVLIOyY61uXcwmWI=;
+        b=iSIFf6nq2Hd14QD37e1Z1peboP6mxTCBZHnvznOsXTclri3Nbmfr1oyce/qxcYYvNZ
+         oOD5jLSisOZOtvd5KizRvbDqhessYZI7y1slTMml53DoW1rjuac7vFm68SKTpY0tq5P5
+         WTXG8iU+EZrnEBSIAC7B+AtOITwCY8wIOu62TC03OMPHpfBFv2syx2NgLepRdIVpFeer
+         AgAJkCMi1lSmRme42E3mfx73sExepJfSXG1mgMRWWy0pS/5o9yKaANH59szR/L62QQEN
+         fcL/35hKm4uyttqlZKAtZWSvUPUMzdaS/EV7si6R+uAnOr4iG0TIb1SmPDRBEKMSUfAK
+         F2ug==
+X-Gm-Message-State: AOAM532Vi/iaoQcnGv8jt/4StQcdBZTPfYr10RJMLo/tiO+mnoZwsAC9
+        Pdb9zD6bCeKfg3QlgV5VF0jMtwmc7unDqFhN2IUSqw==
+X-Google-Smtp-Source: ABdhPJz86aatVqFyHRCUhvImhsp2CKqHcGwOGrpQiGAsYeZo1977hFAgAenDq9K/oh27Yx/hhOzO2jV+sXZxluuCWfk=
+X-Received: by 2002:a02:908a:: with SMTP id x10mr23047196jaf.30.1632219565662;
+ Tue, 21 Sep 2021 03:19:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAMi1Hd3k2snB4-=M57pVrMVom=a9_2a0DTFk-+Hzpubwk-Pr9Q@mail.gmail.com>
+ <64a2a428-8bb1-0078-2403-1ca8e28cf4b1@codeaurora.org> <CAMi1Hd2MCxJgbHz9oGWe4L+MXNM3p+Xntpcg6t3TvZxwjJTy0Q@mail.gmail.com>
+ <47a06078-dd41-7b3d-3de3-4e6c24211691@codeaurora.org>
+In-Reply-To: <47a06078-dd41-7b3d-3de3-4e6c24211691@codeaurora.org>
+From:   Amit Pundir <amit.pundir@linaro.org>
+Date:   Tue, 21 Sep 2021 15:48:49 +0530
+Message-ID: <CAMi1Hd1UtTECaDROGm7hE377Dp5qLzZeqBowmxoQJpOm9uQFHw@mail.gmail.com>
+Subject: Re: dwc3-qcom: tx-fifo-resize regression on Poco F1 (sdm845) with v5.15-rc1
+To:     Wesley Cheng <wcheng@codeaurora.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jack Pham <jackp@codeaurora.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        John Stultz <john.stultz@linaro.org>,
+        linux-usb@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        dt <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The VL817 is used in the RaidSonic Icy Box IB-3740-C31 enclosure. The enclosure
-is advertised as having UASP support, but appears to have problems with 4Kn
-drives (test was done with two Seagate Exos X, 12TB).
+On Tue, 21 Sept 2021 at 13:00, Wesley Cheng <wcheng@codeaurora.org> wrote:
+>
+> Hi Amit,
+>
+> On 9/21/2021 12:04 AM, Amit Pundir wrote:
+> > Hi Wesley,
+> >
+> > On Tue, 21 Sept 2021 at 02:44, Wesley Cheng <wcheng@codeaurora.org> wrote:
+> >>
+> >> Hi Amit,
+> >>
+> >> On 9/20/2021 1:45 PM, Amit Pundir wrote:
+> >>> Hi Wesley, All,
+> >>>
+> >>> I see a reboot loop on Xiaomi Pocophone F1 (sdm845) with TX FIFO
+> >>> resize patches which landed in v5.15-rc1. Upstream commit cefdd52fa045
+> >>> "usb: dwc3: dwc3-qcom: Enable tx-fifo-resize property by default" to
+> >>> be specific, which switched on this feature by default.
+> >>>
+> >>> At times the phone crashes into the fastboot mode after the reboot
+> >>> loop, but mostly end up booting to UI after a while. This is what it
+> >>> looks like https://people.linaro.org/~amit.pundir/beryllium-userdebug/PXL_20210920_162749483.mp4.
+> >>>
+> >>
+> >> I believe Android will attempt a number of bootup sequences and if it
+> >> fails, it falls back to fastboot mode.  Are there any available logs you
+> >> might be able to collect to see where the issue is?
+> >
+> > It is a stock phone with no UART access, so I can't get early crash
+> > logs unless I'm booted up to adb shell. I can try getting some info
+> > using pstore-ramoops but warm reset support for sdm845 was not
+> > upstreamed when I tried using that the last time.
+> >
+>
+> I see, can we maybe avoid the actual resizing by commenting out the
+> following writel() calls, but let the fifo resize logic calculate the EPs?
+>
+> void dwc3_gadget_clear_tx_fifos(struct dwc3 *dwc)
+> {
+> ...
+>                 /* Don't change TXFRAMNUM on usb31 version */
+>                 size = DWC3_IP_IS(DWC3) ? 0 :
+>                         dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(num >> 1)) &
+>                                    DWC31_GTXFIFOSIZ_TXFRAMNUM;
+>                 /* Comment the dwc3_writel() */
+>                 //dwc3_writel(dwc->regs, DWC3_GTXFIFOSIZ(num >> 1), size);
+>
+> and
+>
+> static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+> {
+> ...
+>         /* Comment the dwc3_writel() */
+>         //dwc3_writel(dwc->regs, DWC3_GTXFIFOSIZ(dep->number >> 1), fifo_size);
+>         dwc->num_ep_resized++;
+>
+> Those 2 writel() would be the one that actually programs the TXFIFO
+> register.  I hope when commented out, no resize should actually happen
+> anymore.
+>
+> With this, hopefully we can get some logs from the device at least :)
 
-Disable UAS for the VL817 as it behaves highly unstable:
+I can boot fine with above 2 writel() removed but I don't see EP
+counts being printed in the log anywhere and the only relevant
+message in dmesg I see is this:
 
-[Aug14 16:31] usb 2-1.2: USB disconnect, device number 4
-[  +0.007701] sd 4:0:0:0: [sdb] tag#4 uas_zap_pending 0 uas-tag 1 inflight: CMD
-[  +0.000004] sd 4:0:0:0: [sdb] tag#4 CDB: opcode=0x2a 2a 00 00 37 63 da 00 00 80 00
-[  +0.000022] sd 4:0:0:0: [sdb] tag#4 UNKNOWN(0x2003) Result: hostbyte=0x01 driverbyte=0x00 cmd_age=19s
-[  +0.000001] sd 4:0:0:0: [sdb] tag#4 CDB: opcode=0x2a 2a 00 00 37 63 da 00 00 80 00
-[  +0.000001] blk_update_request: I/O error, dev sdb, sector 29040336 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
-[  +0.000028] blk_update_request: I/O error, dev sdb, sector 29041360 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
-[  +0.000000] blk_update_request: I/O error, dev sdb, sector 16 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
-[  +0.000005] md: super_written gets error=-5
-[  +0.000002] md/raid1:md126: Disk failure on sdb, disabling device.
-              md/raid1:md126: Operation continuing on 1 devices.
-[  +0.000024] blk_update_request: I/O error, dev sdb, sector 29042384 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
-[  +0.000222] sd 4:0:0:0: [sdb] Synchronizing SCSI cache
-[  +0.078154] blk_update_request: I/O error, dev sdb, sector 29040336 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
-[  +0.000025] blk_update_request: I/O error, dev sdb, sector 29040344 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
-[  +0.007520] blk_update_request: I/O error, dev sdb, sector 29040352 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
-[  +0.000021] blk_update_request: I/O error, dev sdb, sector 29040360 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
-[  +0.000015] blk_update_request: I/O error, dev sdb, sector 29040368 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
-[  +0.000009] blk_update_request: I/O error, dev sdb, sector 29040376 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
-[  +0.023299] sd 4:0:0:0: [sdb] Synchronize Cache(10) failed: Result: hostbyte=0x07 driverbyte=0x00
-[  +1.893439] usb 2-1.2: new SuperSpeed Plus Gen 2x1 USB device number 7 using xhci_hcd
-[  +0.024064] scsi host7: uas
-[ +16.365880] scsi 7:0:0:0: Direct-Access     ST12000N M001G-2MV103     SB2D PQ: 0 ANSI: 6
-[  +0.001192] sd 7:0:0:0: Attached scsi generic sg1 type 0
-[  +0.000940] sd 7:0:0:0: [sde] 2929721344 4096-byte logical blocks: (12.0 TB/10.9 TiB)
-[  +0.000130] sd 7:0:0:0: [sde] Write Protect is off
-[  +0.000001] sd 7:0:0:0: [sde] Mode Sense: 2f 00 00 00
-[  +0.000265] sd 7:0:0:0: [sde] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-[  +0.000399] sd 7:0:0:0: [sde] Optimal transfer size 268431360 bytes
-[  +0.120240] sd 7:0:0:0: [sde] Attached SCSI disk
+    Duplicate name in dwc3@a600000, renamed to "tx-fifo-resize#1"
 
-Signed-off-by: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
----
- drivers/usb/storage/unusual_uas.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+which is interesting because I don't see tx-fifo-resize property being
+set by any of the upstream sdm845 or relevant dtsi files.
 
-diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index bda0f2cdf093..7d83ecf835c6 100644
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -125,6 +125,13 @@ UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_NO_ATA_1X),
- 
-+/* Reported-by: Tobias Jakobi <tjakobi@math.uni-bielefeld.de> */
-+UNUSUAL_DEV(0x2109, 0x0715, 0x0000, 0x9999,
-+		"VIA",
-+		"VL817",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_UAS),
-+
- /* Reported-by: Icenowy Zheng <icenowy@aosc.io> */
- UNUSUAL_DEV(0x2537, 0x1068, 0x0000, 0x9999,
- 		"Norelsys",
--- 
-2.32.0
 
+>
+> >>
+> >>> PocoF1 does support TX fifo resizing as I can see that in the
+> >>> downstream dts. So maybe it is the tx-fifo-max-num which need to be
+> >>> adjusted for the device? I couldn't find the tx-fifo-max-num
+> >>> equivalent in the downstream tree though
+> >>> https://github.com/MiCode/Xiaomi_Kernel_OpenSource/tree/dipper-q-oss/
+> >>>
+> >>
+> >> I assume that you've already confirmed reverting that change resolves
+> >> the constant reboots?
+> >
+> > Yes reverting that change resolves the reboot loop issue. Speaking of
+> > which, since no other platform seem to be running into this issue and
+> > "tx-fifo-max-num" property is apparently not at fault either, is it
+> > reasonable to skip adding "tx-fifo-resize" property for PocoF1 using
+> > of_machine_is_compatible("xiaomi,beryllium") as a workaround?
+> >
+>
+> Since SDM845 does technically support txfifo resize downstream, let me
+> see if I can figure out what is different on this particular device
+> after getting the logs.
+>
+> Thanks
+> Wesley Cheng
+>
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
