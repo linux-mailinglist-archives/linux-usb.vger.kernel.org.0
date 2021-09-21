@@ -2,111 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9142B413A88
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 21:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B75413BC3
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 22:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234215AbhIUTNB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Sep 2021 15:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
+        id S232992AbhIUUxp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Sep 2021 16:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbhIUTM5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Sep 2021 15:12:57 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3024C061574;
-        Tue, 21 Sep 2021 12:11:28 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id q26so42237120wrc.7;
-        Tue, 21 Sep 2021 12:11:28 -0700 (PDT)
+        with ESMTP id S232145AbhIUUxp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Sep 2021 16:53:45 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB29C061574;
+        Tue, 21 Sep 2021 13:52:16 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id d6so408615wrc.11;
+        Tue, 21 Sep 2021 13:52:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=oeXwuLKI4VPOt84PTF274pbXZwoHrnhHwnv+XDzjYhQ=;
-        b=aEQCyBeXl9uud7znHNRy0g9EcOsfmBR6DIOd3+jjX3vqBzq2T0vhYFDPjDehm7P+wY
-         NyPZHuv27vgkE2lw6Sh+s/MuU1nk1crwuKuEOpgB43k6HAen1biMJq2sVB79cq9VVSi/
-         4hPD6yWlzYLf+Y/RvKQ0klneKRegaqBJ1nge11c1hNS/Wfg2HVyJ1WtKNDPu+7EmIhD5
-         0mc8PCvBzqHRAaf9mDifD+2+jrB0cayBnogCAE9mo/4xJivzddMjMU5wtcaMbIDYsxog
-         2ntlcusgSD0iZBvdbH5/HqTCju4977/uOlMvaMZEMsOfrQTvQz5D8fcYSj0U3PcXdEcP
-         DVlg==
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=L66QhiZcUuwlRKorNm9Yc4Tr9VadEmevichCsHyMvjU=;
+        b=DeThqqKIqz0+ijJFStlvltj0n+pX12EMofg6z2zKHIxA4eOPVCJqHGT8r9C6B2w7Dx
+         riZSEIi81OvVJMbPiz4zGYvruPbq2Wk/NIIK8+pt5FfyLlZ3otZevCnlFoXsgGIO8t3o
+         0I3J91YkTlDmq+gRQPWfN9TUEsRhmk1D2PS1FJTTY7FR6plQNGOhOeLE7i4OVpZJE5Md
+         CJ8PcpG/Ue7k0C76Y634kdpnjMDWsdEjtAupdRloK9vfJ++xK2PARS3ztOUKQz2YLtN2
+         YfiEaJvcpLd2ySNY37aHhBZHhSRWC9xcFFKLJlraeO+LGY5RTStUWqe2M2aHA8e1AR9s
+         M0kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=oeXwuLKI4VPOt84PTF274pbXZwoHrnhHwnv+XDzjYhQ=;
-        b=W1CLYMmTl2yjOmotF0aLmpqA04yiw+fm1jO44JJ+ykUrNoAGXIHaj/sNy/rBzVuBAK
-         CXprwa0mwtqTevffR0YCHS7rlb4djR3e9aa2XKv90Sj9lZ03A/NyhLHeXyLb45eSD9ok
-         IykXizs96OCMCu/MnHOrc3Ew+q4W4sLFCQs+rAQgHjR0tXS1CAuvpyCZXprN72iHYn1b
-         pEwgxPuQPZ+syF+15MrDsMw/GpSEDMCBrsVWAsPjekUfOHFVIEKWc60VQ9ls8o8QJ6lK
-         oEQuYyKyLono1zgPU9YiD0pf7WDz+Zs9VWvRuKYDeRELrofuCqeMQqRmIyPTGrwk5tjI
-         mZOg==
-X-Gm-Message-State: AOAM530HB2rd38BOKgkXoivMrVBTGugElIRMws+nlNRze/uT5gI+3k2U
-        c3kyF3whf7UVg40GNtbQPpFX8+6uYds=
-X-Google-Smtp-Source: ABdhPJwSxqZkIskvNA31B/yxld8hwX7RTQCYLYdBBO52tnUsA6tkh4kVXj8aNvy3HLXCWh0sEXU1Dg==
-X-Received: by 2002:adf:f6c7:: with SMTP id y7mr37407342wrp.44.1632251487296;
-        Tue, 21 Sep 2021 12:11:27 -0700 (PDT)
-Received: from ?IPv6:2003:c7:8f4e:664:d2c3:5468:e139:48d7? (p200300c78f4e0664d2c35468e13948d7.dip0.t-ipconnect.de. [2003:c7:8f4e:664:d2c3:5468:e139:48d7])
-        by smtp.gmail.com with ESMTPSA id c185sm4244308wma.8.2021.09.21.12.11.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Sep 2021 12:11:26 -0700 (PDT)
-Subject: Re: [PATCH] Update min() to min_t()
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210921055246.GA11535@matrix-ESPRIMO-P710>
- <YUl1067kvLA5KkGC@kroah.com>
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=L66QhiZcUuwlRKorNm9Yc4Tr9VadEmevichCsHyMvjU=;
+        b=YDtVqC7X6JfvrmL99b0a0rgGmLlGPftcf4DSv7CMlPeSvofAaGFoWus+cAk9j+blK2
+         /O/VuF3vZXb0IdFVOv4Jyuiwza0wgyoEVGxpyj3FJskuf05Lj5l6GGB0moPxmN4QKKL/
+         jxNyLDs0J41OZ9LxX472TYZSUBNSkD6lyzWX/L2PGNiY4dpkM74+rc66QiIAXO5NcwBT
+         1enTfH/JRkYxZFbePJtrU+v8gaDg10C08BgT+N63oWgwP6Mgr+E59QsWtjw/2sa6dipe
+         CLppChF2Mida9HfH23NUugYd5ySfP2YONstAYuYtkOmZf5YV3plUz5r0DWO1xTiqFEdv
+         /NlQ==
+X-Gm-Message-State: AOAM532CfdrFsEhcPqXSbQBn9OahgBrPE4qz6WzU2jaaQkhdPfqRzlXW
+        HNzKqbxA2pIKIrA07m0dcXjFeFoLjhA=
+X-Google-Smtp-Source: ABdhPJy1CFKxlE3RZVvlblinxGQcMEPWS2moN/XHUkffr8EQNzJgsOqyIAMzlaD9DploankGPz48VQ==
+X-Received: by 2002:a05:600c:b42:: with SMTP id k2mr6872197wmr.134.1632257534855;
+        Tue, 21 Sep 2021 13:52:14 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p200300c78f4e0664d2c35468e13948d7.dip0.t-ipconnect.de. [2003:c7:8f4e:664:d2c3:5468:e139:48d7])
+        by smtp.gmail.com with ESMTPSA id 23sm5490wme.27.2021.09.21.13.52.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Sep 2021 13:52:14 -0700 (PDT)
+Date:   Tue, 21 Sep 2021 22:52:12 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Message-ID: <a6185b27-a461-84e4-1301-485b88cddd02@gmail.com>
-Date:   Tue, 21 Sep 2021 21:11:25 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: usb-skeleton: Update min() to min_t()
+Message-ID: <20210921205212.GA8669@matrix-ESPRIMO-P710>
 MIME-Version: 1.0
-In-Reply-To: <YUl1067kvLA5KkGC@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9/21/21 8:04 AM, Greg KH wrote:
-> On Tue, Sep 21, 2021 at 07:52:46AM +0200, Philipp Hortmann wrote:
->> diff --git a/drivers/usb/usb-skeleton.c b/drivers/usb/usb-skeleton.c
->> index 2dc58766273a..d87deee3e26e 100644
->> --- a/drivers/usb/usb-skeleton.c
->> +++ b/drivers/usb/usb-skeleton.c
->> @@ -363,7 +363,7 @@ static ssize_t skel_write(struct file *file, const char *user_buffer,
->>   	int retval = 0;
->>   	struct urb *urb = NULL;
->>   	char *buf = NULL;
->> -	size_t writesize = min(count, (size_t)MAX_TRANSFER);
->> +	size_t writesize = min_t(size_t, count, MAX_TRANSFER);
->>   
->>   	dev = file->private_data;
->>   
->> -- 
->> 2.25.1
->>
-> 
-> Has anyone actually built this driver in a while?
-> 
-> thanks,
-> 
-> greg k-h
-> 
-Hi,
+This patch fixes the checkpatch.pl warning:
+WARNING: min() should probably be min_t(size_t, count, MAX_TRANSFER)
++	size_t writesize = min(count, (size_t)MAX_TRANSFER);
 
-I have build and loaded the driver. To me this seems OK.
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+---
+ drivers/usb/usb-skeleton.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-dmesg from loading:
-usb_skeleton: loading out-of-tree module taints kernel.
-usb_skeleton: module verification failed: signature and/or required key 
-missing - tainting kernel
-usbcore: registered new interface driver skeleton
-
-dmesg from unloading:
-usbcore: deregistering interface driver skeleton
-
-Used kernel 5.15.0-rc1+
-
-Bye Philipp
-
+diff --git a/drivers/usb/usb-skeleton.c b/drivers/usb/usb-skeleton.c
+index 2dc58766273a..d87deee3e26e 100644
+--- a/drivers/usb/usb-skeleton.c
++++ b/drivers/usb/usb-skeleton.c
+@@ -363,7 +363,7 @@ static ssize_t skel_write(struct file *file, const char *user_buffer,
+ 	int retval = 0;
+ 	struct urb *urb = NULL;
+ 	char *buf = NULL;
+-	size_t writesize = min(count, (size_t)MAX_TRANSFER);
++	size_t writesize = min_t(size_t, count, MAX_TRANSFER);
+ 
+ 	dev = file->private_data;
+ 
+-- 
+2.25.1
 
