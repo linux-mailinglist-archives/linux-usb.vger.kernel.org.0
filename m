@@ -2,74 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E47F413378
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 14:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECBE4133CA
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 15:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbhIUMnF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Sep 2021 08:43:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50806 "EHLO mail.kernel.org"
+        id S232930AbhIUNLu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Sep 2021 09:11:50 -0400
+Received: from mga04.intel.com ([192.55.52.120]:42555 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232838AbhIUMnB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Sep 2021 08:43:01 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 785EA60249;
-        Tue, 21 Sep 2021 12:41:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632228093;
-        bh=KctZ37/K53xgz2KFk6mwt+AcFiMxEwJaw677ODdeatY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rpttbj55Oat4YnDVWW5MjLLzhuvkstSB0F1tt0FOVWs8PLkFptAFh8smRIxm7ux4a
-         aRU9rUtp/sjV9dZW5/nEfGEKDtTqsGx/QreDQUwFli+24H5+kUyLxEbFavIVddBrGS
-         kJT5RRJGyBjA8DT5gH8/0zQs7HTy5D2PRYA9nIQnM5Atud1+j0Vi60wO86d13oeFvU
-         qdZ2wnfIclxPCcmcGxifM3yd7jpx801M0JJ/+d/T0EDVUVSnmVoNRCNfXoanbS3fA/
-         o1kOVK/7P8vnjEQ3DffQAeNoAmvPwobOPxqBKvbMIYPBtK71iWfjltoUqsAvzmJeMS
-         2b91sgnvUFH7A==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mSf5Y-000561-7f; Tue, 21 Sep 2021 14:41:32 +0200
-Date:   Tue, 21 Sep 2021 14:41:32 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Himadri Pandya <himadrispandya@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] USB: serial: kl5kusb105: use
- usb_control_msg_recv() and usb_control_msg_send()
-Message-ID: <YUnS/Chgat7vNHO7@hovoldconsulting.com>
-References: <20210801203122.3515-1-himadrispandya@gmail.com>
- <20210801203122.3515-7-himadrispandya@gmail.com>
+        id S232344AbhIUNLt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Sep 2021 09:11:49 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10113"; a="221463249"
+X-IronPort-AV: E=Sophos;i="5.85,311,1624345200"; 
+   d="scan'208";a="221463249"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2021 06:10:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,311,1624345200"; 
+   d="scan'208";a="613000879"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 21 Sep 2021 06:10:17 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 Sep 2021 16:10:16 +0300
+Date:   Tue, 21 Sep 2021 16:10:16 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>,
+        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
+        Stan Skowronek <stan@corellium.com>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Alexander Graf <graf@amazon.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+Subject: Re: [RFT PATCH 2/9] usb: typec: tipd: Prepare supporting different
+ variants
+Message-ID: <YUnZuOnyvoqsiRQj@kuha.fi.intel.com>
+References: <20210918120934.28252-1-sven@svenpeter.dev>
+ <20210918120934.28252-3-sven@svenpeter.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210801203122.3515-7-himadrispandya@gmail.com>
+In-Reply-To: <20210918120934.28252-3-sven@svenpeter.dev>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 02, 2021 at 02:01:22AM +0530, Himadri Pandya wrote:
-> The wrappers usb_control_msg_send/recv eliminate the need of allocating
-> dma buffers for usb message. They also impose proper error checks on the
-> return value of usb_control_msg() to handle short read/write. Hence use
-> the wrappers and remove dma allocations.
-> 
-> Signed-off-by: Himadri Pandya <himadrispandya@gmail.com>
+Hi,
+
+On Sat, Sep 18, 2021 at 02:09:27PM +0200, Sven Peter wrote:
+> Apple M1 machines come with a variant of the TI TPS6598x and will need
+> some changes to the current logic. Let's prepare for that by setting up
+> the infrastructure required to support different variants of this chip
+> identified by the DT compatible.
+
+I think in this case it would make sense to just squash this into the
+next patch.
+
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
 > ---
-> Changes in v2:
->  - Fix the caller of klsi_105_chg_port_settings()
->  - Drop unnecessary use of the wrappers
+>  drivers/usb/typec/tipd/core.c | 19 ++++++++++++++++++-
+>  1 file changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 21b3ae25c76d..656020e7f533 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/i2c.h>
+>  #include <linux/acpi.h>
+>  #include <linux/module.h>
+> +#include <linux/of_device.h>
+>  #include <linux/power_supply.h>
+>  #include <linux/regmap.h>
+>  #include <linux/interrupt.h>
+> @@ -76,6 +77,10 @@ static const char *const modes[] = {
+>  /* Unrecognized commands will be replaced with "!CMD" */
+>  #define INVALID_CMD(_cmd_)		(_cmd_ == 0x444d4321)
+>  
+> +struct tps6598x_hw {
+> +};
 
-Now applied with an amended commit message:
+Black line here.
 
-    USB: serial: kl5kusb105: use usb_control_msg_recv() and usb_control_msg_send()
-    
-    The wrappers usb_control_msg_send/recv eliminate the need of
-    manually allocating DMA buffers for USB messages. They also treat
-    short reads as an error. Hence use the wrappers and remove DMA
-    allocations.
-    
-    Note that short reads are now logged as -EREMOTEIO instead of the amount
-    of data read.
+> +static const struct tps6598x_hw ti_tps6598x_data;
+> +
+>  struct tps6598x {
+>  	struct device *dev;
+>  	struct regmap *regmap;
+> @@ -91,6 +96,8 @@ struct tps6598x {
+>  	struct power_supply *psy;
+>  	struct power_supply_desc psy_desc;
+>  	enum power_supply_usb_type usb_type;
+> +
+> +	const struct tps6598x_hw *hw;
+>  };
+>  
+>  static enum power_supply_property tps6598x_psy_props[] = {
+> @@ -590,6 +597,13 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	if (!tps)
+>  		return -ENOMEM;
+>  
+> +	if (client->dev.of_node)
+> +		tps->hw = of_device_get_match_data(&client->dev);
+> +	else
+> +		tps->hw = &ti_tps6598x_data;
+> +	if (!tps->hw)
+> +		return -EINVAL;
 
-I've applied all but the first two patches in the series now. Would you
-mind respinning those two?
+	tps->hw = of_device_get_match_data(&client->dev);
+        if (!tps->hw)
+		tps->hw = &ti_tps6598x_data;
 
-Thanks,
-Johan
+>  	mutex_init(&tps->lock);
+>  	tps->dev = &client->dev;
+>  
+> @@ -729,8 +743,11 @@ static int tps6598x_remove(struct i2c_client *client)
+>  	return 0;
+>  }
+>  
+> +static const struct tps6598x_hw ti_tps6598x_data = {
+> +};
+
+You could also move that above tps6598x_probe() and get rid of the
+forward declaration.
+
+>  static const struct of_device_id tps6598x_of_match[] = {
+> -	{ .compatible = "ti,tps6598x", },
+> +	{ .compatible = "ti,tps6598x", .data = &ti_tps6598x_data },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, tps6598x_of_match);
+
+thanks,
+
+-- 
+heikki
