@@ -2,92 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 093F9413563
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 16:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC6841356A
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 16:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233589AbhIUOeV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Sep 2021 10:34:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60214 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229577AbhIUOeV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Sep 2021 10:34:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5CCD260EC0;
-        Tue, 21 Sep 2021 14:32:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1632234772;
-        bh=zQxpb0Ck9L61Y91Q3j6IA0anwKfO4DPTphZBNgiEbQA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OkxYCVTG2+8/QUMCTFbzXjXBcPCtBlBtybCSTDRSFsx1Hg4AqW3cn8ERWJlzb/t+t
-         XgSZ/WSCHInDySE+8lvkAPKcd3gQ/GpweqcEFSEXeSM/u3VAZkRWYSXvW+28nurZ7H
-         BgoaOtxtee4AYvfs+6Q1fdtIP8LHG8h7v3R3d0CM=
-Date:   Tue, 21 Sep 2021 16:32:43 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu
-Subject: Re: [PATCH v2] usb: host: ohci-tmio: check return value after
- calling platform_get_resource()
-Message-ID: <YUntCyDOxif+DPxB@kroah.com>
-References: <20210916031317.2871282-1-yangyingliang@huawei.com>
+        id S233665AbhIUOgg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Sep 2021 10:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233598AbhIUOgf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Sep 2021 10:36:35 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03772C061574;
+        Tue, 21 Sep 2021 07:35:07 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id u18so38083801wrg.5;
+        Tue, 21 Sep 2021 07:35:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FMlPZNVElGI73LahLPi1WKVzExr05HIB4HFIcx18ilA=;
+        b=nUhoiZoPrQyF6nfVh7mxB9N8Ds4tO7Hc6KM87xmyhCQblobht1FXS61xJlSJ1AsLuT
+         oUeQcTNdMK4NCFsggWFuNQM+qdCUtnQI69MqC2OLkEusKztdoLYip/HQa0lz6bK/EQbP
+         9I0x1ALK9WFRbP/z3NZxFQM1IuvAwEkugrsH6LLZIdGG4wOtKBBEyR9DuviqlaIoU8uj
+         AEXY/icW7pXaduLacg00huFDWNkbfhmSYCcpgtPHRtiZJDdNlt6az5so+uThdUxSfJCa
+         nvNddROVLoDSihs4ld4E8Ip6d2gUdIGYE8AI+U29W9fcyXR+ExoG5o7FY8nIz1uwGY3q
+         GBsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=FMlPZNVElGI73LahLPi1WKVzExr05HIB4HFIcx18ilA=;
+        b=jcQ4fhh8N0lhxGlbScJYYBoyXKuUx/TQJReUXba9tK8nyF0yhaVw9JzC2fNnsOy8QR
+         yqfa5yKz2I/DWGVJi/vHHc+dkrqujgQmLngcMYi8e8jYTbo9AcCAV/TqmSssYid3cxDu
+         ktqVQUV465RyvRqoVMb7aMiYfZmrpGHcnswe+rSa4XVHdXNxAlNYMwosstjEodxAxKwb
+         Y6MCYa1AY2AD4wJIlAt1kL7NuFDMF1oN/wIQmKi8jNVnoSeAoUVmfRg1JU3OhvJ5u/B7
+         y+CCnlJrMmQR0/0P4Wk16gNUIVvAt/viaVbktHLSqkj1SbEEXhvW9qUEhziUHdwhyQRn
+         iqmQ==
+X-Gm-Message-State: AOAM530A51YVL4uFqZJrZU0PXaJKaZnm4jUBgTfSBycs8aiU2VdK2+S4
+        1yHug6sMjxfEwLHdoi4wgbA=
+X-Google-Smtp-Source: ABdhPJyGeqUnwCxI43174J4rxuE71o0vbgM7P0x1pjodsvB3weTAxQ64kaqV4dIaWqnl4zlK1U40cw==
+X-Received: by 2002:a1c:a505:: with SMTP id o5mr5075831wme.32.1632234905553;
+        Tue, 21 Sep 2021 07:35:05 -0700 (PDT)
+Received: from eldamar (80-218-24-251.dclient.hispeed.ch. [80.218.24.251])
+        by smtp.gmail.com with ESMTPSA id v21sm14648574wrv.3.2021.09.21.07.35.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Sep 2021 07:35:05 -0700 (PDT)
+Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
+From:   Salvatore Bonaccorso <carnil@debian.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ben Hutchings <ben@decadent.org.uk>,
+        Salvatore Bonaccorso <carnil@debian.org>
+Subject: [PATCH] Partially revert "usb: Kconfig: using select for USB_COMMON dependency"
+Date:   Tue, 21 Sep 2021 16:34:42 +0200
+Message-Id: <20210921143442.340087-1-carnil@debian.org>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210916031317.2871282-1-yangyingliang@huawei.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 16, 2021 at 11:13:17AM +0800, Yang Yingliang wrote:
-> It will cause null-ptr-deref if platform_get_resource() returns NULL,
-> we need check the return value.
-> 
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  drivers/usb/host/ohci-tmio.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/ohci-tmio.c b/drivers/usb/host/ohci-tmio.c
-> index 08ec2ab0d95a..3f3d62dc0674 100644
-> --- a/drivers/usb/host/ohci-tmio.c
-> +++ b/drivers/usb/host/ohci-tmio.c
-> @@ -199,7 +199,7 @@ static int ohci_hcd_tmio_drv_probe(struct platform_device *dev)
->  	if (usb_disabled())
->  		return -ENODEV;
->  
-> -	if (!cell)
-> +	if (!cell || !regs || !config || !sram)
->  		return -EINVAL;
->  
->  	if (irq < 0)
-> -- 
-> 2.25.1
-> 
+From: Ben Hutchings <ben@decadent.org.uk>
 
+This reverts commit cb9c1cfc86926d0e86d19c8e34f6c23458cd3478 for
+USB_LED_TRIG.  This config symbol has bool type and enables extra code
+in usb_common itself, not a separate driver.  Enabling it should not
+force usb_common to be built-in!
 
-Hi,
+Fixes: cb9c1cfc8692 ("usb: Kconfig: using select for USB_COMMON dependency")
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
+---
+ drivers/usb/common/Kconfig | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+diff --git a/drivers/usb/common/Kconfig b/drivers/usb/common/Kconfig
+index 5e8a04e3dd3c..b856622431a7 100644
+--- a/drivers/usb/common/Kconfig
++++ b/drivers/usb/common/Kconfig
+@@ -6,8 +6,7 @@ config USB_COMMON
+ 
+ config USB_LED_TRIG
+ 	bool "USB LED Triggers"
+-	depends on LEDS_CLASS && LEDS_TRIGGERS
+-	select USB_COMMON
++	depends on LEDS_CLASS && USB_COMMON && LEDS_TRIGGERS
+ 	help
+ 	  This option adds LED triggers for USB host and/or gadget activity.
+ 
+-- 
+2.33.0
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
