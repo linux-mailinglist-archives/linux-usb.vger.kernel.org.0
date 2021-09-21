@@ -2,198 +2,231 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71AF6413575
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 16:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB6F4135B8
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 16:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233643AbhIUOhj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Sep 2021 10:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233613AbhIUOhj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Sep 2021 10:37:39 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B870C061574
-        for <linux-usb@vger.kernel.org>; Tue, 21 Sep 2021 07:36:10 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id t8so32863569wri.1
-        for <linux-usb@vger.kernel.org>; Tue, 21 Sep 2021 07:36:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FF1GBmm4qd6EmQ1+IdfeJQMoYUDIftI73uGchfWUKmM=;
-        b=Tu9Bkyc4MoHgba+24ITvRBKBa0rdffv96VI5XYF3U7mT+ahqosCpIQbAbuxNGfizKB
-         /eUNLnzIA+H6xnGINUmZGm8s8+yswm1vodKXO8NJnRlWlcl9CGdwurOwHtj3lSpMYQT7
-         UfwYWXjyRtaeU4MJvVSjBVnOhwYowop0l5NinCB6zzCrFV2lBIBUoUHmDXWA+hcqpz4H
-         nu8MzQoTchymI2EiYY0JBygNhI26lItn7r4NVldv6ifpypmpVN0lp6u8v7WkEY1ekjeB
-         8n9tp0I68SFKB8hQvcqe5mFx7P6cmc3GfQU7s1Hck5UGfbb9oOV1Dt+gACwxbHfwYamT
-         4tSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=FF1GBmm4qd6EmQ1+IdfeJQMoYUDIftI73uGchfWUKmM=;
-        b=CfS6BMCgh7mFkvDL4d/KYIeuhf3OBYPIScFrVwQgk89gjWQAQnCRj4eSFlgGg1BIw4
-         V5hYRY28/FZUKk1ihcyefgavqi27G3pyA8jOARWui9ELrycVmz++HlHiGvrdoTAOrzN3
-         NuIIPCrLCTtiMc+DC6Urr0XbjQE176P2/jurhjrFmmb3Mz5Z45lgd6ThlBMYssHo9YcX
-         qKCTP7xV90xj6vJ6QGsQQ7lf2Bdophr3sS7a6YInbkR3S+3/+pwwdpblIUS2GltjmTyz
-         lfcNDa+YgiHwru1/8hHix62XKIVFyF0BVeiUYDbPVvxV9pttFWi6fzi7oVKFGhJUCy3U
-         cQrw==
-X-Gm-Message-State: AOAM533HdGIvjPG2bjED2aqsXH5sQ0SSu9N7PUORUMeSy029bRd6gzxa
-        3q2nMj8F97R7V70LuSrG140=
-X-Google-Smtp-Source: ABdhPJwWqmhsubSyzvck62DY//+xxv7Gym4hS3C7Yt/A4GdYH2knk2kzqmikUhmEgcYc87tUNIxMYQ==
-X-Received: by 2002:a7b:c217:: with SMTP id x23mr5079063wmi.192.1632234969087;
-        Tue, 21 Sep 2021 07:36:09 -0700 (PDT)
-Received: from eldamar (80-218-24-251.dclient.hispeed.ch. [80.218.24.251])
-        by smtp.gmail.com with ESMTPSA id l7sm2865172wmp.48.2021.09.21.07.36.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Sep 2021 07:36:08 -0700 (PDT)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Date:   Tue, 21 Sep 2021 16:36:08 +0200
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>
-Subject: Re: [PATCH] Partially revert "usb: Kconfig: using select for
- USB_COMMON dependency"
-Message-ID: <YUnt2A200+OxO/ND@eldamar.lan>
-References: <20170418023639.GE4152decadent!org!uk>
- <YUXcaBR3Yh4PqMxN@eldamar.lan>
- <YUXeicgdhRlp04tN@kroah.com>
- <YUXh+6vl+gwj5ze/@eldamar.lan>
- <YUnq/lnYIC5RsvMt@kroah.com>
+        id S233773AbhIUPAt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Sep 2021 11:00:49 -0400
+Received: from mail.lvk.cs.msu.ru ([188.44.42.233]:37846 "EHLO
+        mail.lvk.cs.msu.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233647AbhIUPAt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Sep 2021 11:00:49 -0400
+Received: from mail.lvk.cs.msu.ru (localhost.localdomain [127.0.0.1])
+        by mail.lvk.cs.msu.ru (Postfix) with ESMTP id A0EF310F0B8;
+        Tue, 21 Sep 2021 17:59:15 +0300 (MSK)
+X-Spam-Checker-Version: SpamAssassin 3.3.2 (2011-06-06) on spamd.lvknet
+X-Spam-Level: 
+X-Spam-ASN:  
+X-Spam-Status: No, score=-2.9 required=7.0 tests=ALL_TRUSTED=-1,BAYES_00=-1.9
+        autolearn=ham version=3.3.2
+Received: from blacky.home (nikaet.starlink.ru [94.141.168.29])
+        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        by mail.lvk.cs.msu.ru (Postfix) with ESMTPSA id 6FAFC10DD2E;
+        Tue, 21 Sep 2021 17:59:15 +0300 (MSK)
+Received: from [192.168.112.17] (helo=cobook.home)
+        by blacky.home with smtp (Exim 4.80)
+        (envelope-from <yoush@cs.msu.su>)
+        id 1mSh7p-0007lL-Kh; Tue, 21 Sep 2021 17:52:01 +0300
+Received: (nullmailer pid 12002 invoked by uid 1000);
+        Tue, 21 Sep 2021 14:59:14 -0000
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Petr Nechaev <petr.nechaev@cogentembedded.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Subject: [PATCH v3] usb: gadget: storage: add support for media larger than 2T
+Date:   Tue, 21 Sep 2021 17:59:02 +0300
+Message-Id: <20210921145901.11952-1-nikita.yoush@cogentembedded.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <YUnsSxUERYj/oXTO@kroah.com>
+References: <YUnsSxUERYj/oXTO@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YUnq/lnYIC5RsvMt@kroah.com>
+Content-Transfer-Encoding: 8bit
+X-AV-Checked: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+This adds support for READ_CAPACITY(16), READ(16) and WRITE(16)
+commands, and fixes READ_CAPACITY command to return 0xffffffff if
+media size does not fit in 32 bits.
 
-On Tue, Sep 21, 2021 at 04:23:58PM +0200, Greg Kroah-Hartman wrote:
-> On Sat, Sep 18, 2021 at 02:56:27PM +0200, Salvatore Bonaccorso wrote:
-> > Hi Greg,
-> > 
-> > On Sat, Sep 18, 2021 at 02:41:45PM +0200, Greg Kroah-Hartman wrote:
-> > > On Sat, Sep 18, 2021 at 02:32:40PM +0200, Salvatore Bonaccorso wrote:
-> > > > Hi Greg,
-> > > > 
-> > > > This is a reply to a very old patch submission:
-> > > > 
-> > > > On Tue, Apr 18, 2017 at 02:36:39AM +0000, Ben Hutchings wrote:
-> > > > > 
-> > > > > This reverts commit cb9c1cfc86926d0e86d19c8e34f6c23458cd3478 for
-> > > > > USB_LED_TRIG.  This config symbol has bool type and enables extra code
-> > > > > in usb_common itself, not a separate driver.  Enabling it should not
-> > > > > force usb_common to be built-in!
-> > > > > 
-> > > > > Fixes: cb9c1cfc8692 ("usb: Kconfig: using select for USB_COMMON dependency")
-> > > > > Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
-> > > > > ---
-> > > > >  drivers/usb/Kconfig | 3 +--
-> > > > >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/usb/Kconfig b/drivers/usb/Kconfig
-> > > > > index fbe493d44e81..8270abe6c677 100644
-> > > > > --- a/drivers/usb/Kconfig
-> > > > > +++ b/drivers/usb/Kconfig
-> > > > > @@ -154,8 +154,7 @@ source "drivers/usb/gadget/Kconfig"
-> > > > > =20
-> > > > >  config USB_LED_TRIG
-> > > > >  	bool "USB LED Triggers"
-> > > > > -	depends on LEDS_CLASS && LEDS_TRIGGERS
-> > > > > -	select USB_COMMON
-> > > > > +	depends on LEDS_CLASS && USB_COMMON && LEDS_TRIGGERS
-> > > > >  	help
-> > > > >  	  This option adds LED triggers for USB host and/or gadget activity.
-> > > > 
-> > > > Was going through the series of patches we had applied in Debian and
-> > > > noticed while this was submitted by Ben back in 2017, it looks it was
-> > > > never applied or considered. Would that be something you could pick
-> > > > up? I'm inlining the original patch from Ben.
-> > > > 
-> > > > Regards,
-> > > > Salvatore
-> > > > 
-> > > > From: Ben Hutchings <ben@decadent.org.uk>
-> > > > Date: Wed, 11 Jan 2017 04:30:40 +0000
-> > > > Subject: Partially revert "usb: Kconfig: using select for USB_COMMON  dependency"
-> > > > 
-> > > > This reverts commit cb9c1cfc86926d0e86d19c8e34f6c23458cd3478 for
-> > > > USB_LED_TRIG.  This config symbol has bool type and enables extra code
-> > > > in usb_common itself, not a separate driver.  Enabling it should not
-> > > > force usb_common to be built-in!
-> > > > 
-> > > > Fixes: cb9c1cfc8692 ("usb: Kconfig: using select for USB_COMMON dependency")
-> > > > Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
-> > > > ---
-> > > >  drivers/usb/common/Kconfig | 3 +--
-> > > >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/usb/common/Kconfig b/drivers/usb/common/Kconfig
-> > > > index d611477aae41..196f4a397587 100644
-> > > > --- a/drivers/usb/common/Kconfig
-> > > > +++ b/drivers/usb/common/Kconfig
-> > > > @@ -6,8 +6,7 @@ config USB_COMMON
-> > > >  
-> > > >  config USB_LED_TRIG
-> > > >  	bool "USB LED Triggers"
-> > > > -	depends on LEDS_CLASS && LEDS_TRIGGERS
-> > > > -	select USB_COMMON
-> > > > +	depends on LEDS_CLASS && USB_COMMON && LEDS_TRIGGERS
-> > > >  	help
-> > > >  	  This option adds LED triggers for USB host and/or gadget activity.
-> > > >  
-> > > 
-> > > I would need it submitted in a format that I can apply it in, and your
-> > > signed-off-by: added as well as it is coming through you.
-> > 
-> > Thanks for confirming! Find it attached/inline in a git am applicable
-> > form and the Signed-off-by added.
-> > 
-> > Regards,
-> > Salvatore
-> > 
-> > >From de72d7df728722515b9700ff673a88ca6f8d9ace Mon Sep 17 00:00:00 2001
-> > From: Ben Hutchings <ben@decadent.org.uk>
-> > Date: Wed, 11 Jan 2017 04:30:40 +0000
-> > Subject: [PATCH] Partially revert "usb: Kconfig: using select for USB_COMMON
-> >  dependency"
-> > 
-> > This reverts commit cb9c1cfc86926d0e86d19c8e34f6c23458cd3478 for
-> > USB_LED_TRIG.  This config symbol has bool type and enables extra code
-> > in usb_common itself, not a separate driver.  Enabling it should not
-> > force usb_common to be built-in!
-> > 
-> > Fixes: cb9c1cfc8692 ("usb: Kconfig: using select for USB_COMMON dependency")
-> > Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
-> > Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
-> > ---
-> >  drivers/usb/common/Kconfig | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/usb/common/Kconfig b/drivers/usb/common/Kconfig
-> > index 5e8a04e3dd3c..b856622431a7 100644
-> > --- a/drivers/usb/common/Kconfig
-> > +++ b/drivers/usb/common/Kconfig
-> > @@ -6,8 +6,7 @@ config USB_COMMON
-> >  
-> >  config USB_LED_TRIG
-> >  	bool "USB LED Triggers"
-> > -	depends on LEDS_CLASS && LEDS_TRIGGERS
-> > -	select USB_COMMON
-> > +	depends on LEDS_CLASS && USB_COMMON && LEDS_TRIGGERS
-> >  	help
-> >  	  This option adds LED triggers for USB host and/or gadget activity.
-> >  
-> > -- 
-> > 2.33.0
-> > 
-> 
-> I need this as a real submission, not as part of a previous email.
+This makes f_mass_storage to export a 16T disk array correctly.
 
-Apologies. The last interation hopefully is okay now. Just sent it
-again.
+Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+---
+v3:
+- added this changelog
 
-Regards,
-Salvatore
+v2:
+- fixed call to check_command() for READ_CAPACITY(16)
+- fixed alphabetical order of commands in switch statement
+- renamed variable, added comments, and fixed formatting, per advices by
+  Alan Stern <stern@rowland.harvard.edu>
+
+ drivers/usb/gadget/function/f_mass_storage.c | 87 ++++++++++++++++++--
+ 1 file changed, 80 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+index 7c96c4665178..96de401f1282 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -619,7 +619,7 @@ static int sleep_thread(struct fsg_common *common, bool can_freeze,
+ static int do_read(struct fsg_common *common)
+ {
+ 	struct fsg_lun		*curlun = common->curlun;
+-	u32			lba;
++	u64			lba;
+ 	struct fsg_buffhd	*bh;
+ 	int			rc;
+ 	u32			amount_left;
+@@ -634,7 +634,10 @@ static int do_read(struct fsg_common *common)
+ 	if (common->cmnd[0] == READ_6)
+ 		lba = get_unaligned_be24(&common->cmnd[1]);
+ 	else {
+-		lba = get_unaligned_be32(&common->cmnd[2]);
++		if (common->cmnd[0] == READ_16)
++			lba = get_unaligned_be64(&common->cmnd[2]);
++		else		/* READ_10 or READ_12 */
++			lba = get_unaligned_be32(&common->cmnd[2]);
+ 
+ 		/*
+ 		 * We allow DPO (Disable Page Out = don't save data in the
+@@ -747,7 +750,7 @@ static int do_read(struct fsg_common *common)
+ static int do_write(struct fsg_common *common)
+ {
+ 	struct fsg_lun		*curlun = common->curlun;
+-	u32			lba;
++	u64			lba;
+ 	struct fsg_buffhd	*bh;
+ 	int			get_some_more;
+ 	u32			amount_left_to_req, amount_left_to_write;
+@@ -771,7 +774,10 @@ static int do_write(struct fsg_common *common)
+ 	if (common->cmnd[0] == WRITE_6)
+ 		lba = get_unaligned_be24(&common->cmnd[1]);
+ 	else {
+-		lba = get_unaligned_be32(&common->cmnd[2]);
++		if (common->cmnd[0] == WRITE_16)
++			lba = get_unaligned_be64(&common->cmnd[2]);
++		else		/* WRITE_10 or WRITE_12 */
++			lba = get_unaligned_be32(&common->cmnd[2]);
+ 
+ 		/*
+ 		 * We allow DPO (Disable Page Out = don't save data in the
+@@ -1146,6 +1152,7 @@ static int do_read_capacity(struct fsg_common *common, struct fsg_buffhd *bh)
+ 	u32		lba = get_unaligned_be32(&common->cmnd[2]);
+ 	int		pmi = common->cmnd[8];
+ 	u8		*buf = (u8 *)bh->buf;
++	u32		max_lba;
+ 
+ 	/* Check the PMI and LBA fields */
+ 	if (pmi > 1 || (pmi == 0 && lba != 0)) {
+@@ -1153,12 +1160,37 @@ static int do_read_capacity(struct fsg_common *common, struct fsg_buffhd *bh)
+ 		return -EINVAL;
+ 	}
+ 
+-	put_unaligned_be32(curlun->num_sectors - 1, &buf[0]);
+-						/* Max logical block */
+-	put_unaligned_be32(curlun->blksize, &buf[4]);/* Block length */
++	if (curlun->num_sectors < 0x100000000ULL)
++		max_lba = curlun->num_sectors - 1;
++	else
++		max_lba = 0xffffffff;
++	put_unaligned_be32(max_lba, &buf[0]);		/* Max logical block */
++	put_unaligned_be32(curlun->blksize, &buf[4]);	/* Block length */
+ 	return 8;
+ }
+ 
++static int do_read_capacity_16(struct fsg_common *common, struct fsg_buffhd *bh)
++{
++	struct fsg_lun  *curlun = common->curlun;
++	u64		lba = get_unaligned_be64(&common->cmnd[2]);
++	int		pmi = common->cmnd[14];
++	u8		*buf = (u8 *)bh->buf;
++
++	/* Check the PMI and LBA fields */
++	if (pmi > 1 || (pmi == 0 && lba != 0)) {
++		curlun->sense_data = SS_INVALID_FIELD_IN_CDB;
++		return -EINVAL;
++	}
++
++	put_unaligned_be64(curlun->num_sectors - 1, &buf[0]);
++							/* Max logical block */
++	put_unaligned_be32(curlun->blksize, &buf[8]);	/* Block length */
++
++	/* It is safe to keep other fields zeroed */
++	memset(&buf[12], 0, 32 - 12);
++	return 32;
++}
++
+ static int do_read_header(struct fsg_common *common, struct fsg_buffhd *bh)
+ {
+ 	struct fsg_lun	*curlun = common->curlun;
+@@ -1905,6 +1937,17 @@ static int do_scsi_command(struct fsg_common *common)
+ 			reply = do_read(common);
+ 		break;
+ 
++	case READ_16:
++		common->data_size_from_cmnd =
++				get_unaligned_be32(&common->cmnd[10]);
++		reply = check_command_size_in_blocks(common, 16,
++				      DATA_DIR_TO_HOST,
++				      (1<<1) | (0xff<<2) | (0xf<<10), 1,
++				      "READ(16)");
++		if (reply == 0)
++			reply = do_read(common);
++		break;
++
+ 	case READ_CAPACITY:
+ 		common->data_size_from_cmnd = 8;
+ 		reply = check_command(common, 10, DATA_DIR_TO_HOST,
+@@ -1957,6 +2000,25 @@ static int do_scsi_command(struct fsg_common *common)
+ 			reply = do_request_sense(common, bh);
+ 		break;
+ 
++	case SERVICE_ACTION_IN_16:
++		switch (common->cmnd[1] & 0x1f) {
++
++		case SAI_READ_CAPACITY_16:
++			common->data_size_from_cmnd =
++				get_unaligned_be32(&common->cmnd[10]);
++			reply = check_command(common, 16, DATA_DIR_TO_HOST,
++					      (1<<1) | (0xff<<2) | (0xf<<10) |
++					      (1<<14), 1,
++					      "READ CAPACITY(16)");
++			if (reply == 0)
++				reply = do_read_capacity_16(common, bh);
++			break;
++
++		default:
++			goto unknown_cmnd;
++		}
++		break;
++
+ 	case START_STOP:
+ 		common->data_size_from_cmnd = 0;
+ 		reply = check_command(common, 6, DATA_DIR_NONE,
+@@ -2028,6 +2090,17 @@ static int do_scsi_command(struct fsg_common *common)
+ 			reply = do_write(common);
+ 		break;
+ 
++	case WRITE_16:
++		common->data_size_from_cmnd =
++				get_unaligned_be32(&common->cmnd[10]);
++		reply = check_command_size_in_blocks(common, 16,
++				      DATA_DIR_FROM_HOST,
++				      (1<<1) | (0xff<<2) | (0xf<<10), 1,
++				      "WRITE(16)");
++		if (reply == 0)
++			reply = do_write(common);
++		break;
++
+ 	/*
+ 	 * Some mandatory commands that we recognize but don't implement.
+ 	 * They don't mean much in this setting.  It's left as an exercise
+-- 
+2.20.1
+
