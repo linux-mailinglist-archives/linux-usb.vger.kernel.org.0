@@ -2,95 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D3141342C
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 15:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E953741347B
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 15:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233255AbhIUNc7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Sep 2021 09:32:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52450 "EHLO mail.kernel.org"
+        id S233159AbhIUNlU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Sep 2021 09:41:20 -0400
+Received: from mga05.intel.com ([192.55.52.43]:27587 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233238AbhIUNcy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Sep 2021 09:32:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E785561183;
-        Tue, 21 Sep 2021 13:31:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632231085;
-        bh=/FskAHTta8BR+nJOSZGpKWzqRfix/jvxVCeWQyU5duk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ag4OBn2icYdE4foTpjoIfZNzfxZUnjgW5hj2wcsN3WiXN1VoWB99W6rW+8T4r9ujZ
-         BGolsSHWxoDht1EpCRtmPH3iWI6eIGdi/w2cpOOxFP0oSoJgUdNexuIhVCJT61p45y
-         gJLbV+3elgiCDr7CJ5pSLHyMlj5y5hQcJExldapGdUiTVY46M/qWyktKbOKTz1H3fc
-         6bM1ieBi2B92lZ9MjpgK+fhR6NWQBkbFVjNVzzUW07ddYMtB9m0TCSugoiaYOdPoyP
-         txGEVtRvj2NYBTqct4d1mEQ6QvjjWuixp0KeWDf0FiTX1jPHCmZNuVNa4qA4YsKB9A
-         9o5lKfiDoxDpw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mSfrp-0003bR-FS; Tue, 21 Sep 2021 15:31:25 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Himadri Pandya <himadrispandya@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] USB: serial: kl5kusb105: drop line-status helper
-Date:   Tue, 21 Sep 2021 15:30:09 +0200
-Message-Id: <20210921133009.13739-4-johan@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210921133009.13739-1-johan@kernel.org>
-References: <20210921133009.13739-1-johan@kernel.org>
+        id S233096AbhIUNlT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Sep 2021 09:41:19 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10113"; a="308909930"
+X-IronPort-AV: E=Sophos;i="5.85,311,1624345200"; 
+   d="scan'208";a="308909930"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2021 06:34:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,311,1624345200"; 
+   d="scan'208";a="613006988"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 21 Sep 2021 06:34:23 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 Sep 2021 16:34:22 +0300
+Date:   Tue, 21 Sep 2021 16:34:22 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>,
+        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
+        Stan Skowronek <stan@corellium.com>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Alexander Graf <graf@amazon.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+Subject: Re: [RFT PATCH 5/9] usb: typec: tipd: Allow to configure irq bits
+Message-ID: <YUnfXkVHbgeqV9V2@kuha.fi.intel.com>
+References: <20210918120934.28252-1-sven@svenpeter.dev>
+ <20210918120934.28252-6-sven@svenpeter.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210918120934.28252-6-sven@svenpeter.dev>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Drop the line-status conversion helper and do the conversion in place
-instead.
+On Sat, Sep 18, 2021 at 02:09:30PM +0200, Sven Peter wrote:
+> The Apple variant of the TI TPS6598x chip uses different interrupt
+> numbers. Prepare for that by allowing those to be configured depending
+> on the compatible.
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/kl5kusb105.c | 19 ++++---------------
- 1 file changed, 4 insertions(+), 15 deletions(-)
+OK, so I think this justifies having a completely separate irq
+handler for your board.
 
-diff --git a/drivers/usb/serial/kl5kusb105.c b/drivers/usb/serial/kl5kusb105.c
-index 99dffbdd3142..edcc57bd9b5e 100644
---- a/drivers/usb/serial/kl5kusb105.c
-+++ b/drivers/usb/serial/kl5kusb105.c
-@@ -147,24 +147,12 @@ static int klsi_105_chg_port_settings(struct usb_serial_port *port,
- 	return rc;
- }
- 
--/* translate a 16-bit status value from the device to linux's TIO bits */
--static unsigned long klsi_105_status2linestate(const __u16 status)
--{
--	unsigned long res = 0;
--
--	res =   ((status & KL5KUSB105A_DSR) ? TIOCM_DSR : 0)
--	      | ((status & KL5KUSB105A_CTS) ? TIOCM_CTS : 0)
--	      ;
--
--	return res;
--}
--
- /*
-  * Read line control via vendor command and return result through
-- * *line_state_p
-+ * the state pointer.
-  */
- static int klsi_105_get_line_state(struct usb_serial_port *port,
--				   unsigned long *line_state_p)
-+				   unsigned long *state)
- {
- 	u16 status;
- 	int rc;
-@@ -186,7 +174,8 @@ static int klsi_105_get_line_state(struct usb_serial_port *port,
- 
- 	dev_dbg(&port->dev, "read status %04x\n", status);
- 
--	*line_state_p = klsi_105_status2linestate(status);
-+	*state = ((status & KL5KUSB105A_DSR) ? TIOCM_DSR : 0) |
-+		 ((status & KL5KUSB105A_CTS) ? TIOCM_CTS : 0);
- 
- 	return 0;
- }
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> ---
+>  drivers/usb/typec/tipd/core.c | 16 ++++++++++++----
+>  1 file changed, 12 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 4a6d66250fef..d191e7435018 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -80,6 +80,10 @@ static const char *const modes[] = {
+>  struct tps6598x_hw {
+>  	bool use_int1;
+>  	bool use_int2;
+> +	unsigned int irq_power_status_update;
+> +	unsigned int irq_data_status_update;
+> +	unsigned int irq_plug_event;
+> +	void (*irq_trace)(u64 event1, u64 event2);
+>  };
+
+Then I believe you don't need any of that.
+
+
+thanks,
+
 -- 
-2.32.0
-
+heikki
