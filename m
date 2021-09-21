@@ -2,142 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 598FB413034
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 10:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC81413165
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 12:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231186AbhIUIgX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Sep 2021 04:36:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36406 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230497AbhIUIgX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Sep 2021 04:36:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 09D4D61090;
-        Tue, 21 Sep 2021 08:34:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632213295;
-        bh=p4y6s3/PhpFd6ixA63EyoxE9wQGBXYX4UMCN9iX5njY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jNnJLqUMJ0PGT9aPgUyW1AhPkvvlXRoaAS0WFWo4VilHNttqWblBZ/j3NrECVM52Q
-         OS4F3Nl4GwQE5VIv0cENhDLzs6XlNtKuUqd8x/Oc35XfCZuSSTPiq/aFs1aInx9Yw6
-         5E8wAPaPf0NOshB+GN5RhWFiiZ8vWwYkNy+W9hiAwT29sZrSn9rmSEgXv1u0feXoAK
-         yASyd+E4lnVRmXaEdWJTjF52i2WBpIPhP8HETC1d4zcYzQrXmdwZ2MU2CqZVgdLSdI
-         NMREKwfdMexjhIcCRgJEJaNXwRafr2jmNW+6XUC/lFd0QQ52i80xfhrdnU7aTegFvq
-         F+Q7ObKQgD4hw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mSbEr-0001Qq-3H; Tue, 21 Sep 2021 10:34:53 +0200
-Date:   Tue, 21 Sep 2021 10:34:53 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Malte Bayer <malte@neo-soft.org>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: Possible bug in the cp210x kernel driver?
-Message-ID: <YUmZLTapApY57veG@hovoldconsulting.com>
-References: <zarafa.6148ae0f.4d56.2bc45ad001615f69@neosoft.neo-soft.org>
+        id S231608AbhIUKTf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Sep 2021 06:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229530AbhIUKTe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Sep 2021 06:19:34 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3C8C061574
+        for <linux-usb@vger.kernel.org>; Tue, 21 Sep 2021 03:18:06 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id t18so37583227wrb.0
+        for <linux-usb@vger.kernel.org>; Tue, 21 Sep 2021 03:18:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UD05AQRtTYhvfFSFPPBFmCBR7+c/rAE9QcA9diTWpv8=;
+        b=Uqohw1X5T2Upxwc83egnItXx5omS9SGb7xXXiZgkyUnqpN8tYWbNKNSTkUnCG7+bn0
+         38p4Sf+ilGqdiRwXpSNAb7ap+cWc0rztnsTINjRZmW2ULk5+e93i8QQptf3o7dUDb73d
+         EcWt9nQlNWIoSYxGIeRuWUyTwGbZQYfiX3rbkiLgmRS3alveHjir6ruO2u65AJ7LgFuX
+         VPE3j28zS5CfyY71gn5SsR2cpi6jhzf2gToWBLZkUM/yP9V/Jw1gGocjXgI8wRyj8wZ6
+         3s8ly2HC3CqcxPPQI+EoNlCl0R/1RqbpgAYK1NLPNYugN/7XO+RUZjhm0QdOgJSr7Q3w
+         lSxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UD05AQRtTYhvfFSFPPBFmCBR7+c/rAE9QcA9diTWpv8=;
+        b=q/j/Lkke/8N0wbUgddNh4h+fDWOVvZld4GrJrFv154FLSXCJK7yBwOiUmlQN/cgJkM
+         DIWm+L7x6eqFbCHm9YSskO3c15vY8s6L9R/m8AtpitC/ndJljSiTSNQ9dMES+DuGGKM7
+         8UGGkOmzE1pfCrWo6H3+ppK6m3xK57q4dznIlysTi8i8w0isTGocCs5F7R1iXUZvnDIJ
+         dWk2bQcjk1DkFjRKkjcpWy5PYbP8A5FJgX3oaHm6oh5OOtL/5MRJWmsxNE5YxqItvI3G
+         7Rnju3wc1rbsY7K+S4C5oGGCCC3ZK6fKiG2R1TLSrbI9sP+wmNfY3i2VMCuEF/NnRbJu
+         MYnA==
+X-Gm-Message-State: AOAM530YvmU5ujdHv/phvHreAULf7QBD5NJHPmzROoU3NLmbRBmLOWwU
+        p9zn7ccBVljhuHjA6xcPMD4=
+X-Google-Smtp-Source: ABdhPJyl5wfaJnCDCshDEx+u1HVhrbVz+aSav8jJ4/CIzQsmB9lUp+R+s21qhpBpAWvKktmNrmqOSA==
+X-Received: by 2002:a5d:6c67:: with SMTP id r7mr17600197wrz.29.1632219484771;
+        Tue, 21 Sep 2021 03:18:04 -0700 (PDT)
+Received: from localhost (ip5f5afd21.dynamic.kabel-deutschland.de. [95.90.253.33])
+        by smtp.gmail.com with ESMTPSA id r25sm19216141wra.76.2021.09.21.03.18.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Sep 2021 03:18:04 -0700 (PDT)
+From:   Tobias Jakobi <cubic2k@gmail.com>
+X-Google-Original-From: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
+To:     stern@rowland.harvard.edu
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
+Subject: [PATCH] usb: storage: add quirks for VIA VL817 USB3-SATA bridge
+Date:   Tue, 21 Sep 2021 12:17:52 +0200
+Message-Id: <20210921101752.4679-1-tjakobi@math.uni-bielefeld.de>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <zarafa.6148ae0f.4d56.2bc45ad001615f69@neosoft.neo-soft.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Malte,
+The VL817 is used in the RaidSonic Icy Box IB-3740-C31 enclosure. The enclosure
+is advertised as having UASP support, but appears to have problems with 4Kn
+drives (test was done with two Seagate Exos X, 12TB).
 
-The mailings lists reject html so can you see if you can disable that
-in you mail client when replying?
+Disable UAS for the VL817 as it behaves highly unstable:
 
-On Mon, Sep 20, 2021 at 05:51:43PM +0200, Malte Bayer wrote:
+[Aug14 16:31] usb 2-1.2: USB disconnect, device number 4
+[  +0.007701] sd 4:0:0:0: [sdb] tag#4 uas_zap_pending 0 uas-tag 1 inflight: CMD
+[  +0.000004] sd 4:0:0:0: [sdb] tag#4 CDB: opcode=0x2a 2a 00 00 37 63 da 00 00 80 00
+[  +0.000022] sd 4:0:0:0: [sdb] tag#4 UNKNOWN(0x2003) Result: hostbyte=0x01 driverbyte=0x00 cmd_age=19s
+[  +0.000001] sd 4:0:0:0: [sdb] tag#4 CDB: opcode=0x2a 2a 00 00 37 63 da 00 00 80 00
+[  +0.000001] blk_update_request: I/O error, dev sdb, sector 29040336 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
+[  +0.000028] blk_update_request: I/O error, dev sdb, sector 29041360 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
+[  +0.000000] blk_update_request: I/O error, dev sdb, sector 16 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+[  +0.000005] md: super_written gets error=-5
+[  +0.000002] md/raid1:md126: Disk failure on sdb, disabling device.
+              md/raid1:md126: Operation continuing on 1 devices.
+[  +0.000024] blk_update_request: I/O error, dev sdb, sector 29042384 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
+[  +0.000222] sd 4:0:0:0: [sdb] Synchronizing SCSI cache
+[  +0.078154] blk_update_request: I/O error, dev sdb, sector 29040336 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+[  +0.000025] blk_update_request: I/O error, dev sdb, sector 29040344 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+[  +0.007520] blk_update_request: I/O error, dev sdb, sector 29040352 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+[  +0.000021] blk_update_request: I/O error, dev sdb, sector 29040360 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+[  +0.000015] blk_update_request: I/O error, dev sdb, sector 29040368 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+[  +0.000009] blk_update_request: I/O error, dev sdb, sector 29040376 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+[  +0.023299] sd 4:0:0:0: [sdb] Synchronize Cache(10) failed: Result: hostbyte=0x07 driverbyte=0x00
+[  +1.893439] usb 2-1.2: new SuperSpeed Plus Gen 2x1 USB device number 7 using xhci_hcd
+[  +0.024064] scsi host7: uas
+[ +16.365880] scsi 7:0:0:0: Direct-Access     ST12000N M001G-2MV103     SB2D PQ: 0 ANSI: 6
+[  +0.001192] sd 7:0:0:0: Attached scsi generic sg1 type 0
+[  +0.000940] sd 7:0:0:0: [sde] 2929721344 4096-byte logical blocks: (12.0 TB/10.9 TiB)
+[  +0.000130] sd 7:0:0:0: [sde] Write Protect is off
+[  +0.000001] sd 7:0:0:0: [sde] Mode Sense: 2f 00 00 00
+[  +0.000265] sd 7:0:0:0: [sde] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+[  +0.000399] sd 7:0:0:0: [sde] Optimal transfer size 268431360 bytes
+[  +0.120240] sd 7:0:0:0: [sde] Attached SCSI disk
 
-> > In event mode the device is supposed to replace any '0xec' characters
-> > in the input stream with the string '0xec 0x00', which the driver then
-> > needs to convert back to '0xec'.
-> > 
-> > But clearly your device doesn't escape '0xec' as expected.
-> > 
-> > What type of cp210x are you using?
-> 
-> Its the Silabs CP2102 DCL00X1612+
-
-I used a CP2102 when implementing support for the embedded-event mode
-and just verified that everything is working as expected.
-
-The batch number "DCL00X" might provide some insight here though.
-Searching for it gives a few hits describing counterfeit CP2102 devices
-which has that particular number. [1][2] Apparently they behave
-mostly like the real ones, but I wouldn't be surprised if they did not
-implement the event mode.
-
-It seems people were able to use the difference in responses to
-malformed requests to determine which chips were fake. The below patch
-is first stab at it based on [3].
-
-Supposedly, the fake ones would only return a single byte in response,
-while the CP2102 I have hear happily returns the full eight byte
-requested.
-
-Can apply the patch and send me the logs from when connecting your
-device?
-
-This might require some experimentation (e.g. different request,
-length), but if we're lucky the malformed type request is all that's
-needed to determine when event mode is supported.
-
-Johan
-
-[1] https://hackaday.com/2017/08/14/hands-on-with-the-shacamp-2017-badge/
-[2] https://mobile.twitter.com/sha2017badge/status/1167902087289532418
-[3] https://github.com/SHA2017-badge/cp2102-det/blob/master/main.c
-
-
-From 43cab5bee8b12617d97998fa956553aef62fa704 Mon Sep 17 00:00:00 2001
-From: Johan Hovold <johan@kernel.org>
-Date: Tue, 21 Sep 2021 10:24:47 +0200
-Subject: [PATCH] dbg: USB: serial: cp210x: add cp2102 quirk instrumentation
-
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
 ---
- drivers/usb/serial/cp210x.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ drivers/usb/storage/unusual_uas.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index 66a6ac50a4cd..51d99d29dde1 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -2074,6 +2074,20 @@ static void cp210x_init_max_speed(struct usb_serial *serial)
- 	priv->use_actual_rate = use_actual_rate;
- }
+diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+index bda0f2cdf093..7d83ecf835c6 100644
+--- a/drivers/usb/storage/unusual_uas.h
++++ b/drivers/usb/storage/unusual_uas.h
+@@ -125,6 +125,13 @@ UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_NO_ATA_1X),
  
-+static void cp2102_determine_quirks(struct usb_serial *serial)
-+{
-+	u8 data[8];
-+	int ret;
++/* Reported-by: Tobias Jakobi <tjakobi@math.uni-bielefeld.de> */
++UNUSUAL_DEV(0x2109, 0x0715, 0x0000, 0x9999,
++		"VIA",
++		"VL817",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_IGNORE_UAS),
 +
-+	ret = cp210x_read_vendor_block(serial, REQTYPE_DEVICE_TO_HOST,
-+			CP210X_GET_PARTNUM, data, sizeof(data));
-+	if (ret)
-+		return;
-+
-+	dev_info(&serial->interface->dev, "%s - %*ph\n", __func__,
-+			(int)sizeof(data), data);
-+}
-+
- static int cp210x_get_fw_version(struct usb_serial *serial, u16 value)
- {
- 	struct cp210x_serial_private *priv = usb_get_serial_data(serial);
-@@ -2108,7 +2122,13 @@ static void cp210x_determine_type(struct usb_serial *serial)
- 		return;
- 	}
- 
-+	dev_info(&serial->interface->dev, "%s - type = 0x%02x\n", __func__,
-+			priv->partnum);
-+
- 	switch (priv->partnum) {
-+	case CP210X_PARTNUM_CP2102:
-+		cp2102_determine_quirks(serial);
-+		break;
- 	case CP210X_PARTNUM_CP2105:
- 	case CP210X_PARTNUM_CP2108:
- 		cp210x_get_fw_version(serial, CP210X_GET_FW_VER);
+ /* Reported-by: Icenowy Zheng <icenowy@aosc.io> */
+ UNUSUAL_DEV(0x2537, 0x1068, 0x0000, 0x9999,
+ 		"Norelsys",
 -- 
 2.32.0
 
