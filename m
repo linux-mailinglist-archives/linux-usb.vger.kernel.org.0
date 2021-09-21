@@ -2,231 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB6F4135B8
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 16:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67DAE4135F4
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 17:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbhIUPAt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Sep 2021 11:00:49 -0400
-Received: from mail.lvk.cs.msu.ru ([188.44.42.233]:37846 "EHLO
-        mail.lvk.cs.msu.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233647AbhIUPAt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Sep 2021 11:00:49 -0400
-Received: from mail.lvk.cs.msu.ru (localhost.localdomain [127.0.0.1])
-        by mail.lvk.cs.msu.ru (Postfix) with ESMTP id A0EF310F0B8;
-        Tue, 21 Sep 2021 17:59:15 +0300 (MSK)
-X-Spam-Checker-Version: SpamAssassin 3.3.2 (2011-06-06) on spamd.lvknet
-X-Spam-Level: 
-X-Spam-ASN:  
-X-Spam-Status: No, score=-2.9 required=7.0 tests=ALL_TRUSTED=-1,BAYES_00=-1.9
-        autolearn=ham version=3.3.2
-Received: from blacky.home (nikaet.starlink.ru [94.141.168.29])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        by mail.lvk.cs.msu.ru (Postfix) with ESMTPSA id 6FAFC10DD2E;
-        Tue, 21 Sep 2021 17:59:15 +0300 (MSK)
-Received: from [192.168.112.17] (helo=cobook.home)
-        by blacky.home with smtp (Exim 4.80)
-        (envelope-from <yoush@cs.msu.su>)
-        id 1mSh7p-0007lL-Kh; Tue, 21 Sep 2021 17:52:01 +0300
-Received: (nullmailer pid 12002 invoked by uid 1000);
-        Tue, 21 Sep 2021 14:59:14 -0000
-From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Petr Nechaev <petr.nechaev@cogentembedded.com>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Subject: [PATCH v3] usb: gadget: storage: add support for media larger than 2T
-Date:   Tue, 21 Sep 2021 17:59:02 +0300
-Message-Id: <20210921145901.11952-1-nikita.yoush@cogentembedded.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <YUnsSxUERYj/oXTO@kroah.com>
-References: <YUnsSxUERYj/oXTO@kroah.com>
+        id S233799AbhIUPOy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Sep 2021 11:14:54 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:47055 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S231196AbhIUPOx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Sep 2021 11:14:53 -0400
+Received: (qmail 170821 invoked by uid 1000); 21 Sep 2021 11:13:23 -0400
+Date:   Tue, 21 Sep 2021 11:13:23 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Tobias Jakobi <cubic2k@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
+Subject: Re: [PATCH] usb: storage: add quirks for VIA VL817 USB3-SATA bridge
+Message-ID: <20210921151323.GA170347@rowland.harvard.edu>
+References: <20210921101752.4679-1-tjakobi@math.uni-bielefeld.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AV-Checked: ClamAV using ClamSMTP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210921101752.4679-1-tjakobi@math.uni-bielefeld.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This adds support for READ_CAPACITY(16), READ(16) and WRITE(16)
-commands, and fixes READ_CAPACITY command to return 0xffffffff if
-media size does not fit in 32 bits.
+On Tue, Sep 21, 2021 at 12:17:52PM +0200, Tobias Jakobi wrote:
+> The VL817 is used in the RaidSonic Icy Box IB-3740-C31 enclosure. The enclosure
+> is advertised as having UASP support, but appears to have problems with 4Kn
+> drives (test was done with two Seagate Exos X, 12TB).
+> 
+> Disable UAS for the VL817 as it behaves highly unstable:
+> 
+> [Aug14 16:31] usb 2-1.2: USB disconnect, device number 4
 
-This makes f_mass_storage to export a 16T disk array correctly.
+So first the drive was unplugged or disconnected...
 
-Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
----
-v3:
-- added this changelog
+> [  +0.007701] sd 4:0:0:0: [sdb] tag#4 uas_zap_pending 0 uas-tag 1 inflight: CMD
+> [  +0.000004] sd 4:0:0:0: [sdb] tag#4 CDB: opcode=0x2a 2a 00 00 37 63 da 00 00 80 00
+> [  +0.000022] sd 4:0:0:0: [sdb] tag#4 UNKNOWN(0x2003) Result: hostbyte=0x01 driverbyte=0x00 cmd_age=19s
+> [  +0.000001] sd 4:0:0:0: [sdb] tag#4 CDB: opcode=0x2a 2a 00 00 37 63 da 00 00 80 00
+> [  +0.000001] blk_update_request: I/O error, dev sdb, sector 29040336 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
+> [  +0.000028] blk_update_request: I/O error, dev sdb, sector 29041360 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
+> [  +0.000000] blk_update_request: I/O error, dev sdb, sector 16 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+> [  +0.000005] md: super_written gets error=-5
+> [  +0.000002] md/raid1:md126: Disk failure on sdb, disabling device.
+>               md/raid1:md126: Operation continuing on 1 devices.
+> [  +0.000024] blk_update_request: I/O error, dev sdb, sector 29042384 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
+> [  +0.000222] sd 4:0:0:0: [sdb] Synchronizing SCSI cache
+> [  +0.078154] blk_update_request: I/O error, dev sdb, sector 29040336 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+> [  +0.000025] blk_update_request: I/O error, dev sdb, sector 29040344 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+> [  +0.007520] blk_update_request: I/O error, dev sdb, sector 29040352 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+> [  +0.000021] blk_update_request: I/O error, dev sdb, sector 29040360 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+> [  +0.000015] blk_update_request: I/O error, dev sdb, sector 29040368 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+> [  +0.000009] blk_update_request: I/O error, dev sdb, sector 29040376 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+> [  +0.023299] sd 4:0:0:0: [sdb] Synchronize Cache(10) failed: Result: hostbyte=0x07 driverbyte=0x00
 
-v2:
-- fixed call to check_command() for READ_CAPACITY(16)
-- fixed alphabetical order of commands in switch statement
-- renamed variable, added comments, and fixed formatting, per advices by
-  Alan Stern <stern@rowland.harvard.edu>
+Then there was a bunch of errors, which is to be expected when a drive 
+is suddenly disconnected...
 
- drivers/usb/gadget/function/f_mass_storage.c | 87 ++++++++++++++++++--
- 1 file changed, 80 insertions(+), 7 deletions(-)
+> [  +1.893439] usb 2-1.2: new SuperSpeed Plus Gen 2x1 USB device number 7 using xhci_hcd
+> [  +0.024064] scsi host7: uas
+> [ +16.365880] scsi 7:0:0:0: Direct-Access     ST12000N M001G-2MV103     SB2D PQ: 0 ANSI: 6
+> [  +0.001192] sd 7:0:0:0: Attached scsi generic sg1 type 0
+> [  +0.000940] sd 7:0:0:0: [sde] 2929721344 4096-byte logical blocks: (12.0 TB/10.9 TiB)
+> [  +0.000130] sd 7:0:0:0: [sde] Write Protect is off
+> [  +0.000001] sd 7:0:0:0: [sde] Mode Sense: 2f 00 00 00
+> [  +0.000265] sd 7:0:0:0: [sde] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+> [  +0.000399] sd 7:0:0:0: [sde] Optimal transfer size 268431360 bytes
+> [  +0.120240] sd 7:0:0:0: [sde] Attached SCSI disk
 
-diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-index 7c96c4665178..96de401f1282 100644
---- a/drivers/usb/gadget/function/f_mass_storage.c
-+++ b/drivers/usb/gadget/function/f_mass_storage.c
-@@ -619,7 +619,7 @@ static int sleep_thread(struct fsg_common *common, bool can_freeze,
- static int do_read(struct fsg_common *common)
- {
- 	struct fsg_lun		*curlun = common->curlun;
--	u32			lba;
-+	u64			lba;
- 	struct fsg_buffhd	*bh;
- 	int			rc;
- 	u32			amount_left;
-@@ -634,7 +634,10 @@ static int do_read(struct fsg_common *common)
- 	if (common->cmnd[0] == READ_6)
- 		lba = get_unaligned_be24(&common->cmnd[1]);
- 	else {
--		lba = get_unaligned_be32(&common->cmnd[2]);
-+		if (common->cmnd[0] == READ_16)
-+			lba = get_unaligned_be64(&common->cmnd[2]);
-+		else		/* READ_10 or READ_12 */
-+			lba = get_unaligned_be32(&common->cmnd[2]);
- 
- 		/*
- 		 * We allow DPO (Disable Page Out = don't save data in the
-@@ -747,7 +750,7 @@ static int do_read(struct fsg_common *common)
- static int do_write(struct fsg_common *common)
- {
- 	struct fsg_lun		*curlun = common->curlun;
--	u32			lba;
-+	u64			lba;
- 	struct fsg_buffhd	*bh;
- 	int			get_some_more;
- 	u32			amount_left_to_req, amount_left_to_write;
-@@ -771,7 +774,10 @@ static int do_write(struct fsg_common *common)
- 	if (common->cmnd[0] == WRITE_6)
- 		lba = get_unaligned_be24(&common->cmnd[1]);
- 	else {
--		lba = get_unaligned_be32(&common->cmnd[2]);
-+		if (common->cmnd[0] == WRITE_16)
-+			lba = get_unaligned_be64(&common->cmnd[2]);
-+		else		/* WRITE_10 or WRITE_12 */
-+			lba = get_unaligned_be32(&common->cmnd[2]);
- 
- 		/*
- 		 * We allow DPO (Disable Page Out = don't save data in the
-@@ -1146,6 +1152,7 @@ static int do_read_capacity(struct fsg_common *common, struct fsg_buffhd *bh)
- 	u32		lba = get_unaligned_be32(&common->cmnd[2]);
- 	int		pmi = common->cmnd[8];
- 	u8		*buf = (u8 *)bh->buf;
-+	u32		max_lba;
- 
- 	/* Check the PMI and LBA fields */
- 	if (pmi > 1 || (pmi == 0 && lba != 0)) {
-@@ -1153,12 +1160,37 @@ static int do_read_capacity(struct fsg_common *common, struct fsg_buffhd *bh)
- 		return -EINVAL;
- 	}
- 
--	put_unaligned_be32(curlun->num_sectors - 1, &buf[0]);
--						/* Max logical block */
--	put_unaligned_be32(curlun->blksize, &buf[4]);/* Block length */
-+	if (curlun->num_sectors < 0x100000000ULL)
-+		max_lba = curlun->num_sectors - 1;
-+	else
-+		max_lba = 0xffffffff;
-+	put_unaligned_be32(max_lba, &buf[0]);		/* Max logical block */
-+	put_unaligned_be32(curlun->blksize, &buf[4]);	/* Block length */
- 	return 8;
- }
- 
-+static int do_read_capacity_16(struct fsg_common *common, struct fsg_buffhd *bh)
-+{
-+	struct fsg_lun  *curlun = common->curlun;
-+	u64		lba = get_unaligned_be64(&common->cmnd[2]);
-+	int		pmi = common->cmnd[14];
-+	u8		*buf = (u8 *)bh->buf;
-+
-+	/* Check the PMI and LBA fields */
-+	if (pmi > 1 || (pmi == 0 && lba != 0)) {
-+		curlun->sense_data = SS_INVALID_FIELD_IN_CDB;
-+		return -EINVAL;
-+	}
-+
-+	put_unaligned_be64(curlun->num_sectors - 1, &buf[0]);
-+							/* Max logical block */
-+	put_unaligned_be32(curlun->blksize, &buf[8]);	/* Block length */
-+
-+	/* It is safe to keep other fields zeroed */
-+	memset(&buf[12], 0, 32 - 12);
-+	return 32;
-+}
-+
- static int do_read_header(struct fsg_common *common, struct fsg_buffhd *bh)
- {
- 	struct fsg_lun	*curlun = common->curlun;
-@@ -1905,6 +1937,17 @@ static int do_scsi_command(struct fsg_common *common)
- 			reply = do_read(common);
- 		break;
- 
-+	case READ_16:
-+		common->data_size_from_cmnd =
-+				get_unaligned_be32(&common->cmnd[10]);
-+		reply = check_command_size_in_blocks(common, 16,
-+				      DATA_DIR_TO_HOST,
-+				      (1<<1) | (0xff<<2) | (0xf<<10), 1,
-+				      "READ(16)");
-+		if (reply == 0)
-+			reply = do_read(common);
-+		break;
-+
- 	case READ_CAPACITY:
- 		common->data_size_from_cmnd = 8;
- 		reply = check_command(common, 10, DATA_DIR_TO_HOST,
-@@ -1957,6 +2000,25 @@ static int do_scsi_command(struct fsg_common *common)
- 			reply = do_request_sense(common, bh);
- 		break;
- 
-+	case SERVICE_ACTION_IN_16:
-+		switch (common->cmnd[1] & 0x1f) {
-+
-+		case SAI_READ_CAPACITY_16:
-+			common->data_size_from_cmnd =
-+				get_unaligned_be32(&common->cmnd[10]);
-+			reply = check_command(common, 16, DATA_DIR_TO_HOST,
-+					      (1<<1) | (0xff<<2) | (0xf<<10) |
-+					      (1<<14), 1,
-+					      "READ CAPACITY(16)");
-+			if (reply == 0)
-+				reply = do_read_capacity_16(common, bh);
-+			break;
-+
-+		default:
-+			goto unknown_cmnd;
-+		}
-+		break;
-+
- 	case START_STOP:
- 		common->data_size_from_cmnd = 0;
- 		reply = check_command(common, 6, DATA_DIR_NONE,
-@@ -2028,6 +2090,17 @@ static int do_scsi_command(struct fsg_common *common)
- 			reply = do_write(common);
- 		break;
- 
-+	case WRITE_16:
-+		common->data_size_from_cmnd =
-+				get_unaligned_be32(&common->cmnd[10]);
-+		reply = check_command_size_in_blocks(common, 16,
-+				      DATA_DIR_FROM_HOST,
-+				      (1<<1) | (0xff<<2) | (0xf<<10), 1,
-+				      "WRITE(16)");
-+		if (reply == 0)
-+			reply = do_write(common);
-+		break;
-+
- 	/*
- 	 * Some mandatory commands that we recognize but don't implement.
- 	 * They don't mean much in this setting.  It's left as an exercise
--- 
-2.20.1
+And then the drive reconnected, this time successfully.  How does this 
+show that UAS was the reason for the problem?  Indeed, how does this 
+show there was any problem at all?
 
+> Signed-off-by: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
+> ---
+>  drivers/usb/storage/unusual_uas.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+> index bda0f2cdf093..7d83ecf835c6 100644
+> --- a/drivers/usb/storage/unusual_uas.h
+> +++ b/drivers/usb/storage/unusual_uas.h
+> @@ -125,6 +125,13 @@ UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
+>  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>  		US_FL_NO_ATA_1X),
+>  
+> +/* Reported-by: Tobias Jakobi <tjakobi@math.uni-bielefeld.de> */
+> +UNUSUAL_DEV(0x2109, 0x0715, 0x0000, 0x9999,
+> +		"VIA",
+> +		"VL817",
+> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> +		US_FL_IGNORE_UAS),
+> +
+>  /* Reported-by: Icenowy Zheng <icenowy@aosc.io> */
+>  UNUSUAL_DEV(0x2537, 0x1068, 0x0000, 0x9999,
+>  		"Norelsys",
+
+Instead of IGNORE_UAS, have you tried the NO_ATA_1X flag, which seems to 
+help in the preceding entry (a different device from the same vendor)?
+
+Alan Stern
