@@ -2,91 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4656F4134ED
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 15:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5424134A1
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Sep 2021 15:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233398AbhIUOBZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Sep 2021 10:01:25 -0400
-Received: from mga02.intel.com ([134.134.136.20]:57851 "EHLO mga02.intel.com"
+        id S233401AbhIUNoC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Sep 2021 09:44:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58750 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233042AbhIUOBY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Sep 2021 10:01:24 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10113"; a="210599486"
-X-IronPort-AV: E=Sophos;i="5.85,311,1624345200"; 
-   d="scan'208";a="210599486"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2021 06:40:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,311,1624345200"; 
-   d="scan'208";a="613009248"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 21 Sep 2021 06:40:21 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 Sep 2021 16:40:20 +0300
-Date:   Tue, 21 Sep 2021 16:40:20 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Alexander Graf <graf@amazon.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Subject: Re: [RFT PATCH 6/9] usb: typec: tipd: Setup IntMask explicitly
-Message-ID: <YUngxBX8CSJK4nw8@kuha.fi.intel.com>
-References: <20210918120934.28252-1-sven@svenpeter.dev>
- <20210918120934.28252-7-sven@svenpeter.dev>
+        id S233448AbhIUNoB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Sep 2021 09:44:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A4A5061159;
+        Tue, 21 Sep 2021 13:42:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632231752;
+        bh=+vkRjBOB4stl7U6W0aJJppigkyRk9cK3TtGppMIE0mA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dvzaRC3ayM2AuFzkIjGNuyWKThk7MX+VfQB2hTaFE8jP3GPKobYUyHcZWMVE9PMKN
+         SA46OC2VTF2+394cnDznvnvvluigl0NoowC/4+WumonkBe6F+w+HBRtxpwX7Q6x8zq
+         M+r+mcBL5yOZukgq2zGkL1mobaszK93yVyj+sjf9mFjjHOmSvvsdcpbZCMRxeG5mVn
+         QPlTV1gW+pEo3S5YlqOQrtX6VWAA0wCtE5xPsnTaH/8LzYRVCo0rne3kP/NrKv8zSQ
+         UIDXC1Ndv9Etf5sfomxqT2rXm2LVoHoxxDrzONqAhCA+/WqEEUNFSWJMbNsGwHRbDs
+         gxEOlXuN2UXnA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mSg2Z-0003fQ-At; Tue, 21 Sep 2021 15:42:31 +0200
+Date:   Tue, 21 Sep 2021 15:42:31 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Uwe Brandt <uwe.brandt@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: cp210x: add ID for GW Instek GDM-834x
+ Digital Multimeter
+Message-ID: <YUnhR/L8XOmWLFUQ@hovoldconsulting.com>
+References: <CAPui18kK+MCv1uO8h3es3rpZdzztukJVh+3oub9H+53ncp-Usw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210918120934.28252-7-sven@svenpeter.dev>
+In-Reply-To: <CAPui18kK+MCv1uO8h3es3rpZdzztukJVh+3oub9H+53ncp-Usw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Sep 18, 2021 at 02:09:31PM +0200, Sven Peter wrote:
-> Right now the code relies on the bootloader to set up the interrupt mask
-> correctly. This usually works but let's make sure to do it explicitly to
-> guarantee it will always work.
+On Tue, Sep 21, 2021 at 01:41:40PM +0200, Uwe Brandt wrote:
+> Hi Johan,
 > 
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> ---
->  drivers/usb/typec/tipd/core.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
+> included is a patch to make the GW Instek GDM-834x Multimeter accessible
+> via ttyUSBx
+> https://www.gwinstek.com/en-global/products/detail/GDM-8342_GDM-8341
 > 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index d191e7435018..2058e8cca631 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -728,6 +728,24 @@ static int tps6598x_probe(struct i2c_client *client)
->  			dev_err(&client->dev, "failed to register partner\n");
->  	}
->  
-> +	if (tps->hw->use_int1) {
-> +		ret = tps6598x_write64(tps, TPS_REG_INT_MASK1,
-> +					tps->hw->irq_power_status_update |
-> +					tps->hw->irq_data_status_update |
-> +					tps->hw->irq_plug_event);
-> +		if (ret)
-> +			goto err_role_put;
-> +	}
-> +
-> +	if (tps->hw->use_int2) {
-> +		ret = tps6598x_write64(tps, TPS_REG_INT_MASK2,
-> +					tps->hw->irq_power_status_update |
-> +					tps->hw->irq_data_status_update |
-> +					tps->hw->irq_plug_event);
-> +		if (ret)
-> +			goto err_role_put;
-> +	}
+> lsusb output:
+> Bus 001 Device 002: ID 2184:0030 GW Instek GDM834X VCP PORT
+> 
+> dmesg output:
+> [ 1102.650572] usb 1-2: cp210x converter now attached to ttyUSB0
+> 
+> patch:
+> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+> index f5143eedbc..38f2b6be24 100644
+> --- a/drivers/usb/serial/cp210x.c
+> +++ b/drivers/usb/serial/cp210x.c
+> @@ -228,6 +228,7 @@ static const struct usb_device_id id_table[] = {
+>        { USB_DEVICE(0x1FB9, 0x0602) }, /* Lake Shore Model 648 Magnet Power
+> Supply */
+>        { USB_DEVICE(0x1FB9, 0x0700) }, /* Lake Shore Model 737 VSM
+> Controller */
+>        { USB_DEVICE(0x1FB9, 0x0701) }, /* Lake Shore Model 776 Hall Matrix
+> */
+> +       { USB_DEVICE(0x2184, 0x0030) }, /* GW Instek GDM-834x Digital
+> Multimeter */
+>        { USB_DEVICE(0x2626, 0xEA60) }, /* Aruba Networks 7xxx USB Serial
+> Console */
+>        { USB_DEVICE(0x3195, 0xF190) }, /* Link Instruments MSO-19 */
+>        { USB_DEVICE(0x3195, 0xF280) }, /* Link Instruments MSO-28 */
 
-You should first only set the mask on your board. We can then see if
-it's something that should be done on other boards as well later.
+Thanks for the patch. Patch Subject and content looks good, but the
+formatting needs a little work.
 
-thanks,
+First, anything you put in the body goes in the commit message so
+greetings, etc. should go below a --- line before the diff.
 
--- 
-heikki
+Second, the diff appears to be whitespace damaged (tabs replaced by
+spaces), possibly by your mail client. Try sending the patch to yourself
+first and make sure you can apply it with git-am. Also have a look at
+git-format-patch and git-send-email.
+
+Third, you need to sign-off on your patches. More details can be found
+here:
+
+	Documentation/process/submitting-patches.rst
+
+Here's an example of what a patch adding a device-id could look like:
+
+	https://lore.kernel.org/all/20210803194711.3036-1-dnlplm@gmail.com/
+
+Care to send a v2?
+
+Johan
