@@ -2,137 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6203414C9D
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Sep 2021 17:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03FF8414D67
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Sep 2021 17:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236312AbhIVPCY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Sep 2021 11:02:24 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:43871 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236303AbhIVPCX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Sep 2021 11:02:23 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 87124580ACF;
-        Wed, 22 Sep 2021 11:00:53 -0400 (EDT)
-Received: from imap21 ([10.202.2.71])
-  by compute1.internal (MEProxy); Wed, 22 Sep 2021 11:00:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=mime-version:message-id:in-reply-to:references:date:from:to
-        :cc:subject:content-type; s=fm2; bh=hfJGbhpQSJZLILbIIAyLZ6CJq6Tq
-        NG5zUILLNAc/iKY=; b=SB501QdNOkqUVa4lGU0E3RCAlGzm2baEyrBGgNR+wUpf
-        lX9wJpOjCVfVYb/MYsH2f3SiyB+1hJMTTHpcDuHs5Fw3GOby1lLf/3Hfxi7dyJVq
-        3yHfA097XlODrojoaQHT9GHfP3uU4lTONusxyXlwvK+LTl2AhOy35OKRVyh/f7Cq
-        a21Pkj9TMMxdojqNPl7RUBF6eTnWSdaRO889YZ1W/s6gNN2me9Ze5PAPy+5xBBNJ
-        du0UsAbYK72ZrqJ/khFC/H33WXvhX6d0lProcRLiP/PtKYJglMDaMzRXjYTUx+8D
-        IJ+LBTYo89RQfX++JYI03Qrm7CUb2oxh40sRXv7rJQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=hfJGbh
-        pQSJZLILbIIAyLZ6CJq6TqNG5zUILLNAc/iKY=; b=MgXmBN/x0cmOjqA0oeR+zK
-        Czm7sCxBo3muXxCDjI0j7Wks3RlUghpPzlQCTUbsvZEnn9dUDgnzYNFTzHEnHnQA
-        p1FY6mG4GinWwQmjobxcuejeZqPlNP7foVt7zuXl1r1b4C9RCx9bTe5DGkfX6Nex
-        yHomm/E350P3hjgDzn5Qk3Gb1wDDJTvtUGcG08bIP2mBq+6DKBawU49ZqNH8Gblz
-        +1cqCc7qyW2wxoJgn749w7xGK19jnG/TxQx46nbETk2e7jJuvlTFhVaoUQelewEl
-        zmkaDy6uxmcxU3GWGJJvrbdn0FJbjiy3R9oxV+FNFvexLjHhKKg4Oe/Tk0mE4iXQ
-        ==
-X-ME-Sender: <xms:I0VLYVRliXKijmALhRWv_ktFhksh1M8KS2wY4mgc8e5VKQWl2oVNvw>
-    <xme:I0VLYey4777DO29fNiAZzOTbkI0zEAyytqgOEOz3IwK55AV-GFJA0RdjQwcByA93F
-    hzhReWupo_IgotOzQM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudeijedgkedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreerjeenucfhrhhomhepfdfuvhgv
-    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
-    htthgvrhhnpeehjefgtddtfeelfeetjeeifeduueehleektdegtdejheeiteeuleehuefh
-    geehgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:I0VLYa0cJsU9J0FMSJHKrhwPXd8TUqy0qEweejSjQCY7xf-FX4sseQ>
-    <xmx:I0VLYdAPXemT349Yav2fXzmJVO7WJfxdi0kqnhLIN3kHZ2DSJFxFvg>
-    <xmx:I0VLYehf2Chz3h_D8JRi7AloNLuhB_Xz0tdNY9LFCBZZ83aMlTnBlA>
-    <xmx:JUVLYZPEFUIVgcdYpzYoXrwHmHRqU8pW6ZnZydxf7z_e7yxc5ZgA8A>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id AE18751C0060; Wed, 22 Sep 2021 11:00:51 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-1302-gc62ab821ef-fm-20210921.001-gc62ab821
-Mime-Version: 1.0
-Message-Id: <d8024591-0142-442e-98e9-0c92a7679768@www.fastmail.com>
-In-Reply-To: <YUniTtc/DwGYPD+c@kuha.fi.intel.com>
-References: <20210918120934.28252-1-sven@svenpeter.dev>
- <20210918120934.28252-9-sven@svenpeter.dev>
- <YUniTtc/DwGYPD+c@kuha.fi.intel.com>
-Date:   Wed, 22 Sep 2021 17:00:31 +0200
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Heikki Krogerus" <heikki.krogerus@linux.intel.com>
-Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Hector Martin" <marcan@marcan.st>,
-        "Mohamed Mediouni" <mohamed.mediouni@caramail.com>,
-        "Stan Skowronek" <stan@corellium.com>,
-        "Mark Kettenis" <mark.kettenis@xs4all.nl>,
-        "Alexander Graf" <graf@amazon.com>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>
-Subject: =?UTF-8?Q?Re:_[RFT_PATCH_8/9]_usb:_typec:_tipd:_Switch_power_state_to_S0?=
- =?UTF-8?Q?_for_Apple_variant?=
-Content-Type: text/plain
+        id S236484AbhIVPxp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Sep 2021 11:53:45 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:42681 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233129AbhIVPxp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Sep 2021 11:53:45 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1632325935; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=/S10efTAtIEf6Q6vguThpcfQQAGYu5+Hts2tr4lAAII=; b=e0JYGAQfsJnm7QN7PwdS58tDHgIiqGlFQxFWnEjj47uQgjwWmn2irlA1dEofSzlLO1fb8Yvj
+ H+dCRiBQUkqWSwzSe+svwSQbZ84BC8VeoieQF6Yyz3PO70r+eTnKLCrurf1Bwq/lqniXiehT
+ Ll9SB0N+lNc6PjrwT78CSa0rZsI=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
+ 614b512d507800c880bb36f2 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 22 Sep 2021 15:52:13
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 5554CC4360D; Wed, 22 Sep 2021 15:52:12 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 302D4C4338F;
+        Wed, 22 Sep 2021 15:52:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 302D4C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Date:   Wed, 22 Sep 2021 08:52:08 -0700
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     "N. Chen" <takhv1@gmail.com>, linux-usb@vger.kernel.org,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>
+Subject: Re: uac2/hid gadget issues on Win10 hosts
+Message-ID: <20210922155208.GE3515@jackp-linux.qualcomm.com>
+References: <CADA1JhOe89Q7iQtb7vwK6utigpKfo+UfuW6o2GdMBMo5rAz7=A@mail.gmail.com>
+ <9f719bb8-2a9a-4a97-f25a-660d38a29555@ivitera.com>
+ <20210904074032.GC3515@jackp-linux.qualcomm.com>
+ <b11414f0-1783-192e-2b79-066dd4c814d0@ivitera.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b11414f0-1783-192e-2b79-066dd4c814d0@ivitera.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Pavel,
 
+On Mon, Sep 06, 2021 at 02:43:25PM +0200, Pavel Hofman wrote:
+> Hi Jack,
+> 
+> Dne 04. 09. 21 v 9:40 Jack Pham napsal(a):
+> > Hi Pavel,
+> > 
+> > On Mon, Aug 23, 2021 at 03:17:11PM +0200, Pavel Hofman wrote:
+> > > There is a problem with max packet size calculation for EP-IN. It has been
+> > > discussed here recently
+> > > https://www.spinics.net/lists/linux-usb/msg214615.html
+> > > 
+> > > The simple change in the post above fixed Win10 enumeration for me and
+> > > another tester.
+> > 
+> > I faced the same error on Win10 and also tried the above patch and it
+> > worked for me as well.  Are you planning to send a formal patch for it?
+> > If so, you can add my
+> > 
+> > Tested-by: Jack Pham <jackp@codeaurora.org>
+> > 
+> > > Also, there is a problem with feedback value calculation which Win10 ignores
+> > > and keeps sending the same amount of samples. The fix is to send number of
+> > > samples per the actual packet, not per microframe for USB2. I have not
+> > > posted the attached patch as the whole patchset will most likely be reverted
+> > > for 5.15 https://www.spinics.net/lists/linux-usb/msg216042.html and I wanted
+> > > to wait till the situation works out to avoid confusion. In the attached
+> > > patch just change the ->c_srate_active to ->c_srate (the patch is on top of
+> > > more changes for switching between multiple samplerates).
+> > 
+> > It doesn't look like any of the feedback EP changes got reverted for
+> > 5.14 / 5.15-rc1 so it looks like the dust has settled.  Are you going to
+> > send the below patch formally as well?
+> > 
+> 
+> Thanks for testing the patch. I did not want to intrude into Jerome's plan.
+> However, if Jerome is OK with the attached patch, I can submit it formally
+> and continue with submitting more patches for Win10 support.
+> 
+> Thanks,
+> 
+> Pavel.
 
-On Tue, Sep 21, 2021, at 15:46, Heikki Krogerus wrote:
-> On Sat, Sep 18, 2021 at 02:09:33PM +0200, Sven Peter wrote:
->> The Apple CD321x comes up in a low-power state after boot. Usually, the
->> bootloader will already power it up to S0 but let's do it here as well
->> in case that didn't happen.
->> 
->> Suggested-by: Stan Skowronek <stan@corellium.com>
->> Signed-off-by: Sven Peter <sven@svenpeter.dev>
->> ---
->>  drivers/usb/typec/tipd/core.c     | 44 +++++++++++++++++++++++++++++++
->>  drivers/usb/typec/tipd/tps6598x.h |  6 +++++
->>  2 files changed, 50 insertions(+)
->> 
->> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
->> index e96b17fe6af6..26807c050662 100644
->> --- a/drivers/usb/typec/tipd/core.c
->> +++ b/drivers/usb/typec/tipd/core.c
->> @@ -30,6 +30,7 @@
->>  #define TPS_REG_INT_MASK2		0x17
->>  #define TPS_REG_INT_CLEAR1		0x18
->>  #define TPS_REG_INT_CLEAR2		0x19
->> +#define TPS_REG_SYSTEM_POWER_STATE	0x20
->>  #define TPS_REG_STATUS			0x1a
->>  #define TPS_REG_SYSTEM_CONF		0x28
->>  #define TPS_REG_CTRL_CONF		0x29
->> @@ -84,6 +85,8 @@ struct tps6598x_hw {
->>  	unsigned int irq_data_status_update;
->>  	unsigned int irq_plug_event;
->>  	void (*irq_trace)(u64 event1, u64 event2);
->> +
->> +	bool supports_spss;
->>  };
-[...]
->>  static int devm_tps6598_psy_register(struct tps6598x *tps)
->>  {
->>  	struct power_supply_config psy_cfg = {};
->> @@ -648,6 +685,11 @@ static int tps6598x_probe(struct i2c_client *client)
->>  	if (ret)
->>  		return ret;
->>  
->> +	/* Switch Apple chips to the correct system power state */
->> +	ret = cd321x_switch_power_state(tps, TPS_SYSTEM_POWER_STATE_S0);
->> +	if (ret)
->> +		return ret;
->
-> If you call this from the same quirk where you set the mask for your
-> board, you don't need that supports_spss flag at all, right?
+> From 26f5a49c2ddac2d5c52c4072bc756e7d15b47bc8 Mon Sep 17 00:00:00 2001
+> From: Pavel Hofman <pavel.hofman@ivitera.com>
+> Date: Mon, 6 Sep 2021 14:04:00 +0200
+> Subject: [PATCH] usb: gadget: f_uac2: fixed EP-IN wMaxPacketSize
 
-Yup, that one will also disappear then.
+Thanks for this patch, it looks good to me.  Can you please send this as
+a formal patch in its own mail so Greg & Felipe can properly take it?
+Or if you like I can send it (if so I'd need to add my S-o-b as well).
 
-Thanks,
+Jack
 
-Sven
+> Async feedback patches broke enumeration on Windows 10 previously fixed
+> by commit 789ea77310f0 ("usb: gadget: f_uac2: always increase endpoint
+> max_packet_size by one audio slot").
+> 
+> While the existing calculation for EP OUT capture for async mode yields
+> size+1 frame due to uac2_opts->fb_max > 0, playback side lost the +1
+> feature.  Therefore the +1 frame addition must be re-introduced for
+> playback. Win10 enumerates the device only when both EP IN and EP OUT
+> max packet sizes are (at least) +1 frame.
+> 
+> Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+> Tested-by: Henrik Enquist <henrik.enquist@gmail.com>
+> Tested-by: Jack Pham <jackp@codeaurora.org>
+> ---
+>  drivers/usb/gadget/function/f_uac2.c | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+> index ae29ff2b2b68..bdc7e6e78455 100644
+> --- a/drivers/usb/gadget/function/f_uac2.c
+> +++ b/drivers/usb/gadget/function/f_uac2.c
+> @@ -584,11 +584,17 @@ static int set_ep_max_packet_size(const struct f_uac2_opts *uac2_opts,
+>  		ssize = uac2_opts->c_ssize;
+>  	}
+>  
+> -	if (!is_playback && (uac2_opts->c_sync == USB_ENDPOINT_SYNC_ASYNC))
+> +	if (!is_playback && (uac2_opts->c_sync == USB_ENDPOINT_SYNC_ASYNC)) {
+> +	  // Win10 requires max packet size + 1 frame
+>  		srate = srate * (1000 + uac2_opts->fb_max) / 1000;
+> -
+> -	max_size_bw = num_channels(chmask) * ssize *
+> -		DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1)));
+> +		// updated srate is always bigger, therefore DIV_ROUND_UP always yields +1
+> +		max_size_bw = num_channels(chmask) * ssize *
+> +			(DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1))));
+> +	} else {
+> +		// adding 1 frame provision for Win10
+> +		max_size_bw = num_channels(chmask) * ssize *
+> +			(DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1))) + 1);
+> +	}
+>  	ep_desc->wMaxPacketSize = cpu_to_le16(min_t(u16, max_size_bw,
+>  						    max_size_ep));
+>  
+> -- 
+> 2.25.1
+> 
