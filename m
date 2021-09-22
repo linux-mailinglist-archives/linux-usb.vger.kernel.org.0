@@ -2,73 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB02C41425F
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Sep 2021 09:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5C24142A5
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Sep 2021 09:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233169AbhIVHNG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Sep 2021 03:13:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37358 "EHLO mail.kernel.org"
+        id S233166AbhIVHdP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Sep 2021 03:33:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42806 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233024AbhIVHNG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 Sep 2021 03:13:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2FEDE61156;
-        Wed, 22 Sep 2021 07:11:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1632294696;
-        bh=yxr8NwWPu+PUAvGLOodKkJu+rQJl50G7dN5h5BcR4ac=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vS81OGacSdPaQk1uO6u9wE4l6gGnKqWe62ahPNb3jlzhlUj9f87H/Lfvy/He91zk1
-         L+COx0tNywGKNBC5A5yQKfaVLICrdnJxn41U8pTor59/S85KZJw9Id3byQjsyC9XlH
-         MAmowrPiiFek+Ho5tdj+/b58Sb2502s+fI6Tikfc=
-Date:   Wed, 22 Sep 2021 09:11:33 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Peter Korsgaard <peter@korsgaard.com>
-Cc:     Jiri Slaby <jslaby@suse.cz>, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] MAINTAINERS: usb, update Peter Korsgaard's entries
-Message-ID: <YUrXJTDE0YX6pkgb@kroah.com>
-References: <20210922063008.25758-1-jslaby@suse.cz>
- <87r1dhqecp.fsf@dell.be.48ers.dk>
+        id S231429AbhIVHdP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 Sep 2021 03:33:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 79A8460E8B;
+        Wed, 22 Sep 2021 07:31:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632295905;
+        bh=GJfxswTas8HMqf4MeuLP21erMt5kueVbW2x0om+Zw3Y=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=F9THj58mUmhrE4kiF1sRwvDUGS1NFeYUJs4ZIOL7aTwV46riMhA6mFTvn5GOTdGem
+         QeDXicWMJyt7USf3usHSOhQF3ZIlMhRDcjlKv6Dax0vp85+SK7g8mZxQ6x5cHRftXZ
+         UbJ267TJmLlaqz2YmDykBo5lQqspyJw6IkzFGubGrhgdvbhsQUByc1h3xs+pqwfOVK
+         k+KxCjzJtzquEVdUl7X9hk/tZMAw58ZahhDWMr70VyUF/qXs5WV7HDq9jpUhRtdArp
+         9J5OQD8uXtXxwM8eXp2mVguw6fmJgbzZvXmS7/yfB6YKyqlhu1KwKPkrKe+StzAoY8
+         Z7/KO8jYBy59A==
+Date:   Wed, 22 Sep 2021 09:31:42 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Andrej Shadura <andrew.shadura@collabora.co.uk>
+cc:     linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
+        kernel@collabora.com,
+        Benjamin Tissoires <benjamin.tissoires@gmail.com>
+Subject: Re: [PATCH] HID: u2fzero: ignore incomplete packets without data
+In-Reply-To: <20210916163311.11968-1-andrew.shadura@collabora.co.uk>
+Message-ID: <nycvar.YFH.7.76.2109220931360.15944@cbobk.fhfr.pm>
+References: <20210916163311.11968-1-andrew.shadura@collabora.co.uk>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87r1dhqecp.fsf@dell.be.48ers.dk>
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 22, 2021 at 09:05:58AM +0200, Peter Korsgaard wrote:
-> >>>>> "Jiri" == Jiri Slaby <jslaby@suse.cz> writes:
-> 
->  > Peter's e-mail in MAINTAINERS is defunct:
->  > This is the qmail-send program at a.mx.sunsite.dk.
->  > <jacmet@sunsite.dk>:
->  >       Sorry, no mailbox here by that name. (#5.1.1)
-> 
->  > Peter says:
->  > ** Ahh yes, it should be changed to peter@korsgaard.com.
-> 
->  > However he also says:
->  > ** I haven't had access to c67x00 hw for quite some years though, so maybe
->  > ** it should be marked Orphan instead?
-> 
->  > So change as he wishes.
-> 
->  > Signed-off-by: Jiri Slaby <jslaby@suse.cz>
->  > Cc: Peter Korsgaard <peter@korsgaard.com>
->  > Cc: Linus Torvalds <torvalds@linux-foundation.org>
->  > Cc: linux-usb@vger.kernel.org
->  > ---
->  > [v2]
-> 
->  > - Change the e-mail in DM9601 instead of dropping the old one.
->  > - Make C67X00 an orphan.
-> 
-> Thanks!
-> 
-> Acked-by: Peter Korsgaard <peter@korsgaard.com>
+On Thu, 16 Sep 2021, Andrej Shadura wrote:
 
-Thanks, I'll take this through my tree now.
+> Since the actual_length calculation is performed unsigned, packets
+> shorter than 7 bytes (e.g. packets without data or otherwise truncated)
+> or non-received packets ("zero" bytes) can cause buffer overflow.
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=214437
+> Fixes: 42337b9d4d958("HID: add driver for U2F Zero built-in LED and RNG")
+> Signed-off-by: Andrej Shadura <andrew.shadura@collabora.co.uk>
+> ---
+>  drivers/hid/hid-u2fzero.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hid/hid-u2fzero.c b/drivers/hid/hid-u2fzero.c
+> index 95e0807878c7..d70cd3d7f583 100644
+> --- a/drivers/hid/hid-u2fzero.c
+> +++ b/drivers/hid/hid-u2fzero.c
+> @@ -198,7 +198,9 @@ static int u2fzero_rng_read(struct hwrng *rng, void *data,
+>  	}
+>  
+>  	ret = u2fzero_recv(dev, &req, &resp);
+> -	if (ret < 0)
+> +
+> +	/* ignore errors or packets without data */
+> +	if (ret < offsetof(struct u2f_hid_msg, init.data))
+>  		return 0;
+>  
 
-greg k-h
+Applied, thanks.
+
+-- 
+Jiri Kosina
+SUSE Labs
+
