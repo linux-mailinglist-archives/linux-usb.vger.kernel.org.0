@@ -2,183 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1FFB41476D
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Sep 2021 13:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EAC4147CA
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Sep 2021 13:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235424AbhIVLNp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Sep 2021 07:13:45 -0400
-Received: from mail-bn7nam10on2048.outbound.protection.outlook.com ([40.107.92.48]:35936
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235486AbhIVLNm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 Sep 2021 07:13:42 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LeI2i1zyZFOFbAeLzeT7DFavt4wkesFeYd9xuVgP9jI/Omy+US3C2GR5u51lYx6mlDUz1kLwevKbwaRNbmnFVIkb9pWlIW9q96TyNTU1SzqmIbDb9nN58kwQ6MsoNNtCl/Kc/0mUCQ7qOYfSZGF4clxUDvEmTzYPnLZjZWzFqf2pB8BVtmqOBpv8IZnYfsO2jmozqSin5Gos5hIH/dn87+w33CyK88uNqZnvk23FPPXeysZEdIb4LnDqIPNDwgRYFy5u26KXHLyozJoavyrjnGjYTg6NXx0bvQnSl10F785ofcTU4NTNjKhzftN282fWkbzDeZaVO8ijQEJPuqNknw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=gzJB1sC21gQdkvyTsr4hr4/Jw8MfNFxqOJOtUIpksNw=;
- b=LjE8e/gY1gHh7+Hi5n8w5ROTfc8TPWfmfdThi96iDvieN/+qp+WbzbmznMu7RDWtnPu7x2SbkhixFwHw6tEeZdqKH1iTLQmPFkheiXM/ZlcPiwzdacvBXG9/KJfqGqLBhnfSrmB+Vp1oBjJjLm1Pum1KqQMxlFLIIEvwTy/rRJ6/SIbP498Dnc7T4DfQxhxCViCi0Xs6Cj8biDTnKh/heJXle0ZCG+Vve5gwRv0yd+SaF+zPmOd2TIH9M0Z9/gyJ/C8df2Wc4cfzL74aQNcvFvQROnerlKtEC8GNFO98eiQ/Iq40bzWylNyuxUV+2rKqeq4wL3QbfEcz1FxpQwX6DQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gzJB1sC21gQdkvyTsr4hr4/Jw8MfNFxqOJOtUIpksNw=;
- b=rl4xgp5HCLwR5mmRRZ8yKpF9sEDpQjLnNqaKeAoE1Ir7FugDuAhRMEWr6IRMrxKZJoYTqrbN6YOUvjattYUJsz+MmclFbG7qvtADQ9s4rL2sAjDzVPBLNTJgkyJCQSvoT1bt1V1+CdzshKRDQ6eRnkyQGidGNLGyZ6pzREynsC8=
-Received: from BN0PR07CA0015.namprd07.prod.outlook.com (2603:10b6:408:141::30)
- by BYAPR02MB4741.namprd02.prod.outlook.com (2603:10b6:a03:52::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.17; Wed, 22 Sep
- 2021 11:12:10 +0000
-Received: from BN1NAM02FT004.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:141:cafe::75) by BN0PR07CA0015.outlook.office365.com
- (2603:10b6:408:141::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.14 via Frontend
- Transport; Wed, 22 Sep 2021 11:12:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT004.mail.protection.outlook.com (10.13.2.123) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4523.14 via Frontend Transport; Wed, 22 Sep 2021 11:12:10 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Wed, 22 Sep 2021 04:11:40 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Wed, 22 Sep 2021 04:11:40 -0700
-Envelope-to: git@xilinx.com,
- linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org,
- gregkh@linuxfoundation.org,
- shubhrajyoti.datta@gmail.com
-Received: from [10.140.6.39] (port=42856 helo=xhdsgoud40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <shubhrajyoti.datta@xilinx.com>)
-        id 1mT0A4-0005wf-LK; Wed, 22 Sep 2021 04:11:37 -0700
-From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-To:     <linux-usb@vger.kernel.org>
-CC:     <devicetree@vger.kernel.org>, <gregkh@linuxfoundation.org>,
-        <shubhrajyoti.datta@gmail.com>, <git@xilinx.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Subject: [PATCH v3 2/2] usb: gadget: udc-xilinx: Add clock support
-Date:   Wed, 22 Sep 2021 16:41:26 +0530
-Message-ID: <7c3386d2f2b315fa6e248fc664efefb9a2de35e9.1632307026.git.shubhrajyoti.datta@xilinx.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1632307026.git.shubhrajyoti.datta@xilinx.com>
-References: <cover.1632307026.git.shubhrajyoti.datta@xilinx.com>
+        id S235701AbhIVLaE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Sep 2021 07:30:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44052 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235699AbhIVLaD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 Sep 2021 07:30:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0192B6112F;
+        Wed, 22 Sep 2021 11:28:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632310114;
+        bh=Wne4TnzNwCea4iyChQ94L2nuquoRNKhCUrYLwaaEZ5o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jSsbWthGeiq9Yi8mYUDLhODAc9DF8/WIg5nUZoaU6I0RYtqoBlPMo6/yJvZD3p8QD
+         Y5w0ErehI90/Eoh6XmMqDY07V4BljLJ9ttLgezufgElCfKXAw3YeX6vTJ8jjl2jd9U
+         TEIWLfrReWYaOC29cut8/N64GPODNRe9J+Kq5rQLpPH7pSAgYWZ+e+BGxFedrErW5k
+         gEMq1tJsW4EHIkK6aTxBPMywO+uTDb2Gc7PIA9HEWWhg7R5iJ7/SIITe9TfHdiPSuC
+         vVeoRNbQRvUuspjHjoh9iijAGmZSPAI1mqm6X/a6PaYYfKkywm/RjZTCT4cSXtXb4S
+         R86gv4urf0+ww==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mT0QS-0005Ok-R7; Wed, 22 Sep 2021 13:28:33 +0200
+Date:   Wed, 22 Sep 2021 13:28:32 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Malte Di Donato <malte@neo-soft.org>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: Possible bug in the cp210x kernel driver?
+Message-ID: <YUsTYFOdMH/kQEyE@hovoldconsulting.com>
+References: <zarafa.614a0e7a.4925.15cc733978d29bb6@neosoft.neo-soft.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 643c7179-0f94-44cf-5ca9-08d97db9d29e
-X-MS-TrafficTypeDiagnostic: BYAPR02MB4741:
-X-Microsoft-Antispam-PRVS: <BYAPR02MB474129819667564EF3519526AAA29@BYAPR02MB4741.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:962;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: l4vf+KqQI5fzfzN4DmHzPx+yTRJPqPfLzVNh8ww+v+EtpV8VJddY+h8m4mnAuiCph1BTph3Cvtcy/YGbTLa7ro5yQd97B/TdbBgNjSl+lf4cJlM1Uo8yaTFiBs8i2Zk0JDDdqAkvnpRuftkvMiCli3n0369U3bQrtPcjhMOK6NJFKH4Gi3GIfHCbqhjbCI+ISHDfDJUqstpZ56E3US7anQp2AgUnl3yYnSviuJq5PoQKrSJ3MmgllQHykKqCPinTFaEmFvUpQhDkxuAvtAXrKb/eugSublmmZFuimLh+NalDtW8Celua8Z//u6FllNzFk1RIMBgZVeFYJHp88WKaKHcQbNkDfkId+rnkOF8Ooy3fUU/w06Yi4iKLMjzMNjMb5jcUt9z6te/CYhdDgtqsVb1ZTm4og017V+xLLsRJxD7wgVYuLSFoAQzE6usmcIPYpZKZVWhcpYlx+acmgjRBCnF3jSih0epxUkKKMWxfqQeUyaxipop7rPHYlw6Bay+ZFcjncZkQp/hdJkw8VPGmRYh7oDqJoUlU9tn28Ct2/9BvzUudzBC+lGzCx2uxZ1PGVrmm0+chKJyW3tSD5PwrPYaQGrG25DAKz5tUjrFMilfujLW2V3Vtobo1kIGgtDML2QnXjR+X+yiGPsfyjA+F4OH3Ctb1WLLCdWleGZgcqlou801x6yq8utWtnYEd2atqLbpnjQ/c+efEF5opvQV0gU3ruCsDtZfsyx4NLdPssl0=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(44832011)(7696005)(6916009)(7636003)(4326008)(5660300002)(2616005)(356005)(2906002)(70206006)(82310400003)(8676002)(8936002)(36860700001)(316002)(70586007)(54906003)(47076005)(508600001)(107886003)(426003)(186003)(6666004)(36906005)(9786002)(26005)(83380400001)(336012)(36756003)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2021 11:12:10.4192
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 643c7179-0f94-44cf-5ca9-08d97db9d29e
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT004.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB4741
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <zarafa.614a0e7a.4925.15cc733978d29bb6@neosoft.neo-soft.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently the driver depends on the  bootloader to enable the clocks.
-Add support for clocking. The patch enables the clock at  probe and
-disables them at remove.
+On Tue, Sep 21, 2021 at 06:55:21PM +0200, Malte Di Donato wrote:
+> Hi Johan,
+> 
+> Sorry about the html crap.
+> (and double excuse that I've totally forgotten to change my webmail
+> account surname since wedding ;)
 
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
----
-v3:
-Add dev_warn
+Heh, good that you noticed in time so I can give you proper credit in
+the commit message. ;)
 
- drivers/usb/gadget/udc/udc-xilinx.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+Unfortunately your mails won't be seen by anyone else one the list
+unless you can disable that html.
 
-diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
-index fb4ffedd6f0d..f5ca670776a3 100644
---- a/drivers/usb/gadget/udc/udc-xilinx.c
-+++ b/drivers/usb/gadget/udc/udc-xilinx.c
-@@ -11,6 +11,7 @@
-  * USB peripheral controller (at91_udc.c).
-  */
- 
-+#include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/dma-mapping.h>
-@@ -171,6 +172,7 @@ struct xusb_ep {
-  * @addr: the usb device base address
-  * @lock: instance of spinlock
-  * @dma_enabled: flag indicating whether the dma is included in the system
-+ * @clk: pointer to struct clk
-  * @read_fn: function pointer to read device registers
-  * @write_fn: function pointer to write to device registers
-  */
-@@ -188,6 +190,7 @@ struct xusb_udc {
- 	void __iomem *addr;
- 	spinlock_t lock;
- 	bool dma_enabled;
-+	struct clk *clk;
- 
- 	unsigned int (*read_fn)(void __iomem *);
- 	void (*write_fn)(void __iomem *, u32, u32);
-@@ -2092,6 +2095,27 @@ static int xudc_probe(struct platform_device *pdev)
- 	udc->gadget.ep0 = &udc->ep[XUSB_EP_NUMBER_ZERO].ep_usb;
- 	udc->gadget.name = driver_name;
- 
-+	udc->clk = devm_clk_get(&pdev->dev, "s_axi_aclk");
-+	if (IS_ERR(udc->clk)) {
-+		if (PTR_ERR(udc->clk) != -ENOENT) {
-+			ret = PTR_ERR(udc->clk);
-+			goto fail;
-+		}
-+
-+		/*
-+		 * Clock framework support is optional, continue on,
-+		 * anyways if we don't find a matching clock
-+		 */
-+		dev_warn(&pdev->dev, "s_axi_aclk clock property is not found\n");
-+		udc->clk = NULL;
-+	}
-+
-+	ret = clk_prepare_enable(udc->clk);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Unable to enable clock.\n");
-+		return ret;
-+	}
-+
- 	spin_lock_init(&udc->lock);
- 
- 	/* Check for IP endianness */
-@@ -2147,6 +2171,7 @@ static int xudc_remove(struct platform_device *pdev)
- 	struct xusb_udc *udc = platform_get_drvdata(pdev);
- 
- 	usb_del_gadget_udc(&udc->gadget);
-+	clk_disable_unprepare(udc->clk);
- 
- 	return 0;
- }
--- 
-2.25.1
+> Placed the patch code into my running debian kernel version
+> 5.10.0-8-amd64 and put the two invocations to the
+> cp210x_init_max_speed function (cp210x_get_fw_version not existent in
+> my kernel source file).
 
+Sounds good, we need to do the same when backporting the fix.
+
+> Here's the dmesg with the patched driver:
+> 
+> [19089.502913] usbcore: registered new interface driver cp210x
+> [19089.502951] usbserial: USB Serial support registered for cp210x
+> [19096.084910] usb 3-1.2: new full-speed USB device number 9 using ehci-pci
+> [19096.224973] usb 3-1.2: New USB device found, idVendor=10c4, idProduct=ea60, bcdDevice= 1.00
+> [19096.225034] usb 3-1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> [19096.225037] usb 3-1.2: Product: CP2102 USB to UART Bridge Controller
+> [19096.225040] usb 3-1.2: Manufacturer: Silicon Labs
+> [19096.225043] usb 3-1.2: SerialNumber: 0001
+> [19096.233460] cp210x 3-1.2:1.0: cp210x converter detected
+> [19096.233939] cp210x 3-1.2:1.0: cp210x_init_max_speed - type = 0x02
+> [19096.234458] cp210x 3-1.2:1.0: failed to get vendor val 0x370b size 8: 1
+
+So the device returns one byte (instead of eight) as I suspected. Then
+we can use this to detect these devices.
+
+> [19096.236568] usb 3-1.2: cp210x converter now attached to ttyUSB0
+> 
+> I also compiled the cp2102-det and run it against the chip:
+> 09: Got 128 bytes:  FF F0 FF FA 01 00 60 E3 16 00 FF F0 FF FA 01 00 60 E3 16 00 FF EC FF F8 01 00 80 4F 12 00 FF E6 FF F6 01 00 00 10 0E 00 FF D6 FF F0 01 00 00 CA 08 00 FF D0 FF EE 01 00 20 A1 07 00 FF CC FF EC 01 00 00 08 07 00 FF A2 FF DC 01 00 00 E8 03 00 FF A0 FF DC 01 00 90 D0 03 00 FF 98 FF D9 01 00 00 84 03 00 FF 64 FF C5 01 00 00 58 02 00 FF 44 FF B9 01 00 00 F4 01 00 FF 30 FF B2 01 00 00 C2 
+> 0A: Got 1 bytes:  FF 
+> 0B: Got 1 bytes:  02 
+> Done.
+> 
+> Hope this helps?
+
+It does, thanks. The 0B request above is the part-number request. The
+original CP2102 I have here returns 8 bytes if that's requested.
+
+> As I look on the "SerialNumber: 0001" in dmesg it may be possible that
+> I've got a cloned chip on the chinesium usb/ttl converter...
+
+Mine has 0001 as serial number as well, but the lack of event-mode and
+different vendor request behaviour seems to suggest it could be a
+counterfeit.
+
+I'll reply to this mail with a fix that fixes the dropped character
+issue by disabling event-insertion mode (and thus parity reporting) for
+devices such as yours.
+
+I've verified it here as well as I could, but could you give it a spin
+with your device as well? If you want you can reply to the patch mail
+with a Tested-by tag and I'll add that to the commit message as well.
+
+Johan
