@@ -2,142 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E422413EE9
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Sep 2021 03:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC65413F3F
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Sep 2021 04:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232246AbhIVBSR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Sep 2021 21:18:17 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:21443 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230469AbhIVBSR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Sep 2021 21:18:17 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1632273408; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=oaqFD/Hj6mpuWTjt+/L5itwzAWWv5BkTLbVKreF7s24=; b=PaDT/LoRP/BOychqn38DBuSp0zKOJhQQzyzX3qAW4l8LFenwawPNp1fotz720gRTIZ+68D/Z
- 9CbVk0AsDCDh6nk8f9aDmoJCQe4tkjhwzTOxvp5KBUu1D+k++C526f2xlysavMtIqhxCboff
- NWnYBhG35El5SUk4PX5tnYXJ9ek=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
- 614a83ffb585cc7d246e1599 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 22 Sep 2021 01:16:47
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 3EAD0C4360D; Wed, 22 Sep 2021 01:16:47 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 179C5C4338F;
-        Wed, 22 Sep 2021 01:16:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 179C5C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Date:   Tue, 21 Sep 2021 18:16:43 -0700
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+        id S230015AbhIVCIq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Sep 2021 22:08:46 -0400
+Received: from m1353.mail.163.com ([220.181.13.53]:40894 "EHLO
+        m1353.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229640AbhIVCIp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Sep 2021 22:08:45 -0400
+X-Greylist: delayed 923 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 Sep 2021 22:08:44 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=0jByO
+        U6YoAr0xNi7fOL95kexfWdGhbTncKzQAa9Si+U=; b=dN+MuAwfK4IMJXkyorz/1
+        fgElwV/d6AGzwp4Ha/Hwd20kYxZNK18YgCo0r9rxzhfVxDyoUBgEO97DJXop7EDk
+        vM0AAcuK7Vp7t5kiJJE5rfI5uRQfogeFAGXjY7GkrIHXtUUYmViKDCLto+RlJdEf
+        /dlpYnPtnb9UXfFFOEypRs=
+Received: from slark_xiao$163.com ( [223.104.68.0] ) by ajax-webmail-wmsvr53
+ (Coremail) ; Wed, 22 Sep 2021 09:51:47 +0800 (CST)
+X-Originating-IP: [223.104.68.0]
+Date:   Wed, 22 Sep 2021 09:51:47 +0800 (CST)
+From:   "Slark Xiao" <slark_xiao@163.com>
+To:     "Johan Hovold" <johan@kernel.org>
 Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 2/4] xhci: Improve detection of device initiated wake
- signal.
-Message-ID: <20210922011643.GD3515@jackp-linux.qualcomm.com>
-References: <20210311115353.2137560-1-mathias.nyman@linux.intel.com>
- <20210311115353.2137560-3-mathias.nyman@linux.intel.com>
+        linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH] USB:serial:option Add Foxconn T99W265
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
+ Copyright (c) 2002-2021 www.mailtech.cn 163com
+In-Reply-To: <YUhVKrRJ8M2hKJil@hovoldconsulting.com>
+References: <20210917110106.9852-1-slark_xiao@163.com>
+ <YUhVKrRJ8M2hKJil@hovoldconsulting.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210311115353.2137560-3-mathias.nyman@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Message-ID: <2992805f.bc9.17c0b33a78e.Coremail.slark_xiao@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: NcGowACHhOYzjEphBC7NAA--.52284W
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbioxMWZFUMY-NuZAAAsB
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
-
-On Thu, Mar 11, 2021 at 01:53:51PM +0200, Mathias Nyman wrote:
-> A xHC USB 3 port might miss the first wake signal from a USB 3 device
-> if the port LFPS reveiver isn't enabled fast enough after xHC resume.
-> 
-> xHC host will anyway be resumed by a PME# signal, but will go back to
-> suspend if no port activity is seen.
-> The device resends the U3 LFPS wake signal after a 100ms delay, but
-> by then host is already suspended, starting all over from the
-> beginning of this issue.
-> 
-> USB 3 specs say U3 wake LFPS signal is sent for max 10ms, then device
-> needs to delay 100ms before resending the wake.
-> 
-> Don't suspend immediately if port activity isn't detected in resume.
-> Instead add a retry. If there is no port activity then delay for 120ms,
-> and re-check for port activity.
-
-We have a use case with which this change is causing unnecessary delay.
-Consider a USB2* device is attached and host is initiating the resume.
-Since this is not a device initiated wakeup there wouldn't be any
-pending event seen on the PORTSC registers, yet this adds an additional
-120ms delay to re-check the PORTSC before returning and allowing the USB
-core to perform resume signaling.
-
-Is there a way to avoid this delay in that case?  Perhaps could we
-distinguish whether we arrive here at xhci_resume() due to a
-host-initiated resume vs. a device remote wakeup?
-
-* I think it should be similar for attached USB3 devices as well, since
-the host-initiated exit from U3 wouldn't happen until usb_port_resume().
-
-Thanks,
-Jack
-
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> ---
->  drivers/usb/host/xhci.c | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index bd27bd670104..48a68fcf2b36 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -1088,6 +1088,7 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
->  	struct usb_hcd		*secondary_hcd;
->  	int			retval = 0;
->  	bool			comp_timer_running = false;
-> +	bool			pending_portevent = false;
->  
->  	if (!hcd->state)
->  		return 0;
-> @@ -1226,13 +1227,22 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
->  
->   done:
->  	if (retval == 0) {
-> -		/* Resume root hubs only when have pending events. */
-> -		if (xhci_pending_portevent(xhci)) {
-> +		/*
-> +		 * Resume roothubs only if there are pending events.
-> +		 * USB 3 devices resend U3 LFPS wake after a 100ms delay if
-> +		 * the first wake signalling failed, give it that chance.
-> +		 */
-> +		pending_portevent = xhci_pending_portevent(xhci);
-> +		if (!pending_portevent) {
-> +			msleep(120);
-> +			pending_portevent = xhci_pending_portevent(xhci);
-> +		}
-> +
-> +		if (pending_portevent) {
->  			usb_hcd_resume_root_hub(xhci->shared_hcd);
->  			usb_hcd_resume_root_hub(hcd);
->  		}
->  	}
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+CgpBdCAyMDIxLTA5LTIwIDE3OjMyOjI2LCAiSm9oYW4gSG92b2xkIiA8am9oYW5Aa2VybmVsLm9y
+Zz4gd3JvdGU6Cj5PbiBGcmksIFNlcCAxNywgMjAyMSBhdCAwNzowMTowNlBNICswODAwLCBTbGFy
+ayBYaWFvIHdyb3RlOgo+PiBBZGRpbmcgc3VwcG9ydCBmb3IgRm94Y29ubiBkZXZpY2UgVDk5VzI2
+NSBmb3IgZW51bWVyYXRpb24gd2l0aAo+PiBQSUQgMHhlMGRiLgo+PiAKPj4gdXNiLWRldmljZXMg
+b3V0cHV0IGZvciAweGUwZGIKPj4gVDogIEJ1cz0wNCBMZXY9MDEgUHJudD0wMSBQb3J0PTAwIENu
+dD0wMSBEZXYjPSAxOSBTcGQ9NTAwMCBNeENoPSAwCj4+IEQ6ICBWZXI9IDMuMjAgQ2xzPWVmKG1p
+c2MgKSBTdWI9MDIgUHJvdD0wMSBNeFBTPSA5ICNDZmdzPSAgMQo+PiBQOiAgVmVuZG9yPTA0ODkg
+UHJvZElEPWUwZGIgUmV2PTA1LjA0Cj4+IFM6ICBNYW51ZmFjdHVyZXI9TWljcm9zb2Z0Cj4+IFM6
+ICBQcm9kdWN0PUdlbmVyaWMgTW9iaWxlIEJyb2FkYmFuZCBBZGFwdGVyCj4+IFM6ICBTZXJpYWxO
+dW1iZXI9NmM1MGY0NTIKPj4gQzogICNJZnM9IDUgQ2ZnIz0gMSBBdHI9YTAgTXhQd3I9ODk2bUEK
+Pj4gSTogIElmIz0weDAgQWx0PSAwICNFUHM9IDEgQ2xzPTAyKGNvbW1jKSBTdWI9MGUgUHJvdD0w
+MCBEcml2ZXI9Y2RjX21iaW0KPj4gSTogIElmIz0weDEgQWx0PSAxICNFUHM9IDIgQ2xzPTBhKGRh
+dGEgKSBTdWI9MDAgUHJvdD0wMiBEcml2ZXI9Y2RjX21iaW0KPj4gSTogIElmIz0weDIgQWx0PSAw
+ICNFUHM9IDMgQ2xzPWZmKHZlbmQuKSBTdWI9ZmYgUHJvdD00MCBEcml2ZXI9b3B0aW9uCj4+IEk6
+ICBJZiM9MHgzIEFsdD0gMCAjRVBzPSAxIENscz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9ZmYgRHJp
+dmVyPShub25lKQo+PiBJOiAgSWYjPTB4NCBBbHQ9IDAgI0VQcz0gMiBDbHM9ZmYodmVuZC4pIFN1
+Yj1mZiBQcm90PTMwIERyaXZlcj1vcHRpb24KPj4gCj4+IGlmMC8xOiBNQklNLCBpZjI6RGlhZywg
+aWYzOkdOU1MsIGlmNDogTW9kZW0KPj4gCj4+IFNpZ25lZC1vZmYtYnk6IFNsYXJrIFhpYW8gPHNs
+YXJrX3hpYW9AMTYzLmNvbT4KPgo+VGhhbmtzIGZvciB0aGUgcGF0Y2ggYW5kIGZvciBpbmNsdWRp
+bmcgYWxsIHRoZSBuZWNlc3NhcnkgZGV0YWlscyBpbiB0aGUKPmNvbW1pdCBtZXNzYWdlLgo+Cj5G
+aXJzdCwgYSBtaW5vciBzdHlsZSBuaXQ6IFBsZWFzZSBhZGQgc3BhY2VzIGFmdGVyIHRoZSAnOidz
+IGluIHRoZSBwYXRjaAo+U3ViamVjdC4KPgoKVGhhbmtzIGZvciB5b3VyIHdhcm0gbm90aWNlLiBJ
+IHdpbGwgbWluZCB0aGlzIGluIGZ1dHVyZS4KCj4+IC0tLQo+PiAgZHJpdmVycy91c2Ivc2VyaWFs
+L29wdGlvbi5jIHwgMiArKwo+PiAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKQo+PiAK
+Pj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL3NlcmlhbC9vcHRpb24uYyBiL2RyaXZlcnMvdXNi
+L3NlcmlhbC9vcHRpb24uYwo+PiBpbmRleCAyOWM3NjVjYzg0OTUuLmZkZTU5OWZhMmQ3MyAxMDA2
+NDQKPj4gLS0tIGEvZHJpdmVycy91c2Ivc2VyaWFsL29wdGlvbi5jCj4+ICsrKyBiL2RyaXZlcnMv
+dXNiL3NlcmlhbC9vcHRpb24uYwo+PiBAQCAtMjA2OCw2ICsyMDY4LDggQEAgc3RhdGljIGNvbnN0
+IHN0cnVjdCB1c2JfZGV2aWNlX2lkIG9wdGlvbl9pZHNbXSA9IHsKPj4gIAkgIC5kcml2ZXJfaW5m
+byA9IFJTVkQoMCkgfCBSU1ZEKDEpIHwgUlNWRCg2KSB9LAo+PiAgCXsgVVNCX0RFVklDRSgweDA0
+ODksIDB4ZTBiNSksCQkJCQkJLyogRm94Y29ubiBUNzdXOTY4IEVTSU0gKi8KPj4gIAkgIC5kcml2
+ZXJfaW5mbyA9IFJTVkQoMCkgfCBSU1ZEKDEpIHwgUlNWRCg2KSB9LAo+PiArCXsgVVNCX0RFVklD
+RSgweDA0ODksIDB4ZTBkYiksCQkJCQkJLyogRm94Y29ubiBUOTlXMjY1IE1CSU0gZXh0ZW5zaW9u
+Ki8KPj4gKwkgIC5kcml2ZXJfaW5mbyA9IFJTVkQoMCkgfCBSU1ZEKDEpIHwgUlNWRCgzKSB9LAo+
+Cj5JZiB5b3UgdXNlIFVTQl9ERVZJQ0VfSU5URVJGQUNFX0NMQVNTKCkgaW5zdGVhZCB5b3UgZG9u
+J3QgbmVlZCB0bwo+ZXhwbGljaXRseSByZXNlcnZlIHRoZSBNQklNIGludGVyZmFjZXMuIAo+Cj5B
+bHNvLCB3aHkgYXJlIHlvdSByZXNlcnZpbmcgdGhlIEdOU1MgaW50ZXJmYWNlIChlLmcuIHVubGlr
+ZSBUNzdXOTY4KT8KCkkganVzdCB3YW50IHRvIGtlZXAgc2FtZSBzdHlsZSBhcyBwcmV2aW91cyBw
+cm9kdWN0cy4gVGhhdCB3b3VsZCBiZSBtb3JlIGNvb3JkaW5hdGVkLCBJIHRoaW5rLgpBbmQgZm9y
+IEdOU1MgcG9ydCwgaXQgY2FuJ3QgYmUgc3VwcG9ydGVkIHdpdGggc2VyaWFsIGRyaXZlci4gSXQg
+ZG9lc24ndCBsaWtlIGEgIE5NRUEgcG9ydCB3aGljaCBpcyB1c2luZyBzZXJpYWwgZHJpdmVyLgpJ
+IGNoZWNrZWQgaXQgZm9yIFQ3N1c5NjgoTUJJTSBtb2RlKSBhbmQgZm91bmQgc2V0dGluZ3MgYXMg
+YmVsb3c6CmlmMC9pZjE6IE1CSU0sIGlmMjogTW9kZW0sIGlmMzpBVCwgIGlmNDogTk1FQSwgaWY1
+OiBEaWFnLCBpZjY6IEdOU1MKR05TUyBpcyBhbHNvIHJlc2VydmVkLgoKVGhhbmtzLgo+Cj4+ICAJ
+eyBVU0JfREVWSUNFKDB4MTUwOCwgMHgxMDAxKSwJCQkJCQkvKiBGaWJvY29tIE5MNjY4IChJT1Qg
+dmVyc2lvbikgKi8KPj4gIAkgIC5kcml2ZXJfaW5mbyA9IFJTVkQoNCkgfCBSU1ZEKDUpIHwgUlNW
+RCg2KSB9LAo+PiAgCXsgVVNCX0RFVklDRSgweDJjYjcsIDB4MDEwNCksCQkJCQkJLyogRmlib2Nv
+bSBOTDY3OCBzZXJpZXMgKi8KPgo+Sm9oYW4K
