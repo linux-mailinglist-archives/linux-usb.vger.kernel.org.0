@@ -2,165 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 103D7414441
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Sep 2021 10:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F31D4146DC
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Sep 2021 12:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234135AbhIVIzO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Sep 2021 04:55:14 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:20235 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233741AbhIVIzM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Sep 2021 04:55:12 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1632300822; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=id+uOqWXqh1BzsspNKQReK/0+hKAUXpygQ1iBVBGuvw=; b=Pm1QvnFiXAXUmcVSpNqJHjrlEx+va/hToQTMmfRz8UedKvq+ofO4X9o8d21WOk5+oHahxxY5
- 1xOQgWYYFC9nDFTfpGSQIPATcYul/YBG4kIbrLBjq9Oqw/EIBc3fDKP99OlMR8uBOnSy5df/
- PUEowwtO5uJQqurutqesY7XsDFs=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
- 614aef08b585cc7d2461cdf3 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 22 Sep 2021 08:53:28
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 03754C43617; Wed, 22 Sep 2021 08:53:28 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [192.168.1.6] (cpe-75-80-185-151.san.res.rr.com [75.80.185.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 36681C43460;
-        Wed, 22 Sep 2021 08:53:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 36681C43460
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: dwc3-qcom: tx-fifo-resize regression on Poco F1 (sdm845) with
- v5.15-rc1
-To:     Amit Pundir <amit.pundir@linaro.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+        id S235325AbhIVKoS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Sep 2021 06:44:18 -0400
+Received: from mga12.intel.com ([192.55.52.136]:52938 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235403AbhIVKmF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 Sep 2021 06:42:05 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10114"; a="203059424"
+X-IronPort-AV: E=Sophos;i="5.85,313,1624345200"; 
+   d="scan'208";a="203059424"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2021 03:40:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,313,1624345200"; 
+   d="scan'208";a="613368772"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 22 Sep 2021 03:40:31 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 22 Sep 2021 13:40:30 +0300
+Date:   Wed, 22 Sep 2021 13:40:30 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Rajaram R <rajaram.officemail@gmail.com>
+Cc:     Badhri Jagan Sridharan <badhri@google.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "bleung@chromium.org" <bleung@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jack Pham <jackp@codeaurora.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        John Stultz <john.stultz@linaro.org>,
-        linux-usb@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dt <devicetree@vger.kernel.org>
-References: <CAMi1Hd3k2snB4-=M57pVrMVom=a9_2a0DTFk-+Hzpubwk-Pr9Q@mail.gmail.com>
- <64a2a428-8bb1-0078-2403-1ca8e28cf4b1@codeaurora.org>
- <CAMi1Hd2MCxJgbHz9oGWe4L+MXNM3p+Xntpcg6t3TvZxwjJTy0Q@mail.gmail.com>
- <47a06078-dd41-7b3d-3de3-4e6c24211691@codeaurora.org>
- <CAMi1Hd1UtTECaDROGm7hE377Dp5qLzZeqBowmxoQJpOm9uQFHw@mail.gmail.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <a126f6f3-1313-64f9-98bf-fcb7984220cd@codeaurora.org>
-Date:   Wed, 22 Sep 2021 01:53:25 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+Message-ID: <YUsIHvNcEfX6dzZG@kuha.fi.intel.com>
+References: <20210902213500.3795948-1-pmalani@chromium.org>
+ <20210902213500.3795948-3-pmalani@chromium.org>
+ <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
+ <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <YUB16up3JDwi3HfI@kuha.fi.intel.com>
+ <YULwz8NsoA3+vrhA@google.com>
+ <YUMbGp0aemx1HCHv@kuha.fi.intel.com>
+ <DB9PR10MB46525E6CA4C6BB101059D93C80DC9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <CAPTae5Kxmp0L35KnkYaHARrBmysX9wkMYZhGhJsu6tX4bcHuAA@mail.gmail.com>
+ <CAOiXhaLpe7gHw6c8pCZDNeOC31WfxFum5G1RNiEbEG2Fn=6oeQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAMi1Hd1UtTECaDROGm7hE377Dp5qLzZeqBowmxoQJpOm9uQFHw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOiXhaLpe7gHw6c8pCZDNeOC31WfxFum5G1RNiEbEG2Fn=6oeQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Amit,
+Hi Rajaram,
 
-On 9/21/2021 3:18 AM, Amit Pundir wrote:
-> On Tue, 21 Sept 2021 at 13:00, Wesley Cheng <wcheng@codeaurora.org> wrote:
->>
->> Hi Amit,
->>
->> On 9/21/2021 12:04 AM, Amit Pundir wrote:
->>> Hi Wesley,
->>>
->>> On Tue, 21 Sept 2021 at 02:44, Wesley Cheng <wcheng@codeaurora.org> wrote:
->>>>
->>>> Hi Amit,
->>>>
->>>> On 9/20/2021 1:45 PM, Amit Pundir wrote:
->>>>> Hi Wesley, All,
->>>>>
->>>>> I see a reboot loop on Xiaomi Pocophone F1 (sdm845) with TX FIFO
->>>>> resize patches which landed in v5.15-rc1. Upstream commit cefdd52fa045
->>>>> "usb: dwc3: dwc3-qcom: Enable tx-fifo-resize property by default" to
->>>>> be specific, which switched on this feature by default.
->>>>>
->>>>> At times the phone crashes into the fastboot mode after the reboot
->>>>> loop, but mostly end up booting to UI after a while. This is what it
->>>>> looks like https://people.linaro.org/~amit.pundir/beryllium-userdebug/PXL_20210920_162749483.mp4.
->>>>>
->>>>
->>>> I believe Android will attempt a number of bootup sequences and if it
->>>> fails, it falls back to fastboot mode.  Are there any available logs you
->>>> might be able to collect to see where the issue is?
->>>
->>> It is a stock phone with no UART access, so I can't get early crash
->>> logs unless I'm booted up to adb shell. I can try getting some info
->>> using pstore-ramoops but warm reset support for sdm845 was not
->>> upstreamed when I tried using that the last time.
->>>
->>
->> I see, can we maybe avoid the actual resizing by commenting out the
->> following writel() calls, but let the fifo resize logic calculate the EPs?
->>
->> void dwc3_gadget_clear_tx_fifos(struct dwc3 *dwc)
->> {
->> ...
->>                 /* Don't change TXFRAMNUM on usb31 version */
->>                 size = DWC3_IP_IS(DWC3) ? 0 :
->>                         dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(num >> 1)) &
->>                                    DWC31_GTXFIFOSIZ_TXFRAMNUM;
->>                 /* Comment the dwc3_writel() */
->>                 //dwc3_writel(dwc->regs, DWC3_GTXFIFOSIZ(num >> 1), size);
->>
->> and
->>
->> static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
->> {
->> ...
->>         /* Comment the dwc3_writel() */
->>         //dwc3_writel(dwc->regs, DWC3_GTXFIFOSIZ(dep->number >> 1), fifo_size);
->>         dwc->num_ep_resized++;
->>
->> Those 2 writel() would be the one that actually programs the TXFIFO
->> register.  I hope when commented out, no resize should actually happen
->> anymore.
->>
->> With this, hopefully we can get some logs from the device at least :)
-> 
-> I can boot fine with above 2 writel() removed but I don't see EP
-> counts being printed in the log anywhere and the only relevant
-> message in dmesg I see is this:
-> 
->     Duplicate name in dwc3@a600000, renamed to "tx-fifo-resize#1"
-> 
-> which is interesting because I don't see tx-fifo-resize property being
-> set by any of the upstream sdm845 or relevant dtsi files.
-> 
-> 
-Thanks for testing.  What is the current composition the device is
-exposing to the host?
+I'm sorry for the late reply.
 
-Can we get a ftrace log w/ the DWC3 events enabled, as well as the
-kernel log? (if not at boot up then maybe a plug in/out)  This will at
-least help us identify when the DWC3 ep enable is being called (which
-triggers the resize routine)
+On Mon, Sep 20, 2021 at 06:50:22PM +0530, Rajaram R wrote:
+> On Fri, Sep 17, 2021 at 6:25 AM Badhri Jagan Sridharan
+> <badhri@google.com> wrote:
+> >
+> > On Thu, Sep 16, 2021 at 7:12 AM Adam Thomson
+> > <Adam.Thomson.Opensource@diasemi.com> wrote:
+> > >
+> > > On 16 September 2021 11:23, Heikki Krogerus wrote:
+> > >
+> > > > > Thanks for providing the clarification. So you're proposing a port-psy and a
+> > > > > port-partner-psy that are connected to each other (one supplying the other).
+> > > > > If PD is not present, those two will exist per port and partner, and there
+> > > > > will be information about Type-C current (and possibly BC 1.2 and other
+> > > > > methods?)
+> > > >
+> > > > Yes, exactly.
+> 
+> 
+>  As Benson mentioned PDOs contain more than power details like USB
+> Suspend indicator etc or Type-C only devices as Badhri mentioned here
+> may not integrate well with PSY class.  Additionally, it is also
+> important to consider cable properties here for power as they also
+> have a role to play in the power limits and necessitates change of
+> existing PDOs or power limits. ( Type-C Monitor charging a computing
+> system does not have captive cables)
+> 
+> Given too many possibilities, would an approach similar to
+> gadgetfs/configfs or cpu scaling say like "type-configfs" or "typec
+> scaling" ABI framework that allows USB=C port management under one
+> path /sys/class/typec that allows:
+> 
+> - Provision to manage USB-C port power (  Power supply class should
+> still represent power contract established, as remaining
+> characteristics are nested with functional aspects and relevant on a
+> power contract failure )
+> + dynamically change Rp ( Rp(default) is required to enter USB suspend)
+> + Set PDO Policy ( PPS, Fixed, etc)
+> + Give back power
+> + Expose complete PDO ( As we do for VDOs)
+> + Change USB Suspend flag
+> 
+> - Provision for extended messages
+> + Provides additional details regarding ports like Get Status etc.
+> This shall allow us to take system level decisions.
+> 
+> - Provision to manage USB-C modes
+> + Provision to enter modes as provided by interface standards like UCSI
+> 
+> With this user tools like Chrome OS "typecd" be able to use a single
+> class and its ABIs to manage USB-C port power and mode. Kindly correct
+> me if I am missing something here.
 
-Thanks
-Wesley Cheng
+So I agree that we should have secondary interface to the USB Type-C
+ports, cables and partners, and I think the secondary interface should
+be "usbpdfs", something similar to usbfs, that you can use to tap into
+the protocol layer of the PD stack.
+
+We have to interpret things especially with UCSI, since we can't even
+communicate raw VDOs with UCSI, but it will still not be a huge
+problem.
+
+I'm quite certain that we should be able to solve a lot of the control
+related problems that we now have (so basically lack of control) with
+it, but more importantly we would then not need to figure out what is
+the correct way to represent every single thing in sysfs in order to
+utilise it.
+
+I would imagine this could then at least ideally be the only interface
+that also the typecd would need to deal with.
+
+thanks,
 
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+heikki
