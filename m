@@ -2,179 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C856414FA5
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Sep 2021 20:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1AB41515F
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Sep 2021 22:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237016AbhIVSQl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Sep 2021 14:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236987AbhIVSQk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Sep 2021 14:16:40 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFD2C061756
-        for <linux-usb@vger.kernel.org>; Wed, 22 Sep 2021 11:15:10 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id b10so4594862ioq.9
-        for <linux-usb@vger.kernel.org>; Wed, 22 Sep 2021 11:15:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZQV4XJx/DFSXSOOyfOEMFYhipz4Fl6dlEeGzliw9JTY=;
-        b=bvxZ6G1NA+MLuCa5cGubm24q50H3hoy0Bog3f5krwJUlAuv9vo2dthuljO8qqFfBV5
-         ghKmtYxnqBFZiZPrqZl6ejmknepVPS99/2BLn/IEQJD3BXTsy/TtRAUNUDwysKTFMHwu
-         d7BeHvj0WRfPQ0RsHMF/DF05SdFJ/9EyGoy/4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ZQV4XJx/DFSXSOOyfOEMFYhipz4Fl6dlEeGzliw9JTY=;
-        b=jXpxrXqgGthayDvrapfyGKvhz85hfnDJ9p0ZFEL+RV6ajBC/QGMYYxu5SgGb/+FAZ1
-         mpVgllwaPooAPafxBXepYt2AeIrldKBhOLuSebmmRa3rjFSR+Gfh7+eh9b21UPXzNJAt
-         0m9b++/7CBtl5AbiKxAp0LDkBoIeJhjvGzvzWgKnAoQ/cC+HaAFmuDzhpQXG71stvf+R
-         QdvVQB296QtAIh9BMaMMhJuz9Mw6tHcT5mDhsTTIgbtWJlWSZsvuEDcypAP8WvbiL6Le
-         QdzfcOQs0Z0dd9Q7/7F+cA54z3kLWqNIgKgOpQ4bxwWpbzzqZk0uqOtPoHwh16X7AGR8
-         Pqzg==
-X-Gm-Message-State: AOAM532jtt30fGIqA19/6BF0RiCJRi6WoqVigOP0tHAna7Kz0vxP7tMD
-        wprGtnR5JX7AVG/2Q3w2B2WfJg==
-X-Google-Smtp-Source: ABdhPJzpGFKPcvQ1dQiq6NQIIOHRYCS0MNJZnb/XlexqCV8ZWYYGunxpKKLw9XZAalIae/yWYmYlbw==
-X-Received: by 2002:a5d:8d06:: with SMTP id p6mr295578ioj.7.1632334509796;
-        Wed, 22 Sep 2021 11:15:09 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id b3sm1369122ile.37.2021.09.22.11.15.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Sep 2021 11:15:09 -0700 (PDT)
-Subject: Re: INFO: task hung in hub_port_init
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Hao Sun <sunhao.th@gmail.com>, Shuah Khan <shuah@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        a.darwish@linutronix.de, johan@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        oneukum@suse.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <CACkBjsYQxQxGQwb3YS4obVWH3EODzqky5=nM3ADP7+13hBYgAA@mail.gmail.com>
- <20210913135459.GA120302@rowland.harvard.edu>
- <CACkBjsZcg0B=tF8cr54VqaJMVURD9R463epZqRQfesnoY=+L8g@mail.gmail.com>
- <20210918020245.GA69263@rowland.harvard.edu>
- <CACkBjsZPjO96NzLjKR2N7bYzBJRN6sPuaDpK6cvmGqKTd=Byow@mail.gmail.com>
- <20210918135301.GA79656@rowland.harvard.edu>
- <2d776f5b-c6b5-1c05-de37-493fc10a97af@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <4a59e9e7-4501-4328-f985-0a82593af282@linuxfoundation.org>
-Date:   Wed, 22 Sep 2021 12:15:08 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <2d776f5b-c6b5-1c05-de37-493fc10a97af@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S237556AbhIVU20 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 22 Sep 2021 16:28:26 -0400
+Received: from mailer.bingner.com ([64.62.210.4]:8645 "EHLO mail.bingner.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237381AbhIVU2Z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 Sep 2021 16:28:25 -0400
+X-Greylist: delayed 902 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 Sep 2021 16:28:25 EDT
+Received: from EX01.ds.sbdhi.com (2001:470:3c:1::21) by EX01.ds.sbdhi.com
+ (2001:470:3c:1::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.10; Wed, 22 Sep
+ 2021 10:11:52 -1000
+Received: from EX01.ds.sbdhi.com ([fe80::44d3:ef59:fdca:d83]) by
+ EX01.ds.sbdhi.com ([fe80::44d3:ef59:fdca:d83%3]) with mapi id 15.01.2242.010;
+ Wed, 22 Sep 2021 10:11:52 -1000
+From:   Sam Bingner <sam@bingner.com>
+To:     Oliver Neukum <oneukum@suse.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Martin Habets <mhabets@solarflare.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Shannon Nelson <snelson@pensando.io>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Matti Vuorela <matti.vuorela@bitfactor.fi>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Yves-Alexis Perez" <corsac@corsac.net>
+Subject: RE: [PATCH] usbnet: ipheth: fix connectivity with iOS 14
+Thread-Topic: [PATCH] usbnet: ipheth: fix connectivity with iOS 14
+Thread-Index: AQHXCROd8ZjcASMffkmnvxDkK/JoLKuxyU/A
+Date:   Wed, 22 Sep 2021 20:11:52 +0000
+Message-ID: <79d05aaa5052408897aeb8039c6a1582@bingner.com>
+References: <370902e520c44890a44cb5dd0cb1595f@bingner.com>
+ <d61ad9565e29a07086e52bc984e8e629285ff8cf.camel@suse.com>
+In-Reply-To: <d61ad9565e29a07086e52bc984e8e629285ff8cf.camel@suse.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [98.150.132.238]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Hao Sun,
+Sorry I didn't have time to research this further to prove it was a regression - but there is now somebody else who has done so and created a patch.  I thought it might be good to give a link to it to you guys.  It caused problems on all iOS versions AFAIK.  The patch and discussion is available at:
 
-On 9/20/21 8:31 AM, Shuah Khan wrote:
-> On 9/18/21 7:53 AM, Alan Stern wrote:
->> On Sat, Sep 18, 2021 at 10:17:26AM +0800, Hao Sun wrote:
->>> Alan Stern <stern@rowland.harvard.edu> 于2021年9月18日周六 上午10:02写道：
->>>>
->>>> On Sat, Sep 18, 2021 at 09:56:52AM +0800, Hao Sun wrote:
->>>>> Hi Alan,
->>>>>
->>>>> Alan Stern <stern@rowland.harvard.edu> 于2021年9月13日周一 下午9:55写道：
->>>>>>
->>>>>> On Mon, Sep 13, 2021 at 11:13:15AM +0800, Hao Sun wrote:
->>>>>>> Hello,
->>>>>>>
->>>>>>> When using Healer to fuzz the Linux kernel, the following crash was triggered.
->>>>>>>
->>>>>>> HEAD commit: ac08b1c68d1b Merge tag 'pci-v5.15-changes'
->>>>>>> git tree: upstream
->>>>>>> console output:
->>>>>>> https://drive.google.com/file/d/1ZeDIMe-DoY3fB32j2p5ifgpq-Lc5N74I/view?usp=sharing
->>>>>>> kernel config: https://drive.google.com/file/d/1qrJUXD8ZIeAkg-xojzDpp04v9MtQ8RR6/view?usp=sharing
->>>>>>> Syzlang reproducer:
->>>>>>> https://drive.google.com/file/d/1tZe8VmXfxoPqlNpzpGOd-e5WCSWgbkxB/view?usp=sharing
->>>>>>> Similar report:
->>>>>>> https://groups.google.com/g/syzkaller-bugs/c/zX55CUzjBOY/m/uf91r0XqAgAJ
->>>>>>>
->>>>>>> Sorry, I don't have a C reproducer for this crash but have a Syzlang
->>>>>>> reproducer. Also, hope the symbolized report can help.
->>>>>>> Here are the instructions on how to execute Syzlang prog:
->>>>>>> https://github.com/google/syzkaller/blob/master/docs/executing_syzkaller_programs.md
->>>>>>>
->>>>>>> If you fix this issue, please add the following tag to the commit:
->>>>>>> Reported-by: Hao Sun <sunhao.th@gmail.com>
->>>>>>
->>>>>> There's not much hope of finding the cause of a problem like this
->>>>>> without seeing the kernel log.
->>>>>>
->>>>>
->>>>> Healer found another Syzlang prog to reproduce this task hang:
->>>>> https://paste.ubuntu.com/p/HCNYbKJYtx/
->>>>>
->>>>> Also here is a very simple script to execute the reproducer:
->>>>> https://paste.ubuntu.com/p/ZTGmvFSP6d/
->>>>>
->>>>> The `syz-execprog` and `syz-executor` are needed, so please build
->>>>> Syzkaller first before running the script.
->>>>> Hope this can help to find the root cause of the problem.
->>>>
->>>> I don't have time to install and figure out how to use Healer and
->>>> Syzkaller.  But if you run the reproducer and post the kernel log,
->>>> I'll take a look at it.
->>>>
->>>
->>> Just executed the reproducer, here is the full log:
->>> https://paste.ubuntu.com/p/x43SqQy8PX/
->>
->> The log indicates that the problem is related to the vhci-hcd driver
->> somehow.  I don't know why those "Module has invalid ELF structures"
->> errors keep appearing, starting in line 1946 of the log.
->>
+https://github.com/openwrt/openwrt/pull/4084
 
-Can you send me your config? This message is rather odd.
+Sam
 
-[   82.249631][ T6679] Module has invalid ELF structures
+-----Original Message-----
+From: Oliver Neukum <oneukum@suse.com> 
+Sent: Monday, February 22, 2021 2:10 AM
+To: Sam Bingner <sam@bingner.com>; linux-usb@vger.kernel.org
+Cc: David S. Miller <davem@davemloft.net>; Martin Habets <mhabets@solarflare.com>; Luc Van Oostenryck <luc.vanoostenryck@gmail.com>; Shannon Nelson <snelson@pensando.io>; Michael S. Tsirkin <mst@redhat.com>; netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Matti Vuorela <matti.vuorela@bitfactor.fi>; Jakub Kicinski <kuba@kernel.org>; Yves-Alexis Perez <corsac@corsac.net>
+Subject: Re: [PATCH] usbnet: ipheth: fix connectivity with iOS 14
 
-It is right below:
-[   82.248529][ T6679] vhci_hcd vhci_hcd.0: Device attached
+Am Sonntag, den 21.02.2021, 10:42 +0000 schrieb Sam Bingner:
+> There seems to be a problem with this patch:
+> 
+> Whenever the iPhone sends a packet to the tethered device that is 1500 bytes long, it gets the error "ipheth 1-1:4.2: ipheth_rcvbulk_callback: urb status: -79" on the connected device and stops passing traffic.  I am able to bring it back up by shutting and unshutting the interface, but the same thing happens very quickly.   I noticed that this patch dropped the max USB packet size from 1516 to 1514 bytes, so I decided to try lowering the MTU to 1498; this made the connection reliable and no more errors occurred.
+> 
+> It appears to me that the iPhone is still sending out 1516 bytes over USB for a 1500 byte packet and this patch makes USB abort when that happens?  I could duplicate reliably by sending a ping from the iphone (ping -s 1472) to the connected device, or vice versa as the reply would then break it.
+> 
+> I apologize if this reply doesn't end up where it should - I tried to reply to the last message in this thread but I wasn't actually *on* the thread so I had to just build it as much as possible myself.
 
-or
+Is this a regression? Does it work after reverting the patch? Which version of iOS?
 
-[   83.860819][ T6710] vhci_hcd vhci_hcd.0: port 0 already used
+	Regards
+		Oliver
 
-My guess is this isn't the vhci_hcd module that gets loaded at this
-point when we see this message, but another module that gets loaded
-when vhci_hcd initiates probe after device attach. Note that vhci_hcd
-is loaded earlier.
-
-It is possible, the hung task might be related to load_module()
-failure. Unfortunately load_module() doesn't print elf_validity_check()
-error.
-
-Would you be able to add this patch and run the reproducer again?
-
-
---------------------------------------------------------------------
-diff --git a/kernel/module.c b/kernel/module.c
-index 40ec9a030eec..02f758b04f05 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -3941,7 +3941,8 @@ static int load_module(struct load_info *info, const char __user *uargs,
-          */
-         err = elf_validity_check(info);
-         if (err) {
--               pr_err("Module has invalid ELF structures\n");
-+               pr_err("Module has invalid ELF structures error (%ld)\n",
-+                       err);
-                 goto free_copy;
-         }
-
---------------------------------------------------------------------
-
-thanks,
--- Shuah
 
