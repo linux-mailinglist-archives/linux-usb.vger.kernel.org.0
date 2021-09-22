@@ -2,135 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F31D4146DC
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Sep 2021 12:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32CA2414766
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Sep 2021 13:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235325AbhIVKoS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Sep 2021 06:44:18 -0400
-Received: from mga12.intel.com ([192.55.52.136]:52938 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235403AbhIVKmF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 Sep 2021 06:42:05 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10114"; a="203059424"
-X-IronPort-AV: E=Sophos;i="5.85,313,1624345200"; 
-   d="scan'208";a="203059424"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2021 03:40:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,313,1624345200"; 
-   d="scan'208";a="613368772"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 22 Sep 2021 03:40:31 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 22 Sep 2021 13:40:30 +0300
-Date:   Wed, 22 Sep 2021 13:40:30 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Rajaram R <rajaram.officemail@gmail.com>
-Cc:     Badhri Jagan Sridharan <badhri@google.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "bleung@chromium.org" <bleung@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
-Message-ID: <YUsIHvNcEfX6dzZG@kuha.fi.intel.com>
-References: <20210902213500.3795948-1-pmalani@chromium.org>
- <20210902213500.3795948-3-pmalani@chromium.org>
- <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
- <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
- <YUB16up3JDwi3HfI@kuha.fi.intel.com>
- <YULwz8NsoA3+vrhA@google.com>
- <YUMbGp0aemx1HCHv@kuha.fi.intel.com>
- <DB9PR10MB46525E6CA4C6BB101059D93C80DC9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
- <CAPTae5Kxmp0L35KnkYaHARrBmysX9wkMYZhGhJsu6tX4bcHuAA@mail.gmail.com>
- <CAOiXhaLpe7gHw6c8pCZDNeOC31WfxFum5G1RNiEbEG2Fn=6oeQ@mail.gmail.com>
+        id S235310AbhIVLN2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Sep 2021 07:13:28 -0400
+Received: from mail-dm6nam10on2058.outbound.protection.outlook.com ([40.107.93.58]:57505
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235429AbhIVLN1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 Sep 2021 07:13:27 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ac4rFNM786stQm7Om9L3nmZINcbTpfCnkyiaPywsRln+HE2/5602ppcFMEYi7V/MYYeBd0AlwwknEsjomYCoZxgQDCUUKj65ftYhndwx8G89AcVTqkIR4WA0wHzJB21hw84IVJXMXpX8jTqjbjObZUpWpIpVbrNYSL055VpHR6iBByEhzcMz4wPok93vsAkt0pLrgkKnyLbgt9xLexoDSIUWFarM6aqid2X70W6j16cNxo9sE8u+pOEgqvLPr5n6twZMvyef677ySnZCfq5DQ1JDzeZ7pElJU7yXVgR//KkMqQU+CCcJRfxEmwGg9NXsQnnMXoCQMD3Le7/HixlXZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=mDNuqEcWclVoT/wvPp9zlw1tVxxGoAWdQiJEVfQ0cxY=;
+ b=QpiE2uqlGu3o2fQNJIq5LWYrVcuFqC6erDYY9+XSwah3qjudtLaHQeO+0R/2DwZAtH3SEpWgnvto//cMIaMoAykqgrus1Ayxcd2EwjodL3SVxfNFH1rFkgVDTrnxH++WWwCNOrlscwW3X/D55Tfj5GqxZJ6v1tKGov3XRV1rBmmLoFg60kPP/Vog0TymTowq2JZXfsOw5B8y4fb8/PiTzDI04Jzah9lTDOIzyIDdsmOXTMNradIbF1g7XxEM374dQlv+QrDgTjRXx9nX0YwzyxvVGGsxTUNzxTOrIPh3cxxfTYr2X0M/IAH3DF1Mz3zaqnAw6mNru/xIKX9Ih9sv7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mDNuqEcWclVoT/wvPp9zlw1tVxxGoAWdQiJEVfQ0cxY=;
+ b=Qc4v2LsWUvdqwQ4sITDxhUQ5JftzaA9pkRkT1vwA9yu3LiC9PMBPxtYVygDZCwTbFfLgU/eTCHRUXkpBQXt8SWUcV0mGx+hDWS69e3ngWFY+YXGtxCRbNBr2diBIuRFRV4vMS0RbRQ49TPegnPFKSfMO0LeEwHDxZI2KFLQyb7E=
+Received: from BN9PR03CA0958.namprd03.prod.outlook.com (2603:10b6:408:108::33)
+ by PH0PR02MB7464.namprd02.prod.outlook.com (2603:10b6:510:15::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.13; Wed, 22 Sep
+ 2021 11:11:56 +0000
+Received: from BN1NAM02FT028.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:108:cafe::12) by BN9PR03CA0958.outlook.office365.com
+ (2603:10b6:408:108::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.16 via Frontend
+ Transport; Wed, 22 Sep 2021 11:11:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT028.mail.protection.outlook.com (10.13.2.142) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4523.14 via Frontend Transport; Wed, 22 Sep 2021 11:11:55 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Wed, 22 Sep 2021 04:11:32 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Wed, 22 Sep 2021 04:11:32 -0700
+Envelope-to: git@xilinx.com,
+ linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ gregkh@linuxfoundation.org,
+ shubhrajyoti.datta@gmail.com
+Received: from [10.140.6.39] (port=42856 helo=xhdsgoud40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <shubhrajyoti.datta@xilinx.com>)
+        id 1mT09z-0005wf-9r; Wed, 22 Sep 2021 04:11:31 -0700
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+To:     <linux-usb@vger.kernel.org>
+CC:     <devicetree@vger.kernel.org>, <gregkh@linuxfoundation.org>,
+        <shubhrajyoti.datta@gmail.com>, <git@xilinx.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Subject: [PATCH v3 0/2] usb: gadget: Add clock support
+Date:   Wed, 22 Sep 2021 16:41:24 +0530
+Message-ID: <cover.1632307026.git.shubhrajyoti.datta@xilinx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOiXhaLpe7gHw6c8pCZDNeOC31WfxFum5G1RNiEbEG2Fn=6oeQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6579f494-e33e-410a-9d22-08d97db9ca01
+X-MS-TrafficTypeDiagnostic: PH0PR02MB7464:
+X-Microsoft-Antispam-PRVS: <PH0PR02MB746485C3FC57FFD07430E4DFAAA29@PH0PR02MB7464.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8uX8Ggj4SkmeNDwpUN926Cur44HqTp5NZOBF+k/G17KinLOarKbQTr4UUS216ahleBMn4ROF95bqW7pijiFcgKABfGSBArd+fsFYkcpJRDHzvkD4ipgTcyt8NFRTn+1DtupvjxInItO8HTf4rr8yXXfCfMfvhDVTrh1eZYNvfwDMW4DRy2WwfNkMt0LSiwCm+XP+ved6aWJ/in8Va9J3JH8Srj+NZ7voiktVDDnBmbb+lIDwrHGTkIzQHX04a9RGK315lFhaAddJa5MxuDQrFQ3qHDFVMfIrFesvVsEv2hvBjJ/WBd+eBLNJJRUsHaZmYtSTo1gfvT0qvFEg7tdVyTNeJgJrU2V2+0X0Tb7/LQEcamv2+LXAZxgQKlxVKoOKk3ePyw0bJ8TopWV49s2Idb81zvvUpGFSpT1unTbXgknRH75PfW2YJrM1DkSPg3WNGfM+iGzb+gd07jOaAtJP1tIHPUz1kN0plKLe7dZL06S9ySZrzyPOKvNFS006SLwE9a29e16bvaqGuMnRjk4TJlbR9EreTkgw+mAIogT7gwPXk8/mYjvvDObrqM4j+61ZF7JA2ROiuew4U138eAnrsmFTtyGiwmaXmtLj6ydTWq5mclmtVlj4CsUMbsIw3KFoa8XKjnWyw9DXopANFFUGnBMOFg+sR0gDq/t6BwyPH4HraMZ7i73nsiZQlA89h8Uf5ft6JraWy7zra/Sj7fXXh1g4JklLYGUtsNOLf3CbemE=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(8936002)(4326008)(186003)(4744005)(107886003)(36756003)(26005)(2906002)(82310400003)(356005)(336012)(83380400001)(508600001)(9786002)(70206006)(7696005)(2616005)(426003)(6916009)(47076005)(44832011)(36860700001)(36906005)(70586007)(5660300002)(8676002)(6666004)(54906003)(7636003)(316002)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2021 11:11:55.9691
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6579f494-e33e-410a-9d22-08d97db9ca01
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT028.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR02MB7464
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rajaram,
+Add clock support to udc xilinx.
 
-I'm sorry for the late reply.
+v2:
+Add the clock binding
+v3:
+Add a warn print
 
-On Mon, Sep 20, 2021 at 06:50:22PM +0530, Rajaram R wrote:
-> On Fri, Sep 17, 2021 at 6:25 AM Badhri Jagan Sridharan
-> <badhri@google.com> wrote:
-> >
-> > On Thu, Sep 16, 2021 at 7:12 AM Adam Thomson
-> > <Adam.Thomson.Opensource@diasemi.com> wrote:
-> > >
-> > > On 16 September 2021 11:23, Heikki Krogerus wrote:
-> > >
-> > > > > Thanks for providing the clarification. So you're proposing a port-psy and a
-> > > > > port-partner-psy that are connected to each other (one supplying the other).
-> > > > > If PD is not present, those two will exist per port and partner, and there
-> > > > > will be information about Type-C current (and possibly BC 1.2 and other
-> > > > > methods?)
-> > > >
-> > > > Yes, exactly.
-> 
-> 
->  As Benson mentioned PDOs contain more than power details like USB
-> Suspend indicator etc or Type-C only devices as Badhri mentioned here
-> may not integrate well with PSY class.  Additionally, it is also
-> important to consider cable properties here for power as they also
-> have a role to play in the power limits and necessitates change of
-> existing PDOs or power limits. ( Type-C Monitor charging a computing
-> system does not have captive cables)
-> 
-> Given too many possibilities, would an approach similar to
-> gadgetfs/configfs or cpu scaling say like "type-configfs" or "typec
-> scaling" ABI framework that allows USB=C port management under one
-> path /sys/class/typec that allows:
-> 
-> - Provision to manage USB-C port power (  Power supply class should
-> still represent power contract established, as remaining
-> characteristics are nested with functional aspects and relevant on a
-> power contract failure )
-> + dynamically change Rp ( Rp(default) is required to enter USB suspend)
-> + Set PDO Policy ( PPS, Fixed, etc)
-> + Give back power
-> + Expose complete PDO ( As we do for VDOs)
-> + Change USB Suspend flag
-> 
-> - Provision for extended messages
-> + Provides additional details regarding ports like Get Status etc.
-> This shall allow us to take system level decisions.
-> 
-> - Provision to manage USB-C modes
-> + Provision to enter modes as provided by interface standards like UCSI
-> 
-> With this user tools like Chrome OS "typecd" be able to use a single
-> class and its ABIs to manage USB-C port power and mode. Kindly correct
-> me if I am missing something here.
+Shubhrajyoti Datta (2):
+  dt-binding: usb: xilinx: Add clocking node
+  usb: gadget: udc-xilinx: Add clock support
 
-So I agree that we should have secondary interface to the USB Type-C
-ports, cables and partners, and I think the secondary interface should
-be "usbpdfs", something similar to usbfs, that you can use to tap into
-the protocol layer of the PD stack.
-
-We have to interpret things especially with UCSI, since we can't even
-communicate raw VDOs with UCSI, but it will still not be a huge
-problem.
-
-I'm quite certain that we should be able to solve a lot of the control
-related problems that we now have (so basically lack of control) with
-it, but more importantly we would then not need to figure out what is
-the correct way to represent every single thing in sysfs in order to
-utilise it.
-
-I would imagine this could then at least ideally be the only interface
-that also the typecd would need to deal with.
-
-thanks,
+ .../devicetree/bindings/usb/xlnx,usb2.yaml    |  8 ++++++
+ drivers/usb/gadget/udc/udc-xilinx.c           | 25 +++++++++++++++++++
+ 2 files changed, 33 insertions(+)
 
 -- 
-heikki
+2.25.1
+
