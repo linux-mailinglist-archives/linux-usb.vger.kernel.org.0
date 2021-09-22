@@ -2,66 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6318D414C96
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Sep 2021 16:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6203414C9D
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Sep 2021 17:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236365AbhIVPAe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Sep 2021 11:00:34 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:34731 "EHLO
+        id S236312AbhIVPCY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Sep 2021 11:02:24 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:43871 "EHLO
         new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236358AbhIVPAa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Sep 2021 11:00:30 -0400
+        by vger.kernel.org with ESMTP id S236303AbhIVPCX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Sep 2021 11:02:23 -0400
 Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 78D27580ACD;
-        Wed, 22 Sep 2021 10:59:00 -0400 (EDT)
+        by mailnew.nyi.internal (Postfix) with ESMTP id 87124580ACF;
+        Wed, 22 Sep 2021 11:00:53 -0400 (EDT)
 Received: from imap21 ([10.202.2.71])
-  by compute1.internal (MEProxy); Wed, 22 Sep 2021 10:59:00 -0400
+  by compute1.internal (MEProxy); Wed, 22 Sep 2021 11:00:53 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
          h=mime-version:message-id:in-reply-to:references:date:from:to
-        :cc:subject:content-type; s=fm2; bh=96uf9r25tZ+rFVz9V65UgKSRRvB6
-        6XWK+SRSHb8lQSk=; b=dM/eRfLC5EeA1t7ZAsvBwAMXhbNjk+sdAJ44AteH1K/S
-        P8QO5pqDsg6APWqtmvPxC4878fS3Mx1WSOcqxWVuzqUm9XMAj9LISH15QXaefT7Z
-        LOH1fV4KqVCkMQpWlfHGJp8b+yxjWhJrCjC6/iTNp+Ayv+QBCAxWKOERGW0cbqkl
-        Et/8CFIwp2n67TPNR/KiytC0TK1NNELKKh8OTE2nsxyRgDrbSbJusGvCsxwYKg74
-        PZuztb2NZc9yc74xl3itjxS2wksqVOgEZs2sGXyOxE25CcJ7x8hhMK+6Z8M8TppV
-        2gRuMGR58fp2H5APsmDE7fT7HY39QXgvKB4CkFfI+g==
+        :cc:subject:content-type; s=fm2; bh=hfJGbhpQSJZLILbIIAyLZ6CJq6Tq
+        NG5zUILLNAc/iKY=; b=SB501QdNOkqUVa4lGU0E3RCAlGzm2baEyrBGgNR+wUpf
+        lX9wJpOjCVfVYb/MYsH2f3SiyB+1hJMTTHpcDuHs5Fw3GOby1lLf/3Hfxi7dyJVq
+        3yHfA097XlODrojoaQHT9GHfP3uU4lTONusxyXlwvK+LTl2AhOy35OKRVyh/f7Cq
+        a21Pkj9TMMxdojqNPl7RUBF6eTnWSdaRO889YZ1W/s6gNN2me9Ze5PAPy+5xBBNJ
+        du0UsAbYK72ZrqJ/khFC/H33WXvhX6d0lProcRLiP/PtKYJglMDaMzRXjYTUx+8D
+        IJ+LBTYo89RQfX++JYI03Qrm7CUb2oxh40sRXv7rJQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:from:in-reply-to
         :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=96uf9r
-        25tZ+rFVz9V65UgKSRRvB66XWK+SRSHb8lQSk=; b=ue+jY6JHa6mZuqFqj9Ulcw
-        YH837GSuvfztVVEpOWYzSNKeCRWUdC8QtACDU97K6kuZDL0n8wdVJKsUpWdRxvEw
-        6VOS0LwNbgw3n3p6FlVUj0cGkRrP/1Bu1hc8yYA2FELRWdpXB/ktRRumYhVuwdHI
-        PhIc7Z+XEbnPd9TrYoLHY4w2/wQSRIB8hxeV/Z04QTKMWZZccKM+raLEXMOVxif6
-        6/uVb5V6Yza+mSLCVsGWbF/wrTl7uA2t+qqA/AO91aQHWlpKv4V+c2B5/06LQGRu
-        wqxe2dacvw9+eKdKev1huYPg7x17/0+vmV7w3bDq5oO79wZWUbsU1+yXWXq+UCOQ
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=hfJGbh
+        pQSJZLILbIIAyLZ6CJq6TqNG5zUILLNAc/iKY=; b=MgXmBN/x0cmOjqA0oeR+zK
+        Czm7sCxBo3muXxCDjI0j7Wks3RlUghpPzlQCTUbsvZEnn9dUDgnzYNFTzHEnHnQA
+        p1FY6mG4GinWwQmjobxcuejeZqPlNP7foVt7zuXl1r1b4C9RCx9bTe5DGkfX6Nex
+        yHomm/E350P3hjgDzn5Qk3Gb1wDDJTvtUGcG08bIP2mBq+6DKBawU49ZqNH8Gblz
+        +1cqCc7qyW2wxoJgn749w7xGK19jnG/TxQx46nbETk2e7jJuvlTFhVaoUQelewEl
+        zmkaDy6uxmcxU3GWGJJvrbdn0FJbjiy3R9oxV+FNFvexLjHhKKg4Oe/Tk0mE4iXQ
         ==
-X-ME-Sender: <xms:tERLYcLWa4_z6ugJbh74K8O517615PHB2CNc7L_V8JAnhA9Qs_QjEQ>
-    <xme:tERLYcLYqnJ5n_zZCsXnyq1mcNuW9ZuBJ4LC9cl0ZrmlLck9IcgxtWhCyNSdsXdGq
-    ZX8T6U47_Y20StB6C4>
+X-ME-Sender: <xms:I0VLYVRliXKijmALhRWv_ktFhksh1M8KS2wY4mgc8e5VKQWl2oVNvw>
+    <xme:I0VLYey4777DO29fNiAZzOTbkI0zEAyytqgOEOz3IwK55AV-GFJA0RdjQwcByA93F
+    hzhReWupo_IgotOzQM>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudeijedgkedvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreerjeenucfhrhhomhepfdfuvhgv
     nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
-    htthgvrhhnpefgieegieffuefhtedtjefgteejteefleefgfefgfdvvddtgffhffduhedv
-    feekffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    htthgvrhhnpeehjefgtddtfeelfeetjeeifeduueehleektdegtdejheeiteeuleehuefh
+    geehgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
     hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:tERLYcvutFd_fCl9I85ItB2vIkDSjJp851c5V3BtPBlT2CStOQwpVw>
-    <xmx:tERLYZZ6m1gUrtE2PvEy3-VejkqQYGz0k0QnQSsc5iZGH8--AcAmyQ>
-    <xmx:tERLYTa64bzHfkDlJve4qetm87EZtH-841g1NibGOR_6oAjCcoEq7g>
-    <xmx:tERLYdlsfJ_ebpUFT-IfX29c1DcD0bW9__qpm5qBnYDUXQjT0YrRBA>
+X-ME-Proxy: <xmx:I0VLYa0cJsU9J0FMSJHKrhwPXd8TUqy0qEweejSjQCY7xf-FX4sseQ>
+    <xmx:I0VLYdAPXemT349Yav2fXzmJVO7WJfxdi0kqnhLIN3kHZ2DSJFxFvg>
+    <xmx:I0VLYehf2Chz3h_D8JRi7AloNLuhB_Xz0tdNY9LFCBZZ83aMlTnBlA>
+    <xmx:JUVLYZPEFUIVgcdYpzYoXrwHmHRqU8pW6ZnZydxf7z_e7yxc5ZgA8A>
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 4AB2A51C0060; Wed, 22 Sep 2021 10:59:00 -0400 (EDT)
+        id AE18751C0060; Wed, 22 Sep 2021 11:00:51 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.5.0-alpha0-1302-gc62ab821ef-fm-20210921.001-gc62ab821
 Mime-Version: 1.0
-Message-Id: <1fac9efc-f24c-4912-8c26-b959574e6b4e@www.fastmail.com>
-In-Reply-To: <YUngxBX8CSJK4nw8@kuha.fi.intel.com>
+Message-Id: <d8024591-0142-442e-98e9-0c92a7679768@www.fastmail.com>
+In-Reply-To: <YUniTtc/DwGYPD+c@kuha.fi.intel.com>
 References: <20210918120934.28252-1-sven@svenpeter.dev>
- <20210918120934.28252-7-sven@svenpeter.dev>
- <YUngxBX8CSJK4nw8@kuha.fi.intel.com>
-Date:   Wed, 22 Sep 2021 16:58:39 +0200
+ <20210918120934.28252-9-sven@svenpeter.dev>
+ <YUniTtc/DwGYPD+c@kuha.fi.intel.com>
+Date:   Wed, 22 Sep 2021 17:00:31 +0200
 From:   "Sven Peter" <sven@svenpeter.dev>
 To:     "Heikki Krogerus" <heikki.krogerus@linux.intel.com>
 Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
@@ -74,7 +74,8 @@ Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
         "Mark Kettenis" <mark.kettenis@xs4all.nl>,
         "Alexander Graf" <graf@amazon.com>,
         "Alyssa Rosenzweig" <alyssa@rosenzweig.io>
-Subject: Re: [RFT PATCH 6/9] usb: typec: tipd: Setup IntMask explicitly
+Subject: =?UTF-8?Q?Re:_[RFT_PATCH_8/9]_usb:_typec:_tipd:_Switch_power_state_to_S0?=
+ =?UTF-8?Q?_for_Apple_variant?=
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -82,48 +83,56 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On Tue, Sep 21, 2021, at 15:40, Heikki Krogerus wrote:
-> On Sat, Sep 18, 2021 at 02:09:31PM +0200, Sven Peter wrote:
->> Right now the code relies on the bootloader to set up the interrupt mask
->> correctly. This usually works but let's make sure to do it explicitly to
->> guarantee it will always work.
+On Tue, Sep 21, 2021, at 15:46, Heikki Krogerus wrote:
+> On Sat, Sep 18, 2021 at 02:09:33PM +0200, Sven Peter wrote:
+>> The Apple CD321x comes up in a low-power state after boot. Usually, the
+>> bootloader will already power it up to S0 but let's do it here as well
+>> in case that didn't happen.
 >> 
+>> Suggested-by: Stan Skowronek <stan@corellium.com>
 >> Signed-off-by: Sven Peter <sven@svenpeter.dev>
 >> ---
->>  drivers/usb/typec/tipd/core.c | 18 ++++++++++++++++++
->>  1 file changed, 18 insertions(+)
+>>  drivers/usb/typec/tipd/core.c     | 44 +++++++++++++++++++++++++++++++
+>>  drivers/usb/typec/tipd/tps6598x.h |  6 +++++
+>>  2 files changed, 50 insertions(+)
 >> 
 >> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
->> index d191e7435018..2058e8cca631 100644
+>> index e96b17fe6af6..26807c050662 100644
 >> --- a/drivers/usb/typec/tipd/core.c
 >> +++ b/drivers/usb/typec/tipd/core.c
->> @@ -728,6 +728,24 @@ static int tps6598x_probe(struct i2c_client *client)
->>  			dev_err(&client->dev, "failed to register partner\n");
->>  	}
->>  
->> +	if (tps->hw->use_int1) {
->> +		ret = tps6598x_write64(tps, TPS_REG_INT_MASK1,
->> +					tps->hw->irq_power_status_update |
->> +					tps->hw->irq_data_status_update |
->> +					tps->hw->irq_plug_event);
->> +		if (ret)
->> +			goto err_role_put;
->> +	}
+>> @@ -30,6 +30,7 @@
+>>  #define TPS_REG_INT_MASK2		0x17
+>>  #define TPS_REG_INT_CLEAR1		0x18
+>>  #define TPS_REG_INT_CLEAR2		0x19
+>> +#define TPS_REG_SYSTEM_POWER_STATE	0x20
+>>  #define TPS_REG_STATUS			0x1a
+>>  #define TPS_REG_SYSTEM_CONF		0x28
+>>  #define TPS_REG_CTRL_CONF		0x29
+>> @@ -84,6 +85,8 @@ struct tps6598x_hw {
+>>  	unsigned int irq_data_status_update;
+>>  	unsigned int irq_plug_event;
+>>  	void (*irq_trace)(u64 event1, u64 event2);
 >> +
->> +	if (tps->hw->use_int2) {
->> +		ret = tps6598x_write64(tps, TPS_REG_INT_MASK2,
->> +					tps->hw->irq_power_status_update |
->> +					tps->hw->irq_data_status_update |
->> +					tps->hw->irq_plug_event);
->> +		if (ret)
->> +			goto err_role_put;
->> +	}
+>> +	bool supports_spss;
+>>  };
+[...]
+>>  static int devm_tps6598_psy_register(struct tps6598x *tps)
+>>  {
+>>  	struct power_supply_config psy_cfg = {};
+>> @@ -648,6 +685,11 @@ static int tps6598x_probe(struct i2c_client *client)
+>>  	if (ret)
+>>  		return ret;
+>>  
+>> +	/* Switch Apple chips to the correct system power state */
+>> +	ret = cd321x_switch_power_state(tps, TPS_SYSTEM_POWER_STATE_S0);
+>> +	if (ret)
+>> +		return ret;
 >
-> You should first only set the mask on your board. We can then see if
-> it's something that should be done on other boards as well later.
->
+> If you call this from the same quirk where you set the mask for your
+> board, you don't need that supports_spss flag at all, right?
 
-Make sense, I'll only call this when the cd321x variant is probed then.
+Yup, that one will also disappear then.
 
+Thanks,
 
 Sven
