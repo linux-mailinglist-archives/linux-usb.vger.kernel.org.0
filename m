@@ -2,92 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAD341671D
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Sep 2021 23:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A607C4167DF
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Sep 2021 00:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243240AbhIWVLK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Sep 2021 17:11:10 -0400
-Received: from mail-oi1-f177.google.com ([209.85.167.177]:43538 "EHLO
-        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243174AbhIWVLJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Sep 2021 17:11:09 -0400
-Received: by mail-oi1-f177.google.com with SMTP id w19so11541174oik.10;
-        Thu, 23 Sep 2021 14:09:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ECAcJQ5j3b9V37w+5AU1dCjJzeuc06UOkYf0x/TJhHI=;
-        b=xIdLizm4aubTc3dGOr/JOOrmu/jGmoWQ1B+ry9dtYUiPsD6NfmRoN4HOihRT5Cyc+m
-         26xhWVWU5zolKwopYzzACSCyMQyPhWdae9KYinSfzPY5V2bUmsZtHQw253u+mXUwjWcz
-         hZ3KtcEaJ7G2AQo6VVgkHgs1IBpP9BcRnck4CkZnO85wIlE7eu5bb6ai3XjNu8f5jYq5
-         Vc8mP7zS1F+f+X30oCmD1y+uTkuD3rvthnLu+18HsnIjblgiJ+3d/z5A+JHeqv1LqEfh
-         dI5UbMrEeCVxS35KYOftBanaD2WRfDGWBceNepJmXAnA5kKf5mZTrTvWR3FyQkGAyc2u
-         NRcA==
-X-Gm-Message-State: AOAM5314M/Ns5HRCOV8AJMEoGbhkjzLYg4+Tk7O1cc5lV7jp7CS2BSMl
-        JK3KG9Ggu+n2Da6WjjxcI9fQA//FoA==
-X-Google-Smtp-Source: ABdhPJxgGB/F5m/HUdgfquhEQY/6qPe41K4exPARMH+1jXMEbOmyXEtt37OEluaLbFS8sOex0LCyaQ==
-X-Received: by 2002:aca:645:: with SMTP id 66mr5369149oig.145.1632431377021;
-        Thu, 23 Sep 2021 14:09:37 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id d10sm1701331ooj.24.2021.09.23.14.09.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Sep 2021 14:09:36 -0700 (PDT)
-Received: (nullmailer pid 3527425 invoked by uid 1000);
-        Thu, 23 Sep 2021 21:09:34 -0000
-Date:   Thu, 23 Sep 2021 16:09:34 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Lucas Stach <dev@lynxeye.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        linux-kernel@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, David Heidelberg <david@ixit.cz>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-tegra@vger.kernel.org,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Nishanth Menon <nm@ti.com>, linux-pwm@vger.kernel.org,
-        linux-staging@lists.linux.dev, Stefan Agner <stefan@agner.ch>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        devicetree@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Subject: Re: [PATCH v12 05/35] dt-bindings: clock: tegra-car: Document new
- clock sub-nodes
-Message-ID: <YUztDv/KbKVAY7cB@robh.at.kernel.org>
-References: <20210920181145.19543-1-digetx@gmail.com>
- <20210920181145.19543-6-digetx@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210920181145.19543-6-digetx@gmail.com>
+        id S240687AbhIWWRx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Sep 2021 18:17:53 -0400
+Received: from fgw20-4.mail.saunalahti.fi ([62.142.5.107]:18050 "EHLO
+        fgw20-4.mail.saunalahti.fi" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235510AbhIWWRx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Sep 2021 18:17:53 -0400
+Received: from localhost.localdomain (85-76-102-236-nat.elisa-mobile.fi [85.76.102.236])
+        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
+        id a281e6f2-1cb9-11ec-8d6d-005056bd6ce9;
+        Fri, 24 Sep 2021 01:00:17 +0300 (EEST)
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andre Edich <andre.edich@microchip.com>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Aaro Koskinen <aaro.koskinen@iki.fi>
+Subject: [PATCH] smsc95xx: fix stalled rx after link change
+Date:   Fri, 24 Sep 2021 01:00:16 +0300
+Message-Id: <20210923220016.18221-1-aaro.koskinen@iki.fi>
+X-Mailer: git-send-email 2.17.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 20 Sep 2021 21:11:15 +0300, Dmitry Osipenko wrote:
-> Document sub-nodes which describe Tegra SoC clocks that require a higher
-> voltage of the core power domain in order to operate properly on a higher
-> clock rates.  Each node contains a phandle to OPP table and power domain.
-> 
-> The root PLLs and system clocks don't have any specific device dedicated
-> to them, clock controller is in charge of managing power for them.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  .../bindings/clock/nvidia,tegra20-car.yaml    | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
-> 
+After commit 05b35e7eb9a1 ("smsc95xx: add phylib support"), link changes
+are no longer propagated to usbnet. As a result, rx URB allocation won't
+happen until there is a packet sent out first (this might never happen,
+e.g. running just ssh server with a static IP). Fix by triggering usbnet
+EVENT_LINK_CHANGE.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Fixes: 05b35e7eb9a1 ("smsc95xx: add phylib support")
+Signed-off-by: Aaro Koskinen <aaro.koskinen@iki.fi>
+---
+ drivers/net/usb/smsc95xx.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
+index 7d953974eb9b..26b1bd8e845b 100644
+--- a/drivers/net/usb/smsc95xx.c
++++ b/drivers/net/usb/smsc95xx.c
+@@ -1178,7 +1178,10 @@ static void smsc95xx_unbind(struct usbnet *dev, struct usb_interface *intf)
+ 
+ static void smsc95xx_handle_link_change(struct net_device *net)
+ {
++	struct usbnet *dev = netdev_priv(net);
++
+ 	phy_print_status(net->phydev);
++	usbnet_defer_kevent(dev, EVENT_LINK_CHANGE);
+ }
+ 
+ static int smsc95xx_start_phy(struct usbnet *dev)
+-- 
+2.17.0
+
