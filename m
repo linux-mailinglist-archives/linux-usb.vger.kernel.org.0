@@ -2,133 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52ECC415B4A
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Sep 2021 11:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3427415BA9
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Sep 2021 12:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240248AbhIWJt2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Sep 2021 05:49:28 -0400
-Received: from pegase2.c-s.fr ([93.17.235.10]:52743 "EHLO pegase2.c-s.fr"
+        id S240302AbhIWKEJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Sep 2021 06:04:09 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:26136 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240175AbhIWJt0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Sep 2021 05:49:26 -0400
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4HFVhS1HTcz9sTZ;
-        Thu, 23 Sep 2021 11:47:52 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id N2iojAvTUjrW; Thu, 23 Sep 2021 11:47:52 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4HFVhS0G8Vz9sTX;
-        Thu, 23 Sep 2021 11:47:52 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E65698B775;
-        Thu, 23 Sep 2021 11:47:51 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id HEg50hnqH7U5; Thu, 23 Sep 2021 11:47:51 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.200])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 224928B763;
-        Thu, 23 Sep 2021 11:47:50 +0200 (CEST)
-Subject: Re: [PATCH 3/3] memblock: cleanup memblock_free interface
-To:     Mike Rapoport <rppt@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     devicetree@vger.kernel.org, linux-efi@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        linux-usb@vger.kernel.org, linux-alpha@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20210923074335.12583-1-rppt@kernel.org>
- <20210923074335.12583-4-rppt@kernel.org>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <1101e3c7-fcb7-a632-8e22-47f4a01ea02e@csgroup.eu>
-Date:   Thu, 23 Sep 2021 11:47:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S240286AbhIWKEI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Sep 2021 06:04:08 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1632391357; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=ZSwkghkpKQA37kwC61R4tPg4+Lb80MaPfKoCgF7cuyY=;
+ b=ZxBZ/Bhofh//DFT6rHRnz7RFviN7jLCa7U7+tyHRLY428jj+hK0Y8ekuClfS0F/KrBkYvPME
+ WhEE4QckMsNhca+gfplIl/wCt3LqS407XT0sx7OYIsDFYNef34ozSZyTMZZIGBF++XuUwlct
+ HU6sQJMrt3RQpvV9X/DGqE7FUFw=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 614c5088e0f78151d6d16c60 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 23 Sep 2021 10:01:44
+ GMT
+Sender: pmaliset=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 09BB3C4360C; Thu, 23 Sep 2021 10:01:43 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmaliset)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3AFECC4338F;
+        Thu, 23 Sep 2021 10:01:43 +0000 (UTC)
 MIME-Version: 1.0
-In-Reply-To: <20210923074335.12583-4-rppt@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr-FR
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 23 Sep 2021 15:31:43 +0530
+From:   Prasad Malisetty <pmaliset@codeaurora.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     agross@kernel.org, bhelgaas@google.com, bjorn.andersson@linaro.org,
+        lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
+        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dianders@chromium.org,
+        mka@chromium.org, vbadigan@codeaurora.org, sallenki@codeaurora.org,
+        manivannan.sadhasivam@linaro.org
+Subject: Re: [PATCH v8 4/4] PCI: qcom: Switch pcie_1_pipe_clk_src after PHY
+ init in SC7280
+In-Reply-To: <CAE-0n53d9wjc7-U2M6i5MzjAqOxu8oNUcihrxJv-HJnRX0TJHQ@mail.gmail.com>
+References: <1631898947-27433-1-git-send-email-pmaliset@codeaurora.org>
+ <1631898947-27433-5-git-send-email-pmaliset@codeaurora.org>
+ <CAE-0n53d9wjc7-U2M6i5MzjAqOxu8oNUcihrxJv-HJnRX0TJHQ@mail.gmail.com>
+Message-ID: <a4b5ddd8f3376688cca5e79577fed89c@codeaurora.org>
+X-Sender: pmaliset@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-Le 23/09/2021 à 09:43, Mike Rapoport a écrit :
-> From: Mike Rapoport <rppt@linux.ibm.com>
+On 2021-09-21 01:23, Stephen Boyd wrote:
+> Quoting Prasad Malisetty (2021-09-17 10:15:47)
+>> On the SC7280, the clock source for gcc_pcie_1_pipe_clk_src
+>> must be the TCXO while gdsc is enabled. After PHY init successful
+>> clock source should switch to pipe clock for gcc_pcie_1_pipe_clk_src.
+>> 
+>> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
+>> ---
 > 
-> For ages memblock_free() interface dealt with physical addresses even
-> despite the existence of memblock_alloc_xx() functions that return a
-> virtual pointer.
+> One nit below
 > 
-> Introduce memblock_phys_free() for freeing physical ranges and repurpose
-> memblock_free() to free virtual pointers to make the following pairing
-> abundantly clear:
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 > 
-> 	int memblock_phys_free(phys_addr_t base, phys_addr_t size);
-> 	phys_addr_t memblock_phys_alloc(phys_addr_t base, phys_addr_t size);
+>> @@ -1488,7 +1553,9 @@ static int qcom_pcie_probe(struct 
+>> platform_device *pdev)
+>> 
+>>         pcie->pci = pci;
+>> 
+>> -       pcie->ops = of_device_get_match_data(dev);
+>> +       pcie_cfg = of_device_get_match_data(dev);
+>> +       pcie->ops = pcie_cfg->ops;
 > 
-> 	void *memblock_alloc(phys_addr_t size, phys_addr_t align);
-> 	void memblock_free(void *ptr, size_t size);
+> Maybe worth failing probe with if (!pcie->ops) just to be a little
+> nicer here.
 > 
-> Replace intermediate memblock_free_ptr() with memblock_free() and drop
-> unnecessary aliases memblock_free_early() and memblock_free_early_nid().
-> 
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
+Thanks Stephen, I will add the check in new patch series if any.
 
-> diff --git a/arch/s390/kernel/smp.c b/arch/s390/kernel/smp.c
-> index 1a04e5bdf655..37826d8c4f74 100644
-> --- a/arch/s390/kernel/smp.c
-> +++ b/arch/s390/kernel/smp.c
-> @@ -723,7 +723,7 @@ void __init smp_save_dump_cpus(void)
->   			/* Get the CPU registers */
->   			smp_save_cpu_regs(sa, addr, is_boot_cpu, page);
->   	}
-> -	memblock_free(page, PAGE_SIZE);
-> +	memblock_phys_free(page, PAGE_SIZE);
->   	diag_amode31_ops.diag308_reset();
->   	pcpu_set_smt(0);
->   }
-> @@ -880,7 +880,7 @@ void __init smp_detect_cpus(void)
->   
->   	/* Add CPUs present at boot */
->   	__smp_rescan_cpus(info, true);
-> -	memblock_free_early((unsigned long)info, sizeof(*info));
-> +	memblock_free(info, sizeof(*info));
->   }
->   
->   /*
-
-I'm a bit lost. IIUC memblock_free_early() and memblock_free() where 
-identical.
-
-In the first hunk memblock_free() gets replaced by memblock_phys_free()
-In the second hunk memblock_free_early() gets replaced by memblock_free()
-
-I think it would be easier to follow if you could split it in several 
-patches:
-- First patch: Create memblock_phys_free() and change all relevant 
-memblock_free() to memblock_phys_free() - Or change memblock_free() to 
-memblock_phys_free() and make memblock_free() an alias of it.
-- Second patch: Make memblock_free_ptr() become memblock_free() and 
-change all remaining callers to the new semantics (IIUC 
-memblock_free(__pa(ptr)) becomes memblock_free(ptr) and make 
-memblock_free_ptr() an alias of memblock_free()
-- Fourth patch: Replace and drop memblock_free_ptr()
-- Fifth patch: Drop memblock_free_early() and memblock_free_early_nid() 
-(All users should have been upgraded to memblock_free_phys() in patch 1 
-or memblock_free() in patch 2)
-
-Christophe
+>> +       pcie->pipe_clk_need_muxing = pcie_cfg->pipe_clk_need_muxing;
+>> 
+>>         pcie->reset = devm_gpiod_get_optional(dev, "perst", 
+>> GPIOD_OUT_HIGH);
+>>         if (IS_ERR(pcie->reset)) {
