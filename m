@@ -2,100 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3427415BA9
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Sep 2021 12:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8114E415D86
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Sep 2021 14:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240302AbhIWKEJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Sep 2021 06:04:09 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:26136 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240286AbhIWKEI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Sep 2021 06:04:08 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1632391357; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=ZSwkghkpKQA37kwC61R4tPg4+Lb80MaPfKoCgF7cuyY=;
- b=ZxBZ/Bhofh//DFT6rHRnz7RFviN7jLCa7U7+tyHRLY428jj+hK0Y8ekuClfS0F/KrBkYvPME
- WhEE4QckMsNhca+gfplIl/wCt3LqS407XT0sx7OYIsDFYNef34ozSZyTMZZIGBF++XuUwlct
- HU6sQJMrt3RQpvV9X/DGqE7FUFw=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
- 614c5088e0f78151d6d16c60 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 23 Sep 2021 10:01:44
- GMT
-Sender: pmaliset=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 09BB3C4360C; Thu, 23 Sep 2021 10:01:43 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmaliset)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3AFECC4338F;
-        Thu, 23 Sep 2021 10:01:43 +0000 (UTC)
+        id S240722AbhIWMDT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Sep 2021 08:03:19 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25586 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240869AbhIWMDI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Sep 2021 08:03:08 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18NAdUcU003364;
+        Thu, 23 Sep 2021 08:01:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=pp1;
+ bh=pXzEf65A4Oe5+XzfRr8terVnfyIyuO6PQs0+F8aXgGc=;
+ b=ZCv5VVg5Axl96NC4/j5oW2leA+TyRu7PTszC85LX7OnyuvdR/QPrxFJvHee6+ph9/1Ah
+ rUd/1Dr4tZ5yXYAiKoNA4l0g4riJzCer09eV4KmKCsnovao7Ujg6/MQzQ6IVb2C5LRSL
+ 6WitPRreJzNPlii4WW55mXNNAxhzlImWjS7TBI5y3E9CuYqxTL+hR1eRpZFENX5WHVgo
+ 3bzeScRRqqA6eAdFzB/5aWdZYhNxC/HkliRolmuo1Xv4pKsUbXkIzU8GEpyYBQunYUKJ
+ 0M08Qqduz9x2e5o+taGQrQG0ce7A7g963Zzijz3wHvEhl/y43e2FXQI9OwpYg11CHmgU 9g== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3b8p4dcmbn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Sep 2021 08:01:14 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18NBvwov029624;
+        Thu, 23 Sep 2021 12:01:11 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06fra.de.ibm.com with ESMTP id 3b7q6ps42c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Sep 2021 12:01:11 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18NC18Jk56885734
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Sep 2021 12:01:08 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 810B04C08B;
+        Thu, 23 Sep 2021 12:01:08 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 64DD54C089;
+        Thu, 23 Sep 2021 12:01:06 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.145.159.121])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu, 23 Sep 2021 12:01:06 +0000 (GMT)
+Date:   Thu, 23 Sep 2021 15:01:04 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        devicetree@vger.kernel.org, linux-efi@vger.kernel.org,
+        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        iommu@lists.linux-foundation.org, linux-usb@vger.kernel.org,
+        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 3/3] memblock: cleanup memblock_free interface
+Message-ID: <YUxsgN/uolhn1Ok+@linux.ibm.com>
+References: <20210923074335.12583-1-rppt@kernel.org>
+ <20210923074335.12583-4-rppt@kernel.org>
+ <1101e3c7-fcb7-a632-8e22-47f4a01ea02e@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 23 Sep 2021 15:31:43 +0530
-From:   Prasad Malisetty <pmaliset@codeaurora.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     agross@kernel.org, bhelgaas@google.com, bjorn.andersson@linaro.org,
-        lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
-        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dianders@chromium.org,
-        mka@chromium.org, vbadigan@codeaurora.org, sallenki@codeaurora.org,
-        manivannan.sadhasivam@linaro.org
-Subject: Re: [PATCH v8 4/4] PCI: qcom: Switch pcie_1_pipe_clk_src after PHY
- init in SC7280
-In-Reply-To: <CAE-0n53d9wjc7-U2M6i5MzjAqOxu8oNUcihrxJv-HJnRX0TJHQ@mail.gmail.com>
-References: <1631898947-27433-1-git-send-email-pmaliset@codeaurora.org>
- <1631898947-27433-5-git-send-email-pmaliset@codeaurora.org>
- <CAE-0n53d9wjc7-U2M6i5MzjAqOxu8oNUcihrxJv-HJnRX0TJHQ@mail.gmail.com>
-Message-ID: <a4b5ddd8f3376688cca5e79577fed89c@codeaurora.org>
-X-Sender: pmaliset@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1101e3c7-fcb7-a632-8e22-47f4a01ea02e@csgroup.eu>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: fe2SFaLdoxw706nrVmE8bleSLkHdGrzC
+X-Proofpoint-ORIG-GUID: fe2SFaLdoxw706nrVmE8bleSLkHdGrzC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-23_04,2021-09-23_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ lowpriorityscore=0 phishscore=0 clxscore=1011 bulkscore=0 spamscore=0
+ mlxlogscore=613 impostorscore=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109200000 definitions=main-2109230076
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-09-21 01:23, Stephen Boyd wrote:
-> Quoting Prasad Malisetty (2021-09-17 10:15:47)
->> On the SC7280, the clock source for gcc_pcie_1_pipe_clk_src
->> must be the TCXO while gdsc is enabled. After PHY init successful
->> clock source should switch to pipe clock for gcc_pcie_1_pipe_clk_src.
->> 
->> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
->> ---
+On Thu, Sep 23, 2021 at 11:47:48AM +0200, Christophe Leroy wrote:
 > 
-> One nit below
 > 
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> Le 23/09/2021 à 09:43, Mike Rapoport a écrit :
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> > 
+> > For ages memblock_free() interface dealt with physical addresses even
+> > despite the existence of memblock_alloc_xx() functions that return a
+> > virtual pointer.
+> > 
+> > Introduce memblock_phys_free() for freeing physical ranges and repurpose
+> > memblock_free() to free virtual pointers to make the following pairing
+> > abundantly clear:
+> > 
+> > 	int memblock_phys_free(phys_addr_t base, phys_addr_t size);
+> > 	phys_addr_t memblock_phys_alloc(phys_addr_t base, phys_addr_t size);
+> > 
+> > 	void *memblock_alloc(phys_addr_t size, phys_addr_t align);
+> > 	void memblock_free(void *ptr, size_t size);
+> > 
+> > Replace intermediate memblock_free_ptr() with memblock_free() and drop
+> > unnecessary aliases memblock_free_early() and memblock_free_early_nid().
+> > 
+> > Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> > ---
 > 
->> @@ -1488,7 +1553,9 @@ static int qcom_pcie_probe(struct 
->> platform_device *pdev)
->> 
->>         pcie->pci = pci;
->> 
->> -       pcie->ops = of_device_get_match_data(dev);
->> +       pcie_cfg = of_device_get_match_data(dev);
->> +       pcie->ops = pcie_cfg->ops;
+> > diff --git a/arch/s390/kernel/smp.c b/arch/s390/kernel/smp.c
+> > index 1a04e5bdf655..37826d8c4f74 100644
+> > --- a/arch/s390/kernel/smp.c
+> > +++ b/arch/s390/kernel/smp.c
+> > @@ -723,7 +723,7 @@ void __init smp_save_dump_cpus(void)
+> >   			/* Get the CPU registers */
+> >   			smp_save_cpu_regs(sa, addr, is_boot_cpu, page);
+> >   	}
+> > -	memblock_free(page, PAGE_SIZE);
+> > +	memblock_phys_free(page, PAGE_SIZE);
+> >   	diag_amode31_ops.diag308_reset();
+> >   	pcpu_set_smt(0);
+> >   }
+> > @@ -880,7 +880,7 @@ void __init smp_detect_cpus(void)
+> >   	/* Add CPUs present at boot */
+> >   	__smp_rescan_cpus(info, true);
+> > -	memblock_free_early((unsigned long)info, sizeof(*info));
+> > +	memblock_free(info, sizeof(*info));
+> >   }
+> >   /*
 > 
-> Maybe worth failing probe with if (!pcie->ops) just to be a little
-> nicer here.
-> 
-Thanks Stephen, I will add the check in new patch series if any.
+> I'm a bit lost. IIUC memblock_free_early() and memblock_free() where
+> identical.
 
->> +       pcie->pipe_clk_need_muxing = pcie_cfg->pipe_clk_need_muxing;
->> 
->>         pcie->reset = devm_gpiod_get_optional(dev, "perst", 
->> GPIOD_OUT_HIGH);
->>         if (IS_ERR(pcie->reset)) {
+Yes, they were, but all calls to memblock_free_early() were using
+__pa(vaddr) because they had a virtual address at hand.
+
+> In the first hunk memblock_free() gets replaced by memblock_phys_free()
+> In the second hunk memblock_free_early() gets replaced by memblock_free()
+
+In the first hunk the memory is allocated with memblock_phys_alloc() and we
+have a physical range to free. In the second hunk the memory is allocated
+with memblock_alloc() and we are freeing a virtual pointer.
+ 
+> I think it would be easier to follow if you could split it in several
+> patches:
+
+It was an explicit request from Linus to make it a single commit:
+
+  but the actual commit can and should be just a single commit that just
+  fixes 'memblock_free()' to have sane interfaces.
+
+I don't feel strongly about splitting it (except my laziness really
+objects), but I don't think doing the conversion in several steps worth the
+churn.
+
+> - First patch: Create memblock_phys_free() and change all relevant
+> memblock_free() to memblock_phys_free() - Or change memblock_free() to
+> memblock_phys_free() and make memblock_free() an alias of it.
+> - Second patch: Make memblock_free_ptr() become memblock_free() and change
+> all remaining callers to the new semantics (IIUC memblock_free(__pa(ptr))
+> becomes memblock_free(ptr) and make memblock_free_ptr() an alias of
+> memblock_free()
+> - Fourth patch: Replace and drop memblock_free_ptr()
+> - Fifth patch: Drop memblock_free_early() and memblock_free_early_nid() (All
+> users should have been upgraded to memblock_free_phys() in patch 1 or
+> memblock_free() in patch 2)
+> 
+> Christophe
+
+-- 
+Sincerely yours,
+Mike.
