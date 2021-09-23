@@ -2,110 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4BC41650C
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Sep 2021 20:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71870416624
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Sep 2021 21:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242802AbhIWSPr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Sep 2021 14:15:47 -0400
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:43255 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242858AbhIWSPU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Sep 2021 14:15:20 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 92352580C1A;
-        Thu, 23 Sep 2021 14:13:44 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 23 Sep 2021 14:13:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=y5cXdn5TG30ct
-        gUM3idfkxKAvngMhxBoi4mQOhq6uUM=; b=r40Otg6qMtjG6gXzlCjBP8PVgteax
-        n05G3w/lMSU7p1HBrcy2HFIBvyM/lEgH96dMhOhf8V55wnno9d6xQsI2LMpbKVhA
-        wSvdQh3ysHPBlmLU35P36LBjV3CGM7Dx+fNPXhIEDWvnYiJPG5Wj9snTgyJLfsr8
-        cGUHbZh4DjKg2HDfRpgtcdSUPEIDDcnvQE7wit4oKuP4IJ5bSgp3+aG7B0F+c3pq
-        OXacAAY3X12lZB86aNRhl2UlBX2BiO4ArasDZxxGN4IxzH7qtdrui+fkeaI2+6wy
-        N4ewKF0RPtGNBeNexjP0IibriLB4TEFbJC/d75Ab2KWFrS+iRcGJm2pBA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=y5cXdn5TG30ctgUM3idfkxKAvngMhxBoi4mQOhq6uUM=; b=NX0COu24
-        2iFpRIF0yGf6vzVJdLdipvxcSzLSL/cB8RNBiCZHUPQNOJBEip/d4upwsxSpuA6V
-        TjONNOccXROu+7d7SC03RHSWzo5ME9q+dCw5M08hoUu1cUu9Hy6+rjrkNJiLcNE8
-        KOh2zbbQCgWqRzeGn93FsEJg24ol2X77Ce71NAGKiLt6nD0gmsbAvWTqcN3v/Mx1
-        dWyAHLNYZCiJjFKFpUH9GzlTMbb7iJaA3LpaOS7pazPLsTnedr+Qc4KuNrMseZGa
-        TnT/AJKZ4ZHXRdzA+cHH0GG3vNNMm1Oru/3BfrhpBwTQAGyWkg8RWgT7/yzuud5d
-        DOPcOtgrfwbJzg==
-X-ME-Sender: <xms:2MNMYUzIhDLNPbob0-k7wIIXnIAK4hxLhzMZAwh7NjMgC7wt-FMyHQ>
-    <xme:2MNMYYSsg6ReGju7EungIY7blbBKjqhFwkfpiNymShDRG3vnPc21dH-uxp75SkaDS
-    _n6N29GCCzJ5ipMB9M>
-X-ME-Received: <xmr:2MNMYWVkH9LviPe4gG5ubGN7hFeEywcdWWzMaJHulSGtgaukPnESuse-Y-y-V6rFFOcfRiuW4wn1HFOutgxkY4tPpmW8oO2P97LiGrEoRgOzZ8KQgfjS2sA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudeiledguddvudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufhvvghn
-    ucfrvghtvghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtth
-    gvrhhnpeetvdekteeluefffffhkeetteffgefggfevheeileeufedvtdeuffevveelhfef
-    jeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvh
-    gvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:2MNMYSjpjxPfTuoEL4wRKu2ry8MzAiCeQFgtcMJ-1TpdDm7IuN450g>
-    <xmx:2MNMYWD643y53M-A4iJbU7WX_l2HpLDOuhDVqOOdbC6Rk0G-YfGZDQ>
-    <xmx:2MNMYTJ3apFUcdTRdbLmFVFqywac8HJrV6ursUDmJwJ_mZbuq0Yb1Q>
-    <xmx:2MNMYXK6NMIXl82ski-QeVfLqbOFWQbheCSAh77OIRid8UsoXu_ugQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 23 Sep 2021 14:13:42 -0400 (EDT)
-From:   Sven Peter <sven@svenpeter.dev>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Alexander Graf <graf@amazon.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Subject: [PATCH v2 6/6] usb: typec: tipd: Remove FIXME about testing with I2C_FUNC_I2C
-Date:   Thu, 23 Sep 2021 20:13:21 +0200
-Message-Id: <20210923181321.3044-7-sven@svenpeter.dev>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20210923181321.3044-1-sven@svenpeter.dev>
-References: <20210923181321.3044-1-sven@svenpeter.dev>
+        id S242996AbhIWTrq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Sep 2021 15:47:46 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:10952 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242861AbhIWTrn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Sep 2021 15:47:43 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18NJW36f031236;
+        Thu, 23 Sep 2021 15:45:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=OlfxwL5SxCQJGsEygNnP+Bd9S5CycoibyIwI1T9qbFQ=;
+ b=o2g9xUdg4iWokOSpifGukNkZK7jrG3PCnBFvuz4C7oP+gzjHDglARWvYTHBDYKWgrmUN
+ nywTanPgUpTOTd5/xMfhi1L+mJwrCvVoKxej3UCLp5sG7C25GVynwAmr4q0nxjw5T5YF
+ XfSS+haqO/MAAWW7EoLHEph+pIjpH8koxcOuzA2lkqyOwZ+Lt0jX5schDBGsmjxT7nCn
+ nj0KpCKZ1MAIxT1dHKe+ArroeI/VY7R10b19vbUGLmbRaxdWWrC+tHtvcRU2gpGyiZee
+ fQz965XLLMlLTgvc9SCxBhiIocufoeoMuCL9s+OrHLUbKOqWsHzC5EoSrMfU3XKh1xK9 Bg== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3b8wkuupat-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Sep 2021 15:45:58 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18NJRuDe003688;
+        Thu, 23 Sep 2021 19:45:56 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03fra.de.ibm.com with ESMTP id 3b7q6kd587-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Sep 2021 19:45:56 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18NJjrxv44106172
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Sep 2021 19:45:53 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A19734C04A;
+        Thu, 23 Sep 2021 19:45:53 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 903DC4C05A;
+        Thu, 23 Sep 2021 19:45:51 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.145.159.121])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu, 23 Sep 2021 19:45:51 +0000 (GMT)
+Date:   Thu, 23 Sep 2021 22:45:49 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        KVM list <kvm@vger.kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-usb@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-sparc <sparclinux@vger.kernel.org>,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH 0/3] memblock: cleanup memblock_free interface
+Message-ID: <YUzZberbgZE+7HEo@linux.ibm.com>
+References: <20210923074335.12583-1-rppt@kernel.org>
+ <CAHk-=wiJB8H5pZz-AKaSJ7ViRtdxQGJT7eOByp8DJx2OwZSYwA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiJB8H5pZz-AKaSJ7ViRtdxQGJT7eOByp8DJx2OwZSYwA@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: NmcKtlYbna1qS7iyZ4wr-YnA7UP6mwwQ
+X-Proofpoint-ORIG-GUID: NmcKtlYbna1qS7iyZ4wr-YnA7UP6mwwQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-23_06,2021-09-23_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 mlxscore=0 malwarescore=0 spamscore=0
+ priorityscore=1501 bulkscore=0 clxscore=1015 suspectscore=0
+ mlxlogscore=691 adultscore=0 phishscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2109200000
+ definitions=main-2109230115
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Apple i2c bus uses I2C_FUNC_I2C and I've tested this quite
-extensivly in the past days. Remove the FIXME about that testing :-)
+Hi Linus,
 
-Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Sven Peter <sven@svenpeter.dev>
----
-changes since v1:
-  - added r-b tags
+On Thu, Sep 23, 2021 at 09:01:46AM -0700, Linus Torvalds wrote:
+> On Thu, Sep 23, 2021 at 12:43 AM Mike Rapoport <rppt@kernel.org> wrote:
+> >
+> You need to be a LOT more careful.
+> 
+> From a trivial check - exactly because I looked at doing it with a
+> script, and decided it's not so easy - I found cases like this:
+> 
+> -               memblock_free(__pa(paca_ptrs) + new_ptrs_size,
+> +               memblock_free(paca_ptrs + new_ptrs_size,
+> 
+> which is COMPLETELY wrong.
 
- drivers/usb/typec/tipd/core.c | 3 ---
- 1 file changed, 3 deletions(-)
+I did use a coccinelle script that's slightly more robust that a sed you've
+sent, but then I did a manual review, hence the two small patches with
+fixes. Indeed I missed this one, so to be on the safe side I'll rename only
+the obvious cases where coccinelle can be used reliably and leave all the
+rest as it's now. If somebody cares enough they can update it later.
+ 
+> And no, making the scripting just replace '__pa(x)' with '(void *)(x)'
 
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index 20d9f89208ff..51cebb41884c 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -746,9 +746,6 @@ static int tps6598x_probe(struct i2c_client *client)
- 	/*
- 	 * Checking can the adapter handle SMBus protocol. If it can not, the
- 	 * driver needs to take care of block reads separately.
--	 *
--	 * FIXME: Testing with I2C_FUNC_I2C. regmap-i2c uses I2C protocol
--	 * unconditionally if the adapter has I2C_FUNC_I2C set.
- 	 */
- 	if (i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
- 		tps->i2c_protocol = true;
+These were actually manual and they are required for variables that
+used as virtual addresses but have unsigned long type, like e.g.
+initrd_start. So it's either __pa(x) or (void *).
+
 -- 
-2.25.1
-
+Sincerely yours,
+Mike.
