@@ -2,100 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFB4415AAA
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Sep 2021 11:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3559D415B19
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Sep 2021 11:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239943AbhIWJQd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Sep 2021 05:16:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42314 "EHLO mail.kernel.org"
+        id S240158AbhIWJkU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Sep 2021 05:40:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58472 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239801AbhIWJQd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Sep 2021 05:16:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0B80E61242;
-        Thu, 23 Sep 2021 09:15:02 +0000 (UTC)
+        id S238217AbhIWJkT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Sep 2021 05:40:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8F3B26121F;
+        Thu, 23 Sep 2021 09:38:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632388502;
-        bh=vMYvixEgUWdnWa+2gaNyq7I03Go3AKuf919kIzUDE3g=;
+        s=k20201202; t=1632389927;
+        bh=d58N7onB8KeEx4agVz+GvbDHkrznYzV8nRj9L2MqL0E=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q9A14e/yyL0c3X2pFSd7BIFo1fYgLMeL1xNr/5NDLyTwAuzTMXS3+IYak4+LmxJzR
-         M7ZnrSNntuyKfhrYGNn6emdtPDhPVwvf2jJKrirh/U1ZTTfggF0ljxkUnp2/oiehu7
-         l6zuGPrH127iWoW/2D9wu6ayrR7VzgJ3WH2jDI/rJNcko7+dmcoNkK8FOFLGiz0EDP
-         9ap+AMX5uAJlB0KNiIaehW/BGHG+HIAODu8yjEWHOpc0MwgrUFDuKnezGfGaCfjC0/
-         oaYe7C2IG023QK2kAxXfdtDCVIichCiXADk+del7MpakokYyssOMiMa0GA4AG+l3Ji
-         2niWkOSDV4MzQ==
+        b=tiAXdAJ7enQ389Q76nQGOdetsK/JVjHd1rHVrbyLxaY19sn5zlRUaXr4BnC6+UQDu
+         xI2MSTmaqol2L1Q/UUUvs7qKj0tFE/e7XaJ8mulF8UXCZwu8k3VNSxsOmFoL9VbG04
+         JBrl+JJqJwzn3NF1GrS6NT751p52HVEvlkCcB+rdpdxHrgV1c2k6kG2Kd2Xx/UuJC9
+         /+P4wttc7fKaa4y8pwhYoMRn3qTrr3vDA6IDevJYZrhoNY/uQM/rpYd1yf0r9TR/MW
+         Nvk0oI0fla7C+tskDrYZjIHYDRtbMXyyzs4M2zGLHqbnQYAHDAgpXZm3GehBmcBk5Y
+         Kh/euxUxNm1LQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1mTKop-0002Aj-7V; Thu, 23 Sep 2021 11:15:03 +0200
-Date:   Thu, 23 Sep 2021 11:15:03 +0200
+        id 1mTLBo-0000e0-KD; Thu, 23 Sep 2021 11:38:49 +0200
+Date:   Thu, 23 Sep 2021 11:38:48 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     uwe.brandt@post.rwth-aachen.de
-Cc:     uwe.brandt@gmail.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] USB: serial: cp210x: add ID for GW Instek GDM-834x
- Digital Multimeter
-Message-ID: <YUxFl3YUCPGJZd8Y@hovoldconsulting.com>
-References: <217af179-c16d-ffe1-d204-3cbd17128dfa@post.rwth-aachen.de>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH] USB:serial:option Add Foxconn T99W265
+Message-ID: <YUxLKCGd0Icl+Mbv@hovoldconsulting.com>
+References: <20210917110106.9852-1-slark_xiao@163.com>
+ <YUhVKrRJ8M2hKJil@hovoldconsulting.com>
+ <2992805f.bc9.17c0b33a78e.Coremail.slark_xiao@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <217af179-c16d-ffe1-d204-3cbd17128dfa@post.rwth-aachen.de>
+In-Reply-To: <2992805f.bc9.17c0b33a78e.Coremail.slark_xiao@163.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 21, 2021 at 07:54:46PM +0200, Uwe Brandt wrote:
-> Add the USB serial device ID for the GW Instek GDM-834x Digital Multimeter
+[ Please configure your mail client to wrap lines at 72 columns or so. ]
+
+On Wed, Sep 22, 2021 at 09:51:47AM +0800, Slark Xiao wrote:
+> At 2021-09-20 17:32:26, "Johan Hovold" <johan@kernel.org> wrote:
+> >On Fri, Sep 17, 2021 at 07:01:06PM +0800, Slark Xiao wrote:
+> >> Adding support for Foxconn device T99W265 for enumeration with
+> >> PID 0xe0db.
+> >> 
+> >> usb-devices output for 0xe0db
+> >> T:  Bus=04 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 19 Spd=5000 MxCh= 0
+> >> D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+> >> P:  Vendor=0489 ProdID=e0db Rev=05.04
+> >> S:  Manufacturer=Microsoft
+> >> S:  Product=Generic Mobile Broadband Adapter
+> >> S:  SerialNumber=6c50f452
+> >> C:  #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=896mA
+> >> I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+> >> I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+> >> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+> >> I:  If#=0x3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+> >> I:  If#=0x4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+> >> 
+> >> if0/1: MBIM, if2:Diag, if3:GNSS, if4: Modem
+> >> 
+> >> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+
+> >> ---
+> >>  drivers/usb/serial/option.c | 2 ++
+> >>  1 file changed, 2 insertions(+)
+> >> 
+> >> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> >> index 29c765cc8495..fde599fa2d73 100644
+> >> --- a/drivers/usb/serial/option.c
+> >> +++ b/drivers/usb/serial/option.c
+> >> @@ -2068,6 +2068,8 @@ static const struct usb_device_id option_ids[] = {
+> >>  	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
+> >>  	{ USB_DEVICE(0x0489, 0xe0b5),						/* Foxconn T77W968 ESIM */
+> >>  	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
+> >> +	{ USB_DEVICE(0x0489, 0xe0db),						/* Foxconn T99W265 MBIM extension*/
+> >> +	  .driver_info = RSVD(0) | RSVD(1) | RSVD(3) },
+> >
+> >If you use USB_DEVICE_INTERFACE_CLASS() instead you don't need to
+> >explicitly reserve the MBIM interfaces. 
+> >
+> >Also, why are you reserving the GNSS interface (e.g. unlike T77W968)?
 > 
-> Signed-off-by: Uwe Brandt <uwe.brandt@gmail.com>
-> ---
-> Hi Johan,
-> 
-> included is a patch to make the GW Instek GDM-834x Multimeter accessible
-> via ttyUSBx
-> https://www.gwinstek.com/en-global/products/detail/GDM-8342_GDM-8341
-> 
-> lsusb output:
-> Bus 001 Device 002: ID 2184:0030 GW Instek GDM834X VCP PORT
-> 
-> dmesg output:
-> [ 1102.650572] usb 1-2: cp210x converter now attached to ttyUSB0
+> I just want to keep same style as previous products. That would be
+> more coordinated, I think.
 
-Thanks for the v2, looks good now!
+I understand your point, but it's better to use a more specific matching
+rule were possible since it prevents driver core from even trying to
+bind the driver.
 
-When you switched to sending from the t-online account the commit author
-mail address also changed so that it no longer matches the Signed-off-by
-address. We generally prefer them to match and tools like
-scripts/checkpatch.pl also warns about this.
+Note that for T77W968 we couldn't do so since we needed to bind also to
+non-vendor-class interfaces.
 
-I changed back the author mail address to you gmail address which you
-used in v1 when applying. Let me know if you prefer it the other way
-round instead and I'll drop the patch so you can resend.
+I'll just change this to USB_DEVICE_INTERFACE_CLASS() when applying.
 
-For next time, git-send-email can usually deal with this by inserting
-a From: line at the start of the patch body if configured correctly (or
-you can do so manually).
+> And for GNSS port, it can't be supported with serial driver. It
+> doesn't like a  NMEA port which is using serial driver.
+> I checked it for T77W968(MBIM mode) and found settings as below:
+> if0/if1: MBIM, if2: Modem, if3:AT,  if4: NMEA, if5: Diag, if6: GNSS
+> GNSS is also reserved.
 
-Also note that the second v2 you sent last night appeared to be
-whitespace damaged again for some reason (empty lines inserted between
-every line). But this one from Tuesday night was fine and I didn't
-notice any other differences.
+Ah, thanks for explaining. I only saw that T77W968 had an NMEA port and
+thought it was the same one.
 
-> ---
->   drivers/usb/serial/cp210x.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-> index 66a6ac50a4..7c6a4f6948 100644
-> --- a/drivers/usb/serial/cp210x.c
-> +++ b/drivers/usb/serial/cp210x.c
-> @@ -233,6 +233,7 @@ static const struct usb_device_id id_table[] = {
->   	{ USB_DEVICE(0x1FB9, 0x0602) }, /* Lake Shore Model 648 Magnet Power Supply */
->   	{ USB_DEVICE(0x1FB9, 0x0700) }, /* Lake Shore Model 737 VSM Controller */
->   	{ USB_DEVICE(0x1FB9, 0x0701) }, /* Lake Shore Model 776 Hall Matrix */
-> +	{ USB_DEVICE(0x2184, 0x0030) }, /* GW Instek GDM-834x Digital Multimeter */
->   	{ USB_DEVICE(0x2626, 0xEA60) }, /* Aruba Networks 7xxx USB Serial Console */
->   	{ USB_DEVICE(0x3195, 0xF190) }, /* Link Instruments MSO-19 */
->   	{ USB_DEVICE(0x3195, 0xF280) }, /* Link Instruments MSO-28 */
-
-Now applied.
+Now applied with the change mentioned above.
 
 Johan
