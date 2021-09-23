@@ -2,88 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 796E741529B
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Sep 2021 23:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2394B4158E7
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Sep 2021 09:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238104AbhIVVWX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Sep 2021 17:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40032 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238117AbhIVVWR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Sep 2021 17:22:17 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95523C061574;
-        Wed, 22 Sep 2021 14:20:41 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id q11so10871290wrr.9;
-        Wed, 22 Sep 2021 14:20:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=CsEV1+cmn95PxWDVCkkcklf6Fg+sq2sl8U8wO+GKv78=;
-        b=qN0/EA/eVvLzwaa2M0ReXbQzxdWnMoDiUxF80IfjLD5DrIiK0Tv2STvYwePlMv70Qf
-         xyc1/icFZdmN6uNiK7axTctOlPIDxNURvW/zDihTs4EEf0Zy4VjoWaq/nVTjuOPJtQQd
-         0ZMO2ZYEKP6kMn6yUGWcYggIkygywYNh8lD+ageXkCj8i/5jyhNJ4WyiWx3XW99vqXOv
-         LCUykxhrD4HXJ6+tN/CXuV9xWk5G8p3Ti68L67QPZaWqEMXFFDaXc8+bVuiAibp8Lg1Y
-         uSLAOaPK9X8Irxlwn6RGneeFJLaYDs5jeI5X3l2bw3jI/J/xqbeuEXno8PQtgFgHkfRO
-         oaoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=CsEV1+cmn95PxWDVCkkcklf6Fg+sq2sl8U8wO+GKv78=;
-        b=sYOGrAnqTiftKbxnRtwXK5HQccEx2WSoXyH9mWQSPifsrIOWQDvHSEKdkbYpR6q+No
-         AW+DJhvT/MEiqFdSq4jHgNiiP6RyJ1oHX/3X0b4zXQOHPrf8qGsWEfR8xUaEIf9IAOWe
-         ZZwRD2ivhSfG7sXwQhjT1q+odM0+ld5rPtInfULvNMF3aD3kRyprV9YPJc36nkWYX2M3
-         3h6P1D9LbyGc+Ag/SkvGsi7NgX8GmY1BvtZvFFMl6IKhuga7DEWQz7uK0m/++auKeFTe
-         O7exoKL2Cr81cyOBinnJGure7R40KTDDTRbqFmOTw/3ilLV5dGB339RqVA2yuUHgpT9k
-         vz8Q==
-X-Gm-Message-State: AOAM532Gxe+29zVu9CURYltvpKaeDGsWYhFJvCbrHLUePs3LaB0T2GTl
-        ZnLX707n7HOZJsZ/Kuwm8KCoMcYrZkI=
-X-Google-Smtp-Source: ABdhPJxmHsPEPhjTikq0HLDexoFcCIvBSp1JWPm3GPSh6bFsKcFxAYpuY316gaWZfXQBn3oVib2X4w==
-X-Received: by 2002:a7b:c217:: with SMTP id x23mr1089179wmi.192.1632345640228;
-        Wed, 22 Sep 2021 14:20:40 -0700 (PDT)
-Received: from matrix-ESPRIMO-P710 (p200300c78f4e0670a283da159592dc58.dip0.t-ipconnect.de. [2003:c7:8f4e:670:a283:da15:9592:dc58])
-        by smtp.gmail.com with ESMTPSA id t23sm3451263wrb.71.2021.09.22.14.20.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Sep 2021 14:20:39 -0700 (PDT)
-Date:   Wed, 22 Sep 2021 23:20:37 +0200
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] usb: usb-skeleton: Update min() to min_t()
-Message-ID: <20210922212037.GA8110@matrix-ESPRIMO-P710>
+        id S239564AbhIWHQ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Sep 2021 03:16:28 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:48194 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S239504AbhIWHQ2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Sep 2021 03:16:28 -0400
+X-UUID: c544ae7d4a1345fa812414bb1ba5501c-20210923
+X-UUID: c544ae7d4a1345fa812414bb1ba5501c-20210923
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 839298269; Thu, 23 Sep 2021 15:14:47 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 23 Sep 2021 15:14:46 +0800
+Received: from localhost.localdomain (10.17.3.154) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 23 Sep 2021 15:14:45 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Eddie Hung" <eddie.hung@mediatek.com>
+Subject: [PATCH] usb: xhci-mtk: use xhci_dbg() to print log
+Date:   Thu, 23 Sep 2021 15:14:47 +0800
+Message-ID: <20210923071447.15688-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch fixes the checkpatch.pl warning:
-WARNING: min() should probably be min_t(size_t, count, MAX_TRANSFER)
-+	size_t writesize = min(count, (size_t)MAX_TRANSFER);
+Use xhci_dbg() to print log instead of xhci_err() due to it's not
+error log.
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
-V2 -> V3: Added change history missed in V2
-V1 -> V2: Added subsystem and driver to subject line
-
- drivers/usb/usb-skeleton.c | 2 +-
+ drivers/usb/host/xhci-mtk-sch.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/usb-skeleton.c b/drivers/usb/usb-skeleton.c
-index 2dc58766273a..d87deee3e26e 100644
---- a/drivers/usb/usb-skeleton.c
-+++ b/drivers/usb/usb-skeleton.c
-@@ -363,7 +363,7 @@ static ssize_t skel_write(struct file *file, const char *user_buffer,
- 	int retval = 0;
- 	struct urb *urb = NULL;
- 	char *buf = NULL;
--	size_t writesize = min(count, (size_t)MAX_TRANSFER);
-+	size_t writesize = min_t(size_t, count, MAX_TRANSFER);
+diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+index 134f4789bd89..1edef7527c11 100644
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -734,7 +734,7 @@ static void drop_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
+ 	if (!need_bw_sch(udev, ep))
+ 		return;
  
- 	dev = file->private_data;
+-	xhci_err(xhci, "%s %s\n", __func__, decode_ep(ep, udev->speed));
++	xhci_dbg(xhci, "%s %s\n", __func__, decode_ep(ep, udev->speed));
  
+ 	hash_for_each_possible_safe(mtk->sch_ep_hash, sch_ep,
+ 				    hn, hentry, (unsigned long)ep) {
 -- 
-2.25.1
+2.18.0
 
