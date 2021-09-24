@@ -2,275 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3F541772E
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Sep 2021 16:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E8D4177F3
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Sep 2021 17:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346941AbhIXPAt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Sep 2021 11:00:49 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:51321 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346908AbhIXPAs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Sep 2021 11:00:48 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id E5DE9580C68;
-        Fri, 24 Sep 2021 10:59:14 -0400 (EDT)
-Received: from imap21 ([10.202.2.71])
-  by compute1.internal (MEProxy); Fri, 24 Sep 2021 10:59:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=mime-version:message-id:in-reply-to:references:date:from:to
-        :cc:subject:content-type; s=fm2; bh=c1bp1vZKmpUpTWZmDMjCv933PKun
-        Qkv3Vp6Hm48cSZo=; b=DBlss/Z6+yzWbFkJRny83cw8rFvGwgWB+ZhbGPNDsrWY
-        iBeMtKI6XDQYDIhx0Fi+BJ5c8qLKtmjvmQcwSWCWWjrZ5LF0JsJk+I+VVrBCJkvR
-        3jK7VxdJ4ptmEu4bVyJcej1F4KkyCJUZLZ/i3IQx+peOgczhq2jTHPXIthiL2Yop
-        vJLLdPKum0STrD8v06TEcXmNErYEaCkCg+/HZGrq3eamebKCzVXQg5UqmCNtAkWY
-        kPSGTErjKuNcd25Dril898WkQEOamWY2HqXaCLi7v89VlBtezmimZPYjj8Y45ahe
-        bD8seFQxHCOYC/7Cixmy67vTlBEOr+kku+1Aq0pZLw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=c1bp1v
-        ZKmpUpTWZmDMjCv933PKunQkv3Vp6Hm48cSZo=; b=Ls2yjZ4whsnrpAx7Vop7hu
-        xVA418tjpjhQ0uac6kkvFT1lQaGBsNihbzbJEZdX5xxwuNfGUt/8nmxXNi1jfQBR
-        0F4o9NwAQAdj/CkhyojDZIyikJyHpkD4tKOwRanOhEuCbA8k8QOrFXjhWufw1nIy
-        43P5knR0sqF+z1NA6NVtG25HXu/YveJXXDcqUVRn3HR/UnRkFbWzEboHqMgNFuWq
-        ctv+/Fje8muJAoFoLDpo1wq47G/eOpfOHQrmqwnxQtvJDz8J2nqmcJjwlwVKXkX5
-        jkmcIJH6oMicWzbo84Ue84+T0a9ojKz1iJWizendrrBOEwAPoQFsXMZO2ace+t8w
-        ==
-X-ME-Sender: <xms:wedNYdCU1O9EOyyuWuPGokzTzaYnOe6MzLdnxz8z0-3Tp97RLwOy7A>
-    <xme:wedNYbhY7PIqlF1gJJoZsqDMnIV-xJ9ZLGO0RWkpaEcGFQ8ANLMWdl6-Ul8Q1Fc-M
-    PO1EhmgyDAyZvVtGzE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudejuddgkedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
-    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
-    htthgvrhhnpefgieegieffuefhtedtjefgteejteefleefgfefgfdvvddtgffhffduhedv
-    feekffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:wedNYYluVxe0j_ZYvi46bQrEHgm65T1WQO3yaN2zDFrLiw-5h42r4A>
-    <xmx:wedNYXySuHZky1Ew_EqS5BeeRqA17NNoShDdSEwPLNp2eLpXWd8bdw>
-    <xmx:wedNYSSLxS5RgUEwY20LR0jFROV7eRzczVRZ4Q4vG3duYWtdhdF_Fg>
-    <xmx:wudNYT9KR5MtRJPotDs5sp8o2L-jr5rf2t1EHmBYhj6JO7p7Fuwa9A>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B2E8851C0060; Fri, 24 Sep 2021 10:59:13 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-1303-gb2406efd75-fm-20210922.002-gb2406efd
-Mime-Version: 1.0
-Message-Id: <41c29255-ba7b-4385-9637-0cef8ecb4be1@www.fastmail.com>
-In-Reply-To: <YU3jtIvYOk/IHUWn@kuha.fi.intel.com>
-References: <20210923181321.3044-1-sven@svenpeter.dev>
- <20210923181321.3044-5-sven@svenpeter.dev>
- <YU3jtIvYOk/IHUWn@kuha.fi.intel.com>
-Date:   Fri, 24 Sep 2021 16:58:52 +0200
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Heikki Krogerus" <heikki.krogerus@linux.intel.com>
-Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Hector Martin" <marcan@marcan.st>,
-        "Mohamed Mediouni" <mohamed.mediouni@caramail.com>,
-        "Stan Skowronek" <stan@corellium.com>,
-        "Mark Kettenis" <mark.kettenis@xs4all.nl>,
-        "Alexander Graf" <graf@amazon.com>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>
-Subject: Re: [PATCH v2 4/6] usb: typec: tipd: Add support for Apple CD321X
-Content-Type: text/plain
+        id S1347129AbhIXPkM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Sep 2021 11:40:12 -0400
+Received: from mail-am6eur05on2059.outbound.protection.outlook.com ([40.107.22.59]:37409
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1347165AbhIXPj7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 24 Sep 2021 11:39:59 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XLaRjQAyHlEofnKhvCispThFTAmN4VsgcM6y7Gak5UZlAwn61eM54XEPzeTTeCDG+H8MPOCG/5RP7af8xtVaoN0rKA0tGyuVKDakivs4X9prczqJiU4glo0WlzvR6oKneP5gycX7HUqn1k4llTqGe7LsXbULp89xmxq96c0IFi7cq79Q4WqkMa8B/U1THNT4OHv0VwVxQ0Al6QY3Vm7roGSSwrt41xcj1DumR7wY9JrXJfOGVJuqVivX6gPUprht9IpkdIhIkS4qrssjAdTNdub3JE5dR7bieJtoaUoEHKH/ODHu6Z3x3pUExkhW9cFUsUrSnqhis/Dzq9i9OAOCdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=NLsGHsdLydN5UyWyYvqN+1gMCsryUgz93PdeI7ZtY4Y=;
+ b=H8KpQgv50PFC0OM/mfr5HTYffaijiNXhMN5XPzLy4Q0hgCo8ozh8JNi4dAuF/WZfpAr5fMzBMifE28xelovJpX5seeii8ECTF11k0Kd1Q+4b4tDxHwoTqOzqxtaGX424P4kD9UUB9Pw6cvWfcl2SwD/tBlmJVjsKHIrrrcJ+UMBp+LuVTuRMlMAX0hiOF7N/4WDedRWTFjkYxPYQ4M2Ew4XSFhAPhRFkaMN3vlhMeJEjpjnWlhLS5DJaCpP0oUa6dQTzAqPEbpm0F0w+7njevuv1vOp3//p6crtfh5wcBECp+Xo8BodxUXZz4ANg/uS89Qvall67XWSirEqt1zgJ8Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=diasemi.com; dmarc=pass action=none header.from=diasemi.com;
+ dkim=pass header.d=diasemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=dialogsemiconductor.onmicrosoft.com;
+ s=selector1-dialogsemiconductor-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NLsGHsdLydN5UyWyYvqN+1gMCsryUgz93PdeI7ZtY4Y=;
+ b=vfuMY33f6SrWdAW99ngzsynlIy9iq/GWwJFd1rZy3twZpMTco06YJ6bxVgqorhJgVElbQ6y/5NyhQt877AuBTwoJ2Gzz6TEKFCoqpp7UKyUg+liMLpTlk02dOvkwFvpUJh0ERTeg03SaZUtbhOwhgHV4h359CljVm09t8j/jZM0=
+Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:255::23)
+ by DB7PR10MB1931.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:5:c::27) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4523.17; Fri, 24 Sep 2021 15:38:23 +0000
+Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::dc0f:9e52:6dbb:1144]) by DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::dc0f:9e52:6dbb:1144%7]) with mapi id 15.20.4544.018; Fri, 24 Sep 2021
+ 15:38:23 +0000
+From:   Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+CC:     Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "bleung@chromium.org" <bleung@chromium.org>,
+        "badhri@google.com" <badhri@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: RE: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+Thread-Topic: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+Thread-Index: AQHXoEKRtU4w32eDxEeY6U4KQGzJs6uiBmsAgAAaumCAAUDQAIAC9NuAgAAyawCAAD1scIAHpq+AgAUCZYA=
+Date:   Fri, 24 Sep 2021 15:38:23 +0000
+Message-ID: <DB9PR10MB46524E3817FB4D836CDC13E180A49@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+References: <20210902213500.3795948-1-pmalani@chromium.org>
+ <20210902213500.3795948-3-pmalani@chromium.org>
+ <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
+ <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <YUB16up3JDwi3HfI@kuha.fi.intel.com> <YULwz8NsoA3+vrhA@google.com>
+ <YUMbGp0aemx1HCHv@kuha.fi.intel.com>
+ <DB9PR10MB46525E6CA4C6BB101059D93C80DC9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <YUm5sdbceMcDTvYj@kuha.fi.intel.com>
+In-Reply-To: <YUm5sdbceMcDTvYj@kuha.fi.intel.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=none action=none
+ header.from=diasemi.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 06c93788-c174-4647-5228-08d97f715852
+x-ms-traffictypediagnostic: DB7PR10MB1931:
+x-ms-exchange-sharedmailbox-routingagent-processed: True
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB7PR10MB19313970EA0109414815D01EA7A49@DB7PR10MB1931.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: eHv7ys9cQt/3AQ+WLduec7AZRWOiQ6nKLY+ec6X9wMe3q+6Y0aofnM99pD4dg/pGac6xeUdJ/OTAAKReCRfPprM5LS/53+6OmXUbqNoYsad0mHPs1mXtgECF7IVbYbM1XlzjIBFGtjyUdx99hG7HlSjn/OOpqeWGePpYqDMNikqp4F0f6ayh0NhOD86+i/fV07pfoWc/fiua0z9UavaLch5XDCllpPlIHs4uA+Y/LG5WzPNH4i7GcifeHZfNYLkmO4rwL15Uf3f2jBZUIXpuc7ZHvDoi9JFAOOmYEY+nvmiULIv8ajuTBQQbvEZsWEF9wcXswP819vny06ODIp9Oj5Ca884AysIYj/LANGzzF2lnFPytHFGzn7ZWTH3D839Y0hvPDtQMNvc+6XjxBilU9NpKLBpbIfYim1Puy6KTYdjMZlmsW4xJ6pvUfE+WyJ+YSxE2mOee9U4vKq9wqt9v1D1VcKQ3toKPpRnJEX+eW4dpXdcWdZ5Dgp1HxpzSo6eGJCeFZQwMHqLJbfHDPD0/9kVN6aXVjBzt5HZ358vasc2THZ8Tg/nq3pWjef6jPWVGy77YeljyTJnmE9Xum9ks4VD3RlL44ex8paRNCwEZEOws5sYpd94olJy7Q5R0Zu71En783tCbizkSEh4LlxocFAVqOPZvnN4zgPyAgiiL2pFKiwG8fubmzIS3jwKLrvp8puf5BPdHkgY+IulNWQhm1g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(76116006)(66446008)(316002)(52536014)(2906002)(7696005)(83380400001)(66556008)(71200400001)(110136005)(55016002)(38070700005)(64756008)(66476007)(8936002)(7416002)(8676002)(66946007)(54906003)(26005)(5660300002)(6506007)(55236004)(4326008)(53546011)(508600001)(186003)(33656002)(86362001)(122000001)(9686003)(38100700002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?dKp6kEJFBphsfoDJhOX+KaFnzMosxlzyyp4Xbtti/1OxhPXsAwSwov433W2H?=
+ =?us-ascii?Q?q6GUAbMxKtCvZBBnKmiB7vAItSBpgkdJ86NbS9w9RQC86qdstf0XdbMaX43Y?=
+ =?us-ascii?Q?0nSLdg+sHwpH+L02yIhKmHfCr1IlAhRdcDSXclxubzvgJt5U50QJPi9B82zR?=
+ =?us-ascii?Q?TXg8JMyo4Q1cuYEsvYlkI55gUKZ5wJKuYJvrc2dakpcOtNmiCo6KRMx5XnzV?=
+ =?us-ascii?Q?FgyjJC+hgWkf6JVXR/07zxi9TGgx8ph2o9G+KOvBqmn+NekzNAkHXFbZqBQ1?=
+ =?us-ascii?Q?fi7ZxSArRwtAM+6hHG0fv/OWLLr8Uz2/jRDe8KAx9wV4hrV4r2hVzG208zRh?=
+ =?us-ascii?Q?TADNBK+63ugXLWsbxlleOmTNZAi0jeIbs3tqilgjjoLoeFWIjYFnzHBFqnbb?=
+ =?us-ascii?Q?pxZcM7q0BaWJQdzWZOblRN1cs5Xk61RUj+g8w4GOIznPgVFPpyfHZzkWGtku?=
+ =?us-ascii?Q?E6aVNwHNrPuNpKhEnXr5zZ3ztoTeWIPCcx2GrQ+vYQop9bj9xMOVWuQ+yV5P?=
+ =?us-ascii?Q?Iv/cyZPXmZw5IpD5p6zwTmiMQ3RptvF5ETYGPjk7ULPLTF5W/ihxjvbekArx?=
+ =?us-ascii?Q?um+h502TRw+WiY38UD+AWn//c0XaRVPIrcElHupzwERnrTschVGc/ftJlmoj?=
+ =?us-ascii?Q?E6h5nQrqw0rFRXRhfd7pG84FGzNWpMa6DPpLMhHyUXtkNiabSADQUmvTi/Zq?=
+ =?us-ascii?Q?fF7ZefY/3BZYw+EjpxZoGdU6M5tspzNfiqoq6kRzcZc75vW4NKWPXJK+2F2A?=
+ =?us-ascii?Q?UTG5SC7Wu12qW4iXMTo8Lb8Qp8U7sUtzWkFHyAo0K1w+x+m0jaSy7i6y0oGw?=
+ =?us-ascii?Q?vs+bUqkE+DFwwnnTW/ODE+F9xlYjsOELHb8n6NKMEyBqU+Z0HWERguVz8kIY?=
+ =?us-ascii?Q?f3Qn3TxA9Mny3JRKwZgakIaMsfnnNgbGLgJzqNC8Pq2IRFHEEy3oACj+w7Vh?=
+ =?us-ascii?Q?sLQYfwnjUi1+Jkp4T8nDATTE1B8q4ThhV8e5SpouESEy/6mXEkRefB3zicon?=
+ =?us-ascii?Q?lZ+NqjHsJB/6gOEHOAvaG2f3Q2fl5XTSiwUxYhr1+iqejJLeNBcJz+aZATSc?=
+ =?us-ascii?Q?rtzCDbdLisHcCk/EuiSBOGJJwOXaclqHZuaVrJmH55XTZmA9a9JHVozSZIeQ?=
+ =?us-ascii?Q?Qy4fKK3ENEkKUGpSfWY38O8qHWPtHV25sqEefNkk1xmzONTnPpnyPM2VkL/S?=
+ =?us-ascii?Q?2OAqdGL5jdF3MNod8ICmOqh+R3E9BCMbE1Fd5ZClQBtSgoktDtk989ssuVPj?=
+ =?us-ascii?Q?1SbUay4faeQM/Oobu6s32tAY4g/Nw0kTZHbV1++/CWNyerHyecHihostpm+Q?=
+ =?us-ascii?Q?e3pLVmAqrCW8L9efw4YdLgaU?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: diasemi.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 06c93788-c174-4647-5228-08d97f715852
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Sep 2021 15:38:23.8999
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HblffOThtChO7JPt1LG184MpZCq1YG5r14emEWd8p/7AmpTIGGTP7zjM++y7mZvA2d9spJOjr3fP0YY7IrA4XaaQO/SYh25s1YNqss1c+jc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR10MB1931
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On 21 September 2021 11:54, Heikki Krogerus wrote:
 
+> If we can leave the decision about the selection to TCPM, that would
+> be great! I'm not against that at all. As I said, I have not though
+> through the control aspect. Right now I'm mostly concerned about how
+> we expose the information to the user. The only reason why I have
+> considered the control part at all is because how ever we decide to
+> expose the information to the user, it has to work with control as
+> well.
 
-On Fri, Sep 24, 2021, at 16:41, Heikki Krogerus wrote:
-> Hi,
->
-> One more question below.
->
-> On Thu, Sep 23, 2021 at 08:13:19PM +0200, Sven Peter wrote:
->> Apple CD321x chips are a variant of the TI TPS 6598x chips.
->> The major differences are the changed interrupt numbers and
->> the concurrent connection to the SMC which we must not disturb.
->> 
->> Signed-off-by: Sven Peter <sven@svenpeter.dev>
->> ---
->> changes since v1:
->>   - new commit since Heikki suggested to just add a separate irq handler
->> 
->>  drivers/usb/typec/tipd/core.c     | 86 ++++++++++++++++++++++++++++++-
->>  drivers/usb/typec/tipd/tps6598x.h |  6 +++
->>  drivers/usb/typec/tipd/trace.h    | 23 +++++++++
->>  3 files changed, 113 insertions(+), 2 deletions(-)
->> 
->> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
->> index cd1e37eb8a0c..6c9c8f19a1cf 100644
->> --- a/drivers/usb/typec/tipd/core.c
->> +++ b/drivers/usb/typec/tipd/core.c
->> @@ -9,6 +9,7 @@
->>  #include <linux/i2c.h>
->>  #include <linux/acpi.h>
->>  #include <linux/module.h>
->> +#include <linux/of_device.h>
->>  #include <linux/power_supply.h>
->>  #include <linux/regmap.h>
->>  #include <linux/interrupt.h>
->> @@ -76,6 +77,16 @@ static const char *const modes[] = {
->>  /* Unrecognized commands will be replaced with "!CMD" */
->>  #define INVALID_CMD(_cmd_)		(_cmd_ == 0x444d4321)
->>  
->> +enum tipd_hw_type {
->> +	HW_TPS6598X,
->> +	HW_CD321X
->> +};
->> +
->> +struct tipd_hw {
->> +	enum tipd_hw_type type;
->> +	irq_handler_t irq_handler;
->> +};
->> +
->>  struct tps6598x {
->>  	struct device *dev;
->>  	struct regmap *regmap;
->> @@ -458,6 +469,51 @@ static void tps6598x_handle_plug_event(struct tps6598x *tps, u32 status)
->>  	}
->>  }
->>  
->> +static irqreturn_t cd321x_interrupt(int irq, void *data)
->> +{
->> +	struct tps6598x *tps = data;
->> +	u64 event = 0;
->> +	u32 status;
->> +	int ret;
->> +
->> +	mutex_lock(&tps->lock);
->> +
->> +	ret = tps6598x_read64(tps, TPS_REG_INT_EVENT1, &event);
->> +	if (ret) {
->> +		dev_err(tps->dev, "%s: failed to read events\n", __func__);
->> +		goto err_unlock;
->> +	}
->> +	trace_cd321x_irq(event);
->> +
->> +	if (!event)
->> +		goto err_unlock;
->> +
->> +	if (!tps6598x_read_status(tps, &status))
->> +		goto err_clear_ints;
->> +
->> +	if (event & APPLE_CD_REG_INT_POWER_STATUS_UPDATE)
->> +		if (!tps6598x_read_power_status(tps))
->> +			goto err_clear_ints;
->> +
->> +	if (event & APPLE_CD_REG_INT_DATA_STATUS_UPDATE)
->> +		if (!tps6598x_read_data_status(tps))
->> +			goto err_clear_ints;
->> +
->> +	/* Handle plug insert or removal */
->> +	if (event & APPLE_CD_REG_INT_PLUG_EVENT)
->> +		tps6598x_handle_plug_event(tps, status);
->> +
->> +err_clear_ints:
->> +	tps6598x_write64(tps, TPS_REG_INT_CLEAR1, event);
->> +
->> +err_unlock:
->> +	mutex_unlock(&tps->lock);
->> +
->> +	if (event)
->> +		return IRQ_HANDLED;
->> +	return IRQ_NONE;
->> +}
->> +
->>  static irqreturn_t tps6598x_interrupt(int irq, void *data)
->>  {
->>  	struct tps6598x *tps = data;
->> @@ -615,8 +671,19 @@ static int devm_tps6598_psy_register(struct tps6598x *tps)
->>  	return PTR_ERR_OR_ZERO(tps->psy);
->>  }
->>  
->> +static const struct tipd_hw ti_tps6598x_data = {
->> +	.type = HW_TPS6598X,
->> +	.irq_handler = tps6598x_interrupt,
->> +};
->> +
->> +static const struct tipd_hw apple_cd321x_data = {
->> +	.type = HW_CD321X,
->> +	.irq_handler = cd321x_interrupt,
->> +};
->> +
->>  static int tps6598x_probe(struct i2c_client *client)
->>  {
->> +	const struct tipd_hw *hw;
->>  	struct typec_capability typec_cap = { };
->>  	struct tps6598x *tps;
->>  	struct fwnode_handle *fwnode;
->> @@ -629,6 +696,10 @@ static int tps6598x_probe(struct i2c_client *client)
->>  	if (!tps)
->>  		return -ENOMEM;
->>  
->> +	hw = of_device_get_match_data(&client->dev);
->> +	if (!hw)
->> +		hw = &ti_tps6598x_data;
->> +
->>  	mutex_init(&tps->lock);
->>  	tps->dev = &client->dev;
->>  
->> @@ -655,6 +726,16 @@ static int tps6598x_probe(struct i2c_client *client)
->>  	if (ret)
->>  		return ret;
->>  
->> +	if (hw->type == HW_CD321X) {
->> +		/* CD321X chips have all interrupts masked initially */
->> +		ret = tps6598x_write64(tps, TPS_REG_INT_MASK1,
->> +					APPLE_CD_REG_INT_POWER_STATUS_UPDATE |
->> +					APPLE_CD_REG_INT_DATA_STATUS_UPDATE |
->> +					APPLE_CD_REG_INT_PLUG_EVENT);
->> +		if (ret)
->> +			return ret;
->> +	}
->> +
->>  	ret = tps6598x_read32(tps, TPS_REG_STATUS, &status);
->>  	if (ret < 0)
->>  		return ret;
->> @@ -736,7 +817,7 @@ static int tps6598x_probe(struct i2c_client *client)
->>  	}
->>  
->>  	ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
->> -					tps6598x_interrupt,
->> +					hw->irq_handler,
->>  					IRQF_SHARED | IRQF_ONESHOT,
->>  					dev_name(&client->dev), tps);
->
-> Couldn't you just use the compatible property and local variable here?
->
->         irq_handler_t irq_handler = tps6598x_interrupt;
->         struct device_node *np = client->dev.of_node;
->
->         if (np && of_device_is_compatible(np, "apple,cd321x")) {
->                 /* CD321X chips have all interrupts masked initially */
->                 ret = tps6598x_write64(tps, TPS_REG_INT_MASK1,
->                                         APPLE_CD_REG_INT_POWER_STATUS_UPDATE |
->                                         APPLE_CD_REG_INT_DATA_STATUS_UPDATE |
->                                         APPLE_CD_REG_INT_PLUG_EVENT);
->                 if (ret)
->                         return ret;
->
->                 irq_handler = cd321x_interrupt;
->         }
->
-> 	ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
-> 					irq_handler,
-> 					IRQF_SHARED | IRQF_ONESHOT,
-> 					dev_name(&client->dev), tps);
->
-> I did not go over the whole series yet, so I may have missed
-> something.
+Well part of the discussion has to be about the role that the user plays in
+the control. What does and doesn't need to be controlled further up the sta=
+ck,
+and what will be taken care of by, for example, TCPM? Surely that dictates =
+to
+some degree what and how we expose all of this? Right now we have a simple =
+means
+to read and control voltages and currents through a PSY class, without the =
+need
+for the user to know any details of what a PDO/APDO is. Do we continue with
+abstracting away to the user or instead let the user decipher this itself a=
+nd
+decide? Am just trying to understand the needs going forward.
 
-Sure, that will work and get rid of the slightly awkward and redundant interrupt/enum
-combination. I'll wait for your comments for the rest of the series and do that for v3 then :)
+> The final PSYs and the supply chains they create as well as the
+> individual properties I'm more than happy to talk about, but having a
+> separate object for the smallest thing that we can see (PDO) is the
+> right thing to do here IMO. Trying to concatenate things into single
+> objects especially in sysfs, despite how nice it always would seem,
+> has taken me to the brink of disaster in the past far too many times.
+>
+> In this case we don't need to take the risk of having to duplicated
+> information or in worst case deprecate something that is also exposed
+> to the sysfs in the future.
+>
+> So the question is not why should we registers every individual PDO
+> separately. The question is, why shouldn't we do that? And saying that
+> it's "heavyweight" I'm afraid is not good enough. :-)
 
+That was my initial feeling on the suggestion based on the idea of a PSY pe=
+r PDO
+and I still don't feel that fits as your creating a whole class of resource=
+s
+to expose something that's pretty small. To me the PSY represents the sourc=
+e as
+whole, and the PDOs are simply options/configurations for that source. If w=
+e're
+needing to expose PDOs then I don't disagree with separating them out
+individually and I certainly wouldn't want that all concatenated as one
+property. However I think something like dynamically generated properties
+might be a nicer solution to expose each PDO, or even groups of properties =
+if
+you wanted to split PDOs even further into constituent parts to the user.
 
-Thanks,
-
-
-Sven
+Honestly though I'm not really against anything right now. I'm still trying=
+ to
+build a better view for myself as to how this needs to be used in the futur=
+e.
