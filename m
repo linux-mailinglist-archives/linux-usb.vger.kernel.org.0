@@ -2,127 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD2F4175C0
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Sep 2021 15:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 852F8417651
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Sep 2021 15:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346231AbhIXNcR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Sep 2021 09:32:17 -0400
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:59634
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344365AbhIXNcO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Sep 2021 09:32:14 -0400
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3CBD640292
-        for <linux-usb@vger.kernel.org>; Fri, 24 Sep 2021 13:30:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1632490240;
-        bh=3xD6qAEhtRsJqFfznLwkKRQHrDkBb3UaWxl2/slC6j4=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=nSjm3xZyhfahJPG/dd2BJOA02+LCoFxYoguBs6CybtMYbjB18D0DM1KPv5jTLqY6X
-         nlIYIqRHgJy0L2EuIYJBhbSmCdrSEPWC8yJ/9FBt4CSurIYr66iqE2ky6vcDn1hlWU
-         dN/Ng9JdxDbazvJTXTJcyi+IbVK0gMqN2vOx5C7QIrxadz8Zv6v+ym8xtkmTph3fQ7
-         yrGW20s5ZFT/wLoikFsCKO21fuU0JaiqEaVADR1b5D/7kijNpavDfURf4af/uc2EJN
-         vFX3G4DsRxx92eYfnzBOSu+LAndjijk0OZbK/ulBe/rJagxD97Cc/FzyXB863N443R
-         LzrdsmSDinvSw==
-Received: by mail-wr1-f70.google.com with SMTP id v15-20020adff68f000000b0015df51efa18so8053860wrp.16
-        for <linux-usb@vger.kernel.org>; Fri, 24 Sep 2021 06:30:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3xD6qAEhtRsJqFfznLwkKRQHrDkBb3UaWxl2/slC6j4=;
-        b=YG6koQH+9Q3sTCS6zbUxXavWbMegsCCRxh4dHa2tjVdO1vC8lAuAqNkjOYKpjGebp4
-         NlqIOK57LSQxHK9Z9Sj0X3nJCXwY58bdSM3+KBbpnsWfaUxtyKxsDv+0HIFvvZiAwy82
-         nAPfTCPhQgIPhxbtTwgvibrm9K2owZYGI/0bugXN63oivJ8KKOYkTL3wbo11BSnRHiaB
-         2NilqeukPA8P62mIWzXUoA6EyI0hmfEtrAhIU2VDIDbzy06xqTClcRmxbSTGfI1Ju29n
-         USQzCFtQWujb7eP3k36AtGPWinEF9FgznQzA+4iPnYdbVw8pTpUTP1OEzdhFw17SxqLU
-         x7zA==
-X-Gm-Message-State: AOAM531xIhR/f7YEmi2WxbG7in5ULz2htslCGN9KpR2d5Z2oqh28lfgt
-        QaGr22AR+5gA7xqGXycFmtzbJjfpcbMmH/JGulwTEc1Nw6RNhu9R6hDK9l/Zp9lGDE2eHPjmgiP
-        ZtKm3NkKVDfYfgrMfSgSniwXkwUm0EQEjiGnKhg==
-X-Received: by 2002:a7b:c052:: with SMTP id u18mr2131020wmc.105.1632490239945;
-        Fri, 24 Sep 2021 06:30:39 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxatSONAGwx8bkyPabvpoXT2g6eOdCu2CFURKgVt6gBRUeQdbu9BS0S8yUmhBIZdqIfSdu7VA==
-X-Received: by 2002:a7b:c052:: with SMTP id u18mr2130997wmc.105.1632490239750;
-        Fri, 24 Sep 2021 06:30:39 -0700 (PDT)
-Received: from localhost.localdomain (lk.84.20.244.219.dc.cable.static.lj-kabel.net. [84.20.244.219])
-        by smtp.gmail.com with ESMTPSA id l19sm8646742wrc.16.2021.09.24.06.30.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Sep 2021 06:30:38 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Felipe Balbi <balbi@kernel.org>,
+        id S1346371AbhIXN5C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Sep 2021 09:57:02 -0400
+Received: from mga09.intel.com ([134.134.136.24]:13419 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233156AbhIXN5C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 24 Sep 2021 09:57:02 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10116"; a="224105805"
+X-IronPort-AV: E=Sophos;i="5.85,320,1624345200"; 
+   d="scan'208";a="224105805"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2021 06:55:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,320,1624345200"; 
+   d="scan'208";a="614507067"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 24 Sep 2021 06:55:18 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 24 Sep 2021 16:55:17 +0300
+Date:   Fri, 24 Sep 2021 16:55:17 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Ulrich Huber <ulrich@huberulrich.de>
+Cc:     Benjamin Berg <bberg@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
-Subject: [PATCH] usb: exynos: describe driver in KConfig
-Date:   Fri, 24 Sep 2021 15:30:05 +0200
-Message-Id: <20210924133005.111564-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.30.2
+Subject: Re: [PATCH 0/7] usb: typec: ucsi: Driver improvements
+Message-ID: <YU3YxXkjYNQx2Mlh@kuha.fi.intel.com>
+References: <20210920142419.54493-1-heikki.krogerus@linux.intel.com>
+ <52591c12693733a3caf11d2bb5999acdfe177054.camel@redhat.com>
+ <401db7b6-1ee2-d585-f76f-bdd4577224c2@huberulrich.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <401db7b6-1ee2-d585-f76f-bdd4577224c2@huberulrich.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Describe better which driver applies to which SoC, to make configuring
-kernel for Samsung SoC easier.
+On Thu, Sep 23, 2021 at 06:06:21PM +0200, Ulrich Huber wrote:
+> Hi,
+> 
+> Am 23.09.21 um 16:38 schrieb Benjamin Berg:
+> > Hi,
+> > 
+> > On Mon, 2021-09-20 at 17:24 +0300, Heikki Krogerus wrote:
+> > > The goal of this series was to improve the alt mode handling in the
+> > > driver, but now it seems that we can use the "poll worker" that was
+> > > introduced for that to handle other tasks better as well.
+> > > 
+> > > Ulrich reported some problems that are caused by the second
+> > > GET_CONNECTOR_STATUS right after the first one that was introduced in
+> > > 217504a05532 ("usb: typec: ucsi: Work around PPM losing change
+> > > information"). In the last patch I try to improve that workaround by
+> > > extracting it out of the generic event handler into its own task and
+> > > executing it only when it's really needed. That seems to improve the
+> > > situation.
+> > > 
+> > > These patches definitely improve the quality of the driver by making
+> > > it a bit more readable, but they also appear to make the behaviour a
+> > > bit more predictably and uniform on different platforms.
+> > > 
+> > > Benjamin, can you test these?
+> > I just gave this a spin on a X1 Carbon Gen 8 with a Lenovo TB 3 Dock.
+> > Unfortunately, I can still reproduce the issue occasionally. My take is
+> > that the rate is much lower than it was before my patch was introduced.
+> > However, unfortunately the patchset does appear to cause a regression
+> > on the machine I tested.
+> > 
+> > As before. The "online" status of the UCSI power supply is reported as
+> > "1" occasionally even after the cable was unplugged. And the issue
+> > seems to only happens with a dock, not if I use a USB-C charger.
+> > 
+> > Benjamin
+> 
+> From my point of view the patch set is still a huge improvement to the
+> current state of the driver. Before it, the status of the UCSI power supply
+> was unpredictable when using an USB-C charger with my Lenovo Yoga 9i.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- drivers/usb/dwc3/Kconfig | 7 ++++---
- drivers/usb/host/Kconfig | 6 ++++--
- 2 files changed, 8 insertions(+), 5 deletions(-)
+This is the problem with these workarounds that attempt to fix
+firmware issues. It's difficult to find a solution that works on every
+board. That's why it's important to attempt to isolate them, and use
+them only when needed.
 
-diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
-index 66b1454c4db2..c483f28b695d 100644
---- a/drivers/usb/dwc3/Kconfig
-+++ b/drivers/usb/dwc3/Kconfig
-@@ -66,12 +66,13 @@ config USB_DWC3_OMAP
- 	  Say 'Y' or 'M' here if you have one such device
- 
- config USB_DWC3_EXYNOS
--	tristate "Samsung Exynos Platform"
-+	tristate "Samsung Exynos SoC Platform"
- 	depends on (ARCH_EXYNOS || COMPILE_TEST) && OF
- 	default USB_DWC3
- 	help
--	  Recent Exynos5 SoCs ship with one DesignWare Core USB3 IP inside,
--	  say 'Y' or 'M' if you have one such device.
-+	  Recent Samsung Exynos SoCs (Exynos5250, Exynos5410, Exynos542x,
-+	  Exynos5800, Exynos5433, Exynos7) ship with one DesignWare Core USB3
-+	  IP inside, say 'Y' or 'M' if you have one such device.
- 
- config USB_DWC3_PCI
- 	tristate "PCIe-based Platforms"
-diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index c4736d1d020c..d1d926f8f9c2 100644
---- a/drivers/usb/host/Kconfig
-+++ b/drivers/usb/host/Kconfig
-@@ -290,7 +290,8 @@ config USB_EHCI_EXYNOS
- 	tristate "EHCI support for Samsung S5P/Exynos SoC Series"
- 	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
- 	help
--	  Enable support for the Samsung Exynos SOC's on-chip EHCI controller.
-+	  Enable support for the Samsung S5Pv210 and Exynos SOC's on-chip EHCI
-+	  controller.
- 
- config USB_EHCI_MV
- 	tristate "EHCI support for Marvell PXA/MMP USB controller"
-@@ -563,7 +564,8 @@ config USB_OHCI_EXYNOS
- 	tristate "OHCI support for Samsung S5P/Exynos SoC Series"
- 	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
- 	help
--	  Enable support for the Samsung Exynos SOC's on-chip OHCI controller.
-+	  Enable support for the Samsung S5Pv210 and Exynos SOC's on-chip OHCI
-+	  controller.
- 
- config USB_CNS3XXX_OHCI
- 	bool "Cavium CNS3XXX OHCI Module (DEPRECATED)"
+Right now the driver does behave quite unpredictable on several boards
+because of commit 217504a05532. The way that it solves a single issue
+is not isolated enough like it should be, which means every single
+connector change event is affected by it even when there is no need
+for that, but the solution itself - duplicated command execution - is
+also simply too heavy for many EC firmwares.
+
+I do admit that my series still leaves problems, it does not solve
+everything, and I'm not claiming that it's actually fixing anything
+(it's not tagged as a fix), but it does improve the behaviour of the
+driver so much that I still think that we should use it as the new
+"baseline" for future improvements.
+
+> I do still get error messages in the kernel log right after waking from
+> suspend occasionally, but I have not yet found reproducible steps. Most
+> likely it has something to do with the controller being in an invalid state
+> after waking from suspension. Though even then the status of the UCSI power
+> supply is correct when this happens.
+
+This is most likely separate issue that needs its own fix.
+
+
+thanks,
+
 -- 
-2.30.2
-
+heikki
