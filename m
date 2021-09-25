@@ -2,121 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E997B4182BE
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Sep 2021 16:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 176FE4182CF
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Sep 2021 16:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343593AbhIYOdR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Sep 2021 10:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245152AbhIYOdQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Sep 2021 10:33:16 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F305FC061570
-        for <linux-usb@vger.kernel.org>; Sat, 25 Sep 2021 07:31:41 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id m70so12465951ybm.5
-        for <linux-usb@vger.kernel.org>; Sat, 25 Sep 2021 07:31:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=FELeHWRLzFEBrq4obhX73D1BquHMgJ/7I3UYNELg8LY=;
-        b=KvjaUCO8ClMlfZevsnquUBLawX+BPi8RBLkHW2yaOg3L+MbrrqAA3ssciJlPas/Fip
-         CDpfuiFhu77MljNT2qGuf0BDTrzE6YNmxshNymvkfb0TPj9KItKSc2MfBD8MJ8TZAban
-         1XH095/aKiOcEavzNPa/+NLvfX50gZkLA9d1vSF8qXFHJPuU6jL3vtti/p6Ts6hEYVvR
-         BR66yqsP0vOla8L16Q8yc2ISLnCIdlitCL9i/HX3M5R2Xng1CR9S93iH4xHQJqQcvJCV
-         eFoDmnC+tjWabe+x4DAuPd7vJd01k095M5KznQg6hCxTZ2rNkBKt6hKWBxhOXS4DE0v6
-         4UdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=FELeHWRLzFEBrq4obhX73D1BquHMgJ/7I3UYNELg8LY=;
-        b=GAsOR824cbZClJygdjHAl5ubmCH8E3UuQSFcqZ2W7BdJ72dXGobfdLzzjwjCQhtMbu
-         ZZFGm5nVwrsJbSMq2Or9nyNPGibgc2rJOgMXO5Scqx/XHFddaEWUWW2BG0RJTLYC1lim
-         fQeH86aK22kqMoEY7lxw2rOsV2WV1Pybsi09BJuNw1ppJf+jq1dM1l4nSny/GuO4pkDc
-         bWeBjWs9GSZGhDK0GTKcu5MGRPEx6la5hn4r0zGlxSDRc/YHiq6N4e12ODs45ENpg3mA
-         p30cx0Ubee94mLooBF7jR8rw/yFqEoptJdxroUFRxbQkiTMeOWOdItp0Rx9B87o7dBGk
-         nc2g==
-X-Gm-Message-State: AOAM531pODXXDJpjDnUbJKxfm9Du4c15NfMSSXgKpuDlXhNbMNggT8OB
-        E/ei4XMP+IoejvCTgfNpVCxjdnKPLlL8Z1+nM5oHo+BIWvM=
-X-Google-Smtp-Source: ABdhPJxp7HWQpb7/FHdk/6a0Y0hsHFLdzFuU7s3VZRF8J4N3p16dtEACPF2+grPoY1cFZLN11subZK81PDlEs0SrtP8=
-X-Received: by 2002:a25:fc24:: with SMTP id v36mr8331222ybd.23.1632580301176;
- Sat, 25 Sep 2021 07:31:41 -0700 (PDT)
+        id S236166AbhIYOqt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Sep 2021 10:46:49 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:39555 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S234538AbhIYOqs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Sep 2021 10:46:48 -0400
+Received: (qmail 309059 invoked by uid 1000); 25 Sep 2021 10:45:13 -0400
+Date:   Sat, 25 Sep 2021 10:45:13 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Cai Huoqing <caihuoqing@baidu.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] usb: ehci: Fix a function name in comments
+Message-ID: <20210925144513.GA308698@rowland.harvard.edu>
+References: <20210925124920.1564-1-caihuoqing@baidu.com>
 MIME-Version: 1.0
-From:   Turritopsis Dohrnii Teo En Ming <ceo.teo.en.ming@gmail.com>
-Date:   Sat, 25 Sep 2021 22:31:30 +0800
-Message-ID: <CAMEJMGGeOT_a4ZxLkhbiYi1ZMRD3p+Hr9X7=CAMLmzUafZV2GQ@mail.gmail.com>
-Subject: Introduction: I am a Linux and open source software enthusiast
-To:     linux-usb@vger.kernel.org
-Cc:     ceo@teo-en-ming-corp.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210925124920.1564-1-caihuoqing@baidu.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Subject: Introduction: I am a Linux and open source software enthusiast
+On Sat, Sep 25, 2021 at 08:49:17PM +0800, Cai Huoqing wrote:
+> Use dma_map_single() instead of pci_map_single(),
+> because only dma_map_single() is called here.
+> 
+> Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
 
-Greetings from Singapore,
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-My name is Mr. Turritopsis Dohrnii Teo En Ming, 43 years old as of 25
-September 2021. My country is Singapore. Presently I am an IT
-Consultant with a System Integrator (SI)/computer firm in Singapore. I
-am also a Linux and open source software and information technology
-enthusiast.
-
-You can read my autobiography on my redundant blogs. The title of my
-autobiography is:
-
-"Autobiography of Singaporean Targeted Individual Mr. Turritopsis
-Dohrnii Teo En Ming (Very First Draft, Lots More to Add in Future)"
-
-Links to my redundant blogs (Blogger and Wordpress) can be found in my
-email signature below. These are my main blogs.
-
-I have three other redundant blogs, namely:
-
-https://teo-en-ming.tumblr.com/
-
-https://teo-en-ming.medium.com/
-
-https://teo-en-ming.livejournal.com/
-
-Future/subsequent versions of my autobiography will be published on my
-redundant blogs.
-
-My Blog Books (in PDF format) are also available for download on my
-redundant blogs.
-
-I have also published many guides, howtos, tutorials, and information
-technology articles on my redundant blogs.
-
-Thank you very much.
-
-
-
-
-
-
------BEGIN EMAIL SIGNATURE-----
-
-The Gospel for all Targeted Individuals (TIs):
-
-[The New York Times] Microwave Weapons Are Prime Suspect in Ills of
-U.S. Embassy Workers
-
-Link:
-https://www.nytimes.com/2018/09/01/science/sonic-attack-cuba-microwave.html
-
-********************************************************************************************
-
-Singaporean Targeted Individual Mr. Turritopsis Dohrnii Teo En Ming's
-Academic Qualifications as at 14 Feb 2019 and refugee seeking attempts
-at the United Nations Refugee Agency Bangkok (21 Mar 2017), in Taiwan
-(5 Aug 2019) and Australia (25 Dec 2019 to 9 Jan 2020):
-
-[1] https://tdtemcerts.wordpress.com/
-
-[2] https://tdtemcerts.blogspot.sg/
-
-[3] https://www.scribd.com/user/270125049/Teo-En-Ming
-
------END EMAIL SIGNATURE-----
+> ---
+>  drivers/usb/host/ehci-hcd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
+> index 144080321629..3d82e0b853be 100644
+> --- a/drivers/usb/host/ehci-hcd.c
+> +++ b/drivers/usb/host/ehci-hcd.c
+> @@ -588,7 +588,7 @@ static int ehci_run (struct usb_hcd *hcd)
+>  	 * hcc_params controls whether ehci->regs->segment must (!!!)
+>  	 * be used; it constrains QH/ITD/SITD and QTD locations.
+>  	 * dma_pool consistent memory always uses segment zero.
+> -	 * streaming mappings for I/O buffers, like pci_map_single(),
+> +	 * streaming mappings for I/O buffers, like dma_map_single(),
+>  	 * can return segments above 4GB, if the device allows.
+>  	 *
+>  	 * NOTE:  the dma mask is visible through dev->dma_mask, so
+> -- 
+> 2.25.1
+> 
