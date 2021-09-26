@@ -2,100 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D558F4188F2
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Sep 2021 15:00:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0251C418A74
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Sep 2021 20:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231602AbhIZNCI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Sep 2021 09:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbhIZNCI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Sep 2021 09:02:08 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8725C061570;
-        Sun, 26 Sep 2021 06:00:31 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id c1so13159844pfp.10;
-        Sun, 26 Sep 2021 06:00:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JSFOayOTE4Uyc1hI32Lkwa+XwwdJucxTM76xvaMDZA4=;
-        b=JNkA9kuYGc5wEyRaiHYqPTiAIG6jyk5XPUK3MKP1K/sDskwtbOKmKzs06bjJsKJxHc
-         161P/abz6GuhalZHibwpWUCkMEP/QHd3PO7cl+F3S4e2YIXt4FFrU35Oq3vZkSgzupXD
-         HsyuMjculPbeeAEtkju8dTaMZ6eGIWXdT9DSBSCh1Lvg/mSkyc6GSneTnkyWi72D8rTe
-         +jv8hoBuUTECdH6JcV/EQwA1BRKowo+bji/pz+2Kd1ssUR2KQyozVcE6mYgByIoBcdLa
-         b/rPhL6uMnTzYzQCeJgRQkGCEuQhXzdHvjy2SiGARKb8eMM80vzRqjBR4Ubgdv9l1jL5
-         SpFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JSFOayOTE4Uyc1hI32Lkwa+XwwdJucxTM76xvaMDZA4=;
-        b=kGPBfhR9ZaXQp01rEXtNeu562UEakIc3np5nuYMjg3hUYfcLGEtYBBfxk6zRvhI1FC
-         AivG+QgVoPjtUTS1gPDRKdq6SzYFeqwLd65tiJkTzDC3zuskgFmRKMJY59pItNedpeFv
-         sgWyc+CCKh1IgTRsOJiw5RwFhtnpmP5hIdCXcT1sJYcvKxGCDFh/PbU8wxRQRfj7Y+mc
-         HWtugvkCoQFamvHwMPdOcEjIiRmB/nKke6DJGydq0M9/U7MAYkvbGgUnQjF90vPbPZ5z
-         byonanYcLbHI4gRt3m4QGcl8+TNrxuSZR9z/qU824z0Tc/iLU2j7tBNQHhNi4tbX0wZ1
-         ljwA==
-X-Gm-Message-State: AOAM530K1rRG6IFPJHLtkGoU0Uwqu94y+3Ixjn4fLjRp2BM4IkxJkvLD
-        sPpb4/trMoCsURhAYgrchQnQFfaTWoILTRvEIqE=
-X-Google-Smtp-Source: ABdhPJwL5Ay/Ji5j2V/XIM9VJK1N3hblgjJzqq5FFyfyJgS5AtC9pn8zDBTWDONA76Z5+4TS8TZunN0wfOL6fTYsyXk=
-X-Received: by 2002:aa7:9e9a:0:b0:43e:d9b:cd93 with SMTP id
- p26-20020aa79e9a000000b0043e0d9bcd93mr18844437pfq.50.1632661231439; Sun, 26
- Sep 2021 06:00:31 -0700 (PDT)
+        id S229549AbhIZSQ3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sun, 26 Sep 2021 14:16:29 -0400
+Received: from smtp1.math.uni-bielefeld.de ([129.70.45.10]:55146 "EHLO
+        smtp1.math.uni-bielefeld.de" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229531AbhIZSQ2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Sep 2021 14:16:28 -0400
+Received: from [192.168.0.100] (dslb-088-074-203-145.088.074.pools.vodafone-ip.de [88.74.203.145])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by smtp1.math.uni-bielefeld.de (Postfix) with ESMTPSA id 58AED60247;
+        Sun, 26 Sep 2021 20:14:50 +0200 (CEST)
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Tobias Jakobi <cubic2k@gmail.com>, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+References: <20210921101752.4679-1-tjakobi@math.uni-bielefeld.de>
+ <20210921151323.GA170347@rowland.harvard.edu>
+ <cfb2d4e4-0e6a-69d5-01ac-dc1ab4d9d319@math.uni-bielefeld.de>
+ <20210921164221.GA172450@rowland.harvard.edu>
+From:   Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
+Subject: Re: [PATCH] usb: storage: add quirks for VIA VL817 USB3-SATA bridge
+Message-ID: <609b10d0-7a20-ffa2-b283-67e0e91c7909@math.uni-bielefeld.de>
+Date:   Sun, 26 Sep 2021 20:14:46 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20210801203122.3515-1-himadrispandya@gmail.com>
- <20210801203122.3515-7-himadrispandya@gmail.com> <YUnS/Chgat7vNHO7@hovoldconsulting.com>
-In-Reply-To: <YUnS/Chgat7vNHO7@hovoldconsulting.com>
-From:   Himadri Pandya <himadrispandya@gmail.com>
-Date:   Sun, 26 Sep 2021 15:00:20 +0200
-Message-ID: <CAOY-YVk9_8zEXpW8XwTuEPVMxCUwpXemWmNzt2by90bnTv66YA@mail.gmail.com>
-Subject: Re: [PATCH v2 6/6] USB: serial: kl5kusb105: use usb_control_msg_recv()
- and usb_control_msg_send()
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210921164221.GA172450@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8BIT
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 21, 2021 at 2:41 PM Johan Hovold <johan@kernel.org> wrote:
->
-> On Mon, Aug 02, 2021 at 02:01:22AM +0530, Himadri Pandya wrote:
-> > The wrappers usb_control_msg_send/recv eliminate the need of allocating
-> > dma buffers for usb message. They also impose proper error checks on the
-> > return value of usb_control_msg() to handle short read/write. Hence use
-> > the wrappers and remove dma allocations.
-> >
-> > Signed-off-by: Himadri Pandya <himadrispandya@gmail.com>
-> > ---
-> > Changes in v2:
-> >  - Fix the caller of klsi_105_chg_port_settings()
-> >  - Drop unnecessary use of the wrappers
->
-> Now applied with an amended commit message:
->
->     USB: serial: kl5kusb105: use usb_control_msg_recv() and usb_control_msg_send()
->
->     The wrappers usb_control_msg_send/recv eliminate the need of
->     manually allocating DMA buffers for USB messages. They also treat
->     short reads as an error. Hence use the wrappers and remove DMA
->     allocations.
->
->     Note that short reads are now logged as -EREMOTEIO instead of the amount
->     of data read.
->
-> I've applied all but the first two patches in the series now. Would you
-> mind respinning those two?
->
-> Thanks,
-> Johan
+Hello Alan,
 
-Thanks for reviewing and applying these patches. And yes, I'm sending
-the revised version for the first two.
+On 9/21/21 6:42 PM, Alan Stern wrote:
+> On Tue, Sep 21, 2021 at 06:06:45PM +0200, Tobias Jakobi wrote:
+>> Hi Alan,
+>>
+>> sorry but your analysis of the log is wrong. Nothing was disconnected or
+>> unplugged when the device behaves this way. The enclosure is connected to
+>> the power the entire time, and the same applies to the physical USB
+>> connection to my system.
+> That may be so, but if it is then the log extract you included with the
+> patch is very misleading.  For instance, you didn't include any part of
+> the log before and leading up to the line saying "usb 2-1.2: USB
+> disconnect, device number 4".  Thus there is no way for the reader to
+> tell what caused this event, whether it was a physical unplug or not.
 
-Regards,
-Himadri
+I included the part of the kernel log which shows how the issue 
+manifests itself. Do you think I'm so stupid as to believe I could 
+prevent a physical unplug of the enclosure by blacklisting UAS? Really, 
+this is getting ridiculous...
+
+>> To make things very clear: This happens in under five minutes after having
+>> powered up the enclosure and starting a file transfer to the installed RAID.
+>> After blacklisting UASP the enclosure works perfectly fine for hours. I hope
+>> this clears things up.
+> You didn't answer my question about using NO_ATA_1X instead of
+> IGNORE_UAS.  This is a perfect example of one of the dangers of
+> top-posting -- it makes it far too easy for people to miss important
+> points in the email they are replying to.  (Hint: Don't top-post!)
+
+I did not answer this question, because I didn't have the answer to it 
+yet. I have tested your suggestion today, but sadly I'm running into the 
+same type of problem with NO_ATA_1X. You can find the complete kernel 
+log here:
+https://www.math.uni-bielefeld.de/~tjakobi/archive/dmesg_VL817.log
+
+The RAID1 is broken after such an event.
+
+With best wishes,
+Tobias
+
+
+>
+> Alan Stern
+>
+>> With best wishes,
+>> Tobias
+>>
+>> On 9/21/21 5:13 PM, Alan Stern wrote:
+>>> On Tue, Sep 21, 2021 at 12:17:52PM +0200, Tobias Jakobi wrote:
+>>>> The VL817 is used in the RaidSonic Icy Box IB-3740-C31 enclosure. The enclosure
+>>>> is advertised as having UASP support, but appears to have problems with 4Kn
+>>>> drives (test was done with two Seagate Exos X, 12TB).
+>>>>
+>>>> Disable UAS for the VL817 as it behaves highly unstable:
+>>>>
+>>>> [Aug14 16:31] usb 2-1.2: USB disconnect, device number 4
+>>> So first the drive was unplugged or disconnected...
+>>>
+>>>> [  +0.007701] sd 4:0:0:0: [sdb] tag#4 uas_zap_pending 0 uas-tag 1 inflight: CMD
+>>>> [  +0.000004] sd 4:0:0:0: [sdb] tag#4 CDB: opcode=0x2a 2a 00 00 37 63 da 00 00 80 00
+>>>> [  +0.000022] sd 4:0:0:0: [sdb] tag#4 UNKNOWN(0x2003) Result: hostbyte=0x01 driverbyte=0x00 cmd_age=19s
+>>>> [  +0.000001] sd 4:0:0:0: [sdb] tag#4 CDB: opcode=0x2a 2a 00 00 37 63 da 00 00 80 00
+>>>> [  +0.000001] blk_update_request: I/O error, dev sdb, sector 29040336 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
+>>>> [  +0.000028] blk_update_request: I/O error, dev sdb, sector 29041360 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
+>>>> [  +0.000000] blk_update_request: I/O error, dev sdb, sector 16 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+>>>> [  +0.000005] md: super_written gets error=-5
+>>>> [  +0.000002] md/raid1:md126: Disk failure on sdb, disabling device.
+>>>>                 md/raid1:md126: Operation continuing on 1 devices.
+>>>> [  +0.000024] blk_update_request: I/O error, dev sdb, sector 29042384 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
+>>>> [  +0.000222] sd 4:0:0:0: [sdb] Synchronizing SCSI cache
+>>>> [  +0.078154] blk_update_request: I/O error, dev sdb, sector 29040336 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+>>>> [  +0.000025] blk_update_request: I/O error, dev sdb, sector 29040344 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+>>>> [  +0.007520] blk_update_request: I/O error, dev sdb, sector 29040352 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+>>>> [  +0.000021] blk_update_request: I/O error, dev sdb, sector 29040360 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+>>>> [  +0.000015] blk_update_request: I/O error, dev sdb, sector 29040368 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+>>>> [  +0.000009] blk_update_request: I/O error, dev sdb, sector 29040376 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
+>>>> [  +0.023299] sd 4:0:0:0: [sdb] Synchronize Cache(10) failed: Result: hostbyte=0x07 driverbyte=0x00
+>>> Then there was a bunch of errors, which is to be expected when a drive
+>>> is suddenly disconnected...
+>>>
+>>>> [  +1.893439] usb 2-1.2: new SuperSpeed Plus Gen 2x1 USB device number 7 using xhci_hcd
+>>>> [  +0.024064] scsi host7: uas
+>>>> [ +16.365880] scsi 7:0:0:0: Direct-Access     ST12000N M001G-2MV103     SB2D PQ: 0 ANSI: 6
+>>>> [  +0.001192] sd 7:0:0:0: Attached scsi generic sg1 type 0
+>>>> [  +0.000940] sd 7:0:0:0: [sde] 2929721344 4096-byte logical blocks: (12.0 TB/10.9 TiB)
+>>>> [  +0.000130] sd 7:0:0:0: [sde] Write Protect is off
+>>>> [  +0.000001] sd 7:0:0:0: [sde] Mode Sense: 2f 00 00 00
+>>>> [  +0.000265] sd 7:0:0:0: [sde] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+>>>> [  +0.000399] sd 7:0:0:0: [sde] Optimal transfer size 268431360 bytes
+>>>> [  +0.120240] sd 7:0:0:0: [sde] Attached SCSI disk
+>>> And then the drive reconnected, this time successfully.  How does this
+>>> show that UAS was the reason for the problem?  Indeed, how does this
+>>> show there was any problem at all?
+>>>
+>>>> Signed-off-by: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
+>>>> ---
+>>>>    drivers/usb/storage/unusual_uas.h | 7 +++++++
+>>>>    1 file changed, 7 insertions(+)
+>>>>
+>>>> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+>>>> index bda0f2cdf093..7d83ecf835c6 100644
+>>>> --- a/drivers/usb/storage/unusual_uas.h
+>>>> +++ b/drivers/usb/storage/unusual_uas.h
+>>>> @@ -125,6 +125,13 @@ UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
+>>>>    		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>>>>    		US_FL_NO_ATA_1X),
+>>>> +/* Reported-by: Tobias Jakobi <tjakobi@math.uni-bielefeld.de> */
+>>>> +UNUSUAL_DEV(0x2109, 0x0715, 0x0000, 0x9999,
+>>>> +		"VIA",
+>>>> +		"VL817",
+>>>> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>>>> +		US_FL_IGNORE_UAS),
+>>>> +
+>>>>    /* Reported-by: Icenowy Zheng <icenowy@aosc.io> */
+>>>>    UNUSUAL_DEV(0x2537, 0x1068, 0x0000, 0x9999,
+>>>>    		"Norelsys",
+>>> Instead of IGNORE_UAS, have you tried the NO_ATA_1X flag, which seems to
+>>> help in the preceding entry (a different device from the same vendor)?
+>>>
+>>> Alan Stern
+
