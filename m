@@ -2,162 +2,274 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0251C418A74
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Sep 2021 20:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D45A418CB7
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Sep 2021 00:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbhIZSQ3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sun, 26 Sep 2021 14:16:29 -0400
-Received: from smtp1.math.uni-bielefeld.de ([129.70.45.10]:55146 "EHLO
-        smtp1.math.uni-bielefeld.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229531AbhIZSQ2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Sep 2021 14:16:28 -0400
-Received: from [192.168.0.100] (dslb-088-074-203-145.088.074.pools.vodafone-ip.de [88.74.203.145])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by smtp1.math.uni-bielefeld.de (Postfix) with ESMTPSA id 58AED60247;
-        Sun, 26 Sep 2021 20:14:50 +0200 (CEST)
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Tobias Jakobi <cubic2k@gmail.com>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-References: <20210921101752.4679-1-tjakobi@math.uni-bielefeld.de>
- <20210921151323.GA170347@rowland.harvard.edu>
- <cfb2d4e4-0e6a-69d5-01ac-dc1ab4d9d319@math.uni-bielefeld.de>
- <20210921164221.GA172450@rowland.harvard.edu>
-From:   Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
-Subject: Re: [PATCH] usb: storage: add quirks for VIA VL817 USB3-SATA bridge
-Message-ID: <609b10d0-7a20-ffa2-b283-67e0e91c7909@math.uni-bielefeld.de>
-Date:   Sun, 26 Sep 2021 20:14:46 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S231347AbhIZWoP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Sep 2021 18:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230331AbhIZWoE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Sep 2021 18:44:04 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDF8C061570;
+        Sun, 26 Sep 2021 15:42:27 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id t10so68463230lfd.8;
+        Sun, 26 Sep 2021 15:42:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ODs6zhlkLMHshS4JHU5fhllhmsoNHoota6CZoe8HKXI=;
+        b=EkHmL4ABihxW4SssDBIHuIY/eDwr54e5Ytg7Q7Ktu9ft8PY97Z0GvHh8jY+TXG3YGS
+         tG6sNz8EB+EgXKgY1UUhTjgYg46rytuQpX/igb4p/t2/yivDqzjoTIP0Rj4a8UXitJFG
+         NRbBXmH8m02A2hjfALc1+8tpbX/lHLuxH3e7WwJyXDo+aFhCgPdL6tqo58LYxIwf9uuM
+         x+v8wpxQAUYroeI2KmLTz5jXzxKv5rW7eDTBAmOPeZdLdwF+OfZfaOZwU1izqJzFvCYe
+         fBNn5z/ubFhJpgw6OFxj4HLwr+eymwun1pelRRBSxcE7yWgZHL/vuZ/A1DZEWk0r7xNn
+         hKjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ODs6zhlkLMHshS4JHU5fhllhmsoNHoota6CZoe8HKXI=;
+        b=VLPmAPzV42jY2QiL6LE+1/YGLtqrvPvzRfI2IU7Yny51sN0hXexHJmVxnMEWxlZ+D2
+         7SrLgw9cMTP4mE17U7dJ7X3pwqZMtpBoAFVJjN7ftr7bKIs43vOZSPt1ej9h5TUJ0Muv
+         eT+9+fOWZNcxPQrGA4IUKRAxV78Bp13iBPhqaWJpGROHkeO/tRX87T756xg5WI/y3VUk
+         vHqkVhkolqOnETqv5+KNt3muqQFi+8PS111DMf/yZkJQh4jSsv0MX/632y39Dved0Ieh
+         Ma3P7plikbbw91kUwdRfnYUJOfVq2q/J4XiCDJJJFXfkZdSv0oPR9wriJFGYtGDXOObi
+         VdLA==
+X-Gm-Message-State: AOAM533NeSxqTpd33UwBCoOHe/zVuzQzF6kpEERSjtge/TzIQqw5EpGr
+        KwRfuw/pximnhysKcuS3qAc=
+X-Google-Smtp-Source: ABdhPJyS3Wy6JAbPibwRzUbxuaTS20mWaQUVTBz2SvN5TuZB2dAM9fG3nH4rhnduRVz0bmM5M/xNxA==
+X-Received: by 2002:a05:6512:688:: with SMTP id t8mr21344530lfe.49.1632696145424;
+        Sun, 26 Sep 2021 15:42:25 -0700 (PDT)
+Received: from localhost.localdomain (46-138-80-108.dynamic.spd-mgts.ru. [46.138.80.108])
+        by smtp.gmail.com with ESMTPSA id m10sm1408899lfr.272.2021.09.26.15.42.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Sep 2021 15:42:25 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+Subject: [PATCH v13 00/35] NVIDIA Tegra power management patches for 5.16
+Date:   Mon, 27 Sep 2021 01:40:23 +0300
+Message-Id: <20210926224058.1252-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20210921164221.GA172450@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8BIT
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Alan,
+This series adds runtime PM support to Tegra drivers and enables core
+voltage scaling for Tegra20/30 SoCs, resolving overheating troubles.
 
-On 9/21/21 6:42 PM, Alan Stern wrote:
-> On Tue, Sep 21, 2021 at 06:06:45PM +0200, Tobias Jakobi wrote:
->> Hi Alan,
->>
->> sorry but your analysis of the log is wrong. Nothing was disconnected or
->> unplugged when the device behaves this way. The enclosure is connected to
->> the power the entire time, and the same applies to the physical USB
->> connection to my system.
-> That may be so, but if it is then the log extract you included with the
-> patch is very misleading.  For instance, you didn't include any part of
-> the log before and leading up to the line saying "usb 2-1.2: USB
-> disconnect, device number 4".  Thus there is no way for the reader to
-> tell what caused this event, whether it was a physical unplug or not.
+All patches in this series are interdependent and should go via Tegra tree.
 
-I included the part of the kernel log which shows how the issue 
-manifests itself. Do you think I'm so stupid as to believe I could 
-prevent a physical unplug of the enclosure by blacklisting UAS? Really, 
-this is getting ridiculous...
+Changelog:
 
->> To make things very clear: This happens in under five minutes after having
->> powered up the enclosure and starting a file transfer to the installed RAID.
->> After blacklisting UASP the enclosure works perfectly fine for hours. I hope
->> this clears things up.
-> You didn't answer my question about using NO_ATA_1X instead of
-> IGNORE_UAS.  This is a perfect example of one of the dangers of
-> top-posting -- it makes it far too easy for people to miss important
-> points in the email they are replying to.  (Hint: Don't top-post!)
+v13: - Fixed compile-test error reported by build bot by reverting the
+       mmc/ patch to v11. The sdhci_suspend/resume_host() functions aren't
+       available with the disabled CONFIG_PM_SLEEP, some code needs the
+       ifdef.
 
-I did not answer this question, because I didn't have the answer to it 
-yet. I have tested your suggestion today, but sadly I'm running into the 
-same type of problem with NO_ATA_1X. You can find the complete kernel 
-log here:
-https://www.math.uni-bielefeld.de/~tjakobi/archive/dmesg_VL817.log
+     - Added last r-b from Rob Herring for the DT patches.
 
-The RAID1 is broken after such an event.
+     - Corrected clk/ PM domain-support patch by not using the
+       devm_tegra_core_dev_init_opp_table_common() helper, which I
+       utilized in v12. The clk driver implements its own power domain
+       state syncing and common helper shouldn't be used. This fixes driver
+       probing for some clocks on some devices. It was reported by
+       Svyatoslav Ryhel for PLLE OPP error on T30 Asus Transformer tablet.
 
-With best wishes,
-Tobias
+v12: - Added r-b from Rob Herring to the host1x binding patch.
 
+     - Added acks from Hans Verkuil to the video decoder patches.
 
->
-> Alan Stern
->
->> With best wishes,
->> Tobias
->>
->> On 9/21/21 5:13 PM, Alan Stern wrote:
->>> On Tue, Sep 21, 2021 at 12:17:52PM +0200, Tobias Jakobi wrote:
->>>> The VL817 is used in the RaidSonic Icy Box IB-3740-C31 enclosure. The enclosure
->>>> is advertised as having UASP support, but appears to have problems with 4Kn
->>>> drives (test was done with two Seagate Exos X, 12TB).
->>>>
->>>> Disable UAS for the VL817 as it behaves highly unstable:
->>>>
->>>> [Aug14 16:31] usb 2-1.2: USB disconnect, device number 4
->>> So first the drive was unplugged or disconnected...
->>>
->>>> [  +0.007701] sd 4:0:0:0: [sdb] tag#4 uas_zap_pending 0 uas-tag 1 inflight: CMD
->>>> [  +0.000004] sd 4:0:0:0: [sdb] tag#4 CDB: opcode=0x2a 2a 00 00 37 63 da 00 00 80 00
->>>> [  +0.000022] sd 4:0:0:0: [sdb] tag#4 UNKNOWN(0x2003) Result: hostbyte=0x01 driverbyte=0x00 cmd_age=19s
->>>> [  +0.000001] sd 4:0:0:0: [sdb] tag#4 CDB: opcode=0x2a 2a 00 00 37 63 da 00 00 80 00
->>>> [  +0.000001] blk_update_request: I/O error, dev sdb, sector 29040336 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
->>>> [  +0.000028] blk_update_request: I/O error, dev sdb, sector 29041360 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
->>>> [  +0.000000] blk_update_request: I/O error, dev sdb, sector 16 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
->>>> [  +0.000005] md: super_written gets error=-5
->>>> [  +0.000002] md/raid1:md126: Disk failure on sdb, disabling device.
->>>>                 md/raid1:md126: Operation continuing on 1 devices.
->>>> [  +0.000024] blk_update_request: I/O error, dev sdb, sector 29042384 op 0x1:(WRITE) flags 0x0 phys_seg 128 prio class 0
->>>> [  +0.000222] sd 4:0:0:0: [sdb] Synchronizing SCSI cache
->>>> [  +0.078154] blk_update_request: I/O error, dev sdb, sector 29040336 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
->>>> [  +0.000025] blk_update_request: I/O error, dev sdb, sector 29040344 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
->>>> [  +0.007520] blk_update_request: I/O error, dev sdb, sector 29040352 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
->>>> [  +0.000021] blk_update_request: I/O error, dev sdb, sector 29040360 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
->>>> [  +0.000015] blk_update_request: I/O error, dev sdb, sector 29040368 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
->>>> [  +0.000009] blk_update_request: I/O error, dev sdb, sector 29040376 op 0x1:(WRITE) flags 0x800 phys_seg 1 prio class 0
->>>> [  +0.023299] sd 4:0:0:0: [sdb] Synchronize Cache(10) failed: Result: hostbyte=0x07 driverbyte=0x00
->>> Then there was a bunch of errors, which is to be expected when a drive
->>> is suddenly disconnected...
->>>
->>>> [  +1.893439] usb 2-1.2: new SuperSpeed Plus Gen 2x1 USB device number 7 using xhci_hcd
->>>> [  +0.024064] scsi host7: uas
->>>> [ +16.365880] scsi 7:0:0:0: Direct-Access     ST12000N M001G-2MV103     SB2D PQ: 0 ANSI: 6
->>>> [  +0.001192] sd 7:0:0:0: Attached scsi generic sg1 type 0
->>>> [  +0.000940] sd 7:0:0:0: [sde] 2929721344 4096-byte logical blocks: (12.0 TB/10.9 TiB)
->>>> [  +0.000130] sd 7:0:0:0: [sde] Write Protect is off
->>>> [  +0.000001] sd 7:0:0:0: [sde] Mode Sense: 2f 00 00 00
->>>> [  +0.000265] sd 7:0:0:0: [sde] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
->>>> [  +0.000399] sd 7:0:0:0: [sde] Optimal transfer size 268431360 bytes
->>>> [  +0.120240] sd 7:0:0:0: [sde] Attached SCSI disk
->>> And then the drive reconnected, this time successfully.  How does this
->>> show that UAS was the reason for the problem?  Indeed, how does this
->>> show there was any problem at all?
->>>
->>>> Signed-off-by: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
->>>> ---
->>>>    drivers/usb/storage/unusual_uas.h | 7 +++++++
->>>>    1 file changed, 7 insertions(+)
->>>>
->>>> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
->>>> index bda0f2cdf093..7d83ecf835c6 100644
->>>> --- a/drivers/usb/storage/unusual_uas.h
->>>> +++ b/drivers/usb/storage/unusual_uas.h
->>>> @@ -125,6 +125,13 @@ UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
->>>>    		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->>>>    		US_FL_NO_ATA_1X),
->>>> +/* Reported-by: Tobias Jakobi <tjakobi@math.uni-bielefeld.de> */
->>>> +UNUSUAL_DEV(0x2109, 0x0715, 0x0000, 0x9999,
->>>> +		"VIA",
->>>> +		"VL817",
->>>> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->>>> +		US_FL_IGNORE_UAS),
->>>> +
->>>>    /* Reported-by: Icenowy Zheng <icenowy@aosc.io> */
->>>>    UNUSUAL_DEV(0x2537, 0x1068, 0x0000, 0x9999,
->>>>    		"Norelsys",
->>> Instead of IGNORE_UAS, have you tried the NO_ATA_1X flag, which seems to
->>> help in the preceding entry (a different device from the same vendor)?
->>>
->>> Alan Stern
+     - In the v11 changelog I forgot to mention that the clk-binding
+       patch was also changed with a corrected regex pattern and removed
+       'clocks' sub-node. This patch needs r-b or ack too.
+
+     - Added new "Rename 3d power domains" patch to match the DT schema
+       naming requirement. Thanks to David Heidelberg for spotting this
+       problem.
+
+     - Replaced #ifdef CONFIG_PM_SLEEP with maybe_unused in the MMC patch
+       to make code cleaner.
+
+v11: - Added acks and r-b from Rob Herring, Mark Brown and Miquel Raynal
+       that were given to v8.
+
+     - Corrected order of the new memory controller reset entry in
+       device-trees and host1x DT binding patch, which was requested by
+       Rob Herring.
+
+     - Switched consumer drivers to use power domain state syncing done
+       by new Tegra's common OPP-initialization helper.
+
+     - Made use of new devm_pm_runtime_enable() helper that was added to
+       v5.15 kernel, where appropriate.
+
+     - Added "fuse: Use resource-managed helpers" patch.
+
+     - Converted Tegra20/30 clk drivers to a proper platform drivers,
+       which was requested by Thierry Reding.
+
+     - Removed clk-bulk API usage from the MMC patch, which was requested
+       by Thierry Reding.
+
+     - Changed CORE power domain name to "core" in a new patch
+       "Change name of core power domain".
+
+     - Misc small fixes for problems that I found since v8, like couple
+       typos in error code paths and restored working RPM for Tegra DRM
+       UAPI v1 that was removed in v8 by accident.
+
+v9-v10: Figured out remaining GENPD API changes with Ulf Hansson and
+        Viresh Kumar. The OPP-sync helper that was used in v8 isn't needed
+        anymore because GENPD API now allows consumer drivers to
+        init rpm_pstate of power domains.
+
+v8: - Added new generic dev_pm_opp_sync() helper that syncs OPP state with
+      hardware. All drivers changed to use it. This replaces GENPD attach_dev
+      callback hacks that were used in v7.
+
+    - Added new patch patch "soc/tegra: regulators: Prepare for suspend"
+      that fixes dying Tegra20 SoC after enabling VENC power domain during
+      resume from suspend. It matches to what downstream kernel does on
+      suspend/resume.
+
+    - After a second thought, I dropped patches which added RPM to memory
+      drivers since hardware is always-on and RPM not needed.
+
+    - Replaced the "dummy host1x driver" patch with new "Disable unused
+      host1x hardware" patch, since it's a cleaner solution.
+
+Dmitry Osipenko (35):
+  opp: Change type of dev_pm_opp_attach_genpd(names) argument
+  soc/tegra: Add devm_tegra_core_dev_init_opp_table_common()
+  soc/tegra: pmc: Disable PMC state syncing
+  soc/tegra: Don't print error message when OPPs not available
+  dt-bindings: clock: tegra-car: Document new clock sub-nodes
+  clk: tegra: Support runtime PM and power domain
+  dt-bindings: host1x: Document OPP and power domain properties
+  dt-bindings: host1x: Document Memory Client resets of Host1x, GR2D and
+    GR3D
+  gpu: host1x: Add runtime PM and OPP support
+  gpu: host1x: Add host1x_channel_stop()
+  drm/tegra: dc: Support OPP and SoC core voltage scaling
+  drm/tegra: hdmi: Add OPP support
+  drm/tegra: gr2d: Support generic power domain and runtime PM
+  drm/tegra: gr3d: Support generic power domain and runtime PM
+  drm/tegra: vic: Support system suspend
+  usb: chipidea: tegra: Add runtime PM and OPP support
+  bus: tegra-gmi: Add runtime PM and OPP support
+  pwm: tegra: Add runtime PM and OPP support
+  mmc: sdhci-tegra: Add runtime PM and OPP support
+  mtd: rawnand: tegra: Add runtime PM and OPP support
+  spi: tegra20-slink: Add OPP support
+  media: dt: bindings: tegra-vde: Convert to schema
+  media: dt: bindings: tegra-vde: Document OPP and power domain
+  media: staging: tegra-vde: Support generic power domain
+  soc/tegra: fuse: Reset hardware
+  soc/tegra: fuse: Use resource-managed helpers
+  soc/tegra: regulators: Prepare for suspend
+  soc/tegra: pmc: Rename 3d power domains
+  soc/tegra: pmc: Rename core power domain
+  soc/tegra: pmc: Enable core domain support for Tegra20 and Tegra30
+  ARM: tegra: Add OPP tables and power domains to Tegra20 device-trees
+  ARM: tegra: Add OPP tables and power domains to Tegra30 device-trees
+  ARM: tegra: Add Memory Client resets to Tegra20 GR2D, GR3D and Host1x
+  ARM: tegra: Add Memory Client resets to Tegra30 GR2D, GR3D and Host1x
+  ARM: tegra20/30: Disable unused host1x hardware
+
+ .../bindings/clock/nvidia,tegra20-car.yaml    |   37 +
+ .../display/tegra/nvidia,tegra20-host1x.txt   |   53 +
+ .../bindings/media/nvidia,tegra-vde.txt       |   64 -
+ .../bindings/media/nvidia,tegra-vde.yaml      |  119 ++
+ .../boot/dts/tegra20-acer-a500-picasso.dts    |    1 +
+ arch/arm/boot/dts/tegra20-colibri.dtsi        |    3 +-
+ arch/arm/boot/dts/tegra20-harmony.dts         |    3 +-
+ arch/arm/boot/dts/tegra20-paz00.dts           |    1 +
+ .../arm/boot/dts/tegra20-peripherals-opp.dtsi |  941 +++++++++++
+ arch/arm/boot/dts/tegra20-seaboard.dts        |    3 +-
+ arch/arm/boot/dts/tegra20-tamonten.dtsi       |    3 +-
+ arch/arm/boot/dts/tegra20-trimslice.dts       |    9 +
+ arch/arm/boot/dts/tegra20-ventana.dts         |    1 +
+ arch/arm/boot/dts/tegra20.dtsi                |  116 +-
+ .../tegra30-asus-nexus7-grouper-common.dtsi   |    1 +
+ arch/arm/boot/dts/tegra30-beaver.dts          |    1 +
+ arch/arm/boot/dts/tegra30-cardhu.dtsi         |    1 +
+ arch/arm/boot/dts/tegra30-colibri.dtsi        |   17 +-
+ arch/arm/boot/dts/tegra30-ouya.dts            |    1 +
+ .../arm/boot/dts/tegra30-peripherals-opp.dtsi | 1412 +++++++++++++++++
+ arch/arm/boot/dts/tegra30.dtsi                |  175 +-
+ drivers/bus/tegra-gmi.c                       |   52 +-
+ drivers/clk/tegra/Makefile                    |    1 +
+ drivers/clk/tegra/clk-device.c                |  230 +++
+ drivers/clk/tegra/clk-pll.c                   |    2 +-
+ drivers/clk/tegra/clk-super.c                 |    2 +-
+ drivers/clk/tegra/clk-tegra20.c               |   77 +-
+ drivers/clk/tegra/clk-tegra30.c               |  116 +-
+ drivers/clk/tegra/clk.c                       |   75 +-
+ drivers/clk/tegra/clk.h                       |    2 +
+ drivers/gpu/drm/tegra/dc.c                    |   74 +
+ drivers/gpu/drm/tegra/dc.h                    |    2 +
+ drivers/gpu/drm/tegra/gr2d.c                  |  155 +-
+ drivers/gpu/drm/tegra/gr3d.c                  |  388 ++++-
+ drivers/gpu/drm/tegra/hdmi.c                  |   16 +-
+ drivers/gpu/drm/tegra/vic.c                   |    4 +
+ drivers/gpu/host1x/channel.c                  |    8 +
+ drivers/gpu/host1x/debug.c                    |   15 +
+ drivers/gpu/host1x/dev.c                      |  151 +-
+ drivers/gpu/host1x/dev.h                      |    3 +-
+ drivers/gpu/host1x/hw/channel_hw.c            |   44 +-
+ drivers/gpu/host1x/intr.c                     |    3 -
+ drivers/gpu/host1x/syncpt.c                   |    5 +-
+ drivers/mmc/host/sdhci-tegra.c                |   82 +-
+ drivers/mtd/nand/raw/tegra_nand.c             |   55 +-
+ drivers/opp/core.c                            |    6 +-
+ drivers/pwm/pwm-tegra.c                       |   88 +-
+ drivers/soc/tegra/common.c                    |    4 +-
+ drivers/soc/tegra/fuse/fuse-tegra.c           |   51 +-
+ drivers/soc/tegra/fuse/fuse-tegra20.c         |   33 +-
+ drivers/soc/tegra/fuse/fuse.h                 |    1 +
+ drivers/soc/tegra/pmc.c                       |   27 +-
+ drivers/soc/tegra/regulators-tegra20.c        |   99 ++
+ drivers/soc/tegra/regulators-tegra30.c        |  122 ++
+ drivers/spi/spi-tegra20-slink.c               |   10 +-
+ drivers/staging/media/tegra-vde/vde.c         |   57 +-
+ drivers/usb/chipidea/ci_hdrc_tegra.c          |   53 +-
+ include/linux/host1x.h                        |    1 +
+ include/linux/pm_opp.h                        |    8 +-
+ include/soc/tegra/common.h                    |   24 +
+ 60 files changed, 4751 insertions(+), 357 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/nvidia,tegra-vde.txt
+ create mode 100644 Documentation/devicetree/bindings/media/nvidia,tegra-vde.yaml
+ create mode 100644 drivers/clk/tegra/clk-device.c
+
+-- 
+2.32.0
 
