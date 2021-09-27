@@ -2,130 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B61D9419633
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Sep 2021 16:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F85419776
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Sep 2021 17:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234789AbhI0OYl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Sep 2021 10:24:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35286 "EHLO mail.kernel.org"
+        id S235104AbhI0POe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 27 Sep 2021 11:14:34 -0400
+Received: from molly.corsac.net ([82.66.73.9]:38768 "EHLO mail.corsac.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234730AbhI0OYl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 27 Sep 2021 10:24:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 24C0E60FD7;
-        Mon, 27 Sep 2021 14:23:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632752583;
-        bh=ZQ/mzkuYyFwT1Vg8d4ghbZ2fcO4h2gXnjki81+LWF5Y=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Yv0VMjutnYt7YpQlCSbAgV0KeX2YXrxL/4sUyQ5s199wKNJMtWhhnpyE1whB3y7PE
-         lt3x/Tyo1i1MMEq944grqooDLXMYLtZs5zXKdA/YnngXi1h3ZOr7lOIYEEqUqPBhf+
-         IOTKuqb7pZfVQ6GPDe9KdepjYE4EYLCue0ajI/D8LlErWm+9KKxf32Kc3Q1vm6DHW1
-         PjEm4wwPsbn5/O7YMyx7oqZfv6U4I0H4VCYZFxmwOJ5aboPUr4QuUAVxNGNGN7dPcW
-         0IVdx10f/+mIqcLkvpKfYm+ZCnpkr66Ycvy7noYzKUPUnVf3HqiHHbBw0Q3gFP6Qui
-         Rc1P8QYKjdqrQ==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        JC Kuo <jckuo@nvidia.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] [RESEND] usb: xhci: tegra: mark PM functions as __maybe_unused
-Date:   Mon, 27 Sep 2021 16:22:52 +0200
-Message-Id: <20210927142258.1863321-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        id S235083AbhI0POd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Sep 2021 11:14:33 -0400
+Received: from scapa.corsac.net (unknown [IPv6:2a01:e0a:2ff:c170:6af7:28ff:fe8d:2119])
+        by mail.corsac.net (Postfix) with ESMTPS id 46F31A2
+        for <linux-usb@vger.kernel.org>; Mon, 27 Sep 2021 16:51:14 +0200 (CEST)
+Received: from corsac (uid 1000)
+        (envelope-from corsac@corsac.net)
+        id a01c9
+        by scapa.corsac.net (DragonFly Mail Agent v0.13);
+        Mon, 27 Sep 2021 16:51:13 +0200
+Message-ID: <eaccc3f66f4c616f3eecfc01c359ac03a5d92028.camel@corsac.net>
+Subject: Re: [PATCH] usbnet: ipheth: fix connectivity with iOS 14
+From:   Yves-Alexis Perez <corsac@corsac.net>
+To:     Sam Bingner <sam@bingner.com>, Oliver Neukum <oneukum@suse.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Martin Habets <mhabets@solarflare.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Shannon Nelson <snelson@pensando.io>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Matti Vuorela <matti.vuorela@bitfactor.fi>,
+        Jakub Kicinski <kuba@kernel.org>
+Date:   Mon, 27 Sep 2021 16:51:13 +0200
+In-Reply-To: <79d05aaa5052408897aeb8039c6a1582@bingner.com>
+References: <370902e520c44890a44cb5dd0cb1595f@bingner.com>
+         <d61ad9565e29a07086e52bc984e8e629285ff8cf.camel@suse.com>
+         <79d05aaa5052408897aeb8039c6a1582@bingner.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Wed, 2021-09-22 at 20:11 +0000, Sam Bingner wrote:
+> Sorry I didn't have time to research this further to prove it was a
+> regression - but there is now somebody else who has done so and created a
+> patch.  I thought it might be good to give a link to it to you guys.  It
+> caused problems on all iOS versions AFAIK.  The patch and discussion is
+> available at:
+> 
+> https://github.com/openwrt/openwrt/pull/4084
 
-The added #ifdefs in the PM rework were almost correct, but still
-cause warnings in some randconfig builds:
+Hi Sam, sorry for the delay.
 
-drivers/usb/host/xhci-tegra.c:2147:12: error: 'tegra_xusb_resume' defined but not used [-Werror=unused-function]
- 2147 | static int tegra_xusb_resume(struct device *dev)
-      |            ^~~~~~~~~~~~~~~~~
-drivers/usb/host/xhci-tegra.c:2105:12: error: 'tegra_xusb_suspend' defined but not used [-Werror=unused-function]
- 2105 | static int tegra_xusb_suspend(struct device *dev)
+I've read the thread above and the patch. Unfortunately we don't have
+documentation on how the driver is supposed to work and how the iPhone part
+behave, everything was reverse engineered at the time and the people who did
+it seem long gone.
 
-Replace the #ifdef checks with simpler __maybe_unused annotations to
-reliably shut up these warnings.
+As far as I understand it, when we experienced the “first” bug, it was noted
+that reducing the (TX) buffer size by 2 helped, and thus the patch changing
+IPHETH_BUF_SIZE to 1514 was committed, reducing both RX and TX buffer size.
 
-Fixes: d64d362f1d8b ("usb: xhci: tegra: Enable ELPG for runtime/system PM")
-Reviewed-by: JC Kuo <jckuo@nvidia.com>
-Link: https://lore.kernel.org/all/20210421135613.3560777-2-arnd@kernel.org/
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/usb/host/xhci-tegra.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+During my testings I never experienced the subsequent bug (the
+ipheth_rcvbulk_callback: urb status: -75) but maybe I never received 1500b
+packets (it's a bit strange but maybe).
 
-diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-index 575fa89a783f..1bf494b649bd 100644
---- a/drivers/usb/host/xhci-tegra.c
-+++ b/drivers/usb/host/xhci-tegra.c
-@@ -1787,7 +1787,6 @@ static int tegra_xusb_remove(struct platform_device *pdev)
+Maybe the right fix would be to split IPHETH_BUF_SIZE to
+IPHETH_{RX,TX}_BUF_SIZE? Something like:
+
+diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
+index 57d94b18ef33..005d2e31d97c 100644
+--- a/drivers/net/usb/ipheth.c
++++ b/drivers/net/usb/ipheth.c
+@@ -60,7 +60,9 @@
+ #define IPHETH_USBINTF_PROTO    1
+ 
+ #define IPHETH_BUF_SIZE         1514
+-#define IPHETH_IP_ALIGN		2	/* padding at front of URB */
++#define IPHETH_IP_ALIGN		2	/* padding at front of URB on
+RX path */
++#define IPHETH_TX_BUF_SIZE      IPHETH_BUF_SIZE
++#define IPHETH_RX_BUF_SIZE      IPHETH_BUF_SIZE + IPHETH_IP_ALIGN
+ #define IPHETH_TX_TIMEOUT       (5 * HZ)
+ 
+ #define IPHETH_INTFNUM          2
+@@ -116,12 +118,12 @@ static int ipheth_alloc_urbs(struct ipheth_device
+*iphone)
+ 	if (rx_urb == NULL)
+ 		goto free_tx_urb;
+ 
+-	tx_buf = usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE,
++	tx_buf = usb_alloc_coherent(iphone->udev, IPHETH_TX_BUF_SIZE,
+ 				    GFP_KERNEL, &tx_urb->transfer_dma);
+ 	if (tx_buf == NULL)
+ 		goto free_rx_urb;
+ 
+-	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE,
++	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_RX_BUF_SIZE,
+ 				    GFP_KERNEL, &rx_urb->transfer_dma);
+ 	if (rx_buf == NULL)
+ 		goto free_tx_buf;
+@@ -134,7 +136,7 @@ static int ipheth_alloc_urbs(struct ipheth_device *iphone)
  	return 0;
- }
  
--#if IS_ENABLED(CONFIG_PM) || IS_ENABLED(CONFIG_PM_SLEEP)
- static bool xhci_hub_ports_suspended(struct xhci_hub *hub)
+ free_tx_buf:
+-	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, tx_buf,
++	usb_free_coherent(iphone->udev, IPHETH_TX_BUF_SIZE, tx_buf,
+ 			  tx_urb->transfer_dma);
+ free_rx_urb:
+ 	usb_free_urb(rx_urb);
+@@ -146,9 +148,9 @@ static int ipheth_alloc_urbs(struct ipheth_device *iphone)
+ 
+ static void ipheth_free_urbs(struct ipheth_device *iphone)
  {
- 	struct device *dev = hub->hcd->self.controller;
-@@ -2102,7 +2101,7 @@ static int tegra_xusb_exit_elpg(struct tegra_xusb *tegra, bool runtime)
- 	return err;
- }
+-	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, iphone->rx_buf,
++	usb_free_coherent(iphone->udev, IPHETH_RX_BUF_SIZE, iphone->rx_buf,
+ 			  iphone->rx_urb->transfer_dma);
+-	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, iphone->tx_buf,
++	usb_free_coherent(iphone->udev, IPHETH_TX_BUF_SIZE, iphone->tx_buf,
+ 			  iphone->tx_urb->transfer_dma);
+ 	usb_free_urb(iphone->rx_urb);
+ 	usb_free_urb(iphone->tx_urb);
+@@ -317,7 +319,7 @@ static int ipheth_rx_submit(struct ipheth_device *dev,
+gfp_t mem_flags)
  
--static int tegra_xusb_suspend(struct device *dev)
-+static __maybe_unused int tegra_xusb_suspend(struct device *dev)
- {
- 	struct tegra_xusb *tegra = dev_get_drvdata(dev);
- 	int err;
-@@ -2144,7 +2143,7 @@ static int tegra_xusb_suspend(struct device *dev)
- 	return err;
- }
+ 	usb_fill_bulk_urb(dev->rx_urb, udev,
+ 			  usb_rcvbulkpipe(udev, dev->bulk_in),
+-			  dev->rx_buf, IPHETH_BUF_SIZE,
++			  dev->rx_buf, IPHETH_RX_BUF_SIZE,
+ 			  ipheth_rcvbulk_callback,
+ 			  dev);
+ 	dev->rx_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+@@ -381,7 +383,7 @@ static netdev_tx_t ipheth_tx(struct sk_buff *skb, struct
+net_device *net)
+ 	int retval;
  
--static int tegra_xusb_resume(struct device *dev)
-+static __maybe_unused int tegra_xusb_resume(struct device *dev)
- {
- 	struct tegra_xusb *tegra = dev_get_drvdata(dev);
- 	int err;
-@@ -2174,10 +2173,8 @@ static int tegra_xusb_resume(struct device *dev)
+ 	/* Paranoid */
+-	if (skb->len > IPHETH_BUF_SIZE) {
++	if (skb->len > IPHETH_TX_BUF_SIZE) {
+ 		WARN(1, "%s: skb too large: %d bytes\n", __func__, skb->len);
+ 		dev->net->stats.tx_dropped++;
+ 		dev_kfree_skb_any(skb);
+@@ -389,12 +391,12 @@ static netdev_tx_t ipheth_tx(struct sk_buff *skb, struct
+net_device *net)
+ 	}
  
- 	return 0;
- }
--#endif
+ 	memcpy(dev->tx_buf, skb->data, skb->len);
+-	if (skb->len < IPHETH_BUF_SIZE)
+-		memset(dev->tx_buf + skb->len, 0, IPHETH_BUF_SIZE - skb-
+>len);
++	if (skb->len < IPHETH_TX_BUF_SIZE)
++		memset(dev->tx_buf + skb->len, 0, IPHETH_TX_BUF_SIZE - skb-
+>len);
  
--#ifdef CONFIG_PM
--static int tegra_xusb_runtime_suspend(struct device *dev)
-+static __maybe_unused int tegra_xusb_runtime_suspend(struct device *dev)
- {
- 	struct tegra_xusb *tegra = dev_get_drvdata(dev);
- 	int ret;
-@@ -2190,7 +2187,7 @@ static int tegra_xusb_runtime_suspend(struct device *dev)
- 	return ret;
- }
- 
--static int tegra_xusb_runtime_resume(struct device *dev)
-+static __maybe_unused int tegra_xusb_runtime_resume(struct device *dev)
- {
- 	struct tegra_xusb *tegra = dev_get_drvdata(dev);
- 	int err;
-@@ -2201,7 +2198,6 @@ static int tegra_xusb_runtime_resume(struct device *dev)
- 
- 	return err;
- }
--#endif
- 
- static const struct dev_pm_ops tegra_xusb_pm_ops = {
- 	SET_RUNTIME_PM_OPS(tegra_xusb_runtime_suspend,
+ 	usb_fill_bulk_urb(dev->tx_urb, udev,
+ 			  usb_sndbulkpipe(udev, dev->bulk_out),
+-			  dev->tx_buf, IPHETH_BUF_SIZE,
++			  dev->tx_buf, IPHETH_TX_BUF_SIZE,
+ 			  ipheth_sndbulk_callback,
+ 			  dev);
+ 	dev->tx_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+
 -- 
-2.29.2
-
+Yves-Alexis
