@@ -2,81 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1484191F5
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Sep 2021 12:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 550D1419212
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Sep 2021 12:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233738AbhI0KIO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Sep 2021 06:08:14 -0400
-Received: from mga01.intel.com ([192.55.52.88]:55551 "EHLO mga01.intel.com"
+        id S233785AbhI0KRw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Sep 2021 06:17:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60866 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233703AbhI0KIL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 27 Sep 2021 06:08:11 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10119"; a="246934961"
-X-IronPort-AV: E=Sophos;i="5.85,326,1624345200"; 
-   d="scan'208";a="246934961"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2021 03:06:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,326,1624345200"; 
-   d="scan'208";a="615717554"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 27 Sep 2021 03:06:30 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 27 Sep 2021 13:06:29 +0300
-Date:   Mon, 27 Sep 2021 13:06:29 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Xu Yang <xu.yang_2@nxp.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-imx@nxp.com, jun.li@nxp.com
-Subject: Re: [PATCH 1/1] usb: typec: tcpci: don't handle vSafe0V event if
- it's not enabled
-Message-ID: <YVGXpWH1qqppJpNv@kuha.fi.intel.com>
-References: <20210926101415.3775058-1-xu.yang_2@nxp.com>
+        id S233703AbhI0KRw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Sep 2021 06:17:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 64CF360F6C;
+        Mon, 27 Sep 2021 10:16:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632737774;
+        bh=Bq2dWaShr/xZPho3pKYv2iZApCmL3XL12AcCSUUBVkY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cl0DVcvh4emKAb8+mahJbuYxhI4Rb7V+XxsONvq/AvxjqtcBilVRrR/xosMqJExhY
+         LIlMRciNqoSCWEU+w+MDU4FV9b4HCZhpdPhGHWnQlppUg2OSFa7t3Wl4O3HAkBKeDu
+         cI5jkP/8kfkQosTKXHuM6yfOmEtTKDLZyq7gt53SIEoovLzPyce0obcNrDGFPtxp8X
+         GRHp4d06isHvj6Sm3NwQjuB/H0kZyzAH7oFOPyzcoPD0HO/rXuzfX2ZHg7hT4XZHSP
+         w8o3XDkODo0v8/K7JuVghu25BqYBa/tEVzk+P/nvDS4YIMfH2BtF3rUC6S8tpZVmLh
+         SpXo9ROnuJ2HA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Pavel Machek <pavel@ucw.cz>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Isaac Hazan <isaac.hazan@intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] led-class-flash: fix -Wrestrict warning
+Date:   Mon, 27 Sep 2021 12:15:59 +0200
+Message-Id: <20210927101610.1669830-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210926101415.3775058-1-xu.yang_2@nxp.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Sep 26, 2021 at 06:14:15PM +0800, Xu Yang wrote:
-> USB TCPCI Spec, 4.4.3 Mask Registers:
-> "A masked register will still indicate in the ALERT register, but shall
-> not set the Alert# pin low."
-> 
-> Thus, the Extended Status will still indicate in ALERT register if vSafe0V
-> is detected by TCPC even though being masked. In current code, howerer,
-> this event will not be handled in detection time. Rather it will be
-> handled when next ALERT event coming(CC evnet, PD event, etc).
-> 
-> Tcpm might transition to a wrong state in this situation. Thus, the vSafe0V
-> event should not be handled when it's masked.
-> 
-> Fixes: 766c485b86ef ("usb: typec: tcpci: Add support to report vSafe0V")
-> cc: <stable@vger.kernel.org>
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+drivers/leds/led-class-flash.c: In function 'flash_fault_show':
+drivers/leds/led-class-flash.c:210:16: error: 'sprintf' argument 3 overlaps destination object 'buf' [-Werror=restrict]
+  210 |         return sprintf(buf, "%s\n", buf);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/leds/led-class-flash.c:187:54: note: destination object referenced by 'restrict'-qualified argument 1 was declared here
+  187 |                 struct device_attribute *attr, char *buf)
+      |                                                ~~~~~~^~~
+cc1: all warnings being treated as errors
+make[5]: *** [scripts/Makefile.build:277: drivers/leds/led-class-flash.o] Error 1
+make[5]: Target '__build' not remade because of errors.
+make[4]: *** [scripts/Makefile.build:540: drivers/leds] Error 2
+drivers/thunderbolt/xdomain.c: In function 'modalias_show':
+drivers/thunderbolt/xdomain.c:733:16: error: 'sprintf' argument 3 overlaps destination object 'buf' [-Werror=restrict]
+  733 |         return sprintf(buf, "%s\n", buf);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/thunderbolt/xdomain.c:727:36: note: destination object referenced by 'restrict'-qualified argument 1 was declared here
+  727 |                              char *buf)
+      |                              ~~~~~~^~~
 
-> ---
->  drivers/usb/typec/tcpm/tcpci.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index 9858716698df..c15eec9cc460 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -696,7 +696,7 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
->  		tcpm_pd_receive(tcpci->port, &msg);
->  	}
->  
-> -	if (status & TCPC_ALERT_EXTENDED_STATUS) {
-> +	if (tcpci->data->vbus_vsafe0v && (status & TCPC_ALERT_EXTENDED_STATUS)) {
->  		ret = regmap_read(tcpci->regmap, TCPC_EXTENDED_STATUS, &raw);
->  		if (!ret && (raw & TCPC_EXTENDED_STATUS_VSAFE0V))
->  			tcpm_vbus_change(tcpci->port);
-> -- 
-> 2.25.1
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/leds/led-class-flash.c | 2 +-
+ drivers/thunderbolt/xdomain.c  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/leds/led-class-flash.c b/drivers/leds/led-class-flash.c
+index 185e17055317..6fe9d700dfef 100644
+--- a/drivers/leds/led-class-flash.c
++++ b/drivers/leds/led-class-flash.c
+@@ -207,7 +207,7 @@ static ssize_t flash_fault_show(struct device *dev,
+ 		mask <<= 1;
+ 	}
+ 
+-	return sprintf(buf, "%s\n", buf);
++	return strlen(strcat(buf, "\n"));
+ }
+ static DEVICE_ATTR_RO(flash_fault);
+ 
+diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
+index d66ea4d616fd..eff32499610f 100644
+--- a/drivers/thunderbolt/xdomain.c
++++ b/drivers/thunderbolt/xdomain.c
+@@ -730,7 +730,7 @@ static ssize_t modalias_show(struct device *dev, struct device_attribute *attr,
+ 
+ 	/* Full buffer size except new line and null termination */
+ 	get_modalias(svc, buf, PAGE_SIZE - 2);
+-	return sprintf(buf, "%s\n", buf);
++	return strlen(strcat(buf, "\n"));
+ }
+ static DEVICE_ATTR_RO(modalias);
+ 
 -- 
-heikki
+2.29.2
+
