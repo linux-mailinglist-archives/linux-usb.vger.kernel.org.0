@@ -2,169 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F85419776
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Sep 2021 17:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5A141971F
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Sep 2021 17:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235104AbhI0POe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 27 Sep 2021 11:14:34 -0400
-Received: from molly.corsac.net ([82.66.73.9]:38768 "EHLO mail.corsac.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235083AbhI0POd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 27 Sep 2021 11:14:33 -0400
-Received: from scapa.corsac.net (unknown [IPv6:2a01:e0a:2ff:c170:6af7:28ff:fe8d:2119])
-        by mail.corsac.net (Postfix) with ESMTPS id 46F31A2
-        for <linux-usb@vger.kernel.org>; Mon, 27 Sep 2021 16:51:14 +0200 (CEST)
-Received: from corsac (uid 1000)
-        (envelope-from corsac@corsac.net)
-        id a01c9
-        by scapa.corsac.net (DragonFly Mail Agent v0.13);
-        Mon, 27 Sep 2021 16:51:13 +0200
-Message-ID: <eaccc3f66f4c616f3eecfc01c359ac03a5d92028.camel@corsac.net>
-Subject: Re: [PATCH] usbnet: ipheth: fix connectivity with iOS 14
-From:   Yves-Alexis Perez <corsac@corsac.net>
-To:     Sam Bingner <sam@bingner.com>, Oliver Neukum <oneukum@suse.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Martin Habets <mhabets@solarflare.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Shannon Nelson <snelson@pensando.io>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Matti Vuorela <matti.vuorela@bitfactor.fi>,
-        Jakub Kicinski <kuba@kernel.org>
-Date:   Mon, 27 Sep 2021 16:51:13 +0200
-In-Reply-To: <79d05aaa5052408897aeb8039c6a1582@bingner.com>
-References: <370902e520c44890a44cb5dd0cb1595f@bingner.com>
-         <d61ad9565e29a07086e52bc984e8e629285ff8cf.camel@suse.com>
-         <79d05aaa5052408897aeb8039c6a1582@bingner.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        id S235004AbhI0PFl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Sep 2021 11:05:41 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:51685 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S234991AbhI0PFj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Sep 2021 11:05:39 -0400
+Received: (qmail 361986 invoked by uid 1000); 27 Sep 2021 11:04:00 -0400
+Date:   Mon, 27 Sep 2021 11:04:00 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
+Cc:     Tobias Jakobi <cubic2k@gmail.com>, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: storage: add quirks for VIA VL817 USB3-SATA bridge
+Message-ID: <20210927150400.GA361082@rowland.harvard.edu>
+References: <20210921101752.4679-1-tjakobi@math.uni-bielefeld.de>
+ <20210921151323.GA170347@rowland.harvard.edu>
+ <cfb2d4e4-0e6a-69d5-01ac-dc1ab4d9d319@math.uni-bielefeld.de>
+ <20210921164221.GA172450@rowland.harvard.edu>
+ <609b10d0-7a20-ffa2-b283-67e0e91c7909@math.uni-bielefeld.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <609b10d0-7a20-ffa2-b283-67e0e91c7909@math.uni-bielefeld.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2021-09-22 at 20:11 +0000, Sam Bingner wrote:
-> Sorry I didn't have time to research this further to prove it was a
-> regression - but there is now somebody else who has done so and created a
-> patch.  I thought it might be good to give a link to it to you guys.  It
-> caused problems on all iOS versions AFAIK.  The patch and discussion is
-> available at:
+On Sun, Sep 26, 2021 at 08:14:46PM +0200, Tobias Jakobi wrote:
+> Hello Alan,
 > 
-> https://github.com/openwrt/openwrt/pull/4084
+> On 9/21/21 6:42 PM, Alan Stern wrote:
+> > On Tue, Sep 21, 2021 at 06:06:45PM +0200, Tobias Jakobi wrote:
+> > > Hi Alan,
+> > > 
+> > > sorry but your analysis of the log is wrong. Nothing was disconnected or
+> > > unplugged when the device behaves this way. The enclosure is connected to
+> > > the power the entire time, and the same applies to the physical USB
+> > > connection to my system.
+> > That may be so, but if it is then the log extract you included with the
+> > patch is very misleading.  For instance, you didn't include any part of
+> > the log before and leading up to the line saying "usb 2-1.2: USB
+> > disconnect, device number 4".  Thus there is no way for the reader to
+> > tell what caused this event, whether it was a physical unplug or not.
+> 
+> I included the part of the kernel log which shows how the issue manifests
+> itself. Do you think I'm so stupid as to believe I could prevent a physical
+> unplug of the enclosure by blacklisting UAS? Really, this is getting
+> ridiculous...
 
-Hi Sam, sorry for the delay.
+No, I don't believe that.  However, I do believe you are so stupid as 
+to post a patch with a description that does not justify it and 
+includes a lot of irrelevant details.  (Hey, you brought up the issue 
+of how stupid you are!  :-)
 
-I've read the thread above and the patch. Unfortunately we don't have
-documentation on how the driver is supposed to work and how the iPhone part
-behave, everything was reverse engineered at the time and the people who did
-it seem long gone.
+> > > To make things very clear: This happens in under five minutes after having
+> > > powered up the enclosure and starting a file transfer to the installed RAID.
+> > > After blacklisting UASP the enclosure works perfectly fine for hours. I hope
+> > > this clears things up.
+> > You didn't answer my question about using NO_ATA_1X instead of
+> > IGNORE_UAS.  This is a perfect example of one of the dangers of
+> > top-posting -- it makes it far too easy for people to miss important
+> > points in the email they are replying to.  (Hint: Don't top-post!)
+> 
+> I did not answer this question, because I didn't have the answer to it yet.
+> I have tested your suggestion today, but sadly I'm running into the same
+> type of problem with NO_ATA_1X. You can find the complete kernel log here:
+> https://www.math.uni-bielefeld.de/~tjakobi/archive/dmesg_VL817.log
 
-As far as I understand it, when we experienced the “first” bug, it was noted
-that reducing the (TX) buffer size by 2 helped, and thus the patch changing
-IPHETH_BUF_SIZE to 1514 was committed, reducing both RX and TX buffer size.
+Good, thank you.  Unfortunately the log doesn't include any smoking 
+guns pointing to an underlying cause.
 
-During my testings I never experienced the subsequent bug (the
-ipheth_rcvbulk_callback: urb status: -75) but maybe I never received 1500b
-packets (it's a bit strange but maybe).
+> The RAID1 is broken after such an event.
+> 
+> With best wishes,
+> Tobias
+> 
+> 
+> > 
+> > Alan Stern
+> > 
+> > > With best wishes,
+> > > Tobias
+> > > 
+> > > On 9/21/21 5:13 PM, Alan Stern wrote:
+> > > > On Tue, Sep 21, 2021 at 12:17:52PM +0200, Tobias Jakobi wrote:
+> > > > > The VL817 is used in the RaidSonic Icy Box IB-3740-C31 enclosure. The enclosure
+> > > > > is advertised as having UASP support, but appears to have problems with 4Kn
+> > > > > drives (test was done with two Seagate Exos X, 12TB).
+> > > > > 
+> > > > > Disable UAS for the VL817 as it behaves highly unstable:
 
-Maybe the right fix would be to split IPHETH_BUF_SIZE to
-IPHETH_{RX,TX}_BUF_SIZE? Something like:
+I still have to wonder if the enclosure works okay with other types of 
+disk drive.  And if it doesn't, why don't these errors show up on 
+Windows systems?  Or on other VIA enclosures?
 
-diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
-index 57d94b18ef33..005d2e31d97c 100644
---- a/drivers/net/usb/ipheth.c
-+++ b/drivers/net/usb/ipheth.c
-@@ -60,7 +60,9 @@
- #define IPHETH_USBINTF_PROTO    1
- 
- #define IPHETH_BUF_SIZE         1514
--#define IPHETH_IP_ALIGN		2	/* padding at front of URB */
-+#define IPHETH_IP_ALIGN		2	/* padding at front of URB on
-RX path */
-+#define IPHETH_TX_BUF_SIZE      IPHETH_BUF_SIZE
-+#define IPHETH_RX_BUF_SIZE      IPHETH_BUF_SIZE + IPHETH_IP_ALIGN
- #define IPHETH_TX_TIMEOUT       (5 * HZ)
- 
- #define IPHETH_INTFNUM          2
-@@ -116,12 +118,12 @@ static int ipheth_alloc_urbs(struct ipheth_device
-*iphone)
- 	if (rx_urb == NULL)
- 		goto free_tx_urb;
- 
--	tx_buf = usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE,
-+	tx_buf = usb_alloc_coherent(iphone->udev, IPHETH_TX_BUF_SIZE,
- 				    GFP_KERNEL, &tx_urb->transfer_dma);
- 	if (tx_buf == NULL)
- 		goto free_rx_urb;
- 
--	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE,
-+	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_RX_BUF_SIZE,
- 				    GFP_KERNEL, &rx_urb->transfer_dma);
- 	if (rx_buf == NULL)
- 		goto free_tx_buf;
-@@ -134,7 +136,7 @@ static int ipheth_alloc_urbs(struct ipheth_device *iphone)
- 	return 0;
- 
- free_tx_buf:
--	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, tx_buf,
-+	usb_free_coherent(iphone->udev, IPHETH_TX_BUF_SIZE, tx_buf,
- 			  tx_urb->transfer_dma);
- free_rx_urb:
- 	usb_free_urb(rx_urb);
-@@ -146,9 +148,9 @@ static int ipheth_alloc_urbs(struct ipheth_device *iphone)
- 
- static void ipheth_free_urbs(struct ipheth_device *iphone)
- {
--	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, iphone->rx_buf,
-+	usb_free_coherent(iphone->udev, IPHETH_RX_BUF_SIZE, iphone->rx_buf,
- 			  iphone->rx_urb->transfer_dma);
--	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, iphone->tx_buf,
-+	usb_free_coherent(iphone->udev, IPHETH_TX_BUF_SIZE, iphone->tx_buf,
- 			  iphone->tx_urb->transfer_dma);
- 	usb_free_urb(iphone->rx_urb);
- 	usb_free_urb(iphone->tx_urb);
-@@ -317,7 +319,7 @@ static int ipheth_rx_submit(struct ipheth_device *dev,
-gfp_t mem_flags)
- 
- 	usb_fill_bulk_urb(dev->rx_urb, udev,
- 			  usb_rcvbulkpipe(udev, dev->bulk_in),
--			  dev->rx_buf, IPHETH_BUF_SIZE,
-+			  dev->rx_buf, IPHETH_RX_BUF_SIZE,
- 			  ipheth_rcvbulk_callback,
- 			  dev);
- 	dev->rx_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
-@@ -381,7 +383,7 @@ static netdev_tx_t ipheth_tx(struct sk_buff *skb, struct
-net_device *net)
- 	int retval;
- 
- 	/* Paranoid */
--	if (skb->len > IPHETH_BUF_SIZE) {
-+	if (skb->len > IPHETH_TX_BUF_SIZE) {
- 		WARN(1, "%s: skb too large: %d bytes\n", __func__, skb->len);
- 		dev->net->stats.tx_dropped++;
- 		dev_kfree_skb_any(skb);
-@@ -389,12 +391,12 @@ static netdev_tx_t ipheth_tx(struct sk_buff *skb, struct
-net_device *net)
- 	}
- 
- 	memcpy(dev->tx_buf, skb->data, skb->len);
--	if (skb->len < IPHETH_BUF_SIZE)
--		memset(dev->tx_buf + skb->len, 0, IPHETH_BUF_SIZE - skb-
->len);
-+	if (skb->len < IPHETH_TX_BUF_SIZE)
-+		memset(dev->tx_buf + skb->len, 0, IPHETH_TX_BUF_SIZE - skb-
->len);
- 
- 	usb_fill_bulk_urb(dev->tx_urb, udev,
- 			  usb_sndbulkpipe(udev, dev->bulk_out),
--			  dev->tx_buf, IPHETH_BUF_SIZE,
-+			  dev->tx_buf, IPHETH_TX_BUF_SIZE,
- 			  ipheth_sndbulk_callback,
- 			  dev);
- 	dev->tx_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+That's why I'm cautious about accepting this patch.  I don't want to 
+slow down unnecessarily a bunch of USB disks that could work just fine 
+at the higher UAS transfer rates.
 
--- 
-Yves-Alexis
+By the way, does the enclosure have its own power source, or does it 
+rely entirely on power provided over the USB cable?  Note that UAS can 
+use more power than the older mass-storage protocols, because it queues 
+more operations in rapid succession (which is also why it runs faster).
+
+Alan Stern
