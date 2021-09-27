@@ -2,107 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A51941923C
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Sep 2021 12:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C43419285
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Sep 2021 12:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233831AbhI0KdR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Sep 2021 06:33:17 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:57166 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233828AbhI0KdQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Sep 2021 06:33:16 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id A61B81C0B7A; Mon, 27 Sep 2021 12:31:37 +0200 (CEST)
-Date:   Mon, 27 Sep 2021 12:31:37 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Isaac Hazan <isaac.hazan@intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        id S233904AbhI0Kv0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Sep 2021 06:51:26 -0400
+Received: from mga02.intel.com ([134.134.136.20]:41843 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233866AbhI0Kv0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Sep 2021 06:51:26 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10119"; a="211700320"
+X-IronPort-AV: E=Sophos;i="5.85,326,1624345200"; 
+   d="scan'208";a="211700320"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2021 03:49:48 -0700
+X-IronPort-AV: E=Sophos;i="5.85,326,1624345200"; 
+   d="scan'208";a="437666516"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2021 03:49:46 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 27 Sep 2021 13:49:43 +0300
+Date:   Mon, 27 Sep 2021 13:49:43 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Sanjay R Mehta <Sanju.Mehta@amd.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, Basavaraj.Natikar@amd.com,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH] led-class-flash: fix -Wrestrict warning
-Message-ID: <20210927103137.GA25707@duo.ucw.cz>
-References: <20210927101610.1669830-1-arnd@kernel.org>
+Subject: Re: [PATCH] thunderbolt: Enable retry logic for intra-domain control
+ packets
+Message-ID: <YVGhxy7YZtQ/94Ft@lahna>
+References: <1632469464-53954-1-git-send-email-Sanju.Mehta@amd.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="4Ckj6UjgE2iN1+kY"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210927101610.1669830-1-arnd@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1632469464-53954-1-git-send-email-Sanju.Mehta@amd.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, Sep 24, 2021 at 02:44:24AM -0500, Sanjay R Mehta wrote:
+> From: Sanjay R Mehta <sanju.mehta@amd.com>
+> 
+> In case of software connection manager, the response packets are lost
+> sometimes within the stipulated time. Hence resending the control
+> packets in such scenario by increasing the retry count TB_CTL_RETRIES
+> value.
+> 
+> Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
+> Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
---4Ckj6UjgE2iN1+kY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi!
-
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/leds/led-class-flash.c | 2 +-
->  drivers/thunderbolt/xdomain.c  | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/leds/led-class-flash.c b/drivers/leds/led-class-flas=
-h.c
-> index 185e17055317..6fe9d700dfef 100644
-> --- a/drivers/leds/led-class-flash.c
-> +++ b/drivers/leds/led-class-flash.c
-> @@ -207,7 +207,7 @@ static ssize_t flash_fault_show(struct device *dev,
->  		mask <<=3D 1;
->  	}
-> =20
-> -	return sprintf(buf, "%s\n", buf);
-> +	return strlen(strcat(buf, "\n"));
->  }
->  static DEVICE_ATTR_RO(flash_fault);
->
-
-That's not just a warning. .. the code is crazy. I'll take it if you
-split it from the thunderbolt change.
-
-Best regards,
-								Pavel
-
-> diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
-> index d66ea4d616fd..eff32499610f 100644
-> --- a/drivers/thunderbolt/xdomain.c
-> +++ b/drivers/thunderbolt/xdomain.c
-> @@ -730,7 +730,7 @@ static ssize_t modalias_show(struct device *dev, stru=
-ct device_attribute *attr,
-> =20
->  	/* Full buffer size except new line and null termination */
->  	get_modalias(svc, buf, PAGE_SIZE - 2);
-> -	return sprintf(buf, "%s\n", buf);
-> +	return strlen(strcat(buf, "\n"));
->  }
->  static DEVICE_ATTR_RO(modalias);
-> =20
-> --=20
-> 2.29.2
-
---=20
-http://www.livejournal.com/~pavelmachek
-
---4Ckj6UjgE2iN1+kY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYVGdiQAKCRAw5/Bqldv6
-8kRqAJwJEv2ANUJy1EMUAfdG56oMdJDwWQCeL/coOb+Z8MwJj2Y8AliUkjk6JS8=
-=On5G
------END PGP SIGNATURE-----
-
---4Ckj6UjgE2iN1+kY--
+Applied, thanks!
