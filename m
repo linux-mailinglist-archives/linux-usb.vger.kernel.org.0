@@ -2,77 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1844419E50
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Sep 2021 20:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEFED419ECC
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Sep 2021 21:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236123AbhI0ScU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Sep 2021 14:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236025AbhI0ScT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Sep 2021 14:32:19 -0400
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BDCC061575
-        for <linux-usb@vger.kernel.org>; Mon, 27 Sep 2021 11:30:41 -0700 (PDT)
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9f:8608:6e64:956a:daea:cf2f])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 18RIUTYm1499397
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Mon, 27 Sep 2021 20:30:29 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1632767429; bh=Br0dxDUXmS46R8VXa+3JDvUsYLhphZTN99Gw2x1jE5E=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=SjwIaFfF5i9ygrBiDBHMjBTJGs5GSvLZXXRxOTxd/N2CvGBtCHCwVQjlSqprOvgbc
-         F1GTPR8fVDlIKaG8IshabXJ0cTjZSN/1ouitm4tswY6zh4cchgCDKL91ks6G7o4MHa
-         eSuEigJS4ajfCmbXDkXVM5+ylJ6T5DvPyf4rQAfo=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
-        (envelope-from <bjorn@mork.no>)
-        id 1mUvOX-00031o-2Q; Mon, 27 Sep 2021 20:30:29 +0200
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Mathias Nyman <mathias.nyman@intel.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 RESEND] xhci: add quirk for host controllers that
- don't update endpoint DCS
-Organization: m
-References: <87h7hdf5dy.fsf@miraculix.mork.no>
-        <87tuj4jot3.fsf@miraculix.mork.no>
-Date:   Mon, 27 Sep 2021 20:30:29 +0200
-In-Reply-To: <87tuj4jot3.fsf@miraculix.mork.no> (=?utf-8?Q?=22Bj=C3=B8rn?=
- Mork"'s message of
-        "Wed, 01 Sep 2021 17:30:48 +0200")
-Message-ID: <87zgrxq3ay.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S235819AbhI0TC1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Sep 2021 15:02:27 -0400
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:39609 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235693AbhI0TC0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Sep 2021 15:02:26 -0400
+Received: by mail-oi1-f175.google.com with SMTP id a3so26910042oid.6;
+        Mon, 27 Sep 2021 12:00:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3ZLzcZefcsSNoUH8+eqz/u6GfOHxaYYcKo55P/iMgSE=;
+        b=jLT617AaRUMaQoggtczbLncKluPZ34b/wLHpHou/r8bhsEJ1ntc3uVjRpguVUdqFcg
+         Jxh99Xw0/sRs9hDS2xrAI29zkFBppbnc+yhxiUDgvG6NVDpUJQQhBL3hrZIGEeVvXNF7
+         cU+MFhhRBldN72FwV2swdfzLATMoMA2mmbALJgvopvXs32qpj0yDyqBzs57W9cYRUnZh
+         /0VUxKagJmnF7crufQVO5rPCxzhJfbsjM1nhbLuMz2y3OAmMt/UQEl2RTj2rsaJoHBPn
+         mZQF4biNp6rhfD/VdYGcCYPlMAzC34wV7ABePiDoW/RYp8hxQe5rz0iJWrhxOPS2GvZ+
+         +stw==
+X-Gm-Message-State: AOAM5313nNWBEklIo8c8hL6cn1vEAsLxD96/YImp4rPFs4s+P5Omr5MO
+        4BY7eLRu4rZvUCNuoc6VFQ==
+X-Google-Smtp-Source: ABdhPJztunahmm91WjGv8lkmKizseoxUnp9C/P7jH+iQr6pg93ZYYrZLchm7E3kGvDHuGwh0LtGg4Q==
+X-Received: by 2002:aca:d6cc:: with SMTP id n195mr510866oig.116.1632769247699;
+        Mon, 27 Sep 2021 12:00:47 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id a19sm2850790oic.25.2021.09.27.12.00.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Sep 2021 12:00:47 -0700 (PDT)
+Received: (nullmailer pid 3669168 invoked by uid 1000);
+        Mon, 27 Sep 2021 19:00:46 -0000
+Date:   Mon, 27 Sep 2021 14:00:46 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        gregkh@linuxfoundation.org, shubhrajyoti.datta@gmail.com,
+        git@xilinx.com
+Subject: Re: [PATCH v3 1/2] dt-binding: usb: xilinx: Add clocking node
+Message-ID: <YVIU3gnpGe8JVdz/@robh.at.kernel.org>
+References: <cover.1632307026.git.shubhrajyoti.datta@xilinx.com>
+ <625a34188da7fcc4132b8717afd3d69e6bdc3316.1632307026.git.shubhrajyoti.datta@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.2 at canardo
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <625a34188da7fcc4132b8717afd3d69e6bdc3316.1632307026.git.shubhrajyoti.datta@xilinx.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Bj=C3=B8rn Mork <bjorn@mork.no> writes:
-
-> From: Jonathan Bell <jonathan@raspberrypi.org>
->
-> Seen on a VLI VL805 PCIe to USB controller. For non-stream endpoints
-> at least, if the xHC halts on a particular TRB due to an error then
-> the DCS field in the Out Endpoint Context maintained by the hardware
-> is not updated with the current cycle state.
->
-> Using the quirk XHCI_EP_CTX_BROKEN_DCS and instead fetch the DCS bit
-> from the TRB that the xHC stopped on.
->
-> [ bjorn: rebased to v5.14-rc2 ]
-> Cc: stable@vger.kernel.org
-> Link: https://github.com/raspberrypi/linux/issues/3060
-> Signed-off-by: Jonathan Bell <jonathan@raspberrypi.org>
-> Signed-off-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+On Wed, Sep 22, 2021 at 04:41:25PM +0530, Shubhrajyoti Datta wrote:
+> Add a clocking node for xilinx udc.
+> 
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 > ---
-> [ resending this as I haven't seen any ack/nak and wonder if it might
->   have gotten lost in a large pile of vacation backlog ]
+>  Documentation/devicetree/bindings/usb/xlnx,usb2.yaml | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml b/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml
+> index b8acc415eaf1..39213806ac79 100644
+> --- a/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml
+> +++ b/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml
+> @@ -24,6 +24,14 @@ properties:
+>        If present, hardware has dma capability.
+>      type: boolean
+>  
+> +  clocks:
+> +    minItems: 1
+> +
+> +  clock-name:
 
-ping?
+I think you meant 'clock-names'.
 
+> +    const: "s_axi_aclk"
 
-Bj=C3=B8rn
+Don't need quotes.
+
+> +    description: |
+> +      Input clock name.
+
+That's every 'clock-names'. You can drop description.
+
+> +
+>  required:
+>    - compatible
+>    - reg
+> -- 
+> 2.25.1
+> 
+> 
