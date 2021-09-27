@@ -2,79 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8374193F6
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Sep 2021 14:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67019419465
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Sep 2021 14:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234309AbhI0MSm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Sep 2021 08:18:42 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:51565 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234259AbhI0MSl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Sep 2021 08:18:41 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 714B25C00B1;
-        Mon, 27 Sep 2021 08:17:00 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 27 Sep 2021 08:17:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=INVKYL/hImMLfwyu3HkJ3O9tiNp
-        9okvbdqAbJgPUcIA=; b=HEkhCKoXGZEZORodRpbAWjivivkrQU32/NKBMeUNIr/
-        SE/UA1g0Q4IKTILY5wQ0Ksl5temW9I/PFCe0zjkEgL48Z2GXwc/uwtbn4SMVwW50
-        94vcZZxkAh2OOjWaHciM4Z3wsmf6H/BswbkfYjeRZw7hCV1ic7hrhNeactAkMnEC
-        U2Ewz1e7BcMV6/wUwqL9+nMDcAIYgdj/7vItCyLCSpOmCuFd3phDJjzDuzg+Icpk
-        Hgsjnzg+GT81QIJuIiA2ya7ep9G54GENmwOagn9j8psHOqQJ0LlyQENAxyRJU1SK
-        WDcXeHatqUu6aymvdfk+zqV7AL9FndDl7xjr5TQutMQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=INVKYL
-        /hImMLfwyu3HkJ3O9tiNp9okvbdqAbJgPUcIA=; b=qUlBh2cEUgBPxYAaYwON2c
-        l4Jau0kWOowJxoG5nf1hND7qcQ2P9yAqEHz0qrI3vvWe6Lw8lba4bJPrOpoSXwQk
-        ldqVRtsq+nb8ByufS6d4qyxg4V3sRRZgjDqBdIjAd0hmOc0iVqp3rl4FfTg0gKPc
-        /obrVBYXpm7HPMCnqC5aT/8bqRMnMRfMBNsafu3Wn1Ux1aEC/Ax+d3BR3WMXQLMA
-        GlF3OqEQxJYEmZqby24ODTyiALCU9qGnZ9fK9SSJ8Q6vivbH05VCqEi981krd1uG
-        GZdt4q2nZoX4MTIUNoVBshzYsWEvnrX7TwKdyXQbyPdRU3Wgk01zIyBwgEQynXJA
-        ==
-X-ME-Sender: <xms:PLZRYR_oPsu_zx5OC_RmwDERzdnaRnV12M56_qlz-jmVGKg95YdNCg>
-    <xme:PLZRYVvL3jSe4xTXS8X-2QviMW9rIcvzcyuaGmnAn70HMMVYDhT3jDdud8H7R0UA5
-    TN2VFeDtBbThg>
-X-ME-Received: <xmr:PLZRYfCv1AamG7S4WiFpmgnFyiqEZPUz521dV70As8_7O8Mh2HGeDegaWq0EFCoDGpSrnOZrovjdonWJwCco9qChwgKGUIBK>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudejkedggeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:PLZRYVf1w5Tj_LYdfR74IMkJjmRe2nVp2jwlzWKNOxZv9p8VfxHDPQ>
-    <xmx:PLZRYWNkU0AQA9A5KHz3PEWWbWgvvUzUVz0RuT55hvX8KYYiF_-qCg>
-    <xmx:PLZRYXlM3TUyxspmM9IvcwDpKWi9RFdiLSewSUoa8amrV_KxATw6kQ>
-    <xmx:PLZRYXh0z1WoZ01lEUbZfMJVBLFjvjflSkSnQyhhWUGHvOHQ4PxP4w>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Sep 2021 08:16:59 -0400 (EDT)
-Date:   Mon, 27 Sep 2021 14:16:57 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     stable@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Malte Di Donato <malte@neo-soft.org>
-Subject: Re: [PATCH stable-5.10] USB: serial: cp210x: fix dropped characters
- with CP2102
-Message-ID: <YVG2OVNtg9ScNIpW@kroah.com>
-References: <20210927090012.14437-1-johan@kernel.org>
+        id S234361AbhI0MkO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Sep 2021 08:40:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57672 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234337AbhI0MkM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Sep 2021 08:40:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8E18A60FF2;
+        Mon, 27 Sep 2021 12:38:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632746314;
+        bh=e+bNLTCuq7rd5GH4BwuiLOjI8vpmkyfEg4ZBAUITB4k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OKrYssl09h3Pv6UhJfR5x+oAeOwNOTHdwJLafsN/xxC9MyBlraGZMJrDuBCsOmjrw
+         WwfOgbvBy/WAvs6bSqFP/8o3e3hKm1ED8SpYSB0EKYkqelrvINKXIqEiX4F8UXI00z
+         ro9rZRfIGcrJxro4iABlc+13sXCM8m2q+waYrZwauksbInTmtnmzD0qJ48cXZb+hk0
+         Is5FE7ETemZMvq4rrYHVC1EZ9pUDkgUbcFum+l1TvjUud+McuHesPhp7FDXP0nlUcr
+         weVHvENc0q53WERk/A2TLH8aatlAPUfSJiI1BVBCX/agB763oe0puwUjKftqAMXb0E
+         2DhZ0O6ColWyg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH] [RFC] usb: gadget: avoid unusual inline assembly
+Date:   Mon, 27 Sep 2021 14:38:20 +0200
+Message-Id: <20210927123830.1278953-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210927090012.14437-1-johan@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 27, 2021 at 11:00:12AM +0200, Johan Hovold wrote:
-> commit c32dfec6c1c36bbbcd5d33e949d99aeb215877ec upstream.
-> 
+From: Arnd Bergmann <arnd@arndb.de>
 
-Both now queued up, thanks.
+clang does not understand the "mrc%?" syntax:
 
-greg k-h
+drivers/usb/gadget/udc/pxa25x_udc.c:2330:11: error: invalid % escape in inline assembly string
+
+I don't understand it either, but removing the %? here gets it to build.
+This is probably wrong and someone else should do a proper patch.
+
+Any suggestions?
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/usb/gadget/udc/pxa25x_udc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/udc/pxa25x_udc.c b/drivers/usb/gadget/udc/pxa25x_udc.c
+index a09ec1d826b2..52cdfd8212d6 100644
+--- a/drivers/usb/gadget/udc/pxa25x_udc.c
++++ b/drivers/usb/gadget/udc/pxa25x_udc.c
+@@ -2325,7 +2325,7 @@ static int pxa25x_udc_probe(struct platform_device *pdev)
+ 	pr_info("%s: version %s\n", driver_name, DRIVER_VERSION);
+ 
+ 	/* insist on Intel/ARM/XScale */
+-	asm("mrc%? p15, 0, %0, c0, c0" : "=r" (chiprev));
++	asm("mrc p15, 0, %0, c0, c0" : "=r" (chiprev));
+ 	if ((chiprev & CP15R0_VENDOR_MASK) != CP15R0_XSCALE_VALUE) {
+ 		pr_err("%s: not XScale!\n", driver_name);
+ 		return -ENODEV;
+-- 
+2.29.2
+
