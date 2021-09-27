@@ -2,86 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 409134198FB
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Sep 2021 18:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1844419E50
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Sep 2021 20:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235490AbhI0Qie (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Sep 2021 12:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59416 "EHLO
+        id S236123AbhI0ScU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Sep 2021 14:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235467AbhI0Qid (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Sep 2021 12:38:33 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5948AC061575;
-        Mon, 27 Sep 2021 09:36:55 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id g41so79864347lfv.1;
-        Mon, 27 Sep 2021 09:36:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=a3irQuzXcmJ3SaUrVWrpItQuRKBrje2gTk7DCRbRsQM=;
-        b=jI55Zff60BLNnV7bhyYUXQpBjUwP8T76ka5M60SixBxI6fL9AH8aUSFXKtQTYx1B8u
-         ei5ek7k5JTmGZ82pjKzLnWP7HMqp5PQKFr0fVlhQbMxLSkkI9hOAHd5tNGkmyrKokOkR
-         CBrNciMMA/fvqKhyccD2itltjTetfWsV5iDYZ3a/YhjDT37a5oer0B4ar678qW3QLe+0
-         mjH16VehgPByZrX+6P61WDTUFZsSb3NUZKL1ZutLflq6RvbRd/u7iOsphppFDuq0GgVc
-         B6keFBpOygJz1VxyUR1H/YMtLcquY+uRaac6ADHBnKaru6yMH2sKIaxAfLHP8k07AhXE
-         ZLQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=a3irQuzXcmJ3SaUrVWrpItQuRKBrje2gTk7DCRbRsQM=;
-        b=4h1CkP4DRgmcLjk0APnUnaHOwoyU479mvXHO6tt8DmX2hPE3h9NGt3rcYibytMiY7H
-         PO46nXxSUiJfzX4Q3BVp0YYSaKgPRk5JYmUIuX8XtGGrow4DacB48qQiH3isMLtwflXA
-         3cETtuMU5EjgLx94iGMI9IL3dLFZE4ltMKIM808KrSFgZkl71nCkDrJTXmISLwoleQuR
-         M71JCbpsc6lRdKcGu895mJMkE8XM6Qtj4GQLlBFf9jJs+dc/yqIzie1K15ncbsuJrTPT
-         mMTKWUN6oFRuRwEvbBSmbrNE/J21JSAdZcn6+jMKPj+RKQbxxRReNfssV38oLIBRphwl
-         UyEg==
-X-Gm-Message-State: AOAM532WKEMHrpWbsW8eKKo6mkqYbPcnTiaWdzue0MqM/bgkE2t1mD23
-        HnRpryybuStwf+qMO9e4WiyytutxEQI=
-X-Google-Smtp-Source: ABdhPJzxOPe7qDAw4MaX7bB6k60wC41MoxRiAoiCoeVzO9t5W7OGRArncN5cph55hr/Vw1ICAmH9Og==
-X-Received: by 2002:a05:6512:513:: with SMTP id o19mr699839lfb.31.1632760613335;
-        Mon, 27 Sep 2021 09:36:53 -0700 (PDT)
-Received: from [192.168.2.145] (46-138-80-108.dynamic.spd-mgts.ru. [46.138.80.108])
-        by smtp.googlemail.com with ESMTPSA id c2sm2077219lji.71.2021.09.27.09.36.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Sep 2021 09:36:52 -0700 (PDT)
-Subject: Re: [PATCH v7 4/7] usb: phy: tegra: Support OTG mode programming
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Peter Chen <peter.chen@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-References: <20210912181718.1328-1-digetx@gmail.com>
- <20210912181718.1328-5-digetx@gmail.com>
-Message-ID: <29ae631d-cc8d-663e-3ce2-db00f3470365@gmail.com>
-Date:   Mon, 27 Sep 2021 19:36:52 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        with ESMTP id S236025AbhI0ScT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Sep 2021 14:32:19 -0400
+Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BDCC061575
+        for <linux-usb@vger.kernel.org>; Mon, 27 Sep 2021 11:30:41 -0700 (PDT)
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9f:8608:6e64:956a:daea:cf2f])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 18RIUTYm1499397
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Mon, 27 Sep 2021 20:30:29 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1632767429; bh=Br0dxDUXmS46R8VXa+3JDvUsYLhphZTN99Gw2x1jE5E=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=SjwIaFfF5i9ygrBiDBHMjBTJGs5GSvLZXXRxOTxd/N2CvGBtCHCwVQjlSqprOvgbc
+         F1GTPR8fVDlIKaG8IshabXJ0cTjZSN/1ouitm4tswY6zh4cchgCDKL91ks6G7o4MHa
+         eSuEigJS4ajfCmbXDkXVM5+ylJ6T5DvPyf4rQAfo=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
+        (envelope-from <bjorn@mork.no>)
+        id 1mUvOX-00031o-2Q; Mon, 27 Sep 2021 20:30:29 +0200
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Mathias Nyman <mathias.nyman@intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 RESEND] xhci: add quirk for host controllers that
+ don't update endpoint DCS
+Organization: m
+References: <87h7hdf5dy.fsf@miraculix.mork.no>
+        <87tuj4jot3.fsf@miraculix.mork.no>
+Date:   Mon, 27 Sep 2021 20:30:29 +0200
+In-Reply-To: <87tuj4jot3.fsf@miraculix.mork.no> (=?utf-8?Q?=22Bj=C3=B8rn?=
+ Mork"'s message of
+        "Wed, 01 Sep 2021 17:30:48 +0200")
+Message-ID: <87zgrxq3ay.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <20210912181718.1328-5-digetx@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.2 at canardo
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-12.09.2021 21:17, Dmitry Osipenko пишет:
-> Support programming USB PHY into OTG mode.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/usb/phy/phy-tegra-usb.c   | 198 +++++++++++++++++++++++++++++-
->  include/linux/usb/tegra_usb_phy.h |   5 +
->  2 files changed, 198 insertions(+), 5 deletions(-)
+Bj=C3=B8rn Mork <bjorn@mork.no> writes:
 
-Greg / Felipe, could you please ack this patch to allow Thierry to take
-this series via the Tegra tree? It depends on the soc/tegra patch of
-this patchset.
+> From: Jonathan Bell <jonathan@raspberrypi.org>
+>
+> Seen on a VLI VL805 PCIe to USB controller. For non-stream endpoints
+> at least, if the xHC halts on a particular TRB due to an error then
+> the DCS field in the Out Endpoint Context maintained by the hardware
+> is not updated with the current cycle state.
+>
+> Using the quirk XHCI_EP_CTX_BROKEN_DCS and instead fetch the DCS bit
+> from the TRB that the xHC stopped on.
+>
+> [ bjorn: rebased to v5.14-rc2 ]
+> Cc: stable@vger.kernel.org
+> Link: https://github.com/raspberrypi/linux/issues/3060
+> Signed-off-by: Jonathan Bell <jonathan@raspberrypi.org>
+> Signed-off-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+> ---
+> [ resending this as I haven't seen any ack/nak and wonder if it might
+>   have gotten lost in a large pile of vacation backlog ]
+
+ping?
+
+
+Bj=C3=B8rn
