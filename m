@@ -2,48 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D3F41A8FE
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Sep 2021 08:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D9F41ABF3
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Sep 2021 11:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238986AbhI1GdH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Sep 2021 02:33:07 -0400
-Received: from muru.com ([72.249.23.125]:38178 "EHLO muru.com"
+        id S239818AbhI1JeT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Sep 2021 05:34:19 -0400
+Received: from mga07.intel.com ([134.134.136.100]:29357 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234207AbhI1GdH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 28 Sep 2021 02:33:07 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 96F7C809F;
-        Tue, 28 Sep 2021 06:31:56 +0000 (UTC)
-Date:   Tue, 28 Sep 2021 09:31:26 +0300
-From:   Tony Lindgren <tony@atomide.com>
+        id S239724AbhI1JeS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 28 Sep 2021 05:34:18 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10120"; a="288319708"
+X-IronPort-AV: E=Sophos;i="5.85,329,1624345200"; 
+   d="scan'208";a="288319708"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2021 02:32:39 -0700
+X-IronPort-AV: E=Sophos;i="5.85,329,1624345200"; 
+   d="scan'208";a="476227861"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2021 02:32:35 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 28 Sep 2021 12:32:32 +0300
+Date:   Tue, 28 Sep 2021 12:32:32 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     soc@kernel.org, Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] ARM: omap1: move omap15xx local bus handling to usb.c
-Message-ID: <YVK2vnOQHCH2zwHh@atomide.com>
-References: <20210927144118.2464881-1-arnd@kernel.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Isaac Hazan <isaac.hazan@intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: fix -Wrestrict warning
+Message-ID: <YVLhMNdk0TkURA89@lahna>
+References: <20210927131620.1587294-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210927144118.2464881-1-arnd@kernel.org>
+In-Reply-To: <20210927131620.1587294-1-arnd@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-* Arnd Bergmann <arnd@kernel.org> [210927 14:41]:
+On Mon, Sep 27, 2021 at 03:16:11PM +0200, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
-> If there are no objections, I'd apply this to the soc tree for
-> 5.16, or let Tony pick it up into his tree. This was originally
-> part of a longer series to bring omap1 closer to an allmodconfig
-> build. If I manage to find some time, I'll also try to resurrect
-> the rest of that series.
+> 
+> gcc-11 warns when building with W=1:
+> 
+> drivers/thunderbolt/xdomain.c: In function 'modalias_show':
+> drivers/thunderbolt/xdomain.c:733:16: error: 'sprintf' argument 3 overlaps destination object 'buf' [-Werror=restrict]
+>   733 |         return sprintf(buf, "%s\n", buf);
+>       |                ^~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/thunderbolt/xdomain.c:727:36: note: destination object referenced by 'restrict'-qualified argument 1 was declared here
+>   727 |                              char *buf)
+>       |                              ~~~~~~^~~
+> 
+> There is no need for the sprintf() here when a strcat() does
+> the same thing.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Looks good to me, it should not conflict with anything else so please
-feel free to apply:
-
-Acked-by: Tony Lindgren <tony@atomide.com>
+Applied, thanks!
