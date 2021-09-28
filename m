@@ -2,112 +2,246 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A305741B35E
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Sep 2021 17:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0925841B3B7
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Sep 2021 18:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241776AbhI1P5Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Sep 2021 11:57:16 -0400
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:55821 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241729AbhI1P5M (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Sep 2021 11:57:12 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 5BDD8580C2C;
-        Tue, 28 Sep 2021 11:55:32 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Tue, 28 Sep 2021 11:55:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=tioV3w1us2lR+
-        k7Bn3CrlkUcCREi0bHyi5Rh0GFTTMY=; b=acOT0Vy30SAM0oxpv/aisxLns3l1t
-        BJo13UWxgqRnHR+Es2BHozcf970I7jkdnuFHcYcJg6gcfv2aA7MCbBw5X1qQUVTe
-        QPSRz0pPh0R2nJ3UwwbQ0EqCA4wQE+Sr4QZCbljutZpZ3UDB8sz/Rwe7TNCfQE63
-        LmUghPmwuyb2IEs1+cbDt9B5CWRs+iat3W0n9iVDOWLjWPG83+RW9fsb16814RRE
-        qjpm6uUVVuoDDm4fN2CCjMuQJsRN+WPDCmg1d773xtgX6GiWpYgV+PW5GWMEXdfx
-        s+FvhRPSjLfXJnX9LGoO6Rn0MRQ7+etC3M3OUrp0jlCEfzjqczrIkoJtg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=tioV3w1us2lR+k7Bn3CrlkUcCREi0bHyi5Rh0GFTTMY=; b=dtFI6iEt
-        3uwRWSnuw6VUc8ZScaqU0RvrZSq2BQlN3ifMGqia9s0laL4T07rgaNWflru+hWeR
-        Ux6yNFVo/LNq2X02RRpV2bJiAnbHSIk6fYwg+fAebCqLcQfx0sezbhjxds+cYAtQ
-        RU+q+1oYSH+u0XPxjGdI646DxQvOdGgf309dXL6w/ysMLXIUtkmfpr0R5fAVQqFM
-        MEZsyjrXqPiT1XnuDJjhsXwKokK1VL3O0mClvi/pHzzt+oz7ROFmGwGF1exugosw
-        OqL2vh4wB2zPIGmlPmjxytTKm8dNDplJJ7fWfREfajogOxXq7Vt2S69XdC61a8+Q
-        Zvmvxvbc/DpKww==
-X-ME-Sender: <xms:9DpTYUp9DVwMwlfKO6jIcp_Bqrkv7U8O6ayMQs6cb_Qb5lNhcd4JDA>
-    <xme:9DpTYarwfEQNkDW9jqk6sQLmzgSTTufZysN-CRZrD6WMe_O50CK9a30s336G8r6Nb
-    D0PiX6084M7PjMOuvY>
-X-ME-Received: <xmr:9DpTYZOMg6lnf0gZ69AwU7Ll6JWfgd844hsiW714SQ9Lw7uO88ols7rvQ4Lpocsma6eHsfgzQD5sA9A_J0m2eeHLGxHVyFukYzBqznomIIe2fAmIvssv5nA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudektddgledtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcu
-    rfgvthgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvg
-    hrnheptedvkeetleeuffffhfekteetffeggffgveehieelueefvddtueffveevlefhfeej
-    necuvehluhhsthgvrhfuihiivgepvdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvg
-    hnsehsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:9DpTYb5YtrPAJNj6ELeNjiLU_Hq3V3FR02Muf2R1jC4Qf20VsHK5hw>
-    <xmx:9DpTYT5Byidu5Cfef3A7-pgWgI3YZ49NW0oYdVgv4uLwW-1t7hdBYA>
-    <xmx:9DpTYbgXyhFrrRbQbNMsonLbDVBPnSK_AptOf7s2b4C6S8DtO7padQ>
-    <xmx:9DpTYXiIdRZyOzsCRAlDcaiYG_57MRfPIljDCgAZJke4v6IGe0tKIg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 28 Sep 2021 11:55:30 -0400 (EDT)
-From:   Sven Peter <sven@svenpeter.dev>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Alexander Graf <graf@amazon.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Subject: [PATCH v3 6/6] usb: typec: tipd: Remove FIXME about testing with I2C_FUNC_I2C
-Date:   Tue, 28 Sep 2021 17:55:02 +0200
-Message-Id: <20210928155502.71372-7-sven@svenpeter.dev>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20210928155502.71372-1-sven@svenpeter.dev>
-References: <20210928155502.71372-1-sven@svenpeter.dev>
+        id S241828AbhI1QXb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Sep 2021 12:23:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56472 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241662AbhI1QXa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 28 Sep 2021 12:23:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 136C660F5B;
+        Tue, 28 Sep 2021 16:21:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632846110;
+        bh=pMo9KK5doUM7+rvpr+8DStF/6cDzZLGEDqhBIksnBAQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=ee30XMTJzmJ1Ftatpaxcg4q3jAMMSRDOc8lPLaCJQxAToLAS94K6U9ENweBWVt14q
+         5So91pbyf1uxyWPdlrnpc1yAUIMFf7Yu/sEzRZffwEmRAh7cF5+i5+CTzlnZ7IrPuG
+         dQ9EI0fxgC1qDuF+l1gHAVXdKyEZ256oQfemwVyY7GLAYW5ByeLv70gP6b35UFUmkL
+         NezpBoDwasqRDcYg59nnhwXmRi9dhAvMvBn7V+u0+viHC4wcIGsXq754MviH5sfg5E
+         OzTRIEJQXnP2TLNVuA8rE+qBdlznwVwYpXDxot7R6/NPcuFbFrRr1rLmeu1I1+DB3k
+         UX4wiMUpNIGYQ==
+Date:   Tue, 28 Sep 2021 11:21:48 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Prasad Malisetty <pmaliset@codeaurora.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, bhelgaas@google.com,
+        robh+dt@kernel.org, swboyd@chromium.org, lorenzo.pieralisi@arm.com,
+        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dianders@chromium.org,
+        mka@chromium.org, vbadigan@codeaurora.org, sallenki@codeaurora.org,
+        manivannan.sadhasivam@linaro.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v9 4/4] PCI: qcom: Switch pcie_1_pipe_clk_src after PHY
+ init in SC7280
+Message-ID: <20210928162148.GA701581@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1632837350-12100-5-git-send-email-pmaliset@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Apple i2c bus uses I2C_FUNC_I2C and I've tested this quite
-extensivly in the past days. Remove the FIXME about that testing :-)
+[+cc linux-pci; please cc drivers/pci changes there]
 
-Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Sven Peter <sven@svenpeter.dev>
----
-no changes sinve v2
+On Tue, Sep 28, 2021 at 07:25:50PM +0530, Prasad Malisetty wrote:
+> On the SC7280, the clock source for gcc_pcie_1_pipe_clk_src
+> must be the TCXO while gdsc is enabled. After PHY init successful
+> clock source should switch to pipe clock for gcc_pcie_1_pipe_clk_src.
 
-changes since v1:
-  - added r-b tags
+This looks good.  Ideally the commit log would say what the patch
+*does*.  I know it's in the subject, but it's nice to have it both
+places so the body is complete in itself.
 
- drivers/usb/typec/tipd/core.c | 3 ---
- 1 file changed, 3 deletions(-)
+Again in an ideal world, I would split this into two patches:
 
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index c74fc9ae1686..4e1a31f88c2a 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -726,9 +726,6 @@ static int tps6598x_probe(struct i2c_client *client)
- 	/*
- 	 * Checking can the adapter handle SMBus protocol. If it can not, the
- 	 * driver needs to take care of block reads separately.
--	 *
--	 * FIXME: Testing with I2C_FUNC_I2C. regmap-i2c uses I2C protocol
--	 * unconditionally if the adapter has I2C_FUNC_I2C set.
- 	 */
- 	if (i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
- 		tps->i2c_protocol = true;
--- 
-2.25.1
+  1) Do the boilerplate conversions to struct qcom_pcie_cfg and
+  updates of qcom_pcie_match[].  This patch would have no functional
+  change.
 
+  2) Add the code to deal with pcie_1_pipe_clk_src, which should be a
+  much smaller patch.
+
+This makes it easier to see the important part of dealing with
+pcie_1_pipe_clk_src and makes any future bisect much more specific.
+
+> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom.c | 94 ++++++++++++++++++++++++++++++----
+>  1 file changed, 83 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 8a7a300..7896a86 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -166,6 +166,9 @@ struct qcom_pcie_resources_2_7_0 {
+>  	struct regulator_bulk_data supplies[2];
+>  	struct reset_control *pci_reset;
+>  	struct clk *pipe_clk;
+> +	struct clk *pipe_clk_src;
+> +	struct clk *phy_pipe_clk;
+> +	struct clk *ref_clk_src;
+>  };
+>  
+>  union qcom_pcie_resources {
+> @@ -189,6 +192,11 @@ struct qcom_pcie_ops {
+>  	int (*config_sid)(struct qcom_pcie *pcie);
+>  };
+>  
+> +struct qcom_pcie_cfg {
+> +	const struct qcom_pcie_ops *ops;
+> +	unsigned int pipe_clk_need_muxing:1;
+> +};
+> +
+>  struct qcom_pcie {
+>  	struct dw_pcie *pci;
+>  	void __iomem *parf;			/* DT parf */
+> @@ -197,6 +205,7 @@ struct qcom_pcie {
+>  	struct phy *phy;
+>  	struct gpio_desc *reset;
+>  	const struct qcom_pcie_ops *ops;
+> +	unsigned int pipe_clk_need_muxing:1;
+>  };
+>  
+>  #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
+> @@ -1167,6 +1176,20 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
+>  	if (ret < 0)
+>  		return ret;
+>  
+> +	if (pcie->pipe_clk_need_muxing) {
+> +		res->pipe_clk_src = devm_clk_get(dev, "pipe_mux");
+> +		if (IS_ERR(res->pipe_clk_src))
+> +			return PTR_ERR(res->pipe_clk_src);
+> +
+> +		res->phy_pipe_clk = devm_clk_get(dev, "phy_pipe");
+> +		if (IS_ERR(res->phy_pipe_clk))
+> +			return PTR_ERR(res->phy_pipe_clk);
+> +
+> +		res->ref_clk_src = devm_clk_get(dev, "ref");
+> +		if (IS_ERR(res->ref_clk_src))
+> +			return PTR_ERR(res->ref_clk_src);
+> +	}
+> +
+>  	res->pipe_clk = devm_clk_get(dev, "pipe");
+>  	return PTR_ERR_OR_ZERO(res->pipe_clk);
+>  }
+> @@ -1185,6 +1208,10 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
+>  		return ret;
+>  	}
+>  
+> +	/* Set TCXO as clock source for pcie_pipe_clk_src */
+> +	if (pcie->pipe_clk_need_muxing)
+> +		clk_set_parent(res->pipe_clk_src, res->ref_clk_src);
+> +
+>  	ret = clk_bulk_prepare_enable(res->num_clks, res->clks);
+>  	if (ret < 0)
+>  		goto err_disable_regulators;
+> @@ -1256,6 +1283,10 @@ static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
+>  {
+>  	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
+>  
+> +	/* Set pipe clock as clock source for pcie_pipe_clk_src */
+> +	if (pcie->pipe_clk_need_muxing)
+> +		clk_set_parent(res->pipe_clk_src, res->phy_pipe_clk);
+> +
+>  	return clk_prepare_enable(res->pipe_clk);
+>  }
+>  
+> @@ -1456,6 +1487,39 @@ static const struct qcom_pcie_ops ops_1_9_0 = {
+>  	.config_sid = qcom_pcie_config_sid_sm8250,
+>  };
+>  
+> +static const struct qcom_pcie_cfg apq8084_cfg = {
+> +	.ops = &ops_1_0_0,
+> +};
+> +
+> +static const struct qcom_pcie_cfg ipq8064_cfg = {
+> +	.ops = &ops_2_1_0,
+> +};
+> +
+> +static const struct qcom_pcie_cfg msm8996_cfg = {
+> +	.ops = &ops_2_3_2,
+> +};
+> +
+> +static const struct qcom_pcie_cfg ipq8074_cfg = {
+> +	.ops = &ops_2_3_3,
+> +};
+> +
+> +static const struct qcom_pcie_cfg ipq4019_cfg = {
+> +	.ops = &ops_2_4_0,
+> +};
+> +
+> +static const struct qcom_pcie_cfg sdm845_cfg = {
+> +	.ops = &ops_2_7_0,
+> +};
+> +
+> +static const struct qcom_pcie_cfg sm8250_cfg = {
+> +	.ops = &ops_1_9_0,
+> +};
+> +
+> +static const struct qcom_pcie_cfg sc7280_cfg = {
+> +	.ops = &ops_1_9_0,
+> +	.pipe_clk_need_muxing = true,
+> +};
+> +
+>  static const struct dw_pcie_ops dw_pcie_ops = {
+>  	.link_up = qcom_pcie_link_up,
+>  	.start_link = qcom_pcie_start_link,
+> @@ -1467,6 +1531,7 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>  	struct pcie_port *pp;
+>  	struct dw_pcie *pci;
+>  	struct qcom_pcie *pcie;
+> +	const struct qcom_pcie_cfg *pcie_cfg;
+>  	int ret;
+>  
+>  	pcie = devm_kzalloc(dev, sizeof(*pcie), GFP_KERNEL);
+> @@ -1488,7 +1553,13 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>  
+>  	pcie->pci = pci;
+>  
+> -	pcie->ops = of_device_get_match_data(dev);
+> +	pcie_cfg = of_device_get_match_data(dev);
+> +	pcie->ops = pcie_cfg->ops;
+> +	if (!pcie->ops) {
+> +		dev_err(dev, "Invalid platform data\n");
+> +		return -EINVAL;
+> +	}
+> +	pcie->pipe_clk_need_muxing = pcie_cfg->pipe_clk_need_muxing;
+>  
+>  	pcie->reset = devm_gpiod_get_optional(dev, "perst", GPIOD_OUT_HIGH);
+>  	if (IS_ERR(pcie->reset)) {
+> @@ -1545,16 +1616,17 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>  }
+>  
+>  static const struct of_device_id qcom_pcie_match[] = {
+> -	{ .compatible = "qcom,pcie-apq8084", .data = &ops_1_0_0 },
+> -	{ .compatible = "qcom,pcie-ipq8064", .data = &ops_2_1_0 },
+> -	{ .compatible = "qcom,pcie-ipq8064-v2", .data = &ops_2_1_0 },
+> -	{ .compatible = "qcom,pcie-apq8064", .data = &ops_2_1_0 },
+> -	{ .compatible = "qcom,pcie-msm8996", .data = &ops_2_3_2 },
+> -	{ .compatible = "qcom,pcie-ipq8074", .data = &ops_2_3_3 },
+> -	{ .compatible = "qcom,pcie-ipq4019", .data = &ops_2_4_0 },
+> -	{ .compatible = "qcom,pcie-qcs404", .data = &ops_2_4_0 },
+> -	{ .compatible = "qcom,pcie-sdm845", .data = &ops_2_7_0 },
+> -	{ .compatible = "qcom,pcie-sm8250", .data = &ops_1_9_0 },
+> +	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
+> +	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
+> +	{ .compatible = "qcom,pcie-ipq8064-v2", .data = &ipq8064_cfg },
+> +	{ .compatible = "qcom,pcie-apq8064", .data = &ipq8064_cfg },
+> +	{ .compatible = "qcom,pcie-msm8996", .data = &msm8996_cfg },
+> +	{ .compatible = "qcom,pcie-ipq8074", .data = &ipq8074_cfg },
+> +	{ .compatible = "qcom,pcie-ipq4019", .data = &ipq4019_cfg },
+> +	{ .compatible = "qcom,pcie-qcs404", .data = &ipq4019_cfg },
+> +	{ .compatible = "qcom,pcie-sdm845", .data = &sdm845_cfg },
+> +	{ .compatible = "qcom,pcie-sm8250", .data = &sm8250_cfg },
+> +	{ .compatible = "qcom,pcie-sc7280", .data = &sc7280_cfg },
+>  	{ }
+>  };
+>  
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 
