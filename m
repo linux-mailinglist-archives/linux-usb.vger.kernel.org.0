@@ -2,244 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C31141B165
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Sep 2021 15:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B864441B352
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Sep 2021 17:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241184AbhI1N6k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Sep 2021 09:58:40 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:53418 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241193AbhI1N6j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Sep 2021 09:58:39 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1632837420; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=yyzU2LzLHVX60CMF1ch1yRMXfZKKlAVrt7Hqen1iKSU=; b=NeLO9Iuj01H1Xs7DoG+nvu29dRBzFtjBC+0Zf7GsX0PpYF9p0bIoJ8nZSSpv04CVXpj2W1Cp
- xET+kfRMmNaL++TlzTpORBWlSTl0T317kb6PI40NRNvmHgOESp2Dh7HlZ+SWRmtcK7YlJaew
- e9CWvZ+SJXg0WbiumWm2q7HC9rg=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 61531f0a713d5d6f9610a779 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 28 Sep 2021 13:56:26
- GMT
-Sender: pmaliset=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B2453C4361C; Tue, 28 Sep 2021 13:56:25 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from pmaliset-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmaliset)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id D2A9EC43617;
-        Tue, 28 Sep 2021 13:56:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org D2A9EC43617
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Prasad Malisetty <pmaliset@codeaurora.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, bhelgaas@google.com,
-        robh+dt@kernel.org, swboyd@chromium.org, lorenzo.pieralisi@arm.com,
-        svarbanov@mm-sol.com
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        id S241696AbhI1P47 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Sep 2021 11:56:59 -0400
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:40811 "EHLO
+        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241514AbhI1P46 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Sep 2021 11:56:58 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id EE551580C23;
+        Tue, 28 Sep 2021 11:55:18 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 28 Sep 2021 11:55:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm2; bh=Y1NfofkeQMpms15HG9J/5g3fXC
+        eHBXSK7jIqptB1puk=; b=LdxjyLA5MaFR81GrboLqtJEg2m/YdTRRtZEQQlgyGO
+        8qm6HQTRhH1w9egzWPPLPCHczeyO0Pbof7fjAeUM55+kh8ji/d37qCcpD2LLFKte
+        pLRP7OrP6POJTH72DpXt7cdw4NqbHFfXINRFRoFQA21HJU+PRwo8qUVTd3C5481h
+        PhfI5zlhZSIM9cghiDIQ1hGic4gJ3RTHrv2MF30MV4IyN2Hz6M5/Vipmgd8HXDso
+        tw7ywYhryv5d5OiYJSifqZATHqa8SohOIVXoK/iRmtIEqhPakUSOcv9Gdc2+ZQcB
+        2v/GGMcneHzGf9dUcWYbUms2ouroJngZqIenRv/IaguA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=Y1NfofkeQMpms15HG
+        9J/5g3fXCeHBXSK7jIqptB1puk=; b=sqjwF3v4I+i4Uv9lr76WJz0jwetf+WEQv
+        +mLGp3KEgNfDKy0PAIJdt7rf/uJDH9t5pIcitodH6jTxbpweHuhtEpuAL75dd8OI
+        bgaaNe1/o2uNd2qtWcTbJ4r1Bu6IIIkh3dc8LnBBAmAOKIXqhX55P7nbbps2yTlI
+        B+FNaAhhqnX6LBwVjQAAx3/rurGZ6Zl96okgTHVImGAAUPfyH4ztJfwPrnK7P0y3
+        +8TKPs0d/TudWavX9inz1SGN6IhuZvI8p166bHJ6HMuo6vPjCCPEdr7vTLCvJDBD
+        KGcDGkLvPa/Jkx5acrTcse+1BcdP9olWjeJtyrTxttz4hmSSHgpFg==
+X-ME-Sender: <xms:5jpTYcCxO4Ukf_E02ob-rLeNEvrXVjnHaJbDuVQUBIgyOGo4aJMZow>
+    <xme:5jpTYehKEwFPsW1paw-lC96MqoHI-rcMN4VYDmfIYJeXIhtYOl8JSa1gDU7N99Yuw
+    Ju5Gp4gZGlMlu8-nO4>
+X-ME-Received: <xmr:5jpTYfmsw_8KZaA9-snSOdSqduFZAs4cCjImURMjVdgW_cT9QZ9k2FvIRR01yYREQS_3hgHHGF-5kt3nJhp4IlPo6F9dYJ88IzvMbWO3PgkTZBy1c6cfWwc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudektddgledtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
+    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
+    epfeehudeftddvhfehvdduhedtjeejheeuudfftdfgvdekvdelleeuveelgfeflefgnecu
+    ffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:5jpTYSzIJ1zluxu6ETaJXC78WPpTpEnRPwj_qHxue9xfEgq8-Ob2BA>
+    <xmx:5jpTYRSHm-cJKMBaC-yGRuOGsVHEEWs6nK2dx5mfDSk-zn303gzbSw>
+    <xmx:5jpTYdYX67dy9ytZrbf2dqicBajEqICuH_ImRhtfaa6k5uDCPq-PBQ>
+    <xmx:5jpTYRbMbtRqQ6abL6Plxhz2MNP8gd8QfLwd4ER_xvHIag217YrnRg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 28 Sep 2021 11:55:16 -0400 (EDT)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
+        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
-        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org,
-        Prasad Malisetty <pmaliset@codeaurora.org>
-Subject: [PATCH v9 4/4] PCI: qcom: Switch pcie_1_pipe_clk_src after PHY init in SC7280
-Date:   Tue, 28 Sep 2021 19:25:50 +0530
-Message-Id: <1632837350-12100-5-git-send-email-pmaliset@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1632837350-12100-1-git-send-email-pmaliset@codeaurora.org>
-References: <1632837350-12100-1-git-send-email-pmaliset@codeaurora.org>
+        Hector Martin <marcan@marcan.st>,
+        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
+        Stan Skowronek <stan@corellium.com>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Alexander Graf <graf@amazon.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+Subject: [PATCH v3 0/6] usb: typec: tipd: Add Apple M1 support
+Date:   Tue, 28 Sep 2021 17:54:56 +0200
+Message-Id: <20210928155502.71372-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On the SC7280, the clock source for gcc_pcie_1_pipe_clk_src
-must be the TCXO while gdsc is enabled. After PHY init successful
-clock source should switch to pipe clock for gcc_pcie_1_pipe_clk_src.
+Hi,
 
-Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/pci/controller/dwc/pcie-qcom.c | 94 ++++++++++++++++++++++++++++++----
- 1 file changed, 83 insertions(+), 11 deletions(-)
+v1: https://lore.kernel.org/linux-usb/20210918120934.28252-1-sven@svenpeter.dev/
+v2: https://lore.kernel.org/linux-usb/20210923181321.3044-1-sven@svenpeter.dev/ 
+Thanks again to Heikki for your review of v2!
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 8a7a300..7896a86 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -166,6 +166,9 @@ struct qcom_pcie_resources_2_7_0 {
- 	struct regulator_bulk_data supplies[2];
- 	struct reset_control *pci_reset;
- 	struct clk *pipe_clk;
-+	struct clk *pipe_clk_src;
-+	struct clk *phy_pipe_clk;
-+	struct clk *ref_clk_src;
- };
- 
- union qcom_pcie_resources {
-@@ -189,6 +192,11 @@ struct qcom_pcie_ops {
- 	int (*config_sid)(struct qcom_pcie *pcie);
- };
- 
-+struct qcom_pcie_cfg {
-+	const struct qcom_pcie_ops *ops;
-+	unsigned int pipe_clk_need_muxing:1;
-+};
-+
- struct qcom_pcie {
- 	struct dw_pcie *pci;
- 	void __iomem *parf;			/* DT parf */
-@@ -197,6 +205,7 @@ struct qcom_pcie {
- 	struct phy *phy;
- 	struct gpio_desc *reset;
- 	const struct qcom_pcie_ops *ops;
-+	unsigned int pipe_clk_need_muxing:1;
- };
- 
- #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
-@@ -1167,6 +1176,20 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
- 	if (ret < 0)
- 		return ret;
- 
-+	if (pcie->pipe_clk_need_muxing) {
-+		res->pipe_clk_src = devm_clk_get(dev, "pipe_mux");
-+		if (IS_ERR(res->pipe_clk_src))
-+			return PTR_ERR(res->pipe_clk_src);
-+
-+		res->phy_pipe_clk = devm_clk_get(dev, "phy_pipe");
-+		if (IS_ERR(res->phy_pipe_clk))
-+			return PTR_ERR(res->phy_pipe_clk);
-+
-+		res->ref_clk_src = devm_clk_get(dev, "ref");
-+		if (IS_ERR(res->ref_clk_src))
-+			return PTR_ERR(res->ref_clk_src);
-+	}
-+
- 	res->pipe_clk = devm_clk_get(dev, "pipe");
- 	return PTR_ERR_OR_ZERO(res->pipe_clk);
- }
-@@ -1185,6 +1208,10 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
- 		return ret;
- 	}
- 
-+	/* Set TCXO as clock source for pcie_pipe_clk_src */
-+	if (pcie->pipe_clk_need_muxing)
-+		clk_set_parent(res->pipe_clk_src, res->ref_clk_src);
-+
- 	ret = clk_bulk_prepare_enable(res->num_clks, res->clks);
- 	if (ret < 0)
- 		goto err_disable_regulators;
-@@ -1256,6 +1283,10 @@ static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
- {
- 	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
- 
-+	/* Set pipe clock as clock source for pcie_pipe_clk_src */
-+	if (pcie->pipe_clk_need_muxing)
-+		clk_set_parent(res->pipe_clk_src, res->phy_pipe_clk);
-+
- 	return clk_prepare_enable(res->pipe_clk);
- }
- 
-@@ -1456,6 +1487,39 @@ static const struct qcom_pcie_ops ops_1_9_0 = {
- 	.config_sid = qcom_pcie_config_sid_sm8250,
- };
- 
-+static const struct qcom_pcie_cfg apq8084_cfg = {
-+	.ops = &ops_1_0_0,
-+};
-+
-+static const struct qcom_pcie_cfg ipq8064_cfg = {
-+	.ops = &ops_2_1_0,
-+};
-+
-+static const struct qcom_pcie_cfg msm8996_cfg = {
-+	.ops = &ops_2_3_2,
-+};
-+
-+static const struct qcom_pcie_cfg ipq8074_cfg = {
-+	.ops = &ops_2_3_3,
-+};
-+
-+static const struct qcom_pcie_cfg ipq4019_cfg = {
-+	.ops = &ops_2_4_0,
-+};
-+
-+static const struct qcom_pcie_cfg sdm845_cfg = {
-+	.ops = &ops_2_7_0,
-+};
-+
-+static const struct qcom_pcie_cfg sm8250_cfg = {
-+	.ops = &ops_1_9_0,
-+};
-+
-+static const struct qcom_pcie_cfg sc7280_cfg = {
-+	.ops = &ops_1_9_0,
-+	.pipe_clk_need_muxing = true,
-+};
-+
- static const struct dw_pcie_ops dw_pcie_ops = {
- 	.link_up = qcom_pcie_link_up,
- 	.start_link = qcom_pcie_start_link,
-@@ -1467,6 +1531,7 @@ static int qcom_pcie_probe(struct platform_device *pdev)
- 	struct pcie_port *pp;
- 	struct dw_pcie *pci;
- 	struct qcom_pcie *pcie;
-+	const struct qcom_pcie_cfg *pcie_cfg;
- 	int ret;
- 
- 	pcie = devm_kzalloc(dev, sizeof(*pcie), GFP_KERNEL);
-@@ -1488,7 +1553,13 @@ static int qcom_pcie_probe(struct platform_device *pdev)
- 
- 	pcie->pci = pci;
- 
--	pcie->ops = of_device_get_match_data(dev);
-+	pcie_cfg = of_device_get_match_data(dev);
-+	pcie->ops = pcie_cfg->ops;
-+	if (!pcie->ops) {
-+		dev_err(dev, "Invalid platform data\n");
-+		return -EINVAL;
-+	}
-+	pcie->pipe_clk_need_muxing = pcie_cfg->pipe_clk_need_muxing;
- 
- 	pcie->reset = devm_gpiod_get_optional(dev, "perst", GPIOD_OUT_HIGH);
- 	if (IS_ERR(pcie->reset)) {
-@@ -1545,16 +1616,17 @@ static int qcom_pcie_probe(struct platform_device *pdev)
- }
- 
- static const struct of_device_id qcom_pcie_match[] = {
--	{ .compatible = "qcom,pcie-apq8084", .data = &ops_1_0_0 },
--	{ .compatible = "qcom,pcie-ipq8064", .data = &ops_2_1_0 },
--	{ .compatible = "qcom,pcie-ipq8064-v2", .data = &ops_2_1_0 },
--	{ .compatible = "qcom,pcie-apq8064", .data = &ops_2_1_0 },
--	{ .compatible = "qcom,pcie-msm8996", .data = &ops_2_3_2 },
--	{ .compatible = "qcom,pcie-ipq8074", .data = &ops_2_3_3 },
--	{ .compatible = "qcom,pcie-ipq4019", .data = &ops_2_4_0 },
--	{ .compatible = "qcom,pcie-qcs404", .data = &ops_2_4_0 },
--	{ .compatible = "qcom,pcie-sdm845", .data = &ops_2_7_0 },
--	{ .compatible = "qcom,pcie-sm8250", .data = &ops_1_9_0 },
-+	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
-+	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
-+	{ .compatible = "qcom,pcie-ipq8064-v2", .data = &ipq8064_cfg },
-+	{ .compatible = "qcom,pcie-apq8064", .data = &ipq8064_cfg },
-+	{ .compatible = "qcom,pcie-msm8996", .data = &msm8996_cfg },
-+	{ .compatible = "qcom,pcie-ipq8074", .data = &ipq8074_cfg },
-+	{ .compatible = "qcom,pcie-ipq4019", .data = &ipq4019_cfg },
-+	{ .compatible = "qcom,pcie-qcs404", .data = &ipq4019_cfg },
-+	{ .compatible = "qcom,pcie-sdm845", .data = &sdm845_cfg },
-+	{ .compatible = "qcom,pcie-sm8250", .data = &sm8250_cfg },
-+	{ .compatible = "qcom,pcie-sc7280", .data = &sc7280_cfg },
- 	{ }
- };
- 
+This series adds initial support for the Apple CD3217/3218 chip which is also
+known as Apple ACE1/2. These chips are used on Apple M1 machines.
+They are based on the TI TPS6598x chips with a few differences:
+
+	- The interrupt numbers have been changed
+	- The secondary i2c bus and its interrupt controller are connected to the
+	  system management controller and must not be disturbed
+	- The chip comes up in a low power state and must be booted using the
+	  "SPSS" (System Power State Switch maybe) command which is not
+	  documented in the TI manual
+	- The interrupt mask must be set up explicitly
+
+The only difference to v2 is that now of_device_is_compatible instead of
+of_device_get_match_data is used to switch to the CD321x logic as suggested
+by Heikki.
+
+Best,
+
+Sven
+
+Sven Peter (6):
+  dt-bindings: usb: tps6598x: Add Apple CD321x compatible
+  usb: typec: tipd: Split interrupt handler
+  usb: typec: tipd: Add short-circuit for no irqs
+  usb: typec: tipd: Add support for Apple CD321X
+  usb: typec: tipd: Switch CD321X power state to S0
+  usb: typec: tipd: Remove FIXME about testing with I2C_FUNC_I2C
+
+ .../devicetree/bindings/usb/ti,tps6598x.yaml  |   4 +
+ drivers/usb/typec/tipd/core.c                 | 206 +++++++++++++++---
+ drivers/usb/typec/tipd/tps6598x.h             |  12 +
+ drivers/usb/typec/tipd/trace.h                |  23 ++
+ 4 files changed, 209 insertions(+), 36 deletions(-)
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.25.1
 
