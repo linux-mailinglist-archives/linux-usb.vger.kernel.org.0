@@ -2,82 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B778F41C019
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Sep 2021 09:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8EDF41C01F
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Sep 2021 09:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244660AbhI2HuH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Sep 2021 03:50:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46046 "EHLO mail.kernel.org"
+        id S244382AbhI2HwM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Sep 2021 03:52:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46896 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243252AbhI2HuH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 29 Sep 2021 03:50:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A437A613C8;
-        Wed, 29 Sep 2021 07:48:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632901706;
-        bh=Ij6oqmx2xp/RI901C67pBD+5q8ON3zfgXKfYNpsCiZQ=;
+        id S244241AbhI2HwM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 Sep 2021 03:52:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EA366613C8;
+        Wed, 29 Sep 2021 07:50:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1632901831;
+        bh=n2bdQEu+ZHc2F7R1x0Q9U/cUozwpEKEnFR7JljWmwYI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y6viwwTECLzKPuyQTf4O6zpdxfn89eLolf9030cofRx7nsb8in5uCmmhJ9lWIIgjf
-         jJLbnVP7269R75lbIsil2IJCyy8c0u6+ftvTDrYllB4wc2avwO2i2UG7nieTV9nE27
-         1xe1xI4/BfiIt6aTFpEH3/9ExJ3yKo97DPgY7RG3L+WmrUOyi/8isXK/bmWTl8Amw6
-         49vKsrm/HlcYcvzNXPnM2uxqa8J+c6eRT6TayWZR1NJRkWuv3YWO/h9GacL2aDsqPe
-         mwhqFQhapzrZORwHtZsHHT5UE4P1Fuq6UMJXaelDDwZ4+XtSq64Nd1CZ5j4MyB32pV
-         L/cypBrX93hqQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mVUKI-0006Uw-TS; Wed, 29 Sep 2021 09:48:27 +0200
-Date:   Wed, 29 Sep 2021 09:48:26 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Yu-Tung Chang <mtwget@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        b=Su/COERiJl50sM5Bego2nlzYEv9i7m4s0OYbYXhl/KXUPTap0ccdIq4p3xiRzUXNj
+         mdHU7xzMtoOT8caqVdGN03RPi2INa2rWHFoK3GiiCorD/O/iSUBPpv21QS7eRuLoBZ
+         0L+xRKeyS/8T5v4DV94eZEG5eKwdjzOHzSVAUi3s=
+Date:   Wed, 29 Sep 2021 09:50:29 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add Quectel EC200S-CN module support
-Message-ID: <YVQaSj+zIaoeZJKs@hovoldconsulting.com>
-References: <20210929071713.319751-1-mtwget@gmail.com>
+Subject: Re: [v0] usb: ohci: add check for start frame in host controller
+ functional states
+Message-ID: <YVQaxS3vjvZuT9JP@kroah.com>
+References: <1632901259-32746-1-git-send-email-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210929071713.319751-1-mtwget@gmail.com>
+In-Reply-To: <1632901259-32746-1-git-send-email-zhuyinbo@loongson.cn>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 29, 2021 at 03:17:13PM +0800, Yu-Tung Chang wrote:
-> Add usb product id of the Quectel EC200S-CN module.
-> 
-> usb-devices output for 0x6002:
-> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=480 MxCh= 0
-> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=2c7c ProdID=6002 Rev=03.18
-> S:  Manufacturer=Android
-> S:  Product=Android
-> S:  SerialNumber=0000
-> C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-> I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=06 Prot=00 Driver=cdc_ether
-> I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> I:  If#=0x2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-> I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-> I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-> 
-> Signed-off-by: Yu-Tung Chang <mtwget@gmail.com>
-> ---
->  drivers/usb/serial/option.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 6cfb5d33609f..428d101f6193 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -252,6 +252,7 @@ static void option_instat_callback(struct urb *urb);
->  #define QUECTEL_PRODUCT_EM12			0x0512
->  #define QUECTEL_PRODUCT_RM500Q			0x0800
->  #define QUECTEL_PRODUCT_EC200T			0x6026
-> +#define QUECTEL_PRODUCT_EC200S_CN		0x6002
+On Wed, Sep 29, 2021 at 03:40:59PM +0800, Yinbo Zhu wrote:
+> The pm states of ohci include UsbOperational、UsbReset、UsbSuspend、UsbResume
+> , among them only the UsbOperational state supports launching the start frame
+> for host controller according the ohci protocol spec, but in S3/S4 press test
+> procedure, it may happen that the start frame was launched in other pm states
+> and cause ohci works abnormally then kernel will allways report rcu CallTrace
+> . This patch was to add check for start frame in host controller functional
+> states for fixing above issue.
 
-You forgot the actual entry. Also keep the defines sorted by PID·
- 
->  #define CMOTECH_VENDOR_ID			0x16d8
->  #define CMOTECH_PRODUCT_6001			0x6001
 
-Johan
+Odd use of punctuation :(
+
+> 
+> Change-Id: Ic5c2c0a41d01d9396a9452f3eb64acc52b4cbf76
+
+Always run checkpatch.pl on your patches do you do not get grumpy
+maintainers asking you to run checkpatch.pl on your patches.
+
+and what does "v0" on the subject line mean?
+
+thanks,
+
+greg k-h
