@@ -2,73 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1A741C157
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Sep 2021 11:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E445141C18A
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Sep 2021 11:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244994AbhI2JLq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Sep 2021 05:11:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37446 "EHLO mail.kernel.org"
+        id S245046AbhI2JYb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Sep 2021 05:24:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51630 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244989AbhI2JLp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 29 Sep 2021 05:11:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AC6DF6140B;
-        Wed, 29 Sep 2021 09:10:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632906604;
-        bh=xSqo1TwRt4jqwdnxqfFvi9GrKsg78RJwRQhRbiGEmuc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MF5eh2ydbdZMSiWxANuPA54nULVZkbKd0t25t/bVkpo/eOYZqd5sf0FgbwQwPuIPf
-         nj1GBC5zzTIzU3Vo6eEC2KF+59in3ZVgdiTYKG3dlfexP+zM42OMZYFobKFQDqsa0+
-         dd5pYo0FdSUv8LxzM83bqAHYLAHPuclJSQU59znmAkyNvM8/A8Xr4m03L+H4q6nHJV
-         4Q9iTaFm8bOn5Vk0ufOoGn8kM/SNsXj3ajvq1ZvoKPeI3i8luuEZOe9TBvmvH/6yro
-         xsy41peGJrxHYMKmnDIgKWD0q4wM5V9F1oovqXt55spoJB6u10PTPQhVZZ2SKmHTeY
-         r1YQ7UKCB8mEw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mVVbJ-0001wV-Qk; Wed, 29 Sep 2021 11:10:05 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH 2/2] USB: cdc-acm: fix break reporting
-Date:   Wed, 29 Sep 2021 11:09:37 +0200
-Message-Id: <20210929090937.7410-3-johan@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210929090937.7410-1-johan@kernel.org>
-References: <20210929090937.7410-1-johan@kernel.org>
+        id S230347AbhI2JYa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 Sep 2021 05:24:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A45CA613D0;
+        Wed, 29 Sep 2021 09:22:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1632907370;
+        bh=j1iOY8IOPalSV7rWzGucjk6aw8Cof5o98mqaQKFeaek=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MNz7+B+8GfDcFQnnfBvPc8Eb5JHNVvAZ+ShI/uQGCRpnKkSnMZvvUDb4l5IOKFH1I
+         GpjTgDEA2R47lfv06fb1Y3nDikdxU+2uXNV0FysTE+3yxxdRr1wro4x1QqbjZvMIOm
+         ZIkFVqgWSRx/HcIhs/qhHxnP+Z8nqg3/Vq7RNBAA=
+Date:   Wed, 29 Sep 2021 11:22:47 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     zhuyinbo <zhuyinbo@loongson.cn>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [v0] usb: ohci: add check for start frame in host controller
+ functional states
+Message-ID: <YVQwZ8ed4od0q/Jh@kroah.com>
+References: <1632901259-32746-1-git-send-email-zhuyinbo@loongson.cn>
+ <YVQaxS3vjvZuT9JP@kroah.com>
+ <bf56ff89-3800-9786-bba3-53175822a5d3@loongson.cn>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <bf56ff89-3800-9786-bba3-53175822a5d3@loongson.cn>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A recent change that started reporting break events forgot to push the
-event to the line discipline, which meant that a detected break would
-not be reported until further characters had been receive (the port
-could even have been closed and reopened in between).
+On Wed, Sep 29, 2021 at 04:58:15PM +0800, zhuyinbo wrote:
+> 
+> 在 2021/9/29 下午3:50, Greg Kroah-Hartman 写道:
+> > On Wed, Sep 29, 2021 at 03:40:59PM +0800, Yinbo Zhu wrote:
+> > > The pm states of ohci include UsbOperational、UsbReset、UsbSuspend、UsbResume
+> > > , among them only the UsbOperational state supports launching the start frame
+> > > for host controller according the ohci protocol spec, but in S3/S4 press test
+> > > procedure, it may happen that the start frame was launched in other pm states
+> > > and cause ohci works abnormally then kernel will allways report rcu CallTrace
+> > > . This patch was to add check for start frame in host controller functional
+> > > states for fixing above issue.
+> > 
+> > > Odd use of punctuation :(
+> > 
+> > > Change-Id: Ic5c2c0a41d01d9396a9452f3eb64acc52b4cbf76
+> > > Always run checkpatch.pl on your patches do you do not get grumpy
+> > > maintainers asking you to run checkpatch.pl on your patches.
+> > 
+> > > and what does "v0" on the subject line mean?
+> > 
+> > > thanks,
+> > 
+> > > greg k-h
+> 
+> Hi greg k-h,
+> 
+> 
+> The string "v0" of subject line is patch version,  as for the punctuation
+> I'll revise it,
+> 
+> and I don't find any error that use checkpatch.pl to check patch. then
+> please you
 
-Fixes: 08dff274edda ("cdc-acm: fix BREAK rx code path adding necessary calls")
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/class/cdc-acm.c | 3 +++
- 1 file changed, 3 insertions(+)
+You had a Change-Id: in the changelog, that is not needed or allowed in
+the kernel tree.
 
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index c7a1736720e7..7b2e2420ecae 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -340,6 +340,9 @@ static void acm_process_notification(struct acm *acm, unsigned char *buf)
- 			acm->iocount.overrun++;
- 		spin_unlock_irqrestore(&acm->read_lock, flags);
- 
-+		if (newctrl & ACM_CTRL_BRK)
-+			tty_flip_buffer_push(&acm->port);
-+
- 		if (difference)
- 			wake_up_all(&acm->wioctl);
- 
--- 
-2.32.0
+thanks,
 
+greg k-h
