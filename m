@@ -2,98 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E816F41BFBE
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Sep 2021 09:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B778F41C019
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Sep 2021 09:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244548AbhI2HTF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Sep 2021 03:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244525AbhI2HTE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Sep 2021 03:19:04 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCE7C06161C;
-        Wed, 29 Sep 2021 00:17:23 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id x8so878453plv.8;
-        Wed, 29 Sep 2021 00:17:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LEQFPQiTn4Bx9qdKWxs/A4UShFsbFjXxm6TVxU4yPMY=;
-        b=GwJm4JswLA46fbEkpEOMHk+VNR1RKffxoJCk8dyCcn9ARU4ERBYpskdjhHrcFlN+cQ
-         Llpsp4Vz7i2NP165l5ChcN1mto1/fUIjyyclSVJZVkRgwsWjfYsVCdiUvjXQk3qvuGMK
-         xHk6gmglwdaBUH+Wr31juWGKpFNEk758ichrOEhUIUE1CJcNcXDtgCrfo5vkcAqUk/m3
-         PfQInSCqaDtzZQM14+Yf/kP92A5OTH6M/co4eYuCBOabhAXBV2l6jKeryOIhvkSm/dRo
-         7WZAZ74c/JWQeBR57iQ31g7P6WRwipUUU9uj+qM+D1AmBH4gSCW5oOW7nkSVZWqKSCeq
-         i05g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LEQFPQiTn4Bx9qdKWxs/A4UShFsbFjXxm6TVxU4yPMY=;
-        b=oaeZGokodaRI0zASallawE3zPIemSplVtPTU95HH3Hjdjc51ptdPN7KTWM7G3jp71F
-         NMqwwR/vNOm6dVjwtVgVpiFUqq+rEJn4mXjyctBKXMOCODOUSXix9VjBS6k59/6tAe1e
-         ykGG7EtgBoiZUNFXaTKYvPH2E9sT685X8bUkpUOU1q5T8kGr4WEuzdkvJRhNx44X4Xqo
-         ea7uRDZFsuHUcr9bzxaKxeaQ4IHuxMyuwZxb6Sa0lzlwf8kWNJyKjEzO/NEo/6KZXMtb
-         N3XQZnxiq0d6/50uG7vvRKoE5gvvBx6gNJ69ZcJZ6u7sBCWVH7tIxjWnxDE/NfsDtt1W
-         /kRg==
-X-Gm-Message-State: AOAM533NS5lPkMnRxmaig7KFM6uepJBYyhly1z+n2gtPhJH2OXguZ3xr
-        rZk7IF65EFLLiC0/8b/5yHI=
-X-Google-Smtp-Source: ABdhPJx4wvpJ2rAeGKxW6eOyAjyN6Ef7Mn+ibeuCsSuUY0LBDHAhewdjoOGViSuvfj0vfjhscZVzOQ==
-X-Received: by 2002:a17:902:710f:b0:13c:aad1:8343 with SMTP id a15-20020a170902710f00b0013caad18343mr9162053pll.16.1632899843280;
-        Wed, 29 Sep 2021 00:17:23 -0700 (PDT)
-Received: from ruantu-linux-1.. ([211.72.215.15])
-        by smtp.gmail.com with ESMTPSA id z124sm1355263pfb.108.2021.09.29.00.17.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Sep 2021 00:17:22 -0700 (PDT)
-From:   Yu-Tung Chang <mtwget@gmail.com>
-To:     johan@kernel.org
+        id S244660AbhI2HuH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Sep 2021 03:50:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46046 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243252AbhI2HuH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 Sep 2021 03:50:07 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A437A613C8;
+        Wed, 29 Sep 2021 07:48:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632901706;
+        bh=Ij6oqmx2xp/RI901C67pBD+5q8ON3zfgXKfYNpsCiZQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y6viwwTECLzKPuyQTf4O6zpdxfn89eLolf9030cofRx7nsb8in5uCmmhJ9lWIIgjf
+         jJLbnVP7269R75lbIsil2IJCyy8c0u6+ftvTDrYllB4wc2avwO2i2UG7nieTV9nE27
+         1xe1xI4/BfiIt6aTFpEH3/9ExJ3yKo97DPgY7RG3L+WmrUOyi/8isXK/bmWTl8Amw6
+         49vKsrm/HlcYcvzNXPnM2uxqa8J+c6eRT6TayWZR1NJRkWuv3YWO/h9GacL2aDsqPe
+         mwhqFQhapzrZORwHtZsHHT5UE4P1Fuq6UMJXaelDDwZ4+XtSq64Nd1CZ5j4MyB32pV
+         L/cypBrX93hqQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mVUKI-0006Uw-TS; Wed, 29 Sep 2021 09:48:27 +0200
+Date:   Wed, 29 Sep 2021 09:48:26 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Yu-Tung Chang <mtwget@gmail.com>
 Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yu-Tung Chang <mtwget@gmail.com>
-Subject: [PATCH] USB: serial: option: add Quectel EC200S-CN module support
-Date:   Wed, 29 Sep 2021 15:17:13 +0800
-Message-Id: <20210929071713.319751-1-mtwget@gmail.com>
-X-Mailer: git-send-email 2.33.0
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: add Quectel EC200S-CN module support
+Message-ID: <YVQaSj+zIaoeZJKs@hovoldconsulting.com>
+References: <20210929071713.319751-1-mtwget@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210929071713.319751-1-mtwget@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add usb product id of the Quectel EC200S-CN module.
+On Wed, Sep 29, 2021 at 03:17:13PM +0800, Yu-Tung Chang wrote:
+> Add usb product id of the Quectel EC200S-CN module.
+> 
+> usb-devices output for 0x6002:
+> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=480 MxCh= 0
+> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=2c7c ProdID=6002 Rev=03.18
+> S:  Manufacturer=Android
+> S:  Product=Android
+> S:  SerialNumber=0000
+> C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
+> I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=06 Prot=00 Driver=cdc_ether
+> I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+> I:  If#=0x2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+> I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+> I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+> 
+> Signed-off-by: Yu-Tung Chang <mtwget@gmail.com>
+> ---
+>  drivers/usb/serial/option.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 6cfb5d33609f..428d101f6193 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -252,6 +252,7 @@ static void option_instat_callback(struct urb *urb);
+>  #define QUECTEL_PRODUCT_EM12			0x0512
+>  #define QUECTEL_PRODUCT_RM500Q			0x0800
+>  #define QUECTEL_PRODUCT_EC200T			0x6026
+> +#define QUECTEL_PRODUCT_EC200S_CN		0x6002
 
-usb-devices output for 0x6002:
-T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=480 MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=6002 Rev=03.18
-S:  Manufacturer=Android
-S:  Product=Android
-S:  SerialNumber=0000
-C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=06 Prot=00 Driver=cdc_ether
-I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-I:  If#=0x2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-
-Signed-off-by: Yu-Tung Chang <mtwget@gmail.com>
----
- drivers/usb/serial/option.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 6cfb5d33609f..428d101f6193 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -252,6 +252,7 @@ static void option_instat_callback(struct urb *urb);
- #define QUECTEL_PRODUCT_EM12			0x0512
- #define QUECTEL_PRODUCT_RM500Q			0x0800
- #define QUECTEL_PRODUCT_EC200T			0x6026
-+#define QUECTEL_PRODUCT_EC200S_CN		0x6002
+You forgot the actual entry. Also keep the defines sorted by PID·
  
- #define CMOTECH_VENDOR_ID			0x16d8
- #define CMOTECH_PRODUCT_6001			0x6001
--- 
-2.33.0
+>  #define CMOTECH_VENDOR_ID			0x16d8
+>  #define CMOTECH_PRODUCT_6001			0x6001
 
+Johan
