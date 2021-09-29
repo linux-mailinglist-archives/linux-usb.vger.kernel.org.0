@@ -2,105 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8ED41CE25
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Sep 2021 23:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8F441CF71
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Sep 2021 00:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346961AbhI2V3U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Sep 2021 17:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55658 "EHLO
+        id S1347333AbhI2WuN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Sep 2021 18:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347010AbhI2V3O (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Sep 2021 17:29:14 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08284C061779
-        for <linux-usb@vger.kernel.org>; Wed, 29 Sep 2021 14:27:31 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id q8-20020a056902150800b005b640f67812so5263069ybu.8
-        for <linux-usb@vger.kernel.org>; Wed, 29 Sep 2021 14:27:30 -0700 (PDT)
+        with ESMTP id S1347236AbhI2WuJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Sep 2021 18:50:09 -0400
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA71C06161C
+        for <linux-usb@vger.kernel.org>; Wed, 29 Sep 2021 15:48:28 -0700 (PDT)
+Received: by mail-qk1-x74a.google.com with SMTP id az37-20020a05620a172500b0045e43348ee8so11256620qkb.19
+        for <linux-usb@vger.kernel.org>; Wed, 29 Sep 2021 15:48:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=08MMqZQxkHJyz/VF+8d0XPyGY6ToAo0OA/OmmtaYHyg=;
-        b=Xc0r7XDhQk/RWJL3VJzgIR6Z34QQY3yA7gfvyI2MR/G/ctI7q+99DthyY5LlcWg2e7
-         yNZKWxRGgPdrPrKcdjVGfuLYpgUyyaxc9QM+cEdXLZO7cGIBk81SomjCOBT5pFHhS50s
-         c6xbphtTxJebvIq+LQjYxHjM/EiPRt3x+0CttaNT3TVpxgt96Nx34le5hdAMHS1ggHKu
-         uoCMduNUutZNaLiuUGpfAGsoSYuT04gWEbTvHxWTQXG9vA1xAV4uphxEGXqqwOYkP7G9
-         Czl8saVkvd0Wswmv2h2fMTdekMv294gEiwyuHMbzXc/Mvk4eKvpBG3Q+5f1Pbd2ghoD/
-         m3kA==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ETcVWno/psejFFgEWsam5NI1lLczvhwOhyjFPnZZicY=;
+        b=EghzBSYgJaumTGBJNjWIlqQkmELd14y20ZMqLBeHV1G43vyoHX7wZUtHS9Ck3OyXke
+         SJxanL4NUMcG2yOWC0yktYmJtOqYlceftM6+fKTjzlp5v0RL0Vebi0WwQ4Pcr8M1FNBu
+         ePRwE2Vy1dyMsGEFKDxhVwcXK5wlQGyY/RpekflN21IJzxBkhoUUyhj7ODMQL5SNi4yF
+         dwNFomcEZiFu35kZnbSH8XNl0ihfsZere/O79Xbn2MF+7Hc4hXdf5+q+TkQuxfsc1wvn
+         nyAObw/ixyyJgz3hPODjhD1k6kMPbQKYWt/emXaDstFNHpvJkMRTNk8RRjC3rnCUn31S
+         tJ0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=08MMqZQxkHJyz/VF+8d0XPyGY6ToAo0OA/OmmtaYHyg=;
-        b=OTo31ZcBv3I50tCeuxJY/1CPI9Bn6mUlAgEhUZtYAJryzAvn7GJBfKS3XXCQLpeHgi
-         zoZH99vEkn35s4Es8iOc4P61Es+E93cznfIA7PZfld38m+iR3WdT4MEI2XhhtPjS3DCM
-         2eX0qH8bg1S0NmzlUcRoGKxK2yyNKDsx0AEK++KROobEjQoTcsRgr4/03oDdR9l0ckUl
-         k+Xiqp25Ou0YnmxKZ6IdGg7dvBBntZPkxMcUmP+8oBFWmA+eCk03YMe3/awUiaJcrtOD
-         HPE1amzVgfN0jFQfLm22vP/dGHI+oOYpAnr0hUbm0Ot++x4B+wJsyY46MeQBbHKj0DlL
-         F6Vg==
-X-Gm-Message-State: AOAM533v01pLDfvk1xWusfVuajCriV5cTDNY/V+vWn8JdkZ6FA1315l8
-        fQNVtjVdhuF1cmfDP3gip6D1oZ27oKnJl4Mw9yYtAQ==
-X-Google-Smtp-Source: ABdhPJydtA3evA/mok1g6x4rh7TZpUEjkOozHd/KU5sU/LKW6mja59yYtNHfsoGoBJBqAHbTDyWHKtYkEMdXaZ/OgKddcA==
-X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:201:83f4:ff43:90d6:efd3])
- (user=brendanhiggins job=sendgmr) by 2002:a25:1584:: with SMTP id
- 126mr2372236ybv.126.1632950850186; Wed, 29 Sep 2021 14:27:30 -0700 (PDT)
-Date:   Wed, 29 Sep 2021 14:27:13 -0700
-In-Reply-To: <20210929212713.1213476-1-brendanhiggins@google.com>
-Message-Id: <20210929212713.1213476-6-brendanhiggins@google.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ETcVWno/psejFFgEWsam5NI1lLczvhwOhyjFPnZZicY=;
+        b=qsFrVvUgdJH1uSUpg34+APHJ6pc4FedjV5MEp4L8KMGHEhwRlm/F4YzqqSHUJVWdcH
+         5L/4CHreHSXVoYdrWFsEoVz1ZeDwlX2798UxSFp7h+lF9frL3q2+NO0ADfrw7IrirazM
+         ZLY9qi+E9NxN40aP09z8CyXVJAo3b/jmS6adpoOVnmdN+1bUuuS6YQ7F9sARCGl1qjSe
+         WxhNjYh7BKlx9od1a5MwZZrVixDC1I37ENcLrcjh43ABY0vbLTypxX+qvv/Zm74ReywK
+         ZwjK6mFnMQhkZijE3gufEqpXNSGW531Xn5VA+XN/V6U7nv0Yjl82T7waBQ0W4zEkpcZS
+         CAeQ==
+X-Gm-Message-State: AOAM5327VEieCUwJ3D1N0ZdAyfllOkNvnAcT1NMHgqepIjwRUKlCO7bg
+        NqhmY5JK2mQNbsbXO9rzhz5CFLOrb6yN
+X-Google-Smtp-Source: ABdhPJz4dFZxZ37NcH6OGB5NWytbGQwJt62+4qAU4i+rz/Y1LnFor5rxegWAq8JofebiYEc/pO27ztkLBYHa
+X-Received: from rajat2.mtv.corp.google.com ([2620:15c:202:201:d512:b04f:25a7:c7f])
+ (user=rajatja job=sendgmr) by 2002:a05:6214:140c:: with SMTP id
+ n12mr2370973qvx.39.1632955707380; Wed, 29 Sep 2021 15:48:27 -0700 (PDT)
+Date:   Wed, 29 Sep 2021 15:48:22 -0700
+Message-Id: <20210929224823.556943-1-rajatja@google.com>
 Mime-Version: 1.0
-References: <20210929212713.1213476-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.33.0.685.g46640cef36-goog
-Subject: [PATCH v2 5/5] bitfield: build kunit tests without structleak plugin
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     shuah@kernel.org, davidgow@google.com, arnd@arndb.de,
-        keescook@chromium.org, rafael@kernel.org, jic23@kernel.org,
-        lars@metafoo.de, ulf.hansson@linaro.org, andreas.noever@gmail.com,
-        michael.jamet@intel.com, mika.westerberg@linux.intel.com,
-        YehezkelShB@gmail.com, masahiroy@kernel.org,
-        michal.lkml@markovi.net, ndesaulniers@google.com
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        gregkh@linuxfoundation.org, linux-iio@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>
+Subject: [PATCH 1/2] usb: hub: Mark root hubs on removable devices, as removable.
+From:   Rajat Jain <rajatja@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rajat Jain <rajatja@google.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     levinale@google.com, bleung@google.com, rajatxjain@gmail.com,
+        jsbarnes@google.com, pmalani@google.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Currently all usb root hubs are always marked as DEVICE_REMOVABLE_UNKNOWN
+unconditionally. Let us try to help the users to identify the removable
+root hubs, by checking the device on which the root hub sits. If the base
+(parent) device on which the root hub sits, is removable (e.g. on
+thunderbolt docks), then the roothub is also marked as removable.
 
-The structleak plugin causes the stack frame size to grow immensely:
-
-lib/bitfield_kunit.c: In function 'test_bitfields_constants':
-lib/bitfield_kunit.c:93:1: error: the frame size of 7440 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
-
-Turn it off in this file.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Rajat Jain <rajatja@google.com>
 ---
-Changes since last revision:
- - Dropped -Wframe-larger-than=10240 from CFLAGS.
----
- lib/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/core/hub.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/lib/Makefile b/lib/Makefile
-index 5efd1b435a37c..a841be5244ac6 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -351,7 +351,7 @@ obj-$(CONFIG_OBJAGG) += objagg.o
- obj-$(CONFIG_PLDMFW) += pldmfw/
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 86658a81d284..45d1c81b121d 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -2440,8 +2440,16 @@ static void set_usb_port_removable(struct usb_device *udev)
  
- # KUnit tests
--CFLAGS_bitfield_kunit.o := $(call cc-option,-Wframe-larger-than=10240)
-+CFLAGS_bitfield_kunit.o := $(DISABLE_STRUCTLEAK_PLUGIN)
- obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
- obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
+ 	dev_set_removable(&udev->dev, DEVICE_REMOVABLE_UNKNOWN);
+ 
+-	if (!hdev)
++	if (!hdev) {
++		/*
++		 * If the root hub sits on a removable device, mark the root hub
++		 * removable as well. This helps with the USB root hubs sitting
++		 * on the thunderbolt docks.
++		 */
++		if (udev->dev.parent && dev_is_removable(udev->dev.parent))
++			dev_set_removable(&udev->dev, DEVICE_REMOVABLE);
+ 		return;
++	}
+ 
+ 	hub = usb_hub_to_struct_hub(udev->parent);
+ 
 -- 
 2.33.0.685.g46640cef36-goog
 
