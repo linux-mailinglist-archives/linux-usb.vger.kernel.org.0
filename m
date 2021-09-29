@@ -2,157 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9768E41C5E6
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Sep 2021 15:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0713941C692
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Sep 2021 16:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344252AbhI2NqB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Sep 2021 09:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344186AbhI2NqA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Sep 2021 09:46:00 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C356C061755
-        for <linux-usb@vger.kernel.org>; Wed, 29 Sep 2021 06:44:19 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mVZs4-0002ro-Tl; Wed, 29 Sep 2021 15:43:40 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mVZru-0005It-Cu; Wed, 29 Sep 2021 15:43:30 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mVZru-0001Wi-AO; Wed, 29 Sep 2021 15:43:30 +0200
-Date:   Wed, 29 Sep 2021 15:43:30 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andrew Donnellan <ajd@linux.ibm.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Russell Currey <ruscur@russell.cc>,
-        Jiri Olsa <jolsa@redhat.com>, Christoph Hellwig <hch@lst.de>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        kernel@pengutronix.de, Frederic Barrat <fbarrat@linux.ibm.com>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v5 10/11] PCI: Replace pci_dev::driver usage by
- pci_dev::dev.driver
-Message-ID: <20210929134330.e5c57t7mtwu5iner@pengutronix.de>
-References: <20210929085306.2203850-1-u.kleine-koenig@pengutronix.de>
- <20210929085306.2203850-11-u.kleine-koenig@pengutronix.de>
- <75dd6d60-08b9-fa68-352c-3a0c5a04c0ab@linux.ibm.com>
+        id S1344135AbhI2OXv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Sep 2021 10:23:51 -0400
+Received: from mga02.intel.com ([134.134.136.20]:35542 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244491AbhI2OXu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 Sep 2021 10:23:50 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10122"; a="212205808"
+X-IronPort-AV: E=Sophos;i="5.85,332,1624345200"; 
+   d="scan'208";a="212205808"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2021 07:21:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,332,1624345200"; 
+   d="scan'208";a="486933959"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga008.jf.intel.com with ESMTP; 29 Sep 2021 07:21:46 -0700
+To:     =?UTF-8?Q?Bj=c3=b8rn_Mork?= <bjorn@mork.no>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     linux-usb@vger.kernel.org
+References: <87h7hdf5dy.fsf@miraculix.mork.no>
+ <87tuj4jot3.fsf@miraculix.mork.no> <87zgrxq3ay.fsf@miraculix.mork.no>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v2 RESEND] xhci: add quirk for host controllers that don't
+ update endpoint DCS
+Message-ID: <b23d5b4b-5c55-5f59-0cc3-41c633570c06@linux.intel.com>
+Date:   Wed, 29 Sep 2021 17:24:29 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ycp367bsarc33tfb"
-Content-Disposition: inline
-In-Reply-To: <75dd6d60-08b9-fa68-352c-3a0c5a04c0ab@linux.ibm.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <87zgrxq3ay.fsf@miraculix.mork.no>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 27.9.2021 21.30, Bjørn Mork wrote:
+> Bjørn Mork <bjorn@mork.no> writes:
+> 
+>> From: Jonathan Bell <jonathan@raspberrypi.org>
+>>
+>> Seen on a VLI VL805 PCIe to USB controller. For non-stream endpoints
+>> at least, if the xHC halts on a particular TRB due to an error then
+>> the DCS field in the Out Endpoint Context maintained by the hardware
+>> is not updated with the current cycle state.
+>>
+>> Using the quirk XHCI_EP_CTX_BROKEN_DCS and instead fetch the DCS bit
+>> from the TRB that the xHC stopped on.
+>>
+>> [ bjorn: rebased to v5.14-rc2 ]
+>> Cc: stable@vger.kernel.org
+>> Link: https://github.com/raspberrypi/linux/issues/3060
+>> Signed-off-by: Jonathan Bell <jonathan@raspberrypi.org>
+>> Signed-off-by: Bjørn Mork <bjorn@mork.no>
+>> ---
+>> [ resending this as I haven't seen any ack/nak and wonder if it might
+>>   have gotten lost in a large pile of vacation backlog ]
+> 
+> ping?
+> 
 
---ycp367bsarc33tfb
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sorry about the delay, looks good to me.
+I'll let it go through some testing, then add it.
 
-On Wed, Sep 29, 2021 at 11:15:37PM +1000, Andrew Donnellan wrote:
-> On 29/9/21 6:53 pm, Uwe Kleine-K=F6nig wrote:>   =09
-> list_for_each_entry(afu_dev, &afu->phb->bus->devices, bus_list) {
-> > -			if (afu_dev->driver && afu_dev->driver->err_handler &&
-> > -			    afu_dev->driver->err_handler->resume)
-> > -				afu_dev->driver->err_handler->resume(afu_dev);
-> > +			struct pci_driver *afu_drv;
-> > +			if (afu_dev->dev.driver &&
-> > +			    (afu_drv =3D to_pci_driver(afu_dev->dev.driver))->err_handler &&
->=20
-> I'm not a huge fan of assignments in if statements and if you send a v6 I=
-'d
-> prefer you break it up.
+As this goes to stable it makes sense to add it as is, but
+this again shows I really need to write a xhci_dma_to_trb(ring, dma) helper
 
-I'm not a huge fan either, I used it to keep the control flow as is and
-without introducing several calls to to_pci_driver.
-
-The whole code looks as follows:
-
-	list_for_each_entry(afu_dev, &afu->phb->bus->devices, bus_list) {
-		struct pci_driver *afu_drv;
-		if (afu_dev->dev.driver &&
-		    (afu_drv =3D to_pci_driver(afu_dev->dev.driver))->err_handler &&
-		    afu_drv->err_handler->resume)
-			afu_drv->err_handler->resume(afu_dev);
-	}
-
-Without assignment in the if it could look as follows:
-
-	list_for_each_entry(afu_dev, &afu->phb->bus->devices, bus_list) {
-		struct pci_driver *afu_drv;
-
-		if (!afu_dev->dev.driver)
-			continue;
-
-		afu_drv =3D to_pci_driver(afu_dev->dev.driver));
-
-		if (afu_drv->err_handler && afu_drv->err_handler->resume)
-			afu_drv->err_handler->resume(afu_dev);
-	}
-
-Fine for me.
-
-(Sidenote: What happens if the device is unbound directly after the
-check for afu_dev->dev.driver? This is a problem the old code had, too
-(assuming it is a real problem, didn't check deeply).)
-
-> Apart from that everything in the powerpc and cxl sections looks good to =
-me.
-
-Thanks for checking.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ycp367bsarc33tfb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFUbX8ACgkQwfwUeK3K
-7Am1vgf4oAZW8TWGX7Ao47AspECT0eq6axIwcj5PXeVpv5NC7BZPYClTPkycpcUZ
-q8GsCEDyP5ratJ0gW3XFPyCkvgml0ndAP8y5Cs1ZeE1rU6xCJivD/HWMBoTJvaIH
-uWxKIKzt/IiZWdt4Wo+fYplgR1/fak8IgUcV7jWOXA7pVVcZB3enVL/cB6xinq/H
-+T9nGsYMVfSfdJdcD/EHVePI34oVlE9Eor3g1MFzRHk21B+r9J/TxUCsj84/JW60
-P//CUO5CrpsjnqvhmShEm8POvpOjaTXLPxxTh3Oan2WFcgc/8mNx5zaKFdM1Rjmg
-YeZXa3sMNdP7hIFZvqylIJDO3SbK
-=MbZA
------END PGP SIGNATURE-----
-
---ycp367bsarc33tfb--
+Thanks
+-Mathias 
