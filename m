@@ -2,95 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A0441C579
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Sep 2021 15:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9768E41C5E6
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Sep 2021 15:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344152AbhI2NYD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Sep 2021 09:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55946 "EHLO
+        id S1344252AbhI2NqB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Sep 2021 09:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344148AbhI2NYC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Sep 2021 09:24:02 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07A6C061760;
-        Wed, 29 Sep 2021 06:22:21 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id b20so10812602lfv.3;
-        Wed, 29 Sep 2021 06:22:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=OGgy6PY9R3yl/0r3hvANVaQGDrHRDnCpCti/cTSOZWk=;
-        b=bZZ/ymz9a6EE+ghHDYneld/zn5AOqI7cwiEBNW5tD/hJn0XwMOOfakhSake6pab53D
-         65bsBQnQ7+Ynz6s9g8JKEDs/6BKGs4wZBo0Nx2TbDsxqQY98JWez/ZL/PceJOQVLqk3M
-         55hzYHJG4D94hmqEhL2rpqAGvYYC9+ZRYT+zAx0yoyq5b6bp7/DtcRdL++GhnpBclsB6
-         9QnvJ35jB0ShORRCfpDtIy6utEI0tvF35+/xKhlS523ylQbjy2JknfhV3zmaY/L+vpEO
-         g++JhBPOxadhDDz4wQq18KGCX/ozByIIWhyhQ4DjgMzADHuOv+GVJId56pqLrdLMFi9o
-         rwdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=OGgy6PY9R3yl/0r3hvANVaQGDrHRDnCpCti/cTSOZWk=;
-        b=ZeRP6hdGvj2pUjTTzX6SUcMMb87q9UpnC4MmOtlR0cbkqbBLRwi/M7wByJXIHQY6b4
-         hFV+wXiga4mcnQs+oZuM3HOsMwWsYtdPSamg+3uLTNhfPo36wv5LyzQgWHHzuhoY0VTA
-         EHzcVuIrYFbKiGBL2zw/q1i82d1MSwhiomaFcduwwMWPj2mbtnCh845eh5fSegY0kdQR
-         3fnmtMV7I9jFRI7oncjl7fFyh2vM0pSnRopEzGIoNu19lzPnTJ1ukd5yUdii8KXyS/HE
-         Vq657zlKYKoSuYgbJeMNLXN4bTyXjijmIvBiEgdCCJsjcaQMDmCcOTLVq3/OTF6DT2KE
-         jWzw==
-X-Gm-Message-State: AOAM532hjuo935YG04uXkyKFyPG7XOtGjqFoTfxrr1UtKok9SVcDaK1m
-        OKVRFr9zd5NucIXIytGxgY+qcDHRMqE4Ng==
-X-Google-Smtp-Source: ABdhPJz5PwOMN3Err04apFYPqLdEP6g0+0yGRnCveILE/3Sk6HV4EikhelqSLZFfp1+bLJCglNhcjA==
-X-Received: by 2002:a19:711d:: with SMTP id m29mr1012930lfc.132.1632921740148;
-        Wed, 29 Sep 2021 06:22:20 -0700 (PDT)
-Received: from localhost.localdomain (h-98-128-228-193.NA.cust.bahnhof.se. [98.128.228.193])
-        by smtp.gmail.com with ESMTPSA id z10sm283695ljc.117.2021.09.29.06.22.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Sep 2021 06:22:19 -0700 (PDT)
-From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Wei Yongjun <weiyongjun1@huawei.com>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Junlin Yang <yangjunlin@yulong.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Subject: [PATCH 2/2] usb: cdc-wdm: Constify static struct wwan_port_ops
-Date:   Wed, 29 Sep 2021 15:21:43 +0200
-Message-Id: <20210929132143.36822-3-rikard.falkeborn@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210929132143.36822-1-rikard.falkeborn@gmail.com>
-References: <20210929132143.36822-1-rikard.falkeborn@gmail.com>
+        with ESMTP id S1344186AbhI2NqA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Sep 2021 09:46:00 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C356C061755
+        for <linux-usb@vger.kernel.org>; Wed, 29 Sep 2021 06:44:19 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mVZs4-0002ro-Tl; Wed, 29 Sep 2021 15:43:40 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mVZru-0005It-Cu; Wed, 29 Sep 2021 15:43:30 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mVZru-0001Wi-AO; Wed, 29 Sep 2021 15:43:30 +0200
+Date:   Wed, 29 Sep 2021 15:43:30 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andrew Donnellan <ajd@linux.ibm.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Russell Currey <ruscur@russell.cc>,
+        Jiri Olsa <jolsa@redhat.com>, Christoph Hellwig <hch@lst.de>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, linux-pci@vger.kernel.org,
+        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        kernel@pengutronix.de, Frederic Barrat <fbarrat@linux.ibm.com>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v5 10/11] PCI: Replace pci_dev::driver usage by
+ pci_dev::dev.driver
+Message-ID: <20210929134330.e5c57t7mtwu5iner@pengutronix.de>
+References: <20210929085306.2203850-1-u.kleine-koenig@pengutronix.de>
+ <20210929085306.2203850-11-u.kleine-koenig@pengutronix.de>
+ <75dd6d60-08b9-fa68-352c-3a0c5a04c0ab@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ycp367bsarc33tfb"
+Content-Disposition: inline
+In-Reply-To: <75dd6d60-08b9-fa68-352c-3a0c5a04c0ab@linux.ibm.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The only usage of wdm_wwan_port_ops is to pass its address to
-wwan_create_port() which takes a pointer to const wwan_port_ops as
-argument. Make it const to allow the compiler to put it in read-only
-memory.
 
-Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
----
- drivers/usb/class/cdc-wdm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--ycp367bsarc33tfb
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
-index 03b25aaaa1dd..e5834f1228f9 100644
---- a/drivers/usb/class/cdc-wdm.c
-+++ b/drivers/usb/class/cdc-wdm.c
-@@ -911,7 +911,7 @@ static int wdm_wwan_port_tx(struct wwan_port *port, struct sk_buff *skb)
- 	return rv;
- }
- 
--static struct wwan_port_ops wdm_wwan_port_ops = {
-+static const struct wwan_port_ops wdm_wwan_port_ops = {
- 	.start = wdm_wwan_port_start,
- 	.stop = wdm_wwan_port_stop,
- 	.tx = wdm_wwan_port_tx,
--- 
-2.33.0
+On Wed, Sep 29, 2021 at 11:15:37PM +1000, Andrew Donnellan wrote:
+> On 29/9/21 6:53 pm, Uwe Kleine-K=F6nig wrote:>   =09
+> list_for_each_entry(afu_dev, &afu->phb->bus->devices, bus_list) {
+> > -			if (afu_dev->driver && afu_dev->driver->err_handler &&
+> > -			    afu_dev->driver->err_handler->resume)
+> > -				afu_dev->driver->err_handler->resume(afu_dev);
+> > +			struct pci_driver *afu_drv;
+> > +			if (afu_dev->dev.driver &&
+> > +			    (afu_drv =3D to_pci_driver(afu_dev->dev.driver))->err_handler &&
+>=20
+> I'm not a huge fan of assignments in if statements and if you send a v6 I=
+'d
+> prefer you break it up.
 
+I'm not a huge fan either, I used it to keep the control flow as is and
+without introducing several calls to to_pci_driver.
+
+The whole code looks as follows:
+
+	list_for_each_entry(afu_dev, &afu->phb->bus->devices, bus_list) {
+		struct pci_driver *afu_drv;
+		if (afu_dev->dev.driver &&
+		    (afu_drv =3D to_pci_driver(afu_dev->dev.driver))->err_handler &&
+		    afu_drv->err_handler->resume)
+			afu_drv->err_handler->resume(afu_dev);
+	}
+
+Without assignment in the if it could look as follows:
+
+	list_for_each_entry(afu_dev, &afu->phb->bus->devices, bus_list) {
+		struct pci_driver *afu_drv;
+
+		if (!afu_dev->dev.driver)
+			continue;
+
+		afu_drv =3D to_pci_driver(afu_dev->dev.driver));
+
+		if (afu_drv->err_handler && afu_drv->err_handler->resume)
+			afu_drv->err_handler->resume(afu_dev);
+	}
+
+Fine for me.
+
+(Sidenote: What happens if the device is unbound directly after the
+check for afu_dev->dev.driver? This is a problem the old code had, too
+(assuming it is a real problem, didn't check deeply).)
+
+> Apart from that everything in the powerpc and cxl sections looks good to =
+me.
+
+Thanks for checking.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--ycp367bsarc33tfb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFUbX8ACgkQwfwUeK3K
+7Am1vgf4oAZW8TWGX7Ao47AspECT0eq6axIwcj5PXeVpv5NC7BZPYClTPkycpcUZ
+q8GsCEDyP5ratJ0gW3XFPyCkvgml0ndAP8y5Cs1ZeE1rU6xCJivD/HWMBoTJvaIH
+uWxKIKzt/IiZWdt4Wo+fYplgR1/fak8IgUcV7jWOXA7pVVcZB3enVL/cB6xinq/H
++T9nGsYMVfSfdJdcD/EHVePI34oVlE9Eor3g1MFzRHk21B+r9J/TxUCsj84/JW60
+P//CUO5CrpsjnqvhmShEm8POvpOjaTXLPxxTh3Oan2WFcgc/8mNx5zaKFdM1Rjmg
+YeZXa3sMNdP7hIFZvqylIJDO3SbK
+=MbZA
+-----END PGP SIGNATURE-----
+
+--ycp367bsarc33tfb--
