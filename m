@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5412541CE18
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Sep 2021 23:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F0541CE1F
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Sep 2021 23:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347004AbhI2V3M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Sep 2021 17:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
+        id S1346993AbhI2V3Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Sep 2021 17:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346966AbhI2V3I (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Sep 2021 17:29:08 -0400
-Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7064EC06176C
-        for <linux-usb@vger.kernel.org>; Wed, 29 Sep 2021 14:27:26 -0700 (PDT)
-Received: by mail-qk1-x74a.google.com with SMTP id az37-20020a05620a172500b0045e43348ee8so11072528qkb.19
-        for <linux-usb@vger.kernel.org>; Wed, 29 Sep 2021 14:27:26 -0700 (PDT)
+        with ESMTP id S1346951AbhI2V3K (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Sep 2021 17:29:10 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A358EC061771
+        for <linux-usb@vger.kernel.org>; Wed, 29 Sep 2021 14:27:28 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id p20-20020a25d814000000b005b6a75a370cso5221844ybg.14
+        for <linux-usb@vger.kernel.org>; Wed, 29 Sep 2021 14:27:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=MW+dGcYoW6OnAGQelBXtE4Ow4ZA6fkyzfNYjYrI2dg0=;
-        b=ehSIGen7rcDV5FoKmyJqv7AM6JzrLJIhOSNSBq7fdf2L6kEUSQYs0bX/ivFr6qHET6
-         QLbd1hWBvQNs1dSoo3uubM2LfTALNxesitV+57Djw2IRCc9h0QkaVjktF+I6NM6egA5F
-         7VdVY0kYuzR8EDuWLZFm9OsR/0AE616mFc8hObpExpmlNtSdj3C2DUHL/a3hjIckdOrl
-         aHjNaslvAnV89vbHiR5IG3qvMyQjKdlZlAzGKCwSdRqiZ9Ys6KlWqkXWvX1EJloHkKmb
-         Z9oF87rQd4x+olzmsBe8TBbibQ2RZJOFP7tbj1ypYMxxtGL8bV/cwt/9f4Oy0mBW+j6I
-         gbyg==
+        bh=aSPV27tjY7pw3PilwZezZx2K/hJgwuA/3Sl9DWnicys=;
+        b=fPAfs9F2RGWNVGNpY1vbd3tw35Qe9d9ADKWh9fz38g1iKJ0vWO4Me6axzgomQy+J0E
+         7UCuKx3WlPViBCXN4P8hSuxuqAE+EaJ5yP/qs4l/ZcFqqshOaGaK/QLfd8YQPe61LyRL
+         j2hKXNU0v0RAvhMTHJxrKE9f8Ymgyg3jZPF76LQ7QG4Qo4ZQ/NtZUHPuZvVm5WIsatyB
+         NAslu9lhgdS8z/aXqcvQwMBDyKYVYq2jVJr0/tYtDFWPKpOdm5WN70ofY0479ZAMnmwD
+         CMEnGkCVo9IxoRc86KDoqub07ixobnK8MqzFrUW126fKl3cG9U3sqet6+ky1xOHz98xW
+         6o7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=MW+dGcYoW6OnAGQelBXtE4Ow4ZA6fkyzfNYjYrI2dg0=;
-        b=MKZ9G5CRJaLQEIVPVge9uODwphgHVgxpA0I+0BAF47q4o2bZjjXrWQSmcPbJVjpskC
-         UqDAe3NrK0ilkK/lrhzni54kCQVKrE3lZ5uLX9+7j8hpGdivMG68ZCjUOMO23FOB8txE
-         LwOC6tv/bBYgqf8HG0fl5Swbxv1V40DyAKDcZ4y6IDHApye4PCmrXjT7e5mKDcw5LxMC
-         XvmkKp0GvSogQxhgbhiz4LHhYUSMWbNC3y8fRBZaojD/n7ebHJoFMT0yEk/AJM1m3pLZ
-         op0lkvYOppfiBCGzKkUYTQEqwJ6r16A/eO/ACnfLeyQY+5wTAWt4sUnw/W25oF5vK4qZ
-         cFfA==
-X-Gm-Message-State: AOAM532UhxAG1CtNGIcsiURszDCDm5BZdsBnviLpore2/TreRJQ9Ser4
-        C8xp+qEN9QFXSUvXkALpsq+rvvvC3MQCmx1K85aJ+Q==
-X-Google-Smtp-Source: ABdhPJwCs0j75saROJYED02fGyd+eJ8PZweJbRLoPXBzHwpSpeXkxhNIY8yNm3Cb1iuATR9LjzK4TsE+hv2/ybSM5bcQ1g==
+        bh=aSPV27tjY7pw3PilwZezZx2K/hJgwuA/3Sl9DWnicys=;
+        b=Tpj4ze01t6mK1B6t9gNL66PHeyOcanyj37Ybqtk1pljIdc5qu7RKpD8KKLqrR/5fo6
+         pkXrQA7ahJZY89/rJc1J9JvntkMtxUX1RuXBLGxjwHyjg6BhXQDa5Uw8yytPmNhUx7eE
+         /H2fn3Rco347PN5ZArfC4t98HZZ/qV15IwYL4lTq3BWPz8ZoE0tEF5an2OCcFOJkig3I
+         hy95Oodfxk9h2JJzQiuoWXA+coCjlX/4eGy5pno9Nkn5QwjL/nSYQOatYIx1FLCj8j34
+         +54fwgZHAgJ/35rcSEOcyeaVGRiURi9jko96UI0ZCU4QMnUMoIYNr4gxIc+nohpNrjoq
+         snZw==
+X-Gm-Message-State: AOAM531Ucr456F3h97sF+0DgqOLtW3Yp71GzqlnBBwruuRhoIXeRp5VA
+        H45APvbq55/RsEPL4bbR2TZMpvaBudUR4gRA8VvK3A==
+X-Google-Smtp-Source: ABdhPJyErlGQvS1CYKbsC/V+OsCpTku3TIuMCkUAL4Jzl/iLJIZy1pCIolM/CMAW6C7Qj4FovUZKq9AhydHyU4IWOMESYQ==
 X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:201:83f4:ff43:90d6:efd3])
- (user=brendanhiggins job=sendgmr) by 2002:a05:6214:1225:: with SMTP id
- p5mr615132qvv.21.1632950845646; Wed, 29 Sep 2021 14:27:25 -0700 (PDT)
-Date:   Wed, 29 Sep 2021 14:27:11 -0700
+ (user=brendanhiggins job=sendgmr) by 2002:a25:6610:: with SMTP id
+ a16mr2493812ybc.193.1632950847837; Wed, 29 Sep 2021 14:27:27 -0700 (PDT)
+Date:   Wed, 29 Sep 2021 14:27:12 -0700
 In-Reply-To: <20210929212713.1213476-1-brendanhiggins@google.com>
-Message-Id: <20210929212713.1213476-4-brendanhiggins@google.com>
+Message-Id: <20210929212713.1213476-5-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20210929212713.1213476-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.33.0.685.g46640cef36-goog
-Subject: [PATCH v2 3/5] device property: build kunit tests without structleak plugin
+Subject: [PATCH v2 4/5] thunderbolt: build kunit tests without structleak plugin
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     shuah@kernel.org, davidgow@google.com, arnd@arndb.de,
         keescook@chromium.org, rafael@kernel.org, jic23@kernel.org,
@@ -72,33 +72,36 @@ X-Mailing-List: linux-usb@vger.kernel.org
 The structleak plugin causes the stack frame size to grow immensely when
 used with KUnit:
 
-../drivers/base/test/property-entry-test.c:492:1: warning: the frame size of 2832 bytes is larger than 2048 bytes [-Wframe-larger-than=]
-../drivers/base/test/property-entry-test.c:322:1: warning: the frame size of 2080 bytes is larger than 2048 bytes [-Wframe-larger-than=]
-../drivers/base/test/property-entry-test.c:250:1: warning: the frame size of 4976 bytes is larger than 2048 bytes [-Wframe-larger-than=]
-../drivers/base/test/property-entry-test.c:115:1: warning: the frame size of 3280 bytes is larger than 2048 bytes [-Wframe-larger-than=]
+drivers/thunderbolt/test.c:1529:1: error: the frame size of 1176 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
 
 Turn it off in this file.
 
+Linus already split up tests in this file, so this change *should* be
+redundant now.
+
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
 Changes since last revision:
  - None
 ---
- drivers/base/test/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thunderbolt/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/base/test/Makefile b/drivers/base/test/Makefile
-index 64b2f3d744d51..7f76fee6f989d 100644
---- a/drivers/base/test/Makefile
-+++ b/drivers/base/test/Makefile
-@@ -2,4 +2,4 @@
- obj-$(CONFIG_TEST_ASYNC_DRIVER_PROBE)	+= test_async_driver_probe.o
+diff --git a/drivers/thunderbolt/Makefile b/drivers/thunderbolt/Makefile
+index da19d7987d005..78fd365893c13 100644
+--- a/drivers/thunderbolt/Makefile
++++ b/drivers/thunderbolt/Makefile
+@@ -7,6 +7,7 @@ thunderbolt-objs += usb4_port.o nvm.o retimer.o quirks.o
+ thunderbolt-${CONFIG_ACPI} += acpi.o
+ thunderbolt-$(CONFIG_DEBUG_FS) += debugfs.o
+ thunderbolt-${CONFIG_USB4_KUNIT_TEST} += test.o
++CFLAGS_test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
  
- obj-$(CONFIG_DRIVER_PE_KUNIT_TEST) += property-entry-test.o
--CFLAGS_REMOVE_property-entry-test.o += -fplugin-arg-structleak_plugin-byref -fplugin-arg-structleak_plugin-byref-all
-+CFLAGS_property-entry-test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
+ thunderbolt_dma_test-${CONFIG_USB4_DMA_TEST} += dma_test.o
+ obj-$(CONFIG_USB4_DMA_TEST) += thunderbolt_dma_test.o
 -- 
 2.33.0.685.g46640cef36-goog
 
