@@ -2,85 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77FEF41BE9F
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Sep 2021 07:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E816F41BFBE
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Sep 2021 09:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244200AbhI2FUY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Sep 2021 01:20:24 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:44792 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232553AbhI2FUV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Sep 2021 01:20:21 -0400
-X-UUID: 70daad25348b408cb336491b518638f4-20210929
-X-UUID: 70daad25348b408cb336491b518638f4-20210929
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <jason-ch.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1840174725; Wed, 29 Sep 2021 13:18:36 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 29 Sep 2021 13:18:35 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 29 Sep 2021 13:18:35 +0800
-From:   Jason-ch Chen <jason-ch.chen@mediatek.com>
-To:     <matthias.bgg@gmail.com>, <hayeswang@realtek.com>
-CC:     <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <hsinyi@google.com>, Jason-ch Chen <jason-ch.chen@mediatek.com>
-Subject: [PATCH] r8152: stop submitting rx for -EPROTO
-Date:   Wed, 29 Sep 2021 13:18:12 +0800
-Message-ID: <20210929051812.3107-1-jason-ch.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        id S244548AbhI2HTF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Sep 2021 03:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244525AbhI2HTE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Sep 2021 03:19:04 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCE7C06161C;
+        Wed, 29 Sep 2021 00:17:23 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id x8so878453plv.8;
+        Wed, 29 Sep 2021 00:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LEQFPQiTn4Bx9qdKWxs/A4UShFsbFjXxm6TVxU4yPMY=;
+        b=GwJm4JswLA46fbEkpEOMHk+VNR1RKffxoJCk8dyCcn9ARU4ERBYpskdjhHrcFlN+cQ
+         Llpsp4Vz7i2NP165l5ChcN1mto1/fUIjyyclSVJZVkRgwsWjfYsVCdiUvjXQk3qvuGMK
+         xHk6gmglwdaBUH+Wr31juWGKpFNEk758ichrOEhUIUE1CJcNcXDtgCrfo5vkcAqUk/m3
+         PfQInSCqaDtzZQM14+Yf/kP92A5OTH6M/co4eYuCBOabhAXBV2l6jKeryOIhvkSm/dRo
+         7WZAZ74c/JWQeBR57iQ31g7P6WRwipUUU9uj+qM+D1AmBH4gSCW5oOW7nkSVZWqKSCeq
+         i05g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LEQFPQiTn4Bx9qdKWxs/A4UShFsbFjXxm6TVxU4yPMY=;
+        b=oaeZGokodaRI0zASallawE3zPIemSplVtPTU95HH3Hjdjc51ptdPN7KTWM7G3jp71F
+         NMqwwR/vNOm6dVjwtVgVpiFUqq+rEJn4mXjyctBKXMOCODOUSXix9VjBS6k59/6tAe1e
+         ykGG7EtgBoiZUNFXaTKYvPH2E9sT685X8bUkpUOU1q5T8kGr4WEuzdkvJRhNx44X4Xqo
+         ea7uRDZFsuHUcr9bzxaKxeaQ4IHuxMyuwZxb6Sa0lzlwf8kWNJyKjEzO/NEo/6KZXMtb
+         N3XQZnxiq0d6/50uG7vvRKoE5gvvBx6gNJ69ZcJZ6u7sBCWVH7tIxjWnxDE/NfsDtt1W
+         /kRg==
+X-Gm-Message-State: AOAM533NS5lPkMnRxmaig7KFM6uepJBYyhly1z+n2gtPhJH2OXguZ3xr
+        rZk7IF65EFLLiC0/8b/5yHI=
+X-Google-Smtp-Source: ABdhPJx4wvpJ2rAeGKxW6eOyAjyN6Ef7Mn+ibeuCsSuUY0LBDHAhewdjoOGViSuvfj0vfjhscZVzOQ==
+X-Received: by 2002:a17:902:710f:b0:13c:aad1:8343 with SMTP id a15-20020a170902710f00b0013caad18343mr9162053pll.16.1632899843280;
+        Wed, 29 Sep 2021 00:17:23 -0700 (PDT)
+Received: from ruantu-linux-1.. ([211.72.215.15])
+        by smtp.gmail.com with ESMTPSA id z124sm1355263pfb.108.2021.09.29.00.17.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Sep 2021 00:17:22 -0700 (PDT)
+From:   Yu-Tung Chang <mtwget@gmail.com>
+To:     johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yu-Tung Chang <mtwget@gmail.com>
+Subject: [PATCH] USB: serial: option: add Quectel EC200S-CN module support
+Date:   Wed, 29 Sep 2021 15:17:13 +0800
+Message-Id: <20210929071713.319751-1-mtwget@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When unplugging RTL8152 Fast Ethernet Adapter which is plugged
-into an USB HUB, the driver would get -EPROTO for bulk transfer.
-There is a high probability to get the soft/hard lockup
-information if the driver continues to submit Rx before the HUB
-completes the detection of all hub ports and issue the
-disconnect event.
+Add usb product id of the Quectel EC200S-CN module.
 
-[  644.786219] net_ratelimit: 113887 callbacks suppressed
-[  644.786239] r8152 1-1.2.4:1.0 eth0: Rx status -71
-[  644.786335] r8152 1-1.2.4:1.0 eth0: Rx status -71
-[  644.786369] r8152 1-1.2.4:1.0 eth0: Rx status -71
-[  644.786431] r8152 1-1.2.4:1.0 eth0: Rx status -71
-[  644.786493] r8152 1-1.2.4:1.0 eth0: Rx status -71
-[  644.786555] r8152 1-1.2.4:1.0 eth0: Rx status -71
-[  644.786617] r8152 1-1.2.4:1.0 eth0: Rx status -71
-[  644.786678] r8152 1-1.2.4:1.0 eth0: Rx status -71
-[  644.786740] r8152 1-1.2.4:1.0 eth0: Rx status -71
-[  644.786802] r8152 1-1.2.4:1.0 eth0: Rx status -71
-[  645.041159] mtk-scp 10500000.scp: scp_ipi_send: IPI timeout!
-[  645.041211] cros-ec-rpmsg 10500000.scp.cros-ec-rpmsg.13.-1: rpmsg send failed
-[  649.183350] watchdog: BUG: soft lockup - CPU#0 stuck for 12s! [migration/0:14]
+usb-devices output for 0x6002:
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=480 MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=6002 Rev=03.18
+S:  Manufacturer=Android
+S:  Product=Android
+S:  SerialNumber=0000
+C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=06 Prot=00 Driver=cdc_ether
+I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+I:  If#=0x2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
 
-Signed-off-by: Jason-ch Chen <jason-ch.chen@mediatek.com>
+Signed-off-by: Yu-Tung Chang <mtwget@gmail.com>
 ---
- drivers/net/usb/r8152.c | 1 +
+ drivers/usb/serial/option.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 60ba9b734055..250718f0dcb7 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -1771,6 +1771,7 @@ static void read_bulk_callback(struct urb *urb)
- 		netif_device_detach(tp->netdev);
- 		return;
- 	case -ENOENT:
-+	case -EPROTO:
- 		return;	/* the urb is in unlink state */
- 	case -ETIME:
- 		if (net_ratelimit())
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 6cfb5d33609f..428d101f6193 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -252,6 +252,7 @@ static void option_instat_callback(struct urb *urb);
+ #define QUECTEL_PRODUCT_EM12			0x0512
+ #define QUECTEL_PRODUCT_RM500Q			0x0800
+ #define QUECTEL_PRODUCT_EC200T			0x6026
++#define QUECTEL_PRODUCT_EC200S_CN		0x6002
+ 
+ #define CMOTECH_VENDOR_ID			0x16d8
+ #define CMOTECH_PRODUCT_6001			0x6001
 -- 
-2.18.0
+2.33.0
 
