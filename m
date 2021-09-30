@@ -2,121 +2,197 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A4F41DC07
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Sep 2021 16:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E5241DC69
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Sep 2021 16:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351786AbhI3OKm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Sep 2021 10:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240149AbhI3OKl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Sep 2021 10:10:41 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1A0C06176A;
-        Thu, 30 Sep 2021 07:08:58 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id b15so25730137lfe.7;
-        Thu, 30 Sep 2021 07:08:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=FbYwtZf63HA1feBdReYPazjfCwECYf7J/LcnagkS5eU=;
-        b=qRQIo8RwUav2UmTra9oF6epGn59qVcbfkWvdDGVDc/I3VvWeddwr1dqwKGHN43kWcO
-         DaknpPTwDGNSY0qj/vuZMQ+EkFjjT/DDyA8yAVbb5t8+cbMVH3ESCPkcYm04Ck8YWr43
-         zrplPFlPo+zCWrz4Vd8LF+IXnAG5rtwSZu7cV47thKqF865BwfegPZ11umUl0wvxpi3u
-         69cI9QAnuHM4T4curizIUlc+msZ3JMRXmJ23U1OoUXyP/pCpqx5znnf8RaSyTf/Iij/X
-         R01C7FPFx014oNqZOzPeCr4tdIky5Bmc4sGwQxivsb0fd368heHcy8U6CVbuaHa44hXZ
-         JOrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=FbYwtZf63HA1feBdReYPazjfCwECYf7J/LcnagkS5eU=;
-        b=6510RLwK4zaHnLALzQPRb0fZ+jorJGzDatK7CXwDY9b1RcOwBxjZs7DyYa1SW6hfvm
-         NEGOcBL7VqUM9q3PVlA1rIan8r1Rz2pMgzMrHDCiiyXTcMJMJWCJBZxdPGZFfkDvYTm4
-         0Pq0whB+bTFhUOtBg5t4ikc5S/y+DELxnDA2UlowqMU6ULT8E59xOOiVx5qJL5ahl7zz
-         wausMrfD/z/RPsEtitd5lETeRuNBCht6cmsWQeDppOtpkhKDShxuf3lG1IdpXvZ2Xw0j
-         /bns4RO6yly2xe/UlyBaPlhrXknmzgbU7tCKxcOXEj3x8hM+YJW4tZ7sSetfpvqnGa4Y
-         UO4A==
-X-Gm-Message-State: AOAM532RfvOoTB/pMV4xxJhBxRMAYcg5gRdF4lI6uYoL3/mCPi007YSY
-        dhxVHCcwRGgvtExMVPBmNbI=
-X-Google-Smtp-Source: ABdhPJw2MpyVxuwrGHjgPVIzNI4sHyolChi3D2RfJQLhexFRsDLjbr061I9VfMnIzN8pIMuESKq7Kw==
-X-Received: by 2002:a2e:5046:: with SMTP id v6mr6445920ljd.368.1633010931799;
-        Thu, 30 Sep 2021 07:08:51 -0700 (PDT)
-Received: from [192.168.2.145] (46-138-80-108.dynamic.spd-mgts.ru. [46.138.80.108])
-        by smtp.googlemail.com with ESMTPSA id r22sm357824lji.5.2021.09.30.07.08.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Sep 2021 07:08:51 -0700 (PDT)
-Subject: Re: [PATCH v13 16/35] usb: chipidea: tegra: Add runtime PM and OPP
- support
-To:     Peter Chen <peter.chen@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-References: <20210926224058.1252-1-digetx@gmail.com>
- <20210926224058.1252-17-digetx@gmail.com> <20210930140630.GA6697@Peter>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <e8eb0f29-2ffb-b1d8-34bf-7dff1e8ba1f8@gmail.com>
-Date:   Thu, 30 Sep 2021 17:08:50 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20210930140630.GA6697@Peter>
-Content-Type: text/plain; charset=utf-8
+        id S1350674AbhI3Oii (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Sep 2021 10:38:38 -0400
+Received: from mail-db8eur05on2120.outbound.protection.outlook.com ([40.107.20.120]:52321
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1348167AbhI3Oii (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 Sep 2021 10:38:38 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VNLBjlAjhzyuMq0kHI27iLjdM5RKJR6erct+Z65uJGNBEikYSLRm76W6CrlWXKaj53LSk+GqrCx9dAjanfa72hYrUapVnMFYNLZzdvB3F6MQcrDMK9Xzw9CYcBwUfMV42hoYFGKYUnydh+TP3c1m0FXmPglm3NtPIG7p/6EgmuJ0p6+pZbkzu6Z9eh5ltC7SbQlh6yRUwkAHtxNwZ4IOOYXZmDs8rhAvDX1gGPuEpw8G/gLBmOKmCyFdYtC5XIGRrR1gFn6CcP7K6u2WCL41a8ihVwhyBqFg+yFJWXlFanaf+u0R24HHcUo83HHvVIl05z1yzqq4SYwwJ0GuAHgewA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=klIT//nO7OMM4/wM9GpTspKVgKYtnqEPJGQgwuUmmeo=;
+ b=i3VBljhgDhib/Okf3so30enh9X0x9mMD9oHwT3Em+ZwmCaDfcuZB/lcsYmDGr7Z6CfTn/+i2nNUyiQ/7Vaz8msNwIvSMbiHrRO0JXLJZfWzbrze7SI1r1edh2629jeG+Pz3/O3GryYK612nvmD+5HJtJo2ZN+vYHrpQo8DY9JyazNl0DH2YVfinm6iIjlpbwOscNC7Ignl9t8ycwRgi4VcC1R0PCNAQQqj5exoEoJykdgHDvxluLHBp0MYdiQk9gFrEkJWTt1WS86ObM1Edw2csdzlqY8aKG7ywHogJCu+WShpMmi6eY4yqW8QIeaWxMhZlUdPPgiKbGN1nRiCzJqA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
+ dkim=pass header.d=kontron.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
+ s=selector2-mysnt-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=klIT//nO7OMM4/wM9GpTspKVgKYtnqEPJGQgwuUmmeo=;
+ b=JR2uzPKssGbdl6Csya6qfd0MwfVcjhyeuvwu2JGg0fkzajBIQ8WrfBR5ZTyjd+ym0fan4LKCeLsGBF4p1LKzBoIC/Fjby8LW+L995JSHq8fauW/TbBHzqvrUoDP/xBAb7JnPhXgQxjra9fO/acny3GkDHVM/75VHYq9qQrX2kfM=
+Authentication-Results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=kontron.de;
+Received: from AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:157::14)
+ by AM0PR10MB2260.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:e4::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.13; Thu, 30 Sep
+ 2021 14:36:53 +0000
+Received: from AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::216b:62be:3272:2560]) by AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::216b:62be:3272:2560%6]) with mapi id 15.20.4566.015; Thu, 30 Sep 2021
+ 14:36:53 +0000
+Message-ID: <7f3b82ad-ff12-ce23-12a3-25b09c767759@kontron.de>
+Date:   Thu, 30 Sep 2021 16:36:51 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.1
+Subject: Re: [PATCH v3] usb: chipidea: ci_hdrc_imx: Also search for 'phys'
+ phandle
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+To:     Fabio Estevam <festevam@gmail.com>, peter.chen@kernel.org
+Cc:     shawnguo@kernel.org, marex@denx.de, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, heiko.thiery@gmail.com,
+        stable@vger.kernel.org
+References: <20210921113754.767631-1-festevam@gmail.com>
+From:   Frieder Schrempf <frieder.schrempf@kontron.de>
+In-Reply-To: <20210921113754.767631-1-festevam@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM5PR0601CA0072.eurprd06.prod.outlook.com
+ (2603:10a6:206::37) To AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:157::14)
+MIME-Version: 1.0
+Received: from [192.168.10.40] (89.247.44.207) by AM5PR0601CA0072.eurprd06.prod.outlook.com (2603:10a6:206::37) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.13 via Frontend Transport; Thu, 30 Sep 2021 14:36:52 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 11697f78-9f1e-4bfd-061d-08d9841fbed0
+X-MS-TrafficTypeDiagnostic: AM0PR10MB2260:
+X-Microsoft-Antispam-PRVS: <AM0PR10MB2260AC10C2002CDF2B8E9D19E9AA9@AM0PR10MB2260.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:293;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WFEyHgiZgcXZLsFLd6z2knbpTrrdlVV19jnmvTuVHWOb653Shulw5tboo6gFJF+imMQyucr1yc4e2OOpxkRXUzf9mijTSosfeZE7k8HZwkuYfUFH1eOVgz8VD05OO+wWyhcMSlKiJapklVWIfuofBZEvbdnJwNahLAebc5IUkB9RWuwMpzu7bRHDkUuDSiQHOe1PvlyfXdQYh3paI8YYYsRM++hMo33/4CsM05Vt380vpjTB/7ovU88f7LY8TFY1BYS0SJay4QM9ioYi58NOpuXX6tU7TGoiVuQht/L38ASTG0SHTEyHzoietwjG2wjpYc9i7fG7/OwVbENznRqccaGX5ZXUKBWfEmXfSgdhpzetKZuwNWn2dI2Nr31crIylTpo5BL8WCppzOF5FL81Zry2A6YwBuiGuDj2so0stLfALl5V0n8K8BeduFYpr5wNwnLNllEePUp8ZdASkouYUyj0nm0XUTk5A+iV41R4lArRsToUhNCA/oFD61N6D93QtsfW9Pw5vzAelS8YfUllSuEdAQGQuke2/5CVmC6flj1677SxkTJhDQL9Xz3vT7izk0hTDO8v8pph8DYFfOCGFYyCEdhvKgRBZoZb+CkegEn2mCvghrjsOrEbOuxS8Dkx3Oy9k+OXVoFX32QzeUonvfR3nlicunfdDtQZJKNMfDAF/2BY7wTv3rhRWMsgMcktgKO4NbIL4BfYh3+msMlAAvdyCTqLoyhLmPzYhO9fVXyY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(66946007)(86362001)(4326008)(956004)(2616005)(44832011)(5660300002)(36756003)(8936002)(31696002)(83380400001)(66476007)(66556008)(186003)(8676002)(26005)(16576012)(38100700002)(53546011)(31686004)(2906002)(45080400002)(6486002)(508600001)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VUt1TC9FZnpjS0pIN25qelpUOE5rdngzdjlCZlMwNm9XRGRTWG80ZG5SOTFo?=
+ =?utf-8?B?WG11RlZKSklocWRiQlhVU3p6TmhoVGE3ZDlwakZ5NkpjcVE2L0V2cWVnNVNG?=
+ =?utf-8?B?UlJTd3R4SkU4OFF4a21VNDNlUzVYcHVMdFo4Y01iT0FENmhEUTk3aEY4eURQ?=
+ =?utf-8?B?R1E2Zm1UYS90UFg4SmJTQy9iZU13U2Z6TDNXd1BndmFyY3R3TlpWcmFFSDkz?=
+ =?utf-8?B?L3lkK2NsakFQNnFvZjB2MHRRY0RJZjhsMFJXNm41OXJwZHZTQktGai9DckRp?=
+ =?utf-8?B?eVE0WjU2Umgrc3NoR21ZM2NJeCsxcHhZS28xWDRadmJ0TXQ1bzBvWjNpNHUy?=
+ =?utf-8?B?S0NsVytrRFRvVlFFRVBxc0NUVXFiQjdLUCtBeGZVdG1LMG5BTzdsekJ2MGlM?=
+ =?utf-8?B?VFBjckY4WUp0ZFU5b1NrQm9rRXNvQ1FqajcyMS9kUHYwTThoOW1zRXp0R25K?=
+ =?utf-8?B?VWszMkFUMnRudE1DYWpGbUJlQjMwdGxEb09kMmZzZFA2WkFHMkFYZ29vTGk1?=
+ =?utf-8?B?RkV3RGU1KzhNVGNMZzlDRHZhaFBOOFhCZmc5WlduT1JvaDVET2dlczIxRDRI?=
+ =?utf-8?B?cko5Y2Z5ZS9KTEFrU3lIWktwRmJZNXVRYTZMQWx5YTFMSnVhK0RhSEtkTFg3?=
+ =?utf-8?B?b0h0UWxqRVkzNUNEUS8vN25UMFJlYVVTUmNrZFB6MTFySVFrRmNlOUVJemND?=
+ =?utf-8?B?UW13TzdoZkh1MmtWV0VITmNZOHphcHdDbkwxaXdlNFJ2QU1RVWdkQ1d5SG9O?=
+ =?utf-8?B?L2k0YjR5KzMwSElTQ29WcDlRcTN1ZThGVGNrYzc2SU9oWkFTLys1Q3owaDZD?=
+ =?utf-8?B?cW9SWHh3bFgxdE1vcjd1bVloblFuUllHT2Z1d2ExRkFUM003SGthTXViNFpO?=
+ =?utf-8?B?NzNEMnlOVXFTUTBJbm9Qc3B3Z0NFZHBudFI0VVUydi9YK1Jub0VUdzM5Zy9P?=
+ =?utf-8?B?a0RPSHZxeWY3TEVvOUlXS3ovMmN2TW84Y3IyU0pGamV5cFZmZW1EUzI2TXp1?=
+ =?utf-8?B?eXB6dGJLTHkxK3BCQmE5Z0tZcUsxeWRISlo0NzBDdDRzSVhncHJtUnZ6V3ZM?=
+ =?utf-8?B?VVVPN1Z3UldOaVZGUk84WUNaNTRHVzh6bWo4ZnFNWnJ3ank0YWFlYlVybjRj?=
+ =?utf-8?B?d2t5UjlQb2ZRalBsUCs0QnBWL2lnaFkwajZQM2JzNXJOQ00yYjVXWUpvRU83?=
+ =?utf-8?B?YkZmNWowTjNwbE1weUxQOVNleHRLQlRiRkJUZVhQMGpuWHlrUythRmIzeHQ3?=
+ =?utf-8?B?OGJwNEE5djZZVjVzTHZMQ0NFNlZlc1E3OHVFSmVST04xdlZDSFI3c3lweWd1?=
+ =?utf-8?B?TS94cjZZZWNYdVUrbkNmK2x4MXQ1VGN2dGpzaFFUL3ZTc1krd293NUszZ3Bz?=
+ =?utf-8?B?Z0Q3aW5TSVUzbDluVi9VVTJFeXM5Sk1lQjAzbnR5dXpJQnVoaldPYVN5Wjlq?=
+ =?utf-8?B?UDJxRk1LNmxRcnY4QWNxTzAxTURHWHRHbXVpSC9ubTlienRndklXVXNGUkFw?=
+ =?utf-8?B?TUQyUlF4dDhVYmZpMEdYdmp0a1YxWGJJN2x6blBqZ21laE5zbmNPbFd5bHUz?=
+ =?utf-8?B?NlFpUXRLRkt3bGQ4SG1LalJaakN1djJqaW45NzhpeE5uaDdWdDh0TVc1MWJG?=
+ =?utf-8?B?MWZIbXpUQ3Ryb0pKUTNrRk5rajc0Q3c1cU9SKzArcFNuV29Xc216anp6WWRj?=
+ =?utf-8?B?Qkt5SHI1QjJvSEk5akszVFlzYW5qSkVMZjQvQzJSREk1bndaUmpzZno1bi9B?=
+ =?utf-8?Q?cHPN61gBTtYI70NKZ8mIHm8cHIctcY42lPtECO1?=
+X-OriginatorOrg: kontron.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11697f78-9f1e-4bfd-061d-08d9841fbed0
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2021 14:36:53.2291
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Fk8S8jRfntDQABa3MVnSjhYQgPbc4bIL1+/s+i+1mGq7mYRroh8v7WByxru1YF+J+MXaa0XKelsZqX7DnihtCCejHOeE/EfgmtXNq0dsjlo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB2260
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-30.09.2021 17:06, Peter Chen пишет:
-> On 21-09-27 01:40:39, Dmitry Osipenko wrote:
->> The Tegra USB controller belongs to the core power domain and we're going
->> to enable GENPD support for the core domain. Now USB controller must be
->> resumed using runtime PM API in order to initialize the USB power state.
->> We already support runtime PM for the CI device, but CI's PM is separated
->> from the RPM managed by tegra-usb driver. Add runtime PM and OPP support
->> to the driver.
->>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/usb/chipidea/ci_hdrc_tegra.c | 53 ++++++++++++++++++++++++----
->>  1 file changed, 46 insertions(+), 7 deletions(-)
-...
+On 21.09.21 13:37, Fabio Estevam wrote:
+> When passing 'phys' in the devicetree to describe the USB PHY phandle
+> (which is the recommended way according to
+> Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt) the
+> following NULL pointer dereference is observed on i.MX7 and i.MX8MM:
 > 
-> I got below compile error if only compile this file, I think previous patches
-> should include the definition, if that, feel free to add my ack to this
-> patch.
+> [    1.489344] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000098
+> [    1.498170] Mem abort info:
+> [    1.500966]   ESR = 0x96000044
+> [    1.504030]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [    1.509356]   SET = 0, FnV = 0
+> [    1.512416]   EA = 0, S1PTW = 0
+> [    1.515569]   FSC = 0x04: level 0 translation fault
+> [    1.520458] Data abort info:
+> [    1.523349]   ISV = 0, ISS = 0x00000044
+> [    1.527196]   CM = 0, WnR = 1
+> [    1.530176] [0000000000000098] user address but active_mm is swapper
+> [    1.536544] Internal error: Oops: 96000044 [#1] PREEMPT SMP
+> [    1.542125] Modules linked in:
+> [    1.545190] CPU: 3 PID: 7 Comm: kworker/u8:0 Not tainted 5.14.0-dirty #3
+> [    1.551901] Hardware name: Kontron i.MX8MM N801X S (DT)
+> [    1.557133] Workqueue: events_unbound deferred_probe_work_func
+> [    1.562984] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO BTYPE=--)
+> [    1.568998] pc : imx7d_charger_detection+0x3f0/0x510
+> [    1.573973] lr : imx7d_charger_detection+0x22c/0x510
 > 
-> Acked-by: Peter Chen <peter.chen@kernel.org>
+> This happens because the charger functions check for the phy presence
+> inside the imx_usbmisc_data structure (data->usb_phy), but the chipidea
+> core populates the usb_phy passed via 'phys' inside 'struct ci_hdrc'
+> (ci->usb_phy) instead.
 > 
-> drivers/usb/chipidea/ci_hdrc_tegra.c:308:8: error: implicit declaration of function ‘devm_tegra_core_dev_init_opp_table_common’;
-> did you mean ‘devm_tegra_core_dev_init_opp_table’? [-Werror=implicit-function-declaration]
->   308 |  err = devm_tegra_core_dev_init_opp_table_common(&pdev->dev);
->       |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |        devm_tegra_core_dev_init_opp_table
+> This causes the NULL pointer dereference inside imx7d_charger_detection().
+> 
+> Fix it by also searching for 'phys' in case 'fsl,usbphy' is not found.
+> 
+> Tested on a imx7s-warp board.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 746f316b753a ("usb: chipidea: introduce imx7d USB charger detection")
+> Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-That's correct, devm_tegra_core_dev_init_opp_table_common() is added by
-an earlier patch of this series. Thank you!
+Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+
+> ---
+> Changes since v2:
+> 
+> - Added Frieder's reviewed-by tag.
+> - Cc stable
+> - Improved the commit log and fixed typo in 'dereferenced'
+> 
+>  drivers/usb/chipidea/ci_hdrc_imx.c | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+> index 8b7bc10b6e8b..f1d100671ee6 100644
+> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
+> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+> @@ -420,11 +420,16 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+>  	data->phy = devm_usb_get_phy_by_phandle(dev, "fsl,usbphy", 0);
+>  	if (IS_ERR(data->phy)) {
+>  		ret = PTR_ERR(data->phy);
+> -		/* Return -EINVAL if no usbphy is available */
+> -		if (ret == -ENODEV)
+> -			data->phy = NULL;
+> -		else
+> -			goto err_clk;
+> +		if (ret == -ENODEV) {
+> +			data->phy = devm_usb_get_phy_by_phandle(dev, "phys", 0);
+> +			if (IS_ERR(data->phy)) {
+> +				ret = PTR_ERR(data->phy);
+> +				if (ret == -ENODEV)
+> +					data->phy = NULL;
+> +				else
+> +					goto err_clk;
+> +			}
+> +		}
+>  	}
+>  
+>  	pdata.usb_phy = data->phy;
+> 
