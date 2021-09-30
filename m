@@ -2,139 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C0641DE5D
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Sep 2021 18:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 751DA41DE8F
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Sep 2021 18:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348156AbhI3QHS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Sep 2021 12:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348158AbhI3QHO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Sep 2021 12:07:14 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D22DC06176D
-        for <linux-usb@vger.kernel.org>; Thu, 30 Sep 2021 09:05:32 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id w206so7914847oiw.4
-        for <linux-usb@vger.kernel.org>; Thu, 30 Sep 2021 09:05:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vYKsPBiDJqWgn94z0UrisRrDiPIkl/InaR+MbnDzd8o=;
-        b=XhAVOr/0A4R/z99tlCeSSHraD2rZ5vHyFbhTb43A/MXaFjTdRn+YxPnSnr1gS5DDF9
-         8uKdNk+GEVCTF6jBsbp7QiwGS2/UWZ0UOBqGCAkVw+TITRFWXcCa1t9MKQX3c1GRGt1F
-         jvYccHHP5wBGLZcruY3bA3Yfi2fTnH0pmQHx4S/KXKGyM/DPAen3gCCaglOumcRoiejK
-         vsApbVLIdx6ZrUVI6P+zV9rtBwob8R8V/bdBTbtI75T39PmMgTDsZUi1GOQOodK2jkUp
-         Azjel8ZfF9N+C2z29j3eN1LjCz/NSn2+rzolTfTiGoU3WUhSwJAPblDHUP/jM6fE32I/
-         CGIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vYKsPBiDJqWgn94z0UrisRrDiPIkl/InaR+MbnDzd8o=;
-        b=ii91FX3ILQNU0g9XT67pXvc0jDGLq3A2JRTDGTVBRM78WCFj7pofb/ZUf9TkcoRSXX
-         wPGZEzYzhegf7uHG+ZN8xX5YTC2AxLyCvKnZP5UKJ5gtMVMUYs711KyAA+ix1SlY9ROL
-         rY79WpOWt9zA02s2zY8FTbLf6m45KBDTSRp92tEUo2GUZjj700oD4zUAVD4Ul1W/zFFV
-         unZDLYIUQZB1vbDuCbnAYZ4cB8am9D1080kK840T/bvs4Ej4ILbERQcw0qBvh++rSn5G
-         1AKK+6lSQFMfGh9zPqDEbd7MiYx0gd8i0J3ldM13JEWr5ZLhvpLFodUSO6R7631Y89WE
-         HMrg==
-X-Gm-Message-State: AOAM532MVHy9DUwx/5aCCeyxsqCPnnR4WkHwDNYYsBktkx78QlH68hri
-        1h8rn+RK6C+atl1PEVqVv8GzoA==
-X-Google-Smtp-Source: ABdhPJzkcIYZeTpr8veDVdd9USNDj/qqDvR5BA6ShZH//YGQawtDR/aJqibAv9FK+9S05XHjuwQutQ==
-X-Received: by 2002:a05:6808:144b:: with SMTP id x11mr3467780oiv.111.1633017931479;
-        Thu, 30 Sep 2021 09:05:31 -0700 (PDT)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id b2sm248127ooi.25.2021.09.30.09.05.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Sep 2021 09:05:31 -0700 (PDT)
-Date:   Thu, 30 Sep 2021 09:07:20 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pratham Pratap <prathampratap@codeaurora.org>
-Subject: Re: [PATCH 1/3] dt-bindings: usb: qcom,dwc3: Add multi-pd bindings
- for dwc3 qcom
-Message-ID: <YVXguCSrsdMoCCXH@ripper>
-References: <1630346073-7099-1-git-send-email-sanm@codeaurora.org>
- <1630346073-7099-2-git-send-email-sanm@codeaurora.org>
- <YTduDqCO9aUyAsw1@ripper>
- <e947695b-cd50-391b-3de9-3c028dbddab2@codeaurora.org>
+        id S1349110AbhI3QPe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Sep 2021 12:15:34 -0400
+Received: from rtits2.realtek.com ([211.75.126.72]:45487 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349113AbhI3QPa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Sep 2021 12:15:30 -0400
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 18UGDFBc8009853, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36503.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 18UGDFBc8009853
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 1 Oct 2021 00:13:15 +0800
+Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
+ RTEXH36503.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Fri, 1 Oct 2021 00:13:15 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Thu, 30 Sep 2021 09:13:15 -0700
+Received: from RTEXMBS04.realtek.com.tw ([fe80::cdd5:82a3:e854:7098]) by
+ RTEXMBS04.realtek.com.tw ([fe80::cdd5:82a3:e854:7098%5]) with mapi id
+ 15.01.2106.013; Fri, 1 Oct 2021 00:13:14 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Oliver Neukum <oneukum@suse.com>,
+        Jason-ch Chen <jason-ch.chen@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "Project_Global_Chrome_Upstream_Group@mediatek.com" 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "hsinyi@google.com" <hsinyi@google.com>,
+        nic_swsd <nic_swsd@realtek.com>
+Subject: RE: [PATCH] r8152: stop submitting rx for -EPROTO
+Thread-Topic: [PATCH] r8152: stop submitting rx for -EPROTO
+Thread-Index: AQHXtPF6mRt31KuIqUSf0ySwz113xKu6nqYQ//+g0oCAAYwXgIAAt/FQ
+Date:   Thu, 30 Sep 2021 16:13:14 +0000
+Message-ID: <9a23368b27bd42299e74235f1f8be3fa@realtek.com>
+References: <20210929051812.3107-1-jason-ch.chen@mediatek.com>
+ <cbd1591fc03f480c9f08cc55585e2e35@realtek.com>
+ <4c2ad5e4a9747c59a55d92a8fa0c95df5821188f.camel@mediatek.com>
+ <274ec862-86cf-9d83-7ea7-5786e30ca4a7@suse.com>
+In-Reply-To: <274ec862-86cf-9d83-7ea7-5786e30ca4a7@suse.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [123.192.91.194]
+x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzkvMzAgpFWkyCAwMjozODowMA==?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e947695b-cd50-391b-3de9-3c028dbddab2@codeaurora.org>
+X-KSE-ServerInfo: RTEXH36503.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu 30 Sep 02:41 PDT 2021, Sandeep Maheswaram wrote:
-
-> 
-> On 9/7/2021 7:20 PM, Bjorn Andersson wrote:
-> > On Mon 30 Aug 10:54 PDT 2021, Sandeep Maheswaram wrote:
-> > 
-> > > Add multi pd bindings to set performance state for cx domain
-> > > to maintain minimum corner voltage for USB clocks.
-> > > 
-> > > Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> > > ---
-> > >   Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 13 ++++++++++++-
-> > >   1 file changed, 12 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> > > index e70afc4..838d9c4 100644
-> > > --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> > > +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> > > @@ -41,7 +41,18 @@ properties:
-> > >     power-domains:
-> > >       description: specifies a phandle to PM domain provider node
-> > > -    maxItems: 1
-> > > +    minItems: 1
-> > > +    items:
-> > > +      - description: optional,cx power domain
-> > > +      - description: USB gdsc power domain
-> > > +
-> > > +  power-domain-names:
-> > > +     items:
-> > > +      - const: cx
-> > > +      - const: usb_gdsc
-> > But "usb_gdsc" is a subdomain of "cx", why can't we describe this fact
-> > in gcc?
-> > 
-> > Regards,
-> > Bjorn
-> Thanks for your review.
-> Any idea on how can this be described in gcc ? Can you point any reference
-> for this .
-> 
-
-There's a series from Dmitry that defines such a relationship between
-MDSS_GDSC and the MMCX domain on SM8250. This seems like a continuation
-of that support, given that we have multiple parent domains (cx, mx
-etc).
-
-You can find that discussion here:
-
-https://lore.kernel.org/all/20210727202004.712665-1-dmitry.baryshkov@linaro.org/
-
-Regards,
-Bjorn
-
-> Regards
-> Sandeep
-> > > +
-> > > +  required-opps:
-> > > +    description: specifies the performance state to cx power domain
-> > >     clocks:
-> > >       description:
-> > > -- 
-> > > QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-> > > of Code Aurora Forum, hosted by The Linux Foundation
-> > > 
+T2xpdmVyIE5ldWt1bSA8b25ldWt1bUBzdXNlLmNvbT4NCj4gU2VudDogVGh1cnNkYXksIFNlcHRl
+bWJlciAzMCwgMjAyMSA1OjMwIFBNDQpbLi4uXQ0KPiBIaSwNCj4gDQo+IEhheWVzIHByb3Bvc2Vk
+IGEgc29sdXRpb24uIEJhc2ljYWxseSB5b3Ugc29sdmUgdGhpcyB0aGUgd2F5IEhJRCBvciBXRE0g
+ZG8gaXQNCj4gZGVsYXlpbmcgcmVzdWJtaXNzaW9uLiBUaGlzIG1ha2VzIG1lIHdvbmRlciB3aGV0
+aGVyIHRoaXMgcHJvYmxlbSBpcyBzcGVjaWZpYw0KPiB0byBhbnkgZHJpdmVyLiBJZiBpdCBpcyBu
+b3QsIGFzIEkgd291bGQgYXJndWUsIGRvIHdlIGhhdmUgYSBkZWZpY2llbmN5DQo+IGluIG91ciBB
+UEk/DQoNCkkgdGhpbmsgdGhlIG1ham9yIHF1ZXN0aW9uIGlzIHRoYXQgdGhlIGRyaXZlciBkb2Vz
+bid0IGtub3cgd2hldGhlcg0KaXQgaXMgbmVjZXNzYXJ5IHRvIHN0b3Agc3VibWl0dGluZyBidWxr
+IHRyYW5zZmVyIG9yIG5vdC4gVGhlcmUgYXJlDQp0d28gc2l0dWF0aW9ucyB3aXRoIHRoZSBzYW1l
+IGVycm9yIGNvZGUuIE9uZSBuZWVkcyB0byByZXN1Ym1pdA0KdGhlIGJ1bGsgdHJhbnNmZXIuIFRo
+ZSBvdGhlciBuZWVkcyB0byBzdG9wIHRoZSB0cmFuc2Zlci4gVGhlIG9yaWdpbmFsDQppZGVhIGlz
+IHRoYXQgdGhlIGRpc2Nvbm5lY3QgZXZlbnQgd291bGQgc3RvcCBzdWJtaXR0aW5nIHRyYW5zZmVy
+IGZvcg0KdGhlIHNlY29uZCBzaXR1YXRpb24uIEhvd2V2ZXIsIGZvciB0aGlzIGNhc2UsIHRoZSBk
+aXNjb25uZWN0IGV2ZW50DQpjb21lcyB2ZXJ5IGxhdGUsIHNvIHRoZSBzdWJtaXNzaW9uIGNvdWxk
+bid0IGJlIHN0b3BwZWQgaW4gdGltZS4NClRoZSBiZXN0IHNvbHV0aW9uIGlzIHRoZSBkcml2ZXIg
+Y291bGQgZ2V0IGFub3RoZXIgZXJyb3IgY29kZSB3aGljaA0KaW5kaWNhdGVzIHRoZSBkZXZpY2Ug
+aXMgZGlzYXBwZWFyIGZvciB0aGUgc2Vjb25kIHNpdHVhdGlvbi4gIFRoZW4sDQpJIGRvbid0IG5l
+ZWQgdG8gZG8gZGVsYXllZCByZXN1Ym1pc3Npb24uDQoNCkJlc3QgUmVnYXJkcywNCkhheWVzDQo=
