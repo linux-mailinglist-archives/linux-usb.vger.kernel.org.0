@@ -2,106 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5517341D14D
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Sep 2021 04:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2686E41D187
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Sep 2021 04:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347573AbhI3CNB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Sep 2021 22:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233941AbhI3CNB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Sep 2021 22:13:01 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBC2C06161C;
-        Wed, 29 Sep 2021 19:11:19 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id r7so3069894pjo.3;
-        Wed, 29 Sep 2021 19:11:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Vx2XlZ4FegGZ4VBMiJz6zHP9tSJ66bvq6JyHo/xaLRU=;
-        b=RAnlGPDeNFcKcGDmEN+pDC5DDMNviROi76zg0TVSVHUUVGPZ9LFwt+KYvpsk9+ZcYp
-         v7y1xgy8cBsya5aKI2561+92pJhhZYwn5vobSRD9cTqALiIETJ0eKdzg0ZgPDBCltRTD
-         /SXQM9fartt1GRZtRMVOUGvOsiK/gd+zOj1YeYckoKv1i5XxYB6dIqZVh3EgSOJnVhwF
-         76eq7gI22EHZka0VzL7DeLK/9/raG0t1Hq6bGOcUbnOlq7wZkUz5/3L4w4+qgQJm3XbQ
-         76G+KwI59d0gtIPABwWWtuH4pvoAOJcHS8CwUzmOI8ZyUXwfYofafCc54NMX3s/5NgAi
-         SpJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Vx2XlZ4FegGZ4VBMiJz6zHP9tSJ66bvq6JyHo/xaLRU=;
-        b=sC6GBqavN7L8K0A4tFFXgd40v/fYL+Pz/5cNRX6fZGTx5ZYcWmmI9pp/6ecgLWkSzE
-         8uRa04mCN6SRAs6uOZvfpJ60dKqVUn0QCRqxR4gSa1Y+lM4rBs4/S34NKAtfcJ+2PmFJ
-         PRA9FOTobR4a+h98pgC6FH5UgjK5p1QeQeXJ+kLm5LH0SStIWXhb/6EKDtjqAHnab7Gt
-         LMKZzF+1pbyhTYO112/WlUWR6ozmEdYctZr45Zs9N7puD/u/3TaomSgH6qiyY+YCG4af
-         KYtaU/bKGt6PEMyVJ9MbNbI/RjaRc6xRJSjwbz/sLMZHL5E44sUVBZZ9E4dCf1D28KTZ
-         D6EQ==
-X-Gm-Message-State: AOAM531TD03eUN0VJ5EQPTiwXjHe/5j73vMoDnUoTzfx0nNxy1Zbj99n
-        mk4yltCGTM+5JIkMGMBx0DomMwUr6N8=
-X-Google-Smtp-Source: ABdhPJyUKGR61yoBB19QMgH8+u4bRxZBfexMHdHynMJC2tzguc1Rx74OI7yierbnRsTnmH97v3T3Lg==
-X-Received: by 2002:a17:90a:7892:: with SMTP id x18mr3318084pjk.95.1632967879204;
-        Wed, 29 Sep 2021 19:11:19 -0700 (PDT)
-Received: from ruantu-linux-1.. ([211.72.215.15])
-        by smtp.gmail.com with ESMTPSA id y24sm928448pfo.69.2021.09.29.19.11.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Sep 2021 19:11:18 -0700 (PDT)
-From:   Yu-Tung Chang <mtwget@gmail.com>
-To:     johan@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yu-Tung Chang <mtwget@gmail.com>
-Subject: [PATCH v1] USB: serial: option: add Quectel EC200S-CN module support
-Date:   Thu, 30 Sep 2021 10:11:12 +0800
-Message-Id: <20210930021112.330396-1-mtwget@gmail.com>
-X-Mailer: git-send-email 2.33.0
+        id S1347878AbhI3Ckd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Sep 2021 22:40:33 -0400
+Received: from mga02.intel.com ([134.134.136.20]:59232 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347849AbhI3Ckd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 Sep 2021 22:40:33 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10122"; a="212341575"
+X-IronPort-AV: E=Sophos;i="5.85,334,1624345200"; 
+   d="scan'208";a="212341575"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2021 19:38:50 -0700
+X-IronPort-AV: E=Sophos;i="5.85,334,1624345200"; 
+   d="scan'208";a="555319477"
+Received: from pgupadra-mobl1.amr.corp.intel.com (HELO skuppusw-mobl5.amr.corp.intel.com) ([10.212.0.91])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2021 19:38:49 -0700
+Subject: Re: [PATCH v2 1/6] driver core: Move the "authorized" attribute from
+ USB/Thunderbolt to core
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jason Wang <jasowang@redhat.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org
+References: <20210930010511.3387967-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20210930010511.3387967-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20210930014229.GA447956@rowland.harvard.edu>
+ <CAPcyv4iiEC3B2i81evZpLP+XHa8dLkfgWmrY7HocORwP8FMPZQ@mail.gmail.com>
+From:   "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Message-ID: <f9b7cf97-0a14-1c80-12ab-23213ec2f4f2@linux.intel.com>
+Date:   Wed, 29 Sep 2021 19:38:47 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPcyv4iiEC3B2i81evZpLP+XHa8dLkfgWmrY7HocORwP8FMPZQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add usb product id of the Quectel EC200S-CN module.
 
-usb-devices output for 0x6002:
-T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=480 MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=6002 Rev=03.18
-S:  Manufacturer=Android
-S:  Product=Android
-S:  SerialNumber=0000
-C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=06 Prot=00 Driver=cdc_ether
-I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-I:  If#=0x2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
 
-Signed-off-by: Yu-Tung Chang <mtwget@gmail.com>
----
- drivers/usb/serial/option.c | 2 ++
- 1 file changed, 2 insertions(+)
+On 9/29/21 6:55 PM, Dan Williams wrote:
+>> Also, you ignored the usb_[de]authorize_interface() functions and
+>> their friends.
+> Ugh, yes.
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 6cfb5d33609f..f65a2e7699bf 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -251,6 +251,7 @@ static void option_instat_callback(struct urb *urb);
- #define QUECTEL_PRODUCT_EP06			0x0306
- #define QUECTEL_PRODUCT_EM12			0x0512
- #define QUECTEL_PRODUCT_RM500Q			0x0800
-+#define QUECTEL_PRODUCT_EC200S_CN		0x6002
- #define QUECTEL_PRODUCT_EC200T			0x6026
- 
- #define CMOTECH_VENDOR_ID			0x16d8
-@@ -1128,6 +1129,7 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x10),
- 	  .driver_info = ZLP },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
- 
- 	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
+I did not change it because I am not sure about the interface vs device
+dependency.
+
+I think following change should work.
+
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index f57b5a7a90ca..84969732d09c 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -334,7 +334,7 @@ static int usb_probe_interface(struct device *dev)
+  	if (udev->dev.authorized == false) {
+  		dev_err(&intf->dev, "Device is not authorized for usage\n");
+  		return error;
+-	} else if (intf->authorized == 0) {
++	} else if (intf->dev.authorized == 0) {
+  		dev_err(&intf->dev, "Interface %d is not authorized for usage\n",
+  				intf->altsetting->desc.bInterfaceNumber);
+  		return error;
+@@ -546,7 +546,7 @@ int usb_driver_claim_interface(struct usb_driver *driver,
+  		return -EBUSY;
+
+  	/* reject claim if interface is not authorized */
+-	if (!iface->authorized)
++	if (!iface->dev.authorized)
+  		return -ENODEV;
+
+  	dev->driver = &driver->drvwrap.driver;
+diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+index 47548ce1cfb1..ab3c8d1e4db9 100644
+--- a/drivers/usb/core/message.c
++++ b/drivers/usb/core/message.c
+@@ -1791,9 +1791,9 @@ void usb_deauthorize_interface(struct usb_interface *intf)
+
+  	device_lock(dev->parent);
+
+-	if (intf->authorized) {
++	if (intf->dev.authorized) {
+  		device_lock(dev);
+-		intf->authorized = 0;
++		intf->dev.authorized = 0;
+  		device_unlock(dev);
+
+  		usb_forced_unbind_intf(intf);
+@@ -1811,9 +1811,9 @@ void usb_authorize_interface(struct usb_interface *intf)
+  {
+  	struct device *dev = &intf->dev;
+
+-	if (!intf->authorized) {
++	if (!intf->dev.authorized) {
+  		device_lock(dev);
+-		intf->authorized = 1; /* authorize interface */
++		intf->dev.authorized = 1; /* authorize interface */
+  		device_unlock(dev);
+  	}
+  }
+@@ -2069,7 +2069,6 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
+  		intfc = cp->intf_cache[i];
+  		intf->altsetting = intfc->altsetting;
+  		intf->num_altsetting = intfc->num_altsetting;
+-		intf->authorized = !!HCD_INTF_AUTHORIZED(hcd);
+  		kref_get(&intfc->ref);
+
+  		alt = usb_altnum_to_altsetting(intf, 0);
+@@ -2101,6 +2100,7 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
+  		INIT_WORK(&intf->reset_ws, __usb_queue_reset_device);
+  		intf->minor = -1;
+  		device_initialize(&intf->dev);
++		intf->dev.authorized = !!HCD_INTF_AUTHORIZED(hcd);
+  		pm_runtime_no_callbacks(&intf->dev);
+  		dev_set_name(&intf->dev, "%d-%s:%d.%d", dev->bus->busnum,
+  				dev->devpath, configuration, ifnum);
+diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
+index 3d63e345d0a0..666eeb80ff29 100644
+--- a/drivers/usb/core/sysfs.c
++++ b/drivers/usb/core/sysfs.c
+@@ -1160,9 +1160,7 @@ static DEVICE_ATTR_RO(supports_autosuspend);
+  static ssize_t interface_authorized_show(struct device *dev,
+  		struct device_attribute *attr, char *buf)
+  {
+-	struct usb_interface *intf = to_usb_interface(dev);
+-
+-	return sprintf(buf, "%u\n", intf->authorized);
++	return sprintf(buf, "%u\n", dev->authorized);
+  }
+
+  /*
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 796df4068e94..1e41453c63cb 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -195,8 +195,6 @@ usb_find_last_int_out_endpoint(struct usb_host_interface *alt,
+   *	has been deferred.
+   * @needs_binding: flag set when the driver should be re-probed or unbound
+   *	following a reset or suspend operation it doesn't support.
+- * @authorized: This allows to (de)authorize individual interfaces instead
+- *	a whole device in contrast to the device authorization.
+   * @dev: driver model's view of this device
+   * @usb_dev: if an interface is bound to the USB major, this will point
+   *	to the sysfs representation for that device.
+@@ -252,7 +250,6 @@ struct usb_interface {
+  	unsigned needs_altsetting0:1;	/* switch to altsetting 0 is pending */
+  	unsigned needs_binding:1;	/* needs delayed unbind/rebind */
+  	unsigned resetting_device:1;	/* true: bandwidth alloc after reset */
+-	unsigned authorized:1;		/* used for interface authorization */
+
+  	struct device dev;		/* interface specific device info */
+  	struct device *usb_dev;
 -- 
-2.33.0
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
