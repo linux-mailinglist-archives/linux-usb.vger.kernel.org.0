@@ -2,94 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 751DA41DE8F
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Sep 2021 18:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A264E41DF35
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Sep 2021 18:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349110AbhI3QPe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Sep 2021 12:15:34 -0400
-Received: from rtits2.realtek.com ([211.75.126.72]:45487 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349113AbhI3QPa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Sep 2021 12:15:30 -0400
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 18UGDFBc8009853, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36503.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 18UGDFBc8009853
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 1 Oct 2021 00:13:15 +0800
-Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
- RTEXH36503.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Fri, 1 Oct 2021 00:13:15 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Thu, 30 Sep 2021 09:13:15 -0700
-Received: from RTEXMBS04.realtek.com.tw ([fe80::cdd5:82a3:e854:7098]) by
- RTEXMBS04.realtek.com.tw ([fe80::cdd5:82a3:e854:7098%5]) with mapi id
- 15.01.2106.013; Fri, 1 Oct 2021 00:13:14 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     Oliver Neukum <oneukum@suse.com>,
-        Jason-ch Chen <jason-ch.chen@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "Project_Global_Chrome_Upstream_Group@mediatek.com" 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "hsinyi@google.com" <hsinyi@google.com>,
-        nic_swsd <nic_swsd@realtek.com>
-Subject: RE: [PATCH] r8152: stop submitting rx for -EPROTO
-Thread-Topic: [PATCH] r8152: stop submitting rx for -EPROTO
-Thread-Index: AQHXtPF6mRt31KuIqUSf0ySwz113xKu6nqYQ//+g0oCAAYwXgIAAt/FQ
-Date:   Thu, 30 Sep 2021 16:13:14 +0000
-Message-ID: <9a23368b27bd42299e74235f1f8be3fa@realtek.com>
-References: <20210929051812.3107-1-jason-ch.chen@mediatek.com>
- <cbd1591fc03f480c9f08cc55585e2e35@realtek.com>
- <4c2ad5e4a9747c59a55d92a8fa0c95df5821188f.camel@mediatek.com>
- <274ec862-86cf-9d83-7ea7-5786e30ca4a7@suse.com>
-In-Reply-To: <274ec862-86cf-9d83-7ea7-5786e30ca4a7@suse.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [123.192.91.194]
-x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzkvMzAgpFWkyCAwMjozODowMA==?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        id S1352194AbhI3QlV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Sep 2021 12:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352163AbhI3QlU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Sep 2021 12:41:20 -0400
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5B6C06176A
+        for <linux-usb@vger.kernel.org>; Thu, 30 Sep 2021 09:39:37 -0700 (PDT)
+Received: by mail-ua1-x941.google.com with SMTP id u11so4686925uaw.3
+        for <linux-usb@vger.kernel.org>; Thu, 30 Sep 2021 09:39:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
+        b=o3SZ3/8xgB3svMq+UXE3vgW9sKtG91px1UYnaI00T4dLP05ECFH5EVSAWUR78xdR5n
+         ebHrIeHXVPRJa791OB2s/aZJdtzWdPaX5sbadOL24EflkgZ6O2rEvsBWvojGxJeeST6T
+         eb+k8lxZZa/bWNfHNPwQHvNUM1YEFh4fUMO861Pe8Wc6pfqqL72s+8eCO53Msweav+mv
+         XfoVjVScWXWc0hGgmBVMNFkqROc3jDhXxKvwZxz1ZkBwNJLCRx7xYOcAqQ0tzz+Q5cSM
+         PuhaOVDUO2vb8ybQ6jSikOKS/AFhEN/8Lz75PuCS5qgomh+uSMNWQBtsXYMKNbf3IvW6
+         pZbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
+        b=eWmI2Dg46rJCy/Dx2Z5+JIUuKVU5mA1cpDm+HQuOiCBAe++ScujEPq78fKISw9DbRs
+         MMnvnTRkHVYgpx7Gb3wfh/0xvzG7ne24tWibNO7svw/ModcuN9tmODX5BV/19sEeHnwf
+         PjPzUO0KGt3JvPQNwtsv8ZqFU3jIYplPKAn9vF7bjQokLx9xs8yYlKq09uK2KPs1u6cb
+         WLSwOoFQtCFxp7ILMNwOv80HzHMqi7lC7CkrIdd9RO6b2qj4DqxWWM7Q2IWqpSWBfefv
+         y8ewgbPpzHBxpl/vXgOCKILQERrT3/1ov2SFk3/w+Vd9xiaqFW5A2YtJ5E4Bui89lfi7
+         iyDQ==
+X-Gm-Message-State: AOAM532Cay52tAZKXq/vN55WeV15Bw0h/8foSMRbKlS2ynkrR/d2S0WS
+        qW9t3u43i3D80713hYhWFgJLM0qzqaS7gbIJsEM=
+X-Google-Smtp-Source: ABdhPJx0AmgkV9cE7YZrAYTucsDxPOj7iGMkrooBstJ2APLp74YQnUFP0J0PcWONym4DRiNtFFvbKXZFoRlaXsy60JM=
+X-Received: by 2002:ab0:5602:: with SMTP id y2mr6724983uaa.120.1633019977032;
+ Thu, 30 Sep 2021 09:39:37 -0700 (PDT)
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36503.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
+Received: by 2002:a59:ab2e:0:b0:22d:7f44:603a with HTTP; Thu, 30 Sep 2021
+ 09:39:36 -0700 (PDT)
+Reply-To: irenezakari24@gmail.com
+From:   Irene zakari <irenezakari88@gmail.com>
+Date:   Thu, 30 Sep 2021 09:39:36 -0700
+Message-ID: <CAFT8PFG_8981ivC4O1EnUpb=bxUAD3b8Ry0XqxnGDqbSoBpVzQ@mail.gmail.com>
+Subject: PLEASE I NEED YOUR HELP
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T2xpdmVyIE5ldWt1bSA8b25ldWt1bUBzdXNlLmNvbT4NCj4gU2VudDogVGh1cnNkYXksIFNlcHRl
-bWJlciAzMCwgMjAyMSA1OjMwIFBNDQpbLi4uXQ0KPiBIaSwNCj4gDQo+IEhheWVzIHByb3Bvc2Vk
-IGEgc29sdXRpb24uIEJhc2ljYWxseSB5b3Ugc29sdmUgdGhpcyB0aGUgd2F5IEhJRCBvciBXRE0g
-ZG8gaXQNCj4gZGVsYXlpbmcgcmVzdWJtaXNzaW9uLiBUaGlzIG1ha2VzIG1lIHdvbmRlciB3aGV0
-aGVyIHRoaXMgcHJvYmxlbSBpcyBzcGVjaWZpYw0KPiB0byBhbnkgZHJpdmVyLiBJZiBpdCBpcyBu
-b3QsIGFzIEkgd291bGQgYXJndWUsIGRvIHdlIGhhdmUgYSBkZWZpY2llbmN5DQo+IGluIG91ciBB
-UEk/DQoNCkkgdGhpbmsgdGhlIG1ham9yIHF1ZXN0aW9uIGlzIHRoYXQgdGhlIGRyaXZlciBkb2Vz
-bid0IGtub3cgd2hldGhlcg0KaXQgaXMgbmVjZXNzYXJ5IHRvIHN0b3Agc3VibWl0dGluZyBidWxr
-IHRyYW5zZmVyIG9yIG5vdC4gVGhlcmUgYXJlDQp0d28gc2l0dWF0aW9ucyB3aXRoIHRoZSBzYW1l
-IGVycm9yIGNvZGUuIE9uZSBuZWVkcyB0byByZXN1Ym1pdA0KdGhlIGJ1bGsgdHJhbnNmZXIuIFRo
-ZSBvdGhlciBuZWVkcyB0byBzdG9wIHRoZSB0cmFuc2Zlci4gVGhlIG9yaWdpbmFsDQppZGVhIGlz
-IHRoYXQgdGhlIGRpc2Nvbm5lY3QgZXZlbnQgd291bGQgc3RvcCBzdWJtaXR0aW5nIHRyYW5zZmVy
-IGZvcg0KdGhlIHNlY29uZCBzaXR1YXRpb24uIEhvd2V2ZXIsIGZvciB0aGlzIGNhc2UsIHRoZSBk
-aXNjb25uZWN0IGV2ZW50DQpjb21lcyB2ZXJ5IGxhdGUsIHNvIHRoZSBzdWJtaXNzaW9uIGNvdWxk
-bid0IGJlIHN0b3BwZWQgaW4gdGltZS4NClRoZSBiZXN0IHNvbHV0aW9uIGlzIHRoZSBkcml2ZXIg
-Y291bGQgZ2V0IGFub3RoZXIgZXJyb3IgY29kZSB3aGljaA0KaW5kaWNhdGVzIHRoZSBkZXZpY2Ug
-aXMgZGlzYXBwZWFyIGZvciB0aGUgc2Vjb25kIHNpdHVhdGlvbi4gIFRoZW4sDQpJIGRvbid0IG5l
-ZWQgdG8gZG8gZGVsYXllZCByZXN1Ym1pc3Npb24uDQoNCkJlc3QgUmVnYXJkcywNCkhheWVzDQo=
+Hello   ..
+
+How do you do over there? I hope you are doing well?
+
+My name is Irene. (24 years), i am single, from Gambia, the only child
+of late Eng. Bernard Bakary Zakaria. the Director of Bajam Enterprise
+(Building Construction Company in The Gambia) also the CEO of Bernard
+Import and Export (GAMBIA).
+
+As a matter of fact my mother died when i was barely 4 years old
+according to my late father and because of the type of love he had for
+my mother made him to remain UN-married till he left the ghost..
+
+So after the death of my father as a result of assassinate, his brother (My
+Uncle) who is the purchasing and marketing sale manager of my late
+fathers company named (Mr. James Tokunbo Oriade Zakaria) wanted to
+convert all the properties and resources of my late father into his
+which i quarreled with him and it made him to lay his anger on me to
+the extent of hiring an assassins to kill me but to God be the glory i
+succeeded by making a way to Burkina faso for my dear life.
+Honestly i do live a fearful life even here in Burkina faso because of
+those Assassins coming after me .
+
+I would want to live and study in your country for my better future.
+because my father same blood brother wanted to force me into undecided
+marriage, just for me to leave my father home and went and live with
+another man I never know as he want to occupied all my father home
+and maybe to sold it as my father no longer alive, I'm the only child
+daughter my father born, '' but he don't know that i am not
+interesting in any of my father properties or early marriage for now,
+because i still have future to think about and to focus on my studies
+first as i was doing my first year in the University before the death
+of my father.
+
+Actually what I want to discuss with you is about my personal issue
+concern funds my late father deposited in a bank outside my country,
+worth $4.5 million united state dollars. i need your assistance to
+receive and invest this funds in your country.
+
+Please help me, I am sincere to you and I want to be member of your
+family as well if you wouldn't mind to accept me and lead me to better
+future in your country.
+
+All the documents the bank issue to my father during time of deposit
+is with me now.
+I already notify the bank on phone about the death of my father and
+they are surprise for the news and accept that my father is their good
+customer.
+I will be happy if this money can be invested in any business of your
+choice and it will be under your control till i finished my education,
+also I'm assuring you good relationship and I am ready to discuss the
+amount of money to give you from this money for your help.
+
+Therefore, I shall give you the bank contact and other necessary
+information in my next email if you will only promise me that you will
+not/never betray and disclosed this matter to anybody, because, this
+money is the only hope i have for survival on earth since I have lost
+my parents.
+
+Moreover I have the FUND PLACEMENT CERTIFICATE and the DEATH
+CERTIFICATE here with me, but before I give you further information, i
+will like to know your full data
+
+1. Full Name: ........................
+2. Address: ..................
+3. Nationality: ........... Sex................
+4. Age:........... Date of Birth:................
+5. Occupation:...................
+.....
+6. Phone: ........... Fax:.........................
+7. State of Origin: .......Country:..............
+8. Occupation:...................
+................
+9. Marital status........... E-mail address's: ............
+10. Scan copy of your ID card or Driving License/Photo:............
+DECLARATION:
+
+so that i will be fully sure that i am not trusting the wrong person.
+and it will also give me the mind to send you the bank contact for you
+to communicate with them for more verification about this money. and
+to know you more better.
+
+Meanwhile, you can reach me through my pastor,his name is Pastor Paul
+any time you call, tell him that you want to speak with me because
+right now i am living in the church here in Burkina faso and i don't
+want to stay here any longer,
+send for me to speak with you his phone number is this(+226 75213646)
+
+I will stop here and i will be waiting for your reply and feel free
+ask any thing you want to know about me.
+Please help me, I would be highly appreciated
+Have nice day.
+From Irene
