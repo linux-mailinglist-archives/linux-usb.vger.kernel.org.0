@@ -2,98 +2,181 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2216941D7AE
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Sep 2021 12:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB7B641D841
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Sep 2021 13:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350000AbhI3K3M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Sep 2021 06:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349987AbhI3K3J (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Sep 2021 06:29:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C295C06176E
-        for <linux-usb@vger.kernel.org>; Thu, 30 Sep 2021 03:27:26 -0700 (PDT)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1mVtHg-0002sV-PO; Thu, 30 Sep 2021 12:27:24 +0200
-Received: from mgr by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1mVtHd-00088e-ET; Thu, 30 Sep 2021 12:27:21 +0200
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
-To:     linux-usb@vger.kernel.org
-Cc:     balbi@kernel.org, laurent.pinchart@ideasonboard.com,
-        paul.elder@ideasonboard.com, kernel@pengutronix.de,
-        caleb.connolly@ideasonboard.com
-Subject: [PATCH 7/7] usb: gadget: udc: ensure the gadget is still available
-Date:   Thu, 30 Sep 2021 12:27:17 +0200
-Message-Id: <20210930102717.15720-8-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210930102717.15720-1-m.grzeschik@pengutronix.de>
-References: <20210930102717.15720-1-m.grzeschik@pengutronix.de>
+        id S1350252AbhI3LB3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Sep 2021 07:01:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54310 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350148AbhI3LB2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Sep 2021 07:01:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1632999585;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=b7LaHsUMLVR6EA21h5UrbLpMuCN6Sr+ds/6TKiPoY6M=;
+        b=FoWmsJvsC6XSdx6XXPn2rHxwNNmAatuEGh6Xut40OEt8SWUGRM6sfGwBWtm5C+unLQjRoQ
+        4hLa6zv7XxJNnPBgG1wPL/yCC8RjfrPfrP24+iBC2R9vgzElX5xZNZFDZfSpvKU6Fnjne3
+        7qePn6hsf+Hz3pm6Hocw1zGti90ygLg=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-556-RvyqC4eQP6y623uINLfINA-1; Thu, 30 Sep 2021 06:59:43 -0400
+X-MC-Unique: RvyqC4eQP6y623uINLfINA-1
+Received: by mail-ed1-f70.google.com with SMTP id d11-20020a50cd4b000000b003da63711a8aso5804202edj.20
+        for <linux-usb@vger.kernel.org>; Thu, 30 Sep 2021 03:59:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=b7LaHsUMLVR6EA21h5UrbLpMuCN6Sr+ds/6TKiPoY6M=;
+        b=uqzLl5JqHkPEVV7ekU3qRxzbRnH9QwD1grroUpZyi32Rr/0flrQSYwJq5lMziKyFah
+         pYQfrGA6SyhBuagQaLJzVBTr2521ZJhMzUy+tOw2Hfdzc3Qz39Jn/donohNNbO5GwksB
+         gIBf6mdzl6wGgbawjZXMKmNcQuzx2qYUYhRavBCt25tU9aSe2dN+R649GhbOKTEKNFkx
+         25U7fRztJvpti9EH4ZngEK817TgY6Bzrol+NTXPcMAjkUPNnudpC9QFYv4/4GXQWZMtt
+         BB/KrHGdNAVt/gUnk6k5pYVmCghnwsBzuPeLYn9pyXl7OWixwUxTlwuaRwf/sOP5Vfyf
+         9UAw==
+X-Gm-Message-State: AOAM533wUjimE93ghKfN24zMFU7CicnO9kwZUgf9trrOT+/Gg4LvAoDo
+        zVrESl9oVUlkSNlB3159aVPQqHSiuafABST4HhQN78NcLe4mSofrhjtXgkVH8NToeI1KZIPqXNM
+        LcXCF+mEcqinMq9C2LCb3
+X-Received: by 2002:a17:906:3f95:: with SMTP id b21mr5678172ejj.368.1632999582387;
+        Thu, 30 Sep 2021 03:59:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx2i5HxRxp9m+CxrlD+fPbT58I6Y4N17yAXQUmiEQobb4UJZApVX/orNJjFHXXlnrsZIHnlVQ==
+X-Received: by 2002:a17:906:3f95:: with SMTP id b21mr5678143ejj.368.1632999582132;
+        Thu, 30 Sep 2021 03:59:42 -0700 (PDT)
+Received: from redhat.com ([2.55.134.220])
+        by smtp.gmail.com with ESMTPSA id w26sm1254203edu.59.2021.09.30.03.59.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Sep 2021 03:59:40 -0700 (PDT)
+Date:   Thu, 30 Sep 2021 06:59:36 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jason Wang <jasowang@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v2 2/6] driver core: Add common support to skip probe for
+ un-authorized devices
+Message-ID: <20210930065807-mutt-send-email-mst@kernel.org>
+References: <20210930010511.3387967-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20210930010511.3387967-3-sathyanarayanan.kuppuswamy@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210930010511.3387967-3-sathyanarayanan.kuppuswamy@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It is possible that the configfs gadget layer will be calling the unbind
-functions of all gadget functions on gadget_dev_desc_UDC_store and
-cleaned up the cdev structures pointer to the gadget. This will not
-prevent the usage of the usb_function_de/activate functions.
+On Wed, Sep 29, 2021 at 06:05:07PM -0700, Kuppuswamy Sathyanarayanan wrote:
+> While the common case for device-authorization is to skip probe of
+> unauthorized devices, some buses may still want to emit a message on
+> probe failure (Thunderbolt), or base probe failures on the
+> authorization status of a related device like a parent (USB). So add
+> an option (has_probe_authorization) in struct bus_type for the bus
+> driver to own probe authorization policy.
+> 
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 
-f_obex and f_uvc are the candidates to still call the functions with no
-valid gadget set. This patch prevents the usage of the gadget if it was
-already unset.
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
----
- drivers/usb/gadget/composite.c | 4 ++--
- drivers/usb/gadget/udc/core.c  | 3 +++
- 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index 504c1cbc255d1..1b4cd01e2ae13 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -393,7 +393,7 @@ int usb_function_deactivate(struct usb_function *function)
- 
- 	spin_lock_irqsave(&cdev->lock, flags);
- 
--	if (cdev->deactivations == 0) {
-+	if (cdev->deactivations == 0 && cdev->gadget) {
- 		spin_unlock_irqrestore(&cdev->lock, flags);
- 		status = usb_gadget_deactivate(cdev->gadget);
- 		spin_lock_irqsave(&cdev->lock, flags);
-@@ -428,7 +428,7 @@ int usb_function_activate(struct usb_function *function)
- 		status = -EINVAL;
- 	else {
- 		cdev->deactivations--;
--		if (cdev->deactivations == 0) {
-+		if (cdev->deactivations == 0 && cdev->gadget) {
- 			spin_unlock_irqrestore(&cdev->lock, flags);
- 			status = usb_gadget_activate(cdev->gadget);
- 			spin_lock_irqsave(&cdev->lock, flags);
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 14fdf918ecfeb..52964d0e26fa6 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -756,6 +756,9 @@ int usb_gadget_deactivate(struct usb_gadget *gadget)
- {
- 	int ret = 0;
- 
-+	if (!gadget)
-+		return ret;
-+
- 	if (gadget->deactivated)
- 		goto out;
- 
--- 
-2.30.2
+So what e.g. the PCI patch
+https://lore.kernel.org/all/CACK8Z6E8pjVeC934oFgr=VB3pULx_GyT2NkzAogdRQJ9TKSX9A@mail.gmail.com/
+actually proposes is a list of
+allowed drivers, not devices. Doing it at the device level
+has disadvantages, for example some devices might have a legacy
+unsafe driver, or an out of tree driver. It also does not
+address drivers that poke at hardware during init.
+
+Accordingly, I think the right thing to do is to skip
+driver init for disallowed drivers, not skip probe
+for specific devices.
+
+
+> ---
+>  drivers/base/dd.c            | 5 +++++
+>  drivers/thunderbolt/domain.c | 1 +
+>  drivers/usb/core/driver.c    | 1 +
+>  include/linux/device/bus.h   | 4 ++++
+>  4 files changed, 11 insertions(+)
+> 
+> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+> index 68ea1f949daa..0cd03ac7d3b1 100644
+> --- a/drivers/base/dd.c
+> +++ b/drivers/base/dd.c
+> @@ -544,6 +544,11 @@ static int really_probe(struct device *dev, struct device_driver *drv)
+>  			   !drv->suppress_bind_attrs;
+>  	int ret;
+>  
+> +	if (!dev->authorized && !dev->bus->has_probe_authorization) {
+> +		dev_dbg(dev, "Device is not authorized\n");
+> +		return -ENODEV;
+> +	}
+> +
+>  	if (defer_all_probes) {
+>  		/*
+>  		 * Value of defer_all_probes can be set only by
+> diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
+> index 3e39686eff14..6de8a366b796 100644
+> --- a/drivers/thunderbolt/domain.c
+> +++ b/drivers/thunderbolt/domain.c
+> @@ -321,6 +321,7 @@ struct bus_type tb_bus_type = {
+>  	.probe = tb_service_probe,
+>  	.remove = tb_service_remove,
+>  	.shutdown = tb_service_shutdown,
+> +	.has_probe_authorization = true,
+>  };
+>  
+>  static void tb_domain_release(struct device *dev)
+> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+> index fb476665f52d..f57b5a7a90ca 100644
+> --- a/drivers/usb/core/driver.c
+> +++ b/drivers/usb/core/driver.c
+> @@ -2028,4 +2028,5 @@ struct bus_type usb_bus_type = {
+>  	.match =	usb_device_match,
+>  	.uevent =	usb_uevent,
+>  	.need_parent_lock =	true,
+> +	.has_probe_authorization = true,
+>  };
+> diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
+> index 062777a45a74..571a2f6e7c1d 100644
+> --- a/include/linux/device/bus.h
+> +++ b/include/linux/device/bus.h
+> @@ -69,6 +69,9 @@ struct fwnode_handle;
+>   * @lock_key:	Lock class key for use by the lock validator
+>   * @need_parent_lock:	When probing or removing a device on this bus, the
+>   *			device core should lock the device's parent.
+> + * @has_probe_authorization: Set true to indicate to the driver-core to skip
+> + *			     the authorization checks and let bus drivers
+> + *			     handle it locally.
+>   *
+>   * A bus is a channel between the processor and one or more devices. For the
+>   * purposes of the device model, all devices are connected via a bus, even if
+> @@ -112,6 +115,7 @@ struct bus_type {
+>  	struct lock_class_key lock_key;
+>  
+>  	bool need_parent_lock;
+> +	bool has_probe_authorization;
+>  };
+>  
+>  extern int __must_check bus_register(struct bus_type *bus);
+> -- 
+> 2.25.1
 
