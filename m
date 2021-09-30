@@ -2,88 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6047A41D88F
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Sep 2021 13:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8E741DA31
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Sep 2021 14:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350399AbhI3LVr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Sep 2021 07:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350387AbhI3LVq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Sep 2021 07:21:46 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E6CC06176C;
-        Thu, 30 Sep 2021 04:20:04 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id s75so5867202pgs.5;
-        Thu, 30 Sep 2021 04:20:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0CgQJ7TRp+plPGkNDrMGOcj0htBXUR9OYy7BWH9GhPM=;
-        b=gjG9GFoMwgCB/asQWkGLcPiv7I7dd8FvYTIqmZZE6cyIPkk5afFfHRenu7G20tflHN
-         j4rJiMqHpXWudCF9n8xc9MrvMN+yoju9bNOHA02HLySurdI0tHwGeFJIV1EKeuI7jPHm
-         ROimCE1tT4CBilKK5G6/L/XJV7KEyT5CaGj6Br9dykSiI9WlUXDvxNQPFNqH8kcL2QpA
-         5SbfMWJjVZKr0PMX6SFsJl7EWqCgvIhm6VPNAZREAwC+LLXvzSIcZb198EAHwGklYHHv
-         H8bRbdSZjrG8MwfGQ+f3LV7wHT6psG1FKJwPgZJCF6LfC5NWdjgz44qR93mCdzms0BQO
-         f7Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0CgQJ7TRp+plPGkNDrMGOcj0htBXUR9OYy7BWH9GhPM=;
-        b=TMpwwh28EWxELw2bx0usMFa937hHRzLJ6k2MZH7/FkrPXgGo6G+DpqPdAlEcDwWLH3
-         /kqZq+hBEwA5XHjcODy1Ub6igSf+248g7o7YGlDwgxeLAPire0LzLZa+ZXvran9Xrp9I
-         RQ9wu1h1EYsvLMtE0YNfdtvfa8zdoELTXGSplsn7prXn8G1LYGERAW+0Dlr8EgSlIbbT
-         VV2IuHB2j/KLKO/jh8RiCDIh9zfgIIjL3AttITdGuFh1easOYE9VUdmszAc4th/fMKty
-         sg8TPCitkpR0GmUzOuFQkpcze3w29EaAzaoJ+Zb8fAZTPUJkU0P6z5f6CgvCB5rnpUPv
-         vRIA==
-X-Gm-Message-State: AOAM532jzd7rVtWqGxioBQ1DALyFAiVzRssXq8xirF5yINscjkbwQKq5
-        kbEJHNQQyibUcYqO8L/gAXqQF+40ztC3POGNIfDyvtwn
-X-Google-Smtp-Source: ABdhPJzFEi4IP6RI5YrTNhB/vj9MyeeE4W3MgV7dmTNmrzPxPxolhwys7nBdKNUL3IA6eQsQdLYNcyrOCALuW2HLVT8=
-X-Received: by 2002:a63:d351:: with SMTP id u17mr4453357pgi.174.1633000803750;
- Thu, 30 Sep 2021 04:20:03 -0700 (PDT)
+        id S1351055AbhI3Mth (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Sep 2021 08:49:37 -0400
+Received: from mga07.intel.com ([134.134.136.100]:42531 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351053AbhI3Mtg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 Sep 2021 08:49:36 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10122"; a="288832767"
+X-IronPort-AV: E=Sophos;i="5.85,336,1624345200"; 
+   d="scan'208";a="288832767"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2021 05:47:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,336,1624345200"; 
+   d="scan'208";a="618108524"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 30 Sep 2021 05:47:52 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] usb: typec: tipd: Remove dependency on "connector" child fwnode
+Date:   Thu, 30 Sep 2021 15:47:58 +0300
+Message-Id: <20210930124758.23233-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20210930010511.3387967-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20210930010511.3387967-2-sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20210930010511.3387967-2-sathyanarayanan.kuppuswamy@linux.intel.com>
-From:   Yehezkel Bernat <yehezkelshb@gmail.com>
-Date:   Thu, 30 Sep 2021 14:19:47 +0300
-Message-ID: <CA+CmpXtXn5wjxwow5va5u9qHcQDLkd4Sh2dcqB545SXaxV1GkQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] driver core: Move the "authorized" attribute from
- USB/Thunderbolt to core
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jason Wang <jasowang@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 30, 2021 at 4:05 AM Kuppuswamy Sathyanarayanan
-<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
->
-> no functional
-> changes other than value 2 being not visible to the user.
->
+There is no "connector" child node available on every
+platform, so the driver can't fail to probe when it's
+missing.
 
-Are we sure we don't break any user-facing tool with it? Tools might use this to
-"remember" how the device was authorized this time.
+Fixes: 57560ee95cb7 ("usb: typec: tipd: Don't block probing of consumer of "connector" nodes")
+Reported-by: "Regupathy, Rajaram" <rajaram.regupathy@intel.com>
+Cc: stable@vger.kernel.org # 5.14+
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/typec/tipd/core.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+index 93e56291f0cf1..b30efdb9fa9ed 100644
+--- a/drivers/usb/typec/tipd/core.c
++++ b/drivers/usb/typec/tipd/core.c
+@@ -628,10 +628,6 @@ static int tps6598x_probe(struct i2c_client *client)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	fwnode = device_get_named_child_node(&client->dev, "connector");
+-	if (!fwnode)
+-		return -ENODEV;
+-
+ 	/*
+ 	 * This fwnode has a "compatible" property, but is never populated as a
+ 	 * struct device. Instead we simply parse it to read the properties.
+@@ -639,7 +635,9 @@ static int tps6598x_probe(struct i2c_client *client)
+ 	 * with existing DT files, we work around this by deleting any
+ 	 * fwnode_links to/from this fwnode.
+ 	 */
+-	fw_devlink_purge_absent_suppliers(fwnode);
++	fwnode = device_get_named_child_node(&client->dev, "connector");
++	if (fwnode)
++		fw_devlink_purge_absent_suppliers(fwnode);
+ 
+ 	tps->role_sw = fwnode_usb_role_switch_get(fwnode);
+ 	if (IS_ERR(tps->role_sw)) {
+-- 
+2.33.0
+
