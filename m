@@ -2,115 +2,406 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86CA441ED3F
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 14:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA0641ED8A
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 14:33:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354347AbhJAMVc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Oct 2021 08:21:32 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:11072 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbhJAMVc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 08:21:32 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1633090788; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=RDZYWJryjXt5KGjlspKeJRXLslVEDR1EqDnYjI6acwk=; b=HhOWKfVoHpWCZHemmHRTz8J/O7E5xHm6QN/+BgahMuXf9D964zYE21zadiuMDyRiOOHo6Nmi
- WKtdPaIQlhjHaDiQKZo1aV4FwaclQGfkZVxr1ZsAmSMu3IHh5XnXtBxz4Z4WpJ5b7NHzLpG4
- AKpMEp6tAoW2+anQLO6HOP7aDvw=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 6156fccd8578ef11ed6f9cc2 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 01 Oct 2021 12:19:25
- GMT
-Sender: pkondeti=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 88728C4338F; Fri,  1 Oct 2021 12:19:24 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from codeaurora.org (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: pkondeti)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B81E6C4360C;
-        Fri,  1 Oct 2021 12:19:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org B81E6C4360C
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Pavankumar Kondeti <pkondeti@codeaurora.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Jack Pham <jackp@codeaurora.org>, linux-usb@vger.kernel.org,
-        stable@vger.kernel.org,
-        Pavankumar Kondeti <pkondeti@codeaurora.org>
-Subject: [PATCH] xhci: Fix command ring pointer corruption while aborting a command
-Date:   Fri,  1 Oct 2021 17:49:17 +0530
-Message-Id: <1633090757-8473-1-git-send-email-pkondeti@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1633072946-16826-1-git-send-email-pkondeti@codeaurora.org>
-References: <1633072946-16826-1-git-send-email-pkondeti@codeaurora.org>
+        id S1354389AbhJAMep (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Oct 2021 08:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352842AbhJAMeo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 08:34:44 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B159C06177D
+        for <linux-usb@vger.kernel.org>; Fri,  1 Oct 2021 05:33:00 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id b20so38477683lfv.3
+        for <linux-usb@vger.kernel.org>; Fri, 01 Oct 2021 05:33:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MxegWTUqAg1wAtIssrheLi+x+LfQCMxJV5C3e9zY/So=;
+        b=vcJ2g2ALAm0IVx2Fp7EMGVafelLUrjG16muU1pmyzR8hwXe/c7kdMENPYG2cKj/WKw
+         BS+ZaaO+G4Uj5tvnRpwbititOE3WauKhPQkREVycG/Hvn9PHucIwhkZ/YUGB6qkv1U7f
+         1ae2JiP2HDu+Leu75eZhP4gJWxxvYNIu0f5oDf3KGrt2A4kayT/47nyueEjFDqAxQPI0
+         iTzo6lbag1DiAzbQ9jnlxf6WV5LlF4BTHECcT3A4vBoHPDuEldBEhV/YpniL1bV6yy2m
+         l7uOA4/tbztxL4Zph+77Sg+DntIuch0Ry+Gguy/mz8lrNGeYY+1Vyk1/7itYYlfM8hOX
+         BDkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MxegWTUqAg1wAtIssrheLi+x+LfQCMxJV5C3e9zY/So=;
+        b=wvW8jyDIbssCD3Wy/rhDNZnM8oQgBjnMnvqXIUKNXdwb4/pai1aAo5SLlfi93RatLK
+         g173iCMfrupHfxJk5oSYiCU8xFK+HOkN0LHS8pAxZlDyhADOPF4nLosdOFVUsA/MLm+3
+         swy2g7N5u+YysFFDRl4gUBGSXdfCa9nXekJ35WFxlu4+LRnRgzu1fZuaAf44LbU9lKyG
+         3aIm1IoaiEd9CjvNx0xtB0LskO6kuel7nTMnSFs5KSNSR17fw9598UVr4EEUdlczFafD
+         zztOkUa9YTTJIpGb6VrzKVW1Wdm+xsK6NZbIFMgqdCt391z6Qt0p+jKF/Q7AkUE9O/VK
+         bUpA==
+X-Gm-Message-State: AOAM531Z63dyr+iUeYGOxnayvJx9vrMYcxbOqL2K+0jDyxGupC3P7f3W
+        eLmQjmaxcc/7rQy2J8oWZyVAvJ8TR0E1IxwRXVtdwA==
+X-Google-Smtp-Source: ABdhPJyfBm1RgU4LIN5CLjaq/tOmRfulY+xvfoc1wBqdFGGV+40L5VEoXJW9NfDQ0sTovAsPIzZgtcS+Jd2OZrom1nQ=
+X-Received: by 2002:a05:6512:3fa5:: with SMTP id x37mr5557500lfa.233.1633091578379;
+ Fri, 01 Oct 2021 05:32:58 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210926224058.1252-1-digetx@gmail.com> <20210926224058.1252-7-digetx@gmail.com>
+In-Reply-To: <20210926224058.1252-7-digetx@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 1 Oct 2021 14:32:21 +0200
+Message-ID: <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com>
+Subject: Re: [PATCH v13 06/35] clk: tegra: Support runtime PM and power domain
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The command ring pointer is located at [6:63] bits of the command
-ring control register (CRCR). All the control bits like command stop,
-abort are located at [0:3] bits. While aborting a command, we read the
-CRCR and set the abort bit and write to the CRCR. The read will always
-give command ring pointer as all zeros. So we essentially write only
-the control bits. Since we split the 64 bit write into two 32 bit writes,
-there is a possibility of xHC command ring stopped before the upper
-dword (all zeros) is written. If that happens, xHC updates the upper
-dword of its internal command ring pointer with all zeros. Next time,
-when the command ring is restarted, we see xHC memory access failures.
-Fix this issue by only writing to the lower dword of CRCR where all
-control bits are located.
+On Mon, 27 Sept 2021 at 00:42, Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> The Clock-and-Reset controller resides in a core power domain on NVIDIA
+> Tegra SoCs.  In order to support voltage scaling of the core power domain,
+> we hook up DVFS-capable clocks to the core GENPD for managing of the
+> GENPD's performance state based on the clock changes.
+>
+> Some clocks don't have any specific physical hardware unit that backs
+> them, like root PLLs and system clock and they have theirs own voltage
+> requirements.  This patch adds new clk-device driver that backs the clocks
+> and provides runtime PM functionality for them.  A virtual clk-device is
+> created for each such DVFS-capable clock at the clock's registration time
+> by the new tegra_clk_register() helper.  Driver changes clock's device
+> GENPD performance state based on clk-rate notifications.
+>
+> In result we have this sequence of events:
+>
+>   1. Clock driver creates virtual device for selective clocks, enables
+>      runtime PM for the created device and registers the clock.
+>   2. Clk-device driver starts to listen to clock rate changes.
+>   3. Something changes clk rate or enables/disables clk.
+>   4. CCF core propagates the change through the clk tree.
+>   5. Clk-device driver gets clock rate-change notification or GENPD core
+>      handles prepare/unprepare of the clock.
+>   6. Clk-device driver changes GENPD performance state on clock rate
+>      change.
+>   7. GENPD driver changes voltage regulator state change.
+>   8. The regulator state is committed to hardware via I2C.
+>
+> We rely on fact that DVFS is not needed for Tegra I2C and that Tegra I2C
+> driver already keeps clock always-prepared.  Hence I2C subsystem stays
+> independent from the clk power management and there are no deadlock spots
+> in the sequence.
+>
+> Currently all clocks are registered very early during kernel boot when the
+> device driver core isn't available yet.  The clk-device can't be created
+> at that time.  This patch splits the registration of the clocks in two
+> phases:
+>
+>   1. Register all essential clocks which don't use RPM and are needed
+>      during early boot.
+>
+>   2. Register at a later boot time the rest of clocks.
+>
+> This patch adds power management support for Tegra20 and Tegra30 clocks.
+>
+> Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
+> Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
+> Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
+> Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/clk/tegra/Makefile      |   1 +
+>  drivers/clk/tegra/clk-device.c  | 230 ++++++++++++++++++++++++++++++++
+>  drivers/clk/tegra/clk-pll.c     |   2 +-
+>  drivers/clk/tegra/clk-super.c   |   2 +-
+>  drivers/clk/tegra/clk-tegra20.c |  77 ++++++++---
+>  drivers/clk/tegra/clk-tegra30.c | 116 +++++++++++-----
+>  drivers/clk/tegra/clk.c         |  75 ++++++++++-
+>  drivers/clk/tegra/clk.h         |   2 +
+>  8 files changed, 451 insertions(+), 54 deletions(-)
+>  create mode 100644 drivers/clk/tegra/clk-device.c
+>
+> diff --git a/drivers/clk/tegra/Makefile b/drivers/clk/tegra/Makefile
+> index 7b1816856eb5..a0715cdfc1a4 100644
+> --- a/drivers/clk/tegra/Makefile
+> +++ b/drivers/clk/tegra/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  obj-y                                  += clk.o
+>  obj-y                                  += clk-audio-sync.o
+> +obj-y                                  += clk-device.o
+>  obj-y                                  += clk-dfll.o
+>  obj-y                                  += clk-divider.o
+>  obj-y                                  += clk-periph.o
+> diff --git a/drivers/clk/tegra/clk-device.c b/drivers/clk/tegra/clk-device.c
+> new file mode 100644
+> index 000000000000..830bc0ba25d3
+> --- /dev/null
+> +++ b/drivers/clk/tegra/clk-device.c
+> @@ -0,0 +1,230 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +#include <linux/clk.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/mutex.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_domain.h>
+> +#include <linux/pm_opp.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/slab.h>
+> +
+> +#include <soc/tegra/common.h>
+> +
+> +#include "clk.h"
+> +
+> +/*
+> + * This driver manages performance state of the core power domain for the
+> + * independent PLLs and system clocks.  We created a virtual clock device
+> + * for such clocks, see tegra_clk_dev_register().
+> + */
+> +
+> +struct tegra_clk_device {
+> +       struct notifier_block clk_nb;
+> +       struct device *dev;
+> +       struct clk_hw *hw;
+> +       struct mutex lock;
+> +};
+> +
+> +static int tegra_clock_set_pd_state(struct tegra_clk_device *clk_dev,
+> +                                   unsigned long rate)
+> +{
+> +       struct device *dev = clk_dev->dev;
+> +       struct dev_pm_opp *opp;
+> +       unsigned int pstate;
+> +
+> +       opp = dev_pm_opp_find_freq_ceil(dev, &rate);
+> +       if (opp == ERR_PTR(-ERANGE)) {
+> +               dev_dbg(dev, "failed to find ceil OPP for %luHz\n", rate);
+> +               opp = dev_pm_opp_find_freq_floor(dev, &rate);
+> +       }
+> +
+> +       if (IS_ERR(opp)) {
+> +               dev_err(dev, "failed to find OPP for %luHz: %pe\n", rate, opp);
+> +               return PTR_ERR(opp);
+> +       }
+> +
+> +       pstate = dev_pm_opp_get_required_pstate(opp, 0);
+> +       dev_pm_opp_put(opp);
+> +
+> +       return dev_pm_genpd_set_performance_state(dev, pstate);
 
-Signed-off-by: Pavankumar Kondeti <pkondeti@codeaurora.org>
----
-v2:
-%s/u64/u32 for a variable in xhci_abort_cmd_ring()
+The above code certainly looks like it can be made generic through a
+common opp helper. I know we have discussed this before, so I am not
+saying you should change right now.
 
- drivers/usb/host/xhci-ring.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+Let's instead see what I think (and Viresh), when I have reviewed the
+entire series.
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index e676749..d7fe6d4 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -366,16 +366,22 @@ static void xhci_handle_stopped_cmd_ring(struct xhci_hcd *xhci,
- /* Must be called with xhci->lock held, releases and aquires lock back */
- static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
- {
--	u64 temp_64;
-+	u32 temp_32;
- 	int ret;
- 
- 	xhci_dbg(xhci, "Abort command ring\n");
- 
- 	reinit_completion(&xhci->cmd_ring_stop_completion);
- 
--	temp_64 = xhci_read_64(xhci, &xhci->op_regs->cmd_ring);
--	xhci_write_64(xhci, temp_64 | CMD_RING_ABORT,
--			&xhci->op_regs->cmd_ring);
-+	/*
-+	 * The control bits like command stop, abort are located in lower
-+	 * dword of the command ring control register. Limit the write
-+	 * to the lower dword to avoid corrupting the command ring pointer
-+	 * in case if the command ring is stopped by the time upper dword
-+	 * is written.
-+	 */
-+	temp_32 = readl(&xhci->op_regs->cmd_ring);
-+	writel(temp_32 | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
- 
- 	/* Section 4.6.1.2 of xHCI 1.0 spec says software should also time the
- 	 * completion of the Command Abort operation. If CRR is not negated in 5
--- 
-Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+> +}
+> +
+> +static int tegra_clock_change_notify(struct notifier_block *nb,
+> +                                    unsigned long msg, void *data)
+> +{
+> +       struct clk_notifier_data *cnd = data;
+> +       struct tegra_clk_device *clk_dev;
+> +       int err = 0;
+> +
+> +       clk_dev = container_of(nb, struct tegra_clk_device, clk_nb);
+> +
+> +       mutex_lock(&clk_dev->lock);
+> +       switch (msg) {
+> +       case PRE_RATE_CHANGE:
+> +               if (cnd->new_rate > cnd->old_rate)
+> +                       err = tegra_clock_set_pd_state(clk_dev, cnd->new_rate);
+> +               break;
+> +
+> +       case ABORT_RATE_CHANGE:
+> +               err = tegra_clock_set_pd_state(clk_dev, cnd->old_rate);
+> +               break;
+> +
+> +       case POST_RATE_CHANGE:
+> +               if (cnd->new_rate < cnd->old_rate)
+> +                       err = tegra_clock_set_pd_state(clk_dev, cnd->new_rate);
+> +               break;
+> +
+> +       default:
+> +               break;
+> +       }
+> +       mutex_unlock(&clk_dev->lock);
+> +
+> +       return notifier_from_errno(err);
+> +}
+> +
+> +static int tegra_clock_sync_pd_state(struct tegra_clk_device *clk_dev)
+> +{
+> +       unsigned long rate;
+> +       int ret = 0;
+> +
+> +       mutex_lock(&clk_dev->lock);
+> +
+> +       if (!pm_runtime_status_suspended(clk_dev->dev)) {
+> +               rate = clk_hw_get_rate(clk_dev->hw);
+> +               ret = tegra_clock_set_pd_state(clk_dev, rate);
 
+Don't we need to sync the performance state even when the device is
+runtime suspended?
+
+Perhaps the clock, via a child-clock for example, can get
+prepared/enabled (hence its device gets runtime resumed) before there
+is a clock rate update for it. Then there is no performance state set
+for it, right? Or maybe that isn't a problem?
+
+> +       }
+> +
+> +       mutex_unlock(&clk_dev->lock);
+> +
+> +       return ret;
+> +}
+> +
+> +static int tegra_clock_probe(struct platform_device *pdev)
+> +{
+> +       struct tegra_core_opp_params opp_params = {};
+> +       struct tegra_clk_device *clk_dev;
+> +       struct device *dev = &pdev->dev;
+> +       struct clk *clk;
+> +       int err;
+> +
+> +       if (!dev->pm_domain)
+> +               return -EINVAL;
+> +
+> +       clk_dev = devm_kzalloc(dev, sizeof(*clk_dev), GFP_KERNEL);
+> +       if (!clk_dev)
+> +               return -ENOMEM;
+> +
+> +       clk = devm_clk_get(dev, NULL);
+> +       if (IS_ERR(clk))
+> +               return PTR_ERR(clk);
+> +
+> +       clk_dev->dev = dev;
+> +       clk_dev->hw = __clk_get_hw(clk);
+> +       clk_dev->clk_nb.notifier_call = tegra_clock_change_notify;
+> +       mutex_init(&clk_dev->lock);
+> +
+> +       platform_set_drvdata(pdev, clk_dev);
+> +
+> +       /*
+> +        * Runtime PM was already enabled for this device by the parent clk
+> +        * driver and power domain state should be synced under clk_dev lock,
+> +        * hence we don't use the common OPP helper that initializes OPP
+> +        * state. For some clocks common OPP helper may fail to find ceil
+> +        * rate, it's handled by this driver.
+> +        */
+> +       err = devm_tegra_core_dev_init_opp_table(dev, &opp_params);
+> +       if (err)
+> +               return err;
+> +
+> +       err = clk_notifier_register(clk, &clk_dev->clk_nb);
+> +       if (err) {
+> +               dev_err(dev, "failed to register clk notifier: %d\n", err);
+> +               return err;
+> +       }
+> +
+> +       /*
+> +        * The driver is attaching to a potentially active/resumed clock, hence
+> +        * we need to sync the power domain performance state in a accordance to
+> +        * the clock rate if clock is resumed.
+> +        */
+> +       err = tegra_clock_sync_pd_state(clk_dev);
+> +       if (err)
+> +               goto unreg_clk;
+> +
+> +       return 0;
+> +
+> +unreg_clk:
+> +       clk_notifier_unregister(clk, &clk_dev->clk_nb);
+> +
+> +       return err;
+> +}
+> +
+> +static __maybe_unused int tegra_clock_pm_suspend(struct device *dev)
+> +{
+> +       struct tegra_clk_device *clk_dev = dev_get_drvdata(dev);
+> +
+> +       /*
+> +        * Power management of the clock is entangled with the Tegra PMC
+> +        * GENPD because PMC driver enables/disables clocks for toggling
+> +        * of the PD's on/off state.
+> +        *
+> +        * The PMC GENPD is resumed in NOIRQ phase, before RPM of the clocks
+> +        * becomes available, hence PMC can't use clocks at the early resume
+> +        * phase if RPM is involved. For example when 3d clock is enabled,
+> +        * it may enable the parent PLL clock that needs to be RPM-resumed.
+> +        *
+> +        * Secondly, the PLL clocks may be enabled by the low level suspend
+> +        * code, so we need to assume that PLL is in enabled state during
+> +        * suspend.
+> +        *
+> +        * We will keep PLLs and system clock resumed during suspend time.
+> +        * All PLLs on all SoCs are low power and system clock is always-on,
+> +        * so practically not much is changed here.
+> +        */
+> +
+> +       return clk_prepare(clk_dev->hw->clk);
+
+I am trying to understand, more exactly, what you intend to achieve
+with the clk_prepare() here. It looks a bit weird, to me. Can you try
+to elaborate a bit more on the use case?
+
+Is this rather about making sure that the clock's corresponding PM
+domain stays powered on during system suspend? In that case, I think
+there may be an alternative option....
+
+> +}
+> +
+> +static __maybe_unused int tegra_clock_pm_resume(struct device *dev)
+> +{
+> +       struct tegra_clk_device *clk_dev = dev_get_drvdata(dev);
+> +
+> +       clk_unprepare(clk_dev->hw->clk);
+> +
+> +       return 0;
+> +}
+> +
+> +static void tegra_clock_shutdown(struct platform_device *pdev)
+> +{
+> +       struct tegra_clk_device *clk_dev = platform_get_drvdata(pdev);
+> +
+> +       clk_prepare(clk_dev->hw->clk);
+> +}
+> +
+> +static const struct dev_pm_ops tegra_clock_pm = {
+> +       SET_SYSTEM_SLEEP_PM_OPS(tegra_clock_pm_suspend,
+> +                               tegra_clock_pm_resume)
+> +};
+
+[...]
+
+Kind regards
+Uffe
