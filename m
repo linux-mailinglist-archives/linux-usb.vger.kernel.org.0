@@ -2,120 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEA241F5E5
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 21:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 890E741F5F6
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 21:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbhJATvz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Oct 2021 15:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
+        id S230007AbhJAT7O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Oct 2021 15:59:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbhJATvw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 15:51:52 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBEEC061775;
-        Fri,  1 Oct 2021 12:50:07 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id x27so42934591lfu.5;
-        Fri, 01 Oct 2021 12:50:07 -0700 (PDT)
+        with ESMTP id S229879AbhJAT7N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 15:59:13 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A28C06177E
+        for <linux-usb@vger.kernel.org>; Fri,  1 Oct 2021 12:57:29 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id c4so6989785pls.6
+        for <linux-usb@vger.kernel.org>; Fri, 01 Oct 2021 12:57:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+3tCCW1vf690/4T30qcUTSO03STgS9Zq/gOdQmsNyEY=;
-        b=lY0wpPfvEJC3ODP4sRKgGKoG8Swu6fLZXyhOhUQdBtt8vAmwxCUggKysIiRbfpVECz
-         Cd3ipKChxLyI1Zlljt9jBoTItp7HmkRZNf+eWjSo0rRzLJpIXZuZSpuczURL7aSNbaxj
-         i27N4TFDl5jVrgoDNEymG3WJmbBn2a47R0QIsqRS8kEVT2EURQYnYf+OZQh4u5X906wS
-         OP71a4OED8ggbpaM9F9WPD+jQS6co7bb2ujJRxsbNvD0guBE62JtB6hzhNKWUuRSoEPm
-         eED+tROxrUYQsEDU12h+rkOJTDJ9NZqCO/m7egmIDgFRlkZFJ+0EKU6mPddmAv9siSJx
-         aPHw==
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=j2fdDN3PiozWbni44hrcUM4tELJqdxqZaFoTlKL68Vs=;
+        b=0JGuFckDuefx1bCUOQQTKROf8SkvsfTfm2aQYr6hDdqwzPH2hVDfwY5YXCRic8Cq91
+         ELgl97w/iPOpc3I3dFiz4HMaQyqK86awMgz33OjajUmsBCByhP3QlKPUsuZZth75UuNf
+         AxjeZK9xRw5esr+uKx2BHs/U1paJi146gE1L2rwzir/8YRTP3fppWIc/OsukJNfCjcnt
+         UT1hznJk+ffLu6SvWVFfdLFXYl0JpOEvJcEx/qJCgT/AXRX7xYTyoX/NicL2Hg8ObdVN
+         SCpQrUtUbqFWISWbd7KHBrB0fvBmA1iK40S5N/F/NGKMFompoWkiIFxXYIY8KECPScj6
+         oabw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+3tCCW1vf690/4T30qcUTSO03STgS9Zq/gOdQmsNyEY=;
-        b=Z5MKWqJ44nV0FaQR+LgRdzd3D/DcVqURG5ba8wZhMGE6KgMLCzUFBhhYTmVTyQBSiM
-         vNwu+vpY8LIhD+xGa9ojgjPJFqtlrkYRwnGfZtUWv+1VIWDFkOhqYXxYdF0hPJbVNetG
-         S8++W0JJ0+D5pd2KnhJM23J6t6WVT9greYTkSOYvVI6IPOjq08LQViiqC/lajnFo5Q0T
-         0Igx/O4Xuqs8oLbhIO6CKuvNrolM82bRTDCUffb8BmhZlj6OhSRUfUtpaKrmcpJ7OvUJ
-         Y3gAkLXrodgyw33dv6gj6DADd8/B8t05KFDVKCzZE4dQQq4SWCDpv6WI8C6RCR4855K8
-         rDEA==
-X-Gm-Message-State: AOAM530roErC4l84PFvXKEHQXNYQSY4ucyZEkCIMviBdt0hp3MdwgF6J
-        hfkgfiCo/u1AeTOnYR6Atr0=
-X-Google-Smtp-Source: ABdhPJxYsYCCBKlCSGLAzxa6BXsGbqcTjHWvgb7beKpP4WisArOt1AAHN4vdv1Oz4AuVBT+h3gaDUA==
-X-Received: by 2002:a2e:924d:: with SMTP id v13mr13579672ljg.380.1633117806218;
-        Fri, 01 Oct 2021 12:50:06 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-163-198.dynamic.spd-mgts.ru. [79.139.163.198])
-        by smtp.googlemail.com with ESMTPSA id d26sm835708ljj.45.2021.10.01.12.50.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Oct 2021 12:50:05 -0700 (PDT)
-Subject: Re: [PATCH v13 06/35] clk: tegra: Support runtime PM and power domain
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-References: <20210926224058.1252-1-digetx@gmail.com>
- <20210926224058.1252-7-digetx@gmail.com>
- <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <7386079f-0dfe-9f55-6297-1f9ee67cd9d6@gmail.com>
-Date:   Fri, 1 Oct 2021 22:50:04 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=j2fdDN3PiozWbni44hrcUM4tELJqdxqZaFoTlKL68Vs=;
+        b=cgpNGdaRQFEzVccMSCrazfxgyWouAs6xce9Y9eksVeApH1XNsvwOfai3C9ympVRLsa
+         KrOMRivzf9Yaep8YnApFN4jhtlJYL9N46oEz901SU0Vc45+v9Sd8awUdPAIQ466K0LZZ
+         uwIGjtvn0YDokjgxo3v2MG+h5nciWM+u5/2BMPKQzV6ZshdO3I3VhFvrosWxyXuquX+S
+         f83r1zXUTEpYqypoEDXEZY/34u44fQM+6SV3QQB345cbzh/5dzrQF03Z10/SNWapzh+f
+         m6lQDq2nt5mqs4FSiUPaO2+AyIxhN4JvbL9mkM4AoNGOoY6NJrnySKJ/t0GOBXhWEhvB
+         4m2A==
+X-Gm-Message-State: AOAM531BAyU6HG+UmeCcmnz+HXI+DudLbM46k9TT2XrVFHRyxFViEvmJ
+        R0nlWUcdT8Uv1iBVn8KkzEH5tfgWaU2FhURxt5pstw==
+X-Google-Smtp-Source: ABdhPJyYGsOX6LM9svlvUKXQV6gXINpbe2lghZhRPNGB5T8BuB8dNpJg0NT6Sk/CXd08VvLAzRuUb+K/TIbmj7eSIoE=
+X-Received: by 2002:a17:90b:3b84:: with SMTP id pc4mr15214648pjb.220.1633118248489;
+ Fri, 01 Oct 2021 12:57:28 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210930010511.3387967-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20210930065953-mutt-send-email-mst@kernel.org> <CAPcyv4hP6mtzKS-CVb-aKf-kYuiLM771PMxN2zeBEfoj6NbctA@mail.gmail.com>
+ <6d1e2701-5095-d110-3b0a-2697abd0c489@linux.intel.com> <YVXWaF73gcrlvpnf@kroah.com>
+ <1cfdce51-6bb4-f7af-a86b-5854b6737253@linux.intel.com> <YVaywQLAboZ6b36V@kroah.com>
+ <CAPcyv4gqs=KuGyxFR61QWqF6HKrRg851roCGUqrq585+s2Cm=w@mail.gmail.com>
+ <20211001164533.GC505557@rowland.harvard.edu> <CAPcyv4i__reKFRP1KjWUov_W5jBQN9_vbUbKRL_V7KMM3oPuuQ@mail.gmail.com>
+ <20211001190048.GA512418@rowland.harvard.edu>
+In-Reply-To: <20211001190048.GA512418@rowland.harvard.edu>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Fri, 1 Oct 2021 12:57:18 -0700
+Message-ID: <CAPcyv4hYL51DcBuSuyMRFo5Jcc=zLd=Ugo+H_2saELcZ5AJBeQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] virtio: Initialize authorized attribute for
+ confidential guest
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jason Wang <jasowang@redhat.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-01.10.2021 15:32, Ulf Hansson пишет:
->> +static int tegra_clock_sync_pd_state(struct tegra_clk_device *clk_dev)
->> +{
->> +       unsigned long rate;
->> +       int ret = 0;
->> +
->> +       mutex_lock(&clk_dev->lock);
->> +
->> +       if (!pm_runtime_status_suspended(clk_dev->dev)) {
->> +               rate = clk_hw_get_rate(clk_dev->hw);
->> +               ret = tegra_clock_set_pd_state(clk_dev, rate);
-> Don't we need to sync the performance state even when the device is
-> runtime suspended?
-> 
-> Perhaps the clock, via a child-clock for example, can get
-> prepared/enabled (hence its device gets runtime resumed) before there
-> is a clock rate update for it. Then there is no performance state set
-> for it, right? Or maybe that isn't a problem?
-> 
+On Fri, Oct 1, 2021 at 12:02 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Fri, Oct 01, 2021 at 11:09:52AM -0700, Dan Williams wrote:
+> > On Fri, Oct 1, 2021 at 9:47 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > >
+> > > On Fri, Oct 01, 2021 at 09:13:54AM -0700, Dan Williams wrote:
+> > > > Bear with me, and perhaps it's a lack of imagination on my part, but I
+> > > > don't see how to get to a globally generic "authorized" sysfs ABI
+> > > > given that USB and Thunderbolt want to do bus specific actions on
+> > > > authorization toggle events. Certainly a default generic authorized
+> > > > attribute can be defined for all the other buses that don't have
+> > > > legacy here, but Thunderbolt will still require support for '2' as an
+> > > > authorized value, and USB will still want to base probe decisions on
+> > > > the authorization state of both the usb_device and the usb_interface.
+> > >
+> > > The USB part isn't really accurate (I can't speak for Thunderbolt).
+> > > When a usb_device is deauthorized, the device will be unconfigured,
+> > > deleting all its interfaces and removing the need for any probe
+> > > decisions about them.  In other words, the probe decision for a
+> > > usb_device or usb_interface depends only on the device's/interface's
+> > > own authorization state.
+> > >
+> > > True, the interface binding code does contain a test of the device's
+> > > authorization setting.  That test is redundant and can be removed.
+> > >
+> > > The actions that USB wants to take on authorization toggle events for
+> > > usb_devices are: for authorize, select and install a configuration;
+> > > for deauthorize, unconfigure the device.  Each of these could be
+> > > handled simply enough just by binding/unbinding the device.  (There
+> > > is some special code for handling wireless USB devices, but wireless
+> > > USB is now defunct.)
+> >
+> > Ah, so are you saying that it would be sufficient for USB if the
+> > generic authorized implementation did something like:
+> >
+> > dev->authorized = 1;
+> > device_attach(dev);
+> >
+> > ...for the authorize case, and:
+> >
+> > dev->authorize = 0;
+> > device_release_driver(dev);
+> >
+> > ...for the deauthorize case?
+>
+> Yes, I think so.  But I haven't tried making this change to test and
+> see what really happens.
 
-Good catch! Older versions of this patch had a special handling for clk
-enable/disable. I just forgot to update this function, it's now not a
-problem to change performance state of a suspended device and it
-actually needs to be done. I'll correct it, thanks!
+Sounds like a useful path for this effort to explore. Especially as
+Greg seems to want the proposed "has_probe_authorization" flag in the
+bus_type to disappear and make this all generic. It just seems that
+Thunderbolt would need deeper surgery to move what it does in the
+authorization toggle path into the probe and remove paths.
+
+Mika, do you see a path for Thunderbolt to align its authorization
+paths behind bus ->probe() ->remove() events similar to what USB might
+be able to support for a generic authorization path?
