@@ -2,234 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C0841E6C6
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 06:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D3841E784
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 08:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343670AbhJAEb1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Oct 2021 00:31:27 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:13751 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237038AbhJAEb0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 00:31:26 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1633062582; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=hMlYsnEpNAjIGcGeBS4W4NAj6nd6tI3JefAIl+pq0PI=;
- b=PSHkEBLEGG/GtIEaZnZwGp/ixtl6mqFU8fOZ0qxXoX0xKHRWVRFpCgJ+OT21m3C9V79OXrwF
- /d7f7RhC2atTQqqTWtV2/h0BfJ511NgMKbKMTFCHeMDuyj/Wg846O4/62L3ksFtxzQZ+z/UV
- nJF6A9gD9cvhVm9Z6XKGOqaHL9c=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
- 61568eb447d64efb6d1f2c52 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 01 Oct 2021 04:29:40
- GMT
-Sender: pmaliset=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id AE5D0C43460; Fri,  1 Oct 2021 04:29:40 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmaliset)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9AE4FC4338F;
-        Fri,  1 Oct 2021 04:29:39 +0000 (UTC)
+        id S1352176AbhJAGb0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Oct 2021 02:31:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56020 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1352084AbhJAGbX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 1 Oct 2021 02:31:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AD0D561A57;
+        Fri,  1 Oct 2021 06:29:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1633069779;
+        bh=rcW5f2yBLwBChRyM5RHpwItzXk3vSZPn4evKCamc1c0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OkPICDQRY+xltvJ7ddDOZG9kEPCfLum70sOPEt/Lf/OtCN1j2XdfJYl0kuBOqscLw
+         PujostpRqxD/hbx2g0swIybjvlpLeo8SaUjnLXSRTOjQnHiUaGpljPKzyDUTfgD78c
+         BZXNayCKOYFzqCEcOExF+bZMAM7SOXAsPOzEHHB0=
+Date:   Fri, 1 Oct 2021 08:29:36 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jason Wang <jasowang@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        "Reshetova, Elena" <elena.reshetova@intel.com>
+Subject: Re: [PATCH v2 2/6] driver core: Add common support to skip probe for
+ un-authorized devices
+Message-ID: <YVaq0Hm8WHVY46xX@kroah.com>
+References: <20210930010511.3387967-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20210930065807-mutt-send-email-mst@kernel.org>
+ <YVXBNJ431YIWwZdQ@kroah.com>
+ <20210930103537-mutt-send-email-mst@kernel.org>
+ <YVXOc3IbcHsVXUxr@kroah.com>
+ <20210930105852-mutt-send-email-mst@kernel.org>
+ <YVXWIVZupeAzT6bO@kroah.com>
+ <f4b5a269-843f-6911-24fe-ebffb2bd4f9e@linux.intel.com>
+ <YVXyqBGa5Ix5MzmD@kroah.com>
+ <bb27af8d-d4ba-fa70-8893-5b9939f9280a@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 01 Oct 2021 09:59:39 +0530
-From:   Prasad Malisetty <pmaliset@codeaurora.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     agross@kernel.org, bhelgaas@google.com, bjorn.andersson@linaro.org,
-        lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
-        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dianders@chromium.org,
-        mka@chromium.org, vbadigan@codeaurora.org, sallenki@codeaurora.org,
-        manivannan.sadhasivam@linaro.org
-Subject: Re: [PATCH v9 3/4] arm64: dts: qcom: sc7280: Add PCIe nodes for IDP
- board
-In-Reply-To: <CAE-0n52G7=PFrPGr5Zwq43q55CWBSkaEm7HpC+C4r2+Gjv3JQg@mail.gmail.com>
-References: <1632837350-12100-1-git-send-email-pmaliset@codeaurora.org>
- <1632837350-12100-4-git-send-email-pmaliset@codeaurora.org>
- <CAE-0n52G7=PFrPGr5Zwq43q55CWBSkaEm7HpC+C4r2+Gjv3JQg@mail.gmail.com>
-Message-ID: <d009c9c26e8ea7058509e96d2e0cd282@codeaurora.org>
-X-Sender: pmaliset@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bb27af8d-d4ba-fa70-8893-5b9939f9280a@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-09-29 02:22, Stephen Boyd wrote:
-> Quoting Prasad Malisetty (2021-09-28 06:55:49)
->> Enable PCIe controller and PHY for sc7280 IDP board.
->> Add specific NVMe GPIO entries for SKU1 and SKU2 support.
->> 
->> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
->> ---
->>  arch/arm64/boot/dts/qcom/sc7280-idp.dts  |  9 ++++++
->>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 54 
->> ++++++++++++++++++++++++++++++++
->>  arch/arm64/boot/dts/qcom/sc7280-idp2.dts |  9 ++++++
->>  3 files changed, 72 insertions(+)
->> 
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts 
->> b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
->> index 64fc22a..1562386 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
->> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
->> @@ -61,6 +61,15 @@
->>         modem-init;
->>  };
->> 
->> +&nvme_pwren_pin {
->> +       pins = "gpio19";
->> +};
+On Thu, Sep 30, 2021 at 12:15:16PM -0700, Andi Kleen wrote:
 > 
-> This should move to the bottom in the "pinctrl" section.
+> On 9/30/2021 10:23 AM, Greg Kroah-Hartman wrote:
+> > On Thu, Sep 30, 2021 at 10:17:09AM -0700, Andi Kleen wrote:
+> > > The legacy drivers could be fixed, but nobody really wants to touch them
+> > > anymore and they're impossible to test.
+> > Pointers to them?
 > 
-Hi Stephen,
+> For example if you look over old SCSI drivers in drivers/scsi/*.c there is a
+> substantial number that has a module init longer than just registering a
+> driver. As a single example look at drivers/scsi/BusLogic.c
 
-There is no pinctrl section in this file. we defined nvme_pwren_pin in 
-common IDP file(sc7280-idp.dtsi) and using the nvme_pwren_pin reference 
-to define SKU specific gpio pin for SKU1 and SKU2 support.
+Great, send patches to fix them up instead of adding new infrastructure
+to the kernel.  It is better to remove code than add it.  You can rip
+the ISA code out of that driver and then you will not have the issue
+anymore.
 
-Thanks
--Prasad
->> +
->> +&nvme_3v3_regulators {
->> +       gpio = <&tlmm 19 GPIO_ACTIVE_HIGH>;
->> +       enable-active-high;
-> 
-> The enable-active-high can be in the idp.dtsi file? That doesn't seem 
-> to
-> change.
-> 
->> +};
->> +
->>  &pmk8350_vadc {
->>         pmr735a_die_temp {
->>                 reg = <PMR735A_ADC7_DIE_TEMP>;
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi 
->> b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> index def22ff..5b5505f 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> @@ -31,6 +31,17 @@
->>                         linux,can-disable;
->>                 };
->>         };
->> +
->> +       nvme_3v3_regulators: nvme-3v3-regulators {
-> 
-> Why plural? Isn't it a single regulator?
-> 
-Sure, I will update in next version
+Or again, just add that module to the deny list and never load it from
+userspace.
 
-Thanks
--Prasad
->> +               compatible = "regulator-fixed";
->> +               regulator-name = "VLDO_3V3";
->> +
->> +               regulator-min-microvolt = <3300000>;
->> +               regulator-max-microvolt = <3300000>;
->> +
->> +               pinctrl-names = "default";
->> +               pinctrl-0 = <&nvme_pwren_pin>;
->> +       };
->>  };
->> 
->>  &apps_rsc {
->> @@ -220,6 +231,42 @@
->>         modem-init;
->>  };
->> 
->> +&pcie1 {
->> +       status = "okay";
->> +       perst-gpio = <&tlmm 2 GPIO_ACTIVE_LOW>;
->> +
->> +       vddpe-3v3-supply = <&nvme_3v3_regulators>;
->> +
->> +       pinctrl-names = "default";
->> +       pinctrl-0 = <&pcie1_default_state>;
->> +};
->> +
->> +&pcie1_phy {
->> +       status = "okay";
->> +
->> +       vdda-phy-supply = <&vreg_l10c_0p8>;
->> +       vdda-pll-supply = <&vreg_l6b_1p2>;
->> +};
->> +
->> +&pcie1_default_state {
-> 
-> I thought the node would be split into a reset config node and a wake
-> config node. Is that not being done for some reason? The pinctrl-0 
-> would
-> look like
-> 
-Agree, I will incorporate the changes in next version.
+> There were also quite a few platform drivers like this.
 
-> 	pinctrl-0 = <&pcie1_default_state>, <&pcie1_reset_n>, <&pcie1_wake_n>;
+Of course, platform drivers are horrible abusers of this.  Just like the
+recent one submitted by Intel that would bind to any machine it was
+loaded on and did not actually do any hardware detection assuming that
+it owned the platform:
+	https://lore.kernel.org/r/20210924213157.3584061-2-david.e.box@linux.intel.com
+
+So yes, some drivers are horrible, it is our job to catch that and fix
+it.  If you don't want to load those drivers on your system, we have
+userspace solutions for that (you can have allow/deny lists there.)
+
+> > > The drivers that probe something that is not enumerated in a standard way
+> > > have no choice, it cannot be implemented in a different way.
+> > PCI devices are not enumerated in a standard way???
 > 
->> +       reset-n {
->> +               pins = "gpio2";
->> +               function = "gpio";
->> +
->> +               drive-strength = <16>;
->> +               output-low;
->> +               bias-disable;
->> +       };
->> +
->> +       wake-n {
->> +               pins = "gpio3";
->> +               function = "gpio";
->> +
->> +               drive-strength = <2>;
->> +               bias-pull-up;
->> +       };
->> +};
->> +
->>  &pmk8350_vadc {
->>         pmk8350_die_temp {
->>                 reg = <PMK8350_ADC7_DIE_TEMP>;
->> @@ -489,3 +536,10 @@
->>                 bias-pull-up;
->>         };
->>  };
->> +
->> +&tlmm {
->> +       nvme_pwren_pin: nvme-pwren-pin {
->> +               function = "gpio";
->> +               bias-pull-up;
->> +       };
->> +};
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp2.dts 
->> b/arch/arm64/boot/dts/qcom/sc7280-idp2.dts
->> index 1fc2add..0548cb6 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280-idp2.dts
->> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp2.dts
->> @@ -21,3 +21,12 @@
->>                 stdout-path = "serial0:115200n8";
->>         };
->>  };
->> +
->> +&nvme_pwren_pin {
->> +       pins = "gpio51";
->> +};
+> The pci devices are enumerated in a standard way, but typically the driver
+> also needs something else outside PCI that needs some other probing
+> mechanism.
+
+Like what?  What PCI drivers need outside connections to control the
+hardware?
+
+> > > So instead we're using a "firewall" the prevents these drivers from doing
+> > > bad things by not allowing ioremap access unless opted in, and also do some
+> > > filtering on the IO ports The device filter is still the primary mechanism,
+> > > the ioremap filtering is just belts and suspenders for those odd cases.
+> > That's horrible, don't try to protect the kernel from itself.  Just fix
+> > the drivers.
 > 
-> The pin config can go to a pinctrl section at the bottom of this file?
+> I thought we had already established this last time we discussed it.
 > 
-Same as a like SKU1 (sc7280-idp.dts)
->> +
->> +&nvme_3v3_regulators {
->> +       gpio = <&tlmm 51 GPIO_ACTIVE_HIGH>;
->> +       enable-active-high;
->> +};
+> That's completely impractical. We cannot harden thousands of drivers,
+> especially since it would be all wasted work since nobody will ever need
+> them in virtual guests. Even if we could harden them how would such a work
+> be maintained long term? Using a firewall and filtering mechanism is much
+> saner for everyone.
+
+I agree, you can not "harden" anything here.  That is why I asked you to
+use the existing process that explicitly moves the model to userspace
+where a user can say "do I want this device to be controlled by the
+kernel or not" which then allows you to pick and choose what drivers you
+want to have in your system.
+
+You need to trust devices, and not worry about trusting drivers as you
+yourself admit :)
+
+The kernel's trust model is that once we bind to them, we trust almost
+all device types almost explicitly.  If you wish to change that model,
+that's great, but it is a much larger discussion than this tiny patchset
+would require.
+
+thanks,
+
+greg k-h
