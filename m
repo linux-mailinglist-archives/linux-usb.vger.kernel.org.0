@@ -2,71 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD41741EC0A
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 13:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86CA441ED3F
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 14:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353984AbhJALg1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Oct 2021 07:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353967AbhJALg0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 07:36:26 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0E7C0613E4
-        for <linux-usb@vger.kernel.org>; Fri,  1 Oct 2021 04:34:42 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id ba1so33650212edb.4
-        for <linux-usb@vger.kernel.org>; Fri, 01 Oct 2021 04:34:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=5L/E4eErsLvrvRSyjenHMn1XgR3BfAibYkaUBTxnmho=;
-        b=UOLbJNv/PHcWOU6Z4rzzgus9xotes2ecLAW3m0Y6kDPTOjFVwFz4/NRCuiUc/AjV39
-         70shoNLlGtW2zJKiJK8gWF1ZVghHqNU0FYvYoPopWEQ+fHy4PMJvg/rPa7XOjHzx5+I8
-         Xe7YeiWNQ2x44H4dPlVOE6Ah0lUroynwj/qWhWvYMyQ5kBZOuJhQVhc3aP+Fl6qaCTTC
-         uMrRxUPJ3wsFo+uvtThbmIiq0+6yFUOE4prZ7QcU8rJP7m7ajkacKs1kWI1OpkOo3grw
-         EL6Sbr67jUVUBegOHPesQ5yrtjLicwMzSf4ZTlJn80mKLZXzPrStel0YHAEyxcF5xL+2
-         tHhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=5L/E4eErsLvrvRSyjenHMn1XgR3BfAibYkaUBTxnmho=;
-        b=dok+SIsbwxL7KhYvew3NjOHPkoK2xZ+0bcYqWmipdW3e/1IkkWLU1kwwwn+l/0bKWZ
-         bX+BPauSLkaVacCq0xYGXYp2zdRqgK+rxz1dlRqAy1HO3z7QikKolfFcHnXpidR27kVW
-         POmcQKNCR7wyYYlJK57FDeF9xt4X7aa+u+jKDYFqdTl4CYxw3HlXdvKX0caiLKP3r+iv
-         D5pP3rbOeMPW10cSjC+ffu15H4XvYPjtpq0YfsDkIDQZgL7nyFcUj0pUHizeLhN6dijh
-         hcz1Gzdm7q+l+oAp41IrNlb8YPPjHv5UStxQrPqI5NJW5EUfzGbo98eLmMg0MblvchqW
-         CTrw==
-X-Gm-Message-State: AOAM533ft+eJN5zWzwexlX64QOubzroPG/Cu0N2hfRhmJL+g3d0KkpwJ
-        E94lUngKBR7A1kxrr6M/VPBSnBs2iXsJTBrosvc=
-X-Google-Smtp-Source: ABdhPJzk33LSFp+PeISm+eJBQbbjD4Um0GnvAV/blvchXzlEurQQitZPK5UL59BP+L6PnQP4Ag8ozt5qB2PABb7m0KY=
-X-Received: by 2002:a17:906:1749:: with SMTP id d9mr5442671eje.178.1633088080796;
- Fri, 01 Oct 2021 04:34:40 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a17:906:724a:0:0:0:0 with HTTP; Fri, 1 Oct 2021 04:34:39
- -0700 (PDT)
-Reply-To: joymat52@gmail.com
-From:   Joyce Thomas <tjoyc1234@gmail.com>
-Date:   Fri, 1 Oct 2021 04:34:39 -0700
-Message-ID: <CAF-RpUgaUkMbj2QzyBnkOuwEe=PmUv5qivCYUGKtEUkg1Z6r2w@mail.gmail.com>
-Subject: ATTN:
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S1354347AbhJAMVc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Oct 2021 08:21:32 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:11072 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231313AbhJAMVc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 08:21:32 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1633090788; h=References: In-Reply-To: Message-Id: Date:
+ Subject: Cc: To: From: Sender;
+ bh=RDZYWJryjXt5KGjlspKeJRXLslVEDR1EqDnYjI6acwk=; b=HhOWKfVoHpWCZHemmHRTz8J/O7E5xHm6QN/+BgahMuXf9D964zYE21zadiuMDyRiOOHo6Nmi
+ WKtdPaIQlhjHaDiQKZo1aV4FwaclQGfkZVxr1ZsAmSMu3IHh5XnXtBxz4Z4WpJ5b7NHzLpG4
+ AKpMEp6tAoW2+anQLO6HOP7aDvw=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
+ 6156fccd8578ef11ed6f9cc2 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 01 Oct 2021 12:19:25
+ GMT
+Sender: pkondeti=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 88728C4338F; Fri,  1 Oct 2021 12:19:24 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from codeaurora.org (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: pkondeti)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B81E6C4360C;
+        Fri,  1 Oct 2021 12:19:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org B81E6C4360C
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Pavankumar Kondeti <pkondeti@codeaurora.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Jack Pham <jackp@codeaurora.org>, linux-usb@vger.kernel.org,
+        stable@vger.kernel.org,
+        Pavankumar Kondeti <pkondeti@codeaurora.org>
+Subject: [PATCH] xhci: Fix command ring pointer corruption while aborting a command
+Date:   Fri,  1 Oct 2021 17:49:17 +0530
+Message-Id: <1633090757-8473-1-git-send-email-pkondeti@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1633072946-16826-1-git-send-email-pkondeti@codeaurora.org>
+References: <1633072946-16826-1-git-send-email-pkondeti@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Dear
-My Name is Mr. Joyce Thomas. Contact me for more information on the
-transfer of ($7.9 million dollars) left by my late client from your
-Country. I want to present you as a business partner and next of kin
-of the fund. I will give you the details of this transaction, as soon
-as I hear from you. I need the information below:
-Full Name:
-Address:
-Occupation:
-Age:
-Personal Email:
-Personal Telephone:
-Best Regards,
-Mr.Joyce  Thomas
+The command ring pointer is located at [6:63] bits of the command
+ring control register (CRCR). All the control bits like command stop,
+abort are located at [0:3] bits. While aborting a command, we read the
+CRCR and set the abort bit and write to the CRCR. The read will always
+give command ring pointer as all zeros. So we essentially write only
+the control bits. Since we split the 64 bit write into two 32 bit writes,
+there is a possibility of xHC command ring stopped before the upper
+dword (all zeros) is written. If that happens, xHC updates the upper
+dword of its internal command ring pointer with all zeros. Next time,
+when the command ring is restarted, we see xHC memory access failures.
+Fix this issue by only writing to the lower dword of CRCR where all
+control bits are located.
+
+Signed-off-by: Pavankumar Kondeti <pkondeti@codeaurora.org>
+---
+v2:
+%s/u64/u32 for a variable in xhci_abort_cmd_ring()
+
+ drivers/usb/host/xhci-ring.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index e676749..d7fe6d4 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -366,16 +366,22 @@ static void xhci_handle_stopped_cmd_ring(struct xhci_hcd *xhci,
+ /* Must be called with xhci->lock held, releases and aquires lock back */
+ static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
+ {
+-	u64 temp_64;
++	u32 temp_32;
+ 	int ret;
+ 
+ 	xhci_dbg(xhci, "Abort command ring\n");
+ 
+ 	reinit_completion(&xhci->cmd_ring_stop_completion);
+ 
+-	temp_64 = xhci_read_64(xhci, &xhci->op_regs->cmd_ring);
+-	xhci_write_64(xhci, temp_64 | CMD_RING_ABORT,
+-			&xhci->op_regs->cmd_ring);
++	/*
++	 * The control bits like command stop, abort are located in lower
++	 * dword of the command ring control register. Limit the write
++	 * to the lower dword to avoid corrupting the command ring pointer
++	 * in case if the command ring is stopped by the time upper dword
++	 * is written.
++	 */
++	temp_32 = readl(&xhci->op_regs->cmd_ring);
++	writel(temp_32 | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
+ 
+ 	/* Section 4.6.1.2 of xHCI 1.0 spec says software should also time the
+ 	 * completion of the Command Abort operation. If CRR is not negated in 5
+-- 
+Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+
