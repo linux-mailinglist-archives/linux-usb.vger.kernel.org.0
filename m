@@ -2,159 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF4341E5FB
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 04:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EAF41E606
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 04:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbhJACV7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Sep 2021 22:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57114 "EHLO
+        id S230273AbhJACil (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Sep 2021 22:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbhJACV6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Sep 2021 22:21:58 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B258C06176D
-        for <linux-usb@vger.kernel.org>; Thu, 30 Sep 2021 19:20:15 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id x4so5326891pln.5
-        for <linux-usb@vger.kernel.org>; Thu, 30 Sep 2021 19:20:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=H1v7bfhbOYS9QQdwJ+dS1BX8nNt2lEyswi+C4uaCxgo=;
-        b=MCfltqqpgRZMipzrqKNzE4TCzkTYOE432mzaARuP6ZAPdOOvgGLlpUvdiffi7khzpY
-         r5ytcuFoPT7QP1M4OkD8d4AAlvn+vL0MyimnfkqRJhaR81vcmlu24dPrEc+YtKAlQybA
-         7uURmtuUtHfa/Nr7Epu3ozIGiZBUv0ryceNZpKerlCXqf9QNQpSj9B83sEeRR3HGje2V
-         ccammWBDCWeMLsP2DpIOuH4BWPqRZiqqTRMGUl6o6QVUfFIn9+Kh4TihdfnVd9FVq5xA
-         pfY/wl98KGZ2b/jqHOnCN5/hR5tIVmL9HTa0U3Dihde1AMTPm61wVlHLUYFEkJnvJlU6
-         RSGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H1v7bfhbOYS9QQdwJ+dS1BX8nNt2lEyswi+C4uaCxgo=;
-        b=5rjkDpyf9grhsHs14hwAdY0/GJ4Fzsuj56uFTuMNBVNtrrAtoCrFSOoSxdIqhhjY8W
-         GSwqUi27FTLsTiYnOAkDdlKHDXg69jkz2tt7t47drJoDRRismvLL7vkRsWtX2v3D6WCD
-         GnLloruAzSjVrZv+I0KiCvvKennmmoC5xn5Hv6/GeOI2OzroIvKF5tkV4gj6Ek9mR3DE
-         pdxNtXalL3IK0DbBzHV2eEAkGDoMXVrQrx7ech6aplfotEvpa6vx7I9aw9RYvc9cAXtm
-         sG2Aw7dzVqv4yuRGDYQLMmmshNLAOdNPgfcyPmcNXwm1lYktHBK3XHmk5ADfJQi9TUHO
-         Af5A==
-X-Gm-Message-State: AOAM532eq1fKSn8w6zZj5mAP5t1XL+M0M8hY5M6YpdSqiWdSla73bZwK
-        oFI+AZBZdtgZ7z2aJySWlAogJOx5j10L75oG7/yWZA==
-X-Google-Smtp-Source: ABdhPJw3+LICXsBfSEFCKXlafRA7xXZxwrcD4LdHbM7zaf1EyXu36rjRKL9bEqMGIfW1AeETHE+7h0w47T6Gie9PJI0=
-X-Received: by 2002:a17:902:8a97:b0:13e:6e77:af59 with SMTP id
- p23-20020a1709028a9700b0013e6e77af59mr5975436plo.4.1633054814608; Thu, 30 Sep
- 2021 19:20:14 -0700 (PDT)
+        with ESMTP id S230260AbhJACik (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Sep 2021 22:38:40 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77657C06176A
+        for <linux-usb@vger.kernel.org>; Thu, 30 Sep 2021 19:36:57 -0700 (PDT)
+Received: from pyrite.rasen.tech (unknown [IPv6:2400:4051:61:600:2c71:1b79:d06d:5032])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EE6CAA16;
+        Fri,  1 Oct 2021 04:36:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1633055814;
+        bh=LaN6cHaR/hMeaW2qnf1S8STIioiDqgr2cionnjUxF6g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oYrJlPqPY0+PJmhyKjv6Fa4XKQDFDPLFb6CUs2za2UTkdYZySPnfsidXnY2OsniGw
+         iaqCtvB09avkYJzJywredHztentE9MeW9qb9BOY/jCrX42SzDDjywFY28Df1ZcWyVi
+         nGr41hEvxNTrFvjYddu3DulEQ3DQ6s8JlQy3hBcA=
+Date:   Fri, 1 Oct 2021 11:36:45 +0900
+From:   paul.elder@ideasonboard.com
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
+        laurent.pinchart@ideasonboard.com, kernel@pengutronix.de,
+        caleb.connolly@ideasonboard.com
+Subject: Re: [PATCH 1/7] usb: gadget: uvc: consistently use define for
+ headerlen
+Message-ID: <20211001023645.GA3032473@pyrite.rasen.tech>
+References: <20210930102717.15720-1-m.grzeschik@pengutronix.de>
+ <20210930102717.15720-2-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
-References: <20210930010511.3387967-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20210930065807-mutt-send-email-mst@kernel.org> <YVXBNJ431YIWwZdQ@kroah.com>
- <20210930144305.GA464826@rowland.harvard.edu> <20210930104924-mutt-send-email-mst@kernel.org>
- <20210930153509.GF464826@rowland.harvard.edu> <20210930115243-mutt-send-email-mst@kernel.org>
- <00156941-300d-a34a-772b-17f0a9aad885@linux.intel.com> <20210930204447.GA482974@rowland.harvard.edu>
- <CAPcyv4j8DvsMYppRtm=+JQWc7nJGoXeAGGz9U150x0p_KekqcA@mail.gmail.com> <20211001014114.GB489012@rowland.harvard.edu>
-In-Reply-To: <20211001014114.GB489012@rowland.harvard.edu>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Thu, 30 Sep 2021 19:20:04 -0700
-Message-ID: <CAPcyv4iRo0Hd=_3jAScb5KUEJp3bU=QrWM8FYeb94SzO4gqgJA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] driver core: Add common support to skip probe for
- un-authorized devices
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jason Wang <jasowang@redhat.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        "Reshetova, Elena" <elena.reshetova@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210930102717.15720-2-m.grzeschik@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 30, 2021 at 6:41 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Thu, Sep 30, 2021 at 01:52:59PM -0700, Dan Williams wrote:
-> > On Thu, Sep 30, 2021 at 1:44 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > >
-> > > On Thu, Sep 30, 2021 at 12:23:36PM -0700, Andi Kleen wrote:
-> > > >
-> > > > > I don't think the current mitigations under discussion here are about
-> > > > > keeping the system working. In fact most encrypted VM configs tend to
-> > > > > stop booting as a preferred way to handle security issues.
-> > > >
-> > > > Maybe we should avoid the "trusted" term here. We're only really using it
-> > > > because USB is using it and we're now using a common framework like Greg
-> > > > requested. But I don't think it's the right way to think about it.
-> > > >
-> > > > We usually call the drivers "hardened". The requirement for a hardened
-> > > > driver is that all interactions through MMIO/port/config space IO/MSRs are
-> > > > sanitized and do not cause memory safety issues or other information leaks.
-> > > > Other than that there is no requirement on the functionality. In particular
-> > > > DOS is ok since a malicious hypervisor can decide to not run the guest at
-> > > > any time anyways.
-> > > >
-> > > > Someone loading an malicious driver inside the guest would be out of scope.
-> > > > If an attacker can do that inside the guest you already violated the
-> > > > security mechanisms and there are likely easier ways to take over the guest
-> > > > or leak data.
-> > > >
-> > > > The goal of the device filter mechanism is to prevent loading unhardened
-> > > > drivers that could be exploited without them being themselves malicious.
-> > >
-> > > If all you want to do is prevent someone from loading a bunch of
-> > > drivers that you have identified as unhardened, why not just use a
-> > > modprobe blacklist?  Am I missing something?
-> >
-> > modules != drivers (i.e. multi-driver modules are a thing) and builtin
-> > modules do not adhere to modprobe policy.
-> >
-> > There is also a desire to be able to support a single kernel image
-> > across hosts and guests. So, if you were going to say, "just compile
-> > all unnecessary drivers as modules" that defeats the common kernel
-> > image goal. For confidential computing the expectation is that the
-> > necessary device set is small. As you can see in the patches in this
-> > case it's just a few lines of PCI ids and a hack to the virtio bus to
-> > achieve the goal of disabling all extraneous devices by default.
->
->
->
-> If your goal is to prevent some unwanted _drivers_ from operating --
-> or all but a few desired drivers, as the case may be -- why extend
-> the "authorized" API to all _devices_?  Why not instead develop a
-> separate API (but of similar form) for drivers?
->
-> Wouldn't that make more sense?  It corresponds a lot more directly
-> with what you say you want to accomplish.
+Hi Michael,
 
-This was v1. v1 was NAKd [1] [2]:
+On Thu, Sep 30, 2021 at 12:27:11PM +0200, Michael Grzeschik wrote:
+> The uvc request headerlen of 2 was defined as UVCG_REQUEST_HEADER_LEN
+> in commit e81e7f9a0eb9 ("usb: gadget: uvc: add scatter gather support").
+> We missed to use it consistently. This patch fixes that.
+> 
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
-[1]: https://lore.kernel.org/all/YQwpa+LAYt7YZ5dh@kroah.com/
-[2]: https://lore.kernel.org/all/YQzDqm6FOezM6Rnu@kroah.com/
+Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
 
-> What would you do in the theoretical case where two separate drivers
-> can manage the same device, but one of them is desired (or hardened)
-> and the other isn't?
-
-Allow for user override, just like we do today for new_id, remove_id,
-bind, and unbind  when default driver policy is insufficient.
-
-echo 1 > /sys/bus/$bus/devices/$device/authorized
-echo $device > /sys/bus/$bus/drivers/$desired_driver/bind
-
-The device filter is really only necessary to bootstrap until you can
-run override policy scripts. The driver firewall approach was overkill
-in that regard.
+> ---
+>  drivers/usb/gadget/function/uvc_video.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+> index b4a763e5f70e1..da93b46df464d 100644
+> --- a/drivers/usb/gadget/function/uvc_video.c
+> +++ b/drivers/usb/gadget/function/uvc_video.c
+> @@ -302,7 +302,9 @@ uvc_video_alloc_requests(struct uvc_video *video)
+>  		list_add_tail(&video->ureq[i].req->list, &video->req_free);
+>  		/* req_size/PAGE_SIZE + 1 for overruns and + 1 for header */
+>  		sg_alloc_table(&video->ureq[i].sgt,
+> -			       DIV_ROUND_UP(req_size - 2, PAGE_SIZE) + 2,
+> +			       DIV_ROUND_UP(req_size - UVCG_REQUEST_HEADER_LEN,
+> +					    PAGE_SIZE) +
+> +			       UVCG_REQUEST_HEADER_LEN,
+>  			       GFP_KERNEL);
+>  	}
+>  
+> -- 
+> 2.30.2
+> 
