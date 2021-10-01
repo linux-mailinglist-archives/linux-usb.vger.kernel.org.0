@@ -2,105 +2,297 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9120541EE3C
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 15:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9262B41EE7E
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 15:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbhJANHx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Oct 2021 09:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
+        id S231605AbhJAN0u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Oct 2021 09:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354011AbhJANHp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 09:07:45 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E0FC0613E5
-        for <linux-usb@vger.kernel.org>; Fri,  1 Oct 2021 06:06:01 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id x33-20020a9d37a4000000b0054733a85462so11369068otb.10
-        for <linux-usb@vger.kernel.org>; Fri, 01 Oct 2021 06:06:01 -0700 (PDT)
+        with ESMTP id S231513AbhJAN0o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 09:26:44 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13495C06177C
+        for <linux-usb@vger.kernel.org>; Fri,  1 Oct 2021 06:25:00 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id y26so38991117lfa.11
+        for <linux-usb@vger.kernel.org>; Fri, 01 Oct 2021 06:24:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=W0/sIeZEiNh8HScFCfqMG9usjQt7KqEoDwQwgA0HSn0=;
-        b=qQ6daZwVsLHkYimlvLtypZal4FN5OdlF1UFCIBBEBiOP3Sx61/R2ceXrZOGYxNwCIc
-         WsYoU8J7a9OqsK5rvb7ySN/m4Uom66O2bCHggObfziE4cbtG4eSufPqHfnfNjc/lm0IY
-         w93ufgDi3EtTeEmSiidjrY9F845Mb/tpwbQROiX9jymIFk+i/tpdImT5zYQPdPZdbY42
-         517m/ISyktXwMGRYuZMPHxtjmMqygLCLL3vk3r+1Aig1wV35TO/lIgwQOFmXS0UX0FLT
-         yihU1gvhTOO9eoAa1cjU8VJNPJzYRb0nU28fsDeNWNK95OoQ4ksrWNF/G/87hb8g/mcj
-         soVA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ce1L2tN5HKfi3fvHHadmQ3q2m1uy07zcuZbE6aqO/w8=;
+        b=powMYwV2MjTTSNc/t+dTNLdv1N7EGIPyjZGEPVcI3gY1sc7M027cz1jk10A8Akvayt
+         xjVreVrw3OhYWDozi4k1FD15Y/REv1+kRr+cjUF2h0j1veF2W18YSPZ0Q5Yr4sHeIvE2
+         xbMkeHo9U1tEXk06Mw9Kuy4lgLyOxpZSHnK0HBd2vSzL2VjpwHt/hOcHFKIy7B6LJi7A
+         uoB+oX4ib19bvdTB1CDwwSKijlssZrKUF/Rsk7l+ZYlLV+xqUcOhO1E9Y9gSeqjAwXK/
+         ooBHqYOXpxuJ8myCcf7rUgQtf3FwOKbuwTsCqu62SbjlUC9B1vASEJMY0Aqy8D3WeZyF
+         q1kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=W0/sIeZEiNh8HScFCfqMG9usjQt7KqEoDwQwgA0HSn0=;
-        b=L65TCnZy9LUm9TwZzT4ZgCm7elJVjk+IR9bOmzyLCvMkDMeUBOQi+73dO1x4gml6Rs
-         gtDe1KzURT6tPuA/I3weX7nP0z2HNppfX+htL+Nc+hldoZk+hORbnb3KPxyvvsKHDz6p
-         10d0qy4UCbH9mqfL3X9YtraVxx70Oa+KCTuxNjdU1jIVm1XPqCS9H8V6vwuJ3y3R1127
-         ztYgoN/WFXxM22PRHGDzRRAlhflDN34xqT8Plbydzp+5J5YOseU7p/tOLlWnffhnn2bT
-         0waNUorLVU123oPS64wjqh9VTbfwyBQmDSYN7V3+X7MjC3NLCaFGL58jpDBB9W7CHAoM
-         u2Rg==
-X-Gm-Message-State: AOAM532poVjRWBnITd8MHcuQJhzr0Y/kduw8yUf30TJURySsBcJvzaaF
-        uG2MSH+1tQ5qcBJuKZ5LlPng74AABkA=
-X-Google-Smtp-Source: ABdhPJy698kocr8C0gM72o0Yz/AfR4OVMbtONgr0oeFP7Wa5IU55s/59TGBr5QbDun0u5n3zAps1bQ==
-X-Received: by 2002:a05:6830:2903:: with SMTP id z3mr9945242otu.132.1633093560784;
-        Fri, 01 Oct 2021 06:06:00 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h17sm1126256oog.17.2021.10.01.06.05.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Oct 2021 06:06:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 1 Oct 2021 06:05:58 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Xu Yang <xu.yang_2@nxp.com>
-Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-imx@nxp.com, jun.li@nxp.com
-Subject: Re: [PATCH 1/1] usb: typec: tcpci: don't handle vSafe0V event if
- it's not enabled
-Message-ID: <20211001130558.GB549865@roeck-us.net>
-References: <20210926101415.3775058-1-xu.yang_2@nxp.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ce1L2tN5HKfi3fvHHadmQ3q2m1uy07zcuZbE6aqO/w8=;
+        b=riDcCmMas5yruam0AT53lUUMOX67qAKXmwTjMfHzXGDGKXGlrCd+3R6iGGIWZVZ+FR
+         FBnaFLjqiDBB+Czw9fuUrOVYZYwaUvC6mMExU7Lr/V0gjkwTKH1laIsEIEB8N8O6UsEQ
+         x2o5lbU9lzjVImASFvMEWsQgGGEJJJLnwILP3LhqvckvCSiQ7es7t0K/6keAISIH0Pf7
+         j4xEGhw3NhCsEV66TNa45OavNT5LnEqKuAa+KEaElW8tYCpHpMIOCkUA229DlDC1kd9V
+         lTS2XtmsTbORUKmmKtX+wG4kVV/3/URpAog/VI56lDeOT9QegBfMD/GWkvml7+bGXnL0
+         lFpA==
+X-Gm-Message-State: AOAM533Bb9dIbnRGLXqpQlU8QR6nlFFhvqgF63e6+Xon5bB8YjPjxuNs
+        Sxl2oxoYO5h0DllhLXrHZUfrwfPNZPFlRg3dz7b/tA==
+X-Google-Smtp-Source: ABdhPJx3j8rYzIefonx7fnLDHN6Ws0loCtwYPf/Gwf8OXRLpCYIkD4HnMnNV/rnmavNwT0BrQF7QYu3k62ifmvyYjCU=
+X-Received: by 2002:a19:5f4b:: with SMTP id a11mr5339726lfj.373.1633094698289;
+ Fri, 01 Oct 2021 06:24:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210926101415.3775058-1-xu.yang_2@nxp.com>
+References: <20210926224058.1252-1-digetx@gmail.com> <20210926224058.1252-10-digetx@gmail.com>
+In-Reply-To: <20210926224058.1252-10-digetx@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 1 Oct 2021 15:24:21 +0200
+Message-ID: <CAPDyKFqqQvKusZ2gzHh69LNrncvi9_o04_xFKDpAkDbS-8Zecg@mail.gmail.com>
+Subject: Re: [PATCH v13 09/35] gpu: host1x: Add runtime PM and OPP support
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Sep 26, 2021 at 06:14:15PM +0800, Xu Yang wrote:
-> USB TCPCI Spec, 4.4.3 Mask Registers:
-> "A masked register will still indicate in the ALERT register, but shall
-> not set the Alert# pin low."
-> 
-> Thus, the Extended Status will still indicate in ALERT register if vSafe0V
-> is detected by TCPC even though being masked. In current code, howerer,
-> this event will not be handled in detection time. Rather it will be
-> handled when next ALERT event coming(CC evnet, PD event, etc).
-> 
-> Tcpm might transition to a wrong state in this situation. Thus, the vSafe0V
-> event should not be handled when it's masked.
-> 
-> Fixes: 766c485b86ef ("usb: typec: tcpci: Add support to report vSafe0V")
-> cc: <stable@vger.kernel.org>
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
+On Mon, 27 Sept 2021 at 00:42, Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> Add runtime PM and OPP support to the Host1x driver. For the starter we
+> will keep host1x always-on because dynamic power management require a major
+> refactoring of the driver code since lot's of code paths are missing the
+> RPM handling and we're going to remove some of these paths in the future.
+>
+> Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
+> Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
+> Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
+> Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  drivers/usb/typec/tcpm/tcpci.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index 9858716698df..c15eec9cc460 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -696,7 +696,7 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
->  		tcpm_pd_receive(tcpci->port, &msg);
->  	}
->  
-> -	if (status & TCPC_ALERT_EXTENDED_STATUS) {
-> +	if (tcpci->data->vbus_vsafe0v && (status & TCPC_ALERT_EXTENDED_STATUS)) {
->  		ret = regmap_read(tcpci->regmap, TCPC_EXTENDED_STATUS, &raw);
->  		if (!ret && (raw & TCPC_EXTENDED_STATUS_VSAFE0V))
->  			tcpm_vbus_change(tcpci->port);
-> -- 
-> 2.25.1
-> 
+
+[...]
+
+> --- a/drivers/gpu/host1x/dev.c
+> +++ b/drivers/gpu/host1x/dev.c
+> @@ -6,14 +6,18 @@
+>   */
+>
+>  #include <linux/clk.h>
+> +#include <linux/delay.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/io.h>
+>  #include <linux/list.h>
+>  #include <linux/module.h>
+>  #include <linux/of_device.h>
+>  #include <linux/of.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/slab.h>
+>
+> +#include <soc/tegra/common.h>
+> +
+>  #define CREATE_TRACE_POINTS
+>  #include <trace/events/host1x.h>
+>  #undef CREATE_TRACE_POINTS
+> @@ -190,6 +194,9 @@ static void host1x_setup_sid_table(struct host1x *host)
+>         const struct host1x_info *info = host->info;
+>         unsigned int i;
+>
+> +       if (!info->has_hypervisor)
+> +               return;
+> +
+>         for (i = 0; i < info->num_sid_entries; i++) {
+>                 const struct host1x_sid_entry *entry = &info->sid_table[i];
+>
+> @@ -347,6 +354,27 @@ static void host1x_iommu_exit(struct host1x *host)
+>         }
+>  }
+>
+> +static int host1x_get_resets(struct host1x *host)
+> +{
+> +       int err;
+> +
+> +       host->resets[0].id = "mc";
+> +       host->resets[1].id = "host1x";
+> +       host->nresets = ARRAY_SIZE(host->resets);
+> +
+> +       err = devm_reset_control_bulk_get_optional_exclusive_released(
+> +                               host->dev, host->nresets, host->resets);
+> +       if (err) {
+> +               dev_err(host->dev, "failed to get reset: %d\n", err);
+> +               return err;
+> +       }
+> +
+> +       if (WARN_ON(!host->resets[1].rstc))
+> +               return -ENOENT;
+> +
+> +       return 0;
+> +}
+> +
+>  static int host1x_probe(struct platform_device *pdev)
+>  {
+>         struct host1x *host;
+> @@ -423,12 +451,9 @@ static int host1x_probe(struct platform_device *pdev)
+>                 return err;
+>         }
+>
+> -       host->rst = devm_reset_control_get(&pdev->dev, "host1x");
+> -       if (IS_ERR(host->rst)) {
+> -               err = PTR_ERR(host->rst);
+> -               dev_err(&pdev->dev, "failed to get reset: %d\n", err);
+> +       err = host1x_get_resets(host);
+> +       if (err)
+>                 return err;
+> -       }
+>
+>         err = host1x_iommu_init(host);
+>         if (err < 0) {
+> @@ -443,22 +468,10 @@ static int host1x_probe(struct platform_device *pdev)
+>                 goto iommu_exit;
+>         }
+>
+> -       err = clk_prepare_enable(host->clk);
+> -       if (err < 0) {
+> -               dev_err(&pdev->dev, "failed to enable clock\n");
+> -               goto free_channels;
+> -       }
+> -
+> -       err = reset_control_deassert(host->rst);
+> -       if (err < 0) {
+> -               dev_err(&pdev->dev, "failed to deassert reset: %d\n", err);
+> -               goto unprepare_disable;
+> -       }
+> -
+>         err = host1x_syncpt_init(host);
+>         if (err) {
+>                 dev_err(&pdev->dev, "failed to initialize syncpts\n");
+> -               goto reset_assert;
+> +               goto free_channels;
+>         }
+>
+>         err = host1x_intr_init(host, syncpt_irq);
+> @@ -467,10 +480,18 @@ static int host1x_probe(struct platform_device *pdev)
+>                 goto deinit_syncpt;
+>         }
+>
+> -       host1x_debug_init(host);
+> +       pm_runtime_enable(&pdev->dev);
+> +
+> +       err = devm_tegra_core_dev_init_opp_table_common(&pdev->dev);
+> +       if (err)
+> +               goto pm_disable;
+>
+> -       if (host->info->has_hypervisor)
+> -               host1x_setup_sid_table(host);
+> +       /* the driver's code isn't ready yet for the dynamic RPM */
+> +       err = pm_runtime_resume_and_get(&pdev->dev);
+> +       if (err)
+> +               goto pm_disable;
+> +
+> +       host1x_debug_init(host);
+>
+>         err = host1x_register(host);
+>         if (err < 0)
+> @@ -486,13 +507,14 @@ static int host1x_probe(struct platform_device *pdev)
+>         host1x_unregister(host);
+>  deinit_debugfs:
+>         host1x_debug_deinit(host);
+> +
+> +       pm_runtime_put(&pdev->dev);
+
+pm_runtime_put() is asynchronous, so it may not actually succeed to
+trigger the ->runtime_suspend() callback to be invoked. Thus, this
+could end up that we leave clocks prepared/enabled when ->probe()
+fails, for example.
+
+I guess pm_runtime_put_sync_suspend() is slightly better.
+
+Another option is to call pm_runtime_force_suspend(), but then you
+must skip the call pm_runtime_disable() afterwards, as that has
+already been done inside that function.
+
+> +pm_disable:
+> +       pm_runtime_disable(&pdev->dev);
+> +
+>         host1x_intr_deinit(host);
+>  deinit_syncpt:
+>         host1x_syncpt_deinit(host);
+> -reset_assert:
+> -       reset_control_assert(host->rst);
+> -unprepare_disable:
+> -       clk_disable_unprepare(host->clk);
+>  free_channels:
+>         host1x_channel_list_free(&host->channel_list);
+>  iommu_exit:
+> @@ -507,19 +529,94 @@ static int host1x_remove(struct platform_device *pdev)
+>
+>         host1x_unregister(host);
+>         host1x_debug_deinit(host);
+> +
+> +       pm_runtime_put(&pdev->dev);
+
+Similar comment as in ->probe().
+
+> +       pm_runtime_disable(&pdev->dev);
+> +
+>         host1x_intr_deinit(host);
+>         host1x_syncpt_deinit(host);
+> -       reset_control_assert(host->rst);
+> -       clk_disable_unprepare(host->clk);
+>         host1x_iommu_exit(host);
+>
+>         return 0;
+>  }
+>
+> +
+> +       host1x_setup_sid_table(host);
+> +       host1x_syncpt_restore(host);
+> +       host1x_intr_start(host);
+> +
+> +       return 0;
+> +
+> +disable_clk:
+> +       clk_disable_unprepare(host->clk);
+> +release_reset:
+> +       reset_control_bulk_release(host->nresets, host->resets);
+> +
+> +       return err;
+> +}
+> +
+> +static const struct dev_pm_ops host1x_pm = {
+> +       SET_RUNTIME_PM_OPS(host1x_runtime_suspend, host1x_runtime_resume,
+> +                          NULL)
+> +       /* TODO: add system suspend-resume once driver will be ready for that */
+> +};
+
+[...]
+
+Kind regards
+Uffe
