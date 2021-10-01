@@ -2,151 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D23D41EDD5
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 14:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9120541EE3C
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 15:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbhJAMwt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Oct 2021 08:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
+        id S231528AbhJANHx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Oct 2021 09:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353506AbhJAMwr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 08:52:47 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9505C06177E
-        for <linux-usb@vger.kernel.org>; Fri,  1 Oct 2021 05:51:02 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id u18so38676445lfd.12
-        for <linux-usb@vger.kernel.org>; Fri, 01 Oct 2021 05:51:02 -0700 (PDT)
+        with ESMTP id S1354011AbhJANHp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 09:07:45 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E0FC0613E5
+        for <linux-usb@vger.kernel.org>; Fri,  1 Oct 2021 06:06:01 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id x33-20020a9d37a4000000b0054733a85462so11369068otb.10
+        for <linux-usb@vger.kernel.org>; Fri, 01 Oct 2021 06:06:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=U3g3FVHcAfq2CjS/tDBEgPrTjvgAlik1UmRsepWrO/M=;
-        b=AzjhIKsGc5F00nF8gT49XgOerH2kylziofl1fTWdcLRpswV4wNz8DKK5xJ7On0pP/7
-         FUfZ1Wgbt1/fuaxVdMYCvvgTtIGVXfv0UoK33+IzBB+zOi+jh2jn6j2wyaLjswS/IOzw
-         SQjTg3BAouTPEqyD9JFdD9cYzi69CQhCoGH5fKvFHMMepL7XM0KGl/OrspTiy4mR9WhP
-         foe5FrlQSoXx4OG2RW+Mn3fWJuth6XGpzQJ4ILLPGQ/0+fTYG3YwXfmnYk9SirlbmFbB
-         VWqNGRy6BMbC7o4y9fE4zK6CBmWtNh3bv3/HT2LLpsFmdOSr7meyX9U8IJw0f7EYsu6v
-         RPYQ==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=W0/sIeZEiNh8HScFCfqMG9usjQt7KqEoDwQwgA0HSn0=;
+        b=qQ6daZwVsLHkYimlvLtypZal4FN5OdlF1UFCIBBEBiOP3Sx61/R2ceXrZOGYxNwCIc
+         WsYoU8J7a9OqsK5rvb7ySN/m4Uom66O2bCHggObfziE4cbtG4eSufPqHfnfNjc/lm0IY
+         w93ufgDi3EtTeEmSiidjrY9F845Mb/tpwbQROiX9jymIFk+i/tpdImT5zYQPdPZdbY42
+         517m/ISyktXwMGRYuZMPHxtjmMqygLCLL3vk3r+1Aig1wV35TO/lIgwQOFmXS0UX0FLT
+         yihU1gvhTOO9eoAa1cjU8VJNPJzYRb0nU28fsDeNWNK95OoQ4ksrWNF/G/87hb8g/mcj
+         soVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U3g3FVHcAfq2CjS/tDBEgPrTjvgAlik1UmRsepWrO/M=;
-        b=Yp77DUAaR0mCVy/OZdaktUCnFt3+jpzxt9B2BzTxkqVrs9Op6v8emTiCYvbGCkdBvH
-         L3NPT7dlycnwa4i2jWKIVAjuTmYSUscg7NIT80P8KOOe2ZQmAgw6VM+LBHfNyXWZ57bY
-         n34LVrySyzOAcGmwtAFwMY2k3a7ZuQhpznot51yGwYdt+mFz+DSiQOx0a85f0p4mLmqC
-         qbi44o+9+5Hllo7Oj3U8Lj0wyRU85Af6NvFq4A0wCplAjrK5uxAOGVer1PZUywYrO/E6
-         Ba2oeTpq/80fkGx4UH+jyuLYbpQ4kHi5LtFLKTIPpolkvCziHS2zZ+cKf7KedMqFWxJ1
-         bEzg==
-X-Gm-Message-State: AOAM530lhO8gwvzwLrcjL5oPXUHqXHD1FSYgqtbrpPUBD/ueax4iMiGN
-        6S7Y58WaGcSVkskGT1L6KhWUilKcBqlhWdVDJ6x+8A==
-X-Google-Smtp-Source: ABdhPJwqqw8e12Oj8Mbs+ZBogohxgciqSKBUNXiyR2zo3nKqwCJ61Gsrw5pb7r1VVcKkZcvnXQuH+1x0Dzep9YUsgPg=
-X-Received: by 2002:a19:5f4b:: with SMTP id a11mr5158365lfj.373.1633092661107;
- Fri, 01 Oct 2021 05:51:01 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=W0/sIeZEiNh8HScFCfqMG9usjQt7KqEoDwQwgA0HSn0=;
+        b=L65TCnZy9LUm9TwZzT4ZgCm7elJVjk+IR9bOmzyLCvMkDMeUBOQi+73dO1x4gml6Rs
+         gtDe1KzURT6tPuA/I3weX7nP0z2HNppfX+htL+Nc+hldoZk+hORbnb3KPxyvvsKHDz6p
+         10d0qy4UCbH9mqfL3X9YtraVxx70Oa+KCTuxNjdU1jIVm1XPqCS9H8V6vwuJ3y3R1127
+         ztYgoN/WFXxM22PRHGDzRRAlhflDN34xqT8Plbydzp+5J5YOseU7p/tOLlWnffhnn2bT
+         0waNUorLVU123oPS64wjqh9VTbfwyBQmDSYN7V3+X7MjC3NLCaFGL58jpDBB9W7CHAoM
+         u2Rg==
+X-Gm-Message-State: AOAM532poVjRWBnITd8MHcuQJhzr0Y/kduw8yUf30TJURySsBcJvzaaF
+        uG2MSH+1tQ5qcBJuKZ5LlPng74AABkA=
+X-Google-Smtp-Source: ABdhPJy698kocr8C0gM72o0Yz/AfR4OVMbtONgr0oeFP7Wa5IU55s/59TGBr5QbDun0u5n3zAps1bQ==
+X-Received: by 2002:a05:6830:2903:: with SMTP id z3mr9945242otu.132.1633093560784;
+        Fri, 01 Oct 2021 06:06:00 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h17sm1126256oog.17.2021.10.01.06.05.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Oct 2021 06:06:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 1 Oct 2021 06:05:58 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Xu Yang <xu.yang_2@nxp.com>
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-imx@nxp.com, jun.li@nxp.com
+Subject: Re: [PATCH 1/1] usb: typec: tcpci: don't handle vSafe0V event if
+ it's not enabled
+Message-ID: <20211001130558.GB549865@roeck-us.net>
+References: <20210926101415.3775058-1-xu.yang_2@nxp.com>
 MIME-Version: 1.0
-References: <20210926224058.1252-1-digetx@gmail.com> <20210926224058.1252-3-digetx@gmail.com>
-In-Reply-To: <20210926224058.1252-3-digetx@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 1 Oct 2021 14:50:25 +0200
-Message-ID: <CAPDyKFrtE75Tf-vefM0isj52PJ5_v525AjqU2TMUpc4__rYLhA@mail.gmail.com>
-Subject: Re: [PATCH v13 02/35] soc/tegra: Add devm_tegra_core_dev_init_opp_table_common()
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210926101415.3775058-1-xu.yang_2@nxp.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 27 Sept 2021 at 00:42, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> Only couple drivers need to get the -ENODEV error code and majority of
-> drivers need to explicitly initialize the performance state. Add new
-> common helper which sets up OPP table for these drivers.
->
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+On Sun, Sep 26, 2021 at 06:14:15PM +0800, Xu Yang wrote:
+> USB TCPCI Spec, 4.4.3 Mask Registers:
+> "A masked register will still indicate in the ALERT register, but shall
+> not set the Alert# pin low."
+> 
+> Thus, the Extended Status will still indicate in ALERT register if vSafe0V
+> is detected by TCPC even though being masked. In current code, howerer,
+> this event will not be handled in detection time. Rather it will be
+> handled when next ALERT event coming(CC evnet, PD event, etc).
+> 
+> Tcpm might transition to a wrong state in this situation. Thus, the vSafe0V
+> event should not be handled when it's masked.
+> 
+> Fixes: 766c485b86ef ("usb: typec: tcpci: Add support to report vSafe0V")
+> cc: <stable@vger.kernel.org>
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  include/soc/tegra/common.h | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
->
-> diff --git a/include/soc/tegra/common.h b/include/soc/tegra/common.h
-> index af41ad80ec21..5b4a042f60fb 100644
-> --- a/include/soc/tegra/common.h
-> +++ b/include/soc/tegra/common.h
-> @@ -39,4 +39,28 @@ devm_tegra_core_dev_init_opp_table(struct device *dev,
->  }
->  #endif
->
-> +/*
-> + * This function should be invoked with the enabled runtime PM of the device
-> + * in order to initialize performance state properly. Most of Tegra devices
-> + * are assumed to be suspended at a probe time and GENPD require RPM to be
-> + * enabled to set up the rpm-resume state, otherwise device is active and
-> + * performance state is applied immediately. Note that it will initialize
-> + * OPP bandwidth if it's wired in a device-tree for this device, which is
-> + * undesirable for a suspended device.
-> + */
-> +static inline int
-> +devm_tegra_core_dev_init_opp_table_common(struct device *dev)
-> +{
-> +       struct tegra_core_opp_params opp_params = {};
-> +       int err;
-> +
-> +       opp_params.init_state = true;
-> +
-> +       err = devm_tegra_core_dev_init_opp_table(dev, &opp_params);
-> +       if (err != -ENODEV)
-> +               return err;
-> +
-> +       return 0;
-> +}
-
-Just want to share a few thoughts around these functions.
-
-So, I assume it's fine to call
-devm_tegra_core_dev_init_opp_table_common() or
-devm_tegra_core_dev_init_opp_table() from consumer drivers during
-->probe(), as long as those drivers are tegra specific, which I assume
-all are in the series!?
-
-My point is, a cross SoC consumer driver that needs to initiate OPP
-tables can get rather messy, if it would need to make one specific
-function call per SoC.
-
-That said, I hope we can tackle this as a separate/future problem, so
-the series can get merged as is.
-
-> +
->  #endif /* __SOC_TEGRA_COMMON_H__ */
-> --
-> 2.32.0
->
-
-Kind regards
-Uffe
+>  drivers/usb/typec/tcpm/tcpci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> index 9858716698df..c15eec9cc460 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -696,7 +696,7 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
+>  		tcpm_pd_receive(tcpci->port, &msg);
+>  	}
+>  
+> -	if (status & TCPC_ALERT_EXTENDED_STATUS) {
+> +	if (tcpci->data->vbus_vsafe0v && (status & TCPC_ALERT_EXTENDED_STATUS)) {
+>  		ret = regmap_read(tcpci->regmap, TCPC_EXTENDED_STATUS, &raw);
+>  		if (!ret && (raw & TCPC_EXTENDED_STATUS_VSAFE0V))
+>  			tcpm_vbus_change(tcpci->port);
+> -- 
+> 2.25.1
+> 
