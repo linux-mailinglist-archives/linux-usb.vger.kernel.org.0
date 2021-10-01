@@ -2,148 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A7641E5D5
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 03:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C23FF41E5E1
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 03:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351408AbhJABip (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Sep 2021 21:38:45 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:58990 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230256AbhJABin (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Sep 2021 21:38:43 -0400
-X-UUID: 3bcfb2b1a06848beb28bad7608c253d6-20211001
-X-UUID: 3bcfb2b1a06848beb28bad7608c253d6-20211001
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <jason-ch.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2072459898; Fri, 01 Oct 2021 09:36:56 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 1 Oct 2021 09:36:55 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 1 Oct
- 2021 09:36:55 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 1 Oct 2021 09:36:54 +0800
-Message-ID: <a891e733157ca7e631ca120ebae15557a6f05738.camel@mediatek.com>
-Subject: Re: [PATCH] r8152: stop submitting rx for -EPROTO
-From:   Jason-ch Chen <jason-ch.chen@mediatek.com>
-To:     Hayes Wang <hayeswang@realtek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "Project_Global_Chrome_Upstream_Group@mediatek.com" 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "hsinyi@google.com" <hsinyi@google.com>,
-        nic_swsd <nic_swsd@realtek.com>
-Date:   Fri, 1 Oct 2021 09:36:54 +0800
-In-Reply-To: <7dc4198f05784b6686973500150faca7@realtek.com>
-References: <20210929051812.3107-1-jason-ch.chen@mediatek.com>
-         <cbd1591fc03f480c9f08cc55585e2e35@realtek.com>
-         <4c2ad5e4a9747c59a55d92a8fa0c95df5821188f.camel@mediatek.com>
-         <7dc4198f05784b6686973500150faca7@realtek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S230224AbhJABnA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Sep 2021 21:43:00 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:57675 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1351220AbhJABm7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Sep 2021 21:42:59 -0400
+Received: (qmail 489289 invoked by uid 1000); 30 Sep 2021 21:41:14 -0400
+Date:   Thu, 30 Sep 2021 21:41:14 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jason Wang <jasowang@redhat.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        "Reshetova, Elena" <elena.reshetova@intel.com>
+Subject: Re: [PATCH v2 2/6] driver core: Add common support to skip probe for
+ un-authorized devices
+Message-ID: <20211001014114.GB489012@rowland.harvard.edu>
+References: <20210930010511.3387967-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20210930065807-mutt-send-email-mst@kernel.org>
+ <YVXBNJ431YIWwZdQ@kroah.com>
+ <20210930144305.GA464826@rowland.harvard.edu>
+ <20210930104924-mutt-send-email-mst@kernel.org>
+ <20210930153509.GF464826@rowland.harvard.edu>
+ <20210930115243-mutt-send-email-mst@kernel.org>
+ <00156941-300d-a34a-772b-17f0a9aad885@linux.intel.com>
+ <20210930204447.GA482974@rowland.harvard.edu>
+ <CAPcyv4j8DvsMYppRtm=+JQWc7nJGoXeAGGz9U150x0p_KekqcA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPcyv4j8DvsMYppRtm=+JQWc7nJGoXeAGGz9U150x0p_KekqcA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2021-09-30 at 02:41 +0000, Hayes Wang wrote:
-> Jason-ch Chen <jason-ch.chen@mediatek.com>
-> > Sent: Wednesday, September 29, 2021 5:53 PM
+On Thu, Sep 30, 2021 at 01:52:59PM -0700, Dan Williams wrote:
+> On Thu, Sep 30, 2021 at 1:44 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Thu, Sep 30, 2021 at 12:23:36PM -0700, Andi Kleen wrote:
+> > >
+> > > > I don't think the current mitigations under discussion here are about
+> > > > keeping the system working. In fact most encrypted VM configs tend to
+> > > > stop booting as a preferred way to handle security issues.
+> > >
+> > > Maybe we should avoid the "trusted" term here. We're only really using it
+> > > because USB is using it and we're now using a common framework like Greg
+> > > requested. But I don't think it's the right way to think about it.
+> > >
+> > > We usually call the drivers "hardened". The requirement for a hardened
+> > > driver is that all interactions through MMIO/port/config space IO/MSRs are
+> > > sanitized and do not cause memory safety issues or other information leaks.
+> > > Other than that there is no requirement on the functionality. In particular
+> > > DOS is ok since a malicious hypervisor can decide to not run the guest at
+> > > any time anyways.
+> > >
+> > > Someone loading an malicious driver inside the guest would be out of scope.
+> > > If an attacker can do that inside the guest you already violated the
+> > > security mechanisms and there are likely easier ways to take over the guest
+> > > or leak data.
+> > >
+> > > The goal of the device filter mechanism is to prevent loading unhardened
+> > > drivers that could be exploited without them being themselves malicious.
+> >
+> > If all you want to do is prevent someone from loading a bunch of
+> > drivers that you have identified as unhardened, why not just use a
+> > modprobe blacklist?  Am I missing something?
 > 
-> [...]
-> > Hi Hayes,
-> > 
-> > Sometimes Rx submits rapidly and the USB kernel driver of
-> > opensource
-> > cannot receive any disconnect event due to CPU heavy loading, which
-> > finally causes a system crash.
-> > Do you have any suggestions to modify the r8152 driver to prevent
-> > this
-> > situation happened?
+> modules != drivers (i.e. multi-driver modules are a thing) and builtin
+> modules do not adhere to modprobe policy.
 > 
-> Do you mind to try the following patch?
-> It avoids to re-submit RX immediately.
-> 
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index 60ba9b734055..bfe00af8283f 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -767,6 +767,7 @@ enum rtl8152_flags {
->  	PHY_RESET,
->  	SCHEDULE_TASKLET,
->  	GREEN_ETHERNET,
-> +	SCHEDULE_NAPI,
->  };
->  
->  #define DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2	0x3082
-> @@ -1770,6 +1771,14 @@ static void read_bulk_callback(struct urb
-> *urb)
->  		rtl_set_unplug(tp);
->  		netif_device_detach(tp->netdev);
->  		return;
-> +	case -EPROTO:
-> +		urb->actual_length = 0;
-> +		spin_lock_irqsave(&tp->rx_lock, flags);
-> +		list_add_tail(&agg->list, &tp->rx_done);
-> +		spin_unlock_irqrestore(&tp->rx_lock, flags);
-> +		set_bit(SCHEDULE_NAPI, &tp->flags);
-> +		schedule_delayed_work(&tp->schedule, 1);
-> +		return;
->  	case -ENOENT:
->  		return;	/* the urb is in unlink state */
->  	case -ETIME:
-> @@ -2425,6 +2434,7 @@ static int rx_bottom(struct r8152 *tp, int
-> budget)
->  	if (list_empty(&tp->rx_done))
->  		goto out1;
->  
-> +	clear_bit(SCHEDULE_NAPI, &tp->flags);
->  	INIT_LIST_HEAD(&rx_queue);
->  	spin_lock_irqsave(&tp->rx_lock, flags);
->  	list_splice_init(&tp->rx_done, &rx_queue);
-> @@ -2441,7 +2451,7 @@ static int rx_bottom(struct r8152 *tp, int
-> budget)
->  
->  		agg = list_entry(cursor, struct rx_agg, list);
->  		urb = agg->urb;
-> -		if (urb->actual_length < ETH_ZLEN)
-> +		if (urb->status != 0 || urb->actual_length < ETH_ZLEN)
->  			goto submit;
->  
->  		agg_free = rtl_get_free_rx(tp, GFP_ATOMIC);
-> @@ -6643,6 +6653,10 @@ static void rtl_work_func_t(struct work_struct
-> *work)
->  	    netif_carrier_ok(tp->netdev))
->  		tasklet_schedule(&tp->tx_tl);
->  
-> +	if (test_and_clear_bit(SCHEDULE_NAPI, &tp->flags) &&
-> +	    !list_empty(&tp->rx_done))
-> +		napi_schedule(&tp->napi);
-> +
->  	mutex_unlock(&tp->control);
->  
->  out1:
-> 
-> 
-> Best Regards,
-> Hayes
+> There is also a desire to be able to support a single kernel image
+> across hosts and guests. So, if you were going to say, "just compile
+> all unnecessary drivers as modules" that defeats the common kernel
+> image goal. For confidential computing the expectation is that the
+> necessary device set is small. As you can see in the patches in this
+> case it's just a few lines of PCI ids and a hack to the virtio bus to
+> achieve the goal of disabling all extraneous devices by default.
 
-Hi,
 
-This patch has been verified.
-It did avoid Rx re-submit immediately.
 
-Thanks,
-Jason
+If your goal is to prevent some unwanted _drivers_ from operating -- 
+or all but a few desired drivers, as the case may be -- why extend 
+the "authorized" API to all _devices_?  Why not instead develop a 
+separate API (but of similar form) for drivers?
 
+Wouldn't that make more sense?  It corresponds a lot more directly 
+with what you say you want to accomplish.
+
+What would you do in the theoretical case where two separate drivers 
+can manage the same device, but one of them is desired (or hardened) 
+and the other isn't?
+
+Alan Stern
