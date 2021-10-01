@@ -2,100 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5D941E3AF
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 00:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A7641E5D5
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 03:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348126AbhI3WMc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Sep 2021 18:12:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33016 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230093AbhI3WMb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 30 Sep 2021 18:12:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 965D361390;
-        Thu, 30 Sep 2021 22:10:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633039847;
-        bh=IwzBemW+hy1M1ewr7atFO0cSMjKx7nF1iOUj3EQWXE8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VMFkm4a+fgdg4zYaCkaWnSOTeOZ8uAbKkitUxM0+m4BBfXT2b5oLMM7rDTLawyLAE
-         NhhBOznSRQz5yRbiTNsvbV6E0IU3T5qz407KpFRCdUtW5hyDqK4d2pDAOMg4JRadt6
-         KWrjYIXEm0KrNBVtP+JPzhB2VrG3+5vrqbM5hiSfUBy+07gwCIoejO0uW/sH7DYI6V
-         pgwC0QydyQR/hM9nqnvQyR6gIiVBVoszYMQd2xY8yoPecdNAhtt2AC8GtVh+C0O4VI
-         bPLArmwwdAbQbiLreQFVTZM6xuVy7lVHSRkS66W+8O7Twsm9hTlzsCUC2ioP79rEse
-         MlAOzYU2R7N3A==
-Date:   Thu, 30 Sep 2021 15:10:46 -0700
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Juergen Gross <jgross@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Shahab Vahedi <Shahab.Vahedi@synopsys.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        KVM list <kvm@vger.kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-usb@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v2 0/6] memblock: cleanup memblock_free interface
-Message-ID: <YVY15nd56j8x8udh@kernel.org>
-References: <20210930185031.18648-1-rppt@kernel.org>
- <CAHk-=wjS76My8aJLWJAHd-5GnMEVC1D+kV7DgtV9GjcbtqZdig@mail.gmail.com>
+        id S1351408AbhJABip (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Sep 2021 21:38:45 -0400
+Received: from mailgw01.mediatek.com ([60.244.123.138]:58990 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230256AbhJABin (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Sep 2021 21:38:43 -0400
+X-UUID: 3bcfb2b1a06848beb28bad7608c253d6-20211001
+X-UUID: 3bcfb2b1a06848beb28bad7608c253d6-20211001
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <jason-ch.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2072459898; Fri, 01 Oct 2021 09:36:56 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 1 Oct 2021 09:36:55 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 1 Oct
+ 2021 09:36:55 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 1 Oct 2021 09:36:54 +0800
+Message-ID: <a891e733157ca7e631ca120ebae15557a6f05738.camel@mediatek.com>
+Subject: Re: [PATCH] r8152: stop submitting rx for -EPROTO
+From:   Jason-ch Chen <jason-ch.chen@mediatek.com>
+To:     Hayes Wang <hayeswang@realtek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "Project_Global_Chrome_Upstream_Group@mediatek.com" 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "hsinyi@google.com" <hsinyi@google.com>,
+        nic_swsd <nic_swsd@realtek.com>
+Date:   Fri, 1 Oct 2021 09:36:54 +0800
+In-Reply-To: <7dc4198f05784b6686973500150faca7@realtek.com>
+References: <20210929051812.3107-1-jason-ch.chen@mediatek.com>
+         <cbd1591fc03f480c9f08cc55585e2e35@realtek.com>
+         <4c2ad5e4a9747c59a55d92a8fa0c95df5821188f.camel@mediatek.com>
+         <7dc4198f05784b6686973500150faca7@realtek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjS76My8aJLWJAHd-5GnMEVC1D+kV7DgtV9GjcbtqZdig@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 30, 2021 at 02:20:33PM -0700, Linus Torvalds wrote:
-> On Thu, Sep 30, 2021 at 11:50 AM Mike Rapoport <rppt@kernel.org> wrote:
-> >
-> > The first patch is a cleanup of numa_distance allocation in arch_numa I've
-> > spotted during the conversion.
-> > The second patch is a fix for Xen memory freeing on some of the error
-> > paths.
+On Thu, 2021-09-30 at 02:41 +0000, Hayes Wang wrote:
+> Jason-ch Chen <jason-ch.chen@mediatek.com>
+> > Sent: Wednesday, September 29, 2021 5:53 PM
 > 
-> Well, at least patch 2 looks like something that should go into 5.15
-> and be marked for stable.
+> [...]
+> > Hi Hayes,
+> > 
+> > Sometimes Rx submits rapidly and the USB kernel driver of
+> > opensource
+> > cannot receive any disconnect event due to CPU heavy loading, which
+> > finally causes a system crash.
+> > Do you have any suggestions to modify the r8152 driver to prevent
+> > this
+> > situation happened?
 > 
-> Patch 1 looks like a trivial local cleanup, and could go in
-> immediately. Patch 4 might be in that same category.
+> Do you mind to try the following patch?
+> It avoids to re-submit RX immediately.
 > 
-> The rest look like "next merge window" to me, since they are spread
-> out and neither bugfixes nor tiny localized cleanups (iow renaming
-> functions, global resulting search-and-replace things).
+> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+> index 60ba9b734055..bfe00af8283f 100644
+> --- a/drivers/net/usb/r8152.c
+> +++ b/drivers/net/usb/r8152.c
+> @@ -767,6 +767,7 @@ enum rtl8152_flags {
+>  	PHY_RESET,
+>  	SCHEDULE_TASKLET,
+>  	GREEN_ETHERNET,
+> +	SCHEDULE_NAPI,
+>  };
+>  
+>  #define DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2	0x3082
+> @@ -1770,6 +1771,14 @@ static void read_bulk_callback(struct urb
+> *urb)
+>  		rtl_set_unplug(tp);
+>  		netif_device_detach(tp->netdev);
+>  		return;
+> +	case -EPROTO:
+> +		urb->actual_length = 0;
+> +		spin_lock_irqsave(&tp->rx_lock, flags);
+> +		list_add_tail(&agg->list, &tp->rx_done);
+> +		spin_unlock_irqrestore(&tp->rx_lock, flags);
+> +		set_bit(SCHEDULE_NAPI, &tp->flags);
+> +		schedule_delayed_work(&tp->schedule, 1);
+> +		return;
+>  	case -ENOENT:
+>  		return;	/* the urb is in unlink state */
+>  	case -ETIME:
+> @@ -2425,6 +2434,7 @@ static int rx_bottom(struct r8152 *tp, int
+> budget)
+>  	if (list_empty(&tp->rx_done))
+>  		goto out1;
+>  
+> +	clear_bit(SCHEDULE_NAPI, &tp->flags);
+>  	INIT_LIST_HEAD(&rx_queue);
+>  	spin_lock_irqsave(&tp->rx_lock, flags);
+>  	list_splice_init(&tp->rx_done, &rx_queue);
+> @@ -2441,7 +2451,7 @@ static int rx_bottom(struct r8152 *tp, int
+> budget)
+>  
+>  		agg = list_entry(cursor, struct rx_agg, list);
+>  		urb = agg->urb;
+> -		if (urb->actual_length < ETH_ZLEN)
+> +		if (urb->status != 0 || urb->actual_length < ETH_ZLEN)
+>  			goto submit;
+>  
+>  		agg_free = rtl_get_free_rx(tp, GFP_ATOMIC);
+> @@ -6643,6 +6653,10 @@ static void rtl_work_func_t(struct work_struct
+> *work)
+>  	    netif_carrier_ok(tp->netdev))
+>  		tasklet_schedule(&tp->tx_tl);
+>  
+> +	if (test_and_clear_bit(SCHEDULE_NAPI, &tp->flags) &&
+> +	    !list_empty(&tp->rx_done))
+> +		napi_schedule(&tp->napi);
+> +
+>  	mutex_unlock(&tp->control);
+>  
+>  out1:
 > 
-> So my gut feel is that two (maybe three) of these patches should go in
-> asap, with three (maybe four) be left for 5.16.
 > 
-> IOW, not trat this as a single series.
-> 
-> Hmm?
+> Best Regards,
+> Hayes
 
-Yes, why not :)
-I'd keep patch 4 for the next merge window, does not look urgent to me.
+Hi,
 
-Andrew, can you please take care of this or you'd prefer me resending
-everything separately?
- 
->              Linus
+This patch has been verified.
+It did avoid Rx re-submit immediately.
 
--- 
-Sincerely yours,
-Mike.
+Thanks,
+Jason
+
