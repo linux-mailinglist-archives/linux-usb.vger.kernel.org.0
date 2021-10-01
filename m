@@ -2,248 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2D541E7D2
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 09:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4630141E7F8
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 09:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352398AbhJAHBp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Oct 2021 03:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbhJAHBn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 03:01:43 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7A6C06176A;
-        Thu, 30 Sep 2021 23:59:59 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id j27so6477857wms.0;
-        Thu, 30 Sep 2021 23:59:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=lOm0pW5v0MBkaDugCS5YfwkOAvYOSU7oabQOMG2irfw=;
-        b=jsc0KVMvs+UBDRiBAunXDe6MGEGt2UApoPFusuhLBe1N/F44XlvbgynBk6l8kc+Ynj
-         XYEerSDC9vsJG14026Foo0LDKpyk1joMDcXUlYy5+pLwU7g8PauRQJ0KrDm1zfSXf6jw
-         sYhhfBHzKq0l5NdQXq8udnVAWcn+QSh0xZxaWN/sQkREfI7h1h5qJHCsc4ColiImLvd2
-         qSXhjEPVn5jpRwUHFzUd7U2rWuyWkDA3VhfTyUk1Gsg4I+fpMR8mryaDsZA6tp6xMzPq
-         SjapQVVAyuSUENutklSDe62UmXpxS0dersnEw5VH5Dp6DTbYk5kz7UrvLKVwk79e9fKx
-         FU3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=lOm0pW5v0MBkaDugCS5YfwkOAvYOSU7oabQOMG2irfw=;
-        b=iVoQlFVw/vERT05RIkXBXxivcjkEMm5x8vMxD8zFiM9ra3+sSIGdDNbFF0t+XfOfFe
-         YDi3XsnwNgPMzdNaHNa9cCxrzaV/o7UmrJ3m5WcBfTGETLESlqckYdKT+9YYLb3hu3BQ
-         6rg6RKHEcDxIZ2gDBSRldGVdHD+mMqFlgnCHeJHm5NvEqr+u1yvDCYPkXUhnVcD5gkEN
-         /k4ddTFeqWlOEtMrTGgz3OmZT/XbmkesnEMvWJZSopyQ2G1J2xjppEOzpAJymamK9l3d
-         9n8VCL9DEYSuyvevPb81vG4OcHPqQcN/oJwwuOcadrS/uxv1QfGSdwzvWFY9eppP7UkC
-         ZLCg==
-X-Gm-Message-State: AOAM5338DWkLOk2HuiPuL4oI7E/jvxo33NeBZEedRNqBfdnXcSuCFKEn
-        DxjQNO9d7bZIv0sCvDkZfiM=
-X-Google-Smtp-Source: ABdhPJxuajbFXpaPlSpXiznEBB3q43NbShmltsZ42fSaQ6q4Wz3T7DpkNms3s3hrJ/8qdgk7pMXQbQ==
-X-Received: by 2002:a1c:f405:: with SMTP id z5mr2832895wma.72.1633071597498;
-        Thu, 30 Sep 2021 23:59:57 -0700 (PDT)
-Received: from localhost.localdomain (eth-east-parth2-46-193-64-114.wb.wifirst.net. [46.193.64.114])
-        by smtp.gmail.com with ESMTPSA id 15sm6782000wmk.48.2021.09.30.23.59.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Sep 2021 23:59:56 -0700 (PDT)
-From:   Himadri Pandya <himadrispandya@gmail.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Himadri Pandya <himadrispandya@gmail.com>
-Subject: [PATCH v3 2/2] USB: serial: cp210x: use usb_control_msg_recv() and usb_control_msg_send()
-Date:   Fri,  1 Oct 2021 08:57:20 +0200
-Message-Id: <20211001065720.21330-3-himadrispandya@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211001065720.21330-1-himadrispandya@gmail.com>
-References: <20211001065720.21330-1-himadrispandya@gmail.com>
+        id S1352380AbhJAHF7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Oct 2021 03:05:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38210 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1352590AbhJAHFQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 1 Oct 2021 03:05:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 706EA60551;
+        Fri,  1 Oct 2021 07:03:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1633071813;
+        bh=0W38PdEXHIVQIPll+lj+mk7xZAUxC8QpCqNUBGSB+/8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hgoTVKlDOzzRJAnGmyuCwIrPAJq3TBrkWxku6bsjIb9/ByohDLcD1EsZgSY7se0TI
+         CG6q4Q9ASHZQ1Ge5WQJ9cuWOdgkVpeIV8KWygEsbGCk3UM89UEA/GOzhDqsNKz+K58
+         Qhk0jK55DRI+q71MyjEfmxI23voJ/6FHW597Iwks=
+Date:   Fri, 1 Oct 2021 09:03:29 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jason Wang <jasowang@redhat.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v2 4/6] virtio: Initialize authorized attribute for
+ confidential guest
+Message-ID: <YVaywQLAboZ6b36V@kroah.com>
+References: <20210930010511.3387967-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20210930010511.3387967-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20210930065953-mutt-send-email-mst@kernel.org>
+ <CAPcyv4hP6mtzKS-CVb-aKf-kYuiLM771PMxN2zeBEfoj6NbctA@mail.gmail.com>
+ <6d1e2701-5095-d110-3b0a-2697abd0c489@linux.intel.com>
+ <YVXWaF73gcrlvpnf@kroah.com>
+ <1cfdce51-6bb4-f7af-a86b-5854b6737253@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1cfdce51-6bb4-f7af-a86b-5854b6737253@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The new wrapper functions for usb_control_msg() can accept data from
-stack and treat short reads as error. Hence use the wrappers functions.
-Please note that because of this change, cp210x_read_reg_block() will no
-longer log the length of short reads.
+On Thu, Sep 30, 2021 at 12:04:05PM -0700, Kuppuswamy, Sathyanarayanan wrote:
+> 
+> 
+> On 9/30/21 8:23 AM, Greg Kroah-Hartman wrote:
+> > On Thu, Sep 30, 2021 at 08:18:18AM -0700, Kuppuswamy, Sathyanarayanan wrote:
+> > > 
+> > > 
+> > > On 9/30/21 6:36 AM, Dan Williams wrote:
+> > > > > And in particular, not all virtio drivers are hardened -
+> > > > > I think at this point blk and scsi drivers have been hardened - so
+> > > > > treating them all the same looks wrong.
+> > > > My understanding was that they have been audited, Sathya?
+> > > 
+> > > Yes, AFAIK, it has been audited. Andi also submitted some patches
+> > > related to it. Andi, can you confirm.
+> > 
+> > What is the official definition of "audited"?
+> 
+> 
+> In our case (Confidential Computing platform), the host is an un-trusted
+> entity. So any interaction with host from the drivers will have to be
+> protected against the possible attack from the host. For example, if we
+> are accessing a memory based on index value received from host, we have
+> to make sure it does not lead to out of bound access or when sharing the
+> memory with the host, we need to make sure only the required region is
+> shared with the host and the memory is un-shared after use properly.
 
-Signed-off-by: Himadri Pandya <himadrispandya@gmail.com>
----
-Changes in v3:
- - Rephrase the commit message
- - Explicitly mention that short reads don't log length now
+You have not defined the term "audited" here at all in any way that can
+be reviewed or verified by anyone from what I can tell.
 
-Changes in v2:
- - Drop unrelated style fixes
----
- drivers/usb/serial/cp210x.c | 106 ++++++++++--------------------------
- 1 file changed, 30 insertions(+), 76 deletions(-)
+You have only described a new model that you wish the kernel to run in,
+one in which it does not trust the hardware at all.  That is explicitly
+NOT what the kernel has been designed for so far, and if you wish to
+change that, lots of things need to be done outside of simply running
+some fuzzers on a few random drivers.
 
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index 189279869a8b..3c3ca46b0b82 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -631,29 +631,19 @@ static int cp210x_read_reg_block(struct usb_serial_port *port, u8 req,
- {
- 	struct usb_serial *serial = port->serial;
- 	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
--	void *dmabuf;
- 	int result;
- 
--	dmabuf = kmalloc(bufsize, GFP_KERNEL);
--	if (!dmabuf)
--		return -ENOMEM;
- 
--	result = usb_control_msg(serial->dev, usb_rcvctrlpipe(serial->dev, 0),
--			req, REQTYPE_INTERFACE_TO_HOST, 0,
--			port_priv->bInterfaceNumber, dmabuf, bufsize,
--			USB_CTRL_GET_TIMEOUT);
--	if (result == bufsize) {
--		memcpy(buf, dmabuf, bufsize);
--		result = 0;
--	} else {
-+	result = usb_control_msg_recv(serial->dev, 0, req,
-+				      REQTYPE_INTERFACE_TO_HOST, 0,
-+				      port_priv->bInterfaceNumber, buf,
-+				      bufsize, USB_CTRL_SET_TIMEOUT,
-+				      GFP_KERNEL);
-+	if (result) {
- 		dev_err(&port->dev, "failed get req 0x%x size %d status: %d\n",
- 				req, bufsize, result);
--		if (result >= 0)
--			result = -EIO;
- 	}
- 
--	kfree(dmabuf);
--
- 	return result;
- }
- 
-@@ -672,30 +662,17 @@ static int cp210x_read_u8_reg(struct usb_serial_port *port, u8 req, u8 *val)
- static int cp210x_read_vendor_block(struct usb_serial *serial, u8 type, u16 val,
- 				    void *buf, int bufsize)
- {
--	void *dmabuf;
- 	int result;
- 
--	dmabuf = kmalloc(bufsize, GFP_KERNEL);
--	if (!dmabuf)
--		return -ENOMEM;
--
--	result = usb_control_msg(serial->dev, usb_rcvctrlpipe(serial->dev, 0),
--				 CP210X_VENDOR_SPECIFIC, type, val,
--				 cp210x_interface_num(serial), dmabuf, bufsize,
--				 USB_CTRL_GET_TIMEOUT);
--	if (result == bufsize) {
--		memcpy(buf, dmabuf, bufsize);
--		result = 0;
--	} else {
-+	result = usb_control_msg_recv(serial->dev, 0, CP210X_VENDOR_SPECIFIC,
-+				      type, val, cp210x_interface_num(serial),
-+				      buf, bufsize, USB_CTRL_GET_TIMEOUT,
-+				      GFP_KERNEL);
-+	if (result) {
- 		dev_err(&serial->interface->dev,
- 			"failed to get vendor val 0x%04x size %d: %d\n", val,
- 			bufsize, result);
--		if (result >= 0)
--			result = -EIO;
- 	}
--
--	kfree(dmabuf);
--
- 	return result;
- }
- 
-@@ -730,21 +707,14 @@ static int cp210x_write_reg_block(struct usb_serial_port *port, u8 req,
- {
- 	struct usb_serial *serial = port->serial;
- 	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
--	void *dmabuf;
- 	int result;
- 
--	dmabuf = kmemdup(buf, bufsize, GFP_KERNEL);
--	if (!dmabuf)
--		return -ENOMEM;
--
--	result = usb_control_msg(serial->dev, usb_sndctrlpipe(serial->dev, 0),
--			req, REQTYPE_HOST_TO_INTERFACE, 0,
--			port_priv->bInterfaceNumber, dmabuf, bufsize,
--			USB_CTRL_SET_TIMEOUT);
--
--	kfree(dmabuf);
-+	result = usb_control_msg_send(serial->dev, 0, req,
-+				      REQTYPE_HOST_TO_INTERFACE, 0,
-+				      port_priv->bInterfaceNumber, buf, bufsize,
-+				      USB_CTRL_SET_TIMEOUT, GFP_KERNEL);
- 
--	if (result < 0) {
-+	if (result) {
- 		dev_err(&port->dev, "failed set req 0x%x size %d status: %d\n",
- 				req, bufsize, result);
- 		return result;
-@@ -773,21 +743,14 @@ static int cp210x_write_u32_reg(struct usb_serial_port *port, u8 req, u32 val)
- static int cp210x_write_vendor_block(struct usb_serial *serial, u8 type,
- 				     u16 val, void *buf, int bufsize)
- {
--	void *dmabuf;
- 	int result;
- 
--	dmabuf = kmemdup(buf, bufsize, GFP_KERNEL);
--	if (!dmabuf)
--		return -ENOMEM;
-+	result = usb_control_msg_send(serial->dev, 0, CP210X_VENDOR_SPECIFIC,
-+				      type, val, cp210x_interface_num(serial),
-+				      buf, bufsize, USB_CTRL_SET_TIMEOUT,
-+				      GFP_KERNEL);
- 
--	result = usb_control_msg(serial->dev, usb_sndctrlpipe(serial->dev, 0),
--				 CP210X_VENDOR_SPECIFIC, type, val,
--				 cp210x_interface_num(serial), dmabuf, bufsize,
--				 USB_CTRL_SET_TIMEOUT);
--
--	kfree(dmabuf);
--
--	if (result < 0) {
-+	if (result) {
- 		dev_err(&serial->interface->dev,
- 			"failed to set vendor val 0x%04x size %d: %d\n", val,
- 			bufsize, result);
-@@ -952,27 +915,18 @@ static int cp210x_get_tx_queue_byte_count(struct usb_serial_port *port,
- {
- 	struct usb_serial *serial = port->serial;
- 	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
--	struct cp210x_comm_status *sts;
-+	struct cp210x_comm_status sts;
- 	int result;
- 
--	sts = kmalloc(sizeof(*sts), GFP_KERNEL);
--	if (!sts)
--		return -ENOMEM;
--
--	result = usb_control_msg(serial->dev, usb_rcvctrlpipe(serial->dev, 0),
--			CP210X_GET_COMM_STATUS, REQTYPE_INTERFACE_TO_HOST,
--			0, port_priv->bInterfaceNumber, sts, sizeof(*sts),
--			USB_CTRL_GET_TIMEOUT);
--	if (result == sizeof(*sts)) {
--		*count = le32_to_cpu(sts->ulAmountInOutQueue);
--		result = 0;
--	} else {
-+	result = usb_control_msg_recv(serial->dev, 0, CP210X_GET_COMM_STATUS,
-+				      REQTYPE_INTERFACE_TO_HOST, 0,
-+				      port_priv->bInterfaceNumber, &sts,
-+				      sizeof(sts), USB_CTRL_GET_TIMEOUT,
-+				      GFP_KERNEL);
-+	if (result == 0)
-+		*count = le32_to_cpu(sts.ulAmountInOutQueue);
-+	else
- 		dev_err(&port->dev, "failed to get comm status: %d\n", result);
--		if (result >= 0)
--			result = -EIO;
--	}
--
--	kfree(sts);
- 
- 	return result;
- }
--- 
-2.17.1
+For one example, how do you ensure that the memory you are reading from
+hasn't been modified by the host between writing to it the last time you
+did?  Do you have a list of specific drivers and kernel options that you
+feel you now "trust"?  If so, how long does that trust last for?  Until
+someonen else modifies that code?  What about modifications to functions
+that your "audited" code touches?  Who is doing this auditing?  How do
+you know the auditing has been done correctly?  Who has reviewed and
+audited the tools that are doing the auditing?  Where is the
+specification that has been agreed on how the auditing must be done?
+And so on...
 
+I feel like there are a lot of different things all being mixed up here
+into one "oh we want this to happen!" type of thread.  Please let's just
+stick to the one request that I had here, which was to move the way that
+busses are allowed to authorize the devices they wish to control into a
+generic way instead of being bus-specific logic.
+
+Any requests outside of that type of functionality are just that,
+outside the scope of this patchset and should get their own patch series
+and discussion.
+
+thanks,
+
+greg k-h
