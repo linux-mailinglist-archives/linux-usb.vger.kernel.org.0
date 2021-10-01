@@ -2,287 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCA141EDA4
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 14:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D23D41EDD5
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 14:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353889AbhJAMki (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Oct 2021 08:40:38 -0400
-Received: from cable.insite.cz ([84.242.75.189]:33268 "EHLO cable.insite.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231352AbhJAMki (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 1 Oct 2021 08:40:38 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id E4A68A1A3D401;
-        Fri,  1 Oct 2021 14:38:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1633091931; bh=dearztGRw1GXxn/uQ+0slvG+eWn3LhM4LC+VUDWRPrQ=;
-        h=Subject:From:To:References:Cc:Date:In-Reply-To:From;
-        b=CxO0ssxtIFcJbvipIE3r0Jz4iJt0mx+6xdZLmSl9Ra8y58hStoSnCLnuzU9LrPolG
-         K2/98xBY+z3GcXrNVcZU1/6Y08nSNLhakQDUz6gTZ5vWSDl0VhQcEKNucVsxnZ5gi9
-         H4Uuw6r2yxVzDT58+p1fG//XXNldYeV4weGAx8xY=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id NNRtXa_1KyZv; Fri,  1 Oct 2021 14:38:46 +0200 (CEST)
-Received: from [192.168.105.22] (ip28.insite.cz [81.0.237.28])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 49B6DA1A3D400;
-        Fri,  1 Oct 2021 14:38:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1633091926; bh=dearztGRw1GXxn/uQ+0slvG+eWn3LhM4LC+VUDWRPrQ=;
-        h=Subject:From:To:References:Cc:Date:In-Reply-To:From;
-        b=GCde8NMDseTJAhC/7FXLyfU1g7g9/1iZORxMItchHO5339lQMk8kIKD6ntlQ9b1t0
-         k4jbu3+fZ2spSkdbHUlkQADBss8wMIIQnh6Nt2twPBt9qmejbEYmtoVzle8cOpMgdX
-         IWi6yI3a3i8QlhRzNazE0Glh22sxWsZh0YeQ335I=
-Subject: Re: RFC: usb: gadget: u_audio: Notifying gadget that host started
- playback/capture?
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
-References: <6ebc2456-a46b-bc47-da76-7a341414c1fb@ivitera.com>
-Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Julian Scheel <julian@jusst.de>, Takashi Iwai <tiwai@suse.de>
-Message-ID: <35766f0f-784d-d37a-6d07-665f9ee88331@ivitera.com>
-Date:   Fri, 1 Oct 2021 14:38:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230008AbhJAMwt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Oct 2021 08:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353506AbhJAMwr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 08:52:47 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9505C06177E
+        for <linux-usb@vger.kernel.org>; Fri,  1 Oct 2021 05:51:02 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id u18so38676445lfd.12
+        for <linux-usb@vger.kernel.org>; Fri, 01 Oct 2021 05:51:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U3g3FVHcAfq2CjS/tDBEgPrTjvgAlik1UmRsepWrO/M=;
+        b=AzjhIKsGc5F00nF8gT49XgOerH2kylziofl1fTWdcLRpswV4wNz8DKK5xJ7On0pP/7
+         FUfZ1Wgbt1/fuaxVdMYCvvgTtIGVXfv0UoK33+IzBB+zOi+jh2jn6j2wyaLjswS/IOzw
+         SQjTg3BAouTPEqyD9JFdD9cYzi69CQhCoGH5fKvFHMMepL7XM0KGl/OrspTiy4mR9WhP
+         foe5FrlQSoXx4OG2RW+Mn3fWJuth6XGpzQJ4ILLPGQ/0+fTYG3YwXfmnYk9SirlbmFbB
+         VWqNGRy6BMbC7o4y9fE4zK6CBmWtNh3bv3/HT2LLpsFmdOSr7meyX9U8IJw0f7EYsu6v
+         RPYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U3g3FVHcAfq2CjS/tDBEgPrTjvgAlik1UmRsepWrO/M=;
+        b=Yp77DUAaR0mCVy/OZdaktUCnFt3+jpzxt9B2BzTxkqVrs9Op6v8emTiCYvbGCkdBvH
+         L3NPT7dlycnwa4i2jWKIVAjuTmYSUscg7NIT80P8KOOe2ZQmAgw6VM+LBHfNyXWZ57bY
+         n34LVrySyzOAcGmwtAFwMY2k3a7ZuQhpznot51yGwYdt+mFz+DSiQOx0a85f0p4mLmqC
+         qbi44o+9+5Hllo7Oj3U8Lj0wyRU85Af6NvFq4A0wCplAjrK5uxAOGVer1PZUywYrO/E6
+         Ba2oeTpq/80fkGx4UH+jyuLYbpQ4kHi5LtFLKTIPpolkvCziHS2zZ+cKf7KedMqFWxJ1
+         bEzg==
+X-Gm-Message-State: AOAM530lhO8gwvzwLrcjL5oPXUHqXHD1FSYgqtbrpPUBD/ueax4iMiGN
+        6S7Y58WaGcSVkskGT1L6KhWUilKcBqlhWdVDJ6x+8A==
+X-Google-Smtp-Source: ABdhPJwqqw8e12Oj8Mbs+ZBogohxgciqSKBUNXiyR2zo3nKqwCJ61Gsrw5pb7r1VVcKkZcvnXQuH+1x0Dzep9YUsgPg=
+X-Received: by 2002:a19:5f4b:: with SMTP id a11mr5158365lfj.373.1633092661107;
+ Fri, 01 Oct 2021 05:51:01 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <6ebc2456-a46b-bc47-da76-7a341414c1fb@ivitera.com>
-Content-Type: multipart/mixed;
- boundary="------------210795DD75CC1BC4DE8E7EF2"
-Content-Language: en-US
+References: <20210926224058.1252-1-digetx@gmail.com> <20210926224058.1252-3-digetx@gmail.com>
+In-Reply-To: <20210926224058.1252-3-digetx@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 1 Oct 2021 14:50:25 +0200
+Message-ID: <CAPDyKFrtE75Tf-vefM0isj52PJ5_v525AjqU2TMUpc4__rYLhA@mail.gmail.com>
+Subject: Re: [PATCH v13 02/35] soc/tegra: Add devm_tegra_core_dev_init_opp_table_common()
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------210795DD75CC1BC4DE8E7EF2
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Transfer-Encoding: 7bit
+On Mon, 27 Sept 2021 at 00:42, Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> Only couple drivers need to get the -ENODEV error code and majority of
+> drivers need to explicitly initialize the performance state. Add new
+> common helper which sets up OPP table for these drivers.
+>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  include/soc/tegra/common.h | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>
+> diff --git a/include/soc/tegra/common.h b/include/soc/tegra/common.h
+> index af41ad80ec21..5b4a042f60fb 100644
+> --- a/include/soc/tegra/common.h
+> +++ b/include/soc/tegra/common.h
+> @@ -39,4 +39,28 @@ devm_tegra_core_dev_init_opp_table(struct device *dev,
+>  }
+>  #endif
+>
+> +/*
+> + * This function should be invoked with the enabled runtime PM of the device
+> + * in order to initialize performance state properly. Most of Tegra devices
+> + * are assumed to be suspended at a probe time and GENPD require RPM to be
+> + * enabled to set up the rpm-resume state, otherwise device is active and
+> + * performance state is applied immediately. Note that it will initialize
+> + * OPP bandwidth if it's wired in a device-tree for this device, which is
+> + * undesirable for a suspended device.
+> + */
+> +static inline int
+> +devm_tegra_core_dev_init_opp_table_common(struct device *dev)
+> +{
+> +       struct tegra_core_opp_params opp_params = {};
+> +       int err;
+> +
+> +       opp_params.init_state = true;
+> +
+> +       err = devm_tegra_core_dev_init_opp_table(dev, &opp_params);
+> +       if (err != -ENODEV)
+> +               return err;
+> +
+> +       return 0;
+> +}
 
-Hi,
+Just want to share a few thoughts around these functions.
 
-Dne 08. 09. 21 v 10:21 Pavel Hofman napsal(a):
-> Hi,
-> 
-> The current audio gadget has no way to inform the gadget side that the 
-> host side has started playback/capture and that gadget-side alsa 
-> processes should be started.
-> 
-> Playback/capture processes on the host side do not get stuck without the 
-> gadget side consuming/producing data (OUT requests are ignored in 
-> u_audio_iso_complete, IN ones send initial zeros in their req->buf).
-> 
-> However, playback/capture processes on the gadget side get stuck without 
-> the host side sending playback OUT packets or capture IN requests and 
-> time out with error. If there was a way to inform the gadget side that 
-> playback/capture has started on the host side, the gadget clients could 
-> react accordingly.
-> 
+So, I assume it's fine to call
+devm_tegra_core_dev_init_opp_table_common() or
+devm_tegra_core_dev_init_opp_table() from consumer drivers during
+->probe(), as long as those drivers are tegra specific, which I assume
+all are in the series!?
 
-I drafted a simple patch for u_audio.c which defines read-only boolean 
-ctl elems "Capture Requested" and "Playback Requested". Their values are 
-set/reset in methods u_audio_start_capture/playback and 
-u_audio_stop_capture/playback, i.e. at changes of respective altsettings 
-from 0 to 1 and back. Every ctl elem value change sends notification via 
-snd_ctl_notify. The principle works OK for capture/playback start/stop 
-on the host, as monitored by alsactl:
+My point is, a cross SoC consumer driver that needs to initiate OPP
+tables can get rather messy, if it would need to make one specific
+function call per SoC.
 
-pi@raspberrypi:~ $ alsactl monitor hw:UAC2Gadget
-node hw:UAC2Gadget, #4 (3,0,0,Capture Requested,0) VALUE
-node hw:UAC2Gadget, #4 (3,0,0,Capture Requested,0) VALUE
-node hw:UAC2Gadget, #3 (3,0,0,Playback Requested,0) VALUE
-node hw:UAC2Gadget, #3 (3,0,0,Playback Requested,0) VALUE
+That said, I hope we can tackle this as a separate/future problem, so
+the series can get merged as is.
 
-However at enumeration the USB host switches both playback and capture 
-altsettings repeatedly, generating "fake" events from the gadget side 
-POW. The host even sends regular-sized EP-OUT packets filled with zeros 
-during enumeration (tested on linux only for now).
+> +
+>  #endif /* __SOC_TEGRA_COMMON_H__ */
+> --
+> 2.32.0
+>
 
-Please is there any way to "detect" the enumeration stage to mask out 
-the "fake" playback/capture start/stop events?
-
-The attached patch does not apply cleanly to mainline u_audio.c because 
-it's rebased on other patches not submitted yet but it's only a 
-discussion inducer for now.
-
-Thanks a lot,
-
-Pavel.
-
---------------210795DD75CC1BC4DE8E7EF2
-Content-Type: text/x-patch; charset=UTF-8;
- name="patch.diff"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="patch.diff"
-
-diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-index e395be32275c..69aef4e3677d 100644
---- a/drivers/usb/gadget/function/u_audio.c
-+++ b/drivers/usb/gadget/function/u_audio.c
-@@ -34,6 +34,8 @@ enum {
- 	UAC_VOLUME_CTRL,
- 	UAC_CAPTURE_RATE_CTRL,
- 	UAC_PLAYBACK_RATE_CTRL,
-+	UAC_CAPTURE_REQ_CTRL,
-+	UAC_PLAYBACK_REQ_CTRL,
- };
- 
- /* Runtime data params for one stream */
-@@ -63,6 +65,9 @@ struct uac_rtd_params {
-   s16 volume_min, volume_max, volume_res;
-   s16 volume;
-   int mute;
-+  /* playback/capture_is_requested and their state */
-+  struct snd_kcontrol *snd_kctl_is_req;
-+  int is_requested;
- 
-   spinlock_t lock; /* lock for control transfers */
- 
-@@ -542,6 +547,8 @@ int u_audio_set_playback_srate(struct g_audio *audio_dev, int srate)
- }
- EXPORT_SYMBOL_GPL(u_audio_set_playback_srate);
- 
-+static void update_is_requested(struct uac_rtd_params *prm, unsigned int val);
-+
- int u_audio_start_capture(struct g_audio *audio_dev)
- {
- 	struct snd_uac_chip *uac = audio_dev->uac;
-@@ -553,6 +560,7 @@ int u_audio_start_capture(struct g_audio *audio_dev)
- 	struct uac_params *params = &audio_dev->params;
- 	int req_len, i;
- 
-+	update_is_requested(&uac->c_prm, 1);
- 	ep = audio_dev->out_ep;
- 	prm = &uac->c_prm;
- 	config_ep_by_speed(gadget, &audio_dev->func, ep);
-@@ -625,6 +633,7 @@ void u_audio_stop_capture(struct g_audio *audio_dev)
- {
- 	struct snd_uac_chip *uac = audio_dev->uac;
- 
-+	update_is_requested(&uac->c_prm, 0);
- 	if (audio_dev->in_ep_fback)
- 		free_ep_fback(&uac->c_prm, audio_dev->in_ep_fback);
- 	free_ep(&uac->c_prm, audio_dev->out_ep);
-@@ -645,6 +654,7 @@ int u_audio_start_playback(struct g_audio *audio_dev)
- 	int req_len, i;
- 	unsigned int p_interval, p_pktsize, p_pktsize_residue;
- 
-+	update_is_requested(&uac->p_prm, 1);
- 	dev_dbg(dev, "start playback with rate %d\n", params->p_srate_active);
- 	ep = audio_dev->in_ep;
- 	prm = &uac->p_prm;
-@@ -711,6 +721,7 @@ void u_audio_stop_playback(struct g_audio *audio_dev)
- {
- 	struct snd_uac_chip *uac = audio_dev->uac;
- 
-+	update_is_requested(&uac->p_prm, 0);
- 	free_ep(&uac->p_prm, audio_dev->in_ep);
- }
- EXPORT_SYMBOL_GPL(u_audio_stop_playback);
-@@ -1027,6 +1038,27 @@ static int uac_pcm_rate_get(struct snd_kcontrol *kcontrol,
- 	return 0;
- }
- 
-+static int u_audio_stream_requested_info(struct snd_kcontrol *kcontrol,
-+				   struct snd_ctl_elem_info *uinfo)
-+{
-+	uinfo->type = SNDRV_CTL_ELEM_TYPE_BOOLEAN;
-+	uinfo->count = 1;
-+	uinfo->value.integer.min = 0;
-+	uinfo->value.integer.max = 1;
-+	uinfo->value.integer.step = 1;
-+
-+	return 0;
-+}
-+
-+static int u_audio_stream_requested_get(struct snd_kcontrol *kcontrol,
-+				   struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct uac_rtd_params *prm = snd_kcontrol_chip(kcontrol);
-+	ucontrol->value.integer.value[0] = prm->is_requested;
-+	return 0;
-+}
-+
-+
- static struct snd_kcontrol_new u_audio_controls[]  = {
-   [UAC_FBACK_CTRL] {
-     .iface =        SNDRV_CTL_ELEM_IFACE_PCM,
-@@ -1072,8 +1104,35 @@ static struct snd_kcontrol_new u_audio_controls[]  = {
- 		.get = uac_pcm_rate_get,
- 		.private_value = SNDRV_PCM_STREAM_PLAYBACK,
- 		},
-+  [UAC_CAPTURE_REQ_CTRL] {
-+    .iface =        SNDRV_CTL_ELEM_IFACE_PCM,
-+    .name =         "Capture Requested",
-+    .access = SNDRV_CTL_ELEM_ACCESS_READ | SNDRV_CTL_ELEM_ACCESS_VOLATILE,
-+    .info =         u_audio_stream_requested_info,
-+    .get =          u_audio_stream_requested_get,
-+    .private_value = SNDRV_PCM_STREAM_CAPTURE,
-+  },
-+  [UAC_PLAYBACK_REQ_CTRL] {
-+    .iface =        SNDRV_CTL_ELEM_IFACE_PCM,
-+    .name =         "Playback Requested",
-+    .access = SNDRV_CTL_ELEM_ACCESS_READ | SNDRV_CTL_ELEM_ACCESS_VOLATILE,
-+    .info =         u_audio_stream_requested_info,
-+    .get =          u_audio_stream_requested_get,
-+    .private_value = SNDRV_PCM_STREAM_PLAYBACK,
-+  },
- };
- 
-+static void update_is_requested(struct uac_rtd_params *prm, unsigned int val) {
-+	struct snd_kcontrol *kctl = prm->snd_kctl_is_req;
-+
-+	if (prm->is_requested != val) {
-+		prm->is_requested = val;
-+		snd_ctl_notify(prm->uac->card, SNDRV_CTL_EVENT_MASK_VALUE,
-+				&kctl->id);
-+		pr_debug("Setting '%s' to %d", kctl->id.name, val);
-+	}
-+}
-+
- int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
- 					const char *card_name)
- {
-@@ -1209,6 +1268,38 @@ int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
- 		err = snd_ctl_add(card, kctl);
- 		if (err < 0)
- 			goto snd_fail;
-+
-+		kctl = snd_ctl_new1(&u_audio_controls[UAC_PLAYBACK_REQ_CTRL],
-+						&uac->p_prm);
-+		if (!kctl) {
-+			err = -ENOMEM;
-+			goto snd_fail;
-+		}
-+
-+		kctl->id.device = pcm->device;
-+		kctl->id.subdevice = 0;
-+
-+		err = snd_ctl_add(card, kctl);
-+		if (err < 0)
-+			goto snd_fail;
-+		(&uac->p_prm)->snd_kctl_is_req = kctl;
-+	}
-+
-+	if (c_chmask) {
-+		kctl = snd_ctl_new1(&u_audio_controls[UAC_CAPTURE_REQ_CTRL],
-+					&uac->c_prm);
-+		if (!kctl) {
-+			err = -ENOMEM;
-+			goto snd_fail;
-+		}
-+
-+		kctl->id.device = pcm->device;
-+		kctl->id.subdevice = 0;
-+
-+		err = snd_ctl_add(card, kctl);
-+		if (err < 0)
-+			goto snd_fail;
-+		(&uac->c_prm)->snd_kctl_is_req = kctl;
- 	}
- 
- 	for (i = 0; i <= SNDRV_PCM_STREAM_LAST; i++) {
-
---------------210795DD75CC1BC4DE8E7EF2--
+Kind regards
+Uffe
