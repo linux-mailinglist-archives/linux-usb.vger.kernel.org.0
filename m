@@ -2,77 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39EAF41E606
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 04:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2456E41E60B
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 04:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbhJACil (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Sep 2021 22:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbhJACik (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Sep 2021 22:38:40 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77657C06176A
-        for <linux-usb@vger.kernel.org>; Thu, 30 Sep 2021 19:36:57 -0700 (PDT)
-Received: from pyrite.rasen.tech (unknown [IPv6:2400:4051:61:600:2c71:1b79:d06d:5032])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EE6CAA16;
-        Fri,  1 Oct 2021 04:36:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1633055814;
-        bh=LaN6cHaR/hMeaW2qnf1S8STIioiDqgr2cionnjUxF6g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oYrJlPqPY0+PJmhyKjv6Fa4XKQDFDPLFb6CUs2za2UTkdYZySPnfsidXnY2OsniGw
-         iaqCtvB09avkYJzJywredHztentE9MeW9qb9BOY/jCrX42SzDDjywFY28Df1ZcWyVi
-         nGr41hEvxNTrFvjYddu3DulEQ3DQ6s8JlQy3hBcA=
-Date:   Fri, 1 Oct 2021 11:36:45 +0900
-From:   paul.elder@ideasonboard.com
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
-        laurent.pinchart@ideasonboard.com, kernel@pengutronix.de,
-        caleb.connolly@ideasonboard.com
-Subject: Re: [PATCH 1/7] usb: gadget: uvc: consistently use define for
- headerlen
-Message-ID: <20211001023645.GA3032473@pyrite.rasen.tech>
-References: <20210930102717.15720-1-m.grzeschik@pengutronix.de>
- <20210930102717.15720-2-m.grzeschik@pengutronix.de>
+        id S1351532AbhJACm1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 30 Sep 2021 22:42:27 -0400
+Received: from rtits2.realtek.com ([211.75.126.72]:39036 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230260AbhJACm1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Sep 2021 22:42:27 -0400
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 1912e6Ho9025237, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36503.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 1912e6Ho9025237
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 1 Oct 2021 10:40:06 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36503.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Fri, 1 Oct 2021 10:40:05 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Fri, 1 Oct 2021 10:40:05 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::cdd5:82a3:e854:7098]) by
+ RTEXMBS04.realtek.com.tw ([fe80::cdd5:82a3:e854:7098%5]) with mapi id
+ 15.01.2106.013; Fri, 1 Oct 2021 10:40:05 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>
+CC:     Jason-ch Chen <jason-ch.chen@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "Project_Global_Chrome_Upstream_Group@mediatek.com" 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "hsinyi@google.com" <hsinyi@google.com>,
+        nic_swsd <nic_swsd@realtek.com>
+Subject: RE: [PATCH] r8152: stop submitting rx for -EPROTO
+Thread-Topic: [PATCH] r8152: stop submitting rx for -EPROTO
+Thread-Index: AQHXtPF6mRt31KuIqUSf0ySwz113xKu6nqYQ//+g0oCAAYwXgIAAYT6AgAFAzFA=
+Date:   Fri, 1 Oct 2021 02:40:05 +0000
+Message-ID: <3694347f29ed431e9f8f2c065b8df0a7@realtek.com>
+References: <20210929051812.3107-1-jason-ch.chen@mediatek.com>
+ <cbd1591fc03f480c9f08cc55585e2e35@realtek.com>
+ <4c2ad5e4a9747c59a55d92a8fa0c95df5821188f.camel@mediatek.com>
+ <274ec862-86cf-9d83-7ea7-5786e30ca4a7@suse.com>
+ <20210930151819.GC464826@rowland.harvard.edu>
+In-Reply-To: <20210930151819.GC464826@rowland.harvard.edu>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.203]
+x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2021/9/29_=3F=3F_11:27:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210930102717.15720-2-m.grzeschik@pengutronix.de>
+X-KSE-ServerInfo: RTEXH36503.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Michael,
-
-On Thu, Sep 30, 2021 at 12:27:11PM +0200, Michael Grzeschik wrote:
-> The uvc request headerlen of 2 was defined as UVCG_REQUEST_HEADER_LEN
-> in commit e81e7f9a0eb9 ("usb: gadget: uvc: add scatter gather support").
-> We missed to use it consistently. This patch fixes that.
+Alan Stern <stern@rowland.harvard.edu>
+[...]
+> There has been some discussion about this in the past.
 > 
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> In general, -EPROTO is almost always a non-recoverable error.
 
-Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
+Excuse me. I am confused about the above description.
+I got -EPROTO before, when I debugged another issue.
+However, the bulk transfer still worked after I resubmitted
+the transfer. I didn't do anything to recover it. That is why
+I do resubmission for -EPROTO.
 
-> ---
->  drivers/usb/gadget/function/uvc_video.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-> index b4a763e5f70e1..da93b46df464d 100644
-> --- a/drivers/usb/gadget/function/uvc_video.c
-> +++ b/drivers/usb/gadget/function/uvc_video.c
-> @@ -302,7 +302,9 @@ uvc_video_alloc_requests(struct uvc_video *video)
->  		list_add_tail(&video->ureq[i].req->list, &video->req_free);
->  		/* req_size/PAGE_SIZE + 1 for overruns and + 1 for header */
->  		sg_alloc_table(&video->ureq[i].sgt,
-> -			       DIV_ROUND_UP(req_size - 2, PAGE_SIZE) + 2,
-> +			       DIV_ROUND_UP(req_size - UVCG_REQUEST_HEADER_LEN,
-> +					    PAGE_SIZE) +
-> +			       UVCG_REQUEST_HEADER_LEN,
->  			       GFP_KERNEL);
->  	}
->  
-> -- 
-> 2.30.2
-> 
+Best Regards,
+Hayes
+
