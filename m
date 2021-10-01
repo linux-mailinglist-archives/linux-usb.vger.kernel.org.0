@@ -2,103 +2,234 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9E941E634
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 05:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C0841E6C6
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 06:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbhJAD2z convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 30 Sep 2021 23:28:55 -0400
-Received: from rtits2.realtek.com ([211.75.126.72]:42326 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbhJAD2z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Sep 2021 23:28:55 -0400
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 1913QnFD2004059, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36503.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 1913QnFD2004059
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 1 Oct 2021 11:26:49 +0800
-Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
- RTEXH36503.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Fri, 1 Oct 2021 11:26:49 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Fri, 1 Oct 2021 11:26:48 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::cdd5:82a3:e854:7098]) by
- RTEXMBS04.realtek.com.tw ([fe80::cdd5:82a3:e854:7098%5]) with mapi id
- 15.01.2106.013; Fri, 1 Oct 2021 11:26:48 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>
-CC:     Jason-ch Chen <jason-ch.chen@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "Project_Global_Chrome_Upstream_Group@mediatek.com" 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "hsinyi@google.com" <hsinyi@google.com>,
-        nic_swsd <nic_swsd@realtek.com>
-Subject: RE: [PATCH] r8152: stop submitting rx for -EPROTO
-Thread-Topic: [PATCH] r8152: stop submitting rx for -EPROTO
-Thread-Index: AQHXtPF6mRt31KuIqUSf0ySwz113xKu6nqYQ//+g0oCAAYwXgIAAYT6AgAFAzFCAAA04sA==
-Date:   Fri, 1 Oct 2021 03:26:48 +0000
-Message-ID: <5f56b21575dd4f64a3b46aac21151667@realtek.com>
-References: <20210929051812.3107-1-jason-ch.chen@mediatek.com>
- <cbd1591fc03f480c9f08cc55585e2e35@realtek.com>
- <4c2ad5e4a9747c59a55d92a8fa0c95df5821188f.camel@mediatek.com>
- <274ec862-86cf-9d83-7ea7-5786e30ca4a7@suse.com>
- <20210930151819.GC464826@rowland.harvard.edu>
- <3694347f29ed431e9f8f2c065b8df0a7@realtek.com>
-In-Reply-To: <3694347f29ed431e9f8f2c065b8df0a7@realtek.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.177.203]
-x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2021/9/30_=3F=3F_10:00:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1343670AbhJAEb1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Oct 2021 00:31:27 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:13751 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237038AbhJAEb0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 00:31:26 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1633062582; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=hMlYsnEpNAjIGcGeBS4W4NAj6nd6tI3JefAIl+pq0PI=;
+ b=PSHkEBLEGG/GtIEaZnZwGp/ixtl6mqFU8fOZ0qxXoX0xKHRWVRFpCgJ+OT21m3C9V79OXrwF
+ /d7f7RhC2atTQqqTWtV2/h0BfJ511NgMKbKMTFCHeMDuyj/Wg846O4/62L3ksFtxzQZ+z/UV
+ nJF6A9gD9cvhVm9Z6XKGOqaHL9c=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 61568eb447d64efb6d1f2c52 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 01 Oct 2021 04:29:40
+ GMT
+Sender: pmaliset=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id AE5D0C43460; Fri,  1 Oct 2021 04:29:40 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmaliset)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9AE4FC4338F;
+        Fri,  1 Oct 2021 04:29:39 +0000 (UTC)
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36503.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 01 Oct 2021 09:59:39 +0530
+From:   Prasad Malisetty <pmaliset@codeaurora.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     agross@kernel.org, bhelgaas@google.com, bjorn.andersson@linaro.org,
+        lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
+        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dianders@chromium.org,
+        mka@chromium.org, vbadigan@codeaurora.org, sallenki@codeaurora.org,
+        manivannan.sadhasivam@linaro.org
+Subject: Re: [PATCH v9 3/4] arm64: dts: qcom: sc7280: Add PCIe nodes for IDP
+ board
+In-Reply-To: <CAE-0n52G7=PFrPGr5Zwq43q55CWBSkaEm7HpC+C4r2+Gjv3JQg@mail.gmail.com>
+References: <1632837350-12100-1-git-send-email-pmaliset@codeaurora.org>
+ <1632837350-12100-4-git-send-email-pmaliset@codeaurora.org>
+ <CAE-0n52G7=PFrPGr5Zwq43q55CWBSkaEm7HpC+C4r2+Gjv3JQg@mail.gmail.com>
+Message-ID: <d009c9c26e8ea7058509e96d2e0cd282@codeaurora.org>
+X-Sender: pmaliset@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> Alan Stern <stern@rowland.harvard.edu>
-> [...]
-> > There has been some discussion about this in the past.
-> >
-> > In general, -EPROTO is almost always a non-recoverable error.
+On 2021-09-29 02:22, Stephen Boyd wrote:
+> Quoting Prasad Malisetty (2021-09-28 06:55:49)
+>> Enable PCIe controller and PHY for sc7280 IDP board.
+>> Add specific NVMe GPIO entries for SKU1 and SKU2 support.
+>> 
+>> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
+>> ---
+>>  arch/arm64/boot/dts/qcom/sc7280-idp.dts  |  9 ++++++
+>>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 54 
+>> ++++++++++++++++++++++++++++++++
+>>  arch/arm64/boot/dts/qcom/sc7280-idp2.dts |  9 ++++++
+>>  3 files changed, 72 insertions(+)
+>> 
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts 
+>> b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+>> index 64fc22a..1562386 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+>> @@ -61,6 +61,15 @@
+>>         modem-init;
+>>  };
+>> 
+>> +&nvme_pwren_pin {
+>> +       pins = "gpio19";
+>> +};
 > 
-> Excuse me. I am confused about the above description.
-> I got -EPROTO before, when I debugged another issue.
-> However, the bulk transfer still worked after I resubmitted
-> the transfer. I didn't do anything to recover it. That is why
-> I do resubmission for -EPROTO.
+> This should move to the bottom in the "pinctrl" section.
+> 
+Hi Stephen,
 
-I check the Linux driver and the xHCI spec.
-The driver gets -EPROTO for bulk transfer, when the host
-returns COMP_USB_TRANSACTION_ERROR.
-According to the spec of xHCI, USB TRANSACTION ERROR
-means the host did not receive a valid response from the
-device (Timeout, CRC, Bad PID, unexpected NYET, etc.).
-It seems to be reasonable why resubmission sometimes works.
+There is no pinctrl section in this file. we defined nvme_pwren_pin in 
+common IDP file(sc7280-idp.dtsi) and using the nvme_pwren_pin reference 
+to define SKU specific gpio pin for SKU1 and SKU2 support.
 
-Best Regards,
-Hayes
+Thanks
+-Prasad
+>> +
+>> +&nvme_3v3_regulators {
+>> +       gpio = <&tlmm 19 GPIO_ACTIVE_HIGH>;
+>> +       enable-active-high;
+> 
+> The enable-active-high can be in the idp.dtsi file? That doesn't seem 
+> to
+> change.
+> 
+>> +};
+>> +
+>>  &pmk8350_vadc {
+>>         pmr735a_die_temp {
+>>                 reg = <PMR735A_ADC7_DIE_TEMP>;
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi 
+>> b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>> index def22ff..5b5505f 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>> @@ -31,6 +31,17 @@
+>>                         linux,can-disable;
+>>                 };
+>>         };
+>> +
+>> +       nvme_3v3_regulators: nvme-3v3-regulators {
+> 
+> Why plural? Isn't it a single regulator?
+> 
+Sure, I will update in next version
 
+Thanks
+-Prasad
+>> +               compatible = "regulator-fixed";
+>> +               regulator-name = "VLDO_3V3";
+>> +
+>> +               regulator-min-microvolt = <3300000>;
+>> +               regulator-max-microvolt = <3300000>;
+>> +
+>> +               pinctrl-names = "default";
+>> +               pinctrl-0 = <&nvme_pwren_pin>;
+>> +       };
+>>  };
+>> 
+>>  &apps_rsc {
+>> @@ -220,6 +231,42 @@
+>>         modem-init;
+>>  };
+>> 
+>> +&pcie1 {
+>> +       status = "okay";
+>> +       perst-gpio = <&tlmm 2 GPIO_ACTIVE_LOW>;
+>> +
+>> +       vddpe-3v3-supply = <&nvme_3v3_regulators>;
+>> +
+>> +       pinctrl-names = "default";
+>> +       pinctrl-0 = <&pcie1_default_state>;
+>> +};
+>> +
+>> +&pcie1_phy {
+>> +       status = "okay";
+>> +
+>> +       vdda-phy-supply = <&vreg_l10c_0p8>;
+>> +       vdda-pll-supply = <&vreg_l6b_1p2>;
+>> +};
+>> +
+>> +&pcie1_default_state {
+> 
+> I thought the node would be split into a reset config node and a wake
+> config node. Is that not being done for some reason? The pinctrl-0 
+> would
+> look like
+> 
+Agree, I will incorporate the changes in next version.
 
+> 	pinctrl-0 = <&pcie1_default_state>, <&pcie1_reset_n>, <&pcie1_wake_n>;
+> 
+>> +       reset-n {
+>> +               pins = "gpio2";
+>> +               function = "gpio";
+>> +
+>> +               drive-strength = <16>;
+>> +               output-low;
+>> +               bias-disable;
+>> +       };
+>> +
+>> +       wake-n {
+>> +               pins = "gpio3";
+>> +               function = "gpio";
+>> +
+>> +               drive-strength = <2>;
+>> +               bias-pull-up;
+>> +       };
+>> +};
+>> +
+>>  &pmk8350_vadc {
+>>         pmk8350_die_temp {
+>>                 reg = <PMK8350_ADC7_DIE_TEMP>;
+>> @@ -489,3 +536,10 @@
+>>                 bias-pull-up;
+>>         };
+>>  };
+>> +
+>> +&tlmm {
+>> +       nvme_pwren_pin: nvme-pwren-pin {
+>> +               function = "gpio";
+>> +               bias-pull-up;
+>> +       };
+>> +};
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp2.dts 
+>> b/arch/arm64/boot/dts/qcom/sc7280-idp2.dts
+>> index 1fc2add..0548cb6 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280-idp2.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp2.dts
+>> @@ -21,3 +21,12 @@
+>>                 stdout-path = "serial0:115200n8";
+>>         };
+>>  };
+>> +
+>> +&nvme_pwren_pin {
+>> +       pins = "gpio51";
+>> +};
+> 
+> The pin config can go to a pinctrl section at the bottom of this file?
+> 
+Same as a like SKU1 (sc7280-idp.dts)
+>> +
+>> +&nvme_3v3_regulators {
+>> +       gpio = <&tlmm 51 GPIO_ACTIVE_HIGH>;
+>> +       enable-active-high;
+>> +};
