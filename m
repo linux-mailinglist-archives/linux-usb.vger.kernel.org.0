@@ -2,150 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6AC041F011
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 16:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8547D41F027
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 17:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354679AbhJAO5f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Oct 2021 10:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354668AbhJAO5d (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 10:57:33 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509C3C06177D
-        for <linux-usb@vger.kernel.org>; Fri,  1 Oct 2021 07:55:49 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id y26so40082798lfa.11
-        for <linux-usb@vger.kernel.org>; Fri, 01 Oct 2021 07:55:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=HF8DBMItzWWxaU367RAPSYKUXH5BnlS9jAZczRe4ePU=;
-        b=aqXBI8UqLDWeTuVHGIBErjDsxio9yrdPfisehV9T9mJJk+ppF2b/RSy8QKzqoblHaJ
-         hktrYJaeXtvLqskrzNnGhVJzexc6aEdc98fBbQvK69Gb12EAMd3ESJqlkrS5oD7OvNgG
-         P97muReS34kLGu9NjHY+j5dwj2WyCWNHYTaed7xbvTrI2JzTGDs8qi8N0Qw7LkdjcWZX
-         LXXkcViUSEK9vm+haTULi+cNSHJvU7ahpKWlcRMN7cX+R5RpA0/f3OUd7Bkg7+NCE+Fi
-         1p1K49QgqzjgYEL1VL7M/h/E3btzs6Z5y5Av95Pp0dtJLF67v2p4aNsixGXoHBfrryKU
-         UTgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HF8DBMItzWWxaU367RAPSYKUXH5BnlS9jAZczRe4ePU=;
-        b=TNhVxrFt/vz2TP/7UvSrM9s8ucd/+wTKYyjMCJUoH+0X9/oVZKOQcj92L8XKmuD3Rv
-         5UBgcgADXKYO4Bse5ysSU1OdGUEtYn6nOXHaULS7NJzODk7WIIkTn4kEf1v9kD93SPkB
-         h23mc/nYG95ueLhLHvFuNHANwZ8E2YoXdNmohdakedHouhcG/eHL1U36EVDOobDgzu1r
-         ciPs2JxgLZNMdR6BHPQxDjszQtVnRlAiRLvlzDA5y5OGP4IiW8IlyJdT3RTsP5DnwwtB
-         ibwwduUHNQoZtTFpYa4cfM//debKhDlIvsQyh4RITVZvh3wb+ujFnoxFu/aBLVgr/ztv
-         UGIg==
-X-Gm-Message-State: AOAM530tVEzSlu2GvGoS+uq9HZDV7uZIXUhclwyo7C/lCWblMWdxdiZw
-        8KVUJquex1Is+kuPFLuPOGKttlr67VFbRsVTyt8m3g==
-X-Google-Smtp-Source: ABdhPJy2ug8Cm3POxLOQxU+SWQ8ZDieYeZsYoVZxo62Idbb6vc9hck4xUmbalsRsefa0nQdQjDMqTs5I8HVxPDG4gAE=
-X-Received: by 2002:a05:6512:3095:: with SMTP id z21mr5935006lfd.167.1633100147608;
- Fri, 01 Oct 2021 07:55:47 -0700 (PDT)
+        id S1354701AbhJAPCb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Oct 2021 11:02:31 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:59956 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354692AbhJAPCb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 11:02:31 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id F0B441FEDA;
+        Fri,  1 Oct 2021 15:00:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1633100445; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=6xWZoy2a5K0CyrmBK/cVhYbX7E69zDWhy7ff7dORPUU=;
+        b=ZMIuyG/UzkBdS4Z6/2OmD79XnIC6522CSe/v7FuBL+11XhxC+pU2Kv698BPIAMRvkWZfXJ
+        lGQWS9Zac+HWBPC9/YSSWYrGfHS1zao6wfPFT3a9fad1LZ8wGJvRt6URdvy83xhCyXy29X
+        8YK1VaTp5Tm3ehoBjQJWa6o9+w/tv+o=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AEA8013C6D;
+        Fri,  1 Oct 2021 15:00:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id k+lWKJ0iV2G5OgAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 01 Oct 2021 15:00:45 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v5 0/3] xen, usb: support pvUSB frontend driver
+Date:   Fri,  1 Oct 2021 17:00:36 +0200
+Message-Id: <20211001150039.15921-1-jgross@suse.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20210926224058.1252-1-digetx@gmail.com> <20210926224058.1252-14-digetx@gmail.com>
- <CAPDyKFpzhv1UxjM0q5AWHVxTWC_cCO_Kg_6exO0o_=EoVvjo+w@mail.gmail.com> <aad7a508-7fb5-3418-f902-def80c365094@gmail.com>
-In-Reply-To: <aad7a508-7fb5-3418-f902-def80c365094@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 1 Oct 2021 16:55:11 +0200
-Message-ID: <CAPDyKFppSuP6FfaBaGn3o+8WvTT=vJ8XMzZ47WPQ1JKiUYyEpw@mail.gmail.com>
-Subject: Re: [PATCH v13 13/35] drm/tegra: gr2d: Support generic power domain
- and runtime PM
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 1 Oct 2021 at 16:29, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 01.10.2021 16:39, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > On Mon, 27 Sept 2021 at 00:42, Dmitry Osipenko <digetx@gmail.com> wrote=
-:
-> >>
-> >> Add runtime power management and support generic power domains.
-> >>
-> >> Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-> >> Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
-> >> Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T12=
-4
-> >> Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
-> >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> >> ---
-> >>  drivers/gpu/drm/tegra/gr2d.c | 155 +++++++++++++++++++++++++++++++++-=
--
-> >
-> > [...]
-> >
-> >>  static int gr2d_remove(struct platform_device *pdev)
-> >> @@ -259,15 +312,101 @@ static int gr2d_remove(struct platform_device *=
-pdev)
-> >>                 return err;
-> >>         }
-> >>
-> >> +       pm_runtime_dont_use_autosuspend(&pdev->dev);
-> >> +       pm_runtime_disable(&pdev->dev);
-> >
-> > There is no guarantee that the ->runtime_suspend() has been invoked
-> > here, which means that clock may be left prepared/enabled beyond this
-> > point.
-> >
-> > I suggest you call pm_runtime_force_suspend(), instead of
-> > pm_runtime_disable(), to make sure that gets done.
->
-> The pm_runtime_disable() performs the final synchronization, please see [=
-1].
->
-> [1]
-> https://elixir.bootlin.com/linux/v5.15-rc3/source/drivers/base/power/runt=
-ime.c#L1412
+This series adds XEN guest pvUSB support. With pvUSB it is possible to
+use physical USB devices from a XEN domain.
 
-pm_runtime_disable() end up calling _pm_runtime_barrier(), which calls
-cancel_work_sync() if dev->power.request_pending has been set.
+Since V4 a lot of time (several years) has passed. This is a revived
+attempt to get the frontend into the kernel.
 
-If the work that was punted to the pm_wq in rpm_idle() has not been
-started yet, we end up just canceling it. In other words, there are no
-guarantees it runs to completion.
+The support consists of a frontend in form of a virtual hcd driver in
+the unprivileged domU passing I/O-requests to the backend in a driver
+domain (usually Dom0). The backend is not part of this patch series,
+as it is supported via qemu.
 
-Moreover, use space may have bumped the usage count via sysfs for the
-device (pm_runtime_forbid()) to keep the device runtime resumed.
+The code is taken (and adapted) from the original pvUSB implementation
+done for Linux 2.6 in 2008 by Fujitsu.
 
->
-> Calling pm_runtime_force_suspend() isn't correct because each 'enable'
-> must have the corresponding 'disable'. Hence there is no problem here.
+Normal operation of USB devices by adding and removing them dynamically
+to/from a domain has been tested using various USB devices (USB 1.1,
+2.0 and 3.0) using the qemu based backend.
 
-pm_runtime_force_suspend() calls pm_runtime_disable(), so I think that
-should be fine. No?
+Changes in V5:
+- added interface documentation to patch 1
+- frontend no longer trusts backend to return only sane values
 
-Kind regards
-Uffe
+Changes in V4:
+- remove sysfs file from frontend, as it violated the "one value per file"
+  rule and didn't serve any real purpose.
+
+Changes in V3:
+- move frontend to drivers/usb/host and rename it to xen-hcd.
+- changed name prefixes in patch 1 to "xenusb" as requested by Greg
+- use __u<n> types rather than uint<n>_t as requested by Greg
+
+Changes in V2:
+- removed backend, as it can be implemented in user land
+- added some access macros and definitions to the pvUSB interface
+  description to make it independant from linux kernel USB internals
+- adapted frontend to newer kernel version and use new pvUSB
+  interface macros
+- set port status in one chunk as suggested by Oliver Neukum
+
+Juergen Gross (3):
+  usb: Add Xen pvUSB protocol description
+  usb: Introduce Xen pvUSB frontend (xen hcd)
+  xen: add Xen pvUSB maintainer
+
+ MAINTAINERS                      |    8 +
+ drivers/usb/host/Kconfig         |   11 +
+ drivers/usb/host/Makefile        |    1 +
+ drivers/usb/host/xen-hcd.c       | 1641 ++++++++++++++++++++++++++++++
+ include/xen/interface/io/usbif.h |  421 ++++++++
+ 5 files changed, 2082 insertions(+)
+ create mode 100644 drivers/usb/host/xen-hcd.c
+ create mode 100644 include/xen/interface/io/usbif.h
+
+-- 
+2.26.2
+
