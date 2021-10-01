@@ -2,54 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE0741EEB1
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 15:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD2D41EF20
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 16:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353610AbhJANle (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Oct 2021 09:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
+        id S1354097AbhJAOJV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Oct 2021 10:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231699AbhJANlc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 09:41:32 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9043AC061775
-        for <linux-usb@vger.kernel.org>; Fri,  1 Oct 2021 06:39:48 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id y26so39173153lfa.11
-        for <linux-usb@vger.kernel.org>; Fri, 01 Oct 2021 06:39:48 -0700 (PDT)
+        with ESMTP id S231438AbhJAOJU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 10:09:20 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859D4C061775
+        for <linux-usb@vger.kernel.org>; Fri,  1 Oct 2021 07:07:36 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id i19so35952550lfu.0
+        for <linux-usb@vger.kernel.org>; Fri, 01 Oct 2021 07:07:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=EjEzezsR+/PambgN+lAAYZ1z9rojBWgi6PT34tsYxbI=;
-        b=C6fV4yWw1ceIqlo3pLFwCxKnhVCw/kuzIb7ecScYvV7TNg4eT2p4ZPgCXRjlPQxuCS
-         Wdr/7z3822oHu/gKY7pb2CMDmwChG2MImExZ3SoiaWINyTtW1mjxzlIHKKJVuIYKx8hL
-         XXDlmZ7O6Q9suRQD3j6+xskiuv0wxvOHMTdBDNCKErUgilJvcT2E9jxQ+bUfhhOn3Zl2
-         PegGBhq5uW1fZcmpSDj8XwDwrskqlXtJCleoq2gIF4EIY51y2Y2nzExVxEGZFUBtMPZS
-         64vraK/EdUmAWqAarHFzUdqeZf01jrOztwUyhU1RKUkqlXcaOnw2/6iNrgizwk96n/W6
-         ZSQw==
+        bh=Ccy11Z40KixrI11cltYn5ZcJWVQJimHuRt26MAfNhAc=;
+        b=mmVOZyqaAUMBtkBBuhdoApFSqfWX3cINwimlNhKZZQP7bUFuplZ9/aIK4LLMO7vJCr
+         qyOqhGyIhI6KCEeiPZLwsC2b07LxNGLnpuzcmV6qFpBXMzpeNGktITcYb5/i+tzmqwrz
+         7cx5/5peX588jl+VQ6N9Q3TMW7Iyn5I2zgmwHgFqykeahAizRFvqAC2iniw39z6abLEf
+         On4jq92Ck02U2dkeqDjvca7VUTt4ZNUqTok0sAkszvDNL97AkFeYH3gKMQAjfU2Ojvja
+         rqUwI5xXgPNFICuQzirzLNc0KSzY72zsy/ztBJ8fxgCLJn6zrD/25W2AyKPQmJOLsPTv
+         M6rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=EjEzezsR+/PambgN+lAAYZ1z9rojBWgi6PT34tsYxbI=;
-        b=GAOZlHenyGa3/nwhP8Ky4iGUKvFKJ//7ckFrDkRXirW3Z1leMJvp2Kvxv6P2tA0zPt
-         8Sr1bbtx3uL1IZzHLPcGPHrNMO7UC6K4bdAsl94j+QQsj2P/dftk+GTgGHHkwSEJ2PWP
-         db2O0elR8sWvMTgJto73Kw07nsZOdEIWpCHjrylJq0h3ozTCr9QB/L74RC6Ok/gH5rqU
-         M/FnN9RRF+ymtOhc6bbBCn2PnfovQHnbVsAn6VzJd2ZaGuOcnrIZujBjPyUoGAvAVQws
-         zkChKvJWnhlLOiwDoNHE7xx6Gdql5gD1cZrS+ZD2LqzKT4UiFHK4vQRGiIpJPLojUl1S
-         /ReQ==
-X-Gm-Message-State: AOAM532dQSwJC5F5wdUq0hQN4rmYn7aJRywPDzHV49HISb6zs5ENpIX/
-        8sHQBTDPIOskKzlSAbBUnxYU2gYYJORsDjTBZufYfw==
-X-Google-Smtp-Source: ABdhPJxp4p0UQRRIw2z72BWkWXdCGpyRnefweou3T6S9p6407CeSYXpm2W/gIhkCapLJ10cfY553xwNF/HrJa5MfNR0=
-X-Received: by 2002:a05:651c:2006:: with SMTP id s6mr12122181ljo.4.1633095586851;
- Fri, 01 Oct 2021 06:39:46 -0700 (PDT)
+        bh=Ccy11Z40KixrI11cltYn5ZcJWVQJimHuRt26MAfNhAc=;
+        b=TWvJ/GspP1HuZYZSvNN+m5KsByvsmk17ahHTJA/WwgnRrzT3Q4JpcUvIuXt9zQBiov
+         7RiiF3n4TJk7sCWCXzG5XA3nsAVyYwVHzRDcaquTFMLW4MycmRZaNNymBt9BneMU306g
+         FfNyoiPOkmwpKXVJxJ8svRsWjjSfiLy5xT5Cx9A/qOanwiE6cIaYBHoq0InZ+G2qr2yM
+         TtQjKXm05V95g12bNNTGIZAFaBUQxfc2xtjFA1V/mW59WNT6lB4LF4T7A2C3THiwC40E
+         MwIXYILkcNLx92z2bIpmJm13d5PE7wjjsngRCFLpLmZ4bUBrL8e2/o0X2rVmiCLzN4HD
+         tqcg==
+X-Gm-Message-State: AOAM53165tye/MYmvMlVVpUEcQP1qw4B7NAH9flArdmg31DHmN8ERq/d
+        oaTaaF85IAm9jQz7A1y1JPWtQKOPaJHSBfJI64r4vg==
+X-Google-Smtp-Source: ABdhPJxCT1fIjn0eX7h16hKPoCW6SQiHV9gFT4j/a+Ne56Lp+H5G5HrNrutb2Cfj1iLro5ZcopboLjBeTUlfzWnHMBA=
+X-Received: by 2002:a2e:898c:: with SMTP id c12mr12102788lji.16.1633097254789;
+ Fri, 01 Oct 2021 07:07:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210926224058.1252-1-digetx@gmail.com> <20210926224058.1252-14-digetx@gmail.com>
-In-Reply-To: <20210926224058.1252-14-digetx@gmail.com>
+References: <20210926224058.1252-1-digetx@gmail.com> <20210926224058.1252-15-digetx@gmail.com>
+In-Reply-To: <20210926224058.1252-15-digetx@gmail.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 1 Oct 2021 15:39:10 +0200
-Message-ID: <CAPDyKFpzhv1UxjM0q5AWHVxTWC_cCO_Kg_6exO0o_=EoVvjo+w@mail.gmail.com>
-Subject: Re: [PATCH v13 13/35] drm/tegra: gr2d: Support generic power domain
+Date:   Fri, 1 Oct 2021 16:06:58 +0200
+Message-ID: <CAPDyKFoZdmnmcdoWsD36uQesSjz8KJOq0JxY5tNbHgO_xMy+_g@mail.gmail.com>
+Subject: Re: [PATCH v13 14/35] drm/tegra: gr3d: Support generic power domain
  and runtime PM
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
@@ -95,26 +95,110 @@ On Mon, 27 Sept 2021 at 00:42, Dmitry Osipenko <digetx@gmail.com> wrote:
 > Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  drivers/gpu/drm/tegra/gr2d.c | 155 +++++++++++++++++++++++++++++++++--
+>  drivers/gpu/drm/tegra/gr3d.c | 388 ++++++++++++++++++++++++++++++-----
 
 [...]
 
->  static int gr2d_remove(struct platform_device *pdev)
-> @@ -259,15 +312,101 @@ static int gr2d_remove(struct platform_device *pdev)
->                 return err;
+> +
+> +static int gr3d_probe(struct platform_device *pdev)
+> +{
+> +       struct host1x_syncpt **syncpts;
+> +       struct gr3d *gr3d;
+> +       unsigned int i;
+> +       int err;
+> +
+> +       gr3d = devm_kzalloc(&pdev->dev, sizeof(*gr3d), GFP_KERNEL);
+> +       if (!gr3d)
+> +               return -ENOMEM;
+> +
+> +       platform_set_drvdata(pdev, gr3d);
+> +
+> +       gr3d->soc = of_device_get_match_data(&pdev->dev);
+> +
+> +       syncpts = devm_kzalloc(&pdev->dev, sizeof(*syncpts), GFP_KERNEL);
+> +       if (!syncpts)
+> +               return -ENOMEM;
+> +
+> +       err = gr3d_get_clocks(&pdev->dev, gr3d);
+> +       if (err)
+> +               return err;
+> +
+> +       err = gr3d_get_resets(&pdev->dev, gr3d);
+> +       if (err)
+> +               return err;
+> +
+> +       err = gr3d_init_power(&pdev->dev, gr3d);
+> +       if (err)
+> +               return err;
+> +
+>         INIT_LIST_HEAD(&gr3d->client.base.list);
+>         gr3d->client.base.ops = &gr3d_client_ops;
+>         gr3d->client.base.dev = &pdev->dev;
+> @@ -352,20 +552,36 @@ static int gr3d_probe(struct platform_device *pdev)
+>         gr3d->client.version = gr3d->soc->version;
+>         gr3d->client.ops = &gr3d_ops;
+>
+> +       pm_runtime_enable(&pdev->dev);
+> +       pm_runtime_use_autosuspend(&pdev->dev);
+> +       pm_runtime_set_autosuspend_delay(&pdev->dev, 200);
+> +
+> +       err = devm_pm_opp_register_set_opp_helper(&pdev->dev, gr3d_set_opp);
+> +       if (err)
+> +               goto disable_rpm;
+> +
+> +       err = devm_tegra_core_dev_init_opp_table_common(&pdev->dev);
+> +       if (err)
+> +               goto disable_rpm;
+> +
+>         err = host1x_client_register(&gr3d->client.base);
+>         if (err < 0) {
+>                 dev_err(&pdev->dev, "failed to register host1x client: %d\n",
+>                         err);
+> -               return err;
+> +               goto disable_rpm;
 >         }
 >
+>         /* initialize address register map */
+>         for (i = 0; i < ARRAY_SIZE(gr3d_addr_regs); i++)
+>                 set_bit(gr3d_addr_regs[i], gr3d->addr_regs);
+>
+> -       platform_set_drvdata(pdev, gr3d);
+> -
+>         return 0;
+> +
+> +disable_rpm:
 > +       pm_runtime_dont_use_autosuspend(&pdev->dev);
 > +       pm_runtime_disable(&pdev->dev);
 
-There is no guarantee that the ->runtime_suspend() has been invoked
-here, which means that clock may be left prepared/enabled beyond this
-point.
+Similar comment as for patch13.
 
-I suggest you call pm_runtime_force_suspend(), instead of
-pm_runtime_disable(), to make sure that gets done.
+> +
+> +       return err;
+>  }
+>
+>  static int gr3d_remove(struct platform_device *pdev)
+> @@ -380,23 +596,83 @@ static int gr3d_remove(struct platform_device *pdev)
+>                 return err;
+>         }
+>
+> -       if (gr3d->clk_secondary) {
+> -               reset_control_assert(gr3d->rst_secondary);
+> -               tegra_powergate_power_off(TEGRA_POWERGATE_3D1);
+> -               clk_disable_unprepare(gr3d->clk_secondary);
+> +       pm_runtime_dont_use_autosuspend(&pdev->dev);
+> +       pm_runtime_disable(&pdev->dev);
+
+Similar comment as for patch13. You may want to use
+pm_runtime_force_suspend() in favor of pm_runtime_disable().
+
+> +
+> +       return 0;
+> +}
 
 [...]
+
+I was looking for a call to dev_pm_opp_set_rate(), but couldn't find
+it. Isn't that needed when changing the rate of the clock?
 
 Kind regards
 Uffe
