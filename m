@@ -2,131 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F017F41F049
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 17:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3354341F0EF
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Oct 2021 17:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354789AbhJAPEj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Oct 2021 11:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354772AbhJAPEi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 11:04:38 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20900C06177C
-        for <linux-usb@vger.kernel.org>; Fri,  1 Oct 2021 08:02:54 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id e15so39948928lfr.10
-        for <linux-usb@vger.kernel.org>; Fri, 01 Oct 2021 08:02:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RRYA+dwntp7uVySc4zhYcXxMP7m3tm96xWjdtz/hFGQ=;
-        b=wEpKAHyG/Z2DV3VekAfpccfohS6GuleXT+sluDZqrLWc4fVXO49fTrUqrSvxv8Zw8s
-         RcDa8OGQoiU5NceOwJQxZmdavoBpaLp5cpZxOY6F+bufDOZ4FaXS7oneoiRNEd91hAaQ
-         fi0ahFYRT+uLqfme/EMkPYKyQOUjJfW1EYU/EWc5+MnERt9ifHnZPT0xlsv79INHvAVa
-         n5iBrHjvoImw38ZK0VwfsIEQXxUdGrUEBOEe3mKZSU/NxPY46J9bjQ5D+37CLL9HCmlI
-         03umH+yMd9J3zUrj55H5Ndk+MkCDMyLMUCaV6SGBRA2cOlVqS1jw5smxfm9J/cnyAziI
-         nodg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RRYA+dwntp7uVySc4zhYcXxMP7m3tm96xWjdtz/hFGQ=;
-        b=1OCfwmzne8mmqN1Y/WG4ZrczzYL729jNA1vHZbR2nxLCQuPXpX7lmgrXF/192Lcym0
-         srVcsDUZsctGGMQhf0hYqnfD1++1ggFpar8hUtffcMOvbgq6B7eQC9ixCfM9avpn7AEp
-         Cit5Y3IlKW+NEJHsBoMsl7gRXMDJeYb/BjxPtsI9QPjIZG4vtCGZxiENjknn4ausB1sb
-         kfi1rzrSKfIyMYL3gqhijDrHdQVVJm9LI0qzh+7l2g7XTZC7odn/WfKMrJfZZKpRerhO
-         rIv7kIbvqCO5+hmoH29AQ4HSviWbygJap5h8tEz21PyL9PTVxGOUdAzuXx0Aaky5rI1B
-         +vzQ==
-X-Gm-Message-State: AOAM533VVP42aCNObAAsCVG9+iQ+N124ymj8lPcTVA7t3tojE9UfKjhm
-        kZjc2cHJuk/Lao+1cfU0cYN3hj+fjw+hnR2BS9DMzQ==
-X-Google-Smtp-Source: ABdhPJxxMpC0sB/h1irGfplTvjCJzB8zxjxG16OKRPTRKR56TwhoKCfQgSz0EgtJooAfO/BDyR8+6WRX6Wl2uWGM0Ow=
-X-Received: by 2002:a05:6512:3095:: with SMTP id z21mr5969378lfd.167.1633100572233;
- Fri, 01 Oct 2021 08:02:52 -0700 (PDT)
+        id S1354893AbhJAPP2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Oct 2021 11:15:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51018 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1354869AbhJAPP1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 1 Oct 2021 11:15:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0EB1761A03;
+        Fri,  1 Oct 2021 15:13:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1633101223;
+        bh=lBCw9bkSZZDHUXzzaKop+6Hnc/MB752lkrnFW0SX3Yw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VldMVTz6nDca+vkVL8e0kiTzKzysrG6rFWnNAdrhL29IS+EMl5QwhGpw8dSZLXlBh
+         RYbctzhceiSbuD4LaWuLtoUIuBQXVmxEPSlh4UE5F+8UMCNeglXC361wnol0MdUsAc
+         ExxYnVHJCfPy1EhxNh6TSc2+qsyiFjynOVMT4zPg=
+Date:   Fri, 1 Oct 2021 17:13:40 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] usb: Introduce Xen pvUSB frontend (xen hcd)
+Message-ID: <YVclpB4HP4hynENV@kroah.com>
+References: <20211001150039.15921-1-jgross@suse.com>
+ <20211001150039.15921-3-jgross@suse.com>
 MIME-Version: 1.0
-References: <20210926224058.1252-1-digetx@gmail.com> <CAPDyKFog31OatzU0fHUMfN5FRsX+8Thm8TfipA4QisgFepU+rA@mail.gmail.com>
- <662251e0-d1e4-97ce-16f9-703521cc2600@gmail.com>
-In-Reply-To: <662251e0-d1e4-97ce-16f9-703521cc2600@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 1 Oct 2021 17:02:15 +0200
-Message-ID: <CAPDyKFoEbemYawwKW_muUKt9W+pGx_pncXvT57K2k4o68Z3P7g@mail.gmail.com>
-Subject: Re: [PATCH v13 00/35] NVIDIA Tegra power management patches for 5.16
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211001150039.15921-3-jgross@suse.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 1 Oct 2021 at 16:41, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 01.10.2021 17:36, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > On Mon, 27 Sept 2021 at 00:42, Dmitry Osipenko <digetx@gmail.com> wrote=
-:
-> >>
-> >> This series adds runtime PM support to Tegra drivers and enables core
-> >> voltage scaling for Tegra20/30 SoCs, resolving overheating troubles.
-> >>
-> >> All patches in this series are interdependent and should go via Tegra =
-tree.
-> >>
-> >> Changelog:
-> >>
-> >> v13: - Fixed compile-test error reported by build bot by reverting the
-> >>        mmc/ patch to v11. The sdhci_suspend/resume_host() functions ar=
-en't
-> >>        available with the disabled CONFIG_PM_SLEEP, some code needs th=
-e
-> >>        ifdef.
-> >>
-> >>      - Added last r-b from Rob Herring for the DT patches.
-> >>
-> >>      - Corrected clk/ PM domain-support patch by not using the
-> >>        devm_tegra_core_dev_init_opp_table_common() helper, which I
-> >>        utilized in v12. The clk driver implements its own power domain
-> >>        state syncing and common helper shouldn't be used. This fixes d=
-river
-> >>        probing for some clocks on some devices. It was reported by
-> >>        Svyatoslav Ryhel for PLLE OPP error on T30 Asus Transformer tab=
-let.
-> >
-> > Dmitry, I have looked through the series and besides those comments
-> > that I have posted, I have nothing more to add. Overall it looks good
-> > to me.
->
-> Ulf, thank you very much! Yours input is invaluable. I'm happy that this
-> series moving steadily to the final stage.
+On Fri, Oct 01, 2021 at 05:00:38PM +0200, Juergen Gross wrote:
+> --- /dev/null
+> +++ b/drivers/usb/host/xen-hcd.c
+> @@ -0,0 +1,1641 @@
+> +/*
+> + * xen-hcd.c
 
-My pleasure. Let's get the final pieces fixed so we can get this merged! :-=
-)
+Need a SPDX line here, instead of the license boiler-plate text you
+have.
 
-Kind regards
-Uffe
+Did you run checkpatch on this thing?  I thought that would have told
+you about this.
+
+> + *
+> + * Xen USB Virtual Host Controller driver
+> + *
+> + * Copyright (C) 2009, FUJITSU LABORATORIES LTD.
+> + * Author: Noboru Iwamatsu <n_iwamatsu@jp.fujitsu.com>
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License as published by
+> + * the Free Software Foundation; either version 2 of the License, or
+> + * (at your option) any later version.
+> + *
+> + * This program is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+> + * GNU General Public License for more details.
+> + *
+> + * You should have received a copy of the GNU General Public License
+> + * along with this program; if not, see <http://www.gnu.org/licenses/>.
+> + *
+> + * Or, by your choice:
+> + *
+> + * When distributed separately from the Linux kernel or incorporated into
+> + * other software packages, subject to the following license:
+> + *
+> + * Permission is hereby granted, free of charge, to any person obtaining a copy
+> + * of this software and associated documentation files (the "Software"), to
+> + * deal in the Software without restriction, including without limitation the
+> + * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+> + * sell copies of the Software, and to permit persons to whom the Software is
+> + * furnished to do so, subject to the following conditions:
+> + *
+> + * The above copyright notice and this permission notice shall be included in
+> + * all copies or substantial portions of the Software.
+> + *
+> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> + * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> + * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+> + * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+> + * DEALINGS IN THE SOFTWARE.
+
+Dual licensing a USB host controller driver is, um, a very dubious
+thing given that you can only interact with symbols exported with
+EXPORT_SYMBOL_GPL() from the USB stack.
+
+So you might want to change this...
+
+If not, and you want to keep the dual license, I need some explaination
+from a legal person at your company included in the changelog text, and
+a signed-off-by from them as well.
+
+thanks,
+
+greg k-h
