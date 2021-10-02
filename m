@@ -2,99 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 712E241FC7E
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Oct 2021 16:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0FAF41FC96
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Oct 2021 16:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233341AbhJBO0V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 Oct 2021 10:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233274AbhJBO0V (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Oct 2021 10:26:21 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75221C0613EC
-        for <linux-usb@vger.kernel.org>; Sat,  2 Oct 2021 07:24:35 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id 97-20020a9d006a000000b00545420bff9eso15359923ota.8
-        for <linux-usb@vger.kernel.org>; Sat, 02 Oct 2021 07:24:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4kyU+RC1s1W4Prd2J/eqoa0bc9xDHzgm8cils6Dps0g=;
-        b=ASTMFFw/ouJhICLKWSKmeZYwsv8LZtkqdDWt6qL8ZBQNr2gq8P4j6CiJpqm7pU9B7o
-         No5kZ5jV+ExVN9SWehh6OAF5xvOkKlCseSD6bs9bJFnNGdvD7Aw5y/dkLODz/3eZ4F2o
-         hfEMKp/B5lMU2JNXlirCg7B3/1iZfMU+CeLHawlei3oqPZYYqy39exf3UdjUg83oIAh+
-         NgmOebTXARpLiz8I6uikY3uU+kq65gfFEbCoFBriSEAODNHPdv/xepbuYxNNGXnZmfsQ
-         5ZgpI6Y6dZGpBbUPQoRAvVR9QLUQOdmzElIsGOi5Kso4cgpf4/l+OWQqcL2tv0+w77o0
-         SAQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=4kyU+RC1s1W4Prd2J/eqoa0bc9xDHzgm8cils6Dps0g=;
-        b=KLxKIrh/fEKCz3EHprXLZmmv/WP5m5VAafkw6hYy4n+xodT4m2/3dNictu9rmxGvbN
-         lKwrSk3QkKQMoXHmDiogU+r5eeceiWKUJF+8tE76D0mL7z9cBQnJoEaz3wox/HevcZCz
-         K5/+16j5CZvGLdRMA5sAige3VrY1uMd3ql5JKgOJvZx9+bG8a28a0BBxjdwPkJVlxqfJ
-         4V59AK4pCvgEHG1ZtmSkzFv2vp9A7pp0iUVtowGR2b2h8h2l9Q55H41FxY/xU84zPr1w
-         en+yYR0WFJwDJpNMVijl8vWh8NoCQJoQaiqpb+K8cZdt+IeBXgHZcDvn/DBcQnT1C/pd
-         SARA==
-X-Gm-Message-State: AOAM530OHdbhUjtMGCBBna6odOaH5OlOP/CNZsRLTHItDu4P5OPj7zcL
-        1jxMiXjcRDXeBzpTJwksJb0=
-X-Google-Smtp-Source: ABdhPJxZygGuDwmCCpx/VlIloApTvKmSG59VFsuL1aNNpxwzXjXvf4XMMgYgsnCSBly8ILPai4dxVA==
-X-Received: by 2002:a9d:1910:: with SMTP id j16mr2655730ota.225.1633184674827;
-        Sat, 02 Oct 2021 07:24:34 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 18sm1759642otj.10.2021.10.02.07.24.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Oct 2021 07:24:34 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 2 Oct 2021 07:24:33 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Xu Yang <xu.yang_2@nxp.com>
-Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-imx@nxp.com, jun.li@nxp.com
-Subject: Re: [PATCH] usb: typec: tcpm: handle SRC_STARTUP state if cc changes
-Message-ID: <20211002142433.GD34532@roeck-us.net>
-References: <20210928111639.3854174-1-xu.yang_2@nxp.com>
+        id S233419AbhJBOpv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 Oct 2021 10:45:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49032 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229560AbhJBOpv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 2 Oct 2021 10:45:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BDE8161A38;
+        Sat,  2 Oct 2021 14:44:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1633185845;
+        bh=RVXCE1KtXB8pEGemhZzbi1pw9kaZh7HJ77HnqA+Npns=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KmKcktd/wdJOAcwgKPmcihqF52yuGkwO6RKYCQVgvR3byomenOLbvq2VfDP6EjvI0
+         plksHABi/Z/OXC4bfqZU2y4MUj4nw/JE7r+MlNbFWxMgZ3xVT+GKw6RNwYkpMQ3q5H
+         Df6XaN3sMEBBNp5q2PWkokq4AYxKlEzAikICkvoM=
+Date:   Sat, 2 Oct 2021 16:44:00 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jason Wang <jasowang@redhat.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        "Reshetova, Elena" <elena.reshetova@intel.com>
+Subject: Re: [PATCH v2 4/6] virtio: Initialize authorized attribute for
+ confidential guest
+Message-ID: <YVhwMJyJeAb8iEFL@kroah.com>
+References: <20210930065953-mutt-send-email-mst@kernel.org>
+ <CAPcyv4hP6mtzKS-CVb-aKf-kYuiLM771PMxN2zeBEfoj6NbctA@mail.gmail.com>
+ <6d1e2701-5095-d110-3b0a-2697abd0c489@linux.intel.com>
+ <YVXWaF73gcrlvpnf@kroah.com>
+ <1cfdce51-6bb4-f7af-a86b-5854b6737253@linux.intel.com>
+ <YVaywQLAboZ6b36V@kroah.com>
+ <64eb085b-ef9d-dc6e-5bfd-d23ca0149b5e@linux.intel.com>
+ <20211002070218-mutt-send-email-mst@kernel.org>
+ <YVg/F10PCFNOtCnL@kroah.com>
+ <95ba71c5-87b8-7716-fbe4-bdc9b04b6812@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210928111639.3854174-1-xu.yang_2@nxp.com>
+In-Reply-To: <95ba71c5-87b8-7716-fbe4-bdc9b04b6812@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 28, 2021 at 07:16:39PM +0800, Xu Yang wrote:
-> TCPM for DRP should do the same action as SRC_ATTACHED when cc changes in
-> SRC_STARTUP state. Otherwise, TCPM will transition to SRC_UNATTACHED state
-> which is not satisfied with the Type-C spec.
+On Sat, Oct 02, 2021 at 07:20:22AM -0700, Andi Kleen wrote:
 > 
-> Per Type-C spec:
-> DRP port should move to Unattached.SNK instead of Unattached.SRC if sink
-> removed.
+> On 10/2/2021 4:14 AM, Greg Kroah-Hartman wrote:
+> > On Sat, Oct 02, 2021 at 07:04:28AM -0400, Michael S. Tsirkin wrote:
+> > > On Fri, Oct 01, 2021 at 08:49:28AM -0700, Andi Kleen wrote:
+> > > > >    Do you have a list of specific drivers and kernel options that you
+> > > > > feel you now "trust"?
+> > > > For TDX it's currently only virtio net/block/console
+> > > > 
+> > > > But we expect this list to grow slightly over time, but not at a high rate
+> > > > (so hopefully <10)
+> > > Well there are already >10 virtio drivers and I think it's reasonable
+> > > that all of these will be used with encrypted guests. The list will
+> > > grow.
+> > What is keeping "all" drivers from being on this list?
 > 
-> Fixes: 4b4e02c83167 ("typec: tcpm: Move out of staging")
-> cc: <stable@vger.kernel.org>
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> It would be too much work to harden them all, and it would be pointless
+> because all these drivers are never legitimately needed in a virtualized
+> environment which only virtualize a very small number of devices.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Why would you not want to properly review and fix up all kernel drivers?
+That feels like you are being lazy.
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 1 +
->  1 file changed, 1 insertion(+)
+What exactly are you meaning by "harden"?  Why isn't it automated?  Who
+is doing this work?  Where is it being done?
+
+Come on, you have a small number of virtio drivers, to somehow say that
+they are now divided up into trusted/untrusted feels very very odd.
+
+Just do the real work here, everyone will benefit, including yourself.
+
+> >   How exactly are
+> > you determining what should, and should not, be allowed?
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index a4d37205df54..7f2f3ff1b391 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4876,6 +4876,7 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
->  			tcpm_set_state(port, SRC_ATTACH_WAIT, 0);
->  		break;
->  	case SRC_ATTACHED:
-> +	case SRC_STARTUP:
->  	case SRC_SEND_CAPABILITIES:
->  	case SRC_READY:
->  		if (tcpm_port_is_disconnected(port) ||
-> -- 
-> 2.25.1
+> Everything that has had reasonable effort at hardening can be added. But if
+> someone proposes to add a driver that should trigger additional scrutiny in
+> code review. We should also request them to do some fuzzing.
+
+You can provide that fuzzing right now, why isn't syzbot running on
+these interfaces today?
+
+And again, what _exactly_ do you all mean by "hardening" that has
+happened?  Where is that documented and who did that work?
+
+> > And why not just put all of that into userspace and have it pick and
+> > choose?  That should be the end-goal here, you don't want to encode
+> > policy like this in the kernel, right?
 > 
+> How would user space know what drivers have been hardened? This is really
+> something that the kernel needs to determine. I don't think we can outsource
+> it to anyone else.
+
+It would "know" just as well as you know today in the kernel.  There is
+no difference here.
+
+Just do the real work here, and "harden" all of the virtio drivers
+please.  What prevents that?
+
+> Also BTW of course user space can still override it, but really the defaults
+> should be a kernel policy.
+> 
+> There's also the additional problem that one of the goals of confidential
+> guest is to just move existing guest virtual images into them without much
+> changes. So it's better for such a case if as much as possible of the policy
+> is in the kernel. But that's more a secondary consideration, the first point
+> is really the important part.
+
+Where exactly are all of these "goals" and "requirements" documented and
+who is defining them and forcing them on us without actually doing any
+of the work involved?
+
+thanks,
+
+greg k-h
