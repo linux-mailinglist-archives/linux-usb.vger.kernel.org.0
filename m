@@ -2,164 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 101F941F8C8
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Oct 2021 02:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A323341FAFC
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Oct 2021 13:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232221AbhJBAnP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Oct 2021 20:43:15 -0400
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:42164 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230101AbhJBAnO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Oct 2021 20:43:14 -0400
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19200osO012501;
-        Sat, 2 Oct 2021 00:41:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=jOA1OW3f4FLdi3yHgOlrFGlyDwX0rJiFhNEb9s9/Nbw=;
- b=W5ffz/Yl9S0w35Xi+P24nXqLDo3Uu+pdmYnRwlrwQN58ULWTNLBGjusRLMK2o/mD6T1l
- NJlPO1JdwDijXZF9EfIXMWggIIYx1ld2yqlT4m9KnKF12DTARzo8gM+qaYzsoX+Nugp8
- k2eMd2An4rVkqgqP+QDLtDHe3OG3QtehyDcF2yv6l+IXDWiL3pa2rGbYGwaMPC/yBvMz
- iAVg/9Z2O/NP3TfRMYZfbaaFtUZXncvdoQ8o+KIAGdxYIUn6fjlMsZ5byLTXZI8b9Jn4
- ORiXMl4BbHUWSlYszOSE/UfmfxIVcjx8cd7yBJDOU+smDyXw2PuSKQ6DycV1kvb57WFM 5A== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3bdevvj1bb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 02 Oct 2021 00:41:23 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 1920eYUZ069980;
-        Sat, 2 Oct 2021 00:41:22 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2177.outbound.protection.outlook.com [104.47.55.177])
-        by userp3030.oracle.com with ESMTP id 3bechsgtmh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 02 Oct 2021 00:41:22 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g8OXQaF9Axm0jZ8VQ20wEzE+hpV+VfuqG4MIGIrLiFl4ADsmHv2+983QFNIojDDVnyoF+qGeza4vvDQWeeFtQrC2fnxGJP/TfR++LYKAGMG8RZSTqxlaMIph1S6K113s//hLIJ1XKRPrDdaIARQKs4OjusByWTZCmZKvaXeg3WMN8vG4Ub81++Kxr423z+JjFCF8K98JSxE//xv1ED7c89QRX/bSYZrCNRNxEeho+0yBgsAFxEdaJ35RHnZyd/Z8mcSYjJgUB2RDTaNB1W9NzoG4JJvosZf11H0/uEIQMk2P8GuSOGWXGBryqCY53u2AZUOLBlbDS7Vwt9CxGYFxWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jOA1OW3f4FLdi3yHgOlrFGlyDwX0rJiFhNEb9s9/Nbw=;
- b=Qgm0zyEJK1U5VZTcTRToJDsi612ez7i2KW+JxecMx+z7qRMS1nNYLfPAu+yD/HsUyWbC89EsA2O2K2ZarrCsaNUUWoDnmMEjLMMuCZ6eL2RBKtMhxG6J1muEVcNZ2aQZ7Clf4k6gE66hXkLIsXKV2Ehwlpndm8qoF0j5OAwp6MQFi0e033Tc5uC+XDO9fkE9PsyqnGBaUvR25F7to61C+0AQe6+ykhQqBNFIq6ZRHrXZh7y9m+3ux6aZMN9pl9hiqUJhWucCJFFeXiL3d6+qI3Xs6wNU/pLTAHP6f2Jl2AVMYiY/k127+bLTSakcyXHXJ29BJLA+PJ8ahilPtIH+oQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jOA1OW3f4FLdi3yHgOlrFGlyDwX0rJiFhNEb9s9/Nbw=;
- b=OjeKvNV9q9xu5dPhK/AusHmZ9HN/sKn3g8bqnE7MgcfCpqBVW5UXknxcdR8ZlxGbzGvmvCTcG9+8RylaroZksRpZafmcvqnKucLGy0upDfN+d/Ji/4AoHBmNClb11i1JqUze2oODsXkpa5m0p9odFHd8gEO09Cuw0xZtkTTNu64=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=oracle.com;
-Received: from BLAPR10MB5009.namprd10.prod.outlook.com (2603:10b6:208:321::10)
- by BL0PR10MB2835.namprd10.prod.outlook.com (2603:10b6:208:31::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.17; Sat, 2 Oct
- 2021 00:41:20 +0000
-Received: from BLAPR10MB5009.namprd10.prod.outlook.com
- ([fe80::3c49:46aa:83e1:a329]) by BLAPR10MB5009.namprd10.prod.outlook.com
- ([fe80::3c49:46aa:83e1:a329%5]) with mapi id 15.20.4566.019; Sat, 2 Oct 2021
- 00:41:20 +0000
-Subject: Re: [PATCH v5 1/3] usb: Add Xen pvUSB protocol description
-To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Stefano Stabellini <sstabellini@kernel.org>
-References: <20211001150039.15921-1-jgross@suse.com>
- <20211001150039.15921-2-jgross@suse.com>
-From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Message-ID: <e13367e4-2152-c99a-9b98-05d424019322@oracle.com>
-Date:   Fri, 1 Oct 2021 20:41:17 -0400
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
-In-Reply-To: <20211001150039.15921-2-jgross@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-ClientProxiedBy: SN7PR04CA0220.namprd04.prod.outlook.com
- (2603:10b6:806:127::15) To BLAPR10MB5009.namprd10.prod.outlook.com
- (2603:10b6:208:321::10)
+        id S232813AbhJBLGY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 Oct 2021 07:06:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52394 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232754AbhJBLGX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Oct 2021 07:06:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1633172677;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qto351718/L5ukhIDEPhUdB+4/jOc5k7bmVTjbBmGFU=;
+        b=KjolU/u3sKdQGelrWSAOoZE3gu59MY8UOjHHIc0xhzOh4i4LvHzDav+Y3VuWSDlWc636Lr
+        c5FAFgPBGFWoKiLrDXqavkCFwGh2tW3WzdHhpitN5n4CWWKc3TlbtL7L8NokA9f1XxukmL
+        2gu5cScDnfna3qA35LDEeYD5pjZh02s=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-182-go4l8lCaPSWV79xNat8CWA-1; Sat, 02 Oct 2021 07:04:36 -0400
+X-MC-Unique: go4l8lCaPSWV79xNat8CWA-1
+Received: by mail-ed1-f69.google.com with SMTP id k2-20020a50ce42000000b003dadf140b15so1035198edj.19
+        for <linux-usb@vger.kernel.org>; Sat, 02 Oct 2021 04:04:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qto351718/L5ukhIDEPhUdB+4/jOc5k7bmVTjbBmGFU=;
+        b=Ls6mPuh7rSEwqa5k+F7KrRiQOLaFNifq+us8wOFK+xo0ZouLmtAfHx2dm2EMwVTm6e
+         3KLEgX1AFrLI+21Ft+fdHtGxt65Z0x4oqkxzf2ry5C2Se3SDiHc7J9DKCLwkqCdmEb9o
+         MK4Qt49KMW/hZ5giORrJLpjyTRFU4PqANJdre4/ZklKQm1ng+zHHbQZ3UEJ7+PDPLzlE
+         31NpVdlhHzCFDx6ZjjYrf33x5UflIX3QgQet43lmNfZlsSkoF57Sew+gLl5yK+HtGHxE
+         zP42Z38JdpiuTrP9RVedTd97aCl42an+erEFAxoAG1wWzlTTkYA3zR4s3ap8KD7dlPiV
+         S4dw==
+X-Gm-Message-State: AOAM531HY3trxJhTO3gahZSiDSHePAGWJ9FFvQrOycLlpgDtDET1BM0Z
+        Xb0KzuSrvyIz/7OBAGVWBrXEI7/Md5ziPQ9aBZZcgY2Di1uE+CLqYfRcWijJcXDcULbwc2nptuy
+        +gxrgv8RA+Q3cYE8O5BOW
+X-Received: by 2002:a17:906:8288:: with SMTP id h8mr3663353ejx.87.1633172675241;
+        Sat, 02 Oct 2021 04:04:35 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyDPoSoXkmNQqJE5Pt6aHzQGKWg+96z9iORt+sMWaffH4hD3Mut3sIH6/2W8YSAjIBpj8fcaA==
+X-Received: by 2002:a17:906:8288:: with SMTP id h8mr3663331ejx.87.1633172675106;
+        Sat, 02 Oct 2021 04:04:35 -0700 (PDT)
+Received: from redhat.com ([2.55.22.213])
+        by smtp.gmail.com with ESMTPSA id e3sm3959222ejr.118.2021.10.02.04.04.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Oct 2021 04:04:34 -0700 (PDT)
+Date:   Sat, 2 Oct 2021 07:04:28 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jason Wang <jasowang@redhat.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        "Reshetova, Elena" <elena.reshetova@intel.com>
+Subject: Re: [PATCH v2 4/6] virtio: Initialize authorized attribute for
+ confidential guest
+Message-ID: <20211002070218-mutt-send-email-mst@kernel.org>
+References: <20210930010511.3387967-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20210930010511.3387967-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20210930065953-mutt-send-email-mst@kernel.org>
+ <CAPcyv4hP6mtzKS-CVb-aKf-kYuiLM771PMxN2zeBEfoj6NbctA@mail.gmail.com>
+ <6d1e2701-5095-d110-3b0a-2697abd0c489@linux.intel.com>
+ <YVXWaF73gcrlvpnf@kroah.com>
+ <1cfdce51-6bb4-f7af-a86b-5854b6737253@linux.intel.com>
+ <YVaywQLAboZ6b36V@kroah.com>
+ <64eb085b-ef9d-dc6e-5bfd-d23ca0149b5e@linux.intel.com>
 MIME-Version: 1.0
-Received: from [10.74.98.147] (160.34.88.147) by SN7PR04CA0220.namprd04.prod.outlook.com (2603:10b6:806:127::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.17 via Frontend Transport; Sat, 2 Oct 2021 00:41:19 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6722244b-3698-4062-2887-08d9853d5a5c
-X-MS-TrafficTypeDiagnostic: BL0PR10MB2835:
-X-Microsoft-Antispam-PRVS: <BL0PR10MB2835F75988731904618589628AAC9@BL0PR10MB2835.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2449;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BkwpCcilQB05rBdtsmQ9D+qdlOdLKWMuS2FBGtwNsZM8MzVTnQjEa3oh8BLBoZUIWrYgJOWPDNS+5PoBwddmNgIi05UZwU9iy15IxgCda+j+x2ms9UfLhGdPPxTJZ9YXIb3q2tZqxe47grU0ZF/2BRPwr4yyACH/J8loAYxiUN78t3Wgbpx970JscMxhDobdhiaiLIv7GDj3TpWt5vvGDLz9cMjToFmHgyJBQKhOkYvbQPVTB2lJc2WDaxscsgMDqio1mNNgx2qBGz3geGxrty55dy/FoFL/JIuhIKc/4yuchh9fW4h4ZbY+hy8l3voe3T5nQvmtupl/h0FXxOJuadm9Rl5oJgOy3AXLT1jnasmBcPxhAKzm6wXrZXhS+nVaIrNHyPf2eXm4r03rjBLHFgr8jWBjEwq14Cch/91FnWotjkujI0nW0d+0yI29kmZVD0SJybJklL2ghhSr9WoZjV9RiQy6aVhmjSvuR2quKo1bc1F0ENTipw5ANi7kPSyhM18rjDdFnJ12Q8pN7V2j298e9OWPrm14iBbRqmV5F35EEeGUyGWhL5vTds8IWxKp9smccepNd1OS1hzPBWriJRH9rZS5lyY+f/DnbekTsG/YJDV5iW36ZG8uDLaXDEFVa0G4LndpGJMpwKSSZaBr3V4WxEWOvz9BSjO2apPu6DBh4hc8OtNNxvfpLEV+tvmiTXgj6fJ+Z9zrXQUNSd191OUIzsNlyS77bGUKzw6DK9/cJo9HwbcSbDQ0HLrumBR4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5009.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(44832011)(508600001)(8936002)(31696002)(956004)(6486002)(86362001)(2906002)(66946007)(4744005)(53546011)(38100700002)(2616005)(66556008)(26005)(16576012)(31686004)(8676002)(36756003)(4326008)(5660300002)(66476007)(316002)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dnZwOGU4Ym9scHI2Q1NVSFRkb2duYms3S2oya3lWbkVQa2xXWWZRbDhwZzZ4?=
- =?utf-8?B?MC8zV3FpOEVSYzU3RVp1cVJDU1RwVElGekdQMjRWWHFOaHdxL1RPMzg3WEZW?=
- =?utf-8?B?bzJJYk5FaG5SRGtyWVQ1OWdPN1ZCTUpxWnpCanhVdXhsLzVaZmtiWjlBbUlQ?=
- =?utf-8?B?dFhUSDg1elVsWEhJVFdqdHFwMS8rT3ZyN3d2MlV6Vi9JTzI2ZWlGL1hSN0to?=
- =?utf-8?B?SnRSOG5QMUluV1IwNStiM3RzeS9vaCtRRjY3ZFJCSDM4NzJLMWpENXhuRWpX?=
- =?utf-8?B?djJBazFzVWFteHYvVkNyVGNZeVNOQ1pjUGRKYnh3MmZ0eDNXZEw5bWJoSGNC?=
- =?utf-8?B?Vy9NSENlaGU3R0lUN29wZWhHU1F6YU1qa3RUZkQwVWp6dEhPR3gvVEFoYzlV?=
- =?utf-8?B?alJrMHhUMUJKbWQ3R2YwTy8zZXFuVEd2emI0bnpCcUlSUjNZU2VUV09FOS9C?=
- =?utf-8?B?Q2QvN0p2c081ODAyRjd1Rkx0S0crN2dteGw2WUhhTldZbEdibExDV1crdzFs?=
- =?utf-8?B?cCt0UVRLZFE1R0drczhOMjROdUc2OFNjdWliait2Wkg0OFUyL3JRbDN4TVNo?=
- =?utf-8?B?aVVPWVh2cEVjYkE4WGJrYW5LWllrUEhGYVRtZWowNzVVU3BwcFRKMyt4MWps?=
- =?utf-8?B?UUFkTXI2ZnZWVFNicFVaUTdyRUlCQ1Y1ejI4VjZzWGJENitISjNhOUdCVVgz?=
- =?utf-8?B?d29SN0huUmNOeng2SmJUVTBld0I5NFFzMS9zRHRmcGJKS1NlRXFZOGVRWUpn?=
- =?utf-8?B?TC8rREVkWDdHNVVka2JHMkZlbmdjQ2pPajFSTUM1OXRKd0YvRndTYjJ6eTZS?=
- =?utf-8?B?T1NHOW82QUljL3pjNmNTK3V6R2FWVWErOUVJNkEwenpVWldLVmhTK08rSFRN?=
- =?utf-8?B?S0E2TW1nYnlQUDJyR1hLWjVOSllEM2Q1VVAxWG9VTVNXMXpacG4xaTh4T0Jp?=
- =?utf-8?B?bWd5eW5McjJpOXlIa1B3TDlMUk80TXFPTWhBYTd4U3dqYlQ1dEovd1NHWDdT?=
- =?utf-8?B?WUNGcHdVdm5YZ1RoZE9nbkhHa09FYTk3V0hrc3cvWGYxY21kREhMek1VT0xR?=
- =?utf-8?B?YTZyLy9KaDdXcTZvc01USWwvMjlGZkd5eW1wdFpFTGt6YW9EaEJ3YTBIaG5I?=
- =?utf-8?B?L1Zkano0Q3B3UGdOSm9zeUJ6R3hzTHZVOHlUZnZCaFpoV0g3dVFGYzRGSWsr?=
- =?utf-8?B?cnZXQTQ1RGh5ZnJ1Tkx2QTk0UGtrTGphVDlGNjBreTNMVnF0akw4cmhtYlRX?=
- =?utf-8?B?TDBBTUFVK1ZmdGdFYUh3TUxwV1ZMaWRaa3hmSDdyeHFuZXJjNEZnOEFUdDNE?=
- =?utf-8?B?dDZhSWwwU1l2a3E4SnorUVh3T1p1T1NiUDdla0NBNy9pL1JLZjg1UEZlY1E2?=
- =?utf-8?B?SUVsdmg5OG1Qbm8rbVRyQzNtdnl5ZW42aTdEV3lwR3BJbmNzenBDaG1tWmRY?=
- =?utf-8?B?aHlpUVB1bUJMSnpJekFPQVl1RzkvN0RkWWVLdGJzTWVEOU5hSW82L0JhaU9G?=
- =?utf-8?B?TVFMQXRDbnpQTC9rMEZtQlU0ejBOOStRNllCV0ZlaGJOeU84N0ViaVM3Q3R1?=
- =?utf-8?B?ZDB0Y0NaZ2FFbHVmZ3JHWHJ0R0NHbndtM25VWmRLeWJpL1pxWFh3R3F2NWEw?=
- =?utf-8?B?cUFIcE1oRkhlcGpoTTM3anJ6VFl2SjB2YTB2Y2FYaFdFcG5GTlJVMXNvL2RO?=
- =?utf-8?B?SUtxdHllbFdCcnYvSnFTcDNCYm00OW1nRkx6SGFoWEFZUU1jOVVwMTFpTGdu?=
- =?utf-8?Q?2+zDcegdcNJShHfoIVhAK85Qw9NoIvXXoGXimfg?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6722244b-3698-4062-2887-08d9853d5a5c
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5009.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Oct 2021 00:41:20.6478
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rDhLROxoAdXP6X/9Q36TszibltVr0lXN8u6q8aUgWF66J0Ok1oXi+mG832zIOtgjAAXKauRE1tCI08eifSmFS7CqIQfDhNBzOkA/9PIrmYo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR10MB2835
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10124 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 adultscore=0
- mlxlogscore=999 phishscore=0 suspectscore=0 mlxscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109230001 definitions=main-2110020001
-X-Proofpoint-ORIG-GUID: 2qMlHNNWSjhRUMUzUrM4TsP0pIE-2QlV
-X-Proofpoint-GUID: 2qMlHNNWSjhRUMUzUrM4TsP0pIE-2QlV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <64eb085b-ef9d-dc6e-5bfd-d23ca0149b5e@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, Oct 01, 2021 at 08:49:28AM -0700, Andi Kleen wrote:
+> >   Do you have a list of specific drivers and kernel options that you
+> > feel you now "trust"?
+> 
+> For TDX it's currently only virtio net/block/console
+> 
+> But we expect this list to grow slightly over time, but not at a high rate
+> (so hopefully <10)
 
-On 10/1/21 11:00 AM, Juergen Gross wrote:
-> Add the definition of pvUSB protocol used between the pvUSB frontend in
-> a Xen domU and the pvUSB backend in a Xen driver domain (usually Dom0).
->
-> This header was originally provided by Fujitsu for Xen based on Linux
-> 2.6.18.
->
-> Changes are:
-> - adapt to Linux kernel style guide
-> - use Xen namespace
-> - add lots of comments
-> - don't use kernel internal defines
->
-> Signed-off-by: Juergen Gross <jgross@suse.com>
+Well there are already >10 virtio drivers and I think it's reasonable
+that all of these will be used with encrypted guests. The list will
+grow.
 
-
-
-Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+-- 
+MST
 
