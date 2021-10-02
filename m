@@ -2,103 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4814E41FC9B
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Oct 2021 16:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A407041FDC1
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Oct 2021 20:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233428AbhJBO4g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 Oct 2021 10:56:36 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:44733 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229560AbhJBO4e (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Oct 2021 10:56:34 -0400
-Received: (qmail 533794 invoked by uid 1000); 2 Oct 2021 10:54:47 -0400
-Date:   Sat, 2 Oct 2021 10:54:47 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
-Cc:     Tobias Jakobi <cubic2k@gmail.com>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: storage: add quirks for VIA VL817 USB3-SATA bridge
-Message-ID: <20211002145447.GA533451@rowland.harvard.edu>
-References: <20210921101752.4679-1-tjakobi@math.uni-bielefeld.de>
- <20210921151323.GA170347@rowland.harvard.edu>
- <cfb2d4e4-0e6a-69d5-01ac-dc1ab4d9d319@math.uni-bielefeld.de>
- <20210921164221.GA172450@rowland.harvard.edu>
- <609b10d0-7a20-ffa2-b283-67e0e91c7909@math.uni-bielefeld.de>
- <20210927150400.GA361082@rowland.harvard.edu>
- <c4d2ed9c-0aea-e0f5-7f9a-d603ffd26df5@math.uni-bielefeld.de>
+        id S233857AbhJBSmv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 Oct 2021 14:42:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:48222 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233776AbhJBSmv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Oct 2021 14:42:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1633200064;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ST0KR7EU4N0YWDaDZLrBL4QmpL0x0hJwSn6j1QI0rBo=;
+        b=WFcS156LyoF6LU39OH2UscFA4SumAoQCbj5BeH3OAsEiu5ZeyqIhWWLSY2qcxPuLBMH5Wp
+        D/66XOvgXqYB3o5UWKIil99XS5MCFoSlRHHSbtbySYVijEUkpZ4H2Ewc/Kg9qCoK9SJy5j
+        5g7SpcoSjsClczL0sKyK6kGkHt1Ur6M=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-101-MkkrqILfPTymB2Zfv27nIA-1; Sat, 02 Oct 2021 14:41:03 -0400
+X-MC-Unique: MkkrqILfPTymB2Zfv27nIA-1
+Received: by mail-ed1-f70.google.com with SMTP id 14-20020a508e4e000000b003d84544f33eso13320767edx.2
+        for <linux-usb@vger.kernel.org>; Sat, 02 Oct 2021 11:41:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ST0KR7EU4N0YWDaDZLrBL4QmpL0x0hJwSn6j1QI0rBo=;
+        b=hDyXMlUkjF9V6omSr3qKCiUgvDBlLW8cinkaNdw+HP0w6coEMQQ85g9ZrPk9llwSFw
+         NpIEQsPkZutIJTO9BW3wcLoGfgVov8tVo6P1JyFUAx4tCbpObMPCYLdmQft2I4OAunmt
+         rSnyT7i3JWa7Ft+GeIqQzs7spnhZ0uxlEIukM2UOFkdO4MvDqOO0AJb1Og/v3KXLxpqV
+         PrsAjgDUauV2UTEf9UP9NguS75nozKdM2hmiMWJs4hotyH+zWu2cs4jkwdXiLa5RV6PG
+         lB4yCcgv7hkqWAmT5ogzFa+YwEXPJ7IBGLxGAuJE01UxmCJbIaxbCRLmwSvB8SN91kaQ
+         +NoQ==
+X-Gm-Message-State: AOAM5315DPGBk02W3QajRFga37wgDgFNqrs/cS5XiT4C248CQU7IxgoM
+        PxXs7weCFJy8bEmwUiYUxKi1/GoEZr1n1nhPDrbRR/i8T3GfWF12418MN3JwAUGLw27mU+4l6PU
+        8Sel2ecaTRHtdkM4Z4FII
+X-Received: by 2002:a50:da8d:: with SMTP id q13mr5838528edj.198.1633200062590;
+        Sat, 02 Oct 2021 11:41:02 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxGpM5OHPmCsSpi/pPXyOIbm5UqYLz0NOB9b8PBSBu07W665C9nUJCeC1Y0L2Zy/zB57lHbAA==
+X-Received: by 2002:a50:da8d:: with SMTP id q13mr5838496edj.198.1633200062359;
+        Sat, 02 Oct 2021 11:41:02 -0700 (PDT)
+Received: from redhat.com ([2.55.22.213])
+        by smtp.gmail.com with ESMTPSA id a23sm4866108edv.33.2021.10.02.11.40.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Oct 2021 11:41:01 -0700 (PDT)
+Date:   Sat, 2 Oct 2021 14:40:55 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jason Wang <jasowang@redhat.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        "Reshetova, Elena" <elena.reshetova@intel.com>
+Subject: Re: [PATCH v2 4/6] virtio: Initialize authorized attribute for
+ confidential guest
+Message-ID: <20211002142138-mutt-send-email-mst@kernel.org>
+References: <20210930065953-mutt-send-email-mst@kernel.org>
+ <CAPcyv4hP6mtzKS-CVb-aKf-kYuiLM771PMxN2zeBEfoj6NbctA@mail.gmail.com>
+ <6d1e2701-5095-d110-3b0a-2697abd0c489@linux.intel.com>
+ <YVXWaF73gcrlvpnf@kroah.com>
+ <1cfdce51-6bb4-f7af-a86b-5854b6737253@linux.intel.com>
+ <YVaywQLAboZ6b36V@kroah.com>
+ <64eb085b-ef9d-dc6e-5bfd-d23ca0149b5e@linux.intel.com>
+ <20211002070218-mutt-send-email-mst@kernel.org>
+ <YVg/F10PCFNOtCnL@kroah.com>
+ <95ba71c5-87b8-7716-fbe4-bdc9b04b6812@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c4d2ed9c-0aea-e0f5-7f9a-d603ffd26df5@math.uni-bielefeld.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <95ba71c5-87b8-7716-fbe4-bdc9b04b6812@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 01, 2021 at 10:36:59PM +0200, Tobias Jakobi wrote:
-> On 9/27/21 5:04 PM, Alan Stern wrote:
+On Sat, Oct 02, 2021 at 07:20:22AM -0700, Andi Kleen wrote:
 > 
-> > Good, thank you.  Unfortunately the log doesn't include any smoking
-> > guns pointing to an underlying cause.
+> On 10/2/2021 4:14 AM, Greg Kroah-Hartman wrote:
+> > On Sat, Oct 02, 2021 at 07:04:28AM -0400, Michael S. Tsirkin wrote:
+> > > On Fri, Oct 01, 2021 at 08:49:28AM -0700, Andi Kleen wrote:
+> > > > >    Do you have a list of specific drivers and kernel options that you
+> > > > > feel you now "trust"?
+> > > > For TDX it's currently only virtio net/block/console
+> > > > 
+> > > > But we expect this list to grow slightly over time, but not at a high rate
+> > > > (so hopefully <10)
+> > > Well there are already >10 virtio drivers and I think it's reasonable
+> > > that all of these will be used with encrypted guests. The list will
+> > > grow.
+> > What is keeping "all" drivers from being on this list?
 > 
-> I'm open to suggestions regarding identifying the cause. As you might
-> guess, I'm also not happy that I had to disable UAS for the enclosure -- in
-> particular since I selected this particular product because it was
-> advertised with having support.
-
-One thing you might try is to capture a usbmon trace showing what 
-happens, starting from when the USB cable is attached up to the point 
-when the failure occurs.  However, I'm doubtful that the trace will 
-show anything useful, since the kernel log indicated that the first 
-failed command was an ordinary write.
-
-> > I still have to wonder if the enclosure works okay with other types of
-> > disk drive.  And if it doesn't, why don't these errors show up on
-> > Windows systems?  Or on other VIA enclosures?
+> It would be too much work to harden them all, and it would be pointless
+> because all these drivers are never legitimately needed in a virtualized
+> environment which only virtualize a very small number of devices.
 > 
-> I only experienced this after installing the two 4Kn drives, never with the
-> two 512e drives that were installed first. My guess is that 4Kn drives are
-> still rare and if they're used, then natively attached to a SATA port. I
-> don't have any Windows system here to test this, and even if, I wouldn't
-> know how to assemble the RAID1 there anyway.
-
-It's entirely possible that this failure has nothing to do with the 
-use of RAID.
-
-> > That's why I'm cautious about accepting this patch.  I don't want to
-> > slow down unnecessarily a bunch of USB disks that could work just fine
-> > at the higher UAS transfer rates.
+> >   How exactly are
+> > you determining what should, and should not, be allowed?
 > 
-> I understand. If that's the case, I'm just going to continue to keep the
-> patch in my local kernel tree.
+> Everything that has had reasonable effort at hardening can be added. But if
+> someone proposes to add a driver that should trigger additional scrutiny in
+> code review. We should also request them to do some fuzzing.
 
-You don't even need a patch; you can accomplish the same effect 
-simply by specifying a module parameter for usb-storage:
+Looks like out of tree modules get a free pass then.
+Which is exactly the reverse of what it should be,
+people who spent the time to get their drivers into the kernel
+expect that if kernel decides to change some API their
+driver is automatically updated. This was always the social
+contract, was it not?
 
-	quirks=2109:0715:u
-
-(You might have to rebuild your initramfs image, if you need the 
-quirk to take effect during the early stages of boot-up.)
-
-> > By the way, does the enclosure have its own power source, or does it
-> > rely entirely on power provided over the USB cable?  Note that UAS can
-> > use more power than the older mass-storage protocols, because it queues
-> > more operations in rapid succession (which is also why it runs faster).
+> It's a bit similar to someone trying to add a new syscall interface. That
+> also triggers much additional scrutiny for good reasons and people start
+> fuzzing it.
 > 
-> This is the enclosure:
-> https://icybox.de/product.php?id=155
 > 
-> It has a external power supply (quite a bulky one) and it does not work
-> without it. So it doesn't draw anything (significant) from the USB cable. I
-> first also suspected this to be a power supply related problem, but I
-> discarded that idea since the whole thing works as MSC. I can't imagine the
-> power draw to be so much different for UAS, but maybe I'm just naive there.
+> >    How can
+> > drivers move on, or off, of it over time?
+> 
+> Adding something is submitting a patch to the allow list.
+> 
+> I'm not sure the "off" case would happen, unless the driver is completely
+> removed, or maybe it has some unfixable security problem. But that is all
+> rather unlikely.
+> 
+> 
+> > 
+> > And why not just put all of that into userspace and have it pick and
+> > choose?  That should be the end-goal here, you don't want to encode
+> > policy like this in the kernel, right?
+> 
+> How would user space know what drivers have been hardened? This is really
+> something that the kernel needs to determine. I don't think we can outsource
+> it to anyone else.
 
-Yeah, you might be surprised.  There have been other instances of 
-people submitting patches to disable UAS for their drives, when it 
-seemed quite likely that lack of power was the underlying cause.  
-Although to be fair, these occurred in very power-constrained 
-situations, such as running a bus-powered drive attached to a 
-Raspberry Pi.  Not like your case.  Still, you see why I had to ask.
+IIUC userspace is the distro. It can also do more than a binary on/off,
+e.g. it can decide "only virtio", "no out of tree drivers".
+A distro can also ship configs with a specific features
+enabled/disabled. E.g. I can see where some GPU drivers will be
+included by some distros since they are so useful, and excluded
+by others since they are so big and hard to audit.
+I don't see how the kernel can reasonably make a stand here.
+Is "some audit and some fuzzing" a good policy? How much is enough?
 
-Alan Stern
+> Also BTW of course user space can still override it, but really the defaults
+> should be a kernel policy.
+
+Well if userspace sets the policy then I'm not sure we also want
+a kernel one ... but if yes I'd like it to be in a central
+place so whoever is building the kernel can tweak it easily
+and rebuild, without poking at individual drivers.
+
+> There's also the additional problem that one of the goals of confidential
+> guest is to just move existing guest virtual images into them without much
+> changes. So it's better for such a case if as much as possible of the policy
+> is in the kernel.
+
+If it's e.g. the kernel command line then we can set that
+when building the kernel right? No need for a dedicated interface
+just for this ...
+
+> But that's more a secondary consideration, the first point
+> is really the important part.
+> 
+> 
+> -Andi
+
