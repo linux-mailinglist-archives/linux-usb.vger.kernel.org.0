@@ -2,34 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0800B4203EC
+	by mail.lfdr.de (Postfix) with ESMTP id E2A8A4203EE
 	for <lists+linux-usb@lfdr.de>; Sun,  3 Oct 2021 22:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbhJCUbg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 3 Oct 2021 16:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
+        id S231587AbhJCUbf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 3 Oct 2021 16:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231597AbhJCUbc (ORCPT
+        with ESMTP id S231598AbhJCUbc (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Sun, 3 Oct 2021 16:31:32 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524DCC061786
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8D5C061788
         for <linux-usb@vger.kernel.org>; Sun,  3 Oct 2021 13:29:44 -0700 (PDT)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mgr@pengutronix.de>)
-        id 1mX87C-0003Rm-B6; Sun, 03 Oct 2021 22:29:42 +0200
+        id 1mX87C-0003Rn-BL; Sun, 03 Oct 2021 22:29:42 +0200
 Received: from mgr by dude.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <mgr@pengutronix.de>)
-        id 1mX87B-0000AU-R1; Sun, 03 Oct 2021 22:29:41 +0200
+        id 1mX87B-0000AX-RR; Sun, 03 Oct 2021 22:29:41 +0200
 From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
 To:     linux-usb@vger.kernel.org
 Cc:     balbi@kernel.org, laurent.pinchart@ideasonboard.com,
         paul.elder@ideasonboard.com, kernel@pengutronix.de,
         caleb.connolly@ideasonboard.com
-Subject: [PATCH v2 4/7] usb: gadget: uvc: only schedule stream in streaming state
-Date:   Sun,  3 Oct 2021 22:29:36 +0200
-Message-Id: <20211003202939.306-5-m.grzeschik@pengutronix.de>
+Subject: [PATCH v2 5/7] usb: gadget: uvc: only pump video data if necessary
+Date:   Sun,  3 Oct 2021 22:29:37 +0200
+Message-Id: <20211003202939.306-6-m.grzeschik@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211003202939.306-1-m.grzeschik@pengutronix.de>
 References: <20211003202939.306-1-m.grzeschik@pengutronix.de>
@@ -43,55 +43,47 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch ensures that the video pump thread will only be scheduled if
-the uvc is really in streaming state. This way the worker will not have
-to run on an empty queue.
+If the streaming endpoint is not enabled, the worker has nothing to do.
+In the case it still got enqueued, this patch ensueres that it will bail
+out without handling any data.
 
 Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
 Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 ---
 v2: - added reviewed by
 
- drivers/usb/gadget/function/uvc_v4l2.c  | 3 ++-
- drivers/usb/gadget/function/uvc_video.c | 4 +++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ drivers/usb/gadget/function/uvc_video.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index 4ca89eab61590..67922b1355e69 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -169,7 +169,8 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v4l2_buffer *b)
- 	if (ret < 0)
- 		return ret;
- 
--	schedule_work(&video->pump);
-+	if (uvc->state == UVC_STATE_STREAMING)
-+		schedule_work(&video->pump);
- 
- 	return ret;
- }
 diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index cdfd3726a86ae..ccee35177411d 100644
+index ccee35177411d..152647495fa61 100644
 --- a/drivers/usb/gadget/function/uvc_video.c
 +++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -215,6 +215,7 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 	struct uvc_request *ureq = req->context;
- 	struct uvc_video *video = ureq->video;
+@@ -335,12 +335,12 @@ static void uvcg_video_pump(struct work_struct *work)
+ {
+ 	struct uvc_video *video = container_of(work, struct uvc_video, pump);
  	struct uvc_video_queue *queue = &video->queue;
-+	struct uvc_device *uvc = video->uvc;
+-	struct usb_request *req;
++	struct usb_request *req = NULL;
+ 	struct uvc_buffer *buf;
  	unsigned long flags;
+ 	int ret;
  
- 	switch (req->status) {
-@@ -237,7 +238,8 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+-	while (1) {
++	while (video->ep->enabled) {
+ 		/* Retrieve the first available USB request, protected by the
+ 		 * request lock.
+ 		 */
+@@ -390,6 +390,9 @@ static void uvcg_video_pump(struct work_struct *work)
+ 		video->req_int_count++;
+ 	}
+ 
++	if (!req)
++		return;
++
+ 	spin_lock_irqsave(&video->req_lock, flags);
  	list_add_tail(&req->list, &video->req_free);
  	spin_unlock_irqrestore(&video->req_lock, flags);
- 
--	schedule_work(&video->pump);
-+	if (uvc->state == UVC_STATE_STREAMING)
-+		schedule_work(&video->pump);
- }
- 
- static int
 -- 
 2.30.2
 
