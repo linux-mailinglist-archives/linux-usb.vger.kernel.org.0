@@ -2,148 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F22C41FF48
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Oct 2021 04:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA50420055
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Oct 2021 08:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbhJCC4r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 Oct 2021 22:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbhJCC4r (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Oct 2021 22:56:47 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C504C0613EC
-        for <linux-usb@vger.kernel.org>; Sat,  2 Oct 2021 19:55:00 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id dn26so49994198edb.13
-        for <linux-usb@vger.kernel.org>; Sat, 02 Oct 2021 19:55:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
-        b=UO/tlm+e76hT95sOkS4DHbZzABDXzLYIYWV3BUR7sQjLD/IS0QEX8AChAAYhwb63b/
-         rYYMPwWs1oYXpNZcQj6dWss6f1Q4Wo6iNL7nEOmKjySZIvZlVftepaJnhmSjEAz6WG34
-         0EjJwlnynNOzTSRC5DzVWMGj0bcnLBbm+2FMqr1+13O4Y45NMCpWjcY8hTT2VlxCa9hb
-         oRRHwk/AvJEFGmE95msQ5Krpl02/1/Il5wQ6c4w3bmV48mg3BKmsB2XNWuE17dcAXRg5
-         2xtQ54U6Ov2OwKUyctrDPVD00zXYmAHmGe6Yb3TmKuxFuSkfMBvjGqtCw+tAuSxCiRAq
-         I9LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
-        b=roIQOX1PdrXdForBHUkEwH7o09WMXWo3RoQE45FZmdScl+nS6bMNDq/xS8xkXmRggc
-         MGWZzObjCFXS1ZybuaiVUkBhTAOwfX4MQ+7ZOoSaWu5CO8nw0Nxtlt6fCi0TkShtOZ9R
-         Amlgh8D2uM+ieYsM7g7fAvUCrb8MFKzpMqrKciwBnXKSLS9BpEp65P4eurSVD6RwMOPK
-         2VD1GzisQ5c6op9qTgHPq0FFB/lZD2lINAqoPjYQ1Skl2s2kgaI6BJDPLZleYWKdWYuS
-         qXM0ylDgmVhtQXelx/ziY1kBjgPJo46P4ij6jZUTpTTEt9lGi7W29gWK78sAGzjtF/ov
-         4PBw==
-X-Gm-Message-State: AOAM531CwIswG7rx8mBsTuqFOmXhVt9tCFBx0TWnjwDM0peU7sFCaAq2
-        snsbo/3D8Bc5rISUFqc6xsLz+ilV3fx0gTKvq4s=
-X-Google-Smtp-Source: ABdhPJzdxrhjmDNzipCS2TCAnOZ3bfo1lkTUTDaDOYqNPfvr5yv191StPB+gWnKiskvP6zJL/Ijk7OjQ/YwUd/jWmjg=
-X-Received: by 2002:a17:906:5384:: with SMTP id g4mr7993822ejo.27.1633229699076;
- Sat, 02 Oct 2021 19:54:59 -0700 (PDT)
+        id S229818AbhJCGme (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 3 Oct 2021 02:42:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57306 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229567AbhJCGmb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 3 Oct 2021 02:42:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1841561B2C;
+        Sun,  3 Oct 2021 06:40:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1633243244;
+        bh=q9rseHbfMkCOtuOdC8dHz19BTSOJHk4goi5YKRUsEnc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CL/lBnswr3SxpuaWGHxuu4GyLyFYqX9Ttm8PpYNzXxIq8Qdv4VXAI5J09Bd4e0aYw
+         VYoRTCEjo4vx5ZFzfJAuQ9n6HXvRZmT5NXUE7T4WML7FvzcBIG5DQhnWO/18If46CY
+         8q8X4w3NgFqdxl6/xg1CZcZeXW2mon10BQ/vs6h0=
+Date:   Sun, 3 Oct 2021 08:40:39 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jason Wang <jasowang@redhat.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        "Reshetova, Elena" <elena.reshetova@intel.com>
+Subject: Re: [PATCH v2 4/6] virtio: Initialize authorized attribute for
+ confidential guest
+Message-ID: <YVlQZ1+b7NlsDegb@kroah.com>
+References: <CAPcyv4hP6mtzKS-CVb-aKf-kYuiLM771PMxN2zeBEfoj6NbctA@mail.gmail.com>
+ <6d1e2701-5095-d110-3b0a-2697abd0c489@linux.intel.com>
+ <YVXWaF73gcrlvpnf@kroah.com>
+ <1cfdce51-6bb4-f7af-a86b-5854b6737253@linux.intel.com>
+ <YVaywQLAboZ6b36V@kroah.com>
+ <64eb085b-ef9d-dc6e-5bfd-d23ca0149b5e@linux.intel.com>
+ <20211002070218-mutt-send-email-mst@kernel.org>
+ <YVg/F10PCFNOtCnL@kroah.com>
+ <95ba71c5-87b8-7716-fbe4-bdc9b04b6812@linux.intel.com>
+ <20211002142138-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6408:1c:b0:124:ee6a:e267 with HTTP; Sat, 2 Oct 2021
- 19:54:58 -0700 (PDT)
-From:   Irene Zakari <irenezakari202@gmail.com>
-Date:   Sat, 2 Oct 2021 19:54:58 -0700
-Message-ID: <CAL_4AGXuxLMSwty5ppt7P-eE6inv81HqdCN50Qf5GFvSPd15tQ@mail.gmail.com>
-Subject: PLEASE I NEED YOUR HELP
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211002142138-mutt-send-email-mst@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello   ..
+On Sat, Oct 02, 2021 at 02:40:55PM -0400, Michael S. Tsirkin wrote:
+> On Sat, Oct 02, 2021 at 07:20:22AM -0700, Andi Kleen wrote:
+> > 
+> > On 10/2/2021 4:14 AM, Greg Kroah-Hartman wrote:
+> > > On Sat, Oct 02, 2021 at 07:04:28AM -0400, Michael S. Tsirkin wrote:
+> > > > On Fri, Oct 01, 2021 at 08:49:28AM -0700, Andi Kleen wrote:
+> > > > > >    Do you have a list of specific drivers and kernel options that you
+> > > > > > feel you now "trust"?
+> > > > > For TDX it's currently only virtio net/block/console
+> > > > > 
+> > > > > But we expect this list to grow slightly over time, but not at a high rate
+> > > > > (so hopefully <10)
+> > > > Well there are already >10 virtio drivers and I think it's reasonable
+> > > > that all of these will be used with encrypted guests. The list will
+> > > > grow.
+> > > What is keeping "all" drivers from being on this list?
+> > 
+> > It would be too much work to harden them all, and it would be pointless
+> > because all these drivers are never legitimately needed in a virtualized
+> > environment which only virtualize a very small number of devices.
+> > 
+> > >   How exactly are
+> > > you determining what should, and should not, be allowed?
+> > 
+> > Everything that has had reasonable effort at hardening can be added. But if
+> > someone proposes to add a driver that should trigger additional scrutiny in
+> > code review. We should also request them to do some fuzzing.
+> 
+> Looks like out of tree modules get a free pass then.
 
-How do you do over there? I hope you are doing well?
+That's not good.  As we already know if a module is in or out of the
+tree, you all should be banning all out-of-tree modules if you care
+about these things.  That should be very easy to do if you care.
 
-My name is Irene. (24 years), i am single, from Gambia, the only child
-of late Eng. Bernard Bakary Zakaria. the Director of Bajam Enterprise
-(Building Construction Company in The Gambia) also the CEO of Bernard
-Import and Export (GAMBIA).
+> > How would user space know what drivers have been hardened? This is really
+> > something that the kernel needs to determine. I don't think we can outsource
+> > it to anyone else.
+> 
+> IIUC userspace is the distro. It can also do more than a binary on/off,
+> e.g. it can decide "only virtio", "no out of tree drivers".
+> A distro can also ship configs with a specific features
+> enabled/disabled. E.g. I can see where some GPU drivers will be
+> included by some distros since they are so useful, and excluded
+> by others since they are so big and hard to audit.
+> I don't see how the kernel can reasonably make a stand here.
+> Is "some audit and some fuzzing" a good policy? How much is enough?
 
-As a matter of fact my mother died when i was barely 4 years old
-according to my late father and because of the type of love he had for
-my mother made him to remain UN-married till he left the ghost..
+Agreed, that is why the policy for this should be in userspace.
 
-So after the death of my father as a result of assassinate, his brother (My
-Uncle) who is the purchasing and marketing sale manager of my late
-fathers company named (Mr. James Tokunbo Oriade Zakaria) wanted to
-convert all the properties and resources of my late father into his
-which i quarreled with him and it made him to lay his anger on me to
-the extent of hiring an assassins to kill me but to God be the glory i
-succeeded by making a way to Burkina faso for my dear life.
-Honestly i do live a fearful life even here in Burkina faso because of
-those Assassins coming after me .
+> Well if userspace sets the policy then I'm not sure we also want
+> a kernel one ... but if yes I'd like it to be in a central
+> place so whoever is building the kernel can tweak it easily
+> and rebuild, without poking at individual drivers.
 
-I would want to live and study in your country for my better future.
-because my father same blood brother wanted to force me into undecided
-marriage, just for me to leave my father home and went and live with
-another man I never know as he want to occupied all my father home
-and maybe to sold it as my father no longer alive, I'm the only child
-daughter my father born, '' but he don't know that i am not
-interesting in any of my father properties or early marriage for now,
-because i still have future to think about and to focus on my studies
-first as i was doing my first year in the University before the death
-of my father.
+And here I thought the requirement was that no one could rebuild their
+kernel as it was provided by someone else.
 
-Actually what I want to discuss with you is about my personal issue
-concern funds my late father deposited in a bank outside my country,
-worth $4.5 million united state dollars. i need your assistance to
-receive and invest this funds in your country.
+Again, these requirements seem contradicting, but as no one has actually
+pointed me at the real list of them, who knows what they are?
 
-Please help me, I am sincere to you and I want to be member of your
-family as well if you wouldn't mind to accept me and lead me to better
-future in your country.
+thanks,
 
-All the documents the bank issue to my father during time of deposit
-is with me now.
-I already notify the bank on phone about the death of my father and
-they are surprise for the news and accept that my father is their good
-customer.
-I will be happy if this money can be invested in any business of your
-choice and it will be under your control till i finished my education,
-also I'm assuring you good relationship and I am ready to discuss the
-amount of money to give you from this money for your help.
-
-Therefore, I shall give you the bank contact and other necessary
-information in my next email if you will only promise me that you will
-not/never betray and disclosed this matter to anybody, because, this
-money is the only hope i have for survival on earth since I have lost
-my parents.
-
-Moreover I have the FUND PLACEMENT CERTIFICATE and the DEATH
-CERTIFICATE here with me, but before I give you further information, i
-will like to know your full data
-
-1. Full Name: ........................
-2. Address: ..................
-3. Nationality: ........... Sex................
-4. Age:........... Date of Birth:................
-5. Occupation:...................
-.....
-6. Phone: ........... Fax:.........................
-7. State of Origin: .......Country:..............
-8. Occupation:...................
-................
-9. Marital status........... E-mail address's: ............
-10. Scan copy of your ID card or Driving License/Photo:............
-DECLARATION:
-
-so that i will be fully sure that i am not trusting the wrong person.
-and it will also give me the mind to send you the bank contact for you
-to communicate with them for more verification about this money. and
-to know you more better.
-
-Meanwhile, you can reach me through my pastor,his name is Pastor Paul
-any time you call, tell him that you want to speak with me because
-right now i am living in the church here in Burkina faso and i don't
-want to stay here any longer,
-send for me to speak with you his phone number is this(+226 75213646)
-
-I will stop here and i will be waiting for your reply and feel free
-ask any thing you want to know about me.
-Please help me, I would be highly appreciated
-Have nice day.
-From Irene
+greg k-h
