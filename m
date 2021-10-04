@@ -2,422 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C0542144D
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 18:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 400084217D2
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 21:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237273AbhJDQmd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Oct 2021 12:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237240AbhJDQmc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Oct 2021 12:42:32 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C593C061746
-        for <linux-usb@vger.kernel.org>; Mon,  4 Oct 2021 09:40:43 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id s69so22312323oie.13
-        for <linux-usb@vger.kernel.org>; Mon, 04 Oct 2021 09:40:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jY18J9e7sLZvkwqqkZfwC7GiLdk5C84P/HKvlRDaSRQ=;
-        b=FAFz45f0yfz+b+wggGrTDmB22MGek20N8r51fX1j1Yv5d1Wp9u2Hx823UYokojJx7d
-         EbloQFXoVNRyQ1KeQS9mZeTaGUnO8QKp1GL0o1eUfD0+DArWnMGEImkzicaoYZf8Oj0f
-         JY0/c2eLbLYiKU3g1AlBlm15hEs8uezmyxlXc4Xa0clcJ3FtzE+UNR4xNkSMIXjC4CzD
-         EC4bt4er3KFqYQbxDB4maoM/Dmb3GdKnMx3rSeUp2gPQTsnZVCW8Nb7CfZj0WT5yBovY
-         oZZrPxIM+VCt/yBHzCYjEVUIHzmONus+jVkC23RtmQe6d9uy+V4+xh2ikBApdqzVzISq
-         Itqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jY18J9e7sLZvkwqqkZfwC7GiLdk5C84P/HKvlRDaSRQ=;
-        b=n9vC38T+wmtJXIIEDQjsGI3FwzTUT4HKTGNelwK8ke94MF1ykJGrIGzGtmcAdywJid
-         46HvexyzGMIjvtJFWq21dnbUPogc6l2WbVwURAB3kRQ3kR8i0WEsySmRoeG+soEMvoOp
-         92sRsfTdXl01XlpGu0HId/awrrcSQju5Ub2u4jhqDH/VKylY2jjOSHnBuw4/pgzW16F1
-         2iqEW34vQTPul3nIZC+Hx21NbWYq4GSBzI/ARJjh2+8y3pND6v4O9OtVUpuMKG4Swjei
-         vOMqzxOqMhCElchxNJhWvFMkLLAwxpwSrKn/sZA6A6OkcLcDmx4/7gNGY4Ck/yI2DUm+
-         M1yg==
-X-Gm-Message-State: AOAM530Gju7OAxPKlLcpB7lyV4p1DRg8nnUeDi3opciADO/Q1wh0hV7v
-        m9b3cGnvQu1VyrOM2mKiapjIgw==
-X-Google-Smtp-Source: ABdhPJyA0DotiLofEXkF3Q+tiquLxab/X4zieOgD8r0FdZHlCiJJll0yidTgpCr8oZBjO1PLz6Dj1g==
-X-Received: by 2002:a05:6808:178c:: with SMTP id bg12mr14832770oib.157.1633365642863;
-        Mon, 04 Oct 2021 09:40:42 -0700 (PDT)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id j23sm2796319oih.30.2021.10.04.09.40.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Oct 2021 09:40:42 -0700 (PDT)
-Date:   Mon, 4 Oct 2021 09:42:19 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Souradeep Chowdhury <schowdhu@codeaurora.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Bryan O'Donoghue <pure.logic@nexus-software.ie>,
-        Greg KH <greg@kroah.com>, linux-kernel@vger.kernel.org,
-        ckadabi@codeaurora.org, tsoni@codeaurora.org,
-        bryanh@codeaurora.org, psodagud@codeaurora.org,
-        satyap@codeaurora.org, pheragu@codeaurora.org,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-Subject: Re: [PATCH V0 4/7] usb: common: eud: Added the driver support for
- Embedded USB Debugger(EUD)
-Message-ID: <YVsu602phHbZLMOT@ripper>
-References: <cover.1633343547.git.schowdhu@codeaurora.org>
- <e6df4a21a283e822d15dedb7ffb3ae62c241999c.1633343547.git.schowdhu@codeaurora.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e6df4a21a283e822d15dedb7ffb3ae62c241999c.1633343547.git.schowdhu@codeaurora.org>
+        id S238907AbhJDToM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Oct 2021 15:44:12 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:60817 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239083AbhJDTn6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 Oct 2021 15:43:58 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1633376529; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=hn7lmRIVDQJrIAxbdnCv3VFdDFyuLebKXSyB7FoPSIU=; b=vv9mrD0TYub2sVTLDcfJzol0YtqSeDGll2xFvTxx7LiHYQT4bq7JhEYhYGNRfnr/oMsSMdPA
+ XLqmBuOwiyoGYLL4ORXB7RbyQW9vL89eFQwql0agvNXSd+K/K/92zxmUaimpth1f4NL5rDnO
+ UxwpGveXBriAvmlhF0ScsknQqnI=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
+ 615b58f6605ecf100b48d8e5 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 04 Oct 2021 19:41:42
+ GMT
+Sender: pmaliset=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 52434C43460; Mon,  4 Oct 2021 19:41:42 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from pmaliset-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmaliset)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 60AF2C43460;
+        Mon,  4 Oct 2021 19:41:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 60AF2C43460
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Prasad Malisetty <pmaliset@codeaurora.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, bhelgaas@google.com,
+        robh+dt@kernel.org, swboyd@chromium.org, lorenzo.pieralisi@arm.com,
+        svarbanov@mm-sol.com
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
+        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org,
+        linux-pci@vger.kernel.org,
+        Prasad Malisetty <pmaliset@codeaurora.org>
+Subject: [PATCH v10 0/5] Add DT bindings and DT nodes for PCIe and PHY in SC7280
+Date:   Tue,  5 Oct 2021 01:11:23 +0530
+Message-Id: <1633376488-545-1-git-send-email-pmaliset@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon 04 Oct 04:16 PDT 2021, Souradeep Chowdhury wrote:
+Changes added in v10:
 
-> Add support for control peripheral of EUD (Embedded USB Debugger) to
-> listen to events such as USB attach/detach, pet EUD to indicate software
-> is functional.Reusing the platform device kobj, sysfs entry 'enable' is
-> created to enable or disable EUD.
-> 
-> To enable the eud the following needs to be done
-> echo 1 > /sys/bus/platform/.../enable
-> 
-> To disable eud, following is the command
-> echo 0 > /sys/bus/platform/.../enable
-> 
-> Signed-off-by: Souradeep Chowdhury <schowdhu@codeaurora.org>
-> ---
->  Documentation/ABI/testing/sysfs-driver-eud |   7 +
->  drivers/usb/common/Kconfig                 |   9 +
->  drivers/usb/common/Makefile                |   1 +
->  drivers/usb/common/qcom_eud.c              | 256 +++++++++++++++++++++++++++++
->  4 files changed, 273 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-driver-eud
->  create mode 100644 drivers/usb/common/qcom_eud.c
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-eud b/Documentation/ABI/testing/sysfs-driver-eud
-> new file mode 100644
-> index 0000000..14a02da
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-driver-eud
-> @@ -0,0 +1,7 @@
-> +What:		/sys/bus/platform/.../enable
-> +Date:           October 2021
-> +Contact:        Souradeep Chowdhury <schowdhu@codeaurora.org>
-> +Description:
-> +		The Enable/Disable sysfs interface for Embedded
-> +		USB Debugger(EUD).This enables and disables the
-> +		EUD based on a 1 or a 0 value.
-> diff --git a/drivers/usb/common/Kconfig b/drivers/usb/common/Kconfig
-> index 5e8a04e..669b3fe 100644
-> --- a/drivers/usb/common/Kconfig
-> +++ b/drivers/usb/common/Kconfig
-> @@ -50,3 +50,12 @@ config USB_CONN_GPIO
-> 
->  	  To compile the driver as a module, choose M here: the module will
->  	  be called usb-conn-gpio.ko
-> +
-> +config USB_QCOM_EUD
-> +	tristate "USB EUD Driver"
-> +	select USB_ROLE_SWITCH
-> +	help
-> +	  This module enables support for Qualcomm Technologies, Inc.
-> +	  Embedded USB Debugger (EUD). The EUD is a control peripheral
-> +	  which reports VBUS attach/detach events and has USB-based
-> +	  debug and trace capabilities.
-> diff --git a/drivers/usb/common/Makefile b/drivers/usb/common/Makefile
-> index 8ac4d21..eb66045 100644
-> --- a/drivers/usb/common/Makefile
-> +++ b/drivers/usb/common/Makefile
-> @@ -11,3 +11,4 @@ usb-common-$(CONFIG_USB_LED_TRIG) += led.o
->  obj-$(CONFIG_USB_CONN_GPIO)	+= usb-conn-gpio.o
->  obj-$(CONFIG_USB_OTG_FSM) += usb-otg-fsm.o
->  obj-$(CONFIG_USB_ULPI_BUS)	+= ulpi.o
-> +obj-$(CONFIG_USB_QCOM_EUD)      += qcom_eud.o
-> diff --git a/drivers/usb/common/qcom_eud.c b/drivers/usb/common/qcom_eud.c
-> new file mode 100644
-> index 0000000..7a92fff
-> --- /dev/null
-> +++ b/drivers/usb/common/qcom_eud.c
-> @@ -0,0 +1,256 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2015-2021, The Linux Foundation. All rights reserved.
-> + */
-> +
-> +#include <linux/bitops.h>
-> +#include <linux/delay.h>
-> +#include <linux/err.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +#include <linux/sysfs.h>
-> +#include <linux/usb/role.h>
-> +
-> +#define EUD_REG_INT1_EN_MASK	0x0024
-> +#define EUD_REG_INT_STATUS_1	0x0044
-> +#define EUD_REG_CTL_OUT_1	0x0074
-> +#define EUD_REG_VBUS_INT_CLR	0x0080
-> +#define EUD_REG_CSR_EUD_EN	0x1014
-> +#define EUD_REG_SW_ATTACH_DET	0x1018
-> +#define EUD_REG_EUD_EN2         0x0000
-> +
-> +#define EUD_ENABLE		BIT(0)
-> +#define EUD_INT_PET_EUD		BIT(0)
-> +#define EUD_INT_VBUS		BIT(2)
-> +#define EUD_INT_SAFE_MODE	BIT(4)
-> +#define EUD_INT_ALL		(EUD_INT_VBUS|EUD_INT_SAFE_MODE)
-> +
-> +struct eud_chip {
-> +	struct device			*dev;
-> +	struct usb_role_switch		*role_sw;
-> +	void __iomem			*eud_reg_base;
-> +	void __iomem			*eud_mode_mgr2_phys_base;
-> +	unsigned int			int_status;
-> +	int				enable;
-> +	int				eud_irq;
-> +	bool				usb_attach;
-> +
-> +};
-> +
-> +static int enable_eud(struct eud_chip *priv)
-> +{
-> +	writel(EUD_ENABLE, priv->eud_reg_base + EUD_REG_CSR_EUD_EN);
-> +	writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
-> +			priv->eud_reg_base + EUD_REG_INT1_EN_MASK);
-> +	writel(1, priv->eud_mode_mgr2_phys_base + EUD_REG_EUD_EN2);
-> +
-> +	return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
-> +}
-> +
-> +static void disable_eud(struct eud_chip *priv)
-> +{
-> +	writel(0, priv->eud_reg_base + EUD_REG_CSR_EUD_EN);
-> +	writel(0, priv->eud_mode_mgr2_phys_base + EUD_REG_EUD_EN2);
-> +}
-> +
-> +static ssize_t enable_show(struct device *dev,
-> +		struct device_attribute *attr, char *buf)
-> +{
-> +	struct eud_chip *chip = dev_get_drvdata(dev);
-> +
-> +	return sprintf(buf, "%d", chip->enable);
-> +}
-> +
-> +static ssize_t enable_store(struct device *dev,
-> +		struct device_attribute *attr,
-> +		const char *buf, size_t count)
-> +{
-> +	struct eud_chip *chip = dev_get_drvdata(dev);
-> +	unsigned long enable;
-> +	int ret;
-> +
-> +	if (kstrtoul(buf, 16, &enable))
-> +		return -EINVAL;
-> +
-> +	if (enable == 1) {
-> +		ret = enable_eud(chip);
-> +		if (!ret)
-> +			chip->enable = enable;
-> +	} else if (enable == 0) {
-> +		disable_eud(chip);
-> +	} else {
-> +		return -EINVAL;
-> +	}
-> +
-> +	return count;
-> +}
-> +
-> +static DEVICE_ATTR_RW(enable);
-> +
-> +static const struct device_attribute *eud_attrs[] = {
-> +	&dev_attr_enable,
-> +	NULL,
-> +};
-> +
-> +static void usb_attach_detach(struct eud_chip *chip)
-> +{
-> +	u32 reg;
-> +
-> +	/* read ctl_out_1[4] to find USB attach or detach event */
-> +	reg = readl(chip->eud_reg_base + EUD_REG_CTL_OUT_1);
-> +	if (reg & EUD_INT_SAFE_MODE)
-> +		chip->usb_attach = true;
-> +	else
-> +		chip->usb_attach = false;
-> +
-> +	/* set and clear vbus_int_clr[0] to clear interrupt */
-> +	writel(BIT(0), chip->eud_reg_base + EUD_REG_VBUS_INT_CLR);
-> +	writel(0, chip->eud_reg_base + EUD_REG_VBUS_INT_CLR);
-> +}
-> +
-> +static void pet_eud(struct eud_chip *chip)
-> +{
-> +	u32 reg;
-> +	int ret;
-> +
-> +	/* read sw_attach_det[0] to find attach/detach event */
-> +	reg = readl(chip->eud_reg_base +  EUD_REG_SW_ATTACH_DET);
-> +	if (reg & EUD_INT_PET_EUD) {
-> +		/* Detach & Attach pet for EUD */
-> +		writel(0, chip->eud_reg_base + EUD_REG_SW_ATTACH_DET);
-> +		/* Delay to make sure detach pet is done before attach pet */
-> +		ret = readl_poll_timeout(chip->eud_reg_base + EUD_REG_SW_ATTACH_DET,
-> +					reg, (reg == 0), 1, 100);
-> +		if (ret) {
-> +			dev_err(chip->dev, "Detach pet failed\n");
-> +			return;
-> +		}
-> +
-> +		writel(EUD_INT_PET_EUD, chip->eud_reg_base +
-> +				EUD_REG_SW_ATTACH_DET);
-> +	} else {
-> +		/* Attach pet for EUD */
-> +		writel(EUD_INT_PET_EUD, chip->eud_reg_base +
-> +				EUD_REG_SW_ATTACH_DET);
-> +	}
-> +}
-> +
-> +static irqreturn_t handle_eud_irq(int irq, void *data)
-> +{
-> +	struct eud_chip *chip = data;
-> +	u32 reg;
-> +
-> +	/* read status register and find out which interrupt triggered */
-> +	reg = readl(chip->eud_reg_base +  EUD_REG_INT_STATUS_1);
-> +	switch (reg & EUD_INT_ALL) {
-> +	case EUD_INT_VBUS:
-> +		chip->int_status = EUD_INT_VBUS;
-> +		usb_attach_detach(chip);
-> +		return IRQ_WAKE_THREAD;
-> +	case EUD_INT_SAFE_MODE:
-> +		pet_eud(chip);
-> +		break;
-> +	default:
-> +		return IRQ_NONE;
-> +	}
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static irqreturn_t handle_eud_irq_thread(int irq, void *data)
-> +{
-> +	struct eud_chip *chip = data;
-> +	int ret;
-> +
-> +	if (chip->int_status == EUD_INT_VBUS) {
-> +		if (chip->usb_attach)
-> +			ret = usb_role_switch_set_role(chip->role_sw, USB_ROLE_DEVICE);
-> +		else
-> +			ret = usb_role_switch_set_role(chip->role_sw, USB_ROLE_HOST);
+	* v9 [Patch 4/4/] has been split into two separate patches
+	* Addressed all comments in IDP [Patch 3/4] file.
+ 	
+Changes added in v9:
+    * Added fixed regulator entry for nvme.suggested by Stephen Boyd
+    * Added NULL pointer check before accessing ops in pcie probe
+      Suggested by Stephen Boyd
 
-How does this work if I have a Type-C controller wired up to the dwc3
-and it has negotiated that we're supposed to be in device mode?
+Changes added in v8:
 
-Shouldn't this driver somehow work as an override only when EUD is
-enabled, but otherwise let the Type-C controller deal with things?
+    * Added seperate pinctrl state for NVMe LDO enable pin [v8 P3/4]
+    * Removed pointer initialization for pcie_cfg [v8 P4/4]
+    * Replaced bool pcie_pipe_clk_src with unsigned int:1 [v8 P4/4]
+    * Changed gcc_pcie_1_pipe_clk_src to pipe_clk_src
 
-Or is this interrupt simply not delivered when EUD is disabled, so that
-it happens to work as expected?
+Changes added in v7:
 
-> +		if (ret)
-> +			dev_err(chip->dev, "failed to set role switch\n");
-> +	}
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int eud_probe(struct platform_device *pdev)
-> +{
-> +	struct eud_chip *chip;
-> +	int ret;
-> +
-> +	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
-> +	if (!chip)
-> +		return -ENOMEM;
-> +
-> +	chip->dev = &pdev->dev;
-> +
-> +	chip->role_sw = usb_role_switch_get(chip->dev);
-> +	if (IS_ERR(chip->role_sw)) {
-> +		if (PTR_ERR(chip->role_sw) != -EPROBE_DEFER)
-> +			dev_err(chip->dev, "failed to get role switch\n");
-> +
-> +		return PTR_ERR(chip->role_sw);
+        * Removed two fallbacks qcom,pcie-sm8250 and snps,dw-pcie.
+        * Replaced compatible method in get_resources_2_7_0 with
+            flag approach suggested by Bjorn Helgaas .
+        * Setting gcc_pcie_1_clk_src as XO in init_2_7_0 for
+          gdsc enable.
+        * Added specific NVMe GPIO entries for SKU1 and SKU2 support
+          in idp.dts and idp2.dts respectively.
+        * Moved pcie_1 and pcie_1_phy board specific entries into common
+          board file sc7280-idp.dtsi file.
 
-Please use
-		dev_err_probe(chip->dev, PTR_ERR(chip->role_sw), "failed to...\n");
+Changes in v6:
 
-> +	}
-> +
-> +	chip->eud_reg_base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(chip->eud_reg_base))
-> +		return PTR_ERR(chip->eud_reg_base);
-> +
-> +	chip->eud_mode_mgr2_phys_base = devm_platform_ioremap_resource(pdev, 1);
-> +	if (IS_ERR(chip->eud_mode_mgr2_phys_base))
-> +		return PTR_ERR(chip->eud_mode_mgr2_phys_base);
-> +
-> +	chip->eud_irq = platform_get_irq(pdev, 0);
-> +	ret = devm_request_threaded_irq(&pdev->dev, chip->eud_irq, handle_eud_irq,
-> +			handle_eud_irq_thread, IRQF_ONESHOT, NULL, chip);
-> +	if (ret)
+    * Removed platform check while setting gcc_pcie_1_pipe_clk_src
+          as clk_set_parent will return 0 with nop if platform doesn't
+          need to switch pipe clk source.
+        * Moved wake-n gpio to board specific file sc7280-idp.dtsi
+        * Sorted gpio.h header entry in sc7280.dtsi file
 
-This deserved another dev_err_probe()
+Changes in v5:
 
-Thanks,
-Bjorn
+        * Re ordered PCIe, PHY nodes in Soc and board specific dtsi files.
+        * Removed ref_clk entry in current patch [PATCH v4 P4/4].
+        * I will add ref clk entry in suspend/ resume commits.
+        * Added boolean flag in Soc specific dtsi file to differentiate
+          SM8250 and SC7280 platforms. based on boolean flag, platforms will handle
+          the pipe clk handling.
 
-> +		return ret;
-> +
-> +	device_init_wakeup(&pdev->dev, true);
-> +	enable_irq_wake(chip->eud_irq);
-> +
-> +	platform_set_drvdata(pdev, chip);
-> +
-> +	ret = device_create_file(&pdev->dev, eud_attrs[0]);
-> +
-> +	return ret;
-> +}
-> +
-> +static int eud_remove(struct platform_device *pdev)
-> +{
-> +	struct eud_chip *chip = platform_get_drvdata(pdev);
-> +
-> +	if (chip->enable)
-> +		disable_eud(chip);
-> +
-> +	device_remove_file(&pdev->dev, eud_attrs[0]);
-> +	device_init_wakeup(&pdev->dev, false);
-> +	disable_irq_wake(chip->eud_irq);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id eud_dt_match[] = {
-> +	{ .compatible = "qcom,usb-connector-eud" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, eud_dt_match);
-> +
-> +static struct platform_driver eud_driver = {
-> +	.probe		= eud_probe,
-> +	.remove		= eud_remove,
-> +	.driver		= {
-> +		.name		= "eud",
-> +		.of_match_table = eud_dt_match,
-> +	},
-> +};
-> +module_platform_driver(eud_driver);
-> +
-> +MODULE_DESCRIPTION("QTI EUD driver");
-> +MODULE_LICENSE("GPL v2");
-> --
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-> of Code Aurora Forum, hosted by The Linux Foundation
-> 
+Changes in v4 as suggested by Bjorn:
+
+        * Changed pipe clk mux name as gcc_pcie_1_pipe_clk_src.
+        * Changed pipe_ext_src as phy_pipe_clk.
+        * Updated commit message for [PATCH v4 4/4].
+
+Changes in v3:
+        * Changed pipe clock names in dt bindings as pipe_mux and phy_pipe.
+        * Moved reset and NVMe GPIO pin configs into board specific file.
+        * Updated pipe clk mux commit message.
+
+Changes in v2:
+        * Moved pcie pin control settings into IDP file.
+        * Replaced pipe_clk_src with pipe_clk_mux in pcie driver
+        * Included pipe clk mux setting change set in this series
+
+Prasad Malisetty (5):
+  dt-bindings: pci: qcom: Document PCIe bindings for SC7280
+  arm64: dts: qcom: sc7280: Add PCIe and PHY related nodes
+  arm64: dts: qcom: sc7280: Add PCIe nodes for IDP board
+  PCI: qcom: Add a flag in match data along with ops
+  PCI: qcom: Switch pcie_1_pipe_clk_src after PHY init in SC7280
+
+ .../devicetree/bindings/pci/qcom,pcie.txt          |  17 +++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts            |   8 ++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |  51 +++++++++
+ arch/arm64/boot/dts/qcom/sc7280-idp2.dts           |   8 ++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               | 117 +++++++++++++++++++++
+ drivers/pci/controller/dwc/pcie-qcom.c             |  94 +++++++++++++++--
+ 6 files changed, 284 insertions(+), 11 deletions(-)
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
