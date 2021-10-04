@@ -2,73 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 677D2421A39
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 00:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E76421A87
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 01:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236592AbhJDWo7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Oct 2021 18:44:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53004 "EHLO
+        id S235227AbhJDXWy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Oct 2021 19:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233501AbhJDWo6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Oct 2021 18:44:58 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AD1C061745
-        for <linux-usb@vger.kernel.org>; Mon,  4 Oct 2021 15:43:09 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D0A1025B;
-        Tue,  5 Oct 2021 00:43:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1633387388;
-        bh=IiMdDXfMrKOUGMvnjxksKSa1ckEaQ6IW/lImC+4Fv8o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mdfsgnEUjikKNjGnNHM8ug+gZlB21hz++ENSCD/QSyEj/ryqCfp9WB33eIwhQYrP6
-         k8rDzxqce3EAhivfzh0rogHCXlrJtFWTAjwlLMSvRu1uz36pu6c3C6+mCu4S93A9H2
-         wFIGlF0vkuwISqdpiJPJQrJ3cx36rcZDuh0j2mPw=
-Date:   Tue, 5 Oct 2021 01:43:01 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
-        paul.elder@ideasonboard.com, kernel@pengutronix.de
-Subject: Re: [PATCH v2 0/7] usb: gadget: uvc: smaller fixes for stability
-Message-ID: <YVuDa5iU/GQdWwCv@pendragon.ideasonboard.com>
-References: <20211003202939.306-1-m.grzeschik@pengutronix.de>
+        with ESMTP id S233517AbhJDXWy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Oct 2021 19:22:54 -0400
+Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E7EC061749;
+        Mon,  4 Oct 2021 16:21:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=lB9klwC6rOjyM0N8bWwN1xpjBQyssT4L9VIpQtP7fP8=; b=t8Nl04LLGQN7l/8hLjSQbU9tx5
+        wTCzED2f1xX8RisVP2fIokIbHQaVyBpSU+uB2U+zRgngCoNPg6CWHgnLZpkilY/cxCQxPfwykKWrp
+        2Saypf/97tvJkRSn4jZSmUcFbuezIePgX3C+nF+LCoVGHIZfdT9CtYfQ4vzzCYX2wHIBUpl+6wr8W
+        i260b28NLvdlRmMNaBnmoPn6JRrngwYbi/yqE9N3D1Q2BQX6cPriVTjmJTto3aZNP47dFHPl4KcfY
+        xIet0Abmv8DT4kvS46IxieH0c1nhY02UFoOlFLL8T07x7QNub45XA7ekQEufYcssUm87OYHLhOIDN
+        T86zC31A==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mXXGa-008O7O-0r; Mon, 04 Oct 2021 23:21:04 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Amelie Delaunay <amelie.delaunay@st.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] usb: typec: STUSB160X should select REGMAP_I2C
+Date:   Mon,  4 Oct 2021 16:21:03 -0700
+Message-Id: <20211004232103.23893-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211003202939.306-1-m.grzeschik@pengutronix.de>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Michael,
+REGMAP_I2C is not a user visible kconfig symbol so driver configs
+should not "depend on" it. They should depend on I2C and then
+select REGMAP_I2C.
 
-On Sun, Oct 03, 2021 at 10:29:32PM +0200, Michael Grzeschik wrote:
-> This series improves the uvc video gadget overal stability and code
-> quality. Including a fix for the configfs udc callbacks.
+If this worked, it was only because some other driver had set/enabled
+REGMAP_I2C.
 
-I've only noticed v2 after reviewing v1, sorry about that. I think all
-comments still apply though.
+Fixes: da0cb6310094 ("usb: typec: add support for STUSB160x Type-C controller family")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Amelie Delaunay <amelie.delaunay@st.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+---
+ drivers/usb/typec/Kconfig |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> Michael Grzeschik (6):
->   usb: gadget: uvc: consistently use define for headerlen
->   usb: gadget: uvc: test if ep->desc is valid on ep_queue
->   usb: gadget: uvc: only schedule stream in streaming state
->   usb: gadget: uvc: only pump video data if necessary
->   usb: gadget: uvc: ensure the vdev is unset
->   usb: gadget: udc: ensure the gadget is still available
-> 
-> Michael Tretter (1):
->   usb: gadget: uvc: rename function to be more consistent
-> 
->  drivers/usb/gadget/composite.c          |  4 ++--
->  drivers/usb/gadget/function/f_uvc.c     |  7 ++++---
->  drivers/usb/gadget/function/uvc_v4l2.c  |  3 ++-
->  drivers/usb/gadget/function/uvc_video.c | 23 ++++++++++++++++-------
->  drivers/usb/gadget/udc/core.c           |  3 +++
->  5 files changed, 27 insertions(+), 13 deletions(-)
-> 
-
--- 
-Regards,
-
-Laurent Pinchart
+--- lnx-515-rc4.orig/drivers/usb/typec/Kconfig
++++ lnx-515-rc4/drivers/usb/typec/Kconfig
+@@ -65,9 +65,9 @@ config TYPEC_HD3SS3220
+ 
+ config TYPEC_STUSB160X
+ 	tristate "STMicroelectronics STUSB160x Type-C controller driver"
+-	depends on I2C
+-	depends on REGMAP_I2C
+ 	depends on USB_ROLE_SWITCH || !USB_ROLE_SWITCH
++	depends on I2C
++	select REGMAP_I2C
+ 	help
+ 	  Say Y or M here if your system has STMicroelectronics STUSB160x
+ 	  Type-C port controller.
