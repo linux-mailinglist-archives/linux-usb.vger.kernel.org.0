@@ -2,40 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2894B4219E5
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 00:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84258421A0B
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 00:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235235AbhJDWXy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Oct 2021 18:23:54 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:54662 "EHLO
+        id S235589AbhJDWbY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Oct 2021 18:31:24 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:54778 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233722AbhJDWXx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Oct 2021 18:23:53 -0400
+        with ESMTP id S235841AbhJDWbW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Oct 2021 18:31:22 -0400
 Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EB948EF;
-        Tue,  5 Oct 2021 00:22:02 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B46D85A1;
+        Tue,  5 Oct 2021 00:29:31 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1633386123;
-        bh=A5Vq4uPMNILB6Ps8U4bzOVWNOPukN4dWd1wG1VaENxY=;
+        s=mail; t=1633386571;
+        bh=vOCEolIzbAaVcR2a3kGTePMgkLJsdOOvoiefuvWi4Xo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iKXnV/2Wl+x3WNvdUJfPAR0VGBsiyUG8HFXC7xobgt6sDOD8V68IV8Q6eiZYjzbND
-         MS0b6td4y6hZHSyfwGKFAjSJEXkP+ph6TFdjxaC2MRlx29VnjwChW+hiyllu3RVXHi
-         bmFCtJK4rkJucS5iJeTy81tzTMqMN0ZPLcqD1t9s=
-Date:   Tue, 5 Oct 2021 01:21:56 +0300
+        b=Av8KQcpvSelvWU6yKSpMfb8IDZ/CFjmt+QZi/KEoPdluEkAsQ+5gsJrO7U5tj7NoL
+         5ucg+I/TK35COxBxZYrqixK+9FbEYVhlcJDzUiiF33hBchjO8CcCCX4FTzO+y5PiFF
+         fmPh4y5jeNHWCAMgxAglZ0SkSbLHn5ZxZwESvLFg=
+Date:   Tue, 5 Oct 2021 01:29:25 +0300
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
 Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
         paul.elder@ideasonboard.com, kernel@pengutronix.de,
         caleb.connolly@ideasonboard.com
-Subject: Re: [PATCH 4/7] usb: gadget: uvc: only schedule stream in streaming
- state
-Message-ID: <YVt+hPhI2LC+wtr8@pendragon.ideasonboard.com>
+Subject: Re: [PATCH 5/7] usb: gadget: uvc: only pump video data if necessary
+Message-ID: <YVuARarduyZhwio8@pendragon.ideasonboard.com>
 References: <20210930102717.15720-1-m.grzeschik@pengutronix.de>
- <20210930102717.15720-5-m.grzeschik@pengutronix.de>
+ <20210930102717.15720-6-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210930102717.15720-5-m.grzeschik@pengutronix.de>
+In-Reply-To: <20210930102717.15720-6-m.grzeschik@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -44,56 +43,63 @@ Hi Michael,
 
 Thank you for the patch.
 
-On Thu, Sep 30, 2021 at 12:27:14PM +0200, Michael Grzeschik wrote:
-> This patch ensures that the video pump thread will only be scheduled if
-> the uvc is really in streaming state. This way the worker will not have
-> to run on an empty queue.
-> 
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+On Thu, Sep 30, 2021 at 12:27:15PM +0200, Michael Grzeschik wrote:
+> If the streaming endpoint is not enabled, the worker has nothing to do.
+> In the case it still got enqueued, this patch ensueres that it will bail
+
+s/it still got enqueued/buffers are still queued/
+s/ensueres/ensures/
+
+> out without handling any data.
+
+Does this happen when uvc_function_set_alt() calls usb_ep_disable() ?
+The current implementation will cause usb_ep_queue() (called from
+uvcg_video_ep_queue(), from uvcg_video_pump()) to return an error in
+that case, which will result in uvcg_queue_cancel() being called in
+uvcg_video_pump(). With this patch, I believe this will still work fine
+as userspace is notified of the stream off event and calls
+VIDIOC_STREAMOFF, which in turn calls uvcg_video_enable(0) from
+uvc_v4l2_streamoff() (or uvcg_video_enable(0) gets called from
+uvc_v4l2_release() in the worst case if the application closes the
+device). Could you confirm that your understanding matches this analysis
+? If so,
 
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 > ---
->  drivers/usb/gadget/function/uvc_v4l2.c  | 3 ++-
->  drivers/usb/gadget/function/uvc_video.c | 4 +++-
->  2 files changed, 5 insertions(+), 2 deletions(-)
+>  drivers/usb/gadget/function/uvc_video.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-> index 4ca89eab61590..67922b1355e69 100644
-> --- a/drivers/usb/gadget/function/uvc_v4l2.c
-> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
-> @@ -169,7 +169,8 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v4l2_buffer *b)
->  	if (ret < 0)
->  		return ret;
->  
-> -	schedule_work(&video->pump);
-> +	if (uvc->state == UVC_STATE_STREAMING)
-> +		schedule_work(&video->pump);
->  
->  	return ret;
->  }
 > diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-> index cdfd3726a86ae..ccee35177411d 100644
+> index ccee35177411d..152647495fa61 100644
 > --- a/drivers/usb/gadget/function/uvc_video.c
 > +++ b/drivers/usb/gadget/function/uvc_video.c
-> @@ -215,6 +215,7 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
->  	struct uvc_request *ureq = req->context;
->  	struct uvc_video *video = ureq->video;
+> @@ -335,12 +335,12 @@ static void uvcg_video_pump(struct work_struct *work)
+>  {
+>  	struct uvc_video *video = container_of(work, struct uvc_video, pump);
 >  	struct uvc_video_queue *queue = &video->queue;
-> +	struct uvc_device *uvc = video->uvc;
+> -	struct usb_request *req;
+> +	struct usb_request *req = NULL;
+>  	struct uvc_buffer *buf;
 >  	unsigned long flags;
+>  	int ret;
 >  
->  	switch (req->status) {
-> @@ -237,7 +238,8 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+> -	while (1) {
+> +	while (video->ep->enabled) {
+>  		/* Retrieve the first available USB request, protected by the
+>  		 * request lock.
+>  		 */
+> @@ -390,6 +390,9 @@ static void uvcg_video_pump(struct work_struct *work)
+>  		video->req_int_count++;
+>  	}
+>  
+> +	if (!req)
+> +		return;
+> +
+>  	spin_lock_irqsave(&video->req_lock, flags);
 >  	list_add_tail(&req->list, &video->req_free);
 >  	spin_unlock_irqrestore(&video->req_lock, flags);
->  
-> -	schedule_work(&video->pump);
-> +	if (uvc->state == UVC_STATE_STREAMING)
-> +		schedule_work(&video->pump);
->  }
->  
->  static int
 
 -- 
 Regards,
