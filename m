@@ -2,134 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9784217D1
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 21:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F8642182D
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 22:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239108AbhJDToK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Oct 2021 15:44:10 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:32211 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239036AbhJDToA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 Oct 2021 15:44:00 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1633376530; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=d5xC/Y7qVaeIithoWkfnK7rPsYX3oYEtL52pGdth/kQ=; b=XiH/gUfMZKyDPRd95d5IEDvsy2o0nJlKx5lxNB3iIT4nei+CH5hO7XvqxEg9wXxAr0ZyQaoZ
- 3kMpduTxN32g7huhVnV8FCWTdcVVdkZ3kaXyg/9x7FkrZKG7LpS3EnLm46FRGan20vYgIs8U
- hICNjHSj4xSSfxJASg7WKCdGrsc=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
- 615b5912605ecf100b4961bf (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 04 Oct 2021 19:42:10
- GMT
-Sender: pmaliset=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 73063C4361C; Mon,  4 Oct 2021 19:42:10 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from pmaliset-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmaliset)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2FA2AC43618;
-        Mon,  4 Oct 2021 19:42:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 2FA2AC43618
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Prasad Malisetty <pmaliset@codeaurora.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, bhelgaas@google.com,
-        robh+dt@kernel.org, swboyd@chromium.org, lorenzo.pieralisi@arm.com,
-        svarbanov@mm-sol.com
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
-        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org,
-        linux-pci@vger.kernel.org,
-        Prasad Malisetty <pmaliset@codeaurora.org>
-Subject: [PATCH v10 5/5] PCI: qcom: Switch pcie_1_pipe_clk_src after PHY init in SC7280
-Date:   Tue,  5 Oct 2021 01:11:28 +0530
-Message-Id: <1633376488-545-6-git-send-email-pmaliset@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1633376488-545-1-git-send-email-pmaliset@codeaurora.org>
-References: <1633376488-545-1-git-send-email-pmaliset@codeaurora.org>
+        id S235736AbhJDUJx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Oct 2021 16:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229945AbhJDUJx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Oct 2021 16:09:53 -0400
+Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04F7C061745;
+        Mon,  4 Oct 2021 13:08:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=6NiXQi8FxQNfm2NDse7N8BfGltA2mCF/JILct9+dz5A=; b=IvWFtcK7h4k7Vmy6dpdXujm7yI
+        mQdPZ4B0HaT3PYtufSwlwh/xglhOMcG20bRkm4jBUJQYB3Hf4XdzG4M6rBO9U849TDLp/JhD659kY
+        Gwoa0rfBOy/GIu172JyiyMUTDyuT3hn2rcmMjll/B6GqhzAjsQzbsLDfn/S+9Ec+kEjxivzW4uv3T
+        de5BndTeYo4ENzV5OrgNTTxSOa6Ykw7bI0wRpm1pt6ML40YSFf0RPjXn9D2Nm2L9jYOfeb6a3JA51
+        7ET4f8Q4lVKxtAtW8Gbbx+16A5+s9b/UfkceikvMhe297oYqr1qDTh2rGJFcp+8VNQzki9cqP+dGh
+        HNpp933g==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mXUFm-007wSC-Qt; Mon, 04 Oct 2021 20:08:02 +0000
+Subject: Re: [PATCH V0 4/7] usb: common: eud: Added the driver support for
+ Embedded USB Debugger(EUD)
+To:     Souradeep Chowdhury <schowdhu@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Bryan O'Donoghue <pure.logic@nexus-software.ie>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg KH <greg@kroah.com>
+Cc:     linux-kernel@vger.kernel.org, ckadabi@codeaurora.org,
+        tsoni@codeaurora.org, bryanh@codeaurora.org,
+        psodagud@codeaurora.org, satyap@codeaurora.org,
+        pheragu@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+References: <cover.1633343547.git.schowdhu@codeaurora.org>
+ <e6df4a21a283e822d15dedb7ffb3ae62c241999c.1633343547.git.schowdhu@codeaurora.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <73c1eb4f-6870-1c30-9b23-d991b8c8b35d@infradead.org>
+Date:   Mon, 4 Oct 2021 13:08:01 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <e6df4a21a283e822d15dedb7ffb3ae62c241999c.1633343547.git.schowdhu@codeaurora.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On the SC7280, the clock source for gcc_pcie_1_pipe_clk_src
-must be the TCXO while gdsc is enabled. After PHY init successful
-clock source should switch to pipe clock for gcc_pcie_1_pipe_clk_src.
+On 10/4/21 4:16 AM, Souradeep Chowdhury wrote:
+> Add support for control peripheral of EUD (Embedded USB Debugger) to
+> listen to events such as USB attach/detach, pet EUD to indicate software
 
-Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/pci/controller/dwc/pcie-qcom.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+   I don't quite understand: what pets the EUD? how does it do that?
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 152451b..7896a86 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -166,6 +166,9 @@ struct qcom_pcie_resources_2_7_0 {
- 	struct regulator_bulk_data supplies[2];
- 	struct reset_control *pci_reset;
- 	struct clk *pipe_clk;
-+	struct clk *pipe_clk_src;
-+	struct clk *phy_pipe_clk;
-+	struct clk *ref_clk_src;
- };
- 
- union qcom_pcie_resources {
-@@ -1173,6 +1176,20 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
- 	if (ret < 0)
- 		return ret;
- 
-+	if (pcie->pipe_clk_need_muxing) {
-+		res->pipe_clk_src = devm_clk_get(dev, "pipe_mux");
-+		if (IS_ERR(res->pipe_clk_src))
-+			return PTR_ERR(res->pipe_clk_src);
-+
-+		res->phy_pipe_clk = devm_clk_get(dev, "phy_pipe");
-+		if (IS_ERR(res->phy_pipe_clk))
-+			return PTR_ERR(res->phy_pipe_clk);
-+
-+		res->ref_clk_src = devm_clk_get(dev, "ref");
-+		if (IS_ERR(res->ref_clk_src))
-+			return PTR_ERR(res->ref_clk_src);
-+	}
-+
- 	res->pipe_clk = devm_clk_get(dev, "pipe");
- 	return PTR_ERR_OR_ZERO(res->pipe_clk);
- }
-@@ -1191,6 +1208,10 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
- 		return ret;
- 	}
- 
-+	/* Set TCXO as clock source for pcie_pipe_clk_src */
-+	if (pcie->pipe_clk_need_muxing)
-+		clk_set_parent(res->pipe_clk_src, res->ref_clk_src);
-+
- 	ret = clk_bulk_prepare_enable(res->num_clks, res->clks);
- 	if (ret < 0)
- 		goto err_disable_regulators;
-@@ -1262,6 +1283,10 @@ static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
- {
- 	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
- 
-+	/* Set pipe clock as clock source for pcie_pipe_clk_src */
-+	if (pcie->pipe_clk_need_muxing)
-+		clk_set_parent(res->pipe_clk_src, res->phy_pipe_clk);
-+
- 	return clk_prepare_enable(res->pipe_clk);
- }
- 
+> is functional.Reusing the platform device kobj, sysfs entry 'enable' is
+
+      functional. Reusing
+
+> created to enable or disable EUD.
+> 
+> To enable the eud the following needs to be done
+> echo 1 >/sys/bus/platform/.../enable
+> 
+> To disable eud, following is the command
+> echo 0 >/sys/bus/platform/.../enable
+> 
+> Signed-off-by: Souradeep Chowdhury<schowdhu@codeaurora.org>
+> ---
+>   Documentation/ABI/testing/sysfs-driver-eud |   7 +
+>   drivers/usb/common/Kconfig                 |   9 +
+>   drivers/usb/common/Makefile                |   1 +
+>   drivers/usb/common/qcom_eud.c              | 256 +++++++++++++++++++++++++++++
+>   4 files changed, 273 insertions(+)
+>   create mode 100644 Documentation/ABI/testing/sysfs-driver-eud
+>   create mode 100644 drivers/usb/common/qcom_eud.c
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-driver-eud b/Documentation/ABI/testing/sysfs-driver-eud
+> new file mode 100644
+> index 0000000..14a02da
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-driver-eud
+> @@ -0,0 +1,7 @@
+> +What:		/sys/bus/platform/.../enable
+> +Date:           October 2021
+> +Contact:        Souradeep Chowdhury<schowdhu@codeaurora.org>
+> +Description:
+> +		The Enable/Disable sysfs interface for Embedded
+> +		USB Debugger(EUD).This enables and disables the
+
+		    Debugger (EUD). This enables
+
+> +		EUD based on a 1 or a 0 value.
+
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+~Randy
