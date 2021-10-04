@@ -2,106 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F8642182D
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 22:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E72DC42187B
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 22:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235736AbhJDUJx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Oct 2021 16:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
+        id S236376AbhJDUhu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Oct 2021 16:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbhJDUJx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Oct 2021 16:09:53 -0400
-Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04F7C061745;
-        Mon,  4 Oct 2021 13:08:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=6NiXQi8FxQNfm2NDse7N8BfGltA2mCF/JILct9+dz5A=; b=IvWFtcK7h4k7Vmy6dpdXujm7yI
-        mQdPZ4B0HaT3PYtufSwlwh/xglhOMcG20bRkm4jBUJQYB3Hf4XdzG4M6rBO9U849TDLp/JhD659kY
-        Gwoa0rfBOy/GIu172JyiyMUTDyuT3hn2rcmMjll/B6GqhzAjsQzbsLDfn/S+9Ec+kEjxivzW4uv3T
-        de5BndTeYo4ENzV5OrgNTTxSOa6Ykw7bI0wRpm1pt6ML40YSFf0RPjXn9D2Nm2L9jYOfeb6a3JA51
-        7ET4f8Q4lVKxtAtW8Gbbx+16A5+s9b/UfkceikvMhe297oYqr1qDTh2rGJFcp+8VNQzki9cqP+dGh
-        HNpp933g==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mXUFm-007wSC-Qt; Mon, 04 Oct 2021 20:08:02 +0000
-Subject: Re: [PATCH V0 4/7] usb: common: eud: Added the driver support for
- Embedded USB Debugger(EUD)
-To:     Souradeep Chowdhury <schowdhu@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Bryan O'Donoghue <pure.logic@nexus-software.ie>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg KH <greg@kroah.com>
-Cc:     linux-kernel@vger.kernel.org, ckadabi@codeaurora.org,
-        tsoni@codeaurora.org, bryanh@codeaurora.org,
-        psodagud@codeaurora.org, satyap@codeaurora.org,
-        pheragu@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-References: <cover.1633343547.git.schowdhu@codeaurora.org>
- <e6df4a21a283e822d15dedb7ffb3ae62c241999c.1633343547.git.schowdhu@codeaurora.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <73c1eb4f-6870-1c30-9b23-d991b8c8b35d@infradead.org>
-Date:   Mon, 4 Oct 2021 13:08:01 -0700
+        with ESMTP id S236474AbhJDUht (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Oct 2021 16:37:49 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EECAC061745;
+        Mon,  4 Oct 2021 13:36:00 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id l7so46213590edq.3;
+        Mon, 04 Oct 2021 13:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=e8jdR40hN8Bej0G05/tbT1UK44ZIydXMuCtKj+f0gaE=;
+        b=fJxnqpo035ZWhhA3D8V7Uz2WBbNJEI6XLcxnu6hCA2sCmfT6rOXkLT8l0fpaCJgFBP
+         5ZUYUpvt6nRXH6I+5caBvjuiFlxKD33GeyCkW52YSPiZ5e8RQhyDPcleONCt17jR8AM7
+         EvFYBHclTCygUmoWZpTlU/OIMDskofoz2Ki9JKl+m1IcZdwdeZcXdFOEhn4EBQFEqAzr
+         vmRkznwKMqPaizU8M1mNAYRrT4bUeYQfqS0j6mhmT7Q8SMDmrRYjfNczPH2DGiSqbUU2
+         IgH+NCuGzGsL493qxIUqrjCFa6xGGJiNIKqVD2wyseOylmvX/8DcdOHRGTvT0ZY4FUBR
+         t21w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=e8jdR40hN8Bej0G05/tbT1UK44ZIydXMuCtKj+f0gaE=;
+        b=7AsvZvgHEQD+o76q0hMQP8DSJaw6SqPwJIXiZpHROvAMASK7bnIeA6KIJ8L208Gitr
+         5ejHqBvMWZsTb6/P1rSEQcgPme98dL8rZra8oXF6bIn8SPaq2LPRJXpQp7XzhSIIJtFm
+         /EvlycLCO/0LaL3b1VHwnhlpEUkRvkeS+/2UX4RZekvMhtJcdiMo8sF6TPDCSU0zOESR
+         Dr5zN1o64YdeCzIPqcxpMSwye9y4Viyq75C8gxJehDe4SKklddGZIUod84br55DQ5N27
+         PyY0+NdzFmskWjar07xjC/uf8P6djFi6GxtEnkEHz7z0/EFOYK+hZe1xWsQ8Rsja4icc
+         zNLQ==
+X-Gm-Message-State: AOAM5304hkhMUhFqyqdSDXFdTphInWRSIqpgPdtVbsCmuM6GIiWrPTbm
+        Kof9sYGjyUk1rv62SNj3qSI=
+X-Google-Smtp-Source: ABdhPJyus9YhbK6jp+AZHZJAS/8HxtABx6LiZakikCXLp5NugKcoxiU4gynnsRFDBj9LXMHkYVPBuA==
+X-Received: by 2002:a17:906:2b91:: with SMTP id m17mr19258598ejg.202.1633379758739;
+        Mon, 04 Oct 2021 13:35:58 -0700 (PDT)
+Received: from ?IPv6:2001:981:6fec:1:ca3f:670e:572a:c357? ([2001:981:6fec:1:ca3f:670e:572a:c357])
+        by smtp.gmail.com with ESMTPSA id y93sm7885614ede.42.2021.10.04.13.35.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Oct 2021 13:35:58 -0700 (PDT)
+Subject: Re: [PATCH v1 1/1] usb: dwc3: gadget: Revert "set gadgets parent to
+ the right controller"
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>
+References: <20211004141839.49079-1-andriy.shevchenko@linux.intel.com>
+From:   Ferry Toth <fntoth@gmail.com>
+Message-ID: <7019ca3e-f076-e65b-f207-c23a379ade29@gmail.com>
+Date:   Mon, 4 Oct 2021 22:35:57 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <e6df4a21a283e822d15dedb7ffb3ae62c241999c.1633343547.git.schowdhu@codeaurora.org>
+In-Reply-To: <20211004141839.49079-1-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/4/21 4:16 AM, Souradeep Chowdhury wrote:
-> Add support for control peripheral of EUD (Embedded USB Debugger) to
-> listen to events such as USB attach/detach, pet EUD to indicate software
+Hi,
 
-   I don't quite understand: what pets the EUD? how does it do that?
+Op 04-10-2021 om 16:18 schreef Andy Shevchenko:
+> The commit c6e23b89a95d ("usb: dwc3: gadget: set gadgets parent to the right
+> controller") changed the device for the UDC and broke the user space scripts
+> that instantiate the USB gadget(s) via ConfigFS.
 
-> is functional.Reusing the platform device kobj, sysfs entry 'enable' is
+I confirm this regression on Intel Edison since at least 5.15-rc2 while 
+in 5.14.0 it was working fine.
 
-      functional. Reusing
+This patch resolves the issue as tested on 5.15-rc4.
 
-> created to enable or disable EUD.
-> 
-> To enable the eud the following needs to be done
-> echo 1 >/sys/bus/platform/.../enable
-> 
-> To disable eud, following is the command
-> echo 0 >/sys/bus/platform/.../enable
-> 
-> Signed-off-by: Souradeep Chowdhury<schowdhu@codeaurora.org>
+Tested-by: Ferry Toth<fntoth@gmail.com>
+
+> Revert it for now until the better solution will be proposed.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->   Documentation/ABI/testing/sysfs-driver-eud |   7 +
->   drivers/usb/common/Kconfig                 |   9 +
->   drivers/usb/common/Makefile                |   1 +
->   drivers/usb/common/qcom_eud.c              | 256 +++++++++++++++++++++++++++++
->   4 files changed, 273 insertions(+)
->   create mode 100644 Documentation/ABI/testing/sysfs-driver-eud
->   create mode 100644 drivers/usb/common/qcom_eud.c
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-eud b/Documentation/ABI/testing/sysfs-driver-eud
-> new file mode 100644
-> index 0000000..14a02da
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-driver-eud
-> @@ -0,0 +1,7 @@
-> +What:		/sys/bus/platform/.../enable
-> +Date:           October 2021
-> +Contact:        Souradeep Chowdhury<schowdhu@codeaurora.org>
-> +Description:
-> +		The Enable/Disable sysfs interface for Embedded
-> +		USB Debugger(EUD).This enables and disables the
-
-		    Debugger (EUD). This enables
-
-> +		EUD based on a 1 or a 0 value.
-
-
--- 
-~Randy
+>   drivers/usb/dwc3/gadget.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 8e66a70adae6..13664609ed3c 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -4253,7 +4253,7 @@ int dwc3_gadget_init(struct dwc3 *dwc)
+>   	}
+>   
+>   
+> -	usb_initialize_gadget(dwc->sysdev, dwc->gadget, dwc_gadget_release);
+> +	usb_initialize_gadget(dwc->dev, dwc->gadget, dwc_gadget_release);
+>   	dev				= &dwc->gadget->dev;
+>   	dev->platform_data		= dwc;
+>   	dwc->gadget->ops		= &dwc3_gadget_ops;
