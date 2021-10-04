@@ -2,123 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8164D4204DC
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 04:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0AE42058B
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 07:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232244AbhJDCSJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sun, 3 Oct 2021 22:18:09 -0400
-Received: from rtits2.realtek.com ([211.75.126.72]:53333 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232113AbhJDCSJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 3 Oct 2021 22:18:09 -0400
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 1942FkVV2010014, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36503.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 1942FkVV2010014
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 4 Oct 2021 10:15:46 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXH36503.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Mon, 4 Oct 2021 10:15:45 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Mon, 4 Oct 2021 10:15:44 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::cdd5:82a3:e854:7098]) by
- RTEXMBS04.realtek.com.tw ([fe80::cdd5:82a3:e854:7098%5]) with mapi id
- 15.01.2106.013; Mon, 4 Oct 2021 10:15:44 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Oliver Neukum <oneukum@suse.com>,
-        Jason-ch Chen <jason-ch.chen@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "Project_Global_Chrome_Upstream_Group@mediatek.com" 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "hsinyi@google.com" <hsinyi@google.com>,
-        nic_swsd <nic_swsd@realtek.com>
-Subject: RE: [PATCH] r8152: stop submitting rx for -EPROTO
-Thread-Topic: [PATCH] r8152: stop submitting rx for -EPROTO
-Thread-Index: AQHXtPF6mRt31KuIqUSf0ySwz113xKu6nqYQ//+g0oCAAYwXgIAAYT6AgAFAzFCAAA04sIAARXcAgARaYuA=
-Date:   Mon, 4 Oct 2021 02:15:44 +0000
-Message-ID: <21b97638ece04b4fbd81d29143b72137@realtek.com>
-References: <20210929051812.3107-1-jason-ch.chen@mediatek.com>
- <cbd1591fc03f480c9f08cc55585e2e35@realtek.com>
- <4c2ad5e4a9747c59a55d92a8fa0c95df5821188f.camel@mediatek.com>
- <274ec862-86cf-9d83-7ea7-5786e30ca4a7@suse.com>
- <20210930151819.GC464826@rowland.harvard.edu>
- <3694347f29ed431e9f8f2c065b8df0a7@realtek.com>
- <5f56b21575dd4f64a3b46aac21151667@realtek.com>
- <20211001152226.GA505557@rowland.harvard.edu>
-In-Reply-To: <20211001152226.GA505557@rowland.harvard.edu>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.177.203]
-x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2021/10/3_=3F=3F_11:24:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S232518AbhJDFSe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Oct 2021 01:18:34 -0400
+Received: from mga17.intel.com ([192.55.52.151]:17601 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232388AbhJDFSd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 Oct 2021 01:18:33 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10126"; a="206099171"
+X-IronPort-AV: E=Sophos;i="5.85,344,1624345200"; 
+   d="scan'208";a="206099171"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2021 22:16:45 -0700
+X-IronPort-AV: E=Sophos;i="5.85,344,1624345200"; 
+   d="scan'208";a="566826043"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2021 22:16:39 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 04 Oct 2021 08:16:36 +0300
+Date:   Mon, 4 Oct 2021 08:16:36 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jason Wang <jasowang@redhat.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v2 4/6] virtio: Initialize authorized attribute for
+ confidential guest
+Message-ID: <YVqONA0vhl0/H3QE@lahna>
+References: <CAPcyv4hP6mtzKS-CVb-aKf-kYuiLM771PMxN2zeBEfoj6NbctA@mail.gmail.com>
+ <6d1e2701-5095-d110-3b0a-2697abd0c489@linux.intel.com>
+ <YVXWaF73gcrlvpnf@kroah.com>
+ <1cfdce51-6bb4-f7af-a86b-5854b6737253@linux.intel.com>
+ <YVaywQLAboZ6b36V@kroah.com>
+ <CAPcyv4gqs=KuGyxFR61QWqF6HKrRg851roCGUqrq585+s2Cm=w@mail.gmail.com>
+ <20211001164533.GC505557@rowland.harvard.edu>
+ <CAPcyv4i__reKFRP1KjWUov_W5jBQN9_vbUbKRL_V7KMM3oPuuQ@mail.gmail.com>
+ <20211001190048.GA512418@rowland.harvard.edu>
+ <CAPcyv4hYL51DcBuSuyMRFo5Jcc=zLd=Ugo+H_2saELcZ5AJBeQ@mail.gmail.com>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36503.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 10/04/2021 01:57:09
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 166473 [Oct 04 2021]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
-X-KSE-AntiSpam-Info: LuaCore: 463 463 5854868460de3f0d8e8c0a4df98aeb05fb764a09
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: realtek.com:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 10/04/2021 01:59:00
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPcyv4hYL51DcBuSuyMRFo5Jcc=zLd=Ugo+H_2saELcZ5AJBeQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Alan Stern <stern@rowland.harvard.edu>
-> Sent: Friday, October 1, 2021 11:22 PM
-[...]
-> That's right.  If the device and cable are working properly, this
-> should never happen.  Or only extremely rarely (for example, caused
-> by external electromagnetic interference).
+Hi,
+
+On Fri, Oct 01, 2021 at 12:57:18PM -0700, Dan Williams wrote:
+> > > Ah, so are you saying that it would be sufficient for USB if the
+> > > generic authorized implementation did something like:
+> > >
+> > > dev->authorized = 1;
+> > > device_attach(dev);
+> > >
+> > > ...for the authorize case, and:
+> > >
+> > > dev->authorize = 0;
+> > > device_release_driver(dev);
+> > >
+> > > ...for the deauthorize case?
+> >
+> > Yes, I think so.  But I haven't tried making this change to test and
+> > see what really happens.
 > 
-> > It seems to be reasonable why resubmission sometimes works.
+> Sounds like a useful path for this effort to explore. Especially as
+> Greg seems to want the proposed "has_probe_authorization" flag in the
+> bus_type to disappear and make this all generic. It just seems that
+> Thunderbolt would need deeper surgery to move what it does in the
+> authorization toggle path into the probe and remove paths.
 > 
-> Did you ever track down the reason why you got the -EPROTO error
-> while debugging that other issue?  Can you reproduce it?
+> Mika, do you see a path for Thunderbolt to align its authorization
+> paths behind bus ->probe() ->remove() events similar to what USB might
+> be able to support for a generic authorization path?
 
-I didn't follow it, because it was not relative to the driver. Besides, we
-didn't focus on -EPROTO at that time, because it was not the major issue.
-And the -EPROTO occurred rarely indeed during a lot of transmission.
-The hw engineer confirmed that the device completed the transfer
-normally, but the driver still got an error from the host. I don't sure if
-there was a USB HUB between the device and the USB host controller.
-That are all what I know.
-
-Best Regards,
-Hayes
-
+In Thunderbolt "authorization" actually means whether there is a PCIe
+tunnel to the device or not. There is no driver bind/unbind happening
+when authorization toggles (well on Thunderbolt bus, there can be on PCI
+bus after the tunnel is established) so I'm not entirely sure how we
+could use the bus ->probe() or ->remove for that to be honest.
