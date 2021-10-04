@@ -2,106 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E9342120A
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 16:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A459E42126C
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 17:14:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235311AbhJDOyj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Oct 2021 10:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55232 "EHLO
+        id S234182AbhJDPP7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Oct 2021 11:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234608AbhJDOyi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Oct 2021 10:54:38 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5727C061749;
-        Mon,  4 Oct 2021 07:52:48 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id e15so72801906lfr.10;
-        Mon, 04 Oct 2021 07:52:48 -0700 (PDT)
+        with ESMTP id S234181AbhJDPP6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Oct 2021 11:15:58 -0400
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E69AC061745
+        for <linux-usb@vger.kernel.org>; Mon,  4 Oct 2021 08:14:09 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id g10so2461954vsb.8
+        for <linux-usb@vger.kernel.org>; Mon, 04 Oct 2021 08:14:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=e9mEC7vyz6aYS5ipxJsTFX2kQTkmdkM9KeZtG855BT0=;
-        b=j0Ur3IU22Dtc5kFnP/nXkoktbxHcZFHOAKKskIoJgXkwGHYXbbkyALnAz04dfcCoVV
-         0Mi+yf7x6bLdauQEAwTnqbWC6yASn3DvUmQzjLsswUxGTTKJ6s/CRmffsVicfj4H/JdQ
-         c/LIIg0L7rv8lHs1sW2K5rZwgSx57ZXcHyto17YWq5qqGR+KdrUM8a/vBIQevrz7MKqt
-         4+fAAMP0uH9K8IRIrKtcrYu5d1hJt2gQAndx84DW2UalqWNKhO6AnDeKmZJUWZRpcZPy
-         CmjMAchXyeOg4QY//26g7aMb6W3U/7YeGFmXOquN7S/42F7Yuv5Wu7Qw7InfGjWugPr7
-         q3/A==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=uN9A66mgV/5/HdK7+CFE31TcaHxCIOIbxtMVxmM8pwo=;
+        b=cIXm5xP3bevaBvxWYLUxhWpv2jK0hypca6wpci6RIov4Zdz1dG7P3drr7ls4BWu+t5
+         a1yfiHy+Y+me05U2jOGFBwx28RPWHQybPTltYlHsx+7aMNuV8J7pOIhB8DlZ9mx7jurJ
+         gaMh7Ft13w7tnQgyNtoJfUdRMPUEEHA3+t8aRgmYBUFnpyj1pih+z5lTimG/DBfzoUr4
+         qyrmMZQvnMgFN8D9RTvKxvYSacc9qfvExUEgsk5uhDc1bIuI8VNrvbrXBqUyRUcvCaOC
+         VkSHxgHGSq7/BDg/DNgUxLIo0BX1O7JKdryFydQLZHxIRRdcNt0Iorqkq4d0t09G4mTY
+         h/Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=e9mEC7vyz6aYS5ipxJsTFX2kQTkmdkM9KeZtG855BT0=;
-        b=i4FOD3fZwEezdBUfN0ibfgTJ8bBbIkAGRvpk6bnVxVD/jD6xaHkpPLWblD5dUTA+FN
-         xwnrb6cpktDfgsOJD7Z5NERbkC9ww5+MyuGnsg2HQ8KIjLd2G1yRTE2kR4R2aYhBARFP
-         7YJ9e/gjVT07bv7KzONujK/NvIL1OyachS6GD/Y2L5sEUYGzwcZvcwc2GR6dsTQptgRf
-         C//fUStXeY3Ufp/Fr4R7r1feYRNHMpIIlFJAxlPEMs4EegXfmRQHMUTiEVeti98JFixw
-         eMGZiKBw+sR90a7JmXSCm1P/+VIVC7PO7L00zZkOmgBPMJsDygKER/rrAVzJwqHVoKdZ
-         vN3A==
-X-Gm-Message-State: AOAM5326A24VhUpnlyO4l8r+dzkw2KfbwBEIgBbWc9ROTtdICTxxKtu2
-        E3uku8UKjseBYCt/yHAVPrE=
-X-Google-Smtp-Source: ABdhPJwZpF/pb309DarSmG6340t8JrbcT7IOPdU/tSH1oTe/CJm/C7yaYY6kTpK2zLUPD04MKNAKqg==
-X-Received: by 2002:a2e:5450:: with SMTP id y16mr16673360ljd.21.1633359167035;
-        Mon, 04 Oct 2021 07:52:47 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
-        by smtp.googlemail.com with ESMTPSA id o19sm1632148lfg.68.2021.10.04.07.52.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Oct 2021 07:52:46 -0700 (PDT)
-Subject: Re: [PATCH v13 00/35] NVIDIA Tegra power management patches for 5.16
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-References: <20210926224058.1252-1-digetx@gmail.com>
- <20211004091129.fhlfhsddzk5fakuj@vireshk-i7>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <80e0e5a9-7987-a334-7a2b-a7b09b591414@gmail.com>
-Date:   Mon, 4 Oct 2021 17:52:45 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=uN9A66mgV/5/HdK7+CFE31TcaHxCIOIbxtMVxmM8pwo=;
+        b=VCcvlEXh4t+2SV2BcsJv6MkOMOXSO2rN+qA8BLmBYyX7m082U1OXHjZVlxENIw8EOs
+         Nj7zg8aUwVkc+1X0GVi+k+Z05MeQptM+12X7+TrpA8qXY8qJkF93H0NlUrd4cgKhsVTV
+         Xqc2d0drNXqeuGuQi+8W9vmUg2fj6QpgkDMP0ROQ3E+2W9nZT3LgVG3YFY9nLzmp64C9
+         ZyCmt9+VMjQW5ubKB89Z2Brj1C/BomiCu4/69nUw6IM0twWj7R0A8IRnQZ4PgWRQ27oD
+         Qitx459hfAJM4qNXMc4bwwksEFhQDhXN2nVOcWaDKsmvqRspTI7EtsklgIUB1Wfagfku
+         wDew==
+X-Gm-Message-State: AOAM533gJ6nsGim4euaBOcSryOZZeBSC6sQHylMZxUG89i0XrZwA7YAz
+        ZPByCaakjkJ4wQqnEf4xPGwRUgb6T1EvYa/sU1A=
+X-Google-Smtp-Source: ABdhPJwfdiJeeSq4BKs7fBoSBhe7sWpsV5c9VuQrpcl4hq6F9aNTEokG+gUMGYfBX9eQL8eCQ0M+RCq0khwj/K4nN08=
+X-Received: by 2002:a67:e012:: with SMTP id c18mr3727092vsl.28.1633360448277;
+ Mon, 04 Oct 2021 08:14:08 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20211004091129.fhlfhsddzk5fakuj@vireshk-i7>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ab0:484e:0:0:0:0:0 with HTTP; Mon, 4 Oct 2021 08:14:07 -0700 (PDT)
+Reply-To: mrjoshuakunte@gmail.com
+From:   "Mr. Joshua Kunte" <legalrightschamber07@gmail.com>
+Date:   Mon, 4 Oct 2021 16:14:07 +0100
+Message-ID: <CALi75Oo8EfZVXD0kC7i7M-WZjL7E-eoKgawPKBgm3ukPSOshGQ@mail.gmail.com>
+Subject: =?UTF-8?B?RG9icsO9IGRlxYg=?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-04.10.2021 12:11, Viresh Kumar пишет:
-> On 27-09-21, 01:40, Dmitry Osipenko wrote:
->> This series adds runtime PM support to Tegra drivers and enables core
->> voltage scaling for Tegra20/30 SoCs, resolving overheating troubles.
->>
->> All patches in this series are interdependent and should go via Tegra tree.
-> 
-> So you don't need any OPP changes anymore ? I just came back from
-> vacation, don't know what you guys discussed in between :)
-> 
+--=20
+Niekedy minul=C3=BD t=C3=BD=C5=BEde=C5=88 v=C3=A1m bol odoslan=C3=BD e -mai=
+l s o=C4=8Dak=C3=A1van=C3=ADm
+m=C3=A1m od v=C3=A1s preladen=C3=BA po=C5=A1tu, ale na moje prekvapenie ste=
+ nikdy neodpovedali.
+L=C3=A1skavo odpovedzte na =C4=8Fal=C5=A1ie vysvetlenie.
 
-We discussed it and decided that we don't need more OPP/domain core
-changes. It's already good enough for the starter and making it all
-absolutely ideal doesn't worth the effort for now.
+S =C3=BActou, V=C3=A1=C5=A1,
+P=C3=A1n Joshua Kunte.
