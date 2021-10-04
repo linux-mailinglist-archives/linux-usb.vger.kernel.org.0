@@ -2,105 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E72DC42187B
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 22:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB7E4218EC
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 23:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236376AbhJDUhu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Oct 2021 16:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
+        id S234078AbhJDVGS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Oct 2021 17:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236474AbhJDUht (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Oct 2021 16:37:49 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EECAC061745;
-        Mon,  4 Oct 2021 13:36:00 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id l7so46213590edq.3;
-        Mon, 04 Oct 2021 13:36:00 -0700 (PDT)
+        with ESMTP id S233413AbhJDVGS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Oct 2021 17:06:18 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1264C061749
+        for <linux-usb@vger.kernel.org>; Mon,  4 Oct 2021 14:04:28 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id s11so17756184pgr.11
+        for <linux-usb@vger.kernel.org>; Mon, 04 Oct 2021 14:04:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=e8jdR40hN8Bej0G05/tbT1UK44ZIydXMuCtKj+f0gaE=;
-        b=fJxnqpo035ZWhhA3D8V7Uz2WBbNJEI6XLcxnu6hCA2sCmfT6rOXkLT8l0fpaCJgFBP
-         5ZUYUpvt6nRXH6I+5caBvjuiFlxKD33GeyCkW52YSPiZ5e8RQhyDPcleONCt17jR8AM7
-         EvFYBHclTCygUmoWZpTlU/OIMDskofoz2Ki9JKl+m1IcZdwdeZcXdFOEhn4EBQFEqAzr
-         vmRkznwKMqPaizU8M1mNAYRrT4bUeYQfqS0j6mhmT7Q8SMDmrRYjfNczPH2DGiSqbUU2
-         IgH+NCuGzGsL493qxIUqrjCFa6xGGJiNIKqVD2wyseOylmvX/8DcdOHRGTvT0ZY4FUBR
-         t21w==
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dTL71zCsO4wuS7DXxshZZRFAlW1Q/e6e78gucQODCPs=;
+        b=XmzdavWE+xPwKjOfD7fVZBYLqzsaZ82tzU8rY7LUQTZzp2u58uvRub2eqnWLAelR42
+         wLD6XtFTKQ+DXn86Rk1NjlffjspX7Z4xONQzcrRTl6WpCYAKGNigChzH1USP/+YHqV9S
+         vZc+p0UEL2hD82BqL0dO/uxnq3Mnqc8ctr4Gz/pURtRB4rk3jKWFsKsMSYSX2m2E8Azg
+         RvMWFiiLTiyyKXeTVFLm1BvWmS9VifSoG/e7OsLK26L+G/3Hp+Ihcr8dknzhk96b2FzO
+         e6oEQdoZCpclC6RmTbpgM9m3MeKwU3UAkXLsknw16zQ5X13Esxb3XHzrZsCcKkqqTG+H
+         anFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=e8jdR40hN8Bej0G05/tbT1UK44ZIydXMuCtKj+f0gaE=;
-        b=7AsvZvgHEQD+o76q0hMQP8DSJaw6SqPwJIXiZpHROvAMASK7bnIeA6KIJ8L208Gitr
-         5ejHqBvMWZsTb6/P1rSEQcgPme98dL8rZra8oXF6bIn8SPaq2LPRJXpQp7XzhSIIJtFm
-         /EvlycLCO/0LaL3b1VHwnhlpEUkRvkeS+/2UX4RZekvMhtJcdiMo8sF6TPDCSU0zOESR
-         Dr5zN1o64YdeCzIPqcxpMSwye9y4Viyq75C8gxJehDe4SKklddGZIUod84br55DQ5N27
-         PyY0+NdzFmskWjar07xjC/uf8P6djFi6GxtEnkEHz7z0/EFOYK+hZe1xWsQ8Rsja4icc
-         zNLQ==
-X-Gm-Message-State: AOAM5304hkhMUhFqyqdSDXFdTphInWRSIqpgPdtVbsCmuM6GIiWrPTbm
-        Kof9sYGjyUk1rv62SNj3qSI=
-X-Google-Smtp-Source: ABdhPJyus9YhbK6jp+AZHZJAS/8HxtABx6LiZakikCXLp5NugKcoxiU4gynnsRFDBj9LXMHkYVPBuA==
-X-Received: by 2002:a17:906:2b91:: with SMTP id m17mr19258598ejg.202.1633379758739;
-        Mon, 04 Oct 2021 13:35:58 -0700 (PDT)
-Received: from ?IPv6:2001:981:6fec:1:ca3f:670e:572a:c357? ([2001:981:6fec:1:ca3f:670e:572a:c357])
-        by smtp.gmail.com with ESMTPSA id y93sm7885614ede.42.2021.10.04.13.35.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Oct 2021 13:35:58 -0700 (PDT)
-Subject: Re: [PATCH v1 1/1] usb: dwc3: gadget: Revert "set gadgets parent to
- the right controller"
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>
-References: <20211004141839.49079-1-andriy.shevchenko@linux.intel.com>
-From:   Ferry Toth <fntoth@gmail.com>
-Message-ID: <7019ca3e-f076-e65b-f207-c23a379ade29@gmail.com>
-Date:   Mon, 4 Oct 2021 22:35:57 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dTL71zCsO4wuS7DXxshZZRFAlW1Q/e6e78gucQODCPs=;
+        b=iW9vAgbVBRaHxIfjJ0XycwC/HnQQkSgBK5H/YKuPDarHzqwiyyEabxPdLMdoV3DDXX
+         PRjEcPGlQyLFB5MvndPZmMCVheU7UXIS1HRT6P+d7r2prismfBvy/cY7BrWvylUQax6W
+         JsbK0TxH0fV2Tp6Lky6OIfEwvjXe8pUM+EAkYCE+U9PgaaRpIrOe51aE8OgGJOrl767/
+         mYIAnS4Gn4ut3oIOw67OKr1Tyfg6IC8RQ9/MOlWSo5UqZSM1FCM/NWUY9KW7GxAmdPU7
+         4PlAuy43yARgeqyA32ur+0StN8N9rNjzehxpSIz+/UBP53gaJy8TWwBl0mUZn20ruTsJ
+         PdCg==
+X-Gm-Message-State: AOAM5300U8B8E+bErvohqk5ZdSh/wvrUZRCN8NVHEzhoL3W76HyU4rjB
+        DTZaIjGtFngXgVbDUmk6y0AhthQeIA5Mqsp07xKLvg==
+X-Google-Smtp-Source: ABdhPJwtA7a1u8MewgFOuQ4ODk6qNf/e8OOxKzSS55rulMOQukdTduuScadVjnccrxY46jGbRZAxi2Ttqu24INezDC8=
+X-Received: by 2002:a05:6a00:1a01:b0:44c:1ec3:364f with SMTP id
+ g1-20020a056a001a0100b0044c1ec3364fmr19009668pfv.86.1633381468208; Mon, 04
+ Oct 2021 14:04:28 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20211004141839.49079-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20210930010511.3387967-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20210930010511.3387967-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20210930065953-mutt-send-email-mst@kernel.org> <CAPcyv4hP6mtzKS-CVb-aKf-kYuiLM771PMxN2zeBEfoj6NbctA@mail.gmail.com>
+ <6d1e2701-5095-d110-3b0a-2697abd0c489@linux.intel.com> <YVXWaF73gcrlvpnf@kroah.com>
+ <1cfdce51-6bb4-f7af-a86b-5854b6737253@linux.intel.com> <YVaywQLAboZ6b36V@kroah.com>
+ <64eb085b-ef9d-dc6e-5bfd-d23ca0149b5e@linux.intel.com> <20211002070218-mutt-send-email-mst@kernel.org>
+ <YVg/F10PCFNOtCnL@kroah.com> <95ba71c5-87b8-7716-fbe4-bdc9b04b6812@linux.intel.com>
+In-Reply-To: <95ba71c5-87b8-7716-fbe4-bdc9b04b6812@linux.intel.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Mon, 4 Oct 2021 14:04:20 -0700
+Message-ID: <CAPcyv4jfdVTMtvhoUJ5B-ka596RgEH_0RLathfKL9aAi9+0apg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] virtio: Initialize authorized attribute for
+ confidential guest
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jason Wang <jasowang@redhat.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        "Reshetova, Elena" <elena.reshetova@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-Op 04-10-2021 om 16:18 schreef Andy Shevchenko:
-> The commit c6e23b89a95d ("usb: dwc3: gadget: set gadgets parent to the right
-> controller") changed the device for the UDC and broke the user space scripts
-> that instantiate the USB gadget(s) via ConfigFS.
-
-I confirm this regression on Intel Edison since at least 5.15-rc2 while 
-in 5.14.0 it was working fine.
-
-This patch resolves the issue as tested on 5.15-rc4.
-
-Tested-by: Ferry Toth<fntoth@gmail.com>
-
-> Revert it for now until the better solution will be proposed.
+On Sat, Oct 2, 2021 at 7:20 AM Andi Kleen <ak@linux.intel.com> wrote:
 >
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->   drivers/usb/dwc3/gadget.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 8e66a70adae6..13664609ed3c 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -4253,7 +4253,7 @@ int dwc3_gadget_init(struct dwc3 *dwc)
->   	}
->   
->   
-> -	usb_initialize_gadget(dwc->sysdev, dwc->gadget, dwc_gadget_release);
-> +	usb_initialize_gadget(dwc->dev, dwc->gadget, dwc_gadget_release);
->   	dev				= &dwc->gadget->dev;
->   	dev->platform_data		= dwc;
->   	dwc->gadget->ops		= &dwc3_gadget_ops;
+> On 10/2/2021 4:14 AM, Greg Kroah-Hartman wrote:
+> > On Sat, Oct 02, 2021 at 07:04:28AM -0400, Michael S. Tsirkin wrote:
+> >> On Fri, Oct 01, 2021 at 08:49:28AM -0700, Andi Kleen wrote:
+> >>>>    Do you have a list of specific drivers and kernel options that you
+> >>>> feel you now "trust"?
+> >>> For TDX it's currently only virtio net/block/console
+> >>>
+> >>> But we expect this list to grow slightly over time, but not at a high rate
+> >>> (so hopefully <10)
+> >> Well there are already >10 virtio drivers and I think it's reasonable
+> >> that all of these will be used with encrypted guests. The list will
+> >> grow.
+> > What is keeping "all" drivers from being on this list?
+>
+> It would be too much work to harden them all, and it would be pointless
+> because all these drivers are never legitimately needed in a virtualized
+> environment which only virtualize a very small number of devices.
+>
+> >   How exactly are
+> > you determining what should, and should not, be allowed?
+>
+> Everything that has had reasonable effort at hardening can be added. But
+> if someone proposes to add a driver that should trigger additional
+> scrutiny in code review. We should also request them to do some fuzzing.
+>
+> It's a bit similar to someone trying to add a new syscall interface.
+> That also triggers much additional scrutiny for good reasons and people
+> start fuzzing it.
+>
+>
+> >    How can
+> > drivers move on, or off, of it over time?
+>
+> Adding something is submitting a patch to the allow list.
+>
+> I'm not sure the "off" case would happen, unless the driver is
+> completely removed, or maybe it has some unfixable security problem. But
+> that is all rather unlikely.
+>
+>
+> >
+> > And why not just put all of that into userspace and have it pick and
+> > choose?  That should be the end-goal here, you don't want to encode
+> > policy like this in the kernel, right?
+>
+> How would user space know what drivers have been hardened? This is
+> really something that the kernel needs to determine. I don't think we
+> can outsource it to anyone else.
+
+How it is outsourcing by moving that same allow list over the kernel /
+user boundary. It can be maintained by the same engineers and get
+deployed by something like:
+
+dracut --authorize-device-list=confidential-computing-default $kernel-version
+
+With that distributions can deploy kernel-specific authorizations and
+admins can deploy site-specific authorizations. Then the kernel
+implementation is minimized to authorize just enough drivers by
+default to let userspace take over the policy.
+
+> Also BTW of course user space can still override it, but really the
+> defaults should be a kernel policy.
+
+The default is secure, trust nothing but bootstrap devices.
+
+> There's also the additional problem that one of the goals of
+> confidential guest is to just move existing guest virtual images into
+> them without much changes. So it's better for such a case if as much as
+> possible of the policy is in the kernel. But that's more a secondary
+> consideration, the first point is really the important part.
+
+The same image can be used on host and guest in this "do it in
+userspace" proposal.
