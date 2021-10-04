@@ -2,75 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD804205B2
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 08:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 273B74205E1
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 08:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbhJDGKk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Oct 2021 02:10:40 -0400
-Received: from mga04.intel.com ([192.55.52.120]:63978 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231935AbhJDGKk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 Oct 2021 02:10:40 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10126"; a="224060982"
-X-IronPort-AV: E=Sophos;i="5.85,345,1624345200"; 
-   d="scan'208";a="224060982"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2021 23:08:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,345,1624345200"; 
-   d="scan'208";a="621606233"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 03 Oct 2021 23:08:48 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 04 Oct 2021 09:08:48 +0300
-Date:   Mon, 4 Oct 2021 09:08:48 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Xu Yang <xu.yang_2@nxp.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-imx@nxp.com, jun.li@nxp.com
-Subject: Re: [PATCH] usb: typec: tcpm: handle SRC_STARTUP state if cc changes
-Message-ID: <YVqacFgq4fZzCawv@kuha.fi.intel.com>
-References: <20210928111639.3854174-1-xu.yang_2@nxp.com>
+        id S232685AbhJDGcq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Oct 2021 02:32:46 -0400
+Received: from rtits2.realtek.com ([211.75.126.72]:43209 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232131AbhJDGcp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Oct 2021 02:32:45 -0400
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 1946Uj0J2014914, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36503.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 1946Uj0J2014914
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 4 Oct 2021 14:30:45 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36503.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Mon, 4 Oct 2021 14:30:45 +0800
+Received: from fc34.localdomain (172.21.177.102) by RTEXMBS04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Mon, 4 Oct 2021
+ 14:30:44 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     <jason-ch.chen@mediatek.com>, <kuba@kernel.org>,
+        <davem@davemloft.net>
+CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Hayes Wang <hayeswang@realtek.com>
+Subject: [PATCH net] r8152: avoid to resubmit rx immediately
+Date:   Mon, 4 Oct 2021 14:28:58 +0800
+Message-ID: <20211004062858.1679-381-nic_swsd@realtek.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210929051812.3107-1-jason-ch.chen@mediatek.com>
+References: <20210929051812.3107-1-jason-ch.chen@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210928111639.3854174-1-xu.yang_2@nxp.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.21.177.102]
+X-ClientProxiedBy: RTEXH36503.realtek.com.tw (172.21.6.25) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: trusted connection
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Deterministic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 10/04/2021 06:21:00
+X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
+ rules found
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzEwLzQgpFekyCAwNDo1MTowMA==?=
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-ServerInfo: RTEXH36503.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 10/04/2021 06:17:40
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 166474 [Oct 04 2021]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
+X-KSE-AntiSpam-Info: LuaCore: 463 463 5854868460de3f0d8e8c0a4df98aeb05fb764a09
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;realtek.com:7.1.1
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 10/04/2021 06:21:00
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 28, 2021 at 07:16:39PM +0800, Xu Yang wrote:
-> TCPM for DRP should do the same action as SRC_ATTACHED when cc changes in
-> SRC_STARTUP state. Otherwise, TCPM will transition to SRC_UNATTACHED state
-> which is not satisfied with the Type-C spec.
-> 
-> Per Type-C spec:
-> DRP port should move to Unattached.SNK instead of Unattached.SRC if sink
-> removed.
-> 
-> Fixes: 4b4e02c83167 ("typec: tcpm: Move out of staging")
-> cc: <stable@vger.kernel.org>
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+For the situation that the disconnect event comes very late when the
+device is unplugged, the driver would resubmit the RX bulk transfer
+after getting the callback with -EPROTO immediately and continually.
+Finally, soft lockup occurs.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+This patch avoids to resubmit RX immediately. It uses a workqueue to
+schedule the RX NAPI. And the NAPI would resubmit the RX. It let the
+disconnect event have opportunity to stop the submission before soft
+lockup.
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index a4d37205df54..7f2f3ff1b391 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4876,6 +4876,7 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
->  			tcpm_set_state(port, SRC_ATTACH_WAIT, 0);
->  		break;
->  	case SRC_ATTACHED:
-> +	case SRC_STARTUP:
->  	case SRC_SEND_CAPABILITIES:
->  	case SRC_READY:
->  		if (tcpm_port_is_disconnected(port) ||
-> -- 
-> 2.25.1
+Reported-by: Jason-ch Chen <jason-ch.chen@mediatek.com>
+Tested-by: Jason-ch Chen <jason-ch.chen@mediatek.com>
+Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+---
+ drivers/net/usb/r8152.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 60ba9b734055..f329e39100a7 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -767,6 +767,7 @@ enum rtl8152_flags {
+ 	PHY_RESET,
+ 	SCHEDULE_TASKLET,
+ 	GREEN_ETHERNET,
++	RX_EPROTO,
+ };
+ 
+ #define DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2	0x3082
+@@ -1770,6 +1771,14 @@ static void read_bulk_callback(struct urb *urb)
+ 		rtl_set_unplug(tp);
+ 		netif_device_detach(tp->netdev);
+ 		return;
++	case -EPROTO:
++		urb->actual_length = 0;
++		spin_lock_irqsave(&tp->rx_lock, flags);
++		list_add_tail(&agg->list, &tp->rx_done);
++		spin_unlock_irqrestore(&tp->rx_lock, flags);
++		set_bit(RX_EPROTO, &tp->flags);
++		schedule_delayed_work(&tp->schedule, 1);
++		return;
+ 	case -ENOENT:
+ 		return;	/* the urb is in unlink state */
+ 	case -ETIME:
+@@ -2425,6 +2434,7 @@ static int rx_bottom(struct r8152 *tp, int budget)
+ 	if (list_empty(&tp->rx_done))
+ 		goto out1;
+ 
++	clear_bit(RX_EPROTO, &tp->flags);
+ 	INIT_LIST_HEAD(&rx_queue);
+ 	spin_lock_irqsave(&tp->rx_lock, flags);
+ 	list_splice_init(&tp->rx_done, &rx_queue);
+@@ -2441,7 +2451,7 @@ static int rx_bottom(struct r8152 *tp, int budget)
+ 
+ 		agg = list_entry(cursor, struct rx_agg, list);
+ 		urb = agg->urb;
+-		if (urb->actual_length < ETH_ZLEN)
++		if (urb->status != 0 || urb->actual_length < ETH_ZLEN)
+ 			goto submit;
+ 
+ 		agg_free = rtl_get_free_rx(tp, GFP_ATOMIC);
+@@ -6643,6 +6653,10 @@ static void rtl_work_func_t(struct work_struct *work)
+ 	    netif_carrier_ok(tp->netdev))
+ 		tasklet_schedule(&tp->tx_tl);
+ 
++	if (test_and_clear_bit(RX_EPROTO, &tp->flags) &&
++	    !list_empty(&tp->rx_done))
++		napi_schedule(&tp->napi);
++
+ 	mutex_unlock(&tp->control);
+ 
+ out1:
 -- 
-heikki
+2.31.1
+
