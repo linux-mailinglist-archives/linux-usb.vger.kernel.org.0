@@ -2,131 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DDC421391
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 18:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3AE42143D
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 18:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236369AbhJDQH0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Oct 2021 12:07:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37806 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236252AbhJDQHZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 Oct 2021 12:07:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 52F95613DB;
-        Mon,  4 Oct 2021 16:05:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633363536;
-        bh=5FivIqS1C9WwNIDdKrHogKpwSKWTX2irBi86X37GOBY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X3FOLP3P944JOHUD9kCPQwW+9IHI21MdmIXFjwzNW1YyoXX09pG58+MjdHP9meSL6
-         85+zPs5HS8Calnt4PfZ+xDWQxDU3Q3FEDPOO9XFQcmuFSqbhOAcCP+u4xuf5kEPDKY
-         vuSNLOtYHMUB/Sp8cPWmPMujy5zmoH6b+Rn9KeYm4ndcE8t4Dz2DCbiJNn5GuPVbf8
-         24xBfCwnz4NoDOErlZnRfTM8dr/MVJ0trXW0pme92VSme7icUDkcWVj8JNe94+Q76v
-         hvv9Aq/qWlOlm5cYZp5KXAfsBqUQEPgROahE6bkkB2JWy7wo35hasV+9KUD/nBcV2p
-         EWcA1tGoTIXhw==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     davem@davemloft.net
-Cc:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        linux-usb@vger.kernel.org, Oliver Neukum <oliver@neukum.org>
-Subject: [PATCH net-next 2/2] net: usb: use eth_hw_addr_set() for dev->addr_len cases
-Date:   Mon,  4 Oct 2021 09:05:22 -0700
-Message-Id: <20211004160522.1974052-2-kuba@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211004160522.1974052-1-kuba@kernel.org>
-References: <20211004160522.1974052-1-kuba@kernel.org>
+        id S237209AbhJDQjG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Oct 2021 12:39:06 -0400
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:43910 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237178AbhJDQjG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Oct 2021 12:39:06 -0400
+Received: by mail-ot1-f43.google.com with SMTP id x33-20020a9d37a4000000b0054733a85462so22307367otb.10;
+        Mon, 04 Oct 2021 09:37:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yXdfDKIRSjWNIHGf2GeNCQna0ZEGH+oW5o42/i9ekhg=;
+        b=PSIR2APqIY2QkztOxdB2fKufn0KzF826/IcSwjQnTd1KtG98Yz75LrAMe7gf9gSmqk
+         RjMwDUuCZX/n8NrngRTP3WnWewFtNpXZ2OcbNZDjkZsSZeNa2Omb0wkJ1xdnzPaS5l/y
+         lic0sEQepETyVI87Hxc3vhq2ADBDWZgv1o30ewGqB/CHZtC4yeb2pR0kAqOFyin4/hIQ
+         EGzHhjfexkj36n65n7nm61uGmr+g1/kNCs5vjS4XSHmKlx97ahC/yY4RfiZXT/9ZNnCM
+         agUcdlAqS4BHCG9QGpcx2KeZfmxspakDlgP+QFUhxOMI9e/32mHk9JiV122qhaq4YXDb
+         Etsw==
+X-Gm-Message-State: AOAM531ThcKwnavljq6F12yN98XMSfzqqDrOd/kXf8e7Is276Ha/iQIL
+        FzuFk87gX/ov4gsXvuDSnw==
+X-Google-Smtp-Source: ABdhPJwQeu5GQkOhwdultlP8GZAfwsFJamVDEnHx3HwKXq9slIXZcX4Ve7cxU63r6uzg0buHOFtWyw==
+X-Received: by 2002:a05:6830:410b:: with SMTP id w11mr10073772ott.210.1633365436517;
+        Mon, 04 Oct 2021 09:37:16 -0700 (PDT)
+Received: from robh.at.kernel.org ([66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id l22sm2993874otr.63.2021.10.04.09.37.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Oct 2021 09:37:15 -0700 (PDT)
+Received: (nullmailer pid 1434458 invoked by uid 1000);
+        Mon, 04 Oct 2021 16:37:09 -0000
+Date:   Mon, 4 Oct 2021 11:37:09 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Souradeep Chowdhury <schowdhu@codeaurora.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Bryan O'Donoghue <pure.logic@nexus-software.ie>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg KH <greg@kroah.com>, linux-kernel@vger.kernel.org,
+        ckadabi@codeaurora.org, tsoni@codeaurora.org,
+        bryanh@codeaurora.org, psodagud@codeaurora.org,
+        satyap@codeaurora.org, pheragu@codeaurora.org,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Subject: Re: [PATCH V0 1/7] dt-bindings: connector: Add property for eud type
+ c connector
+Message-ID: <YVsttQySDnaXxOuI@robh.at.kernel.org>
+References: <cover.1633343547.git.schowdhu@codeaurora.org>
+ <246c9d24da27b6ce91d5f1e536fa96ac5656a0b2.1633343547.git.schowdhu@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <246c9d24da27b6ce91d5f1e536fa96ac5656a0b2.1633343547.git.schowdhu@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Convert usb drivers from memcpy(... dev->addr_len)
-to eth_hw_addr_set():
+On Mon, Oct 04, 2021 at 04:46:19PM +0530, Souradeep Chowdhury wrote:
+> Added the property for EUD(Embedded USB Debug) connector.Added
+> the "reg" and "interrupts" property which is needed for EUD.
 
-  @@
-  expression dev, np;
-  @@
-  - memcpy(dev->dev_addr, np, dev->addr_len)
-  + eth_hw_addr_set(dev, np)
+You are going to need a better explanation of this h/w.
 
-Manually checked these are either usbnet or pure etherdevs.
+> 
+> Signed-off-by: Souradeep Chowdhury <schowdhu@codeaurora.org>
+> ---
+>  .../devicetree/bindings/connector/usb-connector.yaml      | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> index 7eb8659..908129f 100644
+> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> @@ -30,6 +30,21 @@ properties:
+>            - const: samsung,usb-connector-11pin
+>            - const: usb-b-connector
+>  
+> +      - items:
+> +          - enum:
+> +              - qcom,sc7280-usb-connector-eud
+> +          - const: qcom,usb-connector-eud
+> +          - const: usb-c-connector
+> +
+> +  reg:
+> +    items:
+> +      - description: EUD Base Register Region
+> +      - description: EUD Mode Manager Region
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: linux-usb@vger.kernel.org
-CC: Oliver Neukum <oliver@neukum.org>
+A connector node represents the physical connector on a board. That 
+can't really be an MMIO peripheral. Maybe you need a node for EUD and 
+then it should have a connector child node? Don't really know without 
+understanding this h/w.
 
- drivers/net/usb/dm9601.c  | 2 +-
- drivers/net/usb/mcs7830.c | 2 +-
- drivers/net/usb/r8152.c   | 2 +-
- drivers/net/usb/rtl8150.c | 2 +-
- drivers/net/usb/sr9700.c  | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/net/usb/dm9601.c b/drivers/net/usb/dm9601.c
-index f4b03202472d..dcdb46314685 100644
---- a/drivers/net/usb/dm9601.c
-+++ b/drivers/net/usb/dm9601.c
-@@ -331,7 +331,7 @@ static int dm9601_set_mac_address(struct net_device *net, void *p)
- 		return -EINVAL;
- 	}
- 
--	memcpy(net->dev_addr, addr->sa_data, net->addr_len);
-+	eth_hw_addr_set(net, addr->sa_data);
- 	__dm9601_set_mac_address(dev);
- 
- 	return 0;
-diff --git a/drivers/net/usb/mcs7830.c b/drivers/net/usb/mcs7830.c
-index 66866bef25df..cead742da381 100644
---- a/drivers/net/usb/mcs7830.c
-+++ b/drivers/net/usb/mcs7830.c
-@@ -159,7 +159,7 @@ static int mcs7830_set_mac_address(struct net_device *netdev, void *p)
- 		return ret;
- 
- 	/* it worked --> adopt it on netdev side */
--	memcpy(netdev->dev_addr, addr->sa_data, netdev->addr_len);
-+	eth_hw_addr_set(netdev, addr->sa_data);
- 
- 	return 0;
- }
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index d762462d34f2..b7fde8d448ff 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -1570,7 +1570,7 @@ static int __rtl8152_set_mac_address(struct net_device *netdev, void *p,
- 
- 	mutex_lock(&tp->control);
- 
--	memcpy(netdev->dev_addr, addr->sa_data, netdev->addr_len);
-+	eth_hw_addr_set(netdev, addr->sa_data);
- 
- 	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_CRWECR, CRWECR_CONFIG);
- 	pla_ocp_write(tp, PLA_IDR, BYTE_EN_SIX_BYTES, 8, addr->sa_data);
-diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
-index a8ae395fa26d..3d2bf2acca94 100644
---- a/drivers/net/usb/rtl8150.c
-+++ b/drivers/net/usb/rtl8150.c
-@@ -278,7 +278,7 @@ static int rtl8150_set_mac_address(struct net_device *netdev, void *p)
- 	if (netif_running(netdev))
- 		return -EBUSY;
- 
--	memcpy(netdev->dev_addr, addr->sa_data, netdev->addr_len);
-+	eth_hw_addr_set(netdev, addr->sa_data);
- 	netdev_dbg(netdev, "Setting MAC address to %pM\n", netdev->dev_addr);
- 	/* Set the IDR registers. */
- 	set_registers(dev, IDR, netdev->addr_len, netdev->dev_addr);
-diff --git a/drivers/net/usb/sr9700.c b/drivers/net/usb/sr9700.c
-index 6516a37893e2..068f197f1786 100644
---- a/drivers/net/usb/sr9700.c
-+++ b/drivers/net/usb/sr9700.c
-@@ -296,7 +296,7 @@ static int sr9700_set_mac_address(struct net_device *netdev, void *p)
- 		return -EINVAL;
- 	}
- 
--	memcpy(netdev->dev_addr, addr->sa_data, netdev->addr_len);
-+	eth_hw_addr_set(netdev, addr->sa_data);
- 	sr_write_async(dev, SR_PAR, 6, netdev->dev_addr);
- 
- 	return 0;
--- 
-2.31.1
-
+> +
+> +  interrupts:
+> +    description:
+> +      EUD interrupt
+> +
+>    label:
+>      description: Symbolic name for the connector.
+>  
+> -- 
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+> of Code Aurora Forum, hosted by The Linux Foundation
+> 
+> 
