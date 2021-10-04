@@ -2,132 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6A5421938
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 23:24:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 239B3421977
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 23:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235484AbhJDV0a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Oct 2021 17:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35486 "EHLO
+        id S234093AbhJDVyD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Oct 2021 17:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234470AbhJDV03 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Oct 2021 17:26:29 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF06C061745;
-        Mon,  4 Oct 2021 14:24:40 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id i4so78033362lfv.4;
-        Mon, 04 Oct 2021 14:24:40 -0700 (PDT)
+        with ESMTP id S230010AbhJDVyC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Oct 2021 17:54:02 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8F1C061745
+        for <linux-usb@vger.kernel.org>; Mon,  4 Oct 2021 14:52:13 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id on12-20020a17090b1d0c00b001997c60aa29so706988pjb.1
+        for <linux-usb@vger.kernel.org>; Mon, 04 Oct 2021 14:52:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Y6CKjic+MhbQXzMyBA7YrYpbPkbHTokGzRhmbnDC1pY=;
-        b=qnUpsdJkrMJsH2AGyxKNQpbqdA0VYA2pVdw7TTLVcg2QMCSHirIQ+ibrjV9OZsFz48
-         vG1lT3qWktk5AR7G9w35q30XNXQ5x54HosTa+iI4Q727zVTQnGEKz46V/z+gna8L7k9v
-         FvaYBlbaA2vh84bGHd2xGwNWU5T7XsakcIlvtjrs5bLoOsblpKJ9Ns02GZQHIyuoSIvX
-         GoHFb3jmmCwIwVJJWmxLvJJ98P+aLa0YU1w3BM36t5vcny5S8Qefe+/cm0TysjgRo7Ag
-         K8UjBFCG+nrhkEO6cIt1d2JAs3bLz7XVK8GwFMU3HcGsBY+xZXbIN4mkGbmafAdDQFzc
-         XAvA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xhPI1GzEPrNpNSw/1tWigqvp+WusDAVMoQ+R+vP0NiI=;
+        b=I2O3YR6F8NgzSpc72E70hoGmIXfBDLHE+l3ULuV6VF4Hsv8oyduxyYzHAiyU3JP35f
+         6xu3bL4kHXRkNJr/SJtzqG/dz5G0nv5j82VKqM06+7ejDMBP/oOcz87XfOsapSCKdJlS
+         RX5lr9dEraqFJtSVsGg3zjdRlJ6KANf224yHVTcc6RTkTJwr9EVX99tyzHNIawonTu9A
+         eP+LL4bWTcITJZQFYy6Y3/W2iKspglKdHpNm2jFrN7sK/JbloQUtmqymJma2AgM0U0iH
+         a1CIFsBBUt5kZkP1AcYi28AGlY0WBp8fxdVeglsPNPLjesC19xf+KJsn8aN6qSeEsmem
+         Bf2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Y6CKjic+MhbQXzMyBA7YrYpbPkbHTokGzRhmbnDC1pY=;
-        b=ctx/eu/9m77HAMdw43BqxoJJ0pNiFT2E4mmZetyK9Qd08vKBCxTriR9OcaH3KJWUAx
-         4+kUh/AGgNXCuZaJcp+jH1b6DlWKS6Taw2gRkdbVIupQAaN93e4JQscqq38vcAJSjbpS
-         +J6PPvCmQvr5HzKqEiqri1ZFHvpqWaDF6ZcwaNoc2+MgX+Zpwu/qSFz9WcRgwgzuK08J
-         bmxLbAZzlAHLzLPYksD3hmECI6nw51dxhyDGxpKPnqmHKJg5gzQRATAqP+6t1iUQyo5Y
-         ZTrf4T9NksJ2aDAFPZ8i2+FYXZtJrxjM4BhHI1W40tpa+s9aBRAFWtxVzC29ww+A9HSR
-         PfYg==
-X-Gm-Message-State: AOAM531zlmdgZGMVALhRBw53s0BGQrSNjWFVBjan9/Jop0w5rP0cavk1
-        4jj0NVAuEQtJZNCP5rHvLPQ=
-X-Google-Smtp-Source: ABdhPJzK69LA/qULZaH06vujyoxbpKODuoq/Rv0LBiW8dmbnx2FiTv4tCUpcbkXhYAzPq4Az2ZFrUQ==
-X-Received: by 2002:a2e:6e19:: with SMTP id j25mr18066041ljc.360.1633382678495;
-        Mon, 04 Oct 2021 14:24:38 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
-        by smtp.googlemail.com with ESMTPSA id d13sm1708555lfe.21.2021.10.04.14.24.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Oct 2021 14:24:38 -0700 (PDT)
-Subject: Re: [PATCH v7 4/7] usb: phy: tegra: Support OTG mode programming
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-References: <20210912181718.1328-1-digetx@gmail.com>
- <20210912181718.1328-5-digetx@gmail.com>
- <29ae631d-cc8d-663e-3ce2-db00f3470365@gmail.com>
- <YVtslrGXStvdO2IS@orome.fritz.box>
- <94949858-6089-06df-1226-f7974a3ae6bf@gmail.com>
- <YVtwqLlG8+S9cooU@orome.fritz.box>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <99040137-64dd-2895-a90e-7b4478e97bec@gmail.com>
-Date:   Tue, 5 Oct 2021 00:24:37 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xhPI1GzEPrNpNSw/1tWigqvp+WusDAVMoQ+R+vP0NiI=;
+        b=lmtSwjJkDTUhqd+EqPIqSRXV4lrQmfuroY/U0SHnqNvXfobNBXIwcQF6+QCzB7ri2g
+         /+jzgwcM3umm+ZZTTpZOj7lpaueUJRgzb1JH40yruQGOuJzqcpcR6KhJJ+T2VUAayeD7
+         zyrInoHJjLtwDKtRzW8MaglvT0RjqcPD7Ckue1CEKlsoo7c1oCHC/zDa3oHC1ll0xoGA
+         CM47Pza/VnBmDYWNJ/+W3Db2HfVUAM/BcEW4WW4BywJsvE0CDbirJTcd1lIX+cv9QpHQ
+         E+I50U5i1mzqCwz02xGJhGI9cDXf2kWVXGWZ+eF1zZw3NAHRt4516IVi/pRg8meCbXeH
+         zUHQ==
+X-Gm-Message-State: AOAM5333nqQmUD8sc6puxVP4lF+uYysIUstbbiauqzcde4xPLLSUSEkF
+        r5NxkvqLYurFFlM63dMVifwTNGTjDXlVd3wkubMNHA==
+X-Google-Smtp-Source: ABdhPJwGn0D4IAk4utn6CKrXvM0mObb6A2+T27So3whzbM3Ycq+u40j0P71EHB0ftwVynof+9y0Qk7HbgmSaSEReA88=
+X-Received: by 2002:a17:90b:1e05:: with SMTP id pg5mr6761112pjb.173.1633384332495;
+ Mon, 04 Oct 2021 14:52:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YVtwqLlG8+S9cooU@orome.fritz.box>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210929224823.556943-1-rajatja@google.com> <YVVLcvcjOzK6m0yK@kroah.com>
+In-Reply-To: <YVVLcvcjOzK6m0yK@kroah.com>
+From:   Rajat Jain <rajatja@google.com>
+Date:   Mon, 4 Oct 2021 14:51:36 -0700
+Message-ID: <CACK8Z6EX__=cXn5zJnxwQbqR_BJ5tBetu+vLFQmQES6nWp5Arw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] usb: hub: Mark root hubs on removable devices, as removable.
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        levinale@google.com, bleung@google.com, rajatxjain@gmail.com,
+        jsbarnes@google.com, pmalani@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-05.10.2021 00:22, Thierry Reding пишет:
-> On Tue, Oct 05, 2021 at 12:13:48AM +0300, Dmitry Osipenko wrote:
->> 05.10.2021 00:05, Thierry Reding пишет:
->>> On Mon, Sep 27, 2021 at 07:36:52PM +0300, Dmitry Osipenko wrote:
->>>> 12.09.2021 21:17, Dmitry Osipenko пишет:
->>>>> Support programming USB PHY into OTG mode.
->>>>>
->>>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->>>>> ---
->>>>>  drivers/usb/phy/phy-tegra-usb.c   | 198 +++++++++++++++++++++++++++++-
->>>>>  include/linux/usb/tegra_usb_phy.h |   5 +
->>>>>  2 files changed, 198 insertions(+), 5 deletions(-)
->>>>
->>>> Greg / Felipe, could you please ack this patch to allow Thierry to take
->>>> this series via the Tegra tree? It depends on the soc/tegra patch of
->>>> this patchset.
->>>
->>> Looking at the series, I don't think this necessarily needs to go
->>> through the Tegra tree. Given that you have backwards-compatibility with
->>> older device trees, applying this separately to the USB tree should work
->>> fine. Once the soc/tegra and DT bits and the USB bits get combined they
->>> should enable the new functionality, but nothing should break if things
->>> are applied separately.
->>>
->>> If so, I can just pick up the rest and let Felipe or Greg pick this one
->>> up.
->>>
->>> Dmitry, can you confirm that this patch should be applicable separately?
->>> If so:
->>>
->>> Acked-by: Thierry Reding <treding@nvidia.com>
->>>
->>
->> This PHY patch has this hunk:
->>
->> +	phy->pmc_regmap = dev_get_regmap(&pmc_pdev->dev, "usb_sleepwalk");
->> +	if (!phy->pmc_regmap)
->> +		return -EINVAL;
->>
->> If this patch and the DT patches will be applied before the soc/tegra
->> patch, then USB PHY driver will fail to probe.
-> 
-> I had missed that. I was assuming that this other hunk took care of the
-> backwards-compatibility:
-> 
-> +       /* older device-trees don't have PMC regmap */
-> +       if (!phy->pmc_regmap)
-> +               return 0;
-> 
-> but that's rather pointless given your check above, right? Why not just
-> return 0 instead and let the remaining code skip sleepwalk configuration
-> if the regmap doesn't exist?
+Hello,
 
-Because regmap must exists if node exists.
+On Wed, Sep 29, 2021 at 10:30 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Sep 29, 2021 at 03:48:22PM -0700, Rajat Jain wrote:
+> > Currently all usb root hubs are always marked as DEVICE_REMOVABLE_UNKNOWN
+> > unconditionally. Let us try to help the users to identify the removable
+> > root hubs, by checking the device on which the root hub sits. If the base
+> > (parent) device on which the root hub sits, is removable (e.g. on
+> > thunderbolt docks), then the roothub is also marked as removable.
+> >
+> > Signed-off-by: Rajat Jain <rajatja@google.com>
+> > ---
+> >  drivers/usb/core/hub.c | 10 +++++++++-
+> >  1 file changed, 9 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > index 86658a81d284..45d1c81b121d 100644
+> > --- a/drivers/usb/core/hub.c
+> > +++ b/drivers/usb/core/hub.c
+> > @@ -2440,8 +2440,16 @@ static void set_usb_port_removable(struct usb_device *udev)
+> >
+> >       dev_set_removable(&udev->dev, DEVICE_REMOVABLE_UNKNOWN);
+> >
+> > -     if (!hdev)
+> > +     if (!hdev) {
+> > +             /*
+> > +              * If the root hub sits on a removable device, mark the root hub
+> > +              * removable as well. This helps with the USB root hubs sitting
+> > +              * on the thunderbolt docks.
+> > +              */
+> > +             if (udev->dev.parent && dev_is_removable(udev->dev.parent))
+> > +                     dev_set_removable(&udev->dev, DEVICE_REMOVABLE);
+> >               return;
+> > +     }
+>
+> How far "up the chain" are you going to go here?  What if the
+> thunderbolt device is on a PCI device that can be removed?  What if that
+> PCI device is on a PCI bus that can be removed?
+
+PCI already takes care of that.
+
+>
+> Is a USB controller on a docking device really "removable"?
+>
+> The goal here is to say if this device itself is removable in the sense
+> of "I can yank this out", and a roothub is not that type of device.
+>
+> What problem are you trying to solve with this series?
+
+Essentially we're trying to collect some statistics (and perhaps
+implement some policies) that require differentiating between internal
+USB devices and external USB devices. Today, a root hub (whether
+internal or external) is always shown up as "unknown". Since the
+roothubs on a thunderbolt dock are removable from the system, IMHO it
+is appropriate to indicate the same in sysfs.
+
+Thanks,
+
+Rajat
+
+>
+> thanks,
+>
+> greg k-h
