@@ -2,102 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0AE42058B
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 07:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD804205B2
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Oct 2021 08:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232518AbhJDFSe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Oct 2021 01:18:34 -0400
-Received: from mga17.intel.com ([192.55.52.151]:17601 "EHLO mga17.intel.com"
+        id S232606AbhJDGKk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Oct 2021 02:10:40 -0400
+Received: from mga04.intel.com ([192.55.52.120]:63978 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232388AbhJDFSd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 Oct 2021 01:18:33 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10126"; a="206099171"
-X-IronPort-AV: E=Sophos;i="5.85,344,1624345200"; 
-   d="scan'208";a="206099171"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2021 22:16:45 -0700
-X-IronPort-AV: E=Sophos;i="5.85,344,1624345200"; 
-   d="scan'208";a="566826043"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2021 22:16:39 -0700
-Received: by lahna (sSMTP sendmail emulation); Mon, 04 Oct 2021 08:16:36 +0300
-Date:   Mon, 4 Oct 2021 08:16:36 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kuppuswamy, Sathyanarayanan" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jason Wang <jasowang@redhat.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v2 4/6] virtio: Initialize authorized attribute for
- confidential guest
-Message-ID: <YVqONA0vhl0/H3QE@lahna>
-References: <CAPcyv4hP6mtzKS-CVb-aKf-kYuiLM771PMxN2zeBEfoj6NbctA@mail.gmail.com>
- <6d1e2701-5095-d110-3b0a-2697abd0c489@linux.intel.com>
- <YVXWaF73gcrlvpnf@kroah.com>
- <1cfdce51-6bb4-f7af-a86b-5854b6737253@linux.intel.com>
- <YVaywQLAboZ6b36V@kroah.com>
- <CAPcyv4gqs=KuGyxFR61QWqF6HKrRg851roCGUqrq585+s2Cm=w@mail.gmail.com>
- <20211001164533.GC505557@rowland.harvard.edu>
- <CAPcyv4i__reKFRP1KjWUov_W5jBQN9_vbUbKRL_V7KMM3oPuuQ@mail.gmail.com>
- <20211001190048.GA512418@rowland.harvard.edu>
- <CAPcyv4hYL51DcBuSuyMRFo5Jcc=zLd=Ugo+H_2saELcZ5AJBeQ@mail.gmail.com>
+        id S231935AbhJDGKk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 Oct 2021 02:10:40 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10126"; a="224060982"
+X-IronPort-AV: E=Sophos;i="5.85,345,1624345200"; 
+   d="scan'208";a="224060982"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2021 23:08:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,345,1624345200"; 
+   d="scan'208";a="621606233"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 03 Oct 2021 23:08:48 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 04 Oct 2021 09:08:48 +0300
+Date:   Mon, 4 Oct 2021 09:08:48 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Xu Yang <xu.yang_2@nxp.com>
+Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-imx@nxp.com, jun.li@nxp.com
+Subject: Re: [PATCH] usb: typec: tcpm: handle SRC_STARTUP state if cc changes
+Message-ID: <YVqacFgq4fZzCawv@kuha.fi.intel.com>
+References: <20210928111639.3854174-1-xu.yang_2@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPcyv4hYL51DcBuSuyMRFo5Jcc=zLd=Ugo+H_2saELcZ5AJBeQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20210928111639.3854174-1-xu.yang_2@nxp.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On Fri, Oct 01, 2021 at 12:57:18PM -0700, Dan Williams wrote:
-> > > Ah, so are you saying that it would be sufficient for USB if the
-> > > generic authorized implementation did something like:
-> > >
-> > > dev->authorized = 1;
-> > > device_attach(dev);
-> > >
-> > > ...for the authorize case, and:
-> > >
-> > > dev->authorize = 0;
-> > > device_release_driver(dev);
-> > >
-> > > ...for the deauthorize case?
-> >
-> > Yes, I think so.  But I haven't tried making this change to test and
-> > see what really happens.
+On Tue, Sep 28, 2021 at 07:16:39PM +0800, Xu Yang wrote:
+> TCPM for DRP should do the same action as SRC_ATTACHED when cc changes in
+> SRC_STARTUP state. Otherwise, TCPM will transition to SRC_UNATTACHED state
+> which is not satisfied with the Type-C spec.
 > 
-> Sounds like a useful path for this effort to explore. Especially as
-> Greg seems to want the proposed "has_probe_authorization" flag in the
-> bus_type to disappear and make this all generic. It just seems that
-> Thunderbolt would need deeper surgery to move what it does in the
-> authorization toggle path into the probe and remove paths.
+> Per Type-C spec:
+> DRP port should move to Unattached.SNK instead of Unattached.SRC if sink
+> removed.
 > 
-> Mika, do you see a path for Thunderbolt to align its authorization
-> paths behind bus ->probe() ->remove() events similar to what USB might
-> be able to support for a generic authorization path?
+> Fixes: 4b4e02c83167 ("typec: tcpm: Move out of staging")
+> cc: <stable@vger.kernel.org>
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
-In Thunderbolt "authorization" actually means whether there is a PCIe
-tunnel to the device or not. There is no driver bind/unbind happening
-when authorization toggles (well on Thunderbolt bus, there can be on PCI
-bus after the tunnel is established) so I'm not entirely sure how we
-could use the bus ->probe() or ->remove for that to be honest.
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index a4d37205df54..7f2f3ff1b391 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4876,6 +4876,7 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
+>  			tcpm_set_state(port, SRC_ATTACH_WAIT, 0);
+>  		break;
+>  	case SRC_ATTACHED:
+> +	case SRC_STARTUP:
+>  	case SRC_SEND_CAPABILITIES:
+>  	case SRC_READY:
+>  		if (tcpm_port_is_disconnected(port) ||
+> -- 
+> 2.25.1
+
+-- 
+heikki
