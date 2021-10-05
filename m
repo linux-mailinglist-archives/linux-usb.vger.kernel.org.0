@@ -2,100 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAED2422519
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 13:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E1F422596
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 13:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234229AbhJELjj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 07:39:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54304 "EHLO mail.kernel.org"
+        id S234497AbhJELrb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 07:47:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58034 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234070AbhJELji (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 Oct 2021 07:39:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3DF7461371;
-        Tue,  5 Oct 2021 11:37:48 +0000 (UTC)
+        id S234405AbhJELr3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 Oct 2021 07:47:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5A0CE6159A;
+        Tue,  5 Oct 2021 11:45:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1633433868;
-        bh=t9DvBZnt4NNB7a0hcVaRvNBVvNKcckqWJY4ipVgovO0=;
+        s=korg; t=1633434338;
+        bh=NIra20hcsUHRkedpcLvDTNl826PaAkXsb/ZidiMq6Tc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lHE1QeNmznD6bnVbAVT3PwtWG3F6j6eAQyCCOUhGsVyLQyT/6RQWjOkdXYES9IjiY
-         hAVEW3AYeZStlx+Oz/2XuJ2Q3y7LKExTe+5+mafaKUWIlWkkgfGtHCKytRNFBpkF4S
-         DLAPqKDgZoDe3QeKwAJFPsiTe2UBjroyH0FS/CLo=
-Date:   Tue, 5 Oct 2021 13:37:46 +0200
+        b=Rmjl8B3U1XQSrhvF4OQDxaWuRe+VZy265wUVs+8+NEyXDsRMqXUstocsmlDiBH98O
+         EoeeBkELLrt0hO5d4GRs3Ccm3ZLgdqo7XmyYp9c5N9Px1maoN5nl8zVmKecrTTN5cY
+         O8bPFVNBW9rAp4LL/O7k87wlzpqDZemiQR3Yg5oY=
+Date:   Tue, 5 Oct 2021 13:45:36 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-usb@vger.kernel.org, hverkuil@xs4all.nl,
-        m.tretter@pengutronix.de, linux-media@vger.kernel.org
-Subject: Re: [RESEND PATCH v4] usb: gadget: uvc: fix multiple opens
-Message-ID: <YVw5CvvOAxa+6aat@kroah.com>
-References: <87pn261h4c.fsf@kernel.org>
- <20211003201355.24081-1-m.grzeschik@pengutronix.de>
- <YVuUDOf+BDTxe/IR@pendragon.ideasonboard.com>
- <YVwwECkXk+nKn7kE@kroah.com>
- <87a6jnzq64.fsf@kernel.org>
+To:     Salvatore Bonaccorso <carnil@debian.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ben Hutchings <ben@decadent.org.uk>
+Subject: Re: [PATCH] Partially revert "usb: Kconfig: using select for
+ USB_COMMON dependency"
+Message-ID: <YVw64IFwkvOk2Eu1@kroah.com>
+References: <20210921143442.340087-1-carnil@debian.org>
+ <YVTMUp7UUKUbsKwn@eldamar.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87a6jnzq64.fsf@kernel.org>
+In-Reply-To: <YVTMUp7UUKUbsKwn@eldamar.lan>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 05, 2021 at 02:06:22PM +0300, Felipe Balbi wrote:
+On Wed, Sep 29, 2021 at 10:28:02PM +0200, Salvatore Bonaccorso wrote:
+> Hi Greg,
 > 
-> Greg KH <gregkh@linuxfoundation.org> writes:
+> On Tue, Sep 21, 2021 at 04:34:42PM +0200, Salvatore Bonaccorso wrote:
+> > From: Ben Hutchings <ben@decadent.org.uk>
+> > 
+> > This reverts commit cb9c1cfc86926d0e86d19c8e34f6c23458cd3478 for
+> > USB_LED_TRIG.  This config symbol has bool type and enables extra code
+> > in usb_common itself, not a separate driver.  Enabling it should not
+> > force usb_common to be built-in!
+> > 
+> > Fixes: cb9c1cfc8692 ("usb: Kconfig: using select for USB_COMMON dependency")
+> > Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+> > Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
+> > ---
+> >  drivers/usb/common/Kconfig | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/usb/common/Kconfig b/drivers/usb/common/Kconfig
+> > index 5e8a04e3dd3c..b856622431a7 100644
+> > --- a/drivers/usb/common/Kconfig
+> > +++ b/drivers/usb/common/Kconfig
+> > @@ -6,8 +6,7 @@ config USB_COMMON
+> >  
+> >  config USB_LED_TRIG
+> >  	bool "USB LED Triggers"
+> > -	depends on LEDS_CLASS && LEDS_TRIGGERS
+> > -	select USB_COMMON
+> > +	depends on LEDS_CLASS && USB_COMMON && LEDS_TRIGGERS
+> >  	help
+> >  	  This option adds LED triggers for USB host and/or gadget activity.
 > 
-> > On Tue, Oct 05, 2021 at 02:53:48AM +0300, Laurent Pinchart wrote:
-> >> Hi Michael,
-> >> 
-> >> Thank you for resending this.
-> >> 
-> >> On Sun, Oct 03, 2021 at 10:13:55PM +0200, Michael Grzeschik wrote:
-> >> > From: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
-> >> > 
-> >> > Currently, the UVC function is activated when open on the corresponding
-> >> > v4l2 device is called.
-> >> > On another open the activation of the function fails since the
-> >> > deactivation counter in `usb_function_activate` equals 0. However the
-> >> > error is not returned to userspace since the open of the v4l2 device is
-> >> > successful.
-> >> > 
-> >> > On a close the function is deactivated (since deactivation counter still
-> >> > equals 0) and the video is disabled in `uvc_v4l2_release`, although the
-> >> > UVC application potentially is streaming.
-> >> > 
-> >> > Move activation of UVC function to subscription on UVC_EVENT_SETUP
-> >> > because there we can guarantee for a userspace application utilizing
-> >> > UVC.
-> >> > Block subscription on UVC_EVENT_SETUP while another application already
-> >> > is subscribed to it, indicated by `bool func_connected` in
-> >> > `struct uvc_device`.
-> >> > Extend the `struct uvc_file_handle` with member `bool is_uvc_app_handle`
-> >> > to tag it as the handle used by the userspace UVC application.
-> >> 
-> >> Reflowing the paragraph would be nice (this could be done when applying
-> >> the patch, or not at all).
-> >> 
-> >> > With this a process is able to check capabilities of the v4l2 device
-> >> > without deactivating the function for the actual UVC application.
-> >> > 
-> >> > Reviewed-By: Michael Tretter <m.tretter@pengutronix.de>
-> >> > Signed-off-by: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
-> >> > Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
-> >> > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> >> 
-> >> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> >> 
-> >> Felipe, please let me know if you want me to take this in my tree and
-> >> issue a pull request, otherwise I'll assume you'll pick it up.
-> >
-> > I'll pick it up now, thanks.
-> 
-> I guess it's too late for an Ack. FWIW:
-> 
-> Acked-by: Felipe Balbi <balbi@kernel.org>
+> Sorry for bothering you again. Is this patch now ok, or do you need me
+> to change something else? Or do I miss something?
 
-Nope, not too late, just added, thanks!
+Nope, sorry for the delay, now applied.
 
 greg k-h
