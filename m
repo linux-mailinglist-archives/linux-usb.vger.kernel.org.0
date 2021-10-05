@@ -2,82 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1DB34225A3
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 13:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8474225AE
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 13:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234351AbhJELua (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 07:50:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59236 "EHLO mail.kernel.org"
+        id S234457AbhJELv7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 07:51:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60012 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230500AbhJELu3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 Oct 2021 07:50:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9D6C561244;
-        Tue,  5 Oct 2021 11:48:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1633434518;
-        bh=xk7MxO9Fxnuns/+KM8Frjyu3gXpYqc1yrwJcw4nB31A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KswjUeyBfELdQTckIMtgk+Ct3HWF/tmFafOI9W6dDj2Iv+ofySK3NwRh2TieQ49jh
-         CfgNFK2tINxx1+Ru9e6NlZinTb78fTJLF1Do3Ac8JxDWuynXE3klncf/hTPvBoywP9
-         ccQyGn4PzIksLXIWUBIo8QK3Rixy28321yBC7FAg=
-Date:   Tue, 5 Oct 2021 13:48:36 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: STUSB160X should select REGMAP_I2C
-Message-ID: <YVw7lJ5TeFsYwAgC@kroah.com>
-References: <20211004232103.23893-1-rdunlap@infradead.org>
+        id S233672AbhJELv7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 Oct 2021 07:51:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id D4A5F61502;
+        Tue,  5 Oct 2021 11:50:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633434608;
+        bh=5H1e9VG8V483wq01PzCvLBbuUnY2XCEq4xrGesCLCUk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Kn6N5Aj+5TRKJNv99nINGDvyhIeqf0aH4MBSLE3lOshHWZpxQbjPcmA/31hkEyPGY
+         LJrw1pC3jp3ZS9bdW9ZFiq06vyHH1jcOgYVvK0iCUNwwiRKYLovjYbkL5p+giEfo98
+         wfM37m0SoI1SXW4LBdpbvL5Heu9PKedv/9/R9qFI1SbNd+af4TTdk/c8toCg2PTx+x
+         RwbhtZCOm8Zhz6WEBM7XtJhlTwxe0Mi9BckXriIhN5RJzGkU5f0Y1PNTb93eUcT6/c
+         sLg2tvpHfLVqR4eKd1+vb6UKjroj/T3AxPn+FuUqLBW1ZuMW1SUdBwlBiAwFUIOEG2
+         ZNMEglnxf6ENg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id CEA7360A53;
+        Tue,  5 Oct 2021 11:50:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211004232103.23893-1-rdunlap@infradead.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] r8152: avoid to resubmit rx immediately
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163343460884.12488.8334221276223981398.git-patchwork-notify@kernel.org>
+Date:   Tue, 05 Oct 2021 11:50:08 +0000
+References: <20211004062858.1679-381-nic_swsd@realtek.com>
+In-Reply-To: <20211004062858.1679-381-nic_swsd@realtek.com>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     jason-ch.chen@mediatek.com, kuba@kernel.org, davem@davemloft.net,
+        netdev@vger.kernel.org, nic_swsd@realtek.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 04, 2021 at 04:21:03PM -0700, Randy Dunlap wrote:
-> REGMAP_I2C is not a user visible kconfig symbol so driver configs
-> should not "depend on" it. They should depend on I2C and then
-> select REGMAP_I2C.
+Hello:
+
+This patch was applied to netdev/net.git (refs/heads/master):
+
+On Mon, 4 Oct 2021 14:28:58 +0800 you wrote:
+> For the situation that the disconnect event comes very late when the
+> device is unplugged, the driver would resubmit the RX bulk transfer
+> after getting the callback with -EPROTO immediately and continually.
+> Finally, soft lockup occurs.
 > 
-> If this worked, it was only because some other driver had set/enabled
-> REGMAP_I2C.
+> This patch avoids to resubmit RX immediately. It uses a workqueue to
+> schedule the RX NAPI. And the NAPI would resubmit the RX. It let the
+> disconnect event have opportunity to stop the submission before soft
+> lockup.
 > 
-> Fixes: da0cb6310094 ("usb: typec: add support for STUSB160x Type-C controller family")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Amelie Delaunay <amelie.delaunay@st.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-usb@vger.kernel.org
-> ---
->  drivers/usb/typec/Kconfig |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> [...]
 
-With this applied, I get the following build error:
+Here is the summary with links:
+  - [net] r8152: avoid to resubmit rx immediately
+    https://git.kernel.org/netdev/net/c/baf33d7a7564
 
-drivers/of/Kconfig:69:error: recursive dependency detected!
-drivers/of/Kconfig:69:	symbol OF_IRQ depends on IRQ_DOMAIN
-kernel/irq/Kconfig:59:	symbol IRQ_DOMAIN is selected by REGMAP
-drivers/base/regmap/Kconfig:7:	symbol REGMAP default is visible depending on REGMAP_I2C
-drivers/base/regmap/Kconfig:20:symbol REGMAP_I2C is selected by TYPEC_STUSB160X
-drivers/usb/typec/Kconfig:66:	symbol TYPEC_STUSB160X depends on USB_ROLE_SWITCH
-drivers/usb/roles/Kconfig:3:	symbol USB_ROLE_SWITCH is selected by USB_MUSB_MEDIATEK
-drivers/usb/musb/Kconfig:119:	symbol USB_MUSB_MEDIATEK depends on GENERIC_PHY
-drivers/phy/Kconfig:8:	symbol GENERIC_PHY is selected by PHY_BCM_NS_USB3
-drivers/phy/broadcom/Kconfig:49:	symbol PHY_BCM_NS_USB3 depends on MDIO_BUS
-drivers/net/mdio/Kconfig:13:	symbol MDIO_BUS depends on MDIO_DEVICE
-drivers/net/mdio/Kconfig:6:	symbol MDIO_DEVICE is selected by PHYLIB
-drivers/net/phy/Kconfig:16:	symbol PHYLIB is selected by ARC_EMAC_CORE
-drivers/net/ethernet/arc/Kconfig:19:	symbol ARC_EMAC_CORE is selected by ARC_EMAC
-drivers/net/ethernet/arc/Kconfig:25:	symbol ARC_EMAC depends on OF_IRQ
-For a resolution refer to Documentation/kbuild/kconfig-language.rst
-subsection "Kconfig recursive dependency limitations"
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-So I can't take it as-is :(
 
-thanks,
-
-greg k-h
