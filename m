@@ -2,114 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E704221F9
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 11:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED04422277
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 11:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232920AbhJEJUB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 05:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55914 "EHLO
+        id S233593AbhJEJjb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 05:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232478AbhJEJUB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 05:20:01 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACA5C061745;
-        Tue,  5 Oct 2021 02:18:10 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id f9so13332523edx.4;
-        Tue, 05 Oct 2021 02:18:10 -0700 (PDT)
+        with ESMTP id S232871AbhJEJja (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 05:39:30 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571F9C061745
+        for <linux-usb@vger.kernel.org>; Tue,  5 Oct 2021 02:37:40 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id s24so15815411wmh.4
+        for <linux-usb@vger.kernel.org>; Tue, 05 Oct 2021 02:37:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rj+oAzgC66Qe4QKG9+z5cKi2AHZOILfEGPSW29imrpI=;
-        b=CHQHokDEoACabVhVf2NKf65knXyhFZScgOfTwJRmF1hEETjM6lI9kBgiDxJBuq7iY3
-         8+WMKbCj2PKR8WVu9yQbmVL5mSc6+0mjavM0lg/ip2oxsUoT1Cwij0G2KWAEMdHGbaP0
-         pzXpPgiKR/DsMHTRMT4a8Z6e38kfKBRCAKJHTUH1yifV1lS9Sm31oEVS7nCAOIOYFevN
-         OUIH0nIYHmBcPbKOISuze/32sxV+XeJ3xKpY3D4L9C7OPj7/TrvxT6zuED/jLI3v50Io
-         vuFGro4gfj5xfixqhhsVD2kk7uyBbUDE4GuMFbfGcfuXjJrX58xrIB7z7uBiFdB7yruV
-         T0VA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=jHynZwHmsCXqTQ1gDKIx14gfCImPOW9MhidoNpGAmk0=;
+        b=4fKEQu3j83XK1G1iPm9PDU9n1rx8lbAcpgDwTDk2uKZV9zvPREdtT/391HX0yxSyPp
+         aEe/eHPkF4w0H16j5Y/G08SxbCeS/k7SGzA6S8HcRMd2zcdW0yIt2AuoCs39Lie4zjAb
+         icY5O9uo/5+74Nyj5XD3uy20e/9XMrTpXjAB8z9GlHTTFx5xZUqWZ5y03KabzSJXoQCS
+         q/Frw5n3+gyDmo8ksIEgXPitJm1SR5WWWNa05r694b3cb1toH8ZOX+UDuneT8lBjnePo
+         nnP7OSbIUvY7FkNzGatosv+brNgcj3YTDZhqfQWPXy/51tMCG6EZj2xGoHK4lJYToY1y
+         f9ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rj+oAzgC66Qe4QKG9+z5cKi2AHZOILfEGPSW29imrpI=;
-        b=31J4ag73kEGHa4aierOs6Fr9zuVwQuSfZ44BqDCEbdc+Y9ZtO0xK+ALh+wdIbeNzFx
-         eP+e/MIU6hI05oEXrUeHMfQRW9Pw8bt2lWVea1vN9xjcSi1hH62LFSDY1QVpG1KROqoA
-         c1K16txZLgz1JxLwJqPB0mxDc/2GObLlDLNmzgaB5DI4nEt8OKU2odmvwkhZvkZOzMBL
-         uxlJ2ImFPAOf5C+88qVl9CH+V1FhV3dlhEnfwonAQEwIHglkPDhhTtgteBYIvmTwKI45
-         DoH0GbXDqtUwB9VK7ONwHESH9HIwOPPOUD+z1JN3LFUICyfglUdyyE7zDI4j1lryj+Iw
-         Km4w==
-X-Gm-Message-State: AOAM533gCtozw+R8jUw1TQ6Dv/uiyinPvOUW0t+AJlbz4qX1TYKoNPYp
-        wp0Uyvac48+8ZfOINpezb8AXDHiCCucsh5sEXyM=
-X-Google-Smtp-Source: ABdhPJwXWslNGbECLTCutNYrjGjEsl1aqNqGLMo9C/wOQ1gaGhlwWqJtSbJKX13zz/WyVDNqbzTjcB6RzNztSiPudws=
-X-Received: by 2002:a50:e142:: with SMTP id i2mr24359986edl.107.1633425489213;
- Tue, 05 Oct 2021 02:18:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211004141839.49079-1-andriy.shevchenko@linux.intel.com>
- <7019ca3e-f076-e65b-f207-c23a379ade29@gmail.com> <20211005085100.GB17524@pengutronix.de>
-In-Reply-To: <20211005085100.GB17524@pengutronix.de>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 5 Oct 2021 12:17:32 +0300
-Message-ID: <CAHp75Ve6cpNkF3BB7LQhaXdQcW5j6X8QVbPj9aQy2JLgDppBfw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] usb: dwc3: gadget: Revert "set gadgets parent to
- the right controller"
-To:     Michael Grzeschik <mgr@pengutronix.de>
-Cc:     Ferry Toth <fntoth@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=jHynZwHmsCXqTQ1gDKIx14gfCImPOW9MhidoNpGAmk0=;
+        b=kIjMcv0mNtt6IszTVcTkKO8uYjOUDuHwlK7YQIN9fwRcgjzDSua8KMucAflBGSgx1S
+         ccl5xbU2Ek82loj/RijNaXlym0ctaRzN/fPnDvNPCr+XP7Cmy3YU8RpWOVEXpKcnFFwT
+         ocpnCC37Jvdmb9UzdgoA2XjmbFCt8nBVJMn5RZ+OGdVc/CpnufIGUdzBqB0a0VwMjWqT
+         wJMgJtyUWDJT61Stc0BGvB5ojuj1fLFLEAus+OpuFy0Yg6A8cz8YLKWNduZTHfZIidz7
+         qbCdjlrjwD5GqXzimokTi5WV9perRy41vYQjeWdab4G8DUSqDg9OakmqcAEQ8lzFY0c4
+         FP6g==
+X-Gm-Message-State: AOAM531mx4a8tuAMaJtldvFikfImLV9GfA45vuE5JfkuFVIdiWxh4CZO
+        /kH9/DoHD3QaAh0pnhOkGr1YIA==
+X-Google-Smtp-Source: ABdhPJyGxS87q8cuJZBC4cnVRnHMqwArMU8eG1KkuWcznxoAyyS1b5olLW2EiAtsI8LhHsCOkqzZKg==
+X-Received: by 2002:a05:600c:4844:: with SMTP id j4mr2255992wmo.145.1633426658872;
+        Tue, 05 Oct 2021 02:37:38 -0700 (PDT)
+Received: from jackdaw.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id h15sm9175537wrt.0.2021.10.05.02.37.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Oct 2021 02:37:38 -0700 (PDT)
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jack Pham <jackp@codeaurora.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-usb@vger.kernel.org
+Subject: [RFC PATCH 1/2] usb: gadget: uac2: fix maximum bandwidth calculation
+Date:   Tue,  5 Oct 2021 11:37:28 +0200
+Message-Id: <20211005093729.628833-1-jbrunet@baylibre.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <1jmtnnvo2x.fsf@starbuckisacylon.baylibre.com>
+References: <1jmtnnvo2x.fsf@starbuckisacylon.baylibre.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 5, 2021 at 11:52 AM Michael Grzeschik <mgr@pengutronix.de> wrote:
-> On Mon, Oct 04, 2021 at 10:35:57PM +0200, Ferry Toth wrote:
-> >Op 04-10-2021 om 16:18 schreef Andy Shevchenko:
-> >>The commit c6e23b89a95d ("usb: dwc3: gadget: set gadgets parent to the right
-> >>controller") changed the device for the UDC and broke the user space scripts
-> >>that instantiate the USB gadget(s) via ConfigFS.
-> >
-> >I confirm this regression on Intel Edison since at least 5.15-rc2
-> >while in 5.14.0 it was working fine.
-> >
-> >This patch resolves the issue as tested on 5.15-rc4.
-> >
-> >Tested-by: Ferry Toth<fntoth@gmail.com>
->
-> NACK! Why should we resolv an issue by reverting it to solve not working
-> userspace.
+This fixes the wMaxPacketSize of the audio gadget so it is in line with
+USB Audio Format specification - section 2.3.1.2.1
 
-Huh?!
+Cc: Jack Pham <jackp@codeaurora.org>
+Cc: Pavel Hofman <pavel.hofman@ivitera.com>
+Fixes: e89bb4288378 ("usb: gadget: u_audio: add real feedback implementation")
+Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+---
+ There was a mistake in my previous mail, rounding depends on the
+ synchronisation, not the stream direction.
 
-It is
- a) used to work;
- b) stopped working after your commit.
+ drivers/usb/gadget/function/f_uac2.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-To me it's a clear regression. Whatever deeper problem is there, I
-really don't care. The change broke my _user space_ case!
-
-> We already have this patch as a solution for solving a deeper
-> Problem, regarding the allocator addressing the right device.
-
-Then rework it. You have still time. Your case wasn't working and one
-more release of not working is not an issue here.
-
-> >>Revert it for now until the better solution will be proposed.
->
-> So, I think fixing the userspace would be the right fix,
-
-Huh?!
-https://www.kernel.org/doc/html/latest/process/4.Coding.html#regressions
-
-> not changing
-> the kernel. Otherwise we should find a proper solution.
-
-So, please do. v5.15 should still work on our devices with
-distribution that uses ConfigFS, no?
-
-
+diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+index ae29ff2b2b68..c152efa30def 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -554,7 +554,7 @@ static int set_ep_max_packet_size(const struct f_uac2_opts *uac2_opts,
+ 	struct usb_endpoint_descriptor *ep_desc,
+ 	enum usb_device_speed speed, bool is_playback)
+ {
+-	int chmask, srate, ssize;
++	int chmask, srate, ssize, spf;
+ 	u16 max_size_bw, max_size_ep;
+ 	unsigned int factor;
+ 
+@@ -584,11 +584,12 @@ static int set_ep_max_packet_size(const struct f_uac2_opts *uac2_opts,
+ 		ssize = uac2_opts->c_ssize;
+ 	}
+ 
+-	if (!is_playback && (uac2_opts->c_sync == USB_ENDPOINT_SYNC_ASYNC))
+-		srate = srate * (1000 + uac2_opts->fb_max) / 1000;
++	if (uac2_opts->c_sync == USB_ENDPOINT_SYNC_ADAPTIVE)
++		spf = DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1)));
++	else
++		spf = (srate / (factor / (1 << (ep_desc->bInterval - 1)))) + 1;
+ 
+-	max_size_bw = num_channels(chmask) * ssize *
+-		DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1)));
++	max_size_bw = num_channels(chmask) * ssize * spf;
+ 	ep_desc->wMaxPacketSize = cpu_to_le16(min_t(u16, max_size_bw,
+ 						    max_size_ep));
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.33.0
+
