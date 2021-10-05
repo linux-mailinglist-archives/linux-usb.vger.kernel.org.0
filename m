@@ -2,147 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2EE6422EEB
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 19:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8AE423030
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 20:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236766AbhJERSJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 13:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236636AbhJERSF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 13:18:05 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97E5C061749;
-        Tue,  5 Oct 2021 10:16:14 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id u18so89541742lfd.12;
-        Tue, 05 Oct 2021 10:16:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=v4VMlYai/5OJD6I0jXVUBp7T7QQDEKF1EDfzlyrXPNg=;
-        b=W2HYfURkJzDMqxvMvdLnaSxyL8uT7r1csfbSZPSbXORQw+cwWFtMynJRUEG4LiQrHQ
-         y3v5acYIRN1Eb0FbSRLCSIRtUZRGATp/wXu0GpAF7MIKkyEe30yYqs44aRZ5hx7PQUf8
-         KTIq6kvEdh07WxUJ9lahyZFbc91AomDi579Y3/gpCjlzb6mopUwQ7ho2PCW0cuccDWMY
-         /i99LFk5tTWbSOuutGf0fRJHd37tPZRn46J6NSoa+sUFqOvBAVR+EQT9iPI/71vRNDUs
-         E1DUIcTLGVE0YH8x38A9SKJivF5TQbdR1jagf785PZye81GIeWabHB+XUJ5q/1UXW+WG
-         AQEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=v4VMlYai/5OJD6I0jXVUBp7T7QQDEKF1EDfzlyrXPNg=;
-        b=DuF4QpkjwFbd4dwlYAhig4rmQJm8ielyZnZ9Ys+SAdiAecq64Ir6wFBUuPbV4j1M+n
-         l8WZxK7bHDsWhMoefwJ8ThuVZM6f2HxW6SJP+kANUWoH6YuK7xvfuAofdrEp+uPjbDQt
-         e2JlK9dJNKr5t7emnh1CplDlaTY+g0h+lGvquMTkLSNTGGSaona6zhrrvCtDWTpQeoF8
-         QNlx7oJuIC2y+Kr52lLRm+BSzcT2/n3hzqhc/wxoPLMLqcZ4IiNofE3rn4A0ThxHZhb+
-         hwVsNNjbCj25/cAMYZBmkAeSgI+512ATeaK867OLdlENIY7XmKIqAT9NIGCr+lslVwWu
-         6dlQ==
-X-Gm-Message-State: AOAM530Y30SpHEqmWsHTtTGfeSHetiuNcwwgRNU1PxSomh39kkYnrjs/
-        4rL44LG/rgUyZvo76ZOMgsQ=
-X-Google-Smtp-Source: ABdhPJzFxn+EEvAfXINlDGqbDWfWJzkpl0QRwm+Z1jKxlyPCyoz5MyhKfZrnAr2zjaXtazuDCKJIlw==
-X-Received: by 2002:a05:6512:10d0:: with SMTP id k16mr4573650lfg.530.1633454173285;
-        Tue, 05 Oct 2021 10:16:13 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
-        by smtp.googlemail.com with ESMTPSA id o12sm2013505lft.254.2021.10.05.10.16.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Oct 2021 10:16:12 -0700 (PDT)
-Subject: Re: [PATCH v13 13/35] drm/tegra: gr2d: Support generic power domain
- and runtime PM
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-References: <20210926224058.1252-1-digetx@gmail.com>
- <20210926224058.1252-14-digetx@gmail.com>
- <CAPDyKFpzhv1UxjM0q5AWHVxTWC_cCO_Kg_6exO0o_=EoVvjo+w@mail.gmail.com>
- <aad7a508-7fb5-3418-f902-def80c365094@gmail.com>
- <CAPDyKFppSuP6FfaBaGn3o+8WvTT=vJ8XMzZ47WPQ1JKiUYyEpw@mail.gmail.com>
- <8d75436d-864a-7ce0-ba53-daa8b663035a@gmail.com>
- <CAPDyKFpqs5gUcym4q+GuiJy13eXqjEnx-eFdUT4bQpcfPAOEYw@mail.gmail.com>
- <f5b5e06a-71ed-1250-f0ad-692062e00e01@gmail.com>
- <CAPDyKFpWzLdKr0bYX4VYwNpPuJNEs=weEpNpDH6zfv9e8SaxJQ@mail.gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <65f5ea6a-5d04-57cc-f4e4-bf29f22af7f0@gmail.com>
-Date:   Tue, 5 Oct 2021 20:16:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <CAPDyKFpWzLdKr0bYX4VYwNpPuJNEs=weEpNpDH6zfv9e8SaxJQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S234965AbhJESpF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 14:45:05 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:32402 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234814AbhJESpD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 Oct 2021 14:45:03 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1633459392; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=VxckCmuQtWYSVYMDG0u11asx7Ol/Ub6Xw7bAx5Zye9g=; b=QY6XwsdWpCSfKeWSsy1yIZy78Hq5OlMzQxn6Y7xHY1T7DcQT7yIDhuCvGxY/3k2xYZAnD0HZ
+ EwK+GQ3frJB4yHQnCl3iWSqQIHZm4p3p5U9Cf7gJkUrGquQrkGWYqotDqjZ7Eear/25+Y9Is
+ PeZuD7M4TM/Gn2AlbK/cqpvS7IA=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
+ 615c9cb68ea00a941f28ac4f (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 05 Oct 2021 18:43:02
+ GMT
+Sender: pmaliset=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B6262C43460; Tue,  5 Oct 2021 18:43:02 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from pmaliset-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmaliset)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id AD284C4338F;
+        Tue,  5 Oct 2021 18:42:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org AD284C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Prasad Malisetty <pmaliset@codeaurora.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, bhelgaas@google.com,
+        robh+dt@kernel.org, swboyd@chromium.org, lorenzo.pieralisi@arm.com,
+        svarbanov@mm-sol.com
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
+        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org,
+        linux-pci@vger.kernel.org,
+        Prasad Malisetty <pmaliset@codeaurora.org>
+Subject: [PATCH v11 0/5] Add DT bindings and DT nodes for PCIe and PHY in SC7280
+Date:   Wed,  6 Oct 2021 00:12:34 +0530
+Message-Id: <1633459359-31517-1-git-send-email-pmaliset@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-...
->> It's not a problem to change this patchset. The problem is that if
->> you'll grep mainline for 'pm_runtime_disable', you will find that there
->> are a lot of drivers in a potential trouble.
-> 
-> Let's start by fixing this patchset, please - then we can consider
-> what to do with the other cases separately.
+Changes added in v11:
 
-Yeah, should be better to discuss it separately.
+	* Modified nvme_pwren name as nvme_pwren.
+	* Removed bias-pullup option in nvme_pwren entry [v11 Patch 3/5].
+	* Changed pcie1_default_state name to pcie1_clkreq_n.
+	* Added NULL pointer check for pcie_cfg.
 
-...
->>  void __pm_runtime_disable(struct device *dev, bool check_resume)
->>  {
->> +       flush_work(&dev->power.work);
->> +
-> 
-> What about the latency this may introduce? I am not sure that is
-> acceptable here!?
+Changes added in v10:
 
-I'm not aware about any code which relies on the original 'cancelling'
-behaviour, perhaps Rafael should have more insight.
+	* v9 [Patch 4/4/] has been split into two separate patches
+	* Addressed all comments in IDP [Patch 3/4] file.
+ 	
+Changes added in v9:
+    * Added fixed regulator entry for nvme.suggested by Stephen Boyd
+    * Added NULL pointer check before accessing ops in pcie probe
+      Suggested by Stephen Boyd
 
-...
->> The sysfs rpm-forbid is a separate problem and it's less troublesome
->> since it requires root privileges. It's also not something that
->> userspace touches casually. For now I don't know what could be done
->> about it.
-> 
-> As I said, the common method to address this problem is to run the
-> following sequence:
-> 
-> pm_runtime_get_sync()
-> "power off the device"
-> pm_runtime_disable()
-> pm_runtime_put_noidle()
-> 
-> This works even if user space, via sysfs, has triggered a call to
-> pm_runtime_forbid(). Or doesn't it?
-> 
-> If you don't like it, pm_runtime_force_suspend() should work too, at
-> least for your cases, I believe.
+Changes added in v8:
 
-I'll update the patches, thank you.
+    * Added seperate pinctrl state for NVMe LDO enable pin [v8 P3/4]
+    * Removed pointer initialization for pcie_cfg [v8 P4/4]
+    * Replaced bool pcie_pipe_clk_src with unsigned int:1 [v8 P4/4]
+    * Changed gcc_pcie_1_pipe_clk_src to pipe_clk_src
+
+Changes added in v7:
+
+        * Removed two fallbacks qcom,pcie-sm8250 and snps,dw-pcie.
+        * Replaced compatible method in get_resources_2_7_0 with
+            flag approach suggested by Bjorn Helgaas .
+        * Setting gcc_pcie_1_clk_src as XO in init_2_7_0 for
+          gdsc enable.
+        * Added specific NVMe GPIO entries for SKU1 and SKU2 support
+          in idp.dts and idp2.dts respectively.
+        * Moved pcie_1 and pcie_1_phy board specific entries into common
+          board file sc7280-idp.dtsi file.
+
+Changes in v6:
+
+    * Removed platform check while setting gcc_pcie_1_pipe_clk_src
+          as clk_set_parent will return 0 with nop if platform doesn't
+          need to switch pipe clk source.
+        * Moved wake-n gpio to board specific file sc7280-idp.dtsi
+        * Sorted gpio.h header entry in sc7280.dtsi file
+
+Changes in v5:
+
+        * Re ordered PCIe, PHY nodes in Soc and board specific dtsi files.
+        * Removed ref_clk entry in current patch [PATCH v4 P4/4].
+        * I will add ref clk entry in suspend/ resume commits.
+        * Added boolean flag in Soc specific dtsi file to differentiate
+          SM8250 and SC7280 platforms. based on boolean flag, platforms will handle
+          the pipe clk handling.
+
+Changes in v4 as suggested by Bjorn:
+
+        * Changed pipe clk mux name as gcc_pcie_1_pipe_clk_src.
+        * Changed pipe_ext_src as phy_pipe_clk.
+        * Updated commit message for [PATCH v4 4/4].
+
+Changes in v3:
+        * Changed pipe clock names in dt bindings as pipe_mux and phy_pipe.
+        * Moved reset and NVMe GPIO pin configs into board specific file.
+        * Updated pipe clk mux commit message.
+
+Changes in v2:
+        * Moved pcie pin control settings into IDP file.
+        * Replaced pipe_clk_src with pipe_clk_mux in pcie driver
+        * Included pipe clk mux setting change set in this series
+
+
+Prasad Malisetty (5):
+  dt-bindings: pci: qcom: Document PCIe bindings for SC7280
+  arm64: dts: qcom: sc7280: Add PCIe and PHY related nodes
+  arm64: dts: qcom: sc7280: Add PCIe nodes for IDP board
+  PCI: qcom: Add a flag in match data along with ops
+  PCI: qcom: Switch pcie_1_pipe_clk_src after PHY init in SC7280
+
+ .../devicetree/bindings/pci/qcom,pcie.txt          |  17 +++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts            |   8 ++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |  50 +++++++++
+ arch/arm64/boot/dts/qcom/sc7280-idp2.dts           |   8 ++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               | 117 +++++++++++++++++++++
+ drivers/pci/controller/dwc/pcie-qcom.c             |  95 +++++++++++++++--
+ 6 files changed, 284 insertions(+), 11 deletions(-)
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
