@@ -2,64 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E7E422B83
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 16:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48239422B97
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 16:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234355AbhJEOyO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 10:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233705AbhJEOyO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 10:54:14 -0400
-Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [IPv6:2001:67c:2050::465:103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DFBC061749
-        for <linux-usb@vger.kernel.org>; Tue,  5 Oct 2021 07:52:23 -0700 (PDT)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [80.241.60.233])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4HP0tD2kyhzQjb8;
-        Tue,  5 Oct 2021 16:52:20 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=robgreener.com;
-        s=MBO0001; t=1633445538;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=02vH2CzMrUzkaIRN7keagRPxwssZRYJkRAo1T8U7PrU=;
-        b=nUliYwOCMX/B88HLL/cbhIkmGPHV2C0tnVdWJqqHknoMAJ1F8oF8Jdl4YaZMg3cR4IWcch
-        Jm/YqlYgYwA0m8AyYmfAJFPKoqhso2xptEYw30Qk2EjltA93z5Rtg10mdyyjO4sClxxJvx
-        KLOOXs9sdT1rAbXBjTrNkeeVSKowyqPax9s0yYQA7wLLt4cL5PB4MmbAJdoSdjGJ0gju1T
-        lNu9aOeS+4DJDc5j2ko3LwNpcwgwo3bOkHkhJ386zme+iaD6oWJzBJwAzl+aSKrch5Z0gj
-        fUIBtyAX6WSeOXOuFEH9Ew0X8MFCeOExvRWyphGpPkaIejNMkW9vyqdWlWggew==
-Date:   Tue, 5 Oct 2021 15:52:17 +0100
-From:   Robert Greener <rob@robgreener.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH 00/13] usb: core: config: fix all checkpatch.pl warnings
-Message-ID: <20211005145217.swnjcyz7ttzonpzf@shortbread>
-References: <cover.1633442131.git.rob@robgreener.com>
- <YVxjRwICqt02inCM@kroah.com>
+        id S235042AbhJEO6r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 10:58:47 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:34889 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S229488AbhJEO6q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 10:58:46 -0400
+Received: (qmail 623870 invoked by uid 1000); 5 Oct 2021 10:56:55 -0400
+Date:   Tue, 5 Oct 2021 10:56:55 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Rajat Jain <rajatja@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Torokhov <dtor@google.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        levinale@google.com, bleung@google.com, rajatxjain@gmail.com,
+        jsbarnes@google.com, pmalani@google.com
+Subject: Re: [PATCH 2/2] usb: hub: Mark devices downstream a removable hub,
+ as removable
+Message-ID: <20211005145655.GJ621017@rowland.harvard.edu>
+References: <20210929224823.556943-1-rajatja@google.com>
+ <20210929224823.556943-2-rajatja@google.com>
+ <YVVLxi/on9x6nfCZ@kroah.com>
+ <CACK8Z6EamamgYExt629gyNrYKpvnu2Gh0eGOOvOa5LH-jnOmaQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YVxjRwICqt02inCM@kroah.com>
-X-Rspamd-Queue-Id: A983726B
+In-Reply-To: <CACK8Z6EamamgYExt629gyNrYKpvnu2Gh0eGOOvOa5LH-jnOmaQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 05, 2021 at 04:37:59PM +0200, Greg KH wrote:
-> First off, your cc: list was corrupted and stripped everything off :(
- 
-Sorry, will make double check this in future...
-
-> On Tue, Oct 05, 2021 at 02:55:31PM +0100, Robert Greener wrote:
-> > This patchset fixes all checkpatch warnings in drivers/usb/core/config.c
+On Mon, Oct 04, 2021 at 03:42:46PM -0700, Rajat Jain wrote:
+> +Dmitry Torokhov
 > 
-> Please do not do this for subsystems that do not explicitly ask for it.
+> Hi Greg, Oliver,
+> 
+> Thanks for taking a look.
+> 
+> On Wed, Sep 29, 2021 at 10:31 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Wed, Sep 29, 2021 at 03:48:23PM -0700, Rajat Jain wrote:
+> > > If a usb device sits below a removable hub, mark the device also as
+> > > removable. This helps with devices inserted on a standard removable hub or
+> > > also thunderbold docks, to be shown as removable.
+> > >
+> > > Signed-off-by: Rajat Jain <rajatja@google.com>
+> > > ---
+> > >  drivers/usb/core/hub.c | 7 +++++++
+> > >  1 file changed, 7 insertions(+)
+> >
+> > Combined with the previous patch, you are now marking all devices that
+> > happen to be attached to a root hub that is on a thunderbolt controller
+> > as removable.  So all USB devices inside of a docking station are now
+> > removable?
+> 
+> With this patch, yes that was my intent. I think what we are debating
+> here is should the "removable" attribute imply possibility of removal
+> from "the system" or just the "local immediate box" (e.g. thunderbolt
+> dock). In my mind, the removable property was analogous to imply an
+> "external device", i.e a device that may be removed from the system,
+> perhaps as a result of its parent devices being removed from the
+> system. I guess this definition doesn't match what you believe it
+> should be?
 
-Sure.
+As I understand it, the "removable" property refers specifically to 
+the device's upstream link, not to whether _any_ of the links leading 
+from the device to the computer could be removed.
 
-Thanks,
-Robert
+This is probably what Oliver meant when he complained about losing 
+information.  With the knowledge of whether each individual link is 
+removable, you can easily tell whether there's some way to remove a 
+device from the system.  But if you only know whether the device is 
+removable from the system overall, you generally can't tell whether 
+the link to the device's parent is removable.
+
+Alan Stern
