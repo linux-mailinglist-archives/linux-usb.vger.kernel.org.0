@@ -2,440 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50693422748
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 15:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE6D422771
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 15:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233977AbhJEND1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 09:03:27 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:38846 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233365AbhJEND0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 09:03:26 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1633438896; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=LZweFgUzCLruRQSKdctiwYf0bITb8qFZlgKQzicABKY=;
- b=XSG7XFG4g5sV1kLRswoStZdkeNRPv5xPf4oGmM8roVG/z2ZpU3sC214i8js01r0Zcg3f0Q0R
- mFBiH7li+6V2tgpYPTON4Gfsexg5omyAmnBw8X/Fhga52bRyzdShV9sMjJOn2LjiWv6tGeAE
- Y7rXBL0/exOyOzX6KhqWxWr/Ui0=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
- 615c4ca4713d5d6f963bfb5a (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 05 Oct 2021 13:01:24
- GMT
-Sender: schowdhu=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 687DDC43616; Tue,  5 Oct 2021 13:01:23 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: schowdhu)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E95CCC43460;
-        Tue,  5 Oct 2021 13:01:21 +0000 (UTC)
+        id S235003AbhJENNC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 09:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234959AbhJENNA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 09:13:00 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18788C061749
+        for <linux-usb@vger.kernel.org>; Tue,  5 Oct 2021 06:11:10 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id y23so46707406lfb.0
+        for <linux-usb@vger.kernel.org>; Tue, 05 Oct 2021 06:11:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=jjr/5gs80cWEm3vhyk3aM1mKvl135EXltar2PLrRZ/k=;
+        b=P2GJcTPd6Kk45HZ8Ezt3mOStexgciMfR/ERjqn7quus9WPj7c0pgJ31TVKDyKIyFGw
+         Y+F7WGFBzXS/vp5jDxxMyzTz/hmBB5xPYGuEv6qEQ23KVdyCACYcfsWUkcNmRV/ofYHS
+         vE4LfuNllox/XGETXWlqstK2Q0L/vr7oXCynROhlgtpi4vvXnVvj6wEyBllh0eoIaYn8
+         f40td9gch4cO2Jp1h51EkJPAQ6/xwpwREWWIr5YIzLYLVQSBM9my6mb9NpueANAdQfBZ
+         CLGXLy2HZcaqGOasKeUtPNXPs47D7ubFHOmVm/lx2TuvCwySuEvv9iGf+AtaMpafWnSk
+         y69w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=jjr/5gs80cWEm3vhyk3aM1mKvl135EXltar2PLrRZ/k=;
+        b=V34tpv+dpUJh0BUnI6F0k5zxjpXpuHC3CztD1OCquXnfFaTPmX17w4tZ3E4Y4i894t
+         h1pd4zNftCtYWRrRNif45L9jpnQmLkNYT/ug4uSHHFCK2tClOc9Mb8VglH2IAYrc9FiE
+         1b9UVwHSLHKDmteh1aLTqGDLuWeLnqfzQGzE07OaO0LHs/KmseXLYN3tpVw+a9JZLurJ
+         Ac7z4PXSIIAGVQeBE5AEac5HFxnpb5KLqktXBll5hOFDE1WnPCgkC5VMnmCBV0/ZcFu+
+         Pey5RFU4eqYY6nlQrr4g7jNyLRQvlJ4dzs2eu++HCSc8AAIupi0Ob3KtcO015LH+Cb1d
+         x+zQ==
+X-Gm-Message-State: AOAM533AW3GCQPR9nOio05JXYXlnXYRsTjb2HynCS/gcEZ/HB0dw447e
+        QCPz2eJ++ccp1IIDzTNZSXZyHFKm328wNsjExgTwpw==
+X-Google-Smtp-Source: ABdhPJzhN75cYX0QdxPZZrVkTo8LNm3eo8IzoivQ7mSAH2J9FquztKwBCIMLaRlaWOOdBUUox7ZGcX1wvMYGNrjgk1w=
+X-Received: by 2002:a05:651c:20b:: with SMTP id y11mr22911109ljn.463.1633439466354;
+ Tue, 05 Oct 2021 06:11:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 05 Oct 2021 18:31:21 +0530
-From:   schowdhu@codeaurora.org
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Bryan O'Donoghue <pure.logic@nexus-software.ie>,
-        Greg KH <greg@kroah.com>, linux-kernel@vger.kernel.org,
-        ckadabi@codeaurora.org, tsoni@codeaurora.org,
-        bryanh@codeaurora.org, psodagud@codeaurora.org,
-        satyap@codeaurora.org, pheragu@codeaurora.org,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-Subject: Re: [PATCH V0 4/7] usb: common: eud: Added the driver support for
- Embedded USB Debugger(EUD)
-In-Reply-To: <YVsu602phHbZLMOT@ripper>
-References: <cover.1633343547.git.schowdhu@codeaurora.org>
- <e6df4a21a283e822d15dedb7ffb3ae62c241999c.1633343547.git.schowdhu@codeaurora.org>
- <YVsu602phHbZLMOT@ripper>
-Message-ID: <aceadaa142a3cb29d7e7069268f19302@codeaurora.org>
-X-Sender: schowdhu@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+References: <20210926224058.1252-1-digetx@gmail.com> <20210926224058.1252-7-digetx@gmail.com>
+ <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com> <24101cd6-d3f5-1e74-db39-145ecd30418b@gmail.com>
+In-Reply-To: <24101cd6-d3f5-1e74-db39-145ecd30418b@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 5 Oct 2021 15:10:30 +0200
+Message-ID: <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
+Subject: Re: [PATCH v13 06/35] clk: tegra: Support runtime PM and power domain
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-10-04 22:12, Bjorn Andersson wrote:
-> On Mon 04 Oct 04:16 PDT 2021, Souradeep Chowdhury wrote:
-> 
->> Add support for control peripheral of EUD (Embedded USB Debugger) to
->> listen to events such as USB attach/detach, pet EUD to indicate 
->> software
->> is functional.Reusing the platform device kobj, sysfs entry 'enable' 
->> is
->> created to enable or disable EUD.
->> 
->> To enable the eud the following needs to be done
->> echo 1 > /sys/bus/platform/.../enable
->> 
->> To disable eud, following is the command
->> echo 0 > /sys/bus/platform/.../enable
->> 
->> Signed-off-by: Souradeep Chowdhury <schowdhu@codeaurora.org>
->> ---
->>  Documentation/ABI/testing/sysfs-driver-eud |   7 +
->>  drivers/usb/common/Kconfig                 |   9 +
->>  drivers/usb/common/Makefile                |   1 +
->>  drivers/usb/common/qcom_eud.c              | 256 
->> +++++++++++++++++++++++++++++
->>  4 files changed, 273 insertions(+)
->>  create mode 100644 Documentation/ABI/testing/sysfs-driver-eud
->>  create mode 100644 drivers/usb/common/qcom_eud.c
->> 
->> diff --git a/Documentation/ABI/testing/sysfs-driver-eud 
->> b/Documentation/ABI/testing/sysfs-driver-eud
->> new file mode 100644
->> index 0000000..14a02da
->> --- /dev/null
->> +++ b/Documentation/ABI/testing/sysfs-driver-eud
->> @@ -0,0 +1,7 @@
->> +What:		/sys/bus/platform/.../enable
->> +Date:           October 2021
->> +Contact:        Souradeep Chowdhury <schowdhu@codeaurora.org>
->> +Description:
->> +		The Enable/Disable sysfs interface for Embedded
->> +		USB Debugger(EUD).This enables and disables the
->> +		EUD based on a 1 or a 0 value.
->> diff --git a/drivers/usb/common/Kconfig b/drivers/usb/common/Kconfig
->> index 5e8a04e..669b3fe 100644
->> --- a/drivers/usb/common/Kconfig
->> +++ b/drivers/usb/common/Kconfig
->> @@ -50,3 +50,12 @@ config USB_CONN_GPIO
->> 
->>  	  To compile the driver as a module, choose M here: the module will
->>  	  be called usb-conn-gpio.ko
->> +
->> +config USB_QCOM_EUD
->> +	tristate "USB EUD Driver"
->> +	select USB_ROLE_SWITCH
->> +	help
->> +	  This module enables support for Qualcomm Technologies, Inc.
->> +	  Embedded USB Debugger (EUD). The EUD is a control peripheral
->> +	  which reports VBUS attach/detach events and has USB-based
->> +	  debug and trace capabilities.
->> diff --git a/drivers/usb/common/Makefile b/drivers/usb/common/Makefile
->> index 8ac4d21..eb66045 100644
->> --- a/drivers/usb/common/Makefile
->> +++ b/drivers/usb/common/Makefile
->> @@ -11,3 +11,4 @@ usb-common-$(CONFIG_USB_LED_TRIG) += led.o
->>  obj-$(CONFIG_USB_CONN_GPIO)	+= usb-conn-gpio.o
->>  obj-$(CONFIG_USB_OTG_FSM) += usb-otg-fsm.o
->>  obj-$(CONFIG_USB_ULPI_BUS)	+= ulpi.o
->> +obj-$(CONFIG_USB_QCOM_EUD)      += qcom_eud.o
->> diff --git a/drivers/usb/common/qcom_eud.c 
->> b/drivers/usb/common/qcom_eud.c
->> new file mode 100644
->> index 0000000..7a92fff
->> --- /dev/null
->> +++ b/drivers/usb/common/qcom_eud.c
->> @@ -0,0 +1,256 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (c) 2015-2021, The Linux Foundation. All rights 
->> reserved.
->> + */
->> +
->> +#include <linux/bitops.h>
->> +#include <linux/delay.h>
->> +#include <linux/err.h>
->> +#include <linux/interrupt.h>
->> +#include <linux/io.h>
->> +#include <linux/iopoll.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/of.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/slab.h>
->> +#include <linux/sysfs.h>
->> +#include <linux/usb/role.h>
->> +
->> +#define EUD_REG_INT1_EN_MASK	0x0024
->> +#define EUD_REG_INT_STATUS_1	0x0044
->> +#define EUD_REG_CTL_OUT_1	0x0074
->> +#define EUD_REG_VBUS_INT_CLR	0x0080
->> +#define EUD_REG_CSR_EUD_EN	0x1014
->> +#define EUD_REG_SW_ATTACH_DET	0x1018
->> +#define EUD_REG_EUD_EN2         0x0000
->> +
->> +#define EUD_ENABLE		BIT(0)
->> +#define EUD_INT_PET_EUD		BIT(0)
->> +#define EUD_INT_VBUS		BIT(2)
->> +#define EUD_INT_SAFE_MODE	BIT(4)
->> +#define EUD_INT_ALL		(EUD_INT_VBUS|EUD_INT_SAFE_MODE)
->> +
->> +struct eud_chip {
->> +	struct device			*dev;
->> +	struct usb_role_switch		*role_sw;
->> +	void __iomem			*eud_reg_base;
->> +	void __iomem			*eud_mode_mgr2_phys_base;
->> +	unsigned int			int_status;
->> +	int				enable;
->> +	int				eud_irq;
->> +	bool				usb_attach;
->> +
->> +};
->> +
->> +static int enable_eud(struct eud_chip *priv)
->> +{
->> +	writel(EUD_ENABLE, priv->eud_reg_base + EUD_REG_CSR_EUD_EN);
->> +	writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
->> +			priv->eud_reg_base + EUD_REG_INT1_EN_MASK);
->> +	writel(1, priv->eud_mode_mgr2_phys_base + EUD_REG_EUD_EN2);
->> +
->> +	return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
->> +}
->> +
->> +static void disable_eud(struct eud_chip *priv)
->> +{
->> +	writel(0, priv->eud_reg_base + EUD_REG_CSR_EUD_EN);
->> +	writel(0, priv->eud_mode_mgr2_phys_base + EUD_REG_EUD_EN2);
->> +}
->> +
->> +static ssize_t enable_show(struct device *dev,
->> +		struct device_attribute *attr, char *buf)
->> +{
->> +	struct eud_chip *chip = dev_get_drvdata(dev);
->> +
->> +	return sprintf(buf, "%d", chip->enable);
->> +}
->> +
->> +static ssize_t enable_store(struct device *dev,
->> +		struct device_attribute *attr,
->> +		const char *buf, size_t count)
->> +{
->> +	struct eud_chip *chip = dev_get_drvdata(dev);
->> +	unsigned long enable;
->> +	int ret;
->> +
->> +	if (kstrtoul(buf, 16, &enable))
->> +		return -EINVAL;
->> +
->> +	if (enable == 1) {
->> +		ret = enable_eud(chip);
->> +		if (!ret)
->> +			chip->enable = enable;
->> +	} else if (enable == 0) {
->> +		disable_eud(chip);
->> +	} else {
->> +		return -EINVAL;
->> +	}
->> +
->> +	return count;
->> +}
->> +
->> +static DEVICE_ATTR_RW(enable);
->> +
->> +static const struct device_attribute *eud_attrs[] = {
->> +	&dev_attr_enable,
->> +	NULL,
->> +};
->> +
->> +static void usb_attach_detach(struct eud_chip *chip)
->> +{
->> +	u32 reg;
->> +
->> +	/* read ctl_out_1[4] to find USB attach or detach event */
->> +	reg = readl(chip->eud_reg_base + EUD_REG_CTL_OUT_1);
->> +	if (reg & EUD_INT_SAFE_MODE)
->> +		chip->usb_attach = true;
->> +	else
->> +		chip->usb_attach = false;
->> +
->> +	/* set and clear vbus_int_clr[0] to clear interrupt */
->> +	writel(BIT(0), chip->eud_reg_base + EUD_REG_VBUS_INT_CLR);
->> +	writel(0, chip->eud_reg_base + EUD_REG_VBUS_INT_CLR);
->> +}
->> +
->> +static void pet_eud(struct eud_chip *chip)
->> +{
->> +	u32 reg;
->> +	int ret;
->> +
->> +	/* read sw_attach_det[0] to find attach/detach event */
->> +	reg = readl(chip->eud_reg_base +  EUD_REG_SW_ATTACH_DET);
->> +	if (reg & EUD_INT_PET_EUD) {
->> +		/* Detach & Attach pet for EUD */
->> +		writel(0, chip->eud_reg_base + EUD_REG_SW_ATTACH_DET);
->> +		/* Delay to make sure detach pet is done before attach pet */
->> +		ret = readl_poll_timeout(chip->eud_reg_base + 
->> EUD_REG_SW_ATTACH_DET,
->> +					reg, (reg == 0), 1, 100);
->> +		if (ret) {
->> +			dev_err(chip->dev, "Detach pet failed\n");
->> +			return;
->> +		}
->> +
->> +		writel(EUD_INT_PET_EUD, chip->eud_reg_base +
->> +				EUD_REG_SW_ATTACH_DET);
->> +	} else {
->> +		/* Attach pet for EUD */
->> +		writel(EUD_INT_PET_EUD, chip->eud_reg_base +
->> +				EUD_REG_SW_ATTACH_DET);
->> +	}
->> +}
->> +
->> +static irqreturn_t handle_eud_irq(int irq, void *data)
->> +{
->> +	struct eud_chip *chip = data;
->> +	u32 reg;
->> +
->> +	/* read status register and find out which interrupt triggered */
->> +	reg = readl(chip->eud_reg_base +  EUD_REG_INT_STATUS_1);
->> +	switch (reg & EUD_INT_ALL) {
->> +	case EUD_INT_VBUS:
->> +		chip->int_status = EUD_INT_VBUS;
->> +		usb_attach_detach(chip);
->> +		return IRQ_WAKE_THREAD;
->> +	case EUD_INT_SAFE_MODE:
->> +		pet_eud(chip);
->> +		break;
->> +	default:
->> +		return IRQ_NONE;
->> +	}
->> +	return IRQ_HANDLED;
->> +}
->> +
->> +static irqreturn_t handle_eud_irq_thread(int irq, void *data)
->> +{
->> +	struct eud_chip *chip = data;
->> +	int ret;
->> +
->> +	if (chip->int_status == EUD_INT_VBUS) {
->> +		if (chip->usb_attach)
->> +			ret = usb_role_switch_set_role(chip->role_sw, USB_ROLE_DEVICE);
->> +		else
->> +			ret = usb_role_switch_set_role(chip->role_sw, USB_ROLE_HOST);
-> 
-> How does this work if I have a Type-C controller wired up to the dwc3
-> and it has negotiated that we're supposed to be in device mode?
-> 
-> Shouldn't this driver somehow work as an override only when EUD is
-> enabled, but otherwise let the Type-C controller deal with things?
-> 
-> Or is this interrupt simply not delivered when EUD is disabled, so that
-> it happens to work as expected?
+On Sat, 2 Oct 2021 at 22:44, Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> 01.10.2021 15:32, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> >> +static __maybe_unused int tegra_clock_pm_suspend(struct device *dev)
+> >> +{
+> >> +       struct tegra_clk_device *clk_dev =3D dev_get_drvdata(dev);
+> >> +
+> >> +       /*
+> >> +        * Power management of the clock is entangled with the Tegra P=
+MC
+> >> +        * GENPD because PMC driver enables/disables clocks for toggli=
+ng
+> >> +        * of the PD's on/off state.
+> >> +        *
+> >> +        * The PMC GENPD is resumed in NOIRQ phase, before RPM of the =
+clocks
+> >> +        * becomes available, hence PMC can't use clocks at the early =
+resume
+> >> +        * phase if RPM is involved. For example when 3d clock is enab=
+led,
+> >> +        * it may enable the parent PLL clock that needs to be RPM-res=
+umed.
+> >> +        *
+> >> +        * Secondly, the PLL clocks may be enabled by the low level su=
+spend
+> >> +        * code, so we need to assume that PLL is in enabled state dur=
+ing
+> >> +        * suspend.
+> >> +        *
+> >> +        * We will keep PLLs and system clock resumed during suspend t=
+ime.
+> >> +        * All PLLs on all SoCs are low power and system clock is alwa=
+ys-on,
+> >> +        * so practically not much is changed here.
+> >> +        */
+> >> +
+> >> +       return clk_prepare(clk_dev->hw->clk);
+> > I am trying to understand, more exactly, what you intend to achieve
+> > with the clk_prepare() here. It looks a bit weird, to me. Can you try
+> > to elaborate a bit more on the use case?
+>
+> The Tegra GENPD driver enable/disable clocks when domain is turned on.
 
-That is correct. When EUD is disabled, the interrupt lines are also 
-disabled.
+Okay. I noticed that in tegra_genpd_power_on(). And the same clocks
+are enabled/disabled also in tegra_genpd_power_off(), when powering
+off the PM domain.
 
-> 
->> +		if (ret)
->> +			dev_err(chip->dev, "failed to set role switch\n");
->> +	}
->> +
->> +	return IRQ_HANDLED;
->> +}
->> +
->> +static int eud_probe(struct platform_device *pdev)
->> +{
->> +	struct eud_chip *chip;
->> +	int ret;
->> +
->> +	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
->> +	if (!chip)
->> +		return -ENOMEM;
->> +
->> +	chip->dev = &pdev->dev;
->> +
->> +	chip->role_sw = usb_role_switch_get(chip->dev);
->> +	if (IS_ERR(chip->role_sw)) {
->> +		if (PTR_ERR(chip->role_sw) != -EPROBE_DEFER)
->> +			dev_err(chip->dev, "failed to get role switch\n");
->> +
->> +		return PTR_ERR(chip->role_sw);
-> 
-> Please use
-> 		dev_err_probe(chip->dev, PTR_ERR(chip->role_sw), "failed to...\n");
+So I guess the problem kind of exists for tegra_genpd_power_off() too?
 
-Ack
+> This can't be done during early system resume, when domains are getting
+> turned on by the drivers core, because when clock is enabled, it's
+> getting prepared (RPM-resumed) and this preparation fails because
+> performance state of the clock goes up and it doesn't work during the
+> early resume time since I2C, which applies the state to hardware, is
+> suspended and can't work at that early time.
 
-> 
->> +	}
->> +
->> +	chip->eud_reg_base = devm_platform_ioremap_resource(pdev, 0);
->> +	if (IS_ERR(chip->eud_reg_base))
->> +		return PTR_ERR(chip->eud_reg_base);
->> +
->> +	chip->eud_mode_mgr2_phys_base = devm_platform_ioremap_resource(pdev, 
->> 1);
->> +	if (IS_ERR(chip->eud_mode_mgr2_phys_base))
->> +		return PTR_ERR(chip->eud_mode_mgr2_phys_base);
->> +
->> +	chip->eud_irq = platform_get_irq(pdev, 0);
->> +	ret = devm_request_threaded_irq(&pdev->dev, chip->eud_irq, 
->> handle_eud_irq,
->> +			handle_eud_irq_thread, IRQF_ONESHOT, NULL, chip);
->> +	if (ret)
-> 
-> This deserved another dev_err_probe()
+This sounds complicated and I still don't quite follow all of it, sorry.
 
-Ack
+So, tegra_genpd_power_on() gets called from genpd_resume_noirq(), when
+the first device of the attached devices to genpd gets resumed. And
+vice versa for tegra_genpd_power_off() and genpd_suspend_noirq().
 
-> 
-> Thanks,
-> Bjorn
-> 
->> +		return ret;
->> +
->> +	device_init_wakeup(&pdev->dev, true);
->> +	enable_irq_wake(chip->eud_irq);
->> +
->> +	platform_set_drvdata(pdev, chip);
->> +
->> +	ret = device_create_file(&pdev->dev, eud_attrs[0]);
->> +
->> +	return ret;
->> +}
->> +
->> +static int eud_remove(struct platform_device *pdev)
->> +{
->> +	struct eud_chip *chip = platform_get_drvdata(pdev);
->> +
->> +	if (chip->enable)
->> +		disable_eud(chip);
->> +
->> +	device_remove_file(&pdev->dev, eud_attrs[0]);
->> +	device_init_wakeup(&pdev->dev, false);
->> +	disable_irq_wake(chip->eud_irq);
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct of_device_id eud_dt_match[] = {
->> +	{ .compatible = "qcom,usb-connector-eud" },
->> +	{ }
->> +};
->> +MODULE_DEVICE_TABLE(of, eud_dt_match);
->> +
->> +static struct platform_driver eud_driver = {
->> +	.probe		= eud_probe,
->> +	.remove		= eud_remove,
->> +	.driver		= {
->> +		.name		= "eud",
->> +		.of_match_table = eud_dt_match,
->> +	},
->> +};
->> +module_platform_driver(eud_driver);
->> +
->> +MODULE_DESCRIPTION("QTI EUD driver");
->> +MODULE_LICENSE("GPL v2");
->> --
->> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
->> member
->> of Code Aurora Forum, hosted by The Linux Foundation
->> 
+Are you saying that trying to enable/disable clocks from
+tegra_genpd_power_on|off() in these paths doesn't work, because it
+would also require the performance state to be changed, which would
+fail because the I2C bus/driver is suspended?
+
+>
+> Secondly, Tegra has arch-specific low level assembly which touches
+> clocks during last phase of system suspend and in the beginning of
+> resume. Hence, clocks should stay prepared during suspend just because
+> technically clock should be prepared before it can be enabled.
+
+So the low level code is gating and ungating the clock behind the back
+of the clock driver then? Why is that done like that, more exactly?
+
+>
+> > Is this rather about making sure that the clock's corresponding PM
+> > domain stays powered on during system suspend? In that case, I think
+> > there may be an alternative option....
+> >
+>
+> This is not about domain staying powered on, this is about keeping the
+> performance state of the domain high during suspend.
+
+Right, so the PM domain managed in tegra_genpd_power_on|off() can
+still be powered on/off, as long as the clock remains ungated?
+
+Kind regards
+Uffe
