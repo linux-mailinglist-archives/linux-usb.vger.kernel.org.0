@@ -2,79 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D80E1421F5A
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 09:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B69A3422108
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 10:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbhJEHXF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 03:23:05 -0400
-Received: from smtprelay0048.hostedemail.com ([216.40.44.48]:44424 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230526AbhJEHXF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 03:23:05 -0400
-X-Greylist: delayed 399 seconds by postgrey-1.27 at vger.kernel.org; Tue, 05 Oct 2021 03:23:04 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave04.hostedemail.com (Postfix) with ESMTP id 8ECED18081302;
-        Tue,  5 Oct 2021 07:14:36 +0000 (UTC)
-Received: from omf14.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay06.hostedemail.com (Postfix) with ESMTP id C071F1807D7C1;
-        Tue,  5 Oct 2021 07:14:30 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id 3DE5B268E45;
-        Tue,  5 Oct 2021 07:14:27 +0000 (UTC)
-Message-ID: <c56e78bc85cbe6b05dd16c750e596ab331c37dee.camel@perches.com>
-Subject: Re: [PATCH V0 4/7] usb: common: eud: Added the driver support for
- Embedded USB Debugger(EUD)
-From:   Joe Perches <joe@perches.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Souradeep Chowdhury <schowdhu@codeaurora.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Bryan O'Donoghue <pure.logic@nexus-software.ie>,
-        Greg KH <greg@kroah.com>, linux-kernel@vger.kernel.org,
-        ckadabi@codeaurora.org, tsoni@codeaurora.org,
-        bryanh@codeaurora.org, psodagud@codeaurora.org,
-        satyap@codeaurora.org, pheragu@codeaurora.org,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-Date:   Tue, 05 Oct 2021 00:14:25 -0700
-In-Reply-To: <YVsu602phHbZLMOT@ripper>
-References: <cover.1633343547.git.schowdhu@codeaurora.org>
-         <e6df4a21a283e822d15dedb7ffb3ae62c241999c.1633343547.git.schowdhu@codeaurora.org>
-         <YVsu602phHbZLMOT@ripper>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.0-1 
+        id S232824AbhJEIqh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 04:46:37 -0400
+Received: from cable.insite.cz ([84.242.75.189]:36036 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230526AbhJEIqg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 Oct 2021 04:46:36 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id C8625A1A3D403;
+        Tue,  5 Oct 2021 10:44:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1633423482; bh=/ZWWRzj4ELLzmrzMGAqK2AbIUtDwgPLjoYip1D8wGBY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MFb5nnK8yWglb3AmwZCoGF7MCUVxFX1CNv0xHc61uL6EjXefJafRYXRRck+RXsjsH
+         PejFPazw9jbtA01/L6n7dUwWtmYGj6TDNPlu3QRyZrOA6Hf7yWSV/bhm0XkFw8qqys
+         wlxmBGYpB2woSPKn3/PUdVRkmtBVJJryG8XVCeK8=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id hZyrhb0JavG7; Tue,  5 Oct 2021 10:44:37 +0200 (CEST)
+Received: from precision.doma (ip28.insite.cz [81.0.237.28])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 41CA3A1A3D402;
+        Tue,  5 Oct 2021 10:44:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1633423477; bh=/ZWWRzj4ELLzmrzMGAqK2AbIUtDwgPLjoYip1D8wGBY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=isOafJMNGZdJCww1f7EHyTJCu4/Mm4foI3GFZZHJEF4cdl41xx82qWcfVglBZ5q6J
+         VQlo7n9BoeBLxcYW3nDRuOY+F0ThilrKyniYWMymiaqe28NfS7VSIyPGLQVsVPpec9
+         pLSGUyadU1FGllUNHAn/DaKIF5EpU/ZoBtdvcDJY=
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Pavel Hofman <pavel.hofman@ivitera.com>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v2] usb: gadget: f_uac2: fixed EP-IN wMaxPacketSize
+Date:   Tue,  5 Oct 2021 10:44:36 +0200
+Message-Id: <20211005084436.6812-1-pavel.hofman@ivitera.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 3DE5B268E45
-X-Spam-Status: No, score=-2.03
-X-Stat-Signature: p41cre9disuxr4e5bn6qwko7y6z19gz4
-X-Rspamd-Server: rspamout02
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/wX7nCYcBjYI3ylpNeDbHYE4g46+Sy/Cw=
-X-HE-Tag: 1633418067-584561
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 2021-10-04 at 09:42 -0700, Bjorn Andersson wrote:
-> On Mon 04 Oct 04:16 PDT 2021, Souradeep Chowdhury wrote:
-> 
-> > Add support for control peripheral of EUD (Embedded USB Debugger) to
-> > listen to events such as USB attach/detach, pet EUD to indicate software
-> > is functional.Reusing the platform device kobj, sysfs entry 'enable' is
-> > created to enable or disable EUD.
-[]
-> > diff --git a/drivers/usb/common/qcom_eud.c b/drivers/usb/common/qcom_eud.c
-[]
-> > +static ssize_t enable_show(struct device *dev,
-> > +		struct device_attribute *attr, char *buf)
-> > +{
-> > +	struct eud_chip *chip = dev_get_drvdata(dev);
-> > +
-> > +	return sprintf(buf, "%d", chip->enable);
+Async feedback patches broke enumeration on Windows 10 previously fixed
+by commit 789ea77310f0 ("usb: gadget: f_uac2: always increase endpoint
+max_packet_size by one audio slot").
 
-trivia:
+While the existing calculation for EP OUT capture for async mode yields
+size+1 frame due to uac2_opts->fb_max > 0, playback side lost the +1
+feature.  Therefore the +1 frame addition must be re-introduced for
+playback. Win10 enumerates the device only when both EP IN and EP OUT
+max packet sizes are (at least) +1 frame.
 
-should probably use sysfs_emit and have a trailing '\n' in the format.
+Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+Fixes: e89bb4288378 ("usb: gadget: u_audio: add real feedback
+implementation")
+Cc: stable@vger.kernel.org
+Tested-by: Henrik Enquist <henrik.enquist@gmail.com>
+Tested-by: Jack Pham <jackp@codeaurora.org>
+---
+ drivers/usb/gadget/function/f_uac2.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+index 17a7ab2c799c..5c7eddf511e5 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -665,11 +665,17 @@ static int set_ep_max_packet_size(const struct f_uac2_opts *uac2_opts,
+ 		ssize = uac2_opts->c_ssize;
+ 	}
+ 
+-	if (!is_playback && (uac2_opts->c_sync == USB_ENDPOINT_SYNC_ASYNC))
++	if (!is_playback && (uac2_opts->c_sync == USB_ENDPOINT_SYNC_ASYNC)) {
++	  // Win10 requires max packet size + 1 frame
+ 		srate = srate * (1000 + uac2_opts->fb_max) / 1000;
+-
+-	max_size_bw = num_channels(chmask) * ssize *
+-		DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1)));
++		// updated srate is always bigger, therefore DIV_ROUND_UP always yields +1
++		max_size_bw = num_channels(chmask) * ssize *
++			(DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1))));
++	} else {
++		// adding 1 frame provision for Win10
++		max_size_bw = num_channels(chmask) * ssize *
++			(DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1))) + 1);
++	}
+ 	ep_desc->wMaxPacketSize = cpu_to_le16(min_t(u16, max_size_bw,
+ 						    max_size_ep));
+ 
+-- 
+2.25.1
 
