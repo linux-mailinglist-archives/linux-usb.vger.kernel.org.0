@@ -2,161 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B3D4422E11
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 18:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F7E422E66
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 18:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236496AbhJEQht (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 12:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47662 "EHLO
+        id S236330AbhJEQxQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 12:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236213AbhJEQht (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 12:37:49 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8ACC06174E
-        for <linux-usb@vger.kernel.org>; Tue,  5 Oct 2021 09:35:58 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id u20-20020a9d7214000000b0054e170300adso1549786otj.13
-        for <linux-usb@vger.kernel.org>; Tue, 05 Oct 2021 09:35:58 -0700 (PDT)
+        with ESMTP id S236617AbhJEQxL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 12:53:11 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91037C06174E
+        for <linux-usb@vger.kernel.org>; Tue,  5 Oct 2021 09:51:20 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id m22so33125549wrb.0
+        for <linux-usb@vger.kernel.org>; Tue, 05 Oct 2021 09:51:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5cRtYvX4n7PWqwhbCmGpwqjf066BLQyAksRPgsA1dno=;
-        b=BMi/ZxobJnZuM634yi3Hh7PMLe/OoOwyS5q2bc2PJxMdVO9FY5UJEMaOm4z8BL/XP3
-         nlxAvIbOfvdevNyAJsr1EIOSU4lidIAIJRZcii1xk0x2aJQQZlBnejGC6YUSvqx3sk7x
-         Dp6mI0L3zUCh4iStZnuHkIrNjFIhBbx76LUutjRQ4hIQp0rVq3ig+Klz49c4VGYktias
-         8q05+0xa5z3YfgjnM7WvOutNrjwq7LPuOEz4AqaYED9oLMkwfnK9WakkVX56+VQ5y7vs
-         LZG7KbvQ7a/pE5xpdrkzJE9FZjetteY46pnwupz2qV0HKJhNJlUYv3vS6MEV1PW9SD2j
-         wBOw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0oYgCq8tdGL5ZnFMRu0rVxW8eQ2Me6G+FliJuxkQGT8=;
+        b=LQoDamG/0yIG0jhB3YGreFjRgT9SUHOOeZblFDFaZlUTvvjj1Apbv9AUs5jG0g2X5k
+         zUUjfGVhtjzs9Xgkfl3rGNUobgp0st2d45dKirMaCW7cIYWs5UsGqS/UjZI4dspV78mt
+         qYxx7SZtd0mj07iKnlU7ZlmBMJUeIw1N89iJ1IVAuxdhYESZhOxrUq5XYBdmtr+SaHBT
+         +kqeiN7RF8hzqrEMElIfy7FYb93pDJGZ6AEiq59eFm9m+JRgfIpMZY0/gOWDt5ejocoG
+         Oiw28g5/9nqV51WozZHfMoOO1pp+vGWBWzjZDhwlMTM89D6BUDrZnb7aXvrR/Zw0h3Md
+         dJEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5cRtYvX4n7PWqwhbCmGpwqjf066BLQyAksRPgsA1dno=;
-        b=5W1unXXmVoQEFqTbVTJXs7LdwoEhg78sjZrvk/mXF2Rzs5dd09376x0yg2hDi7D2IB
-         6dXqVi152YDy2MjMysTDYmV4q2tBQ5gwjBPGWsZaRN36zuo0BfjLpAACcYBIZMheSs7Z
-         yMLH6Vl1K4oDCRlCfwVTk9puL+ZgVWSkMfGp8hfKTH/zxGpjnVUhOg7Pb97WAeAoXbfF
-         yHLkMgym/XmF0FVcHQjPJKxDFnkhtDawTJiKG57+uz0lrtkM64PgVL4+gFdfusWOjeNF
-         ufbnXPsJvftQvSoRYl2TQSQhioVnNOqK7f2clz/uBI7gZFAyw9zeoA5C6iMHNHMynpsm
-         XAxQ==
-X-Gm-Message-State: AOAM533JOhJpuG5F5wHAWU/l5gqWx4Pud1aEjGllnER9Rn7aXyMbHDtT
-        PfEoJanTUmmR2HYxBbyiAsoMb8MwK9bb7g==
-X-Google-Smtp-Source: ABdhPJwtuLu5qShjiu4H9nG0Eoxlcoxl4CySIkH3zM/2v4uluDhAij6dUOKybgAzx4mPNgQnnZ1R2w==
-X-Received: by 2002:a9d:1783:: with SMTP id j3mr15737714otj.366.1633451757971;
-        Tue, 05 Oct 2021 09:35:57 -0700 (PDT)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id 33sm2872552otm.28.2021.10.05.09.35.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Oct 2021 09:35:57 -0700 (PDT)
-Date:   Tue, 5 Oct 2021 09:37:39 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     schowdhu@codeaurora.org
-Cc:     Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        Bryan O'Donoghue <pure.logic@nexus-software.ie>,
-        Greg KH <greg@kroah.com>, linux-kernel@vger.kernel.org,
-        ckadabi@codeaurora.org, tsoni@codeaurora.org,
-        bryanh@codeaurora.org, psodagud@codeaurora.org,
-        satyap@codeaurora.org, pheragu@codeaurora.org,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-Subject: Re: [PATCH V0 1/7] dt-bindings: connector: Add property for eud type
- c connector
-Message-ID: <YVx/U+w8zS6/P6oa@ripper>
-References: <cover.1633343547.git.schowdhu@codeaurora.org>
- <246c9d24da27b6ce91d5f1e536fa96ac5656a0b2.1633343547.git.schowdhu@codeaurora.org>
- <YVsttQySDnaXxOuI@robh.at.kernel.org>
- <b3d10d7b874c11462604a5f78bc0e8cf@codeaurora.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0oYgCq8tdGL5ZnFMRu0rVxW8eQ2Me6G+FliJuxkQGT8=;
+        b=oC2JYVsocyo3Im/f/VltYskG1/C+43CSaCBqv9yp8S8RwVj11rkWG7/3lFeE/3fpxu
+         1vgYe+O/caCMbyX2N2M2gC0dfETMYYDHAeHdje5HKMyFC1iKhayQOX+iFrG2U50Y0Xat
+         du5Bxs5nXhG+hGWU6QYctr/e8hB65y8q/Iz1tM1Cc6Rl8wJiw0GPkgkKZnwiv2i5QAeo
+         uRXp8QGoP7pxakW8eEajrb/odzOolrQ7jekiX5snUR/PzRh5j4tcWsSC3EHWjrGzbYFl
+         F0SJGOhS1Pdx2pCn+k8sXOq33FWgEBxxUgwGIbt3xZX7U+yvTpwgpkKjytVRphHYHZ1w
+         bopA==
+X-Gm-Message-State: AOAM531zugua8ltO1tbjE8816gAl6hLV7GtIi/IJY2ltQoOHPJnI14HU
+        lKXO7x+Uv3A2vwz/2FhDY+GlU8fNQMlCvUWwsOab0Q==
+X-Google-Smtp-Source: ABdhPJxIcRRhtZXhKjFg/Twt+0uxoC+Lb8/6VVNoDaqELQr9ZnABVR2MLDmqkQkwA+1HHVIGUKu9+IznAxkAvDhcArw=
+X-Received: by 2002:adf:a390:: with SMTP id l16mr630649wrb.291.1633452678797;
+ Tue, 05 Oct 2021 09:51:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b3d10d7b874c11462604a5f78bc0e8cf@codeaurora.org>
+References: <20210929224823.556943-1-rajatja@google.com> <20210929224823.556943-2-rajatja@google.com>
+ <YVVLxi/on9x6nfCZ@kroah.com> <CACK8Z6EamamgYExt629gyNrYKpvnu2Gh0eGOOvOa5LH-jnOmaQ@mail.gmail.com>
+ <20211005145655.GJ621017@rowland.harvard.edu>
+In-Reply-To: <20211005145655.GJ621017@rowland.harvard.edu>
+From:   Dmitry Torokhov <dtor@google.com>
+Date:   Tue, 5 Oct 2021 09:51:02 -0700
+Message-ID: <CAE_wzQ-XG3YBtKTmbn1LSGETCUg5AYjTmcnwOnc1h57OaL9+Cw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] usb: hub: Mark devices downstream a removable hub, as removable
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Rajat Jain <rajatja@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        levinale@google.com, bleung@google.com, rajatxjain@gmail.com,
+        jsbarnes@google.com, pmalani@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue 05 Oct 06:11 PDT 2021, schowdhu@codeaurora.org wrote:
+Hi Alan,
 
-> On 2021-10-04 22:07, Rob Herring wrote:
-> > On Mon, Oct 04, 2021 at 04:46:19PM +0530, Souradeep Chowdhury wrote:
-> > > Added the property for EUD(Embedded USB Debug) connector.Added
-> > > the "reg" and "interrupts" property which is needed for EUD.
-> > 
-> > You are going to need a better explanation of this h/w.
-> 
-> Ack. Will update this with the detailed hardware description
-> in the next version.
-> 
-> > 
-> > > 
-> > > Signed-off-by: Souradeep Chowdhury <schowdhu@codeaurora.org>
-> > > ---
-> > >  .../devicetree/bindings/connector/usb-connector.yaml      | 15
-> > > +++++++++++++++
-> > >  1 file changed, 15 insertions(+)
-> > > 
-> > > diff --git
-> > > a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > > b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > > index 7eb8659..908129f 100644
-> > > --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > > +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > > @@ -30,6 +30,21 @@ properties:
-> > >            - const: samsung,usb-connector-11pin
-> > >            - const: usb-b-connector
-> > > 
-> > > +      - items:
-> > > +          - enum:
-> > > +              - qcom,sc7280-usb-connector-eud
-> > > +          - const: qcom,usb-connector-eud
-> > > +          - const: usb-c-connector
-> > > +
-> > > +  reg:
-> > > +    items:
-> > > +      - description: EUD Base Register Region
-> > > +      - description: EUD Mode Manager Region
-> > 
-> > A connector node represents the physical connector on a board. That
-> > can't really be an MMIO peripheral. Maybe you need a node for EUD and
-> > then it should have a connector child node? Don't really know without
-> > understanding this h/w.
-> 
-> As per the previous discussion on the EUD, it was agreed upon to map EUD
-> as a type C connector and use Role-Switch to change the USB role instead
-> of extcon interface that was being used previously. The link for the same
-> is as follows:-
-> 
-> https://lore.kernel.org/lkml/5db1a666-62ec-c850-6626-ad33d337b452@codeaurora.org/
-> 
+On Tue, Oct 5, 2021 at 7:56 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Mon, Oct 04, 2021 at 03:42:46PM -0700, Rajat Jain wrote:
+> > +Dmitry Torokhov
+> >
+> > Hi Greg, Oliver,
+> >
+> > Thanks for taking a look.
+> >
+> > On Wed, Sep 29, 2021 at 10:31 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Wed, Sep 29, 2021 at 03:48:23PM -0700, Rajat Jain wrote:
+> > > > If a usb device sits below a removable hub, mark the device also as
+> > > > removable. This helps with devices inserted on a standard removable hub or
+> > > > also thunderbold docks, to be shown as removable.
+> > > >
+> > > > Signed-off-by: Rajat Jain <rajatja@google.com>
+> > > > ---
+> > > >  drivers/usb/core/hub.c | 7 +++++++
+> > > >  1 file changed, 7 insertions(+)
+> > >
+> > > Combined with the previous patch, you are now marking all devices that
+> > > happen to be attached to a root hub that is on a thunderbolt controller
+> > > as removable.  So all USB devices inside of a docking station are now
+> > > removable?
+> >
+> > With this patch, yes that was my intent. I think what we are debating
+> > here is should the "removable" attribute imply possibility of removal
+> > from "the system" or just the "local immediate box" (e.g. thunderbolt
+> > dock). In my mind, the removable property was analogous to imply an
+> > "external device", i.e a device that may be removed from the system,
+> > perhaps as a result of its parent devices being removed from the
+> > system. I guess this definition doesn't match what you believe it
+> > should be?
+>
+> As I understand it, the "removable" property refers specifically to
+> the device's upstream link, not to whether _any_ of the links leading
+> from the device to the computer could be removed.
 
-Not using extcon is the right thing, but perhaps we should make the EUD
-a role_switch provider and client, so that we can describe how it sits
-inbetween the connector and the controller.
+No, that is not what it means. I'll cite our sysfs ABI:
 
-That way it has the power to pass through or override requests from the
-upstream role-switcher, based on the status of EUD.
+What:           /sys/devices/.../removable
+Date:           May 2021
+Contact:        Rajat Jain <rajatxjain@gmail.com>
+Description:
+                Information about whether a given device can be removed from the
+                platform by the user. This is determined by its subsystem in a
+                bus / platform-specific way. This attribute is only present for
+                devices that can support determining such information:
 
+                "removable": device can be removed from the platform by the user
+                "fixed":     device is fixed to the platform / cannot be removed
+                             by the user.
+                "unknown":   The information is unavailable / cannot be deduced.
 
-That said, I'm still curious to what happens if I renegotiate the roles
-dynamically in a Type-C environment, while enabling EUD. How would the
-device on the other end of the cable know that it's supposed to be a
-host? Or there's simply a reset of the link when this happens?
+                Currently this is only supported by USB (which infers the
+                information from a combination of hub descriptor bits and
+                platform-specific data such as ACPI) and PCI (which gets this
+                from ACPI / device tree).
+
+It specifically talks about _platform_, not about properties of some
+peripheral attached to a system. Note that the wording is very similar
+to what we had for USB devices that originally implemented "removable"
+attribute:
+
+>
+> This is probably what Oliver meant when he complained about losing
+> information.  With the knowledge of whether each individual link is
+> removable, you can easily tell whether there's some way to remove a
+> device from the system.  But if you only know whether the device is
+> removable from the system overall, you generally can't tell whether
+> the link to the device's parent is removable.
+
+If we need this data then we need to establish some new attribute to
+convey this info.
 
 Thanks,
-Bjorn
-
-> > 
-> > > +
-> > > +  interrupts:
-> > > +    description:
-> > > +      EUD interrupt
-> > > +
-> > >    label:
-> > >      description: Symbolic name for the connector.
-> > > 
-> > > --
-> > > QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a
-> > > member
-> > > of Code Aurora Forum, hosted by The Linux Foundation
-> > > 
-> > > 
+Dmitry
