@@ -2,93 +2,212 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD66D42334C
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 00:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9E6423362
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 00:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231648AbhJEWS1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 18:18:27 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:9531 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbhJEWS1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 18:18:27 -0400
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 38488240003;
-        Tue,  5 Oct 2021 22:16:32 +0000 (UTC)
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Nadezda Lutovinova <lutovinova@ispras.ru>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        id S236792AbhJEWVf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 18:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230477AbhJEWVc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 18:21:32 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EB7C061749;
+        Tue,  5 Oct 2021 15:19:41 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id u18so1904112lfd.12;
+        Tue, 05 Oct 2021 15:19:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cm3t0jHYi60ikbjIFrElH5F3+z5ZebZ+trrzKBFfgQI=;
+        b=qTAIEXIVB1/IgtvGdtrN/gmvUv6mTJMWYvN+by7UBNwUQz1edq9ynn5KZ4VakUYvgO
+         zdJ521ZSZKHguY4o7B00h080n6+hpVFgPtipWPhr7vdfUedARgQ4xE4HH2lbru46MeqC
+         A5BXLTY8VINH/AMBjZEF/K2gSikuRXhSI2fF9O8ZK3khdgYy8AFAvm2l22TZw2+cK0Up
+         VqGWxTT463F7ck5TyDg0STieTJ5C+qvpbnUQ5kqq4ulMywcZp+kTXt8lcdefcaH+dgKu
+         zq6l/FilsorGHNG/QzimfNCPZRYUNo7SlGD/xBo5UydUfU+gcPwF7E7ckKKrvoh9klYt
+         Rvdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cm3t0jHYi60ikbjIFrElH5F3+z5ZebZ+trrzKBFfgQI=;
+        b=6hhnqyt2XuRgMYLBNC2nV0yG8PsZANtBv+Y+ujv3fVytDqGArizH5YtwnLATxAsUJt
+         OkqBwMbf78zRVcV/+qsOokjE5H3F1aeZGzVtXS+pSe1PoQtFgIESne4ZTE+qLvuM/537
+         Z289c3Z5jopFyyvmvlAzPZe7dkLyna195R2rycn/fFg9FLjF3bN4evkWrl88Ub2T4QNt
+         KA7sENlEZpFF5OvfJWwhjFl/nDzpJ0kMWoys51uuzC5BuPDzs6oSojwX9QtzgH0eBTO0
+         BDoETraINfqc+1dWTIr2Ii28Uuje+EDoIRhyd1noX9fHWJWCZRzdWE9KvHyAMbmhrUnb
+         ZzFA==
+X-Gm-Message-State: AOAM533jef9d3xmw1Rrve3XH/J5Rejztw9KP0UV1G8UZAUuJ+QLFjqbi
+        eYdIGCVA+23UkRg6+MwsUe8=
+X-Google-Smtp-Source: ABdhPJx7DQPDGWTTKyBBQ7on8Zoc9EHE4rfD8+/mmsH+2cs2olWIZx3pD3Yp7kL6x0TZhEN3swGrdg==
+X-Received: by 2002:a2e:5cc6:: with SMTP id q189mr24035068ljb.82.1633472379484;
+        Tue, 05 Oct 2021 15:19:39 -0700 (PDT)
+Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
+        by smtp.googlemail.com with ESMTPSA id d19sm2088024lfv.74.2021.10.05.15.19.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Oct 2021 15:19:39 -0700 (PDT)
+Subject: Re: [PATCH v13 06/35] clk: tegra: Support runtime PM and power domain
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] usb: musb: dsps: Fix the probe error path
-Date:   Wed,  6 Oct 2021 00:16:31 +0200
-Message-Id: <20211005221631.1529448-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.27.0
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+References: <20210926224058.1252-1-digetx@gmail.com>
+ <20210926224058.1252-7-digetx@gmail.com>
+ <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com>
+ <24101cd6-d3f5-1e74-db39-145ecd30418b@gmail.com>
+ <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <4bdba8a2-4b9b-ed7d-e6ca-9218d8200a85@gmail.com>
+Date:   Wed, 6 Oct 2021 01:19:37 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit 7c75bde329d7 ("usb: musb: musb_dsps: request_irq() after
-initializing musb") has inverted the calls to
-dsps_setup_optional_vbus_irq() and dsps_create_musb_pdev() without
-updating correctly the error path. dsps_create_musb_pdev() allocates and
-registers a new platform device which must be unregistered and freed
-with platform_device_unregister(), and this is missing upon
-dsps_setup_optional_vbus_irq() error.
+05.10.2021 16:10, Ulf Hansson пишет:
+> On Sat, 2 Oct 2021 at 22:44, Dmitry Osipenko <digetx@gmail.com> wrote:
+>>
+>> 01.10.2021 15:32, Ulf Hansson пишет:
+>>>> +static __maybe_unused int tegra_clock_pm_suspend(struct device *dev)
+>>>> +{
+>>>> +       struct tegra_clk_device *clk_dev = dev_get_drvdata(dev);
+>>>> +
+>>>> +       /*
+>>>> +        * Power management of the clock is entangled with the Tegra PMC
+>>>> +        * GENPD because PMC driver enables/disables clocks for toggling
+>>>> +        * of the PD's on/off state.
+>>>> +        *
+>>>> +        * The PMC GENPD is resumed in NOIRQ phase, before RPM of the clocks
+>>>> +        * becomes available, hence PMC can't use clocks at the early resume
+>>>> +        * phase if RPM is involved. For example when 3d clock is enabled,
+>>>> +        * it may enable the parent PLL clock that needs to be RPM-resumed.
+>>>> +        *
+>>>> +        * Secondly, the PLL clocks may be enabled by the low level suspend
+>>>> +        * code, so we need to assume that PLL is in enabled state during
+>>>> +        * suspend.
+>>>> +        *
+>>>> +        * We will keep PLLs and system clock resumed during suspend time.
+>>>> +        * All PLLs on all SoCs are low power and system clock is always-on,
+>>>> +        * so practically not much is changed here.
+>>>> +        */
+>>>> +
+>>>> +       return clk_prepare(clk_dev->hw->clk);
+>>> I am trying to understand, more exactly, what you intend to achieve
+>>> with the clk_prepare() here. It looks a bit weird, to me. Can you try
+>>> to elaborate a bit more on the use case?
+>>
+>> The Tegra GENPD driver enable/disable clocks when domain is turned on.
+> 
+> Okay. I noticed that in tegra_genpd_power_on(). And the same clocks
+> are enabled/disabled also in tegra_genpd_power_off(), when powering
+> off the PM domain.
+> 
+> So I guess the problem kind of exists for tegra_genpd_power_off() too?
 
-While on the master branch it seems not to trigger any issue, I observed
-a kernel crash because of a NULL pointer dereference with a v5.10.70
-stable kernel where the patch mentioned above was backported. With this
-kernel version, -EPROBE_DEFER is returned the first time
-dsps_setup_optional_vbus_irq() is called which triggers the probe to
-error out without unregistering the platform device. Unfortunately, on
-the Beagle Bone Black Wireless, the platform device still living in the
-system is being used by the USB Ethernet gadget driver, which during the
-boot phase triggers the crash.
+Both OFF/ON are affected by the same problem. If domain was already
+turned OFF before genpd_suspend_noirq(), then the OFF problem isn't visible.
 
-My limited knowledge of the musb world prevents me to revert this commit
-which was sent to silence a robot warning which, as far as I understand,
-does not make sense. The goal of this patch was to prevent an IRQ to
-fire before the platform device being registered. I think this cannot
-ever happen due to the fact that enabling the interrupts is done by the
-->enable() callback of the platform musb device, and this platform
-device must be already registered in order for the core or any other
-user to use this callback.
+I reproduced the OFF problem by removing the clk prepare/unprepare from
+the suspend/resume of the clk driver and making some extra changes to
+clock tree topology and etc to trigger the problem on Nexus 7.
 
-Hence, I decided to fix the error path, which might prevent future
-errors on mainline kernels while also fixing older ones.
+tegra-pmc 7000e400.pmc: failed to turn off PM domain heg: -13
 
-Fixes: 7c75bde329d7 ("usb: musb: musb_dsps: request_irq() after initializing musb")
-Cc: stable@vger.kernel.org
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
----
- drivers/usb/musb/musb_dsps.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+I happens from genpd_suspend_noirq() -> tegra_genpd_power_off() -> clk
+-> GENPD -> I2C -> runtime-pm.
 
-diff --git a/drivers/usb/musb/musb_dsps.c b/drivers/usb/musb/musb_dsps.c
-index ce9fc46c9266..b5935834f9d2 100644
---- a/drivers/usb/musb/musb_dsps.c
-+++ b/drivers/usb/musb/musb_dsps.c
-@@ -899,11 +899,13 @@ static int dsps_probe(struct platform_device *pdev)
- 	if (usb_get_dr_mode(&pdev->dev) == USB_DR_MODE_PERIPHERAL) {
- 		ret = dsps_setup_optional_vbus_irq(pdev, glue);
- 		if (ret)
--			goto err;
-+			goto unregister_pdev;
- 	}
- 
- 	return 0;
- 
-+unregister_pdev:
-+	platform_device_unregister(glue->musb);
- err:
- 	pm_runtime_disable(&pdev->dev);
- 	iounmap(glue->usbss_base);
--- 
-2.27.0
+-13 is EACCES, it comes from the runtime PM of I2C device. RPM is
+prohibited/disabled during late (NOIRQ) suspend by the drivers core.
 
+>> This can't be done during early system resume, when domains are getting
+>> turned on by the drivers core, because when clock is enabled, it's
+>> getting prepared (RPM-resumed) and this preparation fails because
+>> performance state of the clock goes up and it doesn't work during the
+>> early resume time since I2C, which applies the state to hardware, is
+>> suspended and can't work at that early time.
+> 
+> This sounds complicated and I still don't quite follow all of it, sorry.
+> 
+> So, tegra_genpd_power_on() gets called from genpd_resume_noirq(), when
+> the first device of the attached devices to genpd gets resumed. And
+> vice versa for tegra_genpd_power_off() and genpd_suspend_noirq().
+> 
+> Are you saying that trying to enable/disable clocks from
+> tegra_genpd_power_on|off() in these paths doesn't work, because it
+> would also require the performance state to be changed, which would
+> fail because the I2C bus/driver is suspended?
+
+Yes, but it's actually not I2C bus/driver that is suspended, it's
+runtime PM that is unavailable during NOIRQ. The I2C driver itself is
+suspended after domains are turned OFF and resumed before they are
+enabled. It's just runtime PM API that is unavailable. I'm wondering if
+this could be changed.
+
+I'm also wondering if we could add some 'was_enabled' flag to GENPDs,
+setting it by genpd_suspend_noirq() for the enabled domains, and then
+powering-on GENPDs from genpd_resume_noirq() only if they were in the
+enabled state during genpd_suspend_noirq() time. It actually puzzled me
+for a quite long time why GENPD core enables domains unconditionally
+during early resume. This should solve a part of the problem and it
+makes suspend/resume a bit safer because there is a smaller chance to
+crash hardware during suspend, at least it's easier to debug.
+
+>> Secondly, Tegra has arch-specific low level assembly which touches
+>> clocks during last phase of system suspend and in the beginning of
+>> resume. Hence, clocks should stay prepared during suspend just because
+>> technically clock should be prepared before it can be enabled.
+> 
+> So the low level code is gating and ungating the clock behind the back
+> of the clock driver then? Why is that done like that, more exactly?
+
+I revisited that code again, and it shouldn't touch the clocks.
+I changed that code to not toggle the clocks [1] sometime ago, but
+forgot about it.
+
+[1] https://git.kernel.org/linus/680ae4452
+
+>>> Is this rather about making sure that the clock's corresponding PM
+>>> domain stays powered on during system suspend? In that case, I think
+>>> there may be an alternative option....
+>>>
+>>
+>> This is not about domain staying powered on, this is about keeping the
+>> performance state of the domain high during suspend.
+> 
+> Right, so the PM domain managed in tegra_genpd_power_on|off() can
+> still be powered on/off, as long as the clock remains ungated?
+
+Not ungated, but prepared.
