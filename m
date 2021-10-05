@@ -2,71 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8474225AE
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 13:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B5B4225F5
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 14:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234457AbhJELv7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 07:51:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60012 "EHLO mail.kernel.org"
+        id S234629AbhJEMJe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 08:09:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36170 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233672AbhJELv7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 Oct 2021 07:51:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id D4A5F61502;
-        Tue,  5 Oct 2021 11:50:08 +0000 (UTC)
+        id S234631AbhJEMJd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 Oct 2021 08:09:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C9F6661502;
+        Tue,  5 Oct 2021 12:07:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633434608;
-        bh=5H1e9VG8V483wq01PzCvLBbuUnY2XCEq4xrGesCLCUk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Kn6N5Aj+5TRKJNv99nINGDvyhIeqf0aH4MBSLE3lOshHWZpxQbjPcmA/31hkEyPGY
-         LJrw1pC3jp3ZS9bdW9ZFiq06vyHH1jcOgYVvK0iCUNwwiRKYLovjYbkL5p+giEfo98
-         wfM37m0SoI1SXW4LBdpbvL5Heu9PKedv/9/R9qFI1SbNd+af4TTdk/c8toCg2PTx+x
-         RwbhtZCOm8Zhz6WEBM7XtJhlTwxe0Mi9BckXriIhN5RJzGkU5f0Y1PNTb93eUcT6/c
-         sLg2tvpHfLVqR4eKd1+vb6UKjroj/T3AxPn+FuUqLBW1ZuMW1SUdBwlBiAwFUIOEG2
-         ZNMEglnxf6ENg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id CEA7360A53;
-        Tue,  5 Oct 2021 11:50:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1633435663;
+        bh=oIgsQ77j5OZfDAx/jRH/jJIfGDauyIlgA9UGM0LBZUY=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=GplYYVg2fP8Z6NLLI9qrRLRfPT3JhNIbxDBkmb+JdFeMgQM/VfHVAvuL0rvb2wV9K
+         E0B/ncmPqh1PyuVpd5e7EH/DzKCr2a4mB1qz30ndRNzQpJjLfyYV7/FI8EmrOVM3Zi
+         7Llq0v6QX4JgVvKFLDXF30qm1tRA0bhHl78wxSuSg4a+lgMz1W6XQncbqBc7IhXMbB
+         FubYkVZqHVn7hCUU4BYh4NyRbnwkw8yxinpLVceU3MYq7q9eOvy2aX4lOc9kDIQBtR
+         WBMuot5tM+uyQNLqqHfz8LeYZkXIF4fDgGt5pUDG/CLRsrDqo97349LcPYn6rekqPH
+         wWUAB8692AzpA==
+References: <YUnsSxUERYj/oXTO@kroah.com>
+ <20210921145901.11952-1-nikita.yoush@cogentembedded.com>
+ <YVwyDsuIT9lZWi2v@kroah.com>
+User-agent: mu4e 1.6.6; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Petr Nechaev <petr.nechaev@cogentembedded.com>
+Subject: Re: [PATCH v3] usb: gadget: storage: add support for media larger
+ than 2T
+Date:   Tue, 05 Oct 2021 15:07:11 +0300
+In-reply-to: <YVwyDsuIT9lZWi2v@kroah.com>
+Message-ID: <875yubznck.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] r8152: avoid to resubmit rx immediately
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163343460884.12488.8334221276223981398.git-patchwork-notify@kernel.org>
-Date:   Tue, 05 Oct 2021 11:50:08 +0000
-References: <20211004062858.1679-381-nic_swsd@realtek.com>
-In-Reply-To: <20211004062858.1679-381-nic_swsd@realtek.com>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     jason-ch.chen@mediatek.com, kuba@kernel.org, davem@davemloft.net,
-        netdev@vger.kernel.org, nic_swsd@realtek.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net.git (refs/heads/master):
+Hi,
 
-On Mon, 4 Oct 2021 14:28:58 +0800 you wrote:
-> For the situation that the disconnect event comes very late when the
-> device is unplugged, the driver would resubmit the RX bulk transfer
-> after getting the callback with -EPROTO immediately and continually.
-> Finally, soft lockup occurs.
-> 
-> This patch avoids to resubmit RX immediately. It uses a workqueue to
-> schedule the RX NAPI. And the NAPI would resubmit the RX. It let the
-> disconnect event have opportunity to stop the submission before soft
-> lockup.
-> 
-> [...]
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
 
-Here is the summary with links:
-  - [net] r8152: avoid to resubmit rx immediately
-    https://git.kernel.org/netdev/net/c/baf33d7a7564
+> On Tue, Sep 21, 2021 at 05:59:02PM +0300, Nikita Yushchenko wrote:
+>> This adds support for READ_CAPACITY(16), READ(16) and WRITE(16)
+>> commands, and fixes READ_CAPACITY command to return 0xffffffff if
+>> media size does not fit in 32 bits.
+>> 
+>> This makes f_mass_storage to export a 16T disk array correctly.
+>> 
+>> Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+>> ---
+>> v3:
+>> - added this changelog
+>> 
+>> v2:
+>> - fixed call to check_command() for READ_CAPACITY(16)
+>> - fixed alphabetical order of commands in switch statement
+>> - renamed variable, added comments, and fixed formatting, per advices by
+>>   Alan Stern <stern@rowland.harvard.edu>
+>
+> Felipe and Alan, any objections to this change?
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+none from me, but I'd definitely wait for Alan's comments as he's the
+one who understands the storage gadget inside out :-)
 
+cheers
 
+-- 
+balbi
