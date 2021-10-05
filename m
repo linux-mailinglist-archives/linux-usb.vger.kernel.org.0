@@ -2,99 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C62342248A
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 13:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD1F42248C
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 13:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233835AbhJELIi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 07:08:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45652 "EHLO mail.kernel.org"
+        id S234122AbhJELIj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 07:08:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45708 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233449AbhJELIh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 Oct 2021 07:08:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D735761139;
-        Tue,  5 Oct 2021 11:06:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633432007;
-        bh=rTNNhWJqsVcBG/ZVwbPHyK3Hc5Td838t+NE0/luBO0k=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=hBDC6ZpKFybCS3A2aITRBx8AIIYHVmPJ3z4hxPmsDh8GaOXM/bNFlfRPnY6xU3clu
-         ZrSXyenbp6jrXDXOpuZF16gTyb+Asm/FnXY4qlc/ujOwmGAdemcVuYKEjP5cnBzu/C
-         w1V0IA9fs0KcpAUDQBV8zJY8vjTkFYNWZ0+K2COI/ltK9aDfJMcVqJl14k8IxH40Uw
-         HcWtrYZQe8zlxNpbQDbStBFk7yHTFq8960Z6WvNgE/epz2+zpBaoYowWR2dEaPGgMn
-         tzBTYHh83Jf33SsC2t4VUYai9wit1k6T6DI0L6MkY8QztVxWJzM28Pxfkn/SDPxJPn
-         KWPzr78qypI5w==
-References: <87pn261h4c.fsf@kernel.org>
- <20211003201355.24081-1-m.grzeschik@pengutronix.de>
- <YVuUDOf+BDTxe/IR@pendragon.ideasonboard.com> <YVwwECkXk+nKn7kE@kroah.com>
-User-agent: mu4e 1.6.6; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-usb@vger.kernel.org, hverkuil@xs4all.nl,
-        m.tretter@pengutronix.de, linux-media@vger.kernel.org
-Subject: Re: [RESEND PATCH v4] usb: gadget: uvc: fix multiple opens
-Date:   Tue, 05 Oct 2021 14:06:22 +0300
-In-reply-to: <YVwwECkXk+nKn7kE@kroah.com>
-Message-ID: <87a6jnzq64.fsf@kernel.org>
+        id S233881AbhJELIj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 Oct 2021 07:08:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9359A61181;
+        Tue,  5 Oct 2021 11:06:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1633432009;
+        bh=TzrIPxcsGexRZuowd5yTFey66W3I5CCoUeggTOGay6s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b5fVzLxaSZ3klmbMRr0tM4gu7NkccL54t77pbne4+SMXm5sgsHG2c5ZJsSUeGgrx/
+         m4xSKL/iZ9YOW/qdpR49jmlMLq0AkpDiYz6Bnj8kolU78zuhhQ7zn5rYYX073HU1ss
+         0wz7XcMexaTfVpemyW2D9lrsvPUavYdZ2ESqzdhA=
+Date:   Tue, 5 Oct 2021 13:06:47 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        JC Kuo <jckuo@nvidia.com>, Arnd Bergmann <arnd@arndb.de>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [RESEND] usb: xhci: tegra: mark PM functions as
+ __maybe_unused
+Message-ID: <YVwxxywC5iSGSaXM@kroah.com>
+References: <20210927142258.1863321-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210927142258.1863321-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, Sep 27, 2021 at 04:22:52PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The added #ifdefs in the PM rework were almost correct, but still
+> cause warnings in some randconfig builds:
+> 
+> drivers/usb/host/xhci-tegra.c:2147:12: error: 'tegra_xusb_resume' defined but not used [-Werror=unused-function]
+>  2147 | static int tegra_xusb_resume(struct device *dev)
+>       |            ^~~~~~~~~~~~~~~~~
+> drivers/usb/host/xhci-tegra.c:2105:12: error: 'tegra_xusb_suspend' defined but not used [-Werror=unused-function]
+>  2105 | static int tegra_xusb_suspend(struct device *dev)
+> 
+> Replace the #ifdef checks with simpler __maybe_unused annotations to
+> reliably shut up these warnings.
+> 
+> Fixes: d64d362f1d8b ("usb: xhci: tegra: Enable ELPG for runtime/system PM")
 
-Greg KH <gregkh@linuxfoundation.org> writes:
+What tree does this commit come in from?  I don't see it in my usb tree
+:(
 
-> On Tue, Oct 05, 2021 at 02:53:48AM +0300, Laurent Pinchart wrote:
->> Hi Michael,
->> 
->> Thank you for resending this.
->> 
->> On Sun, Oct 03, 2021 at 10:13:55PM +0200, Michael Grzeschik wrote:
->> > From: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
->> > 
->> > Currently, the UVC function is activated when open on the corresponding
->> > v4l2 device is called.
->> > On another open the activation of the function fails since the
->> > deactivation counter in `usb_function_activate` equals 0. However the
->> > error is not returned to userspace since the open of the v4l2 device is
->> > successful.
->> > 
->> > On a close the function is deactivated (since deactivation counter still
->> > equals 0) and the video is disabled in `uvc_v4l2_release`, although the
->> > UVC application potentially is streaming.
->> > 
->> > Move activation of UVC function to subscription on UVC_EVENT_SETUP
->> > because there we can guarantee for a userspace application utilizing
->> > UVC.
->> > Block subscription on UVC_EVENT_SETUP while another application already
->> > is subscribed to it, indicated by `bool func_connected` in
->> > `struct uvc_device`.
->> > Extend the `struct uvc_file_handle` with member `bool is_uvc_app_handle`
->> > to tag it as the handle used by the userspace UVC application.
->> 
->> Reflowing the paragraph would be nice (this could be done when applying
->> the patch, or not at all).
->> 
->> > With this a process is able to check capabilities of the v4l2 device
->> > without deactivating the function for the actual UVC application.
->> > 
->> > Reviewed-By: Michael Tretter <m.tretter@pengutronix.de>
->> > Signed-off-by: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
->> > Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
->> > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->> 
->> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->> 
->> Felipe, please let me know if you want me to take this in my tree and
->> issue a pull request, otherwise I'll assume you'll pick it up.
->
-> I'll pick it up now, thanks.
+thanks,
 
-I guess it's too late for an Ack. FWIW:
-
-Acked-by: Felipe Balbi <balbi@kernel.org>
-
--- 
-balbi
+greg k-h
