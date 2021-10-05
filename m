@@ -2,70 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 042004223D6
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 12:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D54F54223E6
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 12:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234138AbhJEKtI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 06:49:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38890 "EHLO mail.kernel.org"
+        id S234158AbhJEKwD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 06:52:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39442 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233490AbhJEKtG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 Oct 2021 06:49:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AEAC460F9D;
-        Tue,  5 Oct 2021 10:47:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1633430836;
-        bh=n/mLNJNfw2jgnN4lHucNLVGQuscvmSJHf9GsOtyO4d4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C4ce0xnh5XOP8FyIq0BszjrQ9GZIJ4MCw8cf/awkf6UCGACy+5VQkUnImmuGWkLcT
-         aIlhhhcTphj/cmopLkfiwQxbrCupJUn9+rmD8PTI5stNHqIeP/lWE6AFiZSsXNjiUv
-         qMOPFmQHighBAU+J0eT/RiBGhAqPvR7Hr4YAi0mc=
-Date:   Tue, 5 Oct 2021 12:47:14 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v7 1/7] dt-bindings: phy: tegra20-usb-phy: Convert to
- schema
-Message-ID: <YVwtMtRTSYYD0Jha@kroah.com>
-References: <20210912181718.1328-1-digetx@gmail.com>
- <20210912181718.1328-2-digetx@gmail.com>
- <YVttLY4cCtgh9Cuu@orome.fritz.box>
+        id S233449AbhJEKwC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 Oct 2021 06:52:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8152761502;
+        Tue,  5 Oct 2021 10:50:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633431011;
+        bh=SLgYcczN9LsLWDYmQolP27i4eos161EtVoDB7lKNWms=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=L+zT0R5057LTJqOM8a8ye3OJiLpJotecIhHXJEuk2owUvRQsKay1wAA63Voni6AOD
+         XpQRwbJBzThtEfzSyQiMUuqLeOjt/WWd4h/22J1Kucw+IZ3TDpPkZA4u9ioc5vMg+W
+         2Uh3i6P3U3mCHLPBxHPjBRytXtDW0GjpqhesDmh7Q9vrlff5XHZSOS+6TBXhH5PpPf
+         blY5tlkQqPj0r5qai9y5uCy7m3k6E0Ly7p3sGP3KCavhHUerRwhV7wshkR+EW0+ET4
+         AFJjEwiIff5E34N6DgOrCwyxC8CKc6DycgLwmw3mFT1ubRMmHdqUaV3FwcJ7+jg36C
+         JJFCzPOfyaGZQ==
+References: <20211004141839.49079-1-andriy.shevchenko@linux.intel.com>
+ <7019ca3e-f076-e65b-f207-c23a379ade29@gmail.com>
+ <20211005085100.GB17524@pengutronix.de>
+User-agent: mu4e 1.6.6; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Michael Grzeschik <mgr@pengutronix.de>
+Cc:     Ferry Toth <fntoth@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] usb: dwc3: gadget: Revert "set gadgets parent to
+ the right controller"
+Date:   Tue, 05 Oct 2021 13:49:32 +0300
+In-reply-to: <20211005085100.GB17524@pengutronix.de>
+Message-ID: <87ee8zzqxr.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YVttLY4cCtgh9Cuu@orome.fritz.box>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 04, 2021 at 11:07:57PM +0200, Thierry Reding wrote:
-> On Sun, Sep 12, 2021 at 09:17:12PM +0300, Dmitry Osipenko wrote:
-> > Convert NVIDIA Tegra20 USB PHY binding to schema.
-> > 
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> > ---
-> >  .../bindings/phy/nvidia,tegra20-usb-phy.txt   |  74 ----
-> >  .../bindings/phy/nvidia,tegra20-usb-phy.yaml  | 357 ++++++++++++++++++
-> >  2 files changed, 357 insertions(+), 74 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/phy/nvidia,tegra20-usb-phy.txt
-> >  create mode 100644 Documentation/devicetree/bindings/phy/nvidia,tegra20-usb-phy.yaml
-> 
-> I'm assuming that Greg or Felipe will pick this (and patch 2) up along
-> with the USB PHY driver patch, in which case:
-> 
-> Acked-by: Thierry Reding <treding@nvidia.com>
-> 
-> Greg, Felipe, if you'd prefer me to take this through the Tegra tree
-> (and ultimately ARM SoC), let me know and I can pick it up as well.
 
-I'll pick these up now, thanks.
+Michael Grzeschik <mgr@pengutronix.de> writes:
 
-greg k-h
+> [[PGP Signed Part:Undecided]]
+> On Mon, Oct 04, 2021 at 10:35:57PM +0200, Ferry Toth wrote:
+>>Hi,
+>>
+>>Op 04-10-2021 om 16:18 schreef Andy Shevchenko:
+>>>The commit c6e23b89a95d ("usb: dwc3: gadget: set gadgets parent to the right
+>>>controller") changed the device for the UDC and broke the user space scripts
+>>>that instantiate the USB gadget(s) via ConfigFS.
+>>
+>> I confirm this regression on Intel Edison since at least 5.15-rc2
+>> while in 5.14.0 it was working fine.
+>>
+>>This patch resolves the issue as tested on 5.15-rc4.
+>>
+>>Tested-by: Ferry Toth<fntoth@gmail.com>
+>
+> NACK! Why should we resolv an issue by reverting it to solve not working
+> userspace. We already have this patch as a solution for solving a deeper
+
+heh, there is only one rule in this community: thou shalt not break
+userspace :-)
+
+-- 
+balbi
