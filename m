@@ -2,149 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F7E422E66
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 18:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2EE6422EEB
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 19:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236330AbhJEQxQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 12:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
+        id S236766AbhJERSJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 13:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236617AbhJEQxL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 12:53:11 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91037C06174E
-        for <linux-usb@vger.kernel.org>; Tue,  5 Oct 2021 09:51:20 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id m22so33125549wrb.0
-        for <linux-usb@vger.kernel.org>; Tue, 05 Oct 2021 09:51:20 -0700 (PDT)
+        with ESMTP id S236636AbhJERSF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 13:18:05 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97E5C061749;
+        Tue,  5 Oct 2021 10:16:14 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id u18so89541742lfd.12;
+        Tue, 05 Oct 2021 10:16:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0oYgCq8tdGL5ZnFMRu0rVxW8eQ2Me6G+FliJuxkQGT8=;
-        b=LQoDamG/0yIG0jhB3YGreFjRgT9SUHOOeZblFDFaZlUTvvjj1Apbv9AUs5jG0g2X5k
-         zUUjfGVhtjzs9Xgkfl3rGNUobgp0st2d45dKirMaCW7cIYWs5UsGqS/UjZI4dspV78mt
-         qYxx7SZtd0mj07iKnlU7ZlmBMJUeIw1N89iJ1IVAuxdhYESZhOxrUq5XYBdmtr+SaHBT
-         +kqeiN7RF8hzqrEMElIfy7FYb93pDJGZ6AEiq59eFm9m+JRgfIpMZY0/gOWDt5ejocoG
-         Oiw28g5/9nqV51WozZHfMoOO1pp+vGWBWzjZDhwlMTM89D6BUDrZnb7aXvrR/Zw0h3Md
-         dJEg==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=v4VMlYai/5OJD6I0jXVUBp7T7QQDEKF1EDfzlyrXPNg=;
+        b=W2HYfURkJzDMqxvMvdLnaSxyL8uT7r1csfbSZPSbXORQw+cwWFtMynJRUEG4LiQrHQ
+         y3v5acYIRN1Eb0FbSRLCSIRtUZRGATp/wXu0GpAF7MIKkyEe30yYqs44aRZ5hx7PQUf8
+         KTIq6kvEdh07WxUJ9lahyZFbc91AomDi579Y3/gpCjlzb6mopUwQ7ho2PCW0cuccDWMY
+         /i99LFk5tTWbSOuutGf0fRJHd37tPZRn46J6NSoa+sUFqOvBAVR+EQT9iPI/71vRNDUs
+         E1DUIcTLGVE0YH8x38A9SKJivF5TQbdR1jagf785PZye81GIeWabHB+XUJ5q/1UXW+WG
+         AQEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0oYgCq8tdGL5ZnFMRu0rVxW8eQ2Me6G+FliJuxkQGT8=;
-        b=oC2JYVsocyo3Im/f/VltYskG1/C+43CSaCBqv9yp8S8RwVj11rkWG7/3lFeE/3fpxu
-         1vgYe+O/caCMbyX2N2M2gC0dfETMYYDHAeHdje5HKMyFC1iKhayQOX+iFrG2U50Y0Xat
-         du5Bxs5nXhG+hGWU6QYctr/e8hB65y8q/Iz1tM1Cc6Rl8wJiw0GPkgkKZnwiv2i5QAeo
-         uRXp8QGoP7pxakW8eEajrb/odzOolrQ7jekiX5snUR/PzRh5j4tcWsSC3EHWjrGzbYFl
-         F0SJGOhS1Pdx2pCn+k8sXOq33FWgEBxxUgwGIbt3xZX7U+yvTpwgpkKjytVRphHYHZ1w
-         bopA==
-X-Gm-Message-State: AOAM531zugua8ltO1tbjE8816gAl6hLV7GtIi/IJY2ltQoOHPJnI14HU
-        lKXO7x+Uv3A2vwz/2FhDY+GlU8fNQMlCvUWwsOab0Q==
-X-Google-Smtp-Source: ABdhPJxIcRRhtZXhKjFg/Twt+0uxoC+Lb8/6VVNoDaqELQr9ZnABVR2MLDmqkQkwA+1HHVIGUKu9+IznAxkAvDhcArw=
-X-Received: by 2002:adf:a390:: with SMTP id l16mr630649wrb.291.1633452678797;
- Tue, 05 Oct 2021 09:51:18 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=v4VMlYai/5OJD6I0jXVUBp7T7QQDEKF1EDfzlyrXPNg=;
+        b=DuF4QpkjwFbd4dwlYAhig4rmQJm8ielyZnZ9Ys+SAdiAecq64Ir6wFBUuPbV4j1M+n
+         l8WZxK7bHDsWhMoefwJ8ThuVZM6f2HxW6SJP+kANUWoH6YuK7xvfuAofdrEp+uPjbDQt
+         e2JlK9dJNKr5t7emnh1CplDlaTY+g0h+lGvquMTkLSNTGGSaona6zhrrvCtDWTpQeoF8
+         QNlx7oJuIC2y+Kr52lLRm+BSzcT2/n3hzqhc/wxoPLMLqcZ4IiNofE3rn4A0ThxHZhb+
+         hwVsNNjbCj25/cAMYZBmkAeSgI+512ATeaK867OLdlENIY7XmKIqAT9NIGCr+lslVwWu
+         6dlQ==
+X-Gm-Message-State: AOAM530Y30SpHEqmWsHTtTGfeSHetiuNcwwgRNU1PxSomh39kkYnrjs/
+        4rL44LG/rgUyZvo76ZOMgsQ=
+X-Google-Smtp-Source: ABdhPJzFxn+EEvAfXINlDGqbDWfWJzkpl0QRwm+Z1jKxlyPCyoz5MyhKfZrnAr2zjaXtazuDCKJIlw==
+X-Received: by 2002:a05:6512:10d0:: with SMTP id k16mr4573650lfg.530.1633454173285;
+        Tue, 05 Oct 2021 10:16:13 -0700 (PDT)
+Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
+        by smtp.googlemail.com with ESMTPSA id o12sm2013505lft.254.2021.10.05.10.16.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Oct 2021 10:16:12 -0700 (PDT)
+Subject: Re: [PATCH v13 13/35] drm/tegra: gr2d: Support generic power domain
+ and runtime PM
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+References: <20210926224058.1252-1-digetx@gmail.com>
+ <20210926224058.1252-14-digetx@gmail.com>
+ <CAPDyKFpzhv1UxjM0q5AWHVxTWC_cCO_Kg_6exO0o_=EoVvjo+w@mail.gmail.com>
+ <aad7a508-7fb5-3418-f902-def80c365094@gmail.com>
+ <CAPDyKFppSuP6FfaBaGn3o+8WvTT=vJ8XMzZ47WPQ1JKiUYyEpw@mail.gmail.com>
+ <8d75436d-864a-7ce0-ba53-daa8b663035a@gmail.com>
+ <CAPDyKFpqs5gUcym4q+GuiJy13eXqjEnx-eFdUT4bQpcfPAOEYw@mail.gmail.com>
+ <f5b5e06a-71ed-1250-f0ad-692062e00e01@gmail.com>
+ <CAPDyKFpWzLdKr0bYX4VYwNpPuJNEs=weEpNpDH6zfv9e8SaxJQ@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <65f5ea6a-5d04-57cc-f4e4-bf29f22af7f0@gmail.com>
+Date:   Tue, 5 Oct 2021 20:16:11 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20210929224823.556943-1-rajatja@google.com> <20210929224823.556943-2-rajatja@google.com>
- <YVVLxi/on9x6nfCZ@kroah.com> <CACK8Z6EamamgYExt629gyNrYKpvnu2Gh0eGOOvOa5LH-jnOmaQ@mail.gmail.com>
- <20211005145655.GJ621017@rowland.harvard.edu>
-In-Reply-To: <20211005145655.GJ621017@rowland.harvard.edu>
-From:   Dmitry Torokhov <dtor@google.com>
-Date:   Tue, 5 Oct 2021 09:51:02 -0700
-Message-ID: <CAE_wzQ-XG3YBtKTmbn1LSGETCUg5AYjTmcnwOnc1h57OaL9+Cw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] usb: hub: Mark devices downstream a removable hub, as removable
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Rajat Jain <rajatja@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        levinale@google.com, bleung@google.com, rajatxjain@gmail.com,
-        jsbarnes@google.com, pmalani@google.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAPDyKFpWzLdKr0bYX4VYwNpPuJNEs=weEpNpDH6zfv9e8SaxJQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
+...
+>> It's not a problem to change this patchset. The problem is that if
+>> you'll grep mainline for 'pm_runtime_disable', you will find that there
+>> are a lot of drivers in a potential trouble.
+> 
+> Let's start by fixing this patchset, please - then we can consider
+> what to do with the other cases separately.
 
-On Tue, Oct 5, 2021 at 7:56 AM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Mon, Oct 04, 2021 at 03:42:46PM -0700, Rajat Jain wrote:
-> > +Dmitry Torokhov
-> >
-> > Hi Greg, Oliver,
-> >
-> > Thanks for taking a look.
-> >
-> > On Wed, Sep 29, 2021 at 10:31 PM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Wed, Sep 29, 2021 at 03:48:23PM -0700, Rajat Jain wrote:
-> > > > If a usb device sits below a removable hub, mark the device also as
-> > > > removable. This helps with devices inserted on a standard removable hub or
-> > > > also thunderbold docks, to be shown as removable.
-> > > >
-> > > > Signed-off-by: Rajat Jain <rajatja@google.com>
-> > > > ---
-> > > >  drivers/usb/core/hub.c | 7 +++++++
-> > > >  1 file changed, 7 insertions(+)
-> > >
-> > > Combined with the previous patch, you are now marking all devices that
-> > > happen to be attached to a root hub that is on a thunderbolt controller
-> > > as removable.  So all USB devices inside of a docking station are now
-> > > removable?
-> >
-> > With this patch, yes that was my intent. I think what we are debating
-> > here is should the "removable" attribute imply possibility of removal
-> > from "the system" or just the "local immediate box" (e.g. thunderbolt
-> > dock). In my mind, the removable property was analogous to imply an
-> > "external device", i.e a device that may be removed from the system,
-> > perhaps as a result of its parent devices being removed from the
-> > system. I guess this definition doesn't match what you believe it
-> > should be?
->
-> As I understand it, the "removable" property refers specifically to
-> the device's upstream link, not to whether _any_ of the links leading
-> from the device to the computer could be removed.
+Yeah, should be better to discuss it separately.
 
-No, that is not what it means. I'll cite our sysfs ABI:
+...
+>>  void __pm_runtime_disable(struct device *dev, bool check_resume)
+>>  {
+>> +       flush_work(&dev->power.work);
+>> +
+> 
+> What about the latency this may introduce? I am not sure that is
+> acceptable here!?
 
-What:           /sys/devices/.../removable
-Date:           May 2021
-Contact:        Rajat Jain <rajatxjain@gmail.com>
-Description:
-                Information about whether a given device can be removed from the
-                platform by the user. This is determined by its subsystem in a
-                bus / platform-specific way. This attribute is only present for
-                devices that can support determining such information:
+I'm not aware about any code which relies on the original 'cancelling'
+behaviour, perhaps Rafael should have more insight.
 
-                "removable": device can be removed from the platform by the user
-                "fixed":     device is fixed to the platform / cannot be removed
-                             by the user.
-                "unknown":   The information is unavailable / cannot be deduced.
+...
+>> The sysfs rpm-forbid is a separate problem and it's less troublesome
+>> since it requires root privileges. It's also not something that
+>> userspace touches casually. For now I don't know what could be done
+>> about it.
+> 
+> As I said, the common method to address this problem is to run the
+> following sequence:
+> 
+> pm_runtime_get_sync()
+> "power off the device"
+> pm_runtime_disable()
+> pm_runtime_put_noidle()
+> 
+> This works even if user space, via sysfs, has triggered a call to
+> pm_runtime_forbid(). Or doesn't it?
+> 
+> If you don't like it, pm_runtime_force_suspend() should work too, at
+> least for your cases, I believe.
 
-                Currently this is only supported by USB (which infers the
-                information from a combination of hub descriptor bits and
-                platform-specific data such as ACPI) and PCI (which gets this
-                from ACPI / device tree).
-
-It specifically talks about _platform_, not about properties of some
-peripheral attached to a system. Note that the wording is very similar
-to what we had for USB devices that originally implemented "removable"
-attribute:
-
->
-> This is probably what Oliver meant when he complained about losing
-> information.  With the knowledge of whether each individual link is
-> removable, you can easily tell whether there's some way to remove a
-> device from the system.  But if you only know whether the device is
-> removable from the system overall, you generally can't tell whether
-> the link to the device's parent is removable.
-
-If we need this data then we need to establish some new attribute to
-convey this info.
-
-Thanks,
-Dmitry
+I'll update the patches, thank you.
