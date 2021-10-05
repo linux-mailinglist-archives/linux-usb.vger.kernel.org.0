@@ -2,101 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE58423414
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 01:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8626F42348A
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 01:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236932AbhJEXHC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 19:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53298 "EHLO
+        id S236820AbhJEXph (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 19:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236929AbhJEXHB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 19:07:01 -0400
-Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBBBC06174E;
-        Tue,  5 Oct 2021 16:05:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:From:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=tnLXVBAH0Pqxsz5bF5y0/CjsNy9V/uSRp0OTZ0xDb0s=; b=JSeb1tGkLzqd6hpH8DTDEJjS8n
-        twUlztODeiWCscTU/4zKfrZXuezxZAkIIz5EM/RY/wdnD7EeAbrDfoMfsi5H4ecD6Ln//jPYK366+
-        zDiU71i8xrN9Drufn7zfrW0sJFRtE4pZ10RRx3g5uNBkPYX37EJQI34rUHXpzTWfIJx14+djto+8Y
-        oWs5oDPlffGIxIi+dvEghktNGu/Z2717RZZJ1Js6MKwoCt39p4uqrJ/i6fVZWy/2aMPu0Ex20sd4j
-        kt4WtbqNBh1xKXmfAa9+fmEJXNxEVYdpNVhDyPj0/wKRQi3weR+UN43BD8OcO+07qfZj9zq4U5vCE
-        feB2Rs4w==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mXtUj-00CF5J-Gx; Tue, 05 Oct 2021 23:05:09 +0000
-Subject: Re: [PATCH] usb: typec: STUSB160X should select REGMAP_I2C
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
-        linux-usb@vger.kernel.org
-References: <20211004232103.23893-1-rdunlap@infradead.org>
- <YVw7lJ5TeFsYwAgC@kroah.com>
- <7c405d70-5001-e4d4-57d1-fbdee5a7a464@infradead.org>
-Message-ID: <87dc2073-553f-6b02-639e-c65a71e3e13f@infradead.org>
-Date:   Tue, 5 Oct 2021 16:05:08 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        with ESMTP id S231373AbhJEXph (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 19:45:37 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98E9C061749;
+        Tue,  5 Oct 2021 16:43:45 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id n71so914481iod.0;
+        Tue, 05 Oct 2021 16:43:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=yOOtA2M5QmbPjwtL+wKK/+7csoshQHh+btCjE+xfZwY=;
+        b=brsVG4NgXYbFNluXPs7dRISQW8XIZwmAjNCXL0N2wa0n0plZlVmBgmGYI09gx4a0vl
+         JfXlgA85tP2GOCttLxBo7oFwvSoQhDaSeAX3ilMz//tW4T0Cy73l+rI5UEKn2hrOR88k
+         y8ZmI4AnwD+0BZvuoJu4gSSczDvdJbaJGOJkLYLzgr8ub85NxAYHyULWFwlu9+PL9Uqe
+         wSTmUdX/sCIgqAugWhdFVnkqq0+J28Jw8eJxXZWlfIS4PiFurbGHy6eSXf9Zx1N6eCBx
+         trH4uf+y4+slwClGAStVPpvIN6ycsINV8dRIYyvdXccIwrOZcauEtou3+9ML4W/RSMko
+         ms4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=yOOtA2M5QmbPjwtL+wKK/+7csoshQHh+btCjE+xfZwY=;
+        b=C8h/AyIzUYq4dlOzanwRp04bv+XaTUYHOblmUCZ/oi7BWhsHOvUFxjo0WzXUVhbftO
+         kXNS3AxbL407qhK39E8MMOF0UMySnT5DvdNEX4f44enT/ad+LEjsb3U4Dxb+3dyFbV/u
+         nMq6Ga+fOPCP7uiui1gDTDursX5N3mXqdqGoUjLsCagyApiJMFG9b16GH5a7x3/sQu+X
+         DVTmKShGVmDU3MmiJ7uvr9Qqw90qX7hQ7GJw7Vtc8itWd9hY1GdcTNYWPqqQ7eoJzUmW
+         WIKMmQU9SpOS2XtAK4qmqR5PnMi++SbDrxswwp12+DgxLR5JEo8TNfpDNMWHHNJhRIAp
+         whQg==
+X-Gm-Message-State: AOAM530Fm32wG6M4Ucp/0oiGt4HHax3QdrVIJetX1STDyW2DfYZPzWQs
+        Tmu8a0r55EfRx4dVQRHJmtXSZH2ARpIZxWGaC9g=
+X-Google-Smtp-Source: ABdhPJw3SgXd3oHcPoAw+z0DymvtQNLu2F7ZsAMQ6X+pzgYxia7GeRCtol2YORg1xumdm2dZMS0j/DZ8eDYj7xEx9zE=
+X-Received: by 2002:a05:6602:2c09:: with SMTP id w9mr4429098iov.78.1633477425014;
+ Tue, 05 Oct 2021 16:43:45 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <7c405d70-5001-e4d4-57d1-fbdee5a7a464@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210929224823.556943-1-rajatja@google.com> <20210929224823.556943-2-rajatja@google.com>
+ <YVVLxi/on9x6nfCZ@kroah.com> <CACK8Z6EamamgYExt629gyNrYKpvnu2Gh0eGOOvOa5LH-jnOmaQ@mail.gmail.com>
+ <20211005145655.GJ621017@rowland.harvard.edu> <CAE_wzQ-XG3YBtKTmbn1LSGETCUg5AYjTmcnwOnc1h57OaL9+Cw@mail.gmail.com>
+ <20211005195929.GA634685@rowland.harvard.edu>
+In-Reply-To: <20211005195929.GA634685@rowland.harvard.edu>
+Reply-To: rajatxjain@gmail.com
+From:   Rajat Jain <rajatxjain@gmail.com>
+Date:   Tue, 5 Oct 2021 16:43:33 -0700
+Message-ID: <CAA93t1qzJuN8M2zbs+Kt9JXWP1H2kjKSxBp8-TXEfaMeZ1iggQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] usb: hub: Mark devices downstream a removable hub, as removable
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Dmitry Torokhov <dtor@google.com>, Rajat Jain <rajatja@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        levinale@google.com, bleung@google.com, jsbarnes@google.com,
+        pmalani@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/5/21 12:04 PM, Randy Dunlap wrote:
-> On 10/5/21 4:48 AM, Greg Kroah-Hartman wrote:
->> On Mon, Oct 04, 2021 at 04:21:03PM -0700, Randy Dunlap wrote:
->>> REGMAP_I2C is not a user visible kconfig symbol so driver configs
->>> should not "depend on" it. They should depend on I2C and then
->>> select REGMAP_I2C.
->>>
->>> If this worked, it was only because some other driver had set/enabled
->>> REGMAP_I2C.
->>>
->>> Fixes: da0cb6310094 ("usb: typec: add support for STUSB160x Type-C controller family")
->>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->>> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
->>> Cc: Amelie Delaunay <amelie.delaunay@st.com>
->>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>> Cc: linux-usb@vger.kernel.org
->>> ---
->>>   drivers/usb/typec/Kconfig |    4 ++--
->>>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> With this applied, I get the following build error:
->>
->> drivers/of/Kconfig:69:error: recursive dependency detected!
->> drivers/of/Kconfig:69:    symbol OF_IRQ depends on IRQ_DOMAIN
->> kernel/irq/Kconfig:59:    symbol IRQ_DOMAIN is selected by REGMAP
->> drivers/base/regmap/Kconfig:7:    symbol REGMAP default is visible depending on REGMAP_I2C
->> drivers/base/regmap/Kconfig:20:symbol REGMAP_I2C is selected by TYPEC_STUSB160X
->> drivers/usb/typec/Kconfig:66:    symbol TYPEC_STUSB160X depends on USB_ROLE_SWITCH
->> drivers/usb/roles/Kconfig:3:    symbol USB_ROLE_SWITCH is selected by USB_MUSB_MEDIATEK
->> drivers/usb/musb/Kconfig:119:    symbol USB_MUSB_MEDIATEK depends on GENERIC_PHY
->> drivers/phy/Kconfig:8:    symbol GENERIC_PHY is selected by PHY_BCM_NS_USB3
->> drivers/phy/broadcom/Kconfig:49:    symbol PHY_BCM_NS_USB3 depends on MDIO_BUS
->> drivers/net/mdio/Kconfig:13:    symbol MDIO_BUS depends on MDIO_DEVICE
->> drivers/net/mdio/Kconfig:6:    symbol MDIO_DEVICE is selected by PHYLIB
->> drivers/net/phy/Kconfig:16:    symbol PHYLIB is selected by ARC_EMAC_CORE
->> drivers/net/ethernet/arc/Kconfig:19:    symbol ARC_EMAC_CORE is selected by ARC_EMAC
->> drivers/net/ethernet/arc/Kconfig:25:    symbol ARC_EMAC depends on OF_IRQ
->> For a resolution refer to Documentation/kbuild/kconfig-language.rst
->> subsection "Kconfig recursive dependency limitations"
->>
->> So I can't take it as-is :(
-> 
-> Darn, I never saw that, but I'll look into it.
+Hello,
 
-Yeah, I easily see that in linux-next instead of mainline.
+On Tue, Oct 5, 2021 at 12:59 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Tue, Oct 05, 2021 at 09:51:02AM -0700, Dmitry Torokhov wrote:
+> > Hi Alan,
+> >
+> > On Tue, Oct 5, 2021 at 7:56 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > >
+> > > As I understand it, the "removable" property refers specifically to
+> > > the device's upstream link, not to whether _any_ of the links leading
+> > > from the device to the computer could be removed.
+> >
+> > No, that is not what it means. I'll cite our sysfs ABI:
+> >
+> > What:           /sys/devices/.../removable
+> > Date:           May 2021
+> > Contact:        Rajat Jain <rajatxjain@gmail.com>
+> > Description:
+> >                 Information about whether a given device can be removed from the
+> >                 platform by the user. This is determined by its subsystem in a
+> >                 bus / platform-specific way. This attribute is only present for
+> >                 devices that can support determining such information:
+> >
+> >                 "removable": device can be removed from the platform by the user
+> >                 "fixed":     device is fixed to the platform / cannot be removed
+> >                              by the user.
+> >                 "unknown":   The information is unavailable / cannot be deduced.
+> >
+> >                 Currently this is only supported by USB (which infers the
+> >                 information from a combination of hub descriptor bits and
+> >                 platform-specific data such as ACPI) and PCI (which gets this
+> >                 from ACPI / device tree).
+> >
+> > It specifically talks about _platform_, not about properties of some
+> > peripheral attached to a system. Note that the wording is very similar
+> > to what we had for USB devices that originally implemented "removable"
+> > attribute:
+>
+> In that case, shouldn't Rajat's patch change go into the driver core
+> rather than the hub driver?  _Every_ device downstream from a
+> removable link should count as removable, yes?  Not just the USB
+> devices.
 
-Still digging into it.  :(
+I have no preference either way, and can do that if that is more acceptable.
 
--- 
-~Randy
+>
+> And to say that the attribute is supported only by USB and PCI is
+> misleading, since it applies to every device downstream from a
+> removable link.
+
+However I do think it makes sense to have the bus control whether this
+attribute applies to it or not. Determining the first point in a
+hierarchy of devices, where a device can be removed is highly bus
+specific (set_usb_port_removable()).
+
+AFAIK, the primary reason / use of this attribute was to distinguish
+devices that can be removed by the user, and really all such devices
+(at least the ones that matter to user) today sit either on PCI or USB
+bus. We intend to use this attribute to segregate internal devices
+from external devices, and collect some statistics about usb device
+usage this way. There is also a VM case that I think Dmitry or Benson
+on this thread can elaborate more about. There seem to be hundreds of
+other bus types and I'm not sure if we want to unnecessarily flood the
+sysfs with a removable attribute under each device.
+
+Thanks & Best Regards,
+
+Rajat
+
+>
+> > > This is probably what Oliver meant when he complained about losing
+> > > information.  With the knowledge of whether each individual link is
+> > > removable, you can easily tell whether there's some way to remove a
+> > > device from the system.  But if you only know whether the device is
+> > > removable from the system overall, you generally can't tell whether
+> > > the link to the device's parent is removable.
+> >
+> > If we need this data then we need to establish some new attribute to
+> > convey this info.
+>
+> I don't know if we need it, but such an attribute seems like a good
+> idea.
+>
+> Alan Stern
