@@ -2,212 +2,303 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9E6423362
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 00:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AEDE42338E
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 00:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236792AbhJEWVf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 18:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
+        id S229974AbhJEWfe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 18:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbhJEWVc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 18:21:32 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EB7C061749;
-        Tue,  5 Oct 2021 15:19:41 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id u18so1904112lfd.12;
-        Tue, 05 Oct 2021 15:19:41 -0700 (PDT)
+        with ESMTP id S236764AbhJEWfd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 18:35:33 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D966C061753
+        for <linux-usb@vger.kernel.org>; Tue,  5 Oct 2021 15:33:42 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id na16-20020a17090b4c1000b0019f5bb661f9so861644pjb.0
+        for <linux-usb@vger.kernel.org>; Tue, 05 Oct 2021 15:33:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cm3t0jHYi60ikbjIFrElH5F3+z5ZebZ+trrzKBFfgQI=;
-        b=qTAIEXIVB1/IgtvGdtrN/gmvUv6mTJMWYvN+by7UBNwUQz1edq9ynn5KZ4VakUYvgO
-         zdJ521ZSZKHguY4o7B00h080n6+hpVFgPtipWPhr7vdfUedARgQ4xE4HH2lbru46MeqC
-         A5BXLTY8VINH/AMBjZEF/K2gSikuRXhSI2fF9O8ZK3khdgYy8AFAvm2l22TZw2+cK0Up
-         VqGWxTT463F7ck5TyDg0STieTJ5C+qvpbnUQ5kqq4ulMywcZp+kTXt8lcdefcaH+dgKu
-         zq6l/FilsorGHNG/QzimfNCPZRYUNo7SlGD/xBo5UydUfU+gcPwF7E7ckKKrvoh9klYt
-         Rvdw==
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NVaNuqsh2cbkaLybruNHatXvA5elgWSJDPvzOcbacUE=;
+        b=EVm/hrha1IfLe4BiCQirvgf7RAapRUWd5OY2P/INgYjGkVj8hc9n6QLCp874tJH4B8
+         c59PijgCMCeR1ww75e7BgxIoTbMuTYzR9/moG5aTuzHYfPG7MAW0gYXmAVqBIaYxB6u3
+         pGT84S6wLaVtEx10zHX31KymEwCtGRBIM7nGxaEsjYxCLvHTfzY6xa7y7SldE/mqIVvK
+         oPnKGRn3Lv3ooPEL9qBqRzUnM8cnjxO5Piw2uYrVwcD14kajcyQSUHHfM8bMcuD/Rg2L
+         iTmJ3+gEulvEGrDRcURXy5eNQOactv7eOZqPRc7WNm1y+P0cIcKdewJWYVmtxJ5+4Jcu
+         GLMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=cm3t0jHYi60ikbjIFrElH5F3+z5ZebZ+trrzKBFfgQI=;
-        b=6hhnqyt2XuRgMYLBNC2nV0yG8PsZANtBv+Y+ujv3fVytDqGArizH5YtwnLATxAsUJt
-         OkqBwMbf78zRVcV/+qsOokjE5H3F1aeZGzVtXS+pSe1PoQtFgIESne4ZTE+qLvuM/537
-         Z289c3Z5jopFyyvmvlAzPZe7dkLyna195R2rycn/fFg9FLjF3bN4evkWrl88Ub2T4QNt
-         KA7sENlEZpFF5OvfJWwhjFl/nDzpJ0kMWoys51uuzC5BuPDzs6oSojwX9QtzgH0eBTO0
-         BDoETraINfqc+1dWTIr2Ii28Uuje+EDoIRhyd1noX9fHWJWCZRzdWE9KvHyAMbmhrUnb
-         ZzFA==
-X-Gm-Message-State: AOAM533jef9d3xmw1Rrve3XH/J5Rejztw9KP0UV1G8UZAUuJ+QLFjqbi
-        eYdIGCVA+23UkRg6+MwsUe8=
-X-Google-Smtp-Source: ABdhPJx7DQPDGWTTKyBBQ7on8Zoc9EHE4rfD8+/mmsH+2cs2olWIZx3pD3Yp7kL6x0TZhEN3swGrdg==
-X-Received: by 2002:a2e:5cc6:: with SMTP id q189mr24035068ljb.82.1633472379484;
-        Tue, 05 Oct 2021 15:19:39 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
-        by smtp.googlemail.com with ESMTPSA id d19sm2088024lfv.74.2021.10.05.15.19.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Oct 2021 15:19:39 -0700 (PDT)
-Subject: Re: [PATCH v13 06/35] clk: tegra: Support runtime PM and power domain
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-References: <20210926224058.1252-1-digetx@gmail.com>
- <20210926224058.1252-7-digetx@gmail.com>
- <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com>
- <24101cd6-d3f5-1e74-db39-145ecd30418b@gmail.com>
- <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <4bdba8a2-4b9b-ed7d-e6ca-9218d8200a85@gmail.com>
-Date:   Wed, 6 Oct 2021 01:19:37 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NVaNuqsh2cbkaLybruNHatXvA5elgWSJDPvzOcbacUE=;
+        b=TMtLxmVWxcVdPPfUktM4VU7ULzVuH0R1YbVAMzGhJwjHYXUAMxbS/D2OhaSmsTYnoh
+         fC3A9fwWDxm7ooQ/26WYodmdbquz8fV2pg5kdFlJtSPfj4glbp5wojctB5fmbvuD9ZHo
+         Lxp7IJ9cJKRBSHuVf4rL1e/j9xlXS5DosklaYTw5E8+2T0HA558xsszKa9E+FQ1HiyOA
+         tfRtHRD6ALCF4pwQdCf9UCtADnNMNrlHeP+TKgod6pCSUuZXKHYxK+GgLwYcylcEIuQT
+         n+G4dv9Khh2sEx8pUWXRCamjvxpVZLFJVLHHE86aEeYFhdnkFAmu54+C+nZaOL6i8yyK
+         XT/Q==
+X-Gm-Message-State: AOAM5312HmuC/Q75aoJjpWloXUqXp++E9h7nOdJTnxUqqUK5Sy4U/80n
+        LnVxiwf4LyQDNwgXjoxB1qutIBG8tHEk5hsuCXFplQ==
+X-Google-Smtp-Source: ABdhPJyNUK8tRKcu+8Dd6LTnJN+R73YCyL6OGLWiFBrQ/OXrJOoHzTAHLH3By0qn+wa4u+t5oNVbKSM82eOjyEdBbGQ=
+X-Received: by 2002:a17:90a:d686:: with SMTP id x6mr6764886pju.8.1633473221792;
+ Tue, 05 Oct 2021 15:33:41 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <CAPcyv4hP6mtzKS-CVb-aKf-kYuiLM771PMxN2zeBEfoj6NbctA@mail.gmail.com>
+ <6d1e2701-5095-d110-3b0a-2697abd0c489@linux.intel.com> <YVXWaF73gcrlvpnf@kroah.com>
+ <1cfdce51-6bb4-f7af-a86b-5854b6737253@linux.intel.com> <YVaywQLAboZ6b36V@kroah.com>
+ <CAPcyv4gqs=KuGyxFR61QWqF6HKrRg851roCGUqrq585+s2Cm=w@mail.gmail.com>
+ <20211001164533.GC505557@rowland.harvard.edu> <CAPcyv4i__reKFRP1KjWUov_W5jBQN9_vbUbKRL_V7KMM3oPuuQ@mail.gmail.com>
+ <20211001190048.GA512418@rowland.harvard.edu> <CAPcyv4hYL51DcBuSuyMRFo5Jcc=zLd=Ugo+H_2saELcZ5AJBeQ@mail.gmail.com>
+ <YVqONA0vhl0/H3QE@lahna>
+In-Reply-To: <YVqONA0vhl0/H3QE@lahna>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 5 Oct 2021 15:33:29 -0700
+Message-ID: <CAPcyv4im4Tsj1SnxSWe=cAHBP1mQ=zgO-D81n2BpD+_HkpitbQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] virtio: Initialize authorized attribute for
+ confidential guest
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jason Wang <jasowang@redhat.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-05.10.2021 16:10, Ulf Hansson пишет:
-> On Sat, 2 Oct 2021 at 22:44, Dmitry Osipenko <digetx@gmail.com> wrote:
->>
->> 01.10.2021 15:32, Ulf Hansson пишет:
->>>> +static __maybe_unused int tegra_clock_pm_suspend(struct device *dev)
->>>> +{
->>>> +       struct tegra_clk_device *clk_dev = dev_get_drvdata(dev);
->>>> +
->>>> +       /*
->>>> +        * Power management of the clock is entangled with the Tegra PMC
->>>> +        * GENPD because PMC driver enables/disables clocks for toggling
->>>> +        * of the PD's on/off state.
->>>> +        *
->>>> +        * The PMC GENPD is resumed in NOIRQ phase, before RPM of the clocks
->>>> +        * becomes available, hence PMC can't use clocks at the early resume
->>>> +        * phase if RPM is involved. For example when 3d clock is enabled,
->>>> +        * it may enable the parent PLL clock that needs to be RPM-resumed.
->>>> +        *
->>>> +        * Secondly, the PLL clocks may be enabled by the low level suspend
->>>> +        * code, so we need to assume that PLL is in enabled state during
->>>> +        * suspend.
->>>> +        *
->>>> +        * We will keep PLLs and system clock resumed during suspend time.
->>>> +        * All PLLs on all SoCs are low power and system clock is always-on,
->>>> +        * so practically not much is changed here.
->>>> +        */
->>>> +
->>>> +       return clk_prepare(clk_dev->hw->clk);
->>> I am trying to understand, more exactly, what you intend to achieve
->>> with the clk_prepare() here. It looks a bit weird, to me. Can you try
->>> to elaborate a bit more on the use case?
->>
->> The Tegra GENPD driver enable/disable clocks when domain is turned on.
-> 
-> Okay. I noticed that in tegra_genpd_power_on(). And the same clocks
-> are enabled/disabled also in tegra_genpd_power_off(), when powering
-> off the PM domain.
-> 
-> So I guess the problem kind of exists for tegra_genpd_power_off() too?
+On Sun, Oct 3, 2021 at 10:16 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> Hi,
+>
+> On Fri, Oct 01, 2021 at 12:57:18PM -0700, Dan Williams wrote:
+> > > > Ah, so are you saying that it would be sufficient for USB if the
+> > > > generic authorized implementation did something like:
+> > > >
+> > > > dev->authorized = 1;
+> > > > device_attach(dev);
+> > > >
+> > > > ...for the authorize case, and:
+> > > >
+> > > > dev->authorize = 0;
+> > > > device_release_driver(dev);
+> > > >
+> > > > ...for the deauthorize case?
+> > >
+> > > Yes, I think so.  But I haven't tried making this change to test and
+> > > see what really happens.
+> >
+> > Sounds like a useful path for this effort to explore. Especially as
+> > Greg seems to want the proposed "has_probe_authorization" flag in the
+> > bus_type to disappear and make this all generic. It just seems that
+> > Thunderbolt would need deeper surgery to move what it does in the
+> > authorization toggle path into the probe and remove paths.
+> >
+> > Mika, do you see a path for Thunderbolt to align its authorization
+> > paths behind bus ->probe() ->remove() events similar to what USB might
+> > be able to support for a generic authorization path?
+>
+> In Thunderbolt "authorization" actually means whether there is a PCIe
+> tunnel to the device or not. There is no driver bind/unbind happening
+> when authorization toggles (well on Thunderbolt bus, there can be on PCI
+> bus after the tunnel is established) so I'm not entirely sure how we
+> could use the bus ->probe() or ->remove for that to be honest.
 
-Both OFF/ON are affected by the same problem. If domain was already
-turned OFF before genpd_suspend_noirq(), then the OFF problem isn't visible.
+Greg, per your comment:
 
-I reproduced the OFF problem by removing the clk prepare/unprepare from
-the suspend/resume of the clk driver and making some extra changes to
-clock tree topology and etc to trigger the problem on Nexus 7.
+"... which was to move the way that busses are allowed to authorize
+the devices they wish to control into a generic way instead of being
+bus-specific logic."
 
-tegra-pmc 7000e400.pmc: failed to turn off PM domain heg: -13
+We have USB and TB that have already diverged on the ABI here. The USB
+behavior is more in line with the "probe authorization" concept, while
+TB is about tunnel establishment and not cleanly tied to probe
+authorization. So while I see a path to a common authorization
+implementation for USB and other buses (per the insight from Alan), TB
+needs to retain the ability to record the authorization state as an
+enum rather than a bool, and emit a uevent on authorization status
+change.
 
-I happens from genpd_suspend_noirq() -> tegra_genpd_power_off() -> clk
--> GENPD -> I2C -> runtime-pm.
+So how about something like the following that moves the attribute
+into the core, but still calls back to TB and USB to perform their
+legacy authorization work. This new authorized attribute only shows up
+when devices default to not authorized, i.e. when userspace owns the
+allow list past critical-boot built-in drivers, or if the bus (USB /
+TB) implements ->authorize().
 
--13 is EACCES, it comes from the runtime PM of I2C device. RPM is
-prohibited/disabled during late (NOIRQ) suspend by the drivers core.
 
->> This can't be done during early system resume, when domains are getting
->> turned on by the drivers core, because when clock is enabled, it's
->> getting prepared (RPM-resumed) and this preparation fails because
->> performance state of the clock goes up and it doesn't work during the
->> early resume time since I2C, which applies the state to hardware, is
->> suspended and can't work at that early time.
-> 
-> This sounds complicated and I still don't quite follow all of it, sorry.
-> 
-> So, tegra_genpd_power_on() gets called from genpd_resume_noirq(), when
-> the first device of the attached devices to genpd gets resumed. And
-> vice versa for tegra_genpd_power_off() and genpd_suspend_noirq().
-> 
-> Are you saying that trying to enable/disable clocks from
-> tegra_genpd_power_on|off() in these paths doesn't work, because it
-> would also require the performance state to be changed, which would
-> fail because the I2C bus/driver is suspended?
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index e65dd803a453..8f8fbe2637d1 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2414,6 +2414,58 @@ static ssize_t online_store(struct device *dev,
+struct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RW(online);
 
-Yes, but it's actually not I2C bus/driver that is suspended, it's
-runtime PM that is unavailable during NOIRQ. The I2C driver itself is
-suspended after domains are turned OFF and resumed before they are
-enabled. It's just runtime PM API that is unavailable. I'm wondering if
-this could be changed.
++static ssize_t authorized_show(struct device *dev,
++                              struct device_attribute *attr, char *buf)
++{
++       return sysfs_emit(buf, "%u\n", dev->authorized);
++}
++
++static ssize_t authorized_store(struct device *dev,
++                               struct device_attribute *attr, const char *buf,
++                               size_t count)
++{
++       unsigned int val, save;
++       ssize_t rc;
++
++       rc = kstrtouint(buf, 0, &val);
++       if (rc < 0)
++               return rc;
++
++       /* some buses (Thunderbolt) support authorized values > 1 */
++       if (val > 1 && !dev->bus->authorize)
++               return -EINVAL;
++
++       device_lock(dev);
++       save = dev->authorized;
++       if (save == val) {
++               rc = count;
++               goto err;
++       }
++
++       dev->authorized = val;
++       if (dev->bus->authorize) {
++               /* notify bus about change in authorization state */
++               rc = dev->bus->authorize(dev);
++               if (rc) {
++                       dev->authorized = save;
++                       goto err;
++               }
++       }
++       device_unlock(dev);
++
++       if (dev->authorized) {
++               if (!device_attach(dev))
++                       dev_dbg(dev, "failed to probe after authorize\n");
++       } else
++               device_release_driver(dev);
++       return count;
++
++err:
++       device_unlock(dev);
++       return rc < 0 ? rc : count;
++}
++static DEVICE_ATTR_RW(authorized);
++
+ static ssize_t removable_show(struct device *dev, struct
+device_attribute *attr,
+                              char *buf)
+ {
+@@ -2616,8 +2668,16 @@ static int device_add_attrs(struct device *dev)
+                        goto err_remove_dev_waiting_for_supplier;
+        }
 
-I'm also wondering if we could add some 'was_enabled' flag to GENPDs,
-setting it by genpd_suspend_noirq() for the enabled domains, and then
-powering-on GENPDs from genpd_resume_noirq() only if they were in the
-enabled state during genpd_suspend_noirq() time. It actually puzzled me
-for a quite long time why GENPD core enables domains unconditionally
-during early resume. This should solve a part of the problem and it
-makes suspend/resume a bit safer because there is a smaller chance to
-crash hardware during suspend, at least it's easier to debug.
++       if (dev_needs_authorization(dev)) {
++               error = device_create_file(dev, &dev_attr_authorized);
++               if (error)
++                       goto err_remove_dev_removable;
++       }
++
+        return 0;
 
->> Secondly, Tegra has arch-specific low level assembly which touches
->> clocks during last phase of system suspend and in the beginning of
->> resume. Hence, clocks should stay prepared during suspend just because
->> technically clock should be prepared before it can be enabled.
-> 
-> So the low level code is gating and ungating the clock behind the back
-> of the clock driver then? Why is that done like that, more exactly?
++ err_remove_dev_removable:
++       device_remove_file(dev, &dev_attr_removable);
+  err_remove_dev_waiting_for_supplier:
+        device_remove_file(dev, &dev_attr_waiting_for_supplier);
+  err_remove_dev_online:
+@@ -2639,6 +2699,7 @@ static void device_remove_attrs(struct device *dev)
+        struct class *class = dev->class;
+        const struct device_type *type = dev->type;
 
-I revisited that code again, and it shouldn't touch the clocks.
-I changed that code to not toggle the clocks [1] sometime ago, but
-forgot about it.
++       device_remove_file(dev, &dev_attr_authorized);
+        device_remove_file(dev, &dev_attr_removable);
+        device_remove_file(dev, &dev_attr_waiting_for_supplier);
+        device_remove_file(dev, &dev_attr_online);
+@@ -2805,6 +2866,8 @@ static void klist_children_put(struct klist_node *n)
+        put_device(dev);
+ }
 
-[1] https://git.kernel.org/linus/680ae4452
++unsigned int dev_default_authorization;
++
+ /**
+  * device_initialize - init device structure.
+  * @dev: device.
+diff --git a/include/linux/device.h b/include/linux/device.h
+index e270cb740b9e..fbb83e46af9d 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -561,6 +561,7 @@ struct device {
+        struct dev_iommu        *iommu;
 
->>> Is this rather about making sure that the clock's corresponding PM
->>> domain stays powered on during system suspend? In that case, I think
->>> there may be an alternative option....
->>>
->>
->> This is not about domain staying powered on, this is about keeping the
->> performance state of the domain high during suspend.
-> 
-> Right, so the PM domain managed in tegra_genpd_power_on|off() can
-> still be powered on/off, as long as the clock remains ungated?
+        enum device_removable   removable;
++       unsigned int            authorized;
 
-Not ungated, but prepared.
+        bool                    offline_disabled:1;
+        bool                    offline:1;
+@@ -814,6 +815,19 @@ static inline bool dev_removable_is_valid(struct
+device *dev)
+        return dev->removable != DEVICE_REMOVABLE_NOT_SUPPORTED;
+ }
+
++extern unsigned int dev_default_authorization;
++
++/*
++ * If the bus has custom authorization, or if devices default to not
++ * authorized, register the 'authorized' attribute for @dev.
++ */
++static inline bool dev_needs_authorization(struct device *dev)
++{
++       if (dev->bus->authorize || dev_default_authorization == 0)
++               return true;
++       return false;
++}
++
+ /*
+  * High level routines for use by the bus drivers
+  */
+diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
+index 062777a45a74..3202a2b13374 100644
+--- a/include/linux/device/bus.h
++++ b/include/linux/device/bus.h
+@@ -40,6 +40,11 @@ struct fwnode_handle;
+  *             that generate uevents to add the environment variables.
+  * @probe:     Called when a new device or driver add to this bus, and callback
+  *             the specific driver's probe to initial the matched device.
++ * @authorize: Called after authorized_store() changes the
++ *             authorization state of the device. Do not use for new
++ *             bus implementations, revalidate dev->authorized in
++ *             @probe and @remove to take any bus specific
++ *             authorization actions.
+  * @sync_state:        Called to sync device state to software state
+after all the
+  *             state tracking consumers linked to this device (present at
+  *             the time of late_initcall) have successfully bound to a
+@@ -90,6 +95,7 @@ struct bus_type {
+        int (*match)(struct device *dev, struct device_driver *drv);
+        int (*uevent)(struct device *dev, struct kobj_uevent_env *env);
+        int (*probe)(struct device *dev);
++       int (*authorize)(struct device *dev);
+        void (*sync_state)(struct device *dev);
+        void (*remove)(struct device *dev);
+        void (*shutdown)(struct device *dev);
