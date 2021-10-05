@@ -2,72 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90145423069
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 20:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 490E6423082
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 21:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235173AbhJESxt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 14:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
+        id S235005AbhJETGn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 15:06:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234413AbhJESxt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 14:53:49 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFEAFC061762
-        for <linux-usb@vger.kernel.org>; Tue,  5 Oct 2021 11:51:57 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id s69so514579oie.13
-        for <linux-usb@vger.kernel.org>; Tue, 05 Oct 2021 11:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=LIIZhO6QemCxBZ+WNeUA1NEuSGEugkxriOxoUlLOrtM=;
-        b=Y1nq5bwPYgRtZSjzARwnqT6iVgQ/xdr6g8NM7LasqBqbPZpI4zP1qfDtiPCm3SaWPr
-         jrdpR5Tx34tO4K7ERkIGnrUhYh3+v/jVh5GhPPfbfud6u6GE5I6i0Rr4W/eNnlf8HALN
-         BsGPH1DMJw5cFM9cMKPantLExCmTQIv+nQip4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=LIIZhO6QemCxBZ+WNeUA1NEuSGEugkxriOxoUlLOrtM=;
-        b=IUinYYjzLuqi3AMuiz1/mpR4Oegeb9UUx8UESHDbxqw0TPB5wWHi3tQjLrL8rb2vYP
-         1qvGcwlpBxY6+GQKUlX+TQvyMUlqmmpr25v+lgmiOY1vP5h+l0rLnLMz3sAqG+frZKXW
-         /kr4V7ebnafoeJWGyL6hldLtmIPDSSC9Dj8kpPJn23LuG0tVIoanV/2kj1TycT4iNgid
-         OlJjjVfXjNOKde/n1ggWRlg/uTgdb2I0wa1n6auPiYrltRGZLB9H9bII47j+5t64wJjl
-         0dygf79gW7xYUDouxbkctVbTjm9CGNiagCYYI8ncRMiXBzXbjMt+oKe+zsHlA0qGEpKd
-         Vp/w==
-X-Gm-Message-State: AOAM532+DzmCZ5EXYrj1Nx2QzAoCf9710S6imYWP2fKE3Pk+nxROOosU
-        V8VR5EfAPf+Qlg1gXjf9IbNyX2GLr+lQGYWe/dvGsw==
-X-Google-Smtp-Source: ABdhPJx3bk6kPZwvGXnigGeMH3u2Pd/DyxwzdF0vLz40GZdxglzimeBZyFdhqzgXgqztcirSxk8zy1Y/fjFQiUbZmPM=
-X-Received: by 2002:aca:3110:: with SMTP id x16mr3979222oix.64.1633459917288;
- Tue, 05 Oct 2021 11:51:57 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 5 Oct 2021 11:51:56 -0700
+        with ESMTP id S229758AbhJETGn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 15:06:43 -0400
+Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB19C061749;
+        Tue,  5 Oct 2021 12:04:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=eButU39qcaN9Nd+LF5xEgZScv1EWqZ53vsIQuSaMqUM=; b=ZQJhIN/qGwB2lK+lYkZEqwjtSY
+        Oe5LHSaKCLMkhgx3ovjc9i416LeBvhK//kdWgo8zGFHz1AyLEm+oIbozntbmisMOS9gMIF1SrwwO3
+        mfVQHSWUTVTj0UL7tG90IXYVRfNxoy8XF0xj3R/RXrvp6KSojDbMn0QKRRDaBSEHonTdSrxm+87DX
+        6MGj2QGDiPDdhJuFPjHfqtrrgYukP+v5qJMcHsPAzyDXiAx6muzjYmHEYoFnRwPC3kKD+t7BeRIgQ
+        DzfMr/5JfojzbVUKoyyUGbrcuMYtfi5YrwqA5AzFrGUYfEsYKTKu+DnxwnJzRP/ptZSDQ39XpUAVz
+        vJx+NQlQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mXpkB-00BdBC-O7; Tue, 05 Oct 2021 19:04:51 +0000
+Subject: Re: [PATCH] usb: typec: STUSB160X should select REGMAP_I2C
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Amelie Delaunay <amelie.delaunay@st.com>,
+        linux-usb@vger.kernel.org
+References: <20211004232103.23893-1-rdunlap@infradead.org>
+ <YVw7lJ5TeFsYwAgC@kroah.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <7c405d70-5001-e4d4-57d1-fbdee5a7a464@infradead.org>
+Date:   Tue, 5 Oct 2021 12:04:51 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <1633459359-31517-5-git-send-email-pmaliset@codeaurora.org>
-References: <1633459359-31517-1-git-send-email-pmaliset@codeaurora.org> <1633459359-31517-5-git-send-email-pmaliset@codeaurora.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Tue, 5 Oct 2021 11:51:56 -0700
-Message-ID: <CAE-0n511H+FbPCbSb+FP0VMsrTmA4h8Q9pfk-=4zZPnwLuRAPQ@mail.gmail.com>
-Subject: Re: [PATCH v11 4/5] PCI: qcom: Add a flag in match data along with ops
-To:     Prasad Malisetty <pmaliset@codeaurora.org>, agross@kernel.org,
-        bhelgaas@google.com, bjorn.andersson@linaro.org,
-        lorenzo.pieralisi@arm.com, robh+dt@kernel.org, svarbanov@mm-sol.com
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
-        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org,
-        linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YVw7lJ5TeFsYwAgC@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Prasad Malisetty (2021-10-05 11:42:38)
-> Add pipe_clk_need_muxing flag in match data and configure
-> If the platform needs to switch pipe_clk_src.
->
-> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
-> ---
+On 10/5/21 4:48 AM, Greg Kroah-Hartman wrote:
+> On Mon, Oct 04, 2021 at 04:21:03PM -0700, Randy Dunlap wrote:
+>> REGMAP_I2C is not a user visible kconfig symbol so driver configs
+>> should not "depend on" it. They should depend on I2C and then
+>> select REGMAP_I2C.
+>>
+>> If this worked, it was only because some other driver had set/enabled
+>> REGMAP_I2C.
+>>
+>> Fixes: da0cb6310094 ("usb: typec: add support for STUSB160x Type-C controller family")
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>> Cc: Amelie Delaunay <amelie.delaunay@st.com>
+>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Cc: linux-usb@vger.kernel.org
+>> ---
+>>   drivers/usb/typec/Kconfig |    4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> With this applied, I get the following build error:
+> 
+> drivers/of/Kconfig:69:error: recursive dependency detected!
+> drivers/of/Kconfig:69:	symbol OF_IRQ depends on IRQ_DOMAIN
+> kernel/irq/Kconfig:59:	symbol IRQ_DOMAIN is selected by REGMAP
+> drivers/base/regmap/Kconfig:7:	symbol REGMAP default is visible depending on REGMAP_I2C
+> drivers/base/regmap/Kconfig:20:symbol REGMAP_I2C is selected by TYPEC_STUSB160X
+> drivers/usb/typec/Kconfig:66:	symbol TYPEC_STUSB160X depends on USB_ROLE_SWITCH
+> drivers/usb/roles/Kconfig:3:	symbol USB_ROLE_SWITCH is selected by USB_MUSB_MEDIATEK
+> drivers/usb/musb/Kconfig:119:	symbol USB_MUSB_MEDIATEK depends on GENERIC_PHY
+> drivers/phy/Kconfig:8:	symbol GENERIC_PHY is selected by PHY_BCM_NS_USB3
+> drivers/phy/broadcom/Kconfig:49:	symbol PHY_BCM_NS_USB3 depends on MDIO_BUS
+> drivers/net/mdio/Kconfig:13:	symbol MDIO_BUS depends on MDIO_DEVICE
+> drivers/net/mdio/Kconfig:6:	symbol MDIO_DEVICE is selected by PHYLIB
+> drivers/net/phy/Kconfig:16:	symbol PHYLIB is selected by ARC_EMAC_CORE
+> drivers/net/ethernet/arc/Kconfig:19:	symbol ARC_EMAC_CORE is selected by ARC_EMAC
+> drivers/net/ethernet/arc/Kconfig:25:	symbol ARC_EMAC depends on OF_IRQ
+> For a resolution refer to Documentation/kbuild/kconfig-language.rst
+> subsection "Kconfig recursive dependency limitations"
+> 
+> So I can't take it as-is :(
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Darn, I never saw that, but I'll look into it.
+
+thanks.
+
+-- 
+~Randy
