@@ -2,129 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 510CE4224E1
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 13:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5341422506
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 13:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234352AbhJELWx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 07:22:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48858 "EHLO mail.kernel.org"
+        id S233911AbhJELdE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 07:33:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52452 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234217AbhJELWw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 Oct 2021 07:22:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6D25261425;
-        Tue,  5 Oct 2021 11:21:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633432862;
-        bh=fvJpMHHEet+MaQV3Zx/ytB8336I76r/NnwK/oIOSVQg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Eu4FspsPS6S0lAkM8OXIpTWEuaWMOKYH8hGAEjkmHlox0ju828ZBmYSFq8cVKdhXi
-         rOXXJqoPeLfDUtz6ZWW62u1qbyCLQhlFie34tILjIfW1L+x5K82lR1JeT246u0WdAF
-         snOcyfvK8a3nal06gmex7k+cV4VwzbkvvdFYZV7oX0e8UzufkR/3jF7V76WUv99M/W
-         qRP8tTz8gV2P6ctjnhCtzqqmAvqywPyFZs2cXCP95VTYlAPnRJBccVHee2p26BGIe5
-         dZrb4vSCzE5zLhBdBX1CK9ZY/R2EgCNvIaqD5z0DIakK3MgF/nW4XUNhRmOjL4pUzv
-         tNN0wxt5ooNxg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, JC Kuo <jckuo@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] [v3] usb: xhci: tegra: mark PM functions as __maybe_unused
-Date:   Tue,  5 Oct 2021 13:20:28 +0200
-Message-Id: <20211005112057.2700888-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        id S233812AbhJELdA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 Oct 2021 07:33:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7BEE76124D;
+        Tue,  5 Oct 2021 11:31:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1633433469;
+        bh=v9Ivu2/WTGqU/gNbWAmUQGt6iunTwdCv2qRWu0qrIhc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ydYzzA/zmFX1asG16uIv4bzccNY1//zhhu610KN6XTflY4rb5bMdbbLGI94nnPW/a
+         3zRT/ix5I2FPr1Y1u4YJE0JAE9eAr703Jcy92fM8yGGahpYojPnOhH0kQ19PAMYE7l
+         6v6/mpoa8AJhGYpMqmAMpKF5RvcFJxR2zRbVOGjQ=
+Date:   Tue, 5 Oct 2021 13:31:07 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     linux-usb@vger.kernel.org,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Jack Pham <jackp@codeaurora.org>
+Subject: Re: [PATCH] usb: gadget: u_audio.c: Adding Playback Pitch ctl for
+ sync playback
+Message-ID: <YVw3e1zOS2QvKiM0@kroah.com>
+References: <20210925143003.12476-1-pavel.hofman@ivitera.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210925143003.12476-1-pavel.hofman@ivitera.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Sat, Sep 25, 2021 at 04:30:03PM +0200, Pavel Hofman wrote:
+> EP IN is hard-coded as ASYNC both in f_uac1 and f_uac2 but u_audio sends
+> steady number of audio frames in each USB packet, without any control.
+> 
+> This patch adds 'Playback Pitch 1000000' ctl analogous to the existing
+> 'Capture Pitch 1000000' ctl. The calculation of playback req->length in
+> u_audio_iso_complete respects the Playback Pitch ctl value to 1ppm now.
+> 
+> Max. value for Playback Pitch is configured by the existing parameter
+> uac2_opts->fb_max, used also for the Capture Pitch.
+> 
+> Since the EP IN packet size can be increased by uac2_opts->fb_max now,
+> maxPacketSize for the playback direction is calculated by the same
+> algorithm as for the async capture direction in
+> f_uac2.c:set_ep_max_packet_size.
+> 
+> Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+> ---
+>  drivers/usb/gadget/function/f_uac2.c  |  5 +-
+>  drivers/usb/gadget/function/u_audio.c | 93 ++++++++++++++++++++-------
+>  2 files changed, 74 insertions(+), 24 deletions(-)
 
-The added #ifdefs in the PM rework were almost correct, but still
-cause warnings in some randconfig builds:
+Does not apply to my tree, what kernel release / branch did you make
+this against?
 
-drivers/usb/host/xhci-tegra.c:2147:12: error: 'tegra_xusb_resume' defined but not used [-Werror=unused-function]
- 2147 | static int tegra_xusb_resume(struct device *dev)
-      |            ^~~~~~~~~~~~~~~~~
-drivers/usb/host/xhci-tegra.c:2105:12: error: 'tegra_xusb_suspend' defined but not used [-Werror=unused-function]
- 2105 | static int tegra_xusb_suspend(struct device *dev)
+thanks,
 
-Replace the #ifdef checks with simpler __maybe_unused annotations to
-reliably shut up these warnings.
-
-Fixes: 971ee247060d ("usb: xhci: tegra: Enable ELPG for runtime/system PM")
-Reviewed-by: JC Kuo <jckuo@nvidia.com>
-Link: https://lore.kernel.org/all/20210421135613.3560777-2-arnd@kernel.org/
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-v3: fix reference to original commit.
----
- drivers/usb/host/xhci-tegra.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-index 575fa89a783f..1bf494b649bd 100644
---- a/drivers/usb/host/xhci-tegra.c
-+++ b/drivers/usb/host/xhci-tegra.c
-@@ -1787,7 +1787,6 @@ static int tegra_xusb_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--#if IS_ENABLED(CONFIG_PM) || IS_ENABLED(CONFIG_PM_SLEEP)
- static bool xhci_hub_ports_suspended(struct xhci_hub *hub)
- {
- 	struct device *dev = hub->hcd->self.controller;
-@@ -2102,7 +2101,7 @@ static int tegra_xusb_exit_elpg(struct tegra_xusb *tegra, bool runtime)
- 	return err;
- }
- 
--static int tegra_xusb_suspend(struct device *dev)
-+static __maybe_unused int tegra_xusb_suspend(struct device *dev)
- {
- 	struct tegra_xusb *tegra = dev_get_drvdata(dev);
- 	int err;
-@@ -2144,7 +2143,7 @@ static int tegra_xusb_suspend(struct device *dev)
- 	return err;
- }
- 
--static int tegra_xusb_resume(struct device *dev)
-+static __maybe_unused int tegra_xusb_resume(struct device *dev)
- {
- 	struct tegra_xusb *tegra = dev_get_drvdata(dev);
- 	int err;
-@@ -2174,10 +2173,8 @@ static int tegra_xusb_resume(struct device *dev)
- 
- 	return 0;
- }
--#endif
- 
--#ifdef CONFIG_PM
--static int tegra_xusb_runtime_suspend(struct device *dev)
-+static __maybe_unused int tegra_xusb_runtime_suspend(struct device *dev)
- {
- 	struct tegra_xusb *tegra = dev_get_drvdata(dev);
- 	int ret;
-@@ -2190,7 +2187,7 @@ static int tegra_xusb_runtime_suspend(struct device *dev)
- 	return ret;
- }
- 
--static int tegra_xusb_runtime_resume(struct device *dev)
-+static __maybe_unused int tegra_xusb_runtime_resume(struct device *dev)
- {
- 	struct tegra_xusb *tegra = dev_get_drvdata(dev);
- 	int err;
-@@ -2201,7 +2198,6 @@ static int tegra_xusb_runtime_resume(struct device *dev)
- 
- 	return err;
- }
--#endif
- 
- static const struct dev_pm_ops tegra_xusb_pm_ops = {
- 	SET_RUNTIME_PM_OPS(tegra_xusb_runtime_suspend,
--- 
-2.29.2
-
+greg k-h
