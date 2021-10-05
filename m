@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5898422779
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 15:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C5F4229C8
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 16:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234681AbhJENNl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 09:13:41 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:59601 "EHLO m43-7.mailgun.net"
+        id S235594AbhJEOBz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 10:01:55 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:31701 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234720AbhJENNl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 Oct 2021 09:13:41 -0400
+        id S236030AbhJEOAI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 Oct 2021 10:00:08 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1633439510; h=Message-ID: References: In-Reply-To: Subject:
+ s=smtp; t=1633442298; h=Message-ID: References: In-Reply-To: Subject:
  Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=U6BZdp7Nj1iB2Co/1jqzWb6n7mqm30f5x3oIRYnDtpI=;
- b=gNxxRdVPpSfsZR9uefQHgknalWbjfPpt3uxsvKLnRvD3DB9l5rq7G0+naMLnNkp8GuU/2O3R
- z8/YEac7wD6HFWndGKE50JnurIm6hcsBupPGgkqMRdzveQjl8Df4F1jvOLlmRYNKd8Q45E+Q
- VDSRAmQWGIz5K3VN8M96empzMRw=
+ MIME-Version: Sender; bh=LgxDMZbTLmbkmI3rWSDe8ZXB9Ho4b2bgxaujdRTL8SE=;
+ b=jlSlIgK7FV1dFfWcyRnRyMwB9Oz0Bk8woVh6FKK80z2KJ73lhFPPPFT2HKHQHJiUPrijmNLr
+ UATDZWA5jJtoFHvO96kA+0s6+/LN9fSVlfBSoAliOZkZ+R/+E4PIQF7W/4s+HFxjza6fZzVF
+ nLzZeccNoX17n+zoN+LsX+09gRM=
 X-Mailgun-Sending-Ip: 69.72.43.7
 X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
 Received: from smtp.codeaurora.org
  (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 615c4f1563b1f186582a7409 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 05 Oct 2021 13:11:49
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 615c59e1ff0285fb0a91aa08 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 05 Oct 2021 13:57:53
  GMT
 Sender: schowdhu=codeaurora.org@mg.codeaurora.org
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id C2883C43616; Tue,  5 Oct 2021 13:11:48 +0000 (UTC)
+        id E091BC35A3B; Tue,  5 Oct 2021 13:57:52 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
@@ -38,15 +38,15 @@ Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
         (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: schowdhu)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 03C64C4338F;
-        Tue,  5 Oct 2021 13:11:47 +0000 (UTC)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B80D0C35A3C;
+        Tue,  5 Oct 2021 13:57:50 +0000 (UTC)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Tue, 05 Oct 2021 18:41:47 +0530
+Date:   Tue, 05 Oct 2021 19:27:50 +0530
 From:   schowdhu@codeaurora.org
-To:     Rob Herring <robh@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
 Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org,
         Bryan O'Donoghue <pure.logic@nexus-software.ie>,
@@ -58,83 +58,77 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         Rajendra Nayak <rnayak@codeaurora.org>,
         Sibi Sankar <sibis@codeaurora.org>,
         Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-Subject: Re: [PATCH V0 1/7] dt-bindings: connector: Add property for eud type
- c connector
-In-Reply-To: <YVsttQySDnaXxOuI@robh.at.kernel.org>
+Subject: Re: [PATCH V0 4/7] usb: common: eud: Added the driver support for
+ Embedded USB Debugger(EUD)
+In-Reply-To: <73c1eb4f-6870-1c30-9b23-d991b8c8b35d@infradead.org>
 References: <cover.1633343547.git.schowdhu@codeaurora.org>
- <246c9d24da27b6ce91d5f1e536fa96ac5656a0b2.1633343547.git.schowdhu@codeaurora.org>
- <YVsttQySDnaXxOuI@robh.at.kernel.org>
-Message-ID: <b3d10d7b874c11462604a5f78bc0e8cf@codeaurora.org>
+ <e6df4a21a283e822d15dedb7ffb3ae62c241999c.1633343547.git.schowdhu@codeaurora.org>
+ <73c1eb4f-6870-1c30-9b23-d991b8c8b35d@infradead.org>
+Message-ID: <edb2e8a9f293bb4d55650cec983c9ced@codeaurora.org>
 X-Sender: schowdhu@codeaurora.org
 User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-10-04 22:07, Rob Herring wrote:
-> On Mon, Oct 04, 2021 at 04:46:19PM +0530, Souradeep Chowdhury wrote:
->> Added the property for EUD(Embedded USB Debug) connector.Added
->> the "reg" and "interrupts" property which is needed for EUD.
+On 2021-10-05 01:38, Randy Dunlap wrote:
+> On 10/4/21 4:16 AM, Souradeep Chowdhury wrote:
+>> Add support for control peripheral of EUD (Embedded USB Debugger) to
+>> listen to events such as USB attach/detach, pet EUD to indicate 
+>> software
 > 
-> You are going to need a better explanation of this h/w.
+>   I don't quite understand: what pets the EUD? how does it do that?
 
-Ack. Will update this with the detailed hardware description
-in the next version.
+Pet EUD is an interrupt that the EUD driver receives periodically to
+indicate if the software is functional. On getting the interrupt the
+EUD driver first does a detach pet and then followed by the an attach
+pet.
 
 > 
+>> is functional.Reusing the platform device kobj, sysfs entry 'enable' 
+>> is
+> 
+>      functional. Reusing
+
+Ack
+
+> 
+>> created to enable or disable EUD.
 >> 
->> Signed-off-by: Souradeep Chowdhury <schowdhu@codeaurora.org>
+>> To enable the eud the following needs to be done
+>> echo 1 >/sys/bus/platform/.../enable
+>> 
+>> To disable eud, following is the command
+>> echo 0 >/sys/bus/platform/.../enable
+>> 
+>> Signed-off-by: Souradeep Chowdhury<schowdhu@codeaurora.org>
 >> ---
->>  .../devicetree/bindings/connector/usb-connector.yaml      | 15 
->> +++++++++++++++
->>  1 file changed, 15 insertions(+)
+>>   Documentation/ABI/testing/sysfs-driver-eud |   7 +
+>>   drivers/usb/common/Kconfig                 |   9 +
+>>   drivers/usb/common/Makefile                |   1 +
+>>   drivers/usb/common/qcom_eud.c              | 256 
+>> +++++++++++++++++++++++++++++
+>>   4 files changed, 273 insertions(+)
+>>   create mode 100644 Documentation/ABI/testing/sysfs-driver-eud
+>>   create mode 100644 drivers/usb/common/qcom_eud.c
 >> 
->> diff --git 
->> a/Documentation/devicetree/bindings/connector/usb-connector.yaml 
->> b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> index 7eb8659..908129f 100644
->> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> @@ -30,6 +30,21 @@ properties:
->>            - const: samsung,usb-connector-11pin
->>            - const: usb-b-connector
->> 
->> +      - items:
->> +          - enum:
->> +              - qcom,sc7280-usb-connector-eud
->> +          - const: qcom,usb-connector-eud
->> +          - const: usb-c-connector
->> +
->> +  reg:
->> +    items:
->> +      - description: EUD Base Register Region
->> +      - description: EUD Mode Manager Region
+>> diff --git a/Documentation/ABI/testing/sysfs-driver-eud 
+>> b/Documentation/ABI/testing/sysfs-driver-eud
+>> new file mode 100644
+>> index 0000000..14a02da
+>> --- /dev/null
+>> +++ b/Documentation/ABI/testing/sysfs-driver-eud
+>> @@ -0,0 +1,7 @@
+>> +What:		/sys/bus/platform/.../enable
+>> +Date:           October 2021
+>> +Contact:        Souradeep Chowdhury<schowdhu@codeaurora.org>
+>> +Description:
+>> +		The Enable/Disable sysfs interface for Embedded
+>> +		USB Debugger(EUD).This enables and disables the
 > 
-> A connector node represents the physical connector on a board. That
-> can't really be an MMIO peripheral. Maybe you need a node for EUD and
-> then it should have a connector child node? Don't really know without
-> understanding this h/w.
+> 		    Debugger (EUD). This enables
 
-As per the previous discussion on the EUD, it was agreed upon to map EUD
-as a type C connector and use Role-Switch to change the USB role instead
-of extcon interface that was being used previously. The link for the 
-same
-is as follows:-
-
-https://lore.kernel.org/lkml/5db1a666-62ec-c850-6626-ad33d337b452@codeaurora.org/
+Ack
 
 > 
->> +
->> +  interrupts:
->> +    description:
->> +      EUD interrupt
->> +
->>    label:
->>      description: Symbolic name for the connector.
->> 
->> --
->> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
->> member
->> of Code Aurora Forum, hosted by The Linux Foundation
->> 
->> 
+>> +		EUD based on a 1 or a 0 value.
