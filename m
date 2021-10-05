@@ -2,68 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E92E422A1E
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 16:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7A1422AC8
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 16:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235619AbhJEOIn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 10:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
+        id S235779AbhJEOTB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 10:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235889AbhJEOIK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 10:08:10 -0400
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050::465:101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E438CC08E8A9;
-        Tue,  5 Oct 2021 07:03:38 -0700 (PDT)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:105:465:1:4:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4HNznh1VL3zQjbb;
-        Tue,  5 Oct 2021 16:03:20 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=robgreener.com;
-        s=MBO0001; t=1633442598;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:to:
-         cc; bh=hx95swwG+ltUhhHv7A0H8iGt2RP/xSHvTG4WjbflYLk=;
-        b=GHR642JpSFmpKr84x2HVhyzDkIGvROhAtoQSHgdCVSTzTsH4NsHRL/kwkv8r9MU9qwAINX
-        j83UDjkolWW91oGvw3RSlMmvFR1moStVkHJNeziOA+I/5D98Qf5fnDaaSidJxcIP+MO23+
-        mcsTFNPS762r7FwyduKhjSxBPEWa/+FdOZAZhAnG/3RbHfvDV8clzxCGBehr8S83P0/4yM
-        k9KyXLmF1+vSvFnGNgYcZqC3RQTA4iG6m3tQVbHrq3mb9QpVCQ1aOfgmsYwaqgYF9sIEBn
-        qwat36I5l+wb8fPJlTbFza4WTcJqnszIf1fRhW2OMUKKrWCawV6ajsOV6q0jEQ==
-X-Mailbox-Line: From 835bbc4e27ca989674fb916f70b81038deaf47e5 Mon Sep 17 00:00:00 2001
-Message-Id: <cover.1633442131.git.rob@robgreener.com>
-From:   Robert Greener <rob@robgreener.com>
-Date:   Tue, 5 Oct 2021 14:55:31 +0100
-Subject: [PATCH 00/13] usb: core: config: fix all checkpatch.pl warnings
-X-Rspamd-Queue-Id: 2608B272
-To:     unlisted-recipients:; (no To-header on input)
+        with ESMTP id S235131AbhJEOTA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 10:19:00 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72EDC061749
+        for <linux-usb@vger.kernel.org>; Tue,  5 Oct 2021 07:17:09 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id o124so23856372vsc.6
+        for <linux-usb@vger.kernel.org>; Tue, 05 Oct 2021 07:17:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=BjaJWmLI4zeDm18Vg5X74JWuITkJZC2dhqIVbVw40Co=;
+        b=cK/HRlF8P88Adib2DQqobwUzeTpkOyo+/NBqcJAnt0kcu92VY4q2hPavZ087/Bi8F4
+         N9gaZzVBLYWzAHaQJMPIWU9g/pF1Tqt0n530nsCDm5GZ3jISuojrTA85l0IzEN4wrL14
+         +ElZ/XLgEIe95pypdbRWtzLiao7J5n9mJRqTZiZJkdq9zcc6EuQ3RKQ90MkN4+jvCl0H
+         8NVzTx+0qcJimF9a5xfqPLp8e0Y8WoBwE0jxoVTirhUG9feZrw47Zo7E4dEXASkxITN5
+         P/4Dr0AJ+IS7kna6uSmldA7065Hw/NSaPnLIpELHakxjeAwPDcU95ruoX9GkjyHAxqQn
+         Sb7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=BjaJWmLI4zeDm18Vg5X74JWuITkJZC2dhqIVbVw40Co=;
+        b=xoRRWmtMoWumQsrmJ9DDgjAeFXY7BVSGFKCw1si5a4UuS6h3Xi1+NVo4kNaj9GRCDK
+         zWX6MJmz4llu02aAD79yRgXvJGd3FFnGyZCA+in0yn79wJQYFvyBqVHa/JO2kavi8ik0
+         Q8IABk1rMIFTUR+y3dGfCJu60Wzlro9CIVeIzyRduNAr8j62wiYSruX3BiQhmYd1qAqv
+         jqKGkyJhJAztfTvvGYxTMAbdfg8MY3lf78Go7DZi++PKUnHIpM8sO+gboKtYbub3Tpay
+         wSLTgDgTtFVkQzW5nHZhdFtU9+kYOWVqe8SAttXWSsrIxYWI4Gg/uSXMGp5Kg+gTY1lw
+         TZ3Q==
+X-Gm-Message-State: AOAM533SpGngQP/bWH1Iw/suWX7TIJN63W76hDk3x3i4LjyFG0DN0gOX
+        1kVjUz4undKl7sZ+GBpKWazLgF3aUiQxWyNw8rA=
+X-Google-Smtp-Source: ABdhPJykrmvC5r/mtnHnhbK9dvRYQ02ASSSU2v86E7JqwERFesoU61oQsc9RdngSZOx5XSdohUyQMt4h6U0OlDABYpg=
+X-Received: by 2002:a67:c217:: with SMTP id i23mr1588998vsj.52.1633443422785;
+ Tue, 05 Oct 2021 07:17:02 -0700 (PDT)
+MIME-Version: 1.0
+Sender: umanbeko4@gmail.com
+Received: by 2002:a05:6102:21d0:0:0:0:0 with HTTP; Tue, 5 Oct 2021 07:17:02
+ -0700 (PDT)
+From:   brate williams <bratewilliams90@gmail.com>
+Date:   Tue, 5 Oct 2021 07:17:02 -0700
+X-Google-Sender-Auth: jb1Axtg1i5lTV4R2JBKjCkBj5W8
+Message-ID: <CAL1kfyYPoCDQ=4UFRQnJtQOPZD4rowBdd2zjf03q49Z+ptwJVQ@mail.gmail.com>
+Subject: URGENT RESPONSES
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patchset fixes all checkpatch warnings in drivers/usb/core/config.c
-
-(when combined with my earlier patch
-Link: https://lore.kernel.org/r/20211001151350.ijiexr3ebwvypmdd@shortbread)
-
-Robert Greener (13):
-  usb: core: config: Use tabs rather than spaces for new lines of args
-  usb: core: config: fix block comment styles
-  usb: core: config: Change `unsigned` to `unsigned int`
-  usb: core: config: Avoid multiple line derefrence
-  usb: core: config: Fix typo in dev_warn
-  usb: core: config: unsplit strings which are split across lines
-  usb: core: config: remove unnecessary blank lines
-  usb: core: config: add blank lines after struct def
-  usb: core: config: fix inline spacign
-  usb: core: config: fix checkpatch.pl braces warning
-  usb: core: config: remove unnecessary parentheses
-  usb: core: config: remove multiple assignments
-  usb: core: config: fix parenthesis alignment
-
- drivers/usb/core/config.c | 393 ++++++++++++++++++++------------------
- 1 file changed, 204 insertions(+), 189 deletions(-)
-
 -- 
-2.32.0
 
+Sir / Madam,
+
+Hi Friend I am the auditing director of the International Finance Bank
+Plc bf I want to transfer an abandoned sum of 10.5 millions USD  to
+your account.50% will be for you.
+No risk involved. Contact me for more details.
+Kindly reply me back to my alternative email address (hauckpristman@gmail.com)
+Thanks
+Mr Huck Pristman.
