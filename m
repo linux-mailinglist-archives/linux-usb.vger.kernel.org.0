@@ -2,69 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5341422506
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 13:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAED2422519
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Oct 2021 13:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233911AbhJELdE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 07:33:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52452 "EHLO mail.kernel.org"
+        id S234229AbhJELjj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 07:39:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54304 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233812AbhJELdA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 Oct 2021 07:33:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7BEE76124D;
-        Tue,  5 Oct 2021 11:31:09 +0000 (UTC)
+        id S234070AbhJELji (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 Oct 2021 07:39:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3DF7461371;
+        Tue,  5 Oct 2021 11:37:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1633433469;
-        bh=v9Ivu2/WTGqU/gNbWAmUQGt6iunTwdCv2qRWu0qrIhc=;
+        s=korg; t=1633433868;
+        bh=t9DvBZnt4NNB7a0hcVaRvNBVvNKcckqWJY4ipVgovO0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ydYzzA/zmFX1asG16uIv4bzccNY1//zhhu610KN6XTflY4rb5bMdbbLGI94nnPW/a
-         3zRT/ix5I2FPr1Y1u4YJE0JAE9eAr703Jcy92fM8yGGahpYojPnOhH0kQ19PAMYE7l
-         6v6/mpoa8AJhGYpMqmAMpKF5RvcFJxR2zRbVOGjQ=
-Date:   Tue, 5 Oct 2021 13:31:07 +0200
+        b=lHE1QeNmznD6bnVbAVT3PwtWG3F6j6eAQyCCOUhGsVyLQyT/6RQWjOkdXYES9IjiY
+         hAVEW3AYeZStlx+Oz/2XuJ2Q3y7LKExTe+5+mafaKUWIlWkkgfGtHCKytRNFBpkF4S
+         DLAPqKDgZoDe3QeKwAJFPsiTe2UBjroyH0FS/CLo=
+Date:   Tue, 5 Oct 2021 13:37:46 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pavel Hofman <pavel.hofman@ivitera.com>
-Cc:     linux-usb@vger.kernel.org,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Jack Pham <jackp@codeaurora.org>
-Subject: Re: [PATCH] usb: gadget: u_audio.c: Adding Playback Pitch ctl for
- sync playback
-Message-ID: <YVw3e1zOS2QvKiM0@kroah.com>
-References: <20210925143003.12476-1-pavel.hofman@ivitera.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        linux-usb@vger.kernel.org, hverkuil@xs4all.nl,
+        m.tretter@pengutronix.de, linux-media@vger.kernel.org
+Subject: Re: [RESEND PATCH v4] usb: gadget: uvc: fix multiple opens
+Message-ID: <YVw5CvvOAxa+6aat@kroah.com>
+References: <87pn261h4c.fsf@kernel.org>
+ <20211003201355.24081-1-m.grzeschik@pengutronix.de>
+ <YVuUDOf+BDTxe/IR@pendragon.ideasonboard.com>
+ <YVwwECkXk+nKn7kE@kroah.com>
+ <87a6jnzq64.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210925143003.12476-1-pavel.hofman@ivitera.com>
+In-Reply-To: <87a6jnzq64.fsf@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Sep 25, 2021 at 04:30:03PM +0200, Pavel Hofman wrote:
-> EP IN is hard-coded as ASYNC both in f_uac1 and f_uac2 but u_audio sends
-> steady number of audio frames in each USB packet, without any control.
+On Tue, Oct 05, 2021 at 02:06:22PM +0300, Felipe Balbi wrote:
 > 
-> This patch adds 'Playback Pitch 1000000' ctl analogous to the existing
-> 'Capture Pitch 1000000' ctl. The calculation of playback req->length in
-> u_audio_iso_complete respects the Playback Pitch ctl value to 1ppm now.
+> Greg KH <gregkh@linuxfoundation.org> writes:
 > 
-> Max. value for Playback Pitch is configured by the existing parameter
-> uac2_opts->fb_max, used also for the Capture Pitch.
+> > On Tue, Oct 05, 2021 at 02:53:48AM +0300, Laurent Pinchart wrote:
+> >> Hi Michael,
+> >> 
+> >> Thank you for resending this.
+> >> 
+> >> On Sun, Oct 03, 2021 at 10:13:55PM +0200, Michael Grzeschik wrote:
+> >> > From: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
+> >> > 
+> >> > Currently, the UVC function is activated when open on the corresponding
+> >> > v4l2 device is called.
+> >> > On another open the activation of the function fails since the
+> >> > deactivation counter in `usb_function_activate` equals 0. However the
+> >> > error is not returned to userspace since the open of the v4l2 device is
+> >> > successful.
+> >> > 
+> >> > On a close the function is deactivated (since deactivation counter still
+> >> > equals 0) and the video is disabled in `uvc_v4l2_release`, although the
+> >> > UVC application potentially is streaming.
+> >> > 
+> >> > Move activation of UVC function to subscription on UVC_EVENT_SETUP
+> >> > because there we can guarantee for a userspace application utilizing
+> >> > UVC.
+> >> > Block subscription on UVC_EVENT_SETUP while another application already
+> >> > is subscribed to it, indicated by `bool func_connected` in
+> >> > `struct uvc_device`.
+> >> > Extend the `struct uvc_file_handle` with member `bool is_uvc_app_handle`
+> >> > to tag it as the handle used by the userspace UVC application.
+> >> 
+> >> Reflowing the paragraph would be nice (this could be done when applying
+> >> the patch, or not at all).
+> >> 
+> >> > With this a process is able to check capabilities of the v4l2 device
+> >> > without deactivating the function for the actual UVC application.
+> >> > 
+> >> > Reviewed-By: Michael Tretter <m.tretter@pengutronix.de>
+> >> > Signed-off-by: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
+> >> > Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+> >> > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> >> 
+> >> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> >> 
+> >> Felipe, please let me know if you want me to take this in my tree and
+> >> issue a pull request, otherwise I'll assume you'll pick it up.
+> >
+> > I'll pick it up now, thanks.
 > 
-> Since the EP IN packet size can be increased by uac2_opts->fb_max now,
-> maxPacketSize for the playback direction is calculated by the same
-> algorithm as for the async capture direction in
-> f_uac2.c:set_ep_max_packet_size.
+> I guess it's too late for an Ack. FWIW:
 > 
-> Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
-> ---
->  drivers/usb/gadget/function/f_uac2.c  |  5 +-
->  drivers/usb/gadget/function/u_audio.c | 93 ++++++++++++++++++++-------
->  2 files changed, 74 insertions(+), 24 deletions(-)
+> Acked-by: Felipe Balbi <balbi@kernel.org>
 
-Does not apply to my tree, what kernel release / branch did you make
-this against?
-
-thanks,
+Nope, not too late, just added, thanks!
 
 greg k-h
