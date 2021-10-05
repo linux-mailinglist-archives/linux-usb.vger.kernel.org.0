@@ -2,61 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8626F42348A
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 01:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E298C4234B1
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 01:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236820AbhJEXph (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 19:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
+        id S236799AbhJEXvP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 19:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbhJEXph (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 19:45:37 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98E9C061749;
-        Tue,  5 Oct 2021 16:43:45 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id n71so914481iod.0;
-        Tue, 05 Oct 2021 16:43:45 -0700 (PDT)
+        with ESMTP id S230188AbhJEXvO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 19:51:14 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011A6C061749;
+        Tue,  5 Oct 2021 16:49:23 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id i11so39853ila.12;
+        Tue, 05 Oct 2021 16:49:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:reply-to:from:date:message-id
          :subject:to:cc;
-        bh=yOOtA2M5QmbPjwtL+wKK/+7csoshQHh+btCjE+xfZwY=;
-        b=brsVG4NgXYbFNluXPs7dRISQW8XIZwmAjNCXL0N2wa0n0plZlVmBgmGYI09gx4a0vl
-         JfXlgA85tP2GOCttLxBo7oFwvSoQhDaSeAX3ilMz//tW4T0Cy73l+rI5UEKn2hrOR88k
-         y8ZmI4AnwD+0BZvuoJu4gSSczDvdJbaJGOJkLYLzgr8ub85NxAYHyULWFwlu9+PL9Uqe
-         wSTmUdX/sCIgqAugWhdFVnkqq0+J28Jw8eJxXZWlfIS4PiFurbGHy6eSXf9Zx1N6eCBx
-         trH4uf+y4+slwClGAStVPpvIN6ycsINV8dRIYyvdXccIwrOZcauEtou3+9ML4W/RSMko
-         ms4w==
+        bh=KVkB/xxIaRrACI2ADXm7FeOgUQdS3/51LOFgkKYmnLo=;
+        b=jJ/TIjRJrqA9Z7zVbo6ragjrWVn6/UHnEyFha+dGVKd5Nq4xMOFd+DMNPejPCimWD5
+         ONuC1SmkKiAjs53YQZQ1fJHz2w7oaaC1oVZVVFLte58gx5mdC4chE81hLCl5GoCk4UuY
+         T0ve7b5gQcDUmlTnQcf1J7aYhaGTOg3Nv0ZnfjkH0H4PbXHxLfVRGEtNbEqqVZDsDix0
+         CCX4hiUVJSkr9X0EoT6PiV3Rhoo1dqs+1Hpg8uZ2PdkmNTPy/CJ4dZ9ebCZRFbK/nxuw
+         40kg6JYfuoG7kJgC2IvV7lnCGucaxVn3IufUHmBU0cP9XpXh0rvFRElytUt8v4WGJYAD
+         TgBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
          :from:date:message-id:subject:to:cc;
-        bh=yOOtA2M5QmbPjwtL+wKK/+7csoshQHh+btCjE+xfZwY=;
-        b=C8h/AyIzUYq4dlOzanwRp04bv+XaTUYHOblmUCZ/oi7BWhsHOvUFxjo0WzXUVhbftO
-         kXNS3AxbL407qhK39E8MMOF0UMySnT5DvdNEX4f44enT/ad+LEjsb3U4Dxb+3dyFbV/u
-         nMq6Ga+fOPCP7uiui1gDTDursX5N3mXqdqGoUjLsCagyApiJMFG9b16GH5a7x3/sQu+X
-         DVTmKShGVmDU3MmiJ7uvr9Qqw90qX7hQ7GJw7Vtc8itWd9hY1GdcTNYWPqqQ7eoJzUmW
-         WIKMmQU9SpOS2XtAK4qmqR5PnMi++SbDrxswwp12+DgxLR5JEo8TNfpDNMWHHNJhRIAp
-         whQg==
-X-Gm-Message-State: AOAM530Fm32wG6M4Ucp/0oiGt4HHax3QdrVIJetX1STDyW2DfYZPzWQs
-        Tmu8a0r55EfRx4dVQRHJmtXSZH2ARpIZxWGaC9g=
-X-Google-Smtp-Source: ABdhPJw3SgXd3oHcPoAw+z0DymvtQNLu2F7ZsAMQ6X+pzgYxia7GeRCtol2YORg1xumdm2dZMS0j/DZ8eDYj7xEx9zE=
-X-Received: by 2002:a05:6602:2c09:: with SMTP id w9mr4429098iov.78.1633477425014;
- Tue, 05 Oct 2021 16:43:45 -0700 (PDT)
+        bh=KVkB/xxIaRrACI2ADXm7FeOgUQdS3/51LOFgkKYmnLo=;
+        b=yefGxTux27z5FlYSSnAB9eO1/xMeYnu1zADWmIjRoMRe7CYQX9a4Ja2YbXZ6Fq7UeU
+         pdQmAR2uGXwQqkgmO2cSho5mEYyYZOnr/nQ9q/bvLGta3nMngyNEtMi/keeD+MT5za14
+         FpvikhJnx5Mxqi8oecDqJp1vBPqu2Wdsa4EOutlXEe1wjZENlwZfH9nAOgGeDnjqzWLc
+         H7PC2rT54deacyx94HFD0Fvo4vpKQ+OvoKou5DwT68mwgsNMKAPVEhhVPj1EXIDksime
+         36ynBS9WMQHXH2Z9nVctZm4WLZSrqmEH5dm2igy0r1XzXzSZWTMtWtqW+XUK/6YLGbVj
+         n3mA==
+X-Gm-Message-State: AOAM533JHUiN8+0Ts14XfcqMBY4FDWmR6RYp3qUeTQcAizA/njazrWJK
+        R7FDiMQb6OJI2pEbE25rFsM1NoFuChxY7OKyUdE=
+X-Google-Smtp-Source: ABdhPJxnOgwxdOya9bNNcbF+ySG/v50f/uPZW5twUmmsEzCoZfwEMKy/QSFGXQ7Xt6ceDUfjE7H9KfmOj06tP1s0be8=
+X-Received: by 2002:a92:ca46:: with SMTP id q6mr5257784ilo.59.1633477762353;
+ Tue, 05 Oct 2021 16:49:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210929224823.556943-1-rajatja@google.com> <20210929224823.556943-2-rajatja@google.com>
- <YVVLxi/on9x6nfCZ@kroah.com> <CACK8Z6EamamgYExt629gyNrYKpvnu2Gh0eGOOvOa5LH-jnOmaQ@mail.gmail.com>
- <20211005145655.GJ621017@rowland.harvard.edu> <CAE_wzQ-XG3YBtKTmbn1LSGETCUg5AYjTmcnwOnc1h57OaL9+Cw@mail.gmail.com>
- <20211005195929.GA634685@rowland.harvard.edu>
-In-Reply-To: <20211005195929.GA634685@rowland.harvard.edu>
+References: <20210929224823.556943-1-rajatja@google.com> <YVw02jUqxaVICKQU@kroah.com>
+In-Reply-To: <YVw02jUqxaVICKQU@kroah.com>
 Reply-To: rajatxjain@gmail.com
 From:   Rajat Jain <rajatxjain@gmail.com>
-Date:   Tue, 5 Oct 2021 16:43:33 -0700
-Message-ID: <CAA93t1qzJuN8M2zbs+Kt9JXWP1H2kjKSxBp8-TXEfaMeZ1iggQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] usb: hub: Mark devices downstream a removable hub, as removable
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Dmitry Torokhov <dtor@google.com>, Rajat Jain <rajatja@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Date:   Tue, 5 Oct 2021 16:49:11 -0700
+Message-ID: <CAA93t1rg=E+2C5+j-i=6_upUH+QRrDZ8WVvtR60uxD+JwO2W3w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] usb: hub: Mark root hubs on removable devices, as removable.
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rajat Jain <rajatja@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Mathias Nyman <mathias.nyman@linux.intel.com>,
         Andrew Lunn <andrew@lunn.ch>,
@@ -69,88 +66,59 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-On Tue, Oct 5, 2021 at 12:59 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+On Tue, Oct 5, 2021 at 4:19 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> On Tue, Oct 05, 2021 at 09:51:02AM -0700, Dmitry Torokhov wrote:
-> > Hi Alan,
+> On Wed, Sep 29, 2021 at 03:48:22PM -0700, Rajat Jain wrote:
+> > Currently all usb root hubs are always marked as DEVICE_REMOVABLE_UNKNOWN
+> > unconditionally. Let us try to help the users to identify the removable
+> > root hubs, by checking the device on which the root hub sits. If the base
+> > (parent) device on which the root hub sits, is removable (e.g. on
+> > thunderbolt docks), then the roothub is also marked as removable.
 > >
-> > On Tue, Oct 5, 2021 at 7:56 AM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > >
-> > > As I understand it, the "removable" property refers specifically to
-> > > the device's upstream link, not to whether _any_ of the links leading
-> > > from the device to the computer could be removed.
+> > Signed-off-by: Rajat Jain <rajatja@google.com>
+> > ---
+> >  drivers/usb/core/hub.c | 10 +++++++++-
+> >  1 file changed, 9 insertions(+), 1 deletion(-)
 > >
-> > No, that is not what it means. I'll cite our sysfs ABI:
+> > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > index 86658a81d284..45d1c81b121d 100644
+> > --- a/drivers/usb/core/hub.c
+> > +++ b/drivers/usb/core/hub.c
+> > @@ -2440,8 +2440,16 @@ static void set_usb_port_removable(struct usb_device *udev)
 > >
-> > What:           /sys/devices/.../removable
-> > Date:           May 2021
-> > Contact:        Rajat Jain <rajatxjain@gmail.com>
-> > Description:
-> >                 Information about whether a given device can be removed from the
-> >                 platform by the user. This is determined by its subsystem in a
-> >                 bus / platform-specific way. This attribute is only present for
-> >                 devices that can support determining such information:
+> >       dev_set_removable(&udev->dev, DEVICE_REMOVABLE_UNKNOWN);
 > >
-> >                 "removable": device can be removed from the platform by the user
-> >                 "fixed":     device is fixed to the platform / cannot be removed
-> >                              by the user.
-> >                 "unknown":   The information is unavailable / cannot be deduced.
-> >
-> >                 Currently this is only supported by USB (which infers the
-> >                 information from a combination of hub descriptor bits and
-> >                 platform-specific data such as ACPI) and PCI (which gets this
-> >                 from ACPI / device tree).
-> >
-> > It specifically talks about _platform_, not about properties of some
-> > peripheral attached to a system. Note that the wording is very similar
-> > to what we had for USB devices that originally implemented "removable"
-> > attribute:
+> > -     if (!hdev)
+> > +     if (!hdev) {
+> > +             /*
+> > +              * If the root hub sits on a removable device, mark the root hub
+> > +              * removable as well. This helps with the USB root hubs sitting
+> > +              * on the thunderbolt docks.
+> > +              */
+> > +             if (udev->dev.parent && dev_is_removable(udev->dev.parent))
 >
-> In that case, shouldn't Rajat's patch change go into the driver core
-> rather than the hub driver?  _Every_ device downstream from a
-> removable link should count as removable, yes?  Not just the USB
-> devices.
+> How can a roothub device not have a parent?
 
-I have no preference either way, and can do that if that is more acceptable.
+It was a sanity check. I can remove that if we know that it can never happen.
 
 >
-> And to say that the attribute is supported only by USB and PCI is
-> misleading, since it applies to every device downstream from a
-> removable link.
+> I still don't know about this.  What userspace tool is going to do
+> anything with this information?  What is broken today that this fixes?
 
-However I do think it makes sense to have the bus control whether this
-attribute applies to it or not. Determining the first point in a
-hierarchy of devices, where a device can be removed is highly bus
-specific (set_usb_port_removable()).
-
-AFAIK, the primary reason / use of this attribute was to distinguish
-devices that can be removed by the user, and really all such devices
-(at least the ones that matter to user) today sit either on PCI or USB
-bus. We intend to use this attribute to segregate internal devices
-from external devices, and collect some statistics about usb device
-usage this way. There is also a VM case that I think Dmitry or Benson
-on this thread can elaborate more about. There seem to be hundreds of
-other bus types and I'm not sure if we want to unnecessarily flood the
-sysfs with a removable attribute under each device.
+With these 2 patches, Chromeos intends to collect statistics about
+external USB device usage in the system. The tool will be an internal
+chrome os statistics collection tool. Today, any thunderbolt docks and
+its devices appear as "unknown". There is also a VM case that is
+helped by these patches, but I think Dmitry on Benson on this thread
+can elaborate more about that.
 
 Thanks & Best Regards,
 
 Rajat
 
+
 >
-> > > This is probably what Oliver meant when he complained about losing
-> > > information.  With the knowledge of whether each individual link is
-> > > removable, you can easily tell whether there's some way to remove a
-> > > device from the system.  But if you only know whether the device is
-> > > removable from the system overall, you generally can't tell whether
-> > > the link to the device's parent is removable.
-> >
-> > If we need this data then we need to establish some new attribute to
-> > convey this info.
+> thanks,
 >
-> I don't know if we need it, but such an attribute seems like a good
-> idea.
->
-> Alan Stern
+> greg k-h
