@@ -2,77 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5C74237C1
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 08:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C90DB4237F6
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 08:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233356AbhJFGD0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Oct 2021 02:03:26 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:48910 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbhJFGDX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Oct 2021 02:03:23 -0400
-Received: by mail-io1-f69.google.com with SMTP id m19-20020a6bea13000000b005d751644a6eso1261746ioc.15
-        for <linux-usb@vger.kernel.org>; Tue, 05 Oct 2021 23:01:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=O/5CjV2AH7vg5AIq9xdJFYcJdW6Ii/C83GcdKIJ0m6c=;
-        b=I8p87X2gBTO/w1bRFGOMavVkq/ag7ChKkMmlS+EMS+yjxHBKhQyaUPeIgJjfV7FrCQ
-         fINpWoYOqs8zD8V2BbPIW/N7hbuZpBLXAxTzzLcbCEYhYQiTOh7ZU5CoEStz//yxO0dd
-         LHNAm8p524goHXC1/50TgVdDBQ85Z/q2Ve5cPcc9ZZFnzR+iz6N35nomLrF1nJhsXq8a
-         t+fF7VcFCcb2VqsgX4yFVeD8CzjT3XBdUGuBmgrFmQzh7NIRJyDosr7FkQomChYC5I3w
-         1tXT3BQduDFejm7Z6bPcxeVpqwL6u3qajBEEzT5FIa86eNK0PEaoFDPzIjaxyk7MLJNN
-         RJKA==
-X-Gm-Message-State: AOAM532V4ttpUuiciKZgHdeYB+KbHr/TcZivFITRxe7dFAqNMxh764pw
-        YJ4W+MZCAWxd2HVg4+AH/ZZzts5P0/Hd7ZeDjPrxVZ6cXTkq
-X-Google-Smtp-Source: ABdhPJyivA7cBFp1gEQ6dDt69J2B7mIIV1FU/oL0iUwQ92Hj6dxyo/yVzF57By4QQkmgJHxvcONvTxmALW398N5Cd9MdpNvDgWqB
+        id S236363AbhJFG3y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Oct 2021 02:29:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53850 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229797AbhJFG3x (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 6 Oct 2021 02:29:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6DDA760EC0;
+        Wed,  6 Oct 2021 06:28:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1633501681;
+        bh=spg2FfB33eWRaZlMimWllWmYIhAbe/hDa0jC2sb1vWI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Nu0KSdos8srKS5PIPAOZZNp8J/2y5CPh/+dnqB2466tL4XJzMDHY0vH2W7eGUsOYc
+         CwnIoKUKrM8wQ76l6MJw2Q38dpQZHYi605sGDZ27T+ryGez1rmoQ5JHaX7o8kI0A+i
+         sD8TBOVJACa3H17k+oxP6iQHDCcOoJIHajMgs3ro=
+Date:   Wed, 6 Oct 2021 08:27:59 +0200
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "amelie.delaunay@foss.st.com" <amelie.delaunay@foss.st.com>
+Subject: Re: [PATCH 1/3] usb: dwc2: add otg_rev and otg_caps information for
+ gadget driver
+Message-ID: <YV1B7/yP2L+0L1sQ@kroah.com>
+References: <1631692473-8732-1-git-send-email-fabrice.gasnier@foss.st.com>
+ <1631692473-8732-2-git-send-email-fabrice.gasnier@foss.st.com>
+ <a183ddf9-c578-0b45-1aa2-4fcd1fbf17eb@synopsys.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:15c6:: with SMTP id q6mr5953491ilu.221.1633500091389;
- Tue, 05 Oct 2021 23:01:31 -0700 (PDT)
-Date:   Tue, 05 Oct 2021 23:01:31 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b01f1505cda8e03c@google.com>
-Subject: [syzbot] usb-testing build error (2)
-From:   syzbot <syzbot+7af597ce2b38596c16ea@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, hminas@synopsys.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a183ddf9-c578-0b45-1aa2-4fcd1fbf17eb@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Fri, Oct 01, 2021 at 11:10:19AM +0000, Minas Harutyunyan wrote:
+> On 9/15/2021 11:54 AM, Fabrice Gasnier wrote:
+> > Currently the dwc2 doesn't fill in the 'otg_caps' of usb_gadget structure.
+> > When registering a gadget device (e.g. via configfs), the
+> > usb_otg_descriptor_init() checks the 'otg_caps' and 'otg_rev'. It defaults
+> > to HNP and SRP bmAttributes if unspecified. There may be a mismatch with
+> > what's being set in dwc2 params structure. This result in the descriptors
+> > to be miss-configured in this case.
+> > 
+> > So add an option to setup 'otg_caps' and 'otg_rev' in the params. It's
+> > then provided to the gadget struct. These parameters can then be tuned
+> > for each platform. In case it's not set, it will default to current
+> > behavior.
+> > Also add option to setup these from the device tree by calling
+> > of_usb_update_otg_caps(). This provides support for standard properties
+> > such as "otg-rev", "hnp-disable" and "srp-disable" (see usb-drd.yaml).
+> > 
+> > Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> Acked-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+> 
 
-syzbot found the following issue on:
+Looks like this commit breaks the build on some configurations:
+	https://lore.kernel.org/r/000000000000b01f1505cda8e03c@google.com
 
-HEAD commit:    dea971290a03 usb: core: config: Change sizeof(struct ...) ..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=150e8a3f300000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cd8a1eadba1e4ce4
-dashboard link: https://syzkaller.appspot.com/bug?extid=7af597ce2b38596c16ea
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
+So I'll go drop this and the 2/3 patch from my tree.  Please fix up and
+resend.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7af597ce2b38596c16ea@syzkaller.appspotmail.com
+thanks,
 
-drivers/usb/dwc2/params.c:252:8: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-drivers/usb/dwc2/params.c:253:8: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-drivers/usb/dwc2/params.c:259:8: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-drivers/usb/dwc2/params.c:260:8: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-drivers/usb/dwc2/params.c:264:8: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-drivers/usb/dwc2/params.c:265:8: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-drivers/usb/dwc2/params.c:270:7: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-drivers/usb/dwc2/params.c:479:53: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-drivers/usb/dwc2/params.c:500:9: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-drivers/usb/dwc2/params.c:509:8: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-drivers/usb/dwc2/params.c:510:8: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+greg k-h
