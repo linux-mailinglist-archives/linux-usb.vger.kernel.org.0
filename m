@@ -2,136 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 811484235EA
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 04:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED9142371E
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 06:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237234AbhJFCl7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 22:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
+        id S230199AbhJFEfG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Oct 2021 00:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbhJFCl5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 22:41:57 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FB3C061749;
-        Tue,  5 Oct 2021 19:40:06 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id t9so4046677lfd.1;
-        Tue, 05 Oct 2021 19:40:06 -0700 (PDT)
+        with ESMTP id S229579AbhJFEfG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Oct 2021 00:35:06 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE307C061749
+        for <linux-usb@vger.kernel.org>; Tue,  5 Oct 2021 21:33:13 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id oa6-20020a17090b1bc600b0019ffc4b9c51so3515871pjb.2
+        for <linux-usb@vger.kernel.org>; Tue, 05 Oct 2021 21:33:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jBjl2SKIDUWdGGNNCdNQzm0sXvagxduES6I98oCU5Y8=;
-        b=chv8eTFsLZvhIeL+hkzvYI0WTv6C1hQt4IbTe+2xmGQkTHoN3MvZ0Jtjaf5nJ60yH8
-         Qll610va/L7nfzXyHi9q5H18Ow+SshG+eVNj+gSdDfOq3y7RXIcXU17IFSrdKUsqMGDl
-         Bns94mjB430lIX1L+jpyb63pJy7SuBLUq2Zz5gUmkoa+ld9TdVOzDhd/itLWhWEQUYh6
-         w/ij/t35/Agn1d9bEjw9KP0FJwCJbX0TIcoQQ9rohRXEEbOoZw69in/qeyGnWiJ4R/RF
-         +DxmiKiv3q4SpB4Czd0/XkoQ7itREY7Ra4KeHWPZGr13fZLG2O0bWXrsMD3HPPH5buvd
-         Yn0g==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Vzt25WKen5yxoB6+zFmyoOUcCazC0GoTv9qeublHMvo=;
+        b=qkWdHv8kvKQKMOmJl/5ZZKmjGRIfAHZK6JvQ0+3QOWAJYv6Tgs9K91GjBSVa/bhMPE
+         /5+XbljEVjOfzQWG3X++h8cCo64f9YaOVRQTdUncv8cYZvy5H+N58TN9W6f6N07D7WZw
+         bakh01K+Kxvp9W+Kr52b0VkQhjSyQo4zBGlCb/jQOY4VruPXh+5Rdv8JQVqGGQnijhzG
+         USPP3GsnQbh+PQq2FxtLv/+it05Zs2rL1KMYaV2bjqdPcleQwesaHh0mbSmSFZzpPj8a
+         8zkxmzlG/BVuW44vWZ2JmiEMNGisSuwXlJMT9WLbYmPFEMlbzwe9iTHPEClbV3eCIzF0
+         P9Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=jBjl2SKIDUWdGGNNCdNQzm0sXvagxduES6I98oCU5Y8=;
-        b=4WZuTi/aFT8t0rIWmsNGXbNserSJoChOakY8uTfD8c8w09DW6C1uX9c7zH0O4LT5h6
-         h80Q8hc8S6aBiPGZ+lhWX14WVOyTvrZfEVeaeTUoJ5/KJf0D6u3FsSatLSMjFGJpICso
-         FBFho8zQsDwUsH/9b9QpmvquzW5dZwDdIZCtuYi69Inkm5G4s+XXQzEIpPPNMnrinYkq
-         gpzl+UNoK4YmYwNmPlylIWBxCk/1GRUFWfnECkvCbk9O6EPAV8Nh/HNqv5txVl/oWMF+
-         Yj6wzFjpXEIbULx1tjyJ6VEw1oftLzUZ+Uni2NVOpXDzjd7MC8+yakgjPWBuOHATu0zq
-         Tv7Q==
-X-Gm-Message-State: AOAM5332YZQX7BPuAOuuaHrL9W/Gy61+C/YFzKU72Q1m4YAMBi8dnrdg
-        mOS2Q8XKGdkNNoZJBEjbiXo=
-X-Google-Smtp-Source: ABdhPJz5nDf5e1lLckhTPfcq8ws67JWhBNrPmg70PycmaRWuWT397hKxpbU2YgDLYDLc8supNRztWA==
-X-Received: by 2002:a2e:91d4:: with SMTP id u20mr25686467ljg.81.1633488004426;
-        Tue, 05 Oct 2021 19:40:04 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
-        by smtp.googlemail.com with ESMTPSA id o19sm2137695lfg.68.2021.10.05.19.40.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Oct 2021 19:40:03 -0700 (PDT)
-Subject: Re: [PATCH v13 06/35] clk: tegra: Support runtime PM and power domain
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-References: <20210926224058.1252-1-digetx@gmail.com>
- <20210926224058.1252-7-digetx@gmail.com>
- <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com>
- <24101cd6-d3f5-1e74-db39-145ecd30418b@gmail.com>
- <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
- <4bdba8a2-4b9b-ed7d-e6ca-9218d8200a85@gmail.com>
- <74a47158-e2e4-5fd0-3f37-0b50d4ead4d9@gmail.com>
-Message-ID: <8597d539-311b-4f04-481c-b48e6a5a882a@gmail.com>
-Date:   Wed, 6 Oct 2021 05:40:02 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        bh=Vzt25WKen5yxoB6+zFmyoOUcCazC0GoTv9qeublHMvo=;
+        b=FWLjh8PzTwsHoFk0meKaiSVb5sqPAgXZ44BCQdSH6Bzcr7G6QIbOWBpZ46sUk8i/WC
+         DeQ5JQ3pve7DGe3BQh5WSNwlG5F7T4r0++feuefZoSoao/JylNlERnVd+rD/kkglEkKS
+         MW8eaaIMtA71yEcb94kc/CzRG9pmtc7V9HQdlpu+Hje3je0W5xhx+iTx9PkMvgu7gXXI
+         uOcl3xVbpmAyDUdik5soyk9sCjGPVZHFfpcU9QYVLFFd9CtrttVbmgZKgZc/7EgSVxga
+         i6S0TZWljnCTbWuCPINyuXateHMVVX3H5GqbWrSAOiBwvV3kTui1khW4Wbj1J1/iGVXN
+         Y7sA==
+X-Gm-Message-State: AOAM530NI0eu3sPjt5ZF3ADurOvw1xkUKbymy+2kL2KqFZ3OjQaslUDe
+        d3QHAx3TiSumxlHRDaMMer8=
+X-Google-Smtp-Source: ABdhPJygw/DStCng3OduJ4tLfbDWcrfr1yf/Vq5Cknd47TAb1oRuITo8OHzc29kZZPpOy6LLgYhstw==
+X-Received: by 2002:a17:90b:224e:: with SMTP id hk14mr8406018pjb.224.1633494793443;
+        Tue, 05 Oct 2021 21:33:13 -0700 (PDT)
+Received: from localhost.localdomain (cpe-172-112-234-200.socal.res.rr.com. [172.112.234.200])
+        by smtp.gmail.com with ESMTPSA id z9sm19369387pfr.124.2021.10.05.21.33.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Oct 2021 21:33:13 -0700 (PDT)
+From:   lindsey.stanpoor@gmail.com
+To:     intel-gfx@lists.freedesktop.org, linux-usb@vger.kernel.org
+Cc:     hdegoede@redhat.com, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, cnemo@tutanota.com
+Subject: [PATCH 1/1] usb: typec: altmodes/displayport: reorder dp_altmode_configured()
+Date:   Tue,  5 Oct 2021 21:32:57 -0700
+Message-Id: <20211006043257.23242-1-lindsey.stanpoor@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <74a47158-e2e4-5fd0-3f37-0b50d4ead4d9@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-06.10.2021 01:43, Dmitry Osipenko пишет:
-> 06.10.2021 01:19, Dmitry Osipenko пишет:
-> ...
->> I reproduced the OFF problem by removing the clk prepare/unprepare from
->> the suspend/resume of the clk driver and making some extra changes to
->> clock tree topology and etc to trigger the problem on Nexus 7.
->>
->> tegra-pmc 7000e400.pmc: failed to turn off PM domain heg: -13
->>
->> It happens from genpd_suspend_noirq() -> tegra_genpd_power_off() -> clk
->> -> GENPD -> I2C -> runtime-pm.
->>
->> -13 is EACCES, it comes from the runtime PM of I2C device. RPM is
->> prohibited/disabled during late (NOIRQ) suspend by the drivers core.
-> 
-> My bad, I double-checked and it's not I2C RPM that is failing now, but
-> the clock's RPM [1], which is also unavailable during NOIRQ.
-> 
-> [1]
-> https://elixir.free-electrons.com/linux/v5.15-rc4/source/drivers/clk/clk.c#L116
-> 
-> Previously it was I2C RPM that was failing in a similar way, but code
-> changed a tad since that time.
-> 
+From: Cameron Nemo <cnemo@tutanota.com>
 
-Just in case, I checked that the suspension order isn't somehow the
-source of the problem by adding links to device tree in order to always
-suspend clocks after the rest of devices and still GENPD gets -EACCESS
-from clk_pm_runtime_get().
+A recent commit [1] introduced an unintended behavioral change by
+reordering certain function calls. The sysfs_notify call for
+pin_assignment should only be invoked when the dp_altmode_notify call
+returns 0, and in the dp->data.conf == 0 case.
 
-RPM is disabled by dpm_suspend_late(), which is invoked before
-dpm_suspend_noirq() [1]. Hence RPM is unavailable in NOIRQ phase in any
-case.
+[1] https://lore.kernel.org/r/20210817215201.795062-8-hdegoede@redhat.com
 
-[1]
-https://elixir.bootlin.com/linux/v5.15-rc4/source/kernel/power/suspend.c#L399
+Signed-off-by: Cameron Nemo <cnemo@tutanota.com>
+---
+ drivers/usb/typec/altmodes/displayport.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+index c1d8c23baa39..a15ae78066e3 100644
+--- a/drivers/usb/typec/altmodes/displayport.c
++++ b/drivers/usb/typec/altmodes/displayport.c
+@@ -154,10 +154,17 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
+ 
+ static int dp_altmode_configured(struct dp_altmode *dp)
+ {
++	int ret;
++
+ 	sysfs_notify(&dp->alt->dev.kobj, "displayport", "configuration");
++
++	ret = dp_altmode_notify(dp);
++	if (ret || !dp->data.conf)
++		return ret;
++
+ 	sysfs_notify(&dp->alt->dev.kobj, "displayport", "pin_assignment");
+ 
+-	return dp_altmode_notify(dp);
++	return 0;
+ }
+ 
+ static int dp_altmode_configure_vdm(struct dp_altmode *dp, u32 conf)
+-- 
+2.33.0
+
