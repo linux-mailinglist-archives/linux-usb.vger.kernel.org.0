@@ -2,101 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD2F423EEB
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 15:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A204F423E6D
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 15:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238614AbhJFN1y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Oct 2021 09:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50470 "EHLO
+        id S238283AbhJFNLu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Oct 2021 09:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238111AbhJFN1r (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Oct 2021 09:27:47 -0400
-X-Greylist: delayed 1542 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 06 Oct 2021 06:25:37 PDT
-Received: from chandra.tablix.org (chandra.tablix.org [IPv6:2a00:ee2:100:3a01::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605F6C061768
-        for <linux-usb@vger.kernel.org>; Wed,  6 Oct 2021 06:25:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tablix.org;
-         s=alpha; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc
-        :To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=vmUDZt4N9AsgqijLndpTMEj2xSGE119w8ekjdw8D3nQ=; b=coCLNJEaf9mE8wLLI64Iydw+5B
-        OUn/pPuCVUFrt8kKVb6h1gH5TEjWXKES/TpMuxhDsQwxbAReW75teYwQWJSOOTbIZvyvXmfFPCNfs
-        XRWUazp5PpN5gKU22imYwuYnladszbgTNK6gsTbJcg/Jlv1d5kX/j6tBiijjM637yPaY3CSPt6qXi
-        oSLN/yUgDm1GppLIn0Z/06WPasdB/Dh1okbtbWCfcXX5jZjECv81rffimVIvIPVRCWW/gRhrPywt6
-        voGmQlmL5TDuC7fYjA+qhgL9BjeMkNMfmJTsxeKrmw4Pznvo/aJM7QLrUT3gxMQ3rEsPIyaQ35haq
-        KaFE9iNA==;
-Received: from [2a01:261:355:1d00:4d4c:70c:e514:4e27] (helo=muffin.lan)
-        by chandra.tablix.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <tomaz.solc@tablix.org>)
-        id 1mY6WX-0001PB-HI; Wed, 06 Oct 2021 14:59:53 +0200
-From:   Tomaz Solc <tomaz.solc@tablix.org>
-To:     linux-usb@vger.kernel.org
-Cc:     Tomaz Solc <tomaz.solc@tablix.org>
-Subject: [PATCH] usb: serial: option: add prod. id for Quectel EG91
-Date:   Wed,  6 Oct 2021 14:57:50 +0200
-Message-Id: <20211006125749.4075-1-tomaz.solc@tablix.org>
-X-Mailer: git-send-email 2.20.1
+        with ESMTP id S230008AbhJFNLu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Oct 2021 09:11:50 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4291FC061749
+        for <linux-usb@vger.kernel.org>; Wed,  6 Oct 2021 06:09:58 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id i132so2362780qke.1
+        for <linux-usb@vger.kernel.org>; Wed, 06 Oct 2021 06:09:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=u3kPhm4C18S+1mkZ5qTq8W02kVBjw/xBsuWmrk26B94=;
+        b=VSKwLaMjDiK3bMCYbvAsK9nimuUxcgTMLnaRuSiZrwliqajAcTGS8gr8DQfmNhzA6C
+         JN7NRgRTDElxXXDvZZ7uGFJIiDrM8DHA+fKRsOU8z7bfwCT7I3gar1E8AXzV+9FO7+Vz
+         tO85TBSpra2DYaC+NYtGrCsozP7gf4PRuuFmCJiBU+jmszlKr0wF3XEXW6SslTEcwPkY
+         7K9/gFe7MaMOjM458Vo0aZy1qMIh3wr04uaTgaOemICF7TLD9WV7RF9xrbG1mkjuJ6B8
+         kCCRFp+hMJDMJAeN3x4w7OU8fFjUVw6nQuT+O4kL+yiPbjI9R/ofdup5/DFvUEc880PT
+         jcRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=u3kPhm4C18S+1mkZ5qTq8W02kVBjw/xBsuWmrk26B94=;
+        b=Z3N7bjnpOF/QNJ0DhzqFT0KoAPP3Z8l47NlgDJORJAgfaH3+eO3b8AHMgKJYzk37IH
+         1s1NiKjfcjzW+g1Q0H04OmXP99CGvzPieuUEKEPlmKUvgezQwrYvsBYbMi6ldL14kA5b
+         2P88pbcS6i1cusr0YbMLNraSPjK71zE6DI+hLhSJPfm6p/PsFmmmzxPwKAZezswQX9h2
+         JdCSrXTkRE9hc8xKXyT/r20ZCJjDKv2bSoMB2XdTJHd1l6gg54Nzr6A9erCTDnKIIc8n
+         J4gm9IMiIxzn7cPfU6Ej3Q2VyzvdpCE5bB5noWZPpRC5Gj30pBAnIVP4J6GVHX/5LWP3
+         j/3g==
+X-Gm-Message-State: AOAM531EF7Y52h5iia+9IsisSMpohDj9KhKvU4atM4TfLz8L2TiL6rOe
+        ksgTxkOXH8gidu93lgGpuvvxFIPokvQY6WNbzhQ=
+X-Google-Smtp-Source: ABdhPJxX4EZIm1JoFbYetmaE7gQYndFivX5X82UU8XdzWZ5pW1nRAALr6fXVJWp8zvcQZ8k9vR8FdWazOwf0SQBXQy4=
+X-Received: by 2002:a37:2717:: with SMTP id n23mr18386174qkn.149.1633525797243;
+ Wed, 06 Oct 2021 06:09:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Sender: barristeragbokenkrumah1971@gmail.com
+Received: by 2002:ad4:5f0f:0:0:0:0:0 with HTTP; Wed, 6 Oct 2021 06:09:56 -0700 (PDT)
+From:   Mrs Francisca John Carlsen <franciscacarlsen20@gmail.com>
+Date:   Wed, 6 Oct 2021 14:09:56 +0100
+X-Google-Sender-Auth: bNH_pfqSXba9N9KvSfDZMcFS_pA
+Message-ID: <CAEYnOn60SFcgfGz4LYM4k9gis-_CVo7yrnxevLi_utK3Huuh1g@mail.gmail.com>
+Subject: Written From Hospital.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Adding support for Quectel EG91 LTE module.
+Written From Hospital.
 
-The interface layout is same as for EG95.
+  It is with deep consideration that I am writing this letter of
+proposal to you, I know that this message may be a very big surprise
+to you,  Please do not feel disturbed for contacting  you in this
+regards, It was based on the critical health condition I find mine
+self.  My names are Mrs. Francisca John  Carlsen from Denmark wife of
+late Mr John Carlsen, a widow and I=E2=80=99m suffering from brain tumor
+disease and this illness has gotten to a very bad stage, I married my
+husband for Ten years without any family members and no child.  My
+husband died after a brief illness that lasted for few   days. Since
+the death of my husband, I decided not to remarry again, When my late
+husband was alive he deposited the sum of ($11.000.000 Eleven million
+dollars.) with the Bank. Presently this money is still in bank. And My
+ Doctor told me that I don't have much time to live because my illness
+has gotten to a very bad stage, Having known my condition I  decided
+to
+entrust over the deposited  fund under your custody to take care of
+the less-privileged ones therein your country or position, which i
+believe that you will utilize this money the way I am going to
+instruct herein.
 
-usb-devices output:
-T:  Bus=01 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#=  3 Spd=480 MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=0191 Rev=03.18
-S:  Manufacturer=Android
-S:  Product=Android
-C:  #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:  If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+ However all I need and required from you is your sincerity and
+ability to carry out the transaction successfully and fulfill my final
+wish in implementing the charitable project as it requires absolute
+trust and devotion without any failure and I will be glad to see that
+the bank finally release and transfer the fund into your bank account
+in your country even before I die here in the hospital, because my
+present health condition is very critical at the moment everything
+needs to be process rapidly as soon as possible.
 
-Interfaces:
+ It will be my pleasure to compensate you as my Investment
+Manager/Partner with 35 % percent of the total fund for your effort in
+handling the transaction, 5 % percent for any expenses or processing
+charges fee that will involve during this process while 60% of the
+fund will be Invested into the charity project there in your country
+for the mutual benefit of the orphans and the less privileges ones.
 
-0: Diag
-1: GNSS
-2: AT-command interface/modem
-3: Modem
-4: QMI
+ Meanwhile I am waiting for your prompt respond, if only you are
+interested for further details of the transaction and execution of
+this humanitarian project for the glory and honor of God the merciful
+compassionate.
 
-Signed-off-by: Tomaz Solc <tomaz.solc@tablix.org>
----
- drivers/usb/serial/option.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ May God bless you and your family.
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 6cfb5d33609f..f54abcb408b6 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -246,6 +246,7 @@ static void option_instat_callback(struct urb *urb);
- /* These Quectel products use Quectel's vendor ID */
- #define QUECTEL_PRODUCT_EC21			0x0121
- #define QUECTEL_PRODUCT_EC25			0x0125
-+#define QUECTEL_PRODUCT_EG91			0x0191
- #define QUECTEL_PRODUCT_EG95			0x0195
- #define QUECTEL_PRODUCT_BG96			0x0296
- #define QUECTEL_PRODUCT_EP06			0x0306
-@@ -1111,6 +1112,9 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC25, 0xff, 0xff, 0xff),
- 	  .driver_info = NUMEP2 },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC25, 0xff, 0, 0) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG91, 0xff, 0xff, 0xff),
-+	  .driver_info = NUMEP2 },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG91, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG95, 0xff, 0xff, 0xff),
- 	  .driver_info = NUMEP2 },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG95, 0xff, 0, 0) },
--- 
-2.20.1
-
+Best Regards,
+Mrs. Francisca John  Carlsen
