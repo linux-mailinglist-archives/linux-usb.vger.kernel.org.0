@@ -2,163 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1748F42356F
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 03:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 811484235EA
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 04:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237129AbhJFB3I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Oct 2021 21:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
+        id S237234AbhJFCl7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Oct 2021 22:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233994AbhJFB3H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 21:29:07 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8685FC061749;
-        Tue,  5 Oct 2021 18:27:15 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id l13so1005599qtv.3;
-        Tue, 05 Oct 2021 18:27:15 -0700 (PDT)
+        with ESMTP id S229908AbhJFCl5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Oct 2021 22:41:57 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FB3C061749;
+        Tue,  5 Oct 2021 19:40:06 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id t9so4046677lfd.1;
+        Tue, 05 Oct 2021 19:40:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b5V/CYpZDaox8A4m9HczsKoqQ1wtwSA/29fW/9YWuUg=;
-        b=ckdJ1ofQolakb9qYLOXHqOqdztVHWt7OPkn5cdwwXmel359jJcqZjM5QS2fP3IQWc9
-         mzNzz6vXC5HJHEt62VeDnV2joYMh7KNS7oB0lCnSzS+DrCR/OojyFMQdi3v357pl20su
-         wZ4xIyCFjQjoM1HpZ80aRqkhfDZBO5kIdrswE=
+        d=gmail.com; s=20210112;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jBjl2SKIDUWdGGNNCdNQzm0sXvagxduES6I98oCU5Y8=;
+        b=chv8eTFsLZvhIeL+hkzvYI0WTv6C1hQt4IbTe+2xmGQkTHoN3MvZ0Jtjaf5nJ60yH8
+         Qll610va/L7nfzXyHi9q5H18Ow+SshG+eVNj+gSdDfOq3y7RXIcXU17IFSrdKUsqMGDl
+         Bns94mjB430lIX1L+jpyb63pJy7SuBLUq2Zz5gUmkoa+ld9TdVOzDhd/itLWhWEQUYh6
+         w/ij/t35/Agn1d9bEjw9KP0FJwCJbX0TIcoQQ9rohRXEEbOoZw69in/qeyGnWiJ4R/RF
+         +DxmiKiv3q4SpB4Czd0/XkoQ7itREY7Ra4KeHWPZGr13fZLG2O0bWXrsMD3HPPH5buvd
+         Yn0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b5V/CYpZDaox8A4m9HczsKoqQ1wtwSA/29fW/9YWuUg=;
-        b=oGNyhbJ60m3kiDrHan/6c+DDlkT7LaZ0rngJ7gw7djtOoTjDBvSPN4jvWoB1D85tX6
-         0DhB1eItHvgfFRtjUw9O1G91mgxVY+SHmkGijWHGnpGeXMkKYtc83OZvldmxOuQ+XXnQ
-         jCpJ3CGBEpLWfxmMhJvbPBdXJhhkkAR4PYSwB/LuJRiLkmDX0W3gKo3QwjpE00t1F8Rn
-         WogkOJoteXBdMQ4auqOjEusf4RjcExH1CIX308Pqq71aECjy2G5Qunq6/tADv7vN81GW
-         OS+cH0xxGTZ+G1IUHHAtGWvVks922cMh9rEtaOen+6dIhxofoQ2Ue3dHXlKLSQGzuzCM
-         PA3w==
-X-Gm-Message-State: AOAM5319mCXZDsQ3RpwNsfAMHCPm0hfl12F8TsQV5pwjQyL9LHJhk/k4
-        +QrtMDd7Azqn9zthWWGepzV308wWOmgsxHnPqAA=
-X-Google-Smtp-Source: ABdhPJzT1l9b+M36cXq5gGZEJbZS03Kabud0GqWeHScKREcFXttNa38KaP4Cr1WMWpPTL8ttV2cmwm4KjdbM2pdUGQM=
-X-Received: by 2002:a05:622a:45:: with SMTP id y5mr23214853qtw.145.1633483634594;
- Tue, 05 Oct 2021 18:27:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210910073619.26095-1-neal_liu@aspeedtech.com>
-In-Reply-To: <20210910073619.26095-1-neal_liu@aspeedtech.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 6 Oct 2021 01:27:02 +0000
-Message-ID: <CACPK8Xf40cfnFFeeAzkdXk6ikbfBhWOOt6U8Oq3iCaxe5v5=_w@mail.gmail.com>
-Subject: Re: [PATCH v4] usb: ehci: handshake CMD_RUN instead of STS_HALT
-To:     Neal Liu <neal_liu@aspeedtech.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tony Prisk <linux@prisktech.co.nz>, linux-usb@vger.kernel.org,
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jBjl2SKIDUWdGGNNCdNQzm0sXvagxduES6I98oCU5Y8=;
+        b=4WZuTi/aFT8t0rIWmsNGXbNserSJoChOakY8uTfD8c8w09DW6C1uX9c7zH0O4LT5h6
+         h80Q8hc8S6aBiPGZ+lhWX14WVOyTvrZfEVeaeTUoJ5/KJf0D6u3FsSatLSMjFGJpICso
+         FBFho8zQsDwUsH/9b9QpmvquzW5dZwDdIZCtuYi69Inkm5G4s+XXQzEIpPPNMnrinYkq
+         gpzl+UNoK4YmYwNmPlylIWBxCk/1GRUFWfnECkvCbk9O6EPAV8Nh/HNqv5txVl/oWMF+
+         Yj6wzFjpXEIbULx1tjyJ6VEw1oftLzUZ+Uni2NVOpXDzjd7MC8+yakgjPWBuOHATu0zq
+         Tv7Q==
+X-Gm-Message-State: AOAM5332YZQX7BPuAOuuaHrL9W/Gy61+C/YFzKU72Q1m4YAMBi8dnrdg
+        mOS2Q8XKGdkNNoZJBEjbiXo=
+X-Google-Smtp-Source: ABdhPJz5nDf5e1lLckhTPfcq8ws67JWhBNrPmg70PycmaRWuWT397hKxpbU2YgDLYDLc8supNRztWA==
+X-Received: by 2002:a2e:91d4:: with SMTP id u20mr25686467ljg.81.1633488004426;
+        Tue, 05 Oct 2021 19:40:04 -0700 (PDT)
+Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
+        by smtp.googlemail.com with ESMTPSA id o19sm2137695lfg.68.2021.10.05.19.40.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Oct 2021 19:40:03 -0700 (PDT)
+Subject: Re: [PATCH v13 06/35] clk: tegra: Support runtime PM and power domain
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Tao Ren <rentao.bupt@gmail.com>,
-        BMC-SW <BMC-SW@aspeedtech.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Bruce Mitchell <Bruce.Mitchell@ibm.com>,
-        Eddie James <eajames@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+References: <20210926224058.1252-1-digetx@gmail.com>
+ <20210926224058.1252-7-digetx@gmail.com>
+ <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com>
+ <24101cd6-d3f5-1e74-db39-145ecd30418b@gmail.com>
+ <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
+ <4bdba8a2-4b9b-ed7d-e6ca-9218d8200a85@gmail.com>
+ <74a47158-e2e4-5fd0-3f37-0b50d4ead4d9@gmail.com>
+Message-ID: <8597d539-311b-4f04-481c-b48e6a5a882a@gmail.com>
+Date:   Wed, 6 Oct 2021 05:40:02 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <74a47158-e2e4-5fd0-3f37-0b50d4ead4d9@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+06.10.2021 01:43, Dmitry Osipenko пишет:
+> 06.10.2021 01:19, Dmitry Osipenko пишет:
+> ...
+>> I reproduced the OFF problem by removing the clk prepare/unprepare from
+>> the suspend/resume of the clk driver and making some extra changes to
+>> clock tree topology and etc to trigger the problem on Nexus 7.
+>>
+>> tegra-pmc 7000e400.pmc: failed to turn off PM domain heg: -13
+>>
+>> It happens from genpd_suspend_noirq() -> tegra_genpd_power_off() -> clk
+>> -> GENPD -> I2C -> runtime-pm.
+>>
+>> -13 is EACCES, it comes from the runtime PM of I2C device. RPM is
+>> prohibited/disabled during late (NOIRQ) suspend by the drivers core.
+> 
+> My bad, I double-checked and it's not I2C RPM that is failing now, but
+> the clock's RPM [1], which is also unavailable during NOIRQ.
+> 
+> [1]
+> https://elixir.free-electrons.com/linux/v5.15-rc4/source/drivers/clk/clk.c#L116
+> 
+> Previously it was I2C RPM that was failing in a similar way, but code
+> changed a tad since that time.
+> 
 
-On Fri, 10 Sept 2021 at 07:38, Neal Liu <neal_liu@aspeedtech.com> wrote:
->
-> For Aspeed, HCHalted status depends on not only Run/Stop but also
-> ASS/PSS status.
-> Handshake CMD_RUN on startup instead.
->
-> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> Reviewed-by: Tao Ren <rentao.bupt@gmail.com>
-> Tested-by: Tao Ren <rentao.bupt@gmail.com>
+Just in case, I checked that the suspension order isn't somehow the
+source of the problem by adding links to device tree in order to always
+suspend clocks after the rest of devices and still GENPD gets -EACCESS
+from clk_pm_runtime_get().
 
-Has this one gone in? If not, here's some tags:
+RPM is disabled by dpm_suspend_late(), which is invoked before
+dpm_suspend_noirq() [1]. Hence RPM is unavailable in NOIRQ phase in any
+case.
 
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-
-It also needs to go to stable:
-
-Cc: stable@vger.kernel.org
-Fixes: 280a9045bb18 ("ehci: fix EHCI host controller initialization sequence")
-
-Cheers,
-
-Joel
-
-> ---
->  drivers/usb/host/ehci-hcd.c      | 11 ++++++++++-
->  drivers/usb/host/ehci-platform.c |  6 ++++++
->  drivers/usb/host/ehci.h          |  1 +
->  3 files changed, 17 insertions(+), 1 deletion(-)
->
-> ---
-> Fix STS_HALT handshake failure for Aspeed 2500/2600 platform.
->
-> Change since v3:
-> - Add more description.
->
-> Change since v2:
-> - Use my "real" name for both the Signed-off-by: line and the From: line.
->
-> Change since v1:
-> - Handshake CMD_RUN status on startup instead of easily skip it.
-> ---
->
-> diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
-> index 6bdc6d6bf74d..55f92d25336b 100644
-> --- a/drivers/usb/host/ehci-hcd.c
-> +++ b/drivers/usb/host/ehci-hcd.c
-> @@ -634,7 +634,16 @@ static int ehci_run (struct usb_hcd *hcd)
->         /* Wait until HC become operational */
->         ehci_readl(ehci, &ehci->regs->command); /* unblock posted writes */
->         msleep(5);
-> -       rc = ehci_handshake(ehci, &ehci->regs->status, STS_HALT, 0, 100 * 1000);
-> +
-> +       /* For Aspeed, STS_HALT also depends on ASS/PSS status.
-> +        * Check CMD_RUN instead.
-> +        */
-> +       if (ehci->is_aspeed)
-> +               rc = ehci_handshake(ehci, &ehci->regs->command, CMD_RUN,
-> +                                   1, 100 * 1000);
-> +       else
-> +               rc = ehci_handshake(ehci, &ehci->regs->status, STS_HALT,
-> +                                   0, 100 * 1000);
->
->         up_write(&ehci_cf_port_reset_rwsem);
->
-> diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
-> index c70f2d0b4aaf..c3dc906274d9 100644
-> --- a/drivers/usb/host/ehci-platform.c
-> +++ b/drivers/usb/host/ehci-platform.c
-> @@ -297,6 +297,12 @@ static int ehci_platform_probe(struct platform_device *dev)
->                                           "has-transaction-translator"))
->                         hcd->has_tt = 1;
->
-> +               if (of_device_is_compatible(dev->dev.of_node,
-> +                                           "aspeed,ast2500-ehci") ||
-> +                   of_device_is_compatible(dev->dev.of_node,
-> +                                           "aspeed,ast2600-ehci"))
-> +                       ehci->is_aspeed = 1;
-> +
->                 if (soc_device_match(quirk_poll_match))
->                         priv->quirk_poll = true;
->
-> diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
-> index 80bb823aa9fe..fdd073cc053b 100644
-> --- a/drivers/usb/host/ehci.h
-> +++ b/drivers/usb/host/ehci.h
-> @@ -219,6 +219,7 @@ struct ehci_hcd {                   /* one per controller */
->         unsigned                need_oc_pp_cycle:1; /* MPC834X port power */
->         unsigned                imx28_write_fix:1; /* For Freescale i.MX28 */
->         unsigned                spurious_oc:1;
-> +       unsigned                is_aspeed:1;
->
->         /* required for usb32 quirk */
->         #define OHCI_CTRL_HCFS          (3 << 6)
-> --
-> 2.25.1
->
+[1]
+https://elixir.bootlin.com/linux/v5.15-rc4/source/kernel/power/suspend.c#L399
