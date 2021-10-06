@@ -2,121 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E644248DA
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 23:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C513742490D
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 23:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239704AbhJFV1C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Oct 2021 17:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50374 "EHLO
+        id S229641AbhJFVkP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Oct 2021 17:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239683AbhJFV1B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Oct 2021 17:27:01 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CB2C061746;
-        Wed,  6 Oct 2021 14:25:08 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id y23so16238275lfb.0;
-        Wed, 06 Oct 2021 14:25:08 -0700 (PDT)
+        with ESMTP id S229464AbhJFVkN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Oct 2021 17:40:13 -0400
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5C7C061746
+        for <linux-usb@vger.kernel.org>; Wed,  6 Oct 2021 14:38:20 -0700 (PDT)
+Received: by mail-vk1-xa36.google.com with SMTP id m199so1846319vka.6
+        for <linux-usb@vger.kernel.org>; Wed, 06 Oct 2021 14:38:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Z+D15vASJYR0SWQDyQP1KR8IKSZuDFJmcBUbxtdKwZQ=;
-        b=AZF3RQplv1wwucr3sX1VkhwqLxjb5jhLmlPTf6BcmzWR9S/ab1/50oKhYytjUxuxjF
-         OHbHbObgbt4KErSP1sBFtIGwDtqomaoinmksPntQwQo7yPKa9M8wW3aTrRkR1ENr9YXH
-         An3NYJ3BFO03YmpjlOAhqA15ukSOSB0TmSxxvb7VM8/kfAy6BCpaA8CZeYQjS7j0xRGz
-         CIwjLR5d3klZfaAeb5Knr5b9YHfwyA4YgK3OqOvAXLc4tncC4f/hvr9mbFYGzpAun4QX
-         mHvtjJ798n0SKwZ8bTfGtw8Fxr4u/DkYaIvvzaIRXqZRO/CW8DDEWuYH/pEiTmGzLMvD
-         XQ1Q==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=0NqHQYP/c3mUi/IFOx7CMz/U7QYzqFRbcXZKclx3qeg=;
+        b=EZs0vgtJp54idTlovB7He34Ix5ZP3KqmNT/KYiQ39T3tX230IosplMgBMPC9R+CMCr
+         GfRVuYJ0F6JaUkY7iHDD1nOHaFgtx7ByhICYVmNoDcRIgfpk94nJSuUavuJGHMd8KM1F
+         O/fGAa5U5ad2WU54PHWQunpkCUnUWRZy43fgO72d15WIREjVZgmfCoFu+vVVbxzL5luC
+         r9rJ4XElytJ354C5XM6UlDN+nKgX1bMz0M1/WCTRb6uUvrYP29hqIq5xV3oipCw6V6t2
+         RsAhzeMKT3gBX7ckmXAvxRW72VFOW9hiBuVtxeyyYpn0dr5LCYmq2EaqOvodXahrCgxF
+         /UHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Z+D15vASJYR0SWQDyQP1KR8IKSZuDFJmcBUbxtdKwZQ=;
-        b=eoI47RpotMB6l/W+VEtTxFLDzwNq8P/uyNHr42K7EWPwthQ2NpE0TiyKjLOuD2tdOL
-         J2q1uepIWAJGbJe6HYN9M8eFZjX1C/tKa2nVdpHTM8DgMebknWB6buakbT3m+qyVuPxv
-         eswrlSGQFl27hbpj71JjlaU77vRfc3Wr/VMIXaYYVqnJF5rZfQ6S3E38nLC1rnu5GEtn
-         NQ37OIpuHAwUdGJex7B3oR0AvJ2Elk0I7C7i69DpBcvS2PQ8helKynEzHerebW/TsBV+
-         Lerp4yqk9J8bMzVytJfch/QBmFtIDnhD2UcYZmpGSDuyMhQQ4FZEh8Ar+S24j4D8y2Bj
-         m3oA==
-X-Gm-Message-State: AOAM533Zj3tjYEXdAlcccH2fYDykd/DdgveE8NZI0qF4nJX+rGypXegK
-        oOqBuTe8od0SDBdiW6fMAIs=
-X-Google-Smtp-Source: ABdhPJw744uZG1epOJTVnrPpE+ugh/u7w22Q41348b4PDrlNyl5oKr3YpciuIkhK7LF587NSrNYsPA==
-X-Received: by 2002:a2e:1404:: with SMTP id u4mr387417ljd.269.1633555506822;
-        Wed, 06 Oct 2021 14:25:06 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
-        by smtp.googlemail.com with ESMTPSA id s30sm2577705lfb.90.2021.10.06.14.25.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Oct 2021 14:25:06 -0700 (PDT)
-Subject: Re: [PATCH v13 06/35] clk: tegra: Support runtime PM and power domain
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-References: <20210926224058.1252-1-digetx@gmail.com>
- <20210926224058.1252-7-digetx@gmail.com>
- <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com>
- <24101cd6-d3f5-1e74-db39-145ecd30418b@gmail.com>
- <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
- <4bdba8a2-4b9b-ed7d-e6ca-9218d8200a85@gmail.com>
- <CAPDyKFq_-HGPRNiNDmnEbuah0mUYoRUWVs1SvbQ6VNMMwEcXjA@mail.gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <35714b9d-d855-1ad3-241b-f97859f8c97b@gmail.com>
-Date:   Thu, 7 Oct 2021 00:25:05 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=0NqHQYP/c3mUi/IFOx7CMz/U7QYzqFRbcXZKclx3qeg=;
+        b=wNNXlaTI+8AAKF0tjfsf0lyh53FmioBvejM3F4kTqwsFAQcDwubngkjZCXwATkY9Fi
+         qcc3AzQCFAzR+wQSw4nFxmz0m1ZfjrcjyHYfptqHr8hA8tSzWR8Cx1CJ0Gskn572IFLw
+         su3B09JJwG9XmiG4IyHusSF6wohKy2L66anhWfcXbbvd8bm/Dx8qAnmNp7AWpnFYEylS
+         lGrmwKHfGp4O3DLAH0kJU1xoNa12xtzrlj3ISOS3ce6k7FZn02VY0dVijew9zeGFTDC+
+         xcAx5Jqh+h95+fbSFmoOvK81ZwtpJElDf2LvOyh67mtUxg9Ys8xqCoJdmbBMrL3ZdsGl
+         W3oQ==
+X-Gm-Message-State: AOAM533aoX7HnbfRI2pFFwKBkAiVJ8wlB8+JQkTtrku/Ij8n7FXi2PTZ
+        OfMdsKzGKNXgclYayQ+Tlu6nKInBUJ6856xY+Cw=
+X-Google-Smtp-Source: ABdhPJxFNYDi9GTF9XX4XtP9Sa2nGHSInsTGcujKizHJZEx9Bebv8ViY4GYjKiC6RixPnMd/NJ1iZVYuO5ABi2V82ZE=
+X-Received: by 2002:a05:6122:201f:: with SMTP id l31mr686958vkd.22.1633556299779;
+ Wed, 06 Oct 2021 14:38:19 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFq_-HGPRNiNDmnEbuah0mUYoRUWVs1SvbQ6VNMMwEcXjA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a59:910d:0:b0:236:6048:2300 with HTTP; Wed, 6 Oct 2021
+ 14:38:19 -0700 (PDT)
+Reply-To: monica43brown@gmail.com
+From:   monica brown <enorakpatcha@gmail.com>
+Date:   Wed, 6 Oct 2021 22:38:19 +0100
+Message-ID: <CALAfAzDo9HWGAWy_nEYSH8HiX4VkvKrk9qxurqLqjj=TEZQSfg@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-06.10.2021 15:38, Ulf Hansson пишет:
->> I'm also wondering if we could add some 'was_enabled' flag to GENPDs,
->> setting it by genpd_suspend_noirq() for the enabled domains, and then
->> powering-on GENPDs from genpd_resume_noirq() only if they were in the
->> enabled state during genpd_suspend_noirq() time. It actually puzzled me
->> for a quite long time why GENPD core enables domains unconditionally
->> during early resume. This should solve a part of the problem and it
->> makes suspend/resume a bit safer because there is a smaller chance to
->> crash hardware during suspend, at least it's easier to debug.
-> Just because the PM domain was already off at genpd_suspend_noirq(),
-> doesn't mean that it can stay powered off at genpd_resume_noirq(). At
-> least as is today.
-> 
-> The main reason why genpd_resume_noirq() powers on the PM domain, is
-> because it's not possible for the consumer drivers to rely on runtime
-> PM to do it (because runtime PM has been disabled by the PM core).
-
-At least Tegra doesn't need to have domains force-resumed. This should
-be a platform-specific behaviour. We may add a new flag for that, I
-suppose. I'll try to keep this in mind for a future improvement. Thank
-you for the clarification.
+Greetings from me
+My name is Monica Brown and how are you today, please I have something that
+i will like to share with you okay please try and get back.
