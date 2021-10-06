@@ -2,68 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 020EB4237F9
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 08:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 070ED42384C
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Oct 2021 08:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbhJFGaY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Oct 2021 02:30:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53968 "EHLO mail.kernel.org"
+        id S235862AbhJFGpM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Oct 2021 02:45:12 -0400
+Received: from cable.insite.cz ([84.242.75.189]:60610 "EHLO cable.insite.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232979AbhJFGaV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 6 Oct 2021 02:30:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6971861186;
-        Wed,  6 Oct 2021 06:28:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1633501709;
-        bh=5Ofyu8hfWQU4ytV6M6hVrHVYrZALkAzZzA9juN6Lct4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RkRktobNnsLwPDF10nX4/f1LenTx7IrHu5yBWUHPP4MllLZe00ww7JU2P6v5ra8C7
-         GSCmd1RwItatjzX5GtRnrh5ukNpFrjbRU0GHSyo98TkWYf+EIqYpP3naz8YK2N4vHk
-         oDOiA8j1qfiIc0nvymFs5GD8WxJtMTctm2Sz92Jg=
-Date:   Wed, 6 Oct 2021 08:28:27 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        syzbot <syzbot+7af597ce2b38596c16ea@syzkaller.appspotmail.com>
-Cc:     hminas@synopsys.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] usb-testing build error (2)
-Message-ID: <YV1CCyGShh623mOA@kroah.com>
-References: <000000000000b01f1505cda8e03c@google.com>
+        id S232979AbhJFGpL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 6 Oct 2021 02:45:11 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 787D8A1A3D403;
+        Wed,  6 Oct 2021 08:43:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1633502598; bh=j0JfYnRkZBCUFNZxEggYhpK/0sNW8X30UCgxNBf1kS0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=jR/TILEvd+ccr/M26+vwTVEHrEaJph+3wQPAHut8vlvlJbSjXikg61SUJRd8srFkI
+         t7NSyCGHXB+CCX8El7unmR3koKaYM0Bx0j3F/Da49R5iYTpUEWTr1EPVvDjy87uPQH
+         jRsUe3L28/WXYNU2NccZMam8oQRdWRahZayojBvo=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id UWub_Yev3x2r; Wed,  6 Oct 2021 08:43:13 +0200 (CEST)
+Received: from [192.168.105.22] (ip28.insite.cz [81.0.237.28])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 0AA58A1A3D402;
+        Wed,  6 Oct 2021 08:43:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1633502593; bh=j0JfYnRkZBCUFNZxEggYhpK/0sNW8X30UCgxNBf1kS0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=qDEJU+vLQa2ZcRdz0O+ig2CdrmNke6QDIyuewwOtd2Rhbqnl8pUBMfjql3oMkFlQi
+         FYRniGyGOAUqS7UGrFqscnMsKOwnG84eSPZaPz/d5vUxl2gIt6Bf8whJp9JqEizklI
+         a9vKivywZPFNW0hLy5jP3pPUxswundjuIa0Ln3MA=
+Subject: Re: [PATCH] usb: gadget: u_audio.c: Adding Playback Pitch ctl for
+ sync playback
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Jack Pham <jackp@codeaurora.org>
+References: <20210925143003.12476-1-pavel.hofman@ivitera.com>
+ <YVw3e1zOS2QvKiM0@kroah.com>
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+Message-ID: <cbd8d9cc-df7b-1990-4ff4-8f2b2a30f846@ivitera.com>
+Date:   Wed, 6 Oct 2021 08:43:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000b01f1505cda8e03c@google.com>
+In-Reply-To: <YVw3e1zOS2QvKiM0@kroah.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 05, 2021 at 11:01:31PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    dea971290a03 usb: core: config: Change sizeof(struct ...) ..
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=150e8a3f300000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=cd8a1eadba1e4ce4
-> dashboard link: https://syzkaller.appspot.com/bug?extid=7af597ce2b38596c16ea
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+7af597ce2b38596c16ea@syzkaller.appspotmail.com
-> 
-> drivers/usb/dwc2/params.c:252:8: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-> drivers/usb/dwc2/params.c:253:8: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-> drivers/usb/dwc2/params.c:259:8: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-> drivers/usb/dwc2/params.c:260:8: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-> drivers/usb/dwc2/params.c:264:8: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-> drivers/usb/dwc2/params.c:265:8: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-> drivers/usb/dwc2/params.c:270:7: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-> drivers/usb/dwc2/params.c:479:53: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-> drivers/usb/dwc2/params.c:500:9: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-> drivers/usb/dwc2/params.c:509:8: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
-> drivers/usb/dwc2/params.c:510:8: error: 'struct dwc2_hsotg' has no member named 'dw_otg_caps'
 
-Thanks, I'll go drop the offending patches from my tree.
+Dne 05. 10. 21 v 13:31 Greg KH napsal(a):
+> On Sat, Sep 25, 2021 at 04:30:03PM +0200, Pavel Hofman wrote:
+>> EP IN is hard-coded as ASYNC both in f_uac1 and f_uac2 but u_audio sends
+>> steady number of audio frames in each USB packet, without any control.
+>>
+>> This patch adds 'Playback Pitch 1000000' ctl analogous to the existing
+>> 'Capture Pitch 1000000' ctl. The calculation of playback req->length in
+>> u_audio_iso_complete respects the Playback Pitch ctl value to 1ppm now.
+>>
+>> Max. value for Playback Pitch is configured by the existing parameter
+>> uac2_opts->fb_max, used also for the Capture Pitch.
+>>
+>> Since the EP IN packet size can be increased by uac2_opts->fb_max now,
+>> maxPacketSize for the playback direction is calculated by the same
+>> algorithm as for the async capture direction in
+>> f_uac2.c:set_ep_max_packet_size.
+>>
+>> Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+>> ---
+>>   drivers/usb/gadget/function/f_uac2.c  |  5 +-
+>>   drivers/usb/gadget/function/u_audio.c | 93 ++++++++++++++++++++-------
+>>   2 files changed, 74 insertions(+), 24 deletions(-)
+> 
+> Does not apply to my tree, what kernel release / branch did you make
+> this against?
+> 
 
-greg k-h
+Greg, the patch requires patch 0560c9c ("usb: gadget: f_uac2: fixed 
+EP-IN wMaxPacketSize") which I sent prior to this one (not as a patch 
+series, this patch was not ready at that time). You applied 0560c9c to 
+your usb-linus yesterday, hence this patch applies cleanly to usb-linus 
+now.
+
+Your branch usb-next does not have 0560c9c yet, therefore the patch 
+fails. But both patches apply cleanly to usb-next as a series, tested 
+just now.
+
+This patch ("usb: gadget: u_audio.c: Adding Playback Pitch ctl for sync 
+playback") is not a bugfix and can wait in usb-next.
+
+That goes back to my question of what are the rules for the two of your 
+branches. What if a new patch requires patches from both usb-linus 
+(bugfix) and usb-next (new features)?
+
+Thanks a lot for explaining and applying the patch,
+
+Pavel.
