@@ -2,79 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC09C425A48
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Oct 2021 20:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C603425B65
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Oct 2021 21:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243461AbhJGSFd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Oct 2021 14:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243383AbhJGSFc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Oct 2021 14:05:32 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC811C061762
-        for <linux-usb@vger.kernel.org>; Thu,  7 Oct 2021 11:03:38 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id u20-20020a9d7214000000b0054e170300adso8444281otj.13
-        for <linux-usb@vger.kernel.org>; Thu, 07 Oct 2021 11:03:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=UqU2sc6nimwttVNTsN+KoIq0D+bxjGjE0Uy7w4zSjso=;
-        b=jLbW+7kkLTNwDo7nzsbCqMtw9ge068L0fVwd4nYZ32DtCDgR3hrMERyqPF8XokXjKM
-         gGvLUrYZf7iFOiN1n2xwIsANaEuHWtjXxisOvMsRXdB3vug5TsidLpUHrzXyRP1KVZ7S
-         nx3EaPhp3M0WGPkZEFcQG+oB01yueTwuhQ5W0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=UqU2sc6nimwttVNTsN+KoIq0D+bxjGjE0Uy7w4zSjso=;
-        b=C/4KoUdHoMiICXkhemqZ9FsHk6Jt3U4fUHmX3Yjvu6K2CfgKLGZL91svT3Yz+INaqt
-         wB304N87Kd+GjsyMOO7e8VfSI03o4nGLeV9cvF5KyFPk/4OH+N/UNcPtjJ9xGzDhPnXL
-         w+vTjAg+34tEqxdjtz0sPkKiS4+pxQ0EbxMZpJWok69W6E6pIXHYNokXFrpcbh+m6Q3U
-         iysWpl7XS4r9UdgjvyON985UkMCm8Y0m/AIygvD/pCNNy4mHzVLOZW8de1x0htRTB6oB
-         wbM1vVCkX2PRT7ky4rFHY0pA7QeyLUQsDOABrdvFhWPBjhkmqDBuKaZ062Tbf5jxSdWG
-         fwHw==
-X-Gm-Message-State: AOAM531cbNHde9IOipwr3er/Qsd+XsIt/PUf8nOZYFmV+n73chC8maek
-        G9t19tUrMZouowjo0dqj/WMUd5npHXIhtb1p87U6Tw==
-X-Google-Smtp-Source: ABdhPJzdP57QnKdUaciIKhWDyQMB6RtxGohINlseRKeMlntrQwhQiwnOaiAxp80/FctFi0Fd4EUCp1h/9sGJoPkWh6k=
-X-Received: by 2002:a9d:6a0f:: with SMTP id g15mr5000139otn.126.1633629818067;
- Thu, 07 Oct 2021 11:03:38 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 7 Oct 2021 14:03:37 -0400
+        id S243873AbhJGTPB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Oct 2021 15:15:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45834 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233879AbhJGTPB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 7 Oct 2021 15:15:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 433A260F23;
+        Thu,  7 Oct 2021 19:13:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633633986;
+        bh=4097i7mkFkqGG7g6bmJrh8yORC7/TSKWh6X6Z6f10a8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=PAW7l7d+uZ/uWAbylFNHh7bfq4jdELPttvGO0mPiMMM7jV3YRMIcNp8m6qVATu0qA
+         e+3Xmr1sEvqzA9ww/tVvPj93ZR6u0X7F3iDfcdcWtGw89juUigk2q9KbvXXCN2HRIJ
+         LD9hahvTR136Q83ZBxxA4b3qoLBgYxrv7236PtPtZCyLAPD6KyFi04VSiG8O0QQSrt
+         ao3Pi07O4Zcjwm/s37c4/NsB9eDUArdO/HPfBIih1LkHKmGMo24lAF57paB1pAP49a
+         UrhLLUzQGVwumGu7L1Pf85Yh4ipTiX3hso7CTmA3JTDovpos7y/7Pvb1N5PGEd4GyC
+         9JOh66/bkHhag==
+Date:   Thu, 7 Oct 2021 14:13:04 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Prasad Malisetty <pmaliset@codeaurora.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, bhelgaas@google.com,
+        robh+dt@kernel.org, swboyd@chromium.org, lorenzo.pieralisi@arm.com,
+        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dianders@chromium.org,
+        mka@chromium.org, vbadigan@codeaurora.org, sallenki@codeaurora.org,
+        manivannan.sadhasivam@linaro.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v12 5/5] PCI: qcom: Switch pcie_1_pipe_clk_src after PHY
+ init in SC7280
+Message-ID: <20211007191304.GA1256620@bhelgaas>
 MIME-Version: 1.0
-In-Reply-To: <1633628923-25047-5-git-send-email-pmaliset@codeaurora.org>
-References: <1633628923-25047-1-git-send-email-pmaliset@codeaurora.org> <1633628923-25047-5-git-send-email-pmaliset@codeaurora.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Thu, 7 Oct 2021 14:03:37 -0400
-Message-ID: <CAE-0n51NfLevCSwDDK0pxg=zmdw7pqw-wGEV2_MxBZZvh_caOQ@mail.gmail.com>
-Subject: Re: [PATCH v12 4/5] PCI: qcom: Add a flag in match data along with ops
-To:     Prasad Malisetty <pmaliset@codeaurora.org>, agross@kernel.org,
-        bhelgaas@google.com, bjorn.andersson@linaro.org,
-        lorenzo.pieralisi@arm.com, robh+dt@kernel.org, svarbanov@mm-sol.com
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
-        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org,
-        linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1633628923-25047-6-git-send-email-pmaliset@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Prasad Malisetty (2021-10-07 10:48:42)
-> Add pipe_clk_need_muxing flag in match data and configure
-
-This commit text isn't accurate. The flag isn't added in this patch
-anymore. Same goes for the commit title/subject. Can you please update
-it to say something like "Point match data to config struct"?
-
-> If the platform needs to switch pipe_clk_src.
->
+On Thu, Oct 07, 2021 at 11:18:43PM +0530, Prasad Malisetty wrote:
+> On the SC7280, the clock source for gcc_pcie_1_pipe_clk_src
+> must be the TCXO while gdsc is enabled. After PHY init successful
+> clock source should switch to pipe clock for gcc_pcie_1_pipe_clk_src.
+> 
 > Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+
+Thanks a lot for sorting out the patch 4/5 and 5/5 contents!
+
 > ---
-
-Otherwise code looks fine:
-
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+>  drivers/pci/controller/dwc/pcie-qcom.c | 29 +++++++++++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 41132dd..ded70e6 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -166,6 +166,9 @@ struct qcom_pcie_resources_2_7_0 {
+>  	struct regulator_bulk_data supplies[2];
+>  	struct reset_control *pci_reset;
+>  	struct clk *pipe_clk;
+> +	struct clk *pipe_clk_src;
+> +	struct clk *phy_pipe_clk;
+> +	struct clk *ref_clk_src;
+>  };
+>  
+>  union qcom_pcie_resources {
+> @@ -191,6 +194,7 @@ struct qcom_pcie_ops {
+>  
+>  struct qcom_pcie_cfg {
+>  	const struct qcom_pcie_ops *ops;
+> +	unsigned int pipe_clk_need_muxing:1;
+>  };
+>  
+>  struct qcom_pcie {
+> @@ -201,6 +205,7 @@ struct qcom_pcie {
+>  	struct phy *phy;
+>  	struct gpio_desc *reset;
+>  	const struct qcom_pcie_ops *ops;
+> +	unsigned int pipe_clk_need_muxing:1;
+>  };
+>  
+>  #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
+> @@ -1171,6 +1176,20 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
+>  	if (ret < 0)
+>  		return ret;
+>  
+> +	if (pcie->pipe_clk_need_muxing) {
+> +		res->pipe_clk_src = devm_clk_get(dev, "pipe_mux");
+> +		if (IS_ERR(res->pipe_clk_src))
+> +			return PTR_ERR(res->pipe_clk_src);
+> +
+> +		res->phy_pipe_clk = devm_clk_get(dev, "phy_pipe");
+> +		if (IS_ERR(res->phy_pipe_clk))
+> +			return PTR_ERR(res->phy_pipe_clk);
+> +
+> +		res->ref_clk_src = devm_clk_get(dev, "ref");
+> +		if (IS_ERR(res->ref_clk_src))
+> +			return PTR_ERR(res->ref_clk_src);
+> +	}
+> +
+>  	res->pipe_clk = devm_clk_get(dev, "pipe");
+>  	return PTR_ERR_OR_ZERO(res->pipe_clk);
+>  }
+> @@ -1189,6 +1208,10 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
+>  		return ret;
+>  	}
+>  
+> +	/* Set TCXO as clock source for pcie_pipe_clk_src */
+> +	if (pcie->pipe_clk_need_muxing)
+> +		clk_set_parent(res->pipe_clk_src, res->ref_clk_src);
+> +
+>  	ret = clk_bulk_prepare_enable(res->num_clks, res->clks);
+>  	if (ret < 0)
+>  		goto err_disable_regulators;
+> @@ -1260,6 +1283,10 @@ static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
+>  {
+>  	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
+>  
+> +	/* Set pipe clock as clock source for pcie_pipe_clk_src */
+> +	if (pcie->pipe_clk_need_muxing)
+> +		clk_set_parent(res->pipe_clk_src, res->phy_pipe_clk);
+> +
+>  	return clk_prepare_enable(res->pipe_clk);
+>  }
+>  
+> @@ -1490,6 +1517,7 @@ static const struct qcom_pcie_cfg sm8250_cfg = {
+>  
+>  static const struct qcom_pcie_cfg sc7280_cfg = {
+>  	.ops = &ops_1_9_0,
+> +	.pipe_clk_need_muxing = true,
+>  };
+>  
+>  static const struct dw_pcie_ops dw_pcie_ops = {
+> @@ -1532,6 +1560,7 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	pcie->ops = pcie_cfg->ops;
+> +	pcie->pipe_clk_need_muxing = pcie_cfg->pipe_clk_need_muxing;
+>  
+>  	pcie->reset = devm_gpiod_get_optional(dev, "perst", GPIOD_OUT_HIGH);
+>  	if (IS_ERR(pcie->reset)) {
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 
