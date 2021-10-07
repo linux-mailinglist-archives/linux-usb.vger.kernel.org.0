@@ -2,330 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83888425E68
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Oct 2021 23:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2FA425FF3
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Oct 2021 00:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232418AbhJGVGD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Oct 2021 17:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
+        id S241458AbhJGWee (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Oct 2021 18:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232200AbhJGVGC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Oct 2021 17:06:02 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F4BC061570
-        for <linux-usb@vger.kernel.org>; Thu,  7 Oct 2021 14:04:08 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id y15so30358286lfk.7
-        for <linux-usb@vger.kernel.org>; Thu, 07 Oct 2021 14:04:08 -0700 (PDT)
+        with ESMTP id S241394AbhJGWed (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Oct 2021 18:34:33 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A05C061760
+        for <linux-usb@vger.kernel.org>; Thu,  7 Oct 2021 15:32:39 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id c20so7851212qtb.2
+        for <linux-usb@vger.kernel.org>; Thu, 07 Oct 2021 15:32:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oGYvm3xhNdNortsl5NWQ+JLbnaeeRWwYjjejsg70jt8=;
-        b=Rbtq726D/kV6VqUuwMv49SsdRPV8uqHMP9pDBHU5TO2+Cp+UbkCYRXH+hL+zjIwVqR
-         RNNMkJmGlhWQpWjDKlcbQWUIX2rzETvvkazMjEcqCXmqExzxjU/4IUlDhoS6zMyBAdZo
-         XWtBDd38McvynyGvvJZC7BgSpLs2QFuh5ny0HPu0Dq+dFylXvyAImP+YBJVecdGWrRQU
-         6/FLQwk7/YWqkWx+JwwUg0r62Ywfu6RwyuXHkQNQMWhUvvPRBZT/kiQgoCWNhNlvwLIw
-         r2dmdLD1+08QKTo/pGcMJY++hdjHfl7770Sd+YiQ11OmwpWzSBC4CmPdXxErGdoVIfrH
-         7m5A==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bPosGXG6aj5fiHXiB91n2H+d3yhrMgyk6caA7rCYuVE=;
+        b=TyzCOLeOsNH+ATbCv+mObEZBqB2Q+42LxF3uXOIU4JqOxFv0Suf1hxARW3mECKJGbk
+         6W72juLLE8mx0B8j0TBIaZ70diDCJy7C1/EwOenCENtB5NKYV4Zt3tTGu6I9cXLJd6yw
+         tgDL6K6e0bH6GRVNl69irNRt4P+TW75No5eE0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oGYvm3xhNdNortsl5NWQ+JLbnaeeRWwYjjejsg70jt8=;
-        b=teIwjKwEcs9vfvUWH6vrYPhMokckRICSCfFMXVIJw5Yf4023mK9qqYxpuhHoin8zmU
-         gnaNMSMRzDWpDZ9tsGLZpp0HTyqkGPYQwB9cmHhHrnsSYsntIaMaDD4c2B+1Tn3U+r3K
-         pMO/InsQ8JlB0I+uz/fOAY5XpCYcHT2JB/qtOowjiMa9e/SKv2SG/BUAHFb+KORWKSZz
-         RVH1eOtBQMKBsD5GvvRKg0Xu46c+Pdx/TfK63x+bcmodaP6t2wIdOFO1US3iipdCcSaZ
-         z0CC7/aM4dGIHr2ldbM4zPo4xXbZXjEO96qoZfxQNujrrZaaHEbqHtJSu3SdbyPn5J7y
-         YYXw==
-X-Gm-Message-State: AOAM532AANTJUUWtir9l8L47+sUhg2NkdaWqk+bH9Bnj7643J2ixG/YY
-        fZabl452H04Y8MJUTdNfVD0=
-X-Google-Smtp-Source: ABdhPJzfIIhQtlf/2lbidW/K3MFOKfGbyEoo6VqmPY+5K9RL8rIfjY51txf/v0oo9cKaA6ykf7Xr4w==
-X-Received: by 2002:a05:651c:17a5:: with SMTP id bn37mr6973656ljb.514.1633640646565;
-        Thu, 07 Oct 2021 14:04:06 -0700 (PDT)
-Received: from dell-precision-T3610 (h-155-4-132-193.NA.cust.bahnhof.se. [155.4.132.193])
-        by smtp.gmail.com with ESMTPSA id m23sm43104lji.132.2021.10.07.14.04.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Oct 2021 14:04:06 -0700 (PDT)
-Date:   Thu, 7 Oct 2021 23:04:04 +0200
-From:   Lars Gunnarsson <gunnarsson.lars@gmail.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 1/3] tools/usbip: support use case reconnect: prepare
-Message-ID: <20211007210404.GA4607@dell-precision-T3610>
-References: <20211006204817.GA43927@dell-precision-T3610>
- <74efa67e-2b2e-3a6e-3bc0-dbbb25197eef@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bPosGXG6aj5fiHXiB91n2H+d3yhrMgyk6caA7rCYuVE=;
+        b=Ufo3DZHw3Iv7riKHBNWyuudposkYdNPTgxxnNE6xqGPJ6hB48MGUWByX2Z9uAOtlb4
+         0YowpfJ8ddtq1hUsBvC3eYmBNb0dJmA/d5CkZyw21c2lX+DsMqPA5MxD/TbIZJCnmMVe
+         8naBdsL6wMQrI75SsA7th7CNleSLMosIxQN5YZUY2XmYXdnSMyEx3c9ouHOs2FgtJRwt
+         9zT1ehWJJV8xsvzLUnC2g5Hy/ceIeP7Q2ZRJzIM04OlzyrTtKUsECv/L3TTS2HuiLlYE
+         bmMWY6ief53W7X5q2p2UMDfOV9RR/nXOIvF0Y+l415gWiOk0IltrDQPDKdsI+xdXbLv9
+         CsMQ==
+X-Gm-Message-State: AOAM532kTqyg/tO38EAvDXdGoUqo/UIOScBooi/3fjUCnVCKxy7DzbV5
+        HoNbW3HJqbFBqE4SxrCTAvr5VtYp6ZGLtWLSc9CUUw==
+X-Google-Smtp-Source: ABdhPJxtMWrNq05xIwSXYzJOaS9tLcGh48Df1ypUB9oB6RjXV44VM0Ys6C+Vs5hx7Kz9jJbv7p9rXESJopZRntEsEdI=
+X-Received: by 2002:ac8:4347:: with SMTP id a7mr8044529qtn.169.1633645958484;
+ Thu, 07 Oct 2021 15:32:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <74efa67e-2b2e-3a6e-3bc0-dbbb25197eef@linuxfoundation.org>
+References: <20210902213500.3795948-1-pmalani@chromium.org>
+ <20210902213500.3795948-3-pmalani@chromium.org> <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
+ <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <YUB16up3JDwi3HfI@kuha.fi.intel.com> <YULwz8NsoA3+vrhA@google.com>
+ <YUMbGp0aemx1HCHv@kuha.fi.intel.com> <DB9PR10MB46525E6CA4C6BB101059D93C80DC9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <YUm5sdbceMcDTvYj@kuha.fi.intel.com> <DB9PR10MB46524E3817FB4D836CDC13E180A49@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+In-Reply-To: <DB9PR10MB46524E3817FB4D836CDC13E180A49@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Thu, 7 Oct 2021 15:32:27 -0700
+Message-ID: <CACeCKaem93dbJ11qOG=a+MkJhSrp0Nx-UAPG00Q-5WwMriJD0A@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Benson Leung <bleung@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "bleung@chromium.org" <bleung@chromium.org>,
+        "badhri@google.com" <badhri@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Shuah,
+Hi folks,
 
-Thanks for the comments and for quick response. I'll send a new
-patch set from the comments.
+Thanks for the comments and discussion on this RFC series.
 
-Best regards, Lars
+On Fri, Sep 24, 2021 at 8:38 AM Adam Thomson
+<Adam.Thomson.Opensource@diasemi.com> wrote:
+>
+> On 21 September 2021 11:54, Heikki Krogerus wrote:
+>
+> > If we can leave the decision about the selection to TCPM, that would
+> > be great! I'm not against that at all. As I said, I have not though
+> > through the control aspect. Right now I'm mostly concerned about how
+> > we expose the information to the user. The only reason why I have
+> > considered the control part at all is because how ever we decide to
+> > expose the information to the user, it has to work with control as
+> > well.
+>
+> Well part of the discussion has to be about the role that the user plays in
+> the control. What does and doesn't need to be controlled further up the stack,
+> and what will be taken care of by, for example, TCPM? Surely that dictates to
+> some degree what and how we expose all of this? Right now we have a simple means
+> to read and control voltages and currents through a PSY class, without the need
+> for the user to know any details of what a PDO/APDO is. Do we continue with
+> abstracting away to the user or instead let the user decipher this itself and
+> decide? Am just trying to understand the needs going forward.
+>
+> > The final PSYs and the supply chains they create as well as the
+> > individual properties I'm more than happy to talk about, but having a
+> > separate object for the smallest thing that we can see (PDO) is the
+> > right thing to do here IMO. Trying to concatenate things into single
+> > objects especially in sysfs, despite how nice it always would seem,
+> > has taken me to the brink of disaster in the past far too many times.
+> >
+> > In this case we don't need to take the risk of having to duplicated
+> > information or in worst case deprecate something that is also exposed
+> > to the sysfs in the future.
+> >
+> > So the question is not why should we registers every individual PDO
+> > separately. The question is, why shouldn't we do that? And saying that
+> > it's "heavyweight" I'm afraid is not good enough. :-)
+>
+> That was my initial feeling on the suggestion based on the idea of a PSY per PDO
+> and I still don't feel that fits as your creating a whole class of resources
+> to expose something that's pretty small. To me the PSY represents the source as
+> whole, and the PDOs are simply options/configurations for that source. If we're
+> needing to expose PDOs then I don't disagree with separating them out
+> individually and I certainly wouldn't want that all concatenated as one
+> property. However I think something like dynamically generated properties
+> might be a nicer solution to expose each PDO, or even groups of properties if
+> you wanted to split PDOs even further into constituent parts to the user.
 
-On Wed, Oct 06, 2021 at 05:37:15PM -0600, Shuah Khan wrote:
-> On 10/6/21 2:48 PM, Lars Gunnarsson wrote:
-> > This patch implements an usb monitor into libusbip to await usb events,
-> > example connect and disconnect.
-> > 
-> 
-> Please describe the use-case adding more details. When and how user
-> would use this?
-> 
-> This will also require doc and man page changes.
-> 
-> > Signed-off-by: Lars Gunnarsson <gunnarsson.lars@gmail.com>
-> > ---
-> >   tools/usb/usbip/.gitignore             |   1 +
-> >   tools/usb/usbip/libsrc/Makefile.am     |   3 +-
-> >   tools/usb/usbip/libsrc/usbip_common.h  |   1 +
-> >   tools/usb/usbip/libsrc/usbip_monitor.c | 147 +++++++++++++++++++++++++
-> >   tools/usb/usbip/libsrc/usbip_monitor.h |  21 ++++
-> >   5 files changed, 172 insertions(+), 1 deletion(-)
-> >   create mode 100644 tools/usb/usbip/libsrc/usbip_monitor.c
-> >   create mode 100644 tools/usb/usbip/libsrc/usbip_monitor.h
-> > 
-> > diff --git a/tools/usb/usbip/.gitignore b/tools/usb/usbip/.gitignore
-> > index 597361a96dbb..6304adefb5e1 100644
-> > --- a/tools/usb/usbip/.gitignore
-> > +++ b/tools/usb/usbip/.gitignore
-> > @@ -28,6 +28,7 @@ libsrc/libusbip_la-usbip_common.lo
-> >   libsrc/libusbip_la-usbip_device_driver.lo
-> >   libsrc/libusbip_la-usbip_host_common.lo
-> >   libsrc/libusbip_la-usbip_host_driver.lo
-> > +libsrc/libusbip_la-usbip_monitor.lo
-> >   libsrc/libusbip_la-vhci_driver.lo
-> >   src/usbip
-> >   src/usbipd
-> > diff --git a/tools/usb/usbip/libsrc/Makefile.am b/tools/usb/usbip/libsrc/Makefile.am
-> > index dabd2c91d311..3e31e33729cf 100644
-> > --- a/tools/usb/usbip/libsrc/Makefile.am
-> > +++ b/tools/usb/usbip/libsrc/Makefile.am
-> > @@ -8,4 +8,5 @@ libusbip_la_SOURCES := names.c names.h usbip_host_driver.c usbip_host_driver.h \
-> >   		       usbip_device_driver.c usbip_device_driver.h \
-> >   		       usbip_common.c usbip_common.h usbip_host_common.h \
-> >   		       usbip_host_common.c vhci_driver.c vhci_driver.h \
-> > -		       sysfs_utils.c sysfs_utils.h
-> > +		       sysfs_utils.c sysfs_utils.h \
-> > +		       usbip_monitor.c
-> > diff --git a/tools/usb/usbip/libsrc/usbip_common.h b/tools/usb/usbip/libsrc/usbip_common.h
-> > index 73a367a7fa10..13f1d4ca47c5 100644
-> > --- a/tools/usb/usbip/libsrc/usbip_common.h
-> > +++ b/tools/usb/usbip/libsrc/usbip_common.hudev_driver
-> > @@ -30,6 +30,7 @@
-> >   /* kernel module names */
-> >   #define USBIP_CORE_MOD_NAME	"usbip-core"
-> > +#define USBIP_USB_DRV_NAME	"usb"
-> >   #define USBIP_HOST_DRV_NAME	"usbip-host"
-> >   #define USBIP_DEVICE_DRV_NAME	"usbip-vudc"
-> >   #define USBIP_VHCI_DRV_NAME	"vhci_hcd"
-> > diff --git a/tools/usb/usbip/libsrc/usbip_monitor.c b/tools/usb/usbip/libsrc/usbip_monitor.c
-> > new file mode 100644
-> > index 000000000000..731d344f2965
-> > --- /dev/null
-> > +++ b/tools/usb/usbip/libsrc/usbip_monitor.c
-> > @@ -0,0 +1,147 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> I am seeing several coding style problems in these patches.
-> inclduing Improper SPDX comment style
-> 
-> > +/**
-> > + * Copyright (C) 2021 Lars Gunnarsson
-> > + */
-> > +#include <libudev.h>
-> > +#include <stdlib.h>
-> > +#include <string.h>
-> > +#include <sys/poll.h>
-> > +
-> > +#include "usbip_monitor.h"
-> > +
-> > +static const size_t MAX_STRLEN = 32;
-> 
-> Let's not add new constants. Take a look at how existing code
-> is checking return values for udev_device_get_action(),
-> udev_device_get_driver() and udev_device_get_sysname() and match
-> it.
-> 
-> > +
-> > +struct usbip_monitor {
-> > +	const char *busid;
-> > +	struct udev *udev;
-> > +	struct udev_monitor *udev_monitor;
-> > +};
-> > +
-> > +usbip_monitor_t *usbip_monitor_new(void)
-> > +{
-> > +	usbip_monitor_t *monitor = NULL;
-> > +	struct udev *udev = udev_new();
-> > +
-> > +	if (udev) {
-> > +		struct udev_monitor *udev_monitor =
-> > +			udev_monitor_new_from_netlink(udev, "udev");
-> > +		udev_monitor_filter_add_match_subsystem_devtype(
-> > +			udev_monitor,
-> > +			/*subsystem=*/"usb",
-> > +			/*devtype=*/"usb_device");
-> > +		udev_monitor_enable_receiving(udev_monitor);
-> > +		monitor = malloc(sizeof(struct usbip_monitor));
-> > +		monitor->busid = NULL;
-> > +		monitor->udev = udev;
-> > +		monitor->udev_monitor = udev_monitor;
-> > +	}
-> > +	return monitor;
-> > +}
-> > +
-> > +void usbip_monitor_delete(usbip_monitor_t *monitor)
-> > +{
-> > +	if (monitor) {
-> > +		udev_monitor_unref(monitor->udev_monitor);
-> > +		udev_unref(monitor->udev);
-> > +		free(monitor);
-> > +	}
-> > +}
-> > +
-> > +void usbip_monitor_set_busid(usbip_monitor_t *monitor, const char *busid)
-> > +{
-> > +	monitor->busid = busid;
-> > +}
-> > +
-> > +static struct udev_device *await_udev_event(const usbip_monitor_t *monitor)
-> > +{
-> > +	struct udev_device *dev = NULL;
-> > +	int fd = udev_monitor_get_fd(monitor->udev_monitor);
-> > +	const int timeout = -1;
-> > +	const int nfds = 1; // number of file descriptors
-> > +	struct pollfd pollfd[] = { { fd, POLLIN, 0 } };
-> > +	int nfd = poll(pollfd, nfds, timeout);
-> > +
-> > +	if (nfd) {
-> > +		dev = udev_monitor_receive_device(monitor->udev_monitor);
-> > +	}
-> > +	return dev;
-> > +}
-> > +
-> > +static int optional_filter_busid(const char *busid, const char *udev_busid)
-> > +{
-> > +	int filter_match = 0;
-> > +
-> > +	if (busid) {
-> > +		if (strncmp(busid, udev_busid, MAX_STRLEN) == 0) {
-> > +			filter_match = 1;
-> > +		}
-> > +	} else {
-> > +		filter_match = 1;
-> > +	}
-> > +	return filter_match;
-> > +}
-> > +
-> > +static void await_usb_with_driver(const usbip_monitor_t *monitor,
-> > +				  const char *driver, const char *action)
-> > +{
-> > +	while (1) {
-> > +		struct udev_device *dev = await_udev_event(monitor);
-> > +
-> > +		if (dev) {
-> > +			const char *udev_action = udev_device_get_action(dev);
-> > +			const char *udev_driver = udev_device_get_driver(dev);
-> > +			const char *udev_busid = udev_device_get_sysname(dev);
-> > +
-> > +			if (strncmp(udev_action, action, MAX_STRLEN) == 0 &&
-> > +			    strncmp(udev_driver, driver, MAX_STRLEN) == 0) {
-> 
-> Braces {} are not necessary for single statement blocks
-> 
-> > +				if (optional_filter_busid(monitor->busid,
-> > +							  udev_busid)) {
-> > +					break;
-> > +				}
-> > +			}
-> > +			udev_device_unref(dev);
-> > +		}
-> > +	}
-> > +}
-> > +
-> > +void usbip_monitor_await_usb_add(const usbip_monitor_t *monitor,
-> > +				 const char *driver)
-> > +{
-> > +	await_usb_with_driver(monitor, driver, "add");
-> > +}
-> > +
-> > +void usbip_monitor_await_usb_bind(const usbip_monitor_t *monitor,
-> > +				  const char *driver)
-> > +{
-> > +	await_usb_with_driver(monitor, driver, "bind");
-> > +}
-> > +
-> > +static void await_usb(const usbip_monitor_t *monitor, const char *action)
-> > +{
-> > +	while (1) {
-> > +		struct udev_device *dev = await_udev_event(monitor);
-> > +
-> > +		if (dev) {
-> > +			const char *udev_action = udev_device_get_action(dev);
-> > +			const char *udev_busid = udev_device_get_sysname(dev);
-> > +
-> > +			if (strncmp(udev_action, action, MAX_STRLEN) == 0) {
-> > +				if (optional_filter_busid(monitor->busid,
-> > +							  udev_busid)) {
-> > +					break;
-> > +				}
-> > +			}
-> > +			udev_device_unref(dev);
-> > +		}
-> > +	}
-> > +}
-> > +
-> > +void usbip_monitor_await_usb_unbind(const usbip_monitor_t *monitor)
-> > +{
-> > +	await_usb(monitor, "unbind");
-> > +}
-> > +
-> > +void usbip_monitor_await_usb_delete(const usbip_monitor_t *monitor)
-> > +{
-> > +	await_usb(monitor, "delete");
-> > +}
-> > diff --git a/tools/usb/usbip/libsrc/usbip_monitor.h b/tools/usb/usbip/libsrc/usbip_monitor.h
-> > new file mode 100644
-> > index 000000000000..474b95c80452
-> > --- /dev/null
-> > +++ b/tools/usb/usbip/libsrc/usbip_monitor.h
-> > @@ -0,0 +1,21 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/**
-> > + * Copyright (C) 2021 Lars Gunnarsson
-> > + */
-> > +#ifndef __USBIP_MONITOR_H
-> > +#define __USBIP_MONITOR_H
-> > +
-> > +typedef struct usbip_monitor usbip_monitor_t;
-> 
-> Let's not add a new typedef
-> > +
-> > +usbip_monitor_t *usbip_monitor_new(void);
-> > +void usbip_monitor_delete(usbip_monitor_t *monitor);
-> > +
-> > +void usbip_monitor_set_busid(usbip_monitor_t *monitor, const char *busid);
-> > +void usbip_monitor_await_usb_add(const usbip_monitor_t *monitor,
-> > +				 const char *driver);
-> > +void usbip_monitor_await_usb_bind(const usbip_monitor_t *monitor,
-> > +				  const char *driver);
-> > +void usbip_monitor_await_usb_unbind(const usbip_monitor_t *monitor);
-> > +void usbip_monitor_await_usb_delete(const usbip_monitor_t *monitor);
-> > +
-> > +#endif /* __USBIP_MONITOR_H */
-> > 
-> 
-> Please run checkpatch on all of these 3 patches and fix the problems.
-> Also add doc and man pages describing the feature you are adding more
-> clearly.
-> 
-> thanks,
-> -- Shuah
+To downscope this issue for the time being, one of our immediate goals
+is to expose the PDOs
+to userspace for metrics reporting and potentially for some power
+policy control through other
+channels (like Chrome OS Embedded Controller).
+
+Would it be acceptable to revise this series to drop the power supply
+support for now (since I don't yet
+see a consensus on how to implement it for the partner), and just add
+sysfs nodes for each PDO ?
+This would be akin to how it's being done for identity VDOs right now.
+
+So we would have :
+
+/sys/class/typec/<port>-partner/source_pdos/pdo{1-13}
+
+and
+
+/sys/class/typec/<port>-partner/sink_pdos/pdo{1-13}
+
+and similarly for the port device.
+
+If we want to add additional parsing of the  Fixed Supply PDO into
+individual properties for the partner/port,
+those can of course be added later.
+
+WDYT?
+
+Thanks,
