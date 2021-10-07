@@ -2,130 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B355425A0F
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Oct 2021 19:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D3E425A37
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Oct 2021 20:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243312AbhJGR5Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Oct 2021 13:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
+        id S243432AbhJGSD3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Oct 2021 14:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233768AbhJGR5P (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Oct 2021 13:57:15 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E180C061570;
-        Thu,  7 Oct 2021 10:55:21 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id r7so21558673wrc.10;
-        Thu, 07 Oct 2021 10:55:21 -0700 (PDT)
+        with ESMTP id S243414AbhJGSD2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Oct 2021 14:03:28 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C94EC061755
+        for <linux-usb@vger.kernel.org>; Thu,  7 Oct 2021 11:01:34 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id y201so10164895oie.3
+        for <linux-usb@vger.kernel.org>; Thu, 07 Oct 2021 11:01:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=GN5gadcVxRW0/dWf5obdZrMuIIY/mSpFCL/VLq2PcMI=;
-        b=ATkzJ5suTLby93G+Jf5ECZ4Kse4d6Tt+RI50oiT7elfe8GtVDdJzUT6PKp/2Xjw9LK
-         D+B8bLKl1SVZTcFbkLuBi8HkA6t9vKK1h7OBpt+KNzNb36ONYynwJ6HsUb2xbDvw9QfP
-         us8kcQRqmYK6SqLgs6J3BZ5Amq6inlB6SYe3KbnkjawFjrKH/jmDtgUQ9gAMFA0IgyKJ
-         UBTG1ZDGmjXfO76njwBzoK7/QWAFr3LDdpK1optVB0+4Hz4AMVsn96IY4yRQFu3M1TdQ
-         BmXnm1Yp1BOnUeoLEdPsSjJTrC9hbY7VkIut1JA1YfLGfYtslkTuzu/KM78STz0a4FOE
-         rF6Q==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=l/jHmdsNTaCbqb/3iY1ubX++haNMV1LDyfyVcpuyCNU=;
+        b=gMIpgNRcHWiBlfWidWRVcnFOODsqVojhqfmUWh0slCQPAeHdEEyceqbZIIIsxB2zNy
+         nccHjL2bqqStmVVkYH72v8oJq3DyIFrAbUvhQ8DIsHfAIuKPJiHZmmFfVqmQ37R+Szpx
+         TmXiymP/d//qpRYSvYziMFjajCB3JhlIy0sxQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=GN5gadcVxRW0/dWf5obdZrMuIIY/mSpFCL/VLq2PcMI=;
-        b=4tgT7NIQhiPA2gFkphg8+qomz1Lz0E7hRNy+NH5rrz2ZpEkkdA5J2L2Okxyb9ozmQ5
-         QZ0zYFnLNzw1XZ4+s6EUANGN2AyoGTWr/b/Rk18ImC7kgiQ58HbHTto6beuny4gq3TKr
-         LrfnF3z60N5TNDnt+4bMcss1oYpkhW7LDx+2qN47989XDlDrlRmidBxh4lsPFhcY8KDE
-         4+1qcLpIyzYCc4OaHN5GGKLG03fYUo9KUPIAF10m7b1GdLgsvzHO2isZEUUrdGchiMk9
-         WkNPlQG51uz3LWEFHgjIZiHfmvwUEOg+eDvb+V9ZJYl/nJ+THwlNxto7QCz7dwv90J2c
-         x1hg==
-X-Gm-Message-State: AOAM532LFLy8zp8VOMSKwefqUDmGZ7//mGYAOXaXuoCumTP0OHdg1oyt
-        QOEiKX5cnq0Jr2eDaVIPi2s=
-X-Google-Smtp-Source: ABdhPJzrLInW4LCr55YGxgpVjG1U/ZqbR0mqwqupL9iDTS5inXXiGRBukzjvoIK+upKaPaXvbCJBEw==
-X-Received: by 2002:adf:b302:: with SMTP id j2mr7213302wrd.285.1633629320177;
-        Thu, 07 Oct 2021 10:55:20 -0700 (PDT)
-Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id v10sm46856wri.29.2021.10.07.10.55.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Oct 2021 10:55:19 -0700 (PDT)
-Date:   Thu, 7 Oct 2021 19:55:18 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, JC Kuo <jckuo@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v3] usb: xhci: tegra: mark PM functions as
- __maybe_unused
-Message-ID: <YV80ht6e7rfK0cfx@orome.fritz.box>
-References: <20211005112057.2700888-1-arnd@kernel.org>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=l/jHmdsNTaCbqb/3iY1ubX++haNMV1LDyfyVcpuyCNU=;
+        b=5DkhDm2pxKqL/LeR7SWJ0yFghcyRSgVecsGyXx4DL0QBhvcByzcLUxsfw7Y68x4Nss
+         tbG14AoTUP+g268aJoHf+pZmiwbVxpX6y2n917RrDUnKxhpsqaUnmf0dhu6+SSgTSYLH
+         uVzR+Ope1SyweAnIJB2J1cN+qiEhRmKMpWKK/YcD9g8Z3AWcBC4qW7oHjPFFfJD8EIPp
+         VnnIN22XR4266xKT7RR406DIzoqWEIOYnFuaqW5jKoD/wD9c4rbGruy7KoyA8dIvC005
+         San2jsvexicXLoe9YRjE+14+63WFyVUkm2atHZZ53WlAN6UQDpq7CkmT5rj1Oi3uXQts
+         AgoA==
+X-Gm-Message-State: AOAM533boyMHymmpL40Gp1Z5cq0rzUfEHJOvBgYaKnOZN8BA15IxwbAO
+        t8jo6gbJ7i5lowuL+NX5WB0GqLBeUoqxX0sF0vyusA==
+X-Google-Smtp-Source: ABdhPJzyJhAIMwWYX0j+dskBijdHRK2EqFvl+pGpjSoNbQ0EmOLi/qyKR7XkJBsTAK1+izQUXcpyDHtFQSZNmCiRpHE=
+X-Received: by 2002:aca:f02:: with SMTP id 2mr4350822oip.64.1633629693863;
+ Thu, 07 Oct 2021 11:01:33 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 7 Oct 2021 14:01:33 -0400
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="qXkdwZl/QpLWXbMS"
-Content-Disposition: inline
-In-Reply-To: <20211005112057.2700888-1-arnd@kernel.org>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+In-Reply-To: <1633628923-25047-4-git-send-email-pmaliset@codeaurora.org>
+References: <1633628923-25047-1-git-send-email-pmaliset@codeaurora.org> <1633628923-25047-4-git-send-email-pmaliset@codeaurora.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Thu, 7 Oct 2021 14:01:33 -0400
+Message-ID: <CAE-0n53kd+eZpX1jv2U_uQe3res+s69uDnw0862yOqYzWO_JvA@mail.gmail.com>
+Subject: Re: [PATCH v12 3/5] arm64: dts: qcom: sc7280: Add PCIe nodes for IDP board
+To:     Prasad Malisetty <pmaliset@codeaurora.org>, agross@kernel.org,
+        bhelgaas@google.com, bjorn.andersson@linaro.org,
+        lorenzo.pieralisi@arm.com, robh+dt@kernel.org, svarbanov@mm-sol.com
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
+        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org,
+        linux-pci@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---qXkdwZl/QpLWXbMS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Oct 05, 2021 at 01:20:28PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> The added #ifdefs in the PM rework were almost correct, but still
-> cause warnings in some randconfig builds:
->=20
-> drivers/usb/host/xhci-tegra.c:2147:12: error: 'tegra_xusb_resume' defined=
- but not used [-Werror=3Dunused-function]
->  2147 | static int tegra_xusb_resume(struct device *dev)
->       |            ^~~~~~~~~~~~~~~~~
-> drivers/usb/host/xhci-tegra.c:2105:12: error: 'tegra_xusb_suspend' define=
-d but not used [-Werror=3Dunused-function]
->  2105 | static int tegra_xusb_suspend(struct device *dev)
->=20
-> Replace the #ifdef checks with simpler __maybe_unused annotations to
-> reliably shut up these warnings.
->=20
-> Fixes: 971ee247060d ("usb: xhci: tegra: Enable ELPG for runtime/system PM=
-")
-> Reviewed-by: JC Kuo <jckuo@nvidia.com>
-> Link: https://lore.kernel.org/all/20210421135613.3560777-2-arnd@kernel.or=
-g/
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Quoting Prasad Malisetty (2021-10-07 10:48:41)
+> Enable PCIe controller and PHY for sc7280 IDP board.
+> Add specific NVMe GPIO entries for SKU1 and SKU2 support.
+>
+> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
 > ---
-> v3: fix reference to original commit.
-> ---
->  drivers/usb/host/xhci-tegra.c | 12 ++++--------
->  1 file changed, 4 insertions(+), 8 deletions(-)
 
-Acked-by: Thierry Reding <treding@nvidia.com>
-
---qXkdwZl/QpLWXbMS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmFfNIYACgkQ3SOs138+
-s6EOIg/+Nbts8TwWrF20o18n0rSfockwRF9SwRwHLNHe8XPLpW/Dzd3wbgITfpAa
-XI/1pOKTxUyaYgIrPE23HZhlYzKsfrMZf9KRR70Etd7SrcBqONchh3DvhigBVYyg
-HbeNPmIpQgB/Fno2ZJcsuIFWoLBry51InCpsGlz5NgxvOddBreTrQro2RaC92N7Y
-xoW0qZarfCp7iEgJzAc88rR7Ra38HZFHYFjsvd/WqRzhektBi++bqi7QhTxYScEE
-rrYNZQbKE5EFR8K7eYiaHOHcin3TszwxD7nOkdRl4/1O+OV7Wf8tTEz+TB9FOS4j
-dbfGigDC9SPA1QV0uRtUv81m6qVvePX8TDVvZhNNEYY2l3Y1C1huOwAj9UFWOLuV
-Vy/y8XPubaK9r+VuiUjKDOUkGTeyi8p+QEPlAg9ARmLZfBFUpTUgNoOkYVhO9T26
-H46URITsxO4lIkaCP2T/lhrcfktkEkW5z+jPYOsxut5SdbPqWV9pwAqz0OmvhG4b
-uy1tIzA+8rF3SsJ/xxZULd3iYDhmhepsabhw/XX3x0ZmlEC4Ki20mPfLD29x63Gl
-W8WXwpmOF5SSSIEV1BK2SI1rcx0GG4CK8GZUfPK6UwwfHROfeo/O3TNoD67YnNr/
-Kj1/dq7whDUQvrl7KYD6VMIrKvnApeQi9FjFfOmZdUuhllL+Lu4=
-=/who
------END PGP SIGNATURE-----
-
---qXkdwZl/QpLWXbMS--
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
