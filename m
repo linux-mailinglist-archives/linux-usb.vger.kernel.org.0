@@ -2,139 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF8A424CAE
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Oct 2021 07:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4366A424CB3
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Oct 2021 07:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240052AbhJGFOc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Oct 2021 01:14:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59942 "EHLO mail.kernel.org"
+        id S230096AbhJGFSV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Oct 2021 01:18:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33090 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229497AbhJGFOc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 Oct 2021 01:14:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5AB1F60F6F;
-        Thu,  7 Oct 2021 05:12:35 +0000 (UTC)
+        id S229497AbhJGFSU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 7 Oct 2021 01:18:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CFE9661076;
+        Thu,  7 Oct 2021 05:16:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633583559;
-        bh=Rw3rWqbqsbMslWYJBU0ib0rem4WuJFy2fSBNtgcPAg4=;
+        s=k20201202; t=1633583787;
+        bh=7eO2iHJP6/kyj6SL7kNu9KnpOymF8KC2X73+9KIZGPU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HuHtnnblr1nqu+5IWhmBsVzMEr0dGMxuNvsgesaA36M3QNJVbZi6dWu/qJriKqfPI
-         RsCwphDVZjeLoG29nqpMFmO+xkT6RyJ0qqCiG8Rn8Ns1JDw0MlJ5z5TRa5WH9I6ctW
-         T/4I4Ibv9QfVH2SNYhb7mSP6RuAq2kC+JNj+lRqkTp4z8OcLDrPi6S2R2/OBdp3ohX
-         LEHq7juNwLEiwDfKxgtIIu3CyvpCTckshcMpbv2+mZkOsI2ujO5A6W6Ot3EjWv4ENJ
-         amxMMM99e8R/QBlP4MN6QBi7xD0Zocm1AuWv4MG0os4+GsjhZkSNZOeybVdrSxvlPT
-         YvfMSA53I+pig==
-Date:   Thu, 7 Oct 2021 13:12:29 +0800
+        b=KruFIhaB7c+kGk7QL2HpxPBQjrtnYY/83RQmtadbkKyPhqDcmn+rPc3bXUtEuwYAB
+         7xYwQ4Nqrj4CEKUWi9TP9cki3VrSn1SwME77FOnYgY5YKBocbgMKtz28vVoqUXtGIq
+         gXLiAqO7MFkxJDQ2ZFq5J2gJZGrEoyf9qpoXT5fR7MZRa5F90NkoodeUZsuuo639kL
+         b+4Miy6zbR+AohEGdHuHZ0044Iw8ZVr/HXXqA3vm+TSRgx1VffXTgkiQRlkwKBOW/d
+         Dqq0p9TwjHlXZ1cSqLe6FKs5IPoszyQxeFToZ0tgAip6VYJbif9j+XxK9i0q+8px0M
+         PVwmDvmpD8faQ==
+Date:   Thu, 7 Oct 2021 13:16:18 +0800
 From:   Peter Chen <peter.chen@kernel.org>
-To:     Manish Narani <manish.narani@xilinx.com>
-Cc:     gregkh@linuxfoundation.org, michal.simek@xilinx.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com
-Subject: Re: [PATCH 0/6] Chipidea USB driver Enhancements and Bug Fixes
-Message-ID: <20211007051229.GG4653@Peter>
-References: <1629825378-8089-1-git-send-email-manish.narani@xilinx.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Fabio Estevam <festevam@gmail.com>, shawnguo@kernel.org,
+        marex@denx.de, linux-usb@vger.kernel.org, heiko.thiery@gmail.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v3] usb: chipidea: ci_hdrc_imx: Also search for 'phys'
+ phandle
+Message-ID: <20211007051618.GH4653@Peter>
+References: <20210921113754.767631-1-festevam@gmail.com>
+ <7f3b82ad-ff12-ce23-12a3-25b09c767759@kontron.de>
+ <20211004065142.GA27151@Peter>
+ <YVqpKIq88Co4IWCP@kroah.com>
+ <20211004072039.GB27151@Peter>
+ <YVwrJVaAcm8fmWkE@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1629825378-8089-1-git-send-email-manish.narani@xilinx.com>
+In-Reply-To: <YVwrJVaAcm8fmWkE@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-08-24 22:46:12, Manish Narani wrote:
-> This patch series has some Enhancements and Bug Fixes to chipidea USB
-> driver related to Zynq platform.
+On 21-10-05 12:38:29, Greg KH wrote:
+> On Mon, Oct 04, 2021 at 03:20:39PM +0800, Peter Chen wrote:
+> > On 21-10-04 09:11:36, Greg KH wrote:
+> > > On Mon, Oct 04, 2021 at 02:51:42PM +0800, Peter Chen wrote:
+> > > > On 21-09-30 16:36:51, Frieder Schrempf wrote:
+> > > > > On 21.09.21 13:37, Fabio Estevam wrote:
+> > > > > > When passing 'phys' in the devicetree to describe the USB PHY phandle
+> > > > > > (which is the recommended way according to
+> > > > > > Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt) the
+> > > > > > following NULL pointer dereference is observed on i.MX7 and i.MX8MM:
+> > > > > > 
+> > > > > > [    1.489344] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000098
+> > > > > > [    1.498170] Mem abort info:
+> > > > > > [    1.500966]   ESR = 0x96000044
+> > > > > > [    1.504030]   EC = 0x25: DABT (current EL), IL = 32 bits
+> > > > > > [    1.509356]   SET = 0, FnV = 0
+> > > > > > [    1.512416]   EA = 0, S1PTW = 0
+> > > > > > [    1.515569]   FSC = 0x04: level 0 translation fault
+> > > > > > [    1.520458] Data abort info:
+> > > > > > [    1.523349]   ISV = 0, ISS = 0x00000044
+> > > > > > [    1.527196]   CM = 0, WnR = 1
+> > > > > > [    1.530176] [0000000000000098] user address but active_mm is swapper
+> > > > > > [    1.536544] Internal error: Oops: 96000044 [#1] PREEMPT SMP
+> > > > > > [    1.542125] Modules linked in:
+> > > > > > [    1.545190] CPU: 3 PID: 7 Comm: kworker/u8:0 Not tainted 5.14.0-dirty #3
+> > > > > > [    1.551901] Hardware name: Kontron i.MX8MM N801X S (DT)
+> > > > > > [    1.557133] Workqueue: events_unbound deferred_probe_work_func
+> > > > > > [    1.562984] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO BTYPE=--)
+> > > > > > [    1.568998] pc : imx7d_charger_detection+0x3f0/0x510
+> > > > > > [    1.573973] lr : imx7d_charger_detection+0x22c/0x510
+> > > > > > 
+> > > > > > This happens because the charger functions check for the phy presence
+> > > > > > inside the imx_usbmisc_data structure (data->usb_phy), but the chipidea
+> > > > > > core populates the usb_phy passed via 'phys' inside 'struct ci_hdrc'
+> > > > > > (ci->usb_phy) instead.
+> > > > > > 
+> > > > > > This causes the NULL pointer dereference inside imx7d_charger_detection().
+> > > > > > 
+> > > > > > Fix it by also searching for 'phys' in case 'fsl,usbphy' is not found.
+> > > > > > 
+> > > > > > Tested on a imx7s-warp board.
+> > > > > > 
+> > > > > > Cc: stable@vger.kernel.org
+> > > > > > Fixes: 746f316b753a ("usb: chipidea: introduce imx7d USB charger detection")
+> > > > > > Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
+> > > > > > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> > > > > > Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> > > > > 
+> > > > > Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> > > > 
+> > > > Acked-by: Peter Chen <peter.chen@kernel.org>
+> > > > 
+> > > > Greg, would you please help apply it?
+> > > 
+> > > Sure.  But I have usually been ignoring chipidea patches and hoping you
+> > > would pick them up and forward them on to me.  Should I no longer do
+> > > that and just wait for an ack from you?
+> > 
+> > Yes, please do that way, thanks.
 > 
-> Manish Narani (3):
->   usb: chipidea: Add support for VBUS control with PHY
->   usb: chipidea: Use usb2 phy for Zynq platform
->   usb: chipidea: Check usb_phy exists before using it
+> Ok, I see at least 1 patch series and one patch that needs your review:
+> 	https://lore.kernel.org/r/1629825378-8089-1-git-send-email-manish.narani@xilinx.com
+> 	https://lore.kernel.org/r/20210913140005.955699-1-piyush.mehta@xilinx.com
 > 
-> Piyush Mehta (3):
->   usb: chipidea: Fix return value handling
->   usb: chipidea: core: Add return value function check
->   usb: chipidea: udc: Add xilinx revision support
-> 
->  drivers/usb/chipidea/ci_hdrc_usb2.c |  5 +++++
->  drivers/usb/chipidea/core.c         | 26 +++++++++++++++++++-------
->  drivers/usb/chipidea/host.c         |  9 +++++++++
->  drivers/usb/chipidea/otg.c          |  6 +++++-
->  drivers/usb/chipidea/otg_fsm.c      |  9 +++++++++
->  drivers/usb/chipidea/udc.c          |  3 ++-
->  include/linux/usb/chipidea.h        |  1 +
->  7 files changed, 50 insertions(+), 9 deletions(-)
+> Can you look at them please?
 > 
 
-I am afraid I can't find [4/6] at my INBOX, comments below:
-
-From: Piyush Mehta <piyush.mehta@xilinx.com>
-
-API was neither captured nor checked.Fixed it by capturing the
-return value and then checking for any error.
-
-Addresses-Coverity: "Calling without checking return"
-Addresses-Coverity: "CHECKED_RETURN"
-Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
-Signed-off-by: Manish Narani <manish.narani@xilinx.com>
----
- drivers/usb/chipidea/core.c | 11 +++++++----
- drivers/usb/chipidea/otg.c  |  6 +++++-
- 2 files changed, 12 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
-index 2b18f50..676346f 100644
---- a/drivers/usb/chipidea/core.c
-+++ b/drivers/usb/chipidea/core.c
-@@ -700,13 +700,16 @@ static int ci_get_platdata(struct device *dev,
- 	if (usb_get_maximum_speed(dev) == USB_SPEED_FULL)
- 		platdata->flags |= CI_HDRC_FORCE_FULLSPEED;
-
--	of_property_read_u32(dev->of_node, "phy-clkgate-delay-us",
--				     &platdata->phy_clkgate_delay_us);
-+	if (of_property_read_u32(dev->of_node, "phy-clkgate-delay-us",
-+				 &platdata->phy_clkgate_delay_us))
-+		dev_dbg(dev, "Missing phy-clkgate-delay-us property\n");
-
- 	platdata->itc_setting = 1;
-
--	of_property_read_u32(dev->of_node, "itc-setting",
--					&platdata->itc_setting);
-+	if (of_property_read_u32(dev->of_node, "itc-setting",
-+				 &platdata->itc_setting))
-+		dev_dbg(dev, "Missing itc-setting property\n");
-+
-
-You may check how to handle this for other properties in this function.
-
-
- 	ret = of_property_read_u32(dev->of_node, "ahb-burst-config",
- 				&platdata->ahb_burst_config);
-diff --git a/drivers/usb/chipidea/otg.c b/drivers/usb/chipidea/otg.c
-index 8dd5928..d527d9d 100644
---- a/drivers/usb/chipidea/otg.c
-+++ b/drivers/usb/chipidea/otg.c
-@@ -168,6 +168,7 @@ static int hw_wait_vbus_lower_bsv(struct ci_hdrc *ci)
- static void ci_handle_id_switch(struct ci_hdrc *ci)
- {
- 	enum ci_role role = ci_otg_role(ci);
-+	int ret;
-
- 	if (role != ci->role) {
- 		dev_dbg(ci->dev, "switching from %s to %s\n",
-@@ -193,7 +194,10 @@ static void ci_handle_id_switch(struct ci_hdrc *ci)
- 			 */
- 			hw_wait_vbus_lower_bsv(ci);
-
--		ci_role_start(ci, role);
-+		ret = ci_role_start(ci, role);
-+		if (ret < 0)
-+			dev_dbg(ci->dev, "switching err %d\n", ret);
-+
-
-You may use dev_err for it.
-
- 		/* vbus change may have already occurred */
- 		if (role == CI_ROLE_GADGET)
- 			ci_handle_vbus_change(ci);
+Reviewed, thanks for reminding.
 
 -- 
 
