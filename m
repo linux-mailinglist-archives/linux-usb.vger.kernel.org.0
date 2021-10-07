@@ -2,132 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 179C8425170
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Oct 2021 12:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C06304252F1
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Oct 2021 14:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240901AbhJGKtf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Oct 2021 06:49:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59884 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232776AbhJGKtd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 Oct 2021 06:49:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D50026113E;
-        Thu,  7 Oct 2021 10:47:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1633603660;
-        bh=X4eythOtdw21j50DD4hM1msWiZxI0gCC5RfMl3lUrmU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tefe7Dj32Yk/t9B9rkhWC/Z5XthkhF9hvZP1Z1KZchbSWfJ5kg486y846RC3WcgKu
-         uYJNra7NLh2XGzS0Am3isV986ZOcubzZJ9YzrdOUnE8jBiWiVYKVFdjW7/lnwF3k+Q
-         A5pXY5ZE2vkXM1ojxKIjOgox7/eBO7UCHByvRZGw=
-Date:   Thu, 7 Oct 2021 12:47:38 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Razvan Heghedus <heghedus.razvan@gmail.com>,
-        Peter Chen <peter.chen@nxp.com>,
-        Anant Thazhemadam <anant.thazhemadam@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: misc: ehset: Workaround for "special" hubs
-Message-ID: <YV7QSnOlmKHbi94C@kroah.com>
-References: <20210915121615.3790-1-heghedus.razvan@gmail.com>
- <YV7KGE9JfibggVVH@hovoldconsulting.com>
+        id S241315AbhJGM1M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Oct 2021 08:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241310AbhJGM1H (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Oct 2021 08:27:07 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0804C061746
+        for <linux-usb@vger.kernel.org>; Thu,  7 Oct 2021 05:25:13 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id t8so18653639wri.1
+        for <linux-usb@vger.kernel.org>; Thu, 07 Oct 2021 05:25:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=aleksander-es.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hjek12AjZEr+Hd7KslG84+7uqBt591HUyaUi8tQnZ+g=;
+        b=ixf10l39YJd9cAo21PWDq+V5gbJoGHGA3WGQI2rbQWS9DyUNwq5m4fbJJI+/MR3VVE
+         gQ53Is9a9EC3v1RK6WFc74QUSYU9YklHG7NiKsyYKEZGYjmxmNwCQsVgzhj41iBmqcS9
+         X7LuB0vaPcUIxFYE+LG0+K0Fo/Yxr8SxBQDmMsutCkPFOrKJhT0olik60uonJzLfYTKC
+         Vty5FfwhR1MpUbucb76TKm5OE3gcRYVg32qjXoiET8KlOwtcn/zUNgT2nUzKAY79Yib2
+         btcDwQj1YsMr8397aJQQexWn94Yk4iORmDo5DXW2PsPpmb2rnzXt+XSwXc1JqtOJH6o/
+         dcAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hjek12AjZEr+Hd7KslG84+7uqBt591HUyaUi8tQnZ+g=;
+        b=zwoMo+AztGQC7JjgKt56YxpwuY33edOSZXqp2KLUKIZR6CRr6yLhu9aXmexAvgO0S9
+         Q7+HX6igchbWOPDjueV88JOoyWVEA6AnNkEX5QRSTfqjVBsT4uEnXpmzPAy62SptQxIu
+         g7fWi8AjbEGabG/TigXb3wKyEtoJnQ3ChbaVDN3yMAdy/IDTxzaiegckbq5jkXfZ1KBs
+         fWMSJsrOy+OkNh2vGJM3cjlEMYGizY5Hfk674EYphWMlHvkkp5swviTmHcWV7mkZFGFG
+         Yc/JKM2znHwgao7wkD4iVKNf06P6zi4Dvrirk5EmQ2RDrkOiiIrjbiBvnmCmndNGl6C7
+         vLWw==
+X-Gm-Message-State: AOAM532rCGpTxjppKHIi1GrbYGLyiiYG09FzhvHeCY7SF00ahz4+BYvx
+        A2pPOJR85CHtzc8LuJDnt6vn2g==
+X-Google-Smtp-Source: ABdhPJypex+YO3cToo2FEr66ejQWoRkzJhnvNLQxi7A92fIgDW/QbRSrdWUGF5bzq1xMbYze4Q3xBw==
+X-Received: by 2002:a05:600c:2256:: with SMTP id a22mr4279067wmm.61.1633609512360;
+        Thu, 07 Oct 2021 05:25:12 -0700 (PDT)
+Received: from ares.lan (156.red-79-144-201.dynamicip.rima-tde.net. [79.144.201.156])
+        by smtp.gmail.com with ESMTPSA id y4sm3184368wry.95.2021.10.07.05.25.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Oct 2021 05:25:11 -0700 (PDT)
+From:   Aleksander Morgado <aleksander@aleksander.es>
+To:     johan@kernel.org, linux-usb@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org,
+        Aleksander Morgado <aleksander@aleksander.es>
+Subject: [PATCH] USB: serial: qcserial: add EM9191 QDL support
+Date:   Thu,  7 Oct 2021 14:25:01 +0200
+Message-Id: <20211007122501.11306-1-aleksander@aleksander.es>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YV7KGE9JfibggVVH@hovoldconsulting.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 07, 2021 at 12:21:12PM +0200, Johan Hovold wrote:
-> On Wed, Sep 15, 2021 at 03:16:13PM +0300, Razvan Heghedus wrote:
-> > The USB2.0 spec chapter 11.24.2.13 says that the USB port which is going
-> > under test needs to be put in suspend state before sending the test
-> > command. Many hubs, don't enforce this precondition and they work fine
-> > without this step. But there are some "special" hubs, which requires to
-> > disable the port power before sending the test command.
-> 
-> So you're essentially doing two things in one patch here; you now
-> sending a suspend request for all hubs except a for the ones in the
-> quirk list that are sent a port power disable.
-> 
-> This isn't really reflected in the commit summary which says "workaround
-> for special hubs" as you're also changing the default implementation.
-> 
-> Probably better handled in two patches, or at least this needs to be
-> reflected in the commit summary/message better.
-> 
-> But this patch is so broken that I just sent a revert. There also some
-> style issues that should be addressed if you send a new version.
-> 
-> > Because the USB spec mention that the port should be suspended, also
-> > do this step before sending the test command. This could rise the
-> > problem with other hubs which are not compliant with the spec and the
-> > test command will not work if the port is suspend. If such hubs are
-> > found, a similar workaround like the disable part could be implemented
-> > to skip the suspend port command.
-> > 
-> > Signed-off-by: Razvan Heghedus <heghedus.razvan@gmail.com>
-> > ---
-> >  Changes in v2:
-> >   - style change regarding multi-line comments and a new black line
-> >     after local variable definitions
-> >   - No more corporate email annotation
-> > This time without that corporate email annotation.
-> > Also has a couple of style changes regardind multi-line comments and a
-> > black line after local variable definitions.
-> >
-> >  drivers/usb/misc/ehset.c | 81 ++++++++++++++++++++++++++++++++--------
-> >  1 file changed, 65 insertions(+), 16 deletions(-)
-> > 
-> > diff --git a/drivers/usb/misc/ehset.c b/drivers/usb/misc/ehset.c
-> > index f87890f9cd26..b848bbdee802 100644
-> > --- a/drivers/usb/misc/ehset.c
-> > +++ b/drivers/usb/misc/ehset.c
-> > @@ -18,6 +18,47 @@
-> >  #define TEST_SINGLE_STEP_GET_DEV_DESC		0x0107
-> >  #define TEST_SINGLE_STEP_SET_FEATURE		0x0108
-> >  
-> > +/*
-> > + * A list of USB hubs which requires to disable the power
-> > + * to the port before starting the testing procedures.
-> > + */
-> > +static const struct usb_device_id ehset_hub_list[] = {
-> > +	{USB_DEVICE(0x0424, 0x4502)},
-> > +	{USB_DEVICE(0x0424, 0x4913)},
-> > +	{USB_DEVICE(0x0451, 0x8027)},
-> > +	{}
-> 
-> Missing spaces after { and before }.
-> 
-> > +};
-> > +
-> > +static int ehset_prepare_port_for_testing(struct usb_device *hub_udev, u16 portnum)
-> > +{
-> > +	int ret = 0;
-> > +
-> > +	/*
-> > +	 * The USB2.0 spec chapter 11.24.2.13 says that the USB port which is
-> > +	 * going under test needs to be put in suspend before sending the
-> > +	 * test command. Most hubs don't enforce this precondition, but there
-> > +	 * are some hubs which needs to disable the power to the port before
-> > +	 * starting the test.
-> > +	 */
-> > +	if (usb_match_id(to_usb_interface(hub_udev->dev.parent), ehset_hub_list)) {
-> 
-> This is the main problem: hub_udev->dev.parent does not represent a USB
-> interface so you cannot use to_usb_interface() or you'd pass a random
-> pointer to usb_match_id().
-> 
-> If hub_udev is a root hub, then hub_udev->dev.parent does not even
-> represent a USB device (but, for example, the parent PCI device).
+When the module boots into QDL download mode it exposes the 1199:90d2
+ids, which can be mapped to the qcserial driver, and used to run
+firmware upgrades (e.g. with the qmi-firmware-update program).
 
-Ugh, good catch, I totally missed this.
+  T:  Bus=01 Lev=03 Prnt=08 Port=03 Cnt=01 Dev#= 10 Spd=480 MxCh= 0
+  D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+  P:  Vendor=1199 ProdID=90d2 Rev=00.00
+  S:  Manufacturer=Sierra Wireless, Incorporated
+  S:  Product=Sierra Wireless EM9191
+  S:  SerialNumber=8W0382004102A109
+  C:  #Ifs= 1 Cfg#= 1 Atr=a0 MxPwr=2mA
+  I:  If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=10 Driver=qcserial
 
-I'll go apply the revert now, thank you so much for it.
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+---
+ drivers/usb/serial/qcserial.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Razvan, how did you test this?
+diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
+index 83da8236e3c8..c18bf8164bc2 100644
+--- a/drivers/usb/serial/qcserial.c
++++ b/drivers/usb/serial/qcserial.c
+@@ -165,6 +165,7 @@ static const struct usb_device_id id_table[] = {
+ 	{DEVICE_SWI(0x1199, 0x907b)},	/* Sierra Wireless EM74xx */
+ 	{DEVICE_SWI(0x1199, 0x9090)},	/* Sierra Wireless EM7565 QDL */
+ 	{DEVICE_SWI(0x1199, 0x9091)},	/* Sierra Wireless EM7565 */
++	{DEVICE_SWI(0x1199, 0x90d2)},	/* Sierra Wireless EM9191 QDL */
+ 	{DEVICE_SWI(0x413c, 0x81a2)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
+ 	{DEVICE_SWI(0x413c, 0x81a3)},	/* Dell Wireless 5570 HSPA+ (42Mbps) Mobile Broadband Card */
+ 	{DEVICE_SWI(0x413c, 0x81a4)},	/* Dell Wireless 5570e HSPA+ (42Mbps) Mobile Broadband Card */
+-- 
+2.32.0
 
-thanks,
-
-greg k-h
