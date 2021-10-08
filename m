@@ -2,177 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 339C94263F5
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Oct 2021 07:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06BF2426420
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Oct 2021 07:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbhJHFCB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Oct 2021 01:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58612 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbhJHFCA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Oct 2021 01:02:00 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8335CC061570;
-        Thu,  7 Oct 2021 22:00:04 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id x27so33972812lfa.9;
-        Thu, 07 Oct 2021 22:00:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6pfqlNtrSH6NcXMnr6NSEeH0028ju0Jwm9BvNQ/kiu0=;
-        b=lCiQYgCZcWnOoSPJlumWW06kWEYD/nhe9QM4J5x8bLwHHs5GQ+F6kaiiKYc4E7eLO5
-         WuR28wegHWBYVNIoJkCTzF7tEfx0Hyt5ThsVYQ2SOdqYmYvTdSnBhYStQ+w0Fam0VW1Z
-         KDMwe+KexeOk/imToysVdP6N78bpXdTQSbDSEGTqY9sAIKx2IbyhtmZnhHnu+n/JUPa8
-         6yyDOCEf+uQysZHmLibVfQtL25vJ5nSY9FgzchoUG2zu6F8oX5dpd8h7p6bMcowfpI+x
-         E2vAe47huY+I1UhC/WNmSBjy1YAR9o2bI3VXIwsq1HsRLMdl2ySW000lbxV2zl6EyoNd
-         pGlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6pfqlNtrSH6NcXMnr6NSEeH0028ju0Jwm9BvNQ/kiu0=;
-        b=qfBiJUIbwCXmqu1I5WEoQfKTBWHCxUF+Ne1Y1R5XRWSG7Bs6BLVRh64Yws+axJDsbP
-         oTAGUjwEVXKtAxO/sXjxyYb4ZLUYYuQaTyLbreAIKqhuo2ZI4D2ywFBquVYQZHG9yp8H
-         la91gxwHiNkuT1nYdnu6V1ZzVLkx1A8Rg3b/aL704XgyQcKZDr7J7L/CrraHFeyYxusR
-         plMrztP4bc01c/vp49mxrNhBxh3DaRB8sdFTQBsN6iw9D9IzgWiY8pnhCmhUtr2NsbKg
-         ybmJEsrbcykSwzuZAPcU+MhYmMCvig/lQEbPr7T84OU2jPKZYuSpLfoWDvhL9a4QrPnm
-         QuRQ==
-X-Gm-Message-State: AOAM5302Yg9cW5SEPOPcPg0TQ+9Qb2KEGdKdyDd47tASuPUeaXL2Y8pc
-        heu8Fgs64H7UZEQ0RHSBsRoaNP6WpNp5FxCUGIw=
-X-Google-Smtp-Source: ABdhPJwkPKUAXd5lqJ3aBD0r5/9D0aaxZ4HR1Se+V9G/ZlAvcqxzw1XrUQQ6XRK0+j+xZmduWOxs+OW30cMpqOF0hOI=
-X-Received: by 2002:a2e:9c94:: with SMTP id x20mr1253874lji.94.1633669202809;
- Thu, 07 Oct 2021 22:00:02 -0700 (PDT)
+        id S229582AbhJHFkH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Oct 2021 01:40:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58440 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229511AbhJHFkG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 8 Oct 2021 01:40:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8188061090;
+        Fri,  8 Oct 2021 05:38:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1633671492;
+        bh=7zxDJqCuKjOUMQzYl1hkBJUtFDCCti1gO6KQRT+M5a4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=chtG6nTFE936el7PeLj6z48C+W28WzixY6Nq0YIxw0OtIXBQWLvPMjyKbuqxrLPtX
+         woT4u64WqxOYM3NQXMLvOwS7Ej3qwghrnAJ0pX9y9zKWkW54RhJ9aECBYZ4R1yEFqK
+         WFv5DQrlukahbAFwJCGrb1R+DAQ1dhXbdTqSKo08=
+Date:   Fri, 8 Oct 2021 07:38:08 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jack Pham <quic_jackp@quicinc.com>
+Cc:     Linyu Yuan <quic_linyyuan@quicinc.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Trilok Soni <quic_tsoni@quicinc.com>
+Subject: Re: [PATCH v5 3/3] usb: gadget: configfs: add some trace event
+Message-ID: <YV/ZQNsLaPBLQYef@kroah.com>
+References: <1630976977-13938-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1630976977-13938-4-git-send-email-quic_linyyuan@quicinc.com>
+ <YVwz/EY4A/y4rY48@kroah.com>
+ <20211008005910.GA7123@jackp-linux.qualcomm.com>
 MIME-Version: 1.0
-References: <1629825378-8089-1-git-send-email-manish.narani@xilinx.com> <1629825378-8089-2-git-send-email-manish.narani@xilinx.com>
-In-Reply-To: <1629825378-8089-2-git-send-email-manish.narani@xilinx.com>
-From:   Jun Li <lijun.kernel@gmail.com>
-Date:   Fri, 8 Oct 2021 12:59:51 +0800
-Message-ID: <CAKgpwJVXyHcBoREcNhpsJxOBxxgkZMkY5Kt41n8Ux95aqxL10w@mail.gmail.com>
-Subject: Re: [PATCH 1/6] usb: chipidea: Add support for VBUS control with PHY
-To:     Manish Narani <manish.narani@xilinx.com>, Li Jun <jun.li@nxp.com>
-Cc:     peter.chen@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        michal.simek@xilinx.com,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>, git@xilinx.com,
-        Subbaraya Sundeep Bhatta <sbhatta@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211008005910.GA7123@jackp-linux.qualcomm.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Manish Narani <manish.narani@xilinx.com> =E4=BA=8E2021=E5=B9=B48=E6=9C=8825=
-=E6=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8A=E5=8D=881:23=E5=86=99=E9=81=93=EF=BC=
-=9A
->
-> Some platforms make use of VBUS control over PHY which
-> means controller driver has to access PHY registers to
-> turn on/off VBUS line.This patch adds support for
-> such platforms in chipidea.
->
-> Signed-off-by: Subbaraya Sundeep Bhatta <sbhatta@xilinx.com>
-> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
-> Signed-off-by: Manish Narani <manish.narani@xilinx.com>
-> ---
->  drivers/usb/chipidea/ci_hdrc_usb2.c | 1 +
->  drivers/usb/chipidea/host.c         | 9 +++++++++
->  drivers/usb/chipidea/otg_fsm.c      | 7 +++++++
->  include/linux/usb/chipidea.h        | 1 +
->  4 files changed, 18 insertions(+)
->
-> diff --git a/drivers/usb/chipidea/ci_hdrc_usb2.c b/drivers/usb/chipidea/c=
-i_hdrc_usb2.c
-> index 89e1d82..dc86b12 100644
-> --- a/drivers/usb/chipidea/ci_hdrc_usb2.c
-> +++ b/drivers/usb/chipidea/ci_hdrc_usb2.c
-> @@ -30,6 +30,7 @@ static const struct ci_hdrc_platform_data ci_default_pd=
-ata =3D {
->
->  static const struct ci_hdrc_platform_data ci_zynq_pdata =3D {
->         .capoffset      =3D DEF_CAPOFFSET,
-> +       .flags          =3D CI_HDRC_PHY_VBUS_CONTROL,
->  };
->
->  static const struct ci_hdrc_platform_data ci_zevio_pdata =3D {
-> diff --git a/drivers/usb/chipidea/host.c b/drivers/usb/chipidea/host.c
-> index e86d13c..578968d 100644
-> --- a/drivers/usb/chipidea/host.c
-> +++ b/drivers/usb/chipidea/host.c
-> @@ -63,6 +63,14 @@ static int ehci_ci_portpower(struct usb_hcd *hcd, int =
-portnum, bool enable)
->                 priv->enabled =3D enable;
->         }
->
-> +       if (ci->platdata->flags & CI_HDRC_PHY_VBUS_CONTROL &&
-> +           ci->usb_phy && ci->usb_phy->set_vbus) {
-> +               if (enable)
-> +                       ci->usb_phy->set_vbus(ci->usb_phy, 1);
-> +               else
-> +                       ci->usb_phy->set_vbus(ci->usb_phy, 0);
-> +       }
-> +
+On Thu, Oct 07, 2021 at 06:09:52PM -0700, Jack Pham wrote:
+> On Tue, Oct 05, 2021 at 01:16:12PM +0200, Greg Kroah-Hartman wrote:
+> > On Tue, Sep 07, 2021 at 09:09:37AM +0800, Linyu Yuan wrote:
+> 
+> > > Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> 
+> > > diff --git a/drivers/usb/gadget/configfs_trace.h b/drivers/usb/gadget/configfs_trace.h
+> > > new file mode 100644
+> > > index 0000000..59d73d5
+> > > --- /dev/null
+> > > +++ b/drivers/usb/gadget/configfs_trace.h
+> > > @@ -0,0 +1,167 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +/*
+> > > + * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
+> > 
+> > Wrong copyright notice, right?  I could be wrong, but you might want to
+> > check...
+> 
+> FYI this is correct.  Qualcomm is currently in transition and some
+> developers have started sending patches from a @quicinc.com email
+> address.  New files sent in this manner will be attributed using this
+> copyright notice (and is approved by our legal team).
 
-Can existing API usb_phy_vbus_on/off() work for you? I think that
-helper will make it simple so you don't need a new flag and those
-checks.
+Thanks for letting me know, is there some guideline as to what code gets
+what copyright during the "transition" phase?
 
-Li Jun
->         if (enable && (ci->platdata->phy_mode =3D=3D USBPHY_INTERFACE_MOD=
-E_HSIC)) {
->                 /*
->                  * Marvell 28nm HSIC PHY requires forcing the port to HS =
-mode.
-> @@ -71,6 +79,7 @@ static int ehci_ci_portpower(struct usb_hcd *hcd, int p=
-ortnum, bool enable)
->                 hw_port_test_set(ci, 5);
->                 hw_port_test_set(ci, 0);
->         }
-> +
->         return 0;
->  };
->
-> diff --git a/drivers/usb/chipidea/otg_fsm.c b/drivers/usb/chipidea/otg_fs=
-m.c
-> index 6ed4b00..2f7f94d 100644
-> --- a/drivers/usb/chipidea/otg_fsm.c
-> +++ b/drivers/usb/chipidea/otg_fsm.c
-> @@ -471,6 +471,10 @@ static void ci_otg_drv_vbus(struct otg_fsm *fsm, int=
- on)
->                                 return;
->                         }
->                 }
-> +
-> +               if (ci->platdata->flags & CI_HDRC_PHY_VBUS_CONTROL)
-> +                       ci->usb_phy->set_vbus(ci->usb_phy, 1);
-> +
->                 /* Disable data pulse irq */
->                 hw_write_otgsc(ci, OTGSC_DPIE, 0);
->
-> @@ -480,6 +484,9 @@ static void ci_otg_drv_vbus(struct otg_fsm *fsm, int =
-on)
->                 if (ci->platdata->reg_vbus)
->                         regulator_disable(ci->platdata->reg_vbus);
->
-> +               if (ci->platdata->flags & CI_HDRC_PHY_VBUS_CONTROL)
-> +                       ci->usb_phy->set_vbus(ci->usb_phy, 0);
-> +
->                 fsm->a_bus_drop =3D 1;
->                 fsm->a_bus_req =3D 0;
->         }
-> diff --git a/include/linux/usb/chipidea.h b/include/linux/usb/chipidea.h
-> index edf3342..ee38835 100644
-> --- a/include/linux/usb/chipidea.h
-> +++ b/include/linux/usb/chipidea.h
-> @@ -62,6 +62,7 @@ struct ci_hdrc_platform_data {
->  #define CI_HDRC_REQUIRES_ALIGNED_DMA   BIT(13)
->  #define CI_HDRC_IMX_IS_HSIC            BIT(14)
->  #define CI_HDRC_PMQOS                  BIT(15)
-> +#define CI_HDRC_PHY_VBUS_CONTROL       BIT(16)
->         enum usb_dr_mode        dr_mode;
->  #define CI_HDRC_CONTROLLER_RESET_EVENT         0
->  #define CI_HDRC_CONTROLLER_STOPPED_EVENT       1
-> --
-> 2.1.1
->
+thanks,
+
+greg k-h
