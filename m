@@ -2,66 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23438426E72
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Oct 2021 18:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2EFC426E74
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Oct 2021 18:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbhJHQOS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Oct 2021 12:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbhJHQOR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Oct 2021 12:14:17 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31303C061570
-        for <linux-usb@vger.kernel.org>; Fri,  8 Oct 2021 09:12:22 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id r18so38367332edv.12
-        for <linux-usb@vger.kernel.org>; Fri, 08 Oct 2021 09:12:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=G+Iq7iy1GRMddIdrCBUu2NHbxR3JoNjA4F7Y0VPhz5I=;
-        b=Rxp/3bhbiNUTejgkKDntUMq2d7gLr5NCyB+q3q94lkhSOPYx9soacaIlVt4MjkboyW
-         JjDGLwjvnkV4RM2Z78eUhKDL6geZtwo+XkT3uG4zMztiljAqn1urYLztVM501i0jf7JY
-         KM3qWzKbaIi2BSS+Sza4BIKYWFYcJ+BzkNiMf6brn19YFTQwQSJyULHNi1XfeEy7Muau
-         xkzVOoIIuRkvujvnwp7zYqFeadTRf5jIaWTP0Ot/9OqcuaWy4fc3AASVBT9Xpoz3AK9c
-         +Lr7/vGjaOp22FMM/OCdb0iTBBg8FeRF6cVvhzua5fZzDQzIzmav4SEgVWw3kXedou+M
-         CHmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=G+Iq7iy1GRMddIdrCBUu2NHbxR3JoNjA4F7Y0VPhz5I=;
-        b=rb0fTWQqztRMsuc1mQFuj5Dq1sPOz5ddEQN9AqIVHtd6rQwI8ZrvV17+1nmItogF8C
-         HsuL9/MAtcmAJTjGFHtLBct47o5G6He/VEUkvyYJlAvA7i8sDxvVYpfR3irS9tCpiXXj
-         VXYkpI6oP6z7RFNMJ3taCUI5uOh4M0DaAorCZQAvGAx2zVwqUxx2IqszusQvku520786
-         7yl2kkERAi+FbIcGALxPI2/ArQ/oDTVH2oLspbUoBvSSUi+7C1foTYrIfRewezrmPr5h
-         3Gne68v6+eMIr0bfPmpxpTjydfT54bQua5SASZQpTUTQxWApPDez+9EhN4Y7nEttmhcs
-         W5hA==
-X-Gm-Message-State: AOAM5306xOgLWuKd5Z2frUukMO9mzSEybWv+2CvBxyhUhjUOrOQLKxg0
-        2xe4OxEM9kMhR4rvkFK8BUDiEX/Ypv3ZrZjXLNg=
-X-Google-Smtp-Source: ABdhPJy36WpZ1PF2SsG4OxaJyYITBB8K13W901io7H+01Z2PKQ7dJvO45LSOZoYKb1l1QCgAQusDF3Gl6YRrdC4abyg=
-X-Received: by 2002:a05:6402:19ba:: with SMTP id o26mr16270263edz.1.1633709540752;
- Fri, 08 Oct 2021 09:12:20 -0700 (PDT)
+        id S229938AbhJHQOZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Oct 2021 12:14:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32810 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229534AbhJHQOY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 8 Oct 2021 12:14:24 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5842261038;
+        Fri,  8 Oct 2021 16:12:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1633709548;
+        bh=l9NKonv+O2PXkvQdUpXNKXFolGTbnrr6j94U8d7AgSM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=AEN+wYdH7DUCcS+PkPU3rle/AaRcvd0hw0VSsE/tZXmyPGkGyFjLAFw54AiU4bQ8s
+         /JHO1EyBDoHzNsepgBludb5GbL++SZluKNAI2rNPGt24K9MStvL4m9YS1+lLYszxXX
+         QOHSkmrJuOIlwn82npWG2yCmGGYdd7iQ82a48Syw=
+Date:   Fri, 8 Oct 2021 18:12:26 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB fixes for 5.15-rc5
+Message-ID: <YWBt6v3kWkjcJcp0@kroah.com>
 MIME-Version: 1.0
-Received: by 2002:a17:906:7809:0:0:0:0 with HTTP; Fri, 8 Oct 2021 09:12:20
- -0700 (PDT)
-Reply-To: alimaanwari48@gmail.com
-From:   Alima Anwari <franmerii42@gmail.com>
-Date:   Fri, 8 Oct 2021 17:12:20 +0100
-Message-ID: <CAOoRhhHRCecQgLPVWoW83C2bLCs1sT4z5n7zDwyjiMrfu844Qg@mail.gmail.com>
-Subject: =?UTF-8?B?QnVlbiBkw61h?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=20
-Hola querido amigo, soy Alima Anwari de Afganist=C3=A1n, por favor responde
-De vuelta a m=C3=AD, tengo un problema urgente que compartir contigo. voy a
-estar esperando
-para su respuesta.
-Gracias.
-Alima.
+The following changes since commit 5816b3e6577eaa676ceb00a848f0fd65fe2adc29:
+
+  Linux 5.15-rc3 (2021-09-26 14:08:19 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.15-rc5
+
+for you to fetch changes up to 58fc1daa4d2e9789b9ffc880907c961ea7c062cc:
+
+  USB: cdc-acm: fix break reporting (2021-10-05 13:50:52 +0200)
+
+----------------------------------------------------------------
+USB fixes for 5.15-rc5
+
+Here are some small USB fixes for 5.15-rc5 that resolve a number of
+reported issues:
+	- gadget driver fixes
+	- xhci build warning fixes
+	- build configuration fix
+	- cdc-acm tty handling fixes
+	- cdc-wdm fix
+	- typec fixes
+
+All of these have been in linux-next for a while with no reported
+issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      usb: dwc3: gadget: Revert "set gadgets parent to the right controller"
+
+Arnd Bergmann (1):
+      usb: xhci: tegra: mark PM functions as __maybe_unused
+
+Ben Hutchings (1):
+      Partially revert "usb: Kconfig: using select for USB_COMMON dependency"
+
+Fabio Estevam (1):
+      usb: chipidea: ci_hdrc_imx: Also search for 'phys' phandle
+
+Heikki Krogerus (1):
+      usb: typec: tipd: Remove dependency on "connector" child fwnode
+
+Johan Hovold (2):
+      USB: cdc-acm: fix racy tty buffer accesses
+      USB: cdc-acm: fix break reporting
+
+Pavel Hofman (1):
+      usb: gadget: f_uac2: fixed EP-IN wMaxPacketSize
+
+Rikard Falkeborn (1):
+      usb: cdc-wdm: Fix check for WWAN
+
+Xu Yang (2):
+      usb: typec: tcpci: don't handle vSafe0V event if it's not enabled
+      usb: typec: tcpm: handle SRC_STARTUP state if cc changes
+
+ drivers/usb/chipidea/ci_hdrc_imx.c   | 15 ++++++++++-----
+ drivers/usb/class/cdc-acm.c          |  8 ++++++++
+ drivers/usb/class/cdc-wdm.c          |  6 +++---
+ drivers/usb/common/Kconfig           |  3 +--
+ drivers/usb/dwc3/gadget.c            |  2 +-
+ drivers/usb/gadget/function/f_uac2.c | 14 ++++++++++----
+ drivers/usb/host/xhci-tegra.c        | 12 ++++--------
+ drivers/usb/typec/tcpm/tcpci.c       |  2 +-
+ drivers/usb/typec/tcpm/tcpm.c        |  1 +
+ drivers/usb/typec/tipd/core.c        |  8 +++-----
+ 10 files changed, 42 insertions(+), 29 deletions(-)
