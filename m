@@ -2,66 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C1D427172
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Oct 2021 21:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21DC34271EE
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Oct 2021 22:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231499AbhJHTek (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Oct 2021 15:34:40 -0400
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:40695 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231316AbhJHTek (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Oct 2021 15:34:40 -0400
-Received: by mail-ot1-f46.google.com with SMTP id l16-20020a9d6a90000000b0053b71f7dc83so12901854otq.7;
-        Fri, 08 Oct 2021 12:32:44 -0700 (PDT)
+        id S241919AbhJHUSG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Oct 2021 16:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231589AbhJHUSF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Oct 2021 16:18:05 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18133C061570
+        for <linux-usb@vger.kernel.org>; Fri,  8 Oct 2021 13:16:10 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id g8so40643553edt.7
+        for <linux-usb@vger.kernel.org>; Fri, 08 Oct 2021 13:16:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qDzzu4XHpDxsX7ZgfqK1Q92moqlgBHfhssYD+3IjEEg=;
+        b=Xkf9wUBSfoF4klEQg46g3xXPftJRRO4ZcHRUQIBXvYGEgcVkuHR/bqPV9CEMg/9Gcq
+         PNcge6apx7Dbht5/da+Rqo3SZgAsz6HG/TV651Iiif8Vbwp2TsjxUng43HtWADPWuRgh
+         2Hkf7Se6gBf0tiedxyZVrKlGqWzk9oDAVaFwpI8opFTG6sJcLPI5IdhnNeWy4Xs1acCe
+         7C187DpyAjJIiUfcPplVP/PjUC23RHn8nUJpcpkdG01JsmbT/J+AdzlzYddQ5SJiOH6t
+         BR6Rkaxil1a5d4uKJcyI8s47EoCYEynE3MRZA5GnlWFTexmOKAjXUEB8JYz1LWPN2uuv
+         +fnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Fn95PFblNu/n2WPk0S8fpzw+qYkLTPd9r9RyFtw4x5w=;
-        b=4b9hP9oHxs/POh7lRJy3Shc7mQkYQVf/dqRe4dIsdLeCZkjKNS12TG4atwy8tN/X09
-         vcuiiX5aKwncCRf5rl36X7l2BuTNbVCA753Vg5t26R7RqiQtz/BG5ib+s8ZHem6yMvIE
-         eqy+2CPZ/KIliKZ+aZFX+60gIlt+hGKMK3EtQIIG3jKDO4HHZp6hRFDCvHCYskrWsRUE
-         WftEZd1zC4HZnl6q1uI4G+oQAmUoctU324MSVFWDGQHa6odHWCbEdnLzcONdUHyCr8a1
-         eG09koD3SgiaVss/s7sfhQXrohiZADTKf+5Myir+AUIGUxQ1paZu4d5vNnRaDlaQHEpy
-         zgtg==
-X-Gm-Message-State: AOAM531bOhoDYlKFPrhf3jD6Go6vnQ/XZEucyF3HMJL6FtUPbPr+kv4K
-        Tj/HKnY6S06MwGibCsSxWVTeUcd8jA==
-X-Google-Smtp-Source: ABdhPJxueOyimn5+QlOO/vCWTB/+h/pOuuDzt7vG9m4ufHYSrvlWZ/XmTF7gEPiDuvRcmF+JbPIYOg==
-X-Received: by 2002:a9d:3783:: with SMTP id x3mr10382211otb.16.1633721564334;
-        Fri, 08 Oct 2021 12:32:44 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id l2sm63420otu.23.2021.10.08.12.32.43
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qDzzu4XHpDxsX7ZgfqK1Q92moqlgBHfhssYD+3IjEEg=;
+        b=PGUeXMtVOmmrCMB3ufUynDlg41wilQIIvr71dtZxAur65tRKbdQdmVlMmr4FZuZPyD
+         n9M2lOWvZHR90fAT9SsD1bbg0Y1m30zLAtdT7z+t1YPUmyoL5te8QVvEC1Fv3INT5qU8
+         PZOoKcGw8YXoaPUPBV2DaKlBqAgeygaOxuyOJu3DfITHq9vJ3JSFdsl3RwJwAKeS3c1s
+         LESavl3sklw1VzGXSD7XYAKoHVtxLVusq6/29Wfi610qhavyQNzOhMqSwtVx/3D91tuD
+         S40E8re85Uo2Ofel2jxnm0h1xYyjHfohcT7kync6o8waFJ7Sa7DaO+BOi5z3QBFzI/1+
+         H7tw==
+X-Gm-Message-State: AOAM532YQOZtQ2fVmbOPryR39oXwiDQZn67uwFfGJLgyOs4nSUfmLUce
+        HaQdJu4aXkroZaLEoYYdfaI=
+X-Google-Smtp-Source: ABdhPJwpcJCeRuVmvgrkIPeSu63h2UqmzLfDW3XxhOlJNp39VmX6Pb3E1DmsDpp3a6WskXCsdXoiQw==
+X-Received: by 2002:a17:907:984d:: with SMTP id jj13mr7202884ejc.211.1633724168646;
+        Fri, 08 Oct 2021 13:16:08 -0700 (PDT)
+Received: from localhost.localdomain ([78.134.31.99])
+        by smtp.googlemail.com with ESMTPSA id dj8sm141925edb.53.2021.10.08.13.16.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Oct 2021 12:32:43 -0700 (PDT)
-Received: (nullmailer pid 3169868 invoked by uid 1000);
-        Fri, 08 Oct 2021 19:32:43 -0000
-Date:   Fri, 8 Oct 2021 14:32:42 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        git-dev@xilinx.com
-Subject: Re: [PATCH v4 1/2] dt-binding: usb: xilinx: Add clocking node
-Message-ID: <YWCc2lYWWNr0SZYD@robh.at.kernel.org>
-References: <cover.1632805672.git.shubhrajyoti.datta@xilinx.com>
- <30c7d87ab46a0ea2da2dd04d824f162a2e3da4c8.1632805672.git.shubhrajyoti.datta@xilinx.com>
+        Fri, 08 Oct 2021 13:16:08 -0700 (PDT)
+From:   Gianni Pisetta <gianni.pisetta@gmail.com>
+To:     gianni.pisetta@gmail.com, linux-usb@vger.kernel.org
+Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, stable@vger.kernel.com
+Subject: [PATCH] usb: typec: tcpm: ignore data role mismatch with a GoodCRC Message
+Date:   Fri,  8 Oct 2021 22:14:55 +0200
+Message-Id: <20211008201455.8739-1-gianni.pisetta@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <30c7d87ab46a0ea2da2dd04d824f162a2e3da4c8.1632805672.git.shubhrajyoti.datta@xilinx.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 28 Sep 2021 10:57:10 +0530, Shubhrajyoti Datta wrote:
-> Add a clocking node for xilinx udc.
-> 
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> ---
-> v3:
-> update clock description and names
-> 
->  Documentation/devicetree/bindings/usb/xlnx,usb2.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
+The data role check in tcpm.c cause the port manager to enter a loop with a
+hard reset on some chargers.
+By the spec in a GoodCRC Message the other end does not need to comply with
+the data role, so ignore a data role mismatch in a request when the message
+type is GoodCRC.
+From the USB PD spec:
+"If a USB Type-C Port receive a Message with the Port Data Role field set 
+to the same Data Role, except for the GoodCRC Message, USB Type-C error 
+recovery..."
 
-Since I picked up the conversion, applied. Thanks!
+Below are the log of a Pinebook Pro attached to a PinePower Desktop Supply
+before the patch:
+
+[226057.970532] state change SNK_DISCOVERY -> SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
+[226057.975891] pending state change SNK_WAIT_CAPABILITIES -> SNK_READY @ 310 ms [rev3 NONE_AMS]
+[226058.134384] PD RX, header: 0x53a1 [1]
+[226058.134389] Data role mismatch, initiating error recovery
+[226058.134392] state change SNK_WAIT_CAPABILITIES -> ERROR_RECOVERY [rev3 NONE_AMS]
+[226058.134404] state change ERROR_RECOVERY -> PORT_RESET [rev3 NONE_AMS]
+
+Fixes: f0690a25a140b
+cc: <stable@vger.kernel.com>
+Signed-off-by: Gianni Pisetta <gianni.pisetta@gmail.com>
+
+---
+ drivers/usb/typec/tcpm/tcpm.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 5d05de666597..02ebf7e03c41 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -2887,11 +2887,11 @@ static void tcpm_pd_rx_handler(struct kthread_work *work)
+ 
+ 		/*
+ 		 * If both ends believe to be DFP/host, we have a data role
+-		 * mismatch.
++		 * mismatch. Must perform error recovery actions, except for
++		 * a GoodCRC Message(USB PD standard, 6.2.1.6).
+ 		 */
+-		if (!!(le16_to_cpu(msg->header) & PD_HEADER_DATA_ROLE) ==
+-		    (port->data_role == TYPEC_HOST)) {
++		if (!!((le16_to_cpu(msg->header) & PD_HEADER_DATA_ROLE) ==
++		       (port->data_role == TYPEC_HOST) && type != PD_CTRL_GOOD_CRC)) {
+ 			tcpm_log(port,
+ 				 "Data role mismatch, initiating error recovery");
+ 			tcpm_set_state(port, ERROR_RECOVERY, 0);
+-- 
+2.20.1
+
