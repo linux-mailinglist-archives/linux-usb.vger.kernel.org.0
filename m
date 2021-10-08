@@ -2,96 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0096C426581
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Oct 2021 09:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB89C4265A0
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Oct 2021 10:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233251AbhJHH7F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Oct 2021 03:59:05 -0400
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:39694 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229941AbhJHH7D (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Oct 2021 03:59:03 -0400
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1984abmV020364;
-        Fri, 8 Oct 2021 09:57:04 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=selector1;
- bh=c6EaOVGfb8Sa8HSlE1ms6Xot8j3nZXJs3bVkNF7A+D8=;
- b=P9RS1+4eRbSDQhkaKAaGifIzcOlHW5vPJLPNx2blBuLiEa+/h+V1Gmi/FKUDt4SoQPtX
- 8CnHd6bGEw5qmB0z94ZlGYgAwuzgQvWrCtLf7fRKUgQr5V6eVaObajTknxMoCQ2lYMHB
- e5NWg3zD6Gky/CYLFJTeKfxB1PwwP8/9oNQAWWojcPGfwU4KQGO5k/6ZpMUR/GRwTGe0
- 4P7ml7uBNk595PrSMRpIMpQMJnSZHn2YioDT9GkNbErnzS0+cnf4SbU0AAn71G0/VlCV
- 8LngPsIlJnrkIbN8TG9er7a1oAyvE0BaWEi9LEFSN4zBfOEV9D0pbjCB+4w56t7gz0q9 rQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 3bjdun9fxj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Oct 2021 09:57:04 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6E42B100034;
-        Fri,  8 Oct 2021 09:57:04 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 63696218110;
-        Fri,  8 Oct 2021 09:57:04 +0200 (CEST)
-Received: from localhost (10.75.127.49) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 8 Oct 2021 09:57:03
- +0200
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To:     <hminas@synopsys.com>, <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>,
-        <fabrice.gasnier@foss.st.com>
-Subject: [PATCH v2 2/2] usb: dwc2: stm32mp15: set otg_rev
-Date:   Fri, 8 Oct 2021 09:53:09 +0200
-Message-ID: <1633679589-16021-3-git-send-email-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1633679589-16021-1-git-send-email-fabrice.gasnier@foss.st.com>
-References: <1633679589-16021-1-git-send-email-fabrice.gasnier@foss.st.com>
+        id S229830AbhJHILp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Oct 2021 04:11:45 -0400
+Received: from mga06.intel.com ([134.134.136.31]:47848 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229670AbhJHILo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 8 Oct 2021 04:11:44 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="287341622"
+X-IronPort-AV: E=Sophos;i="5.85,357,1624345200"; 
+   d="scan'208";a="287341622"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2021 01:09:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,357,1624345200"; 
+   d="scan'208";a="624660408"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 08 Oct 2021 01:09:36 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 08 Oct 2021 11:09:35 +0300
+Date:   Fri, 8 Oct 2021 11:09:35 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     lindsey.stanpoor@gmail.com
+Cc:     intel-gfx@lists.freedesktop.org, linux-usb@vger.kernel.org,
+        hdegoede@redhat.com, gregkh@linuxfoundation.org, cnemo@tutanota.com
+Subject: Re: [PATCH 1/1] usb: typec: altmodes/displayport: reorder
+ dp_altmode_configured()
+Message-ID: <YV/8v2FFcfamJoOI@kuha.fi.intel.com>
+References: <20211006043257.23242-1-lindsey.stanpoor@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
- definitions=2021-10-08_02,2021-10-07_02,2020-04-07_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211006043257.23242-1-lindsey.stanpoor@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-STM32MP15 complies with the OTG 2.0. Set OTG revision accordingly. It is
-useful for the of_usb_update_otg_caps() routine to check and update
-otg_rev to the lower value between DT and provided params.
+On Tue, Oct 05, 2021 at 09:32:57PM -0700, lindsey.stanpoor@gmail.com wrote:
+> From: Cameron Nemo <cnemo@tutanota.com>
+> 
+> A recent commit [1] introduced an unintended behavioral change by
+> reordering certain function calls. The sysfs_notify call for
+> pin_assignment should only be invoked when the dp_altmode_notify call
+> returns 0, and in the dp->data.conf == 0 case.
+> 
+> [1] https://lore.kernel.org/r/20210817215201.795062-8-hdegoede@redhat.com
 
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
----
-Changes in v2:
-- set otg_rev in otg_caps structure directly
----
- drivers/usb/dwc2/params.c | 2 ++
- 1 file changed, 2 insertions(+)
+You should refer the commit, not the mail. I think you could also use
+the Fixes tag in this case, but then I guess Hans should pick this:
 
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index 99d3b62..d300ae3 100644
---- a/drivers/usb/dwc2/params.c
-+++ b/drivers/usb/dwc2/params.c
-@@ -176,6 +176,7 @@ static void dwc2_set_stm32mp15_fsotg_params(struct dwc2_hsotg *hsotg)
- 
- 	p->otg_caps.hnp_support = false;
- 	p->otg_caps.srp_support = false;
-+	p->otg_caps.otg_rev = 0x200;
- 	p->speed = DWC2_SPEED_PARAM_FULL;
- 	p->host_rx_fifo_size = 128;
- 	p->host_nperio_tx_fifo_size = 96;
-@@ -197,6 +198,7 @@ static void dwc2_set_stm32mp15_hsotg_params(struct dwc2_hsotg *hsotg)
- 
- 	p->otg_caps.hnp_support = false;
- 	p->otg_caps.srp_support = false;
-+	p->otg_caps.otg_rev = 0x200;
- 	p->activate_stm_id_vb_detection = !device_property_read_bool(hsotg->dev, "usb-role-switch");
- 	p->host_rx_fifo_size = 440;
- 	p->host_nperio_tx_fifo_size = 256;
+Fixes: fc27e04630e9 ("usb: typec: altmodes/displayport: Make dp_altmode_notify() more generic")
+
+Either way, this is OK by me, so once you have cleaned the commit
+message, please feel free to include my:
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> Signed-off-by: Cameron Nemo <cnemo@tutanota.com>
+> ---
+>  drivers/usb/typec/altmodes/displayport.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+> index c1d8c23baa39..a15ae78066e3 100644
+> --- a/drivers/usb/typec/altmodes/displayport.c
+> +++ b/drivers/usb/typec/altmodes/displayport.c
+> @@ -154,10 +154,17 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
+>  
+>  static int dp_altmode_configured(struct dp_altmode *dp)
+>  {
+> +	int ret;
+> +
+>  	sysfs_notify(&dp->alt->dev.kobj, "displayport", "configuration");
+> +
+> +	ret = dp_altmode_notify(dp);
+> +	if (ret || !dp->data.conf)
+> +		return ret;
+> +
+>  	sysfs_notify(&dp->alt->dev.kobj, "displayport", "pin_assignment");
+>  
+> -	return dp_altmode_notify(dp);
+> +	return 0;
+>  }
+>  
+>  static int dp_altmode_configure_vdm(struct dp_altmode *dp, u32 conf)
+> -- 
+> 2.33.0
+
 -- 
-2.7.4
-
+heikki
