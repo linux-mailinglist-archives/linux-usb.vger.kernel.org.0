@@ -2,209 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E87426333
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Oct 2021 05:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 339C94263F5
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Oct 2021 07:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242564AbhJHDnY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Oct 2021 23:43:24 -0400
-Received: from mga12.intel.com ([192.55.52.136]:20567 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239238AbhJHDnW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 Oct 2021 23:43:22 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="206545538"
-X-IronPort-AV: E=Sophos;i="5.85,356,1624345200"; 
-   d="scan'208";a="206545538"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 20:41:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,356,1624345200"; 
-   d="scan'208";a="484874227"
-Received: from lkp-server01.sh.intel.com (HELO 72c3bd3cf19c) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 07 Oct 2021 20:41:25 -0700
-Received: from kbuild by 72c3bd3cf19c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mYglB-0007wt-59; Fri, 08 Oct 2021 03:41:25 +0000
-Date:   Fri, 08 Oct 2021 11:41:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 58fc1daa4d2e9789b9ffc880907c961ea7c062cc
-Message-ID: <615fbddd.dKr0N1CJJ5I0o74Y%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229696AbhJHFCB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Oct 2021 01:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229603AbhJHFCA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Oct 2021 01:02:00 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8335CC061570;
+        Thu,  7 Oct 2021 22:00:04 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id x27so33972812lfa.9;
+        Thu, 07 Oct 2021 22:00:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=6pfqlNtrSH6NcXMnr6NSEeH0028ju0Jwm9BvNQ/kiu0=;
+        b=lCiQYgCZcWnOoSPJlumWW06kWEYD/nhe9QM4J5x8bLwHHs5GQ+F6kaiiKYc4E7eLO5
+         WuR28wegHWBYVNIoJkCTzF7tEfx0Hyt5ThsVYQ2SOdqYmYvTdSnBhYStQ+w0Fam0VW1Z
+         KDMwe+KexeOk/imToysVdP6N78bpXdTQSbDSEGTqY9sAIKx2IbyhtmZnhHnu+n/JUPa8
+         6yyDOCEf+uQysZHmLibVfQtL25vJ5nSY9FgzchoUG2zu6F8oX5dpd8h7p6bMcowfpI+x
+         E2vAe47huY+I1UhC/WNmSBjy1YAR9o2bI3VXIwsq1HsRLMdl2ySW000lbxV2zl6EyoNd
+         pGlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=6pfqlNtrSH6NcXMnr6NSEeH0028ju0Jwm9BvNQ/kiu0=;
+        b=qfBiJUIbwCXmqu1I5WEoQfKTBWHCxUF+Ne1Y1R5XRWSG7Bs6BLVRh64Yws+axJDsbP
+         oTAGUjwEVXKtAxO/sXjxyYb4ZLUYYuQaTyLbreAIKqhuo2ZI4D2ywFBquVYQZHG9yp8H
+         la91gxwHiNkuT1nYdnu6V1ZzVLkx1A8Rg3b/aL704XgyQcKZDr7J7L/CrraHFeyYxusR
+         plMrztP4bc01c/vp49mxrNhBxh3DaRB8sdFTQBsN6iw9D9IzgWiY8pnhCmhUtr2NsbKg
+         ybmJEsrbcykSwzuZAPcU+MhYmMCvig/lQEbPr7T84OU2jPKZYuSpLfoWDvhL9a4QrPnm
+         QuRQ==
+X-Gm-Message-State: AOAM5302Yg9cW5SEPOPcPg0TQ+9Qb2KEGdKdyDd47tASuPUeaXL2Y8pc
+        heu8Fgs64H7UZEQ0RHSBsRoaNP6WpNp5FxCUGIw=
+X-Google-Smtp-Source: ABdhPJwkPKUAXd5lqJ3aBD0r5/9D0aaxZ4HR1Se+V9G/ZlAvcqxzw1XrUQQ6XRK0+j+xZmduWOxs+OW30cMpqOF0hOI=
+X-Received: by 2002:a2e:9c94:: with SMTP id x20mr1253874lji.94.1633669202809;
+ Thu, 07 Oct 2021 22:00:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <1629825378-8089-1-git-send-email-manish.narani@xilinx.com> <1629825378-8089-2-git-send-email-manish.narani@xilinx.com>
+In-Reply-To: <1629825378-8089-2-git-send-email-manish.narani@xilinx.com>
+From:   Jun Li <lijun.kernel@gmail.com>
+Date:   Fri, 8 Oct 2021 12:59:51 +0800
+Message-ID: <CAKgpwJVXyHcBoREcNhpsJxOBxxgkZMkY5Kt41n8Ux95aqxL10w@mail.gmail.com>
+Subject: Re: [PATCH 1/6] usb: chipidea: Add support for VBUS control with PHY
+To:     Manish Narani <manish.narani@xilinx.com>, Li Jun <jun.li@nxp.com>
+Cc:     peter.chen@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        michal.simek@xilinx.com,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>, git@xilinx.com,
+        Subbaraya Sundeep Bhatta <sbhatta@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 58fc1daa4d2e9789b9ffc880907c961ea7c062cc  USB: cdc-acm: fix break reporting
+Manish Narani <manish.narani@xilinx.com> =E4=BA=8E2021=E5=B9=B48=E6=9C=8825=
+=E6=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8A=E5=8D=881:23=E5=86=99=E9=81=93=EF=BC=
+=9A
+>
+> Some platforms make use of VBUS control over PHY which
+> means controller driver has to access PHY registers to
+> turn on/off VBUS line.This patch adds support for
+> such platforms in chipidea.
+>
+> Signed-off-by: Subbaraya Sundeep Bhatta <sbhatta@xilinx.com>
+> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+> Signed-off-by: Manish Narani <manish.narani@xilinx.com>
+> ---
+>  drivers/usb/chipidea/ci_hdrc_usb2.c | 1 +
+>  drivers/usb/chipidea/host.c         | 9 +++++++++
+>  drivers/usb/chipidea/otg_fsm.c      | 7 +++++++
+>  include/linux/usb/chipidea.h        | 1 +
+>  4 files changed, 18 insertions(+)
+>
+> diff --git a/drivers/usb/chipidea/ci_hdrc_usb2.c b/drivers/usb/chipidea/c=
+i_hdrc_usb2.c
+> index 89e1d82..dc86b12 100644
+> --- a/drivers/usb/chipidea/ci_hdrc_usb2.c
+> +++ b/drivers/usb/chipidea/ci_hdrc_usb2.c
+> @@ -30,6 +30,7 @@ static const struct ci_hdrc_platform_data ci_default_pd=
+ata =3D {
+>
+>  static const struct ci_hdrc_platform_data ci_zynq_pdata =3D {
+>         .capoffset      =3D DEF_CAPOFFSET,
+> +       .flags          =3D CI_HDRC_PHY_VBUS_CONTROL,
+>  };
+>
+>  static const struct ci_hdrc_platform_data ci_zevio_pdata =3D {
+> diff --git a/drivers/usb/chipidea/host.c b/drivers/usb/chipidea/host.c
+> index e86d13c..578968d 100644
+> --- a/drivers/usb/chipidea/host.c
+> +++ b/drivers/usb/chipidea/host.c
+> @@ -63,6 +63,14 @@ static int ehci_ci_portpower(struct usb_hcd *hcd, int =
+portnum, bool enable)
+>                 priv->enabled =3D enable;
+>         }
+>
+> +       if (ci->platdata->flags & CI_HDRC_PHY_VBUS_CONTROL &&
+> +           ci->usb_phy && ci->usb_phy->set_vbus) {
+> +               if (enable)
+> +                       ci->usb_phy->set_vbus(ci->usb_phy, 1);
+> +               else
+> +                       ci->usb_phy->set_vbus(ci->usb_phy, 0);
+> +       }
+> +
 
-elapsed time: 1221m
+Can existing API usb_phy_vbus_on/off() work for you? I think that
+helper will make it simple so you don't need a new flag and those
+checks.
 
-configs tested: 149
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allmodconfig
-arm                              allyesconfig
-m68k                       m5475evb_defconfig
-powerpc                     tqm5200_defconfig
-m68k                       m5249evb_defconfig
-powerpc                     skiroot_defconfig
-powerpc                   motionpro_defconfig
-arc                 nsimosci_hs_smp_defconfig
-m68k                          atari_defconfig
-powerpc                      ppc40x_defconfig
-powerpc                     stx_gp3_defconfig
-m68k                          multi_defconfig
-sh                          landisk_defconfig
-powerpc                      pcm030_defconfig
-mips                          malta_defconfig
-mips                        qi_lb60_defconfig
-mips                       bmips_be_defconfig
-powerpc                     tqm8560_defconfig
-sh                         microdev_defconfig
-powerpc                       ppc64_defconfig
-mips                          ath25_defconfig
-arm                         orion5x_defconfig
-arm                          collie_defconfig
-powerpc                      ppc6xx_defconfig
-powerpc                   microwatt_defconfig
-arm                        multi_v5_defconfig
-xtensa                       common_defconfig
-m68k                        m5272c3_defconfig
-s390                       zfcpdump_defconfig
-sparc                            alldefconfig
-sparc                       sparc64_defconfig
-sh                        sh7757lcr_defconfig
-sh                          rsk7264_defconfig
-mips                       capcella_defconfig
-arm                           h5000_defconfig
-sh                            migor_defconfig
-openrisc                    or1ksim_defconfig
-arc                          axs101_defconfig
-sh                          kfr2r09_defconfig
-mips                        maltaup_defconfig
-mips                      loongson3_defconfig
-sh                   sh7724_generic_defconfig
-arm                           viper_defconfig
-arm                          simpad_defconfig
-powerpc                         ps3_defconfig
-h8300                            allyesconfig
-powerpc                      pasemi_defconfig
-powerpc64                           defconfig
-arm                          moxart_defconfig
-arm                           sama5_defconfig
-arc                     nsimosci_hs_defconfig
-m68k                        stmark2_defconfig
-arm                       omap2plus_defconfig
-mips                           ip27_defconfig
-mips                      malta_kvm_defconfig
-riscv             nommu_k210_sdcard_defconfig
-arm                     davinci_all_defconfig
-sh                          polaris_defconfig
-xtensa                          iss_defconfig
-arm                       multi_v4t_defconfig
-powerpc                     ksi8560_defconfig
-mips                        bcm63xx_defconfig
-x86_64               randconfig-c001-20211003
-i386                 randconfig-c001-20211003
-arm                  randconfig-c002-20211003
-x86_64               randconfig-c001-20211004
-i386                 randconfig-c001-20211004
-arm                  randconfig-c002-20211004
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                             allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-powerpc                          allyesconfig
-x86_64               randconfig-a015-20211004
-x86_64               randconfig-a012-20211004
-x86_64               randconfig-a016-20211004
-x86_64               randconfig-a014-20211004
-x86_64               randconfig-a013-20211004
-x86_64               randconfig-a011-20211004
-i386                 randconfig-a013-20211004
-i386                 randconfig-a016-20211004
-i386                 randconfig-a014-20211004
-i386                 randconfig-a011-20211004
-i386                 randconfig-a012-20211004
-i386                 randconfig-a015-20211004
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                           allyesconfig
-
-clang tested configs:
-x86_64               randconfig-c007-20211003
-i386                 randconfig-c001-20211003
-arm                  randconfig-c002-20211003
-s390                 randconfig-c005-20211003
-powerpc              randconfig-c003-20211003
-riscv                randconfig-c006-20211003
-mips                 randconfig-c004-20211003
-x86_64               randconfig-a003-20211004
-x86_64               randconfig-a005-20211004
-x86_64               randconfig-a001-20211004
-x86_64               randconfig-a002-20211004
-x86_64               randconfig-a004-20211004
-x86_64               randconfig-a006-20211004
-i386                 randconfig-a001-20211004
-i386                 randconfig-a003-20211004
-i386                 randconfig-a005-20211004
-i386                 randconfig-a002-20211004
-i386                 randconfig-a004-20211004
-i386                 randconfig-a006-20211004
-hexagon              randconfig-r045-20211007
-hexagon              randconfig-r041-20211007
-s390                 randconfig-r044-20211007
-riscv                randconfig-r042-20211007
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Li Jun
+>         if (enable && (ci->platdata->phy_mode =3D=3D USBPHY_INTERFACE_MOD=
+E_HSIC)) {
+>                 /*
+>                  * Marvell 28nm HSIC PHY requires forcing the port to HS =
+mode.
+> @@ -71,6 +79,7 @@ static int ehci_ci_portpower(struct usb_hcd *hcd, int p=
+ortnum, bool enable)
+>                 hw_port_test_set(ci, 5);
+>                 hw_port_test_set(ci, 0);
+>         }
+> +
+>         return 0;
+>  };
+>
+> diff --git a/drivers/usb/chipidea/otg_fsm.c b/drivers/usb/chipidea/otg_fs=
+m.c
+> index 6ed4b00..2f7f94d 100644
+> --- a/drivers/usb/chipidea/otg_fsm.c
+> +++ b/drivers/usb/chipidea/otg_fsm.c
+> @@ -471,6 +471,10 @@ static void ci_otg_drv_vbus(struct otg_fsm *fsm, int=
+ on)
+>                                 return;
+>                         }
+>                 }
+> +
+> +               if (ci->platdata->flags & CI_HDRC_PHY_VBUS_CONTROL)
+> +                       ci->usb_phy->set_vbus(ci->usb_phy, 1);
+> +
+>                 /* Disable data pulse irq */
+>                 hw_write_otgsc(ci, OTGSC_DPIE, 0);
+>
+> @@ -480,6 +484,9 @@ static void ci_otg_drv_vbus(struct otg_fsm *fsm, int =
+on)
+>                 if (ci->platdata->reg_vbus)
+>                         regulator_disable(ci->platdata->reg_vbus);
+>
+> +               if (ci->platdata->flags & CI_HDRC_PHY_VBUS_CONTROL)
+> +                       ci->usb_phy->set_vbus(ci->usb_phy, 0);
+> +
+>                 fsm->a_bus_drop =3D 1;
+>                 fsm->a_bus_req =3D 0;
+>         }
+> diff --git a/include/linux/usb/chipidea.h b/include/linux/usb/chipidea.h
+> index edf3342..ee38835 100644
+> --- a/include/linux/usb/chipidea.h
+> +++ b/include/linux/usb/chipidea.h
+> @@ -62,6 +62,7 @@ struct ci_hdrc_platform_data {
+>  #define CI_HDRC_REQUIRES_ALIGNED_DMA   BIT(13)
+>  #define CI_HDRC_IMX_IS_HSIC            BIT(14)
+>  #define CI_HDRC_PMQOS                  BIT(15)
+> +#define CI_HDRC_PHY_VBUS_CONTROL       BIT(16)
+>         enum usb_dr_mode        dr_mode;
+>  #define CI_HDRC_CONTROLLER_RESET_EVENT         0
+>  #define CI_HDRC_CONTROLLER_STOPPED_EVENT       1
+> --
+> 2.1.1
+>
