@@ -2,92 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB89C4265A0
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Oct 2021 10:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CFF84265F9
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Oct 2021 10:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbhJHILp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Oct 2021 04:11:45 -0400
-Received: from mga06.intel.com ([134.134.136.31]:47848 "EHLO mga06.intel.com"
+        id S231521AbhJHIed (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Oct 2021 04:34:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51712 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229670AbhJHILo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 8 Oct 2021 04:11:44 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="287341622"
-X-IronPort-AV: E=Sophos;i="5.85,357,1624345200"; 
-   d="scan'208";a="287341622"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2021 01:09:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,357,1624345200"; 
-   d="scan'208";a="624660408"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 08 Oct 2021 01:09:36 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 08 Oct 2021 11:09:35 +0300
-Date:   Fri, 8 Oct 2021 11:09:35 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     lindsey.stanpoor@gmail.com
-Cc:     intel-gfx@lists.freedesktop.org, linux-usb@vger.kernel.org,
-        hdegoede@redhat.com, gregkh@linuxfoundation.org, cnemo@tutanota.com
-Subject: Re: [PATCH 1/1] usb: typec: altmodes/displayport: reorder
- dp_altmode_configured()
-Message-ID: <YV/8v2FFcfamJoOI@kuha.fi.intel.com>
-References: <20211006043257.23242-1-lindsey.stanpoor@gmail.com>
+        id S229868AbhJHIec (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 8 Oct 2021 04:34:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 7E8606101A
+        for <linux-usb@vger.kernel.org>; Fri,  8 Oct 2021 08:32:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633681957;
+        bh=gDmmxklwbgHj9NeNiO2UGjc/8Jzo7aL/t9Oh/auGE1M=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=aMoQe9cyKRVoaOzBMWr8CHeWffMS4ic0BNkq+m8Ekx/Up5qPTBi15u8jKOVGVT/Bs
+         7qAF6YFKcvT/6fR+2SOn7CpRl/Las9ewh/fdsAbepQScl6xDV0VO04LyMvCJHaixov
+         6xE9X2zhe5Z0DZvA8beg3jkwQImc65obHbUawTPZh1+PWdOhIpSb9+OS3y+WvP314K
+         qb1y2P0bm7k4ZL1W2eQL9g7z5roDy1Xla1f04v5pXp+uEZIYaW/KRNdeif50mbNS1I
+         T2Vh5fGnlrkD9uI2OUuDhGsBCDp1+PDJFfxYyEp++YGuvmQD4MbPosBmDfqyJ1HKEI
+         HOizVDGVv1XfA==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 672EA60F5C; Fri,  8 Oct 2021 08:32:37 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214259] Discrete Thunderbold Controller 8086:1137 throws DMAR
+ and XHCI errors and is only partially functional
+Date:   Fri, 08 Oct 2021 08:32:37 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: wse@tuxedocomputers.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-214259-208809-nwLoL9RvKR@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214259-208809@https.bugzilla.kernel.org/>
+References: <bug-214259-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211006043257.23242-1-lindsey.stanpoor@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 05, 2021 at 09:32:57PM -0700, lindsey.stanpoor@gmail.com wrote:
-> From: Cameron Nemo <cnemo@tutanota.com>
-> 
-> A recent commit [1] introduced an unintended behavioral change by
-> reordering certain function calls. The sysfs_notify call for
-> pin_assignment should only be invoked when the dp_altmode_notify call
-> returns 0, and in the dp->data.conf == 0 case.
-> 
-> [1] https://lore.kernel.org/r/20210817215201.795062-8-hdegoede@redhat.com
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214259
 
-You should refer the commit, not the mail. I think you could also use
-the Fixes tag in this case, but then I guess Hans should pick this:
+--- Comment #16 from wse@tuxedocomputers.com ---
+Found a preexisteng hack originally for tb3 fixing the issue also on this t=
+b4
+controller: https://bugzilla.kernel.org/show_bug.cgi?id=3D206459#c59
 
-Fixes: fc27e04630e9 ("usb: typec: altmodes/displayport: Make dp_altmode_notify() more generic")
+--=20
+You may reply to this email to add a comment.
 
-Either way, this is OK by me, so once you have cleaned the commit
-message, please feel free to include my:
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> Signed-off-by: Cameron Nemo <cnemo@tutanota.com>
-> ---
->  drivers/usb/typec/altmodes/displayport.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index c1d8c23baa39..a15ae78066e3 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -154,10 +154,17 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
->  
->  static int dp_altmode_configured(struct dp_altmode *dp)
->  {
-> +	int ret;
-> +
->  	sysfs_notify(&dp->alt->dev.kobj, "displayport", "configuration");
-> +
-> +	ret = dp_altmode_notify(dp);
-> +	if (ret || !dp->data.conf)
-> +		return ret;
-> +
->  	sysfs_notify(&dp->alt->dev.kobj, "displayport", "pin_assignment");
->  
-> -	return dp_altmode_notify(dp);
-> +	return 0;
->  }
->  
->  static int dp_altmode_configure_vdm(struct dp_altmode *dp, u32 conf)
-> -- 
-> 2.33.0
-
--- 
-heikki
+You are receiving this mail because:
+You are watching the assignee of the bug.=
