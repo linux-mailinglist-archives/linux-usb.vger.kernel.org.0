@@ -2,62 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B88D1427787
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Oct 2021 07:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FAE2427788
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Oct 2021 07:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232450AbhJIFa7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 Oct 2021 01:30:59 -0400
-Received: from esa.hc3962-90.iphmx.com ([216.71.140.77]:32375 "EHLO
+        id S232488AbhJIFeJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 Oct 2021 01:34:09 -0400
+Received: from esa.hc3962-90.iphmx.com ([216.71.140.77]:53280 "EHLO
         esa.hc3962-90.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbhJIFa6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Oct 2021 01:30:58 -0400
+        with ESMTP id S229596AbhJIFeI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Oct 2021 01:34:08 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
-  t=1633757342; x=1634362142;
+  t=1633757532; x=1634362332;
   h=from:to:cc:subject:date:message-id:references:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=jOhby8JcCq5evpZoTUEjuIRL3wVAwYaPJKWkVpQi1Vg=;
-  b=cqvEtoQM5PKs6XsDlMfhGHlXvuZK+zX1sJb9TBrDvtwqLPOQ2EgjdOZW
-   i6KQlcFJw2LOQJ8p+HhfMDlxsy4+Lhafjm0W+E4aqxIT6PTPqwS6585tf
-   UI1+/dcHrP/9bsDLTLYX+8qlE24rLMiS5LeCwKHpCLcCrSvd92zUgrHoB
-   U=;
-Received: from mail-bn1nam07lp2045.outbound.protection.outlook.com (HELO NAM02-BN1-obe.outbound.protection.outlook.com) ([104.47.51.45])
-  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2021 05:29:00 +0000
+  bh=+IbcSvlxfV0fWXuw25H/RFRRl9+Ain7F1/UhA4HrgJ4=;
+  b=P+JQ95lY7CkTAhKlKcA/wsXdQ5KFBusH8gl2or3AuSNwOvUkNzuK5O1L
+   ZqTXkmVDpNgYbYWOfTgaFJ4/fKZIrBreFlKVPzgwPUO7j+eaRVe9kaLMi
+   KdZ7+10VzePl0j3ROcpNkS0vOAv1qJMnbrkJ3VpBEsIHuV0ZcNQbYgjEz
+   I=;
+Received: from mail-mw2nam12lp2047.outbound.protection.outlook.com (HELO NAM12-MW2-obe.outbound.protection.outlook.com) ([104.47.66.47])
+  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2021 05:32:11 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f6DLgX9iXZ4q0fuCVAz0U4crULHD2RWzqCURMPFZnNTR+/5wNHE85yKGsEhEN5wL2u/Yed/u/3gq5fxrkdy/lf1WwxtSYg5OEB5awD8sCI3TziAJLh2zxbjrltE9NOvrx8Oq38MwNVtDKYo1JnmffKmhKb5r3HR4mEZyiiQwAkY77QYLQr4ff2hJj/JhvEZqd4kTqnWdQKc3JjqW4YVoCXy/wqcsJvdRaEwpjsMS6XZjkYnlQrHweLEjYw/pwC7RkPB+AqWA7qUHZqKbbbtiZFZBN9PBWw61GyGBY1AR4im2FJt1jHE8qCOfgJ1BV+q4xmZ0lL2iUTO3ms9xXVjbcw==
+ b=Yvk2Tc7j23/w2Q5hXJqwvwSHCOw5uoTB9B9ll+mn9ddhDFCAZpVR+wQUs8FAU+zbZRZ1u/bE9DQZROi1MFqE3AQIqPPhebHhuvQv0Nr1KGPEg6Ju4lQY4dWbjqbYD0SOecjqf+Wo3287Ia6+DxgJ93rfdYm01Fy/Qr4FwFtfmrJ0RGcs/hZt2cY1bq/NPKk4EbVpwwJAtWAGx4kna2BwtZkgbq0LTk7dMJAx/xEkZltxfWa89R/6M9A0aZvg+C2nwLhBCAzfCukjeBiwz+HnTSzg9BURFInOos+RAkLx39g6i6UeDkajT390nk8BG3JsNBZbyiLB5qTnt1+AIUHLCA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jOhby8JcCq5evpZoTUEjuIRL3wVAwYaPJKWkVpQi1Vg=;
- b=lbrxZRpStfUWdxSRkjzD96nGSyAikWyJCWx/+OCJMooOFLagRGSLukZrsy5Vet14LtYGmaY0GQQgVqWNhVpS3zCtVYzynl0+RN6mJ+cqyKxB27YSQGRXaqq1zjmH4ioA/OvJIn0VW0Tb342oDAdF5KfMH3YjwBG06nl4n5eMihG7hcMpkxVL484Bx/L2KMxENdgnf5e9qeRfqwJ1MV98CCyywkpd+/Aq8Jg/G45KqHgyhvHfZmTBsW0YGGh0w7MJY9oN1UrZdrBzDeERvEqpvpYHBIGxHu7ffcFf/04tJ2kQUhnwlc89CzoB4GtexTtrRaFCmEH2aUX7WBzbFI5C6A==
+ bh=+IbcSvlxfV0fWXuw25H/RFRRl9+Ain7F1/UhA4HrgJ4=;
+ b=aaydtjxAfNkEapsymEksg6zgxzJrmQ3r/cqRzLoJ/0exzfwppcMM44s4ojoqViKlGaPB7w2OFAwTK6rGRDGH3R4HjuTir4YJ3SdLj/MrTJM40DEMQw373sYGJKAkD1/UtjeRN9oJzOchC0tHBREl+xcBgh/7xX3VOObru8QQvy5pTCQLbrCag4GXPdBIJUUWE3VMh0WPhR2pIdJBAKQwuRoMNTi/INnrDjRzVod7wqnFofww21vHxw1GJFZMrmG7u3X1JLxv/OsIfQXjuQUyl8hAqx6rmH8jSWzGzNUkakSmABE442rK8FQjGv49I0GdsTB48ywGhIOJpiUzetMaEw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
  dkim=pass header.d=quicinc.com; arc=none
 Received: from BL3PR02MB8201.namprd02.prod.outlook.com (2603:10b6:208:338::17)
- by BL0PR02MB3828.namprd02.prod.outlook.com (2603:10b6:207:44::19) with
+ by MN2PR02MB7023.namprd02.prod.outlook.com (2603:10b6:208:1f6::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.22; Sat, 9 Oct
- 2021 05:28:56 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.20; Sat, 9 Oct
+ 2021 05:32:10 +0000
 Received: from BL3PR02MB8201.namprd02.prod.outlook.com
  ([fe80::51fb:e0d:4b5e:4cfd]) by BL3PR02MB8201.namprd02.prod.outlook.com
  ([fe80::51fb:e0d:4b5e:4cfd%6]) with mapi id 15.20.4587.024; Sat, 9 Oct 2021
- 05:28:56 +0000
+ 05:32:10 +0000
 From:   "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
 CC:     Felipe Balbi <balbi@kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v5 1/3] usb: gadget: configfs: avoid list move operation
- of usb_function
-Thread-Topic: [PATCH v5 1/3] usb: gadget: configfs: avoid list move operation
- of usb_function
-Thread-Index: AQHXo4UNlBSIOyDIIUmvyeFQTj9v7avE4aQAgAVw6/A=
-Date:   Sat, 9 Oct 2021 05:28:56 +0000
-Message-ID: <BL3PR02MB820103E260254CF9D4C9998EE3B39@BL3PR02MB8201.namprd02.prod.outlook.com>
+Subject: RE: [PATCH v5 2/3] usb: gadget: configfs: add gadget_info for config
+ group
+Thread-Topic: [PATCH v5 2/3] usb: gadget: configfs: add gadget_info for config
+ group
+Thread-Index: AQHXo4UPZ39IA5lPR0GzDl81LhwHi6vE4ewAgAV0OVA=
+Date:   Sat, 9 Oct 2021 05:32:10 +0000
+Message-ID: <BL3PR02MB820185D5B6241EECC055ACF9E3B39@BL3PR02MB8201.namprd02.prod.outlook.com>
 References: <1630976977-13938-1-git-send-email-quic_linyyuan@quicinc.com>
- <1630976977-13938-2-git-send-email-quic_linyyuan@quicinc.com>
- <YVwywFfe/x8OEHh8@kroah.com>
-In-Reply-To: <YVwywFfe/x8OEHh8@kroah.com>
+ <1630976977-13938-3-git-send-email-quic_linyyuan@quicinc.com>
+ <YVwy/AHW2jfeGRnl@kroah.com>
+In-Reply-To: <YVwy/AHW2jfeGRnl@kroah.com>
 Accept-Language: zh-CN, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -67,156 +67,101 @@ authentication-results: linuxfoundation.org; dkim=none (message not signed)
  header.from=quicinc.com;
 x-ms-exchange-messagesentrepresentingtype: 1
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0c1ef71e-4711-49f7-849b-08d98ae5b0bb
-x-ms-traffictypediagnostic: BL0PR02MB3828:
+x-ms-office365-filtering-correlation-id: 3873e8e4-488c-4b20-14a2-08d98ae62405
+x-ms-traffictypediagnostic: MN2PR02MB7023:
 x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BL0PR02MB382862716ECF1B01FBA9CBEE9FB39@BL0PR02MB3828.namprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-microsoft-antispam-prvs: <MN2PR02MB7023279132FA65BE4E335FE59FB39@MN2PR02MB7023.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1824;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: AwaFpkfeg0h3JT4LQjyozC6vuzrduNION8IN2xoipQ4QwELTUj4Cjb3pEcmIdKrWyPcJMwWorMarvWtKzt4stX0G8e4v19eEIccnLhkvB61CMlRVhkJqemwqvKRLAt1/EDt5EqZsA+kLLHisSA1H2aaiWYeHo2ljAt64ZPkwzkgQxvNf+sD70zRQTRXLKHXC4rHxn9qrkTTnFxKHs0tjN+fEZkgdRB/m4s1WExXi/dSTVG94BAhkSWrDhwi3z+QVJ7g6ePod6S4fuxzl69iVXh0dUdnPlGcLKKuUFdpFy9WQ+DBVCCY+fuUVsjZjPq1QGaaofoJH9vFo0Ts/ZEVyOOHiEx1+A2aZXIyQ4CJOWeC5+yZ4mbzqZpl66wj2gOZU7N/Or6UYAhR2yakHclTR+6UvX7E6uUinehjZtJGs9AbECMQNmn/Ts4iuvsvThiPNzv0r+xowKEd6WlMnXUWAmJXz1A6mFmU7shfUr+m7CJtAKzRvxTdHRiau+XwRD4t5L6bn7jNp/he7E/zTEP6xIhkd6a0zguqzeuvhuRULQ9ZlrsBwNkyvfB1K4XQnsN/UF5f7t7rYsGdyXLJ0JPZBg14GtDF4J2sGZx7NuWNCKn30MxuvPqyviAGpeCQAi61AZO8OqDE0f9mXIEcvYMKBjFTvdio1p9iux/DaSCZ2rERS1Rm8P3Ixbnp+1rwd4mmLHqNLs5ccDT/H1XIUC1tW3g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL3PR02MB8201.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66476007)(71200400001)(5660300002)(110136005)(66556008)(64756008)(66446008)(76116006)(38070700005)(66946007)(7696005)(508600001)(54906003)(8936002)(9686003)(6506007)(38100700002)(86362001)(52536014)(26005)(55016002)(122000001)(4326008)(8676002)(186003)(83380400001)(53546011)(316002)(33656002)(2906002);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: XGx22Lsklf+3nwpUKsHgkFp74xaciTi8QKl7EpFhhvW3zaGeVnCqvk0LTXgJZyJakX4giosrBe97oVOTbd3CXzMzRs178o4L2aFxYa+KOEqmbOh7XYm5ESSAGLAx7kbfoAmLJsP0PYKm+iLYeTPWtkqGWSJrgIrFlt0BntjqdWuonuV+LogiOloNdVmpjPk9C5BJMYP3m1z9nbxjw/WVAPSXMwcIDZEDQF5/Ve0hwCp8ISoBVNF1lIZbtrmEpz5kcrzg1w3mU7t/1s6Pq4fO5TDo14T8dl9weHf4Pi+kJU14cbWV9f76pPhNSKEXRueGKtPKIWZ1cRh8AoWkeKRuOfJDzBgycfUsxUFnQzoQsyyKhUnUp6tHavMOUkvDmDRw1W3VBR00GlY6bPN2ZY552Pd9D5xEaACpDsynnLfYRA53rym6UAIgrBuqV/NLyT+s7HCDHRGPdN8pu4oi/5vJDJdNB18/OKQ20UiZcbvfxsKxTJQUe3gIBZxHJ3HRSGh/s2LuJaczuwS2XEJxe0UKY/f+YvOUgkBn/cdzKiQqOMyxej+alOmxli8x02427jBEMq3iULySd6DQnFD9Oljg9pOrvBbM8U91bX6TYsI+J1w2DdVyI1PPgx0U0S9aRZEG7cEdjxLgC4GaWTQ2obbX4Vm1eTW7GQiTwS44BJzmhjrFwP6AArF4lLrx6stsJahc4CnXG1wgNgqc4y4J50p5NA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL3PR02MB8201.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66476007)(38100700002)(66446008)(4326008)(6506007)(122000001)(110136005)(54906003)(66946007)(53546011)(76116006)(66556008)(8676002)(316002)(64756008)(33656002)(8936002)(86362001)(55016002)(52536014)(7696005)(83380400001)(5660300002)(38070700005)(9686003)(186003)(508600001)(71200400001)(26005)(2906002);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?q3IDlHKPAgaBQo0dASfXZSQT5dP6fytxiT27oNw2hBjwnmhzlUrbfl/HFoRe?=
- =?us-ascii?Q?2xR+XFSMSYYmwUna314JUcMLvCQRKAl9QxxtW8KCw939PpniGtRdrUucRbjs?=
- =?us-ascii?Q?96NZCenzOicW6/lnet5c1FL1a2WcMo0sJW0ZnmGZCpOPi1ATqvPh4IBSuI/n?=
- =?us-ascii?Q?CWLtgmDHZaGvdvjXWuWy6uu0iXtFoUGmlMLtzyKceJmPC4L5fzUHEpHMq4ks?=
- =?us-ascii?Q?VbWuFW5nMEsykJrXzVWyq9E6HFJ5CvQ6FHECVjMsy9vLJpI5kAfgGDIfx7N2?=
- =?us-ascii?Q?YdG1VHUaHbmhsz1UPwtCqW4cq10x6GXiFtlcv6E29k91MJpdTfgfeoJbPBaU?=
- =?us-ascii?Q?CfJQrFBPGuGoqgAqxYzM96X1f6V4D9+n3uSGrGgA80Zo7pjC2d07ZX9vIKFX?=
- =?us-ascii?Q?MDVnwqE/KgNWEpCJ+CHi+RfqzMdRsEyL36lSx5cA5lAnQp04IV0nFyG2EVmi?=
- =?us-ascii?Q?/KrVt39dnV3lrlKuK8WzjbD7PJE2VVZ0vGeDvYfe4EuM1DAIvUdHJlSYuCxd?=
- =?us-ascii?Q?GEFZabS4K/CA9rG3Se17X/y5uLswtzNeJRPQ41phtwY4XOwQo7/M+7tBLJyq?=
- =?us-ascii?Q?7oG47cPyj2iKy7995OMtMA+hxC+gZAaURPeYDjMvWF9dRTMf/x48o9Ywad0j?=
- =?us-ascii?Q?+rKsXTTc+KHHQVS7/hbiFZ5+OeUIFT1BZBd/9V72T2n0ce9WeUOh9ePmd2qq?=
- =?us-ascii?Q?AJpytMot2BrKmRgjHxEFThmDa1ICQn5DjQiFsLo1H+JW1/dp4nhfB1FnbKEB?=
- =?us-ascii?Q?Ivure51tmuMQBmJfhzRJR19R2IQbRkavmUZbrbX336PtumPPM5YJrofFDh0r?=
- =?us-ascii?Q?3SCuxHBy1TAz6A3sS+WKs6CEMeCdng0E8vnBqCAd6QwQJJCxPO/9vSU04Ist?=
- =?us-ascii?Q?2wZZN17zRliL3g7o9b7eWF4YNqM+RsJHG7zHdCUWc6BgLTj/fNGhM9RIqZht?=
- =?us-ascii?Q?rz081RtqX3dj74NoNbfr4Zstq8anF9AfxAy7bOUkgNr0jNVV1d32Kjzt9L8i?=
- =?us-ascii?Q?ZoAZK8WdpPqpb10b2718aN+Pxl6P6vI/eTgSg7Z98kPyfJLHqU7jmt4Kivvn?=
- =?us-ascii?Q?unXb0eEarfgTzlBfaOgJSbp0EK1C6TXDgvG/prhchBz2yrdpSJhzxH74IszT?=
- =?us-ascii?Q?Tji4db0ZBHjTYD5GGJrhRl4gyisZCU3QKOrcCwRBBu2e1ihK0Yh5zPVZjPW9?=
- =?us-ascii?Q?fRDSsp9H0GdD3PwIAV51ourI46x1sbPWtyFSydeb4mwpt0RtKoqwdW6+vtIt?=
- =?us-ascii?Q?fB6w4wfIwEhlq4tqwVcQBmn7FOcz3cwRvt4BaAOptLAo2qez6P0PaScGZ897?=
- =?us-ascii?Q?xZE=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?VAVPQIUtttaViutB7KHlZGzCsUgqqOeyZo5aFOq1L1aI55HaOiAylUHuXy9m?=
+ =?us-ascii?Q?nLf8UFSpvXIrR5ebzYxrMy/QS4iD8kM3/v/7cLPt8mj4LskGcN52n9Tvkzv9?=
+ =?us-ascii?Q?+zt1z5qwuCcd0kSv4Rv5ra8Ui3FbevUMjCvqhM/gNrGgcQat8ZW22i+0Ph4m?=
+ =?us-ascii?Q?oICxIqPM+gbuLB9rI8EppDkcm2xMDx1CP+51sAU4tbVDmbvRN1/pSGK0V49z?=
+ =?us-ascii?Q?vCnZIs4561bUHV+JftIVvTTWIkwUkZ5sAzFrXt93UkK3Iw1Io8NOcJGgrcpH?=
+ =?us-ascii?Q?pF6KPtJsIFp3E3Vlr5+IM2T6ZZ1C5PyDlySVhzPnWwyq6M1t8npVrXCbWESV?=
+ =?us-ascii?Q?vL8dzPXwwXPDPePmoGhD50nTSCWQibq5OTezXJgXUCVuDzLnkP3St+HflfqE?=
+ =?us-ascii?Q?MvblwlpW7W+KIuRf9rDh4b3/Toz6/DXKRN55nqMJGx/yM8pvf159YKyY50K+?=
+ =?us-ascii?Q?Ou+q3qqUlEvxrO2L7u0qk9eefk7Oe4po40h9spPsUVREzqA0X3dS8Yg8AGaK?=
+ =?us-ascii?Q?tsBHhusKpFCsP1+4k3ihvjoE+xqv7ii250XNBYGpeTVowOMK8Gwm2VdvtI9v?=
+ =?us-ascii?Q?NUv591vVhJv/Lv3xiovaPh3vcjhOS0SIDFqa1RfK9eNv0HYDHZqKxxdcbaHo?=
+ =?us-ascii?Q?Jo8EXRGduxxmP8t/+mhI6lZMOUk86vNvBp4bGbSsmQ1ROwuXnnGsswe3gV3z?=
+ =?us-ascii?Q?uH834p5O3iYvsXa0j2cD1FIKEP2PL5mAhLiEk8pwk7tKLoPEMo2mUJ1VhurP?=
+ =?us-ascii?Q?YS6FUJxE5aPwyZL/DQdpLAbBuWqP6xeFlgRrvJ7hLcITv7SDGjD83GF/QSrs?=
+ =?us-ascii?Q?iFyn2aUrDWTkOOY9EeKVIaQZTdIx5swLIv0q9EszSJbSnfBIkomD5lzbS+EO?=
+ =?us-ascii?Q?Fv/kH2WllTTpBMm5RHkSDMbxCpK0otTzZmfuSoUjbIEdUeNPGv3+ZMn+W1T9?=
+ =?us-ascii?Q?TxS0zU1GYQZnQysrDQ7qA+v+rkMS47R8TF286i7ip7rDf59cS+XmFDB78Hr/?=
+ =?us-ascii?Q?JBxwi5cV77Xd/MMPMTGeZhCgPOemopTSQfO3CFutLaVASShdsf79OtSKFPel?=
+ =?us-ascii?Q?yL/CcEaQvu1T/Pp7zHHxm7jpLViK8IHY15ZG1DCP0zYppZdtVEUxu+iSehzJ?=
+ =?us-ascii?Q?2VvYtUDAxM+Ny7W+yVP+b5BuoZZwKxfVLbakGi+sZYc0aWNzjtENZDHdRhnZ?=
+ =?us-ascii?Q?qQm5CSj4FpeMCj/i03hSeXZ4zlcwFZlkW6gkXj6u2VfV2Yg9ndE114miweCm?=
+ =?us-ascii?Q?EG8OID4hWyAN4WmxX9WRrjXlDNyqBQq6h1VFNUpj+dkQkjsZ5877PDz+y+4K?=
+ =?us-ascii?Q?HUE=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: quicinc.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BL3PR02MB8201.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c1ef71e-4711-49f7-849b-08d98ae5b0bb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Oct 2021 05:28:56.6201
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3873e8e4-488c-4b20-14a2-08d98ae62405
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Oct 2021 05:32:10.0641
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qM3zJJA6M+FjdnsMU0IV4Q3IkMLxg0ZcbnV9kIZ795aGJjqwoVBmMUIqvdFGz2xRe5mEENd7T8P433j+azu2iO+LGqnm6hnl4ttbNq6to/U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB3828
+X-MS-Exchange-CrossTenant-userprincipalname: tJpnl4ae6TYLMWUeUXZV/gvZRMA5ZyiBCKYvUwfn3pLAg/FUsFkisoPqu39K2mRpPB7ykHX1HNTgrVAiK9fpakWtn1rxF8Y35RM8898MIg4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR02MB7023
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Sent: Tuesday, October 5, 2021 7:11 PM
+> Sent: Tuesday, October 5, 2021 7:12 PM
 > To: Linyu Yuan (QUIC) <quic_linyyuan@quicinc.com>
 > Cc: Felipe Balbi <balbi@kernel.org>; linux-usb@vger.kernel.org
-> Subject: Re: [PATCH v5 1/3] usb: gadget: configfs: avoid list move operat=
-ion
-> of usb_function
+> Subject: Re: [PATCH v5 2/3] usb: gadget: configfs: add gadget_info for co=
+nfig
+> group
 >=20
-> On Tue, Sep 07, 2021 at 09:09:35AM +0800, Linyu Yuan wrote:
-> > add a new list which link all usb_function at configfs layers,
-> > it means that after link a function a configuration,
-> > from configfs layer, we can still found all functions,
-> > it will allow trace all functions from configfs.
+> On Tue, Sep 07, 2021 at 09:09:36AM +0800, Linyu Yuan wrote:
+> > add gadget_info pointer in struct config_usb_cfg
+> > to allow common gadget info trace from configfs layer.
 >=20
-> I am sorry, but I do not understand this paragraph.  Can you try
-> rewording it?
-Thanks, will update next version.
+> Again, I do not understand this description, can you please try to
+> reword it?
 >=20
 > >
-> > Reported-by: kernel test robot <lkp@intel.com>
->=20
-> How did the kernel test robot report this?  You are adding a new
-> function here, it is not a bug you are fixing, right?
-Thanks, will remove next version.
->=20
->=20
 > > Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
 > > ---
-> > v2: fix unused cfg variable warning
-> > v3: add struct inside configfs.c
+> > v2: no change
+> > v3: change struct inside configfs.c
 > > v4: no change
-> > v5: lost v2 fix, add it again
+> > v5: no change
 > >
-> >  drivers/usb/gadget/configfs.c | 55 ++++++++++++++++++++++++----------
-> ---------
-> >  1 file changed, 31 insertions(+), 24 deletions(-)
+> >  drivers/usb/gadget/configfs.c | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
 > >
 > > diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configf=
 s.c
-> > index 477e72a..5b2e6f9 100644
+> > index 5b2e6f9..cea12c3 100644
 > > --- a/drivers/usb/gadget/configfs.c
 > > +++ b/drivers/usb/gadget/configfs.c
-> > @@ -58,6 +58,11 @@ static inline struct gadget_info
-> *to_gadget_info(struct config_item *item)
-> >  	return container_of(to_config_group(item), struct gadget_info,
-> group);
-> >  }
-> >
-> > +struct config_usb_function {
-> > +	struct list_head list;
-> > +	struct usb_function *f;
-> > +};
+> > @@ -70,6 +70,7 @@ struct config_usb_cfg {
+> >  	struct usb_configuration c;
+> >  	struct list_head func_list;
+> >  	struct usb_gadget_strings *gstrings[MAX_USB_STRING_LANGS + 1];
+> > +	struct gadget_info *gi;
 >=20
-> What lock protects this list?
-Currently like string list, there is no protection method,
-I guess original author hope it can protect by following lock,
-struct gadget_info {
+> You add a pointer, where are you removing it?
+Currently configfs layer seem do nothing when configfs drop of config group=
 ...
-	struct mutex lock;
-};
->=20
-> > +
-> >  struct config_usb_cfg {
-> >  	struct config_group group;
-> >  	struct config_group strings_group;
-> > @@ -420,7 +425,7 @@ static int config_usb_cfg_link(
-> >  	struct usb_function_instance *fi =3D container_of(group,
-> >  			struct usb_function_instance, group);
-> >  	struct usb_function_instance *a_fi;
-> > -	struct usb_function *f;
-> > +	struct config_usb_function *cf;
-> >  	int ret;
-> >
-> >  	mutex_lock(&gi->lock);
-> > @@ -438,21 +443,29 @@ static int config_usb_cfg_link(
-> >  		goto out;
-> >  	}
-> >
-> > -	list_for_each_entry(f, &cfg->func_list, list) {
-> > -		if (f->fi =3D=3D fi) {
-> > +	list_for_each_entry(cf, &cfg->func_list, list) {
-> > +		if (cf->f->fi =3D=3D fi) {
-> >  			ret =3D -EEXIST;
-> >  			goto out;
-> >  		}
-> >  	}
-> >
-> > -	f =3D usb_get_function(fi);
-> > -	if (IS_ERR(f)) {
-> > -		ret =3D PTR_ERR(f);
-> > +	cf =3D kzalloc(sizeof(*cf), GFP_KERNEL);
->=20
-> Why "kzalloc" and not "kmalloc"?
-Thanks, will change next version.
->=20
-> I don't understand why you are moving everything to a single list in the
-> system, what is wrong with the existing per-device one?
+(it assume the configuration group will not remove)
+Need to test rmdir operation  and send patch if possible later.
 >=20
 > thanks,
 >=20
