@@ -2,121 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 218F3427282
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Oct 2021 22:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138CF427589
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Oct 2021 04:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243150AbhJHUta (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Oct 2021 16:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243035AbhJHUt3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Oct 2021 16:49:29 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B57C061762
-        for <linux-usb@vger.kernel.org>; Fri,  8 Oct 2021 13:47:33 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id c26-20020a056830349a00b0054d96d25c1eso13079111otu.9
-        for <linux-usb@vger.kernel.org>; Fri, 08 Oct 2021 13:47:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XCq1DA6NhRqrCVulTyM8OJLjSTK+m3+KuoXtzUSU6LQ=;
-        b=onJiWfBlJjFN9/Ye0SfNxBF5RxjZJGkc9neHnkau/l7O3EPG5Nvx1l4HT1pgi77hc9
-         DzGBWoCyoVCw8/jIFCLJY73dAHVmWKMLjxXTdbp5LGxVdTl42kLfOhLKGoI/HdFWIRC0
-         Aa/qd16mg81VXFZjX/TM3lQoQA4j9yqIoXUYjLwAxlH0vf4F0MOinbINk3U7DZPM2ht3
-         HXho0Yt/CmDdiIsq/8HtcNTy4u9mSOCSMVhoc4dFYdsxz1xlPf9YR+GMIdFVldf+Jktg
-         4pPrpJdXTbIY+SYSHjAWZ32coKzrwIuSyd0ji6aW78fgjQrX3WZtymycOspN2/h1v/eQ
-         Eufg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XCq1DA6NhRqrCVulTyM8OJLjSTK+m3+KuoXtzUSU6LQ=;
-        b=ib/vbDo7eUddv3RuHZ+1fOyk488gfbxm+m3KGucb4gTcbsJkxO+ZgOqF8Bz3ztQhJW
-         6VFgQqXI8M3wC0n+WDsfZ17ijb7o0xHVb15pdNhz8IYG1llcHnvBuPiyQnoLsKd4xr3b
-         CDvtIbEljvookmLttqD025DcAamPzCh9MTCoCOk32Zfdz2+OdwahpJ0iyZxYLnuNO5o0
-         vEZ6bBqrVUv10I6AhwhoJsjWBVIH2N8hHmnDZiIpnXJQEGtUhwlo4h1LLR8dBJqehnM3
-         ax1NPu0mN0+Fm1fwbaMzEVgg9GhIXcgkcBzps06Ov68/ZxBCjM0FdTTzLSwkEsM90HSv
-         HGoQ==
-X-Gm-Message-State: AOAM532RfeQTZi+o/QkGwTngd4wMnjS+mbj9B9DGcXEzQTqFm+Sy98sJ
-        cGmumgQF2DOCn0s9xhO9wZS9oyNEy3M=
-X-Google-Smtp-Source: ABdhPJxF0QpbBXEnDOebWTU6OnlrWoDY3jlDvxX7eGTJlEux3la+tKQP0fpRmwTIvC4VjupgFPO66A==
-X-Received: by 2002:a9d:705e:: with SMTP id x30mr10166974otj.221.1633726052678;
-        Fri, 08 Oct 2021 13:47:32 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u12sm91417otq.20.2021.10.08.13.47.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Oct 2021 13:47:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Gianni Pisetta <gianni.pisetta@gmail.com>,
-        linux-usb@vger.kernel.org
-Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        stable@vger.kernel.com
-References: <20211008201455.8739-1-gianni.pisetta@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] usb: typec: tcpm: ignore data role mismatch with a
- GoodCRC Message
-Message-ID: <7d81a8ef-faa1-f8a6-cccc-493cc8bff085@roeck-us.net>
-Date:   Fri, 8 Oct 2021 13:47:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S232107AbhJICD2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Oct 2021 22:03:28 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:46442 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231947AbhJICD1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 8 Oct 2021 22:03:27 -0400
+Received: from [10.180.13.128] (unknown [10.180.13.128])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxH2v192BhVdwWAA--.34518S2;
+        Sat, 09 Oct 2021 10:01:26 +0800 (CST)
+Subject: Re: [PATCH v3] usb: ohci: add check for host controller functional
+ states
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <greg@kroah.com>,
+        Patchwork Bot <patchwork-bot@kernel.org>
+References: <1633677970-10619-1-git-send-email-zhuyinbo@loongson.cn>
+ <20211008142639.GA721194@rowland.harvard.edu>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <7a505fc4-ec47-ac83-633f-7a5251bd5f82@loongson.cn>
+Date:   Sat, 9 Oct 2021 10:01:25 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20211008201455.8739-1-gianni.pisetta@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+In-Reply-To: <20211008142639.GA721194@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf9DxH2v192BhVdwWAA--.34518S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWw4kZr15Wry8Kry8Zw18Krg_yoWrtFW5pF
+        4Skw43KryUJr109r17trn7JF9Ykw4xJ34UGa4Ika4Utrs0q34IqryIgFWj93Z5XrWfK3W2
+        vF1jqrWUu3WDAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjc
+        xK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
+        r21lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
+        AVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+        CY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv
+        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf
+        9x07bOoGdUUUUU=
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/8/21 1:14 PM, Gianni Pisetta wrote:
-> The data role check in tcpm.c cause the port manager to enter a loop with a
-> hard reset on some chargers.
-> By the spec in a GoodCRC Message the other end does not need to comply with
-> the data role, so ignore a data role mismatch in a request when the message
-> type is GoodCRC.
->>From the USB PD spec:
-> "If a USB Type-C Port receive a Message with the Port Data Role field set
-> to the same Data Role, except for the GoodCRC Message, USB Type-C error
-> recovery..."
-> 
-> Below are the log of a Pinebook Pro attached to a PinePower Desktop Supply
-> before the patch:
-> 
-> [226057.970532] state change SNK_DISCOVERY -> SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
-> [226057.975891] pending state change SNK_WAIT_CAPABILITIES -> SNK_READY @ 310 ms [rev3 NONE_AMS]
-> [226058.134384] PD RX, header: 0x53a1 [1]
-> [226058.134389] Data role mismatch, initiating error recovery
-> [226058.134392] state change SNK_WAIT_CAPABILITIES -> ERROR_RECOVERY [rev3 NONE_AMS]
-> [226058.134404] state change ERROR_RECOVERY -> PORT_RESET [rev3 NONE_AMS]
-> 
-> Fixes: f0690a25a140b
-> cc: <stable@vger.kernel.com>
-> Signed-off-by: Gianni Pisetta <gianni.pisetta@gmail.com>
-> 
-> ---
->   drivers/usb/typec/tcpm/tcpm.c | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 5d05de666597..02ebf7e03c41 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -2887,11 +2887,11 @@ static void tcpm_pd_rx_handler(struct kthread_work *work)
->   
->   		/*
->   		 * If both ends believe to be DFP/host, we have a data role
-> -		 * mismatch.
-> +		 * mismatch. Must perform error recovery actions, except for
-> +		 * a GoodCRC Message(USB PD standard, 6.2.1.6).
->   		 */
-> -		if (!!(le16_to_cpu(msg->header) & PD_HEADER_DATA_ROLE) ==
-> -		    (port->data_role == TYPEC_HOST)) {
-> +		if (!!((le16_to_cpu(msg->header) & PD_HEADER_DATA_ROLE) ==
-> +		       (port->data_role == TYPEC_HOST) && type != PD_CTRL_GOOD_CRC)) {
 
-Unless I am missing something, this could also be a PD_DATA_SOURCE_CAP
-or PD_EXT_SOURCE_CAP_EXT message.
+在 2021/10/8 下午10:26, Alan Stern 写道:
+> On Fri, Oct 08, 2021 at 03:26:10PM +0800, Yinbo Zhu wrote:
+>> The usb states of ohci controller include UsbOperational, UsbReset,
+>> UsbSuspend and UsbResume. Among them, only the UsbOperational state
+>> supports launching the start of frame for host controller according
+>> the ohci protocol spec, but in S3/S4 press test procedure, it may
+> Nobody reading this will know what "S3/S4 press test procedure" means.
+> You have to explain it, or use a different name that people will
+> understand.
+okay, I got it.
+>> happen that the start of frame was launched in other usb states and
+>> cause ohci works abnormally then kernel will allways report rcu
+>> call trace. This patch was to add check for host controller
+>> functional states and if it is not UsbOperational state that need
+>> set INTR_SF in intrdisable register to ensure SOF Token generation
+>> was been disabled.
+> This doesn't make sense.  You already mentioned that only the
+> UsbOperational state supports sending start-of-frame packets.  So if the
+> controller is in a different state then it won't send these packets,
+> whether INTR_SF is enabled or not.
+>
+> What problem are you really trying to solve?
 
-Guenter
+Only UsbOperational state supports sending start-of-frame packets, but 
+in fact, in S3/S4 press test procedure,
+
+usb in non-UsbOperational state that send start-of-frame packets but hc 
+driver doesn't deal with this frame. and hc will
+
+allways lauched the SOF for finishing the frame, the cpu will hand this 
+sof interrupt and doesn't deal with time interrupt
+
+that will cause rcu call trace then system doesn't suspend to memory/disk.
+
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> ---
+>> Change in v3:
+>> 		Rework the commit information.
+>> 		Move the patch code change to lower down position in ohci_irq.
+>>
+>>
+>>   drivers/usb/host/ohci-hcd.c | 13 ++++++++++---
+>>   1 file changed, 10 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
+>> index 1f5e693..87aa9bb 100644
+>> --- a/drivers/usb/host/ohci-hcd.c
+>> +++ b/drivers/usb/host/ohci-hcd.c
+>> @@ -879,7 +879,8 @@ static irqreturn_t ohci_irq (struct usb_hcd *hcd)
+>>   {
+>>   	struct ohci_hcd		*ohci = hcd_to_ohci (hcd);
+>>   	struct ohci_regs __iomem *regs = ohci->regs;
+>> -	int			ints;
+>> +	int			ints, ctl;
+>> +
+> Extra blank line not needed.
+>
+>>   
+>>   	/* Read interrupt status (and flush pending writes).  We ignore the
+>>   	 * optimization of checking the LSB of hcca->done_head; it doesn't
+>> @@ -969,9 +970,15 @@ static irqreturn_t ohci_irq (struct usb_hcd *hcd)
+>>   	 * when there's still unlinking to be done (next frame).
+>>   	 */
+>>   	ohci_work(ohci);
+>> -	if ((ints & OHCI_INTR_SF) != 0 && !ohci->ed_rm_list
+>> -			&& ohci->rh_state == OHCI_RH_RUNNING)
+>> +
+>> +	ctl = ohci_readl(ohci, &regs->control);
+>> +
+> Blank lines not needed.
+>
+>> +	if (((ints & OHCI_INTR_SF) != 0 && !ohci->ed_rm_list
+>> +			&& ohci->rh_state == OHCI_RH_RUNNING) ||
+>> +			((ctl & OHCI_CTRL_HCFS) != OHCI_USB_OPER)) {
+>>   		ohci_writel (ohci, OHCI_INTR_SF, &regs->intrdisable);
+>> +		(void)ohci_readl(ohci, &regs->intrdisable);
+>> +	}
+> This is definitely wrong.  You must not turn off SF interrupts when
+> ed_rm_list is non-NULL.  If you do, the driver will not be able to
+> finish unlinking URBs.
+>
+> Alan Stern
+
+Hi Alan Stern,
+
+     even though ed_rm_list is non-NULL, if hc in non-UsbOperation state 
+set SoF status in usbsts register that is illegal,
+
+at this time hcd doesn't need care URB whether finished,  because hc had 
+into a wrong state. even thoug it doesn't has this patch,
+
+URB was not be able to finish when hc in above worng state. except 
+software can intervence this wrong state. but the SoF bit of usbsts
+
+register was set by HC, and this action will happen always !!! software 
+clear SoF state I think it isn't make sense. software only disable SoF
+
+interrupt to fix HC wrong state.
+
+       In additon, when kernel include my patch, that it does't happen 
+about what you descriped that driver will not be able to finish 
+unlinging URBs.
+
+Because above issue happen in S3/S4(Suspend to disk/Suspend to mem) test 
+procedure, if ed_rm_lis is no-NULL but my patch disable SoF interrupt.
+
+then when S3/S4 recovery to cpu idle state that usb resume will be 
+called, reume function has following logic, URB will continue to be 
+processed.
+
+       static int ohci_rh_resume (struct ohci_hcd *ohci)
+
+      {
+
+         ...
+
+         242         if (ohci->ed_rm_list)
+         243                 ohci_writel (ohci, OHCI_INTR_SF, 
+&ohci->regs->intrenable);
+
+        ...
+
+       }
+
+BRS,
+
+Yinbo Zhu.
+
