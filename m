@@ -2,60 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2FE3427966
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Oct 2021 13:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B797F427D26
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Oct 2021 21:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238806AbhJILUH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 Oct 2021 07:20:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44394 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232413AbhJILUH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 9 Oct 2021 07:20:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BB40060F6E;
-        Sat,  9 Oct 2021 11:18:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1633778290;
-        bh=u+T2URSeKvvUkGwYGntQux2WgX9PNNIpVRX7fSEdBBo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LNVfs00KSx/2yFKvN1uwob61/nOAuteTeWJNG7icV+/tMuerFmn7z7BWr+s++HpLd
-         gx1WbqAGKBc7FI0zS1RrR2MXFtFU077HKxK0DxGuQDIHQWrE8EUe+QZEfqMnHq8GK8
-         yGCwN/DPmEmbr/KE2wrHyqllp2VnEnv1vepV/Zik=
-Date:   Sat, 9 Oct 2021 13:18:07 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     syzbot <syzbot+cf1553a86d1962a0c79f@syzkaller.appspotmail.com>
-Cc:     hadess@hadess.net, johan@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, m.v.b@runbox.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: global-out-of-bounds Read in usb_match_device
-Message-ID: <YWF6b/evdTe9Q3z9@kroah.com>
-References: <00000000000046faa305cde9998e@google.com>
+        id S229926AbhJITlA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 Oct 2021 15:41:00 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:50935 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S229558AbhJITk7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Oct 2021 15:40:59 -0400
+Received: (qmail 754485 invoked by uid 1000); 9 Oct 2021 15:39:01 -0400
+Date:   Sat, 9 Oct 2021 15:39:01 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     zhuyinbo <zhuyinbo@loongson.cn>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <greg@kroah.com>,
+        Patchwork Bot <patchwork-bot@kernel.org>
+Subject: Re: [PATCH v3] usb: ohci: add check for host controller functional
+ states
+Message-ID: <20211009193901.GA753830@rowland.harvard.edu>
+References: <1633677970-10619-1-git-send-email-zhuyinbo@loongson.cn>
+ <20211008142639.GA721194@rowland.harvard.edu>
+ <7a505fc4-ec47-ac83-633f-7a5251bd5f82@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <00000000000046faa305cde9998e@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7a505fc4-ec47-ac83-633f-7a5251bd5f82@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Oct 09, 2021 at 04:14:26AM -0700, syzbot wrote:
-> Hello,
+On Sat, Oct 09, 2021 at 10:01:25AM +0800, zhuyinbo wrote:
 > 
-> syzbot found the following issue on:
+> 在 2021/10/8 下午10:26, Alan Stern 写道:
+> > On Fri, Oct 08, 2021 at 03:26:10PM +0800, Yinbo Zhu wrote:
+> > > The usb states of ohci controller include UsbOperational, UsbReset,
+> > > UsbSuspend and UsbResume. Among them, only the UsbOperational state
+> > > supports launching the start of frame for host controller according
+> > > the ohci protocol spec, but in S3/S4 press test procedure, it may
+> > Nobody reading this will know what "S3/S4 press test procedure" means.
+> > You have to explain it, or use a different name that people will
+> > understand.
+> okay, I got it.
+> > > happen that the start of frame was launched in other usb states and
+> > > cause ohci works abnormally then kernel will allways report rcu
+> > > call trace. This patch was to add check for host controller
+> > > functional states and if it is not UsbOperational state that need
+> > > set INTR_SF in intrdisable register to ensure SOF Token generation
+> > > was been disabled.
+> > This doesn't make sense.  You already mentioned that only the
+> > UsbOperational state supports sending start-of-frame packets.  So if the
+> > controller is in a different state then it won't send these packets,
+> > whether INTR_SF is enabled or not.
+> > 
+> > What problem are you really trying to solve?
 > 
-> HEAD commit:    89e84f946479 usb: typec: tipd: Remove FIXME about testing ..
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1638063f300000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=cd8a1eadba1e4ce4
-> dashboard link: https://syzkaller.appspot.com/bug?extid=cf1553a86d1962a0c79f
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=158c3deb300000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1190df03300000
+> Only UsbOperational state supports sending start-of-frame packets, but in
+> fact, in S3/S4 press test procedure,
 > 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+cf1553a86d1962a0c79f@syzkaller.appspotmail.com
+> usb in non-UsbOperational state that send start-of-frame packets but hc
+> driver doesn't deal with this frame. and hc will
+> 
+> allways lauched the SOF for finishing the frame, the cpu will hand this sof
+> interrupt and doesn't deal with time interrupt
+> 
+> that will cause rcu call trace then system doesn't suspend to memory/disk.
 
-Should already be fixed in my latest tree.
+I still don't understand.
 
-thanks,
+Are you saying that your OHCI controller behaves badly because it sends 
+SOF packets even when the state is different from UsbOperational?
 
-greg k-h
+> Hi Alan Stern,
+> 
+>     even though ed_rm_list is non-NULL, if hc in non-UsbOperation state set
+> SoF status in usbsts register that is illegal,
+> 
+> at this time hcd doesn't need care URB whether finished,  because hc had
+> into a wrong state. even thoug it doesn't has this patch,
+> 
+> URB was not be able to finish when hc in above worng state. except software
+> can intervence this wrong state. but the SoF bit of usbsts
+> 
+> register was set by HC, and this action will happen always !!! software
+> clear SoF state I think it isn't make sense. software only disable SoF
+> 
+> interrupt to fix HC wrong state.
+
+This problem happens when you go into S3 or S4 suspend, right?  So you 
+should fix the problem by disabling INTR_SF when the root hub is 
+suspended.  Try adding
+
+	/* All ED unlinks should be finished, no need for SOF interrupts */
+	ohci_writel(ohci, OHCI_INTR_SF, &ohci->regs->intrdisable);
+
+into ohci_rh_suspend(), just before the update_done_list() call.  If you 
+add this then INTR_SF will not be enabled during S3 or S4 suspend, so 
+the problem shouldn't occur.  Does that work for you?
+
+>       In additon, when kernel include my patch, that it does't happen about
+> what you descriped that driver will not be able to finish unlinging URBs.
+> 
+> Because above issue happen in S3/S4(Suspend to disk/Suspend to mem) test
+> procedure, if ed_rm_lis is no-NULL but my patch disable SoF interrupt.
+> 
+> then when S3/S4 recovery to cpu idle state that usb resume will be called,
+> reume function has following logic, URB will continue to be processed.
+> 
+>       static int ohci_rh_resume (struct ohci_hcd *ohci)
+> 
+>      {
+> 
+>         ...
+> 
+>         242         if (ohci->ed_rm_list)
+>         243                 ohci_writel (ohci, OHCI_INTR_SF,
+> &ohci->regs->intrenable);
+> 
+>        ...
+> 
+>       }
+
+I'm worried that your patch may disable INTR_SF even when the controller 
+has not gone into S3 or S4 suspend.  Maybe this won't cause problems, 
+but it's better to be safe and do the disable _only_ when a suspend 
+occurs.
+
+Alan Stern
