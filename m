@@ -2,133 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B797F427D26
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Oct 2021 21:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA49E427D3B
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Oct 2021 22:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbhJITlA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 Oct 2021 15:41:00 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:50935 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229558AbhJITk7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Oct 2021 15:40:59 -0400
-Received: (qmail 754485 invoked by uid 1000); 9 Oct 2021 15:39:01 -0400
-Date:   Sat, 9 Oct 2021 15:39:01 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     zhuyinbo <zhuyinbo@loongson.cn>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <greg@kroah.com>,
-        Patchwork Bot <patchwork-bot@kernel.org>
-Subject: Re: [PATCH v3] usb: ohci: add check for host controller functional
- states
-Message-ID: <20211009193901.GA753830@rowland.harvard.edu>
-References: <1633677970-10619-1-git-send-email-zhuyinbo@loongson.cn>
- <20211008142639.GA721194@rowland.harvard.edu>
- <7a505fc4-ec47-ac83-633f-7a5251bd5f82@loongson.cn>
+        id S230274AbhJIUI7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 Oct 2021 16:08:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41780 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230377AbhJIUI5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 9 Oct 2021 16:08:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 5CAAC60F9C
+        for <linux-usb@vger.kernel.org>; Sat,  9 Oct 2021 20:07:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633810020;
+        bh=/wUa10KH82FdxbB2a9r2iM3IVgL10ZE0/HG0+a3OyK8=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=braAL73Q8697OV4uUss9a2yWkar32gNOMgvXOcNmPZ0hshWw3oNcV8qQ783lwfT++
+         KDZXehgAGHD45lMMth9lOJ6kcI5Jm00pTN2hxC/lFlQ1yAzwbd4l9kJaqXev9oGXTx
+         SmstNENJgN1Zjx7p1rP/6DlXeuwtewKa/8KLlhxecEokiHoCod92oCQ46lIZc8frJJ
+         qigTIU/3YmKUFk8FJfzyhRJM/K8f/cLAJJ8qJ9eHL9UiHXvJC/5FmJ/R9VHOu7R774
+         R5f3vyOF6xOxLLnTtLqWb3LbXSY76Uwsrl8u/4CcyXDj2wczp4+XHBAru6P7E2Nkda
+         ec++QAqto60cw==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 45E7F60FC4; Sat,  9 Oct 2021 20:07:00 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 213771] ch341 USB-Serial converter receives but does not send
+Date:   Sat, 09 Oct 2021 20:07:00 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bondar.den@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-213771-208809-JWjSQHgfJ8@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-213771-208809@https.bugzilla.kernel.org/>
+References: <bug-213771-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7a505fc4-ec47-ac83-633f-7a5251bd5f82@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Oct 09, 2021 at 10:01:25AM +0800, zhuyinbo wrote:
-> 
-> 在 2021/10/8 下午10:26, Alan Stern 写道:
-> > On Fri, Oct 08, 2021 at 03:26:10PM +0800, Yinbo Zhu wrote:
-> > > The usb states of ohci controller include UsbOperational, UsbReset,
-> > > UsbSuspend and UsbResume. Among them, only the UsbOperational state
-> > > supports launching the start of frame for host controller according
-> > > the ohci protocol spec, but in S3/S4 press test procedure, it may
-> > Nobody reading this will know what "S3/S4 press test procedure" means.
-> > You have to explain it, or use a different name that people will
-> > understand.
-> okay, I got it.
-> > > happen that the start of frame was launched in other usb states and
-> > > cause ohci works abnormally then kernel will allways report rcu
-> > > call trace. This patch was to add check for host controller
-> > > functional states and if it is not UsbOperational state that need
-> > > set INTR_SF in intrdisable register to ensure SOF Token generation
-> > > was been disabled.
-> > This doesn't make sense.  You already mentioned that only the
-> > UsbOperational state supports sending start-of-frame packets.  So if the
-> > controller is in a different state then it won't send these packets,
-> > whether INTR_SF is enabled or not.
-> > 
-> > What problem are you really trying to solve?
-> 
-> Only UsbOperational state supports sending start-of-frame packets, but in
-> fact, in S3/S4 press test procedure,
-> 
-> usb in non-UsbOperational state that send start-of-frame packets but hc
-> driver doesn't deal with this frame. and hc will
-> 
-> allways lauched the SOF for finishing the frame, the cpu will hand this sof
-> interrupt and doesn't deal with time interrupt
-> 
-> that will cause rcu call trace then system doesn't suspend to memory/disk.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D213771
 
-I still don't understand.
+Denis Bondar (bondar.den@gmail.com) changed:
 
-Are you saying that your OHCI controller behaves badly because it sends 
-SOF packets even when the state is different from UsbOperational?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |bondar.den@gmail.com
 
-> Hi Alan Stern,
-> 
->     even though ed_rm_list is non-NULL, if hc in non-UsbOperation state set
-> SoF status in usbsts register that is illegal,
-> 
-> at this time hcd doesn't need care URB whether finished,  because hc had
-> into a wrong state. even thoug it doesn't has this patch,
-> 
-> URB was not be able to finish when hc in above worng state. except software
-> can intervence this wrong state. but the SoF bit of usbsts
-> 
-> register was set by HC, and this action will happen always !!! software
-> clear SoF state I think it isn't make sense. software only disable SoF
-> 
-> interrupt to fix HC wrong state.
+--- Comment #5 from Denis Bondar (bondar.den@gmail.com) ---
+Hi,
+This version probably has the same or similar problem:
 
-This problem happens when you go into S3 or S4 suspend, right?  So you 
-should fix the problem by disabling INTR_SF when the root hub is 
-suspended.  Try adding
+Linux home 5.11.0-37-generic #41~20.04.2-Ubuntu
 
-	/* All ED unlinks should be finished, no need for SOF interrupts */
-	ohci_writel(ohci, OHCI_INTR_SF, &ohci->regs->intrdisable);
+--=20
+You may reply to this email to add a comment.
 
-into ohci_rh_suspend(), just before the update_done_list() call.  If you 
-add this then INTR_SF will not be enabled during S3 or S4 suspend, so 
-the problem shouldn't occur.  Does that work for you?
-
->       In additon, when kernel include my patch, that it does't happen about
-> what you descriped that driver will not be able to finish unlinging URBs.
-> 
-> Because above issue happen in S3/S4(Suspend to disk/Suspend to mem) test
-> procedure, if ed_rm_lis is no-NULL but my patch disable SoF interrupt.
-> 
-> then when S3/S4 recovery to cpu idle state that usb resume will be called,
-> reume function has following logic, URB will continue to be processed.
-> 
->       static int ohci_rh_resume (struct ohci_hcd *ohci)
-> 
->      {
-> 
->         ...
-> 
->         242         if (ohci->ed_rm_list)
->         243                 ohci_writel (ohci, OHCI_INTR_SF,
-> &ohci->regs->intrenable);
-> 
->        ...
-> 
->       }
-
-I'm worried that your patch may disable INTR_SF even when the controller 
-has not gone into S3 or S4 suspend.  Maybe this won't cause problems, 
-but it's better to be safe and do the disable _only_ when a suspend 
-occurs.
-
-Alan Stern
+You are receiving this mail because:
+You are watching the assignee of the bug.=
