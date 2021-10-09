@@ -2,148 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3ED4277CA
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Oct 2021 08:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19958427962
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Oct 2021 13:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232605AbhJIGo7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 Oct 2021 02:44:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbhJIGo6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Oct 2021 02:44:58 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4963EC061570
-        for <linux-usb@vger.kernel.org>; Fri,  8 Oct 2021 23:43:02 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id l7-20020a0568302b0700b0054e40740571so8614043otv.0
-        for <linux-usb@vger.kernel.org>; Fri, 08 Oct 2021 23:43:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=sch71Tn4pcTeG3qTTIg7X9YowDl5vCB4ih5b/eob0I0=;
-        b=PzCJzM9upRa2fD25ELTFoURbCSg0Ytiuoqb+7JusLOfrXV+YUQvrCfvKK+1bKrp9pD
-         Nj8xtmqKGqdLtBFYMD3fTmsq9YxRC8+q4PabdsP52kRk2CkNCizMv0cbo2JjOvxrZDhA
-         8SOC0gHMz0DvI2NUg/WMZBoRZuHSYovrrkiPUYGOXsS7jx0Q3ti1rQn7XJBnWrDmUjaj
-         jnLAUceZlqvL8FeHL1CIZ07WMYjfEUJb6bxSSRLuh1116riD7dXaeC1fN5GT12oOEyX0
-         rF67itJGd71QxA+3IwQdEPqPjt/WFDPv4597+7YP8k4/kLgE69urNZ5PsWpyGUKXrti9
-         UzZQ==
+        id S232847AbhJILQX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 Oct 2021 07:16:23 -0400
+Received: from mail-il1-f197.google.com ([209.85.166.197]:41841 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232017AbhJILQX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Oct 2021 07:16:23 -0400
+Received: by mail-il1-f197.google.com with SMTP id c4-20020a92b744000000b002592dabe954so164168ilm.8
+        for <linux-usb@vger.kernel.org>; Sat, 09 Oct 2021 04:14:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=sch71Tn4pcTeG3qTTIg7X9YowDl5vCB4ih5b/eob0I0=;
-        b=gQkTFmeG0HdmtcHCYDqVki2WcSX9Zd0k5FP8+NTCuylrwAygSNQAcmfoi3espi2wZv
-         yEz1a3/2RP4ZUbUh19QDrPWYpiFxkcvwRORAkA0O0y4O3Xnw28wbk6cNOj0+w6AEJAnr
-         MDecqgQQ/XoeSdi0XiH1ac3XhvYv2tEwDSiTKCCgzu5NwFLatONoUQPPpIVgoVs1S/JP
-         AzUAERa7caFF3zYLWO5YlFk18CRIvN2N6ZgHUKPxRtFxwdio/wez2gmgK1+hzdg2vv/i
-         JE3VCrIEi/CJ8dkPX28yMj5JDovIHSdZ/KLYnNB4a1jIKHT56UaVuxJFaNYOKV3ScBYc
-         Rrvg==
-X-Gm-Message-State: AOAM531eCNDkoKtb1pwH/T7m+PLk1K+SXOV7rOaGOFeKP2YB+3Ifr6me
-        nhdmFCF9NU9guOa87H1Z31M=
-X-Google-Smtp-Source: ABdhPJy+95/59vCflzrf6MKPSa6y1wUv5tvrViPNS9epw9tRwce7Hj4cERcxpt/hb9UiIMFes8qJjg==
-X-Received: by 2002:a9d:19a9:: with SMTP id k38mr12253627otk.284.1633761781601;
-        Fri, 08 Oct 2021 23:43:01 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k6sm347676otf.80.2021.10.08.23.43.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Oct 2021 23:43:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] usb: typec: tcpm: ignore data role mismatch with a
- GoodCRC Message
-To:     Gianni Pisetta <gianni.pisetta@gmail.com>
-Cc:     linux-usb@vger.kernel.org, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org
-References: <20211008201455.8739-1-gianni.pisetta@gmail.com>
- <7d81a8ef-faa1-f8a6-cccc-493cc8bff085@roeck-us.net>
- <CAP7v90N=UDs3FSrp7Vke2ckzB5TavhCKz3xKYC8t96wajFM-NA@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <bab08505-d69f-d9d3-0951-9e130c81c948@roeck-us.net>
-Date:   Fri, 8 Oct 2021 23:42:59 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=pwHzytuOLbM8wQAkLqWi6P86FJuSP9gw7ny5OBo/tUA=;
+        b=caCF2aQ0Ia1exIYuGiFE+iZpTXVbfUuSpLbIfkCsJHbUELNVxqUWJVhnItG9zqROmC
+         02Wf8ZFGJrDSjGwwPI6dBwfIwIk3VpB22AEUpDB9VvRDu8iGsrjdEC0s5lbo+2XZ8TIf
+         Jozvc3K7Sku1eEcqz7rfkHJXeYDwE+PPMJQ3pLev0rXqI9YeiBEAoySKpC59hQHem1xE
+         tD950HbDg1aQ4E/RBcIH0At4KcUNF6mkPBJ6EMRWYbET9XTk5uvPMhoe9vcSPyaPdfRq
+         sCc8bP8S8IWC+EFxp9/mmX0viJmXQjis4y2feAlR5nHOk9k5BFPsxK6YVbCXzAQc22oB
+         eecQ==
+X-Gm-Message-State: AOAM531XtlI5T5VYIWIR4x5wWRHnynBt95M1mHWSdDpVTooVNCrAyHKX
+        TXYl8s3PZXLNn2s1fwSXd+vw/a5w0rqaW5rCDcQNq0FjlCz6
+X-Google-Smtp-Source: ABdhPJwur+gA/yZVetuCbDgK2mR8soyYi2g2JJW5ahqXVSjd4wk07kh7tfi3x8urQrl+ezyxEnPfQmIFBL+a9eFi0We5k6kpoeVB
 MIME-Version: 1.0
-In-Reply-To: <CAP7v90N=UDs3FSrp7Vke2ckzB5TavhCKz3xKYC8t96wajFM-NA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6e02:12c3:: with SMTP id i3mr11859002ilm.145.1633778066191;
+ Sat, 09 Oct 2021 04:14:26 -0700 (PDT)
+Date:   Sat, 09 Oct 2021 04:14:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000046faa305cde9998e@google.com>
+Subject: [syzbot] KASAN: global-out-of-bounds Read in usb_match_device
+From:   syzbot <syzbot+cf1553a86d1962a0c79f@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, hadess@hadess.net, johan@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        m.v.b@runbox.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/8/21 11:25 PM, Gianni Pisetta wrote:
-> Il ven 8 ott 2021, 22:47 Guenter Roeck <linux@roeck-us.net> ha scritto:
->>
->> On 10/8/21 1:14 PM, Gianni Pisetta wrote:
->>> The data role check in tcpm.c cause the port manager to enter a loop with a
->>> hard reset on some chargers.
->>> By the spec in a GoodCRC Message the other end does not need to comply with
->>> the data role, so ignore a data role mismatch in a request when the message
->>> type is GoodCRC.
->>> >From the USB PD spec:
->>> "If a USB Type-C Port receive a Message with the Port Data Role field set
->>> to the same Data Role, except for the GoodCRC Message, USB Type-C error
->>> recovery..."
->>>
->>> Below are the log of a Pinebook Pro attached to a PinePower Desktop Supply
->>> before the patch:
->>>
->>> [226057.970532] state change SNK_DISCOVERY -> SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
->>> [226057.975891] pending state change SNK_WAIT_CAPABILITIES -> SNK_READY @ 310 ms [rev3 NONE_AMS]
->>> [226058.134384] PD RX, header: 0x53a1 [1]
->>> [226058.134389] Data role mismatch, initiating error recovery
->>> [226058.134392] state change SNK_WAIT_CAPABILITIES -> ERROR_RECOVERY [rev3 NONE_AMS]
->>> [226058.134404] state change ERROR_RECOVERY -> PORT_RESET [rev3 NONE_AMS]
->>>
->>> Fixes: f0690a25a140b
+Hello,
 
-This is not a correct Fixes: tag. The correct tag would be:
+syzbot found the following issue on:
 
-Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)")
+HEAD commit:    89e84f946479 usb: typec: tipd: Remove FIXME about testing ..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=1638063f300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cd8a1eadba1e4ce4
+dashboard link: https://syzkaller.appspot.com/bug?extid=cf1553a86d1962a0c79f
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=158c3deb300000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1190df03300000
 
-Please run checkpatch on your patches; it should tell you.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cf1553a86d1962a0c79f@syzkaller.appspotmail.com
 
->>> cc: <stable@vger.kernel.com>
->>> Signed-off-by: Gianni Pisetta <gianni.pisetta@gmail.com>
->>>
->>> ---
->>>    drivers/usb/typec/tcpm/tcpm.c | 7 ++++---
->>>    1 file changed, 4 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
->>> index 5d05de666597..02ebf7e03c41 100644
->>> --- a/drivers/usb/typec/tcpm/tcpm.c
->>> +++ b/drivers/usb/typec/tcpm/tcpm.c
->>> @@ -2887,11 +2887,11 @@ static void tcpm_pd_rx_handler(struct kthread_work *work)
->>>
->>>                /*
->>>                 * If both ends believe to be DFP/host, we have a data role
->>> -              * mismatch.
->>> +              * mismatch. Must perform error recovery actions, except for
->>> +              * a GoodCRC Message(USB PD standard, 6.2.1.6).
->>>                 */
->>> -             if (!!(le16_to_cpu(msg->header) & PD_HEADER_DATA_ROLE) ==
->>> -                 (port->data_role == TYPEC_HOST)) {
->>> +             if (!!((le16_to_cpu(msg->header) & PD_HEADER_DATA_ROLE) ==
->>> +                    (port->data_role == TYPEC_HOST) && type != PD_CTRL_GOOD_CRC)) {
->>
->> Unless I am missing something, this could also be a PD_DATA_SOURCE_CAP
->> or PD_EXT_SOURCE_CAP_EXT message.
->>
->> Guenter
-> 
-> Yes, you are definitely right about that. I thought I had checked.
-> Please discard this patch.
-> Would you accept a v2 with a proper check also on PD_HEADER_EXT_HDR
-> and pd_header_cnt?
+usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-1: Product: syz
+usb 1-1: Manufacturer: syz
+usb 1-1: SerialNumber: syz
+usb 1-1: config 0 descriptor??
+==================================================================
+BUG: KASAN: global-out-of-bounds in usb_match_device+0x4dc/0x550 drivers/usb/core/driver.c:641
+Read of size 2 at addr ffffffff87bdfd50 by task kworker/0:1/7
 
-Sure, assuming it is correct, but please remember that there should only
-be one logical change per patch.
+CPU: 0 PID: 7 Comm: kworker/0:1 Not tainted 5.15.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xf/0x309 mm/kasan/report.c:256
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ usb_match_device+0x4dc/0x550 drivers/usb/core/driver.c:641
+ usb_match_one_id drivers/usb/core/driver.c:722 [inline]
+ usb_match_id.part.0+0x10d/0x1b0 drivers/usb/core/driver.c:816
+ usb_match_id+0x23/0x40 drivers/usb/core/driver.c:806
+ ehset_prepare_port_for_testing+0x4a/0xf0 drivers/usb/misc/ehset.c:43
+ ehset_probe+0x271/0x460 drivers/usb/misc/ehset.c:82
+ usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:517 [inline]
+ really_probe+0x245/0xcc0 drivers/base/dd.c:596
+ __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:751
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:781
+ __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:898
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:969
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xc35/0x21b0 drivers/base/core.c:3359
+ usb_set_configuration+0x113f/0x1910 drivers/usb/core/message.c:2170
+ usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
+ usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
+ call_driver_probe drivers/base/dd.c:517 [inline]
+ really_probe+0x245/0xcc0 drivers/base/dd.c:596
+ __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:751
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:781
+ __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:898
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:969
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xc35/0x21b0 drivers/base/core.c:3359
+ usb_new_device.cold+0x63f/0x108e drivers/usb/core/hub.c:2563
+ hub_port_connect drivers/usb/core/hub.c:5348 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5488 [inline]
+ port_event drivers/usb/core/hub.c:5634 [inline]
+ hub_event+0x2357/0x4330 drivers/usb/core/hub.c:5716
+ process_one_work+0x9bf/0x1620 kernel/workqueue.c:2297
+ worker_thread+0x658/0x11f0 kernel/workqueue.c:2444
+ kthread+0x3c2/0x4a0 kernel/kthread.c:319
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
 
-Guenter
+The buggy address belongs to the variable:
+ platform_bus+0x530/0x560
 
-> 
-> Thanks,
-> Gianni
-> 
+Memory state around the buggy address:
+ ffffffff87bdfc00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffffff87bdfc80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffffffff87bdfd00: 00 00 00 00 00 00 00 00 00 f9 f9 f9 f9 f9 f9 f9
+                                                 ^
+ ffffffff87bdfd80: 00 00 00 00 00 00 00 00 00 00 f9 f9 f9 f9 f9 f9
+ ffffffff87bdfe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
 
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
