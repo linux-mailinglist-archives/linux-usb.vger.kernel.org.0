@@ -2,185 +2,244 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 138CF427589
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Oct 2021 04:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E27094276A9
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Oct 2021 04:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbhJICD2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Oct 2021 22:03:28 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:46442 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231947AbhJICD1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 8 Oct 2021 22:03:27 -0400
-Received: from [10.180.13.128] (unknown [10.180.13.128])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxH2v192BhVdwWAA--.34518S2;
-        Sat, 09 Oct 2021 10:01:26 +0800 (CST)
-Subject: Re: [PATCH v3] usb: ohci: add check for host controller functional
- states
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <greg@kroah.com>,
-        Patchwork Bot <patchwork-bot@kernel.org>
-References: <1633677970-10619-1-git-send-email-zhuyinbo@loongson.cn>
- <20211008142639.GA721194@rowland.harvard.edu>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <7a505fc4-ec47-ac83-633f-7a5251bd5f82@loongson.cn>
-Date:   Sat, 9 Oct 2021 10:01:25 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <20211008142639.GA721194@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S244159AbhJIC2M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Oct 2021 22:28:12 -0400
+Received: from esa.hc3962-90.iphmx.com ([216.71.140.77]:45633 "EHLO
+        esa.hc3962-90.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244102AbhJIC2M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Oct 2021 22:28:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
+  t=1633746376; x=1634351176;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=No8xR3YthVEDpWbq40e23l8yrmvPLi7XxeMt0T0HX0E=;
+  b=jNhwWMWramAsHISDjgqzqoXbU5UWdx5GWDkLAZhjanmDcvHXtFtS0DqB
+   sTIfdfRVKnf64HOWzMPvCTpMN6oUPueKluomY0qU8se+L/0qEupMq7M+J
+   lnwJ8GO419YQDjz745UUZy6cM7yikOZPo+v4NE5D9RIrlID/R40+jFlbd
+   I=;
+Received: from mail-bn1nam07lp2047.outbound.protection.outlook.com (HELO NAM02-BN1-obe.outbound.protection.outlook.com) ([104.47.51.47])
+  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2021 02:26:14 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TjvA2PAKgQY1G70/faHfUZC5LtdOwTTXPfDqihqXjQf0mwDrpei+LCUcN+Bjd+kfEpdFx7YvgRlD80k7oq+xdjPveiv00FvNOSAD7Gn2d7yTRpuMKHjdbxzAhvTOIMkssFi882y2dLuHuKTHorsLTlK5yOZh1wK9RRoW3kiT2HylJXcsAncARaEmSPUSuzjQ08tkswQtsEyt1nEAIAhDcp6V6NKV0wJf6CyqGafyffsfCsmfE5FFYK/IvEFYXv8DjtWws4YogP4w3mCF6UwxFJqCXK3R9OVKKbuB9ySz1cxvPz4n2f4J+zAbJchyr9rX0/lEN0HF7T+G0Uv6PBQH8g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=No8xR3YthVEDpWbq40e23l8yrmvPLi7XxeMt0T0HX0E=;
+ b=HI+t0fOY7TxwZrEOVcdmVgUDIafjW/rw8Q9IwDFU8hzYbtJLUjmGOgmWNdJk5wwiYx/QpM0L+QGjrseyjipw8uClBjJk9ZkbSl0bnLQ7pOmm38vUrgtZDzueSE1n/7Yz5YudvnqPcWzecZyyGBBtQB3CQw6fICMK+KKatdWW10CbLy3hZj0dKHzAxtn9cZkRKP9PC2+rhcjnkd11iWD5faxKaWqGbr8+HbNCvCNzYQ4i1EUQXDBB0CILEzUpOsPLl7SVBlYiGR1ylyp4eeQkr5DNFtGaQ7R/Hg/0DHRdMU49VafWI4YzVygXAckm4SYeBneyLz+lrQUIZVsO88j03w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
+ dkim=pass header.d=quicinc.com; arc=none
+Received: from DM8PR02MB8198.namprd02.prod.outlook.com (2603:10b6:8:4::7) by
+ DM8PR02MB8199.namprd02.prod.outlook.com (2603:10b6:8:3::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4587.20; Sat, 9 Oct 2021 02:26:08 +0000
+Received: from DM8PR02MB8198.namprd02.prod.outlook.com
+ ([fe80::55a4:d8fe:170:4479]) by DM8PR02MB8198.namprd02.prod.outlook.com
+ ([fe80::55a4:d8fe:170:4479%4]) with mapi id 15.20.4587.024; Sat, 9 Oct 2021
+ 02:26:07 +0000
+From:   "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v5 1/3] usb: gadget: configfs: avoid list move operation
+ of usb_function
+Thread-Topic: [PATCH v5 1/3] usb: gadget: configfs: avoid list move operation
+ of usb_function
+Thread-Index: AQHXo4UNlBSIOyDIIUmvyeFQTj9v7avE4aQAgAU44jA=
+Date:   Sat, 9 Oct 2021 02:26:07 +0000
+Message-ID: <DM8PR02MB8198787E8C17F646B7DED9F4E3B39@DM8PR02MB8198.namprd02.prod.outlook.com>
+References: <1630976977-13938-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1630976977-13938-2-git-send-email-quic_linyyuan@quicinc.com>
+ <YVwywFfe/x8OEHh8@kroah.com>
+In-Reply-To: <YVwywFfe/x8OEHh8@kroah.com>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
-X-CM-TRANSID: AQAAf9DxH2v192BhVdwWAA--.34518S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw4kZr15Wry8Kry8Zw18Krg_yoWrtFW5pF
-        4Skw43KryUJr109r17trn7JF9Ykw4xJ34UGa4Ika4Utrs0q34IqryIgFWj93Z5XrWfK3W2
-        vF1jqrWUu3WDAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjc
-        xK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
-        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
-        r21lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
-        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
-        AVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
-        CY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf
-        9x07bOoGdUUUUU=
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=none action=none
+ header.from=quicinc.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c84e4c21-1ead-493b-b856-08d98acc26c6
+x-ms-traffictypediagnostic: DM8PR02MB8199:
+x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM8PR02MB81991C0145370CD74B747B159FB39@DM8PR02MB8199.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: pvrynquyYp4zl4B1PQCid4FCQjo3ENwoCYR8NXsZeTSzSjDTrSvopMh8fVzzqRBV1XS0ixClkkNh0A4g95+2VfNkku/lhTDkMr6jznRBaKzZVY6SvjYIOy5mZWj5ydCpvHAop2IA97T+qK5XAxMPzE33oD66jDV+WiSlGxjaFWj372IYeRBO7M5Ifg2sh9BYQtBkKEig49s21lNi4ShEvNhKViNFEuujNcsKeom2zQQLk1PovMZ+MBGzPEy03Bo+1HdurEhjjGAchGfvDyj8cbk4Hfoid6h/hR0zDC8XfcBfm7/V42EF75+5dpQaykobsXT6Xo+FIdmfGbsHPwhyjB2nKL9mxk7L9CYG5Era6Zx0OHDZR4aQ4BqOd/cz2iRyVnjTMIPpA0wBVpG12PdLvn2WUmsUDB/gGvLFxbMQupRUpuJf5v/IvPAxzu9p0a0xv5lT9Nb/mNPVoDHbTBRi4BX6WmTr8rwBBlEfg4NqMMjlgps32Mo1BATpOBS/sAef1z40BGfk/UgonmI3NI4Tt7ylDvcXNR9ZVX1JvrlWi7l7TmkkXtHlzmkRtmjp7B/Iii1Xb+WqM/why5v4/Ib6ghM5pQVv5ShYNJDK60/6ubrtCZZMjZixQXC4tpWNYvgMbsPkolrOX+dbNQLQxejyouCMAXbXjC9kSW1YvKdzkwnKDuGsI52LPF9aO4x3brYGP+Jk2s7b34VG9Xo5o2RWcA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR02MB8198.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38070700005)(33656002)(86362001)(64756008)(186003)(7696005)(26005)(66476007)(71200400001)(8936002)(9686003)(38100700002)(66556008)(76116006)(66946007)(8676002)(122000001)(66446008)(55016002)(4326008)(53546011)(52536014)(508600001)(83380400001)(2906002)(5660300002)(54906003)(110136005)(6506007)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?q97ZOjJvk6egXxeD3y68XwCQhWjFhgM8k85yhSPVJ9Dh/ztVwY5EabIgsg/+?=
+ =?us-ascii?Q?CLQUEKKQH9utFATZWZCBdgDwpoekQ+dKnmqhzEPWe5I6U5QRQoYoozLC8smY?=
+ =?us-ascii?Q?xOtD/tcQLl6wzIn8L3r+jIsWh7+70ApNfIHiD2L89yogJfVDJihyoZqKopH3?=
+ =?us-ascii?Q?aexNhEQEZLKG1HK1DYyBaBIdFiIFw8ZGd3SBiJSp6EzYzcqIFXb4rer/bMu3?=
+ =?us-ascii?Q?Qd8Y/lcOOcasWZ9/4XHuv3pTZkQvK98wv/spICNGC4tILFhs5/DDvei5Bbmb?=
+ =?us-ascii?Q?QSZy8XLItJT5YQaANkZusgOeD+aQXpck8tLG/o0uPGaSYJnKd0kvEyxBGT6R?=
+ =?us-ascii?Q?glWdqPmiskDRv8haG7+GAlDql7cx0zSOL1x3QytRgvykmkcylhiuVYvgXIll?=
+ =?us-ascii?Q?V1JKN0REmSJNNQPEa5mDrNmPxwVRHrkBpvCK/+93vReJC1qVE8AKKiHJdzFp?=
+ =?us-ascii?Q?jJtHlO1lhRe9T2KoTGLgMWFehKOc9Tdvboj88WBjVZ3Uk94PUfVV/ywYUVOV?=
+ =?us-ascii?Q?1Kj4WQPIfrP3LzitvH/+m/+hHIvHlcu8JILxaj+SCPlzOtB50lhDteuXN68s?=
+ =?us-ascii?Q?B8qy1GyDSP28AHjcRUfOVltA9YMtIr7m1LjHnrlZHrWzZ7TjGMD6/o5dJlUk?=
+ =?us-ascii?Q?dJmjJS7BoY1JXG6RyU4Zq6KRPtHQylNmULT5QnpGbnJUH9AKzUBb9P18JxzI?=
+ =?us-ascii?Q?0Mq1CZITpnS9AhQPQwdyzjJrInl+tDAs1v8EzkEWLZGuxqMSi92kNvTmhJry?=
+ =?us-ascii?Q?SNi2r3R7423ZRR83qXcWsRzP6bbsOgAdcU5CpMbaKVAXlydzk9v/pBSGCgxC?=
+ =?us-ascii?Q?2Q7IbT35R7yLGKquQhHqp98SHjhVLiF7Yo+HZZudAd3TCfs6FPJd6FVEzc4G?=
+ =?us-ascii?Q?J7OMBqqfV5VTU9QhUDM18RBntr5mqLqxWA4HJJYa94OZd3K3UxBaKQqhsEul?=
+ =?us-ascii?Q?GUybgExELNjoV0jRK+n+NjktKsdA5Rd/2ntZq+sU7QGeR8t0NiTLfMXshB3M?=
+ =?us-ascii?Q?pmCG4oxhO5k7/a7DmAPqrRDsGf5m+EdFEJRxocMlCX0a7wx7nNYpkxe3v786?=
+ =?us-ascii?Q?lGQeXvO68JQj1iNxBSHoFoOKvy60dWqM04ii91istGh+Tc/fFvTKaZQZnA5n?=
+ =?us-ascii?Q?CnOc7IqMb66v2DZoCT6USaN5iWsslwvLzIS7Jn7A/XJoT6b6FSn1DhtI+0B/?=
+ =?us-ascii?Q?bk+1pkdCd5wl6n0sN+0/ilSHntrO72OvR5UgXd9gpKHNnmCRIbjhNVE4X9a6?=
+ =?us-ascii?Q?K6Pv4pJdQhyTD12948jXWqEFL+mdHCkiZqgxYsc/H3HPonml91+nSeylVHr/?=
+ =?us-ascii?Q?HQQ=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: quicinc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR02MB8198.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c84e4c21-1ead-493b-b856-08d98acc26c6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Oct 2021 02:26:07.6631
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KaFj2aWOO75d8ynVQcBRNz0IvHBZh9EgxfDqzXO9E/Yw4gMfsFl75aNZihPoBxkwZO9Oy4mmhyg4pLULbo+kBDt/H5JNDRMFwt4z55DKUZA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR02MB8199
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Sent: Tuesday, October 5, 2021 7:11 PM
+> To: Linyu Yuan (QUIC) <quic_linyyuan@quicinc.com>
+> Cc: Felipe Balbi <balbi@kernel.org>; linux-usb@vger.kernel.org
+> Subject: Re: [PATCH v5 1/3] usb: gadget: configfs: avoid list move operat=
+ion
+> of usb_function
+>=20
+> On Tue, Sep 07, 2021 at 09:09:35AM +0800, Linyu Yuan wrote:
+> > add a new list which link all usb_function at configfs layers,
+> > it means that after link a function a configuration,
+> > from configfs layer, we can still found all functions,
+> > it will allow trace all functions from configfs.
+>=20
+> I am sorry, but I do not understand this paragraph.  Can you try
+> rewording it?
+>=20
+> >
+> > Reported-by: kernel test robot <lkp@intel.com>
+>=20
+> How did the kernel test robot report this?  You are adding a new
+> function here, it is not a bug you are fixing, right?
+>=20
+>=20
+> > Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> > ---
+> > v2: fix unused cfg variable warning
+> > v3: add struct inside configfs.c
+> > v4: no change
+> > v5: lost v2 fix, add it again
+> >
+> >  drivers/usb/gadget/configfs.c | 55 ++++++++++++++++++++++++----------
+> ---------
+> >  1 file changed, 31 insertions(+), 24 deletions(-)
+> >
+> > diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configf=
+s.c
+> > index 477e72a..5b2e6f9 100644
+> > --- a/drivers/usb/gadget/configfs.c
+> > +++ b/drivers/usb/gadget/configfs.c
+> > @@ -58,6 +58,11 @@ static inline struct gadget_info
+> *to_gadget_info(struct config_item *item)
+> >  	return container_of(to_config_group(item), struct gadget_info,
+> group);
+> >  }
+> >
+> > +struct config_usb_function {
+> > +	struct list_head list;
+> > +	struct usb_function *f;
+> > +};
+>=20
+> What lock protects this list?
+>=20
+> > +
+> >  struct config_usb_cfg {
+> >  	struct config_group group;
+> >  	struct config_group strings_group;
+> > @@ -420,7 +425,7 @@ static int config_usb_cfg_link(
+> >  	struct usb_function_instance *fi =3D container_of(group,
+> >  			struct usb_function_instance, group);
+> >  	struct usb_function_instance *a_fi;
+> > -	struct usb_function *f;
+> > +	struct config_usb_function *cf;
+> >  	int ret;
+> >
+> >  	mutex_lock(&gi->lock);
+> > @@ -438,21 +443,29 @@ static int config_usb_cfg_link(
+> >  		goto out;
+> >  	}
+> >
+> > -	list_for_each_entry(f, &cfg->func_list, list) {
+> > -		if (f->fi =3D=3D fi) {
+> > +	list_for_each_entry(cf, &cfg->func_list, list) {
+> > +		if (cf->f->fi =3D=3D fi) {
+> >  			ret =3D -EEXIST;
+> >  			goto out;
+> >  		}
+> >  	}
+> >
+> > -	f =3D usb_get_function(fi);
+> > -	if (IS_ERR(f)) {
+> > -		ret =3D PTR_ERR(f);
+> > +	cf =3D kzalloc(sizeof(*cf), GFP_KERNEL);
+>=20
+> Why "kzalloc" and not "kmalloc"?
+>=20
+> I don't understand why you are moving everything to a single list in the
+> system, what is wrong with the existing per-device one?
+Thanks Greg,
 
-在 2021/10/8 下午10:26, Alan Stern 写道:
-> On Fri, Oct 08, 2021 at 03:26:10PM +0800, Yinbo Zhu wrote:
->> The usb states of ohci controller include UsbOperational, UsbReset,
->> UsbSuspend and UsbResume. Among them, only the UsbOperational state
->> supports launching the start of frame for host controller according
->> the ohci protocol spec, but in S3/S4 press test procedure, it may
-> Nobody reading this will know what "S3/S4 press test procedure" means.
-> You have to explain it, or use a different name that people will
-> understand.
-okay, I got it.
->> happen that the start of frame was launched in other usb states and
->> cause ohci works abnormally then kernel will allways report rcu
->> call trace. This patch was to add check for host controller
->> functional states and if it is not UsbOperational state that need
->> set INTR_SF in intrdisable register to ensure SOF Token generation
->> was been disabled.
-> This doesn't make sense.  You already mentioned that only the
-> UsbOperational state supports sending start-of-frame packets.  So if the
-> controller is in a different state then it won't send these packets,
-> whether INTR_SF is enabled or not.
->
-> What problem are you really trying to solve?
+Let me explain what I want to do in this  change,
 
-Only UsbOperational state supports sending start-of-frame packets, but 
-in fact, in S3/S4 press test procedure,
+For original code,  when add a function to configuration, it will add funct=
+ion=20
+struct usb_function {
+...
+struct list_head		list; [1]
+};
+to following list,
+struct config_usb_cfg {
+...
+	struct list_head func_list; [2]
+};
+Then when bind happen, it will move [1] to following list,
+struct usb_configuration {
+...
+struct list_head	functions; [3]
+};
 
-usb in non-UsbOperational state that send start-of-frame packets but hc 
-driver doesn't deal with this frame. and hc will
+When unbind, it will move [1] back to [2].
 
-allways lauched the SOF for finishing the frame, the cpu will hand this 
-sof interrupt and doesn't deal with time interrupt
+We can see list [1] move between two list head, it is not easy to trace.
 
-that will cause rcu call trace then system doesn't suspend to memory/disk.
+And when I add trace, I only want to get trace info from structure defined =
+in configfs.c,
 
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->> Change in v3:
->> 		Rework the commit information.
->> 		Move the patch code change to lower down position in ohci_irq.
->>
->>
->>   drivers/usb/host/ohci-hcd.c | 13 ++++++++++---
->>   1 file changed, 10 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
->> index 1f5e693..87aa9bb 100644
->> --- a/drivers/usb/host/ohci-hcd.c
->> +++ b/drivers/usb/host/ohci-hcd.c
->> @@ -879,7 +879,8 @@ static irqreturn_t ohci_irq (struct usb_hcd *hcd)
->>   {
->>   	struct ohci_hcd		*ohci = hcd_to_ohci (hcd);
->>   	struct ohci_regs __iomem *regs = ohci->regs;
->> -	int			ints;
->> +	int			ints, ctl;
->> +
-> Extra blank line not needed.
->
->>   
->>   	/* Read interrupt status (and flush pending writes).  We ignore the
->>   	 * optimization of checking the LSB of hcca->done_head; it doesn't
->> @@ -969,9 +970,15 @@ static irqreturn_t ohci_irq (struct usb_hcd *hcd)
->>   	 * when there's still unlinking to be done (next frame).
->>   	 */
->>   	ohci_work(ohci);
->> -	if ((ints & OHCI_INTR_SF) != 0 && !ohci->ed_rm_list
->> -			&& ohci->rh_state == OHCI_RH_RUNNING)
->> +
->> +	ctl = ohci_readl(ohci, &regs->control);
->> +
-> Blank lines not needed.
->
->> +	if (((ints & OHCI_INTR_SF) != 0 && !ohci->ed_rm_list
->> +			&& ohci->rh_state == OHCI_RH_RUNNING) ||
->> +			((ctl & OHCI_CTRL_HCFS) != OHCI_USB_OPER)) {
->>   		ohci_writel (ohci, OHCI_INTR_SF, &regs->intrdisable);
->> +		(void)ohci_readl(ohci, &regs->intrdisable);
->> +	}
-> This is definitely wrong.  You must not turn off SF interrupts when
-> ed_rm_list is non-NULL.  If you do, the driver will not be able to
-> finish unlinking URBs.
->
-> Alan Stern
+So I add a new list which ONLY add/remove to head [2] and it represent a fu=
+nction in configfs layer.
+And original list [1] will ONLY add/remove to head [3].
 
-Hi Alan Stern,
-
-     even though ed_rm_list is non-NULL, if hc in non-UsbOperation state 
-set SoF status in usbsts register that is illegal,
-
-at this time hcd doesn't need care URB whether finished,  because hc had 
-into a wrong state. even thoug it doesn't has this patch,
-
-URB was not be able to finish when hc in above worng state. except 
-software can intervence this wrong state. but the SoF bit of usbsts
-
-register was set by HC, and this action will happen always !!! software 
-clear SoF state I think it isn't make sense. software only disable SoF
-
-interrupt to fix HC wrong state.
-
-       In additon, when kernel include my patch, that it does't happen 
-about what you descriped that driver will not be able to finish 
-unlinging URBs.
-
-Because above issue happen in S3/S4(Suspend to disk/Suspend to mem) test 
-procedure, if ed_rm_lis is no-NULL but my patch disable SoF interrupt.
-
-then when S3/S4 recovery to cpu idle state that usb resume will be 
-called, reume function has following logic, URB will continue to be 
-processed.
-
-       static int ohci_rh_resume (struct ohci_hcd *ohci)
-
-      {
-
-         ...
-
-         242         if (ohci->ed_rm_list)
-         243                 ohci_writel (ohci, OHCI_INTR_SF, 
-&ohci->regs->intrenable);
-
-        ...
-
-       }
-
-BRS,
-
-Yinbo Zhu.
-
+>=20
+> thanks,
+>=20
+> greg k-h
