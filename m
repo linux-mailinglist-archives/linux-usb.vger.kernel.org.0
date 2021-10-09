@@ -2,257 +2,222 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A224276AC
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Oct 2021 04:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B88D1427787
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Oct 2021 07:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232276AbhJICar (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Oct 2021 22:30:47 -0400
-Received: from mail-eopbgr60073.outbound.protection.outlook.com ([40.107.6.73]:60035
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232269AbhJICaq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 8 Oct 2021 22:30:46 -0400
+        id S232450AbhJIFa7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 Oct 2021 01:30:59 -0400
+Received: from esa.hc3962-90.iphmx.com ([216.71.140.77]:32375 "EHLO
+        esa.hc3962-90.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229596AbhJIFa6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Oct 2021 01:30:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
+  t=1633757342; x=1634362142;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=jOhby8JcCq5evpZoTUEjuIRL3wVAwYaPJKWkVpQi1Vg=;
+  b=cqvEtoQM5PKs6XsDlMfhGHlXvuZK+zX1sJb9TBrDvtwqLPOQ2EgjdOZW
+   i6KQlcFJw2LOQJ8p+HhfMDlxsy4+Lhafjm0W+E4aqxIT6PTPqwS6585tf
+   UI1+/dcHrP/9bsDLTLYX+8qlE24rLMiS5LeCwKHpCLcCrSvd92zUgrHoB
+   U=;
+Received: from mail-bn1nam07lp2045.outbound.protection.outlook.com (HELO NAM02-BN1-obe.outbound.protection.outlook.com) ([104.47.51.45])
+  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2021 05:29:00 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YlevwEx/ZfFTAiiEZYpUeDIB+jatn2K7aGfiy5DAjzZemsxAxI0Gn3W2XKOHfmxRj/ob49W0t0j4oezwB7T6rXLpD0C0GmNAaiq9lKwXAs1KYIbLLhh3prni3xyP8PFYY3nLtpWFoGKhH0hlpwSMMbT1EcgGFXPn87PdhPvdBceUQTF8gAruBd0iRpa3jHJNL+aQjiQYQB3EMYV8iAEwIaG5RUr6ZfKMEz4OHI30WFEM2kvi9XGoXJSY+yvYGLLcg0M4WKKUOC1raz+iU6gwIajtN6SrlyKrxdN1tQIbw4JSmW9ZSAe+Ptbn5oF0p81eoH/Jf1vWXlHFSIayViq3VQ==
+ b=f6DLgX9iXZ4q0fuCVAz0U4crULHD2RWzqCURMPFZnNTR+/5wNHE85yKGsEhEN5wL2u/Yed/u/3gq5fxrkdy/lf1WwxtSYg5OEB5awD8sCI3TziAJLh2zxbjrltE9NOvrx8Oq38MwNVtDKYo1JnmffKmhKb5r3HR4mEZyiiQwAkY77QYLQr4ff2hJj/JhvEZqd4kTqnWdQKc3JjqW4YVoCXy/wqcsJvdRaEwpjsMS6XZjkYnlQrHweLEjYw/pwC7RkPB+AqWA7qUHZqKbbbtiZFZBN9PBWw61GyGBY1AR4im2FJt1jHE8qCOfgJ1BV+q4xmZ0lL2iUTO3ms9xXVjbcw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h4IwdYm+gbQdB6UnJ7ATOnszQVE0TTvx3CPYbW4z9O4=;
- b=iwQKArP0jEaQ6QejMKACsq/I1fwA+vQNOR0vEsUwIlFAarLYLuWMzVMdDypGmZ50wRQdBsFdEwfwscvivcMkK1gjWwHhCthuRsDdI3jMNbTIKzolbUIaKwV/dFrnyo0dFV41i2dQNHq5fDJavyGFIyksQ28xpS9cehAcOUeRP8uNXwD59asGw+tH+v5GR5aUj2tWmMj3U44UVfHMXNC27Bcv6YzdSdAvcMSZebG8hZJ8Aifo5DdqY+doU2nG8wUaQ4WI/blzBa5Rfl0dkQOY2avq+U26yK2/JSNyPMF8bsARQvFyg/56Y7Z/eS9c/gXgbxuo4OuRC23Aojm6jN126A==
+ bh=jOhby8JcCq5evpZoTUEjuIRL3wVAwYaPJKWkVpQi1Vg=;
+ b=lbrxZRpStfUWdxSRkjzD96nGSyAikWyJCWx/+OCJMooOFLagRGSLukZrsy5Vet14LtYGmaY0GQQgVqWNhVpS3zCtVYzynl0+RN6mJ+cqyKxB27YSQGRXaqq1zjmH4ioA/OvJIn0VW0Tb342oDAdF5KfMH3YjwBG06nl4n5eMihG7hcMpkxVL484Bx/L2KMxENdgnf5e9qeRfqwJ1MV98CCyywkpd+/Aq8Jg/G45KqHgyhvHfZmTBsW0YGGh0w7MJY9oN1UrZdrBzDeERvEqpvpYHBIGxHu7ffcFf/04tJ2kQUhnwlc89CzoB4GtexTtrRaFCmEH2aUX7WBzbFI5C6A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=h4IwdYm+gbQdB6UnJ7ATOnszQVE0TTvx3CPYbW4z9O4=;
- b=Ai7SHU4U6Iyjagm8nZQgq/FBOQOGZ9cCyMT6HL00sKyIR75xwvk5Kob/fX7CDqB3ZXieRmLYCubzreQqTfY9qJUdy2m1BuTD7wUIkyx7UGN/2jmNAgepVnML/gCyL1zdfS8bZXNKLMROe5rhvAMswXUFBq5gGht99X7P9HP+5cw=
-Received: from DB8PR04MB6843.eurprd04.prod.outlook.com (2603:10a6:10:11b::14)
- by DBBPR04MB6153.eurprd04.prod.outlook.com (2603:10a6:10:d2::21) with
+ smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
+ dkim=pass header.d=quicinc.com; arc=none
+Received: from BL3PR02MB8201.namprd02.prod.outlook.com (2603:10b6:208:338::17)
+ by BL0PR02MB3828.namprd02.prod.outlook.com (2603:10b6:207:44::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.18; Sat, 9 Oct
- 2021 02:28:49 +0000
-Received: from DB8PR04MB6843.eurprd04.prod.outlook.com
- ([fe80::2102:b9f6:1221:edef]) by DB8PR04MB6843.eurprd04.prod.outlook.com
- ([fe80::2102:b9f6:1221:edef%4]) with mapi id 15.20.4587.024; Sat, 9 Oct 2021
- 02:28:49 +0000
-From:   Xu Yang <xu.yang_2@nxp.com>
-To:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     Jun Li <jun.li@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH v2] usb: typec: tcpm: fix issue of multiple tcpm_set_state
-Thread-Topic: [PATCH v2] usb: typec: tcpm: fix issue of multiple
- tcpm_set_state
-Thread-Index: AQHXmzljyOAmdD7k3EKMdpCjq+0g06uh4NcQgChS3lA=
-Date:   Sat, 9 Oct 2021 02:28:48 +0000
-Message-ID: <DB8PR04MB68432A2A70EE38D6962528CC8CB39@DB8PR04MB6843.eurprd04.prod.outlook.com>
-References: <20210827114809.1577720-1-xu.yang_2@nxp.com>
- <DB8PR04MB68431AEB789C4AEC35DC8E458CD99@DB8PR04MB6843.eurprd04.prod.outlook.com>
-In-Reply-To: <DB8PR04MB68431AEB789C4AEC35DC8E458CD99@DB8PR04MB6843.eurprd04.prod.outlook.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.22; Sat, 9 Oct
+ 2021 05:28:56 +0000
+Received: from BL3PR02MB8201.namprd02.prod.outlook.com
+ ([fe80::51fb:e0d:4b5e:4cfd]) by BL3PR02MB8201.namprd02.prod.outlook.com
+ ([fe80::51fb:e0d:4b5e:4cfd%6]) with mapi id 15.20.4587.024; Sat, 9 Oct 2021
+ 05:28:56 +0000
+From:   "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v5 1/3] usb: gadget: configfs: avoid list move operation
+ of usb_function
+Thread-Topic: [PATCH v5 1/3] usb: gadget: configfs: avoid list move operation
+ of usb_function
+Thread-Index: AQHXo4UNlBSIOyDIIUmvyeFQTj9v7avE4aQAgAVw6/A=
+Date:   Sat, 9 Oct 2021 05:28:56 +0000
+Message-ID: <BL3PR02MB820103E260254CF9D4C9998EE3B39@BL3PR02MB8201.namprd02.prod.outlook.com>
+References: <1630976977-13938-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1630976977-13938-2-git-send-email-quic_linyyuan@quicinc.com>
+ <YVwywFfe/x8OEHh8@kroah.com>
+In-Reply-To: <YVwywFfe/x8OEHh8@kroah.com>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: roeck-us.net; dkim=none (message not signed)
- header.d=none;roeck-us.net; dmarc=none action=none header.from=nxp.com;
+authentication-results: linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=none action=none
+ header.from=quicinc.com;
+x-ms-exchange-messagesentrepresentingtype: 1
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 91566939-3ae2-445f-1611-08d98acc86dc
-x-ms-traffictypediagnostic: DBBPR04MB6153:
+x-ms-office365-filtering-correlation-id: 0c1ef71e-4711-49f7-849b-08d98ae5b0bb
+x-ms-traffictypediagnostic: BL0PR02MB3828:
+x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DBBPR04MB61536405AB93A6D2289FD4728CB39@DBBPR04MB6153.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4125;
+x-microsoft-antispam-prvs: <BL0PR02MB382862716ECF1B01FBA9CBEE9FB39@BL0PR02MB3828.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yi2KmkVBaInNe4MstG/FOpPH2Idkw60nGazfGi1NSbkKFohhvqiq2YfCDexNzuVKtnzvuWk6mqbQeXaAG5+ehfmbunidTr5B3FqT8k/5qQ0G+YGObfFTci0jY1kLIB59ofnryJb3NC5UpFrZAACRsOzTBPLvXVwa/IMuV0FHNjsp2Esf+vO4da1O72+5KVQ7D0Y1DoKbSDDiqyMXVVXIKmNBn1vGoDA62PbY5bsPGZkOYhVAN0dgC+7Nf8LddYsAdtnbwZpSXRB9CSpMELDcvB2pgfIjh2wzP/ykV85uyfYFV1r4a1yjcTaKeizVVwgS0G3Ld7AmFZUyHGnJGGkkZ8BJv8+0LrX9YrUh8mv1sbsJILRJrwSW1sAE6sKfdtCkilvS24Op6Z9lDs+Wq7Lsc2Lb6fgdEP7j2A2lmPoEeqmi4Km+Y+o46kbxJVcwO4pprdCKHVChf4tsap+hXeWrpt3wRalT5OheMuP/ROYhvBfRNU2d2mR4H+GFfD9uok0nCmQPyxoJwGcVA5IyRENvW4zmmQ6Q9dKBy6iVgCHjJhANRvnIr8eZwCUoKejpI72zvQAWNQJuyKa0YWvmH6Xsz9oeev/sx6y88FG+ohf4LAdhuwpK7z+GR0IYdVBYuY6aZaEGqypjXmwpsSSU4CU72FJ2k9aQLgw9fGVAerdSRxnqxu4HIgrkwg7gaK2JJ7BrZWWXmJPCiWccZCAdgkxvwg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6843.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66946007)(6506007)(5660300002)(508600001)(8936002)(66476007)(122000001)(52536014)(64756008)(86362001)(66446008)(54906003)(53546011)(83380400001)(76116006)(33656002)(110136005)(7696005)(38100700002)(2906002)(66556008)(55016002)(4326008)(186003)(316002)(9686003)(26005)(8676002)(38070700005)(71200400001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: AwaFpkfeg0h3JT4LQjyozC6vuzrduNION8IN2xoipQ4QwELTUj4Cjb3pEcmIdKrWyPcJMwWorMarvWtKzt4stX0G8e4v19eEIccnLhkvB61CMlRVhkJqemwqvKRLAt1/EDt5EqZsA+kLLHisSA1H2aaiWYeHo2ljAt64ZPkwzkgQxvNf+sD70zRQTRXLKHXC4rHxn9qrkTTnFxKHs0tjN+fEZkgdRB/m4s1WExXi/dSTVG94BAhkSWrDhwi3z+QVJ7g6ePod6S4fuxzl69iVXh0dUdnPlGcLKKuUFdpFy9WQ+DBVCCY+fuUVsjZjPq1QGaaofoJH9vFo0Ts/ZEVyOOHiEx1+A2aZXIyQ4CJOWeC5+yZ4mbzqZpl66wj2gOZU7N/Or6UYAhR2yakHclTR+6UvX7E6uUinehjZtJGs9AbECMQNmn/Ts4iuvsvThiPNzv0r+xowKEd6WlMnXUWAmJXz1A6mFmU7shfUr+m7CJtAKzRvxTdHRiau+XwRD4t5L6bn7jNp/he7E/zTEP6xIhkd6a0zguqzeuvhuRULQ9ZlrsBwNkyvfB1K4XQnsN/UF5f7t7rYsGdyXLJ0JPZBg14GtDF4J2sGZx7NuWNCKn30MxuvPqyviAGpeCQAi61AZO8OqDE0f9mXIEcvYMKBjFTvdio1p9iux/DaSCZ2rERS1Rm8P3Ixbnp+1rwd4mmLHqNLs5ccDT/H1XIUC1tW3g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL3PR02MB8201.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66476007)(71200400001)(5660300002)(110136005)(66556008)(64756008)(66446008)(76116006)(38070700005)(66946007)(7696005)(508600001)(54906003)(8936002)(9686003)(6506007)(38100700002)(86362001)(52536014)(26005)(55016002)(122000001)(4326008)(8676002)(186003)(83380400001)(53546011)(316002)(33656002)(2906002);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?p2H8nhDh92dKPlxY4PEH/vVz1GjVkd1VXJ0I+mDXfOYpADJKaj62wBTpUsb2?=
- =?us-ascii?Q?tBPkTvalKv0h2TM6s1I96fQeQ0bbgFZR02Tf1WacbFzwdyfoPEgKVhSNVJCW?=
- =?us-ascii?Q?Zf9HRJi32fkTcWaQFrfAsL0yc2RUh2S1VpM+sYzdZP8f8+k8QsojFFAljysd?=
- =?us-ascii?Q?lrY71JtYjDn3ME7fMD+scYUnMe9xVNzy/GgEm+rX1tB0XjAyfz4gi3T0WQg+?=
- =?us-ascii?Q?M/6Id5nle9xgPvP3XlSQ8eNGLjR5Yk4EF5kk/By4iyAU49RhO5ptPXePQJC1?=
- =?us-ascii?Q?nxGGkeDNRb/tg3y++BTwFBMGIjBVXp7uWQojXtx5YJZc5/jZD+cjTcLI/Iqh?=
- =?us-ascii?Q?JLfyYT14HzD3JVCdBi/sxImG7j9NwUlT5z8yB2n6CBUUdNg2CPpxIR05z/yl?=
- =?us-ascii?Q?vkp1S49P5NCTqjGjrtX3H08eQzw17/sp1Tsd61Ef3vYNOBEql/333IM4zxl4?=
- =?us-ascii?Q?bKacTdJoGczesI8nXDa5SFK/iJDiiRzovxvKODHgDTkdGykJGSWJNHqrgN7E?=
- =?us-ascii?Q?gtE2e+lpy/7niosTmY5hPJL5NkmsgSNF+potXoWHOk58R+pohGK4S/lQqzhq?=
- =?us-ascii?Q?Rpyul3nNcdVgI9dk2rIxZjx/bywin1AD/qhlPm55f9FJAA9qJ80AIjJWP77a?=
- =?us-ascii?Q?aPmrViTJfzojK8nsf4zYRDL6q+AVjua/wfsWP4kBOsKg/FfZxwltEQP1pFRC?=
- =?us-ascii?Q?1WUtGEvbmY4qokNc43eOVdcHUFo7jVw5drBB9MAzf7j9Nr1hFl5b14kc1W6F?=
- =?us-ascii?Q?nOofPAroqFZCibQNNk+jSjspdReBxoXD4MFcJw6eebDhdGeUZCOQdTnlYKnz?=
- =?us-ascii?Q?H+VXdvwzB/i+VJoit1LMZJhpMs2UGRJz9DLdQTtUnxGWg6kx5A20MezBts09?=
- =?us-ascii?Q?QABndAH9RDB/QIqjukAkaYeSQbamO9JtIubzYdN86GwoNQqLMdoutAQUFM9g?=
- =?us-ascii?Q?QGnKbE846WWAUAgzvoFujGd51OxcgxljJCLW8E70HHJQhsOhrQLhaEP5ualt?=
- =?us-ascii?Q?XYMmPNGIXzCxrYXpU/rV7cRH1p3w6du3RY0JB2keEiJQNCHDAyWspKDKRT3t?=
- =?us-ascii?Q?l3NqXxxCFqv16Q241wlKmvtbDBW+1nSUmJ37eySyetrkEE00K41kKhnXL4yV?=
- =?us-ascii?Q?UchDsHIRCl6gui68HGnAAa+HEhWzQX2uJMMOfhTsnSUQKruxYwjTQCM/phMQ?=
- =?us-ascii?Q?DpD+P0wSRg81qOkI/3kfMcYzL2mvb7+GiRfQyv558iR9I+567Nv/AyZBDNAp?=
- =?us-ascii?Q?rUvZZybIt00jahboY8qrUZWgpIygA9IYKO8JkbOEIQu49KFEMauLkFJ0GxoX?=
- =?us-ascii?Q?HIIkU7JpA7bMGPNOqKkpL8nT?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?q3IDlHKPAgaBQo0dASfXZSQT5dP6fytxiT27oNw2hBjwnmhzlUrbfl/HFoRe?=
+ =?us-ascii?Q?2xR+XFSMSYYmwUna314JUcMLvCQRKAl9QxxtW8KCw939PpniGtRdrUucRbjs?=
+ =?us-ascii?Q?96NZCenzOicW6/lnet5c1FL1a2WcMo0sJW0ZnmGZCpOPi1ATqvPh4IBSuI/n?=
+ =?us-ascii?Q?CWLtgmDHZaGvdvjXWuWy6uu0iXtFoUGmlMLtzyKceJmPC4L5fzUHEpHMq4ks?=
+ =?us-ascii?Q?VbWuFW5nMEsykJrXzVWyq9E6HFJ5CvQ6FHECVjMsy9vLJpI5kAfgGDIfx7N2?=
+ =?us-ascii?Q?YdG1VHUaHbmhsz1UPwtCqW4cq10x6GXiFtlcv6E29k91MJpdTfgfeoJbPBaU?=
+ =?us-ascii?Q?CfJQrFBPGuGoqgAqxYzM96X1f6V4D9+n3uSGrGgA80Zo7pjC2d07ZX9vIKFX?=
+ =?us-ascii?Q?MDVnwqE/KgNWEpCJ+CHi+RfqzMdRsEyL36lSx5cA5lAnQp04IV0nFyG2EVmi?=
+ =?us-ascii?Q?/KrVt39dnV3lrlKuK8WzjbD7PJE2VVZ0vGeDvYfe4EuM1DAIvUdHJlSYuCxd?=
+ =?us-ascii?Q?GEFZabS4K/CA9rG3Se17X/y5uLswtzNeJRPQ41phtwY4XOwQo7/M+7tBLJyq?=
+ =?us-ascii?Q?7oG47cPyj2iKy7995OMtMA+hxC+gZAaURPeYDjMvWF9dRTMf/x48o9Ywad0j?=
+ =?us-ascii?Q?+rKsXTTc+KHHQVS7/hbiFZ5+OeUIFT1BZBd/9V72T2n0ce9WeUOh9ePmd2qq?=
+ =?us-ascii?Q?AJpytMot2BrKmRgjHxEFThmDa1ICQn5DjQiFsLo1H+JW1/dp4nhfB1FnbKEB?=
+ =?us-ascii?Q?Ivure51tmuMQBmJfhzRJR19R2IQbRkavmUZbrbX336PtumPPM5YJrofFDh0r?=
+ =?us-ascii?Q?3SCuxHBy1TAz6A3sS+WKs6CEMeCdng0E8vnBqCAd6QwQJJCxPO/9vSU04Ist?=
+ =?us-ascii?Q?2wZZN17zRliL3g7o9b7eWF4YNqM+RsJHG7zHdCUWc6BgLTj/fNGhM9RIqZht?=
+ =?us-ascii?Q?rz081RtqX3dj74NoNbfr4Zstq8anF9AfxAy7bOUkgNr0jNVV1d32Kjzt9L8i?=
+ =?us-ascii?Q?ZoAZK8WdpPqpb10b2718aN+Pxl6P6vI/eTgSg7Z98kPyfJLHqU7jmt4Kivvn?=
+ =?us-ascii?Q?unXb0eEarfgTzlBfaOgJSbp0EK1C6TXDgvG/prhchBz2yrdpSJhzxH74IszT?=
+ =?us-ascii?Q?Tji4db0ZBHjTYD5GGJrhRl4gyisZCU3QKOrcCwRBBu2e1ihK0Yh5zPVZjPW9?=
+ =?us-ascii?Q?fRDSsp9H0GdD3PwIAV51ourI46x1sbPWtyFSydeb4mwpt0RtKoqwdW6+vtIt?=
+ =?us-ascii?Q?fB6w4wfIwEhlq4tqwVcQBmn7FOcz3cwRvt4BaAOptLAo2qez6P0PaScGZ897?=
+ =?us-ascii?Q?xZE=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-OriginatorOrg: quicinc.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6843.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91566939-3ae2-445f-1611-08d98acc86dc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Oct 2021 02:28:48.8803
+X-MS-Exchange-CrossTenant-AuthSource: BL3PR02MB8201.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c1ef71e-4711-49f7-849b-08d98ae5b0bb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Oct 2021 05:28:56.6201
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VaqczYGarcz/Mo0HRzpY81MSZlgvIjMaMe53AYw8tz94VD/IZqxkNz0qqBRVD8ZysAoSkt/6I6EOEZKEmghWCA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB6153
+X-MS-Exchange-CrossTenant-userprincipalname: qM3zJJA6M+FjdnsMU0IV4Q3IkMLxg0ZcbnV9kIZ795aGJjqwoVBmMUIqvdFGz2xRe5mEENd7T8P433j+azu2iO+LGqnm6hnl4ttbNq6to/U=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB3828
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Xu Yang
-> Sent: Monday, September 13, 2021 6:42 PM
-> To: linux@roeck-us.net
-> Cc: Jun Li <jun.li@nxp.com>; heikki.krogerus@linux.intel.com;
-> gregkh@linuxfoundation.org; linux-usb@vger.kernel.org; dl-linux-imx <linu=
-x-
-> imx@nxp.com>
-> Subject: RE: [PATCH v2] usb: typec: tcpm: fix issue of multiple
-> tcpm_set_state
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Sent: Tuesday, October 5, 2021 7:11 PM
+> To: Linyu Yuan (QUIC) <quic_linyyuan@quicinc.com>
+> Cc: Felipe Balbi <balbi@kernel.org>; linux-usb@vger.kernel.org
+> Subject: Re: [PATCH v5 1/3] usb: gadget: configfs: avoid list move operat=
+ion
+> of usb_function
+>=20
+> On Tue, Sep 07, 2021 at 09:09:35AM +0800, Linyu Yuan wrote:
+> > add a new list which link all usb_function at configfs layers,
+> > it means that after link a function a configuration,
+> > from configfs layer, we can still found all functions,
+> > it will allow trace all functions from configfs.
+>=20
+> I am sorry, but I do not understand this paragraph.  Can you try
+> rewording it?
+Thanks, will update next version.
+>=20
+> >
+> > Reported-by: kernel test robot <lkp@intel.com>
+>=20
+> How did the kernel test robot report this?  You are adding a new
+> function here, it is not a bug you are fixing, right?
+Thanks, will remove next version.
 >=20
 >=20
-> > -----Original Message-----
-> > From: Xu Yang <xu.yang_2@nxp.com>
-> > Sent: Friday, August 27, 2021 7:48 PM
-> > To: linux@roeck-us.net
-> > Cc: Jun Li <jun.li@nxp.com>; heikki.krogerus@linux.intel.com;
-> > gregkh@linuxfoundation.org; linux-usb@vger.kernel.org; dl-linux-imx
-> > <linux- imx@nxp.com>
-> > Subject: [PATCH v2] usb: typec: tcpm: fix issue of multiple
-> > tcpm_set_state
+> > Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> > ---
+> > v2: fix unused cfg variable warning
+> > v3: add struct inside configfs.c
+> > v4: no change
+> > v5: lost v2 fix, add it again
 > >
-> > There are potential problems when states are set as following:
+> >  drivers/usb/gadget/configfs.c | 55 ++++++++++++++++++++++++----------
+> ---------
+> >  1 file changed, 31 insertions(+), 24 deletions(-)
 > >
-> >     tcpm_set_state(A, 0)
-> >     tcpm_set_state(B, X)
-> >
-> > As long as the state A is set and the state_machine work is queued
-> > successfully, state_machine work will be scheduled soon after. Before
-> > running into tcpm_state_machine_work(), there is a chance to set state
-> > B again. If it does occur:
-> >
-> > either (X =3D 0)
-> >     port->state =3D B and state_machine work is queued again, then work
-> >     will be executed twice.
-> > or (X !=3D 0)
-> >     port->state =3D A and port->delayed_state =3D B, then work will be
-> >     executed once but timer is still running.
-> >
-> > For this situation, tcpm should only handle the most recent state
-> > change as if only one state is set just now. Therefore, if the
-> > state_machine work has already been queued, it can't be queued again
-> > before running into tcpm_state_machine_work().
-> >
-> > The state_machine_running flag already prevents from queuing the work,
-> > so we can make it contain the pending stage (after work be queued and
-> > before running into tcpm_state_machine_work). The
-> > state_machine_pending_or_running flag can be used to indicate that a
-> > state can be handled without queuing the work again.
-> >
-> > Because the state_machine work has been queued for state A, there is
-> > no way to cancel as it may be already dequeued later, and then will
-> > run into
-> > tcpm_state_machine_work() certainly. To handle the delayed state B,
-> > such an abnormal work should be skiped. If port->delayed_state !=3D
-> > INVALID_STATE and timer is still running, it's time to skip.
-> >
-> > Fixes: 4b4e02c83167 ("typec: tcpm: Move out of staging")
-> > cc: <stable@vger.kernel.org>
-> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> >
-> > diff --git a/drivers/usb/typec/tcpm/tcpm.c
-> > b/drivers/usb/typec/tcpm/tcpm.c index 049f4c61ee82..a913bc620e88
-> > 100644
-> > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > @@ -371,7 +371,7 @@ struct tcpm_port {
-> >  	struct kthread_work enable_frs;
-> >  	struct hrtimer send_discover_timer;
-> >  	struct kthread_work send_discover_work;
-> > -	bool state_machine_running;
-> > +	bool state_machine_pending_or_running;
-> >  	bool vdm_sm_running;
-> >
-> >  	struct completion tx_complete;
-> > @@ -1192,6 +1192,7 @@ static void mod_tcpm_delayed_work(struct
-> > tcpm_port *port, unsigned int delay_ms)
-> >  	} else {
-> >  		hrtimer_cancel(&port->state_machine_timer);
-> >  		kthread_queue_work(port->wq, &port->state_machine);
-> > +		port->state_machine_pending_or_running =3D true;
-> >  	}
+> > diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configf=
+s.c
+> > index 477e72a..5b2e6f9 100644
+> > --- a/drivers/usb/gadget/configfs.c
+> > +++ b/drivers/usb/gadget/configfs.c
+> > @@ -58,6 +58,11 @@ static inline struct gadget_info
+> *to_gadget_info(struct config_item *item)
+> >  	return container_of(to_config_group(item), struct gadget_info,
+> group);
 > >  }
 > >
-> > @@ -1250,7 +1251,7 @@ static void tcpm_set_state(struct tcpm_port
-> > *port, enum tcpm_state state,
-> >  		 * tcpm_state_machine_work() will continue running the
-> state
-> >  		 * machine.
-> >  		 */
-> > -		if (!port->state_machine_running)
-> > +		if (!port->state_machine_pending_or_running)
-> >  			mod_tcpm_delayed_work(port, 0);
-> >  	}
-> >  }
-> > @@ -4810,13 +4811,15 @@ static void tcpm_state_machine_work(struct
-> > kthread_work *work)
-> >  	enum tcpm_state prev_state;
-> >
-> >  	mutex_lock(&port->lock);
-> > -	port->state_machine_running =3D true;
-> >
-> >  	if (port->queued_message && tcpm_send_queued_message(port))
-> >  		goto done;
-> >
-> >  	/* If we were queued due to a delayed state change, update it now
-> */
-> >  	if (port->delayed_state) {
-> > +		if (ktime_before(ktime_get(), port->delayed_runtime))
-> > +			goto done;
+> > +struct config_usb_function {
+> > +	struct list_head list;
+> > +	struct usb_function *f;
+> > +};
+>=20
+> What lock protects this list?
+Currently like string list, there is no protection method,
+I guess original author hope it can protect by following lock,
+struct gadget_info {
+...
+	struct mutex lock;
+};
+>=20
 > > +
-> >  		tcpm_log(port, "state change %s -> %s [delayed %ld ms]",
-> >  			 tcpm_states[port->state],
-> >  			 tcpm_states[port->delayed_state], port->delay_ms);
-> @@ -4837,7
-> > +4840,7 @@ static void tcpm_state_machine_work(struct kthread_work
-> > *work)
-> >  	} while (port->state !=3D prev_state && !port->delayed_state);
+> >  struct config_usb_cfg {
+> >  	struct config_group group;
+> >  	struct config_group strings_group;
+> > @@ -420,7 +425,7 @@ static int config_usb_cfg_link(
+> >  	struct usb_function_instance *fi =3D container_of(group,
+> >  			struct usb_function_instance, group);
+> >  	struct usb_function_instance *a_fi;
+> > -	struct usb_function *f;
+> > +	struct config_usb_function *cf;
+> >  	int ret;
 > >
-> >  done:
-> > -	port->state_machine_running =3D false;
-> > +	port->state_machine_pending_or_running =3D false;
-> >  	mutex_unlock(&port->lock);
-> >  }
+> >  	mutex_lock(&gi->lock);
+> > @@ -438,21 +443,29 @@ static int config_usb_cfg_link(
+> >  		goto out;
+> >  	}
 > >
-> > @@ -6300,6 +6303,7 @@ static enum hrtimer_restart
-> > state_machine_timer_handler(struct hrtimer *timer)
-> >  	struct tcpm_port *port =3D container_of(timer, struct tcpm_port,
-> > state_machine_timer);
+> > -	list_for_each_entry(f, &cfg->func_list, list) {
+> > -		if (f->fi =3D=3D fi) {
+> > +	list_for_each_entry(cf, &cfg->func_list, list) {
+> > +		if (cf->f->fi =3D=3D fi) {
+> >  			ret =3D -EEXIST;
+> >  			goto out;
+> >  		}
+> >  	}
 > >
-> >  	kthread_queue_work(port->wq, &port->state_machine);
-> > +	port->state_machine_pending_or_running =3D true;
-> >  	return HRTIMER_NORESTART;
-> >  }
-> >
-> > --
-> > 2.25.1
+> > -	f =3D usb_get_function(fi);
+> > -	if (IS_ERR(f)) {
+> > -		ret =3D PTR_ERR(f);
+> > +	cf =3D kzalloc(sizeof(*cf), GFP_KERNEL);
 >=20
-> A gentle ping.
+> Why "kzalloc" and not "kmalloc"?
+Thanks, will change next version.
 >=20
-> Xu Yang
-
-A gentle ping.
-Xu Yang
+> I don't understand why you are moving everything to a single list in the
+> system, what is wrong with the existing per-device one?
+>=20
+> thanks,
+>=20
+> greg k-h
