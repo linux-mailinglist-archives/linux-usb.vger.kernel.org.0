@@ -2,76 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA49E427D3B
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Oct 2021 22:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 471914280D5
+	for <lists+linux-usb@lfdr.de>; Sun, 10 Oct 2021 13:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbhJIUI7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 Oct 2021 16:08:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41780 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230377AbhJIUI5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 9 Oct 2021 16:08:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 5CAAC60F9C
-        for <linux-usb@vger.kernel.org>; Sat,  9 Oct 2021 20:07:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633810020;
-        bh=/wUa10KH82FdxbB2a9r2iM3IVgL10ZE0/HG0+a3OyK8=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=braAL73Q8697OV4uUss9a2yWkar32gNOMgvXOcNmPZ0hshWw3oNcV8qQ783lwfT++
-         KDZXehgAGHD45lMMth9lOJ6kcI5Jm00pTN2hxC/lFlQ1yAzwbd4l9kJaqXev9oGXTx
-         SmstNENJgN1Zjx7p1rP/6DlXeuwtewKa/8KLlhxecEokiHoCod92oCQ46lIZc8frJJ
-         qigTIU/3YmKUFk8FJfzyhRJM/K8f/cLAJJ8qJ9eHL9UiHXvJC/5FmJ/R9VHOu7R774
-         R5f3vyOF6xOxLLnTtLqWb3LbXSY76Uwsrl8u/4CcyXDj2wczp4+XHBAru6P7E2Nkda
-         ec++QAqto60cw==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 45E7F60FC4; Sat,  9 Oct 2021 20:07:00 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 213771] ch341 USB-Serial converter receives but does not send
-Date:   Sat, 09 Oct 2021 20:07:00 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bondar.den@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-213771-208809-JWjSQHgfJ8@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-213771-208809@https.bugzilla.kernel.org/>
-References: <bug-213771-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S231786AbhJJLfU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 10 Oct 2021 07:35:20 -0400
+Received: from smtp13.smtpout.orange.fr ([80.12.242.135]:29782 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231656AbhJJLfT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 Oct 2021 07:35:19 -0400
+Received: from pop-os.home ([90.126.248.220])
+        by mwinf5d73 with ME
+        id 4BZH2600A4m3Hzu03BZHvZ; Sun, 10 Oct 2021 13:33:20 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 10 Oct 2021 13:33:20 +0200
+X-ME-IP: 90.126.248.220
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        yangyingliang@huawei.com
+Cc:     linux-geode@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] USB: gadget: udc: Remove some dead code
+Date:   Sun, 10 Oct 2021 13:33:16 +0200
+Message-Id: <9a85b2353843b95e2d86acb3103967fd405a8536.1633865503.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D213771
+The 'drd_wq' workqueue_struct has never been used.
+It is only destroyed, but never created.
 
-Denis Bondar (bondar.den@gmail.com) changed:
+It was introduced in commit 1b9f35adb0ff ("usb: gadget: udc: Add Synopsys
+UDC Platform driver")
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |bondar.den@gmail.com
+Remove the corresponding dead code and save some space from the 'udc'
+structure.
 
---- Comment #5 from Denis Bondar (bondar.den@gmail.com) ---
-Hi,
-This version probably has the same or similar problem:
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/usb/gadget/udc/amd5536udc.h    | 1 -
+ drivers/usb/gadget/udc/snps_udc_plat.c | 5 -----
+ 2 files changed, 6 deletions(-)
 
-Linux home 5.11.0-37-generic #41~20.04.2-Ubuntu
+diff --git a/drivers/usb/gadget/udc/amd5536udc.h b/drivers/usb/gadget/udc/amd5536udc.h
+index 3296f3fcee48..055436016503 100644
+--- a/drivers/usb/gadget/udc/amd5536udc.h
++++ b/drivers/usb/gadget/udc/amd5536udc.h
+@@ -572,7 +572,6 @@ struct udc {
+ 	struct extcon_specific_cable_nb	extcon_nb;
+ 	struct notifier_block		nb;
+ 	struct delayed_work		drd_work;
+-	struct workqueue_struct		*drd_wq;
+ 	u32				conn_type;
+ };
+ 
+diff --git a/drivers/usb/gadget/udc/snps_udc_plat.c b/drivers/usb/gadget/udc/snps_udc_plat.c
+index 99805d60a7ab..8bbb89c80348 100644
+--- a/drivers/usb/gadget/udc/snps_udc_plat.c
++++ b/drivers/usb/gadget/udc/snps_udc_plat.c
+@@ -243,11 +243,6 @@ static int udc_plat_remove(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, NULL);
+ 
+-	if (dev->drd_wq) {
+-		flush_workqueue(dev->drd_wq);
+-		destroy_workqueue(dev->drd_wq);
+-	}
+-
+ 	phy_power_off(dev->udc_phy);
+ 	phy_exit(dev->udc_phy);
+ 	extcon_unregister_notifier(dev->edev, EXTCON_USB, &dev->nb);
+-- 
+2.30.2
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
