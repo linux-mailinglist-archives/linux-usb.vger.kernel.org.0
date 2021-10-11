@@ -2,35 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C96A429719
+	by mail.lfdr.de (Postfix) with ESMTP id 5592442971A
 	for <lists+linux-usb@lfdr.de>; Mon, 11 Oct 2021 20:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232719AbhJKSuo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Oct 2021 14:50:44 -0400
-Received: from mga09.intel.com ([134.134.136.24]:24792 "EHLO mga09.intel.com"
+        id S233077AbhJKSup (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Oct 2021 14:50:45 -0400
+Received: from mga05.intel.com ([192.55.52.43]:48819 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229542AbhJKSun (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S229544AbhJKSun (ORCPT <rfc822;linux-usb@vger.kernel.org>);
         Mon, 11 Oct 2021 14:50:43 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10134"; a="226843378"
+X-IronPort-AV: E=McAfee;i="6200,9189,10134"; a="313138237"
 X-IronPort-AV: E=Sophos;i="5.85,365,1624345200"; 
-   d="scan'208";a="226843378"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2021 11:48:43 -0700
+   d="scan'208";a="313138237"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2021 11:48:43 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,365,1624345200"; 
-   d="scan'208";a="591435684"
+   d="scan'208";a="479994893"
 Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 11 Oct 2021 11:48:42 -0700
+  by orsmga007.jf.intel.com with ESMTP; 11 Oct 2021 11:48:42 -0700
 Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1ma0Lp-0002cS-H8; Mon, 11 Oct 2021 18:48:41 +0000
-Date:   Tue, 12 Oct 2021 02:47:49 +0800
+        id 1ma0Lp-0002cN-Fa; Mon, 11 Oct 2021 18:48:41 +0000
+Date:   Tue, 12 Oct 2021 02:47:52 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- 620b74d01b9d4393bef6742bf121908322c2fe0b
-Message-ID: <616486d5.iTTje6DBqcU0SQoz%lkp@intel.com>
+Subject: [usb:usb-linus] BUILD SUCCESS
+ ea0f69d8211963c4b2cc1998b86779a500adb502
+Message-ID: <616486d8.ptNyBJxLUyz2cIFv%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -39,10 +39,10 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-branch HEAD: 620b74d01b9d4393bef6742bf121908322c2fe0b  Merge 5.15-rc5 into usb-next
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: ea0f69d8211963c4b2cc1998b86779a500adb502  xhci: Enable trust tx length quirk for Fresco FL11 USB controller
 
-elapsed time: 720m
+elapsed time: 721m
 
 configs tested: 154
 configs skipped: 3
@@ -57,6 +57,7 @@ arm64                               defconfig
 arm                              allyesconfig
 arm                              allmodconfig
 i386                 randconfig-c001-20211011
+sparc                            allyesconfig
 sh                           se7705_defconfig
 arm                      tct_hammer_defconfig
 ia64                      gensparse_defconfig
@@ -145,15 +146,14 @@ nios2                            allyesconfig
 csky                                defconfig
 alpha                               defconfig
 alpha                            allyesconfig
-xtensa                           allyesconfig
 h8300                            allyesconfig
 arc                                 defconfig
 sh                               allmodconfig
+xtensa                           allyesconfig
 parisc                              defconfig
 s390                             allyesconfig
 parisc                           allyesconfig
 s390                             allmodconfig
-sparc                            allyesconfig
 sparc                               defconfig
 i386                                defconfig
 mips                             allyesconfig
