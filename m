@@ -2,80 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C58DB428B80
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Oct 2021 12:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C418428BEB
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Oct 2021 13:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236125AbhJKK61 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Oct 2021 06:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236133AbhJKK6X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Oct 2021 06:58:23 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2244C06178C
-        for <linux-usb@vger.kernel.org>; Mon, 11 Oct 2021 03:56:13 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id t9so70820220lfd.1
-        for <linux-usb@vger.kernel.org>; Mon, 11 Oct 2021 03:56:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=DOxN63QWnl4dBNWQl+LufsBrewR+8VuPJnGph7ijSeE=;
-        b=km/+rwE10MGCG3K0BNjxD+A2l394aMlSCDFqBEiDyrs45mObKwVEkOccUp5BPFftJU
-         5cB06txNzUPVxcrxQnkqMq9zaxAqQeR9eoa3+7DqnAg3rX7wMze/dloERdrhczopiGET
-         PvxtLks7kWCMKTs5Q8Mmq12LwUKUT5cPH1x1mszpEwl0kuXWAYNTl0kX4+cL3oWAj8+a
-         6an2wLimFEmscCT9jtQf7FGYav0q/UTa6GRCeFihab7mYp8KZTVzyAi9ONxHllw1wfay
-         OSS3CoE7RnQ2PFKTnc/5Yya8gHnSshWvMzermo1msudbBS7MTk09iY8fA6ci8A/KmFSk
-         +E4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=DOxN63QWnl4dBNWQl+LufsBrewR+8VuPJnGph7ijSeE=;
-        b=uM+4G+GYpK3lCGLqHCuW/NbDJTgf7UB1IQWf3SyeSBfTZ2xI6Oikl/tGvGSs/WWuRS
-         meWEKxKY88ZPfc4TYDzzwoxesqV8lVoZDM7n3FVmFzEdZDe9PE86uyGkIUkoAsCQU9CP
-         JjAeySR/jT1nhx+qR84t9BiG865mhot265jypX7kgaPA+D7JQ5RQ/nflkveJNm9mOqyA
-         mDSDa5Xxo1JFqvX9hnn88Yyy2nW2uUWQvSTAHAIcb0D+TC1SZtAhBNv9eMN0QhEfmm6H
-         V2IS79hkSpeRt/Mm4/IOmP2/uwdkG3zBOHAfiPZDtqPTLG6Qd1JXruSY0UlI6z04BMea
-         n9tg==
-X-Gm-Message-State: AOAM5302a1s9PQu0tYeZ8tO5OVXyA8GB/35UIjp/7T9EcwVRWAldU47o
-        CfY1TcHfyKFVgOceNPYCTHUr4JtBYE4tNkCN6mqTamnWNUM1xw==
-X-Google-Smtp-Source: ABdhPJxWYMUVxuj7Tly9azrkWxEMXzTPZAklmoVIH4V2ykknMMiBN9imOFz2zTqxux/zk/7pzvFSRlX+C6mfjc7ADy4=
-X-Received: by 2002:adf:8b9a:: with SMTP id o26mr24377548wra.109.1633949760323;
- Mon, 11 Oct 2021 03:56:00 -0700 (PDT)
+        id S236223AbhJKL1F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Oct 2021 07:27:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46512 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236227AbhJKL1F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 11 Oct 2021 07:27:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7D53C60EB1;
+        Mon, 11 Oct 2021 11:25:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1633951505;
+        bh=RuJomKPZLFQL35W+YFeJBY0CYNy2GotlLI69CpgmVXo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0wZZxo14BNe1muDs9hc6L+VWHaNT9lIRUtyBOJztfD2KLXu+6NtYIZTLvKkJe+mZo
+         WZ36dy+a+q/qRUrBSSIyMxMaBFjH4zY+7Tmr+ruXuwYeF9OduPE0LyHFyhh/9msdEA
+         7U0fuPUyjnIK7uDIem/KWKv/JGwCEHyV0r2Srsec=
+Date:   Mon, 11 Oct 2021 13:25:02 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Xu Yang <xu.yang_2@nxp.com>
+Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        linux-usb@vger.kernel.org, linux-imx@nxp.com, jun.li@nxp.com
+Subject: Re: [PATCH v2] usb: typec: tcpm: fix issue of multiple tcpm_set_state
+Message-ID: <YWQfDjkgRA4GR7ot@kroah.com>
+References: <20211011103210.156552-1-xu.yang_2@nxp.com>
 MIME-Version: 1.0
-Received: by 2002:adf:dd8c:0:0:0:0:0 with HTTP; Mon, 11 Oct 2021 03:55:59
- -0700 (PDT)
-Reply-To: ramcharan9910@outlook.com
-From:   "Cr.David Ramcharan" <convy0101@gmail.com>
-Date:   Mon, 11 Oct 2021 03:55:59 -0700
-Message-ID: <CADDRs95718H=K3tUjphEHH_C96xYhoJw7jeCMpt_FfZZjhEXrA@mail.gmail.com>
-Subject: Thank You
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211011103210.156552-1-xu.yang_2@nxp.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Please I am writing to notify you again on my intention to list your
-name as a beneficiary to the total sum of GBP6.350 million (Six
-million, Three hundred and fifty thousand British Pounds Sterlings) in
-the intent of the deceased (name now withheld since this is my second
-letter to you).
+On Mon, Oct 11, 2021 at 06:32:10PM +0800, Xu Yang wrote:
+> There are potential problems when states are set as following:
+> 
+>     tcpm_set_state(A, 0)
+>     tcpm_set_state(B, X)
+> 
+> As long as the state A is set and the state_machine work is queued
+> successfully, state_machine work will be scheduled soon after. Before
+> running into tcpm_state_machine_work(), there is a chance to set state
+> B again. If it does occur:
+> 
+> either (X = 0)
+>     port->state = B and state_machine work is queued again, then work
+>     will be executed twice.
+> or (X != 0)
+>     port->state = A and port->delayed_state = B, then work will be
+>     executed once but timer is still running.
+> 
+> For this situation, tcpm should only handle the most recent state change
+> as if only one state is set just now. Therefore, if the state_machine work
+> has already been queued, it can't be queued again before running into
+> tcpm_state_machine_work().
+> 
+> The state_machine_running flag already prevents from queuing the work, so
+> we can make it contain the pending stage (after work be queued and before
+> running into tcpm_state_machine_work). The state_machine_pending_or_running
+> flag can be used to indicate that a state can be handled without queuing
+> the work again.
+> 
+> Because the state_machine work has been queued for state A, there is no
+> way to cancel as it may be already dequeued later, and then will run into
+> tcpm_state_machine_work() certainly. To handle the delayed state B, such
+> an abnormal work should be skiped. If port->delayed_state != INVALID_STATE
+> and timer is still running, it's time to skip.
+> 
+> Fixes: 4b4e02c83167 ("typec: tcpm: Move out of staging")
+> cc: <stable@vger.kernel.org>
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> 
+> ---
+> Changes for v2:
+> -Try to avoid such problems occurring from the source.
+> -Set a state_machine_pending_or_running flag to indicate that a state
+>  can be handled without queuing the work again.
 
-I contacted you because you bear the surname identity and therefore
-can present you as the beneficiary to inherit the account proceeds of
-the deceased since there is no written "WILL" or trace to the deceased
-family relatives. My aim is to present you to my Bank Authorities as
-the Next of Kin to our deceased client. I will guide you all through
-the Claim procedure by providing all relevant Information and guiding
-you in your decisions and response to the Bank Management. All the
-papers will be processed after your acceptance.
+I think this is a v3, as I see 2 v2 patches here :(
 
-In your acceptance of this deal, I request that you kindly forward to
-me your letter of acceptance; your current telephone and fax numbers
-,age, occupational status and a forwarding address to enable me submit
-to the Bank Management the details as the Next of Kin to their
-deceased customer. Reply strictly through: ramcharancrdavid@gmail.com
+v4 now please?
 
-Yours faithfully,
-Cr.David Ramcharan
+thanks,
+
+greg k-h
