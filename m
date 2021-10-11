@@ -2,79 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1D6428A41
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Oct 2021 11:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF20428A52
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Oct 2021 12:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235694AbhJKJ7p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Oct 2021 05:59:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54172 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235603AbhJKJ7n (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 11 Oct 2021 05:59:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id CFC3360F0F
-        for <linux-usb@vger.kernel.org>; Mon, 11 Oct 2021 09:57:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633946263;
-        bh=yRvT/1dwxecyRirBvl0okIkHIqe5wz1zI0xa418ZGsY=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=oynbhbMDQRNm7XUpYlFXej9iPTmDnX3W5hngc25FHIbSMNATeaz5hoEkXQCzfcKLD
-         sIcYpzBjAML0Jp6gnoGmveMwRdhqmTduj9MNqazW7nSFNj85SXBtoxDxuKix7FF8QF
-         heMHKbd2By1A8gxJ3SNKAPeF0kt1IvX0alwyp+q4sv6C8Z+qbC7Bzz0LYKTM+epgap
-         dirao30b8f8KejEb0d7flcnbxJC1t3HDA5sNpL2EeY5N+iByUcFnxyv0HHrXY1pY/F
-         gxWvunfsBSLhb756rAk7LW6lpYBUex0MpKOKivw8L/EPmcE5IGvbfNqCQ7zY8/9xfW
-         i3SD4olkl3V6g==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id CC1F360E14; Mon, 11 Oct 2021 09:57:43 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 213771] ch341 USB-Serial converter receives but does not send
-Date:   Mon, 11 Oct 2021 09:57:43 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bondar.den@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-213771-208809-PHQgsLFMxt@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-213771-208809@https.bugzilla.kernel.org/>
-References: <bug-213771-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
+        id S235729AbhJKKEa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Oct 2021 06:04:30 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:43674 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235602AbhJKKE3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Oct 2021 06:04:29 -0400
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 11 Oct 2021 03:02:29 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 11 Oct 2021 03:02:27 -0700
+X-QCInternal: smtphost
+Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 11 Oct 2021 15:32:09 +0530
+Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
+        id E952235A6; Mon, 11 Oct 2021 15:32:07 +0530 (IST)
+From:   Sandeep Maheswaram <sanm@codeaurora.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ppratap@codeaurora.org,
+        pkondeti@codeaurora.org, Sandeep Maheswaram <sanm@codeaurora.org>
+Subject: [PATCH] usb: dwc: host: add xhci_plat_priv quirk XHCI_SKIP_PHY_INIT
+Date:   Mon, 11 Oct 2021 15:31:57 +0530
+Message-Id: <1633946518-13906-1-git-send-email-sanm@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D213771
+dwc3 manages PHY by own DRD driver, so skip the management by
+HCD core.
+During runtime suspend phy was not getting suspend because
+runtime_usage value is 2.
 
---- Comment #7 from Denis Bondar (bondar.den@gmail.com) ---
-(In reply to Johan Hovold from comment #6)
-> On Sat, Oct 09, 2021 at 08:07:00PM +0000,
-> bugzilla-daemon@bugzilla.kernel.org wrote:
->=20
-> That's also not a mainline kernel. Unless you can reproduce this with a
-> mainline (or stable) kernel, you need to report this to Ubuntu.
->=20
-> Providing answers to the questions I asked the original reporter might
-> help too.
->=20
-> Johan
+Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+---
+ drivers/usb/dwc3/host.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Thank you very much. Sorry for the inconvenience.
+diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+index f29a264..0921f05 100644
+--- a/drivers/usb/dwc3/host.c
++++ b/drivers/usb/dwc3/host.c
+@@ -11,6 +11,11 @@
+ #include <linux/platform_device.h>
+ 
+ #include "core.h"
++#include "../host/xhci-plat.h"
++
++static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
++	.quirks = XHCI_SKIP_PHY_INIT,
++};
+ 
+ static int dwc3_host_get_irq(struct dwc3 *dwc)
+ {
+@@ -115,6 +120,13 @@ int dwc3_host_init(struct dwc3 *dwc)
+ 		}
+ 	}
+ 
++	ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
++			sizeof(struct xhci_plat_priv));
++	if (ret) {
++		dev_err(dwc->dev, "failed to add data to xHCI\n");
++		goto err;
++	}
++
+ 	ret = platform_device_add(xhci);
+ 	if (ret) {
+ 		dev_err(dwc->dev, "failed to register xHCI device\n");
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
