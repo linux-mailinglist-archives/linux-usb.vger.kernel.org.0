@@ -2,83 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50DEB42892C
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Oct 2021 10:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64DE142893B
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Oct 2021 10:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235276AbhJKIyE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Oct 2021 04:54:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57928 "EHLO mail.kernel.org"
+        id S235335AbhJKI5X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Oct 2021 04:57:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58534 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235325AbhJKIyE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 11 Oct 2021 04:54:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 70B6C604AC
-        for <linux-usb@vger.kernel.org>; Mon, 11 Oct 2021 08:52:04 +0000 (UTC)
+        id S235339AbhJKI5W (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 11 Oct 2021 04:57:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9EB4B60F38;
+        Mon, 11 Oct 2021 08:55:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633942324;
-        bh=sTH4tmSwJVoK3EnObyCiHRi4qgkNz1M4l2A9npfA1CM=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=IZ95zPMMw+mU81+CH8DHgssDviX0EFrcUBv5xavvARjsvWF2xLcg1fKxWbwDw8Knf
-         UcU2iYqEGUJWcP2OPTD5Soj1ZgWTgx8wykzgLR22j3le1fk3DUMNNDiihZBPwv5Tvx
-         l0OSLVEH2+aSf/4aFEHEusAFASjf8wZWgtqm3An9nzGUpjoUn6hcO4xKFM02szfScz
-         LbFtXsWXiKwrAmK35x+GA221+jhD0+gL6X6jX/ZFu4LSqbvHXNl/1i9YGu1Gg3imYV
-         GkOcpJLfq2mlL8ueUK+7v+3UfI86R5Mhobw9svczftGsPPOVuB/nykkymo2hxQUtgJ
-         Jaru08hI223xw==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 6370860E15; Mon, 11 Oct 2021 08:52:04 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 213771] ch341 USB-Serial converter receives but does not send
-Date:   Mon, 11 Oct 2021 08:52:04 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: johan@kernel.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-213771-208809-r0wuzn9DjJ@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-213771-208809@https.bugzilla.kernel.org/>
-References: <bug-213771-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        s=k20201202; t=1633942522;
+        bh=zRrAnylO0tyT8/HnoXO4076BWvnLEWdLzr3F0zsk/uM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Sd2JvhCCWW0MQi4tldkT/C8sK5yZKeBYy2gTDcHZJnRUCAmvkNjdqgPPCUojSBKf4
+         vt4iyxw+4Hm/MRHN1XvcfCqgEUsQbTADXMlAX753W56vRA/Vagj0NObJv+BvaEI7j9
+         H7fASs3TDHbLamNbZCpUTr0SeK+jsLJiTi+2IQ+EFg1i2Bz9xX1DfKDi1F1QWzR5rb
+         U8mqgvOqTZlV6esN+0FS0EhARUpSu35OtKuGxkmqmGghagPGLi6Z3+hsCfpSfdCkPd
+         V+XUQi295G/SIwYk57cllion+PgzzLguEOPMcVJEfhFhrNRMqn8wSHhR4+wimCwyKA
+         tqQJKMO2npysA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mZr5W-0002Qk-4K; Mon, 11 Oct 2021 10:55:14 +0200
+Date:   Mon, 11 Oct 2021 10:55:14 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     bugzilla-daemon@bugzilla.kernel.org
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [Bug 214131] ch341 communication problem
+Message-ID: <YWP78iMxELn4YGrl@hovoldconsulting.com>
+References: <bug-214131-208809@https.bugzilla.kernel.org/>
+ <bug-214131-208809-sY7jhlxx7J@https.bugzilla.kernel.org/>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bug-214131-208809-sY7jhlxx7J@https.bugzilla.kernel.org/>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D213771
+On Mon, Oct 04, 2021 at 09:21:09AM +0000, bugzilla-daemon@bugzilla.kernel.org wrote:
 
---- Comment #6 from Johan Hovold (johan@kernel.org) ---
-On Sat, Oct 09, 2021 at 08:07:00PM +0000, bugzilla-daemon@bugzilla.kernel.o=
-rg
-wrote:
+> --- Comment #9 from Bogusław Brandys (brandys@o2.pl) ---
+> 5.4.0-88-generic #99-Ubuntu SMP Thu Sep 23 17:29:00 UTC 2021 x86_64 x86_64
+> x86_64 GNU/Linux
+> 
+> Ubuntu 20.04.3 LTS
+> 
+> problem with ch341 driver re-appeared while in 5.4.0.-86 is working fine.
 
-> --- Comment #5 from Denis Bondar (bondar.den@gmail.com) ---
-> Hi,
-> This version probably has the same or similar problem:
->=20
-> Linux home 5.11.0-37-generic #41~20.04.2-Ubuntu
-
-That's also not a mainline kernel. Unless you can reproduce this with a
-mainline (or stable) kernel, you need to report this to Ubuntu.
-
-Providing answers to the questions I asked the original reporter might
-help too.
+This issue has been fixed in mainline (and stable), but we have no idea
+what Ubuntu puts in their kernels. Please report it them. 
 
 Johan
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
