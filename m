@@ -2,246 +2,195 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAF9428484
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Oct 2021 03:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A54428621
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Oct 2021 07:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233011AbhJKBV6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 10 Oct 2021 21:21:58 -0400
-Received: from mga02.intel.com ([134.134.136.20]:19178 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231481AbhJKBV5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 10 Oct 2021 21:21:57 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10133"; a="213925876"
-X-IronPort-AV: E=Sophos;i="5.85,363,1624345200"; 
-   d="scan'208";a="213925876"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2021 18:19:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,363,1624345200"; 
-   d="scan'208";a="658458033"
-Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 10 Oct 2021 18:19:57 -0700
-Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mZjyu-0001j9-RZ; Mon, 11 Oct 2021 01:19:56 +0000
-Date:   Mon, 11 Oct 2021 09:19:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- c326d3ed52c8b47f0de329b3b213dc32409d3656
-Message-ID: <6163911c.j76WHD9Jsojh5EF7%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231582AbhJKFM0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Oct 2021 01:12:26 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:59776 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230152AbhJKFMZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 11 Oct 2021 01:12:25 -0400
+Received: from [10.180.13.145] (unknown [10.180.13.145])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxD2s6x2NhleMXAA--.22022S2;
+        Mon, 11 Oct 2021 13:10:19 +0800 (CST)
+Subject: Re: [PATCH v3] usb: ohci: add check for host controller functional
+ states
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <greg@kroah.com>,
+        Patchwork Bot <patchwork-bot@kernel.org>
+References: <1633677970-10619-1-git-send-email-zhuyinbo@loongson.cn>
+ <20211008142639.GA721194@rowland.harvard.edu>
+ <7a505fc4-ec47-ac83-633f-7a5251bd5f82@loongson.cn>
+ <20211009193901.GA753830@rowland.harvard.edu>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <adc67ae2-e162-a427-a8a9-7df55c92a00c@loongson.cn>
+Date:   Mon, 11 Oct 2021 13:10:18 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20211009193901.GA753830@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf9DxD2s6x2NhleMXAA--.22022S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxtr4UWF18CFWkZF43ZFWxtFb_yoW7AFWfpa
+        1IkF43KrWDAF10vwnrtr1kKr9Yk3y7G3y5GryDCFW8AwnxXrySgr4IgrWY9a95XrWfK3W7
+        ZF10gayUu34UCaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv0b7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY
+        02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
+        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU5
+        PpnJUUUUU==
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: c326d3ed52c8b47f0de329b3b213dc32409d3656  USB: gadget: udc: Remove some dead code
 
-elapsed time: 725m
+在 2021/10/10 上午3:39, Alan Stern 写道:
+> On Sat, Oct 09, 2021 at 10:01:25AM +0800, zhuyinbo wrote:
+>> 在 2021/10/8 下午10:26, Alan Stern 写道:
+>>> On Fri, Oct 08, 2021 at 03:26:10PM +0800, Yinbo Zhu wrote:
+>>>> The usb states of ohci controller include UsbOperational, UsbReset,
+>>>> UsbSuspend and UsbResume. Among them, only the UsbOperational state
+>>>> supports launching the start of frame for host controller according
+>>>> the ohci protocol spec, but in S3/S4 press test procedure, it may
+>>> Nobody reading this will know what "S3/S4 press test procedure" means.
+>>> You have to explain it, or use a different name that people will
+>>> understand.
+>> okay, I got it.
+>>>> happen that the start of frame was launched in other usb states and
+>>>> cause ohci works abnormally then kernel will allways report rcu
+>>>> call trace. This patch was to add check for host controller
+>>>> functional states and if it is not UsbOperational state that need
+>>>> set INTR_SF in intrdisable register to ensure SOF Token generation
+>>>> was been disabled.
+>>> This doesn't make sense.  You already mentioned that only the
+>>> UsbOperational state supports sending start-of-frame packets.  So if the
+>>> controller is in a different state then it won't send these packets,
+>>> whether INTR_SF is enabled or not.
+>>>
+>>> What problem are you really trying to solve?
+>> Only UsbOperational state supports sending start-of-frame packets, but in
+>> fact, in S3/S4 press test procedure,
+>>
+>> usb in non-UsbOperational state that send start-of-frame packets but hc
+>> driver doesn't deal with this frame. and hc will
+>>
+>> allways lauched the SOF for finishing the frame, the cpu will hand this sof
+>> interrupt and doesn't deal with time interrupt
+>>
+>> that will cause rcu call trace then system doesn't suspend to memory/disk.
+> I still don't understand.
+>
+> Are you saying that your OHCI controller behaves badly because it sends
+> SOF packets even when the state is different from UsbOperational?
 
-configs tested: 186
-configs skipped: 4
+HC will allways report the SoF interrupt in the all time when HC was not 
+in NO-UsbOperation state.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+and no WritebackDoneHead interrupt that is the issue phenomenon. and 
+this situation is badly state for ohci.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211010
-powerpc                    ge_imp3a_defconfig
-m68k                       m5249evb_defconfig
-arm                           viper_defconfig
-openrisc                 simple_smp_defconfig
-arm                       omap2plus_defconfig
-m68k                       m5475evb_defconfig
-sh                               allmodconfig
-powerpc                   lite5200b_defconfig
-arm                          imote2_defconfig
-powerpc                   motionpro_defconfig
-mips                         tb0219_defconfig
-ia64                          tiger_defconfig
-arm                   milbeaut_m10v_defconfig
-mips                          rb532_defconfig
-s390                       zfcpdump_defconfig
-mips                     loongson2k_defconfig
-mips                        maltaup_defconfig
-sh                        apsh4ad0a_defconfig
-powerpc                      ppc40x_defconfig
-arm                       aspeed_g4_defconfig
-arm                        clps711x_defconfig
-sh                          landisk_defconfig
-mips                      bmips_stb_defconfig
-m68k                          multi_defconfig
-arm                            xcep_defconfig
-arm                          badge4_defconfig
-mips                      maltasmvp_defconfig
-mips                         cobalt_defconfig
-sh                           se7780_defconfig
-mips                           ip28_defconfig
-arm                         bcm2835_defconfig
-powerpc                     rainier_defconfig
-arm                          exynos_defconfig
-arm                          simpad_defconfig
-powerpc               mpc834x_itxgp_defconfig
-csky                             alldefconfig
-arc                        nsim_700_defconfig
-microblaze                      mmu_defconfig
-arm                       imx_v4_v5_defconfig
-powerpc                     redwood_defconfig
-sparc64                             defconfig
-powerpc                         wii_defconfig
-ia64                         bigsur_defconfig
-mips                        bcm63xx_defconfig
-arm                         cm_x300_defconfig
-sh                  sh7785lcr_32bit_defconfig
-powerpc                 mpc836x_mds_defconfig
-nios2                            alldefconfig
-powerpc                    adder875_defconfig
-sh                           se7343_defconfig
-h8300                               defconfig
-sh                          lboxre2_defconfig
-powerpc                         ps3_defconfig
-powerpc                    socrates_defconfig
-mips                     decstation_defconfig
-mips                         db1xxx_defconfig
-arm                          pcm027_defconfig
-powerpc                    sam440ep_defconfig
-powerpc                    amigaone_defconfig
-sh                         apsh4a3a_defconfig
-sh                               j2_defconfig
-powerpc                       eiger_defconfig
-arm                         axm55xx_defconfig
-arm                           sama7_defconfig
-arm                          iop32x_defconfig
-powerpc                     ksi8560_defconfig
-sh                          rsk7203_defconfig
-mips                         bigsur_defconfig
-arc                            hsdk_defconfig
-arm                            dove_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-nds32                               defconfig
-h8300                            alldefconfig
-powerpc                  iss476-smp_defconfig
-mips                         rt305x_defconfig
-arm                         lpc18xx_defconfig
-powerpc                          g5_defconfig
-m68k                         amcore_defconfig
-m68k                       bvme6000_defconfig
-ia64                      gensparse_defconfig
-arm                        realview_defconfig
-powerpc                     sequoia_defconfig
-sparc                       sparc32_defconfig
-arm                         orion5x_defconfig
-arm                  colibri_pxa300_defconfig
-powerpc                      acadia_defconfig
-xtensa                          iss_defconfig
-arm                          pxa910_defconfig
-powerpc                      mgcoge_defconfig
-mips                          malta_defconfig
-riscv             nommu_k210_sdcard_defconfig
-powerpc                        cell_defconfig
-arc                          axs103_defconfig
-m68k                        mvme16x_defconfig
-powerpc                     ep8248e_defconfig
-arm                       cns3420vb_defconfig
-arm                            hisi_defconfig
-arc                           tb10x_defconfig
-arm                         vf610m4_defconfig
-arm                  randconfig-c002-20211010
-x86_64               randconfig-c001-20211010
-arm                  randconfig-c002-20211011
-i386                 randconfig-c001-20211011
-x86_64               randconfig-c001-20211011
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                                defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-s390                             allmodconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                             allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20211010
-x86_64               randconfig-a004-20211010
-x86_64               randconfig-a001-20211010
-x86_64               randconfig-a005-20211010
-x86_64               randconfig-a002-20211010
-x86_64               randconfig-a003-20211010
-i386                 randconfig-a001-20211010
-i386                 randconfig-a003-20211010
-i386                 randconfig-a004-20211010
-i386                 randconfig-a005-20211010
-i386                 randconfig-a002-20211010
-i386                 randconfig-a006-20211010
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allyesconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                           allyesconfig
+>
+>> Hi Alan Stern,
+>>
+>>      even though ed_rm_list is non-NULL, if hc in non-UsbOperation state set
+>> SoF status in usbsts register that is illegal,
+>>
+>> at this time hcd doesn't need care URB whether finished,  because hc had
+>> into a wrong state. even thoug it doesn't has this patch,
+>>
+>> URB was not be able to finish when hc in above worng state. except software
+>> can intervence this wrong state. but the SoF bit of usbsts
+>>
+>> register was set by HC, and this action will happen always !!! software
+>> clear SoF state I think it isn't make sense. software only disable SoF
+>>
+>> interrupt to fix HC wrong state.
+> This problem happens when you go into S3 or S4 suspend, right?  So you
+> should fix the problem by disabling INTR_SF when the root hub is
+> suspended.  Try adding
+>
+> 	/* All ED unlinks should be finished, no need for SOF interrupts */
+> 	ohci_writel(ohci, OHCI_INTR_SF, &ohci->regs->intrdisable);
+>
+> into ohci_rh_suspend(), just before the update_done_list() call.  If you
+> add this then INTR_SF will not be enabled during S3 or S4 suspend, so
+> the problem shouldn't occur.  Does that work for you?
 
-clang tested configs:
-arm                  randconfig-c002-20211010
-mips                 randconfig-c004-20211010
-i386                 randconfig-c001-20211010
-s390                 randconfig-c005-20211010
-x86_64               randconfig-c007-20211010
-powerpc              randconfig-c003-20211010
-riscv                randconfig-c006-20211010
-x86_64               randconfig-a015-20211010
-x86_64               randconfig-a012-20211010
-x86_64               randconfig-a016-20211010
-x86_64               randconfig-a014-20211010
-x86_64               randconfig-a013-20211010
-x86_64               randconfig-a011-20211010
-i386                 randconfig-a016-20211010
-i386                 randconfig-a014-20211010
-i386                 randconfig-a011-20211010
-i386                 randconfig-a015-20211010
-i386                 randconfig-a012-20211010
-i386                 randconfig-a013-20211010
-hexagon              randconfig-r041-20211010
-s390                 randconfig-r044-20211010
-riscv                randconfig-r042-20211010
-hexagon              randconfig-r045-20211010
+The system doesn't suspend to disk completely by my test result and hc 
+will always produce SoF interrupt.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+I encountered SoF interrupt  issue when HC in UsbSuspend state. and I 
+think when hc in
+
+UsbResume/UsbRest/ SoF interrupt issue may be happen so I disable 
+INTR_SF in ohci_irq.
+
+So I think disable INTR_SF in suspend function which this way isn't good 
+for me.
+
+     In addition, I hope my patch was not only fix the bug i encountered 
+and it can limit HC into badly state and it should be the
+
+base limit condition and prevent more unknown problems.  In fact, HC 
+doesn't deal with ed/td list and done list by the ohci spec, so
+
+I think my patch has no risk for ohci.
+
+       by the way, root hub state isn't completely same with HC, but the 
+root hub reset and resume signaling are controlled by the hcfs bits.
+
+and hcd can set hcfs to decide hc usb state, so I judge whether set 
+SF_INT to interrupt disable register only depend on HC state.
+
+>
+>>        In additon, when kernel include my patch, that it does't happen about
+>> what you descriped that driver will not be able to finish unlinging URBs.
+>>
+>> Because above issue happen in S3/S4(Suspend to disk/Suspend to mem) test
+>> procedure, if ed_rm_lis is no-NULL but my patch disable SoF interrupt.
+>>
+>> then when S3/S4 recovery to cpu idle state that usb resume will be called,
+>> reume function has following logic, URB will continue to be processed.
+>>
+>>        static int ohci_rh_resume (struct ohci_hcd *ohci)
+>>
+>>       {
+>>
+>>          ...
+>>
+>>          242         if (ohci->ed_rm_list)
+>>          243                 ohci_writel (ohci, OHCI_INTR_SF,
+>> &ohci->regs->intrenable);
+>>
+>>         ...
+>>
+>>        }
+> I'm worried that your patch may disable INTR_SF even when the controller
+> has not gone into S3 or S4 suspend.  Maybe this won't cause problems,
+> but it's better to be safe and do the disable _only_ when a suspend
+> occurs.
+>
+> Alan Stern
+
+Hi  Alan Stern,
+
+     According to the previous statement, I think my patch has no risk 
+on ohci.
+
+
+
+
