@@ -2,106 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 927324288CD
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Oct 2021 10:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA9E42890D
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Oct 2021 10:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235032AbhJKId7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Oct 2021 04:33:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53044 "EHLO mail.kernel.org"
+        id S235254AbhJKIqd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Oct 2021 04:46:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56586 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234932AbhJKId6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 11 Oct 2021 04:33:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4C3CE60EB1;
-        Mon, 11 Oct 2021 08:31:59 +0000 (UTC)
+        id S235253AbhJKIqc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 11 Oct 2021 04:46:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A807A60EE3;
+        Mon, 11 Oct 2021 08:44:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633941119;
-        bh=rWIYz6HvGnzK13wjF7/2M8KNWndYaayhjKVmwsFuzzU=;
+        s=k20201202; t=1633941872;
+        bh=1OwUVdNn4fURn0fs9OTI0ATGKii2OR1THQNdwkRa6Dc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q2oSMzY7EjLkuqphAqKSwZKMkuL+XKMdqA2IamIhMZw7uQbAPTx2Y/bBi2TieaU3L
-         n4VB1YPMqaNunzx6vZZFTDwHgenfk6yZynPlSRrzAk1weCgzXjWreaK7IpcByqOBcj
-         ZxNzK9EjQQE5lHEhHYWVZVXLxUQ81FYmioOC0+eImwydN6rYKC6BPOyfhfkcAOiwKi
-         /Uwj7D61cN0HFsphPetW9jeShZXK1tsIMFqbrUQqQLBrvp6gMvbiypA65dNLTWLddP
-         oX2x2k2XHfMO3zCz1WVpPm9UfcR77jI+2jOjA4Kf9e1aUpwH/JKIJyUjZjioCKtfEm
-         QXanbfzonIs/w==
+        b=CBodex6jq4+8Stg3cIR0zRyzu22jFms7KPnST1FATnYsPXO7aC+8bZIOkhXyozxQE
+         1JDZztGiTOqqWPYeAvBSGre0KRfLkDEztsvCUTk+/f1Y/N3Rg3W9Q0zFiLuyCYy1TM
+         MHwon/DQUtonWs8jLRyViH3k5cVmouqgRQqjpDGjt5qXB/toNJC3VG4vUSIVmZai6N
+         z4aZEHivtcrGkLjv6qVVfeuAT2S0wjqjn8bFw07TjlrPpmGRGBJep/ADS1OJV0gf8U
+         O7fJQYPtDvM1sSy8wqEp8ievo/d41aJdFujHLn6e8TKK8U4fYrqOQax794CQlIZQr+
+         GJGdpZVXCCcYA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1mZqis-0002KB-Qv; Mon, 11 Oct 2021 10:31:50 +0200
-Date:   Mon, 11 Oct 2021 10:31:50 +0200
+        id 1mZqv1-0002NB-DY; Mon, 11 Oct 2021 10:44:24 +0200
+Date:   Mon, 11 Oct 2021 10:44:23 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Yu-Tung Chang <mtwget@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] USB: serial: option: add Quectel EC200S-CN module
- support
-Message-ID: <YWP2dpna7WSGen76@hovoldconsulting.com>
-References: <20210930021112.330396-1-mtwget@gmail.com>
- <YV6mD02BVLXXcTr8@hovoldconsulting.com>
- <YV6oTZae5zbgX8cV@hovoldconsulting.com>
- <CAHRgzyNcmhTJHC9vzS-1mbxMLVHw5bYWHVy1+KCvUF61tRnr=A@mail.gmail.com>
- <CAHRgzyO=VOCAV8oGSR15hiifp7NqHCu13KjcTrv3aA2QiURz_g@mail.gmail.com>
+To:     heghedus razvan <heghedus.razvan@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        Anant Thazhemadam <anant.thazhemadam@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: misc: ehset: Workaround for "special" hubs
+Message-ID: <YWP5Z6IaD3blIfue@hovoldconsulting.com>
+References: <20210915121615.3790-1-heghedus.razvan@gmail.com>
+ <YV7KGE9JfibggVVH@hovoldconsulting.com>
+ <YV7QSnOlmKHbi94C@kroah.com>
+ <CAACGJgbXEV4rnvkmHy-peaO2GiR7Mt=3Y=Q8w1Bnc9mJLwFPnQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHRgzyO=VOCAV8oGSR15hiifp7NqHCu13KjcTrv3aA2QiURz_g@mail.gmail.com>
+In-Reply-To: <CAACGJgbXEV4rnvkmHy-peaO2GiR7Mt=3Y=Q8w1Bnc9mJLwFPnQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[ Adding back the lists on CC so that this gets archived. ]
+[ Please avoid top-posting. ]
 
-On Sat, Oct 09, 2021 at 01:50:40PM +0800, Yu-Tung Chang wrote:
-> Yu-Tung Chang <mtwget@gmail.com> 于2021年10月9日周六 下午1:39写道：
-> >
-> > Johan Hovold <johan@kernel.org> 于2021年10月7日周四 下午3:57写道：
-> > >
-> > > On Thu, Oct 07, 2021 at 09:47:28AM +0200, Johan Hovold wrote:
-> > > > On Thu, Sep 30, 2021 at 10:11:12AM +0800, Yu-Tung Chang wrote:
-> > > > > Add usb product id of the Quectel EC200S-CN module.
-> > > > >
-> > > > > usb-devices output for 0x6002:
-> > > > > T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=480 MxCh= 0
-> > > > > D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> > > > > P:  Vendor=2c7c ProdID=6002 Rev=03.18
-> > > > > S:  Manufacturer=Android
-> > > > > S:  Product=Android
-> > > > > S:  SerialNumber=0000
-> > > > > C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-> > > > > I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=06 Prot=00 Driver=cdc_ether
-> > > > > I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> > > > > I:  If#=0x2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-> > > > > I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-> > > > > I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-> > > >
-> > > > Looks good now, but for completeness, could you also mention here what
-> > > > the three ports are used for (and which is which)?
-> > >
-> > > I've applied the patch now, so no need to resend, but please list the
-> > > three ports in a reply if you have that information.
-> >
-> > ttyUSB0 used for debugging, ttyUSB1 used for AT commands,
-> > ttyUSB2 used for PPP dialing.
+On Thu, Oct 07, 2021 at 07:51:00PM +0300, heghedus razvan wrote:
+> Hi all,
+> 
+> This was tested only with some external powered hubs. Indeed for the root
+> hub there is
+> a problem. I see that in the HCDs in hub_control there is the handling for
+> testing
+> procedures, but I don't know how they are used for the root hub.
 
-> and lsusb.py -i -e output info:
->   1-1               2c7c:6002 ef 5IFs [USB 2.00,   480 Mbps, 500mA]
-> (Android Android 0000)
->                       (EP) 00: Control attr 00 len 07 max 040
->     1-1:1.0           (IF) 02:06:00 1EP  (Communications) cdc_ether net/usb0
->                         (EP) 87: Interrupt (4096ms) attr 03 len 07 max 040
->     1-1:1.1           (IF) 0a:00:00 2EPs (CDC Data) cdc_ether
->                         (EP) 83: Bulk attr 02 len 07 max 200
->                         (EP) 0c: Bulk attr 02 len 07 max 200
->     1-1:1.2           (IF) ff:00:00 2EPs (Vendor Specific Class) option ttyUSB0
->                         (EP) 0b: Bulk attr 02 len 07 max 200
->                         (EP) 82: Bulk attr 02 len 07 max 200
->     1-1:1.3           (IF) ff:00:00 3EPs (Vendor Specific Class) option ttyUSB1
->                         (EP) 89: Interrupt (4096ms) attr 03 len 07 max 040
->                         (EP) 86: Bulk attr 02 len 07 max 200
->                         (EP) 0f: Bulk attr 02 len 07 max 200
->     1-1:1.4           (IF) ff:00:00 3EPs (Vendor Specific Class) option ttyUSB2
->                         (EP) 81: Bulk attr 02 len 07 max 200
->                         (EP) 0a: Bulk attr 02 len 07 max 200
->                         (EP) 88: Interrupt (4096ms) attr 03 len 07 max 040
+This isn't just an issue with root hubs, the current implementation is
+just completely broken for all hubs. Which begs the question of how you
+tested this, if at all.
 
-Perfect, thanks for the details.
+> I want to fix this problem, but I don't know how exactly, because I don't
+> have a good
+> grasp on the USB code since it's a huge beast. The main problem is how can I
+> match the VID:PID of the hub_udev(the hub on which the USB testing device
+> was connected) with the hub list for which I need to apply the quirk? I
+> tried to
+> use usb_match_id because I want to use functionality already in the kernel,
+> but it seems that in this context I need to do the checking myself.
+
+You can access the interfaces of a USB device through
+
+	udev->actconfig->interface
+
+but in this case it's probably better to just export
+usb_device_match_id(), which seems to be what you need.
 
 Johan
