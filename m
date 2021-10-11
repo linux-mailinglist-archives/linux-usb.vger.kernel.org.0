@@ -2,160 +2,214 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B5242958F
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Oct 2021 19:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C96A429719
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Oct 2021 20:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234033AbhJKRZK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Oct 2021 13:25:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53136 "EHLO mail.kernel.org"
+        id S232719AbhJKSuo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Oct 2021 14:50:44 -0400
+Received: from mga09.intel.com ([134.134.136.24]:24792 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234034AbhJKRZJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 11 Oct 2021 13:25:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2DEF160EB6;
-        Mon, 11 Oct 2021 17:23:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1633972988;
-        bh=Dcah+wiObB2g/yEpi4xb6Ag+IL87PMhakQ1CDFA5VqE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VDUcTDi2YBOX8W+5x7VR1GG9Y8LION2KXj8pcsBuJ9inuvDZDZ7wIexb+tD4fkl64
-         Y+Qt8Q74CDbWFcCFYiU8M8wIPaqaKTN2pXFCtNsjz8jEgoZtFVZyQGpQc6gPt6EsPN
-         qxBrZFOxrHiB+JaXOuXfztYrXfEYK4XKdZSrnJb8=
-Date:   Mon, 11 Oct 2021 19:23:05 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ALSA: usb-audio: allow -EPIPE errors for some v2 messages
-Message-ID: <YWRy+UoG1YHcQ7UM@kroah.com>
-References: <YWLbEdHUE3k/i0fe@kroah.com>
- <s5hily46316.wl-tiwai@suse.de>
- <YWRYD7fphcaWKEOG@kroah.com>
- <s5h7dej4kbe.wl-tiwai@suse.de>
+        id S229542AbhJKSun (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 11 Oct 2021 14:50:43 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10134"; a="226843378"
+X-IronPort-AV: E=Sophos;i="5.85,365,1624345200"; 
+   d="scan'208";a="226843378"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2021 11:48:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,365,1624345200"; 
+   d="scan'208";a="591435684"
+Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 11 Oct 2021 11:48:42 -0700
+Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1ma0Lp-0002cS-H8; Mon, 11 Oct 2021 18:48:41 +0000
+Date:   Tue, 12 Oct 2021 02:47:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-next] BUILD SUCCESS
+ 620b74d01b9d4393bef6742bf121908322c2fe0b
+Message-ID: <616486d5.iTTje6DBqcU0SQoz%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <s5h7dej4kbe.wl-tiwai@suse.de>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 11, 2021 at 06:07:01PM +0200, Takashi Iwai wrote:
-> On Mon, 11 Oct 2021 17:28:15 +0200,
-> Greg Kroah-Hartman wrote:
-> > 
-> > On Sun, Oct 10, 2021 at 10:25:09PM +0200, Takashi Iwai wrote:
-> > > On Sun, 10 Oct 2021 14:22:41 +0200,
-> > > Greg Kroah-Hartman wrote:
-> > > > 
-> > > > The Schiit Hel device does not like to respond to all get_ctl_value_v2()
-> > > > requests for some reason.  This used to work in older kernels, but now
-> > > > with more strict checking, this failure causes the device to fail to
-> > > > work.
-> > > > 
-> > > > Cc: Jaroslav Kysela <perex@perex.cz>
-> > > > Cc: Takashi Iwai <tiwai@suse.com>
-> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > ---
-> > > > 
-> > > > This fixes the Shiit Hel device that I have.  It used to work on older
-> > > > kernels (a year ago?), but stopped working for some reason and I didn't
-> > > > take the time to track it down.  This change fixes the issue for me, but
-> > > > feels wrong for some reason.  At least now I can use the device as a
-> > > > headphone driver, much better than the built-in one for my current
-> > > > machine...
-> > > > 
-> > > > If needed, I can take the time to do bisection to track down the real
-> > > > issue here, it might be due to stricter endpoint checking in the USB
-> > > > core, but that feels wrong somehow.
-> > > > 
-> > > > Here's the debugfs USB output for this device, showing the endpoints:
-> > > > 
-> > > > T:  Bus=07 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#=  5 Spd=480 MxCh= 0
-> > > > D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> > > > P:  Vendor=30be ProdID=0101 Rev=01.02
-> > > > S:  Manufacturer=Schiit Audio
-> > > > S:  Product=Schiit Hel
-> > > > C:  #Ifs= 4 Cfg#= 1 Atr=c0 MxPwr=0mA
-> > > > I:  If#= 0 Alt= 0 #EPs= 1 Cls=01(audio) Sub=01 Prot=20 Driver=snd-usb-audio
-> > > > E:  Ad=8f(I) Atr=03(Int.) MxPS=   6 Ivl=1ms
-> > > > I:  If#= 1 Alt= 1 #EPs= 2 Cls=01(audio) Sub=02 Prot=20 Driver=snd-usb-audio
-> > > > E:  Ad=05(O) Atr=05(Isoc) MxPS= 104 Ivl=125us
-> > > > E:  Ad=85(I) Atr=11(Isoc) MxPS=   4 Ivl=1ms
-> > > > I:  If#= 2 Alt= 1 #EPs= 1 Cls=01(audio) Sub=02 Prot=20 Driver=snd-usb-audio
-> > > > E:  Ad=88(I) Atr=05(Isoc) MxPS= 156 Ivl=125us
-> > > > I:  If#= 3 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
-> > > > E:  Ad=84(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
-> > > > 
-> > > > Any other suggestions to fix this are welcome.
-> > > 
-> > > Could you show the exact error messages and lsusb -v output?
-> > > We may paper over only the problematic node instead.
-> > 
-> > Sure, here's the dmesg output on 5.15-rc5 when it is turned on:
-> > 
-> > [Oct11 17:25] usb 7-2.2: new high-speed USB device number 9 using xhci_hcd
-> > [  +0.122422] usb 7-2.2: New USB device found, idVendor=30be, idProduct=0101, bcdDevice= 1.02
-> > [  +0.000009] usb 7-2.2: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> > [  +0.000002] usb 7-2.2: Product: Schiit Hel
-> > [  +0.000002] usb 7-2.2: Manufacturer: Schiit Audio
-> > [  +0.327172] input: Schiit Audio Schiit Hel as /devices/pci0000:40/0000:40:01.1/0000:41:00.0/0000:42:08.0/0000:47:00.1/usb7/7-2/7-2.2/7-2.2:1.3/0003:30BE:0101.0009/input/input21
-> > [  +0.055134] hid-generic 0003:30BE:0101.0009: input,hidraw8: USB HID v1.00 Device [Schiit Audio Schiit Hel] on usb-0000:47:00.1-2.2/input3
-> > [  +0.135988] usb 7-2.2: cannot get ctl value: req = 0x81, wValue = 0x100, wIndex = 0x1100, type = 1
-> > [  +0.060647] usb 7-2.2: cannot get ctl value: req = 0x81, wValue = 0x100, wIndex = 0x1100, type = 1
-> > [  +0.065362] usb 7-2.2: cannot get ctl value: req = 0x81, wValue = 0x100, wIndex = 0x1100, type = 1
-> > [  +0.192121] usb 7-2.2: cannot get ctl value: req = 0x81, wValue = 0x100, wIndex = 0x1100, type = 1
-> 
-> Thanks.  So this happens at the unit 17, and ...
-> 
-> 
-> > And here is the 'lsusb -v' output of the device.
-> > 
-> > 
-> > Bus 007 Device 009: ID 30be:0101 Schiit Audio Schiit Hel
-> (snip)
-> >       AudioControl Interface Descriptor:
-> >         bLength                18
-> >         bDescriptorType        36
-> >         bDescriptorSubtype      6 (FEATURE_UNIT)
-> >         bUnitID                17
-> >         bSourceID               5
-> >         bmaControls(0)     0x00000003
-> >           Mute Control (read/write)
-> >         bmaControls(1)     0x00000000
-> >         bmaControls(2)     0x00000000
-> >         iFeature                0 
-> 
-> ... this is the entry.
-> 
-> Could you also post the contents of /proc/asound/card*/usbmixer (only
-> for the corresponding device), too?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+branch HEAD: 620b74d01b9d4393bef6742bf121908322c2fe0b  Merge 5.15-rc5 into usb-next
 
-Sure, here it is:
+elapsed time: 720m
 
-USB Mixer: usb_id=0x30be0101, ctrlif=0, ctlerr=0
-Card: Schiit Audio Schiit Hel at usb-0000:47:00.1-2.2, high speed
-  Unit: 5
-    Control: name="Mic - Input Jack", index=0
-    Info: id=5, control=2, cmask=0x0, channels=1, type="BOOLEAN"
-    Volume: min=0, max=1, dBmin=0, dBmax=0
-  Unit: 7
-    Control: name="Speaker - Output Jack", index=0
-    Info: id=7, control=2, cmask=0x0, channels=1, type="BOOLEAN"
-    Volume: min=0, max=1, dBmin=0, dBmax=0
-  Unit: 13
-    Control: name="PCM Playback Switch", index=0
-    Info: id=13, control=1, cmask=0x0, channels=1, type="INV_BOOLEAN"
-    Volume: min=0, max=1, dBmin=0, dBmax=0
-  Unit: 17
-    Control: name="Mic Capture Switch", index=0
-    Info: id=17, control=1, cmask=0x0, channels=1, type="INV_BOOLEAN"
-    Volume: min=0, max=1, dBmin=0, dBmax=0
-  Unit: 18
-    Control: name="Clock Source 18 Validity", index=0
-    Info: id=18, control=2, cmask=0x0, channels=1, type="BOOLEAN"
-    Volume: min=0, max=1, dBmin=0, dBmax=0
-  Unit: 22
-    Control: name="Clock Source 22 Validity", index=0
-    Info: id=22, control=2, cmask=0x0, channels=1, type="BOOLEAN"
-    Volume: min=0, max=1, dBmin=0, dBmax=0
+configs tested: 154
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211011
+sh                           se7705_defconfig
+arm                      tct_hammer_defconfig
+ia64                      gensparse_defconfig
+sh                           se7206_defconfig
+powerpc                      pcm030_defconfig
+sh                        edosk7760_defconfig
+m68k                                defconfig
+i386                             allyesconfig
+mips                       capcella_defconfig
+m68k                           sun3_defconfig
+sh                     sh7710voipgw_defconfig
+s390                                defconfig
+sh                               alldefconfig
+nios2                         10m50_defconfig
+arm                        realview_defconfig
+arm                        multi_v5_defconfig
+riscv                               defconfig
+sh                     magicpanelr2_defconfig
+mips                  maltasmvp_eva_defconfig
+powerpc64                           defconfig
+powerpc                     taishan_defconfig
+powerpc                     mpc83xx_defconfig
+openrisc                    or1ksim_defconfig
+arm                         at91_dt_defconfig
+arm                             mxs_defconfig
+mips                    maltaup_xpa_defconfig
+mips                        maltaup_defconfig
+parisc                generic-32bit_defconfig
+microblaze                          defconfig
+sh                        sh7785lcr_defconfig
+mips                           ip22_defconfig
+arm                       mainstone_defconfig
+powerpc                 xes_mpc85xx_defconfig
+powerpc                      ppc6xx_defconfig
+arm                        cerfcube_defconfig
+mips                           ci20_defconfig
+sh                                  defconfig
+sh                          r7785rp_defconfig
+arm                         lubbock_defconfig
+xtensa                           alldefconfig
+powerpc                      ppc44x_defconfig
+xtensa                    xip_kc705_defconfig
+powerpc                 linkstation_defconfig
+arc                         haps_hs_defconfig
+m68k                       m5249evb_defconfig
+mips                        vocore2_defconfig
+mips                         tb0287_defconfig
+mips                        workpad_defconfig
+arc                     haps_hs_smp_defconfig
+powerpc                     asp8347_defconfig
+arm                        mini2440_defconfig
+h8300                            alldefconfig
+powerpc                       ebony_defconfig
+arm                        keystone_defconfig
+arm                          iop32x_defconfig
+mips                            e55_defconfig
+powerpc                 mpc8315_rdb_defconfig
+powerpc                    sam440ep_defconfig
+m68k                         apollo_defconfig
+mips                           xway_defconfig
+openrisc                 simple_smp_defconfig
+arm                     davinci_all_defconfig
+sh                          sdk7780_defconfig
+powerpc                   microwatt_defconfig
+powerpc                     mpc512x_defconfig
+sh                        sh7757lcr_defconfig
+nds32                            alldefconfig
+sh                      rts7751r2d1_defconfig
+ia64                        generic_defconfig
+xtensa                    smp_lx200_defconfig
+arm                          moxart_defconfig
+m68k                        m5307c3_defconfig
+mips                            gpr_defconfig
+arm                  randconfig-c002-20211011
+x86_64               randconfig-c001-20211011
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                             allmodconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a015-20211011
+x86_64               randconfig-a012-20211011
+x86_64               randconfig-a016-20211011
+x86_64               randconfig-a014-20211011
+x86_64               randconfig-a013-20211011
+x86_64               randconfig-a011-20211011
+i386                 randconfig-a016-20211011
+i386                 randconfig-a014-20211011
+i386                 randconfig-a011-20211011
+i386                 randconfig-a015-20211011
+i386                 randconfig-a012-20211011
+i386                 randconfig-a013-20211011
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                           allyesconfig
+
+clang tested configs:
+arm                  randconfig-c002-20211011
+mips                 randconfig-c004-20211011
+i386                 randconfig-c001-20211011
+s390                 randconfig-c005-20211011
+x86_64               randconfig-c007-20211011
+powerpc              randconfig-c003-20211011
+riscv                randconfig-c006-20211011
+x86_64               randconfig-a004-20211011
+x86_64               randconfig-a006-20211011
+x86_64               randconfig-a001-20211011
+x86_64               randconfig-a005-20211011
+x86_64               randconfig-a002-20211011
+x86_64               randconfig-a003-20211011
+i386                 randconfig-a001-20211011
+i386                 randconfig-a003-20211011
+i386                 randconfig-a004-20211011
+i386                 randconfig-a005-20211011
+i386                 randconfig-a002-20211011
+i386                 randconfig-a006-20211011
+hexagon              randconfig-r041-20211011
+hexagon              randconfig-r045-20211011
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
