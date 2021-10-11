@@ -2,73 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DEE428D7E
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Oct 2021 15:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF173428E5E
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Oct 2021 15:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236757AbhJKNFf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Oct 2021 09:05:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43494 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232277AbhJKNFe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 11 Oct 2021 09:05:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9B80160F21;
-        Mon, 11 Oct 2021 13:03:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633957415;
-        bh=xqc/dgS9Mue8lkjNkvFBMU9rsl1LMtxv2lgVVxxzjFY=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=g0kuVmX6fE6IEYFgD+ms/Jf6o55G3zPkVjX1IdwegIHrAV/LSSlHhImx3tS13Oznb
-         ZCsd9HOqctG+ehhBY3fKcf0QwlcPQF6ykfRfL6sTD6RI5hWPTyyXjYzPbLhXu2U0My
-         HAKyCPX7F2L6ZZm8ZIoBEc1MJV2D1wGjZhmZRH/ZktrTJ9HygQHEizZ61rX8k1aFKL
-         PokGnwzLc9U2ckkOpJjZtuaJ+yZySHXJVnQ8w49Y7bx0crM2fGSzfFSnmPrnzYVFVP
-         40BWpUKAcKisgiwSPq1yWIWDABn7bOaDqRvWaCtDav+hD7m4Q5Gq+uG0azGc82PT4f
-         UFhWuoz6GTIow==
-References: <20211011123739.GC15188@kili>
-User-agent: mu4e 1.6.6; emacs 28.0.60
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Andrzej Pietrasiewicz <andrzej.p@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: hid: fix error code in do_config()
-Date:   Mon, 11 Oct 2021 16:03:02 +0300
-In-reply-to: <20211011123739.GC15188@kili>
-Message-ID: <87lf2z3e8x.fsf@kernel.org>
+        id S236207AbhJKNoP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Oct 2021 09:44:15 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:28917 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237304AbhJKNno (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Oct 2021 09:43:44 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4HSfwh0qbCzbn4f;
+        Mon, 11 Oct 2021 21:37:08 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Mon, 11 Oct 2021 21:41:34 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Mon, 11 Oct
+ 2021 21:41:34 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>
+Subject: [PATCH v2] usb: host: ohci-tmio: check return value after calling platform_get_resource()
+Date:   Mon, 11 Oct 2021 21:49:20 +0800
+Message-ID: <20211011134920.118477-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-Hi,
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+---
+v2:
+  combine the new checkings with cell checking
+---
+ drivers/usb/host/ohci-tmio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Dan Carpenter <dan.carpenter@oracle.com> writes:
-
-> Return an error code if usb_get_function() fails.  Don't return success.
->
-> Fixes: 4bc8a33f2407 ("usb: gadget: hid: convert to new interface of f_hid")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
->  drivers/usb/gadget/legacy/hid.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/gadget/legacy/hid.c b/drivers/usb/gadget/legacy/hid.c
-> index 5b27d289443f..3912cc805f3a 100644
-> --- a/drivers/usb/gadget/legacy/hid.c
-> +++ b/drivers/usb/gadget/legacy/hid.c
-> @@ -99,8 +99,10 @@ static int do_config(struct usb_configuration *c)
->  
->  	list_for_each_entry(e, &hidg_func_list, node) {
->  		e->f = usb_get_function(e->fi);
-> -		if (IS_ERR(e->f))
-> +		if (IS_ERR(e->f)) {
-> +			status = PTR_ERR(e->f);
-
-nice catch! :-)
-
-Acked-by: Felipe Balbi <balbi@kernel.org>
-
+diff --git a/drivers/usb/host/ohci-tmio.c b/drivers/usb/host/ohci-tmio.c
+index 08ec2ab0d95a..3f3d62dc0674 100644
+--- a/drivers/usb/host/ohci-tmio.c
++++ b/drivers/usb/host/ohci-tmio.c
+@@ -199,7 +199,7 @@ static int ohci_hcd_tmio_drv_probe(struct platform_device *dev)
+ 	if (usb_disabled())
+ 		return -ENODEV;
+ 
+-	if (!cell)
++	if (!cell || !regs || !config || !sram)
+ 		return -EINVAL;
+ 
+ 	if (irq < 0)
 -- 
-balbi
+2.25.1
+
