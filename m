@@ -2,80 +2,193 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 957DE429EAF
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Oct 2021 09:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF52E429EB7
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Oct 2021 09:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233999AbhJLHey (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Oct 2021 03:34:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54768 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233834AbhJLHex (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 12 Oct 2021 03:34:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 38F7360ED4;
-        Tue, 12 Oct 2021 07:32:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634023972;
-        bh=LRBm2jh+UamGAZjoyaJ0xwYHqwdFrEgK4TcXaFgiWuw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a/zEPf/+c+s5zCNYxn0+CCUcChx6frMtDzoHZqV02f92DqZbzb3iK+E4IsQTDlHGG
-         UMJdAni034u8oTa5Lse9bIO7G4xp3NufOamCx75bOqnFyZuyqVKIbTErDnTLwc4Xl1
-         50tfVc3L+PO7PndItyIa6p+JyNLeFgXk/fHd1QJE=
-Date:   Tue, 12 Oct 2021 09:32:49 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ppratap@codeaurora.org,
-        pkondeti@codeaurora.org
-Subject: Re: [PATCH] usb: dwc: host: add xhci_plat_priv quirk
- XHCI_SKIP_PHY_INIT
-Message-ID: <YWU6IZwm2T24ONW2@kroah.com>
-References: <1633946518-13906-1-git-send-email-sanm@codeaurora.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1633946518-13906-1-git-send-email-sanm@codeaurora.org>
+        id S234234AbhJLHhW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Oct 2021 03:37:22 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:40328 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232565AbhJLHhS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Oct 2021 03:37:18 -0400
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 4340E1FF2A;
+        Tue, 12 Oct 2021 07:35:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1634024116; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tFCztFG0NMzu9QUaokuXv6oskYuEM7OIjk8q5b1QKmM=;
+        b=deeaLoY1E/z/wmhY6SlfmEIF79usbAz4JOh5UwnEucv0H4S8GxDZ0J+G8/mDfdBDBnH4nb
+        B7VuSU3ockDrWm0Qjwl9socQVto0y7+n425ClOdEUvLQ+LaudFysMUkuKU+yPqR22vMLB2
+        KgnYO8EAKvksmVySp0tiKjm5EjhePOI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1634024116;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tFCztFG0NMzu9QUaokuXv6oskYuEM7OIjk8q5b1QKmM=;
+        b=pWxtcK1rtSj4CMlAUVXexNrniQrKjYQIRCMWjUI4gUu+v0JSjHwjW0Njekh5TCIjDcV5Id
+        8+z6aZtjtwybCpAw==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 27E0EA3B85;
+        Tue, 12 Oct 2021 07:35:16 +0000 (UTC)
+Date:   Tue, 12 Oct 2021 09:35:16 +0200
+Message-ID: <s5ho87u3dcb.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: usb-audio: allow -EPIPE errors for some v2 messages
+In-Reply-To: <YWRy+UoG1YHcQ7UM@kroah.com>
+References: <YWLbEdHUE3k/i0fe@kroah.com>
+        <s5hily46316.wl-tiwai@suse.de>
+        <YWRYD7fphcaWKEOG@kroah.com>
+        <s5h7dej4kbe.wl-tiwai@suse.de>
+        <YWRy+UoG1YHcQ7UM@kroah.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 11, 2021 at 03:31:57PM +0530, Sandeep Maheswaram wrote:
-> dwc3 manages PHY by own DRD driver, so skip the management by
-> HCD core.
-> During runtime suspend phy was not getting suspend because
-> runtime_usage value is 2.
+On Mon, 11 Oct 2021 19:23:05 +0200,
+Greg Kroah-Hartman wrote:
 > 
-> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> ---
->  drivers/usb/dwc3/host.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+> On Mon, Oct 11, 2021 at 06:07:01PM +0200, Takashi Iwai wrote:
+> > Could you also post the contents of /proc/asound/card*/usbmixer (only
+> > for the corresponding device), too?
 > 
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index f29a264..0921f05 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -11,6 +11,11 @@
->  #include <linux/platform_device.h>
->  
->  #include "core.h"
-> +#include "../host/xhci-plat.h"
+> Sure, here it is:
+> 
+> USB Mixer: usb_id=0x30be0101, ctrlif=0, ctlerr=0
+> Card: Schiit Audio Schiit Hel at usb-0000:47:00.1-2.2, high speed
+>   Unit: 5
+>     Control: name="Mic - Input Jack", index=0
+>     Info: id=5, control=2, cmask=0x0, channels=1, type="BOOLEAN"
+>     Volume: min=0, max=1, dBmin=0, dBmax=0
+>   Unit: 7
+>     Control: name="Speaker - Output Jack", index=0
+>     Info: id=7, control=2, cmask=0x0, channels=1, type="BOOLEAN"
+>     Volume: min=0, max=1, dBmin=0, dBmax=0
+>   Unit: 13
+>     Control: name="PCM Playback Switch", index=0
+>     Info: id=13, control=1, cmask=0x0, channels=1, type="INV_BOOLEAN"
+>     Volume: min=0, max=1, dBmin=0, dBmax=0
+>   Unit: 17
+>     Control: name="Mic Capture Switch", index=0
+>     Info: id=17, control=1, cmask=0x0, channels=1, type="INV_BOOLEAN"
+>     Volume: min=0, max=1, dBmin=0, dBmax=0
+>   Unit: 18
+>     Control: name="Clock Source 18 Validity", index=0
+>     Info: id=18, control=2, cmask=0x0, channels=1, type="BOOLEAN"
+>     Volume: min=0, max=1, dBmin=0, dBmax=0
+>   Unit: 22
+>     Control: name="Clock Source 22 Validity", index=0
+>     Info: id=22, control=2, cmask=0x0, channels=1, type="BOOLEAN"
+>     Volume: min=0, max=1, dBmin=0, dBmax=0
 
-Why are you tying the dwc3 driver to the xhci driver?
+Hm, I expected more exotic control that failed, but it was Mic Capture
+Switch, which should be treated normally.
 
+Could you try the patch below?  This will still show other warning
+messages, but it'll forcibly initialize the mixer elements at probe
+time, and the rest should work.
 
-> +
-> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
-> +	.quirks = XHCI_SKIP_PHY_INIT,
+Once after it's confirmed to work, we may shut up the device warnings
+with a quirk.
 
-If these quirks are now "global", they should go into a
-include/linux/usb/ .h file, right?
 
 thanks,
 
-greg k-h
+Takashi
+
+--- a/sound/usb/mixer.c
++++ b/sound/usb/mixer.c
+@@ -361,9 +361,8 @@ static int get_ctl_value_v2(struct usb_mixer_elem_info *cval, int request,
+ 
+ 	memset(buf, 0, sizeof(buf));
+ 
+-	ret = snd_usb_lock_shutdown(chip) ? -EIO : 0;
+-	if (ret)
+-		goto error;
++	if (snd_usb_lock_shutdown(chip))
++		return -EIO;
+ 
+ 	idx = mixer_ctrl_intf(cval->head.mixer) | (cval->head.id << 8);
+ 	ret = snd_usb_ctl_msg(chip->dev, usb_rcvctrlpipe(chip->dev, 0), bRequest,
+@@ -372,8 +371,7 @@ static int get_ctl_value_v2(struct usb_mixer_elem_info *cval, int request,
+ 	snd_usb_unlock_shutdown(chip);
+ 
+ 	if (ret < 0) {
+-error:
+-		usb_audio_err(chip,
++		usb_audio_dbg(chip,
+ 			"cannot get ctl value: req = %#x, wValue = %#x, wIndex = %#x, type = %d\n",
+ 			request, validx, idx, cval->val_type);
+ 		return ret;
+@@ -1201,12 +1199,32 @@ static void volume_control_quirks(struct usb_mixer_elem_info *cval,
+ 	}
+ }
+ 
++/* forcibly initialize the current mixer value; if GET_CUR fails, set to
++ * the minimum as default
++ */
++static void init_cur_mix_raw(struct usb_mixer_elem_info *cval, int ch, int idx)
++{
++	int val, err;
++
++	err = snd_usb_get_cur_mix_value(cval, ch, idx, &val);
++	if (!err)
++		return;
++	if (!cval->head.mixer->ignore_ctl_error)
++		usb_audio_warn(cval->head.mixer->chip,
++			       "%d:%d: failed to get current value for ch %d (%d)\n",
++			       cval->head.id, mixer_ctrl_intf(cval->head.mixer),
++			       ch, err);
++	snd_usb_set_cur_mix_value(cval, ch, idx, cval->min);
++}
++
+ /*
+  * retrieve the minimum and maximum values for the specified control
+  */
+ static int get_min_max_with_quirks(struct usb_mixer_elem_info *cval,
+ 				   int default_min, struct snd_kcontrol *kctl)
+ {
++	int i, idx;
++
+ 	/* for failsafe */
+ 	cval->min = default_min;
+ 	cval->max = cval->min + 1;
+@@ -1219,7 +1237,6 @@ static int get_min_max_with_quirks(struct usb_mixer_elem_info *cval,
+ 	} else {
+ 		int minchn = 0;
+ 		if (cval->cmask) {
+-			int i;
+ 			for (i = 0; i < MAX_CHANNELS; i++)
+ 				if (cval->cmask & (1 << i)) {
+ 					minchn = i + 1;
+@@ -1320,6 +1337,19 @@ static int get_min_max_with_quirks(struct usb_mixer_elem_info *cval,
+ 		}
+ 	}
+ 
++	/* initialize all elements */
++	if (!cval->cmask) {
++		init_cur_mix_raw(cval, 0, 0);
++	} else {
++		idx = 0;
++		for (i = 0; i < MAX_CHANNELS; i++) {
++			if (cval->cmask & (1 << i)) {
++				init_cur_mix_raw(cval, i + 1, idx);
++				idx++;
++			}
++		}
++	}
++
+ 	return 0;
+ }
+ 
