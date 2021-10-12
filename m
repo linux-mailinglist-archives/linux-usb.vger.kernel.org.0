@@ -2,223 +2,244 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7722D429B21
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Oct 2021 03:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A16E429BE4
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Oct 2021 05:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbhJLBqO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Oct 2021 21:46:14 -0400
-Received: from mga04.intel.com ([192.55.52.120]:22366 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229565AbhJLBqK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 11 Oct 2021 21:46:10 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10134"; a="225785710"
-X-IronPort-AV: E=Sophos;i="5.85,366,1624345200"; 
-   d="scan'208";a="225785710"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2021 18:44:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,366,1624345200"; 
-   d="scan'208";a="591543754"
-Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 11 Oct 2021 18:44:04 -0700
-Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1ma6po-0002vi-9X; Tue, 12 Oct 2021 01:44:04 +0000
-Date:   Tue, 12 Oct 2021 09:43:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD REGRESSION
- d143d2c76ed6b02cca4a366cb1ed8549c5fc2a32
-Message-ID: <6164e849.s0qbrZ1bIKL4vEZ7%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S232234AbhJLDYb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Oct 2021 23:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49374 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232202AbhJLDY0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Oct 2021 23:24:26 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954BCC061745
+        for <linux-usb@vger.kernel.org>; Mon, 11 Oct 2021 20:22:25 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id q129so6531917oib.0
+        for <linux-usb@vger.kernel.org>; Mon, 11 Oct 2021 20:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kFWCWKAWWoaL3SV5gzB8CEd18a1l6a6FD7ldIFD7Pw4=;
+        b=H1RfEtfl628J9zd0S0kNDOa95V8Wemjo6fWE24pMxl3rr4x6vq+gSRWq1uKpWq8gv+
+         t3MNe5F+IoGr8j4ixeJzkXPMU/cfpzUPuqd3KYP/lUwTDsPk0CePJjb4E0Zpf7amrw5g
+         0Lm3rpE/iqXtfIS6H7Tn+fyRkAAVl1xsGij6Yeydf46bw6zfFg7Ka6WsijCz0aK0NGC3
+         wERRBAjgCivkm9LIb1W1DE7flexUm6omx092fj85tRxGYcE9k6WpDXth0cXkbo7U/cQd
+         /p9svKOkZWNq3p4HK9FysAeKdk9jAzMuO18dhi6pACikv+e+YOrXqCiKSHxZEWbfQrsV
+         JBew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kFWCWKAWWoaL3SV5gzB8CEd18a1l6a6FD7ldIFD7Pw4=;
+        b=7FKgUoq3yasalH9rjSmjHteH4+amODsM6HbFfETkYUj508MTk+L/92clatSSK2Nf1s
+         vxu8Ts9pYaCDa/aEkEe0WMZDEYMN8bmBQYbnrXVfkoRxL2CsmUG5twKBLjPdTZN+t3mu
+         dd8rM3n2ynPikue7ITFxVYczrzOCZro4vdHyqxZmwH1ttlQPF8syApLMcdECfOkw8EYI
+         v5kMctPxKJFCpsV0Fk4OkZehIBSAnOIyHXTK0wIaNKHNEsIjVrBnkGV90DwrbYJKT5tI
+         PuOXO0kC3+u0woI92Naiw84XQ086yR4OHNByYrEchEoESdCj5JzW+933XTu4G5Kf7KHe
+         hzJA==
+X-Gm-Message-State: AOAM53371M2+shtzh+QaWlTpFI1sWQhzc9l7xPhm2lYK9sBsHJ5MsaX9
+        YFPjqF4rM6vzTk98WhnJbng1mA==
+X-Google-Smtp-Source: ABdhPJyXQxggU4Zx7haQPwT/hy0aC9lAGeEMnTLcMvco6zQgl82Zj6qAV9dmwbaEucOMPvuLc3GCkg==
+X-Received: by 2002:aca:e004:: with SMTP id x4mr1905158oig.155.1634008944889;
+        Mon, 11 Oct 2021 20:22:24 -0700 (PDT)
+Received: from yoga ([2600:1700:a0:3dc8:c84c:8eff:fe1e:256f])
+        by smtp.gmail.com with ESMTPSA id s10sm2104750oib.58.2021.10.11.20.22.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Oct 2021 20:22:24 -0700 (PDT)
+Date:   Mon, 11 Oct 2021 22:22:22 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     schowdhu@codeaurora.org
+Cc:     Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        Bryan O'Donoghue <pure.logic@nexus-software.ie>,
+        Greg KH <greg@kroah.com>, linux-kernel@vger.kernel.org,
+        ckadabi@codeaurora.org, tsoni@codeaurora.org,
+        bryanh@codeaurora.org, psodagud@codeaurora.org,
+        satyap@codeaurora.org, pheragu@codeaurora.org,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Subject: Re: [PATCH V0 1/7] dt-bindings: connector: Add property for eud type
+ c connector
+Message-ID: <YWT/buCujyK3D0WE@yoga>
+References: <cover.1633343547.git.schowdhu@codeaurora.org>
+ <246c9d24da27b6ce91d5f1e536fa96ac5656a0b2.1633343547.git.schowdhu@codeaurora.org>
+ <YVsttQySDnaXxOuI@robh.at.kernel.org>
+ <b3d10d7b874c11462604a5f78bc0e8cf@codeaurora.org>
+ <YVx/U+w8zS6/P6oa@ripper>
+ <ad4f944d1166882c80a91b3fbbd15fc5@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <ad4f944d1166882c80a91b3fbbd15fc5@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: d143d2c76ed6b02cca4a366cb1ed8549c5fc2a32  usb: gadget: u_audio.c: Adding Playback Pitch ctl for sync playback
+On Thu 07 Oct 04:25 CDT 2021, schowdhu@codeaurora.org wrote:
 
-Error/Warning reports:
+> On 2021-10-05 22:07, Bjorn Andersson wrote:
+> > On Tue 05 Oct 06:11 PDT 2021, schowdhu@codeaurora.org wrote:
+> > 
+> > > On 2021-10-04 22:07, Rob Herring wrote:
+> > > > On Mon, Oct 04, 2021 at 04:46:19PM +0530, Souradeep Chowdhury wrote:
+> > > > > Added the property for EUD(Embedded USB Debug) connector.Added
+> > > > > the "reg" and "interrupts" property which is needed for EUD.
+> > > >
+> > > > You are going to need a better explanation of this h/w.
+> > > 
+> > > Ack. Will update this with the detailed hardware description
+> > > in the next version.
+> > > 
+> > > >
+> > > > >
+> > > > > Signed-off-by: Souradeep Chowdhury <schowdhu@codeaurora.org>
+> > > > > ---
+> > > > >  .../devicetree/bindings/connector/usb-connector.yaml      | 15
+> > > > > +++++++++++++++
+> > > > >  1 file changed, 15 insertions(+)
+> > > > >
+> > > > > diff --git
+> > > > > a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> > > > > b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> > > > > index 7eb8659..908129f 100644
+> > > > > --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> > > > > +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> > > > > @@ -30,6 +30,21 @@ properties:
+> > > > >            - const: samsung,usb-connector-11pin
+> > > > >            - const: usb-b-connector
+> > > > >
+> > > > > +      - items:
+> > > > > +          - enum:
+> > > > > +              - qcom,sc7280-usb-connector-eud
+> > > > > +          - const: qcom,usb-connector-eud
+> > > > > +          - const: usb-c-connector
+> > > > > +
+> > > > > +  reg:
+> > > > > +    items:
+> > > > > +      - description: EUD Base Register Region
+> > > > > +      - description: EUD Mode Manager Region
+> > > >
+> > > > A connector node represents the physical connector on a board. That
+> > > > can't really be an MMIO peripheral. Maybe you need a node for EUD and
+> > > > then it should have a connector child node? Don't really know without
+> > > > understanding this h/w.
+> > > 
+> > > As per the previous discussion on the EUD, it was agreed upon to map
+> > > EUD
+> > > as a type C connector and use Role-Switch to change the USB role
+> > > instead
+> > > of extcon interface that was being used previously. The link for the
+> > > same
+> > > is as follows:-
+> > > 
+> > > https://lore.kernel.org/lkml/5db1a666-62ec-c850-6626-ad33d337b452@codeaurora.org/
+> > > 
+> > 
+> > Not using extcon is the right thing, but perhaps we should make the EUD
+> > a role_switch provider and client, so that we can describe how it sits
+> > inbetween the connector and the controller.
+> > 
+> > That way it has the power to pass through or override requests from the
+> > upstream role-switcher, based on the status of EUD.
+> > 
+> > 
+> > That said, I'm still curious to what happens if I renegotiate the roles
+> > dynamically in a Type-C environment, while enabling EUD. How would the
+> > device on the other end of the cable know that it's supposed to be a
+> > host? Or there's simply a reset of the link when this happens?
+> > 
+> > Thanks,
+> > Bjorn
+> 
+> Hi Bjorn,
+> 
 
-https://lore.kernel.org/linux-usb/202110120052.NOD3RQfr-lkp@intel.com
-https://lore.kernel.org/linux-usb/202110120217.uHSGwfH4-lkp@intel.com
+Hi Souradeep
 
-Error/Warning in current branch:
+> By making EUD Role-Switch provider and client do you mean that
+> we should have a EUD node which will have a connector node as
+> child and this connector node will have a port that points towards
+> the drd role-switch?
+> 
+> So that my device tree node will look like the following in that case
+> 
+> eud@88e0000 {
+>         compatible = "qcom,usb-connector-eud";
+>         reg = <0 0x88e0000 0 0x2000>,
+>               <0 0x88e2000 0 0x1000>;
+>         interrupt-parent = <&pdc>;
+>         interrupts = <11 IRQ_TYPE_LEVEL_HIGH>;
+>         usb_con: connector {
+>                 compatible = "usb-c-connector";
+>                 label = "USB-C";
+>                 port {
+>                       eud_usb_output: endpoint {
+>                       remote-endpoint = <&eud_usb3_input>;
+>                  };
+>         };
+> 
+> };
+> 
+> 
+> @usb2 {
+>     dwc3 {
+>        usb-role-switch;
+>        port {
+>              eud_usb3_input: endpoint {
+>                    remote-endpoint = <&eud_usb_output>;
+>              };
+>      };
+> };
 
-drivers/usb/gadget/function/u_audio.c:589:38: error: variable 'p_pktsize_residue' set but not used [-Werror=unused-but-set-variable]
-drivers/usb/gadget/function/u_audio.c:589:45: error: variable 'p_pktsize_residue' set but not used [-Werror=unused-but-set-variable]
-u_audio.c:(.text+0x3f6): undefined reference to `__udivdi3'
-u_audio.c:(.text+0x60c): undefined reference to `__udivdi3'
+While your "output" and "input" matches the direction of the role
+switching, I think the connection should be describe in the other
+direction.
 
-possible Error/Warning in current branch (please contact us if interested):
+Also my suggestion was that EUD is both connector for the dwc3 and has a
+reference to the connector described in the TypeC controller - to
+properly describe the relationship:
 
-drivers/usb/gadget/function/u_audio.c:589:38: warning: variable 'p_pktsize_residue' set but not used [-Wunused-but-set-variable]
-m68k-linux-ld: u_audio.c:(.text+0x440): undefined reference to `__udivdi3'
+  DWC -> EUD -> connector
 
-Error/Warning ids grouped by kconfigs:
+With the role switching request going from the connector (pmic_glink
+driver) to DWC through the EUD, which can override the vote.
 
-gcc_recent_errors
-|-- arc-allyesconfig
-|   `-- drivers-usb-gadget-function-u_audio.c:error:variable-p_pktsize_residue-set-but-not-used
-|-- arm-allmodconfig
-|   `-- drivers-usb-gadget-function-u_audio.c:error:variable-p_pktsize_residue-set-but-not-used
-|-- arm-allyesconfig
-|   `-- drivers-usb-gadget-function-u_audio.c:error:variable-p_pktsize_residue-set-but-not-used
-|-- arm-randconfig-r003-20211011
-|   `-- u_audio.c:(.text):undefined-reference-to-__udivdi3
-|-- h8300-allyesconfig
-|   `-- drivers-usb-gadget-function-u_audio.c:error:variable-p_pktsize_residue-set-but-not-used
-|-- i386-allyesconfig
-|   `-- drivers-usb-gadget-function-u_audio.c:error:variable-p_pktsize_residue-set-but-not-used
-|-- m68k-randconfig-r001-20211011
-|   `-- m68k-linux-ld:u_audio.c:(.text):undefined-reference-to-__udivdi3
-|-- m68k-randconfig-r015-20211011
-|   `-- u_audio.c:(.text):undefined-reference-to-__udivdi3
-|-- nios2-allyesconfig
-|   `-- drivers-usb-gadget-function-u_audio.c:error:variable-p_pktsize_residue-set-but-not-used
-|-- powerpc-allmodconfig
-|   `-- drivers-usb-gadget-function-u_audio.c:error:variable-p_pktsize_residue-set-but-not-used
-|-- powerpc-allyesconfig
-|   `-- drivers-usb-gadget-function-u_audio.c:error:variable-p_pktsize_residue-set-but-not-used
-|-- riscv-allmodconfig
-|   `-- drivers-usb-gadget-function-u_audio.c:error:variable-p_pktsize_residue-set-but-not-used
-|-- riscv-allyesconfig
-|   `-- drivers-usb-gadget-function-u_audio.c:error:variable-p_pktsize_residue-set-but-not-used
-|-- sh-allmodconfig
-|   `-- drivers-usb-gadget-function-u_audio.c:error:variable-p_pktsize_residue-set-but-not-used
-|-- x86_64-allyesconfig
-|   `-- drivers-usb-gadget-function-u_audio.c:error:variable-p_pktsize_residue-set-but-not-used
-`-- xtensa-allyesconfig
-    `-- drivers-usb-gadget-function-u_audio.c:error:variable-p_pktsize_residue-set-but-not-used
 
-clang_recent_errors
-|-- arm-buildonly-randconfig-r005-20211011
-|   `-- drivers-usb-gadget-function-u_audio.c:warning:variable-p_pktsize_residue-set-but-not-used
-|-- i386-randconfig-a006-20211011
-|   `-- drivers-usb-gadget-function-u_audio.c:warning:variable-p_pktsize_residue-set-but-not-used
-`-- x86_64-randconfig-a001-20211011
-    `-- drivers-usb-gadget-function-u_audio.c:warning:variable-p_pktsize_residue-set-but-not-used
+That said, this is just my suggestion. You need to ensure that Rob
+understands the hardware design well enough to approve your proposed
+binding.
 
-elapsed time: 826m
 
-configs tested: 107
-configs skipped: 3
+E.g. The connector in the EUD isn't a usb-c-connector, it's some
+type of internal connection, the next step in that chain is the actual
+usb-c-connector.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-i386                 randconfig-c001-20211011
-powerpc              randconfig-c003-20211011
-powerpc                      obs600_defconfig
-powerpc                    gamecube_defconfig
-mips                       bmips_be_defconfig
-sh                           se7619_defconfig
-arm                            mps2_defconfig
-powerpc                         ps3_defconfig
-powerpc                 xes_mpc85xx_defconfig
-sh                ecovec24-romimage_defconfig
-sparc                       sparc64_defconfig
-sh                        sh7757lcr_defconfig
-sh                               j2_defconfig
-arm                        realview_defconfig
-arm                       versatile_defconfig
-arm                             ezx_defconfig
-powerpc                 mpc834x_itx_defconfig
-xtensa                    xip_kc705_defconfig
-mips                     decstation_defconfig
-powerpc                      makalu_defconfig
-powerpc                   bluestone_defconfig
-mips                     loongson2k_defconfig
-mips                     loongson1b_defconfig
-mips                         db1xxx_defconfig
-arc                        nsimosci_defconfig
-arm                  randconfig-c002-20211011
-x86_64               randconfig-c001-20211011
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-arc                              allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a015-20211011
-x86_64               randconfig-a012-20211011
-x86_64               randconfig-a016-20211011
-x86_64               randconfig-a014-20211011
-x86_64               randconfig-a013-20211011
-x86_64               randconfig-a011-20211011
-i386                 randconfig-a016-20211011
-i386                 randconfig-a014-20211011
-i386                 randconfig-a011-20211011
-i386                 randconfig-a015-20211011
-i386                 randconfig-a012-20211011
-i386                 randconfig-a013-20211011
-arc                  randconfig-r043-20211011
-s390                 randconfig-r044-20211011
-riscv                randconfig-r042-20211011
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+Regards,
+Bjorn
 
-clang tested configs:
-x86_64               randconfig-a004-20211011
-x86_64               randconfig-a006-20211011
-x86_64               randconfig-a001-20211011
-x86_64               randconfig-a005-20211011
-x86_64               randconfig-a002-20211011
-x86_64               randconfig-a003-20211011
-i386                 randconfig-a001-20211011
-i386                 randconfig-a003-20211011
-i386                 randconfig-a004-20211011
-i386                 randconfig-a005-20211011
-i386                 randconfig-a002-20211011
-i386                 randconfig-a006-20211011
-hexagon              randconfig-r041-20211011
-hexagon              randconfig-r045-20211011
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
+> Also EUD functions only in device mode, so when the role-switch is done by
+> the controller
+> to set the device mode, the PC on the other end becomes the host.
+> 
+> Thanks,
+> Souradeep
+> 
+> > 
+> > > >
+> > > > > +
+> > > > > +  interrupts:
+> > > > > +    description:
+> > > > > +      EUD interrupt
+> > > > > +
+> > > > >    label:
+> > > > >      description: Symbolic name for the connector.
+> > > > >
+> > > > > --
+> > > > > QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a
+> > > > > member
+> > > > > of Code Aurora Forum, hosted by The Linux Foundation
+> > > > >
+> > > > >
