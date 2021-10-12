@@ -2,84 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 536D6429FE7
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Oct 2021 10:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A19542A26D
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Oct 2021 12:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235000AbhJLIdH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Oct 2021 04:33:07 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:32894 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234745AbhJLIdF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 12 Oct 2021 04:33:05 -0400
-Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxL2q7R2VhdJkYAA--.23631S2;
-        Tue, 12 Oct 2021 16:30:55 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <greg@kroah.com>,
-        Patchwork Bot <patchwork-bot@kernel.org>
-Cc:     zhuyinbo@loongson.cn
-Subject: [PATCH v5] usb: ohci: disable start-of-frame interrupt in ohci_rh_suspend
-Date:   Tue, 12 Oct 2021 16:30:50 +0800
-Message-Id: <1634027450-3358-1-git-send-email-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-CM-TRANSID: AQAAf9DxL2q7R2VhdJkYAA--.23631S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJrWxCFWrGF1kAF1UCw1Dtrb_yoW8Gw17pF
-        4a9r43tw43ta1jvF1UGFs7CayrK3Z8KrW7tasFk3yUA39xtw1F9r9rKFW5tFn3WrWfKw1a
-        vFsYv345Wa18uaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svPMxAI
-        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+        id S235960AbhJLKmJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Oct 2021 06:42:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48486 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235872AbhJLKmI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 12 Oct 2021 06:42:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 739B261078;
+        Tue, 12 Oct 2021 10:40:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634035207;
+        bh=Uzedw/TaN1V5uNbmMLry3sosjhIZCWQyxQ25SbxkIU0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CtAyax1CQovCFHNdcR4FiyT7HdGKO9Z43ECa/qa+1XrMchCsrEDxGDaClsnrNAT7z
+         BQcqiEvtsYKgFjWyZq2ihPVNT0b3OdI7AInS2Zrf4uZbtP69EoP/DjBMHHPCLQbYMq
+         pPxdcH1qvL/9+Cy4RoFfnuRceQS911vH4VWZbfN95QyvxLDNOmC8iUMVBJYQTiFVJZ
+         eAzWrAUlZPB4NMWy7SaeEt8YuXFruURn9MmN2uTC5YpsPF2lYzCKINRetm7ByGSMZz
+         o27Iw5RtWM7tNW64J5IdPuBJEo/VoceWazNluYrcoi7MU31VlqdAquntoWCvkcH8/B
+         2x7gVUYi+RQDw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 68D7F60965;
+        Tue, 12 Oct 2021 10:40:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] r8152: select CRC32 and CRYPTO/CRYPTO_HASH/CRYPTO_SHA256
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163403520742.25122.16952890625323973877.git-patchwork-notify@kernel.org>
+Date:   Tue, 12 Oct 2021 10:40:07 +0000
+References: <20211011152249.12387-1-vegard.nossum@oracle.com>
+In-Reply-To: <20211011152249.12387-1-vegard.nossum@oracle.com>
+To:     Vegard Nossum <vegard.nossum@oracle.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, hayeswang@realtek.com,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The usb states of ohci controller include UsbOperational, UsbReset,
-UsbSuspend and UsbResume. Among them, only the UsbOperational state
-supports launching the start-of-frame for host controller according
-the ohci protocol spec, but in S3 and S4 (suspend to memory/suspend
-to disk) press test procedure, it may happen that the start-of-
-frame was launched in UsbSuspend status and cause ohci works failed
-that the phenomenon was hc will allways reproduce the SoF interrupt
-and consider that hc doesn't deal with the ed/td/done list in non-
-UsbOperational, and this patch was to disable SoF interrupt in ohci
-_rh_suspend so that it can fix ohci SoF abnormally interrupt issue.
+Hello:
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
-Change in v5:
-		Move the key code change into ohci_rh_suspend.
-		Rework the commit log information.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
+On Mon, 11 Oct 2021 17:22:49 +0200 you wrote:
+> Fix the following build/link errors by adding a dependency on
+> CRYPTO, CRYPTO_HASH, CRYPTO_SHA256 and CRC32:
+> 
+>   ld: drivers/net/usb/r8152.o: in function `rtl8152_fw_verify_checksum':
+>   r8152.c:(.text+0x2b2a): undefined reference to `crypto_alloc_shash'
+>   ld: r8152.c:(.text+0x2bed): undefined reference to `crypto_shash_digest'
+>   ld: r8152.c:(.text+0x2c50): undefined reference to `crypto_destroy_tfm'
+>   ld: drivers/net/usb/r8152.o: in function `_rtl8152_set_rx_mode':
+>   r8152.c:(.text+0xdcb0): undefined reference to `crc32_le'
+> 
+> [...]
 
- drivers/usb/host/ohci-hub.c | 2 ++
- 1 file changed, 2 insertions(+)
+Here is the summary with links:
+  - r8152: select CRC32 and CRYPTO/CRYPTO_HASH/CRYPTO_SHA256
+    https://git.kernel.org/netdev/net/c/9973a43012b6
 
-diff --git a/drivers/usb/host/ohci-hub.c b/drivers/usb/host/ohci-hub.c
-index f474f2f..80a0094 100644
---- a/drivers/usb/host/ohci-hub.c
-+++ b/drivers/usb/host/ohci-hub.c
-@@ -88,6 +88,8 @@ static int ohci_rh_suspend (struct ohci_hcd *ohci, int autostop)
- 		msleep (8);
- 		spin_lock_irq (&ohci->lock);
- 	}
-+	/* All ED unlinks should be finished, no need for SOF interrupts */
-+	ohci_writel(ohci, OHCI_INTR_SF, &ohci->regs->intrdisable);
- 	update_done_list(ohci);
- 	ohci_work(ohci);
- 
--- 
-1.8.3.1
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
