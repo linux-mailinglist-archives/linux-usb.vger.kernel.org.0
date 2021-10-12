@@ -2,244 +2,273 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A16E429BE4
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Oct 2021 05:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D580429C1F
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Oct 2021 05:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbhJLDYb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Oct 2021 23:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49374 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232202AbhJLDY0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Oct 2021 23:24:26 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954BCC061745
-        for <linux-usb@vger.kernel.org>; Mon, 11 Oct 2021 20:22:25 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id q129so6531917oib.0
-        for <linux-usb@vger.kernel.org>; Mon, 11 Oct 2021 20:22:25 -0700 (PDT)
+        id S232185AbhJLD4h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Oct 2021 23:56:37 -0400
+Received: from esa.hc3962-90.iphmx.com ([216.71.142.165]:4901 "EHLO
+        esa.hc3962-90.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232135AbhJLD4g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Oct 2021 23:56:36 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kFWCWKAWWoaL3SV5gzB8CEd18a1l6a6FD7ldIFD7Pw4=;
-        b=H1RfEtfl628J9zd0S0kNDOa95V8Wemjo6fWE24pMxl3rr4x6vq+gSRWq1uKpWq8gv+
-         t3MNe5F+IoGr8j4ixeJzkXPMU/cfpzUPuqd3KYP/lUwTDsPk0CePJjb4E0Zpf7amrw5g
-         0Lm3rpE/iqXtfIS6H7Tn+fyRkAAVl1xsGij6Yeydf46bw6zfFg7Ka6WsijCz0aK0NGC3
-         wERRBAjgCivkm9LIb1W1DE7flexUm6omx092fj85tRxGYcE9k6WpDXth0cXkbo7U/cQd
-         /p9svKOkZWNq3p4HK9FysAeKdk9jAzMuO18dhi6pACikv+e+YOrXqCiKSHxZEWbfQrsV
-         JBew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kFWCWKAWWoaL3SV5gzB8CEd18a1l6a6FD7ldIFD7Pw4=;
-        b=7FKgUoq3yasalH9rjSmjHteH4+amODsM6HbFfETkYUj508MTk+L/92clatSSK2Nf1s
-         vxu8Ts9pYaCDa/aEkEe0WMZDEYMN8bmBQYbnrXVfkoRxL2CsmUG5twKBLjPdTZN+t3mu
-         dd8rM3n2ynPikue7ITFxVYczrzOCZro4vdHyqxZmwH1ttlQPF8syApLMcdECfOkw8EYI
-         v5kMctPxKJFCpsV0Fk4OkZehIBSAnOIyHXTK0wIaNKHNEsIjVrBnkGV90DwrbYJKT5tI
-         PuOXO0kC3+u0woI92Naiw84XQ086yR4OHNByYrEchEoESdCj5JzW+933XTu4G5Kf7KHe
-         hzJA==
-X-Gm-Message-State: AOAM53371M2+shtzh+QaWlTpFI1sWQhzc9l7xPhm2lYK9sBsHJ5MsaX9
-        YFPjqF4rM6vzTk98WhnJbng1mA==
-X-Google-Smtp-Source: ABdhPJyXQxggU4Zx7haQPwT/hy0aC9lAGeEMnTLcMvco6zQgl82Zj6qAV9dmwbaEucOMPvuLc3GCkg==
-X-Received: by 2002:aca:e004:: with SMTP id x4mr1905158oig.155.1634008944889;
-        Mon, 11 Oct 2021 20:22:24 -0700 (PDT)
-Received: from yoga ([2600:1700:a0:3dc8:c84c:8eff:fe1e:256f])
-        by smtp.gmail.com with ESMTPSA id s10sm2104750oib.58.2021.10.11.20.22.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Oct 2021 20:22:24 -0700 (PDT)
-Date:   Mon, 11 Oct 2021 22:22:22 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     schowdhu@codeaurora.org
-Cc:     Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        Bryan O'Donoghue <pure.logic@nexus-software.ie>,
-        Greg KH <greg@kroah.com>, linux-kernel@vger.kernel.org,
-        ckadabi@codeaurora.org, tsoni@codeaurora.org,
-        bryanh@codeaurora.org, psodagud@codeaurora.org,
-        satyap@codeaurora.org, pheragu@codeaurora.org,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-Subject: Re: [PATCH V0 1/7] dt-bindings: connector: Add property for eud type
- c connector
-Message-ID: <YWT/buCujyK3D0WE@yoga>
-References: <cover.1633343547.git.schowdhu@codeaurora.org>
- <246c9d24da27b6ce91d5f1e536fa96ac5656a0b2.1633343547.git.schowdhu@codeaurora.org>
- <YVsttQySDnaXxOuI@robh.at.kernel.org>
- <b3d10d7b874c11462604a5f78bc0e8cf@codeaurora.org>
- <YVx/U+w8zS6/P6oa@ripper>
- <ad4f944d1166882c80a91b3fbbd15fc5@codeaurora.org>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
+  t=1634010875; x=1634615675;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=d7pzerhSMH4WfR2WH/+AcMKpG30xj4yJime4YaAMkTM=;
+  b=KjQj/sNxCab7JzO2y8/79lcUocWKk5YoaD79ZMndM8Fe719L14ldjiNG
+   a3tZs3zrJ4vG7qpqo2nJzvujdB7etGQtBkmRtxRQpv7eEaKbV4KYwoYhw
+   DXDWPA1XST06H0JFTtbghyIKIAkKwZ1bYDruPDsf2GHHg0eMOQp/xsLV6
+   4=;
+Received: from mail-mw2nam10lp2109.outbound.protection.outlook.com (HELO NAM10-MW2-obe.outbound.protection.outlook.com) ([104.47.55.109])
+  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2021 03:54:34 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D1Rpn9evYkTMmtaOX76ZjDGOIgpy4bernjok9/PLI4p96FGm5L2ErwTID6i82s11gSIKWUgWT8kF4cXNlcpl+myBWUjwjCGKAI7Q6nxf/s/uRzkg0IvNYcY6A1O8jXVVdbYmCeHPoLTNfck/BGHJBWObOeWI+KrofssaoGWpRqOLT33PgoydnJ+7b18tEcmE/ahIkQwM4r4jKhWwcT96KuV0RBKN7xoC9o0TCGMPInZZdDOrw/y0Yas7Z7sZNJ6paWws1wPC3v3z/q0PnavakexXZBccMlBQAI6DE6QqGHY/U9gSNwFBAa3FHMGWRD4q92khatAYDAbaCSCYf8PFdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d7pzerhSMH4WfR2WH/+AcMKpG30xj4yJime4YaAMkTM=;
+ b=KG0+4O5FnIE7nZnyqGGaR09ZbUvpIgbMsySkCIcwHBrT78Tc4xKen2jGgsc54H8zr5RSfqJ5pJNu9jPsb2ICQL6TTj/r4uO+sMvZf/fylxSC4Elpd5a3Tnu56y0kWTzZSPqvj4Ru8ZknP/p0V/FDEUb8LO49Dac0a+UP6FM/utU3BjRLc4FiIcAOjO3N//RqiWCzIsGmLLjdWYuPVQIdNI03U4xH8PyZNPup6Ob7RBqr0gZLCj/uDhqrNLCS6K9L40RMm0m5H04rW6SBS6NGHjTQNFkL7lYt8E6z13oEnr2WvTh0PX/vTGaUMEm4z73U/GSOFm9HOCXyjHTAICVAFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
+ dkim=pass header.d=quicinc.com; arc=none
+Received: from DM8PR02MB8198.namprd02.prod.outlook.com (2603:10b6:8:4::7) by
+ DM6PR02MB6297.namprd02.prod.outlook.com (2603:10b6:5:1d3::31) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4587.25; Tue, 12 Oct 2021 03:54:29 +0000
+Received: from DM8PR02MB8198.namprd02.prod.outlook.com
+ ([fe80::9a7:6922:a91f:8f95]) by DM8PR02MB8198.namprd02.prod.outlook.com
+ ([fe80::9a7:6922:a91f:8f95%6]) with mapi id 15.20.4587.026; Tue, 12 Oct 2021
+ 03:54:29 +0000
+From:   "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v5 1/3] usb: gadget: configfs: avoid list move operation
+ of usb_function
+Thread-Topic: [PATCH v5 1/3] usb: gadget: configfs: avoid list move operation
+ of usb_function
+Thread-Index: AQHXo4UNlBSIOyDIIUmvyeFQTj9v7avE4aQAgAU44jCAAsKNAIACFPVw
+Date:   Tue, 12 Oct 2021 03:54:29 +0000
+Message-ID: <DM8PR02MB8198EFA6BAF945770FEB2E87E3B69@DM8PR02MB8198.namprd02.prod.outlook.com>
+References: <1630976977-13938-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1630976977-13938-2-git-send-email-quic_linyyuan@quicinc.com>
+ <YVwywFfe/x8OEHh8@kroah.com>
+ <DM8PR02MB8198787E8C17F646B7DED9F4E3B39@DM8PR02MB8198.namprd02.prod.outlook.com>
+ <YWLk6IvBsgpT+s75@kroah.com>
+In-Reply-To: <YWLk6IvBsgpT+s75@kroah.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=none action=none
+ header.from=quicinc.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3666d8f3-2b4d-43bb-0afb-08d98d33fe53
+x-ms-traffictypediagnostic: DM6PR02MB6297:
+x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM6PR02MB6297699F440AA83C1FF43EA19FB69@DM6PR02MB6297.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: eXex+1Vni7zCKXphs517hvXiw2fA+e17A4WMDJ5LhHJgRNzFKECji/p83yhQdNv9rtIDpeDIfbFUv6hZ9xWiiZ3vs4+GHmZF6ya3H4aW+cTWTX7i+zdZzHKI5NFQ5RLHTH1elN/Ji3VAgbWI1kUqem/Pto+gO6txPeLCN3P6ypNvH5Za3YwqdWp35YqcfBwEUtvxF5Ok/RvWTYkMNLEM73CnwG4ciUVWYN4SftSz17dYZ3iHeFUlo6+JTzmrSLaqwTXPfEr/LtG5DFqus/KyyJgjuO2NQpftxjBhHZstMCUDpdVWe0PvcKp40J3ouuTjHDV/mhetyAcWC0jw9ZDA3dZRLpoKJLCxrHwEliOXaW0+4k/Ve1FG4YbvPWdRZ58pGmL8VCvI429Zuo+fmBnBg6EXBDMeqCRGBcMrP1yh3rhNmx5gwWuGChJlQUa8ZHNecqJLl+BpLb5Ec/xBsr6VpBehe/0hmsdSayrejEJcpfVqTuDZH1lMxTY6eocT/1NRvJ2bu5p0BSdPh5CCrmvBh4x82HHRZ2DUjjdHP/H/s+bGgc3Ok8+iwl9Upb7vNBKfvOHqmg4EIPvG799muPCP7/kbvkEA+izgwrnhn4isZQECv+yMHHFzkNjInKA050BqVpCYmgduSdLwF++3YreYRSKjv4vUH+EuYPjIrf7nkIEaSgeb3Vwf7KVGdbaYYdEjro5NvougUDwK2kGgLWt5Nw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR02MB8198.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(8676002)(83380400001)(54906003)(110136005)(8936002)(2906002)(316002)(86362001)(66946007)(186003)(66446008)(64756008)(66556008)(66476007)(33656002)(52536014)(55016002)(76116006)(122000001)(38070700005)(71200400001)(5660300002)(26005)(4326008)(508600001)(7696005)(6506007)(9686003)(53546011);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Otg0nCR+gnC/atsLwLtZM0Rn8gfKQckb1JpA0ix/NlAy/nXAVN0t091Ejn/H?=
+ =?us-ascii?Q?xOSLCpo3rCtX9v4WalQl4mRNjSqTJIXwGR9TPp7GoOK7kDwcIioFjU79bwf5?=
+ =?us-ascii?Q?hKw52ran874hD9g3UTUEDjBCuvhbljS/9wkzZVP5blQYLt3fwBHkysV23q99?=
+ =?us-ascii?Q?vtzgiFKTC43by97kqBIZoLxckiO5NsTCAhtZAsuO/cqkhS5pPZelfy1AHNgQ?=
+ =?us-ascii?Q?BDherHujGMzipllwIpHuw7rhsO0ahu+0jeN9lbXtlEm0gG/g9K6cnJygNadE?=
+ =?us-ascii?Q?HRUKURII1z8d2v6jEic5N6QXb/B3kL1Q1I5pt5RRXW4y9BZLNdKL+dcS16xO?=
+ =?us-ascii?Q?LBv7D1NZsOqIjaAE4lS9h8WuwKmrgs6Q1nPTiv6LZmbi4opAwh8OYNWSqido?=
+ =?us-ascii?Q?DwNb4/wX+iShzV1DpX90Exc2qhvBomVIexAkHmFgGlIiP5kYZXBh/z+UQPso?=
+ =?us-ascii?Q?DrlXuCOK37pwN9vMheryxAjbKjTbxG8fUU/X7b16SImmrDvkyAstXqFJKLYj?=
+ =?us-ascii?Q?JdUYXj4+qA0oOD7/o3HTaGis5Nt1qmUpXaAqfs3qPR2iwUzFi8U+8bTGX9JA?=
+ =?us-ascii?Q?4vEygdmtHwpjhDGPkQZA+YnZkv6HAa0yJEAgktdLSXc5lVQYmo7DT5oF1lx4?=
+ =?us-ascii?Q?WrMYoF8IG88BLk6xJnpgFUY4x6oClEer0rsoIFOtb600unv0GldhJmAXBPVs?=
+ =?us-ascii?Q?DGp1GlFrunHNKO+5bdzq6hfYcJxxXKti9oZLn6zX78/Kw+eAmiyhnCcN/8p3?=
+ =?us-ascii?Q?c+wtbLL7D0aPTPZsiSJkwSP6gjjg1Gll1eu+fXWkll2fl5CMsv0mXFozdQp/?=
+ =?us-ascii?Q?vMyVgmhTmlhba3CHI/kLGe4+nS5r/oobBNDQR5U+130D0v9Y1vhSPfNcs+Ul?=
+ =?us-ascii?Q?lHQ4ipd1XSy8g/E8XmOAPiTTQ/H8GanSYj3x6t5CvHbcLxDk8UiItT2rGoEJ?=
+ =?us-ascii?Q?QGXIrgqK+EgEymeLzURDtOKqUzZQ/2lvmy/jo/4AtZrX/K74XPu+2qFRc68y?=
+ =?us-ascii?Q?A39TIR2jBqDX09YfpeVWF0QtbubJnGJU73fFgqpLWydkGQWBfrIbR4n/kUpK?=
+ =?us-ascii?Q?5fRRTcFW3TcsYedbTVkFFg8gQBXuDV8mlXoUbXQ9jNB/QxKgNCjV/Uw4AmV2?=
+ =?us-ascii?Q?BKLxoB7eMFTP9zWBLStYOsFNKQqpm42tra0DkF0a28LCN5fnHLtbl49k8R/g?=
+ =?us-ascii?Q?yNO2QBkEpjiaHWrkzFPFkaUNopV+Kn3fYiZkh5+LUmscoXOZ7+AuC6ZGAqbt?=
+ =?us-ascii?Q?sTDLTiFrElSM78GPDvtXX8UmLsGXkV/mTo4VrbIQdZ9HfuddF/PJXm2n2C0T?=
+ =?us-ascii?Q?laQ=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ad4f944d1166882c80a91b3fbbd15fc5@codeaurora.org>
+X-OriginatorOrg: quicinc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR02MB8198.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3666d8f3-2b4d-43bb-0afb-08d98d33fe53
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Oct 2021 03:54:29.8045
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Fqp/4U/gbQ2QgaaYRf2R2R5NIQuAIl450C5z9v9HPBv7hd30wc6qysc0WUj90tj9tNm5SfkeW8wMqEYowkDp0MDyM/nGPGJMJtQ5zgjq1cU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB6297
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu 07 Oct 04:25 CDT 2021, schowdhu@codeaurora.org wrote:
-
-> On 2021-10-05 22:07, Bjorn Andersson wrote:
-> > On Tue 05 Oct 06:11 PDT 2021, schowdhu@codeaurora.org wrote:
-> > 
-> > > On 2021-10-04 22:07, Rob Herring wrote:
-> > > > On Mon, Oct 04, 2021 at 04:46:19PM +0530, Souradeep Chowdhury wrote:
-> > > > > Added the property for EUD(Embedded USB Debug) connector.Added
-> > > > > the "reg" and "interrupts" property which is needed for EUD.
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Sent: Sunday, October 10, 2021 9:05 PM
+> To: Linyu Yuan (QUIC) <quic_linyyuan@quicinc.com>
+> Cc: Felipe Balbi <balbi@kernel.org>; linux-usb@vger.kernel.org
+> Subject: Re: [PATCH v5 1/3] usb: gadget: configfs: avoid list move operat=
+ion
+> of usb_function
+>=20
+> On Sat, Oct 09, 2021 at 02:26:07AM +0000, Linyu Yuan (QUIC) wrote:
+> > > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > Sent: Tuesday, October 5, 2021 7:11 PM
+> > > To: Linyu Yuan (QUIC) <quic_linyyuan@quicinc.com>
+> > > Cc: Felipe Balbi <balbi@kernel.org>; linux-usb@vger.kernel.org
+> > > Subject: Re: [PATCH v5 1/3] usb: gadget: configfs: avoid list move
+> operation
+> > > of usb_function
+> > >
+> > > On Tue, Sep 07, 2021 at 09:09:35AM +0800, Linyu Yuan wrote:
+> > > > add a new list which link all usb_function at configfs layers,
+> > > > it means that after link a function a configuration,
+> > > > from configfs layer, we can still found all functions,
+> > > > it will allow trace all functions from configfs.
+> > >
+> > > I am sorry, but I do not understand this paragraph.  Can you try
+> > > rewording it?
+> > >
 > > > >
-> > > > You are going to need a better explanation of this h/w.
-> > > 
-> > > Ack. Will update this with the detailed hardware description
-> > > in the next version.
-> > > 
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > >
+> > > How did the kernel test robot report this?  You are adding a new
+> > > function here, it is not a bug you are fixing, right?
+> > >
+> > >
+> > > > Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> > > > ---
+> > > > v2: fix unused cfg variable warning
+> > > > v3: add struct inside configfs.c
+> > > > v4: no change
+> > > > v5: lost v2 fix, add it again
 > > > >
-> > > > >
-> > > > > Signed-off-by: Souradeep Chowdhury <schowdhu@codeaurora.org>
-> > > > > ---
-> > > > >  .../devicetree/bindings/connector/usb-connector.yaml      | 15
-> > > > > +++++++++++++++
-> > > > >  1 file changed, 15 insertions(+)
-> > > > >
-> > > > > diff --git
-> > > > > a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > > > > b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > > > > index 7eb8659..908129f 100644
-> > > > > --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > > > > +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > > > > @@ -30,6 +30,21 @@ properties:
-> > > > >            - const: samsung,usb-connector-11pin
-> > > > >            - const: usb-b-connector
-> > > > >
-> > > > > +      - items:
-> > > > > +          - enum:
-> > > > > +              - qcom,sc7280-usb-connector-eud
-> > > > > +          - const: qcom,usb-connector-eud
-> > > > > +          - const: usb-c-connector
-> > > > > +
-> > > > > +  reg:
-> > > > > +    items:
-> > > > > +      - description: EUD Base Register Region
-> > > > > +      - description: EUD Mode Manager Region
+> > > >  drivers/usb/gadget/configfs.c | 55 ++++++++++++++++++++++++------
+> ----
+> > > ---------
+> > > >  1 file changed, 31 insertions(+), 24 deletions(-)
 > > > >
-> > > > A connector node represents the physical connector on a board. That
-> > > > can't really be an MMIO peripheral. Maybe you need a node for EUD and
-> > > > then it should have a connector child node? Don't really know without
-> > > > understanding this h/w.
-> > > 
-> > > As per the previous discussion on the EUD, it was agreed upon to map
-> > > EUD
-> > > as a type C connector and use Role-Switch to change the USB role
-> > > instead
-> > > of extcon interface that was being used previously. The link for the
-> > > same
-> > > is as follows:-
-> > > 
-> > > https://lore.kernel.org/lkml/5db1a666-62ec-c850-6626-ad33d337b452@codeaurora.org/
-> > > 
-> > 
-> > Not using extcon is the right thing, but perhaps we should make the EUD
-> > a role_switch provider and client, so that we can describe how it sits
-> > inbetween the connector and the controller.
-> > 
-> > That way it has the power to pass through or override requests from the
-> > upstream role-switcher, based on the status of EUD.
-> > 
-> > 
-> > That said, I'm still curious to what happens if I renegotiate the roles
-> > dynamically in a Type-C environment, while enabling EUD. How would the
-> > device on the other end of the cable know that it's supposed to be a
-> > host? Or there's simply a reset of the link when this happens?
-> > 
-> > Thanks,
-> > Bjorn
-> 
-> Hi Bjorn,
-> 
-
-Hi Souradeep
-
-> By making EUD Role-Switch provider and client do you mean that
-> we should have a EUD node which will have a connector node as
-> child and this connector node will have a port that points towards
-> the drd role-switch?
-> 
-> So that my device tree node will look like the following in that case
-> 
-> eud@88e0000 {
->         compatible = "qcom,usb-connector-eud";
->         reg = <0 0x88e0000 0 0x2000>,
->               <0 0x88e2000 0 0x1000>;
->         interrupt-parent = <&pdc>;
->         interrupts = <11 IRQ_TYPE_LEVEL_HIGH>;
->         usb_con: connector {
->                 compatible = "usb-c-connector";
->                 label = "USB-C";
->                 port {
->                       eud_usb_output: endpoint {
->                       remote-endpoint = <&eud_usb3_input>;
->                  };
->         };
-> 
-> };
-> 
-> 
-> @usb2 {
->     dwc3 {
->        usb-role-switch;
->        port {
->              eud_usb3_input: endpoint {
->                    remote-endpoint = <&eud_usb_output>;
->              };
->      };
-> };
-
-While your "output" and "input" matches the direction of the role
-switching, I think the connection should be describe in the other
-direction.
-
-Also my suggestion was that EUD is both connector for the dwc3 and has a
-reference to the connector described in the TypeC controller - to
-properly describe the relationship:
-
-  DWC -> EUD -> connector
-
-With the role switching request going from the connector (pmic_glink
-driver) to DWC through the EUD, which can override the vote.
-
-
-That said, this is just my suggestion. You need to ensure that Rob
-understands the hardware design well enough to approve your proposed
-binding.
-
-
-E.g. The connector in the EUD isn't a usb-c-connector, it's some
-type of internal connection, the next step in that chain is the actual
-usb-c-connector.
-
-Regards,
-Bjorn
-
-> 
-> Also EUD functions only in device mode, so when the role-switch is done by
-> the controller
-> to set the device mode, the PC on the other end becomes the host.
-> 
-> Thanks,
-> Souradeep
-> 
-> > 
+> > > > diff --git a/drivers/usb/gadget/configfs.c
+> b/drivers/usb/gadget/configfs.c
+> > > > index 477e72a..5b2e6f9 100644
+> > > > --- a/drivers/usb/gadget/configfs.c
+> > > > +++ b/drivers/usb/gadget/configfs.c
+> > > > @@ -58,6 +58,11 @@ static inline struct gadget_info
+> > > *to_gadget_info(struct config_item *item)
+> > > >  	return container_of(to_config_group(item), struct gadget_info,
+> > > group);
+> > > >  }
 > > > >
-> > > > > +
-> > > > > +  interrupts:
-> > > > > +    description:
-> > > > > +      EUD interrupt
-> > > > > +
-> > > > >    label:
-> > > > >      description: Symbolic name for the connector.
-> > > > >
-> > > > > --
-> > > > > QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a
-> > > > > member
-> > > > > of Code Aurora Forum, hosted by The Linux Foundation
-> > > > >
-> > > > >
+> > > > +struct config_usb_function {
+> > > > +	struct list_head list;
+> > > > +	struct usb_function *f;
+> > > > +};
+> > >
+> > > What lock protects this list?
+> > >
+> > > > +
+> > > >  struct config_usb_cfg {
+> > > >  	struct config_group group;
+> > > >  	struct config_group strings_group;
+> > > > @@ -420,7 +425,7 @@ static int config_usb_cfg_link(
+> > > >  	struct usb_function_instance *fi =3D container_of(group,
+> > > >  			struct usb_function_instance, group);
+> > > >  	struct usb_function_instance *a_fi;
+> > > > -	struct usb_function *f;
+> > > > +	struct config_usb_function *cf;
+> > > >  	int ret;
+> > > >
+> > > >  	mutex_lock(&gi->lock);
+> > > > @@ -438,21 +443,29 @@ static int config_usb_cfg_link(
+> > > >  		goto out;
+> > > >  	}
+> > > >
+> > > > -	list_for_each_entry(f, &cfg->func_list, list) {
+> > > > -		if (f->fi =3D=3D fi) {
+> > > > +	list_for_each_entry(cf, &cfg->func_list, list) {
+> > > > +		if (cf->f->fi =3D=3D fi) {
+> > > >  			ret =3D -EEXIST;
+> > > >  			goto out;
+> > > >  		}
+> > > >  	}
+> > > >
+> > > > -	f =3D usb_get_function(fi);
+> > > > -	if (IS_ERR(f)) {
+> > > > -		ret =3D PTR_ERR(f);
+> > > > +	cf =3D kzalloc(sizeof(*cf), GFP_KERNEL);
+> > >
+> > > Why "kzalloc" and not "kmalloc"?
+> > >
+> > > I don't understand why you are moving everything to a single list in =
+the
+> > > system, what is wrong with the existing per-device one?
+> > Thanks Greg,
+> >
+> > Let me explain what I want to do in this  change,
+> >
+> > For original code,  when add a function to configuration, it will add f=
+unction
+> > struct usb_function {
+> > ...
+> > struct list_head		list; [1]
+> > };
+> > to following list,
+> > struct config_usb_cfg {
+> > ...
+> > 	struct list_head func_list; [2]
+> > };
+> > Then when bind happen, it will move [1] to following list,
+> > struct usb_configuration {
+> > ...
+> > struct list_head	functions; [3]
+> > };
+> >
+> > When unbind, it will move [1] back to [2].
+> >
+> > We can see list [1] move between two list head, it is not easy to trace=
+.
+> >
+> > And when I add trace, I only want to get trace info from structure defi=
+ned
+> in configfs.c,
+> >
+> > So I add a new list which ONLY add/remove to head [2] and it represent =
+a
+> function in configfs layer.
+> > And original list [1] will ONLY add/remove to head [3].
+>=20
+> I am sorry, but I still do not understand.  These are different types of
+> things that you are now putting all on the same list?
+>=20
+> What prevents your trace functions from working today with the existing
+> code?  What can you not get access to?
+>=20
+> All you say here is "it is not easy to trace", but that does not explain
+> _what_ you are missing and why you need to change that.
+
+Consider the list is moving between two list heads,
+if I trace each function, It may duplicate or missing some function.
+This is my simple reason.
+
+>=20
+> thanks,
+>=20
+> greg k-h
