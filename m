@@ -2,131 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9931442BF5F
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Oct 2021 14:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D005642BF68
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Oct 2021 14:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232206AbhJMMDk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Oct 2021 08:03:40 -0400
-Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:33327 "EHLO
-        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229653AbhJMMDj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Oct 2021 08:03:39 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id 576D32B01147;
-        Wed, 13 Oct 2021 08:01:35 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 13 Oct 2021 08:01:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=rWSTPfUE7TPFJmRSRxhKh167/BF
-        9qamvvLkRCh+xraU=; b=BnSLwvl8etPnKDZMDCwGFruLeZkA4E0sTOIckHlIQcE
-        iHOFRIWF7hYdfjsHi6Cno+mPXAEHvaejeZXrhex5ZTKTrYPAe0+juEwn/3KqgU0c
-        2UxnIWfBiwMd4fV1w0dvuA+U3AW/lD+NWzcfpQ6SL5TCkbQgqRUBO/KgA8fa5M+E
-        DB8AQ40sQMusqn75Mpya7tFXp62c+G6twWvpXWfA8bZyllWYAF8oZ8c6/AF8vxLw
-        MaUqtQr4zPuy4bqifhli/0JLwDVZMV4yf3eShY8h/p/ro6w66yuYz+z+F0cSNXOy
-        tyQxngCkycA/UJ18RWUc5LdwbEXXE/QFeGrbhOy8nhg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=rWSTPf
-        UE7TPFJmRSRxhKh167/BF9qamvvLkRCh+xraU=; b=leJQVqYOo3MK1AKg8I93W9
-        poDakF5UaXQBBF2bHZWXF+os/St+iXLxvzMPssyxVES2wmBwPiSz75/y/1xLRtRb
-        WawJH0zPEjTvIDfiGTHlF+ef6DzPODmwIoT1QHiyD3uhOzzwqtci4nFgV+zR8Mb/
-        ypRbTHoT0/xTNGO+OTeJYIF055130iF6xceJNEwX9pnLXVd4cK7bJozZRu/nHVLO
-        QkJwXVs80hzb6mHbfEesObZ2DfQRsiV8322FZ4bkts+rDnjN6p1s5IZCliZe41/X
-        y8n6mNHXuORGbgj+jdySTGrKMHCx9W8a1+hpgkQ/gbjDJL4LFC0kYL/BVuwRUZyg
-        ==
-X-ME-Sender: <xms:nspmYVGYX69udfCGH8GMeoaBVhTzR-qQPyLl5uyX2BIOyOuhybvcIA>
-    <xme:nspmYaW8Ln-UPe5UVhb7JJ3w0lAV-ecJaDTjakLbE9CXXRPZnM0ki5XdQszyAXtiP
-    DFlTQfr_D1RgA>
-X-ME-Received: <xmr:nspmYXLo3hk2RSvPCnEtgPHi1fqREDQT7kXmz2jYIygKkau9nkd8pDc1z7TiiO84awA12_n_DaoUJPhJ_uE7FE7UrNr_aetz>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddutddggeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:nspmYbHQurJsJju3UTcqVrn7HlgeoGN0KHK-VEWT273tWVLbQFkBbA>
-    <xmx:nspmYbWleQ4P5mlKqbAQhWNU66AAqX2bkVMsfgIyyhTmOrycQRVuPA>
-    <xmx:nspmYWPIbq72nnLU_PyUxHK9F_UYfqipSYRNXXmSikdMtb0zxFf2Dw>
-    <xmx:nspmYUMPmSZrp79yZ1_Yi3EqFcYq0HUkh_YVJQnbbqsQmR4r8WLBhOBiovY>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 13 Oct 2021 08:01:34 -0400 (EDT)
-Date:   Wed, 13 Oct 2021 14:01:32 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-usb@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>
-Subject: Re: [PATCH v6 1/3] usb: Add Xen pvUSB protocol description
-Message-ID: <YWbKnEMvHGU/rv96@kroah.com>
-References: <20211013075207.13910-1-jgross@suse.com>
- <20211013075207.13910-2-jgross@suse.com>
+        id S232299AbhJMMFY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Oct 2021 08:05:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55896 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230005AbhJMMFX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 Oct 2021 08:05:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E007560EB4;
+        Wed, 13 Oct 2021 12:03:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1634126600;
+        bh=6Lpra3ez8JWIpg3SdW3vfWuYRu+xZGQ3by9f1A53ShY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TE077WFAvKOf+ldex8I6AHVm2qgh3cbckzUT+koRTwIjsEVpPaAJSCb9hDWVT3kGg
+         N3pqSyHto9aPTY6jsNFiYrduG8CjwfYXLjRtOmjltNttVgW+YNea6MgbXHM5s1KZw8
+         CXIQHzIA/7Q2QmKbnje49x5Io7JBxUvsqGdbXXSg=
+Date:   Wed, 13 Oct 2021 14:03:18 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Felipe Balbi <balbi@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] [RFC] usb: gadget: avoid unusual inline assembly
+Message-ID: <YWbLBot7RZoycGf3@kroah.com>
+References: <20210927123830.1278953-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211013075207.13910-2-jgross@suse.com>
+In-Reply-To: <20210927123830.1278953-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 09:52:05AM +0200, Juergen Gross wrote:
-> Add the definition of pvUSB protocol used between the pvUSB frontend in
-> a Xen domU and the pvUSB backend in a Xen driver domain (usually Dom0).
+On Mon, Sep 27, 2021 at 02:38:20PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> This header was originally provided by Fujitsu for Xen based on Linux
-> 2.6.18.
+> clang does not understand the "mrc%?" syntax:
 > 
-> Changes are:
-> - adapt to Linux kernel style guide
-> - use Xen namespace
-> - add lots of comments
-> - don't use kernel internal defines
+> drivers/usb/gadget/udc/pxa25x_udc.c:2330:11: error: invalid % escape in inline assembly string
 > 
-> Signed-off-by: Juergen Gross <jgross@suse.com>
-> Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+> I don't understand it either, but removing the %? here gets it to build.
+> This is probably wrong and someone else should do a proper patch.
+> 
+> Any suggestions?
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  include/xen/interface/io/usbif.h | 421 +++++++++++++++++++++++++++++++
->  1 file changed, 421 insertions(+)
->  create mode 100644 include/xen/interface/io/usbif.h
+>  drivers/usb/gadget/udc/pxa25x_udc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/include/xen/interface/io/usbif.h b/include/xen/interface/io/usbif.h
-> new file mode 100644
-> index 000000000000..9494b1c9be99
-> --- /dev/null
-> +++ b/include/xen/interface/io/usbif.h
-> @@ -0,0 +1,421 @@
-> +/*
-> + * usbif.h
-> + *
-> + * USB I/O interface for Xen guest OSes.
-> + *
-> + * Copyright (C) 2009, FUJITSU LABORATORIES LTD.
-> + * Author: Noboru Iwamatsu <n_iwamatsu@jp.fujitsu.com>
-> + *
-> + * Permission is hereby granted, free of charge, to any person obtaining a copy
-> + * of this software and associated documentation files (the "Software"), to
-> + * deal in the Software without restriction, including without limitation the
-> + * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-> + * sell copies of the Software, and to permit persons to whom the Software is
-> + * furnished to do so, subject to the following conditions:
-> + *
-> + * The above copyright notice and this permission notice shall be included in
-> + * all copies or substantial portions of the Software.
-> + *
-> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-> + * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> + * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-> + * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-> + * DEALINGS IN THE SOFTWARE.
-> + */
+> diff --git a/drivers/usb/gadget/udc/pxa25x_udc.c b/drivers/usb/gadget/udc/pxa25x_udc.c
+> index a09ec1d826b2..52cdfd8212d6 100644
+> --- a/drivers/usb/gadget/udc/pxa25x_udc.c
+> +++ b/drivers/usb/gadget/udc/pxa25x_udc.c
+> @@ -2325,7 +2325,7 @@ static int pxa25x_udc_probe(struct platform_device *pdev)
+>  	pr_info("%s: version %s\n", driver_name, DRIVER_VERSION);
+>  
+>  	/* insist on Intel/ARM/XScale */
+> -	asm("mrc%? p15, 0, %0, c0, c0" : "=r" (chiprev));
+> +	asm("mrc p15, 0, %0, c0, c0" : "=r" (chiprev));
+>  	if ((chiprev & CP15R0_VENDOR_MASK) != CP15R0_XSCALE_VALUE) {
+>  		pr_err("%s: not XScale!\n", driver_name);
+>  		return -ENODEV;
+> -- 
+> 2.29.2
+> 
 
-Please use a SPDX line and not license "boilerplate" text like this :(
+Given that no one had any objections, I'll queue this up and see what
+breaks :)
 
 thanks,
 
