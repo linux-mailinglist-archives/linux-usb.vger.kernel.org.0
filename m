@@ -2,95 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C666042B9FB
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Oct 2021 10:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D07042BAAC
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Oct 2021 10:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238741AbhJMIPN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Oct 2021 04:15:13 -0400
-Received: from cable.insite.cz ([84.242.75.189]:35040 "EHLO cable.insite.cz"
+        id S235764AbhJMIna (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Oct 2021 04:43:30 -0400
+Received: from informare.org ([217.11.52.70]:46772 "EHLO informare.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229830AbhJMIPL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 13 Oct 2021 04:15:11 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id 0143FA1A3D404;
-        Wed, 13 Oct 2021 10:13:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1634112788; bh=abqddRGeqRZ0fInUqvDG5/HT4BMp5Fna5Zf+Qpc74E4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=dSPhyVoUTLkGm4xdg06Ee7gv1WaAgc6Ty4/n+SJcuHgVQ481psD8rmu4B60oO6dPp
-         uhzRQG4BZR2X73cwALk/tFZxlklUnyVybAfKQCUaFd+XL/HUTybILkNbBcB90TbS3J
-         1gflNP7EbOQf1TOHtxzGtbQ7qhIYwxb3TOOtupng=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id wPx9nTl4qSuc; Wed, 13 Oct 2021 10:13:02 +0200 (CEST)
-Received: from [192.168.105.22] (ip28.insite.cz [81.0.237.28])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 74654A1A3D403;
-        Wed, 13 Oct 2021 10:13:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1634112782; bh=abqddRGeqRZ0fInUqvDG5/HT4BMp5Fna5Zf+Qpc74E4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=nM7yecAsSGUHFYUk97YZ870FkKm0O1jvXvrMcP3sKSIzkyTILIt9Z9329NBTE6Dt6
-         hckyCGxB83LuwdSsigAk3Cu0XoGtTXONbvzMYzMRNqz6FSKy6k5WsYvQQEEzURBAG8
-         9+XaiIoFc4K5KhhOZpDr8t3ExPdOHEJN15MdOvZk=
-Subject: Re: [PATCH v3] usb: gadget: u_audio.c: Adding Playback Pitch ctl for
- sync playback
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Jack Pham <jackp@codeaurora.org>
-References: <20211006081258.8501-1-pavel.hofman@ivitera.com>
- <YWU3Ngtbbk7Y+dG1@kroah.com>
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Message-ID: <714fe0a9-cf2d-d2c4-d85e-b07e4cf6294a@ivitera.com>
-Date:   Wed, 13 Oct 2021 10:13:02 +0200
+        id S238327AbhJMIn3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 Oct 2021 04:43:29 -0400
+Received: (qmail 20459 invoked from network); 13 Oct 2021 08:41:24 -0000
+Received: from unknown (HELO ?192.168.2.105?) (faber@faberman.de@87.133.104.146)
+  by 0 with ESMTPA; 13 Oct 2021 08:41:24 -0000
+Subject: [PATCH v2] usb: gadget: composite: req->complete not set, using wrong
+ callback for complete
+References: <bded07a9-0549-569f-dcea-12e8bc7bf091@faberman.de>
+To:     linux-usb@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org
+From:   Florian Faber <faber@faberman.de>
+X-Forwarded-Message-Id: <bded07a9-0549-569f-dcea-12e8bc7bf091@faberman.de>
+Message-ID: <2a181414-b33b-5c23-ae75-42fc95c50dc1@faberman.de>
+Date:   Wed, 13 Oct 2021 10:41:21 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <YWU3Ngtbbk7Y+dG1@kroah.com>
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
+In-Reply-To: <bded07a9-0549-569f-dcea-12e8bc7bf091@faberman.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+In usb_composite_setup_continue, req->complete is not set, leaving the
+previous value untouched. After completion of the ep0 transaction, the
+UDC would then call whatever complete callback was set previously with
+the composite cdev as context, leading to all sorts of havoc.
 
+A typical call trace looks like this: A setup packet for mass storage,
+ending up in RNDIS's complete function:
 
-Dne 12. 10. 21 v 9:20 Greg Kroah-Hartman napsal(a):
-> On Wed, Oct 06, 2021 at 10:12:58AM +0200, Pavel Hofman wrote:
->> EP IN is hard-coded as ASYNC both in f_uac1 and f_uac2 but u_audio sends
->> steady number of audio frames in each USB packet, without any control.
->>
->> This patch adds 'Playback Pitch 1000000' ctl analogous to the existing
->> 'Capture Pitch 1000000' ctl. The calculation of playback req->length in
->> u_audio_iso_complete respects the Playback Pitch ctl value to 1ppm now.
->>
->> Max. value for Playback Pitch is configured by the existing parameter
->> uac2_opts->fb_max, used also for the Capture Pitch.
->>
->> Since the EP IN packet size can be increased by uac2_opts->fb_max now,
->> maxPacketSize for the playback direction is calculated by the same
->> algorithm as for the async capture direction in
->> f_uac2.c:set_ep_max_packet_size.
->>
->> Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
->> ---
->>
->> Notes:
->>      v2 -> v3: only notes added
->>      
->>      For: usb-next
->>      Depends on patch 0560c9c ("usb: gadget: f_uac2: fixed EP-IN
->>      wMaxPacketSize") currently only in branch usb-linus.
-> 
-> I have dropped this from my usb-testing branch now due to all of the
-> issues found by the 0-day bot with it (build failure and warnings.)
-> 
-> Please fix up and resubmit.
-> 
+---------------------------snip---------------------------------
+[  183.795661] [<bf10b31c>] (rndis_response_complete [usb_f_rndis]) from [<bf0ec024>] (xgs_iproc_ep_enable+0x92c/0xd2c [xgs_iproc_udc])
+[  183.795666]  r5:df5d73ac r4:df767c80
+[  183.795682] [<bf0ebf20>] (xgs_iproc_ep_enable [xgs_iproc_udc]) from [<bf0eca8c>] (xgs_iproc_ep_queue+0x384/0x5bc [xgs_iproc_udc])
+[  183.795687]  r7:df767cb8 r6:df5d7380 r5:df767c80 r4:df5d73ac
+[  183.795706] [<bf0ec708>] (xgs_iproc_ep_queue [xgs_iproc_udc]) from [<c0384fec>] (usb_ep_queue+0x1f0/0x238)
+[  183.795713]  r10:43425355 r9:df767c80 r8:df767c80 r7:a00f0013 r6:df5d73ac r5:df767c80
+[  183.795716]  r4:df65dea8
+[  183.795743] [<c0384dfc>] (usb_ep_queue) from [<bf0f6910>] (usb_composite_overwrite_options+0x128/0x184 [libcomposite])
+[  183.795750]  r9:00055302 r8:df767c80 r7:a00f0013 r6:df65df04 r5:df767c80 r4:df65dea8
+[  183.795777] [<bf0f68e0>] (usb_composite_overwrite_options [libcomposite]) from [<bf0f69f4>] (usb_composite_setup_continue+0x88/0x138 [libcomposite])
+[  183.795782]  r7:a00f0013 r6:df65df04 r5:00000000 r4:df65dea8
+[  183.795812] [<bf0f696c>] (usb_composite_setup_continue [libcomposite]) from [<bf120cf8>] (fsg_alloc_inst+0xa5c/0xac8 [usb_f_mass_storage])
+[  183.795819]  r9:00055302 r8:00000003 r7:deca5800 r6:00000001 r5:df595a80 r4:deca5948
+[  183.795840] [<bf120a68>] (fsg_alloc_inst [usb_f_mass_storage]) from [<bf120e00>] (fsg_main_thread+0x9c/0x15dc [usb_f_mass_storage])
+[  183.795846]  r8:df770000 r7:df595a80 r6:deca1cc0 r5:df724000 r4:deca5800
+[  183.795864] [<bf120d64>] (fsg_main_thread [usb_f_mass_storage]) from [<c0046cd0>] (kthread+0x14c/0x154)
+[  183.795870]  r10:df785d14 r9:00000000 r8:deca5800 r7:df6c31b8 r6:df70f580 r5:df724000
+[  183.795873]  r4:df6c3180
+[  183.795881] [<c0046b84>] (kthread) from [<c000a67c>] (ret_from_fork+0x14/0x38)
+[  183.795887]  r10:00000000 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:c0046b84
+[  183.795889]  r4:df70f580
+--------------------------snip-------------------------------------
 
-I apologize for the issues, a fixed patch was submitted a while ago 
-https://patchwork.kernel.org/project/linux-usb/patch/20211013073934.36476-1-pavel.hofman@ivitera.com/
+Fixes: 57943716ff1b0733ab0d9879e572bad04166660a ("usb: gadget: composite: set our req->context to cdev")
+Signed-off-by: Florian Faber <faber@faberman.de>
 
-Thanks a lot,
+---
+  drivers/usb/gadget/composite.c | 1 +
+  1 file changed, 1 insertion(+)
 
-Pavel.
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index 504c1cbc255d..8d497be4be32 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -2518,6 +2518,7 @@ void usb_composite_setup_continue(struct
+usb_composite_dev *cdev)
+  		DBG(cdev, "%s: Completing delayed status\n", __func__);
+  		req->length = 0;
+  		req->context = cdev;
++		req->complete = composite_setup_complete;
+  		value = composite_ep0_queue(cdev, req, GFP_ATOMIC);
+  		if (value < 0) {
+  			DBG(cdev, "ep_queue --> %d\n", value);
+-- 
