@@ -2,120 +2,191 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A696142BACE
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Oct 2021 10:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E039042BAF2
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Oct 2021 10:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233400AbhJMIus (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Oct 2021 04:50:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59352 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231658AbhJMIus (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 13 Oct 2021 04:50:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B98B961040;
-        Wed, 13 Oct 2021 08:48:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634114925;
-        bh=ryxlNBu6x22+xRdhInCLv4xINFYJx0bpJUlGI1k/cpA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dEAbaXozuJv1RHXyrkmLjE1u7716MUZtoTqlT0JVW4wJE19ToBqP/+94mKnFrh5Dx
-         T/ccbnfMb2zKPNRJvNq2KDNGZE3zwUVDS4l0wBaARCBQlKniy7BjWu9d0djwrAEcU3
-         run2p+UKwJLts+fWx3YtkeZS76DMI/TPOy35Xjq8=
-Date:   Wed, 13 Oct 2021 10:48:42 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Florian Faber <faber@faberman.de>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: composite: req->complete not set, using
- wrong callback for complete
-Message-ID: <YWadaisHQD7Ap5X8@kroah.com>
-References: <bded07a9-0549-569f-dcea-12e8bc7bf091@faberman.de>
- <2a181414-b33b-5c23-ae75-42fc95c50dc1@faberman.de>
+        id S238922AbhJMIz1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Oct 2021 04:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234956AbhJMIzZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Oct 2021 04:55:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17210C061570
+        for <linux-usb@vger.kernel.org>; Wed, 13 Oct 2021 01:53:22 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1maZzE-0007An-3c; Wed, 13 Oct 2021 10:51:44 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1maZz1-0005Il-VI; Wed, 13 Oct 2021 10:51:31 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1maZz1-0006zY-R9; Wed, 13 Oct 2021 10:51:31 +0200
+Date:   Wed, 13 Oct 2021 10:51:31 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-pci@vger.kernel.org, Alexander Duyck <alexanderduyck@fb.com>,
+        Russell Currey <ruscur@russell.cc>, x86@kernel.org,
+        qat-linux@intel.com, oss-drivers@corigine.com,
+        Oliver O'Halloran <oohall@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jiri Olsa <jolsa@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marco Chiappero <marco.chiappero@intel.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-scsi@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-wireless@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Fiona Trahe <fiona.trahe@intel.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jack Xu <jack.xu@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Michael Buesch <m@bues.ch>, Jiri Pirko <jiri@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        xen-devel@lists.xenproject.org, Vadym Kochan <vkochan@marvell.com>,
+        MPT-FusionLinux.pdl@broadcom.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Wojciech Ziemba <wojciech.ziemba@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        linux-crypto@vger.kernel.org, kernel@pengutronix.de,
+        netdev@vger.kernel.org, Frederic Barrat <fbarrat@linux.ibm.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Tomaszx Kowalik <tomaszx.kowalik@intel.com>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v6 00/11] PCI: Drop duplicated tracking of a pci_dev's
+ bound driver
+Message-ID: <20211013085131.5htnch5p6zv46mzn@pengutronix.de>
+References: <20211004125935.2300113-1-u.kleine-koenig@pengutronix.de>
+ <20211012233212.GA1806189@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jgo3ssjhgqy54b4n"
 Content-Disposition: inline
-In-Reply-To: <2a181414-b33b-5c23-ae75-42fc95c50dc1@faberman.de>
+In-Reply-To: <20211012233212.GA1806189@bhelgaas>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 10:41:21AM +0200, Florian Faber wrote:
-> In usb_composite_setup_continue, req->complete is not set, leaving the
-> previous value untouched. After completion of the ep0 transaction, the
-> UDC would then call whatever complete callback was set previously with
-> the composite cdev as context, leading to all sorts of havoc.
-> 
-> A typical call trace looks like this: A setup packet for mass storage,
-> ending up in RNDIS's complete function:
-> 
-> ---------------------------snip---------------------------------
-> [  183.795661] [<bf10b31c>] (rndis_response_complete [usb_f_rndis]) from [<bf0ec024>] (xgs_iproc_ep_enable+0x92c/0xd2c [xgs_iproc_udc])
-> [  183.795666]  r5:df5d73ac r4:df767c80
-> [  183.795682] [<bf0ebf20>] (xgs_iproc_ep_enable [xgs_iproc_udc]) from [<bf0eca8c>] (xgs_iproc_ep_queue+0x384/0x5bc [xgs_iproc_udc])
-> [  183.795687]  r7:df767cb8 r6:df5d7380 r5:df767c80 r4:df5d73ac
-> [  183.795706] [<bf0ec708>] (xgs_iproc_ep_queue [xgs_iproc_udc]) from [<c0384fec>] (usb_ep_queue+0x1f0/0x238)
-> [  183.795713]  r10:43425355 r9:df767c80 r8:df767c80 r7:a00f0013 r6:df5d73ac r5:df767c80
-> [  183.795716]  r4:df65dea8
-> [  183.795743] [<c0384dfc>] (usb_ep_queue) from [<bf0f6910>] (usb_composite_overwrite_options+0x128/0x184 [libcomposite])
-> [  183.795750]  r9:00055302 r8:df767c80 r7:a00f0013 r6:df65df04 r5:df767c80 r4:df65dea8
-> [  183.795777] [<bf0f68e0>] (usb_composite_overwrite_options [libcomposite]) from [<bf0f69f4>] (usb_composite_setup_continue+0x88/0x138 [libcomposite])
-> [  183.795782]  r7:a00f0013 r6:df65df04 r5:00000000 r4:df65dea8
-> [  183.795812] [<bf0f696c>] (usb_composite_setup_continue [libcomposite]) from [<bf120cf8>] (fsg_alloc_inst+0xa5c/0xac8 [usb_f_mass_storage])
-> [  183.795819]  r9:00055302 r8:00000003 r7:deca5800 r6:00000001 r5:df595a80 r4:deca5948
-> [  183.795840] [<bf120a68>] (fsg_alloc_inst [usb_f_mass_storage]) from [<bf120e00>] (fsg_main_thread+0x9c/0x15dc [usb_f_mass_storage])
-> [  183.795846]  r8:df770000 r7:df595a80 r6:deca1cc0 r5:df724000 r4:deca5800
-> [  183.795864] [<bf120d64>] (fsg_main_thread [usb_f_mass_storage]) from [<c0046cd0>] (kthread+0x14c/0x154)
-> [  183.795870]  r10:df785d14 r9:00000000 r8:deca5800 r7:df6c31b8 r6:df70f580 r5:df724000
-> [  183.795873]  r4:df6c3180
-> [  183.795881] [<c0046b84>] (kthread) from [<c000a67c>] (ret_from_fork+0x14/0x38)
-> [  183.795887]  r10:00000000 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:c0046b84
-> [  183.795889]  r4:df70f580
-> --------------------------snip-------------------------------------
-> 
-> Fixes: 57943716ff1b0733ab0d9879e572bad04166660a ("usb: gadget: composite: set our req->context to cdev")
-> Signed-off-by: Florian Faber <faber@faberman.de>
-> 
-> ---
->  drivers/usb/gadget/composite.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-> index 504c1cbc255d..8d497be4be32 100644
-> --- a/drivers/usb/gadget/composite.c
-> +++ b/drivers/usb/gadget/composite.c
-> @@ -2518,6 +2518,7 @@ void usb_composite_setup_continue(struct
-> usb_composite_dev *cdev)
->  		DBG(cdev, "%s: Completing delayed status\n", __func__);
->  		req->length = 0;
->  		req->context = cdev;
-> +		req->complete = composite_setup_complete;
->  		value = composite_ep0_queue(cdev, req, GFP_ATOMIC);
->  		if (value < 0) {
->  			DBG(cdev, "ep_queue --> %d\n", value);
-> -- 
 
-Hi,
+--jgo3ssjhgqy54b4n
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+On Tue, Oct 12, 2021 at 06:32:12PM -0500, Bjorn Helgaas wrote:
+> On Mon, Oct 04, 2021 at 02:59:24PM +0200, Uwe Kleine-K=F6nig wrote:
+> > Hello,
+> >=20
+> > this is v6 of the quest to drop the "driver" member from struct pci_dev
+> > which tracks the same data (apart from a constant offset) as dev.driver.
+>=20
+> I like this a lot and applied it to pci/driver for v5.16, thanks!
+>=20
+> I split some of the bigger patches apart so they only touched one
+> driver or subsystem at a time.  I also updated to_pci_driver() so it
+> returns NULL when given NULL, which makes some of the validations
+> quite a bit simpler, especially in the PM code in pci-driver.c.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+OK.
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
+> Full interdiff from this v6 series:
+>=20
+> diff --git a/arch/x86/kernel/probe_roms.c b/arch/x86/kernel/probe_roms.c
+> index deaaef6efe34..36e84d904260 100644
+> --- a/arch/x86/kernel/probe_roms.c
+> +++ b/arch/x86/kernel/probe_roms.c
+> @@ -80,17 +80,15 @@ static struct resource video_rom_resource =3D {
+>   */
+>  static bool match_id(struct pci_dev *pdev, unsigned short vendor, unsign=
+ed short device)
+>  {
+> +	struct pci_driver *drv =3D to_pci_driver(pdev->dev.driver);
+>  	const struct pci_device_id *id;
+> =20
+>  	if (pdev->vendor =3D=3D vendor && pdev->device =3D=3D device)
+>  		return true;
+> =20
+> -	if (pdev->dev.driver) {
+> -		struct pci_driver *drv =3D to_pci_driver(pdev->dev.driver);
+> -		for (id =3D drv->id_table; id && id->vendor; id++)
+> -			if (id->vendor =3D=3D vendor && id->device =3D=3D device)
+> -				break;
+> -	}
+> +	for (id =3D drv ? drv->id_table : NULL; id && id->vendor; id++)
+> +		if (id->vendor =3D=3D vendor && id->device =3D=3D device)
+> +			break;
+> =20
+>  	return id && id->vendor;
+>  }
+> diff --git a/drivers/misc/cxl/guest.c b/drivers/misc/cxl/guest.c
+> index d997c9c3ebb5..7eb3706cf42d 100644
+> --- a/drivers/misc/cxl/guest.c
+> +++ b/drivers/misc/cxl/guest.c
+> @@ -20,38 +20,38 @@ static void pci_error_handlers(struct cxl_afu *afu,
+>  				pci_channel_state_t state)
+>  {
+>  	struct pci_dev *afu_dev;
+> +	struct pci_driver *afu_drv;
+> +	struct pci_error_handlers *err_handler;
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+These two could be moved into the for loop (where afu_drv was with my
+patch already). This is also possible in a few other drivers.
 
-thanks,
+Best regards
+Uwe
 
-greg k-h's patch email bot
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--jgo3ssjhgqy54b4n
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFmng8ACgkQwfwUeK3K
+7AmPuQgAk6Dld3vvwdriW0ibspNDJTGfUcre3doNKax+JiXCiHbUthkO3jZ7kx1f
+rTKn9F/GlIOEH1uZZZPonJEaOLwVQmJz3OF8+BKCx7g1+0AqtNe2WefCf4Jl6ajR
+fuBtbNjjaCmBXFqToERlpAsB8kRfNy8Y5V7a/XqiX7ZDLiXle3V2AbuQVi5Ikmhp
+S72E0TV74YTVv77LeVSAA8275wN0GVI3gVT9F7w9ja0BjrapAALEVsk/s9pAl3Zq
+j9D63evuObSQ8ILnNmMOldPueBNZBIGCrXPD/EWKYWXjfstcmZUQtQqvyF6lK9ww
+AubKoQZ72JnZiuJZzVyJCsmBBRo2Vw==
+=Gp6y
+-----END PGP SIGNATURE-----
+
+--jgo3ssjhgqy54b4n--
