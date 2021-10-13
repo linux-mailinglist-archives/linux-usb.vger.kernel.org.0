@@ -2,94 +2,211 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4218142BAF6
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Oct 2021 10:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F45A42BB17
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Oct 2021 11:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236460AbhJMI4z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Oct 2021 04:56:55 -0400
-Received: from informare.org ([217.11.52.70]:46778 "EHLO informare.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229987AbhJMI4z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 13 Oct 2021 04:56:55 -0400
-Received: (qmail 25743 invoked from network); 13 Oct 2021 08:54:51 -0000
-Received: from unknown (HELO ?192.168.2.105?) (faber@faberman.de@87.133.104.146)
-  by 0 with ESMTPA; 13 Oct 2021 08:54:51 -0000
-From:   Florian Faber <faber@faberman.de>
-Subject: [PATCH v3] usb: gadget: composite: req->complete not set, using wrong
- callback for complete
-To:     linux-usb@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org
-References: <bded07a9-0549-569f-dcea-12e8bc7bf091@faberman.de>
-Message-ID: <2eef54eb-4830-555b-1a13-85644c4e65a5@faberman.de>
-Date:   Wed, 13 Oct 2021 10:54:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S238431AbhJMJHi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Oct 2021 05:07:38 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:17006 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229987AbhJMJHh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Oct 2021 05:07:37 -0400
+X-UUID: a5bb4c48f4ba461b83d660149281dec8-20211013
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=qyw2jvRrWrpLU3Qi9lhBa5j9cxz4dl/xIrGBRFmd6hc=;
+        b=S6jGg8GC+L26rlIuvhk2A9j3VkLfib5/AvGre4Xvm+IPUvrE3Gckf+VvjGBMR1QvVmJJSgY53j2t+ShWhnJcEA0rIyGOpzttfR1I4te3zrKQ9Ul4V13GXG1toZ5JPAW7iYoDvyrvDsahI/4s3Fpwftpcr9mzsUQpMEtPMj+lifo=;
+X-UUID: a5bb4c48f4ba461b83d660149281dec8-20211013
+Received: from mtkcas36.mediatek.inc [(172.27.7.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 400759757; Wed, 13 Oct 2021 17:05:30 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 13 Oct
+ 2021 17:05:25 +0800
+Received: from mhfsdcap04 (10.17.3.154) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 13 Oct 2021 17:05:24 +0800
+Message-ID: <6ed7c99ea2f8ef46d62785ecdbe4ae29bd66a630.camel@mediatek.com>
+Subject: Re: [PATCH RESEND v3 1/2] PM / wakeirq: support enabling wake-up
+ irq after runtime_suspend called
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>
+CC:     Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Date:   Wed, 13 Oct 2021 17:05:27 +0800
+In-Reply-To: <20210924023746.22423-1-chunfeng.yun@mediatek.com>
+References: <20210924023746.22423-1-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-In-Reply-To: <bded07a9-0549-569f-dcea-12e8bc7bf091@faberman.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: CB26C819106148658AD623A5739B6A41013C67FBEF91DC638C8C2A10594EBE112000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In usb_composite_setup_continue, req->complete is not set, leaving the
-previous value untouched. After completion of the ep0 transaction, the
-UDC would then call whatever complete callback was set previously with
-the composite cdev as context, leading to all sorts of havoc.
+T24gRnJpLCAyMDIxLTA5LTI0IGF0IDEwOjM3ICswODAwLCBDaHVuZmVuZyBZdW4gd3JvdGU6DQo+
+IFdoZW4gdGhlIGRlZGljYXRlZCB3YWtlLWlycSBpcyBsZXZlbCB0cmlnZ2VyLCBhbmQgaXQgdXNl
+cyB0aGUNCj4gY29uc3VtZXIncyBzbGVlcCBzdGF0dXMgYXMgdGhlIHdha2V1cCBzb3VyY2UsIHRo
+YXQgbWVhbnMgaWYgdGhlDQo+IGNvbnN1bWVyIGlzIG5vdCBpbiBzbGVlcCBzdGF0ZSwgdGhlIHdh
+a2UtaXJxIHdpbGwgYmUgdHJpZ2dlcmVkDQo+IHdoZW4gZW5hYmxlIGl0OyBGb3IgdGhpcyBjYXNl
+LCBuZWVkIGVuYWJsZSB0aGUgd2FrZS1pcnEgYWZ0ZXINCj4gaW52b2tpbmcgdGhlIGNvbnN1bWVy
+J3MgcnVudGltZV9zdXNwZW5kKCkgd2hpY2ggbWFrZSB0aGUgY29uc3VtZXINCj4gZW50ZXIgc2xl
+ZXAgc3RhdGUuDQo+IA0KPiBlLmcuDQo+IEFzc3VtZSB0aGUgd2FrZS1pcnEgaXMgYSBsb3cgbGV2
+ZWwgdHJpZ2dlciB0eXBlLCBhbmQgdGhlIHdha2V1cA0KPiBzaWduYWwgY29tZXMgZnJvbSB0aGUg
+c2xlZXAgc3RhdHVzIG9mIGNvbnN1bWVyLg0KPiBUaGUgd2FrZXVwIHNpZ25hbCBpcyBsb3cgbGV2
+ZWwgYXQgcnVubmluZyB0aW1lICgwKSwgYW5kIGJlY29tZXMNCj4gaGlnaCBsZXZlbCB3aGVuIHRo
+ZSBjb25zdW1lciBlbnRlcnMgc2xlZXAgc3RhdGUgKHJ1bnRpbWVfc3VzcGVuZA0KPiAoMSkgaXMg
+Y2FsbGVkKSwgYSB3YWtldXAgZXZlbnQgYXQgKDIpIG1ha2UgdGhlIGNvbnN1bWVyIGV4aXQgc2xl
+ZXANCj4gc3RhdGUsIHRoZW4gdGhlIHdha2V1cCBzaWduYWwgYWxzbyBiZWNvbWVzIGxvdyBsZXZl
+bC4NCj4gDQo+ICAgICAgICAgICAgICAgICAtLS0tLS0tLS0tLS0tLS0tLS0NCj4gICAgICAgICAg
+ICAgICAgfCAgICAgICAgICAgXiAgICAgXnwNCj4gLS0tLS0tLS0tLS0tLS0tLSAgICAgICAgICAg
+fCAgICAgfCAtLS0tLS0tLS0tLS0tLQ0KPiAgfDwtLS0oMCktLS0+fDwtLSgxKS0tfCAgICgzKSAg
+ICgyKSAgICAoNCkNCj4gDQo+IGlmIGVuYWJsZSB0aGUgd2FrZS1pcnEgYmVmb3JlIGNhbGxpbmcg
+cnVudGltZV9zdXNwZW5kIGR1cmluZyAoMCksDQo+IGFuIGludGVycnVwdCB3aWxsIGFyaXNlLCBp
+dCBjYXVzZXMgcmVzdW1lIGltbWVkaWF0ZWx5Ow0KPiBpdCB3b3JrcyBpZiBlbmFibGUgd2FrZS1p
+cnEgKCBlLmcuIGF0ICgzKSBvciAoNCkpIGFmdGVyIGNhbGxpbmcNCj4gcnVudGltZV9zdXNwZW5k
+Lg0KPiANCj4gVGhpcyBwYXRjaCBpbnRyb2R1Y2VzIGEgbmV3IHN0YXR1cyBXQUtFX0lSUV9ERURJ
+Q0FURURfTEFURV9FTkFCTEVEDQo+IHRvIG9wdGlvbmFsbHkgc3VwcG9ydCBlbmFibGluZyB3YWtl
+LWlycSBhZnRlciBjYWxsaW5nDQo+IHJ1bnRpbWVfc3VzcGVuZCgpLg0KPiANCj4gU3VnZ2VzdGVk
+LWJ5OiBSYWZhZWwgSi4gV3lzb2NraSA8cmFmYWVsLmoud3lzb2NraUBpbnRlbC5jb20+DQo+IFNp
+Z25lZC1vZmYtYnk6IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCj4g
+LS0tDQo+IHYzOiBhZGQgbmV3IHN0YXR1cyBzdWdnZXN0ZWQgYnkgUmFmYWVsDQo+IA0KPiB2Mjog
+YWRkIG1vcmUgY29tbWl0IG1lc3NhZ2UNCj4gDQo+ICAgVXNlIHRoZSBmYWxsaW5nIGVkZ2UgdHJp
+Z2dlciBpbnRlcnJ1cHQgc3VnZ2VzdGVkIGJ5IElram9vbiBbMV0sIGl0DQo+IHdvcmtzIHdlbGwg
+YXQgZmlyc3RseSB3aGVuIG9ubHkgdXNlIHRoaXMgcmVsYXRlZCB3YWtldXAgc291cmNlLCBidXQN
+Cj4gZW5jb3VudGVyIGlzc3VlcyBpZiB1c2Ugb3RoZXIgd2FrZXVwIHNvdXJjZXMgdG8gd2FrZXVw
+IHBsYXRmb3JtIGFzDQo+IGJlbG93IHN0ZXBzOg0KPiAxLiB1c2UgYW5vdGhlciB3YWtldXAgc291
+cmNlIHRvIHdha2UgdXAgdGhlIHN1c3BlbmRlZCBzeXN0ZW07DQo+IDIuIHRoZSBjb25zdW1lcidz
+IHJlc3VtZSgpIHdpbGwgYmUgY2FsbGVkLCBhbmQgZXhpdHMgc2xlZXAgc3RhdGU7DQo+IDMuIHRo
+ZSBjb25zdW1lcidzIHdha2V1cCBzaWduYWwgd2lsbCBmYWxsIGludG8gbG93IGxldmVsLCBkdWUg
+dG8NCj4gICAgY3VycmVudGx5IHRoZSB3YWtldXAgaXJxIGlzIGRpc2FibGVkLCB0aGUgd2FrZS1p
+cnEgaXMgcGVuZGluZzsNCj4gNC4gdGhlIGNvbnN1bWVyIHRyaWVzIHRvIGVudGVyIHJ1bnRpbWUg
+c3VzcGVuZCwgYnV0IHRoZXJlIGlzIGENCj4gICAgcGVuZGluZyB3YWtldXAgaXJxLCBzbyB3aWxs
+IHJlc3VtZSBhZ2FpbiwgdGhpcyB3aWxsIHJlcGVhdA0KPiAgICBlbmRsZXNzbHkuDQo+IA0KPiAg
+IFNlbmQgb3V0IHRoZSBwYXRjaCBhZ2FpbiBmb3IgZnVydGhlciBkaXNjdXNzaW9uLg0KPiANCj4g
+WzFdOiBodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzEyMTkwNDA3DQo+IA0KPiAt
+LS0NCj4gIGRyaXZlcnMvYmFzZS9wb3dlci9wb3dlci5oICAgfCAgNyArKysrLS0NCj4gIGRyaXZl
+cnMvYmFzZS9wb3dlci9ydW50aW1lLmMgfCAgNiArKystLQ0KPiAgZHJpdmVycy9iYXNlL3Bvd2Vy
+L3dha2VpcnEuYyB8IDQ5ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0NCj4gLS0N
+Cj4gIGluY2x1ZGUvbGludXgvcG1fd2FrZWlycS5oICAgfCAgNSArKysrDQo+ICA0IGZpbGVzIGNo
+YW5nZWQsIDYwIGluc2VydGlvbnMoKyksIDcgZGVsZXRpb25zKC0pDQpQaW5nIC4uLg0KDQo+IA0K
+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9iYXNlL3Bvd2VyL3Bvd2VyLmggYi9kcml2ZXJzL2Jhc2Uv
+cG93ZXIvcG93ZXIuaA0KPiBpbmRleCA1NDI5MmNkZDc4MDguLjJkNWRmYzg4NmYwYiAxMDA2NDQN
+Cj4gLS0tIGEvZHJpdmVycy9iYXNlL3Bvd2VyL3Bvd2VyLmgNCj4gKysrIGIvZHJpdmVycy9iYXNl
+L3Bvd2VyL3Bvd2VyLmgNCj4gQEAgLTI1LDggKzI1LDEwIEBAIGV4dGVybiB1NjQgcG1fcnVudGlt
+ZV9hY3RpdmVfdGltZShzdHJ1Y3QgZGV2aWNlDQo+ICpkZXYpOw0KPiAgDQo+ICAjZGVmaW5lIFdB
+S0VfSVJRX0RFRElDQVRFRF9BTExPQ0FURUQJQklUKDApDQo+ICAjZGVmaW5lIFdBS0VfSVJRX0RF
+RElDQVRFRF9NQU5BR0VECUJJVCgxKQ0KPiArI2RlZmluZSBXQUtFX0lSUV9ERURJQ0FURURfTEFU
+RV9FTkFCTEVECUJJVCgyKQ0KPiAgI2RlZmluZSBXQUtFX0lSUV9ERURJQ0FURURfTUFTSwkJKFdB
+S0VfSVJRX0RFRElDQVRFRF9BTEwNCj4gT0NBVEVEIHwgXA0KPiAtCQkJCQkgV0FLRV9JUlFfREVE
+SUNBVEVEX01BTkFHRUQpDQo+ICsJCQkJCSBXQUtFX0lSUV9ERURJQ0FURURfTUFOQUdFRCB8IFwN
+Cj4gKwkJCQkJIFdBS0VfSVJRX0RFRElDQVRFRF9MQVRFX0VOQUJMRQ0KPiBEKQ0KPiAgDQo+ICBz
+dHJ1Y3Qgd2FrZV9pcnEgew0KPiAgCXN0cnVjdCBkZXZpY2UgKmRldjsNCj4gQEAgLTM5LDcgKzQx
+LDggQEAgZXh0ZXJuIHZvaWQgZGV2X3BtX2FybV93YWtlX2lycShzdHJ1Y3Qgd2FrZV9pcnENCj4g
+KndpcnEpOw0KPiAgZXh0ZXJuIHZvaWQgZGV2X3BtX2Rpc2FybV93YWtlX2lycShzdHJ1Y3Qgd2Fr
+ZV9pcnEgKndpcnEpOw0KPiAgZXh0ZXJuIHZvaWQgZGV2X3BtX2VuYWJsZV93YWtlX2lycV9jaGVj
+ayhzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+ICAJCQkJCSBib29sIGNhbl9jaGFuZ2Vfc3RhdHVzKTsN
+Cj4gLWV4dGVybiB2b2lkIGRldl9wbV9kaXNhYmxlX3dha2VfaXJxX2NoZWNrKHN0cnVjdCBkZXZp
+Y2UgKmRldik7DQo+ICtleHRlcm4gdm9pZCBkZXZfcG1fZGlzYWJsZV93YWtlX2lycV9jaGVjayhz
+dHJ1Y3QgZGV2aWNlICpkZXYsIGJvb2wNCj4gc2tpcF9lbmFibGVfbGF0ZSk7DQo+ICtleHRlcm4g
+dm9pZCBkZXZfcG1fZW5hYmxlX3dha2VfaXJxX2NvbXBsZXRlKHN0cnVjdCBkZXZpY2UgKmRldik7
+DQo+ICANCj4gICNpZmRlZiBDT05GSUdfUE1fU0xFRVANCj4gIA0KPiBkaWZmIC0tZ2l0IGEvZHJp
+dmVycy9iYXNlL3Bvd2VyL3J1bnRpbWUuYw0KPiBiL2RyaXZlcnMvYmFzZS9wb3dlci9ydW50aW1l
+LmMNCj4gaW5kZXggZWM5NDA0OTQ0MmI5Li5lOGI4MDdjZDcwMTAgMTAwNjQ0DQo+IC0tLSBhL2Ry
+aXZlcnMvYmFzZS9wb3dlci9ydW50aW1lLmMNCj4gKysrIGIvZHJpdmVycy9iYXNlL3Bvd2VyL3J1
+bnRpbWUuYw0KPiBAQCAtNjQ1LDYgKzY0NSw4IEBAIHN0YXRpYyBpbnQgcnBtX3N1c3BlbmQoc3Ry
+dWN0IGRldmljZSAqZGV2LCBpbnQNCj4gcnBtZmxhZ3MpDQo+ICAJaWYgKHJldHZhbCkNCj4gIAkJ
+Z290byBmYWlsOw0KPiAgDQo+ICsJZGV2X3BtX2VuYWJsZV93YWtlX2lycV9jb21wbGV0ZShkZXYp
+Ow0KPiArDQo+ICAgbm9fY2FsbGJhY2s6DQo+ICAJX191cGRhdGVfcnVudGltZV9zdGF0dXMoZGV2
+LCBSUE1fU1VTUEVOREVEKTsNCj4gIAlwbV9ydW50aW1lX2RlYWN0aXZhdGVfdGltZXIoZGV2KTsN
+Cj4gQEAgLTY5MCw3ICs2OTIsNyBAQCBzdGF0aWMgaW50IHJwbV9zdXNwZW5kKHN0cnVjdCBkZXZp
+Y2UgKmRldiwgaW50DQo+IHJwbWZsYWdzKQ0KPiAgCXJldHVybiByZXR2YWw7DQo+ICANCj4gICBm
+YWlsOg0KPiAtCWRldl9wbV9kaXNhYmxlX3dha2VfaXJxX2NoZWNrKGRldik7DQo+ICsJZGV2X3Bt
+X2Rpc2FibGVfd2FrZV9pcnFfY2hlY2soZGV2LCBmYWxzZSk7DQo+ICAJX191cGRhdGVfcnVudGlt
+ZV9zdGF0dXMoZGV2LCBSUE1fQUNUSVZFKTsNCj4gIAlkZXYtPnBvd2VyLmRlZmVycmVkX3Jlc3Vt
+ZSA9IGZhbHNlOw0KPiAgCXdha2VfdXBfYWxsKCZkZXYtPnBvd2VyLndhaXRfcXVldWUpOw0KPiBA
+QCAtODczLDcgKzg3NSw3IEBAIHN0YXRpYyBpbnQgcnBtX3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpk
+ZXYsIGludA0KPiBycG1mbGFncykNCj4gIA0KPiAgCWNhbGxiYWNrID0gUlBNX0dFVF9DQUxMQkFD
+SyhkZXYsIHJ1bnRpbWVfcmVzdW1lKTsNCj4gIA0KPiAtCWRldl9wbV9kaXNhYmxlX3dha2VfaXJx
+X2NoZWNrKGRldik7DQo+ICsJZGV2X3BtX2Rpc2FibGVfd2FrZV9pcnFfY2hlY2soZGV2LCB0cnVl
+KTsNCj4gIAlyZXR2YWwgPSBycG1fY2FsbGJhY2soY2FsbGJhY2ssIGRldik7DQo+ICAJaWYgKHJl
+dHZhbCkgew0KPiAgCQlfX3VwZGF0ZV9ydW50aW1lX3N0YXR1cyhkZXYsIFJQTV9TVVNQRU5ERUQp
+Ow0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9iYXNlL3Bvd2VyL3dha2VpcnEuYw0KPiBiL2RyaXZl
+cnMvYmFzZS9wb3dlci93YWtlaXJxLmMNCj4gaW5kZXggYjkxYTNhOWJmOWY2Li4xYWNmNzg1ZWJk
+Y2QgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvYmFzZS9wb3dlci93YWtlaXJxLmMNCj4gKysrIGIv
+ZHJpdmVycy9iYXNlL3Bvd2VyL3dha2VpcnEuYw0KPiBAQCAtMjEyLDYgKzIxMiwyNCBAQCBpbnQg
+ZGV2X3BtX3NldF9kZWRpY2F0ZWRfd2FrZV9pcnEoc3RydWN0IGRldmljZQ0KPiAqZGV2LCBpbnQg
+aXJxKQ0KPiAgfQ0KPiAgRVhQT1JUX1NZTUJPTF9HUEwoZGV2X3BtX3NldF9kZWRpY2F0ZWRfd2Fr
+ZV9pcnEpOw0KPiAgDQo+ICsvKioNCj4gKyAqIGRldl9wbV93YWtlX2lycV9zZXRfbGF0ZV9lbmFi
+bGVkX3N0YXR1cyAtIHNldCBzdGF0dXMNCj4gV0FLRV9JUlFfREVESUNBVEVEX0xBVEVfRU5BQkxF
+RA0KPiArICogQGRldjogRGV2aWNlDQo+ICsgKg0KPiArICogU2V0IHRoZSBzdGF0dXMgb2YgV0FL
+RV9JUlFfREVESUNBVEVEX0xBVEVfRU5BQkxFRCB0byB0ZWxsDQo+IHJwbV9zdXNwZW5kKCkNCj4g
+KyAqIHRvIGVuYWJsZSBkZWRpY2F0ZWQgd2FrZS11cCBpbnRlcnJ1cHQgYWZ0ZXIgaW52b2tpbmcg
+dGhlDQo+IHJ1bnRpbWVfc3VzcGVuZCgpLA0KPiArICoNCj4gKyAqIFNob3VsZCBiZSBjYWxsZWQg
+YWZ0ZXIgc2V0dGluZyBkZWRpY2F0ZWQgd2FrZS11cCBpbnRlcnJ1cHQuDQo+ICsgKi8NCj4gK3Zv
+aWQgZGV2X3BtX3dha2VfaXJxX3NldF9sYXRlX2VuYWJsZWRfc3RhdHVzKHN0cnVjdCBkZXZpY2Ug
+KmRldikNCj4gK3sNCj4gKwlzdHJ1Y3Qgd2FrZV9pcnEgKndpcnEgPSBkZXYtPnBvd2VyLndha2Vp
+cnE7DQo+ICsNCj4gKwlpZiAod2lycSAmJiAod2lycS0+c3RhdHVzICYgV0FLRV9JUlFfREVESUNB
+VEVEX0FMTE9DQVRFRCkpDQo+ICsJCXdpcnEtPnN0YXR1cyB8PSBXQUtFX0lSUV9ERURJQ0FURURf
+TEFURV9FTkFCTEVEOw0KPiArfQ0KPiArRVhQT1JUX1NZTUJPTF9HUEwoZGV2X3BtX3dha2VfaXJx
+X3NldF9sYXRlX2VuYWJsZWRfc3RhdHVzKTsNCj4gKw0KPiAgLyoqDQo+ICAgKiBkZXZfcG1fZW5h
+YmxlX3dha2VfaXJxIC0gRW5hYmxlIGRldmljZSB3YWtlLXVwIGludGVycnVwdA0KPiAgICogQGRl
+djogRGV2aWNlDQo+IEBAIC0yODIsMjcgKzMwMCw1MiBAQCB2b2lkIGRldl9wbV9lbmFibGVfd2Fr
+ZV9pcnFfY2hlY2soc3RydWN0IGRldmljZQ0KPiAqZGV2LA0KPiAgCXJldHVybjsNCj4gIA0KPiAg
+ZW5hYmxlOg0KPiAtCWVuYWJsZV9pcnEod2lycS0+aXJxKTsNCj4gKwlpZiAoIWNhbl9jaGFuZ2Vf
+c3RhdHVzIHx8ICEod2lycS0+c3RhdHVzICYNCj4gV0FLRV9JUlFfREVESUNBVEVEX0xBVEVfRU5B
+QkxFRCkpDQo+ICsJCWVuYWJsZV9pcnEod2lycS0+aXJxKTsNCj4gIH0NCj4gIA0KPiAgLyoqDQo+
+ICAgKiBkZXZfcG1fZGlzYWJsZV93YWtlX2lycV9jaGVjayAtIENoZWNrcyBhbmQgZGlzYWJsZXMg
+d2FrZS11cA0KPiBpbnRlcnJ1cHQNCj4gICAqIEBkZXY6IERldmljZQ0KPiArICogQHNraXBfbGF0
+ZV9lbmFibGVkX3N0YXR1czogc2tpcCBjaGVja2luZw0KPiBXQUtFX0lSUV9ERURJQ0FURURfTEFU
+RV9FTkFCTEVEDQo+ICAgKg0KPiAgICogRGlzYWJsZXMgd2FrZS11cCBpbnRlcnJ1cHQgY29uZGl0
+aW9uYWxseSBiYXNlZCBvbiBzdGF0dXMuDQo+ICAgKiBTaG91bGQgYmUgb25seSBjYWxsZWQgZnJv
+bSBycG1fc3VzcGVuZCgpIGFuZCBycG1fcmVzdW1lKCkgcGF0aC4NCj4gICAqLw0KPiAtdm9pZCBk
+ZXZfcG1fZGlzYWJsZV93YWtlX2lycV9jaGVjayhzdHJ1Y3QgZGV2aWNlICpkZXYpDQo+ICt2b2lk
+IGRldl9wbV9kaXNhYmxlX3dha2VfaXJxX2NoZWNrKHN0cnVjdCBkZXZpY2UgKmRldiwgYm9vbA0K
+PiBza2lwX2xhdGVfZW5hYmxlZF9zdGF0dXMpDQo+ICB7DQo+ICAJc3RydWN0IHdha2VfaXJxICp3
+aXJxID0gZGV2LT5wb3dlci53YWtlaXJxOw0KPiAgDQo+ICAJaWYgKCF3aXJxIHx8ICEod2lycS0+
+c3RhdHVzICYgV0FLRV9JUlFfREVESUNBVEVEX01BU0spKQ0KPiAgCQlyZXR1cm47DQo+ICANCj4g
+LQlpZiAod2lycS0+c3RhdHVzICYgV0FLRV9JUlFfREVESUNBVEVEX01BTkFHRUQpDQo+ICsJaWYg
+KHdpcnEtPnN0YXR1cyAmIFdBS0VfSVJRX0RFRElDQVRFRF9NQU5BR0VEICYmDQo+ICsJICAgIChz
+a2lwX2xhdGVfZW5hYmxlZF9zdGF0dXMgfHwNCj4gKwkgICAgICEod2lycS0+c3RhdHVzICYgV0FL
+RV9JUlFfREVESUNBVEVEX0xBVEVfRU5BQkxFRCkpKQ0KPiAgCQlkaXNhYmxlX2lycV9ub3N5bmMo
+d2lycS0+aXJxKTsNCj4gIH0NCj4gIA0KPiArLyoqDQo+ICsgKiBkZXZfcG1fZW5hYmxlX3dha2Vf
+aXJxX2NvbXBsZXRlIC0gZW5hYmxlIHdha2UgaXJxIGJhc2VkIG9uIHN0YXR1cw0KPiArICogQGRl
+djogRGV2aWNlDQo+ICsgKg0KPiArICogRW5hYmxlIHdha2UtdXAgaW50ZXJydXB0IGNvbmRpdGlv
+bmFsbHkgYmFzZWQgb24gc3RhdHVzLCBtYWlubHkNCj4gZm9yDQo+ICsgKiBlbmFibGluZyB3YWtl
+LXVwIGludGVycnVwdCBhZnRlciBydW50aW1lX3N1c3BlbmQoKSBpcyBjYWxsZWQuDQo+ICsgKg0K
+PiArICogU2hvdWxkIGJlIG9ubHkgY2FsbGVkIGZyb20gcnBtX3N1c3BlbmQoKSBwYXRoLg0KPiAr
+ICovDQo+ICt2b2lkIGRldl9wbV9lbmFibGVfd2FrZV9pcnFfY29tcGxldGUoc3RydWN0IGRldmlj
+ZSAqZGV2KQ0KPiArew0KPiArCXN0cnVjdCB3YWtlX2lycSAqd2lycSA9IGRldi0+cG93ZXIud2Fr
+ZWlycTsNCj4gKw0KPiArCWlmICghd2lycSB8fCAhKHdpcnEtPnN0YXR1cyAmIFdBS0VfSVJRX0RF
+RElDQVRFRF9NQVNLKSkNCj4gKwkJcmV0dXJuOw0KPiArDQo+ICsJaWYgKHdpcnEtPnN0YXR1cyAm
+IFdBS0VfSVJRX0RFRElDQVRFRF9NQU5BR0VEICYmDQo+ICsJICAgIHdpcnEtPnN0YXR1cyAmIFdB
+S0VfSVJRX0RFRElDQVRFRF9MQVRFX0VOQUJMRUQpDQo+ICsJCWVuYWJsZV9pcnEod2lycS0+aXJx
+KTsNCj4gK30NCj4gKw0KPiAgLyoqDQo+ICAgKiBkZXZfcG1fYXJtX3dha2VfaXJxIC0gQXJtIGRl
+dmljZSB3YWtlLXVwDQo+ICAgKiBAd2lycTogRGV2aWNlIHdha2UtdXAgaW50ZXJydXB0DQo+IGRp
+ZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3BtX3dha2VpcnEuaCBiL2luY2x1ZGUvbGludXgvcG1f
+d2FrZWlycS5oDQo+IGluZGV4IGNkNWI2MmRiOTA4NC4uOTJmODE0ZDU4M2Y4IDEwMDY0NA0KPiAt
+LS0gYS9pbmNsdWRlL2xpbnV4L3BtX3dha2VpcnEuaA0KPiArKysgYi9pbmNsdWRlL2xpbnV4L3Bt
+X3dha2VpcnEuaA0KPiBAQCAtMjIsNiArMjIsNyBAQCBleHRlcm4gaW50IGRldl9wbV9zZXRfZGVk
+aWNhdGVkX3dha2VfaXJxKHN0cnVjdA0KPiBkZXZpY2UgKmRldiwNCj4gIGV4dGVybiB2b2lkIGRl
+dl9wbV9jbGVhcl93YWtlX2lycShzdHJ1Y3QgZGV2aWNlICpkZXYpOw0KPiAgZXh0ZXJuIHZvaWQg
+ZGV2X3BtX2VuYWJsZV93YWtlX2lycShzdHJ1Y3QgZGV2aWNlICpkZXYpOw0KPiAgZXh0ZXJuIHZv
+aWQgZGV2X3BtX2Rpc2FibGVfd2FrZV9pcnEoc3RydWN0IGRldmljZSAqZGV2KTsNCj4gK2V4dGVy
+biB2b2lkIGRldl9wbV93YWtlX2lycV9zZXRfbGF0ZV9lbmFibGVkX3N0YXR1cyhzdHJ1Y3QgZGV2
+aWNlDQo+ICpkZXYpOw0KPiAgDQo+ICAjZWxzZQkvKiAhQ09ORklHX1BNICovDQo+ICANCj4gQEAg
+LTQ3LDUgKzQ4LDkgQEAgc3RhdGljIGlubGluZSB2b2lkIGRldl9wbV9kaXNhYmxlX3dha2VfaXJx
+KHN0cnVjdA0KPiBkZXZpY2UgKmRldikNCj4gIHsNCj4gIH0NCj4gIA0KPiArc3RhdGljIGlubGlu
+ZSB2b2lkIGRldl9wbV93YWtlX2lycV9zZXRfbGF0ZV9lbmFibGVkX3N0YXR1cyhzdHJ1Y3QNCj4g
+ZGV2aWNlICpkZXYpDQo+ICt7DQo+ICt9DQo+ICsNCj4gICNlbmRpZgkvKiBDT05GSUdfUE0gKi8N
+Cj4gICNlbmRpZgkvKiBfTElOVVhfUE1fV0FLRUlSUV9IICovDQo=
 
-A typical call trace looks like this: A setup packet for mass storage,
-ending up in RNDIS's complete function:
-
----------------------------snip---------------------------------
-[  183.795661] [<bf10b31c>] (rndis_response_complete [usb_f_rndis]) from [<bf0ec024>] (xgs_iproc_ep_enable+0x92c/0xd2c [xgs_iproc_udc])
-[  183.795666]  r5:df5d73ac r4:df767c80
-[  183.795682] [<bf0ebf20>] (xgs_iproc_ep_enable [xgs_iproc_udc]) from [<bf0eca8c>] (xgs_iproc_ep_queue+0x384/0x5bc [xgs_iproc_udc])
-[  183.795687]  r7:df767cb8 r6:df5d7380 r5:df767c80 r4:df5d73ac
-[  183.795706] [<bf0ec708>] (xgs_iproc_ep_queue [xgs_iproc_udc]) from [<c0384fec>] (usb_ep_queue+0x1f0/0x238)
-[  183.795713]  r10:43425355 r9:df767c80 r8:df767c80 r7:a00f0013 r6:df5d73ac r5:df767c80
-[  183.795716]  r4:df65dea8
-[  183.795743] [<c0384dfc>] (usb_ep_queue) from [<bf0f6910>] (usb_composite_overwrite_options+0x128/0x184 [libcomposite])
-[  183.795750]  r9:00055302 r8:df767c80 r7:a00f0013 r6:df65df04 r5:df767c80 r4:df65dea8
-[  183.795777] [<bf0f68e0>] (usb_composite_overwrite_options [libcomposite]) from [<bf0f69f4>] (usb_composite_setup_continue+0x88/0x138 [libcomposite])
-[  183.795782]  r7:a00f0013 r6:df65df04 r5:00000000 r4:df65dea8
-[  183.795812] [<bf0f696c>] (usb_composite_setup_continue [libcomposite]) from [<bf120cf8>] (fsg_alloc_inst+0xa5c/0xac8 [usb_f_mass_storage])
-[  183.795819]  r9:00055302 r8:00000003 r7:deca5800 r6:00000001 r5:df595a80 r4:deca5948
-[  183.795840] [<bf120a68>] (fsg_alloc_inst [usb_f_mass_storage]) from [<bf120e00>] (fsg_main_thread+0x9c/0x15dc [usb_f_mass_storage])
-[  183.795846]  r8:df770000 r7:df595a80 r6:deca1cc0 r5:df724000 r4:deca5800
-[  183.795864] [<bf120d64>] (fsg_main_thread [usb_f_mass_storage]) from [<c0046cd0>] (kthread+0x14c/0x154)
-[  183.795870]  r10:df785d14 r9:00000000 r8:deca5800 r7:df6c31b8 r6:df70f580 r5:df724000
-[  183.795873]  r4:df6c3180
-[  183.795881] [<c0046b84>] (kthread) from [<c000a67c>] (ret_from_fork+0x14/0x38)
-[  183.795887]  r10:00000000 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:c0046b84
-[  183.795889]  r4:df70f580
---------------------------snip-------------------------------------
-
-Fixes: 57943716ff1b0733ab0d9879e572bad04166660a ("usb: gadget: composite: set our req->context to cdev")
-Signed-off-by: Florian Faber <faber@faberman.de>
-
----
-Change in v3:
-   - Addes changes
-
-Change in v2:
-   - More verbose explanation
-   - Added commit hash that introduced the bug
-
-  drivers/usb/gadget/composite.c | 1 +
-  1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index 504c1cbc255d..8d497be4be32 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -2518,6 +2518,7 @@ void usb_composite_setup_continue(struct
-usb_composite_dev *cdev)
-  		DBG(cdev, "%s: Completing delayed status\n", __func__);
-  		req->length = 0;
-  		req->context = cdev;
-+		req->complete = composite_setup_complete;
-  		value = composite_ep0_queue(cdev, req, GFP_ATOMIC);
-  		if (value < 0) {
-  			DBG(cdev, "ep_queue --> %d\n", value);
--- 
