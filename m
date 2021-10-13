@@ -2,299 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 554B142BB80
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Oct 2021 11:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51CD242BC53
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Oct 2021 12:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237003AbhJMJ3d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Oct 2021 05:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236145AbhJMJ3Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Oct 2021 05:29:24 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0A3C061570;
-        Wed, 13 Oct 2021 02:27:20 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id a25so7445359edx.8;
-        Wed, 13 Oct 2021 02:27:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=+/MfPZS60YJ0eap0AJdMs6gge+XO+BZUvon0pBTzNGA=;
-        b=evc4kDT+QZNhO898nkNWsOvYd5uoHISP2WxjXfUrXPc/LAvzY9eu3qYsrzHLMiVRP3
-         7ek8KrGpW83pP3+71f6NoTqJUNew57wgLSdZESolUuO3w3SjswV4oNuZrRCsx5d2Sz6Z
-         U6Dil/exw/Z01VwoZLKDTI9+cXYT6HoMhvbPnOyg97B0PkHUENz49VLf5qJ3twBM3fy6
-         bHXGjIYLA3Q6jVCBIp04R0UFvkX24frr6ijNGP3vuZmaos7c/PDqm98vd8l9QZ2VLZ00
-         0EBJxe8ZaQK4AqNo/Rk1lDSww7yrEMjrcnUEwQvCtD2OBAhLhOYcZrSIMXdkiq7GrIG/
-         lN/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=+/MfPZS60YJ0eap0AJdMs6gge+XO+BZUvon0pBTzNGA=;
-        b=sB4NJpdNsDPkUy6mxgmKe4HtKEN2nu+cK//OpsRyWcLfqCQ31MaLagEbI4kFORFqWT
-         DXbHANfm+km5qyLipWbKv5591O8apIQedw6yhqLc6B1Lu6kV3JmypGG4iKk2WO5NLkRa
-         zJbI6VauabL7kp7wxsO8rh1LG//nT89gz2Z0A/Ir7ZciqzBTL295g8CrovWFVz0JNd4K
-         KMhMg5Ydf7Xmdxs2sxIPMdWWfBLbKkwgNmHyJEe1KkptIjkS7UtgLwkWzDKnP6F1oiOm
-         4z+NWC8E31Hcy0XwUwG6HCd8EhncS4c00qRbwmTVYNuK5UhVy/FLe+YQo9dJvL2k0Srj
-         swAg==
-X-Gm-Message-State: AOAM531TZwmZkz1ZBJo16E9AqcvamrBTbCU10ocMMZ9lBNlzUFX1/LQp
-        +Azpq2TJkpSzwoXVZ2AYXYmrGbmWlW/LJhHRc6k=
-X-Google-Smtp-Source: ABdhPJzL0SqFZyZBLTfBNcE8CpMsywyY4boERpEcXyUfc9yUq7Z2mLOKk/hnon0PQ/WXXVk02NgEbEHqrWvW2H64g2s=
-X-Received: by 2002:a17:907:7601:: with SMTP id jx1mr40092015ejc.69.1634117238956;
- Wed, 13 Oct 2021 02:27:18 -0700 (PDT)
+        id S239236AbhJMKCN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Oct 2021 06:02:13 -0400
+Received: from foss.arm.com ([217.140.110.172]:59718 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239124AbhJMKCN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 Oct 2021 06:02:13 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B94F91063;
+        Wed, 13 Oct 2021 03:00:09 -0700 (PDT)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 994AD3F70D;
+        Wed, 13 Oct 2021 03:00:07 -0700 (PDT)
+Date:   Wed, 13 Oct 2021 11:00:05 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Prasad Malisetty <pmaliset@codeaurora.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, bhelgaas@google.com,
+        robh+dt@kernel.org, swboyd@chromium.org, svarbanov@mm-sol.com,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
+        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v12 0/5] Add DT bindings and DT nodes for PCIe and PHY in
+ SC7280
+Message-ID: <20211013100005.GB9901@lpieralisi>
+References: <1633628923-25047-1-git-send-email-pmaliset@codeaurora.org>
 MIME-Version: 1.0
-References: <20211004125935.2300113-1-u.kleine-koenig@pengutronix.de> <20211012233212.GA1806189@bhelgaas>
-In-Reply-To: <20211012233212.GA1806189@bhelgaas>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 13 Oct 2021 12:26:42 +0300
-Message-ID: <CAHp75Vd0uYEdfB0XaQuUV34V91qJdHR5ARku1hX_TCJLJHEjxQ@mail.gmail.com>
-Subject: Re: [PATCH v6 00/11] PCI: Drop duplicated tracking of a pci_dev's
- bound driver
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Fiona Trahe <fiona.trahe@intel.com>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ido Schimmel <idosch@nvidia.com>,
-        Ingo Molnar <mingo@redhat.com>, Jack Xu <jack.xu@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jiri Olsa <jolsa@redhat.com>, Jiri Pirko <jiri@nvidia.com>,
-        Juergen Gross <jgross@suse.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Marco Chiappero <marco.chiappero@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Michael Buesch <m@bues.ch>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Russell Currey <ruscur@russell.cc>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tomaszx Kowalik <tomaszx.kowalik@intel.com>,
-        Vadym Kochan <vkochan@marvell.com>,
-        Wojciech Ziemba <wojciech.ziemba@intel.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        linux-crypto <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
-        MPT-FusionLinux.pdl@broadcom.com, netdev <netdev@vger.kernel.org>,
-        oss-drivers@corigine.com, qat-linux@intel.com,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        xen-devel@lists.xenproject.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1633628923-25047-1-git-send-email-pmaliset@codeaurora.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 2:33 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> On Mon, Oct 04, 2021 at 02:59:24PM +0200, Uwe Kleine-K=C3=B6nig wrote:
+On Thu, Oct 07, 2021 at 11:18:38PM +0530, Prasad Malisetty wrote:
+> Changes added in v12:
+> 
+> 	* Sorted pipe_clk muxing changes in patch 4 & 5 as per the commit log.
+> 	  -Suggested by Bjorn.
+> 
+> Changes added in v11:
+> 
+> 	* Modified nvme_pwren name as nvme_pwren.
+> 	* Removed bias-pullup option in nvme_pwren entry [v11 Patch 3/5].
+> 	* Changed pcie1_default_state name to pcie1_clkreq_n.
+> 	* Added NULL pointer check for pcie_cfg.
+> 
+> Changes added in v10:
+> 
+> 	* v9 [Patch 4/4/] has been split into two separate patches
+> 	* Addressed all comments in IDP [Patch 3/4] file.
+>  	
+> Changes added in v9:
+>     * Added fixed regulator entry for nvme.suggested by Stephen Boyd
+>     * Added NULL pointer check before accessing ops in pcie probe
+>       Suggested by Stephen Boyd
+> 
+> Changes added in v8:
+> 
+>     * Added seperate pinctrl state for NVMe LDO enable pin [v8 P3/4]
+>     * Removed pointer initialization for pcie_cfg [v8 P4/4]
+>     * Replaced bool pcie_pipe_clk_src with unsigned int:1 [v8 P4/4]
+>     * Changed gcc_pcie_1_pipe_clk_src to pipe_clk_src
+> 
+> Changes added in v7:
+> 
+>         * Removed two fallbacks qcom,pcie-sm8250 and snps,dw-pcie.
+>         * Replaced compatible method in get_resources_2_7_0 with
+>             flag approach suggested by Bjorn Helgaas .
+>         * Setting gcc_pcie_1_clk_src as XO in init_2_7_0 for
+>           gdsc enable.
+>         * Added specific NVMe GPIO entries for SKU1 and SKU2 support
+>           in idp.dts and idp2.dts respectively.
+>         * Moved pcie_1 and pcie_1_phy board specific entries into common
+>           board file sc7280-idp.dtsi file.
+> 
+> Changes in v6:
+> 
+>     * Removed platform check while setting gcc_pcie_1_pipe_clk_src
+>           as clk_set_parent will return 0 with nop if platform doesn't
+>           need to switch pipe clk source.
+>         * Moved wake-n gpio to board specific file sc7280-idp.dtsi
+>         * Sorted gpio.h header entry in sc7280.dtsi file
+> 
+> Changes in v5:
+> 
+>         * Re ordered PCIe, PHY nodes in Soc and board specific dtsi files.
+>         * Removed ref_clk entry in current patch [PATCH v4 P4/4].
+>         * I will add ref clk entry in suspend/ resume commits.
+>         * Added boolean flag in Soc specific dtsi file to differentiate
+>           SM8250 and SC7280 platforms. based on boolean flag, platforms will handle
+>           the pipe clk handling.
+> 
+> Changes in v4 as suggested by Bjorn:
+> 
+>         * Changed pipe clk mux name as gcc_pcie_1_pipe_clk_src.
+>         * Changed pipe_ext_src as phy_pipe_clk.
+>         * Updated commit message for [PATCH v4 4/4].
+> 
+> Changes in v3:
+>         * Changed pipe clock names in dt bindings as pipe_mux and phy_pipe.
+>         * Moved reset and NVMe GPIO pin configs into board specific file.
+>         * Updated pipe clk mux commit message.
+> 
+> Changes in v2:
+>         * Moved pcie pin control settings into IDP file.
+>         * Replaced pipe_clk_src with pipe_clk_mux in pcie driver
+>         * Included pipe clk mux setting change set in this series
+> 
+> Prasad Malisetty (5):
+>   dt-bindings: pci: qcom: Document PCIe bindings for SC7280
+>   arm64: dts: qcom: sc7280: Add PCIe and PHY related nodes
+>   arm64: dts: qcom: sc7280: Add PCIe nodes for IDP board
+>   PCI: qcom: Add a flag in match data along with ops
+>   PCI: qcom: Switch pcie_1_pipe_clk_src after PHY init in SC7280
+> 
+>  .../devicetree/bindings/pci/qcom,pcie.txt          |  17 +++
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dts            |   8 ++
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |  50 +++++++++
+>  arch/arm64/boot/dts/qcom/sc7280-idp2.dts           |   8 ++
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi               | 118 +++++++++++++++++++++
+>  drivers/pci/controller/dwc/pcie-qcom.c             |  95 +++++++++++++++--
+>  6 files changed, 285 insertions(+), 11 deletions(-)
 
-> I split some of the bigger patches apart so they only touched one
-> driver or subsystem at a time.  I also updated to_pci_driver() so it
-> returns NULL when given NULL, which makes some of the validations
-> quite a bit simpler, especially in the PM code in pci-driver.c.
+I applied patches [4-5] to pci/qcom for v5.16, thanks I expect other
+patches to go via the relevant trees.
 
-It's a bit unusual. Other to_*_dev() are not NULL-aware IIRC.
-
-Below are some comments as well.
-
-...
-
->  static bool match_id(struct pci_dev *pdev, unsigned short vendor, unsign=
-ed short device)
->  {
-> +       struct pci_driver *drv =3D to_pci_driver(pdev->dev.driver);
->         const struct pci_device_id *id;
->
->         if (pdev->vendor =3D=3D vendor && pdev->device =3D=3D device)
->                 return true;
-
-> +       for (id =3D drv ? drv->id_table : NULL; id && id->vendor; id++)
-> +               if (id->vendor =3D=3D vendor && id->device =3D=3D device)
-
-> +                       break;
-
-return true;
-
->         return id && id->vendor;
-
-return false;
-
->  }
-
-...
-
-> +                       afu_result =3D err_handler->error_detected(afu_de=
-v,
-> +                                                                state);
-
-One line?
-
-...
-
->         device_lock(&vf_dev->dev);
-> -       if (vf_dev->dev.driver) {
-> +       if (to_pci_driver(vf_dev->dev.driver)) {
-
-Hmm...
-
-...
-
-> +               if (!pci_dev->state_saved && pci_dev->current_state !=3D =
-PCI_D0
-
-> +                   && pci_dev->current_state !=3D PCI_UNKNOWN) {
-
-Can we keep && on the previous line?
-
-> +                       pci_WARN_ONCE(pci_dev, pci_dev->current_state !=
-=3D prev,
-> +                                     "PCI PM: Device state not saved by =
-%pS\n",
-> +                                     drv->suspend);
->                 }
-
-...
-
-> +       return drv && drv->resume ?
-> +                       drv->resume(pci_dev) : pci_pm_reenable_device(pci=
-_dev);
-
-One line?
-
-...
-
-> +       struct pci_driver *drv =3D to_pci_driver(dev->dev.driver);
->         const struct pci_error_handlers *err_handler =3D
-> -                       dev->dev.driver ? to_pci_driver(dev->dev.driver)-=
->err_handler : NULL;
-> +                       drv ? drv->err_handler : NULL;
-
-Isn't dev->driver =3D=3D to_pci_driver(dev->dev.driver)?
-
-...
-
-> +       struct pci_driver *drv =3D to_pci_driver(dev->dev.driver);
->         const struct pci_error_handlers *err_handler =3D
-> -                       dev->dev.driver ? to_pci_driver(dev->dev.driver)-=
->err_handler : NULL;
-> +                       drv ? drv->err_handler : NULL;
-
-Ditto.
-
-...
-
->         device_lock(&dev->dev);
-> +       pdrv =3D to_pci_driver(dev->dev.driver);
->         if (!pci_dev_set_io_state(dev, state) ||
-> -               !dev->dev.driver ||
-> -               !(pdrv =3D to_pci_driver(dev->dev.driver))->err_handler |=
-|
-
-> +               !pdrv ||
-> +               !pdrv->err_handler ||
-
-One line now?
-
->                 !pdrv->err_handler->error_detected) {
-
-Or this and the previous line?
-
-...
-
-> +       pdrv =3D to_pci_driver(dev->dev.driver);
-> +       if (!pdrv ||
-> +               !pdrv->err_handler ||
->                 !pdrv->err_handler->mmio_enabled)
->                 goto out;
-
-Ditto.
-
-...
-
-> +       pdrv =3D to_pci_driver(dev->dev.driver);
-> +       if (!pdrv ||
-> +               !pdrv->err_handler ||
->                 !pdrv->err_handler->slot_reset)
->                 goto out;
-
-Ditto.
-
-...
-
->         if (!pci_dev_set_io_state(dev, pci_channel_io_normal) ||
-> -               !dev->dev.driver ||
-> -               !(pdrv =3D to_pci_driver(dev->dev.driver))->err_handler |=
-|
-> +               !pdrv ||
-> +               !pdrv->err_handler ||
->                 !pdrv->err_handler->resume)
->                 goto out;
-
-Ditto.
-
-> -       result =3D PCI_ERS_RESULT_NONE;
->
->         pcidev =3D pci_get_domain_bus_and_slot(domain, bus, devfn);
->         if (!pcidev || !pcidev->dev.driver) {
->                 dev_err(&pdev->xdev->dev, "device or AER driver is NULL\n=
-");
->                 pci_dev_put(pcidev);
-> -               return result;
-> +               return PCI_ERS_RESULT_NONE;
->         }
->         pdrv =3D to_pci_driver(pcidev->dev.driver);
-
-What about splitting the conditional to two with clear error message
-in each and use pci_err() in the second one?
-
-...
-
->                 default:
->                         dev_err(&pdev->xdev->dev,
-> -                               "bad request in aer recovery "
-> -                               "operation!\n");
-> +                               "bad request in AER recovery operation!\n=
-");
-
-Stray change? Or is it in a separate patch in your tree?
-
---=20
-With Best Regards,
-Andy Shevchenko
+Lorenzo
