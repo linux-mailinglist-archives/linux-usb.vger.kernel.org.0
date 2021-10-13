@@ -2,211 +2,299 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F45A42BB17
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Oct 2021 11:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554B142BB80
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Oct 2021 11:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238431AbhJMJHi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Oct 2021 05:07:38 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:17006 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229987AbhJMJHh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Oct 2021 05:07:37 -0400
-X-UUID: a5bb4c48f4ba461b83d660149281dec8-20211013
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=qyw2jvRrWrpLU3Qi9lhBa5j9cxz4dl/xIrGBRFmd6hc=;
-        b=S6jGg8GC+L26rlIuvhk2A9j3VkLfib5/AvGre4Xvm+IPUvrE3Gckf+VvjGBMR1QvVmJJSgY53j2t+ShWhnJcEA0rIyGOpzttfR1I4te3zrKQ9Ul4V13GXG1toZ5JPAW7iYoDvyrvDsahI/4s3Fpwftpcr9mzsUQpMEtPMj+lifo=;
-X-UUID: a5bb4c48f4ba461b83d660149281dec8-20211013
-Received: from mtkcas36.mediatek.inc [(172.27.7.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 400759757; Wed, 13 Oct 2021 17:05:30 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 13 Oct
- 2021 17:05:25 +0800
-Received: from mhfsdcap04 (10.17.3.154) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 13 Oct 2021 17:05:24 +0800
-Message-ID: <6ed7c99ea2f8ef46d62785ecdbe4ae29bd66a630.camel@mediatek.com>
-Subject: Re: [PATCH RESEND v3 1/2] PM / wakeirq: support enabling wake-up
- irq after runtime_suspend called
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>
-CC:     Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Date:   Wed, 13 Oct 2021 17:05:27 +0800
-In-Reply-To: <20210924023746.22423-1-chunfeng.yun@mediatek.com>
-References: <20210924023746.22423-1-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S237003AbhJMJ3d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Oct 2021 05:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236145AbhJMJ3Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Oct 2021 05:29:24 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0A3C061570;
+        Wed, 13 Oct 2021 02:27:20 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id a25so7445359edx.8;
+        Wed, 13 Oct 2021 02:27:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=+/MfPZS60YJ0eap0AJdMs6gge+XO+BZUvon0pBTzNGA=;
+        b=evc4kDT+QZNhO898nkNWsOvYd5uoHISP2WxjXfUrXPc/LAvzY9eu3qYsrzHLMiVRP3
+         7ek8KrGpW83pP3+71f6NoTqJUNew57wgLSdZESolUuO3w3SjswV4oNuZrRCsx5d2Sz6Z
+         U6Dil/exw/Z01VwoZLKDTI9+cXYT6HoMhvbPnOyg97B0PkHUENz49VLf5qJ3twBM3fy6
+         bHXGjIYLA3Q6jVCBIp04R0UFvkX24frr6ijNGP3vuZmaos7c/PDqm98vd8l9QZ2VLZ00
+         0EBJxe8ZaQK4AqNo/Rk1lDSww7yrEMjrcnUEwQvCtD2OBAhLhOYcZrSIMXdkiq7GrIG/
+         lN/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+/MfPZS60YJ0eap0AJdMs6gge+XO+BZUvon0pBTzNGA=;
+        b=sB4NJpdNsDPkUy6mxgmKe4HtKEN2nu+cK//OpsRyWcLfqCQ31MaLagEbI4kFORFqWT
+         DXbHANfm+km5qyLipWbKv5591O8apIQedw6yhqLc6B1Lu6kV3JmypGG4iKk2WO5NLkRa
+         zJbI6VauabL7kp7wxsO8rh1LG//nT89gz2Z0A/Ir7ZciqzBTL295g8CrovWFVz0JNd4K
+         KMhMg5Ydf7Xmdxs2sxIPMdWWfBLbKkwgNmHyJEe1KkptIjkS7UtgLwkWzDKnP6F1oiOm
+         4z+NWC8E31Hcy0XwUwG6HCd8EhncS4c00qRbwmTVYNuK5UhVy/FLe+YQo9dJvL2k0Srj
+         swAg==
+X-Gm-Message-State: AOAM531TZwmZkz1ZBJo16E9AqcvamrBTbCU10ocMMZ9lBNlzUFX1/LQp
+        +Azpq2TJkpSzwoXVZ2AYXYmrGbmWlW/LJhHRc6k=
+X-Google-Smtp-Source: ABdhPJzL0SqFZyZBLTfBNcE8CpMsywyY4boERpEcXyUfc9yUq7Z2mLOKk/hnon0PQ/WXXVk02NgEbEHqrWvW2H64g2s=
+X-Received: by 2002:a17:907:7601:: with SMTP id jx1mr40092015ejc.69.1634117238956;
+ Wed, 13 Oct 2021 02:27:18 -0700 (PDT)
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: CB26C819106148658AD623A5739B6A41013C67FBEF91DC638C8C2A10594EBE112000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+References: <20211004125935.2300113-1-u.kleine-koenig@pengutronix.de> <20211012233212.GA1806189@bhelgaas>
+In-Reply-To: <20211012233212.GA1806189@bhelgaas>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 13 Oct 2021 12:26:42 +0300
+Message-ID: <CAHp75Vd0uYEdfB0XaQuUV34V91qJdHR5ARku1hX_TCJLJHEjxQ@mail.gmail.com>
+Subject: Re: [PATCH v6 00/11] PCI: Drop duplicated tracking of a pci_dev's
+ bound driver
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Fiona Trahe <fiona.trahe@intel.com>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ido Schimmel <idosch@nvidia.com>,
+        Ingo Molnar <mingo@redhat.com>, Jack Xu <jack.xu@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>, Jiri Pirko <jiri@nvidia.com>,
+        Juergen Gross <jgross@suse.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Marco Chiappero <marco.chiappero@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Michael Buesch <m@bues.ch>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Russell Currey <ruscur@russell.cc>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tomaszx Kowalik <tomaszx.kowalik@intel.com>,
+        Vadym Kochan <vkochan@marvell.com>,
+        Wojciech Ziemba <wojciech.ziemba@intel.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        linux-crypto <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
+        MPT-FusionLinux.pdl@broadcom.com, netdev <netdev@vger.kernel.org>,
+        oss-drivers@corigine.com, qat-linux@intel.com,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        xen-devel@lists.xenproject.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gRnJpLCAyMDIxLTA5LTI0IGF0IDEwOjM3ICswODAwLCBDaHVuZmVuZyBZdW4gd3JvdGU6DQo+
-IFdoZW4gdGhlIGRlZGljYXRlZCB3YWtlLWlycSBpcyBsZXZlbCB0cmlnZ2VyLCBhbmQgaXQgdXNl
-cyB0aGUNCj4gY29uc3VtZXIncyBzbGVlcCBzdGF0dXMgYXMgdGhlIHdha2V1cCBzb3VyY2UsIHRo
-YXQgbWVhbnMgaWYgdGhlDQo+IGNvbnN1bWVyIGlzIG5vdCBpbiBzbGVlcCBzdGF0ZSwgdGhlIHdh
-a2UtaXJxIHdpbGwgYmUgdHJpZ2dlcmVkDQo+IHdoZW4gZW5hYmxlIGl0OyBGb3IgdGhpcyBjYXNl
-LCBuZWVkIGVuYWJsZSB0aGUgd2FrZS1pcnEgYWZ0ZXINCj4gaW52b2tpbmcgdGhlIGNvbnN1bWVy
-J3MgcnVudGltZV9zdXNwZW5kKCkgd2hpY2ggbWFrZSB0aGUgY29uc3VtZXINCj4gZW50ZXIgc2xl
-ZXAgc3RhdGUuDQo+IA0KPiBlLmcuDQo+IEFzc3VtZSB0aGUgd2FrZS1pcnEgaXMgYSBsb3cgbGV2
-ZWwgdHJpZ2dlciB0eXBlLCBhbmQgdGhlIHdha2V1cA0KPiBzaWduYWwgY29tZXMgZnJvbSB0aGUg
-c2xlZXAgc3RhdHVzIG9mIGNvbnN1bWVyLg0KPiBUaGUgd2FrZXVwIHNpZ25hbCBpcyBsb3cgbGV2
-ZWwgYXQgcnVubmluZyB0aW1lICgwKSwgYW5kIGJlY29tZXMNCj4gaGlnaCBsZXZlbCB3aGVuIHRo
-ZSBjb25zdW1lciBlbnRlcnMgc2xlZXAgc3RhdGUgKHJ1bnRpbWVfc3VzcGVuZA0KPiAoMSkgaXMg
-Y2FsbGVkKSwgYSB3YWtldXAgZXZlbnQgYXQgKDIpIG1ha2UgdGhlIGNvbnN1bWVyIGV4aXQgc2xl
-ZXANCj4gc3RhdGUsIHRoZW4gdGhlIHdha2V1cCBzaWduYWwgYWxzbyBiZWNvbWVzIGxvdyBsZXZl
-bC4NCj4gDQo+ICAgICAgICAgICAgICAgICAtLS0tLS0tLS0tLS0tLS0tLS0NCj4gICAgICAgICAg
-ICAgICAgfCAgICAgICAgICAgXiAgICAgXnwNCj4gLS0tLS0tLS0tLS0tLS0tLSAgICAgICAgICAg
-fCAgICAgfCAtLS0tLS0tLS0tLS0tLQ0KPiAgfDwtLS0oMCktLS0+fDwtLSgxKS0tfCAgICgzKSAg
-ICgyKSAgICAoNCkNCj4gDQo+IGlmIGVuYWJsZSB0aGUgd2FrZS1pcnEgYmVmb3JlIGNhbGxpbmcg
-cnVudGltZV9zdXNwZW5kIGR1cmluZyAoMCksDQo+IGFuIGludGVycnVwdCB3aWxsIGFyaXNlLCBp
-dCBjYXVzZXMgcmVzdW1lIGltbWVkaWF0ZWx5Ow0KPiBpdCB3b3JrcyBpZiBlbmFibGUgd2FrZS1p
-cnEgKCBlLmcuIGF0ICgzKSBvciAoNCkpIGFmdGVyIGNhbGxpbmcNCj4gcnVudGltZV9zdXNwZW5k
-Lg0KPiANCj4gVGhpcyBwYXRjaCBpbnRyb2R1Y2VzIGEgbmV3IHN0YXR1cyBXQUtFX0lSUV9ERURJ
-Q0FURURfTEFURV9FTkFCTEVEDQo+IHRvIG9wdGlvbmFsbHkgc3VwcG9ydCBlbmFibGluZyB3YWtl
-LWlycSBhZnRlciBjYWxsaW5nDQo+IHJ1bnRpbWVfc3VzcGVuZCgpLg0KPiANCj4gU3VnZ2VzdGVk
-LWJ5OiBSYWZhZWwgSi4gV3lzb2NraSA8cmFmYWVsLmoud3lzb2NraUBpbnRlbC5jb20+DQo+IFNp
-Z25lZC1vZmYtYnk6IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCj4g
-LS0tDQo+IHYzOiBhZGQgbmV3IHN0YXR1cyBzdWdnZXN0ZWQgYnkgUmFmYWVsDQo+IA0KPiB2Mjog
-YWRkIG1vcmUgY29tbWl0IG1lc3NhZ2UNCj4gDQo+ICAgVXNlIHRoZSBmYWxsaW5nIGVkZ2UgdHJp
-Z2dlciBpbnRlcnJ1cHQgc3VnZ2VzdGVkIGJ5IElram9vbiBbMV0sIGl0DQo+IHdvcmtzIHdlbGwg
-YXQgZmlyc3RseSB3aGVuIG9ubHkgdXNlIHRoaXMgcmVsYXRlZCB3YWtldXAgc291cmNlLCBidXQN
-Cj4gZW5jb3VudGVyIGlzc3VlcyBpZiB1c2Ugb3RoZXIgd2FrZXVwIHNvdXJjZXMgdG8gd2FrZXVw
-IHBsYXRmb3JtIGFzDQo+IGJlbG93IHN0ZXBzOg0KPiAxLiB1c2UgYW5vdGhlciB3YWtldXAgc291
-cmNlIHRvIHdha2UgdXAgdGhlIHN1c3BlbmRlZCBzeXN0ZW07DQo+IDIuIHRoZSBjb25zdW1lcidz
-IHJlc3VtZSgpIHdpbGwgYmUgY2FsbGVkLCBhbmQgZXhpdHMgc2xlZXAgc3RhdGU7DQo+IDMuIHRo
-ZSBjb25zdW1lcidzIHdha2V1cCBzaWduYWwgd2lsbCBmYWxsIGludG8gbG93IGxldmVsLCBkdWUg
-dG8NCj4gICAgY3VycmVudGx5IHRoZSB3YWtldXAgaXJxIGlzIGRpc2FibGVkLCB0aGUgd2FrZS1p
-cnEgaXMgcGVuZGluZzsNCj4gNC4gdGhlIGNvbnN1bWVyIHRyaWVzIHRvIGVudGVyIHJ1bnRpbWUg
-c3VzcGVuZCwgYnV0IHRoZXJlIGlzIGENCj4gICAgcGVuZGluZyB3YWtldXAgaXJxLCBzbyB3aWxs
-IHJlc3VtZSBhZ2FpbiwgdGhpcyB3aWxsIHJlcGVhdA0KPiAgICBlbmRsZXNzbHkuDQo+IA0KPiAg
-IFNlbmQgb3V0IHRoZSBwYXRjaCBhZ2FpbiBmb3IgZnVydGhlciBkaXNjdXNzaW9uLg0KPiANCj4g
-WzFdOiBodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzEyMTkwNDA3DQo+IA0KPiAt
-LS0NCj4gIGRyaXZlcnMvYmFzZS9wb3dlci9wb3dlci5oICAgfCAgNyArKysrLS0NCj4gIGRyaXZl
-cnMvYmFzZS9wb3dlci9ydW50aW1lLmMgfCAgNiArKystLQ0KPiAgZHJpdmVycy9iYXNlL3Bvd2Vy
-L3dha2VpcnEuYyB8IDQ5ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0NCj4gLS0N
-Cj4gIGluY2x1ZGUvbGludXgvcG1fd2FrZWlycS5oICAgfCAgNSArKysrDQo+ICA0IGZpbGVzIGNo
-YW5nZWQsIDYwIGluc2VydGlvbnMoKyksIDcgZGVsZXRpb25zKC0pDQpQaW5nIC4uLg0KDQo+IA0K
-PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9iYXNlL3Bvd2VyL3Bvd2VyLmggYi9kcml2ZXJzL2Jhc2Uv
-cG93ZXIvcG93ZXIuaA0KPiBpbmRleCA1NDI5MmNkZDc4MDguLjJkNWRmYzg4NmYwYiAxMDA2NDQN
-Cj4gLS0tIGEvZHJpdmVycy9iYXNlL3Bvd2VyL3Bvd2VyLmgNCj4gKysrIGIvZHJpdmVycy9iYXNl
-L3Bvd2VyL3Bvd2VyLmgNCj4gQEAgLTI1LDggKzI1LDEwIEBAIGV4dGVybiB1NjQgcG1fcnVudGlt
-ZV9hY3RpdmVfdGltZShzdHJ1Y3QgZGV2aWNlDQo+ICpkZXYpOw0KPiAgDQo+ICAjZGVmaW5lIFdB
-S0VfSVJRX0RFRElDQVRFRF9BTExPQ0FURUQJQklUKDApDQo+ICAjZGVmaW5lIFdBS0VfSVJRX0RF
-RElDQVRFRF9NQU5BR0VECUJJVCgxKQ0KPiArI2RlZmluZSBXQUtFX0lSUV9ERURJQ0FURURfTEFU
-RV9FTkFCTEVECUJJVCgyKQ0KPiAgI2RlZmluZSBXQUtFX0lSUV9ERURJQ0FURURfTUFTSwkJKFdB
-S0VfSVJRX0RFRElDQVRFRF9BTEwNCj4gT0NBVEVEIHwgXA0KPiAtCQkJCQkgV0FLRV9JUlFfREVE
-SUNBVEVEX01BTkFHRUQpDQo+ICsJCQkJCSBXQUtFX0lSUV9ERURJQ0FURURfTUFOQUdFRCB8IFwN
-Cj4gKwkJCQkJIFdBS0VfSVJRX0RFRElDQVRFRF9MQVRFX0VOQUJMRQ0KPiBEKQ0KPiAgDQo+ICBz
-dHJ1Y3Qgd2FrZV9pcnEgew0KPiAgCXN0cnVjdCBkZXZpY2UgKmRldjsNCj4gQEAgLTM5LDcgKzQx
-LDggQEAgZXh0ZXJuIHZvaWQgZGV2X3BtX2FybV93YWtlX2lycShzdHJ1Y3Qgd2FrZV9pcnENCj4g
-KndpcnEpOw0KPiAgZXh0ZXJuIHZvaWQgZGV2X3BtX2Rpc2FybV93YWtlX2lycShzdHJ1Y3Qgd2Fr
-ZV9pcnEgKndpcnEpOw0KPiAgZXh0ZXJuIHZvaWQgZGV2X3BtX2VuYWJsZV93YWtlX2lycV9jaGVj
-ayhzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+ICAJCQkJCSBib29sIGNhbl9jaGFuZ2Vfc3RhdHVzKTsN
-Cj4gLWV4dGVybiB2b2lkIGRldl9wbV9kaXNhYmxlX3dha2VfaXJxX2NoZWNrKHN0cnVjdCBkZXZp
-Y2UgKmRldik7DQo+ICtleHRlcm4gdm9pZCBkZXZfcG1fZGlzYWJsZV93YWtlX2lycV9jaGVjayhz
-dHJ1Y3QgZGV2aWNlICpkZXYsIGJvb2wNCj4gc2tpcF9lbmFibGVfbGF0ZSk7DQo+ICtleHRlcm4g
-dm9pZCBkZXZfcG1fZW5hYmxlX3dha2VfaXJxX2NvbXBsZXRlKHN0cnVjdCBkZXZpY2UgKmRldik7
-DQo+ICANCj4gICNpZmRlZiBDT05GSUdfUE1fU0xFRVANCj4gIA0KPiBkaWZmIC0tZ2l0IGEvZHJp
-dmVycy9iYXNlL3Bvd2VyL3J1bnRpbWUuYw0KPiBiL2RyaXZlcnMvYmFzZS9wb3dlci9ydW50aW1l
-LmMNCj4gaW5kZXggZWM5NDA0OTQ0MmI5Li5lOGI4MDdjZDcwMTAgMTAwNjQ0DQo+IC0tLSBhL2Ry
-aXZlcnMvYmFzZS9wb3dlci9ydW50aW1lLmMNCj4gKysrIGIvZHJpdmVycy9iYXNlL3Bvd2VyL3J1
-bnRpbWUuYw0KPiBAQCAtNjQ1LDYgKzY0NSw4IEBAIHN0YXRpYyBpbnQgcnBtX3N1c3BlbmQoc3Ry
-dWN0IGRldmljZSAqZGV2LCBpbnQNCj4gcnBtZmxhZ3MpDQo+ICAJaWYgKHJldHZhbCkNCj4gIAkJ
-Z290byBmYWlsOw0KPiAgDQo+ICsJZGV2X3BtX2VuYWJsZV93YWtlX2lycV9jb21wbGV0ZShkZXYp
-Ow0KPiArDQo+ICAgbm9fY2FsbGJhY2s6DQo+ICAJX191cGRhdGVfcnVudGltZV9zdGF0dXMoZGV2
-LCBSUE1fU1VTUEVOREVEKTsNCj4gIAlwbV9ydW50aW1lX2RlYWN0aXZhdGVfdGltZXIoZGV2KTsN
-Cj4gQEAgLTY5MCw3ICs2OTIsNyBAQCBzdGF0aWMgaW50IHJwbV9zdXNwZW5kKHN0cnVjdCBkZXZp
-Y2UgKmRldiwgaW50DQo+IHJwbWZsYWdzKQ0KPiAgCXJldHVybiByZXR2YWw7DQo+ICANCj4gICBm
-YWlsOg0KPiAtCWRldl9wbV9kaXNhYmxlX3dha2VfaXJxX2NoZWNrKGRldik7DQo+ICsJZGV2X3Bt
-X2Rpc2FibGVfd2FrZV9pcnFfY2hlY2soZGV2LCBmYWxzZSk7DQo+ICAJX191cGRhdGVfcnVudGlt
-ZV9zdGF0dXMoZGV2LCBSUE1fQUNUSVZFKTsNCj4gIAlkZXYtPnBvd2VyLmRlZmVycmVkX3Jlc3Vt
-ZSA9IGZhbHNlOw0KPiAgCXdha2VfdXBfYWxsKCZkZXYtPnBvd2VyLndhaXRfcXVldWUpOw0KPiBA
-QCAtODczLDcgKzg3NSw3IEBAIHN0YXRpYyBpbnQgcnBtX3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpk
-ZXYsIGludA0KPiBycG1mbGFncykNCj4gIA0KPiAgCWNhbGxiYWNrID0gUlBNX0dFVF9DQUxMQkFD
-SyhkZXYsIHJ1bnRpbWVfcmVzdW1lKTsNCj4gIA0KPiAtCWRldl9wbV9kaXNhYmxlX3dha2VfaXJx
-X2NoZWNrKGRldik7DQo+ICsJZGV2X3BtX2Rpc2FibGVfd2FrZV9pcnFfY2hlY2soZGV2LCB0cnVl
-KTsNCj4gIAlyZXR2YWwgPSBycG1fY2FsbGJhY2soY2FsbGJhY2ssIGRldik7DQo+ICAJaWYgKHJl
-dHZhbCkgew0KPiAgCQlfX3VwZGF0ZV9ydW50aW1lX3N0YXR1cyhkZXYsIFJQTV9TVVNQRU5ERUQp
-Ow0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9iYXNlL3Bvd2VyL3dha2VpcnEuYw0KPiBiL2RyaXZl
-cnMvYmFzZS9wb3dlci93YWtlaXJxLmMNCj4gaW5kZXggYjkxYTNhOWJmOWY2Li4xYWNmNzg1ZWJk
-Y2QgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvYmFzZS9wb3dlci93YWtlaXJxLmMNCj4gKysrIGIv
-ZHJpdmVycy9iYXNlL3Bvd2VyL3dha2VpcnEuYw0KPiBAQCAtMjEyLDYgKzIxMiwyNCBAQCBpbnQg
-ZGV2X3BtX3NldF9kZWRpY2F0ZWRfd2FrZV9pcnEoc3RydWN0IGRldmljZQ0KPiAqZGV2LCBpbnQg
-aXJxKQ0KPiAgfQ0KPiAgRVhQT1JUX1NZTUJPTF9HUEwoZGV2X3BtX3NldF9kZWRpY2F0ZWRfd2Fr
-ZV9pcnEpOw0KPiAgDQo+ICsvKioNCj4gKyAqIGRldl9wbV93YWtlX2lycV9zZXRfbGF0ZV9lbmFi
-bGVkX3N0YXR1cyAtIHNldCBzdGF0dXMNCj4gV0FLRV9JUlFfREVESUNBVEVEX0xBVEVfRU5BQkxF
-RA0KPiArICogQGRldjogRGV2aWNlDQo+ICsgKg0KPiArICogU2V0IHRoZSBzdGF0dXMgb2YgV0FL
-RV9JUlFfREVESUNBVEVEX0xBVEVfRU5BQkxFRCB0byB0ZWxsDQo+IHJwbV9zdXNwZW5kKCkNCj4g
-KyAqIHRvIGVuYWJsZSBkZWRpY2F0ZWQgd2FrZS11cCBpbnRlcnJ1cHQgYWZ0ZXIgaW52b2tpbmcg
-dGhlDQo+IHJ1bnRpbWVfc3VzcGVuZCgpLA0KPiArICoNCj4gKyAqIFNob3VsZCBiZSBjYWxsZWQg
-YWZ0ZXIgc2V0dGluZyBkZWRpY2F0ZWQgd2FrZS11cCBpbnRlcnJ1cHQuDQo+ICsgKi8NCj4gK3Zv
-aWQgZGV2X3BtX3dha2VfaXJxX3NldF9sYXRlX2VuYWJsZWRfc3RhdHVzKHN0cnVjdCBkZXZpY2Ug
-KmRldikNCj4gK3sNCj4gKwlzdHJ1Y3Qgd2FrZV9pcnEgKndpcnEgPSBkZXYtPnBvd2VyLndha2Vp
-cnE7DQo+ICsNCj4gKwlpZiAod2lycSAmJiAod2lycS0+c3RhdHVzICYgV0FLRV9JUlFfREVESUNB
-VEVEX0FMTE9DQVRFRCkpDQo+ICsJCXdpcnEtPnN0YXR1cyB8PSBXQUtFX0lSUV9ERURJQ0FURURf
-TEFURV9FTkFCTEVEOw0KPiArfQ0KPiArRVhQT1JUX1NZTUJPTF9HUEwoZGV2X3BtX3dha2VfaXJx
-X3NldF9sYXRlX2VuYWJsZWRfc3RhdHVzKTsNCj4gKw0KPiAgLyoqDQo+ICAgKiBkZXZfcG1fZW5h
-YmxlX3dha2VfaXJxIC0gRW5hYmxlIGRldmljZSB3YWtlLXVwIGludGVycnVwdA0KPiAgICogQGRl
-djogRGV2aWNlDQo+IEBAIC0yODIsMjcgKzMwMCw1MiBAQCB2b2lkIGRldl9wbV9lbmFibGVfd2Fr
-ZV9pcnFfY2hlY2soc3RydWN0IGRldmljZQ0KPiAqZGV2LA0KPiAgCXJldHVybjsNCj4gIA0KPiAg
-ZW5hYmxlOg0KPiAtCWVuYWJsZV9pcnEod2lycS0+aXJxKTsNCj4gKwlpZiAoIWNhbl9jaGFuZ2Vf
-c3RhdHVzIHx8ICEod2lycS0+c3RhdHVzICYNCj4gV0FLRV9JUlFfREVESUNBVEVEX0xBVEVfRU5B
-QkxFRCkpDQo+ICsJCWVuYWJsZV9pcnEod2lycS0+aXJxKTsNCj4gIH0NCj4gIA0KPiAgLyoqDQo+
-ICAgKiBkZXZfcG1fZGlzYWJsZV93YWtlX2lycV9jaGVjayAtIENoZWNrcyBhbmQgZGlzYWJsZXMg
-d2FrZS11cA0KPiBpbnRlcnJ1cHQNCj4gICAqIEBkZXY6IERldmljZQ0KPiArICogQHNraXBfbGF0
-ZV9lbmFibGVkX3N0YXR1czogc2tpcCBjaGVja2luZw0KPiBXQUtFX0lSUV9ERURJQ0FURURfTEFU
-RV9FTkFCTEVEDQo+ICAgKg0KPiAgICogRGlzYWJsZXMgd2FrZS11cCBpbnRlcnJ1cHQgY29uZGl0
-aW9uYWxseSBiYXNlZCBvbiBzdGF0dXMuDQo+ICAgKiBTaG91bGQgYmUgb25seSBjYWxsZWQgZnJv
-bSBycG1fc3VzcGVuZCgpIGFuZCBycG1fcmVzdW1lKCkgcGF0aC4NCj4gICAqLw0KPiAtdm9pZCBk
-ZXZfcG1fZGlzYWJsZV93YWtlX2lycV9jaGVjayhzdHJ1Y3QgZGV2aWNlICpkZXYpDQo+ICt2b2lk
-IGRldl9wbV9kaXNhYmxlX3dha2VfaXJxX2NoZWNrKHN0cnVjdCBkZXZpY2UgKmRldiwgYm9vbA0K
-PiBza2lwX2xhdGVfZW5hYmxlZF9zdGF0dXMpDQo+ICB7DQo+ICAJc3RydWN0IHdha2VfaXJxICp3
-aXJxID0gZGV2LT5wb3dlci53YWtlaXJxOw0KPiAgDQo+ICAJaWYgKCF3aXJxIHx8ICEod2lycS0+
-c3RhdHVzICYgV0FLRV9JUlFfREVESUNBVEVEX01BU0spKQ0KPiAgCQlyZXR1cm47DQo+ICANCj4g
-LQlpZiAod2lycS0+c3RhdHVzICYgV0FLRV9JUlFfREVESUNBVEVEX01BTkFHRUQpDQo+ICsJaWYg
-KHdpcnEtPnN0YXR1cyAmIFdBS0VfSVJRX0RFRElDQVRFRF9NQU5BR0VEICYmDQo+ICsJICAgIChz
-a2lwX2xhdGVfZW5hYmxlZF9zdGF0dXMgfHwNCj4gKwkgICAgICEod2lycS0+c3RhdHVzICYgV0FL
-RV9JUlFfREVESUNBVEVEX0xBVEVfRU5BQkxFRCkpKQ0KPiAgCQlkaXNhYmxlX2lycV9ub3N5bmMo
-d2lycS0+aXJxKTsNCj4gIH0NCj4gIA0KPiArLyoqDQo+ICsgKiBkZXZfcG1fZW5hYmxlX3dha2Vf
-aXJxX2NvbXBsZXRlIC0gZW5hYmxlIHdha2UgaXJxIGJhc2VkIG9uIHN0YXR1cw0KPiArICogQGRl
-djogRGV2aWNlDQo+ICsgKg0KPiArICogRW5hYmxlIHdha2UtdXAgaW50ZXJydXB0IGNvbmRpdGlv
-bmFsbHkgYmFzZWQgb24gc3RhdHVzLCBtYWlubHkNCj4gZm9yDQo+ICsgKiBlbmFibGluZyB3YWtl
-LXVwIGludGVycnVwdCBhZnRlciBydW50aW1lX3N1c3BlbmQoKSBpcyBjYWxsZWQuDQo+ICsgKg0K
-PiArICogU2hvdWxkIGJlIG9ubHkgY2FsbGVkIGZyb20gcnBtX3N1c3BlbmQoKSBwYXRoLg0KPiAr
-ICovDQo+ICt2b2lkIGRldl9wbV9lbmFibGVfd2FrZV9pcnFfY29tcGxldGUoc3RydWN0IGRldmlj
-ZSAqZGV2KQ0KPiArew0KPiArCXN0cnVjdCB3YWtlX2lycSAqd2lycSA9IGRldi0+cG93ZXIud2Fr
-ZWlycTsNCj4gKw0KPiArCWlmICghd2lycSB8fCAhKHdpcnEtPnN0YXR1cyAmIFdBS0VfSVJRX0RF
-RElDQVRFRF9NQVNLKSkNCj4gKwkJcmV0dXJuOw0KPiArDQo+ICsJaWYgKHdpcnEtPnN0YXR1cyAm
-IFdBS0VfSVJRX0RFRElDQVRFRF9NQU5BR0VEICYmDQo+ICsJICAgIHdpcnEtPnN0YXR1cyAmIFdB
-S0VfSVJRX0RFRElDQVRFRF9MQVRFX0VOQUJMRUQpDQo+ICsJCWVuYWJsZV9pcnEod2lycS0+aXJx
-KTsNCj4gK30NCj4gKw0KPiAgLyoqDQo+ICAgKiBkZXZfcG1fYXJtX3dha2VfaXJxIC0gQXJtIGRl
-dmljZSB3YWtlLXVwDQo+ICAgKiBAd2lycTogRGV2aWNlIHdha2UtdXAgaW50ZXJydXB0DQo+IGRp
-ZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3BtX3dha2VpcnEuaCBiL2luY2x1ZGUvbGludXgvcG1f
-d2FrZWlycS5oDQo+IGluZGV4IGNkNWI2MmRiOTA4NC4uOTJmODE0ZDU4M2Y4IDEwMDY0NA0KPiAt
-LS0gYS9pbmNsdWRlL2xpbnV4L3BtX3dha2VpcnEuaA0KPiArKysgYi9pbmNsdWRlL2xpbnV4L3Bt
-X3dha2VpcnEuaA0KPiBAQCAtMjIsNiArMjIsNyBAQCBleHRlcm4gaW50IGRldl9wbV9zZXRfZGVk
-aWNhdGVkX3dha2VfaXJxKHN0cnVjdA0KPiBkZXZpY2UgKmRldiwNCj4gIGV4dGVybiB2b2lkIGRl
-dl9wbV9jbGVhcl93YWtlX2lycShzdHJ1Y3QgZGV2aWNlICpkZXYpOw0KPiAgZXh0ZXJuIHZvaWQg
-ZGV2X3BtX2VuYWJsZV93YWtlX2lycShzdHJ1Y3QgZGV2aWNlICpkZXYpOw0KPiAgZXh0ZXJuIHZv
-aWQgZGV2X3BtX2Rpc2FibGVfd2FrZV9pcnEoc3RydWN0IGRldmljZSAqZGV2KTsNCj4gK2V4dGVy
-biB2b2lkIGRldl9wbV93YWtlX2lycV9zZXRfbGF0ZV9lbmFibGVkX3N0YXR1cyhzdHJ1Y3QgZGV2
-aWNlDQo+ICpkZXYpOw0KPiAgDQo+ICAjZWxzZQkvKiAhQ09ORklHX1BNICovDQo+ICANCj4gQEAg
-LTQ3LDUgKzQ4LDkgQEAgc3RhdGljIGlubGluZSB2b2lkIGRldl9wbV9kaXNhYmxlX3dha2VfaXJx
-KHN0cnVjdA0KPiBkZXZpY2UgKmRldikNCj4gIHsNCj4gIH0NCj4gIA0KPiArc3RhdGljIGlubGlu
-ZSB2b2lkIGRldl9wbV93YWtlX2lycV9zZXRfbGF0ZV9lbmFibGVkX3N0YXR1cyhzdHJ1Y3QNCj4g
-ZGV2aWNlICpkZXYpDQo+ICt7DQo+ICt9DQo+ICsNCj4gICNlbmRpZgkvKiBDT05GSUdfUE0gKi8N
-Cj4gICNlbmRpZgkvKiBfTElOVVhfUE1fV0FLRUlSUV9IICovDQo=
+On Wed, Oct 13, 2021 at 2:33 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> On Mon, Oct 04, 2021 at 02:59:24PM +0200, Uwe Kleine-K=C3=B6nig wrote:
 
+> I split some of the bigger patches apart so they only touched one
+> driver or subsystem at a time.  I also updated to_pci_driver() so it
+> returns NULL when given NULL, which makes some of the validations
+> quite a bit simpler, especially in the PM code in pci-driver.c.
+
+It's a bit unusual. Other to_*_dev() are not NULL-aware IIRC.
+
+Below are some comments as well.
+
+...
+
+>  static bool match_id(struct pci_dev *pdev, unsigned short vendor, unsign=
+ed short device)
+>  {
+> +       struct pci_driver *drv =3D to_pci_driver(pdev->dev.driver);
+>         const struct pci_device_id *id;
+>
+>         if (pdev->vendor =3D=3D vendor && pdev->device =3D=3D device)
+>                 return true;
+
+> +       for (id =3D drv ? drv->id_table : NULL; id && id->vendor; id++)
+> +               if (id->vendor =3D=3D vendor && id->device =3D=3D device)
+
+> +                       break;
+
+return true;
+
+>         return id && id->vendor;
+
+return false;
+
+>  }
+
+...
+
+> +                       afu_result =3D err_handler->error_detected(afu_de=
+v,
+> +                                                                state);
+
+One line?
+
+...
+
+>         device_lock(&vf_dev->dev);
+> -       if (vf_dev->dev.driver) {
+> +       if (to_pci_driver(vf_dev->dev.driver)) {
+
+Hmm...
+
+...
+
+> +               if (!pci_dev->state_saved && pci_dev->current_state !=3D =
+PCI_D0
+
+> +                   && pci_dev->current_state !=3D PCI_UNKNOWN) {
+
+Can we keep && on the previous line?
+
+> +                       pci_WARN_ONCE(pci_dev, pci_dev->current_state !=
+=3D prev,
+> +                                     "PCI PM: Device state not saved by =
+%pS\n",
+> +                                     drv->suspend);
+>                 }
+
+...
+
+> +       return drv && drv->resume ?
+> +                       drv->resume(pci_dev) : pci_pm_reenable_device(pci=
+_dev);
+
+One line?
+
+...
+
+> +       struct pci_driver *drv =3D to_pci_driver(dev->dev.driver);
+>         const struct pci_error_handlers *err_handler =3D
+> -                       dev->dev.driver ? to_pci_driver(dev->dev.driver)-=
+>err_handler : NULL;
+> +                       drv ? drv->err_handler : NULL;
+
+Isn't dev->driver =3D=3D to_pci_driver(dev->dev.driver)?
+
+...
+
+> +       struct pci_driver *drv =3D to_pci_driver(dev->dev.driver);
+>         const struct pci_error_handlers *err_handler =3D
+> -                       dev->dev.driver ? to_pci_driver(dev->dev.driver)-=
+>err_handler : NULL;
+> +                       drv ? drv->err_handler : NULL;
+
+Ditto.
+
+...
+
+>         device_lock(&dev->dev);
+> +       pdrv =3D to_pci_driver(dev->dev.driver);
+>         if (!pci_dev_set_io_state(dev, state) ||
+> -               !dev->dev.driver ||
+> -               !(pdrv =3D to_pci_driver(dev->dev.driver))->err_handler |=
+|
+
+> +               !pdrv ||
+> +               !pdrv->err_handler ||
+
+One line now?
+
+>                 !pdrv->err_handler->error_detected) {
+
+Or this and the previous line?
+
+...
+
+> +       pdrv =3D to_pci_driver(dev->dev.driver);
+> +       if (!pdrv ||
+> +               !pdrv->err_handler ||
+>                 !pdrv->err_handler->mmio_enabled)
+>                 goto out;
+
+Ditto.
+
+...
+
+> +       pdrv =3D to_pci_driver(dev->dev.driver);
+> +       if (!pdrv ||
+> +               !pdrv->err_handler ||
+>                 !pdrv->err_handler->slot_reset)
+>                 goto out;
+
+Ditto.
+
+...
+
+>         if (!pci_dev_set_io_state(dev, pci_channel_io_normal) ||
+> -               !dev->dev.driver ||
+> -               !(pdrv =3D to_pci_driver(dev->dev.driver))->err_handler |=
+|
+> +               !pdrv ||
+> +               !pdrv->err_handler ||
+>                 !pdrv->err_handler->resume)
+>                 goto out;
+
+Ditto.
+
+> -       result =3D PCI_ERS_RESULT_NONE;
+>
+>         pcidev =3D pci_get_domain_bus_and_slot(domain, bus, devfn);
+>         if (!pcidev || !pcidev->dev.driver) {
+>                 dev_err(&pdev->xdev->dev, "device or AER driver is NULL\n=
+");
+>                 pci_dev_put(pcidev);
+> -               return result;
+> +               return PCI_ERS_RESULT_NONE;
+>         }
+>         pdrv =3D to_pci_driver(pcidev->dev.driver);
+
+What about splitting the conditional to two with clear error message
+in each and use pci_err() in the second one?
+
+...
+
+>                 default:
+>                         dev_err(&pdev->xdev->dev,
+> -                               "bad request in aer recovery "
+> -                               "operation!\n");
+> +                               "bad request in AER recovery operation!\n=
+");
+
+Stray change? Or is it in a separate patch in your tree?
+
+--=20
+With Best Regards,
+Andy Shevchenko
