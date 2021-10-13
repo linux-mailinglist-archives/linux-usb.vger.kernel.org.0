@@ -2,110 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2981842BF81
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Oct 2021 14:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 107E642BFFE
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Oct 2021 14:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbhJMMHI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Oct 2021 08:07:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56808 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229580AbhJMMHH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 13 Oct 2021 08:07:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2FDCF60273;
-        Wed, 13 Oct 2021 12:05:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634126704;
-        bh=7xBx3CBBB+UJBS/HM4tiBugK3pEo465TEI5Rd2huiqE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jbEEezoO8p0OGU1blRW6OGdc6hrothVzTIGzrWeNhsGFn46lX75nT16nWmyXyxDh9
-         Pz19Q8vyiPnugNJ0R0vgQirI2eP9E038bD4Evinvxu2lGWVolKEE9c3PDBffcdmAV2
-         hcC8KK5fb+ZN1rKj1wCtOSHkDphUeIZf8hh6jcMk=
-Date:   Wed, 13 Oct 2021 14:05:02 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Florian Faber <faber@faberman.de>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3] usb: gadget: composite: req->complete not set, using
- wrong callback for complete
-Message-ID: <YWbLbutZto1IRuUA@kroah.com>
-References: <bded07a9-0549-569f-dcea-12e8bc7bf091@faberman.de>
- <2eef54eb-4830-555b-1a13-85644c4e65a5@faberman.de>
+        id S233479AbhJMMbM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Oct 2021 08:31:12 -0400
+Received: from mail-eopbgr130081.outbound.protection.outlook.com ([40.107.13.81]:34500
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233368AbhJMMbL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 Oct 2021 08:31:11 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jEog+YjDElGAzTFs0//1TNL60mJvwviEvnMXA4slaBh1FUu90/2tgvYqyg9J15FHe11ViPs6Be48CnEK4Mw7BxqAEvjwh9+8Gj4/qadChDIUYIeU0erH2HHJtfiaeBirlhbc6SWb2IFgcPeji8kAQgLSLaeh3bzmSIO03AZ/Wv1YD/vLrVS0QfC1MUTOBkBWNy3vLJCwtiQi/0pygY7Y1D1PMYjzRYteivLQhYcznD0CBoM8rnf9XrrkCaq9pTU5TBW6E6azzO6uXGqQ6gTvaKSWpmJpp6NOI/JdZon2dQOGV8g4TNqgXkPHxCQAkzWLnHSdl4NWbRCAOX3qPRmbvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FbUTW+Txltp/cb/9tBvfra3CthFdNhyBuRTj7I0ShKA=;
+ b=bPGt034DkkXLdjg5kKaH78y6ECxZgHskPEH3NgwEZk3DcxJ9XMMWPu80IylU+y9PDInl1sRmQZqdUHyxynuH6Ow6jNmaJI3OKd+xXCaybqjtDY27qkeAFEFENL8TAepLGiXyMXPNN/lf2YaJ4k8uxmnGyorc/DLiPB1KPGuby6Svn/dMy7Xf2+nqDa1uH+OxnrZvp0izO3xNEq1ZmEf16Qor+hXD8wujlWYq5PwXSYlRisnyVyGaBUsjw25eQN4P3PsiWTX+9G7YXrWaTb4nJ4tkSwuTxvgTwPdGNag4t9NxmE4V1smCFmd5ooPTJuGbRcZIZED0EbcYz4+ktU3Wig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=permerror (sender ip
+ is 151.1.184.193) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=asem.it;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=asem.it;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=asem.it; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FbUTW+Txltp/cb/9tBvfra3CthFdNhyBuRTj7I0ShKA=;
+ b=cHj6h+Z1YbdIqwPePLQS/qYnV1LKWcYDz910ihoKgIuusvfVytpkSeD4TTdY+FAJz9/LQgQpVxDST19Q0hZhyCgEMJzmjcRVN7UJ/TqnGl7Y0wirWDHuyghlOdCy6Jauco+nV0MjkJC2e/R2kuJZktp7arZUx02gUNXgZIBhM6o=
+Received: from SV0P279CA0071.NORP279.PROD.OUTLOOK.COM (2603:10a6:f10:14::22)
+ by AM0PR0102MB3570.eurprd01.prod.exchangelabs.com (2603:10a6:208:10::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.22; Wed, 13 Oct
+ 2021 12:29:05 +0000
+Received: from HE1EUR01FT060.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:f10:14:cafe::1b) by SV0P279CA0071.outlook.office365.com
+ (2603:10a6:f10:14::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.14 via Frontend
+ Transport; Wed, 13 Oct 2021 12:29:05 +0000
+X-MS-Exchange-Authentication-Results: spf=permerror (sender IP is
+ 151.1.184.193) smtp.mailfrom=asem.it; vger.kernel.org; dkim=none (message not
+ signed) header.d=none;vger.kernel.org; dmarc=fail action=none
+ header.from=asem.it;
+Received-SPF: PermError (protection.outlook.com: domain of asem.it used an
+ invalid SPF mechanism)
+Received: from asas054.asem.intra (151.1.184.193) by
+ HE1EUR01FT060.mail.protection.outlook.com (10.152.0.249) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4587.18 via Frontend Transport; Wed, 13 Oct 2021 12:29:04 +0000
+Received: from flavio-x.asem.intra ([172.16.17.208]) by asas054.asem.intra with Microsoft SMTPSVC(10.0.14393.0);
+         Wed, 13 Oct 2021 14:28:15 +0200
+From:   Flavio Suligoi <f.suligoi@asem.it>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        Rajat Jain <rajatja@google.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Flavio Suligoi <f.suligoi@asem.it>
+Subject: [PATCH v2] usb: core: hub: improve port over-current alert msg
+Date:   Wed, 13 Oct 2021 14:27:15 +0200
+Message-Id: <20211013122715.883365-1-f.suligoi@asem.it>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2eef54eb-4830-555b-1a13-85644c4e65a5@faberman.de>
+Content-Transfer-Encoding: 8bit
+X-OriginalArrivalTime: 13 Oct 2021 12:28:15.0131 (UTC) FILETIME=[CB8596B0:01D7C02D]
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 20ba3840-aa14-4be5-45f7-08d98e450bb3
+X-MS-TrafficTypeDiagnostic: AM0PR0102MB3570:
+X-Microsoft-Antispam-PRVS: <AM0PR0102MB3570EAF7C4B7DB71A9B972FFF9B79@AM0PR0102MB3570.eurprd01.prod.exchangelabs.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7Zf7xP7MFr1zTKC9wRyNPfxOCFR7Ah4IwyMzDh7P9XljFyu9qzOJT2jnPHrgsgZoWIa8x7iCyBjnjoOW4PXxNJaPvFbXKKKyyaAMeCJuy2k8mYX81lCyyV/EzSib7meWrs8WY8CAsvCnfgh0Adv2Wj/8VDgvWdpbg1uQvM7KVUy9/ttYCF9RhLBKeq+uR+OSXE3hPpYSq2e3U3u5jMivU/vnDIFI0uEOeYu+J9WSCML6oFDG5RttUUOujBVByw7ZicETO66a6uVSH78st0ikvGKb9EYkGyl/7t2lj3XRLkOjsZQRCOJwUT5Wh9lGKmvmbe0MG0dmAO61RHlzti+2xB9mx51E3xpEFrdOAyW5uZ1gVwCvQ1Er809wbjVVx6ihxhfkh94o4ljvlZB/t8bPBPNIgtGWJQAzL1BjlsjWWPKn3yf3CGAYSVvff2YzFpekJZvKhLFZxP/oA7vwH3VO4UaRR7HLZmTAjZNIQC7732Rj5VPt90OD5SwnpI6JGmULX/n5LfpIKKT2Vc5Q7avAQKfP27lrZswNRrawJJbbdv4AlUMJUKLg8ixudnXunuvUhJUDhFQ6FZuRIfEXRH7JwWjpqnW33V30ft5WuEeBRHkAfMJaicXLoyaU6EHYt6NZNDvfc581bhCK3hWc8g9VoXyx4XfS1WVdlPIV+4LTT1a8In4V9dtUaX/OeVoeSJ72Nq0hvKSTBt32c3cVJVh3KT4t71zvKGs05Kup5C2hYO8=
+X-Forefront-Antispam-Report: CIP:151.1.184.193;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:asas054.asem.intra;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(36840700001)(46966006)(86362001)(8936002)(450100002)(110136005)(82310400003)(186003)(70586007)(2616005)(47076005)(81166007)(316002)(5660300002)(83380400001)(15650500001)(36860700001)(70206006)(336012)(1076003)(508600001)(356005)(36756003)(4326008)(8676002)(107886003)(2906002)(26005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: asem.it
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2021 12:29:04.8312
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20ba3840-aa14-4be5-45f7-08d98e450bb3
+X-MS-Exchange-CrossTenant-Id: d0a766c6-7992-4344-a4a2-a467a7bb1ed2
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d0a766c6-7992-4344-a4a2-a467a7bb1ed2;Ip=[151.1.184.193];Helo=[asas054.asem.intra]
+X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT060.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR0102MB3570
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 10:54:47AM +0200, Florian Faber wrote:
-> In usb_composite_setup_continue, req->complete is not set, leaving the
-> previous value untouched. After completion of the ep0 transaction, the
-> UDC would then call whatever complete callback was set previously with
-> the composite cdev as context, leading to all sorts of havoc.
-> 
-> A typical call trace looks like this: A setup packet for mass storage,
-> ending up in RNDIS's complete function:
-> 
-> ---------------------------snip---------------------------------
-> [  183.795661] [<bf10b31c>] (rndis_response_complete [usb_f_rndis]) from [<bf0ec024>] (xgs_iproc_ep_enable+0x92c/0xd2c [xgs_iproc_udc])
-> [  183.795666]  r5:df5d73ac r4:df767c80
-> [  183.795682] [<bf0ebf20>] (xgs_iproc_ep_enable [xgs_iproc_udc]) from [<bf0eca8c>] (xgs_iproc_ep_queue+0x384/0x5bc [xgs_iproc_udc])
-> [  183.795687]  r7:df767cb8 r6:df5d7380 r5:df767c80 r4:df5d73ac
-> [  183.795706] [<bf0ec708>] (xgs_iproc_ep_queue [xgs_iproc_udc]) from [<c0384fec>] (usb_ep_queue+0x1f0/0x238)
-> [  183.795713]  r10:43425355 r9:df767c80 r8:df767c80 r7:a00f0013 r6:df5d73ac r5:df767c80
-> [  183.795716]  r4:df65dea8
-> [  183.795743] [<c0384dfc>] (usb_ep_queue) from [<bf0f6910>] (usb_composite_overwrite_options+0x128/0x184 [libcomposite])
-> [  183.795750]  r9:00055302 r8:df767c80 r7:a00f0013 r6:df65df04 r5:df767c80 r4:df65dea8
-> [  183.795777] [<bf0f68e0>] (usb_composite_overwrite_options [libcomposite]) from [<bf0f69f4>] (usb_composite_setup_continue+0x88/0x138 [libcomposite])
-> [  183.795782]  r7:a00f0013 r6:df65df04 r5:00000000 r4:df65dea8
-> [  183.795812] [<bf0f696c>] (usb_composite_setup_continue [libcomposite]) from [<bf120cf8>] (fsg_alloc_inst+0xa5c/0xac8 [usb_f_mass_storage])
-> [  183.795819]  r9:00055302 r8:00000003 r7:deca5800 r6:00000001 r5:df595a80 r4:deca5948
-> [  183.795840] [<bf120a68>] (fsg_alloc_inst [usb_f_mass_storage]) from [<bf120e00>] (fsg_main_thread+0x9c/0x15dc [usb_f_mass_storage])
-> [  183.795846]  r8:df770000 r7:df595a80 r6:deca1cc0 r5:df724000 r4:deca5800
-> [  183.795864] [<bf120d64>] (fsg_main_thread [usb_f_mass_storage]) from [<c0046cd0>] (kthread+0x14c/0x154)
-> [  183.795870]  r10:df785d14 r9:00000000 r8:deca5800 r7:df6c31b8 r6:df70f580 r5:df724000
-> [  183.795873]  r4:df6c3180
-> [  183.795881] [<c0046b84>] (kthread) from [<c000a67c>] (ret_from_fork+0x14/0x38)
-> [  183.795887]  r10:00000000 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:c0046b84
-> [  183.795889]  r4:df70f580
-> --------------------------snip-------------------------------------
-> 
-> Fixes: 57943716ff1b0733ab0d9879e572bad04166660a ("usb: gadget: composite: set our req->context to cdev")
+At the moment the port over-current message is displayed only if the
+over-current condition is permanent.
 
-No need for the full sha1, look at the documentation for the needed line
-here:
-	Fixes: 57943716ff1b ("usb: gadget: composite: set our req->context to cdev")
+But in case of permanent short-circuit or over-current, some USB
+power-distribution switches (such as the TPS20xx, etc.), after the
+over-current detection and the consequent shutdown, return in the
+normal state.
 
-> Signed-off-by: Florian Faber <faber@faberman.de>
-> 
-> ---
-> Change in v3:
->   - Addes changes
-> 
-> Change in v2:
->   - More verbose explanation
->   - Added commit hash that introduced the bug
-> 
->  drivers/usb/gadget/composite.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-> index 504c1cbc255d..8d497be4be32 100644
-> --- a/drivers/usb/gadget/composite.c
-> +++ b/drivers/usb/gadget/composite.c
-> @@ -2518,6 +2518,7 @@ void usb_composite_setup_continue(struct
-> usb_composite_dev *cdev)
->  		DBG(cdev, "%s: Completing delayed status\n", __func__);
->  		req->length = 0;
->  		req->context = cdev;
-> +		req->complete = composite_setup_complete;
->  		value = composite_ep0_queue(cdev, req, GFP_ATOMIC);
->  		if (value < 0) {
->  			DBG(cdev, "ep_queue --> %d\n", value);
-> -- 
+So, in these cases, the over-current error message never appears.
 
-Patch is linewrapped :(
+To overcome this problem, the "over-current condition" message is
+displayed even after a series of some over-current events.
 
-thanks,
+Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
+---
+ drivers/usb/core/hub.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-greg k-h
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 86658a81d284..24ef09ad208b 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -50,6 +50,9 @@
+ #define USB_TP_TRANSMISSION_DELAY_MAX	65535	/* ns */
+ #define USB_PING_RESPONSE_TIME		400	/* ns */
+ 
++#define USB_OC_COOL_DOWN_TIME		100	/* ms */
++#define USB_OC_REPEATED_MSG_DELAY	2000	/* ms */
++
+ /* Protect struct usb_device->state and ->children members
+  * Note: Both are also protected by ->dev.sem, except that ->state can
+  * change to USB_STATE_NOTATTACHED even when the semaphore isn't held. */
+@@ -5565,6 +5568,11 @@ static void port_event(struct usb_hub *hub, int port1)
+ 		}
+ 	}
+ 
++	/*
++	 * The over-current events can be continuous or intermittent (sometimes
++	 * the event disappears after the cooling-down time); in both cases
++	 * display an error message.
++	 */
+ 	if (portchange & USB_PORT_STAT_C_OVERCURRENT) {
+ 		u16 status = 0, unused;
+ 		port_dev->over_current_count++;
+@@ -5574,10 +5582,12 @@ static void port_event(struct usb_hub *hub, int port1)
+ 			port_dev->over_current_count);
+ 		usb_clear_port_feature(hdev, port1,
+ 				USB_PORT_FEAT_C_OVER_CURRENT);
+-		msleep(100);	/* Cool down */
++		msleep(USB_OC_COOL_DOWN_TIME); /* Cool down */
+ 		hub_power_on(hub, true);
+ 		hub_port_status(hub, port1, &status, &unused);
+-		if (status & USB_PORT_STAT_OVERCURRENT)
++		if ((status & USB_PORT_STAT_OVERCURRENT) ||
++		    !(port_dev->over_current_count %
++		      (USB_OC_REPEATED_MSG_DELAY / USB_OC_COOL_DOWN_TIME)))
+ 			dev_err(&port_dev->dev, "over-current condition\n");
+ 	}
+ 
+-- 
+2.25.1
+
