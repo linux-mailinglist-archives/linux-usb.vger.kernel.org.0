@@ -2,120 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E42EC42B90B
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Oct 2021 09:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC9942B924
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Oct 2021 09:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238416AbhJMHaG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Oct 2021 03:30:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58282 "EHLO mail.kernel.org"
+        id S232329AbhJMHdy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Oct 2021 03:33:54 -0400
+Received: from cable.insite.cz ([84.242.75.189]:52630 "EHLO cable.insite.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238405AbhJMHaF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 13 Oct 2021 03:30:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8988360E53;
-        Wed, 13 Oct 2021 07:28:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634110083;
-        bh=QcbkfNTF0iOrygpufmGcE3HxoY8PhoZf9QBoNP9L9fA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YRStEG4imf7S9GBdb73NeDCXloCCHPKRyKbWu9YnknIv5SIvhQH8A8crl3Kp+49Cl
-         U5skNpY08PrqYXEE2v8OaA1Jn+Vuo3/mbIW6AHipKGUGJvfzzGNTE3PPBzLWUjGzsc
-         DFbXh6Ud3SqsAfakTNFK+p4fne60FrJO+Na2Y8ZU=
-Date:   Wed, 13 Oct 2021 09:28:00 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     =?utf-8?B?546L5pOO?= <wangqing@vivo.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: =?utf-8?B?5Zue5aSNOiDlm57lpI06IFtQQVRD?= =?utf-8?Q?H=5D?= usb:
- replace snprintf in show functions with sysfs_emit
-Message-ID: <YWaKgF76P27KNiC6@kroah.com>
-References: <1634095668-4319-1-git-send-email-wangqing@vivo.com>
- <AA2A8gBxEnrQndzc*evdgarV.9.1634105950804.Hmail.wangqing@vivo.com>
- <SL2PR06MB3082C1AAF2A11871C10CDA53BDB79@SL2PR06MB3082.apcprd06.prod.outlook.com>
- <AGUA7ADTEv9Q*f-TXCLIpKpn.9.1634108876473.Hmail.wangqing@vivo.com>
- <SL2PR06MB3082F89D5AE9436928A934F6BDB79@SL2PR06MB3082.apcprd06.prod.outlook.com>
+        id S229490AbhJMHdy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 Oct 2021 03:33:54 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id E21A2A1A3D404;
+        Wed, 13 Oct 2021 09:31:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1634110309; bh=IX7gQisW5nRSScW1Wp0Z5pwdqBOc0GAS+cKm2HDpcPY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=X1HFBf83GFYthG+3sPZyDNcEqSPHLkrMYxfcFpYstV9Vx+wNbw2U2RCrsTlRWudFH
+         1GfCjzDC/5y19gtVnlVwVR5LfTxWJUX0RmXUp8gawxIVbL0kg2zdC8L/U+kCULUozy
+         HpVzLio7tNsTiGArFwy57WsD1Y4cSVcrIZT8mgmQ=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id KhDZs16cshsD; Wed, 13 Oct 2021 09:31:44 +0200 (CEST)
+Received: from [192.168.105.22] (ip28.insite.cz [81.0.237.28])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 38BECA1A3D403;
+        Wed, 13 Oct 2021 09:31:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1634110304; bh=IX7gQisW5nRSScW1Wp0Z5pwdqBOc0GAS+cKm2HDpcPY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=l4x1uM/kUspcUez+nwIcNcJjlrrvbI7Z+bssWOuHf5eC/NGe1TCLN+5srZCkbfPBG
+         MhhjOrH8eNJWbzqhn8Sv97JEfVHQgzrIEOW2bjbWFWhcYoz8h+AXeRF6fXwb4q7KCq
+         0UBDAkqzQIlIp6fZpN6FOWBaf/8SrQPR/PJTy0pY=
+Subject: Re: [PATCH 2/2] usb: gadget: u_audio: remove unnecessary array
+ declaration of snd_kcontrol_new
+To:     Yunhao Tian <t123yh.xyz@gmail.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        linux-usb@vger.kernel.org
+References: <20211012165314.338619-1-t123yh@outlook.com>
+ <20211012165314.338619-2-t123yh@outlook.com>
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+Message-ID: <fdf83233-be33-15de-051c-b3652ad63c12@ivitera.com>
+Date:   Wed, 13 Oct 2021 09:31:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <SL2PR06MB3082F89D5AE9436928A934F6BDB79@SL2PR06MB3082.apcprd06.prod.outlook.com>
+In-Reply-To: <20211012165314.338619-2-t123yh@outlook.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 07:20:25AM +0000, 王擎 wrote:
->  
-> >> >> On Tue, Oct 12, 2021 at 08:27:47PM -0700, Qing Wang wrote:
-> >> >> coccicheck complains about the use of snprintf() in sysfs show functions.
-> >> >> 
-> >> >> Fix the following coccicheck warning:
-> >> >> drivers/usb/core/sysfs.c:730:8-16: WARNING: use scnprintf or sprintf.
-> >> >> drivers/usb/core/sysfs.c:921:8-16: WARNING: use scnprintf or sprintf.
-> >> >> 
-> >> >> Use sysfs_emit instead of scnprintf or sprintf makes more sense.
-> >> >> 
-> >> >> Signed-off-by: Qing Wang <wangqing@vivo.com>
-> >> >> ---
-> >> >>  drivers/usb/core/sysfs.c | 4 ++--
-> >> >>  1 file changed, 2 insertions(+), 2 deletions(-)
-> >> >> 
-> >> >> diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
-> >> >> index fa2e49d..6387c0d 100644
-> >> >> --- a/drivers/usb/core/sysfs.c
-> >> >> +++ b/drivers/usb/core/sysfs.c
-> >> >> @@ -727,7 +727,7 @@ static ssize_t authorized_show(struct device *dev,
-> >> >>                               struct device_attribute *attr, char *buf)
-> >> >>  {
-> >> >>        struct usb_device *usb_dev = to_usb_device(dev);
-> >> >> -     return snprintf(buf, PAGE_SIZE, "%u\n", usb_dev->authorized);
-> >> >> +     return sysfs_emit(buf, "%u\n", usb_dev->authorized);
-> >> >>  }
-> >> >>  
-> >> >>  /*
-> >> >> @@ -918,7 +918,7 @@ static ssize_t authorized_default_show(struct device *dev,
-> >> >>        struct usb_hcd *hcd;
-> >> >>  
-> >> >>        hcd = bus_to_hcd(usb_bus);
-> >> >> -     return snprintf(buf, PAGE_SIZE, "%u\n", hcd->dev_policy);
-> >> >> +     return sysfs_emit(buf, "%u\n", hcd->dev_policy);
-> >> >>  }
-> >> >>  
-> >> >>  static ssize_t authorized_default_store(struct device *dev,
-> >> >> -- 
-> >> >> 2.7.4
-> >> >> 
-> >> > 
-> >> > If you are going to change this file, you should do this for all of the
-> >> > sysfs show functions in this file, not just 2 of them, right?  Please
-> >> > change this patch to do that.
-> >> >
-> >> > thanks,
-> >> > 
-> >> > greg k-h
-> >> 
-> >> Only these 2 snprintf need to be modified, other show functions
-> >> used sprintf do not need to modify.
-> > 
-> > I do not think you understand the change you are trying to make here.
-> > 
-> > Either the whole file should use the same api, or just leave it as-is as
-> > it obviously works properly today :)
-> > 
-> > thanks,
-> > 
-> > greg k-h
+
+Dne 12. 10. 21 v 18:53 Yunhao Tian napsal(a):
+> From: Yunhao Tian <t123yh.xyz@gmail.com>
 > 
-> snprintf() returns the length of the string, not the length actually written.
-> Here only correct this issue, as to whether it overflows should be 
-> guaranteed by the caller of sprintf().
+> Currently, an array is used to contain all snd_kcontrol_new objects
+> of the audio gadget. This is unnecessary and possibly prone to an
+> (unlikely happen) race condition between the assignment of name
+> and call of snd_ctl_new1 if two audio gadget is being set up simutaneously.
+> This patch removes the global snd_kcontrol_new array and initialize
+> individual snd_kcontrol_new object when it's being used.
+> 
+> Signed-off-by: Yunhao Tian <t123yh.xyz@gmail.com>
+> ---
+>   drivers/usb/gadget/function/u_audio.c | 65 +++++++++++----------------
+>   1 file changed, 25 insertions(+), 40 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+> index c5f39998c653..1f4226d75dd8 100644
+> --- a/drivers/usb/gadget/function/u_audio.c
+> +++ b/drivers/usb/gadget/function/u_audio.c
+> @@ -27,12 +27,6 @@
+>   #define PRD_SIZE_MAX	PAGE_SIZE
+>   #define MIN_PERIODS	4
+>   
+> -enum {
+> -	UAC_FBACK_CTRL,
+> -	UAC_MUTE_CTRL,
+> -	UAC_VOLUME_CTRL,
+> -};
+> -
+>   /* Runtime data params for one stream */
+>   struct uac_rtd_params {
+>   	struct snd_uac_chip *uac;	/* parent chip */
+> @@ -914,31 +908,6 @@ static int u_audio_volume_put(struct snd_kcontrol *kcontrol,
+>   	return change;
+>   }
+>   
+> -
+> -static struct snd_kcontrol_new u_audio_controls[]  = {
+> -	[UAC_FBACK_CTRL] {
+> -		.iface =        SNDRV_CTL_ELEM_IFACE_PCM,
+> -		.name =         "Capture Pitch 1000000",
+> -		.info =         u_audio_pitch_info,
+> -		.get =          u_audio_pitch_get,
+> -		.put =          u_audio_pitch_put,
+> -	},
+> -	[UAC_MUTE_CTRL] {
+> -		.iface =	SNDRV_CTL_ELEM_IFACE_MIXER,
+> -		.name =		"", /* will be filled later */
+> -		.info =		u_audio_mute_info,
+> -		.get =		u_audio_mute_get,
+> -		.put =		u_audio_mute_put,
+> -	},
+> -	[UAC_VOLUME_CTRL] {
+> -		.iface =	SNDRV_CTL_ELEM_IFACE_MIXER,
+> -		.name =		"", /* will be filled later */
+> -		.info =		u_audio_volume_info,
+> -		.get =		u_audio_volume_get,
+> -		.put =		u_audio_volume_put,
+> -	},
+> -};
 
-But for all of these, there is no overflow possible, that's not the
-issue here.
+Hi,
 
-As-is, this code works just fine.  If you really want to change it, as
-per the recommendation of some static checker, then do so for the whole
-file, to be unified and make sense overall.  Do not just blindly follow
-a static tool for no good reason :)
+Please is this patch necessary? My patch (a fixed version of which I 
+will submit today) defines another control and several other important 
+controls are on their way in a few patches. My current devel version has:
 
-thanks,
+enum {
+	UAC_FBACK_CTRL,
+	UAC_P_PITCH_CTRL,
+	UAC_MUTE_CTRL,
+	UAC_VOLUME_CTRL,
+	UAC_CAPTURE_RATE_CTRL,
+	UAC_PLAYBACK_RATE_CTRL,
+	UAC_CAPTURE_REQ_CTRL,
+	UAC_PLAYBACK_REQ_CTRL,
+};
 
-greg k-h
+I actually like the current method, IMO it keeps it quite organized.
+
+Anyway if you want to remove it, please can you wait for all the 
+important patches to land first?
+
+Thanks a lot for considering.
+
+Pavel.
