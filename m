@@ -2,126 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF7B42D1EA
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Oct 2021 07:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF56142D3D1
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Oct 2021 09:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbhJNFnN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Oct 2021 01:43:13 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:18644 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbhJNFnL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Oct 2021 01:43:11 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1634190067; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=9fdRm3w+EXS1CImmOMXTLhvEwCi0R+qogctHD7rq2Eg=; b=oX4pfoyYgAhcITjLJeftaCD1wmqGR4UEaxM9gzJC1UHwTpglWvEJN9Dnt4R1ZgiYGv7tLTx7
- 80g9c3jV1AVPHvhwoTW8yTa90xBEUGNKQ7rHB+FEoaIwXhu+GVmEWTh65EoJ4TyE1Rvje+UC
- EMzBhqfvyRdg+B4HlKW4YfZNfjw=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 6167c2f2f3e5b80f1fccee1a (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 14 Oct 2021 05:41:06
- GMT
-Sender: sanm=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 2EC6BC4361B; Thu, 14 Oct 2021 05:41:06 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [192.168.0.106] (unknown [124.123.178.93])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sanm)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 61060C4360D;
-        Thu, 14 Oct 2021 05:41:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 61060C4360D
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [PATCH] usb: dwc: host: add xhci_plat_priv quirk
- XHCI_SKIP_PHY_INIT
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ppratap@codeaurora.org,
-        pkondeti@codeaurora.org
-References: <1633946518-13906-1-git-send-email-sanm@codeaurora.org>
- <YWU6IZwm2T24ONW2@kroah.com>
-From:   Sandeep Maheswaram <sanm@codeaurora.org>
-Message-ID: <09477c8a-f242-202c-8ead-eebc4f1cdd7d@codeaurora.org>
-Date:   Thu, 14 Oct 2021 11:10:58 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230207AbhJNHil (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Oct 2021 03:38:41 -0400
+Received: from mail.foldedly.com ([212.237.10.209]:37960 "EHLO
+        mail.foldedly.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230137AbhJNHih (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Oct 2021 03:38:37 -0400
+Received: by mail.foldedly.com (Postfix, from userid 1001)
+        id 38663859D6; Thu, 14 Oct 2021 08:36:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=foldedly.com; s=mail;
+        t=1634196991; bh=LrnK0zvEt1kljd1mU4DOdzPOwDec9w8/ii89Wf2jAkc=;
+        h=Date:From:To:Subject:From;
+        b=K1chxu15SBEYWPRNL92K7eqt8WrU8vmVA9G7m3PTf680FK1UBJq2nz8PQOkcgOIDs
+         mRhypRB5ehBTIucqjbVI2KJtzNBHnzVHs3cZUalg3muXaxe/sKULJEbLHNbh/1yF7u
+         gt0sSt7Yr5oqffkFGLo05LGehWqtaylLFG7hv4OyHW4RrG9r3ACrCbOKGqEu7IhJ+I
+         tJOVxAwLyqo3zwMD/BozAauy6W9bP7yRtzm9U93J76vjEOB24TdQizRhi8NZviUknR
+         cdJs54kp9Jp8hX6hxNKP4PZwm3vw9qmJg2SUexOjJTe2grdoUGe/KtoDoLTdnGOSVM
+         zZODfw/75eA7A==
+Received: by mail.foldedly.com for <linux-usb@vger.kernel.org>; Thu, 14 Oct 2021 07:36:12 GMT
+Message-ID: <20211014074500-0.1.z.2avx.0.z1gzdj0e10@foldedly.com>
+Date:   Thu, 14 Oct 2021 07:36:12 GMT
+From:   "Nazario Davalos" <nazario.davalos@foldedly.com>
+To:     <linux-usb@vger.kernel.org>
+Subject: Servicio de la flota
+X-Mailer: mail.foldedly.com
 MIME-Version: 1.0
-In-Reply-To: <YWU6IZwm2T24ONW2@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Buenos d=C3=ADas:
 
-On 10/12/2021 1:02 PM, Greg Kroah-Hartman wrote:
-> On Mon, Oct 11, 2021 at 03:31:57PM +0530, Sandeep Maheswaram wrote:
->> dwc3 manages PHY by own DRD driver, so skip the management by
->> HCD core.
->> During runtime suspend phy was not getting suspend because
->> runtime_usage value is 2.
->>
->> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
->> ---
->>   drivers/usb/dwc3/host.c | 12 ++++++++++++
->>   1 file changed, 12 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
->> index f29a264..0921f05 100644
->> --- a/drivers/usb/dwc3/host.c
->> +++ b/drivers/usb/dwc3/host.c
->> @@ -11,6 +11,11 @@
->>   #include <linux/platform_device.h>
->>   
->>   #include "core.h"
->> +#include "../host/xhci-plat.h"
-> Why are you tying the dwc3 driver to the xhci driver?
->
-Can we add a  property usb-skip-phy-init  in drivers/usb/dwc3/host.c
+Le escribo para hablarle sobre una de las mejores herramientas GPS en el =
+mercado.
 
-props[prop_idx++] = PROPERTY_ENTRY_BOOL("usb-skip-phy-init");
+La herramienta, que me gustar=C3=ADa presentarle brevemente, dispone de m=
+uchas funciones =C3=BAtiles para su trabajo, que optimizan los procesos d=
+e transporte y le ayudan a realizar tareas de campo de manera m=C3=A1s ef=
+iciente.
 
-and set the quirk like this in xhci-plat.c
-
-if (device_property_read_bool(tmpdev, "usb-skip-phy-init"))
-             xhci->quirks |= XHCI_SKIP_PHY_INIT;
-
-as below
-
-if (device_property_read_bool(tmpdev, "usb2-lpm-disable"))
-             xhci->quirks |= XHCI_HW_LPM_DISABLE;
-
-  if (device_property_read_bool(tmpdev, "usb3-lpm-capable"))
-             xhci->quirks |= XHCI_LPM_SUPPORT;
+=C2=BFQuiere conocer los detalles?
 
 
-
->> +
->> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
->> +	.quirks = XHCI_SKIP_PHY_INIT,
-> If these quirks are now "global", they should go into a
-> include/linux/usb/ .h file, right?
->
-> thanks,
->
-> greg k-h
+Atentamente,
+Nazario Davalos
