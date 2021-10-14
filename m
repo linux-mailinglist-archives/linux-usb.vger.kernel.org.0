@@ -2,96 +2,205 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 042DF42D062
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Oct 2021 04:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 063C242D0D8
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Oct 2021 05:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbhJNCaH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Oct 2021 22:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbhJNCaG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Oct 2021 22:30:06 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9935BC061570;
-        Wed, 13 Oct 2021 19:28:02 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id v2-20020a05683018c200b0054e3acddd91so6293573ote.8;
-        Wed, 13 Oct 2021 19:28:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=SdQZv5bEnEI48twijwR7O340qVLNFYgejTRMSJOO360=;
-        b=pQXImiD+ZXm5SHr8PuSZ7IkWwV18+r678yGGUv5Xx4O28Dhl5OADaMjIhC1O6xAaRD
-         A/5h9jp2Dj3Nmn1sYA5iuuE+vURhxA5uLOcsabkWknGphcn07mArmQ9e3ItzKgbKFzW1
-         wJvuHuw2NfjQscWeMigfYiBdC8ryiFmzyi0YQVQtYmYBqNMPAkv9szSklKdsHCBOKtlF
-         z8cTlOj2O+5+2wRZaD3yIgmpieKbZNMyqoMAFkB0sKQP5UlTm97cys4vCOF3CXU3sG45
-         c5cPflI6AuLNcDWuoGARVG4zFK00pjKi39GxMyGFcjfjyZn+6nNmPh7T62gjp22EUqva
-         Q+QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SdQZv5bEnEI48twijwR7O340qVLNFYgejTRMSJOO360=;
-        b=bjU+Z25Haz120ZzMWwFLbANMPCamVEF0sv++3oLEMcTPG42YbTwqpZYaMG7X82+qK5
-         Zy/sRpr79oNWWzXEBhOOAMndvcR23zsW9uc/rGEX7o+lWfNbm2qPVTfbriO6wQwlyKAE
-         n8DWtSmG6bW3nPoVvNlVKus+J9fJ7AG7xK6y9I5k6nUqGJ3mJIef2nWAYru7k8LQjg/4
-         K5KVR36eFL/O3s0pm8uO9hQPmcbuS15zYolYBQ4Ia7gtVX60Zu/h0qG2janr9D98Mmgc
-         OlMPHJxbRm6c7MYKFxEO10qSNU2f4Ea7bLzysc1KfgMaTbpn0nqSilvdbWdIt45uHEfo
-         H+rw==
-X-Gm-Message-State: AOAM531YyFM00mFsIPU6FT9KeLmePynb/V8CaCXvpmYPHt98LWTXWExI
-        40wSyXOUEZfcL1EFzs3bDe4=
-X-Google-Smtp-Source: ABdhPJxR9RRUOqxtGe1Q3/Jv7hcdmd+fSkQgHYNEdnYrYBHm0kEFWtEbMs8QhO4HDjwWSnJwp52AXg==
-X-Received: by 2002:a9d:7257:: with SMTP id a23mr168692otk.311.1634178481989;
-        Wed, 13 Oct 2021 19:28:01 -0700 (PDT)
-Received: from ?IPV6:2600:1700:dfe0:49f0:c875:f7ef:73a9:7098? ([2600:1700:dfe0:49f0:c875:f7ef:73a9:7098])
-        by smtp.gmail.com with ESMTPSA id bf3sm203868oib.34.2021.10.13.19.27.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Oct 2021 19:28:01 -0700 (PDT)
-Message-ID: <8cd71dd4-5889-ed8c-1ef2-5baf63645f6c@gmail.com>
-Date:   Wed, 13 Oct 2021 19:27:59 -0700
+        id S230059AbhJNDQ7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Oct 2021 23:16:59 -0400
+Received: from mga02.intel.com ([134.134.136.20]:50635 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230023AbhJNDQ4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 Oct 2021 23:16:56 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10136"; a="214746147"
+X-IronPort-AV: E=Sophos;i="5.85,371,1624345200"; 
+   d="scan'208";a="214746147"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2021 20:14:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,371,1624345200"; 
+   d="scan'208";a="659795844"
+Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 13 Oct 2021 20:14:50 -0700
+Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1marCj-0005Tq-U8; Thu, 14 Oct 2021 03:14:49 +0000
+Date:   Thu, 14 Oct 2021 11:14:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ c2115b2b16421d93d4993f3fe4c520e91d6fe801
+Message-ID: <6167a0a1.S6OtonuHG02dfo0Y%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH net-next 4/7] ethernet: manually convert
- memcpy(dev_addr,..., sizeof(addr))
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc:     netdev@vger.kernel.org, nicolas.ferre@microchip.com,
-        claudiu.beznea@microchip.com, petkan@nucleusys.com,
-        christophe.jaillet@wanadoo.fr, zhangchangzhong@huawei.com,
-        linux-usb@vger.kernel.org
-References: <20211013204435.322561-1-kuba@kernel.org>
- <20211013204435.322561-5-kuba@kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20211013204435.322561-5-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: c2115b2b16421d93d4993f3fe4c520e91d6fe801  usb: musb: dsps: Fix the probe error path
 
+elapsed time: 898m
 
-On 10/13/2021 1:44 PM, Jakub Kicinski wrote:
-> A handful of drivers use sizeof(addr) for the size of
-> the address, after manually confirming the size is
-> indeed 6 convert them to eth_hw_addr_set().
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: nicolas.ferre@microchip.com
-> CC: claudiu.beznea@microchip.com
-> CC: f.fainelli@gmail.com
-> CC: petkan@nucleusys.com
-> CC: christophe.jaillet@wanadoo.fr
-> CC: zhangchangzhong@huawei.com
-> CC: linux-usb@vger.kernel.org
-> ---
+configs tested: 145
+configs skipped: 4
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->   drivers/net/ethernet/ti/cpmac.c          | 2 +-
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211013
+sparc                            allyesconfig
+arm                  colibri_pxa300_defconfig
+powerpc                       maple_defconfig
+sh                 kfr2r09-romimage_defconfig
+powerpc                 mpc8313_rdb_defconfig
+sh                              ul2_defconfig
+arm                            mmp2_defconfig
+powerpc                  storcenter_defconfig
+arm                         lpc32xx_defconfig
+um                               alldefconfig
+um                                  defconfig
+arm                        multi_v7_defconfig
+powerpc                    sam440ep_defconfig
+h8300                     edosk2674_defconfig
+arc                 nsimosci_hs_smp_defconfig
+arm                             ezx_defconfig
+arm                       omap2plus_defconfig
+mips                        bcm47xx_defconfig
+arm                        multi_v5_defconfig
+sh                             shx3_defconfig
+arm                      jornada720_defconfig
+powerpc                  mpc866_ads_defconfig
+powerpc                      mgcoge_defconfig
+sh                           se7724_defconfig
+powerpc                 mpc832x_mds_defconfig
+mips                  decstation_64_defconfig
+arm                     eseries_pxa_defconfig
+arc                      axs103_smp_defconfig
+arm                        mvebu_v7_defconfig
+sh                     magicpanelr2_defconfig
+arm                         nhk8815_defconfig
+m68k                       m5208evb_defconfig
+arm                        vexpress_defconfig
+xtensa                       common_defconfig
+sh                            migor_defconfig
+powerpc64                        alldefconfig
+mips                           xway_defconfig
+ia64                          tiger_defconfig
+mips                        jmr3927_defconfig
+powerpc                 mpc837x_mds_defconfig
+xtensa                    xip_kc705_defconfig
+powerpc                     tqm5200_defconfig
+powerpc                        icon_defconfig
+arm                         s3c6400_defconfig
+powerpc                    klondike_defconfig
+arm                        magician_defconfig
+mips                           ip32_defconfig
+powerpc                      tqm8xx_defconfig
+mips                     cu1830-neo_defconfig
+mips                     loongson1b_defconfig
+openrisc                    or1ksim_defconfig
+m68k                       m5475evb_defconfig
+mips                        omega2p_defconfig
+m68k                        mvme147_defconfig
+m68k                           sun3_defconfig
+nios2                            alldefconfig
+riscv                    nommu_virt_defconfig
+mips                       bmips_be_defconfig
+mips                        bcm63xx_defconfig
+arm                  randconfig-c002-20211013
+x86_64               randconfig-c001-20211013
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nds32                             allnoconfig
+arc                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+s390                                defconfig
+parisc                           allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                             allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a015-20211013
+x86_64               randconfig-a012-20211013
+x86_64               randconfig-a016-20211013
+x86_64               randconfig-a014-20211013
+x86_64               randconfig-a013-20211013
+x86_64               randconfig-a011-20211013
+i386                 randconfig-a016-20211013
+i386                 randconfig-a014-20211013
+i386                 randconfig-a011-20211013
+i386                 randconfig-a015-20211013
+i386                 randconfig-a012-20211013
+i386                 randconfig-a013-20211013
+arc                  randconfig-r043-20211013
+s390                 randconfig-r044-20211013
+riscv                randconfig-r042-20211013
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+clang tested configs:
+arm                  randconfig-c002-20211013
+mips                 randconfig-c004-20211013
+i386                 randconfig-c001-20211013
+s390                 randconfig-c005-20211013
+x86_64               randconfig-c007-20211013
+powerpc              randconfig-c003-20211013
+riscv                randconfig-c006-20211013
+x86_64               randconfig-a004-20211013
+x86_64               randconfig-a006-20211013
+x86_64               randconfig-a001-20211013
+x86_64               randconfig-a005-20211013
+x86_64               randconfig-a002-20211013
+x86_64               randconfig-a003-20211013
+i386                 randconfig-a001-20211013
+i386                 randconfig-a003-20211013
+i386                 randconfig-a004-20211013
+i386                 randconfig-a005-20211013
+i386                 randconfig-a002-20211013
+i386                 randconfig-a006-20211013
+hexagon              randconfig-r041-20211013
+hexagon              randconfig-r045-20211013
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
