@@ -2,65 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F2942D4D3
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Oct 2021 10:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 428DD42D49A
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Oct 2021 10:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbhJNI3U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Oct 2021 04:29:20 -0400
-Received: from lan.nucleusys.com ([92.247.61.126]:56432 "EHLO
-        zzt.nucleusys.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230010AbhJNI3T (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Oct 2021 04:29:19 -0400
-X-Greylist: delayed 2620 seconds by postgrey-1.27 at vger.kernel.org; Thu, 14 Oct 2021 04:29:18 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=nucleusys.com; s=x; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=G8tLTOnFkmRAM+oUj3dNWt6f4vGVVLmMCR/9dAWETRs=; b=D0sh/Puk5uVfIR23VQ7pN7qhbK
-        f5ktTCor+jo89CFslyZoicRLwbjQs001DFWdQ9HgljO8dhXe/5RG2eS3AGFBeAAwEkU5jGyy+iUv8
-        tyDQ3DRLbmVNofmiZ2Grm33BCuzjusFCPhnQD4QBhOaArA+LsmnW2YPfxv3RAQr0OIKs=;
-Received: from rtr.k.g ([192.168.234.1] helo=p310.k.g)
-        by zzt.nucleusys.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <petkan@nucleusys.com>)
-        id 1mavOX-001Xij-26; Thu, 14 Oct 2021 10:43:17 +0300
-Date:   Thu, 14 Oct 2021 10:43:16 +0300
-From:   Petko Manolov <petkan@nucleusys.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
-        f.fainelli@gmail.com, christophe.jaillet@wanadoo.fr,
-        zhangchangzhong@huawei.com, linux-usb@vger.kernel.org
+        id S230082AbhJNIQv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Oct 2021 04:16:51 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:60431 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229551AbhJNIQs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Oct 2021 04:16:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1634199284; x=1665735284;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=2Q6yaUU9qlb3WZoZtGPuaVZXBC1cFKtpGHsUGf9FZr8=;
+  b=A9fHbjpUvn1Qs03mLRO5MinIqvWFHXoMx9m4X5VxA2MrwlrSwJZ3A7oa
+   lvHINFRp+bEU9TxeGHi6rdiDj2aecRHMKbwyK8BRH+/sidr/W271ppSA2
+   3rBYMHeRQj7EqBqNALJdXFQMgLatLzDD0QgVEvyyENJbzX90ZIG4jbsJ/
+   dIu44nWQhj9BJg60n2oexHxOJ4zYu/ZlgNRwq4luCXUiZZhw1GLwolyYq
+   4XubzTPYFmNtZ/AimfPE2mvGKLfk5/WdaW2rHg9t4mzDS2a5M/in55xLM
+   NMUBVd8vlccvtpoJyxV7B6NaoSJ83voOE38dZLogZJIQbNP9CzXAyotuC
+   Q==;
+IronPort-SDR: Xu1iAr4SBtsG5mthR3lwDh4e0vRa4rcH7tbNgf8PI3EYuWhiiXtuIKn2apCnCxo33CSyg8x6kK
+ hJ14QGc5w1TvfGuywE321RsUYJBVwqWJgiXFEcFwXN7mvpucd7ZwPd/QMQ2iErvyRFtz3DcDdB
+ QG5XqhnswomVeZsr7yuPr+QErYYi58cNxjdkge9RW5lLzRuDTn+0+a3NxfiUEQNY1+ULoebaBf
+ rww9ptBLAZ+Ebgk8iS/QYyEuVQslO4QVL2qcgfPcynOpmRVAaOioy6rqzXiWQqA3EOU8aeZVeo
+ 11omhRztmRK9TCcB4Ytc9Wos
+X-IronPort-AV: E=Sophos;i="5.85,372,1624345200"; 
+   d="scan'208";a="140256199"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Oct 2021 01:14:43 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 14 Oct 2021 01:14:44 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Thu, 14 Oct 2021 01:14:42 -0700
 Subject: Re: [PATCH net-next 4/7] ethernet: manually convert
  memcpy(dev_addr,..., sizeof(addr))
-Message-ID: <YWfflLK+PQg7upLU@p310.k.g>
+To:     Jakub Kicinski <kuba@kernel.org>, <davem@davemloft.net>
+CC:     <netdev@vger.kernel.org>, <claudiu.beznea@microchip.com>,
+        <f.fainelli@gmail.com>, <petkan@nucleusys.com>,
+        <christophe.jaillet@wanadoo.fr>, <zhangchangzhong@huawei.com>,
+        <linux-usb@vger.kernel.org>
 References: <20211013204435.322561-1-kuba@kernel.org>
  <20211013204435.322561-5-kuba@kernel.org>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+Message-ID: <669ce977-1181-9522-2503-746a0499d383@microchip.com>
+Date:   Thu, 14 Oct 2021 10:14:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <20211013204435.322561-5-kuba@kernel.org>
-X-Spam_score: -1.0
-X-Spam_bar: -
-X-Spam_report: Spam detection software, running on the system "zzt.nucleusys.com",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- @@CONTACT_ADDRESS@@ for details.
- Content preview:  On 21-10-13 13:44:32, Jakub Kicinski wrote: > A handful of
-    drivers use sizeof(addr) for the size of > the address, after manually confirming
-    the size is > indeed 6 convert them to eth_hw_addr_set(). > [...] 
- Content analysis details:   (-1.0 points, 5.0 required)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-10-13 13:44:32, Jakub Kicinski wrote:
+On 13/10/2021 at 22:44, Jakub Kicinski wrote:
 > A handful of drivers use sizeof(addr) for the size of
 > the address, after manually confirming the size is
 > indeed 6 convert them to eth_hw_addr_set().
@@ -68,6 +72,9 @@ On 21-10-13 13:44:32, Jakub Kicinski wrote:
 > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 > ---
 > CC: nicolas.ferre@microchip.com
+
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+
 > CC: claudiu.beznea@microchip.com
 > CC: f.fainelli@gmail.com
 > CC: petkan@nucleusys.com
@@ -75,7 +82,82 @@ On 21-10-13 13:44:32, Jakub Kicinski wrote:
 > CC: zhangchangzhong@huawei.com
 > CC: linux-usb@vger.kernel.org
 > ---
+>   drivers/net/ethernet/cadence/macb_main.c | 2 +-
+>   drivers/net/ethernet/dnet.c              | 2 +-
+>   drivers/net/ethernet/pasemi/pasemi_mac.c | 2 +-
+>   drivers/net/ethernet/ti/cpmac.c          | 2 +-
+>   drivers/net/usb/pegasus.c                | 2 +-
+>   5 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
+> index 683f14665c2c..029dea2873e3 100644
+> --- a/drivers/net/ethernet/cadence/macb_main.c
+> +++ b/drivers/net/ethernet/cadence/macb_main.c
+> @@ -313,7 +313,7 @@ static void macb_get_hwaddr(struct macb *bp)
+>                  addr[5] = (top >> 8) & 0xff;
+> 
+>                  if (is_valid_ether_addr(addr)) {
+> -                       memcpy(bp->dev->dev_addr, addr, sizeof(addr));
+> +                       eth_hw_addr_set(bp->dev, addr);
+>                          return;
+>                  }
+>          }
+> diff --git a/drivers/net/ethernet/dnet.c b/drivers/net/ethernet/dnet.c
+> index 3ed21ba4eb99..92462ed87bc4 100644
+> --- a/drivers/net/ethernet/dnet.c
+> +++ b/drivers/net/ethernet/dnet.c
+> @@ -93,7 +93,7 @@ static void dnet_get_hwaddr(struct dnet *bp)
+>          *((__be16 *)(addr + 4)) = cpu_to_be16(tmp);
+> 
+>          if (is_valid_ether_addr(addr))
+> -               memcpy(bp->dev->dev_addr, addr, sizeof(addr));
+> +               eth_hw_addr_set(bp->dev, addr);
+>   }
+> 
+>   static int dnet_mdio_read(struct mii_bus *bus, int mii_id, int regnum)
+> diff --git a/drivers/net/ethernet/pasemi/pasemi_mac.c b/drivers/net/ethernet/pasemi/pasemi_mac.c
+> index 5512e43bafc1..f0ace3a0e85c 100644
+> --- a/drivers/net/ethernet/pasemi/pasemi_mac.c
+> +++ b/drivers/net/ethernet/pasemi/pasemi_mac.c
+> @@ -1722,7 +1722,7 @@ pasemi_mac_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+>                  err = -ENODEV;
+>                  goto out;
+>          }
+> -       memcpy(dev->dev_addr, mac->mac_addr, sizeof(mac->mac_addr));
+> +       eth_hw_addr_set(dev, mac->mac_addr);
+> 
+>          ret = mac_to_intf(mac);
+>          if (ret < 0) {
+> diff --git a/drivers/net/ethernet/ti/cpmac.c b/drivers/net/ethernet/ti/cpmac.c
+> index 02d4e51f7306..7449436fc87c 100644
+> --- a/drivers/net/ethernet/ti/cpmac.c
+> +++ b/drivers/net/ethernet/ti/cpmac.c
+> @@ -1112,7 +1112,7 @@ static int cpmac_probe(struct platform_device *pdev)
+>          priv->dev = dev;
+>          priv->ring_size = 64;
+>          priv->msg_enable = netif_msg_init(debug_level, 0xff);
+> -       memcpy(dev->dev_addr, pdata->dev_addr, sizeof(pdata->dev_addr));
+> +       eth_hw_addr_set(dev, pdata->dev_addr);
+> 
+>          snprintf(priv->phy_name, MII_BUS_ID_SIZE, PHY_ID_FMT,
+>                                                  mdio_bus_id, phy_id);
+> diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
+> index 6a92a3fef75e..c4cd40b090fd 100644
+> --- a/drivers/net/usb/pegasus.c
+> +++ b/drivers/net/usb/pegasus.c
+> @@ -357,7 +357,7 @@ static void set_ethernet_addr(pegasus_t *pegasus)
+>                          goto err;
+>          }
+> 
+> -       memcpy(pegasus->net->dev_addr, node_id, sizeof(node_id));
+> +       eth_hw_addr_set(pegasus->net, node_id);
+> 
+>          return;
+>   err:
+> --
+> 2.31.1
+> 
 
->  drivers/net/usb/pegasus.c                | 2 +-
 
-Acked-by: Petko Manolov <petkan@nucleusys.com>
+-- 
+Nicolas Ferre
