@@ -2,162 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 428DD42D49A
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Oct 2021 10:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C58D42D78C
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Oct 2021 12:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbhJNIQv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Oct 2021 04:16:51 -0400
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:60431 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbhJNIQs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Oct 2021 04:16:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1634199284; x=1665735284;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=2Q6yaUU9qlb3WZoZtGPuaVZXBC1cFKtpGHsUGf9FZr8=;
-  b=A9fHbjpUvn1Qs03mLRO5MinIqvWFHXoMx9m4X5VxA2MrwlrSwJZ3A7oa
-   lvHINFRp+bEU9TxeGHi6rdiDj2aecRHMKbwyK8BRH+/sidr/W271ppSA2
-   3rBYMHeRQj7EqBqNALJdXFQMgLatLzDD0QgVEvyyENJbzX90ZIG4jbsJ/
-   dIu44nWQhj9BJg60n2oexHxOJ4zYu/ZlgNRwq4luCXUiZZhw1GLwolyYq
-   4XubzTPYFmNtZ/AimfPE2mvGKLfk5/WdaW2rHg9t4mzDS2a5M/in55xLM
-   NMUBVd8vlccvtpoJyxV7B6NaoSJ83voOE38dZLogZJIQbNP9CzXAyotuC
-   Q==;
-IronPort-SDR: Xu1iAr4SBtsG5mthR3lwDh4e0vRa4rcH7tbNgf8PI3EYuWhiiXtuIKn2apCnCxo33CSyg8x6kK
- hJ14QGc5w1TvfGuywE321RsUYJBVwqWJgiXFEcFwXN7mvpucd7ZwPd/QMQ2iErvyRFtz3DcDdB
- QG5XqhnswomVeZsr7yuPr+QErYYi58cNxjdkge9RW5lLzRuDTn+0+a3NxfiUEQNY1+ULoebaBf
- rww9ptBLAZ+Ebgk8iS/QYyEuVQslO4QVL2qcgfPcynOpmRVAaOioy6rqzXiWQqA3EOU8aeZVeo
- 11omhRztmRK9TCcB4Ytc9Wos
-X-IronPort-AV: E=Sophos;i="5.85,372,1624345200"; 
-   d="scan'208";a="140256199"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Oct 2021 01:14:43 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 14 Oct 2021 01:14:44 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
- Transport; Thu, 14 Oct 2021 01:14:42 -0700
-Subject: Re: [PATCH net-next 4/7] ethernet: manually convert
- memcpy(dev_addr,..., sizeof(addr))
-To:     Jakub Kicinski <kuba@kernel.org>, <davem@davemloft.net>
-CC:     <netdev@vger.kernel.org>, <claudiu.beznea@microchip.com>,
-        <f.fainelli@gmail.com>, <petkan@nucleusys.com>,
-        <christophe.jaillet@wanadoo.fr>, <zhangchangzhong@huawei.com>,
-        <linux-usb@vger.kernel.org>
-References: <20211013204435.322561-1-kuba@kernel.org>
- <20211013204435.322561-5-kuba@kernel.org>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-Message-ID: <669ce977-1181-9522-2503-746a0499d383@microchip.com>
-Date:   Thu, 14 Oct 2021 10:14:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230168AbhJNK6f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Oct 2021 06:58:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48258 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230156AbhJNK6d (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 Oct 2021 06:58:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AE02E60FE8;
+        Thu, 14 Oct 2021 10:56:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1634208989;
+        bh=svkZNfmZDLaCAg/uXDH6WDMRZjw0ZyWTVBHp5MJyEv4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tGXBlAd3OlEe/2no43GrsfIu3GZ1ndi1L5ekIpNxLPdYgRR1ZyM6366fha78tymtc
+         LrTlVc+UyxLrVU8IEjtxBubiMdbb4nTBCE4Hn5J0ciMcQhoGmEK8u4DGGsniXkrVOQ
+         7OWAvZYUatHlm6KqLtiyLH3S94BFd2jqsSfssqu0=
+Date:   Thu, 14 Oct 2021 12:56:26 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: usb-audio: allow -EPIPE errors for some v2 messages
+Message-ID: <YWgM2jI94fZLfP09@kroah.com>
+References: <YWLbEdHUE3k/i0fe@kroah.com>
+ <s5hily46316.wl-tiwai@suse.de>
+ <YWRYD7fphcaWKEOG@kroah.com>
+ <s5h7dej4kbe.wl-tiwai@suse.de>
+ <YWRy+UoG1YHcQ7UM@kroah.com>
+ <s5ho87u3dcb.wl-tiwai@suse.de>
+ <YWWCiLE6id43uJjp@kroah.com>
+ <s5hsfx61imj.wl-tiwai@suse.de>
 MIME-Version: 1.0
-In-Reply-To: <20211013204435.322561-5-kuba@kernel.org>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <s5hsfx61imj.wl-tiwai@suse.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 13/10/2021 at 22:44, Jakub Kicinski wrote:
-> A handful of drivers use sizeof(addr) for the size of
-> the address, after manually confirming the size is
-> indeed 6 convert them to eth_hw_addr_set().
+On Tue, Oct 12, 2021 at 03:24:04PM +0200, Takashi Iwai wrote:
+> On Tue, 12 Oct 2021 14:41:44 +0200,
+> Greg Kroah-Hartman wrote:
+> > 
+> > On Tue, Oct 12, 2021 at 09:35:16AM +0200, Takashi Iwai wrote:
+> > > On Mon, 11 Oct 2021 19:23:05 +0200,
+> > > Greg Kroah-Hartman wrote:
+> > > > 
+> > > > On Mon, Oct 11, 2021 at 06:07:01PM +0200, Takashi Iwai wrote:
+> > > > > Could you also post the contents of /proc/asound/card*/usbmixer (only
+> > > > > for the corresponding device), too?
+> > > > 
+> > > > Sure, here it is:
+> > > > 
+> > > > USB Mixer: usb_id=0x30be0101, ctrlif=0, ctlerr=0
+> > > > Card: Schiit Audio Schiit Hel at usb-0000:47:00.1-2.2, high speed
+> > > >   Unit: 5
+> > > >     Control: name="Mic - Input Jack", index=0
+> > > >     Info: id=5, control=2, cmask=0x0, channels=1, type="BOOLEAN"
+> > > >     Volume: min=0, max=1, dBmin=0, dBmax=0
+> > > >   Unit: 7
+> > > >     Control: name="Speaker - Output Jack", index=0
+> > > >     Info: id=7, control=2, cmask=0x0, channels=1, type="BOOLEAN"
+> > > >     Volume: min=0, max=1, dBmin=0, dBmax=0
+> > > >   Unit: 13
+> > > >     Control: name="PCM Playback Switch", index=0
+> > > >     Info: id=13, control=1, cmask=0x0, channels=1, type="INV_BOOLEAN"
+> > > >     Volume: min=0, max=1, dBmin=0, dBmax=0
+> > > >   Unit: 17
+> > > >     Control: name="Mic Capture Switch", index=0
+> > > >     Info: id=17, control=1, cmask=0x0, channels=1, type="INV_BOOLEAN"
+> > > >     Volume: min=0, max=1, dBmin=0, dBmax=0
+> > > >   Unit: 18
+> > > >     Control: name="Clock Source 18 Validity", index=0
+> > > >     Info: id=18, control=2, cmask=0x0, channels=1, type="BOOLEAN"
+> > > >     Volume: min=0, max=1, dBmin=0, dBmax=0
+> > > >   Unit: 22
+> > > >     Control: name="Clock Source 22 Validity", index=0
+> > > >     Info: id=22, control=2, cmask=0x0, channels=1, type="BOOLEAN"
+> > > >     Volume: min=0, max=1, dBmin=0, dBmax=0
+> > > 
+> > > Hm, I expected more exotic control that failed, but it was Mic Capture
+> > > Switch, which should be treated normally.
+> > > 
+> > > Could you try the patch below?  This will still show other warning
+> > > messages, but it'll forcibly initialize the mixer elements at probe
+> > > time, and the rest should work.
+> > > 
+> > > Once after it's confirmed to work, we may shut up the device warnings
+> > > with a quirk.
+> > 
+> > Only one warning message shows up, here's the dmesg with this patch
+> > applied:
+> > 
+> > 
+> > [Oct12 14:39] usb 7-2.2: new high-speed USB device number 10 using xhci_hcd
+> > [  +0.123157] usb 7-2.2: New USB device found, idVendor=30be, idProduct=0101, bcdDevice= 1.02
+> > [  +0.000009] usb 7-2.2: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+> > [  +0.000003] usb 7-2.2: Product: Schiit Hel
+> > [  +0.000002] usb 7-2.2: Manufacturer: Schiit Audio
+> > [  +0.339785] usb 7-2.2: 17:0: failed to get current value for ch 0 (-32)
+> > [  +0.020373] input: Schiit Audio Schiit Hel as /devices/pci0000:40/0000:40:01.1/0000:41:00.0/0000:42:08.0/0000:47:00.1/usb7/7-2/7-2.2/7-2.2:1.3/0003:30BE:0101.000B/input/input24
+> > [  +0.056868] hid-generic 0003:30BE:0101.000B: input,hidraw6: USB HID v1.00 Device [Schiit Audio Schiit Hel] on usb-0000:47:00.1-2.2/input3
 > 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: nicolas.ferre@microchip.com
+> OK, then the problem is only about this unit and about the master
+> channel.
+> 
+> > I don't see a "mic capture switch" on this device, but maybe it triggers
+> > when I plug a mic into the microphone port, which is currently empty?
+> 
+> This should be persistent and visible; try to run "amixer -c1" (or the
+> different card index for the device).
+> 
+> So far, so good.  The only remaining piece is how this -EPIPE error
+> comes up.  Is this a protocol stall error or such?  Would it be
+> avoided by adding the delay like done for some devices?
+> 
+> With the 5.15-rc kernel, you can pass quirk_flags option to
+> snd-usb-audio module for applying known quirks.
+> e.g. quirk_flags=0x100 will set the 1msec delay at each control
+> message.  Please check whether it makes any difference.
+> The option is an integer array for multiple devices, so if you have
+> multiple USB-audio devices, put at the appropriate position in the
+> array (e.g. quirk_flags=,,0x100 for the 3rd slot).
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+This quirk did not work.  Well, it caused the error to show up after a
+delay, but the error is still there.
 
-> CC: claudiu.beznea@microchip.com
-> CC: f.fainelli@gmail.com
-> CC: petkan@nucleusys.com
-> CC: christophe.jaillet@wanadoo.fr
-> CC: zhangchangzhong@huawei.com
-> CC: linux-usb@vger.kernel.org
-> ---
->   drivers/net/ethernet/cadence/macb_main.c | 2 +-
->   drivers/net/ethernet/dnet.c              | 2 +-
->   drivers/net/ethernet/pasemi/pasemi_mac.c | 2 +-
->   drivers/net/ethernet/ti/cpmac.c          | 2 +-
->   drivers/net/usb/pegasus.c                | 2 +-
->   5 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-> index 683f14665c2c..029dea2873e3 100644
-> --- a/drivers/net/ethernet/cadence/macb_main.c
-> +++ b/drivers/net/ethernet/cadence/macb_main.c
-> @@ -313,7 +313,7 @@ static void macb_get_hwaddr(struct macb *bp)
->                  addr[5] = (top >> 8) & 0xff;
-> 
->                  if (is_valid_ether_addr(addr)) {
-> -                       memcpy(bp->dev->dev_addr, addr, sizeof(addr));
-> +                       eth_hw_addr_set(bp->dev, addr);
->                          return;
->                  }
->          }
-> diff --git a/drivers/net/ethernet/dnet.c b/drivers/net/ethernet/dnet.c
-> index 3ed21ba4eb99..92462ed87bc4 100644
-> --- a/drivers/net/ethernet/dnet.c
-> +++ b/drivers/net/ethernet/dnet.c
-> @@ -93,7 +93,7 @@ static void dnet_get_hwaddr(struct dnet *bp)
->          *((__be16 *)(addr + 4)) = cpu_to_be16(tmp);
-> 
->          if (is_valid_ether_addr(addr))
-> -               memcpy(bp->dev->dev_addr, addr, sizeof(addr));
-> +               eth_hw_addr_set(bp->dev, addr);
->   }
-> 
->   static int dnet_mdio_read(struct mii_bus *bus, int mii_id, int regnum)
-> diff --git a/drivers/net/ethernet/pasemi/pasemi_mac.c b/drivers/net/ethernet/pasemi/pasemi_mac.c
-> index 5512e43bafc1..f0ace3a0e85c 100644
-> --- a/drivers/net/ethernet/pasemi/pasemi_mac.c
-> +++ b/drivers/net/ethernet/pasemi/pasemi_mac.c
-> @@ -1722,7 +1722,7 @@ pasemi_mac_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->                  err = -ENODEV;
->                  goto out;
->          }
-> -       memcpy(dev->dev_addr, mac->mac_addr, sizeof(mac->mac_addr));
-> +       eth_hw_addr_set(dev, mac->mac_addr);
-> 
->          ret = mac_to_intf(mac);
->          if (ret < 0) {
-> diff --git a/drivers/net/ethernet/ti/cpmac.c b/drivers/net/ethernet/ti/cpmac.c
-> index 02d4e51f7306..7449436fc87c 100644
-> --- a/drivers/net/ethernet/ti/cpmac.c
-> +++ b/drivers/net/ethernet/ti/cpmac.c
-> @@ -1112,7 +1112,7 @@ static int cpmac_probe(struct platform_device *pdev)
->          priv->dev = dev;
->          priv->ring_size = 64;
->          priv->msg_enable = netif_msg_init(debug_level, 0xff);
-> -       memcpy(dev->dev_addr, pdata->dev_addr, sizeof(pdata->dev_addr));
-> +       eth_hw_addr_set(dev, pdata->dev_addr);
-> 
->          snprintf(priv->phy_name, MII_BUS_ID_SIZE, PHY_ID_FMT,
->                                                  mdio_bus_id, phy_id);
-> diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
-> index 6a92a3fef75e..c4cd40b090fd 100644
-> --- a/drivers/net/usb/pegasus.c
-> +++ b/drivers/net/usb/pegasus.c
-> @@ -357,7 +357,7 @@ static void set_ethernet_addr(pegasus_t *pegasus)
->                          goto err;
->          }
-> 
-> -       memcpy(pegasus->net->dev_addr, node_id, sizeof(node_id));
-> +       eth_hw_addr_set(pegasus->net, node_id);
-> 
->          return;
->   err:
-> --
-> 2.31.1
-> 
+> The quirk bit 0x4000 will shut up the control errors.  If the above
+> doesn't fix the warning and the device is working more or less, set
+> this quirk to shut up the warning.  It can be set statically in the
+> table at the end in sound/usb/quirks.c.
 
+This quirk did work in that the error messages are still in the kernel
+log, but the device seems to work properly now.
 
--- 
-Nicolas Ferre
+Let me send a patch that adds this device to the quirk table.
+
+thanks for your help,
+
+greg k-h
