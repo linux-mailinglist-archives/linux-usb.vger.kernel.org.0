@@ -2,88 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E02942CCA8
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Oct 2021 23:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA0142D024
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Oct 2021 03:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbhJMVSy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Oct 2021 17:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbhJMVSx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Oct 2021 17:18:53 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F7BC061570
-        for <linux-usb@vger.kernel.org>; Wed, 13 Oct 2021 14:16:49 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id c28so3928719qtv.11
-        for <linux-usb@vger.kernel.org>; Wed, 13 Oct 2021 14:16:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dGgmeYJEA+hJC6d1SbOgu4fzoGVI+BZr0QPmIbJi7kQ=;
-        b=E1DRIM0q97FmUpIKXSaVqe1NBg/ssaACiSTuQ5kH73Q334ceeF6am/DnoeEV9AYaGT
-         fo69QoKvWk7RDEzE0C/nmPQbCrWMFScJMvJPzpBK0QBKU4UIhkXL5+QYolnwlSV5Hz32
-         UcZBGdrzwuJ51kCW+/NN422G0mB57hI+UvHg8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dGgmeYJEA+hJC6d1SbOgu4fzoGVI+BZr0QPmIbJi7kQ=;
-        b=BymggixzEIZgCdoSeJ3qvUIlUdRqUtH2LPeXjLD2uzZLSC32aFVtKVzOppphG6I2Y4
-         WufWfJkQJLJRAZiquegHLTZKeByADsvoTDTzsaK9Lo35Bv0/K75LAjo7Ydd/iW9tWMck
-         MFhsTTKzWetaW2bNGcN+1WpO9vXTtW6J+yEDEg+Z20LYDagdeziDJNPM+sgRFNJ1TIWQ
-         m5t0bTyl5dyHlKlkIe/VRrOlBanqDSMkKkgOrlicR5YrQYlW1acr80zhArZhq+wrnvGN
-         4vXhDStJA87Xg1+gnTnFMlc3l9JMXP/oFKtNfNjEbzcR2hiRQilr7Gqkog0C665VRVmD
-         W7zw==
-X-Gm-Message-State: AOAM531AD+GYcN5yw5ZhZgEi7O+sOTbCcCWjXEbLe3R/6IOBf8jGGApD
-        rrvx1uDDATeaKdX317zrqCTJSoRGQ3B+YBmROX1XDg==
-X-Google-Smtp-Source: ABdhPJzbLrOl806aiITElI7kNcmtlLZXVpaMcfStIM79CmRGVv9qb+bPogtcTInWREI6yRv9NWwaCilOEow0dXgRpp4=
-X-Received: by 2002:a05:622a:1807:: with SMTP id t7mr2029243qtc.140.1634159809094;
- Wed, 13 Oct 2021 14:16:49 -0700 (PDT)
+        id S229663AbhJNCAH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Oct 2021 22:00:07 -0400
+Received: from mailout.easymail.ca ([64.68.200.34]:60148 "EHLO
+        mailout.easymail.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229496AbhJNCAH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Oct 2021 22:00:07 -0400
+X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Wed, 13 Oct 2021 22:00:07 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mailout.easymail.ca (Postfix) with ESMTP id A30B2A899D;
+        Thu, 14 Oct 2021 01:50:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=braewoods.net;
+        s=easymail; t=1634176256;
+        bh=MhfOxTpNfJrfodNhm+F/B0KSIbrHJIIOloZg7kceITU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lrGXW+s0382w1SubYDvEaNOnDyCYBlEZvdJav9oJUFehUTFTSkWkeWocdObqj4oom
+         5DwaFa7TTCmcku4UCpgv73fowNMcSnRzwyCnWxkK7c0KaVbVfkBwYwH4T65u6t7Q/r
+         bOj6+CbGgXB+6KluQ08ChOy5mAR8cnmycczuFEiV8zjY6QNCioHfifV+BqTpUOC+1W
+         hDcfTh6v1bTB70t/9lvaIk/drwakHdE8xIW0jXzzi46PP7cTQws/ruQYO6fRsklcS7
+         /TQqxsURvyX6Bd4Jm95WBbk8klfmxZ5R0OfdMvZWcu/4ixK8nF34+g+j6EODMbvNC1
+         taRZBJNO8aFaw==
+X-Virus-Scanned: Debian amavisd-new at emo04-pco.easydns.vpn
+Received: from mailout.easymail.ca ([127.0.0.1])
+        by localhost (emo04-pco.easydns.vpn [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id FBvgpGoEbQUz; Thu, 14 Oct 2021 01:50:56 +0000 (UTC)
+Received: from uc.lan (cpe-75-81-17-79.kc.res.rr.com [75.81.17.79])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailout.easymail.ca (Postfix) with ESMTPSA id CE969A8965;
+        Thu, 14 Oct 2021 01:50:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=braewoods.net;
+        s=easymail; t=1634176256;
+        bh=MhfOxTpNfJrfodNhm+F/B0KSIbrHJIIOloZg7kceITU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lrGXW+s0382w1SubYDvEaNOnDyCYBlEZvdJav9oJUFehUTFTSkWkeWocdObqj4oom
+         5DwaFa7TTCmcku4UCpgv73fowNMcSnRzwyCnWxkK7c0KaVbVfkBwYwH4T65u6t7Q/r
+         bOj6+CbGgXB+6KluQ08ChOy5mAR8cnmycczuFEiV8zjY6QNCioHfifV+BqTpUOC+1W
+         hDcfTh6v1bTB70t/9lvaIk/drwakHdE8xIW0jXzzi46PP7cTQws/ruQYO6fRsklcS7
+         /TQqxsURvyX6Bd4Jm95WBbk8klfmxZ5R0OfdMvZWcu/4ixK8nF34+g+j6EODMbvNC1
+         taRZBJNO8aFaw==
+From:   James Buren <braewoods+lkml@braewoods.net>
+To:     linux-usb@vger.kernel.org
+Cc:     James Buren <braewoods+lkml@braewoods.net>
+Subject: [PATCH] usb-storage: Add compatibility quirk flags for iODD 2531/2541
+Date:   Wed, 13 Oct 2021 20:50:50 -0500
+Message-Id: <20211014015050.2694967-1-braewoods+lkml@braewoods.net>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210407065555.88110-1-heikki.krogerus@linux.intel.com>
- <20210407065555.88110-3-heikki.krogerus@linux.intel.com> <YWdBZY7vSWO7DN54@google.com>
- <d82e9972-0d30-f9f4-9333-de57146d5543@roeck-us.net>
-In-Reply-To: <d82e9972-0d30-f9f4-9333-de57146d5543@roeck-us.net>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Wed, 13 Oct 2021 14:16:38 -0700
-Message-ID: <CACeCKaf4OOkzchrNMfWF5Y9ayrfKcyJtZ6XPHaBUzc7K6t+e+A@mail.gmail.com>
-Subject: Re: [PATCH v6 2/4] usb: Link the ports to the connectors they are
- attached to
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 1:57 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 10/13/21 1:28 PM, Prashant Malani wrote:
-> > Hi,
-> >
-> > On Wed, Apr 07, 2021 at 09:55:53AM +0300, Heikki Krogerus wrote:
-> >> Creating link to the USB Type-C connector for every new port
-> >> that is added when possible.
-> >>
-> >> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> >
-> > Did this patch eventually get merged?
-> > I somehow don't see it in the "master" kernel branch [1], although I do
-> > see the commit in that repo [2].
-> >
->
-> It was applied but later reverted with commit 5bdb080f9603 because
-> it created a module dependency cycle.
->
+These drive enclosures have firmware bugs that make it impossible to mount
+a new virtual ISO image after Linux ejects the old one if the device is
+locked by Linux. Windows bypasses this problem by the fact that they do
+not lock the device. Add a quirk to disable device locking for these
+drive enclosures.
 
-Ah I see. Thanks Guenter.
-Hi Heikki, I was interested in knowing if relanding this is on your radar.
+Signed-off-by: James Buren <braewoods+lkml@braewoods.net>
+---
+ drivers/usb/storage/unusual_devs.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Best regards,
+diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
+index c6b3fcf90180..4267b13962e1 100644
+--- a/drivers/usb/storage/unusual_devs.h
++++ b/drivers/usb/storage/unusual_devs.h
+@@ -415,6 +415,16 @@ UNUSUAL_DEV(  0x04cb, 0x0100, 0x0000, 0x2210,
+ 		"FinePix 1400Zoom",
+ 		USB_SC_UFI, USB_PR_DEVICE, NULL, US_FL_FIX_INQUIRY | US_FL_SINGLE_LUN),
+ 
++/*
++ * Reported by James Buren <braewoods+lkml@braewoods.net>
++ * Virtual ISOs cannot be remounted if ejected while the device is locked
++ * Disable locking to mimic Windows behavior that bypasses the issue
++ */
++UNUSUAL_DEV(  0x04c5, 0x2028, 0x0001, 0x0001,
++		"iODD",
++		"2531/2541",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL, US_FL_NOT_LOCKABLE),
++
+ /*
+  * Reported by Ondrej Zary <linux@zary.sk>
+  * The device reports one sector more and breaks when that sector is accessed
+-- 
+2.25.1
 
--Prashant
