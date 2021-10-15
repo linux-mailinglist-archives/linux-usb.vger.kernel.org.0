@@ -2,49 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C31EF42F1A8
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Oct 2021 15:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7408F42F1BC
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Oct 2021 15:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239122AbhJONGm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Oct 2021 09:06:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57298 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235659AbhJONGm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 15 Oct 2021 09:06:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EFE9A610E5;
-        Fri, 15 Oct 2021 13:04:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634303075;
-        bh=ZwbUjjVkXwnP9fvH2v9rlpX5mwmFOSWZJoMxv6SG14E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pnavrw8D/+DioGAe+HDAoZQmZJJ3Ke0ORv0TGx+SDdKoZ+0sK/AIQheA8N5xuLywx
-         NDUsUQ611LJE6Fg9/ewZRKy4Wnry+GsM2mHmPFC2YalL77AlTswtZnF6LmuyAzy+sg
-         2cNMMA/xOanlx1/tnRt7pdqBQeEHjCvLEhMR3R6w=
-Date:   Fri, 15 Oct 2021 15:04:32 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] USB-serial fixes for 5.15-rc6
-Message-ID: <YWl8YP2n7WwrI2N0@kroah.com>
-References: <YWl4TnaWxDLv/V5z@hovoldconsulting.com>
+        id S239271AbhJONKb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Oct 2021 09:10:31 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:44558 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239256AbhJONK3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Oct 2021 09:10:29 -0400
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19FCx1Tm007385;
+        Fri, 15 Oct 2021 13:08:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2021-07-09; bh=5HiMwcak6Fmpj6WRmUR1Pdxweyd3dBzOlejvpHt0vww=;
+ b=aPt0R47T/QHcDyY/4nPD4RXQJkWP8+nnnw+YDjgjWjMxFkM2s9unYkPxJRRku38gB/pM
+ 9tVkcSoh9yoBAZHIccuUMrbIr1JzkrWPgKnzxHl92bIR3t47XHjec+Fo+J9IivKmJ+8E
+ msjVuqFHVP+fxMV4VAFUeKSaRzWYKqgKIFYYuRuW1+V4HzzTERaegEj87BFyI1teflHQ
+ nD63S5hBIgOXTeuO5KqimlLDDoyV4ZMXueqJYSB3zFBAY1mFYlcVyi6FE9G7tpCDgJ1a
+ B4ohnTPt4by4urYbzJrq/oCYjS4aoXkHB878KJccqMD532CwJ1fW44w0zMq8Z0fDFFY1 5A== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3bpfsyrtg9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 15 Oct 2021 13:08:18 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 19FD4sWa005247;
+        Fri, 15 Oct 2021 13:08:17 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by aserp3020.oracle.com with ESMTP id 3bmae46k0y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 15 Oct 2021 13:08:17 +0000
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 19FD8G58020291;
+        Fri, 15 Oct 2021 13:08:16 GMT
+Received: from t460.home (dhcp-10-175-9-30.vpn.oracle.com [10.175.9.30])
+        by aserp3020.oracle.com with ESMTP id 3bmae46jxq-1;
+        Fri, 15 Oct 2021 13:08:16 +0000
+From:   Vegard Nossum <vegard.nossum@oracle.com>
+To:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vegard Nossum <vegard.nossum@oracle.com>
+Subject: [PATCH] lan78xx: select CRC32
+Date:   Fri, 15 Oct 2021 15:07:54 +0200
+Message-Id: <20211015130754.12283-1-vegard.nossum@oracle.com>
+X-Mailer: git-send-email 2.23.0.718.g5ad94255a8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YWl4TnaWxDLv/V5z@hovoldconsulting.com>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: oft2zsSFztGteDHkGwKZWiravcqIXUYm
+X-Proofpoint-GUID: oft2zsSFztGteDHkGwKZWiravcqIXUYm
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 15, 2021 at 02:47:10PM +0200, Johan Hovold wrote:
-> The following changes since commit 9e1ff307c779ce1f0f810c7ecce3d95bbae40896:
-> 
->   Linux 5.15-rc4 (2021-10-03 14:08:47 -0700)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.15-rc6
+Fix the following build/link error by adding a dependency on the CRC32
+routines:
 
-Pulled and pushed out, thanks,
+  ld: drivers/net/usb/lan78xx.o: in function `lan78xx_set_multicast':
+  lan78xx.c:(.text+0x48cf): undefined reference to `crc32_le'
 
-greg k-h
+The actual use of crc32_le() comes indirectly through ether_crc().
+
+Fixes: 55d7de9de6c30 ("Microchip's LAN7800 family USB 2/3 to 10/100/1000 Ethernet device driver")
+Signed-off-by: Vegard Nossum <vegard.nossum@oracle.com>
+---
+ drivers/net/usb/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/usb/Kconfig b/drivers/net/usb/Kconfig
+index f87f175033731..b554054a7560a 100644
+--- a/drivers/net/usb/Kconfig
++++ b/drivers/net/usb/Kconfig
+@@ -117,6 +117,7 @@ config USB_LAN78XX
+ 	select PHYLIB
+ 	select MICROCHIP_PHY
+ 	select FIXED_PHY
++	select CRC32
+ 	help
+ 	  This option adds support for Microchip LAN78XX based USB 2
+ 	  & USB 3 10/100/1000 Ethernet adapters.
+-- 
+2.23.0.718.g5ad94255a8
 
