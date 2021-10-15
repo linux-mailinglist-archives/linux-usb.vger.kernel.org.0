@@ -2,89 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACCC42E4CB
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Oct 2021 01:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC5242E524
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Oct 2021 02:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234396AbhJNXi3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Oct 2021 19:38:29 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:63775 "EHLO m43-7.mailgun.net"
+        id S233549AbhJOASz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Oct 2021 20:18:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39988 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234379AbhJNXi2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 14 Oct 2021 19:38:28 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1634254583; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=umgqbG66d4B7LnBNercE4H55CcjxmxT058i83nBEs+8=; b=c0CNE8QKmw0sU2RMSQ7iBXYU4RDktOYYEAiT605wFurN79j25/KiQLNG6JY0hl+0C0srIA3r
- WYRVBwQu/eKUl1p/lYSe3/LobQ47C6XzQWtyK89rC39cyJu1MGXOtG2kgBQmlm5pbgtvm/Hj
- Erj9F4PVlVzcapVDS8A0QhCZ5bY=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 6168bed1e77f9e0ee31ec5b7 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 14 Oct 2021 23:35:45
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 2DA8BC43460; Thu, 14 Oct 2021 23:35:44 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 24614C4338F;
-        Thu, 14 Oct 2021 23:35:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 24614C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH] usb: dwc3: gadget: Remove dev_err() when queuing to inactive gadget/ep
-Date:   Thu, 14 Oct 2021 16:35:34 -0700
-Message-Id: <20211014233534.2382-1-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.33.0
+        id S230288AbhJOASy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 Oct 2021 20:18:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E8CD660FDC;
+        Fri, 15 Oct 2021 00:16:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634257009;
+        bh=y921IoviWP7ArGzf/NBOMznO7PDvJ8OxA3PyazLbsOc=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=pCi7obhE30Iv7WDLzDrA4nCqMpadPw7MZJ4gYnNOHFAEalPk0tCfXZ+HvEgIia54U
+         k5+ll1GaVAyg84eUhAyLwhqHOdQKc5j/bZAGSbmkH6qti6sgp8m0qd4S+tgooJBsvi
+         Bfo88sZs4vrSNE0j56eripPvUMf3IBWonfEc+HLOFZ9sxVGaJL8DzHHzYEXwRxWl0r
+         A4rwIYS+vtYWACJUmQ03lxppfSC74ZnEnhHDw/NZDVscNhabCkz2muTRcVOXPhQEjA
+         PJXP+VLbj7pUdDQo23ONQeh2EGBx+EfEgtxggBF7Ue2zJiXRQWWbLOdD60/739HnJ8
+         A6nKTZXjxBrOA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210920181145.19543-6-digetx@gmail.com>
+References: <20210920181145.19543-1-digetx@gmail.com> <20210920181145.19543-6-digetx@gmail.com>
+Subject: Re: [PATCH v12 05/35] dt-bindings: clock: tegra-car: Document new clock sub-nodes
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Nishanth Menon <nm@ti.com>, Peter Chen <peter.chen@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Uwe =?utf-8?q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Viresh Kumar <vireshk@kernel.org>
+Date:   Thu, 14 Oct 2021 17:16:47 -0700
+Message-ID: <163425700766.1688384.4481739110941660602@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since function drivers will still be active until dwc3_disconnect_gadget()
-is called, some applications will continue to queue packets to DWC3
-gadget.  This can lead to a flood of messages regarding failed ep queue,
-as the endpoint is in the process of being disabled.  Remove the print as
-function drivers will likely log queuing errors as well.
+Quoting Dmitry Osipenko (2021-09-20 11:11:15)
+> diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.y=
+aml b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+> index 459d2a525393..f832abb7f11a 100644
+> --- a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+> +++ b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+> @@ -42,6 +42,36 @@ properties:
+>    "#reset-cells":
+>      const: 1
+> =20
+> +patternProperties:
+> +  "^(sclk)|(pll-[cem])$":
+> +    type: object
+> +    properties:
+> +      compatible:
+> +        enum:
+> +          - nvidia,tegra20-sclk
+> +          - nvidia,tegra30-sclk
+> +          - nvidia,tegra30-pllc
+> +          - nvidia,tegra30-plle
+> +          - nvidia,tegra30-pllm
+> +
+> +      operating-points-v2: true
+> +
+> +      clocks:
+> +        items:
+> +          - description: node's clock
+> +
+> +      power-domains:
+> +        maxItems: 1
+> +        description: phandle to the core SoC power domain
 
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
----
- drivers/usb/dwc3/gadget.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Is this done to associate the power domain with a particular clk? And an
+OPP table with a particular clk?
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 4845682a0408..674a9a527125 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1812,11 +1812,8 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
- {
- 	struct dwc3		*dwc = dep->dwc;
- 
--	if (!dep->endpoint.desc || !dwc->pullups_connected || !dwc->connected) {
--		dev_err(dwc->dev, "%s: can't queue to disabled endpoint\n",
--				dep->name);
-+	if (!dep->endpoint.desc || !dwc->pullups_connected || !dwc->connected)
- 		return -ESHUTDOWN;
--	}
- 
- 	if (WARN(req->dep != dep, "request %pK belongs to '%s'\n",
- 				&req->request, req->dep->name))
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+> +
+> +    required:
+> +      - compatible
+> +      - operating-points-v2
+> +      - clocks
+> +      - power-domains
+> +
+> +    additionalProperties: false
+> +
+>  required:
+>    - compatible
+>    - reg
