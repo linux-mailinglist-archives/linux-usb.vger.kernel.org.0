@@ -2,130 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0916542E92C
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Oct 2021 08:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0166042E9C1
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Oct 2021 09:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235578AbhJOGlb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Oct 2021 02:41:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56990 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229716AbhJOGla (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 15 Oct 2021 02:41:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B89B861184;
-        Fri, 15 Oct 2021 06:39:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634279964;
-        bh=eHMP1L5p7U9JjkTgxLAgLmWgChOZElqg0ECTI25pFiM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vH5xyVPI7ANQGLw7FNvgZFKqHpopiBvQMnPds7bxMgnbwjA8XxmviHtF/zfnjwhNU
-         G+6HLYm08gIDuOVCObdDG0AXRoBnmlvhxa2cYdTI/5DF97VTndUoIbYg+t2Ivojhxv
-         cDly48omx4tvWBlX4moZM+FA+Sex7vXvTIsISXTU=
-Date:   Fri, 15 Oct 2021 08:39:20 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Jens Axboe <axboe@kernel.dk>, Johan Hovold <johan@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Lionel Debieve <lionel.debieve@st.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mark Brown <broonie@kernel.org>,
-        Martin =?iso-8859-1?Q?J=FCcker?= <martin.juecker@gmail.com>,
-        Nishanth Menon <nm@ti.com>,
-        Olivier Moysan <olivier.moysan@st.com>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Robert Richter <rric@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Lindgren <tony@atomide.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        William Cohen <wcohen@redhat.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>
-Subject: Re: [PATCH v16 0/7] usb: misc: Add onboard_usb_hub driver
-Message-ID: <YWkiGGBKOVokBye9@kroah.com>
-References: <20210813195228.2003500-1-mka@chromium.org>
- <YUoRq1RrOIoiBJ5+@google.com>
- <CAD=FV=WrddUhWT0wUVZD0gN_+8Zy1VGY77LYLYBvhaPQQ_SqZw@mail.gmail.com>
+        id S235910AbhJOHOh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Oct 2021 03:14:37 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:28945 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234497AbhJOHOg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Oct 2021 03:14:36 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4HVy5q1vvBzbnCB;
+        Fri, 15 Oct 2021 15:07:59 +0800 (CST)
+Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Fri, 15 Oct 2021 15:12:28 +0800
+Received: from [10.174.176.245] (10.174.176.245) by
+ kwepemm600001.china.huawei.com (7.193.23.3) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Fri, 15 Oct 2021 15:12:27 +0800
+Subject: Re: [PATCH] USB: serial: Fix possible memleak in keyspan_port_probe()
+To:     Johan Hovold <johan@kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211014132033.554304-1-wanghai38@huawei.com>
+ <YWg6fBsl/1ui2vcR@hovoldconsulting.com>
+From:   "wanghai (M)" <wanghai38@huawei.com>
+Message-ID: <92fd3812-4b20-1a59-f58d-be1b6a88d2e7@huawei.com>
+Date:   Fri, 15 Oct 2021 15:12:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=WrddUhWT0wUVZD0gN_+8Zy1VGY77LYLYBvhaPQQ_SqZw@mail.gmail.com>
+In-Reply-To: <YWg6fBsl/1ui2vcR@hovoldconsulting.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.245]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600001.china.huawei.com (7.193.23.3)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 14, 2021 at 02:38:55PM -0700, Doug Anderson wrote:
-> Hi,
-> 
-> On Tue, Sep 21, 2021 at 10:09 AM Matthias Kaehlcke <mka@chromium.org> wrote:
-> >
-> > Hi Greg,
-> >
-> > are there any actions pending or can this land in usb-testing?
-> >
-> > I confirmed that this series can be rebased on top of v5.15-rc2
-> > without conflicts.
-> 
-> I'm quite interested to know what the next action items are, too. This
-> is one of the very few patches we have for trogdor (excluding MIPI
-> camera, which is a long story) that we're carrying downstream, so I'm
-> keenly interested in making sure it's unblocked (if, indeed, it's
-> blocked on anything).
-> 
-> If folks feel that this needs more review eyes before landing again
-> then I'll try to find some time in the next week or two. If it's just
-> waiting for the merge window to open/close so it can have maximal bake
-> time, that's cool too. Please yell if there's something that I can do
-> to help, though! :-)
 
-I would love more review-eyes on this please.
+ÔÚ 2021/10/14 22:11, Johan Hovold Ð´µÀ:
+> On Thu, Oct 14, 2021 at 09:20:33PM +0800, Wang Hai wrote:
+>> I got memory leak as follows when doing fault injection test:
+>>
+>> unreferenced object 0xffff888258228440 (size 64):
+>>    comm "kworker/7:2", pid 2005, jiffies 4294989509 (age 824.540s)
+>>    hex dump (first 32 bytes):
+>>      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>>      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>>    backtrace:
+>>      [<ffffffff8167939c>] slab_post_alloc_hook+0x9c/0x490
+>>      [<ffffffff8167f627>] kmem_cache_alloc_trace+0x1f7/0x470
+>>      [<ffffffffa02ac0e4>] keyspan_port_probe+0xa4/0x5d0 [keyspan]
+>>      [<ffffffffa0294c07>] usb_serial_device_probe+0x97/0x1d0 [usbserial]
+>>      [<ffffffff82b50ca7>] really_probe+0x167/0x460
+>>      [<ffffffff82b51099>] __driver_probe_device+0xf9/0x180
+>>      [<ffffffff82b51173>] driver_probe_device+0x53/0x130
+>>      [<ffffffff82b516f5>] __device_attach_driver+0x105/0x130
+>>      [<ffffffff82b4cfe9>] bus_for_each_drv+0x129/0x190
+>>      [<ffffffff82b50a69>] __device_attach+0x1c9/0x270
+>>      [<ffffffff82b518d0>] device_initial_probe+0x20/0x30
+>>      [<ffffffff82b4f062>] bus_probe_device+0x142/0x160
+>>      [<ffffffff82b4a4e9>] device_add+0x829/0x1300
+>>      [<ffffffffa0295fda>] usb_serial_probe.cold+0xc9b/0x14ac [usbserial]
+>>      [<ffffffffa02266aa>] usb_probe_interface+0x1aa/0x3c0 [usbcore]
+>>      [<ffffffff82b50ca7>] really_probe+0x167/0x460
+>>
+>> If it fails to allocate memory for an out_buffer[i] or in_buffer[i],
+>> the previously allocated memory for out_buffer or in_buffer needs to
+>> be freed on the error handling path, otherwise a memory leak will result.
+>>
+>> Fixes: bad41a5bf177 ("USB: keyspan: fix port DMA-buffer allocations")
+>> Reported-by: Hulk Robot <hulkci@huawei.com>
+>> Signed-off-by: Wang Hai <wanghai38@huawei.com>
+>> ---
+>>   drivers/usb/serial/keyspan.c | 7 +++----
+>>   1 file changed, 3 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/usb/serial/keyspan.c b/drivers/usb/serial/keyspan.c
+>> index 87b89c99d517..ba27a9f0275b 100644
+>> --- a/drivers/usb/serial/keyspan.c
+>> +++ b/drivers/usb/serial/keyspan.c
+>> @@ -2901,7 +2901,7 @@ static int keyspan_port_probe(struct usb_serial_port *port)
+>>   
+>>   	p_priv->inack_buffer = kzalloc(INACK_BUFLEN, GFP_KERNEL);
+>>   	if (!p_priv->inack_buffer)
+>> -		goto err_inack_buffer;
+>> +		goto err_out_buffer;
+>>   
+>>   	p_priv->outcont_buffer = kzalloc(OUTCONT_BUFLEN, GFP_KERNEL);
+>>   	if (!p_priv->outcont_buffer)
+>> @@ -2953,13 +2953,12 @@ static int keyspan_port_probe(struct usb_serial_port *port)
+>>   
+>>   err_outcont_buffer:
+>>   	kfree(p_priv->inack_buffer);
+>> -err_inack_buffer:
+>> +err_out_buffer:
+>>   	for (i = 0; i < ARRAY_SIZE(p_priv->out_buffer); ++i)
+>>   		kfree(p_priv->out_buffer[i]);
+>> -err_out_buffer:
+>> +err_in_buffer:
+>>   	for (i = 0; i < ARRAY_SIZE(p_priv->in_buffer); ++i)
+>>   		kfree(p_priv->in_buffer[i]);
+>> -err_in_buffer:
+>>   	kfree(p_priv);
+>>   
+>>   	return -ENOMEM;
+> Good catch. Fortunately these small allocations would currently never
+> fail, but we should fix it up nonetheless.
+>
+> The fix looks correct, but you're now mixing two styles of error labels
+> (i.e. naming them after where you jump from and after what they do,
+> respectively).
+>
+> Since you're touching all but one label, could you rename also the last
+> one after what is done and include a "free_" infix in the label names
+> (e.g. err_free_in_buffer, etc)?
+Okay, thank you for your suggestion, I will send the v2 patch.
+>
+> Johan
+> .
+>
+-- 
+Wang Hai
 
-It's in my queue to review, I just need to spend the time on it, sorry
-for the delay.
-
-greg k-h
