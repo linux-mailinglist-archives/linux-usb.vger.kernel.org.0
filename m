@@ -2,88 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 350E842E842
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Oct 2021 07:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8BA42E8FC
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Oct 2021 08:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235341AbhJOFK5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Oct 2021 01:10:57 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:24320 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbhJOFK4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Oct 2021 01:10:56 -0400
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4HVvM74SYgzYff7;
-        Fri, 15 Oct 2021 13:04:19 +0800 (CST)
-Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Fri, 15 Oct 2021 13:08:49 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
- (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Fri, 15 Oct
- 2021 13:08:48 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <balbi@kernel.org>
-Subject: [PATCH] usb: phy: isp1301: add release func to dev to avoid memory leak
-Date:   Fri, 15 Oct 2021 13:16:24 +0800
-Message-ID: <20211015051624.1655193-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        id S234535AbhJOGb2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Oct 2021 02:31:28 -0400
+Received: from mailout.easymail.ca ([64.68.200.34]:44100 "EHLO
+        mailout.easymail.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232562AbhJOGb1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Oct 2021 02:31:27 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mailout.easymail.ca (Postfix) with ESMTP id 09A2B67EED
+        for <linux-usb@vger.kernel.org>; Fri, 15 Oct 2021 06:29:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=braewoods.net;
+        s=easymail; t=1634279361;
+        bh=3IdGE6PQgT2X3zZIl6tZdOMI5g89u87BA5HkE35Lce4=;
+        h=Date:From:To:Subject:In-Reply-To:References:From;
+        b=NfWlX7tw4lj4tuhpbdxx1dywxQx9vk6Z9UOlbZjrW1nh2w3xBNYSfMvghGAw0MUP4
+         OPotlqQDVN2hZJO89Gk8EUxUu/eZKxg7u4IpsWEz+nFxlXGfgiMm4q8SjmWZATt82a
+         xRMmm5QSdEZhftMWtqv1GlUJ7sc9MSTLy60pz0kNcz0abS3JtMcvPJt3D6WLgPsOzO
+         TZKD8dXsCknt5yTNCDm0ecrfrHnrqe/mIllZWM/yGkmsm4N0gfRCmm1v/ZygziwQwZ
+         1U0FI4FGkSWFSujnWi+10cxVBa0Y+SAFVA0wyFF3iT7CGF5ZverzCicqs6UcJ1BXYg
+         3vmsb8yEtOVqg==
+X-Virus-Scanned: Debian amavisd-new at emo05-pco.easydns.vpn
+Received: from mailout.easymail.ca ([127.0.0.1])
+        by localhost (emo05-pco.easydns.vpn [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id af12mFGjT2vH for <linux-usb@vger.kernel.org>;
+        Fri, 15 Oct 2021 06:29:20 +0000 (UTC)
+Received: from messages.easymail.ca (unknown [172.17.13.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailout.easymail.ca (Postfix) with ESMTPSA id AAD8767EA7
+        for <linux-usb@vger.kernel.org>; Fri, 15 Oct 2021 06:29:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=braewoods.net;
+        s=easymail; t=1634279360;
+        bh=3IdGE6PQgT2X3zZIl6tZdOMI5g89u87BA5HkE35Lce4=;
+        h=Date:From:To:Subject:In-Reply-To:References:From;
+        b=gN1R+DRKhxtPWS4WEndG+8j8eKNe56Zx/VXxD1Fu0atdXwyyvdHzI9F41KMOBNaso
+         IaZbPlm7NRrWYI2WM44ZMpwjbP1HW1n4EOWORdqt//tFkC32u0A93X4ZvDfBaUqyS7
+         hR+vSX40yEglVyLjfqxoM1YOWqevzv6IxjVST9fXfpEyRuvS6wYuXNfenWZeeVgDOn
+         M1EldVN76/KGASB4qc9fVBiaX+kTmYQQnxf/IDEFq3wSZao++mJDJncKaJ61E1Celj
+         eW6k80hEHmJkQVMENrtHdZeTjwamXCsZTR8sr14jxb/0DJpz6pm6pIZ6sfeOyVr3IO
+         mKwxXzmMmZ25g==
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500017.china.huawei.com (7.185.36.243)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 15 Oct 2021 01:29:20 -0500
+From:   braewoods@braewoods.net
+To:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb-storage: Add compatibility quirk flags for iODD
+ 2531/2541
+In-Reply-To: <20211014022049.GB910341@rowland.harvard.edu>
+References: <20211014015504.2695089-1-braewoods+lkml@braewoods.net>
+ <20211014022049.GB910341@rowland.harvard.edu>
+Message-ID: <8466fa531529630936ee0f0e290b54b2@braewoods.net>
+X-Sender: braewoods@braewoods.net
+User-Agent: Roundcube Webmail/1.3.3
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-After calling usb_add_phy_dev(), client->dev.type will be changed
-to 'usb_pyh_dev_type', the release() func is null, it cause the
-following WARNING:
+On 2021-10-13 21:20, Alan Stern wrote:
+> In the future, you should always include a version number in the email
+> Subject: line (for example, "[PATCH v2]") so that readers will know
+> which patch is which.  And you should include, here just below the 
+> "---"
+> line, a description of how this version differs from the previous
+> version.  See the email archives for examples of multi-version patches.
+> 
+> Nevertheless, this looks okay.
+> 
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Device '1-001c' does not have a release() function, it is broken and must be fixed. See Documentation/core-api/kobject.rst.
-WARNING: CPU: 1 PID: 405 at device_release+0x1b7/0x240
-Call Trace:
- kobject_put+0x1e5/0x540
- device_unregister+0x35/0xc0
- i2c_unregister_device+0x114/0x1f0
-
-It cause 'client' leaked which is allocated in i2c_new_client_device():
-
-unreferenced object 0xffff88800670b000 (size 2048):
-  comm "xrun", pid 429, jiffies 4294946742 (age 235.248s)
-  hex dump (first 32 bytes):
-    00 00 1c 00 69 73 70 31 33 30 31 00 00 00 00 00  ....isp1301.....
-    00 00 00 00 00 00 00 00 c0 e4 17 c1 ff ff ff ff  ................
-  backtrace:
-    [<00000000a4641100>] kmem_cache_alloc_trace+0x186/0x2b0
-    [<00000000d9d933e7>] i2c_new_client_device+0x56/0xb40
-    [<000000007255bed2>] new_device_store+0x1f4/0x410
-
-So add release func to dev to avoid this memory leak.
-
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Fixes: 790d3a5ab6e36 ("usb: phy: isp1301: give it a context structure")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/usb/phy/phy-isp1301.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/phy/phy-isp1301.c b/drivers/usb/phy/phy-isp1301.c
-index ad3d57f1c273..04f005572484 100644
---- a/drivers/usb/phy/phy-isp1301.c
-+++ b/drivers/usb/phy/phy-isp1301.c
-@@ -111,6 +111,7 @@ static int isp1301_probe(struct i2c_client *client,
- 	phy->init = isp1301_phy_init;
- 	phy->set_vbus = isp1301_phy_set_vbus;
- 	phy->type = USB_PHY_TYPE_USB2;
-+	client->dev.release = client->dev.type->release;
- 
- 	i2c_set_clientdata(client, isp);
- 	usb_add_phy_dev(phy);
--- 
-2.25.1
-
+Noted. I'll do that for future patches. On a side note, any idea how 
+long it normally takes to get a simple patch like this committed? I've 
+had mixed experiences with getting feedback on patches. Sometimes my 
+patches just get totally ignored.
