@@ -2,148 +2,308 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8A142EB41
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Oct 2021 10:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63FDB42ECD6
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Oct 2021 10:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236241AbhJOIQV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Oct 2021 04:16:21 -0400
-Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:35243 "EHLO
-        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236164AbhJOIQU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Oct 2021 04:16:20 -0400
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id 85FF52B01252;
-        Fri, 15 Oct 2021 04:14:10 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 15 Oct 2021 04:14:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=A0sZcq8K/bMEVM6Z/GmabDSwCYf
-        1knmEGs8b2zvlHhQ=; b=ZzfVVTn6dbh38/j3OKZRepxl9kEa3guxDRvTHgZd9UZ
-        5v475Ji0wfwDq8R0BC5n6i6uI1xKhG5QXS0vU3PQrvzwCJVxNVwe4Q3512+yPov1
-        FYna5xLUZmgHh55dF+5IblbiJhBiLy5Lk/tOfcYAdbifrOTRSWP62RBtkhSZfW3i
-        noblBfXvaOS8rffbJ0VqHO6LzAmEdQpjLKXszHkSSGlYTUuL5UKzyeB7liYAZYFA
-        2Ac2+WCIL4kXLzCZd/+moJDiL7W5ZhzTRIdM+zB9s7rqraSsP/ZvtbWGUbH3+yfT
-        +XyOdsbt1tSkpZPPAY/l1GmDYFRVKSc1QEpg8utzK4A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=A0sZcq
-        8K/bMEVM6Z/GmabDSwCYf1knmEGs8b2zvlHhQ=; b=ktnorKikd3Z9v0GZ3qijQN
-        mrCxmSbMkQNrE3w3/8mM0hlt+mshhb7YU59TimV2tezcpmFUJPCdswYfjfG7ro47
-        PDHegrv1krJQQgFNCwLew5Rpfifynr/p6Dzwe29TSHr18aMmrAwv9eoZhGwTenAs
-        /eaS/6rtthi1IAm/k3FWU9/PaxqnQaAnv2pk1NlhQvD4jCGfJSEowNmD9yyxhv36
-        R0s/LDMbPXQ7a6tHTzn2lo0nIaLXbG4hI1shprTDIcCKT+wMmhVgqee0b8k0sghz
-        +6pzsualiK/tq28vlmbADF/pwGmUP95FCFO/dEHC1SUgpoaYi8h9io+lPLZcDmNw
-        ==
-X-ME-Sender: <xms:UjhpYRPTiuE9SZFAtEfWxUkUSryt8k573jnHMcFlMSCE7rEiGbJZIQ>
-    <xme:UjhpYT8NORnxJzMdUwfTNbaLl-iZE-PH8Vsalz4pXJhFAHbXW010MTQsTbryIUES1
-    B8r9WcroCVgRg>
-X-ME-Received: <xmr:UjhpYQSWpc5je8X1tcnumCxR0zoEDhW2JunBMtH2lfDL3xU-QQQoq9RWQbEQfk5wAgAOt1NkTHu_7vMzGhe8Ety9oTb2A68l>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddugedgtdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:UjhpYdvj28l7TDdqA2-jLKTA9OEvEj_vWHcs9zbvFXVtgalUSfFNwQ>
-    <xmx:UjhpYZeKfrVBkpFmWCOcb47rgpnfb4Vfl2NuJXkDQc5pbTelAOf4Ug>
-    <xmx:UjhpYZ1Ify1N6dGT5gBMC7Is-KSKADbopgPoGoIPmpwcQbyPWvxJlA>
-    <xmx:UjhpYaXwCA88UchI6-C-P-N4WqV4iFPayIOkbPqljl8sh1hLc2T5STfKXGE>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 15 Oct 2021 04:14:09 -0400 (EDT)
-Date:   Fri, 15 Oct 2021 10:14:07 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Juergen Gross <jgross@suse.com>
+        id S235404AbhJOIyX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Oct 2021 04:54:23 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:44636 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235827AbhJOIyN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Oct 2021 04:54:13 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 667042196B;
+        Fri, 15 Oct 2021 08:52:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1634287926; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IXAl2q6bJ/uf1ZF69wGwObp1dDnRLmcEatmkzy7CMLY=;
+        b=BhSQb8kRLdd/dNc0xCsCtFvD3UwhStC7Kg1kmQDxUwPCPm/84cSbal6K7uFVz7lcQXClig
+        sAQpEmFkKI/lIb7KOtmPV9gh9Dc2yOAa6iqpHRsYGfu3AlaOMMpoRawqRHX6mD7bKy/koU
+        zqdp2rozH7GOrOjB0DS1mh3SM+J9B70=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3CC6413B87;
+        Fri, 15 Oct 2021 08:52:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BieTDTZBaWGEIAAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 15 Oct 2021 08:52:06 +0000
+To:     Greg KH <greg@kroah.com>
 Cc:     linux-usb@vger.kernel.org, xen-devel@lists.xenproject.org,
         linux-kernel@vger.kernel.org,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         Stefano Stabellini <sstabellini@kernel.org>
-Subject: Re: [PATCH v6 1/3] usb: Add Xen pvUSB protocol description
-Message-ID: <YWk4T2HTAD3VJMYR@kroah.com>
 References: <20211013075207.13910-1-jgross@suse.com>
- <20211013075207.13910-2-jgross@suse.com>
- <YWbKnEMvHGU/rv96@kroah.com>
- <54da6414-4183-2d0c-cc24-a9471ed8332b@suse.com>
+ <20211013075207.13910-2-jgross@suse.com> <YWbKnEMvHGU/rv96@kroah.com>
+ <54da6414-4183-2d0c-cc24-a9471ed8332b@suse.com> <YWk4T2HTAD3VJMYR@kroah.com>
+From:   Juergen Gross <jgross@suse.com>
+Subject: Re: [PATCH v6 1/3] usb: Add Xen pvUSB protocol description
+Message-ID: <e2245716-ea36-aa21-f0a0-aad9c3e37136@suse.com>
+Date:   Fri, 15 Oct 2021 10:52:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <54da6414-4183-2d0c-cc24-a9471ed8332b@suse.com>
+In-Reply-To: <YWk4T2HTAD3VJMYR@kroah.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="1Smack4gtX8AsrGGFe6fqZJRGo8fuJXPl"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 15, 2021 at 10:07:35AM +0200, Juergen Gross wrote:
-> On 13.10.21 14:01, Greg KH wrote:
-> > On Wed, Oct 13, 2021 at 09:52:05AM +0200, Juergen Gross wrote:
-> > > Add the definition of pvUSB protocol used between the pvUSB frontend in
-> > > a Xen domU and the pvUSB backend in a Xen driver domain (usually Dom0).
-> > > 
-> > > This header was originally provided by Fujitsu for Xen based on Linux
-> > > 2.6.18.
-> > > 
-> > > Changes are:
-> > > - adapt to Linux kernel style guide
-> > > - use Xen namespace
-> > > - add lots of comments
-> > > - don't use kernel internal defines
-> > > 
-> > > Signed-off-by: Juergen Gross <jgross@suse.com>
-> > > Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-> > > ---
-> > >   include/xen/interface/io/usbif.h | 421 +++++++++++++++++++++++++++++++
-> > >   1 file changed, 421 insertions(+)
-> > >   create mode 100644 include/xen/interface/io/usbif.h
-> > > 
-> > > diff --git a/include/xen/interface/io/usbif.h b/include/xen/interface/io/usbif.h
-> > > new file mode 100644
-> > > index 000000000000..9494b1c9be99
-> > > --- /dev/null
-> > > +++ b/include/xen/interface/io/usbif.h
-> > > @@ -0,0 +1,421 @@
-> > > +/*
-> > > + * usbif.h
-> > > + *
-> > > + * USB I/O interface for Xen guest OSes.
-> > > + *
-> > > + * Copyright (C) 2009, FUJITSU LABORATORIES LTD.
-> > > + * Author: Noboru Iwamatsu <n_iwamatsu@jp.fujitsu.com>
-> > > + *
-> > > + * Permission is hereby granted, free of charge, to any person obtaining a copy
-> > > + * of this software and associated documentation files (the "Software"), to
-> > > + * deal in the Software without restriction, including without limitation the
-> > > + * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-> > > + * sell copies of the Software, and to permit persons to whom the Software is
-> > > + * furnished to do so, subject to the following conditions:
-> > > + *
-> > > + * The above copyright notice and this permission notice shall be included in
-> > > + * all copies or substantial portions of the Software.
-> > > + *
-> > > + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> > > + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> > > + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-> > > + * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> > > + * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-> > > + * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-> > > + * DEALINGS IN THE SOFTWARE.
-> > > + */
-> > 
-> > Please use a SPDX line and not license "boilerplate" text like this :(
-> 
-> Okay. Is this your only concern for this series? Or is it a blocking
-> point for you before looking into it in more detail?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--1Smack4gtX8AsrGGFe6fqZJRGo8fuJXPl
+Content-Type: multipart/mixed; boundary="Nkwb4DjyLs57lOoHe5NTLeXy3J57x9HeL";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Greg KH <greg@kroah.com>
+Cc: linux-usb@vger.kernel.org, xen-devel@lists.xenproject.org,
+ linux-kernel@vger.kernel.org, Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+ Stefano Stabellini <sstabellini@kernel.org>
+Message-ID: <e2245716-ea36-aa21-f0a0-aad9c3e37136@suse.com>
+Subject: Re: [PATCH v6 1/3] usb: Add Xen pvUSB protocol description
+References: <20211013075207.13910-1-jgross@suse.com>
+ <20211013075207.13910-2-jgross@suse.com> <YWbKnEMvHGU/rv96@kroah.com>
+ <54da6414-4183-2d0c-cc24-a9471ed8332b@suse.com> <YWk4T2HTAD3VJMYR@kroah.com>
+In-Reply-To: <YWk4T2HTAD3VJMYR@kroah.com>
 
-It was an easy thing to see at first glance that you hadn't taken my
-previous comment about this seriously :(
+--Nkwb4DjyLs57lOoHe5NTLeXy3J57x9HeL
+Content-Type: multipart/mixed;
+ boundary="------------2F77AC7F69D1198DD8D382E0"
+Content-Language: en-US
 
-> IOW: does it make sense for me to wait for further comments before
-> sending a new version of the series?
+This is a multi-part message in MIME format.
+--------------2F77AC7F69D1198DD8D382E0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-Sure, you can fix this up and resend, it will take a while to review the
-host controller code...
+On 15.10.21 10:14, Greg KH wrote:
+> On Fri, Oct 15, 2021 at 10:07:35AM +0200, Juergen Gross wrote:
+>> On 13.10.21 14:01, Greg KH wrote:
+>>> On Wed, Oct 13, 2021 at 09:52:05AM +0200, Juergen Gross wrote:
+>>>> Add the definition of pvUSB protocol used between the pvUSB frontend=
+ in
+>>>> a Xen domU and the pvUSB backend in a Xen driver domain (usually Dom=
+0).
+>>>>
+>>>> This header was originally provided by Fujitsu for Xen based on Linu=
+x
+>>>> 2.6.18.
+>>>>
+>>>> Changes are:
+>>>> - adapt to Linux kernel style guide
+>>>> - use Xen namespace
+>>>> - add lots of comments
+>>>> - don't use kernel internal defines
+>>>>
+>>>> Signed-off-by: Juergen Gross <jgross@suse.com>
+>>>> Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+>>>> ---
+>>>>    include/xen/interface/io/usbif.h | 421 ++++++++++++++++++++++++++=
++++++
+>>>>    1 file changed, 421 insertions(+)
+>>>>    create mode 100644 include/xen/interface/io/usbif.h
+>>>>
+>>>> diff --git a/include/xen/interface/io/usbif.h b/include/xen/interfac=
+e/io/usbif.h
+>>>> new file mode 100644
+>>>> index 000000000000..9494b1c9be99
+>>>> --- /dev/null
+>>>> +++ b/include/xen/interface/io/usbif.h
+>>>> @@ -0,0 +1,421 @@
+>>>> +/*
+>>>> + * usbif.h
+>>>> + *
+>>>> + * USB I/O interface for Xen guest OSes.
+>>>> + *
+>>>> + * Copyright (C) 2009, FUJITSU LABORATORIES LTD.
+>>>> + * Author: Noboru Iwamatsu <n_iwamatsu@jp.fujitsu.com>
+>>>> + *
+>>>> + * Permission is hereby granted, free of charge, to any person obta=
+ining a copy
+>>>> + * of this software and associated documentation files (the "Softwa=
+re"), to
+>>>> + * deal in the Software without restriction, including without limi=
+tation the
+>>>> + * rights to use, copy, modify, merge, publish, distribute, sublice=
+nse, and/or
+>>>> + * sell copies of the Software, and to permit persons to whom the S=
+oftware is
+>>>> + * furnished to do so, subject to the following conditions:
+>>>> + *
+>>>> + * The above copyright notice and this permission notice shall be i=
+ncluded in
+>>>> + * all copies or substantial portions of the Software.
+>>>> + *
+>>>> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, =
+EXPRESS OR
+>>>> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANT=
+ABILITY,
+>>>> + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVEN=
+T SHALL THE
+>>>> + * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR=
+ OTHER
+>>>> + * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, =
+ARISING
+>>>> + * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OT=
+HER
+>>>> + * DEALINGS IN THE SOFTWARE.
+>>>> + */
+>>>
+>>> Please use a SPDX line and not license "boilerplate" text like this :=
+(
+>>
+>> Okay. Is this your only concern for this series? Or is it a blocking
+>> point for you before looking into it in more detail?
+>=20
+> It was an easy thing to see at first glance that you hadn't taken my
+> previous comment about this seriously :(
 
-thanks,
+I'm sorry for that. This was clearly an oversight from me.
 
-greg k-h
+BTW, when checking which SPDX tag to use I discovered that most of the
+Xen header files under include/xen/interface have been tagged as GPL-2.0
+by a patch from you.
+
+Said patch (commit b24413180f5600) stated that there was no license
+information found in those files, but they all clearly had a verbatim
+copy of the MIT license in them.
+
+I'll send another patch fixing those SPDX tags.
+
+>=20
+>> IOW: does it make sense for me to wait for further comments before
+>> sending a new version of the series?
+>=20
+> Sure, you can fix this up and resend, it will take a while to review th=
+e
+> host controller code...
+
+I'm quite sure there will be at least some comments, so I'll wait with
+resending until I've got more feedback.
+
+
+Thanks,
+
+Juergen
+
+--------------2F77AC7F69D1198DD8D382E0
+Content-Type: application/pgp-keys;
+ name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Transfer-Encoding: quoted-printable
+Content-Description: OpenPGP public key
+Content-Disposition: attachment;
+ filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOBy=
+cWx
+w3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJvedYm8O=
+f8Z
+d621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y=
+9bf
+IhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xq=
+G7/
+377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR=
+3Jv
+c3MgPGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsEFgIDA=
+QIe
+AQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4FUGNQH2lvWAUy+dnyT=
+hpw
+dtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3TyevpB0CA3dbBQp0OW0fgCetToGIQrg0=
+MbD
+1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u+6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbv=
+oPH
+Z8SlM4KWm8rG+lIkGurqqu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v=
+5QL
++qHI3EIPtyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVyZ=
+2Vu
+IEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJCAcDAgEGFQgCC=
+QoL
+BBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4RF7HoZhPVPogNVbC4YA6lW7Dr=
+Wf0
+teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz78X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC=
+/nu
+AFVGy+67q2DH8As3KPu0344TBDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0Lh=
+ITT
+d9jLzdDad1pQSToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLm=
+XBK
+7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkMnQfvUewRz=
+80h
+SnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMBAgAjBQJTjHDXAhsDBwsJC=
+AcD
+AgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJn=
+FOX
+gMLdBQgBlVPO3/D9R8LtF9DBAFPNhlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1=
+jnD
+kfJZr6jrbjgyoZHiw/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0=
+N51
+N5JfVRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwPOoE+l=
+otu
+fe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK/1xMI3/+8jbO0tsn1=
+tqS
+EUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuZGU+wsB5BBMBAgAjBQJTjHDrA=
+hsD
+BwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3=
+g3O
+ZUEBmDHVVbqMtzwlmNC4k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5=
+dM7
+wRqzgJpJwK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu5=
+D+j
+LRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzBTNh30FVKK1Evm=
+V2x
+AKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37IoN1EblHI//x/e2AaIHpzK5h88N=
+Eaw
+QsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpW=
+nHI
+s98ndPUDpnoxWQugJ6MpMncr0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZR=
+wgn
+BC5mVM6JjQ5xDk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNV=
+bVF
+LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mmwe0icXKLk=
+pEd
+IXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0Iv3OOImwTEe4co3c1mwARA=
+QAB
+wsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMvQ/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEw=
+Tbe
+8YFsw2V/Buv6Z4Mysln3nQK5ZadD534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1=
+vJz
+Q1fOU8lYFpZXTXIHb+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8=
+VGi
+wXvTyJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqcsuylW=
+svi
+uGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5BjR/i1DG86lem3iBDX=
+zXs
+ZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------2F77AC7F69D1198DD8D382E0--
+
+--Nkwb4DjyLs57lOoHe5NTLeXy3J57x9HeL--
+
+--1Smack4gtX8AsrGGFe6fqZJRGo8fuJXPl
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmFpQTUFAwAAAAAACgkQsN6d1ii/Ey/1
+ggf/VxJ1rByBYmOWYbIitQVuWqcyV6FZmx6M+INEKilSXTCiRmjsrGCYsBhByW8qU0os5foX4/qt
+3geRP9u5d9+WPAT/o6katzOXmKg2VrUAEzksrvW/J6UAZvFQNSqVAPsRFvf7Qzoie2+29N274LNW
+avH0VPRPUNB+0xFOAAR5JrNsF0FAWwVOhCeLmYScjNb1wkFF4Se9MENTK7f0HskvZeEsjpFnd5P2
+bhcqZ+mXkHithna63ghGFEuxqwWfUJCCk84y3XqBOok5I3SKM5jGiwoM/HDOxr3rjOMr7TrjFhVY
+/+gJMGBVRh+hdTFvxM3hDp5smO4uGbRcIJNIPrKj9g==
+=mMim
+-----END PGP SIGNATURE-----
+
+--1Smack4gtX8AsrGGFe6fqZJRGo8fuJXPl--
