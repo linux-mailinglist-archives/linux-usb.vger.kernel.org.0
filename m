@@ -2,67 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDFD42F3CC
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Oct 2021 15:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2706E42F3F4
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Oct 2021 15:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239850AbhJONlI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Oct 2021 09:41:08 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:51019 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S239855AbhJONlE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Oct 2021 09:41:04 -0400
-Received: (qmail 969088 invoked by uid 1000); 15 Oct 2021 09:38:57 -0400
-Date:   Fri, 15 Oct 2021 09:38:57 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     braewoods@braewoods.net, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb-storage: Add compatibility quirk flags for iODD
- 2531/2541
-Message-ID: <20211015133857.GA968676@rowland.harvard.edu>
-References: <20211014015504.2695089-1-braewoods+lkml@braewoods.net>
- <20211014022049.GB910341@rowland.harvard.edu>
- <8466fa531529630936ee0f0e290b54b2@braewoods.net>
- <YWkzxWyIhW08ZCcX@kroah.com>
+        id S239853AbhJONmO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Oct 2021 09:42:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47896 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239841AbhJONmO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 15 Oct 2021 09:42:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id D92916115C;
+        Fri, 15 Oct 2021 13:40:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634305207;
+        bh=++VYZxb1k0MdY+p0VarcfX/XIUGntHcujXiOuY3ZaQY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ZZsG9m8Ty033EA9CYG+OKHGBR3ICygvaFP1DpiOMLkIYaPJG0eVqMmXJmSZrvz71f
+         sEdyEoqttdyjDCB6bcPBo/lHTEM43igWTqq9TISMNvW4+R3GkQ1+w4od3lgaGMacIe
+         qHtKoB5YHjQrrYVZiwyIPTw/AC1BNCmbGykbluywcAW31qxQC4VETbLufjfKJyp1Es
+         QcKu94sHMfeUIPMVHkWMensJmMtUkQ/PkEN0zD9E9moyP4oqyKMFCfDu1moiEAOOR4
+         cpsXDg8Y8BiYWvZHJpdZs34SKIpPGybHqnZGZLlHiU9Lp4tBx/3UQrCNFU2BBgsXUW
+         Z+nEhDNYsfI/A==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C87E8609ED;
+        Fri, 15 Oct 2021 13:40:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YWkzxWyIhW08ZCcX@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] lan78xx: select CRC32
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163430520781.23472.11375176494240682949.git-patchwork-notify@kernel.org>
+Date:   Fri, 15 Oct 2021 13:40:07 +0000
+References: <20211015130754.12283-1-vegard.nossum@oracle.com>
+In-Reply-To: <20211015130754.12283-1-vegard.nossum@oracle.com>
+To:     Vegard Nossum <vegard.nossum@oracle.com>
+Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 15, 2021 at 09:54:45AM +0200, Greg KH wrote:
-> On Fri, Oct 15, 2021 at 01:29:20AM -0500, braewoods@braewoods.net wrote:
-> > On 2021-10-13 21:20, Alan Stern wrote:
-> > > In the future, you should always include a version number in the email
-> > > Subject: line (for example, "[PATCH v2]") so that readers will know
-> > > which patch is which.  And you should include, here just below the "---"
-> > > line, a description of how this version differs from the previous
-> > > version.  See the email archives for examples of multi-version patches.
-> > > 
-> > > Nevertheless, this looks okay.
-> > > 
-> > > Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> > 
-> > Noted. I'll do that for future patches. On a side note, any idea how long it
-> > normally takes to get a simple patch like this committed? I've had mixed
-> > experiences with getting feedback on patches. Sometimes my patches just get
-> > totally ignored.
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Fri, 15 Oct 2021 15:07:54 +0200 you wrote:
+> Fix the following build/link error by adding a dependency on the CRC32
+> routines:
 > 
-> Depends on the subsystem and the patch submitted.
-
-Greg tends to be quite good at merging patches in a timely manner.  They 
-generally are committed within a few weeks.
-
-In this case, should the patch also be added to the -stable kernels?
-
-Alan Stern
-
-> Also always use scripts/get_maintainer.pl to properly copy the needed
-> maintainers and mailing lists.  Sometimes patches get lost in the noise
-> if the right people are not copied.
+>   ld: drivers/net/usb/lan78xx.o: in function `lan78xx_set_multicast':
+>   lan78xx.c:(.text+0x48cf): undefined reference to `crc32_le'
 > 
-> thanks,
+> The actual use of crc32_le() comes indirectly through ether_crc().
 > 
-> greg k-h
+> [...]
+
+Here is the summary with links:
+  - lan78xx: select CRC32
+    https://git.kernel.org/netdev/net/c/46393d61a328
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
