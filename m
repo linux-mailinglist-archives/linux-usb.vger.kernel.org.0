@@ -2,147 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7281042F8DD
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Oct 2021 18:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 567BC42FC5A
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Oct 2021 21:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241713AbhJOQzm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Oct 2021 12:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33110 "EHLO
+        id S242797AbhJOTpa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Oct 2021 15:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236428AbhJOQzl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Oct 2021 12:55:41 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57FCC061762;
-        Fri, 15 Oct 2021 09:53:34 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id y12so42189837eda.4;
-        Fri, 15 Oct 2021 09:53:34 -0700 (PDT)
+        with ESMTP id S242785AbhJOTp3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Oct 2021 15:45:29 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5817C061765
+        for <linux-usb@vger.kernel.org>; Fri, 15 Oct 2021 12:43:22 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id o204so14515087oih.13
+        for <linux-usb@vger.kernel.org>; Fri, 15 Oct 2021 12:43:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DFAfhL2wTnA/x1oOiRIEIccRhRGZWYerK6em4KwuQr0=;
-        b=WhznUYR2nkpwiwbTRwmHKoc047JsFdk3RvHIe/jtOLSDmdxX07MCX9Eow0Bi+yLoQp
-         EyU08OzLxLG5ZCsUs7GUsgWdhql+ygc3SL2hgpQj7qkueaPaH4FCl+VEJFbTT66B35gH
-         GDagaCdrbJmPFv3m1vjK25dlCo+SurtmwsJpbtn+lVZ1hUtQu8pPUJ/3APaMcce/rMb+
-         gK4/JKJga2A5DLyU3cXWQ467mYYMbHs26I04bEcKD9mvTuveZ0BpijvVaw9Fg5WzWNNW
-         l7COh3PfIisjI8gWM0rsyxYaukEsrZpFMim7hIuXFIwI4NkGZUXxkbzqxVTnksr3mpP4
-         SUYg==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=l0+h2/ZRa+qjLW8dxix8MACMEy37KEPKQH8VyQ2MSVw=;
+        b=BFOiMCYGbYe6Lz8Dmjn78QbsW3EnVgyQwxdhrh9g06c8Fm/3Uzdq10bJB/vGqLKGSw
+         2Y8LCxnh/xTkroly7cz9pd0Z7iu+QjKCEbBCybRRyq/TPnPgZ9Z6iX0Ek//rNDgN9m4p
+         dVEPXp+WGgn2BicFuy26ULhGsRF0wpHquSO8w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DFAfhL2wTnA/x1oOiRIEIccRhRGZWYerK6em4KwuQr0=;
-        b=Pz66uXOYVPkKHpFryMN1vuv3PRaUUufVOktG/MXAyn+Mbnw67Hg+Y9A5/5ATuNWpbN
-         2apggTaSkDPxZ0TXvlb7Yc2fkPKHAqAH6cPp0ZRCyIhRq5T/Ga+wN92BZY22KWRL0px0
-         kr3ipbNNYsXFEfbnMnDFID1N0gdKA3BqLM+r9mGWrrMHp26dHnH2mwYGb/5/gQlnYc1Q
-         ArLpMWvshnVXU7a8w1Gp8dngNucMAhb62ma12skWTfwT7Kljvwc42Ges/nmkAMVmyRsa
-         FboJls257B2pG0z6DUpE/Rinw4YeDgbQmKpklsvYMMoCGqS84dFt7TluRpTUrsSBS1JO
-         lSow==
-X-Gm-Message-State: AOAM531fRDtVFQmGAgEdDX8QQ9FKZCV0/Fcr/6I7qlFhhfOBUo0iN3R/
-        2HQYIpNqVOsbxTFimIu3oU9vvzetwldYc5ybjC8=
-X-Google-Smtp-Source: ABdhPJw1GMYkf4/DzQ6xCdDldbViFURlmc0YnNdhDKa/6j1hrF7JWMyfM92nI6tIEj+fn7ChYTDQotvOC+uhf3cE48A=
-X-Received: by 2002:a50:e188:: with SMTP id k8mr19911628edl.119.1634316813165;
- Fri, 15 Oct 2021 09:53:33 -0700 (PDT)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=l0+h2/ZRa+qjLW8dxix8MACMEy37KEPKQH8VyQ2MSVw=;
+        b=ShckayRSmR/Qi8le5yX4q+k/U77j1Dj1CpJHTgeFnEh3cP1ZQCYTf+EV0nxN/SiAut
+         1ofx4R2tXvtQ+D6YclZlmUzhlWdtYDHBC9xw3FInq7cAXo6X4Bl3ePYpRTB7zZm4/hKl
+         DR6hLTnYizE4NkPBwDNU16Y+7k45a8TwdxiJ3d57jdeRicgmm60hFH1ueMZmzFnrvJVY
+         70jjPSwCepQm2WIbZLMpxsysH2BD+xJbVI284GzHGhvIuYBS2tFjGJTF2E6Ps8wHxekz
+         GBPiCYeBZW1j2YN7ZYve/ulTHCqYpIvKrMWFctjmf/nD7SxJhlbYq58yr4XwRY8IdxE4
+         WmxQ==
+X-Gm-Message-State: AOAM530qnEsSuj8/CUOOZD76nhNiLbNMenNrkNNudYN6+B21ObgZEcQV
+        YE+zIvdSK7J+os+DgbhSaWgVzwQfwL3a6cPsBTNLT9//47I=
+X-Google-Smtp-Source: ABdhPJyVIq562JmyFECfhrNyOu7gwPgWE/JD6BOexAsIMAqD22SVUUOfEtvXgMTFtpWJlfzpaXksP++FfDyV5v8Fu/U=
+X-Received: by 2002:a05:6808:23c2:: with SMTP id bq2mr3750281oib.32.1634327000551;
+ Fri, 15 Oct 2021 12:43:20 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 15 Oct 2021 14:43:20 -0500
 MIME-Version: 1.0
-References: <YWbdvc7EWEZLVTHM@smile.fi.intel.com> <20211015164653.GA2108651@bhelgaas>
-In-Reply-To: <20211015164653.GA2108651@bhelgaas>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 15 Oct 2021 22:52:45 +0300
-Message-ID: <CAHp75VdpVwvOkjDWHcnWA-qZFm062UBp7VwdcpWbkdVR=i75Hw@mail.gmail.com>
-Subject: Re: [PATCH v6 00/11] PCI: Drop duplicated tracking of a pci_dev's
- bound driver
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Fiona Trahe <fiona.trahe@intel.com>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ido Schimmel <idosch@nvidia.com>,
-        Ingo Molnar <mingo@redhat.com>, Jack Xu <jack.xu@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jiri Olsa <jolsa@redhat.com>, Jiri Pirko <jiri@nvidia.com>,
-        Juergen Gross <jgross@suse.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Marco Chiappero <marco.chiappero@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Michael Buesch <m@bues.ch>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Russell Currey <ruscur@russell.cc>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tomaszx Kowalik <tomaszx.kowalik@intel.com>,
-        Vadym Kochan <vkochan@marvell.com>,
-        Wojciech Ziemba <wojciech.ziemba@intel.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        linux-crypto <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
-        MPT-FusionLinux.pdl@broadcom.com, netdev <netdev@vger.kernel.org>,
-        oss-drivers@corigine.com, qat-linux@intel.com,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        xen-devel@lists.xenproject.org
+In-Reply-To: <20211013100005.GB9901@lpieralisi>
+References: <1633628923-25047-1-git-send-email-pmaliset@codeaurora.org> <20211013100005.GB9901@lpieralisi>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Fri, 15 Oct 2021 14:43:20 -0500
+Message-ID: <CAE-0n52fZZkWt5KxF8gq0D55f_joq0v2sBBp81Gts8cBt6fJgg@mail.gmail.com>
+Subject: Re: [PATCH v12 0/5] Add DT bindings and DT nodes for PCIe and PHY in SC7280
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Prasad Malisetty <pmaliset@codeaurora.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, bhelgaas@google.com,
+        robh+dt@kernel.org, svarbanov@mm-sol.com,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
+        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org,
+        linux-pci@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 15, 2021 at 7:46 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> On Wed, Oct 13, 2021 at 04:23:09PM +0300, Andy Shevchenko wrote:
-
-...
-
-> so compared to Uwe's v6, I restored that section to the original code.
-> My goal here was to make the patch as simple and easy to review as
-> possible.
-
-Thanks for elaboration. I have got it.
-
-...
-
-> You're right, this didn't make much sense in that patch.  I moved the
-> line join to the previous patch, which unindented this section and
-> made space for this to fit on one line.  Here's the revised commit:
+Quoting Lorenzo Pieralisi (2021-10-13 03:00:05)
+> On Thu, Oct 07, 2021 at 11:18:38PM +0530, Prasad Malisetty wrote:
+> > Prasad Malisetty (5):
+> >   dt-bindings: pci: qcom: Document PCIe bindings for SC7280
+> >   arm64: dts: qcom: sc7280: Add PCIe and PHY related nodes
+> >   arm64: dts: qcom: sc7280: Add PCIe nodes for IDP board
+> >   PCI: qcom: Add a flag in match data along with ops
+> >   PCI: qcom: Switch pcie_1_pipe_clk_src after PHY init in SC7280
+> >
+> >  .../devicetree/bindings/pci/qcom,pcie.txt          |  17 +++
+> >  arch/arm64/boot/dts/qcom/sc7280-idp.dts            |   8 ++
+> >  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |  50 +++++++++
+> >  arch/arm64/boot/dts/qcom/sc7280-idp2.dts           |   8 ++
+> >  arch/arm64/boot/dts/qcom/sc7280.dtsi               | 118 +++++++++++++++++++++
+> >  drivers/pci/controller/dwc/pcie-qcom.c             |  95 +++++++++++++++--
+> >  6 files changed, 285 insertions(+), 11 deletions(-)
 >
->   https://git.kernel.org/cgit/linux/kernel/git/helgaas/pci.git/commit/?id=34ab316d7287
+> I applied patches [4-5] to pci/qcom for v5.16, thanks I expect other
+> patches to go via the relevant trees.
+>
 
-Side remark: default without break or return is error prone (okay, to
-some extent). Perhaps adding the return statement there will make
-things robust and clean.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Lorenzo, can you pick up patch 1 too? It's the binding update for the
+compatible string used in patch 4-5.
