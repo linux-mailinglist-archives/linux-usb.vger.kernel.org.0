@@ -2,262 +2,449 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A21524300DD
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Oct 2021 09:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D70430341
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Oct 2021 17:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243744AbhJPHj5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 16 Oct 2021 03:39:57 -0400
-Received: from mga06.intel.com ([134.134.136.31]:19029 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234547AbhJPHj4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 16 Oct 2021 03:39:56 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10138"; a="288894876"
-X-IronPort-AV: E=Sophos;i="5.85,377,1624345200"; 
-   d="scan'208";a="288894876"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2021 00:37:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,377,1624345200"; 
-   d="scan'208";a="442776661"
-Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 16 Oct 2021 00:37:47 -0700
-Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mbeGI-0008rH-VV; Sat, 16 Oct 2021 07:37:46 +0000
-Date:   Sat, 16 Oct 2021 15:37:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- cd932c2a1ecc8f261ecb8d140fa431c16379931f
-Message-ID: <616a8138.0iww6ONhZJtxQ+2n%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S237389AbhJPPXp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 16 Oct 2021 11:23:45 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:47876 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237075AbhJPPXo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 Oct 2021 11:23:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1634397697; x=1665933697;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=W0A8biCH0qhZomNB4P07ihKR5dM4hw5rTLWfXwGA0Jg=;
+  b=MMHDkGEdhGTnq539jeNzr+3H4Nh7/Tr2TMJYJIBDdNN+Q2+QHgQSK6Y0
+   X0kc8cw/iWL6SYqXZ332KqRwV1XIwgx+AvBZY5YApD5HAejoSmRqunK6J
+   qmo17btBRwBubWad4X869jphJ1BZKWNhYuty1W5AZvY/VTTIg29XYj1mC
+   k=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 16 Oct 2021 08:21:36 -0700
+X-QCInternal: smtphost
+Received: from nalasex01b.na.qualcomm.com ([10.47.209.197])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2021 08:21:36 -0700
+Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
+ Sat, 16 Oct 2021 08:21:34 -0700
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [PATCH v6] usb: gadget: add configfs trace events
+Date:   Sat, 16 Oct 2021 23:21:29 +0800
+Message-ID: <1634397689-2015-1-git-send-email-quic_linyyuan@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: cd932c2a1ecc8f261ecb8d140fa431c16379931f  Merge tag 'usb-serial-5.15-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+in case of USB Gadget functions configure through configfs from
+a complicated user space program, when switch function from one to another,
+if it failed, it is better to find out what action was done to configfs
+from user space program.
 
-elapsed time: 1065m
+this change add most trace events which enable/disable a function,
+it including add/remove configuration, bind/unbind UDC,
+and write/read some attributes.
 
-configs tested: 202
-configs skipped: 4
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211016
-i386                 randconfig-c001-20211015
-sparc                            allyesconfig
-mips                           ip28_defconfig
-sh                        sh7763rdp_defconfig
-mips                      bmips_stb_defconfig
-powerpc                      acadia_defconfig
-mips                        nlm_xlr_defconfig
-xtensa                           alldefconfig
-arm                          moxart_defconfig
-sh                          rsk7264_defconfig
-arm                           spitz_defconfig
-powerpc                     skiroot_defconfig
-powerpc                 mpc834x_mds_defconfig
-nios2                            alldefconfig
-arm                           omap1_defconfig
-mips                            e55_defconfig
-ia64                      gensparse_defconfig
-powerpc                     tqm8560_defconfig
-arm                         at91_dt_defconfig
-powerpc                 mpc8272_ads_defconfig
-powerpc                    socrates_defconfig
-arm                      tct_hammer_defconfig
-mips                      maltasmvp_defconfig
-arm                        trizeps4_defconfig
-arm                          gemini_defconfig
-openrisc                            defconfig
-powerpc                          g5_defconfig
-sparc                               defconfig
-arm                           sama7_defconfig
-powerpc                     kmeter1_defconfig
-ia64                             alldefconfig
-powerpc                  iss476-smp_defconfig
-powerpc                      chrp32_defconfig
-m68k                       m5249evb_defconfig
-sparc64                             defconfig
-arm                          iop32x_defconfig
-h8300                       h8s-sim_defconfig
-sh                        sh7785lcr_defconfig
-mips                      maltaaprp_defconfig
-sh                     magicpanelr2_defconfig
-nds32                            alldefconfig
-arm                       mainstone_defconfig
-um                             i386_defconfig
-mips                        nlm_xlp_defconfig
-arm                  colibri_pxa300_defconfig
-sh                   sh7724_generic_defconfig
-s390                       zfcpdump_defconfig
-arm                    vt8500_v6_v7_defconfig
-mips                        workpad_defconfig
-powerpc                    ge_imp3a_defconfig
-arm                         bcm2835_defconfig
-arc                              alldefconfig
-arm                       imx_v4_v5_defconfig
-arm                         lpc18xx_defconfig
-powerpc                    amigaone_defconfig
-m68k                        m5407c3_defconfig
-powerpc                       holly_defconfig
-ia64                            zx1_defconfig
-m68k                        m5307c3_defconfig
-mips                         db1xxx_defconfig
-mips                          malta_defconfig
-microblaze                      mmu_defconfig
-mips                        vocore2_defconfig
-arc                     haps_hs_smp_defconfig
-sh                         microdev_defconfig
-sh                          kfr2r09_defconfig
-sh                         apsh4a3a_defconfig
-arm                       versatile_defconfig
-arm                         socfpga_defconfig
-arm                           h3600_defconfig
-m68k                           sun3_defconfig
-h8300                            alldefconfig
-powerpc                   motionpro_defconfig
-m68k                          atari_defconfig
-arm64                            alldefconfig
-arm                          ixp4xx_defconfig
-arm                      pxa255-idp_defconfig
-s390                                defconfig
-powerpc                      obs600_defconfig
-arm                      integrator_defconfig
-powerpc                      tqm8xx_defconfig
-mips                     loongson1b_defconfig
-sh                          sdk7786_defconfig
-powerpc                      bamboo_defconfig
-arm                          badge4_defconfig
-arm                             rpc_defconfig
-arm                           u8500_defconfig
-arm                            hisi_defconfig
-arm                  randconfig-c002-20211015
-x86_64               randconfig-c001-20211015
-arm                  randconfig-c002-20211016
-x86_64               randconfig-c001-20211016
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-s390                             allmodconfig
-i386                                defconfig
-i386                             allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20211016
-x86_64               randconfig-a004-20211016
-x86_64               randconfig-a001-20211016
-x86_64               randconfig-a005-20211016
-x86_64               randconfig-a002-20211016
-x86_64               randconfig-a003-20211016
-i386                 randconfig-a003-20211016
-i386                 randconfig-a001-20211016
-i386                 randconfig-a005-20211016
-i386                 randconfig-a004-20211016
-i386                 randconfig-a002-20211016
-i386                 randconfig-a006-20211016
-x86_64               randconfig-a012-20211015
-x86_64               randconfig-a015-20211015
-x86_64               randconfig-a016-20211015
-x86_64               randconfig-a014-20211015
-x86_64               randconfig-a011-20211015
-x86_64               randconfig-a013-20211015
-i386                 randconfig-a016-20211015
-i386                 randconfig-a014-20211015
-i386                 randconfig-a011-20211015
-i386                 randconfig-a015-20211015
-i386                 randconfig-a012-20211015
-i386                 randconfig-a013-20211015
-arc                  randconfig-r043-20211015
-s390                 randconfig-r044-20211015
-riscv                randconfig-r042-20211015
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-mips                 randconfig-c004-20211015
-arm                  randconfig-c002-20211015
-i386                 randconfig-c001-20211015
-s390                 randconfig-c005-20211015
-x86_64               randconfig-c007-20211015
-powerpc              randconfig-c003-20211015
-riscv                randconfig-c006-20211015
-x86_64               randconfig-a006-20211015
-x86_64               randconfig-a004-20211015
-x86_64               randconfig-a001-20211015
-x86_64               randconfig-a005-20211015
-x86_64               randconfig-a002-20211015
-x86_64               randconfig-a003-20211015
-i386                 randconfig-a003-20211015
-i386                 randconfig-a001-20211015
-i386                 randconfig-a005-20211015
-i386                 randconfig-a004-20211015
-i386                 randconfig-a002-20211015
-i386                 randconfig-a006-20211015
-x86_64               randconfig-a012-20211016
-x86_64               randconfig-a015-20211016
-x86_64               randconfig-a016-20211016
-x86_64               randconfig-a014-20211016
-x86_64               randconfig-a011-20211016
-x86_64               randconfig-a013-20211016
-i386                 randconfig-a016-20211016
-i386                 randconfig-a014-20211016
-i386                 randconfig-a011-20211016
-i386                 randconfig-a015-20211016
-i386                 randconfig-a012-20211016
-i386                 randconfig-a013-20211016
-hexagon              randconfig-r041-20211016
-s390                 randconfig-r044-20211016
-riscv                randconfig-r042-20211016
-hexagon              randconfig-r045-20211016
-hexagon              randconfig-r041-20211015
-hexagon              randconfig-r045-20211015
-
+Suggested-by: Felipe Balbi <balbi@kernel.org>
+Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+v2: fix two issue Reported-by: kernel test robot <lkp@intel.com>
+v3: do not move private structure to configfs.h
+v4: add missing new file configfs_trace.h
+v5: lost some change of v2, add it again
+v6: fix comments from Greg Kroah-Hartman
+
+ drivers/usb/gadget/configfs.c       |  45 +++++++--
+ drivers/usb/gadget/configfs_trace.h | 191 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 227 insertions(+), 9 deletions(-)
+ create mode 100644 drivers/usb/gadget/configfs_trace.h
+
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index 477e72a..f30f98f 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -73,6 +73,11 @@ static inline struct config_usb_cfg *to_config_usb_cfg(struct config_item *item)
+ 			group);
+ }
+ 
++static inline struct gadget_info *cfg_to_gadget_info(struct config_usb_cfg *cfg)
++{
++	return container_of(cfg->c.cdev, struct gadget_info, cdev);
++}
++
+ struct gadget_strings {
+ 	struct usb_gadget_strings stringtab_dev;
+ 	struct usb_string strings[USB_GADGET_FIRST_AVAIL_IDX];
+@@ -97,6 +102,10 @@ struct gadget_config_name {
+ 	struct list_head list;
+ };
+ 
++#define CONFIGFS_TRACE_STRING
++#define CREATE_TRACE_POINTS
++#include "configfs_trace.h"
++
+ #define USB_MAX_STRING_WITH_NULL_LEN	(USB_MAX_STRING_LEN+1)
+ 
+ static int usb_string_copy(const char *s, char **s_copy)
+@@ -204,6 +213,7 @@ static ssize_t gadget_dev_desc_bcdDevice_store(struct config_item *item,
+ 	if (ret)
+ 		return ret;
+ 
++	trace_gadget_dev_desc_bcdDevice_store(to_gadget_info(item));
+ 	to_gadget_info(item)->cdev.desc.bcdDevice = cpu_to_le16(bcdDevice);
+ 	return len;
+ }
+@@ -222,6 +232,7 @@ static ssize_t gadget_dev_desc_bcdUSB_store(struct config_item *item,
+ 		return ret;
+ 
+ 	to_gadget_info(item)->cdev.desc.bcdUSB = cpu_to_le16(bcdUSB);
++	trace_gadget_dev_desc_bcdUSB_store(to_gadget_info(item));
+ 	return len;
+ }
+ 
+@@ -234,6 +245,7 @@ static ssize_t gadget_dev_desc_UDC_show(struct config_item *item, char *page)
+ 	mutex_lock(&gi->lock);
+ 	udc_name = gi->composite.gadget_driver.udc_name;
+ 	ret = sprintf(page, "%s\n", udc_name ?: "");
++	trace_gadget_dev_desc_UDC_show(gi);
+ 	mutex_unlock(&gi->lock);
+ 
+ 	return ret;
+@@ -243,6 +255,7 @@ static int unregister_gadget(struct gadget_info *gi)
+ {
+ 	int ret;
+ 
++	trace_unregister_gadget(gi);
+ 	if (!gi->composite.gadget_driver.udc_name)
+ 		return -ENODEV;
+ 
+@@ -270,6 +283,8 @@ static ssize_t gadget_dev_desc_UDC_store(struct config_item *item,
+ 	if (name[len - 1] == '\n')
+ 		name[len - 1] = '\0';
+ 
++	trace_gadget_dev_desc_UDC_store(gi);
++
+ 	mutex_lock(&gi->lock);
+ 
+ 	if (!strlen(name)) {
+@@ -302,6 +317,7 @@ static ssize_t gadget_dev_desc_max_speed_show(struct config_item *item,
+ {
+ 	enum usb_device_speed speed = to_gadget_info(item)->composite.max_speed;
+ 
++	trace_gadget_dev_desc_max_speed_show(to_gadget_info(item));
+ 	return sprintf(page, "%s\n", usb_speed_string(speed));
+ }
+ 
+@@ -331,6 +347,8 @@ static ssize_t gadget_dev_desc_max_speed_store(struct config_item *item,
+ 
+ 	gi->composite.gadget_driver.max_speed = gi->composite.max_speed;
+ 
++	trace_gadget_dev_desc_max_speed_store(gi);
++
+ 	mutex_unlock(&gi->lock);
+ 	return len;
+ err:
+@@ -413,8 +431,7 @@ static int config_usb_cfg_link(
+ 	struct config_item *usb_func_ci)
+ {
+ 	struct config_usb_cfg *cfg = to_config_usb_cfg(usb_cfg_ci);
+-	struct usb_composite_dev *cdev = cfg->c.cdev;
+-	struct gadget_info *gi = container_of(cdev, struct gadget_info, cdev);
++	struct gadget_info *gi = cfg_to_gadget_info(cfg);
+ 
+ 	struct config_group *group = to_config_group(usb_func_ci);
+ 	struct usb_function_instance *fi = container_of(group,
+@@ -455,6 +472,7 @@ static int config_usb_cfg_link(
+ 	list_add_tail(&f->list, &cfg->func_list);
+ 	ret = 0;
+ out:
++	trace_config_usb_cfg_link(gi);
+ 	mutex_unlock(&gi->lock);
+ 	return ret;
+ }
+@@ -464,8 +482,7 @@ static void config_usb_cfg_unlink(
+ 	struct config_item *usb_func_ci)
+ {
+ 	struct config_usb_cfg *cfg = to_config_usb_cfg(usb_cfg_ci);
+-	struct usb_composite_dev *cdev = cfg->c.cdev;
+-	struct gadget_info *gi = container_of(cdev, struct gadget_info, cdev);
++	struct gadget_info *gi = cfg_to_gadget_info(cfg);
+ 
+ 	struct config_group *group = to_config_group(usb_func_ci);
+ 	struct usb_function_instance *fi = container_of(group,
+@@ -487,6 +504,7 @@ static void config_usb_cfg_unlink(
+ 		if (f->fi == fi) {
+ 			list_del(&f->list);
+ 			usb_put_function(f);
++			trace_config_usb_cfg_unlink(gi);
+ 			mutex_unlock(&gi->lock);
+ 			return;
+ 		}
+@@ -505,12 +523,16 @@ static struct configfs_item_operations gadget_config_item_ops = {
+ static ssize_t gadget_config_desc_MaxPower_show(struct config_item *item,
+ 		char *page)
+ {
+-	return sprintf(page, "%u\n", to_config_usb_cfg(item)->c.MaxPower);
++	struct config_usb_cfg *cfg = to_config_usb_cfg(item);
++
++	trace_gadget_config_desc_MaxPower_show(cfg_to_gadget_info(cfg));
++	return sprintf(page, "%u\n", cfg->c.MaxPower);
+ }
+ 
+ static ssize_t gadget_config_desc_MaxPower_store(struct config_item *item,
+ 		const char *page, size_t len)
+ {
++	struct config_usb_cfg *cfg = to_config_usb_cfg(item);
+ 	u16 val;
+ 	int ret;
+ 	ret = kstrtou16(page, 0, &val);
+@@ -518,20 +540,24 @@ static ssize_t gadget_config_desc_MaxPower_store(struct config_item *item,
+ 		return ret;
+ 	if (DIV_ROUND_UP(val, 8) > 0xff)
+ 		return -ERANGE;
+-	to_config_usb_cfg(item)->c.MaxPower = val;
++	cfg->c.MaxPower = val;
++	trace_gadget_config_desc_MaxPower_store(cfg_to_gadget_info(cfg));
+ 	return len;
+ }
+ 
+ static ssize_t gadget_config_desc_bmAttributes_show(struct config_item *item,
+ 		char *page)
+ {
+-	return sprintf(page, "0x%02x\n",
+-		to_config_usb_cfg(item)->c.bmAttributes);
++	struct config_usb_cfg *cfg = to_config_usb_cfg(item);
++
++	trace_gadget_config_desc_bmAttributes_show(cfg_to_gadget_info(cfg));
++	return sprintf(page, "0x%02x\n", cfg->c.bmAttributes);
+ }
+ 
+ static ssize_t gadget_config_desc_bmAttributes_store(struct config_item *item,
+ 		const char *page, size_t len)
+ {
++	struct config_usb_cfg *cfg = to_config_usb_cfg(item);
+ 	u8 val;
+ 	int ret;
+ 	ret = kstrtou8(page, 0, &val);
+@@ -542,7 +568,8 @@ static ssize_t gadget_config_desc_bmAttributes_store(struct config_item *item,
+ 	if (val & ~(USB_CONFIG_ATT_ONE | USB_CONFIG_ATT_SELFPOWER |
+ 				USB_CONFIG_ATT_WAKEUP))
+ 		return -EINVAL;
+-	to_config_usb_cfg(item)->c.bmAttributes = val;
++	cfg->c.bmAttributes = val;
++	trace_gadget_config_desc_bmAttributes_store(cfg_to_gadget_info(cfg));
+ 	return len;
+ }
+ 
+diff --git a/drivers/usb/gadget/configfs_trace.h b/drivers/usb/gadget/configfs_trace.h
+new file mode 100644
+index 0000000..890122e
+--- /dev/null
++++ b/drivers/usb/gadget/configfs_trace.h
+@@ -0,0 +1,191 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++#ifdef CONFIGFS_TRACE_STRING
++#undef CONFIGFS_TRACE_STRING
++
++#define MAX_CONFIGURAITON_STR_LEN	512
++static __maybe_unused char *configfs_trace_string(struct gadget_info *gi)
++{
++	struct usb_configuration *uc;
++	struct config_usb_cfg *cfg;
++	struct usb_function *f;
++	static char trs[MAX_CONFIGURAITON_STR_LEN];
++	size_t len = MAX_CONFIGURAITON_STR_LEN - 1;
++	int n = 0;
++
++	list_for_each_entry(uc, &gi->cdev.configs, list) {
++		cfg = container_of(uc, struct config_usb_cfg, c);
++
++		n += scnprintf(trs + n, len - n,
++			"{%d %02x %d ",
++			uc->bConfigurationValue,
++			uc->bmAttributes,
++			uc->MaxPower);
++
++		list_for_each_entry(f, &cfg->func_list, list)
++			n += scnprintf(trs + n, len - n, "%s;", f->name);
++
++		list_for_each_entry(f, &cfg->c.functions, list)
++			n += scnprintf(trs + n, len - n, "%s;", f->name);
++
++		n += scnprintf(trs + n, len - n, "},");
++	}
++
++	return trs;
++}
++
++#endif /* CONFIGFS_TRACE_STRING */
++
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM configfs_gadget
++
++#if !defined(__CONFIGFS_GADGET_TRACE_H) || defined(TRACE_HEADER_MULTI_READ)
++#define __CONFIGFS_GADGET_TRACE_H
++
++#include <linux/tracepoint.h>
++
++DECLARE_EVENT_CLASS(log_gadget_info,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi),
++	TP_STRUCT__entry(
++		__string(gi_group, config_item_name(&gi->group.cg_item))
++		__field(bool, unbind)
++		__field(bool, use_os_desc)
++		__field(char, b_vendor_code)
++
++		__field(bool, suspended)
++		__field(bool, setup_pending)
++		__field(bool, os_desc_pending)
++		__field(unsigned, deactivations)
++		__field(int, delayed_status)
++		__field(u16, bcdUSB)
++		__field(u16, bcdDevice)
++		__string(config, configfs_trace_string(gi))
++
++		__field(unsigned, max_speed)
++		__field(bool, needs_serial)
++
++		__string(udc_name, gi->composite.gadget_driver.udc_name)
++	),
++	TP_fast_assign(
++		__assign_str(gi_group, config_item_name(&gi->group.cg_item));
++		__entry->unbind = gi->unbind;
++		__entry->use_os_desc = gi->use_os_desc;
++		__entry->b_vendor_code = gi->b_vendor_code;
++
++		__entry->suspended = gi->cdev.suspended;
++		__entry->setup_pending = gi->cdev.setup_pending;
++		__entry->os_desc_pending = gi->cdev.os_desc_pending;
++		__entry->deactivations = gi->cdev.deactivations;
++		__entry->delayed_status = gi->cdev.delayed_status;
++		__entry->bcdUSB = le16_to_cpu(gi->cdev.desc.bcdUSB);
++		__entry->bcdDevice = le16_to_cpu(gi->cdev.desc.bcdDevice);
++		__assign_str(config, configfs_trace_string(gi));
++
++		__entry->max_speed = gi->composite.max_speed;
++		__entry->needs_serial = gi->composite.needs_serial;
++
++		__assign_str(udc_name, gi->composite.gadget_driver.udc_name);
++	),
++	TP_printk("%s %d %d %d - %d %d %d %d %d %04x %04x %s - %d %d - %s",
++
++		__get_str(gi_group),
++		__entry->unbind,
++		__entry->use_os_desc,
++		__entry->b_vendor_code,
++
++		__entry->suspended,
++		__entry->setup_pending,
++		__entry->os_desc_pending,
++		__entry->deactivations,
++		__entry->delayed_status,
++		__entry->bcdUSB,
++		__entry->bcdDevice,
++		__get_str(config),
++
++		__entry->max_speed,
++		__entry->needs_serial,
++
++		__get_str(udc_name)
++	)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_dev_desc_bcdDevice_store,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_dev_desc_bcdUSB_store,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_dev_desc_UDC_show,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, unregister_gadget,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_dev_desc_UDC_store,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_dev_desc_max_speed_show,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_dev_desc_max_speed_store,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, config_usb_cfg_link,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, config_usb_cfg_unlink,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_config_desc_MaxPower_show,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_config_desc_MaxPower_store,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_config_desc_bmAttributes_show,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_config_desc_bmAttributes_store,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++#endif /* __CONFIGFS_GADGET_TRACE_H */
++
++/* this part has to be here */
++
++#undef TRACE_INCLUDE_PATH
++#define TRACE_INCLUDE_PATH ../../drivers/usb/gadget
++
++#undef TRACE_INCLUDE_FILE
++#define TRACE_INCLUDE_FILE configfs_trace
++
++#include <trace/define_trace.h>
+-- 
+2.7.4
+
