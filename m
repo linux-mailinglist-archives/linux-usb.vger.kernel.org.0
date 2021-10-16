@@ -2,383 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C3A430350
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Oct 2021 17:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5173243036E
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Oct 2021 17:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237748AbhJPPbi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 16 Oct 2021 11:31:38 -0400
-Received: from esa.hc3962-90.iphmx.com ([216.71.142.165]:49081 "EHLO
-        esa.hc3962-90.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233277AbhJPPbh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 Oct 2021 11:31:37 -0400
+        id S238180AbhJPPit (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 16 Oct 2021 11:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51094 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234575AbhJPPir (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 Oct 2021 11:38:47 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE1FC061570;
+        Sat, 16 Oct 2021 08:36:39 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id i24so54405169lfj.13;
+        Sat, 16 Oct 2021 08:36:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
-  t=1634398170; x=1635002970;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=V8Qj0wKE5oUvsQ6tH2Li4WJLC7O9cZwFaLlJruCczE8=;
-  b=VMa4rhz0s8pkD0frHS1CAT2dvcrgF2SlTYM3n0TpN2GuX/6QOHo/bvyC
-   s0fXC/nZUF6GWejBZpQBUzpRuF3NjP+3y6EQRnVfOguieHyjF1PSH9VN/
-   5LmjqusVs9ougFexXd8AblHIAHsETbHldARe8UWLjDZL9BJLPlJFqcxAt
-   8=;
-Received: from mail-dm3nam07lp2049.outbound.protection.outlook.com (HELO NAM02-DM3-obe.outbound.protection.outlook.com) ([104.47.56.49])
-  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2021 15:29:29 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R3ikrCT5eBePgxyNSY/EyWYMgooqoiybWR2NyxYLQrnYi/eolShJaS6J3ik3ZWOsZiCKVRlWQmF4WpWTD8Hk1Cy3F56lUXJX/+BeJixibHsNF6rUFtuqVyvlLjd4GYGxAg3AgQB82kZ/skysWc9uoD0KrwgCxXF/gb/T551n57GSa9Pgaw+uj+t2BYWD+ikwC3XfyJkvhpNsJuDpp78+JdMAPEhWmSGel9WLsIditsDvZLeZScKr9gFLS8oUsGIRnB1UtM+Jocs3VepokK+mXWcYiNYVR9mlYxwDS5o1fhCIgymffnCfLA7Gx3BiOCBl6lSd2ksyHAy/CJFwe/FXEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V8Qj0wKE5oUvsQ6tH2Li4WJLC7O9cZwFaLlJruCczE8=;
- b=m7DYoGvy8ntM7nwuG59izl3M04J7RNB/ILnh/CGkHE3CbesAKBi9gO6++If/uC8wwW7XlKIhdlaquB2GxNaf8CHIQ7xcTnK26L3z8rD+zH5UU0cv22yd6OMnLisSUvw89DCQQ1nlcf9DCvYNMNIGegahKNTyLtQPru0pejE2qpwnEj7zWi2LYWMF/ZgZcHs5UFVoNuKCEy+NzsPJKv3ViO3EQJr7l26QTNQuwvZzlJlMZCGu9G7/tocfClxdKPGD/79wD3BQdoj++HJ7aFvFpkH+PbiuX+B54fWa7q+X/z5JDzjW80YaL2NIwe8U70Bqaz4XJJpbKAttznr2BO6u2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
- dkim=pass header.d=quicinc.com; arc=none
-Received: from BL3PR02MB8201.namprd02.prod.outlook.com (2603:10b6:208:338::17)
- by BL3PR02MB8161.namprd02.prod.outlook.com (2603:10b6:208:35c::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.16; Sat, 16 Oct
- 2021 15:29:27 +0000
-Received: from BL3PR02MB8201.namprd02.prod.outlook.com
- ([fe80::51fb:e0d:4b5e:4cfd]) by BL3PR02MB8201.namprd02.prod.outlook.com
- ([fe80::51fb:e0d:4b5e:4cfd%5]) with mapi id 15.20.4608.018; Sat, 16 Oct 2021
- 15:29:26 +0000
-From:   "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v5 3/3] usb: gadget: configfs: add some trace event
-Thread-Topic: [PATCH v5 3/3] usb: gadget: configfs: add some trace event
-Thread-Index: AQHXo4UQHddSKHPT9EqYg2oVp5RXDKvE4x0AgBEaK7A=
-Date:   Sat, 16 Oct 2021 15:29:26 +0000
-Message-ID: <BL3PR02MB8201BDCA2A46C85F94BC5E47E3BA9@BL3PR02MB8201.namprd02.prod.outlook.com>
-References: <1630976977-13938-1-git-send-email-quic_linyyuan@quicinc.com>
- <1630976977-13938-4-git-send-email-quic_linyyuan@quicinc.com>
- <YVwz/EY4A/y4rY48@kroah.com>
-In-Reply-To: <YVwz/EY4A/y4rY48@kroah.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=quicinc.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9a83a569-ca96-4bae-6e03-08d990b9bd36
-x-ms-traffictypediagnostic: BL3PR02MB8161:
-x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BL3PR02MB8161640702BB75DA92C804EA9FBA9@BL3PR02MB8161.namprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:281;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wSvUluvGoVUdPGq25sJgvEn7XpG24LLdTGZSPe2ND26uSf3RhwsAy9/trtGSimqVOg+JzqBvWSLTNIhvqMkp9vFMZdnBC2UW/P1+FfSYpHf7VbqlXh8emdxg3K06F/f8a1ajjAiU6eVK61s7RsS027emjjjvti060WH7MaRMRsMA5jiN+s/Et3kR18j8MLecTurQegr1dV8kd4aBnzNSUenLvaC72fQXe7DeUl1p53pY1N9nRe4YArCOirbSBQeSfsJVB1I32B3Azga3BYs/IhrpmQEFFsHQCH2IlEn9+OyAS1+5Bhkh12CU7lgylxvD6B5iusj3hYgfe4wGhxBkx2dF6R2hLDkVNbzwSdmelxrBVyGO/HJfrvcIFAuuFckv8eUs5r6wY1ogDAnh8A3vBKKqf0QLsqOZBUmjJobV1IKQyaRtR6Dl6QyGU8KIcqZ9AHiEyltZb2hlBKpqRFq8Lu8+na6YcjhPRRJwL0OB/sQzgw80MAgonsB9S7i900oneYp4m3mbb9RajK7K51K9fXGAtVuaIPrxEcbSR6jCVXeMl1ezOv6hR83cA9jrsYeYTK3ypbjJDDGNYDGkJw/qJiMBnqbT8nhCa50npS1g28VUhccJ7iuZtv4MonPyUf4eHdEwZmh/o2H6REvvgHYCigE2S6x96CZ/NTF47Lxw1YwMb6eAPrz63zx6bqcfc9cPqOU1IZ+81n0ZICZsMcmyWg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL3PR02MB8201.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(52536014)(55016002)(508600001)(83380400001)(6506007)(64756008)(26005)(8676002)(5660300002)(8936002)(53546011)(71200400001)(122000001)(9686003)(2906002)(7696005)(38100700002)(186003)(38070700005)(316002)(4326008)(110136005)(54906003)(66556008)(33656002)(76116006)(66476007)(86362001)(66446008)(66946007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?x+boLjdkRXaIkzo2u5FORUqJA1/9uViLJacxp6coMz4GjTSeLLlERXve7MJY?=
- =?us-ascii?Q?HjOfi4yEQgUXaKvg8wMeno2M8FvZZFvLirgZZ0qy25pgREO75UbjcMEKdFop?=
- =?us-ascii?Q?PcNR+2ORSB5lpcUEzHu960svLlSkdCi9f8Xl45EU9/53us27RmjiNKPGVM+X?=
- =?us-ascii?Q?YicGaNvtBMXnbdAuOcv5CScR6tR50xceRJwSanQXsNHqdIpMR5EiYvuH3Q3x?=
- =?us-ascii?Q?dpiTDbB5OuLiXhjc0rTQaJ3mnzBB1Tjf7VuFjkKj+EieaKGw6dhO44gOuNBR?=
- =?us-ascii?Q?flR+1pF4g4+Cg/JcaCsOb+5AIp2s98eR0bJ54KaHAkZRg5cNFhN1URt9I27J?=
- =?us-ascii?Q?94lUEwwI77RNB8kw8wY+Haoe6iE3HX1Nlm7IqVabw8RylCC4zGNHKH5LCtu4?=
- =?us-ascii?Q?LtlqCFf8DU6t+PY3yJ/AK1DT4G8qcyPvYO7t/GPD4bP3xRj3+Y4sDM70z6tg?=
- =?us-ascii?Q?ReWMNgDo+KVNOjKE9+p0IWcbHg1kThQhiUlCU4sq8wpYN5x+OdI3RjtVWXlf?=
- =?us-ascii?Q?UclXnRAvTh2VeBStXkAdeMVoN3NWqvE8UHjLWZpreoIXgEy7QL3tyGxmrAll?=
- =?us-ascii?Q?Uuv1kvy+qz094I/fM0PIfcCUzIIyFYNupDitlzYgC47iSZQsH00fUSdUrJQP?=
- =?us-ascii?Q?Vxnv6gm2LWITp+bRktMFekyC7NY7HkLh38pWC5VLOXzMg2DgFPnymIsEnkeQ?=
- =?us-ascii?Q?CvXKRAjkj54kuuyWn82DsJXyizM149BtEe5OOnju37/nXl7ao9trBK8OoOUi?=
- =?us-ascii?Q?yZLW2BTIYfsckvTQ5qZK5QKrJJQSGLKsMTJTWkJ/VYW8GuZklZ7RwJ/Ik8xp?=
- =?us-ascii?Q?aWN2sJvmzhJnskbrZ7bqL63VUSXC8dcznqwfXQiBuq+wyALRPSWQ3ugnCE8L?=
- =?us-ascii?Q?9u0hBEqXjPTllNzCQVRhjE/iyW7nfBXIvQFKmeMglv17HHbB5UgBNM14Oetz?=
- =?us-ascii?Q?IPdQ89QvF30B/DiUTn3eBVayTCxABa4UUerHkePQQ4vFvhPcb0EOKa+V0mi/?=
- =?us-ascii?Q?zs8wn1tGaPHlCNMrBu18bPqS+Z5Qq2sSZpv7K8BFyNR/w2oryA4SUprBCy/O?=
- =?us-ascii?Q?cnljET47AONipPbKoYmEq4UbUG0x2uCGexY2cL+QBXARPbOQ4+A7Zr5/N+IS?=
- =?us-ascii?Q?MBhzT/4yFY9jAa4ocAPb1P1/3TnF9yCPlq4GOLn9ezvRM054T+Yo+3Lk3DuA?=
- =?us-ascii?Q?SwjuXqls/rGfHRJ2W51r0LbG7cTbvRvpaFlTZM8lG5/QM1zuKWXzF75Z34Mr?=
- =?us-ascii?Q?CVqx+RLWcCT8PNR04loifjK3Q8jI9sXbbaSMCc3XCkymQlSJmAAboK1ldhVt?=
- =?us-ascii?Q?WZg=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=iXmHQbdUUEj7iD9UdLGIRExPe2SbeX0x9hgeURTYmuQ=;
+        b=gy+a/5BSaOUZjjMeREUgCptM2ybr7PF148YGvG+CqztuyGq8LBhigc7vHDIIyQZ4RR
+         nCkxVRmxG6APD0+J/FGkfKxkl0tNsjzP7W5/HDgmaFfOHmvbOI3WCtMY70n8umX8yEJV
+         FJGDPXjLDrI9pGt9cpA+/Wo5Ds2dyHODEA9wSoRG9q3PsnHlqMpubsdtzMh+a+j199o6
+         sBrVM5rVaDlfadaBelsLV+JFBxj2s8A9ruw+Th0rjBkgDfinqABq4j1GP6WbYKhHhnWW
+         e25hnD271Cbz3yMZERuOiAdnU4nILxFmsh9aOU6cSv/0XCWbnrMGgN49CuZqdBiLmYgo
+         PhGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=iXmHQbdUUEj7iD9UdLGIRExPe2SbeX0x9hgeURTYmuQ=;
+        b=77+wQh5JSBvSRipG4bflGBZadMuOCKuoPz4zRYjNOoM7i83MvqLsfzFxgYPTFYB2y5
+         pEVKasO991N6S89jOoOhZ1zKa5cycPk4n7ZaQbjnBP5HCTgzkDHkToC4ndG8nMb4AMe5
+         d5KSiVukiDXNPJ+J71wnoFelNHkmln40qArHEg0yZVc5H0L0OydIDbwJqU7lIH8C792I
+         DKohOws2kGx5oq1wqohQdEvGzKSgpzMyYJTzNE2LkZogzrMHlyxLAuekJ79fVZ4R+gTt
+         HOD2KjDopLVtWKsWdKTzwM+gvr+Q2s7esoUeDi0sNggCPwp92j0gjW2FLrcEDUVFh/sX
+         9iVw==
+X-Gm-Message-State: AOAM531yzIB82WTrmLXDn7gN8ShM1V5KzzFPf+UtrAbkMDKNMihZmVDy
+        X7qs26TZ4lsOA+7HCF/tF+o=
+X-Google-Smtp-Source: ABdhPJxtvgN0MWJt4cva3KTlHcgZzj89zboYkD6ihnqr+bNLevlFAbbJkDz7ATXU/w01SNAG8MS09Q==
+X-Received: by 2002:a2e:a544:: with SMTP id e4mr15585258ljn.225.1634398597937;
+        Sat, 16 Oct 2021 08:36:37 -0700 (PDT)
+Received: from [192.168.2.145] (46-138-48-94.dynamic.spd-mgts.ru. [46.138.48.94])
+        by smtp.googlemail.com with ESMTPSA id w26sm1021100ljh.18.2021.10.16.08.36.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Oct 2021 08:36:37 -0700 (PDT)
+Subject: Re: [PATCH v13 11/35] drm/tegra: dc: Support OPP and SoC core voltage
+ scaling
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+References: <20210926224058.1252-1-digetx@gmail.com>
+ <20210926224058.1252-12-digetx@gmail.com>
+ <CAPDyKFobSsFOnmFc4BG353uYgECGD1U1U020oQwB7pX0mfCfvw@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <9bb95684-de30-697a-139c-1e3e54dade2a@gmail.com>
+Date:   Sat, 16 Oct 2021 18:36:35 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-X-OriginatorOrg: quicinc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL3PR02MB8201.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a83a569-ca96-4bae-6e03-08d990b9bd36
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Oct 2021 15:29:26.6132
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NSEvbz1R120FRpVqrLcPwCEKeA0Ab6V6IR6IkAeknNg2dXV4DRPUCJZfxT6KmnQxieWNMAyllLqjHg3uzPAa/uTddnaF2qjlxMD87d0g/5Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR02MB8161
+In-Reply-To: <CAPDyKFobSsFOnmFc4BG353uYgECGD1U1U020oQwB7pX0mfCfvw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Sent: Tuesday, October 5, 2021 7:16 PM
-> To: Linyu Yuan (QUIC) <quic_linyyuan@quicinc.com>
-> Cc: Felipe Balbi <balbi@kernel.org>; linux-usb@vger.kernel.org
-> Subject: Re: [PATCH v5 3/3] usb: gadget: configfs: add some trace event
->=20
-> On Tue, Sep 07, 2021 at 09:09:37AM +0800, Linyu Yuan wrote:
-> > add UDC, cfg link/unlink and some attributes trace
-> > to better trace gadget issues.
->=20
-> Please document this a lot better.  What do these traces do and who is
-> supposed to use them and what for?
->=20
->=20
-> >
-> > Suggested-by: Felipe Balbi <balbi@kernel.org>
-> > Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
-> > ---
-> > v3: build trace inside configfs.c
-> > v4: no change
-> > v5: lost v2 fix, add it again
-> >
-> >  drivers/usb/gadget/configfs.c       |  54 ++++++++++++
-> >  drivers/usb/gadget/configfs_trace.h | 167
-> ++++++++++++++++++++++++++++++++++++
-> >  2 files changed, 221 insertions(+)
-> >  create mode 100644 drivers/usb/gadget/configfs_trace.h
-> >
-> > diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configf=
-s.c
-> > index cea12c3..61a8908 100644
-> > --- a/drivers/usb/gadget/configfs.c
-> > +++ b/drivers/usb/gadget/configfs.c
-> > @@ -103,6 +103,42 @@ struct gadget_config_name {
-> >  	struct list_head list;
-> >  };
-> >
-> > +#define MAX_CONFIGURAITON_STR_LEN	512
-> > +
-> > +static char *config_trace_string(struct gadget_info *gi)
-> > +{
-> > +	struct usb_configuration *uc;
-> > +	struct config_usb_cfg *cfg;
-> > +	struct config_usb_function *cf;
-> > +	static char trs[MAX_CONFIGURAITON_STR_LEN];
->=20
-> One buffer for all messages?  What locking do you have in place to
-> handle things when multiple CPUs call this function at the same time?
->=20
-> > +	size_t len =3D MAX_CONFIGURAITON_STR_LEN;
->=20
-> Should be MAX_CONFIGURAITON_STR_LEN - 1, right?
->=20
-> > +	int n =3D 0;
-> > +
-> > +	trs[0] =3D '\0';
->=20
-> Why initialize just the first character
->=20
->=20
-> > +
-> > +	list_for_each_entry(uc, &gi->cdev.configs, list) {
-> > +		cfg =3D container_of(uc, struct config_usb_cfg, c);
-> > +
-> > +		n +=3D scnprintf(trs + n, len - n,
-> > +
-> 	"group:%s,bConfigurationValue:%d,bmAttributes:%d,"
->=20
-> No spaces in the trace message, is that normal?
->=20
-> > +			"MaxPower:%d,",
->=20
-> Please do not split strings across a line.
->=20
-> > +			config_item_name(&cfg->group.cg_item),
-> > +			uc->bConfigurationValue,
-> > +			uc->bmAttributes,
-> > +			uc->MaxPower);
-> > +
-> > +		n +=3D scnprintf(trs + n, len - n, "function:[");
-> > +		list_for_each_entry(cf, &cfg->func_list, list)
-> > +			n +=3D scnprintf(trs + n, len - n, "%s", cf->f->name);
-> > +		n +=3D scnprintf(trs + n, len - n, "},");
-> > +	}
-> > +
-> > +	return trs;
->=20
-> Again, you return a pointer to a static structure, yet you have no locks
-> at all.
-Seem when trace function called, the preempt disabled.
-Do we need to add a lock ?
->=20
-> > +}
-> > +
-> > +#define CREATE_TRACE_POINTS
-> > +#include "configfs_trace.h"
-> > +
-> >  #define USB_MAX_STRING_WITH_NULL_LEN
-> 	(USB_MAX_STRING_LEN+1)
-> >
-> >  static int usb_string_copy(const char *s, char **s_copy)
-> > @@ -210,6 +246,7 @@ static ssize_t
-> gadget_dev_desc_bcdDevice_store(struct config_item *item,
-> >  	if (ret)
-> >  		return ret;
-> >
-> > +	trace_gadget_dev_desc_bcdDevice_store(to_gadget_info(item));
-> >  	to_gadget_info(item)->cdev.desc.bcdDevice =3D
-> cpu_to_le16(bcdDevice);
-> >  	return len;
-> >  }
-> > @@ -228,6 +265,7 @@ static ssize_t
-> gadget_dev_desc_bcdUSB_store(struct config_item *item,
-> >  		return ret;
-> >
-> >  	to_gadget_info(item)->cdev.desc.bcdUSB =3D cpu_to_le16(bcdUSB);
-> > +	trace_gadget_dev_desc_bcdUSB_store(to_gadget_info(item));
-> >  	return len;
-> >  }
-> >
-> > @@ -240,6 +278,7 @@ static ssize_t gadget_dev_desc_UDC_show(struct
-> config_item *item, char *page)
-> >  	mutex_lock(&gi->lock);
-> >  	udc_name =3D gi->composite.gadget_driver.udc_name;
-> >  	ret =3D sprintf(page, "%s\n", udc_name ?: "");
-> > +	trace_gadget_dev_desc_UDC_show(gi);
-> >  	mutex_unlock(&gi->lock);
-> >
-> >  	return ret;
-> > @@ -249,6 +288,7 @@ static int unregister_gadget(struct gadget_info *gi=
-)
-> >  {
-> >  	int ret;
-> >
-> > +	trace_unregister_gadget(gi);
-> >  	if (!gi->composite.gadget_driver.udc_name)
-> >  		return -ENODEV;
-> >
-> > @@ -276,6 +316,8 @@ static ssize_t gadget_dev_desc_UDC_store(struct
-> config_item *item,
-> >  	if (name[len - 1] =3D=3D '\n')
-> >  		name[len - 1] =3D '\0';
-> >
-> > +	trace_gadget_dev_desc_UDC_store(gi);
-> > +
-> >  	mutex_lock(&gi->lock);
-> >
-> >  	if (!strlen(name)) {
-> > @@ -296,6 +338,8 @@ static ssize_t gadget_dev_desc_UDC_store(struct
-> config_item *item,
-> >  		}
-> >  	}
-> >  	mutex_unlock(&gi->lock);
-> > +
-> > +	trace_gadget_dev_desc_UDC_store(gi);
-> >  	return len;
-> >  err:
-> >  	kfree(name);
-> > @@ -308,6 +352,7 @@ static ssize_t
-> gadget_dev_desc_max_speed_show(struct config_item *item,
-> >  {
-> >  	enum usb_device_speed speed =3D to_gadget_info(item)-
-> >composite.max_speed;
-> >
-> > +	trace_gadget_dev_desc_max_speed_show(to_gadget_info(item));
-> >  	return sprintf(page, "%s\n", usb_speed_string(speed));
-> >  }
-> >
-> > @@ -337,6 +382,8 @@ static ssize_t
-> gadget_dev_desc_max_speed_store(struct config_item *item,
-> >
-> >  	gi->composite.gadget_driver.max_speed =3D gi-
-> >composite.max_speed;
-> >
-> > +	trace_gadget_dev_desc_max_speed_store(gi);
-> > +
-> >  	mutex_unlock(&gi->lock);
-> >  	return len;
-> >  err:
-> > @@ -468,6 +515,7 @@ static int config_usb_cfg_link(
-> >  	list_add_tail(&cf->list, &cfg->func_list);
-> >  	ret =3D 0;
-> >  out:
-> > +	trace_config_usb_cfg_link(gi);
-> >  	mutex_unlock(&gi->lock);
-> >  	return ret;
-> >  }
-> > @@ -500,10 +548,12 @@ static void config_usb_cfg_unlink(
-> >  			list_del(&cf->list);
-> >  			usb_put_function(cf->f);
-> >  			kfree(cf);
-> > +			trace_config_usb_cfg_unlink(gi);
-> >  			mutex_unlock(&gi->lock);
-> >  			return;
-> >  		}
-> >  	}
-> > +	trace_config_usb_cfg_unlink(gi);
-> >  	mutex_unlock(&gi->lock);
-> >  	WARN(1, "Unable to locate function to unbind\n");
-> >  }
-> > @@ -518,6 +568,7 @@ static struct configfs_item_operations
-> gadget_config_item_ops =3D {
-> >  static ssize_t gadget_config_desc_MaxPower_show(struct config_item
-> *item,
-> >  		char *page)
-> >  {
-> > +
-> 	trace_gadget_config_desc_MaxPower_show(to_config_usb_cfg(ite
-> m)->gi);
-> >  	return sprintf(page, "%u\n", to_config_usb_cfg(item)-
-> >c.MaxPower);
-> >  }
-> >
-> > @@ -532,12 +583,14 @@ static ssize_t
-> gadget_config_desc_MaxPower_store(struct config_item *item,
-> >  	if (DIV_ROUND_UP(val, 8) > 0xff)
-> >  		return -ERANGE;
-> >  	to_config_usb_cfg(item)->c.MaxPower =3D val;
-> > +
-> 	trace_gadget_config_desc_MaxPower_store(to_config_usb_cfg(ite
-> m)->gi);
-> >  	return len;
-> >  }
-> >
-> >  static ssize_t gadget_config_desc_bmAttributes_show(struct config_item
-> *item,
-> >  		char *page)
-> >  {
-> > +
-> 	trace_gadget_config_desc_bmAttributes_show(to_config_usb_cfg(i
-> tem)->gi);
-> >  	return sprintf(page, "0x%02x\n",
-> >  		to_config_usb_cfg(item)->c.bmAttributes);
-> >  }
-> > @@ -556,6 +609,7 @@ static ssize_t
-> gadget_config_desc_bmAttributes_store(struct config_item *item,
-> >  				USB_CONFIG_ATT_WAKEUP))
-> >  		return -EINVAL;
-> >  	to_config_usb_cfg(item)->c.bmAttributes =3D val;
-> > +
-> 	trace_gadget_config_desc_bmAttributes_store(to_config_usb_cfg(i
-> tem)->gi);
-> >  	return len;
-> >  }
-> >
-> > diff --git a/drivers/usb/gadget/configfs_trace.h
-> b/drivers/usb/gadget/configfs_trace.h
-> > new file mode 100644
-> > index 0000000..59d73d5
-> > --- /dev/null
-> > +++ b/drivers/usb/gadget/configfs_trace.h
-> > @@ -0,0 +1,167 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights rese=
-rved.
->=20
-> Wrong copyright notice, right?  I could be wrong, but you might want to
-> check...
->=20
->=20
-> thanks,
->=20
-> greg k-h
+01.10.2021 16:27, Ulf Hansson пишет:
+> On Mon, 27 Sept 2021 at 00:42, Dmitry Osipenko <digetx@gmail.com> wrote:
+>>
+>> Add OPP and SoC core voltage scaling support to the display controller
+>> driver. This is required for enabling system-wide DVFS on pre-Tegra186
+>> SoCs.
+>>
+>> Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
+>> Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
+>> Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
+>> Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  drivers/gpu/drm/tegra/dc.c | 74 ++++++++++++++++++++++++++++++++++++++
+>>  drivers/gpu/drm/tegra/dc.h |  2 ++
+>>  2 files changed, 76 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/tegra/dc.c b/drivers/gpu/drm/tegra/dc.c
+>> index a29d64f87563..d4047a14e2b6 100644
+>> --- a/drivers/gpu/drm/tegra/dc.c
+>> +++ b/drivers/gpu/drm/tegra/dc.c
+>> @@ -11,9 +11,12 @@
+>>  #include <linux/interconnect.h>
+>>  #include <linux/module.h>
+>>  #include <linux/of_device.h>
+>> +#include <linux/pm_domain.h>
+>> +#include <linux/pm_opp.h>
+>>  #include <linux/pm_runtime.h>
+>>  #include <linux/reset.h>
+>>
+>> +#include <soc/tegra/common.h>
+>>  #include <soc/tegra/pmc.h>
+>>
+>>  #include <drm/drm_atomic.h>
+>> @@ -1762,6 +1765,47 @@ int tegra_dc_state_setup_clock(struct tegra_dc *dc,
+>>         return 0;
+>>  }
+>>
+>> +static void tegra_dc_update_voltage_state(struct tegra_dc *dc,
+>> +                                         struct tegra_dc_state *state)
+>> +{
+>> +       unsigned long rate, pstate;
+>> +       struct dev_pm_opp *opp;
+>> +       int err;
+>> +
+>> +       if (!dc->has_opp_table)
+>> +               return;
+>> +
+>> +       /* calculate actual pixel clock rate which depends on internal divider */
+>> +       rate = DIV_ROUND_UP(clk_get_rate(dc->clk) * 2, state->div + 2);
+>> +
+>> +       /* find suitable OPP for the rate */
+>> +       opp = dev_pm_opp_find_freq_ceil(dc->dev, &rate);
+>> +
+>> +       if (opp == ERR_PTR(-ERANGE))
+>> +               opp = dev_pm_opp_find_freq_floor(dc->dev, &rate);
+>> +
+>> +       if (IS_ERR(opp)) {
+>> +               dev_err(dc->dev, "failed to find OPP for %luHz: %pe\n",
+>> +                       rate, opp);
+>> +               return;
+>> +       }
+>> +
+>> +       pstate = dev_pm_opp_get_required_pstate(opp, 0);
+>> +       dev_pm_opp_put(opp);
+>> +
+>> +       /*
+>> +        * The minimum core voltage depends on the pixel clock rate (which
+>> +        * depends on internal clock divider of the CRTC) and not on the
+>> +        * rate of the display controller clock. This is why we're not using
+>> +        * dev_pm_opp_set_rate() API and instead controlling the power domain
+>> +        * directly.
+>> +        */
+>> +       err = dev_pm_genpd_set_performance_state(dc->dev, pstate);
+>> +       if (err)
+>> +               dev_err(dc->dev, "failed to set power domain state to %lu: %d\n",
+>> +                       pstate, err);
+> 
+> Yeah, the above code looks very similar to the code I pointed to in
+> patch6. Perhaps we need to discuss with Viresh, whether it makes sense
+> to fold in a patch adding an opp helper function after all, to avoid
+> the open coding.
+> 
+> Viresh?
+
+I'll keep it open-coded for now. This code is specific to Tegra because
+normally ceil error shouldn't fall back to the floor, but for Tegra it's
+expected to happen and it's a normal condition.
