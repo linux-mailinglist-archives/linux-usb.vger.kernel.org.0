@@ -2,104 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 095164307B0
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Oct 2021 12:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E2D43092D
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Oct 2021 14:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245260AbhJQKIB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 17 Oct 2021 06:08:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39572 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245237AbhJQKIB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 17 Oct 2021 06:08:01 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4D7BD60F56;
-        Sun, 17 Oct 2021 10:05:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634465151;
-        bh=ssHl03Ra1nvF6dDbFdLpedVMJmJtt/gryOT8PCjCdW4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=OqwZNAoCLXXMzTXIo6qyyW301S+yoIze/k3e5bz/CaEks3cH1vq/QIvVuhiMOb80v
-         pHIEXMZ86AQas+L5McFykspBG30xxXiRsgUPvwssDnlyQ4tdPTGO+1+4QBQ/ttFMFi
-         bcjo0T2UvcRXKvcLL0b52SRcN9h2bTsjlbREfOgQ=
-Date:   Sun, 17 Oct 2021 12:05:48 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fixes for 5.15-rc6
-Message-ID: <YWv1fKnZCcV4kG5S@kroah.com>
+        id S1343514AbhJQNBa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 17 Oct 2021 09:01:30 -0400
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:46033 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242268AbhJQNB3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 17 Oct 2021 09:01:29 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 5DCD95C0109;
+        Sun, 17 Oct 2021 08:59:17 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Sun, 17 Oct 2021 08:59:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm2; bh=knU1y68hFncbUMmEzLqabx16z9
+        8FUfXq7euHxu34Zfk=; b=ck+WM73arOovdlimiqQK6Q6U73xPANY4l8bU8u4mpU
+        7WkO/IzofiY8/F790PtkAT8FCf0va1CKQ1M/tOFVn/te876pZbyx9GqX8/1yEntq
+        +oCHHxrAcKU0EX7M6ADLCH02sT959VlxTopO25mZZ1c6hZaF1FPR4ksGtKt65QMm
+        wZyW3GdcJrztWBCUbotLSt4ievmQQ6iiDeu42iLitYtPqZWg62XwdKmHvttu2Rvo
+        IiekldIqGvZgfEFz396LUNw9KYdA1gRhejiCI4FKXkop9h0lDvPb5fRRq+QucZmj
+        RQZcMf1A1znnHjBLug2SmEmb6GElsyAYuSf+Je7MPMTg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=knU1y68hFncbUMmEz
+        Lqabx16z98FUfXq7euHxu34Zfk=; b=CGGsaPCgs+DGc7wcFucl+0LR+EJliQxUe
+        JljDfa+H3ZHePBlc9Cl8R++65BACuH+dWKxVrnsrcE+IxqXib1KXMYpMqj5PG39r
+        oHqnTZ0FnIWkhWFI7H1055EyrCsK8A5AwJ9azYP8/d64OMJgytFJepnqCLIYF8YE
+        z/39C2d7It254wSuXTYGpO3iehrO0lYEFEc9YWRnAX4fXeQjxZdYQESPMqIH842E
+        ppbrJsHBhuAZbyM2tnmBc8rlEOFWRO7gkJYxjOqQ8YkxXrEEpmVOldLhMXQByqBI
+        MAYR3rZ5Eodm3rXJCQSiscdyyQ4AqPk7ewfOO9OHKlxbkc1VpRVMA==
+X-ME-Sender: <xms:JR5sYf3YNwGmqqP45F30p6M3y_2s1pYvJHVuw8Yi5IEqmObFvWI5jw>
+    <xme:JR5sYeHN7GjUyD1hi53XT8C2OZacjxvvuOdjwMOz1ds4BSVSqlUtRLF470sgXFxPK
+    P3exuiFtZ_lSKsEDBk>
+X-ME-Received: <xmr:JR5sYf4mmE4OffeXMP1enmSJcIfc5ktMPewLHizTWOdOGI7wYCMCi129pMQ8u0up0bFIRIpk6q6inhhXzEF6YTDFBPlEkUbBorhMr0NapEVTByCrNPXU7c8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddukedgheejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
+    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
+    epuefgleekvddtjefffeejheevleefveekgfduudfhgefhfeegtdehveejfefffffgnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnse
+    hsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:JR5sYU063KTkUf_L-gUR66FzyfQvD0buCE1P2f-xebCYAJZI49OE_w>
+    <xmx:JR5sYSHFZc_M8_jbx0Zfv8vModOZeTV1aIKJWnIYPO8gTo7gXM5r2g>
+    <xmx:JR5sYV8xw5bz5YlAQWQdQ8gDn9CNA9avOCs-Oq6uoq3LPVA3uZk-KA>
+    <xmx:JR5sYQbLtkcrivqQnqioxU9jc5pMtYVqNwOwTriF0usctRL9UJnKhQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 17 Oct 2021 08:59:15 -0400 (EDT)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Sven Peter <sven@svenpeter.dev>, Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: usb: dwc3: Document role-switch-reset-quirk
+Date:   Sun, 17 Oct 2021 14:59:03 +0200
+Message-Id: <20211017125904.69076-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[resend with properly subject line...]
+The dwc3 controller on the Apple M1 must be reset whenever a
+device is unplugged from the root port and triggers a role
+switch notification. Document the quirk to enable this behavior.
 
-The following changes since commit 64570fbc14f8d7cb3fe3995f20e26bc25ce4b2cc:
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
+---
+ Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-  Linux 5.15-rc5 (2021-10-10 17:01:59 -0700)
+diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+index 25ac2c93dc6c..9635e20cab68 100644
+--- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+@@ -226,6 +226,12 @@ properties:
+       avoid -EPROTO errors with usbhid on some devices (Hikey 970).
+     type: boolean
+ 
++  snps,role-switch-reset-quirk:
++    description:
++      When set, DWC3 will be reset and reinitialized whenever a role switch
++      is performed.
++    type: boolean
++
+   snps,is-utmi-l1-suspend:
+     description:
+       True when DWC3 asserts output signal utmi_l1_suspend_n, false when
+-- 
+2.25.1
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.15-rc6
-
-for you to fetch changes up to cd932c2a1ecc8f261ecb8d140fa431c16379931f:
-
-  Merge tag 'usb-serial-5.15-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2021-10-15 15:04:02 +0200)
-
-----------------------------------------------------------------
-USB fixes for 5.15-rc6
-
-Here are some small USB fixes that resolve a number of tiny issues.
-They include:
-	- new USB serial driver ids
-	- xhci driver fixes for a bunch of issues
-	- musb error path fixes.
-
-All of these have been in linux-next for a while with no reported
-issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Aleksander Morgado (1):
-      USB: serial: qcserial: add EM9191 QDL support
-
-Daniele Palmas (1):
-      USB: serial: option: add Telit LE910Cx composition 0x1204
-
-Greg Kroah-Hartman (1):
-      Merge tag 'usb-serial-5.15-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
-
-Johan Hovold (1):
-      USB: xhci: dbc: fix tty registration race
-
-Jonathan Bell (2):
-      xhci: guard accesses to ep_state in xhci_endpoint_reset()
-      xhci: add quirk for host controllers that don't update endpoint DCS
-
-Miquel Raynal (1):
-      usb: musb: dsps: Fix the probe error path
-
-Nikolay Martynov (1):
-      xhci: Enable trust tx length quirk for Fresco FL11 USB controller
-
-Pavankumar Kondeti (1):
-      xhci: Fix command ring pointer corruption while aborting a command
-
-Tomaz Solc (1):
-      USB: serial: option: add prod. id for Quectel EG91
-
-Yu-Tung Chang (1):
-      USB: serial: option: add Quectel EC200S-CN module support
-
- drivers/usb/host/xhci-dbgtty.c | 28 +++++++++++++---------------
- drivers/usb/host/xhci-pci.c    |  6 +++++-
- drivers/usb/host/xhci-ring.c   | 39 ++++++++++++++++++++++++++++++++++-----
- drivers/usb/host/xhci.c        |  5 +++++
- drivers/usb/host/xhci.h        |  1 +
- drivers/usb/musb/musb_dsps.c   |  4 +++-
- drivers/usb/serial/option.c    |  8 ++++++++
- drivers/usb/serial/qcserial.c  |  1 +
- 8 files changed, 70 insertions(+), 22 deletions(-)
