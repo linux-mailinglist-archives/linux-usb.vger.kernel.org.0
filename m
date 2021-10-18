@@ -2,60 +2,449 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91763430E1B
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 05:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9C4430EF8
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 06:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbhJRDYi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 17 Oct 2021 23:24:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50248 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229445AbhJRDYi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 17 Oct 2021 23:24:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 918E260E53;
-        Mon, 18 Oct 2021 03:22:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634527347;
-        bh=WQvv/2BQWh58MxuJC+OalY2CYQpkGcjzd13vRIEdp/A=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=RXi4iE1HuE367KLAUil7MFs0KRJIhWbPkLyuJyr99J7JGcUB/IlQiI1RAjMElmS3u
-         jXxhc/DaczJnpXasML7Ykq+utpZlpYZWC4K1BxyjLFKI394GGve58aZ6PbsyZXqdBP
-         D8Wdu/g3eWckAHsStsYtBMjHxWnE7U3RDOFXEDW73wqP7xQPaF1RsJtBv9cVfITYu/
-         +bdczelC1JSa0FhK5oaLfvRxxPxOYDLW4em16Y6PlA4xd+qfq5Udx+BUlfbmdUpKBa
-         bFOkDK+GGptz1Xm/L7J7LlNfkosnmJZlkje1KSZi1Z1kRXjYF4Ql+NSyntEn2nSiMn
-         7TpK0a3JFgRqA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 87AC8609AD;
-        Mon, 18 Oct 2021 03:22:27 +0000 (UTC)
-Subject: Re: [GIT PULL] USB fixes for 5.15-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YWv1XLbDBs/y1d3W@kroah.com>
-References: <YWv1XLbDBs/y1d3W@kroah.com>
-X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YWv1XLbDBs/y1d3W@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.15-rc6
-X-PR-Tracked-Commit-Id: cd932c2a1ecc8f261ecb8d140fa431c16379931f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ebf613ae87baff7804966d3f251d09ec7c3ad17f
-Message-Id: <163452734749.4914.1747784481215023416.pr-tracker-bot@kernel.org>
-Date:   Mon, 18 Oct 2021 03:22:27 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+        id S229493AbhJRElL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Oct 2021 00:41:11 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:22378 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229481AbhJRElK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 00:41:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1634531940; x=1666067940;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Qk0szTbkB9FO/tBDmCGeJ8tU5Y8lVLNgNU3Jtimcxcs=;
+  b=t4is5KaEp7coZBBfPRqGUeKlNruO6wipNoROIQfwHkixcvGPjFB07Dji
+   v+pIiI1wXh4UKID7VWTngU1du0oz65x5SO7ubQFJ9FC58RG/ZJig07Fjd
+   ZqSiApbpWQlFARJ2gmv7UyAFlmZHKIP6OiPmydw2ij3Fm5QqOq3+1FGhE
+   g=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 17 Oct 2021 21:39:00 -0700
+X-QCInternal: smtphost
+Received: from nalasex01b.na.qualcomm.com ([10.47.209.197])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2021 21:38:59 -0700
+Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
+ Sun, 17 Oct 2021 21:38:57 -0700
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, Jack Pham <jackp@quicinc.com>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [PATCH v7] usb: gadget: add configfs trace events
+Date:   Mon, 18 Oct 2021 12:38:54 +0800
+Message-ID: <1634531934-31560-1-git-send-email-quic_linyyuan@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Sun, 17 Oct 2021 12:05:16 +0200:
+in case of USB Gadget functions configure through configfs from
+a complicated user space program, when switch function from one to another,
+if it failed, it is better to find out what action was done to configfs
+from user space program.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.15-rc6
+this change add most trace events which enable/disable a function,
+it including add/remove configuration, bind/unbind UDC,
+and write/read some attributes.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ebf613ae87baff7804966d3f251d09ec7c3ad17f
+Suggested-by: Felipe Balbi <balbi@kernel.org>
+Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+---
+v2: fix two issue Reported-by: kernel test robot <lkp@intel.com>
+v3: do not move private structure to configfs.h
+v4: add missing new file configfs_trace.h
+v5: lost some change of v2, add it again
+v6: fix comments from Greg Kroah-Hartman
+v7: change two trace location.
 
-Thank you!
+ drivers/usb/gadget/configfs.c       |  43 ++++++--
+ drivers/usb/gadget/configfs_trace.h | 191 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 225 insertions(+), 9 deletions(-)
+ create mode 100644 drivers/usb/gadget/configfs_trace.h
 
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index 477e72a..0e7feaa 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -73,6 +73,11 @@ static inline struct config_usb_cfg *to_config_usb_cfg(struct config_item *item)
+ 			group);
+ }
+ 
++static inline struct gadget_info *cfg_to_gadget_info(struct config_usb_cfg *cfg)
++{
++	return container_of(cfg->c.cdev, struct gadget_info, cdev);
++}
++
+ struct gadget_strings {
+ 	struct usb_gadget_strings stringtab_dev;
+ 	struct usb_string strings[USB_GADGET_FIRST_AVAIL_IDX];
+@@ -97,6 +102,10 @@ struct gadget_config_name {
+ 	struct list_head list;
+ };
+ 
++#define CONFIGFS_TRACE_STRING
++#define CREATE_TRACE_POINTS
++#include "configfs_trace.h"
++
+ #define USB_MAX_STRING_WITH_NULL_LEN	(USB_MAX_STRING_LEN+1)
+ 
+ static int usb_string_copy(const char *s, char **s_copy)
+@@ -205,6 +214,7 @@ static ssize_t gadget_dev_desc_bcdDevice_store(struct config_item *item,
+ 		return ret;
+ 
+ 	to_gadget_info(item)->cdev.desc.bcdDevice = cpu_to_le16(bcdDevice);
++	trace_gadget_dev_desc_bcdDevice_store(to_gadget_info(item));
+ 	return len;
+ }
+ 
+@@ -222,6 +232,7 @@ static ssize_t gadget_dev_desc_bcdUSB_store(struct config_item *item,
+ 		return ret;
+ 
+ 	to_gadget_info(item)->cdev.desc.bcdUSB = cpu_to_le16(bcdUSB);
++	trace_gadget_dev_desc_bcdUSB_store(to_gadget_info(item));
+ 	return len;
+ }
+ 
+@@ -234,6 +245,7 @@ static ssize_t gadget_dev_desc_UDC_show(struct config_item *item, char *page)
+ 	mutex_lock(&gi->lock);
+ 	udc_name = gi->composite.gadget_driver.udc_name;
+ 	ret = sprintf(page, "%s\n", udc_name ?: "");
++	trace_gadget_dev_desc_UDC_show(gi);
+ 	mutex_unlock(&gi->lock);
+ 
+ 	return ret;
+@@ -243,6 +255,7 @@ static int unregister_gadget(struct gadget_info *gi)
+ {
+ 	int ret;
+ 
++	trace_unregister_gadget(gi);
+ 	if (!gi->composite.gadget_driver.udc_name)
+ 		return -ENODEV;
+ 
+@@ -289,6 +302,7 @@ static ssize_t gadget_dev_desc_UDC_store(struct config_item *item,
+ 			goto err;
+ 		}
+ 	}
++	trace_gadget_dev_desc_UDC_store(gi);
+ 	mutex_unlock(&gi->lock);
+ 	return len;
+ err:
+@@ -302,6 +316,7 @@ static ssize_t gadget_dev_desc_max_speed_show(struct config_item *item,
+ {
+ 	enum usb_device_speed speed = to_gadget_info(item)->composite.max_speed;
+ 
++	trace_gadget_dev_desc_max_speed_show(to_gadget_info(item));
+ 	return sprintf(page, "%s\n", usb_speed_string(speed));
+ }
+ 
+@@ -331,6 +346,7 @@ static ssize_t gadget_dev_desc_max_speed_store(struct config_item *item,
+ 
+ 	gi->composite.gadget_driver.max_speed = gi->composite.max_speed;
+ 
++	trace_gadget_dev_desc_max_speed_store(gi);
+ 	mutex_unlock(&gi->lock);
+ 	return len;
+ err:
+@@ -413,8 +429,7 @@ static int config_usb_cfg_link(
+ 	struct config_item *usb_func_ci)
+ {
+ 	struct config_usb_cfg *cfg = to_config_usb_cfg(usb_cfg_ci);
+-	struct usb_composite_dev *cdev = cfg->c.cdev;
+-	struct gadget_info *gi = container_of(cdev, struct gadget_info, cdev);
++	struct gadget_info *gi = cfg_to_gadget_info(cfg);
+ 
+ 	struct config_group *group = to_config_group(usb_func_ci);
+ 	struct usb_function_instance *fi = container_of(group,
+@@ -455,6 +470,7 @@ static int config_usb_cfg_link(
+ 	list_add_tail(&f->list, &cfg->func_list);
+ 	ret = 0;
+ out:
++	trace_config_usb_cfg_link(gi);
+ 	mutex_unlock(&gi->lock);
+ 	return ret;
+ }
+@@ -464,8 +480,7 @@ static void config_usb_cfg_unlink(
+ 	struct config_item *usb_func_ci)
+ {
+ 	struct config_usb_cfg *cfg = to_config_usb_cfg(usb_cfg_ci);
+-	struct usb_composite_dev *cdev = cfg->c.cdev;
+-	struct gadget_info *gi = container_of(cdev, struct gadget_info, cdev);
++	struct gadget_info *gi = cfg_to_gadget_info(cfg);
+ 
+ 	struct config_group *group = to_config_group(usb_func_ci);
+ 	struct usb_function_instance *fi = container_of(group,
+@@ -487,6 +502,7 @@ static void config_usb_cfg_unlink(
+ 		if (f->fi == fi) {
+ 			list_del(&f->list);
+ 			usb_put_function(f);
++			trace_config_usb_cfg_unlink(gi);
+ 			mutex_unlock(&gi->lock);
+ 			return;
+ 		}
+@@ -505,12 +521,16 @@ static struct configfs_item_operations gadget_config_item_ops = {
+ static ssize_t gadget_config_desc_MaxPower_show(struct config_item *item,
+ 		char *page)
+ {
+-	return sprintf(page, "%u\n", to_config_usb_cfg(item)->c.MaxPower);
++	struct config_usb_cfg *cfg = to_config_usb_cfg(item);
++
++	trace_gadget_config_desc_MaxPower_show(cfg_to_gadget_info(cfg));
++	return sprintf(page, "%u\n", cfg->c.MaxPower);
+ }
+ 
+ static ssize_t gadget_config_desc_MaxPower_store(struct config_item *item,
+ 		const char *page, size_t len)
+ {
++	struct config_usb_cfg *cfg = to_config_usb_cfg(item);
+ 	u16 val;
+ 	int ret;
+ 	ret = kstrtou16(page, 0, &val);
+@@ -518,20 +538,24 @@ static ssize_t gadget_config_desc_MaxPower_store(struct config_item *item,
+ 		return ret;
+ 	if (DIV_ROUND_UP(val, 8) > 0xff)
+ 		return -ERANGE;
+-	to_config_usb_cfg(item)->c.MaxPower = val;
++	cfg->c.MaxPower = val;
++	trace_gadget_config_desc_MaxPower_store(cfg_to_gadget_info(cfg));
+ 	return len;
+ }
+ 
+ static ssize_t gadget_config_desc_bmAttributes_show(struct config_item *item,
+ 		char *page)
+ {
+-	return sprintf(page, "0x%02x\n",
+-		to_config_usb_cfg(item)->c.bmAttributes);
++	struct config_usb_cfg *cfg = to_config_usb_cfg(item);
++
++	trace_gadget_config_desc_bmAttributes_show(cfg_to_gadget_info(cfg));
++	return sprintf(page, "0x%02x\n", cfg->c.bmAttributes);
+ }
+ 
+ static ssize_t gadget_config_desc_bmAttributes_store(struct config_item *item,
+ 		const char *page, size_t len)
+ {
++	struct config_usb_cfg *cfg = to_config_usb_cfg(item);
+ 	u8 val;
+ 	int ret;
+ 	ret = kstrtou8(page, 0, &val);
+@@ -542,7 +566,8 @@ static ssize_t gadget_config_desc_bmAttributes_store(struct config_item *item,
+ 	if (val & ~(USB_CONFIG_ATT_ONE | USB_CONFIG_ATT_SELFPOWER |
+ 				USB_CONFIG_ATT_WAKEUP))
+ 		return -EINVAL;
+-	to_config_usb_cfg(item)->c.bmAttributes = val;
++	cfg->c.bmAttributes = val;
++	trace_gadget_config_desc_bmAttributes_store(cfg_to_gadget_info(cfg));
+ 	return len;
+ }
+ 
+diff --git a/drivers/usb/gadget/configfs_trace.h b/drivers/usb/gadget/configfs_trace.h
+new file mode 100644
+index 0000000..b56ab31
+--- /dev/null
++++ b/drivers/usb/gadget/configfs_trace.h
+@@ -0,0 +1,191 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++#ifdef CONFIGFS_TRACE_STRING
++#undef CONFIGFS_TRACE_STRING
++
++#define MAX_CONFIGURAITON_STR_LEN	512
++static __maybe_unused char *configfs_trace_string(struct gadget_info *gi)
++{
++	struct usb_configuration *uc;
++	struct config_usb_cfg *cfg;
++	struct usb_function *f;
++	static char trs[MAX_CONFIGURAITON_STR_LEN];
++	size_t len = MAX_CONFIGURAITON_STR_LEN - 1;
++	int n = 0;
++
++	list_for_each_entry(uc, &gi->cdev.configs, list) {
++		cfg = container_of(uc, struct config_usb_cfg, c);
++
++		n += scnprintf(trs + n, len - n,
++			"{%d %02x %d ",
++			uc->bConfigurationValue,
++			uc->bmAttributes,
++			uc->MaxPower);
++
++		list_for_each_entry(f, &cfg->func_list, list)
++			n += scnprintf(trs + n, len - n, "%s;", f->name);
++
++		list_for_each_entry(f, &cfg->c.functions, list)
++			n += scnprintf(trs + n, len - n, "%s;", f->name);
++
++		n += scnprintf(trs + n, len - n, "},");
++	}
++
++	return trs;
++}
++
++#endif /* CONFIGFS_TRACE_STRING */
++
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM configfs_gadget
++
++#if !defined(__CONFIGFS_GADGET_TRACE_H) || defined(TRACE_HEADER_MULTI_READ)
++#define __CONFIGFS_GADGET_TRACE_H
++
++#include <linux/tracepoint.h>
++
++DECLARE_EVENT_CLASS(log_gadget_info,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi),
++	TP_STRUCT__entry(
++		__string(gi_group, config_item_name(&gi->group.cg_item))
++		__field(bool, unbind)
++		__field(bool, use_os_desc)
++		__field(char, b_vendor_code)
++
++		__field(bool, suspended)
++		__field(bool, setup_pending)
++		__field(bool, os_desc_pending)
++		__field(unsigned int, deactivations)
++		__field(int, delayed_status)
++		__field(u16, bcdUSB)
++		__field(u16, bcdDevice)
++		__string(config, configfs_trace_string(gi))
++
++		__field(unsigned int, max_speed)
++		__field(bool, needs_serial)
++
++		__string(udc_name, gi->composite.gadget_driver.udc_name)
++	),
++	TP_fast_assign(
++		__assign_str(gi_group, config_item_name(&gi->group.cg_item));
++		__entry->unbind = gi->unbind;
++		__entry->use_os_desc = gi->use_os_desc;
++		__entry->b_vendor_code = gi->b_vendor_code;
++
++		__entry->suspended = gi->cdev.suspended;
++		__entry->setup_pending = gi->cdev.setup_pending;
++		__entry->os_desc_pending = gi->cdev.os_desc_pending;
++		__entry->deactivations = gi->cdev.deactivations;
++		__entry->delayed_status = gi->cdev.delayed_status;
++		__entry->bcdUSB = le16_to_cpu(gi->cdev.desc.bcdUSB);
++		__entry->bcdDevice = le16_to_cpu(gi->cdev.desc.bcdDevice);
++		__assign_str(config, configfs_trace_string(gi));
++
++		__entry->max_speed = gi->composite.max_speed;
++		__entry->needs_serial = gi->composite.needs_serial;
++
++		__assign_str(udc_name, gi->composite.gadget_driver.udc_name);
++	),
++	TP_printk("%s %d %d %d - %d %d %d %d %d %04x %04x %s - %d %d - %s",
++
++		__get_str(gi_group),
++		__entry->unbind,
++		__entry->use_os_desc,
++		__entry->b_vendor_code,
++
++		__entry->suspended,
++		__entry->setup_pending,
++		__entry->os_desc_pending,
++		__entry->deactivations,
++		__entry->delayed_status,
++		__entry->bcdUSB,
++		__entry->bcdDevice,
++		__get_str(config),
++
++		__entry->max_speed,
++		__entry->needs_serial,
++
++		__get_str(udc_name)
++	)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_dev_desc_bcdDevice_store,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_dev_desc_bcdUSB_store,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_dev_desc_UDC_show,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, unregister_gadget,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_dev_desc_UDC_store,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_dev_desc_max_speed_show,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_dev_desc_max_speed_store,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, config_usb_cfg_link,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, config_usb_cfg_unlink,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_config_desc_MaxPower_show,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_config_desc_MaxPower_store,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_config_desc_bmAttributes_show,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++DEFINE_EVENT(log_gadget_info, gadget_config_desc_bmAttributes_store,
++	TP_PROTO(struct gadget_info *gi),
++	TP_ARGS(gi)
++);
++
++#endif /* __CONFIGFS_GADGET_TRACE_H */
++
++/* this part has to be here */
++
++#undef TRACE_INCLUDE_PATH
++#define TRACE_INCLUDE_PATH ../../drivers/usb/gadget
++
++#undef TRACE_INCLUDE_FILE
++#define TRACE_INCLUDE_FILE configfs_trace
++
++#include <trace/define_trace.h>
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.7.4
+
