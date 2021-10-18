@@ -2,91 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D59DF4321FC
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 17:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF331432406
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 18:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232516AbhJRPJx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Oct 2021 11:09:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49016 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232957AbhJRPJa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 Oct 2021 11:09:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3E3F160EE9;
-        Mon, 18 Oct 2021 15:07:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634569638;
-        bh=Md59R3ONCqA6DyDyeTDd7ISrl7eVjopr9ACmL5mS5tk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1ZZaMCSaxdA/CIeNTvKesceOkoRJZ87xNoKPvQoF8AveNgeVspamgtqXWe1yCMreq
-         I3Dq7US8r58YjLqbew9KPUtpligOiMeuMby3n7CY5KW/XzxRMjZBj6q1MjMfn0wwd/
-         uNrQUjj7rpMLfURLpLjV4OiboBqfd3geSPV/i+DU=
-Date:   Mon, 18 Oct 2021 17:07:16 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        balbi@kernel.org
-Subject: Re: [PATCH] usb: phy: isp1301: add release func to dev to avoid
- memory leak
-Message-ID: <YW2NpDG6hGJk4UR9@kroah.com>
-References: <20211015051624.1655193-1-yangyingliang@huawei.com>
+        id S233723AbhJRQpo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Oct 2021 12:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233708AbhJRQpn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 12:45:43 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254ADC061765
+        for <linux-usb@vger.kernel.org>; Mon, 18 Oct 2021 09:43:32 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id o20so42642679wro.3
+        for <linux-usb@vger.kernel.org>; Mon, 18 Oct 2021 09:43:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=fLqIPEBaRNOdjfMHVTUzcLno6ImGHaWY2L/hpqGEyjA=;
+        b=SXHO/6+HBY76BkVRUx+ROamghkp1ypDCJXpkFapzp7Nkt75GezNQ2L5j1s5tvVY3rw
+         Se0818Htn0H6/jcAIkZzI7qP2OZXVmgCacJ22EaT8pBiNIkxoUrWXZdEJ/9qXllpYf4B
+         eOr5rLOB5W1OtmlhnOfKI9+7/ihlslJTpoEK7/CVyqNS0l3KzfskEPQJbScdqjq+djPC
+         QdaBgeNRcXzl0XY4vwOgrvSeivwVsHDoQd5ngw/q0gT2ei6NuE2lY2pByMTIipDLqlEb
+         IjyO54PgFruxTUsm639OK2WIzRp6NMKVt519x4yCSJsc4C48OK6JLQXKh08CPcGMFqqS
+         Tc9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=fLqIPEBaRNOdjfMHVTUzcLno6ImGHaWY2L/hpqGEyjA=;
+        b=XIXQCpXMGVk8iR7HhN7jjegU/obXuULjgayG0J7mTJJamKNVsA46t8c2QYlsp44ZG0
+         nA42ThjjPWq7htKnAAk6ww3k57u82rPYIh6WLwzIfVNhRAK4SUYJpKXQfGmoDT9jV3Ie
+         pCNIr9vwsbsceJ1X3qtsQKsWgJk8sH9o4xYpdPbUqNyIhOvSFpWf1u4cO+sQhaqOZNEy
+         V23w7qNPxqiDBhBKzVc/v6pQEpvIaWE3RwcGVXf5elm1deioyxsho1w5IdXfueiCy4vj
+         E6jtGpF7NoODlxc31CIa+DPQEkAc3BTO9WaCUMLuj6GKX/eboufpn7Qmf7qbUXzfUcBW
+         /vlQ==
+X-Gm-Message-State: AOAM5319Sm16r0403FBQdDLQWCD3yKyAmQ93meOJrHphlMke6Y+ctZMm
+        62isQo/LDqwPR1XhR6EhGHb5U0j5kOn7qiglZF4=
+X-Google-Smtp-Source: ABdhPJxCbT5kbbmy0+um8u9ohZPNODeAZPAIJ29zM18tS0a7sFAa2/OOTjq+Eeb5h31Foo5Z4riAKQTMZI2IHswpaM4=
+X-Received: by 2002:a5d:4281:: with SMTP id k1mr17827219wrq.89.1634575410730;
+ Mon, 18 Oct 2021 09:43:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211015051624.1655193-1-yangyingliang@huawei.com>
+Received: by 2002:a5d:4385:0:0:0:0:0 with HTTP; Mon, 18 Oct 2021 09:43:30
+ -0700 (PDT)
+Reply-To: mrjoshuakunte@gmail.com
+From:   Mr Joshua Kunte <kuntemrjoshua@gmail.com>
+Date:   Mon, 18 Oct 2021 17:43:30 +0100
+Message-ID: <CAFhr1xC4Lede1HJfM9fJ00cfBGveXpQZph3p3O5b_R7ifb4UCw@mail.gmail.com>
+Subject: =?UTF-8?B?7JWI64WV7ZWY7Iut64uI6rmM?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 15, 2021 at 01:16:24PM +0800, Yang Yingliang wrote:
-> After calling usb_add_phy_dev(), client->dev.type will be changed
-> to 'usb_pyh_dev_type', the release() func is null, it cause the
-> following WARNING:
-> 
-> Device '1-001c' does not have a release() function, it is broken and must be fixed. See Documentation/core-api/kobject.rst.
-> WARNING: CPU: 1 PID: 405 at device_release+0x1b7/0x240
-> Call Trace:
->  kobject_put+0x1e5/0x540
->  device_unregister+0x35/0xc0
->  i2c_unregister_device+0x114/0x1f0
-> 
-> It cause 'client' leaked which is allocated in i2c_new_client_device():
-> 
-> unreferenced object 0xffff88800670b000 (size 2048):
->   comm "xrun", pid 429, jiffies 4294946742 (age 235.248s)
->   hex dump (first 32 bytes):
->     00 00 1c 00 69 73 70 31 33 30 31 00 00 00 00 00  ....isp1301.....
->     00 00 00 00 00 00 00 00 c0 e4 17 c1 ff ff ff ff  ................
->   backtrace:
->     [<00000000a4641100>] kmem_cache_alloc_trace+0x186/0x2b0
->     [<00000000d9d933e7>] i2c_new_client_device+0x56/0xb40
->     [<000000007255bed2>] new_device_store+0x1f4/0x410
-> 
-> So add release func to dev to avoid this memory leak.
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Fixes: 790d3a5ab6e36 ("usb: phy: isp1301: give it a context structure")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  drivers/usb/phy/phy-isp1301.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/phy/phy-isp1301.c b/drivers/usb/phy/phy-isp1301.c
-> index ad3d57f1c273..04f005572484 100644
-> --- a/drivers/usb/phy/phy-isp1301.c
-> +++ b/drivers/usb/phy/phy-isp1301.c
-> @@ -111,6 +111,7 @@ static int isp1301_probe(struct i2c_client *client,
->  	phy->init = isp1301_phy_init;
->  	phy->set_vbus = isp1301_phy_set_vbus;
->  	phy->type = USB_PHY_TYPE_USB2;
-> +	client->dev.release = client->dev.type->release;
-
-messing with a release pointer is almost never a good idea, and a sign
-that something is really wrong.
-
-Why is the type not set properly here so as to get the correct release
-callback when the device is created?  Why do you have to manually change
-this now after the fact?
-
-thanks,
-
-greg k-h
+LS0gDQrsp4Drgpwg7KO8IOyWtOuKkCDrgqAg64u57Iug7JeQ6rKMIOuplOydvOydtCDrsJzshqHr
+kJjsl4jsirXri4jri6QuDQrri7nsi6Dsl5DqsozshJwg7ZqM7IugIOuplOydvOydhCDrsJvslZjs
+p4Drp4wg64aA656N6rKM64+EIOuLueyLoOydgCDtmozsi6DtlZjsp4Ag7JWK7JWY7Iq164uI64uk
+Lg0K7J6Q7IS47ZWcIOyEpOuqheydgCDtmozsi6Ag67aA7YOB65Oc66a964uI64ukLg0KDQrsoJXs
+pJHtnogg64u57Iug7J2YLA0K7KGw7IqI7JWEIOy/pO2FjCDslKguDQo=
