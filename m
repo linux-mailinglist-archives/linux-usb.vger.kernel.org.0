@@ -2,17 +2,17 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8999E4326A7
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 20:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B893E4326AA
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 20:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233410AbhJRSlx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Oct 2021 14:41:53 -0400
-Received: from mxout02.lancloud.ru ([45.84.86.82]:54606 "EHLO
-        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232909AbhJRSlu (ORCPT
+        id S233485AbhJRSly (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Oct 2021 14:41:54 -0400
+Received: from mxout04.lancloud.ru ([45.84.86.114]:55488 "EHLO
+        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233186AbhJRSlu (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 14:41:50 -0400
 Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 64E892072127
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru B795D20A8F94
 Received: from LanCloud
 Received: from LanCloud
 Received: from LanCloud
@@ -20,13 +20,9 @@ From:   Sergey Shtylyov <s.shtylyov@omp.ru>
 To:     <linux-usb@vger.kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH 08/22] usb: host: ohci-at91: deny IRQ0
-Date:   Mon, 18 Oct 2021 21:39:16 +0300
-Message-ID: <20211018183930.8448-9-s.shtylyov@omp.ru>
+Subject: [PATCH 09/22] usb: host: ohci-da8xx: deny IRQ0
+Date:   Mon, 18 Oct 2021 21:39:17 +0300
+Message-ID: <20211018183930.8448-10-s.shtylyov@omp.ru>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20211018183930.8448-1-s.shtylyov@omp.ru>
 References: <20211018183930.8448-1-s.shtylyov@omp.ru>
@@ -44,25 +40,27 @@ If platform_get_irq() returns IRQ0 (considered invalid according to Linus)
 the driver blithely passes it to usb_add_hcd() that treats IRQ0 as no IRQ
 at all. Deny IRQ0 right away, returning -EINVAL from the probe() method...
 
-Fixes: fb5f1834c322 ("usb: ohci-at91: fix irq and iomem resource retrieval")
+Fixes: efe7daf2231a ("USB: OHCI: DA8xx/OMAP-L1x glue layer")
 Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 ---
- drivers/usb/host/ohci-at91.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/host/ohci-da8xx.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
-index a24aea3d2759..6a7276a730d1 100644
---- a/drivers/usb/host/ohci-at91.c
-+++ b/drivers/usb/host/ohci-at91.c
-@@ -181,6 +181,8 @@ static int usb_hcd_at91_probe(const struct hc_driver *driver,
- 		dev_dbg(dev, "hcd probe: missing irq resource\n");
- 		return irq;
+diff --git a/drivers/usb/host/ohci-da8xx.c b/drivers/usb/host/ohci-da8xx.c
+index 1371b0c249ec..6d08ab2bf163 100644
+--- a/drivers/usb/host/ohci-da8xx.c
++++ b/drivers/usb/host/ohci-da8xx.c
+@@ -449,6 +449,10 @@ static int ohci_da8xx_probe(struct platform_device *pdev)
+ 		error = -ENODEV;
+ 		goto err;
  	}
-+	if (!irq)
-+		return -EINVAL;
++	if (!hcd_irq) {
++		error = -EINVAL;
++		goto err;
++	}
  
- 	hcd = usb_create_hcd(driver, dev, "at91");
- 	if (!hcd)
+ 	error = usb_add_hcd(hcd, hcd_irq, 0);
+ 	if (error)
 -- 
 2.26.3
 
