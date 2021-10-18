@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2BF3430F6D
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 07:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5891430FBB
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 07:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbhJRFFM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Oct 2021 01:05:12 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:16582 "EHLO
+        id S229666AbhJRFbz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Oct 2021 01:31:55 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:14900 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbhJRFFL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 01:05:11 -0400
+        with ESMTP id S229533AbhJRFbs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 01:31:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1634533381; x=1666069381;
+  t=1634534979; x=1666070979;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=u8+mXONpKnTjFJsZiCacQS7XsVEm8ekW9NZ+9RQWAdk=;
-  b=UlJ45P9LfVvyW5O5eSMpmaL2FhcnmHGbluxPg+6C3/EeNATzhYc+PWCJ
-   3NZq3oMwk9pv2Y+r/Lpq/yKJqtDIHFQBALnmsmnaASQZNCKcWcArByyIT
-   e1omoUtJ66auZYq+J44jUBGVtHzgPCSUpUu1kb+YYekQnmq6gG2zgSfHD
+  bh=fYgyyj6Ox32zj7IJdh2pT42mNrahyLiIOFraIKhUImQ=;
+  b=XI0qUFWxQvjjQ6qQZPVBQsYkCBO2Dzcs8I1TaS9pBpFper0581xPmlxS
+   arHG6mj0ewlFFaWoJaADEhepx4S6ESpdusJvoF+XOdB7MCbkwIXmdT5vi
+   wJR3wLIqP20TM6yc2tdiH8gUHKkzLAtIQvPgBIqq+MzWL9OO3aU7AUp92
    w=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 17 Oct 2021 22:03:01 -0700
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 17 Oct 2021 22:29:38 -0700
 X-QCInternal: smtphost
 Received: from nalasex01b.na.qualcomm.com ([10.47.209.197])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2021 22:03:01 -0700
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2021 22:29:38 -0700
 Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Sun, 17 Oct 2021 22:02:58 -0700
+ Sun, 17 Oct 2021 22:29:36 -0700
 From:   Linyu Yuan <quic_linyyuan@quicinc.com>
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     <linux-usb@vger.kernel.org>, Jack Pham <jackp@quicinc.com>,
         Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH v9] usb: gadget: add configfs trace events
-Date:   Mon, 18 Oct 2021 13:02:55 +0800
-Message-ID: <1634533375-1201-1-git-send-email-quic_linyyuan@quicinc.com>
+Subject: [PATCH v10] usb: gadget: add configfs trace events
+Date:   Mon, 18 Oct 2021 13:29:30 +0800
+Message-ID: <1634534970-9198-1-git-send-email-quic_linyyuan@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -69,6 +69,7 @@ v6: fix comments from Greg Kroah-Hartman
 v7: three minor changes according to coding rules
 v8: change two trace location
 v9: fix when config is empty
+v10: fix wrong api in v9
 
  drivers/usb/gadget/configfs.c       |  43 ++++++--
  drivers/usb/gadget/configfs_trace.h | 196 ++++++++++++++++++++++++++++++++++++
@@ -252,7 +253,7 @@ index 477e72a..0e7feaa 100644
  
 diff --git a/drivers/usb/gadget/configfs_trace.h b/drivers/usb/gadget/configfs_trace.h
 new file mode 100644
-index 0000000..71b3a9c
+index 0000000..d631320
 --- /dev/null
 +++ b/drivers/usb/gadget/configfs_trace.h
 @@ -0,0 +1,196 @@
@@ -275,7 +276,7 @@ index 0000000..71b3a9c
 +	int n = 0;
 +
 +	if (list_empty(&gi->cdev.configs)) {
-+		strcat(trs, "empty");
++		strcpy(trs, "empty");
 +		return trs;
 +	}
 +
