@@ -2,154 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 645BB4326EB
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 20:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B344D43276F
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 21:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232992AbhJRS5j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Oct 2021 14:57:39 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:36802 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbhJRS5h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 14:57:37 -0400
-Received: by mail-io1-f70.google.com with SMTP id x21-20020a0566022c5500b005ddd625f399so11521579iov.3
-        for <linux-usb@vger.kernel.org>; Mon, 18 Oct 2021 11:55:26 -0700 (PDT)
+        id S232050AbhJRTVZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Oct 2021 15:21:25 -0400
+Received: from mail-oi1-f174.google.com ([209.85.167.174]:43585 "EHLO
+        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232773AbhJRTVV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 15:21:21 -0400
+Received: by mail-oi1-f174.google.com with SMTP id o4so1180139oia.10;
+        Mon, 18 Oct 2021 12:19:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=d9FglVVwh25AoGE+76STUHBE//5+OPpn8rA7VxNxOTI=;
-        b=RyQDlhAwde4Kpf/OIbWoQJ+vCangoJhEmFR0FVfp+s/Y5Irzhud6VPL2fUYmrwKG++
-         0W3dyKCOFUYAWXmCAELDnXM6dZ7Udyvkh7h9wpHWuJNU5anM9ehB/bTXa8r9rnqfY2u2
-         1GHqRDIqLH5kxwM7O7i9CnFe8ZFuvqGfQUpYz44CDpVtL+7Gy/E3Ttp6PsPt4Etpa+JS
-         a536AFRWrgTN7Kiu72t18IIKL2dpo167aks4bWcvDd6XmnQ3qAAGFox+lOYT+a9/8xBp
-         iLMhBi6dYrTR8gt6Iav29Y6ZtDApJvC20tY1zAlUvstmjDfN9tksPTnyL+bkt/T8ilrj
-         9K2w==
-X-Gm-Message-State: AOAM531A3PtiEELgphu68FT7qCWClWMAoGrKyC/X26BXmJgJNlBo48fT
-        pOydoMWu4pLT9llx9M26fziGL9kuwdb4jUOVZzOdOwTsj2DB
-X-Google-Smtp-Source: ABdhPJwVl4Hluj+sHjdVEOw84B/s8707bcUBy90SmSxoxW/4Op1rbrmHAViUG0tIZjkhBcDE+PUubtQ5nVHtVpU9Zkiep7OB0MuU
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XzZA50mc4BjmpmEztRaxMISR4WRQ5FsdiLAiBdxZMQ8=;
+        b=JrjjPvpoEBrZk44FEZZU0P510jJjzEq+0Nh9wmZvEsatnI0gCF6fhvYLDL73YspuD/
+         mP32yHYXZEUa9sjbR10K0eK/YKmQQQ/yj8zmaTfhyR/udanmDPXUA6cgTt1CYPb2wVS/
+         qHN2XJFq0RbEMY+ClDZWONgxtwAHwFCjmKbjTuvtEhM0oBHp03AVu17af8HjIQioOaZB
+         tBMiLLvoeYW+loe/CzxDD010vGMhcoIQzelUyALMJYfPUm4M+mEY3SlqKnY1X/uek6a8
+         zXQryvtQ3xbsCpHuaUWzfaC49iDeCVTNXKaXxcKVWOzwY6tCFW9AeB99FN4dHZ/Vn+0W
+         icVg==
+X-Gm-Message-State: AOAM533K0eqXLQ+o9ES1ccWkGx+EEeGKcpEeGvtb/1pnjaa3wFh0Dz7T
+        zPvSBsZp0C42cJE2aHdMAg==
+X-Google-Smtp-Source: ABdhPJzi5oIzQvFFsTJQzRG1M4YHxjr7RvG38AEuCWK4MXFxFyARyWTLHNWWGxwh4ifKNHkYHkbDVA==
+X-Received: by 2002:a05:6808:20a6:: with SMTP id s38mr563895oiw.149.1634584745423;
+        Mon, 18 Oct 2021 12:19:05 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id l26sm3248993oti.45.2021.10.18.12.19.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Oct 2021 12:19:04 -0700 (PDT)
+Received: (nullmailer pid 2788566 invoked by uid 1000);
+        Mon, 18 Oct 2021 19:19:03 -0000
+Date:   Mon, 18 Oct 2021 14:19:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        hminas@synopsys.com, devicetree@vger.kernel.org,
+        amelie.delaunay@foss.st.com, alexandre.torgue@foss.st.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] dt-bindings: usb: dwc2: Add reference to
+ usb-drd.yaml
+Message-ID: <YW3Ip4gxMnYSIsUg@robh.at.kernel.org>
+References: <1634133425-25670-1-git-send-email-fabrice.gasnier@foss.st.com>
+ <1634133425-25670-2-git-send-email-fabrice.gasnier@foss.st.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:4ca:: with SMTP id f10mr15538757ils.316.1634583326004;
- Mon, 18 Oct 2021 11:55:26 -0700 (PDT)
-Date:   Mon, 18 Oct 2021 11:55:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000809ecc05cea5165d@google.com>
-Subject: [syzbot] divide error in genelink_tx_fixup
-From:   syzbot <syzbot+a6ec4dd9d38cb9261a77@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1634133425-25670-2-git-send-email-fabrice.gasnier@foss.st.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Wed, 13 Oct 2021 15:57:02 +0200, Fabrice Gasnier wrote:
+> Add a reference to usb-drd.yaml, in order to:
+> - extend possible supported properties
+> - avoid duplicated definitions of standard properties
+> Remove definitions for dr_mode and usb-role-switch standard properties.
+> 
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> ---
+>  Documentation/devicetree/bindings/usb/dwc2.yaml | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
 
-syzbot found the following issue on:
-
-HEAD commit:    660a92a59b9e usb: xhci: Enable runtime-pm by default on AM..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1506ccf0b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5016916cdc0a4a84
-dashboard link: https://syzkaller.appspot.com/bug?extid=a6ec4dd9d38cb9261a77
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11308734b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12f56f68b00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a6ec4dd9d38cb9261a77@syzkaller.appspotmail.com
-
-gl620a 2-1:0.0 usb1: register 'gl620a' at usb-dummy_hcd.1-1, Genesys GeneLink, 7a:f2:d1:89:41:da
-divide error: 0000 [#1] SMP KASAN
-CPU: 0 PID: 7 Comm: kworker/0:1 Not tainted 5.15.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: mld mld_ifc_work
-RIP: 0010:genelink_tx_fixup+0x308/0x610 drivers/net/usb/gl620a.c:172
-Code: 8b 44 24 70 48 ba 00 00 00 00 00 fc ff df 48 89 f9 48 c1 e9 03 0f b6 14 11 84 d2 74 09 80 fa 03 0f 8e 50 02 00 00 31 d2 31 ff <f7> b3 28 01 00 00 41 89 d5 89 d6 e8 f8 50 b6 fd 45 85 ed 0f 84 b1
-RSP: 0018:ffffc9000007f5e8 EFLAGS: 00010246
-RAX: 0000000000000062 RBX: ffff8881197c0c00 RCX: 1ffff110232f81a5
-RDX: 0000000000000000 RSI: ffffffff84bd1bb7 RDI: 0000000000000000
-RBP: ffff88811b40b780 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff838b813c R11: 0000000000000000 R12: ffff88811b40b780
-R13: 0000000000000654 R14: 000000000000005a R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f09f3e0aff8 CR3: 000000011c54f000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- usbnet_start_xmit+0x152/0x1f70 drivers/net/usb/usbnet.c:1370
- __netdev_start_xmit include/linux/netdevice.h:4988 [inline]
- netdev_start_xmit include/linux/netdevice.h:5002 [inline]
- xmit_one net/core/dev.c:3576 [inline]
- dev_hard_start_xmit+0x1df/0x890 net/core/dev.c:3592
- sch_direct_xmit+0x25b/0x790 net/sched/sch_generic.c:342
- __dev_xmit_skb net/core/dev.c:3803 [inline]
- __dev_queue_xmit+0xf25/0x2d40 net/core/dev.c:4170
- neigh_resolve_output net/core/neighbour.c:1492 [inline]
- neigh_resolve_output+0x50e/0x820 net/core/neighbour.c:1472
- neigh_output include/net/neighbour.h:510 [inline]
- ip6_finish_output2+0xdbe/0x1b20 net/ipv6/ip6_output.c:126
- __ip6_finish_output.part.0+0x387/0xbb0 net/ipv6/ip6_output.c:191
- __ip6_finish_output include/linux/skbuff.h:982 [inline]
- ip6_finish_output net/ipv6/ip6_output.c:201 [inline]
- NF_HOOK_COND include/linux/netfilter.h:296 [inline]
- ip6_output+0x3d2/0x810 net/ipv6/ip6_output.c:224
- dst_output include/net/dst.h:450 [inline]
- NF_HOOK include/linux/netfilter.h:307 [inline]
- NF_HOOK include/linux/netfilter.h:301 [inline]
- mld_sendpack+0x979/0xe10 net/ipv6/mcast.c:1826
- mld_send_cr net/ipv6/mcast.c:2127 [inline]
- mld_ifc_work+0x71c/0xdc0 net/ipv6/mcast.c:2659
- process_one_work+0x9bf/0x1620 kernel/workqueue.c:2297
- worker_thread+0x658/0x11f0 kernel/workqueue.c:2444
- kthread+0x3c2/0x4a0 kernel/kthread.c:319
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-Modules linked in:
----[ end trace faca6a933050247e ]---
-RIP: 0010:genelink_tx_fixup+0x308/0x610 drivers/net/usb/gl620a.c:172
-Code: 8b 44 24 70 48 ba 00 00 00 00 00 fc ff df 48 89 f9 48 c1 e9 03 0f b6 14 11 84 d2 74 09 80 fa 03 0f 8e 50 02 00 00 31 d2 31 ff <f7> b3 28 01 00 00 41 89 d5 89 d6 e8 f8 50 b6 fd 45 85 ed 0f 84 b1
-RSP: 0018:ffffc9000007f5e8 EFLAGS: 00010246
-RAX: 0000000000000062 RBX: ffff8881197c0c00 RCX: 1ffff110232f81a5
-RDX: 0000000000000000 RSI: ffffffff84bd1bb7 RDI: 0000000000000000
-RBP: ffff88811b40b780 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff838b813c R11: 0000000000000000 R12: ffff88811b40b780
-R13: 0000000000000654 R14: 000000000000005a R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f09f3e0aff8 CR3: 000000011c54f000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	8b 44 24 70          	mov    0x70(%rsp),%eax
-   4:	48 ba 00 00 00 00 00 	movabs $0xdffffc0000000000,%rdx
-   b:	fc ff df
-   e:	48 89 f9             	mov    %rdi,%rcx
-  11:	48 c1 e9 03          	shr    $0x3,%rcx
-  15:	0f b6 14 11          	movzbl (%rcx,%rdx,1),%edx
-  19:	84 d2                	test   %dl,%dl
-  1b:	74 09                	je     0x26
-  1d:	80 fa 03             	cmp    $0x3,%dl
-  20:	0f 8e 50 02 00 00    	jle    0x276
-  26:	31 d2                	xor    %edx,%edx
-  28:	31 ff                	xor    %edi,%edi
-* 2a:	f7 b3 28 01 00 00    	divl   0x128(%rbx) <-- trapping instruction
-  30:	41 89 d5             	mov    %edx,%r13d
-  33:	89 d6                	mov    %edx,%esi
-  35:	e8 f8 50 b6 fd       	callq  0xfdb65132
-  3a:	45 85 ed             	test   %r13d,%r13d
-  3d:	0f                   	.byte 0xf
-  3e:	84                   	.byte 0x84
-  3f:	b1                   	.byte 0xb1
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Reviewed-by: Rob Herring <robh@kernel.org>
