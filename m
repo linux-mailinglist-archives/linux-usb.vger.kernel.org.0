@@ -2,128 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AFA43118C
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 09:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D95874311AC
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 09:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbhJRHs2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Oct 2021 03:48:28 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:58544 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbhJRHs2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 03:48:28 -0400
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CC4A58C6;
-        Mon, 18 Oct 2021 09:46:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1634543176;
-        bh=+5DXgvGO51l5WW2VyIFmBw/6Dg+7y/nxyoPkvnT4H9A=;
+        id S231186AbhJRH7q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Oct 2021 03:59:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35502 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231183AbhJRH7k (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 18 Oct 2021 03:59:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AECFF60E76;
+        Mon, 18 Oct 2021 07:57:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634543847;
+        bh=wizAlz3nkzwk1hhzFyfhTjq3YJTZcPcoMIebpmvCLu8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oF9ZKuKm1V3+X6DoATCqwDzjTWcnxiqCdQx0WYbias0wxsOqYjeRkcAVkMZE6qLqt
-         f1w/LUBEv74ZSGcYMFXWFCmVF+YLpxgvAFtKbzb7Gmir/NOdegduIQ4iqDYWSJxZIk
-         wOAUQE8VUOM8eAor54kk6H0B8wZ8d98lNQmLw0wc=
-Date:   Mon, 18 Oct 2021 10:45:59 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
-        paul.elder@ideasonboard.com, kernel@pengutronix.de
-Subject: Re: [PATCH v4] usb: gadget: uvc: consistently use define for
- headerlen
-Message-ID: <YW0mN3tyyV6U3Mjo@pendragon.ideasonboard.com>
-References: <20211017215017.18392-2-m.grzeschik@pengutronix.de>
- <20211018072059.11465-1-m.grzeschik@pengutronix.de>
+        b=K/f4aW3unDdT8GlzNEw/RQ+Ddk6bp9mLbJIW23NRg8eHvca2eH6SmmBzgihck6KMy
+         fsGaUtFbzZoJTQGT7nPQOcrj4nF7XVBK757ChWAKx9MDySmB2aQT3zntHttBQ+YR+U
+         WWBpF0y6ZBb4AbLi8pc1+SbfG8fzCYmTnmK82i6nL45Dwa171uOyz3IUI4JN//0NNe
+         mHMZ7Z5bM4BB+lKsiEglv6NhMTEdqAqZbpccxpw+YfOERWCmQEbEC9MQ5TrMmyo+Qq
+         DO//whpovw0TIGaF7L7fKKMQwNXv+dy47NMMnZ0+WsH3Q094YArH31OrP5/dDQTNeu
+         0nCOsGlxck2Fw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mcNWI-0002e0-50; Mon, 18 Oct 2021 09:57:18 +0200
+Date:   Mon, 18 Oct 2021 09:57:18 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Wang Hai <wanghai38@huawei.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] USB: serial: Fix possible memleak in
+ keyspan_port_probe()
+Message-ID: <YW0o3hv6mG+NQ3f5@hovoldconsulting.com>
+References: <20211015085543.1203011-1-wanghai38@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211018072059.11465-1-m.grzeschik@pengutronix.de>
+In-Reply-To: <20211015085543.1203011-1-wanghai38@huawei.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Michael,
-
-Thank you for the patch.
-
-On Mon, Oct 18, 2021 at 09:20:59AM +0200, Michael Grzeschik wrote:
-> The uvc request headerlen of 2 was defined as UVCG_REQUEST_HEADER_LEN
-> in commit e81e7f9a0eb9 ("usb: gadget: uvc: add scatter gather support").
-> We missed to use it consistently. This patch fixes that.
+On Fri, Oct 15, 2021 at 04:55:43PM +0800, Wang Hai wrote:
+> I got memory leak as follows when doing fault injection test:
 > 
-> Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
+> unreferenced object 0xffff888258228440 (size 64):
+>   comm "kworker/7:2", pid 2005, jiffies 4294989509 (age 824.540s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff8167939c>] slab_post_alloc_hook+0x9c/0x490
+>     [<ffffffff8167f627>] kmem_cache_alloc_trace+0x1f7/0x470
+>     [<ffffffffa02ac0e4>] keyspan_port_probe+0xa4/0x5d0 [keyspan]
+>     [<ffffffffa0294c07>] usb_serial_device_probe+0x97/0x1d0 [usbserial]
+>     [<ffffffff82b50ca7>] really_probe+0x167/0x460
+>     [<ffffffff82b51099>] __driver_probe_device+0xf9/0x180
+>     [<ffffffff82b51173>] driver_probe_device+0x53/0x130
+>     [<ffffffff82b516f5>] __device_attach_driver+0x105/0x130
+>     [<ffffffff82b4cfe9>] bus_for_each_drv+0x129/0x190
+>     [<ffffffff82b50a69>] __device_attach+0x1c9/0x270
+>     [<ffffffff82b518d0>] device_initial_probe+0x20/0x30
+>     [<ffffffff82b4f062>] bus_probe_device+0x142/0x160
+>     [<ffffffff82b4a4e9>] device_add+0x829/0x1300
+>     [<ffffffffa0295fda>] usb_serial_probe.cold+0xc9b/0x14ac [usbserial]
+>     [<ffffffffa02266aa>] usb_probe_interface+0x1aa/0x3c0 [usbcore]
+>     [<ffffffff82b50ca7>] really_probe+0x167/0x460
+> 
+> If it fails to allocate memory for an out_buffer[i] or in_buffer[i],
+> the previously allocated memory for out_buffer or in_buffer needs to
+> be freed on the error handling path, otherwise a memory leak will result.
+> 
+> Fixes: bad41a5bf177 ("USB: keyspan: fix port DMA-buffer allocations")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Wang Hai <wanghai38@huawei.com>
 > ---
-> v3: - fixed wrong use of define
->     - added missing use of define in uvc_video_encode_header
-> v4: - fixed headersize in struct uvc_request to also use the define
-> 
->  drivers/usb/gadget/function/uvc.h       | 4 +++-
->  drivers/usb/gadget/function/uvc_video.c | 6 +++---
->  drivers/usb/gadget/function/uvc_video.h | 2 --
->  3 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-> index 9d5f17b551bbd..b05de36e2c605 100644
-> --- a/drivers/usb/gadget/function/uvc.h
-> +++ b/drivers/usb/gadget/function/uvc.h
-> @@ -68,6 +68,8 @@ extern unsigned int uvc_gadget_trace_param;
->  #define UVC_MAX_REQUEST_SIZE			64
->  #define UVC_MAX_EVENTS				4
->  
-> +#define UVCG_REQUEST_HEADER_LEN			2
-> +
->  /* ------------------------------------------------------------------------
->   * Structures
->   */
-> @@ -76,7 +78,7 @@ struct uvc_request {
->  	u8 *req_buffer;
->  	struct uvc_video *video;
->  	struct sg_table sgt;
-> -	u8 header[2];
-> +	u8 header[UVCG_REQUEST_HEADER_LEN];
->  };
->  
->  struct uvc_video {
-> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-> index b4a763e5f70e1..f3e97a4fc0303 100644
-> --- a/drivers/usb/gadget/function/uvc_video.c
-> +++ b/drivers/usb/gadget/function/uvc_video.c
-> @@ -33,7 +33,7 @@ uvc_video_encode_header(struct uvc_video *video, struct uvc_buffer *buf,
->  	if (buf->bytesused - video->queue.buf_used <= len - UVCG_REQUEST_HEADER_LEN)
->  		data[1] |= UVC_STREAM_EOF;
->  
-> -	return 2;
-> +	return UVCG_REQUEST_HEADER_LEN;
->  }
->  
->  static int
-> @@ -302,8 +302,8 @@ uvc_video_alloc_requests(struct uvc_video *video)
->  		list_add_tail(&video->ureq[i].req->list, &video->req_free);
->  		/* req_size/PAGE_SIZE + 1 for overruns and + 1 for header */
->  		sg_alloc_table(&video->ureq[i].sgt,
-> -			       DIV_ROUND_UP(req_size - 2, PAGE_SIZE) + 2,
-> -			       GFP_KERNEL);
-> +			       DIV_ROUND_UP(req_size - UVCG_REQUEST_HEADER_LEN,
-> +					    PAGE_SIZE) + 2, GFP_KERNEL);
->  	}
->  
->  	video->req_size = req_size;
-> diff --git a/drivers/usb/gadget/function/uvc_video.h b/drivers/usb/gadget/function/uvc_video.h
-> index 9bf19475f6f9a..03adeefa343b7 100644
-> --- a/drivers/usb/gadget/function/uvc_video.h
-> +++ b/drivers/usb/gadget/function/uvc_video.h
-> @@ -12,8 +12,6 @@
->  #ifndef __UVC_VIDEO_H__
->  #define __UVC_VIDEO_H__
->  
-> -#define UVCG_REQUEST_HEADER_LEN			2
-> -
->  struct uvc_video;
->  
->  int uvcg_video_enable(struct uvc_video *video, int enable);
+> v1->v2: rename error labels
 
--- 
-Regards,
+Thanks for the update. Now applied with a slightly amended commit
+message:
 
-Laurent Pinchart
+	USB: serial: keyspan: fix memleak on probe errors
+
+	...
+
+	If keyspan_port_probe() fails...
+
+Johan
