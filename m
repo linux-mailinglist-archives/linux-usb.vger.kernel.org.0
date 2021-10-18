@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9C4430EF8
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 06:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8F7430F57
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 06:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbhJRElL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Oct 2021 00:41:11 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:22378 "EHLO
+        id S229589AbhJREus (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Oct 2021 00:50:48 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:50135 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbhJRElK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 00:41:10 -0400
+        with ESMTP id S229470AbhJREur (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 00:50:47 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1634531940; x=1666067940;
+  t=1634532517; x=1666068517;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=Qk0szTbkB9FO/tBDmCGeJ8tU5Y8lVLNgNU3Jtimcxcs=;
-  b=t4is5KaEp7coZBBfPRqGUeKlNruO6wipNoROIQfwHkixcvGPjFB07Dji
-   v+pIiI1wXh4UKID7VWTngU1du0oz65x5SO7ubQFJ9FC58RG/ZJig07Fjd
-   ZqSiApbpWQlFARJ2gmv7UyAFlmZHKIP6OiPmydw2ij3Fm5QqOq3+1FGhE
-   g=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 17 Oct 2021 21:39:00 -0700
+  bh=e/dkFcMbpBaxrUMalUjlfoz7MO5FH7d4Oii2XPb6LFU=;
+  b=wHPtzKxzWCBSVBXVY0l9JTDGkTbwrIDmtCLtmJ2JuzwJjN3pj0ZP4+jf
+   XnFFotaNp01wFzu4Xo3/Bh/TPs47/VPecDiYOK/RWWSW0k5QZbwts05k7
+   kur1YodxPpO8K23O4SpWun0WANjizOiDhjwHPJk3+/SqoNmWdLN1dNcr0
+   4=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 17 Oct 2021 21:48:37 -0700
 X-QCInternal: smtphost
 Received: from nalasex01b.na.qualcomm.com ([10.47.209.197])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2021 21:38:59 -0700
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2021 21:48:37 -0700
 Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Sun, 17 Oct 2021 21:38:57 -0700
+ Sun, 17 Oct 2021 21:48:34 -0700
 From:   Linyu Yuan <quic_linyyuan@quicinc.com>
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     <linux-usb@vger.kernel.org>, Jack Pham <jackp@quicinc.com>,
         Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH v7] usb: gadget: add configfs trace events
-Date:   Mon, 18 Oct 2021 12:38:54 +0800
-Message-ID: <1634531934-31560-1-git-send-email-quic_linyyuan@quicinc.com>
+Subject: [PATCH v8] usb: gadget: add configfs trace events
+Date:   Mon, 18 Oct 2021 12:48:31 +0800
+Message-ID: <1634532511-32585-1-git-send-email-quic_linyyuan@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -66,7 +66,8 @@ v3: do not move private structure to configfs.h
 v4: add missing new file configfs_trace.h
 v5: lost some change of v2, add it again
 v6: fix comments from Greg Kroah-Hartman
-v7: change two trace location.
+v7: three minor changes according to coding rules
+v8: change two trace location
 
  drivers/usb/gadget/configfs.c       |  43 ++++++--
  drivers/usb/gadget/configfs_trace.h | 191 ++++++++++++++++++++++++++++++++++++
