@@ -2,150 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6801943288A
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 22:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E814743298D
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 00:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbhJRUmr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Oct 2021 16:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
+        id S231160AbhJRWHm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Oct 2021 18:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbhJRUmq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 16:42:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3E5C06161C
-        for <linux-usb@vger.kernel.org>; Mon, 18 Oct 2021 13:40:34 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mcZQu-0002UW-K6; Mon, 18 Oct 2021 22:40:32 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mcZQs-0001Qe-QY; Mon, 18 Oct 2021 22:40:30 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mcZQs-0000yB-Ph; Mon, 18 Oct 2021 22:40:30 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     David Mosberger <davidm@egauge.net>, linux-usb@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH v2] usb: max-3421: Use driver data instead of maintaining a list of bound devices
-Date:   Mon, 18 Oct 2021 22:40:28 +0200
-Message-Id: <20211018204028.2914597-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211018202835.txyjkm54ddwmwpsu@pengutronix.de>
-References: <20211018202835.txyjkm54ddwmwpsu@pengutronix.de>
+        with ESMTP id S232139AbhJRWHl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 18:07:41 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF86C061745
+        for <linux-usb@vger.kernel.org>; Mon, 18 Oct 2021 15:05:29 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id a13so7024629qkg.11
+        for <linux-usb@vger.kernel.org>; Mon, 18 Oct 2021 15:05:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VNpqRRdnPDIUGCc3uEFG9REMCz+uQZwgGwBrpVs1X7k=;
+        b=PzH1/3QFJDCAo6+yfE9yZp3FhN5bdJblxdwmrYJXz4W0YDV5QgMDwXPS+9oDzaYsmR
+         1hy1VBsrs0g+cboLAmAYffm5C4OKJ9PZknz0zqdbSlWGpa8IqJfWmggmKLf9VGSQPSoq
+         bF2fHToJMjgOwuWZ6BDY28QPn+sUaZRuPFe0c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VNpqRRdnPDIUGCc3uEFG9REMCz+uQZwgGwBrpVs1X7k=;
+        b=jbUPBCtWEy+bsRM6Q+a6i8INo1Nius9Vv39wuP/rlcQL/AAmkUABXPghZGyMD0jWV9
+         mL7ZyJoZlk8O4YzxeRdSe7fgKGTVDmX8gmRbyaU5SG9UGpwGRJt/yDc57AEKGzkbEdHX
+         SVH6smjpKbswuLkGkMoBogp7m75ab7gCcwuyH6XU9SmIiZXh0PJABEqTOjNSYc6gS9M2
+         EEgjQZNm38yrTBqhv/evsk9mOcv17g2rWVtjS6W7G3gIvsDP2YQmaTrIISRBduyzWbwc
+         ibCvnHuG+XbAUHwWcWKadQkfO36aEDbSUIFxRmsGeF9zRlMKM+zJ9PXCPCZIKKuRyxeP
+         kmOQ==
+X-Gm-Message-State: AOAM531O7d8cOECieXhNMuDq5D2GqpsVdmAW61UzMs0Zt4ngG88UCZ+O
+        j/ZF71Emu3KPBtn5XG+VX958tPqcf3C9fA==
+X-Google-Smtp-Source: ABdhPJxgYjUyH0Q251jOZsOWEQ+UIOqPIjhVTG8zxqDyI6ymObyK9GhrElt8oohDuuXI2j4/nN2ovA==
+X-Received: by 2002:a37:a50a:: with SMTP id o10mr25659134qke.419.1634594728317;
+        Mon, 18 Oct 2021 15:05:28 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id t11sm7024335qkm.92.2021.10.18.15.05.28
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Oct 2021 15:05:28 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id t127so5549850ybf.13
+        for <linux-usb@vger.kernel.org>; Mon, 18 Oct 2021 15:05:28 -0700 (PDT)
+X-Received: by 2002:a5b:102:: with SMTP id 2mr31008124ybx.101.1634594288583;
+ Mon, 18 Oct 2021 14:58:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Patch-Hashes: v=1; h=sha256; i=3O9ZTIQwa6QwyQdGOMQAbCx8u1qugpeddtq1H4HZZKI=; m=aTHET5H9l41icuHtfWHYP5lDmrj6wnCpcZygP4z0hiM=; p=ebmPLZVkfGe6zWtZ0q1KnDINDf/V3O14zXGG9MdJ6SA=; g=c28ae95098245f8630c94026d28e3b75d76e6867
-X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFt27QACgkQwfwUeK3K7AmRIQf7Br5 6/nLziIEa09IyOQpXvSC3cgvLy60zVe1ccaLdfPJCDbfJLHzbXbUqNvwdl3jrLRwGLNr1Z32aEgHQ TSx+eZZvzrsfKF3DX7TkLWM3i0WIuK3dfXvOHxwivVZ10bgYDMcym1M/ctz+3YH1gHZ/znkcGOl/3 YTVUTf7SzDwLRyOdlbh6+BDSwf5rQ9DL7iy1DivexAtipMgKv07xeja9O94FAkaGdGY2LjzVRCbRl 69ig74RPSvOnife8GW33+XjezxQqfmSEpG0G7YbwCvcUm8MNHCKSlcem6qBncAco4U4qxwyO1kKtD tZNy2Ucd2xTCnfgOhye6FgSnx2HQHPA==
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+References: <1633628923-25047-1-git-send-email-pmaliset@codeaurora.org>
+ <20211013100005.GB9901@lpieralisi> <CAE-0n52fZZkWt5KxF8gq0D55f_joq0v2sBBp81Gts8cBt6fJgg@mail.gmail.com>
+In-Reply-To: <CAE-0n52fZZkWt5KxF8gq0D55f_joq0v2sBBp81Gts8cBt6fJgg@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 18 Oct 2021 14:57:56 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WYvV+=uyEOYq7LjtBgpSGV6KovvoS1e88fgc1kpt_c7Q@mail.gmail.com>
+Message-ID: <CAD=FV=WYvV+=uyEOYq7LjtBgpSGV6KovvoS1e88fgc1kpt_c7Q@mail.gmail.com>
+Subject: Re: [PATCH v12 0/5] Add DT bindings and DT nodes for PCIe and PHY in SC7280
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Prasad Malisetty <pmaliset@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>, svarbanov@mm-sol.com,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Veerabhadrarao Badiganti <vbadigan@codeaurora.org>,
+        sallenki@codeaurora.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Instead of maintaining a single-linked list of devices that must be
-searched linearly in .remove() just use spi_set_drvdata() to remember the
-link between the spi device and the driver struct. Then the global list
-and the next member can be dropped.
+Hi,
 
-This simplifies the driver, reduces the memory footprint and the time to
-search the list. Also it makes obvious that there is always a corresponding
-driver struct for a given device in .remove(), so the error path for
-!max3421_hcd can be dropped, too.
+On Fri, Oct 15, 2021 at 12:43 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Lorenzo Pieralisi (2021-10-13 03:00:05)
+> > On Thu, Oct 07, 2021 at 11:18:38PM +0530, Prasad Malisetty wrote:
+> > > Prasad Malisetty (5):
+> > >   dt-bindings: pci: qcom: Document PCIe bindings for SC7280
+> > >   arm64: dts: qcom: sc7280: Add PCIe and PHY related nodes
+> > >   arm64: dts: qcom: sc7280: Add PCIe nodes for IDP board
+> > >   PCI: qcom: Add a flag in match data along with ops
+> > >   PCI: qcom: Switch pcie_1_pipe_clk_src after PHY init in SC7280
+> > >
+> > >  .../devicetree/bindings/pci/qcom,pcie.txt          |  17 +++
+> > >  arch/arm64/boot/dts/qcom/sc7280-idp.dts            |   8 ++
+> > >  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |  50 +++++++++
+> > >  arch/arm64/boot/dts/qcom/sc7280-idp2.dts           |   8 ++
+> > >  arch/arm64/boot/dts/qcom/sc7280.dtsi               | 118 +++++++++++++++++++++
+> > >  drivers/pci/controller/dwc/pcie-qcom.c             |  95 +++++++++++++++--
+> > >  6 files changed, 285 insertions(+), 11 deletions(-)
+> >
+> > I applied patches [4-5] to pci/qcom for v5.16, thanks I expect other
+> > patches to go via the relevant trees.
+> >
+>
+> Lorenzo, can you pick up patch 1 too? It's the binding update for the
+> compatible string used in patch 4-5.
 
-As a side effect this fixes a data inconsistency when .probe() races with
-itself for a second max3421 device in manipulating max3421_hcd_list. A
-similar race is fixed in .remove(), too.
+I think that means that patches 2-3 are ready to land in the Qualcomm
+tree assuming Bjorn Andersson is still accepting patches there for
+5.16, right?
 
-Fixes: 2d53139f3162 ("Add support for using a MAX3421E chip as a host driver.")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
-Changes since (implicit) v1:
-
- - don't drop "max3421_hcd = hcd_to_max3421(hcd);", noticed by the
-   kernel test robot. Greg helped interpreting the kernel test robot's
-   finding.
-
-As before, this patch is only build tested.
-
-Best regards
-Uwe
- drivers/usb/host/max3421-hcd.c | 25 +++++--------------------
- 1 file changed, 5 insertions(+), 20 deletions(-)
-
-diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-hcd.c
-index 59cc1bc7f12f..30de85a707fe 100644
---- a/drivers/usb/host/max3421-hcd.c
-+++ b/drivers/usb/host/max3421-hcd.c
-@@ -125,8 +125,6 @@ struct max3421_hcd {
- 
- 	struct task_struct *spi_thread;
- 
--	struct max3421_hcd *next;
--
- 	enum max3421_rh_state rh_state;
- 	/* lower 16 bits contain port status, upper 16 bits the change mask: */
- 	u32 port_status;
-@@ -174,8 +172,6 @@ struct max3421_ep {
- 	u8 retransmit;			/* packet needs retransmission */
- };
- 
--static struct max3421_hcd *max3421_hcd_list;
--
- #define MAX3421_FIFO_SIZE	64
- 
- #define MAX3421_SPI_DIR_RD	0	/* read register from MAX3421 */
-@@ -1882,9 +1878,8 @@ max3421_probe(struct spi_device *spi)
- 	}
- 	set_bit(HCD_FLAG_POLL_RH, &hcd->flags);
- 	max3421_hcd = hcd_to_max3421(hcd);
--	max3421_hcd->next = max3421_hcd_list;
--	max3421_hcd_list = max3421_hcd;
- 	INIT_LIST_HEAD(&max3421_hcd->ep_list);
-+	spi_set_drvdata(spi, max3421_hcd);
- 
- 	max3421_hcd->tx = kmalloc(sizeof(*max3421_hcd->tx), GFP_KERNEL);
- 	if (!max3421_hcd->tx)
-@@ -1934,28 +1929,18 @@ max3421_probe(struct spi_device *spi)
- static int
- max3421_remove(struct spi_device *spi)
- {
--	struct max3421_hcd *max3421_hcd = NULL, **prev;
--	struct usb_hcd *hcd = NULL;
-+	struct max3421_hcd *max3421_hcd;
-+	struct usb_hcd *hcd;
- 	unsigned long flags;
- 
--	for (prev = &max3421_hcd_list; *prev; prev = &(*prev)->next) {
--		max3421_hcd = *prev;
--		hcd = max3421_to_hcd(max3421_hcd);
--		if (hcd->self.controller == &spi->dev)
--			break;
--	}
--	if (!max3421_hcd) {
--		dev_err(&spi->dev, "no MAX3421 HCD found for SPI device %p\n",
--			spi);
--		return -ENODEV;
--	}
-+	max3421_hcd = spi_get_drvdata(spi);
-+	hcd = max3421_to_hcd(max3421_hcd);
- 
- 	usb_remove_hcd(hcd);
- 
- 	spin_lock_irqsave(&max3421_hcd->lock, flags);
- 
- 	kthread_stop(max3421_hcd->spi_thread);
--	*prev = max3421_hcd->next;
- 
- 	spin_unlock_irqrestore(&max3421_hcd->lock, flags);
- 
--- 
-2.30.2
-
+-Doug
