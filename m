@@ -2,90 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D95874311AC
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 09:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1B0A43168E
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 12:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231186AbhJRH7q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Oct 2021 03:59:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35502 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231183AbhJRH7k (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 Oct 2021 03:59:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AECFF60E76;
-        Mon, 18 Oct 2021 07:57:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634543847;
-        bh=wizAlz3nkzwk1hhzFyfhTjq3YJTZcPcoMIebpmvCLu8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K/f4aW3unDdT8GlzNEw/RQ+Ddk6bp9mLbJIW23NRg8eHvca2eH6SmmBzgihck6KMy
-         fsGaUtFbzZoJTQGT7nPQOcrj4nF7XVBK757ChWAKx9MDySmB2aQT3zntHttBQ+YR+U
-         WWBpF0y6ZBb4AbLi8pc1+SbfG8fzCYmTnmK82i6nL45Dwa171uOyz3IUI4JN//0NNe
-         mHMZ7Z5bM4BB+lKsiEglv6NhMTEdqAqZbpccxpw+YfOERWCmQEbEC9MQ5TrMmyo+Qq
-         DO//whpovw0TIGaF7L7fKKMQwNXv+dy47NMMnZ0+WsH3Q094YArH31OrP5/dDQTNeu
-         0nCOsGlxck2Fw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mcNWI-0002e0-50; Mon, 18 Oct 2021 09:57:18 +0200
-Date:   Mon, 18 Oct 2021 09:57:18 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Wang Hai <wanghai38@huawei.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] USB: serial: Fix possible memleak in
- keyspan_port_probe()
-Message-ID: <YW0o3hv6mG+NQ3f5@hovoldconsulting.com>
-References: <20211015085543.1203011-1-wanghai38@huawei.com>
+        id S230446AbhJRK4G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Oct 2021 06:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229714AbhJRK4F (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 06:56:05 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB534C06161C;
+        Mon, 18 Oct 2021 03:53:54 -0700 (PDT)
+Date:   Mon, 18 Oct 2021 12:53:50 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1634554432;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DmyYIQ6/Gn+EjOYyOfOHPKtVvGqXG+QS63gXgRjV3is=;
+        b=c1JjhlVq2JLxhaE4mEibOQ0Rr42NuWh6jXeIqf/j+WBGOhmUZ1+4VPNlBBQyxIRdcbxxnd
+        HQSpfaErRqgwy8WlkNKSTlbszmOU1MiGTd2L6Bv7apQABT0x/TMBHLLxLoKiW2xl/AdED5
+        1XUN9gwz2w2KQNF+D6KmHgm1BmDu6WEJEXGxQmnOCEhvnpXfhw8nF6NW8tqt2OcOq8fT3+
+        RXIBz4MQ7JCtSkCOaQJcJ0f2N8Ik+pEhKG92DEt6zHSARghm/h/eFJSmrZoH0uFvxPGSNe
+        4bW9B29me+gDNziczQYfLK8V66lRsHtzcUm0gmf7NZU7zRwW3QCRBdCmVSq95A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1634554432;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DmyYIQ6/Gn+EjOYyOfOHPKtVvGqXG+QS63gXgRjV3is=;
+        b=BLoxm2wOMyY2yny6TnhD5ICCWoAVKALx1QkCvtqk4fTKD8wzdr9gXqfPMoyRDtrbRm9r3P
+        s8GIPEsCAX8CUkBg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Christoph Hellwig <hch@infradead.org>, linux-block@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        Jens Axboe <axboe@kernel.dk>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [RFC PATCH 3/3] scsi, usb: storage: Complete the blk-request
+ directly.
+Message-ID: <20211018105350.7p2exznyn6e2gbtn@linutronix.de>
+References: <20211015151412.3229037-1-bigeasy@linutronix.de>
+ <20211015151412.3229037-4-bigeasy@linutronix.de>
+ <YWmmn4MpTSGHRVOU@infradead.org>
+ <20211015161653.muq37x6mkeru6lxc@linutronix.de>
+ <e567fc59-46b1-bc83-c90c-199257ff8c93@acm.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211015085543.1203011-1-wanghai38@huawei.com>
+In-Reply-To: <e567fc59-46b1-bc83-c90c-199257ff8c93@acm.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 15, 2021 at 04:55:43PM +0800, Wang Hai wrote:
-> I got memory leak as follows when doing fault injection test:
+On 2021-10-16 19:17:05 [-0700], Bart Van Assche wrote:
+> On 10/15/21 09:16, Sebastian Andrzej Siewior wrote:
+> > On 2021-10-15 09:04:47 [-0700], Christoph Hellwig wrote:
+> > > Bart has been working on removing the ->scsi_done indirection, so this
+> > > will need to find a way to interact with that
+> > 
+> > Okay. So I just wait until it is there. Is this v5.15/16 material?
 > 
-> unreferenced object 0xffff888258228440 (size 64):
->   comm "kworker/7:2", pid 2005, jiffies 4294989509 (age 824.540s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<ffffffff8167939c>] slab_post_alloc_hook+0x9c/0x490
->     [<ffffffff8167f627>] kmem_cache_alloc_trace+0x1f7/0x470
->     [<ffffffffa02ac0e4>] keyspan_port_probe+0xa4/0x5d0 [keyspan]
->     [<ffffffffa0294c07>] usb_serial_device_probe+0x97/0x1d0 [usbserial]
->     [<ffffffff82b50ca7>] really_probe+0x167/0x460
->     [<ffffffff82b51099>] __driver_probe_device+0xf9/0x180
->     [<ffffffff82b51173>] driver_probe_device+0x53/0x130
->     [<ffffffff82b516f5>] __device_attach_driver+0x105/0x130
->     [<ffffffff82b4cfe9>] bus_for_each_drv+0x129/0x190
->     [<ffffffff82b50a69>] __device_attach+0x1c9/0x270
->     [<ffffffff82b518d0>] device_initial_probe+0x20/0x30
->     [<ffffffff82b4f062>] bus_probe_device+0x142/0x160
->     [<ffffffff82b4a4e9>] device_add+0x829/0x1300
->     [<ffffffffa0295fda>] usb_serial_probe.cold+0xc9b/0x14ac [usbserial]
->     [<ffffffffa02266aa>] usb_probe_interface+0x1aa/0x3c0 [usbcore]
->     [<ffffffff82b50ca7>] really_probe+0x167/0x460
+> Isn't it too late to submit patches for v5.15 other than bugfixes for
+> patches merged during the v5.15 merge window?
+
+yeah, off by one, meant 16/17 ;)
+
+> Martin Petersen, the SCSI maintainer, has been so kind to queue the patch
+> series that removes the scsi_done member for the v5.16 merge window. So that
+> patch series should become available soon in the following git repository:
+> git://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
+
+Thanks.
+
+> Thanks,
 > 
-> If it fails to allocate memory for an out_buffer[i] or in_buffer[i],
-> the previously allocated memory for out_buffer or in_buffer needs to
-> be freed on the error handling path, otherwise a memory leak will result.
-> 
-> Fixes: bad41a5bf177 ("USB: keyspan: fix port DMA-buffer allocations")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Wang Hai <wanghai38@huawei.com>
-> ---
-> v1->v2: rename error labels
+> Bart.
 
-Thanks for the update. Now applied with a slightly amended commit
-message:
-
-	USB: serial: keyspan: fix memleak on probe errors
-
-	...
-
-	If keyspan_port_probe() fails...
-
-Johan
+Sebastian
