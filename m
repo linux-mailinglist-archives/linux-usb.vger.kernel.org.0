@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8F7430F57
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 06:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BF3430F6D
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Oct 2021 07:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbhJREus (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Oct 2021 00:50:48 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:50135 "EHLO
+        id S229526AbhJRFFM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Oct 2021 01:05:12 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:16582 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbhJREur (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 00:50:47 -0400
+        with ESMTP id S229482AbhJRFFL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 01:05:11 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1634532517; x=1666068517;
+  t=1634533381; x=1666069381;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=e/dkFcMbpBaxrUMalUjlfoz7MO5FH7d4Oii2XPb6LFU=;
-  b=wHPtzKxzWCBSVBXVY0l9JTDGkTbwrIDmtCLtmJ2JuzwJjN3pj0ZP4+jf
-   XnFFotaNp01wFzu4Xo3/Bh/TPs47/VPecDiYOK/RWWSW0k5QZbwts05k7
-   kur1YodxPpO8K23O4SpWun0WANjizOiDhjwHPJk3+/SqoNmWdLN1dNcr0
-   4=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 17 Oct 2021 21:48:37 -0700
+  bh=u8+mXONpKnTjFJsZiCacQS7XsVEm8ekW9NZ+9RQWAdk=;
+  b=UlJ45P9LfVvyW5O5eSMpmaL2FhcnmHGbluxPg+6C3/EeNATzhYc+PWCJ
+   3NZq3oMwk9pv2Y+r/Lpq/yKJqtDIHFQBALnmsmnaASQZNCKcWcArByyIT
+   e1omoUtJ66auZYq+J44jUBGVtHzgPCSUpUu1kb+YYekQnmq6gG2zgSfHD
+   w=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 17 Oct 2021 22:03:01 -0700
 X-QCInternal: smtphost
 Received: from nalasex01b.na.qualcomm.com ([10.47.209.197])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2021 21:48:37 -0700
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2021 22:03:01 -0700
 Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Sun, 17 Oct 2021 21:48:34 -0700
+ Sun, 17 Oct 2021 22:02:58 -0700
 From:   Linyu Yuan <quic_linyyuan@quicinc.com>
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     <linux-usb@vger.kernel.org>, Jack Pham <jackp@quicinc.com>,
         Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH v8] usb: gadget: add configfs trace events
-Date:   Mon, 18 Oct 2021 12:48:31 +0800
-Message-ID: <1634532511-32585-1-git-send-email-quic_linyyuan@quicinc.com>
+Subject: [PATCH v9] usb: gadget: add configfs trace events
+Date:   Mon, 18 Oct 2021 13:02:55 +0800
+Message-ID: <1634533375-1201-1-git-send-email-quic_linyyuan@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -68,10 +68,11 @@ v5: lost some change of v2, add it again
 v6: fix comments from Greg Kroah-Hartman
 v7: three minor changes according to coding rules
 v8: change two trace location
+v9: fix when config is empty
 
  drivers/usb/gadget/configfs.c       |  43 ++++++--
- drivers/usb/gadget/configfs_trace.h | 191 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 225 insertions(+), 9 deletions(-)
+ drivers/usb/gadget/configfs_trace.h | 196 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 230 insertions(+), 9 deletions(-)
  create mode 100644 drivers/usb/gadget/configfs_trace.h
 
 diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
@@ -251,10 +252,10 @@ index 477e72a..0e7feaa 100644
  
 diff --git a/drivers/usb/gadget/configfs_trace.h b/drivers/usb/gadget/configfs_trace.h
 new file mode 100644
-index 0000000..b56ab31
+index 0000000..71b3a9c
 --- /dev/null
 +++ b/drivers/usb/gadget/configfs_trace.h
-@@ -0,0 +1,191 @@
+@@ -0,0 +1,196 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
@@ -272,6 +273,11 @@ index 0000000..b56ab31
 +	static char trs[MAX_CONFIGURAITON_STR_LEN];
 +	size_t len = MAX_CONFIGURAITON_STR_LEN - 1;
 +	int n = 0;
++
++	if (list_empty(&gi->cdev.configs)) {
++		strcat(trs, "empty");
++		return trs;
++	}
 +
 +	list_for_each_entry(uc, &gi->cdev.configs, list) {
 +		cfg = container_of(uc, struct config_usb_cfg, c);
