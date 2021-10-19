@@ -2,151 +2,207 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 139B7432C27
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 05:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8CD432C3B
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 05:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231938AbhJSDTn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Oct 2021 23:19:43 -0400
-Received: from mail-il1-f197.google.com ([209.85.166.197]:54090 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbhJSDTm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 23:19:42 -0400
-Received: by mail-il1-f197.google.com with SMTP id x4-20020a923004000000b00258f6abf8feso9215360ile.20
-        for <linux-usb@vger.kernel.org>; Mon, 18 Oct 2021 20:17:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=OaCb4m2Y41G8nZRW9KQLy/L6JXv6G8zOIqHDza5NSKY=;
-        b=ynhV9cUBYc0eMEB+/zc4xjXmcXfGYRyZUZtYr/0SawOdOezFFbnQ6vLBNKczOFXwkx
-         pESTErJK9mhQu0HN8B+yIbxT2ZjGixbg+jfesQwDWFq3SL8E5bvqvvSOcaPdq0upxaMQ
-         MWyOka9/jsQeOZ+wo9U4UMxgFk19W6nG1Z1SbGBjr+IIHIjdk2j0xT01Qfe9mSX5u6l5
-         QDS9ichpZNr5CQ5ppg/4iVx7Au56eNRzbBqQ0xYX2cH11H8QCvGBmfxlF2La9/GF+3Z+
-         r9Kme/13aplzjYw7sbvhTrXn0sgZTZLwRbEtrxqMP6/+cqn4H4R+V2EAsmsUHAL6vSBD
-         sbWg==
-X-Gm-Message-State: AOAM533LJZQb0KnY2Pa9UC9mKq2nzX1JwU5npxEXpE4NtdtH64kjNPj+
-        qa9/GufmLccx79DgkFkp53abikaeKup+qqUOb283xd3CijVA
-X-Google-Smtp-Source: ABdhPJytT01GGfwmypDTPjJGvud3xJD/NRIzfMyKE/Wt5woHb/L6cvKtWWgzORzXXgPLYExfF4IloMbwxriKJhcmvYnYPvVeicuK
+        id S229794AbhJSD0B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Oct 2021 23:26:01 -0400
+Received: from mga04.intel.com ([192.55.52.120]:58917 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229692AbhJSD0B (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 18 Oct 2021 23:26:01 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10141"; a="227182984"
+X-IronPort-AV: E=Sophos;i="5.85,383,1624345200"; 
+   d="scan'208";a="227182984"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2021 20:23:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,383,1624345200"; 
+   d="scan'208";a="531216557"
+Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 18 Oct 2021 20:23:48 -0700
+Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mcfj9-000Bzp-GF; Tue, 19 Oct 2021 03:23:47 +0000
+Date:   Tue, 19 Oct 2021 11:23:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 8ef1e58783b9f55daa4a865c7801dc75cbeb8260
+Message-ID: <616e3a1d.Dop9h9cOMEHMO+MW%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:220c:: with SMTP id l12mr2445346jas.149.1634613449745;
- Mon, 18 Oct 2021 20:17:29 -0700 (PDT)
-Date:   Mon, 18 Oct 2021 20:17:29 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000046acd05ceac1a72@google.com>
-Subject: [syzbot] divide error in usbnet_start_xmit
-From:   syzbot <syzbot+76bb1d34ffa0adc03baa@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        oneukum@suse.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 8ef1e58783b9f55daa4a865c7801dc75cbeb8260  usb: typec: STUSB160X should select REGMAP_I2C
 
-syzbot found the following issue on:
+elapsed time: 729m
 
-HEAD commit:    c03fb16bafdf Merge 5.15-rc6 into usb-next
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=12d48f1f300000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c27d285bdb7457e2
-dashboard link: https://syzkaller.appspot.com/bug?extid=76bb1d34ffa0adc03baa
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14fe6decb00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15c7bcaf300000
+configs tested: 147
+configs skipped: 3
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+76bb1d34ffa0adc03baa@syzkaller.appspotmail.com
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-divide error: 0000 [#1] SMP KASAN
-CPU: 0 PID: 1315 Comm: kworker/0:6 Not tainted 5.15.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: mld mld_ifc_work
-RIP: 0010:usbnet_start_xmit+0x3f1/0x1f70 drivers/net/usb/usbnet.c:1404
-Code: 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 0f b6 04 02 84 c0 74 08 3c 03 0f 8e 4b 18 00 00 8b 44 24 08 31 d2 31 ff <41> f7 b5 28 0d 00 00 41 89 d4 89 d6 e8 4e 12 b5 fd 45 85 e4 0f 84
-RSP: 0018:ffffc9000104f660 EFLAGS: 00010246
-RAX: 000000000000005a RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff838cbdc1 RDI: 0000000000000000
-RBP: ffff8881155b1350 R08: 0000000000000001 R09: 0000000000000000
-R10: ffffffff838cbdb4 R11: 0000000000000000 R12: 00000000c0011100
-R13: ffff888119304000 R14: ffff8881155b1280 R15: ffff8881155b0d00
-FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f24d7edaa70 CR3: 000000010a45d000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- __netdev_start_xmit include/linux/netdevice.h:4988 [inline]
- netdev_start_xmit include/linux/netdevice.h:5002 [inline]
- xmit_one net/core/dev.c:3576 [inline]
- dev_hard_start_xmit+0x1df/0x890 net/core/dev.c:3592
- sch_direct_xmit+0x25b/0x790 net/sched/sch_generic.c:342
- __dev_xmit_skb net/core/dev.c:3803 [inline]
- __dev_queue_xmit+0xf25/0x2d40 net/core/dev.c:4170
- neigh_resolve_output net/core/neighbour.c:1492 [inline]
- neigh_resolve_output+0x50e/0x820 net/core/neighbour.c:1472
- neigh_output include/net/neighbour.h:510 [inline]
- ip6_finish_output2+0xdbe/0x1b20 net/ipv6/ip6_output.c:126
- __ip6_finish_output.part.0+0x387/0xbb0 net/ipv6/ip6_output.c:191
- __ip6_finish_output include/linux/skbuff.h:982 [inline]
- ip6_finish_output net/ipv6/ip6_output.c:201 [inline]
- NF_HOOK_COND include/linux/netfilter.h:296 [inline]
- ip6_output+0x3d2/0x810 net/ipv6/ip6_output.c:224
- dst_output include/net/dst.h:450 [inline]
- NF_HOOK include/linux/netfilter.h:307 [inline]
- NF_HOOK include/linux/netfilter.h:301 [inline]
- mld_sendpack+0x979/0xe10 net/ipv6/mcast.c:1826
- mld_send_cr net/ipv6/mcast.c:2127 [inline]
- mld_ifc_work+0x71c/0xdc0 net/ipv6/mcast.c:2659
- process_one_work+0x9bf/0x1620 kernel/workqueue.c:2297
- worker_thread+0x658/0x11f0 kernel/workqueue.c:2444
- kthread+0x3c2/0x4a0 kernel/kthread.c:319
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-Modules linked in:
----[ end trace 3c734ee50b55655e ]---
-RIP: 0010:usbnet_start_xmit+0x3f1/0x1f70 drivers/net/usb/usbnet.c:1404
-Code: 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 0f b6 04 02 84 c0 74 08 3c 03 0f 8e 4b 18 00 00 8b 44 24 08 31 d2 31 ff <41> f7 b5 28 0d 00 00 41 89 d4 89 d6 e8 4e 12 b5 fd 45 85 e4 0f 84
-RSP: 0018:ffffc9000104f660 EFLAGS: 00010246
-RAX: 000000000000005a RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff838cbdc1 RDI: 0000000000000000
-RBP: ffff8881155b1350 R08: 0000000000000001 R09: 0000000000000000
-R10: ffffffff838cbdb4 R11: 0000000000000000 R12: 00000000c0011100
-R13: ffff888119304000 R14: ffff8881155b1280 R15: ffff8881155b0d00
-FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f24d7edaa70 CR3: 000000010a45d000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-   7:	fc ff df
-   a:	48 89 fa             	mov    %rdi,%rdx
-   d:	48 c1 ea 03          	shr    $0x3,%rdx
-  11:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax
-  15:	84 c0                	test   %al,%al
-  17:	74 08                	je     0x21
-  19:	3c 03                	cmp    $0x3,%al
-  1b:	0f 8e 4b 18 00 00    	jle    0x186c
-  21:	8b 44 24 08          	mov    0x8(%rsp),%eax
-  25:	31 d2                	xor    %edx,%edx
-  27:	31 ff                	xor    %edi,%edi
-* 29:	41 f7 b5 28 0d 00 00 	divl   0xd28(%r13) <-- trapping instruction
-  30:	41 89 d4             	mov    %edx,%r12d
-  33:	89 d6                	mov    %edx,%esi
-  35:	e8 4e 12 b5 fd       	callq  0xfdb51288
-  3a:	45 85 e4             	test   %r12d,%r12d
-  3d:	0f                   	.byte 0xf
-  3e:	84                   	.byte 0x84
+gcc tested configs:
+arm64                               defconfig
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211019
+powerpc                    adder875_defconfig
+powerpc                      walnut_defconfig
+arc                        nsim_700_defconfig
+sparc                       sparc64_defconfig
+powerpc                     tqm8548_defconfig
+powerpc                   bluestone_defconfig
+powerpc                      acadia_defconfig
+ia64                         bigsur_defconfig
+arm                       multi_v4t_defconfig
+arm                      jornada720_defconfig
+powerpc                     pseries_defconfig
+xtensa                       common_defconfig
+mips                            gpr_defconfig
+arm                         axm55xx_defconfig
+arm                            qcom_defconfig
+arm64                            alldefconfig
+arm                        multi_v5_defconfig
+mips                          ath79_defconfig
+powerpc                     powernv_defconfig
+openrisc                            defconfig
+sh                   secureedge5410_defconfig
+powerpc                       ppc64_defconfig
+arm                         palmz72_defconfig
+arm                         nhk8815_defconfig
+sh                          urquell_defconfig
+sh                          sdk7780_defconfig
+x86_64                              defconfig
+openrisc                    or1ksim_defconfig
+arm                        spear3xx_defconfig
+riscv                               defconfig
+arm                         vf610m4_defconfig
+m68k                        mvme147_defconfig
+powerpc                mpc7448_hpc2_defconfig
+arm                            dove_defconfig
+sh                     magicpanelr2_defconfig
+riscv                          rv32_defconfig
+s390                       zfcpdump_defconfig
+arc                        vdk_hs38_defconfig
+m68k                            q40_defconfig
+powerpc                 linkstation_defconfig
+arm                        keystone_defconfig
+mips                           ip28_defconfig
+sh                          rsk7264_defconfig
+powerpc                      mgcoge_defconfig
+arm                           u8500_defconfig
+powerpc64                        alldefconfig
+mips                           rs90_defconfig
+m68k                       bvme6000_defconfig
+h8300                            alldefconfig
+mips                            e55_defconfig
+powerpc                      pasemi_defconfig
+powerpc               mpc834x_itxgp_defconfig
+ia64                            zx1_defconfig
+m68k                        m5307c3_defconfig
+m68k                        m5407c3_defconfig
+arm                           sunxi_defconfig
+sh                ecovec24-romimage_defconfig
+arm                       cns3420vb_defconfig
+powerpc                          g5_defconfig
+powerpc                       holly_defconfig
+arm                      integrator_defconfig
+arm                           corgi_defconfig
+arm                        realview_defconfig
+powerpc                  storcenter_defconfig
+riscv             nommu_k210_sdcard_defconfig
+arm                  randconfig-c002-20211019
+x86_64               randconfig-c001-20211019
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+parisc                           allyesconfig
+s390                                defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                             allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a015-20211019
+x86_64               randconfig-a012-20211019
+x86_64               randconfig-a016-20211019
+x86_64               randconfig-a014-20211019
+x86_64               randconfig-a013-20211019
+x86_64               randconfig-a011-20211019
+i386                 randconfig-a014-20211019
+i386                 randconfig-a016-20211019
+i386                 randconfig-a011-20211019
+i386                 randconfig-a015-20211019
+i386                 randconfig-a012-20211019
+i386                 randconfig-a013-20211019
+riscv                    nommu_virt_defconfig
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                           allyesconfig
 
+clang tested configs:
+arm                  randconfig-c002-20211019
+mips                 randconfig-c004-20211019
+i386                 randconfig-c001-20211019
+s390                 randconfig-c005-20211019
+x86_64               randconfig-c007-20211019
+riscv                randconfig-c006-20211019
+powerpc              randconfig-c003-20211019
+x86_64               randconfig-a004-20211019
+x86_64               randconfig-a006-20211019
+x86_64               randconfig-a005-20211019
+x86_64               randconfig-a001-20211019
+x86_64               randconfig-a002-20211019
+x86_64               randconfig-a003-20211019
+i386                 randconfig-a001-20211019
+i386                 randconfig-a003-20211019
+i386                 randconfig-a004-20211019
+i386                 randconfig-a005-20211019
+i386                 randconfig-a002-20211019
+i386                 randconfig-a006-20211019
+hexagon              randconfig-r041-20211019
+hexagon              randconfig-r045-20211019
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
