@@ -2,106 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0A64336B9
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 15:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3472E433701
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 15:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235818AbhJSNPY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Oct 2021 09:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235795AbhJSNPY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 09:15:24 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37287C06161C;
-        Tue, 19 Oct 2021 06:13:11 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id w14so12678549edv.11;
-        Tue, 19 Oct 2021 06:13:11 -0700 (PDT)
+        id S235861AbhJSN26 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Oct 2021 09:28:58 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:8771 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235743AbhJSN25 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 09:28:57 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iBrOklT6wRz3+4Sv0nSOix/uEw45k7IhgJcWd50H2V4=;
-        b=deOrvOSZJ7Ax/hHX/I0bj/ua6fjX1rP1DhOlu075couX1a3c1NVd1vCXiKTksJ8yXW
-         qp4uXHhYMHHGxeF0zRIXPw9gurIoJ3aRUNnKbOAe8ArOMSk57YGOgDvnqpZIjI5pEo4Z
-         cNOwb5tFsa/EZb+qlgBK9hUuhTQpDnP7tE1vX1OxMa5fUH/G9FCb1T2XFaA3XjPmvKVd
-         dPYjOPOJrqXvXlcYtNWa+RaDM/Y8Rn+1e9mqNRVeUb4kvgVK7Ntrb0cdAT9Ackzt55Vo
-         Nf7tiQol+2HlOzjTdRwPlexTUAyoCtbWQg81M4LN82vslZ3ear0azg0nfJ7vueyiZAuk
-         6H/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iBrOklT6wRz3+4Sv0nSOix/uEw45k7IhgJcWd50H2V4=;
-        b=z46AzwIuTv1NuFko8Y1Ujxdko7ZaghdKIJk2+YfCBAGi/zTd/MSCY8d8XJq2X6cHnC
-         Jema461/2mSMggsRdJ/VnEKIVrqlYwJcc5ZHDNAS7hzbhQwCj2TXsjQImfC4Llelb0U3
-         ORgk3hS41GByvKWcFQvMvhqyOzOuXcuTJK81sc7ox7T9VwaehdfDcCk0QZ/9+vuytr7a
-         CMrzoc5RXEH4tfZY6oJRzU1oIakQJ0k/WlJuPslK+MHyInK2m1dBO5tPUZD4fVc7bxaB
-         rBp7QYeOketbpAZG8yzVwWMa9dof73fRzk4gvh96igVp2hW/yhWKgWMYatpQ1UbzcuVN
-         hqJQ==
-X-Gm-Message-State: AOAM533uCeAwRDBvm9MJAVOS5yECWubObvSBhqUlz283bRX7231kC/44
-        uYGOzm4CE3l7P7SY/afx68M=
-X-Google-Smtp-Source: ABdhPJzP6RuvLFjU20H2PG1567GaG8/B+U9ZCxaQnE9gpZ3riwQ97C9SC3UHkFwm4W7diIY+IG7Xpg==
-X-Received: by 2002:a17:906:e104:: with SMTP id gj4mr36909389ejb.358.1634649169355;
-        Tue, 19 Oct 2021 06:12:49 -0700 (PDT)
-Received: from roman-Latitude-3400.. (178-133-75-113.mobile.vf-ua.net. [178.133.75.113])
-        by smtp.gmail.com with ESMTPSA id g2sm11334590edq.81.2021.10.19.06.12.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Oct 2021 06:12:48 -0700 (PDT)
-From:   Roman Stratiienko <r.stratiienko@gmail.com>
-To:     linux-sunxi@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-usb@vger.kernel.org, jernej.skrabec@gmail.com, wens@csie.org,
-        mripard@kernel.org, b-liu@ti.com, megous@megous.com,
-        Roman Stratiienko <r.stratiienko@gmail.com>
-Subject: [PATCH] usb: musb: sunxi: Don't print error on MUSB_ULPI_BUSCONTROL access
-Date:   Tue, 19 Oct 2021 16:12:44 +0300
-Message-Id: <20211019131244.1568560-1-r.stratiienko@gmail.com>
-X-Mailer: git-send-email 2.30.2
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1634650005; x=1666186005;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LBrqyaiN9KluujmGOKPgjwTDMvGMGd6Dcj+elihCbhI=;
+  b=YizLDF+J00mK5Jx4a1Pwr74H7JArH2gp72LA/C5gr/TeudT8QLnjkEb5
+   c1GNfznn6CH6DKM3ER/CdG5DGw1JlQTXx8D8gQ4t2gRT5XT21fgtkpK16
+   9pFPyJzsqkxLg7B12+7zHDDfzEPMDu4fGW5rFgliuIRzCJgn2wp468hT0
+   Q=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 19 Oct 2021 06:26:44 -0700
+X-QCInternal: smtphost
+Received: from nalasex01b.na.qualcomm.com ([10.47.209.197])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2021 06:26:43 -0700
+Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
+ Tue, 19 Oct 2021 06:26:42 -0700
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, Jack Pham <jackp@quicinc.com>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [PATCH v12 0/4] usb: gadget: configfs: add some trace event
+Date:   Tue, 19 Oct 2021 21:26:33 +0800
+Message-ID: <1634649997-28745-1-git-send-email-quic_linyyuan@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Error message appears during suspend, where musb driver is storing
-the register state in musb_save_context():
-```
-musb-sunxi 1c19000.usb: Error unknown readb offset 112
-```
+this series make some minor change to gadget configfs and
+add some important trace event from configfs layer.
 
-Print warning instead to avoid confusion.
+follow suggestion from Felipe Balbi in link below,
+https://lore.kernel.org/linux-usb/1629777281-30188-1-git-send-email-quic_linyyuan@quicinc.com/
 
-Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
----
- drivers/usb/musb/sunxi.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+v2: fix two issue Reported-by: kernel test robot <lkp@intel.com>
+v3: do not move private structure to configfs.h
+v4: add missing new file configfs_trace.h
+v5: lost some change of v2, add it again
+v6: fix comments from Greg Kroah-Hartman
+v7: three minor changes according to coding rules
+v8: change two trace location
+v9: fix when config is empty
+v10: fix wrong api in v9
+v11: split to three changes, minor change to trace event print format
+v12: use mutex lock gi->lock to make sure data safe for trace
 
-diff --git a/drivers/usb/musb/sunxi.c b/drivers/usb/musb/sunxi.c
-index f3f76f2ac63f9b..961c858fb349e1 100644
---- a/drivers/usb/musb/sunxi.c
-+++ b/drivers/usb/musb/sunxi.c
-@@ -440,6 +440,10 @@ static u8 sunxi_musb_readb(void __iomem *addr, u32 offset)
- 				return 0xde;
- 
- 			return readb(addr + SUNXI_MUSB_CONFIGDATA);
-+		case MUSB_ULPI_BUSCONTROL:
-+			dev_warn(sunxi_musb->controller->parent,
-+				"sunxi-musb does not have ULPI bus control register\n");
-+			return 0;
- 		/* Offset for these is fixed by sunxi_musb_busctl_offset() */
- 		case SUNXI_MUSB_TXFUNCADDR:
- 		case SUNXI_MUSB_TXHUBADDR:
-@@ -494,6 +498,10 @@ static void sunxi_musb_writeb(void __iomem *addr, unsigned offset, u8 data)
- 			return writeb(data, addr + SUNXI_MUSB_TXFIFOSZ);
- 		case MUSB_RXFIFOSZ:
- 			return writeb(data, addr + SUNXI_MUSB_RXFIFOSZ);
-+		case MUSB_ULPI_BUSCONTROL:
-+			dev_warn(sunxi_musb->controller->parent,
-+				"sunxi-musb does not have ULPI bus control register\n");
-+			return;
- 		/* Offset for these is fixed by sunxi_musb_busctl_offset() */
- 		case SUNXI_MUSB_TXFUNCADDR:
- 		case SUNXI_MUSB_TXHUBADDR:
+trace event will looks like as below,
+config_usb_cfg_link: g1: 0 0 0 0 0 0 0 0 0000 0510 6 0 {1 80 2 Function FS Gadget,}; - (null)
+gadget_dev_desc_UDC_store: g1: 0 0 0 0 0 0 0 0 0000 0510 6 0 {1 80 2 Function FS Gadget,}; - dummy_udc
+unregister_gadget: g1: 0 0 0 0 0 0 0 0 0000 0510 6 0 {1 80 2 Function FS Gadget,}; - dummy_udc
+config_usb_cfg_unlink: g1: 0 0 0 0 0 0 0 0 0000 0510 6 0 {1 80 2 }, - (null)
+
+Linyu Yuan (4):
+  usb: gadget: configfs: add cfg_to_gadget_info() helper
+  usb: gadget: configfs: change config attributes file operation
+  usb: gadget: configfs: use gi->lock to protect write operation
+  usb: gadget: add configfs trace events
+
+ drivers/usb/gadget/configfs.c       |  61 ++++++++++---
+ drivers/usb/gadget/configfs_trace.h | 168 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 218 insertions(+), 11 deletions(-)
+ create mode 100644 drivers/usb/gadget/configfs_trace.h
+
 -- 
-2.30.2
+2.7.4
 
