@@ -2,85 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8246643347A
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 13:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2CE643348F
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 13:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235344AbhJSLSB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Oct 2021 07:18:01 -0400
-Received: from mail.thorsis.com ([92.198.35.195]:58065 "EHLO mail.thorsis.com"
+        id S235309AbhJSLUy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Oct 2021 07:20:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53590 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230097AbhJSLSB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 19 Oct 2021 07:18:01 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.thorsis.com (Postfix) with ESMTP id 654791C9D
-        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 13:15:47 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at mail.thorsis.com
-Received: from mail.thorsis.com ([127.0.0.1])
-        by localhost (mail.thorsis.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id QgBjFMxf6Gkp for <linux-usb@vger.kernel.org>;
-        Tue, 19 Oct 2021 13:15:47 +0200 (CEST)
-Received: by mail.thorsis.com (Postfix, from userid 109)
-        id 31907F34; Tue, 19 Oct 2021 13:15:47 +0200 (CEST)
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NO_RECEIVED,
-        NO_RELAYS autolearn=unavailable autolearn_force=no version=3.4.2
-X-Spam-Report: * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        * -0.0 NO_RELAYS Informational: message was not relayed via SMTP
-        * -0.0 NO_RECEIVED Informational: message has no Received headers
-Date:   Tue, 19 Oct 2021 13:15:37 +0200
-From:   Alexander Dahl <ada@thorsis.com>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 11/22] usb: host: ohci-at91: deny IRQ0
-Message-ID: <YW6o2dfHElc4yTvW@ada.ifak-system.com>
-Mail-Followup-To: Sergey Shtylyov <s.shtylyov@omp.ru>,
-        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20211018183930.8448-1-s.shtylyov@omp.ru>
- <20211018183930.8448-12-s.shtylyov@omp.ru>
+        id S230281AbhJSLUy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 Oct 2021 07:20:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1615C60EFF;
+        Tue, 19 Oct 2021 11:18:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1634642321;
+        bh=m7/TU6tsys8Z48fYR4T1Ntgnf6sAopDPJvkYB2AmNos=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MCcTuJoCIbpwopiLjD5WcKG06bAzxb7pBo4yaSfjI1almMVY3vTjdlrdIOPqXbfrt
+         ZJiTWOBb0Hb14ijtnFg6Dy4nLr7OfO0NZ1gjx0XnvmiifkjSz7Y5k6T05xVh+Nv0VV
+         R4ag377tpX88kd/HOpCRgzMru9jEz06+6XDp9ItY=
+Date:   Tue, 19 Oct 2021 13:18:38 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     mark_k@iname.com
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: USB2 Link USB-SCSI converter and LUNs
+Message-ID: <YW6pjieI5UwOM9LW@kroah.com>
+References: <trinity-d3be8a5b-2b1c-45f8-8767-cf9cf758a0c0-1634638509008@3c-app-mailcom-lxa12>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211018183930.8448-12-s.shtylyov@omp.ru>
+In-Reply-To: <trinity-d3be8a5b-2b1c-45f8-8767-cf9cf758a0c0-1634638509008@3c-app-mailcom-lxa12>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Sergey,
-
-Am Mon, Oct 18, 2021 at 09:39:19PM +0300 schrieb Sergey Shtylyov:
-> If platform_get_irq() returns IRQ0 (considered invalid according to Linus)
-> the driver blithely passes it to usb_add_hcd() that treats IRQ0 as no IRQ
-> at all. Deny IRQ0 right away, returning -EINVAL from the probe() method...
+On Tue, Oct 19, 2021 at 12:15:09PM +0200, mark_k@iname.com wrote:
+> Hi,
 > 
-> Fixes: 60bbfc84b6d9 ("USB OHCI controller support for PNX4008")
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-> ---
->  drivers/usb/host/ohci-nxp.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> I have a Core Micro Systems USB2 Link USB-SCSI converter (07B4:0380).
 > 
-> diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
-> index 85878e8ad331..afb9c2fc85c3 100644
-> --- a/drivers/usb/host/ohci-nxp.c
-> +++ b/drivers/usb/host/ohci-nxp.c
-> @@ -215,6 +215,10 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
->  		ret = -ENXIO;
->  		goto fail_resource;
->  	}
-> +	if (!irq) {
-> +		ret = -EINVAL;
-> +		goto fail_resource;
-> +	}
->  
->  	ohci_nxp_start_hc();
->  	platform_set_drvdata(pdev, hcd);
+> Adding an entry to unusual_devs.h should get it to work, just needing
+> USB_PR_BULK. That should at least allow the connected device with SCSI ID 0
+> to be accessed.
 
-Subject refers to at91 while content is about nxp.
+Why do you need any quirk at all for this?
 
-Greets
-Alex
+> However in order to access multiple targets and LUNs, the USB2 Link uses
+> byte 13 of the command block wrapper in a special way.
+> 
+> Normally CBW byte 13 has bCBWLUN in bits [3:0] with bits [7:4] reserved.
+> The USB2 Link expects the target ID in bits [3:0] and LUN in bits [7:4].
+> The advantage of that is, it should be possible to access multiple targets
+> without needing to modify the USB mass storage driver. (It returns 0x06 to
+> a Get Max LUN request since its SCSI ID is hard-coded to 7.)
+> 
+> Being able to access non-zero actual LUNs would of course require changes
+> to the driver.
+> 
+> I'm just wondering, how does the usb-storage driver handle these cases:
+> 
+>  - (What it thinks are) LUNs are not contiguous. Suppose the user has two
+>    SCSI devices in the chain, one with ID 0 the other with ID 3. Would it
+>    scan LUNs (which map to separate targets) 1, 2, 4, 5 and 6? Or would it
+>    give up on getting no response from LUN 1?
+> 
+>  - "LUN" 0 is not present. E.g. where the connected SCSI devices have IDs 1
+>    and 3.
+> 
+>  - When different "LUNs" are completely different devices (e.g. one a
+>    CD-ROM, another a hard disk, another a tape drive).
+> 
+
+That should all be up to the scsi layer in the kernel.  If this device
+is not following the standard, how is it supposed to work at all?
+
+Does it require custom drivers for other operating systems?
+
+thanks,
+
+greg k-h
