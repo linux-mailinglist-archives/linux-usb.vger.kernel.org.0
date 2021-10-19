@@ -2,89 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C18E1433D71
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 19:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D01433DFA
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 20:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234570AbhJSR1q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Oct 2021 13:27:46 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:56753 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S234524AbhJSR1p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 13:27:45 -0400
-Received: (qmail 1088844 invoked by uid 1000); 19 Oct 2021 13:25:31 -0400
-Date:   Tue, 19 Oct 2021 13:25:31 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     mark_k@iname.com
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Subject: Re: USB2 Link USB-SCSI converter and LUNs
-Message-ID: <20211019172531.GA1088438@rowland.harvard.edu>
-References: <trinity-d3be8a5b-2b1c-45f8-8767-cf9cf758a0c0-1634638509008@3c-app-mailcom-lxa12>
- <YW6pjieI5UwOM9LW@kroah.com>
- <trinity-7db5ef0c-99a3-4fa0-a1d7-1e57c80cc4ff-1634648008985@3c-app-mailcom-lxa13>
- <YW7BtIHwVH3n13yH@kroah.com>
- <trinity-5eaf7ea7-ff39-498d-b5cc-844177c47b48-1634661477272@3c-app-mailcom-lxa06>
+        id S232148AbhJSSFI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Oct 2021 14:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230158AbhJSSFH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 14:05:07 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E801C06161C
+        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 11:02:54 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id s64so9208349yba.11
+        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 11:02:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=cYy8FtQ5PJc6367yM2zsJLpHDz0zySj37WgNCxUbuek=;
+        b=WcrHf5eK5l5fL2CfCWicXHdzyzov33lXjNML5E/tEZkbifyw9O8RiZ6iUZesfEwNOn
+         RpKEgMnTL/3MIl3FLjGN9t7HKcwnGvxMennlSX7dGLVfwvznMoNIJN1yAkyvg3NrTfdl
+         dZub7ZU+Vv7fA1wVcwqkyYwqT64pHhsxTs87uIeFNW2Xsy9HZlnHRZm8eKkbAoag+/nI
+         NR+uhw38vsQP/WlPZxH1LITIIt6Rcrq3RwKy7yNfmZ+P0LkZBTY5cSO/yQ4uA3A0aBP/
+         Kcx0iXaeDcvncGtLHsgBF+pS9ZPE9aNXYp/GmzxQGiYIQK3SqdOnZ7aaTieYYB+qNIfo
+         JIew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=cYy8FtQ5PJc6367yM2zsJLpHDz0zySj37WgNCxUbuek=;
+        b=hPXJUOSVpkuKgwhageTKgJ1ovnu/plbYxnlafizmYrE3JZAcy4SzwofgGsUBvN7mmF
+         +QQUmGmiRwE4AReStyYOYXk8PLeVPPHJYLH39zS6Tn1Rie/731UHn+LElE52VEFJbxKL
+         NjiqYy/H/P093CYrSQpyl1PYSWHT2Y/R/8Etvt0Go+98e4mnExAu3i4n5ZwTZH51Ctoj
+         mMK0RElIamhFdtqxBDSa80Tbi2gaXbthZykb937XCzIZsqo2fajcBFcdzNWQlRSEDVND
+         /nSPrOkOjRA5XGqsSHiAn5SsXpM6oABtCmyXNm69tFZLPGuSfbFYq7fX8TTDdv9g0GLG
+         6ckw==
+X-Gm-Message-State: AOAM53298hBWEIP0h4K2FD40XhsX6irTwdXyq6QW2hXA351j8dpL8qhS
+        A6xv1ppIHj0C0dpdCtF5IrKJje65KfOpPnRV/NhU1U1gKAM=
+X-Google-Smtp-Source: ABdhPJzXAxj7fFxF1L0wGCdaY2rdBW8sSl6zxG/ZqHXRcHMxIYpyvwckPhcS9ro6kbDSpvGGpewsz67Nf6K0UlhoaDQ=
+X-Received: by 2002:a25:cc8:: with SMTP id 191mr37664032ybm.63.1634666573217;
+ Tue, 19 Oct 2021 11:02:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <trinity-5eaf7ea7-ff39-498d-b5cc-844177c47b48-1634661477272@3c-app-mailcom-lxa06>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211019172124.1413620-1-kuba@kernel.org>
+In-Reply-To: <20211019172124.1413620-1-kuba@kernel.org>
+From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Date:   Tue, 19 Oct 2021 11:02:42 -0700
+Message-ID: <CANP3RGcPFgguWnDLUegWXyu4niNHqmHCsgn=hhQPftfjD+K5fQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: u_ether: use eth_hw_addr_set()
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     balbi@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lorenzo Colitti <lorenzo@google.com>, manish.narani@xilinx.com,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 19, 2021 at 06:37:57PM +0200, mark_k@iname.com wrote:
-> I rebuilt the usb-storage module after adding an entry for the USB2 Link to
-> unusual_devs.h.
-> 
-> With one SCSI device set to ID 0, the kernel detected the drive and I could
-> access it:
-> 
-> [ 2219.761126] usb-storage 2-1:1.0: USB Mass Storage device detected
-> [ 2219.762033] scsi host5: usb-storage 2-1:1.0
-> [ 2219.762163] usbcore: registered new interface driver usb-storage
-> [ 2220.769695] scsi 5:0:0:0: Optical Device    HP       C1113M           1.19 PQ: 0 ANSI: 2
-> [ 2221.156254] usb 2-1: reset high-speed USB device number 5 using ehci-pci
-> [ 2221.712223] usb 2-1: reset high-speed USB device number 5 using ehci-pci
-> [ 2222.268262] usb 2-1: reset high-speed USB device number 5 using ehci-pci
-> [ 2222.824239] usb 2-1: reset high-speed USB device number 5 using ehci-pci
-> [ 2222.981475] sd 5:0:0:0: Attached scsi generic sg2 type 7
-> [ 2222.987240] sd 5:0:0:0: [sdb] Attached SCSI removable disk
-> 
-> 
-> Note the extra "reset high-speed..." lines, probably due to the kernel
-> trying to access LUNs 1 to 5 (which the USB2 Link maps to accesses to non-
-> existent SCSI targets 1-5). Is that harmless?
-
-To really find out what's going on, you should collect a usbmon trace 
-showing what happens when the device is plugged in.
-
-> [As mentioned before, the USB2 Link reports its Max LUN as 6.]
-> 
-> 
-> > > It could/should be possible to properly support multiple targets and LUNs
-> > > by using a similar method to the SCM USB-SCSI converters. (Those, after a
-> > > special intitialisation request, take the target ID from the *upper* 4 bits
-> > > of CBW byte 13.)
-> >
-> > Are you sure this device actually supports this?  If so, what operating
-> > system does it work on?
-> 
-> It does definitely support that. I installed the manufacturer driver on
-> (32-bit) Windows and looked at USBpcap captures. I also disassembled the
-> driver.
-> 
-> Do you think it would be worthwhile submitting a patch adding the USB2
-> Link to unusual-devs.h? If those reset... lines aren't acceptable I could
-> add US_FL_SINGLE_LUN, but that would only allow it to work with a single
-> SCSI device (set to ID 0).
-> 
-> Or should I try and get proper/full support (multiple targets and LUNs)
-> working first?
-
-Either approach would be acceptable.  If you do implement the 
-full-support approach, you should imitate the scheme used for the 
-US_FL_SCM_MULT_TARG flag.  But you may find it's not worth the trouble.  
-After all, how often will people want to chain together more than seven 
-devices to one of these things?
-
-Alan Stern
+On Tue, Oct 19, 2021 at 10:21 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> Commit 406f42fa0d3c ("net-next: When a bond have a massive amount
+> of VLANs...") introduced a rbtree for faster Ethernet address look
+> up. To maintain netdev->dev_addr in this tree we need to make all
+> the writes to it got through appropriate helpers.
+>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: balbi@kernel.org
+> CC: gregkh@linuxfoundation.org
+> CC: lorenzo@google.com
+> CC: manish.narani@xilinx.com
+> CC: maze@google.com
+> CC: linux-usb@vger.kernel.org
+> ---
+>  drivers/usb/gadget/function/u_ether.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/f=
+unction/u_ether.c
+> index 85a3f6d4b5af..e0ad5aed6ac9 100644
+> --- a/drivers/usb/gadget/function/u_ether.c
+> +++ b/drivers/usb/gadget/function/u_ether.c
+> @@ -754,6 +754,7 @@ struct eth_dev *gether_setup_name(struct usb_gadget *=
+g,
+>         struct eth_dev          *dev;
+>         struct net_device       *net;
+>         int                     status;
+> +       u8                      addr[ETH_ALEN];
+>
+>         net =3D alloc_etherdev(sizeof *dev);
+>         if (!net)
+> @@ -773,9 +774,10 @@ struct eth_dev *gether_setup_name(struct usb_gadget =
+*g,
+>         dev->qmult =3D qmult;
+>         snprintf(net->name, sizeof(net->name), "%s%%d", netname);
+>
+> -       if (get_ether_addr(dev_addr, net->dev_addr))
+> +       if (get_ether_addr(dev_addr, addr))
+>                 dev_warn(&g->dev,
+>                         "using random %s ethernet address\n", "self");
+> +       eth_hw_addr_set(net, addr);
+>         if (get_ether_addr(host_addr, dev->host_mac))
+>                 dev_warn(&g->dev,
+>                         "using random %s ethernet address\n", "host");
+> --
+> 2.31.1
+>
+Reviewed-by: Maciej =C5=BBenczykowski <maze@google.com>
