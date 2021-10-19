@@ -2,64 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8518F43402A
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 23:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14EB8434059
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 23:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232878AbhJSVLV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Oct 2021 17:11:21 -0400
-Received: from mail-il1-f200.google.com ([209.85.166.200]:48705 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbhJSVLU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 17:11:20 -0400
-Received: by mail-il1-f200.google.com with SMTP id s8-20020a056e02216800b002593ad87094so10993118ilv.15
-        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 14:09:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=zv4Ff+EvirxD9Sti+DPatT77gsB6mvVIfAn+44z0Cf8=;
-        b=HYSwNnG+l+EfnVIXOB3X4QHA6OUcnIAEmAoso5dz94Hpng1oycTa6p2okONss7MoJB
-         47Rl/zw2YAtawPjuyHlabnPdIdDfv4ynRllaxIiv3hKH59NpIjH1RsvswuY70d0ZxR5E
-         2jf0bbdWhFwnAUKSke+x/JL2xNGDis3vUexJ4EACh87bCbab6eZ9EybrQ5PLijDZLko5
-         Q8K39n86Gna7i6Y8IiEPV+vBWxor1MgfiI5n5UVwL6IRAg/fqTOHlu6I3z7ANafCOYko
-         yPNoZjc3S58PFun4suP9fK3oFn8Py+hustnLmi6aeJyCpmbD1wRB14Vbw9xnN1AMTbZv
-         2QDA==
-X-Gm-Message-State: AOAM533L1HA0blIaIVL94dN7QSXR//SVXRVhd63eckg2sEgp7Is96tOw
-        0tH/lBB4nk2rgJyb3bwyvbZm4u7AH54+LiXryGoZxgeJCXzU
-X-Google-Smtp-Source: ABdhPJzLYFSTrQZlVF6KtsED28EZgP23hSEbF0h5Qnz5TuhAwjS5tV/Ty7UnPxCZ1gy7WhBDFIjl/kQ6ls1FrBpBH7aREnB92H/K
+        id S229641AbhJSVUG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Oct 2021 17:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229483AbhJSVUF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 17:20:05 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE388C06161C
+        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 14:17:52 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id AA2DC738;
+        Tue, 19 Oct 2021 21:17:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net AA2DC738
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1634678271; bh=UCRDCuJa8KPpx1EsK+Fxjrdirrt8HupK/FB9Ht4UhsY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=YIEAG/3ngtwg4ajkuJOUWI/bVFHx2fjSHZyVnMDLoaIbjSFZu5VmrolIP/xjhZ83N
+         l7dxwTEZoi+qFmq3X1XS50IyEc5UR1km25s0cg3fFFD4A1oHTUkWdXDS8Hq4w1lXya
+         we2yPx3yV4YEvywY88d59EL4kJNlXwkHAIsZMj/JYgH7ZIKRBJCh/EJDGkALLCHC1o
+         NUHwoNiJ0aaopXmhbgSF1bdkxKNAg1XFZIujvxJ3Mob/WwWVbSvbcN57mB+Uv/sQan
+         +Z5ZDEJPYlDBqHrsHpkENn6WF4JgyA4ma60YaMgXX+HE3mrWY/LdWekCkmoWyBUtuI
+         16NpgYQ7u7BeA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH] Docs: usb: update struct usb_driver, __init and __exit
+In-Reply-To: <20211017214948.GA9901@matrix-ESPRIMO-P710>
+References: <20211017214948.GA9901@matrix-ESPRIMO-P710>
+Date:   Tue, 19 Oct 2021 15:17:51 -0600
+Message-ID: <87h7dcsohs.fsf@meer.lwn.net>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:fe05:: with SMTP id x5mr21247279ioh.201.1634677747302;
- Tue, 19 Oct 2021 14:09:07 -0700 (PDT)
-Date:   Tue, 19 Oct 2021 14:09:07 -0700
-In-Reply-To: <4617c408-b7f6-8861-4307-ed0ec24283ea@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000073441e05cebb127c@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in rtl8712_dl_fw
-From:   syzbot <syzbot+c55162be492189fb4f51@syzkaller.appspotmail.com>
-To:     Larry.Finger@lwfinger.net, agamkohli9@gmail.com,
-        florian.c.schilhabel@googlemail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, paskripkin@gmail.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Philipp Hortmann <philipp.g.hortmann@gmail.com> writes:
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> update struct usb_driver from usb-skeleton.c.
+> update __init and __exit functions that are moved from
+> usb-skeleton.c to common used multi-stage macros.
+>
+> Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+> ---
+>  .../driver-api/usb/writing_usb_driver.rst     | 51 +++++++------------
+>  1 file changed, 19 insertions(+), 32 deletions(-)
 
-Reported-and-tested-by: syzbot+c55162be492189fb4f51@syzkaller.appspotmail.com
+Adding linux-usb: this seems like a reasonable change (though see
+below), but the USB folks should have a chance to look it over too.
 
-Tested on:
+> diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
+> index 2176297e5765..1064adf79ccb 100644
+> --- a/Documentation/driver-api/usb/writing_usb_driver.rst
+> +++ b/Documentation/driver-api/usb/writing_usb_driver.rst
+> @@ -54,12 +54,15 @@ information is passed to the USB subsystem in the :c:type:`usb_driver`
+>  structure. The skeleton driver declares a :c:type:`usb_driver` as::
+>  
+>      static struct usb_driver skel_driver = {
+> -	    .name        = "skeleton",
+> -	    .probe       = skel_probe,
+> -	    .disconnect  = skel_disconnect,
+> -	    .fops        = &skel_fops,
+> -	    .minor       = USB_SKEL_MINOR_BASE,
+> -	    .id_table    = skel_table,
+> +           .name        = "skeleton",
+> +           .probe       = skel_probe,
+> +           .disconnect  = skel_disconnect,
+> +           .suspend     = skel_suspend,
+> +           .resume      = skel_resume,
+> +           .pre_reset   = skel_pre_reset,
+> +           .post_reset  = skel_post_reset,
+> +           .id_table    = skel_table,
+> +           .supports_autosuspend = 1,
+>      };
+>  
+>  
+> @@ -81,36 +84,20 @@ this user-space interaction. The skeleton driver needs this kind of
+>  interface, so it provides a minor starting number and a pointer to its
+>  :c:type:`file_operations` functions.
+>  
+> -The USB driver is then registered with a call to :c:func:`usb_register`,
+> -usually in the driver's init function, as shown here::
+> -
+> -    static int __init usb_skel_init(void)
+> -    {
+> -	    int result;
+> -
+> -	    /* register this driver with the USB subsystem */
+> -	    result = usb_register(&skel_driver);
+> -	    if (result < 0) {
+> -		    err("usb_register failed for the "__FILE__ "driver."
+> -			"Error number %d", result);
+> -		    return -1;
+> -	    }
+> -
+> -	    return 0;
+> -    }
+> -    module_init(usb_skel_init);
+> -
+> +The USB driver is then registered with a call to :c:func:`usb_register`
 
-commit:         8ef1e587 usb: typec: STUSB160X should select REGMAP_I2C
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c27d285bdb7457e2
-dashboard link: https://syzkaller.appspot.com/bug?extid=c55162be492189fb4f51
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=164527c8b00000
+We shouldn't be using :c:func: anymore; just say usb_register() and the
+right things will happen.  Definitely worth fixing while you are in the
+neighborhood.
 
-Note: testing is done by a robot and is best-effort only.
+> +which is usually in the driver's init function. Since this functionality
+> +is usable with many USB drivers, it is hidden behind multi-stage macros.
+> +While the first macros are USB specific the later macros are used in different
+> +subsystems. This removes a lot of boilerplate code.
+>  
+>  When the driver is unloaded from the system, it needs to deregister
+>  itself with the USB subsystem. This is done with the :c:func:`usb_deregister`
+> -function::
+> +which is also hidden behind multi-stage macros.
+
+If you're making this change, take out "the" (as well as :c:func:).
+
+> -    static void __exit usb_skel_exit(void)
+> -    {
+> -	    /* deregister this driver with the USB subsystem */
+> -	    usb_deregister(&skel_driver);
+> -    }
+> -    module_exit(usb_skel_exit);
+> +The init and exit functions are included in the macro :
+> +module_usb_driver(skel_driver);
+> +which is in the first stage replaced by:
+> +module_driver(__usb_driver, usb_register, usb_deregister)
+
+This will not render the way you want; consider using literal blocks
+here. 
+
+Thanks,
+
+jon
