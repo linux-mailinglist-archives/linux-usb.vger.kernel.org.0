@@ -2,207 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8CD432C3B
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 05:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC50432D53
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 07:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbhJSD0B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Oct 2021 23:26:01 -0400
-Received: from mga04.intel.com ([192.55.52.120]:58917 "EHLO mga04.intel.com"
+        id S233383AbhJSFlZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Oct 2021 01:41:25 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:48450 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229692AbhJSD0B (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 Oct 2021 23:26:01 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10141"; a="227182984"
-X-IronPort-AV: E=Sophos;i="5.85,383,1624345200"; 
-   d="scan'208";a="227182984"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2021 20:23:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,383,1624345200"; 
-   d="scan'208";a="531216557"
-Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 18 Oct 2021 20:23:48 -0700
-Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mcfj9-000Bzp-GF; Tue, 19 Oct 2021 03:23:47 +0000
-Date:   Tue, 19 Oct 2021 11:23:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 8ef1e58783b9f55daa4a865c7801dc75cbeb8260
-Message-ID: <616e3a1d.Dop9h9cOMEHMO+MW%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S233351AbhJSFlX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 Oct 2021 01:41:23 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1634621951; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=FvSG1JjoiOkVx48jhYdHGI+1T4oq9+2kuA3u8qL+q48=; b=E66nN8h0GnJdXi/NawjEyGRSS1Q4bIZk+VP2MCT4dxxFXtPkyQ3skjEnT9HHNxw+CHnarm4x
+ JjfMbEBrHZTcYgmt7F7VDMpPLgiQwtNFSgAagk6ptepzuelYDzciU8MfNp4eknxg2BC+iM/s
+ WhHDbsGnkSC2jgh/ALeAhHrntN4=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 616e59ed14914866fa5ba48b (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 19 Oct 2021 05:38:53
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 6F3FBC43618; Tue, 19 Oct 2021 05:38:52 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 759EEC43460;
+        Tue, 19 Oct 2021 05:38:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 759EEC43460
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Date:   Mon, 18 Oct 2021 22:38:48 -0700
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Wesley Cheng <wcheng@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH] usb: dwc3: gadget: Skip resizing EP's TX FIFO if already
+ resized
+Message-ID: <20211019053848.GC16586@jackp-linux.qualcomm.com>
+References: <20210909083120.15350-1-jackp@codeaurora.org>
+ <6a4bb7a9-2c63-5e1e-f4fc-a5bbc7aaa168@synopsys.com>
+ <db0664a9-575f-1c6a-2efc-ec8372e2f1d4@codeaurora.org>
+ <6538dd76-5dea-1e31-9459-657898be6d8f@synopsys.com>
+ <926df659-7e31-9504-9752-a206f1eb8eaf@codeaurora.org>
+ <56339fa2-e476-0f5b-9625-7016294e6be7@synopsys.com>
+ <20211015005101.GA16586@jackp-linux.qualcomm.com>
+ <9ecf98e9-0700-3a38-d056-5479f5188f4c@synopsys.com>
+ <20211018072856.GB16586@jackp-linux.qualcomm.com>
+ <205c4af2-37dd-6dbf-12ab-5111fadab530@synopsys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <205c4af2-37dd-6dbf-12ab-5111fadab530@synopsys.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 8ef1e58783b9f55daa4a865c7801dc75cbeb8260  usb: typec: STUSB160X should select REGMAP_I2C
+On Tue, Oct 19, 2021 at 02:38:30AM +0000, Thinh Nguyen wrote:
+> Jack Pham wrote:
+> > On Fri, Oct 15, 2021 at 10:20:48PM +0000, Thinh Nguyen wrote:
+> >> TX endpoints should have non-zero GTXFIFOSIZ. Using the register as a
+> >> flag to check whether it's been resized is not ok. Also, what happened
+> >> after resizing the txfifo? Do you restore its previous default value?
+> > 
+> > The choice to use the resizing algorithm is a fixed setting determined
+> > by device property.  So if it is enabled for a particular platform
+> > instance, it means we don't intend to use any of the default values.
+> > All the registers will get cleared to 0 upon every Set Configuration so
+> > that each EP enable call thereafter will be starting from a clean slate.
+> 
+> Some fields of GTXFIFOSIZ may not get cleared. Depends on the controller
+> version, we introduce different fields (as the case for DWC32 and
+> DWC31). So this may not apply for all the time. I just noticed that the
+> entire GTXFIFOSIZ was written with 0. Please only write to the specific
+> fields with proper macros.
 
-elapsed time: 729m
+Hmm, I thought Wesley's original change already takes care to do that:
 
-configs tested: 147
-configs skipped: 3
+void dwc3_gadget_clear_tx_fifos(struct dwc3 *dwc)
+{
+...
+	/* Clear existing TXFIFO for all IN eps except ep0 */
+	for (num = 3; num < min_t(int, dwc->num_eps, DWC3_ENDPOINTS_NUM);
+             num += 2) {
+		dep = dwc->eps[num];
+		/* Don't change TXFRAMNUM on usb31 version */
+		size = DWC3_IP_IS(DWC3) ? 0 :
+			dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(num >> 1)) &
+                		DWC31_GTXFIFOSIZ_TXFRAMNUM;
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+		dwc3_writel(dwc->regs, DWC3_GTXFIFOSIZ(num >> 1), size);
+		dep->flags &= ~DWC3_EP_TXFIFO_RESIZED;
+	}
+	dwc->num_ep_resized = 0;
+}
 
-gcc tested configs:
-arm64                               defconfig
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211019
-powerpc                    adder875_defconfig
-powerpc                      walnut_defconfig
-arc                        nsim_700_defconfig
-sparc                       sparc64_defconfig
-powerpc                     tqm8548_defconfig
-powerpc                   bluestone_defconfig
-powerpc                      acadia_defconfig
-ia64                         bigsur_defconfig
-arm                       multi_v4t_defconfig
-arm                      jornada720_defconfig
-powerpc                     pseries_defconfig
-xtensa                       common_defconfig
-mips                            gpr_defconfig
-arm                         axm55xx_defconfig
-arm                            qcom_defconfig
-arm64                            alldefconfig
-arm                        multi_v5_defconfig
-mips                          ath79_defconfig
-powerpc                     powernv_defconfig
-openrisc                            defconfig
-sh                   secureedge5410_defconfig
-powerpc                       ppc64_defconfig
-arm                         palmz72_defconfig
-arm                         nhk8815_defconfig
-sh                          urquell_defconfig
-sh                          sdk7780_defconfig
-x86_64                              defconfig
-openrisc                    or1ksim_defconfig
-arm                        spear3xx_defconfig
-riscv                               defconfig
-arm                         vf610m4_defconfig
-m68k                        mvme147_defconfig
-powerpc                mpc7448_hpc2_defconfig
-arm                            dove_defconfig
-sh                     magicpanelr2_defconfig
-riscv                          rv32_defconfig
-s390                       zfcpdump_defconfig
-arc                        vdk_hs38_defconfig
-m68k                            q40_defconfig
-powerpc                 linkstation_defconfig
-arm                        keystone_defconfig
-mips                           ip28_defconfig
-sh                          rsk7264_defconfig
-powerpc                      mgcoge_defconfig
-arm                           u8500_defconfig
-powerpc64                        alldefconfig
-mips                           rs90_defconfig
-m68k                       bvme6000_defconfig
-h8300                            alldefconfig
-mips                            e55_defconfig
-powerpc                      pasemi_defconfig
-powerpc               mpc834x_itxgp_defconfig
-ia64                            zx1_defconfig
-m68k                        m5307c3_defconfig
-m68k                        m5407c3_defconfig
-arm                           sunxi_defconfig
-sh                ecovec24-romimage_defconfig
-arm                       cns3420vb_defconfig
-powerpc                          g5_defconfig
-powerpc                       holly_defconfig
-arm                      integrator_defconfig
-arm                           corgi_defconfig
-arm                        realview_defconfig
-powerpc                  storcenter_defconfig
-riscv             nommu_k210_sdcard_defconfig
-arm                  randconfig-c002-20211019
-x86_64               randconfig-c001-20211019
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                             allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-x86_64               randconfig-a015-20211019
-x86_64               randconfig-a012-20211019
-x86_64               randconfig-a016-20211019
-x86_64               randconfig-a014-20211019
-x86_64               randconfig-a013-20211019
-x86_64               randconfig-a011-20211019
-i386                 randconfig-a014-20211019
-i386                 randconfig-a016-20211019
-i386                 randconfig-a011-20211019
-i386                 randconfig-a015-20211019
-i386                 randconfig-a012-20211019
-i386                 randconfig-a013-20211019
-riscv                    nommu_virt_defconfig
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                           allyesconfig
+Just before the write, the read is masked with the TXFRAMNUM bit in case
+of !DWC3, i.e. DWC31 or DWC32.  The rest would be 0'ed out.  Sorry if my
+previous reply implied the entire register was written as 0.
 
-clang tested configs:
-arm                  randconfig-c002-20211019
-mips                 randconfig-c004-20211019
-i386                 randconfig-c001-20211019
-s390                 randconfig-c005-20211019
-x86_64               randconfig-c007-20211019
-riscv                randconfig-c006-20211019
-powerpc              randconfig-c003-20211019
-x86_64               randconfig-a004-20211019
-x86_64               randconfig-a006-20211019
-x86_64               randconfig-a005-20211019
-x86_64               randconfig-a001-20211019
-x86_64               randconfig-a002-20211019
-x86_64               randconfig-a003-20211019
-i386                 randconfig-a001-20211019
-i386                 randconfig-a003-20211019
-i386                 randconfig-a004-20211019
-i386                 randconfig-a005-20211019
-i386                 randconfig-a002-20211019
-i386                 randconfig-a006-20211019
-hexagon              randconfig-r041-20211019
-hexagon              randconfig-r045-20211019
+> > I can go ahead with V2 of this patch using this flag to be more clear.
+> > 
+> 
+> I think using a flag is clearer also.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks, and appreciate the reviewed-by you already replied with for v2!
+
+Jack
+-- 
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
