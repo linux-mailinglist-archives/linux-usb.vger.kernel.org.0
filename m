@@ -2,63 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20DF3432F8F
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 09:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 194EC432FFC
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 09:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231177AbhJSHeI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Oct 2021 03:34:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50268 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234691AbhJSHeD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 19 Oct 2021 03:34:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7CA556137F;
-        Tue, 19 Oct 2021 07:31:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634628711;
-        bh=0mWtOhHHavXATvNfchyONfHu9pPTSnq66KGn6WkLiTk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2eSEex4ExDqY1eMlza6GH/2GDlPGPDCHycTTLnZ8jEZFo3E0YKbPJUE7/HMz54DHv
-         5/1ssdwq7USzQXddiJNf5CieEdOIjxrHqoT592ygY5A6ifPgGe8HA6fP1V4fvQLQaY
-         02Tx82m9gVotbeCBhenS41HR1FuWkr1zbQlx/tTc=
-Date:   Tue, 19 Oct 2021 09:31:48 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Subject: Re: [PATCH 00/22] Explicitly deny IRQ0 in the USB host drivers
-Message-ID: <YW50ZLkVDkVuYdBp@kroah.com>
-References: <20211018183930.8448-1-s.shtylyov@omp.ru>
- <YW5ajmF67RjuD7l5@kroah.com>
+        id S234538AbhJSHqy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Oct 2021 03:46:54 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:34074 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234132AbhJSHqx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 03:46:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1634629481; x=1666165481;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=omu0zvp46diWd+kq6KZZAbW4jAtlZjV2yT/23w7NbvE=;
+  b=vIv0v+Ztxbm6K6l7diwneMsm7R3PkK3PrSq1tyXsLMfqYEU5WkV45kw0
+   wmnKL5tFh56+K1XG3y0Dd4i9WM5CMrrcFn7VPsyNbNntThFf+YSzIWyQW
+   noi+Iufhuu2TNQiH9o4RSy/97p7BQTIgB3E7urciLEeQ4jzud8ZgIz4rF
+   s=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 19 Oct 2021 00:44:41 -0700
+X-QCInternal: smtphost
+Received: from nalasex01b.na.qualcomm.com ([10.47.209.197])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2021 00:44:40 -0700
+Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
+ Tue, 19 Oct 2021 00:44:38 -0700
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, Jack Pham <jackp@quicinc.com>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [PATCH v11 0/3] usb: gadget: configfs: add some trace event
+Date:   Tue, 19 Oct 2021 15:44:29 +0800
+Message-ID: <1634629473-15411-1-git-send-email-quic_linyyuan@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YW5ajmF67RjuD7l5@kroah.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 19, 2021 at 07:41:34AM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Oct 18, 2021 at 09:39:08PM +0300, Sergey Shtylyov wrote:
-> > Here are 22 patches against the 'usb-next' branch of Greg KH's 'usb.git' repo.
-> > The affected drivers use platform_get_irq() which can return IRQ0 (considered
-> > invalid, according to Linus) that means broken HCD when passed to usb_add_hcd()
-> > called at the end of the probe methods. I think that the solution to this issue
-> > is either explicitly deny or accept IRQ0 in usb_add_hcd()... /but/ here's this
-> > patch set to get the things going...
-> 
-> Why not fix the root of the problem for your platform that is failing to
-> assign a valid irq for the device?
-> 
-> Are you going to make this change to all callers of this function in the
-> kernel tree?
+this series make some minor change to gadget configfs and
+add some important trace event from configfs layer.
 
-Also, you should have gotten a huge WARNING in your kernel log if this
-happens to let you know that something bad is going on.  Is this patch
-series going to really change any of that?
+follow suggestion from Felipe Balbi in link below,
+https://lore.kernel.org/linux-usb/1629777281-30188-1-git-send-email-quic_linyyuan@quicinc.com/
 
-What is the root problem here that you are trying to paper over with
-this patchset?
+v2: fix two issue Reported-by: kernel test robot <lkp@intel.com>
+v3: do not move private structure to configfs.h
+v4: add missing new file configfs_trace.h
+v5: lost some change of v2, add it again
+v6: fix comments from Greg Kroah-Hartman
+v7: three minor changes according to coding rules
+v8: change two trace location
+v9: fix when config is empty
+v10: fix wrong api in v9
+v11: split to three changes, minor change to trace event print format
 
-thanks,
+trace event will looks like as below,
+config_usb_cfg_link: g1: 0 0 0 0 0 0 0 0 0000 0510 6 0 {1 80 2 Function FS Gadget,}; - (null)
+gadget_dev_desc_UDC_store: g1: 0 0 0 0 0 0 0 0 0000 0510 6 0 {1 80 2 Function FS Gadget,}; - dummy_udc
+unregister_gadget: g1: 0 0 0 0 0 0 0 0 0000 0510 6 0 {1 80 2 Function FS Gadget,}; - dummy_udc
+config_usb_cfg_unlink: g1: 0 0 0 0 0 0 0 0 0000 0510 6 0 {1 80 2 }, - (null)
 
-greg k-h
+
+Linyu Yuan (3):
+  usb: gadget: configfs: add cfg_to_gadget_info() helper
+  usb: gadget: configfs: change config attributes file operation
+  usb: gadget: add configfs trace events
+
+ drivers/usb/gadget/configfs.c       |  39 +++++++--
+ drivers/usb/gadget/configfs_trace.h | 166 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 196 insertions(+), 9 deletions(-)
+ create mode 100644 drivers/usb/gadget/configfs_trace.h
+
+-- 
+2.7.4
+
