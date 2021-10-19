@@ -2,225 +2,227 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF0C7433A5A
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 17:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 500B6433B96
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 18:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234229AbhJSPbh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Oct 2021 11:31:37 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:56025 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232329AbhJSPbg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 11:31:36 -0400
-Received: by mail-io1-f69.google.com with SMTP id t16-20020a5d8850000000b005dc56fcd7e5so13566682ios.22
-        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 08:29:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=K1HutfgURzvvD5hyC0nHEmKEekjLe2BfBHvMni2B8aE=;
-        b=qjFcxIJLV8n2sM5aiR6NjUcheE+A/49zfbvPQ9giT2fqe+XtZn4ImgiGw0a3AYnTRH
-         AqVXAGF0pGBVz6ORcC8yHYtynYuXKSs5HvOpoCup9fjhOcrUkQRg4IE4XiEX8CSrIiNi
-         uDlk+rGhP0Dt7K6+x4GxCZBCqB1vecYMSbBQcRVKszwZlHyJnB2lc1jcqTgKpcnfKB4L
-         BfdgJ18+L5Jt1fJ049TkC69AxKys2q6z14kgYXeHE0Y1z1RyEw03fxkOnfxihiBt7dd2
-         QGTZjvV+fdwITILs0VLAPncFFZqpLTfEGF5wvwQRLZ2W+djrA7rDJNm7e+bPZ7sNH5Js
-         LD4g==
-X-Gm-Message-State: AOAM530enkWedmsHlgW/kofyyDGEeQoSDG+fUd+37eDvMLpjUBTijP02
-        fSLGjm/c2M65uyAxOqYcNcYiZAwrpGVIov40RL3mN9RWNdI/
-X-Google-Smtp-Source: ABdhPJwYq3yHE78JsV2t2FkWdrQmQC0uwyE44V+cuUFK16jXRSlxzkVxVrNpZl2SNYu6h/FlHR9tNxfToJuoz45OfxRvAExgUZCD
+        id S232929AbhJSQGf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Oct 2021 12:06:35 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:53144 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230168AbhJSQGd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 12:06:33 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19JE1L0R004966;
+        Tue, 19 Oct 2021 18:04:12 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=fdqa3FWQjGrFeZEe9ls1cJx0wp/BD6sM4yLn8Lo2/UM=;
+ b=MQ9RMn/gavH7KWZKGlRD6W0G2SSSkl5rnWfomMnQraGoBLCCHVk7jvRfO3aOZbIRWyNK
+ rTEUjBGacbreKzkcYuCBGK8UiX/Ut9TxE807dUDJCBr5jcV3Vcf3545KxTw35ANnCi79
+ ntGjUtShm65X9ljUriPAf/Qnl3Ikeq8raNJJBn2P+eH5AtWhltGkoFo5MjpgCDDirkpX
+ LKA6IMeKuLKHVln5APy8+shqAHtWyYFWeBr8Z3nBH/MpMJnRFx72LkX4P7aMsYNpgRXf
+ lebYdKxDqnm/vEwwKrjLzLxo9DDHqMLeUMcs+GHoGb8XvJ0iyRECLeXXCIo141/KFMqs NA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 3bstrwauuq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 19 Oct 2021 18:04:12 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C1EA3100034;
+        Tue, 19 Oct 2021 18:04:09 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 61C78231518;
+        Tue, 19 Oct 2021 18:04:09 +0200 (CEST)
+Received: from [10.48.0.126] (10.75.127.50) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 19 Oct
+ 2021 18:04:06 +0200
+Subject: Re: Re: [PATCH v16 0/7] usb: misc: Add onboard_usb_hub driver
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Alan Stern <stern@rowland.harvard.edu>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        "Felipe Balbi" <balbi@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        "Ravi Chandra Sadineni" <ravisadineni@chromium.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre TORGUE - foss <alexandre.torgue@foss.st.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        "Aswath Govindraju" <a-govindraju@ti.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        "Enric Balletbo i Serra" <enric.balletbo@collabora.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        =?UTF-8?Q?Guido_G=c3=bcnther?= <agx@sigxcpu.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jens Axboe <axboe@kernel.dk>, Johan Hovold <johan@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Lionel DEBIEVE <lionel.debieve@st.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        "Marek Szyprowski" <m.szyprowski@samsung.com>,
+        Mark Brown <broonie@kernel.org>,
+        =?UTF-8?Q?Martin_J=c3=bccker?= <martin.juecker@gmail.com>,
+        Nishanth Menon <nm@ti.com>,
+        Olivier MOYSAN <olivier.moysan@st.com>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Robert Richter <rric@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Tony Lindgren <tony@atomide.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        William Cohen <wcohen@redhat.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-omap <linux-omap@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>
+References: <20210813195228.2003500-1-mka@chromium.org>
+ <YUoRq1RrOIoiBJ5+@google.com>
+ <CAD=FV=WrddUhWT0wUVZD0gN_+8Zy1VGY77LYLYBvhaPQQ_SqZw@mail.gmail.com>
+ <YWkiGGBKOVokBye9@kroah.com>
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Message-ID: <03f28680-35eb-25f4-5041-f3a56144da24@foss.st.com>
+Date:   Tue, 19 Oct 2021 18:04:06 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2724:: with SMTP id m36mr4735996jav.49.1634657363269;
- Tue, 19 Oct 2021 08:29:23 -0700 (PDT)
-Date:   Tue, 19 Oct 2021 08:29:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000779cb105ceb65376@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in rtl8712_dl_fw
-From:   syzbot <syzbot+c55162be492189fb4f51@syzkaller.appspotmail.com>
-To:     Larry.Finger@lwfinger.net, agamkohli9@gmail.com,
-        florian.c.schilhabel@googlemail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, paskripkin@gmail.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YWkiGGBKOVokBye9@kroah.com>
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-10-19_02,2021-10-19_01,2020-04-07_01
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On 10/15/21 8:39 AM, Greg Kroah-Hartman wrote:
+> On Thu, Oct 14, 2021 at 02:38:55PM -0700, Doug Anderson wrote:
+>> Hi,
+>>
+>> On Tue, Sep 21, 2021 at 10:09 AM Matthias Kaehlcke <mka@chromium.org> wrote:
+>>>
+>>> Hi Greg,
+>>>
+>>> are there any actions pending or can this land in usb-testing?
+>>>
+>>> I confirmed that this series can be rebased on top of v5.15-rc2
+>>> without conflicts.
+>>
+>> I'm quite interested to know what the next action items are, too. This
+>> is one of the very few patches we have for trogdor (excluding MIPI
+>> camera, which is a long story) that we're carrying downstream, so I'm
+>> keenly interested in making sure it's unblocked (if, indeed, it's
+>> blocked on anything).
+>>
+>> If folks feel that this needs more review eyes before landing again
+>> then I'll try to find some time in the next week or two. If it's just
+>> waiting for the merge window to open/close so it can have maximal bake
+>> time, that's cool too. Please yell if there's something that I can do
+>> to help, though! :-)
+> 
+> I would love more review-eyes on this please.
+> 
 
-syzbot found the following issue on:
+Hi,
 
-HEAD commit:    8ef1e58783b9 usb: typec: STUSB160X should select REGMAP_I2C
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1106dcfb300000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c27d285bdb7457e2
-dashboard link: https://syzkaller.appspot.com/bug?extid=c55162be492189fb4f51
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12725770b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1168c158b00000
+I noticed this series some time ago, and wanted to take a closer look.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c55162be492189fb4f51@syzkaller.appspotmail.com
+The same issue this series address is seen on stm32 board for instance.
+(arch/arm/boot/dts/stm32mp15xx-dkx.dtsi). On board HUB (not described in
+the DT) is supplied by an always-on regulator.
+So it could could be interesting/useful to address the same case ,
+on stm32 boards, where USB2 (ehci-platform driver) is used currently.
 
-==================================================================
-BUG: KASAN: use-after-free in rtl871x_open_fw drivers/staging/rtl8712/hal_init.c:83 [inline]
-BUG: KASAN: use-after-free in rtl8712_dl_fw+0xd95/0xe10 drivers/staging/rtl8712/hal_init.c:170
-Read of size 8 at addr ffff88810e25c9c0 by task dhcpcd/1204
+I noticed a few things, especially on the dt-bindings. I've some
+questions here.
 
-CPU: 0 PID: 1204 Comm: dhcpcd Not tainted 5.15.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0x6c/0x309 mm/kasan/report.c:256
- __kasan_report mm/kasan/report.c:442 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
- rtl871x_open_fw drivers/staging/rtl8712/hal_init.c:83 [inline]
- rtl8712_dl_fw+0xd95/0xe10 drivers/staging/rtl8712/hal_init.c:170
- rtl8712_hal_init drivers/staging/rtl8712/hal_init.c:330 [inline]
- rtl871x_hal_init+0xae/0x180 drivers/staging/rtl8712/hal_init.c:394
- netdev_open+0xe6/0x6c0 drivers/staging/rtl8712/os_intfs.c:380
- __dev_open+0x2bc/0x4d0 net/core/dev.c:1484
- __dev_change_flags+0x583/0x750 net/core/dev.c:8761
- dev_change_flags+0x93/0x170 net/core/dev.c:8832
- devinet_ioctl+0x15d1/0x1ca0 net/ipv4/devinet.c:1142
- inet_ioctl+0x1e6/0x320 net/ipv4/af_inet.c:971
- sock_do_ioctl+0xcc/0x230 net/socket.c:1118
- sock_ioctl+0x2f1/0x640 net/socket.c:1235
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7ff4004a20e7
-Code: 3c 1c e8 1c ff ff ff 85 c0 79 87 49 c7 c4 ff ff ff ff 5b 5d 4c 89 e0 41 5c c3 66 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 61 9d 0c 00 f7 d8 64 89 01 48
-RSP: 002b:00007fffba0f8738 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007ff4003b46c8 RCX: 00007ff4004a20e7
-RDX: 00007fffba108928 RSI: 0000000000008914 RDI: 0000000000000005
-RBP: 00007fffba118ad8 R08: 00007fffba1088e8 R09: 00007fffba108898
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fffba108928 R14: 0000000000000028 R15: 0000000000008914
+In this series, RTS5411 is used. The dt-bindings documents it as a child
+node of the USB controller. E.g.
 
-Allocated by task 1128:
- kasan_save_stack+0x1b/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:46 [inline]
- set_alloc_info mm/kasan/common.c:434 [inline]
- ____kasan_kmalloc mm/kasan/common.c:513 [inline]
- __kasan_kmalloc+0x7c/0x90 mm/kasan/common.c:522
- kmalloc include/linux/slab.h:591 [inline]
- kzalloc include/linux/slab.h:721 [inline]
- _request_firmware_prepare drivers/base/firmware_loader/main.c:732 [inline]
- _request_firmware+0x192/0x1440 drivers/base/firmware_loader/main.c:808
- request_firmware_work_func+0xdd/0x230 drivers/base/firmware_loader/main.c:1079
- process_one_work+0x9bf/0x1620 kernel/workqueue.c:2297
- worker_thread+0x658/0x11f0 kernel/workqueue.c:2444
- kthread+0x3c2/0x4a0 kernel/kthread.c:319
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+&usb {
+	usb_hub_2_0: hub@1 {
+		...
+	};
 
-Freed by task 1306:
- kasan_save_stack+0x1b/0x40 mm/kasan/common.c:38
- kasan_set_track+0x1c/0x30 mm/kasan/common.c:46
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:360
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free mm/kasan/common.c:328 [inline]
- __kasan_slab_free+0xe0/0x110 mm/kasan/common.c:374
- kasan_slab_free include/linux/kasan.h:230 [inline]
- slab_free_hook mm/slub.c:1700 [inline]
- slab_free_freelist_hook mm/slub.c:1725 [inline]
- slab_free mm/slub.c:3483 [inline]
- kfree+0xd9/0x460 mm/slub.c:4543
- release_firmware+0x1b/0x30 drivers/base/firmware_loader/main.c:1053
- r871xu_dev_remove+0xcc/0x2c0 drivers/staging/rtl8712/usb_intf.c:599
- usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:458
- __device_release_driver+0x5d7/0x700 drivers/base/dd.c:1205
- device_release_driver_internal drivers/base/dd.c:1236 [inline]
- device_release_driver+0x26/0x40 drivers/base/dd.c:1259
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:529
- device_del+0x502/0xd60 drivers/base/core.c:3583
- usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1419
- usb_disconnect.cold+0x27a/0x78e drivers/usb/core/hub.c:2225
- hub_port_connect drivers/usb/core/hub.c:5199 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5488 [inline]
- port_event drivers/usb/core/hub.c:5634 [inline]
- hub_event+0x1c9c/0x4330 drivers/usb/core/hub.c:5716
- process_one_work+0x9bf/0x1620 kernel/workqueue.c:2297
- worker_thread+0x658/0x11f0 kernel/workqueue.c:2444
- kthread+0x3c2/0x4a0 kernel/kthread.c:319
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+	usb_hub_3_0: hub@2 {
+	};
+}
 
-The buggy address belongs to the object at ffff88810e25c9c0
- which belongs to the cache kmalloc-32 of size 32
-The buggy address is located 0 bytes inside of
- 32-byte region [ffff88810e25c9c0, ffff88810e25c9e0)
-The buggy address belongs to the page:
-page:ffffea0004389700 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88810e25c900 pfn:0x10e25c
-flags: 0x200000000000200(slab|node=0|zone=2)
-raw: 0200000000000200 ffffea000418e000 0000000c0000000c ffff888100041500
-raw: ffff88810e25c900 000000008040003f 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12c40(GFP_NOFS|__GFP_NOWARN|__GFP_NORETRY), pid 1165, ts 7264636375, free_ts 7245803911
- prep_new_page mm/page_alloc.c:2424 [inline]
- get_page_from_freelist+0x11d2/0x28b0 mm/page_alloc.c:4153
- __alloc_pages+0x1b2/0x4e0 mm/page_alloc.c:5375
- alloc_pages+0x1a7/0x300 mm/mempolicy.c:2197
- alloc_slab_page mm/slub.c:1763 [inline]
- allocate_slab mm/slub.c:1900 [inline]
- new_slab+0x319/0x490 mm/slub.c:1963
- ___slab_alloc+0xa4b/0x1170 mm/slub.c:2994
- __slab_alloc mm/slub.c:3081 [inline]
- slab_alloc_node mm/slub.c:3172 [inline]
- slab_alloc mm/slub.c:3214 [inline]
- __kmalloc+0x303/0x320 mm/slub.c:4387
- kmalloc include/linux/slab.h:596 [inline]
- tomoyo_add_entry security/tomoyo/common.c:2031 [inline]
- tomoyo_supervisor+0xce8/0xf00 security/tomoyo/common.c:2103
- tomoyo_audit_path_log security/tomoyo/file.c:168 [inline]
- tomoyo_path_permission security/tomoyo/file.c:587 [inline]
- tomoyo_path_permission+0x270/0x3a0 security/tomoyo/file.c:573
- tomoyo_check_open_permission+0x33e/0x380 security/tomoyo/file.c:777
- tomoyo_file_open security/tomoyo/tomoyo.c:311 [inline]
- tomoyo_file_open+0xa3/0xd0 security/tomoyo/tomoyo.c:306
- security_file_open+0x45/0xb0 security/security.c:1634
- do_dentry_open+0x34e/0x1110 fs/open.c:809
- do_open fs/namei.c:3428 [inline]
- path_openat+0x1c9a/0x2740 fs/namei.c:3561
- do_filp_open+0x1aa/0x400 fs/namei.c:3588
- do_sys_openat2+0x16d/0x4d0 fs/open.c:1200
- do_sys_open fs/open.c:1216 [inline]
- __do_sys_openat fs/open.c:1232 [inline]
- __se_sys_openat fs/open.c:1227 [inline]
- __x64_sys_openat+0x13f/0x1f0 fs/open.c:1227
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1338 [inline]
- free_pcp_prepare+0x2b3/0x670 mm/page_alloc.c:1389
- free_unref_page_prepare mm/page_alloc.c:3315 [inline]
- free_unref_page+0x19/0x490 mm/page_alloc.c:3394
- __vunmap+0x783/0xb70 mm/vmalloc.c:2621
- free_work+0x58/0x70 mm/vmalloc.c:95
- process_one_work+0x9bf/0x1620 kernel/workqueue.c:2297
- worker_thread+0x658/0x11f0 kernel/workqueue.c:2444
- kthread+0x3c2/0x4a0 kernel/kthread.c:319
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+I had a quick look at RTS5411 datasheet. It looks like there's an i2c
+interface too.
+- I guess the I2C interface isn't used in your case ?
+  (I haven't checked what it could be used for...)
 
-Memory state around the buggy address:
- ffff88810e25c880: fa fb fb fb fc fc fc fc fa fb fb fb fc fc fc fc
- ffff88810e25c900: fb fb fb fb fc fc fc fc fa fb fb fb fc fc fc fc
->ffff88810e25c980: fa fb fb fb fc fc fc fc fa fb fb fb fc fc fc fc
-                                           ^
- ffff88810e25ca00: fa fb fb fb fc fc fc fc fa fb fb fb fc fc fc fc
- ffff88810e25ca80: fa fb fb fb fc fc fc fc fa fb fb fb fc fc fc fc
-==================================================================
+In the stm32 boards (stm32mp15xx-dkx), there's an usb2514b chip
+- that also could be wired on I2C interface (0R mount option)
+- unused on stm32 boards by default
+
+usb2514b chip already has a dt-bindings (with compatible), and a driver:
+- drivers/usb/misc/usb251xb.c
+- Documentation/devicetree/bindings/usb/usb251xb.txt
+
+It is defined more as an i2c chip, so I'd expect it as an i2c child,
+e.g. like:
+
+&i2c {
+	usb2514b@2c {
+		compatible = "microchip,usb2514b";
+		...
+	};
+};
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+This way, I don't see how it could be used together with onboard_usb_hub
+driver ? (But I may have missed it)
+Is it possible to use a phandle, instead of a child node ?
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+However, in the stm32mp15xx-dkx case, i2c interface isn't wired/used by
+default. So obviously the i2c driver isn't used. In this case, could the
+"microchip,usb2514b" be listed in onboard_usb_hub driver ?
+(wouldn't it be redundant ?)
+
+In this case it would be a child node of the usb DT node... Maybe that's
+more a question for Rob: would it be "legal" regarding existing
+dt-bindings ?
+
+
+Thanks in advance
+Best Regards,
+Fabrice
+
+
+> It's in my queue to review, I just need to spend the time on it, sorry
+> for the delay.
+> 
+> greg k-h
+> 
