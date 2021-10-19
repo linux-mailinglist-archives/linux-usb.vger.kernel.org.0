@@ -2,100 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 372F2433691
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 15:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A0A64336B9
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 15:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235719AbhJSND4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Oct 2021 09:03:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48036 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231616AbhJSNDz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 19 Oct 2021 09:03:55 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7B3A760FC2;
-        Tue, 19 Oct 2021 13:01:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634648503;
-        bh=Ou8N2yzlv96KKZKRywo3323nZQ3APgCv8/T4RDjyUYU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tOnuv7bOUqlDSC6/dhhjbdzJVT+7EwVQeLdkAUyLhFmHgcQ9kqvHlKbs2OPE36l2w
-         3dw06f/AKpRibgam3apxC+NamB144tFWZZKfzb9JKGHTuQ/LoUxgnMGJKAcmJWT+6w
-         AWcRAKLkBgpCFGO/MM+pkqr/WQeekCX7D4wCfYE8=
-Date:   Tue, 19 Oct 2021 15:01:40 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     mark_k@iname.com
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: USB2 Link USB-SCSI converter and LUNs
-Message-ID: <YW7BtIHwVH3n13yH@kroah.com>
-References: <trinity-d3be8a5b-2b1c-45f8-8767-cf9cf758a0c0-1634638509008@3c-app-mailcom-lxa12>
- <YW6pjieI5UwOM9LW@kroah.com>
- <trinity-7db5ef0c-99a3-4fa0-a1d7-1e57c80cc4ff-1634648008985@3c-app-mailcom-lxa13>
+        id S235818AbhJSNPY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Oct 2021 09:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235795AbhJSNPY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 09:15:24 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37287C06161C;
+        Tue, 19 Oct 2021 06:13:11 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id w14so12678549edv.11;
+        Tue, 19 Oct 2021 06:13:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iBrOklT6wRz3+4Sv0nSOix/uEw45k7IhgJcWd50H2V4=;
+        b=deOrvOSZJ7Ax/hHX/I0bj/ua6fjX1rP1DhOlu075couX1a3c1NVd1vCXiKTksJ8yXW
+         qp4uXHhYMHHGxeF0zRIXPw9gurIoJ3aRUNnKbOAe8ArOMSk57YGOgDvnqpZIjI5pEo4Z
+         cNOwb5tFsa/EZb+qlgBK9hUuhTQpDnP7tE1vX1OxMa5fUH/G9FCb1T2XFaA3XjPmvKVd
+         dPYjOPOJrqXvXlcYtNWa+RaDM/Y8Rn+1e9mqNRVeUb4kvgVK7Ntrb0cdAT9Ackzt55Vo
+         Nf7tiQol+2HlOzjTdRwPlexTUAyoCtbWQg81M4LN82vslZ3ear0azg0nfJ7vueyiZAuk
+         6H/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iBrOklT6wRz3+4Sv0nSOix/uEw45k7IhgJcWd50H2V4=;
+        b=z46AzwIuTv1NuFko8Y1Ujxdko7ZaghdKIJk2+YfCBAGi/zTd/MSCY8d8XJq2X6cHnC
+         Jema461/2mSMggsRdJ/VnEKIVrqlYwJcc5ZHDNAS7hzbhQwCj2TXsjQImfC4Llelb0U3
+         ORgk3hS41GByvKWcFQvMvhqyOzOuXcuTJK81sc7ox7T9VwaehdfDcCk0QZ/9+vuytr7a
+         CMrzoc5RXEH4tfZY6oJRzU1oIakQJ0k/WlJuPslK+MHyInK2m1dBO5tPUZD4fVc7bxaB
+         rBp7QYeOketbpAZG8yzVwWMa9dof73fRzk4gvh96igVp2hW/yhWKgWMYatpQ1UbzcuVN
+         hqJQ==
+X-Gm-Message-State: AOAM533uCeAwRDBvm9MJAVOS5yECWubObvSBhqUlz283bRX7231kC/44
+        uYGOzm4CE3l7P7SY/afx68M=
+X-Google-Smtp-Source: ABdhPJzP6RuvLFjU20H2PG1567GaG8/B+U9ZCxaQnE9gpZ3riwQ97C9SC3UHkFwm4W7diIY+IG7Xpg==
+X-Received: by 2002:a17:906:e104:: with SMTP id gj4mr36909389ejb.358.1634649169355;
+        Tue, 19 Oct 2021 06:12:49 -0700 (PDT)
+Received: from roman-Latitude-3400.. (178-133-75-113.mobile.vf-ua.net. [178.133.75.113])
+        by smtp.gmail.com with ESMTPSA id g2sm11334590edq.81.2021.10.19.06.12.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Oct 2021 06:12:48 -0700 (PDT)
+From:   Roman Stratiienko <r.stratiienko@gmail.com>
+To:     linux-sunxi@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-usb@vger.kernel.org, jernej.skrabec@gmail.com, wens@csie.org,
+        mripard@kernel.org, b-liu@ti.com, megous@megous.com,
+        Roman Stratiienko <r.stratiienko@gmail.com>
+Subject: [PATCH] usb: musb: sunxi: Don't print error on MUSB_ULPI_BUSCONTROL access
+Date:   Tue, 19 Oct 2021 16:12:44 +0300
+Message-Id: <20211019131244.1568560-1-r.stratiienko@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <trinity-7db5ef0c-99a3-4fa0-a1d7-1e57c80cc4ff-1634648008985@3c-app-mailcom-lxa13>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 19, 2021 at 02:53:29PM +0200, mark_k@iname.com wrote:
-> On Tuesday, October 19, 2021 at 12:18 PM "Greg KH" <gregkh@linuxfoundation.org> wrote:
-> > On Tue, Oct 19, 2021 at 12:15:09PM +0200, mark_k@iname.com wrote:
-> > > I have a Core Micro Systems USB2 Link USB-SCSI converter (07B4:0380).
-> > >
-> > > Adding an entry to unusual_devs.h should get it to work, just needing
-> > > USB_PR_BULK. That should at least allow the connected device with SCSI ID 0
-> > > to be accessed.
-> >
-> > Why do you need any quirk at all for this?
-> 
-> My mistake, sorry. Its interface descriptor has
->   bInterfaceClass 0xFF
->   bInterfaceSubClass 0x06
->   bInterfaceProtocol 0x50
-> so an entry with USB_SC_DEVICE, USB_PR_DEVICE would work.
+Error message appears during suspend, where musb driver is storing
+the register state in musb_save_context():
+```
+musb-sunxi 1c19000.usb: Error unknown readb offset 112
+```
 
-Again, why is a quirk needed at all?
+Print warning instead to avoid confusion.
 
-> > > I'm just wondering, how does the usb-storage driver handle these cases:
-> > >
-> > >  - (What it thinks are) LUNs are not contiguous. Suppose the user has two
-> > >    SCSI devices in the chain, one with ID 0 the other with ID 3. Would it
-> > >    scan LUNs (which map to separate targets) 1, 2, 4, 5 and 6? Or would it
-> > >    give up on getting no response from LUN 1?
-> > >
-> > >  - "LUN" 0 is not present. E.g. where the connected SCSI devices have IDs 1
-> > >    and 3.
-> > >
-> > >  - When different "LUNs" are completely different devices (e.g. one a
-> > >    CD-ROM, another a hard disk, another a tape drive).
-> > >
-> >
-> > That should all be up to the scsi layer in the kernel.  If this device
-> > is not following the standard, how is it supposed to work at all?
-> >
-> > Does it require custom drivers for other operating systems?
-> 
-> My guess is that (with quirk entry) it will work when there is a SCSI
-> device with ID 0. If all other devices in the chain have contiguous IDs
-> they could be accessible too.
-> 
-> I can tell Windows to use its built-in mass storage driver and that works
-> to access the device with ID 0 only. I haven't yet checked with more than
-> one SCSI device in the chain.
+Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
+---
+ drivers/usb/musb/sunxi.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Does this work properly with Linux in this way with no quirk as well?
+diff --git a/drivers/usb/musb/sunxi.c b/drivers/usb/musb/sunxi.c
+index f3f76f2ac63f9b..961c858fb349e1 100644
+--- a/drivers/usb/musb/sunxi.c
++++ b/drivers/usb/musb/sunxi.c
+@@ -440,6 +440,10 @@ static u8 sunxi_musb_readb(void __iomem *addr, u32 offset)
+ 				return 0xde;
+ 
+ 			return readb(addr + SUNXI_MUSB_CONFIGDATA);
++		case MUSB_ULPI_BUSCONTROL:
++			dev_warn(sunxi_musb->controller->parent,
++				"sunxi-musb does not have ULPI bus control register\n");
++			return 0;
+ 		/* Offset for these is fixed by sunxi_musb_busctl_offset() */
+ 		case SUNXI_MUSB_TXFUNCADDR:
+ 		case SUNXI_MUSB_TXHUBADDR:
+@@ -494,6 +498,10 @@ static void sunxi_musb_writeb(void __iomem *addr, unsigned offset, u8 data)
+ 			return writeb(data, addr + SUNXI_MUSB_TXFIFOSZ);
+ 		case MUSB_RXFIFOSZ:
+ 			return writeb(data, addr + SUNXI_MUSB_RXFIFOSZ);
++		case MUSB_ULPI_BUSCONTROL:
++			dev_warn(sunxi_musb->controller->parent,
++				"sunxi-musb does not have ULPI bus control register\n");
++			return;
+ 		/* Offset for these is fixed by sunxi_musb_busctl_offset() */
+ 		case SUNXI_MUSB_TXFUNCADDR:
+ 		case SUNXI_MUSB_TXHUBADDR:
+-- 
+2.30.2
 
-And how do you know that the device will work with additional scsi
-devices?
-
-> It could/should be possible to properly support multiple targets and LUNs
-> by using a similar method to the SCM USB-SCSI converters. (Those, after a
-> special intitialisation request, take the target ID from the *upper* 4 bits
-> of CBW byte 13.)
-
-Are you sure this device actually supports this?  If so, what operating
-system does it work on?
-
-thanks,
-
-greg k-h
