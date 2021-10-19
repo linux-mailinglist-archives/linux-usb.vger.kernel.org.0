@@ -2,59 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B2C433338
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 12:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3541F433368
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 12:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234999AbhJSKKa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Oct 2021 06:10:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56704 "EHLO mail.kernel.org"
+        id S235147AbhJSKWY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Oct 2021 06:22:24 -0400
+Received: from mout.gmx.com ([74.208.4.200]:46693 "EHLO mout.gmx.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234794AbhJSKK3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 19 Oct 2021 06:10:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 66D6B61027;
-        Tue, 19 Oct 2021 10:08:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634638097;
-        bh=v3ZgfjOMlT1nq1dQKvgKBrGgWcQCUILfdrmg6uPmvpY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kRCnsSUTGajo6V3B7idUl0NpnfV69oM4fxLin2YUeCg86JwacGX3KDYE4R8K94ZqR
-         Ia2Blf9iSxqouv2XHrq4m8J/OF3EhS+TJcZj7cOMa9zne99dFTxHXenQCH5h/hO/bo
-         tKNRcxRWXjGxcgOuZ4zk/pZUFYMwMn59XzxkHBwF6TrP+8NR89iLBvRuxWPiMrUka0
-         R8CGDO6zHIHIbXQYxIfe5ksvbV62Ys9Fpt7exeADNG+j4cQPpNgGWHlOL4ChHnA03B
-         d++LMS8uRkGUVvA8AquVstS+o2xopnPhPd2188CP3KkmaUoj3Gb60wiexkp0ih37rs
-         wz+9N6oNAYMkg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mcm2R-0006k2-Sb; Tue, 19 Oct 2021 12:08:08 +0200
-Date:   Tue, 19 Oct 2021 12:08:07 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     syzbot <syzbot+76bb1d34ffa0adc03baa@syzkaller.appspotmail.com>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] divide error in usbnet_start_xmit
-Message-ID: <YW6ZB6/RePcZJai9@hovoldconsulting.com>
-References: <000000000000046acd05ceac1a72@google.com>
- <c5a75b9b-bc2b-2bd8-f57c-833e6ca4c192@suse.com>
- <YW6On2cAm1qLoidn@hovoldconsulting.com>
- <db0817c7-a918-dbb6-d6ca-e69d14d0d134@suse.com>
+        id S230042AbhJSKWY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 Oct 2021 06:22:24 -0400
+X-Greylist: delayed 301 seconds by postgrey-1.27 at vger.kernel.org; Tue, 19 Oct 2021 06:22:23 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mail.com;
+        s=dbd5af2cbaf7; t=1634638811;
+        bh=JRzVTDo3XR/y3NFnCt2TciD+vl6WRr6a1L19Bmretus=;
+        h=X-UI-Sender-Class:From:To:Subject:Date;
+        b=qPLNjo3bW0MLiUIE+MkJ1jdnlODlEivTgOGbZKl5GJ4Pu6184+DdZYsLU9QbzvFLZ
+         qD2AZn3JK9va4MSNyjNArtGQK7m7F90qHCC8Ojhejdumj9YHi8OKYdWICC7FhvEi+g
+         2hrswTeWPdJc1tY5ZINkhtdwN21EUwVdlJmJm7Go=
+X-UI-Sender-Class: 214d933f-fd2f-45c7-a636-f5d79ae31a79
+Received: from [2.124.36.225] ([2.124.36.225]) by web-mail.mail.com
+ (3c-app-mailcom-lxa12.server.lan [10.76.45.13]) (via HTTP); Tue, 19 Oct
+ 2021 12:15:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <db0817c7-a918-dbb6-d6ca-e69d14d0d134@suse.com>
+Message-ID: <trinity-d3be8a5b-2b1c-45f8-8767-cf9cf758a0c0-1634638509008@3c-app-mailcom-lxa12>
+From:   mark_k@iname.com
+To:     linux-usb@vger.kernel.org
+Subject: USB2 Link USB-SCSI converter and LUNs
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 19 Oct 2021 12:15:09 +0200
+Importance: normal
+Sensitivity: Normal
+X-Priority: 3
+X-Provags-ID: V03:K1:AejQhe/7zLrTWK05RrB67ZHOIrXs6x3KWtDChUfq3ASBNlbcVKrh5/1H9kQauJ6Ms+HAP
+ /ZJgWvEB3PkTA3o2siYrDP0IiLjAV6fsYhpnWQGtCQQhA6a08WCI4CpK93hKbUa3hY6FkzwPEMPz
+ rKOpBgDrAwm+hUdLN2EwuT4Pp1rC28hRJNOBoJjrryYGOUfuyniPc/SKoaU96jv1w9+H8W7xJzAe
+ nFTB5kFkakgbvEGywOsOPSZ9/BVVKxGm8JgddC087/XU13jgsbNdQC9SyojJbfeKFlAhBrdrOb8j
+ S0=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:JH9M/z5HUuo=:rMuLZ0JNwsRwVH7ghzgJnN
+ GMErn56hTl7f1MzIcGQQgqgeGocEUIVz2x49dRLBKrJ8mtR+ISKlT+izTyam9cTRaFZvwvr4U
+ cmu2JbszyZfhrrmvZOp4cCj5L8U/AstqUAeo9xL24LRTeK9Jgin1yRzf+NWOCmAvr/0D8Rbbe
+ Jt7U2QYB1l4nNwyJfKV/6qwLKQ9BwrNKLxTzZOge0Q0WaqIMGvucoW1piuAwn8pnLJHw/K2Qk
+ jOloSHRnP+PShY86GtP/86WZqYrRM0mbeNebnTnk+7BjLMHYYv7qqneLVe5En144uLMtoHGUJ
+ 222l7jXITAuBnHFjsh8zpYd9a7YKy+OKg9Uy4wlxWWAWI/qz901+hDKPI/BR0nujzLivR5u1P
+ drzluBxqI1sgbRUkFGhte5yYHB9sg3CgmYEE9v1ZcnSD0Y0gfZxWsaYTWvPRq1jiVYxXIsP6d
+ /h3cdUj6zzG2exhXhy6KtNEQoDjJSywrwkNPveJA54hxlolv6GBCRcLNFD0Z2w9T6Y2+hMI7M
+ 3fm1stoprmh+2JcgteAYIsc5NBmfRu2v3qeWEIZPDeko4EGr4YfC4Z+IYn9WAvbc8gvnuopbn
+ hj0FmaiNKUwuiERR7ES+hV3fbgEmZhEC097hQSL2jK3uFLyl/tGvFX79Tl+6QBM8GF0tPyEAX
+ p4J/3rX6hbj4w/6O446blNH56G6b0ujCxsqcKAT+X4J0rZ+B+3kFSyUQWWfGhCt/xj0pR1we2
+ 5VRYkvuY7Jl5e3Q4S0JHSdIGvOj5HeXwCOYKyZ5goUBtk7+Mlr9Lb02UstfkNXKYlCnyXUwVK
+ 27l5pNz
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 19, 2021 at 12:04:31PM +0200, Oliver Neukum wrote:
-> On 19.10.21 11:23, Johan Hovold wrote:
-> 
-> > Just bail out; what can you do with a 1-byte packet size? Also compare
-> > usbnet_get_endpoints() where such endpoints are ignored.
-> 
-> OK. We'd accept a 1 now, though. Can you think of a sensible lower bound?
+Hi,
 
-You can continue accepting 1 if you want, just reject zero and abort
-probe.
+I have a Core Micro Systems USB2 Link USB-SCSI converter (07B4:0380).
 
-Johan
+Adding an entry to unusual_devs.h should get it to work, just needing
+USB_PR_BULK. That should at least allow the connected device with SCSI ID 0
+to be accessed.
+
+However in order to access multiple targets and LUNs, the USB2 Link uses
+byte 13 of the command block wrapper in a special way.
+
+Normally CBW byte 13 has bCBWLUN in bits [3:0] with bits [7:4] reserved.
+The USB2 Link expects the target ID in bits [3:0] and LUN in bits [7:4].
+The advantage of that is, it should be possible to access multiple targets
+without needing to modify the USB mass storage driver. (It returns 0x06 to
+a Get Max LUN request since its SCSI ID is hard-coded to 7.)
+
+Being able to access non-zero actual LUNs would of course require changes
+to the driver.
+
+I'm just wondering, how does the usb-storage driver handle these cases:
+
+ - (What it thinks are) LUNs are not contiguous. Suppose the user has two
+   SCSI devices in the chain, one with ID 0 the other with ID 3. Would it
+   scan LUNs (which map to separate targets) 1, 2, 4, 5 and 6? Or would it
+   give up on getting no response from LUN 1?
+
+ - "LUN" 0 is not present. E.g. where the connected SCSI devices have IDs 1
+   and 3.
+
+ - When different "LUNs" are completely different devices (e.g. one a
+   CD-ROM, another a hard disk, another a tape drive).
+
