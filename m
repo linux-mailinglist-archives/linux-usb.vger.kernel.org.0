@@ -2,107 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E25F0433FE9
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 22:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C4F433FF3
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 22:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235049AbhJSUqj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Oct 2021 16:46:39 -0400
-Received: from mail-il1-f198.google.com ([209.85.166.198]:44554 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbhJSUqi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 16:46:38 -0400
-Received: by mail-il1-f198.google.com with SMTP id i11-20020a92540b000000b0025456903645so10971751ilb.11
-        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 13:44:25 -0700 (PDT)
+        id S231479AbhJSUvt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Oct 2021 16:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231314AbhJSUvt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 16:51:49 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E595AC06161C;
+        Tue, 19 Oct 2021 13:49:35 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id y15so10240436lfk.7;
+        Tue, 19 Oct 2021 13:49:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to;
+        bh=VQTDgaZM3Z/XI5zRatMxhRTR2PstCm1jooAFg0YXZC4=;
+        b=dY1aTm2iNoy1tFx3q5N4cbuYzKZv9VlKVEwYN4WYrF9cpMRAudQFCoSyufCNGjAzcH
+         ikSgV7zhOdxvLEOn3ht8CLnimRAuUOyO0PzE1BCQHBZtXkf8VTg1R7Aqzh8Ha9jSPtZd
+         +T0CQWPfTgqeawNORyT6e+6akKkN3LKA+IORdrc0KqUq0sSQNGEuB9jrcDv3jMI02T0T
+         YAW/Vw9nGxirkA5LLnHb+7/bOPAhb97A01Ng2firZRAI9V5Wtc/difEG8KihpipdVUmF
+         zOyIp2/rGhhX9YQTzptCcmXz86vEu/IE1GeMI7CKRr/JKEcy4KrkxTpHyIuEkmmbgYjH
+         QeCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=7/QuVQVY77P8PX5pIWl+8vwMQXGJf7/M09+1P7+2iO4=;
-        b=QftC/a8T4d3uEOJzNve8S/NNLtHjZ51qsuP0sCia/lMoiJMalSjqQ5jwoSmyiUzJW+
-         Mo7gT8YCbuO3eGkQ+WW5/BbjFRGLwytvxklDkpJ/UHn3o3DWI9XiHBXWyJ8zHDOEd9L+
-         zs4Q//Yn42yaTDbWodAH90jSpUBeHP9tW4Dt7mqDM5Qq7hu4bydh6MkuhMZiPCHks42H
-         jSTuZiYdhyu60h6GH3Y7jwjggjzlOQmhAkPOY3r7gbD0z1yKH2wGjyMOn5AQlDxGq1X6
-         adqQnMhn7NqEu06VDGPRXvSuXlDjDsxVzxQZ9qTFntELtYtwS8/pZm4aTRiR2PwkLTx7
-         ZWjg==
-X-Gm-Message-State: AOAM532p2zC4F/w2dPz7QqUemMhV9tveG+zoGpojI6BDttyu8kNlvZck
-        DtuD10JQ/1isA/uUKqxaPOvq3bKGJK++UqlXmH3/JcK+4LIr
-X-Google-Smtp-Source: ABdhPJwUnO5eC01NJJ+51z35GWixE8YfGC8soh8Wa0tgMNOZv2+nFmpEyYsOPA1yKxLgJczX0lhD1C/cXA/4y8x7KMx84JfdIfGJ
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to;
+        bh=VQTDgaZM3Z/XI5zRatMxhRTR2PstCm1jooAFg0YXZC4=;
+        b=HRGoeBXZ0tASwB7IRJ1aeFTa5MlatdzgtQxv4BqtHzx5+gYjuHuI9KBaxxDI+9HJk8
+         JoQahA8MXTRhp7Vp7XjhL05CjndJFfuDiaBT/8GOmrrMkWJsw5DGmRTLGLuxmZpHBgld
+         f3/Nax9LHm5TqtGvLTP61JIQ6gCHcs25w5B6swc62j/mR/0CQ6q+NkQJjpZnttDztNUp
+         NCrXUMFNb/zTQXVhkI/Fd36oUULw/TJO/Z/TOSfZMIQF0TG3gaT0C3XNwgGaEDYED0Kk
+         9h9MWl8fKDNBB3iaYloBV9hElkBSLbJxlBqpz8Bzf/FRM02x2kbwsGmWGd6oENABefBl
+         Qthw==
+X-Gm-Message-State: AOAM53363o82zs4g/zW3pCCd6A06HjEEon38+NbDn/NPz8yZUM4bWrIf
+        kmnXVcAqVackh7ewy21bgSg=
+X-Google-Smtp-Source: ABdhPJwlJSSt28V1RzEpuynAjfA5G1qn+CQfc0dggVWDWG8fO4N8qctjEvmvxDDC4Q/PLbi45IITPA==
+X-Received: by 2002:a19:4950:: with SMTP id l16mr8230829lfj.248.1634676574111;
+        Tue, 19 Oct 2021 13:49:34 -0700 (PDT)
+Received: from [192.168.1.11] ([94.103.235.181])
+        by smtp.gmail.com with ESMTPSA id bi1sm18558lfb.290.2021.10.19.13.49.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Oct 2021 13:49:33 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------Es9l7oID2AeS4qfABKBq6Ec6"
+Message-ID: <4617c408-b7f6-8861-4307-ed0ec24283ea@gmail.com>
+Date:   Tue, 19 Oct 2021 23:49:32 +0300
 MIME-Version: 1.0
-X-Received: by 2002:a6b:148:: with SMTP id 69mr19869569iob.54.1634676264799;
- Tue, 19 Oct 2021 13:44:24 -0700 (PDT)
-Date:   Tue, 19 Oct 2021 13:44:24 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001611e605cebabab5@google.com>
-Subject: [syzbot] UBSAN: array-index-out-of-bounds in ehci_hub_control
-From:   syzbot <syzbot+9df2568864dedf79db36@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.2
+Subject: Re: [syzbot] KASAN: use-after-free Read in rtl8712_dl_fw
+Content-Language: en-US
+To:     syzbot <syzbot+c55162be492189fb4f51@syzkaller.appspotmail.com>,
+        Larry.Finger@lwfinger.net, agamkohli9@gmail.com,
+        florian.c.schilhabel@googlemail.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000779cb105ceb65376@google.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <000000000000779cb105ceb65376@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+This is a multi-part message in MIME format.
+--------------Es9l7oID2AeS4qfABKBq6Ec6
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-syzbot found the following issue on:
+On 10/19/21 18:29, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    8ef1e58783b9 usb: typec: STUSB160X should select REGMAP_I2C
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1106dcfb300000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=c27d285bdb7457e2
+> dashboard link: https://syzkaller.appspot.com/bug?extid=c55162be492189fb4f51
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12725770b00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1168c158b00000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+c55162be492189fb4f51@syzkaller.appspotmail.com
+> 
 
-HEAD commit:    d999ade1cc86 Merge tag 'perf-tools-fixes-for-v5.15-2021-10..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17d85d34b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b5d8cfd89abd92bf
-dashboard link: https://syzkaller.appspot.com/bug?extid=9df2568864dedf79db36
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Ok, this driver can't be fixed.... Let's try unregister netdev before 
+doing clean up stuff to not race with ->ndo_open()
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9df2568864dedf79db36@syzkaller.appspotmail.com
-
-================================================================================
-UBSAN: array-index-out-of-bounds in drivers/usb/host/ehci-hub.c:754:39
-index 254 is out of range for type 'u32 [15]'
-CPU: 0 PID: 11514 Comm: syz-executor.1 Not tainted 5.15.0-rc5-syzkaller #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- ubsan_epilogue+0xb/0x5a lib/ubsan.c:151
- __ubsan_handle_out_of_bounds.cold+0x62/0x6c lib/ubsan.c:291
- ehci_hub_control+0x22ad/0x2720 drivers/usb/host/ehci-hub.c:754
- rh_call_control drivers/usb/core/hcd.c:683 [inline]
- rh_urb_enqueue drivers/usb/core/hcd.c:841 [inline]
- usb_hcd_submit_urb+0xcaf/0x22d0 drivers/usb/core/hcd.c:1544
- usb_submit_urb+0x86d/0x18a0 drivers/usb/core/urb.c:594
- usb_start_wait_urb+0x101/0x4c0 drivers/usb/core/message.c:58
- usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
- usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
- do_proc_control+0x40a/0x9f0 drivers/usb/core/devio.c:1165
- proc_control drivers/usb/core/devio.c:1191 [inline]
- usbdev_do_ioctl drivers/usb/core/devio.c:2540 [inline]
- usbdev_ioctl+0x10e2/0x36c0 drivers/usb/core/devio.c:2713
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fdbaec43a39
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fdbac1b9188 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007fdbaed46f60 RCX: 00007fdbaec43a39
-RDX: 0000000020000000 RSI: 00000000c0185500 RDI: 0000000000000003
-RBP: 00007fdbaec9dc5f R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe5b9cffbf R14: 00007fdbac1b9300 R15: 0000000000022000
-================================================================================
+#syz test: 
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+
+With regards,
+Pavel Skripkin
+--------------Es9l7oID2AeS4qfABKBq6Ec6
+Content-Type: text/plain; charset=UTF-8; name="ph"
+Content-Disposition: attachment; filename="ph"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvc3RhZ2luZy9ydGw4NzEyL3VzYl9pbnRmLmMgYi9kcml2
+ZXJzL3N0YWdpbmcvcnRsODcxMi91c2JfaW50Zi5jCmluZGV4IDUwNWViZWI2NDNkYy4uY2Fl
+MDQyNzJkZWZmIDEwMDY0NAotLS0gYS9kcml2ZXJzL3N0YWdpbmcvcnRsODcxMi91c2JfaW50
+Zi5jCisrKyBiL2RyaXZlcnMvc3RhZ2luZy9ydGw4NzEyL3VzYl9pbnRmLmMKQEAgLTU5NSwx
+MiArNTk1LDEyIEBAIHN0YXRpYyB2b2lkIHI4NzF4dV9kZXZfcmVtb3ZlKHN0cnVjdCB1c2Jf
+aW50ZXJmYWNlICpwdXNiX2ludGYpCiAKIAkvKiBuZXZlciBleGl0IHdpdGggYSBmaXJtd2Fy
+ZSBjYWxsYmFjayBwZW5kaW5nICovCiAJd2FpdF9mb3JfY29tcGxldGlvbigmcGFkYXB0ZXIt
+PnJ0bDg3MTJfZndfcmVhZHkpOworCWlmIChwbmV0ZGV2LT5yZWdfc3RhdGUgIT0gTkVUUkVH
+X1VOSU5JVElBTElaRUQpCisJCXVucmVnaXN0ZXJfbmV0ZGV2KHBuZXRkZXYpOyAvKiB3aWxs
+IGNhbGwgbmV0ZGV2X2Nsb3NlKCkgKi8KIAl1c2Jfc2V0X2ludGZkYXRhKHB1c2JfaW50Ziwg
+TlVMTCk7CiAJcmVsZWFzZV9maXJtd2FyZShwYWRhcHRlci0+ZncpOwogCWlmIChkcnZwcml2
+LmRydl9yZWdpc3RlcmVkKQogCQlwYWRhcHRlci0+c3VycHJpc2VfcmVtb3ZlZCA9IHRydWU7
+Ci0JaWYgKHBuZXRkZXYtPnJlZ19zdGF0ZSAhPSBORVRSRUdfVU5JTklUSUFMSVpFRCkKLQkJ
+dW5yZWdpc3Rlcl9uZXRkZXYocG5ldGRldik7IC8qIHdpbGwgY2FsbCBuZXRkZXZfY2xvc2Uo
+KSAqLwogCXI4NzEyX2ZsdXNoX3J3Y3RybF93b3JrcyhwYWRhcHRlcik7CiAJcjg3MTJfZmx1
+c2hfbGVkX3dvcmtzKHBhZGFwdGVyKTsKIAl1ZGVsYXkoMSk7Cg==
+--------------Es9l7oID2AeS4qfABKBq6Ec6--
+
