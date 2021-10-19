@@ -2,97 +2,211 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AC3433296
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 11:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E284332A8
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 11:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235154AbhJSJl0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Oct 2021 05:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235143AbhJSJlO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 05:41:14 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED405C061768
-        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 02:39:01 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id r15so17879053qkp.8
-        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 02:39:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=h7Ka/8DlpkXEXF23rPgOfJJ3SyquA2FhD5HYDsybiG4=;
-        b=TOvN/3L74NxJ8jkZLAwc1HWcAigE5PqgL50bgmFqgfF5N3Ni/F/hFF6HKKLKTN31yN
-         HevaAXYbPfypt8hhKvSPyehT5ALdXqczNk+5xUwtC+i5sgHXh2uIQwAecZjfCaWU8ix6
-         IP3iNNDeKzM9Rarn67S7Y6Q5meavaw7Mpk+sez5Jm9gTXVkS2K7rH0HxN0wGBD1vTEZW
-         SlZ7Ohjm5TDffwxVe9psHKkZrw9F8ewS3UJdvRp48BugnVC9N6o6tGt7kOuD9dBL9WOI
-         l1dbXlU20FuuDCR1G9eGV6dpPzPq/obtSd+vSUmjw4dvgQ3M4KndmuUgzevCd5/KLP2j
-         AvJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=h7Ka/8DlpkXEXF23rPgOfJJ3SyquA2FhD5HYDsybiG4=;
-        b=tFWEh4aB1t2MHmgJ01YFPP435xx6X77iZrnj/y8YoP7XtTN9Qg+b1YN9qT2fEhTsw6
-         fW7ol+Lq9xYeIiwYTGGdwsdRAdizp/71vu8/OuOBS4W7cMH7qxkxMHic5xdYc8RwYBAR
-         jNBBl9bau2xRKqiFGTp6J0V4GPzX5mFyUEl72wCagOsZ+Oki4vB9FwLPf9DsKNVOyZLq
-         NhiM57amGXFg73X+pUuKzplxSSN/5GyvQsztZqt58bif3jINidXPjMDS+XGPC+nzkvFA
-         yIDX0/ZxQ3JqYad/7rYhcGvaVNxzc/d40GWaD9XbFm/F+hwJVlM4jm9Z44+YWmfFQZEb
-         nadg==
-X-Gm-Message-State: AOAM530wD3gGEwkP51lVmIvvHA53UyLOa1wbo07fYrAs4ZHsVrraWjXQ
-        29aQJS4fTlSecbhoyxKb4/sn58goN3q9WUO0lOGbxHPrxg0=
-X-Google-Smtp-Source: ABdhPJzMH7/Viv+gmOFi/wRxRbcc549EbhNxq1WBmFuuCl5Y1sIaNw3hPc5P9A8SHm6QnP1HNGNAvecvirmJS/oiL6w=
-X-Received: by 2002:a02:6f5d:: with SMTP id b29mr3319085jae.113.1634636331013;
- Tue, 19 Oct 2021 02:38:51 -0700 (PDT)
+        id S235045AbhJSJl4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Oct 2021 05:41:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46194 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234808AbhJSJl4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 Oct 2021 05:41:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 20D156137E;
+        Tue, 19 Oct 2021 09:39:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1634636383;
+        bh=jkGX3Ba0dI/Q+qkOLWKijikhjoMcZNgzHpzCv8SdNw0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zCaDdf4/QaBkb2Nty9jkGINZ+kOMlWcqrj9lsZaNZ2Bo+gh5av/xXWNVOppl8y2Nm
+         cVHFNIFxrjHm8ipaEGV1tOPdnwBmWE6IGN+cdXIQZYo2zgBrjsW2aBICUoi/wGbtj8
+         0m5bKEYHPM9i9WkzO9wccw4Xl4lyOiAGAnW44rfU=
+Date:   Tue, 19 Oct 2021 11:39:41 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Jack Pham <jackp@quicinc.com>
+Subject: Re: [PATCH v11 3/3] usb: gadget: add configfs trace events
+Message-ID: <YW6SXYrgTpz1OUu0@kroah.com>
+References: <1634629473-15411-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1634629473-15411-4-git-send-email-quic_linyyuan@quicinc.com>
 MIME-Version: 1.0
-Received: by 2002:a92:c7c6:0:0:0:0:0 with HTTP; Tue, 19 Oct 2021 02:38:50
- -0700 (PDT)
-Reply-To: megaritalouisdrayfu199@yahoo.com
-From:   "Mrs. Margarita Louis-Dreyfus." <anniewei112@gmail.com>
-Date:   Mon, 18 Oct 2021 21:38:50 -1200
-Message-ID: <CAGT4pMkzKn8mfeY05OAG04CCAxodKEVDUk46D=O7cfK8+n1=tA@mail.gmail.com>
-Subject: Charitable funds to help the less privilege!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1634629473-15411-4-git-send-email-quic_linyyuan@quicinc.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=20
-Hello,
+On Tue, Oct 19, 2021 at 03:44:32PM +0800, Linyu Yuan wrote:
+> in case of USB Gadget functions configure through configfs from
+> a complicated user space program, when switch function from one to another,
+> if it failed, it is better to find out what action was done to configfs
+> from user space program.
+> 
+> this change add some trace events which enable/disable a function,
+> it including add/remove configuration, bind/unbind UDC,
+> and some attribute files write operation.
+> 
+> Suggested-by: Felipe Balbi <balbi@kernel.org>
+> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> ---
+> v2: fix two issue Reported-by: kernel test robot <lkp@intel.com>
+> v3: do not move private structure to configfs.h
+> v4: add missing new file configfs_trace.h
+> v5: lost some change of v2, add it again
+> v6: fix comments from Greg Kroah-Hartman
+> v7: three minor changes according to coding rules
+> v8: change two trace location
+> v9: fix when config is empty
+> v10: fix wrong api in v9
+> v11: split to 3 changes, remove read trace, change trace event print format
+> 
+>  drivers/usb/gadget/configfs.c       |  13 +++
+>  drivers/usb/gadget/configfs_trace.h | 166 ++++++++++++++++++++++++++++++++++++
+>  2 files changed, 179 insertions(+)
+>  create mode 100644 drivers/usb/gadget/configfs_trace.h
+> 
+> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+> index 36c611d..9b063bb 100644
+> --- a/drivers/usb/gadget/configfs.c
+> +++ b/drivers/usb/gadget/configfs.c
+> @@ -102,6 +102,10 @@ struct gadget_config_name {
+>  	struct list_head list;
+>  };
+>  
+> +#define CONFIGFS_TRACE_STRING
+> +#define CREATE_TRACE_POINTS
+> +#include "configfs_trace.h"
+> +
+>  #define USB_MAX_STRING_WITH_NULL_LEN	(USB_MAX_STRING_LEN+1)
+>  
+>  static int usb_string_copy(const char *s, char **s_copy)
+> @@ -210,6 +214,7 @@ static ssize_t gadget_dev_desc_bcdDevice_store(struct config_item *item,
+>  		return ret;
+>  
+>  	to_gadget_info(item)->cdev.desc.bcdDevice = cpu_to_le16(bcdDevice);
+> +	trace_gadget_dev_desc_bcdDevice_store(to_gadget_info(item));
+>  	return len;
+>  }
+>  
+> @@ -227,6 +232,7 @@ static ssize_t gadget_dev_desc_bcdUSB_store(struct config_item *item,
+>  		return ret;
+>  
+>  	to_gadget_info(item)->cdev.desc.bcdUSB = cpu_to_le16(bcdUSB);
+> +	trace_gadget_dev_desc_bcdUSB_store(to_gadget_info(item));
+>  	return len;
+>  }
+>  
+> @@ -248,6 +254,7 @@ static int unregister_gadget(struct gadget_info *gi)
+>  {
+>  	int ret;
+>  
+> +	trace_unregister_gadget(gi);
+>  	if (!gi->composite.gadget_driver.udc_name)
+>  		return -ENODEV;
+>  
+> @@ -294,6 +301,7 @@ static ssize_t gadget_dev_desc_UDC_store(struct config_item *item,
+>  			goto err;
+>  		}
+>  	}
+> +	trace_gadget_dev_desc_UDC_store(gi);
+>  	mutex_unlock(&gi->lock);
+>  	return len;
+>  err:
+> @@ -336,6 +344,7 @@ static ssize_t gadget_dev_desc_max_speed_store(struct config_item *item,
+>  
+>  	gi->composite.gadget_driver.max_speed = gi->composite.max_speed;
+>  
+> +	trace_gadget_dev_desc_max_speed_store(gi);
+>  	mutex_unlock(&gi->lock);
+>  	return len;
+>  err:
+> @@ -459,6 +468,7 @@ static int config_usb_cfg_link(
+>  	list_add_tail(&f->list, &cfg->func_list);
+>  	ret = 0;
+>  out:
+> +	trace_config_usb_cfg_link(gi);
+>  	mutex_unlock(&gi->lock);
+>  	return ret;
+>  }
+> @@ -490,6 +500,7 @@ static void config_usb_cfg_unlink(
+>  		if (f->fi == fi) {
+>  			list_del(&f->list);
+>  			usb_put_function(f);
+> +			trace_config_usb_cfg_unlink(gi);
+>  			mutex_unlock(&gi->lock);
+>  			return;
+>  		}
+> @@ -525,6 +536,7 @@ static ssize_t gadget_config_desc_MaxPower_store(struct config_item *item,
+>  	if (DIV_ROUND_UP(val, 8) > 0xff)
+>  		return -ERANGE;
+>  	cfg->c.MaxPower = val;
+> +	trace_gadget_config_desc_MaxPower_store(cfg_to_gadget_info(cfg));
+>  	return len;
+>  }
+>  
+> @@ -551,6 +563,7 @@ static ssize_t gadget_config_desc_bmAttributes_store(struct config_item *item,
+>  				USB_CONFIG_ATT_WAKEUP))
+>  		return -EINVAL;
+>  	cfg->c.bmAttributes = val;
+> +	trace_gadget_config_desc_bmAttributes_store(cfg_to_gadget_info(cfg));
+>  	return len;
+>  }
+>  
+> diff --git a/drivers/usb/gadget/configfs_trace.h b/drivers/usb/gadget/configfs_trace.h
+> new file mode 100644
+> index 0000000..74283f0
+> --- /dev/null
+> +++ b/drivers/usb/gadget/configfs_trace.h
+> @@ -0,0 +1,166 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#ifdef CONFIGFS_TRACE_STRING
+> +#undef CONFIGFS_TRACE_STRING
+> +
+> +#define MAX_CONFIGURAITON_STR_LEN	512
+> +static __maybe_unused char *configfs_trace_string(struct gadget_info *gi)
+> +{
+> +	struct usb_configuration *uc;
+> +	struct config_usb_cfg *cfg;
+> +	struct usb_function *f;
+> +	static char trs[MAX_CONFIGURAITON_STR_LEN];
+> +	size_t len = MAX_CONFIGURAITON_STR_LEN - 1;
+> +	int n = 0;
+> +
+> +	if (list_empty(&gi->cdev.configs)) {
+> +		strcat(trs, "empty");
+> +		return trs;
+> +	}
 
-I am sorry to encroach into your privacy in this manner, my name
-Margarita Louis-Dreyfus , I find it pleasurable to offer you my
-partnership in business, i only pray at this time that your email
-address is still valid. I want to solicit your attention to receive
-money on my behalf for humanitarian project to help the less
-priviledge.
+What protects this list from changing why you are accessing it?  Where
+is the lock here?
 
-The purpose of my contacting you is because my status would not permit
-me to do this alone. Given my current state of health, I have decided
-to donate Ninety -Eight Million United State Dollars to establish a
-foundation with your help to reach out to the less privilege, orphans,
-sick and homeless people in your country who will receive their
-blessings as i promised my God before i leave this earth.
+> +
+> +	list_for_each_entry(uc, &gi->cdev.configs, list) {
+> +		cfg = container_of(uc, struct config_usb_cfg, c);
+> +
+> +		n += scnprintf(trs + n, len - n,
+> +			"{%d %02x %d ",
+> +			uc->bConfigurationValue,
+> +			uc->bmAttributes,
+> +			uc->MaxPower);
+> +
+> +		list_for_each_entry(f, &cfg->func_list, list)
+> +			n += scnprintf(trs + n, len - n, "%s,", f->name);
+> +
+> +		list_for_each_entry(f, &cfg->c.functions, list)
+> +			n += scnprintf(trs + n, len - n, "%s,", f->name);
 
-I got your contact through my personal search, you were revealed as
-being quite astute in private entrepreneurship, and i have no doubt
-that you can handle this huge financial transaction. Please contact my
-executor for more information:
+Same for all of these list entries, what happens if you are tracing and
+remove a device at the same time?  Or add a device?
 
-Mr. Ford Spencer(Attorney at Law).
-For: Mrs. Margarita Louis-Dreyfus
-LEGAL DEPARTMENT LAWSON & ASSOCIATES
-(JUSTICE, FAIRPLAY & EQUITY)
-Email: fordspencer828@yahoo.com, fordspencereqs828@gmail.com
-Office: +1-970-414-1400
-+1-702-714-3422
-Mobile: +1 916 269 2733
-Fax: +1-970-414-1433
-=C2=AE Property of Steven C Spence PA.
+No locks feels very very wrong to me, I need some "proof" this is safe
+to do.
 
-Your earliest response to this letter will be appreciated.
+thanks,
 
-Kind Regards,
-
-Mrs. Margarita Louis-Dreyfus.
+greg k-h
