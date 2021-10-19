@@ -2,90 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3541F433368
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 12:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75DE4433384
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 12:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235147AbhJSKWY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Oct 2021 06:22:24 -0400
-Received: from mout.gmx.com ([74.208.4.200]:46693 "EHLO mout.gmx.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230042AbhJSKWY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 19 Oct 2021 06:22:24 -0400
-X-Greylist: delayed 301 seconds by postgrey-1.27 at vger.kernel.org; Tue, 19 Oct 2021 06:22:23 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mail.com;
-        s=dbd5af2cbaf7; t=1634638811;
-        bh=JRzVTDo3XR/y3NFnCt2TciD+vl6WRr6a1L19Bmretus=;
-        h=X-UI-Sender-Class:From:To:Subject:Date;
-        b=qPLNjo3bW0MLiUIE+MkJ1jdnlODlEivTgOGbZKl5GJ4Pu6184+DdZYsLU9QbzvFLZ
-         qD2AZn3JK9va4MSNyjNArtGQK7m7F90qHCC8Ojhejdumj9YHi8OKYdWICC7FhvEi+g
-         2hrswTeWPdJc1tY5ZINkhtdwN21EUwVdlJmJm7Go=
-X-UI-Sender-Class: 214d933f-fd2f-45c7-a636-f5d79ae31a79
-Received: from [2.124.36.225] ([2.124.36.225]) by web-mail.mail.com
- (3c-app-mailcom-lxa12.server.lan [10.76.45.13]) (via HTTP); Tue, 19 Oct
- 2021 12:15:09 +0200
+        id S235225AbhJSKdT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Oct 2021 06:33:19 -0400
+Received: from mail-il1-f198.google.com ([209.85.166.198]:39761 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235208AbhJSKdS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 06:33:18 -0400
+Received: by mail-il1-f198.google.com with SMTP id b16-20020a92ce10000000b0025936b43fc2so9866932ilo.6
+        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 03:31:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=hXd5vu2HVp+c/936Z+UfrXr6vwZDrrnzOmy4lULgqWc=;
+        b=NhdeFLeuktzMSsifh/vq/Er0zWDCu0hW3xAlyPAJnGBbCJwvci87RVVKqgvIPdn5b2
+         WpvDnnaO36a3s9RXVPijQPeGNQZocvbQKOU/ZH2yj9QlLZJSBBcA0u6nktKmOXFRDte2
+         uNWWDfT91dpH5McmB0a1jqY6PdnPZeGM+cSCgrW/gbUgi5Vph/Ra5/4rAh8N4ZvtIcGQ
+         o0X0VZ3z4ug5gF5833+DNtGPvp2M8yGyrN2EmpVJnDCJrt5AOxiEYEymTI8HbCxJ9W8f
+         jg30YyaWtrjNCfoWVSsQAgZW+6LfD+HSB2ZiBffYWfQmcY3VRZGBXWHVqcuLnjtFXtFJ
+         K7Lw==
+X-Gm-Message-State: AOAM532PbTATg1r4G3RKWr8Rz9T9S5rc75Gb5vkWJ2w1/jMRRJGR07AP
+        PWBILu0ogr6NdUeR3Pm/DKLylqes2pQO3voHIZCcN8TsCLFt
+X-Google-Smtp-Source: ABdhPJyFNinPrD+dC0GJvpY6bw/xoDh7KcP4ullLmIObAIatN5O9PX8AXOag91eqZ/lVKAJcOTn1fWXsLcc8pv2b121jymSzmI1v
 MIME-Version: 1.0
-Message-ID: <trinity-d3be8a5b-2b1c-45f8-8767-cf9cf758a0c0-1634638509008@3c-app-mailcom-lxa12>
-From:   mark_k@iname.com
-To:     linux-usb@vger.kernel.org
-Subject: USB2 Link USB-SCSI converter and LUNs
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 19 Oct 2021 12:15:09 +0200
-Importance: normal
-Sensitivity: Normal
-X-Priority: 3
-X-Provags-ID: V03:K1:AejQhe/7zLrTWK05RrB67ZHOIrXs6x3KWtDChUfq3ASBNlbcVKrh5/1H9kQauJ6Ms+HAP
- /ZJgWvEB3PkTA3o2siYrDP0IiLjAV6fsYhpnWQGtCQQhA6a08WCI4CpK93hKbUa3hY6FkzwPEMPz
- rKOpBgDrAwm+hUdLN2EwuT4Pp1rC28hRJNOBoJjrryYGOUfuyniPc/SKoaU96jv1w9+H8W7xJzAe
- nFTB5kFkakgbvEGywOsOPSZ9/BVVKxGm8JgddC087/XU13jgsbNdQC9SyojJbfeKFlAhBrdrOb8j
- S0=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:JH9M/z5HUuo=:rMuLZ0JNwsRwVH7ghzgJnN
- GMErn56hTl7f1MzIcGQQgqgeGocEUIVz2x49dRLBKrJ8mtR+ISKlT+izTyam9cTRaFZvwvr4U
- cmu2JbszyZfhrrmvZOp4cCj5L8U/AstqUAeo9xL24LRTeK9Jgin1yRzf+NWOCmAvr/0D8Rbbe
- Jt7U2QYB1l4nNwyJfKV/6qwLKQ9BwrNKLxTzZOge0Q0WaqIMGvucoW1piuAwn8pnLJHw/K2Qk
- jOloSHRnP+PShY86GtP/86WZqYrRM0mbeNebnTnk+7BjLMHYYv7qqneLVe5En144uLMtoHGUJ
- 222l7jXITAuBnHFjsh8zpYd9a7YKy+OKg9Uy4wlxWWAWI/qz901+hDKPI/BR0nujzLivR5u1P
- drzluBxqI1sgbRUkFGhte5yYHB9sg3CgmYEE9v1ZcnSD0Y0gfZxWsaYTWvPRq1jiVYxXIsP6d
- /h3cdUj6zzG2exhXhy6KtNEQoDjJSywrwkNPveJA54hxlolv6GBCRcLNFD0Z2w9T6Y2+hMI7M
- 3fm1stoprmh+2JcgteAYIsc5NBmfRu2v3qeWEIZPDeko4EGr4YfC4Z+IYn9WAvbc8gvnuopbn
- hj0FmaiNKUwuiERR7ES+hV3fbgEmZhEC097hQSL2jK3uFLyl/tGvFX79Tl+6QBM8GF0tPyEAX
- p4J/3rX6hbj4w/6O446blNH56G6b0ujCxsqcKAT+X4J0rZ+B+3kFSyUQWWfGhCt/xj0pR1we2
- 5VRYkvuY7Jl5e3Q4S0JHSdIGvOj5HeXwCOYKyZ5goUBtk7+Mlr9Lb02UstfkNXKYlCnyXUwVK
- 27l5pNz
+X-Received: by 2002:a05:6e02:1583:: with SMTP id m3mr17715899ilu.304.1634639466240;
+ Tue, 19 Oct 2021 03:31:06 -0700 (PDT)
+Date:   Tue, 19 Oct 2021 03:31:06 -0700
+In-Reply-To: <28d9989c-4a80-daf7-d0e0-ae8e56b6e4d9@suse.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b89ea805ceb228dd@google.com>
+Subject: Re: [syzbot] divide error in genelink_tx_fixup
+From:   syzbot <syzbot+a6ec4dd9d38cb9261a77@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        oneukum@suse.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hello,
 
-I have a Core Micro Systems USB2 Link USB-SCSI converter (07B4:0380).
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Adding an entry to unusual_devs.h should get it to work, just needing
-USB_PR_BULK. That should at least allow the connected device with SCSI ID 0
-to be accessed.
+Reported-and-tested-by: syzbot+a6ec4dd9d38cb9261a77@syzkaller.appspotmail.com
 
-However in order to access multiple targets and LUNs, the USB2 Link uses
-byte 13 of the command block wrapper in a special way.
+Tested on:
 
-Normally CBW byte 13 has bCBWLUN in bits [3:0] with bits [7:4] reserved.
-The USB2 Link expects the target ID in bits [3:0] and LUN in bits [7:4].
-The advantage of that is, it should be possible to access multiple targets
-without needing to modify the USB mass storage driver. (It returns 0x06 to
-a Get Max LUN request since its SCSI ID is hard-coded to 7.)
+commit:         c03fb16b Merge 5.15-rc6 into usb-next
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c27d285bdb7457e2
+dashboard link: https://syzkaller.appspot.com/bug?extid=a6ec4dd9d38cb9261a77
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=10d634e8b00000
 
-Being able to access non-zero actual LUNs would of course require changes
-to the driver.
-
-I'm just wondering, how does the usb-storage driver handle these cases:
-
- - (What it thinks are) LUNs are not contiguous. Suppose the user has two
-   SCSI devices in the chain, one with ID 0 the other with ID 3. Would it
-   scan LUNs (which map to separate targets) 1, 2, 4, 5 and 6? Or would it
-   give up on getting no response from LUN 1?
-
- - "LUN" 0 is not present. E.g. where the connected SCSI devices have IDs 1
-   and 3.
-
- - When different "LUNs" are completely different devices (e.g. one a
-   CD-ROM, another a hard disk, another a tape drive).
-
+Note: testing is done by a robot and is best-effort only.
