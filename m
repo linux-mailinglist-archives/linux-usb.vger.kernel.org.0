@@ -2,127 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC50432D53
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 07:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B672E432D59
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 07:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233383AbhJSFlZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Oct 2021 01:41:25 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:48450 "EHLO m43-7.mailgun.net"
+        id S229692AbhJSFnu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Oct 2021 01:43:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34142 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233351AbhJSFlX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 19 Oct 2021 01:41:23 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1634621951; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=FvSG1JjoiOkVx48jhYdHGI+1T4oq9+2kuA3u8qL+q48=; b=E66nN8h0GnJdXi/NawjEyGRSS1Q4bIZk+VP2MCT4dxxFXtPkyQ3skjEnT9HHNxw+CHnarm4x
- JjfMbEBrHZTcYgmt7F7VDMpPLgiQwtNFSgAagk6ptepzuelYDzciU8MfNp4eknxg2BC+iM/s
- WhHDbsGnkSC2jgh/ALeAhHrntN4=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 616e59ed14914866fa5ba48b (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 19 Oct 2021 05:38:53
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 6F3FBC43618; Tue, 19 Oct 2021 05:38:52 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 759EEC43460;
-        Tue, 19 Oct 2021 05:38:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 759EEC43460
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Date:   Mon, 18 Oct 2021 22:38:48 -0700
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Wesley Cheng <wcheng@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH] usb: dwc3: gadget: Skip resizing EP's TX FIFO if already
- resized
-Message-ID: <20211019053848.GC16586@jackp-linux.qualcomm.com>
-References: <20210909083120.15350-1-jackp@codeaurora.org>
- <6a4bb7a9-2c63-5e1e-f4fc-a5bbc7aaa168@synopsys.com>
- <db0664a9-575f-1c6a-2efc-ec8372e2f1d4@codeaurora.org>
- <6538dd76-5dea-1e31-9459-657898be6d8f@synopsys.com>
- <926df659-7e31-9504-9752-a206f1eb8eaf@codeaurora.org>
- <56339fa2-e476-0f5b-9625-7016294e6be7@synopsys.com>
- <20211015005101.GA16586@jackp-linux.qualcomm.com>
- <9ecf98e9-0700-3a38-d056-5479f5188f4c@synopsys.com>
- <20211018072856.GB16586@jackp-linux.qualcomm.com>
- <205c4af2-37dd-6dbf-12ab-5111fadab530@synopsys.com>
+        id S229527AbhJSFnt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 Oct 2021 01:43:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0065C6108E;
+        Tue, 19 Oct 2021 05:41:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1634622097;
+        bh=XalDn+8gjf9zDy7jBCLgBK1qz12i+bCTlsxPbuf4wqI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bUsFxtkvmXR9r6YrWZMz3sQyURz2futjS79nFFv/z+a8NPnJQ9A36pTvfP7yxcr8e
+         ExZ9zK9/y8pbcfqZkYHOy2BjAvt+1pUlCkQUL22ApR99gPpvd5C5uIAjA5ZJahQZfA
+         f4hf6VUYb8kFde8nqMhs2NRgztte//zeySePoS8E=
+Date:   Tue, 19 Oct 2021 07:41:34 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Subject: Re: [PATCH 00/22] Explicitly deny IRQ0 in the USB host drivers
+Message-ID: <YW5ajmF67RjuD7l5@kroah.com>
+References: <20211018183930.8448-1-s.shtylyov@omp.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <205c4af2-37dd-6dbf-12ab-5111fadab530@synopsys.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20211018183930.8448-1-s.shtylyov@omp.ru>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 19, 2021 at 02:38:30AM +0000, Thinh Nguyen wrote:
-> Jack Pham wrote:
-> > On Fri, Oct 15, 2021 at 10:20:48PM +0000, Thinh Nguyen wrote:
-> >> TX endpoints should have non-zero GTXFIFOSIZ. Using the register as a
-> >> flag to check whether it's been resized is not ok. Also, what happened
-> >> after resizing the txfifo? Do you restore its previous default value?
-> > 
-> > The choice to use the resizing algorithm is a fixed setting determined
-> > by device property.  So if it is enabled for a particular platform
-> > instance, it means we don't intend to use any of the default values.
-> > All the registers will get cleared to 0 upon every Set Configuration so
-> > that each EP enable call thereafter will be starting from a clean slate.
-> 
-> Some fields of GTXFIFOSIZ may not get cleared. Depends on the controller
-> version, we introduce different fields (as the case for DWC32 and
-> DWC31). So this may not apply for all the time. I just noticed that the
-> entire GTXFIFOSIZ was written with 0. Please only write to the specific
-> fields with proper macros.
+On Mon, Oct 18, 2021 at 09:39:08PM +0300, Sergey Shtylyov wrote:
+> Here are 22 patches against the 'usb-next' branch of Greg KH's 'usb.git' repo.
+> The affected drivers use platform_get_irq() which can return IRQ0 (considered
+> invalid, according to Linus) that means broken HCD when passed to usb_add_hcd()
+> called at the end of the probe methods. I think that the solution to this issue
+> is either explicitly deny or accept IRQ0 in usb_add_hcd()... /but/ here's this
+> patch set to get the things going...
 
-Hmm, I thought Wesley's original change already takes care to do that:
+Why not fix the root of the problem for your platform that is failing to
+assign a valid irq for the device?
 
-void dwc3_gadget_clear_tx_fifos(struct dwc3 *dwc)
-{
-...
-	/* Clear existing TXFIFO for all IN eps except ep0 */
-	for (num = 3; num < min_t(int, dwc->num_eps, DWC3_ENDPOINTS_NUM);
-             num += 2) {
-		dep = dwc->eps[num];
-		/* Don't change TXFRAMNUM on usb31 version */
-		size = DWC3_IP_IS(DWC3) ? 0 :
-			dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(num >> 1)) &
-                		DWC31_GTXFIFOSIZ_TXFRAMNUM;
+Are you going to make this change to all callers of this function in the
+kernel tree?
 
-		dwc3_writel(dwc->regs, DWC3_GTXFIFOSIZ(num >> 1), size);
-		dep->flags &= ~DWC3_EP_TXFIFO_RESIZED;
-	}
-	dwc->num_ep_resized = 0;
-}
+thanks,
 
-Just before the write, the read is masked with the TXFRAMNUM bit in case
-of !DWC3, i.e. DWC31 or DWC32.  The rest would be 0'ed out.  Sorry if my
-previous reply implied the entire register was written as 0.
-
-> > I can go ahead with V2 of this patch using this flag to be more clear.
-> > 
-> 
-> I think using a flag is clearer also.
-
-Thanks, and appreciate the reviewed-by you already replied with for v2!
-
-Jack
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+greg k-h
