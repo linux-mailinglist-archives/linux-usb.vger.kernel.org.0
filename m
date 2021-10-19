@@ -2,219 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 078924334E9
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 13:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB3E43365C
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 14:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235353AbhJSLnL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Oct 2021 07:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235291AbhJSLnH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 07:43:07 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E42C061765
-        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 04:40:54 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id g36so6822811lfv.3
-        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 04:40:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=p/y6DgAZycykowwrleZpy70Yak++qIhNqJ9ImugcYMs=;
-        b=gbZb/rIEkq16uEpMdDfbn531uPXxDE2vXRTZ1At7zc8FyijjHf+TaWP9WSCNsx9CRl
-         Ax+uAwkmd3zCdbRdDaM3dpQ6QH2wtz6LdoMLA6+gjkzDI8FsGa3Gg4WLu7V9K5SrUrby
-         y6A+UktAxyprVLbdSpurxxaZ8mnWtv03QgVC25vrqwdz6F5CjpkyH0G67ZL5o2xSalbx
-         z2YLwvEkGXJDZVRENSUyiANgZXnd7Hl65An187cV1TSi/tcYxCoWRVEqIP0BwzqCyQr0
-         hoZBxk1g0lrSFu4sw+cYxe+pvM8G9j1I2iiX+c9B9ryltLhmQtiX2zDR77yR1QolGdKK
-         MOng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=p/y6DgAZycykowwrleZpy70Yak++qIhNqJ9ImugcYMs=;
-        b=T7wy/411o5LmD6fK3wY1FCBlrtew0xb+hAY5Qwl6MJ1/WL+oSlQjj6p8Mhq4eClWOM
-         E4D1SDe2+cyZDTWFD1BgmiVkZThXOAqsYErTXyZtz517xVEErGAHgrMVwfA0WXkERUv7
-         y8VJWlEeSrKx6xZDcj2FnqRWESbxHro816KOPSfrjvWrsKAPeOrg2ayin8aXPC0wB9Mp
-         skmHClv2fCdMwV+ukwwhoQogdQkkTHKN5SDb/EcqV/OVmltwsWojG+AbrPc3ga/t97ps
-         JzWf1Jfz5phPrj1lC6V7z3f4ym2U72DrntjIo6VKaaPdZX3lhRGwvlJtZPklQesilHzA
-         p0bg==
-X-Gm-Message-State: AOAM530RyqcEHhK6XMDCtzK9BqW6AdTdyEwcWxOxd7GMjEbwiBTdqxwQ
-        0Cg832o9Q1ESAttUOuPjnZKz35ikdr4tSg1vEdI7Uw==
-X-Google-Smtp-Source: ABdhPJyiZ8hxPaWs5ZGwktR/58DXEHsnrg2iCZG7+dtLEFQZezq+DvEjCTIwbhL0fm341kLJAfk/05h60QX3kuXQ9G4=
-X-Received: by 2002:a05:6512:3084:: with SMTP id z4mr5314051lfd.167.1634643653278;
- Tue, 19 Oct 2021 04:40:53 -0700 (PDT)
+        id S235513AbhJSMzn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Oct 2021 08:55:43 -0400
+Received: from mout.gmx.com ([74.208.4.201]:41893 "EHLO mout.gmx.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230097AbhJSMzn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 Oct 2021 08:55:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mail.com;
+        s=dbd5af2cbaf7; t=1634648009;
+        bh=cuNcUyBANEr5RzDOn6B7FXOi7Jc495+2pjTKnnD/mNs=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=0vd84S6F2Bl9BEZdOijj4M47HyQYXvPjVDfddRVgTnEasUTvOgs+ZhVmKXalTgUXa
+         4uxtEiUvE+NXIVEJO2qFeq4xJo3TT7hdM2ercZKDFN67pat7Uo3blU+/6Adxpf1GHM
+         ViFlXJR7mzqbhbFgJLZoHSKTzQbyhiNiDCfDdDgk=
+X-UI-Sender-Class: 214d933f-fd2f-45c7-a636-f5d79ae31a79
+Received: from [2.124.36.225] ([2.124.36.225]) by web-mail.mail.com
+ (3c-app-mailcom-lxa13.server.lan [10.76.45.14]) (via HTTP); Tue, 19 Oct
+ 2021 14:53:29 +0200
 MIME-Version: 1.0
-References: <20210926224058.1252-1-digetx@gmail.com> <20210926224058.1252-21-digetx@gmail.com>
- <CAPDyKFoF2QxZss_h9B1NFqOqgeF=TQ6LajCedGiJ9_P8X5M0NA@mail.gmail.com>
- <0bcbcd3d-2154-03d2-f572-dc9032125c26@gmail.com> <CAPDyKFohA9iu2UQfwoc0pCrCGupdwnUTWjKOtP09_C2KaFSo8w@mail.gmail.com>
- <073114ea-490b-89a9-e82d-852b34cb11df@gmail.com>
-In-Reply-To: <073114ea-490b-89a9-e82d-852b34cb11df@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 19 Oct 2021 13:40:16 +0200
-Message-ID: <CAPDyKFoOMvEW0o6=-_bYKhwUcbfeTD4qu-K2tfkdXiR0bErHsw@mail.gmail.com>
-Subject: Re: [PATCH v13 20/35] mtd: rawnand: tegra: Add runtime PM and OPP support
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <trinity-7db5ef0c-99a3-4fa0-a1d7-1e57c80cc4ff-1634648008985@3c-app-mailcom-lxa13>
+From:   mark_k@iname.com
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: USB2 Link USB-SCSI converter and LUNs
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 19 Oct 2021 14:53:29 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <YW6pjieI5UwOM9LW@kroah.com>
+References: <trinity-d3be8a5b-2b1c-45f8-8767-cf9cf758a0c0-1634638509008@3c-app-mailcom-lxa12>
+ <YW6pjieI5UwOM9LW@kroah.com>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:V/sR9l/hSEgOUTsH90YDdqEtUGPW3hnGMAmy3zK5YeVn6nKWN8//LLSJ8uTZSj1qTrzAs
+ MpyFxygCqIvQMdUFOnEEqrrKjchsU+kiXMJQE/ATSMJdRE0pdPRwqppDhgbOlyIdRZGhnuPHkdhM
+ GIthSyGtLCSx+ifuaWTTM7VKMPj97UHaBHX/Dim5xSekS9Dvh36x9bQt3z3vFapxEPpaqeo1eAQ2
+ sfsp6+4v3cTOeQfOeasbsMvWNkfIIupUA3yEYD/qOj+Z01HW3pBhLIGhtL2g8MtTwWLOzSy1eo0c
+ bI=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:daJWWoehd9Q=:Sv8ZyuJM7Gbkq8uQwqDtF5
+ koWizdQUoAilVFb6RIXstyg4qUU+wVyIU0aUFC3ClIBhujUv9X+rKScCXQQNuqeO6v3qJQMnu
+ qQOeIM6PzQDg6pMlFhmGirPjSB2p4r/UOyQxlE9z1k3xPqqi2Fh649cNBFeIJfCOYH179dx5X
+ 68ZaV8wJ949ntxTdHAW42pA5RJ4T5Ge9+NL9Prm2qzKOzzT0VqkURtRrCYcgZOivyp421uY56
+ YDjSoUC6z2ur4EtVL/O843CgEz6bdo2BzlVebxnic3uedW5fzSCSuSlTLpC9EidFdvHF4upTy
+ jNMjPmFRs9nfgAJiNWUHQA7h3+PEzLpH3UZWBYod7yGbnBYyKZY6mHwbBijnqzTq56rvkR1ed
+ aLDSPl1Mh4fTdSGFqUBEIP1WrGB1BryTpKgLXLCE4/mSnfKbui4qRXFwjCgbef4PnlnFIp+JB
+ SMKoFnvWqhEww1dNjMSZ/5CVhGWNvY5L6hkI0XFEhzo9Pqoiji5uNB2Z2tpV8+WzYIUpOhd8n
+ 52ZAFDd/iSHgz7ipESLCJ3lKdV+ij5Y8PcyN2ORmhuGyaYDqEvBzh1K96fQT9tJiVurgngMGQ
+ DYoN7tVY8Hz/RFLQYDgu0mp4m4CxQz6XYP5OS4rzD/a9fYByUAH4eY5ZDK1G83B+xmKRJxioM
+ mVuHVa/7C4CNTWbOGPemWf0o/a9GMJE04OVwdYobOP21cFTDbBjLqo5QojlARylLsEPhr4HxM
+ LPdYuXhZL0N3MN1Wo70i5fWBGOd/tLxMb+SKDQVIIu+v/XOjbTl7kQ8IJ3X7kQ7yYdyLr/0v4
+ OpBRAMb
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 17 Oct 2021 at 10:38, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 01.10.2021 18:01, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > On Fri, 1 Oct 2021 at 16:35, Dmitry Osipenko <digetx@gmail.com> wrote:
-> >>
-> >> 01.10.2021 17:24, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >>> On Mon, 27 Sept 2021 at 00:42, Dmitry Osipenko <digetx@gmail.com> wro=
-te:
-> >>>>
-> >>>> The NAND on Tegra belongs to the core power domain and we're going t=
-o
-> >>>> enable GENPD support for the core domain. Now NAND must be resumed u=
-sing
-> >>>> runtime PM API in order to initialize the NAND power state. Add runt=
-ime PM
-> >>>> and OPP support to the NAND driver.
-> >>>>
-> >>>> Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> >>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> >>>> ---
-> >>>>  drivers/mtd/nand/raw/tegra_nand.c | 55 ++++++++++++++++++++++++++--=
----
-> >>>>  1 file changed, 47 insertions(+), 8 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/mtd/nand/raw/tegra_nand.c b/drivers/mtd/nand/ra=
-w/tegra_nand.c
-> >>>> index 32431bbe69b8..098fcc9cb9df 100644
-> >>>> --- a/drivers/mtd/nand/raw/tegra_nand.c
-> >>>> +++ b/drivers/mtd/nand/raw/tegra_nand.c
-> >>>> @@ -17,8 +17,11 @@
-> >>>>  #include <linux/mtd/rawnand.h>
-> >>>>  #include <linux/of.h>
-> >>>>  #include <linux/platform_device.h>
-> >>>> +#include <linux/pm_runtime.h>
-> >>>>  #include <linux/reset.h>
-> >>>>
-> >>>> +#include <soc/tegra/common.h>
-> >>>> +
-> >>>>  #define COMMAND                                        0x00
-> >>>>  #define   COMMAND_GO                           BIT(31)
-> >>>>  #define   COMMAND_CLE                          BIT(30)
-> >>>> @@ -1151,6 +1154,7 @@ static int tegra_nand_probe(struct platform_de=
-vice *pdev)
-> >>>>                 return -ENOMEM;
-> >>>>
-> >>>>         ctrl->dev =3D &pdev->dev;
-> >>>> +       platform_set_drvdata(pdev, ctrl);
-> >>>>         nand_controller_init(&ctrl->controller);
-> >>>>         ctrl->controller.ops =3D &tegra_nand_controller_ops;
-> >>>>
-> >>>> @@ -1166,14 +1170,22 @@ static int tegra_nand_probe(struct platform_=
-device *pdev)
-> >>>>         if (IS_ERR(ctrl->clk))
-> >>>>                 return PTR_ERR(ctrl->clk);
-> >>>>
-> >>>> -       err =3D clk_prepare_enable(ctrl->clk);
-> >>>> +       err =3D devm_pm_runtime_enable(&pdev->dev);
-> >>>> +       if (err)
-> >>>> +               return err;
-> >>>> +
-> >>>> +       err =3D devm_tegra_core_dev_init_opp_table_common(&pdev->dev=
-);
-> >>>> +       if (err)
-> >>>> +               return err;
-> >>>> +
-> >>>> +       err =3D pm_runtime_resume_and_get(&pdev->dev);
-> >>>>         if (err)
-> >>>>                 return err;
-> >>>>
-> >>>>         err =3D reset_control_reset(rst);
-> >>>>         if (err) {
-> >>>>                 dev_err(ctrl->dev, "Failed to reset HW: %d\n", err);
-> >>>> -               goto err_disable_clk;
-> >>>> +               goto err_put_pm;
-> >>>>         }
-> >>>>
-> >>>>         writel_relaxed(HWSTATUS_CMD_DEFAULT, ctrl->regs + HWSTATUS_C=
-MD);
-> >>>> @@ -1188,21 +1200,19 @@ static int tegra_nand_probe(struct platform_=
-device *pdev)
-> >>>>                                dev_name(&pdev->dev), ctrl);
-> >>>>         if (err) {
-> >>>>                 dev_err(ctrl->dev, "Failed to get IRQ: %d\n", err);
-> >>>> -               goto err_disable_clk;
-> >>>> +               goto err_put_pm;
-> >>>>         }
-> >>>>
-> >>>>         writel_relaxed(DMA_MST_CTRL_IS_DONE, ctrl->regs + DMA_MST_CT=
-RL);
-> >>>>
-> >>>>         err =3D tegra_nand_chips_init(ctrl->dev, ctrl);
-> >>>>         if (err)
-> >>>> -               goto err_disable_clk;
-> >>>> -
-> >>>> -       platform_set_drvdata(pdev, ctrl);
-> >>>> +               goto err_put_pm;
-> >>>>
-> >>>
-> >>> There is no corresponding call pm_runtime_put() here. Is it
-> >>> intentional to always leave the device runtime resumed after ->probe(=
-)
-> >>> has succeeded?
-> >>>
-> >>> I noticed you included some comments about this for some other
-> >>> drivers, as those needed more tweaks. Is that also the case for this
-> >>> driver?
-> >>
-> >> Could you please clarify? There is pm_runtime_put() in both probe-erro=
-r
-> >> and remove() code paths here.
+On Tuesday, October 19, 2021 at 12:18 PM "Greg KH" <gregkh@linuxfoundation=
+.org> wrote:
+> On Tue, Oct 19, 2021 at 12:15:09PM +0200, mark_k@iname.com wrote:
+> > I have a Core Micro Systems USB2 Link USB-SCSI converter (07B4:0380).
 > >
-> > I was not considering the error path of ->probe() (or ->remove()), but
-> > was rather thinking about when ->probe() completes successfully. Then
-> > you keep the device runtime resumed, because you have called
-> > pm_runtime_resume_and_get() for it.
-> >
-> > Shouldn't you have a corresponding pm_runtime_put() in ->probe(),
-> > allowing it to be runtime suspended, until the device is really needed
-> > later on. No?
+> > Adding an entry to unusual_devs.h should get it to work, just needing
+> > USB_PR_BULK. That should at least allow the connected device with SCSI=
+ ID 0
+> > to be accessed.
 >
-> This driver doesn't support active power management. I don't have Tegra
-> hardware that uses NAND storage for testing, so it's up to somebody else
-> to implement dynamic power management. NAND doesn't require high
-> voltages, so it's fine to keep the old driver behaviour by keeping
-> hardware resumed since the probe time.
+> Why do you need any quirk at all for this?
 
-Alright, fair enough and thanks for clarifying!
+My mistake, sorry. Its interface descriptor has
+  bInterfaceClass 0xFF
+  bInterfaceSubClass 0x06
+  bInterfaceProtocol 0x50
+so an entry with USB_SC_DEVICE, USB_PR_DEVICE would work.
 
-Kind regards
-Uffe
+
+> > I'm just wondering, how does the usb-storage driver handle these cases=
+:
+> >
+> >  - (What it thinks are) LUNs are not contiguous. Suppose the user has =
+two
+> >    SCSI devices in the chain, one with ID 0 the other with ID 3. Would=
+ it
+> >    scan LUNs (which map to separate targets) 1, 2, 4, 5 and 6? Or woul=
+d it
+> >    give up on getting no response from LUN 1?
+> >
+> >  - "LUN" 0 is not present. E.g. where the connected SCSI devices have =
+IDs 1
+> >    and 3.
+> >
+> >  - When different "LUNs" are completely different devices (e.g. one a
+> >    CD-ROM, another a hard disk, another a tape drive).
+> >
+>
+> That should all be up to the scsi layer in the kernel.  If this device
+> is not following the standard, how is it supposed to work at all?
+>
+> Does it require custom drivers for other operating systems?
+
+My guess is that (with quirk entry) it will work when there is a SCSI
+device with ID 0. If all other devices in the chain have contiguous IDs
+they could be accessible too.
+
+I can tell Windows to use its built-in mass storage driver and that works
+to access the device with ID 0 only. I haven't yet checked with more than
+one SCSI device in the chain.
+
+It could/should be possible to properly support multiple targets and LUNs
+by using a similar method to the SCM USB-SCSI converters. (Those, after a
+special intitialisation request, take the target ID from the *upper* 4 bit=
+s
+of CBW byte 13.)
+
+But I figure an initial patch to add a quirk entry will be much easier. An=
+d
+in practice would be enough for most use cases.
+
