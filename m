@@ -2,114 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E814743298D
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 00:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2647432B3B
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 02:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbhJRWHm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Oct 2021 18:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232139AbhJRWHl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 18:07:41 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF86C061745
-        for <linux-usb@vger.kernel.org>; Mon, 18 Oct 2021 15:05:29 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id a13so7024629qkg.11
-        for <linux-usb@vger.kernel.org>; Mon, 18 Oct 2021 15:05:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VNpqRRdnPDIUGCc3uEFG9REMCz+uQZwgGwBrpVs1X7k=;
-        b=PzH1/3QFJDCAo6+yfE9yZp3FhN5bdJblxdwmrYJXz4W0YDV5QgMDwXPS+9oDzaYsmR
-         1hy1VBsrs0g+cboLAmAYffm5C4OKJ9PZknz0zqdbSlWGpa8IqJfWmggmKLf9VGSQPSoq
-         bF2fHToJMjgOwuWZ6BDY28QPn+sUaZRuPFe0c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VNpqRRdnPDIUGCc3uEFG9REMCz+uQZwgGwBrpVs1X7k=;
-        b=jbUPBCtWEy+bsRM6Q+a6i8INo1Nius9Vv39wuP/rlcQL/AAmkUABXPghZGyMD0jWV9
-         mL7ZyJoZlk8O4YzxeRdSe7fgKGTVDmX8gmRbyaU5SG9UGpwGRJt/yDc57AEKGzkbEdHX
-         SVH6smjpKbswuLkGkMoBogp7m75ab7gCcwuyH6XU9SmIiZXh0PJABEqTOjNSYc6gS9M2
-         EEgjQZNm38yrTBqhv/evsk9mOcv17g2rWVtjS6W7G3gIvsDP2YQmaTrIISRBduyzWbwc
-         ibCvnHuG+XbAUHwWcWKadQkfO36aEDbSUIFxRmsGeF9zRlMKM+zJ9PXCPCZIKKuRyxeP
-         kmOQ==
-X-Gm-Message-State: AOAM531O7d8cOECieXhNMuDq5D2GqpsVdmAW61UzMs0Zt4ngG88UCZ+O
-        j/ZF71Emu3KPBtn5XG+VX958tPqcf3C9fA==
-X-Google-Smtp-Source: ABdhPJxgYjUyH0Q251jOZsOWEQ+UIOqPIjhVTG8zxqDyI6ymObyK9GhrElt8oohDuuXI2j4/nN2ovA==
-X-Received: by 2002:a37:a50a:: with SMTP id o10mr25659134qke.419.1634594728317;
-        Mon, 18 Oct 2021 15:05:28 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id t11sm7024335qkm.92.2021.10.18.15.05.28
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Oct 2021 15:05:28 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id t127so5549850ybf.13
-        for <linux-usb@vger.kernel.org>; Mon, 18 Oct 2021 15:05:28 -0700 (PDT)
-X-Received: by 2002:a5b:102:: with SMTP id 2mr31008124ybx.101.1634594288583;
- Mon, 18 Oct 2021 14:58:08 -0700 (PDT)
+        id S230144AbhJSAnm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Oct 2021 20:43:42 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:54729 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229529AbhJSAnl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Oct 2021 20:43:41 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1634604089; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=oTmPw4tMF+qnxvUn3IYouYHbHLXYsP51JPAg0jGqOwY=; b=XUkVfVxp/WXKWWNS0nXDTBzoSfpks2Wu7va6892fntdC/d53Ji1Khi1zJ/R8J3s7+/bDLGVi
+ 64OoNtVgc9Ca1UKOBqLgtbg4iGjaiB88bxqtR45B4uD3jA/kwYXAiyhftGWEAkM5zxS2rcIm
+ kDzrXWg0PbZolNp/AsXh3TiqW+4=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 616e14395baa84c77ba0457f (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 19 Oct 2021 00:41:29
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id A4ACAC43617; Tue, 19 Oct 2021 00:41:28 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4F0D4C4338F;
+        Tue, 19 Oct 2021 00:41:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 4F0D4C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Wesley Cheng <wcheng@codeaurora.org>
+Cc:     linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Jack Pham <jackp@codeaurora.org>
+Subject: [PATCH v2] usb: dwc3: gadget: Skip resizing EP's TX FIFO if already resized
+Date:   Mon, 18 Oct 2021 17:41:23 -0700
+Message-Id: <20211019004123.15987-1-jackp@codeaurora.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-References: <1633628923-25047-1-git-send-email-pmaliset@codeaurora.org>
- <20211013100005.GB9901@lpieralisi> <CAE-0n52fZZkWt5KxF8gq0D55f_joq0v2sBBp81Gts8cBt6fJgg@mail.gmail.com>
-In-Reply-To: <CAE-0n52fZZkWt5KxF8gq0D55f_joq0v2sBBp81Gts8cBt6fJgg@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 18 Oct 2021 14:57:56 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WYvV+=uyEOYq7LjtBgpSGV6KovvoS1e88fgc1kpt_c7Q@mail.gmail.com>
-Message-ID: <CAD=FV=WYvV+=uyEOYq7LjtBgpSGV6KovvoS1e88fgc1kpt_c7Q@mail.gmail.com>
-Subject: Re: [PATCH v12 0/5] Add DT bindings and DT nodes for PCIe and PHY in SC7280
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Prasad Malisetty <pmaliset@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>, svarbanov@mm-sol.com,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Veerabhadrarao Badiganti <vbadigan@codeaurora.org>,
-        sallenki@codeaurora.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Some functions may dynamically enable and disable their endpoints
+regularly throughout their operation, particularly when Set Interface
+is employed to switch between Alternate Settings.  For instance the
+UAC2 function has its respective endpoints for playback & capture
+associated with AltSetting 1, in which case those endpoints would not
+get enabled until the host activates the AltSetting.  And they
+conversely become disabled when the interfaces' AltSetting 0 is
+chosen.
 
-On Fri, Oct 15, 2021 at 12:43 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> Quoting Lorenzo Pieralisi (2021-10-13 03:00:05)
-> > On Thu, Oct 07, 2021 at 11:18:38PM +0530, Prasad Malisetty wrote:
-> > > Prasad Malisetty (5):
-> > >   dt-bindings: pci: qcom: Document PCIe bindings for SC7280
-> > >   arm64: dts: qcom: sc7280: Add PCIe and PHY related nodes
-> > >   arm64: dts: qcom: sc7280: Add PCIe nodes for IDP board
-> > >   PCI: qcom: Add a flag in match data along with ops
-> > >   PCI: qcom: Switch pcie_1_pipe_clk_src after PHY init in SC7280
-> > >
-> > >  .../devicetree/bindings/pci/qcom,pcie.txt          |  17 +++
-> > >  arch/arm64/boot/dts/qcom/sc7280-idp.dts            |   8 ++
-> > >  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |  50 +++++++++
-> > >  arch/arm64/boot/dts/qcom/sc7280-idp2.dts           |   8 ++
-> > >  arch/arm64/boot/dts/qcom/sc7280.dtsi               | 118 +++++++++++++++++++++
-> > >  drivers/pci/controller/dwc/pcie-qcom.c             |  95 +++++++++++++++--
-> > >  6 files changed, 285 insertions(+), 11 deletions(-)
-> >
-> > I applied patches [4-5] to pci/qcom for v5.16, thanks I expect other
-> > patches to go via the relevant trees.
-> >
->
-> Lorenzo, can you pick up patch 1 too? It's the binding update for the
-> compatible string used in patch 4-5.
+With the DWC3 FIFO resizing algorithm recently added, every
+usb_ep_enable() call results in a call to resize that EP's TXFIFO,
+but if the same endpoint is enabled again and again, this incorrectly
+leads to FIFO RAM allocation exhaustion as the mechanism did not
+account for the possibility that endpoints can be re-enabled many
+times.
 
-I think that means that patches 2-3 are ready to land in the Qualcomm
-tree assuming Bjorn Andersson is still accepting patches there for
-5.16, right?
+Example log splat:
 
--Doug
+	dwc3 a600000.dwc3: Fifosize(3717) > RAM size(3462) ep3in depth:217973127
+	configfs-gadget gadget: u_audio_start_capture:521 Error!
+	dwc3 a600000.dwc3: request 000000000be13e18 was not queued to ep3in
+
+Add another bit DWC3_EP_TXFIFO_RESIZED to dep->flags to keep track of
+whether an EP had already been resized in the current configuration.
+If so, bail out of dwc3_gadget_resize_tx_fifos() to avoid the
+calculation error resulting from accumulating the EP's FIFO depth
+repeatedly.  This flag is retained across multiple ep_disable() and
+ep_enable() calls and is cleared when GTXFIFOSIZn is reset in
+dwc3_gadget_clear_tx_fifos() upon receiving the next Set Config.
+
+Fixes: 9f607a309fbe9 ("usb: dwc3: Resize TX FIFOs to meet EP bursting requirements")
+Signed-off-by: Jack Pham <jackp@codeaurora.org>
+---
+v2: Added explicit flag to dep->flags and check that instead of directly
+    reading the GTXFIFOSIZn register.
+
+ drivers/usb/dwc3/core.h   | 1 +
+ drivers/usb/dwc3/gadget.c | 8 +++++++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 5612bfdf37da..f033063f6948 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -723,6 +723,7 @@ struct dwc3_ep {
+ #define DWC3_EP_FORCE_RESTART_STREAM	BIT(9)
+ #define DWC3_EP_FIRST_STREAM_PRIMED	BIT(10)
+ #define DWC3_EP_PENDING_CLEAR_STALL	BIT(11)
++#define DWC3_EP_TXFIFO_RESIZED	BIT(12)
+ 
+ 	/* This last one is specific to EP0 */
+ #define DWC3_EP0_DIR_IN		BIT(31)
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 4519d06c9ca2..ed97e47d3261 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -702,6 +702,7 @@ void dwc3_gadget_clear_tx_fifos(struct dwc3 *dwc)
+ 				   DWC31_GTXFIFOSIZ_TXFRAMNUM;
+ 
+ 		dwc3_writel(dwc->regs, DWC3_GTXFIFOSIZ(num >> 1), size);
++		dep->flags &= ~DWC3_EP_TXFIFO_RESIZED;
+ 	}
+ 	dwc->num_ep_resized = 0;
+ }
+@@ -747,6 +748,10 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+ 	if (!usb_endpoint_dir_in(dep->endpoint.desc) || dep->number <= 1)
+ 		return 0;
+ 
++	/* bail if already resized */
++	if (dep->flags & DWC3_EP_TXFIFO_RESIZED)
++		return 0;
++
+ 	ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
+ 
+ 	if ((dep->endpoint.maxburst > 1 &&
+@@ -807,6 +812,7 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+ 	}
+ 
+ 	dwc3_writel(dwc->regs, DWC3_GTXFIFOSIZ(dep->number >> 1), fifo_size);
++	dep->flags |= DWC3_EP_TXFIFO_RESIZED;
+ 	dwc->num_ep_resized++;
+ 
+ 	return 0;
+@@ -995,7 +1001,7 @@ static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
+ 
+ 	dep->stream_capable = false;
+ 	dep->type = 0;
+-	dep->flags = 0;
++	dep->flags &= DWC3_EP_TXFIFO_RESIZED;
+ 
+ 	return 0;
+ }
+-- 
+2.24.0
+
