@@ -2,243 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 886EA434130
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Oct 2021 00:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F5A4341B4
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Oct 2021 00:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbhJSWMp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Oct 2021 18:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
+        id S229899AbhJSW4f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Oct 2021 18:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbhJSWMn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 18:12:43 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B079C061765
-        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 15:10:30 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id c4so13617864pgv.11
-        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 15:10:30 -0700 (PDT)
+        with ESMTP id S229845AbhJSW4f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 18:56:35 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D8BC06161C
+        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 15:54:22 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id m21so20715234pgu.13
+        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 15:54:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=gcH42ft4PL5Uc/1EXoL8Dp6lDCUUCAQKKLWYXAKG1cg=;
-        b=gLWWTkEYbZJ9S5wn4tB9utjlf9XVjePkQgnPtpzqwjV5+Tgd9KNtnGEhYWs+gca1Lh
-         rNxbvgYEXhl0I3xqP+Cmu1u86u6h2HL6+AWpTA1fXMnsiEkM3o5cQaKyjsu7nhg3rY91
-         gjfn5RrgwxY3j3wjOSMw4nbZQW+p1PmXD32HA=
+        bh=cU3HJbTF7v8oN4m9QpyNLUi7Z2VsnXCEZXyNBnXavMs=;
+        b=cuhVndCamK8/716BHL8VV3m6G8gcGkThTiSVQ6WCdR23cmkvS8BAdf5MUWNZ3+xdJh
+         SXNvDs9u/lEzXmzt2H4VqFJR13EW1nC9xTyUpNjgvdyajBpGbxaWkVSkwru2zDmzhJL5
+         9+BvigGJweB1Imcox7fO16zbnV5IFg9bzbcUo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=gcH42ft4PL5Uc/1EXoL8Dp6lDCUUCAQKKLWYXAKG1cg=;
-        b=ZptAbB7fJr/3EyujEcWmuOL+yICc/FoXwVhqBTZPBi44tqaK0HMMCnlwIXYV8xsmOs
-         3IEP+4are2e8UNlDnhDfKCOE8HdAMAAMqejQdz0hJKh8ft3keN6s58ZBcDZBNVZmRJDT
-         zfn9dvXUi6HPwHdjWn12QSDza1QSaypaiCS8TOJxA3rRPag7MWZnNxeq7lLE0Tw2mJhT
-         rdf73BWPp6ercmDCYoR13Pvk1oO0w/aFd+1xuZegRmg5j1861CsDfUxZh6KPx7bq3SBy
-         a8dHcvj+50PZY554GatgT2WdaoBVuVBVrbSV+VpfeulNzVJh6xEFetEVyEFMYEFwVYCS
-         6gkQ==
-X-Gm-Message-State: AOAM530GD00RZLNW946AT00nxHed65X7oePQdG2t7IA+JMc+2rILC0Hz
-        ov2k8Ii07HapcFeLPLXiWhOXtQ==
-X-Google-Smtp-Source: ABdhPJz8FQqhb8sxAUF9c1/0TkQZqd983/XaDEdJ60GExi3IhnaND//4FpVJC7NyexgDMDDuQ7+QWQ==
-X-Received: by 2002:a63:7f0e:: with SMTP id a14mr24338961pgd.390.1634681430017;
-        Tue, 19 Oct 2021 15:10:30 -0700 (PDT)
+        bh=cU3HJbTF7v8oN4m9QpyNLUi7Z2VsnXCEZXyNBnXavMs=;
+        b=F/G8ExOujWJT71Swyli6l6h0gs8T8JlOtpOARGdHzyFc7ogpG7mSYrfzb8MmW7mWQp
+         ouyggqjh4WgovmfAD/kbCQRhEtF0RQ+s7o8P5g5AEEQOmhcKt6cfunvk8clxkUJ8rJZu
+         yGDwf/6F8o4yLKeo3ybVYavgSOZggietZH8cOluPURe5Ti2+/B6NF8fW4I7psHl37/TD
+         SHm3Jmg0EMRa1icGF7LFUpCuHch7jWYHChKqWQnHHno+W0TGWK9MAjnsKk8XEiUWilQy
+         KhzrdAyRTPL9EIr/cyWbh2IbX40rm1Nm0GvlrCj0F6hMEykSbupB7NzdXycDgSn5maqg
+         JzIA==
+X-Gm-Message-State: AOAM530u+xwIqS0d7RB0J4wWqX3zS1RCj55ijler20PzyAZMSYwGhnbY
+        tJUppaL6i+dvgTsVvdMKWDPdHQ==
+X-Google-Smtp-Source: ABdhPJwhFFyHmKUMVfxbdbUIRSGmuKpqlVMRtb5XW/S/r0SYWKyVbrnMtwygjRKH7m1CQn1PDJPYsw==
+X-Received: by 2002:a62:5804:0:b0:44b:b75b:ec8f with SMTP id m4-20020a625804000000b0044bb75bec8fmr2499812pfb.63.1634684061497;
+        Tue, 19 Oct 2021 15:54:21 -0700 (PDT)
 Received: from localhost ([2620:15c:202:201:6c1f:a561:f56:7d16])
-        by smtp.gmail.com with UTF8SMTPSA id n207sm203903pfd.143.2021.10.19.15.10.26
+        by smtp.gmail.com with UTF8SMTPSA id q6sm245804pgc.1.2021.10.19.15.54.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Oct 2021 15:10:29 -0700 (PDT)
-Date:   Tue, 19 Oct 2021 15:10:25 -0700
+        Tue, 19 Oct 2021 15:54:21 -0700 (PDT)
+Date:   Tue, 19 Oct 2021 15:54:18 -0700
 From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
         Mathias Nyman <mathias.nyman@intel.com>,
         Felipe Balbi <balbi@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
         Bastien Nocera <hadess@hadess.net>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
         Michal Simek <michal.simek@xilinx.com>,
-        Roger Quadros <rogerq@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-usb@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
         Stephen Boyd <swboyd@chromium.org>,
         Al Cooper <alcooperx@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alexandre TORGUE - foss <alexandre.torgue@foss.st.com>,
-        Andrew Lunn <andrew@lunn.ch>,
         Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Andy Gross <agross@kernel.org>,
         Aswath Govindraju <a-govindraju@ti.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Dmitry Osipenko <digetx@gmail.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
         Enric Balletbo i Serra <enric.balletbo@collabora.com>,
         Fabio Estevam <festevam@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
         Guido =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>,
         Jagan Teki <jagan@amarulasolutions.com>,
-        Jens Axboe <axboe@kernel.dk>, Johan Hovold <johan@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Lionel DEBIEVE <lionel.debieve@st.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mark Brown <broonie@kernel.org>,
-        Martin =?utf-8?Q?J=C3=BCcker?= <martin.juecker@gmail.com>,
         Nishanth Menon <nm@ti.com>,
-        Olivier MOYSAN <olivier.moysan@st.com>,
         Pawel Laszczak <pawell@cadence.com>,
-        Robert Richter <rric@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Lindgren <tony@atomide.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
         Will Deacon <will@kernel.org>,
-        William Cohen <wcohen@redhat.com>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>
-Subject: Re: [PATCH v16 0/7] usb: misc: Add onboard_usb_hub driver
-Message-ID: <YW9CUabfA0HrtTAq@google.com>
-References: <20210813195228.2003500-1-mka@chromium.org>
- <YUoRq1RrOIoiBJ5+@google.com>
- <CAD=FV=WrddUhWT0wUVZD0gN_+8Zy1VGY77LYLYBvhaPQQ_SqZw@mail.gmail.com>
- <YWkiGGBKOVokBye9@kroah.com>
- <03f28680-35eb-25f4-5041-f3a56144da24@foss.st.com>
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH v15 0/6] usb: misc: Add onboard_usb_hub driver
+Message-ID: <YW9MmoSTouEDdpxa@google.com>
+References: <20210727004118.2583774-1-mka@chromium.org>
+ <CAA8EJpq55e+fk9oDi8+JXDWiPcXDXK5oz1DL5eqfx+FkT-xhnw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <03f28680-35eb-25f4-5041-f3a56144da24@foss.st.com>
+In-Reply-To: <CAA8EJpq55e+fk9oDi8+JXDWiPcXDXK5oz1DL5eqfx+FkT-xhnw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 19, 2021 at 06:04:06PM +0200, Fabrice Gasnier wrote:
-> On 10/15/21 8:39 AM, Greg Kroah-Hartman wrote:
-> > On Thu, Oct 14, 2021 at 02:38:55PM -0700, Doug Anderson wrote:
-> >> Hi,
-> >>
-> >> On Tue, Sep 21, 2021 at 10:09 AM Matthias Kaehlcke <mka@chromium.org> wrote:
-> >>>
-> >>> Hi Greg,
-> >>>
-> >>> are there any actions pending or can this land in usb-testing?
-> >>>
-> >>> I confirmed that this series can be rebased on top of v5.15-rc2
-> >>> without conflicts.
-> >>
-> >> I'm quite interested to know what the next action items are, too. This
-> >> is one of the very few patches we have for trogdor (excluding MIPI
-> >> camera, which is a long story) that we're carrying downstream, so I'm
-> >> keenly interested in making sure it's unblocked (if, indeed, it's
-> >> blocked on anything).
-> >>
-> >> If folks feel that this needs more review eyes before landing again
-> >> then I'll try to find some time in the next week or two. If it's just
-> >> waiting for the merge window to open/close so it can have maximal bake
-> >> time, that's cool too. Please yell if there's something that I can do
-> >> to help, though! :-)
-> > 
-> > I would love more review-eyes on this please.
-> > 
-> 
-> Hi,
-> 
-> I noticed this series some time ago, and wanted to take a closer look.
-> 
-> The same issue this series address is seen on stm32 board for instance.
-> (arch/arm/boot/dts/stm32mp15xx-dkx.dtsi). On board HUB (not described in
-> the DT) is supplied by an always-on regulator.
-> So it could could be interesting/useful to address the same case ,
-> on stm32 boards, where USB2 (ehci-platform driver) is used currently.
-> 
-> I noticed a few things, especially on the dt-bindings. I've some
-> questions here.
-> 
-> In this series, RTS5411 is used. The dt-bindings documents it as a child
-> node of the USB controller. E.g.
-> 
-> &usb {
-> 	usb_hub_2_0: hub@1 {
-> 		...
-> 	};
-> 
-> 	usb_hub_3_0: hub@2 {
-> 	};
-> }
-> 
-> I had a quick look at RTS5411 datasheet. It looks like there's an i2c
-> interface too.
-> - I guess the I2C interface isn't used in your case ?
->   (I haven't checked what it could be used for...)
+Hi Dmitry,
 
-Correct, the i2c interface isn't used on my board.
-
-Also the binding isn't completely new, it is based on the generic USB
-binding (https://www.kernel.org/doc/Documentation/devicetree/bindings/usb/usb-device.txt)
-
-> In the stm32 boards (stm32mp15xx-dkx), there's an usb2514b chip
-> - that also could be wired on I2C interface (0R mount option)
-> - unused on stm32 boards by default
+On Tue, Oct 19, 2021 at 07:24:41PM +0300, Dmitry Baryshkov wrote:
+> On Tue, 27 Jul 2021 at 03:41, Matthias Kaehlcke <mka@chromium.org> wrote:
+> >
+> > This series adds:
+> > - the onboard_usb_hub_driver
+> > - glue in the xhci-plat driver to create and destroy the
+> >   onboard_usb_hub platform devices if needed
+> > - a device tree binding for the Realtek RTS5411 USB hub controller
+> > - device tree changes that add RTS5411 entries for the QCA SC7180
+> >   based boards trogdor and lazor
+> > - a couple of stubs for platform device functions to avoid
+> >   unresolved symbols with certain kernel configs
+> >
+> > The main issue the driver addresses is that a USB hub needs to be
+> > powered before it can be discovered. For discrete onboard hubs (an
+> > example for such a hub is the Realtek RTS5411) this is often solved
+> > by supplying the hub with an 'always-on' regulator, which is kind
+> > of a hack. Some onboard hubs may require further initialization
+> > steps, like changing the state of a GPIO or enabling a clock, which
+> > requires even more hacks. This driver creates a platform device
+> > representing the hub which performs the necessary initialization.
+> > Currently it only supports switching on a single regulator, support
+> > for multiple regulators or other actions can be added as needed.
+> > Different initialization sequences can be supported based on the
+> > compatible string.
 > 
-> usb2514b chip already has a dt-bindings (with compatible), and a driver:
-> - drivers/usb/misc/usb251xb.c
-> - Documentation/devicetree/bindings/usb/usb251xb.txt
-> 
-> It is defined more as an i2c chip, so I'd expect it as an i2c child,
-> e.g. like:
-> 
-> &i2c {
-> 	usb2514b@2c {
-> 		compatible = "microchip,usb2514b";
-> 		...
-> 	};
-> };
-> 
-> 
-> This way, I don't see how it could be used together with onboard_usb_hub
-> driver ? (But I may have missed it)
+> I have the feeling that you might want to check if you can use pwrseq
+> subsystem being proposed at
+> https://lore.kernel.org/linux-arm-msm/20211006035407.1147909-1-dmitry.baryshkov@linaro.org/.
+> It has been created for exactly the same reason of handling complex
+> power up/down requirements in a bus-neutral way. So instead of
+> creating an onboard-usb-hub, you might want to populate the hub node
+> with the reference to pwrseq device and make usb core call into
+> pwrseq. How does that sound to you?
 
-Indeed, you can either use the i2c driver for the hub or the onboard_usb_hub
-driver, but not both at the same time. The i2c driver requires the hub to be
-powered before communicating with it over i2c, hence the power sequence
-should not be delegated to the onboard_usb_hub driver.
+Thanks for the pointer, it's good to see another attempt to sort out
+power sequencing.
 
-> Is it possible to use a phandle, instead of a child node ?
+The pwrseq framework could potentially be used by the onboard_usb_hub
+driver, but it probably can't replace it completely. Besides powering
+the USB hub on before enumeration the driver also can optionally power
+it off during system suspend when no wakeup capable USB devices are
+connected, which can result in signifcant power savings on battery
+powered devices. For this the driver needs knowledge about the USB
+(hub) devices that are provided by a hub chip. That part is probably
+best implemented by a driver under drivers/usb/.
 
-The child node is part of the generic USB binding. The onboard_usb_hub
-driver needs it to find the USB device(s) that correspond to the hub,
-to optionally power the hub off during system suspend when no wakeup
-capable devices are connected.
-
-> However, in the stm32mp15xx-dkx case, i2c interface isn't wired/used by
-> default. So obviously the i2c driver isn't used. In this case, could the
-> "microchip,usb2514b" be listed in onboard_usb_hub driver ?
-> (wouldn't it be redundant ?)
-
-You would use the compatible string of the generic USB binding, i.e.
-"usbVID,PID", which would have to be added to the onboard_usb_hub driver.
-
-> In this case it would be a child node of the usb DT node... Maybe that's
-> more a question for Rob: would it be "legal" regarding existing
-> dt-bindings ?
-
-The USB node is always there implicitly (the USB device exists), the only
-difference is that the node is added explicitly (plus additional
-properties).
-
-There was a somewhat related long-winded discussion with Rob on an earlier
-version of the driver/binding:
-https://lore.kernel.org/linux-usb/1613055380.685661.519681.nullmailer@robh.at.kernel.org/
+It might be an option to have the USB core and the onboard_usb_hub
+driver use the pwrseq framework, though we'd have to ensure that it
+isn't a problem that the USB core turns power on (before
+enumeration) and the onboard_usb_hub driver turns it off during
+system suspend (and on again on resume).
