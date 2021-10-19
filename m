@@ -2,139 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 402FB433C0E
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 18:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2050C433C7B
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Oct 2021 18:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbhJSQ1H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Oct 2021 12:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233550AbhJSQ1G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Oct 2021 12:27:06 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3F4C061749
-        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 09:24:53 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id z24so448536qtv.9
-        for <linux-usb@vger.kernel.org>; Tue, 19 Oct 2021 09:24:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=15SUVNjuA+MqctsOYnbPTmIlkRsNZOxO4riu8UF//h0=;
-        b=fK+lPSwI1RGJXAeOcYSmAi+RRs1ueziY8FqbXBa7BV7E6/7ByaK9ZCRh4GJ/AD3tJH
-         KMFoi6ZnmXOtxgyveYyZLIIKkdqGEn4bgFZ3npMLiyPPZEXjf0FRBJ1QWsPUmy1GmqQ+
-         ORo+WtPrWflHN2JPS3no9tLz1jt1sMSSC3YZ8rMATQuYIPelGrmMCmKm7S+8Ep+km5v3
-         UFS0dGbUDHUjmRPJuqMEekENex2g/uxRI7rjUae03apr/DsfFWa8coFytMyrG4wID414
-         L3Evm2x5kDzlTqn1GMnnCbRu6EW8I//L9ZRBKvMu+bHgTrg4SBgU0SLRCd4fcA3rvy1K
-         JUNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=15SUVNjuA+MqctsOYnbPTmIlkRsNZOxO4riu8UF//h0=;
-        b=JfifEXoJXp0jI3VVtVUlQgwv26UJfhQoBB3/NHB6KAVWtSQ+sMvqlDMnYzbh69S06F
-         fOYlC1SujtlvgEOs0U74YlRL6U6ViBTYtvzkcmRphYQiG90EEoyu3dmJOXenLM7RGc/V
-         1phZMBFZjlqKH6hf2QrD3MpMSldNnmRRdodxW8pgfb/v7NhwK6m3qCB8mGwqVab7KLKb
-         DM2DkPGAKF3Je6SxuhI7goqeQHaVetjn+Qd7YNVLxC+5jm4qNX57QgzZhPTlI4JwpFou
-         sJo+mgkl+nBM8/WbFhiGhyNLwweI4yn/wtaK61eyBnRkmD1aiuF/1Aq7L1GsjaS4hYPi
-         zqQw==
-X-Gm-Message-State: AOAM531oKUi9bpYpSsk/AJvXY2rciWOHiFgDyt72xDobP01kjs/NU35K
-        lcPZuSIB78QbwxzA1W3suBw+ZuNw4NjQYgK565s9hA==
-X-Google-Smtp-Source: ABdhPJwhsxdepZGrzEMoIzc6l/55gIir0sm89iZlWRUPYW3kP59vAcG9XWpOFy592VMNC+pRPFoGt4IIFn2UIbiT9J8=
-X-Received: by 2002:ac8:7d92:: with SMTP id c18mr1039528qtd.388.1634660693042;
- Tue, 19 Oct 2021 09:24:53 -0700 (PDT)
+        id S234411AbhJSQkM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Oct 2021 12:40:12 -0400
+Received: from mout.gmx.com ([74.208.4.200]:38481 "EHLO mout.gmx.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234351AbhJSQkL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 Oct 2021 12:40:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mail.com;
+        s=dbd5af2cbaf7; t=1634661477;
+        bh=fXWu3rveKH06uqaxh4+4opC9piNS4W+FPFbPIyF1Iyk=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=gb72azes/njbsRobxjyzcIw8gO2k3g0Djp67Cu9ILIYRtWbXETItbZnJkBRGIGr1D
+         xNfvwcXkffhLwX/YH0YLuPn+afSnWfU3XR3EeQguxFTRgJm2jc8Hox6zo9I+EuEuXu
+         QGusRe5h+kBon6/gX6XyadDYaIqGh+KewsnrhKNI=
+X-UI-Sender-Class: 214d933f-fd2f-45c7-a636-f5d79ae31a79
+Received: from [2.124.36.225] ([2.124.36.225]) by web-mail.mail.com
+ (3c-app-mailcom-lxa06.server.lan [10.76.45.7]) (via HTTP); Tue, 19 Oct 2021
+ 18:37:57 +0200
 MIME-Version: 1.0
-References: <20210727004118.2583774-1-mka@chromium.org>
-In-Reply-To: <20210727004118.2583774-1-mka@chromium.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 19 Oct 2021 19:24:41 +0300
-Message-ID: <CAA8EJpq55e+fk9oDi8+JXDWiPcXDXK5oz1DL5eqfx+FkT-xhnw@mail.gmail.com>
-Subject: Re: [PATCH v15 0/6] usb: misc: Add onboard_usb_hub driver
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Peter Chen <peter.chen@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-usb@vger.kernel.org,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Andy Gross <agross@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        =?UTF-8?Q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Nishanth Menon <nm@ti.com>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <trinity-5eaf7ea7-ff39-498d-b5cc-844177c47b48-1634661477272@3c-app-mailcom-lxa06>
+From:   mark_k@iname.com
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: USB2 Link USB-SCSI converter and LUNs
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 19 Oct 2021 18:37:57 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <YW7BtIHwVH3n13yH@kroah.com>
+References: <trinity-d3be8a5b-2b1c-45f8-8767-cf9cf758a0c0-1634638509008@3c-app-mailcom-lxa12>
+ <YW6pjieI5UwOM9LW@kroah.com>
+ <trinity-7db5ef0c-99a3-4fa0-a1d7-1e57c80cc4ff-1634648008985@3c-app-mailcom-lxa13>
+ <YW7BtIHwVH3n13yH@kroah.com>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:rEhiQbwVIRObWWK/PtlC5FdfnkTdhVYUXrgd9wRknl9qbksYY+QUipCYWuBhzx3fiDU2k
+ h5KfZ2mGbA9yjJpxnJXWWufJe3Ffw3Hivkh7ngO3IRCZAN6LLIoRgH3EKSd6sL3y0G8lRqm2lC01
+ vsFIM23wY5iug5duPzXVd/3ST58Vqm+T05JshuhnCY8OySIllHtVblX4m2lEK6O2AexYqgKKhX8V
+ 0QHYT2K0S3VUW30na2LCOykFeEDoVVYG3joDRpkmXtJcoHUBtN4NTHFyQVzZh+iWNGFjlLD//d8n
+ dw=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WG1RRZ+TilE=:DpngMLnYkBmSjUZaqQtcvw
+ qLnUS3G3uwwB//b/Lnbz8FKx0u1mFCvRfyJm6+imPeOvS9y2cJxx5xpGqpA4DOgNxNOBkfjb3
+ XPTr1VlSLmrVkRK6JXmKc5yv5uFMLKkpS0yQhsuk8bOAVUgiQhLBM7KUoX7wJM/53Yf49vfoZ
+ PuPU/DSWI5bwlhWIrOATDE5NbyKTFgOK81ZJAURmAg1Se6sNtjYF5zU1jLuzHMmVxzzsmghX2
+ n7EGHUiqFv12rEJUjDvIR4XMYmiwOO/Gv6dru1HnywXqJDFiIOgYcT4BZJ0FjY6zlVS54ma9j
+ Msu5KxIdowagATtMV6a6vKL5rCSOfD2fl01S0mQM+xEcoXV0ibDHJZAYxCeluSfo1mEJVSifN
+ AlZ8Hb5Iklp3Hjbl1dbu0mFxlm8v3cUwCEHeqW5L3F8XDl/ZRCp5TsjNA4a2rwnqL0Etl1ry7
+ nzuWA+ESeM4zKI6J0128n5QkQ75zlQJrpuYWwFamQBtz0VkklOsy17IzCDnjlabaJPi420WQh
+ pgv8V2v/6zhiOmAmjumroBiEyacQgGh4KCxdN85SsKFt8+q8QTBcHI5BZY5YLNqLhV1i1kSzY
+ eLaWVmvH31tFWxxxN+ivnsLt9IAnoQhNyvpVaOs6mPE7dBZlYa5UTLocYi7raRqDpK2Yl96SJ
+ E2wzNepN0oURBnaBwKwSEZ0gQNPk+XQIVmAAxPen6OEpj5QVQAimXEDa5vFx+ogSaWsfOq4vK
+ BUuqvO5eXU8Qbc1Gtqvuk5We6qlvMFYJDjXZASSII35/YrkIU4Q39flOrXfiYC2K/sHgEyZCT
+ 2Jug02C
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 27 Jul 2021 at 03:41, Matthias Kaehlcke <mka@chromium.org> wrote:
+On Tuesday, October 19, 2021 at 2:01 PM "Greg KH" <gregkh@linuxfoundation.=
+org> wrote:
+> On Tue, Oct 19, 2021 at 02:53:29PM +0200, mark_k@iname.com wrote:
+> > On Tuesday, October 19, 2021 at 12:18 PM "Greg KH" <gregkh@linuxfounda=
+tion.org> wrote:
+> > > On Tue, Oct 19, 2021 at 12:15:09PM +0200, mark_k@iname.com wrote:
+> > > > I have a Core Micro Systems USB2 Link USB-SCSI converter (07B4:038=
+0).
+> > > >
+> > > > Adding an entry to unusual_devs.h should get it to work, just need=
+ing
+> > > > USB_PR_BULK. That should at least allow the connected device with =
+SCSI ID 0
+> > > > to be accessed.
+> > >
+> > > Why do you need any quirk at all for this?
+> >
+> > My mistake, sorry. Its interface descriptor has
+> >   bInterfaceClass 0xFF
+> >   bInterfaceSubClass 0x06
+> >   bInterfaceProtocol 0x50
+> > so an entry with USB_SC_DEVICE, USB_PR_DEVICE would work.
 >
-> This series adds:
-> - the onboard_usb_hub_driver
-> - glue in the xhci-plat driver to create and destroy the
->   onboard_usb_hub platform devices if needed
-> - a device tree binding for the Realtek RTS5411 USB hub controller
-> - device tree changes that add RTS5411 entries for the QCA SC7180
->   based boards trogdor and lazor
-> - a couple of stubs for platform device functions to avoid
->   unresolved symbols with certain kernel configs
+> Again, why is a quirk needed at all?
+
+bInterfaceClass =3D 0xFF (not 0x08 which is the mass storage class number)
+so usb-storage does not bind to it automatically.
+
+
+> > > That should all be up to the scsi layer in the kernel.  If this devi=
+ce
+> > > is not following the standard, how is it supposed to work at all?
+> > >
+> > > Does it require custom drivers for other operating systems?
+> >
+> > My guess is that (with quirk entry) it will work when there is a SCSI
+> > device with ID 0. If all other devices in the chain have contiguous ID=
+s
+> > they could be accessible too.
+> >
+> > I can tell Windows to use its built-in mass storage driver and that wo=
+rks
+> > to access the device with ID 0 only. I haven't yet checked with more t=
+han
+> > one SCSI device in the chain.
 >
-> The main issue the driver addresses is that a USB hub needs to be
-> powered before it can be discovered. For discrete onboard hubs (an
-> example for such a hub is the Realtek RTS5411) this is often solved
-> by supplying the hub with an 'always-on' regulator, which is kind
-> of a hack. Some onboard hubs may require further initialization
-> steps, like changing the state of a GPIO or enabling a clock, which
-> requires even more hacks. This driver creates a platform device
-> representing the hub which performs the necessary initialization.
-> Currently it only supports switching on a single regulator, support
-> for multiple regulators or other actions can be added as needed.
-> Different initialization sequences can be supported based on the
-> compatible string.
-
-I have the feeling that you might want to check if you can use pwrseq
-subsystem being proposed at
-https://lore.kernel.org/linux-arm-msm/20211006035407.1147909-1-dmitry.baryshkov@linaro.org/.
-It has been created for exactly the same reason of handling complex
-power up/down requirements in a bus-neutral way. So instead of
-creating an onboard-usb-hub, you might want to populate the hub node
-with the reference to pwrseq device and make usb core call into
-pwrseq. How does that sound to you?
-
+> Does this work properly with Linux in this way with no quirk as well?
 >
-> Besides performing the initialization the driver can be configured
-> to power the hub off during system suspend. This can help to extend
-> battery life on battery powered devices which have no requirements
-> to keep the hub powered during suspend. The driver can also be
-> configured to leave the hub powered when a wakeup capable USB device
-> is connected when suspending, and power it off otherwise.
+> And how do you know that the device will work with additional scsi
+> devices?
+
+I rebuilt the usb-storage module after adding an entry for the USB2 Link t=
+o
+unusual_devs.h.
+
+With one SCSI device set to ID 0, the kernel detected the drive and I coul=
+d
+access it:
+
+[ 2219.761126] usb-storage 2-1:1.0: USB Mass Storage device detected
+[ 2219.762033] scsi host5: usb-storage 2-1:1.0
+[ 2219.762163] usbcore: registered new interface driver usb-storage
+[ 2220.769695] scsi 5:0:0:0: Optical Device    HP       C1113M           1=
+.19 PQ: 0 ANSI: 2
+[ 2221.156254] usb 2-1: reset high-speed USB device number 5 using ehci-pc=
+i
+[ 2221.712223] usb 2-1: reset high-speed USB device number 5 using ehci-pc=
+i
+[ 2222.268262] usb 2-1: reset high-speed USB device number 5 using ehci-pc=
+i
+[ 2222.824239] usb 2-1: reset high-speed USB device number 5 using ehci-pc=
+i
+[ 2222.981475] sd 5:0:0:0: Attached scsi generic sg2 type 7
+[ 2222.987240] sd 5:0:0:0: [sdb] Attached SCSI removable disk
 
 
--- 
-With best wishes
-Dmitry
+Note the extra "reset high-speed..." lines, probably due to the kernel
+trying to access LUNs 1 to 5 (which the USB2 Link maps to accesses to non-
+existent SCSI targets 1-5). Is that harmless?
+[As mentioned before, the USB2 Link reports its Max LUN as 6.]
+
+
+> > It could/should be possible to properly support multiple targets and L=
+UNs
+> > by using a similar method to the SCM USB-SCSI converters. (Those, afte=
+r a
+> > special intitialisation request, take the target ID from the *upper* 4=
+ bits
+> > of CBW byte 13.)
+>
+> Are you sure this device actually supports this?  If so, what operating
+> system does it work on?
+
+It does definitely support that. I installed the manufacturer driver on
+(32-bit) Windows and looked at USBpcap captures. I also disassembled the
+driver.
+
+Do you think it would be worthwhile submitting a patch adding the USB2
+Link to unusual-devs.h? If those reset... lines aren't acceptable I could
+add US_FL_SINGLE_LUN, but that would only allow it to work with a single
+SCSI device (set to ID 0).
+
+Or should I try and get proper/full support (multiple targets and LUNs)
+working first?
+
