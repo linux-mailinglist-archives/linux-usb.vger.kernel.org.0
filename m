@@ -2,70 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B13D7434ADB
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Oct 2021 14:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E49C434BC4
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Oct 2021 15:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbhJTMMb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Oct 2021 08:12:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43042 "EHLO mail.kernel.org"
+        id S230170AbhJTNGg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Oct 2021 09:06:36 -0400
+Received: from mga02.intel.com ([134.134.136.20]:47989 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229941AbhJTMMb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 20 Oct 2021 08:12:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E53261074;
-        Wed, 20 Oct 2021 12:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634731816;
-        bh=6Ks1/eR+X7U36GpSUhjOn7JjPSsSzjIPabkDWckSdnA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GoQ/wmYVukyLJw/lhbTDdLET8gH3Zz7Jttgjn8z9plPWfO52znmTKnCyRoUHNKl/k
-         udsvM/r4P0pdhyolpLUKpE6ZP7l5kVJRIg9Iv9i4JKkIZsRFTnrJIKl1ArSGSunIcM
-         us00TbPX5ZB2TLuqf8T1nvUeV9MesO/8dtJ5pjG8=
-Date:   Wed, 20 Oct 2021 14:10:13 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Saranya Gopal <saranya.gopal@intel.com>, linux-usb@vger.kernel.org,
-        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        rajaram.regupathy@intel.com
-Subject: Re: [PATCH 0/2] Fix IRQ flood issue in TI PD controller
-Message-ID: <YXAHJZH1KHKmgDgY@kroah.com>
-References: <20211020022620.21012-1-saranya.gopal@intel.com>
- <5d717e4a-f859-da28-8cf0-7bca373161c9@redhat.com>
+        id S229702AbhJTNGg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 20 Oct 2021 09:06:36 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10142"; a="215937382"
+X-IronPort-AV: E=Sophos;i="5.87,166,1631602800"; 
+   d="scan'208";a="215937382"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2021 06:04:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,166,1631602800"; 
+   d="scan'208";a="631256361"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Oct 2021 06:04:16 -0700
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     devicetree@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Bastien Nocera <hadess@hadess.net>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>
+References: <20210813195228.2003500-1-mka@chromium.org>
+ <20210813125146.v16.6.I7a3a7d9d2126c34079b1cab87aa0b2ec3030f9b7@changeid>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v16 6/7] usb: host: xhci-plat: Create platform device for
+ onboard hubs in probe()
+Message-ID: <dfac0025-b693-2431-04c8-1dba7ef32141@linux.intel.com>
+Date:   Wed, 20 Oct 2021 16:05:37 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5d717e4a-f859-da28-8cf0-7bca373161c9@redhat.com>
+In-Reply-To: <20210813125146.v16.6.I7a3a7d9d2126c34079b1cab87aa0b2ec3030f9b7@changeid>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 01:54:39PM +0200, Hans de Goede wrote:
-> Hi,
-> 
-> On 10/20/21 04:26, Saranya Gopal wrote:
-> > Hi,
-> > 
-> > There was an issue reported that the TI PD controller driver is causing 
-> > high CPU load due to a flood of interrupts. So, a patch was added in 
-> > the i2c-multi-instantiate driver to stop the TI PD driver from loading 
-> > in devices with INT3515 ACPI nodes.
-> > We identified that required event interrupts are not being set in the interrupt 
-> > mask register from the driver to the register of the controller.
-> > We enabled only the necessary events like data status update, power status update 
-> > and plug events in the interrupt mask register of the TI PD controller. 
-> > After enabling these events in the interrupt mask register, there is no interrupt flood.
-> > This patch series contains the fix for the interrupt flood issue 
-> > in the TI PD driver and another patch to re-enable the INT3515 platform device.
-> > I prefer this patch series to be taken through usb tree since the fix is in 
-> > the TI USB PD driver and the second patch is just a revert patch.
-> > 
-> > Hi Hans,
-> > Could I get your Ack to take this series through the usb tree?
-> 
-> Since Heikki has reviewed the revert, I'm fine with this and I'm
-> also fine with taking this upstream through the usb tree:
-> 
-> Acked-by: Hans de Goede <hdegoede@redhat.com>
+Hi
 
-Thanks, I'll queue it up.
+On 13.8.2021 22.52, Matthias Kaehlcke wrote:
+> Call onboard_hub_create/destroy_pdevs() from  _probe()/_remove()
+> to create/destroy platform devices for onboard USB hubs that may
+> be connected to the root hub of the controller. These functions
+> are a NOP unless CONFIG_USB_ONBOARD_HUB=y/m.
+> 
+> Also add a field to struct xhci_hcd to keep track of the onboard hub
+> platform devices that are owned by the xHCI.
+> 
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
 
-greg k-h
+Haven't really looked at this series until now.
+
+Is there any reason why the xhci platform driver was selected as 
+the best place to create/remove these onboard hub devices?
+
+This ties the onboard hubs to xhci, and won't work in case we have onboard
+hubs connected to a ehci controllers.
+
+If separate devices for controlling onboard hub power is the right solution then
+how about creating the onboard hub device in usb_add_hcd() (hcd.c), and
+store it in struct usb_hcd.
+
+A bit like how the roothub device is created, or PHYs are tuned.
+
+Thanks
+Mathias
+
+
+
+
+
+
+
+
+
+
+
