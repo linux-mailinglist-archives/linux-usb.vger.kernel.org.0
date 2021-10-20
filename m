@@ -2,105 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5B64348EA
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Oct 2021 12:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87BD84348FA
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Oct 2021 12:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbhJTKa0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Oct 2021 06:30:26 -0400
-Received: from mga09.intel.com ([134.134.136.24]:6891 "EHLO mga09.intel.com"
+        id S229959AbhJTKed (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Oct 2021 06:34:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49266 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229959AbhJTKa0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 20 Oct 2021 06:30:26 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10142"; a="228621976"
-X-IronPort-AV: E=Sophos;i="5.87,166,1631602800"; 
-   d="scan'208";a="228621976"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2021 03:28:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,166,1631602800"; 
-   d="scan'208";a="575280545"
-Received: from saranya-nuc10i7fnh.iind.intel.com ([10.223.216.64])
-  by fmsmga002.fm.intel.com with ESMTP; 20 Oct 2021 03:27:58 -0700
-From:   Saranya Gopal <saranya.gopal@intel.com>
-To:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        hdegoede@redhat.com
-Cc:     heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        rajaram.regupathy@intel.com,
-        Saranya Gopal <saranya.gopal@intel.com>
-Subject: [PATCH 2/2] Revert "platform/x86: i2c-multi-instantiate: Don't create platform device for INT3515 ACPI nodes"
-Date:   Wed, 20 Oct 2021 07:56:20 +0530
-Message-Id: <20211020022620.21012-3-saranya.gopal@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211020022620.21012-1-saranya.gopal@intel.com>
-References: <20211020022620.21012-1-saranya.gopal@intel.com>
+        id S229639AbhJTKec (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 20 Oct 2021 06:34:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 96CC161038;
+        Wed, 20 Oct 2021 10:32:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634725938;
+        bh=kEIAWD+bpGZoBVbbebOjMIQ0Llna+qN1VaxbtYqNI+k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LQ4CLpU3TAXV4bI+RQS6xx2VnddCqOTSyHGYzDE4b7GyBba/5ghc6EttQzfj36sRD
+         ASkrG1uJ8LH6bgfk1OQ/7WWUM5HzvKK06McJ8KGJp6njLDY3zOHpgrFTEp9x5TyB/3
+         sV2SWwVtvtzsTnsRdTzad3MbB3lIoooOt1YcgqYr1jVYY9drZxjCByw7x6RX/g0prZ
+         pSKYlh+QbyXAL1A8pldZM6txDBCwxeehsVAJHSI6OF3r7DB1Oai/dCO2uQkcEehAEe
+         2VXnu5ZJEjrZsbJKXTeI8s0CdcI0wNv6sl2X3OwTB+5KuXPT606BN+q/bHnLXhkC91
+         HTktkrnrlJzBQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1md8tD-0006Un-BY; Wed, 20 Oct 2021 12:32:08 +0200
+Date:   Wed, 20 Oct 2021 12:32:07 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     syzkaller-bugs@googlegroups.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        syzbot+76bb1d34ffa0adc03baa@syzkaller.appspotmail.com
+Subject: Re: [PATCH] usbnet: sanity check for maxpacket
+Message-ID: <YW/wJ727MSdiLrIY@hovoldconsulting.com>
+References: <20211020091733.20085-1-oneukum@suse.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211020091733.20085-1-oneukum@suse.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This reverts commit 9bba96275576da0cf78ede62aeb2fc975ed8a32d.
+On Wed, Oct 20, 2021 at 11:17:33AM +0200, Oliver Neukum wrote:
+> maxpacket of 0 makes no sense and oopdses as we need to divide
 
-The above commit was added to prevent the tipd driver from loading
-in devices which have INT3515 ACPI nodes since high CPU load was
-reported in these devices due to interrupt flood. Now that the issue
-of interrupt flood in the tipd driver is fixed, re-enable the creation
-of platform device for INT3515 ACPI nodes.
+typo: oopses
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Saranya Gopal <saranya.gopal@intel.com>
----
- drivers/platform/x86/i2c-multi-instantiate.c | 31 +++++---------------
- 1 file changed, 8 insertions(+), 23 deletions(-)
+> by it. Give up.
+> 
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> Reported-by: syzbot+76bb1d34ffa0adc03baa@syzkaller.appspotmail.com
+> ---
+>  drivers/net/usb/usbnet.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+> index 840c1c2ab16a..396f5e677bf0 100644
+> --- a/drivers/net/usb/usbnet.c
+> +++ b/drivers/net/usb/usbnet.c
+> @@ -1788,6 +1788,9 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
+>  	if (!dev->rx_urb_size)
+>  		dev->rx_urb_size = dev->hard_mtu;
+>  	dev->maxpacket = usb_maxpacket (dev->udev, dev->out, 1);
+> +	if (dev->maxpacket == 0)
+> +		/* that is a broken device */
+> +		goto out4;
 
-diff --git a/drivers/platform/x86/i2c-multi-instantiate.c b/drivers/platform/x86/i2c-multi-instantiate.c
-index a50153ecd560..4956a1df5b90 100644
---- a/drivers/platform/x86/i2c-multi-instantiate.c
-+++ b/drivers/platform/x86/i2c-multi-instantiate.c
-@@ -139,29 +139,13 @@ static const struct i2c_inst_data bsg2150_data[]  = {
- 	{}
- };
- 
--/*
-- * Device with _HID INT3515 (TI PD controllers) has some unresolved interrupt
-- * issues. The most common problem seen is interrupt flood.
-- *
-- * There are at least two known causes. Firstly, on some boards, the
-- * I2CSerialBus resource index does not match the Interrupt resource, i.e. they
-- * are not one-to-one mapped like in the array below. Secondly, on some boards
-- * the IRQ line from the PD controller is not actually connected at all. But the
-- * interrupt flood is also seen on some boards where those are not a problem, so
-- * there are some other problems as well.
-- *
-- * Because of the issues with the interrupt, the device is disabled for now. If
-- * you wish to debug the issues, uncomment the below, and add an entry for the
-- * INT3515 device to the i2c_multi_instance_ids table.
-- *
-- * static const struct i2c_inst_data int3515_data[]  = {
-- *	{ "tps6598x", IRQ_RESOURCE_APIC, 0 },
-- *	{ "tps6598x", IRQ_RESOURCE_APIC, 1 },
-- *	{ "tps6598x", IRQ_RESOURCE_APIC, 2 },
-- *	{ "tps6598x", IRQ_RESOURCE_APIC, 3 },
-- *	{ }
-- * };
-- */
-+static const struct i2c_inst_data int3515_data[]  = {
-+	{ "tps6598x", IRQ_RESOURCE_APIC, 0 },
-+	{ "tps6598x", IRQ_RESOURCE_APIC, 1 },
-+	{ "tps6598x", IRQ_RESOURCE_APIC, 2 },
-+	{ "tps6598x", IRQ_RESOURCE_APIC, 3 },
-+	{}
-+};
- 
- /*
-  * Note new device-ids must also be added to i2c_multi_instantiate_ids in
-@@ -170,6 +154,7 @@ static const struct i2c_inst_data bsg2150_data[]  = {
- static const struct acpi_device_id i2c_multi_inst_acpi_ids[] = {
- 	{ "BSG1160", (unsigned long)bsg1160_data },
- 	{ "BSG2150", (unsigned long)bsg2150_data },
-+	{ "INT3515", (unsigned long)int3515_data },
- 	{ }
- };
- MODULE_DEVICE_TABLE(acpi, i2c_multi_inst_acpi_ids);
--- 
-2.17.1
+I'd prefer brackets here since it's a multi-line block. Or just drop the
+comment.
 
+>  
+>  	/* let userspace know we have a random address */
+>  	if (ether_addr_equal(net->dev_addr, node_id))
+
+Other than that, looks good:
+
+Reviewed-by: Johan Hovold <johan@kernel.org>
+
+Johan
