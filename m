@@ -2,76 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 736964347C0
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Oct 2021 11:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE944348E8
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Oct 2021 12:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbhJTJUE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Oct 2021 05:20:04 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:40792 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbhJTJTu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Oct 2021 05:19:50 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id EB9691FD47;
-        Wed, 20 Oct 2021 09:17:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1634721455; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=g+R9ECcr894LWO3oSHMxjA3nZr4l2pEpfIypzba5F2I=;
-        b=nbZQoKJEVWuICnzQbxKjPevg8SLPrnELUDuRCzhErN6vBVmRjUwRbOjgkxYCtpaBVH9083
-        /XOUUJU/gjcfKd4QCCyMKhNqgJPXl5OdTK557VZq6CqMGl3TXdehfpuRxFZDLA/mNBlB57
-        Qaxz+sKW0If1Iksl3FWhF76oT8UGOWQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9B1F313F81;
-        Wed, 20 Oct 2021 09:17:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id tmYlJK/eb2FcegAAMHmgww
-        (envelope-from <oneukum@suse.com>); Wed, 20 Oct 2021 09:17:35 +0000
-From:   Oliver Neukum <oneukum@suse.com>
-To:     syzkaller-bugs@googlegroups.com, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, davem@davemloft.net, kuba@kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        syzbot+76bb1d34ffa0adc03baa@syzkaller.appspotmail.com
-Subject: [PATCH] usbnet: sanity check for maxpacket
-Date:   Wed, 20 Oct 2021 11:17:33 +0200
-Message-Id: <20211020091733.20085-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.26.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S229993AbhJTKa0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Oct 2021 06:30:26 -0400
+Received: from mga09.intel.com ([134.134.136.24]:6891 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229900AbhJTKaZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 20 Oct 2021 06:30:25 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10142"; a="228621962"
+X-IronPort-AV: E=Sophos;i="5.87,166,1631602800"; 
+   d="scan'208";a="228621962"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2021 03:27:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,166,1631602800"; 
+   d="scan'208";a="575280529"
+Received: from saranya-nuc10i7fnh.iind.intel.com ([10.223.216.64])
+  by fmsmga002.fm.intel.com with ESMTP; 20 Oct 2021 03:27:54 -0700
+From:   Saranya Gopal <saranya.gopal@intel.com>
+To:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        hdegoede@redhat.com
+Cc:     heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        rajaram.regupathy@intel.com,
+        Saranya Gopal <saranya.gopal@intel.com>
+Subject: [PATCH 0/2] Fix IRQ flood issue in TI PD controller
+Date:   Wed, 20 Oct 2021 07:56:18 +0530
+Message-Id: <20211020022620.21012-1-saranya.gopal@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-maxpacket of 0 makes no sense and oopdses as we need to divide
-by it. Give up.
+Hi,
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Reported-by: syzbot+76bb1d34ffa0adc03baa@syzkaller.appspotmail.com
----
- drivers/net/usb/usbnet.c | 3 +++
- 1 file changed, 3 insertions(+)
+There was an issue reported that the TI PD controller driver is causing 
+high CPU load due to a flood of interrupts. So, a patch was added in 
+the i2c-multi-instantiate driver to stop the TI PD driver from loading 
+in devices with INT3515 ACPI nodes.
+We identified that required event interrupts are not being set in the interrupt 
+mask register from the driver to the register of the controller.
+We enabled only the necessary events like data status update, power status update 
+and plug events in the interrupt mask register of the TI PD controller. 
+After enabling these events in the interrupt mask register, there is no interrupt flood.
+This patch series contains the fix for the interrupt flood issue 
+in the TI PD driver and another patch to re-enable the INT3515 platform device.
+I prefer this patch series to be taken through usb tree since the fix is in 
+the TI USB PD driver and the second patch is just a revert patch.
 
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index 840c1c2ab16a..396f5e677bf0 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1788,6 +1788,9 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
- 	if (!dev->rx_urb_size)
- 		dev->rx_urb_size = dev->hard_mtu;
- 	dev->maxpacket = usb_maxpacket (dev->udev, dev->out, 1);
-+	if (dev->maxpacket == 0)
-+		/* that is a broken device */
-+		goto out4;
- 
- 	/* let userspace know we have a random address */
- 	if (ether_addr_equal(net->dev_addr, node_id))
+Hi Hans,
+Could I get your Ack to take this series through the usb tree?
+
+Saranya Gopal (2):
+  usb: typec: tipd: Enable event interrupts by default
+  Revert "platform/x86: i2c-multi-instantiate: Don't create platform
+    device for INT3515 ACPI nodes"
+
+ drivers/platform/x86/i2c-multi-instantiate.c | 31 +++++---------------
+ drivers/usb/typec/tipd/core.c                |  8 +++++
+ 2 files changed, 16 insertions(+), 23 deletions(-)
+
 -- 
-2.26.2
+2.17.1
 
