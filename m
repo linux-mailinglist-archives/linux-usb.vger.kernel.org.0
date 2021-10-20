@@ -2,71 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89CE34351F2
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Oct 2021 19:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5B7435334
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Oct 2021 20:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbhJTRvf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Oct 2021 13:51:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55498 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230499AbhJTRvZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 20 Oct 2021 13:51:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 083B46128B;
-        Wed, 20 Oct 2021 17:49:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634752150;
-        bh=UY7whghJ0CF+27cck+zPo8YHzcjinvyXjF/op8BsEto=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FzW4GeyNS55sRWhnvPUiGcJuCKOtmL1+3Fs7GwIUyKZ1XEBZMiEtemmrwggcZrq1F
-         o64alCGTeqAnnRBz2y3Emp++LUAf4k3xdQ/7i45jbng+qaCjnOCyCy+rwG4Nmnb3Pl
-         fu3moUeh15d70HbM/1u/ab3BLII+F+Bkx4SnFx4g=
-Date:   Wed, 20 Oct 2021 19:49:07 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jens Axboe <axboe@kernel.dk>, linux-usb@vger.kernel.org
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
-Subject: Re: [PATCH] fs: kill unused ret2 argument from iocb->ki_complete()
-Message-ID: <YXBWk8Zzi7yIyTi/@kroah.com>
-References: <ce839d66-1d05-dab8-4540-71b8485fdaf3@kernel.dk>
- <YXBSLweOk1he8DTO@infradead.org>
- <fe54edc2-da83-6dbb-cfb9-ad3a7fbe3780@kernel.dk>
+        id S231536AbhJTSxs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Oct 2021 14:53:48 -0400
+Received: from mxout04.lancloud.ru ([45.84.86.114]:37710 "EHLO
+        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231534AbhJTSxS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Oct 2021 14:53:18 -0400
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 6D0AB20AD26C
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH 00/22] Explicitly deny IRQ0 in the USB host drivers
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@intel.com>
+References: <20211018183930.8448-1-s.shtylyov@omp.ru>
+ <YXBA7IdNIrWNAEi3@kroah.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <e3792d5f-d8a1-02cf-9538-bfe1f61f6f38@omp.ru>
+Date:   Wed, 20 Oct 2021 21:50:54 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fe54edc2-da83-6dbb-cfb9-ad3a7fbe3780@kernel.dk>
+In-Reply-To: <YXBA7IdNIrWNAEi3@kroah.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 11:35:27AM -0600, Jens Axboe wrote:
-> On 10/20/21 11:30 AM, Christoph Hellwig wrote:
-> > On Wed, Oct 20, 2021 at 10:49:07AM -0600, Jens Axboe wrote:
-> >> It's not used for anything, and we're wasting time passing in zeroes
-> >> where we could just ignore it instead. Update all ki_complete users in
-> >> the kernel to drop that last argument.
-> >>
-> >> The exception is the USB gadget code, which passes in non-zero. But
-> >> since nobody every looks at ret2, it's still pointless.
-> > 
-> > Yes, the USB gadget passes non-zero, and aio passes that on to
-> > userspace.  So this is an ABI change.  Does it actually matter?
-> > I don't know, but you could CC the relevant maintainers and list
-> > to try to figure that out.
+On 10/20/21 7:16 PM, Greg Kroah-Hartman wrote:
+[...]
+>> Here are 22 patches against the 'usb-next' branch of Greg KH's 'usb.git' repo.
+>> The affected drivers use platform_get_irq() which can return IRQ0 (considered
+>> invalid, according to Linus) that means broken HCD when passed to usb_add_hcd()
+>> called at the end of the probe methods. I think that the solution to this issue
+>> is either explicitly deny or accept IRQ0 in usb_add_hcd()... /but/ here's this
+>> patch set to get the things going...
+
+[...]
+
+> Can you update and send a v2 for this series, with Alan's acks added to
+> the proper commits and fix up the other things that people have found?
+
+   OK, I'll try. Posting the patches with git for the 1st time, so somewhat
+afraid to ruin something (which I've already done). :-)
+
+> thanks,
 > 
-> True, guess it does go out to userspace. Greg, is anyone using
-> it on the userspace side?
+> greg k-h
 
-I really do not know (adding linux-usb@vger)  My interactions with the
-gadget code have not been through the aio api, thankfully :)
-
-Odds are it's fine, I think that something had to be passed in there so
-that was chosen?  If the aio code didn't do anything with it, I can't
-see where the gadget code gets it back at anywhere, but I might be
-looking in the wrong place.
-
-Anyone else here know?
-
-thanks,
-
-greg k-h
+MBR, Sergey
