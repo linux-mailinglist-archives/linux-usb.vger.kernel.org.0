@@ -2,99 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E49C434BC4
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Oct 2021 15:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A744B434F6B
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Oct 2021 17:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbhJTNGg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Oct 2021 09:06:36 -0400
-Received: from mga02.intel.com ([134.134.136.20]:47989 "EHLO mga02.intel.com"
+        id S230517AbhJTP6k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Oct 2021 11:58:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34458 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229702AbhJTNGg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 20 Oct 2021 09:06:36 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10142"; a="215937382"
-X-IronPort-AV: E=Sophos;i="5.87,166,1631602800"; 
-   d="scan'208";a="215937382"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2021 06:04:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,166,1631602800"; 
-   d="scan'208";a="631256361"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Oct 2021 06:04:16 -0700
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     devicetree@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Bastien Nocera <hadess@hadess.net>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>
-References: <20210813195228.2003500-1-mka@chromium.org>
- <20210813125146.v16.6.I7a3a7d9d2126c34079b1cab87aa0b2ec3030f9b7@changeid>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v16 6/7] usb: host: xhci-plat: Create platform device for
- onboard hubs in probe()
-Message-ID: <dfac0025-b693-2431-04c8-1dba7ef32141@linux.intel.com>
-Date:   Wed, 20 Oct 2021 16:05:37 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.8.1
+        id S230219AbhJTP6j (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 20 Oct 2021 11:58:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 15A6861391;
+        Wed, 20 Oct 2021 15:56:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634745385;
+        bh=Q6GukgSxum5heAjWu5WVyDdY9rzmygiOSc8He3sQwrE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=IR4Gnr2XMuyGLrAh4Wgp2n7WVebOkBKwoenrs0vDN7Fk1lQRD3njkHRI5QnSGIWU/
+         BHLlOjW8SS8hwNHRxd5NlTzHOdqAZ/VL/NDvmga+FACCVe+ft4q9xCqgppaqguwdjt
+         PsPceZg1Wh1y7Sf92ToeOKem8Aht29iYMxy0g6nJrA4xTOtbtsyUJmdrpm/MWjzzlq
+         Y/h6Osj6wzxQE8JtL/Lvv7/dMrSxZSWti8GcJ5BhpVx4W/OGRo0gICVaJQJoPnXhCb
+         4jg794KV2ImAGmjtjmXoqQXCbYOrb6jByWldoRMdMsOQfwQxNc0eD7ZlrgpdKzSRDY
+         mgc8SfBpQuK/Q==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     davem@davemloft.net
+Cc:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        steve.glendinning@shawell.net, UNGLinuxDriver@microchip.com,
+        linux-usb@vger.kernel.org
+Subject: [PATCH net-next 02/12] usb: smsc: use eth_hw_addr_set()
+Date:   Wed, 20 Oct 2021 08:56:07 -0700
+Message-Id: <20211020155617.1721694-3-kuba@kernel.org>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20211020155617.1721694-1-kuba@kernel.org>
+References: <20211020155617.1721694-1-kuba@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20210813125146.v16.6.I7a3a7d9d2126c34079b1cab87aa0b2ec3030f9b7@changeid>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+Commit 406f42fa0d3c ("net-next: When a bond have a massive amount
+of VLANs...") introduced a rbtree for faster Ethernet address look
+up. To maintain netdev->dev_addr in this tree we need to make all
+the writes to it got through appropriate helpers.
 
-On 13.8.2021 22.52, Matthias Kaehlcke wrote:
-> Call onboard_hub_create/destroy_pdevs() from  _probe()/_remove()
-> to create/destroy platform devices for onboard USB hubs that may
-> be connected to the root hub of the controller. These functions
-> are a NOP unless CONFIG_USB_ONBOARD_HUB=y/m.
-> 
-> Also add a field to struct xhci_hcd to keep track of the onboard hub
-> platform devices that are owned by the xHCI.
-> 
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: steve.glendinning@shawell.net
+CC: UNGLinuxDriver@microchip.com
+CC: linux-usb@vger.kernel.org
+---
+ drivers/net/usb/smsc75xx.c | 6 ++++--
+ drivers/net/usb/smsc95xx.c | 6 ++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-Haven't really looked at this series until now.
-
-Is there any reason why the xhci platform driver was selected as 
-the best place to create/remove these onboard hub devices?
-
-This ties the onboard hubs to xhci, and won't work in case we have onboard
-hubs connected to a ehci controllers.
-
-If separate devices for controlling onboard hub power is the right solution then
-how about creating the onboard hub device in usb_add_hcd() (hcd.c), and
-store it in struct usb_hcd.
-
-A bit like how the roothub device is created, or PHYs are tuned.
-
-Thanks
-Mathias
-
-
-
-
-
-
-
-
-
-
+diff --git a/drivers/net/usb/smsc75xx.c b/drivers/net/usb/smsc75xx.c
+index 3b6987bb4fbe..95de452ff4da 100644
+--- a/drivers/net/usb/smsc75xx.c
++++ b/drivers/net/usb/smsc75xx.c
+@@ -757,6 +757,8 @@ static int smsc75xx_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
+ 
+ static void smsc75xx_init_mac_address(struct usbnet *dev)
+ {
++	u8 addr[ETH_ALEN];
++
+ 	/* maybe the boot loader passed the MAC address in devicetree */
+ 	if (!platform_get_ethdev_address(&dev->udev->dev, dev->net)) {
+ 		if (is_valid_ether_addr(dev->net->dev_addr)) {
+@@ -767,8 +769,8 @@ static void smsc75xx_init_mac_address(struct usbnet *dev)
+ 	}
+ 
+ 	/* try reading mac address from EEPROM */
+-	if (smsc75xx_read_eeprom(dev, EEPROM_MAC_OFFSET, ETH_ALEN,
+-			dev->net->dev_addr) == 0) {
++	if (smsc75xx_read_eeprom(dev, EEPROM_MAC_OFFSET, ETH_ALEN, addr) == 0) {
++		eth_hw_addr_set(dev->net, addr);
+ 		if (is_valid_ether_addr(dev->net->dev_addr)) {
+ 			/* eeprom values are valid so use them */
+ 			netif_dbg(dev, ifup, dev->net,
+diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
+index 21a42a6527dc..20fe4cd8f784 100644
+--- a/drivers/net/usb/smsc95xx.c
++++ b/drivers/net/usb/smsc95xx.c
+@@ -755,6 +755,8 @@ static int smsc95xx_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
+ 
+ static void smsc95xx_init_mac_address(struct usbnet *dev)
+ {
++	u8 addr[ETH_ALEN];
++
+ 	/* maybe the boot loader passed the MAC address in devicetree */
+ 	if (!platform_get_ethdev_address(&dev->udev->dev, dev->net)) {
+ 		if (is_valid_ether_addr(dev->net->dev_addr)) {
+@@ -765,8 +767,8 @@ static void smsc95xx_init_mac_address(struct usbnet *dev)
+ 	}
+ 
+ 	/* try reading mac address from EEPROM */
+-	if (smsc95xx_read_eeprom(dev, EEPROM_MAC_OFFSET, ETH_ALEN,
+-			dev->net->dev_addr) == 0) {
++	if (smsc95xx_read_eeprom(dev, EEPROM_MAC_OFFSET, ETH_ALEN, addr) == 0) {
++		eth_hw_addr_set(dev->net, addr);
+ 		if (is_valid_ether_addr(dev->net->dev_addr)) {
+ 			/* eeprom values are valid so use them */
+ 			netif_dbg(dev, ifup, dev->net, "MAC address read from EEPROM\n");
+-- 
+2.31.1
 
