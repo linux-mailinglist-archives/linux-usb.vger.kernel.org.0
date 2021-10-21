@@ -2,92 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF73343682A
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 18:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C2043687D
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 18:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbhJUQmw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Oct 2021 12:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
+        id S232003AbhJUQ65 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Oct 2021 12:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbhJUQmn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Oct 2021 12:42:43 -0400
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08951C061764;
-        Thu, 21 Oct 2021 09:40:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Content-Type:
-        References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID
-        :Content-Description; bh=PSTuS+2kRoxl2cZOxwy2FIn+5gaz/HAlHJRLYgxO/FU=; b=yO+7
-        UjU3QZMeeIx5DkL/dLavKg+WrzAQ0+SztOxQ5QfQ+R+vi3OSIcMZ5pfRSeGgW7jrHAARTnHvpb3Wu
-        5NB0tt7sD7e6o1q19dggFTCJpcXKoQkHehwg2TLJdtcsKNulTPA76DEOfwfJBXxlQJ+F6bmWYu1w6
-        emCQgfWl+iQbCnRgbpNAOHn/uOEOQdRaxswKH9r/t+0X8pAcRFIBhpS7Rqvkz1ttXSH201hXG3j8Z
-        lRN+MHY/rqGVOvNu/+5W3TXlNqZ1GjrtOpGPyWhlUnL4dXQU02HfIpnmnUbepkjnVEF/lUBajX72o
-        ILhsJoalxyKxfncjQuJ6QnvXjGFU5A==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1mdb78-0005xX-Hz; Thu, 21 Oct 2021 17:40:22 +0100
-Date:   Thu, 21 Oct 2021 17:40:21 +0100
-From:   John Keeping <john@metanate.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-usb@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
+        with ESMTP id S231897AbhJUQ64 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Oct 2021 12:58:56 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82610C061764
+        for <linux-usb@vger.kernel.org>; Thu, 21 Oct 2021 09:56:40 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id o4so1611401oia.10
+        for <linux-usb@vger.kernel.org>; Thu, 21 Oct 2021 09:56:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=/hlV407F1l+ROiLc6tM2c93643d0+AHOqhGVvP4z9QY=;
+        b=LohioBCl5wGoK963SUABKlFG5Z7gnOJVzhz+v0Es4zjnxy8/hY4q4m62vPBxo1lna8
+         VXAmLliqNuivGoaAV8rlJ9MA3lCQpaIIztRIjcRy1gNRbSNPwyydcef/cTaE1MaUr2Sq
+         8zPafVhchDKM1Yx2cKy41ug0iSvWSBj6eq7BbxC75pWStXkaZAoswc+QK+ukawpyC8zv
+         aVFE36fGm5a93cLtA/haDVo35306888aTI3t836IQsCogAT4xrLIQ4w4p1ZT1SbrmyVY
+         HQWLef5rEYt2E8WFoq1LGaFLYu7HITE8Dzz7/G88bby6x9fwyFq3rcrQrSJ968LoWhtD
+         5nTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/hlV407F1l+ROiLc6tM2c93643d0+AHOqhGVvP4z9QY=;
+        b=LtIo+sKdSzTNS3kV/+MKP0vUVBkf2SMIrPx7gHUobbub3o5D890TSGUNOJgIpWNjiG
+         vJXzP6h8oHOIiQ0nyC4JT6rZHgqL7+dk/tVmlY1aWrjIOVksowI+OxUFpma6KaqZsGEA
+         VKNEkg6ag4ijBZiBUyB9OrvSCEFMCekvW2bPAgo6/LP/PAdU3qzEPegQYojzLjTzDmXi
+         mhE3qLcH87jICMUA8hewD0m4rgOqho+jPLdNf/gbGaQgUYJW4PNgTZZOt+SsyjxfKWcS
+         7E7BkcihbiL7VfM8ungaRcwcEm7wKsECzdWZhTYgND3/POxCxzdjkT8GFNQhFQnUgHK5
+         gQag==
+X-Gm-Message-State: AOAM530wXc/wRrFS1V9HNsAWlnnP9leOx4joCgN48vOoWwTW2m6JaeZ5
+        EdZ23zDNvmdkJ05VW/Lv5MCJjA==
+X-Google-Smtp-Source: ABdhPJyIl3B3WhG49DdG18eRdUfkGtfJCsFJhehcK1kmRxQlOjFYPLDQjkX18yZ0tq/J/9Yy/uvjzw==
+X-Received: by 2002:a05:6808:171b:: with SMTP id bc27mr5719417oib.21.1634835399871;
+        Thu, 21 Oct 2021 09:56:39 -0700 (PDT)
+Received: from ?IPv6:2600:380:783a:c43c:af64:c142:4db7:63ac? ([2600:380:783a:c43c:af64:c142:4db7:63ac])
+        by smtp.gmail.com with ESMTPSA id n107sm396229ota.40.2021.10.21.09.56.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Oct 2021 09:56:39 -0700 (PDT)
+Subject: Re: [PATCH] fs: kill unused ret2 argument from iocb->ki_complete()
+To:     John Keeping <john@metanate.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Christoph Hellwig <hch@infradead.org>,
         "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
         "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
-Subject: Re: [PATCH] fs: kill unused ret2 argument from iocb->ki_complete()
-Message-ID: <20211021174021.273c82b1.john@metanate.com>
-In-Reply-To: <YXBWk8Zzi7yIyTi/@kroah.com>
 References: <ce839d66-1d05-dab8-4540-71b8485fdaf3@kernel.dk>
-        <YXBSLweOk1he8DTO@infradead.org>
-        <fe54edc2-da83-6dbb-cfb9-ad3a7fbe3780@kernel.dk>
-        <YXBWk8Zzi7yIyTi/@kroah.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+ <YXBSLweOk1he8DTO@infradead.org>
+ <fe54edc2-da83-6dbb-cfb9-ad3a7fbe3780@kernel.dk> <YXBWk8Zzi7yIyTi/@kroah.com>
+ <20211021174021.273c82b1.john@metanate.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <ab08cafb-613f-ce38-4437-8f247c0bc0c2@kernel.dk>
+Date:   Thu, 21 Oct 2021 10:56:38 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20211021174021.273c82b1.john@metanate.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 20 Oct 2021 19:49:07 +0200
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-
-> On Wed, Oct 20, 2021 at 11:35:27AM -0600, Jens Axboe wrote:
-> > On 10/20/21 11:30 AM, Christoph Hellwig wrote:  
-> > > On Wed, Oct 20, 2021 at 10:49:07AM -0600, Jens Axboe wrote:  
-> > >> It's not used for anything, and we're wasting time passing in zeroes
-> > >> where we could just ignore it instead. Update all ki_complete users in
-> > >> the kernel to drop that last argument.
-> > >>
-> > >> The exception is the USB gadget code, which passes in non-zero. But
-> > >> since nobody every looks at ret2, it's still pointless.  
-> > > 
-> > > Yes, the USB gadget passes non-zero, and aio passes that on to
-> > > userspace.  So this is an ABI change.  Does it actually matter?
-> > > I don't know, but you could CC the relevant maintainers and list
-> > > to try to figure that out.  
-> > 
-> > True, guess it does go out to userspace. Greg, is anyone using
-> > it on the userspace side?  
+On 10/21/21 10:40 AM, John Keeping wrote:
+> On Wed, 20 Oct 2021 19:49:07 +0200
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 > 
-> I really do not know (adding linux-usb@vger)  My interactions with the
-> gadget code have not been through the aio api, thankfully :)
+>> On Wed, Oct 20, 2021 at 11:35:27AM -0600, Jens Axboe wrote:
+>>> On 10/20/21 11:30 AM, Christoph Hellwig wrote:  
+>>>> On Wed, Oct 20, 2021 at 10:49:07AM -0600, Jens Axboe wrote:  
+>>>>> It's not used for anything, and we're wasting time passing in zeroes
+>>>>> where we could just ignore it instead. Update all ki_complete users in
+>>>>> the kernel to drop that last argument.
+>>>>>
+>>>>> The exception is the USB gadget code, which passes in non-zero. But
+>>>>> since nobody every looks at ret2, it's still pointless.  
+>>>>
+>>>> Yes, the USB gadget passes non-zero, and aio passes that on to
+>>>> userspace.  So this is an ABI change.  Does it actually matter?
+>>>> I don't know, but you could CC the relevant maintainers and list
+>>>> to try to figure that out.  
+>>>
+>>> True, guess it does go out to userspace. Greg, is anyone using
+>>> it on the userspace side?  
+>>
+>> I really do not know (adding linux-usb@vger)  My interactions with the
+>> gadget code have not been through the aio api, thankfully :)
+>>
+>> Odds are it's fine, I think that something had to be passed in there so
+>> that was chosen?  If the aio code didn't do anything with it, I can't
+>> see where the gadget code gets it back at anywhere, but I might be
+>> looking in the wrong place.
+>>
+>> Anyone else here know?
 > 
-> Odds are it's fine, I think that something had to be passed in there so
-> that was chosen?  If the aio code didn't do anything with it, I can't
-> see where the gadget code gets it back at anywhere, but I might be
-> looking in the wrong place.
+> I really doubt anyone uses io_event::res2 with FunctionFS gadgets.  The
+> examples in tools/usb/ffs-aio-example/ either check just "res" or ignore
+> the status completely.
 > 
-> Anyone else here know?
+> The only other program I can find using aio FunctionFS is adbd which
+> also checks res and ignores res2 [1].  Other examples I know of just use
+> synchronous I/O.
 
-I really doubt anyone uses io_event::res2 with FunctionFS gadgets.  The
-examples in tools/usb/ffs-aio-example/ either check just "res" or ignore
-the status completely.
+We might consider doing a separate change to just skip status reporting,
+and then once a few releases have passed and if nobody has complained,
+then we can drop it entirely. If we do it separately, it'd be an easy
+revert of just that part if we do run into trouble.
 
-The only other program I can find using aio FunctionFS is adbd which
-also checks res and ignores res2 [1].  Other examples I know of just use
-synchronous I/O.
+At least for now we'll just have the one argument bundling the two parts
+for aio, so there's not a great need to eliminate the status thing on
+the USB gadget side. But if it is unused, then it should get removed
+regardless.
 
-[1] https://github.com/aosp-mirror/platform_system_core/blob/34a0e57a257f0081c672c9be0e87230762e677ca/adb/daemon/usb.cpp#L527
+-- 
+Jens Axboe
+
