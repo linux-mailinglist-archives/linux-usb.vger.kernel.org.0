@@ -2,168 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FF2435FDB
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 13:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF22B4360DD
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 13:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbhJULE4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Oct 2021 07:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47072 "EHLO
+        id S231126AbhJUL5v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Oct 2021 07:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbhJULEx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Oct 2021 07:04:53 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA08C061749
-        for <linux-usb@vger.kernel.org>; Thu, 21 Oct 2021 04:02:37 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mdVqC-0000p6-Cl; Thu, 21 Oct 2021 13:02:32 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mdVqB-0008Fo-8C; Thu, 21 Oct 2021 13:02:31 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mdVqB-0001Gb-79; Thu, 21 Oct 2021 13:02:31 +0200
-Date:   Thu, 21 Oct 2021 13:02:31 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Peter Chen <peter.chen@nxp.com>,
-        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH] ARM: imx25: provide a fixed regulator for usb phys
-Message-ID: <20211021110231.pcdjjax67ygs3iok@pengutronix.de>
-References: <20190625100412.11815-1-u.kleine-koenig@pengutronix.de>
- <VI1PR04MB5327E09DB0DFEB7E868DB59D8BE20@VI1PR04MB5327.eurprd04.prod.outlook.com>
- <20190626055409.jjiwptyths6p6jty@pengutronix.de>
- <VI1PR04MB53270E979BA9817D47A7AFC88BFD0@VI1PR04MB5327.eurprd04.prod.outlook.com>
- <20190724130939.43t66umrasbe4wwf@pengutronix.de>
- <20190923102825.zemkconnvdibke5h@pengutronix.de>
- <20191115090757.usc753lq7uujtqyy@pengutronix.de>
+        with ESMTP id S230523AbhJUL5s (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Oct 2021 07:57:48 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4563EC06161C;
+        Thu, 21 Oct 2021 04:55:32 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id g36so276740lfv.3;
+        Thu, 21 Oct 2021 04:55:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V1jEJHNy1rpIMC1prko3vAzn6yRQlR45J0vSd88M0Wc=;
+        b=XOMAHUJx0i/12kKJAXzxVziVwGKqGOSnAI1TsCe02UCieVeT5TKeDLmXlDLyDxpPdH
+         SKeavDKLW8GV/KarRKogZt01hDZtJVr+ejkVRSCu+6iaDB4g8xLkW6ZVFM/DcDwO/J88
+         WF2swpt7wLMziMbmB7NWpZvLgF3B+VDLcryOF6y5C019tMAI0P5bO7fKHwOytCZRivIy
+         KJEkIeEwEjhufc6CwZEImW8gHgCgoMJ2fFE7Dgh58Nl8A8/MxNzSW21/Taho0QyVHcJZ
+         K7zXlx5fYU9CBej/2QANlERqlDsUbcxt7bciF+I0GeV/Xt5SBWMOWvXZPnd4va5C7+/c
+         qs4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V1jEJHNy1rpIMC1prko3vAzn6yRQlR45J0vSd88M0Wc=;
+        b=fmODIC4sIeGgfdmfVm+ewCLa0ujeEkiA+9MSDecxVXjhJciAe5DBalqdJ1MWfsPcQA
+         Tof3xKPAVLVB/VTo9XhxeAAb1HVFjF1YaLiowTcJsC0A2iU8q9WayVg3+TBCmvbTFs0r
+         XrYoJy44lQdHEAVGJDSuad26KkR2OG0HsdPfknTRLkq9F21MsewbLLlmG7MjmIGswtYH
+         KB1mmCdH8BxSaWYrbgYQV+Ov11k2bzhqD9AgkV5jyJ/1vLGh81scBhlGbFIpw1xq3Aje
+         jlHN84QqsmUKfqCo0ztaMeMGnnv3GAZWolm/fnUVHF6d8bVdrfP2H9a3HgWQGiNuvZiH
+         H24w==
+X-Gm-Message-State: AOAM532fK6WGR0XqZrW+Dl4cA3XT2J0LvY++EzXrI8BM6u8QtEd2aPb5
+        vZN/Ej1BURcCTIWM/19Dbz5NHuKNCf0=
+X-Google-Smtp-Source: ABdhPJyt3bxMyhH+ZwiH/BUspV4Vdc1aLduwGkpeVI69xJqU2kMcBQppVdxrb4d6Cw2tkqL31P37Bg==
+X-Received: by 2002:ac2:5f06:: with SMTP id 6mr5065587lfq.516.1634817330659;
+        Thu, 21 Oct 2021 04:55:30 -0700 (PDT)
+Received: from localhost.localdomain (94-29-39-10.dynamic.spd-mgts.ru. [94.29.39.10])
+        by smtp.gmail.com with ESMTPSA id b30sm440565lfv.288.2021.10.21.04.55.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Oct 2021 04:55:30 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        JC Kuo <jckuo@nvidia.com>, Nicolas Chauvet <kwizart@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH v1] usb: xhci: tegra: Check padctrl interrupt presence in device tree
+Date:   Thu, 21 Oct 2021 14:55:01 +0300
+Message-Id: <20211021115501.14932-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gdginxlkf2f7j5c4"
-Content-Disposition: inline
-In-Reply-To: <20191115090757.usc753lq7uujtqyy@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Older device-trees don't specify padctrl interrupt and xhci-tegra driver
+now fails to probe with -EINVAL using those device-trees. Check interrupt
+presence and disallow runtime PM suspension if it's missing to fix the
+trouble.
 
---gdginxlkf2f7j5c4
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 971ee247060d ("usb: xhci: tegra: Enable ELPG for runtime/system PM")
+Reported-by: Nicolas Chauvet <kwizart@gmail.com>
+Tested-by: Nicolas Chauvet <kwizart@gmail.com>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/usb/host/xhci-tegra.c | 32 +++++++++++++++++++++-----------
+ 1 file changed, 21 insertions(+), 11 deletions(-)
 
-On Fri, Nov 15, 2019 at 10:07:57AM +0100, Uwe Kleine-K=F6nig wrote:
-> Hello,
->=20
-> On Mon, Sep 23, 2019 at 12:28:25PM +0200, Uwe Kleine-K=F6nig wrote:
-> > On Wed, Jul 24, 2019 at 03:09:39PM +0200, Uwe Kleine-K=F6nig wrote:
-> > > On Thu, Jun 27, 2019 at 03:15:10AM +0000, Peter Chen wrote:
-> > > > =20
-> > > > > On 19-06-26 02:40, Peter Chen wrote:
-> > > > > >
-> > > > > > > Subject: [PATCH] ARM: imx25: provide a fixed regulator for us=
-b phys
-> > > > > > >
-> > > > > > > The usb phys are internal to the SoC and so it their 5V suppl=
-y. With
-> > > > > > > this regulator added explicitly the following (harmless) boot=
- messages go away:
-> > > > > > >
-> > > > > > > 	usb_phy_generic usbphy:usb-phy@0: usbphy:usb-phy@0 supply vc=
-c not found, using dummy regulator
-> > > > > > > 	usb_phy_generic usbphy:usb-phy@1: usbphy:usb-phy@1 supply vc=
-c not found, using dummy regulator
-> > > > > > >
-> > > > > >
-> > > > > > To eliminate the warning message, I suggest doing below changes=
-, as
-> > > > > > vcc supply is not mandatory.
-> > > > > >
-> > > > > > diff --git a/drivers/usb/phy/phy-generic.c
-> > > > > > b/drivers/usb/phy/phy-generic.c index a53b89be5324..01a5ff1a0515
-> > > > > > 100644
-> > > > > > --- a/drivers/usb/phy/phy-generic.c
-> > > > > > +++ b/drivers/usb/phy/phy-generic.c
-> > > > > > @@ -275,7 +275,7 @@ int usb_phy_gen_create_phy(struct device *d=
-ev, struct usb_phy_generic *nop,
-> > > > > >                 }
-> > > > > >         }
-> > > > > >
-> > > > > > -       nop->vcc =3D devm_regulator_get(dev, "vcc");
-> > > > > > +       nop->vcc =3D devm_regulator_get_optional(dev, "vcc");
-> > > > >=20
-> > > > > Is the regulator optional? IMHO this shouldn't be the fix. I thin=
-k the right fix is Uwe's
-> > > > > approach.
-> > > > >=20
-> > > >=20
-> > > > Add Felipe.
-> > > >=20
-> > > > Some USB PHY's power are from the core system's power (eg, DDR), an=
-d some are
-> > > > fixed at the board and no switch for it. So, it is transparent for =
-software at some cases.
-> > >=20
-> > > It's not clear to me how to proceed. There are two opposing opinions =
-and
-> > > I don't know enough about USB on mx25 to judge myself.
-> > >=20
-> > > Felipe?
-> >=20
-> > This thread is still open in my inbox. Felipe, how can I lure you into
-> > giving your opinion?
-> >=20
-> > My original suggestion can be seen at
-> > https://lore.kernel.org/linux-usb/20190625100412.11815-1-u.kleine-koeni=
-g@pengutronix.de/,
-> > Peter's alternative is still in the quotes above. Which is the
-> > right/better one?
->=20
-> The stuff said above is still true. I'd like to put this issue on file
-> with "fixed in mainline", but currently this seems to be a stalemate.
-> because nobody cares enough :-|
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index 1bf494b649bd..47927a1df3dc 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -1454,10 +1454,13 @@ static int tegra_xusb_probe(struct platform_device *pdev)
+ 		goto put_padctl;
+ 	}
+ 
+-	tegra->padctl_irq = of_irq_get(np, 0);
+-	if (tegra->padctl_irq <= 0) {
+-		err = (tegra->padctl_irq == 0) ? -ENODEV : tegra->padctl_irq;
+-		goto put_padctl;
++	/* Older device-trees don't specify padctrl interrupt */
++	if (of_property_read_bool(np, "interrupts")) {
++		tegra->padctl_irq = of_irq_get(np, 0);
++		if (tegra->padctl_irq <= 0) {
++			err = (tegra->padctl_irq == 0) ? -ENODEV : tegra->padctl_irq;
++			goto put_padctl;
++		}
+ 	}
+ 
+ 	tegra->host_clk = devm_clk_get(&pdev->dev, "xusb_host");
+@@ -1696,11 +1699,15 @@ static int tegra_xusb_probe(struct platform_device *pdev)
+ 		goto remove_usb3;
+ 	}
+ 
+-	err = devm_request_threaded_irq(&pdev->dev, tegra->padctl_irq, NULL, tegra_xusb_padctl_irq,
+-					IRQF_ONESHOT, dev_name(&pdev->dev), tegra);
+-	if (err < 0) {
+-		dev_err(&pdev->dev, "failed to request padctl IRQ: %d\n", err);
+-		goto remove_usb3;
++	if (tegra->padctl_irq) {
++		err = devm_request_threaded_irq(&pdev->dev, tegra->padctl_irq,
++						NULL, tegra_xusb_padctl_irq,
++						IRQF_ONESHOT, dev_name(&pdev->dev),
++						tegra);
++		if (err < 0) {
++			dev_err(&pdev->dev, "failed to request padctl IRQ: %d\n", err);
++			goto remove_usb3;
++		}
+ 	}
+ 
+ 	err = tegra_xusb_enable_firmware_messages(tegra);
+@@ -2132,7 +2139,7 @@ static __maybe_unused int tegra_xusb_suspend(struct device *dev)
+ 		tegra->suspended = true;
+ 		pm_runtime_disable(dev);
+ 
+-		if (device_may_wakeup(dev)) {
++		if (device_may_wakeup(dev) && tegra->padctl_irq) {
+ 			if (enable_irq_wake(tegra->padctl_irq))
+ 				dev_err(dev, "failed to enable padctl wakes\n");
+ 		}
+@@ -2161,7 +2168,7 @@ static __maybe_unused int tegra_xusb_resume(struct device *dev)
+ 		return err;
+ 	}
+ 
+-	if (device_may_wakeup(dev)) {
++	if (device_may_wakeup(dev) && tegra->padctl_irq) {
+ 		if (disable_irq_wake(tegra->padctl_irq))
+ 			dev_err(dev, "failed to disable padctl wakes\n");
+ 	}
+@@ -2179,6 +2186,9 @@ static __maybe_unused int tegra_xusb_runtime_suspend(struct device *dev)
+ 	struct tegra_xusb *tegra = dev_get_drvdata(dev);
+ 	int ret;
+ 
++	if (!tegra->padctl_irq)
++		return -EOPNOTSUPP;
++
+ 	synchronize_irq(tegra->mbox_irq);
+ 	mutex_lock(&tegra->lock);
+ 	ret = tegra_xusb_enter_elpg(tegra, true);
+-- 
+2.32.0
 
-This topic is on stall since two years now and I still have the patch in
-the patch stack for my mx25 boards.
-
-In my eyes my patch is the right one, because no matter how, the usb
-phys need some powering, so devm_regulator_get_optional() doesn't seem
-to be the right approach.
-
-Would resending the patch help?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---gdginxlkf2f7j5c4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFxSL4ACgkQwfwUeK3K
-7AnS6ggAjw0nNGSQUE4mj6ul03QBEsSYmsAm+MYYaWAnmB7vSVXYQJb0RVxPsJJc
-nG7X5xPTHn6mLZfznqkJxxcuSQcvBi0XhLzyFBE3MzqIUyHAJE5Rwq+1/LYpr56S
-5qrzXNHWHrame3REZpFBtK6ocy+lxksqezMwrQscp1+LszOLq4tiTrVnExxeTEyR
-l21R9J3Er1b/4icxCj/7R/W3WpTXEhHIDuEZJUAZNXkW4CRMU9RUWTm7SXC+7ly5
-Oct6N2mbZXST5YKVXMF8pTQ4Mx2EZvWvUh6t2KDRT42wRGqEnMpL1LIZkSuyx45D
-sezdxPdeLJyJSoT8UrpRa6LLJxNRpw==
-=tWhJ
------END PGP SIGNATURE-----
-
---gdginxlkf2f7j5c4--
