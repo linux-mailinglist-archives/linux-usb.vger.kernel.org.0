@@ -2,268 +2,218 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD38443627C
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 15:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E924363AF
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 16:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbhJUNOl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Oct 2021 09:14:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52498 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230359AbhJUNOg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 21 Oct 2021 09:14:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B526861213;
-        Thu, 21 Oct 2021 13:12:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634821940;
-        bh=2OwPE9gb6RtUBOJNoa/1um22t5RQ9ftt3EKem5uxb4A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MLmWxFJK1gOf+t/S6nv97HwYSw26PaRyvyxpfXQHM6ADm1pgUMWGMFl/bA8vsBelV
-         +FkW8k1OG8J1hI2W4V8UetpNSu8HfgFb92opVLkVh9nb4csrV9EbHiHEYqXX24KIhZ
-         IrGLbnPodTrg1yDxn6/Md1YhN8g7lLKeNHVAhOB4p6ygZ9agEb25vpBUdeaCHXHwYb
-         ohVIfVjzqXB2IhWGczgCCBGmB5nrF+pHGRAenJbEz8Evr5+o+BfMIvahtudrwfTCX+
-         Lm71xHEEi5Vo85fUPeZ2Kir02tylf2jRnjpn8YxayrKUvRhMPK0p1wyszy7fE+Jag8
-         7w7+HpiJBCd0g==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     davem@davemloft.net
-Cc:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        oneukum@suse.com, linux-usb@vger.kernel.org
-Subject: [PATCH net-next v2 04/12] net: usb: don't write directly to netdev->dev_addr
-Date:   Thu, 21 Oct 2021 06:12:06 -0700
-Message-Id: <20211021131214.2032925-5-kuba@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211021131214.2032925-1-kuba@kernel.org>
-References: <20211021131214.2032925-1-kuba@kernel.org>
+        id S231493AbhJUODv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Oct 2021 10:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231408AbhJUODv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Oct 2021 10:03:51 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC26C0613B9;
+        Thu, 21 Oct 2021 07:01:35 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id d198-20020a1c1dcf000000b00322f53b9b89so849340wmd.0;
+        Thu, 21 Oct 2021 07:01:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Jenu2GqZVZH+2Ih+CmGTNLbryuPvJisikb5F8so+Md8=;
+        b=QWSC6GSDIZfelegRe+qktS7pst+13f5KiQaRSA6AAtuWLSCtTEV5mGNBzFAmKDTrG0
+         9gS9D9zjGu8sypPKOmOa+XoFObQ12l5rj30/Os8AuOzRshAtJEwXTcJ+eF9fAXNqYZKX
+         vAgQXPCLzNpDTGJOkbivzPlybXHrjjsugfs56sDxqRFsMnZfrc7Skb9FPJcpleKUV83R
+         /y+0MqEF5RSfql+pCkWvZZj2Ls0/hAGMNdw+BheDMmRxMZZNJTKk0vabwUrFPC03WVGs
+         bPZWUPVoqf618VKNJ18fqnvm9zr5Q6tOSOhdHB2SznuE5CKyCJu2vYS2NpAvuAhJ12Oo
+         0YQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Jenu2GqZVZH+2Ih+CmGTNLbryuPvJisikb5F8so+Md8=;
+        b=nNzn3mycuumdFXZ/ezKsBZIV373LxLe5IzQxAarbMYAtQkiL7frl73AD5XxHSxsaEN
+         3xp+3JgDsLFl8cYsXL9LJ2RPOizOqsp7q75XMeQ+srroBWirg2bYgXV7ddCqG7i3CjZs
+         l0pMSY380njPNRAbuwwj/ySDmS1NoskYxgfPcsb7Om/+awsaIrfTYHaLlWuCAD9TF/db
+         XR1o4QkZcmIh5Gx/okP5bxP0wXdSgcnL1hdsMuPTy0hMhxVmGyXSn0aToRiy1iyze3WL
+         mNuNomvDKaMvzSovJPvmkoZO2l9gYUT9cKdS+8KXGBGaMRXFfa4AYm+tDxL+qJDrt71F
+         9M5A==
+X-Gm-Message-State: AOAM5306qwsGjSNbq1KRH9fY7ryIu92BSCTrsYKpEiDa+BCJ45PcHr+u
+        y2yMDWNRjM4HTAwAwOiEbSc=
+X-Google-Smtp-Source: ABdhPJxA1TcIDABdAyaJZxx55EXa7MqrEnUHayHNllPzq4tjSTcDstRy1qKXr1axV4RwmPFYv0VoNg==
+X-Received: by 2002:a1c:f615:: with SMTP id w21mr6742465wmc.16.1634824893583;
+        Thu, 21 Oct 2021 07:01:33 -0700 (PDT)
+Received: from localhost ([217.111.27.204])
+        by smtp.gmail.com with ESMTPSA id y8sm660786wrq.39.2021.10.21.07.01.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Oct 2021 07:01:32 -0700 (PDT)
+Date:   Thu, 21 Oct 2021 16:01:31 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        JC Kuo <jckuo@nvidia.com>, Nicolas Chauvet <kwizart@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v1] usb: xhci: tegra: Check padctrl interrupt presence in
+ device tree
+Message-ID: <YXFyu+Q5ifG8Au9w@orome.fritz.box>
+References: <20211021115501.14932-1-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="BOA8n6/bNvmkjro8"
+Content-Disposition: inline
+In-Reply-To: <20211021115501.14932-1-digetx@gmail.com>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit 406f42fa0d3c ("net-next: When a bond have a massive amount
-of VLANs...") introduced a rbtree for faster Ethernet address look
-up. To maintain netdev->dev_addr in this tree we need to make all
-the writes to it got through appropriate helpers.
 
-Manually fix all net/usb drivers without separate maintainers.
+--BOA8n6/bNvmkjro8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-v2: catc does DMA to the buffer, leave the conversion to Oliver
+On Thu, Oct 21, 2021 at 02:55:01PM +0300, Dmitry Osipenko wrote:
+> Older device-trees don't specify padctrl interrupt and xhci-tegra driver
+> now fails to probe with -EINVAL using those device-trees. Check interrupt
+> presence and disallow runtime PM suspension if it's missing to fix the
+> trouble.
+>=20
+> Fixes: 971ee247060d ("usb: xhci: tegra: Enable ELPG for runtime/system PM=
+")
+> Reported-by: Nicolas Chauvet <kwizart@gmail.com>
+> Tested-by: Nicolas Chauvet <kwizart@gmail.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/usb/host/xhci-tegra.c | 32 +++++++++++++++++++++-----------
+>  1 file changed, 21 insertions(+), 11 deletions(-)
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: oneukum@suse.com
-CC: linux-usb@vger.kernel.org
----
- drivers/net/usb/ch9200.c      | 4 +++-
- drivers/net/usb/cx82310_eth.c | 5 +++--
- drivers/net/usb/kaweth.c      | 3 +--
- drivers/net/usb/mcs7830.c     | 4 +++-
- drivers/net/usb/sierra_net.c  | 6 ++++--
- drivers/net/usb/sr9700.c      | 4 +++-
- drivers/net/usb/sr9800.c      | 5 +++--
- drivers/net/usb/usbnet.c      | 6 ++++--
- 8 files changed, 24 insertions(+), 13 deletions(-)
+Thanks for typing this up. A couple of minor comments below.
 
-diff --git a/drivers/net/usb/ch9200.c b/drivers/net/usb/ch9200.c
-index d7f3b70d5477..f69d9b902da0 100644
---- a/drivers/net/usb/ch9200.c
-+++ b/drivers/net/usb/ch9200.c
-@@ -336,6 +336,7 @@ static int ch9200_bind(struct usbnet *dev, struct usb_interface *intf)
- {
- 	int retval = 0;
- 	unsigned char data[2];
-+	u8 addr[ETH_ALEN];
- 
- 	retval = usbnet_get_endpoints(dev, intf);
- 	if (retval)
-@@ -383,7 +384,8 @@ static int ch9200_bind(struct usbnet *dev, struct usb_interface *intf)
- 	retval = control_write(dev, REQUEST_WRITE, 0, MAC_REG_CTRL, data, 0x02,
- 			       CONTROL_TIMEOUT_MS);
- 
--	retval = get_mac_address(dev, dev->net->dev_addr);
-+	retval = get_mac_address(dev, addr);
-+	eth_hw_addr_set(dev->net, addr);
- 
- 	return retval;
- }
-diff --git a/drivers/net/usb/cx82310_eth.c b/drivers/net/usb/cx82310_eth.c
-index c4568a491dc4..79a47e2fd437 100644
---- a/drivers/net/usb/cx82310_eth.c
-+++ b/drivers/net/usb/cx82310_eth.c
-@@ -146,6 +146,7 @@ static int cx82310_bind(struct usbnet *dev, struct usb_interface *intf)
- 	u8 link[3];
- 	int timeout = 50;
- 	struct cx82310_priv *priv;
-+	u8 addr[ETH_ALEN];
- 
- 	/* avoid ADSL modems - continue only if iProduct is "USB NET CARD" */
- 	if (usb_string(udev, udev->descriptor.iProduct, buf, sizeof(buf)) > 0
-@@ -202,12 +203,12 @@ static int cx82310_bind(struct usbnet *dev, struct usb_interface *intf)
- 		goto err;
- 
- 	/* get the MAC address */
--	ret = cx82310_cmd(dev, CMD_GET_MAC_ADDR, true, NULL, 0,
--			  dev->net->dev_addr, ETH_ALEN);
-+	ret = cx82310_cmd(dev, CMD_GET_MAC_ADDR, true, NULL, 0, addr, ETH_ALEN);
- 	if (ret) {
- 		netdev_err(dev->net, "unable to read MAC address: %d\n", ret);
- 		goto err;
- 	}
-+	eth_hw_addr_set(dev->net, addr);
- 
- 	/* start (does not seem to have any effect?) */
- 	ret = cx82310_cmd(dev, CMD_START, false, NULL, 0, NULL, 0);
-diff --git a/drivers/net/usb/kaweth.c b/drivers/net/usb/kaweth.c
-index 144c686b4333..9b2bc1993ece 100644
---- a/drivers/net/usb/kaweth.c
-+++ b/drivers/net/usb/kaweth.c
-@@ -1044,8 +1044,7 @@ static int kaweth_probe(
- 		goto err_all_but_rxbuf;
- 
- 	memcpy(netdev->broadcast, &bcast_addr, sizeof(bcast_addr));
--	memcpy(netdev->dev_addr, &kaweth->configuration.hw_addr,
--               sizeof(kaweth->configuration.hw_addr));
-+	eth_hw_addr_set(netdev, (u8 *)&kaweth->configuration.hw_addr);
- 
- 	netdev->netdev_ops = &kaweth_netdev_ops;
- 	netdev->watchdog_timeo = KAWETH_TX_TIMEOUT;
-diff --git a/drivers/net/usb/mcs7830.c b/drivers/net/usb/mcs7830.c
-index 5f42db26d200..326cc4e749d8 100644
---- a/drivers/net/usb/mcs7830.c
-+++ b/drivers/net/usb/mcs7830.c
-@@ -473,17 +473,19 @@ static const struct net_device_ops mcs7830_netdev_ops = {
- static int mcs7830_bind(struct usbnet *dev, struct usb_interface *udev)
- {
- 	struct net_device *net = dev->net;
-+	u8 addr[ETH_ALEN];
- 	int ret;
- 	int retry;
- 
- 	/* Initial startup: Gather MAC address setting from EEPROM */
- 	ret = -EINVAL;
- 	for (retry = 0; retry < 5 && ret; retry++)
--		ret = mcs7830_hif_get_mac_address(dev, net->dev_addr);
-+		ret = mcs7830_hif_get_mac_address(dev, addr);
- 	if (ret) {
- 		dev_warn(&dev->udev->dev, "Cannot read MAC address\n");
- 		goto out;
- 	}
-+	eth_hw_addr_set(net, addr);
- 
- 	mcs7830_data_set_multicast(net);
- 
-diff --git a/drivers/net/usb/sierra_net.c b/drivers/net/usb/sierra_net.c
-index 55025202dc4f..bb4cbe8fc846 100644
---- a/drivers/net/usb/sierra_net.c
-+++ b/drivers/net/usb/sierra_net.c
-@@ -669,6 +669,7 @@ static int sierra_net_bind(struct usbnet *dev, struct usb_interface *intf)
- 		0x00, 0x00, SIERRA_NET_HIP_MSYNC_ID, 0x00};
- 	static const u8 shdwn_tmplate[sizeof(priv->shdwn_msg)] = {
- 		0x00, 0x00, SIERRA_NET_HIP_SHUTD_ID, 0x00};
-+	u8 mod[2];
- 
- 	dev_dbg(&dev->udev->dev, "%s", __func__);
- 
-@@ -698,8 +699,9 @@ static int sierra_net_bind(struct usbnet *dev, struct usb_interface *intf)
- 	dev->net->netdev_ops = &sierra_net_device_ops;
- 
- 	/* change MAC addr to include, ifacenum, and to be unique */
--	dev->net->dev_addr[ETH_ALEN-2] = atomic_inc_return(&iface_counter);
--	dev->net->dev_addr[ETH_ALEN-1] = ifacenum;
-+	mod[0] = atomic_inc_return(&iface_counter);
-+	mod[1] = ifacenum;
-+	dev_addr_mod(dev->net, ETH_ALEN - 2, mod, 2);
- 
- 	/* prepare shutdown message template */
- 	memcpy(priv->shdwn_msg, shdwn_tmplate, sizeof(priv->shdwn_msg));
-diff --git a/drivers/net/usb/sr9700.c b/drivers/net/usb/sr9700.c
-index 15209de1849e..b658510cc9a4 100644
---- a/drivers/net/usb/sr9700.c
-+++ b/drivers/net/usb/sr9700.c
-@@ -320,6 +320,7 @@ static int sr9700_bind(struct usbnet *dev, struct usb_interface *intf)
- {
- 	struct net_device *netdev;
- 	struct mii_if_info *mii;
-+	u8 addr[ETH_ALEN];
- 	int ret;
- 
- 	ret = usbnet_get_endpoints(dev, intf);
-@@ -350,11 +351,12 @@ static int sr9700_bind(struct usbnet *dev, struct usb_interface *intf)
- 	 * EEPROM automatically to PAR. In case there is no EEPROM externally,
- 	 * a default MAC address is stored in PAR for making chip work properly.
- 	 */
--	if (sr_read(dev, SR_PAR, ETH_ALEN, netdev->dev_addr) < 0) {
-+	if (sr_read(dev, SR_PAR, ETH_ALEN, addr) < 0) {
- 		netdev_err(netdev, "Error reading MAC address\n");
- 		ret = -ENODEV;
- 		goto out;
- 	}
-+	eth_hw_addr_set(netdev, addr);
- 
- 	/* power up and reset phy */
- 	sr_write_reg(dev, SR_PRR, PRR_PHY_RST);
-diff --git a/drivers/net/usb/sr9800.c b/drivers/net/usb/sr9800.c
-index 838f4e9e8b58..f5e19f3ef6cd 100644
---- a/drivers/net/usb/sr9800.c
-+++ b/drivers/net/usb/sr9800.c
-@@ -731,6 +731,7 @@ static int sr9800_bind(struct usbnet *dev, struct usb_interface *intf)
- 	struct sr_data *data = (struct sr_data *)&dev->data;
- 	u16 led01_mux, led23_mux;
- 	int ret, embd_phy;
-+	u8 addr[ETH_ALEN];
- 	u32 phyid;
- 	u16 rx_ctl;
- 
-@@ -754,12 +755,12 @@ static int sr9800_bind(struct usbnet *dev, struct usb_interface *intf)
- 	}
- 
- 	/* Get the MAC address */
--	ret = sr_read_cmd(dev, SR_CMD_READ_NODE_ID, 0, 0, ETH_ALEN,
--			  dev->net->dev_addr);
-+	ret = sr_read_cmd(dev, SR_CMD_READ_NODE_ID, 0, 0, ETH_ALEN, addr);
- 	if (ret < 0) {
- 		netdev_dbg(dev->net, "Failed to read MAC address: %d\n", ret);
- 		return ret;
- 	}
-+	eth_hw_addr_set(dev->net, addr);
- 	netdev_dbg(dev->net, "mac addr : %pM\n", dev->net->dev_addr);
- 
- 	/* Initialize MII structure */
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index 840c1c2ab16a..1797ee5ad566 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -165,12 +165,13 @@ EXPORT_SYMBOL_GPL(usbnet_get_endpoints);
- 
- int usbnet_get_ethernet_addr(struct usbnet *dev, int iMACAddress)
- {
-+	u8		addr[ETH_ALEN];
- 	int 		tmp = -1, ret;
- 	unsigned char	buf [13];
- 
- 	ret = usb_string(dev->udev, iMACAddress, buf, sizeof buf);
- 	if (ret == 12)
--		tmp = hex2bin(dev->net->dev_addr, buf, 6);
-+		tmp = hex2bin(addr, buf, 6);
- 	if (tmp < 0) {
- 		dev_dbg(&dev->udev->dev,
- 			"bad MAC string %d fetch, %d\n", iMACAddress, tmp);
-@@ -178,6 +179,7 @@ int usbnet_get_ethernet_addr(struct usbnet *dev, int iMACAddress)
- 			ret = -EINVAL;
- 		return ret;
- 	}
-+	eth_hw_addr_set(dev->net, addr);
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(usbnet_get_ethernet_addr);
-@@ -1726,7 +1728,7 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
- 
- 	dev->net = net;
- 	strscpy(net->name, "usb%d", sizeof(net->name));
--	memcpy (net->dev_addr, node_id, sizeof node_id);
-+	eth_hw_addr_set(net, node_id);
- 
- 	/* rx and tx sides can use different message sizes;
- 	 * bind() should set rx_urb_size in that case.
--- 
-2.31.1
+> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+> index 1bf494b649bd..47927a1df3dc 100644
+> --- a/drivers/usb/host/xhci-tegra.c
+> +++ b/drivers/usb/host/xhci-tegra.c
+> @@ -1454,10 +1454,13 @@ static int tegra_xusb_probe(struct platform_devic=
+e *pdev)
+>  		goto put_padctl;
+>  	}
+> =20
+> -	tegra->padctl_irq =3D of_irq_get(np, 0);
+> -	if (tegra->padctl_irq <=3D 0) {
+> -		err =3D (tegra->padctl_irq =3D=3D 0) ? -ENODEV : tegra->padctl_irq;
+> -		goto put_padctl;
+> +	/* Older device-trees don't specify padctrl interrupt */
+> +	if (of_property_read_bool(np, "interrupts")) {
 
+Can't we just rely on the return value from of_irq_get() instead of
+explicitly checking for the presence of the "interrupts" property? All
+we really want is to make this interrupt optional. As far as I can tell,
+of_irq_get() will return -EINVAL (via of_irq_parse_one() and then
+of_property_read_u32_index()) if the property doesn't exist, so I'd
+think it should be possible to turn this into something like this:
+
+	tegra->padctl_irq =3D of_irq_get(np, 0);
+	if (tegra->padctl_irq =3D=3D -EINVAL)
+		tegra->padctl_irq =3D 0;
+
+> +		tegra->padctl_irq =3D of_irq_get(np, 0);
+> +		if (tegra->padctl_irq <=3D 0) {
+> +			err =3D (tegra->padctl_irq =3D=3D 0) ? -ENODEV : tegra->padctl_irq;
+> +			goto put_padctl;
+> +		}
+>  	}
+> =20
+>  	tegra->host_clk =3D devm_clk_get(&pdev->dev, "xusb_host");
+> @@ -1696,11 +1699,15 @@ static int tegra_xusb_probe(struct platform_devic=
+e *pdev)
+>  		goto remove_usb3;
+>  	}
+> =20
+> -	err =3D devm_request_threaded_irq(&pdev->dev, tegra->padctl_irq, NULL, =
+tegra_xusb_padctl_irq,
+> -					IRQF_ONESHOT, dev_name(&pdev->dev), tegra);
+> -	if (err < 0) {
+> -		dev_err(&pdev->dev, "failed to request padctl IRQ: %d\n", err);
+> -		goto remove_usb3;
+> +	if (tegra->padctl_irq) {
+> +		err =3D devm_request_threaded_irq(&pdev->dev, tegra->padctl_irq,
+> +						NULL, tegra_xusb_padctl_irq,
+> +						IRQF_ONESHOT, dev_name(&pdev->dev),
+> +						tegra);
+> +		if (err < 0) {
+> +			dev_err(&pdev->dev, "failed to request padctl IRQ: %d\n", err);
+> +			goto remove_usb3;
+> +		}
+>  	}
+> =20
+>  	err =3D tegra_xusb_enable_firmware_messages(tegra);
+> @@ -2132,7 +2139,7 @@ static __maybe_unused int tegra_xusb_suspend(struct=
+ device *dev)
+>  		tegra->suspended =3D true;
+>  		pm_runtime_disable(dev);
+> =20
+> -		if (device_may_wakeup(dev)) {
+> +		if (device_may_wakeup(dev) && tegra->padctl_irq) {
+
+I wondered if perhaps there was a way to make device_may_wakeup() return
+false if we don't have that IRQ. Intuitively I would've thought that the
+calls to device_wakeup_enable() and device_init_wakeup() set this all up
+but after looking at the code I'm not sure if omitting them would
+actually cause device_may_wakeup() to return false. That would certainly
+be nicer than these double checks.
+
+>  			if (enable_irq_wake(tegra->padctl_irq))
+>  				dev_err(dev, "failed to enable padctl wakes\n");
+>  		}
+> @@ -2161,7 +2168,7 @@ static __maybe_unused int tegra_xusb_resume(struct =
+device *dev)
+>  		return err;
+>  	}
+> =20
+> -	if (device_may_wakeup(dev)) {
+> +	if (device_may_wakeup(dev) && tegra->padctl_irq) {
+>  		if (disable_irq_wake(tegra->padctl_irq))
+>  			dev_err(dev, "failed to disable padctl wakes\n");
+>  	}
+> @@ -2179,6 +2186,9 @@ static __maybe_unused int tegra_xusb_runtime_suspen=
+d(struct device *dev)
+>  	struct tegra_xusb *tegra =3D dev_get_drvdata(dev);
+>  	int ret;
+> =20
+> +	if (!tegra->padctl_irq)
+> +		return -EOPNOTSUPP;
+> +
+
+Similarly, couldn't we enable all that runtime PM stuff conditionally so
+that these functions would only ever get called when runtime PM is
+actually available? That seems a bit nicer than having this return
+-EOPNOTSUPP.
+
+Thierry
+
+--BOA8n6/bNvmkjro8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmFxcrgACgkQ3SOs138+
+s6HvVQ/+Myd2kXFOTgsuH0PDcev44JhEZW5yiTo9q5pVPayqCqOju+hD3MpegGXs
+5ZwTUmuP0gKunLoommLnUUReM81gD9yJmMojPzeXHqVXMH6NKzCuTyqHUlVKT+6L
+zz4O7GGD6Iq/a9+iGNRd0nTv5VrEnkut/KKtWRPWE+YVxlIT6IGak3vDUQaPAbjK
++9va7kAFk+DhfyC1P8ELComqXWj6HUx2d8Gxumv5J0WGesdPvJw9hwLzMUkOHJkc
+VRUMctSKUefE1F63Ly/N7w5bgIM/dQ2WTSenC70q4uVC6aUoC8DhhkfsRZ6i1Xxu
+VrZqvM8VuK5PrBaOk9MH6idg51yTw5//1X5jfAa1BMXGX+JmjMPlmOE10d9xTo9U
+cC8YQu1H6RmPgcek1iSCpPG5Yfnw4GW8nqtl8PgibO+2dDY0m8gu8KhSPrte8WhF
+9IavcRg44lnVxOx/qzNvRGhA9Pm/owuSV52f615EIy5ZMXEngA2QFuVuMFeEaahE
+mhB1Geqro8+tpWL4OO9fzcMukImI6fgUmcIHX1xZ327JVr3ngNx4r83R4SpDm2rf
+c9FUdXuCrcmtbe7MaK6cjthPDXUnZh6SI1ff2BbxOjLlmkc+KdyWDw1AOWX1xBjB
+v/+k8SssaWcQ+4+KcTxDF2+D1JXVNpqaueJhsvfRl6l0LiPTMrU=
+=ZYNf
+-----END PGP SIGNATURE-----
+
+--BOA8n6/bNvmkjro8--
