@@ -2,32 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F13436CD4
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 23:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31ABC436D02
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 23:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232066AbhJUVj4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Oct 2021 17:39:56 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:50820 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231573AbhJUVj4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 21 Oct 2021 17:39:56 -0400
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 4Hb16V1VVQz6R;
-        Thu, 21 Oct 2021 23:37:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1634852258; bh=yUVhaB9gtZqOXRJVOA05HW9hkegVAWRPf9/Fb5zzqus=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=koVud3mbFV4o0HzcOfuSsIcS2ECm/kLSoXQuf6z+NYoTkDHLtnIDgnSecJEiUNeAG
-         k8Gq9vQVQwbPEFuKm+OcqpAvsi8aPWmV7qrHRqy5gCAA9aJJFQohoOJskWET0G+/V2
-         uJP6WgJN4GyL+oeOlCXdnNJE0XUtBWBSciWfN5nBIDY4MJuiilWEiDQIsk4QYU8oMF
-         90eZLNEzek9jTdfc3WL059gNWPMM1BEDAfYZASi4QDODXSaR3MHXZzsw4oPS7rX7zI
-         nHW1GSvIEeK+bV4sfwoS28azb/E5jKp5WQ0bk+nyxlegxVsUiR05LKa5+FmQ45IDxe
-         UdsSfk89OopjQ==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.103.3 at mail
-Date:   Thu, 21 Oct 2021 23:37:36 +0200
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Dmitry Osipenko <digetx@gmail.com>
+        id S232126AbhJUVsn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Oct 2021 17:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231138AbhJUVsm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Oct 2021 17:48:42 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00906C061764;
+        Thu, 21 Oct 2021 14:46:25 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id l5so1017803lja.13;
+        Thu, 21 Oct 2021 14:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0xlnYhJkaNk96ITMhxfdXS3J1MPuX3UoZqSSw9IGVG0=;
+        b=OGQIwTdBSyVZSx0jNWT6RkOfe4yhLHKAIRBe9+3akekOo/cdiycS+q1v3/9zLX0+6Q
+         OxmeeN932jX02OXkVXigEr8W3RskvUkl8dg3BJxxre9SmKd4UAF7sP/NpjfuZeZ8Kz2Z
+         c/4Bv6XOz1Urvc7YkMpVW3+e/+Q5Phavk6R2oozc8rYjwRZoGelI5iBThX7DrG13WMYa
+         gMrZemgI9+p02XYA6d0kdbOFzgS8QKxHiZFOrCCtWdJHspBz8MVVbFpsyQKRFQNVCqsn
+         CsICWPvTWOwp2IBfyiDfRq6zSkVRG6HBH60336Zsnoja2FS6ql0T9Sf53vhb1ZDV8EpW
+         Tckg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0xlnYhJkaNk96ITMhxfdXS3J1MPuX3UoZqSSw9IGVG0=;
+        b=WwI2/wZdqJXMXaNFzlptuAkZpCejimqc74V4kTiWBJKmu7Mq1moT/UhsHmOdK00Woz
+         ufsbJe3nJKoMQ2TYdPluVhOj8l3gAyT+zoOJ+4YZukX7bnOiIMoLGMsz3SubOiCpmtXJ
+         sRylzyf0DWNnnt7hEeKrP9NZ/MSh/bD8K2dvYUK9kGQphPX/yxS2Iq11IQ8+ACA3pIWv
+         D19YjDKKc5r2ryijpJQgVLQOeloJHvBJpw97D/FZVsj90SgwEO37aG4eUk4iFHvVasNW
+         G/xqGwgqmkv7mi5C1cD4XgwMZvAOXrydvPyRb+HUIiFzsoTfbA5jqb20rCBb8xSiYnz9
+         +y+g==
+X-Gm-Message-State: AOAM533pI8gmpTL6/CqvpbTtxWU6YB3gBvhvK7WUk4/UgfAV4mxoYRku
+        ifKXdr+8C+TrMcRfXNxJhqnupAF8VfA=
+X-Google-Smtp-Source: ABdhPJz9v5HcOPJefrKvS+XLSq6llXFfDWF7caDiqhx5rsCTgUV7mgJ39z/fW28JLWBw5IjLz1weHw==
+X-Received: by 2002:a2e:7004:: with SMTP id l4mr8843888ljc.199.1634852784116;
+        Thu, 21 Oct 2021 14:46:24 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-61-202.dynamic.spd-mgts.ru. [94.29.61.202])
+        by smtp.googlemail.com with ESMTPSA id t20sm599687lft.240.2021.10.21.14.46.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Oct 2021 14:46:23 -0700 (PDT)
+Subject: Re: [PATCH v1] usb: xhci: tegra: Check padctrl interrupt presence in
+ device tree
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
 Cc:     Thierry Reding <treding@nvidia.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -35,45 +58,42 @@ Cc:     Thierry Reding <treding@nvidia.com>,
         JC Kuo <jckuo@nvidia.com>, Nicolas Chauvet <kwizart@gmail.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v1] usb: xhci: tegra: Check padctrl interrupt presence in
- device tree
-Message-ID: <YXHdoFAgGlxoI0Jx@qmqm.qmqm.pl>
 References: <20211021115501.14932-1-digetx@gmail.com>
+ <YXHdoFAgGlxoI0Jx@qmqm.qmqm.pl>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <29b38423-631e-192e-b006-aa0d258c8030@gmail.com>
+Date:   Fri, 22 Oct 2021 00:46:23 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
+In-Reply-To: <YXHdoFAgGlxoI0Jx@qmqm.qmqm.pl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211021115501.14932-1-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 02:55:01PM +0300, Dmitry Osipenko wrote:
-> Older device-trees don't specify padctrl interrupt and xhci-tegra driver
-> now fails to probe with -EINVAL using those device-trees. Check interrupt
-> presence and disallow runtime PM suspension if it's missing to fix the
-> trouble.
-[...]
-> --- a/drivers/usb/host/xhci-tegra.c
-> +++ b/drivers/usb/host/xhci-tegra.c
-> @@ -1454,10 +1454,13 @@ static int tegra_xusb_probe(struct platform_device *pdev)
->  		goto put_padctl;
->  	}
->  
-> -	tegra->padctl_irq = of_irq_get(np, 0);
-> -	if (tegra->padctl_irq <= 0) {
-> -		err = (tegra->padctl_irq == 0) ? -ENODEV : tegra->padctl_irq;
-> -		goto put_padctl;
-> +	/* Older device-trees don't specify padctrl interrupt */
-> +	if (of_property_read_bool(np, "interrupts")) {
+22.10.2021 00:37, Michał Mirosław пишет:
+> On Thu, Oct 21, 2021 at 02:55:01PM +0300, Dmitry Osipenko wrote:
+>> Older device-trees don't specify padctrl interrupt and xhci-tegra driver
+>> now fails to probe with -EINVAL using those device-trees. Check interrupt
+>> presence and disallow runtime PM suspension if it's missing to fix the
+>> trouble.
+> [...]
+>> --- a/drivers/usb/host/xhci-tegra.c
+>> +++ b/drivers/usb/host/xhci-tegra.c
+>> @@ -1454,10 +1454,13 @@ static int tegra_xusb_probe(struct platform_device *pdev)
+>>  		goto put_padctl;
+>>  	}
+>>  
+>> -	tegra->padctl_irq = of_irq_get(np, 0);
+>> -	if (tegra->padctl_irq <= 0) {
+>> -		err = (tegra->padctl_irq == 0) ? -ENODEV : tegra->padctl_irq;
+>> -		goto put_padctl;
+>> +	/* Older device-trees don't specify padctrl interrupt */
+>> +	if (of_property_read_bool(np, "interrupts")) {
+> 
+> Does this catch "interrupts-extended"?
 
-Does this catch "interrupts-extended"?
-
-> +		tegra->padctl_irq = of_irq_get(np, 0);
-> +		if (tegra->padctl_irq <= 0) {
-> +			err = (tegra->padctl_irq == 0) ? -ENODEV : tegra->padctl_irq;
-> +			goto put_padctl;
-> +		}
-
-Best Regards
-Micha� Miros�aw
+No, Tegra doesn't use interrupts-extended.
