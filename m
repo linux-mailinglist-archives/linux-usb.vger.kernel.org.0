@@ -2,70 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 272D743652E
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 17:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7005C436593
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 17:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbhJUPMY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Oct 2021 11:12:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37468 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231533AbhJUPMX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 21 Oct 2021 11:12:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id D9CB9611CE;
-        Thu, 21 Oct 2021 15:10:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634829007;
-        bh=9p7D1MG/ql8WzkSbKIyaxURYPpAAPm5mIncQafOQyiU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=q+qNuD69Z7e76v+xlo1621J8FDyOAITY8koyXXSgm6LptiaQdd/xBmggQ2BlEYy9/
-         3+DgXYpzV5zSYW+Gw5Mt24sg85rKEIIoALYYxR2ufsFAEbYTjKu9KkA10M6t+DdVZR
-         58vjyGEy5ghRlqpxYnjrfqqqi/VdfkcQeNIBKx1vUqNBPHJN2Ay2J8hTXn3ucfU3LX
-         +OGN21I2V8d0V9D6hsI/7v2W7+J/ePRJ75Q6WImN/6ScfGhRCjR5sGooIqLursZe5I
-         IrGd+676YgBpcjvUlHb5nMW+09B9ayFbKHR+PfaguLyf+PgbuMm5XSnWYkoangB1tJ
-         n6qk+5OmXYa4A==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id CFF6260A44;
-        Thu, 21 Oct 2021 15:10:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S232019AbhJUPQO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Oct 2021 11:16:14 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:56149 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S231667AbhJUPPo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Oct 2021 11:15:44 -0400
+Received: (qmail 1161564 invoked by uid 1000); 21 Oct 2021 11:13:27 -0400
+Date:   Thu, 21 Oct 2021 11:13:27 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Cai Huoqing <caihuoqing@baidu.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: mass_storage: Make use of the helper macro
+ kthread_run()
+Message-ID: <20211021151327.GA1161262@rowland.harvard.edu>
+References: <20211021084359.2607-1-caihuoqing@baidu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCHv2] usbnet: sanity check for maxpacket
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163482900784.14016.9961969841902136645.git-patchwork-notify@kernel.org>
-Date:   Thu, 21 Oct 2021 15:10:07 +0000
-References: <20211021122944.21816-1-oneukum@suse.com>
-In-Reply-To: <20211021122944.21816-1-oneukum@suse.com>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     syzkaller-bugs@googlegroups.com, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        syzbot+76bb1d34ffa0adc03baa@syzkaller.appspotmail.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211021084359.2607-1-caihuoqing@baidu.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu, 21 Oct 2021 14:29:44 +0200 you wrote:
-> maxpacket of 0 makes no sense and oopses as we need to divide
-> by it. Give up.
+On Thu, Oct 21, 2021 at 04:43:58PM +0800, Cai Huoqing wrote:
+> Repalce kthread_create/wake_up_process() with kthread_run()
+> to simplify the code.
 > 
-> V2: fixed typo in log and stylistic issues
+> Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
+> ---
+>  drivers/usb/gadget/function/f_mass_storage.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> Reported-by: syzbot+76bb1d34ffa0adc03baa@syzkaller.appspotmail.com
-> 
-> [...]
+> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+> index 3cabf7692ee1..1e3cab5d635c 100644
+> --- a/drivers/usb/gadget/function/f_mass_storage.c
+> +++ b/drivers/usb/gadget/function/f_mass_storage.c
+> @@ -2962,7 +2962,7 @@ static int fsg_bind(struct usb_configuration *c, struct usb_function *f)
+>  	if (!common->thread_task) {
+>  		common->state = FSG_STATE_NORMAL;
+>  		common->thread_task =
+> -			kthread_create(fsg_main_thread, common, "file-storage");
+> +			kthread_run(fsg_main_thread, common, "file-storage");
+>  		if (IS_ERR(common->thread_task)) {
+>  			ret = PTR_ERR(common->thread_task);
+>  			common->thread_task = NULL;
+> @@ -2971,7 +2971,6 @@ static int fsg_bind(struct usb_configuration *c, struct usb_function *f)
+>  		}
+>  		DBG(common, "I/O thread pid: %d\n",
+>  		    task_pid_nr(common->thread_task));
+> -		wake_up_process(common->thread_task);
+>  	}
 
-Here is the summary with links:
-  - [PATCHv2] usbnet: sanity check for maxpacket
-    https://git.kernel.org/netdev/net/c/397430b50a36
+We better not apply this patch for the same reason as the other one: 
+It's probably not a good idea for the fsg_main_thread task to start 
+running before common->thread_task has been assigned.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Alan Stern
