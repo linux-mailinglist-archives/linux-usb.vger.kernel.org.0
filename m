@@ -2,75 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A566436B44
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 21:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E25436B54
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 21:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbhJUTYQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Oct 2021 15:24:16 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:47769 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230020AbhJUTYP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Oct 2021 15:24:15 -0400
-Received: (qmail 1170639 invoked by uid 1000); 21 Oct 2021 15:21:58 -0400
-Date:   Thu, 21 Oct 2021 15:21:58 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 04/10] usb: host: ehci-atmel: fix deferred probing
-Message-ID: <20211021192158.GB1170019@rowland.harvard.edu>
-References: <20211021191437.8737-1-s.shtylyov@omp.ru>
- <20211021191437.8737-5-s.shtylyov@omp.ru>
+        id S230437AbhJUTaG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Oct 2021 15:30:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43722 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230020AbhJUTaG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 21 Oct 2021 15:30:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id E497B61213
+        for <linux-usb@vger.kernel.org>; Thu, 21 Oct 2021 19:27:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634844469;
+        bh=SAQZFVKqSJW6AQR5cjoqIcHivNSmt60OCX7KgN50/WY=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=gashT1J2PWOyazD6xKb9AnWuIO6YYlEf+9ZNrpJmPgleq/w8LxO31yHcUPggFMiq+
+         lrKFUkJPidi1AcEu0JajJFu1VPvDZXOmM1dqEu+oe8GDEc6gqmtxjYlewHx8EVnJcS
+         S5QNLLGXxYc2TQ0AfYpRul3Yvb4ic49D3ivc/27N81eAXisT4rjja/9foO7rZ2Lr0F
+         CmNv/65P+GuY0/TYr5fxs068oJbgCcLxHgJfCpCyF2RPQBWDjJFfi0c5v+xYBcf/cl
+         Igf/U+CxK+eC8iU3SELc+J4RjPGGwQLsO90wFVE8mV5oyE3LmAdaSqGBD9jxNyrDL4
+         ysQXkwgsL5+Gg==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id CFD8760F92; Thu, 21 Oct 2021 19:27:49 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214789] ehci-hcd.c ISR
+Date:   Thu, 21 Oct 2021 19:27:49 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-214789-208809-lMUTBR3DhZ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214789-208809@https.bugzilla.kernel.org/>
+References: <bug-214789-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211021191437.8737-5-s.shtylyov@omp.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 10:14:31PM +0300, Sergey Shtylyov wrote:
-> The driver overrides the error codes (and also IRQ0) returned by
-> platform_get_irq() to -ENODEV, so if it returns -EPROBE_DEFER, the driver
-> will fail the probe permanently instead of the deferred probing. Switch to
-> propagating the error codes upstream -- that means we have to explicitly
-> filter out IRQ0 as bad since usb_add_hcd() doesn't quite like it... :-)
-> 
-> Fixes: 501c9c0802d9 ("USB: at91: Add USB EHCI driver for at91sam9g45 series")
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-> ---
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214789
 
-For patches 4 - 9:
+--- Comment #5 from Alan Stern (stern@rowland.harvard.edu) ---
+Okay, but _why_ don't the timing card's interrupts get handled when ehci_irq
+uses spin_lock?  And _why_ does changing to spin_lock_irqsave make a
+difference?
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Do all of the card's interrupt requests get lost or only some of them?
 
->  drivers/usb/host/ehci-atmel.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ehci-atmel.c b/drivers/usb/host/ehci-atmel.c
-> index 05d41fd65f25..3f7c8ccc6d7f 100644
-> --- a/drivers/usb/host/ehci-atmel.c
-> +++ b/drivers/usb/host/ehci-atmel.c
-> @@ -104,8 +104,12 @@ static int ehci_atmel_drv_probe(struct platform_device *pdev)
->  	pr_debug("Initializing Atmel-SoC USB Host Controller\n");
->  
->  	irq = platform_get_irq(pdev, 0);
-> -	if (irq <= 0) {
-> -		retval = -ENODEV;
-> +	if (irq < 0) {
-> +		retval = irq;
-> +		goto fail_create_hcd;
-> +	}
-> +	if (!irq) {
-> +		retval = -EINVAL;
->  		goto fail_create_hcd;
->  	}
->  
-> -- 
-> 2.26.3
-> 
+Are you somehow getting recursive (nested) interrupts for the same IRQ line?
+
+Is ehci_irq somehow getting called with interrupts enabled?
+
+I don't want to make any changes to the driver until we know the answers to
+these questions.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
