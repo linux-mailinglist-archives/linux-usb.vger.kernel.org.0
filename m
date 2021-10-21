@@ -2,131 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CDA94368DE
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 19:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C971143698E
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 19:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232137AbhJURTA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Oct 2021 13:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbhJURS7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Oct 2021 13:18:59 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4884EC061764;
-        Thu, 21 Oct 2021 10:16:43 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 145so1172220ljj.1;
-        Thu, 21 Oct 2021 10:16:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=pL6FutmKQRRgfjSTZSCCJbdmC4nC81cDtLeVacDNGBo=;
-        b=DadjUeOrEEqFWPVTkzVrBRzJsM+VDYy48UgyWn+TcocappFVn+iY9IK10qCip65knA
-         w5A42GGpumWoFK34VAaiGBfyKdNZCr/PZ4DdkmO0Mo0lky1hwv58K2AhRTcgc9bCoYNc
-         we44CAqO+YDwunMVKorw1WG2frgQ5PZZjbDd2goxh4cy4+03RgwtR/k9xB9m5ISMj57S
-         57d4+Hpnozp2PpS/H7oxE4eBMJWntHWK8MPmf7qvYWhjgfTX8RKP+jWrono/0EHtQXa4
-         ugmTQHaNhetqCtAOh8ovLd+FxfHZ74+7SxN+CUI8SRk/uKWM6uvNhulgbU5Cin4eZ2rO
-         uolA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=pL6FutmKQRRgfjSTZSCCJbdmC4nC81cDtLeVacDNGBo=;
-        b=3KooicdZ3LCW5D803DohyJYzk7wnpCtgzCwsdTlv2UDmDkisAcoOEOY6NzNLkrV4K6
-         OV28nbqvyc/aVmE5VWcHFm227JpM1yQ27IFCDRVY8gA6+GG4l0BOHANeHndidUQ67OdQ
-         Z0zAOaB0B1KLMxdsejMzbyuQz6k0GNStqRDZkYUBIR9iGe1mJAf7k3lNDy8CJrZeG832
-         4ocORd/t/0X1ebY9RueuRRxm3qUebRRmJgQEBfe5QpDrD8+21PjPzh0T51w2wcHxKsmK
-         S+uRg5Ht2E5O3Gozhh6bOCvvAJ3QR7arz5mH+fceQHpyw6QDGfLd9Le2pnvUppPnV8pH
-         PqUA==
-X-Gm-Message-State: AOAM532SPaOUeA8FRRmbuy5wBn4ihrpCfr4W9CE1hy0psMy4f++w51M9
-        XGdI7DQCDLF1UeeQj8m3t0JL1XGISE8=
-X-Google-Smtp-Source: ABdhPJzwS1pa+uFmMchmjJekSDhTIHjdQK9Bj8nC9P1B3IZedtMMpjxk7pVBZHTR4Jl2ey3A5XIPbQ==
-X-Received: by 2002:a2e:a5c9:: with SMTP id n9mr7209164ljp.512.1634836601485;
-        Thu, 21 Oct 2021 10:16:41 -0700 (PDT)
-Received: from [192.168.2.145] (46-138-115-62.dynamic.spd-mgts.ru. [46.138.115.62])
-        by smtp.googlemail.com with ESMTPSA id k24sm505111lfe.76.2021.10.21.10.16.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Oct 2021 10:16:41 -0700 (PDT)
-Subject: Re: [PATCH v1] usb: xhci: tegra: Check padctrl interrupt presence in
- device tree
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        JC Kuo <jckuo@nvidia.com>, Nicolas Chauvet <kwizart@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <20211021115501.14932-1-digetx@gmail.com>
- <YXFyu+Q5ifG8Au9w@orome.fritz.box>
- <5f122caa-c810-534d-b2a1-53edef313ff0@gmail.com>
- <32694811-8768-8e77-f188-4ed1a1fb93da@gmail.com>
- <20211021152028.GB1161262@rowland.harvard.edu>
- <82a02e70-33bc-7faf-e085-a25884e48844@gmail.com>
-Message-ID: <44567c4f-0f0f-6995-b48f-c427cedb6755@gmail.com>
-Date:   Thu, 21 Oct 2021 20:16:40 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S232088AbhJURrE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Oct 2021 13:47:04 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:61537 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232411AbhJURpr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Oct 2021 13:45:47 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1634838206; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=kMFb9ZVoikffIU0mbMBdnz5hSJA8sUX95BWY8GtEFi4=; b=TKZoDfJbknRA363S78/gWR23yavl2T4bt/YXKFbeWrjo4xOWxzQxcDCT0nGzhgtFCmcKUd6K
+ vrh202GoqzwNw8dF1NoOB/EwRvNWain0NEpH2flXqflfqctMo31YkyT1Nhes58+KoC79QWex
+ yajRQVcuVM1lo2bvTg1ASmsqiFg=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
+ 6171a6bdb03398c06c0930b3 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 21 Oct 2021 17:43:25
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id C127FC4361B; Thu, 21 Oct 2021 17:43:24 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 6F8D1C4314B;
+        Thu, 21 Oct 2021 17:43:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 6F8D1C4314B
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Date:   Thu, 21 Oct 2021 10:43:17 -0700
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2] usb: dwc3: gadget: Skip resizing EP's TX FIFO if
+ already resized
+Message-ID: <20211021174316.GA2357@jackp-linux.qualcomm.com>
+References: <20211019004123.15987-1-jackp@codeaurora.org>
+ <YXFGWPMmmdyaSOPg@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <82a02e70-33bc-7faf-e085-a25884e48844@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YXFGWPMmmdyaSOPg@kroah.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-21.10.2021 20:13, Dmitry Osipenko пишет:
-> 21.10.2021 18:20, Alan Stern пишет:
->> On Thu, Oct 21, 2021 at 06:08:41PM +0300, Dmitry Osipenko wrote:
->>> 21.10.2021 17:57, Dmitry Osipenko пишет:
->>>> It might be wrong to disable device_may_wakeup() because it will change
->>>> the system suspend-resume behaviour, i.e. you won't be able to resume by
->>>> USB event, see [1].
->>>>
->>>> [1]
->>>> https://elixir.bootlin.com/linux/v5.15-rc6/source/drivers/usb/host/xhci-tegra.c#L1962
->>>>
->>>> Although, I'm not sure whether this is a correct behaviour to start
->>>> with. Previously, before the offending commit, device_wakeup was never
->>>> enabled for tegra-xusb. Commit message doesn't explain why wakeup is now
->>>> enabled unconditionally, wakeup checks aren't needed at all then. This
->>>> makes no sense, please check it with JC Kuo.
->>>
->>> Although, wakeup could be disabled via sysfs, so it makes sense. Still
->>> it's not clear whether it's a correct behaviour to enable wakeup during
->>> system suspend by default. If it wakes machine from suspend when USB
->>> device is plugged/unplugged, then it's a wrong behaviour.
->>
->> It depends on the details of how the device works.  In most cases we do 
->> want to enable wakeup by default for host controller devices.  The 
->> reason is simple enough: If some USB device attached to the HC is 
->> enabled for wakeup and sends a wakeup request, we don't want the request 
->> to get lost because the HC isn't allowed to forward the request on to 
->> the CPU.
->>
->> But we do not want to enable wakeup for root hubs.  In particular, we 
->> don't want to wake up a suspended system merely because a USB device has 
->> been plugged or unplugged.
->>
->> Clearly this arrangement depends on the hardware making a distinction 
->> between wakeup requests originating from the root hub and those simply 
->> passing through the HC.
+On Thu, Oct 21, 2021 at 12:52:08PM +0200, Greg Kroah-Hartman wrote:
+> On Mon, Oct 18, 2021 at 05:41:23PM -0700, Jack Pham wrote:
+> > Some functions may dynamically enable and disable their endpoints
+> > regularly throughout their operation, particularly when Set Interface
+> > is employed to switch between Alternate Settings.  For instance the
+> > UAC2 function has its respective endpoints for playback & capture
+> > associated with AltSetting 1, in which case those endpoints would not
+> > get enabled until the host activates the AltSetting.  And they
+> > conversely become disabled when the interfaces' AltSetting 0 is
+> > chosen.
+> > 
+> > With the DWC3 FIFO resizing algorithm recently added, every
+> > usb_ep_enable() call results in a call to resize that EP's TXFIFO,
+> > but if the same endpoint is enabled again and again, this incorrectly
+> > leads to FIFO RAM allocation exhaustion as the mechanism did not
+> > account for the possibility that endpoints can be re-enabled many
+> > times.
+> > 
+> > Example log splat:
+> > 
+> > 	dwc3 a600000.dwc3: Fifosize(3717) > RAM size(3462) ep3in depth:217973127
+> > 	configfs-gadget gadget: u_audio_start_capture:521 Error!
+> > 	dwc3 a600000.dwc3: request 000000000be13e18 was not queued to ep3in
+> > 
+> > Add another bit DWC3_EP_TXFIFO_RESIZED to dep->flags to keep track of
+> > whether an EP had already been resized in the current configuration.
+> > If so, bail out of dwc3_gadget_resize_tx_fifos() to avoid the
+> > calculation error resulting from accumulating the EP's FIFO depth
+> > repeatedly.  This flag is retained across multiple ep_disable() and
+> > ep_enable() calls and is cleared when GTXFIFOSIZn is reset in
+> > dwc3_gadget_clear_tx_fifos() upon receiving the next Set Config.
+> > 
+> > Fixes: 9f607a309fbe9 ("usb: dwc3: Resize TX FIFOs to meet EP bursting requirements")
+> > Signed-off-by: Jack Pham <jackp@codeaurora.org>
+> > ---
+> > v2: Added explicit flag to dep->flags and check that instead of directly
+> >     reading the GTXFIFOSIZn register.
+> > 
+> >  drivers/usb/dwc3/core.h   | 1 +
+> >  drivers/usb/dwc3/gadget.c | 8 +++++++-
+> >  2 files changed, 8 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> > index 5612bfdf37da..f033063f6948 100644
+> > --- a/drivers/usb/dwc3/core.h
+> > +++ b/drivers/usb/dwc3/core.h
+> > @@ -723,6 +723,7 @@ struct dwc3_ep {
+> >  #define DWC3_EP_FORCE_RESTART_STREAM	BIT(9)
+> >  #define DWC3_EP_FIRST_STREAM_PRIMED	BIT(10)
+> >  #define DWC3_EP_PENDING_CLEAR_STALL	BIT(11)
+> > +#define DWC3_EP_TXFIFO_RESIZED	BIT(12)
 > 
-> Should USB keyboard be able to wake up every HC or it's a
-> machine-specific feature?
+> Any specific reason this isn't lined up properly?
 
-I mean whether key press should wake up HC if wake-up is enabled for the
-keyboard device.
+The preceding macros admittedly aren't consistent either :-P.  Here's
+the whole section with my change:
 
-> I'm asking because wakeup works on a typical
-> Intel hardware, but doesn't work on older Tegra SoCs that use Chipidea
-> controller. It's not obvious to me whether this is something that
-> firmware handles for Intel or it's broken on Tegra. Could you please
-> clarify? If it should work for every HC, then I may try to take a closer
-> look.
-> 
+	unsigned int            flags;
+#define DWC3_EP_ENABLED		BIT(0)
+#define DWC3_EP_STALL		BIT(1)
+#define DWC3_EP_WEDGE		BIT(2)
+#define DWC3_EP_TRANSFER_STARTED BIT(3)
+#define DWC3_EP_END_TRANSFER_PENDING BIT(4)
+#define DWC3_EP_PENDING_REQUEST	BIT(5)
+#define DWC3_EP_DELAY_START	BIT(6)
+#define DWC3_EP_WAIT_TRANSFER_COMPLETE	BIT(7)
+#define DWC3_EP_IGNORE_NEXT_NOSTREAM	BIT(8)
+#define DWC3_EP_FORCE_RESTART_STREAM	BIT(9)
+#define DWC3_EP_FIRST_STREAM_PRIMED	BIT(10)
+#define DWC3_EP_PENDING_CLEAR_STALL	BIT(11)
+#define DWC3_EP_TXFIFO_RESIZED	BIT(12)
 
+The macros for the earlier bits 0-2, 5 and 6 have shorter names and
+therefore use one or two tabs to line up at an earlier tab stop.  But
+the ones with the longer names for bits 7-11 use a single tab which bump
+out the definition to the next tab column.  Since the macro I'm adding
+in my patch has a shorter name I thought I'd follow the precedent of the
+earlier bits and use a single tab which aligns with the earlier bits but
+I agree it does look strange overall.  Especially with bits 3 & 4 which
+aren't lined up at all.
+
+I guess a patch to fix the rest of the earlier macros wouldn't hurt but
+I'd also like this to go to stable too.  Should I send this as a 2-part
+series: 1/2 being my change (with correct alignment and cc:stable) and
+2/2 as a cleanup for bits 0-6?
+
+Jack
+-- 
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
