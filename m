@@ -2,87 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3AC4356E2
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 02:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27693435A03
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 06:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbhJUAXK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Oct 2021 20:23:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42068 "EHLO mail.kernel.org"
+        id S229982AbhJUEb6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Oct 2021 00:31:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40140 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231453AbhJUAXI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 20 Oct 2021 20:23:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BBFCB6128E;
-        Thu, 21 Oct 2021 00:20:52 +0000 (UTC)
+        id S229452AbhJUEb6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 21 Oct 2021 00:31:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id C316760F5D
+        for <linux-usb@vger.kernel.org>; Thu, 21 Oct 2021 04:29:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634775653;
-        bh=Jp/LtOfV9PqFomRlVTg0uqUKP1LxKDBW4p2FwcZfc8Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GREZ5qclDnKJh3R/RfxPFwJMPcYA7WidnrPikOSADL4WrOk24KPLNt7AWxZH9wsRx
-         4waGl8UAsxipdWEEbjN9eNKaNtFI/BEO0nMwPAmH0cMZgW9KTyRSO7cw1MiIgLtTUL
-         8LsPGRVj4Pom2TC0JpIdnbAdjkLFetr2X2zr+YPR0I12JfagNpzQHficmCMACEUhkJ
-         gC9JAoGUJZStazpwoX7fu5ic77o9vQkz9mz/7uFVFdQ4RKvY043eK/brY5lQZu0wWt
-         JfC2gb9dJR0myDAemp0xKJgri7xfPli8kE+E5zFXdOV8ck5pcr5TfWCJPeokL0vqcN
-         9qgudDPqAPL9w==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 06/26] thunderbolt: build kunit tests without structleak plugin
-Date:   Wed, 20 Oct 2021 20:20:03 -0400
-Message-Id: <20211021002023.1128949-6-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211021002023.1128949-1-sashal@kernel.org>
-References: <20211021002023.1128949-1-sashal@kernel.org>
+        s=k20201202; t=1634790582;
+        bh=ToTMgVoDbamx4adCWrUUNEuesO5ogyMFscv8p0bp7vQ=;
+        h=From:To:Subject:Date:From;
+        b=aeSyR/7rZj3MFnWWiaOcsurCqoZjKi0FJJ+Zj4CKNyD3z7jgRFn8cM3mOneKHb9SV
+         GV8p6XLa+kN5sJhy+K/qTNs1LLcS7WOqp3WGZw30rYcEXwuCMqEYNl0mnl9re9Dbcd
+         AYQQTK6w3XDboh6xE7fnkbe54W+rkVr59asuHUees9odgIj0SA0yS8FgTsD70WLjbe
+         les2BAvCIsqFL/crAnGOcv7USuySL/DmsI1vHa4AFbWVCsu7dD/75n3Qk3b0kJtkQu
+         42dG1QFScBYQ2LBoky1q//5LnIZ/aH3ZKxs/vJD10Xm5at4LPnWmTCF6id0eqVqLAb
+         aYbAJKzXhhTiQ==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id AF76660CA4; Thu, 21 Oct 2021 04:29:42 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214789] New: ehci-hcd.c ISR
+Date:   Thu, 21 Oct 2021 04:29:42 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: scott.c.arnold@nasa.gov
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-214789-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Brendan Higgins <brendanhiggins@google.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214789
 
-[ Upstream commit 33d4951e021bb67ebd6bdb01f3d437c0f45b3c0c ]
+            Bug ID: 214789
+           Summary: ehci-hcd.c ISR
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.11+
+          Hardware: x86-64
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: high
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: scott.c.arnold@nasa.gov
+        Regression: No
 
-The structleak plugin causes the stack frame size to grow immensely when
-used with KUnit:
+Change in ehci_irq from spin_lock_irqsave/irqrestore to spin_lock/unlock br=
+oke
+shared IRQ's
 
-drivers/thunderbolt/test.c:1529:1: error: the frame size of 1176 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+--=20
+You may reply to this email to add a comment.
 
-Turn it off in this file.
-
-Linus already split up tests in this file, so this change *should* be
-redundant now.
-
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/thunderbolt/Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/thunderbolt/Makefile b/drivers/thunderbolt/Makefile
-index da19d7987d00..78fd365893c1 100644
---- a/drivers/thunderbolt/Makefile
-+++ b/drivers/thunderbolt/Makefile
-@@ -7,6 +7,7 @@ thunderbolt-objs += usb4_port.o nvm.o retimer.o quirks.o
- thunderbolt-${CONFIG_ACPI} += acpi.o
- thunderbolt-$(CONFIG_DEBUG_FS) += debugfs.o
- thunderbolt-${CONFIG_USB4_KUNIT_TEST} += test.o
-+CFLAGS_test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
- 
- thunderbolt_dma_test-${CONFIG_USB4_DMA_TEST} += dma_test.o
- obj-$(CONFIG_USB4_DMA_TEST) += thunderbolt_dma_test.o
--- 
-2.33.0
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
