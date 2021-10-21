@@ -2,111 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF38C4369ED
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 20:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 451F6436A04
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 20:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232376AbhJUSEL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Oct 2021 14:04:11 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:36022 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232370AbhJUSEK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 21 Oct 2021 14:04:10 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1634839314; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=wPke1kVExHHKxzuSn8tsmK/QATxLQG/Xj0V+uR+hkzg=; b=pfnEGEprHKGgPyz2vL6S1lMKEbMgIa65mwT08s+rm77cTw3Xx9MOUd5lkIOjiEpOb/IAAmsi
- nl6KzYPASSBIaiiN7bd0zN8A7+0nwVQrNAsTScKrs6vGNC1hCKkFtERWxG594bkRw/CvkuxB
- F5KsYJqhl6rh/A8CHUE0UrAIPNI=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
- 6171ab0167f107c611159817 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 21 Oct 2021 18:01:37
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 91B8AC43460; Thu, 21 Oct 2021 18:01:37 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S232565AbhJUSGK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Oct 2021 14:06:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30680 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232363AbhJUSGB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Oct 2021 14:06:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1634839425;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oSHfqseBKeRB8xf7I0mUX0PNFUzMlKErE4TYf1UyH6c=;
+        b=dHLnYKle40+eUQ7Xjz/SjoqbpGe/n+cd8Eyh4rNZVZKnaaIlMSBILhsjaRzBUFNqEkUAHe
+        SAsK/l4Qg8sTSmQUecVVJo5xSSMzRfZYoA0gLJi8ub0ez5SYYNid00gfFY+08sw1ejfiWV
+        ug5hHYY1mBwypmBNv8q6TQnKI6G6cyk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-520-nxdvAYv3MO2dOkZVxQcX4A-1; Thu, 21 Oct 2021 14:03:41 -0400
+X-MC-Unique: nxdvAYv3MO2dOkZVxQcX4A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id D2728C4338F;
-        Thu, 21 Oct 2021 18:01:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org D2728C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Wesley Cheng <wcheng@codeaurora.org>
-Cc:     linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Jack Pham <jackp@codeaurora.org>
-Subject: [PATCH v3 2/2] usb: dwc3: Align DWC3_EP_* flag macros
-Date:   Thu, 21 Oct 2021 11:01:29 -0700
-Message-Id: <20211021180129.27938-2-jackp@codeaurora.org>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20211021180129.27938-1-jackp@codeaurora.org>
-References: <20211021180129.27938-1-jackp@codeaurora.org>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 779B01006AA3;
+        Thu, 21 Oct 2021 18:03:40 +0000 (UTC)
+Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EEE2560C13;
+        Thu, 21 Oct 2021 18:03:39 +0000 (UTC)
+From:   Jeff Moyer <jmoyer@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        "linux-fsdevel\@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-block\@vger.kernel.org" <linux-block@vger.kernel.org>,
+        linux-aio@kvack.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] fs: replace the ki_complete two integer arguments with a single argument
+References: <4d409f23-2235-9fa6-4028-4d6c8ed749f8@kernel.dk>
+        <YXElk52IsvCchbOx@infradead.org> <YXFHgy85MpdHpHBE@infradead.org>
+        <4d3c5a73-889c-2e2c-9bb2-9572acdd11b7@kernel.dk>
+        <YXF8X3RgRfZpL3Cb@infradead.org>
+        <b7b6e63e-8787-f24c-2028-e147b91c4576@kernel.dk>
+        <x49ee8ev21s.fsf@segfault.boston.devel.redhat.com>
+        <6338ba2b-cd71-f66d-d596-629c2812c332@kernel.dk>
+X-PGP-KeyID: 1F78E1B4
+X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
+Date:   Thu, 21 Oct 2021 14:05:45 -0400
+In-Reply-To: <6338ba2b-cd71-f66d-d596-629c2812c332@kernel.dk> (Jens Axboe's
+        message of "Thu, 21 Oct 2021 09:19:45 -0600")
+Message-ID: <x497de6uubq.fsf@segfault.boston.devel.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix the DWC3_EP_* flag macros so that the definitions are all
-lined up on the same tab column for consistent style.
 
-No functional change.
+>> I'll follow up if there are issues.
 
-Signed-off-by: Jack Pham <jackp@codeaurora.org>
----
-v3: New patch
+s390 (big endian, 64 bit) is failing libaio test 21:
 
- drivers/usb/dwc3/core.h | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+# harness/cases/21.p
+Expected -EAGAIN, got 4294967285
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 0c100901a784..054795d78b68 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -711,13 +711,13 @@ struct dwc3_ep {
- 
- 	u32			saved_state;
- 	unsigned int		flags;
--#define DWC3_EP_ENABLED		BIT(0)
--#define DWC3_EP_STALL		BIT(1)
--#define DWC3_EP_WEDGE		BIT(2)
--#define DWC3_EP_TRANSFER_STARTED BIT(3)
--#define DWC3_EP_END_TRANSFER_PENDING BIT(4)
--#define DWC3_EP_PENDING_REQUEST	BIT(5)
--#define DWC3_EP_DELAY_START	BIT(6)
-+#define DWC3_EP_ENABLED			BIT(0)
-+#define DWC3_EP_STALL			BIT(1)
-+#define DWC3_EP_WEDGE			BIT(2)
-+#define DWC3_EP_TRANSFER_STARTED	BIT(3)
-+#define DWC3_EP_END_TRANSFER_PENDING	BIT(4)
-+#define DWC3_EP_PENDING_REQUEST		BIT(5)
-+#define DWC3_EP_DELAY_START		BIT(6)
- #define DWC3_EP_WAIT_TRANSFER_COMPLETE	BIT(7)
- #define DWC3_EP_IGNORE_NEXT_NOSTREAM	BIT(8)
- #define DWC3_EP_FORCE_RESTART_STREAM	BIT(9)
-@@ -726,7 +726,7 @@ struct dwc3_ep {
- #define DWC3_EP_TXFIFO_RESIZED		BIT(12)
- 
- 	/* This last one is specific to EP0 */
--#define DWC3_EP0_DIR_IN		BIT(31)
-+#define DWC3_EP0_DIR_IN			BIT(31)
- 
- 	/*
- 	 * IMPORTANT: we *know* we have 256 TRBs in our @trb_pool, so we will
--- 
-2.24.0
+If I print out both res and res2 using %lx, you'll see what happened:
+
+Expected -EAGAIN, got fffffff5,ffffffff
+
+The sign extension is being split up.
+
+-Jeff
 
