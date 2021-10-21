@@ -2,81 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6524355A0
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Oct 2021 23:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D3AC4356E2
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 02:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbhJTV7y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Oct 2021 17:59:54 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:42901 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229842AbhJTV7x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Oct 2021 17:59:53 -0400
-Received: (qmail 1140230 invoked by uid 1000); 20 Oct 2021 17:57:38 -0400
-Date:   Wed, 20 Oct 2021 17:57:38 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-        Peter Chen <peter.chen@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Bastien Nocera <hadess@hadess.net>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>
-Subject: Re: [PATCH v16 6/7] usb: host: xhci-plat: Create platform device for
- onboard hubs in probe()
-Message-ID: <20211020215738.GA1140001@rowland.harvard.edu>
-References: <20210813195228.2003500-1-mka@chromium.org>
- <20210813125146.v16.6.I7a3a7d9d2126c34079b1cab87aa0b2ec3030f9b7@changeid>
- <dfac0025-b693-2431-04c8-1dba7ef32141@linux.intel.com>
- <YXB7vIP6ifQS3T4o@google.com>
- <20211020203720.GA1137200@rowland.harvard.edu>
- <YXCDobJSuytwthoA@google.com>
+        id S231148AbhJUAXK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Oct 2021 20:23:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42068 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231453AbhJUAXI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 20 Oct 2021 20:23:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BBFCB6128E;
+        Thu, 21 Oct 2021 00:20:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634775653;
+        bh=Jp/LtOfV9PqFomRlVTg0uqUKP1LxKDBW4p2FwcZfc8Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GREZ5qclDnKJh3R/RfxPFwJMPcYA7WidnrPikOSADL4WrOk24KPLNt7AWxZH9wsRx
+         4waGl8UAsxipdWEEbjN9eNKaNtFI/BEO0nMwPAmH0cMZgW9KTyRSO7cw1MiIgLtTUL
+         8LsPGRVj4Pom2TC0JpIdnbAdjkLFetr2X2zr+YPR0I12JfagNpzQHficmCMACEUhkJ
+         gC9JAoGUJZStazpwoX7fu5ic77o9vQkz9mz/7uFVFdQ4RKvY043eK/brY5lQZu0wWt
+         JfC2gb9dJR0myDAemp0xKJgri7xfPli8kE+E5zFXdOV8ck5pcr5TfWCJPeokL0vqcN
+         9qgudDPqAPL9w==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.14 06/26] thunderbolt: build kunit tests without structleak plugin
+Date:   Wed, 20 Oct 2021 20:20:03 -0400
+Message-Id: <20211021002023.1128949-6-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211021002023.1128949-1-sashal@kernel.org>
+References: <20211021002023.1128949-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YXCDobJSuytwthoA@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 02:01:21PM -0700, Matthias Kaehlcke wrote:
-> On Wed, Oct 20, 2021 at 04:37:20PM -0400, Alan Stern wrote:
-> > On Wed, Oct 20, 2021 at 01:27:40PM -0700, Matthias Kaehlcke wrote:
-> > > Hi Mathias,
-> > > 
-> > > On Wed, Oct 20, 2021 at 04:05:37PM +0300, Mathias Nyman wrote:
-> > > > If separate devices for controlling onboard hub power is the right solution then
-> > > > how about creating the onboard hub device in usb_add_hcd() (hcd.c), and
-> > > > store it in struct usb_hcd.
-> > > > 
-> > > > A bit like how the roothub device is created, or PHYs are tuned.
-> > > 
-> > > Sure, that sounds feasible, even better if it's handled in a single place
-> > > and different types of controllers don't have to add support separately.
-> > 
-> > Bear in mind that this would prevent you from working with onboard
-> > non-root hubs.
-> 
-> My goal is to (architecturally) support nested hubs, but TBH I haven't
-> looked much into such a configuration since I don't have hardware for
-> testing. My assumption was that support for onboard hubs connected to
-> non-root hubs whould have to be added to the generic hub driver.
-> 
-> Could you elaborate in how far you think it would be different for
-> xhci_plat vs generic hcd?
+From: Brendan Higgins <brendanhiggins@google.com>
 
-A lot of this material has slipped from my mind.  However, I don't see 
-much difference between those two approaches.
+[ Upstream commit 33d4951e021bb67ebd6bdb01f3d437c0f45b3c0c ]
 
-Alan Stern
+The structleak plugin causes the stack frame size to grow immensely when
+used with KUnit:
+
+drivers/thunderbolt/test.c:1529:1: error: the frame size of 1176 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+
+Turn it off in this file.
+
+Linus already split up tests in this file, so this change *should* be
+redundant now.
+
+Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/thunderbolt/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/thunderbolt/Makefile b/drivers/thunderbolt/Makefile
+index da19d7987d00..78fd365893c1 100644
+--- a/drivers/thunderbolt/Makefile
++++ b/drivers/thunderbolt/Makefile
+@@ -7,6 +7,7 @@ thunderbolt-objs += usb4_port.o nvm.o retimer.o quirks.o
+ thunderbolt-${CONFIG_ACPI} += acpi.o
+ thunderbolt-$(CONFIG_DEBUG_FS) += debugfs.o
+ thunderbolt-${CONFIG_USB4_KUNIT_TEST} += test.o
++CFLAGS_test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
+ 
+ thunderbolt_dma_test-${CONFIG_USB4_DMA_TEST} += dma_test.o
+ obj-$(CONFIG_USB4_DMA_TEST) += thunderbolt_dma_test.o
+-- 
+2.33.0
+
