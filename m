@@ -2,135 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23343436BBC
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 22:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49CC3436C4E
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 22:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232000AbhJUUGg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Oct 2021 16:06:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44942 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230020AbhJUUGW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 21 Oct 2021 16:06:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 852726128B
-        for <linux-usb@vger.kernel.org>; Thu, 21 Oct 2021 20:04:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634846646;
-        bh=NoCBr1XPXdIdkwYEyKYBdySQoubvfIR/amtsitcAPkU=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=C3ODIye9rNGoHQ+WiT/72Y/vaF9I18RtUZ5fqxssz6+wPTZntgd767NvKQporPPrQ
-         o+p66QvxBmafaxXMjAYszZ4O0gQcwzf5qkSU6k+f/YP4Cl1dxWC7fcvf3jv5vgyUoa
-         EmRwd2XOy+jwY2RvQWCAeFt9M/jorDGnjwCH6ToKN/DkQzfQzV5EzApxmIT4jELwoy
-         764p4UhuVgWZgHYZHBz3D+CKjzRcLPa/sH+9j2qRMLLwmv8ac3F7ITTydAV3PCzm7b
-         NY5iBr1QzGN0lKYkdn92Ckye1LISGYJDBWBu6Bz8A5SZOO8AZL++AQ1tAuJTtEFXU2
-         1IZJuKjE/3lpQ==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 7772260F92; Thu, 21 Oct 2021 20:04:06 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 214789] ehci-hcd.c ISR
-Date:   Thu, 21 Oct 2021 20:04:06 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: scott.c.arnold@nasa.gov
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-214789-208809-pZY0CUx8KD@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-214789-208809@https.bugzilla.kernel.org/>
-References: <bug-214789-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S231987AbhJUUnm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Oct 2021 16:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231853AbhJUUnj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Oct 2021 16:43:39 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8406DC061348
+        for <linux-usb@vger.kernel.org>; Thu, 21 Oct 2021 13:41:23 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id z126so2384368oiz.12
+        for <linux-usb@vger.kernel.org>; Thu, 21 Oct 2021 13:41:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=zYu/XzE61dMqHf6uR2/QbWx7gRoKrMaZmUU9f8DAHPw=;
+        b=erpsMOJBVRPBocX2r8KaI4qmlq/SX4EgdaY+ZtYkEOqWmQjRam1maiyODvwQ/EtQ5B
+         RUMsgnsOU2i2/BfyrDhrk1RaYKjPiuZW1gsPJPFgb+t7yywAscRsuOxbj2k1ZXV10PmU
+         cQBFM7KocDa+jfucuBba+3g5b892mE/mGIXkIUNzbEhRwcKMMuAZ0kfFfgxWrt7x83cJ
+         vlo77Lh+T+jvS7ziAuCBL9hLJddJxdss5f3+1gdelFU9QBvGb4ZJwftlUBvws/4iP93A
+         P9Tx43hQlhVXWcD7ls+YeKHuWbc8YcN8BQG6MlzK0jdj2Vq+37Ti0v5VLMfnSi4L0Gz5
+         x1mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zYu/XzE61dMqHf6uR2/QbWx7gRoKrMaZmUU9f8DAHPw=;
+        b=HSQnAp6srA936UDoLGkalphpMwpF/3emgXmfKFcwxH3e9oGqJUQZyZx/BiCk7R6jti
+         sliTxjSAzb52j6rkSTvVXoGQ/rjuPzc0a6tft5v6WPEwQaHW8glyrxrUo4JGPnRRx2vu
+         WOfpbVRxw5mFRDIiyKfX6krk6o6sr1GP1QhG1LqhbEEHgB5IDuGOtTpWiBJsC6TpKvL3
+         2LCVvtLJmVL5lukKXZBhwvKNKGk5aROXMei0e9cDv31yM1ub9KasqKOosxdOdYdlMOTW
+         PTyEoWhdKKyPcIj9vo/pFpbxDttZTLVVokBX9Ip98cMZXSGzA1y9YUIJ34+huOgLJFWX
+         14qw==
+X-Gm-Message-State: AOAM532XI2bTqykNG/G3WJ2VgujQySabY4RSzJ+qZaPItAJs1lwBcdqs
+        8EH44EiO0uCNt7Plm5hnLuxEZw8PwckXDQ==
+X-Google-Smtp-Source: ABdhPJxJ+1j42/Jy6Bxk7qm9NcJnUowtZbUgd82CjGbt8EHDWpJAunp0atGG7AaHRM89xSb2ARyc0Q==
+X-Received: by 2002:aca:3e86:: with SMTP id l128mr6050189oia.111.1634848882316;
+        Thu, 21 Oct 2021 13:41:22 -0700 (PDT)
+Received: from [172.20.15.86] (rrcs-24-173-18-66.sw.biz.rr.com. [24.173.18.66])
+        by smtp.gmail.com with ESMTPSA id q15sm1228625otk.81.2021.10.21.13.41.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Oct 2021 13:41:21 -0700 (PDT)
+Subject: Re: [PATCH v2] fs: replace the ki_complete two integer arguments with
+ a single argument
+To:     Jeff Moyer <jmoyer@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        linux-aio@kvack.org, linux-usb@vger.kernel.org
+References: <4d409f23-2235-9fa6-4028-4d6c8ed749f8@kernel.dk>
+ <YXElk52IsvCchbOx@infradead.org> <YXFHgy85MpdHpHBE@infradead.org>
+ <4d3c5a73-889c-2e2c-9bb2-9572acdd11b7@kernel.dk>
+ <YXF8X3RgRfZpL3Cb@infradead.org>
+ <b7b6e63e-8787-f24c-2028-e147b91c4576@kernel.dk>
+ <x49ee8ev21s.fsf@segfault.boston.devel.redhat.com>
+ <6338ba2b-cd71-f66d-d596-629c2812c332@kernel.dk>
+ <x497de6uubq.fsf@segfault.boston.devel.redhat.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <7a697483-8e44-6dc3-361e-ae7b62b82074@kernel.dk>
+Date:   Thu, 21 Oct 2021 14:41:18 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <x497de6uubq.fsf@segfault.boston.devel.redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214789
+On 10/21/21 12:05 PM, Jeff Moyer wrote:
+> 
+>>> I'll follow up if there are issues.
+> 
+> s390 (big endian, 64 bit) is failing libaio test 21:
+> 
+> # harness/cases/21.p
+> Expected -EAGAIN, got 4294967285
+> 
+> If I print out both res and res2 using %lx, you'll see what happened:
+> 
+> Expected -EAGAIN, got fffffff5,ffffffff
+> 
+> The sign extension is being split up.
 
---- Comment #9 from Scott Arnold (scott.c.arnold@nasa.gov) ---
-Hello,
-The timing card driver receives no interrupts according to debug.
-IRQ16:  IO-APIC   16-fasteoi   ehci_hcd:usb1, hpilo, rt_pcclk
+Funky, does it work if you apply this on top?
 
-Ehci_hcd entries in /sys/kernel/debug/usb/devices:
+diff --git a/fs/aio.c b/fs/aio.c
+index 3674abc43788..c56437908339 100644
+--- a/fs/aio.c
++++ b/fs/aio.c
+@@ -1442,8 +1442,8 @@ static void aio_complete_rw(struct kiocb *kiocb, u64 res)
+ 	 * 32-bits of value at most for either value, bundle these up and
+ 	 * pass them in one u64 value.
+ 	 */
+-	iocb->ki_res.res = lower_32_bits(res);
+-	iocb->ki_res.res2 = upper_32_bits(res);
++	iocb->ki_res.res = (long) (res & 0xffffffff);
++	iocb->ki_res.res2 = (long) (res >> 32);
+ 	iocb_put(iocb);
+ }
+ 
 
-T:  Bus=3D01 Lev=3D00 Prnt=3D00 Port=3D00 Cnt=3D00 Dev#=3D  1 Spd=3D480  Mx=
-Ch=3D 2
-B:  Alloc=3D  0/800 us ( 0%), #Int=3D  4, #Iso=3D  0
-D:  Ver=3D 2.00 Cls=3D09(hub  ) Sub=3D00 Prot=3D00 MxPS=3D64 #Cfgs=3D  1
-P:  Vendor=3D1d6b ProdID=3D0002 Rev=3D 5.11
-S:  Manufacturer=3DLinux 5.11.17_OBCS_1 ehci_hcd
-S:  Product=3DEHCI Host Controller
-S:  SerialNumber=3D0000:00:1a.0
-C:* #Ifs=3D 1 Cfg#=3D 1 Atr=3De0 MxPwr=3D  0mA
-I:* If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D09(hub  ) Sub=3D00 Prot=3D00 Driver=
-=3Dhub
-E:  Ad=3D81(I) Atr=3D03(Int.) MxPS=3D   4 Ivl=3D256ms
+-- 
+Jens Axboe
 
-T:  Bus=3D02 Lev=3D00 Prnt=3D00 Port=3D00 Cnt=3D00 Dev#=3D  1 Spd=3D480  Mx=
-Ch=3D 2
-B:  Alloc=3D  0/800 us ( 0%), #Int=3D  0, #Iso=3D  0
-D:  Ver=3D 2.00 Cls=3D09(hub  ) Sub=3D00 Prot=3D00 MxPS=3D64 #Cfgs=3D  1
-P:  Vendor=3D1d6b ProdID=3D0002 Rev=3D 5.11
-S:  Manufacturer=3DLinux 5.11.17_OBCS_1 ehci_hcd
-S:  Product=3DEHCI Host Controller
-S:  SerialNumber=3D0000:00:1d.0
-C:* #Ifs=3D 1 Cfg#=3D 1 Atr=3De0 MxPwr=3D  0mA
-I:* If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D09(hub  ) Sub=3D00 Prot=3D00 Driver=
-=3Dhub
-E:  Ad=3D81(I) Atr=3D03(Int.) MxPS=3D   4 Ivl=3D256ms
-
-I have not tried enabling debug in ehci_hcd yet.
-Moving card to another slot did not help, still sharing IRQ 16
-
-Thanks
-Scott
------Original Message-----
-From: bugzilla-daemon@bugzilla.kernel.org <bugzilla-daemon@bugzilla.kernel.=
-org>=20
-Sent: Thursday, October 21, 2021 2:46 PM
-To: Arnold, Scott C. (JSC-CD13)[SGT, INC] <scott.c.arnold@nasa.gov>
-Subject: [EXTERNAL] [Bug 214789] ehci-hcd.c ISR
-
-https://gcc02.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fbugzill=
-a.kernel.org%2Fshow_bug.cgi%3Fid%3D214789&amp;data=3D04%7C01%7Cscott.c.arno=
-ld%40nasa.gov%7Ccc119a80759145cdeec508d994cb775f%7C7005d45845be48ae8140d43d=
-a96dd17b%7C0%7C0%7C637704423875337090%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wL=
-jAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=3DJ1=
-5Rmcdsnn%2Bp7O%2FFtRSqnlohPqS%2FxEGqznFqLMQaNOs%3D&amp;reserved=3D0
-
---- Comment #8 from Alan Stern (stern@rowland.harvard.edu) --- How many of
-those 90 interrupts were issued by the EHCI host controller as opposed to t=
-he
-card?
-
-Are there any USB devices attached to the host controller?  What does
-/sys/kernel/debug/usb/devices have to say?
-
-Does the card use edge-triggered interrupts rather than level-triggered?
-
-Have you tried adding any debugging messages to ehci_irq to find out what's
-going on when it runs?
-
---
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You reported the bug.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
