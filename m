@@ -2,77 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 451F6436A04
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 20:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 173E5436B23
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 21:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232565AbhJUSGK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Oct 2021 14:06:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30680 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232363AbhJUSGB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Oct 2021 14:06:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634839425;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oSHfqseBKeRB8xf7I0mUX0PNFUzMlKErE4TYf1UyH6c=;
-        b=dHLnYKle40+eUQ7Xjz/SjoqbpGe/n+cd8Eyh4rNZVZKnaaIlMSBILhsjaRzBUFNqEkUAHe
-        SAsK/l4Qg8sTSmQUecVVJo5xSSMzRfZYoA0gLJi8ub0ez5SYYNid00gfFY+08sw1ejfiWV
-        ug5hHYY1mBwypmBNv8q6TQnKI6G6cyk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-520-nxdvAYv3MO2dOkZVxQcX4A-1; Thu, 21 Oct 2021 14:03:41 -0400
-X-MC-Unique: nxdvAYv3MO2dOkZVxQcX4A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 779B01006AA3;
-        Thu, 21 Oct 2021 18:03:40 +0000 (UTC)
-Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EEE2560C13;
-        Thu, 21 Oct 2021 18:03:39 +0000 (UTC)
-From:   Jeff Moyer <jmoyer@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        "linux-fsdevel\@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-block\@vger.kernel.org" <linux-block@vger.kernel.org>,
-        linux-aio@kvack.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] fs: replace the ki_complete two integer arguments with a single argument
-References: <4d409f23-2235-9fa6-4028-4d6c8ed749f8@kernel.dk>
-        <YXElk52IsvCchbOx@infradead.org> <YXFHgy85MpdHpHBE@infradead.org>
-        <4d3c5a73-889c-2e2c-9bb2-9572acdd11b7@kernel.dk>
-        <YXF8X3RgRfZpL3Cb@infradead.org>
-        <b7b6e63e-8787-f24c-2028-e147b91c4576@kernel.dk>
-        <x49ee8ev21s.fsf@segfault.boston.devel.redhat.com>
-        <6338ba2b-cd71-f66d-d596-629c2812c332@kernel.dk>
-X-PGP-KeyID: 1F78E1B4
-X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
-Date:   Thu, 21 Oct 2021 14:05:45 -0400
-In-Reply-To: <6338ba2b-cd71-f66d-d596-629c2812c332@kernel.dk> (Jens Axboe's
-        message of "Thu, 21 Oct 2021 09:19:45 -0600")
-Message-ID: <x497de6uubq.fsf@segfault.boston.devel.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S231558AbhJUTQ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Oct 2021 15:16:58 -0400
+Received: from mxout03.lancloud.ru ([45.84.86.113]:48156 "EHLO
+        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230020AbhJUTQ5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Oct 2021 15:16:57 -0400
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 70F7120A4A1A
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+To:     <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>, Bin Liu <b-liu@ti.com>
+Subject: [PATCH 00/10] Fix deferred probing in the USB host/gadget drivers
+Date:   Thu, 21 Oct 2021 22:14:27 +0300
+Message-ID: <20211021191437.8737-1-s.shtylyov@omp.ru>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Here are 10 patches against the 'usb-next' branch of Wolfram's 'usb.git' repo
+plus my 22 patches posted on Monday.  The affected host/gadget drivers call
+platform_get_irq() but override its result in case of error -- which prevents
+the deferred probing from working...
 
->> I'll follow up if there are issues.
+Sergey Shtylyov (10):
+  usb: gadget: udc: bcm63xx: fix deferred probing
+  usb: gadget: udc: gr: fix deferred probing
+  usb: gadget: udc: pxa25x: fix deferred probing
+  usb: host: ehci-atmel: fix deferred probing
+  usb: host: ehci-orion: fix deferred probing
+  usb: host: ehci-sh: fix deferred probing
+  usb: host: ohci-da8xx: fix deferred probing
+  usb: host: ohci-nxp: fix deferred probing
+  usb: host: ohci-omap: fix deferred probing
+  usb: musb: core: fix deferred probing
 
-s390 (big endian, 64 bit) is failing libaio test 21:
+ drivers/usb/gadget/udc/bcm63xx_udc.c | 8 ++++++--
+ drivers/usb/gadget/udc/gr_udc.c      | 8 ++++----
+ drivers/usb/gadget/udc/pxa25x_udc.c  | 2 +-
+ drivers/usb/host/ehci-atmel.c        | 8 ++++++--
+ drivers/usb/host/ehci-orion.c        | 8 ++++++--
+ drivers/usb/host/ehci-sh.c           | 8 ++++++--
+ drivers/usb/host/ohci-da8xx.c        | 2 +-
+ drivers/usb/host/ohci-nxp.c          | 2 +-
+ drivers/usb/host/ohci-omap.c         | 2 +-
+ drivers/usb/musb/musb_core.c         | 4 ++--
+ 10 files changed, 34 insertions(+), 18 deletions(-)
 
-# harness/cases/21.p
-Expected -EAGAIN, got 4294967285
-
-If I print out both res and res2 using %lx, you'll see what happened:
-
-Expected -EAGAIN, got fffffff5,ffffffff
-
-The sign extension is being split up.
-
--Jeff
+-- 
+2.26.3
 
