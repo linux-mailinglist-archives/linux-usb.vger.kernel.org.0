@@ -2,66 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7005C436593
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 17:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EED4365C7
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 17:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbhJUPQO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Oct 2021 11:16:14 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:56149 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231667AbhJUPPo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Oct 2021 11:15:44 -0400
-Received: (qmail 1161564 invoked by uid 1000); 21 Oct 2021 11:13:27 -0400
-Date:   Thu, 21 Oct 2021 11:13:27 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Cai Huoqing <caihuoqing@baidu.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: mass_storage: Make use of the helper macro
- kthread_run()
-Message-ID: <20211021151327.GA1161262@rowland.harvard.edu>
-References: <20211021084359.2607-1-caihuoqing@baidu.com>
+        id S231931AbhJUPTL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Oct 2021 11:19:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23811 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230020AbhJUPTJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Oct 2021 11:19:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1634829413;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZuGUCWJesXH8eEfD4uYbvpcQnhlkdtgHDHRl2HOKRu4=;
+        b=H/OCJ53tzgkd4E+3omc7KA5tOZ2hro72HJ6HgGtOkTQmBHCtRGTtmcl7c6N0NVzc4u3yHn
+        vzaxKg1l2p/EdMB02CrCmeqTVhUt56eisqGe+xbRH7zKNsLiqRTLSEjJV6pcO1w2TyoOX3
+        9DM0yzmvJ6TzHF0K8J2SWiX9nrw3jWE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-218-8T2Q3_FoMD6B-Jir8MiN0g-1; Thu, 21 Oct 2021 11:16:51 -0400
+X-MC-Unique: 8T2Q3_FoMD6B-Jir8MiN0g-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 199CC1927801;
+        Thu, 21 Oct 2021 15:16:50 +0000 (UTC)
+Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9042960C13;
+        Thu, 21 Oct 2021 15:16:49 +0000 (UTC)
+From:   Jeff Moyer <jmoyer@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        "linux-fsdevel\@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-block\@vger.kernel.org" <linux-block@vger.kernel.org>,
+        linux-aio@kvack.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] fs: replace the ki_complete two integer arguments with a single argument
+References: <4d409f23-2235-9fa6-4028-4d6c8ed749f8@kernel.dk>
+        <YXElk52IsvCchbOx@infradead.org> <YXFHgy85MpdHpHBE@infradead.org>
+        <4d3c5a73-889c-2e2c-9bb2-9572acdd11b7@kernel.dk>
+        <YXF8X3RgRfZpL3Cb@infradead.org>
+        <b7b6e63e-8787-f24c-2028-e147b91c4576@kernel.dk>
+X-PGP-KeyID: 1F78E1B4
+X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
+Date:   Thu, 21 Oct 2021 11:18:55 -0400
+In-Reply-To: <b7b6e63e-8787-f24c-2028-e147b91c4576@kernel.dk> (Jens Axboe's
+        message of "Thu, 21 Oct 2021 08:44:16 -0600")
+Message-ID: <x49ee8ev21s.fsf@segfault.boston.devel.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211021084359.2607-1-caihuoqing@baidu.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 04:43:58PM +0800, Cai Huoqing wrote:
-> Repalce kthread_create/wake_up_process() with kthread_run()
-> to simplify the code.
-> 
-> Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
-> ---
->  drivers/usb/gadget/function/f_mass_storage.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-> index 3cabf7692ee1..1e3cab5d635c 100644
-> --- a/drivers/usb/gadget/function/f_mass_storage.c
-> +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> @@ -2962,7 +2962,7 @@ static int fsg_bind(struct usb_configuration *c, struct usb_function *f)
->  	if (!common->thread_task) {
->  		common->state = FSG_STATE_NORMAL;
->  		common->thread_task =
-> -			kthread_create(fsg_main_thread, common, "file-storage");
-> +			kthread_run(fsg_main_thread, common, "file-storage");
->  		if (IS_ERR(common->thread_task)) {
->  			ret = PTR_ERR(common->thread_task);
->  			common->thread_task = NULL;
-> @@ -2971,7 +2971,6 @@ static int fsg_bind(struct usb_configuration *c, struct usb_function *f)
->  		}
->  		DBG(common, "I/O thread pid: %d\n",
->  		    task_pid_nr(common->thread_task));
-> -		wake_up_process(common->thread_task);
->  	}
+Jens Axboe <axboe@kernel.dk> writes:
 
-We better not apply this patch for the same reason as the other one: 
-It's probably not a good idea for the fsg_main_thread task to start 
-running before common->thread_task has been assigned.
+> On 10/21/21 8:42 AM, Christoph Hellwig wrote:
+>> On Thu, Oct 21, 2021 at 08:34:38AM -0600, Jens Axboe wrote:
+>>> Incremental, are you happy with that comment?
+>> 
+>> Looks fine to me.
+>
+> OK good, can I add your ack/review? I can send out a v3 if needed, but
+> seems a bit pointless for that small change.
+>
+> Jeff, are you happy with this one too?
 
-Alan Stern
+> diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+> index 397bfafc4c25..66c6e0c5d638 100644
+> --- a/drivers/block/loop.c
+> +++ b/drivers/block/loop.c
+> @@ -550,7 +550,7 @@ static void lo_rw_aio_do_completion(struct loop_cmd *cmd)
+>  		blk_mq_complete_request(rq);
+>  }
+>  
+> -static void lo_rw_aio_complete(struct kiocb *iocb, long ret, long ret2)
+> +static void lo_rw_aio_complete(struct kiocb *iocb, u64 ret)
+>  {
+>  	struct loop_cmd *cmd = container_of(iocb, struct loop_cmd, iocb);
+>  
+> @@ -623,7 +623,7 @@ static int lo_rw_aio(struct loop_device *lo, struct loop_cmd *cmd,
+>  	lo_rw_aio_do_completion(cmd);
+>  
+>  	if (ret != -EIOCBQUEUED)
+> -		cmd->iocb.ki_complete(&cmd->iocb, ret, 0);
+> +		lo_rw_aio_complete(&cmd->iocb, ret);
+>  	return 0;
+
+I'm not sure why that was part of this patch, but I think it's fine.
+
+I've still got more testing to do, but you can add:
+
+Reviewed-by: Jeff Moyer <jmoyer@redhat.com>
+
+I'll follow up if there are issues.
+
+Cheers,
+Jeff
+
