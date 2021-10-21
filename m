@@ -2,78 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A393B4361DD
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 14:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B4443625B
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 15:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbhJUMkr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Oct 2021 08:40:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41356 "EHLO mail.kernel.org"
+        id S231142AbhJUNIy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Oct 2021 09:08:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51044 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230444AbhJUMki (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 21 Oct 2021 08:40:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0CED660E05;
-        Thu, 21 Oct 2021 12:38:21 +0000 (UTC)
+        id S230444AbhJUNIw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 21 Oct 2021 09:08:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 54B0260FE8;
+        Thu, 21 Oct 2021 13:06:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634819901;
-        bh=T3Ke85gRqLotKwqhbroI8pmVVoX9PeyZrn1+k6eWjUM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YKMYU0PwspwDS5Hyjnwq2aYgtYS5mnQZQhrtFw/D5efF1Qz1eAh4VFW/1NYVcEn1W
-         YPEV+rlIh45KoHiW5WUwongaCXWWylZPI+4SiyBtFgADsXj6vkQ+VU/sbGj9W68oM/
-         BMgGNANxDSF/2onSHyFC7BT3D2tN8u37uTfXcDnGq7tpliq0K9q0x8kbvpnpZKK2d/
-         Tk6FnP5Y64+jlsGJB9sjRj+KtIFK18GS7pUMCOXlgpSF9Rx6yw06vyKDOKGLL1+7aM
-         88oj93sbargOT5fkPjTbdD/zmf7cCbJ4jwzT3EBUoHwIJdl9a+lSa7zBWhp/2lEN9H
-         UDvjsJlQB0n+g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mdXKi-0005yo-4m; Thu, 21 Oct 2021 14:38:08 +0200
-Date:   Thu, 21 Oct 2021 14:38:08 +0200
-From:   Johan Hovold <johan@kernel.org>
+        s=k20201202; t=1634821596;
+        bh=+mLSzKOMFevHHTNK1ZvqnU8FThaU5AqVuhwLuwr0Yn4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=psYxRlsUeD7F2CDhwSQDlA1uCxX4cBqUm8ZvvnLIdECgLoWdlvko+uQA3xNEjql55
+         XIDItym44FSsM7/ER+86s6ixtgQiAXt15nayUcqNOwXP6bNixSAbVrjfJKTQGN4K1g
+         yjEDGFJpULScaC5D6wfWT3iltJtdjvc0SNd/ez5ndspMbwfAC7Mk1QjYrD5T3WFoeQ
+         ZlAMRoto4QvhY0eFJ4uxBFBr0coBCEHvCKTZxzOEAf6Nz+mtjRI3jhML0AKbYHtZti
+         ahl1vWW6CtWzP60RbrKIW+s+sCszERw9Ahr3i75VX0Lj4noGQyuOK/vsgjrCHgIEwL
+         rIZWFzgzBsVtg==
+Date:   Thu, 21 Oct 2021 06:06:35 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
 To:     Oliver Neukum <oneukum@suse.com>
-Cc:     syzkaller-bugs@googlegroups.com, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        syzbot+76bb1d34ffa0adc03baa@syzkaller.appspotmail.com
-Subject: Re: [PATCHv2] usbnet: sanity check for maxpacket
-Message-ID: <YXFfMCZA3XHzHfgQ@hovoldconsulting.com>
-References: <20211021122944.21816-1-oneukum@suse.com>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH net-next 04/12] net: usb: don't write directly to
+ netdev->dev_addr
+Message-ID: <20211021060635.43526d0a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <be00cea5-3074-5a27-3e04-97c08ae60fd8@suse.com>
+References: <20211020155617.1721694-1-kuba@kernel.org>
+        <20211020155617.1721694-5-kuba@kernel.org>
+        <be00cea5-3074-5a27-3e04-97c08ae60fd8@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211021122944.21816-1-oneukum@suse.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 02:29:44PM +0200, Oliver Neukum wrote:
-> maxpacket of 0 makes no sense and oopses as we need to divide
-> by it. Give up.
+On Thu, 21 Oct 2021 11:55:00 +0200 Oliver Neukum wrote:
+> On 20.10.21 17:56, Jakub Kicinski wrote:
+> > Commit 406f42fa0d3c ("net-next: When a bond have a massive amount
+> > of VLANs...") introduced a rbtree for faster Ethernet address look
+> > up. To maintain netdev->dev_addr in this tree we need to make all
+> > the writes to it got through appropriate helpers.
+> >
+> > Manually fix all net/usb drivers without separate maintainers.
+> >
+> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> > ---  
 > 
-> V2: fixed typo in log and stylistic issues
+> this looks good except for catc, which needs a more complicated fix.
+> Do you want me to do it and drop it from this patch?
 
-Changelog goes below the ---
-
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> Reported-by: syzbot+76bb1d34ffa0adc03baa@syzkaller.appspotmail.com
-
-Again,
-
-Reviewed-by: Johan Hovold <johan@kernel.org>
-
-> ---
->  drivers/net/usb/usbnet.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-> index 840c1c2ab16a..80432ee0ce69 100644
-> --- a/drivers/net/usb/usbnet.c
-> +++ b/drivers/net/usb/usbnet.c
-> @@ -1788,6 +1788,10 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
->  	if (!dev->rx_urb_size)
->  		dev->rx_urb_size = dev->hard_mtu;
->  	dev->maxpacket = usb_maxpacket (dev->udev, dev->out, 1);
-> +	if (dev->maxpacket == 0) {
-> +		/* that is a broken device */
-> +		goto out4;
-> +	}
->  
->  	/* let userspace know we have a random address */
->  	if (ether_addr_equal(net->dev_addr, node_id))
+Sure, thanks!
