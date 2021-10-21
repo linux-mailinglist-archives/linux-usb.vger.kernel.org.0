@@ -2,96 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D63B435FB9
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 12:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE6F435FCB
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Oct 2021 12:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbhJUKy1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Oct 2021 06:54:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60382 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229567AbhJUKy0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 21 Oct 2021 06:54:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A931760EE9;
-        Thu, 21 Oct 2021 10:52:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634813531;
-        bh=ju2/G1q9d1NsW6DFlmH3WjqOSsI8ErlJ2aYm/MR0KDo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rp/cEbz3k5j+qHt2ta4LiVmNsU8w3jEotL0w2gyQM3aSKE8q1vzDQNFn+Opg4Cedt
-         K68UUAqlULtJs4pmK8euYmowvopud7SMSRQ4dnBcVmN2Dl7vDIDcfT2IggS0CUyLvR
-         wUxQq29tvzhP2BsVVfyOKCjb66kAQJiGJArDZzZ0=
-Date:   Thu, 21 Oct 2021 12:52:08 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2] usb: dwc3: gadget: Skip resizing EP's TX FIFO if
- already resized
-Message-ID: <YXFGWPMmmdyaSOPg@kroah.com>
-References: <20211019004123.15987-1-jackp@codeaurora.org>
+        id S230308AbhJUK7Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Oct 2021 06:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230179AbhJUK7Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Oct 2021 06:59:24 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3390AC06161C;
+        Thu, 21 Oct 2021 03:57:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=dub8UqOFRYaTWZsCvyLvD1E6FjdsA28JdylaDkp2hpM=; b=g9+VbEern6p9EX4w8aSL7V5UKX
+        l8iS5HfrUU6gNWsA22ENGum0q/RZNGLkmJQJlDHfwLohj5+rKpNnKCo07dEFlMGmd9zf85XKF4egT
+        adseBxHCCQTyTImqmSL6c/X+8mawDFOesTJnS7gpbF7zaL+bYNvr4qQmE+jgzJq78l04g/xwdF+Co
+        eEeZAicjvSWqvjM6zM6jAANn2QY5C6x4aJmgwQI1VnoicgvPZyaMZUKkizHTwg/yKJv7z+Eu2W8c6
+        lLX84QO7k/SRv0emgkq/jQiB5QGa2SyMcfagYZDzV8qiS1DrkbWG6cMCBiQHjuNm3nxpVvysymKWF
+        WEnJMFlA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mdVkx-007Ifc-FC; Thu, 21 Oct 2021 10:57:07 +0000
+Date:   Thu, 21 Oct 2021 03:57:07 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        linux-aio@kvack.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] fs: replace the ki_complete two integer arguments
+ with a single argument
+Message-ID: <YXFHgy85MpdHpHBE@infradead.org>
+References: <4d409f23-2235-9fa6-4028-4d6c8ed749f8@kernel.dk>
+ <YXElk52IsvCchbOx@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211019004123.15987-1-jackp@codeaurora.org>
+In-Reply-To: <YXElk52IsvCchbOx@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 18, 2021 at 05:41:23PM -0700, Jack Pham wrote:
-> Some functions may dynamically enable and disable their endpoints
-> regularly throughout their operation, particularly when Set Interface
-> is employed to switch between Alternate Settings.  For instance the
-> UAC2 function has its respective endpoints for playback & capture
-> associated with AltSetting 1, in which case those endpoints would not
-> get enabled until the host activates the AltSetting.  And they
-> conversely become disabled when the interfaces' AltSetting 0 is
-> chosen.
+On Thu, Oct 21, 2021 at 01:32:19AM -0700, Christoph Hellwig wrote:
+> > @@ -1436,8 +1436,8 @@ static void aio_complete_rw(struct kiocb *kiocb, long res, long res2)
+> >  		file_end_write(kiocb->ki_filp);
+> >  	}
+> >  
+> > -	iocb->ki_res.res = res;
+> > -	iocb->ki_res.res2 = res2;
+> > +	iocb->ki_res.res = res & 0xffffffff;
+> > +	iocb->ki_res.res2 = res >> 32;
 > 
-> With the DWC3 FIFO resizing algorithm recently added, every
-> usb_ep_enable() call results in a call to resize that EP's TXFIFO,
-> but if the same endpoint is enabled again and again, this incorrectly
-> leads to FIFO RAM allocation exhaustion as the mechanism did not
-> account for the possibility that endpoints can be re-enabled many
-> times.
-> 
-> Example log splat:
-> 
-> 	dwc3 a600000.dwc3: Fifosize(3717) > RAM size(3462) ep3in depth:217973127
-> 	configfs-gadget gadget: u_audio_start_capture:521 Error!
-> 	dwc3 a600000.dwc3: request 000000000be13e18 was not queued to ep3in
-> 
-> Add another bit DWC3_EP_TXFIFO_RESIZED to dep->flags to keep track of
-> whether an EP had already been resized in the current configuration.
-> If so, bail out of dwc3_gadget_resize_tx_fifos() to avoid the
-> calculation error resulting from accumulating the EP's FIFO depth
-> repeatedly.  This flag is retained across multiple ep_disable() and
-> ep_enable() calls and is cleared when GTXFIFOSIZn is reset in
-> dwc3_gadget_clear_tx_fifos() upon receiving the next Set Config.
-> 
-> Fixes: 9f607a309fbe9 ("usb: dwc3: Resize TX FIFOs to meet EP bursting requirements")
-> Signed-off-by: Jack Pham <jackp@codeaurora.org>
-> ---
-> v2: Added explicit flag to dep->flags and check that instead of directly
->     reading the GTXFIFOSIZn register.
-> 
->  drivers/usb/dwc3/core.h   | 1 +
->  drivers/usb/dwc3/gadget.c | 8 +++++++-
->  2 files changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index 5612bfdf37da..f033063f6948 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -723,6 +723,7 @@ struct dwc3_ep {
->  #define DWC3_EP_FORCE_RESTART_STREAM	BIT(9)
->  #define DWC3_EP_FIRST_STREAM_PRIMED	BIT(10)
->  #define DWC3_EP_PENDING_CLEAR_STALL	BIT(11)
-> +#define DWC3_EP_TXFIFO_RESIZED	BIT(12)
+> This needs a big fat comments explaining the historic context.
 
-Any specific reason this isn't lined up properly?
-
-thanks,
-
-greg k-h
+Oh, and please use the upper_32_bits / lower_32_bits helpers.
