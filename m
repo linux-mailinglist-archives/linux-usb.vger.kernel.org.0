@@ -2,79 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 928AF43762C
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Oct 2021 13:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E27014376FE
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Oct 2021 14:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232793AbhJVLtl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Oct 2021 07:49:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54388 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232670AbhJVLtk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 22 Oct 2021 07:49:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1960560F4B;
-        Fri, 22 Oct 2021 11:47:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634903243;
-        bh=qw6WeHQjz5BGcN40R316+5AOhKOKwg58R+12KXsfyE8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=esMebFbfxvNI7HVc9VDFBaau3u1+sIJ8qIWyo/ZIowItMmwfRpKgBQFiRRHWBmcGE
-         2zjDXI5EXGBqqRKYbV6YIDQlLjmczank1xyaRVmyyjoSJaOJwa1S5RJoRmclXFWz9b
-         6aBRTTtm1f6AIDruhjYN/1A8+y8iCDDcMiDU/iJk=
-Date:   Fri, 22 Oct 2021 13:47:21 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     dingsenjie@163.com
-Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dingsenjie <dingsenjie@yulong.com>
-Subject: Re: [PATCH] usb: tcpm: Simplify the return expression of
- tcpm_start_toggling
-Message-ID: <YXKkyRGoH+UJzIFw@kroah.com>
-References: <20211022110045.11044-1-dingsenjie@163.com>
+        id S232754AbhJVMYg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Oct 2021 08:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232301AbhJVMY0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Oct 2021 08:24:26 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8D0C0611C2
+        for <linux-usb@vger.kernel.org>; Fri, 22 Oct 2021 05:22:02 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z20so1544651edc.13
+        for <linux-usb@vger.kernel.org>; Fri, 22 Oct 2021 05:22:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=EabbjzyBCsHP1Pqryzjhoy0dM3xlyxLmmpO8ACgMTo8=;
+        b=opUIgqVWyZcHOIldu+LgQVfQLu2JLSm4eq0yRYoR8X3EkJ0jJdtgK1LJrEC4fAYG/u
+         x5QndCavFk6KrgrLKL2M04eWhmo9Ht5gsCUOTzm6BFmYlOhPKCnfQmAWRcGWJ3Kgd+Po
+         dxnzE1GzD0Fe/zdoRYGanqsnNZ7HZwcDd5jvb2P53Z7ySB2eUUW5eKcCwJjvHcLwQW3D
+         hmZMQ0WQ67mADARNZlQPTMDFACAa1pT2f55C5E+z5xU/0SGGI05AA1ys/nk/8Z7QRecx
+         rbFLK51ODld/urTp+hjZ3tCNNEiv03NL8R5n8H4ZVv1sIR3Pcfr4FSd/aUugOrtvCJBK
+         4QUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=EabbjzyBCsHP1Pqryzjhoy0dM3xlyxLmmpO8ACgMTo8=;
+        b=Jtc8oOmhbn10A3MqNfzNHiECrGqD0eYgWjNL0VZNJ2OfACaiAEc6oenOBXbtchf9rI
+         TNaMA1EWqScXCtrIkwQ8Qui5wfYL4L+dah/m1CA2JcbzLcePih75NqF5u59xAv0quDlU
+         GVHlPB1lsVf07wPqsYA5sYRtyYum0nsCfkdxIF3WnojIRDD5boMqU0x3uJkapDfpx09t
+         BqbVJBe5zeZaWEC9hp7S/0n9KwML+Sal+lYbVQSiZuw0rVBXjHVJT5qAImmhWZkWfcyx
+         Ge7rImn4C1nP3R31WSA1dixwGGnCU/yvAqymKjTTrd0KRo+/KnmThbJoAtMGv54bOku5
+         l2HQ==
+X-Gm-Message-State: AOAM531ob4d3l9llx/iuEMYLgfCxOkpl+1mEGTfQU7qmZZwibu4R7l0v
+        ltJd7h/B9jiyxkmweAG2LM5bmCnsZabpbtLgqTmuS6BeolZ+x07K
+X-Google-Smtp-Source: ABdhPJy2Z+mCK6UsBedDHfuHLqHjOelryE6bx9xZ/OavTEghlxY+bPID2uQBe/oD5nVNF4jHf9BZTkpf3h9vpVXzB08=
+X-Received: by 2002:a17:907:1b0a:: with SMTP id mp10mr15488909ejc.29.1634905309828;
+ Fri, 22 Oct 2021 05:21:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211022110045.11044-1-dingsenjie@163.com>
+Received: by 2002:a17:907:7fa7:0:0:0:0 with HTTP; Fri, 22 Oct 2021 05:21:48
+ -0700 (PDT)
+Reply-To: bahadur.rayanby@gmail.com
+From:   Ryan Bahadur <dr.philposman7@gmail.com>
+Date:   Fri, 22 Oct 2021 05:21:48 -0700
+Message-ID: <CAMOT=VQ19xGMh1Soq8rNHNKaBCqZh03d0u+Nrf_Ou9bAtd-seQ@mail.gmail.com>
+Subject: CAN I TRUST YOU
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 22, 2021 at 07:00:45PM +0800, dingsenjie@163.com wrote:
-> From: dingsenjie <dingsenjie@yulong.com>
-> 
-> Simplify the return expression in the tcpm.c
+-- 
+Greetings,
 
-Why?
+Firstly, I apologize for encroaching into your privacy in this manner
+as it may seem unethical though it is a matter of great importance.
 
-> 
-> Signed-off-by: dingsenjie <dingsenjie@yulong.com>
+I am Mr.Ryan Bahadur, I work with Cayman National Bank (Cayman Islands).
 
-Is this the full name you sign legal documents with?  (I have to ask...)
+I am contacting you because my status would not permit me to do this
+alone as it is concerning our customer and an investment placed under
+our bank's management over 5 years ago.
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 22a85b396f69..dabe694a7eb1 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -2766,14 +2766,11 @@ static int tcpm_set_charge(struct tcpm_port *port, bool charge)
->  
->  static bool tcpm_start_toggling(struct tcpm_port *port, enum typec_cc_status cc)
->  {
-> -	int ret;
-> -
->  	if (!port->tcpc->start_toggling)
->  		return false;
->  
->  	tcpm_log_force(port, "Start toggling");
-> -	ret = port->tcpc->start_toggling(port->tcpc, port->port_type, cc);
-> -	return ret == 0;
-> +	return port->tcpc->start_toggling(port->tcpc, port->port_type, cc) == 0;
+I have a proposal I would love to discuss with you which will be very
+beneficial to both of us. It's regarding my late client who has a huge
+deposit with my bank.
 
-Why change this from the original code?  The original code is easier to
-read, right?
+He is from your country and shares the same last name with you.
 
-thanks,
+I want to seek your consent to present you as the next of kin to my
+late client who died and left a huge deposit with my bank.
 
-greg k-h
+I would respectfully request that you keep the contents of this mail
+confidential and respect the integrity of the information you come by
+as a result of this mail.
+
+Please kindly get back to me for more details if I can TRUST YOU.{
+bahadur.rayanby@gmail.com}
+
+Regards
+Mr.Ryan Bahadur
+Treasury and Deposit Management,
+Cayman National Bank Cayman Islands.
