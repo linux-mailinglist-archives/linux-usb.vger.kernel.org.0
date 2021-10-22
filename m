@@ -2,140 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B794378F3
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Oct 2021 16:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83BC343792C
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Oct 2021 16:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233023AbhJVOV4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Oct 2021 10:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232995AbhJVOVz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Oct 2021 10:21:55 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A85C061767
-        for <linux-usb@vger.kernel.org>; Fri, 22 Oct 2021 07:19:38 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id r6so5211280oiw.2
-        for <linux-usb@vger.kernel.org>; Fri, 22 Oct 2021 07:19:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=k9e8WyMd1qfMhPo9VdVqOG2FyHldcmSV6mWD6oKAoeY=;
-        b=wH/RdseJWRiQhEie1xIATdF2YWf0Tt9II/ETYc5olSHDiNMcJEE3XxjbGIYaUA7iGK
-         XJDmxd5MDYabrWvU6UOcwQ01QNQa704eQNyV/bsaLkJK5akCtKiDxgsE8urY9vt4HL/1
-         spwnTvJHx6CU+On7JPKg+BJiUmmfbnwaC7tH19k/Ws8CShBcXtumhNayUY9ScCkl9AXS
-         seWxMFNbhzV0K26XfBZ3WcnBs0Q6MMjLGhu4+Xn+HjUujBVveMchGtq6gNBLr9jq2oac
-         SIJP3LdiZNbcqJ2bQjfpUKAJoIBjp3JhRSqJGU5QsKMZD+gJ5LqW47gsil7+hcROm4lH
-         vtzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=k9e8WyMd1qfMhPo9VdVqOG2FyHldcmSV6mWD6oKAoeY=;
-        b=yL3wezMDRa2FuNVe7nXizyLgDYxOWWgmP5/u+JVzB2T00PgiX98vQcQIa3HpciDXlt
-         jFD8L8AxqwOetqU1iAUieyWYRTjNlURc73vxo0Ber5KaMpaKBFqmlf9FgFju4KMK7tKs
-         Lz8zY/7vMdYDnPQ3lKiWZsvmgVwBnbT1kPZAmBBlpUTeGdnE+yK44F4wzUxhddLLhqR2
-         JfQ1T3OTP8lhh+0TxYW4pBa11rEq6kQq0/O6hsz21J72xK3pNBzxmH/z1G2yOqO4f1wD
-         usRsB2Ygp+LdSyW/9wwNwaA+QFya4yuBlC4k15Mt0W86Bp6QDYrT5rQX+xiQL7ikWwo9
-         uE6Q==
-X-Gm-Message-State: AOAM531uPGj7rwKeCqOM4C8JTHzNYxxtLaK4qSEzlSM2eNN1kKxvljNS
-        M2XYcpKaElYdSCtfjyQ7Huy8/NY8ZYgH7A==
-X-Google-Smtp-Source: ABdhPJz9MHdu+kULCD2Ld82e2jghT/yuW0dOuVAcgAqwROJxs06ZYVe3X6nfvAORBrB2B0QfLBgh6w==
-X-Received: by 2002:aca:c6d8:: with SMTP id w207mr10218293oif.145.1634912377096;
-        Fri, 22 Oct 2021 07:19:37 -0700 (PDT)
-Received: from [172.20.15.86] (rrcs-24-173-18-66.sw.biz.rr.com. [24.173.18.66])
-        by smtp.gmail.com with ESMTPSA id d18sm1489112ook.14.2021.10.22.07.19.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Oct 2021 07:19:36 -0700 (PDT)
-Subject: Re: [PATCH v2] fs: replace the ki_complete two integer arguments with
- a single argument
-To:     Jeff Moyer <jmoyer@redhat.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        linux-aio@kvack.org, linux-usb@vger.kernel.org
-References: <4d409f23-2235-9fa6-4028-4d6c8ed749f8@kernel.dk>
- <YXElk52IsvCchbOx@infradead.org> <YXFHgy85MpdHpHBE@infradead.org>
- <4d3c5a73-889c-2e2c-9bb2-9572acdd11b7@kernel.dk>
- <YXF8X3RgRfZpL3Cb@infradead.org>
- <b7b6e63e-8787-f24c-2028-e147b91c4576@kernel.dk>
- <x49ee8ev21s.fsf@segfault.boston.devel.redhat.com>
- <6338ba2b-cd71-f66d-d596-629c2812c332@kernel.dk>
- <x497de6uubq.fsf@segfault.boston.devel.redhat.com>
- <7a697483-8e44-6dc3-361e-ae7b62b82074@kernel.dk>
- <x49wnm6t7r9.fsf@segfault.boston.devel.redhat.com>
- <x49sfwut7i8.fsf@segfault.boston.devel.redhat.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <d67c3d6f-56a2-4ace-7b57-cb9c594ad82c@kernel.dk>
-Date:   Fri, 22 Oct 2021 08:19:33 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S232922AbhJVOr1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Oct 2021 10:47:27 -0400
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:42889 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232825AbhJVOrX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Oct 2021 10:47:23 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 513645C0131;
+        Fri, 22 Oct 2021 10:45:05 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 22 Oct 2021 10:45:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:mime-version:content-type; s=
+        fm2; bh=Et6KZrcdZK6bzUf+xuIArNSukxz0R3kbny373GbNlNg=; b=JEPRB9mT
+        n2jxyb4o8h14YZe96Pc7sG05S6rQCjcXXlDyJjlDwUAwEY9sepj4baQxEuekafkp
+        Phss/z4QADcy5HzS2i17j1BI+BDHtQZxkFeCmOoPaG8lCWC7qWICdXlZmJtlgsZE
+        qwsEhjch6mX4yqrBkydAA3ZKZcJttD9Il+vXPyQ4ADaORfPH0/kzoSevRjGKnb8g
+        O19+UgXvfeOuxvDyp7cu2Gq1cT4NXObdN8KsTvZPaqyCgvcnjCZBW0k3zX91RwIf
+        YzX6D+TsyJJOl07AAI5WRYDzkryloFkuSr/Mg3GuVFHS4KYEtytgFjOqSPqGjpKL
+        +SKFSZoaaUT3lQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:message-id
+        :mime-version:subject:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm1; bh=Et6KZrcdZK6bzUf+xuIArNSukxz0R
+        3kbny373GbNlNg=; b=eD7CcMuklBlx+0I6iKhsogonHNAOCe7uBXkGPS50OTThe
+        +qcXSVNsYRL+EZybQG8P1iNZEXtVUpdVIhA587rm5O5i1XIuin25JJLI+D36IHgM
+        0mQCeaFo8qAdYjkD5zk6KQYZJ7cHPsiPt3sq23SBfGq9jM10OxEqgRtQbmLrIakP
+        BoADzpvrPe//Llt054HJPIY6gbKuBV5EneFn53TLVMfPzdeFAWDvVDG+MrH9mWEM
+        0zzEbnfEuAs1vUj2V9gA58oN3tkCd7HtqvvdZWBtF2vUnQfd10AQjHBSuS3r04Ay
+        3LoWlsqMssnAIQFEPbHPjE+fjuA4+KvMDghaxjqmg==
+X-ME-Sender: <xms:cc5yYRU5E7jt86x2Im1xX3ISDGjVfyynSVPoXSYHqqKPdyV9EqThTA>
+    <xme:cc5yYRlIysKdxpC3yUsvsN8W7CJxqpqqquMnDAjvzKmnQy0FAUymDuHWV2DctBTuQ
+    lYnjnQOrr4idA>
+X-ME-Received: <xmr:cc5yYdaAU8l-AMXyIhMYJnCmxma7S4jV0H04zNrH05znKLWLEEp3bw1024Sd5pMWraN5E2pDfSqZc2aqNiIsQZ6hfxqBotiu>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddvkedgjedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkgggtugesthdtredttd
+    dtvdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecu
+    ggftrfgrthhtvghrnhepvedugeeuffelgeekhfehtdefhfekffdtgedvteeitddvieduhf
+    ekheekueehleelnecuffhomhgrihhnpehkrhhorghhrdgtohhmpdhgihhthhhusgdrtgho
+    mhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrh
+    gvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:cc5yYUWLeVyJWtPet9rsuFU7jgi7Q_13pPBakQ61vftDnT3FBVgGWw>
+    <xmx:cc5yYbkOwAie3fm2ARr7gEcF1thxq6ZZyP-2kzops0NkwCKagq1K5g>
+    <xmx:cc5yYRcXc8jObN4DvafxtLX3f7NLzA_yAuVd4lor2d0gI8DJLf2qSw>
+    <xmx:cc5yYQzabi7DGdVgFy_a758VsDTlyFSXFvsLMf_9LaPMmS7TrDGfGA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 22 Oct 2021 10:45:04 -0400 (EDT)
+Date:   Fri, 22 Oct 2021 16:44:53 +0200
+From:   Greg KH <greg@kroah.com>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: usbview 2.1 release
+Message-ID: <YXLOZSarSq5zPiUT@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <x49sfwut7i8.fsf@segfault.boston.devel.redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/21/21 3:03 PM, Jeff Moyer wrote:
-> Jeff Moyer <jmoyer@redhat.com> writes:
-> 
->> Jens Axboe <axboe@kernel.dk> writes:
->>
->>> On 10/21/21 12:05 PM, Jeff Moyer wrote:
->>>>
->>>>>> I'll follow up if there are issues.
->>>>
->>>> s390 (big endian, 64 bit) is failing libaio test 21:
->>>>
->>>> # harness/cases/21.p
->>>> Expected -EAGAIN, got 4294967285
->>>>
->>>> If I print out both res and res2 using %lx, you'll see what happened:
->>>>
->>>> Expected -EAGAIN, got fffffff5,ffffffff
->>>>
->>>> The sign extension is being split up.
->>>
->>> Funky, does it work if you apply this on top?
->>>
->>> diff --git a/fs/aio.c b/fs/aio.c
->>> index 3674abc43788..c56437908339 100644
->>> --- a/fs/aio.c
->>> +++ b/fs/aio.c
->>> @@ -1442,8 +1442,8 @@ static void aio_complete_rw(struct kiocb *kiocb, u64 res)
->>>  	 * 32-bits of value at most for either value, bundle these up and
->>>  	 * pass them in one u64 value.
->>>  	 */
->>> -	iocb->ki_res.res = lower_32_bits(res);
->>> -	iocb->ki_res.res2 = upper_32_bits(res);
->>> +	iocb->ki_res.res = (long) (res & 0xffffffff);
->>> +	iocb->ki_res.res2 = (long) (res >> 32);
->>>  	iocb_put(iocb);
->>>  }
->>
->> I think you'll also need to clamp any ki_complete() call sites to 32
->> bits (cast to int, or what have you).  Otherwise that sign extension
->> will spill over into res2.
->>
->> fwiw, I tested with this:
->>
->> 	iocb->ki_res.res = (long)(int)lower_32_bits(res);
->> 	iocb->ki_res.res2 = (long)(int)upper_32_bits(res);
->>
->> Coupled with the call site changes, that made things work for me.
-> 
-> This is all starting to feel like a minefield.  If you don't have any
-> concrete numbers to show that there is a speedup, I think we should
-> shelf this change.
+After 9 years, I figure it's about time for a new release of usbview, as
+some people still use it, and there's been some grumbling about a
+release by the distro packages that have to deal with it.
 
-It's really not a minefield at all, we just need a proper help to encode
-the value. I'm out until Tuesday, but I'll sort it out when I get back.
-Can also provide some numbers on this.
+Nothing big in here, just loads of build configuration changes in order
+to keep the thing building properly within most modern Linux systems,
+and a few other small changes.  Full changelog is at the bottom of this
+email.
 
--- 
-Jens Axboe
+Ideally in the future, this will move into the usbutils package, when I
+get some free time, and remove it from the need to access the debugfs
+file and take advantage of the extended device structure parsing that
+'lsusb' provides.
+
+The package can be downladed at:
+	http://www.kroah.com/linux/usb/usbview-2.1.tar.gz
+and the git tree can be found at:
+	http://github.com/gregkh/usbview
+
+thanks,
+
+greg k-h
+
+-------
+version 2.1
+        - build warnings fixed
+        - increased max number of interfaces allowed, fixing problem with some
+          USB sound devices.
+        - autogen.sh added
+        - LICENSES directory added and license moved to it
+        - SPDX license headers added
+        - policykit support added
+        - usbview.desktop: Add desktop file.
+        - usbview_icon.svg: Convert xpm bitmap icon into a scalable svg icon.
+        - configure.in configure.ac: Rename former to latter.
+        - autgen.sh, config.h.in: Remove in favour of "autoreconf --install".
+        - configure.ac, Makefile.am:
+          - Autotools tweaks and normalization.
+          - Don't include CPPFLAGS in AM_CPPFLAGS.
+          - Remove references to unset GLIB_CFLAGS and GLIB_LIBS in Makefile.am
+          - Reorder clauses to usual order.
+          - Remove obsolete comments.
+          - Add m4 quoting to configure.ac per autoconf documentation.
+          - VERSION belongs in config.h from configure.ac, not Makefile.am.
+          - Use AX_CFLAGS_WARN_ALL instead of custom code.
+          - Address "autoupdate" and "autoreconf --warn=all" output.
+          - Support (conditional) installation of icons, including bitmap
+            icons at various resolutions, and desktop file.
+          - remove NEWS, now unnecessary due to automake foreign option.
+        - Makefile.am, interface.c: Generate icon compiled into executable from scalable icon.
+        - .gitignore: Updates.
+        - ChangeLog: trim whitespace
+        - squelch compiler warning: examine fgets return value
 
