@@ -2,406 +2,226 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E21C4379A4
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Oct 2021 17:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1866D4379F0
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Oct 2021 17:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233452AbhJVPMt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Oct 2021 11:12:49 -0400
-Received: from mail-il1-f199.google.com ([209.85.166.199]:48762 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233360AbhJVPMg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Oct 2021 11:12:36 -0400
-Received: by mail-il1-f199.google.com with SMTP id s8-20020a056e02216800b002593ad87094so2674948ilv.15
-        for <linux-usb@vger.kernel.org>; Fri, 22 Oct 2021 08:10:19 -0700 (PDT)
+        id S233321AbhJVPcH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Oct 2021 11:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233328AbhJVPcD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Oct 2021 11:32:03 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2559CC061767
+        for <linux-usb@vger.kernel.org>; Fri, 22 Oct 2021 08:29:46 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id s9so5471897oiw.6
+        for <linux-usb@vger.kernel.org>; Fri, 22 Oct 2021 08:29:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=LUtnq1wX3c9ZSKlFVqBQ9milrt9oUJPe3W7pJqk8fis=;
+        b=Dt6Xe7RT9/rmETzyvm6KPZXudZiAHUA2T8XHt//MeIXHgfevOpKLZ+t5VvL4srw/Ba
+         IQEzzktExKHA9fZfICrEpqT1kmakmZoRxQFEv+4IFM6Fopm+2rwRHhgAhC0W8wWc83rS
+         oOh71WpSfXuHTo8oZnZGplwUy/o5P257gkK9AzYegblq//FMB6WsRJrP8apwa+7GnNP1
+         10vtC0aguxaaRjQXa4kABPrDsqWyZa1BUPPIFw/DIKZ/uDIv8Vgz1rr1hu4xisGj2gcr
+         7Y6f7k4EWgGMsoC0QmpSDGb6rzpmYI02gymq27osbsFKaiB0vsyY3jt2dt662L+3wHPu
+         k3jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=dzMScCJzD8KNQMG+U1s3cz7LwmN1H60cRSP1WR9DSAU=;
-        b=KMMPBAR7thhekcykHz3Y10UoSF+lY/9hK5BRUgK6DiH/rSkUGerBb2IzQa7l+ZZV2Z
-         02DHRmD4YkrWvPd/FF4styLqkJzXRYr0Gnt1o42pPZBDWyHxpP7ZqZw3upghOUa1JGcF
-         KE2Zp2KjuI+5eA7vd1/k3ltKXTx6yyyMdkKUqmqo8xrh0KGSjbZMxO76cuPKqCGHpqu2
-         /yVWI1d21DFmicyNVmLbEFZq2Ped0QoXAKkTwcepRhEXOu+iBllvi38zYHoNwKlVHWJD
-         3P/pEu8u3TV30/UAYNDNWqGZASe8z6AtFHUIlpczyN5vRyInJJgNacFju174nRIMy8/S
-         rlKA==
-X-Gm-Message-State: AOAM530zzZIt//+77ORvZX2k6tWt7b2LaPOo/nHbvS6f44bgmSai63Jt
-        qbsHLpKr7Z12M+kvMxCAKRqTXtTMsyDOlr/Xe2sA7FziBG2f
-X-Google-Smtp-Source: ABdhPJz3Xga2wvOl2nVtIgBjjNOfnOQnOXgr7pfe+eaoU1FckeXno8M/38tGxDKHo6lh8RNtbdirz2M3W09PU6R3z0e0wuN7+ZG1
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LUtnq1wX3c9ZSKlFVqBQ9milrt9oUJPe3W7pJqk8fis=;
+        b=gTt0PreH0C2+BnIGEAAUdwDxLflu9RpX7tPtWJHeeO72xYZaADR6r3XGv0Q9qY9WSf
+         Nf5TM7SJ/0TRbDAHMubsOxQy1mqB/haxqnyUrYQK67jRXJUV77UBeo09MO3sEvGVOfiS
+         AWKzC8vZuoIkgC3htO4bl7lIA3Hd1m//QyNrOQU93x14PukD02+m4z3iISH0SGNyr5Ec
+         HYPXLIeHddh+Q8VcH1s08CVvqeVkrAd0btXXiFyNIn33QHGgLR07oGWqwfNwwbCd/9W1
+         FrO6s0dHIf+8Icrc5uOO5Ylq0RVLv6uDm/PQhHCAmdIvdyN4b7UvBM0bx/+3IbbM6fhJ
+         igSg==
+X-Gm-Message-State: AOAM5324FctLgluIInSA0vZXv3e8zIFtE8fqeLSPe67A4iD5RfeNhP5F
+        z/i2dMqs3NeG+B5CleSvULioDDPFSS0VFA==
+X-Google-Smtp-Source: ABdhPJx1jjUdC1bsdaA7We5wTASWQ/NVsI6ael3sh50HPmv4zQ9u/R/KB+jBRoiRr7junic+9/3XsQ==
+X-Received: by 2002:aca:ac0b:: with SMTP id v11mr10588962oie.155.1634916585185;
+        Fri, 22 Oct 2021 08:29:45 -0700 (PDT)
+Received: from [172.20.15.86] (rrcs-24-173-18-66.sw.biz.rr.com. [24.173.18.66])
+        by smtp.gmail.com with ESMTPSA id v22sm1491435oot.43.2021.10.22.08.29.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Oct 2021 08:29:44 -0700 (PDT)
+Subject: Re: [PATCH v2] fs: replace the ki_complete two integer arguments with
+ a single argument
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Jeff Moyer <jmoyer@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        linux-aio@kvack.org, linux-usb@vger.kernel.org
+References: <4d409f23-2235-9fa6-4028-4d6c8ed749f8@kernel.dk>
+ <YXElk52IsvCchbOx@infradead.org> <YXFHgy85MpdHpHBE@infradead.org>
+ <4d3c5a73-889c-2e2c-9bb2-9572acdd11b7@kernel.dk>
+ <YXF8X3RgRfZpL3Cb@infradead.org>
+ <b7b6e63e-8787-f24c-2028-e147b91c4576@kernel.dk>
+ <x49ee8ev21s.fsf@segfault.boston.devel.redhat.com>
+ <6338ba2b-cd71-f66d-d596-629c2812c332@kernel.dk>
+ <x497de6uubq.fsf@segfault.boston.devel.redhat.com>
+ <7a697483-8e44-6dc3-361e-ae7b62b82074@kernel.dk>
+ <x49wnm6t7r9.fsf@segfault.boston.devel.redhat.com>
+ <x49sfwut7i8.fsf@segfault.boston.devel.redhat.com>
+ <d67c3d6f-56a2-4ace-7b57-cb9c594ad82c@kernel.dk>
+Message-ID: <67127b02-2b58-5944-8bfb-e842182d6459@kernel.dk>
+Date:   Fri, 22 Oct 2021 09:29:43 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-Received: by 2002:a6b:6d06:: with SMTP id a6mr108155iod.25.1634915418929;
- Fri, 22 Oct 2021 08:10:18 -0700 (PDT)
-Date:   Fri, 22 Oct 2021 08:10:18 -0700
-In-Reply-To: <0000000000003cc03505a9c771ed@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c87fc005cef26865@google.com>
-Subject: Re: [syzbot] INFO: task hung in sisusb_open
-From:   syzbot <syzbot+fd9d03311cdce9a9ec36@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, thomas@winischhofer.net
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <d67c3d6f-56a2-4ace-7b57-cb9c594ad82c@kernel.dk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On 10/22/21 8:19 AM, Jens Axboe wrote:
+> On 10/21/21 3:03 PM, Jeff Moyer wrote:
+>> Jeff Moyer <jmoyer@redhat.com> writes:
+>>
+>>> Jens Axboe <axboe@kernel.dk> writes:
+>>>
+>>>> On 10/21/21 12:05 PM, Jeff Moyer wrote:
+>>>>>
+>>>>>>> I'll follow up if there are issues.
+>>>>>
+>>>>> s390 (big endian, 64 bit) is failing libaio test 21:
+>>>>>
+>>>>> # harness/cases/21.p
+>>>>> Expected -EAGAIN, got 4294967285
+>>>>>
+>>>>> If I print out both res and res2 using %lx, you'll see what happened:
+>>>>>
+>>>>> Expected -EAGAIN, got fffffff5,ffffffff
+>>>>>
+>>>>> The sign extension is being split up.
+>>>>
+>>>> Funky, does it work if you apply this on top?
+>>>>
+>>>> diff --git a/fs/aio.c b/fs/aio.c
+>>>> index 3674abc43788..c56437908339 100644
+>>>> --- a/fs/aio.c
+>>>> +++ b/fs/aio.c
+>>>> @@ -1442,8 +1442,8 @@ static void aio_complete_rw(struct kiocb *kiocb, u64 res)
+>>>>  	 * 32-bits of value at most for either value, bundle these up and
+>>>>  	 * pass them in one u64 value.
+>>>>  	 */
+>>>> -	iocb->ki_res.res = lower_32_bits(res);
+>>>> -	iocb->ki_res.res2 = upper_32_bits(res);
+>>>> +	iocb->ki_res.res = (long) (res & 0xffffffff);
+>>>> +	iocb->ki_res.res2 = (long) (res >> 32);
+>>>>  	iocb_put(iocb);
+>>>>  }
+>>>
+>>> I think you'll also need to clamp any ki_complete() call sites to 32
+>>> bits (cast to int, or what have you).  Otherwise that sign extension
+>>> will spill over into res2.
+>>>
+>>> fwiw, I tested with this:
+>>>
+>>> 	iocb->ki_res.res = (long)(int)lower_32_bits(res);
+>>> 	iocb->ki_res.res2 = (long)(int)upper_32_bits(res);
+>>>
+>>> Coupled with the call site changes, that made things work for me.
+>>
+>> This is all starting to feel like a minefield.  If you don't have any
+>> concrete numbers to show that there is a speedup, I think we should
+>> shelf this change.
+> 
+> It's really not a minefield at all, we just need a proper help to encode
+> the value. I'm out until Tuesday, but I'll sort it out when I get back.
+> Can also provide some numbers on this.
 
-HEAD commit:    2f111a6fd5b5 Merge tag 'ceph-for-5.15-rc7' of git://github..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15a3aaf0b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=61f4d9af07d3bbdf
-dashboard link: https://syzkaller.appspot.com/bug?extid=fd9d03311cdce9a9ec36
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13d4e9fcb00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1444ada4b00000
+I think this incremental should fix it, also providing a helper to
+properly pack these. The more I look at the gadget stuff the more I also
+get the feeling that it really is wonky and nobody uses res2, which
+would be a nice cleanup to continue. But I think it should be separate.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fd9d03311cdce9a9ec36@syzkaller.appspotmail.com
 
-INFO: task syz-executor620:7119 blocked for more than 143 seconds.
-      Not tainted 5.15.0-rc6-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor620 state:D stack:28152 pid: 7119 ppid:  6567 flags:0x00000004
-Call Trace:
- context_switch kernel/sched/core.c:4940 [inline]
- __schedule+0xb44/0x5960 kernel/sched/core.c:6287
- schedule+0xd3/0x270 kernel/sched/core.c:6366
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6425
- __mutex_lock_common kernel/locking/mutex.c:669 [inline]
- __mutex_lock+0xa34/0x12f0 kernel/locking/mutex.c:729
- sisusb_open+0xb2/0x4d0 drivers/usb/misc/sisusbvga/sisusb.c:2396
- usb_open+0x204/0x2e0 drivers/usb/core/file.c:48
- chrdev_open+0x266/0x770 fs/char_dev.c:414
- do_dentry_open+0x4c8/0x11d0 fs/open.c:822
- do_open fs/namei.c:3428 [inline]
- path_openat+0x1c9a/0x2740 fs/namei.c:3561
- do_filp_open+0x1aa/0x400 fs/namei.c:3588
- do_sys_openat2+0x16d/0x4d0 fs/open.c:1200
- do_sys_open fs/open.c:1216 [inline]
- __do_sys_openat fs/open.c:1232 [inline]
- __se_sys_openat fs/open.c:1227 [inline]
- __x64_sys_openat+0x13f/0x1f0 fs/open.c:1227
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f6c225333c7
-RSP: 002b:00007fffa0f54860 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 00000000000f4240 RCX: 00007f6c225333c7
-RDX: 0000000000000002 RSI: 00007fffa0f548e0 RDI: 00000000ffffff9c
-RBP: 00007fffa0f548e0 R08: 0000000000000000 R09: 000000000000000f
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
-R13: 00007fffa0f5497c R14: 00007fffa0f54990 R15: 00007fffa0f54980
-INFO: task syz-executor620:7122 blocked for more than 143 seconds.
-      Not tainted 5.15.0-rc6-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor620 state:D stack:28152 pid: 7122 ppid:  6568 flags:0x00000004
-Call Trace:
- context_switch kernel/sched/core.c:4940 [inline]
- __schedule+0xb44/0x5960 kernel/sched/core.c:6287
- schedule+0xd3/0x270 kernel/sched/core.c:6366
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6425
- __mutex_lock_common kernel/locking/mutex.c:669 [inline]
- __mutex_lock+0xa34/0x12f0 kernel/locking/mutex.c:729
- sisusb_open+0xb2/0x4d0 drivers/usb/misc/sisusbvga/sisusb.c:2396
- usb_open+0x204/0x2e0 drivers/usb/core/file.c:48
- chrdev_open+0x266/0x770 fs/char_dev.c:414
- do_dentry_open+0x4c8/0x11d0 fs/open.c:822
- do_open fs/namei.c:3428 [inline]
- path_openat+0x1c9a/0x2740 fs/namei.c:3561
- do_filp_open+0x1aa/0x400 fs/namei.c:3588
- do_sys_openat2+0x16d/0x4d0 fs/open.c:1200
- do_sys_open fs/open.c:1216 [inline]
- __do_sys_openat fs/open.c:1232 [inline]
- __se_sys_openat fs/open.c:1227 [inline]
- __x64_sys_openat+0x13f/0x1f0 fs/open.c:1227
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f6c225333c7
-RSP: 002b:00007fffa0f54860 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 00000000000f4240 RCX: 00007f6c225333c7
-RDX: 0000000000000002 RSI: 00007fffa0f548e0 RDI: 00000000ffffff9c
-RBP: 00007fffa0f548e0 R08: 0000000000000000 R09: 000000000000000f
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
-R13: 00007fffa0f5497c R14: 00007fffa0f54990 R15: 00007fffa0f54980
-INFO: task syz-executor620:7125 blocked for more than 143 seconds.
-      Not tainted 5.15.0-rc6-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor620 state:D stack:27872 pid: 7125 ppid:  6566 flags:0x00004004
-Call Trace:
- context_switch kernel/sched/core.c:4940 [inline]
- __schedule+0xb44/0x5960 kernel/sched/core.c:6287
- schedule+0xd3/0x270 kernel/sched/core.c:6366
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6425
- __mutex_lock_common kernel/locking/mutex.c:669 [inline]
- __mutex_lock+0xa34/0x12f0 kernel/locking/mutex.c:729
- sisusb_open+0xb2/0x4d0 drivers/usb/misc/sisusbvga/sisusb.c:2396
- usb_open+0x204/0x2e0 drivers/usb/core/file.c:48
- chrdev_open+0x266/0x770 fs/char_dev.c:414
- do_dentry_open+0x4c8/0x11d0 fs/open.c:822
- do_open fs/namei.c:3428 [inline]
- path_openat+0x1c9a/0x2740 fs/namei.c:3561
- do_filp_open+0x1aa/0x400 fs/namei.c:3588
- do_sys_openat2+0x16d/0x4d0 fs/open.c:1200
- do_sys_open fs/open.c:1216 [inline]
- __do_sys_openat fs/open.c:1232 [inline]
- __se_sys_openat fs/open.c:1227 [inline]
- __x64_sys_openat+0x13f/0x1f0 fs/open.c:1227
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f6c225333c7
-RSP: 002b:00007fffa0f54860 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 00000000000f4240 RCX: 00007f6c225333c7
-RDX: 0000000000000002 RSI: 00007fffa0f548e0 RDI: 00000000ffffff9c
-RBP: 00007fffa0f548e0 R08: 0000000000000000 R09: 000000000000000f
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
-R13: 00007fffa0f5497c R14: 00007fffa0f54990 R15: 00007fffa0f54980
-INFO: task syz-executor620:7128 blocked for more than 144 seconds.
-      Not tainted 5.15.0-rc6-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor620 state:D stack:28016 pid: 7128 ppid:  6562 flags:0x00000004
-Call Trace:
- context_switch kernel/sched/core.c:4940 [inline]
- __schedule+0xb44/0x5960 kernel/sched/core.c:6287
- schedule+0xd3/0x270 kernel/sched/core.c:6366
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6425
- __mutex_lock_common kernel/locking/mutex.c:669 [inline]
- __mutex_lock+0xa34/0x12f0 kernel/locking/mutex.c:729
- sisusb_open+0xb2/0x4d0 drivers/usb/misc/sisusbvga/sisusb.c:2396
- usb_open+0x204/0x2e0 drivers/usb/core/file.c:48
- chrdev_open+0x266/0x770 fs/char_dev.c:414
- do_dentry_open+0x4c8/0x11d0 fs/open.c:822
- do_open fs/namei.c:3428 [inline]
- path_openat+0x1c9a/0x2740 fs/namei.c:3561
- do_filp_open+0x1aa/0x400 fs/namei.c:3588
- do_sys_openat2+0x16d/0x4d0 fs/open.c:1200
- do_sys_open fs/open.c:1216 [inline]
- __do_sys_openat fs/open.c:1232 [inline]
- __se_sys_openat fs/open.c:1227 [inline]
- __x64_sys_openat+0x13f/0x1f0 fs/open.c:1227
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f6c225333c7
-RSP: 002b:00007fffa0f54860 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 00000000000f4240 RCX: 00007f6c225333c7
-RDX: 0000000000000002 RSI: 00007fffa0f548e0 RDI: 00000000ffffff9c
-RBP: 00007fffa0f548e0 R08: 0000000000000000 R09: 000000000000000f
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
-R13: 00007fffa0f5497c R14: 00007fffa0f54990 R15: 00007fffa0f54980
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 8536f19d3c9a..9c5372229714 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -831,7 +831,7 @@ static void ffs_user_copy_worker(struct work_struct *work)
+ 		kthread_unuse_mm(io_data->mm);
+ 	}
+ 
+-	io_data->kiocb->ki_complete(io_data->kiocb, ((u64) ret << 32) | ret);
++	io_data->kiocb->ki_complete(io_data->kiocb, aio_res_pack(ret, ret));
+ 
+ 	if (io_data->ffs->ffs_eventfd && !kiocb_has_eventfd)
+ 		eventfd_signal(io_data->ffs->ffs_eventfd, 1);
+diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
+index d3deb23eb2ab..15dff219b483 100644
+--- a/drivers/usb/gadget/legacy/inode.c
++++ b/drivers/usb/gadget/legacy/inode.c
+@@ -469,7 +469,7 @@ static void ep_user_copy_worker(struct work_struct *work)
+ 		ret = -EFAULT;
+ 
+ 	/* completing the iocb can drop the ctx and mm, don't touch mm after */
+-	iocb->ki_complete(iocb, ((u64) ret << 32) | ret);
++	iocb->ki_complete(iocb, aio_res_pack(ret, ret));
+ 
+ 	kfree(priv->buf);
+ 	kfree(priv->to_free);
+@@ -499,8 +499,10 @@ static void ep_aio_complete(struct usb_ep *ep, struct usb_request *req)
+ 		kfree(priv);
+ 		iocb->private = NULL;
+ 		/* aio_complete() reports bytes-transferred _and_ faults */
+-		aio_ret = req->actual ? req->actual : (long)req->status;
+-		aio_ret |= (u64) req->status << 32;
++		if (req->actual)
++			aio_ret = aio_res_pack(req->actual, req->status);
++		else
++			aio_ret = aio_res_pack(req->status, req->status);
+ 		iocb->ki_complete(iocb, aio_ret);
+ 	} else {
+ 		/* ep_copy_to_user() won't report both; we hide some faults */
+diff --git a/fs/aio.c b/fs/aio.c
+index 3674abc43788..cd43a26b2aa2 100644
+--- a/fs/aio.c
++++ b/fs/aio.c
+@@ -1442,8 +1442,8 @@ static void aio_complete_rw(struct kiocb *kiocb, u64 res)
+ 	 * 32-bits of value at most for either value, bundle these up and
+ 	 * pass them in one u64 value.
+ 	 */
+-	iocb->ki_res.res = lower_32_bits(res);
+-	iocb->ki_res.res2 = upper_32_bits(res);
++	iocb->ki_res.res = (long) lower_32_bits(res);
++	iocb->ki_res.res2 = (long) upper_32_bits(res);
+ 	iocb_put(iocb);
+ }
+ 
+diff --git a/include/linux/aio.h b/include/linux/aio.h
+index b83e68dd006f..50a6c7da27ec 100644
+--- a/include/linux/aio.h
++++ b/include/linux/aio.h
+@@ -24,4 +24,18 @@ static inline void kiocb_set_cancel_fn(struct kiocb *req,
+ extern unsigned long aio_nr;
+ extern unsigned long aio_max_nr;
+ 
++/*
++ * Take some care packing two 32-bit quantities into a 64-bit, so we don't
++ * get sign extensions ruining the result. aio uses long, but it's really
++ * just 32-bit values.
++ */
++static inline u64 aio_res_pack(long res, long res2)
++{
++	u64 ret;
++
++	ret = (u64) res2 << 32;
++	ret |= (u32) res;
++	return ret;
++}
++
+ #endif /* __LINUX__AIO_H */
 
-Showing all locks held in the system:
-6 locks held by kworker/0:0/5:
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:634 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:661 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x8a3/0x16b0 kernel/workqueue.c:2268
- #1: ffffc90000ca7db0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8d7/0x16b0 kernel/workqueue.c:2272
- #2: ffff8881462ac220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #2: ffff8881462ac220 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4330 drivers/usb/core/hub.c:5662
- #3: ffff88801213b220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #3: ffff88801213b220 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:944
- #4: ffff88801cec41a8 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #4: ffff88801cec41a8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:944
- #5: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_register_dev drivers/usb/core/file.c:187 [inline]
- #5: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_register_dev+0x19d/0x7e0 drivers/usb/core/file.c:156
-6 locks held by kworker/1:1/25:
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:634 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:661 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x8a3/0x16b0 kernel/workqueue.c:2268
- #1: ffffc90000dffdb0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8d7/0x16b0 kernel/workqueue.c:2272
- #2: ffff88814663e220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #2: ffff88814663e220 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4330 drivers/usb/core/hub.c:5662
- #3: ffff888019b39220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #3: ffff888019b39220 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:944
- #4: ffff8881477ae1a8 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #4: ffff8881477ae1a8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:944
- #5: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_register_dev drivers/usb/core/file.c:187 [inline]
- #5: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_register_dev+0x19d/0x7e0 drivers/usb/core/file.c:156
-1 lock held by khungtaskd/27:
- #0: ffffffff8b981b60 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6446
-6 locks held by kworker/0:2/1266:
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:634 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:661 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x8a3/0x16b0 kernel/workqueue.c:2268
- #1: ffffc900051efdb0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8d7/0x16b0 kernel/workqueue.c:2272
- #2: ffff8881462a4220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #2: ffff8881462a4220 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4330 drivers/usb/core/hub.c:5662
- #3: ffff88801213a220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #3: ffff88801213a220 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:944
- #4: ffff88801bc171a8 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #4: ffff88801bc171a8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:944
- #5: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_register_dev drivers/usb/core/file.c:187 [inline]
- #5: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_register_dev+0x19d/0x7e0 drivers/usb/core/file.c:156
-6 locks held by kworker/1:3/2951:
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:634 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:661 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x8a3/0x16b0 kernel/workqueue.c:2268
- #1: ffffc9000c74fdb0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8d7/0x16b0 kernel/workqueue.c:2272
- #2: ffff888146672220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #2: ffff888146672220 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4330 drivers/usb/core/hub.c:5662
- #3: ffff88801258d220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #3: ffff88801258d220 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:944
- #4: ffff8880121921a8 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #4: ffff8880121921a8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:944
- #5: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_register_dev drivers/usb/core/file.c:187 [inline]
- #5: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_register_dev+0x19d/0x7e0 drivers/usb/core/file.c:156
-6 locks held by kworker/1:0/6579:
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:634 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:661 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x8a3/0x16b0 kernel/workqueue.c:2268
- #1: ffffc90002cefdb0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8d7/0x16b0 kernel/workqueue.c:2272
- #2: ffff888146675220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #2: ffff888146675220 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4330 drivers/usb/core/hub.c:5662
- #3: ffff88801258e220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #3: ffff88801258e220 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:944
- #4: ffff8880121911a8 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #4: ffff8880121911a8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:944
- #5: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_register_dev drivers/usb/core/file.c:187 [inline]
- #5: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_register_dev+0x19d/0x7e0 drivers/usb/core/file.c:156
-6 locks held by kworker/1:2/6583:
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:634 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:661 [inline]
- #0: ffff8880143e4138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x8a3/0x16b0 kernel/workqueue.c:2268
- #1: ffffc90002c97db0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8d7/0x16b0 kernel/workqueue.c:2272
- #2: ffff88801eb01220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #2: ffff88801eb01220 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4330 drivers/usb/core/hub.c:5662
- #3: ffff88801258f220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #3: ffff88801258f220 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:944
- #4: ffff888025ad01a8 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #4: ffff888025ad01a8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:944
- #5: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_register_dev drivers/usb/core/file.c:187 [inline]
- #5: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_register_dev+0x19d/0x7e0 drivers/usb/core/file.c:156
-2 locks held by syz-executor620/7116:
- #0: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_open+0x24/0x2e0 drivers/usb/core/file.c:39
- #1: ffff88801be198d0 (&(sisusb->lock)){+.+.}-{3:3}, at: sisusb_open+0xb2/0x4d0 drivers/usb/misc/sisusbvga/sisusb.c:2396
-2 locks held by syz-executor620/7119:
- #0: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_open+0x24/0x2e0 drivers/usb/core/file.c:39
- #1: ffff88801be198d0 (&(sisusb->lock)){+.+.}-{3:3}, at: sisusb_open+0xb2/0x4d0 drivers/usb/misc/sisusbvga/sisusb.c:2396
-2 locks held by syz-executor620/7122:
- #0: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_open+0x24/0x2e0 drivers/usb/core/file.c:39
- #1: ffff88801be198d0 (&(sisusb->lock)){+.+.}-{3:3}, at: sisusb_open+0xb2/0x4d0 drivers/usb/misc/sisusbvga/sisusb.c:2396
-2 locks held by syz-executor620/7125:
- #0: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_open+0x24/0x2e0 drivers/usb/core/file.c:39
- #1: ffff88801be198d0 (&(sisusb->lock)){+.+.}-{3:3}, at: sisusb_open+0xb2/0x4d0 drivers/usb/misc/sisusbvga/sisusb.c:2396
-2 locks held by syz-executor620/7128:
- #0: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_open+0x24/0x2e0 drivers/usb/core/file.c:39
- #1: ffff88801be198d0 (&(sisusb->lock)){+.+.}-{3:3}, at: sisusb_open+0xb2/0x4d0 drivers/usb/misc/sisusbvga/sisusb.c:2396
-1 lock held by syz-executor620/7150:
- #0: ffffffff8c81f970 (minor_rwsem#2){++++}-{3:3}, at: usb_open+0x24/0x2e0 drivers/usb/core/file.c:39
-
-=============================================
-
-NMI backtrace for cpu 1
-CPU: 1 PID: 27 Comm: khungtaskd Not tainted 5.15.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:105
- nmi_trigger_cpumask_backtrace+0x1ae/0x220 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:210 [inline]
- watchdog+0xc1d/0xf50 kernel/hung_task.c:295
- kthread+0x3e5/0x4d0 kernel/kthread.c:319
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-Sending NMI from CPU 1 to CPUs 0:
-NMI backtrace for cpu 0
-CPU: 0 PID: 2960 Comm: systemd-journal Not tainted 5.15.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:bytes_is_nonzero mm/kasan/generic.c:84 [inline]
-RIP: 0010:memory_is_nonzero mm/kasan/generic.c:102 [inline]
-RIP: 0010:memory_is_poisoned_n mm/kasan/generic.c:128 [inline]
-RIP: 0010:memory_is_poisoned mm/kasan/generic.c:159 [inline]
-RIP: 0010:check_region_inline mm/kasan/generic.c:180 [inline]
-RIP: 0010:kasan_check_range+0xc8/0x180 mm/kasan/generic.c:189
-Code: 38 00 74 ed 48 8d 50 08 eb 09 48 83 c0 01 48 39 d0 74 7a 80 38 00 74 f2 48 89 c2 b8 01 00 00 00 48 85 d2 75 56 5b 5d 41 5c c3 <48> 85 d2 74 5e 48 01 ea eb 09 48 83 c0 01 48 39 d0 74 50 80 38 00
-RSP: 0018:ffffc90002b9faa0 EFLAGS: 00000083
-RAX: fffffbfff1f9ff42 RBX: fffffbfff1f9ff43 RCX: ffffffff815bcd56
-RDX: 0000000000000001 RSI: 0000000000000008 RDI: ffffffff8fcffa10
-RBP: fffffbfff1f9ff42 R08: 0000000000000000 R09: ffffffff8fcffa17
-R10: fffffbfff1f9ff42 R11: 0000000000000000 R12: ffff88807b585fa0
-R13: ffff88807b585580 R14: 0000000000050000 R15: 00000000000501a1
-FS:  00007f57954e18c0(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f57928e0000 CR3: 000000002507b000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- instrument_atomic_read include/linux/instrumented.h:71 [inline]
- test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
- hlock_class kernel/locking/lockdep.c:199 [inline]
- check_wait_context kernel/locking/lockdep.c:4688 [inline]
- __lock_acquire+0x3e6/0x54a0 kernel/locking/lockdep.c:4965
- lock_acquire kernel/locking/lockdep.c:5625 [inline]
- lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5590
- __might_fault mm/memory.c:5262 [inline]
- __might_fault+0x106/0x180 mm/memory.c:5247
- strncpy_from_user+0x2f/0x3e0 lib/strncpy_from_user.c:117
- getname_flags.part.0+0x95/0x4f0 fs/namei.c:149
- getname_flags include/linux/audit.h:319 [inline]
- getname+0x8e/0xd0 fs/namei.c:217
- do_sys_openat2+0xf5/0x4d0 fs/open.c:1194
- do_sys_open fs/open.c:1216 [inline]
- __do_sys_open fs/open.c:1224 [inline]
- __se_sys_open fs/open.c:1220 [inline]
- __x64_sys_open+0x119/0x1c0 fs/open.c:1220
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f5794a70840
-Code: 73 01 c3 48 8b 0d 68 77 20 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d 89 bb 20 00 00 75 10 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 1e f6 ff ff 48 89 04 24
-RSP: 002b:00007ffd068716a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 00007ffd068719b0 RCX: 00007f5794a70840
-RDX: 00000000000001a0 RSI: 0000000000080042 RDI: 000055871d1a48d0
-RBP: 000000000000000d R08: 0000000000000000 R09: 00000000ffffffff
-R10: 0000000000000069 R11: 0000000000000246 R12: 00000000ffffffff
-R13: 000055871d197040 R14: 00007ffd06871970 R15: 000055871d1a46f0
-INFO: NMI handler (nmi_cpu_backtrace_handler) took too long to run: 1.187 msecs
-----------------
-Code disassembly (best guess):
-   0:	38 00                	cmp    %al,(%rax)
-   2:	74 ed                	je     0xfffffff1
-   4:	48 8d 50 08          	lea    0x8(%rax),%rdx
-   8:	eb 09                	jmp    0x13
-   a:	48 83 c0 01          	add    $0x1,%rax
-   e:	48 39 d0             	cmp    %rdx,%rax
-  11:	74 7a                	je     0x8d
-  13:	80 38 00             	cmpb   $0x0,(%rax)
-  16:	74 f2                	je     0xa
-  18:	48 89 c2             	mov    %rax,%rdx
-  1b:	b8 01 00 00 00       	mov    $0x1,%eax
-  20:	48 85 d2             	test   %rdx,%rdx
-  23:	75 56                	jne    0x7b
-  25:	5b                   	pop    %rbx
-  26:	5d                   	pop    %rbp
-  27:	41 5c                	pop    %r12
-  29:	c3                   	retq
-* 2a:	48 85 d2             	test   %rdx,%rdx <-- trapping instruction
-  2d:	74 5e                	je     0x8d
-  2f:	48 01 ea             	add    %rbp,%rdx
-  32:	eb 09                	jmp    0x3d
-  34:	48 83 c0 01          	add    $0x1,%rax
-  38:	48 39 d0             	cmp    %rdx,%rax
-  3b:	74 50                	je     0x8d
-  3d:	80 38 00             	cmpb   $0x0,(%rax)
+-- 
+Jens Axboe
 
