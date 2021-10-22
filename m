@@ -2,216 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE11437478
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Oct 2021 11:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD84437482
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Oct 2021 11:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232588AbhJVJPX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Oct 2021 05:15:23 -0400
-Received: from mga07.intel.com ([134.134.136.100]:50539 "EHLO mga07.intel.com"
+        id S232508AbhJVJQG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Oct 2021 05:16:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46368 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232571AbhJVJPV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 22 Oct 2021 05:15:21 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10144"; a="292726872"
-X-IronPort-AV: E=Sophos;i="5.87,172,1631602800"; 
-   d="scan'208";a="292726872"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2021 02:13:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,172,1631602800"; 
-   d="scan'208";a="445713364"
-Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 22 Oct 2021 02:13:03 -0700
-Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mdqbm-000FWL-Br; Fri, 22 Oct 2021 09:13:02 +0000
-Date:   Fri, 22 Oct 2021 17:12:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- e4ce9ed835bcaf4cd3230a53a79645986c25ce0f
-Message-ID: <6172808e.HX9qqD0XRcMLNdCF%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S232624AbhJVJQB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 22 Oct 2021 05:16:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id ABC0D610CB;
+        Fri, 22 Oct 2021 09:13:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1634894024;
+        bh=H/IecAZU9Vka+FxLgVpI5lpGtmOBDxUU4pOnlzjcF/Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f8AHFMPsk4W9sPlhRKDCcNhSpVkeiKGyHCcsNY3/Z9n5MFHf2qz+b9rcJvEWaDUD0
+         PzlKRSBADuM0aL272QgHN+QoRpPmGUOY35l0cCHu/0qBtyzP3WyFBCY5PIQgW3GhRx
+         K2/c+sABfdfjyFj3/OSX06UX3ciy9+GP5ad94yLg=
+Date:   Fri, 22 Oct 2021 11:13:41 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jack Pham <jackp@codeaurora.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2] usb: dwc3: gadget: Skip resizing EP's TX FIFO if
+ already resized
+Message-ID: <YXKAxYZ+ikGaDvv/@kroah.com>
+References: <20211019004123.15987-1-jackp@codeaurora.org>
+ <YXFGWPMmmdyaSOPg@kroah.com>
+ <20211021174316.GA2357@jackp-linux.qualcomm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20211021174316.GA2357@jackp-linux.qualcomm.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: e4ce9ed835bcaf4cd3230a53a79645986c25ce0f  usb: gadget: uvc: ensure the vdev is unset
+On Thu, Oct 21, 2021 at 10:43:17AM -0700, Jack Pham wrote:
+> On Thu, Oct 21, 2021 at 12:52:08PM +0200, Greg Kroah-Hartman wrote:
+> > On Mon, Oct 18, 2021 at 05:41:23PM -0700, Jack Pham wrote:
+> > > Some functions may dynamically enable and disable their endpoints
+> > > regularly throughout their operation, particularly when Set Interface
+> > > is employed to switch between Alternate Settings.  For instance the
+> > > UAC2 function has its respective endpoints for playback & capture
+> > > associated with AltSetting 1, in which case those endpoints would not
+> > > get enabled until the host activates the AltSetting.  And they
+> > > conversely become disabled when the interfaces' AltSetting 0 is
+> > > chosen.
+> > > 
+> > > With the DWC3 FIFO resizing algorithm recently added, every
+> > > usb_ep_enable() call results in a call to resize that EP's TXFIFO,
+> > > but if the same endpoint is enabled again and again, this incorrectly
+> > > leads to FIFO RAM allocation exhaustion as the mechanism did not
+> > > account for the possibility that endpoints can be re-enabled many
+> > > times.
+> > > 
+> > > Example log splat:
+> > > 
+> > > 	dwc3 a600000.dwc3: Fifosize(3717) > RAM size(3462) ep3in depth:217973127
+> > > 	configfs-gadget gadget: u_audio_start_capture:521 Error!
+> > > 	dwc3 a600000.dwc3: request 000000000be13e18 was not queued to ep3in
+> > > 
+> > > Add another bit DWC3_EP_TXFIFO_RESIZED to dep->flags to keep track of
+> > > whether an EP had already been resized in the current configuration.
+> > > If so, bail out of dwc3_gadget_resize_tx_fifos() to avoid the
+> > > calculation error resulting from accumulating the EP's FIFO depth
+> > > repeatedly.  This flag is retained across multiple ep_disable() and
+> > > ep_enable() calls and is cleared when GTXFIFOSIZn is reset in
+> > > dwc3_gadget_clear_tx_fifos() upon receiving the next Set Config.
+> > > 
+> > > Fixes: 9f607a309fbe9 ("usb: dwc3: Resize TX FIFOs to meet EP bursting requirements")
+> > > Signed-off-by: Jack Pham <jackp@codeaurora.org>
+> > > ---
+> > > v2: Added explicit flag to dep->flags and check that instead of directly
+> > >     reading the GTXFIFOSIZn register.
+> > > 
+> > >  drivers/usb/dwc3/core.h   | 1 +
+> > >  drivers/usb/dwc3/gadget.c | 8 +++++++-
+> > >  2 files changed, 8 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> > > index 5612bfdf37da..f033063f6948 100644
+> > > --- a/drivers/usb/dwc3/core.h
+> > > +++ b/drivers/usb/dwc3/core.h
+> > > @@ -723,6 +723,7 @@ struct dwc3_ep {
+> > >  #define DWC3_EP_FORCE_RESTART_STREAM	BIT(9)
+> > >  #define DWC3_EP_FIRST_STREAM_PRIMED	BIT(10)
+> > >  #define DWC3_EP_PENDING_CLEAR_STALL	BIT(11)
+> > > +#define DWC3_EP_TXFIFO_RESIZED	BIT(12)
+> > 
+> > Any specific reason this isn't lined up properly?
+> 
+> The preceding macros admittedly aren't consistent either :-P.  Here's
+> the whole section with my change:
+> 
+> 	unsigned int            flags;
+> #define DWC3_EP_ENABLED		BIT(0)
+> #define DWC3_EP_STALL		BIT(1)
+> #define DWC3_EP_WEDGE		BIT(2)
+> #define DWC3_EP_TRANSFER_STARTED BIT(3)
+> #define DWC3_EP_END_TRANSFER_PENDING BIT(4)
+> #define DWC3_EP_PENDING_REQUEST	BIT(5)
+> #define DWC3_EP_DELAY_START	BIT(6)
+> #define DWC3_EP_WAIT_TRANSFER_COMPLETE	BIT(7)
+> #define DWC3_EP_IGNORE_NEXT_NOSTREAM	BIT(8)
+> #define DWC3_EP_FORCE_RESTART_STREAM	BIT(9)
+> #define DWC3_EP_FIRST_STREAM_PRIMED	BIT(10)
+> #define DWC3_EP_PENDING_CLEAR_STALL	BIT(11)
+> #define DWC3_EP_TXFIFO_RESIZED	BIT(12)
 
-elapsed time: 1218m
+Ah, didn't notice that, I only could see the context here.  Nevermind
+then :)
 
-configs tested: 157
-configs skipped: 4
+> The macros for the earlier bits 0-2, 5 and 6 have shorter names and
+> therefore use one or two tabs to line up at an earlier tab stop.  But
+> the ones with the longer names for bits 7-11 use a single tab which bump
+> out the definition to the next tab column.  Since the macro I'm adding
+> in my patch has a shorter name I thought I'd follow the precedent of the
+> earlier bits and use a single tab which aligns with the earlier bits but
+> I agree it does look strange overall.  Especially with bits 3 & 4 which
+> aren't lined up at all.
+> 
+> I guess a patch to fix the rest of the earlier macros wouldn't hurt but
+> I'd also like this to go to stable too.  Should I send this as a 2-part
+> series: 1/2 being my change (with correct alignment and cc:stable) and
+> 2/2 as a cleanup for bits 0-6?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Looks like you already did that, thanks.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211021
-m68k                         apollo_defconfig
-arm                            mmp2_defconfig
-arm                         vf610m4_defconfig
-powerpc                    gamecube_defconfig
-h8300                            alldefconfig
-powerpc                  mpc866_ads_defconfig
-powerpc                     ep8248e_defconfig
-mips                            gpr_defconfig
-powerpc                      makalu_defconfig
-arm                        trizeps4_defconfig
-arm                  colibri_pxa300_defconfig
-powerpc                   bluestone_defconfig
-sh                ecovec24-romimage_defconfig
-powerpc                     sequoia_defconfig
-arm                        magician_defconfig
-xtensa                  cadence_csp_defconfig
-mips                        omega2p_defconfig
-mips                         mpc30x_defconfig
-um                                  defconfig
-arm                         orion5x_defconfig
-powerpc                     akebono_defconfig
-powerpc                      chrp32_defconfig
-powerpc                      ppc64e_defconfig
-arm                         s3c2410_defconfig
-arm                       multi_v4t_defconfig
-parisc                              defconfig
-m68k                          atari_defconfig
-mips                        qi_lb60_defconfig
-m68k                                defconfig
-powerpc                      obs600_defconfig
-mips                malta_qemu_32r6_defconfig
-openrisc                            defconfig
-mips                           ip32_defconfig
-arm                        neponset_defconfig
-sh                        edosk7705_defconfig
-arm                             pxa_defconfig
-arm                      footbridge_defconfig
-sh                     magicpanelr2_defconfig
-nios2                               defconfig
-mips                       capcella_defconfig
-arm                         s5pv210_defconfig
-sh                          rsk7201_defconfig
-m68k                            q40_defconfig
-parisc                           alldefconfig
-arm                           u8500_defconfig
-riscv                    nommu_virt_defconfig
-powerpc                      tqm8xx_defconfig
-sh                         ap325rxa_defconfig
-powerpc                          allyesconfig
-arm                            mps2_defconfig
-arm                          moxart_defconfig
-arc                     haps_hs_smp_defconfig
-sh                           se7751_defconfig
-mips                          rb532_defconfig
-openrisc                 simple_smp_defconfig
-arm                  randconfig-c002-20211022
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                             allmodconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                              debian-10.3
-i386                             allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a004-20211022
-i386                 randconfig-a003-20211022
-i386                 randconfig-a002-20211022
-i386                 randconfig-a005-20211022
-i386                 randconfig-a006-20211022
-i386                 randconfig-a001-20211022
-x86_64               randconfig-a013-20211021
-x86_64               randconfig-a015-20211021
-x86_64               randconfig-a011-20211021
-x86_64               randconfig-a014-20211021
-x86_64               randconfig-a016-20211021
-x86_64               randconfig-a012-20211021
-i386                 randconfig-a012-20211021
-i386                 randconfig-a013-20211021
-i386                 randconfig-a011-20211021
-i386                 randconfig-a016-20211021
-i386                 randconfig-a015-20211021
-i386                 randconfig-a014-20211021
-arc                  randconfig-r043-20211021
-riscv                randconfig-r042-20211021
-s390                 randconfig-r044-20211021
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allyesconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                           allyesconfig
-
-clang tested configs:
-powerpc              randconfig-c003-20211021
-riscv                randconfig-c006-20211021
-arm                  randconfig-c002-20211021
-x86_64               randconfig-c007-20211021
-mips                 randconfig-c004-20211021
-s390                 randconfig-c005-20211021
-i386                 randconfig-c001-20211021
-x86_64               randconfig-a002-20211021
-x86_64               randconfig-a004-20211021
-x86_64               randconfig-a005-20211021
-x86_64               randconfig-a001-20211021
-x86_64               randconfig-a006-20211021
-x86_64               randconfig-a003-20211021
-i386                 randconfig-a004-20211021
-i386                 randconfig-a003-20211021
-i386                 randconfig-a002-20211021
-i386                 randconfig-a005-20211021
-i386                 randconfig-a001-20211021
-i386                 randconfig-a006-20211021
-x86_64               randconfig-a013-20211022
-x86_64               randconfig-a015-20211022
-x86_64               randconfig-a011-20211022
-x86_64               randconfig-a014-20211022
-x86_64               randconfig-a016-20211022
-x86_64               randconfig-a012-20211022
-i386                 randconfig-a012-20211022
-i386                 randconfig-a013-20211022
-i386                 randconfig-a011-20211022
-i386                 randconfig-a016-20211022
-i386                 randconfig-a015-20211022
-i386                 randconfig-a014-20211022
-hexagon              randconfig-r045-20211021
-hexagon              randconfig-r041-20211021
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+greg k-h
