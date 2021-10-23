@@ -2,183 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DDD4383EC
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Oct 2021 16:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D0D438498
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Oct 2021 19:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbhJWOUT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Oct 2021 10:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbhJWOUS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Oct 2021 10:20:18 -0400
-Received: from cambridge.shadura.me (cambridge.shadura.me [IPv6:2a00:1098:0:86:1000:13:0:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3141C061714;
-        Sat, 23 Oct 2021 07:17:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=shadura.me;
-         s=a; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:
-        From:Content-Type:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-        References; bh=N5g4n8eL/g/FyvTMhUq/0hPBbOaZ+wi8caRZG4Wh/rw=; b=EKGnTMGZn85GyF
-        pgPr9oyCjbAjsFJLIzmqgEpR2QsxXKAE9NqE8U9NRoFReTq7aoRvoyjXelX9IPOMujyMzqrky8UEx
-        keabzCur5qEz6DiYjl9OVpyzp70d3HSGj0zw4ooN6Qt6kPMh1kEi086uS9lRfbjS5XZwcrK08o2Xa
-        aDU=;
-Received: from 178-143-43-60.dynamic.orange.sk ([178.143.43.60] helo=localhost)
-        by cambridge.shadura.me with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <andrew@shadura.me>)
-        id 1meHqN-0002Xi-NY; Sat, 23 Oct 2021 16:17:55 +0200
-From:   Andrej Shadura <andrew.shadura@collabora.co.uk>
-To:     =?UTF-8?q?Ji=C5=99=C3=AD=20Kosina?= <jikos@kernel.org>
-Cc:     linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
-        kernel@collabora.com, Szczepan Zalega <szczepan@nitrokey.com>
-Subject: [PATCH] HID: u2fzero: Support NitroKey U2F revision of the device
-Date:   Sat, 23 Oct 2021 16:17:11 +0200
-Message-Id: <20211023141710.348341-1-andrew.shadura@collabora.co.uk>
-X-Mailer: git-send-email 2.33.0
+        id S230121AbhJWR6B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 Oct 2021 13:58:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41610 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230104AbhJWR6B (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 23 Oct 2021 13:58:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id DD45F603E9
+        for <linux-usb@vger.kernel.org>; Sat, 23 Oct 2021 17:55:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635011741;
+        bh=wUifiUNOLBZKxTlfBSLMj5VPRzKP7GftnVF2lKwrh+I=;
+        h=From:To:Subject:Date:From;
+        b=SleM+JaBDZ42nhwK18fU9/JjLSgD41F6yW9D7T0mX+nghS6gnUh6p/0iR3dFFczf8
+         88zhXeKmGnPV7MoUzKR8K3Kdfyb+XyrSLSs6dbVzctlm4expJZLw0/jzUWrtsdrkK1
+         4Y68OxH6tKF2J7NJbE2wF/ePD0bHcvnqYr/Wzn/GLiY7VnneQJ8AS0Ba6q2REdW3lw
+         2t8d9zQre31qYMpdFQVpuK6D1AF/ErukbRsBoyAyH0Z4fVSVBzMBiku0I15jX0EFIo
+         zWCCFKotsDQi8rxjtnQp9amzhbKD4CJwFooWO9t481lWtGejlrF9A3HplAK//6GiaI
+         q6yg23QIwo3Yg==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id C944B60F41; Sat, 23 Oct 2021 17:55:41 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214797] New: ehci-pci: unable to enumerate Sony NW-WS623 Device
+Date:   Sat, 23 Oct 2021 17:55:41 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: enhancement
+X-Bugzilla-Who: Stefan.Lauterwasser@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression attachments.created
+Message-ID: <bug-214797-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-NitroKey produced a clone of U2F Zero with a different firmware,
-which moved extra commands into the vendor range.
-Disambiguate hardware revisions and select the correct configuration in
-u2fzero_probe.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214797
 
-Link: https://github.com/Nitrokey/nitrokey-fido-u2f-firmware/commit/a93c16b41f
-Signed-off-by: Andrej Shadura <andrew.shadura@collabora.co.uk>
----
- drivers/hid/hid-ids.h     |  3 +++
- drivers/hid/hid-u2fzero.c | 45 +++++++++++++++++++++++++++++++--------
- 2 files changed, 39 insertions(+), 9 deletions(-)
+            Bug ID: 214797
+           Summary: ehci-pci: unable to enumerate Sony NW-WS623 Device
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.14.14-arch1-1
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: enhancement
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: Stefan.Lauterwasser@gmail.com
+        Regression: No
 
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 29564b370341..44459be66a5d 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -288,6 +288,9 @@
- #define USB_DEVICE_ID_CJTOUCH_MULTI_TOUCH_0020	0x0020
- #define USB_DEVICE_ID_CJTOUCH_MULTI_TOUCH_0040	0x0040
- 
-+#define USB_VENDOR_ID_CLAY_LOGIC	0x20a0
-+#define USB_DEVICE_ID_NITROKEY_U2F	0x4287
-+
- #define USB_VENDOR_ID_CMEDIA		0x0d8c
- #define USB_DEVICE_ID_CM109		0x000e
- #define USB_DEVICE_ID_CMEDIA_HS100B	0x0014
-diff --git a/drivers/hid/hid-u2fzero.c b/drivers/hid/hid-u2fzero.c
-index 67ae2b18e33a..31ea7fc69916 100644
---- a/drivers/hid/hid-u2fzero.c
-+++ b/drivers/hid/hid-u2fzero.c
-@@ -26,6 +26,30 @@
- 
- #define HID_REPORT_SIZE		64
- 
-+enum hw_revision {
-+	HW_U2FZERO,
-+	HW_NITROKEY_U2F,
-+};
-+
-+struct hw_revision_config {
-+	u8 rng_cmd;
-+	u8 wink_cmd;
-+	const char *name;
-+};
-+
-+static const struct hw_revision_config hw_configs[] = {
-+	[HW_U2FZERO] = {
-+		.rng_cmd  = 0x21,
-+		.wink_cmd = 0x24,
-+		.name = "U2F Zero",
-+	},
-+	[HW_NITROKEY_U2F] = {
-+		.rng_cmd  = 0xc0,
-+		.wink_cmd = 0xc2,
-+		.name = "NitroKey U2F",
-+	},
-+};
-+
- /* We only use broadcast (CID-less) messages */
- #define CID_BROADCAST		0xffffffff
- 
-@@ -52,10 +76,6 @@ struct u2f_hid_report {
- 
- #define U2F_HID_MSG_LEN(f)	(size_t)(((f).init.bcnth << 8) + (f).init.bcntl)
- 
--/* Custom extensions to the U2FHID protocol */
--#define U2F_CUSTOM_GET_RNG	0x21
--#define U2F_CUSTOM_WINK		0x24
--
- struct u2fzero_device {
- 	struct hid_device	*hdev;
- 	struct urb		*urb;	    /* URB for the RNG data */
-@@ -67,6 +87,7 @@ struct u2fzero_device {
- 	u8			*buf_in;
- 	struct mutex		lock;
- 	bool			present;
-+	kernel_ulong_t		hw_revision;
- };
- 
- static int u2fzero_send(struct u2fzero_device *dev, struct u2f_hid_report *req)
-@@ -154,7 +175,7 @@ static int u2fzero_blink(struct led_classdev *ldev)
- 		.report_type = 0,
- 		.msg.cid = CID_BROADCAST,
- 		.msg.init = {
--			.cmd = U2F_CUSTOM_WINK,
-+			.cmd = hw_configs[dev->hw_revision].wink_cmd,
- 			.bcnth = 0,
- 			.bcntl = 0,
- 			.data  = {0},
-@@ -182,7 +203,7 @@ static int u2fzero_rng_read(struct hwrng *rng, void *data,
- 		.report_type = 0,
- 		.msg.cid = CID_BROADCAST,
- 		.msg.init = {
--			.cmd = U2F_CUSTOM_GET_RNG,
-+			.cmd = hw_configs[dev->hw_revision].rng_cmd,
- 			.bcnth = 0,
- 			.bcntl = 0,
- 			.data  = {0},
-@@ -297,6 +318,8 @@ static int u2fzero_probe(struct hid_device *hdev,
- 	if (dev == NULL)
- 		return -ENOMEM;
- 
-+	dev->hw_revision = id->driver_data;
-+
- 	dev->buf_out = devm_kmalloc(&hdev->dev,
- 		sizeof(struct u2f_hid_report), GFP_KERNEL);
- 	if (dev->buf_out == NULL)
-@@ -331,7 +354,7 @@ static int u2fzero_probe(struct hid_device *hdev,
- 		return ret;
- 	}
- 
--	hid_info(hdev, "U2F Zero LED initialised\n");
-+	hid_info(hdev, "%s LED initialised\n", hw_configs[dev->hw_revision].name);
- 
- 	ret = u2fzero_init_hwrng(dev, minor);
- 	if (ret) {
-@@ -339,7 +362,7 @@ static int u2fzero_probe(struct hid_device *hdev,
- 		return ret;
- 	}
- 
--	hid_info(hdev, "U2F Zero RNG initialised\n");
-+	hid_info(hdev, "%s RNG initialised\n", hw_configs[dev->hw_revision].name);
- 
- 	return 0;
- }
-@@ -359,7 +382,11 @@ static void u2fzero_remove(struct hid_device *hdev)
- 
- static const struct hid_device_id u2fzero_table[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_CYGNAL,
--	  USB_DEVICE_ID_U2F_ZERO) },
-+	  USB_DEVICE_ID_U2F_ZERO),
-+	  .driver_data = HW_U2FZERO },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_CLAY_LOGIC,
-+	  USB_DEVICE_ID_NITROKEY_U2F),
-+	  .driver_data = HW_NITROKEY_U2F },
- 	{ }
- };
- MODULE_DEVICE_TABLE(hid, u2fzero_table);
--- 
-2.33.0
+Created attachment 299303
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D299303&action=3Dedit
+Windows 10 Device Information
 
+kernel: usb 1-1.5: new high-speed USB device number 40 using ehci-pci
+kernel: usb 1-1.5: device descriptor read/64, error -71
+kernel: usb 1-1.5: device descriptor read/64, error -71
+kernel: usb 1-1.5: new high-speed USB device number 41 using ehci-pci
+kernel: usb 1-1.5: device descriptor read/64, error -71
+kernel: usb 1-1.5: device descriptor read/64, error -71
+kernel: usb 1-1-port5: attempt power cycle
+kernel: usb 1-1.5: new high-speed USB device number 42 using ehci-pci
+kernel: usb 1-1.5: device not accepting address 42, error -71
+kernel: usb 1-1.5: new high-speed USB device number 43 using ehci-pci
+kernel: usb 1-1.5: device not accepting address 43, error -71
+kernel: usb 1-1-port5: unable to enumerate USB device
+kernel: usb 1-1.5: new high-speed USB device number 44 using ehci-pci
+kernel: usb 1-1.5: device descriptor read/64, error -71
+kernel: usb 1-1.5: device descriptor read/64, error -71
+kernel: usb 1-1.5: new high-speed USB device number 45 using ehci-pci
+kernel: usb 1-1.5: device descriptor read/64, error -71
+kernel: usb 1-1.5: device descriptor read/64, error -71
+kernel: usb 1-1-port5: attempt power cycle
+kernel: usb 1-1.5: new high-speed USB device number 46 using ehci-pci
+kernel: usb 1-1.5: device not accepting address 46, error -71
+kernel: usb 1-1.5: new high-speed USB device number 47 using ehci-pci
+kernel: usb 1-1.5: device not accepting address 47, error -71
+kernel: usb 1-1-port5: unable to enumerate USB device
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
