@@ -2,117 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC148438218
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Oct 2021 08:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5BD438221
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Oct 2021 09:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbhJWHBk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Oct 2021 03:01:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbhJWHBj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Oct 2021 03:01:39 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9501AC061764;
-        Fri, 22 Oct 2021 23:59:20 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id m42so4995183wms.2;
-        Fri, 22 Oct 2021 23:59:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=odO9BU6w2dsyXVnjQWKBXDwWqOdNcc7IgTwaejfrngQ=;
-        b=lzhP6TcppNmupz3tHcRJkoanJgpf2+mQTa9YjsV40VKLf0mC4xt8MEmEwivcs3Yrhm
-         5mlqeNslY971QEgvmFmJyxFQwgaRNCHG6gMV4yejdH/VxwG9Gg/BwwTHitbn3xsxiX3q
-         Ax1bUGHQxcHmTeNAw+1X6o43b7ttATzrrlCOBoAHNqyim0blFr/C2QbfybZXfLMY8TbB
-         0LSlF3Vd1VpjRSVJfdL87goZNdJZ6yo+vrXDve4en/WIkkbqA74+Oh7xPGX26HMHDxpI
-         9pVQkQRRyekqdTMKyvG0tjpKEg4MJ2pObVoahvXn1tPS3Gs4Mz7FlQMtXUnFBesNtZ7q
-         ahKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=odO9BU6w2dsyXVnjQWKBXDwWqOdNcc7IgTwaejfrngQ=;
-        b=csorbrPY/dZDQ/Zbm9/Y2nX3gBDZMWWSdupJaqJCEz4W+po8qxXOIvl7/hjAsDlVSM
-         3zVV2ko7dsOosFNjQN7yj7TLXTx+XtFzhBuBb6t2Bxzfh06AjlJkeEVxPjkAW8XUr6yx
-         BXSCfct+SehILuXTDicEHktc9R09BKWlAkKQ7iIWBpDLe48d/Wc/8Gf8TsZ0eok0KB0y
-         iOuUrN3XfOLNiDLZjngd8xXvWJywApy76zz+cwOJ+1vVtPQer0o5YXD20VFY+9ao0rlR
-         Rt8MXdE+BCftk8k1GYvnX8yzDExwW4g25+ei2z1LCBG16vi0Lri3R+Ffz71s+jImBJ21
-         5B9w==
-X-Gm-Message-State: AOAM530bXVeEPnvpppWpzECUl/Ui+/xo55P3I2qnTKU6rw7Vm8o0Tf6E
-        kdiwLKnVPk5HBTTm9Bji8wWneXP+R3s=
-X-Google-Smtp-Source: ABdhPJyNKDPBP+Blum3WToWhdGNARKYfKpMdz/CZSKU4ZC5KPbtlOH3/R3h/LfInB+pq573n7nDT9Q==
-X-Received: by 2002:a05:600c:4f42:: with SMTP id m2mr34039106wmq.82.1634972358393;
-        Fri, 22 Oct 2021 23:59:18 -0700 (PDT)
-Received: from matrix-ESPRIMO-P710 (p200300c78f4e0684ec383d1d224ce07d.dip0.t-ipconnect.de. [2003:c7:8f4e:684:ec38:3d1d:224c:e07d])
-        by smtp.gmail.com with ESMTPSA id 126sm4167584wmz.28.2021.10.22.23.59.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Oct 2021 23:59:18 -0700 (PDT)
-Date:   Sat, 23 Oct 2021 08:59:16 +0200
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH v3] Docs: usb: update struct usb_driver, __init and __exit
-Message-ID: <20211023065916.GA6268@matrix-ESPRIMO-P710>
+        id S229661AbhJWHJs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 Oct 2021 03:09:48 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:41796 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229446AbhJWHJr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Oct 2021 03:09:47 -0400
+X-UUID: 4844edf552944d72a0486fbd59903cee-20211023
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=PmZWJ9UWN+c3zsZcmYLjxNzeeNw+AKsJe5gbnHhBlIk=;
+        b=cYUMhTHjv7gFy24lwOS8aGGfq1pffBVHRray+G41xsmt62/xSLhyI6gomPwDNs02TFp7GGsmVSgmMk25ouybsGzhaHSVrxdHvxqGR2pdevPjxHlWyo0dBT2YvtVd5jPxE4UAN8wvtz8QQ8VQcWC50YOJ2VcvU73djB5RVMrFYLw=;
+X-UUID: 4844edf552944d72a0486fbd59903cee-20211023
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1273308793; Sat, 23 Oct 2021 15:07:15 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS33N2.mediatek.inc
+ (172.27.4.76) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sat, 23 Oct
+ 2021 15:07:13 +0800
+Received: from mhfsdcap04 (10.17.3.154) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 23 Oct 2021 15:07:12 +0800
+Message-ID: <ab177213e7aa808b3803cac46146d96a02724425.camel@mediatek.com>
+Subject: Re: [PATCH v3 1/2] PM / wakeirq: support enabling wake-up irq after
+ runtime_suspend called
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Ikjoon Jang <ikjn@chromium.org>
+Date:   Sat, 23 Oct 2021 15:07:12 +0800
+In-Reply-To: <df145215a21b67b440405736d9628199ccce2a1b.camel@mediatek.com>
+References: <1628651069-22162-1-git-send-email-chunfeng.yun@mediatek.com>
+         <CAJZ5v0hTR2mZk7FuUVciX766qq0AwWXFBZoBsV3Sd9ToYuErdQ@mail.gmail.com>
+         <df145215a21b67b440405736d9628199ccce2a1b.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-TM-SNTS-SMTP: 69F60639D0B2889D7551EF1742E782FD3C13CD9681A813A705DCFB5C80DDD6F22000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-update struct usb_driver from usb-skeleton.c.
-remove :c:func: for usb_register and usb_deregister
-
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
----
-V2 -> V3: update struct usb_driver with tabs as in the original
-          taken out all changes for _init and __exit
-          except replacing :c:func:
-V1 -> V2: changed :c:func:`usb_register` to usb_register()
-          changed the :c:func:`usb_deregister` to usb_deregister()
-          used literal blocks for makro module_usb_driver and added one more
-          stage of multi-stage macros.
-
- Documentation/driver-api/usb/writing_usb_driver.rst | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
-index 2176297e5765..d0f7c1b79815 100644
---- a/Documentation/driver-api/usb/writing_usb_driver.rst
-+++ b/Documentation/driver-api/usb/writing_usb_driver.rst
-@@ -57,9 +57,12 @@ structure. The skeleton driver declares a :c:type:`usb_driver` as::
- 	    .name        = "skeleton",
- 	    .probe       = skel_probe,
- 	    .disconnect  = skel_disconnect,
--	    .fops        = &skel_fops,
--	    .minor       = USB_SKEL_MINOR_BASE,
-+	    .suspend     = skel_suspend,
-+	    .resume      = skel_resume,
-+	    .pre_reset   = skel_pre_reset,
-+	    .post_reset  = skel_post_reset,
- 	    .id_table    = skel_table,
-+	    .supports_autosuspend = 1,
-     };
- 
- 
-@@ -81,7 +84,7 @@ this user-space interaction. The skeleton driver needs this kind of
- interface, so it provides a minor starting number and a pointer to its
- :c:type:`file_operations` functions.
- 
--The USB driver is then registered with a call to :c:func:`usb_register`,
-+The USB driver is then registered with a call to usb_register(),
- usually in the driver's init function, as shown here::
- 
-     static int __init usb_skel_init(void)
-@@ -102,7 +105,7 @@ usually in the driver's init function, as shown here::
- 
- 
- When the driver is unloaded from the system, it needs to deregister
--itself with the USB subsystem. This is done with the :c:func:`usb_deregister`
-+itself with the USB subsystem. This is done with the usb_deregister()
- function::
- 
-     static void __exit usb_skel_exit(void)
--- 
-2.25.1
+T24gU2F0LCAyMDIxLTEwLTIzIGF0IDE0OjM1ICswODAwLCBDaHVuZmVuZyBZdW4gd3JvdGU6DQo+
+IE9uIFR1ZSwgMjAyMS0xMC0xOSBhdCAxNzoyOCArMDIwMCwgUmFmYWVsIEouIFd5c29ja2kgd3Jv
+dGU6DQo+ID4gT24gV2VkLCBBdWcgMTEsIDIwMjEgYXQgNTowNSBBTSBDaHVuZmVuZyBZdW4gPA0K
+PiA+IGNodW5mZW5nLnl1bkBtZWRpYXRlay5jb20+IHdyb3RlOg0KPiA+ID4gDQo+ID4gPiBXaGVu
+IHRoZSBkZWRpY2F0ZWQgd2FrZS1pcnEgaXMgbGV2ZWwgdHJpZ2dlciwgYW5kIGl0IHVzZXMgdGhl
+DQo+ID4gPiBjb25zdW1lcidzIHNsZWVwIHN0YXR1cyBhcyB0aGUgd2FrZXVwIHNvdXJjZSwgdGhh
+dCBtZWFucyBpZiB0aGUNCj4gPiA+IGNvbnN1bWVyIGlzIG5vdCBpbiBzbGVlcCBzdGF0ZSwgdGhl
+IHdha2UtaXJxIHdpbGwgYmUgdHJpZ2dlcmVkDQo+ID4gPiB3aGVuIGVuYWJsZSBpdDsgRm9yIHRo
+aXMgY2FzZSwgbmVlZCBlbmFibGUgdGhlIHdha2UtaXJxIGFmdGVyDQo+ID4gPiBpbnZva2luZyB0
+aGUgY29uc3VtZXIncyBydW50aW1lX3N1c3BlbmQoKSB3aGljaCBtYWtlIHRoZSBjb25zdW1lcg0K
+PiA+ID4gZW50ZXIgc2xlZXAgc3RhdGUuDQo+ID4gWy4uLl0NCj4gDQo+IElmIHdhbnQgdG8gbWFr
+ZSBpdCBzdGF0aWMsIHNob3VsZCBtb3ZlIGl0IGZyb20gd2FrZWlycS5jIGludG8NCj4gcnVudGlt
+ZS5jDQo+IA0KPiA+IA0KPiA+ID4gIHsNCj4gPiA+ICAgICAgICAgc3RydWN0IHdha2VfaXJxICp3
+aXJxID0gZGV2LT5wb3dlci53YWtlaXJxOw0KPiA+ID4gDQo+ID4gPiAgICAgICAgIGlmICghd2ly
+cSB8fCAhKHdpcnEtPnN0YXR1cyAmIFdBS0VfSVJRX0RFRElDQVRFRF9NQVNLKSkNCj4gPiA+ICAg
+ICAgICAgICAgICAgICByZXR1cm47DQo+ID4gDQo+ID4gQW5kIEkgd291bGQganVzdCBhZGQgdGhl
+IGZvbGxvd2luZyBsaW5lIGhlcmU6DQo+ID4gDQo+ID4gaWYgKGNvbmRfZGlzYWJsZSAmJiAod2ly
+cS0+c3RhdHVzICYNCj4gPiBXQUtFX0lSUV9ERURJQ0FURURfTEFURV9FTkFCTEVEKSkNCj4gPiAg
+ICAgICAgIHJldHVybjsNCj4gDQo+IFRoaXMgY2hhbmdlIGRvZXNuJ3QgY292ZXIgdGhlIGNhc2Ug
+KFdBS0VfSVJRX0RFRElDQVRFRF9MQVRFX0VOQUJMRUQNCj4gYW5kDQo+ICBXQUtFX0lSUV9ERURJ
+Q0FURURfTUFOQUdFRCBhcmUgYm90aCBzZXQgMSk6DQo+IA0KPiAtLT5ycG1fc3VzcGVuZCgpOiB3
+aXJxLT5pcnEgaXMgZW5hYmxlZA0KPiAtLT5ycG1fcmVzdW1lKCk6IGRpc2FibGUgd2lycS0+aXJx
+OyAoaWYgY2hhbmdlIGl0LCBkb2Vzbid0IGRpc2FibGUNCj4gd2lycS0+aXJxKQ0KU2VlbXMgSSdt
+IHdyb25nLCBjaGVjayBhZ2Fpbi4NCg0KPiANCj4gPiANCj4gPiA+IA0KPiA+ID4gLSAgICAgICBp
+ZiAod2lycS0+c3RhdHVzICYgV0FLRV9JUlFfREVESUNBVEVEX01BTkFHRUQpDQo+ID4gPiArICAg
+ICAgIGlmICh3aXJxLT5zdGF0dXMgJiBXQUtFX0lSUV9ERURJQ0FURURfTUFOQUdFRCAmJg0KPiA+
+ID4gKyAgICAgICAgICAgKHNraXBfbGF0ZV9lbmFibGVkX3N0YXR1cyB8fA0KPiA+ID4gKyAgICAg
+ICAgICAgICEod2lycS0+c3RhdHVzICYgV0FLRV9JUlFfREVESUNBVEVEX0xBVEVfRU5BQkxFRCkp
+KQ0KPiA+ID4gICAgICAgICAgICAgICAgIGRpc2FibGVfaXJxX25vc3luYyh3aXJxLT5pcnEpOw0K
+PiA+ID4gIH0NCj4gPiA+IA0KPiA+ID4gKy8qKg0KPiA+ID4gKyAqIGRldl9wbV9lbmFibGVfd2Fr
+ZV9pcnFfY29tcGxldGUgLSBlbmFibGUgd2FrZSBpcnEgYmFzZWQgb24NCj4gPiA+IHN0YXR1cw0K
+PiA+IA0K
 
