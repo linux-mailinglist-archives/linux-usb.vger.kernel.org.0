@@ -2,86 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE1B4384D1
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Oct 2021 20:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F3D438555
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Oct 2021 22:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbhJWS6O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Oct 2021 14:58:14 -0400
-Received: from mleia.com ([178.79.152.223]:44280 "EHLO mail.mleia.com"
+        id S230404AbhJWUln (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 Oct 2021 16:41:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49436 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230266AbhJWS6O (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 23 Oct 2021 14:58:14 -0400
-X-Greylist: delayed 423 seconds by postgrey-1.27 at vger.kernel.org; Sat, 23 Oct 2021 14:58:14 EDT
-Received: from mail.mleia.com (localhost [127.0.0.1])
-        by mail.mleia.com (Postfix) with ESMTP id 5F4C62E1D8;
-        Sat, 23 Oct 2021 18:48:20 +0000 (UTC)
-Subject: Re: [PATCH 08/10] usb: host: ohci-nxp: fix deferred probing
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-arm-kernel@lists.infradead.org
-References: <20211021191437.8737-1-s.shtylyov@omp.ru>
- <20211021191437.8737-9-s.shtylyov@omp.ru>
-From:   Vladimir Zapolskiy <vz@mleia.com>
-Message-ID: <c80e73b0-a09e-955e-e3f8-0d940a5e7908@mleia.com>
-Date:   Sat, 23 Oct 2021 21:48:19 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S229954AbhJWUlm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 23 Oct 2021 16:41:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 16F7B60F23
+        for <linux-usb@vger.kernel.org>; Sat, 23 Oct 2021 20:39:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635021563;
+        bh=joKCuuQuPoWFY/KmQNszm4infqan93YMffIRz3AmKVA=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=lwc3HceYBk9eebOvYUjq3F0TPThYAxgVp205HSrLMhozDFAkhh4LS3B9o/WX9uZyW
+         qqQsyrfBePVSM2kD3l0XBJP25ImA53sZ8z/IXIVv7tEDhpJjFKBX8U2caiBIRYpbjZ
+         I9lirH35V0lG0lNdgKo3k3VhEih4CltCFaHs9NeUbBVG7u07y8D0DfYQ+YnFSKCLoO
+         aZQywD4lWiBtHufIW7t9i/Srvy2sDkBcVOVCIF2Qi2qYwPb7yOw6+AlNFk8Wz7a3kJ
+         yWXrce8T8mxH2iXRNBl2nOF/5gkYrpvW7YbtNuI+6UjFu349DLPHmbHnNMiDWho7w6
+         fPC3sFaLxeaTA==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 02FDC60F43; Sat, 23 Oct 2021 20:39:22 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214797] ehci-pci: unable to enumerate Sony NW-WS623 Device
+Date:   Sat, 23 Oct 2021 20:39:22 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: enhancement
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-214797-208809-GtxcqQ6KzQ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214797-208809@https.bugzilla.kernel.org/>
+References: <bug-214797-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <20211021191437.8737-9-s.shtylyov@omp.ru>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
-X-CRM114-CacheID: sfid-20211023_184820_406618_8EDAB838 
-X-CRM114-Status: GOOD (  19.15  )
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Sergey,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214797
 
-On 10/21/21 10:14 PM, Sergey Shtylyov wrote:
-> The driver overrides the error codes returned by platform_get_irq() to
-> -ENXIO for some strange reason, so if it returns -EPROBE_DEFER, the driver
-> will fail the probe permanently instead of the deferred probing. Switch to
-> propagating the error codes upstream...
-> 
-> Fixes: 60bbfc84b6d9 ("USB OHCI controller support for PNX4008")
+--- Comment #2 from Alan Stern (stern@rowland.harvard.edu) ---
+The most likely explanation is that the USB device, the cable, or the host
+controller hardware isn't working properly.  Does the device work on other
+computers?  Do other devices work when plugged into that USB port?
 
-thank you for the change, it is correct per se, however the blamed commit id
-is obviously invalid and must be fixed.
+You cannot work around the issue by specifying details manually.
 
-The driver has been added 6 years before introduction of the EPROBE_DEFER by
-commit d1c3414c2a9d ("drivercore: Add driver probe deferral mechanism"), and
-the mechanism in connection to getting an irq was added even later, presumably
-in commit 9ec36cafe43b ("of/irq: do irq resolution in platform_get_irq"), but
-please correct me here.
+--=20
+You may reply to this email to add a comment.
 
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-> ---
->   drivers/usb/host/ohci-nxp.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
-> index afb9c2fc85c3..2492f78da6f1 100644
-> --- a/drivers/usb/host/ohci-nxp.c
-> +++ b/drivers/usb/host/ohci-nxp.c
-> @@ -212,7 +212,7 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
->   
->   	irq = platform_get_irq(pdev, 0);
->   	if (irq < 0) {
-> -		ret = -ENXIO;
-> +		ret = irq;
->   		goto fail_resource;
->   	}
->   	if (!irq) {
-> 
-
-After an expected correction of the blamed commit id is done:
-
-Acked-by: Vladimir Zapolskiy <vz@mleia.com>
-
---
-Best wishes,
-Vladimir
+You are receiving this mail because:
+You are watching the assignee of the bug.=
