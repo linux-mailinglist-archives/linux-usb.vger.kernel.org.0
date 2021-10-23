@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4700D4385E5
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Oct 2021 01:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1BFE4385E7
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Oct 2021 01:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbhJWXKX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Oct 2021 19:10:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50354 "EHLO mail.kernel.org"
+        id S230463AbhJWXVp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 Oct 2021 19:21:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55864 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230463AbhJWXKW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 23 Oct 2021 19:10:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id CDD8F601FC
-        for <linux-usb@vger.kernel.org>; Sat, 23 Oct 2021 23:08:02 +0000 (UTC)
+        id S230284AbhJWXVo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 23 Oct 2021 19:21:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 0277860F12
+        for <linux-usb@vger.kernel.org>; Sat, 23 Oct 2021 23:19:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635030482;
-        bh=pZ//gojFiCpUK1Q2PTcWtMe55S1Yk4SqHlr0eRTR+bA=;
+        s=k20201202; t=1635031165;
+        bh=SuwWiJ8JyIoTC9DBIjAMAeNooKkrijFht9ftbD83W8o=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=F8IfWkvHy5zRnKrJQobOyOn/HeZdEtI8YR4R6VLIuPgmzaMNQOTADmvtdE21tMDRl
-         q2+7/tJfDCpup8Zo+TasWnf+SjK05iYGNwYs28jIi9vWWiwI5wwhuRVkMSW3PQO49r
-         c1yxILtNkNADWhb/TMqlmJcRAFPutYkQcLBBd8mh6o50Q+wUL3oB0P0EHNsNl2V7uB
-         Flm+zybBP0EGIsZBiNjBtogd4xXQcb/F7EfYkmyuT9HOZPbn7akyrSb8wWA5lPfc0h
-         dijra3uCfYlGik23SikV7F+mEE5TNaJoXXvHsyZDjxtYP4hOqm47ZuPaJ0D/PPjNsu
-         QwvGRq5BpaB7A==
+        b=cIuq/5kqV+JSBR0KSfhDbsCfXG7ujuxD2Ydv3dxuPw51o+WqxEb1iVDjiE0yo5eHY
+         uU9qcVdeIuQtWUMimWKU8++RseE9S4CJlY0s79AmpeipFkzNnd93aei81oQovU51gK
+         7dqiUwsOmWQike/+40FBfM18i2X9hI1OD9bq2I9UoFmdL8HvejJwr9Km/CfWbuX5yP
+         ztycUj6gl6dNuRTg/4XyNApioAvNYmuZsfDWgmzjtU1nNm7iGg2Eb6MV3zzqTvFosj
+         x8y7jQBQxGvXlI3nIHYoLZNfLTeoAHwUZpAK1h+21jiSmwgjmhpx7Cl5VAzQVNvwzC
+         D4t82Gd5D4hUQ==
 Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id B983060F4D; Sat, 23 Oct 2021 23:08:02 +0000 (UTC)
+        id E9D3D60F4D; Sat, 23 Oct 2021 23:19:24 +0000 (UTC)
 From:   bugzilla-daemon@bugzilla.kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 214797] ehci-pci: unable to enumerate Sony NW-WS623 Device
-Date:   Sat, 23 Oct 2021 23:08:02 +0000
+Date:   Sat, 23 Oct 2021 23:19:24 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -44,7 +44,7 @@ X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-214797-208809-6ll0b93kIL@https.bugzilla.kernel.org/>
+Message-ID: <bug-214797-208809-iOim8dq9td@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-214797-208809@https.bugzilla.kernel.org/>
 References: <bug-214797-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -58,47 +58,12 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D214797
 
---- Comment #3 from Stefan.Lauterwasser@gmail.com ---
-@Alan Stern
-Same host controller, same port, same cable - both devices with mini-USB po=
-rt.
-My mouse is working properly:
+--- Comment #4 from Stefan.Lauterwasser@gmail.com ---
+I am able to force "full-speed" instead of "high-speed"?
 
-kernel: usb 1-1.5: new full-speed USB device number 79 using ehci-pci
-kernel: usb 1-1.5: New USB device found, idVendor=3D25a7, idProduct=3Dfa98,
-bcdDevice=3D 2.03
-kernel: usb 1-1.5: New USB device strings: Mfr=3D1, Product=3D2, SerialNumb=
-er=3D0
-kernel: usb 1-1.5: Product: 2.4G Dual Mode Mouse
-kernel: usb 1-1.5: Manufacturer: Compx
-kernel: input: Compx 2.4G Dual Mode Mouse as
-/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.5/1-1.5:1.0/0003:25A7:FA98.00=
-23/input/input74
-kernel: hid-generic 0003:25A7:FA98.0023: input,hidraw6: USB HID v1.10 Mouse
-[Compx 2.4G Dual Mode Mouse] on usb-0000:00:1a.0-1.5/input0
-kernel: input: Compx 2.4G Dual Mode Mouse Keyboard as
-/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.5/1-1.5:1.1/0003:25A7:FA98.00=
-24/input/input75
-kernel: input: Compx 2.4G Dual Mode Mouse as
-/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.5/1-1.5:1.1/0003:25A7:FA98.00=
-24/input/input76
-kernel: input: Compx 2.4G Dual Mode Mouse as
-/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.5/1-1.5:1.1/0003:25A7:FA98.00=
-24/input/input77
-kernel: hid-generic 0003:25A7:FA98.0024: input,hiddev100,hidraw7: USB HID v=
-1.10
-Keyboard [Compx 2.4G Dual Mode Mouse] on usb-0000:00:1a.0-1.5/input1
-mtp-probe[214798]: checking bus 1, device 79:
-"/sys/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.5"
-mtp-probe[214798]: bus: 1, device: 79 was not an MTP device
-upowerd[843]: treating change event as add on
-/sys/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.5
-systemd-logind[471]: Watching system buttons on /dev/input/event27 (Compx 2=
-.4G
-Dual Mode Mouse Keyboard)
-mtp-probe[214811]: checking bus 1, device 79:
-"/sys/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.5"
-mtp-probe[214811]: bus: 1, device: 79 was not an MTP device
+What is called "device number" here - it will be increased more often in ca=
+se
+of failure? Just to avoid USB "index"/"name" conflicts?
 
 --=20
 You may reply to this email to add a comment.
