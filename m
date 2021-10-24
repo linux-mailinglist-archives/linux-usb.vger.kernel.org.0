@@ -2,71 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2565A4385F2
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Oct 2021 01:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1C5438602
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Oct 2021 02:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbhJWXvk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Oct 2021 19:51:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36162 "EHLO mail.kernel.org"
+        id S231408AbhJXAjY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 Oct 2021 20:39:24 -0400
+Received: from phobos.denx.de ([85.214.62.61]:37030 "EHLO phobos.denx.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231331AbhJWXvj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 23 Oct 2021 19:51:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id E27FD60560
-        for <linux-usb@vger.kernel.org>; Sat, 23 Oct 2021 23:49:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635032959;
-        bh=6IBauWbEQdxNBxJelyYVk8hJ9ub5zwk2pFgA02Cp39U=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=A6U9Qx41WYrk6L+Rc5KAqZdw9KurcCQ5i7e4WF7VM5VKWiaTgJ0hHc3kecJhfbs4e
-         78rFa20cQkw1E0AmSPRzBTnqKSivEGbNScua/pq2CYsmBYATNT00QpXQIoh6PoKu6M
-         ipvKkx44Apxk8yiPJKR71iI0wnBiITZ4s+76f2s5VLSjl6QWZD/QhImITUk8PN0sZI
-         C3ME2OmK3+NiVryCBqsFOswfde9cBYCGF22maGbnR8K+pcMTE+unkwgU5CrHQJEBvr
-         WWWWprxCA3eOIlrtM97zDlkLQRB6yhHOAkJeJX0OCp7zBPFzPiIaLK9cSN1KkLCnIM
-         AOXwHeI7ucOwA==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id D752C60F4D; Sat, 23 Oct 2021 23:49:19 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
+        id S231131AbhJXAjX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 23 Oct 2021 20:39:23 -0400
+Received: from tr.lan (ip-89-176-112-137.net.upcbroadband.cz [89.176.112.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id D337D83303;
+        Sun, 24 Oct 2021 02:37:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1635035822;
+        bh=Sy1O37cAs5gqV5sR7/uMeWWea3WjWSSRC8MZNh3N/8U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=E+Wmca333vp2sTkVdW4S8aO6Zycl8NnzjEozzRGYW0IpOXHDMEVlNbYG0L3vdRP8d
+         GSQkkqt1PXAPxOJC8GJirr6jxXtnPt1r8RH+5SAQtSdw6qmBGXnaQeGr4NwBKiUoHB
+         m5vVpGjRx3kMedm6tFOoAz7IKk0mUhuJh4FMDg+wLsdNc7jGXTIcI5LVjC8umyn5YT
+         zpY04Ot9zW+K6BcMpTYCif9nNv28MtFqR2AL3DimNNi+X/PfF9VPN+9ekM3cp0mByl
+         OXpS+ebLib94VQeMcgxwBGNuTxL0OFHixSxO9/sJjkrw068nd/u7DzjOmKDjOCAHNp
+         gZPIVOrVNAyiQ==
+From:   Marek Vasut <marex@denx.de>
 To:     linux-usb@vger.kernel.org
-Subject: [Bug 214797] ehci-pci: unable to enumerate Sony NW-WS623 Device
-Date:   Sat, 23 Oct 2021 23:49:19 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: enhancement
-X-Bugzilla-Who: Stefan.Lauterwasser@gmail.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: ANSWERED
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-214797-208809-yamEr80EED@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-214797-208809@https.bugzilla.kernel.org/>
-References: <bug-214797-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+Cc:     Marek Vasut <marex@denx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: [PATCH] dt-bindings: usb: dwc2: Add otg-rev property documentation
+Date:   Sun, 24 Oct 2021 02:36:52 +0200
+Message-Id: <20211024003652.227772-1-marex@denx.de>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214797
+Copy the otg-rev property documentation from usb-drd.yaml into the DWC2
+binding document, since some users of the DWC2 IP like STM32MP1 use the
+otg-rev property in DT bindings for this controller.
 
-Stefan.Lauterwasser@gmail.com changed:
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: devicetree@vger.kernel.org
+---
+NOTE: Shouldn't this somehow be part of the USB core bindings instead?
+---
+ Documentation/devicetree/bindings/usb/dwc2.yaml | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |ANSWERED
+diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
+index 10c7d9b6cc53f..254436c19870b 100644
+--- a/Documentation/devicetree/bindings/usb/dwc2.yaml
++++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+@@ -120,6 +120,16 @@ properties:
+     $ref: /schemas/types.yaml#/definitions/uint32-array
+     description: size of periodic tx fifo per endpoint (except ep0) in gadget mode.
+ 
++  otg-rev:
++    description:
++      Tells usb driver the release number of the OTG and EH supplement with
++      which the device and its descriptors are compliant, in binary-coded
++      decimal (i.e. 2.0 is 0200H). This property is used if any real OTG
++      features (HNP/SRP/ADP) is enabled. If ADP is required, otg-rev should be
++      0x0200 or above.
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [0x0100, 0x0120, 0x0130, 0x0200]
++
+   snps,need-phy-for-wake:
+     $ref: /schemas/types.yaml#/definitions/flag
+     description: If present indicates that the phy needs to be left on for 
+-- 
+2.33.0
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
