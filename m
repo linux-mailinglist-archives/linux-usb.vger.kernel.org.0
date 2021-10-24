@@ -2,114 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E41F84388CB
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Oct 2021 14:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F8D438B3C
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Oct 2021 20:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbhJXMMV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 24 Oct 2021 08:12:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36856 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230300AbhJXMMU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 24 Oct 2021 08:12:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 3D80660FD7
-        for <linux-usb@vger.kernel.org>; Sun, 24 Oct 2021 12:10:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635077400;
-        bh=XY9Jk9MVgIL6WMwHJntqUBZG2IvCMZlshqCnHS4lE+0=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=WW+3qNleXluQ844Pu6CJLHB2XOG01pnl0kyJvWwfu+UjdMgpsDPRui3hbnL/l5iy4
-         5G+QHCzGnKx+hPIREWwIeuc4mN7p4DeyMaYIXtYLAK1yuG+Le6fQGiBkCzvNeeX2+w
-         CqB0hql5W4ogrU1GBSA15quwvOH/eLKKFi30g6oY2MTXImZt31f7WUNv1JrfFqKLCn
-         kAnTh8KF3ZVv+FJP6dMl8Ui8/ZFZXEpaX5A9ptkuROHpS9sexkhd+5TThRYYh/lpIQ
-         +W4o4yjsWoPxOLk2uBTAnEBAKOa+4kryWUYtQKxYT6rXCC/j8Sy95se2rWn/M3roIY
-         K70wZdLyP2wlg==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 39C5260EFF; Sun, 24 Oct 2021 12:10:00 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 210425] Plugging in or unplugging power cord while system is
- suspended does not trigger updates
-Date:   Sun, 24 Oct 2021 12:09:59 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: meven29@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-210425-208809-ikw1fHywIP@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
-References: <bug-210425-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S231779AbhJXSJB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 24 Oct 2021 14:09:01 -0400
+Received: from mail-co1nam11on2077.outbound.protection.outlook.com ([40.107.220.77]:6703
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231481AbhJXSJA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 24 Oct 2021 14:09:00 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mwVwQSNu6aBT0xZ0sDsAppo9nV5RQXMhCH4i/nYEvG2nuZDrrJHPcI4WFq9Ka2e/Ur8uAqKMg4FITe0FoN9acRWws3adeN1f8dT15lOtuGSWoeLucXTdCAvC5IAZCXMcYBFSAabf9e5TgWNfhD6HgmotMRxcX8tWwAFWT/IvT5O4inU5l4nB70PRCMynC0zkmQ92ge8qNF4EqkUCb1U/5iRBEY+iPaZ3Y5okZg5otZ29o2DHEg3nqeM+NaWTpm4inEpYKvb1aHcdBIxxFjfYqrS3fNIkpRazoGZme8B04nCBQ/7znwiN21yBeKOvmrHa38PFdkVgFdbqvjAp+D0OqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=U9XfxgSCj7LlHh93XWqKiqXs+DfZpy2MPoWyyUU/6Ak=;
+ b=IiXanlAFM8I8zmOAqjhkmkUKGbtsEgfvGJ8xI5Q7wNRNoKQ0HWUBKg440sc75lwM59ujPeRT+rN03ezrAknQ8sz1nqBZ/xJqVShl5dJrLnI7aVVTbWOgs1hKDZUXloFwa5p79ql9khF2cNgRS9tWCkc5nHT4tHdbtBfIvloiM991ngnyvALLjZQ0IZCOuqXEP5catl/hyecjKVBjCRjEunTpeRllHAMadPQBu7sb14tdm2oSAk8V02P0H18Hu/IcYHzA3efmd5CIlt1ng1Id8zt2bw7wwqeqxGQLDddnI+76APziM0gnEJJAFoFnp+ggSwp+SKVvNzaeT49rIKh/sw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
+ header.from=xilinx.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=U9XfxgSCj7LlHh93XWqKiqXs+DfZpy2MPoWyyUU/6Ak=;
+ b=YxXUPLpAZvBarESmVeQD/03/59ynH9bhMCK04fyUBCNS+wZfQ1UNbcBAxjPl6/z2pf1e20dRPOoCRBOG73qSpx9VMjgZJu2K51yHdSSYmpfjk5lb137sH94DI4LdhsR0RCaeZ4StHbChSPW0HGjTA7mHFITbk1aMRZ2MN+1EMfA=
+Received: from SA0PR12CA0030.namprd12.prod.outlook.com (2603:10b6:806:6f::35)
+ by SN4PR0201MB8807.namprd02.prod.outlook.com (2603:10b6:806:202::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.20; Sun, 24 Oct
+ 2021 18:06:38 +0000
+Received: from SN1NAM02FT0021.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:6f:cafe::e2) by SA0PR12CA0030.outlook.office365.com
+ (2603:10b6:806:6f::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.16 via Frontend
+ Transport; Sun, 24 Oct 2021 18:06:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=pass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0021.mail.protection.outlook.com (10.97.5.32) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4628.18 via Frontend Transport; Sun, 24 Oct 2021 18:06:37 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Sun, 24 Oct 2021 11:06:35 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Sun, 24 Oct 2021 11:06:35 -0700
+Envelope-to: git@xilinx.com,
+ gregkh@linuxfoundation.org,
+ --to=robh+dt@kernel.org,
+ mka@chromium.org,
+ ravisadineni@chromium.org,
+ stern@rowland.harvard.edu,
+ alcooperx@gmail.com,
+ linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Received: from [10.140.6.35] (port=56658 helo=xhdsaipava40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <piyush.mehta@xilinx.com>)
+        id 1mehtC-0002dJ-Li; Sun, 24 Oct 2021 11:06:35 -0700
+From:   Piyush Mehta <piyush.mehta@xilinx.com>
+To:     <gregkh@linuxfoundation.org>, <--to=robh+dt@kernel.org>,
+        <mka@chromium.org>, <ravisadineni@chromium.org>,
+        <stern@rowland.harvard.edu>, <alcooperx@gmail.com>,
+        <michal.simek@xilinx.com>
+CC:     <piyush.mehta@xilinx.com>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <git@xilinx.com>, <sgoud@xilinx.com>
+Subject: [PATCH 0/2] usb: misc: add support for microchip,usb2244 USB-SD controller
+Date:   Sun, 24 Oct 2021 23:36:26 +0530
+Message-ID: <20211024180628.2992108-1-piyush.mehta@xilinx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 732135a8-2194-4862-42ca-08d9971905af
+X-MS-TrafficTypeDiagnostic: SN4PR0201MB8807:
+X-Microsoft-Antispam-PRVS: <SN4PR0201MB880744481EA84540B0181897D4829@SN4PR0201MB8807.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Omv05gkYMmRaVy7PofYWFcmf132HBRkAu271al60aI0uePKujJ7fiPwd6hUenSxuAIm9TL91ck5zK9qtn/S/XyT8ugHhhTzcTyz2oyNEwdh4dU/iNKs2r2kB2gKPUJIJjWKFYskR09gy4KGkQDmi80tQ71O8Z0VUEQyknWMAz6pM+ffecT4lJVtOeKnVTfGwxrMmqoarHsXJftGIkZvXyvJnl47JqRgt+E0uIh00gDCFAd+ZapxOsbPqOgu/bfbCjYR+ASNgd/ygciBaNUGCBW6RnK2abzXA2OeEkwDzGEmuT6Ze48BC5341ZQOsMMc6YzdAMrReer1WsD0tJTyJOQNoqUT7WSrQPpSJJSab6fO8oAxtsJ+wipKURNY/4kPj/sjSwONVuYHsvYh2D5ztmKVv4uriSbdobDm2UK21mSUd+zKTcUXt3lOQKFQ327secvDMpFyV8JaYHjKHdcODggMAZQDmAj2WKG3WMek9x5l5ut/L8WRVV8Zagm1cAqQsyzmG3oeGolcfhXDY5xEgdnrIgE9SZRYSVr0wLQiAz01mLm8I3joPSW97cRPhd/7A1q/d2wJuFE909oDEUQePw/9Q1rNcDRnTbtaCCBVlUrCyQyumPK/J3PoTi8ZhpKaJwK6yffAfrzhTPXzHppc1M+56CexaMCgsqUQYSaB85y9PnRGa+xdTCmK0qfw1JVTtAH5GOGtcfDn1JXT8j64DrVTRgQmhv8hSuLHR6yaGJv8=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(46966006)(36840700001)(2906002)(356005)(2616005)(7636003)(70206006)(6666004)(70586007)(26005)(508600001)(186003)(44832011)(47076005)(1076003)(426003)(107886003)(36906005)(336012)(82310400003)(110136005)(36860700001)(9786002)(7696005)(6636002)(8676002)(5660300002)(36756003)(8936002)(316002)(4326008)(54906003)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2021 18:06:37.4174
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 732135a8-2194-4862-42ca-08d9971905af
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0021.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR0201MB8807
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
+Microchip's USB224x family of Hi-Speed USB 2.0 flash media card
+controllers provide an ultra-fast interface between a USB host
+controller and flash media cards.
 
-M=C3=A9ven Car (meven29@gmail.com) changed:
+This patch adds a GPIO based usb-sd reset for USB2244 USB2 ultra
+fast SD controller. This usb2244 driver trigger sd reset signal
+after soft reset or core Reset. The SD needs to be resetted after
+completion of phy initialization. After the toggling of gpio,
+controller gets out form reset.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |meven29@gmail.com
+As part of the reset, sets the direction of the pin to output before
+toggling the pin. Delay of microseconds is added in between low and
+high to meet the setup and hold time requirement of the reset.
 
---- Comment #5 from M=C3=A9ven Car (meven29@gmail.com) ---
-It seems to me `ucsi_resume()` should take into account that connectors can=
- be
-plugged-in/out while the system is suspended.
+Piyush Mehta (2):
+  dt-bindings: usb: misc: Add binding for Microchip usb2244 Controller
+  usb: misc: usb244: add support for USB2 ultra fast sd controller
 
-Upon wake-up it should someway scan its connectors and notify userspace the=
-n.
+ .../devicetree/bindings/usb/microchip,usb2244.yaml | 43 ++++++++++++++
+ drivers/usb/misc/Kconfig                           |  8 +++
+ drivers/usb/misc/Makefile                          |  1 +
+ drivers/usb/misc/usb2244.c                         | 69 ++++++++++++++++++++++
+ 4 files changed, 121 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb2244.yaml
+ create mode 100644 drivers/usb/misc/usb2244.c
 
-Instead resume only hook the notification after the fact and does not check
-current state.=20
+-- 
+2.7.4
 
-> int ucsi_resume(struct ucsi *ucsi)
-> {
->       u64 command;
->
->       /* Restore UCSI notification enable mask after system resume */
->       command =3D UCSI_SET_NOTIFICATION_ENABLE | ucsi->ntfy;
->
->       return ucsi_send_command(ucsi, command, NULL, 0);
-> }
-
-Consequently after suspending, unplugging AC and resuming
-
-> cat /sys/class/power_supply/ucsi-source-psy-USBC000\:001/online
-> 1
-Regardless of the connector state (re-plugging is not signaled either).
-We don't get any `udevadm monitor` notification from the usci subsystem.
-
-AFAICT We should have a call to
-"power_supply_changed(usci->connector[i]->psy);" somewhere for the usci
-connector concerned resulting from `ucsi_resume` after the connector state =
-has
-been updated with `ucsi_handle_connector_change()` for instance. But I don't
-know about the work_struct API.=20
-Either this or a bug in `ucsi_handle_connector_change()` not taking into
-account the unplugged-during-suspend usecase.=20
-
-I would welcome any code hint to come up with a proper patch or a patch tha=
-t I
-would be happy to test.
-
-My hardware is a DELL XPS 9370.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
