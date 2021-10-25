@@ -2,95 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DACC44397D6
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 15:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D03439834
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 16:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232691AbhJYNu6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Oct 2021 09:50:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36759 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232478AbhJYNu6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 09:50:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635169715;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=QFI3PFtyII2N/X0+5XOVxFRqOrrQcvsw/pIIb4c1XKU=;
-        b=eNdpgRWBBsyQbuF9SoDOtXVEhgRm1pO8ISLlOjTU5a79vv/4v5ZY4ohpsij8nM+qcaInYW
-        4tHROde80GJ4+uLyZhenE4wm0q7XYDssHo7OCtbZB8ayonXG0iguM2kZlPdl22YBzXwwlN
-        G6KbVGHHsJIihcFX1aGT+sqHYq4QtgE=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-387-e_2Eh546NaOmfXMNR_9KAg-1; Mon, 25 Oct 2021 09:48:34 -0400
-X-MC-Unique: e_2Eh546NaOmfXMNR_9KAg-1
-Received: by mail-ed1-f70.google.com with SMTP id i9-20020a508709000000b003dd4b55a3caso304415edb.19
-        for <linux-usb@vger.kernel.org>; Mon, 25 Oct 2021 06:48:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=QFI3PFtyII2N/X0+5XOVxFRqOrrQcvsw/pIIb4c1XKU=;
-        b=o3Amn87756VUr+T25MuaBLspfHQWW+nydeQTPk1RLrcQDpIUSbqusveA0OFtriLsIC
-         gBVlIrlpS91nYmsSKpRXZSo9Dpf5N/XgutqApHbui31mRVTvNQzDA2PYpVdfabel8ej6
-         7FQLrxyCbZbE5uAwO48MnYOmrf8/JbTc340lmI/ftgqcsrmRGkq8xwvvia401spGibz0
-         6skfhWjtEoXUlyPMuYuI1RPGsYZg0N9wjHMZcgE56JHwl1Qb+USeSkObVfDEuoCQFBwd
-         RZpWopnkp39JxMtk5cyDWoNt2FSUhOPbCkKjW0+aJFqSD9tjUWzPNnlrFW/Y+tfjA6DK
-         Jq5A==
-X-Gm-Message-State: AOAM5303GCInlY3I8qQz05btC98STo0LBnXkAEKhWNRoqL9uHeNNGM0I
-        coBZDUF9o5k2XBIvvleQRu4TfOub021pxu51rVwAN7K5yaDZk3oM2g4wJUQOcb2lfww5k6MYIe1
-        LJ6SQoN8U8hdU2deXyZTo
-X-Received: by 2002:a17:906:d552:: with SMTP id cr18mr10372637ejc.130.1635169712712;
-        Mon, 25 Oct 2021 06:48:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxJMIDqRAUzemX3+LEOJOZGY2oPKITC0T0wU0rRc3Y4v/9h6lOEHTFuev9/fP5nGigq5W6REg==
-X-Received: by 2002:a17:906:d552:: with SMTP id cr18mr10372620ejc.130.1635169712579;
-        Mon, 25 Oct 2021 06:48:32 -0700 (PDT)
-Received: from [10.40.1.223] ([81.30.35.201])
-        by smtp.gmail.com with ESMTPSA id g26sm2448670edt.13.2021.10.25.06.48.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Oct 2021 06:48:32 -0700 (PDT)
-Message-ID: <e21981cf-fef0-b73d-8fe4-4e1fab0d3864@redhat.com>
-Date:   Mon, 25 Oct 2021 15:48:31 +0200
+        id S233374AbhJYONs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Oct 2021 10:13:48 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:49856 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233384AbhJYONr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 10:13:47 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B09CD2193C;
+        Mon, 25 Oct 2021 14:11:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1635171084; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=OTjSY7GSGw0G3NioSQABoRLAMGiPnBKkRoos8pwLTqc=;
+        b=kiuorOvH9YQGwEpt5DZ2I/rRf3/sB3+Zyrlf1dm9zZxWCtXjAGcLAub6ReU0t8ULp4sxry
+        2vsPdeRIrbb70ZzJhm1L+z0gIBbChLxXEdkOKTkNhBXQImZhtxHvqOKhrAOac+WSdLNnwl
+        jTtvNJWvkJrXNWgni7A2jVf9J6bN34g=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6F04C13C0B;
+        Mon, 25 Oct 2021 14:11:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id OjXyGAy7dmG6cgAAMHmgww
+        (envelope-from <oneukum@suse.com>); Mon, 25 Oct 2021 14:11:24 +0000
+From:   Oliver Neukum <oneukum@suse.com>
+To:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] usbb: catc: use correct API for MAC addresses
+Date:   Mon, 25 Oct 2021 16:11:21 +0200
+Message-Id: <20211025141121.14828-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-US
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Mario Limonciello <mario.limonciello@outlook.com>
-Cc:     linux-usb <linux-usb@vger.kernel.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: Disabling intel-wmi-thunderbolt on devices without Thunderbolt /
- detecting if a device has Thunderbolt
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi All,
+Commit 406f42fa0d3c ("net-next: When a bond have a massive amount
+of VLANs...") introduced a rbtree for faster Ethernet address look
+up. To maintain netdev->dev_addr in this tree we need to make all
+the writes to it got through appropriate helpers.
 
-While digging through Microsoft Surface Go ACPI tables to fix an unrelated
-issue, I noticed that there is an intel-wmi-thunderbolt WMI device in the
-ACPI tables and the intel-wmi-thunderbolt driver happily binds to this.
-This is likely the result of copy paste programming of the ACPI tables.
+In the case of catc we need a new temporary buffer to conform
+to the rules for DMA coherency. That in turn necessitates
+a reworking of error handling in probe().
 
-This causes a /sys/bus/wmi/devices/.../force_power attribute to be created
-and echoing to that executes ACPI code which ends up poking at things it
-should not be poking at on the Surface Go.
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/net/usb/catc.c | 22 +++++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
 
-The problem of having these "nonsense" WMI devices with the
-intel-wmi-thunderbolt GUID is likely more wide-spread and ideally the
-intel-wmi-thunderbolt would ignore these.
-
-This makes me wonder if there is a way to see if there are any thunderbolt
-controllers on the system at all ? (with as goal to make intel-wmi-thunderbolt
-not bind if there are none)
-
-Regards,
-
-Hans
-
+diff --git a/drivers/net/usb/catc.c b/drivers/net/usb/catc.c
+index 24db5768a3c0..e7fe9c0f63a9 100644
+--- a/drivers/net/usb/catc.c
++++ b/drivers/net/usb/catc.c
+@@ -770,17 +770,23 @@ static int catc_probe(struct usb_interface *intf, const struct usb_device_id *id
+ 	struct net_device *netdev;
+ 	struct catc *catc;
+ 	u8 broadcast[ETH_ALEN];
+-	int pktsz, ret;
++	u8 *macbuf;
++	int pktsz, ret = -ENOMEM;
++
++	macbuf = kmalloc(ETH_ALEN, GFP_KERNEL);
++	if (!macbuf)
++		goto error;
+ 
+ 	if (usb_set_interface(usbdev,
+ 			intf->altsetting->desc.bInterfaceNumber, 1)) {
+ 		dev_err(dev, "Can't set altsetting 1.\n");
+-		return -EIO;
++		ret = -EIO;
++		goto fail_mem;;
+ 	}
+ 
+ 	netdev = alloc_etherdev(sizeof(struct catc));
+ 	if (!netdev)
+-		return -ENOMEM;
++		goto fail_mem;
+ 
+ 	catc = netdev_priv(netdev);
+ 
+@@ -870,7 +876,8 @@ static int catc_probe(struct usb_interface *intf, const struct usb_device_id *id
+ 	  
+ 		dev_dbg(dev, "Getting MAC from SEEROM.\n");
+ 	  
+-		catc_get_mac(catc, netdev->dev_addr);
++		catc_get_mac(catc, macbuf);
++		eth_hw_addr_set(netdev, macbuf);
+ 		
+ 		dev_dbg(dev, "Setting MAC into registers.\n");
+ 	  
+@@ -899,7 +906,8 @@ static int catc_probe(struct usb_interface *intf, const struct usb_device_id *id
+ 	} else {
+ 		dev_dbg(dev, "Performing reset\n");
+ 		catc_reset(catc);
+-		catc_get_mac(catc, netdev->dev_addr);
++		catc_get_mac(catc, macbuf);
++		eth_hw_addr_set(netdev, macbuf);
+ 		
+ 		dev_dbg(dev, "Setting RX Mode\n");
+ 		catc->rxmode[0] = RxEnable | RxPolarity | RxMultiCast;
+@@ -917,6 +925,7 @@ static int catc_probe(struct usb_interface *intf, const struct usb_device_id *id
+ 	if (ret)
+ 		goto fail_clear_intfdata;
+ 
++	kfree(macbuf);
+ 	return 0;
+ 
+ fail_clear_intfdata:
+@@ -927,6 +936,9 @@ static int catc_probe(struct usb_interface *intf, const struct usb_device_id *id
+ 	usb_free_urb(catc->rx_urb);
+ 	usb_free_urb(catc->irq_urb);
+ 	free_netdev(netdev);
++fail_mem:
++	kfree(macbuf);
++error:
+ 	return ret;
+ }
+ 
+-- 
+2.26.2
 
