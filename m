@@ -2,89 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 312FE43A522
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 22:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C21143A612
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 23:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234258AbhJYU6H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Oct 2021 16:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
+        id S232898AbhJYVoK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Oct 2021 17:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234325AbhJYU6E (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 16:58:04 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4165C061767
-        for <linux-usb@vger.kernel.org>; Mon, 25 Oct 2021 13:55:41 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id z14so13975940wrg.6
-        for <linux-usb@vger.kernel.org>; Mon, 25 Oct 2021 13:55:41 -0700 (PDT)
+        with ESMTP id S230177AbhJYVoI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 17:44:08 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49382C061745
+        for <linux-usb@vger.kernel.org>; Mon, 25 Oct 2021 14:41:46 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id p6-20020a9d7446000000b0054e6bb223f3so16885765otk.3
+        for <linux-usb@vger.kernel.org>; Mon, 25 Oct 2021 14:41:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/F+PYzHsO5aqOW+C55ObkoMjfLBJMSXkRVXYJO4Yd3M=;
-        b=kodlkyottSVRTWBOfFTJEucWrdDw69evvjPDqUaHDPOAGwMwFlHDbXtWydvi27rCaW
-         oZko5yvMKZwWFgYWrxY+Yl7eUiMvvhJdoofyu2V7A2YO0ERho1jBK4TBh1YlGLRALF5F
-         t0RwDHqfLsCD+jWv/ORenA5UeYvGfDuRLQ7AWO8Bzo5L4sV4ksckzux2P66wpK+0I0D6
-         sFMXL3OyShA2LOHDev2z/jpKFcvpAEuhJJie55QOMtpPM3pf43TMF2AU1A4JdFOV5zZ/
-         sQvylxADIxrWFHx5uKylNhkCFEGH6LUYjkOZxMauFAiyDjuY+NsZz+zcZ0CkuZ0muMdN
-         tL1A==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FGNc9Tx8g5/v6KFaaId5VnO2l2Gb29zLqsK+20u4jlQ=;
+        b=cJ3SgI091BISPRXBiE8q+NoMzCMMO7TE3mUjnVUSZyyTM/2HdEVTjjMyq1UXYuMO/I
+         9qbPtU9k5GfpLfM8F5+H9jcEfr/yhky4VTwQKbUFixO2j+WJbmYLLbSskU78vG9M67gX
+         fEvF1LXQw9Avk5tv4b51z16nbHxwj5vIdMelwpLPvEfeK4GaaQHo9EdS/1qo7r/rwV2s
+         FPDNv8jCkgsJnDCsSVlF2pUZ+2Eged6qJeAVqKkpDWh5KjAgHW0qvj7PcQd2taipNnoZ
+         9qMAgV881ohcmD70JM1ccV+heo10pUPygClUkcx53B4MuxQl5H8u/jc/gnMlmfXu4YcC
+         C8cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/F+PYzHsO5aqOW+C55ObkoMjfLBJMSXkRVXYJO4Yd3M=;
-        b=yLvqmqFTucWEm6LNmYiPRVgq1s6odW1/+UEBagG2sO9T6xiOXyC+lnI006+GUKOujY
-         T9vBCrsVHF85X0Y7N70CqxVnklap3oQMT/cYF9f75/ZcI3JGQvezOhxl4mFa4pBrdiEn
-         GomcSwwNJvy9JIHqlKLH1ffr3gbfQjYyrp9XF6rPK4/MbAY9A7BSfHh32v6ze948RCuh
-         cNbxvihsi71MUDLeG3qDcf/iXQ7UVpNLvVkEsnRCUMJUyf8X0jHtn3DF5cxyqfFKlSvE
-         sg85o+an/Aalj/9yrmIKBGcHt69ii+ow5eu2fcOM+jBlm2n5DlEN/Z1rlFv895HrqYnM
-         6rtQ==
-X-Gm-Message-State: AOAM532lTLsMkD58ExHrA544FxQLGmnv3GPMLff2SIFXQ1wzgDP9FNGg
-        1FPY3nK7wCaFfjjrBULLPqEk+g==
-X-Google-Smtp-Source: ABdhPJwq1PO5lgTpZYuNfDF5dsEQK0VDS944J027R6H5avmaaoLY9oBKx6HWRLB0XomGbxLAksAwag==
-X-Received: by 2002:adf:fa08:: with SMTP id m8mr16492224wrr.417.1635195340287;
-        Mon, 25 Oct 2021 13:55:40 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id v4sm10101398wrs.86.2021.10.25.13.55.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Oct 2021 13:55:39 -0700 (PDT)
-Message-ID: <71e39011-71af-8f68-a829-7be0e186bc3a@linaro.org>
-Date:   Mon, 25 Oct 2021 21:57:41 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FGNc9Tx8g5/v6KFaaId5VnO2l2Gb29zLqsK+20u4jlQ=;
+        b=cfa5tjyobpwSLGFZfjq7iSLBaybD3R7DrIH+1FfOQxxow+JeiTCtHIrryJWQVAfi4S
+         HKWWxdBo7YMOrpRm5UNApeZotIdp5al9SB4SWxA8Md7ljXrsgq2FK/g9m9R0tRD5gcNo
+         lcpK9BHjBQ4uiXBRPyxV+67VVep2rupq+asjE8qlqRFej2Vd0qw5J5T1ceYX2qjuTqhX
+         ZrMBn2WBbFK0Pc5E0+FD0bMMn8TnNKag3ehylzCvjHfqn1BydivvidsLeH/Yrt6qgR3M
+         3gvHhrMVyzcweN2LjUGFqKUGh4X9XaOHOT+wGGRXydk1RKi4N2D5nrw8iJOrEw8/vtw2
+         rZ/w==
+X-Gm-Message-State: AOAM533d7YUE6TOiYPFa8uW/Wm31csIWdE9498ZoTRMCcxb9fdVT9qPA
+        NH2i7B3oiHeyd67hmHYgaGhrbQ==
+X-Google-Smtp-Source: ABdhPJyLPL3Eu2q0jA6zGLKMIGyDySUIKVBTEKYYpx+QwwdzIq5OVLXZHPgZxZS1/B9VT/HVaxe4Ng==
+X-Received: by 2002:a9d:704d:: with SMTP id x13mr15188704otj.4.1635198105567;
+        Mon, 25 Oct 2021 14:41:45 -0700 (PDT)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id s20sm4306440oiw.17.2021.10.25.14.41.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Oct 2021 14:41:45 -0700 (PDT)
+Date:   Mon, 25 Oct 2021 14:43:23 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com
+Subject: Re: [PATCH v2 1/3] dt-bindings: usb: qcom,dwc3: Add multi-pd
+ bindings for dwc3 qcom
+Message-ID: <YXck+xCJQBRGqTCw@ripper>
+References: <1635152851-23660-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1635152851-23660-2-git-send-email-quic_c_sanm@quicinc.com>
+ <YXcBK7zqny0s4gd4@ripper>
+ <CAE-0n51k8TycXjEkH7rHYo0j7cYbKJOnOn1keVhx2yyTcBNnvg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [PATCH 6/6] usb: typec: qcom: Add pm8150b TCPM driver
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        wcheng@codeaurora.org
-References: <20211025150906.176686-1-bryan.odonoghue@linaro.org>
- <20211025150906.176686-7-bryan.odonoghue@linaro.org>
- <20211025161747.GA970809@roeck-us.net>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20211025161747.GA970809@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE-0n51k8TycXjEkH7rHYo0j7cYbKJOnOn1keVhx2yyTcBNnvg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 25/10/2021 17:17, Guenter Roeck wrote:
->> +static int qcom_pmic_tcpm_core_set_polarity(struct tcpc_dev *tcpc,
->> +					    enum typec_cc_polarity pol)
->> +{
->> +	return 0;
-> A comment explaining why this isn't needed with this hardware would help.
+On Mon 25 Oct 13:17 PDT 2021, Stephen Boyd wrote:
+
+> Quoting Bjorn Andersson (2021-10-25 12:10:35)
+> > On Mon 25 Oct 02:07 PDT 2021, Sandeep Maheswaram wrote:
+> >
+> > > Add multi pd bindings to set performance state for cx domain
+> > > to maintain minimum corner voltage for USB clocks.
+> > >
+> > > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > > ---
+> > > v2:
+> > > Make cx domain mandatory.
+> > >
+> > >  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 8 +++++++-
+> > >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > > index 2bdaba0..fd595a8 100644
+> > > --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > > +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > > @@ -42,7 +42,13 @@ properties:
+> > >
+> > >    power-domains:
+> > >      description: specifies a phandle to PM domain provider node
+> > > -    maxItems: 1
+> > > +    minItems: 2
+> > > +    items:
+> > > +      - description: cx power domain
+> > > +      - description: USB gdsc power domain
+> > > +
+> > > +  required-opps:
+> > > +    description: specifies the performance state to power domain
+> >
+> > I'm still worried about the fact that we can't just rely on the USB GDSC
+> > being a subdomin of CX in order to just "turn on" CX.
+> >
+> > Afaict accepting this path forward means that for any device that sits
+> > in a GDSC power domain we will have to replicate this series for the
+> > related driver.
+> >
 > 
+> I suspect the problem is that it's not just "turn on" but wanting to
+> turn it on and then set the performance state to some value based on the
+> clk frequency.
 
-Will do.
+I don't see an opp-table involved, just the required-opps for the
+purpose of turning CX on a little bit more. Perhaps I'm missing
+something here though.
 
-Briefly though, there's a separate USB PHY which is responsible for 
-orientation switches, its done outside of this block.
+> Maybe the simplest version of that could be supported
+> somehow by having dev_pm_opp_set_rate() figure out that the 'level'
+> applies to the parent power domain instead of the child one?
 
-https://git.linaro.org/people/bryan.odonoghue/kernel.git/commit/?h=usb-next-25-10-21-pm8150b-tcpm&id=4d754f4eee2ae7c142ab55092f8c4aabd30b433c
+Having the performance_state request cascade up through the GDSC sounds
+like a nice solution; I've not looked at the code to see if this is
+feasible though.
 
----
-bod
+> Or we may need to make another part of the OPP binding to indicate the
+> relationship between the power domain and the OPP and the parent of
+> the power domain.
+
+I suspect this would be useful if a power-domain provider needs to
+translate a performance_state into a different supply-performance_state.
+Not sure if we have such case currently; these examples are all an
+adjustable power-domain with "gating" subdomains.
+
+
+PS. I think we have the same problem in the display subsystem, the
+sub-blocks are powered by MDSS_GDSC, which is a subdomain of MMCX. We
+trust the parent mdss node to keep the GDSC powered and specify MMCX as
+the power-domain for the children, so that we can affect their levels by
+respective opp-table.
+
+Regards,
+Bjorn
