@@ -2,102 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C93394399B6
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 17:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EDDB4399A6
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 17:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233811AbhJYPKm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Oct 2021 11:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49450 "EHLO
+        id S233672AbhJYPJa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Oct 2021 11:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233750AbhJYPKl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 11:10:41 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 402B4C061745;
-        Mon, 25 Oct 2021 08:08:19 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id e59-20020a9d01c1000000b00552c91a99f7so15389951ote.6;
-        Mon, 25 Oct 2021 08:08:19 -0700 (PDT)
+        with ESMTP id S233628AbhJYPJ3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 11:09:29 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3348AC061745
+        for <linux-usb@vger.kernel.org>; Mon, 25 Oct 2021 08:07:07 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id w15so9787693wra.3
+        for <linux-usb@vger.kernel.org>; Mon, 25 Oct 2021 08:07:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=0i9A8W66RFfBxdwNrTea1JXD72yIeM0GMxTmhvajXzI=;
-        b=Y9llym05CJNRQ4jxpxDaR2gD631VYUba9ycrHfstKAtdUaajLETDiy+aYqUGH0KvGs
-         TZO75zSbPaolMidx53Sowec0wE+WpNfVCyAK1ZfTOboSTAQZ30LEvo1pmS2neGzBbLCm
-         G+OFbV9B0DqtTJLIgtRPHaYRrocy0tZKOgfzPawcpxMR1HGTtJf5EfgWajbwvXZ9RXbj
-         29kdJm1eNAOBmnZURd0LFOht8ngPHd3IUdwCu/R7Z0VSb8rp9P27wRe0AMaxdCYdJjfB
-         XYch3wr7Z1Tkje8dntQ9PfT+4suaV+MU74Srx2gK0URI07ddquee8UBcNOQJH8P5HJNp
-         JwUw==
+        bh=r3wknB51IB1YnTAJzsIFZkuKQE3RsPZNmcjzc4IBcDg=;
+        b=ORwqpZirW8FsR0ML6vPd1iyQKwDX8LGmP7hvwMIfz4o0N+ZAL8WcEFOHK/LNOU1Pka
+         yTneVoSnEgli5MS6Fx/xoEMvylRbQqpcx8u2qhvujpQ4wBPP6XJq9i3mrS1CQSktS4mZ
+         sViONSQjOZJFnY5TskRD4CSlFucgsji1y1rksvjNachaIlk+GsW+ym71UFyoloT5Otuu
+         /Enr/KQn5HCoapLrPDF7CLfqwnj/w9WyHaX1T6dfreBLfnrC6V6QfUmC+yVIa8PF1//F
+         qUGcYDiyQud1qU8wsm6Kme7rtZo72hyaybZoxboFlTH7Xk++8TGc8bHP54Tm6XaaQ4v1
+         Y0cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=0i9A8W66RFfBxdwNrTea1JXD72yIeM0GMxTmhvajXzI=;
-        b=cm4ylJQA53VUi+swZyIzq6XXzgDdMGa8OLln6HI+DvjNdTSjShdI6VAE0E9w/nBQQJ
-         JoCOJ2ZYEhqhdvbx/xr3+6YQZjrowgsj4q+rvp1IawfhjXElFrMOXRVIza/es+yuCl46
-         8uunSSF3xAk7v6bHtWoC6PZmA9PcYbvoqDhiRhL1w6QE5G5O4gq/IyW2CssndKZBYqdE
-         XoyRWWNs3uvskZQZEVfxetZe0kOlEvaaOZ2XNaxpy3nCRyuyhl1iAISKrfW8OIu/LZF0
-         Yg0tH2a3VCWs6llNPxgsKTMnY43sghexD8OvkVXfDCZuMJmblD3HCiI7Ii+wY05pXZg2
-         FtRA==
-X-Gm-Message-State: AOAM532MP4r3UbGzQGe4r0AeyZ59Qa2Ok8pHxto8VGn5B+PBiwVTqRqw
-        LAYhzuJKyNk1TZ+X33ki/Fa1Xvec1hSU3A==
-X-Google-Smtp-Source: ABdhPJxj15twYNELKFv/DvQbdqi+sVmeml8x+5y/g9KL7w8MF4JoHUTULMHW1GL4blBmCwzKP5txLA==
-X-Received: by 2002:a05:6830:3116:: with SMTP id b22mr14638515ots.212.1635174498674;
-        Mon, 25 Oct 2021 08:08:18 -0700 (PDT)
-Received: from ?IPV6:2603:8090:2005:39b3::101e? (2603-8090-2005-39b3-0000-0000-0000-101e.res6.spectrum.com. [2603:8090:2005:39b3::101e])
-        by smtp.gmail.com with ESMTPSA id 95sm3597553otr.2.2021.10.25.08.08.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Oct 2021 08:08:18 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <e9098c0e-e1fe-5d65-c111-1607d0a6a1a7@lwfinger.net>
-Date:   Mon, 25 Oct 2021 10:08:16 -0500
+        bh=r3wknB51IB1YnTAJzsIFZkuKQE3RsPZNmcjzc4IBcDg=;
+        b=Y8247E9lCXQG5uIbhYac7y50hhClHPcf9jDCTrWBOWxGXgr3HxhtZAEBQQuaNmEUEH
+         q5+ClIk/PkXIuwd2xb/+JhIg5Hi5opSWhmefcO8iI/xNuNrpKMY0wHKMrN/U4zWBMIGY
+         pPCQOqviqq9jf1Li6DfYsUoXfI2ZcLpYlGQCb27c3aTFW+9d+P11V8vR8pNcfpzWxon6
+         3NGBpk1HVUHNqTh8YS7Bb5Q4Tl8r9hhvtNDbxy4wLkVbXT3sXfA8fc8GDGmSD0S/owNm
+         ThIjZ695aWF+U1wofKVfMLm6KL1ymBiU1eMO+I9ivib9qB+8+94quAXXGRDsuq8tZnv2
+         YEiA==
+X-Gm-Message-State: AOAM533OvaKTxaB5oZjA/iZVAEq2CA/sciq4z0JyR5fZg6DQT9Fqbxmc
+        lHu8uOsq0lkUuZNX/aduXvv6eA==
+X-Google-Smtp-Source: ABdhPJy0TLBHbJ825k86gTm3EtWbSekMuzP/+YvTPC6lXpchekFbsp+EVH5b+3G7gYTyRbdBAlJeRQ==
+X-Received: by 2002:a5d:4a12:: with SMTP id m18mr23677773wrq.203.1635174425787;
+        Mon, 25 Oct 2021 08:07:05 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id f20sm19173554wmq.38.2021.10.25.08.07.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Oct 2021 08:07:05 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, bjorn.andersson@linaro.org,
+        robh+dt@kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     wcheng@codeaurora.org, bryan.odonoghue@linaro.org
+Subject: [PATCH 0/6] Add pm8150b TPCM driver
+Date:   Mon, 25 Oct 2021 16:09:00 +0100
+Message-Id: <20211025150906.176686-1-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 2/2] staging: r8712u: fix control-message timeout
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
-        linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20211025120910.6339-1-johan@kernel.org>
- <20211025120910.6339-3-johan@kernel.org>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <20211025120910.6339-3-johan@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/25/21 07:09, Johan Hovold wrote:
-> USB control-message timeouts are specified in milliseconds and should
-> specifically not vary with CONFIG_HZ.
-> 
-> Fixes: 2865d42c78a9 ("staging: r8712u: Add the new driver to the mainline kernel")
-> Cc: stable@vger.kernel.org      # 2.6.37
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
->   drivers/staging/rtl8712/usb_ops_linux.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+This series adds a set of yaml and a driver to bind together the type-c and
+pdphy silicon in qcom's pm8150b block as a Linux type-c port manager.
 
-Acked-by: Larry Finger <Larry.Finger@lwfinger.net>
+As part of that we retire the existing qcom-pmic-typec driver and fully
+replicate its functionality inside of the new block with the additional
+pdphy stuff along with it.
 
-> 
-> diff --git a/drivers/staging/rtl8712/usb_ops_linux.c b/drivers/staging/rtl8712/usb_ops_linux.c
-> index 655497cead12..f984a5ab2c6f 100644
-> --- a/drivers/staging/rtl8712/usb_ops_linux.c
-> +++ b/drivers/staging/rtl8712/usb_ops_linux.c
-> @@ -494,7 +494,7 @@ int r8712_usbctrl_vendorreq(struct intf_priv *pintfpriv, u8 request, u16 value,
->   		memcpy(pIo_buf, pdata, len);
->   	}
->   	status = usb_control_msg(udev, pipe, request, reqtype, value, index,
-> -				 pIo_buf, len, HZ / 2);
-> +				 pIo_buf, len, 500);
->   	if (status > 0) {  /* Success this control transfer. */
->   		if (requesttype == 0x01) {
->   			/* For Control read transfer, we have to copy the read
-> 
+An additional series will follow this one for the SoC and RB5 dtsi and dts
+respectively.
+
+A bootable series can be found here
+
+Link: https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=usb-next-25-10-21-pm8150b-tcpm
+
+Bryan O'Donoghue (6):
+  dt-bindings: usb: Add qcom,pmic-usb-typec dt-binding header
+  dt-bindings: usb: Add Qualcomm PMIC type C controller YAML schema
+  dt-bindings: usb: Add qcom,pmic-usb-pdphy dt-binding header
+  dt-bindings: usb: Add Qualcomm PMIC PDPHY controller YAML schema
+  dt-bindings: usb: Add Qualcomm PMIC TCPM YAML schema
+  usb: typec: qcom: Add pm8150b TCPM driver
+
+ .../bindings/usb/qcom,pmic-pdphy.yaml         | 115 ++++
+ .../bindings/usb/qcom,pmic-tcpm.yaml          | 110 ++++
+ .../bindings/usb/qcom,pmic-typec.yaml         | 116 ++++
+ MAINTAINERS                                   |   8 +
+ drivers/usb/typec/Makefile                    |   1 -
+ drivers/usb/typec/qcom-pmic-typec.c           | 262 --------
+ drivers/usb/typec/tcpm/Kconfig                |  11 +
+ drivers/usb/typec/tcpm/Makefile               |   1 +
+ .../usb/typec/tcpm/qcom/qcom_pmic_tcpm_core.c | 345 ++++++++++
+ .../typec/tcpm/qcom/qcom_pmic_tcpm_pdphy.c    | 577 +++++++++++++++++
+ .../typec/tcpm/qcom/qcom_pmic_tcpm_pdphy.h    |  85 +++
+ .../typec/tcpm/qcom/qcom_pmic_tcpm_typec.c    | 593 ++++++++++++++++++
+ .../typec/tcpm/qcom/qcom_pmic_tcpm_typec.h    | 163 +++++
+ .../usb/typec/tcpm/qcom,pmic-usb-pdphy.h      |  18 +
+ .../usb/typec/tcpm/qcom,pmic-usb-typec.h      |  18 +
+ 15 files changed, 2160 insertions(+), 263 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-pdphy.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-tcpm.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
+ delete mode 100644 drivers/usb/typec/qcom-pmic-typec.c
+ create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_tcpm_core.c
+ create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_tcpm_pdphy.c
+ create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_tcpm_pdphy.h
+ create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_tcpm_typec.c
+ create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_tcpm_typec.h
+ create mode 100644 include/dt-bindings/usb/typec/tcpm/qcom,pmic-usb-pdphy.h
+ create mode 100644 include/dt-bindings/usb/typec/tcpm/qcom,pmic-usb-typec.h
+
+-- 
+2.33.0
 
