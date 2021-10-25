@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 550B6439CC4
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 19:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B396439CE1
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 19:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234177AbhJYRGp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Oct 2021 13:06:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56708 "EHLO mail.kernel.org"
+        id S234863AbhJYRHI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Oct 2021 13:07:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55940 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234640AbhJYRDz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 25 Oct 2021 13:03:55 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AD11560F70;
-        Mon, 25 Oct 2021 17:01:17 +0000 (UTC)
+        id S234459AbhJYREO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 25 Oct 2021 13:04:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 69B13610D2;
+        Mon, 25 Oct 2021 17:01:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635181278;
-        bh=yAUPeMRMR5WBXzQ+VGOAyFWKkfCcGA1CA7S0hx/Gdls=;
+        s=k20201202; t=1635181290;
+        bh=400Nh6Ud5p6IB0VRpwhYfffj5ss6oI+bK9BzysJ6Fis=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e9XQsdcYouWZgnR3sbK/V9UGAANy5NGhrImR6biQ4epPal848E6sOTx/ciURvZha/
-         +T1apMmE20OP6BePV/O2Z0RfFfvZkb+pu9UbjZQnskcrb5bQurWISWC04L1TsF1KU9
-         e1zbKJsPg/9IMnblr5AJX5rO2utrroMHC31kkj7mT8BC8Uwg97hETqyIVJ1CArgmqD
-         O2uMc+1AcKgftcqPeZ3n4Xs5t+AxkQSR4KpR9l7GXhr64S93w4FTUxI/5OHqliHGVA
-         J8f/S0mNzMwKfJr8aK2cM1DA3Ak/rYqwpDqzu2s6pNsP8mGXyOQU7hNJkXrDSgnxL+
-         7GGunpZ7tF8Uw==
+        b=rkc7qW5sC5ynkXgsd5L3fIeQKYz5oJMUiUJT7IvuzlkJoWUDFovjUpoMq8y/X+b+W
+         T7xazzTr1mRo0uB0xDrGyfN6gpinkBXTwu7sjPYrYpZtOkhqEiMEAH2LsU/vM+IacF
+         VOCY8sUyI9+cz8Kgr7ZXadpDSOyxMjQbJsPbUT3lZZE3DLSRQHoE3vKUpsOPT2n2f+
+         HGJXCbzBI5qaYoXWJbcsjWMaX/BCnz/rGzVV27FiuxZqMqzbhceNRgmksSWOlme6CC
+         zNcM8YvtdbkRsgsNLNXBqG2OoAAlGNVrZXcRHedSSQ3BQeBkm+eJ9fMkG5/DJzzd9Z
+         jfgYIHnyO7CAw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Oliver Neukum <oneukum@suse.com>,
@@ -31,12 +31,12 @@ Cc:     Oliver Neukum <oneukum@suse.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
         netdev@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 6/7] usbnet: sanity check for maxpacket
-Date:   Mon, 25 Oct 2021 13:01:01 -0400
-Message-Id: <20211025170103.1394651-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 6/7] usbnet: sanity check for maxpacket
+Date:   Mon, 25 Oct 2021 13:01:19 -0400
+Message-Id: <20211025170120.1394792-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211025170103.1394651-1-sashal@kernel.org>
-References: <20211025170103.1394651-1-sashal@kernel.org>
+In-Reply-To: <20211025170120.1394792-1-sashal@kernel.org>
+References: <20211025170120.1394792-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -65,10 +65,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+)
 
 diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index 84b354f76dea..0598bc7aff89 100644
+index cb9a18eda798..1703da29bdee 100644
 --- a/drivers/net/usb/usbnet.c
 +++ b/drivers/net/usb/usbnet.c
-@@ -1784,6 +1784,10 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
+@@ -1788,6 +1788,10 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
  	if (!dev->rx_urb_size)
  		dev->rx_urb_size = dev->hard_mtu;
  	dev->maxpacket = usb_maxpacket (dev->udev, dev->out, 1);
