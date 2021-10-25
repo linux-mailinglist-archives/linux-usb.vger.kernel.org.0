@@ -2,124 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC632439985
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 17:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C078D4399A3
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 17:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233666AbhJYPD5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Oct 2021 11:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
+        id S233762AbhJYPJV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Oct 2021 11:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233723AbhJYPDy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 11:03:54 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63343C061745;
-        Mon, 25 Oct 2021 08:01:32 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id e59-20020a9d01c1000000b00552c91a99f7so15358528ote.6;
-        Mon, 25 Oct 2021 08:01:32 -0700 (PDT)
+        with ESMTP id S233672AbhJYPJV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 11:09:21 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01840C061745;
+        Mon, 25 Oct 2021 08:06:59 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id s9so15973882oiw.6;
+        Mon, 25 Oct 2021 08:06:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=A+S3HWQ2cNdNT0gvOR7pkAfIyvaWrJTHlMu3SNcQ49M=;
-        b=eL5A9ckMmevcxpm0fssgqeCaYIczduVUZdVHZroOjCafLyKFo8dawBJXm4JdkwAcOj
-         +VfO8SkAERS5rr7b8zsOKUonnAi/2ov+/bIZ2AeIEtCIYqN2Vf/+DROKQdNQhotwcXX/
-         aMowPnoeJT/g7bYOla+kQMWih8p3h2lU00o43ZsSliRsRBCoxrDwcujryOAcpU61iY4Y
-         xXBiCPgByYZU83Q/S5frJbiY9npvI8UbVlJu1XpNwdwGZCc9kpr0sktCVbE8XNH+QANx
-         FYVJ1nPUuEJfj7fpyrrkIndOL5y/yYUqaY+C5g2ILhJNY19XfFWS1yhpB+jWrI+AxRza
-         WUfw==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oM8yA7a5dVE7JX8EcdvOiaf5ULOdCzfUf0V8tBfwui4=;
+        b=ER0GMacpTnOTj7tzZfbyTloQJCQVh+rQsBqHcRfmmYdWOumvJXTe2HsV5ap6NC5GvJ
+         aeMQktuglIYN7hDPxydn1Iq0XD8omM7TtYKFZTOB10t3OnlX5P+aPxMUthsIyTFSB4Cp
+         GRX/YsZkRm3799hkSHKK7TsH338+CWVDoHp4rDR9/nDz6CYKygOMy5HPrXmrU8UlCfPZ
+         ++1UzUoUGZ6tVgfI98SoCmh1srXoqE8q0xYkPx6z8ZweOgZuS5l4XQAoS5LqbfwALSpq
+         +e6RhL7ppbzVGken8xBQ6Z6jmBIbUYNLgPqTIu57s/Pl/QtrX4eW34x2GMz+XSNwkC+F
+         YqtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=A+S3HWQ2cNdNT0gvOR7pkAfIyvaWrJTHlMu3SNcQ49M=;
-        b=kF1j1Rb9OpdAY4si8/ojQqyB3wEvxIofW6aVOGou+z6zlnc7GFOoTRTXWwFhUbTV+s
-         OCvy8S/khH+dwsdxBV8jwZpLW7WaeRnjkghQeOrBFTz43bJTaFbOZsPGi2BNEtKh8kuA
-         KuxZlM5uV4FLBN+b4YAhXeSHIaZs6SUXH6WIe2HBRQlxv/JwM87xOPHokQLkp2y+CddQ
-         +OllrwL00pxCp6a+ZAar3fKejTvS2ohbC8VxJjo7CmzFCbqpVDnjTNutOQXvPfkrFhvf
-         Ku+gNZEXglhlRtx+5AaDYvwJeCrNBC/zORQjLLq0d7xa1k5hvCxe47pFDxiL/Svu67Fu
-         mGyA==
-X-Gm-Message-State: AOAM531nx/OysbODs2CYtkV1dm/NVFcQshdbKiRUEyCJnYihy7unFbXe
-        Tn5g+6czlOOe9B1Re1yiNNlbTx6oOwyUQW4qJSA=
-X-Google-Smtp-Source: ABdhPJz5eN6QcT3GBTj2brE49su666LdeEUlL09hFdmLlFt8g5OXuYW5ycMDZcMOcStrzrL23zF73DIKaykQbgspG7c=
-X-Received: by 2002:a9d:70c4:: with SMTP id w4mr13843313otj.170.1635174090284;
- Mon, 25 Oct 2021 08:01:30 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oM8yA7a5dVE7JX8EcdvOiaf5ULOdCzfUf0V8tBfwui4=;
+        b=qsACwUOcDAMfOeW0ym2FVoXOvh9D1bEAnDV2JbgHtcZNBZdB8IWqOyQE/VsdeJru8w
+         BpiiPPX9PEElV/aNuf0u6gNFbjyi1NfxQf1j6SRR3rdpGO835uIVNVa5Wk0ngDNYp54x
+         amnZ/V9hJgh4wyJ3ugptpNZvPkAVSJE77+2un/XHz5Mq2MJb+dOOp8sq4x9lYJO9P7m5
+         TltnIPnCHeIhA1lDiC4GErIl1e0eIuVHG9Ay0GvtMXhfefLop0pkPf7yFWWbHbAartgE
+         vCjO5YsGcVS/tR+pzdBTwNBOWnBuKs0juWD8aBq2w4MIFNfLV35n5UM7Rj7LBEkGL11N
+         txaw==
+X-Gm-Message-State: AOAM530rF54s3uw5ns+h+Lv149N1PfVhKSvUqXUSJqWGntPHdXxbz4pl
+        46EaNVGO5pixaAdH+/xWGIY=
+X-Google-Smtp-Source: ABdhPJx7eHOV/Rj1dfcQbb+E4YkvGmIM8cWShmj+USs3dQQxpyMHv1C8wOTSbiYJDcuOPvRBc8Cdzw==
+X-Received: by 2002:aca:ac82:: with SMTP id v124mr23639856oie.0.1635174418293;
+        Mon, 25 Oct 2021 08:06:58 -0700 (PDT)
+Received: from ?IPV6:2603:8090:2005:39b3::101e? (2603-8090-2005-39b3-0000-0000-0000-101e.res6.spectrum.com. [2603:8090:2005:39b3::101e])
+        by smtp.gmail.com with ESMTPSA id bk8sm3803285oib.57.2021.10.25.08.06.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Oct 2021 08:06:57 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Message-ID: <fdb677be-6e06-fef9-811d-bb2c71246197@lwfinger.net>
+Date:   Mon, 25 Oct 2021 10:06:56 -0500
 MIME-Version: 1.0
-Received: by 2002:a9d:4b15:0:0:0:0:0 with HTTP; Mon, 25 Oct 2021 08:01:29
- -0700 (PDT)
-In-Reply-To: <8c3cd8f7-0bd1-0ec4-2f58-6122ae7ef270@linux.intel.com>
-References: <20211008092547.3996295-5-mathias.nyman@linux.intel.com>
- <20211022105913.7671-1-youling257@gmail.com> <CAOzgRdY8+Wm-Ane==RQTvEe4aKa40+h1VF9JSg8WQsm-XH0ZCw@mail.gmail.com>
- <8c3cd8f7-0bd1-0ec4-2f58-6122ae7ef270@linux.intel.com>
-From:   youling 257 <youling257@gmail.com>
-Date:   Mon, 25 Oct 2021 23:01:29 +0800
-Message-ID: <CAOzgRdb2MK5mVonatO7t9DcXwtK=MbDwdWreR+6dpqvEv7R0Fw@mail.gmail.com>
-Subject: Re: [PATCH 4/5] xhci: Fix command ring pointer corruption while
- aborting a command
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        pkondeti@codeaurora.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 1/2] staging: rtl8192u: fix control-message timeouts
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
+        linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20211025120910.6339-1-johan@kernel.org>
+ <20211025120910.6339-2-johan@kernel.org>
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+In-Reply-To: <20211025120910.6339-2-johan@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-test this patch suspend resume usb can work.
+On 10/25/21 07:09, Johan Hovold wrote:
+> USB control-message timeouts are specified in milliseconds and should
+> specifically not vary with CONFIG_HZ.
+> 
+> Fixes: 8fc8598e61f6 ("Staging: Added Realtek rtl8192u driver to staging")
+> Cc: stable@vger.kernel.org      # 2.6.33
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
+>   drivers/staging/rtl8192u/r8192U_core.c | 18 +++++++++---------
+>   1 file changed, 9 insertions(+), 9 deletions(-)
 
-2021-10-25 19:21 GMT+08:00, Mathias Nyman <mathias.nyman@linux.intel.com>:
-> Hi
->
->>> This patch cause suspend to disk resume usb not work, xhci_hcd
->>> 0000:00:14.0:
->>> Abort failed to stop command ring: -110.
->
-> Thanks for the report, this is odd.
->
-> Could you double check that by reverting this patch resume start working
-> again.
->
-> If this is the case maybe we need to write all 64bits before this xHC
-> hardware reacts to
-> CRCR register changes.
->
-> Maybe following changes on top of current patch could help:
->
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 311597bba80e..32665637d5e5 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -366,7 +366,7 @@ static void xhci_handle_stopped_cmd_ring(struct xhci_hcd
-> *xhci,
->  /* Must be called with xhci->lock held, releases and aquires lock back */
->  static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
->  {
-> -	u32 temp_32;
-> +	u64 crcr;
-> 	int ret;
->
-> 	xhci_dbg(xhci, "Abort command ring\n");
-> @@ -375,13 +375,15 @@ static int xhci_abort_cmd_ring(struct xhci_hcd *xhci,
-> unsigned long flags)
->
-> 	/*
-> 	 * The control bits like command stop, abort are located in lower
-> -	 * dword of the command ring control register. Limit the write
-> -	 * to the lower dword to avoid corrupting the command ring pointer
-> -        * in case if the command ring is stopped by the time upper dword
-> -	 * is written.
-> +	 * dword of the command ring control register. Some hw require all
-> +	 * 64 bits to be written, starting with lower dword.
-> +	 * Make sure the upper dword is valid to avoid corrupting the command
-> +	 * ring pointer in case if the command ring is stopped by the time upper
-> +	 * dword is written.
-> 	 */
-> -	temp_32 = readl(&xhci->op_regs->cmd_ring);
-> -	writel(temp_32 | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
-> +	crcr = xhci_trb_virt_to_dma(xhci->cmd_ring->deq_seg,
-> +				    xhci->cmd_ring->dequeue);
-> +	xhci_write_64(xhci, crcr | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
->
-> 	/* Section 4.6.1.2 of xHCI 1.0 spec says software should also time the
-> 	 * completion of the Command Abort operation. If CRR is not negated in 5
->
-> -Mathias
->
+I would have preferred that you not use the magic number "500", but the patch is OK.
+
+Acked-by: Larry Finger <Larry.Finger@lwfinger.net>
+
+Larry
+
+> 
+> diff --git a/drivers/staging/rtl8192u/r8192U_core.c b/drivers/staging/rtl8192u/r8192U_core.c
+> index b6698656fc01..cf5cfee2936f 100644
+> --- a/drivers/staging/rtl8192u/r8192U_core.c
+> +++ b/drivers/staging/rtl8192u/r8192U_core.c
+> @@ -229,7 +229,7 @@ int write_nic_byte_E(struct net_device *dev, int indx, u8 data)
+>   
+>   	status = usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
+>   				 RTL8187_REQ_SET_REGS, RTL8187_REQT_WRITE,
+> -				 indx | 0xfe00, 0, usbdata, 1, HZ / 2);
+> +				 indx | 0xfe00, 0, usbdata, 1, 500);
+>   	kfree(usbdata);
+>   
+>   	if (status < 0) {
+> @@ -251,7 +251,7 @@ int read_nic_byte_E(struct net_device *dev, int indx, u8 *data)
+>   
+>   	status = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
+>   				 RTL8187_REQ_GET_REGS, RTL8187_REQT_READ,
+> -				 indx | 0xfe00, 0, usbdata, 1, HZ / 2);
+> +				 indx | 0xfe00, 0, usbdata, 1, 500);
+>   	*data = *usbdata;
+>   	kfree(usbdata);
+>   
+> @@ -279,7 +279,7 @@ int write_nic_byte(struct net_device *dev, int indx, u8 data)
+>   	status = usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
+>   				 RTL8187_REQ_SET_REGS, RTL8187_REQT_WRITE,
+>   				 (indx & 0xff) | 0xff00, (indx >> 8) & 0x0f,
+> -				 usbdata, 1, HZ / 2);
+> +				 usbdata, 1, 500);
+>   	kfree(usbdata);
+>   
+>   	if (status < 0) {
+> @@ -305,7 +305,7 @@ int write_nic_word(struct net_device *dev, int indx, u16 data)
+>   	status = usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
+>   				 RTL8187_REQ_SET_REGS, RTL8187_REQT_WRITE,
+>   				 (indx & 0xff) | 0xff00, (indx >> 8) & 0x0f,
+> -				 usbdata, 2, HZ / 2);
+> +				 usbdata, 2, 500);
+>   	kfree(usbdata);
+>   
+>   	if (status < 0) {
+> @@ -331,7 +331,7 @@ int write_nic_dword(struct net_device *dev, int indx, u32 data)
+>   	status = usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
+>   				 RTL8187_REQ_SET_REGS, RTL8187_REQT_WRITE,
+>   				 (indx & 0xff) | 0xff00, (indx >> 8) & 0x0f,
+> -				 usbdata, 4, HZ / 2);
+> +				 usbdata, 4, 500);
+>   	kfree(usbdata);
+>   
+>   	if (status < 0) {
+> @@ -355,7 +355,7 @@ int read_nic_byte(struct net_device *dev, int indx, u8 *data)
+>   	status = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
+>   				 RTL8187_REQ_GET_REGS, RTL8187_REQT_READ,
+>   				 (indx & 0xff) | 0xff00, (indx >> 8) & 0x0f,
+> -				 usbdata, 1, HZ / 2);
+> +				 usbdata, 1, 500);
+>   	*data = *usbdata;
+>   	kfree(usbdata);
+>   
+> @@ -380,7 +380,7 @@ int read_nic_word(struct net_device *dev, int indx, u16 *data)
+>   	status = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
+>   				 RTL8187_REQ_GET_REGS, RTL8187_REQT_READ,
+>   				 (indx & 0xff) | 0xff00, (indx >> 8) & 0x0f,
+> -				 usbdata, 2, HZ / 2);
+> +				 usbdata, 2, 500);
+>   	*data = *usbdata;
+>   	kfree(usbdata);
+>   
+> @@ -404,7 +404,7 @@ static int read_nic_word_E(struct net_device *dev, int indx, u16 *data)
+>   
+>   	status = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
+>   				 RTL8187_REQ_GET_REGS, RTL8187_REQT_READ,
+> -				 indx | 0xfe00, 0, usbdata, 2, HZ / 2);
+> +				 indx | 0xfe00, 0, usbdata, 2, 500);
+>   	*data = *usbdata;
+>   	kfree(usbdata);
+>   
+> @@ -430,7 +430,7 @@ int read_nic_dword(struct net_device *dev, int indx, u32 *data)
+>   	status = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
+>   				 RTL8187_REQ_GET_REGS, RTL8187_REQT_READ,
+>   				 (indx & 0xff) | 0xff00, (indx >> 8) & 0x0f,
+> -				 usbdata, 4, HZ / 2);
+> +				 usbdata, 4, 500);
+>   	*data = *usbdata;
+>   	kfree(usbdata);
+>   
+> 
+
