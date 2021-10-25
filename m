@@ -2,86 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 141C1439209
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 11:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B58A43946F
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 13:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbhJYJKk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Oct 2021 05:10:40 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:36225 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232479AbhJYJKh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 05:10:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1635152896; x=1666688896;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=P4bXBTYrltaXp9PhngK0POqzvllY4fXOthFXfnrTvcA=;
-  b=rI0SSz027FZKTXm2hRUPFPwHSc5Bq8wiZQjF2da+eaGt7Yjf562/U6Ox
-   a6yujMW5r0RgILeBQcla89+n4wM7T+WNdYjsctiFyox9A2MShHUCdunLF
-   QEkpfgfnQqt0b9UCNcAoPLb1WzFKl0zvzkltNw5CtkhTeeF/jrtyppUTn
-   4=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 25 Oct 2021 02:08:16 -0700
-X-QCInternal: smtphost
-Received: from nalasex01a.na.qualcomm.com ([10.47.209.196])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2021 02:08:15 -0700
-Received: from c-sanm-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Mon, 25 Oct 2021 02:08:09 -0700
-From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: [PATCH v2 3/3] arm64: dts: qcom: sc7280: Add cx power domain support
-Date:   Mon, 25 Oct 2021 14:37:31 +0530
-Message-ID: <1635152851-23660-4-git-send-email-quic_c_sanm@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1635152851-23660-1-git-send-email-quic_c_sanm@quicinc.com>
-References: <1635152851-23660-1-git-send-email-quic_c_sanm@quicinc.com>
+        id S232680AbhJYLHD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Oct 2021 07:07:03 -0400
+Received: from mga18.intel.com ([134.134.136.126]:17048 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232525AbhJYLHD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 25 Oct 2021 07:07:03 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10147"; a="216533558"
+X-IronPort-AV: E=Sophos;i="5.87,180,1631602800"; 
+   d="scan'208";a="216533558"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2021 04:04:41 -0700
+X-IronPort-AV: E=Sophos;i="5.87,180,1631602800"; 
+   d="scan'208";a="496751709"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2021 04:04:38 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 25 Oct 2021 14:04:36 +0300
+Date:   Mon, 25 Oct 2021 14:04:35 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Subject: [GIT PULL] Thunderbolt/USB4 changes for v5.16 merge window
+Message-ID: <YXaPQ1p8c6PfTiOh@lahna>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add multi pd support to set performance state for cx domain
-to maintain minimum corner voltage for USB clocks.
+Hi Greg,
 
-Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
----
-v2:
-Changed rpmhd_opp_svs to rmphd_opp_nom for cx domain.
+The following changes since commit 5816b3e6577eaa676ceb00a848f0fd65fe2adc29:
 
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+  Linux 5.15-rc3 (2021-09-26 14:08:19 -0700)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index d74a4c8..9e3b6ad 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2538,7 +2538,8 @@
- 			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
- 					  "dm_hs_phy_irq", "ss_phy_irq";
- 
--			power-domains = <&gcc GCC_USB30_PRIM_GDSC>;
-+			power-domains = <&rpmhpd SC7280_CX>, <&gcc GCC_USB30_PRIM_GDSC>;
-+			required-opps = <&rpmhpd_opp_svs>, <>;
- 
- 			resets = <&gcc GCC_USB30_PRIM_BCR>;
- 
--- 
-2.7.4
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v5.16-rc1
+
+for you to fetch changes up to 0a0624a26f9ceb8aae16882d87dc3b12f17f4a49:
+
+  thunderbolt: Fix -Wrestrict warning (2021-09-28 12:28:54 +0300)
+
+----------------------------------------------------------------
+thunderbolt: Changes for v5.16 merge window
+
+This includes following Thunderbolt/USB4 changes for the v5.16 merge
+window:
+
+  * Re-enable retry logic for control packets in domain needed by some
+    controllers when software connection manager is being used
+  * Fix -Wrestrict build warning emitted by gcc-11.
+
+Both have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      thunderbolt: Fix -Wrestrict warning
+
+Sanjay R Mehta (1):
+      thunderbolt: Enable retry logic for intra-domain control packets
+
+ drivers/thunderbolt/ctl.c     | 2 +-
+ drivers/thunderbolt/xdomain.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
