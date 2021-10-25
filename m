@@ -2,95 +2,354 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BFE439F06
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 21:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C90BE43A467
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 22:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233670AbhJYTOP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Oct 2021 15:14:15 -0400
-Received: from sonic309-25.consmr.mail.ir2.yahoo.com ([77.238.179.83]:36930
-        "EHLO sonic309-25.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233262AbhJYTOO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 15:14:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1635189110; bh=QyWIY6pEFThT88EmytgW3yM/+P9YYjDpyIPGVYXm+tM=; h=Date:From:Reply-To:To:Cc:Subject:References:From:Subject:Reply-To; b=ST9YuZN61sCCTCjyKHLQvXfFFWerV4cX/Xc7GhEPxRyEzToikwWVQBbyvezT3IKzJEoROgkoKopo6OkiB+OFakSqgiT90fHpn6zS8g2WSNGNc/sItDC8L51Dkz9mjJ3c/ef6+gzaHvCKfARGnwjjh0bCfUXM7vDD0bstve2Cc04Qmh+XAGaC65fPNlMNWyNxapT8IB4sSuSWhLpcISVWHw2Xv8Sw/+119/ATzo6yVpLcZxnH9Arg0Q3blCCme9PXmC6jhhI5Hcl+nhauq/juoh1Z1KHv80qMFuAAyc4hXyN8gDdt4gyGbVHNR3d8yVMoJk7IynP74o+yfVhF1KiaKw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1635189110; bh=Cq39qSqfTeWmVg6oNBLor6POweV0lByIP133EdmOiLV=; h=X-Sonic-MF:Date:From:To:Subject:From:Subject; b=Ddpq5qd/pnWPkdCisdgpzdA6IuQTrJtlv0krjZ6NQVfwqMxQi2JLN/DWUcWjSHBQguEAD//CRwNbdXysHEWQ51jD+tw8DRoyRigfikKxP/6IAcwkXEy94BtfWuoOD2hRDQKgp2b6GyXkg7G6qlmT8S0y+B8l+QmKMt5e10QoVKN0kdSJCXUa1kd6o683100C98FPHA0aVj+QaBVQu45seSEywfie5hvBEl5n6yjDtClxDb0BeI/2lg9eUz7hk5PXYFQTopk49JYlut1Q0aVZEKbzvJKSTUpTxc52YBhFJlJo0r5vSaJmKQ6HQxutgO2DMQibWr7Cf58wN4UDaleFPw==
-X-YMail-OSG: wZpuMPMVM1l2cetFGc7mNoBKWkuIVK9kqE6Yon.rxu.pIu.DwQ4oEW9_NyDGsL1
- O7KpEkJhQ1Rk3u_6eJm3NJJxa.tgsVrRKlczSEIAL.2FgZpbXvePEFUEbo434.rvfGukyGe3vdgU
- yM86Mg9xeqhC6o8Y0VZ209dRhxjsvOtUC6ir0czcCZaKSFzscVD.jDEUkmUA.Mva5XITmn1H6vyb
- XxO9jR4pvRYa1kSqvUe8YA9do1knHe6WK9GprNo7yNY_VJQEZEgBHV10W0CRlFsDH40C2XEMAK9x
- WW3Y7O15e99dLDhCZteSiQm_sHr8POgaaiCWSfSaCdjKM445YSetsmtH_i8dZaYx4p3FFvbKyMw.
- 3iJNjz8AJUz4zovNLjPJcJ16mWKIxzHzAsFRgDA9QxoHMCWJ.5ojXRWMUbQmT9qIqnFAyAVTniQd
- 46Xx5gQUbG9IqHASAJIEIhUIXG1povZncbPmsGa4iqHaN1wUDedQO8aXGI4dP2eWYgBEK6TC4UW9
- 4JBx4u1cmMSFbW8ODTs07.XVwDPWeRHnpIZVFzdGvwzAnML35LkRD5EkhGuGpbzfQzMFHnIbH7pY
- iSHDabSx90CAM4eOKyq0ewj0.pzVib4hPh.6QrTN6AgLjeX7y_8Xmb1isneAAuSnxkz0BeCYP0k5
- U715WKWVTM0uYUyTwZuRdMr5lqyUSAA_Nc4Ata16CwS.6D1C4nFon5WlizbLNdcvWODcYEEXaRep
- TjcEWRrE5GcAYB.R037lo9ZC5ilU.PcO58m0_vsZ8gxtYpv3ZNuSwT8xmR9dNybbFdNL_5d7DBfp
- guVUB5tkhG9I2NdSWbp4AaBPswfyBE7GWK_kdxWnXPLWKVQ_C9k6x6DpRRUJwFcTZIDoVCQiqh8g
- rV7quxfSeAgnQyp.URW1O2USv_mZxRfya1WYwCDl2YDIvp8DpwF9uOkHaA_95SzJPMDX65gHGwdM
- FNqx.HG3Sp8wizscQPNs5BlwZ3Gkwe6FGSvwm53Ff1DPVWsb7XUUxEoVE3gPCxK.hdnl0lRoksAj
- MzOhHZTDe7DupUnaxf5Z37Q2W4zWECXBpwAgUreOcCj.gJgPaoAwlSUFuCW3j2UUz24EWYlwZMnF
- ifQ6TXxxOjfaYQRHXVkwQGLk_dPOm6IVkbfZs8SRD3VCpAJ1JG4wQ8njDiir9ohdD3HdUJWQqjON
- tlc0UcbEUJU4rmh0rfca.otUFPMqAe23JrMo71lV8jQHid4Vd7NU42NsO5ryOQOKbeTKSsc5vVHO
- ZfdoFNh63ChxJPtiH1TvHzNRV.D1SZVosQjXvXdys7fJ._PLRf18EJiR_NWXtJGypWeCksYQQy7d
- Cqojjout3UWrY2q6EROlFZBVU.poDE0KsJgXJOCLZYpvEawKQFPBP_ta2yh7lgq45L_K1XMRK88y
- 5tybubE_JorZUgYEHjK81Ug3alAchmbTpYoJq2o0StCI9uFFaZeMHgrrefKR4E5UJfNmBiGiOXt8
- Uf02p.CK0hThptNovxM3DIIztZwxLdXW.4ayUr2iNmeyYDXnuuTtd99tp83wZk8D1eq9vu0yB44Z
- W2hqWQJKYy3UVE8HqMrf5CUc5j2o_BKYKJe.gEgga8pIzKsJNH4BIg3AWkwfmQRteFv240aQ6Vr1
- IBhLtuLUeSvK8HbHZrN3Dq0V.fZPar.qQDQc5lPUu0N7_7rWpBBKE1wue7dH_gxMXq7uWOBe3yiR
- Tf2yuw0MA78y3adtsvsNc.uWNEoV.4Y8_LVUt9Q2OugxXmbzbBdGTKrdONXbLiBTmC0GO09qhmZf
- ro5dkPEv9Wna5i.N_FaLAOC_iwjdwVa4lJujGLt7lFdhjwckyR8MnSHCtmTFrHLFHf2Hvo3NsQAb
- geDTOS7EXR2.2ILlabwtoJYv4669Jm7eWYnzfXGtydaDpXPhh5_D.qWC0iUtxNEAX8F.qKBhy1BT
- oeqtl17Z86yHo8p2jQ4PVj6PHK6p17LoID0mfTyLJ_mYqfX97O0L6O30J1iPY0tx6kTY4SEW9Lrw
- YtTZ9w3IaFDzq.ctpboJcvQpYIWi4yZAtJPVjwu_fBULHuYjB5QACGRtk4sjCYHHmnxtuSx6G.Zd
- xyxwI9tDGoZSYEYYrf6INtbVLYKMJijyHeQRfrvAPhLfGbOIGSPw011N5GRuS8jjiRO.jUrc2Re4
- uwqJhnuS2iwB9AESoD1XSjEj6GZGTh31OM.uor7P0lKz5fbe_r4SkIi4SpQgb8hpIg6719Ltwply
- Mo8YQxBLk9S4CJ32YBkSarvSeaQX4G1XK_KkYp6foEaorWT2OjnvPZLMzbzR3G7W8bDlKgiAJKDB
- jSRc-
-X-Sonic-MF: <htl10@users.sourceforge.net>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ir2.yahoo.com with HTTP; Mon, 25 Oct 2021 19:11:50 +0000
-Date:   Mon, 25 Oct 2021 19:11:50 +0000 (UTC)
-From:   Hin-Tak Leung <htl10@users.sourceforge.net>
-Reply-To: htl10@users.sourceforge.net
-To:     Johan Hovold <johan@kernel.org>, Kalle Valo <kvalo@codeaurora.org>
-Cc:     Herton Ronaldo Krzesinski <herton@canonical.com>,
-        Larry Finger <larry.finger@lwfinger.net>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Siva Rebbagondla <siva8118@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>, stable@vger.kernel.org
-Message-ID: <1202359771.1685642.1635189110010@mail.yahoo.com>
-Subject: Re: [PATCH 3/4] rtl8187: fix control-message timeouts
+        id S238302AbhJYUY7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Oct 2021 16:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234784AbhJYUYw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 16:24:52 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E36DC061235
+        for <linux-usb@vger.kernel.org>; Mon, 25 Oct 2021 13:06:19 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id s19so11389172ljj.11
+        for <linux-usb@vger.kernel.org>; Mon, 25 Oct 2021 13:06:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=Ig1GCYbIg39Pd8FwpsqdMUZmIWBhojlLu+bmwd2SsfA=;
+        b=PsU7mXvgw3EchF9dJ/XGiBtJjcJbmYTkAS/nutgztb1QkyyK5aHdNlFe91tIZhlbuT
+         aytE4ooggt9aMGHUW9mxABHvDYaLOAXQYOO35jSdE80IKqir9Qb2ok9bOsU/fNQURpNv
+         e9dwBOytLWD5VqVXxtUNaHyxWLUJG2wuolrklgFgoL0jhhCXUNszV+FgyhuzKpU8d1aj
+         BYhu9n0itpvGB4w7n9qYeVtTsehIZ6kf1yR/hBfCofoo1r6i0E2rN0SYXIdWhoLox4C/
+         bRKVpnZeKTxS090Zx273x4e+YHhpgWdyrP7R4QgrD15W825zLgdhXWusW2XUuM5S2dLL
+         dJQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=Ig1GCYbIg39Pd8FwpsqdMUZmIWBhojlLu+bmwd2SsfA=;
+        b=Mb7Dywmn9y7EUizm5DYYdMlmE3WSSbUbX2JONmGaNTr8rw3jofFc7ZYKeAm5UA37GS
+         +OwLZEtpcq+9/PrTh7CitJ+DnDxxuYSnZGoXNYLK8aijCnleyZXY5lKp9Tin3GkP5miO
+         HktVasPmjsjSW20OWFmVFavwkUOTJXli+ZzGRQFg5fPH01TzTth3vnQpTeIwgAG+HlNu
+         LzxGa6UY5UoDvwgzaLKexlwcBI3DkOuhOWSq6EE6wrv4SQ7AeaecoCuDCD6SZNKQd4y8
+         56U6QF4XFmMrGvsyn8Pp5+Y455ILxWy4sVOBHRX9TwoxwIjXLTubkHVxK6phevcKSuJ9
+         NLjQ==
+X-Gm-Message-State: AOAM530TUHDN14nxMeZSua8HjcrN+KcLkyEeeczF8+fR1GsB3/4lvLPD
+        XSfK778pU2GyBNdRtT1HOWf/Zlun7tA=
+X-Google-Smtp-Source: ABdhPJx1AGPBdStlzEQu3SmppAWXuTNBfPVeCMNrfWHWyt8ezwCX8OoMxm3QBCVZLhT42jnelFvsIQ==
+X-Received: by 2002:a2e:a5c9:: with SMTP id n9mr20863996ljp.512.1635192377931;
+        Mon, 25 Oct 2021 13:06:17 -0700 (PDT)
+Received: from dell-precision-T3610 (h-155-4-132-193.NA.cust.bahnhof.se. [155.4.132.193])
+        by smtp.gmail.com with ESMTPSA id i10sm1730465lfu.272.2021.10.25.13.06.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Oct 2021 13:06:17 -0700 (PDT)
+Date:   Mon, 25 Oct 2021 22:06:15 +0200
+From:   Lars Gunnarsson <gunnarsson.lars@gmail.com>
+To:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH v2 1/3] tools/usbip: persistently forward USB devices on a
+ given bus
+Message-ID: <20211025200615.GA14140@dell-precision-T3610>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <1202359771.1685642.1635189110010.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.19198 YMailNodin
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> USB control-message timeouts are specified in milliseconds and should
-> specifically not vary with CONFIG_HZ.
+To forward a remote usb device over usbip the following steps is required:
 
-> Fixes: 605bebe23bf6 ("[PATCH] Add rtl8187 wireless driver")
-> Cc: stable@vger.kernel.org      # 2.6.23
-> Signed-off-by: Johan Hovold <johan@kernel.org>
+1. Execute "usbip bind" on remote end.
+2. Execute "usbip attach" on local end.
 
-Acked-by: Hin-Tak Leung <htl10@users.sourceforge.net>
+These steps must be perfomed in above order and after usb device is plugged in.
+If the usb device is unplugged on the remote end the steps above needs to be
+performed again to establish the connection. This patch set implements a feature
+to persistently forward devices on a given bus. When using flag "-p|--persistent"
+on remot end, the USB device becomes exported when plugged in. When using flag
+"-p|--persistent" on local end, the USB device becomes imported when available
+on remote end. Thus it is only required to run the usbip command once on each
+end, in any order, to persistently forward usb devices on a given bus.
 
-> ---
-> .../net/wireless/realtek/rtl818x/rtl8187/rtl8225.c | 14 +++++++-------
-> 1 file changed, 7 insertions(+), 7 deletions(-)
+This patch implements an usb monitor into libusbip to synchronously wait for usb
+events. This api is used in coming patches to implement the feature decribed
+above. Example:
 
-> diff --git a/drivers/net/wireless/realtek/rtl818x/rtl8187/rtl8225.c b/drivers/net/wireless/realtek/rtl818x/rtl8187/rtl8225.c
-> index 585784258c66..4efab907a3ac 100644
-> --- a/drivers/net/wireless/realtek/rtl818x/rtl8187/rtl8225.c
-> +++ b/drivers/net/wireless/realtek/rtl818x/rtl8187/rtl8225.c
-> @@ -28,7 +28,7 @@ u8 rtl818x_ioread8_idx(struct rtl8187_priv *priv,
->     usb_control_msg(priv->udev, usb_rcvctrlpipe(priv->udev, 0),
->             RTL8187_REQ_GET_REG, RTL8187_REQT_READ,
->             (unsigned long)addr, idx & 0x03,
-> -            &priv->io_dmabuf->bits8, sizeof(val), HZ / 2);
-> +            &priv->io_dmabuf->bits8, sizeof(val), 500);
+// wait for an usb divce to be plugged in:
+usbip_monitor_t *monitor = usbip_monitor_new();
+usbip_monitor_set_busid(monitor, "3-3.1.2.3");
+usbip_monitor_await_usb_bind(monitor, "usb");  // this is a blocking call
+// usb device with busid 3-3.1.2.3 is now bound to driver "usb".
+usbip_monitor_delete(monitor);
 
-Looks reasonable, although I would have preferred a common defined value taken from a common header, instead of a hard-coded 1/2 second.
+Signed-off-by: Lars Gunnarsson <gunnarsson.lars@gmail.com>
+---
+v2: Change title, fix style warnings, improve feature description, add timeout
+    into usbip_monitor.
+
+Justifications of remaining warnings from "scripts/checkpatch.pl":
+
+* Exception according to Linux kernel coding style 5.a where
+  "usbip_monitor_t" is a totally opaque object:
+
+  WARNING: do not add new typedefs
+  #199: FILE: tools/usb/usbip/libsrc/usbip_monitor.h:8:
+  +typedef struct usbip_monitor usbip_monitor_t;
+
+ tools/usb/usbip/.gitignore             |   1 +
+ tools/usb/usbip/libsrc/Makefile.am     |   3 +-
+ tools/usb/usbip/libsrc/usbip_common.h  |   1 +
+ tools/usb/usbip/libsrc/usbip_monitor.c | 159 +++++++++++++++++++++++++
+ tools/usb/usbip/libsrc/usbip_monitor.h |  36 ++++++
+ 5 files changed, 199 insertions(+), 1 deletion(-)
+ create mode 100644 tools/usb/usbip/libsrc/usbip_monitor.c
+ create mode 100644 tools/usb/usbip/libsrc/usbip_monitor.h
+
+diff --git a/tools/usb/usbip/.gitignore b/tools/usb/usbip/.gitignore
+index 597361a96dbb..6304adefb5e1 100644
+--- a/tools/usb/usbip/.gitignore
++++ b/tools/usb/usbip/.gitignore
+@@ -28,6 +28,7 @@ libsrc/libusbip_la-usbip_common.lo
+ libsrc/libusbip_la-usbip_device_driver.lo
+ libsrc/libusbip_la-usbip_host_common.lo
+ libsrc/libusbip_la-usbip_host_driver.lo
++libsrc/libusbip_la-usbip_monitor.lo
+ libsrc/libusbip_la-vhci_driver.lo
+ src/usbip
+ src/usbipd
+diff --git a/tools/usb/usbip/libsrc/Makefile.am b/tools/usb/usbip/libsrc/Makefile.am
+index dabd2c91d311..3e31e33729cf 100644
+--- a/tools/usb/usbip/libsrc/Makefile.am
++++ b/tools/usb/usbip/libsrc/Makefile.am
+@@ -8,4 +8,5 @@ libusbip_la_SOURCES := names.c names.h usbip_host_driver.c usbip_host_driver.h \
+ 		       usbip_device_driver.c usbip_device_driver.h \
+ 		       usbip_common.c usbip_common.h usbip_host_common.h \
+ 		       usbip_host_common.c vhci_driver.c vhci_driver.h \
+-		       sysfs_utils.c sysfs_utils.h
++		       sysfs_utils.c sysfs_utils.h \
++		       usbip_monitor.c
+diff --git a/tools/usb/usbip/libsrc/usbip_common.h b/tools/usb/usbip/libsrc/usbip_common.h
+index 73a367a7fa10..13f1d4ca47c5 100644
+--- a/tools/usb/usbip/libsrc/usbip_common.h
++++ b/tools/usb/usbip/libsrc/usbip_common.h
+@@ -30,6 +30,7 @@
+ 
+ /* kernel module names */
+ #define USBIP_CORE_MOD_NAME	"usbip-core"
++#define USBIP_USB_DRV_NAME	"usb"
+ #define USBIP_HOST_DRV_NAME	"usbip-host"
+ #define USBIP_DEVICE_DRV_NAME	"usbip-vudc"
+ #define USBIP_VHCI_DRV_NAME	"vhci_hcd"
+diff --git a/tools/usb/usbip/libsrc/usbip_monitor.c b/tools/usb/usbip/libsrc/usbip_monitor.c
+new file mode 100644
+index 000000000000..ce60069d86ca
+--- /dev/null
++++ b/tools/usb/usbip/libsrc/usbip_monitor.c
+@@ -0,0 +1,159 @@
++// SPDX-License-Identifier: GPL-2.0
++/**
++ * Copyright (C) 2021 Lars Gunnarsson
++ */
++#include <libudev.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/poll.h>
++
++#include "usbip_monitor.h"
++
++struct usbip_monitor {
++	const char *busid;
++	int timeout_ms;
++	struct udev *udev;
++	struct udev_monitor *udev_monitor;
++};
++
++usbip_monitor_t *usbip_monitor_new(void)
++{
++	usbip_monitor_t *monitor = NULL;
++	struct udev *udev = udev_new();
++
++	if (udev) {
++		struct udev_monitor *udev_monitor =
++			udev_monitor_new_from_netlink(udev, "udev");
++		udev_monitor_filter_add_match_subsystem_devtype(
++			udev_monitor,
++			/*subsystem=*/"usb",
++			/*devtype=*/"usb_device");
++		udev_monitor_enable_receiving(udev_monitor);
++		monitor = malloc(sizeof(struct usbip_monitor));
++		monitor->busid = NULL;
++		monitor->timeout_ms = -1;
++		monitor->udev = udev;
++		monitor->udev_monitor = udev_monitor;
++	}
++	return monitor;
++}
++
++void usbip_monitor_delete(usbip_monitor_t *monitor)
++{
++	if (monitor) {
++		udev_monitor_unref(monitor->udev_monitor);
++		udev_unref(monitor->udev);
++		free(monitor);
++	}
++}
++
++void usbip_monitor_set_busid(usbip_monitor_t *monitor, const char *busid)
++{
++	monitor->busid = busid;
++}
++
++void usbip_monitor_set_timeout(usbip_monitor_t *monitor, int milliseconds)
++{
++	monitor->timeout_ms = milliseconds;
++}
++
++static struct udev_device *await_udev_event(const usbip_monitor_t *monitor)
++{
++	struct udev_device *dev = NULL;
++	int fd = udev_monitor_get_fd(monitor->udev_monitor);
++	const int nfds = 1;
++	struct pollfd pollfd[] = { { fd, POLLIN, 0 } };
++	int nfd = poll(pollfd, nfds, monitor->timeout_ms);
++
++	if (nfd)
++		dev = udev_monitor_receive_device(monitor->udev_monitor);
++	return dev;
++}
++
++static int optional_filter_busid(const char *busid, const char *udev_busid)
++{
++	int filter_match = 0;
++
++	if (busid) {
++		if (strcmp(busid, udev_busid) == 0)
++			filter_match = 1;
++	} else {
++		filter_match = 1;
++	}
++	return filter_match;
++}
++
++static bool await_usb_with_driver(const usbip_monitor_t *monitor,
++				  const char *driver, const char *action)
++{
++	bool event_occured = false;
++
++	while (!event_occured) {
++		struct udev_device *dev = await_udev_event(monitor);
++
++		if (dev) {
++			const char *udev_action = udev_device_get_action(dev);
++			const char *udev_driver = udev_device_get_driver(dev);
++			const char *udev_busid = udev_device_get_sysname(dev);
++
++			if (strcmp(udev_action, action) == 0 &&
++			    strcmp(udev_driver, driver) == 0) {
++				if (optional_filter_busid(monitor->busid,
++							  udev_busid)) {
++					event_occured = true;
++				}
++			}
++			udev_device_unref(dev);
++		} else {
++			break;
++		}
++	}
++	return event_occured;
++}
++
++bool usbip_monitor_await_usb_add(const usbip_monitor_t *monitor,
++				 const char *driver)
++{
++	return await_usb_with_driver(monitor, driver, "add");
++}
++
++bool usbip_monitor_await_usb_bind(const usbip_monitor_t *monitor,
++				  const char *driver)
++{
++	return await_usb_with_driver(monitor, driver, "bind");
++}
++
++static bool await_usb(const usbip_monitor_t *monitor, const char *action)
++{
++	bool event_occured = false;
++
++	while (!event_occured) {
++		struct udev_device *dev = await_udev_event(monitor);
++
++		if (dev) {
++			const char *udev_action = udev_device_get_action(dev);
++			const char *udev_busid = udev_device_get_sysname(dev);
++
++			if (strcmp(udev_action, action) == 0) {
++				if (optional_filter_busid(monitor->busid,
++							  udev_busid)) {
++					event_occured = true;
++				}
++			}
++			udev_device_unref(dev);
++		} else {
++			break;
++		}
++	}
++	return event_occured;
++}
++
++bool usbip_monitor_await_usb_unbind(const usbip_monitor_t *monitor)
++{
++	return await_usb(monitor, "unbind");
++}
++
++bool usbip_monitor_await_usb_delete(const usbip_monitor_t *monitor)
++{
++	return await_usb(monitor, "delete");
++}
+diff --git a/tools/usb/usbip/libsrc/usbip_monitor.h b/tools/usb/usbip/libsrc/usbip_monitor.h
+new file mode 100644
+index 000000000000..750abb6b79e0
+--- /dev/null
++++ b/tools/usb/usbip/libsrc/usbip_monitor.h
+@@ -0,0 +1,36 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/**
++ * Copyright (C) 2021 Lars Gunnarsson
++ */
++#ifndef __USBIP_MONITOR_H
++#define __USBIP_MONITOR_H
++
++#include <stdbool.h>
++
++typedef struct usbip_monitor usbip_monitor_t;
++
++usbip_monitor_t *usbip_monitor_new(void);
++void usbip_monitor_delete(usbip_monitor_t *monitor);
++
++/**
++ * Set busid to await events on. If unset, any busid will be matched.
++ */
++void usbip_monitor_set_busid(usbip_monitor_t *monitor, const char *busid);
++
++/**
++ * Set timeout for await calls in milliseconds, default is no timeout (-1).
++ */
++void usbip_monitor_set_timeout(usbip_monitor_t *monitor, int milliseconds);
++
++/**
++ * Functions below is blocking. Returns true if event occurred, or false on
++ * timeouts.
++ */
++bool usbip_monitor_await_usb_add(const usbip_monitor_t *monitor,
++				 const char *driver);
++bool usbip_monitor_await_usb_bind(const usbip_monitor_t *monitor,
++				  const char *driver);
++bool usbip_monitor_await_usb_unbind(const usbip_monitor_t *monitor);
++bool usbip_monitor_await_usb_delete(const usbip_monitor_t *monitor);
++
++#endif /* __USBIP_MONITOR_H */
+-- 
+2.25.1
+
