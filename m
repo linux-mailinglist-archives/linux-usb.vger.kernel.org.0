@@ -2,91 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55906438E0E
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 06:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6BA0438EA2
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 07:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbhJYEWp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Oct 2021 00:22:45 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:41381 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbhJYEWo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 00:22:44 -0400
+        id S232248AbhJYFME (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Oct 2021 01:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229678AbhJYFME (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 01:12:04 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232FAC061745;
+        Sun, 24 Oct 2021 22:09:42 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id b143so12298wmd.1;
+        Sun, 24 Oct 2021 22:09:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1635135623; x=1666671623;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=X7bAkQfz6aT4/715bzVhw0pglrEtN8FLQnyZrTVFNdU=;
-  b=GsQUwD+ka644G4LLLLTj8ootb0+CBTsyG0rxaTXlv0wCUaAd3UP4ti5l
-   wY02psWHtg17oqJnWBsklpJ3jDBnODtmwXx/pOXQM/nFtAmPTNQUhSjtg
-   pyFH4rPq3+eCdFiVrG0uislI/eYXWxmdZuPt12BHGQkthjxuJSC/n06i5
-   I=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 24 Oct 2021 21:20:23 -0700
-X-QCInternal: smtphost
-Received: from nalasex01a.na.qualcomm.com ([10.47.209.196])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2021 21:20:22 -0700
-Received: from c-sanm-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Sun, 24 Oct 2021 21:20:17 -0700
-From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        "Vinod Koul" <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: [PATCH v2] phy: qcom-snps: Correct the FSEL_MASK
-Date:   Mon, 25 Oct 2021 09:49:35 +0530
-Message-ID: <1635135575-5668-1-git-send-email-quic_c_sanm@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=qH7PS/UlMczeVLNI4zJXq9uVeSNY0uh36oNK2kNW72I=;
+        b=mMS23Ip4ic14XCF/vtvV4EIOwkeJ46TiJeR7LTBXxaujgU4mpi7no8dSAcgOESNQ4A
+         0Gcu+hKyosfS86DYEClSQmFHtiPO8HLb9uunTD7MI3YORe12/dhHDC0c2l+flMxXVRnT
+         gFn/9faBLD5NCuFfZnrGYvqKsrrkq35tD5jt29PeTD4LJ9KdO1RfvyBvT1re3pUpb7W+
+         GBvz0zhXAfwLhYypbIb3FpQ1AzD+jyAUnxS2PgOUFlJWwgERdn+nOhQQ0lxxpt3aGdz/
+         gjqTchBToMgljoWOS1XaaF0UsIAqN6kX+BZJNPpncWDDMc0BOKkl7vMUL/V+ypb6VlVQ
+         t6Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=qH7PS/UlMczeVLNI4zJXq9uVeSNY0uh36oNK2kNW72I=;
+        b=6eo7L6S8ZrJHckX4EWSisk0/PvcnZzAeANkxvJ02oyJH3YZxtPQrHhYTl9uPwHAkkb
+         fH6A8qbw8v2UkVpf4PbXSn8F+2YUFWBx1bFDTkmlVXCx9P2zmclZah20Qe2KZzK/A4zy
+         h/jhUb9oBJF5RYfSkB1Y5NZ7IIg2y85qy5CZ3zZq+h7mbVDSGufpARGj7cy4wStTHwp3
+         BrV20X85W7MSrfJuYV1wZypCxJIN8u7JQ6Tyk2OJbmwzQkGAtw11jm7B66/fXKkFe910
+         A8S7kE6iEsbJt2xATEMWZmZtbqo+5OKr6Z/fvIvA+X/jAMLLA/bgaN9wam1sFIrlskY5
+         xqgw==
+X-Gm-Message-State: AOAM531VHDRLoHaNlkonfn4+m+o+PlquIW9LaOcq/uPLI10HL9OucSl6
+        0MDuNrAvJC6FOJiyxTTjtykEleZrl30=
+X-Google-Smtp-Source: ABdhPJxONwA4KaiC1Z81DegA0HSqn0EWs2Md/2h5OcX7hu+EjQtg76ozrygwLzHycvg+0o1a8+ALCg==
+X-Received: by 2002:a7b:c207:: with SMTP id x7mr703477wmi.116.1635138580746;
+        Sun, 24 Oct 2021 22:09:40 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p200300c78f4e06658ca10b404d232775.dip0.t-ipconnect.de. [2003:c7:8f4e:665:8ca1:b40:4d23:2775])
+        by smtp.gmail.com with ESMTPSA id i9sm10990103wmb.22.2021.10.24.22.09.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Oct 2021 22:09:40 -0700 (PDT)
+Date:   Mon, 25 Oct 2021 07:09:38 +0200
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org
+Subject: [PATCH 0/2] Docs: usb: update struct usb_driver, remove :c:func:
+Message-ID: <cover.1635138058.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The FSEL_MASK which selects the refclock is defined incorrectly.
-It should be [4:6] not [5:7]. Due to this incorrect definition, the BIT(7)
-in USB2_PHY_USB_PHY_HS_PHY_CTRL_COMMON0 is reset which keeps PHY analog
-blocks ON during suspend.
-Fix this issue by correctly defining the FSEL_MASK.
+update struct usb_driver and remove :c:func: for usb_register and usb_deregister
 
-Fixes: 51e8114f80d0 (phy: qcom-snps: Add SNPS USB PHY driver for
-QCOM based SOCs)
-Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
----
-v2:
-Corrected the register name COMMON1 > COMMMON0 in commit description.
-Added Fixes tag.
-Dropped copyright line.
+Philipp Hortmann (2):
+  Docs: usb: update struct usb_driver
+  Docs: usb: remove :c:func: for usb_register and usb_deregister
 
- drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/driver-api/usb/writing_usb_driver.rst | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c b/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
-index ae4bac0..7e61202 100644
---- a/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
-+++ b/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
-@@ -33,7 +33,7 @@
- 
- #define USB2_PHY_USB_PHY_HS_PHY_CTRL_COMMON0	(0x54)
- #define RETENABLEN				BIT(3)
--#define FSEL_MASK				GENMASK(7, 5)
-+#define FSEL_MASK				GENMASK(6, 4)
- #define FSEL_DEFAULT				(0x3 << 4)
- 
- #define USB2_PHY_USB_PHY_HS_PHY_CTRL_COMMON1	(0x58)
 -- 
-2.7.4
+2.25.1
 
