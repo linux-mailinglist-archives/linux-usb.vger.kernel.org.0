@@ -2,75 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D084394F9
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 13:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969CF43950A
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 13:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232934AbhJYLnB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Oct 2021 07:43:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36040 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230058AbhJYLnB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 25 Oct 2021 07:43:01 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0710460F22;
-        Mon, 25 Oct 2021 11:40:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635162039;
-        bh=7iq1S2INfykGSss8PFEiH9xQxiYNWl/G6VXjyPTK3Xg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HsQctk6ETFurBfXm7FcghgFHqA89rr7OZaTamB8o4ejBAUOxn9i7gi/YlNMTmopq3
-         vauB/QYAFDzWsvNaW31VTq1eeWdWJ6c0F1AdtGYtsS6DIUEc99vhpZc66Dz9oeD9NY
-         RzbpyOvfjO4NiRhY7rY8I46cxUj4wIV5hia8e8ZcDn8mlgUW1FsTX4uvoIOnb/fTho
-         P1Z1hEQ1ZhkD38XJ9zxM0bkwux8BPpAkCwaGwGva2z/Z6i2DlXtsYAUIv37YkabUgV
-         ZTRheyYpe/AbfyX4/Xd6D022vquQQBoKDc7D7DfhnI+CLs+xw4TaoC50gSqJvmmM12
-         fOmsLGi7d4+JA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1meyKz-000196-Es; Mon, 25 Oct 2021 13:40:21 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Marcel Holtmann <marcel@holtmann.org>
-Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        stable@vger.kernel.org
-Subject: [PATCH] Bluetooth: fix division by zero in send path
-Date:   Mon, 25 Oct 2021 13:39:44 +0200
-Message-Id: <20211025113944.4350-1-johan@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        id S233191AbhJYLox (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Oct 2021 07:44:53 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:21537 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233190AbhJYLot (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 07:44:49 -0400
+X-UUID: 4577476c31e343fe8032adcd60fde2fe-20211025
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=5Z+pVIUsnwczbSK4PAQNtN2qL8Rf6p3/4/bd0Nz7Kl8=;
+        b=c+xauU6inVHKw+IUzOmb1CvG8W7jRQBoo8dKA1Cshc7thXUeBD3lOoH4aPKb7G+QMM5s4v2cEXvw3SlTyB3AZbBZ4sQmHpUH5GixA3vS2xPi0pkQ1iwl//yWqkCAxSKLwJ2u32iM+qurMF7Dgh6CjkZ1iRYMWHDuTA+U9zbsrDo=;
+X-UUID: 4577476c31e343fe8032adcd60fde2fe-20211025
+Received: from mtkmbs10n1.mediatek.inc [(172.27.7.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1606625707; Mon, 25 Oct 2021 19:42:19 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 25 Oct 2021 19:42:20 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 25 Oct 2021 19:42:19 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Yun-Chien Yu <yun-chien.yu@mediatek.com>
+Subject: [RFC PATCH] usb: xhci: skip re-check pending port event if hibernated
+Date:   Mon, 25 Oct 2021 19:42:09 +0800
+Message-ID: <20211025114209.4047-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the missing bulk-out endpoint sanity check to probe() to avoid
-division by zero in bfusb_send_frame() in case a malicious device has
-broken descriptors (or when doing descriptor fuzz testing).
-
-Note that USB core will reject URBs submitted for endpoints with zero
-wMaxPacketSize but that drivers doing packet-size calculations still
-need to handle this (cf. commit 2548288b4fb0 ("USB: Fix: Don't skip
-endpoint descriptors with maxpacket=0")).
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/bluetooth/bfusb.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/bluetooth/bfusb.c b/drivers/bluetooth/bfusb.c
-index 5a321b4076aa..df80fb324356 100644
---- a/drivers/bluetooth/bfusb.c
-+++ b/drivers/bluetooth/bfusb.c
-@@ -627,6 +627,8 @@ static int bfusb_probe(struct usb_interface *intf, const struct usb_device_id *i
- 	data->bulk_in_ep    = bulk_in_ep->desc.bEndpointAddress;
- 	data->bulk_out_ep   = bulk_out_ep->desc.bEndpointAddress;
- 	data->bulk_pkt_size = le16_to_cpu(bulk_out_ep->desc.wMaxPacketSize);
-+	if (!data->bulk_pkt_size)
-+		goto done;
- 
- 	rwlock_init(&data->lock);
- 
--- 
-2.32.0
+V2hlbiB4SENJIGNvbnRyb2xsZXIgaGliZXJuYXRlZCwgdGhlIHJvb3QgaHViIGxvc3QgcG93ZXIs
+IGlmIGNvbnRyb2xsZXINCnN1cHBvcnQgUG9ydCBQb3dlciBDb250cm9sIChQUEMpLCBQUCBpcyBu
+b3Qgc2V0IGF0IHhoY2lfcmVzdW1lKCkgYW5kDQpzZXQgYnkgaHViX3Jlc2V0X3Jlc3VtZSgpIGxh
+dGVyLCBzbyBubyBuZWVkIGNoZWNrIHBlbmRpbmcgcG9ydCBldmVudC4NCklmIFBQQyBpcyBub3Qg
+c3VwcG9ydGVkLCBkZXZpY2UgaXMgZGlzY29ubmVjZWQsIHNlZW1zIGRvIG5vdCBzZW5kIG91dA0K
+VTMgTEZQUyB3YWtlIHNpZ25hbCwgbm8gbmVlZCByZS1jaGVjayBhZ2FpbiBhbmQgZHJvcCAxMjBt
+cyBkZWxheSB0bw0Kc2F2ZSByZXN1bWUgdGltZS4NCg0KUmVwb3J0ZWQtYnk6IFl1bi1DaGllbiBZ
+dSA8eXVuLWNoaWVuLnl1QG1lZGlhdGVrLmNvbT4NClNpZ25lZC1vZmYtYnk6IENodW5mZW5nIFl1
+biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCi0tLQ0KIGRyaXZlcnMvdXNiL2hvc3QveGhj
+aS5jIHwgMiArLQ0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigt
+KQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvaG9zdC94aGNpLmMgYi9kcml2ZXJzL3VzYi9o
+b3N0L3hoY2kuYw0KaW5kZXggZjNkYWJkMDIzODJjLi5hN2EyYmY1YmMyMDggMTAwNjQ0DQotLS0g
+YS9kcml2ZXJzL3VzYi9ob3N0L3hoY2kuYw0KKysrIGIvZHJpdmVycy91c2IvaG9zdC94aGNpLmMN
+CkBAIC0xMjM1LDcgKzEyMzUsNyBAQCBpbnQgeGhjaV9yZXN1bWUoc3RydWN0IHhoY2lfaGNkICp4
+aGNpLCBib29sIGhpYmVybmF0ZWQpDQogCQkgKiB0aGUgZmlyc3Qgd2FrZSBzaWduYWxsaW5nIGZh
+aWxlZCwgZ2l2ZSBpdCB0aGF0IGNoYW5jZS4NCiAJCSAqLw0KIAkJcGVuZGluZ19wb3J0ZXZlbnQg
+PSB4aGNpX3BlbmRpbmdfcG9ydGV2ZW50KHhoY2kpOw0KLQkJaWYgKCFwZW5kaW5nX3BvcnRldmVu
+dCkgew0KKwkJaWYgKCFwZW5kaW5nX3BvcnRldmVudCAmJiAhaGliZXJuYXRlZCkgew0KIAkJCW1z
+bGVlcCgxMjApOw0KIAkJCXBlbmRpbmdfcG9ydGV2ZW50ID0geGhjaV9wZW5kaW5nX3BvcnRldmVu
+dCh4aGNpKTsNCiAJCX0NCi0tIA0KMi4xOC4wDQo=
 
