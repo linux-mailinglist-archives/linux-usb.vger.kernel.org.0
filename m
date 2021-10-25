@@ -2,117 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E547B43A4A1
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 22:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE7E43A4A8
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 22:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236172AbhJYU21 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Oct 2021 16:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36794 "EHLO
+        id S238626AbhJYU2y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Oct 2021 16:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236860AbhJYU2G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 16:28:06 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C12C04CCA0
-        for <linux-usb@vger.kernel.org>; Mon, 25 Oct 2021 13:17:01 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id o83so17240430oif.4
-        for <linux-usb@vger.kernel.org>; Mon, 25 Oct 2021 13:17:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=sFv6oulnfVWm3KV24cqy4zkMNUKjR06XXY8InDqsw00=;
-        b=QDiai+q8Lqf5LMBLx2DhWGQnvq0RMrH2tHpBEgbx3rXXJU1etaPCLUki3NvMOiiWf8
-         t/1GJIn2IejrRZjvkeRoV8LAE3d9Ps01FqQmrkk6U7FEf8+OVU2HXp50V9ve+WZ9Tyf1
-         1JunLoHzZAAYHRpEGHajeJ3/3EhrykIaRZuIs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=sFv6oulnfVWm3KV24cqy4zkMNUKjR06XXY8InDqsw00=;
-        b=QfoLAGo06B5ZUsYv4R6y2OFkSVrQ/UZzOO5YiJM6PT9xAcKLFcOSfEADJozOzUH8tU
-         /0R6K8hVP0J48Pq4Wj5/7oLBewuZ3ZzkUpLo+JgnhBHxwG1osHkk/Lbp+9FqEJgWxQze
-         6g4+igfZxy3vIOap8gW+dM7Koz3K9RU4V2qqEGMlgIMX6I5Hv/vLCbGMOCnM7mbbArRS
-         ZyyWOchmgh8i90mqy8wV34N8GbI8zPyahP8P54F+Dtr2qOV0JI4fydyUvdGq04NQJn53
-         R9m706x6H/Z/Tf1z605TgMIjKRNwGSl3Or04wq5+vTbeKtpa5k5Ym60nj5n2clJDfSXk
-         MbOg==
-X-Gm-Message-State: AOAM5336dRhPEMY8+cQR1EK0zlSSWMyVJtxNHkwmF/Nl3Mf9KS8Bdmke
-        UqfG/OgkvK3UInAuPAHHkj+jDUNda4Stp7UgHM+Qog==
-X-Google-Smtp-Source: ABdhPJwhdypNNNtSLateKcvC+lx++2bCS+2MH4BP5EkkJROEF59u9EHq9c5I6//07zar4ce5AtumC4etyH/4t4KQ/Xc=
-X-Received: by 2002:a05:6808:1d9:: with SMTP id x25mr12912230oic.64.1635193021348;
- Mon, 25 Oct 2021 13:17:01 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 25 Oct 2021 13:17:00 -0700
+        with ESMTP id S236738AbhJYU2v (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 16:28:51 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A46AC0431AE;
+        Mon, 25 Oct 2021 13:21:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=TOmVv8RYdCP7WdPI2k4qRR3ZB98gyGZVm4ksO65sAaE=; b=gYwBtb47VFNrl8RHglhpwGrp57
+        tclObzk4zOl404oHQ5i2qHI0hHk8FK6Rg+41I2RQ3hzHba56WregGCW7F50QTrmFsHVwBPHL/5OZa
+        aWtvQ9cg5/FtbUTG3+0I8yfciHstqC7WiWQXZOxADfhzS+kFo8ZoEtWgZn8LP+qhgavIond7Z/TIX
+        EBnaMS60XNBkjVdohaMo/0Uz/sk1GYX1xRjLONkIkopMuYAxPhYhcVFGmxfQd41Pn8eEOhkrliyP4
+        H0Xn/D6mqoI/eyd3BeTt1r6vv2HB0niAiVr6CArorJj3Q6NPAKF/oVfiJajn+O/Y+BU/ONWejK91L
+        SLZItRFw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mf6Ta-00Ha1r-FF; Mon, 25 Oct 2021 20:21:46 +0000
+Subject: Re: [PATCH 6/6] usb: typec: qcom: Add pm8150b TCPM driver
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     wcheng@codeaurora.org
+References: <20211025150906.176686-1-bryan.odonoghue@linaro.org>
+ <20211025150906.176686-7-bryan.odonoghue@linaro.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <f650d244-59e6-406a-a342-b3f9214c2d25@infradead.org>
+Date:   Mon, 25 Oct 2021 13:21:45 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <YXcBK7zqny0s4gd4@ripper>
-References: <1635152851-23660-1-git-send-email-quic_c_sanm@quicinc.com>
- <1635152851-23660-2-git-send-email-quic_c_sanm@quicinc.com> <YXcBK7zqny0s4gd4@ripper>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Mon, 25 Oct 2021 13:17:00 -0700
-Message-ID: <CAE-0n51k8TycXjEkH7rHYo0j7cYbKJOnOn1keVhx2yyTcBNnvg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: usb: qcom,dwc3: Add multi-pd bindings
- for dwc3 qcom
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211025150906.176686-7-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Bjorn Andersson (2021-10-25 12:10:35)
-> On Mon 25 Oct 02:07 PDT 2021, Sandeep Maheswaram wrote:
->
-> > Add multi pd bindings to set performance state for cx domain
-> > to maintain minimum corner voltage for USB clocks.
-> >
-> > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > ---
-> > v2:
-> > Make cx domain mandatory.
-> >
-> >  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> > index 2bdaba0..fd595a8 100644
-> > --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> > @@ -42,7 +42,13 @@ properties:
-> >
-> >    power-domains:
-> >      description: specifies a phandle to PM domain provider node
-> > -    maxItems: 1
-> > +    minItems: 2
-> > +    items:
-> > +      - description: cx power domain
-> > +      - description: USB gdsc power domain
-> > +
-> > +  required-opps:
-> > +    description: specifies the performance state to power domain
->
-> I'm still worried about the fact that we can't just rely on the USB GDSC
-> being a subdomin of CX in order to just "turn on" CX.
->
-> Afaict accepting this path forward means that for any device that sits
-> in a GDSC power domain we will have to replicate this series for the
-> related driver.
->
+Hi--
 
-I suspect the problem is that it's not just "turn on" but wanting to
-turn it on and then set the performance state to some value based on the
-clk frequency. Maybe the simplest version of that could be supported
-somehow by having dev_pm_opp_set_rate() figure out that the 'level'
-applies to the parent power domain instead of the child one? Or we may
-need to make another part of the OPP binding to indicate the
-relationship between the power domain and the OPP and the parent of the
-power domain.
+On 10/25/21 8:09 AM, Bryan O'Donoghue wrote:
+> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
+> index 557f392fe24da..4ec0e230f7be4 100644
+> --- a/drivers/usb/typec/tcpm/Kconfig
+> +++ b/drivers/usb/typec/tcpm/Kconfig
+> @@ -66,4 +66,15 @@ config TYPEC_WCOVE
+>   	  To compile this driver as module, choose M here: the module will be
+>   	  called typec_wcove.ko
+>   
+> +config TYPEC_QCOM_PMIC
+> +	tristate "Qualcomm PMIC USB Type-C Port Controller Manager driver"
+> +	depends on ARCH_QCOM || COMPILE_TEST
+> +	help
+> +	  A Type-C port and power-deliver driver. This driver aggregates
+
+	                          delivery
+
+> +	  together two discreet pieces of silicon in the PM8150b PMIC block the
+
+"together" is redundant after "aggregates."
+It's nice of them to be discreet, but "discrete" would be better here.
+So:
+	  two discrete pieces of silicon in the PM8150b PMIC block: the
+
+> +	  Type-C port controller and the power delivery PHY.
+> +
+> +	  This driver provides Type-C role switching, orientation, Alternate
+> +	  mode and Power Delivery support both for VBUS and VCONN.
+> +
+>   endif # TYPEC_TCPM
+
+
+-- 
+~Randy
