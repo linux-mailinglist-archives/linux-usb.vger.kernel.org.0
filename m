@@ -2,135 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D03439834
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 16:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FFAE4398D1
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 16:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233374AbhJYONs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Oct 2021 10:13:48 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:49856 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233384AbhJYONr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 10:13:47 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B09CD2193C;
-        Mon, 25 Oct 2021 14:11:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1635171084; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=OTjSY7GSGw0G3NioSQABoRLAMGiPnBKkRoos8pwLTqc=;
-        b=kiuorOvH9YQGwEpt5DZ2I/rRf3/sB3+Zyrlf1dm9zZxWCtXjAGcLAub6ReU0t8ULp4sxry
-        2vsPdeRIrbb70ZzJhm1L+z0gIBbChLxXEdkOKTkNhBXQImZhtxHvqOKhrAOac+WSdLNnwl
-        jTtvNJWvkJrXNWgni7A2jVf9J6bN34g=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6F04C13C0B;
-        Mon, 25 Oct 2021 14:11:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OjXyGAy7dmG6cgAAMHmgww
-        (envelope-from <oneukum@suse.com>); Mon, 25 Oct 2021 14:11:24 +0000
-From:   Oliver Neukum <oneukum@suse.com>
-To:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH] usbb: catc: use correct API for MAC addresses
-Date:   Mon, 25 Oct 2021 16:11:21 +0200
-Message-Id: <20211025141121.14828-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.26.2
+        id S233038AbhJYOmb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Oct 2021 10:42:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34640 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232779AbhJYOm3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 25 Oct 2021 10:42:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 6FFB060F4F;
+        Mon, 25 Oct 2021 14:40:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635172807;
+        bh=/6abjMQS5xEYvS/FjEnWDsVCa5+gy5AlYE2h4/ddhwQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=rAI5ZIVkxpPC0elvZGRJ7bG6gwz3oDDt0ETYYk5yD9BTBKDwf3Ov/YD2zEAcTfwPE
+         5b3DQwAQdajoqqlh2ayZFSLNxslTH7r8Q1ITOJYhbaDPG+uhMmOLLjtpbUeHOAQLe6
+         fH7POmZr8PWuC6F6Jm+Npn4bV5A7wZO5cNCQn7cwTOj/wEONW12Syr6zr4Mo1GxkYu
+         iSOM3tyuCfpHiWTedZ4dN3kDD6+SWzUL/Zm6vW1iDUC4MJOeN5Ybb2RCmDUoUurDlV
+         24QOIKoU0eRedoaOS4nk75u78FOFULaNDOhb1vqEWBciQ6fFfxmR6Zi6QTFrzBVBFt
+         S/mODMzYB0FjA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 5805E60A90;
+        Mon, 25 Oct 2021 14:40:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] usbb: catc: use correct API for MAC addresses
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163517280735.8080.10052885339658850678.git-patchwork-notify@kernel.org>
+Date:   Mon, 25 Oct 2021 14:40:07 +0000
+References: <20211025141121.14828-1-oneukum@suse.com>
+In-Reply-To: <20211025141121.14828-1-oneukum@suse.com>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit 406f42fa0d3c ("net-next: When a bond have a massive amount
-of VLANs...") introduced a rbtree for faster Ethernet address look
-up. To maintain netdev->dev_addr in this tree we need to make all
-the writes to it got through appropriate helpers.
+Hello:
 
-In the case of catc we need a new temporary buffer to conform
-to the rules for DMA coherency. That in turn necessitates
-a reworking of error handling in probe().
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/net/usb/catc.c | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+On Mon, 25 Oct 2021 16:11:21 +0200 you wrote:
+> Commit 406f42fa0d3c ("net-next: When a bond have a massive amount
+> of VLANs...") introduced a rbtree for faster Ethernet address look
+> up. To maintain netdev->dev_addr in this tree we need to make all
+> the writes to it got through appropriate helpers.
+> 
+> In the case of catc we need a new temporary buffer to conform
+> to the rules for DMA coherency. That in turn necessitates
+> a reworking of error handling in probe().
+> 
+> [...]
 
-diff --git a/drivers/net/usb/catc.c b/drivers/net/usb/catc.c
-index 24db5768a3c0..e7fe9c0f63a9 100644
---- a/drivers/net/usb/catc.c
-+++ b/drivers/net/usb/catc.c
-@@ -770,17 +770,23 @@ static int catc_probe(struct usb_interface *intf, const struct usb_device_id *id
- 	struct net_device *netdev;
- 	struct catc *catc;
- 	u8 broadcast[ETH_ALEN];
--	int pktsz, ret;
-+	u8 *macbuf;
-+	int pktsz, ret = -ENOMEM;
-+
-+	macbuf = kmalloc(ETH_ALEN, GFP_KERNEL);
-+	if (!macbuf)
-+		goto error;
- 
- 	if (usb_set_interface(usbdev,
- 			intf->altsetting->desc.bInterfaceNumber, 1)) {
- 		dev_err(dev, "Can't set altsetting 1.\n");
--		return -EIO;
-+		ret = -EIO;
-+		goto fail_mem;;
- 	}
- 
- 	netdev = alloc_etherdev(sizeof(struct catc));
- 	if (!netdev)
--		return -ENOMEM;
-+		goto fail_mem;
- 
- 	catc = netdev_priv(netdev);
- 
-@@ -870,7 +876,8 @@ static int catc_probe(struct usb_interface *intf, const struct usb_device_id *id
- 	  
- 		dev_dbg(dev, "Getting MAC from SEEROM.\n");
- 	  
--		catc_get_mac(catc, netdev->dev_addr);
-+		catc_get_mac(catc, macbuf);
-+		eth_hw_addr_set(netdev, macbuf);
- 		
- 		dev_dbg(dev, "Setting MAC into registers.\n");
- 	  
-@@ -899,7 +906,8 @@ static int catc_probe(struct usb_interface *intf, const struct usb_device_id *id
- 	} else {
- 		dev_dbg(dev, "Performing reset\n");
- 		catc_reset(catc);
--		catc_get_mac(catc, netdev->dev_addr);
-+		catc_get_mac(catc, macbuf);
-+		eth_hw_addr_set(netdev, macbuf);
- 		
- 		dev_dbg(dev, "Setting RX Mode\n");
- 		catc->rxmode[0] = RxEnable | RxPolarity | RxMultiCast;
-@@ -917,6 +925,7 @@ static int catc_probe(struct usb_interface *intf, const struct usb_device_id *id
- 	if (ret)
- 		goto fail_clear_intfdata;
- 
-+	kfree(macbuf);
- 	return 0;
- 
- fail_clear_intfdata:
-@@ -927,6 +936,9 @@ static int catc_probe(struct usb_interface *intf, const struct usb_device_id *id
- 	usb_free_urb(catc->rx_urb);
- 	usb_free_urb(catc->irq_urb);
- 	free_netdev(netdev);
-+fail_mem:
-+	kfree(macbuf);
-+error:
- 	return ret;
- }
- 
+Here is the summary with links:
+  - usbb: catc: use correct API for MAC addresses
+    https://git.kernel.org/netdev/net-next/c/7ce9a701ac8f
+
+You are awesome, thank you!
 -- 
-2.26.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
