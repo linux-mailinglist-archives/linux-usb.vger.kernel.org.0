@@ -2,60 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E794399AB
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 17:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6B34399AD
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Oct 2021 17:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233832AbhJYPJe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Oct 2021 11:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
+        id S233799AbhJYPJf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Oct 2021 11:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233813AbhJYPJc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 11:09:32 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB77C061745
-        for <linux-usb@vger.kernel.org>; Mon, 25 Oct 2021 08:07:10 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id e12so13422826wra.4
-        for <linux-usb@vger.kernel.org>; Mon, 25 Oct 2021 08:07:10 -0700 (PDT)
+        with ESMTP id S233818AbhJYPJe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 11:09:34 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7318C061745
+        for <linux-usb@vger.kernel.org>; Mon, 25 Oct 2021 08:07:11 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id d10so9343507wrb.1
+        for <linux-usb@vger.kernel.org>; Mon, 25 Oct 2021 08:07:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=q128a9lhY0ksiYIyPMAMQms4ozwMnmwzN8Z/nJ9OKEQ=;
-        b=A0XxRKArRsXAGrhT5RwT3QiQmXTtl2leaqHBeuijG3mMuXEIbL7LCyDFw/GFfsqF+Y
-         C6xViHf1QzDPaR1S3VEF4LgIEvX/KIl9yE+knP8BL2jZEWsYAAwF3nrA/oWCFDIhsKjq
-         wfEVCzmyaKUiLiR9D0py3aq2olClyUkKbjQqRmuV2Dji/wWgYsqgPRwxC7gv8bACA1oX
-         NlPi/Z6TN8YZSm6wbL8cwukPrapLrUWaGcAtvB2yKV6Pz0PieHHlINRmVh9k8eKzcCe4
-         KXW4unkz06l4ZqDpZ1G3HBZUGa6ycLMpadASNHyLMvoCzhtT0R44KzYwQhb2rIcBKiLT
-         pkJw==
+        bh=W6folD6S9BqLGM99G5RWE+A4n/cypELvZBV4a40T5Hg=;
+        b=n2QLK5/A6VWBtZJRNSilVFh0PBKql1ijikzR98JjphMtVCftvBstVloM96R6/py50m
+         9RzhQavw1fOTITRoStaDzaW2wlGebuCTQ39Em0AJxFRZ3mO3wcKEliVSRsawDlL2/lpr
+         44BNRdh3BlWZHWWy8NS9Zk/xoKtpPYugFXRTtBuWfLJTwpExUMTQdhwDfK2oCIDB1tDM
+         RZXNH1X428cVLLdLP5oLIGsw6sduCh9aGGqusmgcpKA4MNwocwo5fo8TpcmhGLP27AWs
+         /UO1IxfnbWdPvHy/a7bXtwg/vMTUkYEofo/hPjAqrfxo6/QXA20Ts9JrUUOm6t12FP/7
+         l40A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=q128a9lhY0ksiYIyPMAMQms4ozwMnmwzN8Z/nJ9OKEQ=;
-        b=7IgDxFE+JkmdVPRVP5vYQvCMqBoZDq3HJXy9DsnywMhjaCsbPfc38vbYzb86uqLIJ8
-         Ru1iO3KiIjY47A+KcrKycZq6wEJAi+vGQaxvSFHLXWyojF9s2RIspUtqxBDt/wVAN0c0
-         wrHyooZFu+SJEXd2k2kQOIo57YdLWUK6zLtqtEK9uxLpRNHfHfOGkmi/f/A93VSGho7S
-         CP6cjYsSJ0gOiKM8ca0Y2Q1szrjTfGSgDo0DMHYBfQ4BPp7Ua2BKXh0vpD//KF9QD2Y0
-         53vJy0d1Vcf5ljHP3hlQ+LpVnWOjobwSdGIDDmplmOtLzcW+49F1KL3H+T9e2H7tgeE2
-         hDqg==
-X-Gm-Message-State: AOAM533RG6ju0mJTR/u9Biy2ob4hFeknyfp89Y1WpOiwlhwaSQm4IgtY
-        haMhG6oCR2a3iXT8Fsk8J9lW+w==
-X-Google-Smtp-Source: ABdhPJw++sjAyDGkZSzgBxbCLFd5I+37Y30KZ17qxe54f8se62jNi86n9g0x0+YbeMCHqzy8Quh4tA==
-X-Received: by 2002:adf:fd47:: with SMTP id h7mr20994717wrs.200.1635174429092;
-        Mon, 25 Oct 2021 08:07:09 -0700 (PDT)
+        bh=W6folD6S9BqLGM99G5RWE+A4n/cypELvZBV4a40T5Hg=;
+        b=kgkRyPyTMSij9NoruXrItojp6Ng2RbXfn9YtEG4ZyJeW/rag+/RTRa3iFkkeTjDeMM
+         1ToQbGutwVQfV5koLJYT5vEH3w+KaT9hTDvAJCG5MD7Z76Wl05ZYr8zuaixh2hMOOSRO
+         BkQdPxedimiBAICQl/nroZfarhZh9BWAu3M178uo/mHHhVyc5g+lkydhnLMQQ9lf9/s+
+         e7mf4eclrYnOmsVgOOhgHDmGtLWrw6Dtg8jQBzN2acvxBjfbg32fhLE7kmlDEH5qMS6c
+         fVF/l3jwX/yE9K+hb20ZcVsrtD4G9ICWtANh3ZjIoJvwiRsienYNF0150jmM4Gb3NlY6
+         vIog==
+X-Gm-Message-State: AOAM530LoNggqWtGcQSz3MH9KM/pCkvGx6T2TsuftxD/jJ1JFgK5UOoh
+        SOHp30khP15aq+3uhdDwENTG0g==
+X-Google-Smtp-Source: ABdhPJyDbOlnCGi41bunK/lTO1AxVS8RGw0gEMTb5OjOlX/g3xLz/AlR7pudSa0ETrM56Hx/cuanng==
+X-Received: by 2002:adf:c00a:: with SMTP id z10mr23681638wre.315.1635174430168;
+        Mon, 25 Oct 2021 08:07:10 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id f20sm19173554wmq.38.2021.10.25.08.07.08
+        by smtp.gmail.com with ESMTPSA id f20sm19173554wmq.38.2021.10.25.08.07.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Oct 2021 08:07:08 -0700 (PDT)
+        Mon, 25 Oct 2021 08:07:09 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
         gregkh@linuxfoundation.org, bjorn.andersson@linaro.org,
         robh+dt@kernel.org, linux-usb@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
 Cc:     wcheng@codeaurora.org, bryan.odonoghue@linaro.org
-Subject: [PATCH 3/6] dt-bindings: usb: Add qcom,pmic-usb-pdphy dt-binding header
-Date:   Mon, 25 Oct 2021 16:09:03 +0100
-Message-Id: <20211025150906.176686-4-bryan.odonoghue@linaro.org>
+Subject: [PATCH 4/6] dt-bindings: usb: Add Qualcomm PMIC PDPHY controller YAML schema
+Date:   Mon, 25 Oct 2021 16:09:04 +0100
+Message-Id: <20211025150906.176686-5-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211025150906.176686-1-bryan.odonoghue@linaro.org>
 References: <20211025150906.176686-1-bryan.odonoghue@linaro.org>
@@ -65,39 +65,139 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Adds a series of defines which are used in the DTS and pdphy driver for
-identifying interrupts.
+Add a YAML binding for the power-delivery PHY silicon interface inside
+Qualcomm's pm8150b hardware block.
+
+The pdphy driver operates with a type-c driver inside of a high level
+single TCPM device to provide overall TCPM functionality.
 
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- .../usb/typec/tcpm/qcom,pmic-usb-pdphy.h       | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
- create mode 100644 include/dt-bindings/usb/typec/tcpm/qcom,pmic-usb-pdphy.h
+ .../bindings/usb/qcom,pmic-pdphy.yaml         | 115 ++++++++++++++++++
+ 1 file changed, 115 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-pdphy.yaml
 
-diff --git a/include/dt-bindings/usb/typec/tcpm/qcom,pmic-usb-pdphy.h b/include/dt-bindings/usb/typec/tcpm/qcom,pmic-usb-pdphy.h
+diff --git a/Documentation/devicetree/bindings/usb/qcom,pmic-pdphy.yaml b/Documentation/devicetree/bindings/usb/qcom,pmic-pdphy.yaml
 new file mode 100644
-index 0000000000000..0bb1ce677fe5c
+index 0000000000000..9110f6203b87f
 --- /dev/null
-+++ b/include/dt-bindings/usb/typec/tcpm/qcom,pmic-usb-pdphy.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (c) 2021, Linaro Ltd. All rights reserved.
-+ */
++++ b/Documentation/devicetree/bindings/usb/qcom,pmic-pdphy.yaml
+@@ -0,0 +1,115 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/usb/qcom,pmic-pdphy.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
-+#ifndef _DT_BINDINGS_TCPM_QCOM_PMIC_USB_PDPHY_H
-+#define _DT_BINDINGS_TCPM_QCOM_PMIC_USB_PDPHY_H
++title: Qualcomm PMIC based USB PDPHY driver
 +
-+#define PMIC_PDPHY_SIG_TX_IRQ		0x0
-+#define PMIC_PDPHY_SIG_RX_IRQ		0x1
-+#define PMIC_PDPHY_MSG_TX_IRQ		0x2
-+#define PMIC_PDPHY_MSG_RX_IRQ		0x3
-+#define PMIC_PDPHY_MSG_TX_FAIL_IRQ	0x4
-+#define PMIC_PDPHY_MSG_TX_DISCARD_IRQ	0x5
-+#define PMIC_PDPHY_MSG_RX_DISCARD_IRQ	0x6
-+#define PMIC_PDPHY_FR_SWAP_IRQ		0x7
++maintainers:
++  - Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 +
-+#endif
++description: |
++  Qualcomm PMIC Power Delivery PHY driver
++
++properties:
++  compatible:
++    enum:
++      - qcom,pm8150b-pdphy
++
++  reg:
++    maxItems: 1
++    description: PDPHY base address
++
++  interrupts:
++    items:
++      - description: Sig TX - transmitted reset signal
++      - description: Sig RX - received reset signal
++      - description: TX completion
++      - description: RX completion
++      - description: TX fail
++      - description: TX discgard
++      - description: RX discgard
++      - description: Fast Role Swap event
++
++  interrupt-names:
++    items:
++       - const: pmic-pdphy-sig-tx
++       - const: pmic-pdphy-sig-rx
++       - const: pmic-pdphy-msg-tx
++       - const: pmic-pdphy-msg-rx
++       - const: pmic-pdphy-msg-tx-failed
++       - const: pmic-pdphy-msg-tx-discarded
++       - const: pmic-pdphy-msg-rx-discarded
++       - const: pmic-pdphy-fr-swap
++
++  ports:
++    description: Remote endpoint connections
++    $ref: /connector/usb-connector.yaml#/properties/ports
++
++    properties:
++      port@0:
++        description: Remote endpoints for the TCPM driver
++
++    required:
++      - port@0
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-names
++  - ports
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/usb/typec/tcpm/qcom,pmic-usb-pdphy.h>
++
++    pm8150b {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        pm8150b_pdphy: pdphy@1700 {
++            compatible = "qcom,pm8150b-pdphy";
++            reg = <0x1700>;
++            interrupts = <0x2 0x17 PMIC_PDPHY_SIG_TX_IRQ
++                          IRQ_TYPE_EDGE_RISING>,
++                         <0x2 0x17 PMIC_PDPHY_SIG_RX_IRQ
++                          IRQ_TYPE_EDGE_RISING>,
++                         <0x2 0x17 PMIC_PDPHY_MSG_TX_IRQ
++                          IRQ_TYPE_EDGE_RISING>,
++                         <0x2 0x17 PMIC_PDPHY_MSG_RX_IRQ
++                          IRQ_TYPE_EDGE_RISING>,
++                         <0x2 0x17 PMIC_PDPHY_MSG_TX_FAIL_IRQ
++                          IRQ_TYPE_EDGE_RISING>,
++                         <0x2 0x17 PMIC_PDPHY_MSG_TX_DISCARD_IRQ
++                          IRQ_TYPE_EDGE_RISING>,
++                         <0x2 0x17 PMIC_PDPHY_MSG_RX_DISCARD_IRQ
++                          IRQ_TYPE_EDGE_RISING>,
++                         <0x2 0x17 PMIC_PDPHY_FR_SWAP_IRQ
++                          IRQ_TYPE_EDGE_RISING>;
++            interrupt-names = "pmic-pdphy-sig-tx",
++                              "pmic-pdphy-sig-rx",
++                              "pmic-pdphy-msg-tx",
++                              "pmic-pdphy-msg-rx",
++                              "pmic-pdphy-msg-tx-failed",
++                              "pmic-pdphy-msg-tx-discarded",
++                              "pmic-pdphy-msg-rx-discarded",
++                              "pmic-pdphy-fr-swap";
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                port@0 {
++                    reg = <0>;
++                    pmic_pdphy: endpoint {
++                        remote-endpoint = <&pmic_tcpm_pdphy>;
++                    };
++                };
++            };
++        };
++    };
++...
 -- 
 2.33.0
 
