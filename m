@@ -2,75 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E94A843B26F
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 14:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78EB943B24E
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 14:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235972AbhJZMdS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Oct 2021 08:33:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45700 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235425AbhJZMdS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 26 Oct 2021 08:33:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5394960EBD;
-        Tue, 26 Oct 2021 12:30:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635251454;
-        bh=Sjf7b/oeWGiONyuawgadmBHHVmuErKfTpBabVyn5MPQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LPtaD8PAqJ645wMcl9R83O49m5Eo8JqJYW4TP1jHM0+4L1ODZsjyh3B4Kue6MglMu
-         5+sTKd/xW7bNhfpInnlSbZabnai2u5Hz9jX0X5nFA4vxEZ/3hamuafbWqyrBLdhbhm
-         zWDLrrtFGPavjQf+EoTOh66VHUx3JhVUkGkhvsOsBntvYB4C+swA9dKXr2QYnatapo
-         k8/fSk63lb6XO1BH97qxxW0ni8cnsEofqXDNP1d53UJ1EpBT0fU2+6G5VE8LW2F8k2
-         I0HG0cIdfNndlfizE8VN/bLQ81usn6UJcBXWxt6Iqb8O5X0R23eevsqvNSZuv/L7qB
-         70xtS9eEskPqw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mfLbB-0001iB-JL; Tue, 26 Oct 2021 14:30:38 +0200
-Date:   Tue, 26 Oct 2021 14:30:37 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Wang Hai <wanghai38@huawei.com>
-Cc:     oneukum@suse.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2] usbnet: fix error return code in usbnet_probe()
-Message-ID: <YXf07WrHVwk8WF2B@hovoldconsulting.com>
-References: <20211026124015.3025136-1-wanghai38@huawei.com>
+        id S235055AbhJZMYx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Oct 2021 08:24:53 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:26123 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230213AbhJZMYn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Oct 2021 08:24:43 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4HdrWB1dWvz1DHs2;
+        Tue, 26 Oct 2021 20:20:22 +0800 (CST)
+Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.15; Tue, 26 Oct 2021 20:22:16 +0800
+Received: from huawei.com (10.175.104.82) by kwepemm600001.china.huawei.com
+ (7.193.23.3) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.15; Tue, 26 Oct
+ 2021 20:22:15 +0800
+From:   Wang Hai <wanghai38@huawei.com>
+To:     <oneukum@suse.com>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <johan@kernel.org>
+CC:     <netdev@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH net v2] usbnet: fix error return code in usbnet_probe()
+Date:   Tue, 26 Oct 2021 20:40:15 +0800
+Message-ID: <20211026124015.3025136-1-wanghai38@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211026124015.3025136-1-wanghai38@huawei.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.82]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600001.china.huawei.com (7.193.23.3)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 26, 2021 at 08:40:15PM +0800, Wang Hai wrote:
-> Return error code if usb_maxpacket() returns 0 in usbnet_probe()
-> 
-> Fixes: 397430b50a36 ("usbnet: sanity check for maxpacket")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Wang Hai <wanghai38@huawei.com>
+Return error code if usb_maxpacket() returns 0 in usbnet_probe()
 
-This needs to go to stable as well as the offending patch is being
-backported.
+Fixes: 397430b50a36 ("usbnet: sanity check for maxpacket")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wang Hai <wanghai38@huawei.com>
+---
+v1->v2: change '-EINVAL' to '-ENODEV'
+ drivers/net/usb/usbnet.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Cc: stable@vger.kernel.org
-Reviewed-by: Johan Hovold <johan@kernel.org>
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index 80432ee0ce69..a33d7fb82a00 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -1790,6 +1790,7 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
+ 	dev->maxpacket = usb_maxpacket (dev->udev, dev->out, 1);
+ 	if (dev->maxpacket == 0) {
+ 		/* that is a broken device */
++		status = -ENODEV;
+ 		goto out4;
+ 	}
+ 
+-- 
+2.25.1
 
-> ---
-> v1->v2: change '-EINVAL' to '-ENODEV'
->  drivers/net/usb/usbnet.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-> index 80432ee0ce69..a33d7fb82a00 100644
-> --- a/drivers/net/usb/usbnet.c
-> +++ b/drivers/net/usb/usbnet.c
-> @@ -1790,6 +1790,7 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
->  	dev->maxpacket = usb_maxpacket (dev->udev, dev->out, 1);
->  	if (dev->maxpacket == 0) {
->  		/* that is a broken device */
-> +		status = -ENODEV;
->  		goto out4;
->  	}
-
-Johan
