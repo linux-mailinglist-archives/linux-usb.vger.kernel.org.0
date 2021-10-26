@@ -2,92 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2702543B97B
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 20:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9069F43B981
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 20:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238232AbhJZS1I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Oct 2021 14:27:08 -0400
-Received: from mxout01.lancloud.ru ([45.84.86.81]:53538 "EHLO
-        mxout01.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231297AbhJZS1I (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Oct 2021 14:27:08 -0400
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru 2EBF1209B989
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH 22/22] usb: host: xhci-tegra: deny IRQ0
-To:     Dmitry Osipenko <digetx@gmail.com>, <linux-usb@vger.kernel.org>,
-        "Alan Stern" <stern@rowland.harvard.edu>,
+        id S238273AbhJZS2a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Oct 2021 14:28:30 -0400
+Received: from mleia.com ([178.79.152.223]:34186 "EHLO mail.mleia.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238269AbhJZS2a (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 Oct 2021 14:28:30 -0400
+Received: from mail.mleia.com (localhost [127.0.0.1])
+        by mail.mleia.com (Postfix) with ESMTP id 1341E2F042;
+        Tue, 26 Oct 2021 18:25:35 +0000 (UTC)
+Subject: Re: [PATCH v2 11/22] usb: host: ohci-nxp: deny IRQ0
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>, linux-usb@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        <linux-tegra@vger.kernel.org>
-References: <20211018183930.8448-1-s.shtylyov@omp.ru>
- <20211018183930.8448-23-s.shtylyov@omp.ru>
- <415d1410-5b5f-3de4-1973-998528481c0f@gmail.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <bde8811f-806e-1845-9a17-25227ecc02e9@omp.ru>
-Date:   Tue, 26 Oct 2021 21:24:40 +0300
+Cc:     linux-arm-kernel@lists.infradead.org
+References: <20211026173943.6829-1-s.shtylyov@omp.ru>
+ <20211026173943.6829-12-s.shtylyov@omp.ru>
+From:   Vladimir Zapolskiy <vz@mleia.com>
+Message-ID: <c1b4a352-97ad-d2da-58ac-480d12d5fd48@mleia.com>
+Date:   Tue, 26 Oct 2021 21:25:34 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-In-Reply-To: <415d1410-5b5f-3de4-1973-998528481c0f@gmail.com>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20211026173943.6829-12-s.shtylyov@omp.ru>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20211026_182535_097401_AD46D684 
+X-CRM114-Status: GOOD (  16.47  )
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+Hi Sergey,
 
-On 10/21/21 12:09 PM, Dmitry Osipenko wrote:
-[...]
->> If platform_get_irq() returns IRQ0 (considered invalid according to Linus)
->> the driver blithely passes it to usb_add_hcd() that treats IRQ0 as no IRQ
->> at all. Deny IRQ0 right away, returning -EINVAL from the probe() method...
->>
->> Fixes: e84fce0f8837 ("usb: xhci: Add NVIDIA Tegra XUSB controller driver")
->> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->> ---
->>  drivers/usb/host/xhci-tegra.c | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
->> index 1bf494b649bd..7151b1d4f876 100644
->> --- a/drivers/usb/host/xhci-tegra.c
->> +++ b/drivers/usb/host/xhci-tegra.c
->> @@ -1439,6 +1439,8 @@ static int tegra_xusb_probe(struct platform_device *pdev)
->>  	tegra->xhci_irq = platform_get_irq(pdev, 0);
->>  	if (tegra->xhci_irq < 0)
->>  		return tegra->xhci_irq;
->> +	if (!tegra->xhci_irq)
->> +		return -ENIVAL;
->>  
->>  	tegra->mbox_irq = platform_get_irq(pdev, 1);
->>  	if (tegra->mbox_irq < 0)
->>
+On 10/26/21 8:39 PM, Sergey Shtylyov wrote:
+> If platform_get_irq() returns IRQ0 (considered invalid according to Linus)
+> the driver blithely passes it to usb_add_hcd() that treats IRQ0 as no IRQ
+> at all. Deny IRQ0 right away, returning -EINVAL from the probe() method...
 > 
-> platform_get_irq() never returns zero in accordance to [1], but I see
-> that it can return it [2].
-
-   Not only that, it also can be returned thru the normal path (from an IRQ descriptor).
-I'm not sure whether 0 means an IRQ0 returned from acpi_dev_gpio_irq_get(), looks like yes...
-
-> Should be better to fix [2] and return -EINVAL.
-
-   No, we have WARN() before returning IRQ0 -- if we're going to finally declare IRQ0 invalid,
-it should be done after this check.
-
-> [1]
-> https://elixir.bootlin.com/linux/v5.15-rc6/source/drivers/base/platform.c#L254
+> Fixes: 60bbfc84b6d9 ("USB OHCI controller support for PNX4008")
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> ---
+> Changes in version 2:
+> - fixed the subject to match the patch;
+> - added Alan's ACK.
 > 
-> [2]
-> https://elixir.bootlin.com/linux/v5.15-rc6/source/drivers/base/platform.c#L226
+>   drivers/usb/host/ohci-nxp.c | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
+> index 85878e8ad331..afb9c2fc85c3 100644
+> --- a/drivers/usb/host/ohci-nxp.c
+> +++ b/drivers/usb/host/ohci-nxp.c
+> @@ -215,6 +215,10 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
+>   		ret = -ENXIO;
+>   		goto fail_resource;
+>   	}
+> +	if (!irq) {
+> +		ret = -EINVAL;
+> +		goto fail_resource;
+> +	}
+>   
+>   	ohci_nxp_start_hc();
+>   	platform_set_drvdata(pdev, hcd);
+> 
 
-MBR, Sergey
+thank you for the change.
+
+Acked-by: Vladimir Zapolskiy <vz@mleia.com>
+
+--
+Best wishes,
+Vladimir
