@@ -2,81 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9069F43B981
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 20:26:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9563643BB1C
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 21:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238273AbhJZS2a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Oct 2021 14:28:30 -0400
-Received: from mleia.com ([178.79.152.223]:34186 "EHLO mail.mleia.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238269AbhJZS2a (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 26 Oct 2021 14:28:30 -0400
-Received: from mail.mleia.com (localhost [127.0.0.1])
-        by mail.mleia.com (Postfix) with ESMTP id 1341E2F042;
-        Tue, 26 Oct 2021 18:25:35 +0000 (UTC)
-Subject: Re: [PATCH v2 11/22] usb: host: ohci-nxp: deny IRQ0
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>, linux-usb@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-kernel@lists.infradead.org
-References: <20211026173943.6829-1-s.shtylyov@omp.ru>
- <20211026173943.6829-12-s.shtylyov@omp.ru>
-From:   Vladimir Zapolskiy <vz@mleia.com>
-Message-ID: <c1b4a352-97ad-d2da-58ac-480d12d5fd48@mleia.com>
-Date:   Tue, 26 Oct 2021 21:25:34 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S237026AbhJZTml (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Oct 2021 15:42:41 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:44225 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236859AbhJZTmi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Oct 2021 15:42:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1635277214; x=1666813214;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=jboiSRwJvMy7cqpSJRQcRDRWWEZYJWSw9hlVM10klyQ=;
+  b=ubncl7lj6sE9ThQtDdrVYIExYpNWGituSLFbKzE/EvNWyQaoB9U/Zv0T
+   /+4HrKwK9vdQapkGnTF1VIgIBcU51S5Ju613wMFFWa9r/EMaxl1k4B0m9
+   ET0F5zHCt+/utnN2SBL0FI3zBSNjDeF1Lt25QfQ4k8iMbEZ9GTIW2AyDq
+   Y=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 26 Oct 2021 12:40:13 -0700
+X-QCInternal: smtphost
+Received: from nalasex01b.na.qualcomm.com ([10.47.209.197])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2021 12:40:13 -0700
+Received: from [10.110.50.18] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7; Tue, 26 Oct 2021
+ 12:40:12 -0700
+Subject: Re: [PATCH] usb: gadget: f_mass_storage: Disable eps during
+ disconnect
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Wesley Cheng <wcheng@codeaurora.org>
+References: <20211026004456.23054-1-quic_wcheng@quicinc.com>
+ <20211026144140.GA1288435@rowland.harvard.edu>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+Message-ID: <81fc3f6d-f747-736b-32db-aecbca77dd31@quicinc.com>
+Date:   Tue, 26 Oct 2021 12:40:04 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20211026173943.6829-12-s.shtylyov@omp.ru>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20211026144140.GA1288435@rowland.harvard.edu>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
-X-CRM114-CacheID: sfid-20211026_182535_097401_AD46D684 
-X-CRM114-Status: GOOD (  16.47  )
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Sergey,
+Hi Alan,
 
-On 10/26/21 8:39 PM, Sergey Shtylyov wrote:
-> If platform_get_irq() returns IRQ0 (considered invalid according to Linus)
-> the driver blithely passes it to usb_add_hcd() that treats IRQ0 as no IRQ
-> at all. Deny IRQ0 right away, returning -EINVAL from the probe() method...
+On 10/26/2021 7:41 AM, Alan Stern wrote:
+> On Mon, Oct 25, 2021 at 05:44:56PM -0700, Wesley Cheng wrote:
+>> From: Wesley Cheng <wcheng@codeaurora.org>
+>>
+>> When receiving a disconnect event from the UDC, the mass storage
+>> function driver currently runs the handle_exception() routine
+>> asynchronously.  For UDCs that support runtime PM, there is a
+>> possibility the UDC is already suspended by the time the
+>> do_set_interface() is executed.  This can lead to HW register access
+>> while the UDC is already suspended.
+>>
+>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>> ---
+>>  drivers/usb/gadget/function/f_mass_storage.c | 10 ++++++++++
+>>  1 file changed, 10 insertions(+)
+>>
+>> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+>> index 3cabf7692ee1..752439690fda 100644
+>> --- a/drivers/usb/gadget/function/f_mass_storage.c
+>> +++ b/drivers/usb/gadget/function/f_mass_storage.c
+>> @@ -2342,6 +2342,16 @@ static void fsg_disable(struct usb_function *f)
+>>  {
+>>  	struct fsg_dev *fsg = fsg_from_func(f);
+>>  
+>> +	/* Disable the endpoints */
+>> +	if (fsg->bulk_in_enabled) {
+>> +		usb_ep_disable(fsg->bulk_in);
 > 
-> Fixes: 60bbfc84b6d9 ("USB OHCI controller support for PNX4008")
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> ---
-> Changes in version 2:
-> - fixed the subject to match the patch;
-> - added Alan's ACK.
+> According to the kerneldoc, this routine must be called in process 
+> context.
 > 
->   drivers/usb/host/ohci-nxp.c | 4 ++++
->   1 file changed, 4 insertions(+)
+>> +		fsg->bulk_in_enabled = 0;
+>> +	}
+>> +	if (fsg->bulk_out_enabled) {
+>> +		usb_ep_disable(fsg->bulk_out);
+>> +		fsg->bulk_out_enabled = 0;
+>> +	}
+>> +
+>>  	__raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE, NULL);
+>>  }
 > 
-> diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
-> index 85878e8ad331..afb9c2fc85c3 100644
-> --- a/drivers/usb/host/ohci-nxp.c
-> +++ b/drivers/usb/host/ohci-nxp.c
-> @@ -215,6 +215,10 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
->   		ret = -ENXIO;
->   		goto fail_resource;
->   	}
-> +	if (!irq) {
-> +		ret = -EINVAL;
-> +		goto fail_resource;
-> +	}
->   
->   	ohci_nxp_start_hc();
->   	platform_set_drvdata(pdev, hcd);
+> Looks like you'll have to find a different way to avoid the problem.  
+> For example, if an exception is pending then you might prevent the 
+> gadget from going into runtime suspend until the exception has been 
+> handled.
 > 
+Thanks for the suggestion.  I noticed that a lot of other FDs currently
+call usb_ep_disable() in the disable/disconnect path as well.  Actually,
+f_mass_storage seems to be the only one that doesn't do so.  Maybe we
+should change the kerneldoc :)
 
-thank you for the change.
-
-Acked-by: Vladimir Zapolskiy <vz@mleia.com>
-
---
-Best wishes,
-Vladimir
+Thanks
+Wesley Cheng
