@@ -2,88 +2,227 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F15E43A969
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 02:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E5F43AA74
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 04:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233524AbhJZAto (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Oct 2021 20:49:44 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:14972 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235810AbhJZAtn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 20:49:43 -0400
+        id S231478AbhJZCsy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Oct 2021 22:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232868AbhJZCst (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Oct 2021 22:48:49 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD535C061243
+        for <linux-usb@vger.kernel.org>; Mon, 25 Oct 2021 19:46:26 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id 107-20020a9d0a74000000b00553bfb53348so34814otg.0
+        for <linux-usb@vger.kernel.org>; Mon, 25 Oct 2021 19:46:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1635209240; x=1666745240;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5znon4iCho05Hu+qdNP4H8pF1rkGlP/vfvPo8Af0PG8=;
-  b=vlFlKkEn7rxqiS+mBZ+aerxYFyWS+AfpHd9n3CxXmpxJU9NbXyDwW9W+
-   RtaBggBK7omZuhYZFny3ZIYXpFST4+eLXjoqoltoN/jkfu1IffTfL+oJf
-   JiAuez0EI5rJTMYKd6pWy5CgKmYZoHjNSjcm86GwVb/HkJeD6h0anjkWj
-   s=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 25 Oct 2021 17:47:19 -0700
-X-QCInternal: smtphost
-Received: from nalasex01b.na.qualcomm.com ([10.47.209.197])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2021 17:47:19 -0700
-Received: from wcheng-linux.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Mon, 25 Oct 2021 17:47:19 -0700
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH] usb: gadget: f_mass_storage: Disable eps during disconnect
-Date:   Mon, 25 Oct 2021 17:44:56 -0700
-Message-ID: <20211026004456.23054-1-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.33.1
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fNJEWmbc5F3iZTFtMpvuRuP6v2KdIvW972u1Kqe/0GM=;
+        b=hLA76FBAWKCorHaVgR34RZkpRLv4fqLHBF4RTe+TqR3UxiFAlEx8aRJXKHOq67tZTe
+         ep7GMAc3Qviokz3G3gpvTy3OgWAqkJ4ZpvafVJLQ8abzHFztYsWYFIHNHAaQ8ODzB4Ze
+         nkI69DUHB+NZjAAYbKGdnGpiCFFUOWp/k5+dhyjfJi1sSrAZbj4m2dFC97SLu4HUI6/0
+         4oU6JMtnH+o7KaJWMbijAcmWYUt2eDLCFRyATQkfUIqbtzHFv9ZsQe0cdJNahtUdFap0
+         iemEXRRz1F6QEdFA3uKbUiwKdVLDRpe7c2xJoS0P0SDCdcNKuO0iT9KgIpymazWOXFXM
+         5oqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fNJEWmbc5F3iZTFtMpvuRuP6v2KdIvW972u1Kqe/0GM=;
+        b=S4iisrWEKN0LrmICiTpuPt80H1WzQvRVy1221vcU9OJjYYRpoDcb4moFUUJMbX/2Hd
+         qthDDHL9/zg8z+ldODJu47KlNfIoc3DJjcb50qhlDeEHp0FFdgSGUc4bxZuTtvsMSpuO
+         f79Znx9K4cNRk0g/9o06VgGVV2+qcenjhK3z66+4HKqYrJI5itBPPYT8XTDe9EOCBGDE
+         bMUvnW/Q2c3rTWaQhHD0zME/tvNZjv0hT1p/utANZ7EjgNozdfaIIWaAB7CeSUZXVtry
+         2Xsyl9K78Sw7kb4mZgfs6T5QMEcX30vGB4/xbEdalTIIFTkFTGu54nk9LWKN2rCkXJaO
+         SFdQ==
+X-Gm-Message-State: AOAM532ADbHeriHidXVZ5jpZouc5qX7epls9TqFagxkwoLRN/94Vj3ql
+        K94/mERmCmTH01Lv7J7TExJudg==
+X-Google-Smtp-Source: ABdhPJzZnGPL7jx+BaO7sWh6d98A+NYjtnR3AXtmeSyrTFZYCLlkqdQBDdPoJS6MLunFyYkgz6Jn0A==
+X-Received: by 2002:a9d:611b:: with SMTP id i27mr16648120otj.323.1635216385800;
+        Mon, 25 Oct 2021 19:46:25 -0700 (PDT)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id w28sm3469138ooc.3.2021.10.25.19.46.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Oct 2021 19:46:25 -0700 (PDT)
+Date:   Mon, 25 Oct 2021 19:48:02 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com
+Subject: Re: [PATCH v2 1/3] dt-bindings: usb: qcom,dwc3: Add multi-pd
+ bindings for dwc3 qcom
+Message-ID: <YXdsYlLWnjopyMn/@ripper>
+References: <1635152851-23660-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1635152851-23660-2-git-send-email-quic_c_sanm@quicinc.com>
+ <YXcBK7zqny0s4gd4@ripper>
+ <CAE-0n51k8TycXjEkH7rHYo0j7cYbKJOnOn1keVhx2yyTcBNnvg@mail.gmail.com>
+ <YXck+xCJQBRGqTCw@ripper>
+ <CAE-0n530M3eft-o0qB+yEzGjZgCLMgY==ZgdvwiVCwqqCAVxxA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE-0n530M3eft-o0qB+yEzGjZgCLMgY==ZgdvwiVCwqqCAVxxA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Wesley Cheng <wcheng@codeaurora.org>
+On Mon 25 Oct 15:41 PDT 2021, Stephen Boyd wrote:
 
-When receiving a disconnect event from the UDC, the mass storage
-function driver currently runs the handle_exception() routine
-asynchronously.  For UDCs that support runtime PM, there is a
-possibility the UDC is already suspended by the time the
-do_set_interface() is executed.  This can lead to HW register access
-while the UDC is already suspended.
+> Quoting Bjorn Andersson (2021-10-25 14:43:23)
+> > On Mon 25 Oct 13:17 PDT 2021, Stephen Boyd wrote:
+> >
+> > > Quoting Bjorn Andersson (2021-10-25 12:10:35)
+> > > > On Mon 25 Oct 02:07 PDT 2021, Sandeep Maheswaram wrote:
+> > > >
+> > > > > Add multi pd bindings to set performance state for cx domain
+> > > > > to maintain minimum corner voltage for USB clocks.
+> > > > >
+> > > > > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > > > > ---
+> > > > > v2:
+> > > > > Make cx domain mandatory.
+> > > > >
+> > > > >  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 8 +++++++-
+> > > > >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > > > >
+> > > > > diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > > > > index 2bdaba0..fd595a8 100644
+> > > > > --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > > > > +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > > > > @@ -42,7 +42,13 @@ properties:
+> > > > >
+> > > > >    power-domains:
+> > > > >      description: specifies a phandle to PM domain provider node
+> > > > > -    maxItems: 1
+> > > > > +    minItems: 2
+> > > > > +    items:
+> > > > > +      - description: cx power domain
+> > > > > +      - description: USB gdsc power domain
+> > > > > +
+> > > > > +  required-opps:
+> > > > > +    description: specifies the performance state to power domain
+> > > >
+> > > > I'm still worried about the fact that we can't just rely on the USB GDSC
+> > > > being a subdomin of CX in order to just "turn on" CX.
+> > > >
+> > > > Afaict accepting this path forward means that for any device that sits
+> > > > in a GDSC power domain we will have to replicate this series for the
+> > > > related driver.
+> > > >
+> > >
+> > > I suspect the problem is that it's not just "turn on" but wanting to
+> > > turn it on and then set the performance state to some value based on the
+> > > clk frequency.
+> >
+> > I don't see an opp-table involved, just the required-opps for the
+> > purpose of turning CX on a little bit more. Perhaps I'm missing
+> > something here though.
+> 
+> Indeed. There's only one clk frequency for USB so only one performance
+> state/required-opps is used. In general that isn't the case and so we'll
+> eventually need to map some GDSC on/off state to the clk frequency of
+> whatever clk domain is associated with CX for a device.
+> 
 
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
----
- drivers/usb/gadget/function/f_mass_storage.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Makes sense, just because we don't use opp-tables to scale the frequency
+and performance_state, the issue remains the same.
 
-diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-index 3cabf7692ee1..752439690fda 100644
---- a/drivers/usb/gadget/function/f_mass_storage.c
-+++ b/drivers/usb/gadget/function/f_mass_storage.c
-@@ -2342,6 +2342,16 @@ static void fsg_disable(struct usb_function *f)
- {
- 	struct fsg_dev *fsg = fsg_from_func(f);
- 
-+	/* Disable the endpoints */
-+	if (fsg->bulk_in_enabled) {
-+		usb_ep_disable(fsg->bulk_in);
-+		fsg->bulk_in_enabled = 0;
-+	}
-+	if (fsg->bulk_out_enabled) {
-+		usb_ep_disable(fsg->bulk_out);
-+		fsg->bulk_out_enabled = 0;
-+	}
-+
- 	__raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE, NULL);
- }
- 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+> >
+> > > Maybe the simplest version of that could be supported
+> > > somehow by having dev_pm_opp_set_rate() figure out that the 'level'
+> > > applies to the parent power domain instead of the child one?
+> >
+> > Having the performance_state request cascade up through the GDSC sounds
+> > like a nice solution; I've not looked at the code to see if this is
+> > feasible though.
+> 
+> When the binding was introduced I recall we punted on the parent child
+> conversion stuff. One problem at a time. There's also the possibility
+> for a power domain to be parented by multiple power domains so
+> translation tables need to account for that.
+> 
 
+But for this case - and below display case - the subdomain (the device's
+power-domain) is just a dumb gate. So there is no translation, the given
+performance_state applies to the parent. Or perhaps such implicitness
+will come back and bite us?
+
+I don't think we allow a power-domain to be a subdomain of two
+power-domains - and again it's not applicable to USB or display afaict.
+
+> >
+> > > Or we may need to make another part of the OPP binding to indicate the
+> > > relationship between the power domain and the OPP and the parent of
+> > > the power domain.
+> >
+> > I suspect this would be useful if a power-domain provider needs to
+> > translate a performance_state into a different supply-performance_state.
+> > Not sure if we have such case currently; these examples are all an
+> > adjustable power-domain with "gating" subdomains.
+> 
+> Even for this case, we should be able to have the GDSC map the on state
+> to some performance state in the parent domain. Maybe we need to add
+> some code to the gdsc.c file to set a performance state on the parent
+> domain when it is turned on. I'm not sure where the value for that perf
+> state comes from. I guess we can hardcode it in the driver for now and
+> if it needs to be multiple values based on the clk frequency we can push
+> it out to an OPP table or something like that.
+> 
+
+For the GDSC I believe we only have 1:1 mapping, so implementing
+set_performance_state to just pass that on to the parent might do the
+trick (although I haven't thought this through).
+
+Conceptually I guess this would be like calling clk_set_rate() on a
+clock gate, relying on it being propagated upwards. The problem here is
+that the performance_state is just a "random" integer without a well
+defined unit.
+
+
+
+The one case where I believe we talked about having different mapping
+between the performance_state levels was in the relationship between CX
+and MX. But I don't think we ever did anything about that...
+
+> >
+> >
+> > PS. I think we have the same problem in the display subsystem, the
+> > sub-blocks are powered by MDSS_GDSC, which is a subdomain of MMCX. We
+> > trust the parent mdss node to keep the GDSC powered and specify MMCX as
+> > the power-domain for the children, so that we can affect their levels by
+> > respective opp-table.
+> >
+> 
+> Yes, a GDSC is really a gate on a parent power domain like CX or MMCX,
+> etc. Is the display subsystem an example of different clk frequencies
+> wanting to change the perf state of CX? If so it's a good place to work
+> out the translation scheme for devices that aren't listing the CX power
+> domain in DT.
+
+Yes, the various display components sits in MDSS_GDSC but the opp-tables
+needs to change the performance_state of MDSS_GDSC->parent (i.e. CX or
+MMCX, depending on platform).
+
+As I said, today we hack this by trusting that the base drm/msm driver
+will keep MDSS_GDSC on and listing MMCX (or CX) as power-domain for each
+of these components.
+
+
+So if we solve this, then that seems to directly map to the static case
+for USB as well.
+
+Regards,
+Bjorn
