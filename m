@@ -2,17 +2,17 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 623A143B865
+	by mail.lfdr.de (Postfix) with ESMTP id CE70043B866
 	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 19:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237919AbhJZRmW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Oct 2021 13:42:22 -0400
-Received: from mxout04.lancloud.ru ([45.84.86.114]:56842 "EHLO
-        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237855AbhJZRmP (ORCPT
+        id S237860AbhJZRmX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Oct 2021 13:42:23 -0400
+Received: from mxout01.lancloud.ru ([45.84.86.81]:51778 "EHLO
+        mxout01.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237856AbhJZRmP (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Oct 2021 13:42:15 -0400
 Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru E338520A74C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru 45A4A2093220
 Received: from LanCloud
 Received: from LanCloud
 Received: from LanCloud
@@ -20,11 +20,10 @@ From:   Sergey Shtylyov <s.shtylyov@omp.ru>
 To:     <linux-usb@vger.kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC:     Vladimir Zapolskiy <vz@mleia.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v2 11/22] usb: host: ohci-nxp: deny IRQ0
-Date:   Tue, 26 Oct 2021 20:39:32 +0300
-Message-ID: <20211026173943.6829-12-s.shtylyov@omp.ru>
+CC:     <linux-omap@vger.kernel.org>
+Subject: [PATCH v2 12/22] usb: host: ohci-omap: deny IRQ0
+Date:   Tue, 26 Oct 2021 20:39:33 +0300
+Message-ID: <20211026173943.6829-13-s.shtylyov@omp.ru>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20211026173943.6829-1-s.shtylyov@omp.ru>
 References: <20211026173943.6829-1-s.shtylyov@omp.ru>
@@ -42,32 +41,31 @@ If platform_get_irq() returns IRQ0 (considered invalid according to Linus)
 the driver blithely passes it to usb_add_hcd() that treats IRQ0 as no IRQ
 at all. Deny IRQ0 right away, returning -EINVAL from the probe() method...
 
-Fixes: 60bbfc84b6d9 ("USB OHCI controller support for PNX4008")
+Fixes: 489447380a29 ("[PATCH] handle errors returned by platform_get_irq*()")
 Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 Acked-by: Alan Stern <stern@rowland.harvard.edu>
 ---
 Changes in version 2:
-- fixed the subject to match the patch;
 - added Alan's ACK.
 
- drivers/usb/host/ohci-nxp.c | 4 ++++
+ drivers/usb/host/ohci-omap.c | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
-index 85878e8ad331..afb9c2fc85c3 100644
---- a/drivers/usb/host/ohci-nxp.c
-+++ b/drivers/usb/host/ohci-nxp.c
-@@ -215,6 +215,10 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
- 		ret = -ENXIO;
- 		goto fail_resource;
+diff --git a/drivers/usb/host/ohci-omap.c b/drivers/usb/host/ohci-omap.c
+index ded9738392e4..6d5f964d0995 100644
+--- a/drivers/usb/host/ohci-omap.c
++++ b/drivers/usb/host/ohci-omap.c
+@@ -309,6 +309,10 @@ static int ohci_hcd_omap_probe(struct platform_device *pdev)
+ 		retval = -ENXIO;
+ 		goto err3;
  	}
 +	if (!irq) {
-+		ret = -EINVAL;
-+		goto fail_resource;
++		retval = -EINVAL;
++		goto err3;
 +	}
- 
- 	ohci_nxp_start_hc();
- 	platform_set_drvdata(pdev, hcd);
+ 	retval = usb_add_hcd(hcd, irq, 0);
+ 	if (retval)
+ 		goto err3;
 -- 
 2.26.3
 
