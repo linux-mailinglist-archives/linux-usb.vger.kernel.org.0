@@ -2,78 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7688A43B47F
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 16:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC1943B514
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 17:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236850AbhJZOoF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Oct 2021 10:44:05 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:42485 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S236854AbhJZOoE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Oct 2021 10:44:04 -0400
-Received: (qmail 1289069 invoked by uid 1000); 26 Oct 2021 10:41:40 -0400
-Date:   Tue, 26 Oct 2021 10:41:40 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wesley Cheng <wcheng@codeaurora.org>
-Subject: Re: [PATCH] usb: gadget: f_mass_storage: Disable eps during
- disconnect
-Message-ID: <20211026144140.GA1288435@rowland.harvard.edu>
-References: <20211026004456.23054-1-quic_wcheng@quicinc.com>
+        id S231697AbhJZPI7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Oct 2021 11:08:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34178 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231184AbhJZPIy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 Oct 2021 11:08:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B388B604AC;
+        Tue, 26 Oct 2021 15:06:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1635260790;
+        bh=+Z01TEK+QyGY0xo8I0ZHZPD2JObUitun2+iJ1F+8ky0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zeRS4rWXDIOP7OcI42dfE34DbZ/0RnnieZyC47+iNVCm/OFDi4nOkgsyBw7uiyMEI
+         AShlVrx5bJu6uI3UG3krgnJ1uq8IaFcddNSC/xWbhdKGEW/Jvyi4O82Xvx0noVbiZ3
+         PlHeAJ55erDvywmbV2xmIsFf6sh0fyGshBd7DIvI=
+Date:   Tue, 26 Oct 2021 17:06:28 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@google.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        "Gopal, Saranya" <saranya.gopal@intel.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/4] USB Power Delivery character device interface
+Message-ID: <YXgZdFV2yTXAKxE9@kroah.com>
+References: <20211026143352.78387-1-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211026004456.23054-1-quic_wcheng@quicinc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211026143352.78387-1-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 25, 2021 at 05:44:56PM -0700, Wesley Cheng wrote:
-> From: Wesley Cheng <wcheng@codeaurora.org>
+On Tue, Oct 26, 2021 at 05:33:48PM +0300, Heikki Krogerus wrote:
+> Hi,
 > 
-> When receiving a disconnect event from the UDC, the mass storage
-> function driver currently runs the handle_exception() routine
-> asynchronously.  For UDCs that support runtime PM, there is a
-> possibility the UDC is already suspended by the time the
-> do_set_interface() is executed.  This can lead to HW register access
-> while the UDC is already suspended.
-> 
-> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-> ---
->  drivers/usb/gadget/function/f_mass_storage.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-> index 3cabf7692ee1..752439690fda 100644
-> --- a/drivers/usb/gadget/function/f_mass_storage.c
-> +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> @@ -2342,6 +2342,16 @@ static void fsg_disable(struct usb_function *f)
->  {
->  	struct fsg_dev *fsg = fsg_from_func(f);
->  
-> +	/* Disable the endpoints */
-> +	if (fsg->bulk_in_enabled) {
-> +		usb_ep_disable(fsg->bulk_in);
+> This is the proposal for USB PD character devices that we could use to
+> communicate USB PD messages directly with the USB PD capable partners,
+> ports and cable plugs from user space. Originally I proposed this idea
+> here as a better way to get the PDOs from the partners (and ports and
+> plugs): https://lkml.org/lkml/2021/10/8/331
 
-According to the kerneldoc, this routine must be called in process 
-context.
+You should put the info there (and please use lore.kernel.org in the
+future, not lkml.org as we have no control over that site), into this
+0/X message as I have no idea _why_ you need a char device and why the
+sysfs interface will not work.
 
-> +		fsg->bulk_in_enabled = 0;
-> +	}
-> +	if (fsg->bulk_out_enabled) {
-> +		usb_ep_disable(fsg->bulk_out);
-> +		fsg->bulk_out_enabled = 0;
-> +	}
-> +
->  	__raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE, NULL);
->  }
+So, why not sysfs?  :)
 
-Looks like you'll have to find a different way to avoid the problem.  
-For example, if an exception is pending then you might prevent the 
-gadget from going into runtime suspend until the exception has been 
-handled.
+thanks,
 
-Alan Stern
+greg k-h
