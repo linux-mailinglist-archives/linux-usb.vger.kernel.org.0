@@ -2,377 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1013743B5C8
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 17:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E8743B5D7
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 17:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235582AbhJZPma (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Oct 2021 11:42:30 -0400
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:39744 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235012AbhJZPm2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Oct 2021 11:42:28 -0400
-Received: by mail-ot1-f46.google.com with SMTP id e59-20020a9d01c1000000b00552c91a99f7so20384999ote.6;
-        Tue, 26 Oct 2021 08:40:05 -0700 (PDT)
+        id S237072AbhJZPnj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Oct 2021 11:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237046AbhJZPnN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Oct 2021 11:43:13 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BE7C061745
+        for <linux-usb@vger.kernel.org>; Tue, 26 Oct 2021 08:40:48 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id u11so12433570lfs.1
+        for <linux-usb@vger.kernel.org>; Tue, 26 Oct 2021 08:40:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1JXoWXHtBWdFbfIWUv0KF+B9dMJXWd2f8ajP40zMzQI=;
+        b=N4tHnrxwkxS4Sc5sl/f/0SEe3Pp4vVuZ6s/k7hmHGNL551PiE4wHKyW4zy0hyGhhxo
+         7QfTutXPaLHG3wKzcERDrA9JFL+LDQ8KHVTTun06JGw0CAdG5AZPK0D3UjLdly4KSPNc
+         KWHJEfJnAs2hYsXMBgE+/71CwyuMx/CKc24GcHVFfJG51QRSSpnFej+iLnMXD/7XvmQ3
+         P+Vqrn/17Y4lLbyi5M9Rv8yShy+sOIfniIOwk8H5H9RO0uj1/i72pA9LSazmfilg9eXz
+         S9yqfJaDxOHLYR6QYmA1/9lFih3SMGBoe/cEQ/oa8Z3tybZPv+BQdgMCxYkBjoBrYh84
+         sqqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LHJn05dFrFSrzp6BE8p0Ogvc76VnimFelZpRceN/kow=;
-        b=lLXwhAsOgpqGIYoXU8XCfKpwMjznt7Gj1JqaA3qqWbOQhPDph1bXdUaCWcklRGfl6z
-         XbaMn1+FW0lnFuxoBTgXgANDf8A3z70cq5iU8pmlScM0t6VGPfYM30Iy33r2gGPPfBrn
-         +5OS9n5j8DbFwWuORtP+zNBI+K40xYfzB31wlg1BRQsh0T8enwe8D2HhXSFD9JHxTQQd
-         8nAjuk3T0/8u4sMZT1NtYHvmVSxYJF2iiLNvM4GwO6Wnnd0KZceawdal5rSCrnYL7z6e
-         VloMvsWcNlB79FGzdjCvFev8Q7M9PMB0XCy2q61Ip3jXgasWqrtN4NVYGa0n8xR2C4CA
-         Jcjw==
-X-Gm-Message-State: AOAM530ptno6A2itGvRU6dW/m3HNiqID6UmMv08eWfZCpkOLaCr4O4c5
-        KsrRQnNCm9quE0uGZDc7s5pyNTa3h9tuvg7dYrrG/jFP
-X-Google-Smtp-Source: ABdhPJwT64HxGvetYBeeAQcCBsq8AdGDlgIRoZ+S8FjnUW77a5Gc2RmixdTVJabKk60LXzUhxJLE6KiCZ/UmVVhMQzc=
-X-Received: by 2002:a05:6830:90b:: with SMTP id v11mr20131207ott.254.1635262804497;
- Tue, 26 Oct 2021 08:40:04 -0700 (PDT)
+        bh=1JXoWXHtBWdFbfIWUv0KF+B9dMJXWd2f8ajP40zMzQI=;
+        b=eJlygRQQ1AoD9eFoU97vo5z+Z7gdjPd42rhLGHMi3pCQ2vMUYYqpJE8sPyEFP9FG8N
+         ZUs42EriZhog/pzIq8lw+mlmlrgTlwELeF5Mtjz3g/eg1GDj28pNqdB2G9sOqWoWJQux
+         mqWWNgifPN0OkZGHNx8vGVzw0rSlIYu4+UqSW9lp85j7Gd72JktfuLnG1jgaA1p4Ez6s
+         ID5rC/MY9YPOon2bwvLXvQFXUBeVlrLAUH4zeRE8nr4+89GAD2zj4JN4DSGIRd+8yBOg
+         yS6AGWqBLZVq492ZdNikW1WvKOOd963PiS6nFd+bVoT8VgooyBgx592VC37cQeBujM/s
+         l8YQ==
+X-Gm-Message-State: AOAM533Oo3Mf6lBz4XouRv7SM93ENvQudOJmzMr53IUo1QXzw+iStm8n
+        UGEGNwtoCsv/7Tc4C75+BfEhV9wuQ9W1GFNsxOOoeA==
+X-Google-Smtp-Source: ABdhPJz0FROLqXnyvZDXkAxN66AoCpWZjjmuKAfVBWLsqoaGSihYESsDj1l/RfrrIUnuyC77oIROLEwnaeVTC0+swUU=
+X-Received: by 2002:a05:6512:1515:: with SMTP id bq21mr24048209lfb.71.1635262846881;
+ Tue, 26 Oct 2021 08:40:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211025070155.2995-1-chunfeng.yun@mediatek.com>
-In-Reply-To: <20211025070155.2995-1-chunfeng.yun@mediatek.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 26 Oct 2021 17:39:53 +0200
-Message-ID: <CAJZ5v0gb6vN9kHeQbgjRQXvOCNaFK8ur7bLDeAVjDqdT2=a+-g@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] PM / wakeirq: support enabling wake-up irq after
- runtime_suspend called
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+References: <20211025115608.5287-1-johan@kernel.org>
+In-Reply-To: <20211025115608.5287-1-johan@kernel.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 26 Oct 2021 17:40:09 +0200
+Message-ID: <CAPDyKFoeqp2Ztw9AE3nMju2kav-04Ahd_F_H9tiyZchsNSjrvQ@mail.gmail.com>
+Subject: Re: [PATCH] mmc: vub300: fix control-message timeouts
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-mmc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 25, 2021 at 9:02 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+On Mon, 25 Oct 2021 at 13:56, Johan Hovold <johan@kernel.org> wrote:
 >
-> When the dedicated wake IRQ is level trigger, and it uses the
-> device's low-power status as the wakeup source, that means if the
-> device is not in low-power state, the wake IRQ will be triggered
-> if enabled; For this case, need enable the wake IRQ after running
-> the device's ->runtime_suspend() which make it enter low-power state.
+> USB control-message timeouts are specified in milliseconds and should
+> specifically not vary with CONFIG_HZ.
 >
-> e.g.
-> Assume the wake IRQ is a low level trigger type, and the wakeup
-> signal comes from the low-power status of the device.
-> The wakeup signal is low level at running time (0), and becomes
-> high level when the device enters low-power state (runtime_suspend
-> (1) is called), a wakeup event at (2) make the device exit low-power
-> state, then the wakeup signal also becomes low level.
->
->                 ------------------
->                |           ^     ^|
-> ----------------           |     | --------------
->  |<---(0)--->|<--(1)--|   (3)   (2)    (4)
->
-> if enable the wake IRQ before running runtime_suspend during (0),
-> a wake IRQ will arise, it causes resume immediately;
-> it works if enable wake IRQ ( e.g. at (3) or (4)) after running
-> ->runtime_suspend().
->
-> This patch introduces a new status WAKE_IRQ_DEDICATED_REVERSE to
-> optionally support enabling wake IRQ after running ->runtime_suspend().
->
-> Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Fixes: 88095e7b473a ("mmc: Add new VUB300 USB-to-SD/SDIO/MMC driver")
+> Cc: stable@vger.kernel.org      # 3.0
+> Signed-off-by: Johan Hovold <johan@kernel.org>
 
-I don't really have anything to add regarding the code.
+Applied for fixes, thanks!
 
-The kerneldoc comments could be improved, but I can take care of this
-when applying the patch.
+Kind regards
+Uffe
 
-Please collect ACKs for the remaining 2 patches in the series and I
-will pick up all three.
-
-Thanks!
 
 > ---
-> v4: changes according to Rafael's suggestions
->     1. rename new flag as WAKE_IRQ_DEDICATED_REVERSE;
->     2. add __dev_pm_set_dedicated_wake_irq() with flag parameter, then
->        rebuild dev_pm_set_dedicated_wake_irq() and add new api
->        dev_pm_set_dedicated_wake_irq_reverse();
->     3. rename the new added parameter as cond_disable in
->        dev_pm_disable_wake_irq_check(), and also simplify its flow;
->     4. modify some comments
+>  drivers/mmc/host/vub300.c | 18 +++++++++---------
+>  1 file changed, 9 insertions(+), 9 deletions(-)
 >
-> v3: add new status suggested by Rafael
->
-> v2: add more commit message
->
->   Use the falling edge trigger interrupt suggested by Ikjoon [1], it
-> works well at firstly when only use this related wakeup source, but
-> encounter issues if use other wakeup sources to wakeup platform as
-> below steps:
-> 1. use another wakeup source to wake up the suspended system;
-> 2. the consumer's resume() will be called, and exits sleep state;
-> 3. the consumer's wakeup signal will fall into low level, due to
->    currently the wakeup irq is disabled, the wake-irq is pending;
-> 4. the consumer tries to enter runtime suspend, but there is a
->    pending wakeup irq, so will resume again, this will repeat
->    endlessly.
->
->   Send out the patch again for further discussion.
->
-> [1]: https://patchwork.kernel.org/patch/12190407
->
-> ---
->  drivers/base/power/power.h   |   7 ++-
->  drivers/base/power/runtime.c |   6 ++-
->  drivers/base/power/wakeirq.c | 101 +++++++++++++++++++++++++++--------
->  include/linux/pm_wakeirq.h   |   9 +++-
->  4 files changed, 96 insertions(+), 27 deletions(-)
->
-> diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
-> index 54292cdd7808..0eb7f02b3ad5 100644
-> --- a/drivers/base/power/power.h
-> +++ b/drivers/base/power/power.h
-> @@ -25,8 +25,10 @@ extern u64 pm_runtime_active_time(struct device *dev);
->
->  #define WAKE_IRQ_DEDICATED_ALLOCATED   BIT(0)
->  #define WAKE_IRQ_DEDICATED_MANAGED     BIT(1)
-> +#define WAKE_IRQ_DEDICATED_REVERSE     BIT(2)
->  #define WAKE_IRQ_DEDICATED_MASK                (WAKE_IRQ_DEDICATED_ALLOCATED | \
-> -                                        WAKE_IRQ_DEDICATED_MANAGED)
-> +                                        WAKE_IRQ_DEDICATED_MANAGED | \
-> +                                        WAKE_IRQ_DEDICATED_REVERSE)
->
->  struct wake_irq {
->         struct device *dev;
-> @@ -39,7 +41,8 @@ extern void dev_pm_arm_wake_irq(struct wake_irq *wirq);
->  extern void dev_pm_disarm_wake_irq(struct wake_irq *wirq);
->  extern void dev_pm_enable_wake_irq_check(struct device *dev,
->                                          bool can_change_status);
-> -extern void dev_pm_disable_wake_irq_check(struct device *dev);
-> +extern void dev_pm_disable_wake_irq_check(struct device *dev, bool cond_disable);
-> +extern void dev_pm_enable_wake_irq_complete(struct device *dev);
->
->  #ifdef CONFIG_PM_SLEEP
->
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index ec94049442b9..d504cd4ab3cb 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -645,6 +645,8 @@ static int rpm_suspend(struct device *dev, int rpmflags)
->         if (retval)
->                 goto fail;
->
-> +       dev_pm_enable_wake_irq_complete(dev);
-> +
->   no_callback:
->         __update_runtime_status(dev, RPM_SUSPENDED);
->         pm_runtime_deactivate_timer(dev);
-> @@ -690,7 +692,7 @@ static int rpm_suspend(struct device *dev, int rpmflags)
->         return retval;
->
->   fail:
-> -       dev_pm_disable_wake_irq_check(dev);
-> +       dev_pm_disable_wake_irq_check(dev, true);
->         __update_runtime_status(dev, RPM_ACTIVE);
->         dev->power.deferred_resume = false;
->         wake_up_all(&dev->power.wait_queue);
-> @@ -873,7 +875,7 @@ static int rpm_resume(struct device *dev, int rpmflags)
->
->         callback = RPM_GET_CALLBACK(dev, runtime_resume);
->
-> -       dev_pm_disable_wake_irq_check(dev);
-> +       dev_pm_disable_wake_irq_check(dev, false);
->         retval = rpm_callback(callback, dev);
->         if (retval) {
->                 __update_runtime_status(dev, RPM_SUSPENDED);
-> diff --git a/drivers/base/power/wakeirq.c b/drivers/base/power/wakeirq.c
-> index b91a3a9bf9f6..76c163a89104 100644
-> --- a/drivers/base/power/wakeirq.c
-> +++ b/drivers/base/power/wakeirq.c
-> @@ -142,24 +142,7 @@ static irqreturn_t handle_threaded_wake_irq(int irq, void *_wirq)
->         return IRQ_HANDLED;
+> diff --git a/drivers/mmc/host/vub300.c b/drivers/mmc/host/vub300.c
+> index 4950d10d3a19..97beece62fec 100644
+> --- a/drivers/mmc/host/vub300.c
+> +++ b/drivers/mmc/host/vub300.c
+> @@ -576,7 +576,7 @@ static void check_vub300_port_status(struct vub300_mmc_host *vub300)
+>                                 GET_SYSTEM_PORT_STATUS,
+>                                 USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+>                                 0x0000, 0x0000, &vub300->system_port_status,
+> -                               sizeof(vub300->system_port_status), HZ);
+> +                               sizeof(vub300->system_port_status), 1000);
+>         if (sizeof(vub300->system_port_status) == retval)
+>                 new_system_port_status(vub300);
 >  }
->
-> -/**
-> - * dev_pm_set_dedicated_wake_irq - Request a dedicated wake-up interrupt
-> - * @dev: Device entry
-> - * @irq: Device wake-up interrupt
-> - *
-> - * Unless your hardware has separate wake-up interrupts in addition
-> - * to the device IO interrupts, you don't need this.
-> - *
-> - * Sets up a threaded interrupt handler for a device that has
-> - * a dedicated wake-up interrupt in addition to the device IO
-> - * interrupt.
-> - *
-> - * The interrupt starts disabled, and needs to be managed for
-> - * the device by the bus code or the device driver using
-> - * dev_pm_enable_wake_irq() and dev_pm_disable_wake_irq()
-> - * functions.
-> - */
-> -int dev_pm_set_dedicated_wake_irq(struct device *dev, int irq)
-> +static int __dev_pm_set_dedicated_wake_irq(struct device *dev, int irq, unsigned int flag)
->  {
->         struct wake_irq *wirq;
->         int err;
-> @@ -197,7 +180,7 @@ int dev_pm_set_dedicated_wake_irq(struct device *dev, int irq)
->         if (err)
->                 goto err_free_irq;
->
-> -       wirq->status = WAKE_IRQ_DEDICATED_ALLOCATED;
-> +       wirq->status = WAKE_IRQ_DEDICATED_ALLOCATED | flag;
->
->         return err;
->
-> @@ -210,8 +193,57 @@ int dev_pm_set_dedicated_wake_irq(struct device *dev, int irq)
->
->         return err;
->  }
-> +
-> +
-> +/**
-> + * dev_pm_set_dedicated_wake_irq - Request a dedicated wake-up interrupt
-> + * @dev: Device entry
-> + * @irq: Device wake-up interrupt
-> + *
-> + * Unless your hardware has separate wake-up interrupts in addition
-> + * to the device IO interrupts, you don't need this.
-> + *
-> + * Sets up a threaded interrupt handler for a device that has
-> + * a dedicated wake-up interrupt in addition to the device IO
-> + * interrupt.
-> + *
-> + * The interrupt starts disabled, and needs to be managed for
-> + * the device by the bus code or the device driver using
-> + * dev_pm_enable_wake_irq*() and dev_pm_disable_wake_irq*()
-> + * functions.
-> + */
-> +int dev_pm_set_dedicated_wake_irq(struct device *dev, int irq)
-> +{
-> +       return __dev_pm_set_dedicated_wake_irq(dev, irq, 0);
-> +}
->  EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq);
->
-> +/**
-> + * dev_pm_set_dedicated_wake_irq_reverse - Request a dedicated wake-up interrupt
-> + *       with setting flag WAKE_IRQ_DEDICATED_REVERSE
-> + * @dev: Device entry
-> + * @irq: Device wake-up interrupt
-> + *
-> + * Unless your hardware has separate wake-up interrupts in addition
-> + * to the device IO interrupts, you don't need this.
-> + *
-> + * Sets up a threaded interrupt handler for a device that has a dedicated
-> + * wake-up interrupt in addition to the device IO interrupt. It sets
-> + * the status of WAKE_IRQ_DEDICATED_REVERSE to tell rpm_suspend()
-> + * to enable dedicated wake-up interrupt after running the
-> + * ->runtime_suspend()
-> + *
-> + * The interrupt starts disabled, and needs to be managed for
-> + * the device by the bus code or the device driver using
-> + * dev_pm_enable_wake_irq*() and dev_pm_disable_wake_irq*()
-> + * functions.
-> + */
-> +int dev_pm_set_dedicated_wake_irq_reverse(struct device *dev, int irq)
-> +{
-> +       return __dev_pm_set_dedicated_wake_irq(dev, irq, WAKE_IRQ_DEDICATED_REVERSE);
-> +}
-> +EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq_reverse);
-> +
->  /**
->   * dev_pm_enable_wake_irq - Enable device wake-up interrupt
->   * @dev: Device
-> @@ -282,27 +314,54 @@ void dev_pm_enable_wake_irq_check(struct device *dev,
->         return;
->
->  enable:
-> -       enable_irq(wirq->irq);
-> +       if (!can_change_status || !(wirq->status & WAKE_IRQ_DEDICATED_REVERSE))
-> +               enable_irq(wirq->irq);
->  }
->
->  /**
->   * dev_pm_disable_wake_irq_check - Checks and disables wake-up interrupt
->   * @dev: Device
-> + * @cond_disable: if set, also check WAKE_IRQ_DEDICATED_REVERSE
->   *
->   * Disables wake-up interrupt conditionally based on status.
->   * Should be only called from rpm_suspend() and rpm_resume() path.
->   */
-> -void dev_pm_disable_wake_irq_check(struct device *dev)
-> +void dev_pm_disable_wake_irq_check(struct device *dev, bool cond_disable)
->  {
->         struct wake_irq *wirq = dev->power.wakeirq;
->
->         if (!wirq || !(wirq->status & WAKE_IRQ_DEDICATED_MASK))
->                 return;
->
-> +       if (cond_disable && (wirq->status & WAKE_IRQ_DEDICATED_REVERSE))
-> +               return;
-> +
->         if (wirq->status & WAKE_IRQ_DEDICATED_MANAGED)
->                 disable_irq_nosync(wirq->irq);
->  }
->
-> +/**
-> + * dev_pm_enable_wake_irq_complete - enable wake IRQ not enabled before
-> + * @dev: Device using the wake IRQ
-> + *
-> + * Enable wake IRQ conditionally based on status, mainly used if want to
-> + * enable wake IRQ after running ->runtime_suspend() which depends on
-> + * WAKE_IRQ_DEDICATED_REVERSE.
-> + *
-> + * Should be only called from rpm_suspend() path.
-> + */
-> +void dev_pm_enable_wake_irq_complete(struct device *dev)
-> +{
-> +       struct wake_irq *wirq = dev->power.wakeirq;
-> +
-> +       if (!wirq || !(wirq->status & WAKE_IRQ_DEDICATED_MASK))
-> +               return;
-> +
-> +       if (wirq->status & WAKE_IRQ_DEDICATED_MANAGED &&
-> +           wirq->status & WAKE_IRQ_DEDICATED_REVERSE)
-> +               enable_irq(wirq->irq);
-> +}
-> +
->  /**
->   * dev_pm_arm_wake_irq - Arm device wake-up
->   * @wirq: Device wake-up interrupt
-> diff --git a/include/linux/pm_wakeirq.h b/include/linux/pm_wakeirq.h
-> index cd5b62db9084..e63a63aa47a3 100644
-> --- a/include/linux/pm_wakeirq.h
-> +++ b/include/linux/pm_wakeirq.h
-> @@ -17,8 +17,8 @@
->  #ifdef CONFIG_PM
->
->  extern int dev_pm_set_wake_irq(struct device *dev, int irq);
-> -extern int dev_pm_set_dedicated_wake_irq(struct device *dev,
-> -                                        int irq);
-> +extern int dev_pm_set_dedicated_wake_irq(struct device *dev, int irq);
-> +extern int dev_pm_set_dedicated_wake_irq_reverse(struct device *dev, int irq);
->  extern void dev_pm_clear_wake_irq(struct device *dev);
->  extern void dev_pm_enable_wake_irq(struct device *dev);
->  extern void dev_pm_disable_wake_irq(struct device *dev);
-> @@ -35,6 +35,11 @@ static inline int dev_pm_set_dedicated_wake_irq(struct device *dev, int irq)
->         return 0;
->  }
->
-> +static inline int dev_pm_set_dedicated_wake_irq_reverse(struct device *dev, int irq)
-> +{
-> +       return 0;
-> +}
-> +
->  static inline void dev_pm_clear_wake_irq(struct device *dev)
->  {
->  }
+> @@ -1241,7 +1241,7 @@ static void __download_offload_pseudocode(struct vub300_mmc_host *vub300,
+>                                                 SET_INTERRUPT_PSEUDOCODE,
+>                                                 USB_DIR_OUT | USB_TYPE_VENDOR |
+>                                                 USB_RECIP_DEVICE, 0x0000, 0x0000,
+> -                                               xfer_buffer, xfer_length, HZ);
+> +                                               xfer_buffer, xfer_length, 1000);
+>                         kfree(xfer_buffer);
+>                         if (retval < 0)
+>                                 goto copy_error_message;
+> @@ -1284,7 +1284,7 @@ static void __download_offload_pseudocode(struct vub300_mmc_host *vub300,
+>                                                 SET_TRANSFER_PSEUDOCODE,
+>                                                 USB_DIR_OUT | USB_TYPE_VENDOR |
+>                                                 USB_RECIP_DEVICE, 0x0000, 0x0000,
+> -                                               xfer_buffer, xfer_length, HZ);
+> +                                               xfer_buffer, xfer_length, 1000);
+>                         kfree(xfer_buffer);
+>                         if (retval < 0)
+>                                 goto copy_error_message;
+> @@ -1991,7 +1991,7 @@ static void __set_clock_speed(struct vub300_mmc_host *vub300, u8 buf[8],
+>                 usb_control_msg(vub300->udev, usb_sndctrlpipe(vub300->udev, 0),
+>                                 SET_CLOCK_SPEED,
+>                                 USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+> -                               0x00, 0x00, buf, buf_array_size, HZ);
+> +                               0x00, 0x00, buf, buf_array_size, 1000);
+>         if (retval != 8) {
+>                 dev_err(&vub300->udev->dev, "SET_CLOCK_SPEED"
+>                         " %dkHz failed with retval=%d\n", kHzClock, retval);
+> @@ -2013,14 +2013,14 @@ static void vub300_mmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+>                 usb_control_msg(vub300->udev, usb_sndctrlpipe(vub300->udev, 0),
+>                                 SET_SD_POWER,
+>                                 USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+> -                               0x0000, 0x0000, NULL, 0, HZ);
+> +                               0x0000, 0x0000, NULL, 0, 1000);
+>                 /* must wait for the VUB300 u-proc to boot up */
+>                 msleep(600);
+>         } else if ((ios->power_mode == MMC_POWER_UP) && !vub300->card_powered) {
+>                 usb_control_msg(vub300->udev, usb_sndctrlpipe(vub300->udev, 0),
+>                                 SET_SD_POWER,
+>                                 USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+> -                               0x0001, 0x0000, NULL, 0, HZ);
+> +                               0x0001, 0x0000, NULL, 0, 1000);
+>                 msleep(600);
+>                 vub300->card_powered = 1;
+>         } else if (ios->power_mode == MMC_POWER_ON) {
+> @@ -2275,14 +2275,14 @@ static int vub300_probe(struct usb_interface *interface,
+>                                 GET_HC_INF0,
+>                                 USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+>                                 0x0000, 0x0000, &vub300->hc_info,
+> -                               sizeof(vub300->hc_info), HZ);
+> +                               sizeof(vub300->hc_info), 1000);
+>         if (retval < 0)
+>                 goto error5;
+>         retval =
+>                 usb_control_msg(vub300->udev, usb_sndctrlpipe(vub300->udev, 0),
+>                                 SET_ROM_WAIT_STATES,
+>                                 USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+> -                               firmware_rom_wait_states, 0x0000, NULL, 0, HZ);
+> +                               firmware_rom_wait_states, 0x0000, NULL, 0, 1000);
+>         if (retval < 0)
+>                 goto error5;
+>         dev_info(&vub300->udev->dev,
+> @@ -2297,7 +2297,7 @@ static int vub300_probe(struct usb_interface *interface,
+>                                 GET_SYSTEM_PORT_STATUS,
+>                                 USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+>                                 0x0000, 0x0000, &vub300->system_port_status,
+> -                               sizeof(vub300->system_port_status), HZ);
+> +                               sizeof(vub300->system_port_status), 1000);
+>         if (retval < 0) {
+>                 goto error4;
+>         } else if (sizeof(vub300->system_port_status) == retval) {
 > --
-> 2.18.0
+> 2.32.0
 >
