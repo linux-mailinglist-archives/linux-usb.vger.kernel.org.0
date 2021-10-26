@@ -2,230 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC5843B293
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 14:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5058543B3DC
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 16:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235802AbhJZMpQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Oct 2021 08:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59412 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234126AbhJZMpP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Oct 2021 08:45:15 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E50C061767
-        for <linux-usb@vger.kernel.org>; Tue, 26 Oct 2021 05:42:52 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id x192so18618070lff.12
-        for <linux-usb@vger.kernel.org>; Tue, 26 Oct 2021 05:42:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=HuPXxQ3Dx5OU5hbFOWVQiDy9S2Ab/pqOebTTCbBX458=;
-        b=yp/FjIP2ZykqVytABuEpEZO1uJnOPB/r5RSZXjwbbGVBknnnCJfGJQWPwFNhzbdWPx
-         5b0kfYV+PNchKANblo/AR1ip8GVyob81fsovi0Seo2WABuCQICdFeaudXFmfExFdFG+V
-         vObP8NA2YVpVe/PTSjnGvAnp5xI0ba/iq0RzglKYLQwkak+gTB+X/V98elp1ND8v/hmj
-         X0p+SnQmWdwr0VDaP1vCO6RbHkUkp2EC7S2H4hUoeLdabKo9lVnUhC3mSHjiYBx9j8DS
-         GqaG7gfuZpk7F5dsJE0ISRS6s48eNw/ffU02WhE6I6mUPjU0OcLCph0+shE4xvcCFSSA
-         eUgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=HuPXxQ3Dx5OU5hbFOWVQiDy9S2Ab/pqOebTTCbBX458=;
-        b=aYfGEs1nOxBRRdSk/ifDLIeqiC8Ew9WxQvX+QqlQisbn7soGcxpVSI2cyP5sH+9OvD
-         ok5XfaSGNpjeU8pf72lkBr4s1pfQLlUU/dEE5+DyF3Nlt+K9oIP/snvK/l50BtrZLCEx
-         fJQZFJP8QRYyIGMr2v9SA6jwBUxi/1ozDn4WD/kjvSck+mPrKednKnYybc+1YOkITAE1
-         WYBc7NQ/8wjhCZEQWOSg1BJ6A/M+7CCVlaNMGq+RmasjOgwrYuEfWCUua1DB3x4gdUWA
-         XHmh6c2N/CNt7rRx3n5svtAu0xFWu2A7T8Zu8lGOGoOR/aqNHoJOBf8JZXHfP+j7j1WJ
-         cUWQ==
-X-Gm-Message-State: AOAM531Zn6nmgVOJ+Z3GVzWzbKYkhrPbwTTfNXS3R4GEVqEPhiCHACzM
-        TqIjaAWjRFGokqbTDujqOOLuTA==
-X-Google-Smtp-Source: ABdhPJwtr6cFDc91FwGgkx11o3XI6XVYbNqXOl252C5qhPNnoAkCmQISNhEGbYqHen0kRK1NV8MKuw==
-X-Received: by 2002:a05:6512:108e:: with SMTP id j14mr23034146lfg.274.1635252170309;
-        Tue, 26 Oct 2021 05:42:50 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id o26sm2017103ljg.92.2021.10.26.05.42.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Oct 2021 05:42:49 -0700 (PDT)
-Subject: Re: [PATCH v12 2/5] arm64: dts: qcom: sc7280: Add PCIe and PHY
- related nodes
-To:     Prasad Malisetty <pmaliset@codeaurora.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, bhelgaas@google.com,
-        robh+dt@kernel.org, swboyd@chromium.org, lorenzo.pieralisi@arm.com,
-        svarbanov@mm-sol.com
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        id S236483AbhJZOYI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Oct 2021 10:24:08 -0400
+Received: from smtp92.ord1d.emailsrvr.com ([184.106.54.92]:34165 "EHLO
+        smtp92.ord1d.emailsrvr.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235281AbhJZOYI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Oct 2021 10:24:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
+        s=20190130-41we5z8j; t=1635257549;
+        bh=+4cb5meI4blfHPvJYISdY1ggOGQPN9CfCZDwjUGLC2M=;
+        h=Subject:To:From:Date:From;
+        b=NRZzEnMFGrC5X4Hc1B1RL9z+RT5V8FIDaUQwhldIyCOZAHGUnT+83W8RETj5lrzHM
+         SPfYis0X9JfwtxyISRZd45SbRpNBLk7E+qdYSbPB4PmrylHO4ihZ3Ma3vE3ZR7M0T+
+         BEnwq5KAS++kk6uey0mmKf3yZoEQZdFAZXDD8BDU=
+X-Auth-ID: abbotti@mev.co.uk
+Received: by smtp12.relay.ord1d.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id C1E97E0115;
+        Tue, 26 Oct 2021 10:12:28 -0400 (EDT)
+Subject: Re: [PATCH 1/5] comedi: ni_usb6501: fix NULL-deref in command paths
+To:     Johan Hovold <johan@kernel.org>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
-        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org,
-        linux-pci@vger.kernel.org
-References: <1633628923-25047-1-git-send-email-pmaliset@codeaurora.org>
- <1633628923-25047-3-git-send-email-pmaliset@codeaurora.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Message-ID: <70502702-3f55-46f2-46e4-d3dda4f0294d@linaro.org>
-Date:   Tue, 26 Oct 2021 15:42:47 +0300
+        stable@vger.kernel.org, Luca Ellero <luca.ellero@brickedbrain.com>
+References: <20211025114532.4599-1-johan@kernel.org>
+ <20211025114532.4599-2-johan@kernel.org>
+From:   Ian Abbott <abbotti@mev.co.uk>
+Organization: MEV Ltd.
+Message-ID: <be9dcb4f-3594-e756-78e3-74750a49fe91@mev.co.uk>
+Date:   Tue, 26 Oct 2021 15:12:28 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <1633628923-25047-3-git-send-email-pmaliset@codeaurora.org>
+In-Reply-To: <20211025114532.4599-2-johan@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
+X-Classification-ID: ffc54a2e-ba37-4dec-b7bf-ea32ca4e0a9e-1-1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 07/10/2021 20:48, Prasad Malisetty wrote:
-> Add PCIe controller and PHY nodes for sc7280 SOC.
+On 25/10/2021 12:45, Johan Hovold wrote:
+> The driver uses endpoint-sized USB transfer buffers but had no sanity
+> checks on the sizes. This can lead to zero-size-pointer dereferences or
+> overflowed transfer buffers in ni6501_port_command() and
+> ni6501_counter_command() if a (malicious) device has smaller max-packet
+> sizes than expected (or when doing descriptor fuzz testing).
 > 
-> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> Add the missing sanity checks to probe().
+> 
+> Fixes: a03bb00e50ab ("staging: comedi: add NI USB-6501 support")
+> Cc: stable@vger.kernel.org      # 3.18
+> Cc: Luca Ellero <luca.ellero@brickedbrain.com>
+> Signed-off-by: Johan Hovold <johan@kernel.org>
 > ---
->   arch/arm64/boot/dts/qcom/sc7280.dtsi | 118 +++++++++++++++++++++++++++++++++++
->   1 file changed, 118 insertions(+)
+>   drivers/comedi/drivers/ni_usb6501.c | 8 ++++++++
+>   1 file changed, 8 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 39635da..cde814f 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -1563,6 +1563,117 @@
->   			qcom,bcm-voters = <&apps_bcm_voter>;
->   		};
+> diff --git a/drivers/comedi/drivers/ni_usb6501.c b/drivers/comedi/drivers/ni_usb6501.c
+> index 5b6d9d783b2f..eb2e5c23f25d 100644
+> --- a/drivers/comedi/drivers/ni_usb6501.c
+> +++ b/drivers/comedi/drivers/ni_usb6501.c
+> @@ -144,6 +144,10 @@ static const u8 READ_COUNTER_RESPONSE[]	= {0x00, 0x01, 0x00, 0x10,
+>   					   0x00, 0x00, 0x00, 0x02,
+>   					   0x00, 0x00, 0x00, 0x00};
 >   
-> +		pcie1: pci@1c08000 {
-> +			compatible = "qcom,pcie-sc7280";
-> +			reg = <0 0x01c08000 0 0x3000>,
-> +			      <0 0x40000000 0 0xf1d>,
-> +			      <0 0x40000f20 0 0xa8>,
-> +			      <0 0x40001000 0 0x1000>,
-> +			      <0 0x40100000 0 0x100000>;
+> +/* Largest supported packets */
+> +static const size_t TX_MAX_SIZE	= sizeof(SET_PORT_DIR_REQUEST);
+> +static const size_t RX_MAX_SIZE	= sizeof(READ_PORT_RESPONSE);
 > +
-> +			reg-names = "parf", "dbi", "elbi", "atu", "config";
-> +			device_type = "pci";
-> +			linux,pci-domain = <1>;
-> +			bus-range = <0x00 0xff>;
-> +			num-lanes = <2>;
-> +
-> +			#address-cells = <3>;
-> +			#size-cells = <2>;
-> +
-> +			ranges = <0x01000000 0x0 0x40200000 0x0 0x40200000 0x0 0x100000>,
-> +				 <0x02000000 0x0 0x40300000 0x0 0x40300000 0x0 0x1fd00000>;
-> +
-> +			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "msi";
-> +			#interrupt-cells = <1>;
-> +			interrupt-map-mask = <0 0 0 0x7>;
-> +			interrupt-map = <0 0 0 1 &intc 0 434 IRQ_TYPE_LEVEL_HIGH>,
-> +					<0 0 0 2 &intc 0 435 IRQ_TYPE_LEVEL_HIGH>,
-> +					<0 0 0 3 &intc 0 438 IRQ_TYPE_LEVEL_HIGH>,
-> +					<0 0 0 4 &intc 0 439 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			clocks = <&gcc GCC_PCIE_1_PIPE_CLK>,
-> +				 <&gcc GCC_PCIE_1_PIPE_CLK_SRC>,
-> +				 <&pcie1_lane 0>,
-
-This should be just <&pcie1_lane>, as the phy doesn't have clock cells.
-
-> +				 <&rpmhcc RPMH_CXO_CLK>,
-> +				 <&gcc GCC_PCIE_1_AUX_CLK>,
-> +				 <&gcc GCC_PCIE_1_CFG_AHB_CLK>,
-> +				 <&gcc GCC_PCIE_1_MSTR_AXI_CLK>,
-> +				 <&gcc GCC_PCIE_1_SLV_AXI_CLK>,
-> +				 <&gcc GCC_PCIE_1_SLV_Q2A_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_NOC_PCIE_TBU_CLK>,
-> +				 <&gcc GCC_DDRSS_PCIE_SF_CLK>;
-> +
-> +			clock-names = "pipe",
-> +				      "pipe_mux",
-> +				      "phy_pipe",
-> +				      "ref",
-> +				      "aux",
-> +				      "cfg",
-> +				      "bus_master",
-> +				      "bus_slave",
-> +				      "slave_q2a",
-> +				      "tbu",
-> +				      "ddrss_sf_tbu";
-> +
-> +			assigned-clocks = <&gcc GCC_PCIE_1_AUX_CLK>;
-> +			assigned-clock-rates = <19200000>;
-> +
-> +			resets = <&gcc GCC_PCIE_1_BCR>;
-> +			reset-names = "pci";
-> +
-> +			power-domains = <&gcc GCC_PCIE_1_GDSC>;
-> +
-> +			phys = <&pcie1_lane>;
-> +			phy-names = "pciephy";
-> +
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&pcie1_clkreq_n>;
-> +
-> +			iommus = <&apps_smmu 0x1c80 0x1>;
-> +
-> +			iommu-map = <0x0 &apps_smmu 0x1c80 0x1>,
-> +				    <0x100 &apps_smmu 0x1c81 0x1>;
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		pcie1_phy: phy@1c0e000 {
-> +			compatible = "qcom,sm8250-qmp-gen3x2-pcie-phy";
-> +			reg = <0 0x01c0e000 0 0x1c0>;
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +			clocks = <&gcc GCC_PCIE_1_AUX_CLK>,
-> +				 <&gcc GCC_PCIE_1_CFG_AHB_CLK>,
-> +				 <&gcc GCC_PCIE_CLKREF_EN>,
-> +				 <&gcc GCC_PCIE1_PHY_RCHNG_CLK>;
-> +			clock-names = "aux", "cfg_ahb", "ref", "refgen";
-> +
-> +			resets = <&gcc GCC_PCIE_1_PHY_BCR>;
-> +			reset-names = "phy";
-> +
-> +			assigned-clocks = <&gcc GCC_PCIE1_PHY_RCHNG_CLK>;
-> +			assigned-clock-rates = <100000000>;
-> +
-> +			status = "disabled";
-> +
-> +			pcie1_lane: lanes@1c0e200 {
-> +				reg = <0 0x01c0e200 0 0x170>,
-> +				      <0 0x01c0e400 0 0x200>,
-> +				      <0 0x01c0ea00 0 0x1f0>,
-> +				      <0 0x01c0e600 0 0x170>,
-> +				      <0 0x01c0e800 0 0x200>,
-> +				      <0 0x01c0ee00 0 0xf4>;
-> +				clocks = <&gcc GCC_PCIE_1_PIPE_CLK>;
-> +				clock-names = "pipe0";
-> +
-> +				#phy-cells = <0>;
-> +				#clock-cells = <1>;
-> +				clock-output-names = "pcie_1_pipe_clk";
-> +			};
-> +		};
-> +
->   		ipa: ipa@1e40000 {
->   			compatible = "qcom,sc7280-ipa";
+>   enum commands {
+>   	READ_PORT,
+>   	WRITE_PORT,
+> @@ -486,12 +490,16 @@ static int ni6501_find_endpoints(struct comedi_device *dev)
+>   		ep_desc = &iface_desc->endpoint[i].desc;
 >   
-> @@ -2676,6 +2787,13 @@
->   			gpio-ranges = <&tlmm 0 0 175>;
->   			wakeup-parent = <&pdc>;
+>   		if (usb_endpoint_is_bulk_in(ep_desc)) {
+> +			if (usb_endpoint_maxp(ep_desc) < RX_MAX_SIZE)
+> +				continue;
+>   			if (!devpriv->ep_rx)
+>   				devpriv->ep_rx = ep_desc;
+>   			continue;
+>   		}
 >   
-> +			pcie1_clkreq_n: pcie1-clkreq-n {
-> +				pins = "gpio79";
-> +				function = "pcie1_clkreqn";
-> +				drive-strength = <2>;
-> +				bias-pull-up;
-> +			};
-> +
->   			qspi_clk: qspi-clk {
->   				pins = "gpio14";
->   				function = "qspi_clk";
+>   		if (usb_endpoint_is_bulk_out(ep_desc)) {
+> +			if (usb_endpoint_maxp(ep_desc) < TX_MAX_SIZE)
+> +				continue;
+>   			if (!devpriv->ep_tx)
+>   				devpriv->ep_tx = ep_desc;
+>   			continue;
 > 
 
+Perhaps it should return an error if the first encountered bulk-in 
+endpoint has the wrong size or the first encountered bulk-out endpoint 
+has the wrong size. Something like:
+
+		if (usb_endpoint_is_bulk_in(ep_desc)) {
+			if (!devpriv->ep_rx) {
+				if (usb_endpoint_maxp(ep_desc) < RX_MAX_SIZE)
+					break;
+			}
+			continue;
+
+(similar for bulk-out with TX_MAX_SIZE)
 
 -- 
-With best wishes
-Dmitry
+-=( Ian Abbott <abbotti@mev.co.uk> || MEV Ltd. is a company  )=-
+-=( registered in England & Wales.  Regd. number: 02862268.  )=-
+-=( Regd. addr.: S11 & 12 Building 67, Europa Business Park, )=-
+-=( Bird Hall Lane, STOCKPORT, SK3 0XA, UK. || www.mev.co.uk )=-
