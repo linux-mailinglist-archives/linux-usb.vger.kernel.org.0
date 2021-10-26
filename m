@@ -2,93 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 315FB43AD23
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 09:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F7643AD82
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 09:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233934AbhJZHZn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Oct 2021 03:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbhJZHZm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Oct 2021 03:25:42 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C003C061745;
-        Tue, 26 Oct 2021 00:23:19 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id e2so1670176ljg.13;
-        Tue, 26 Oct 2021 00:23:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=AW+Zz4LSPPD4HAdRjlqcvubjivOVrJcjX5uwm6fq5Iw=;
-        b=ltIEJDarwJVKfK15/fJ93KV9dIaCfqL1hDksHWWzyKB/yhM0BGFYD6rzxgLXL2Pnu1
-         +KByUGWdjhDqk9jCrIf8VHZ5zpYMgcGLH6NVnVnoApmbNpLzkbs4NzjIxSPJ3Lqyty5i
-         faGC1OSgZwpZNr/EqCFPZvfnbABkuVJGd6iHF28zdXmYuIqa8BFPs8D4byLbpJvKK0Sz
-         o6fFoaC7bPysfQB4UkkFSTgf9bwAhNOA4h+rqHoKZxhUtaofgmphGtNlMRRfimQDisX2
-         Vd2eIJV20AhGitNmubkV6DHKetFkb+ohfLm1i6TbQc5/PaaiHKJNczlEd4hXL/8tLA4R
-         a6gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=AW+Zz4LSPPD4HAdRjlqcvubjivOVrJcjX5uwm6fq5Iw=;
-        b=jvPQbuaDOpJMbM5OZWDnuluJG+sKiwg5J1lU3F54ZcgnKEdLx8Z5c6A87xyQlz+bRD
-         Z1i6XWzdbHzn+PSbjsLD7BjfUqWjJpS1nY9Xmhv2HwB1R/XYnfgIY2jctU0I+KKKb1OE
-         4mTUYBBhdlrJRGpnmVPORdy0c3Qw7XCgOs6KXJEw2OjJLzXAzdZiXqwi9ZqL1L4v49Xk
-         aNRN3q2zU026+M+mPxo030YeGiiiFxo+WIpylHkyLKgcVCMqcDum5oYJmu4aaXZ3vwYT
-         U7wFhDAVBP+LNfOE95/zM69Ys7dxKn9Vy4ht7bK7yLWorQX45PaMh1yrEAEA+8UzZJzL
-         wGkA==
-X-Gm-Message-State: AOAM531h17Ihx1bTXoLFXwKKZyKO1OgmMFJFlaT5oIF3fe5wGLseP+p4
-        +bFl3hLkHoaRYA04GHLe4bbWEogKZdk=
-X-Google-Smtp-Source: ABdhPJy6bO8wL79f/SflIqNmc/13+GWFAWCLs0jBMm1HZu9WsrVrGYOuDugsntGJIXuTNoiIqXtR8A==
-X-Received: by 2002:a05:651c:989:: with SMTP id b9mr2598690ljq.335.1635232997385;
-        Tue, 26 Oct 2021 00:23:17 -0700 (PDT)
-Received: from [192.168.2.145] (46-138-41-28.dynamic.spd-mgts.ru. [46.138.41.28])
-        by smtp.googlemail.com with ESMTPSA id q15sm1934453ljm.43.2021.10.26.00.23.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Oct 2021 00:23:17 -0700 (PDT)
-Subject: Re: [PATCH v1] usb: xhci: tegra: Check padctrl interrupt presence in
- device tree
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        JC Kuo <jckuo@nvidia.com>, Nicolas Chauvet <kwizart@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <20211021115501.14932-1-digetx@gmail.com>
- <YXFyu+Q5ifG8Au9w@orome.fritz.box>
- <5f122caa-c810-534d-b2a1-53edef313ff0@gmail.com>
-Message-ID: <2c22dc0c-6709-907d-8296-712d77282f0e@gmail.com>
-Date:   Tue, 26 Oct 2021 10:23:16 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S232553AbhJZHtZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Oct 2021 03:49:25 -0400
+Received: from mga11.intel.com ([192.55.52.93]:24597 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230239AbhJZHtY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 Oct 2021 03:49:24 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10148"; a="227299746"
+X-IronPort-AV: E=Sophos;i="5.87,182,1631602800"; 
+   d="scan'208";a="227299746"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2021 00:46:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,182,1631602800"; 
+   d="scan'208";a="635032871"
+Received: from kuha.fi.intel.com ([10.237.72.166])
+  by fmsmga001.fm.intel.com with SMTP; 26 Oct 2021 00:46:56 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 26 Oct 2021 10:46:55 +0300
+Date:   Tue, 26 Oct 2021 10:46:55 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        wcheng@codeaurora.org
+Subject: Re: [PATCH 6/6] usb: typec: qcom: Add pm8150b TCPM driver
+Message-ID: <YXeyb76jh4bim3lS@kuha.fi.intel.com>
+References: <20211025150906.176686-1-bryan.odonoghue@linaro.org>
+ <20211025150906.176686-7-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <5f122caa-c810-534d-b2a1-53edef313ff0@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211025150906.176686-7-bryan.odonoghue@linaro.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-21.10.2021 17:57, Dmitry Osipenko пишет:
-> It might be wrong to disable device_may_wakeup() because it will change
-> the system suspend-resume behaviour, i.e. you won't be able to resume by
-> USB event, see [1].
+On Mon, Oct 25, 2021 at 04:09:06PM +0100, Bryan O'Donoghue wrote:
+> The PM8150b contains both a type-c controller and a power-delivery PHY.
+> This driver binds both of those blocks together via a virtual TCPM driver.
 > 
-> [1]
-> https://elixir.bootlin.com/linux/v5.15-rc6/source/drivers/usb/host/xhci-tegra.c#L1962
+> qcom-pmic-tcpm.c is responsible for registering with tcpm and wrappers
+>                  calls into the type-c and pdphy drivers from tcpm.
+>                  Its up to qcom-pmic-tcpm.c to wait for both
+>                  qcom-pmic-pdphy.c and qcom-pmic-typec.c to probe before
+>                  registering a type-c port
 > 
-> Although, I'm not sure whether this is a correct behaviour to start
-> with. Previously, before the offending commit, device_wakeup was never
-> enabled for tegra-xusb. Commit message doesn't explain why wakeup is now
-> enabled unconditionally, wakeup checks aren't needed at all then. This
-> makes no sense, please check it with JC Kuo.
+> qcom-pmic-pdphy.c implements a set functions that qcom-pmic-tcpm.c is
+>                   responsible for interfacing with the pdphy hardware and
+>                   processing power-delivery related calls from tcpm.
+> 
+> qcom-pmic-typec.c implements a similar interface for the typec hardware
+>                   interface and is responsible for notifying and processing
+>                   type-c related calls from tcpm.
+> 
+> In conjunction with appropriate entries in the platform dts we can
+> establish a source or sink contract with a PD peer and indeed negotiate SBU
+> alternative modes.
+> 
+> This code provides all of the same functionality as the existing
+> qcom typec driver plus power-delivery as well.
+> 
+> As a result commit 6c8cf3695176 ("usb: typec: Add QCOM PMIC typec detection
+> driver") can be deleted entirely.
+> 
+> References code from Jonathan Marek, Jack Pham, Wesley Cheng, Hemant Kumar,
+> Guru Das Srinagesh and Ashay Jaiswal.
+> 
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>  MAINTAINERS                                   |   8 +
+>  drivers/usb/typec/Makefile                    |   1 -
+>  drivers/usb/typec/qcom-pmic-typec.c           | 262 --------
 
-I looked at it again and now see that disabling wakeup actually should
-restore the old code behaviour properly because previously wakeup wasn't
-ever enabled. Alright, I'll prepare v2.
+You removed the file and the Makefile entry, but you left the Kconfig
+entry? Please remove that too.
+
+>  drivers/usb/typec/tcpm/Kconfig                |  11 +
+>  drivers/usb/typec/tcpm/Makefile               |   1 +
+>  .../usb/typec/tcpm/qcom/qcom_pmic_tcpm_core.c | 345 ++++++++++
+>  .../typec/tcpm/qcom/qcom_pmic_tcpm_pdphy.c    | 577 +++++++++++++++++
+>  .../typec/tcpm/qcom/qcom_pmic_tcpm_pdphy.h    |  85 +++
+>  .../typec/tcpm/qcom/qcom_pmic_tcpm_typec.c    | 593 ++++++++++++++++++
+>  .../typec/tcpm/qcom/qcom_pmic_tcpm_typec.h    | 163 +++++
+>  10 files changed, 1783 insertions(+), 263 deletions(-)
+>  delete mode 100644 drivers/usb/typec/qcom-pmic-typec.c
+>  create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_tcpm_core.c
+>  create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_tcpm_pdphy.c
+>  create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_tcpm_pdphy.h
+>  create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_tcpm_typec.c
+>  create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_tcpm_typec.h
+
+You don't have a Makefile in that new directory typec/tcpm/qcom?
+How do you compile these new drivers?
+
+thanks,
+
+-- 
+heikki
