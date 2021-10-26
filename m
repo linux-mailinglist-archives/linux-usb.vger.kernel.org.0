@@ -2,25 +2,25 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC1943B514
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 17:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F38743B51D
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 17:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbhJZPI7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Oct 2021 11:08:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34178 "EHLO mail.kernel.org"
+        id S235596AbhJZPK1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Oct 2021 11:10:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35426 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231184AbhJZPIy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 26 Oct 2021 11:08:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B388B604AC;
-        Tue, 26 Oct 2021 15:06:29 +0000 (UTC)
+        id S231545AbhJZPK1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 Oct 2021 11:10:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D60D760200;
+        Tue, 26 Oct 2021 15:08:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1635260790;
-        bh=+Z01TEK+QyGY0xo8I0ZHZPD2JObUitun2+iJ1F+8ky0=;
+        s=korg; t=1635260883;
+        bh=0XC+Ubh1QkWoRD6gJg2T3EnMFPxdPJ1VDdiOnTzCcT4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zeRS4rWXDIOP7OcI42dfE34DbZ/0RnnieZyC47+iNVCm/OFDi4nOkgsyBw7uiyMEI
-         AShlVrx5bJu6uI3UG3krgnJ1uq8IaFcddNSC/xWbhdKGEW/Jvyi4O82Xvx0noVbiZ3
-         PlHeAJ55erDvywmbV2xmIsFf6sh0fyGshBd7DIvI=
-Date:   Tue, 26 Oct 2021 17:06:28 +0200
+        b=LzjRGliV/g/PF5CswOAGe1WCK7HafenLr5+7zV3gP4PZ1kvxGpnXlPCsWqiJnSUY7
+         2HBi2KSB1g9Fn6TLAo20n7SgTr/HO9qFEtTbvB0Gw49abqqyjqYPRSp0X/cisf6u1t
+         OYya2vaOB9JB4liNCVFpn4Cn5Wp3huyLuiIx4d5Q=
+Date:   Tue, 26 Oct 2021 17:08:00 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Cc:     Prashant Malani <pmalani@chromium.org>,
@@ -32,32 +32,45 @@ Cc:     Prashant Malani <pmalani@chromium.org>,
         "Gopal, Saranya" <saranya.gopal@intel.com>,
         "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] USB Power Delivery character device interface
-Message-ID: <YXgZdFV2yTXAKxE9@kroah.com>
+Subject: Re: [RFC PATCH 2/4] usb: typec: Character device for USB Power
+ Delivery devices
+Message-ID: <YXgZ0N/eWmmXeoP2@kroah.com>
 References: <20211026143352.78387-1-heikki.krogerus@linux.intel.com>
+ <20211026143352.78387-3-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211026143352.78387-1-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20211026143352.78387-3-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 26, 2021 at 05:33:48PM +0300, Heikki Krogerus wrote:
-> Hi,
+On Tue, Oct 26, 2021 at 05:33:50PM +0300, Heikki Krogerus wrote:
+> Interim.
 > 
-> This is the proposal for USB PD character devices that we could use to
-> communicate USB PD messages directly with the USB PD capable partners,
-> ports and cable plugs from user space. Originally I proposed this idea
-> here as a better way to get the PDOs from the partners (and ports and
-> plugs): https://lkml.org/lkml/2021/10/8/331
+> TODO/ideas:
+> - Figure out a proper magic value for the ioctl and check if
+>   the ioctl range is OK.
+> - Register separate PD device for the cdev, and register it
+>   only if the device (port, plug or partner) actually
+>   supports USB PD (or come up with some other solution?).
+> - Introduce something like
+> 
+> 	struct pd_request {
+> 		struct pd_message request;
+> 		struct pd_message __user *response;
+> 	};
+> 
+>   and use it instead of only single struct pd_messages everywhere.
+> 
+> - Add compat support.
 
-You should put the info there (and please use lore.kernel.org in the
-future, not lkml.org as we have no control over that site), into this
-0/X message as I have no idea _why_ you need a char device and why the
-sysfs interface will not work.
+Ick, no, new ioctls should never need compat support if you create them
+properly.  That is only for "old" ones.
 
-So, why not sysfs?  :)
+Also, why not use the miscdev api instead?  That should remove some code
+of yours and make things simpler, if you really want to stick with a
+char device node...
 
 thanks,
 
