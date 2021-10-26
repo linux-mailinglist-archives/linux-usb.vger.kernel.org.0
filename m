@@ -2,82 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA7343B222
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 14:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2735743B251
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 14:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235707AbhJZMUF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Oct 2021 08:20:05 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:29939 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230409AbhJZMUF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Oct 2021 08:20:05 -0400
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4HdrLh3x9dzbnFt;
-        Tue, 26 Oct 2021 20:13:00 +0800 (CST)
-Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.15; Tue, 26 Oct 2021 20:17:38 +0800
-Received: from [10.174.176.245] (10.174.176.245) by
- kwepemm600001.china.huawei.com (7.193.23.3) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.15; Tue, 26 Oct 2021 20:17:37 +0800
-Subject: Re: [PATCH net] usbnet: fix error return code in usbnet_probe()
-To:     Johan Hovold <johan@kernel.org>
-CC:     <oneukum@suse.com>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <netdev@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20211026112526.2878177-1-wanghai38@huawei.com>
- <YXfsclAOm8Zhbac1@hovoldconsulting.com>
-From:   "wanghai (M)" <wanghai38@huawei.com>
-Message-ID: <f7eec28b-1e4a-c03b-3503-39efff9d45ff@huawei.com>
-Date:   Tue, 26 Oct 2021 20:17:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S234624AbhJZMY6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Oct 2021 08:24:58 -0400
+Received: from mga04.intel.com ([192.55.52.120]:8473 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235928AbhJZMY4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 Oct 2021 08:24:56 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10148"; a="228647135"
+X-IronPort-AV: E=Sophos;i="5.87,182,1631602800"; 
+   d="scan'208";a="228647135"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2021 05:22:15 -0700
+X-IronPort-AV: E=Sophos;i="5.87,182,1631602800"; 
+   d="scan'208";a="554666933"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2021 05:22:11 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 26 Oct 2021 15:22:08 +0300
+Date:   Tue, 26 Oct 2021 15:22:08 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mario Limonciello <mario.limonciello@outlook.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb <linux-usb@vger.kernel.org>
+Subject: Re: Disabling intel-wmi-thunderbolt on devices without Thunderbolt /
+ detecting if a device has Thunderbolt
+Message-ID: <YXfy8Bnh+PA68o5Y@lahna>
+References: <e21981cf-fef0-b73d-8fe4-4e1fab0d3864@redhat.com>
+ <PH0PR15MB4992B80415BE9BD4836CF336E1839@PH0PR15MB4992.namprd15.prod.outlook.com>
+ <b067d9f8-4d15-ac5e-3f1f-ff2ffa3b29aa@redhat.com>
+ <YXbJZ+qP7s7TZ4rQ@lahna>
+ <ba1fdd81-0580-1d1f-9e09-d78642b13d95@redhat.com>
+ <YXfCGtrtUiej2EZT@lahna>
+ <46faa3fd-85bd-da33-42b5-9a40824e0b31@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <YXfsclAOm8Zhbac1@hovoldconsulting.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.245]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600001.china.huawei.com (7.193.23.3)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <46faa3fd-85bd-da33-42b5-9a40824e0b31@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Oct 26, 2021 at 12:34:33PM +0200, Hans de Goede wrote:
+> Hi,
+> 
+> On 10/26/21 10:53, Mika Westerberg wrote:
+> > Hi,
+> > 
+> > On Tue, Oct 26, 2021 at 10:17:53AM +0200, Hans de Goede wrote:
+> >> Hi,
+> >>
+> >> On 10/25/21 17:12, Mika Westerberg wrote:
+> >>> On Mon, Oct 25, 2021 at 04:54:41PM +0200, Hans de Goede wrote:
+> >>>>> Yes that's exactly what is supposed to happen that this attribute is made.
+> >>>>> What exactly happens when you write into it?
+> >>>>
+> >>>> The _SB.CGWR ACPI method gets called, with arguments coming from ACPI
+> >>>> settings stored in memory. Depending on those settings this function
+> >>>> either directly pokes some MMIO or tries to talk to an I2C GPIO
+> >>>> expander which is not present on the Surface Go, causing it to
+> >>>> MMIO poke an I2C controller which it should not touch.
+> >>>>
+> >>>> In either case the AML code ends up poking stuff it should not touch
+> >>>> and the entire force_power sysfs attribute should simply not be
+> >>>> there on devices without thunderbolt.
+> >>>
+> >>> That's right - it should not be there in the first place if there is no
+> >>> Thunderbolt controller on that thing.
+> >>>
+> >>> I guess most of the systems that have this actually do support
+> >>> Thunderbolt so maybe we can work this around by quirking all the Surface
+> >>> models in that driver?
+> >>
+> >> I was hoping that we could avoid this, but yes if there is no easy /
+> >> clean way to detect if there are any Thunderbolt controllers on the
+> >> system then a DMI table is necessary.
+> > 
+> > Well, the force power thing is there just for this reason. It should
+> > only be present on systems using ACPI assisted PCIe hotplug for
+> > Thunderbolt devices. Apparantly some BIOS engineer forgot to remove it
+> > on Surface :( I need to check if it is present on recent reference
+> > BIOSes too. If it is then I'll report an internal sighting about this to
+> > get it removed.
+> > 
+> > In theory we could also use a heuristic that if there is a TBT
+> > controller present when the driver probes it should fail the probe or
+> > so. Or even look for the PCI host bridge and if it got the PCIe hotplug
+> > capability from the BIOS (through _OSC negotiation) we can assume this
+> > system does not need the force power.
+> 
+> I think adding such heuristics might be a good thing to do, because
+> I suspect that this problem is much wider then just a couple of
+> surface devices.
+> 
+> One worry I have about this is probe ordering. We cannot assume the
+> entire PCI bus has been enumerated when the intel-wmi-thunderbolt's
+> probe() method runs. So that would mean doing something like
+> returning -EPROBE_DEFER if no thunderbolt controller is found and
+> then say 1 minute after boot return -ENODEV to get us of the
+> probe_deferal devices list...
 
-ÔÚ 2021/10/26 19:54, Johan Hovold Ð´µÀ:
-> On Tue, Oct 26, 2021 at 07:25:26PM +0800, Wang Hai wrote:
->> Return error code if usb_maxpacket() returns 0 in usbnet_probe().
->>
->> Fixes: 397430b50a36 ("usbnet: sanity check for maxpacket")
->> Reported-by: Hulk Robot <hulkci@huawei.com>
->> Signed-off-by: Wang Hai <wanghai38@huawei.com>
->> ---
-> Good catch. This is embarrassing. I double checked the error path but
-> failed to notice the missing return value.
->
->>   drivers/net/usb/usbnet.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
->> index 80432ee0ce69..fb5bf7d36d50 100644
->> --- a/drivers/net/usb/usbnet.c
->> +++ b/drivers/net/usb/usbnet.c
->> @@ -1790,6 +1790,7 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
->>   	dev->maxpacket = usb_maxpacket (dev->udev, dev->out, 1);
->>   	if (dev->maxpacket == 0) {
->>   		/* that is a broken device */
->> +		status = -EINVAL;
-> But please use -ENODEV here. -EINVAL is typically reserved for bad user
-> input.
-Ok, I will send v2
->>   		goto out4;
->>   	}
-> Johan
-> .
->
--- 
-Wang Hai
+The whole PCI bus does not need to be enumerated - just the host bridge
+which is typically pretty early.
 
+> IOW this is going to be ugly so for now I think a DMI list for the
+> devices where I want to make sure force_power does not poke the
+> GEXP device is best.
+
+I agree. We can look for the other option later if more devices with
+this issue are found.
