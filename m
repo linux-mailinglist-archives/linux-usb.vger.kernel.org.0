@@ -2,114 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2DA943B840
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 19:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 333EB43B853
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Oct 2021 19:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236494AbhJZRi1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Oct 2021 13:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237839AbhJZRiR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Oct 2021 13:38:17 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92EBC061220
-        for <linux-usb@vger.kernel.org>; Tue, 26 Oct 2021 10:35:52 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id n63so21691927oif.7
-        for <linux-usb@vger.kernel.org>; Tue, 26 Oct 2021 10:35:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ANjT17K3ayZRw6d7hdD8+s5Skaoxr1KQOeOiPXOn+/A=;
-        b=CPQt/KpbL1B1CLWaw8s2/N8hYoD+t6qyE8pvv1K0DevOBforkxredd1J4DHrpEEsG8
-         BHekRZyOFZ1/nw6a0C6Rjd4QBpgzrYXasZrvJvRVGB9mvVQ8bgg6jP7/0ElTU81D09dQ
-         NLj7Z7pxJ8vnXvWD++CgHEtnhCDO5ZM0gfEfo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ANjT17K3ayZRw6d7hdD8+s5Skaoxr1KQOeOiPXOn+/A=;
-        b=GeSUKAIyl6qH3XXAbDpmDTFcc4G8bPFjLp0lDcugJyEj2YstiM3eaFRboWfaSFhNMN
-         cpXEfXfsGH5yw+y8uMuYW+DuBP7CHpFPKmPuxd7a8vJdVkeJwOWRcwyEn1zHuxHZZXAb
-         Ifbr36P+MkxS4/tTj9cq5LKj+Mj6DzhEF3xQqvx5GGDySpJqYf2faAMrNq/8Q0mJ3a8v
-         vqOlFbEIQGfOuozhfeakZMKQccTtwjnsg3IKtyAp48htGJjMcFUwFqfjmM51+9XbwCNF
-         8iaHeCgoJQ2vw4cQHvvaQ2W2+RE3TeIYMEc/c8bDET671axt/UT6IBYrt6uvB+tDfJi7
-         SzTA==
-X-Gm-Message-State: AOAM533ZOxM6Qd4ZDitgRXm33aDz3DFc42vhIJ6wdoJuxf2BohpzkNW+
-        MdispPWoTsOBxD2otS94THt9gxlnUaJMhg==
-X-Google-Smtp-Source: ABdhPJzWa7+rPtGFnGhn1yQEaLiakTIGp3iatl3jqY7h0g+uak674CpWhjpUZN8lLthTpzaIQV+WXQ==
-X-Received: by 2002:a05:6808:987:: with SMTP id a7mr46584oic.97.1635269751932;
-        Tue, 26 Oct 2021 10:35:51 -0700 (PDT)
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com. [209.85.210.42])
-        by smtp.gmail.com with ESMTPSA id p14sm3935579oov.0.2021.10.26.10.35.50
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Oct 2021 10:35:51 -0700 (PDT)
-Received: by mail-ot1-f42.google.com with SMTP id 107-20020a9d0a74000000b00553bfb53348so3179688otg.0
-        for <linux-usb@vger.kernel.org>; Tue, 26 Oct 2021 10:35:50 -0700 (PDT)
-X-Received: by 2002:a05:6830:44a9:: with SMTP id r41mr20622101otv.230.1635269748963;
- Tue, 26 Oct 2021 10:35:48 -0700 (PDT)
+        id S236558AbhJZRmL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Oct 2021 13:42:11 -0400
+Received: from mxout02.lancloud.ru ([45.84.86.82]:57190 "EHLO
+        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231618AbhJZRmK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Oct 2021 13:42:10 -0400
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru AAA9620C0461
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+To:     <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Mathias Nyman" <mathias.nyman@intel.com>
+Subject: [PATCH v2 00/22] Explicitly deny IRQ0 in the USB host drivers
+Date:   Tue, 26 Oct 2021 20:39:21 +0300
+Message-ID: <20211026173943.6829-1-s.shtylyov@omp.ru>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-References: <20211026095214.26375-1-johan@kernel.org> <20211026095214.26375-3-johan@kernel.org>
-In-Reply-To: <20211026095214.26375-3-johan@kernel.org>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Tue, 26 Oct 2021 10:35:37 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXNbMJ1EgPRvosx0AbJgsE-qOiaQjeD=vCEyDLoUQAgkiw@mail.gmail.com>
-Message-ID: <CA+ASDXNbMJ1EgPRvosx0AbJgsE-qOiaQjeD=vCEyDLoUQAgkiw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] mwifiex: fix division by zero in fw download path
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Kalle Valo <kvalo@codeaurora.org>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Amitkumar Karwar <akarwar@marvell.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 26, 2021 at 2:53 AM Johan Hovold <johan@kernel.org> wrote:
->
-> Add the missing endpoint max-packet sanity check to probe() to avoid
-> division by zero in mwifiex_write_data_sync() in case a malicious device
-> has broken descriptors (or when doing descriptor fuzz testing).
->
-> Note that USB core will reject URBs submitted for endpoints with zero
-> wMaxPacketSize but that drivers doing packet-size calculations still
-> need to handle this (cf. commit 2548288b4fb0 ("USB: Fix: Don't skip
-> endpoint descriptors with maxpacket=0")).
->
-> Fixes: 4daffe354366 ("mwifiex: add support for Marvell USB8797 chipset")
-> Cc: stable@vger.kernel.org      # 3.5
-> Cc: Amitkumar Karwar <akarwar@marvell.com>
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
+Here are 22 patches against the 'usb-next' branch of Greg KH's 'usb.git' repo.
+The affected drivers use platform_get_irq() which can return IRQ0 (considered
+invalid, according to Linus) that means broken HCD when passed to usb_add_hcd()
+called at the end of the probe() methods.
 
-Seems like you're missing a changelog and a version number, since
-you've already sent previous versions of this patch.
+Sergey Shtylyov (22):
+  usb: host: ehci-exynos: deny IRQ0
+  usb: host: ehci-mv: deny IRQ0
+  usb: host: ehci-npcm7xx: deny IRQ0
+  usb: host: ehci-omap: deny IRQ0
+  usb: host: ehci-platform: deny IRQ0
+  usb: host: ehci-spear: deny IRQ0
+  usb: host: ehci-st: deny IRQ0
+  usb: host: ohci-at91: deny IRQ0
+  usb: host: ohci-da8xx: deny IRQ0
+  usb: host: ohci-exynos: deny IRQ0
+  usb: host: ohci-at91: deny IRQ0
+  usb: host: ohci-omap: deny IRQ0
+  usb: host: ohci-platform: deny IRQ0
+  usb: host: ohci-pxa27x: deny IRQ0
+  usb: host: ohci-sm501: deny IRQ0
+  usb: host: ohci-spear: deny IRQ0
+  usb: host: ohci-st: deny IRQ0
+  usb: host: ohci-tmio: deny IRQ0
+  usb: host: xhci-histb: deny IRQ0
+  usb: host: xhci-mtk: deny IRQ0
+  usb: host: xhci-plat: deny IRQ0
+  usb: host: xhci-tegra: deny IRQ0
 
->  drivers/net/wireless/marvell/mwifiex/usb.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/net/wireless/marvell/mwifiex/usb.c b/drivers/net/wireless/marvell/mwifiex/usb.c
-> index 426e39d4ccf0..2826654907d9 100644
-> --- a/drivers/net/wireless/marvell/mwifiex/usb.c
-> +++ b/drivers/net/wireless/marvell/mwifiex/usb.c
-> @@ -502,6 +502,9 @@ static int mwifiex_usb_probe(struct usb_interface *intf,
->                         atomic_set(&card->tx_cmd_urb_pending, 0);
->                         card->bulk_out_maxpktsize =
->                                         le16_to_cpu(epd->wMaxPacketSize);
-> +                       /* Reject broken descriptors. */
-> +                       if (card->bulk_out_maxpktsize == 0)
-> +                               return -ENODEV;
+ drivers/usb/host/ehci-exynos.c   | 4 ++++
+ drivers/usb/host/ehci-mv.c       | 4 ++++
+ drivers/usb/host/ehci-npcm7xx.c  | 4 ++++
+ drivers/usb/host/ehci-omap.c     | 2 ++
+ drivers/usb/host/ehci-platform.c | 2 ++
+ drivers/usb/host/ehci-spear.c    | 4 ++++
+ drivers/usb/host/ehci-st.c       | 2 ++
+ drivers/usb/host/ohci-at91.c     | 2 ++
+ drivers/usb/host/ohci-da8xx.c    | 4 ++++
+ drivers/usb/host/ohci-exynos.c   | 4 ++++
+ drivers/usb/host/ohci-nxp.c      | 4 ++++
+ drivers/usb/host/ohci-omap.c     | 4 ++++
+ drivers/usb/host/ohci-platform.c | 2 ++
+ drivers/usb/host/ohci-pxa27x.c   | 2 ++
+ drivers/usb/host/ohci-sm501.c    | 4 ++++
+ drivers/usb/host/ohci-spear.c    | 4 ++++
+ drivers/usb/host/ohci-st.c       | 2 ++
+ drivers/usb/host/ohci-tmio.c     | 2 ++
+ drivers/usb/host/xhci-histb.c    | 2 ++
+ drivers/usb/host/xhci-mtk.c      | 4 +++-
+ drivers/usb/host/xhci-plat.c     | 2 ++
+ drivers/usb/host/xhci-tegra.c    | 2 ++
+ 22 files changed, 65 insertions(+), 1 deletion(-)
 
-If we're really talking about malicious devices, I'm still not 100%
-sure this is sufficient -- what if the device doesn't advertise the
-right endpoints? Might we get through the surrounding loop without
-ever even reaching this code? Seems like the right thing to do would
-be to pull the validation outside the loop.
-
-Brian
+-- 
+2.26.3
