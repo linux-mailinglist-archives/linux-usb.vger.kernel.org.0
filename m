@@ -2,72 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA63F440427
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Oct 2021 22:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B724405F3
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Oct 2021 01:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbhJ2Ufv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Oct 2021 16:35:51 -0400
-Received: from mxout03.lancloud.ru ([45.84.86.113]:55882 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231463AbhJ2Ufu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Oct 2021 16:35:50 -0400
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru E52BF208D528
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH 1/3] Docs: usb: update err() to pr_err() and replace
- __FILE__
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>, <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <linux-usb@vger.kernel.org>
-References: <cover.1635533924.git.philipp.g.hortmann@gmail.com>
- <e2f2c5c6995a011494105484849776a856af5bcc.1635533924.git.philipp.g.hortmann@gmail.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <49a766ec-014e-3667-828c-a4fd19c7c9e3@omp.ru>
-Date:   Fri, 29 Oct 2021 23:33:17 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S231589AbhJ2X7o convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 29 Oct 2021 19:59:44 -0400
+Received: from 219-87-183-172.static.tfn.net.tw ([219.87.183.172]:52128 "EHLO
+        ms4.kntech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231401AbhJ2X7o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Oct 2021 19:59:44 -0400
+Received: from [103.27.239.15] ([103.27.239.15])
+        (authenticated bits=0)
+        by ms4.kntech.com.tw (8.13.8/8.13.8) with ESMTP id 19RF1doM017395
+        for <linux-usb@vger.kernel.org>; Wed, 27 Oct 2021 23:01:42 +0800
+Message-Id: <202110271501.19RF1doM017395@ms4.kntech.com.tw>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <e2f2c5c6995a011494105484849776a856af5bcc.1635533924.git.philipp.g.hortmann@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Dear Friend,
+To:     linux-usb@vger.kernel.org
+From:   "Wahid Majrooh" <wnf@sendayan.com.my>
+Date:   Wed, 27 Oct 2021 22:01:56 +0700
+Reply-To: wfnngaf@gmail.com
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/29/21 10:39 PM, Philipp Hortmann wrote:
+Dear Friend,
 
-> update err() to pr_err() and replace __FILE__
-> 
-> Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
-> ---
->  Documentation/driver-api/usb/writing_usb_driver.rst | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
-> index 2176297e5765..5c29e5bdbe88 100644
-> --- a/Documentation/driver-api/usb/writing_usb_driver.rst
-> +++ b/Documentation/driver-api/usb/writing_usb_driver.rst
-> @@ -91,8 +91,8 @@ usually in the driver's init function, as shown here::
->  	    /* register this driver with the USB subsystem */
->  	    result = usb_register(&skel_driver);
->  	    if (result < 0) {
-> -		    err("usb_register failed for the "__FILE__ "driver."
-> -			"Error number %d", result);
-> +		    pr_err("usb_register failed for the %s driver. "
+I am writing to you to make a proposal regarding Investing in your
+country. I am proposing to you a business development Investment in
+housing and health sector or any other sector you can recommend. My name
+is Wahid Majrooh. Former  acting Minister of Public Health of
+Afghanistan.
 
-   Don't break up the kernel message like this. The current code is a bad example --
-high time to fix it. :-)
 
-> +			   "Error number %d", skel_driver.name, result);
->  		    return -1;
->  	    }
->  
+Sincerely
 
-MBR, Sergey
+Wahid
