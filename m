@@ -2,89 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D8643D0A9
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 20:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B18E943D158
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 21:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243535AbhJ0S0V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Oct 2021 14:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233726AbhJ0S0V (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 14:26:21 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1C5C061570
-        for <linux-usb@vger.kernel.org>; Wed, 27 Oct 2021 11:23:55 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id br18so3363602qkb.1
-        for <linux-usb@vger.kernel.org>; Wed, 27 Oct 2021 11:23:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5dU5i2rPAA1rWa1tBZegagA5UHnsbTclU/Hvls+bm6w=;
-        b=LnRRS+MmzvGJTLZ4cdjuzpaM79iMGNZvfqRkeBYT+/VV6Zxo3dkTmrRHfLbM2Y/Cw2
-         1+b0r9rHhreWhKzLcucFILGrNT9TEqlx0EM0ljZnye2h5Xduc1sS5dWHE1Xk3PzU3B1L
-         3RQhu5MNmGTwvqi8CZObzmDLH4GSQbKTFjuwA=
+        id S240493AbhJ0TDQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Oct 2021 15:03:16 -0400
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:35718 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240523AbhJ0TDL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 15:03:11 -0400
+Received: by mail-ot1-f44.google.com with SMTP id w12-20020a056830410c00b0054e7ceecd88so5057077ott.2;
+        Wed, 27 Oct 2021 12:00:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5dU5i2rPAA1rWa1tBZegagA5UHnsbTclU/Hvls+bm6w=;
-        b=gkTfo0H5v5WhT/g39oJ9mX1REnGwV7IouT4fb/YQsCEZHJLDZouOhSwVEoJN1SdVi/
-         tmvVCMuHz8IHGKcYvGKBvDrH7l9ewTovXfs2Ezn0KGfxmzl9SAxeHRAvvQA0+MiOb0kS
-         0ttzhNApymUMAqPODYsbQRKokHo/zOta41pfSObYkbiqgHn7RQqf8+7x9Zq8VzbP0Jwl
-         rQQjjEygu53mphy5ff97P4H/iwbbdPHAQ/WDy7Yjbqsm1K3QOG4oq9GRNFrrPrV1+gpy
-         AOsJ+hj3izEDQiTyca6ruXh4Om4IwXU7j2LQ9qzDA+wga8auyfXH23sM3iVA86RVNMJX
-         H2vw==
-X-Gm-Message-State: AOAM532Lde5GAC7+hxnA/r+iN9kZGs20VroEDvbxw9dVOcsFpBLVa4RL
-        rp+RDduYFZAMGC142LLXhvj1wmwgsVaugg==
-X-Google-Smtp-Source: ABdhPJxutit3VAo50uPaBLATERM6Bi9MPoIvLOuNdcIRkRJnhkVH82fSBBYLMefx9aGcXoCKTlFj8Q==
-X-Received: by 2002:a37:aec4:: with SMTP id x187mr26600873qke.217.1635359033650;
-        Wed, 27 Oct 2021 11:23:53 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id c24sm511279qkp.43.2021.10.27.11.23.52
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Oct 2021 11:23:52 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id q74so2701966ybq.11
-        for <linux-usb@vger.kernel.org>; Wed, 27 Oct 2021 11:23:52 -0700 (PDT)
-X-Received: by 2002:a25:b851:: with SMTP id b17mr32814544ybm.301.1635359032208;
- Wed, 27 Oct 2021 11:23:52 -0700 (PDT)
+        bh=twYyXM54JZtknY6kSlEQB2YIbHREslZxx1VWjQb9rKA=;
+        b=K5USj36N/xFW8pCr+3ry3/T7CI2ZI5jI/yDViD6+veeV7vRxI8d0iW5al0Wjnn/KfH
+         rdB25lF2DZ5jbBvgAoFTPEdHCArGVS6LAJEf44lfd0uNihmC4OLr9RwesfFSvjhJwvHC
+         89yxS9S0FSWmhkOFFfZZtAJFZ68hYbgshebuhH9w5iHk9h2y8d6cAbOFpdoIndoO9FBJ
+         bqyo0u5XJNf6S22yAiffMFoKCbqtscL551Ts9v3QOsn1a9KTrlqjRKQdtt8S1FdgMglQ
+         IhSck47GjHkersVHMbi5Sso2TeK9f4IJkhz9W/Yex9F4avDa+PeRsYNZ6yYsSR9PYfa1
+         fSvw==
+X-Gm-Message-State: AOAM533nYQHOWGxaotOAm1NoCPF2gKqsjjnB1fxgMmFtNRcWHZsArsBs
+        RXenxJF+yaU4fUWzbABrmzVFYAp52gy9mZwc0gE=
+X-Google-Smtp-Source: ABdhPJxwyoNvTjXEvWSwEzQkvS3twTW+fZkOH2aK+Tp8JKa7djpi/yo4glrydaOg6ed57ahTO8qmsT3UR7s8ZIDHGmY=
+X-Received: by 2002:a05:6830:1af0:: with SMTP id c16mr25814378otd.16.1635361244953;
+ Wed, 27 Oct 2021 12:00:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211026095214.26375-1-johan@kernel.org> <20211026095214.26375-3-johan@kernel.org>
- <CA+ASDXNbMJ1EgPRvosx0AbJgsE-qOiaQjeD=vCEyDLoUQAgkiw@mail.gmail.com> <YXkCVLJrQC7ig31t@hovoldconsulting.com>
-In-Reply-To: <YXkCVLJrQC7ig31t@hovoldconsulting.com>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Wed, 27 Oct 2021 11:23:41 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXPGDOmZgCV01xAAgyOei9sSyNe_VUDWK7pkC_VLs4K8JA@mail.gmail.com>
-Message-ID: <CA+ASDXPGDOmZgCV01xAAgyOei9sSyNe_VUDWK7pkC_VLs4K8JA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] mwifiex: fix division by zero in fw download path
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Kalle Valo <kvalo@codeaurora.org>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Amitkumar Karwar <akarwar@marvell.com>
+References: <20211025070155.2995-1-chunfeng.yun@mediatek.com>
+ <CAJZ5v0gb6vN9kHeQbgjRQXvOCNaFK8ur7bLDeAVjDqdT2=a+-g@mail.gmail.com> <fba3246fbc600f06eb40e90283c1cd51bc259804.camel@mediatek.com>
+In-Reply-To: <fba3246fbc600f06eb40e90283c1cd51bc259804.camel@mediatek.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 27 Oct 2021 21:00:34 +0200
+Message-ID: <CAJZ5v0hnrr+ZidUMkN837utcKc6otmqaZ+uTX_xMukTUrdHLDQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] PM / wakeirq: support enabling wake-up irq after
+ runtime_suspend called
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 12:40 AM Johan Hovold <johan@kernel.org> wrote:
-> On Tue, Oct 26, 2021 at 10:35:37AM -0700, Brian Norris wrote:
-> > Seems like you're missing a changelog and a version number, since
-> > you've already sent previous versions of this patch.
+On Wed, Oct 27, 2021 at 11:34 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
 >
-> Seems like you're confusing me with someone else.
+> On Tue, 2021-10-26 at 17:39 +0200, Rafael J. Wysocki wrote:
+> > On Mon, Oct 25, 2021 at 9:02 AM Chunfeng Yun <
+> > chunfeng.yun@mediatek.com> wrote:
+> > >
+> > > When the dedicated wake IRQ is level trigger, and it uses the
+> > > device's low-power status as the wakeup source, that means if the
+> > > device is not in low-power state, the wake IRQ will be triggered
+> > > if enabled; For this case, need enable the wake IRQ after running
+> > > the device's ->runtime_suspend() which make it enter low-power
+> > > state.
+> > >
+> > > e.g.
+> > > Assume the wake IRQ is a low level trigger type, and the wakeup
+> > > signal comes from the low-power status of the device.
+> > > The wakeup signal is low level at running time (0), and becomes
+> > > high level when the device enters low-power state (runtime_suspend
+> > > (1) is called), a wakeup event at (2) make the device exit low-
+> > > power
+> > > state, then the wakeup signal also becomes low level.
+> > >
+> > >                 ------------------
+> > >                |           ^     ^|
+> > > ----------------           |     | --------------
+> > >  |<---(0)--->|<--(1)--|   (3)   (2)    (4)
+> > >
+> > > if enable the wake IRQ before running runtime_suspend during (0),
+> > > a wake IRQ will arise, it causes resume immediately;
+> > > it works if enable wake IRQ ( e.g. at (3) or (4)) after running
+> > > ->runtime_suspend().
+> > >
+> > > This patch introduces a new status WAKE_IRQ_DEDICATED_REVERSE to
+> > > optionally support enabling wake IRQ after running
+> > > ->runtime_suspend().
+> > >
+> > > Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> >
+> > I don't really have anything to add regarding the code.
+> >
+> > The kerneldoc comments could be improved, but I can take care of this
+> > when applying the patch.
+> Ok, thanks
+> >
+> > Please collect ACKs for the remaining 2 patches in the series and I
+> > will pick up all three.
+> The files (mtu3_plat.c, xhci-mtk.c) modified by other 2 patches are
+> maintained by myself, please pick up them, thanks a lot.
 
-Oops, you're correct :( It was only a week or two ago someone else was
-trying to patch this, and I didn't remember the "From" correctly.
-Sorry!
-
-> I'll send a v2.
-
-Looks better, thanks.
-
-Brian
+OK, applied as 5.16 material, thanks!
