@@ -2,94 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 450D044F14B
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Nov 2021 05:59:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BB644F1FB
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Nov 2021 08:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbhKMFCA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 13 Nov 2021 00:02:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbhKMFB7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 13 Nov 2021 00:01:59 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DFBC061766
-        for <linux-usb@vger.kernel.org>; Fri, 12 Nov 2021 20:59:07 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id p18-20020a17090ad31200b001a78bb52876so8573852pju.3
-        for <linux-usb@vger.kernel.org>; Fri, 12 Nov 2021 20:59:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cWD6ZMN/TLMJ0F8lDVMWbuyLXylJgc5f0OVQLw2Oxq4=;
-        b=XGqzUFB0+TL66FpHkvUWL6TwtBjVyDToPBE4y8x969DGErHi/2N/xtnhysGiARTfE4
-         rYF/OhO0+LCsRZvYCwLLAcy9t5RcDikeC+dzLxvRjjL9QZQ39NB8UihLnveS2oYUtL3l
-         1EcznoDbVuSyMHlLrj1NY3HlIjHPX7HkX03Qubb6MLHIQUqqve87vGXha4pNj1p6nwZk
-         GwL4jA6ni7YpfGKAVcUagQGxtxn/py5ukb5y+pkUUGQ/cR9QPLvJ7Fr6Ey67nDZuLEWx
-         145BiCn2NmOWbmy7ylHIxBNgoqBSQbGYBEWarm+U7ZvMyJ/RYLcq6W6FEHIUreJYytVj
-         95OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cWD6ZMN/TLMJ0F8lDVMWbuyLXylJgc5f0OVQLw2Oxq4=;
-        b=WIoZYmHwAuG2nM360lwgfX0aBDr2am4nv8wRn8OPjTgzJwDWmRHKKV/lFAowk+Yg9S
-         v3yekd8pm8W9zXLI7mOVAdpwzD79YP1Uaoo1sdSrLIE266lv4lLbk+vMDKQEHOiGjEOV
-         BCS+O0owBPLsJlgP5lSa2kthPs/Y3xt3ISh/1NzIiHgoqcEUXBUyfkVoEnbpHdqhgpvZ
-         B6Zj+dB8cOiwYmm/JeFVzNoxKznWZxn2hY1tNTd8Hxlk48NUBwo/DIRPYLqzOmJe1gFe
-         UtLbEjx81ciIXMMFSL5FM69e+2v2abppNBscHnipVd1hdOHh2MHpIKWf3fDwKFEONA19
-         n78g==
-X-Gm-Message-State: AOAM533eZJP5wpdxh60UbRse/Q+11l7qMir8zpfvIaljHgC68En4RScA
-        gbtzup7CW63TJd7X2REHFrs=
-X-Google-Smtp-Source: ABdhPJwMnlxTXidylpfbzDzVr5ku+sBT7r6CfkyxETUkpY2KMyxmPTQ8zsensZwUPT0PmwgnyInzvQ==
-X-Received: by 2002:a17:90a:9dca:: with SMTP id x10mr42729844pjv.170.1636779547310;
-        Fri, 12 Nov 2021 20:59:07 -0800 (PST)
-Received: from ELIJAHBAI-MB0.tencent.com ([203.205.141.113])
-        by smtp.gmail.com with ESMTPSA id 4sm6106243pgj.63.2021.11.12.20.59.05
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 12 Nov 2021 20:59:06 -0800 (PST)
-From:   Haimin Zhang <tcs.kernel@gmail.com>
-To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Cc:     Haimin Zhang <tcs.kernel@gmail.com>,
-        TCS Robot <tcs_robot@tencent.com>
-Subject: [PATCH v4] USB: ehci_brcm_hub_control: improve port index sanitizing
-Date:   Sat, 13 Nov 2021 12:57:14 +0800
-Message-Id: <20211113045714.46373-1-tcs.kernel@gmail.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        id S235728AbhKMHTP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 13 Nov 2021 02:19:15 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:57252 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231250AbhKMHTO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 13 Nov 2021 02:19:14 -0500
+X-UUID: 6e42686547ec4888a155e74ec960264a-20211113
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Date:MIME-Version:Content-Type:References:In-Reply-To:CC:To:From:Subject:Message-ID; bh=tz4dMpoGwAHrKtvwXNl0qRY/8R7GtbkOSsZHPQmwR0M=;
+        b=OumaVR2Da8crvl4ZuBHCC1FjO2LIHkGslSwkI6cqoD3faoCW5jX66XpqXX0HeRxLHgR+gH7Rke0tM8oasSy+W7ec/XxHSVsSnnfrirdSIVysGETIaaHxrbrHEjfwHfdMN8nQuHwy8+rOV2DGb6OWECdQO4uv7KsNkm6rj4agnrs=;
+X-UUID: 6e42686547ec4888a155e74ec960264a-20211113
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1232590081; Sat, 13 Nov 2021 15:16:18 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Sat, 13 Nov 2021 15:16:17 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sat, 13 Nov
+ 2021 15:16:17 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 13 Nov 2021 15:16:16 +0800
+Message-ID: <7d5da62b58cd51c08e4e4f9e23069f122c1a5cb4.camel@mediatek.com>
+Subject: Re: [PATCH v2 20/22] usb: host: xhci-mtk: deny IRQ0
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>, <linux-usb@vger.kernel.org>,
+        "Mathias Nyman" <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+In-Reply-To: <20211026173943.6829-21-s.shtylyov@omp.ru>
+References: <20211026173943.6829-1-s.shtylyov@omp.ru>
+         <20211026173943.6829-21-s.shtylyov@omp.ru>
+Content-Type: text/plain; charset="UTF-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date:   Wed, 27 Oct 2021 16:54:48 +0800
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Due to (wIndex & 0xff) - 1 can get an integer greater than 0xf, this
-can cause array index to be out of bounds since the size of array
-port_status is 0xf. This change prevents a possible out-of-bounds
-pointer computation by forcing the use of a valid port number.
-
-Reported-by: TCS Robot <tcs_robot@tencent.com>
-Signed-off-by: Haimin Zhang <tcs.kernel@gmail.com>
----
- drivers/usb/host/ehci-brcm.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/ehci-brcm.c b/drivers/usb/host/ehci-brcm.c
-index d3626bfa966b..2e92918a14dd 100644
---- a/drivers/usb/host/ehci-brcm.c
-+++ b/drivers/usb/host/ehci-brcm.c
-@@ -62,8 +62,12 @@ static int ehci_brcm_hub_control(
- 	u32 __iomem	*status_reg;
- 	unsigned long flags;
- 	int retval, irq_disabled = 0;
-+	u32 temp;
- 
--	status_reg = &ehci->regs->port_status[(wIndex & 0xff) - 1];
-+	temp = (wIndex & 0xff) - 1;
-+	if (temp >= HCS_N_PORTS_MAX)
-+		temp = 0;
-+	status_reg = &ehci->regs->port_status[temp];
- 
- 	/*
- 	 * RESUME is cleared when GetPortStatus() is called 20ms after start
--- 
-2.30.1 (Apple Git-130)
+T24gVHVlLCAyMDIxLTEwLTI2IGF0IDIwOjM5ICswMzAwLCBTZXJnZXkgU2h0eWx5b3Ygd3JvdGU6
+DQo+IElmIHBsYXRmb3JtX2dldF9pcnEoKSByZXR1cm5zIElSUTAgKGNvbnNpZGVyZWQgaW52YWxp
+ZCBhY2NvcmRpbmcgdG8NCj4gTGludXMpDQo+IHRoZSBkcml2ZXIgYmxpdGhlbHkgcGFzc2VzIGl0
+IHRvIHVzYl9hZGRfaGNkKCkgdGhhdCB0cmVhdHMgSVJRMCBhcyBubw0KPiBJUlENCj4gYXQgYWxs
+LiBEZW55IElSUTAgcmlnaHQgYXdheSwgcmV0dXJuaW5nIC1FSU5WQUwgZnJvbSB0aGUgcHJvYmUo
+KQ0KPiBtZXRob2QuLi4NCj4gDQo+IEZpeGVzOiAwY2JkNGIzNGNkYTkgKCJ4aGNpOiBtZWRpYXRl
+azogc3VwcG9ydCBNVEsgeEhDSSBob3N0DQo+IGNvbnRyb2xsZXIiKQ0KPiBTaWduZWQtb2ZmLWJ5
+OiBTZXJnZXkgU2h0eWx5b3YgPHMuc2h0eWx5b3ZAb21wLnJ1Pg0KPiAtLS0NCj4gIGRyaXZlcnMv
+dXNiL2hvc3QveGhjaS1tdGsuYyB8IDQgKysrLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0
+aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hv
+c3QveGhjaS1tdGsuYyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS0NCj4gbXRrLmMNCj4gaW5kZXgg
+YzUzZjZmMjc2ZDVjLi5kMmRjOGQ5ODYzZWUgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdXNiL2hv
+c3QveGhjaS1tdGsuYw0KPiArKysgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktbXRrLmMNCj4gQEAg
+LTQ5NSw3ICs0OTUsNyBAQCBzdGF0aWMgaW50IHhoY2lfbXRrX3Byb2JlKHN0cnVjdCBwbGF0Zm9y
+bV9kZXZpY2UNCj4gKnBkZXYpDQo+ICAJCXJldHVybiByZXQ7DQo+ICANCj4gIAlpcnEgPSBwbGF0
+Zm9ybV9nZXRfaXJxX2J5bmFtZV9vcHRpb25hbChwZGV2LCAiaG9zdCIpOw0KPiAtCWlmIChpcnEg
+PCAwKSB7DQo+ICsJaWYgKGlycSA8PSAwKSB7DQo+ICAJCWlmIChpcnEgPT0gLUVQUk9CRV9ERUZF
+UikNCj4gIAkJCXJldHVybiBpcnE7DQo+ICANCj4gQEAgLTUwMyw2ICs1MDMsOCBAQCBzdGF0aWMg
+aW50IHhoY2lfbXRrX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UNCj4gKnBkZXYpDQo+ICAJ
+CWlycSA9IHBsYXRmb3JtX2dldF9pcnEocGRldiwgMCk7DQo+ICAJCWlmIChpcnEgPCAwKQ0KPiAg
+CQkJcmV0dXJuIGlycTsNCj4gKwkJaWYgKCFpcnEpDQpJdCBpcyAiaWYgKGlycSA8PSAwKSI/DQoN
+Cg0KPiArCQkJcmV0dXJuIC1FSU5WQUw7DQo+ICAJfQ0KPiAgDQo+ICAJd2FrZXVwX2lycSA9IHBs
+YXRmb3JtX2dldF9pcnFfYnluYW1lX29wdGlvbmFsKHBkZXYsICJ3YWtldXAiKTsNCg==
 
