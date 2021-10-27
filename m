@@ -2,69 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6184C43D212
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 22:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C975643D22E
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 22:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243782AbhJ0UJb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Oct 2021 16:09:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53164 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243780AbhJ0UJb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Oct 2021 16:09:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 490BD60234
-        for <linux-usb@vger.kernel.org>; Wed, 27 Oct 2021 20:07:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635365225;
-        bh=B1eZ69MsOiOAuAPow04jDcULkGoMBXUEI7Fwll5ip5A=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=rg8X3xwhE+r6UdU2XWIlmFrAi+niw41cl6xqkZpM9Wa9n+myDM/+yBkGO4dbIFokG
-         CTM2pbMAPAxzt6E2Frt+kDCbVboFb0GTd21B34ZQTYX4pHPqOQtdf2Js824GJga3yX
-         rExTPp0HLz1C/O1G+uhJg+PmQ+SlCCkCDvdhITDoB2nXgVOl1HaRyLSWshJhvbp+QM
-         +NkFq5BFyHR43KhuxUw3iMT1qj5GmG/fQKpna2mKLRTxkLUYmfKu5csHMnTl0mr2Wr
-         QSJSN35rrDLAPB3BLFI2tufVPCrKqkaOaC0Yu7pmNhdVIEUoaWW0sD47fppcz0lGT2
-         fVIOdSCguLlow==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 44EA5610FA; Wed, 27 Oct 2021 20:07:05 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 214789] ehci-hcd.c ISR
-Date:   Wed, 27 Oct 2021 20:07:05 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-214789-208809-Oby9vMj35S@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-214789-208809@https.bugzilla.kernel.org/>
-References: <bug-214789-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S240496AbhJ0UMp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Oct 2021 16:12:45 -0400
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:40705 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243830AbhJ0UMn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 16:12:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1635365418; x=1666901418;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=4sZ8+PsZnpALtmEwUku1TEagKL1r7jaVqsFdyy1aw4Y=;
+  b=SGS5dtQQlWu11AYrT7dIBsjPi6oPtqFHLRQ2nVfT0n0mqSh1PBF7s+5t
+   EUIPjB+4pGiY+QDldi1TNSrmmI8EYuxpHpR1DddLszxU7eWmDlUvowTKf
+   Y1tkqNYk2iDQTcv07EdsrxJC8WwRcRoUtD4vkaVgKG5cquoMUV/NUKjLY
+   w=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Oct 2021 13:10:17 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2021 13:10:17 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
+ Wed, 27 Oct 2021 13:10:17 -0700
+Received: from wcheng-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
+ Wed, 27 Oct 2021 13:10:16 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <jackp@codeaurora.org>, Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH v3 0/2] Disable mass storage endpoints during disconnect
+Date:   Wed, 27 Oct 2021 13:10:05 -0700
+Message-ID: <1635365407-31337-1-git-send-email-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214789
+Changes in v3:
+ - Modify statement for usb_ep_enable().
+ - Add explicit statement mentioning that APIs can be called in atomic context.
 
---- Comment #15 from Alan Stern (stern@rowland.harvard.edu) ---
-Can you try testing some kernel versions between 5.3 and 5.11 to see exactl=
-y at
-what point the problem was introduced?
+Changes in v2:
+ - Revised comments for usb_ep_disable() as it should be safe to be
+   executed in atomic contexts as well.  Other FDs are currently
+   calling ep disable during the disconnect event as well.
 
---=20
-You may reply to this email to add a comment.
+This series calls the usb_ep_disable() API directly from fsg_disable()
+as there is a possibility that UDCs that support runtime PM may
+already be in a suspended state, leading to HW access while resources
+are disabled.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Wesley Cheng (2):
+  usb: gadget: udc: core: Revise comments for USB ep enable/disable
+  usb: gadget: f_mass_storage: Disable eps during disconnect
+
+ drivers/usb/gadget/function/f_mass_storage.c | 10 ++++++++++
+ drivers/usb/gadget/udc/core.c                |  4 ++--
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
