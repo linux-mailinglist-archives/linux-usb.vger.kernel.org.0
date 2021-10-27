@@ -2,87 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAC943D231
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 22:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8051943D2A2
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 22:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243836AbhJ0UMr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Oct 2021 16:12:47 -0400
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:10131 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243839AbhJ0UMo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 16:12:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1635365418; x=1666901418;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=v1X2j5whadQ5qsqNX1PcC/XgYJy3oUyc4E5mS3fnRHY=;
-  b=ciWrRGsD2Gz4Y9SnOVYxEwDg6ufU9G3k069406xbbWrz3SZ2Xio3SEro
-   gM9IjE2Q0r7YhtqNqMxWEQg9jt57ivytU8CsC5vpbvZbQkNjqTgxDfxXh
-   /tQhm8qPTW5wSf/ved/qkYb6IGdnFvdN8cQhGK6PqSJYbejQsZi8t3iCp
-   o=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 Oct 2021 13:10:18 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2021 13:10:18 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Wed, 27 Oct 2021 13:10:17 -0700
-Received: from wcheng-linux1.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Wed, 27 Oct 2021 13:10:17 -0700
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <jackp@codeaurora.org>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v3 2/2] usb: gadget: f_mass_storage: Disable eps during disconnect
-Date:   Wed, 27 Oct 2021 13:10:07 -0700
-Message-ID: <1635365407-31337-3-git-send-email-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1635365407-31337-1-git-send-email-quic_wcheng@quicinc.com>
+        id S237006AbhJ0URF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Oct 2021 16:17:05 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:39393 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S234969AbhJ0URF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 16:17:05 -0400
+Received: (qmail 1331371 invoked by uid 1000); 27 Oct 2021 16:14:38 -0400
+Date:   Wed, 27 Oct 2021 16:14:38 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        jackp@codeaurora.org
+Subject: Re: [PATCH v3 0/2] Disable mass storage endpoints during disconnect
+Message-ID: <20211027201438.GB1326060@rowland.harvard.edu>
 References: <1635365407-31337-1-git-send-email-quic_wcheng@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1635365407-31337-1-git-send-email-quic_wcheng@quicinc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When receiving a disconnect event from the UDC, the mass storage
-function driver currently runs the handle_exception() routine
-asynchronously.  For UDCs that support runtime PM, there is a
-possibility the UDC is already suspended by the time the
-do_set_interface() is executed.  This can lead to HW register access
-while the UDC is already suspended.
+On Wed, Oct 27, 2021 at 01:10:05PM -0700, Wesley Cheng wrote:
+> Changes in v3:
+>  - Modify statement for usb_ep_enable().
+>  - Add explicit statement mentioning that APIs can be called in atomic context.
+> 
+> Changes in v2:
+>  - Revised comments for usb_ep_disable() as it should be safe to be
+>    executed in atomic contexts as well.  Other FDs are currently
+>    calling ep disable during the disconnect event as well.
+> 
+> This series calls the usb_ep_disable() API directly from fsg_disable()
+> as there is a possibility that UDCs that support runtime PM may
+> already be in a suspended state, leading to HW access while resources
+> are disabled.
+> 
+> Wesley Cheng (2):
+>   usb: gadget: udc: core: Revise comments for USB ep enable/disable
+>   usb: gadget: f_mass_storage: Disable eps during disconnect
+> 
+>  drivers/usb/gadget/function/f_mass_storage.c | 10 ++++++++++
+>  drivers/usb/gadget/udc/core.c                |  4 ++--
+>  2 files changed, 12 insertions(+), 2 deletions(-)
 
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- drivers/usb/gadget/function/f_mass_storage.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+For both patches:
 
-diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-index 3cabf76..7524396 100644
---- a/drivers/usb/gadget/function/f_mass_storage.c
-+++ b/drivers/usb/gadget/function/f_mass_storage.c
-@@ -2342,6 +2342,16 @@ static void fsg_disable(struct usb_function *f)
- {
- 	struct fsg_dev *fsg = fsg_from_func(f);
- 
-+	/* Disable the endpoints */
-+	if (fsg->bulk_in_enabled) {
-+		usb_ep_disable(fsg->bulk_in);
-+		fsg->bulk_in_enabled = 0;
-+	}
-+	if (fsg->bulk_out_enabled) {
-+		usb_ep_disable(fsg->bulk_out);
-+		fsg->bulk_out_enabled = 0;
-+	}
-+
- 	__raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE, NULL);
- }
- 
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
