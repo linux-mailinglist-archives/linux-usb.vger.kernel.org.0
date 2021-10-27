@@ -2,89 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 596D343BDD2
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 01:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 344D643BE80
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 02:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240271AbhJZX1v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Oct 2021 19:27:51 -0400
-Received: from mail-oo1-f49.google.com ([209.85.161.49]:41706 "EHLO
-        mail-oo1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240276AbhJZX1u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Oct 2021 19:27:50 -0400
-Received: by mail-oo1-f49.google.com with SMTP id t201-20020a4a3ed2000000b002b8c98da3edso291807oot.8;
-        Tue, 26 Oct 2021 16:25:25 -0700 (PDT)
+        id S235511AbhJ0Ahl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Oct 2021 20:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233673AbhJ0Ahk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Oct 2021 20:37:40 -0400
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F232C061745
+        for <linux-usb@vger.kernel.org>; Tue, 26 Oct 2021 17:35:16 -0700 (PDT)
+Received: by mail-oo1-xc34.google.com with SMTP id r4-20020a4aa2c4000000b002b6f374cac9so345900ool.6
+        for <linux-usb@vger.kernel.org>; Tue, 26 Oct 2021 17:35:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=4FClTT0c0lvTH4JvJKAi1wapScSyCR6IqIG1AROPiHc=;
+        b=ZWTciEqzi5wtqjaGi+5y7xUDXMKQhz0uBfuDli4XelI0LC9YGT5GThcMlpmcVvaFr4
+         nH7c7q8qIZcHfnQO5ZTwDF3FvO6x3kx660lAU0L2KZRWkJwI68GBUhURPzZGJIMcMZw5
+         2TaLjLeSKlNwxzlEnOEgOC4M335FgM6rd4Yew=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=COX6qcOMv7vPVSkX300sUvDrTEmMuSLBZS7S2513Mmw=;
-        b=MzKaAIoInez/5e9tHYr3sRvemPIHNB8M79eJ/f3yRxfzhY1jRzhuCHGlo0JcsvXHKk
-         tnt7HngAYsAGy2ki3QlslmDegQwrUPh0LaNyrH8UllSx3+5ru0c7uR2ugVrWyxNV1vKc
-         fkSYah1KV3q+kvZA7Ku0c0Dv7opPfvTOzUTvJdIfkcne31v+JNGXuj7ZzNJmID8KiFwB
-         +xhwX5RkSo2KDhb/PQzjtL4fS5a3uP3ddwlgFBXfcPMglHvcFGZIeSO8MGwpPgU3iDuZ
-         LOEfBinHr6HiFG9Afa3BUVz9GDY5PD7i0htZpj23E6gwcrgRojI4L4RXjLmJeTLpQkBf
-         c4Sg==
-X-Gm-Message-State: AOAM530cDORcd6SnksgTB8bfOjWsb85Wi1qo7JYLst2oCK38uEJ/UYHs
-        NGiMexMVIF/qyrHh//jHwepdC3PwHA==
-X-Google-Smtp-Source: ABdhPJw9VIQP4mMuRqaMaqZ94kJ7Cn/A9ZuKO3RqfD8xOl9Aii/KrvmCGlr+NhlOlRcgW3g58iI8lA==
-X-Received: by 2002:a4a:d0cd:: with SMTP id u13mr19392608oor.49.1635290725253;
-        Tue, 26 Oct 2021 16:25:25 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 16sm5171704oty.20.2021.10.26.16.25.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Oct 2021 16:25:24 -0700 (PDT)
-Received: (nullmailer pid 3510703 invoked by uid 1000);
-        Tue, 26 Oct 2021 23:25:22 -0000
-Date:   Tue, 26 Oct 2021 18:25:22 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3: Document
- role-switch-reset-quirk
-Message-ID: <YXiOYvnKmXNaLnoJ@robh.at.kernel.org>
-References: <20211017125904.69076-1-sven@svenpeter.dev>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=4FClTT0c0lvTH4JvJKAi1wapScSyCR6IqIG1AROPiHc=;
+        b=LhJdkyVGmMMVYRj5nJplCkBdfIV8VIMJbi6fMtYFdp1/eCD4hAlwThVlAnuweQmgT9
+         WmxgEI1BELLlQ39qMkW5Dyb9nSloDu+rmHHc5Qm0QnftLN+dbhGdn7DRCHUGP0/5otdM
+         R1laVfWjSX10Omv1MsjRsU611b4G0eQL7bxDmPhHqBEuFjaTOmuHEtS6PrrFiWBPy9Qp
+         B4YeW9Gug8uHkfyM18NU65KlhXAs3iVLlizUg+woOiSYQ+hhORtQZTuH+aKwRBB7kbXa
+         KXBIfxviKQPtGL+CuLavBi8farca8LhNqaJo8r0crjTPMpTfhq3B/6H0yaLFb8dTGFhK
+         5IGw==
+X-Gm-Message-State: AOAM530xT8BHb+OC4GVNCEHiQeMyoXJxOPHr74lbqqkUtwE9cE+Gq0GA
+        fFznNABGBuX9xrmv0Rn3gcgwAfdrtNdsjxrPERixUaG9CAg=
+X-Google-Smtp-Source: ABdhPJy6mMGiH/4mhV1zeYiLkU0FjIaPiTalCzJfDsWWHTrffDxp2XcIfSQ7in9s5qQrHRg8AfC/WoHwHRiEm5krydE=
+X-Received: by 2002:a4a:e75a:: with SMTP id n26mr19787082oov.1.1635294914676;
+ Tue, 26 Oct 2021 17:35:14 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 26 Oct 2021 17:35:14 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211017125904.69076-1-sven@svenpeter.dev>
+In-Reply-To: <1635272372-9982-2-git-send-email-quic_c_sanm@quicinc.com>
+References: <1635272372-9982-1-git-send-email-quic_c_sanm@quicinc.com> <1635272372-9982-2-git-send-email-quic_c_sanm@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Tue, 26 Oct 2021 17:35:14 -0700
+Message-ID: <CAE-0n50oV7rV1+9yoxciOpcB1FrtmC07Fp1U=QktxrOwtLtL7g@mail.gmail.com>
+Subject: Re: [PATCH 1/3] dt-bindings: usb: usb-xhci: Add bindings for
+ usb-skip-phy-init property
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Oct 17, 2021 at 02:59:03PM +0200, Sven Peter wrote:
-> The dwc3 controller on the Apple M1 must be reset whenever a
-> device is unplugged from the root port and triggers a role
-> switch notification. Document the quirk to enable this behavior.
-> 
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+Quoting Sandeep Maheswaram (2021-10-26 11:19:30)
+> Adding bindings for usb-skip-phy-init property.
+
+Yes, but why?
+
+>
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 > ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index 25ac2c93dc6c..9635e20cab68 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -226,6 +226,12 @@ properties:
->        avoid -EPROTO errors with usbhid on some devices (Hikey 970).
+>  Documentation/devicetree/bindings/usb/usb-xhci.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.yaml b/Documentation/devicetree/bindings/usb/usb-xhci.yaml
+> index 965f87f..69a757b 100644
+> --- a/Documentation/devicetree/bindings/usb/usb-xhci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/usb-xhci.yaml
+> @@ -25,6 +25,10 @@ properties:
+>      description: Set if the controller has broken port disable mechanism
 >      type: boolean
->  
-> +  snps,role-switch-reset-quirk:
-> +    description:
-> +      When set, DWC3 will be reset and reinitialized whenever a role switch
-> +      is performed.
+>
+> +  usb-skip-phy-init:
+> +    description: Set if the phy initiazation is managed by controller
+
+s/initiazation/initialization/
+
 > +    type: boolean
-
-This binding is a example of why we don't do a property per quirk. We 
-end up with a gazillion of them.
-
-Imply this from the SoC specific compatible (I don't recall seeing one 
-for the M1, so that's a problem).
-
-Rob
+> +
+>    imod-interval-ns:
+>      description: Interrupt moderation interval
+>      default: 5000
