@@ -2,68 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 505B143C315
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 08:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E35643C33C
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 08:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238666AbhJ0Gjh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Oct 2021 02:39:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49914 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230342AbhJ0Gjh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Oct 2021 02:39:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2EFED60E78;
-        Wed, 27 Oct 2021 06:37:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635316632;
-        bh=kuEr7jKL4rFOnl3Ynjj9UaIAg4wBlAAzNNJxNlHsTr0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vk1mxDLWmsYBNKeTOipcn4eI79hmLoOTBm6itC76wa4Uyt+Hy+mFvxLOKwalOcTzQ
-         sD305EiAY2W8lsJMqlIJ2/eVDhkIEHgo3QaYPNh6EtHQ797xc1Ap9I/ag7TDLMbN8x
-         zlvKvM4k6INEvvLAfKm9aFCbTXCbx+Xp32kzub6qHGEIQd8g2J/+G7E2RSl4OVUHys
-         dKAmqUg1h5RLuXJVWfjEnyOKT6PRXZys3dMy0m9G/98ZMUW0uVCyPSrbqf38xoTdum
-         m3802t9LHCai8vwoqvbJB14LHUMol8rWZU6vncQq8cuc50+XJooKnv9lOyFCNozmEC
-         NVZ52f3Em3FXw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mfcYR-0002gq-Rh; Wed, 27 Oct 2021 08:36:55 +0200
-Date:   Wed, 27 Oct 2021 08:36:55 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] media: uvcvideo: fix division by zero at stream start
-Message-ID: <YXjzh8duy+nY8RA2@hovoldconsulting.com>
-References: <20211026095511.26673-1-johan@kernel.org>
- <163524570516.1184428.14632987312253060787@Monstersaurus>
- <YXfjSJ+fm+LV/m+M@pendragon.ideasonboard.com>
- <YXfvXzgnvPVqwqZs@hovoldconsulting.com>
- <YXh4NqnpzOnPiA5/@pendragon.ideasonboard.com>
+        id S231197AbhJ0Gvd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Oct 2021 02:51:33 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:28209 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235258AbhJ0Gvb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 02:51:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1635317347; x=1666853347;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3VZbzj/mwTYx1C0FNEboDSho7NnWajQVHdw0N1pGQ6Q=;
+  b=leohdFG0wBgIG8uzYhEUVewvR19/yJ5z4SOGcSJofm5WWKodSyf2Namp
+   qSa1pyse7uw/IY7suj5/ygMsnX/otqmF42PufDLbQXaOOwGnueyF7fDAH
+   XxfwoMErbd/K6V+oiSpuhMeou6mnRZCJBUIDTyPFsO62Uw8XaHPY/eUBt
+   s=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 26 Oct 2021 23:49:07 -0700
+X-QCInternal: smtphost
+Received: from nalasex01a.na.qualcomm.com ([10.47.209.196])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2021 23:49:06 -0700
+Received: from jackp-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
+ Tue, 26 Oct 2021 23:49:05 -0700
+From:   Jack Pham <quic_jackp@quicinc.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     <linux-usb@vger.kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@google.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>
+Subject: [PATCH] usb: typec: ucsi: Only get source PDOs from the actual source
+Date:   Tue, 26 Oct 2021 23:48:42 -0700
+Message-ID: <20211027064842.6901-1-quic_jackp@quicinc.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YXh4NqnpzOnPiA5/@pendragon.ideasonboard.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 12:50:46AM +0300, Laurent Pinchart wrote:
-> Hi Johan,
-> 
-> On Tue, Oct 26, 2021 at 02:06:55PM +0200, Johan Hovold wrote:
+The intent of ucsi_get_src_pdos() is to obtain the source's PDOs
+in order to provide the power_supply object the required data to
+report the mininum, maximum and currently operating voltage &
+current should a PD contract be in place.
 
-> > Do you want me to resend or can you change
-> > 
-> > 	s/probe()/uvc_video_start_transfer()/
-> > 
-> > in the commit message when applying if you think this is acceptable as
-> > is?
-> 
-> I can fix this when applying.
+If however, the port is operating as a PD source, this call would
+invoke GET_PDOS on the partner causing the PPM to send a
+Get_Source_Caps PD message to the port partner which may not make
+sense especially if the partner is not a dual-power role capable
+device.  Further, it has been observed that certain DisplayPort
+adapter cables (which are power sink-only devices) even fail to
+bring up the display link after receiving a Get_Source_Caps
+message, suggesting they can't cope well with an unsupported PD
+message to the point that it renders them functionally inoperable.
 
-Perfect, thanks.
+Fix this by checking the connector status flags for the power
+direction and use this to decide whether to send the GET_PDOs
+query to the partner or the port.  This also helps to make the
+power_supply VOLTAGE_{MIN,MAX,NOW} and CURRENT_{MAX,NOW}
+properties more consistent when the port is in source mode.
 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
+---
+Hi Heikki,
 
-Johan
+Was wrestling with how exactly to do this.  The other approach I was
+thinking was to not even do GET_PDOs at all if operating as a source,
+but that would also mean we'd need to add similar checking to the
+VOLTAGE/CURRENT property getters in psy.c so that they would not
+return incorrect/stale data.  Since the ONLINE property will already
+be 0 anyway it may make more sense to invalidate the rest of the props?
+
+The patch below is concise though...so that's what I went with ;)
+
+Jack
+
+ drivers/usb/typec/ucsi/ucsi.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 6aa28384f77f..406d757266ae 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -582,9 +582,13 @@ static int ucsi_get_pdos(struct ucsi_connector *con, int is_partner,
+ static int ucsi_get_src_pdos(struct ucsi_connector *con)
+ {
+ 	int ret;
++	int partner;
++
++	/* Get PDOs from whomever is the source */
++	partner = (con->status.flags & UCSI_CONSTAT_PWR_DIR) == TYPEC_SINK;
+ 
+ 	/* UCSI max payload means only getting at most 4 PDOs at a time */
+-	ret = ucsi_get_pdos(con, 1, con->src_pdos, 0, UCSI_MAX_PDOS);
++	ret = ucsi_get_pdos(con, partner, con->src_pdos, 0, UCSI_MAX_PDOS);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -593,7 +597,7 @@ static int ucsi_get_src_pdos(struct ucsi_connector *con)
+ 		return 0;
+ 
+ 	/* get the remaining PDOs, if any */
+-	ret = ucsi_get_pdos(con, 1, con->src_pdos, UCSI_MAX_PDOS,
++	ret = ucsi_get_pdos(con, partner, con->src_pdos, UCSI_MAX_PDOS,
+ 			    PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
+ 	if (ret < 0)
+ 		return ret;
+-- 
+2.24.0
+
