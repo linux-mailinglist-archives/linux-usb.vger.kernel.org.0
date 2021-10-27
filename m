@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBFC43D303
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 22:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C87643D3A4
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 23:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240618AbhJ0Ulj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Oct 2021 16:41:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40098 "EHLO mail.kernel.org"
+        id S244231AbhJ0VQz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Oct 2021 17:16:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59896 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235613AbhJ0Uli (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Oct 2021 16:41:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id D38F360F39
-        for <linux-usb@vger.kernel.org>; Wed, 27 Oct 2021 20:39:12 +0000 (UTC)
+        id S240849AbhJ0VQz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 Oct 2021 17:16:55 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 12F3B6109F
+        for <linux-usb@vger.kernel.org>; Wed, 27 Oct 2021 21:14:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635367152;
-        bh=JkafoNR5uR5HUnYttQOrREiUXQD4ujLr0W8iio34VKs=;
+        s=k20201202; t=1635369269;
+        bh=9iBRGVuf6l3nheN6Aef9skmKk7jcEyRA1euYDCyMYCY=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=WtK13IsGlxHH+nd4M9QH6B9kTY8/TBYQELdA5CTkLTcqH4NVZLHsTRW7ToekUKTQG
-         xM4m4mnNxIbU9vUhik2+ZaliwfNPHztlWKwRdQOhxrtJ6oIJP1XE+liVEMdMoNo17A
-         HCg3Cpp2U5BJUqiCZsOc14PZufT7fGwSuanpCMtTLvQl5d/m9/YaWIh1sC3XIdYRmV
-         HtfU2ZqYjbT/3OXi3UasiFBrJdVJ4l3Yr4dtNwnPKjvxdRc/uBCFIhGvBIf0mv+5hp
-         Q9lyaojo5BXvQsaXbaPFNV+Jb+yfIwwRwqHhJLbwaa+g48cDfp9vDQT+9hmV0F0NwK
-         0JdBeBH70KTiw==
+        b=i+qE3FOFyUIYwIDYTne0ECDWnQmaTAVdKzvPBDMxruFnTllqNaIzvd0BsYdN7yhtA
+         y8CNsB09FpHlFAYCF/G/C4SSEXY9PbREYYn71uceHb4oY3KPkzmjM3tTs52RBs7DFf
+         Q+6wg/bXEGFAXTcEwg5L2Cd+xOC+F2knPR3MEoQk24rUiXwQ0hbqOMFCecYoIQjrqY
+         3qOl95OjS7bYf1OtWKapROBFdYhtoreKaoMZvZb7upfidj4Ziebaa0GwYlIP8nD2Zs
+         ZmOK+WlwXsbznCMpGr7JEEsfoi9oV7H0YZnGP/Qj3kEA82TPYKUdNn1kX0Nr56+uhS
+         3sg8gm+9IxPZQ==
 Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id C3669610FA; Wed, 27 Oct 2021 20:39:12 +0000 (UTC)
+        id 01CDB610FA; Wed, 27 Oct 2021 21:14:29 +0000 (UTC)
 From:   bugzilla-daemon@bugzilla.kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 214789] ehci-hcd.c ISR
-Date:   Wed, 27 Oct 2021 20:39:12 +0000
+Date:   Wed, 27 Oct 2021 21:14:28 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -44,7 +44,7 @@ X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-214789-208809-ph5y6lXBsb@https.bugzilla.kernel.org/>
+Message-ID: <bug-214789-208809-xs8D099US4@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-214789-208809@https.bugzilla.kernel.org/>
 References: <bug-214789-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -58,10 +58,11 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D214789
 
---- Comment #16 from Scott Arnold (scott.c.arnold@nasa.gov) ---
+--- Comment #17 from Scott Arnold (scott.c.arnold@nasa.gov) ---
 Hello,
-Not easily, the machine is back in general development use.=20
-I'll see what I can do.
+5.4 and 5.9 look the most suspicious based on release notes. I will try tho=
+se
+when I get the OK.
 Thanks
 Scott
 
