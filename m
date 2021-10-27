@@ -2,76 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC2143C651
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 11:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E493D43C66C
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 11:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239528AbhJ0JVK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Oct 2021 05:21:10 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:47564 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S237410AbhJ0JVK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 05:21:10 -0400
-X-UUID: 5f85a098493148fab95b3db43a181f3c-20211027
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=DnF617kfzUFWB+wTivNGwRZqdqT0fNx18iqxKeiaIoI=;
-        b=hohhy9kXY+QlZnce9I8XyAyvddEsPo9QCRuS5fHZP1g3IFpOWbYgi8oK0j9LzTQodzJwz8dRDXEOBcfoVRWiv2aILx5nz3NUkhGWeqLe2vycs0USFjvpbCfPt1r7CBPSYofjAa6XJDYCXT6c7uN4RS4NYQCKS3k5TIKDfbghUvE=;
-X-UUID: 5f85a098493148fab95b3db43a181f3c-20211027
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 291350436; Wed, 27 Oct 2021 17:18:40 +0800
-Received: from MTKMBS34N1.mediatek.inc (172.27.4.172) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 27 Oct 2021 17:18:39 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS34N1.mediatek.inc
- (172.27.4.172) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 27 Oct
- 2021 17:18:32 +0800
-Received: from mhfsdcap04 (10.17.3.154) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 27 Oct 2021 17:18:32 +0800
-Message-ID: <fee8297f6b34e530ef2e3da4e9bc9e324308b439.camel@mediatek.com>
+        id S240116AbhJ0J2V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Oct 2021 05:28:21 -0400
+Received: from mxout03.lancloud.ru ([45.84.86.113]:34456 "EHLO
+        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230195AbhJ0J2V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 05:28:21 -0400
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 8E5EB20ED992
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Message-ID: <d7a7d79a-a1b9-3c3d-13e1-ab4ab8e9989a@omp.ru>
+Date:   Wed, 27 Oct 2021 12:25:44 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
 Subject: Re: [PATCH v2 20/22] usb: host: xhci-mtk: deny IRQ0
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>, <linux-usb@vger.kernel.org>,
-        "Mathias Nyman" <mathias.nyman@intel.com>,
+Content-Language: en-US
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     Matthias Brugger <matthias.bgg@gmail.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>
-Date:   Wed, 27 Oct 2021 17:18:31 +0800
-In-Reply-To: <20211026173943.6829-21-s.shtylyov@omp.ru>
 References: <20211026173943.6829-1-s.shtylyov@omp.ru>
-         <20211026173943.6829-21-s.shtylyov@omp.ru>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+ <20211026173943.6829-21-s.shtylyov@omp.ru>
+ <fee8297f6b34e530ef2e3da4e9bc9e324308b439.camel@mediatek.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+In-Reply-To: <fee8297f6b34e530ef2e3da4e9bc9e324308b439.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVHVlLCAyMDIxLTEwLTI2IGF0IDIwOjM5ICswMzAwLCBTZXJnZXkgU2h0eWx5b3Ygd3JvdGU6
-DQo+IElmIHBsYXRmb3JtX2dldF9pcnEoKSByZXR1cm5zIElSUTAgKGNvbnNpZGVyZWQgaW52YWxp
-ZCBhY2NvcmRpbmcgdG8NCj4gTGludXMpDQo+IHRoZSBkcml2ZXIgYmxpdGhlbHkgcGFzc2VzIGl0
-IHRvIHVzYl9hZGRfaGNkKCkgdGhhdCB0cmVhdHMgSVJRMCBhcyBubw0KPiBJUlENCj4gYXQgYWxs
-LiBEZW55IElSUTAgcmlnaHQgYXdheSwgcmV0dXJuaW5nIC1FSU5WQUwgZnJvbSB0aGUgcHJvYmUo
-KQ0KPiBtZXRob2QuLi4NCj4gDQo+IEZpeGVzOiAwY2JkNGIzNGNkYTkgKCJ4aGNpOiBtZWRpYXRl
-azogc3VwcG9ydCBNVEsgeEhDSSBob3N0DQo+IGNvbnRyb2xsZXIiKQ0KPiBTaWduZWQtb2ZmLWJ5
-OiBTZXJnZXkgU2h0eWx5b3YgPHMuc2h0eWx5b3ZAb21wLnJ1Pg0KPiAtLS0NCj4gIGRyaXZlcnMv
-dXNiL2hvc3QveGhjaS1tdGsuYyB8IDQgKysrLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0
-aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hv
-c3QveGhjaS1tdGsuYyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS0NCj4gbXRrLmMNCj4gaW5kZXgg
-YzUzZjZmMjc2ZDVjLi5kMmRjOGQ5ODYzZWUgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdXNiL2hv
-c3QveGhjaS1tdGsuYw0KPiArKysgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktbXRrLmMNCj4gQEAg
-LTQ5NSw3ICs0OTUsNyBAQCBzdGF0aWMgaW50IHhoY2lfbXRrX3Byb2JlKHN0cnVjdCBwbGF0Zm9y
-bV9kZXZpY2UNCj4gKnBkZXYpDQo+ICAJCXJldHVybiByZXQ7DQo+ICANCj4gIAlpcnEgPSBwbGF0
-Zm9ybV9nZXRfaXJxX2J5bmFtZV9vcHRpb25hbChwZGV2LCAiaG9zdCIpOw0KPiAtCWlmIChpcnEg
-PCAwKSB7DQo+ICsJaWYgKGlycSA8PSAwKSB7DQo+ICAJCWlmIChpcnEgPT0gLUVQUk9CRV9ERUZF
-UikNCj4gIAkJCXJldHVybiBpcnE7DQo+ICANCj4gQEAgLTUwMyw2ICs1MDMsOCBAQCBzdGF0aWMg
-aW50IHhoY2lfbXRrX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UNCj4gKnBkZXYpDQo+ICAJ
-CWlycSA9IHBsYXRmb3JtX2dldF9pcnEocGRldiwgMCk7DQo+ICAJCWlmIChpcnEgPCAwKQ0KPiAg
-CQkJcmV0dXJuIGlycTsNCj4gKwkJaWYgKCFpcnEpDQppdCdzICJpZiAoaXJxIDw9IDApIj8NCg0K
-PiArCQkJcmV0dXJuIC1FSU5WQUw7DQo+ICAJfQ0KPiAgDQo+ICAJd2FrZXVwX2lycSA9IHBsYXRm
-b3JtX2dldF9pcnFfYnluYW1lX29wdGlvbmFsKHBkZXYsICJ3YWtldXAiKTsNCg==
+On 27.10.2021 12:18, Chunfeng Yun wrote:
 
+>> If platform_get_irq() returns IRQ0 (considered invalid according to
+>> Linus)
+>> the driver blithely passes it to usb_add_hcd() that treats IRQ0 as no
+>> IRQ
+>> at all. Deny IRQ0 right away, returning -EINVAL from the probe()
+>> method...
+>>
+>> Fixes: 0cbd4b34cda9 ("xhci: mediatek: support MTK xHCI host
+>> controller")
+>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+>> ---
+>>   drivers/usb/host/xhci-mtk.c | 4 +++-
+>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-
+>> mtk.c
+>> index c53f6f276d5c..d2dc8d9863ee 100644
+>> --- a/drivers/usb/host/xhci-mtk.c
+>> +++ b/drivers/usb/host/xhci-mtk.c
+>> @@ -495,7 +495,7 @@ static int xhci_mtk_probe(struct platform_device
+>> *pdev)
+>>   		return ret;
+>>   
+>>   	irq = platform_get_irq_byname_optional(pdev, "host");
+>> -	if (irq < 0) {
+>> +	if (irq <= 0) {
+>>   		if (irq == -EPROBE_DEFER)
+>>   			return irq;
+>>   
+>> @@ -503,6 +503,8 @@ static int xhci_mtk_probe(struct platform_device
+>> *pdev)
+>>   		irq = platform_get_irq(pdev, 0);
+>>   		if (irq < 0)
+>>   			return irq;
+>> +		if (!irq)
+> it's "if (irq <= 0)"?
+
+    No, if (irq == 0).
+
+>> +			return -EINVAL;
+>>   	}
+>>   
+>>   	wakeup_irq = platform_get_irq_byname_optional(pdev, "wakeup");
+
+MBR, Sergey
