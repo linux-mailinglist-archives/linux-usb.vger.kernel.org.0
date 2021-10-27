@@ -2,124 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1161243BEEB
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 03:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA3A43BF46
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 04:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237272AbhJ0BVE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Oct 2021 21:21:04 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:22741 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237256AbhJ0BVE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Oct 2021 21:21:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1635297520; x=1666833520;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=CiUcwr+Yg1b8BpUQefDDhnEVBo+pE6kk9p9NELtogrY=;
-  b=kXb+p3vwHmLdi8NJzF9gBDiBO1qOurV1LJQUKfHOuyHSUoRZXKW9oM/e
-   MeOzbsBwlY+ZAw3ib8lvTPziOPZo2q/OO2wR3vxupmBqw25B1HYTHmxX+
-   Rn/9qKopKXthRc7A1mHYk+O/FkWq4X6VJ6AORr5Opc5tvwB68rmbRXFBq
-   Y=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 26 Oct 2021 18:18:39 -0700
-X-QCInternal: smtphost
-Received: from nalasex01b.na.qualcomm.com ([10.47.209.197])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2021 18:18:39 -0700
-Received: from [10.110.50.18] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7; Tue, 26 Oct 2021
- 18:18:38 -0700
-Subject: Re: [PATCH] usb: gadget: f_mass_storage: Disable eps during
- disconnect
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Wesley Cheng <wcheng@codeaurora.org>
-References: <20211026004456.23054-1-quic_wcheng@quicinc.com>
- <20211026144140.GA1288435@rowland.harvard.edu>
- <81fc3f6d-f747-736b-32db-aecbca77dd31@quicinc.com>
- <20211026205701.GA1300692@rowland.harvard.edu>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-Message-ID: <5737f9b3-14e0-8a83-f298-f44dcb57455a@quicinc.com>
-Date:   Tue, 26 Oct 2021 18:18:37 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S237756AbhJ0CIF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Oct 2021 22:08:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51400 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237728AbhJ0CIE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 Oct 2021 22:08:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 06D29610A6
+        for <linux-usb@vger.kernel.org>; Wed, 27 Oct 2021 02:05:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635300340;
+        bh=Ut5apj9prdVUAKLJdRPvhPWEZ5AFZdCuU7Pbh73Hk7Y=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=JLfPmM26dQ9rpa/4Y8XYuzjJqQpyLgfbDUjtATs3ltkcN23eDvEI96PgZtQqXqY1S
+         yyH34K08vEiQ9MpJmKRbM4H7hcg277hAF4pssvoz3MdFfQkKckaDpQm6Rf7sRB9ImB
+         2xafV4OYaDG1esEnA9p7/oXP3owcej9glh1jxGfW/yK20uAa4wYj0R8eY/8/vDgpnO
+         PrHZzZ4lLLQzR4tUQnxgauyNqHa5mIiUUyhA6ODTnEWHnnfxf4zYOzFG0aK8YZCfoU
+         5yC+nGyPzuvv26/ZF0Mki/f0HAeVDyiwo/cNoDw6OnAYujfGmpghNAFvB2O5JcOi1u
+         9qI5BACHJ5adA==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id E978A60EBD; Wed, 27 Oct 2021 02:05:39 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214789] ehci-hcd.c ISR
+Date:   Wed, 27 Oct 2021 02:05:39 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-214789-208809-ZEvoJ64dwy@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214789-208809@https.bugzilla.kernel.org/>
+References: <bug-214789-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <20211026205701.GA1300692@rowland.harvard.edu>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214789
 
-On 10/26/2021 1:57 PM, Alan Stern wrote:
-> On Tue, Oct 26, 2021 at 12:40:04PM -0700, Wesley Cheng wrote:
->> Hi Alan,
->>
->> On 10/26/2021 7:41 AM, Alan Stern wrote:
->>> On Mon, Oct 25, 2021 at 05:44:56PM -0700, Wesley Cheng wrote:
->>>> From: Wesley Cheng <wcheng@codeaurora.org>
->>>>
->>>> When receiving a disconnect event from the UDC, the mass storage
->>>> function driver currently runs the handle_exception() routine
->>>> asynchronously.  For UDCs that support runtime PM, there is a
->>>> possibility the UDC is already suspended by the time the
->>>> do_set_interface() is executed.  This can lead to HW register access
->>>> while the UDC is already suspended.
->>>>
->>>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->>>> ---
->>>>  drivers/usb/gadget/function/f_mass_storage.c | 10 ++++++++++
->>>>  1 file changed, 10 insertions(+)
->>>>
->>>> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
->>>> index 3cabf7692ee1..752439690fda 100644
->>>> --- a/drivers/usb/gadget/function/f_mass_storage.c
->>>> +++ b/drivers/usb/gadget/function/f_mass_storage.c
->>>> @@ -2342,6 +2342,16 @@ static void fsg_disable(struct usb_function *f)
->>>>  {
->>>>  	struct fsg_dev *fsg = fsg_from_func(f);
->>>>  
->>>> +	/* Disable the endpoints */
->>>> +	if (fsg->bulk_in_enabled) {
->>>> +		usb_ep_disable(fsg->bulk_in);
->>>
->>> According to the kerneldoc, this routine must be called in process 
->>> context.
->>>
->>>> +		fsg->bulk_in_enabled = 0;
->>>> +	}
->>>> +	if (fsg->bulk_out_enabled) {
->>>> +		usb_ep_disable(fsg->bulk_out);
->>>> +		fsg->bulk_out_enabled = 0;
->>>> +	}
->>>> +
->>>>  	__raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE, NULL);
->>>>  }
->>>
->>> Looks like you'll have to find a different way to avoid the problem.  
->>> For example, if an exception is pending then you might prevent the 
->>> gadget from going into runtime suspend until the exception has been 
->>> handled.
->>>
->> Thanks for the suggestion.  I noticed that a lot of other FDs currently
->> call usb_ep_disable() in the disable/disconnect path as well.  Actually,
->> f_mass_storage seems to be the only one that doesn't do so.  Maybe we
->> should change the kerneldoc :)
-> 
-> You're right; I don't see any real reason why the usb_ep_{en,dis}able 
-> routines can't run in an atomic context.  So if you to make this change 
-> to f_mass_storage, you should first submit a patch changing the 
-> kerneldoc.
-> 
-Sure, will do that and include it in the next rev.
+--- Comment #13 from Alan Stern (stern@rowland.harvard.edu) ---
+What does the kernel log from a recent kernel say about UHCI?  If it is pre=
+sent
+in the older kernel then it should still show up in the recent kernel.
 
-Thanks
-Wesley Cheng
+And if the problem is related to uhci-hcd, why would patching ehci-hcd make=
+ it
+go away?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
