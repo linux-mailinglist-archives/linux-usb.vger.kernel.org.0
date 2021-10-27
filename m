@@ -2,109 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B18E943D158
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 21:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA4643D18E
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 21:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240493AbhJ0TDQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Oct 2021 15:03:16 -0400
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:35718 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240523AbhJ0TDL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 15:03:11 -0400
-Received: by mail-ot1-f44.google.com with SMTP id w12-20020a056830410c00b0054e7ceecd88so5057077ott.2;
-        Wed, 27 Oct 2021 12:00:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=twYyXM54JZtknY6kSlEQB2YIbHREslZxx1VWjQb9rKA=;
-        b=K5USj36N/xFW8pCr+3ry3/T7CI2ZI5jI/yDViD6+veeV7vRxI8d0iW5al0Wjnn/KfH
-         rdB25lF2DZ5jbBvgAoFTPEdHCArGVS6LAJEf44lfd0uNihmC4OLr9RwesfFSvjhJwvHC
-         89yxS9S0FSWmhkOFFfZZtAJFZ68hYbgshebuhH9w5iHk9h2y8d6cAbOFpdoIndoO9FBJ
-         bqyo0u5XJNf6S22yAiffMFoKCbqtscL551Ts9v3QOsn1a9KTrlqjRKQdtt8S1FdgMglQ
-         IhSck47GjHkersVHMbi5Sso2TeK9f4IJkhz9W/Yex9F4avDa+PeRsYNZ6yYsSR9PYfa1
-         fSvw==
-X-Gm-Message-State: AOAM533nYQHOWGxaotOAm1NoCPF2gKqsjjnB1fxgMmFtNRcWHZsArsBs
-        RXenxJF+yaU4fUWzbABrmzVFYAp52gy9mZwc0gE=
-X-Google-Smtp-Source: ABdhPJxwyoNvTjXEvWSwEzQkvS3twTW+fZkOH2aK+Tp8JKa7djpi/yo4glrydaOg6ed57ahTO8qmsT3UR7s8ZIDHGmY=
-X-Received: by 2002:a05:6830:1af0:: with SMTP id c16mr25814378otd.16.1635361244953;
- Wed, 27 Oct 2021 12:00:44 -0700 (PDT)
+        id S243671AbhJ0TWd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Oct 2021 15:22:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41928 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240730AbhJ0TWc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 Oct 2021 15:22:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 017D560F22;
+        Wed, 27 Oct 2021 19:20:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635362407;
+        bh=oEMnwBGN5e3TfwMZF6+cu7+ZE+PMIGdkBM5rQMuJFlU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=S2fn1XSefu1iTa3R/hcGuvh8LWM0rGSaC1HpUHmdKkeZz/wv5KNInzXy3EL38rBXp
+         QdbTMlgTYhdYs4r5H39YqyvhMX1fvREflOqTlMt0uWBxhrwnFgWKXQ4k12cbijgBiI
+         nnBVkMyAWi+3Fj4Tef5CdoQYHe2CToQ2fVDa8tlJgUneAOGjL7K5gcmhM20E8WDpSq
+         5uQ1/dreriRWipdgPP0+9vXHaeDwxCeRzsaxEUAnakbC4vfHGKdw92XjngZpj4hBGT
+         3CC/q6Ns+rH0nnb5RQL+H5yj94OEaKP2gxjiNTok2HELDLWK9ZFbEQYar5QRLlnaxp
+         FC81yiRhmnJOQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E8D9160A17;
+        Wed, 27 Oct 2021 19:20:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20211025070155.2995-1-chunfeng.yun@mediatek.com>
- <CAJZ5v0gb6vN9kHeQbgjRQXvOCNaFK8ur7bLDeAVjDqdT2=a+-g@mail.gmail.com> <fba3246fbc600f06eb40e90283c1cd51bc259804.camel@mediatek.com>
-In-Reply-To: <fba3246fbc600f06eb40e90283c1cd51bc259804.camel@mediatek.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 27 Oct 2021 21:00:34 +0200
-Message-ID: <CAJZ5v0hnrr+ZidUMkN837utcKc6otmqaZ+uTX_xMukTUrdHLDQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] PM / wakeirq: support enabling wake-up irq after
- runtime_suspend called
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2] usbnet: fix error return code in usbnet_probe()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163536240694.6049.9179035734607540392.git-patchwork-notify@kernel.org>
+Date:   Wed, 27 Oct 2021 19:20:06 +0000
+References: <20211026124015.3025136-1-wanghai38@huawei.com>
+In-Reply-To: <20211026124015.3025136-1-wanghai38@huawei.com>
+To:     Wang Hai <wanghai38@huawei.com>
+Cc:     oneukum@suse.com, davem@davemloft.net, kuba@kernel.org,
+        johan@kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 11:34 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
->
-> On Tue, 2021-10-26 at 17:39 +0200, Rafael J. Wysocki wrote:
-> > On Mon, Oct 25, 2021 at 9:02 AM Chunfeng Yun <
-> > chunfeng.yun@mediatek.com> wrote:
-> > >
-> > > When the dedicated wake IRQ is level trigger, and it uses the
-> > > device's low-power status as the wakeup source, that means if the
-> > > device is not in low-power state, the wake IRQ will be triggered
-> > > if enabled; For this case, need enable the wake IRQ after running
-> > > the device's ->runtime_suspend() which make it enter low-power
-> > > state.
-> > >
-> > > e.g.
-> > > Assume the wake IRQ is a low level trigger type, and the wakeup
-> > > signal comes from the low-power status of the device.
-> > > The wakeup signal is low level at running time (0), and becomes
-> > > high level when the device enters low-power state (runtime_suspend
-> > > (1) is called), a wakeup event at (2) make the device exit low-
-> > > power
-> > > state, then the wakeup signal also becomes low level.
-> > >
-> > >                 ------------------
-> > >                |           ^     ^|
-> > > ----------------           |     | --------------
-> > >  |<---(0)--->|<--(1)--|   (3)   (2)    (4)
-> > >
-> > > if enable the wake IRQ before running runtime_suspend during (0),
-> > > a wake IRQ will arise, it causes resume immediately;
-> > > it works if enable wake IRQ ( e.g. at (3) or (4)) after running
-> > > ->runtime_suspend().
-> > >
-> > > This patch introduces a new status WAKE_IRQ_DEDICATED_REVERSE to
-> > > optionally support enabling wake IRQ after running
-> > > ->runtime_suspend().
-> > >
-> > > Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> >
-> > I don't really have anything to add regarding the code.
-> >
-> > The kerneldoc comments could be improved, but I can take care of this
-> > when applying the patch.
-> Ok, thanks
-> >
-> > Please collect ACKs for the remaining 2 patches in the series and I
-> > will pick up all three.
-> The files (mtu3_plat.c, xhci-mtk.c) modified by other 2 patches are
-> maintained by myself, please pick up them, thanks a lot.
+Hello:
 
-OK, applied as 5.16 material, thanks!
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue, 26 Oct 2021 20:40:15 +0800 you wrote:
+> Return error code if usb_maxpacket() returns 0 in usbnet_probe()
+> 
+> Fixes: 397430b50a36 ("usbnet: sanity check for maxpacket")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Wang Hai <wanghai38@huawei.com>
+> ---
+> v1->v2: change '-EINVAL' to '-ENODEV'
+>  drivers/net/usb/usbnet.c | 1 +
+>  1 file changed, 1 insertion(+)
+
+Here is the summary with links:
+  - [net,v2] usbnet: fix error return code in usbnet_probe()
+    https://git.kernel.org/netdev/net/c/6f7c88691191
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
