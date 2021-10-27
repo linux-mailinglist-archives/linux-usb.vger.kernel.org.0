@@ -2,105 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3862E43CC65
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 16:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D12A43CCE5
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 16:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238908AbhJ0Okd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 27 Oct 2021 10:40:33 -0400
-Received: from mail-qv1-f43.google.com ([209.85.219.43]:33708 "EHLO
-        mail-qv1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237549AbhJ0Okc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 10:40:32 -0400
-Received: by mail-qv1-f43.google.com with SMTP id kd16so1930294qvb.0;
-        Wed, 27 Oct 2021 07:38:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=IIc3VM+0QP6tW1izmsIwRCOe4zK0xch73rEnQe2rldc=;
-        b=bZRL694X7ag7gRm4SDz2tWTMYt6k0l087Ca7LvU3tgMTKFAi3HyF0SbFCTUEye2hPp
-         4VQZSy86N/WDzEuwLmHyQ6klEYGfaOCVJPNc+MEaSOsp/R+cu1ORKDSnCMFuWBVHfbMb
-         dgGubVm1fc7jARx+bt3eL9uT5s2oGI4lVXlzkxNMkxAXQCENIX6YtGlL4aUaLGHBv8Ys
-         eHmrrtJ9LM7yn1+bCqi+I8sSREUbr0O44yHPp0Ehq9ay7GVaNX2cJS56e45ygkliIqhI
-         HgpIX/6FHCfU2c+tEXa3SIhriI5T4vCxzQlFfHc436RcXRdHmszOycMfUppYslwj0k1E
-         VGfw==
-X-Gm-Message-State: AOAM5337qJDkO4lI5Z5WeyA96QewIkCuqI9qVqs2idLLaWLFGfDXc3Ro
-        9DRQ1gK4IaBCybdMx8I8QA3el6czwfM=
-X-Google-Smtp-Source: ABdhPJwQLaWZVWb/nNgd+6aO+EyS1atPXnwaSX94Bmfgmuz2/KU1BfeuqCmchvvRxdgUXwqNYIQ12g==
-X-Received: by 2002:ad4:5b81:: with SMTP id 1mr21374587qvp.48.1635345486439;
-        Wed, 27 Oct 2021 07:38:06 -0700 (PDT)
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com. [209.85.219.46])
-        by smtp.gmail.com with ESMTPSA id bq30sm137481qkb.6.2021.10.27.07.38.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Oct 2021 07:38:05 -0700 (PDT)
-Received: by mail-qv1-f46.google.com with SMTP id gh1so1875555qvb.8;
-        Wed, 27 Oct 2021 07:38:05 -0700 (PDT)
-X-Received: by 2002:a0c:fe8c:: with SMTP id d12mr25332323qvs.19.1635345485575;
- Wed, 27 Oct 2021 07:38:05 -0700 (PDT)
+        id S237621AbhJ0PCT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Oct 2021 11:02:19 -0400
+Received: from mga17.intel.com ([192.55.52.151]:5708 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237605AbhJ0PCT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 Oct 2021 11:02:19 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10150"; a="210958346"
+X-IronPort-AV: E=Sophos;i="5.87,187,1631602800"; 
+   d="scan'208";a="210958346"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2021 07:59:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,187,1631602800"; 
+   d="scan'208";a="494863564"
+Received: from lkp-server01.sh.intel.com (HELO 3b851179dbd8) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 27 Oct 2021 07:59:49 -0700
+Received: from kbuild by 3b851179dbd8 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mfkP6-0000e8-Mq; Wed, 27 Oct 2021 14:59:48 +0000
+Date:   Wed, 27 Oct 2021 22:59:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 79a4479a17b83310deb0b1a2a274fe5be12d2318
+Message-ID: <6179694b.CXLsDXVyCEzMkzML%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20211027080849.3276289-1-geert@linux-m68k.org>
-In-Reply-To: <20211027080849.3276289-1-geert@linux-m68k.org>
-From:   Li Yang <leoyang.li@nxp.com>
-Date:   Wed, 27 Oct 2021 09:37:54 -0500
-X-Gmail-Original-Message-ID: <CADRPPNQwcTTS-0MkonizSA_XbLBbTS8di4F3NWOMADACp4gD_w@mail.gmail.com>
-Message-ID: <CADRPPNQwcTTS-0MkonizSA_XbLBbTS8di4F3NWOMADACp4gD_w@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: Mark USB_FSL_QE broken on 64-bit
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 5:25 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> On 64-bit:
->
->     drivers/usb/gadget/udc/fsl_qe_udc.c: In function ‘qe_ep0_rx’:
->     drivers/usb/gadget/udc/fsl_qe_udc.c:842:13: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
->       842 |     vaddr = (u32)phys_to_virt(in_be32(&bd->buf));
->           |             ^
->     In file included from drivers/usb/gadget/udc/fsl_qe_udc.c:41:
->     drivers/usb/gadget/udc/fsl_qe_udc.c:843:28: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
->       843 |     frame_set_data(pframe, (u8 *)vaddr);
->           |                            ^
->
-> The driver assumes physical and virtual addresses are 32-bit, hence it
-> cannot work on 64-bit platforms.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 79a4479a17b83310deb0b1a2a274fe5be12d2318  USB: iowarrior: fix control-message timeouts
 
-The device is truly only used in legacy 32-bit PowerPC chips and never
-tested with 64-bit.  Thanks.
+elapsed time: 1289m
 
->
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+configs tested: 83
+configs skipped: 3
 
-Acked-by: Li Yang <leoyang.li@nxp.com>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> ---
-> One more casualty of CONFIG_WERROR=y.
-> http://kisskb.ellerman.id.au/kisskb/buildresult/14652936/
-> ---
->  drivers/usb/gadget/udc/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
-> index 8c614bb86c665c77..69394dc1cdfb6436 100644
-> --- a/drivers/usb/gadget/udc/Kconfig
-> +++ b/drivers/usb/gadget/udc/Kconfig
-> @@ -330,6 +330,7 @@ config USB_AMD5536UDC
->  config USB_FSL_QE
->         tristate "Freescale QE/CPM USB Device Controller"
->         depends on FSL_SOC && (QUICC_ENGINE || CPM)
-> +       depends on !64BIT || BROKEN
->         help
->            Some of Freescale PowerPC processors have a Full Speed
->            QE/CPM2 USB controller, which support device mode with 4
-> --
-> 2.25.1
->
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211027
+mips                         tb0287_defconfig
+nios2                            alldefconfig
+powerpc                     ep8248e_defconfig
+powerpc                        fsp2_defconfig
+sh                           se7721_defconfig
+arm                    vt8500_v6_v7_defconfig
+arm                     davinci_all_defconfig
+arc                         haps_hs_defconfig
+arc                            hsdk_defconfig
+arm                          lpd270_defconfig
+i386                             alldefconfig
+powerpc                 mpc832x_rdb_defconfig
+arm                       aspeed_g5_defconfig
+mips                         tb0226_defconfig
+openrisc                    or1ksim_defconfig
+xtensa                    xip_kc705_defconfig
+mips                     decstation_defconfig
+powerpc                      bamboo_defconfig
+mips                          ath25_defconfig
+mips                         cobalt_defconfig
+powerpc                 mpc8315_rdb_defconfig
+arm                  randconfig-c002-20211027
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a013-20211027
+x86_64               randconfig-a015-20211027
+x86_64               randconfig-a011-20211027
+x86_64               randconfig-a014-20211027
+x86_64               randconfig-a016-20211027
+x86_64               randconfig-a012-20211027
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                           allyesconfig
+
+clang tested configs:
+hexagon              randconfig-r045-20211027
+hexagon              randconfig-r041-20211027
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
