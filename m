@@ -2,110 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C49E43C84D
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 13:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2AD143C859
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 13:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241573AbhJ0LMp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Oct 2021 07:12:45 -0400
-Received: from mga14.intel.com ([192.55.52.115]:51870 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239506AbhJ0LMo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Oct 2021 07:12:44 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10149"; a="230409327"
-X-IronPort-AV: E=Sophos;i="5.87,186,1631602800"; 
-   d="scan'208";a="230409327"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2021 04:10:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,186,1631602800"; 
-   d="scan'208";a="635683209"
-Received: from kuha.fi.intel.com ([10.237.72.166])
-  by fmsmga001.fm.intel.com with SMTP; 27 Oct 2021 04:10:16 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 27 Oct 2021 14:10:15 +0300
-Date:   Wed, 27 Oct 2021 14:10:15 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@google.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        "Gopal, Saranya" <saranya.gopal@intel.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 3/4] usb: typec: ucsi: Add support for PD cdev
-Message-ID: <YXkzl+1mTA2pslN0@kuha.fi.intel.com>
-References: <20211026143352.78387-1-heikki.krogerus@linux.intel.com>
- <20211026143352.78387-4-heikki.krogerus@linux.intel.com>
- <20211027010035.GA13345@jackp-linux.qualcomm.com>
+        id S241605AbhJ0LQK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Oct 2021 07:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232616AbhJ0LQJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 07:16:09 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000B1C061570;
+        Wed, 27 Oct 2021 04:13:43 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id bq11so5335557lfb.10;
+        Wed, 27 Oct 2021 04:13:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=3jAbywh6FBZn1JbpVxbDqKlHXuzjjbftG8a1nG7vq/g=;
+        b=l1RHSQMHUNHJ2IzON2Z9uyKw+M9V8FS8bvNVyepY/pfcevOZp+r2d9Rus4e/htupU0
+         sD0WwrJR4TXIafnbmVgPnYvlcfy3QrI2KZl3Y5R8mNSeDWlzySPsn0Qq9E5eYYTbOCn4
+         KtMy507O0DTPVVSjtsGzoTuH3aSTRm8weNDU8KmJazalob/hqXGBT9HbcykXkmwPyE1J
+         gSAwwIKVMouHAl79JaTxA4LZMgmJR1yhHk3TT3pRrnzm/MaAoIt8vV+rqriHXobfUxPh
+         yuRjCANj/FVCwcZQq+v6cKn0K3DBX0L4QBRwZmmA9y+nWnWJOefyIU4CFD0yTAFUxHqr
+         jsvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=3jAbywh6FBZn1JbpVxbDqKlHXuzjjbftG8a1nG7vq/g=;
+        b=HyyB3irzBSNlORRMyBPz/RjAbMkVi8Cw2BAXCyjfl2q3Uv+6X1F4WIMPqVL0UzURET
+         qDft/iNFt4XSG8I1XjJxW9MJf2veeXci10wm9r8ho+k84L3vAWSy1L3VF7CM+hxq6OE6
+         Jr92kHMvXKszOPTiXN0DB626sHGUd9BHGK73nA8dFYYV8sKMUGuPja3dI2Q34fAAtV4s
+         OPUwxVKYWnj7zuOzFREinBQKnq7L6mO5pMIV1kLIsBTxX1k9PDrSPXFR9z8hbw+Jpl8G
+         hJ3Zavm8hdV7CftsA1BJPEZTyl4yD+d26/i8FQJLPPfuRK9ZQxlmvgdWEPtMQe/jWIkC
+         gvPg==
+X-Gm-Message-State: AOAM530eEk0PAZTUh8yyESUduICYe2hrXcls7bBW4QjRTN/cBTRzeHZu
+        9J7iXm6jnzRY5x/Z/TfmwDRTLkA97Lo=
+X-Google-Smtp-Source: ABdhPJwK1X9hQKe6NGBbeg/qMuCfJiTs/eNL4u3ZEFo3pz129QUEcCkaFTh55UOCW8yeyF+Q2ElzPg==
+X-Received: by 2002:a19:7903:: with SMTP id u3mr27347045lfc.406.1635333222233;
+        Wed, 27 Oct 2021 04:13:42 -0700 (PDT)
+Received: from [192.168.2.145] (46-138-41-28.dynamic.spd-mgts.ru. [46.138.41.28])
+        by smtp.googlemail.com with ESMTPSA id c20sm2209125lfi.182.2021.10.27.04.13.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Oct 2021 04:13:41 -0700 (PDT)
+Subject: Re: [PATCH 22/22] usb: host: xhci-tegra: deny IRQ0
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>, linux-usb@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-tegra@vger.kernel.org
+References: <20211018183930.8448-1-s.shtylyov@omp.ru>
+ <20211018183930.8448-23-s.shtylyov@omp.ru>
+ <415d1410-5b5f-3de4-1973-998528481c0f@gmail.com>
+ <bde8811f-806e-1845-9a17-25227ecc02e9@omp.ru>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <424502be-baab-4c89-a39b-b921a4e2bd37@gmail.com>
+Date:   Wed, 27 Oct 2021 14:13:41 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211027010035.GA13345@jackp-linux.qualcomm.com>
+In-Reply-To: <bde8811f-806e-1845-9a17-25227ecc02e9@omp.ru>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 26, 2021 at 06:00:35PM -0700, Jack Pham wrote:
-> On Tue, Oct 26, 2021 at 05:33:51PM +0300, Heikki Krogerus wrote:
-> >
-> > -static int ucsi_get_src_pdos(struct ucsi_connector *con)
-> > +int ucsi_read_pdos(struct ucsi_connector *con, int partner, int source, u32 *pdos)
-> >  {
-> > +	u32 pdo[PDO_MAX_OBJECTS];
-> > +	int num_pdos;
-> >  	int ret;
-> >  
-> >  	/* UCSI max payload means only getting at most 4 PDOs at a time */
-> > -	ret = ucsi_get_pdos(con, 1, con->src_pdos, 0, UCSI_MAX_PDOS);
-> > +	ret = ucsi_get_pdos(con, partner, source, pdo, 0, UCSI_MAX_PDOS);
-> >  	if (ret < 0)
-> >  		return ret;
-> >  
-> > -	con->num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
-> > -	if (con->num_pdos < UCSI_MAX_PDOS)
-> > -		return 0;
-> > +	num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
-> > +	if (num_pdos < UCSI_MAX_PDOS)
-> > +		goto done;
-> >  
-> >  	/* get the remaining PDOs, if any */
-> > -	ret = ucsi_get_pdos(con, 1, con->src_pdos, UCSI_MAX_PDOS,
-> > +	ret = ucsi_get_pdos(con, partner, source, pdo, UCSI_MAX_PDOS,
-> >  			    PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
-> >  	if (ret < 0)
-> >  		return ret;
-> >  
-> > -	con->num_pdos += ret / sizeof(u32);
-> > +	num_pdos += ret / sizeof(u32);
-> > +done:
-> > +	memcpy(pdos, pdo, num_pdos * sizeof(pdo));
-> > +
-> > +	return num_pdos;
-> > +}
-> > +
-> > +static int ucsi_get_src_pdos(struct ucsi_connector *con)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = ucsi_read_pdos(con, 0, 1, con->src_pdos);
+26.10.2021 21:24, Sergey Shtylyov пишет:
+> Hello!
 > 
-> Second parameter should be 1 right?  Original intent of get_src_pdos()
-> is to retrieve the partner's source capabilities in order to populate
-> the power_supply.  Passing 0 as the partner param here changes the
-> behavior to retrieve the source PDOs of the port.
+> On 10/21/21 12:09 PM, Dmitry Osipenko wrote:
+> [...]
+>>> If platform_get_irq() returns IRQ0 (considered invalid according to Linus)
+>>> the driver blithely passes it to usb_add_hcd() that treats IRQ0 as no IRQ
+>>> at all. Deny IRQ0 right away, returning -EINVAL from the probe() method...
+>>>
+>>> Fixes: e84fce0f8837 ("usb: xhci: Add NVIDIA Tegra XUSB controller driver")
+>>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+>>> ---
+>>>  drivers/usb/host/xhci-tegra.c | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+>>> index 1bf494b649bd..7151b1d4f876 100644
+>>> --- a/drivers/usb/host/xhci-tegra.c
+>>> +++ b/drivers/usb/host/xhci-tegra.c
+>>> @@ -1439,6 +1439,8 @@ static int tegra_xusb_probe(struct platform_device *pdev)
+>>>  	tegra->xhci_irq = platform_get_irq(pdev, 0);
+>>>  	if (tegra->xhci_irq < 0)
+>>>  		return tegra->xhci_irq;
+>>> +	if (!tegra->xhci_irq)
+>>> +		return -ENIVAL;
+>>>  
+>>>  	tegra->mbox_irq = platform_get_irq(pdev, 1);
+>>>  	if (tegra->mbox_irq < 0)
+>>>
+>>
+>> platform_get_irq() never returns zero in accordance to [1], but I see
+>> that it can return it [2].
+> 
+>    Not only that, it also can be returned thru the normal path (from an IRQ descriptor).
+> I'm not sure whether 0 means an IRQ0 returned from acpi_dev_gpio_irq_get(), looks like yes...
+> 
+>> Should be better to fix [2] and return -EINVAL.
+> 
+>    No, we have WARN() before returning IRQ0 -- if we're going to finally declare IRQ0 invalid,
+> it should be done after this check.
 
-Sounds like there is a bug in the existing code. I'm not changing the
-behviour in this patch.
+Warning is already explicitly saying that IRQ0 is invalid, hence IRQ0
+*is* declared invalid. Either doc comment or function itself is wrong,
+both are bad.
 
-> (BTW I'm going to send a quick patch for this to since this assumes that
-> port is sink and partner is source; when it's the other way around we
-> end up calling GET_PDOS on the sink partner when it might not even be
-> source capable).
-
-I'll check it...
-
-thanks,
-
--- 
-heikki
+If function is wrong, then you're fixing symptom instead of fixing the
+root of the problem.
