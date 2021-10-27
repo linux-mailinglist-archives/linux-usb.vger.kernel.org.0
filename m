@@ -2,175 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1E043BE95
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 02:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A07243BEB5
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 03:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235868AbhJ0Aum (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Oct 2021 20:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbhJ0Aul (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Oct 2021 20:50:41 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9905EC061767
-        for <linux-usb@vger.kernel.org>; Tue, 26 Oct 2021 17:48:16 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id l24-20020a9d1c98000000b00552a5c6b23cso1213171ota.9
-        for <linux-usb@vger.kernel.org>; Tue, 26 Oct 2021 17:48:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=pO6hebzYNrv+/+pOVUyyRcxmOyAEdYQyaagcCX4YDnU=;
-        b=kZTlKRIgEp17ei/WKStDhVd9uZFLymxrV+fql/20idR53mABoNwMzTsCl+FN+FIKwR
-         Lz6NHPSBNnZoCrSKhle+4q2PazxCKjejYmJS99QqZ4wBZxCvMfB0eE/n9GIjxkTanxkr
-         Sf3KKI/8Zi+xrSdD+NhJ6fy/An+KHG6z5iOYA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=pO6hebzYNrv+/+pOVUyyRcxmOyAEdYQyaagcCX4YDnU=;
-        b=nlJq2h/RVP9vqAvDNYmacJ4lRLgb5UBJ0pWA95AAuNw6nyN7RAlzViP5r8f81b8yGM
-         zNdlYGEoZiUzL+39gGC7Yedlhz+k3k7Ayz0CCiGTgc9RzTJe7e/evdXkBOsiRx41OpEk
-         jlLaTasTrwdEEpSN06MrCLCnXN9ePf5cV5L+7+twZfVOLrZAh4zWc2P3LzudvNLwsSRX
-         VU7XVaKM3gKosxTBfBPeAFMEJxf6DKvEWai23/YEuFBZcsVh/u9oJU1EQ4YhOc7RT0e7
-         RtZvmZs6bIE6ylHgbUOBQSDiL+MNKWxF5tD487AmvJUqzFCC8x2Vl5HInFdT3B9/E30U
-         HvGA==
-X-Gm-Message-State: AOAM5326qGFOfSI9ooSdupi5v/Zqj53NLdAVDy80HSBHlX/VIUXjcdeY
-        CiTprk6TBPdvNqO5NcSWitImnggYomVyxuM6IG/yaw==
-X-Google-Smtp-Source: ABdhPJwgxXesivM1CiIBtnjbk8y13S1s+YjKODrxZccz+Vo9N9qsPGJ7xTp9upiCfdo0ygI/lb/Czfbc978AI6SYupo=
-X-Received: by 2002:a9d:12f4:: with SMTP id g107mr22343738otg.77.1635295695952;
- Tue, 26 Oct 2021 17:48:15 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 26 Oct 2021 17:48:15 -0700
+        id S236433AbhJ0BDH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Oct 2021 21:03:07 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:20366 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236400AbhJ0BDH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 Oct 2021 21:03:07 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1635296442; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=ACdGNtGl5teNBEXUOcFYOMF8OhNAHfEGI143nwXmy+Y=; b=Q+1l+hM2FkKMt2hm5Ig26nH2aGspXjNeLrmlrf6jlPWRPjYZUOjZVKZTbLxusbUHu0pzBmdj
+ 1NQmQwWrxJmh2yDMGAH/8WJ9cJRtKeiN+Mb09gSxfGhrqVwCB8OvbRVVDNWbN/RhJWe8oasK
+ zskkg70y/ZQmjoLf/tCjtU4sPJs=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 6178a4b914914866fa797d9d (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 27 Oct 2021 01:00:41
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B1211C43460; Wed, 27 Oct 2021 01:00:40 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5C73DC4338F;
+        Wed, 27 Oct 2021 01:00:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 5C73DC4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Date:   Tue, 26 Oct 2021 18:00:35 -0700
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@google.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        "Gopal, Saranya" <saranya.gopal@intel.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 3/4] usb: typec: ucsi: Add support for PD cdev
+Message-ID: <20211027010035.GA13345@jackp-linux.qualcomm.com>
+References: <20211026143352.78387-1-heikki.krogerus@linux.intel.com>
+ <20211026143352.78387-4-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <YXdsYlLWnjopyMn/@ripper>
-References: <1635152851-23660-1-git-send-email-quic_c_sanm@quicinc.com>
- <1635152851-23660-2-git-send-email-quic_c_sanm@quicinc.com>
- <YXcBK7zqny0s4gd4@ripper> <CAE-0n51k8TycXjEkH7rHYo0j7cYbKJOnOn1keVhx2yyTcBNnvg@mail.gmail.com>
- <YXck+xCJQBRGqTCw@ripper> <CAE-0n530M3eft-o0qB+yEzGjZgCLMgY==ZgdvwiVCwqqCAVxxA@mail.gmail.com>
- <YXdsYlLWnjopyMn/@ripper>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Tue, 26 Oct 2021 17:48:15 -0700
-Message-ID: <CAE-0n51C4dm6bhds=ZZyje-Pcejxjm4MMa3m-VHjFgq7GZGrLw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: usb: qcom,dwc3: Add multi-pd bindings
- for dwc3 qcom
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        Rajendra Nayak <rnayak@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211026143352.78387-4-heikki.krogerus@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-+Rajendra
+On Tue, Oct 26, 2021 at 05:33:51PM +0300, Heikki Krogerus wrote:
+>
+> -static int ucsi_get_src_pdos(struct ucsi_connector *con)
+> +int ucsi_read_pdos(struct ucsi_connector *con, int partner, int source, u32 *pdos)
+>  {
+> +	u32 pdo[PDO_MAX_OBJECTS];
+> +	int num_pdos;
+>  	int ret;
+>  
+>  	/* UCSI max payload means only getting at most 4 PDOs at a time */
+> -	ret = ucsi_get_pdos(con, 1, con->src_pdos, 0, UCSI_MAX_PDOS);
+> +	ret = ucsi_get_pdos(con, partner, source, pdo, 0, UCSI_MAX_PDOS);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	con->num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
+> -	if (con->num_pdos < UCSI_MAX_PDOS)
+> -		return 0;
+> +	num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
+> +	if (num_pdos < UCSI_MAX_PDOS)
+> +		goto done;
+>  
+>  	/* get the remaining PDOs, if any */
+> -	ret = ucsi_get_pdos(con, 1, con->src_pdos, UCSI_MAX_PDOS,
+> +	ret = ucsi_get_pdos(con, partner, source, pdo, UCSI_MAX_PDOS,
+>  			    PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	con->num_pdos += ret / sizeof(u32);
+> +	num_pdos += ret / sizeof(u32);
+> +done:
+> +	memcpy(pdos, pdo, num_pdos * sizeof(pdo));
+> +
+> +	return num_pdos;
+> +}
+> +
+> +static int ucsi_get_src_pdos(struct ucsi_connector *con)
+> +{
+> +	int ret;
+> +
+> +	ret = ucsi_read_pdos(con, 0, 1, con->src_pdos);
 
-Quoting Bjorn Andersson (2021-10-25 19:48:02)
-> On Mon 25 Oct 15:41 PDT 2021, Stephen Boyd wrote:
->
-> >
-> > When the binding was introduced I recall we punted on the parent child
-> > conversion stuff. One problem at a time. There's also the possibility
-> > for a power domain to be parented by multiple power domains so
-> > translation tables need to account for that.
-> >
->
-> But for this case - and below display case - the subdomain (the device's
-> power-domain) is just a dumb gate. So there is no translation, the given
-> performance_state applies to the parent. Or perhaps such implicitness
-> will come back and bite us?
+Second parameter should be 1 right?  Original intent of get_src_pdos()
+is to retrieve the partner's source capabilities in order to populate
+the power_supply.  Passing 0 as the partner param here changes the
+behavior to retrieve the source PDOs of the port.
 
-In the gate case I don't see how the implicitness will ever be a
-problem.
+(BTW I'm going to send a quick patch for this to since this assumes that
+port is sink and partner is source; when it's the other way around we
+end up calling GET_PDOS on the sink partner when it might not even be
+source capable).
 
->
-> I don't think we allow a power-domain to be a subdomain of two
-> power-domains - and again it's not applicable to USB or display afaict.
-
-Ah maybe. I always confuse power domains and genpd.
-
->
-> > >
-> > > > Or we may need to make another part of the OPP binding to indicate the
-> > > > relationship between the power domain and the OPP and the parent of
-> > > > the power domain.
-> > >
-> > > I suspect this would be useful if a power-domain provider needs to
-> > > translate a performance_state into a different supply-performance_state.
-> > > Not sure if we have such case currently; these examples are all an
-> > > adjustable power-domain with "gating" subdomains.
-> >
-> > Even for this case, we should be able to have the GDSC map the on state
-> > to some performance state in the parent domain. Maybe we need to add
-> > some code to the gdsc.c file to set a performance state on the parent
-> > domain when it is turned on. I'm not sure where the value for that perf
-> > state comes from. I guess we can hardcode it in the driver for now and
-> > if it needs to be multiple values based on the clk frequency we can push
-> > it out to an OPP table or something like that.
-> >
->
-> For the GDSC I believe we only have 1:1 mapping, so implementing
-> set_performance_state to just pass that on to the parent might do the
-> trick (although I haven't thought this through).
->
-> Conceptually I guess this would be like calling clk_set_rate() on a
-> clock gate, relying on it being propagated upwards. The problem here is
-> that the performance_state is just a "random" integer without a well
-> defined unit.
->
-
-Right. Ideally it would be in the core code somehow so that if there
-isn't a set_performance_state function we go to the parent or some
-special return value from the function says "call it on my parent". The
-translation scheme could come later so we can translate the "random"
-integer between parent-child domains. At the end of the day the device
-driver wants to set a frequency or runtime pm get the device and let the
-OPP table or power domain code figure out what the level is supposed to
-be.
-
->
->
-> The one case where I believe we talked about having different mapping
-> between the performance_state levels was in the relationship between CX
-> and MX. But I don't think we ever did anything about that...
-
-Hmm alright. I think there's a constraint but otherwise nobody really
-wants to change both at the same time.
-
-> >
-> > Yes, a GDSC is really a gate on a parent power domain like CX or MMCX,
-> > etc. Is the display subsystem an example of different clk frequencies
-> > wanting to change the perf state of CX? If so it's a good place to work
-> > out the translation scheme for devices that aren't listing the CX power
-> > domain in DT.
->
-> Yes, the various display components sits in MDSS_GDSC but the opp-tables
-> needs to change the performance_state of MDSS_GDSC->parent (i.e. CX or
-> MMCX, depending on platform).
->
-> As I said, today we hack this by trusting that the base drm/msm driver
-> will keep MDSS_GDSC on and listing MMCX (or CX) as power-domain for each
-> of these components.
->
->
-> So if we solve this, then that seems to directly map to the static case
-> for USB as well.
->
-
-Got it. So in this case we could have the various display components
-that are in the mdss gdsc domain set their frequency via OPP and then
-have that translate to a level in CX or MMCX. How do we parent the power
-domains outside of DT? I'm thinking that we'll need to do that if MMCX
-is parented by CX or something like that and the drivers for those two
-power domains are different. Is it basic string matching?
+Jack
+-- 
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
