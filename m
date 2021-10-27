@@ -2,66 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F02C43C4EC
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 10:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FECC43C5A8
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 10:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236925AbhJ0IUI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Oct 2021 04:20:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49060 "EHLO mail.kernel.org"
+        id S239668AbhJ0I5e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Oct 2021 04:57:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58040 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235443AbhJ0IUH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Oct 2021 04:20:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 895E961075;
-        Wed, 27 Oct 2021 08:17:41 +0000 (UTC)
+        id S231566AbhJ0I5d (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 Oct 2021 04:57:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E02660C51;
+        Wed, 27 Oct 2021 08:55:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635322662;
-        bh=Tvs8vg13VA/N60SGK6ZS4NQQ46MxuCa+cpjFExD0Daw=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=JjXyaWFm5+bpVloyI/NRbuvHnPdVKLZqXdJ08y1XyKvm0fNT9cjzwDaOexTRLWUDr
-         tnbDZpDKXyFIHYHGMLdChj1DxKZ1PrXN+JRsdehnkacC/bLmuIAxSqb8FWsKJt4zIg
-         2YTF3n2fGcK3w2vig9rIMzLDhUzlZzt3wVOdNpJZ5z3xcuQgH2Cwy2a3Nqk/zpm051
-         mHI+qD9IrivYfb7CAb5ut1w9BURfuQm0p5AbtnV0vLrjazD0afdtTa5Ki/sgCdYSGa
-         WghaukezHFxt05rtuSNlKVFZ5SXkVjMTDaXqvt354KHbs8C875LJXPTqLEjwfBdMna
-         w9KEkLvaED8uA==
-Date:   Wed, 27 Oct 2021 10:17:39 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Andrej Shadura <andrew.shadura@collabora.co.uk>
-cc:     linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
-        stable@vger.kernel.org, kernel@collabora.com,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH v3 1/2] HID: u2fzero: clarify error check and length
- calculations
-In-Reply-To: <20211019152917.79666-1-andrew.shadura@collabora.co.uk>
-Message-ID: <nycvar.YFH.7.76.2110271017280.12554@cbobk.fhfr.pm>
-References: <20211019152917.79666-1-andrew.shadura@collabora.co.uk>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        s=k20201202; t=1635324908;
+        bh=jsFQ2hTPk1o/ulS9XWmpRn7TcjUOhIqJs34hGUXQZ08=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u20JBEpP23dqtrJiBCgr8MYA30VQEXwx5LDZt+duCBCQxoQedfaJVSonFvtc9HwmY
+         YYzxtCdI+nvFAA9BlZvmyVdtrYARMlOuTY5N4XgFA9iBgT09sM4vk4s83eM5p8ylB9
+         I9JdxW3h0utZCbq8PZS2aeQfEf4IwtIeLJfCFr5Mdtj263MafplBx0efD1Ynsla7/z
+         euiqL6tWvcq4HnppBBBf1erMWz8mgiCvopm6ihwFj8pMOyW6TBXSpUyJVJ5V1rroCj
+         3lRUqpChMaTzJ1SFT1mqAYSxOpYnR4rMf4TOLqkx582LbKJPd9OxzgQLzKvRD/atDy
+         v8DmDcnOiDMPg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mfehv-00037H-S0; Wed, 27 Oct 2021 10:54:52 +0200
+Date:   Wed, 27 Oct 2021 10:54:51 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Ian Abbott <abbotti@mev.co.uk>
+Cc:     H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Luca Ellero <luca.ellero@brickedbrain.com>
+Subject: Re: [PATCH 1/5] comedi: ni_usb6501: fix NULL-deref in command paths
+Message-ID: <YXkT24DuZHehBO/b@hovoldconsulting.com>
+References: <20211025114532.4599-1-johan@kernel.org>
+ <20211025114532.4599-2-johan@kernel.org>
+ <be9dcb4f-3594-e756-78e3-74750a49fe91@mev.co.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <be9dcb4f-3594-e756-78e3-74750a49fe91@mev.co.uk>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 19 Oct 2021, Andrej Shadura wrote:
-
-> The previous commit fixed handling of incomplete packets but broke error
-> handling: offsetof returns an unsigned value (size_t), but when compared
-> against the signed return value, the return value is interpreted as if
-> it were unsigned, so negative return values are never less than the
-> offset.
+On Tue, Oct 26, 2021 at 03:12:28PM +0100, Ian Abbott wrote:
+> On 25/10/2021 12:45, Johan Hovold wrote:
+> > The driver uses endpoint-sized USB transfer buffers but had no sanity
+> > checks on the sizes. This can lead to zero-size-pointer dereferences or
+> > overflowed transfer buffers in ni6501_port_command() and
+> > ni6501_counter_command() if a (malicious) device has smaller max-packet
+> > sizes than expected (or when doing descriptor fuzz testing).
+> > 
+> > Add the missing sanity checks to probe().
+> > 
+> > Fixes: a03bb00e50ab ("staging: comedi: add NI USB-6501 support")
+> > Cc: stable@vger.kernel.org      # 3.18
+> > Cc: Luca Ellero <luca.ellero@brickedbrain.com>
+> > Signed-off-by: Johan Hovold <johan@kernel.org>
+> > ---
+> >   drivers/comedi/drivers/ni_usb6501.c | 8 ++++++++
+> >   1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/drivers/comedi/drivers/ni_usb6501.c b/drivers/comedi/drivers/ni_usb6501.c
+> > index 5b6d9d783b2f..eb2e5c23f25d 100644
+> > --- a/drivers/comedi/drivers/ni_usb6501.c
+> > +++ b/drivers/comedi/drivers/ni_usb6501.c
+> > @@ -144,6 +144,10 @@ static const u8 READ_COUNTER_RESPONSE[]	= {0x00, 0x01, 0x00, 0x10,
+> >   					   0x00, 0x00, 0x00, 0x02,
+> >   					   0x00, 0x00, 0x00, 0x00};
+> >   
+> > +/* Largest supported packets */
+> > +static const size_t TX_MAX_SIZE	= sizeof(SET_PORT_DIR_REQUEST);
+> > +static const size_t RX_MAX_SIZE	= sizeof(READ_PORT_RESPONSE);
+> > +
+> >   enum commands {
+> >   	READ_PORT,
+> >   	WRITE_PORT,
+> > @@ -486,12 +490,16 @@ static int ni6501_find_endpoints(struct comedi_device *dev)
+> >   		ep_desc = &iface_desc->endpoint[i].desc;
+> >   
+> >   		if (usb_endpoint_is_bulk_in(ep_desc)) {
+> > +			if (usb_endpoint_maxp(ep_desc) < RX_MAX_SIZE)
+> > +				continue;
+> >   			if (!devpriv->ep_rx)
+> >   				devpriv->ep_rx = ep_desc;
+> >   			continue;
+> >   		}
+> >   
+> >   		if (usb_endpoint_is_bulk_out(ep_desc)) {
+> > +			if (usb_endpoint_maxp(ep_desc) < TX_MAX_SIZE)
+> > +				continue;
+> >   			if (!devpriv->ep_tx)
+> >   				devpriv->ep_tx = ep_desc;
+> >   			continue;
+> > 
 > 
-> To make the code easier to read, calculate the minimal packet length
-> once and separately, and assign it to a signed int variable to eliminate
-> unsigned math and the need for type casts. It then becomes immediately
-> obvious how the actual data length is calculated and why the return
-> value cannot be less than the minimal length.
+> Perhaps it should return an error if the first encountered bulk-in 
+> endpoint has the wrong size or the first encountered bulk-out endpoint 
+> has the wrong size. Something like:
 > 
-> Fixes: 22d65765f211 ("HID: u2fzero: ignore incomplete packets without data")
-> Fixes: 42337b9d4d95 ("HID: add driver for U2F Zero built-in LED and RNG")
-> Signed-off-by: Andrej Shadura <andrew.shadura@collabora.co.uk>
+> 		if (usb_endpoint_is_bulk_in(ep_desc)) {
+> 			if (!devpriv->ep_rx) {
+> 				if (usb_endpoint_maxp(ep_desc) < RX_MAX_SIZE)
+> 					break;
+> 			}
+> 			continue;
 
-Both now applied, thanks.
+This is too convoluted, but I can move the max-packet sanity checks
+after the endpoint look-ups instead.
 
--- 
-Jiri Kosina
-SUSE Labs
+It doesn't really matter in the end as the real devices presumably only
+have two bulk endpoints.
 
+Johan
