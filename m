@@ -2,199 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C91043CABF
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 15:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0280B43CACE
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 15:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237337AbhJ0Ngx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Oct 2021 09:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59342 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236811AbhJ0Ngw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 09:36:52 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A293C061570;
-        Wed, 27 Oct 2021 06:34:27 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id f5so2903411pgc.12;
-        Wed, 27 Oct 2021 06:34:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OimM3+h1Wf5azCbyfr+q/2UfruCcyn297O3W5lL9/Sg=;
-        b=qpA/g5kG1aC81EM8OiowtG3/pDD2MZzO/p17CiE8biMvXvsl1DVasYOeD9J7sK0weK
-         NIwfBvAUZe7fnxCOMw4qSNPcofIPVxrhGx9ahKzS1lOe8P9snHSw+BevD48ii6EaFnEA
-         WHuIyr2SfZ93JrfqJFxcyRqmDrQBBrmp8bXoMAYAwvDL7e59q4PEj9jsCPyVbx3wt4q1
-         p3brSeCrcjqkl2ObznUK34M8qrin08YT2Qh9ud1T3xrtkWxzS3coQI97V9w1kqnCqc96
-         nwtRRyekMGbBhftV7i5h/ZTQs9maRfYRc4bHz1t+T1SroINRYQFhLTHKd6MJG1F35Ao6
-         uanA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OimM3+h1Wf5azCbyfr+q/2UfruCcyn297O3W5lL9/Sg=;
-        b=dYwlfvFV/FCEfeN0Gr9CO1wFphvvjTpuHD5Jwp/1wt4YW+5v2LTk75XX/fbrbBjgrX
-         8a5UfIBucXB+gknCR2rgpKE4Uim6I2Hwc9AFlJEBta5Gg7rp6o1T3V213Su/2aWIgiaL
-         LEd/S983aivwd6fDEnmNM1NIeLLJrHxTYsRKyu5WkWxBmEA45xr7sQnXUUf5iRM7Dnqi
-         mWfUlzVAvraqcvZY8l76LGiYnUXBrAp42QYQcZ0VPwqq5TNanVAI9qKWU+T+enwhUDI4
-         7eVnh2I/gP1t3EPpnPMK3l3uPam3D8E4Ld+UrcDzKQCsg4wL32D6jW0mjefZF3NkBokp
-         qEsg==
-X-Gm-Message-State: AOAM5307pWiKdBcGgskrI1kS0HvTnaPHzwQWISj0su3R1e3oq2dwRWiv
-        8+MzEamDC7DxRsLA39AGBy9W9Xhr6JtjQTOaPj4=
-X-Google-Smtp-Source: ABdhPJxgqvNiLC0lESY3PT23uP4K34VYYNfp4WLRWcVZa/naRfeqvHJ/fqiWmoN+mHwNyALnqa4zsBU5yCKSBkWIjSQ=
-X-Received: by 2002:a63:3e4b:: with SMTP id l72mr15977292pga.428.1635341666555;
- Wed, 27 Oct 2021 06:34:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211001065720.21330-1-himadrispandya@gmail.com>
- <20211001065720.21330-3-himadrispandya@gmail.com> <YXlRfsv6L53ZaaA7@hovoldconsulting.com>
-In-Reply-To: <YXlRfsv6L53ZaaA7@hovoldconsulting.com>
-From:   Himadri Pandya <himadrispandya@gmail.com>
-Date:   Wed, 27 Oct 2021 15:34:15 +0200
-Message-ID: <CAOY-YVmHqCCCWn_bF7sMcN=FOWFLAbLPM_ag1CukPCegsh2+mw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] USB: serial: cp210x: use usb_control_msg_recv()
- and usb_control_msg_send()
-To:     Johan Hovold <johan@kernel.org>
+        id S237522AbhJ0Nk2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Oct 2021 09:40:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58434 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235710AbhJ0Nk2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 Oct 2021 09:40:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AF92560C51;
+        Wed, 27 Oct 2021 13:38:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635341882;
+        bh=qJlE+rKByLhXWxjO8K8LqV6oWJBIM5IZCXPlGnIR17E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eQ0CjDxFPeUX0sLIGqwTPaNTMXs6BXGBvqNoEixrrFJKhrB+7hjmyK8ev+6YVncjf
+         Gg1dRy4J8wo19vughwzMLFcRpnZxvqPoXKNi9yl8sycXsWXFx1OKQSu2T09IxzPL42
+         pcCbVu6xsb8iop0IUJnNFLSJW/70VPw8xweTz44IAEqbCWINl+KXWEoc6W+GSg2R9l
+         OUdk4oqbgUIZBposr/AwUfBt15wYFpY7wmzT8kM7BEp8rXNBzG39rQSDqjEv0MouMC
+         UhavlWj8r94/0F5KYJqSOZorXcvXYTDsQGt847ENo4mDfVKkCNUS9XNTgr4O/Lo/QM
+         mceSf4ZSHXYpQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mfj7i-0001cL-H5; Wed, 27 Oct 2021 15:37:47 +0200
+Date:   Wed, 27 Oct 2021 15:37:46 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Himadri Pandya <himadrispandya@gmail.com>
 Cc:     Greg KH <gregkh@linuxfoundation.org>,
         USB list <linux-usb@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v3 1/2] USB: serial: ch314: use usb_control_msg_recv()
+ and usb_control_msg_send()
+Message-ID: <YXlWKuuYVeSWXNXR@hovoldconsulting.com>
+References: <20211001065720.21330-1-himadrispandya@gmail.com>
+ <20211001065720.21330-2-himadrispandya@gmail.com>
+ <YXlOSQXdZra5sYbe@hovoldconsulting.com>
+ <CAOY-YVmtt4XTet4hU43nfD4pj2W008ab-VRhBMs-One4kpEEug@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOY-YVmtt4XTet4hU43nfD4pj2W008ab-VRhBMs-One4kpEEug@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 3:18 PM Johan Hovold <johan@kernel.org> wrote:
->
-> On Fri, Oct 01, 2021 at 08:57:20AM +0200, Himadri Pandya wrote:
-> > The new wrapper functions for usb_control_msg() can accept data from
-> > stack and treat short reads as error. Hence use the wrappers functions.
-> > Please note that because of this change, cp210x_read_reg_block() will no
-> > longer log the length of short reads.
-> >
-> > Signed-off-by: Himadri Pandya <himadrispandya@gmail.com>
-> > ---
-> > Changes in v3:
-> >  - Rephrase the commit message
-> >  - Explicitly mention that short reads don't log length now
-> >
-> > Changes in v2:
-> >  - Drop unrelated style fixes
->
-> This looks good now, but I did do some minor style changes described
-> below.
->
-> > ---
-> >  drivers/usb/serial/cp210x.c | 106 ++++++++++--------------------------
-> >  1 file changed, 30 insertions(+), 76 deletions(-)
-> >
-> > diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-> > index 189279869a8b..3c3ca46b0b82 100644
-> > --- a/drivers/usb/serial/cp210x.c
-> > +++ b/drivers/usb/serial/cp210x.c
-> > @@ -631,29 +631,19 @@ static int cp210x_read_reg_block(struct usb_serial_port *port, u8 req,
-> >  {
-> >       struct usb_serial *serial = port->serial;
-> >       struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
-> > -     void *dmabuf;
-> >       int result;
-> >
-> > -     dmabuf = kmalloc(bufsize, GFP_KERNEL);
-> > -     if (!dmabuf)
-> > -             return -ENOMEM;
-> >
-> > -     result = usb_control_msg(serial->dev, usb_rcvctrlpipe(serial->dev, 0),
-> > -                     req, REQTYPE_INTERFACE_TO_HOST, 0,
-> > -                     port_priv->bInterfaceNumber, dmabuf, bufsize,
-> > -                     USB_CTRL_GET_TIMEOUT);
-> > -     if (result == bufsize) {
-> > -             memcpy(buf, dmabuf, bufsize);
-> > -             result = 0;
-> > -     } else {
-> > +     result = usb_control_msg_recv(serial->dev, 0, req,
-> > +                                   REQTYPE_INTERFACE_TO_HOST, 0,
-> > +                                   port_priv->bInterfaceNumber, buf,
-> > +                                   bufsize, USB_CTRL_SET_TIMEOUT,
-> > +                                   GFP_KERNEL);
->
-> The indentation style of this driver is a bit inconsistent but there's
-> no need to change to the open-parenthesis alignment style when you can
-> avoid it (it's mostly just "checkpacth.pl --subjective" that insists on
-> it).
->
-> Indenting continuation lines two tabs is just fine and avoids excessive
-> indentation and having to realign arguments when symbol names change.
->
+On Wed, Oct 27, 2021 at 03:28:42PM +0200, Himadri Pandya wrote:
+> On Wed, Oct 27, 2021 at 3:04 PM Johan Hovold <johan@kernel.org> wrote:
+> > On Fri, Oct 01, 2021 at 08:57:19AM +0200, Himadri Pandya wrote:
 
-Thanks for clearing this up. I followed the checkpatch suggestion in
-v2 and then came back to the original style of the driver in v3.
-Feeling the extra spaces to match the indentation wasn't really fun.
-
-> > +     if (result) {
-> >               dev_err(&port->dev, "failed get req 0x%x size %d status: %d\n",
-> >                               req, bufsize, result);
-> > -             if (result >= 0)
-> > -                     result = -EIO;
-> >       }
+> > > @@ -287,23 +277,18 @@ static int ch341_set_handshake(struct usb_device *dev, u8 control)
+> > >  static int ch341_get_status(struct usb_device *dev, struct ch341_private *priv)
+> > >  {
+> > >       const unsigned int size = 2;
+> > > -     char *buffer;
+> > > +     u8 buffer[2];
+> > >       int r;
+> > >       unsigned long flags;
+> > >
+> > > -     buffer = kmalloc(size, GFP_KERNEL);
+> > > -     if (!buffer)
+> > > -             return -ENOMEM;
+> > > -
+> > >       r = ch341_control_in(dev, CH341_REQ_READ_REG, 0x0706, 0, buffer, size);
+> > > -     if (r < 0)
+> > > -             goto out;
+> > > +     if (r)
+> > > +             return r;
+> > >
+> > >       spin_lock_irqsave(&priv->lock, flags);
+> > >       priv->msr = (~(*buffer)) & CH341_BITS_MODEM_STAT;
+> > >       spin_unlock_irqrestore(&priv->lock, flags);
+> > >
+> > > -out: kfree(buffer);
+> > >       return r;
 > >
-> > -     kfree(dmabuf);
-> > -
-> >       return result;
->
-> I changed this to explicit zero and return an error above instead.
-
-Okay.
-
->
-> > @@ -952,27 +915,18 @@ static int cp210x_get_tx_queue_byte_count(struct usb_serial_port *port,
-> >  {
-> >       struct usb_serial *serial = port->serial;
-> >       struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
-> > -     struct cp210x_comm_status *sts;
-> > +     struct cp210x_comm_status sts;
-> >       int result;
+> > This should now be
 > >
-> > -     sts = kmalloc(sizeof(*sts), GFP_KERNEL);
-> > -     if (!sts)
-> > -             return -ENOMEM;
-> > -
-> > -     result = usb_control_msg(serial->dev, usb_rcvctrlpipe(serial->dev, 0),
-> > -                     CP210X_GET_COMM_STATUS, REQTYPE_INTERFACE_TO_HOST,
-> > -                     0, port_priv->bInterfaceNumber, sts, sizeof(*sts),
-> > -                     USB_CTRL_GET_TIMEOUT);
-> > -     if (result == sizeof(*sts)) {
-> > -             *count = le32_to_cpu(sts->ulAmountInOutQueue);
-> > -             result = 0;
-> > -     } else {
-> > +     result = usb_control_msg_recv(serial->dev, 0, CP210X_GET_COMM_STATUS,
-> > +                                   REQTYPE_INTERFACE_TO_HOST, 0,
-> > +                                   port_priv->bInterfaceNumber, &sts,
-> > +                                   sizeof(sts), USB_CTRL_GET_TIMEOUT,
-> > +                                   GFP_KERNEL);
-> > +     if (result == 0)
-> > +             *count = le32_to_cpu(sts.ulAmountInOutQueue);
-> > +     else
-> >               dev_err(&port->dev, "failed to get comm status: %d\n", result);
-> > -             if (result >= 0)
-> > -                     result = -EIO;
-> > -     }
-> > -
-> > -     kfree(sts);
->
-> The above is now also better handled with an explicit error check and
-> early return and the doing the *count assignment in the success path.
->
-
-Yes.
-
+> >         return 0;
 > >
-> >       return result;
-> >  }
->
-> Now applied with the above changes. The result is here:
->
->         https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit/?h=usb-next&id=f5cfbecb0a162319464c9408420282d22ed69721
->
-> Johan
+> 
+> Yes. The function was returning the negative error value before the
+> change. But now it doesn't need to as we are already taking care of it
+> in the wrapper.
 
-Thank you.
+It has more to do with the fact that we now return early on errors so r
+will always be zero here. It's better to be explicit about that.
+ 
+> > >  }
+> > >
+> > > @@ -312,30 +297,25 @@ out:    kfree(buffer);
+> > >  static int ch341_configure(struct usb_device *dev, struct ch341_private *priv)
+> > >  {
+> > >       const unsigned int size = 2;
+> > > -     char *buffer;
+> > > +     u8 buffer[2];
+> > >       int r;
+> > >
+> > > -     buffer = kmalloc(size, GFP_KERNEL);
+> > > -     if (!buffer)
+> > > -             return -ENOMEM;
+> > > -
+> > >       /* expect two bytes 0x27 0x00 */
+> > >       r = ch341_control_in(dev, CH341_REQ_READ_VERSION, 0, 0, buffer, size);
+> > > -     if (r < 0)
+> > > -             goto out;
+> > > +     if (r)
+> > > +             return r;
+> > >       dev_dbg(&dev->dev, "Chip version: 0x%02x\n", buffer[0]);
+> > >
+> > >       r = ch341_control_out(dev, CH341_REQ_SERIAL_INIT, 0, 0);
+> > > -     if (r < 0)
+> > > -             goto out;
+> > > +     if (r)
+> > > +             return r;
+> >
+> > Now an unrelated change.
+> 
+> I think it is a related change because we are removing the out label.
 
-Regards,
-Himadri
+Sorry, I meant that the (r < 0) change was unrelated since you're no
+longer touching ch341_control_out(). The return is indeed still needed.
+ 
+> > > @@ -647,23 +611,19 @@ static void ch341_break_ctl(struct tty_struct *tty, int break_state)
+> > >       struct ch341_private *priv = usb_get_serial_port_data(port);
+> > >       int r;
+> > >       uint16_t reg_contents;
+> > > -     uint8_t *break_reg;
+> > > +     uint8_t break_reg[2];
+> > >
+> > >       if (priv->quirks & CH341_QUIRK_SIMULATE_BREAK) {
+> > >               ch341_simulate_break(tty, break_state);
+> > >               return;
+> > >       }
+> > >
+> > > -     break_reg = kmalloc(2, GFP_KERNEL);
+> > > -     if (!break_reg)
+> > > -             return;
+> > > -
+> > >       r = ch341_control_in(port->serial->dev, CH341_REQ_READ_REG,
+> > >                       ch341_break_reg, 0, break_reg, 2);
+> > > -     if (r < 0) {
+> > > +     if (r) {
+> > >               dev_err(&port->dev, "%s - USB control read error (%d)\n",
+> > >                               __func__, r);
+> > > -             goto out;
+> > > +             return;
+> > >       }
+> > >       dev_dbg(&port->dev, "%s - initial ch341 break register contents - reg1: %x, reg2: %x\n",
+> > >               __func__, break_reg[0], break_reg[1]);
+> > > @@ -681,11 +641,9 @@ static void ch341_break_ctl(struct tty_struct *tty, int break_state)
+> > >       reg_contents = get_unaligned_le16(break_reg);
+> > >       r = ch341_control_out(port->serial->dev, CH341_REQ_WRITE_REG,
+> > >                       ch341_break_reg, reg_contents);
+> > > -     if (r < 0)
+> > > +     if (r)
+> >
+> > Now also an unrelated change.
+> >
+> 
+> Maybe I misunderstood your comments on v2. I thought you asked to get
+> rid of the out labels in callers.
+
+Yes, but as above I'm referring to the (r < 0) change for
+ch341_control_out() which is now unrelated to the rest of the patch.
+
+Johan
