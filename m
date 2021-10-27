@@ -2,241 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7331A43CC1B
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 16:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3862E43CC65
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 16:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242506AbhJ0O16 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Oct 2021 10:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235140AbhJ0O1y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 10:27:54 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EB4C061570
-        for <linux-usb@vger.kernel.org>; Wed, 27 Oct 2021 07:25:28 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id o26so5047121ljj.2
-        for <linux-usb@vger.kernel.org>; Wed, 27 Oct 2021 07:25:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WNAMDt0ADcK+n3RsR7jtkIgpfhbhOoaoKp+bIVUXzCo=;
-        b=ox50lX+eprZt1V6nglRNBzkFkP9BY6+LFieoj8+/IXJkU7HwHZSE6HKntwtP0qW6Po
-         llsnguVNK7I+uCHSLGEm7j52FncoKeR89sGDLEJdNsKvNVhkWV5LGBb6ExNKqJng/cir
-         hMoIIUg97fyCHt6127zqJRZlfm++CictFvuO2QiKcrkfUpNYnG2Dl2J97hFlnjz3CUND
-         brS4N6M03ATDJkPH8OPtIn4f4O6kOXbl2dJQyugs6ROQi7muJknUmDmzOxHx6hMwEY+r
-         IjYovE2eI/1UAYT8Dpjjfj/l4LvtzD/nOyjVNqBoU348DwT6fZ5tBRKcC2gbv3e95Qn2
-         6VwA==
+        id S238908AbhJ0Okd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 27 Oct 2021 10:40:33 -0400
+Received: from mail-qv1-f43.google.com ([209.85.219.43]:33708 "EHLO
+        mail-qv1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237549AbhJ0Okc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 10:40:32 -0400
+Received: by mail-qv1-f43.google.com with SMTP id kd16so1930294qvb.0;
+        Wed, 27 Oct 2021 07:38:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WNAMDt0ADcK+n3RsR7jtkIgpfhbhOoaoKp+bIVUXzCo=;
-        b=pKJnAXEF/tFIGcM/QVlL7oMCeihSJq6LF0xXjHf2Fjg/qP4wgaJszM80jPem21TVa5
-         EZR15TujNouSvCOnUuKMZR+a3aTQ3jcaeFUjFxBpJd0rx0nyfohRxAMwn3dgp6w3GQka
-         4G7ylRduo8V2iVjblsbymwsriaTb06w9B6HP/f4sZmqs+rM9JRw5+1TT4Wc1KzYvKzuh
-         ZtL1I7cgox1hikMSEbY4oyPgDBbBVA/Ez877gHYGM4Cl29GWjX0wSj/IU0DypOMEo858
-         3JG+nVtm29QV9n/wABa8v18U+ey+xCovYhd6dDa0PpgXKymKVyt85aKta4NRnLt16xtZ
-         y9lg==
-X-Gm-Message-State: AOAM531hl2f/C7JXLkTQeAv/fNbjC0f7x/Z6YsOZOvJcNkNuXxUKYKB5
-        ZraUYwUjKAzXy8/hb1SRZrQjTl37DIRjhcwHFOr/YQ==
-X-Google-Smtp-Source: ABdhPJy6HDilhtMJ4mWprnuUa4gEBr21bSJphH24YDGc1eAc5GIF49QKqAbykfnywK/pWXjBK7lgAhjvv/hVR4Mj3tk=
-X-Received: by 2002:a2e:b550:: with SMTP id a16mr34038341ljn.229.1635344726453;
- Wed, 27 Oct 2021 07:25:26 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=IIc3VM+0QP6tW1izmsIwRCOe4zK0xch73rEnQe2rldc=;
+        b=bZRL694X7ag7gRm4SDz2tWTMYt6k0l087Ca7LvU3tgMTKFAi3HyF0SbFCTUEye2hPp
+         4VQZSy86N/WDzEuwLmHyQ6klEYGfaOCVJPNc+MEaSOsp/R+cu1ORKDSnCMFuWBVHfbMb
+         dgGubVm1fc7jARx+bt3eL9uT5s2oGI4lVXlzkxNMkxAXQCENIX6YtGlL4aUaLGHBv8Ys
+         eHmrrtJ9LM7yn1+bCqi+I8sSREUbr0O44yHPp0Ehq9ay7GVaNX2cJS56e45ygkliIqhI
+         HgpIX/6FHCfU2c+tEXa3SIhriI5T4vCxzQlFfHc436RcXRdHmszOycMfUppYslwj0k1E
+         VGfw==
+X-Gm-Message-State: AOAM5337qJDkO4lI5Z5WeyA96QewIkCuqI9qVqs2idLLaWLFGfDXc3Ro
+        9DRQ1gK4IaBCybdMx8I8QA3el6czwfM=
+X-Google-Smtp-Source: ABdhPJwQLaWZVWb/nNgd+6aO+EyS1atPXnwaSX94Bmfgmuz2/KU1BfeuqCmchvvRxdgUXwqNYIQ12g==
+X-Received: by 2002:ad4:5b81:: with SMTP id 1mr21374587qvp.48.1635345486439;
+        Wed, 27 Oct 2021 07:38:06 -0700 (PDT)
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com. [209.85.219.46])
+        by smtp.gmail.com with ESMTPSA id bq30sm137481qkb.6.2021.10.27.07.38.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Oct 2021 07:38:05 -0700 (PDT)
+Received: by mail-qv1-f46.google.com with SMTP id gh1so1875555qvb.8;
+        Wed, 27 Oct 2021 07:38:05 -0700 (PDT)
+X-Received: by 2002:a0c:fe8c:: with SMTP id d12mr25332323qvs.19.1635345485575;
+ Wed, 27 Oct 2021 07:38:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <1635152851-23660-1-git-send-email-quic_c_sanm@quicinc.com>
- <1635152851-23660-2-git-send-email-quic_c_sanm@quicinc.com>
- <YXcBK7zqny0s4gd4@ripper> <CAE-0n51k8TycXjEkH7rHYo0j7cYbKJOnOn1keVhx2yyTcBNnvg@mail.gmail.com>
- <YXck+xCJQBRGqTCw@ripper> <CAE-0n530M3eft-o0qB+yEzGjZgCLMgY==ZgdvwiVCwqqCAVxxA@mail.gmail.com>
- <YXdsYlLWnjopyMn/@ripper> <CAE-0n51C4dm6bhds=ZZyje-Pcejxjm4MMa3m-VHjFgq7GZGrLw@mail.gmail.com>
- <YXjbs3Bv6Y3d87EC@yoga>
-In-Reply-To: <YXjbs3Bv6Y3d87EC@yoga>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 27 Oct 2021 16:24:49 +0200
-Message-ID: <CAPDyKFrWQdvZX4ukHZoGz73JPfQSgqVrG_4ShMp_GrxL0NKLvg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: usb: qcom,dwc3: Add multi-pd bindings
- for dwc3 qcom
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
+References: <20211027080849.3276289-1-geert@linux-m68k.org>
+In-Reply-To: <20211027080849.3276289-1-geert@linux-m68k.org>
+From:   Li Yang <leoyang.li@nxp.com>
+Date:   Wed, 27 Oct 2021 09:37:54 -0500
+X-Gmail-Original-Message-ID: <CADRPPNQwcTTS-0MkonizSA_XbLBbTS8di4F3NWOMADACp4gD_w@mail.gmail.com>
+Message-ID: <CADRPPNQwcTTS-0MkonizSA_XbLBbTS8di4F3NWOMADACp4gD_w@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: Mark USB_FSL_QE broken on 64-bit
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com
+        linux-usb@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 27 Oct 2021 at 06:55, Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
+On Wed, Oct 27, 2021 at 5:25 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
-> On Tue 26 Oct 19:48 CDT 2021, Stephen Boyd wrote:
+> On 64-bit:
 >
-> > +Rajendra
-> >
-> > Quoting Bjorn Andersson (2021-10-25 19:48:02)
-> > > On Mon 25 Oct 15:41 PDT 2021, Stephen Boyd wrote:
-> > >
-> > > >
-> > > > When the binding was introduced I recall we punted on the parent child
-> > > > conversion stuff. One problem at a time. There's also the possibility
-> > > > for a power domain to be parented by multiple power domains so
-> > > > translation tables need to account for that.
-> > > >
-> > >
-> > > But for this case - and below display case - the subdomain (the device's
-> > > power-domain) is just a dumb gate. So there is no translation, the given
-> > > performance_state applies to the parent. Or perhaps such implicitness
-> > > will come back and bite us?
-> >
-> > In the gate case I don't see how the implicitness will ever be a
-> > problem.
-> >
-> > >
-> > > I don't think we allow a power-domain to be a subdomain of two
-> > > power-domains - and again it's not applicable to USB or display afaict.
-> >
-> > Ah maybe. I always confuse power domains and genpd.
-> >
-> > >
-> > > > >
-> > > > > > Or we may need to make another part of the OPP binding to indicate the
-> > > > > > relationship between the power domain and the OPP and the parent of
-> > > > > > the power domain.
-> > > > >
-> > > > > I suspect this would be useful if a power-domain provider needs to
-> > > > > translate a performance_state into a different supply-performance_state.
-> > > > > Not sure if we have such case currently; these examples are all an
-> > > > > adjustable power-domain with "gating" subdomains.
-> > > >
-> > > > Even for this case, we should be able to have the GDSC map the on state
-> > > > to some performance state in the parent domain. Maybe we need to add
-> > > > some code to the gdsc.c file to set a performance state on the parent
-> > > > domain when it is turned on. I'm not sure where the value for that perf
-> > > > state comes from. I guess we can hardcode it in the driver for now and
-> > > > if it needs to be multiple values based on the clk frequency we can push
-> > > > it out to an OPP table or something like that.
-> > > >
-> > >
-> > > For the GDSC I believe we only have 1:1 mapping, so implementing
-> > > set_performance_state to just pass that on to the parent might do the
-> > > trick (although I haven't thought this through).
-> > >
-> > > Conceptually I guess this would be like calling clk_set_rate() on a
-> > > clock gate, relying on it being propagated upwards. The problem here is
-> > > that the performance_state is just a "random" integer without a well
-> > > defined unit.
-> > >
-> >
-> > Right. Ideally it would be in the core code somehow so that if there
-> > isn't a set_performance_state function we go to the parent or some
-> > special return value from the function says "call it on my parent". The
-> > translation scheme could come later so we can translate the "random"
-> > integer between parent-child domains.
+>     drivers/usb/gadget/udc/fsl_qe_udc.c: In function ‘qe_ep0_rx’:
+>     drivers/usb/gadget/udc/fsl_qe_udc.c:842:13: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
+>       842 |     vaddr = (u32)phys_to_virt(in_be32(&bd->buf));
+>           |             ^
+>     In file included from drivers/usb/gadget/udc/fsl_qe_udc.c:41:
+>     drivers/usb/gadget/udc/fsl_qe_udc.c:843:28: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+>       843 |     frame_set_data(pframe, (u8 *)vaddr);
+>           |                            ^
 >
-> As a proof of concept it should be sufficient to just add an
-> implementation of sc->pd.set_performance_state in gdsc.c. But I agree
-> that it would be nice to push this into some framework code, perhaps
-> made opt-in by some GENPD_FLAG_xyz.
->
-> > At the end of the day the device
-> > driver wants to set a frequency or runtime pm get the device and let the
-> > OPP table or power domain code figure out what the level is supposed to
-> > be.
-> >
->
-> Yes and this is already working for the non-nested case - where the
-> single power-domain jumps between performance states as the opp code
-> switches from one opp to another.
->
-> So if we can list only the child power-domain (i.e. the GDSC) and have
-> the performance_stat requests propagate up to the parent rpmhpd resource
-> I think we're good.
->
->
-> Let's give this a spin and confirm that this is the case...
->
-> > >
-> > >
-> > > The one case where I believe we talked about having different mapping
-> > > between the performance_state levels was in the relationship between CX
-> > > and MX. But I don't think we ever did anything about that...
-> >
-> > Hmm alright. I think there's a constraint but otherwise nobody really
-> > wants to change both at the same time.
-> >
-> > > >
-> > > > Yes, a GDSC is really a gate on a parent power domain like CX or MMCX,
-> > > > etc. Is the display subsystem an example of different clk frequencies
-> > > > wanting to change the perf state of CX? If so it's a good place to work
-> > > > out the translation scheme for devices that aren't listing the CX power
-> > > > domain in DT.
-> > >
-> > > Yes, the various display components sits in MDSS_GDSC but the opp-tables
-> > > needs to change the performance_state of MDSS_GDSC->parent (i.e. CX or
-> > > MMCX, depending on platform).
-> > >
-> > > As I said, today we hack this by trusting that the base drm/msm driver
-> > > will keep MDSS_GDSC on and listing MMCX (or CX) as power-domain for each
-> > > of these components.
-> > >
-> > >
-> > > So if we solve this, then that seems to directly map to the static case
-> > > for USB as well.
-> > >
-> >
-> > Got it. So in this case we could have the various display components
-> > that are in the mdss gdsc domain set their frequency via OPP and then
-> > have that translate to a level in CX or MMCX. How do we parent the power
-> > domains outside of DT? I'm thinking that we'll need to do that if MMCX
-> > is parented by CX or something like that and the drivers for those two
-> > power domains are different. Is it basic string matching?
->
-> In one way or another we need to invoke pm_genpd_add_subdomain() to link
-> the two power-domains (actually genpds) together, like what was done in
-> 3652265514f5 ("clk: qcom: gdsc: enable optional power domain support").
->
-> In the case of MMCX and CX, my impression of the documentation is that
-> they are independent - but if we need to express that CX is parent of
-> MMCX, they are both provided by rpmhpd which already supports this by
-> just specifying .parent on mmcx to point to cx.
+> The driver assumes physical and virtual addresses are 32-bit, hence it
+> cannot work on 64-bit platforms.
 
-I was trying to follow the discussion, but it turned out to be a bit
-complicated to catch up and answer all things. In any case, let me
-just add a few overall comments, perhaps that can help to move things
-forward.
+The device is truly only used in legacy 32-bit PowerPC chips and never
+tested with 64-bit.  Thanks.
 
-First, one domain can have two parent domains. Both from DT and from
-genpd point of view, just to make this clear.
+>
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Although, it certainly looks questionable to me, to hook up the USB
-device to two separate power domains, one to control power and one to
-control performance. Especially, if it's really the same piece of HW
-that is managing both things. Additionally, if it's correct to model
-the USB GDSC power domain as a child to the CX power domain from HW
-point of view, we should likely do that.
+Acked-by: Li Yang <leoyang.li@nxp.com>
 
-From the performance states point of view, genpd supports propagating
-performance states to parent domains, via a 1:1 mapping of the
-performance state. Note that, we have also quite recently made genpd's
-->set_performance_state() callback to be optional. A vote for a
-performance state will be propagated to the parent domain, even if the
-child domain would lack the ->set_performance_state() callback.  This
-should be useful, where a child domain relies on its parent domain for
-performance state management, which seems to be the case for the USB
-GDSC/CX power domains, right?
-
-In regards to the parsing of the "required-opps" DT binding for a
-device node, I think that should work for cases like these, too. Or is
-there something missing around this?
-
-Kind regards
-Uffe
+> ---
+> One more casualty of CONFIG_WERROR=y.
+> http://kisskb.ellerman.id.au/kisskb/buildresult/14652936/
+> ---
+>  drivers/usb/gadget/udc/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
+> index 8c614bb86c665c77..69394dc1cdfb6436 100644
+> --- a/drivers/usb/gadget/udc/Kconfig
+> +++ b/drivers/usb/gadget/udc/Kconfig
+> @@ -330,6 +330,7 @@ config USB_AMD5536UDC
+>  config USB_FSL_QE
+>         tristate "Freescale QE/CPM USB Device Controller"
+>         depends on FSL_SOC && (QUICC_ENGINE || CPM)
+> +       depends on !64BIT || BROKEN
+>         help
+>            Some of Freescale PowerPC processors have a Full Speed
+>            QE/CPM2 USB controller, which support device mode with 4
+> --
+> 2.25.1
+>
