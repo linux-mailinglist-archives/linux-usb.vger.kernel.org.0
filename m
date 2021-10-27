@@ -2,197 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C39F43CF32
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 18:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 784D343CF81
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 19:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243115AbhJ0RBN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Oct 2021 13:01:13 -0400
-Received: from smtprelay0195.hostedemail.com ([216.40.44.195]:47860 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S239242AbhJ0RBL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 13:01:11 -0400
-Received: from omf01.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay05.hostedemail.com (Postfix) with ESMTP id 88CE218027A8A;
-        Wed, 27 Oct 2021 16:58:41 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf01.hostedemail.com (Postfix) with ESMTPA id 34EC11727C;
-        Wed, 27 Oct 2021 16:57:52 +0000 (UTC)
-Message-ID: <20ffb5604269f9add568b343701d42097c599c89.camel@perches.com>
-Subject: Re: dt-bindings: treewide: Update @st.com email address to
- @foss.st.com
-From:   Joe Perches <joe@perches.com>
-To:     Patrice CHOTARD <patrice.chotard@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        maxime coquelin <mcoquelin.stm32@gmail.com>,
-        alexandre torgue <alexandre.torgue@foss.st.com>,
-        michael turquette <mturquette@baylibre.com>,
-        stephen boyd <sboyd@kernel.org>,
-        herbert xu <herbert@gondor.apana.org.au>,
-        "david s . miller" <davem@davemloft.net>,
-        david airlie <airlied@linux.ie>,
-        daniel vetter <daniel@ffwll.ch>,
-        thierry reding <thierry.reding@gmail.com>,
-        sam ravnborg <sam@ravnborg.org>,
-        yannick fertre <yannick.fertre@foss.st.com>,
-        philippe cornu <philippe.cornu@foss.st.com>,
-        benjamin gaignard <benjamin.gaignard@linaro.org>,
-        vinod koul <vkoul@kernel.org>,
-        ohad ben-cohen <ohad@wizery.com>,
-        bjorn andersson <bjorn.andersson@linaro.org>,
-        baolin wang <baolin.wang7@gmail.com>,
-        jonathan cameron <jic23@kernel.org>,
-        lars-peter clausen <lars@metafoo.de>,
-        olivier moysan <olivier.moysan@foss.st.com>,
-        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matt Mackall <mpm@selenic.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        dillon min <dillon.minfei@gmail.com>,
-        Marek Vasut <marex@denx.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
-        Lionel Debieve <lionel.debieve@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        pascal Paillet <p.paillet@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Le Ray <erwan.leray@foss.st.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-crypto@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        dmaengine@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-media@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
-Date:   Wed, 27 Oct 2021 09:57:50 -0700
-In-Reply-To: <865a4055-5c2f-0793-bdce-9f04eac167d2@foss.st.com>
-References: <20211020065000.21312-1-patrice.chotard@foss.st.com>
-         <22fb6f19-21eb-dcb5-fa31-bb243d4a7eaf@canonical.com>
-         <878ryoc4dc.wl-maz@kernel.org>
-         <82492eb2-5a5e-39a2-a058-5e2ba75323e0@foss.st.com>
-         <865a4055-5c2f-0793-bdce-9f04eac167d2@foss.st.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1 
+        id S243141AbhJ0RR0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Oct 2021 13:17:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37596 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239397AbhJ0RR0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 Oct 2021 13:17:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id BE095601FF
+        for <linux-usb@vger.kernel.org>; Wed, 27 Oct 2021 17:15:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635354900;
+        bh=VykGUOv6iAmMMlPUjCh2WLnLSbZCRaKGP5Dt2klKku8=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=PXsiV3lChgpa6CAd7SWX6Cetvz6qHfqN5LAOuuxjOZN612seYWAYfUhaxvdonuO2o
+         HGv8RvYMHaO237xdJPoODTRtfkz4EVaW5+lReEsRhMwCj4ds1XR3exknZvMgp8Idpd
+         FgOQMV7I8oeKlIahHbMRCxiUhywl5zJDO1AHwXS3WBrnTKtVrmsx+D9jblG0W8Nxnj
+         heurB81bbPWVSOyd5n/A/MNwUgtRskeDRmUcss20p7MIoDcItI/GHRqQUHzQjj1UPp
+         ZDI8902KgSeOtI9w9rD7oJS1131knz3yXJ+kThcL3JSk4Px/EBw+rvzN6n0Hr0/f22
+         5/UWfvD9dNjag==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id B077D610CD; Wed, 27 Oct 2021 17:15:00 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214789] ehci-hcd.c ISR
+Date:   Wed, 27 Oct 2021 17:15:00 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: scott.c.arnold@nasa.gov
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-214789-208809-xF8OLDW5qW@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214789-208809@https.bugzilla.kernel.org/>
+References: <bug-214789-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.20
-X-Stat-Signature: d7f39g9ut4x78f1qzm6ux4u3z7warbny
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: 34EC11727C
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/mP1yO9Xb7wezovkJWdqP2VR+2BHiCxac=
-X-HE-Tag: 1635353872-396338
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2021-10-27 at 15:56 +0200, Patrice CHOTARD wrote:
-> On 10/27/21 8:11 AM, Patrice CHOTARD wrote:
-> > On 10/20/21 1:39 PM, Marc Zyngier wrote:
-> > > On Wed, 20 Oct 2021 08:45:02 +0100,
-> > > Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
-> > > > On 20/10/2021 08:50, patrice.chotard@foss.st.com wrote:
-> > > > > From: Patrice Chotard <patrice.chotard@foss.st.com>
-> > > > > 
-> > > > > Not all @st.com email address are concerned, only people who have
-> > > > > a specific @foss.st.com email will see their entry updated.
-> > > > > For some people, who left the company, remove their email.
-> > > > Also would be nice to see here explained *why* are you doing this.
-> > > 
-> > > And why this can't be done with a single update to .mailmap, like
-> > > anyone else does.
-> > 
-> > Thanks for the tips, yes, it will be simpler.
-> 
-> I made a try by updating .mailmap with adding a new entry with my @foss.st.com email :
-> 
->  Pali Rohár <pali@kernel.org> <pali.rohar@gmail.com>
->  Paolo 'Blaisorblade' Giarrusso <blaisorblade@yahoo.it>
-> +Patrice Chotard <patrice.chotard@foss.st.com> <patrice.chotard@st.com>
->  Patrick Mochel <mochel@digitalimplant.org>
->  Paul Burton <paulburton@kernel.org> <paul.burton@imgtec.com>
-> 
-> But when running ./scripts/get_maintainer.pl Documentation/devicetree/bindings/arm/sti.yaml, by old email is still displayed
-> 
-> Rob Herring <robh+dt@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-> Patrice Chotard <patrice.chotard@st.com> (in file)
-> devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-> linux-kernel@vger.kernel.org (open list)
-> 
-> By default, the get_maintainer.pl script is using .mailmap file ($email_use_mailmap = 1).
-> 
-> It seems there is an issue with get_maintainer.pl and maintainer name/e-mail found in yaml file ?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214789
 
-I'm of two minds whether it's an "issue" actually.
+--- Comment #14 from Scott Arnold (scott.c.arnold@nasa.gov) ---
+Hello,
+Sorry for the confusion.
+While patching echi-hcd.c using meld to change spin_locks " current_status =
+=3D
+ehci_readl(ehci, &ehci->regs->status);" got changed to "status =3D
+ehci_readl(ehci, &ehci->regs->status);" (~line 723).
+As a result current_status was used un-initialized (I would have thought gcc
+8.3.1 would have warned about that).
+This caused the "nobody cared" messages on IRQ's 16 and 23. So ehci-hcd did=
+ not
+load/allocate the IRQ's.
+Spin_locks are not the problem.
+If ehci-hcd does not load the timer card works fine.
+If ehci-hcd loads the timer card will not work even if ehci-hcd is unloaded.
+IRQ count on 16 stuck at ~90 in /proc/interrupts.
+Seems like IRQ 16 is somehow left disabled. Could be why uhci-hcd does not =
+load
+?
+All works fine with the 5.3.6 kernel, broken in 5.11+.
 
-get_maintainer is not the only tool used to create email
-address lists.
+Lsudb with 5.3.6:
 
-Some actually read files like MAINTAINERS or .dts or .yaml
-files directly to find maintainer addresses.
+Bus 002 Device 003: ID 0424:2660 Microchip Technology, Inc. (formerly SMSC)=
+ Hub
+Bus 002 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 003 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Bus 001 Device 003: ID 14dd:1007 Raritan Computer, Inc. D2CIM-VUSB KVM
+connector
+Bus 001 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 
-So If your name and email address is listed in an source file
-where nominally active email addresses are entered then I
-believe .mailmap should not modify it.
+Thanks
+Scott
 
-So I believe email addresses in each file should be updated
-in preference to using a mailmap entry for nominally active
-email addresses in these files.
+-----Original Message-----
+From: bugzilla-daemon@bugzilla.kernel.org <bugzilla-daemon@bugzilla.kernel.=
+org>=20
+Sent: Tuesday, October 26, 2021 9:06 PM
+To: Arnold, Scott C. (JSC-CD13)[SGT, INC] <scott.c.arnold@nasa.gov>
+Subject: [EXTERNAL] [Bug 214789] ehci-hcd.c ISR
 
----
+https://gcc02.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fbugzill=
+a.kernel.org%2Fshow_bug.cgi%3Fid%3D214789&amp;data=3D04%7C01%7Cscott.c.arno=
+ld%40nasa.gov%7Cb7b68d317a8a42969d9508d998ee48e8%7C7005d45845be48ae8140d43d=
+a96dd17b%7C0%7C0%7C637708971458208168%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wL=
+jAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=3DZk=
+3yh4xfKyj7NsjmOmmnfWZ%2FukvbAOpeKrziViiPVUc%3D&amp;reserved=3D0
 
-$ cat Documentation/devicetree/bindings/arm/sti.yaml
-# SPDX-License-Identifier: GPL-2.0
-%YAML 1.2
----
-$id: http://devicetree.org/schemas/arm/sti.yaml#
-$schema: http://devicetree.org/meta-schemas/core.yaml#
+--- Comment #13 from Alan Stern (stern@rowland.harvard.edu) --- What does t=
+he
+kernel log from a recent kernel say about UHCI?  If it is present in the ol=
+der
+kernel then it should still show up in the recent kernel.
 
-title: ST STi Platforms Device Tree Bindings
+And if the problem is related to uhci-hcd, why would patching ehci-hcd make=
+ it
+go away?
 
-maintainers:
-  - Patrice Chotard <patrice.chotard@st.com>
+--
+You may reply to this email to add a comment.
 
+You are receiving this mail because:
+You reported the bug.
 
+--=20
+You may reply to this email to add a comment.
 
+You are receiving this mail because:
+You are watching the assignee of the bug.=
