@@ -2,197 +2,206 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A37A743CB18
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 15:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C01E143CB4C
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Oct 2021 15:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237081AbhJ0NuM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Oct 2021 09:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34262 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbhJ0NuM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 09:50:12 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44ACC061570;
-        Wed, 27 Oct 2021 06:47:46 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id oa12-20020a17090b1bcc00b0019f715462a8so2125332pjb.3;
-        Wed, 27 Oct 2021 06:47:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qvdNFh7MkxWNhtp7QKNJAhYk/nyXIPZJEIzI2iPA3Mo=;
-        b=hcT/4ljv08p+AgUZoVB1ay+S6Xt+MGseUne1f3O4ngEiaZrhIqbfX4moYG5jFqkXv9
-         F/06/B7L4fbdJ0SiyZ+2PQ11G3E5aorWeAc+JfcHP3+IvNBCZPg2eR4EOni7TcxLgEl9
-         YtoMyeVbADulB8ai8VoEScrx/9RQiGUvHFiJtbeUnoyynUwTmHsMTIm8+E/6WZ2n2xVr
-         jePqMLXsubRWU0jf5cqJy7N75SLyISBNKaU2WajiRssnI+Gtf+FK3234n24qMuSkjv9b
-         mHNF5vysWAoprbcN33Tk6K2m6Lwcqd4+2ijFkb5gv07y101KUurJ/6Sa9Y3KaZoVt0nj
-         ZOMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qvdNFh7MkxWNhtp7QKNJAhYk/nyXIPZJEIzI2iPA3Mo=;
-        b=Ijkx7DJ2GUZWLAnw2cd+g1HVIUNOoQ04pGZi/msI970+sl97sE0IlU7oE+O+s+d7KB
-         TUbUxlwnSF1O0Vm4U3D1KgoNrKODZOu9ncutP3AqxMSX3MyAV94y/GgGNJAjlwZgdRC3
-         y8oog3mVrrnPSnryYqEIfYD8W5hXgBTFdZB1MC0GBgoGYOUG4jWsRWpyyOwJKc2Ba9H3
-         r1WC8P82aNw8JZhhRRc2kfI+dWGguC6ejtFyJphbXaD/qaSSF0qEdIfnO1CByMOh6uVM
-         erGhWH1lxMOx9krGHKy9REXKqF2cd2hJyXtOlrvC7ioSX0O1NUhIJcxllALLizmRaUTB
-         q+gA==
-X-Gm-Message-State: AOAM5338WDP/2ZCKC9C6Cn9Xi+48oxw/C4vyv9/KYD3+3AFsRfCWd3Ht
-        dBGoFrJxBtc6FpRyvhDI2QLN6t4amwBUdp79GwE=
-X-Google-Smtp-Source: ABdhPJzKP+b5xfi2bkRWraalmmHfFU3KDb80OW/qhpk0kDxI9cT7lEraO56w9PGRbE2w5OWXgLkMyMqEv/7Opy42wII=
-X-Received: by 2002:a17:902:6ac4:b0:13f:52e1:8840 with SMTP id
- i4-20020a1709026ac400b0013f52e18840mr28067744plt.15.1635342466407; Wed, 27
- Oct 2021 06:47:46 -0700 (PDT)
+        id S242327AbhJ0N7v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Oct 2021 09:59:51 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:36496 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231838AbhJ0N7p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 09:59:45 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19RD9TUg016081;
+        Wed, 27 Oct 2021 15:56:41 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : from : to
+ : cc : references : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=SonikwPLivf5Wf37m9QGw9Dbl0nfvPwQE843HNWkcTc=;
+ b=WzTh3e1T+lbbR0asJHNFou5wy8ymDy2S+R6rPJyrqAzstKAMap8J47xdHxMl2RgiS0FA
+ GmPrGi2x3OeVUYtOCqe6mJeZ8Qnqgr3AqxOk450p67gxTAT52rOaRO+ShqQ7sCyKWJnI
+ akk/0WBtQxfWvGvmNBBFHNJxGj2edblZplh16L99+Icve2UKQ3u0Y7rBt6zEBSDWSZG4
+ hjGa2jeJcZtnU6/w30poOeFwKUFpEn8VYHXLg/vCxFZY0lY9ng2HR45n3c8vhiJwnllz
+ Jwmg2Jsob0VeZLHlpEugPKm678F0Rb6n0r6pPAbgzUx5bSgYL/7OoJXo5clDxcl3kg2U lg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 3by38r22bq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 27 Oct 2021 15:56:41 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5734910002A;
+        Wed, 27 Oct 2021 15:56:39 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3742D22D168;
+        Wed, 27 Oct 2021 15:56:39 +0200 (CEST)
+Received: from lmecxl0573.lme.st.com (10.75.127.50) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 27 Oct
+ 2021 15:56:35 +0200
+Subject: Re: dt-bindings: treewide: Update @st.com email address to
+ @foss.st.com
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+To:     Marc Zyngier <maz@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        <joe@perches.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        maxime coquelin <mcoquelin.stm32@gmail.com>,
+        alexandre torgue <alexandre.torgue@foss.st.com>,
+        michael turquette <mturquette@baylibre.com>,
+        stephen boyd <sboyd@kernel.org>,
+        herbert xu <herbert@gondor.apana.org.au>,
+        "david s . miller" <davem@davemloft.net>,
+        david airlie <airlied@linux.ie>,
+        daniel vetter <daniel@ffwll.ch>,
+        thierry reding <thierry.reding@gmail.com>,
+        sam ravnborg <sam@ravnborg.org>,
+        yannick fertre <yannick.fertre@foss.st.com>,
+        "philippe cornu" <philippe.cornu@foss.st.com>,
+        benjamin gaignard <benjamin.gaignard@linaro.org>,
+        vinod koul <vkoul@kernel.org>,
+        ohad ben-cohen <ohad@wizery.com>,
+        bjorn andersson <bjorn.andersson@linaro.org>,
+        baolin wang <baolin.wang7@gmail.com>,
+        jonathan cameron <jic23@kernel.org>,
+        "lars-peter clausen" <lars@metafoo.de>,
+        olivier moysan <olivier.moysan@foss.st.com>,
+        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "Richard Weinberger" <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matt Mackall <mpm@selenic.com>,
+        "Alessandro Zummo" <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Ahmad Fatoum" <a.fatoum@pengutronix.de>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        dillon min <dillon.minfei@gmail.com>,
+        Marek Vasut <marex@denx.de>,
+        "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Lionel Debieve <lionel.debieve@foss.st.com>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        pascal Paillet <p.paillet@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        "Jose Abreu" <joabreu@synopsys.com>,
+        Le Ray <erwan.leray@foss.st.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <dmaengine@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-media@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <netdev@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-gpio@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>
+References: <20211020065000.21312-1-patrice.chotard@foss.st.com>
+ <22fb6f19-21eb-dcb5-fa31-bb243d4a7eaf@canonical.com>
+ <878ryoc4dc.wl-maz@kernel.org>
+ <82492eb2-5a5e-39a2-a058-5e2ba75323e0@foss.st.com>
+Message-ID: <865a4055-5c2f-0793-bdce-9f04eac167d2@foss.st.com>
+Date:   Wed, 27 Oct 2021 15:56:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20211001065720.21330-1-himadrispandya@gmail.com>
- <20211001065720.21330-2-himadrispandya@gmail.com> <YXlOSQXdZra5sYbe@hovoldconsulting.com>
- <CAOY-YVmtt4XTet4hU43nfD4pj2W008ab-VRhBMs-One4kpEEug@mail.gmail.com> <YXlWKuuYVeSWXNXR@hovoldconsulting.com>
-In-Reply-To: <YXlWKuuYVeSWXNXR@hovoldconsulting.com>
-From:   Himadri Pandya <himadrispandya@gmail.com>
-Date:   Wed, 27 Oct 2021 15:47:34 +0200
-Message-ID: <CAOY-YVkCt8BojRYc41mZL+gA0gvaKCdaM_hhW6Wo0ZShprcYmw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] USB: serial: ch314: use usb_control_msg_recv() and usb_control_msg_send()
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <82492eb2-5a5e-39a2-a058-5e2ba75323e0@foss.st.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-10-27_04,2021-10-26_01,2020-04-07_01
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 3:38 PM Johan Hovold <johan@kernel.org> wrote:
->
-> On Wed, Oct 27, 2021 at 03:28:42PM +0200, Himadri Pandya wrote:
-> > On Wed, Oct 27, 2021 at 3:04 PM Johan Hovold <johan@kernel.org> wrote:
-> > > On Fri, Oct 01, 2021 at 08:57:19AM +0200, Himadri Pandya wrote:
->
-> > > > @@ -287,23 +277,18 @@ static int ch341_set_handshake(struct usb_device *dev, u8 control)
-> > > >  static int ch341_get_status(struct usb_device *dev, struct ch341_private *priv)
-> > > >  {
-> > > >       const unsigned int size = 2;
-> > > > -     char *buffer;
-> > > > +     u8 buffer[2];
-> > > >       int r;
-> > > >       unsigned long flags;
-> > > >
-> > > > -     buffer = kmalloc(size, GFP_KERNEL);
-> > > > -     if (!buffer)
-> > > > -             return -ENOMEM;
-> > > > -
-> > > >       r = ch341_control_in(dev, CH341_REQ_READ_REG, 0x0706, 0, buffer, size);
-> > > > -     if (r < 0)
-> > > > -             goto out;
-> > > > +     if (r)
-> > > > +             return r;
-> > > >
-> > > >       spin_lock_irqsave(&priv->lock, flags);
-> > > >       priv->msr = (~(*buffer)) & CH341_BITS_MODEM_STAT;
-> > > >       spin_unlock_irqrestore(&priv->lock, flags);
-> > > >
-> > > > -out: kfree(buffer);
-> > > >       return r;
-> > >
-> > > This should now be
-> > >
-> > >         return 0;
-> > >
-> >
-> > Yes. The function was returning the negative error value before the
-> > change. But now it doesn't need to as we are already taking care of it
-> > in the wrapper.
->
-> It has more to do with the fact that we now return early on errors so r
-> will always be zero here. It's better to be explicit about that.
->
+Hi Marc
 
-Okay. Right.
++Joe Perches
 
-> > > >  }
-> > > >
-> > > > @@ -312,30 +297,25 @@ out:    kfree(buffer);
-> > > >  static int ch341_configure(struct usb_device *dev, struct ch341_private *priv)
-> > > >  {
-> > > >       const unsigned int size = 2;
-> > > > -     char *buffer;
-> > > > +     u8 buffer[2];
-> > > >       int r;
-> > > >
-> > > > -     buffer = kmalloc(size, GFP_KERNEL);
-> > > > -     if (!buffer)
-> > > > -             return -ENOMEM;
-> > > > -
-> > > >       /* expect two bytes 0x27 0x00 */
-> > > >       r = ch341_control_in(dev, CH341_REQ_READ_VERSION, 0, 0, buffer, size);
-> > > > -     if (r < 0)
-> > > > -             goto out;
-> > > > +     if (r)
-> > > > +             return r;
-> > > >       dev_dbg(&dev->dev, "Chip version: 0x%02x\n", buffer[0]);
-> > > >
-> > > >       r = ch341_control_out(dev, CH341_REQ_SERIAL_INIT, 0, 0);
-> > > > -     if (r < 0)
-> > > > -             goto out;
-> > > > +     if (r)
-> > > > +             return r;
-> > >
-> > > Now an unrelated change.
-> >
-> > I think it is a related change because we are removing the out label.
->
-> Sorry, I meant that the (r < 0) change was unrelated since you're no
-> longer touching ch341_control_out(). The return is indeed still needed.
->
+On 10/27/21 8:11 AM, Patrice CHOTARD wrote:
+> Hi Marc
+> 
+> On 10/20/21 1:39 PM, Marc Zyngier wrote:
+>> On Wed, 20 Oct 2021 08:45:02 +0100,
+>> Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
+>>>
+>>> On 20/10/2021 08:50, patrice.chotard@foss.st.com wrote:
+>>>> From: Patrice Chotard <patrice.chotard@foss.st.com>
+>>>>
+>>>> Not all @st.com email address are concerned, only people who have
+>>>> a specific @foss.st.com email will see their entry updated.
+>>>> For some people, who left the company, remove their email.
+>>>>
+>>>
+>>> Please split simple address change from maintainer updates (removal,
+>>> addition).
+>>>
+>>> Also would be nice to see here explained *why* are you doing this.
+>>
+>> And why this can't be done with a single update to .mailmap, like
+>> anyone else does.
+> 
+> Thanks for the tips, yes, it will be simpler.
+> 
+> Thanks
+> Patrice
+> 
+>>
+>> 	M.
+>>
 
-Oh, okay. My bad.
+I made a try by updating .mailmap with adding a new entry with my @foss.st.com email :
 
-> > > > @@ -647,23 +611,19 @@ static void ch341_break_ctl(struct tty_struct *tty, int break_state)
-> > > >       struct ch341_private *priv = usb_get_serial_port_data(port);
-> > > >       int r;
-> > > >       uint16_t reg_contents;
-> > > > -     uint8_t *break_reg;
-> > > > +     uint8_t break_reg[2];
-> > > >
-> > > >       if (priv->quirks & CH341_QUIRK_SIMULATE_BREAK) {
-> > > >               ch341_simulate_break(tty, break_state);
-> > > >               return;
-> > > >       }
-> > > >
-> > > > -     break_reg = kmalloc(2, GFP_KERNEL);
-> > > > -     if (!break_reg)
-> > > > -             return;
-> > > > -
-> > > >       r = ch341_control_in(port->serial->dev, CH341_REQ_READ_REG,
-> > > >                       ch341_break_reg, 0, break_reg, 2);
-> > > > -     if (r < 0) {
-> > > > +     if (r) {
-> > > >               dev_err(&port->dev, "%s - USB control read error (%d)\n",
-> > > >                               __func__, r);
-> > > > -             goto out;
-> > > > +             return;
-> > > >       }
-> > > >       dev_dbg(&port->dev, "%s - initial ch341 break register contents - reg1: %x, reg2: %x\n",
-> > > >               __func__, break_reg[0], break_reg[1]);
-> > > > @@ -681,11 +641,9 @@ static void ch341_break_ctl(struct tty_struct *tty, int break_state)
-> > > >       reg_contents = get_unaligned_le16(break_reg);
-> > > >       r = ch341_control_out(port->serial->dev, CH341_REQ_WRITE_REG,
-> > > >                       ch341_break_reg, reg_contents);
-> > > > -     if (r < 0)
-> > > > +     if (r)
-> > >
-> > > Now also an unrelated change.
-> > >
-> >
-> > Maybe I misunderstood your comments on v2. I thought you asked to get
-> > rid of the out labels in callers.
->
-> Yes, but as above I'm referring to the (r < 0) change for
-> ch341_control_out() which is now unrelated to the rest of the patch.
->
-> Johan
+ Pali Rohár <pali@kernel.org> <pali.rohar@gmail.com>
+ Paolo 'Blaisorblade' Giarrusso <blaisorblade@yahoo.it>
++Patrice Chotard <patrice.chotard@foss.st.com> <patrice.chotard@st.com>
+ Patrick Mochel <mochel@digitalimplant.org>
+ Paul Burton <paulburton@kernel.org> <paul.burton@imgtec.com>
 
-Yes, got it.
+But when running ./scripts/get_maintainer.pl Documentation/devicetree/bindings/arm/sti.yaml, by old email is still displayed
 
-Thanks,
-Himadri
+Rob Herring <robh+dt@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+Patrice Chotard <patrice.chotard@st.com> (in file)
+devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+linux-kernel@vger.kernel.org (open list)
+
+By default, the get_maintainer.pl script is using .mailmap file ($email_use_mailmap = 1).
+
+It seems there is an issue with get_maintainer.pl and maintainer name/e-mail found in yaml file ?
+
+Thanks
+Patrice
