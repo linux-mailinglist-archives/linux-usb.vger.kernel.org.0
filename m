@@ -2,89 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B5743DF6D
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Oct 2021 12:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7B243E051
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Oct 2021 13:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbhJ1Ky4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Oct 2021 06:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbhJ1Kyt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Oct 2021 06:54:49 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B59AC06122F
-        for <linux-usb@vger.kernel.org>; Thu, 28 Oct 2021 03:52:22 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id p16so12695535lfa.2
-        for <linux-usb@vger.kernel.org>; Thu, 28 Oct 2021 03:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
-        b=MqgQiMnth4O6zLvpsYbAhVLW1BorpgoCleWwfkY0/i+i6OSDuXRZO1jIKzpTTrmehO
-         XtsLWdXiTcL+XCe4naFtf2tTUJnbwwmDpuUkpvRhLd+LEnuxY7nNr11hmTRUVX1WOHsO
-         bN0u1arCg4gm9LHdXRMZFcXOD22U5gDGuBOuhPo6qvWbt6nA2j/p/5IZ88XFHrEsiSW3
-         12hentYJMlWeUfa2lUQkLm+5/fvMSizrI7wGoF2taOa3dgGUV5HKZWb0yAAH7nAXVevJ
-         tDC/xbHNLzSn310XeD3Gkoobjl6MPBQzT5DSLzerNBdTKOdmyp3xvfvOyo80qVUTZIED
-         gaRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
-        b=16+aRhPgvfZ8H4numjCEQynTcKRVnO5WVMel53biZCrOGdL4hkPajgjJDiVEgmoZ78
-         sQhYczAR9MJ9yCopu0aG8F+Ec2Kjy8TXPGn9a8VT8TTOVq3sbR2g8CgPOdwh66bslzvE
-         vOnhBPB8RytXV/bsftlh2PTRbbuqQ536Re5zFeDT4epeT/nxhcfA1a0PazBefW1e4m+C
-         gOiUWM39EwKdHobKToAzzceLjNi7SkPK77nzAJ7K2xEdil1fAY/LXpSVnXM6Vg+NyI+x
-         MEZkhUGuZm4Saa/DwD7JuvNI9oJAiZP6geUXWVFL5R5LK+M+rbqEtgRb3wXadGs7/z3S
-         C/JA==
-X-Gm-Message-State: AOAM530A0uJgvV0jgdO+6suuDkSiZuXZJxiTJuUMoa2UyosYgbyTw3Ej
-        Q0j89sO9JbGV67grEHBR8P2a/lxxrFR/prrd5jrvBGZdH9QqXIxM
-X-Google-Smtp-Source: ABdhPJw39EF9dJlXS9lAFrZ3adXxB8DVzXcygVzA3uRLiZxWlggxaB9ElCxkEB0P82xisoA6G442GD5iqMe2hCgLIt8=
-X-Received: by 2002:a2e:9a83:: with SMTP id p3mr3750290lji.145.1635418330269;
- Thu, 28 Oct 2021 03:52:10 -0700 (PDT)
+        id S230115AbhJ1L7G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Oct 2021 07:59:06 -0400
+Received: from mga12.intel.com ([192.55.52.136]:35853 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229578AbhJ1L7F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 28 Oct 2021 07:59:05 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10150"; a="210463182"
+X-IronPort-AV: E=Sophos;i="5.87,189,1631602800"; 
+   d="scan'208";a="210463182"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2021 04:55:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,189,1631602800"; 
+   d="scan'208";a="636179120"
+Received: from kuha.fi.intel.com ([10.237.72.166])
+  by fmsmga001.fm.intel.com with SMTP; 28 Oct 2021 04:55:33 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 28 Oct 2021 14:55:32 +0300
+Date:   Thu, 28 Oct 2021 14:55:32 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Jack Pham <quic_jackp@quicinc.com>
+Cc:     linux-usb@vger.kernel.org, Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@google.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+Subject: Re: [PATCH] usb: typec: ucsi: Only get source PDOs from the actual
+ source
+Message-ID: <YXqPtNmETT0ZtnKl@kuha.fi.intel.com>
+References: <20211027064842.6901-1-quic_jackp@quicinc.com>
 MIME-Version: 1.0
-Received: by 2002:ab3:6f89:0:0:0:0:0 with HTTP; Thu, 28 Oct 2021 03:52:09
- -0700 (PDT)
-Reply-To: aabdulwalialhashmi@gmail.com
-From:   Abdulwali Alhashmi <husamalsayed.hs@gmail.com>
-Date:   Thu, 28 Oct 2021 03:52:09 -0700
-Message-ID: <CAF6yYCeS=rm8=_71-kMjVo4oaVK57w9X52R_yv1HDrBe7vh-sA@mail.gmail.com>
-Subject: PLEASE GET BACK TO ME IF I CAN I TRUST YOU
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211027064842.6901-1-quic_jackp@quicinc.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Oct 26, 2021 at 11:48:42PM -0700, Jack Pham wrote:
+> The intent of ucsi_get_src_pdos() is to obtain the source's PDOs
+> in order to provide the power_supply object the required data to
+> report the mininum, maximum and currently operating voltage &
+> current should a PD contract be in place.
+> 
+> If however, the port is operating as a PD source, this call would
+> invoke GET_PDOS on the partner causing the PPM to send a
+> Get_Source_Caps PD message to the port partner which may not make
+> sense especially if the partner is not a dual-power role capable
+> device.  Further, it has been observed that certain DisplayPort
+> adapter cables (which are power sink-only devices) even fail to
+> bring up the display link after receiving a Get_Source_Caps
+> message, suggesting they can't cope well with an unsupported PD
+> message to the point that it renders them functionally inoperable.
+> 
+> Fix this by checking the connector status flags for the power
+> direction and use this to decide whether to send the GET_PDOs
+> query to the partner or the port.  This also helps to make the
+> power_supply VOLTAGE_{MIN,MAX,NOW} and CURRENT_{MAX,NOW}
+> properties more consistent when the port is in source mode.
+> 
+> Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
+> ---
+> Hi Heikki,
+> 
+> Was wrestling with how exactly to do this.  The other approach I was
+> thinking was to not even do GET_PDOs at all if operating as a source,
+> but that would also mean we'd need to add similar checking to the
+> VOLTAGE/CURRENT property getters in psy.c so that they would not
+> return incorrect/stale data.  Since the ONLINE property will already
+> be 0 anyway it may make more sense to invalidate the rest of the props?
+> 
+> The patch below is concise though...so that's what I went with ;)
+
+Would it still make sense / help if we had separate power supplies
+registered for the port-source, port-sink, partner-source and
+partner-sink?
+
+I also think we need to unify these power supplies so that tcpm and
+ucsi (and others) always register the same power supplies.
+
+
+thanks,
+
 -- 
-Greetings,
-
-Firstly, I apologize for encroaching into your privacy in this manner
-as it may seem unethical though it is a matter of great importance.
-
-I am Abdulwali Alhashmi, I work with Cayman National Bank (Cayman Islands).
-
-I am contacting you because my status would not permit me to do this
-alone as it is concerning our customer and an investment placed under
-our bank's management over 5 years ago.
-
-I have a proposal I would love to discuss with you which will be very
-beneficial to both of us. It's regarding my late client who has a huge
-deposit with my bank.
-
-He is from your country and shares the same last name with you.
-
-I want to seek your consent to present you as the next of kin to my
-late client who died and left a huge deposit with my bank.
-
-I would respectfully request that you keep the contents of this mail
-confidential and respect the integrity of the information you come by
-as a result of this mail.
-
-Please kindly get back to me for more details if I can TRUST YOU.{
-aabdulwalialhashmi@gmail.com }
-
-Regards
-Abdulwali Alhashmi
-Treasury and Deposit Management,
-Cayman National Bank Cayman Islands
+heikki
