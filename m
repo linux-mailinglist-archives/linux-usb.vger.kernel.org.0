@@ -2,91 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7B243E051
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Oct 2021 13:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F8C43E21A
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Oct 2021 15:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbhJ1L7G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Oct 2021 07:59:06 -0400
-Received: from mga12.intel.com ([192.55.52.136]:35853 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229578AbhJ1L7F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 28 Oct 2021 07:59:05 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10150"; a="210463182"
-X-IronPort-AV: E=Sophos;i="5.87,189,1631602800"; 
-   d="scan'208";a="210463182"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2021 04:55:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,189,1631602800"; 
-   d="scan'208";a="636179120"
-Received: from kuha.fi.intel.com ([10.237.72.166])
-  by fmsmga001.fm.intel.com with SMTP; 28 Oct 2021 04:55:33 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 28 Oct 2021 14:55:32 +0300
-Date:   Thu, 28 Oct 2021 14:55:32 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Jack Pham <quic_jackp@quicinc.com>
-Cc:     linux-usb@vger.kernel.org, Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@google.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
-Subject: Re: [PATCH] usb: typec: ucsi: Only get source PDOs from the actual
- source
-Message-ID: <YXqPtNmETT0ZtnKl@kuha.fi.intel.com>
-References: <20211027064842.6901-1-quic_jackp@quicinc.com>
+        id S230379AbhJ1N30 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Oct 2021 09:29:26 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:36378 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230335AbhJ1N3Z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Oct 2021 09:29:25 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1635427618; h=Date: Message-ID: Cc: To: References:
+ In-Reply-To: From: Subject: Content-Transfer-Encoding: MIME-Version:
+ Content-Type: Sender; bh=uHCxDRy0CnpAT24ZiF7PmTZGX6J9BLvsOGhtHcHUmSg=;
+ b=ts4xvUVHzNtarC8ArJPDOUq4EVkguJIPl+JTMkTXlUJ0BHfqOLcGN80Pd5R7LN2qDvnVg6Wk
+ vieoGhfmMvJec8RbssJv4Q15t5oIdSFIuIZUG4FU/cOJuGgM3RD1StODmYhj5El64gyF60JA
+ JuBYhvE3DcE+IDSzusmh+DAF/co=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
+ 617aa51ac8c1b282a5bcc438 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 28 Oct 2021 13:26:50
+ GMT
+Sender: kvalo=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id C7A82C4361A; Thu, 28 Oct 2021 13:26:49 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.5 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        MISSING_DATE,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from tykki.adurom.net (tynnyri.adurom.net [51.15.11.48])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: kvalo)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 8FC82C4338F;
+        Thu, 28 Oct 2021 13:26:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 8FC82C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211027064842.6901-1-quic_jackp@quicinc.com>
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 3/4] rtl8187: fix control-message timeouts
+From:   Kalle Valo <kvalo@codeaurora.org>
+In-Reply-To: <20211025120522.6045-4-johan@kernel.org>
+References: <20211025120522.6045-4-johan@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Herton Ronaldo Krzesinski <herton@canonical.com>,
+        Hin-Tak Leung <htl10@users.sourceforge.net>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Siva Rebbagondla <siva8118@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>, stable@vger.kernel.org
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <163542760369.5095.9529718902360790096.kvalo@codeaurora.org>
+Date:   Thu, 28 Oct 2021 13:26:49 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 26, 2021 at 11:48:42PM -0700, Jack Pham wrote:
-> The intent of ucsi_get_src_pdos() is to obtain the source's PDOs
-> in order to provide the power_supply object the required data to
-> report the mininum, maximum and currently operating voltage &
-> current should a PD contract be in place.
-> 
-> If however, the port is operating as a PD source, this call would
-> invoke GET_PDOS on the partner causing the PPM to send a
-> Get_Source_Caps PD message to the port partner which may not make
-> sense especially if the partner is not a dual-power role capable
-> device.  Further, it has been observed that certain DisplayPort
-> adapter cables (which are power sink-only devices) even fail to
-> bring up the display link after receiving a Get_Source_Caps
-> message, suggesting they can't cope well with an unsupported PD
-> message to the point that it renders them functionally inoperable.
-> 
-> Fix this by checking the connector status flags for the power
-> direction and use this to decide whether to send the GET_PDOs
-> query to the partner or the port.  This also helps to make the
-> power_supply VOLTAGE_{MIN,MAX,NOW} and CURRENT_{MAX,NOW}
-> properties more consistent when the port is in source mode.
-> 
-> Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
-> ---
-> Hi Heikki,
-> 
-> Was wrestling with how exactly to do this.  The other approach I was
-> thinking was to not even do GET_PDOs at all if operating as a source,
-> but that would also mean we'd need to add similar checking to the
-> VOLTAGE/CURRENT property getters in psy.c so that they would not
-> return incorrect/stale data.  Since the ONLINE property will already
-> be 0 anyway it may make more sense to invalidate the rest of the props?
-> 
-> The patch below is concise though...so that's what I went with ;)
+Johan Hovold <johan@kernel.org> wrote:
 
-Would it still make sense / help if we had separate power supplies
-registered for the port-source, port-sink, partner-source and
-partner-sink?
+> USB control-message timeouts are specified in milliseconds and should
+> specifically not vary with CONFIG_HZ.
+> 
+> Fixes: 605bebe23bf6 ("[PATCH] Add rtl8187 wireless driver")
+> Cc: stable@vger.kernel.org      # 2.6.23
+> Signed-off-by: Johan Hovold <johan@kernel.org>
 
-I also think we need to unify these power supplies so that tcpm and
-ucsi (and others) always register the same power supplies.
+2 patches applied to wireless-drivers-next.git, thanks.
 
-
-thanks,
+2e9be536a213 rtl8187: fix control-message timeouts
+541fd20c3ce5 rsi: fix control-message timeout
 
 -- 
-heikki
+https://patchwork.kernel.org/project/linux-wireless/patch/20211025120522.6045-4-johan@kernel.org/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
