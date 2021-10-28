@@ -2,656 +2,450 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5B143D7CB
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Oct 2021 01:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4343E43D85E
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Oct 2021 03:03:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbhJ1AAw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Oct 2021 20:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
+        id S229699AbhJ1BFg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Oct 2021 21:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229474AbhJ1AAw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 20:00:52 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC65C061570
-        for <linux-usb@vger.kernel.org>; Wed, 27 Oct 2021 16:58:25 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id m184so5905784iof.1
-        for <linux-usb@vger.kernel.org>; Wed, 27 Oct 2021 16:58:25 -0700 (PDT)
+        with ESMTP id S229642AbhJ1BFg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 21:05:36 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234A6C061570
+        for <linux-usb@vger.kernel.org>; Wed, 27 Oct 2021 18:03:10 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id oa4so3418537pjb.2
+        for <linux-usb@vger.kernel.org>; Wed, 27 Oct 2021 18:03:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=fLNbYGBi9eVRkrfF0X2tsaVjcBjgbCZFE5/qKGRDrkg=;
-        b=HYAzv+N5vtG541S6YgRugG5UF4jiSV4uvSV2ldPXo3hJmQRKwBX87AmX5s7HzLP6wo
-         OTF8XxdWrHZih48SNSM280PVzpMY6uedm8sMToyVOdkrQU5vmKJI+A3r3RUgME2FOTEq
-         KIGb5TNNUIqEGRLDtLM1GEesLvI2v/135OKBY=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xlCc7Z1e4GadDTRFmw2EkFwl1UE1nzrwFhoIf8evImM=;
+        b=jrHfocbGWZjYndnSJh5Lv8bCYIgZNnv1om4Nxt3Ye6uTFRkyxmeulCcY6t9B8DgpLH
+         5unXtr8uUZY7UjDPAdUoqCYRDjCeoXZSd38z3C4KNup7LoDtGLyKPFikeQ0kusVoy1rx
+         hy7N3FU+lxvpuOy0kHCWKfkfWm/FqxNM9s8dc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fLNbYGBi9eVRkrfF0X2tsaVjcBjgbCZFE5/qKGRDrkg=;
-        b=vIuCoMNe/Ld1Pt2+t+9pIdkCugXLkH4q1dKFNOG9pmlm/m8HRwhmZweIEbOtdDtatu
-         R1/lo2pWZQDzUWcYYlpfqPBIbBg5lva5KOyBnhAwhWpEjflu09EaTxqRXESfX+wVY8EH
-         YTKOk5Soeq2mL5Tx9yKt+hZWRTdo5bXbGPFEusCxv7j1DsvbLhFSXL6VD+7u+IoXUKrQ
-         UyFIy0EEocu0vpyCHND3n6x6Sw7/BpsL5xsKVWI1tMfYFIjUNRiKV33uM8sjqMmKc9LL
-         otfMXSryTsuhsWNzXBN1WTzMKopsN7ecq+EkPmqqyFEoMouyEAIb1QeUjzDaEvRVbmMa
-         KO7g==
-X-Gm-Message-State: AOAM533aIg96oHnYvKlFm2OeZXY/jPg3SroY4BTnDbUEq/zAhLCp3C4R
-        Oj2/3NPYCpPAxLV+QR5y7bbLnA==
-X-Google-Smtp-Source: ABdhPJx1SFi5kzb9L/W28p+BdVriu4KSaZK5qC7ploDFcDIiLebpZEBXovnAQMq9y35E443kM2mwWg==
-X-Received: by 2002:a5d:9149:: with SMTP id y9mr473282ioq.67.1635379105165;
-        Wed, 27 Oct 2021 16:58:25 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id i11sm751619ila.12.2021.10.27.16.58.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Oct 2021 16:58:24 -0700 (PDT)
-Subject: Re: [PATCH v3 3/3] tools/usbip: import USB devices on a given bus
- persistently
-To:     Lars Gunnarsson <gunnarsson.lars@gmail.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211027193208.GA16461@dell-precision-T3610>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <8cbc6034-274c-3a12-d23f-2473ba1b885d@linuxfoundation.org>
-Date:   Wed, 27 Oct 2021 17:58:23 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xlCc7Z1e4GadDTRFmw2EkFwl1UE1nzrwFhoIf8evImM=;
+        b=YXiR4waLmw2uqdtHEZElVLV2oqeOuuhm2Ce/t5wzzyBomSnj//nYKp7VqyL2ty95dG
+         Lwy5u4F88UulW8jgR0B/axl6BT2fcSs8GaB0hK21teI8Wsj49o6V3epI/BnAJZEUJs0p
+         CPh0u8ZuOmYXjOOiR2GfyXhARNg9aOSzLuzcs7FfWF2jA2+EJHXiYaKkUuyroMLwoPhe
+         2n4CznnXacf3raDHpOyJMVsVtYS/SOy0K7qaGGV1vfSsBEidTx8kn2J5gKXLj2NxnRt1
+         XkZpThjZ/ZqDhtJxWgpZE3kRmyHBWZtMnhgsGT9gvN8LBTml5LnsLokeHgYOj6LjTDEa
+         h32g==
+X-Gm-Message-State: AOAM533TCW5rbCXrAM15S4eaqebC6rjqXLDDSFDyWSCQK0HvfbD1yaMD
+        x3tAaQXkXbGKpBoVHT9te8Nhlw==
+X-Google-Smtp-Source: ABdhPJwxfZbRBibNFccrbI0cu7Sb0+htg7U7Vk2tzArj5wMlL868qnVJLZjDbACergDrOBZUEX5Reg==
+X-Received: by 2002:a17:90b:4d0b:: with SMTP id mw11mr1155531pjb.228.1635382989596;
+        Wed, 27 Oct 2021 18:03:09 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:eed8:5671:5fed:996c])
+        by smtp.gmail.com with ESMTPSA id c11sm5099882pji.38.2021.10.27.18.03.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Oct 2021 18:03:09 -0700 (PDT)
+Date:   Wed, 27 Oct 2021 18:03:08 -0700
+From:   Prashant Malani <pmalani@chromium.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Benson Leung <bleung@google.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        "Gopal, Saranya" <saranya.gopal@intel.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 2/4] usb: typec: Character device for USB Power
+ Delivery devices
+Message-ID: <YXn2zCA9lasDY/Xl@google.com>
+References: <20211026143352.78387-1-heikki.krogerus@linux.intel.com>
+ <20211026143352.78387-3-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20211027193208.GA16461@dell-precision-T3610>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211026143352.78387-3-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/27/21 1:32 PM, Lars Gunnarsson wrote:
-> This patch extends the command "usbip attach" with flag "-p|--persistent". When
-> this flag is used, devices on the given remote busid is imported when available,
-> instead of returning an error if the device is not exported. When the usb device is
-> unplugged, it will start monitor the given remote bus again. Increment protocol
-> version to 1.1.2 (0x112) since this patch affects both ends: usbipd (server)
-> and command "usbip attach" (client).
+Hi Heikki,
 
-Make the commit log 75 char long. A maximum 75 chars per line is prefered
+Thanks for sending the RFC.
+
+On Tue, Oct 26, 2021 at 05:33:50PM +0300, Heikki Krogerus wrote:
+> Interim.
 > 
-> Signed-off-by: Lars Gunnarsson <gunnarsson.lars@gmail.com>
+> TODO/ideas:
+> - Figure out a proper magic value for the ioctl and check if
+>   the ioctl range is OK.
+> - Register separate PD device for the cdev, and register it
+>   only if the device (port, plug or partner) actually
+>   supports USB PD (or come up with some other solution?).
+> - Introduce something like
+> 
+> 	struct pd_request {
+> 		struct pd_message request;
+> 		struct pd_message __user *response;
+> 	};
+> 
+>   and use it instead of only single struct pd_messages everywhere.
+> 
+> - Add compat support.
+> - What do we do with Alerts and Attentions?
+> 
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 > ---
-> v2: Change title, fix style warnings, improve feature description, refactor
->      cmdline flag usage.
-> v3: Change title and description.
+>  .../userspace-api/ioctl/ioctl-number.rst      |   1 +
+>  drivers/usb/typec/Makefile                    |   2 +-
+>  drivers/usb/typec/class.c                     |  42 ++++
+>  drivers/usb/typec/class.h                     |   4 +
+>  drivers/usb/typec/pd-dev.c                    | 210 ++++++++++++++++++
+>  drivers/usb/typec/pd-dev.h                    |  15 ++
+>  include/linux/usb/pd_dev.h                    |  22 ++
+>  include/linux/usb/typec.h                     |   8 +
+>  include/uapi/linux/usb/pd_dev.h               |  55 +++++
+>  9 files changed, 358 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/usb/typec/pd-dev.c
+>  create mode 100644 drivers/usb/typec/pd-dev.h
+>  create mode 100644 include/linux/usb/pd_dev.h
+>  create mode 100644 include/uapi/linux/usb/pd_dev.h
 > 
->   Documentation/usb/usbip_protocol.rst  |  56 +++++++++--
-
-Cosolidate documentation changes in a single separate patch.
-You have doc changes in patch 2&3. Make this as the first
-patch - it will be easier to review.
-
->   tools/usb/usbip/configure.ac          |   2 +-
->   tools/usb/usbip/libsrc/usbip_common.c |   1 +
->   tools/usb/usbip/libsrc/usbip_common.h |   1 +
->   tools/usb/usbip/libsrc/vhci_driver.c  |  16 ++++
->   tools/usb/usbip/libsrc/vhci_driver.h  |   1 +
->   tools/usb/usbip/src/usbip_attach.c    | 132 +++++++++++++++++++-------
->   tools/usb/usbip/src/usbip_network.h   |   2 +
->   tools/usb/usbip/src/usbipd.c          |  92 ++++++++++++++++--
->   9 files changed, 251 insertions(+), 52 deletions(-)
-> 
-> diff --git a/Documentation/usb/usbip_protocol.rst b/Documentation/usb/usbip_protocol.rst
-> index 2ed7d97278e8..1afe6d297efc 100644
-> --- a/Documentation/usb/usbip_protocol.rst
-> +++ b/Documentation/usb/usbip_protocol.rst
-> @@ -36,12 +36,7 @@ TCP/IP connection is closed.
-> 
->   Once the client knows the list of exported USB devices it may decide to use one
->   of them. First the client opens a TCP/IP connection to the server and
-> -sends an OP_REQ_IMPORT packet. The server replies with OP_REP_IMPORT. If the
-> -import was successful the TCP/IP connection remains open and will be used
-> -to transfer the URB traffic between the client and the server. The client may
-> -send two types of packets: the USBIP_CMD_SUBMIT to submit an URB, and
-> -USBIP_CMD_UNLINK to unlink a previously submitted URB. The answers of the
-> -server may be USBIP_RET_SUBMIT and USBIP_RET_UNLINK respectively.
-> +sends an OP_REQ_IMPORT packet. The server replies with OP_REP_IMPORT.
-> 
->   ::
-> 
-> @@ -55,6 +50,47 @@ server may be USBIP_RET_SUBMIT and USBIP_RET_UNLINK respectively.
->             |                  OP_REP_IMPORT                  |
->             | <---------------------------------------------- |
->             |                                                 |
-> +
-> +The client may also request to poll for devices to become exported on a given
-> +busid, instead of immediately receive an error. If no device becomes exported
-> +within the chosen time, the server replies with timeout. The TCP/IP connection
-> +remains open and subsequent poll requests can be sent.
-> +
-> +::
-> +
-> + virtual host controller                                 usb host
-> +      "client"                                           "server"
-> +  (imports USB devices)                             (exports USB devices)
-> +          |                                                 |
-> +          |                  OP_REQ_IMPORT                  |
-> +          | ----------------------------------------------> |
-> +          |                        .                        |
-> +          |                        :                        |
-> +          |                                                 |
-> +          |                  OP_REP_IMPORT                  |
-> +          | <---------------------------------------------- |
-> +          |                                                 |
-> +          |                  OP_REQ_IMPORT                  |
-> +          | ----------------------------------------------> |
-> +          |                        .                        |
-> +          |                        :                        |
-> +          |                                                 |
-> +          |                  OP_REP_IMPORT                  |
-> +          | <---------------------------------------------- |
-> +          |                        .                        |
-> +          |                        :                        |
-> +
-> +If the import was successful the TCP/IP connection remains open and will be used
-> +to transfer the URB traffic between the client and the server. The client may
-> +send two types of packets: the USBIP_CMD_SUBMIT to submit an URB, and
-> +USBIP_CMD_UNLINK to unlink a previously submitted URB. The answers of the
-> +server may be USBIP_RET_SUBMIT and USBIP_RET_UNLINK respectively.
-> +
-> +::
-> +
-> + virtual host controller                                 usb host
-> +      "client"                                           "server"
-> +  (imports USB devices)                             (exports USB devices)
->             |                                                 |
->             |            USBIP_CMD_SUBMIT(seqnum = n)         |
->             | ----------------------------------------------> |
-> @@ -137,8 +173,8 @@ byte (MSB) is stored at the lowest address.
->   Protocol Version
->   ================
-> 
-> -The documented USBIP version is v1.1.1. The binary representation of this
-> -version in message headers is 0x0111.
-> +The documented USBIP version is v1.1.2. The binary representation of this
-> +version in message headers is 0x0112.
-> 
->   This is defined in tools/usb/usbip/configure.ac
-> 
-> @@ -248,6 +284,10 @@ OP_REQ_IMPORT:
->   |           |        |            | A string closed with zero, the unused bytes       |
->   |           |        |            | shall be filled with zeros.                       |
->   +-----------+--------+------------+---------------------------------------------------+
-> +| 40        | 4      |            | poll timeout: instead of returning immediately if |
-> +|           |        |            | device is not available, wait until usb device    |
-> +|           |        |            | becomes exported or a timeout occurs.             |
-> ++-----------+--------+------------+---------------------------------------------------+
-> 
->   OP_REP_IMPORT:
->   	Reply to import (attach) a remote USB device.
-> diff --git a/tools/usb/usbip/configure.ac b/tools/usb/usbip/configure.ac
-> index 607d05c5ccfd..156e42456423 100644
-> --- a/tools/usb/usbip/configure.ac
-> +++ b/tools/usb/usbip/configure.ac
-> @@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
-> 
->   AC_PREREQ(2.59)
->   AC_INIT([usbip-utils], [2.0], [linux-usb@vger.kernel.org])
-> -AC_DEFINE([USBIP_VERSION], [0x00000111], [binary-coded decimal version number])
-> +AC_DEFINE([USBIP_VERSION], [0x00000112], [binary-coded decimal version number])
-> 
->   CURRENT=0
->   REVISION=1
-> diff --git a/tools/usb/usbip/libsrc/usbip_common.c b/tools/usb/usbip/libsrc/usbip_common.c
-> index b8d7d480595a..30efb6a9f76d 100644
-> --- a/tools/usb/usbip/libsrc/usbip_common.c
-> +++ b/tools/usb/usbip/libsrc/usbip_common.c
-> @@ -78,6 +78,7 @@ static struct op_common_status_string op_common_status_strings[] = {
->   	{ ST_DEV_ERR,	"Device in error state" },
->   	{ ST_NODEV,	"Device not found" },
->   	{ ST_ERROR,	"Unexpected response" },
-> +	{ ST_POLL_TIMEOUT,	"Poll timeout" },
->   	{ 0, NULL}
->   };
-> 
-> diff --git a/tools/usb/usbip/libsrc/usbip_common.h b/tools/usb/usbip/libsrc/usbip_common.h
-> index 13f1d4ca47c5..3df351877a33 100644
-> --- a/tools/usb/usbip/libsrc/usbip_common.h
-> +++ b/tools/usb/usbip/libsrc/usbip_common.h
-> @@ -53,6 +53,7 @@
->   #define ST_DEV_ERR	0x03
->   #define ST_NODEV	0x04
->   #define ST_ERROR	0x05
-> +#define ST_POLL_TIMEOUT 0x06
-> 
->   extern int usbip_use_syslog;
->   extern int usbip_use_stderr;
-> diff --git a/tools/usb/usbip/libsrc/vhci_driver.c b/tools/usb/usbip/libsrc/vhci_driver.c
-> index 8159fd98680b..4fc75e8bad66 100644
-> --- a/tools/usb/usbip/libsrc/vhci_driver.c
-> +++ b/tools/usb/usbip/libsrc/vhci_driver.c
-> @@ -465,3 +465,19 @@ int usbip_vhci_imported_device_dump(struct usbip_imported_device *idev)
-> 
->   	return 0;
->   }
-> +
-> +int usbip_vhci_get_local_busid_from(int port, char *local_busid)
+> diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst b/Documentation/userspace-api/ioctl/ioctl-number.rst
+> index 0ba463be6c588..fd443fd21f62a 100644
+> --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
+> +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
+> @@ -175,6 +175,7 @@ Code  Seq#    Include File                                           Comments
+>  'P'   60-6F  sound/sscape_ioctl.h                                    conflict!
+>  'P'   00-0F  drivers/usb/class/usblp.c                               conflict!
+>  'P'   01-09  drivers/misc/pci_endpoint_test.c                        conflict!
+> +'P'   70-7F  uapi/linux/usb/pd_dev.h                                 <mailto:linux-usb@vger.kernel.org>
+>  'Q'   all    linux/soundcard.h
+>  'R'   00-1F  linux/random.h                                          conflict!
+>  'R'   01     linux/rfkill.h                                          conflict!
+> diff --git a/drivers/usb/typec/Makefile b/drivers/usb/typec/Makefile
+> index a0adb8947a301..be44528168013 100644
+> --- a/drivers/usb/typec/Makefile
+> +++ b/drivers/usb/typec/Makefile
+> @@ -1,6 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  obj-$(CONFIG_TYPEC)		+= typec.o
+> -typec-y				:= class.o mux.o bus.o port-mapper.o
+> +typec-y				:= class.o mux.o bus.o port-mapper.o pd-dev.o
+>  obj-$(CONFIG_TYPEC)		+= altmodes/
+>  obj-$(CONFIG_TYPEC_TCPM)	+= tcpm/
+>  obj-$(CONFIG_TYPEC_UCSI)	+= ucsi/
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index aeef453aa6585..19fcc5da175d7 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -15,6 +15,7 @@
+>  
+>  #include "bus.h"
+>  #include "class.h"
+> +#include "pd-dev.h"
+>  
+>  static DEFINE_IDA(typec_index_ida);
+>  
+> @@ -665,6 +666,11 @@ static const struct attribute_group *typec_partner_groups[] = {
+>  	NULL
+>  };
+>  
+> +char *typec_partner_devnode(struct device *dev, umode_t *mode, kuid_t *uid, kgid_t *gid)
 > +{
-> +	int rc = -1;
-> +
-> +	for (int i = 0; i < vhci_driver->nports; ++i) {
-> +		struct usbip_imported_device *idev = &vhci_driver->idev[i];
-> +
-> +		if (idev->port == port && strnlen(idev->udev.busid, SYSFS_BUS_ID_SIZE)) {
-> +			memcpy(local_busid, idev->udev.busid, SYSFS_BUS_ID_SIZE);
-> +			rc = 0;
-> +			break;
-> +		}
-> +	}
-> +	return rc;
+> +	return kasprintf(GFP_KERNEL, "pd%u/partner", to_typec_port(dev->parent)->id);
 > +}
-> diff --git a/tools/usb/usbip/libsrc/vhci_driver.h b/tools/usb/usbip/libsrc/vhci_driver.h
-> index 6c9aca216705..4aecd4013cbe 100644
-> --- a/tools/usb/usbip/libsrc/vhci_driver.h
-> +++ b/tools/usb/usbip/libsrc/vhci_driver.h
-> @@ -63,5 +63,6 @@ int usbip_vhci_attach_device(uint8_t port, int sockfd, uint8_t busnum,
->   int usbip_vhci_detach_device(uint8_t port);
-> 
->   int usbip_vhci_imported_device_dump(struct usbip_imported_device *idev);
-> +int usbip_vhci_get_local_busid_from(int port, char *local_busid);
-> 
->   #endif /* __VHCI_DRIVER_H */
-> diff --git a/tools/usb/usbip/src/usbip_attach.c b/tools/usb/usbip/src/usbip_attach.c
-> index b4aeb9f1f493..231c3896864b 100644
-> --- a/tools/usb/usbip/src/usbip_attach.c
-> +++ b/tools/usb/usbip/src/usbip_attach.c
-> @@ -12,6 +12,7 @@
->   #include <limits.h>
->   #include <stdint.h>
->   #include <stdio.h>
-> +#include <stdbool.h>
->   #include <string.h>
-> 
->   #include <fcntl.h>
-> @@ -21,14 +22,23 @@
-> 
->   #include "vhci_driver.h"
->   #include "usbip_common.h"
-> +#include "usbip_monitor.h"
->   #include "usbip_network.h"
->   #include "usbip.h"
-> 
-> +struct attach_options {
-> +	char *busid;
-> +	bool is_persistent;
+> +
+>  static void typec_partner_release(struct device *dev)
+>  {
+>  	struct typec_partner *partner = to_typec_partner(dev);
+> @@ -676,6 +682,7 @@ static void typec_partner_release(struct device *dev)
+>  const struct device_type typec_partner_dev_type = {
+>  	.name = "typec_partner",
+>  	.groups = typec_partner_groups,
+> +	.devnode = typec_partner_devnode,
+>  	.release = typec_partner_release,
+>  };
+>  
+> @@ -807,6 +814,7 @@ struct typec_partner *typec_register_partner(struct typec_port *port,
+>  
+>  	ida_init(&partner->mode_ids);
+>  	partner->usb_pd = desc->usb_pd;
+> +	partner->pd_dev = desc->pd_dev;
+>  	partner->accessory = desc->accessory;
+>  	partner->num_altmodes = -1;
+>  	partner->pd_revision = desc->pd_revision;
+> @@ -826,6 +834,9 @@ struct typec_partner *typec_register_partner(struct typec_port *port,
+>  	partner->dev.type = &typec_partner_dev_type;
+>  	dev_set_name(&partner->dev, "%s-partner", dev_name(&port->dev));
+>  
+> +	if (partner->pd_dev)
+> +		partner->dev.devt = MKDEV(PD_DEV_MAJOR, port->id * 4 + 3);
+> +
+>  	ret = device_register(&partner->dev);
+>  	if (ret) {
+>  		dev_err(&port->dev, "failed to register partner (%d)\n", ret);
+> @@ -853,6 +864,13 @@ EXPORT_SYMBOL_GPL(typec_unregister_partner);
+>  /* ------------------------------------------------------------------------- */
+>  /* Type-C Cable Plugs */
+>  
+> +char *typec_plug_devnode(struct device *dev, umode_t *mode, kuid_t *uid, kgid_t *gid)
+> +{
+> +	return kasprintf(GFP_KERNEL, "pd%u/plug%d",
+> +			 to_typec_port(dev->parent->parent)->id,
+> +			 to_typec_plug(dev)->index);
+> +}
+> +
+>  static void typec_plug_release(struct device *dev)
+>  {
+>  	struct typec_plug *plug = to_typec_plug(dev);
+> @@ -891,6 +909,7 @@ static const struct attribute_group *typec_plug_groups[] = {
+>  const struct device_type typec_plug_dev_type = {
+>  	.name = "typec_plug",
+>  	.groups = typec_plug_groups,
+> +	.devnode = typec_plug_devnode,
+>  	.release = typec_plug_release,
+>  };
+>  
+> @@ -973,11 +992,16 @@ struct typec_plug *typec_register_plug(struct typec_cable *cable,
+>  	ida_init(&plug->mode_ids);
+>  	plug->num_altmodes = -1;
+>  	plug->index = desc->index;
+> +	plug->pd_dev = desc->pd_dev;
+>  	plug->dev.class = &typec_class;
+>  	plug->dev.parent = &cable->dev;
+>  	plug->dev.type = &typec_plug_dev_type;
+>  	dev_set_name(&plug->dev, "%s-%s", dev_name(cable->dev.parent), name);
+>  
+> +	if (plug->pd_dev)
+> +		plug->dev.devt = MKDEV(PD_DEV_MAJOR,
+> +				       to_typec_port(cable->dev.parent)->id * 4 + 1 + plug->index);
+> +
+>  	ret = device_register(&plug->dev);
+>  	if (ret) {
+>  		dev_err(&cable->dev, "failed to register plug (%d)\n", ret);
+> @@ -1595,6 +1619,11 @@ static int typec_uevent(struct device *dev, struct kobj_uevent_env *env)
+>  	return ret;
+>  }
+>  
+> +char *typec_devnode(struct device *dev, umode_t *mode, kuid_t *uid, kgid_t *gid)
+> +{
+> +	return kasprintf(GFP_KERNEL, "pd%u/port", to_typec_port(dev)->id);
+> +}
+> +
+>  static void typec_release(struct device *dev)
+>  {
+>  	struct typec_port *port = to_typec_port(dev);
+> @@ -1611,6 +1640,7 @@ const struct device_type typec_port_dev_type = {
+>  	.name = "typec_port",
+>  	.groups = typec_groups,
+>  	.uevent = typec_uevent,
+> +	.devnode = typec_devnode,
+>  	.release = typec_release,
+>  };
+>  
+> @@ -2044,6 +2074,7 @@ struct typec_port *typec_register_port(struct device *parent,
+>  
+>  	port->id = id;
+>  	port->ops = cap->ops;
+> +	port->pd_dev = cap->pd_dev;
+>  	port->port_type = cap->type;
+>  	port->prefer_role = cap->prefer_role;
+>  
+> @@ -2055,6 +2086,9 @@ struct typec_port *typec_register_port(struct device *parent,
+>  	dev_set_name(&port->dev, "port%d", id);
+>  	dev_set_drvdata(&port->dev, cap->driver_data);
+>  
+> +	if (port->pd_dev)
+> +		port->dev.devt = MKDEV(PD_DEV_MAJOR, id * 4);
+> +
+>  	port->cap = kmemdup(cap, sizeof(*cap), GFP_KERNEL);
+>  	if (!port->cap) {
+>  		put_device(&port->dev);
+> @@ -2121,8 +2155,15 @@ static int __init typec_init(void)
+>  	if (ret)
+>  		goto err_unregister_mux_class;
+>  
+> +	ret = usbpd_dev_init();
+> +	if (ret)
+> +		goto err_unregister_class;
+> +
+>  	return 0;
+>  
+> +err_unregister_class:
+> +	class_unregister(&typec_class);
+> +
+>  err_unregister_mux_class:
+>  	class_unregister(&typec_mux_class);
+>  
+> @@ -2135,6 +2176,7 @@ subsys_initcall(typec_init);
+>  
+>  static void __exit typec_exit(void)
+>  {
+> +	usbpd_dev_exit();
+>  	class_unregister(&typec_class);
+>  	ida_destroy(&typec_index_ida);
+>  	bus_unregister(&typec_bus);
+> diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
+> index aef03eb7e1523..87c072f2ad753 100644
+> --- a/drivers/usb/typec/class.h
+> +++ b/drivers/usb/typec/class.h
+> @@ -14,6 +14,7 @@ struct typec_plug {
+>  	enum typec_plug_index		index;
+>  	struct ida			mode_ids;
+>  	int				num_altmodes;
+> +	const struct pd_dev		*pd_dev;
+>  };
+>  
+>  struct typec_cable {
+> @@ -33,6 +34,7 @@ struct typec_partner {
+>  	int				num_altmodes;
+>  	u16				pd_revision; /* 0300H = "3.0" */
+>  	enum usb_pd_svdm_ver		svdm_version;
+> +	const struct pd_dev		*pd_dev;
+>  };
+>  
+>  struct typec_port {
+> @@ -59,6 +61,8 @@ struct typec_port {
+>  	struct mutex			port_list_lock; /* Port list lock */
+>  
+>  	void				*pld;
+> +
+> +	const struct pd_dev		*pd_dev;
+>  };
+>  
+>  #define to_typec_port(_dev_) container_of(_dev_, struct typec_port, dev)
+> diff --git a/drivers/usb/typec/pd-dev.c b/drivers/usb/typec/pd-dev.c
+> new file mode 100644
+> index 0000000000000..436853e046ce4
+> --- /dev/null
+> +++ b/drivers/usb/typec/pd-dev.c
+> @@ -0,0 +1,210 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * USB Power Delivery /dev entries
+> + *
+> + * Copyright (C) 2021 Intel Corporation
+> + * Author: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> + */
+> +
+> +#include <linux/cdev.h>
+> +#include <linux/fs.h>
+> +#include <linux/slab.h>
+> +#include <linux/usb/pd_dev.h>
+> +
+> +#include "class.h"
+> +
+> +#define PD_DEV_MAX (MINORMASK + 1)
+> +
+> +dev_t usbpd_devt;
+> +static struct cdev usb_pd_cdev;
+> +
+> +struct pddev {
+> +	struct device *dev;
+> +	struct typec_port *port;
+> +	const struct pd_dev *pd_dev;
 > +};
 > +
->   static const char usbip_attach_usage_string[] =
->   	"usbip attach <args>\n"
->   	"    -r, --remote=<host>      The machine with exported USB devices\n"
-> -	"    -b, --busid=<busid>    Busid of the device on <host>\n"
-> -	"    -d, --device=<devid>    Id of the virtual UDC on <host>\n";
-> +	"    -b, --busid=<busid>      Busid of the device on <host>\n"
-
-Waht's the change here? Looks the same.
-
-> +	"    -d, --device=<devid>     Id of the virtual UDC on <host>\n"
-> +	"    -p, --persistent         Persistently monitor the given bus and import\n"
-> +	"                             USB devices when available on the remote end\n";
+> +static ssize_t usbpd_read(struct file *file, char __user *buf, size_t count, loff_t *offset)
+> +{
+> +	/* FIXME TODO XXX */
 > +
-> 
->   void usbip_attach_usage(void)
->   {
-> @@ -117,7 +127,7 @@ static int import_device(int sockfd, struct usbip_usb_device *udev)
->   	return -1;
->   }
-> 
-> -static int query_import_device(int sockfd, char *busid)
-> +static int query_import_device(int sockfd, char *busid, bool is_persistent)
->   {
->   	int rc;
->   	struct op_import_request request;
-> @@ -127,31 +137,35 @@ static int query_import_device(int sockfd, char *busid)
-> 
->   	memset(&request, 0, sizeof(request));
->   	memset(&reply, 0, sizeof(reply));
-> -
-> -	/* send a request */
-> -	rc = usbip_net_send_op_common(sockfd, OP_REQ_IMPORT, 0);
-> -	if (rc < 0) {
-> -		err("send op_common");
-> -		return -1;
-> -	}
-> -
->   	strncpy(request.busid, busid, SYSFS_BUS_ID_SIZE-1);
-> +	if (is_persistent) {
-> +		request.poll_timeout_ms = 5000;
-> +		info("remote device on busid %s: polling", busid);
-> +	}
-> +	PACK_OP_IMPORT_REQUEST(1, &request);
-> 
-> -	PACK_OP_IMPORT_REQUEST(0, &request);
-> +	do {
-> +		/* send a request */
-> +		rc = usbip_net_send_op_common(sockfd, OP_REQ_IMPORT, 0);
-> +		if (rc < 0) {
-> +			err("send op_common");
-> +			return -1;
+> +	/* Alert and Attention handling here (with poll) ? */
+> +
+> +	return 0;
+> +}
+> +
+> +static long usbpd_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+> +{
+> +	struct pddev *pd = file->private_data;
+> +	void __user *p = (void __user *)arg;
+> +	unsigned int pwr_role;
+> +	struct pd_message msg;
+> +	u32 configuration;
+> +	int ret = 0;
+> +
+> +	switch (cmd) {
+> +	case USBPDDEV_INFO:
+> +		if (copy_to_user(p, pd->pd_dev->info, sizeof(*pd->pd_dev->info)))
+> +			return -EFAULT;
+> +		break;
+> +	case USBPDDEV_CONFIGURE:
+> +		if (!pd->pd_dev->ops->configure)
+> +			return -ENOTTY;
+> +
+> +		if (copy_from_user(&configuration, p, sizeof(configuration)))
+> +			return -EFAULT;
+> +
+> +		ret = pd->pd_dev->ops->configure(pd->pd_dev, configuration);
+> +		if (ret)
+> +			return ret;
+> +		break;
+> +	case USBPDDEV_PWR_ROLE:
+> +		if (is_typec_plug(pd->dev))
+> +			return -ENOTTY;
+> +
+> +		if (is_typec_partner(pd->dev)) {
+> +			if (pd->port->pwr_role == TYPEC_SINK)
+> +				pwr_role = TYPEC_SOURCE;
+> +			else
+> +				pwr_role = TYPEC_SINK;
+> +		} else {
+> +			pwr_role = pd->port->pwr_role;
 > +		}
-> 
-> -	rc = usbip_net_send(sockfd, (void *) &request, sizeof(request));
-> -	if (rc < 0) {
-> -		err("send op_import_request");
-> -		return -1;
-> -	}
-> +		rc = usbip_net_send(sockfd, (void *) &request, sizeof(request));
-> +		if (rc < 0) {
-> +			err("send op_import_request");
-> +			return -1;
-> +		}
-> 
-> -	/* receive a reply */
-> -	rc = usbip_net_recv_op_common(sockfd, &code, &status);
-> -	if (rc < 0) {
-> -		err("Attach Request for %s failed - %s\n",
-> -		    busid, usbip_op_common_status_string(status));
-> -		return -1;
-> -	}
-> +		/* receive a reply */
-> +		rc = usbip_net_recv_op_common(sockfd, &code, &status);
-> +		if (status != ST_POLL_TIMEOUT && rc < 0) {
-> +			err("Attach Request for %s failed - %s\n",
-> +					busid, usbip_op_common_status_string(status));
-> +			return -1;
-> +		}
-> +	} while (status == ST_POLL_TIMEOUT);
-> 
->   	rc = usbip_net_recv(sockfd, (void *) &reply, sizeof(reply));
->   	if (rc < 0) {
-> @@ -171,7 +185,17 @@ static int query_import_device(int sockfd, char *busid)
->   	return import_device(sockfd, &reply.udev);
->   }
-> 
-> -static int attach_device(char *host, char *busid)
-> +static int get_local_busid_from(int port, char *local_busid)
-> +{
-> +	int rc = usbip_vhci_driver_open();
 > +
-> +	if (rc == 0)
-> +		rc = usbip_vhci_get_local_busid_from(port, local_busid);
-> +	usbip_vhci_driver_close();
-> +	return rc;
-> +}
+> +		if (copy_to_user(p, &pwr_role, sizeof(unsigned int)))
+> +			return -EFAULT;
+> +		break;
+> +	case USBPDDEV_GET_MESSAGE:
+> +		if (!pd->pd_dev->ops->get_message)
+> +			return -ENOTTY;
 > +
-> +static int attach_device(char *host, struct attach_options opt)
->   {
->   	int sockfd;
->   	int rc;
-> @@ -183,19 +207,53 @@ static int attach_device(char *host, char *busid)
->   		return -1;
->   	}
-> 
-> -	rhport = query_import_device(sockfd, busid);
-> +	rhport = query_import_device(sockfd, opt.busid, opt.is_persistent);
->   	if (rhport < 0)
->   		return -1;
-> 
->   	close(sockfd);
-> 
-> -	rc = record_connection(host, usbip_port_string, busid, rhport);
-> +	rc = record_connection(host, usbip_port_string, opt.busid, rhport);
->   	if (rc < 0) {
->   		err("record connection");
+> +		if (copy_from_user(&msg, p, sizeof(msg)))
+> +			return -EFAULT;
+> +
+> +		ret = pd->pd_dev->ops->get_message(pd->pd_dev, &msg);
+> +		if (ret)
+> +			return ret;
+> +
+> +		if (copy_to_user(p, &msg, sizeof(msg)))
+> +			return -EFAULT;
+> +		break;
+> +	case USBPDDEV_SET_MESSAGE:
+> +		if (!pd->pd_dev->ops->set_message)
+> +			return -ENOTTY;
+> +
+> +		ret = pd->pd_dev->ops->set_message(pd->pd_dev, &msg);
+> +		if (ret)
+> +			return ret;
+> +
+> +		if (copy_to_user(p, &msg, sizeof(msg)))
+> +			return -EFAULT;
+> +		break;
+> +	case USBPDDEV_SUBMIT_MESSAGE:
+> +		if (!pd->pd_dev->ops->submit)
+> +			return -ENOTTY;
+> +
+> +		if (copy_from_user(&msg, p, sizeof(msg)))
+> +			return -EFAULT;
+> +
+> +		ret = pd->pd_dev->ops->submit(pd->pd_dev, &msg);
+> +		if (ret)
+> +			return ret;
+> +
+> +		if (copy_to_user(p, &msg, sizeof(msg)))
+> +			return -EFAULT;
+> +		break;
 
-This is cryptic. Please print more information to be useful.
+Why is USBPDDEV_SUBMIT_MESSAGE different from USBPDDEV_SET_MESSAGE?
+Shouldn't "setting" a PDO or property automatically "submit" it (using TCPM
+or whatever interface is actually performing the PD messaging) if
+appropriate (e.g Source Caps?). Is there a situation where one would
+want to "set" a property but not "send" it?
 
->   		return -1;
->   	}
-> +	info("remote device on busid %s: attach complete", opt.busid);
-> +	return rhport;
-> +}
-> 
-> -	return 0;
-> +static void monitor_disconnect(usbip_monitor_t *monitor, char *busid, int rhport)
-> +{
-> +	// To monitor unbind we must first ensure to be at a bound state. To
-> +	// monitor bound state a local busid is needed, which is unknown at this
-> +	// moment. Local busid is not available until it's already bound to the usbip
-> +	// driver. Thus monitor bind events for any usb device until the busid is
-> +	// available for the port.
-> +	char local_busid[SYSFS_BUS_ID_SIZE] = {};
-> +
-> +	while (get_local_busid_from(rhport, local_busid))
-> +		usbip_monitor_await_usb_bind(monitor, USBIP_USB_DRV_NAME);
-> +	info("remote device on busid %s: monitor disconnect", busid);
-> +	usbip_monitor_set_busid(monitor, local_busid);
-> +	usbip_monitor_await_usb_unbind(monitor);
-> +	usbip_monitor_set_busid(monitor, NULL);
-> +}
-> +
-> +static int attach_device_persistently(char *host, struct attach_options opt)
-> +{
-> +	int rc = 0;
-> +	usbip_monitor_t *monitor = usbip_monitor_new();
-> +
-> +	while (rc == 0) {
-> +		int rhport = attach_device(host, opt);
-> +
-> +		if (rhport < 0)
-> +			rc = -1;
-> +		else
-> +			monitor_disconnect(monitor, opt.busid, rhport);
-> +	}
-> +	usbip_monitor_delete(monitor);
-> +	return rc;
->   }
-> 
->   int usbip_attach(int argc, char *argv[])
-> @@ -204,15 +262,16 @@ int usbip_attach(int argc, char *argv[])
->   		{ "remote", required_argument, NULL, 'r' },
->   		{ "busid",  required_argument, NULL, 'b' },
->   		{ "device",  required_argument, NULL, 'd' },
-> +		{ "persistent",  no_argument, NULL, 'p' },
->   		{ NULL, 0,  NULL, 0 }
->   	};
->   	char *host = NULL;
-> -	char *busid = NULL;
-> +	struct attach_options options = {};
->   	int opt;
->   	int ret = -1;
-> 
->   	for (;;) {
-> -		opt = getopt_long(argc, argv, "d:r:b:", opts, NULL);
-> +		opt = getopt_long(argc, argv, "d:r:b:p", opts, NULL);
-> 
->   		if (opt == -1)
->   			break;
-> @@ -223,17 +282,24 @@ int usbip_attach(int argc, char *argv[])
->   			break;
->   		case 'd':
->   		case 'b':
-> -			busid = optarg;
-> +			options.busid = optarg;
-> +			break;
-> +		case 'p':
-> +			options.is_persistent = true;
->   			break;
->   		default:
->   			goto err_out;
->   		}
->   	}
-> 
-> -	if (!host || !busid)
-> +	if (!host || !options.busid)
->   		goto err_out;
-> 
-> -	ret = attach_device(host, busid);
-> +	if (options.is_persistent)
-> +		ret = attach_device_persistently(host, options);
-> +	else
-> +		ret = attach_device(host, options);
-> +
->   	goto out;
-> 
->   err_out:
-> diff --git a/tools/usb/usbip/src/usbip_network.h b/tools/usb/usbip/src/usbip_network.h
-> index 83b4c5344f72..1c25d06ab688 100644
-> --- a/tools/usb/usbip/src/usbip_network.h
-> +++ b/tools/usb/usbip/src/usbip_network.h
-> @@ -61,6 +61,7 @@ struct op_devinfo_reply {
-> 
->   struct op_import_request {
->   	char busid[SYSFS_BUS_ID_SIZE];
-> +	uint32_t poll_timeout_ms;
->   } __attribute__((packed));
-> 
->   struct op_import_reply {
-> @@ -69,6 +70,7 @@ struct op_import_reply {
->   } __attribute__((packed));
-> 
->   #define PACK_OP_IMPORT_REQUEST(pack, request)  do {\
-> +	(request)->poll_timeout_ms = usbip_net_pack_uint32_t(pack, (request)->poll_timeout_ms);\
->   } while (0)
-> 
->   #define PACK_OP_IMPORT_REPLY(pack, reply)  do {\
-> diff --git a/tools/usb/usbip/src/usbipd.c b/tools/usb/usbip/src/usbipd.c
-> index 48398a78e88a..42ebe073b966 100644
-> --- a/tools/usb/usbip/src/usbipd.c
-> +++ b/tools/usb/usbip/src/usbipd.c
-> @@ -22,6 +22,7 @@
->   #include <arpa/inet.h>
->   #include <sys/socket.h>
->   #include <netinet/in.h>
-> +#include <stdbool.h>
-> 
->   #ifdef HAVE_LIBWRAP
->   #include <tcpd.h>
-> @@ -35,6 +36,7 @@
->   #include "usbip_host_common.h"
->   #include "usbip_device_driver.h"
->   #include "usbip_common.h"
-> +#include "usbip_monitor.h"
->   #include "usbip_network.h"
->   #include "list.h"
-> 
-> @@ -88,13 +90,78 @@ static void usbipd_help(void)
->   	printf("%s\n", usbipd_help_string);
->   }
-> 
-> +static struct usbip_exported_device *get_exported_device(const char *busid)
-> +{
-> +	struct usbip_exported_device *exported_dev = NULL;
-> +	struct usbip_exported_device *edev = NULL;
-> +	struct list_head *i;
-> +
-> +	list_for_each(i, &driver->edev_list) {
-> +		edev = list_entry(i, struct usbip_exported_device, node);
-> +		if (!strncmp(busid, edev->udev.busid, SYSFS_BUS_ID_SIZE)) {
-> +			exported_dev = edev;
-> +			break;
-> +		}
-> +	}
-> +	return exported_dev;
-> +}
-> +
-> +static bool await_requested_device(usbip_monitor_t *monitor,
-> +				   struct op_import_request *req)
-> +{
-> +	usbip_monitor_set_busid(monitor, req->busid);
-> +	usbip_monitor_set_timeout(monitor, req->poll_timeout_ms);
-> +	return usbip_monitor_await_usb_bind(monitor, "usbip-host");
-> +}
-> +
-> +static int recv_subsequent_poll_request(int sockfd, struct op_import_request *req)
-> +{
-> +	uint16_t code = OP_UNSPEC;
-> +	int status;
-> +	int rc = 0;
-> +
-> +	rc = usbip_net_recv_op_common(sockfd, &code, &status);
-> +	if (rc < 0) {
-> +		dbg("could not receive opcode: %#0x", code);
-> +		return -1;
-> +	}
-> +	if (code != OP_REQ_IMPORT) {
-> +		dbg("Only subsequent OP_REQ_IMPORT allowed when polling");
-> +		return -1;
-> +	}
-> +	rc = usbip_net_recv(sockfd, req, sizeof(struct op_import_request));
-> +	if (rc < 0) {
-> +		dbg("usbip_net_recv failed: subsequent OP_REQ_IMPORT request");
+It seems to me that the two can be combined into 1 rather than having
+a separate command just for ports.
 
-Same here. Make this message useful.
+Best regards,
 
-> +		return -1;
-> +	}
-> +	PACK_OP_IMPORT_REQUEST(0, req);
-> +	return rc;
-> +}
-> +
-> +static int monitor_requested_busid(int sockfd, struct op_import_request *req)
-> +{
-> +	int rc = 0;
-> +	usbip_monitor_t *monitor = usbip_monitor_new();
-> +
-> +	while (!await_requested_device(monitor, req)) {
-> +		int status = ST_POLL_TIMEOUT;
-> +
-> +		rc = usbip_net_send_op_common(sockfd, OP_REP_IMPORT, status);
-> +		if (rc < 0) {
-> +			dbg("usbip_net_send_op_common failed: %#0x", OP_REP_IMPORT);
-> +			break;
-> +		}
-> +		rc = recv_subsequent_poll_request(sockfd, req);
-> +	}
-> +	usbip_monitor_delete(monitor);
-> +	return rc;
-> +}
-> +
->   static int recv_request_import(int sockfd)
->   {
->   	struct op_import_request req;
-> -	struct usbip_exported_device *edev;
-> +	struct usbip_exported_device *edev = NULL;
->   	struct usbip_usb_device pdu_udev;
-> -	struct list_head *i;
-> -	int found = 0;
->   	int status = ST_OK;
->   	int rc;
-> 
-> @@ -107,16 +174,21 @@ static int recv_request_import(int sockfd)
->   	}
->   	PACK_OP_IMPORT_REQUEST(0, &req);
-> 
-> -	list_for_each(i, &driver->edev_list) {
-> -		edev = list_entry(i, struct usbip_exported_device, node);
-> -		if (!strncmp(req.busid, edev->udev.busid, SYSFS_BUS_ID_SIZE)) {
-> -			info("found requested device: %s", req.busid);
-> -			found = 1;
-> -			break;
-> +	edev = get_exported_device(req.busid);
-> +
-> +	if (!edev && req.poll_timeout_ms) {
-> +		info("Client polling for devices on busid: %s", req.busid);
-> +		rc = monitor_requested_busid(sockfd, &req);
-> +		if (rc < 0) {
-> +			dbg("monitor_requested_busid failed");
+-Prashant
 
-Same here.
-
-> +			return -1;
->   		}
-> +		usbip_refresh_device_list(driver);
-> +		edev = get_exported_device(req.busid);
->   	}
-> 
-> -	if (found) {
-> +	if (edev) {
-> +		info("found requested device: %s", req.busid);
->   		/* should set TCP_NODELAY for usbip */
->   		usbip_net_set_nodelay(sockfd);
-> 
-> --
-> 2.25.1
-> 
-> 
-
-thanks,
--- Shuah
