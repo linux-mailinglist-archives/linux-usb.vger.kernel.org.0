@@ -2,97 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A4D43DBD0
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Oct 2021 09:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093DB43DBDB
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Oct 2021 09:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbhJ1HT6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Oct 2021 03:19:58 -0400
-Received: from mga01.intel.com ([192.55.52.88]:50581 "EHLO mga01.intel.com"
+        id S229878AbhJ1HXf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Oct 2021 03:23:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56026 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229768AbhJ1HT5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 28 Oct 2021 03:19:57 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10150"; a="253900828"
-X-IronPort-AV: E=Sophos;i="5.87,189,1631602800"; 
-   d="scan'208";a="253900828"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2021 00:17:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,189,1631602800"; 
-   d="scan'208";a="636111472"
-Received: from kuha.fi.intel.com ([10.237.72.166])
-  by fmsmga001.fm.intel.com with SMTP; 28 Oct 2021 00:17:12 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 28 Oct 2021 10:17:11 +0300
-Date:   Thu, 28 Oct 2021 10:17:11 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@google.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        "Gopal, Saranya" <saranya.gopal@intel.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] USB Power Delivery character device interface
-Message-ID: <YXpOd9AZ/mGZC97g@kuha.fi.intel.com>
-References: <20211026143352.78387-1-heikki.krogerus@linux.intel.com>
- <YXgZdFV2yTXAKxE9@kroah.com>
- <YXkx0uG3Z539XJWo@kuha.fi.intel.com>
- <YXlL5WG6M7fNNtuo@kroah.com>
+        id S229656AbhJ1HXf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 28 Oct 2021 03:23:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 686F560E54;
+        Thu, 28 Oct 2021 07:21:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635405668;
+        bh=e/wyzVfkTV0dR6YteYW1jvF1J3q6I2+0CEvxKq0nxCE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JBkj/hcGqPxgoS4c4hfbNCE/wp/WzptPZxH+uLq1JsS0EkK8xuq2B+BFYT/M9kMdW
+         B4lilA5IPudFk9zJtUWeypRWHZ7ScqjZP4NOuaM9yorU8jk9wi/hIqpxA9d23HhHwP
+         C7RH/AcL97uMfN+5WAwkKf2+85pUtwc5Bcp05lYaO1hCYYYwnk0Q3u9p4ytVX0Kvef
+         mz7WaNfGSLj5r54b82U5boDP+OLa6+8TS2VerEyuxRIwCX5V07bCEvtvTPMSuBTaTY
+         D+D/jKbWRdviY1Qme+7BkNA36znep6njYk5ZeGs1LkQOkpyxmcXDRx0lAn4ZF71B34
+         0ujB0wUI0dsSA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mfziT-00023a-77; Thu, 28 Oct 2021 09:20:49 +0200
+Date:   Thu, 28 Oct 2021 09:20:49 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Kalle Valo <kvalo@codeaurora.org>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Amitkumar Karwar <akarwar@marvell.com>
+Subject: Re: [PATCH v2 3/3] mwifiex: fix division by zero in fw download path
+Message-ID: <YXpPUdj0wJG2L5ra@hovoldconsulting.com>
+References: <20211027080819.6675-1-johan@kernel.org>
+ <20211027080819.6675-4-johan@kernel.org>
+ <CA+ASDXMYbP3jQPeOpDDktHgp4X81AH41cgiLFgz-YHVPyZO1sw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YXlL5WG6M7fNNtuo@kroah.com>
+In-Reply-To: <CA+ASDXMYbP3jQPeOpDDktHgp4X81AH41cgiLFgz-YHVPyZO1sw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 02:53:57PM +0200, Greg KH wrote:
-> On Wed, Oct 27, 2021 at 02:02:42PM +0300, Heikki Krogerus wrote:
-> > Hi Greg,
-> > 
-> > On Tue, Oct 26, 2021 at 05:06:28PM +0200, Greg KH wrote:
-> > > So, why not sysfs?  :)
-> > 
-> > This is about allowing the user space to take over the USB Power
-> > Delivery communication and policy decisions in some cases. The user
-> > space needs to be able to send and receive raw USB Power Delivery
-> > messages one way or the other. I don't care about what's the interface
-> > that we use.
-> > 
-> > Here we are talking about the PDOs, so basically the power contract.
-> > Even if we figured out a way how to expose all the information from
-> > the Capability, Status, Alert and what ever messages you need to the
-> > user space via sysfs, and then allow the user to separately send the
-> > Request Message, we would have only covered the power contract. That
-> > does not cover everything, but it would also be unnecessarily
-> > complicated to handle with separate sysfs files IMO.
-> > 
-> > Even with the power contract it would make more sense to me to just
-> > allow the user space to simply read and write the raw messages, but
-> > when we go the other things like Vendor Specific Messages, I don't
-> > think there is any other way.
-> > 
-> > So we really do need to be able to tap into the USB Power Delivery
-> > protocol layer directly from user space. I don't care about how we do
-> > that - character device is just a suggestion, although, it does still
-> > feel correct to me. Is there some other way we could do this?
+On Wed, Oct 27, 2021 at 11:22:39AM -0700, Brian Norris wrote:
+> On Wed, Oct 27, 2021 at 1:12 AM Johan Hovold <johan@kernel.org> wrote:
+> > --- a/drivers/net/wireless/marvell/mwifiex/usb.c
+> > +++ b/drivers/net/wireless/marvell/mwifiex/usb.c
+> > @@ -505,6 +505,22 @@ static int mwifiex_usb_probe(struct usb_interface *intf,
+> >                 }
+> >         }
+> >
+> > +       switch (card->usb_boot_state) {
+> > +       case USB8XXX_FW_DNLD:
+> > +               /* Reject broken descriptors. */
+> > +               if (!card->rx_cmd_ep || !card->tx_cmd_ep)
+> > +                       return -ENODEV;
 > 
-> Ok, a char device sounds fine, but _what_ userspace code is going to be
-> using this interface?  We need to have a working version of that as well
-> before we could take this new interface, otherwise it wouldn't make much
-> sense.
-> 
-> And why does userspace have to do this, what is wrong with the kernel
-> doing it as it does today?  I.e. what is broken that adding a new api to
-> the kernel is going to fix?
-> 
-> That needs to be documented really really well.
+> ^^ These two conditions are applicable to USB8XXX_FW_READY too, right?
 
-Sure.
+Right, but I didn't want to add an incomplete set of constraints.
 
-thanks,
+I couldn't find any documentation (e.g. lsusb -v) for what the
+descriptors are supposed to look like, but judging from the code,
+something like
 
--- 
-heikki
+	if (!card->rx_cmd_ep || !card->tx_cmd_ep)
+		return -ENODEV;
+	if (!card->rx_data_ep || !card->port[0].tx_data_ep)
+		return -ENODEV;
+
+should do. But I'm not sure about the second tx endpoint,
+card->port[1].tx_data_ep, for which support was added later and which
+the driver appears to be able to manage without.
+
+Either way it has nothing to do with the division-by-zero and should be
+added separately.
+
+> > +               if (card->bulk_out_maxpktsize == 0)
+> > +                       return -ENODEV;
+> > +               break;
+> > +       case USB8XXX_FW_READY:
+> > +               /* Assume the driver can handle missing endpoints for now. */
+> > +               break;
+> > +       default:
+> > +               WARN_ON(1);
+> > +               return -ENODEV;
+> > +       }
+
+Johan
