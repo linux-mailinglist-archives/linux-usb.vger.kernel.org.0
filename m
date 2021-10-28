@@ -2,450 +2,245 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4343E43D85E
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Oct 2021 03:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A34943DA04
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Oct 2021 05:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbhJ1BFg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Oct 2021 21:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbhJ1BFg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Oct 2021 21:05:36 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234A6C061570
-        for <linux-usb@vger.kernel.org>; Wed, 27 Oct 2021 18:03:10 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id oa4so3418537pjb.2
-        for <linux-usb@vger.kernel.org>; Wed, 27 Oct 2021 18:03:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xlCc7Z1e4GadDTRFmw2EkFwl1UE1nzrwFhoIf8evImM=;
-        b=jrHfocbGWZjYndnSJh5Lv8bCYIgZNnv1om4Nxt3Ye6uTFRkyxmeulCcY6t9B8DgpLH
-         5unXtr8uUZY7UjDPAdUoqCYRDjCeoXZSd38z3C4KNup7LoDtGLyKPFikeQ0kusVoy1rx
-         hy7N3FU+lxvpuOy0kHCWKfkfWm/FqxNM9s8dc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xlCc7Z1e4GadDTRFmw2EkFwl1UE1nzrwFhoIf8evImM=;
-        b=YXiR4waLmw2uqdtHEZElVLV2oqeOuuhm2Ce/t5wzzyBomSnj//nYKp7VqyL2ty95dG
-         Lwy5u4F88UulW8jgR0B/axl6BT2fcSs8GaB0hK21teI8Wsj49o6V3epI/BnAJZEUJs0p
-         CPh0u8ZuOmYXjOOiR2GfyXhARNg9aOSzLuzcs7FfWF2jA2+EJHXiYaKkUuyroMLwoPhe
-         2n4CznnXacf3raDHpOyJMVsVtYS/SOy0K7qaGGV1vfSsBEidTx8kn2J5gKXLj2NxnRt1
-         XkZpThjZ/ZqDhtJxWgpZE3kRmyHBWZtMnhgsGT9gvN8LBTml5LnsLokeHgYOj6LjTDEa
-         h32g==
-X-Gm-Message-State: AOAM533TCW5rbCXrAM15S4eaqebC6rjqXLDDSFDyWSCQK0HvfbD1yaMD
-        x3tAaQXkXbGKpBoVHT9te8Nhlw==
-X-Google-Smtp-Source: ABdhPJwxfZbRBibNFccrbI0cu7Sb0+htg7U7Vk2tzArj5wMlL868qnVJLZjDbACergDrOBZUEX5Reg==
-X-Received: by 2002:a17:90b:4d0b:: with SMTP id mw11mr1155531pjb.228.1635382989596;
-        Wed, 27 Oct 2021 18:03:09 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:eed8:5671:5fed:996c])
-        by smtp.gmail.com with ESMTPSA id c11sm5099882pji.38.2021.10.27.18.03.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Oct 2021 18:03:09 -0700 (PDT)
-Date:   Wed, 27 Oct 2021 18:03:08 -0700
-From:   Prashant Malani <pmalani@chromium.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Benson Leung <bleung@google.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        "Gopal, Saranya" <saranya.gopal@intel.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 2/4] usb: typec: Character device for USB Power
- Delivery devices
-Message-ID: <YXn2zCA9lasDY/Xl@google.com>
-References: <20211026143352.78387-1-heikki.krogerus@linux.intel.com>
- <20211026143352.78387-3-heikki.krogerus@linux.intel.com>
+        id S229783AbhJ1D7l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Oct 2021 23:59:41 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:30133 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229752AbhJ1D7i (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 Oct 2021 23:59:38 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1635393432; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=m+tIbxcshou06MTQ58i8f/rhVixWQJgIxK9i9z23/4k=; b=ttp+E4jfakf/+Pxc/v2AvmGDp8Vm7MytNuXTlR3FysRXc2BJvb6r9IOEWn4nwd6v1EiVfnWX
+ 1fUrvyPt+k54JawsrJvaiB/w6OE8pDPnntvfrxrkSo0QOvHt+ducZNADnNqWPO2zZhr2wrUG
+ sJFIKBaOovPycSrSGET96sk4nzU=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 617a1f93545d7d365f27c2a8 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 28 Oct 2021 03:57:07
+ GMT
+Sender: rnayak=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 20798C4360D; Thu, 28 Oct 2021 03:57:07 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.0
+Received: from [192.168.0.118] (unknown [49.207.214.117])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0CE52C4338F;
+        Thu, 28 Oct 2021 03:57:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 0CE52C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: usb: qcom,dwc3: Add multi-pd bindings
+ for dwc3 qcom
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com
+References: <1635152851-23660-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1635152851-23660-2-git-send-email-quic_c_sanm@quicinc.com>
+ <YXcBK7zqny0s4gd4@ripper>
+ <CAE-0n51k8TycXjEkH7rHYo0j7cYbKJOnOn1keVhx2yyTcBNnvg@mail.gmail.com>
+ <YXck+xCJQBRGqTCw@ripper>
+ <CAE-0n530M3eft-o0qB+yEzGjZgCLMgY==ZgdvwiVCwqqCAVxxA@mail.gmail.com>
+ <YXdsYlLWnjopyMn/@ripper>
+ <CAE-0n51C4dm6bhds=ZZyje-Pcejxjm4MMa3m-VHjFgq7GZGrLw@mail.gmail.com>
+ <YXjbs3Bv6Y3d87EC@yoga>
+ <CAPDyKFrWQdvZX4ukHZoGz73JPfQSgqVrG_4ShMp_GrxL0NKLvg@mail.gmail.com>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <da877712-dac9-e9d0-0bfc-25bef450eb65@codeaurora.org>
+Date:   Thu, 28 Oct 2021 09:26:58 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211026143352.78387-3-heikki.krogerus@linux.intel.com>
+In-Reply-To: <CAPDyKFrWQdvZX4ukHZoGz73JPfQSgqVrG_4ShMp_GrxL0NKLvg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
 
-Thanks for sending the RFC.
 
-On Tue, Oct 26, 2021 at 05:33:50PM +0300, Heikki Krogerus wrote:
-> Interim.
+On 10/27/2021 7:54 PM, Ulf Hansson wrote:
+> On Wed, 27 Oct 2021 at 06:55, Bjorn Andersson
+> <bjorn.andersson@linaro.org> wrote:
+>>
+>> On Tue 26 Oct 19:48 CDT 2021, Stephen Boyd wrote:
+>>
+>>> +Rajendra
+>>>
+>>> Quoting Bjorn Andersson (2021-10-25 19:48:02)
+>>>> On Mon 25 Oct 15:41 PDT 2021, Stephen Boyd wrote:
+>>>>
+>>>>>
+>>>>> When the binding was introduced I recall we punted on the parent child
+>>>>> conversion stuff. One problem at a time. There's also the possibility
+>>>>> for a power domain to be parented by multiple power domains so
+>>>>> translation tables need to account for that.
+>>>>>
+>>>>
+>>>> But for this case - and below display case - the subdomain (the device's
+>>>> power-domain) is just a dumb gate. So there is no translation, the given
+>>>> performance_state applies to the parent. Or perhaps such implicitness
+>>>> will come back and bite us?
+>>>
+>>> In the gate case I don't see how the implicitness will ever be a
+>>> problem.
+>>>
+>>>>
+>>>> I don't think we allow a power-domain to be a subdomain of two
+>>>> power-domains - and again it's not applicable to USB or display afaict.
+>>>
+>>> Ah maybe. I always confuse power domains and genpd.
+>>>
+>>>>
+>>>>>>
+>>>>>>> Or we may need to make another part of the OPP binding to indicate the
+>>>>>>> relationship between the power domain and the OPP and the parent of
+>>>>>>> the power domain.
+>>>>>>
+>>>>>> I suspect this would be useful if a power-domain provider needs to
+>>>>>> translate a performance_state into a different supply-performance_state.
+>>>>>> Not sure if we have such case currently; these examples are all an
+>>>>>> adjustable power-domain with "gating" subdomains.
+>>>>>
+>>>>> Even for this case, we should be able to have the GDSC map the on state
+>>>>> to some performance state in the parent domain. Maybe we need to add
+>>>>> some code to the gdsc.c file to set a performance state on the parent
+>>>>> domain when it is turned on. I'm not sure where the value for that perf
+>>>>> state comes from. I guess we can hardcode it in the driver for now and
+>>>>> if it needs to be multiple values based on the clk frequency we can push
+>>>>> it out to an OPP table or something like that.
+>>>>>
+>>>>
+>>>> For the GDSC I believe we only have 1:1 mapping, so implementing
+>>>> set_performance_state to just pass that on to the parent might do the
+>>>> trick (although I haven't thought this through).
+>>>>
+>>>> Conceptually I guess this would be like calling clk_set_rate() on a
+>>>> clock gate, relying on it being propagated upwards. The problem here is
+>>>> that the performance_state is just a "random" integer without a well
+>>>> defined unit.
+>>>>
+>>>
+>>> Right. Ideally it would be in the core code somehow so that if there
+>>> isn't a set_performance_state function we go to the parent or some
+>>> special return value from the function says "call it on my parent". The
+>>> translation scheme could come later so we can translate the "random"
+>>> integer between parent-child domains.
+>>
+>> As a proof of concept it should be sufficient to just add an
+>> implementation of sc->pd.set_performance_state in gdsc.c. But I agree
+>> that it would be nice to push this into some framework code, perhaps
+>> made opt-in by some GENPD_FLAG_xyz.
+>>
+>>> At the end of the day the device
+>>> driver wants to set a frequency or runtime pm get the device and let the
+>>> OPP table or power domain code figure out what the level is supposed to
+>>> be.
+>>>
+>>
+>> Yes and this is already working for the non-nested case - where the
+>> single power-domain jumps between performance states as the opp code
+>> switches from one opp to another.
+>>
+>> So if we can list only the child power-domain (i.e. the GDSC) and have
+>> the performance_stat requests propagate up to the parent rpmhpd resource
+>> I think we're good.
+>>
+>>
+>> Let's give this a spin and confirm that this is the case...
+>>
+>>>>
+>>>>
+>>>> The one case where I believe we talked about having different mapping
+>>>> between the performance_state levels was in the relationship between CX
+>>>> and MX. But I don't think we ever did anything about that...
+>>>
+>>> Hmm alright. I think there's a constraint but otherwise nobody really
+>>> wants to change both at the same time.
+>>>
+>>>>>
+>>>>> Yes, a GDSC is really a gate on a parent power domain like CX or MMCX,
+>>>>> etc. Is the display subsystem an example of different clk frequencies
+>>>>> wanting to change the perf state of CX? If so it's a good place to work
+>>>>> out the translation scheme for devices that aren't listing the CX power
+>>>>> domain in DT.
+>>>>
+>>>> Yes, the various display components sits in MDSS_GDSC but the opp-tables
+>>>> needs to change the performance_state of MDSS_GDSC->parent (i.e. CX or
+>>>> MMCX, depending on platform).
+>>>>
+>>>> As I said, today we hack this by trusting that the base drm/msm driver
+>>>> will keep MDSS_GDSC on and listing MMCX (or CX) as power-domain for each
+>>>> of these components.
+>>>>
+>>>>
+>>>> So if we solve this, then that seems to directly map to the static case
+>>>> for USB as well.
+>>>>
+>>>
+>>> Got it. So in this case we could have the various display components
+>>> that are in the mdss gdsc domain set their frequency via OPP and then
+>>> have that translate to a level in CX or MMCX. How do we parent the power
+>>> domains outside of DT? I'm thinking that we'll need to do that if MMCX
+>>> is parented by CX or something like that and the drivers for those two
+>>> power domains are different. Is it basic string matching?
+>>
+>> In one way or another we need to invoke pm_genpd_add_subdomain() to link
+>> the two power-domains (actually genpds) together, like what was done in
+>> 3652265514f5 ("clk: qcom: gdsc: enable optional power domain support").
+>>
+>> In the case of MMCX and CX, my impression of the documentation is that
+>> they are independent - but if we need to express that CX is parent of
+>> MMCX, they are both provided by rpmhpd which already supports this by
+>> just specifying .parent on mmcx to point to cx.
 > 
-> TODO/ideas:
-> - Figure out a proper magic value for the ioctl and check if
->   the ioctl range is OK.
-> - Register separate PD device for the cdev, and register it
->   only if the device (port, plug or partner) actually
->   supports USB PD (or come up with some other solution?).
-> - Introduce something like
+> I was trying to follow the discussion, but it turned out to be a bit
+> complicated to catch up and answer all things. In any case, let me
+> just add a few overall comments, perhaps that can help to move things
+> forward.
 > 
-> 	struct pd_request {
-> 		struct pd_message request;
-> 		struct pd_message __user *response;
-> 	};
+> First, one domain can have two parent domains. Both from DT and from
+> genpd point of view, just to make this clear.
 > 
->   and use it instead of only single struct pd_messages everywhere.
-> 
-> - Add compat support.
-> - What do we do with Alerts and Attentions?
-> 
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
->  .../userspace-api/ioctl/ioctl-number.rst      |   1 +
->  drivers/usb/typec/Makefile                    |   2 +-
->  drivers/usb/typec/class.c                     |  42 ++++
->  drivers/usb/typec/class.h                     |   4 +
->  drivers/usb/typec/pd-dev.c                    | 210 ++++++++++++++++++
->  drivers/usb/typec/pd-dev.h                    |  15 ++
->  include/linux/usb/pd_dev.h                    |  22 ++
->  include/linux/usb/typec.h                     |   8 +
->  include/uapi/linux/usb/pd_dev.h               |  55 +++++
->  9 files changed, 358 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/usb/typec/pd-dev.c
->  create mode 100644 drivers/usb/typec/pd-dev.h
->  create mode 100644 include/linux/usb/pd_dev.h
->  create mode 100644 include/uapi/linux/usb/pd_dev.h
-> 
-> diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst b/Documentation/userspace-api/ioctl/ioctl-number.rst
-> index 0ba463be6c588..fd443fd21f62a 100644
-> --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
-> +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
-> @@ -175,6 +175,7 @@ Code  Seq#    Include File                                           Comments
->  'P'   60-6F  sound/sscape_ioctl.h                                    conflict!
->  'P'   00-0F  drivers/usb/class/usblp.c                               conflict!
->  'P'   01-09  drivers/misc/pci_endpoint_test.c                        conflict!
-> +'P'   70-7F  uapi/linux/usb/pd_dev.h                                 <mailto:linux-usb@vger.kernel.org>
->  'Q'   all    linux/soundcard.h
->  'R'   00-1F  linux/random.h                                          conflict!
->  'R'   01     linux/rfkill.h                                          conflict!
-> diff --git a/drivers/usb/typec/Makefile b/drivers/usb/typec/Makefile
-> index a0adb8947a301..be44528168013 100644
-> --- a/drivers/usb/typec/Makefile
-> +++ b/drivers/usb/typec/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  obj-$(CONFIG_TYPEC)		+= typec.o
-> -typec-y				:= class.o mux.o bus.o port-mapper.o
-> +typec-y				:= class.o mux.o bus.o port-mapper.o pd-dev.o
->  obj-$(CONFIG_TYPEC)		+= altmodes/
->  obj-$(CONFIG_TYPEC_TCPM)	+= tcpm/
->  obj-$(CONFIG_TYPEC_UCSI)	+= ucsi/
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index aeef453aa6585..19fcc5da175d7 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -15,6 +15,7 @@
->  
->  #include "bus.h"
->  #include "class.h"
-> +#include "pd-dev.h"
->  
->  static DEFINE_IDA(typec_index_ida);
->  
-> @@ -665,6 +666,11 @@ static const struct attribute_group *typec_partner_groups[] = {
->  	NULL
->  };
->  
-> +char *typec_partner_devnode(struct device *dev, umode_t *mode, kuid_t *uid, kgid_t *gid)
-> +{
-> +	return kasprintf(GFP_KERNEL, "pd%u/partner", to_typec_port(dev->parent)->id);
-> +}
-> +
->  static void typec_partner_release(struct device *dev)
->  {
->  	struct typec_partner *partner = to_typec_partner(dev);
-> @@ -676,6 +682,7 @@ static void typec_partner_release(struct device *dev)
->  const struct device_type typec_partner_dev_type = {
->  	.name = "typec_partner",
->  	.groups = typec_partner_groups,
-> +	.devnode = typec_partner_devnode,
->  	.release = typec_partner_release,
->  };
->  
-> @@ -807,6 +814,7 @@ struct typec_partner *typec_register_partner(struct typec_port *port,
->  
->  	ida_init(&partner->mode_ids);
->  	partner->usb_pd = desc->usb_pd;
-> +	partner->pd_dev = desc->pd_dev;
->  	partner->accessory = desc->accessory;
->  	partner->num_altmodes = -1;
->  	partner->pd_revision = desc->pd_revision;
-> @@ -826,6 +834,9 @@ struct typec_partner *typec_register_partner(struct typec_port *port,
->  	partner->dev.type = &typec_partner_dev_type;
->  	dev_set_name(&partner->dev, "%s-partner", dev_name(&port->dev));
->  
-> +	if (partner->pd_dev)
-> +		partner->dev.devt = MKDEV(PD_DEV_MAJOR, port->id * 4 + 3);
-> +
->  	ret = device_register(&partner->dev);
->  	if (ret) {
->  		dev_err(&port->dev, "failed to register partner (%d)\n", ret);
-> @@ -853,6 +864,13 @@ EXPORT_SYMBOL_GPL(typec_unregister_partner);
->  /* ------------------------------------------------------------------------- */
->  /* Type-C Cable Plugs */
->  
-> +char *typec_plug_devnode(struct device *dev, umode_t *mode, kuid_t *uid, kgid_t *gid)
-> +{
-> +	return kasprintf(GFP_KERNEL, "pd%u/plug%d",
-> +			 to_typec_port(dev->parent->parent)->id,
-> +			 to_typec_plug(dev)->index);
-> +}
-> +
->  static void typec_plug_release(struct device *dev)
->  {
->  	struct typec_plug *plug = to_typec_plug(dev);
-> @@ -891,6 +909,7 @@ static const struct attribute_group *typec_plug_groups[] = {
->  const struct device_type typec_plug_dev_type = {
->  	.name = "typec_plug",
->  	.groups = typec_plug_groups,
-> +	.devnode = typec_plug_devnode,
->  	.release = typec_plug_release,
->  };
->  
-> @@ -973,11 +992,16 @@ struct typec_plug *typec_register_plug(struct typec_cable *cable,
->  	ida_init(&plug->mode_ids);
->  	plug->num_altmodes = -1;
->  	plug->index = desc->index;
-> +	plug->pd_dev = desc->pd_dev;
->  	plug->dev.class = &typec_class;
->  	plug->dev.parent = &cable->dev;
->  	plug->dev.type = &typec_plug_dev_type;
->  	dev_set_name(&plug->dev, "%s-%s", dev_name(cable->dev.parent), name);
->  
-> +	if (plug->pd_dev)
-> +		plug->dev.devt = MKDEV(PD_DEV_MAJOR,
-> +				       to_typec_port(cable->dev.parent)->id * 4 + 1 + plug->index);
-> +
->  	ret = device_register(&plug->dev);
->  	if (ret) {
->  		dev_err(&cable->dev, "failed to register plug (%d)\n", ret);
-> @@ -1595,6 +1619,11 @@ static int typec_uevent(struct device *dev, struct kobj_uevent_env *env)
->  	return ret;
->  }
->  
-> +char *typec_devnode(struct device *dev, umode_t *mode, kuid_t *uid, kgid_t *gid)
-> +{
-> +	return kasprintf(GFP_KERNEL, "pd%u/port", to_typec_port(dev)->id);
-> +}
-> +
->  static void typec_release(struct device *dev)
->  {
->  	struct typec_port *port = to_typec_port(dev);
-> @@ -1611,6 +1640,7 @@ const struct device_type typec_port_dev_type = {
->  	.name = "typec_port",
->  	.groups = typec_groups,
->  	.uevent = typec_uevent,
-> +	.devnode = typec_devnode,
->  	.release = typec_release,
->  };
->  
-> @@ -2044,6 +2074,7 @@ struct typec_port *typec_register_port(struct device *parent,
->  
->  	port->id = id;
->  	port->ops = cap->ops;
-> +	port->pd_dev = cap->pd_dev;
->  	port->port_type = cap->type;
->  	port->prefer_role = cap->prefer_role;
->  
-> @@ -2055,6 +2086,9 @@ struct typec_port *typec_register_port(struct device *parent,
->  	dev_set_name(&port->dev, "port%d", id);
->  	dev_set_drvdata(&port->dev, cap->driver_data);
->  
-> +	if (port->pd_dev)
-> +		port->dev.devt = MKDEV(PD_DEV_MAJOR, id * 4);
-> +
->  	port->cap = kmemdup(cap, sizeof(*cap), GFP_KERNEL);
->  	if (!port->cap) {
->  		put_device(&port->dev);
-> @@ -2121,8 +2155,15 @@ static int __init typec_init(void)
->  	if (ret)
->  		goto err_unregister_mux_class;
->  
-> +	ret = usbpd_dev_init();
-> +	if (ret)
-> +		goto err_unregister_class;
-> +
->  	return 0;
->  
-> +err_unregister_class:
-> +	class_unregister(&typec_class);
-> +
->  err_unregister_mux_class:
->  	class_unregister(&typec_mux_class);
->  
-> @@ -2135,6 +2176,7 @@ subsys_initcall(typec_init);
->  
->  static void __exit typec_exit(void)
->  {
-> +	usbpd_dev_exit();
->  	class_unregister(&typec_class);
->  	ida_destroy(&typec_index_ida);
->  	bus_unregister(&typec_bus);
-> diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
-> index aef03eb7e1523..87c072f2ad753 100644
-> --- a/drivers/usb/typec/class.h
-> +++ b/drivers/usb/typec/class.h
-> @@ -14,6 +14,7 @@ struct typec_plug {
->  	enum typec_plug_index		index;
->  	struct ida			mode_ids;
->  	int				num_altmodes;
-> +	const struct pd_dev		*pd_dev;
->  };
->  
->  struct typec_cable {
-> @@ -33,6 +34,7 @@ struct typec_partner {
->  	int				num_altmodes;
->  	u16				pd_revision; /* 0300H = "3.0" */
->  	enum usb_pd_svdm_ver		svdm_version;
-> +	const struct pd_dev		*pd_dev;
->  };
->  
->  struct typec_port {
-> @@ -59,6 +61,8 @@ struct typec_port {
->  	struct mutex			port_list_lock; /* Port list lock */
->  
->  	void				*pld;
-> +
-> +	const struct pd_dev		*pd_dev;
->  };
->  
->  #define to_typec_port(_dev_) container_of(_dev_, struct typec_port, dev)
-> diff --git a/drivers/usb/typec/pd-dev.c b/drivers/usb/typec/pd-dev.c
-> new file mode 100644
-> index 0000000000000..436853e046ce4
-> --- /dev/null
-> +++ b/drivers/usb/typec/pd-dev.c
-> @@ -0,0 +1,210 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * USB Power Delivery /dev entries
-> + *
-> + * Copyright (C) 2021 Intel Corporation
-> + * Author: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> + */
-> +
-> +#include <linux/cdev.h>
-> +#include <linux/fs.h>
-> +#include <linux/slab.h>
-> +#include <linux/usb/pd_dev.h>
-> +
-> +#include "class.h"
-> +
-> +#define PD_DEV_MAX (MINORMASK + 1)
-> +
-> +dev_t usbpd_devt;
-> +static struct cdev usb_pd_cdev;
-> +
-> +struct pddev {
-> +	struct device *dev;
-> +	struct typec_port *port;
-> +	const struct pd_dev *pd_dev;
-> +};
-> +
-> +static ssize_t usbpd_read(struct file *file, char __user *buf, size_t count, loff_t *offset)
-> +{
-> +	/* FIXME TODO XXX */
-> +
-> +	/* Alert and Attention handling here (with poll) ? */
-> +
-> +	return 0;
-> +}
-> +
-> +static long usbpd_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
-> +{
-> +	struct pddev *pd = file->private_data;
-> +	void __user *p = (void __user *)arg;
-> +	unsigned int pwr_role;
-> +	struct pd_message msg;
-> +	u32 configuration;
-> +	int ret = 0;
-> +
-> +	switch (cmd) {
-> +	case USBPDDEV_INFO:
-> +		if (copy_to_user(p, pd->pd_dev->info, sizeof(*pd->pd_dev->info)))
-> +			return -EFAULT;
-> +		break;
-> +	case USBPDDEV_CONFIGURE:
-> +		if (!pd->pd_dev->ops->configure)
-> +			return -ENOTTY;
-> +
-> +		if (copy_from_user(&configuration, p, sizeof(configuration)))
-> +			return -EFAULT;
-> +
-> +		ret = pd->pd_dev->ops->configure(pd->pd_dev, configuration);
-> +		if (ret)
-> +			return ret;
-> +		break;
-> +	case USBPDDEV_PWR_ROLE:
-> +		if (is_typec_plug(pd->dev))
-> +			return -ENOTTY;
-> +
-> +		if (is_typec_partner(pd->dev)) {
-> +			if (pd->port->pwr_role == TYPEC_SINK)
-> +				pwr_role = TYPEC_SOURCE;
-> +			else
-> +				pwr_role = TYPEC_SINK;
-> +		} else {
-> +			pwr_role = pd->port->pwr_role;
-> +		}
-> +
-> +		if (copy_to_user(p, &pwr_role, sizeof(unsigned int)))
-> +			return -EFAULT;
-> +		break;
-> +	case USBPDDEV_GET_MESSAGE:
-> +		if (!pd->pd_dev->ops->get_message)
-> +			return -ENOTTY;
-> +
-> +		if (copy_from_user(&msg, p, sizeof(msg)))
-> +			return -EFAULT;
-> +
-> +		ret = pd->pd_dev->ops->get_message(pd->pd_dev, &msg);
-> +		if (ret)
-> +			return ret;
-> +
-> +		if (copy_to_user(p, &msg, sizeof(msg)))
-> +			return -EFAULT;
-> +		break;
-> +	case USBPDDEV_SET_MESSAGE:
-> +		if (!pd->pd_dev->ops->set_message)
-> +			return -ENOTTY;
-> +
-> +		ret = pd->pd_dev->ops->set_message(pd->pd_dev, &msg);
-> +		if (ret)
-> +			return ret;
-> +
-> +		if (copy_to_user(p, &msg, sizeof(msg)))
-> +			return -EFAULT;
-> +		break;
-> +	case USBPDDEV_SUBMIT_MESSAGE:
-> +		if (!pd->pd_dev->ops->submit)
-> +			return -ENOTTY;
-> +
-> +		if (copy_from_user(&msg, p, sizeof(msg)))
-> +			return -EFAULT;
-> +
-> +		ret = pd->pd_dev->ops->submit(pd->pd_dev, &msg);
-> +		if (ret)
-> +			return ret;
-> +
-> +		if (copy_to_user(p, &msg, sizeof(msg)))
-> +			return -EFAULT;
-> +		break;
+> Although, it certainly looks questionable to me, to hook up the USB
+> device to two separate power domains, one to control power and one to
+> control performance. Especially, if it's really the same piece of HW
+> that is managing both things. 
+[]..
+> Additionally, if it's correct to model
+> the USB GDSC power domain as a child to the CX power domain from HW
+> point of view, we should likely do that.
 
-Why is USBPDDEV_SUBMIT_MESSAGE different from USBPDDEV_SET_MESSAGE?
-Shouldn't "setting" a PDO or property automatically "submit" it (using TCPM
-or whatever interface is actually performing the PD messaging) if
-appropriate (e.g Source Caps?). Is there a situation where one would
-want to "set" a property but not "send" it?
+I think this would still require a few things in genpd, since
+CX and USB GDSC are power domains from different providers.
+Perhaps a pm_genpd_add_subdomain_by_name()?
 
-It seems to me that the two can be combined into 1 rather than having
-a separate command just for ports.
-
-Best regards,
-
--Prashant
-
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
