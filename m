@@ -2,170 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59ABF43E69F
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Oct 2021 18:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9804043E8D0
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Oct 2021 21:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbhJ1Qx4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Oct 2021 12:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbhJ1Qxx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Oct 2021 12:53:53 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5862CC061745
-        for <linux-usb@vger.kernel.org>; Thu, 28 Oct 2021 09:51:25 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id q129so9230977oib.0
-        for <linux-usb@vger.kernel.org>; Thu, 28 Oct 2021 09:51:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vdcieApq76aVwV7YeMbL8svFqnVx22XOBF/ZRhqhdrw=;
-        b=VmAzlfQViSU8L2QzalW4BxxyO3g0UOqJWS98/kME2IOfJlFAK1uyLIMYdqNHwB4J3Q
-         tk/T4YqeIUhBk14pYTxaqxaYliGAPfRs4B7iKO3BWERKdjJzRSY/wdOSk/rZBF6ZPKed
-         QiN+Lqj3HC74T4frOj4auTGqAafFJ4KVxg445qaLRQkDIW8MEQ1qREhUkO0c+llAqgK9
-         0uNIvg1RAiBhIvvnVWcDKMrrG54qz3etlmFfWRquIwUpyACrGtpXgw7LdJc93XksOYtx
-         XW2t8kOKZLhJQ81wjMAvsheSde6OVDVyEhSjeXPKh3gRV0YmSwbv1fMqZqXbebUu54ZS
-         rvfA==
+        id S231222AbhJ1TLW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Oct 2021 15:11:22 -0400
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:45639 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231178AbhJ1TLV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Oct 2021 15:11:21 -0400
+Received: by mail-ot1-f53.google.com with SMTP id l16-20020a9d6a90000000b0054e7ab56f27so9975852otq.12;
+        Thu, 28 Oct 2021 12:08:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vdcieApq76aVwV7YeMbL8svFqnVx22XOBF/ZRhqhdrw=;
-        b=Ofm1atNdfo0Pql/7gGEZWy6NTXttyeBJRIO6pQBEUQ+e3HT1XzAKXbT/+kQgo1vywD
-         Xye9D0fpveoioZ3MsEET+cIL5eSOeTN/bAc4Ixlhl9FX6NpyYYTWyI8CcKX5jFgd/zwT
-         97OvRPaINUtz+auEhBio3G5ygt7eOumfEOKV1WSmUDW7l8AzPOYU/4dv5jQ6BPPhVMuv
-         i7dzV2kSuEWwm9fuYic7LEOen7rj6UUTCoBleH/rnix+Qrhier2Sux140mHXMomBqOMW
-         Y5rk28L5eeQqhYst91YJUQsK451/sg1U3UuW9VNQRG7euorZroqqv/M96wudoucMgTFj
-         RXWw==
-X-Gm-Message-State: AOAM531B7MMPzNCQ86r9f1uY5KWLBrXgy+/NBGkoi99JA6x0CMwjOcuI
-        AR7Urdjc4wbbQl6gkWM4CPs+NNhfdd5yfQ20
-X-Google-Smtp-Source: ABdhPJxFgbLyfR/ke3FH70Vv9T+iJrawjEp7Pk+BsCSCkyiKAoFyC4dXUhGH3nTTI7DWi8fkZYMzig==
-X-Received: by 2002:a05:6808:171c:: with SMTP id bc28mr9424798oib.18.1635439884570;
-        Thu, 28 Oct 2021 09:51:24 -0700 (PDT)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id q15sm1178672otm.15.2021.10.28.09.51.23
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=tHwyqYZeG12PlwvxWaijeWvT3HLavP643dZAsZIvq2g=;
+        b=Mb2H8Qtuxo+ADAV2jW937vnQJpFGNHljqfzZylm+3HaDwbh2cba57YygdB6BWUBaCn
+         WBX1qlLhxh9oWapqunWkKAfGQ70spVso93j3ODRFrsV605S5j3aqM/5VTX7h1aegjvSa
+         ST9WF2j66WV3dtv7N9BHdq4TKmLax0NW4ckXaAG+sREKLWg1BvEvHWpW6LSgjkxOMJIo
+         14Ln9X3cPd/pyxRshVAiVIC4U/hqIh+kwLeAypeXPN5bWvivVC0KHWU57nyvXNiNn0Xg
+         k4xYAD+2p1qvzZuekO4WKfjz/SR5OwZA8SdXIBorcRxCDeglVMhyDK94JPJ2KWtInYfz
+         Jimw==
+X-Gm-Message-State: AOAM530/i+LuVici1a5eWuHKHkGVF+Bqbkw26w+pvvsaUvlblffkvCbn
+        KC5Cj5dmZkfynVa3vk6lOg==
+X-Google-Smtp-Source: ABdhPJxqVd1DJn9hYajbDWkNVOETuiRVmZt9+VXwhTslZyk5Y43+wUfo/90GMU5kPDLTOAoTTCe1gw==
+X-Received: by 2002:a9d:847:: with SMTP id 65mr374703oty.326.1635448132055;
+        Thu, 28 Oct 2021 12:08:52 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id r22sm1253535otq.5.2021.10.28.12.08.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Oct 2021 09:51:24 -0700 (PDT)
-Date:   Thu, 28 Oct 2021 09:53:14 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com
-Subject: Re: [PATCH v2 1/3] dt-bindings: usb: qcom,dwc3: Add multi-pd
- bindings for dwc3 qcom
-Message-ID: <YXrVevUlCJJtbpLi@ripper>
-References: <CAE-0n51k8TycXjEkH7rHYo0j7cYbKJOnOn1keVhx2yyTcBNnvg@mail.gmail.com>
- <YXck+xCJQBRGqTCw@ripper>
- <CAE-0n530M3eft-o0qB+yEzGjZgCLMgY==ZgdvwiVCwqqCAVxxA@mail.gmail.com>
- <YXdsYlLWnjopyMn/@ripper>
- <CAE-0n51C4dm6bhds=ZZyje-Pcejxjm4MMa3m-VHjFgq7GZGrLw@mail.gmail.com>
- <YXjbs3Bv6Y3d87EC@yoga>
- <CAPDyKFrWQdvZX4ukHZoGz73JPfQSgqVrG_4ShMp_GrxL0NKLvg@mail.gmail.com>
- <da877712-dac9-e9d0-0bfc-25bef450eb65@codeaurora.org>
- <CAPDyKFoMpmkHgUbRN4pxgW2Gy=aZpS=eVwQrg0ydFbh9_GFG6Q@mail.gmail.com>
- <e32a59e2-0d8b-3338-5963-81ea07a709ef@codeaurora.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e32a59e2-0d8b-3338-5963-81ea07a709ef@codeaurora.org>
+        Thu, 28 Oct 2021 12:08:51 -0700 (PDT)
+Received: (nullmailer pid 409859 invoked by uid 1000);
+        Thu, 28 Oct 2021 19:08:48 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     rdunlap@infradead.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        heikki.krogerus@linux.intel.com, linux@roeck-us.net,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        wcheng@codeaurora.org, bjorn.andersson@linaro.org
+In-Reply-To: <20211028164941.831918-5-bryan.odonoghue@linaro.org>
+References: <20211028164941.831918-1-bryan.odonoghue@linaro.org> <20211028164941.831918-5-bryan.odonoghue@linaro.org>
+Subject: Re: [RESEND PATCH v2 4/7] dt-bindings: usb: Add Qualcomm PMIC PDPHY controller YAML schema
+Date:   Thu, 28 Oct 2021 14:08:48 -0500
+Message-Id: <1635448128.091392.409858.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu 28 Oct 03:46 PDT 2021, Rajendra Nayak wrote:
-
+On Thu, 28 Oct 2021 17:49:38 +0100, Bryan O'Donoghue wrote:
+> Add a YAML binding for the power-delivery PHY silicon interface inside
+> Qualcomm's pm8150b hardware block.
 > 
-> On 10/28/2021 4:05 PM, Ulf Hansson wrote:
-> > [...]
-> > 
-> > > > > > Got it. So in this case we could have the various display components
-> > > > > > that are in the mdss gdsc domain set their frequency via OPP and then
-> > > > > > have that translate to a level in CX or MMCX. How do we parent the power
-> > > > > > domains outside of DT? I'm thinking that we'll need to do that if MMCX
-> > > > > > is parented by CX or something like that and the drivers for those two
-> > > > > > power domains are different. Is it basic string matching?
-> > > > > 
-> > > > > In one way or another we need to invoke pm_genpd_add_subdomain() to link
-> > > > > the two power-domains (actually genpds) together, like what was done in
-> > > > > 3652265514f5 ("clk: qcom: gdsc: enable optional power domain support").
-> > > > > 
-> > > > > In the case of MMCX and CX, my impression of the documentation is that
-> > > > > they are independent - but if we need to express that CX is parent of
-> > > > > MMCX, they are both provided by rpmhpd which already supports this by
-> > > > > just specifying .parent on mmcx to point to cx.
-> > > > 
-> > > > I was trying to follow the discussion, but it turned out to be a bit
-> > > > complicated to catch up and answer all things. In any case, let me
-> > > > just add a few overall comments, perhaps that can help to move things
-> > > > forward.
-> > > > 
-> > > > First, one domain can have two parent domains. Both from DT and from
-> > > > genpd point of view, just to make this clear.
-> > > > 
-> > > > Although, it certainly looks questionable to me, to hook up the USB
-> > > > device to two separate power domains, one to control power and one to
-> > > > control performance. Especially, if it's really the same piece of HW
-> > > > that is managing both things.
-> > > []..
-> > > > Additionally, if it's correct to model
-> > > > the USB GDSC power domain as a child to the CX power domain from HW
-> > > > point of view, we should likely do that.
-> > > 
-> > > I think this would still require a few things in genpd, since
-> > > CX and USB GDSC are power domains from different providers.
-> > > Perhaps a pm_genpd_add_subdomain_by_name()?
-> > > 
-> > 
-> > I think of_genpd_add_subdomain() should help to address this. No?
+> The pdphy driver operates with a type-c driver inside of a high level
+> single TCPM device to provide overall TCPM functionality.
 > 
-> We only describe the provider nodes in DT and not the individual power domains.
-> For instance GCC is the power domain provider which is in DT, and USB GDSC is one
-> of the many power domains it supports, similarly RPMHPD is the provider node in
-> DT and CX is one of the many power domains it supports.
-> So we would need some non-DT way of hooking up power domains from two different
-> providers as parent/child.
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>  .../bindings/usb/qcom,pmic-pdphy.yaml         | 115 ++++++++++++++++++
+>  1 file changed, 115 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-pdphy.yaml
 > 
 
-See 266e5cf39a0f ("arm64: dts: qcom: sm8250: remove mmcx regulator") and
-3652265514f5 ("clk: qcom: gdsc: enable optional power domain support")
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-MMCX is declared as power-domain for the dispcc (which is correct
-in itself) and the gdsc code will register GDSCs as subdomains of
-the same power-domain.
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/usb/qcom,pmic-pdphy.yaml:37:8: [warning] wrong indentation: expected 6 but found 7 (indentation)
 
+dtschema/dtc warnings/errors:
 
-To ensure this code path is invoked the clock driver itself needed this
-6158b94ec807 ("clk: qcom: dispcc-sm8250: use runtime PM for the clock
-controller")
+doc reference errors (make refcheckdocs):
 
-So at least in theory, considering only USB the minimum would be to
-pm_runtime_enable() gcc-7280 and add power-domains = <CX> to the gcc
-node.
+See https://patchwork.ozlabs.org/patch/1547614
 
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-The "problem" I described would be if there are GDSCs that are
-subdomains of MX - which I've seen hinted in some documentation. If so
-we should to specify both CX and MX as power-domains for &gcc and the
-gdsc implementation needs to be extended to allow us to select between
-the two.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-For this I believe a combination of genpd_dev_pm_attach_by_name() and
-of_genpd_add_subdomain() would do the trick.
+pip3 install dtschema --upgrade
 
-That is, if there actually are GDSCs exposed by gcc that are not
-subdomains of CX - otherwise none of this is needed.
+Please check and re-submit.
 
-Regards,
-Bjorn
