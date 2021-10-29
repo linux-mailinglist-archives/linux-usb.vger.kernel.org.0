@@ -2,103 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1E543FCAE
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Oct 2021 14:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9A143FD49
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Oct 2021 15:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbhJ2MxT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Oct 2021 08:53:19 -0400
-Received: from mga03.intel.com ([134.134.136.65]:19931 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231593AbhJ2MxN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 29 Oct 2021 08:53:13 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10151"; a="230609015"
-X-IronPort-AV: E=Sophos;i="5.87,193,1631602800"; 
-   d="scan'208";a="230609015"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2021 05:50:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,193,1631602800"; 
-   d="scan'208";a="636685360"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Oct 2021 05:50:40 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     quic_pkondeti@quicinc.com, youling257@gmail.com
-Cc:     pkondeti@codeaurora.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [RFT PATCH] xhci: Fix commad ring abort, write all 64 bits to CRCR register.
-Date:   Fri, 29 Oct 2021 15:51:54 +0300
-Message-Id: <20211029125154.438152-1-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <e96e2a96-00c4-6e6b-fc5a-e4a881325dc0@linux.intel.com>
-References: <e96e2a96-00c4-6e6b-fc5a-e4a881325dc0@linux.intel.com>
+        id S231593AbhJ2NYE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Oct 2021 09:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231401AbhJ2NYD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Oct 2021 09:24:03 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE22C061570
+        for <linux-usb@vger.kernel.org>; Fri, 29 Oct 2021 06:21:34 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id e10so18086887uab.3
+        for <linux-usb@vger.kernel.org>; Fri, 29 Oct 2021 06:21:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=LdZRkb2jjHRwvNCYK2yy30G5/ZwFDQKRdQX+XUuj5lM=;
+        b=DR7MYkr3eIG6SMu54RDrdsjFrr1Q5fg16s26ka73Z297o96fb4gilhi8E3YFXaGSC/
+         shRpLtHv5peEX3upiykuxWlmG4q4alSAVZ2SYijehSWiT2atmp/HwRZfghe8pc8TJx0V
+         o5INT6p342OHqFIX9HiDTji3aPBjQhLs2vqXSByMZG9deAOt0aWPQCcdPlxk/X6FDCRv
+         wW2ibYHKgLqGCHjZf2X3U5T89TUVWTLRVKHPGDN5x+4UkNU0wTcVDbWDLf82RQUN8NbZ
+         NVJP0HIoiLFeSdQ25Z2HesW0vy0rtBFUUTlulplvvoXcHU+a6+unyFAB2BwT97LPdcRi
+         lmOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=LdZRkb2jjHRwvNCYK2yy30G5/ZwFDQKRdQX+XUuj5lM=;
+        b=oyZ1Ud8AUi/yXBnK3228sUcj7J92sn18mG0eowiyGNxZ+LbZszZi83vP9idn5IiMBm
+         swBhY1xOrEeAC4rmdP4tkfo/HdwqEMNGHbeQsvZ48R/91+FGF4e0zkK8YFrzCSan1+ml
+         E/FQ5m5N9S2rI+GJ04b1L4UW9o0M5JNjF0wvNEUzuhE+gRRcllNi6HHPAod3x41cej52
+         I4XqRY8IbVqNR9pYdzMBra3fNOLAij1kb+Ks1JX0TOabjzAuRtiTVkoPurTPU0FiCOwQ
+         LN4QeA8kDKg2kFFH+ad/oLFkX6oSxb7y7DYkFa1KiupwZP5kzGdxfC8Vt5NKzv5h8TKr
+         vsDA==
+X-Gm-Message-State: AOAM531HPBdnjZVKHmqkRaIshOsfYFJvSHKfnsLYnLTO0lNbfMnSHAbp
+        lIsfhB+Zc2D+FfrU3ySMfsdPhwI7IgfqFQ3bFKM=
+X-Google-Smtp-Source: ABdhPJyqdIYo9Jod08bcSRqbiqKOtMXB8/dTjtNT9o/n3Z0DvW2dfsFsAe+RJvvcf/8Vfer42WFY71CS4yK8/+6Bqb0=
+X-Received: by 2002:ab0:45a8:: with SMTP id u37mr9269720uau.24.1635513693016;
+ Fri, 29 Oct 2021 06:21:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a59:8e07:0:b0:23d:2f6a:b4ca with HTTP; Fri, 29 Oct 2021
+ 06:21:32 -0700 (PDT)
+Reply-To: barristerkarimdin020@gmail.com
+From:   Din Karim <katiehuggin@gmail.com>
+Date:   Fri, 29 Oct 2021 13:21:32 +0000
+Message-ID: <CABMVJ-Y6oeG=Nxq76WHptrGNehrxn-WeXPKXY77ibHQKHnVNGQ@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Turns out some xHC controllers require all 64 bits in the CRCR register
-to be written to execute a command abort.
+Hello dear,
 
-The lower 32 bits containing the command abort bit is written first.
-In case the command ring stops before we write the upper 32 bits then
-hardware may use these upper bits to set the commnd ring dequeue pointer.
+Please I'm Barr Karim Din.from the Republic of Ghana I wish to
+communicate with you.
 
-Solve this by making sure the upper 32 bits contain a valid command
-ring dequeue pointer.
+I wait for your response.
 
-The original patch that only wrote the first 32 to stop the ring went
-to stable, so this fix should go there as well.
-
-Fixes: ff0e50d3564f ("xhci: Fix command ring pointer corruption while aborting a command")
-Cc: stable@vger.kernel.org
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-ring.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 311597bba80e..eaa49aef2935 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -366,7 +366,9 @@ static void xhci_handle_stopped_cmd_ring(struct xhci_hcd *xhci,
- /* Must be called with xhci->lock held, releases and aquires lock back */
- static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
- {
--	u32 temp_32;
-+	struct xhci_segment *new_seg	= xhci->cmd_ring->deq_seg;
-+	union xhci_trb *new_deq		= xhci->cmd_ring->dequeue;
-+	u64 crcr;
- 	int ret;
- 
- 	xhci_dbg(xhci, "Abort command ring\n");
-@@ -375,13 +377,18 @@ static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
- 
- 	/*
- 	 * The control bits like command stop, abort are located in lower
--	 * dword of the command ring control register. Limit the write
--	 * to the lower dword to avoid corrupting the command ring pointer
--	 * in case if the command ring is stopped by the time upper dword
--	 * is written.
-+	 * dword of the command ring control register.
-+	 * Some controllers require all 64 bits to be written to abort the ring.
-+	 * Make sure the upper dword is valid, pointing to the next command,
-+	 * avoiding corrupting the command ring pointer in case the command ring
-+	 * is stopped by the time the upper dword is written.
- 	 */
--	temp_32 = readl(&xhci->op_regs->cmd_ring);
--	writel(temp_32 | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
-+	next_trb(xhci, NULL, &new_seg, &new_deq);
-+	if (trb_is_link(new_deq))
-+		next_trb(xhci, NULL, &new_seg, &new_deq);
-+
-+	crcr = xhci_trb_virt_to_dma(new_seg, new_deq);
-+	xhci_write_64(xhci, crcr | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
- 
- 	/* Section 4.6.1.2 of xHCI 1.0 spec says software should also time the
- 	 * completion of the Command Abort operation. If CRR is not negated in 5
--- 
-2.25.1
-
+Barr Din Karim(Esq)
