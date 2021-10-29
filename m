@@ -2,102 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0AA544033A
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Oct 2021 21:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE786440357
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Oct 2021 21:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbhJ2Taa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Oct 2021 15:30:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58774 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231778AbhJ2TaJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 29 Oct 2021 15:30:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id D448F610C7
-        for <linux-usb@vger.kernel.org>; Fri, 29 Oct 2021 19:27:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635535659;
-        bh=6ddaQdgkhCeVTq8IlypzvmuGGpj8Hq4wL/fiEdrXaVg=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=K3ory+3wYGO8ORJY3uCywVGQrEQK/0s0i9tseReSFduX9TL07NOjjjCEBNHm+OfGn
-         E6L01XQZ2td0HYMQeH8aVEDuNOPaqpGfZ7Ft5evyByuWyXKzn3zqTtSeDYSfn3IVQ4
-         pRnHpJEKXVfoutKVgcL8NBrzqI8kpHv6bWIfx1+E9MQhe1R08xmNV9kATXYuOOz45M
-         2VvyhuRJmW05V/zxvMS2g4OyoYrrCieajWgY2ymiZmSRn1vcNAKHqchJSGEYwiVVEk
-         9tThhQd6ET0KmXIBgHPDIHx4AJl3swM+LtDGRl/Ypn5sRyGJHCmPWIisNNhyAB3HlG
-         ACFF7ZibnNHpA==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id D00BC60F14; Fri, 29 Oct 2021 19:27:39 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 210425] Plugging in or unplugging power cord while system is
- suspended does not trigger updates
-Date:   Fri, 29 Oct 2021 19:27:39 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: meven29@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-210425-208809-AqUFrRfMBu@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
-References: <bug-210425-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S230172AbhJ2TmT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Oct 2021 15:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229474AbhJ2TmT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Oct 2021 15:42:19 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FF0C061570;
+        Fri, 29 Oct 2021 12:39:50 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id b12so13691151wrh.4;
+        Fri, 29 Oct 2021 12:39:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=7mQAaVooZ+3/w5FzxHsOnPcYhmbD/cVybvP2/CtUJ9Y=;
+        b=pFeBkeQ5Io5H0fQMaF718IZeXwGdhlcPdKSiYc5BbAHodfDwdWeT+ZrYizU2ubRXgR
+         t/4L0wo68Fk5Qdgvfclfa6+Kfd7yzHJex11kclUZd9uTlUJ6zJMHNVzMzpfmKqZob6f7
+         M0lhapFfpvwCHH4hqb7tPFzC4WtqhrHRO+IOyb0u2DUF24CtKEOubax6vIPEW/OzJ9i6
+         lX32ASUqP/l1o0sZV1bIKnacUYlmh2a+3NZ9d6F6aWxcYnc5QV33duf42Mdhe69on394
+         kYuhZsrVdDRodHdByzgSVjAYzBfcC0b0RJmxzLW+uH4BUz9ZtFVQMBQlygG1HwMNlmsp
+         JSgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=7mQAaVooZ+3/w5FzxHsOnPcYhmbD/cVybvP2/CtUJ9Y=;
+        b=7hX8qi703UK67R8mJBdBVWdH84GOlcsLszgEK5rFBXemzgoQn5gID/FiC4nf+RB2JS
+         4z9VmXd2UA6urZAHWTJ0QzQaEmbH7VEipAwbMvNJdnpJ4Xz0c1fHOFIayEuXz+CDxnNU
+         5ShcmsMop1+2sZPGYbIvrZU2g3TtFoRbwQ2y3mvF1cso76qLWRMfRN8YLkKqsBK7YsFe
+         gDvHU/Ih65gwlxep3aPfclxbkroRWsCYZeePJmo8XuBM8sB0zXThdIIPs/GVdKWKcM+Q
+         EJX89sMGbvJusFPB7ZKOfm1p4+eLyvbpbosY/aZPK2YA11zS5V10+ltQzdzuOo4d4PId
+         Tymw==
+X-Gm-Message-State: AOAM532cscZZaq/2UIPiT9fQMJOIhnggOypf3u5rYQeO7VMuSLbio3v/
+        ZPMw6vzolGyfB/tHFgjUGaotlStIZ2c=
+X-Google-Smtp-Source: ABdhPJx+LNpstYOnaWPOhUu6gnSFdGizO9fuaNFGQ4VcCSfk/K64RzpqUn5EsATBvGnJK0ITX56aIA==
+X-Received: by 2002:adf:a209:: with SMTP id p9mr16681163wra.70.1635536388587;
+        Fri, 29 Oct 2021 12:39:48 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p200300c78f4e06341d0f9ebdf4bbe019.dip0.t-ipconnect.de. [2003:c7:8f4e:634:1d0f:9ebd:f4bb:e019])
+        by smtp.gmail.com with ESMTPSA id m34sm5142710wms.25.2021.10.29.12.39.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Oct 2021 12:39:48 -0700 (PDT)
+Date:   Fri, 29 Oct 2021 21:39:46 +0200
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org
+Subject: [PATCH 0/3] Docs: usb: Example code updates from usb-skeleton
+Message-ID: <cover.1635533924.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
+Example code updates from usb-skeleton.c
 
---- Comment #7 from M=C3=A9ven Car (meven29@gmail.com) ---
-I have this naive patch that fix the main issue:
+Philipp Hortmann (3):
+  Docs: usb: update err() to pr_err() and replace __FILE__
+  Docs: usb: update comment and code near increment usage count
+  Docs: usb: update writesize, copy_from_user, usb_fill_bulk_urb,
+    usb_submit_urb
 
-diff --git drivers/usb/typec/ucsi/ucsi.c drivers/usb/typec/ucsi/ucsi.c
-index d0c63afaf345..a679359c98be 100644
---- drivers/usb/typec/ucsi/ucsi.c
-+++ drivers/usb/typec/ucsi/ucsi.c
-@@ -187,11 +187,22 @@ EXPORT_SYMBOL_GPL(ucsi_send_command);
- int ucsi_resume(struct ucsi *ucsi)
- {
-        u64 command;
-+       int ret;
-+       int i;
+ .../driver-api/usb/writing_usb_driver.rst     | 32 ++++++++++---------
+ 1 file changed, 17 insertions(+), 15 deletions(-)
 
-        /* Restore UCSI notification enable mask after system resume */
-        command =3D UCSI_SET_NOTIFICATION_ENABLE | ucsi->ntfy;
+-- 
+2.25.1
 
--       return ucsi_send_command(ucsi, command, NULL, 0);
-+       ret =3D ucsi_send_command(ucsi, command, NULL, 0);
-+       if (ret)
-+               return ret;
-+
-+       /* update all connectors */
-+       for (i =3D 0; i < ucsi->cap.num_connectors; i++) {
-+               ucsi_connector_change(ucsi, i);
-+       }
-+
-+       return ret;
- }
- EXPORT_SYMBOL_GPL(ucsi_resume);
- /* -----------------------------------------------------------------------=
----
-*/
-
-
-Will probably post to LKML
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
