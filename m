@@ -2,48 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94539440B8D
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Oct 2021 21:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E34440C0D
+	for <lists+linux-usb@lfdr.de>; Sun, 31 Oct 2021 00:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbhJ3TxX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 30 Oct 2021 15:53:23 -0400
-Received: from mga17.intel.com ([192.55.52.151]:42566 "EHLO mga17.intel.com"
+        id S231494AbhJ3WLd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 30 Oct 2021 18:11:33 -0400
+Received: from mga01.intel.com ([192.55.52.88]:10090 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230016AbhJ3TxX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 30 Oct 2021 15:53:23 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10153"; a="211608532"
+        id S230323AbhJ3WLc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 30 Oct 2021 18:11:32 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10153"; a="254438742"
 X-IronPort-AV: E=Sophos;i="5.87,196,1631602800"; 
-   d="gz'50?scan'50,208,50";a="211608532"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2021 12:50:50 -0700
+   d="gz'50?scan'50,208,50";a="254438742"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2021 15:09:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,196,1631602800"; 
-   d="gz'50?scan'50,208,50";a="448853633"
+   d="gz'50?scan'50,208,50";a="666190120"
 Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 30 Oct 2021 12:50:47 -0700
+  by orsmga005.jf.intel.com with ESMTP; 30 Oct 2021 15:08:58 -0700
 Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mguNK-0001iz-Hy; Sat, 30 Oct 2021 19:50:46 +0000
-Date:   Sun, 31 Oct 2021 03:49:45 +0800
+        id 1mgwX3-0001ot-JU; Sat, 30 Oct 2021 22:08:57 +0000
+Date:   Sun, 31 Oct 2021 06:08:43 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Sergey Shtylyov <s.shtylyov@omp.ru>, linux-usb@vger.kernel.org,
         Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild-all@lists.01.org, linux-omap@vger.kernel.org
-Subject: Re: [PATCH v2 04/22] usb: host: ehci-omap: deny IRQ0
-Message-ID: <202110310310.dDfSnTiN-lkp@intel.com>
-References: <20211026173943.6829-5-s.shtylyov@omp.ru>
+Cc:     kbuild-all@lists.01.org, Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v2 22/22] usb: host: xhci-tegra: deny IRQ0
+Message-ID: <202110310604.388hcvrm-lkp@intel.com>
+References: <20211026173943.6829-23-s.shtylyov@omp.ru>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="gBBFr7Ir9EOA20Yy"
+Content-Type: multipart/mixed; boundary="1yeeQ81UyVL57Vl7"
 Content-Disposition: inline
-In-Reply-To: <20211026173943.6829-5-s.shtylyov@omp.ru>
+In-Reply-To: <20211026173943.6829-23-s.shtylyov@omp.ru>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---gBBFr7Ir9EOA20Yy
+--1yeeQ81UyVL57Vl7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -52,7 +54,8 @@ Hi Sergey,
 I love your patch! Yet something to improve:
 
 [auto build test ERROR on usb/usb-testing]
-[also build test ERROR on peter-chen-usb/for-usb-next balbi-usb/testing/next v5.15-rc7 next-20211029]
+[also build test ERROR on peter-chen-usb/for-usb-next v5.15-rc7 next-20211029]
+[cannot apply to balbi-usb/testing/next]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
@@ -64,201 +67,400 @@ compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/99339edc4591ee2104acf45913d0dcb2a75bf1bf
+        # https://github.com/0day-ci/linux/commit/23ab86f72b35fb51cbc8add959ca78506d95ef25
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Sergey-Shtylyov/Explicitly-deny-IRQ0-in-the-USB-host-drivers/20211027-015925
-        git checkout 99339edc4591ee2104acf45913d0dcb2a75bf1bf
+        git checkout 23ab86f72b35fb51cbc8add959ca78506d95ef25
         # save the attached .config to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/usb/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/usb/host/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   drivers/usb/host/ehci-omap.c: In function 'ehci_hcd_omap_probe':
->> drivers/usb/host/ehci-omap.c:121:25: error: 'ENIVAL' undeclared (first use in this function); did you mean 'EINVAL'?
-     121 |                 return -ENIVAL;
+   drivers/usb/host/xhci-tegra.c: In function 'tegra_xusb_probe':
+>> drivers/usb/host/xhci-tegra.c:1443:25: error: 'ENIVAL' undeclared (first use in this function); did you mean 'EINVAL'?
+    1443 |                 return -ENIVAL;
          |                         ^~~~~~
          |                         EINVAL
-   drivers/usb/host/ehci-omap.c:121:25: note: each undeclared identifier is reported only once for each function it appears in
+   drivers/usb/host/xhci-tegra.c:1443:25: note: each undeclared identifier is reported only once for each function it appears in
 
 
-vim +121 drivers/usb/host/ehci-omap.c
+vim +1443 drivers/usb/host/xhci-tegra.c
 
-    77	
-    78	/**
-    79	 * ehci_hcd_omap_probe - initialize TI-based HCDs
-    80	 * @pdev: Pointer to this platform device's information
-    81	 *
-    82	 * Allocates basic resources for this USB host controller, and
-    83	 * then invokes the start() method for the HCD associated with it
-    84	 * through the hotplug entry's driver_data.
-    85	 */
-    86	static int ehci_hcd_omap_probe(struct platform_device *pdev)
-    87	{
-    88		struct device *dev = &pdev->dev;
-    89		struct usbhs_omap_platform_data *pdata = dev_get_platdata(dev);
-    90		struct resource	*res;
-    91		struct usb_hcd	*hcd;
-    92		void __iomem *regs;
-    93		int ret;
-    94		int irq;
-    95		int i;
-    96		struct omap_hcd	*omap;
-    97	
-    98		if (usb_disabled())
-    99			return -ENODEV;
-   100	
-   101		if (!dev->parent) {
-   102			dev_err(dev, "Missing parent device\n");
-   103			return -ENODEV;
-   104		}
-   105	
-   106		/* For DT boot, get platform data from parent. i.e. usbhshost */
-   107		if (dev->of_node) {
-   108			pdata = dev_get_platdata(dev->parent);
-   109			dev->platform_data = pdata;
-   110		}
-   111	
-   112		if (!pdata) {
-   113			dev_err(dev, "Missing platform data\n");
-   114			return -ENODEV;
-   115		}
-   116	
-   117		irq = platform_get_irq(pdev, 0);
-   118		if (irq < 0)
-   119			return irq;
-   120		if (!irq)
- > 121			return -ENIVAL;
-   122	
-   123		res =  platform_get_resource(pdev, IORESOURCE_MEM, 0);
-   124		regs = devm_ioremap_resource(dev, res);
-   125		if (IS_ERR(regs))
-   126			return PTR_ERR(regs);
-   127	
-   128		/*
-   129		 * Right now device-tree probed devices don't get dma_mask set.
-   130		 * Since shared usb code relies on it, set it here for now.
-   131		 * Once we have dma capability bindings this can go away.
-   132		 */
-   133		ret = dma_coerce_mask_and_coherent(dev, DMA_BIT_MASK(32));
-   134		if (ret)
-   135			return ret;
-   136	
-   137		ret = -ENODEV;
-   138		hcd = usb_create_hcd(&ehci_omap_hc_driver, dev,
-   139				dev_name(dev));
-   140		if (!hcd) {
-   141			dev_err(dev, "Failed to create HCD\n");
-   142			return -ENOMEM;
-   143		}
-   144	
-   145		hcd->rsrc_start = res->start;
-   146		hcd->rsrc_len = resource_size(res);
-   147		hcd->regs = regs;
-   148		hcd_to_ehci(hcd)->caps = regs;
-   149	
-   150		omap = (struct omap_hcd *)hcd_to_ehci(hcd)->priv;
-   151		omap->nports = pdata->nports;
-   152	
-   153		platform_set_drvdata(pdev, hcd);
-   154	
-   155		/* get the PHY devices if needed */
-   156		for (i = 0 ; i < omap->nports ; i++) {
-   157			struct usb_phy *phy;
-   158	
-   159			/* get the PHY device */
-   160			phy = devm_usb_get_phy_by_phandle(dev, "phys", i);
-   161			if (IS_ERR(phy)) {
-   162				ret = PTR_ERR(phy);
-   163				if (ret == -ENODEV) { /* no PHY */
-   164					phy = NULL;
-   165					continue;
-   166				}
-   167	
-   168				if (ret != -EPROBE_DEFER)
-   169					dev_err(dev, "Can't get PHY for port %d: %d\n",
-   170						i, ret);
-   171				goto err_phy;
-   172			}
-   173	
-   174			omap->phy[i] = phy;
-   175	
-   176			if (pdata->port_mode[i] == OMAP_EHCI_PORT_MODE_PHY) {
-   177				usb_phy_init(omap->phy[i]);
-   178				/* bring PHY out of suspend */
-   179				usb_phy_set_suspend(omap->phy[i], 0);
-   180			}
-   181		}
-   182	
-   183		pm_runtime_enable(dev);
-   184		pm_runtime_get_sync(dev);
-   185	
-   186		/*
-   187		 * An undocumented "feature" in the OMAP3 EHCI controller,
-   188		 * causes suspended ports to be taken out of suspend when
-   189		 * the USBCMD.Run/Stop bit is cleared (for example when
-   190		 * we do ehci_bus_suspend).
-   191		 * This breaks suspend-resume if the root-hub is allowed
-   192		 * to suspend. Writing 1 to this undocumented register bit
-   193		 * disables this feature and restores normal behavior.
-   194		 */
-   195		ehci_write(regs, EHCI_INSNREG04,
-   196					EHCI_INSNREG04_DISABLE_UNSUSPEND);
-   197	
-   198		ret = usb_add_hcd(hcd, irq, IRQF_SHARED);
-   199		if (ret) {
-   200			dev_err(dev, "failed to add hcd with err %d\n", ret);
-   201			goto err_pm_runtime;
-   202		}
-   203		device_wakeup_enable(hcd->self.controller);
-   204	
-   205		/*
-   206		 * Bring PHYs out of reset for non PHY modes.
-   207		 * Even though HSIC mode is a PHY-less mode, the reset
-   208		 * line exists between the chips and can be modelled
-   209		 * as a PHY device for reset control.
-   210		 */
-   211		for (i = 0; i < omap->nports; i++) {
-   212			if (!omap->phy[i] ||
-   213			     pdata->port_mode[i] == OMAP_EHCI_PORT_MODE_PHY)
-   214				continue;
-   215	
-   216			usb_phy_init(omap->phy[i]);
-   217			/* bring PHY out of suspend */
-   218			usb_phy_set_suspend(omap->phy[i], 0);
-   219		}
-   220	
-   221		return 0;
-   222	
-   223	err_pm_runtime:
-   224		pm_runtime_put_sync(dev);
-   225		pm_runtime_disable(dev);
-   226	
-   227	err_phy:
-   228		for (i = 0; i < omap->nports; i++) {
-   229			if (omap->phy[i])
-   230				usb_phy_shutdown(omap->phy[i]);
-   231		}
-   232	
-   233		usb_put_hcd(hcd);
-   234	
-   235		return ret;
-   236	}
-   237	
+  1400	
+  1401	static int tegra_xusb_probe(struct platform_device *pdev)
+  1402	{
+  1403		struct tegra_xusb *tegra;
+  1404		struct device_node *np;
+  1405		struct resource *regs;
+  1406		struct xhci_hcd *xhci;
+  1407		unsigned int i, j, k;
+  1408		struct phy *phy;
+  1409		int err;
+  1410	
+  1411		BUILD_BUG_ON(sizeof(struct tegra_xusb_fw_header) != 256);
+  1412	
+  1413		tegra = devm_kzalloc(&pdev->dev, sizeof(*tegra), GFP_KERNEL);
+  1414		if (!tegra)
+  1415			return -ENOMEM;
+  1416	
+  1417		tegra->soc = of_device_get_match_data(&pdev->dev);
+  1418		mutex_init(&tegra->lock);
+  1419		tegra->dev = &pdev->dev;
+  1420	
+  1421		err = tegra_xusb_init_context(tegra);
+  1422		if (err < 0)
+  1423			return err;
+  1424	
+  1425		tegra->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &regs);
+  1426		if (IS_ERR(tegra->regs))
+  1427			return PTR_ERR(tegra->regs);
+  1428	
+  1429		tegra->fpci_base = devm_platform_ioremap_resource(pdev, 1);
+  1430		if (IS_ERR(tegra->fpci_base))
+  1431			return PTR_ERR(tegra->fpci_base);
+  1432	
+  1433		if (tegra->soc->has_ipfs) {
+  1434			tegra->ipfs_base = devm_platform_ioremap_resource(pdev, 2);
+  1435			if (IS_ERR(tegra->ipfs_base))
+  1436				return PTR_ERR(tegra->ipfs_base);
+  1437		}
+  1438	
+  1439		tegra->xhci_irq = platform_get_irq(pdev, 0);
+  1440		if (tegra->xhci_irq < 0)
+  1441			return tegra->xhci_irq;
+  1442		if (!tegra->xhci_irq)
+> 1443			return -ENIVAL;
+  1444	
+  1445		tegra->mbox_irq = platform_get_irq(pdev, 1);
+  1446		if (tegra->mbox_irq < 0)
+  1447			return tegra->mbox_irq;
+  1448	
+  1449		tegra->padctl = tegra_xusb_padctl_get(&pdev->dev);
+  1450		if (IS_ERR(tegra->padctl))
+  1451			return PTR_ERR(tegra->padctl);
+  1452	
+  1453		np = of_parse_phandle(pdev->dev.of_node, "nvidia,xusb-padctl", 0);
+  1454		if (!np) {
+  1455			err = -ENODEV;
+  1456			goto put_padctl;
+  1457		}
+  1458	
+  1459		tegra->padctl_irq = of_irq_get(np, 0);
+  1460		if (tegra->padctl_irq <= 0) {
+  1461			err = (tegra->padctl_irq == 0) ? -ENODEV : tegra->padctl_irq;
+  1462			goto put_padctl;
+  1463		}
+  1464	
+  1465		tegra->host_clk = devm_clk_get(&pdev->dev, "xusb_host");
+  1466		if (IS_ERR(tegra->host_clk)) {
+  1467			err = PTR_ERR(tegra->host_clk);
+  1468			dev_err(&pdev->dev, "failed to get xusb_host: %d\n", err);
+  1469			goto put_padctl;
+  1470		}
+  1471	
+  1472		tegra->falcon_clk = devm_clk_get(&pdev->dev, "xusb_falcon_src");
+  1473		if (IS_ERR(tegra->falcon_clk)) {
+  1474			err = PTR_ERR(tegra->falcon_clk);
+  1475			dev_err(&pdev->dev, "failed to get xusb_falcon_src: %d\n", err);
+  1476			goto put_padctl;
+  1477		}
+  1478	
+  1479		tegra->ss_clk = devm_clk_get(&pdev->dev, "xusb_ss");
+  1480		if (IS_ERR(tegra->ss_clk)) {
+  1481			err = PTR_ERR(tegra->ss_clk);
+  1482			dev_err(&pdev->dev, "failed to get xusb_ss: %d\n", err);
+  1483			goto put_padctl;
+  1484		}
+  1485	
+  1486		tegra->ss_src_clk = devm_clk_get(&pdev->dev, "xusb_ss_src");
+  1487		if (IS_ERR(tegra->ss_src_clk)) {
+  1488			err = PTR_ERR(tegra->ss_src_clk);
+  1489			dev_err(&pdev->dev, "failed to get xusb_ss_src: %d\n", err);
+  1490			goto put_padctl;
+  1491		}
+  1492	
+  1493		tegra->hs_src_clk = devm_clk_get(&pdev->dev, "xusb_hs_src");
+  1494		if (IS_ERR(tegra->hs_src_clk)) {
+  1495			err = PTR_ERR(tegra->hs_src_clk);
+  1496			dev_err(&pdev->dev, "failed to get xusb_hs_src: %d\n", err);
+  1497			goto put_padctl;
+  1498		}
+  1499	
+  1500		tegra->fs_src_clk = devm_clk_get(&pdev->dev, "xusb_fs_src");
+  1501		if (IS_ERR(tegra->fs_src_clk)) {
+  1502			err = PTR_ERR(tegra->fs_src_clk);
+  1503			dev_err(&pdev->dev, "failed to get xusb_fs_src: %d\n", err);
+  1504			goto put_padctl;
+  1505		}
+  1506	
+  1507		tegra->pll_u_480m = devm_clk_get(&pdev->dev, "pll_u_480m");
+  1508		if (IS_ERR(tegra->pll_u_480m)) {
+  1509			err = PTR_ERR(tegra->pll_u_480m);
+  1510			dev_err(&pdev->dev, "failed to get pll_u_480m: %d\n", err);
+  1511			goto put_padctl;
+  1512		}
+  1513	
+  1514		tegra->clk_m = devm_clk_get(&pdev->dev, "clk_m");
+  1515		if (IS_ERR(tegra->clk_m)) {
+  1516			err = PTR_ERR(tegra->clk_m);
+  1517			dev_err(&pdev->dev, "failed to get clk_m: %d\n", err);
+  1518			goto put_padctl;
+  1519		}
+  1520	
+  1521		tegra->pll_e = devm_clk_get(&pdev->dev, "pll_e");
+  1522		if (IS_ERR(tegra->pll_e)) {
+  1523			err = PTR_ERR(tegra->pll_e);
+  1524			dev_err(&pdev->dev, "failed to get pll_e: %d\n", err);
+  1525			goto put_padctl;
+  1526		}
+  1527	
+  1528		if (!of_property_read_bool(pdev->dev.of_node, "power-domains")) {
+  1529			tegra->host_rst = devm_reset_control_get(&pdev->dev,
+  1530								 "xusb_host");
+  1531			if (IS_ERR(tegra->host_rst)) {
+  1532				err = PTR_ERR(tegra->host_rst);
+  1533				dev_err(&pdev->dev,
+  1534					"failed to get xusb_host reset: %d\n", err);
+  1535				goto put_padctl;
+  1536			}
+  1537	
+  1538			tegra->ss_rst = devm_reset_control_get(&pdev->dev, "xusb_ss");
+  1539			if (IS_ERR(tegra->ss_rst)) {
+  1540				err = PTR_ERR(tegra->ss_rst);
+  1541				dev_err(&pdev->dev, "failed to get xusb_ss reset: %d\n",
+  1542					err);
+  1543				goto put_padctl;
+  1544			}
+  1545		} else {
+  1546			err = tegra_xusb_powerdomain_init(&pdev->dev, tegra);
+  1547			if (err)
+  1548				goto put_powerdomains;
+  1549		}
+  1550	
+  1551		tegra->supplies = devm_kcalloc(&pdev->dev, tegra->soc->num_supplies,
+  1552					       sizeof(*tegra->supplies), GFP_KERNEL);
+  1553		if (!tegra->supplies) {
+  1554			err = -ENOMEM;
+  1555			goto put_powerdomains;
+  1556		}
+  1557	
+  1558		regulator_bulk_set_supply_names(tegra->supplies,
+  1559						tegra->soc->supply_names,
+  1560						tegra->soc->num_supplies);
+  1561	
+  1562		err = devm_regulator_bulk_get(&pdev->dev, tegra->soc->num_supplies,
+  1563					      tegra->supplies);
+  1564		if (err) {
+  1565			dev_err(&pdev->dev, "failed to get regulators: %d\n", err);
+  1566			goto put_powerdomains;
+  1567		}
+  1568	
+  1569		for (i = 0; i < tegra->soc->num_types; i++) {
+  1570			if (!strncmp(tegra->soc->phy_types[i].name, "usb2", 4))
+  1571				tegra->num_usb_phys = tegra->soc->phy_types[i].num;
+  1572			tegra->num_phys += tegra->soc->phy_types[i].num;
+  1573		}
+  1574	
+  1575		tegra->phys = devm_kcalloc(&pdev->dev, tegra->num_phys,
+  1576					   sizeof(*tegra->phys), GFP_KERNEL);
+  1577		if (!tegra->phys) {
+  1578			err = -ENOMEM;
+  1579			goto put_powerdomains;
+  1580		}
+  1581	
+  1582		for (i = 0, k = 0; i < tegra->soc->num_types; i++) {
+  1583			char prop[8];
+  1584	
+  1585			for (j = 0; j < tegra->soc->phy_types[i].num; j++) {
+  1586				snprintf(prop, sizeof(prop), "%s-%d",
+  1587					 tegra->soc->phy_types[i].name, j);
+  1588	
+  1589				phy = devm_phy_optional_get(&pdev->dev, prop);
+  1590				if (IS_ERR(phy)) {
+  1591					dev_err(&pdev->dev,
+  1592						"failed to get PHY %s: %ld\n", prop,
+  1593						PTR_ERR(phy));
+  1594					err = PTR_ERR(phy);
+  1595					goto put_powerdomains;
+  1596				}
+  1597	
+  1598				tegra->phys[k++] = phy;
+  1599			}
+  1600		}
+  1601	
+  1602		tegra->hcd = usb_create_hcd(&tegra_xhci_hc_driver, &pdev->dev,
+  1603					    dev_name(&pdev->dev));
+  1604		if (!tegra->hcd) {
+  1605			err = -ENOMEM;
+  1606			goto put_powerdomains;
+  1607		}
+  1608	
+  1609		tegra->hcd->skip_phy_initialization = 1;
+  1610		tegra->hcd->regs = tegra->regs;
+  1611		tegra->hcd->rsrc_start = regs->start;
+  1612		tegra->hcd->rsrc_len = resource_size(regs);
+  1613	
+  1614		/*
+  1615		 * This must happen after usb_create_hcd(), because usb_create_hcd()
+  1616		 * will overwrite the drvdata of the device with the hcd it creates.
+  1617		 */
+  1618		platform_set_drvdata(pdev, tegra);
+  1619	
+  1620		err = tegra_xusb_clk_enable(tegra);
+  1621		if (err) {
+  1622			dev_err(tegra->dev, "failed to enable clocks: %d\n", err);
+  1623			goto put_hcd;
+  1624		}
+  1625	
+  1626		err = regulator_bulk_enable(tegra->soc->num_supplies, tegra->supplies);
+  1627		if (err) {
+  1628			dev_err(tegra->dev, "failed to enable regulators: %d\n", err);
+  1629			goto disable_clk;
+  1630		}
+  1631	
+  1632		err = tegra_xusb_phy_enable(tegra);
+  1633		if (err < 0) {
+  1634			dev_err(&pdev->dev, "failed to enable PHYs: %d\n", err);
+  1635			goto disable_regulator;
+  1636		}
+  1637	
+  1638		/*
+  1639		 * The XUSB Falcon microcontroller can only address 40 bits, so set
+  1640		 * the DMA mask accordingly.
+  1641		 */
+  1642		err = dma_set_mask_and_coherent(tegra->dev, DMA_BIT_MASK(40));
+  1643		if (err < 0) {
+  1644			dev_err(&pdev->dev, "failed to set DMA mask: %d\n", err);
+  1645			goto disable_phy;
+  1646		}
+  1647	
+  1648		err = tegra_xusb_request_firmware(tegra);
+  1649		if (err < 0) {
+  1650			dev_err(&pdev->dev, "failed to request firmware: %d\n", err);
+  1651			goto disable_phy;
+  1652		}
+  1653	
+  1654		err = tegra_xusb_unpowergate_partitions(tegra);
+  1655		if (err)
+  1656			goto free_firmware;
+  1657	
+  1658		tegra_xusb_config(tegra);
+  1659	
+  1660		err = tegra_xusb_load_firmware(tegra);
+  1661		if (err < 0) {
+  1662			dev_err(&pdev->dev, "failed to load firmware: %d\n", err);
+  1663			goto powergate;
+  1664		}
+  1665	
+  1666		err = usb_add_hcd(tegra->hcd, tegra->xhci_irq, IRQF_SHARED);
+  1667		if (err < 0) {
+  1668			dev_err(&pdev->dev, "failed to add USB HCD: %d\n", err);
+  1669			goto powergate;
+  1670		}
+  1671	
+  1672		device_wakeup_enable(tegra->hcd->self.controller);
+  1673	
+  1674		xhci = hcd_to_xhci(tegra->hcd);
+  1675	
+  1676		xhci->shared_hcd = usb_create_shared_hcd(&tegra_xhci_hc_driver,
+  1677							 &pdev->dev,
+  1678							 dev_name(&pdev->dev),
+  1679							 tegra->hcd);
+  1680		if (!xhci->shared_hcd) {
+  1681			dev_err(&pdev->dev, "failed to create shared HCD\n");
+  1682			err = -ENOMEM;
+  1683			goto remove_usb2;
+  1684		}
+  1685	
+  1686		err = usb_add_hcd(xhci->shared_hcd, tegra->xhci_irq, IRQF_SHARED);
+  1687		if (err < 0) {
+  1688			dev_err(&pdev->dev, "failed to add shared HCD: %d\n", err);
+  1689			goto put_usb3;
+  1690		}
+  1691	
+  1692		err = devm_request_threaded_irq(&pdev->dev, tegra->mbox_irq,
+  1693						tegra_xusb_mbox_irq,
+  1694						tegra_xusb_mbox_thread, 0,
+  1695						dev_name(&pdev->dev), tegra);
+  1696		if (err < 0) {
+  1697			dev_err(&pdev->dev, "failed to request IRQ: %d\n", err);
+  1698			goto remove_usb3;
+  1699		}
+  1700	
+  1701		err = devm_request_threaded_irq(&pdev->dev, tegra->padctl_irq, NULL, tegra_xusb_padctl_irq,
+  1702						IRQF_ONESHOT, dev_name(&pdev->dev), tegra);
+  1703		if (err < 0) {
+  1704			dev_err(&pdev->dev, "failed to request padctl IRQ: %d\n", err);
+  1705			goto remove_usb3;
+  1706		}
+  1707	
+  1708		err = tegra_xusb_enable_firmware_messages(tegra);
+  1709		if (err < 0) {
+  1710			dev_err(&pdev->dev, "failed to enable messages: %d\n", err);
+  1711			goto remove_usb3;
+  1712		}
+  1713	
+  1714		err = tegra_xusb_init_usb_phy(tegra);
+  1715		if (err < 0) {
+  1716			dev_err(&pdev->dev, "failed to init USB PHY: %d\n", err);
+  1717			goto remove_usb3;
+  1718		}
+  1719	
+  1720		/* Enable wake for both USB 2.0 and USB 3.0 roothubs */
+  1721		device_init_wakeup(&tegra->hcd->self.root_hub->dev, true);
+  1722		device_init_wakeup(&xhci->shared_hcd->self.root_hub->dev, true);
+  1723		device_init_wakeup(tegra->dev, true);
+  1724	
+  1725		pm_runtime_use_autosuspend(tegra->dev);
+  1726		pm_runtime_set_autosuspend_delay(tegra->dev, 2000);
+  1727		pm_runtime_mark_last_busy(tegra->dev);
+  1728		pm_runtime_set_active(tegra->dev);
+  1729		pm_runtime_enable(tegra->dev);
+  1730	
+  1731		return 0;
+  1732	
+  1733	remove_usb3:
+  1734		usb_remove_hcd(xhci->shared_hcd);
+  1735	put_usb3:
+  1736		usb_put_hcd(xhci->shared_hcd);
+  1737	remove_usb2:
+  1738		usb_remove_hcd(tegra->hcd);
+  1739	powergate:
+  1740		tegra_xusb_powergate_partitions(tegra);
+  1741	free_firmware:
+  1742		dma_free_coherent(&pdev->dev, tegra->fw.size, tegra->fw.virt,
+  1743				  tegra->fw.phys);
+  1744	disable_phy:
+  1745		tegra_xusb_phy_disable(tegra);
+  1746	disable_regulator:
+  1747		regulator_bulk_disable(tegra->soc->num_supplies, tegra->supplies);
+  1748	disable_clk:
+  1749		tegra_xusb_clk_disable(tegra);
+  1750	put_hcd:
+  1751		usb_put_hcd(tegra->hcd);
+  1752	put_powerdomains:
+  1753		tegra_xusb_powerdomain_remove(&pdev->dev, tegra);
+  1754	put_padctl:
+  1755		of_node_put(np);
+  1756		tegra_xusb_padctl_put(tegra->padctl);
+  1757		return err;
+  1758	}
+  1759	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---gBBFr7Ir9EOA20Yy
+--1yeeQ81UyVL57Vl7
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICDqHfWEAAy5jb25maWcAjDxdc9u4ru/7Kzy7L+c8dGvJn5k7eaAlyuJaXyEpx8kLx5u6
+H4sICBK4fWEAAy5jb25maWcAjDxdc9u4ru/7Kzy7L+c8dGvJn5k7eaAlyuJaXyEpx8kLx5u6
 PZmT2L2Os7f99xekvkiKctrpTCsAJEEQBAEQ9B+//TFC75fT6/7y/LR/efk5+nY4Hs77y+HL
 6Ovzy+F/RmE+ynI+wiHhfwJx8nx8//F5f34dzf70Zn+OP52f5qPN4Xw8vIyC0/Hr87d3aP18
 Ov72x29BnkVkLYJAbDFlJM8Exzt++zu0/vQi+/n07fh+2P/9/Onb09PoX+sg+PfI8/70/xz/
@@ -1285,4 +1487,4 @@ gLEXjP5OwncZL7GryUE3CTbggWqjHJp8NHvbFJKL2tGUBUg89vO9yxdrWyVVBjLxwESqWK8D
 4+Ff8fRulfEZ2KgVasdmxcCOgcs0BL5yYMdJJpnVv7aVDCPIiAmogmezeKKtGlSD2Cbd1EXk
 NTN4p3jBEdSD8P8HicrFsDW/AwA=
 
---gBBFr7Ir9EOA20Yy--
+--1yeeQ81UyVL57Vl7--
