@@ -2,120 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93710440841
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Oct 2021 11:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D2244088B
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Oct 2021 13:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbhJ3JhM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 30 Oct 2021 05:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
+        id S231849AbhJ3L1X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 30 Oct 2021 07:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbhJ3JhM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 Oct 2021 05:37:12 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11090C061570
-        for <linux-usb@vger.kernel.org>; Sat, 30 Oct 2021 02:34:42 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id bi35so25923823lfb.9
-        for <linux-usb@vger.kernel.org>; Sat, 30 Oct 2021 02:34:41 -0700 (PDT)
+        with ESMTP id S231574AbhJ3L1V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 Oct 2021 07:27:21 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D67FC061570;
+        Sat, 30 Oct 2021 04:24:51 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id d5so5490092wrc.1;
+        Sat, 30 Oct 2021 04:24:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=9/WkdH8I7SISzvTO/uk8FQH2z0Yov9Zen7PU8kYoFrw=;
-        b=AM4112v6UbdLoYkhUMcAIffEVq8eIK4LhBRbRn25HOyOOS5QrF/WOp7tsrcDcwiRuc
-         u7GTL4RRLWGayxO9Qhx756ZUNcb5YDfrRlQu3gPpZpfWxeVVkeC6+Sw+FDre6lNOtgHb
-         9K9FYdw+X12zuWAnVMACjjRHtRtDhx5nP4kYSva4/jX1dV3d2rJ6P3b+6y2Uxk5Hn+Rw
-         nA6myrbyD7gCoiXi/zIDm7Dnq7X9JA83CnXktfo9o1BrH8rj/40/3AKzgZS4uvfcYpN5
-         pex6ojPWYVRTGMxG0++JfsNXKTn0r+0W2G4UNaYQUk8aeG4oRObVD70/c1jx6OCiR/iO
-         PHrQ==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=7xavHv1Il8UdSsJGPMXxUxUi9idHdGLlQpzGC+6BG7I=;
+        b=hr7KkC8xGfMEZ8hVd1t5IxeHNZVp9RZLUhCebOskkyoisoGoLEBTdBYbIaB2bku7YX
+         EXSDtetmVn1YGnJTqG8zhVbM2z1upzOwj4YypN6Q4Y4clobJO3eks87o9M3mauXIvLNw
+         AbuebhUb+Xa0iQ/3UfunJczUugyWTqz1hOwPBw46/vA+gTlsP8MWGLfY07YvBLInbjpc
+         ig2HxpT5FPFZL2+Nu8hG9gIfRuHi1TkZ381uQwFBIBsfqFfMPKHgTsEH71Q2t//EjFhO
+         k3ndC/Gay/2MsuYpUUVk+pU0b0YsfEnv62veABrCnw0ZF/WUuY9x4omjYEcRpTJLJmc9
+         XhjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=9/WkdH8I7SISzvTO/uk8FQH2z0Yov9Zen7PU8kYoFrw=;
-        b=KXvwfb/xwp0gbFNDl99ie7vaFCOPFyzbBGUPBSNeWAiGYwii8FouBkHE1lwAxMpING
-         Qo4X0TeBUjiYQV+OxiD5hW/tdqtpMjpdci9tmO8N7Ig6lULIWDGHBWnEVG/Xcgh86hqF
-         cEZxlEq3b8Gbr7lzBauPW80ts8Po6aoQ86Vo/+qpc//LpFAcFV1/uMOTylq1g3N5jQkX
-         cp/7mPr8ruXJxkdWSG71+ruM7y4wqHOhm949UE43jbddzEzEDe67nAb+an5vPRKWY1vJ
-         my7ME0l5ZWSRwU1a7VviAllaTY91CRWwLLUtkrPo7N+SNUzN4cS5wSJxHCrAXFiJqLRT
-         ml5Q==
-X-Gm-Message-State: AOAM532NPZanKognShqmyL1NuMShJ9j5kxSWjwgSw1XxgAmLpVfB9fL0
-        qoI9b1DElQfvhkVkGmCa4SNP4nzcus+PWIvGJsQ=
-X-Google-Smtp-Source: ABdhPJzAdzUAkcHXfioc5jxBu2KrCMUEVEjgdxxdPNZmYzR9Dam+Z4I2pudPhLF9o8oph4yRzte7f7XDmrE8kdSdW70=
-X-Received: by 2002:a05:6512:3697:: with SMTP id d23mr15301528lfs.187.1635586480396;
- Sat, 30 Oct 2021 02:34:40 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=7xavHv1Il8UdSsJGPMXxUxUi9idHdGLlQpzGC+6BG7I=;
+        b=FO8RfMv28/kIG6MIUKlj/tG/R39sQoTD1wCv3WJF9yXM9Lv5GyuPL8VuLK/TvK48wF
+         aqeZ3fC2mP2spDZNXhjinM6UFpeyFLS5DJyDCZ3htttEp6+vVs3dhgROsBisGs5hTUcS
+         Bbea9Xw+t6VJsCLDCxMSXrlokc47K69zTYD+d3PMgXoyHuUVfqKp8fbSAwkhUuSv9+ZP
+         hiGt7YX8XkdtMXf1ownZsd03SMY3cr+c8XplRt7R7WcoZrcwxih6zB/av5QwGBYtPu2U
+         gjZwVs3abjqnCDewquqMjvup7Z4nPmXCoBUz3NU3Rlr1qunV7ZueafVloFJ2oLwYd7fS
+         TjEQ==
+X-Gm-Message-State: AOAM531k7BwhsV7/BvBSEo6mA189nZ7ELpjNPXXUigL5Z3xO8t+boVH6
+        7hSuKe/7SSTHnb69OL82fYRetN0fUMA=
+X-Google-Smtp-Source: ABdhPJzN/vxFueQGbYOGI9AfIwSporfCybicaxHpOWXFFBw13B+S26szI9Ge97ZLP4l7xugXt6di+A==
+X-Received: by 2002:a5d:4909:: with SMTP id x9mr18042026wrq.313.1635593089918;
+        Sat, 30 Oct 2021 04:24:49 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p200300c78f4e069113f7f01122185925.dip0.t-ipconnect.de. [2003:c7:8f4e:691:13f7:f011:2218:5925])
+        by smtp.gmail.com with ESMTPSA id f1sm7978237wrc.74.2021.10.30.04.24.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Oct 2021 04:24:49 -0700 (PDT)
+Date:   Sat, 30 Oct 2021 13:24:47 +0200
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org
+Subject: [PATCH v2 0/3] Docs: usb: Example code updates from usb-skeleton
+Message-ID: <cover.1635591623.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6520:4031:b0:149:151b:56d7 with HTTP; Sat, 30 Oct 2021
- 02:34:40 -0700 (PDT)
-Reply-To: mussaomra2017@gmail.com
-From:   Omra Musa <mussaomra2017@gmail.com>
-Date:   Sat, 30 Oct 2021 09:34:40 +0000
-Message-ID: <CAFRtM2PdVbFpPpmmnVezQZifA2MZjukPNzMzgVAoYb=+1pKhRw@mail.gmail.com>
-Subject: PLEASE READ AND GET BACK TO ME.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From Mr Omra Musa
-Bank Of Africa (B.O.A)
-Burkina Faso Ouagadougou
+Example code updates from usb-skeleton.c
 
-My Dear Friend,
+v2: update patch #1
+    - changed kernel message to be in one line
+    - added missing "n\"    
 
-Please I want you to read this letter very carefully and I must
-apologize for barging this message into your mail box without any
-formal introduction due to the urgency and confidential of this issue
-and I know that this message will come to you as a surprise. Please
-this is not a joke and I will not like you to joke with it.
+Philipp Hortmann (3):
+  Docs: usb: update err() to pr_err() and replace __FILE__
+  Docs: usb: update comment and code near increment usage count
+  Docs: usb: update writesize, copy_from_user, usb_fill_bulk_urb,
+    usb_submit_urb
 
-I am Mr Omra Musa Manager in Bank Of Africa (B.O.A) Ouagadougou,
-Burkina Faso. I Hoped that you will not expose or betray this trust
-and confident that I am about to establish with you for the mutual
-benefit of you and I. This fund was deposited in our bank by Mr.
-Kattan Azmal from Jordan who died in a plane crash in 2000 Tbm 700
-aircraft on 31st July with his wife and the whole crew on board.
+ .../driver-api/usb/writing_usb_driver.rst     | 32 ++++++++++---------
+ 1 file changed, 17 insertions(+), 15 deletions(-)
 
-I need your urgent assistance in transferring the sum of ($15) million
-USD into your account within 14 working banking days. This money has
-been deposited for years in our Bank without claim due to the owner of
-this fund died along with his entire family in an air crash since July
-31st 2000.
+-- 
+2.25.1
 
-The reason why i contacted you is that after the bank audit in 24th of
-November, we found out that this fund has remained unclaimed since the
-death of the deceased costumer.
-
-I want our bank to release this fund to you as the nearest person to
-our deceased customer while i come over to your country to share this
-fund with you as soon as you confirm this fund into your account and
-ask me to come over. I don't want the money to go into our Bank
-treasure as an abandoned fund. So this is the reason why i contacted
-you so that our bank will release this money to you as the next of kin
-to the deceased customer. Please I would like you to keep this
-proposal as a top secret and delete it if you are not interesting.
-
-Upon the receipt of your reply and indication of your capability, i
-will give you full details on how the business will be executed and
-also note that you will have 50% of the above mentioned sum if you
-agree to handle this business with me while 50% be for me, Because i
-don't want anyone here in our bank to know my involvement until you
-confirm this fund into your account and ask me to come over for the
-sharing as I indicated.
-
-I am looking forward to hear from you immediately for further information
-
-THE REQUESTED INFORMATIONS BELOW
-==================================
-1. FULL NAME..............
-2. TELEPHONE NUMBERS/MOBILE/FAX.......
-3. YOUR AGE......
-4. YOUR SEX.........
-5. YOUR OCCUPATION........
-6. YOUR COUNTRY AND CITY......
-7. YOUR HOME ADDRESS........
-8. MARITAL STATUS............
-
-Sincerely,
-Mr Omra Musa
-
-You can reply to my private email address at mussaomra2017@gmail.com
