@@ -2,78 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6C3440814
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Oct 2021 10:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2BA440817
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Oct 2021 10:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbhJ3I5A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 30 Oct 2021 04:57:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50914 "EHLO mail.kernel.org"
+        id S231759AbhJ3JAb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 30 Oct 2021 05:00:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51178 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230427AbhJ3I47 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 30 Oct 2021 04:56:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 866C361038;
-        Sat, 30 Oct 2021 08:54:29 +0000 (UTC)
+        id S230427AbhJ3JAa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 30 Oct 2021 05:00:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DA6CB60F58;
+        Sat, 30 Oct 2021 08:57:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1635584070;
-        bh=c52Wntt5s9OoFBF1jdvF7shL8eVEBkvJVgyOd9zNJjU=;
+        s=korg; t=1635584280;
+        bh=ZLezgHFxQv+bwUymquKkOIMuuk0otT01ybewMqW1B2A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hFN4OkxWi54pg8ZRryV9msy84nbZgKnUEhVngdxIGo14ykjAwCb/6LVOm0GKF0G1f
-         lUJfpo0PXbFNBP1m6pMQDexQI5UXY2o7zvv48SYBa/u+NTlKx9otZKZ0/4D0KBXYtr
-         SUAijaYJFoV3PZD2z7WTofGK4lguIyGbZuKVSkmM=
-Date:   Sat, 30 Oct 2021 10:54:27 +0200
+        b=QXFLUqvE/pmjqynuplphgdRg+dhKgKBaUVlKY1fA1znsNcRlY1l8g19DwgeUe2GmZ
+         r78p9D5WreqUhXfoCfa4B97gp+k5+yMLsKWR5bBPtI/Y8WMKs3/T0HmB+Uca9YEiF+
+         Dlxf7155dziMwQIlEFhCp/RyJpqFSXZUnNJ8Oa1w=
+Date:   Sat, 30 Oct 2021 10:57:58 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v2 01/22] usb: host: ehci-exynos: deny IRQ0
-Message-ID: <YX0IQ/boUgVseZvS@kroah.com>
-References: <20211026173943.6829-1-s.shtylyov@omp.ru>
- <20211026173943.6829-2-s.shtylyov@omp.ru>
+To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com
+Subject: Re: [PATCH 3/3] usb: dwc: host: Set the property usb-skip-phy-init
+Message-ID: <YX0JFnJPEbJIKSKf@kroah.com>
+References: <1635272372-9982-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1635272372-9982-4-git-send-email-quic_c_sanm@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211026173943.6829-2-s.shtylyov@omp.ru>
+In-Reply-To: <1635272372-9982-4-git-send-email-quic_c_sanm@quicinc.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 26, 2021 at 08:39:22PM +0300, Sergey Shtylyov wrote:
-> If platform_get_irq() returns IRQ0 (considered invalid according to Linus)
-> the driver blithely passes it to usb_add_hcd() that treats IRQ0 as no IRQ
-> at all. Deny IRQ0 right away, returning -EINVAL from the probe() method...
+On Tue, Oct 26, 2021 at 11:49:32PM +0530, Sandeep Maheswaram wrote:
+> dwc3 manages PHY by own DRD driver, so skip the management by
+> HCD core.
+> During runtime suspend phy was not getting suspend because
+> runtime_usage value is 2.
 > 
-> Fixes: 44ed240d6273 ("usb: host: ehci-exynos: Fix error check in exynos_ehci_probe()")
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 > ---
-> Changes in version 2:
-> - added Alan's ACK.
-> 
->  drivers/usb/host/ehci-exynos.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
-> index 1a9b7572e17f..ff4e1261801a 100644
-> --- a/drivers/usb/host/ehci-exynos.c
-> +++ b/drivers/usb/host/ehci-exynos.c
-> @@ -207,6 +207,10 @@ static int exynos_ehci_probe(struct platform_device *pdev)
->  		err = irq;
->  		goto fail_io;
->  	}
-> +	if (!irq) {
-> +		err = -EINVAL;
-> +		goto fail_io;
-> +	}
+>  drivers/usb/dwc3/host.c | 2 ++
+>  1 file changed, 2 insertions(+)
 
-This is a huge sign that the api being used here is broken.
-
-Please fix the root cause here, if returning a 0 is an error, then have
-the function you called to get this irq return an error.  Otherwise you
-will have to fix ALL callers, and people will always get it wrong.
-
-Fix the root cause here, don't paper it over.
+Subject line should have "dwc3" not "dwc", right?
 
 thanks,
 
