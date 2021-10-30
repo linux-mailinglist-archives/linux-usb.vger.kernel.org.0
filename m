@@ -2,74 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4407E44081B
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Oct 2021 10:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C1144083F
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Oct 2021 11:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbhJ3JA7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 30 Oct 2021 05:00:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51316 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230427AbhJ3JA6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 30 Oct 2021 05:00:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9FAF960F58;
-        Sat, 30 Oct 2021 08:58:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1635584308;
-        bh=qG3G823JIzBJ2/MxvF2Pm7j/ThHt+frg08MkdIe9CWU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eSkQPHFQ3FzheWgeM7ofBSJMya6fMVELILKWCNXfBgxkhedsSnfglihc/Emiaz8Az
-         0cTUWEQtLGSNTZ8I9tGzUtSxzqj5p4nU+yOBqqo1GFLzuyOAlgWTLvi1Z1LbXS3gt3
-         SPI1zkI6uJNIR02kNEGt9r/GAVHznpzLoi9iZgLA=
-Date:   Sat, 30 Oct 2021 10:58:25 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com
-Subject: Re: [PATCH 2/3] usb: host: xhci-plat: Add device property to set
- XHCI_SKIP_PHY_INIT quirk
-Message-ID: <YX0JMfgHS3vqEdU6@kroah.com>
-References: <1635272372-9982-1-git-send-email-quic_c_sanm@quicinc.com>
- <1635272372-9982-3-git-send-email-quic_c_sanm@quicinc.com>
+        id S231722AbhJ3Jfc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 30 Oct 2021 05:35:32 -0400
+Received: from mxout03.lancloud.ru ([45.84.86.113]:44048 "EHLO
+        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230394AbhJ3Jfb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 Oct 2021 05:35:31 -0400
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 85CAD20EBD51
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Message-ID: <ec1960ae-1f81-48ae-f153-46e7fd08f3df@omp.ru>
+Date:   Sat, 30 Oct 2021 12:32:42 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1635272372-9982-3-git-send-email-quic_c_sanm@quicinc.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH 1/3] Docs: usb: update err() to pr_err() and replace
+ __FILE__
+Content-Language: en-US
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>, <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <linux-usb@vger.kernel.org>
+References: <cover.1635533924.git.philipp.g.hortmann@gmail.com>
+ <e2f2c5c6995a011494105484849776a856af5bcc.1635533924.git.philipp.g.hortmann@gmail.com>
+ <49a766ec-014e-3667-828c-a4fd19c7c9e3@omp.ru>
+Organization: Open Mobile Platform
+In-Reply-To: <49a766ec-014e-3667-828c-a4fd19c7c9e3@omp.ru>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 26, 2021 at 11:49:31PM +0530, Sandeep Maheswaram wrote:
-> Add device property usb-skip-phy-init to check and set XHCI_SKIP_PHY_INIT
-> quirk.
+On 29.10.2021 23:33, Sergey Shtylyov wrote:
+
+[...]
+>> update err() to pr_err() and replace __FILE__
+>>
+>> Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+>> ---
+>>   Documentation/driver-api/usb/writing_usb_driver.rst | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
+>> index 2176297e5765..5c29e5bdbe88 100644
+>> --- a/Documentation/driver-api/usb/writing_usb_driver.rst
+>> +++ b/Documentation/driver-api/usb/writing_usb_driver.rst
+>> @@ -91,8 +91,8 @@ usually in the driver's init function, as shown here::
+>>   	    /* register this driver with the USB subsystem */
+>>   	    result = usb_register(&skel_driver);
+>>   	    if (result < 0) {
+>> -		    err("usb_register failed for the "__FILE__ "driver."
+>> -			"Error number %d", result);
+>> +		    pr_err("usb_register failed for the %s driver. "
 > 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> ---
->  drivers/usb/host/xhci-plat.c | 3 +++
->  1 file changed, 3 insertions(+)
+>     Don't break up the kernel message like this. The current code is a bad example --
+> high time to fix it. :-)
 > 
-> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> index c1edcc9..2a45f89 100644
-> --- a/drivers/usb/host/xhci-plat.c
-> +++ b/drivers/usb/host/xhci-plat.c
-> @@ -323,6 +323,9 @@ static int xhci_plat_probe(struct platform_device *pdev)
->  		if (device_property_read_bool(tmpdev, "quirk-broken-port-ped"))
->  			xhci->quirks |= XHCI_BROKEN_PORT_PED;
->  
-> +		if (device_property_read_bool(tmpdev, "usb-skip-phy-init"))
-> +			xhci->quirks |= XHCI_SKIP_PHY_INIT;
-> +
+>> +			   "Error number %d", skel_driver.name, result);
 
-Why is this needed?  What will it fix?
+    Oh, and add `\n' at the end of message.
 
-You need more information.
+[...]
 
-thanks,
-greg k-h
+MBR, Sergey
