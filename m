@@ -2,80 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6C64422B0
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Nov 2021 22:32:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9704423BA
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Nov 2021 00:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbhKAVe7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Nov 2021 17:34:59 -0400
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:38499 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbhKAVe7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Nov 2021 17:34:59 -0400
-Received: by mail-ot1-f51.google.com with SMTP id c2-20020a056830348200b0055a46c889a8so6475974otu.5;
-        Mon, 01 Nov 2021 14:32:25 -0700 (PDT)
+        id S232363AbhKAXI7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Nov 2021 19:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229679AbhKAXI6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Nov 2021 19:08:58 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB9DC061714
+        for <linux-usb@vger.kernel.org>; Mon,  1 Nov 2021 16:06:25 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id w193so27293669oie.1
+        for <linux-usb@vger.kernel.org>; Mon, 01 Nov 2021 16:06:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=k6fomv0sdqyhGG3g2MPtJX0afBVvlWccl4oJlzfMn9Y=;
+        b=NHZAASkppcCtIgZGr+dxNGC01NZlQ2kR5YtLp/QiL3hzfj2C4iFv5JL0213sdHN3Cc
+         r4bdh//jJCS1jLn3jx/qUmqNt/u/7oUy3kfVn1/jdw/8Bjp8UjcAjKuChGSQVX4UYWIM
+         NghJ/2hUJt/3nZenw+X44JfYGnbiPPljJIetd7AWM5y8OrRnwwhz8hr7lijUCfvdkraB
+         HM5KJWYyVy2qdus8e/SDs9hkVfQnhF7PXoIzmjRWmyQjs5s5MOFA+X9qc0d8mgBWIzsH
+         GpTfIAV5zh4Sw2CAiMZT8uZSIFr16ZmyI/V1cNFsh4o+/84729FUYuyaw28iw7VaGtlb
+         PKTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hCy5/rdH3EP/f0UY0j7JtyNiYST+yJ1udugsOF/LEYE=;
-        b=gXoyjFSHXii7YiVRMZj1GG115Y4EFwLMEVRTc8xT4xdSjlMf/95l/J1nAtttKUW4pz
-         56c2m5FL3WsV1O+tQUpti4uLnG3fadxP40tEmHjxcQVXPsbP3vPrCeL6lYwqtrf9Dhxx
-         +MQDoEhPzgppGsDrD0QvgKxdRyOtuxp8ziTPplW6RgQlxiVi2mZjS57vw3feoe/FB4T/
-         F1NpE0WGoLByyBbQeUILByynVRlNAovoah49yCmiYHyK2WoVMRt0gN4GHULOM891Bf9s
-         2X0ZCzEh7UTWSVlzPNLGtkeD13z95phlbhsV141CwLuEHsiih2qCxww7epB8mZdNn8hi
-         Ljgg==
-X-Gm-Message-State: AOAM532EFWsxPJhkDFbxHE+oZ46Bq69RwGMedSBITGkOzRShjqfipTYF
-        TFx01Uos4kHqByNH9jETPzIAt9h8dA==
-X-Google-Smtp-Source: ABdhPJzbfKMCsIhJntczuawzfOIxUC7Vv7zBS5V4IJzEi/WktKP+H/BlI4ncV/CpLisSsb9yeh0KIg==
-X-Received: by 2002:a9d:2ac2:: with SMTP id e60mr18743852otb.369.1635802345210;
-        Mon, 01 Nov 2021 14:32:25 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 90sm4352796otj.70.2021.11.01.14.32.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Nov 2021 14:32:24 -0700 (PDT)
-Received: (nullmailer pid 1101334 invoked by uid 1000);
-        Mon, 01 Nov 2021 21:32:23 -0000
-Date:   Mon, 1 Nov 2021 16:32:23 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc:     amelie.delaunay@foss.st.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alexandre.torgue@foss.st.com, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, linux-usb@vger.kernel.org, hminas@synopsys.com
-Subject: Re: [PATCH v2] dt-bindings: usb: dwc2: document the port when
- usb-role-switch is used
-Message-ID: <YYBc59SlC+reg1T9@robh.at.kernel.org>
-References: <1635336752-14796-1-git-send-email-fabrice.gasnier@foss.st.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=k6fomv0sdqyhGG3g2MPtJX0afBVvlWccl4oJlzfMn9Y=;
+        b=eIY4N8Ro2QAYqxpcjleh40HjIkc5EOvRKevdgdbrDtSg9KO0uqDXiZwrLiOekzfKrR
+         XcgaqsLGw5DQ1eQ/Rm3Z/nOdaCSQrE6JbkzVZcSYR+w4Vc7gz9lJH1XQnP0XUF7I22Xt
+         p1rIjwi2TC07AstWv4CtQFA7mUmr4aj6H5MvSbcT2ukT2RG0GXN3Cl9TZyfRlpLr4Trz
+         NBKFPJ+Nmn827CChmCaIZ5J11Yj4y4ehTtArhXjyTPfZFJIStEBGcqJT9MgshMMTEl0s
+         3rSnhSfYnJC0JGgk/V5NdlYad1oXmY0+h7BIQkpQXdfVxQcxC/XcAd7NOzi9VCCtC/tg
+         3T5g==
+X-Gm-Message-State: AOAM533bON94eYDNzbg4ieWN8NI+QfmoVBfb0hfc1zWwDq7qCHVehrO9
+        gVBO7edB56lgHzx1CF0/1+rGdlaqhvw7L6HVN88=
+X-Google-Smtp-Source: ABdhPJxZrwp2QSOogPI/bXi1HGjMOVxDwfN9MeTt4XfOsVuZBhIfqYTR2TcRK+6Q103+4uX5PZXs91MD0kdIPFBJiXo=
+X-Received: by 2002:a05:6808:168d:: with SMTP id bb13mr1802481oib.94.1635807984521;
+ Mon, 01 Nov 2021 16:06:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1635336752-14796-1-git-send-email-fabrice.gasnier@foss.st.com>
+Received: by 2002:a05:6808:1246:0:0:0:0 with HTTP; Mon, 1 Nov 2021 16:06:24
+ -0700 (PDT)
+Reply-To: asameraa950@gmail.com
+From:   Samera Ali <sjen362@gmail.com>
+Date:   Mon, 1 Nov 2021 16:06:24 -0700
+Message-ID: <CADeDfr=sWZiSJMTZ3e4R7p7BaK6_+MN5ufB9CKigVTa+mhHvfw@mail.gmail.com>
+Subject: Hey dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 27 Oct 2021 14:12:32 +0200, Fabrice Gasnier wrote:
-> Document the "port" property, which is used with "usb-role-switch"
-> to describe the bus connector.
-> Definition is inspired from mediatek,mtu3.yaml.
-> 
-> This fixes some errors seen when running "make dtbs_check":
-> ... 'port' does not match any of the regexes: 'pinctrl-[0-9]+'
->         From schema: ... Documentation/devicetree/bindings/usb/dwc2.yaml
-> 
-> Note: add dependencies so that 'usb-role-switch' without port is valid or
-> both must be present.
-> 
-> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-> ---
-> Changes in v2:
-> Rob's review comments:
-> - drop reference to graph.txt
-> - drop unneeded quotes
-> ---
->  Documentation/devicetree/bindings/usb/dwc2.yaml | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
+Hey dear
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Nice to meet you, Am Miss samera I found your email here in google
+search and I picked interest to contact you. I've something very
+important which I would like to discuss with you and I would
+appreciate if you respond back to me through my email address as to
+tell you more about me with my photos, my private email as fellows??
+[ asameraa950@gmail.com ]
+
+From, samera ali
