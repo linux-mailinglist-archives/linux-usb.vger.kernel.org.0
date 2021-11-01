@@ -2,74 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC0B84412D0
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Nov 2021 05:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B04C244140E
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Nov 2021 08:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbhKAEzt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Nov 2021 00:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbhKAEzt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Nov 2021 00:55:49 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45516C061714
-        for <linux-usb@vger.kernel.org>; Sun, 31 Oct 2021 21:53:16 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 131so30115407ybc.7
-        for <linux-usb@vger.kernel.org>; Sun, 31 Oct 2021 21:53:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X7FEhn6Tl2UoNynMJLa0n6Y/fRORJdkZfPa3LHqz8j0=;
-        b=lWRQ/RO3bn6HGGI1a7ev76ph9uy9wqZ1J+rlsZgkgstF//TUJ0p/t9Xqx5SmccZ61v
-         ykIfVReVLWUrtIxOVB9VzXLkrE0UPz/JCukpsO1/ESWdm2c8MzeK+BChg0e4oALgya8g
-         H5p5FeFBTf5n7LZHP5hHhXKNau1PfTzLh7CwbrN3KqwFSMi74xgIuLNI4Rm5IOzNt19a
-         XDARDkuIrbJbjOQcEG3igCNgEAPkoNbjAHeOPw5wdB1dOA08lviVp9GJMKGcRmRYsYf9
-         QQp85N+jCJwrTIJ7orxFqgJLKUZ9LNGqGi5Y9RTr46Lxg5fqtb0MA/K/kTxSSDKfE1kG
-         TEqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X7FEhn6Tl2UoNynMJLa0n6Y/fRORJdkZfPa3LHqz8j0=;
-        b=foQhDz4MlY/2xNmmKcaUtyVD8M5YgUBp2MrnPPT2oOGpgi2lY8qkyv3XvGCFTMQ5re
-         8rWtzK53nMqihX+oAIVhiESixknE1lqcaBV3/kKBh96GrWjMr3JPMLaZnQbGq/r+f53V
-         mxMaY48Ytfh/6wbAoAavlt5hYB5QNAEs3GJGnJxMZGyhbxMYFs1SC8IEDb7Kh47BLgwX
-         Hf97hTPdE+gTfXJD5mL66RWMClFahnpnV0Zk/8m0UZVeTUkEWMNTTA/ec9j3HunDVSJT
-         nsjGIohqekiIHYkbR3T2131uMoK6pbckF+J0b7GE20EqLFzm98QJq4fsR5/9dZqkNf2O
-         +Zng==
-X-Gm-Message-State: AOAM530dA+Qr3R1Fwa0JmPXGjHxlGbWhaPxetf/klPCDldAVKQp523PP
-        4X2prJMPt1fdidAtYln6FYDYvDL1vMulv5Bh3w9wU9p61B8=
-X-Google-Smtp-Source: ABdhPJyBKXSPsn33RE/DqlQsylTyLZfXyvKAw+1g8kqtrAD7kXhRF89xy14V4umRJRsNCjMj79JoQCu4ZDVzODqlPzE=
-X-Received: by 2002:a25:4f89:: with SMTP id d131mr27722210ybb.397.1635742395049;
- Sun, 31 Oct 2021 21:53:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210622120906.743-1-charlesyeh522@gmail.com> <YQpx5Y6CZUP+u7LS@hovoldconsulting.com>
-In-Reply-To: <YQpx5Y6CZUP+u7LS@hovoldconsulting.com>
-From:   Charles Yeh <charlesyeh522@gmail.com>
-Date:   Mon, 1 Nov 2021 12:53:03 +0800
-Message-ID: <CAAZvQQ6q4Kg2iHkD4JefJ3r=pa9Gbz_y_5utgwSGQL_2HH7Ohg@mail.gmail.com>
-Subject: Re: [PATCH] USB: serial: pl2303: Add new PID to support PL256X (TYPE_MP)
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>
-Content-Type: text/plain; charset="UTF-8"
+        id S229938AbhKAHT5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Nov 2021 03:19:57 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:57112 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229622AbhKAHT5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 1 Nov 2021 03:19:57 -0400
+Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxX2pzlH9hp4QjAA--.39563S2;
+        Mon, 01 Nov 2021 15:17:12 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     zhuyinbo@loongson.cn
+Subject: [PATCH v1] usb: xhci: add LPM quirk for ensuring uPD720201 into D3 state after S5
+Date:   Mon,  1 Nov 2021 15:17:05 +0800
+Message-Id: <1635751025-25906-1-git-send-email-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-CM-TRANSID: AQAAf9DxX2pzlH9hp4QjAA--.39563S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AF1fuF15Cw4UtFyUGF17ZFb_yoW8Zr15pF
+        4rWayUurs5Kr4IqryDAF1v9as5G3ZFkFyUKry7C3yqgrZ8trZ5GFyUGFW3GrZ3W395Jw1a
+        qF1kW3y5WFW7GaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkS14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVCm-wCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUozVbDUUUU
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This issue can be closed.
+After S5, any pci device should into D3 state that if supported, but the
+uPD720201 was not and it may be the cause of xhci firmware and cause
+OSPM power consumption is more higher that S5 than S4. I think xhci HCD
+can add a quirk ensure it into D3 state after S5 that is appropriate
+and this patch was to add LPM quirk and set PCI_D3hot to uPD720201 pmsc
+register in xhci_pci_shutdown to fix xhci power consumption issue.
 
-Sorry, it took so long to reply...
-Finally, our company(Prolific) decided to change the new chip from
-"Class FFh (Vendor Specific)" to "Class 02h (Communications and CDC Control)"
-In this way, the chip's default support can be backward compatible
-with the lower version of the Linux kernel (such as 3.X / 4.X,...)
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+ drivers/usb/host/xhci-pci.c | 4 +++-
+ drivers/usb/host/xhci.h     | 1 +
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-If there are customers who need RTS/CTS and other flow control in the future.
-We(Prolific) will provide patch file to support
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 2c9f25c..f97bb64 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -265,6 +265,7 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	    pdev->device == 0x0014) {
+ 		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
+ 		xhci->quirks |= XHCI_ZERO_64B_REGS;
++		xhci->quirks |= XHCI_LPM_QUIRK;
+ 	}
+ 	if (pdev->vendor == PCI_VENDOR_ID_RENESAS &&
+ 	    pdev->device == 0x0015) {
+@@ -608,7 +609,8 @@ static void xhci_pci_shutdown(struct usb_hcd *hcd)
+ 	xhci_shutdown(hcd);
+ 
+ 	/* Yet another workaround for spurious wakeups at shutdown with HSW */
+-	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
++	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP ||
++			xhci->quirks & XHCI_LPM_QUIRK)
+ 		pci_set_power_state(pdev, PCI_D3hot);
+ }
+ #endif /* CONFIG_PM */
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index dca6181..5f790202 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1899,6 +1899,7 @@ struct xhci_hcd {
+ #define XHCI_SG_TRB_CACHE_SIZE_QUIRK	BIT_ULL(39)
+ #define XHCI_NO_SOFT_RETRY	BIT_ULL(40)
+ #define XHCI_BROKEN_D3COLD	BIT_ULL(41)
++#define XHCI_LPM_QUIRK		BIT_ULL(42)
+ 
+ 	unsigned int		num_active_eps;
+ 	unsigned int		limit_active_eps;
+-- 
+1.8.3.1
 
-Finally, thank you for your kind review patch code.
-
-Charles.
