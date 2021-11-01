@@ -2,95 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B04C244140E
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Nov 2021 08:17:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB5C44146D
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Nov 2021 08:54:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbhKAHT5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Nov 2021 03:19:57 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:57112 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229622AbhKAHT5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 1 Nov 2021 03:19:57 -0400
-Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxX2pzlH9hp4QjAA--.39563S2;
-        Mon, 01 Nov 2021 15:17:12 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
+        id S230312AbhKAH4d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Nov 2021 03:56:33 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:26167 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229882AbhKAH4c (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Nov 2021 03:56:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1635753240; x=1667289240;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=25sah/KSti2H/cMu+ExnGDDFiW6UpNflUADGWlFdf/Y=;
+  b=ticHBwlycm/1K/LQwC2GJ6vKpOC+dzOke+4U5Fi4N8j5A3WIiSq+hHBA
+   0F7elOWzLEEFxdmAw9UjsRy5WlJ3/ojXXOsB/wuwRlKFQb9k+9lsu3AXA
+   CnXRkFIfOpHwlTyxdPkHzvXzV9acUIDJ52fxicZVkRffONy595FI9gf4O
+   8=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 01 Nov 2021 00:54:00 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2021 00:53:59 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
+ Mon, 1 Nov 2021 00:53:58 -0700
+Received: from c-sanm-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
+ Mon, 1 Nov 2021 00:53:54 -0700
+From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     zhuyinbo@loongson.cn
-Subject: [PATCH v1] usb: xhci: add LPM quirk for ensuring uPD720201 into D3 state after S5
-Date:   Mon,  1 Nov 2021 15:17:05 +0800
-Message-Id: <1635751025-25906-1-git-send-email-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-CM-TRANSID: AQAAf9DxX2pzlH9hp4QjAA--.39563S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7AF1fuF15Cw4UtFyUGF17ZFb_yoW8Zr15pF
-        4rWayUurs5Kr4IqryDAF1v9as5G3ZFkFyUKry7C3yqgrZ8trZ5GFyUGFW3GrZ3W395Jw1a
-        qF1kW3y5WFW7GaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkS14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVCm-wCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUozVbDUUUU
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: [PATCH v9 0/5] USB DWC3 host wake up support from system suspend
+Date:   Mon, 1 Nov 2021 13:23:39 +0530
+Message-ID: <1635753224-23975-1-git-send-email-quic_c_sanm@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-After S5, any pci device should into D3 state that if supported, but the
-uPD720201 was not and it may be the cause of xhci firmware and cause
-OSPM power consumption is more higher that S5 than S4. I think xhci HCD
-can add a quirk ensure it into D3 state after S5 that is appropriate
-and this patch was to add LPM quirk and set PCI_D3hot to uPD720201 pmsc
-register in xhci_pci_shutdown to fix xhci power consumption issue.
+Avoiding phy powerdown in host mode when wakeup capable devices are 
+connected, so that it can be wake up by devices.
+Set GENPD_FLAG_ACTIVE_WAKEUP flag to keep usb30_prim gdsc active
+when wakeup capable devices are connected to the host.
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
- drivers/usb/host/xhci-pci.c | 4 +++-
- drivers/usb/host/xhci.h     | 1 +
- 2 files changed, 4 insertions(+), 1 deletion(-)
+Changes in v9:
+Checking with device_may_makeup property instead of phy_power_off flag.
+Changed the IRQ flags and removed hs_phy_mode variable.
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 2c9f25c..f97bb64 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -265,6 +265,7 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	    pdev->device == 0x0014) {
- 		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
- 		xhci->quirks |= XHCI_ZERO_64B_REGS;
-+		xhci->quirks |= XHCI_LPM_QUIRK;
- 	}
- 	if (pdev->vendor == PCI_VENDOR_ID_RENESAS &&
- 	    pdev->device == 0x0015) {
-@@ -608,7 +609,8 @@ static void xhci_pci_shutdown(struct usb_hcd *hcd)
- 	xhci_shutdown(hcd);
- 
- 	/* Yet another workaround for spurious wakeups at shutdown with HSW */
--	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
-+	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP ||
-+			xhci->quirks & XHCI_LPM_QUIRK)
- 		pci_set_power_state(pdev, PCI_D3hot);
- }
- #endif /* CONFIG_PM */
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index dca6181..5f790202 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1899,6 +1899,7 @@ struct xhci_hcd {
- #define XHCI_SG_TRB_CACHE_SIZE_QUIRK	BIT_ULL(39)
- #define XHCI_NO_SOFT_RETRY	BIT_ULL(40)
- #define XHCI_BROKEN_D3COLD	BIT_ULL(41)
-+#define XHCI_LPM_QUIRK		BIT_ULL(42)
- 
- 	unsigned int		num_active_eps;
- 	unsigned int		limit_active_eps;
+Changes in v8:
+Moved the dwc3 suspend quirk code in dwc3/host.c to xhci-plat.c
+Checking phy_power_off flag instead of usb_wakeup_enabled_descendants 
+to keep gdsc active.
+
+Changes in v7:
+Change in commit text and message in PATCH 1/5 and PATCH 5/5
+as per Matthias suggestion.
+Added curly braces for if and else if sections in PATCH 4/5.
+
+Changes in v6:
+Addressed comments in host.c and core.c
+Separated the patches in dwc3-qcom.c to make it simple.
+Dropped wakeup-source change as it is not related to this series.
+
+Changes in v5:
+Added phy_power_off flag to check presence of wakeup capable devices.
+Dropped patch[v4,4/5] as it is present linux-next.
+Addressed comments in host.c and dwc3-qcom.c.
+
+Changes in v4:
+Addressed Matthias comments raised in v3.
+
+Changes in v3:
+Removed need_phy_for_wakeup flag and by default avoiding phy powerdown.
+Addressed Matthias comments and added entry for DEV_SUPERSPEED.
+Added suspend_quirk in dwc3 host and moved the dwc3_set_phy_speed_flags.
+Added wakeup-source dt entry and reading in dwc-qcom.c glue driver.
+
+Changes in v2:
+Dropped the patch in clock to set GENPD_FLAG_ACTIVE_WAKEUP flag and 
+setting in usb dwc3 driver.
+Separated the core patch and glue driver patch.
+Made need_phy_for_wakeup flag part of dwc structure and 
+hs_phy_flags as unsgined int.
+Adrressed the comment on device_init_wakeup call.
+Corrected offset for reading portsc register.
+Added pacth to support wakeup in xo shutdown case.
+
+Sandeep Maheswaram (5):
+  usb: host: xhci: plat: Add suspend quirk for dwc3 controller
+  usb: dwc3: core: Host wake up support from system suspend
+  usb: dwc3: qcom: Add helper functions to enable,disable wake irqs
+  usb: dwc3: qcom: Change the IRQ flag for DP/DM hs phy irq
+  usb: dwc3: qcom: Keep power domain on to support wakeup
+
+ drivers/usb/dwc3/core.c      |  7 +++--
+ drivers/usb/dwc3/dwc3-qcom.c | 73 +++++++++++++++++++++++---------------------
+ drivers/usb/host/xhci-plat.c | 12 ++++++++
+ 3 files changed, 56 insertions(+), 36 deletions(-)
+
 -- 
-1.8.3.1
+2.7.4
 
