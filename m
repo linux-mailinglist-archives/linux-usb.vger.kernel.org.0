@@ -2,130 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F84441266
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Nov 2021 04:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14026441269
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Nov 2021 04:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbhKADeg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 31 Oct 2021 23:34:36 -0400
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:56551 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230222AbhKADef (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 Oct 2021 23:34:35 -0400
+        id S230337AbhKADf5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 31 Oct 2021 23:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230222AbhKADf4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 Oct 2021 23:35:56 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC34C061714;
+        Sun, 31 Oct 2021 20:33:23 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 75so16047025pga.3;
+        Sun, 31 Oct 2021 20:33:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1635737522; x=1667273522;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ETfMPM1juLpBJqaaEVCjIYmhWTdj7WsFNBaq0G+XEeE=;
-  b=iNww5c2huLVDRlnpwtLxoCY3LqKtE8hORHzRPjJqyVFIE9FIoZCMN+p4
-   Tfs1NfhyWYzE66iUP4EAFFQbCghaCvIoXuMUZvL+AN7jQifqhXwvGwzpl
-   gVz2QZJrQn79Fpil4EkXtqZytzrw0OsWq4Oo+5iNgAToGOSoERaaX/IGQ
-   E=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 31 Oct 2021 20:32:02 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2021 20:32:01 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Sun, 31 Oct 2021 20:32:01 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Sun, 31 Oct 2021 20:31:58 -0700
-Date:   Mon, 1 Nov 2021 09:01:54 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-CC:     <quic_pkondeti@quicinc.com>, <youling257@gmail.com>,
-        <pkondeti@codeaurora.org>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: Re: [RFT PATCH] xhci: Fix commad ring abort, write all 64 bits to
- CRCR register.
-Message-ID: <20211101033154.GA28038@hu-pkondeti-hyd.qualcomm.com>
-References: <e96e2a96-00c4-6e6b-fc5a-e4a881325dc0@linux.intel.com>
- <20211029125154.438152-1-mathias.nyman@linux.intel.com>
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:to:cc:references:subject
+         :content-language:from:in-reply-to:content-transfer-encoding;
+        bh=sharXBBWNJQME5ykY3LH+Wuf67MVUTp15Nj0dIthtu4=;
+        b=YNKZPhGxufB1MqdoLMpX2GgiBUoek9Je1+IUYEEe+W4RTQ8dKyjs4HuwkJDE7WItU8
+         5QLRMEeeJeH93IAEB7FtpD189DdiqLNtLPZAPIJ6s3l+Q0Rfoe+gWBbkYk8Y5ik2kbPx
+         vvyC0IhJcKsDZ1NviSWRTTT20o3MBTlqL12HK97h5FLU6FALN1bmMp84dyrOxwUWvPm8
+         Bj2epbaPGN0MvVij0J8ZR79dAqcCEiLSzkPvXz7DcInYAl4IepwXKJ79Gqur4ScbDShR
+         CwUutsvEfXZu9KUyzx7n0eRtUbsR3TnVd/veVNIoq5YArKI8wKpqZJ+ySxlXMVmu7rSu
+         jvgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
+         :references:subject:content-language:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sharXBBWNJQME5ykY3LH+Wuf67MVUTp15Nj0dIthtu4=;
+        b=bs8NVgwCpLUun6ejIcM0hr37GhyQ3+iH6dUuXyH5LT1VrDVHea4bvJ2VoNhptCpCRd
+         GalJxWi7jsIm6cM4QGI+eaXR0kkcNLv9tMlfq9QycUGH/tnBxN0fLlo0MQEEJg6tRy7b
+         qfSfikg04Lh5rguJzIA86VWcBRMG4g81G4fq11T/1o0dqyjDQ6RT8i/B+8Sz4xhcEOd6
+         cRtudhsBPCWO2oiPf4qZStuuQggVdcNuAyvGwLDYeQ9TevTXda9gCSrethgq88/4Qdch
+         99Obta8Xpwa6feA//45WDFIlvvTsp2+9WSNi29q2lbgi1a9dXiBJezRewbq3COUtt8uj
+         mFEg==
+X-Gm-Message-State: AOAM532IkByg2PXF5l/pz4sVXbWpmMl/myO8VsMSDKPbIMMOAYmgbeRX
+        kpP36Q/8780zHgCEamBnyZo=
+X-Google-Smtp-Source: ABdhPJyMvgiysaFFd7vJTxWh3eDoFfSzoDu6orq/3c+qmlVO4XLL+lpJqF+q+5V6CjZ2MHarSBDLDQ==
+X-Received: by 2002:a05:6a00:22cb:b0:47e:5755:7d86 with SMTP id f11-20020a056a0022cb00b0047e57557d86mr23342419pfj.78.1635737603550;
+        Sun, 31 Oct 2021 20:33:23 -0700 (PDT)
+Received: from [192.168.50.189] (67.218.130.61.16clouds.com. [67.218.130.61])
+        by smtp.gmail.com with ESMTPSA id h11sm15364884pfh.162.2021.10.31.20.33.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 31 Oct 2021 20:33:23 -0700 (PDT)
+Message-ID: <c639c965-5231-b745-7b59-476877202e0c@gmail.com>
+Date:   Mon, 1 Nov 2021 11:33:16 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20211029125154.438152-1-mathias.nyman@linux.intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+To:     chunfeng.yun@mediatek.com
+Cc:     eddie.hung@mediatek.com, gregkh@linuxfoundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
+        matthias.bgg@gmail.com, nishadkamdar@gmail.com,
+        stern@rowland.harvard.edu
+References: <1618017645-12259-1-git-send-email-chunfeng.yun@mediatek.com>
+Subject: Re: [PATCH v2] usb: core: reduce power-on-good delay time of root hub
+Content-Language: en-US
+From:   "Walt Jr. Brake" <mr.yming81@gmail.com>
+In-Reply-To: <1618017645-12259-1-git-send-email-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
+Three month ago, My USB 3.1 device cannot be detected after upgrade 
+kernel from version 5.10.41 to 5.10.42.
 
-On Fri, Oct 29, 2021 at 03:51:54PM +0300, Mathias Nyman wrote:
-> Turns out some xHC controllers require all 64 bits in the CRCR register
-> to be written to execute a command abort.
-> 
-> The lower 32 bits containing the command abort bit is written first.
-> In case the command ring stops before we write the upper 32 bits then
-> hardware may use these upper bits to set the commnd ring dequeue pointer.
-> 
-> Solve this by making sure the upper 32 bits contain a valid command
-> ring dequeue pointer.
-> 
-> The original patch that only wrote the first 32 to stop the ring went
-> to stable, so this fix should go there as well.
-> 
-> Fixes: ff0e50d3564f ("xhci: Fix command ring pointer corruption while aborting a command")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> ---
->  drivers/usb/host/xhci-ring.c | 21 ++++++++++++++-------
->  1 file changed, 14 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 311597bba80e..eaa49aef2935 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -366,7 +366,9 @@ static void xhci_handle_stopped_cmd_ring(struct xhci_hcd *xhci,
->  /* Must be called with xhci->lock held, releases and aquires lock back */
->  static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
->  {
-> -	u32 temp_32;
-> +	struct xhci_segment *new_seg	= xhci->cmd_ring->deq_seg;
-> +	union xhci_trb *new_deq		= xhci->cmd_ring->dequeue;
-> +	u64 crcr;
->  	int ret;
->  
->  	xhci_dbg(xhci, "Abort command ring\n");
-> @@ -375,13 +377,18 @@ static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
->  
->  	/*
->  	 * The control bits like command stop, abort are located in lower
-> -	 * dword of the command ring control register. Limit the write
-> -	 * to the lower dword to avoid corrupting the command ring pointer
-> -	 * in case if the command ring is stopped by the time upper dword
-> -	 * is written.
-> +	 * dword of the command ring control register.
-> +	 * Some controllers require all 64 bits to be written to abort the ring.
-> +	 * Make sure the upper dword is valid, pointing to the next command,
-> +	 * avoiding corrupting the command ring pointer in case the command ring
-> +	 * is stopped by the time the upper dword is written.
->  	 */
-> -	temp_32 = readl(&xhci->op_regs->cmd_ring);
-> -	writel(temp_32 | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
-> +	next_trb(xhci, NULL, &new_seg, &new_deq);
-> +	if (trb_is_link(new_deq))
-> +		next_trb(xhci, NULL, &new_seg, &new_deq);
-> +
-> +	crcr = xhci_trb_virt_to_dma(new_seg, new_deq);
-> +	xhci_write_64(xhci, crcr | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
->  
->  	/* Section 4.6.1.2 of xHCI 1.0 spec says software should also time the
->  	 * completion of the Command Abort operation. If CRR is not negated in 5
+And I found some other people ran into the same issue:
 
-Thanks for the patch. I don't see any issues with this patch.
+https://forum.manjaro.org/t/kernel-5-10-59-doesnt-detect-a-connected-usb-external-disk/79320
 
-Feel free to add
+https://forum.manjaro.org/t/how-to-make-active-usb-hub-work-in-manjaro/84548
 
-Tested-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Two days ago, I try to fix the issue myself, and I found out that it was 
+cause by this patch. After revert this patch, my USB 3.1 device can be 
+detect again.
 
-Thanks,
-Pavan
+I have already file a bug on here: 
+https://bugzilla.kernel.org/show_bug.cgi?id=214875.
+
+
