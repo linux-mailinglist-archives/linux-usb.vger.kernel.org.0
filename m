@@ -2,145 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0A74421A0
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Nov 2021 21:24:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 316A24421C3
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Nov 2021 21:39:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbhKAU0b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Nov 2021 16:26:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43786 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229560AbhKAU0a (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 1 Nov 2021 16:26:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0D00E61058;
-        Mon,  1 Nov 2021 20:23:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635798237;
-        bh=feSTcRc2actU+HHo2pcgOZswEK9+Krw1YkXnHhxgUtc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=k6/BV6czCRnhMubWyz+TvKRLAdfLuZ6hVCq4/8MWd4wluVUqTYwxezxQIkHpVGLCi
-         9qekMnUAVBMJ9vDxkS2TRXfI/zIhh1o1L2vKlETOW8wbwXlwNKhND0P3W8rIokSQir
-         MndHf7pqpC8YM377htnlXMhggAH9KgPFAfJouRRXl3nM3w7wOWhKtxX8wb8Vwlfp7w
-         0A2HCfyDkFV/nNR4STfwHOOTFQ3ZKZxvqAiK4PsNvkqWJ1mg2Gzaoq7BQ8MH+9CSgC
-         rl8dYgsQwa3OKzx9P2ojjTcr/aV9svuFi509I/vCr5XiU0Zx1EZkwouGCOcCUlQ0Ad
-         xkLHGtHEuIUgg==
-Received: by mail-ed1-f43.google.com with SMTP id w1so14389714edd.10;
-        Mon, 01 Nov 2021 13:23:56 -0700 (PDT)
-X-Gm-Message-State: AOAM531U4l0NOB7TqC2TawJCuTIDv9zsA0DJmsBwdCNcIf4wH2wthEFV
-        Y7Bm/4KSjrGGAQ+dlQzN33Znu82Hr1hzTYHsqQ==
-X-Google-Smtp-Source: ABdhPJxerSbOAL+RQjUEcSRK11YYr4XJkk1k3y92Df/MixrQUqwOf/jtSj37gCjipDXUeK8l900VtO/oHXaq6BA8PhM=
-X-Received: by 2002:aa7:dc13:: with SMTP id b19mr28817292edu.145.1635798235443;
- Mon, 01 Nov 2021 13:23:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211024180628.2992108-1-piyush.mehta@xilinx.com> <20211024180628.2992108-2-piyush.mehta@xilinx.com>
-In-Reply-To: <20211024180628.2992108-2-piyush.mehta@xilinx.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 1 Nov 2021 15:23:44 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKu6vr3iCz1G7MtK6gyqAvn4s4mpuLOwPzJDEmyZeROig@mail.gmail.com>
-Message-ID: <CAL_JsqKu6vr3iCz1G7MtK6gyqAvn4s4mpuLOwPzJDEmyZeROig@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: usb: misc: Add binding for Microchip
- usb2244 Controller
-To:     Piyush Mehta <piyush.mehta@xilinx.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        --to=robh+dt@kernel.org, Matthias Kaehlcke <mka@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        id S230268AbhKAUmF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Nov 2021 16:42:05 -0400
+Received: from mxout03.lancloud.ru ([45.84.86.113]:50146 "EHLO
+        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230246AbhKAUlu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Nov 2021 16:41:50 -0400
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru A0A0320A6A22
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH v2 01/22] usb: host: ehci-exynos: deny IRQ0
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>,
-        Al Cooper <alcooperx@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        git <git@xilinx.com>, Srinivas Goud <sgoud@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>
+References: <20211026173943.6829-1-s.shtylyov@omp.ru>
+ <20211026173943.6829-2-s.shtylyov@omp.ru> <YX0IQ/boUgVseZvS@kroah.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <46d41d2b-4701-fb7f-9a0b-f4a35e59c3d3@omp.ru>
+Date:   Mon, 1 Nov 2021 23:39:13 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <YX0IQ/boUgVseZvS@kroah.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Oct 24, 2021 at 1:06 PM Piyush Mehta <piyush.mehta@xilinx.com> wrot=
-e:
->
+Hello!
 
-Your email is somewhat corrupted. Lore has a warning:
+On 10/30/21 11:54 AM, Greg Kroah-Hartman wrote:
 
-[-- Warning: decoded text below may be mangled, UTF-8 assumed --]
-[-- Attachment #1: Type: text/plain; charset=3D"y", Size: 2065 bytes --]
+>> If platform_get_irq() returns IRQ0 (considered invalid according to Linus)
+>> the driver blithely passes it to usb_add_hcd() that treats IRQ0 as no IRQ
+>> at all. Deny IRQ0 right away, returning -EINVAL from the probe() method...
+>>
+>> Fixes: 44ed240d6273 ("usb: host: ehci-exynos: Fix error check in exynos_ehci_probe()")
+>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+>> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+>> ---
+>> Changes in version 2:
+>> - added Alan's ACK.
+>>
+>>  drivers/usb/host/ehci-exynos.c | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>>
+>> diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
+>> index 1a9b7572e17f..ff4e1261801a 100644
+>> --- a/drivers/usb/host/ehci-exynos.c
+>> +++ b/drivers/usb/host/ehci-exynos.c
+>> @@ -207,6 +207,10 @@ static int exynos_ehci_probe(struct platform_device *pdev)
+>>  		err = irq;
+>>  		goto fail_io;
+>>  	}
+>> +	if (!irq) {
+>> +		err = -EINVAL;
+>> +		goto fail_io;
+>> +	}
+> 
+> This is a huge sign that the api being used here is broken.
 
-Maybe it's the '--to=3Drobh+dt@kernel.org' email...
+   And you're telling me that after I've wasted  time on v2? :-( Well, at least the series had
+couple blunders, so it couldn't merged for 5.16-rc1 anyway (not sure why these weren't detected
+in v1).
 
-> Microchip's USB224x family of Hi-Speed USB 2.0 flash media card controlle=
-rs
-> provides an ultra-fast interface between a USB host controller and flash
-> media cards.
->
-> Add dt-bindings documentation for Microchip's usb2244 Controller.
-> USB224x is a USB 2.0 compliant ultra fast USB 2.0 multi-format,
-> SD/MMC, and MS Flash Media Controllers.
->
-> Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
-> ---
->  .../devicetree/bindings/usb/microchip,usb2244.yaml | 43 ++++++++++++++++=
-++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb22=
-44.yaml
->
-> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb2244.yaml=
- b/Documentation/devicetree/bindings/usb/microchip,usb2244.yaml
-> new file mode 100644
-> index 0000000..ecab0cb
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/microchip,usb2244.yaml
-> @@ -0,0 +1,43 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/usb/microchip,usb2244.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Bindings for the Microchip USB2244 Ultra Fast USB-SD Controller
-> +
-> +description:
-> +  Microchip=E2=80=99s USB224x is a USB 2.0 compliant, Hi-Speed bulk only=
- mass
-> +  storage class peripheral controller intended for reading and writing
-> +  to popular flash media from the xDPicture Card=E2=84=A2, Memory Stick=
-=C2=AE (MS),
-> +  Secure Digital (SD), and MultiMediaCard=E2=84=A2 (MMC) families.
-> +
-> +  USB224x is a flash media card reader solution fully compliant with the
-> +  USB 2.0 specification
-> +
-> +maintainers:
-> +  - Piyush Mehta <piyush.mehta@xilinx.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: microchip,usb2244
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +    description:
-> +      The phandle and specifier for the GPIO that controls the RESET lin=
-e of
-> +      flash media controller.
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    usb {
-> +       compatible =3D "microchip,usb2244";
+> Please fix the root cause here, if returning a 0 is an error, then have
+> the function you called to get this irq return an error.
 
-This needs to be a USB device under a USB controller node. See usb-device.y=
-aml.
+   Well, technically not, although that doesn't match the kernel-doc for the function now.
+I only don't understand why returning IRQ0 hasn't been replaced still...
 
-> +       reset-gpios =3D <&gpio 2 GPIO_ACTIVE_HIGH>;
-> +    };
-> --
-> 2.7.4
->
+> Otherwise you
+> will have to fix ALL callers, and people will always get it wrong.
+> Fix the root cause here, don't paper it over.
+
+   As I have already told you, I won't have to do it as filtering out is only needed iff 0 is
+used as an indication for something special. IRQ0 is still perfectly valid for request_irq()
+and is even called by arch/{aplha|mips|x86}...
+
+> thanks,
+> 
+> greg k-h
+
+MBR, Sergey
