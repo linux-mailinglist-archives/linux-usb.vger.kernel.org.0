@@ -2,119 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44AE744147C
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Nov 2021 08:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A997B4414D1
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Nov 2021 09:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231652AbhKAH47 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Nov 2021 03:56:59 -0400
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:49623 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231402AbhKAH4x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Nov 2021 03:56:53 -0400
+        id S231698AbhKAIIf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Nov 2021 04:08:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231543AbhKAIIe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Nov 2021 04:08:34 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3F4C061714
+        for <linux-usb@vger.kernel.org>; Mon,  1 Nov 2021 01:06:01 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id i5so19279369wrb.2
+        for <linux-usb@vger.kernel.org>; Mon, 01 Nov 2021 01:06:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1635753261; x=1667289261;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=WqegnewrNuQ3nBCJakumAYPktDzd/O0Hg//x5CeiZyI=;
-  b=FEh31ZYDPvdL8YPS7jzZ8Q7ZHUd5nrQE9INTAnt+3Dm0Wue8hQp7waSp
-   FeNdsRWvoBmCEvIKHa0qJNCYtNbo410XEJGhD6E4XK9y1Wry5UKE8rP/d
-   O6x7e9VF7WBR5dpPuAdNw4tM2Ta6Qdl+0jOK1eC5MJx/RUg8KkN7gtajI
-   4=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Nov 2021 00:54:21 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2021 00:54:20 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Mon, 1 Nov 2021 00:54:20 -0700
-Received: from c-sanm-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Mon, 1 Nov 2021 00:54:16 -0700
-From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: [PATCH v9 5/5] usb: dwc3: qcom: Keep power domain on to support wakeup
-Date:   Mon, 1 Nov 2021 13:23:44 +0530
-Message-ID: <1635753224-23975-6-git-send-email-quic_c_sanm@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1635753224-23975-1-git-send-email-quic_c_sanm@quicinc.com>
-References: <1635753224-23975-1-git-send-email-quic_c_sanm@quicinc.com>
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
+        b=SFtDbE+6IDkHc1ulMYz3kIam1g8jrqMGveAFEIhzD57obcB2AAsvwDS7G9U5mllj4v
+         CXcMkcBLXp8av6pKrkxlnlH5OKDvvoptJUs33+ZsvH08EiMe99qcW7O6zHQLvSZrgd0O
+         vCM1DFFUxXbOTgTBZUHaqMWAsLsVkwQHIKx7yYArIjJiU9Id6qnVa2AaPiZRD+AlKd5h
+         AdNSKNBm0Kf1bwocLQT9cET1yolKLuAIwOilZUtmrnQSP+fGgJWS3nO8E8Mb56sNH1Bp
+         AO0nfdr8sSYDIc/xE0EXH23DxgT/1mFqpNrA+Y0Xex+/Q8MVRWz+jzSmqE3rPOpMkPfs
+         t3vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
+        b=7PP7/hfZalXgX4tQVLsLsylJKveCQiKl7QByaT51xCyGoAlB45Q6JgDeM59ZOIiflw
+         LNRoKvBLsoUgXmV2BCDdzCw+bbQl+XasZh3f3nj21YCihlIyBWy3cIW5ik+0x/zhflA0
+         PZsuX15m5GtyOYqbKOmq4gGPwbO+QgBMaLDI+ltZda8bXIp5f7Nf//wJ03zPxV9EZ316
+         DUm/r0OnYXMErsKQorjALrOVtrfkJfs00yf+JkdPl7JwLrEHhe7hS+JFPzz1YG9euNJx
+         dwHupQ3+p/24p9pm2acDBH7LmRH84TqiVQkBum931/K2o18J817yO12dsViQgsw26B6K
+         KHvA==
+X-Gm-Message-State: AOAM532980bGKxjU1rGrb7VhyBoWrrdhA7S4JMLE/zNJRU2zix+eIty4
+        zIy3ehZH6IDi7+nEmV5HdZ0du4Q9qyrwkN8NmVHxDIWP0Ko=
+X-Google-Smtp-Source: ABdhPJxUF1tFmQzyAoIKyVPAG7R9FZL/KscgZLvfipr9TchgvjoT54aDh6EPcy8Ml6w3HwOZZMYj/oDtLWKn7uRbNdI=
+X-Received: by 2002:a05:651c:548:: with SMTP id q8mr6002668ljp.220.1635753949864;
+ Mon, 01 Nov 2021 01:05:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Received: by 2002:a05:6512:304b:0:0:0:0 with HTTP; Mon, 1 Nov 2021 01:05:49
+ -0700 (PDT)
+Reply-To: aisha.7d@yahoo.com
+From:   Aisha AG <rbx17058@gmail.com>
+Date:   Mon, 1 Nov 2021 00:05:49 -0800
+Message-ID: <CA+KbyydWeN4vHtdJCa8_Ot01GFV1JVo19c-A3KMMDn_Yj4rckg@mail.gmail.com>
+Subject: Hello Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If wakeup capable devices are connected to the controller (directly
-or through hubs) at suspend time keep the power domain on in order
-to support wakeup from these devices.
-
-Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
----
- drivers/usb/dwc3/dwc3-qcom.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 356f4f8..23bf2c1 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -17,6 +17,7 @@
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
- #include <linux/phy/phy.h>
-+#include <linux/pm_domain.h>
- #include <linux/usb/of.h>
- #include <linux/reset.h>
- #include <linux/iopoll.h>
-@@ -340,10 +341,15 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
- {
- 	u32 val;
- 	int i, ret;
-+	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-+	struct generic_pm_domain *genpd = pd_to_genpd(qcom->dev->pm_domain);
- 
- 	if (qcom->is_suspended)
- 		return 0;
- 
-+	if (device_may_wakeup(&dwc->xhci->dev) && dwc->xhci)
-+		genpd->flags |= GENPD_FLAG_ACTIVE_WAKEUP;
-+
- 	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
- 	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
- 		dev_err(qcom->dev, "HS-PHY not in L2\n");
-@@ -367,10 +373,15 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
- {
- 	int ret;
- 	int i;
-+	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-+	struct generic_pm_domain *genpd = pd_to_genpd(qcom->dev->pm_domain);
- 
- 	if (!qcom->is_suspended)
- 		return 0;
- 
-+	if (dwc->xhci)
-+		genpd->flags &= ~GENPD_FLAG_ACTIVE_WAKEUP;
-+
- 	if (device_may_wakeup(qcom->dev))
- 		dwc3_qcom_disable_interrupts(qcom);
- 
 -- 
-2.7.4
 
+Hello Dear,
+
+I came across your e-mail contact prior to a private search while in
+need of your assistance. I am Aisha Al-Qaddafi, the only biological
+Daughter of Former President of Libya Col.Muammar Al-Qaddafi.
+Am a Widow and a single Mother with three Children.
+
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar $27.500.000.00, and i need a trusted
+investment Manager/Partner because of my current refugee status,
+however, I am interested in you for investment project assistance in
+your country,may be from there,we can build business relationship
+in the nearest future.
+
+I am willing to negotiate an investment/business profit sharing ratio
+with you based on the future investment earning profits.
+
+If you are willing to handle this project on my behalf kindly reply
+urgently to enable me to provide you more information about the
+investment funds.
+Best Regards
+Mrs Aisha Al-Qaddafi.
