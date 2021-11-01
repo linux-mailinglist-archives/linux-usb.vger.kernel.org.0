@@ -2,69 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C2244212C
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Nov 2021 20:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0A74421A0
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Nov 2021 21:24:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbhKAT7e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Nov 2021 15:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbhKAT71 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Nov 2021 15:59:27 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B73C0613F5
-        for <linux-usb@vger.kernel.org>; Mon,  1 Nov 2021 12:56:53 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id s3so19755815ild.0
-        for <linux-usb@vger.kernel.org>; Mon, 01 Nov 2021 12:56:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=AOZMT0NUobpHN7R7KMHeFUdB5AsC0u04KXbhEHGPXwc=;
-        b=a70OOHA6epYnku23xuC+CR1kXimRSEuPekSs4vIOMuf+JXRYGZAszaSC9AmqkdnBEY
-         ZdHkOul7y430Uw6acb0OqV8xq7J7JlFAwqBdD2nEDdt+cGYD8oq2rKeCZpYFcqPEzFj5
-         EWpzhNdHi2MsHDOpg3rGZbEgJhdNRPwDEs8cQ4p6NHNBydfZFcea8SHklTmtLUPXT1LD
-         sZaM22hILkLtZ1qccuQc+OznxtG5gyb8KIef52Ibj3jatT6wTQUwhdHiuFtyjnxkkp3N
-         H12Nx74kcqotU2VccfZJw/dW70dipq9VQwXknH/xdhnUz3zBLnIjemmIksTV6P3G0vni
-         1gxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=AOZMT0NUobpHN7R7KMHeFUdB5AsC0u04KXbhEHGPXwc=;
-        b=dK9jg7n41eymfGOKkcFSmoN4UWdhzJFVrmfKrMWRGRWx8yvrNWzZig4AO0PDXiNeGh
-         NBaKGrULmWbwTVivrl0Aovq0QdZTajwUnt3XDk0Y3cdd0DPzO/0w8AiLi8a6mYWod4MR
-         XjY6DPDJJW0FL8vTFe1HtjH9YctwR2mCjIokYaCh5EMWIF3KcuzB8hm14ps8+tcihpzu
-         PldrMnkNbLZsgT2bE5KlGWhETHtV9TpxgAmIrYSmZRwMsvEVzYwtekEudbjYamDmJ4cF
-         h14KOqZw54Pg/hdIu39defzXkhcRqF36MHBg5oz+8T89BE5Kzk19DyqNpRUdpPQqlN1T
-         f3Bg==
-X-Gm-Message-State: AOAM531ZodEQwxFWlGx7UlH7leMnt3cumxJy3sixSgtj4QxXd6VdhtxX
-        26Izt96AvsuFJaZi0FsnqHY7B9MRZxaPQsafrQM=
-X-Google-Smtp-Source: ABdhPJxpX16ZQQoeyiTiXWyBF4PtPeqkqtiPYAFjYv9HykPZXopn6F1m+cBVjLHfhYqBJGIlfGO7PxJwW47rRWxC3t8=
-X-Received: by 2002:a05:6e02:16c9:: with SMTP id 9mr21500038ilx.166.1635796613308;
- Mon, 01 Nov 2021 12:56:53 -0700 (PDT)
+        id S230393AbhKAU0b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Nov 2021 16:26:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43786 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229560AbhKAU0a (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 1 Nov 2021 16:26:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0D00E61058;
+        Mon,  1 Nov 2021 20:23:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635798237;
+        bh=feSTcRc2actU+HHo2pcgOZswEK9+Krw1YkXnHhxgUtc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=k6/BV6czCRnhMubWyz+TvKRLAdfLuZ6hVCq4/8MWd4wluVUqTYwxezxQIkHpVGLCi
+         9qekMnUAVBMJ9vDxkS2TRXfI/zIhh1o1L2vKlETOW8wbwXlwNKhND0P3W8rIokSQir
+         MndHf7pqpC8YM377htnlXMhggAH9KgPFAfJouRRXl3nM3w7wOWhKtxX8wb8Vwlfp7w
+         0A2HCfyDkFV/nNR4STfwHOOTFQ3ZKZxvqAiK4PsNvkqWJ1mg2Gzaoq7BQ8MH+9CSgC
+         rl8dYgsQwa3OKzx9P2ojjTcr/aV9svuFi509I/vCr5XiU0Zx1EZkwouGCOcCUlQ0Ad
+         xkLHGtHEuIUgg==
+Received: by mail-ed1-f43.google.com with SMTP id w1so14389714edd.10;
+        Mon, 01 Nov 2021 13:23:56 -0700 (PDT)
+X-Gm-Message-State: AOAM531U4l0NOB7TqC2TawJCuTIDv9zsA0DJmsBwdCNcIf4wH2wthEFV
+        Y7Bm/4KSjrGGAQ+dlQzN33Znu82Hr1hzTYHsqQ==
+X-Google-Smtp-Source: ABdhPJxerSbOAL+RQjUEcSRK11YYr4XJkk1k3y92Df/MixrQUqwOf/jtSj37gCjipDXUeK8l900VtO/oHXaq6BA8PhM=
+X-Received: by 2002:aa7:dc13:: with SMTP id b19mr28817292edu.145.1635798235443;
+ Mon, 01 Nov 2021 13:23:55 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:14cc:0:0:0:0 with HTTP; Mon, 1 Nov 2021 12:56:52
- -0700 (PDT)
-Reply-To: mauhin42@gmail.com
-From:   Maureen Hinckley <patrickkipngetich96@gmail.com>
-Date:   Mon, 1 Nov 2021 22:56:52 +0300
-Message-ID: <CADwW=dyDT9iCrfctssKWShBzY5qo8LY6OO=YQ76U0TGKYkUqKw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20211024180628.2992108-1-piyush.mehta@xilinx.com> <20211024180628.2992108-2-piyush.mehta@xilinx.com>
+In-Reply-To: <20211024180628.2992108-2-piyush.mehta@xilinx.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 1 Nov 2021 15:23:44 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKu6vr3iCz1G7MtK6gyqAvn4s4mpuLOwPzJDEmyZeROig@mail.gmail.com>
+Message-ID: <CAL_JsqKu6vr3iCz1G7MtK6gyqAvn4s4mpuLOwPzJDEmyZeROig@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: misc: Add binding for Microchip
+ usb2244 Controller
+To:     Piyush Mehta <piyush.mehta@xilinx.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        --to=robh+dt@kernel.org, Matthias Kaehlcke <mka@chromium.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Al Cooper <alcooperx@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        git <git@xilinx.com>, Srinivas Goud <sgoud@xilinx.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=20
-Hello,
+On Sun, Oct 24, 2021 at 1:06 PM Piyush Mehta <piyush.mehta@xilinx.com> wrot=
+e:
+>
 
-I am Maureen Hinckley and my foundation is donating ($2.2 Million.
-Dollars) to you. Contact us via my email at (mauhin42@gmail.com) for
-further details.
+Your email is somewhat corrupted. Lore has a warning:
 
-Best Regards,
-Mrs. Maureen Hinckley,
-Copyright =C2=A92021 The Maureen Hinckley Foundation All Rights Reserved.
+[-- Warning: decoded text below may be mangled, UTF-8 assumed --]
+[-- Attachment #1: Type: text/plain; charset=3D"y", Size: 2065 bytes --]
+
+Maybe it's the '--to=3Drobh+dt@kernel.org' email...
+
+> Microchip's USB224x family of Hi-Speed USB 2.0 flash media card controlle=
+rs
+> provides an ultra-fast interface between a USB host controller and flash
+> media cards.
+>
+> Add dt-bindings documentation for Microchip's usb2244 Controller.
+> USB224x is a USB 2.0 compliant ultra fast USB 2.0 multi-format,
+> SD/MMC, and MS Flash Media Controllers.
+>
+> Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
+> ---
+>  .../devicetree/bindings/usb/microchip,usb2244.yaml | 43 ++++++++++++++++=
+++++++
+>  1 file changed, 43 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb22=
+44.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb2244.yaml=
+ b/Documentation/devicetree/bindings/usb/microchip,usb2244.yaml
+> new file mode 100644
+> index 0000000..ecab0cb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/microchip,usb2244.yaml
+> @@ -0,0 +1,43 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/usb/microchip,usb2244.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Bindings for the Microchip USB2244 Ultra Fast USB-SD Controller
+> +
+> +description:
+> +  Microchip=E2=80=99s USB224x is a USB 2.0 compliant, Hi-Speed bulk only=
+ mass
+> +  storage class peripheral controller intended for reading and writing
+> +  to popular flash media from the xDPicture Card=E2=84=A2, Memory Stick=
+=C2=AE (MS),
+> +  Secure Digital (SD), and MultiMediaCard=E2=84=A2 (MMC) families.
+> +
+> +  USB224x is a flash media card reader solution fully compliant with the
+> +  USB 2.0 specification
+> +
+> +maintainers:
+> +  - Piyush Mehta <piyush.mehta@xilinx.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: microchip,usb2244
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +    description:
+> +      The phandle and specifier for the GPIO that controls the RESET lin=
+e of
+> +      flash media controller.
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    usb {
+> +       compatible =3D "microchip,usb2244";
+
+This needs to be a USB device under a USB controller node. See usb-device.y=
+aml.
+
+> +       reset-gpios =3D <&gpio 2 GPIO_ACTIVE_HIGH>;
+> +    };
+> --
+> 2.7.4
+>
