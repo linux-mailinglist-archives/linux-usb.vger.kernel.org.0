@@ -2,88 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14026441269
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Nov 2021 04:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0B84412D0
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Nov 2021 05:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbhKADf5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 31 Oct 2021 23:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
+        id S229669AbhKAEzt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Nov 2021 00:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbhKADf4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 Oct 2021 23:35:56 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC34C061714;
-        Sun, 31 Oct 2021 20:33:23 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 75so16047025pga.3;
-        Sun, 31 Oct 2021 20:33:23 -0700 (PDT)
+        with ESMTP id S229462AbhKAEzt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Nov 2021 00:55:49 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45516C061714
+        for <linux-usb@vger.kernel.org>; Sun, 31 Oct 2021 21:53:16 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 131so30115407ybc.7
+        for <linux-usb@vger.kernel.org>; Sun, 31 Oct 2021 21:53:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:to:cc:references:subject
-         :content-language:from:in-reply-to:content-transfer-encoding;
-        bh=sharXBBWNJQME5ykY3LH+Wuf67MVUTp15Nj0dIthtu4=;
-        b=YNKZPhGxufB1MqdoLMpX2GgiBUoek9Je1+IUYEEe+W4RTQ8dKyjs4HuwkJDE7WItU8
-         5QLRMEeeJeH93IAEB7FtpD189DdiqLNtLPZAPIJ6s3l+Q0Rfoe+gWBbkYk8Y5ik2kbPx
-         vvyC0IhJcKsDZ1NviSWRTTT20o3MBTlqL12HK97h5FLU6FALN1bmMp84dyrOxwUWvPm8
-         Bj2epbaPGN0MvVij0J8ZR79dAqcCEiLSzkPvXz7DcInYAl4IepwXKJ79Gqur4ScbDShR
-         CwUutsvEfXZu9KUyzx7n0eRtUbsR3TnVd/veVNIoq5YArKI8wKpqZJ+ySxlXMVmu7rSu
-         jvgw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=X7FEhn6Tl2UoNynMJLa0n6Y/fRORJdkZfPa3LHqz8j0=;
+        b=lWRQ/RO3bn6HGGI1a7ev76ph9uy9wqZ1J+rlsZgkgstF//TUJ0p/t9Xqx5SmccZ61v
+         ykIfVReVLWUrtIxOVB9VzXLkrE0UPz/JCukpsO1/ESWdm2c8MzeK+BChg0e4oALgya8g
+         H5p5FeFBTf5n7LZHP5hHhXKNau1PfTzLh7CwbrN3KqwFSMi74xgIuLNI4Rm5IOzNt19a
+         XDARDkuIrbJbjOQcEG3igCNgEAPkoNbjAHeOPw5wdB1dOA08lviVp9GJMKGcRmRYsYf9
+         QQp85N+jCJwrTIJ7orxFqgJLKUZ9LNGqGi5Y9RTr46Lxg5fqtb0MA/K/kTxSSDKfE1kG
+         TEqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
-         :references:subject:content-language:from:in-reply-to
-         :content-transfer-encoding;
-        bh=sharXBBWNJQME5ykY3LH+Wuf67MVUTp15Nj0dIthtu4=;
-        b=bs8NVgwCpLUun6ejIcM0hr37GhyQ3+iH6dUuXyH5LT1VrDVHea4bvJ2VoNhptCpCRd
-         GalJxWi7jsIm6cM4QGI+eaXR0kkcNLv9tMlfq9QycUGH/tnBxN0fLlo0MQEEJg6tRy7b
-         qfSfikg04Lh5rguJzIA86VWcBRMG4g81G4fq11T/1o0dqyjDQ6RT8i/B+8Sz4xhcEOd6
-         cRtudhsBPCWO2oiPf4qZStuuQggVdcNuAyvGwLDYeQ9TevTXda9gCSrethgq88/4Qdch
-         99Obta8Xpwa6feA//45WDFIlvvTsp2+9WSNi29q2lbgi1a9dXiBJezRewbq3COUtt8uj
-         mFEg==
-X-Gm-Message-State: AOAM532IkByg2PXF5l/pz4sVXbWpmMl/myO8VsMSDKPbIMMOAYmgbeRX
-        kpP36Q/8780zHgCEamBnyZo=
-X-Google-Smtp-Source: ABdhPJyMvgiysaFFd7vJTxWh3eDoFfSzoDu6orq/3c+qmlVO4XLL+lpJqF+q+5V6CjZ2MHarSBDLDQ==
-X-Received: by 2002:a05:6a00:22cb:b0:47e:5755:7d86 with SMTP id f11-20020a056a0022cb00b0047e57557d86mr23342419pfj.78.1635737603550;
-        Sun, 31 Oct 2021 20:33:23 -0700 (PDT)
-Received: from [192.168.50.189] (67.218.130.61.16clouds.com. [67.218.130.61])
-        by smtp.gmail.com with ESMTPSA id h11sm15364884pfh.162.2021.10.31.20.33.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 31 Oct 2021 20:33:23 -0700 (PDT)
-Message-ID: <c639c965-5231-b745-7b59-476877202e0c@gmail.com>
-Date:   Mon, 1 Nov 2021 11:33:16 +0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X7FEhn6Tl2UoNynMJLa0n6Y/fRORJdkZfPa3LHqz8j0=;
+        b=foQhDz4MlY/2xNmmKcaUtyVD8M5YgUBp2MrnPPT2oOGpgi2lY8qkyv3XvGCFTMQ5re
+         8rWtzK53nMqihX+oAIVhiESixknE1lqcaBV3/kKBh96GrWjMr3JPMLaZnQbGq/r+f53V
+         mxMaY48Ytfh/6wbAoAavlt5hYB5QNAEs3GJGnJxMZGyhbxMYFs1SC8IEDb7Kh47BLgwX
+         Hf97hTPdE+gTfXJD5mL66RWMClFahnpnV0Zk/8m0UZVeTUkEWMNTTA/ec9j3HunDVSJT
+         nsjGIohqekiIHYkbR3T2131uMoK6pbckF+J0b7GE20EqLFzm98QJq4fsR5/9dZqkNf2O
+         +Zng==
+X-Gm-Message-State: AOAM530dA+Qr3R1Fwa0JmPXGjHxlGbWhaPxetf/klPCDldAVKQp523PP
+        4X2prJMPt1fdidAtYln6FYDYvDL1vMulv5Bh3w9wU9p61B8=
+X-Google-Smtp-Source: ABdhPJyBKXSPsn33RE/DqlQsylTyLZfXyvKAw+1g8kqtrAD7kXhRF89xy14V4umRJRsNCjMj79JoQCu4ZDVzODqlPzE=
+X-Received: by 2002:a25:4f89:: with SMTP id d131mr27722210ybb.397.1635742395049;
+ Sun, 31 Oct 2021 21:53:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-To:     chunfeng.yun@mediatek.com
-Cc:     eddie.hung@mediatek.com, gregkh@linuxfoundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
-        matthias.bgg@gmail.com, nishadkamdar@gmail.com,
-        stern@rowland.harvard.edu
-References: <1618017645-12259-1-git-send-email-chunfeng.yun@mediatek.com>
-Subject: Re: [PATCH v2] usb: core: reduce power-on-good delay time of root hub
-Content-Language: en-US
-From:   "Walt Jr. Brake" <mr.yming81@gmail.com>
-In-Reply-To: <1618017645-12259-1-git-send-email-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20210622120906.743-1-charlesyeh522@gmail.com> <YQpx5Y6CZUP+u7LS@hovoldconsulting.com>
+In-Reply-To: <YQpx5Y6CZUP+u7LS@hovoldconsulting.com>
+From:   Charles Yeh <charlesyeh522@gmail.com>
+Date:   Mon, 1 Nov 2021 12:53:03 +0800
+Message-ID: <CAAZvQQ6q4Kg2iHkD4JefJ3r=pa9Gbz_y_5utgwSGQL_2HH7Ohg@mail.gmail.com>
+Subject: Re: [PATCH] USB: serial: pl2303: Add new PID to support PL256X (TYPE_MP)
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
+        <charles-yeh@prolific.com.tw>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Three month ago, My USB 3.1 device cannot be detected after upgrade 
-kernel from version 5.10.41 to 5.10.42.
+This issue can be closed.
 
-And I found some other people ran into the same issue:
+Sorry, it took so long to reply...
+Finally, our company(Prolific) decided to change the new chip from
+"Class FFh (Vendor Specific)" to "Class 02h (Communications and CDC Control)"
+In this way, the chip's default support can be backward compatible
+with the lower version of the Linux kernel (such as 3.X / 4.X,...)
 
-https://forum.manjaro.org/t/kernel-5-10-59-doesnt-detect-a-connected-usb-external-disk/79320
+If there are customers who need RTS/CTS and other flow control in the future.
+We(Prolific) will provide patch file to support
 
-https://forum.manjaro.org/t/how-to-make-active-usb-hub-work-in-manjaro/84548
+Finally, thank you for your kind review patch code.
 
-Two days ago, I try to fix the issue myself, and I found out that it was 
-cause by this patch. After revert this patch, my USB 3.1 device can be 
-detect again.
-
-I have already file a bug on here: 
-https://bugzilla.kernel.org/show_bug.cgi?id=214875.
-
-
+Charles.
