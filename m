@@ -2,227 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7F844108F
-	for <lists+linux-usb@lfdr.de>; Sun, 31 Oct 2021 20:42:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C6F4411FD
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Nov 2021 02:58:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbhJaToq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 31 Oct 2021 15:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33604 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbhJaTop (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 Oct 2021 15:44:45 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C59C061766
-        for <linux-usb@vger.kernel.org>; Sun, 31 Oct 2021 12:42:13 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id 62so11729650iou.2
-        for <linux-usb@vger.kernel.org>; Sun, 31 Oct 2021 12:42:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:subject:to:cc:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=jj5YXm4gvBDLImTM9umWbZ/4moDJqxtX4hwJVoI/emc=;
-        b=4T6o+w7wrpuG9V0c2cvw/Pjh6uWMdSuF/RX6UgWsVHnX1tscveYzR1gXdssSlIl/f6
-         Pl40NtznkrixrMSuqCm1oB1qh+hIzMKFlrfG+m3XuoCxsSlxOjL/GVhpyUYwErsV8qot
-         8ph3F26XfDWloRSVCUcQLVH0ghdVPEPs3TbyQGu49bhy+N5aVJQI1AQaRHyqKuI7ONc/
-         XrggSuTssLkW1yWeieex2LAgaxMpwbFfH1Z40KYY5HWdrgPMWT3SwFX8LYXySBNNoDMO
-         efg7JuB3kq+1PUVc9KbzrKEOl5MXMptHUa4NVdtZ5lGt78NWfK9Y0JUm9suV0+d3QC1X
-         W2eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=jj5YXm4gvBDLImTM9umWbZ/4moDJqxtX4hwJVoI/emc=;
-        b=EPN20mT3fKcRBxlLDfbGypkd+zrz8VqsAVFUI50GLfDnkfTf2Ft9+5acoAhzTwH5dN
-         JKgslpKZdsw3JhE6Ub+gD5EAWGrFL/Q+WPrOaMxtocDgyzNNmOKohGe6EN1i+S2mLGHW
-         IYJM4+fH/WrLbKwQ/oRcgplaD2uKnVJUIBiyOlB9ngtzSIiVxWQdVqKus4RWBE90puRa
-         SdsIFXwh/4AvbK8q6K1UrwkAlN+krXlV0iwUJTcsg1oTCNE26T6wf44WSPfAx0bRIzIK
-         5qr4n2Tx4WvHs+Ujd0tqAANJn10wBxkyA356bYVexZ4qvm3mQdERs9zeA+4cvWzPSGLd
-         X6Dg==
-X-Gm-Message-State: AOAM533AWPD0WG+qz6e88InJLUYRRKURlTLoxCZWpeeCurGI2oEUl5/M
-        vEqMRNYf6JMQsxKMvSY7SPqTDUE0LPUJNQ==
-X-Google-Smtp-Source: ABdhPJzP673XSsEdfYgTpRv/d4IG5EQ2p5uMA25F5ci+VrlrKOT0drvsM3q5ny+UkBQfYu2opcXiWg==
-X-Received: by 2002:a02:cc9a:: with SMTP id s26mr6366913jap.55.1635709331459;
-        Sun, 31 Oct 2021 12:42:11 -0700 (PDT)
-Received: from [192.168.1.116] ([66.219.217.159])
-        by smtp.gmail.com with ESMTPSA id n14sm1101953ilm.18.2021.10.31.12.42.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 31 Oct 2021 12:42:11 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-Subject: [GIT PULL] Remove ->ki_complete() res2 argument
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        linux-aio@kvack.org, linux-usb@vger.kernel.org
-Message-ID: <966b2cbc-8f25-edd9-29b7-f390a85bba61@kernel.dk>
-Date:   Sun, 31 Oct 2021 13:42:10 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S230274AbhKACAs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 31 Oct 2021 22:00:48 -0400
+Received: from mail-eopbgr1320085.outbound.protection.outlook.com ([40.107.132.85]:5280
+        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230234AbhKACAr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 31 Oct 2021 22:00:47 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g2Lrfuh2s42tRWizTlsTuO5a/EnbT0BRHMiHv0tBFiCMBNsB8D2hfWCw6fXH4LSb1OXUd07m95AOInFAtZRKo+e49Hqt6haanKyPRsyljkLWAOiS2IZk3TH+Hi1fXmhUSjRyPPt+1+PGoXy10MRQZ6TiPSNxBL7BydQoXgxGXlPBcqZvTPLxQw4w7DCLB2m20kVOB+mGV1xcfx7jt6STJWabb0/sZuAWr+WC9Ir6LHfBH5oUSLND3KJ+8lzojHQBLcdardrPsZvsar57gU59/mGNz4FoMEU4VjQq0IonUeQXYAcVuF6SyJS8WJeC3Og7B/sGd2c/WLUdAtaUdK//Kw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xc8x4mocXxfJqfffI3mfQKW7znFLjHgxsPY1Kmajr90=;
+ b=L/ikM8sRLCIQ7VvHvWH6FaEoF+bM/ddZfaLgJ7FRi67mQlZnpVkQQLrVbDN1t8aTmn6htwRdHzy0ttnYPd5zHgOij2I3VukPCs+iKqYRdeYYiHIjSdmpfilBjnJ8LZAcpPXa4iRRITAOCTh7ODLQAZiFyvIfFC0QGP6S2kGOjXHEY1kpSqW42TBBTkasG2b8LnWzA70KVSNb4vaBJSfvtKHcTrRPbInwewlK5SkgmzIhQKl3VprqPkzHHWnWvclZ7uBMTB2wBpQW4RuT8EUrcqKCPWcl7ExSYsN4zm7ZBjEKMkk7bQQRbOKOTftv9XeNVzlmksxSTek67dHwPhAr+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
+ dkim=pass header.d=oppo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xc8x4mocXxfJqfffI3mfQKW7znFLjHgxsPY1Kmajr90=;
+ b=ERQdwgMtU6BEXXMt/4I/rL7JdNnwPzEieH55OfeqFx+7ePmVxX+Xt5tKHrD8t8AVhnAkWVD1IwTqPEo3yaySwA2qu3QkEyHQtXA/WYFzol+6pu9M1d0g/upyUlYSLIquISCEd7k68G/SAvMqhgoh1bOY1fQ0ZKOL2l9C46QrzVg=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=oppo.com;
+Received: from KU1PR02MB2536.apcprd02.prod.outlook.com (2603:1096:802:22::12)
+ by KL1PR0201MB2120.apcprd02.prod.outlook.com (2603:1096:802:9::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.15; Mon, 1 Nov
+ 2021 01:58:07 +0000
+Received: from KU1PR02MB2536.apcprd02.prod.outlook.com
+ ([fe80::8132:4e3:4879:62e8]) by KU1PR02MB2536.apcprd02.prod.outlook.com
+ ([fe80::8132:4e3:4879:62e8%6]) with mapi id 15.20.4649.019; Mon, 1 Nov 2021
+ 01:58:07 +0000
+From:   Qihang Hu <huqihang@oppo.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Qihang Hu <huqihang@oppo.com>
+Subject: [PATCH] usb: gadget: composite: Fix null pointer exception
+Date:   Mon,  1 Nov 2021 09:57:57 +0800
+Message-Id: <20211101015757.290350-1-huqihang@oppo.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR04CA0053.apcprd04.prod.outlook.com
+ (2603:1096:202:14::21) To KU1PR02MB2536.apcprd02.prod.outlook.com
+ (2603:1096:802:22::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: from localhost.localdomain (58.252.5.71) by HK2PR04CA0053.apcprd04.prod.outlook.com (2603:1096:202:14::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.15 via Frontend Transport; Mon, 1 Nov 2021 01:58:06 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 723fd4ef-5d65-4f74-aabe-08d99cdb0c74
+X-MS-TrafficTypeDiagnostic: KL1PR0201MB2120:
+X-Microsoft-Antispam-PRVS: <KL1PR0201MB2120D95DFDCE4D787FAA9C45B08A9@KL1PR0201MB2120.apcprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SuQurvToSQ+dauyPAJPXUmUxq5NxsR6dHfZtFls/ZxFuNx8gbQicAtoybhdsCO800RZR3lzKUadIQREiBhzoI3yHgw9yb5+BB3AokU6n0bJDUA0e3haISlSn6275EURmqWEymekJVQIWYnXQuT/Lkt9B9WuaLuax8CG+7CovFJUAMD03MK1pPLds7yYwJmgG/T7pttZAQ8Bw2Wm43+fSeeTLWpATXNQ282/GaAghYeGrNsO3qILDvaPg60ZZuk5P65U2eDGg0oC31WaX6oA3giNfmkFQ5XN0XmOeTr35zi8TJnePiEYW/Jo8es3fnSb0U2F5HwDHncyTtCi4hqmcX7xEQrn4Q6EIEFyyTYsHa1LeBQ0QuAcZFtPDT7UfQZwFYhSZecz95L3Rk2u9ax7ZpNwc6dGOgrPSPTx8Ifwy00eZrfNn8YDZwE7l/Rqe9wg19zBcOs18/Ecte3shu3b4LYghu5AH8XcWjMoO696GYo3sJo7X+5b45fB0aAzzI7uBfyjCU47r6Dvjdx/+whSjJdPztZMnaSw2FbmPeYV0Q5CclbIU6cg1EF0lRwA8tKItPp6zXFUFhAKYoSEy9CVmhJLOvl1peTd6k56ddzEtmgR/xRoGnulJ/osSqCUky/FwDEF4D9OMLudcuONJb/Xt3C7FFCiLkh16AU4pwed1p0UZfTuIkk8OTzWdHNFO0u5J0aX69g5Xci38eUJ6DP3JA7LUvXkYCGiHiMfRoNJ29hw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KU1PR02MB2536.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(2616005)(956004)(38100700002)(1076003)(26005)(6506007)(38350700002)(66556008)(66476007)(66946007)(107886003)(36756003)(4326008)(6666004)(5660300002)(52116002)(86362001)(316002)(186003)(83380400001)(2906002)(8676002)(6512007)(508600001)(6486002)(8936002)(11606007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8QZ/rhdylKzTWklRQOaMRZuPN3U5pazPyVO+AdK7TWSo2CAAiOG/miXFyu+g?=
+ =?us-ascii?Q?sqMsWYYzgyQAjcOXDTpBij7LBqgt6OTVlcVLokx0AafvYeyR/r8cOCDSbF6I?=
+ =?us-ascii?Q?JvGTDng/CYPA7JMcjbfvCBo8YlnNvl0NIfRJLtmN588i3i1xDwSw2/11IHma?=
+ =?us-ascii?Q?QmM745j7W23vaUxDQ5yuMboCwxB3mqxnLxhxsCmz0zT6mBjRAVsXPtytJA3F?=
+ =?us-ascii?Q?xvhsBBi1NNFnkwrs1u44Lis0nPB5NK5L3FdwJJdGGrdLasAAAfQgN9hm9wyK?=
+ =?us-ascii?Q?9A0J1m1e1EPo5EWZtY3e2OeTIcI0dZhmifzQizcjsd50C0qRmjd2bp9Gv/7z?=
+ =?us-ascii?Q?37ucK1J/IssiukN7DxHVfdAjasode5eVgK7FdlYbZJYkChMdrlhagKtq3o6/?=
+ =?us-ascii?Q?k8GQC/cF6qOv8Hya86FaEtTt+QAiXvM9W2nyGUhyrqsmfOvZdyQySB0zNNwK?=
+ =?us-ascii?Q?tXUHWeBrQc1VTM4tf3HgSisHNdznestkpC9WgLKcKqBwCRSxO33wNYi0zhR6?=
+ =?us-ascii?Q?DBq+bwYOaKcJZcf0pnFk31czz0R7PwGjNmc442saPbWAb2Wk+269ZFIT0Usy?=
+ =?us-ascii?Q?Cjof52lIuThY5rMTIXkQ1uf5LhfaOkmDjZwjyJRWJEw6sbPtoTV8mkXjEw7T?=
+ =?us-ascii?Q?/AWP5v/GWwZ0qNd/iynAFHSmq93Y+Ao7IgtEp37R6GcZgTwZFwQtqShW8oH3?=
+ =?us-ascii?Q?+Xvj6tsyrJKyTKq3d252fMj1gzLqr07LJdq1hqg1b17Z1aFA20yH91onBQ4s?=
+ =?us-ascii?Q?7OV2sCMWopO5hfxV0lfpuiSlQKt7f8m38jha35s0G6A6x/jHLRGfZ8+TiFdX?=
+ =?us-ascii?Q?osk6R87JVKZTAO13aL4cTVkeoU6LzQKfI8kgb4O4e0qodCM7ZwF1BAZzEG+G?=
+ =?us-ascii?Q?svrw0VBMrUhihx/riquW97Nnihghx8KgmbRQiJsuoa5nD8Fb0oQlrccNiw21?=
+ =?us-ascii?Q?irqdbKmj0ElQK32tqjDgSc0mHyfwctaxweNmlSZj4Sg2dQblg3Z+xuaiRCHB?=
+ =?us-ascii?Q?IFfV1eyKV3dC82seHcpyjQzLCwx9gCiV6dp/bvEpqKkWzJwukz4G8Gp/Flde?=
+ =?us-ascii?Q?Uuw6/nmElR/Ec6OgobQ7yJCujqsPwbgpRkuTnYr8uZZKscv6L66XLhKHO+5+?=
+ =?us-ascii?Q?F7jvqnnpfT4tPVb4IklEO/S2E45ndVcLXmQ/EBMg8qyYNmem8ktP0vuzoySh?=
+ =?us-ascii?Q?UgTsyR076BsKSD1v9KQ3A37HosN1EhCR6+x2ikPoqg6Ce/83+6dX1WTd3rWc?=
+ =?us-ascii?Q?1OVfWeO8WTKHqJmUA7btQNbDTCKlHeL0j6+vh5Kj5h+BzDehbk1TzLCzeggl?=
+ =?us-ascii?Q?dBaGqAG4NvQS2WFXXqx2cyD4i7q5SYDKC2HQvsRq8qw/AYs4cL/xlripwEef?=
+ =?us-ascii?Q?b66jJd94xLflf8wem2lzQJGoE0kQl4HQJ44h0UIM/+Nkgu6rr/ZySFgBAO/D?=
+ =?us-ascii?Q?0PWtcBM7xfl5d4f/JhhZeMfcuIvMvd1Kqfs+dVOtQyIrKKlt7iEwy5Z92RgE?=
+ =?us-ascii?Q?zXlejkvid6tg3T5z5b1lPW/U2YnlCJUwV4NssLmGCdvPABc0ci6AryOlfjvj?=
+ =?us-ascii?Q?EOCf83hqR00sni02cdFlvQ8jBNJPlaooVap83UGXtDiRx2XAavjhceNzTS8R?=
+ =?us-ascii?Q?UJ49L8cdpUtj09Le9zoLx7g=3D?=
+X-OriginatorOrg: oppo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 723fd4ef-5d65-4f74-aabe-08d99cdb0c74
+X-MS-Exchange-CrossTenant-AuthSource: KU1PR02MB2536.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2021 01:58:07.1878
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EmuQChX83LBpR2NmTFD8YWXjupf3AoCZ/QsNKffdXyGrzkZ9bgf7GUP8SD5gECdt6YXJj7a8CWe0WZ/U0yLKgA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0201MB2120
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Linus,
+In the config_ep_by_speed_and_alt function, select the corresponding
+descriptor through g->speed, but the interface driver may not
+support the corresponding speed. So, we need to check whether the
+interface driver provides the corresponding speed descriptor when
+selecting the descriptor.
 
-On top of the core block branch, this pull request removes the res2
-argument from kiocb->ki_complete(). Only the USB gadget code used it,
-everybody else passes 0. The USB guys checked the user gadget code they
-could find, and everybody just uses res as expected for the async
-interface.
+[  237.708146]  android_work: sent uevent USB_STATE=CONNECTED
+[  237.712464]  kconfigfs-gadget gadget: super-speed config #1: b
+[  237.712487]  kUnable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+[  237.712493]  kMem abort info:
+[  237.712498]  k  ESR = 0x96000006
+[  237.712504]  k  EC = 0x25: DABT (current EL), IL = 32 bits
+[  237.712510]  k  SET = 0, FnV = 0
+[  237.712515]  k  EA = 0, S1PTW = 0
+[  237.712520]  kData abort info:
+[  237.712525]  k  ISV = 0, ISS = 0x00000006
+[  237.712530]  k  CM = 0, WnR = 0
+[  237.712536]  kuser pgtable: 4k pages, 39-bit VAs, pgdp=000000020ef29000
+[  237.712541]  k[0000000000000000] pgd=000000020ef2a003, pud=000000020ef2a003, pmd=0000000000000000
+[  237.712554]  kInternal error: Oops: 96000006 [#1] PREEMPT SMP
+[  237.722067]  kSkip md ftrace buffer dump for: 0x1609e0
+[  237.787037]  kWorkqueue: dwc_wq dwc3_bh_work.cfi_jt
+[  237.854922]  kpstate: 60c00085 (nZCv daIf +PAN +UAO)
+[  237.863165]  kpc : config_ep_by_speed_and_alt+0x90/0x308
+[  237.871766]  klr : audio_set_alt+0x54/0x78
+[  237.879108]  ksp : ffffffc0104839e0
 
-Note that this will throw one merge conflict in block/fops.c which is
-trivial to resolve, but it will miss the other addition of a ki_complete
-call in there. The '0' just needs to be removed there, I've included my
-merge resolution below.
+Signed-off-by: Qihang Hu <huqihang@oppo.com>
+---
+ drivers/usb/gadget/composite.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Please pull!
-
-
-The following changes since commit e94f68527a35271131cdf9d3fb4eb3c2513dc3d0:
-
-  block: kill extra rcu lock/unlock in queue enter (2021-10-21 08:37:26 -0600)
-
-are available in the Git repository at:
-
-  git://git.kernel.dk/linux-block.git tags/for-5.16/ki_complete-2021-10-29
-
-for you to fetch changes up to 6b19b766e8f077f29cdb47da5003469a85bbfb9c:
-
-  fs: get rid of the res2 iocb->ki_complete argument (2021-10-25 10:36:24 -0600)
-
-----------------------------------------------------------------
-for-5.16/ki_complete-2021-10-29
-
-----------------------------------------------------------------
-Jens Axboe (2):
-      usb: remove res2 argument from gadget code completions
-      fs: get rid of the res2 iocb->ki_complete argument
-
- block/fops.c                       |  2 +-
- crypto/af_alg.c                    |  2 +-
- drivers/block/loop.c               |  4 ++--
- drivers/nvme/target/io-cmd-file.c  |  4 ++--
- drivers/target/target_core_file.c  |  4 ++--
- drivers/usb/gadget/function/f_fs.c |  2 +-
- drivers/usb/gadget/legacy/inode.c  |  7 ++-----
- fs/aio.c                           |  6 +++---
- fs/cachefiles/io.c                 | 12 ++++++------
- fs/ceph/file.c                     |  2 +-
- fs/cifs/file.c                     |  4 ++--
- fs/direct-io.c                     |  2 +-
- fs/fuse/file.c                     |  2 +-
- fs/io_uring.c                      |  6 +++---
- fs/iomap/direct-io.c               |  2 +-
- fs/nfs/direct.c                    |  2 +-
- fs/overlayfs/file.c                |  4 ++--
- include/linux/fs.h                 |  2 +-
- 18 files changed, 33 insertions(+), 36 deletions(-)
-
-
-diff --cc block/fops.c
-index 3777c7b76eae,d86ebda73e8c..450bcbc0e90c
---- a/block/fops.c
-+++ b/block/fops.c
-@@@ -282,94 -305,6 +283,94 @@@ static ssize_t __blkdev_direct_IO(struc
-  	return ret;
-  }
-  
- +static void blkdev_bio_end_io_async(struct bio *bio)
- +{
- +	struct blkdev_dio *dio = container_of(bio, struct blkdev_dio, bio);
- +	struct kiocb *iocb = dio->iocb;
- +	ssize_t ret;
- +
- +	if (likely(!bio->bi_status)) {
- +		ret = dio->size;
- +		iocb->ki_pos += ret;
- +	} else {
- +		ret = blk_status_to_errno(bio->bi_status);
- +	}
- +
-- 	iocb->ki_complete(iocb, ret, 0);
-++	iocb->ki_complete(iocb, ret);
- +
- +	if (dio->flags & DIO_SHOULD_DIRTY) {
- +		bio_check_pages_dirty(bio);
- +	} else {
- +		bio_release_pages(bio, false);
- +		bio_put(bio);
- +	}
- +}
- +
- +static ssize_t __blkdev_direct_IO_async(struct kiocb *iocb,
- +					struct iov_iter *iter,
- +					unsigned int nr_pages)
- +{
- +	struct block_device *bdev = iocb->ki_filp->private_data;
- +	struct blkdev_dio *dio;
- +	struct bio *bio;
- +	loff_t pos = iocb->ki_pos;
- +	int ret = 0;
- +
- +	if ((pos | iov_iter_alignment(iter)) &
- +	    (bdev_logical_block_size(bdev) - 1))
- +		return -EINVAL;
- +
- +	bio = bio_alloc_kiocb(iocb, nr_pages, &blkdev_dio_pool);
- +	dio = container_of(bio, struct blkdev_dio, bio);
- +	dio->flags = 0;
- +	dio->iocb = iocb;
- +	bio_set_dev(bio, bdev);
- +	bio->bi_iter.bi_sector = pos >> SECTOR_SHIFT;
- +	bio->bi_write_hint = iocb->ki_hint;
- +	bio->bi_end_io = blkdev_bio_end_io_async;
- +	bio->bi_ioprio = iocb->ki_ioprio;
- +
- +	if (iov_iter_is_bvec(iter)) {
- +		/*
- +		 * Users don't rely on the iterator being in any particular
- +		 * state for async I/O returning -EIOCBQUEUED, hence we can
- +		 * avoid expensive iov_iter_advance(). Bypass
- +		 * bio_iov_iter_get_pages() and set the bvec directly.
- +		 */
- +		bio_iov_bvec_set(bio, iter);
- +	} else {
- +		ret = bio_iov_iter_get_pages(bio, iter);
- +		if (unlikely(ret)) {
- +			bio->bi_status = BLK_STS_IOERR;
- +			bio_endio(bio);
- +			return ret;
- +		}
- +	}
- +	dio->size = bio->bi_iter.bi_size;
- +
- +	if (iov_iter_rw(iter) == READ) {
- +		bio->bi_opf = REQ_OP_READ;
- +		if (iter_is_iovec(iter)) {
- +			dio->flags |= DIO_SHOULD_DIRTY;
- +			bio_set_pages_dirty(bio);
- +		}
- +	} else {
- +		bio->bi_opf = dio_bio_write_op(iocb);
- +		task_io_account_write(bio->bi_iter.bi_size);
- +	}
- +
- +	if (iocb->ki_flags & IOCB_HIPRI) {
- +		bio->bi_opf |= REQ_POLLED | REQ_NOWAIT;
- +		submit_bio(bio);
- +		WRITE_ONCE(iocb->private, bio);
- +	} else {
- +		if (iocb->ki_flags & IOCB_NOWAIT)
- +			bio->bi_opf |= REQ_NOWAIT;
- +		submit_bio(bio);
- +	}
- +	return -EIOCBQUEUED;
- +}
- +
-  static ssize_t blkdev_direct_IO(struct kiocb *iocb, struct iov_iter *iter)
-  {
-  	unsigned int nr_pages;
-
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index 72a9797dbbae..443a65af98af 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -166,21 +166,21 @@ int config_ep_by_speed_and_alt(struct usb_gadget *g,
+ 	/* select desired speed */
+ 	switch (g->speed) {
+ 	case USB_SPEED_SUPER_PLUS:
+-		if (gadget_is_superspeed_plus(g)) {
++		if (gadget_is_superspeed_plus(g) && f->ssp_descriptors) {
+ 			speed_desc = f->ssp_descriptors;
+ 			want_comp_desc = 1;
+ 			break;
+ 		}
+ 		fallthrough;
+ 	case USB_SPEED_SUPER:
+-		if (gadget_is_superspeed(g)) {
++		if (gadget_is_superspeed(g) && f->ss_descriptors) {
+ 			speed_desc = f->ss_descriptors;
+ 			want_comp_desc = 1;
+ 			break;
+ 		}
+ 		fallthrough;
+ 	case USB_SPEED_HIGH:
+-		if (gadget_is_dualspeed(g)) {
++		if (gadget_is_dualspeed(g) && f->hs_descriptors) {
+ 			speed_desc = f->hs_descriptors;
+ 			break;
+ 		}
 -- 
-Jens Axboe
+2.25.1
 
