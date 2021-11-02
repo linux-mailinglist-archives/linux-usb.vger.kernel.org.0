@@ -2,127 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3338C442910
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Nov 2021 09:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0624442A3B
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Nov 2021 10:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbhKBIHR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Nov 2021 04:07:17 -0400
-Received: from mga01.intel.com ([192.55.52.88]:48461 "EHLO mga01.intel.com"
+        id S230015AbhKBJU5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Nov 2021 05:20:57 -0400
+Received: from mga11.intel.com ([192.55.52.93]:30947 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229497AbhKBIHN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 2 Nov 2021 04:07:13 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10155"; a="254816106"
+        id S229577AbhKBJUz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 2 Nov 2021 05:20:55 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10155"; a="228668464"
 X-IronPort-AV: E=Sophos;i="5.87,202,1631602800"; 
-   d="scan'208";a="254816106"
+   d="scan'208";a="228668464"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2021 01:04:32 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2021 02:03:54 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,202,1631602800"; 
-   d="scan'208";a="638108510"
-Received: from kuha.fi.intel.com ([10.237.72.166])
-  by fmsmga001.fm.intel.com with SMTP; 02 Nov 2021 01:04:22 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Nov 2021 10:04:21 +0200
-Date:   Tue, 2 Nov 2021 10:04:21 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Jack Pham <quic_jackp@quicinc.com>
-Cc:     linux-usb@vger.kernel.org, Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@google.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
-Subject: Re: [PATCH] usb: typec: ucsi: Only get source PDOs from the actual
- source
-Message-ID: <YYDxBV9ZqPiEmMUI@kuha.fi.intel.com>
-References: <20211027064842.6901-1-quic_jackp@quicinc.com>
- <YXqPtNmETT0ZtnKl@kuha.fi.intel.com>
- <20211102070131.GA31877@jackp-linux.qualcomm.com>
+   d="scan'208";a="638121195"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 02 Nov 2021 02:03:45 -0700
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        "Walt Jr. Brake" <mr.yming81@gmail.com>
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Nishad Kamdar <nishadkamdar@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Eddie Hung <eddie.hung@mediatek.com>
+References: <1618017645-12259-1-git-send-email-chunfeng.yun@mediatek.com>
+ <5e907ccd-40bb-2ece-fe05-1a65a74f3aa2@gmail.com>
+ <20211101140613.GC1456700@rowland.harvard.edu>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v2] usb: core: reduce power-on-good delay time of root hub
+Message-ID: <3cf46eaf-5443-30df-6d72-b92a6a518afc@linux.intel.com>
+Date:   Tue, 2 Nov 2021 11:05:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211102070131.GA31877@jackp-linux.qualcomm.com>
+In-Reply-To: <20211101140613.GC1456700@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 02, 2021 at 12:01:31AM -0700, Jack Pham wrote:
-> Hi Heikki,
+On 1.11.2021 16.06, Alan Stern wrote:
+> On Sat, Oct 30, 2021 at 12:49:37PM +0800, Walt Jr. Brake wrote:
+>> This patch make USB 3.1 device cannot be detected, and I report the bug [1]
+>> to archlinux three month ago. Yesterday I try to fix it myself, and after I
+>> revert this patch, compile the kernel and test, it works.
+>>
+>> [1] https://bugs.archlinux.org/task/71660?project=1&pagenum=2
+>>
+>>
+>> diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+>> index 22ea1f4f2d66..73f4482d833a 100644
+>> --- a/drivers/usb/core/hub.h
+>> +++ b/drivers/usb/core/hub.h
+>> @@ -148,10 +148,8 @@ static inline unsigned hub_power_on_good_delay(struct
+>> usb_hub *hub)
+>>  {
+>>         unsigned delay = hub->descriptor->bPwrOn2PwrGood * 2;
+>>
+>> -       if (!hub->hdev->parent) /* root hub */
+>> -               return delay;
+>> -       else /* Wait at least 100 msec for power to become stable */
+>> -               return max(delay, 100U);
+>> +       /* Wait at least 100 msec for power to become stable */
+>> +       return max(delay, 100U);
+>>  }
 > 
-> On Thu, Oct 28, 2021 at 02:55:32PM +0300, Heikki Krogerus wrote:
-> > On Tue, Oct 26, 2021 at 11:48:42PM -0700, Jack Pham wrote:
-> > > The intent of ucsi_get_src_pdos() is to obtain the source's PDOs
-> > > in order to provide the power_supply object the required data to
-> > > report the mininum, maximum and currently operating voltage &
-> > > current should a PD contract be in place.
-> > > 
-> > > If however, the port is operating as a PD source, this call would
-> > > invoke GET_PDOS on the partner causing the PPM to send a
-> > > Get_Source_Caps PD message to the port partner which may not make
-> > > sense especially if the partner is not a dual-power role capable
-> > > device.  Further, it has been observed that certain DisplayPort
-> > > adapter cables (which are power sink-only devices) even fail to
-> > > bring up the display link after receiving a Get_Source_Caps
-> > > message, suggesting they can't cope well with an unsupported PD
-> > > message to the point that it renders them functionally inoperable.
-> > > 
-> > > Fix this by checking the connector status flags for the power
-> > > direction and use this to decide whether to send the GET_PDOs
-> > > query to the partner or the port.  This also helps to make the
-> > > power_supply VOLTAGE_{MIN,MAX,NOW} and CURRENT_{MAX,NOW}
-> > > properties more consistent when the port is in source mode.
-> > > 
-> > > Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
-> > > ---
-> > > Hi Heikki,
-> > > 
-> > > Was wrestling with how exactly to do this.  The other approach I was
-> > > thinking was to not even do GET_PDOs at all if operating as a source,
-> > > but that would also mean we'd need to add similar checking to the
-> > > VOLTAGE/CURRENT property getters in psy.c so that they would not
-> > > return incorrect/stale data.  Since the ONLINE property will already
-> > > be 0 anyway it may make more sense to invalidate the rest of the props?
-> > > 
-> > > The patch below is concise though...so that's what I went with ;)
-> > 
-> > Would it still make sense / help if we had separate power supplies
-> > registered for the port-source, port-sink, partner-source and
-> > partner-sink?
+> Mathias:
 > 
-> The name "power_supply" of the class to me implies a source :). So I
-> can see perhaps having separate port-source and partner-source supplies
-> making sense; they would effectively be mutually exclusive as only one
-> of the pair would be "online" at a time when a partner is present
-> depending on the power direction.
+> It looks like the bPwrOn2PwrGood value in xhci-hcd's hub descriptor is 
+> too small for some USB 3.1 devices.
 > 
-> But I'm not sure I see a use for having port-sink/partner-sink objects
-> though.  While the VOLTAGE_NOW / CURRENT_NOW properties might be
-> redundantly reporting the same value from corresponding -source objects,
-> would there be different MIN/MAX values which are obtained from
-> Get_Sink_Caps?
-
-A power-supply can be a supply, supplicant or both, and that aligns
-perfectly with source/sink IMO. By taking advantage of that, you could
-display the whole power-supply chain to the user space.
-
-So if you had a port-sink power-supply online and partner-source
-online - the partner supplying the port - then in reality the
-port-sink power-supply would/could also be the "supply" for another
-power-supply, for example the battery. That's the idea with the
-power-supply chain.
-
-Nevertheless, I guess there does not have to be separate source and
-sink power-supplies. If we just had separate port and partner
-power-supplies, we could also possibly use the "status" property to
-see which one is sink and which is the source (charging or
-discharging). Though, I don't think that would be ideal.
-
-> > I also think we need to unify these power supplies so that tcpm and
-> > ucsi (and others) always register the same power supplies.
+> Can you look into this?
 > 
-> I like that idea too!
+> Alan Stern
+> 
 
+At first glance the xhci roothub bPwrOn2PwrGood value looks ok.
+xhci spec 5.4.8 states software should wait 20ms after asserting PP, before
+attempting to change the state of the port.
 
-thanks,
+xhci driver sets desc->bPwrOn2PwrGood = 10; (2ms interval, so equals 20ms )
 
--- 
-heikki
+We should probably get this working immediately, so maybe revert that patch
+while looking into the rootcause.
+
+Walt Jr. Brake, instead of reverting that patch, could you test if changing the
+xhci roothub bPwrOn2PwrGood value helps.
+
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+index a3f875eea751..756231a55602 100644
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -257,7 +257,7 @@ static void xhci_common_hub_descriptor(struct xhci_hcd *xhci,
+ {
+        u16 temp;
+ 
+-       desc->bPwrOn2PwrGood = 10;      /* xhci section 5.4.9 says 20ms max */
++       desc->bPwrOn2PwrGood = 50;      /* The 20ms in xhci 5.4.8 isn't enough for USB 3.1 */
+        desc->bHubContrCurrent = 0;
+ 
+        desc->bNbrPorts = ports;
+
+Thanks
+-Mathias
