@@ -2,162 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 217DD4426F6
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Nov 2021 07:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B569D44275F
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Nov 2021 08:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbhKBGDk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Nov 2021 02:03:40 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:38374 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230015AbhKBGDh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Nov 2021 02:03:37 -0400
-X-UUID: 98581cd3af4d47a3b52b4bcfe8ef3736-20211102
-X-UUID: 98581cd3af4d47a3b52b4bcfe8ef3736-20211102
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 849701908; Tue, 02 Nov 2021 14:01:00 +0800
-Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 2 Nov 2021 14:00:59 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs10n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 2 Nov 2021 14:00:58 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 3/3] arm64: dts: mediatek: Add USB xHCI controller for mt8195
-Date:   Tue, 2 Nov 2021 14:00:49 +0800
-Message-ID: <20211102060049.1843-3-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211102060049.1843-1-chunfeng.yun@mediatek.com>
-References: <20211102060049.1843-1-chunfeng.yun@mediatek.com>
+        id S229510AbhKBHEM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Nov 2021 03:04:12 -0400
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:28438 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229497AbhKBHEL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Nov 2021 03:04:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1635836497; x=1667372497;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Rmlq2mRo2a6AljwIeeGhxxJDSH75L1XvLG8o/iAtLQY=;
+  b=eB8BlI9aQu0HwW4Is5F9xTFU7L44zBcbeOiNVUvrzLlLeSzRopjEC9fa
+   f7hW7ZGeDjBNcbUqiXl5xnM26fPYTl3peQblwoFWAymtBKA8mtg9dRr4z
+   O2/c9J3lIb8dZf/FpaRg6+BeNuy6N4jzUunp4YWVRbYUHWJk+bEyKmoWp
+   A=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 02 Nov 2021 00:01:37 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2021 00:01:37 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
+ Tue, 2 Nov 2021 00:01:36 -0700
+Received: from jackp-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
+ Tue, 2 Nov 2021 00:01:36 -0700
+Date:   Tue, 2 Nov 2021 00:01:31 -0700
+From:   Jack Pham <quic_jackp@quicinc.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     <linux-usb@vger.kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@google.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+Subject: Re: [PATCH] usb: typec: ucsi: Only get source PDOs from the actual
+ source
+Message-ID: <20211102070131.GA31877@jackp-linux.qualcomm.com>
+References: <20211027064842.6901-1-quic_jackp@quicinc.com>
+ <YXqPtNmETT0ZtnKl@kuha.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YXqPtNmETT0ZtnKl@kuha.fi.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add all four USB xHCI controllers for MT8195
+Hi Heikki,
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 79 ++++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
+On Thu, Oct 28, 2021 at 02:55:32PM +0300, Heikki Krogerus wrote:
+> On Tue, Oct 26, 2021 at 11:48:42PM -0700, Jack Pham wrote:
+> > The intent of ucsi_get_src_pdos() is to obtain the source's PDOs
+> > in order to provide the power_supply object the required data to
+> > report the mininum, maximum and currently operating voltage &
+> > current should a PD contract be in place.
+> > 
+> > If however, the port is operating as a PD source, this call would
+> > invoke GET_PDOS on the partner causing the PPM to send a
+> > Get_Source_Caps PD message to the port partner which may not make
+> > sense especially if the partner is not a dual-power role capable
+> > device.  Further, it has been observed that certain DisplayPort
+> > adapter cables (which are power sink-only devices) even fail to
+> > bring up the display link after receiving a Get_Source_Caps
+> > message, suggesting they can't cope well with an unsupported PD
+> > message to the point that it renders them functionally inoperable.
+> > 
+> > Fix this by checking the connector status flags for the power
+> > direction and use this to decide whether to send the GET_PDOs
+> > query to the partner or the port.  This also helps to make the
+> > power_supply VOLTAGE_{MIN,MAX,NOW} and CURRENT_{MAX,NOW}
+> > properties more consistent when the port is in source mode.
+> > 
+> > Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
+> > ---
+> > Hi Heikki,
+> > 
+> > Was wrestling with how exactly to do this.  The other approach I was
+> > thinking was to not even do GET_PDOs at all if operating as a source,
+> > but that would also mean we'd need to add similar checking to the
+> > VOLTAGE/CURRENT property getters in psy.c so that they would not
+> > return incorrect/stale data.  Since the ONLINE property will already
+> > be 0 anyway it may make more sense to invalidate the rest of the props?
+> > 
+> > The patch below is concise though...so that's what I went with ;)
+> 
+> Would it still make sense / help if we had separate power supplies
+> registered for the port-source, port-sink, partner-source and
+> partner-sink?
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index a59c0e9d1fc2..263eebfd2ea1 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -8,6 +8,7 @@
- #include <dt-bindings/clock/mt8195-clk.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/phy/phy.h>
- #include <dt-bindings/power/mt8195-power.h>
- 
- / {
-@@ -823,6 +824,26 @@
- 			status = "disabled";
- 		};
- 
-+		xhci0: usb@11200000 {
-+			compatible = "mediatek,mt8195-xhci", "mediatek,mtk-xhci";
-+			reg = <0 0x11200000 0 0x1000>, <0 0x11203e00 0 0x0100>;
-+			reg-names = "mac", "ippc";
-+			interrupts = <GIC_SPI 129 IRQ_TYPE_LEVEL_HIGH 0>;
-+			phys = <&u2port0 PHY_TYPE_USB2>, <&u3port0 PHY_TYPE_USB3>;
-+			assigned-clocks = <&topckgen CLK_TOP_USB_TOP>,
-+					  <&topckgen CLK_TOP_SSUSB_XHCI>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
-+						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
-+			clocks = <&infracfg_ao CLK_INFRA_AO_SSUSB>,
-+				 <&infracfg_ao CLK_INFRA_AO_SSUSB_XHCI>,
-+				 <&topckgen CLK_TOP_SSUSB_REF>,
-+				 <&apmixedsys CLK_APMIXED_USB1PLL>;
-+			clock-names = "sys_ck", "xhci_ck", "ref_ck", "mcu_ck";
-+			mediatek,syscon-wakeup = <&pericfg 0x400 103>;
-+			wakeup-source;
-+			status = "disabled";
-+		};
-+
- 		mmc0: mmc@11230000 {
- 			compatible = "mediatek,mt8195-mmc", "mediatek,mt8192-mmc";
- 			reg = <0 0x11230000 0 0x10000>,
-@@ -843,6 +864,64 @@
- 			status = "disabled";
- 		};
- 
-+		xhci1: usb@11290000 {
-+			compatible = "mediatek,mt8195-xhci", "mediatek,mtk-xhci";
-+			reg = <0 0x11290000 0 0x1000>, <0 0x11293e00 0 0x0100>;
-+			reg-names = "mac", "ippc";
-+			interrupts = <GIC_SPI 530 IRQ_TYPE_LEVEL_HIGH 0>;
-+			phys = <&u2port1 PHY_TYPE_USB2>;
-+			assigned-clocks = <&topckgen CLK_TOP_USB_TOP_1P>,
-+					  <&topckgen CLK_TOP_SSUSB_XHCI_1P>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
-+						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
-+			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_1P_BUS>,
-+				 <&pericfg_ao CLK_PERI_AO_SSUSB_1P_XHCI>,
-+				 <&topckgen CLK_TOP_SSUSB_P1_REF>,
-+				 <&apmixedsys CLK_APMIXED_USB1PLL>;
-+			clock-names = "sys_ck", "xhci_ck", "ref_ck", "mcu_ck";
-+			mediatek,syscon-wakeup = <&pericfg 0x400 104>;
-+			wakeup-source;
-+			status = "disabled";
-+		};
-+
-+		xhci2: usb@112a0000 {
-+			compatible = "mediatek,mt8195-xhci", "mediatek,mtk-xhci";
-+			reg = <0 0x112a0000 0 0x1000>, <0 0x112a3e00 0 0x0100>;
-+			reg-names = "mac", "ippc";
-+			interrupts = <GIC_SPI 533 IRQ_TYPE_LEVEL_HIGH 0>;
-+			phys = <&u2port2 PHY_TYPE_USB2>;
-+			assigned-clocks = <&topckgen CLK_TOP_USB_TOP_2P>,
-+					  <&topckgen CLK_TOP_SSUSB_XHCI_2P>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
-+						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
-+			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_2P_BUS>,
-+				 <&pericfg_ao CLK_PERI_AO_SSUSB_2P_XHCI>,
-+				 <&topckgen CLK_TOP_SSUSB_P2_REF>;
-+			clock-names = "sys_ck", "xhci_ck", "ref_ck";
-+			mediatek,syscon-wakeup = <&pericfg 0x400 105>;
-+			status = "disabled";
-+		};
-+
-+		xhci3: usb@112b0000 {
-+			compatible = "mediatek,mt8195-xhci", "mediatek,mtk-xhci";
-+			reg = <0 0x112b0000 0 0x1000>, <0 0x112b3e00 0 0x0100>;
-+			reg-names = "mac", "ippc";
-+			interrupts = <GIC_SPI 536 IRQ_TYPE_LEVEL_HIGH 0>;
-+			phys = <&u2port3 PHY_TYPE_USB2>;
-+			assigned-clocks = <&topckgen CLK_TOP_USB_TOP_3P>,
-+					  <&topckgen CLK_TOP_SSUSB_XHCI_3P>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
-+						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
-+			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_3P_BUS>,
-+				 <&pericfg_ao CLK_PERI_AO_SSUSB_3P_XHCI>,
-+				 <&topckgen CLK_TOP_SSUSB_P3_REF>;
-+			clock-names = "sys_ck", "xhci_ck", "ref_ck";
-+			mediatek,syscon-wakeup = <&pericfg 0x400 106>;
-+			wakeup-source;
-+			usb2-lpm-disable;
-+			status = "disabled";
-+		};
-+
- 		nor_flash: nor@1132c000 {
- 			compatible = "mediatek,mt8195-nor", "mediatek,mt8173-nor";
- 			reg = <0 0x1132c000 0 0x1000>;
--- 
-2.18.0
+The name "power_supply" of the class to me implies a source :). So I
+can see perhaps having separate port-source and partner-source supplies
+making sense; they would effectively be mutually exclusive as only one
+of the pair would be "online" at a time when a partner is present
+depending on the power direction.
 
+But I'm not sure I see a use for having port-sink/partner-sink objects
+though.  While the VOLTAGE_NOW / CURRENT_NOW properties might be
+redundantly reporting the same value from corresponding -source objects,
+would there be different MIN/MAX values which are obtained from
+Get_Sink_Caps?
+
+> I also think we need to unify these power supplies so that tcpm and
+> ucsi (and others) always register the same power supplies.
+
+I like that idea too!
+
+Thanks,
+Jack
