@@ -2,110 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC29C444965
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Nov 2021 21:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 054D344499D
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Nov 2021 21:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230441AbhKCUOR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Nov 2021 16:14:17 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:43875 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229697AbhKCUOQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Nov 2021 16:14:16 -0400
-Received: (qmail 1535365 invoked by uid 1000); 3 Nov 2021 16:11:38 -0400
-Date:   Wed, 3 Nov 2021 16:11:38 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Marcel Holtmann <marcel@holtmann.org>
-Cc:     Benjamin Berg <benjamin@sipsolutions.net>,
-        linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org
-Subject: Re: Userspace enumeration hang while btusb tries to load firmware of
- removed device
-Message-ID: <20211103201138.GC1529362@rowland.harvard.edu>
-References: <df021873788acdb64e1311289e9ca6dc3f169616.camel@sipsolutions.net>
- <20211103182303.GB1529362@rowland.harvard.edu>
- <BCD95F43-3C6E-4B50-9228-9F2AD93BBBA4@holtmann.org>
+        id S230248AbhKCUis (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Nov 2021 16:38:48 -0400
+Received: from mga14.intel.com ([192.55.52.115]:28920 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229698AbhKCUis (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 3 Nov 2021 16:38:48 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10157"; a="231840605"
+X-IronPort-AV: E=Sophos;i="5.87,206,1631602800"; 
+   d="scan'208";a="231840605"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2021 13:36:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,206,1631602800"; 
+   d="scan'208";a="639057499"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 03 Nov 2021 13:36:08 -0700
+Subject: Re: [PATCH v2] usb: core: reduce power-on-good delay time of root hub
+To:     "Walt Jr. Brake" <mr.yming81@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Nishad Kamdar <nishadkamdar@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Eddie Hung <eddie.hung@mediatek.com>
+References: <1618017645-12259-1-git-send-email-chunfeng.yun@mediatek.com>
+ <5e907ccd-40bb-2ece-fe05-1a65a74f3aa2@gmail.com>
+ <20211101140613.GC1456700@rowland.harvard.edu>
+ <3cf46eaf-5443-30df-6d72-b92a6a518afc@linux.intel.com>
+ <62d0ac30-f2b9-f58c-cb1e-215ccb455753@gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <13d55059-9f66-8599-54fc-46698bae41d1@linux.intel.com>
+Date:   Wed, 3 Nov 2021 22:37:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <62d0ac30-f2b9-f58c-cb1e-215ccb455753@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <BCD95F43-3C6E-4B50-9228-9F2AD93BBBA4@holtmann.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 03, 2021 at 08:31:03PM +0100, Marcel Holtmann wrote:
-> Hi Alan,
+On 2.11.2021 22.29, Walt Jr. Brake wrote:
+> On 2/11/2021 17:05, Mathias Nyman wrote:
+>> On 1.11.2021 16.06, Alan Stern wrote:
+>>> On Sat, Oct 30, 2021 at 12:49:37PM +0800, Walt Jr. Brake wrote:
+>>>> This patch make USB 3.1 device cannot be detected, and I report the bug [1]
+>>>> to archlinux three month ago. Yesterday I try to fix it myself, and after I
+>>>> revert this patch, compile the kernel and test, it works.
+>>>>
+>>>> [1] https://bugs.archlinux.org/task/71660?project=1&pagenum=2
+>>>>
+>>>>
+>>>> diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+>>>> index 22ea1f4f2d66..73f4482d833a 100644
+>>>> --- a/drivers/usb/core/hub.h
+>>>> +++ b/drivers/usb/core/hub.h
+>>>> @@ -148,10 +148,8 @@ static inline unsigned hub_power_on_good_delay(struct
+>>>> usb_hub *hub)
+>>>>   {
+>>>>          unsigned delay = hub->descriptor->bPwrOn2PwrGood * 2;
+>>>>
+>>>> -       if (!hub->hdev->parent) /* root hub */
+>>>> -               return delay;
+>>>> -       else /* Wait at least 100 msec for power to become stable */
+>>>> -               return max(delay, 100U);
+>>>> +       /* Wait at least 100 msec for power to become stable */
+>>>> +       return max(delay, 100U);
+>>>>   }
+>>> Mathias:
+>>>
+>>> It looks like the bPwrOn2PwrGood value in xhci-hcd's hub descriptor is
+>>> too small for some USB 3.1 devices.
+>>>
+>>> Can you look into this?
+>>>
+>>> Alan Stern
+>>>
+>> At first glance the xhci roothub bPwrOn2PwrGood value looks ok.
+>> xhci spec 5.4.8 states software should wait 20ms after asserting PP, before
+>> attempting to change the state of the port.
+>>
+>> xhci driver sets desc->bPwrOn2PwrGood = 10; (2ms interval, so equals 20ms )
+>>
+>> We should probably get this working immediately, so maybe revert that patch
+>> while looking into the rootcause.
+>>
+>> Walt Jr. Brake, instead of reverting that patch, could you test if changing the
+>> xhci roothub bPwrOn2PwrGood value helps.
+>>
+>> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+>> index a3f875eea751..756231a55602 100644
+>> --- a/drivers/usb/host/xhci-hub.c
+>> +++ b/drivers/usb/host/xhci-hub.c
+>> @@ -257,7 +257,7 @@ static void xhci_common_hub_descriptor(struct xhci_hcd *xhci,
+>>   {
+>>          u16 temp;
+>>   -       desc->bPwrOn2PwrGood = 10;      /* xhci section 5.4.9 says 20ms max */
+>> +       desc->bPwrOn2PwrGood = 50;      /* The 20ms in xhci 5.4.8 isn't enough for USB 3.1 */
+>>          desc->bHubContrCurrent = 0;
+>>            desc->bNbrPorts = ports;
+>>
+>> Thanks
+>> -Mathias
 > 
-> >> a user is seeing a hang in fprintd while enumerating devices which
-> >> appears to be caused by an interaction of:
-> >> 
-> >> * system is resuming from S3
-> >> * btusb starts loading firmware
-> >> * bluetooth device disappears (probably thinkpad_acpi rfkill)
-> >> * libusb enumerates USB devices (fprintd in this case)
-> >> 
-> >> When this happens, the firmware load fails after a timeout of 10s. It
-> >> appears that if userspace queries information about the root hub in
-> >> question during this time, it will hang until the btusb firmware load
-> >> has timed out.
-> >> 
-> >> Attaching the full kernel log, below an excerpt, you can see:
-> >> * At :12 device removal: "usb 5-4: USB disconnect, device number 33"
-> >> * libusb enumeration retrieves information about the usb5 root hub,
-> >>   and blocks on this
-> >> * At :14 there is a tx timeout on hci0
-> >> * At :23 the firmware load finally fails
-> >> * Then usb_disable_device happens
-> >> * libusb/fprintd gets the usb5 HUB information and continues its
-> >>   enumeration
-> >> 
-> >> As I see it, there may be two issues:
-> >> 1. userspace should not block due to the firmware load hanging
-> >> 2. btusb should give up more quickly when the device disappears
-> >> 
-> >> Does anyone have a good idea about the possible cause or how we can fix
-> >> the problem?
-> >> 
-> >> Downstream issue: https://bugzilla.redhat.com/show_bug.cgi?id=2019857
-> > 
-> > I'm not familiar with the btusb driver, so someone on the 
-> > linux-bluetooth mailing list would have a better idea about this. 
-> > However, it does look as though btusb keeps the device locked during the 
-> > entire 10-second period while it tries to send over the firmware, and it 
-> > doesn't abort the procedure when it starts getting disconnection errors 
-> > but instead persists until a timeout expires.  Keeping the device locked 
-> > would certainly block lsusb.
-> > 
-> > In general, locking the device during a firmware upload seems like
-> > the right thing to do -- you don't want extraneous transfers from
-> > other processes messing up the firmware!  So overall, it appears that
-> > the whole problem would be solved if the firmware transfer were
-> > aborted as soon as the -ENODEV errors start appearing.
+> Mathias:
 > 
-> the problem seems to be that we hitting HCI command timeout. So the 
-> firmware download is done via HCI commands. These commands are send to 
-> the transport driver btusb.c via hdev->send (as btusb_send_frame). 
-> This triggers the usb_submit_urb or queues them via data->deferred 
-> anchor. All this reports back the error properly except that nobody 
-> does anything with it.
+> Sorry to reply lately. I test with your patch, it works.
 > 
-> See hci_send_frame() last portion:
+> I also test with setting bPwrOn2PwrGood to 45, and it not work.
 > 
->         err = hdev->send(hdev, skb);
->         if (err < 0) {
->                 bt_dev_err(hdev, "sending frame failed (%d)", err);
->                 kfree_skb(skb);
->         }
+> Seems that the minimal value should be 50 for this case.
 > 
-> And that is it. We are not checking for ENODEV or any error here. That 
-> means the failure of the HCI command gets only caught via the HCI 
-> command timeout. I don’t know how to do this yet, but you would have 
-> to look there to fail HCI command right away instead of waiting for 
-> the timeout.
 
-I have no idea how all the different layers work here.  Clearly 
-something has to signal hdev->req_wait_q after setting hdev->req_status 
-to some appropriate value.  Can this be done in btusb.c, either when the 
-URB is submitted or when it completes?  Or in hci_send_frame?
+Thanks for testing, and for checking that 90ms wait isn't enough
 
-Alan Stern
+-Mathias
