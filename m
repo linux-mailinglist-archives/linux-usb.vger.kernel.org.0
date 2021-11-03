@@ -2,94 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED099444419
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Nov 2021 15:59:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 328E044483B
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Nov 2021 19:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbhKCPB6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Nov 2021 11:01:58 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:41921 "HELO
+        id S230195AbhKCSZl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Nov 2021 14:25:41 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:53065 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231360AbhKCPB5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Nov 2021 11:01:57 -0400
-Received: (qmail 1524263 invoked by uid 1000); 3 Nov 2021 10:59:19 -0400
-Date:   Wed, 3 Nov 2021 10:59:19 -0400
+        with SMTP id S229893AbhKCSZk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Nov 2021 14:25:40 -0400
+Received: (qmail 1532068 invoked by uid 1000); 3 Nov 2021 14:23:03 -0400
+Date:   Wed, 3 Nov 2021 14:23:03 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, linux-usb@vger.kernel.org,
-        chris.chiu@canonical.com, Mathias Nyman <mathias.nyman@intel.com>
-Subject: Re: 5.14.14+ USB regression caused by "usb: core: hcd: Add support
- for deferring roothub registration" series
-Message-ID: <20211103145919.GC1521906@rowland.harvard.edu>
-References: <42bcbea6-5eb8-16c7-336a-2cb72e71bc36@redhat.com>
- <YYJRRg8QDBfy2PP7@kroah.com>
- <9e1abe71-d903-f227-38ae-a854ab9e5baf@redhat.com>
- <5c95597b-289b-ea1c-4770-8be9e8511ae0@ti.com>
+To:     Benjamin Berg <benjamin@sipsolutions.net>
+Cc:     linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org
+Subject: Re: Userspace enumeration hang while btusb tries to load firmware of
+ removed device
+Message-ID: <20211103182303.GB1529362@rowland.harvard.edu>
+References: <df021873788acdb64e1311289e9ca6dc3f169616.camel@sipsolutions.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5c95597b-289b-ea1c-4770-8be9e8511ae0@ti.com>
+In-Reply-To: <df021873788acdb64e1311289e9ca6dc3f169616.camel@sipsolutions.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 03, 2021 at 08:14:35PM +0530, Kishon Vijay Abraham I wrote:
-> + Alan, Chris, Mathias, linux-usb
+On Wed, Nov 03, 2021 at 03:55:31PM +0100, Benjamin Berg wrote:
+> Hi,
 > 
-> Hi Hans,
+> a user is seeing a hang in fprintd while enumerating devices which
+> appears to be caused by an interaction of:
 > 
-> On 03/11/21 6:18 pm, Hans de Goede wrote:
-> > Hi,
-> > 
-> > On 11/3/21 10:07, Greg Kroah-Hartman wrote:
-> >> On Wed, Nov 03, 2021 at 10:02:52AM +0100, Hans de Goede wrote:
-> >>> Hi Greg,
-> >>>
-> >>> We (Fedora) have been receiving multiple reports about USB devices stopping
-> >>> working starting with 5.14.14 .
-> >>>
-> >>> An Arch Linux user has found that reverting the first 2 patches from this series:
-> >>> https://lore.kernel.org/all/20210909064200.16216-1-kishon@ti.com/
-> >>>
-> >>> Fixes things (the 3th patch is just some mostly unrelated refactoring/cleanup).
-> >>>
-> >>> See here for the Arch-linux discussion surrounding this:
-> >>> https://bbs.archlinux.org/viewtopic.php?pid=2000956#p2000956
-> >>>
-> >>> And here are 2 Fedora bug reports of Fedora users being unable to use their
-> >>> machines due their mouse + kbd not working:
-> >>>
-> >>> https://bugzilla.redhat.com/show_bug.cgi?id=2019542
-> >>> https://bugzilla.redhat.com/show_bug.cgi?id=2019576
-> >>>
-> >>> Can we get this patch-series reverted from the 5.14.y releases please ?
-> >>
-> >> Sure,
-> > 
-> > Thanks.
-> > 
-> >> but can you also submit patches to get into 5.15.y and 5.16-rc1
-> >> that revert these changes as they should still be an issue there, right?
-> > 
-> > Yes I assume this is still an issue there too, but I was hoping that
-> > Kishon can take a look and maybe actually fix things, since just
-> > reverting presumably regresses whatever these patches were addressing.
-> > 
-> > We've aprox 1-3 weeks before distros like Arch and Linux will switch
-> > to 5.15.y kernels.  So we have some time to come up with a fix
-> > there, where as for 5.14.y this is hitting users now.
+> * system is resuming from S3
+> * btusb starts loading firmware
+> * bluetooth device disappears (probably thinkpad_acpi rfkill)
+> * libusb enumerates USB devices (fprintd in this case)
 > 
-> Is the issue with PCIe USB devices or platform USB device? Is it specific to
-> super speed devices or high speed device?
+> When this happens, the firmware load fails after a timeout of 10s. It
+> appears that if userspace queries information about the root hub in
+> question during this time, it will hang until the btusb firmware load
+> has timed out.
+> 
+> Attaching the full kernel log, below an excerpt, you can see:
+>  * At :12 device removal: "usb 5-4: USB disconnect, device number 33"
+>  * libusb enumeration retrieves information about the usb5 root hub,
+>    and blocks on this
+>  * At :14 there is a tx timeout on hci0
+>  * At :23 the firmware load finally fails
+>  * Then usb_disable_device happens
+>  * libusb/fprintd gets the usb5 HUB information and continues its
+>    enumeration
+> 
+> As I see it, there may be two issues:
+> 1. userspace should not block due to the firmware load hanging
+> 2. btusb should give up more quickly when the device disappears
+> 
+> Does anyone have a good idea about the possible cause or how we can fix
+> the problem?
+> 
+> Downstream issue: https://bugzilla.redhat.com/show_bug.cgi?id=2019857
 
-Look at the bug reports.  They are on standard PCs (so PCIe controllers) 
-and some of them involve full speed (mouse and keyboard) devices.  
-Although it looks like the problem has little to do with the device and 
-a lot to do with the controller.
+I'm not familiar with the btusb driver, so someone on the 
+linux-bluetooth mailing list would have a better idea about this. 
+However, it does look as though btusb keeps the device locked during the 
+entire 10-second period while it tries to send over the firmware, and it 
+doesn't abort the procedure when it starts getting disconnection errors 
+but instead persists until a timeout expires.  Keeping the device locked 
+would certainly block lsusb.
 
-Is there a good way to get more information about what is going wrong?  
-For example, by enabling tracepoints in the xhci-hcd driver?
+In general, locking the device during a firmware upload seems like
+the right thing to do -- you don't want extraneous transfers from
+other processes messing up the firmware!  So overall, it appears that
+the whole problem would be solved if the firmware transfer were
+aborted as soon as the -ENODEV errors start appearing.
 
 Alan Stern
