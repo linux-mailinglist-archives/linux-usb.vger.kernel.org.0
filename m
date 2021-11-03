@@ -2,112 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19EC9443E79
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Nov 2021 09:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 119CB4443CD
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Nov 2021 15:44:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbhKCIhh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Nov 2021 04:37:37 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:58904 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230463AbhKCIhh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Nov 2021 04:37:37 -0400
-Received: from [10.180.13.153] (unknown [10.180.13.153])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxf2ulSYJhOackAA--.58098S2;
-        Wed, 03 Nov 2021 16:34:54 +0800 (CST)
-Subject: Re: [PATCH v1] usb: xhci: add LPM quirk for ensuring uPD720201 into
- D3 state after S5
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
+        id S231464AbhKCOrX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Nov 2021 10:47:23 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:40352 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230252AbhKCOrW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Nov 2021 10:47:22 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1A3EieVX008169;
+        Wed, 3 Nov 2021 09:44:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1635950680;
+        bh=3VlKYAYGeekLvefX8uPnEKHFYx4A386Rsik+RAkABuA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=oQf4J0mILH6oxE2oIoGQ8nJtaRHDEtBWkDefuQIQBOwgakutwDtpvwIJSeNCLrbqw
+         BlxQ/iaLQoUoZmf01y4al8hNjUgf4/IjTZLlW0MreEPG6qpGmc3lBsSDWjK8c8WpRr
+         1f+VOzi8IgYQWK5B4dEol5S53VOW6S+phw+QM1bg=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1A3EieF7129195
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 3 Nov 2021 09:44:40 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 3
+ Nov 2021 09:44:39 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 3 Nov 2021 09:44:39 -0500
+Received: from [10.250.233.204] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1A3EiaoU077528;
+        Wed, 3 Nov 2021 09:44:37 -0500
+Subject: Re: 5.14.14+ USB regression caused by "usb: core: hcd: Add support
+ for deferring roothub registration" series
+To:     Hans de Goede <hdegoede@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhuyinbo@loongson.cn, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1635751025-25906-1-git-send-email-zhuyinbo@loongson.cn>
- <f7cfa6bc-a0f6-aaa6-aafa-b4fe2714ca40@linux.intel.com>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <59c395bf-daac-9835-7063-5f8b6a9f3338@loongson.cn>
-Date:   Wed, 3 Nov 2021 16:34:45 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Alan Stern <stern@rowland.harvard.edu>
+CC:     <stable@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <chris.chiu@canonical.com>, Mathias Nyman <mathias.nyman@intel.com>
+References: <42bcbea6-5eb8-16c7-336a-2cb72e71bc36@redhat.com>
+ <YYJRRg8QDBfy2PP7@kroah.com>
+ <9e1abe71-d903-f227-38ae-a854ab9e5baf@redhat.com>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <5c95597b-289b-ea1c-4770-8be9e8511ae0@ti.com>
+Date:   Wed, 3 Nov 2021 20:14:35 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <f7cfa6bc-a0f6-aaa6-aafa-b4fe2714ca40@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <9e1abe71-d903-f227-38ae-a854ab9e5baf@redhat.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-X-CM-TRANSID: AQAAf9Dxf2ulSYJhOackAA--.58098S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7WFW3CF45KF4fZF48tF1fZwb_yoW8Ww47pa
-        yqg390gFn8GFn29r12kw10v3yfA3s5ZryDJry3A34DCrZrWr92v34UKr4DA3s7WFZavw1q
-        9F4jyr98uw4UZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CE
-        bIxvr21lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
-        8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
-        xVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
-        8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2
-        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
-        UI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
++ Alan, Chris, Mathias, linux-usb
 
-在 2021/11/1 下午5:18, Mathias Nyman 写道:
-> Hi
->
-> On 1.11.2021 9.17, Yinbo Zhu wrote:
->> After S5, any pci device should into D3 state that if supported, but the
->> uPD720201 was not and it may be the cause of xhci firmware and cause
->> OSPM power consumption is more higher that S5 than S4. I think xhci HCD
->> can add a quirk ensure it into D3 state after S5 that is appropriate
->> and this patch was to add LPM quirk and set PCI_D3hot to uPD720201 pmsc
->> register in xhci_pci_shutdown to fix xhci power consumption issue.
+Hi Hans,
+
+On 03/11/21 6:18 pm, Hans de Goede wrote:
+> Hi,
+> 
+> On 11/3/21 10:07, Greg Kroah-Hartman wrote:
+>> On Wed, Nov 03, 2021 at 10:02:52AM +0100, Hans de Goede wrote:
+>>> Hi Greg,
+>>>
+>>> We (Fedora) have been receiving multiple reports about USB devices stopping
+>>> working starting with 5.14.14 .
+>>>
+>>> An Arch Linux user has found that reverting the first 2 patches from this series:
+>>> https://lore.kernel.org/all/20210909064200.16216-1-kishon@ti.com/
+>>>
+>>> Fixes things (the 3th patch is just some mostly unrelated refactoring/cleanup).
+>>>
+>>> See here for the Arch-linux discussion surrounding this:
+>>> https://bbs.archlinux.org/viewtopic.php?pid=2000956#p2000956
+>>>
+>>> And here are 2 Fedora bug reports of Fedora users being unable to use their
+>>> machines due their mouse + kbd not working:
+>>>
+>>> https://bugzilla.redhat.com/show_bug.cgi?id=2019542
+>>> https://bugzilla.redhat.com/show_bug.cgi?id=2019576
+>>>
+>>> Can we get this patch-series reverted from the 5.14.y releases please ?
 >>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> I think we need a better understanding of the underlying issue before
-> adding a quirk like this.
->
-> Is this a known issue with the uPD720201 controller firmware? or is it
-> an issue with ACPI table entries not supporting the proper D state in BIOS
-> on the tested platform, or something completely different?
+>> Sure,
+> 
+> Thanks.
+> 
+>> but can you also submit patches to get into 5.15.y and 5.16-rc1
+>> that revert these changes as they should still be an issue there, right?
+> 
+> Yes I assume this is still an issue there too, but I was hoping that
+> Kishon can take a look and maybe actually fix things, since just
+> reverting presumably regresses whatever these patches were addressing.
+> 
+> We've aprox 1-3 weeks before distros like Arch and Linux will switch
+> to 5.15.y kernels.  So we have some time to come up with a fix
+> there, where as for 5.14.y this is hitting users now.
 
-Yes, and I notice other xhci hc doesn't encounter this power consumption 
-issue I think that xhci firmware
-
-may be set D3 after s5, but the xhci firmware code isn't visible,  in 
-addition I find that test platform the
-
-_PS3 method wasn't implemented in acpi table which can make device into 
-S3, Bios team didn't add it for
-
-some platform reason and I think xhci hcd to ensure device into D3 state 
-after s5 that is appropriate
-
->
-> Also, LPM usually refers to "Link Power Management" in the xHCI spec.
-> This is about the U1 and U2 link states for the connected USB device.
->
-> If we end up needing a new xhci quirk it will need a new name.
->
-> Thanks
-> -Mathias
-
-Hi Mathias,
-
-
-I had changed the quirk that replace XHCI_LPM_QUIRK with XHCI_LWP_QUIRK 
-as v2 version patch.
-
-please view the v2 version patch.
-
+Is the issue with PCIe USB devices or platform USB device? Is it specific to
+super speed devices or high speed device?
 
 Thanks,
-
-Yinbo.
-
-
+Kishon
