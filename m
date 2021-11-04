@@ -2,96 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D159444ED7
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Nov 2021 07:26:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E953A444FBC
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Nov 2021 08:36:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbhKDG3F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Nov 2021 02:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47250 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbhKDG3B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Nov 2021 02:29:01 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D34C061714
-        for <linux-usb@vger.kernel.org>; Wed,  3 Nov 2021 23:26:24 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id t24-20020a252d18000000b005c225ae9e16so7460385ybt.15
-        for <linux-usb@vger.kernel.org>; Wed, 03 Nov 2021 23:26:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=4+lptrSez3O7I9lFhrCLmPI8ZR+QIBXMWJtPqo31Kho=;
-        b=SN7IJCouH2K1RaDvT7DpS9fRd1EKpz2D+KwHt5kKFYQn8GJJleawLFP+9rQ7724awt
-         MsANgzCrp8apBGjUpdSLvFUtzmPevdsMwOZK4d48DfaRvnuf9LPUrv1xF8+uyCrhiTLr
-         U7fwK828KxzzlQeUbvAupQ0LqzGhmUQSAltbZrlEl0+uZ/Xz9/uYF4uQ3sB99UPXUTH0
-         0FqBsFcgII2ZEdZfDbY5VDongWQnRMYf6uhyflx1BT0h/UWoH9aRHTZ1RkbDm9i7vA/U
-         Fko9dxVExFxxc9rNalm8FlJnzXBnfe3jbzxaXX43FRxDtxcU2IItkAvLNAjoLPALroDt
-         scWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=4+lptrSez3O7I9lFhrCLmPI8ZR+QIBXMWJtPqo31Kho=;
-        b=rXcz9xxHTwj3pB49m0wRdvQ0k2W1kEApWejdKro17L7rf5fOc8BmDm1Ri3HpZSXdo9
-         +iyGOfprLUICDzTiXiX/f4cbdjUBJxSFRTRlzuVd+XO4N9yLhAM1tux47hHB+CLFI2Ju
-         eBYF/ORmA97V5BU0yn5+oq2pJUrYqPgfc7pkK7jXc8InaFH85o+9A0pXw5anEMU6xbZb
-         wNM2qY4ZuA4ChelciaBiTPUbbBi4ycMjgs2UPw9VzOyq1mdtigDEYGZ5CedzQNxVwSah
-         r7nlrTjqanNvrTFJyYZKVdxFHKCadMZdIG51Lzguuxpo2q01vlpqsIx266h12flceaSW
-         UcVg==
-X-Gm-Message-State: AOAM533ASN58cZDES+PAKXBedSqL5UuvpTDoPonbaYaEu3SDc6MZ3DgH
-        dMabBErGhT2oaW54iq34EcuaQzcy+nEGMjIhv9g=
-X-Google-Smtp-Source: ABdhPJwTHX0W7XivKhw5GZhwmnwULoRpTPIU8SfZWXMRJHpAurMGO9os+98teOKiUMv8vlHtXMXy6dNUx75dqiOcjPM=
-X-Received: from albertccwang.ntc.corp.google.com ([2401:fa00:fc:202:b82c:caf0:c403:32cf])
- (user=albertccwang job=sendgmr) by 2002:a25:6c06:: with SMTP id
- h6mr52939921ybc.222.1636007183647; Wed, 03 Nov 2021 23:26:23 -0700 (PDT)
-Date:   Thu,  4 Nov 2021 14:26:16 +0800
-Message-Id: <20211104062616.948353-1-albertccwang@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.33.1.1089.g2158813163f-goog
-Subject: [PATCH] usb: dwc3: gadget: Fix null pointer exception
-From:   Albert Wang <albertccwang@google.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Albert Wang <albertccwang@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S230388AbhKDHip (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Nov 2021 03:38:45 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:52352 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230084AbhKDHio (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Nov 2021 03:38:44 -0400
+Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id BE99B4120B;
+        Thu,  4 Nov 2021 07:36:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1636011367; bh=/CA63UR5arwsAXDCVLYSttSBde59BmSIjoOTvS8/nZw=;
+        h=Date:From:Subject:To:Cc:From;
+        b=aALTCRbs5pESNUZpn+aWwkGiGPfLuq2G5sfw1qJDLFPUE+W1KMcZ9cnqMB1qbPtb2
+         rcIBHunlDd2+GQL/kNNEw2hDnYJsY4+7Rtrg03V8XUSeljfS85XQFxN5qcXetB48aR
+         jW9+smbni1kEQ9xycj95FzyrfvYS4zxJiRMwvV7YRuzEHx+kcrPxvXudrXKGHY2XNj
+         J5HYg/SN3u6SsnjP8nuZqkHimrX5t8hy3ab7mPByB9RVVctdAneqNO5HY7elXg4Qoq
+         IUMKDGbitArYmVhKXY2yyAsxkAj2IXgQKpt8N8rwAsdVJf7E+ZMjYK8LolTNew/TD8
+         p7EYoH5gDS/bQ==
+Received: from hminas-z420 (hminas-z420.internal.synopsys.com [10.116.75.77])
+        (using TLSv1 with cipher AES128-SHA (128/128 bits))
+        (Client did not present a certificate)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 4BF75A005D;
+        Thu,  4 Nov 2021 07:36:03 +0000 (UTC)
+Received: by hminas-z420 (sSMTP sendmail emulation); Thu, 04 Nov 2021 11:36:01 +0400
+Date:   Thu, 04 Nov 2021 11:36:01 +0400
+Message-Id: <c356baade6e9716d312d43df08d53ae557cb8037.1636011277.git.Minas.Harutyunyan@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Subject: [PATCH] usb: dwc2: gadget: Fix ISOC flow for elapsed frames
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        stable <stable@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In the endpoint interrupt functions
-dwc3_gadget_endpoint_transfer_in_progress() and
-dwc3_gadget_endpoint_trbs_complete() will dereference the endpoint
-descriptor. But it could be cleared in __dwc3_gadget_ep_disable()
-when accessory disconnected. So we need to check whether it is null
-or not before dereferencing it.
+Added updating of request frame number for elapsed frames,
+otherwise frame number will remain as previous use of request.
+This will allow function driver to correctly track frames in
+case of Missed ISOC occurs.
 
-Signed-off-by: Albert Wang <albertccwang@google.com>
+Added setting request actual length to 0 for elapsed frames.
+In Slave mode when pushing data to RxFIFO by dwords, request
+actual length incrementing accordingly. But before whole packet
+will be pushed into RxFIFO and send to host can occurs Missed
+ISOC and data will not send to host. So, in this case request
+actual length should be reset to 0.
+
+Fixes: 91bb163e1e4f ("usb: dwc2: gadget: Fix ISOC flow for BDMA and Slave")
+Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
 ---
- drivers/usb/dwc3/gadget.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/usb/dwc2/gadget.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 23de2a5a40d6..83c7344888fd 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -3252,6 +3252,9 @@ static bool dwc3_gadget_endpoint_trbs_complete(struct dwc3_ep *dep,
- 	struct dwc3		*dwc = dep->dwc;
- 	bool			no_started_trb = true;
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 11d85a6e0b0d..2190225bf3da 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -1198,6 +1198,8 @@ static void dwc2_hsotg_start_req(struct dwc2_hsotg *hsotg,
+ 			}
+ 			ctrl |= DXEPCTL_CNAK;
+ 		} else {
++			hs_req->req.frame_number = hs_ep->target_frame;
++			hs_req->req.actual = 0;
+ 			dwc2_hsotg_complete_request(hsotg, hs_ep, hs_req, -ENODATA);
+ 			return;
+ 		}
+@@ -2857,9 +2859,12 @@ static void dwc2_gadget_handle_ep_disabled(struct dwc2_hsotg_ep *hs_ep)
  
-+	if (!dep->endpoint.desc)
-+		return no_started_trb;
-+
- 	dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
+ 	do {
+ 		hs_req = get_ep_head(hs_ep);
+-		if (hs_req)
++		if (hs_req) {
++			hs_req->req.frame_number = hs_ep->target_frame;
++			hs_req->req.actual = 0;
+ 			dwc2_hsotg_complete_request(hsotg, hs_ep, hs_req,
+ 						    -ENODATA);
++		}
+ 		dwc2_gadget_incr_frame_num(hs_ep);
+ 		/* Update current frame number value. */
+ 		hsotg->frame_number = dwc2_hsotg_read_frameno(hsotg);
+@@ -2912,8 +2917,11 @@ static void dwc2_gadget_handle_out_token_ep_disabled(struct dwc2_hsotg_ep *ep)
  
- 	if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
-@@ -3299,6 +3302,9 @@ static void dwc3_gadget_endpoint_transfer_in_progress(struct dwc3_ep *dep,
- {
- 	int status = 0;
+ 	while (dwc2_gadget_target_frame_elapsed(ep)) {
+ 		hs_req = get_ep_head(ep);
+-		if (hs_req)
++		if (hs_req) {
++			hs_req->req.frame_number = ep->target_frame;
++			hs_req->req.actual = 0;
+ 			dwc2_hsotg_complete_request(hsotg, ep, hs_req, -ENODATA);
++		}
  
-+	if (!dep->endpoint.desc)
-+		return;
-+
- 	if (usb_endpoint_xfer_isoc(dep->endpoint.desc))
- 		dwc3_gadget_endpoint_frame_from_event(dep, event);
+ 		dwc2_gadget_incr_frame_num(ep);
+ 		/* Update current frame number value. */
+@@ -3002,8 +3010,11 @@ static void dwc2_gadget_handle_nak(struct dwc2_hsotg_ep *hs_ep)
  
+ 	while (dwc2_gadget_target_frame_elapsed(hs_ep)) {
+ 		hs_req = get_ep_head(hs_ep);
+-		if (hs_req)
++		if (hs_req) {
++			hs_req->req.frame_number = hs_ep->target_frame;
++			hs_req->req.actual = 0;
+ 			dwc2_hsotg_complete_request(hsotg, hs_ep, hs_req, -ENODATA);
++		}
+ 
+ 		dwc2_gadget_incr_frame_num(hs_ep);
+ 		/* Update current frame number value. */
+
+base-commit: c26f1c109d21f2ea874e4a85c0c76c385b8f46cb
 -- 
-2.33.1.1089.g2158813163f-goog
+2.11.0
 
