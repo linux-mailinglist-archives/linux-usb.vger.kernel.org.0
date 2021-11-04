@@ -2,60 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7FA4457FF
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Nov 2021 18:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 109E3445BF2
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Nov 2021 22:59:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbhKDRM3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Nov 2021 13:12:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39946 "EHLO mail.kernel.org"
+        id S232354AbhKDWCV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Nov 2021 18:02:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41456 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231186AbhKDRM2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 4 Nov 2021 13:12:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 880CA60F56;
-        Thu,  4 Nov 2021 17:09:50 +0000 (UTC)
+        id S232336AbhKDWCN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 4 Nov 2021 18:02:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CCC4E61267;
+        Thu,  4 Nov 2021 21:59:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636045790;
-        bh=plRviCoN82O4obatYYnQOXHdW6bWskO0ezcd9ZTRSgw=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=JIX2JLcUlZUWfQo3CgS+0hLh7BAduszmTkytLf2/eQV/DhFxM7ad1uSo3A1CsvyWH
-         jRl0yL1N2QxbQwW6jKHME6gGbn7/hyqSsitPzfkWMcJzGGORvDyg8zOoEE74DbMTy0
-         RrNBwVK7nVoW//8e3XIQpXyXJY4M8RK56XjJdUgcNpMEx13d9cIGeie2YGSDpbivbh
-         3UoNWDOb+d5hweN3w9xajkRjUO8qVxlkdNvhYVONDbRxFu7vxmJrisQppNsRyTbZZ9
-         GgZmoHalu77tEPqaLcFpthutDdhAPKIZfZ9jFocxRw+F4NTt8rqRI+d0+ThLk0shGS
-         bRi+F7X4UuEXA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 758EC609D9;
-        Thu,  4 Nov 2021 17:09:50 +0000 (UTC)
-Subject: Re: [GIT PULL] USB / Thunderbolt changes for 5.16-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YYPaloH8ltR32qUk@kroah.com>
-References: <YYPaloH8ltR32qUk@kroah.com>
-X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YYPaloH8ltR32qUk@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16-rc1
-X-PR-Tracked-Commit-Id: a0548b26901f082684ad1fb3ba397d2de3a1406a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 048ff8629e117d8411a787559417c781bcd78d7e
-Message-Id: <163604579042.24234.1674569365815236421.pr-tracker-bot@kernel.org>
-Date:   Thu, 04 Nov 2021 17:09:50 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+        s=k20201202; t=1636063175;
+        bh=dpz/Kq034PoEyMdh5IwG1YW0B9x+52MEt1VYusOTdWg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MEDhjRMWCrE9x1d4o9ANKrw8fpO/JMTKGQg/mSww83t7weUYScm8pmopyV5a86H47
+         uZLwLUhBPpSYA0BiZlBRDh4MhPSD4g/xMoP0D2t2muOYjoOUH0e2SkpaUBtqxJQttM
+         LwBW+5mBPWNXfVZTuhgxgKRg1O5N0NC+8l6o5OIWmg8dQNglkpmigiBxYQ5xCqOGxe
+         Fk+Th/9GgoATO/VqyQ60oTCRsidnU9vSjm/tE0RA4TQ2W2WNvxCDLp5N2NYcIiyy6u
+         juubWGcXBNgklrVHgVyuxPbi3EiOJcVvDQEMLJk+tEzAvIqR1TUnQEZGhVhFTUzfVa
+         uJTUVr+GxeMng==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] usb: dwc2: hcd_queue: Fix use of floating point literal
+Date:   Thu,  4 Nov 2021 14:59:23 -0700
+Message-Id: <20211104215923.719785-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.0.rc0
+MIME-Version: 1.0
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Thu, 4 Nov 2021 14:05:26 +0100:
+A new commit in LLVM causes an error on the use of 'long double' when
+'-mno-x87' is used, which the kernel does through an alias,
+'-mno-80387' (see the LLVM commit below for more details around why it
+does this).
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16-rc1
+ drivers/usb/dwc2/hcd_queue.c:1744:25: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
+                         delay = ktime_set(0, DWC2_RETRY_WAIT_DELAY);
+                                             ^
+ drivers/usb/dwc2/hcd_queue.c:62:34: note: expanded from macro 'DWC2_RETRY_WAIT_DELAY'
+ #define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
+                                 ^
+ 1 error generated.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/048ff8629e117d8411a787559417c781bcd78d7e
+This happens due to the use of a 'long double' literal. The 'E6' part of
+'1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
+it to 'long double'.
 
-Thank you!
+There is no visible reason for a floating point value in this driver, as
+the value is only used as a parameter to a function that expects an
+integer type.  Use USEC_PER_SEC, which is the same integer value as
+'1E6L', to avoid changing functionality but fix the error.
 
+Fixes: 6ed30a7d8ec2 ("usb: dwc2: host: use hrtimer for NAK retries")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1497
+Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/usb/dwc2/hcd_queue.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc2/hcd_queue.c b/drivers/usb/dwc2/hcd_queue.c
+index 89a788326c56..bdf1927e1be1 100644
+--- a/drivers/usb/dwc2/hcd_queue.c
++++ b/drivers/usb/dwc2/hcd_queue.c
+@@ -59,7 +59,7 @@
+ #define DWC2_UNRESERVE_DELAY (msecs_to_jiffies(5))
+ 
+ /* If we get a NAK, wait this long before retrying */
+-#define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
++#define DWC2_RETRY_WAIT_DELAY (1 * USEC_PER_SEC)
+ 
+ /**
+  * dwc2_periodic_channel_available() - Checks that a channel is available for a
+
+base-commit: d4439a1189f93d0ac1eaf0197db8e6b3e197d5c7
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.34.0.rc0
+
