@@ -2,122 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE7F444BCE
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Nov 2021 00:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F79444CE9
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Nov 2021 02:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbhKCX4I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Nov 2021 19:56:08 -0400
-Received: from mga04.intel.com ([192.55.52.120]:57966 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229541AbhKCX4H (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Nov 2021 19:56:07 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10157"; a="230342467"
-X-IronPort-AV: E=Sophos;i="5.87,207,1631602800"; 
-   d="scan'208";a="230342467"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2021 16:53:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,207,1631602800"; 
-   d="scan'208";a="639100544"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 03 Nov 2021 16:53:28 -0700
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, linux-usb@vger.kernel.org,
-        chris.chiu@canonical.com, Mathias Nyman <mathias.nyman@intel.com>
-References: <42bcbea6-5eb8-16c7-336a-2cb72e71bc36@redhat.com>
- <YYJRRg8QDBfy2PP7@kroah.com>
- <9e1abe71-d903-f227-38ae-a854ab9e5baf@redhat.com>
- <5c95597b-289b-ea1c-4770-8be9e8511ae0@ti.com>
- <20211103145919.GC1521906@rowland.harvard.edu>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: 5.14.14+ USB regression caused by "usb: core: hcd: Add support
- for deferring roothub registration" series
-Message-ID: <3cfc755c-7559-306c-bec4-ae87052fc7c0@linux.intel.com>
-Date:   Thu, 4 Nov 2021 01:54:53 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.8.1
+        id S231455AbhKDBPe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Nov 2021 21:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231160AbhKDBPe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Nov 2021 21:15:34 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2494DC061714;
+        Wed,  3 Nov 2021 18:12:57 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id n23so3920233pgh.8;
+        Wed, 03 Nov 2021 18:12:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IVu0tbLLxmk7blwPwfUFDP5GkHVSYjXtlbgYnA2bsOA=;
+        b=kyji4rZQQADxOmhEb/NYzXkRuj+xN6yzzcHW8IqPqczD0FPTBRgU8SG+GGnHQNpIZX
+         vGDncRATWYrOTz/q4yPTxiWqwGgZrFzdS39ROtx7UlI4fnHIw/v+9rkLiIawyo/eZhPA
+         IxI1AgV11AND/RGEPfA0QCT8T2oiVicGFiUpM+4X5a6SL2t2Dyg7n/eoe4tpi8IzpIsR
+         FzgSVHXIEfPB2O9qgadhvWYhZoaFjQAF7LlFWbKz1HlzCRkYR+SM2DdZhIKQFY/a0zVK
+         Asq9q460hrCdePNxu+4YkEr/HiJFvHj0c2qikdd4ElZY7SBt6xIOImSO5ELc+0Tdcexe
+         YAcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IVu0tbLLxmk7blwPwfUFDP5GkHVSYjXtlbgYnA2bsOA=;
+        b=u90V3tgLyzSav5PFM9kIwqKIfBZsnEEUuCoC0ZlSJXbCPnPwFf5yCura1umfQvc4cp
+         YxrL9SlDGbzFLuutZ1urceiRo1MS2pUtZCZyb7yRtPxkoJE/Q3y7yOdDSodLuY9XSYdE
+         0eODz1mmk6jqmd88z+On5RCMI7RZCF2e8XYFpP9kgEJvnFjUiC+NrYa48T2Mg6PpJ+Ds
+         CBx2npvojyhMwO9g+2C1Ra5oOxdi8swvQFwPSsJL8vdSYTGGTodVKQu25TQ1blLn2XF1
+         Creb5vttc2IvzCvnsAu0pzZGVi2HoHmnuKyzv64tf3Z+bWf/9MZQh5O6jJLb2yLM7s7b
+         Qt7A==
+X-Gm-Message-State: AOAM5307ql9+fqLW2qtHepo7Fjdh05U/Gx642MNz6TZvIj1SRCxsOMgI
+        7igvzjcunLlSQEX2oGUpt0M=
+X-Google-Smtp-Source: ABdhPJyuN48WEj2SI6wfK8T+uxAc0TWupez2Upq76eHaZ7CSmgNwZSxNj4C32sCf/NNK2mUVvTzfqA==
+X-Received: by 2002:a05:6a00:1489:b0:481:2a68:b7cf with SMTP id v9-20020a056a00148900b004812a68b7cfmr14555325pfu.66.1635988376749;
+        Wed, 03 Nov 2021 18:12:56 -0700 (PDT)
+Received: from debian11-dev-61.localdomain (192.243.120.180.16clouds.com. [192.243.120.180])
+        by smtp.gmail.com with ESMTPSA id k2sm3844768pfu.112.2021.11.03.18.12.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Nov 2021 18:12:56 -0700 (PDT)
+From:   davidcomponentone@gmail.com
+X-Google-Original-From: yang.guang5@zte.com.cn
+To:     balbi@kernel.org
+Cc:     davidcomponentone@gmail.com, gregkh@linuxfoundation.org,
+        colin.king@canonical.com, stern@rowland.harvard.edu,
+        yang.guang5@zte.com.cn, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] USB: UDC: use swap() to make code cleaner
+Date:   Thu,  4 Nov 2021 09:12:45 +0800
+Message-Id: <20211104011245.1027675-1-yang.guang5@zte.com.cn>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20211103145919.GC1521906@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3.11.2021 16.59, Alan Stern wrote:
-> On Wed, Nov 03, 2021 at 08:14:35PM +0530, Kishon Vijay Abraham I wrote:
->> + Alan, Chris, Mathias, linux-usb
->>
->> Hi Hans,
->>
->> On 03/11/21 6:18 pm, Hans de Goede wrote:
->>> Hi,
->>>
->>> On 11/3/21 10:07, Greg Kroah-Hartman wrote:
->>>> On Wed, Nov 03, 2021 at 10:02:52AM +0100, Hans de Goede wrote:
->>>>> Hi Greg,
->>>>>
->>>>> We (Fedora) have been receiving multiple reports about USB devices stopping
->>>>> working starting with 5.14.14 .
->>>>>
->>>>> An Arch Linux user has found that reverting the first 2 patches from this series:
->>>>> https://lore.kernel.org/all/20210909064200.16216-1-kishon@ti.com/
->>>>>
->>>>> Fixes things (the 3th patch is just some mostly unrelated refactoring/cleanup).
->>>>>
->>>>> See here for the Arch-linux discussion surrounding this:
->>>>> https://bbs.archlinux.org/viewtopic.php?pid=2000956#p2000956
->>>>>
->>>>> And here are 2 Fedora bug reports of Fedora users being unable to use their
->>>>> machines due their mouse + kbd not working:
->>>>>
->>>>> https://bugzilla.redhat.com/show_bug.cgi?id=2019542
->>>>> https://bugzilla.redhat.com/show_bug.cgi?id=2019576
->>>>>
->>>>> Can we get this patch-series reverted from the 5.14.y releases please ?
->>>>
->>>> Sure,
->>>
->>> Thanks.
->>>
->>>> but can you also submit patches to get into 5.15.y and 5.16-rc1
->>>> that revert these changes as they should still be an issue there, right?
->>>
->>> Yes I assume this is still an issue there too, but I was hoping that
->>> Kishon can take a look and maybe actually fix things, since just
->>> reverting presumably regresses whatever these patches were addressing.
->>>
->>> We've aprox 1-3 weeks before distros like Arch and Linux will switch
->>> to 5.15.y kernels.  So we have some time to come up with a fix
->>> there, where as for 5.14.y this is hitting users now.
->>
->> Is the issue with PCIe USB devices or platform USB device? Is it specific to
->> super speed devices or high speed device?
-> 
-> Look at the bug reports.  They are on standard PCs (so PCIe controllers) 
-> and some of them involve full speed (mouse and keyboard) devices.  
-> Although it looks like the problem has little to do with the device and 
-> a lot to do with the controller.
-> 
-> Is there a good way to get more information about what is going wrong?  
-> For example, by enabling tracepoints in the xhci-hcd driver?
-> 
-> Alan Stern
-> 
+From: Yang Guang <yang.guang5@zte.com.cn>
 
-To enable xhci traces and dynamic debug at boot please add:
-"usbcore.dyndbg=+p xhci_hcd.dyndbg=+p trace_event=xhci-hcd trace_buf_size=80M"
-to the kernel cmdline before booting.
-(info added to https://bugzilla.redhat.com/show_bug.cgi?id=2019788 as well)
+Use the macro 'swap()' defined in 'include/linux/minmax.h' to avoid
+opencoding it.
 
-Symptoms look similar to an old race issue where two usb devices were reset at the same time.
-xHC HW can't handle this, and to prevent it the hcd->address0_mutex was added.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+---
+ drivers/usb/gadget/udc/net2280.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-for details see: 
-https://lkml.org/lkml/2016/2/8/312
+diff --git a/drivers/usb/gadget/udc/net2280.c b/drivers/usb/gadget/udc/net2280.c
+index 16e7d2db6411..71e02bcebecd 100644
+--- a/drivers/usb/gadget/udc/net2280.c
++++ b/drivers/usb/gadget/udc/net2280.c
+@@ -933,16 +933,13 @@ static inline void
+ queue_dma(struct net2280_ep *ep, struct net2280_request *req, int valid)
+ {
+ 	struct net2280_dma	*end;
+-	dma_addr_t		tmp;
+ 
+ 	/* swap new dummy for old, link; fill and maybe activate */
+ 	end = ep->dummy;
+ 	ep->dummy = req->td;
+ 	req->td = end;
+ 
+-	tmp = ep->td_dma;
+-	ep->td_dma = req->td_dma;
+-	req->td_dma = tmp;
++	swap(ep->td_dma, req->td_dma);
+ 
+ 	end->dmadesc = cpu_to_le32 (ep->td_dma);
+ 
+-- 
+2.30.2
 
--Mathias
