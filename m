@@ -2,247 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4578A445053
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Nov 2021 09:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9811744513A
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Nov 2021 10:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbhKDIcV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Nov 2021 04:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
+        id S231147AbhKDJhJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Nov 2021 05:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230084AbhKDIcV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Nov 2021 04:32:21 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E404C061714;
-        Thu,  4 Nov 2021 01:29:43 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id b12so7359409wrh.4;
-        Thu, 04 Nov 2021 01:29:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=pcwd8GDYliHD4EuN9qh2enVI/ZU5CIFHUNJvQUBYilI=;
-        b=dGUbbax9kMiAJm1Pwhzjm3VGm1knzly+h1/Fephby+5bqqt/Mz30E5nEmcI7IvpB+B
-         1zb44ty9JLoyAnBs+DN9Gr8pkW7lHwmJdcUmptUo3MNcK7kmoVzGeSD1uZtVBHW661sY
-         kGuWRij3/l5fQQ5nY8b/XbRMHUdRwxNa4cCqWFdTXK6gb1lDSyzcM97Gjk1JAUHrjfjU
-         CJfaOgncKZfgsy5khYD5YZcrLtWOmMrUEmrVNlrt/gK59gge9568416eaeUBfLdRXq40
-         YErhxvGgcSFLTH06z+eYOHaO7A9pZZ9sHrpXlWGZydQjBnLGUhOS2eR9i8Sdb9rsVK01
-         X0Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=pcwd8GDYliHD4EuN9qh2enVI/ZU5CIFHUNJvQUBYilI=;
-        b=Qd8zezkBeU6WfW57TaEG47dj5BRIlB6lf6d7IXTRPTD/lbeUy4PeZnDDV/F0SH4IkV
-         le5p16OuIOzlZtWb+MztE9xksosueZYQTZlqw2GhTKodqrMxwXqLFLZyX1y92lbLQBg/
-         aENSIY0Xf/0S8WLDHN+caRteQlBkQe7HjYIMHoBKNdskzlFukFPS1bUk2fH1/PKOth8w
-         ff14M6jMcnozl4wob+coqitB2lihOZAfg5lH/TT1Gqa1LBlpcLX6xGYP+1jFIcfY8zvd
-         dbhPx4OV0JETpSls9xU6hDsyZAqGCFTvdWjuBRvWFPtEKBOu10gcvjHKrLHMJWIaL/qo
-         DIJA==
-X-Gm-Message-State: AOAM533DpsihJ2ecUn5UxQHxV00F6o38EpuAJGHiWdWO1CTYn7l1AULl
-        soUdz2v0E/JMi526+rv1EaE=
-X-Google-Smtp-Source: ABdhPJwDLiXTSPiambILjtqwczoTMpJV8US3YrI7+PEySnF9sH1GZDt1S0qfQU+l3YSZ3lAZr5uj+w==
-X-Received: by 2002:adf:f551:: with SMTP id j17mr61148688wrp.392.1636014581916;
-        Thu, 04 Nov 2021 01:29:41 -0700 (PDT)
-Received: from orome.fritz.box ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id e3sm4242898wrp.8.2021.11.04.01.29.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Nov 2021 01:29:41 -0700 (PDT)
-Date:   Thu, 4 Nov 2021 09:29:38 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        JC Kuo <jckuo@nvidia.com>, Nicolas Chauvet <kwizart@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v2] usb: xhci: tegra: Check padctrl interrupt presence in
- device tree
-Message-ID: <YYOZ8sYB94hZlncn@orome.fritz.box>
-References: <20211102184801.7229-1-digetx@gmail.com>
+        with ESMTP id S230365AbhKDJhI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Nov 2021 05:37:08 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF0AC061714;
+        Thu,  4 Nov 2021 02:34:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Content-Transfer-Encoding:
+        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=OPpNag35nq3f5jzKifHa8+MYq8ja7qLgXfeSwdatLt4=; t=1636018470; x=1637228070; 
+        b=o1fkXhK/UwTWcgaah0Rk8CiyqvxL3L1Fg+7O9JmRPvqc+TwQiDP+tzyCVr3CJvvEOW4jfPLNY6V
+        E9og1UEizSQN2ub5j76g57F1em26AKntQ3AigOedN1b3EtDg1OsTPKHGjpefeorHx/TnK1sm0ROV1
+        RBfHZaBRn8LO0hDienMJMY+2QxgGZ6F4rU+gnjl5GJzxyhpbTue6/RGRrkazhOZHQ4bTe7vc5PWlv
+        crNlMS8SYmk7SFRLOcBQSNcdCiRzGuXhIhmhx+agHGTOpFOq9rhDr1stMWuN/mz0aztEEadQ/abNn
+        sjuMikfIHJVdjPM2mkTPXJ79BvPbd/CacO7Q==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <benjamin@sipsolutions.net>)
+        id 1miZ8a-00As0y-PU;
+        Thu, 04 Nov 2021 10:34:24 +0100
+Message-ID: <fae44c06e8e8d24b21b60a096e7294bc37444b12.camel@sipsolutions.net>
+Subject: Re: Userspace enumeration hang while btusb tries to load firmware
+ of removed device
+From:   Benjamin Berg <benjamin@sipsolutions.net>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org
+Date:   Thu, 04 Nov 2021 10:34:22 +0100
+In-Reply-To: <BCD95F43-3C6E-4B50-9228-9F2AD93BBBA4@holtmann.org>
+References: <df021873788acdb64e1311289e9ca6dc3f169616.camel@sipsolutions.net>
+         <20211103182303.GB1529362@rowland.harvard.edu>
+         <BCD95F43-3C6E-4B50-9228-9F2AD93BBBA4@holtmann.org>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-/EP9GhlX6OidL7rLeMc8"
+User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Qycldy+Ti1hSw7yP"
-Content-Disposition: inline
-In-Reply-To: <20211102184801.7229-1-digetx@gmail.com>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+X-malware-bazaar: not-scanned
+X-malware-bazaar-2: OK
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---Qycldy+Ti1hSw7yP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--=-/EP9GhlX6OidL7rLeMc8
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 02, 2021 at 09:48:01PM +0300, Dmitry Osipenko wrote:
-> Older device-trees don't specify padctrl interrupt and xhci-tegra driver
-> now fails to probe with -EINVAL using those device-trees. Check interrupt
-> presence and keep runtime PM disabled if it's missing to fix the trouble.
+Hi Marcel and Alan,
+
+On Wed, 2021-11-03 at 20:31 +0100, Marcel Holtmann wrote:
+> > I'm not familiar with the btusb driver, so someone on the=20
+> > linux-bluetooth mailing list would have a better idea about this.=20
+> > However, it does look as though btusb keeps the device locked during th=
+e=20
+> > entire 10-second period while it tries to send over the firmware, and i=
+t=20
+> > doesn't abort the procedure when it starts getting disconnection errors=
+=20
+> > but instead persists until a timeout expires.  Keeping the device locke=
+d=20
+> > would certainly block lsusb.
+> >=20
+> > In general, locking the device during a firmware upload seems like
+> > the right thing to do -- you don't want extraneous transfers from
+> > other processes messing up the firmware!  So overall, it appears that
+> > the whole problem would be solved if the firmware transfer were
+> > aborted as soon as the -ENODEV errors start appearing.
 >=20
-> Fixes: 971ee247060d ("usb: xhci: tegra: Enable ELPG for runtime/system PM=
-")
-> Cc: <stable@vger.kernel.org> # 5.14+
-> Tested-by: Nicolas Chauvet <kwizart@gmail.com>
-> Reported-by: Nicolas Chauvet <kwizart@gmail.com>
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
+> the problem seems to be that we hitting HCI command timeout. So the
+> firmware download is done via HCI commands. These commands are send
+> to the transport driver btusb.c via hdev->send (as btusb_send_frame).
+> This triggers the usb_submit_urb or queues them via data->deferred
+> anchor. All this reports back the error properly except that nobody
+> does anything with it.
 >=20
-> Changelog:
+> See hci_send_frame() last portion:
 >=20
-> v2: - Use of_irq_parse_one() to check interrupt presence status in device=
--tree,
->       instead of checking interrupt properties directly.
+>         err =3D hdev->send(hdev, skb);                                   =
+         =20
+>         if (err < 0) {                                                   =
+       =20
+>                 bt_dev_err(hdev, "sending frame failed (%d)", err);      =
+       =20
+>                 kfree_skb(skb);                                          =
+       =20
+>         }
 >=20
->     - USB wakeup and runtime PM are kept disabled if interrupt is missing,
->       instead of returning -EOPNOTSUPP from RPM-suspend callback.
->=20
->     - Added debug message, telling about the missing interrupt.
->=20
->  drivers/usb/host/xhci-tegra.c | 40 ++++++++++++++++++++++++-----------
->  1 file changed, 28 insertions(+), 12 deletions(-)
+> And that is it. We are not checking for ENODEV or any error here.
+> That means the failure of the HCI command gets only caught via the
+> HCI command timeout. I don=E2=80=99t know how to do this yet, but you wou=
+ld
+> have to look there to fail HCI command right away instead of waiting
+> for the timeout.
 
-I like this version much better. Two minor nits:
+Hmm, true, I don't see a "sending frame failed" error message during
+the firmware download though. You are right that this codepath is
+loosing the error, but this does not seem to be the scenario we are
+running into while loading the firmware. This error only happens later
+on from the btintel_reset_to_bootloader function.
 
->=20
-> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-> index 1bf494b649bd..0a7ab596be85 100644
-> --- a/drivers/usb/host/xhci-tegra.c
-> +++ b/drivers/usb/host/xhci-tegra.c
-> @@ -1400,6 +1400,7 @@ static void tegra_xusb_deinit_usb_phy(struct tegra_=
-xusb *tegra)
-> =20
->  static int tegra_xusb_probe(struct platform_device *pdev)
->  {
-> +	struct of_phandle_args irq_arg;
+What seems to happen in the posted log is that the URB is initially
+submitted just fine and the transfer errors out afterwards.
+Unfortunately, the btusb_tx_complete is only used for statistics
+(stat.err_tx is increased) and has no further error handling that could
+abort the firmware upload.
 
-Could've been just "args". There's no other "arg" variable here, so no
-need for an irq_ prefix to differentiate.
+Benjamin
 
->  	struct tegra_xusb *tegra;
->  	struct device_node *np;
->  	struct resource *regs;
-> @@ -1454,10 +1455,16 @@ static int tegra_xusb_probe(struct platform_devic=
-e *pdev)
->  		goto put_padctl;
->  	}
-> =20
-> -	tegra->padctl_irq =3D of_irq_get(np, 0);
-> -	if (tegra->padctl_irq <=3D 0) {
-> -		err =3D (tegra->padctl_irq =3D=3D 0) ? -ENODEV : tegra->padctl_irq;
-> -		goto put_padctl;
-> +	/* Older device-trees don't have padctrl interrupt */
-> +	err =3D of_irq_parse_one(np, 0, &irq_arg);
-> +	if (!err) {
-> +		tegra->padctl_irq =3D of_irq_get(np, 0);
-> +		if (tegra->padctl_irq <=3D 0) {
-> +			err =3D (tegra->padctl_irq =3D=3D 0) ? -ENODEV : tegra->padctl_irq;
-> +			goto put_padctl;
-> +		}
-> +	} else {
-> +		dev_dbg(&pdev->dev, "%pOF doesn't have interrupt\n", np);
-
-This seems a bit vague. I think it'd be better to include information
-about the consequence of this interrupt being missing and/or some hint
-about what should be done about it. Perhaps something like:
-
-		dev_dbg(&pdev->dev, "%pOF is missing an interrupt, disabling PM support\n=
-", np);
-
-With that fixed:
-
-Acked-by: Thierry Reding <treding@nvidia.com>
-
-
-I've also run this through our GVS test farm, and didn't spot any
-regressions, so:
-
-Tested-by: Thierry Reding <treding@nvidia.com>
-
-Thierry
-
->  	}
-> =20
->  	tegra->host_clk =3D devm_clk_get(&pdev->dev, "xusb_host");
-> @@ -1696,11 +1703,15 @@ static int tegra_xusb_probe(struct platform_devic=
-e *pdev)
->  		goto remove_usb3;
->  	}
-> =20
-> -	err =3D devm_request_threaded_irq(&pdev->dev, tegra->padctl_irq, NULL, =
-tegra_xusb_padctl_irq,
-> -					IRQF_ONESHOT, dev_name(&pdev->dev), tegra);
-> -	if (err < 0) {
-> -		dev_err(&pdev->dev, "failed to request padctl IRQ: %d\n", err);
-> -		goto remove_usb3;
-> +	if (tegra->padctl_irq) {
-> +		err =3D devm_request_threaded_irq(&pdev->dev, tegra->padctl_irq,
-> +						NULL, tegra_xusb_padctl_irq,
-> +						IRQF_ONESHOT, dev_name(&pdev->dev),
-> +						tegra);
-> +		if (err < 0) {
-> +			dev_err(&pdev->dev, "failed to request padctl IRQ: %d\n", err);
-> +			goto remove_usb3;
-> +		}
->  	}
-> =20
->  	err =3D tegra_xusb_enable_firmware_messages(tegra);
-> @@ -1718,13 +1729,16 @@ static int tegra_xusb_probe(struct platform_devic=
-e *pdev)
->  	/* Enable wake for both USB 2.0 and USB 3.0 roothubs */
->  	device_init_wakeup(&tegra->hcd->self.root_hub->dev, true);
->  	device_init_wakeup(&xhci->shared_hcd->self.root_hub->dev, true);
-> -	device_init_wakeup(tegra->dev, true);
-> =20
->  	pm_runtime_use_autosuspend(tegra->dev);
->  	pm_runtime_set_autosuspend_delay(tegra->dev, 2000);
->  	pm_runtime_mark_last_busy(tegra->dev);
->  	pm_runtime_set_active(tegra->dev);
-> -	pm_runtime_enable(tegra->dev);
-> +
-> +	if (tegra->padctl_irq) {
-> +		device_init_wakeup(tegra->dev, true);
-> +		pm_runtime_enable(tegra->dev);
-> +	}
-> =20
->  	return 0;
-> =20
-> @@ -1772,7 +1786,9 @@ static int tegra_xusb_remove(struct platform_device=
- *pdev)
->  	dma_free_coherent(&pdev->dev, tegra->fw.size, tegra->fw.virt,
->  			  tegra->fw.phys);
-> =20
-> -	pm_runtime_disable(&pdev->dev);
-> +	if (tegra->padctl_irq)
-> +		pm_runtime_disable(&pdev->dev);
-> +
->  	pm_runtime_put(&pdev->dev);
-> =20
->  	tegra_xusb_powergate_partitions(tegra);
-> --=20
-> 2.33.1
->=20
-
---Qycldy+Ti1hSw7yP
+--=-/EP9GhlX6OidL7rLeMc8
 Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGDme8ACgkQ3SOs138+
-s6GevxAAvkTTp7npOtsuFJy7thXLlayo+hsSGRMPEEatIEM8UPncC9OM4ljiBVWY
-3nCRClCxbxrr+FS6ChXsDwh1QOKZuYJdLQk5Hwny3prfp2mH7Ibzgp+vU4RXQlKw
-zByURJ4FdwFUk+avxtT/N20jzgkEy0gaVPm7aLajInXeRXcmZ9wQZY0TmTadcB5p
-cRj1czJDa7tWmkIEvSjLUHb1X+yyMiEq151VUxI8/NzWcXSQmnCN16hV6d0D6MZ9
-eK89pk3/RiBoRDK2yfv33I1tIwdRLvXi9gOQuN/4tSbf1Y94a8+Zq2FuRKfWGSB4
-XSasfrDxdpUchELjlapcHjV8JEF5EyGhaVCOByv6k2QtBjG/SU+S+LpDQPY4KwzO
-mJqRJdvgSSJDRp0A6629p/ciyiey30CJN24WIMMnTXpjefn53/stQVlSlfT3vnq3
-4hsCm3l508oAqqohdnFaThWjF5KqM5wWAO7FQqBLi2xPW5LvHeve6METUlQA+SFm
-nSwafHVqrbtoPGWBBUAZZaQjpLdVWIC5mXfsVfvtAj3po7gwf7z7tAuUEHpEjfrS
-pR+UD/qtgedI8VTKo2eaO0eIqnzI+ZCA2hL0iDB+F+2q5iXOPqdI5Wji9FDwMD5d
-SXK60cUYla7TUnCsXwLHzL4Es4CQv1aXPgdSBQVMc5BMmOJdIlk=
-=NQzK
+iQIzBAABCAAdFiEED2NO4vMS33W8E4AFq6ZWhpmFY3AFAmGDqR4ACgkQq6ZWhpmF
+Y3BychAAhhFMMj35ScIRH8jiPNBevER5QhbsjsRfBPZdYJHdr3TDfKjG//cI1kvT
+DMWMR5b1kqxumDzR1wPDYtBajYDUyfA46Lz1o/BvnGQK+wX2Qn4hzIcjUEfulhgt
+PgEVFhpZcqCFKaPfLDZGWkg2hXDZ6IjIRecsFk0mhb7X/1JbYWET72wCN7fepjwy
+aoMIPR61gzN3D7HOdADtwKTO9KlC68I5/HmUNqGCx/yC2lfaxi3Q/9brYgB14qlA
+UXh0tBWSINli6Ob+Nadbsf5/WiCOTqjaK2QSUkzUOAiNeyvMqzbXe1ld6/9nimNp
+wBiFJqp4shQiKP306GPONPyEgXJT2ncmx4N5db/MAMhm5shI9QMZpa4J6zOCEP/j
+/RNqj+JZBT7UZNhS6pd9jabaBu+EtBLHcsLJzex7Fr7dlRpF4vhwFj2OBtq218hx
+931JK2V3TxT+0iP286yUiVjXLE8xrT1gD5yM8/TA596Dix+Xzdb1h4G65BmQOArE
+iWHKYgim519c0sB7Rw+GUysSs/F+9/Jmdu0XTpOdlAW90UnbFiw9ZzZSmvmRVwFB
+rtZKWHe0M9YMNt+St+lpVKjm68LA94MAXvyrxgRApGu1yfiPfYGkvI1L8K6YCSpC
+SAkbm8kv3tT90wQBWGidn4gI4Ogbzhs8LdFHLebOwwnoTZnebEc=
+=Tora
 -----END PGP SIGNATURE-----
 
---Qycldy+Ti1hSw7yP--
+--=-/EP9GhlX6OidL7rLeMc8--
+
