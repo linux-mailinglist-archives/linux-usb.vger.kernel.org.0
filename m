@@ -2,124 +2,247 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E953A444FBC
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Nov 2021 08:36:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4578A445053
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Nov 2021 09:29:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbhKDHip (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Nov 2021 03:38:45 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:52352 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230084AbhKDHio (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Nov 2021 03:38:44 -0400
-Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id BE99B4120B;
-        Thu,  4 Nov 2021 07:36:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1636011367; bh=/CA63UR5arwsAXDCVLYSttSBde59BmSIjoOTvS8/nZw=;
-        h=Date:From:Subject:To:Cc:From;
-        b=aALTCRbs5pESNUZpn+aWwkGiGPfLuq2G5sfw1qJDLFPUE+W1KMcZ9cnqMB1qbPtb2
-         rcIBHunlDd2+GQL/kNNEw2hDnYJsY4+7Rtrg03V8XUSeljfS85XQFxN5qcXetB48aR
-         jW9+smbni1kEQ9xycj95FzyrfvYS4zxJiRMwvV7YRuzEHx+kcrPxvXudrXKGHY2XNj
-         J5HYg/SN3u6SsnjP8nuZqkHimrX5t8hy3ab7mPByB9RVVctdAneqNO5HY7elXg4Qoq
-         IUMKDGbitArYmVhKXY2yyAsxkAj2IXgQKpt8N8rwAsdVJf7E+ZMjYK8LolTNew/TD8
-         p7EYoH5gDS/bQ==
-Received: from hminas-z420 (hminas-z420.internal.synopsys.com [10.116.75.77])
-        (using TLSv1 with cipher AES128-SHA (128/128 bits))
-        (Client did not present a certificate)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 4BF75A005D;
-        Thu,  4 Nov 2021 07:36:03 +0000 (UTC)
-Received: by hminas-z420 (sSMTP sendmail emulation); Thu, 04 Nov 2021 11:36:01 +0400
-Date:   Thu, 04 Nov 2021 11:36:01 +0400
-Message-Id: <c356baade6e9716d312d43df08d53ae557cb8037.1636011277.git.Minas.Harutyunyan@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: [PATCH] usb: dwc2: gadget: Fix ISOC flow for elapsed frames
-To:     Felipe Balbi <balbi@kernel.org>,
+        id S230361AbhKDIcV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Nov 2021 04:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230084AbhKDIcV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Nov 2021 04:32:21 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E404C061714;
+        Thu,  4 Nov 2021 01:29:43 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id b12so7359409wrh.4;
+        Thu, 04 Nov 2021 01:29:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=pcwd8GDYliHD4EuN9qh2enVI/ZU5CIFHUNJvQUBYilI=;
+        b=dGUbbax9kMiAJm1Pwhzjm3VGm1knzly+h1/Fephby+5bqqt/Mz30E5nEmcI7IvpB+B
+         1zb44ty9JLoyAnBs+DN9Gr8pkW7lHwmJdcUmptUo3MNcK7kmoVzGeSD1uZtVBHW661sY
+         kGuWRij3/l5fQQ5nY8b/XbRMHUdRwxNa4cCqWFdTXK6gb1lDSyzcM97Gjk1JAUHrjfjU
+         CJfaOgncKZfgsy5khYD5YZcrLtWOmMrUEmrVNlrt/gK59gge9568416eaeUBfLdRXq40
+         YErhxvGgcSFLTH06z+eYOHaO7A9pZZ9sHrpXlWGZydQjBnLGUhOS2eR9i8Sdb9rsVK01
+         X0Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pcwd8GDYliHD4EuN9qh2enVI/ZU5CIFHUNJvQUBYilI=;
+        b=Qd8zezkBeU6WfW57TaEG47dj5BRIlB6lf6d7IXTRPTD/lbeUy4PeZnDDV/F0SH4IkV
+         le5p16OuIOzlZtWb+MztE9xksosueZYQTZlqw2GhTKodqrMxwXqLFLZyX1y92lbLQBg/
+         aENSIY0Xf/0S8WLDHN+caRteQlBkQe7HjYIMHoBKNdskzlFukFPS1bUk2fH1/PKOth8w
+         ff14M6jMcnozl4wob+coqitB2lihOZAfg5lH/TT1Gqa1LBlpcLX6xGYP+1jFIcfY8zvd
+         dbhPx4OV0JETpSls9xU6hDsyZAqGCFTvdWjuBRvWFPtEKBOu10gcvjHKrLHMJWIaL/qo
+         DIJA==
+X-Gm-Message-State: AOAM533DpsihJ2ecUn5UxQHxV00F6o38EpuAJGHiWdWO1CTYn7l1AULl
+        soUdz2v0E/JMi526+rv1EaE=
+X-Google-Smtp-Source: ABdhPJwDLiXTSPiambILjtqwczoTMpJV8US3YrI7+PEySnF9sH1GZDt1S0qfQU+l3YSZ3lAZr5uj+w==
+X-Received: by 2002:adf:f551:: with SMTP id j17mr61148688wrp.392.1636014581916;
+        Thu, 04 Nov 2021 01:29:41 -0700 (PDT)
+Received: from orome.fritz.box ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id e3sm4242898wrp.8.2021.11.04.01.29.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Nov 2021 01:29:41 -0700 (PDT)
+Date:   Thu, 4 Nov 2021 09:29:38 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        stable <stable@vger.kernel.org>
+        Mathias Nyman <mathias.nyman@intel.com>,
+        JC Kuo <jckuo@nvidia.com>, Nicolas Chauvet <kwizart@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v2] usb: xhci: tegra: Check padctrl interrupt presence in
+ device tree
+Message-ID: <YYOZ8sYB94hZlncn@orome.fritz.box>
+References: <20211102184801.7229-1-digetx@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Qycldy+Ti1hSw7yP"
+Content-Disposition: inline
+In-Reply-To: <20211102184801.7229-1-digetx@gmail.com>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Added updating of request frame number for elapsed frames,
-otherwise frame number will remain as previous use of request.
-This will allow function driver to correctly track frames in
-case of Missed ISOC occurs.
 
-Added setting request actual length to 0 for elapsed frames.
-In Slave mode when pushing data to RxFIFO by dwords, request
-actual length incrementing accordingly. But before whole packet
-will be pushed into RxFIFO and send to host can occurs Missed
-ISOC and data will not send to host. So, in this case request
-actual length should be reset to 0.
+--Qycldy+Ti1hSw7yP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 91bb163e1e4f ("usb: dwc2: gadget: Fix ISOC flow for BDMA and Slave")
-Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
----
- drivers/usb/dwc2/gadget.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+On Tue, Nov 02, 2021 at 09:48:01PM +0300, Dmitry Osipenko wrote:
+> Older device-trees don't specify padctrl interrupt and xhci-tegra driver
+> now fails to probe with -EINVAL using those device-trees. Check interrupt
+> presence and keep runtime PM disabled if it's missing to fix the trouble.
+>=20
+> Fixes: 971ee247060d ("usb: xhci: tegra: Enable ELPG for runtime/system PM=
+")
+> Cc: <stable@vger.kernel.org> # 5.14+
+> Tested-by: Nicolas Chauvet <kwizart@gmail.com>
+> Reported-by: Nicolas Chauvet <kwizart@gmail.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>=20
+> Changelog:
+>=20
+> v2: - Use of_irq_parse_one() to check interrupt presence status in device=
+-tree,
+>       instead of checking interrupt properties directly.
+>=20
+>     - USB wakeup and runtime PM are kept disabled if interrupt is missing,
+>       instead of returning -EOPNOTSUPP from RPM-suspend callback.
+>=20
+>     - Added debug message, telling about the missing interrupt.
+>=20
+>  drivers/usb/host/xhci-tegra.c | 40 ++++++++++++++++++++++++-----------
+>  1 file changed, 28 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 11d85a6e0b0d..2190225bf3da 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -1198,6 +1198,8 @@ static void dwc2_hsotg_start_req(struct dwc2_hsotg *hsotg,
- 			}
- 			ctrl |= DXEPCTL_CNAK;
- 		} else {
-+			hs_req->req.frame_number = hs_ep->target_frame;
-+			hs_req->req.actual = 0;
- 			dwc2_hsotg_complete_request(hsotg, hs_ep, hs_req, -ENODATA);
- 			return;
- 		}
-@@ -2857,9 +2859,12 @@ static void dwc2_gadget_handle_ep_disabled(struct dwc2_hsotg_ep *hs_ep)
- 
- 	do {
- 		hs_req = get_ep_head(hs_ep);
--		if (hs_req)
-+		if (hs_req) {
-+			hs_req->req.frame_number = hs_ep->target_frame;
-+			hs_req->req.actual = 0;
- 			dwc2_hsotg_complete_request(hsotg, hs_ep, hs_req,
- 						    -ENODATA);
-+		}
- 		dwc2_gadget_incr_frame_num(hs_ep);
- 		/* Update current frame number value. */
- 		hsotg->frame_number = dwc2_hsotg_read_frameno(hsotg);
-@@ -2912,8 +2917,11 @@ static void dwc2_gadget_handle_out_token_ep_disabled(struct dwc2_hsotg_ep *ep)
- 
- 	while (dwc2_gadget_target_frame_elapsed(ep)) {
- 		hs_req = get_ep_head(ep);
--		if (hs_req)
-+		if (hs_req) {
-+			hs_req->req.frame_number = ep->target_frame;
-+			hs_req->req.actual = 0;
- 			dwc2_hsotg_complete_request(hsotg, ep, hs_req, -ENODATA);
-+		}
- 
- 		dwc2_gadget_incr_frame_num(ep);
- 		/* Update current frame number value. */
-@@ -3002,8 +3010,11 @@ static void dwc2_gadget_handle_nak(struct dwc2_hsotg_ep *hs_ep)
- 
- 	while (dwc2_gadget_target_frame_elapsed(hs_ep)) {
- 		hs_req = get_ep_head(hs_ep);
--		if (hs_req)
-+		if (hs_req) {
-+			hs_req->req.frame_number = hs_ep->target_frame;
-+			hs_req->req.actual = 0;
- 			dwc2_hsotg_complete_request(hsotg, hs_ep, hs_req, -ENODATA);
-+		}
- 
- 		dwc2_gadget_incr_frame_num(hs_ep);
- 		/* Update current frame number value. */
+I like this version much better. Two minor nits:
 
-base-commit: c26f1c109d21f2ea874e4a85c0c76c385b8f46cb
--- 
-2.11.0
+>=20
+> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+> index 1bf494b649bd..0a7ab596be85 100644
+> --- a/drivers/usb/host/xhci-tegra.c
+> +++ b/drivers/usb/host/xhci-tegra.c
+> @@ -1400,6 +1400,7 @@ static void tegra_xusb_deinit_usb_phy(struct tegra_=
+xusb *tegra)
+> =20
+>  static int tegra_xusb_probe(struct platform_device *pdev)
+>  {
+> +	struct of_phandle_args irq_arg;
 
+Could've been just "args". There's no other "arg" variable here, so no
+need for an irq_ prefix to differentiate.
+
+>  	struct tegra_xusb *tegra;
+>  	struct device_node *np;
+>  	struct resource *regs;
+> @@ -1454,10 +1455,16 @@ static int tegra_xusb_probe(struct platform_devic=
+e *pdev)
+>  		goto put_padctl;
+>  	}
+> =20
+> -	tegra->padctl_irq =3D of_irq_get(np, 0);
+> -	if (tegra->padctl_irq <=3D 0) {
+> -		err =3D (tegra->padctl_irq =3D=3D 0) ? -ENODEV : tegra->padctl_irq;
+> -		goto put_padctl;
+> +	/* Older device-trees don't have padctrl interrupt */
+> +	err =3D of_irq_parse_one(np, 0, &irq_arg);
+> +	if (!err) {
+> +		tegra->padctl_irq =3D of_irq_get(np, 0);
+> +		if (tegra->padctl_irq <=3D 0) {
+> +			err =3D (tegra->padctl_irq =3D=3D 0) ? -ENODEV : tegra->padctl_irq;
+> +			goto put_padctl;
+> +		}
+> +	} else {
+> +		dev_dbg(&pdev->dev, "%pOF doesn't have interrupt\n", np);
+
+This seems a bit vague. I think it'd be better to include information
+about the consequence of this interrupt being missing and/or some hint
+about what should be done about it. Perhaps something like:
+
+		dev_dbg(&pdev->dev, "%pOF is missing an interrupt, disabling PM support\n=
+", np);
+
+With that fixed:
+
+Acked-by: Thierry Reding <treding@nvidia.com>
+
+
+I've also run this through our GVS test farm, and didn't spot any
+regressions, so:
+
+Tested-by: Thierry Reding <treding@nvidia.com>
+
+Thierry
+
+>  	}
+> =20
+>  	tegra->host_clk =3D devm_clk_get(&pdev->dev, "xusb_host");
+> @@ -1696,11 +1703,15 @@ static int tegra_xusb_probe(struct platform_devic=
+e *pdev)
+>  		goto remove_usb3;
+>  	}
+> =20
+> -	err =3D devm_request_threaded_irq(&pdev->dev, tegra->padctl_irq, NULL, =
+tegra_xusb_padctl_irq,
+> -					IRQF_ONESHOT, dev_name(&pdev->dev), tegra);
+> -	if (err < 0) {
+> -		dev_err(&pdev->dev, "failed to request padctl IRQ: %d\n", err);
+> -		goto remove_usb3;
+> +	if (tegra->padctl_irq) {
+> +		err =3D devm_request_threaded_irq(&pdev->dev, tegra->padctl_irq,
+> +						NULL, tegra_xusb_padctl_irq,
+> +						IRQF_ONESHOT, dev_name(&pdev->dev),
+> +						tegra);
+> +		if (err < 0) {
+> +			dev_err(&pdev->dev, "failed to request padctl IRQ: %d\n", err);
+> +			goto remove_usb3;
+> +		}
+>  	}
+> =20
+>  	err =3D tegra_xusb_enable_firmware_messages(tegra);
+> @@ -1718,13 +1729,16 @@ static int tegra_xusb_probe(struct platform_devic=
+e *pdev)
+>  	/* Enable wake for both USB 2.0 and USB 3.0 roothubs */
+>  	device_init_wakeup(&tegra->hcd->self.root_hub->dev, true);
+>  	device_init_wakeup(&xhci->shared_hcd->self.root_hub->dev, true);
+> -	device_init_wakeup(tegra->dev, true);
+> =20
+>  	pm_runtime_use_autosuspend(tegra->dev);
+>  	pm_runtime_set_autosuspend_delay(tegra->dev, 2000);
+>  	pm_runtime_mark_last_busy(tegra->dev);
+>  	pm_runtime_set_active(tegra->dev);
+> -	pm_runtime_enable(tegra->dev);
+> +
+> +	if (tegra->padctl_irq) {
+> +		device_init_wakeup(tegra->dev, true);
+> +		pm_runtime_enable(tegra->dev);
+> +	}
+> =20
+>  	return 0;
+> =20
+> @@ -1772,7 +1786,9 @@ static int tegra_xusb_remove(struct platform_device=
+ *pdev)
+>  	dma_free_coherent(&pdev->dev, tegra->fw.size, tegra->fw.virt,
+>  			  tegra->fw.phys);
+> =20
+> -	pm_runtime_disable(&pdev->dev);
+> +	if (tegra->padctl_irq)
+> +		pm_runtime_disable(&pdev->dev);
+> +
+>  	pm_runtime_put(&pdev->dev);
+> =20
+>  	tegra_xusb_powergate_partitions(tegra);
+> --=20
+> 2.33.1
+>=20
+
+--Qycldy+Ti1hSw7yP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGDme8ACgkQ3SOs138+
+s6GevxAAvkTTp7npOtsuFJy7thXLlayo+hsSGRMPEEatIEM8UPncC9OM4ljiBVWY
+3nCRClCxbxrr+FS6ChXsDwh1QOKZuYJdLQk5Hwny3prfp2mH7Ibzgp+vU4RXQlKw
+zByURJ4FdwFUk+avxtT/N20jzgkEy0gaVPm7aLajInXeRXcmZ9wQZY0TmTadcB5p
+cRj1czJDa7tWmkIEvSjLUHb1X+yyMiEq151VUxI8/NzWcXSQmnCN16hV6d0D6MZ9
+eK89pk3/RiBoRDK2yfv33I1tIwdRLvXi9gOQuN/4tSbf1Y94a8+Zq2FuRKfWGSB4
+XSasfrDxdpUchELjlapcHjV8JEF5EyGhaVCOByv6k2QtBjG/SU+S+LpDQPY4KwzO
+mJqRJdvgSSJDRp0A6629p/ciyiey30CJN24WIMMnTXpjefn53/stQVlSlfT3vnq3
+4hsCm3l508oAqqohdnFaThWjF5KqM5wWAO7FQqBLi2xPW5LvHeve6METUlQA+SFm
+nSwafHVqrbtoPGWBBUAZZaQjpLdVWIC5mXfsVfvtAj3po7gwf7z7tAuUEHpEjfrS
+pR+UD/qtgedI8VTKo2eaO0eIqnzI+ZCA2hL0iDB+F+2q5iXOPqdI5Wji9FDwMD5d
+SXK60cUYla7TUnCsXwLHzL4Es4CQv1aXPgdSBQVMc5BMmOJdIlk=
+=NQzK
+-----END PGP SIGNATURE-----
+
+--Qycldy+Ti1hSw7yP--
