@@ -2,97 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFEA54467C3
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 18:23:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C904467E4
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 18:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbhKERZ5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Nov 2021 13:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
+        id S234284AbhKERa3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Nov 2021 13:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbhKERZ4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Nov 2021 13:25:56 -0400
+        with ESMTP id S233214AbhKERa1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Nov 2021 13:30:27 -0400
 Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF160C061714;
-        Fri,  5 Nov 2021 10:23:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDD0C061714;
+        Fri,  5 Nov 2021 10:27:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Message-Id:Date:
-        Subject:Cc:To:From:Content-Type:Reply-To:Content-ID:Content-Description:
-        In-Reply-To:References; bh=ctF+ypAFgSoH0Id9vII8CUGN6vLFTyuz4AWE/C/4nUw=; b=XQ
-        jAixBCYw5JdFAs0OhECoIoekyoj6b3MSl3jZPA0dsASrJwp9mC/zEg7ihQA80pGzOqpXIFMk+1LLU
-        D2MLD+/PMJGc+EEM0hxjrpljG5OPJ9qNyRD3+XTT82Sp9AW14wFOHYNhMHQ6mEr5e1dOSHA3fJnke
-        JHMedJGT+ROccEOtZQtWqwuCJQ9zz37xU/Q99vdZf8WFR4FIw/1SmnNKMezyAoOIbku+1n3m24yGg
-        RuUW/vo+w7B2swnIozTX4lcrnVABq0AwVHhmc2J9BeWmgm+7+tySHASofn/R1TbiQqDWTv0jjakHW
-        zSwX1Fn7hf6gHOhnEPnU0fkndQLHrrpA==;
-Received: from [81.174.171.191] (helo=donbot.metanate.com)
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=+EuADCz3KxLfauAaV/cM2d29LIe6kmYoyUrEWCMg+Zo=; b=J/8UR
+        EG6RyEwhcRUBO2MsYIDTBLBsj3HYwQAaTw6dtCciJY5gJyB8rxDYniJZh8TN3yK3LF8mi7WFSzVQF
+        JHI63LW6Q1O1aVWtlSEt+VnuPaVvwGhrAUNAkUA4qe9H73ZhiN5qbJoid6XlvV7MhZ3F1dygCD+qZ
+        lwwsLGqnU3YlPPrKljNdcHGLKrNyw79Uy1yNiHSbKe6AQ0E8xgMkhR6Xj6Gf08rgX3JBE/GVlmrLy
+        M99U+15s8Zgkst9UY0YBD2T3sBj55h/fPneGrAY8PttCLFJSFZhav1NcjMXXrZ6r7t8so82lR1wv5
+        Ad+prBXILYLDR0sAg04oPY3avGShg==;
+Received: from [81.174.171.191] (helo=donbot)
         by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <john@metanate.com>)
-        id 1mj2vo-0006fe-Dc; Fri, 05 Nov 2021 17:23:12 +0000
+        id 1mj30A-0006gp-HL; Fri, 05 Nov 2021 17:27:42 +0000
+Date:   Fri, 5 Nov 2021 17:27:36 +0000
 From:   John Keeping <john@metanate.com>
-To:     Minas Harutyunyan <hminas@synopsys.com>
-Cc:     John Keeping <john@metanate.com>,
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: dwc2: gadget: respect driver's max_speed
-Date:   Fri,  5 Nov 2021 17:23:04 +0000
-Message-Id: <20211105172304.1308458-1-john@metanate.com>
-X-Mailer: git-send-email 2.33.1
+        linux-usb@vger.kernel.org, John Youn <John.Youn@synopsys.com>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH] usb: dwc2: gadget: Fix ISOC flow for elapsed frames
+Message-ID: <YYVpiEpm+kjDRePK@donbot>
+References: <c356baade6e9716d312d43df08d53ae557cb8037.1636011277.git.Minas.Harutyunyan@synopsys.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c356baade6e9716d312d43df08d53ae557cb8037.1636011277.git.Minas.Harutyunyan@synopsys.com>
 X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-UDCs should not enumerate faster than the max_speed set by the gadget
-driver.  Use this to further restrict the speed set in the DWC2
-parameters so that the device will not connect faster than is supported
-by the gadget driver.
+On Thu, Nov 04, 2021 at 11:36:01AM +0400, Minas Harutyunyan wrote:
+> Added updating of request frame number for elapsed frames,
+> otherwise frame number will remain as previous use of request.
+> This will allow function driver to correctly track frames in
+> case of Missed ISOC occurs.
+> 
+> Added setting request actual length to 0 for elapsed frames.
+> In Slave mode when pushing data to RxFIFO by dwords, request
+> actual length incrementing accordingly. But before whole packet
+> will be pushed into RxFIFO and send to host can occurs Missed
+> ISOC and data will not send to host. So, in this case request
+> actual length should be reset to 0.
+> 
+> Fixes: 91bb163e1e4f ("usb: dwc2: gadget: Fix ISOC flow for BDMA and Slave")
+> Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
 
-For configfs-based composite devices this can be set via the max_speed
-configfs file.
+Reviewed-by: John Keeping <john@metanate.com>
 
-Signed-off-by: John Keeping <john@metanate.com>
----
- drivers/usb/dwc2/gadget.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 744539b78f6c..1f39c2f1be8e 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -3377,6 +3377,7 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
- 	u32 val;
- 	u32 usbcfg;
- 	u32 dcfg = 0;
-+	u8 speed;
- 	int ep;
- 
- 	/* Kill any ep0 requests as controller will be reinitialized */
-@@ -3418,7 +3419,22 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
- 
- 	dcfg |= DCFG_EPMISCNT(1);
- 
--	switch (hsotg->params.speed) {
-+	speed = hsotg->params.speed;
-+	if (hsotg->driver) {
-+		switch (hsotg->driver->max_speed) {
-+		case USB_SPEED_LOW:
-+			speed = DWC2_SPEED_PARAM_LOW;
-+			break;
-+		case USB_SPEED_FULL:
-+			if (speed != USB_SPEED_LOW)
-+				speed = DWC2_SPEED_PARAM_FULL;
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+
-+	switch (speed) {
- 	case DWC2_SPEED_PARAM_LOW:
- 		dcfg |= DCFG_DEVSPD_LS;
- 		break;
--- 
-2.33.1
-
+> ---
+>  drivers/usb/dwc2/gadget.c | 17 ++++++++++++++---
+>  1 file changed, 14 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+> index 11d85a6e0b0d..2190225bf3da 100644
+> --- a/drivers/usb/dwc2/gadget.c
+> +++ b/drivers/usb/dwc2/gadget.c
+> @@ -1198,6 +1198,8 @@ static void dwc2_hsotg_start_req(struct dwc2_hsotg *hsotg,
+>  			}
+>  			ctrl |= DXEPCTL_CNAK;
+>  		} else {
+> +			hs_req->req.frame_number = hs_ep->target_frame;
+> +			hs_req->req.actual = 0;
+>  			dwc2_hsotg_complete_request(hsotg, hs_ep, hs_req, -ENODATA);
+>  			return;
+>  		}
+> @@ -2857,9 +2859,12 @@ static void dwc2_gadget_handle_ep_disabled(struct dwc2_hsotg_ep *hs_ep)
+>  
+>  	do {
+>  		hs_req = get_ep_head(hs_ep);
+> -		if (hs_req)
+> +		if (hs_req) {
+> +			hs_req->req.frame_number = hs_ep->target_frame;
+> +			hs_req->req.actual = 0;
+>  			dwc2_hsotg_complete_request(hsotg, hs_ep, hs_req,
+>  						    -ENODATA);
+> +		}
+>  		dwc2_gadget_incr_frame_num(hs_ep);
+>  		/* Update current frame number value. */
+>  		hsotg->frame_number = dwc2_hsotg_read_frameno(hsotg);
+> @@ -2912,8 +2917,11 @@ static void dwc2_gadget_handle_out_token_ep_disabled(struct dwc2_hsotg_ep *ep)
+>  
+>  	while (dwc2_gadget_target_frame_elapsed(ep)) {
+>  		hs_req = get_ep_head(ep);
+> -		if (hs_req)
+> +		if (hs_req) {
+> +			hs_req->req.frame_number = ep->target_frame;
+> +			hs_req->req.actual = 0;
+>  			dwc2_hsotg_complete_request(hsotg, ep, hs_req, -ENODATA);
+> +		}
+>  
+>  		dwc2_gadget_incr_frame_num(ep);
+>  		/* Update current frame number value. */
+> @@ -3002,8 +3010,11 @@ static void dwc2_gadget_handle_nak(struct dwc2_hsotg_ep *hs_ep)
+>  
+>  	while (dwc2_gadget_target_frame_elapsed(hs_ep)) {
+>  		hs_req = get_ep_head(hs_ep);
+> -		if (hs_req)
+> +		if (hs_req) {
+> +			hs_req->req.frame_number = hs_ep->target_frame;
+> +			hs_req->req.actual = 0;
+>  			dwc2_hsotg_complete_request(hsotg, hs_ep, hs_req, -ENODATA);
+> +		}
+>  
+>  		dwc2_gadget_incr_frame_num(hs_ep);
+>  		/* Update current frame number value. */
+> 
+> base-commit: c26f1c109d21f2ea874e4a85c0c76c385b8f46cb
+> -- 
+> 2.11.0
+> 
