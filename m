@@ -2,100 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06080446395
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 13:45:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1B74463DA
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 14:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232712AbhKEMre (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Nov 2021 08:47:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57076 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233162AbhKEMrS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 5 Nov 2021 08:47:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CC5B760F21;
-        Fri,  5 Nov 2021 12:44:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1636116278;
-        bh=QULd5jTaKPgk0P83tqgiYaMLPitgfw/aqw0mVkDXD4k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=troD8ckkdjN2MqGlbeqVuw+0+Czok8Px8SxZixN4Vg8dvwXRRnySSHJyF/nMFJaF2
-         VdziixhtPAOUOHXQFmitF70Uwpww9+z+n8x1I/RjbAnMXjcCQkOAzfQ0V4JTA4fvMk
-         WBvVveQFZ4WQwhJIk1LWGKc9hEq1PeXpCn7/v8pw=
-Date:   Fri, 5 Nov 2021 13:44:35 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Qihang Hu <huqihang@oppo.com>
-Cc:     balbi@kernel.org, peter.chen@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: composite: Fix null pointer exception
-Message-ID: <YYUnM0/82FwS5OUE@kroah.com>
-References: <20211105104840.159533-1-huqihang@oppo.com>
+        id S232280AbhKENLr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Nov 2021 09:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37030 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229924AbhKENLq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Nov 2021 09:11:46 -0400
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACCAC061714;
+        Fri,  5 Nov 2021 06:09:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=Bz8cdhZXbt7ZToRTPSoSmYiw1e6Kd14GIZdjGatloIw=; b=zM41P
+        +/C+xf1ELT2qg/fxigElKjTpMaNsB8GtPzYCWMNnz/nQ6LXTfvxS8IHTWXkDci7TPzv25M4uVsBAh
+        42aSZ/4QW6q2ALr/O2k4H2IxAsb1uzSXyjenG6LCKvmNZALKVvXVv8DnXfOUgBqB9pQSWtNTFEvWB
+        aSt+pw+lfZJSpJn4QAB+Cv/rdu5c+11yhGyDWhYNyL7+ND4EG2O1UGx05exjtCiFpeBa1ItiGKjro
+        mALuRN4lMd1unQMuP9dVL6/2WKXDxzushe9dtNngJ0amEhe/cnqn1nu8+uF800u7ZhcdG71vQ6YO5
+        xom+1Gzl9qRGxJ770Fpvcpbh7GxQg==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1miyxl-0003RI-Pv; Fri, 05 Nov 2021 13:08:57 +0000
+Date:   Fri, 5 Nov 2021 13:08:48 +0000
+From:   John Keeping <john@metanate.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] usb: dwc2: hcd_queue: Fix use of floating point literal
+Message-ID: <YYUs4PME9QizsPTt@donbot>
+References: <20211104215923.719785-1-nathan@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211105104840.159533-1-huqihang@oppo.com>
+In-Reply-To: <20211104215923.719785-1-nathan@kernel.org>
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 05, 2021 at 06:48:40PM +0800, Qihang Hu wrote:
-> In the config_ep_by_speed_and_alt function, select the corresponding
-> descriptor through g->speed, but the function driver may not
-> support the corresponding speed. So, we need to check whether the
-> function driver provides the corresponding speed descriptor when
-> selecting the descriptor.
+On Thu, Nov 04, 2021 at 02:59:23PM -0700, Nathan Chancellor wrote:
+> A new commit in LLVM causes an error on the use of 'long double' when
+> '-mno-x87' is used, which the kernel does through an alias,
+> '-mno-80387' (see the LLVM commit below for more details around why it
+> does this).
 > 
-> [  237.708146]  android_work: sent uevent USB_STATE=CONNECTED
-> [  237.712464]  kconfigfs-gadget gadget: super-speed config #1: b
-> [  237.712487]  kUnable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-
-So this is an invalid driver causing this problem?  Or can this be
-triggered by userspace?
-
-> [  237.712493]  kMem abort info:
-> [  237.712498]  k  ESR = 0x96000006
-> [  237.712504]  k  EC = 0x25: DABT (current EL), IL = 32 bits
-> [  237.712510]  k  SET = 0, FnV = 0
-> [  237.712515]  k  EA = 0, S1PTW = 0
-> [  237.712520]  kData abort info:
-> [  237.712525]  k  ISV = 0, ISS = 0x00000006
-> [  237.712530]  k  CM = 0, WnR = 0
-> [  237.712536]  kuser pgtable: 4k pages, 39-bit VAs, pgdp=000000020ef29000
-> [  237.712541]  k[0000000000000000] pgd=000000020ef2a003, pud=000000020ef2a003, pmd=0000000000000000
-> [  237.712554]  kInternal error: Oops: 96000006 [#1] PREEMPT SMP
-> [  237.722067]  kSkip md ftrace buffer dump for: 0x1609e0
-> [  237.787037]  kWorkqueue: dwc_wq dwc3_bh_work.cfi_jt
-> [  237.854922]  kpstate: 60c00085 (nZCv daIf +PAN +UAO)
-> [  237.863165]  kpc : config_ep_by_speed_and_alt+0x90/0x308
-> [  237.871766]  klr : audio_set_alt+0x54/0x78
-> [  237.879108]  ksp : ffffffc0104839e0
+>  drivers/usb/dwc2/hcd_queue.c:1744:25: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
+>                          delay = ktime_set(0, DWC2_RETRY_WAIT_DELAY);
+>                                              ^
+>  drivers/usb/dwc2/hcd_queue.c:62:34: note: expanded from macro 'DWC2_RETRY_WAIT_DELAY'
+>  #define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
+>                                  ^
+>  1 error generated.
 > 
-> Signed-off-by: Qihang Hu <huqihang@oppo.com>
-
-What commit id does this fix?
-
+> This happens due to the use of a 'long double' literal. The 'E6' part of
+> '1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
+> it to 'long double'.
+> 
+> There is no visible reason for a floating point value in this driver, as
+> the value is only used as a parameter to a function that expects an
+> integer type.  Use USEC_PER_SEC, which is the same integer value as
+> '1E6L', to avoid changing functionality but fix the error.
+> 
+> Fixes: 6ed30a7d8ec2 ("usb: dwc2: host: use hrtimer for NAK retries")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1497
+> Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > ---
-> Changes in v2:
-> -Add warning message
-> ---
->  drivers/usb/gadget/composite.c | 40 +++++++++++++++++++++++-----------
->  1 file changed, 27 insertions(+), 13 deletions(-)
+>  drivers/usb/dwc2/hcd_queue.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-> index 72a9797dbbae..746b34cf0310 100644
-> --- a/drivers/usb/gadget/composite.c
-> +++ b/drivers/usb/gadget/composite.c
-> @@ -160,6 +160,9 @@ int config_ep_by_speed_and_alt(struct usb_gadget *g,
+> diff --git a/drivers/usb/dwc2/hcd_queue.c b/drivers/usb/dwc2/hcd_queue.c
+> index 89a788326c56..bdf1927e1be1 100644
+> --- a/drivers/usb/dwc2/hcd_queue.c
+> +++ b/drivers/usb/dwc2/hcd_queue.c
+> @@ -59,7 +59,7 @@
+>  #define DWC2_UNRESERVE_DELAY (msecs_to_jiffies(5))
 >  
->  	struct usb_descriptor_header **d_spd; /* cursor for speed desc */
->  
+>  /* If we get a NAK, wait this long before retrying */
+> -#define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
+> +#define DWC2_RETRY_WAIT_DELAY (1 * USEC_PER_SEC)
 
-Why the blank line here?
+Using USEC_PER_SEC here seems quite weird.  This is used as:
 
-> +	struct usb_composite_dev *cdev;
-> +	int incomplete_desc = 0;
+	delay = ktime_set(0, DWC2_RETRY_WAIT_DELAY);
 
-Shouldn't this be a bool?
+so the units are nanoseconds.
 
-
-thanks,
-
-greg k-h
+Maybe NSEC_PER_MSEC would better indicate the intent here?
