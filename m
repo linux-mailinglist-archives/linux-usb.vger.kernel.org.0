@@ -2,104 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F530446793
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 18:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFEA54467C3
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 18:23:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232883AbhKERM6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Nov 2021 13:12:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39590 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234280AbhKERMp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 5 Nov 2021 13:12:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id C323B61244
-        for <linux-usb@vger.kernel.org>; Fri,  5 Nov 2021 17:10:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636132205;
-        bh=m8Q3MZF8uU6SZK7IE6g/autm3R0MwcmN6h9fJW1XQbs=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=uZc9/eb1TxU6qe8KejvvdITuDK73BPSeZdXhkMzy2oO1EcziYqhbNeafL1k9lffjN
-         tdBqbmo6LE6BigGW79w3mJa8t4mkqNjCxfmfqEW0u4OlRGUA0SzM/rJCeKGKpDjvBg
-         06bizJEAAlWzSeV7PxvSMeVBvP1Ny8wezcVzuscU+B2/wDOSMC961djDKL/d/Q97k6
-         Sw8eSBrqTJQZfdVoeoGUDKfkNF+8KNNEmEYrPUv60HFoCX9uj61mkAqSlGi33Iotg8
-         6pMkoTJUkGrV6GuivYmu4AZ4Z2G/WAu6dBC0vuR45vgEVqyy/H143A1+vVs+xcg86Y
-         B8YMLA56VoIDw==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id B1FEA61108; Fri,  5 Nov 2021 17:10:05 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 214789] ehci-hcd.c ISR
-Date:   Fri, 05 Nov 2021 17:10:05 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: scott.c.arnold@nasa.gov
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-214789-208809-L7vPEsR09B@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-214789-208809@https.bugzilla.kernel.org/>
-References: <bug-214789-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S232614AbhKERZ5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Nov 2021 13:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230089AbhKERZ4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Nov 2021 13:25:56 -0400
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF160C061714;
+        Fri,  5 Nov 2021 10:23:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Message-Id:Date:
+        Subject:Cc:To:From:Content-Type:Reply-To:Content-ID:Content-Description:
+        In-Reply-To:References; bh=ctF+ypAFgSoH0Id9vII8CUGN6vLFTyuz4AWE/C/4nUw=; b=XQ
+        jAixBCYw5JdFAs0OhECoIoekyoj6b3MSl3jZPA0dsASrJwp9mC/zEg7ihQA80pGzOqpXIFMk+1LLU
+        D2MLD+/PMJGc+EEM0hxjrpljG5OPJ9qNyRD3+XTT82Sp9AW14wFOHYNhMHQ6mEr5e1dOSHA3fJnke
+        JHMedJGT+ROccEOtZQtWqwuCJQ9zz37xU/Q99vdZf8WFR4FIw/1SmnNKMezyAoOIbku+1n3m24yGg
+        RuUW/vo+w7B2swnIozTX4lcrnVABq0AwVHhmc2J9BeWmgm+7+tySHASofn/R1TbiQqDWTv0jjakHW
+        zSwX1Fn7hf6gHOhnEPnU0fkndQLHrrpA==;
+Received: from [81.174.171.191] (helo=donbot.metanate.com)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1mj2vo-0006fe-Dc; Fri, 05 Nov 2021 17:23:12 +0000
+From:   John Keeping <john@metanate.com>
+To:     Minas Harutyunyan <hminas@synopsys.com>
+Cc:     John Keeping <john@metanate.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc2: gadget: respect driver's max_speed
+Date:   Fri,  5 Nov 2021 17:23:04 +0000
+Message-Id: <20211105172304.1308458-1-john@metanate.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214789
+UDCs should not enumerate faster than the max_speed set by the gadget
+driver.  Use this to further restrict the speed set in the DWC2
+parameters so that the device will not connect faster than is supported
+by the gadget driver.
 
---- Comment #22 from Scott Arnold (scott.c.arnold@nasa.gov) ---
-Hello,
-This caused problem:
-https://patchwork.kernel.org/project/linux-pci/patch/20200214213313.66622-2=
--sean.v.kelley@linux.intel.com/
-Scott
+For configfs-based composite devices this can be set via the max_speed
+configfs file.
 
------Original Message-----
-From: bugzilla-daemon@bugzilla.kernel.org <bugzilla-daemon@bugzilla.kernel.=
-org>=20
-Sent: Monday, November 1, 2021 2:41 PM
-To: Arnold, Scott C. (JSC-CD13)[SGT, INC] <scott.c.arnold@nasa.gov>
-Subject: [EXTERNAL] [Bug 214789] ehci-hcd.c ISR
+Signed-off-by: John Keeping <john@metanate.com>
+---
+ drivers/usb/dwc2/gadget.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-https://gcc02.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fbugzill=
-a.kernel.org%2Fshow_bug.cgi%3Fid%3D214789&amp;data=3D04%7C01%7Cscott.c.arno=
-ld%40nasa.gov%7C5df722eafbb3426ea8e708d99d6f8ef1%7C7005d45845be48ae8140d43d=
-a96dd17b%7C0%7C0%7C637713924742064413%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wL=
-jAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=3Dhb=
-1Mm3rBbLg%2FUZQIk8WY0Pr%2BSqo9XBRJBLS2vmapYio%3D&amp;reserved=3D0
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 744539b78f6c..1f39c2f1be8e 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3377,6 +3377,7 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
+ 	u32 val;
+ 	u32 usbcfg;
+ 	u32 dcfg = 0;
++	u8 speed;
+ 	int ep;
+ 
+ 	/* Kill any ep0 requests as controller will be reinitialized */
+@@ -3418,7 +3419,22 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
+ 
+ 	dcfg |= DCFG_EPMISCNT(1);
+ 
+-	switch (hsotg->params.speed) {
++	speed = hsotg->params.speed;
++	if (hsotg->driver) {
++		switch (hsotg->driver->max_speed) {
++		case USB_SPEED_LOW:
++			speed = DWC2_SPEED_PARAM_LOW;
++			break;
++		case USB_SPEED_FULL:
++			if (speed != USB_SPEED_LOW)
++				speed = DWC2_SPEED_PARAM_FULL;
++			break;
++		default:
++			break;
++		}
++	}
++
++	switch (speed) {
+ 	case DWC2_SPEED_PARAM_LOW:
+ 		dcfg |= DCFG_DEVSPD_LS;
+ 		break;
+-- 
+2.33.1
 
---- Comment #20 from Alan Stern (stern@rowland.harvard.edu) --- There were =
-no
-significant changes at all to the ehci-hcd driver between 5.6.1 and 5.7.1.=
-=20
-Which indicates that the cause of the problem lies somewhere else in the
-kernel.
-
-At this point, your best approach would be to carry out a git bisect between
-those two kernel versions.  Or maybe just between 5.6 and 5.7 (I assume that
-5.6 is okay, just like 5.6.1, and 5.7 is bad, just like 5.7.1).  That would=
- let
-you identify the exact commit where the problem started.
-
---
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You reported the bug.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
