@@ -2,86 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2C9446936
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 20:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE5B1446937
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 20:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbhKETm3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Nov 2021 15:42:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41004 "EHLO mail.kernel.org"
+        id S230267AbhKETmm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Nov 2021 15:42:42 -0400
+Received: from mga09.intel.com ([134.134.136.24]:61164 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229918AbhKETm0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 5 Nov 2021 15:42:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id F106C6120D
-        for <linux-usb@vger.kernel.org>; Fri,  5 Nov 2021 19:39:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636141187;
-        bh=wgOSEJAESpiFzgsz2cT+yC3aKgKxBbYHQbGGbqGTIu0=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=FB95XDQI3DKAWTcfKMHMmcMuneGpWeH0gFdBuwlCuiYH7ZvH/1EjT77HjAT52U/Cr
-         3XgEgRj1fxlP+Fw7YLCmVDMOOjy0XItznkDZUzhHjCXNNg14UaQnNS38y71hH6Zyv6
-         6PDY858/Qv/EpkMP271UdCU6iMjT/y5kh4PYrrl48jtHSSe9RtWd0SLq6WjqavRZK7
-         Vsq7wtr+FljQ9ZpMigRZZEi78wTvRrDEUWzFQ61bUnU1zW5bG+HtnnUSXAi4J3M6Np
-         P2UNStpECDKVY0mHmrn8O6roM68eZZQURAmWWGKKxjDbDuv+krndLJc3FruOlahgai
-         LtT+JbSDDJvnw==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id EE03F61157; Fri,  5 Nov 2021 19:39:46 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 214789] ehci-hcd.c ISR
-Date:   Fri, 05 Nov 2021 19:39:46 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-214789-208809-xsD4k74Kwl@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-214789-208809@https.bugzilla.kernel.org/>
-References: <bug-214789-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S229918AbhKETml (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 5 Nov 2021 15:42:41 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10159"; a="231814694"
+X-IronPort-AV: E=Sophos;i="5.87,212,1631602800"; 
+   d="scan'208";a="231814694"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2021 12:40:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,212,1631602800"; 
+   d="scan'208";a="639910310"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 05 Nov 2021 12:39:58 -0700
+Subject: Re: [PATCH] xhci: Fix USB 3.1 enumeration issues by increasing
+ roothub power-on-good delay
+To:     "Walt Jr. Brake" <mr.yming81@gmail.com>
+Cc:     chunfeng.yun@mediatek.com, matthias.bgg@gmail.com,
+        nishadkamdar@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, eddie.hung@mediatek.com,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg KH <gregkh@linuxfoundation.org>
+References: <20211105133050.GA1590803@rowland.harvard.edu>
+ <20211105160036.549516-1-mathias.nyman@linux.intel.com>
+ <96925c96-0f87-f110-e279-5b669337948a@linux.intel.com>
+ <8301c7f7-4c63-5681-af53-9edc67d96d17@gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <5fc1dc0b-6fd0-2162-4e1d-9420ecabc337@linux.intel.com>
+Date:   Fri, 5 Nov 2021 21:41:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <8301c7f7-4c63-5681-af53-9edc67d96d17@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214789
+On 5.11.2021 19.32, Walt Jr. Brake wrote:
+> On 6/11/2021 00:09, Mathias Nyman wrote:
+>> On 5.11.2021 18.00, Mathias Nyman wrote:
+>>> Some USB 3.1 enumeration issues were reported after the hub driver removed
+>>> the minimum 100ms limit for the power-on-good delay.
+>>>
+>>> Since commit 90d28fb53d4a ("usb: core: reduce power-on-good delay time of
+>>> root hub") the hub driver sets the power-on-delay based on the
+>>> bPwrOn2PwrGood value in the hub descriptor.
+>>>
+>>> xhci driver has a 20ms bPwrOn2PwrGood value for both roothubs based
+>>> on xhci spec section 5.4.8, but it's clearly not enough for the
+>>> USB 3.1 devices, causing enumeration issues.
+>>>
+>>> Tests indicate full 100ms delay is needed.
+>>>
+>>> Reported-by: Walt Jr. Brake <mr.yming81@gmail.com>
+>>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>>
+>> Walt Jr Brake, just to be sure could you test this one as well?
+>>
+>> As Alan suggested this sets 100ms for the USB 3 roothub but
+>> keeps the 20ms for the USB 2 roothub.
+>>
+>> Thanks
+>> -Mathias
+> 
+> Yes I tested, it works too.
+> 
 
---- Comment #24 from Alan Stern (stern@rowland.harvard.edu) ---
-On Fri, Nov 05, 2021 at 05:10:05PM +0000, bugzilla-daemon@bugzilla.kernel.o=
-rg
-wrote:
-> https://bugzilla.kernel.org/show_bug.cgi?id=3D214789
->=20
-> --- Comment #22 from Scott Arnold (scott.c.arnold@nasa.gov) ---
-> Hello,
-> This caused problem:
->
-> https://patchwork.kernel.org/project/linux-pci/patch/20200214213313.66622=
--2-sean.v.kelley@linux.intel.com/
-> Scott
-
-This is commit b88bf6c3b6ff ("PCI: Add boot interrupt quirk mechanism=20
-for Xeon chipsets").
-
-Sean and linux-pci readers, please take a look at this bug report=20
-(Bugzilla #214789).
-
-Alan Stern
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Thank you
+-Mathias
