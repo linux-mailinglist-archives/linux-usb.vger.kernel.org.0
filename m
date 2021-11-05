@@ -2,124 +2,228 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E22D445CD0
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 00:59:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68776445EAC
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 04:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232443AbhKEAC0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Nov 2021 20:02:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51564 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232410AbhKEAC0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 4 Nov 2021 20:02:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A56F604D2;
-        Thu,  4 Nov 2021 23:59:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636070387;
-        bh=ed29zpkeOjsycDqE+cquSEnEmDgcI51DG+xfYCKXcz4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E56O7dJ97Huw9uzbwz9GmCdTVSA/2qNNXJnG/u6mGPYRiohU8IMbXLFVtwhh0g87o
-         UDcW+OCPZ40zr+YJUTKHL1AJVhKOXLciO9DgFpDM8OYub84f5XAHQeN16VFPimXQB0
-         +D0vMja12Rj/s59GKc5Zmxw7wgaiKrFjaHguWC9F5SqoMKLQUcKb1US4rmMiuYOfaA
-         if1XE2rRox8P2kvY6dSnoxq0zVt8O+KvgwOL414uLIwGCm4Bv5tP3XthcKi/TaA3z+
-         3+u/aLKe/OdnvJ2y3bHGq7sXyXxBGAcrKTxLXRcb8PQ5rMxpCnUpFLS6lsxtuLcZsF
-         kwPsIXJnypQPA==
-Date:   Thu, 4 Nov 2021 16:59:42 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Minas Harutyunyan <hminas@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] usb: dwc2: hcd_queue: Fix use of floating point literal
-Message-ID: <YYRz7oyZQSaeWFCz@archlinux-ax161>
-References: <20211104215923.719785-1-nathan@kernel.org>
- <CAKwvOdnBv8LcxvVYJKacL7eUXAoGVfnQp7TAL_r+P8V0WcOq1Q@mail.gmail.com>
- <CAKwvOdkp99t4ZvVgMLCzKjRq+AwM2-t+JRJeh8vs3vGq=kMoQg@mail.gmail.com>
+        id S232190AbhKEDgl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Nov 2021 23:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231817AbhKEDgk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Nov 2021 23:36:40 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBA8C061205
+        for <linux-usb@vger.kernel.org>; Thu,  4 Nov 2021 20:34:01 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id z11-20020a1c7e0b000000b0030db7b70b6bso8648765wmc.1
+        for <linux-usb@vger.kernel.org>; Thu, 04 Nov 2021 20:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S7Yk+FkXQ7I5h+tDc4CVkiVNjrz23sJGozwpLzZeAPg=;
+        b=HMZoT9WgqjN5QcNfw9dyEDbvihwWTiB4GO+ZzTZnwjPRjZEsY4qV6Ja+HBNpkud6K8
+         7yAC7g5Kd3qwKH7Lex4iN803cyHtGSmF26RjOSUDggCLoojPVNFqpdt1gk5dDbb+1JzX
+         fc/OxKBBO6FsdOzZmg9m4O4bMHg9PVlyS+fhiaBIR0mLbwTxZQkVDZdgik8be2GQ6Vle
+         l1BhUipniDlmgcwSAUzum02Km/qHwC9tk7QvZ8QgMq5bi8xSYm+sBoiCF9sejcPzjJo4
+         wocp7fRrMF+S5oTwcfSd+KRW7i0HHFOhlJcVaCxgYeyOv1O7o6OoVOMDgd4X65mPy7kh
+         ZBMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S7Yk+FkXQ7I5h+tDc4CVkiVNjrz23sJGozwpLzZeAPg=;
+        b=oFTzVhB4ycg6yuoLndE2vQeTRq2/8q2tf1TOwdRiLPthLCU9/tE+UwreLGBuRCban5
+         lqPC+MUinmCGeRJ1FyxVxpzIhklXvMQiulvsas1knI6cSWABmGxDmgIzAfvfjVu/62JY
+         xulmgE1lDreDrs5CbsMXLdsvMHyqNvUVXohqo38om6624sSSKMQX8lstxtlIht3h0ayg
+         fQthzaFvCh9ml643dMj5VCKjhILaPXPROXz+g0dPwfEqLkSXFq7+ZJZdS1hQ4pSAmkJW
+         eizxvSyWk1dqPT9t1LUN6fIifWasioCQDaIxcI++cnmPbxL8WIuawg3IrSHXO7/7N6CO
+         UXmA==
+X-Gm-Message-State: AOAM5327Z82uFtU7nXCzHfvmIR48kbKaStYbZuuApKZEBnzMru0xwKu6
+        pdf170Z94u9JuOf0LCLSCHkAfQ==
+X-Google-Smtp-Source: ABdhPJxV54X4bO4PZ5cGazBrYh4+m7ihDzMu1/HqZRWCjnFFpb67eBHeJbYC7gT+9YUX8Wssr8kldg==
+X-Received: by 2002:a05:600c:354f:: with SMTP id i15mr10617800wmq.59.1636083239553;
+        Thu, 04 Nov 2021 20:33:59 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id l15sm2546296wme.47.2021.11.04.20.33.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Nov 2021 20:33:59 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, bjorn.andersson@linaro.org,
+        robh+dt@kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     wcheng@codeaurora.org, bryan.odonoghue@linaro.org
+Subject: [PATCH v3 0/7] Add pm8150b TPCM driver
+Date:   Fri,  5 Nov 2021 03:35:51 +0000
+Message-Id: <20211105033558.1573552-1-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdkp99t4ZvVgMLCzKjRq+AwM2-t+JRJeh8vs3vGq=kMoQg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 04, 2021 at 04:33:41PM -0700, Nick Desaulniers wrote:
-> On Thu, Nov 4, 2021 at 4:29 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
-> >
-> > On Thu, Nov 4, 2021 at 2:59 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > A new commit in LLVM causes an error on the use of 'long double' when
-> > > '-mno-x87' is used, which the kernel does through an alias,
-> > > '-mno-80387' (see the LLVM commit below for more details around why it
-> > > does this).
-> > >
-> > >  drivers/usb/dwc2/hcd_queue.c:1744:25: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
-> > >                          delay = ktime_set(0, DWC2_RETRY_WAIT_DELAY);
-> > >                                              ^
-> > >  drivers/usb/dwc2/hcd_queue.c:62:34: note: expanded from macro 'DWC2_RETRY_WAIT_DELAY'
-> > >  #define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
-> > >                                  ^
-> > >  1 error generated.
-> > >
-> > > This happens due to the use of a 'long double' literal. The 'E6' part of
-> > > '1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
-> > > it to 'long double'.
-> > >
-> > > There is no visible reason for a floating point value in this driver, as
-> > > the value is only used as a parameter to a function that expects an
-> > > integer type.  Use USEC_PER_SEC, which is the same integer value as
-> > > '1E6L', to avoid changing functionality but fix the error.
-> > >
-> > > Fixes: 6ed30a7d8ec2 ("usb: dwc2: host: use hrtimer for NAK retries")
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1497
-> > > Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> >
-> > Thanks for the patch!
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> 
-> hmm...should we explicitly #include <vdso/time.h> for this
-> declaration?  It may work due to transitive includes, but that's
-> generally considered brittle should those transitive includes change
-> in the future.
+V3:
+Rob Herrings review
 
-This file uses ktime_t, which comes from include/linux/ktime.h, which
-eventually includes include/vdso/time64.h. include/vdso/time64.h is only
-included in three header files and no drivers so I do not think this is
-that brittle. I am happy to change that if the maintainers feel it is
-worth the extra include.
+- Drops use of remote-endpoint and ports to bind
+  tcpm to pdphy and typec replacing with phandle
 
-> >
-> > > ---
-> > >  drivers/usb/dwc2/hcd_queue.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/usb/dwc2/hcd_queue.c b/drivers/usb/dwc2/hcd_queue.c
-> > > index 89a788326c56..bdf1927e1be1 100644
-> > > --- a/drivers/usb/dwc2/hcd_queue.c
-> > > +++ b/drivers/usb/dwc2/hcd_queue.c
-> > > @@ -59,7 +59,7 @@
-> > >  #define DWC2_UNRESERVE_DELAY (msecs_to_jiffies(5))
-> > >
-> > >  /* If we get a NAK, wait this long before retrying */
-> > > -#define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
-> > > +#define DWC2_RETRY_WAIT_DELAY (1 * USEC_PER_SEC)
-> > >
-> > >  /**
-> > >   * dwc2_periodic_channel_available() - Checks that a channel is available for a
-> > >
-> > > base-commit: d4439a1189f93d0ac1eaf0197db8e6b3e197d5c7
-> > > --
-> > > 2.34.0.rc0
-> > >
-> >
-> >
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
-> 
-> 
-> 
-> -- 
-> Thanks,
-> ~Nick Desaulniers
+- Drops pmic-pdphy-* and pmic-typec-* from interrupt names
+  as suggested
+
+- Passes make dt_binding_check DT_CHECKER_FLAGS=-m
+
+BOD
+- Noticed qcom_pmic_tcpm_pdphy_enable() was missing a
+  regulator_disable in case of an error, added.
+
+- qcom_pmic_tcpm_pdphy_probe()
+  devm_regulator_get() should come before regmap_get()
+  as is the case in qcom_pmic_tcpm_typec_probe()
+
+- Fixes compatible name in qcom,pmic-typec.yaml should
+  have read qcom,pm8150b-typec not qcom,pm8150b-usb-typec
+
+- Makes sure compat for core is "qcom,pm8150b-tcpm" in
+  docs and driver
+
+- Drops redundant return in void qcom_pmic_tcpm_pdphy_reset_off()
+
+Kernel Robot
+- Drops unused variable debounced in qcom_pmic_tcpm_typec_get_cc()
+
+- Drops unsused variable orientation in qcom_pmic_tcpm_typec_set_cc()
+
+Latest bootable series can be found here:
+Link: https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=usb-next-04-11-21-pm8150b-tcpm-v3
+
+git diff usb-next-27-10-21-pm8150b-tcpm-v2 -- drivers/usb/typec/tcpm/qcom/
+git diff usb-next-27-10-21-pm8150b-tcpm-v2 -- Documentation/devicetree/bindings/usb/qcom,pmic*
+
+Previous set:
+Link: https://lore.kernel.org/linux-usb/20211028164941.831918-1-bryan.odonoghue@linaro.org/T/#t
+
+V2 resend:
+- Adding omitted devicetree mailing list
+
+V2:
+
+Guenter Roeck's review
+- Converts suggested qcom_pmic_tcpm_core.c into one-liners
+
+- Adds comment on how polarity is set in set_polarity()
+
+- Removes optional set_current_limit()
+
+- regmap_read/regmap_write
+  Reviwing other pm8150b/spmi drivers I then added in checks for all
+  reamap_read()/regmap_write() calls.
+
+- Fixes (type == TCPC_TX_CABLE_RESET || TCPC_TX_HARD_RESET)
+  thanks I definitely had the blinkers on there and didn't see that at all
+
+- qcom_pmic_tcpm_pdphy_pd_transmit_payload()
+  Treats regmap_read and read value as separate error paths
+
+- qcom_pmic_tcpm_pdphy_set_pd_rx()
+  Replaces boolean if/else with !on as suggested
+
+- Returns -ENODEV not -EINVAL on dev_get_regmap() error
+
+- qcom_pmic_tcpm_pdphy_pd_receive()
+  Guenter asks: "No error return ?"
+  bod: No we are inside an ISR here if we read data we pass that off to TCPM
+       if somehow we don't read the data - it is "junk" there's no value IMO
+       in pushing an error upwards back to the handler.
+
+Heikki Krogerus' review
+- Includes Makefile I missed adding to my git index
+
+- Removes old Kconfig entry for remove driver
+
+Randy Dunlap's review 
+- Rewords drivers/usb/typec/tcpm/Kconfig
+
+- Drops tautology "aggregates togther"
+
+- Corrects spelling typos
+
+BOD's own review
+- Drops redundant include of regmap.h in qcom_pmic_tcpm_core.c
+
+- Propogates qcom_pmic_tcpm_pdphy_disable() error upwards
+
+- Propogates pmic_pdphy_reset() error upwards
+
+- Drops error prints in qcom_pmic_tcpm_pdphy_pd_transmit_payload()
+  I had these in-place during development and don't recall them being
+  triggered even once, they are redundant, remove.
+ 
+Differences between the two can be seen by
+git diff usb-next-27-10-21-pm8150b-tcpm-v2..usb-next-25-10-21-pm8150b-tcpm -- drivers/usb/typec/tcpm
+
+Latest bootable series can be found here:
+Link: https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=usb-next-27-10-21-pm8150b-tcpm-v2
+
+Previous set:
+Link: https://lore.kernel.org/all/20211025150906.176686-1-bryan.odonoghue@linaro.org/T/#t
+
+V1:
+This series adds a set of yaml and a driver to bind together the type-c and
+pdphy silicon in qcom's pm8150b block as a Linux type-c port manager.
+
+As part of that we retire the existing qcom-pmic-typec driver and fully
+replicate its functionality inside of the new block with the additional
+pdphy stuff along with it.
+
+An additional series will follow this one for the SoC and RB5 dtsi and dts
+respectively.
+
+A bootable series can be found here
+
+Link: https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=usb-next-25-10-21-pm8150b-tcpm
+
+Bryan O'Donoghue (7):
+  dt-bindings: usb: Add qcom,pmic-usb-typec dt-binding header
+  dt-bindings: usb: Add Qualcomm PMIC type C controller YAML schema
+  dt-bindings: usb: Add qcom,pmic-usb-pdphy dt-binding header
+  dt-bindings: usb: Add Qualcomm PMIC PDPHY controller YAML schema
+  dt-bindings: usb: Add Qualcomm PMIC TCPM YAML schema
+  usb: typec: qcom: Remove standalone qcom pm8150b typec driver
+  usb: typec: qcom: Add a pm8150b TCPM driver
+
+ .../bindings/usb/qcom,pmic-pdphy.yaml         |  92 +++
+ .../bindings/usb/qcom,pmic-tcpm.yaml          |  68 ++
+ .../bindings/usb/qcom,pmic-typec.yaml         |  93 +++
+ MAINTAINERS                                   |   8 +
+ drivers/usb/typec/Kconfig                     |  13 -
+ drivers/usb/typec/Makefile                    |   1 -
+ drivers/usb/typec/qcom-pmic-typec.c           | 262 -------
+ drivers/usb/typec/tcpm/Kconfig                |  11 +
+ drivers/usb/typec/tcpm/Makefile               |   1 +
+ drivers/usb/typec/tcpm/qcom/Makefile          |   6 +
+ .../usb/typec/tcpm/qcom/qcom_pmic_tcpm_core.c | 320 +++++++++
+ .../typec/tcpm/qcom/qcom_pmic_tcpm_pdphy.c    | 607 +++++++++++++++++
+ .../typec/tcpm/qcom/qcom_pmic_tcpm_pdphy.h    |  85 +++
+ .../typec/tcpm/qcom/qcom_pmic_tcpm_typec.c    | 638 ++++++++++++++++++
+ .../typec/tcpm/qcom/qcom_pmic_tcpm_typec.h    | 163 +++++
+ .../usb/typec/tcpm/qcom,pmic-usb-pdphy.h      |  18 +
+ .../usb/typec/tcpm/qcom,pmic-usb-typec.h      |  18 +
+ 17 files changed, 2128 insertions(+), 276 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-pdphy.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-tcpm.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
+ delete mode 100644 drivers/usb/typec/qcom-pmic-typec.c
+ create mode 100644 drivers/usb/typec/tcpm/qcom/Makefile
+ create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_tcpm_core.c
+ create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_tcpm_pdphy.c
+ create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_tcpm_pdphy.h
+ create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_tcpm_typec.c
+ create mode 100644 drivers/usb/typec/tcpm/qcom/qcom_pmic_tcpm_typec.h
+ create mode 100644 include/dt-bindings/usb/typec/tcpm/qcom,pmic-usb-pdphy.h
+ create mode 100644 include/dt-bindings/usb/typec/tcpm/qcom,pmic-usb-typec.h
+
+-- 
+2.33.0
+
