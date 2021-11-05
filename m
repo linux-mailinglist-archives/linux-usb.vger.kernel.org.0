@@ -2,112 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 916E844658E
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 16:15:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AFB446698
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 17:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbhKEPSQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Nov 2021 11:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233378AbhKEPSP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Nov 2021 11:18:15 -0400
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF41C061714;
-        Fri,  5 Nov 2021 08:15:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=vj1Y8Yv+t+83fnDU9eN1bFfDvaknUqC+W0ZNrx23L/U=; b=m9Pra
-        IbzxNsNJ113UP1/JZWfzDx+yYKJVoAh7ltJ2/bgX2A2gAgCzg0r6hciQFnn6672sHIdl+3ZPPI0V/
-        SrF5yj/FnTte56oYpbmQ5w2CA/1LprZAoJ/7JIVUwgcSJegSNpJEh2jXWM7dUn+1cTx3Zzm5o38di
-        r8IihhsWigOsJzuPWQT6jg0hSSGOwvsbZ8fp6Fp7cOlVY5t5RK86xK5sl6qAcp/rlct+vaSTIcbpM
-        jR+9oxi5D6VamP+9jReAR9bVWVPxanM6OTNcUTRPxHtfCwyefv9+0l64Tyxtv9j/rSabjjcCx8rGR
-        s3YDT9pafAyxrCof1MaYXZbqouh5w==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1mj0wC-0004zX-Kg; Fri, 05 Nov 2021 15:15:28 +0000
-Date:   Fri, 5 Nov 2021 15:15:27 +0000
-From:   John Keeping <john@metanate.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Minas Harutyunyan <hminas@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+        id S233706AbhKEQCi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Nov 2021 12:02:38 -0400
+Received: from mga05.intel.com ([192.55.52.43]:15049 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233646AbhKEQCh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 5 Nov 2021 12:02:37 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10159"; a="318126913"
+X-IronPort-AV: E=Sophos;i="5.87,212,1631602800"; 
+   d="scan'208";a="318126913"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2021 08:59:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,212,1631602800"; 
+   d="scan'208";a="490372721"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by orsmga007.jf.intel.com with ESMTP; 05 Nov 2021 08:59:34 -0700
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>
+Cc:     mr.yming81@gmail.com, chunfeng.yun@mediatek.com,
+        matthias.bgg@gmail.com, nishadkamdar@gmail.com,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v2] usb: dwc2: hcd_queue: Fix use of floating point
- literal
-Message-ID: <YYVKj/+4snhK6/vs@donbot>
-References: <20211105145802.2520658-1-nathan@kernel.org>
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, eddie.hung@mediatek.com,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH] xhci: Fix USB 3.1 enumeration issues by increasing roothub power-on-good delay
+Date:   Fri,  5 Nov 2021 18:00:36 +0200
+Message-Id: <20211105160036.549516-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211105133050.GA1590803@rowland.harvard.edu>
+References: <20211105133050.GA1590803@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211105145802.2520658-1-nathan@kernel.org>
-X-Authenticated: YES
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 05, 2021 at 07:58:03AM -0700, Nathan Chancellor wrote:
-> A new commit in LLVM causes an error on the use of 'long double' when
-> '-mno-x87' is used, which the kernel does through an alias,
-> '-mno-80387' (see the LLVM commit below for more details around why it
-> does this).
-> 
->  drivers/usb/dwc2/hcd_queue.c:1744:25: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
->                          delay = ktime_set(0, DWC2_RETRY_WAIT_DELAY);
->                                              ^
->  drivers/usb/dwc2/hcd_queue.c:62:34: note: expanded from macro 'DWC2_RETRY_WAIT_DELAY'
->  #define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
->                                  ^
->  1 error generated.
-> 
-> This happens due to the use of a 'long double' literal. The 'E6' part of
-> '1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
-> it to 'long double'.
-> 
-> There is no visible reason for a floating point value in this driver, as
-> the value is only used as a parameter to a function that expects an
-> integer type. Use NSEC_PER_MSEC, which is the same integer value as
-> '1E6L', to avoid changing functionality but fix the error.
-> 
-> Fixes: 6ed30a7d8ec2 ("usb: dwc2: host: use hrtimer for NAK retries")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1497
-> Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Some USB 3.1 enumeration issues were reported after the hub driver removed
+the minimum 100ms limit for the power-on-good delay.
 
-Reviewed-by: John Keeping <john@metanate.com>
+Since commit 90d28fb53d4a ("usb: core: reduce power-on-good delay time of
+root hub") the hub driver sets the power-on-delay based on the
+bPwrOn2PwrGood value in the hub descriptor.
 
-> ---
-> 
-> v1 -> v2: https://lore.kernel.org/r/20211104215923.719785-1-nathan@kernel.org/
-> 
-> * Use NSEC_PER_MSEC instead of USEC_PER_SEC, as the units of the second
->   parameter of ktime_set is nanoseconds. Thanks to John Keeping for
->   pointing this out.
-> 
-> * Pick up Nick's review tag.
-> 
->  drivers/usb/dwc2/hcd_queue.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc2/hcd_queue.c b/drivers/usb/dwc2/hcd_queue.c
-> index 89a788326c56..24beff610cf2 100644
-> --- a/drivers/usb/dwc2/hcd_queue.c
-> +++ b/drivers/usb/dwc2/hcd_queue.c
-> @@ -59,7 +59,7 @@
->  #define DWC2_UNRESERVE_DELAY (msecs_to_jiffies(5))
->  
->  /* If we get a NAK, wait this long before retrying */
-> -#define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
-> +#define DWC2_RETRY_WAIT_DELAY (1 * NSEC_PER_MSEC)
->  
->  /**
->   * dwc2_periodic_channel_available() - Checks that a channel is available for a
-> 
-> base-commit: d4439a1189f93d0ac1eaf0197db8e6b3e197d5c7
-> -- 
-> 2.34.0.rc0
-> 
+xhci driver has a 20ms bPwrOn2PwrGood value for both roothubs based
+on xhci spec section 5.4.8, but it's clearly not enough for the
+USB 3.1 devices, causing enumeration issues.
+
+Tests indicate full 100ms delay is needed.
+
+Reported-by: Walt Jr. Brake <mr.yming81@gmail.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
+ drivers/usb/host/xhci-hub.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+index a3f875eea751..af946c42b6f0 100644
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -257,7 +257,6 @@ static void xhci_common_hub_descriptor(struct xhci_hcd *xhci,
+ {
+ 	u16 temp;
+ 
+-	desc->bPwrOn2PwrGood = 10;	/* xhci section 5.4.9 says 20ms max */
+ 	desc->bHubContrCurrent = 0;
+ 
+ 	desc->bNbrPorts = ports;
+@@ -292,6 +291,7 @@ static void xhci_usb2_hub_descriptor(struct usb_hcd *hcd, struct xhci_hcd *xhci,
+ 	desc->bDescriptorType = USB_DT_HUB;
+ 	temp = 1 + (ports / 8);
+ 	desc->bDescLength = USB_DT_HUB_NONVAR_SIZE + 2 * temp;
++	desc->bPwrOn2PwrGood = 10;	/* xhci section 5.4.8 says 20ms */
+ 
+ 	/* The Device Removable bits are reported on a byte granularity.
+ 	 * If the port doesn't exist within that byte, the bit is set to 0.
+@@ -344,6 +344,7 @@ static void xhci_usb3_hub_descriptor(struct usb_hcd *hcd, struct xhci_hcd *xhci,
+ 	xhci_common_hub_descriptor(xhci, desc, ports);
+ 	desc->bDescriptorType = USB_DT_SS_HUB;
+ 	desc->bDescLength = USB_DT_SS_HUB_SIZE;
++	desc->bPwrOn2PwrGood = 50;	/* usb 3.1 may fail if less than 100ms */
+ 
+ 	/* header decode latency should be zero for roothubs,
+ 	 * see section 4.23.5.2.
+-- 
+2.25.1
+
