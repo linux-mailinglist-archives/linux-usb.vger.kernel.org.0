@@ -2,95 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DDF446579
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 16:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 916E844658E
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 16:15:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233333AbhKEPLP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Nov 2021 11:11:15 -0400
-Received: from mga11.intel.com ([192.55.52.93]:62671 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229680AbhKEPLO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 5 Nov 2021 11:11:14 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10158"; a="229377692"
-X-IronPort-AV: E=Sophos;i="5.87,212,1631602800"; 
-   d="scan'208";a="229377692"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2021 08:02:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,212,1631602800"; 
-   d="scan'208";a="639841114"
-Received: from kuha.fi.intel.com ([10.237.72.166])
-  by fmsmga001.fm.intel.com with SMTP; 05 Nov 2021 08:02:08 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 05 Nov 2021 17:02:08 +0200
-Date:   Fri, 5 Nov 2021 17:02:08 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
-        bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, wcheng@codeaurora.org
-Subject: Re: [PATCH v3 6/7] usb: typec: qcom: Remove standalone qcom pm8150b
- typec driver
-Message-ID: <YYVHcHC1Gm92VxEM@kuha.fi.intel.com>
-References: <20211105033558.1573552-1-bryan.odonoghue@linaro.org>
- <20211105033558.1573552-7-bryan.odonoghue@linaro.org>
- <YYVG5DZJdNfZyj8x@kuha.fi.intel.com>
+        id S233497AbhKEPSQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Nov 2021 11:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233378AbhKEPSP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Nov 2021 11:18:15 -0400
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF41C061714;
+        Fri,  5 Nov 2021 08:15:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=vj1Y8Yv+t+83fnDU9eN1bFfDvaknUqC+W0ZNrx23L/U=; b=m9Pra
+        IbzxNsNJ113UP1/JZWfzDx+yYKJVoAh7ltJ2/bgX2A2gAgCzg0r6hciQFnn6672sHIdl+3ZPPI0V/
+        SrF5yj/FnTte56oYpbmQ5w2CA/1LprZAoJ/7JIVUwgcSJegSNpJEh2jXWM7dUn+1cTx3Zzm5o38di
+        r8IihhsWigOsJzuPWQT6jg0hSSGOwvsbZ8fp6Fp7cOlVY5t5RK86xK5sl6qAcp/rlct+vaSTIcbpM
+        jR+9oxi5D6VamP+9jReAR9bVWVPxanM6OTNcUTRPxHtfCwyefv9+0l64Tyxtv9j/rSabjjcCx8rGR
+        s3YDT9pafAyxrCof1MaYXZbqouh5w==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1mj0wC-0004zX-Kg; Fri, 05 Nov 2021 15:15:28 +0000
+Date:   Fri, 5 Nov 2021 15:15:27 +0000
+From:   John Keeping <john@metanate.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v2] usb: dwc2: hcd_queue: Fix use of floating point
+ literal
+Message-ID: <YYVKj/+4snhK6/vs@donbot>
+References: <20211105145802.2520658-1-nathan@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YYVG5DZJdNfZyj8x@kuha.fi.intel.com>
+In-Reply-To: <20211105145802.2520658-1-nathan@kernel.org>
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 05, 2021 at 04:59:53PM +0200, Heikki Krogerus wrote:
-> On Fri, Nov 05, 2021 at 03:35:57AM +0000, Bryan O'Donoghue wrote:
-> > Remove the standalone PMIC Type-C driver. We have implemented a full TCPM
-> > driver which covers and extends the functionality in this driver.
-> > 
-> > Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> > ---
-> >  drivers/usb/typec/Kconfig           |  13 --
-> >  drivers/usb/typec/Makefile          |   1 -
-> >  drivers/usb/typec/qcom-pmic-typec.c | 262 ----------------------------
-> >  3 files changed, 276 deletions(-)
-> >  delete mode 100644 drivers/usb/typec/qcom-pmic-typec.c
-> > 
-> > diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
-> > index ab480f38523aa..61fba7bd1671d 100644
-> > --- a/drivers/usb/typec/Kconfig
-> > +++ b/drivers/usb/typec/Kconfig
-> > @@ -75,19 +75,6 @@ config TYPEC_STUSB160X
-> >  	  If you choose to build this driver as a dynamically linked module, the
-> >  	  module will be called stusb160x.ko.
-> >  
-> > -config TYPEC_QCOM_PMIC
-> > -	tristate "Qualcomm PMIC USB Type-C driver"
-> > -	depends on ARCH_QCOM || COMPILE_TEST
-> > -	depends on USB_ROLE_SWITCH || !USB_ROLE_SWITCH
-> > -	help
-> > -	  Driver for supporting role switch over the Qualcomm PMIC.  This will
-> > -	  handle the USB Type-C role and orientation detection reported by the
-> > -	  QCOM PMIC if the PMIC has the capability to handle USB Type-C
-> > -	  detection.
-> > -
-> > -	  It will also enable the VBUS output to connected devices when a
-> > -	  DFP connection is made.
+On Fri, Nov 05, 2021 at 07:58:03AM -0700, Nathan Chancellor wrote:
+> A new commit in LLVM causes an error on the use of 'long double' when
+> '-mno-x87' is used, which the kernel does through an alias,
+> '-mno-80387' (see the LLVM commit below for more details around why it
+> does this).
 > 
-> I don't like that you create point where the support is temporarily
-> removed for this hardware. I know Guenter asked that you remove the
-> old driver in a separate patch, but I believe at that point you were
-> also proposing different config option name for the new driver, so you
-> could have removed the old driver only after you added the new one.
+>  drivers/usb/dwc2/hcd_queue.c:1744:25: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
+>                          delay = ktime_set(0, DWC2_RETRY_WAIT_DELAY);
+>                                              ^
+>  drivers/usb/dwc2/hcd_queue.c:62:34: note: expanded from macro 'DWC2_RETRY_WAIT_DELAY'
+>  #define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
+>                                  ^
+>  1 error generated.
 > 
-> Since you now use the same configuration option name - which makes
-> perfect sense to me - I think you need to refactor this series. Maybe
-> you could first just move the old driver under drivers/usb/typec/tcpm/
-> in one patch, and then modify and slit it in another patch.
+> This happens due to the use of a 'long double' literal. The 'E6' part of
+> '1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
+> it to 'long double'.
+> 
+> There is no visible reason for a floating point value in this driver, as
+> the value is only used as a parameter to a function that expects an
+> integer type. Use NSEC_PER_MSEC, which is the same integer value as
+> '1E6L', to avoid changing functionality but fix the error.
+> 
+> Fixes: 6ed30a7d8ec2 ("usb: dwc2: host: use hrtimer for NAK retries")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1497
+> Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Or just merge this patch to the next one.
+Reviewed-by: John Keeping <john@metanate.com>
 
-thanks,
-
--- 
-heikki
+> ---
+> 
+> v1 -> v2: https://lore.kernel.org/r/20211104215923.719785-1-nathan@kernel.org/
+> 
+> * Use NSEC_PER_MSEC instead of USEC_PER_SEC, as the units of the second
+>   parameter of ktime_set is nanoseconds. Thanks to John Keeping for
+>   pointing this out.
+> 
+> * Pick up Nick's review tag.
+> 
+>  drivers/usb/dwc2/hcd_queue.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/dwc2/hcd_queue.c b/drivers/usb/dwc2/hcd_queue.c
+> index 89a788326c56..24beff610cf2 100644
+> --- a/drivers/usb/dwc2/hcd_queue.c
+> +++ b/drivers/usb/dwc2/hcd_queue.c
+> @@ -59,7 +59,7 @@
+>  #define DWC2_UNRESERVE_DELAY (msecs_to_jiffies(5))
+>  
+>  /* If we get a NAK, wait this long before retrying */
+> -#define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
+> +#define DWC2_RETRY_WAIT_DELAY (1 * NSEC_PER_MSEC)
+>  
+>  /**
+>   * dwc2_periodic_channel_available() - Checks that a channel is available for a
+> 
+> base-commit: d4439a1189f93d0ac1eaf0197db8e6b3e197d5c7
+> -- 
+> 2.34.0.rc0
+> 
