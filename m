@@ -2,98 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1B74463DA
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 14:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 898F4446429
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 14:30:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232280AbhKENLr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Nov 2021 09:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37030 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbhKENLq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Nov 2021 09:11:46 -0400
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACCAC061714;
-        Fri,  5 Nov 2021 06:09:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=Bz8cdhZXbt7ZToRTPSoSmYiw1e6Kd14GIZdjGatloIw=; b=zM41P
-        +/C+xf1ELT2qg/fxigElKjTpMaNsB8GtPzYCWMNnz/nQ6LXTfvxS8IHTWXkDci7TPzv25M4uVsBAh
-        42aSZ/4QW6q2ALr/O2k4H2IxAsb1uzSXyjenG6LCKvmNZALKVvXVv8DnXfOUgBqB9pQSWtNTFEvWB
-        aSt+pw+lfZJSpJn4QAB+Cv/rdu5c+11yhGyDWhYNyL7+ND4EG2O1UGx05exjtCiFpeBa1ItiGKjro
-        mALuRN4lMd1unQMuP9dVL6/2WKXDxzushe9dtNngJ0amEhe/cnqn1nu8+uF800u7ZhcdG71vQ6YO5
-        xom+1Gzl9qRGxJ770Fpvcpbh7GxQg==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1miyxl-0003RI-Pv; Fri, 05 Nov 2021 13:08:57 +0000
-Date:   Fri, 5 Nov 2021 13:08:48 +0000
-From:   John Keeping <john@metanate.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Minas Harutyunyan <hminas@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+        id S232960AbhKENdb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Nov 2021 09:33:31 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:51129 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S232861AbhKENda (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Nov 2021 09:33:30 -0400
+Received: (qmail 1591166 invoked by uid 1000); 5 Nov 2021 09:30:50 -0400
+Date:   Fri, 5 Nov 2021 09:30:50 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        "Walt Jr. Brake" <mr.yming81@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Nishad Kamdar <nishadkamdar@gmail.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] usb: dwc2: hcd_queue: Fix use of floating point literal
-Message-ID: <YYUs4PME9QizsPTt@donbot>
-References: <20211104215923.719785-1-nathan@kernel.org>
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Eddie Hung <eddie.hung@mediatek.com>
+Subject: Re: [PATCH v2] usb: core: reduce power-on-good delay time of root hub
+Message-ID: <20211105133050.GA1590803@rowland.harvard.edu>
+References: <1618017645-12259-1-git-send-email-chunfeng.yun@mediatek.com>
+ <5e907ccd-40bb-2ece-fe05-1a65a74f3aa2@gmail.com>
+ <20211101140613.GC1456700@rowland.harvard.edu>
+ <3cf46eaf-5443-30df-6d72-b92a6a518afc@linux.intel.com>
+ <62d0ac30-f2b9-f58c-cb1e-215ccb455753@gmail.com>
+ <13d55059-9f66-8599-54fc-46698bae41d1@linux.intel.com>
+ <YYUAv5456iyuxaG6@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20211104215923.719785-1-nathan@kernel.org>
-X-Authenticated: YES
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YYUAv5456iyuxaG6@kroah.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 04, 2021 at 02:59:23PM -0700, Nathan Chancellor wrote:
-> A new commit in LLVM causes an error on the use of 'long double' when
-> '-mno-x87' is used, which the kernel does through an alias,
-> '-mno-80387' (see the LLVM commit below for more details around why it
-> does this).
+On Fri, Nov 05, 2021 at 11:00:31AM +0100, Greg Kroah-Hartman wrote:
+> On Wed, Nov 03, 2021 at 10:37:33PM +0200, Mathias Nyman wrote:
+> > On 2.11.2021 22.29, Walt Jr. Brake wrote:
+> > > On 2/11/2021 17:05, Mathias Nyman wrote:
+> > >> On 1.11.2021 16.06, Alan Stern wrote:
+> > >>> On Sat, Oct 30, 2021 at 12:49:37PM +0800, Walt Jr. Brake wrote:
+> > >>>> This patch make USB 3.1 device cannot be detected, and I report the bug [1]
+> > >>>> to archlinux three month ago. Yesterday I try to fix it myself, and after I
+> > >>>> revert this patch, compile the kernel and test, it works.
+> > >>>>
+> > >>>> [1] https://bugs.archlinux.org/task/71660?project=1&pagenum=2
+> > >>>>
+> > >>>>
+> > >>>> diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+> > >>>> index 22ea1f4f2d66..73f4482d833a 100644
+> > >>>> --- a/drivers/usb/core/hub.h
+> > >>>> +++ b/drivers/usb/core/hub.h
+> > >>>> @@ -148,10 +148,8 @@ static inline unsigned hub_power_on_good_delay(struct
+> > >>>> usb_hub *hub)
+> > >>>>   {
+> > >>>>          unsigned delay = hub->descriptor->bPwrOn2PwrGood * 2;
+> > >>>>
+> > >>>> -       if (!hub->hdev->parent) /* root hub */
+> > >>>> -               return delay;
+> > >>>> -       else /* Wait at least 100 msec for power to become stable */
+> > >>>> -               return max(delay, 100U);
+> > >>>> +       /* Wait at least 100 msec for power to become stable */
+> > >>>> +       return max(delay, 100U);
+> > >>>>   }
+> > >>> Mathias:
+> > >>>
+> > >>> It looks like the bPwrOn2PwrGood value in xhci-hcd's hub descriptor is
+> > >>> too small for some USB 3.1 devices.
+> > >>>
+> > >>> Can you look into this?
+> > >>>
+> > >>> Alan Stern
+> > >>>
+> > >> At first glance the xhci roothub bPwrOn2PwrGood value looks ok.
+> > >> xhci spec 5.4.8 states software should wait 20ms after asserting PP, before
+> > >> attempting to change the state of the port.
+> > >>
+> > >> xhci driver sets desc->bPwrOn2PwrGood = 10; (2ms interval, so equals 20ms )
+> > >>
+> > >> We should probably get this working immediately, so maybe revert that patch
+> > >> while looking into the rootcause.
+> > >>
+> > >> Walt Jr. Brake, instead of reverting that patch, could you test if changing the
+> > >> xhci roothub bPwrOn2PwrGood value helps.
+> > >>
+> > >> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+> > >> index a3f875eea751..756231a55602 100644
+> > >> --- a/drivers/usb/host/xhci-hub.c
+> > >> +++ b/drivers/usb/host/xhci-hub.c
+> > >> @@ -257,7 +257,7 @@ static void xhci_common_hub_descriptor(struct xhci_hcd *xhci,
+> > >>   {
+> > >>          u16 temp;
+> > >>   -       desc->bPwrOn2PwrGood = 10;      /* xhci section 5.4.9 says 20ms max */
+> > >> +       desc->bPwrOn2PwrGood = 50;      /* The 20ms in xhci 5.4.8 isn't enough for USB 3.1 */
+> > >>          desc->bHubContrCurrent = 0;
+> > >>            desc->bNbrPorts = ports;
+> > >>
+> > >> Thanks
+> > >> -Mathias
+> > > 
+> > > Mathias:
+> > > 
+> > > Sorry to reply lately. I test with your patch, it works.
+> > > 
+> > > I also test with setting bPwrOn2PwrGood to 45, and it not work.
+> > > 
+> > > Seems that the minimal value should be 50 for this case.
+> > > 
+> > 
+> > Thanks for testing, and for checking that 90ms wait isn't enough
 > 
->  drivers/usb/dwc2/hcd_queue.c:1744:25: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
->                          delay = ktime_set(0, DWC2_RETRY_WAIT_DELAY);
->                                              ^
->  drivers/usb/dwc2/hcd_queue.c:62:34: note: expanded from macro 'DWC2_RETRY_WAIT_DELAY'
->  #define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
->                                  ^
->  1 error generated.
-> 
-> This happens due to the use of a 'long double' literal. The 'E6' part of
-> '1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
-> it to 'long double'.
-> 
-> There is no visible reason for a floating point value in this driver, as
-> the value is only used as a parameter to a function that expects an
-> integer type.  Use USEC_PER_SEC, which is the same integer value as
-> '1E6L', to avoid changing functionality but fix the error.
-> 
-> Fixes: 6ed30a7d8ec2 ("usb: dwc2: host: use hrtimer for NAK retries")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1497
-> Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/usb/dwc2/hcd_queue.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc2/hcd_queue.c b/drivers/usb/dwc2/hcd_queue.c
-> index 89a788326c56..bdf1927e1be1 100644
-> --- a/drivers/usb/dwc2/hcd_queue.c
-> +++ b/drivers/usb/dwc2/hcd_queue.c
-> @@ -59,7 +59,7 @@
->  #define DWC2_UNRESERVE_DELAY (msecs_to_jiffies(5))
->  
->  /* If we get a NAK, wait this long before retrying */
-> -#define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
-> +#define DWC2_RETRY_WAIT_DELAY (1 * USEC_PER_SEC)
+> Can you send a "real" patch for this so I can get it into the tree soon
+> to resolve the regression?
 
-Using USEC_PER_SEC here seems quite weird.  This is used as:
+Also, it might make sense to move the desc->bPwrOn2PwrGood setting from 
+xhci_common_hub_descriptor into the speed-specific routines.  For the 
+USB-2 root hub the value can remain set to 10; only the USB-3 root hub 
+needs to be changed.
 
-	delay = ktime_set(0, DWC2_RETRY_WAIT_DELAY);
-
-so the units are nanoseconds.
-
-Maybe NSEC_PER_MSEC would better indicate the intent here?
+Alan Stern
