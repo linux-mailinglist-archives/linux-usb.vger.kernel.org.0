@@ -2,100 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 103774468B5
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 19:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C16B44468F1
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 20:24:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232304AbhKES7E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Nov 2021 14:59:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59042 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229722AbhKES7C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 5 Nov 2021 14:59:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 09B1961242
-        for <linux-usb@vger.kernel.org>; Fri,  5 Nov 2021 18:56:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636138583;
-        bh=//JIY3OoDh6sIzx45A2hdJl8MapcfJeLas8ROWrb3nM=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=E/0YCPxZQd5SR+d5WfyNNt+cGlWFL3T+poWumIAolRKTmBJbfZMe8t7+lbHKBtYw0
-         S27ruw3kdWeqmrNFdjI2FCW2I3huVX0sZzICCMVp2tIAPCNrUESKzDsXeDWj9NJHdU
-         rT/rrRJ5Ac0WwYqBx0I+4iy8ww4dWCrqQPLrZH7U8sCD13eQXQy8HViDUgXMNeb4vO
-         uTN/OipGBAIORNYk9a76QJXRwc1tkmO9gpqVNxRP4bHLjDzfXLt62fWDF1+0zX4bjg
-         eLCrRsLfBEoT0xgTTGVF1xqHmcl85Xdzgii1Y/U4FZlPheW/8w0cX7qaAK5Xoe+MU3
-         DdOsfzdx/uvZg==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id EF4DD61108; Fri,  5 Nov 2021 18:56:22 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 214789] ehci-hcd.c ISR
-Date:   Fri, 05 Nov 2021 18:56:22 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: scott.c.arnold@nasa.gov
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-214789-208809-FQns2um8K0@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-214789-208809@https.bugzilla.kernel.org/>
-References: <bug-214789-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S233325AbhKET1O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Nov 2021 15:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230318AbhKET1N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Nov 2021 15:27:13 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93AB3C061714;
+        Fri,  5 Nov 2021 12:24:33 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id bk26so14822388oib.11;
+        Fri, 05 Nov 2021 12:24:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XQeAgDVPrMatGxUAJnx2FSGsJF127xSHo+APhMk0Q58=;
+        b=dzKRNza/f9HSFkZgirZnErPLvbZzUQ643ru/Nixx/s7W9D734aEKI/NTA2ieGROHOR
+         PRh5CpstQaXWEq0ik1/D7UV5MS67rZAeceHReE+GkqEOMoemiKuZ/cHx9STcAhJqqrb6
+         FjZfbuocS+5V024M9GvKNCIri8arGagS1bHasnIdtNMiOyZ52d5qTjfjYzlgz25WM4Zh
+         QxsZlGP+9Juai8/ZJns8OjXVvs0gHDeUaPqmC5gZXKHcQ3hdkB0T7ysDvmTDED+fADs7
+         3HuJuZQdDiuspORZW3uMF+2I1KtpflqrWgb1AYcV9+WlDZ93r72yef+cOBpfRq95jpeG
+         PYag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=XQeAgDVPrMatGxUAJnx2FSGsJF127xSHo+APhMk0Q58=;
+        b=rO+Tff7iGpKURQubokO3RHpK8hMjsrc4iR4XAk5M+kT3AlZV6WkmaoIxSaL6X7F4xl
+         p45J6C7CZlHA7yOpYy2w8+KYk4A3Ajmxz3tdXFERoMkHS3IGcDSqHkerlZLPR0J+r4ut
+         c2jmqEsUnGpADCtVXr0ZBuDRDuLtrXdpHCi8zgHkiQ0++v6bNdoO4sAUlE+sSRYsT0/w
+         cSxTb9TYMlmsano6bWKZWy4EOUkOXrW3sYVjUW0kxgd3SkfFp3oyA+sEcUMJ+N8xYSFD
+         Mz7UsW57sQSpG4sMdVlrZx8KF0tql+95ISNcTpsRWkiG8cSRlXgArV6tQ+Xcglpvs6Wy
+         y5qQ==
+X-Gm-Message-State: AOAM533E1DnZ+sfdovBKw54/MNmTWHSAZV9ciN63rMdi/zaxDHFtmljY
+        5au/QCXAk6ojk80fiOBrPNdCyVFMHug=
+X-Google-Smtp-Source: ABdhPJyFcGJRVn9ejLzO7BhRak/280TJjRSiro7mkoi8DjY79g9D9SLq+YWJKALObw3WIl1h57lWyg==
+X-Received: by 2002:aca:1b07:: with SMTP id b7mr7908598oib.178.1636140272966;
+        Fri, 05 Nov 2021 12:24:32 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r5sm2716496oov.48.2021.11.05.12.24.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Nov 2021 12:24:32 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 5 Nov 2021 12:24:30 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        gregkh@linuxfoundation.org, bjorn.andersson@linaro.org,
+        robh+dt@kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        wcheng@codeaurora.org
+Subject: Re: [PATCH v3 6/7] usb: typec: qcom: Remove standalone qcom pm8150b
+ typec driver
+Message-ID: <20211105192430.GA1449812@roeck-us.net>
+References: <20211105033558.1573552-1-bryan.odonoghue@linaro.org>
+ <20211105033558.1573552-7-bryan.odonoghue@linaro.org>
+ <YYVG5DZJdNfZyj8x@kuha.fi.intel.com>
+ <YYVHcHC1Gm92VxEM@kuha.fi.intel.com>
+ <749a058d-a16d-3a92-25b6-97afcfaa7787@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <749a058d-a16d-3a92-25b6-97afcfaa7787@linaro.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214789
+On Fri, Nov 05, 2021 at 04:05:37PM +0000, Bryan O'Donoghue wrote:
+> 
+> > > 
+> > > I don't like that you create point where the support is temporarily
+> > > removed for this hardware. I know Guenter asked that you remove the
+> > > old driver in a separate patch, but I believe at that point you were
+> > > also proposing different config option name for the new driver, so you
+> > > could have removed the old driver only after you added the new one.
+> > > 
+> > > Since you now use the same configuration option name - which makes
+> > > perfect sense to me - I think you need to refactor this series. Maybe
+> > > you could first just move the old driver under drivers/usb/typec/tcpm/
+> > > in one patch, and then modify and slit it in another patch.
+> 
+> No problem with this in principle
+> 
+> > Or just merge this patch to the next one.
+> 
+> I think this for preference unless Guenter has an objection .. easier/less
+> work
 
---- Comment #23 from Scott Arnold (scott.c.arnold@nasa.gov) ---
-pci=3Dnoioapicquirk fixes it.
+I understand the logic, so I won't object. Note that I may not have time
+to review the resulting patch if it ends up changing the same source file
+to replace one driver with another.
 
------Original Message-----
-From: bugzilla-daemon@bugzilla.kernel.org <bugzilla-daemon@bugzilla.kernel.=
-org>=20
-Sent: Monday, November 1, 2021 2:41 PM
-To: Arnold, Scott C. (JSC-CD13)[SGT, INC] <scott.c.arnold@nasa.gov>
-Subject: [EXTERNAL] [Bug 214789] ehci-hcd.c ISR
-
-https://gcc02.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fbugzill=
-a.kernel.org%2Fshow_bug.cgi%3Fid%3D214789&amp;data=3D04%7C01%7Cscott.c.arno=
-ld%40nasa.gov%7C5df722eafbb3426ea8e708d99d6f8ef1%7C7005d45845be48ae8140d43d=
-a96dd17b%7C0%7C0%7C637713924742064413%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wL=
-jAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=3Dhb=
-1Mm3rBbLg%2FUZQIk8WY0Pr%2BSqo9XBRJBLS2vmapYio%3D&amp;reserved=3D0
-
---- Comment #20 from Alan Stern (stern@rowland.harvard.edu) --- There were =
-no
-significant changes at all to the ehci-hcd driver between 5.6.1 and 5.7.1.=
-=20
-Which indicates that the cause of the problem lies somewhere else in the
-kernel.
-
-At this point, your best approach would be to carry out a git bisect between
-those two kernel versions.  Or maybe just between 5.6 and 5.7 (I assume that
-5.6 is okay, just like 5.6.1, and 5.7 is bad, just like 5.7.1).  That would=
- let
-you identify the exact commit where the problem started.
-
---
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You reported the bug.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Guenter
