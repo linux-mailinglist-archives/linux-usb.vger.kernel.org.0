@@ -2,128 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C904467E4
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 18:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C0A24467F4
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Nov 2021 18:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234284AbhKERa3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Nov 2021 13:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        id S234405AbhKERfY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Nov 2021 13:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233214AbhKERa1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Nov 2021 13:30:27 -0400
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDD0C061714;
-        Fri,  5 Nov 2021 10:27:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=+EuADCz3KxLfauAaV/cM2d29LIe6kmYoyUrEWCMg+Zo=; b=J/8UR
-        EG6RyEwhcRUBO2MsYIDTBLBsj3HYwQAaTw6dtCciJY5gJyB8rxDYniJZh8TN3yK3LF8mi7WFSzVQF
-        JHI63LW6Q1O1aVWtlSEt+VnuPaVvwGhrAUNAkUA4qe9H73ZhiN5qbJoid6XlvV7MhZ3F1dygCD+qZ
-        lwwsLGqnU3YlPPrKljNdcHGLKrNyw79Uy1yNiHSbKe6AQ0E8xgMkhR6Xj6Gf08rgX3JBE/GVlmrLy
-        M99U+15s8Zgkst9UY0YBD2T3sBj55h/fPneGrAY8PttCLFJSFZhav1NcjMXXrZ6r7t8so82lR1wv5
-        Ad+prBXILYLDR0sAg04oPY3avGShg==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1mj30A-0006gp-HL; Fri, 05 Nov 2021 17:27:42 +0000
-Date:   Fri, 5 Nov 2021 17:27:36 +0000
-From:   John Keeping <john@metanate.com>
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, John Youn <John.Youn@synopsys.com>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: dwc2: gadget: Fix ISOC flow for elapsed frames
-Message-ID: <YYVpiEpm+kjDRePK@donbot>
-References: <c356baade6e9716d312d43df08d53ae557cb8037.1636011277.git.Minas.Harutyunyan@synopsys.com>
+        with ESMTP id S232969AbhKERfV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Nov 2021 13:35:21 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55955C061714;
+        Fri,  5 Nov 2021 10:32:41 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id g184so8942460pgc.6;
+        Fri, 05 Nov 2021 10:32:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2OWM37nBksJ7gayzdgOjUg6cXZHlid4wQ9drsluV0C8=;
+        b=DQRxCNEXF7tlNikiQLw63G8Y+Dsn+L66+H84HjfKEy4BscuewNUkH2sgfXMLDJHfAn
+         70hvD+26uYuolr0JBLTX7LtSCK6egOPeJcWkkXSUqR47XBKqYXNzph3T2TD/mTuAlTFs
+         lSnLFZ6A7rH74GeBag2mVNjv5gEry5gBlqYGUO+rQKkDtTrT559Rxam15FBmwuh7s7M5
+         QLsW7fuznfV9dng22XiNlj+vpyAL6rnI5cnRTja8k7MrhEX22LWkKABdX4Dnj87Nfrly
+         8XKsVaHG3cvhJMfAKbLZlnEEYT5fXydHJ+ZzsJMDbF//OLuIrxEZEkMCcJwQ0c96nr7M
+         ZtqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2OWM37nBksJ7gayzdgOjUg6cXZHlid4wQ9drsluV0C8=;
+        b=ldm22MS6YSsPqjEtVpKZITvxzXdxAfyYFVpmaEmLMpMBU9pZg8eVEO1eHTXxh22nCw
+         7aRCgi0EjRXSHw0VUmcmSnMmS0+U9KK4a4EsLa0FS45lS9R3/Y4jPKL/8EBMPBaOVpSO
+         QlTilt4xoQKo55CjVnpg6LsBkEyFJ7gYUBUaxZq9srnfTEOIJWsJR+yKAiyzXM9B28kT
+         HdQA9r7brEKFeCR2PjzH6q+n05zSxDDl4p7epgJfFb1kQEk6OA5Pr+v7kOiSrD0WZCpp
+         Dr+xpaw2hI8KJWtJNJ362Eldt3CdRJ8e06nX6NPJC/+11sSQesUgcdEnSXQHnj2+ehgS
+         rMFg==
+X-Gm-Message-State: AOAM531M9eZ/uAVdbgzKU8QHF1duzbgdEZYNn5MccRWhf8pTpOzhT2Ja
+        QhR9TTgHZxvye1PKuXziz+I=
+X-Google-Smtp-Source: ABdhPJykHZw2/9QJGdkoo4Kk9zk/Gp1KOr83+sK4tkJl24z/KpiwOjB5LZro7ajFk49kLCes0PrJww==
+X-Received: by 2002:a65:62c4:: with SMTP id m4mr46146521pgv.453.1636133560906;
+        Fri, 05 Nov 2021 10:32:40 -0700 (PDT)
+Received: from [192.168.50.188] (67.218.130.61.16clouds.com. [67.218.130.61])
+        by smtp.gmail.com with ESMTPSA id s25sm7683062pfm.138.2021.11.05.10.32.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Nov 2021 10:32:40 -0700 (PDT)
+Message-ID: <8301c7f7-4c63-5681-af53-9edc67d96d17@gmail.com>
+Date:   Sat, 6 Nov 2021 01:32:32 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c356baade6e9716d312d43df08d53ae557cb8037.1636011277.git.Minas.Harutyunyan@synopsys.com>
-X-Authenticated: YES
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] xhci: Fix USB 3.1 enumeration issues by increasing
+ roothub power-on-good delay
+Content-Language: en-US
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     chunfeng.yun@mediatek.com, matthias.bgg@gmail.com,
+        nishadkamdar@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, eddie.hung@mediatek.com,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg KH <gregkh@linuxfoundation.org>
+References: <20211105133050.GA1590803@rowland.harvard.edu>
+ <20211105160036.549516-1-mathias.nyman@linux.intel.com>
+ <96925c96-0f87-f110-e279-5b669337948a@linux.intel.com>
+From:   "Walt Jr. Brake" <mr.yming81@gmail.com>
+In-Reply-To: <96925c96-0f87-f110-e279-5b669337948a@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 04, 2021 at 11:36:01AM +0400, Minas Harutyunyan wrote:
-> Added updating of request frame number for elapsed frames,
-> otherwise frame number will remain as previous use of request.
-> This will allow function driver to correctly track frames in
-> case of Missed ISOC occurs.
-> 
-> Added setting request actual length to 0 for elapsed frames.
-> In Slave mode when pushing data to RxFIFO by dwords, request
-> actual length incrementing accordingly. But before whole packet
-> will be pushed into RxFIFO and send to host can occurs Missed
-> ISOC and data will not send to host. So, in this case request
-> actual length should be reset to 0.
-> 
-> Fixes: 91bb163e1e4f ("usb: dwc2: gadget: Fix ISOC flow for BDMA and Slave")
-> Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+On 6/11/2021 00:09, Mathias Nyman wrote:
+> On 5.11.2021 18.00, Mathias Nyman wrote:
+>> Some USB 3.1 enumeration issues were reported after the hub driver removed
+>> the minimum 100ms limit for the power-on-good delay.
+>>
+>> Since commit 90d28fb53d4a ("usb: core: reduce power-on-good delay time of
+>> root hub") the hub driver sets the power-on-delay based on the
+>> bPwrOn2PwrGood value in the hub descriptor.
+>>
+>> xhci driver has a 20ms bPwrOn2PwrGood value for both roothubs based
+>> on xhci spec section 5.4.8, but it's clearly not enough for the
+>> USB 3.1 devices, causing enumeration issues.
+>>
+>> Tests indicate full 100ms delay is needed.
+>>
+>> Reported-by: Walt Jr. Brake <mr.yming81@gmail.com>
+>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>
+> Walt Jr Brake, just to be sure could you test this one as well?
+>
+> As Alan suggested this sets 100ms for the USB 3 roothub but
+> keeps the 20ms for the USB 2 roothub.
+>
+> Thanks
+> -Mathias
 
-Reviewed-by: John Keeping <john@metanate.com>
+Yes I tested, it works too.
 
-> ---
->  drivers/usb/dwc2/gadget.c | 17 ++++++++++++++---
->  1 file changed, 14 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-> index 11d85a6e0b0d..2190225bf3da 100644
-> --- a/drivers/usb/dwc2/gadget.c
-> +++ b/drivers/usb/dwc2/gadget.c
-> @@ -1198,6 +1198,8 @@ static void dwc2_hsotg_start_req(struct dwc2_hsotg *hsotg,
->  			}
->  			ctrl |= DXEPCTL_CNAK;
->  		} else {
-> +			hs_req->req.frame_number = hs_ep->target_frame;
-> +			hs_req->req.actual = 0;
->  			dwc2_hsotg_complete_request(hsotg, hs_ep, hs_req, -ENODATA);
->  			return;
->  		}
-> @@ -2857,9 +2859,12 @@ static void dwc2_gadget_handle_ep_disabled(struct dwc2_hsotg_ep *hs_ep)
->  
->  	do {
->  		hs_req = get_ep_head(hs_ep);
-> -		if (hs_req)
-> +		if (hs_req) {
-> +			hs_req->req.frame_number = hs_ep->target_frame;
-> +			hs_req->req.actual = 0;
->  			dwc2_hsotg_complete_request(hsotg, hs_ep, hs_req,
->  						    -ENODATA);
-> +		}
->  		dwc2_gadget_incr_frame_num(hs_ep);
->  		/* Update current frame number value. */
->  		hsotg->frame_number = dwc2_hsotg_read_frameno(hsotg);
-> @@ -2912,8 +2917,11 @@ static void dwc2_gadget_handle_out_token_ep_disabled(struct dwc2_hsotg_ep *ep)
->  
->  	while (dwc2_gadget_target_frame_elapsed(ep)) {
->  		hs_req = get_ep_head(ep);
-> -		if (hs_req)
-> +		if (hs_req) {
-> +			hs_req->req.frame_number = ep->target_frame;
-> +			hs_req->req.actual = 0;
->  			dwc2_hsotg_complete_request(hsotg, ep, hs_req, -ENODATA);
-> +		}
->  
->  		dwc2_gadget_incr_frame_num(ep);
->  		/* Update current frame number value. */
-> @@ -3002,8 +3010,11 @@ static void dwc2_gadget_handle_nak(struct dwc2_hsotg_ep *hs_ep)
->  
->  	while (dwc2_gadget_target_frame_elapsed(hs_ep)) {
->  		hs_req = get_ep_head(hs_ep);
-> -		if (hs_req)
-> +		if (hs_req) {
-> +			hs_req->req.frame_number = hs_ep->target_frame;
-> +			hs_req->req.actual = 0;
->  			dwc2_hsotg_complete_request(hsotg, hs_ep, hs_req, -ENODATA);
-> +		}
->  
->  		dwc2_gadget_incr_frame_num(hs_ep);
->  		/* Update current frame number value. */
-> 
-> base-commit: c26f1c109d21f2ea874e4a85c0c76c385b8f46cb
-> -- 
-> 2.11.0
-> 
