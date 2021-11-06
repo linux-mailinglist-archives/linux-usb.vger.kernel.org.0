@@ -2,107 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D3A446BC4
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Nov 2021 02:25:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D60B446CD0
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Nov 2021 08:02:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233601AbhKFB2G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Nov 2021 21:28:06 -0400
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:20570 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233096AbhKFB2F (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Nov 2021 21:28:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1636161925; x=1667697925;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sglaOwUzHlzlCzVky4H9HY7VZv0OsVdHPN/wDLDLv40=;
-  b=AtSxkRCwxD0BF/jeo1kHoPhihRNS0Hiipzqi7p4Hx6YUoeVl/vQzWnku
-   1F7jHB4Qon8Ukmd7RyaRFAzCAhYbazCxz3fFYJznFHpzoMFfIlcJOxFtI
-   P2aGwYI3bNuv2X42UIBo/iDwAguFyXkL0FEmuI6kgNhx2TkY/uii4RblL
-   U=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 05 Nov 2021 18:25:25 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2021 18:25:25 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Fri, 5 Nov 2021 18:25:24 -0700
-Received: from jackp-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Fri, 5 Nov 2021 18:25:23 -0700
-Date:   Fri, 5 Nov 2021 18:25:17 -0700
-From:   Jack Pham <quic_jackp@quicinc.com>
-To:     Albert Wang <albertccwang@google.com>
-CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <badhri@google.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: Re: [PATCH] usb: dwc3: gadget: Fix null pointer exception
-Message-ID: <20211106012513.GA19852@jackp-linux.qualcomm.com>
-References: <20211104062616.948353-1-albertccwang@google.com>
+        id S233746AbhKFHFi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 6 Nov 2021 03:05:38 -0400
+Received: from mga11.intel.com ([192.55.52.93]:14001 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229946AbhKFHFh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 6 Nov 2021 03:05:37 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10159"; a="229494730"
+X-IronPort-AV: E=Sophos;i="5.87,213,1631602800"; 
+   d="scan'208";a="229494730"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2021 00:02:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,213,1631602800"; 
+   d="scan'208";a="490579455"
+Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 06 Nov 2021 00:02:53 -0700
+Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mjFj3-0008qC-4j; Sat, 06 Nov 2021 07:02:53 +0000
+Date:   Sat, 06 Nov 2021 15:02:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 439b08c57c3fe1df85cfe9d00accdf9b62cb3275
+Message-ID: <61862898.dcLULf4K1hbB8iox%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20211104062616.948353-1-albertccwang@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 04, 2021 at 02:26:16PM +0800, Albert Wang wrote:
-> In the endpoint interrupt functions
-> dwc3_gadget_endpoint_transfer_in_progress() and
-> dwc3_gadget_endpoint_trbs_complete() will dereference the endpoint
-> descriptor. But it could be cleared in __dwc3_gadget_ep_disable()
-> when accessory disconnected. So we need to check whether it is null
-> or not before dereferencing it.
-> 
-> Signed-off-by: Albert Wang <albertccwang@google.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 439b08c57c3fe1df85cfe9d00accdf9b62cb3275  Revert "usb: core: hcd: Add support for deferring roothub registration"
 
-Nice catch.  I think this might have been caused when the call to
-dwc3_remove_requests() in __dwc3_gadget_ep_disable() was moved after
-the endpoint descriptors is cleared.  So you can probably add:
+elapsed time: 1371m
 
-Fixes: f09ddcfcb8c5 ("usb: dwc3: gadget: Prevent EP queuing while
-stopping transfers").
+configs tested: 53
+configs skipped: 3
 
-Reviewed-by: Jack Pham <quic_jackp@quicinc.com>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> ---
->  drivers/usb/dwc3/gadget.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 23de2a5a40d6..83c7344888fd 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -3252,6 +3252,9 @@ static bool dwc3_gadget_endpoint_trbs_complete(struct dwc3_ep *dep,
->  	struct dwc3		*dwc = dep->dwc;
->  	bool			no_started_trb = true;
->  
-> +	if (!dep->endpoint.desc)
-> +		return no_started_trb;
-> +
->  	dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
->  
->  	if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
-> @@ -3299,6 +3302,9 @@ static void dwc3_gadget_endpoint_transfer_in_progress(struct dwc3_ep *dep,
->  {
->  	int status = 0;
->  
-> +	if (!dep->endpoint.desc)
-> +		return;
-> +
->  	if (usb_endpoint_xfer_isoc(dep->endpoint.desc))
->  		dwc3_gadget_endpoint_frame_from_event(dep, event);
->  
-> -- 
-> 2.33.1.1089.g2158813163f-goog
-> 
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allmodconfig
+arm                              allyesconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                                defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+s390                             allmodconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                              debian-10.3
+i386                             allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allyesconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                           allyesconfig
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
