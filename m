@@ -2,73 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C294473C3
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Nov 2021 17:25:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36EB04473FB
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Nov 2021 17:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235758AbhKGQ2i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 7 Nov 2021 11:28:38 -0500
-Received: from smtp09.smtpout.orange.fr ([80.12.242.131]:61462 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234472AbhKGQ2h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Nov 2021 11:28:37 -0500
-Received: from pop-os.home ([86.243.171.122])
-        by smtp.orange.fr with ESMTPA
-        id jkzNmTDaKf6fnjkzNmDULC; Sun, 07 Nov 2021 17:25:53 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 07 Nov 2021 17:25:53 +0100
-X-ME-IP: 86.243.171.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        michal.simek@xilinx.com, lee.jones@linaro.org,
-        jiapeng.chong@linux.alibaba.com, abaci-bugfix@linux.alibaba.com,
-        shubhrajyoti.datta@xilinx.com
-Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] usb: gadget: udc-xilinx: Fix an error handling path in 'xudc_probe()'
-Date:   Sun,  7 Nov 2021 17:25:48 +0100
-Message-Id: <ec61a89b83ce34b53a3bdaacfd1413a9869cc608.1636302246.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.30.2
+        id S235301AbhKGQvc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 7 Nov 2021 11:51:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235838AbhKGQva (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Nov 2021 11:51:30 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BF4C06120D
+        for <linux-usb@vger.kernel.org>; Sun,  7 Nov 2021 08:48:47 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id o14so14256137plg.5
+        for <linux-usb@vger.kernel.org>; Sun, 07 Nov 2021 08:48:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=3KhLtwCKP93j3EcWq+BGTsAWsp8Oi4eBuXX0Ov40ah8=;
+        b=TNg4tHoQw5kKoLZkiGTAZIxJzUBBq4ejYt4ncgOecgNOvSUwtqqwittPPI+7pJVjX+
+         GpTp2M0KfhRYRUpBRXEYVXnxqP/7lqMWjwkVgxSXQTHg4r801CGBH3Cxkr2xCA8iHpDQ
+         PkNioeCtNa8D4FxZOybE5F6kFZNCXIj5SS/5dluRY9kmgQGkqsgb/0EL9qYgh0jdJYEk
+         mgqrImAxVO9xLB3ph2REOdqPQUk3eSUgj070IZGlv2zYI0h97xHGiGSssFFZrlwEHWTd
+         7gJa3FlCIyQYHI4/knwR34TShiwqFLlPcy+ypePmUlRAZLKNrHzuj6T1hpUgZdGxUgLr
+         tNtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=3KhLtwCKP93j3EcWq+BGTsAWsp8Oi4eBuXX0Ov40ah8=;
+        b=O+jZrtcrdyhGxFeJxkgRgM+Ylj3/BrOZsKVBF36DHd466FYwrOkPtsdPe0zQ5mCYyx
+         FUs7dfBp94QA8fG63ETz9kgffmtFok56bIkUjUvEXhZBPxNW1PG4HAfZzq/x2l/UTBnV
+         dImdT3BE//cXlse6n9o1OjrcXcuqy3/G6hCehl+u3F/kDAHO6cR2AN3xx4fMZuEl5ZRX
+         0qSjdlKlHzv2iQmC0U2msIiBnp8QMCcfRID0q/yCYndGsnOhm9LDzEteDeGOq1cOfXkc
+         D12UrNIgRQmmBiGmwLT+B8JXXUEx374tt/To8vyuTwnprnXq04j+lqtzYn+77F9swfP4
+         nI4A==
+X-Gm-Message-State: AOAM5328UyqXB8cKEGyfLM8gvIP1z/ueGQPcBCSDxWXgN7CZVPkPuvw2
+        i7bgXMZY5f7ZYzcrbAwK5+PhLhxtLNRWTlJXrQ0=
+X-Google-Smtp-Source: ABdhPJxAeCOxzzTO2bC1ebInPX7TK42gu5RWx2Xb9R/R8imfArbHNs+vmtD0xqJ/WYY5NVOuLREd2E+dZSLVoRt6leo=
+X-Received: by 2002:a17:902:a60b:b0:142:7621:be0b with SMTP id
+ u11-20020a170902a60b00b001427621be0bmr4070721plq.58.1636303726736; Sun, 07
+ Nov 2021 08:48:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6a10:4a14:0:0:0:0 with HTTP; Sun, 7 Nov 2021 08:48:46
+ -0800 (PST)
+Reply-To: amabenchambers00@gmail.com
+From:   Amadou Benjamin <ousmanekarim54@gmail.com>
+Date:   Sun, 7 Nov 2021 08:48:46 -0800
+Message-ID: <CAJFAt4Zwu2DZNzEx2mhTp73fqWvHNwMrUMgOFZ==TBGW8S=HkA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A successful 'clk_prepare_enable()' call should be balanced by a
-corresponding 'clk_disable_unprepare()' call in the error handling path
-of the probe, as already done in the remove function.
-
-Fixes: 24749229211c ("usb: gadget: udc-xilinx: Add clock support")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/usb/gadget/udc/udc-xilinx.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
-index f5ca670776a3..857159dd5ae0 100644
---- a/drivers/usb/gadget/udc/udc-xilinx.c
-+++ b/drivers/usb/gadget/udc/udc-xilinx.c
-@@ -2136,7 +2136,7 @@ static int xudc_probe(struct platform_device *pdev)
- 
- 	ret = usb_add_gadget_udc(&pdev->dev, &udc->gadget);
- 	if (ret)
--		goto fail;
-+		goto err_disable_unprepare_clk;
- 
- 	udc->dev = &udc->gadget.dev;
- 
-@@ -2155,6 +2155,9 @@ static int xudc_probe(struct platform_device *pdev)
- 		 udc->dma_enabled ? "with DMA" : "without DMA");
- 
- 	return 0;
-+
-+err_disable_unprepare_clk:
-+	clk_disable_unprepare(udc->clk);
- fail:
- 	dev_err(&pdev->dev, "probe failed, %d\n", ret);
- 	return ret;
 -- 
-2.30.2
+Hello good day.
 
+I am Barrister Amadou Benjamin by name, with due respect, I am
+contacting you to help get the deposit 10.5 million Dollars, my late
+client Engineer Vasiliy left in his Bank before his sudden death on
+April 21, 2007, to avoid confiscation by Lloyds bank. Please write me
+back through this email (amabenchambers00@gmail.com)for more
+information about this transaction or send me your private email to
+Contact you myself.
+
+Sincerely,
+Barrister Amadou Benjamin Esq
