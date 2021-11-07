@@ -2,105 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7658447521
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Nov 2021 20:06:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A80E447663
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Nov 2021 23:45:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236227AbhKGTJl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 7 Nov 2021 14:09:41 -0500
-Received: from vps.xff.cz ([195.181.215.36]:41350 "EHLO vps.xff.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229990AbhKGTJk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 7 Nov 2021 14:09:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1636311444; bh=wy8oGQ/IddhtpuNDv1H1qik8p/4msedKxLoUzVvtIP4=;
-        h=Date:From:To:Subject:X-My-GPG-KeyId:References:From;
-        b=oqFaWNSlHR1aVbQM9c1jy+nJb8eLvHo3CuYpIvlBCHpMK3Wa33pG0F4YRm4PG66Zs
-         heNvziTOwtGUw9PO2wpD5fkhQQZZjNVxvoKg9hZl7zn3sV2I+0xYmcJaAK5EvcxDXo
-         GzKuDSdtsDuXkpk0WaARiHR0HelWEHp3RxiSzdyM=
-Date:   Sun, 7 Nov 2021 19:57:24 +0100
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        id S236634AbhKGWr7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 7 Nov 2021 17:47:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56690 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235853AbhKGWr6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Nov 2021 17:47:58 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E53CC061570;
+        Sun,  7 Nov 2021 14:45:15 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id l22so5248275lfg.7;
+        Sun, 07 Nov 2021 14:45:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nKLBpn7FGCZZeZkeg4yyWEeinAGCnOMxXV56UTFOBS4=;
+        b=Xq/JMX9Mm3gwhsTC4/pppefYLPxZ/81nUek6NZOo1sDQJgcHM2EFMoY3vUGw2g8UP7
+         aLf/hhmp+3oJKwbQVf3fhVsa/o0qA4x5OuCcpT4NJXkyfkAnGlXK1WQaQDBcLDO+ghCJ
+         VuufuRNkgM6g1onmcmNFzqnKd1On4APtGx+9fNu5NTPS8zeafTY443PSzEmfARD2AKE4
+         63XTUVP4kEKuv7qd9ZIWk0qiaAIJdMqvsh0dmlgp6LrThtTZyVFkUywrUTrh2j1udnJL
+         ckjfKj1iFIt+FJGKWLH/Rnc2yDGTQzuPBakXqfeEUevxXYSjU8deckGBGyljNznnKFhs
+         VcQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nKLBpn7FGCZZeZkeg4yyWEeinAGCnOMxXV56UTFOBS4=;
+        b=SNSEwGP4VuvTX+iouJt5+g+EFzaA8qCiCe2vFYGKj6S3Jwujwg5L/JoeWVzzhlSAJo
+         ny6C8NNE3Prywq1UyzgrXvKsxPRWS941HS+AjcP/I6qjaJ+U7yllh5/tqmCgHrGq+h0P
+         IhWFZgnPTghPMNv3Ze0zEvS8loaYgG6377ySxoYTNd103oPznHb9brYOubESsetFDnc2
+         IYOQxmBo+EOMaYDMyR3ie8A0s76hxI+Hw52iMNOTmKksWSLr0tI2+Nv0rjELXFJ5IIhv
+         OgC0pXWHrXA7MoYm0a2p30LQN+kgrDDckHiHdThqX160AftaQsXChsnvR0r+P8An26iW
+         gKhg==
+X-Gm-Message-State: AOAM532M9B2Y11tauAcaolvnglGg3jqO2We7xnamLz/KafY6YR1EgckT
+        XpljKGHY8+n/GRP4GUpa/+4=
+X-Google-Smtp-Source: ABdhPJw/QEZz8Nj+O4m7+v1Thm1A5ZYbZ6nMY7BKDsDZHxoWuG2sVof+JsydkMnIieSHa/WVrCiLVQ==
+X-Received: by 2002:a05:6512:1515:: with SMTP id bq21mr67688718lfb.71.1636325113581;
+        Sun, 07 Nov 2021 14:45:13 -0800 (PST)
+Received: from localhost.localdomain (79-139-188-96.dynamic.spd-mgts.ru. [79.139.188.96])
+        by smtp.gmail.com with ESMTPSA id z17sm1414244ljk.97.2021.11.07.14.45.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Nov 2021 14:45:13 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        "open list:USB TYPEC PORT CONTROLLER DRIVERS" 
-        <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 06/15] usb: typec: fusb302: Fix masking of comparator and
- bc_lvl interrupts
-Message-ID: <20211107185724.ik6wthsl3e6qlbj3@core>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        "open list:USB TYPEC PORT CONTROLLER DRIVERS" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20211107185435.2540185-1-megous@megous.com>
+        Mathias Nyman <mathias.nyman@intel.com>,
+        JC Kuo <jckuo@nvidia.com>,
+        Thomas Graichen <thomas.graichen@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH v3] usb: xhci: tegra: Check padctrl interrupt presence in device tree
+Date:   Mon,  8 Nov 2021 01:44:55 +0300
+Message-Id: <20211107224455.10359-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211107185435.2540185-1-megous@megous.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Older device-trees don't specify padctrl interrupt and xhci-tegra driver
+now fails to probe with -EINVAL using those device-trees. Check interrupt
+presence and keep runtime PM disabled if it's missing to fix the trouble.
 
-On Sun, Nov 07, 2021 at 07:54:33PM +0100, megous hlavni wrote:
-> The masks are swapped (interrupts are enabled when the mask is 0).
+Fixes: 971ee247060d ("usb: xhci: tegra: Enable ELPG for runtime/system PM")
+Cc: <stable@vger.kernel.org> # 5.14+
+Reported-by: Nicolas Chauvet <kwizart@gmail.com>
+Tested-by: Nicolas Chauvet <kwizart@gmail.com> # T124 TK1
+Tested-by: Thomas Graichen <thomas.graichen@gmail.com> # T124 Nyan Big
+Tested-by: Thierry Reding <treding@nvidia.com> # Tegra CI
+Acked-by: Thierry Reding <treding@nvidia.com>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
 
-Please ignore the 06/15 in the subject. This is just a single patch
-from my local series and I forgot to edit the subject.
+Changelog:
 
-kind regards,
-	o.
+v3: - Renamed 'irq_arg' to 'args' and extended debug message, like was
+      suggested by Thierry Reding.
 
-> This caused inability of the driver to recognize cable unplug events
-> in host mode (where only comparator interrupt is generated, and VBUS
-> interrupt is not).
-> 
-> Signed-off-by: Ondrej Jirman <megous@megous.com>
-> ---
->  drivers/usb/typec/tcpm/fusb302.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-> index 7a2a17866a823..72f9001b07921 100644
-> --- a/drivers/usb/typec/tcpm/fusb302.c
-> +++ b/drivers/usb/typec/tcpm/fusb302.c
-> @@ -669,25 +669,27 @@ static int tcpm_set_cc(struct tcpc_dev *dev, enum typec_cc_status cc)
->  		ret = fusb302_i2c_mask_write(chip, FUSB_REG_MASK,
->  					     FUSB_REG_MASK_BC_LVL |
->  					     FUSB_REG_MASK_COMP_CHNG,
-> -					     FUSB_REG_MASK_COMP_CHNG);
-> +					     FUSB_REG_MASK_BC_LVL);
->  		if (ret < 0) {
->  			fusb302_log(chip, "cannot set SRC interrupt, ret=%d",
->  				    ret);
->  			goto done;
->  		}
->  		chip->intr_comp_chng = true;
-> +		chip->intr_bc_lvl = false;
->  		break;
->  	case TYPEC_CC_RD:
->  		ret = fusb302_i2c_mask_write(chip, FUSB_REG_MASK,
->  					     FUSB_REG_MASK_BC_LVL |
->  					     FUSB_REG_MASK_COMP_CHNG,
-> -					     FUSB_REG_MASK_BC_LVL);
-> +					     FUSB_REG_MASK_COMP_CHNG);
->  		if (ret < 0) {
->  			fusb302_log(chip, "cannot set SRC interrupt, ret=%d",
->  				    ret);
->  			goto done;
->  		}
->  		chip->intr_bc_lvl = true;
-> +		chip->intr_comp_chng = false;
->  		break;
->  	default:
->  		break;
-> -- 
-> 2.33.1
-> 
+    - Added t-b from Thomas Graichen and ack from Thierry Reding.
+
+v2: - Use of_irq_parse_one() to check interrupt presence status in device-tree,
+      instead of checking interrupt properties directly.
+
+    - USB wakeup and runtime PM are kept disabled if interrupt is missing,
+      instead of returning -EOPNOTSUPP from RPM-suspend callback.
+
+    - Added debug message, telling about the missing interrupt.
+
+ drivers/usb/host/xhci-tegra.c | 41 +++++++++++++++++++++++++----------
+ 1 file changed, 29 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index 1bf494b649bd..c8af2cd2216d 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -1400,6 +1400,7 @@ static void tegra_xusb_deinit_usb_phy(struct tegra_xusb *tegra)
+ 
+ static int tegra_xusb_probe(struct platform_device *pdev)
+ {
++	struct of_phandle_args args;
+ 	struct tegra_xusb *tegra;
+ 	struct device_node *np;
+ 	struct resource *regs;
+@@ -1454,10 +1455,17 @@ static int tegra_xusb_probe(struct platform_device *pdev)
+ 		goto put_padctl;
+ 	}
+ 
+-	tegra->padctl_irq = of_irq_get(np, 0);
+-	if (tegra->padctl_irq <= 0) {
+-		err = (tegra->padctl_irq == 0) ? -ENODEV : tegra->padctl_irq;
+-		goto put_padctl;
++	/* Older device-trees don't have padctrl interrupt */
++	err = of_irq_parse_one(np, 0, &args);
++	if (!err) {
++		tegra->padctl_irq = of_irq_get(np, 0);
++		if (tegra->padctl_irq <= 0) {
++			err = (tegra->padctl_irq == 0) ? -ENODEV : tegra->padctl_irq;
++			goto put_padctl;
++		}
++	} else {
++		dev_dbg(&pdev->dev,
++			"%pOF is missing an interrupt, disabling PM support\n", np);
+ 	}
+ 
+ 	tegra->host_clk = devm_clk_get(&pdev->dev, "xusb_host");
+@@ -1696,11 +1704,15 @@ static int tegra_xusb_probe(struct platform_device *pdev)
+ 		goto remove_usb3;
+ 	}
+ 
+-	err = devm_request_threaded_irq(&pdev->dev, tegra->padctl_irq, NULL, tegra_xusb_padctl_irq,
+-					IRQF_ONESHOT, dev_name(&pdev->dev), tegra);
+-	if (err < 0) {
+-		dev_err(&pdev->dev, "failed to request padctl IRQ: %d\n", err);
+-		goto remove_usb3;
++	if (tegra->padctl_irq) {
++		err = devm_request_threaded_irq(&pdev->dev, tegra->padctl_irq,
++						NULL, tegra_xusb_padctl_irq,
++						IRQF_ONESHOT, dev_name(&pdev->dev),
++						tegra);
++		if (err < 0) {
++			dev_err(&pdev->dev, "failed to request padctl IRQ: %d\n", err);
++			goto remove_usb3;
++		}
+ 	}
+ 
+ 	err = tegra_xusb_enable_firmware_messages(tegra);
+@@ -1718,13 +1730,16 @@ static int tegra_xusb_probe(struct platform_device *pdev)
+ 	/* Enable wake for both USB 2.0 and USB 3.0 roothubs */
+ 	device_init_wakeup(&tegra->hcd->self.root_hub->dev, true);
+ 	device_init_wakeup(&xhci->shared_hcd->self.root_hub->dev, true);
+-	device_init_wakeup(tegra->dev, true);
+ 
+ 	pm_runtime_use_autosuspend(tegra->dev);
+ 	pm_runtime_set_autosuspend_delay(tegra->dev, 2000);
+ 	pm_runtime_mark_last_busy(tegra->dev);
+ 	pm_runtime_set_active(tegra->dev);
+-	pm_runtime_enable(tegra->dev);
++
++	if (tegra->padctl_irq) {
++		device_init_wakeup(tegra->dev, true);
++		pm_runtime_enable(tegra->dev);
++	}
+ 
+ 	return 0;
+ 
+@@ -1772,7 +1787,9 @@ static int tegra_xusb_remove(struct platform_device *pdev)
+ 	dma_free_coherent(&pdev->dev, tegra->fw.size, tegra->fw.virt,
+ 			  tegra->fw.phys);
+ 
+-	pm_runtime_disable(&pdev->dev);
++	if (tegra->padctl_irq)
++		pm_runtime_disable(&pdev->dev);
++
+ 	pm_runtime_put(&pdev->dev);
+ 
+ 	tegra_xusb_powergate_partitions(tegra);
+-- 
+2.33.1
+
