@@ -2,56 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B138447464
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Nov 2021 18:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5CF447475
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Nov 2021 18:16:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235936AbhKGRS4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 7 Nov 2021 12:18:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
+        id S235971AbhKGRTg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 7 Nov 2021 12:19:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235937AbhKGRSz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Nov 2021 12:18:55 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DE3C061570
-        for <linux-usb@vger.kernel.org>; Sun,  7 Nov 2021 09:16:12 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id p16so30880272lfa.2
-        for <linux-usb@vger.kernel.org>; Sun, 07 Nov 2021 09:16:12 -0800 (PST)
+        with ESMTP id S235968AbhKGRTe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Nov 2021 12:19:34 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E385AC061570
+        for <linux-usb@vger.kernel.org>; Sun,  7 Nov 2021 09:16:50 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id t11so24889730ljh.6
+        for <linux-usb@vger.kernel.org>; Sun, 07 Nov 2021 09:16:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=ilqwspEvSwBZfbneVV2WpbR9vZpMTbWiiZ7iEJyGkzE=;
-        b=FnK7KVMclA7ZdTjWg/vFmr8vW0TFhr838+NbCP33+Fzg3+xPaQpkwCcWuRuMvKf7Zk
-         nV3HcrU415RXCnqhr3zi5M1qwOhU5QHaNJn+7ASjUIqz92UQ0F9mlAJQAYioCaxLCZpW
-         k4G779m3fvzXOyWPjyuHDgpMPWotw4jwrbikVllZvMfooy5bhjr6CKdoBlRnSSFUUhA4
-         GXz05I8wxXZXIAFMY6cuTL7AvHPLSDorIXkZ1/VfyqZaxzWo3eyqQ9J3rgC5LLE5PE3q
-         +Fbw9oA9RzeF7G/O8XK0mtbCvj0aJ/lJOdDpcCy/qOdPLDzJbQqD9yXFbRe1fgfKSFxc
-         DF7w==
+        bh=nNUKVNy8vOuHc8wD6tyPbuUT/IFxVm1KtXxpJlI7LIw=;
+        b=F55V9d0YJNLhdCu1/4ADkG9EQaa0TmU6eGzKET2zR/vZ4WQ43E6UaoTjL2vLMds8zh
+         fBJzxCANgOOD6vSUn3NexMMM0oxEfQ9kkAicG4iUl9DO5+0ymafQ+0gREsAXuwqWcInD
+         gME5ORMEKYW0/O74hh3lF8l2o7F1M6dHK2bA+K64lMa5NfBu1EUchDJ3BkFvfb31s8ju
+         spHIYkfVmvgTOADTtQSOGoA1heTM3vFip5uNtiZ2/HfzqJxIyQUHHQMRzANRjcXtRNf/
+         42loW5XP1cektWOoICKQvTxD6hpP/lbmkVb0solt6nx1UNVGBJAgdQV4qjElxkg6mBC8
+         q5vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:subject:message-id:mime-version
          :content-disposition;
-        bh=ilqwspEvSwBZfbneVV2WpbR9vZpMTbWiiZ7iEJyGkzE=;
-        b=G1aV8o5ayeTPErgggLDYdoqFo1AUvV7BnHTbrXWHimkkuld3K0DwEUAqbkedsXvxD7
-         QZghuZ0Ux8UW/91xRdd/H27ZrQt1rwzsXZ/pr//DKBiUG2+IcFgJFnpza+srgzB5KZZJ
-         NRMORn4m0TWqIv3/TCQmNZWqfXtc/71WkDlt3CYEpMAv+XI6V3gLnvzU00qpRn9B2Jtc
-         uEg8SlizSOOjbdJT6XMDt6LHh2X4aJUbWGQEFz5v7qY3Jt2q2sZ3WyDUBMTq3nj5WSmr
-         pSj63J95Lmx4lH1ySN/3jjo0+mCC/HPsxT4lPAu+ryt8fGg5opwpCg1MX03E1Fdv1roh
-         UDZw==
-X-Gm-Message-State: AOAM531t9TULApFoCGM/ADsjQWCy3VcJ+OEMi1VZXZN0QhlDu5QLamg/
-        mqT3qVNqQkb4BIRWtpVql0g=
-X-Google-Smtp-Source: ABdhPJxhGIi0+UbhUFZ19wbs83lnN6KyxWqjNWAchkvEbQTYIljH94Di5Nm9RuHDUu2vXxh1kN5pvw==
-X-Received: by 2002:a19:6a08:: with SMTP id u8mr11013967lfu.9.1636305370636;
-        Sun, 07 Nov 2021 09:16:10 -0800 (PST)
+        bh=nNUKVNy8vOuHc8wD6tyPbuUT/IFxVm1KtXxpJlI7LIw=;
+        b=pIO2CF2bvXrBSXwbWSwx0iVGjoszaYHYehyzUm1cNt1bcCCnZRPxlVS6doHSyhfvlW
+         lGeINgfZRqyYT7k+rENpXe1MVfSU75Kw+Dm4qwk/RUh06RWxA1Jyy/ibuaP6S1irvSgR
+         l0riDErtJ0KYs+4AUAbeWODbfY8ncPecImi/BqLYMs8A9wOumCP/Au2TxwQ2mkSScnOe
+         qkEoXWUdbM9zSoh1eslZFY62CYtlAggrn3cc+XLWoe+k+k52PnKd4AiT1vjnVbFzClKg
+         8+OgYM3WoJMCMe2k10V1Q0jVmsikyRz5+rD/VlTGP3rXTurYZurBSl6kLty5i5fMIwMP
+         Vong==
+X-Gm-Message-State: AOAM5311iAdEIb55bPQyrXQQMc62heH4w/NVJr8O17aDBCsGoFaMqZQ2
+        KmMDVPDyvKUcN3xPJV7TRQv3zTN4YbM=
+X-Google-Smtp-Source: ABdhPJwlLOmsG8Qllu1RiQYjbQVvVsF/l0HxbZcaOh/QVwZjrDDKVOMiXIW0I8BT9qFVjxcSte6NhQ==
+X-Received: by 2002:a2e:a4b6:: with SMTP id g22mr3748138ljm.447.1636305409304;
+        Sun, 07 Nov 2021 09:16:49 -0800 (PST)
 Received: from dell-precision-T3610 (h-155-4-132-193.NA.cust.bahnhof.se. [155.4.132.193])
-        by smtp.gmail.com with ESMTPSA id c14sm1528849lfc.225.2021.11.07.09.16.10
+        by smtp.gmail.com with ESMTPSA id v15sm108154lfo.301.2021.11.07.09.16.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Nov 2021 09:16:10 -0800 (PST)
-Date:   Sun, 7 Nov 2021 18:16:08 +0100
+        Sun, 07 Nov 2021 09:16:49 -0800 (PST)
+Date:   Sun, 7 Nov 2021 18:16:47 +0100
 From:   Lars Gunnarsson <gunnarsson.lars@gmail.com>
 To:     Valentina Manea <valentina.manea.m@gmail.com>,
         Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH v4 2/4] tools/usbip: add usb event monitor into libusbip
-Message-ID: <20211107171608.GA14721@dell-precision-T3610>
+Subject: [PATCH v4 3/4] tools/usbip: export USB devices on a given bus
+ persistently
+Message-ID: <20211107171647.GA14872@dell-precision-T3610>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -59,295 +60,208 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch implements an usb monitor into libusbip to synchronously wait
-for usb events, which is used in coming patches. By hooking this api into
-"usb bind" before exporting a device, allows the command to wait for a
-device to be plugged in. By hooking this api in after a successful export
-allows the command to know when to restart bus monitoring again.
-
-By hooking this api into usbipd at the beginning of an import request,
-allows the command "usbip attach" to wait for a device to become exported.
-By hooking this api into "usbip attach" right after a successful import,
-allows the command to know when to restart remote bus monitoring again.
-
-Example of api usage:
-
-// wait for an usb divce to be plugged in:
-usbip_monitor_t *monitor = usbip_monitor_new();
-usbip_monitor_set_busid(monitor, "3-3.1.2.3");
-usbip_monitor_await_usb_bind(monitor, "usb");  // this is a blocking call
-// usb device with busid 3-3.1.2.3 is now bound to driver "usb".
-usbip_monitor_delete(monitor);
+This patch extends the command "usbip bind" with flag "-p|--persistent".
+When this flag is used, devices on a given busid becomes exported when
+plugged in, instead of returning an error if the device is not available.
+When the usb device is unplugged, it will start monitor the bus again.
 
 Signed-off-by: Lars Gunnarsson <gunnarsson.lars@gmail.com>
 ---
-v2: Change title, fix style warnings, improve feature description, add timeout
-   into usbip_monitor.
+v2: Change title, fix style warnings, improve feature description, refactor
+    cmdline flag usage.
 v3: Change title and description.
-v4: Change description and fix review comments.
+v4: Fix review comments.
 
-Justifications of remaining warnings from "scripts/checkpatch.pl":
+ tools/usb/usbip/src/usbip_bind.c | 117 ++++++++++++++++++++++++-------
+ 1 file changed, 92 insertions(+), 25 deletions(-)
 
-* Exception according to Linux kernel coding style 5.a where
-  "usbip_monitor_t" is a totally opaque object:
-
-  WARNING: do not add new typedefs
-  #199: FILE: tools/usb/usbip/libsrc/usbip_monitor.h:8:
-  +typedef struct usbip_monitor usbip_monitor_t;
-
- tools/usb/usbip/.gitignore             |   1 +
- tools/usb/usbip/libsrc/Makefile.am     |   3 +-
- tools/usb/usbip/libsrc/usbip_common.h  |   1 +
- tools/usb/usbip/libsrc/usbip_monitor.c | 161 +++++++++++++++++++++++++
- tools/usb/usbip/libsrc/usbip_monitor.h |  36 ++++++
- 5 files changed, 201 insertions(+), 1 deletion(-)
- create mode 100644 tools/usb/usbip/libsrc/usbip_monitor.c
- create mode 100644 tools/usb/usbip/libsrc/usbip_monitor.h
-
-diff --git a/tools/usb/usbip/.gitignore b/tools/usb/usbip/.gitignore
-index 597361a96dbb..6304adefb5e1 100644
---- a/tools/usb/usbip/.gitignore
-+++ b/tools/usb/usbip/.gitignore
-@@ -28,6 +28,7 @@ libsrc/libusbip_la-usbip_common.lo
- libsrc/libusbip_la-usbip_device_driver.lo
- libsrc/libusbip_la-usbip_host_common.lo
- libsrc/libusbip_la-usbip_host_driver.lo
-+libsrc/libusbip_la-usbip_monitor.lo
- libsrc/libusbip_la-vhci_driver.lo
- src/usbip
- src/usbipd
-diff --git a/tools/usb/usbip/libsrc/Makefile.am b/tools/usb/usbip/libsrc/Makefile.am
-index dabd2c91d311..3e31e33729cf 100644
---- a/tools/usb/usbip/libsrc/Makefile.am
-+++ b/tools/usb/usbip/libsrc/Makefile.am
-@@ -8,4 +8,5 @@ libusbip_la_SOURCES := names.c names.h usbip_host_driver.c usbip_host_driver.h \
- 		       usbip_device_driver.c usbip_device_driver.h \
- 		       usbip_common.c usbip_common.h usbip_host_common.h \
- 		       usbip_host_common.c vhci_driver.c vhci_driver.h \
--		       sysfs_utils.c sysfs_utils.h
-+		       sysfs_utils.c sysfs_utils.h \
-+		       usbip_monitor.c
-diff --git a/tools/usb/usbip/libsrc/usbip_common.h b/tools/usb/usbip/libsrc/usbip_common.h
-index 73a367a7fa10..13f1d4ca47c5 100644
---- a/tools/usb/usbip/libsrc/usbip_common.h
-+++ b/tools/usb/usbip/libsrc/usbip_common.h
-@@ -30,6 +30,7 @@
+diff --git a/tools/usb/usbip/src/usbip_bind.c b/tools/usb/usbip/src/usbip_bind.c
+index f1cf9225a69c..c1c267614411 100644
+--- a/tools/usb/usbip/src/usbip_bind.c
++++ b/tools/usb/usbip/src/usbip_bind.c
+@@ -8,12 +8,14 @@
  
- /* kernel module names */
- #define USBIP_CORE_MOD_NAME	"usbip-core"
-+#define USBIP_USB_DRV_NAME	"usb"
- #define USBIP_HOST_DRV_NAME	"usbip-host"
- #define USBIP_DEVICE_DRV_NAME	"usbip-vudc"
- #define USBIP_VHCI_DRV_NAME	"vhci_hcd"
-diff --git a/tools/usb/usbip/libsrc/usbip_monitor.c b/tools/usb/usbip/libsrc/usbip_monitor.c
-new file mode 100644
-index 000000000000..9facf6aff294
---- /dev/null
-+++ b/tools/usb/usbip/libsrc/usbip_monitor.c
-@@ -0,0 +1,161 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/**
-+ * Copyright (C) 2021 Lars Gunnarsson <gunnarsson.lars@gmail.com>
-+ */
-+#include <libudev.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/poll.h>
-+
+ #include <errno.h>
+ #include <stdio.h>
++#include <stdbool.h>
+ #include <stdlib.h>
+ #include <string.h>
+ 
+ #include <getopt.h>
+ 
+ #include "usbip_common.h"
 +#include "usbip_monitor.h"
-+
-+struct usbip_monitor {
-+	const char *busid;
-+	int timeout_ms;
-+	struct udev *udev;
-+	struct udev_monitor *udev_monitor;
+ #include "utils.h"
+ #include "usbip.h"
+ #include "sysfs_utils.h"
+@@ -24,10 +26,17 @@ enum unbind_status {
+ 	UNBIND_ST_FAILED
+ };
+ 
++struct bind_options {
++	char *busid;
++	bool is_persistent;
 +};
 +
-+usbip_monitor_t *usbip_monitor_new(void)
-+{
-+	usbip_monitor_t *monitor = NULL;
+ static const char usbip_bind_usage_string[] =
+ 	"usbip bind <args>\n"
+-	"    -b, --busid=<busid>    Bind " USBIP_HOST_DRV_NAME ".ko to device "
+-	"on <busid>\n";
++	"    -b, --busid=<busid>        Bind " USBIP_HOST_DRV_NAME ".ko to device\n"
++	"                               on <busid>\n"
++	"    -p, --persistent           Persistently monitor the given bus and\n"
++	"                               export USB devices plugged in\n";
+ 
+ void usbip_bind_usage(void)
+ {
+@@ -127,29 +136,29 @@ static int unbind_other(char *busid)
+ 	return status;
+ }
+ 
+-static int bind_device(char *busid)
++static const char *get_device_devpath(char *busid)
+ {
+-	int rc;
+-	struct udev *udev;
+-	struct udev_device *dev;
+-	const char *devpath;
 +	struct udev *udev = udev_new();
++	const char *devpath = NULL;
++	struct udev_device *dev = udev_device_new_from_subsystem_sysname(udev, "usb", busid);
+ 
+-	/* Check whether the device with this bus ID exists. */
+-	udev = udev_new();
+-	dev = udev_device_new_from_subsystem_sysname(udev, "usb", busid);
+-	if (!dev) {
+-		err("device with the specified bus ID does not exist");
+-		return -1;
+-	}
+-	devpath = udev_device_get_devpath(dev);
++	if (dev)
++		devpath = udev_device_get_devpath(dev);
+ 	udev_unref(udev);
++	return devpath;
++}
+ 
+-	/* If the device is already attached to vhci_hcd - bail out */
+-	if (strstr(devpath, USBIP_VHCI_DRV_NAME)) {
+-		err("bind loop detected: device: %s is attached to %s\n",
+-		    devpath, USBIP_VHCI_DRV_NAME);
+-		return -1;
+-	}
++static bool is_usb_connected(char *busid)
++{
++	if (get_device_devpath(busid))
++		return true;
++	else
++		return false;
++}
 +
-+	if (udev) {
-+		struct udev_monitor *udev_monitor =
-+			udev_monitor_new_from_netlink(udev, "udev");
-+		udev_monitor_filter_add_match_subsystem_devtype(
-+			udev_monitor, "usb", "usb_device");
-+		udev_monitor_enable_receiving(udev_monitor);
-+		monitor = malloc(sizeof(struct usbip_monitor));
-+		monitor->busid = NULL;
-+		monitor->timeout_ms = -1;
-+		monitor->udev = udev;
-+		monitor->udev_monitor = udev_monitor;
++static int bind_available_device(char *busid)
++{
++	int rc;
+ 
+ 	rc = unbind_other(busid);
+ 	if (rc == UNBIND_ST_FAILED) {
+@@ -174,36 +183,94 @@ static int bind_device(char *busid)
+ 		return -1;
+ 	}
+ 
+-	info("bind device on busid %s: complete", busid);
++	info("device on busid %s: bind complete", busid);
+ 
+ 	return 0;
+ }
+ 
++static int bind_device(char *busid)
++{
++	const char *devpath = get_device_devpath(busid);
++
++	/* Check whether the device with this bus ID exists. */
++	if (!devpath) {
++		err("device with the specified bus ID does not exist");
++		return -1;
 +	}
-+	return monitor;
-+}
 +
-+void usbip_monitor_delete(usbip_monitor_t *monitor)
-+{
-+	if (monitor) {
-+		udev_monitor_unref(monitor->udev_monitor);
-+		udev_unref(monitor->udev);
-+		free(monitor);
++	/* If the device is already attached to vhci_hcd - bail out */
++	if (strstr(devpath, USBIP_VHCI_DRV_NAME)) {
++		err("bind loop detected: device: %s is attached to %s\n",
++		    devpath, USBIP_VHCI_DRV_NAME);
++		return -1;
 +	}
++
++	return bind_available_device(busid);
 +}
 +
-+void usbip_monitor_set_busid(usbip_monitor_t *monitor, const char *busid)
++static int bind_device_persistently(char *busid)
 +{
-+	monitor->busid = busid;
-+}
++	int rc = 0;
++	bool already_connected = is_usb_connected(busid);
++	usbip_monitor_t *monitor = monitor = usbip_monitor_new();
 +
-+void usbip_monitor_set_timeout(usbip_monitor_t *monitor, int milliseconds)
-+{
-+	monitor->timeout_ms = milliseconds;
-+}
-+
-+static struct udev_device *await_udev_event(const usbip_monitor_t *monitor)
-+{
-+	struct udev_device *dev = NULL;
-+
-+	if (monitor) {
-+		int fd = udev_monitor_get_fd(monitor->udev_monitor);
-+		const int nfds = 1;
-+		struct pollfd pollfd[] = { { fd, POLLIN, 0 } };
-+		int nfd = poll(pollfd, nfds, monitor->timeout_ms);
-+
-+		if (nfd)
-+			dev = udev_monitor_receive_device(
-+				monitor->udev_monitor);
-+	}
-+	return dev;
-+}
-+
-+static int optional_filter_busid(const char *busid, const char *udev_busid)
-+{
-+	int filter_match = 0;
-+
-+	if (busid) {
-+		if (strcmp(busid, udev_busid) == 0)
-+			filter_match = 1;
-+	} else {
-+		filter_match = 1;
-+	}
-+	return filter_match;
-+}
-+
-+static bool await_usb_with_driver(const usbip_monitor_t *monitor,
-+				  const char *driver, const char *action)
-+{
-+	bool event_occured = false;
-+
-+	while (!event_occured) {
-+		struct udev_device *dev = await_udev_event(monitor);
-+
-+		if (dev) {
-+			const char *udev_action = udev_device_get_action(dev);
-+			const char *udev_driver = udev_device_get_driver(dev);
-+			const char *udev_busid = udev_device_get_sysname(dev);
-+
-+			if (strcmp(udev_action, action) == 0 &&
-+			    strcmp(udev_driver, driver) == 0) {
-+				if (optional_filter_busid(monitor->busid,
-+							  udev_busid)) {
-+					event_occured = true;
-+				}
-+			}
-+			udev_device_unref(dev);
-+		} else {
-+			break;
++	usbip_monitor_set_busid(monitor, busid);
++	while (rc == 0) {
++		if (!already_connected) {
++			info("device on busid %s: monitor connect", busid);
++			usbip_monitor_await_usb_bind(monitor, USBIP_USB_DRV_NAME);
 +		}
-+	}
-+	return event_occured;
-+}
-+
-+bool usbip_monitor_await_usb_add(const usbip_monitor_t *monitor,
-+				 const char *driver)
-+{
-+	return await_usb_with_driver(monitor, driver, "add");
-+}
-+
-+bool usbip_monitor_await_usb_bind(const usbip_monitor_t *monitor,
-+				  const char *driver)
-+{
-+	return await_usb_with_driver(monitor, driver, "bind");
-+}
-+
-+static bool await_usb(const usbip_monitor_t *monitor, const char *action)
-+{
-+	bool event_occured = false;
-+
-+	while (!event_occured) {
-+		struct udev_device *dev = await_udev_event(monitor);
-+
-+		if (dev) {
-+			const char *udev_action = udev_device_get_action(dev);
-+			const char *udev_busid = udev_device_get_sysname(dev);
-+
-+			if (strcmp(udev_action, action) == 0) {
-+				if (optional_filter_busid(monitor->busid,
-+							  udev_busid)) {
-+					event_occured = true;
-+				}
-+			}
-+			udev_device_unref(dev);
-+		} else {
-+			break;
++		rc = bind_available_device(busid);
++		if (rc == 0) {
++			info("device on busid %s: monitor disconnect", busid);
++			usbip_monitor_await_usb_bind(monitor, USBIP_HOST_DRV_NAME);
++			usbip_monitor_await_usb_unbind(monitor);
 +		}
++		already_connected = false;
 +	}
-+	return event_occured;
++	usbip_monitor_delete(monitor);
++	return rc;
 +}
 +
-+bool usbip_monitor_await_usb_unbind(const usbip_monitor_t *monitor)
-+{
-+	return await_usb(monitor, "unbind");
-+}
+ int usbip_bind(int argc, char *argv[])
+ {
+ 	static const struct option opts[] = {
+ 		{ "busid", required_argument, NULL, 'b' },
++		{ "persistent",  no_argument, NULL, 'p' },
+ 		{ NULL,    0,                 NULL,  0  }
+ 	};
+ 
++	struct bind_options options = {};
+ 	int opt;
+ 	int ret = -1;
+ 
+ 	for (;;) {
+-		opt = getopt_long(argc, argv, "b:", opts, NULL);
++		opt = getopt_long(argc, argv, "b:p", opts, NULL);
+ 
+ 		if (opt == -1)
+ 			break;
+ 
+ 		switch (opt) {
+ 		case 'b':
+-			ret = bind_device(optarg);
+-			goto out;
++			options.busid = optarg;
++			break;
++		case 'p':
++			options.is_persistent = true;
++			break;
+ 		default:
+ 			goto err_out;
+ 		}
+ 	}
+ 
++	if (!options.busid)
++		goto err_out;
 +
-+bool usbip_monitor_await_usb_delete(const usbip_monitor_t *monitor)
-+{
-+	return await_usb(monitor, "delete");
-+}
-diff --git a/tools/usb/usbip/libsrc/usbip_monitor.h b/tools/usb/usbip/libsrc/usbip_monitor.h
-new file mode 100644
-index 000000000000..209bc722529c
---- /dev/null
-+++ b/tools/usb/usbip/libsrc/usbip_monitor.h
-@@ -0,0 +1,36 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/**
-+ * Copyright (C) 2021 Lars Gunnarsson <gunnarsson.lars@gmail.com>
-+ */
-+#ifndef __USBIP_MONITOR_H
-+#define __USBIP_MONITOR_H
++	if (options.is_persistent)
++		ret = bind_device_persistently(options.busid);
++	else
++		ret = bind_device(options.busid);
++	goto out;
 +
-+#include <stdbool.h>
-+
-+typedef struct usbip_monitor usbip_monitor_t;
-+
-+usbip_monitor_t *usbip_monitor_new(void);
-+void usbip_monitor_delete(usbip_monitor_t *monitor);
-+
-+/**
-+ * Set busid to await events on. If unset, any busid will be matched.
-+ */
-+void usbip_monitor_set_busid(usbip_monitor_t *monitor, const char *busid);
-+
-+/**
-+ * Set timeout for await calls in milliseconds, default is no timeout (-1).
-+ */
-+void usbip_monitor_set_timeout(usbip_monitor_t *monitor, int milliseconds);
-+
-+/**
-+ * Functions below is blocking. Returns true if event occurred, or false on
-+ * timeouts.
-+ */
-+bool usbip_monitor_await_usb_add(const usbip_monitor_t *monitor,
-+				 const char *driver);
-+bool usbip_monitor_await_usb_bind(const usbip_monitor_t *monitor,
-+				  const char *driver);
-+bool usbip_monitor_await_usb_unbind(const usbip_monitor_t *monitor);
-+bool usbip_monitor_await_usb_delete(const usbip_monitor_t *monitor);
-+
-+#endif /* __USBIP_MONITOR_H */
+ err_out:
+ 	usbip_bind_usage();
+ out:
 -- 
 2.25.1
 
