@@ -2,132 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9F74481EC
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Nov 2021 15:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6212448208
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Nov 2021 15:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240551AbhKHOip (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Nov 2021 09:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42784 "EHLO
+        id S240570AbhKHOrp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Nov 2021 09:47:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239345AbhKHOim (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Nov 2021 09:38:42 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AEAC061570;
-        Mon,  8 Nov 2021 06:35:57 -0800 (PST)
-Received: from zn.tnic (p200300ec2f331100b486bab6e60d7aaf.dip0.t-ipconnect.de [IPv6:2003:ec:2f33:1100:b486:bab6:e60d:7aaf])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1A75E1EC01FC;
-        Mon,  8 Nov 2021 15:35:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1636382156;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=B6oOQ1q4gjLTOu5usgfET43xDRmf4tLazw1TZ6CRXFw=;
-        b=Upd25HzfEqhrG5TAXmV4X7VLTXjG+2mbIZvAcNaA5XdFGwWxC22cjGdH367SqKuC2YI35V
-        XePkT+plNO8Rcdx9qRLbflORPHDjzc4q/HfinrM2oVoUmKJ3f3FbXqZbeiIVI7zzNRafCc
-        NDGlsVX5pxz7i7hCYlNzvvCrAxbHbAs=
-Date:   Mon, 8 Nov 2021 15:35:50 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Ayush Sawal <ayush.sawal@chelsio.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rohit Maheshwari <rohitm@chelsio.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
-        alsa-devel@alsa-project.org, bcm-kernel-feedback-list@broadcom.com,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-remoteproc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v0 00/42] notifiers: Return an error when callback is
- already registered
-Message-ID: <YYk1xi3eJdMJdjHC@zn.tnic>
-References: <20211108101157.15189-1-bp@alien8.de>
- <20211108101924.15759-1-bp@alien8.de>
- <20211108141703.GB1666297@rowland.harvard.edu>
- <YYkzJ3+faVga2Tl3@zn.tnic>
+        with ESMTP id S240562AbhKHOrn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Nov 2021 09:47:43 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE31C061570;
+        Mon,  8 Nov 2021 06:44:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=tsPEec06c/evSYUwBeagvZhXkAdm4gzB53uPqsCl3+c=; b=Gp5DY
+        wJrsjnHyxwFXvB/JNmO6eTfO9hvWDp5Mq/Y4fnRmunO8aDtJ5wpUXGh9sBJ843n1rhcDsNv9ZNaq+
+        xb/ezo40P2ire7qA+qQWGq7Flryjz+CHUq9dpYabe3QqUZElnVWOG3HGj/mBy9HXBBS+ADJfD7KKI
+        0LugtgkjB65eiIWkwNC3ts85uH7m+p+D28nAlGsIVI8FWiFFXBs/9MBXvFf4rNa26ihcfqmN/Tg7T
+        dEjwgXH6G58yHOQrEGdZq9o0yGYICvs6L5DzfC/S8Jom35z8lOxVKPV7sUg3SI4WAXZ1gmrSCEln2
+        6KxShESwEFuhZb3+mTlrT/sxownow==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1mk5tG-0004qs-Rs; Mon, 08 Nov 2021 14:44:54 +0000
+Date:   Mon, 8 Nov 2021 14:44:53 +0000
+From:   John Keeping <john@metanate.com>
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: dwc2: gadget: respect driver's max_speed
+Message-ID: <YYk35SnRf/iaxx+C@donbot>
+References: <20211105172304.1308458-1-john@metanate.com>
+ <e3652630-f479-185f-0afa-9980a4fdf444@synopsys.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YYkzJ3+faVga2Tl3@zn.tnic>
+In-Reply-To: <e3652630-f479-185f-0afa-9980a4fdf444@synopsys.com>
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 08, 2021 at 03:24:39PM +0100, Borislav Petkov wrote:
-> I guess I can add another indirection to notifier_chain_register() and
-> avoid touching all the call sites.
+On Mon, Nov 08, 2021 at 07:56:50AM +0000, Minas Harutyunyan wrote:
+> On 11/5/2021 9:23 PM, John Keeping wrote:
+> > UDCs should not enumerate faster than the max_speed set by the gadget
+> > driver.  Use this to further restrict the speed set in the DWC2
+> > parameters so that the device will not connect faster than is supported
+> > by the gadget driver.
+> > 
+> > For configfs-based composite devices this can be set via the max_speed
+> > configfs file.
+> > 
+> > Signed-off-by: John Keeping <john@metanate.com>
+> 
+> Acked-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
 
-IOW, something like this below.
+Actually, this isn't needed following commit 5324bad66f09 ("usb: dwc2:
+gadget: implement udc_set_speed()") - I should have tested on something
+more recent than 5.10.
 
-This way I won't have to touch all the callsites and the registration
-routines would still return a proper value instead of returning 0
-unconditionally.
-
----
-diff --git a/kernel/notifier.c b/kernel/notifier.c
-index b8251dc0bc0f..04f08b2ef17f 100644
---- a/kernel/notifier.c
-+++ b/kernel/notifier.c
-@@ -19,14 +19,12 @@ BLOCKING_NOTIFIER_HEAD(reboot_notifier_list);
-  *	are layered on top of these, with appropriate locking added.
-  */
- 
--static int notifier_chain_register(struct notifier_block **nl,
--		struct notifier_block *n)
-+static int __notifier_chain_register(struct notifier_block **nl,
-+				     struct notifier_block *n)
- {
- 	while ((*nl) != NULL) {
--		if (unlikely((*nl) == n)) {
--			WARN(1, "double register detected");
--			return 0;
--		}
-+		if (unlikely((*nl) == n))
-+			return -EEXIST;
- 		if (n->priority > (*nl)->priority)
- 			break;
- 		nl = &((*nl)->next);
-@@ -36,6 +34,18 @@ static int notifier_chain_register(struct notifier_block **nl,
- 	return 0;
- }
- 
-+static int notifier_chain_register(struct notifier_block **nl,
-+				   struct notifier_block *n)
-+{
-+	int ret = __notifier_chain_register(nl, n);
-+
-+	if (ret == -EEXIST)
-+		WARN(1, "double register of notifier callback %ps detected",
-+			n->notifier_call);
-+
-+	return ret;
-+}
-+
- static int notifier_chain_unregister(struct notifier_block **nl,
- 		struct notifier_block *n)
- {
+There are still some problems in this area for dwc2 platforms that do
+not support high-speed, but this patch is not the fix for them.  Please
+drop this.
 
 
--- 
-Regards/Gruss,
-    Boris.
+Sorry for the noise,
+John
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
+> > ---
+> >   drivers/usb/dwc2/gadget.c | 18 +++++++++++++++++-
+> >   1 file changed, 17 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+> > index 744539b78f6c..1f39c2f1be8e 100644
+> > --- a/drivers/usb/dwc2/gadget.c
+> > +++ b/drivers/usb/dwc2/gadget.c
+> > @@ -3377,6 +3377,7 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
+> >   	u32 val;
+> >   	u32 usbcfg;
+> >   	u32 dcfg = 0;
+> > +	u8 speed;
+> >   	int ep;
+> >   
+> >   	/* Kill any ep0 requests as controller will be reinitialized */
+> > @@ -3418,7 +3419,22 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
+> >   
+> >   	dcfg |= DCFG_EPMISCNT(1);
+> >   
+> > -	switch (hsotg->params.speed) {
+> > +	speed = hsotg->params.speed;
+> > +	if (hsotg->driver) {
+> > +		switch (hsotg->driver->max_speed) {
+> > +		case USB_SPEED_LOW:
+> > +			speed = DWC2_SPEED_PARAM_LOW;
+> > +			break;
+> > +		case USB_SPEED_FULL:
+> > +			if (speed != USB_SPEED_LOW)
+> > +				speed = DWC2_SPEED_PARAM_FULL;
+> > +			break;
+> > +		default:
+> > +			break;
+> > +		}
+> > +	}
+> > +
+> > +	switch (speed) {
+> >   	case DWC2_SPEED_PARAM_LOW:
+> >   		dcfg |= DCFG_DEVSPD_LS;
+> >   		break;
+> > 
+> 
