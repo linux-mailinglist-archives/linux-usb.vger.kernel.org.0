@@ -2,65 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0D5449DA8
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Nov 2021 22:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49FF9449DB1
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Nov 2021 22:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239812AbhKHVMX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Nov 2021 16:12:23 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:42542
+        id S239856AbhKHVN0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Nov 2021 16:13:26 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:42632
         "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236513AbhKHVMW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Nov 2021 16:12:22 -0500
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        by vger.kernel.org with ESMTP id S238547AbhKHVNX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Nov 2021 16:13:23 -0500
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 300253F044
-        for <linux-usb@vger.kernel.org>; Mon,  8 Nov 2021 21:09:37 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 6B8C43F1DB
+        for <linux-usb@vger.kernel.org>; Mon,  8 Nov 2021 21:10:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1636405777;
-        bh=Va/pwg0yU2yK/e7gM+AfCFIYpglqXBbYNHqGSFsajyo=;
+        s=20210705; t=1636405837;
+        bh=mwPFRn0AEGOneXePTnmoZQRi4asMCrfCLz0IrMjqCXA=;
         h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
          In-Reply-To:Content-Type;
-        b=YZvAA0wYyA7LJlfe5euuTj+SgWcDR+24x/KAtkVWngYxnbRJBVsHeQNhHZoaH66Gu
-         2GfbHCy4Oz/wQBAso/w//0nRj9U79rwTMrJEd3dg0hMNnJU7HCorDO1lJBCFqzZKvJ
-         FnWibgy3kW3RLnkW0nsJ8BtAG3IXX5jUUXmYBcPdmy/Z+t/EJjtWqjEV/GCOhEhFDb
-         kELjwQjsjTvXLVF0pzG9PgP0Ho42EaYqzBN3yUg6/12XWBc5f6IzIg3HlKNCrqjTJl
-         iJF/Bovy948WVp4k7hjjxAN+txCaGjJDusm7V8DwAvn7pYzwyWTiReM3snSUbG6+O2
-         VUDgsp5RnXIfw==
-Received: by mail-ed1-f69.google.com with SMTP id w12-20020aa7da4c000000b003e28acbf765so15996634eds.6
-        for <linux-usb@vger.kernel.org>; Mon, 08 Nov 2021 13:09:37 -0800 (PST)
+        b=L06ce1S7CebcXKfk9w/1VnAZa7HKWSH/CDXoHgwnJNpRXbIA4LkMXXo/uLR2uZR+o
+         mTqQ6tqWADK91HZ09kylWKlDO5Z1hwD4Yr9FtemJNEeIzRbil2SFH5G88JgA6PPRVD
+         xpKS4o0LVdYFgyCpuXLezU6PF0IYNPyLvE3Yh+wcUfLP6u9qM4IzovYy8mgq1lJohv
+         TCQqJsyDaQ2c5P+yqkuJ1EU70gOgKKCyr9am8xb7cPC2vKSZXFtpe/EaaEvaT9fr/U
+         Z/9wEEblC1nOh8QAgN8Hlx//5ASWi6tKgJEmbNOu/YoYg805vuHU2UVWVU2zn32Qji
+         GMhCeEN0ITeYA==
+Received: by mail-lf1-f72.google.com with SMTP id bp10-20020a056512158a00b0040376f60e35so1473741lfb.8
+        for <linux-usb@vger.kernel.org>; Mon, 08 Nov 2021 13:10:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Va/pwg0yU2yK/e7gM+AfCFIYpglqXBbYNHqGSFsajyo=;
-        b=QYuIph3mjSavE3dFbO9F92dz9fIcR6tFiOJp65UbukNw3L9Z4u4nAyAtSpMDK8/ymX
-         bg5q6PH+jeQhegbqMRMX1caG+FKzn3o/JP9KbOqjNFOUHyOJbHqbvDu1sIOYQvUH24nj
-         lM6P2AoYJl2Yb89IwSFTn+k6rtHSaKkJb0B1MhTFEC41tGDURsk2TYaof5vpQFlJPvKq
-         lf1y+6w69ZMA4wBr81njQE8nsVJe0F7CiHUQ+3m370JDwxOJC1D6yrCSqnmzoqDGyR2y
-         S70ym9Ea74PDOYhcq9yAXJ+PzIZCSS7CjquwGOEDzaUWLlX+n5fBi9USLI4IIwxyew14
-         dGpw==
-X-Gm-Message-State: AOAM531VSbYTueoHvXQe+fy8QJAO1lCufzIWA0HjFR8cKVPxNHzb10wn
-        0LRJefqlzchW7p6MvJYvzFdGLfgh4/LCLtlN8yQSA34an+uqD3+v//62x3VVQ7Es7cDA41gbzXI
-        skr2yHMLN/h40s/26S/mfbDVb3Aq4drcvB4Pv1g==
-X-Received: by 2002:a05:651c:11cf:: with SMTP id z15mr2048861ljo.30.1636405766142;
-        Mon, 08 Nov 2021 13:09:26 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz5zuS8P1mHA/OLv+7/rIK0KelVh9uEKzH2K354xcsLSXE2l72piSekseZIEjgtyZT8qG201w==
-X-Received: by 2002:a05:651c:11cf:: with SMTP id z15mr2048814ljo.30.1636405765859;
-        Mon, 08 Nov 2021 13:09:25 -0800 (PST)
+        bh=mwPFRn0AEGOneXePTnmoZQRi4asMCrfCLz0IrMjqCXA=;
+        b=6p8a0v96oAB7TecVxbieaZgiSSE9jxrQtEirkFXugoPqe6S1Fo/0BW0aKYYAoAC7QM
+         dqa8R/dkwPpBPD0xgDSGZqNSSmy7rDJVUEJ0bRXoQnzpVxk7B/gCkd77NIlPS77W9arH
+         pn6YhXZa97qGUhREHCuYarRhlaOUjfqNtHNuMH8B7H4OPJuDXe789oOAU8cwCJeDT6lv
+         H/XPdi+aNeW3s8bXtsEz5DWLTl8TDIc9VjT66hVRkm5Zq8zsCu/IMZGnt0myArvGj1bx
+         G9Zq9WTLlySXTrcAnkgj2bPe6Zx2sA/qyvClkWltqlRItHX7kWlrrRIMLg394ze0pES2
+         4snQ==
+X-Gm-Message-State: AOAM533owmun7WEjMYp1VHL7R8pP+o5+41ki+/ylInNNOyICjvq5Ymql
+        KUUTc5df2qwRw8n7CkCfxn1NCoFPmiBPbSaVrLs7R2pWAg0iuNpGzXZf7iDskPtETGB7AmYOXo2
+        4XBLmsMb/RyrKJejBEyEFQV61sFc4/XqdqQ1qoQ==
+X-Received: by 2002:a05:651c:246:: with SMTP id x6mr2094939ljn.49.1636405836525;
+        Mon, 08 Nov 2021 13:10:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyZb4LKcW1A1+MA8CuLWPJQDB5phDB0potg5NQYQwGvOUd0o3C/EZkqT0mWfTObhT2/wWNBag==
+X-Received: by 2002:a05:651c:246:: with SMTP id x6mr2094920ljn.49.1636405836357;
+        Mon, 08 Nov 2021 13:10:36 -0800 (PST)
 Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id p21sm1933204lfg.18.2021.11.08.13.09.24
+        by smtp.gmail.com with ESMTPSA id a16sm1929374lfu.274.2021.11.08.13.10.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Nov 2021 13:09:25 -0800 (PST)
-Message-ID: <8a316610-c0f6-dadd-4745-bd3aff76372c@canonical.com>
-Date:   Mon, 8 Nov 2021 22:09:23 +0100
+        Mon, 08 Nov 2021 13:10:36 -0800 (PST)
+Message-ID: <8343f11a-89e8-c043-6296-000f7ba3e3d2@canonical.com>
+Date:   Mon, 8 Nov 2021 22:10:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.1
-Subject: Re: [PATCH 03/13] dt-bindings: soc/microchip: update sys ctrlr compat
- string
+Subject: Re: [PATCH 04/13] dt-bindings: riscv: update microchip polarfire
+ binds
 Content-Language: en-US
 To:     conor.dooley@microchip.com, linus.walleij@linaro.org,
         bgolaszewski@baylibre.com, robh+dt@kernel.org,
@@ -76,9 +76,9 @@ To:     conor.dooley@microchip.com, linus.walleij@linaro.org,
         linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
 Cc:     geert@linux-m68k.org, bin.meng@windriver.com
 References: <20211108150554.4457-1-conor.dooley@microchip.com>
- <20211108150554.4457-4-conor.dooley@microchip.com>
+ <20211108150554.4457-5-conor.dooley@microchip.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211108150554.4457-4-conor.dooley@microchip.com>
+In-Reply-To: <20211108150554.4457-5-conor.dooley@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -88,60 +88,29 @@ X-Mailing-List: linux-usb@vger.kernel.org
 On 08/11/2021 16:05, conor.dooley@microchip.com wrote:
 > From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Update 'compatible' strings for system controller drivers to the
-> approved Microchip name.
+> Add mpfs-soc to clear undocumented binding warning
+
+What warnings? There is no such compatible used.
+
 > 
 > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
->  .../bindings/mailbox/microchip,polarfire-soc-mailbox.yaml     | 4 +++-
->  .../soc/microchip/microchip,polarfire-soc-sys-controller.yaml | 4 +++-
->  drivers/mailbox/mailbox-mpfs.c                                | 1 +
->  3 files changed, 7 insertions(+), 2 deletions(-)
+>  Documentation/devicetree/bindings/riscv/microchip.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml
-> index bbb173ea483c..b08c8a158eea 100644
-> --- a/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml
-> +++ b/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml
-> @@ -11,7 +11,9 @@ maintainers:
+> diff --git a/Documentation/devicetree/bindings/riscv/microchip.yaml b/Documentation/devicetree/bindings/riscv/microchip.yaml
+> index 3f981e897126..1ff7a5224bbc 100644
+> --- a/Documentation/devicetree/bindings/riscv/microchip.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/microchip.yaml
+> @@ -21,6 +21,7 @@ properties:
+>        - enum:
+>            - microchip,mpfs-icicle-kit
+>        - const: microchip,mpfs
+> +      - const: microchip,mpfs-soc
 >  
->  properties:
->    compatible:
-> -    const: microchip,polarfire-soc-mailbox
-> +    enum:
-> +      - microchip,polarfire-soc-mailbox
-> +      - microchip,mpfs-mailbox
+>  additionalProperties: true
 >  
->    reg:
->      items:
-> diff --git a/Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml b/Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml
-> index 2cd3bc6bd8d6..d6c953cd154b 100644
-> --- a/Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml
-> +++ b/Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml
-> @@ -19,7 +19,9 @@ properties:
->      maxItems: 1
->  
->    compatible:
-> -    const: microchip,polarfire-soc-sys-controller
-> +    enum:
-> +      - microchip,polarfire-soc-sys-controller
-> +      - microchip,mpfs-sys-controller
->  
->  required:
->    - compatible
-> diff --git a/drivers/mailbox/mailbox-mpfs.c b/drivers/mailbox/mailbox-mpfs.c
-> index 0d6e2231a2c7..9d5e558a6ee6 100644
-> --- a/drivers/mailbox/mailbox-mpfs.c
-> +++ b/drivers/mailbox/mailbox-mpfs.c
-> @@ -233,6 +233,7 @@ static int mpfs_mbox_probe(struct platform_device *pdev)
->  
->  static const struct of_device_id mpfs_mbox_of_match[] = {
->  	{.compatible = "microchip,polarfire-soc-mailbox", },
-> +	{.compatible = "microchip,mpfs-mailbox", },
->  	{},
->  };
->  MODULE_DEVICE_TABLE(of, mpfs_mbox_of_match);
-
-Please split the bindings from the code.
+> 
 
 
 Best regards,
