@@ -2,59 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 904A04480FE
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Nov 2021 15:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D16544812D
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Nov 2021 15:17:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238852AbhKHOLz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Nov 2021 09:11:55 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:47678 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238838AbhKHOLz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 8 Nov 2021 09:11:55 -0500
-Received: from zn.tnic (p200300ec2f33110093973d8dfcf40fd9.dip0.t-ipconnect.de [IPv6:2003:ec:2f33:1100:9397:3d8d:fcf4:fd9])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EABCC1EC01FC;
-        Mon,  8 Nov 2021 15:09:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1636380550;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=afTIKYf1mOVjf2en+sa+/dA5gZljLEsuW+H25HdsaEo=;
-        b=PToB6GqDvuo8AkGnFC5fFetj2cDCUpLX8LVQFtaR7g1+SXbDZ1Obz/JUjvsIRvLbss8LuN
-        crLYPD9I1wW5t4XGaY7WJK9kO5q6CnWI7ovaKXHqoupzkIwgss0Q6txDqvYTgXLDhcKWQk
-        7B+7SsxyzSzlvpQd0fsunpKiQpXh3f0=
-Date:   Mon, 8 Nov 2021 15:09:04 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v0 16/42] USB: Check notifier registration return value
-Message-ID: <YYkvgFW07CPRrBPn@zn.tnic>
+        id S240321AbhKHOTz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Nov 2021 09:19:55 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:37337 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S240326AbhKHOTu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Nov 2021 09:19:50 -0500
+Received: (qmail 1667203 invoked by uid 1000); 8 Nov 2021 09:17:03 -0500
+Date:   Mon, 8 Nov 2021 09:17:03 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Ayush Sawal <ayush.sawal@chelsio.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rohit Maheshwari <rohitm@chelsio.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
+        alsa-devel@alsa-project.org, bcm-kernel-feedback-list@broadcom.com,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-remoteproc@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v0 00/42] notifiers: Return an error when callback is
+ already registered
+Message-ID: <20211108141703.GB1666297@rowland.harvard.edu>
 References: <20211108101157.15189-1-bp@alien8.de>
- <20211108101157.15189-17-bp@alien8.de>
- <20211108140553.GA1666297@rowland.harvard.edu>
+ <20211108101924.15759-1-bp@alien8.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211108140553.GA1666297@rowland.harvard.edu>
+In-Reply-To: <20211108101924.15759-1-bp@alien8.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 08, 2021 at 09:05:53AM -0500, Alan Stern wrote:
-> This is a rather misleading description.  The patch does exactly the 
-> opposite: It _adds_ a homegrown notifier registration check.  (Homegrown 
-> in the sense that the check is made by the individual caller rather than 
-> being centralized in the routine being called.)
+On Mon, Nov 08, 2021 at 11:19:24AM +0100, Borislav Petkov wrote:
+> From: Borislav Petkov <bp@suse.de>
+> 
+> Hi all,
+> 
+> this is a huge patchset for something which is really trivial - it
+> changes the notifier registration routines to return an error value
+> if a notifier callback is already present on the respective list of
+> callbacks. For more details scroll to the last patch.
+> 
+> Everything before it is converting the callers to check the return value
+> of the registration routines and issue a warning, instead of the WARN()
+> notifier_chain_register() does now.
 
-See the 0th message - there is a link to another example of what I mean
-with "homegrown" but I see your point.
+What reason is there for moving the check into the callers?  It seems 
+like pointless churn.  Why not add the error return code, change the 
+WARN to pr_warn, and leave the callers as they are?  Wouldn't that end 
+up having exactly the same effect?
 
-Thx.
+For that matter, what sort of remedial action can a caller take if the 
+return code is -EEXIST?  Is there any point in forcing callers to check 
+the return code if they can't do anything about it?
 
--- 
-Regards/Gruss,
-    Boris.
+> Before the last patch has been applied, though, that checking is a
+> NOP which would make the application of those patches trivial - every
+> maintainer can pick a patch at her/his discretion - only the last one
+> enables the build warnings and that one will be queued only after the
+> preceding patches have all been merged so that there are no build
+> warnings.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Why should there be _any_ build warnings?  The real problem occurs when 
+a notifier callback is added twice, not when a caller fails to check the 
+return code.  Double-registration is not the sort of thing that can be 
+detected at build time.
+
+Alan Stern
+
+> Due to the sheer volume of the patches, I have addressed the respective
+> patch and the last one, which enables the warning, with addressees for
+> each maintained area so as not to spam people unnecessarily.
+> 
+> If people prefer I carry some through tip, instead, I'll gladly do so -
+> your call.
+> 
+> And, if you think the warning messages need to be more precise, feel
+> free to adjust them before committing.
+> 
+> Thanks!
