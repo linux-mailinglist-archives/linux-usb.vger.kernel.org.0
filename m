@@ -2,107 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F56449C1A
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Nov 2021 19:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F7F8449C51
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Nov 2021 20:22:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236459AbhKHTBc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Nov 2021 14:01:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231641AbhKHTBb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Nov 2021 14:01:31 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2514C061746
-        for <linux-usb@vger.kernel.org>; Mon,  8 Nov 2021 10:58:46 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so535370wme.4
-        for <linux-usb@vger.kernel.org>; Mon, 08 Nov 2021 10:58:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mvanPmq6qXs9DzVRtgUSTOUmzu/gL8E/gxL2zjoZAoU=;
-        b=Jds43h1kcT0VaWp4h+zpSpszb21LxvCV1SXv0QtYW632/7pjGTHS9SNVSvTaAx2Q+G
-         DVWRLPvvmg9dwSKlglNJMzrZdEa1/yZxnkkdlKz8kw/mplyH57mAQjski9ge4ccQ+VIh
-         mGAd4Gns0D3nGK+YS5/5UJ71KHYvWXWVIi7BJ+46RdcW5+LCXVc76jDqKSiAYmYLxeXo
-         MmYhnrSc4wN+l04t54J9a8RSCb4OBeB+9upEeZZhV4FDslrK74tdEoGTtWJHkhvGSyjJ
-         yFzqN3I+KMUqiS4K+T0kliU37AgO3wwgAX/QgIJLqmkMZEJ60q98+txE/Z/JPyjhxIVU
-         g9Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mvanPmq6qXs9DzVRtgUSTOUmzu/gL8E/gxL2zjoZAoU=;
-        b=XV1mLjgXT6mjaZ1hpuIK4hsarrj3f22MBW5dESRoHgwKYb+9wj4uKAEa32MsoTetIB
-         fxsqLACeZHaTwtbcjRkywcvdarQoLN4sKOEo+uJ0gMZLFrCwgX8aZWcN+97+n3Irmjxf
-         vYxbCdn5drT/qHGE8nvK6S9hcSr/i+z5+Ucgjp6RsMBO8iB+KqUsn3prLNarPz8A3PHW
-         eVjVaHJXRTbJRQJZAIhNA9CvbxhFvvB09FA7NFcu/HOxOtnrGiHURKDnMNm3gmDNR2y3
-         9FS7Rc6gcJ/4iaPJXzo0fflpJkZep9OUQmfeQC2axvSt7CrpOCvP8qFT501rCETLSuTj
-         soEA==
-X-Gm-Message-State: AOAM533y5VV9FwS7jAdTWRcK2wcZh+zhVCh68/YEjkM5MWChZJDxnrpf
-        3khKxi3yMqu+h/joDXaIjLZMiA==
-X-Google-Smtp-Source: ABdhPJy+WfzdWMT9C4MVN8FRQQCs9fEop+vwYbJy6qQ1Bg3YyCSw0l/qrHIAzGl8b7gPViVms8uv1w==
-X-Received: by 2002:a05:600c:1d01:: with SMTP id l1mr602978wms.44.1636397925431;
-        Mon, 08 Nov 2021 10:58:45 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id n184sm208627wme.2.2021.11.08.10.58.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Nov 2021 10:58:44 -0800 (PST)
-Message-ID: <60841bf0-f5ea-314f-34c6-822a8812000d@linaro.org>
-Date:   Mon, 8 Nov 2021 19:00:46 +0000
+        id S237098AbhKHTZg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Nov 2021 14:25:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55824 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236881AbhKHTZg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 8 Nov 2021 14:25:36 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A9B956125F;
+        Mon,  8 Nov 2021 19:22:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636399371;
+        bh=OyhdrCwmduas8Bf2SGokDWTFUEz0lqll6PmVnmcUhv4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=njub24Ve76vttifGaOD4cEPCM7kGx3yiceFq6ZTAuR3EXMIgQebgZYSrCyrAE9DTl
+         tjaJN0O8IpYlmrYmdHNxhCziAiATbGBfsGDlliozbJvThGPA6hEY4wt+Izcf12VXTv
+         bCQOHzSE5D7ey01XPBpJdQndvRJEJjp6qVdDef4wMaAmO5Rz3gdMi2mLJAagMkSzzy
+         O0VtOJNZJ03sr7K+f1z8lpYvKUXfyVsKZ7kmJs5PUuxrjLNJKoacXWdtVFxZ4VDPaF
+         w6T+YDcS6HN+es/R56bJckwGuzCtFrSQT6oeC5NtCCsdS6mIvVhIiKzXS4B6OgU5//
+         aL2Ym54BX/tYQ==
+Received: by mail-ed1-f50.google.com with SMTP id j21so66640221edt.11;
+        Mon, 08 Nov 2021 11:22:51 -0800 (PST)
+X-Gm-Message-State: AOAM5326AtUT2gNrSIFMWJaCpaivxSEujVKfjw56xP96Q434H1Y2pCUc
+        5lBWuRKTmbHANhZMqmv4Cw1TuoHvts3tvTzH0w==
+X-Google-Smtp-Source: ABdhPJxHy3XXfeSCxRM6y5yMWPG5BE73S7jjdC+obQdE/fzygBWUNNSaifQexXjzhpIRnlgxhjmon4sS/awswuFEGXg=
+X-Received: by 2002:a17:907:3f24:: with SMTP id hq36mr2031288ejc.390.1636399369785;
+ Mon, 08 Nov 2021 11:22:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [PATCH v3 5/7] dt-bindings: usb: Add Qualcomm PMIC TCPM YAML
- schema
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, bjorn.andersson@linaro.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, wcheng@codeaurora.org
 References: <20211105033558.1573552-1-bryan.odonoghue@linaro.org>
- <20211105033558.1573552-6-bryan.odonoghue@linaro.org>
- <YYlaqTYhe4hbXhFf@robh.at.kernel.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <YYlaqTYhe4hbXhFf@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <20211105033558.1573552-6-bryan.odonoghue@linaro.org> <YYlaqTYhe4hbXhFf@robh.at.kernel.org>
+ <60841bf0-f5ea-314f-34c6-822a8812000d@linaro.org>
+In-Reply-To: <60841bf0-f5ea-314f-34c6-822a8812000d@linaro.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 8 Nov 2021 13:22:37 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKtesGfaJ+81jaWzB1kD_qXeehv7hrvXh3x=cpo15Ny-g@mail.gmail.com>
+Message-ID: <CAL_JsqKtesGfaJ+81jaWzB1kD_qXeehv7hrvXh3x=cpo15Ny-g@mail.gmail.com>
+Subject: Re: [PATCH v3 5/7] dt-bindings: usb: Add Qualcomm PMIC TCPM YAML schema
+To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        devicetree@vger.kernel.org, Wesley Cheng <wcheng@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 08/11/2021 17:13, Rob Herring wrote:
-> Looks like the h/w is all part of a
-> PMIC, so it should be part of the PMIC binding and probably merged with
-> one of the nodes these phandles point to.
+On Mon, Nov 8, 2021 at 12:58 PM Bryan O'Donoghue
+<bryan.odonoghue@linaro.org> wrote:
+>
+> On 08/11/2021 17:13, Rob Herring wrote:
+> > Looks like the h/w is all part of a
+> > PMIC, so it should be part of the PMIC binding and probably merged with
+> > one of the nodes these phandles point to.
+>
+> Not sure I really follow you here.
+>
+> The existing PMIC dts arch/arm64/boot/dts/qcom/pm8150b.dtsi has:
+>
+> pm8150b_gpios: gpio@c000 {
+>      compatible = "qcom,pm8150b-gpio";
+> }
+> Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
+>
+> and
+>
+> pm8150b_adc_tm: adc-tm@3500 {
+>      compatible = "qcom,spmi-adc-tm5";
+> };
+> Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
+>
+> to which I'm adding :
+>
+> pm8150b_typec: typec@1500 {
+>      compatible = "qcom,pm8150b-typec";
+> };
+>
+> Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
+>
+> pm8150b_pdphy: pdphy@1700 {
+>      compatible = "qcom,pm8150b-pdphy";
+> };
+>
+> Documentation/devicetree/bindings/usb/qcom,pmic-pdphy.yaml
 
-Not sure I really follow you here.
+From what I gather, there is not a 3rd h/w device this binding
+describes, but it is just a collection of all the data you happen to
+want for your driver. That's assuming a specific structure for a
+specific OS. Why can't most of this binding be part of
+"qcom,pm8150b-typec" instead of making up some virtual device?
 
-The existing PMIC dts arch/arm64/boot/dts/qcom/pm8150b.dtsi has:
-
-pm8150b_gpios: gpio@c000 {
-     compatible = "qcom,pm8150b-gpio";
-}
-Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
-
-and
-
-pm8150b_adc_tm: adc-tm@3500 {
-     compatible = "qcom,spmi-adc-tm5";
-};
-Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-
-to which I'm adding :
-
-pm8150b_typec: typec@1500 {
-     compatible = "qcom,pm8150b-typec";
-};
-
-Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
-
-pm8150b_pdphy: pdphy@1700 {
-     compatible = "qcom,pm8150b-pdphy";
-};
-
-Documentation/devicetree/bindings/usb/qcom,pmic-pdphy.yaml
+Rob
