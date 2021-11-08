@@ -2,103 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77184447A96
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Nov 2021 07:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45814447AB0
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Nov 2021 08:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236333AbhKHGpM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Nov 2021 01:45:12 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:6266 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237180AbhKHGpJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Nov 2021 01:45:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1636353746; x=1667889746;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=NY60+9RbJmuSbzCyMdFlgec8Bnna6jLnovIzVcr/yCs=;
-  b=l2CE3RS7sEqJJT+IZVmxWHpvtwr7rnRy2imEhOJR4twgxVwc3M5R7eBA
-   WNVV47n4Dy+oT8KDCOaF3n6PQh/YTDFHnBizvY0VrpLrLKzXlBqSdwa+v
-   xtEM7115ey8daci5/Zch1OZ1iqwlFd7V/zLM4zlPgrYEbZn4S16VPgH11
-   w=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 07 Nov 2021 22:42:26 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2021 22:42:25 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Sun, 7 Nov 2021 22:42:25 -0800
-Received: from c-sanm-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Sun, 7 Nov 2021 22:42:19 -0800
-From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: [PATCH v2 3/3] usb: dwc3: host: Set the property usb-skip-phy-init
-Date:   Mon, 8 Nov 2021 12:11:50 +0530
-Message-ID: <1636353710-25582-4-git-send-email-quic_c_sanm@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com>
-References: <1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com>
+        id S237290AbhKHHLG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Nov 2021 02:11:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52840 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236168AbhKHHLF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 8 Nov 2021 02:11:05 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 411266112F;
+        Mon,  8 Nov 2021 07:08:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1636355301;
+        bh=WG+MUmo7ZfgpICCSz7TrSwgD5tzJlfGEj9mAbIhpCDM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bA6UMB6knomM1ld5X5hZ+j+qoN6OKCrPJPhpsm2+hSxbJBueE7fiNviScsDLiXDI7
+         zP50uj5iQtRkEEofhAN6zcVd9j8Wz1lTwNGqFVA0OrHela6xEtcIDRUngqqUcfs5kc
+         yrePBDYXgcUevFpXptfs9SNi0Jk4iibxeFnkSQSU=
+Date:   Mon, 8 Nov 2021 08:08:19 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Neal Liu <neal_liu@aspeedtech.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Tony Prisk <linux@prisktech.co.nz>, linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Tao Ren <rentao.bupt@gmail.com>,
+        BMC-SW <BMC-SW@aspeedtech.com>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Bruce Mitchell <Bruce.Mitchell@ibm.com>,
+        Eddie James <eajames@linux.ibm.com>
+Subject: Re: [PATCH v4] usb: ehci: handshake CMD_RUN instead of STS_HALT
+Message-ID: <YYjM40q6p3zT7CIH@kroah.com>
+References: <20210910073619.26095-1-neal_liu@aspeedtech.com>
+ <CACPK8Xf40cfnFFeeAzkdXk6ikbfBhWOOt6U8Oq3iCaxe5v5=_w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACPK8Xf40cfnFFeeAzkdXk6ikbfBhWOOt6U8Oq3iCaxe5v5=_w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Runtime suspend of phy drivers was failing from DWC3 driver as
-runtime usage value is 2 because the phy is initialized from
-DWC3 core and HCD core.
-Some controllers like DWC3 and CDNS3 manage phy in their core drivers.
-This property can be set to avoid phy initialization in HCD core.
+On Wed, Oct 06, 2021 at 01:27:02AM +0000, Joel Stanley wrote:
+> Hi Greg,
+> 
+> On Fri, 10 Sept 2021 at 07:38, Neal Liu <neal_liu@aspeedtech.com> wrote:
+> >
+> > For Aspeed, HCHalted status depends on not only Run/Stop but also
+> > ASS/PSS status.
+> > Handshake CMD_RUN on startup instead.
+> >
+> > Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+> > Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> > Reviewed-by: Tao Ren <rentao.bupt@gmail.com>
+> > Tested-by: Tao Ren <rentao.bupt@gmail.com>
+> 
+> Has this one gone in? If not, here's some tags:
+> 
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
+> 
+> It also needs to go to stable:
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 280a9045bb18 ("ehci: fix EHCI host controller initialization sequence")
 
-Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
----
-v2:
-Changed subject prefix from dwc to dwc3.
-Increased props array size.
+This patch failed to apply to 4.4.y, 4.9.y, and 4.14.y, so could you
+provide a working backport for those kernels for me to be able to queue
+it up to the stable queues there?
 
- drivers/usb/dwc3/host.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+thanks,
 
-diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index f29a264..ece7912 100644
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -44,7 +44,7 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
- 
- int dwc3_host_init(struct dwc3 *dwc)
- {
--	struct property_entry	props[4];
-+	struct property_entry	props[5];
- 	struct platform_device	*xhci;
- 	int			ret, irq;
- 	struct resource		*res;
-@@ -107,6 +107,8 @@ int dwc3_host_init(struct dwc3 *dwc)
- 	if (DWC3_VER_IS_WITHIN(DWC3, ANY, 300A))
- 		props[prop_idx++] = PROPERTY_ENTRY_BOOL("quirk-broken-port-ped");
- 
-+	props[prop_idx++] = PROPERTY_ENTRY_BOOL("usb-skip-phy-init");
-+
- 	if (prop_idx) {
- 		ret = device_create_managed_software_node(&xhci->dev, props, NULL);
- 		if (ret) {
--- 
-2.7.4
-
+greg k-h
