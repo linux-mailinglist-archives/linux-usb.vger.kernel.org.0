@@ -2,89 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7E44480CC
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Nov 2021 15:05:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE8F4480CD
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Nov 2021 15:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237673AbhKHOIi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Nov 2021 09:08:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35614 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236375AbhKHOIh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Nov 2021 09:08:37 -0500
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE3EC061570
-        for <linux-usb@vger.kernel.org>; Mon,  8 Nov 2021 06:05:53 -0800 (PST)
-Received: by mail-vk1-xa2a.google.com with SMTP id d130so8276370vke.0
-        for <linux-usb@vger.kernel.org>; Mon, 08 Nov 2021 06:05:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shantur-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tZJpdHOaG0iUf4w7R7AzyCRtmPHuDKsAWZnrMbfncFM=;
-        b=VgjaKR55G/D4nZjX1YOC3DX3oSIfBkO1J0otGZr9fOqR/ddB1D1DxTcIWWaIU4tZti
-         E08BrbDlphyvf9JuDqrLT2ONmgvv9ne40A9Cljfb0AWEwJUKEaPaPO4gmJwtqdRWLTQ1
-         rfh1FGnC8aO970qf0KWTmM4YZ42z87ebIT4DWENDbVq1AsP4Dw/mLyE7T93WLCbPQe4O
-         94MHpBCPJRsJSj7oxTwM5J3Ko2wGAunnt+Ee9cVjptAioF30SPP7f8451OeSrw2YXor7
-         vGHf3fKoXFiFfDIAJ5rKcRbSCGa2dSygT6a+eimVA6Z8kK6DcUzPwLHbEXbUPzWCj7hv
-         b3jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tZJpdHOaG0iUf4w7R7AzyCRtmPHuDKsAWZnrMbfncFM=;
-        b=u/ECyDmYAAvUJ6I8eTnj/+AWOb7iridNu1+mGsktojW0O8Mid/tl/cg8pyhuj6/ya8
-         eThiRUVr/Q3yGrC+Hvnii0d7szVZwajhzu+xxdXcAhxf6ehP/7gZTifAnRJcO4O06Bnv
-         ZDuduRRNvJT271z71TcZNETRO46LHsW3g/GwMnjAmVd17lnz2sFp0rfqbvH9/RRqSQ5F
-         +Vapa+kfreXYcPWhK485cMCIzJGroONzvUXRrlN+0rFITwkW29Skxpi2E3XgT9i7vLNV
-         3IiFxESjALj6dRC6igwYQ5j8FDPhGhZioh3LFu3gHSFHpSKm91nh/6EngS31OuXZjLXq
-         DdeA==
-X-Gm-Message-State: AOAM533InUcI1HyxUzZFdQFFO+hOi3aIvgPeEXX+qE9yg2Xc8c3cK//O
-        Qz50/wG3GwqYHX7mI83VfbUjLZBrFfK0lWxXSEQDzw==
-X-Google-Smtp-Source: ABdhPJz6OUqE+9l/eylnaLABbYLSl68+5HfjObbW0tS07s3Ll7rPpxn7Z77euCFxg4+Yxbb9s/PShMgZOigjAYB7bIk=
-X-Received: by 2002:a05:6122:1693:: with SMTP id 19mr32618153vkl.2.1636380352332;
- Mon, 08 Nov 2021 06:05:52 -0800 (PST)
+        id S238823AbhKHOIj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Nov 2021 09:08:39 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:58413 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S237677AbhKHOIj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Nov 2021 09:08:39 -0500
+Received: (qmail 1666786 invoked by uid 1000); 8 Nov 2021 09:05:53 -0500
+Date:   Mon, 8 Nov 2021 09:05:53 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v0 16/42] USB: Check notifier registration return value
+Message-ID: <20211108140553.GA1666297@rowland.harvard.edu>
+References: <20211108101157.15189-1-bp@alien8.de>
+ <20211108101157.15189-17-bp@alien8.de>
 MIME-Version: 1.0
-References: <CABEcMwWwsa1Q_mZaf=QUQb-Gc-xe=gmL6F2v3BPGyrJ7-mfB2g@mail.gmail.com>
- <87sfw6eqx8.fsf@kernel.org>
-In-Reply-To: <87sfw6eqx8.fsf@kernel.org>
-From:   Shantur Rathore <i@shantur.com>
-Date:   Mon, 8 Nov 2021 14:05:44 +0000
-Message-ID: <CABEcMwWfXnxY=J1Q7HPSXEFehRi902OzdkNse1+mYfwj33aO+w@mail.gmail.com>
-Subject: Re: usb-gadget: dynamic reconfiguration
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211108101157.15189-17-bp@alien8.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 8, 2021 at 1:08 PM Felipe Balbi <balbi@kernel.org> wrote:
->
->
-> Hi,
->
-> Shantur Rathore <i@shantur.com> writes:
-> > Hi all,
-> >
-> > I am trying to figure out if it's possible to reconfigure a usb-gadget
-> > when it's live.
-> > The idea is to create a gadget with 1 function - lets say a serial gadget.
-> >
-> > Upon communication with the host, the host could specify (via Serial
-> > communication) which is the next gadget it needs for example a mass
-> > storage or ecm and the next gadget can be added to the configuration.
-> >
-> > For now this only works if the gadget is disconnected and reconnected
-> > to the UDC.
-> >
-> > I want to understand if it is technically possible to add more
-> > functions to a live config without affecting existing functions.
->
-> the only thing you can do is upon a certain command, logically
-> disconnect from the bus and connect again as a new device.
+On Mon, Nov 08, 2021 at 11:11:31AM +0100, Borislav Petkov wrote:
+> From: Borislav Petkov <bp@suse.de>
+> 
+> Avoid homegrown notifier registration checks.
 
-thanks guys, always helpful.
+This is a rather misleading description.  The patch does exactly the 
+opposite: It _adds_ a homegrown notifier registration check.  (Homegrown 
+in the sense that the check is made by the individual caller rather than 
+being centralized in the routine being called.)
 
->
-> --
-> balbi
+Alan Stern
+
+> No functional changes.
+> 
+> Signed-off-by: Borislav Petkov <bp@suse.de>
+> Cc: linux-usb@vger.kernel.org
+> ---
+>  drivers/usb/core/notify.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/core/notify.c b/drivers/usb/core/notify.c
+> index e6143663778f..80d1bfa61887 100644
+> --- a/drivers/usb/core/notify.c
+> +++ b/drivers/usb/core/notify.c
+> @@ -28,7 +28,8 @@ static BLOCKING_NOTIFIER_HEAD(usb_notifier_list);
+>   */
+>  void usb_register_notify(struct notifier_block *nb)
+>  {
+> -	blocking_notifier_chain_register(&usb_notifier_list, nb);
+> +	if (blocking_notifier_chain_register(&usb_notifier_list, nb))
+> +		pr_warn("USB change notifier already registered\n");
+>  }
+>  EXPORT_SYMBOL_GPL(usb_register_notify);
+>  
+> -- 
+> 2.29.2
+> 
