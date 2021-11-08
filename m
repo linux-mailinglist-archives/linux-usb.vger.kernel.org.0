@@ -2,138 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5AA449C8B
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Nov 2021 20:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5245C449D69
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Nov 2021 21:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237564AbhKHThN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Nov 2021 14:37:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237545AbhKHThM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Nov 2021 14:37:12 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5213C061746
-        for <linux-usb@vger.kernel.org>; Mon,  8 Nov 2021 11:34:27 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id n29so17104396wra.11
-        for <linux-usb@vger.kernel.org>; Mon, 08 Nov 2021 11:34:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZfqMWQMUbjmhEJSkL6pUi8fZcDXQhGXqHpkR3NxIB0w=;
-        b=Pq72Wuc+TwQ7kdDg9fQNpDsaWj9PsG1NXy2QVK7252I4pPI/i4ELB/louvCSOuT6r4
-         OHnGShi35MhvVlEQDJ4LYKVaSrgEV89hu718An9GvNV1O02JPlI4qrDC4bOpXJ5+DHPD
-         mWMzFcygJzxHTsyCsMGUhdXzssGMVdJOMNMmPSOXCF+jbiTuQgcIsoqOTzYpzbdBthiV
-         y5hzBipuf7P2CfqNgrhc/d+0o0x0q+DaZqFX0hKvegSQWceTHAuWUiwqmH+GZvV7CONL
-         zbwx9nn201+8aWx8SjhT/q4N+YYVcX7iHBQZgwuaTRbbsI5TDrrWr0F8BMh92H11xZYP
-         ws8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZfqMWQMUbjmhEJSkL6pUi8fZcDXQhGXqHpkR3NxIB0w=;
-        b=htvjRZ1HveodiTUWTFwHvqB6KDdfaD8t/l3R688eA4PvudeirAP3hJVas2vgxeJdIN
-         wGysamgyR4w4XfTE1atp2uYy1IrxubtY9e6J5hpbHCJHMFAeNeonmjEeoYALQPs1glPM
-         Tj/lUEkOhGQ7qj4J2uYdFz1IVOzVrsHaiamaxRRzLJjWn0Yb/CehKSSEf7i48ZN8AAZb
-         w7saymy5+AS9myBSGLnYy52wD82NKQq0qIUmCEVMUbQMR9KbSLXWFlt4Jhk1jPUYpJSV
-         N2PK3FsCrHXgtY5B0Wj0Rw0kRwDJ1XnQZWNbdwJstccG/odMuV5EoFQ8BE09utAHSkRV
-         k5VQ==
-X-Gm-Message-State: AOAM5305Qwh2kF/tSoD9Z1QCDGlu/V7QAmzPL2NGzQNh6rxKAwdWdi3P
-        y+9YLmCrjGyLoMeQ4WqMBy7BuQ==
-X-Google-Smtp-Source: ABdhPJy6X8TfhTuDeBXEDxnnB9cLYXfKk1/TslNQYy0mPQHbIf0jQjhY05zH0OFZhoBj6HgD3Amagw==
-X-Received: by 2002:a05:6000:110a:: with SMTP id z10mr1959969wrw.396.1636400066285;
-        Mon, 08 Nov 2021 11:34:26 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id a9sm17455570wrt.66.2021.11.08.11.34.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Nov 2021 11:34:25 -0800 (PST)
-Message-ID: <4195f05a-e926-246c-5276-ec38750909cb@linaro.org>
-Date:   Mon, 8 Nov 2021 19:36:27 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [PATCH v3 5/7] dt-bindings: usb: Add Qualcomm PMIC TCPM YAML
- schema
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        id S236837AbhKHVCR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Nov 2021 16:02:17 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:38035 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S238465AbhKHVCP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Nov 2021 16:02:15 -0500
+Received: (qmail 1679175 invoked by uid 1000); 8 Nov 2021 15:59:26 -0500
+Date:   Mon, 8 Nov 2021 15:59:26 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ayush Sawal <ayush.sawal@chelsio.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        devicetree@vger.kernel.org, Wesley Cheng <wcheng@codeaurora.org>
-References: <20211105033558.1573552-1-bryan.odonoghue@linaro.org>
- <20211105033558.1573552-6-bryan.odonoghue@linaro.org>
- <YYlaqTYhe4hbXhFf@robh.at.kernel.org>
- <60841bf0-f5ea-314f-34c6-822a8812000d@linaro.org>
- <CAL_JsqKtesGfaJ+81jaWzB1kD_qXeehv7hrvXh3x=cpo15Ny-g@mail.gmail.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <CAL_JsqKtesGfaJ+81jaWzB1kD_qXeehv7hrvXh3x=cpo15Ny-g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Rohit Maheshwari <rohitm@chelsio.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        intel-gvt-dev@lists.freedesktop.org,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-edac@vger.kernel.org,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        linux-hyperv@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-leds <linux-leds@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "open list:REMOTE PROCESSOR \(REMOTEPROC\) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-staging@lists.linux.dev,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT \(xtensa\)" 
+        <linux-xtensa@linux-xtensa.org>, netdev <netdev@vger.kernel.org>,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux <sparclinux@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v0 42/42] notifier: Return an error when callback is
+ already registered
+Message-ID: <20211108205926.GA1678880@rowland.harvard.edu>
+References: <20211108101157.15189-1-bp@alien8.de>
+ <20211108101157.15189-43-bp@alien8.de>
+ <CAMuHMdWH+txiSP_d7Jc4f_bU8Lf9iWpT4E3o5o7BJr-YdA6-VA@mail.gmail.com>
+ <YYkyUEqcsOwQMb1S@zn.tnic>
+ <CAMuHMdXiBEQyEXJagSfpH44hxVA2t0sDH7B7YubLGHrb2MJLLA@mail.gmail.com>
+ <YYlJQYLiIrhjwOmT@zn.tnic>
+ <CAMuHMdXHikGrmUzuq0WG5JRHUUE=5zsaVCTF+e4TiHpM5tc5kA@mail.gmail.com>
+ <YYlOmd0AeA8DSluD@zn.tnic>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YYlOmd0AeA8DSluD@zn.tnic>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 08/11/2021 19:22, Rob Herring wrote:
-> On Mon, Nov 8, 2021 at 12:58 PM Bryan O'Donoghue
-> <bryan.odonoghue@linaro.org> wrote:
->>
->> On 08/11/2021 17:13, Rob Herring wrote:
->>> Looks like the h/w is all part of a
->>> PMIC, so it should be part of the PMIC binding and probably merged with
->>> one of the nodes these phandles point to.
->>
->> Not sure I really follow you here.
->>
->> The existing PMIC dts arch/arm64/boot/dts/qcom/pm8150b.dtsi has:
->>
->> pm8150b_gpios: gpio@c000 {
->>       compatible = "qcom,pm8150b-gpio";
->> }
->> Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
->>
->> and
->>
->> pm8150b_adc_tm: adc-tm@3500 {
->>       compatible = "qcom,spmi-adc-tm5";
->> };
->> Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
->>
->> to which I'm adding :
->>
->> pm8150b_typec: typec@1500 {
->>       compatible = "qcom,pm8150b-typec";
->> };
->>
->> Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
->>
->> pm8150b_pdphy: pdphy@1700 {
->>       compatible = "qcom,pm8150b-pdphy";
->> };
->>
->> Documentation/devicetree/bindings/usb/qcom,pmic-pdphy.yaml
+On Mon, Nov 08, 2021 at 05:21:45PM +0100, Borislav Petkov wrote:
+> On Mon, Nov 08, 2021 at 05:12:16PM +0100, Geert Uytterhoeven wrote:
+> > Returning void is the other extreme ;-)
+> > 
+> > There are 3 levels (ignoring BUG_ON()/panic () inside the callee):
+> >   1. Return void: no one can check success or failure,
+> >   2. Return an error code: up to the caller to decide,
+> >   3. Return a __must_check error code: every caller must check.
+> > 
+> > I'm in favor of 2, as there are several places where it cannot fail.
 > 
->  From what I gather, there is not a 3rd h/w device this binding
-> describes, but it is just a collection of all the data you happen to
-> want for your driver.
+> Makes sense to me. I'll do that in the next iteration.
 
-The TCPM "virtual" driver presents as a device to the TCPM API and then 
-uses phandle to talk to the PDPHY and typec devices yes.
+Is there really any reason for returning an error code?  For example, is 
+it anticipated that at some point in the future these registration calls 
+might fail?
 
-  That's assuming a specific structure for a
-> specific OS. Why can't most of this binding be part of
-> "qcom,pm8150b-typec" instead of making up some virtual device?
+Currently, the only reason for failing to register a notifier callback 
+is because the callback is already registered.  In a sense this isn't 
+even an actual failure -- after the registration returns the callback 
+_will_ still be registered.
 
-I thought it was a better model to have the TCPM be a separate device 
-with the pdphy and typec blocks as their own devices.
+So if the call can never really fail, why bother with a return code?  
+Especially since the caller can't do anything with such a code value.
 
-#1 Because the address space spans over more than just the pdphy and 
-typec device, there's a charger block in between
+Given the current state of affairs, I vote in favor of 1 (plus a WARN or 
+something similar to generate a stack dump in the callee, since double 
+registration really is a bug).
 
-#2 Because the pdphy and typec have separate IRQ lines and register spaces
-
----
-bod
+Alan Stern
