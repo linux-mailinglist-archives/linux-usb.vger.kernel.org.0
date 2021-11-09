@@ -2,131 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B8544B1B3
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Nov 2021 18:03:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE3244B57B
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Nov 2021 23:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240698AbhKIRGn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Nov 2021 12:06:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239427AbhKIRGm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Nov 2021 12:06:42 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEFFC061764;
-        Tue,  9 Nov 2021 09:03:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Content-Transfer-Encoding:
-        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=4ZefLbsNKRWIJeD/uc4IHUZbZRNto2H4EeJCNxjeN1k=; t=1636477436; x=1637687036; 
-        b=Ef2ORtNj/IJpaCmraDm3mwymqpK6VT/SnG19OVTzoU5hiOCXjPJlCcpGQqV7NHaQqsdnTIunWf9
-        LI74SHqp/i2lsdFy6J24TQMrm2wCP1OUmn3Y3fPAjx811LLXF3Y9/NmZr8ybuAn7tNoxfjDIY89x8
-        l6bwMmrSmUEudJsjaOSRgd1/qTGPsjQYP27b6m8mWRAOadr14PAQOXJaN+3cuCRinSTopBckh1TsU
-        WWDLOV+KYzO5ubqOZgmjfADRPygWvReDnwyL9KEaAwo98a6oA/URDZDQi/7uKFK4AOiXsr3FBJ+2w
-        JU/bB1Ict0KeZ/Vf6LvUoIt/tEtOyBE3io/Q==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <benjamin@sipsolutions.net>)
-        id 1mkUXH-00D227-Ev;
-        Tue, 09 Nov 2021 18:03:51 +0100
-Message-ID: <76ff2cb3f687fdf0ca271fe0fe084371c4288c33.camel@sipsolutions.net>
-Subject: Re: Userspace enumeration hang while btusb tries to load firmware
- of removed device
-From:   Benjamin Berg <benjamin@sipsolutions.net>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Marcel Holtmann <marcel@holtmann.org>
-Cc:     linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org
-Date:   Tue, 09 Nov 2021 18:03:48 +0100
-In-Reply-To: <20211103201138.GC1529362@rowland.harvard.edu>
-References: <df021873788acdb64e1311289e9ca6dc3f169616.camel@sipsolutions.net>
-         <20211103182303.GB1529362@rowland.harvard.edu>
-         <BCD95F43-3C6E-4B50-9228-9F2AD93BBBA4@holtmann.org>
-         <20211103201138.GC1529362@rowland.harvard.edu>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-s4OlCZHD6ZVRueWwyarj"
-User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
+        id S1343571AbhKIWVD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Nov 2021 17:21:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41188 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245561AbhKIWUd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 9 Nov 2021 17:20:33 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C119461248;
+        Tue,  9 Nov 2021 22:17:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636496247;
+        bh=4CRT7RCXMKiOsgu3ogcz06kWJVI2Tfh4ozMN2bCKil8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mNNIslf5Ttp1EMjEK+8uiSQE71j9avEujesk+b+vYb1Qy/Yf76Iz9Zk20dN1kA+Ss
+         TfNwnL7Xyb3rOA2XN1NFMzJ+Z1B2itTUE8NO+xwFW4Y4zizoW4+nYIDC9ezIfHL4dn
+         Ah60Yjp0wwcnf4o2orHnVD/AJAMehetFAwJyLuYXA2YgHRnflOFY3d1zzUybO7WnDB
+         2iEoSULcuOtB8FqfnTk/hoJ1h88M5/bzq1n7SdcmCgg/wtgb/bn1brlGKQZQDCKWJ2
+         cPjyUS7qqbQRO5ib7Y4KXyMm6nHRS2IZLi4Rj+M982Xe+4QfJcWjkMXiEvoBdzTSai
+         kQ6+TfyKpipKg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, balbi@ti.com,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 21/82] usb: musb: tusb6010: check return value after calling platform_get_resource()
+Date:   Tue,  9 Nov 2021 17:15:39 -0500
+Message-Id: <20211109221641.1233217-21-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211109221641.1233217-1-sashal@kernel.org>
+References: <20211109221641.1233217-1-sashal@kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-malware-bazaar-2: OK
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: Yang Yingliang <yangyingliang@huawei.com>
 
---=-s4OlCZHD6ZVRueWwyarj
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+[ Upstream commit 14651496a3de6807a17c310f63c894ea0c5d858e ]
 
-Hi,
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-On Wed, 2021-11-03 at 16:11 -0400, Alan Stern wrote:
-> On Wed, Nov 03, 2021 at 08:31:03PM +0100, Marcel Holtmann wrote:
-> > the problem seems to be that we hitting HCI command timeout. So the=20
-> > firmware download is done via HCI commands. These commands are send to=
-=20
-> > the transport driver btusb.c via hdev->send (as btusb_send_frame).=20
-> > This triggers the usb_submit_urb or queues them via data->deferred=20
-> > anchor. All this reports back the error properly except that nobody=20
-> > does anything with it.
-> >=20
-> > See hci_send_frame() last portion:
-> >=20
-> >         err =3D hdev->send(hdev, skb);
-> >         if (err < 0) {
-> >                 bt_dev_err(hdev, "sending frame failed (%d)", err);
-> >                 kfree_skb(skb);
-> >         }
-> >=20
-> > And that is it. We are not checking for ENODEV or any error here. That=
-=20
-> > means the failure of the HCI command gets only caught via the HCI=20
-> > command timeout. I don=E2=80=99t know how to do this yet, but you would=
- have=20
-> > to look there to fail HCI command right away instead of waiting for=20
-> > the timeout.
->=20
-> I have no idea how all the different layers work here.  Clearly=20
-> something has to signal hdev->req_wait_q after setting hdev->req_status=
-=20
-> to some appropriate value.  Can this be done in btusb.c, either when the=
-=20
-> URB is submitted or when it completes?  Or in hci_send_frame?
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Link: https://lore.kernel.org/r/20210915034925.2399823-1-yangyingliang@huawei.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/musb/tusb6010.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-I submitted
-  https://patchwork.kernel.org/project/bluetooth/list/?series=3D577565
-for this now.
-
-The patchset pretty much calls hci_req_sync_cancel to set req_status
-and signal req_wait_q. Doing this and hooking it up in various location
-appears to work reasonably well for the synchronous commands.
-
-Benjamin
-
-PS: The user now reported that TLP is blocking the rfkill switch after
-resume. So an good workaround is to just not use TLP.
-
---=-s4OlCZHD6ZVRueWwyarj
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEED2NO4vMS33W8E4AFq6ZWhpmFY3AFAmGKqfQACgkQq6ZWhpmF
-Y3BO8g/+J5w8LRcVVM8jUDu+KP+kJhy9bOXENEmanf2j2QgnMY1nOi/E/VYnQ/jC
-DGFxp49Y/SIDpFOvjQ+xOd9/Q22kiN6Uyz1m1/jV0ubBpkb0FxueoIdl1Kq/vSgF
-sZSVGSNJrNMSgd9NSi1MyZiWI5mm02nSy/XOCrQGNn5qgmIUAYteuRz4x815Hqqd
-ibelL1P5pGVwD19dKSRCH0aW7u4KWrhBKlcMtyOo1RmLQaJZ2bmAtBZoIiENEYTf
-Uqs5EqPFuHLIBWX6hi4wl2r/1XwGNrWQTU9+zmCIDvs9F7NMW6jv36O+686lqSI2
-H0SYV/wOvCM3mzWsCZ06rbRo2v33UhTwlp7w9z8zFPjtNRpz9eWEGFbiyZJWhwha
-8HPR66UmkP9dycJfO4bXg63hKes9HQmMfI8PYHs5Hgw4vOnpIUg7a6WSGo2Ql/ae
-f7d0en34fS0oOW20QEth8g/R3lUjOP9xdoT7XfN8o19yjY8GDHJ5j1RpzISzG7se
-peCyOWQxsIMkbgLfz0kboB52J4QTBAQnPXrodOl5GiEU8nzveOvEJDjEJ/97invr
-svpq4IHz1ztjsf5Fs2G77Fwsr9e6DvFJYhzDU7U5gZ/Bl7YprVWP5O9XU2Ek5Uaz
-AZdAcKcHME5g23jE6FGPAy0XFEm+Vb/rxXDq8Pwmyb5SrlCAMtA=
-=uOcD
------END PGP SIGNATURE-----
-
---=-s4OlCZHD6ZVRueWwyarj--
+diff --git a/drivers/usb/musb/tusb6010.c b/drivers/usb/musb/tusb6010.c
+index c968ecda42aa8..7ed4cc348d993 100644
+--- a/drivers/usb/musb/tusb6010.c
++++ b/drivers/usb/musb/tusb6010.c
+@@ -1104,6 +1104,11 @@ static int tusb_musb_init(struct musb *musb)
+ 
+ 	/* dma address for async dma */
+ 	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!mem) {
++		pr_debug("no async dma resource?\n");
++		ret = -ENODEV;
++		goto done;
++	}
+ 	musb->async = mem->start;
+ 
+ 	/* dma address for sync dma */
+-- 
+2.33.0
 
