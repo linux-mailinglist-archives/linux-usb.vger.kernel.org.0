@@ -2,187 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47ED544A5DF
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Nov 2021 05:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85BA544A601
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Nov 2021 06:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242811AbhKIEqk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Nov 2021 23:46:40 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:62176 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242766AbhKIEqk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Nov 2021 23:46:40 -0500
+        id S231887AbhKIFNO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Nov 2021 00:13:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230238AbhKIFNM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Nov 2021 00:13:12 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DCBC061764
+        for <linux-usb@vger.kernel.org>; Mon,  8 Nov 2021 21:10:27 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id d24so30818004wra.0
+        for <linux-usb@vger.kernel.org>; Mon, 08 Nov 2021 21:10:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1636433035; x=1667969035;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RPvJcJDPMdp7Swo0W51sy6DYmybCviFK4B196uJ5MtU=;
-  b=B4RJTFsVYUWnpLsLCLV9YTjlCqdSfTmFSJm7ZcxYJXKZ68rP+RA4lHZh
-   CIf2R60odjISVa7YAyXXTQFRCvMOOPxaTsGNlJASAODykVdjUwhr9oXWc
-   BFF3wctjiZpp5h1BqDX6c+dzwq6Q2bDNAjtejuCycOXIv/UpTONMH4CU9
-   8=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Nov 2021 20:43:55 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2021 20:43:54 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Mon, 8 Nov 2021 20:43:54 -0800
-Received: from qian-HP-Z2-SFF-G5-Workstation (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Mon, 8 Nov 2021 20:43:52 -0800
-Date:   Mon, 8 Nov 2021 23:43:50 -0500
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [RFC PATCH] software node: Skip duplicated software_node sysfs
-Message-ID: <YYn8hpxxmAtw9z5S@qian-HP-Z2-SFF-G5-Workstation>
-References: <20211101200346.16466-1-quic_qiancai@quicinc.com>
- <CAHp75VcrWPdR8EVGpcsniQedT0J4X700N7thFs6+srTP1MTgwQ@mail.gmail.com>
- <52df4a97-1132-d594-0180-132d0ca714d5@quicinc.com>
- <CAHp75VebOnrce-XZjOnZiivQPz-Cdgq6mor5oiLxK8Y49GiNNg@mail.gmail.com>
- <1269258d-db4c-3922-776b-f11e6a1e338e@quicinc.com>
- <YYlnIpGEmLH5GXft@smile.fi.intel.com>
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wChQfCcRN8/h4bsmukuc7LMGPInLM49zrDhyAhinlqc=;
+        b=e1iCXh6FUM+zNl6Shpg9UNX5ZOG1m5JqUzsx7ykiMPNSCkQhzYki77QU18eiKEZXSH
+         XlWbUC1hQxwoeKsPtDsnE1Wj26HzRehUzx04QB6IA4+M7k5ki5LSAFI+cCqivJjO56nS
+         OXJc7Om1NK7Outorntm5sr1QGH2Hz9yw3eNMI4zoXp5nEGRH7m2+rHyF+KVNmR0gXK/c
+         5pBWpiMSHN16gqu/V7gIU6dEQ1Ikg+HTSIg0j2dTd/HSVcUlC4JJtd5/p5CaZGstXcdA
+         TRsUh8zkfHf2jxZlh+g87wWqFUdmFn+VgkxAiJjTpKGtDrZu4NzTnWs5aIyDTYCoG8Ha
+         IbuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wChQfCcRN8/h4bsmukuc7LMGPInLM49zrDhyAhinlqc=;
+        b=K/GsUbo4fiFeIeRTPjoNfD7mRqEs6fLjpQNgjm0n8E93vabHNIlp5kjbz3mefp6CNa
+         6KjstHeFHTjN0O/AU/KosUtC7c21BE9owggoI+AL7gIamCvZZNDguujaWyBJFDXZPaV+
+         hY7AQtUgT7WUiMtuJfcCqaMhnrfLd9dC802XztR8hQWPMovsoQTIz3qXuzEPkKrCNNES
+         N857x0CrdSpJzb0p/eT+v13Ex3FlkbuMqzr1EoU1zHqjuE7cPcZh9DoGcOF8jUztOVca
+         hITF9NEmwUkmiIRumRe85oApta8WIvWsrfk0F3zoLHNNOHLtseYY6fl90ffMtFF6yGQj
+         Supw==
+X-Gm-Message-State: AOAM531ZlCFIEwOs5JFS8YBrTNANjUv4RvFNGknUY63k1Aoz9pGGZDFS
+        OD2hNAluhlCFmM5yC/m0Lo0rP9zbDGRYmbS/ei0pjg==
+X-Google-Smtp-Source: ABdhPJysyG8kDS71v04oKrDBw4a2yzyW7tkmiQNLXXJxYIYgOAWLA43awMFFV2xk3XNQDkhNLo3z9H5w6JZ5026TkqI=
+X-Received: by 2002:a5d:5186:: with SMTP id k6mr6021712wrv.146.1636434625375;
+ Mon, 08 Nov 2021 21:10:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YYlnIpGEmLH5GXft@smile.fi.intel.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+References: <20211104062616.948353-1-albertccwang@google.com> <20211106012513.GA19852@jackp-linux.qualcomm.com>
+In-Reply-To: <20211106012513.GA19852@jackp-linux.qualcomm.com>
+From:   Albert Wang <albertccwang@google.com>
+Date:   Tue, 9 Nov 2021 13:10:13 +0800
+Message-ID: <CANqn-rj3hJcKet=Fn3QwWqRZL11YfitBgjiE4kz-ttOfgqpARw@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc3: gadget: Fix null pointer exception
+To:     Jack Pham <quic_jackp@quicinc.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, badhri@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 08, 2021 at 08:06:26PM +0200, Andy Shevchenko wrote:
-> Btw, what you can do in this case is to switch to use fwnode_create_software
-> node and switch them in drd.c. It will be much much easier to achieve then
-> full kernel refactoring.
+Ok, let me do that.
 
-(Adding arm64 and dwc3 people since that iort_iommu_configure_id()
-path below to create a duplicated sysfs is arm64-specific. The
-original thread is here):
+Thanks,
+Albert
 
-https://lore.kernel.org/lkml/20211101200346.16466-1-quic_qiancai@quicinc.com/
-
-Andy, did you mean host.c? I saw that the first time
-"/devices/platform/808622B7:01/xhci-hcd.3.auto/software_node" was
-created by dwc3_host_init(). Call trace:
-
-  sysfs_do_create_link_sd.isra.0
-  sysfs_create_link
-  software_node_notify
-  device_add
-  platform_device_add
-  dwc3_host_init
-  dwc3_probe
-  platform_probe
-  really_probe.part.0
-  really_probe
-  __driver_probe_device
-  driver_probe_device
-  __driver_attach
-  bus_for_each_dev
-  driver_attach
-  bus_add_driver
-  driver_register
-  __platform_driver_register
-  dwc3_driver_init
-  dwc3_driver_init at drivers/usb/dwc3/core.c:2072
-  do_one_initcall
-  kernel_init_freeable
-  kernel_init
-  ret_from_fork
-
-Then, which functions do you suggest to replace with
-fwnode_create_software_node()? In dwc3_host_init(),
-
-int dwc3_host_init(struct dwc3 *dwc)
-{
-	...
-	xhci = platform_device_alloc("xhci-hcd", PLATFORM_DEVID_AUTO);
-	...
-	ret = platform_device_add(xhci);
-
-I am wondering if that we could solve the problem by avoiding
-"xhci-hcd" string here which would unfortunately clash with
-xhci_plat_init() as mentioned before:
-
-  sysfs_create_link
-  software_node_notify
-  device_create_managed_software_node
-  iort_named_component_init
-  iort_iommu_configure_id
-  acpi_dma_configure_id
-  platform_dma_configure
-  really_probe.part.0
-  really_probe
-  __driver_probe_device
-  driver_probe_device
-  __driver_attach
-  bus_for_each_dev
-  driver_attach
-  bus_add_driver
-  driver_register
-  __platform_driver_register
-  xhci_plat_init
-  do_one_initcall
-  kernel_init_freeable
-  kernel_init
-  ret_from_fork
-
-since the driver would also use "xhci-hcd".
-
-static struct platform_driver usb_xhci_driver = {
-	...
-	.driver	= {
-		.name = "xhci-hcd",
-
-static int __init xhci_plat_init(void)
-{
-       ...
-       return platform_driver_register(&usb_xhci_driver);
-
-
-BTW, "/sys/devices/platform/808622B7:01/software_node" was also
-created from the path:
-
-  sysfs_create_link
-  software_node_notify
-  device_create_managed_software_node
-  iort_named_component_init
-  iort_iommu_configure_id
-  acpi_dma_configure_id
-  platform_dma_configure
-  really_probe.part.0
-  really_probe
-  __driver_probe_device
-  driver_probe_device
-  __driver_attach
-  bus_for_each_dev
-  driver_attach
-  bus_add_driver
-  driver_register
-  __platform_driver_register
-  dwc3_driver_init
-  do_one_initcall
-  kernel_init_freeable
-  kernel_init
-  ret_from_fork
-
-# ls -l /sys//devices/platform/808622B7:01/xhci-hcd.3.auto/software_node
-lrwxrwxrwx 1 root root 0 Nov  9 03:18 /sys//devices/platform/808622B7:01/xhci-hcd.3.auto/software_node -> ../../../../kernel/software_nodes/node4
-
-# ls -l /sys//devices/platform/808622B7:01/software_node
-lrwxrwxrwx 1 root root 0 Nov  9 03:18 /sys//devices/platform/808622B7:01/software_node -> ../../../kernel/software_nodes/node4
+On Sat, Nov 6, 2021 at 9:25 AM Jack Pham <quic_jackp@quicinc.com> wrote:
+>
+> On Thu, Nov 04, 2021 at 02:26:16PM +0800, Albert Wang wrote:
+> > In the endpoint interrupt functions
+> > dwc3_gadget_endpoint_transfer_in_progress() and
+> > dwc3_gadget_endpoint_trbs_complete() will dereference the endpoint
+> > descriptor. But it could be cleared in __dwc3_gadget_ep_disable()
+> > when accessory disconnected. So we need to check whether it is null
+> > or not before dereferencing it.
+> >
+> > Signed-off-by: Albert Wang <albertccwang@google.com>
+>
+> Nice catch.  I think this might have been caused when the call to
+> dwc3_remove_requests() in __dwc3_gadget_ep_disable() was moved after
+> the endpoint descriptors is cleared.  So you can probably add:
+>
+> Fixes: f09ddcfcb8c5 ("usb: dwc3: gadget: Prevent EP queuing while
+> stopping transfers").
+>
+> Reviewed-by: Jack Pham <quic_jackp@quicinc.com>
+>
+> > ---
+> >  drivers/usb/dwc3/gadget.c | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > index 23de2a5a40d6..83c7344888fd 100644
+> > --- a/drivers/usb/dwc3/gadget.c
+> > +++ b/drivers/usb/dwc3/gadget.c
+> > @@ -3252,6 +3252,9 @@ static bool dwc3_gadget_endpoint_trbs_complete(struct dwc3_ep *dep,
+> >       struct dwc3             *dwc = dep->dwc;
+> >       bool                    no_started_trb = true;
+> >
+> > +     if (!dep->endpoint.desc)
+> > +             return no_started_trb;
+> > +
+> >       dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
+> >
+> >       if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
+> > @@ -3299,6 +3302,9 @@ static void dwc3_gadget_endpoint_transfer_in_progress(struct dwc3_ep *dep,
+> >  {
+> >       int status = 0;
+> >
+> > +     if (!dep->endpoint.desc)
+> > +             return;
+> > +
+> >       if (usb_endpoint_xfer_isoc(dep->endpoint.desc))
+> >               dwc3_gadget_endpoint_frame_from_event(dep, event);
+> >
+> > --
+> > 2.33.1.1089.g2158813163f-goog
+> >
