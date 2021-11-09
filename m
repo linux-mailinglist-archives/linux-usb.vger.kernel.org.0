@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E95144B6AE
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Nov 2021 23:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C9F44B6EA
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Nov 2021 23:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343895AbhKIW3X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Nov 2021 17:29:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50282 "EHLO mail.kernel.org"
+        id S1344810AbhKIWat (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Nov 2021 17:30:49 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48790 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344377AbhKIW0W (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 9 Nov 2021 17:26:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D25876108C;
-        Tue,  9 Nov 2021 22:19:42 +0000 (UTC)
+        id S1344874AbhKIW2q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 9 Nov 2021 17:28:46 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 74B3661208;
+        Tue,  9 Nov 2021 22:20:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636496383;
-        bh=wUtuqPafkjHuIBSa8o+gQLFE+TdhXk32F5NW/Iv+NVQ=;
+        s=k20201202; t=1636496428;
+        bh=wywaTOUg4rQhajJSmVTWOlOkW6JYAOE/z69eL1ZC92g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uRj+lozdHJWEAMq0KvOwyGZvJfb+CnRhqx5FkI375EKwx+nRaL9I23lC0ypmV470t
-         Gg5LiqR7nXBJA+VdeSJPLRlai9C+SU7RY/XerNQWFVXyNOrDmXhl8W1BNmOOsMoUyv
-         kcXUd/vTH50mHiTQQ2k79Ie6Cni6dAWRoakzDPhP7ckxaUyHm3/FyRVYRsMcaw62jM
-         5wkvjUAI5TjiJ+MG7+FfyOMfn9GSwCbMhi4stJBMvJTzJI88mIrOeku9O1sEn9/qTt
-         3F7ZCL/LQikGl8YDp1Pg7VOMNuBxtaCXNJcl16+iZqVYXL4UMK2yqANMFdZlBtdkxv
-         Q0s8Qz4fElxIw==
+        b=JRdFFf5MNMSCXX9qLE2B6DXoQdb6cYBfJKdbCi7eqmF8D02TwZCyqi7tqWnNgPcQ1
+         FtEcu0FueIN6XnxnLbjwMc5xkAkVM6L7hfoVRJgFalJYS0rTFIJEHXs9qTVi02f71o
+         Sawq+GzgHKO4BR2Pkw4Ny+3NYgL4eNV7RjqddjolDf06OyrLiHVUv9GsHeG1kS3sPJ
+         JSkYgCVlzFjL/i+iwR501kTT6Pca6N/3kaiTjzUXnyc4VKnrgM+cv2ULehBHR3tO1N
+         4w3DTqFXFioGZXAHrMsnonRNjHWRGgsS89qmPFDsK8rmBobzvyptKlkMfA+pdqKplR
+         VLITeHkbxvAbg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 21/75] usb: typec: tipd: Remove WARN_ON in tps6598x_block_read
-Date:   Tue,  9 Nov 2021 17:18:11 -0500
-Message-Id: <20211109221905.1234094-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.14 51/75] usb: host: ohci-tmio: check return value after calling platform_get_resource()
+Date:   Tue,  9 Nov 2021 17:18:41 -0500
+Message-Id: <20211109221905.1234094-51-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211109221905.1234094-1-sashal@kernel.org>
 References: <20211109221905.1234094-1-sashal@kernel.org>
@@ -43,36 +43,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Sven Peter <sven@svenpeter.dev>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit b7a0a63f3fed57d413bb857de164ea9c3984bc4e ]
+[ Upstream commit 9eff2b2e59fda25051ab36cd1cb5014661df657b ]
 
-Calling tps6598x_block_read with a higher than allowed len can be
-handled by just returning an error. There's no need to crash systems
-with panic-on-warn enabled.
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Sven Peter <sven@svenpeter.dev>
-Link: https://lore.kernel.org/r/20210914140235.65955-3-sven@svenpeter.dev
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Link: https://lore.kernel.org/r/20211011134920.118477-1-yangyingliang@huawei.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/typec/tipd/core.c | 2 +-
+ drivers/usb/host/ohci-tmio.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index ea4cc0a6e40cc..97f50f301f13b 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -117,7 +117,7 @@ tps6598x_block_read(struct tps6598x *tps, u8 reg, void *val, size_t len)
- 	u8 data[TPS_MAX_LEN + 1];
- 	int ret;
+diff --git a/drivers/usb/host/ohci-tmio.c b/drivers/usb/host/ohci-tmio.c
+index 08ec2ab0d95a5..3f3d62dc06746 100644
+--- a/drivers/usb/host/ohci-tmio.c
++++ b/drivers/usb/host/ohci-tmio.c
+@@ -199,7 +199,7 @@ static int ohci_hcd_tmio_drv_probe(struct platform_device *dev)
+ 	if (usb_disabled())
+ 		return -ENODEV;
  
--	if (WARN_ON(len + 1 > sizeof(data)))
-+	if (len + 1 > sizeof(data))
+-	if (!cell)
++	if (!cell || !regs || !config || !sram)
  		return -EINVAL;
  
- 	if (!tps->i2c_protocol)
+ 	if (irq < 0)
 -- 
 2.33.0
 
