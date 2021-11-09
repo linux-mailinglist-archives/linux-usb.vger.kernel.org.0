@@ -2,313 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F171449E62
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Nov 2021 22:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A4B449F85
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Nov 2021 01:28:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240521AbhKHVn1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Nov 2021 16:43:27 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:44082
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240537AbhKHVnM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Nov 2021 16:43:12 -0500
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 868A03F1B8
-        for <linux-usb@vger.kernel.org>; Mon,  8 Nov 2021 21:40:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1636407626;
-        bh=xMlhz60Y7Re9w6VZ4mCdMM9k1oT7By2/e2a+Ful96Aw=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=bX7UibC0CwCtGAXqB/qeeT1i/VWtCJqlLQUm7cSF7t0ziRguM7bqrYu8vjkZrrfAc
-         plNc8MQ9o0kzj1/UN56kTmZ8fFvdR8xRDg037HbTayR+0y3gPz0D3oFeGX2B5P7FtV
-         BdF0vVSGrhpra/iBQ77B9XrNZafgOh5HL15gNL44YRkrbYL+jzz9tvIoDD4iBC7g/W
-         C484qRypK7kAXpGTMaESxWRPtZWjhnxFK7ZgWNI/Bdy6ywY8N9G+UTaZciaKW0qzlb
-         zR33KDw39vmHXhUD3cckhGFOTw0oFp8laC9SqMxAusxCbo4cWD0vYfgJzVR+aZtfsB
-         pFrN+mHdmaebg==
-Received: by mail-ed1-f70.google.com with SMTP id g3-20020a056402424300b003e2981e1edbso16151997edb.3
-        for <linux-usb@vger.kernel.org>; Mon, 08 Nov 2021 13:40:26 -0800 (PST)
+        id S239230AbhKIAaz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Nov 2021 19:30:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231252AbhKIAay (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Nov 2021 19:30:54 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3DCC061714
+        for <linux-usb@vger.kernel.org>; Mon,  8 Nov 2021 16:28:09 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id b17so13102033qvl.9
+        for <linux-usb@vger.kernel.org>; Mon, 08 Nov 2021 16:28:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PIhh11j64GJB5tkkAYeEUi1he5/a0olDT6t9pDlGgAg=;
+        b=SrewlxLXy5A5oOJK7Vp265kIB4JFYhK/xcDmhcxns65Y6VpUudY8geHbQmEX53jxSn
+         QncDcE/y/hkJNipELIVJZjhy2bcTGXZ0s+akt5WukPtKDQwhVRdNp2eLF9ydsjxKCIng
+         /xX0vFqSrLKtA+aRRZkz/EWCkRw/1TKr54qJg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xMlhz60Y7Re9w6VZ4mCdMM9k1oT7By2/e2a+Ful96Aw=;
-        b=D6q6t0yfkHLb+nJOxRaE1pK5qW94ad9LfbN3XSGqDa0VoTY1fu7zGNHw3P3QxwOnFB
-         g758IlzhDh9dMkg9wCNEON00x2owi8MuILWzHd8odPzRX340X70W+9D+pmukrX5jyEv/
-         y3Dx+Ag4eTr6YxpiGc5xDbKfsKZhPMQRHZfh4sLThyKIlkKIpWjSWAwO4Qmfjo//rO1d
-         2ohTKG7dsqrXgYe1ifmQEPjbcn8KrZAOROj16smaLPH+ihxYwBVVamwNcgtsmPYAa58q
-         NVGfO6MkezTU0aCl5McYxmxsQFYRVl3JxnqM8K8USGmc4apzhXdMWchgxJI+9ngrY1ls
-         cgQQ==
-X-Gm-Message-State: AOAM532hRVyNYN3CtTHRZ+h5OEr2ZHvGJpHgTjpcAOn4aNKx6N4VAsDj
-        tjEipCCaxq7EPzx6NAw70ai+jNpVzfjakjqIbRTbTubtzACbnTaasCvD6/c8FfNKkAL1lbO9BbS
-        VGhd4+d+fvIWTMfwgoJZUzT4a62fC43Em3LMtyg==
-X-Received: by 2002:ac2:4bc2:: with SMTP id o2mr2168838lfq.307.1636407614504;
-        Mon, 08 Nov 2021 13:40:14 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJym1HJFJOCiKpshotep+fEMHGVvuCHCUht7Znnr1Fptl/CMGw7zMKN16qBDQpX9jY7h2z+d7w==
-X-Received: by 2002:ac2:4bc2:: with SMTP id o2mr2168813lfq.307.1636407614293;
-        Mon, 08 Nov 2021 13:40:14 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id h18sm295563ljh.133.2021.11.08.13.40.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Nov 2021 13:40:13 -0800 (PST)
-Message-ID: <01fdf2cf-26ae-b062-178b-4b9a23cd5803@canonical.com>
-Date:   Mon, 8 Nov 2021 22:40:12 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PIhh11j64GJB5tkkAYeEUi1he5/a0olDT6t9pDlGgAg=;
+        b=5E3JxqFgCZ5M6c7/4BEDJvmJtVBlFlqy+G6GXVwKlgO/Lp7/5cezJSRqMYHkSmdyuk
+         JsVqVV6wAb3HBvZty2tiQ9Dz2byCh1Go6z08U4N+rqRzcUesFoTXXkjUaKYOfMKHsc+0
+         lSQ2OpfPlB2aelQgVS6/VAP4fhDMtjxSd/xMvcYtm0YkghvKi5U/Ydzp47T1HDh5Zdz+
+         z4lUBdOYUYTyhrr+yXW+LwjIDBM7BjOMdBqaoyKnjTKhV9AgdjP4qoN1IPihyZoXd170
+         SgHGG678MilDok7plbH27y/NY9cKgrp/rDOLHvSyGPGcGJWNzSJ7jHdM+wMQhoR7lnHg
+         21VA==
+X-Gm-Message-State: AOAM53319exOYxi1DiRvEdM/IxU0v0E0UCEbG53t8OtM/h22zsizs66p
+        FLejKpDcUon1QJZe/dEIl7pzoX9dVVbZKZ93ZbLmDxzLeSQ=
+X-Google-Smtp-Source: ABdhPJyy7zFreyFzm0oVAJnF+Wv+Xx1CS7ENHrac3M4N9cvTpQpGSxXw+AwFyiXgc0nhR5tLeK5whJdo4uj4i4ezbU0=
+X-Received: by 2002:a05:6214:21ea:: with SMTP id p10mr2981168qvj.67.1636417688528;
+ Mon, 08 Nov 2021 16:28:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH 12/13] riscv: icicle-kit: update microchip icicle kit
- device tree
-Content-Language: en-US
-To:     conor.dooley@microchip.com, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, robh+dt@kernel.org,
-        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, broonie@kernel.org,
-        gregkh@linuxfoundation.org, lewis.hanly@microchip.com,
-        daire.mcnamara@microchip.com, atish.patra@wdc.com,
-        ivan.griffin@microchip.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     geert@linux-m68k.org, bin.meng@windriver.com
-References: <20211108150554.4457-1-conor.dooley@microchip.com>
- <20211108150554.4457-13-conor.dooley@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211108150554.4457-13-conor.dooley@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20211026143352.78387-1-heikki.krogerus@linux.intel.com>
+ <20211026143352.78387-3-heikki.krogerus@linux.intel.com> <YXn2zCA9lasDY/Xl@google.com>
+ <YXpS58zozw93QXig@kuha.fi.intel.com>
+In-Reply-To: <YXpS58zozw93QXig@kuha.fi.intel.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Mon, 8 Nov 2021 16:27:56 -0800
+Message-ID: <CACeCKaeAV13=o_G6B3nF+4PRv95OzO3j0kSTjdT8Lpzs3-a1bA@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/4] usb: typec: Character device for USB Power
+ Delivery devices
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Benson Leung <bleung@google.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        "Gopal, Saranya" <saranya.gopal@intel.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 08/11/2021 16:05, conor.dooley@microchip.com wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Update the device tree for the icicle kit by splitting it into a third part,
-> which contains peripherals in the fpga fabric, add new peripherals
-> (spi, qspi, gpio, rtc, pcie, system services, i2c), update parts of the memory
-> map which have been changed.
+Hi Heikki,
 
-This should be multiple commits because you mix up refactoring (split)
-and adding new features. The patch is really, really difficult to
-review. I gave up in the middle.
+On Thu, Oct 28, 2021 at 12:36 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Hi,
+>
+> On Wed, Oct 27, 2021 at 06:03:08PM -0700, Prashant Malani wrote:
+> > Why is USBPDDEV_SUBMIT_MESSAGE different from USBPDDEV_SET_MESSAGE?
+> > Shouldn't "setting" a PDO or property automatically "submit" it (using TCPM
+> > or whatever interface is actually performing the PD messaging) if
+> > appropriate (e.g Source Caps?). Is there a situation where one would
+> > want to "set" a property but not "send" it?
+> >
+> > It seems to me that the two can be combined into 1 rather than having
+> > a separate command just for ports.
+>
+> USBPDDEV_SUBMIT_MESSAGE you use to send message directly to the partner.
+>
+> USBPDDEV_SET_MESSAGE is meant to be used to store the values to a
+> cached message that the port manager should use next time there is
+> communication, but it does not send the message to the partner. So you
+> can use it even when there is no connection with a port, for example,
+> to store the values like the initial USB mode that should be used by
+> setting the EUDO message. Maybe the ioctl should be named
+> USBPDDEV_STORE_MESSAGE... I used "set" because it is sort of a
+> counterpart to USBPDDEV_GET_MESSAGE.
+>
+> There is an explanation in include/uapi/linux/usb/pd_dev.h, please
+> check it.
 
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../dts/microchip/microchip-mpfs-fabric.dtsi  |  21 ++
->  .../microchip/microchip-mpfs-icicle-kit.dts   | 159 +++++++--
->  .../boot/dts/microchip/microchip-mpfs.dtsi    | 333 ++++++++++++++----
->  3 files changed, 428 insertions(+), 85 deletions(-)
->  create mode 100644 arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
-> 
-> diff --git a/arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi b/arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
-> new file mode 100644
-> index 000000000000..8fa3356494f1
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
-> @@ -0,0 +1,21 @@
-> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> +/* Copyright (c) 2020-2021 Microchip Technology Inc */
-> +
-> +/ {
-> +	fpgadma: fpgadma@60020000 {
-> +		compatible = "microchip,mpfs-fpga-dma-uio";
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +		reg = <0x0 0x60020000 0x0 0x1000>;
-> +		interrupt-parent = <&plic>;
-> +		interrupts = <PLIC_INT_FABRIC_F2H_2>;
-> +		status = "okay";
-> +	};
-> +
-> +	fpgalsram: fpga_lsram@61000000 {
+Thanks for the further clarification. I guess I still don't see enough
+need to differentiate SET/STORE
+from SUBMIT; is there a situation where one would want to store the
+source/sink caps for a port,
+but not send/submit them immediately? When a partner is not connected
+to a port, a set would
+automatically just update the cached values and not perform a "submit"
+(since there is nothing to
+submit to). Perhaps there are (situations which require separate store
+and submit), but I'm unable
+to come up with one on the spot.
 
-Node names go with hyphen, but actually you should not need it, because
-the name should be generic, e.g. "uio".
+I'm curious also what you think about the idea with
+> USBPDDEV_CONFIGURE.
 
-However there is no such compatible and checkpatch should complain about it.
+It is indeed interesting. It seems like the specific interface for
+this needs to be fleshed out more (will we
+define a standard set of features which can be represented by the
+|flags| and made configurable?). At present
+I can't think of TCPM features which we'd want to toggle at runtime,
+but I'm looking at it from a Chrome OS
+perspective, so could be missing a bunch of use cases.
 
-> +		compatible = "generic-uio";
-> +		reg = <0x0 0x61000000 0x0 0x0001000
-> +			0x14 0x00000000 0x0 0x00010000>;
-> +		status = "okay";
-> +	};
-> +};
-> diff --git a/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts b/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
-> index fc1e5869df1b..4212129fcdf1 100644
-> --- a/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
-> +++ b/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
-> @@ -1,5 +1,5 @@
->  // SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> -/* Copyright (c) 2020 Microchip Technology Inc */
-> +/* Copyright (c) 2020-2021 Microchip Technology Inc */
->  
->  /dts-v1/;
->  
-> @@ -13,72 +13,187 @@ / {
->  	compatible = "microchip,mpfs-icicle-kit", "microchip,mpfs";
->  
->  	aliases {
-> -		ethernet0 = &emac1;
-> -		serial0 = &serial0;
-> -		serial1 = &serial1;
-> -		serial2 = &serial2;
-> -		serial3 = &serial3;> +		mmuart0 = &mmuart0;
-> +		mmuart1 = &mmuart1;
-> +		mmuart2 = &mmuart2;
-> +		mmuart3 = &mmuart3;
-> +		mmuart4 = &mmuart4;
-
-Why? Commit msg does not explain it.
-
->  	};
->  
->  	chosen {
-> -		stdout-path = "serial0:115200n8";
-> +		stdout-path = "mmuart1:115200n8";
->  	};
->  
->  	cpus {
->  		timebase-frequency = <RTCCLK_FREQ>;
->  	};
->  
-> -	memory@80000000 {
-> +	ddrc_cache_lo: memory@80000000 {
->  		device_type = "memory";
-> -		reg = <0x0 0x80000000 0x0 0x40000000>;
-> -		clocks = <&clkcfg 26>;
-> +		reg = <0x0 0x80000000 0x0 0x2e000000>;
-> +		clocks = <&clkcfg CLK_DDRC>;
-> +		status = "okay";
-> +	};
-> +
-> +	ddrc_cache_hi: memory@1000000000 {
-> +		device_type = "memory";
-> +		reg = <0x10 0x0 0x0 0x40000000>;
-> +		clocks = <&clkcfg CLK_DDRC>;
-> +		status = "okay";
->  	};
->  };
->  
-> -&serial0 {
-> +&mmuart1 {
->  	status = "okay";
->  };
->  
-> -&serial1 {
-> +&mmuart2 {
->  	status = "okay";
->  };
->  
-> -&serial2 {
-> +&mmuart3 {
->  	status = "okay";
->  };
->  
-> -&serial3 {
-> +&mmuart4 {
->  	status = "okay";
->  };
->  
->  &mmc {
->  	status = "okay";
-> -
->  	bus-width = <4>;
->  	disable-wp;
->  	cap-sd-highspeed;
-> +	cap-mmc-highspeed;
->  	card-detect-delay = <200>;
-> +	mmc-ddr-1_8v;
-> +	mmc-hs200-1_8v;
->  	sd-uhs-sdr12;
->  	sd-uhs-sdr25;
->  	sd-uhs-sdr50;
->  	sd-uhs-sdr104;
->  };
->  
-> -&emac0 {
-> +&spi0 {
-> +	status = "okay";
-> +	spidev@0 {
-> +		compatible = "spidev";
-
-1. There is no such compatible,
-2. You should have big fat warning when booting, so such DT cannot be
-accepted.
-
-> +		reg = <0>; /* CS 0 */
-> +		spi-max-frequency = <10000000>;
-> +		status = "okay";
-> +	};
-> +};
-> +
-> +&spi1 {
-> +	status = "okay";
-> +};
-> +
-> +&qspi {
-> +	status = "okay";
-> +};
-> +
-> +&i2c0 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c1 {
-> +	status = "okay";
-> +	pac193x: pac193x@10 {
-
-Generic node name. Looks like compatible is not documented, so first
-bindings.
-
-
-> +		compatible = "microchip,pac1934";
-> +		reg = <0x10>;
-> +		samp-rate = <64>;
-> +		status = "okay";
-> +		ch0: channel0 {
-> +			uohms-shunt-res = <10000>;
-> +			rail-name = "VDDREG";
-> +			channel_enabled;
-> +		};
-> +		ch1: channel1 {
-> +			uohms-shunt-res = <10000>;
-> +			rail-name = "VDDA25";
-> +			channel_enabled;
-> +		};
-> +		ch2: channel2 {
-> +			uohms-shunt-res = <10000>;
-> +			rail-name = "VDD25";
-> +			channel_enabled;
-> +		};
-> +		ch3: channel3 {
-> +			uohms-shunt-res = <10000>;
-> +			rail-name = "VDDA_REG";
-> +			channel_enabled;
-> +		};
-> +	};
-> +};
-> +
-> +&mac0 {
-> +	status = "okay";
->  	phy-mode = "sgmii";
->  	phy-handle = <&phy0>;
-> -	phy0: ethernet-phy@8 {
-> -		reg = <8>;
-> -		ti,fifo-depth = <0x01>;
-> -	};
->  };
->  
-> -&emac1 {
-> +&mac1 {
-
-I gave up here, it's not easy to find what is effect of refactoring,
-what is a new node.
+BTW, does poll work with this character device?
 
 Best regards,
-Krzysztof
