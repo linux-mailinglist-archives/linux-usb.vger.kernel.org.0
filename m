@@ -2,100 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7B744A603
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Nov 2021 06:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8689B44A96D
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Nov 2021 09:41:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232089AbhKIFOS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Nov 2021 00:14:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231839AbhKIFOR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Nov 2021 00:14:17 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D47C061764
-        for <linux-usb@vger.kernel.org>; Mon,  8 Nov 2021 21:11:32 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id h62-20020a25a544000000b005c5d9b06e57so6381045ybi.6
-        for <linux-usb@vger.kernel.org>; Mon, 08 Nov 2021 21:11:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=uvIwbGx+u6q+kJKMl/5AYRSz/lq9tfFJ54Vg+Sbhq2Q=;
-        b=H4SadlQEIDFGn/n58RPTZa8Y0fSNRFGPsRuP/lwPlG0tbLpyllkiz8843jOd3crEfm
-         8v6Me4t3eJIhsqwE5qBZxAuh5VK/seDdbk9zoXfFHnYY6lwC4x29KNc9kCmrp1U6QRb5
-         9RxxBTlR1InBsUnXd1iQalevatNLTftNYWOqWgHYjgEwJCWtArkU3gnvh462VlLgD6Pb
-         i87hNJSqI6c+lSnMwhFIpNC3YP4zbB4GbQ8pxR3S3cMmvMhdm3xGMEdrBonQDJ9kRsmG
-         nNrRNFf1f0svFDw0IvMG2odsuK8cy9g2CrsumF5bhwJbxOYbczADa1kzWY9Il1EZydLo
-         RYsw==
+        id S244406AbhKIIoO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Nov 2021 03:44:14 -0500
+Received: from mail-pl1-f173.google.com ([209.85.214.173]:39674 "EHLO
+        mail-pl1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244402AbhKIInQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Nov 2021 03:43:16 -0500
+Received: by mail-pl1-f173.google.com with SMTP id t21so19642292plr.6;
+        Tue, 09 Nov 2021 00:40:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=uvIwbGx+u6q+kJKMl/5AYRSz/lq9tfFJ54Vg+Sbhq2Q=;
-        b=NWO2ZB76xiX27T2i0POBP27e6WXs9XKcUVawPihN6rWadGlMfdfDF00TliuY63OLQR
-         vd9cOerWjw6+AnG6/XmM9RUv8o7YVU15/mpDFcWbX/XIbJ0l/LoT2wUkAHQQMCYTLa6o
-         0kIwrsZBQO4VqQxUlvRScPEe2zrnAxoXjbiIpWDwdIoYS9eBlIHkgZDyZ/YAEuu3rhA8
-         zNK7yjlG+iOfrnrf1GIiu/hOrz9v+txvFc28QFUYUPWHjoWVdn7aVqf+RXPtcxWxRuPp
-         lcnann1EUibhhHcTyRfJUrUYGqT9ewbvMs9d6r713olgpyVndjN8fGNmh/99vToIJJCZ
-         2dxg==
-X-Gm-Message-State: AOAM530zgID5JH0eZtSQyoUOQxHWJO2b2+jMXyj16kx/YmvZyz4v/wLU
-        oEP3JZ76iLmbK5U8HRmN5sJg8PQN2UhHZ3tJctk=
-X-Google-Smtp-Source: ABdhPJxs79jF1Ic27F9OPFZoZUHFyOjgSk3kRcJ0YwKb6sXA4LXk302zqaWiHZCLnfyAQMt9OyyqSx2W8myqdg6aaW0=
-X-Received: from albertccwang.ntc.corp.google.com ([2401:fa00:fc:202:a18f:cf64:97e0:fceb])
- (user=albertccwang job=sendgmr) by 2002:a25:4055:: with SMTP id
- n82mr5617104yba.168.1636434691444; Mon, 08 Nov 2021 21:11:31 -0800 (PST)
-Date:   Tue,  9 Nov 2021 13:11:23 +0800
-Message-Id: <20211109051123.3458088-1-albertccwang@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.0.rc0.344.g81b53c2807-goog
-Subject: [PATCH v2] usb: dwc3: gadget: Fix null pointer exception
-From:   Albert Wang <albertccwang@google.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org, wcheng@codeaurora.org
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Albert Wang <albertccwang@google.com>,
-        Jack Pham <quic_jackp@quicinc.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gSLDpPNAPTFpdKJNeNQhMNDuIXO+IuEe87YK9rCw7Wk=;
+        b=bkicM4NptlSvs00dBmXJ8TA9DlC4vSJ2JXtFGNClf/JdgY4gMyYyDkSYfwVpSzaTnz
+         X/9Wi4YkrynGP0SbMT9EbYhwepz+NrK9oERNaggxMkpCgX+anSzKxtgAOIKj4IYigEg0
+         9ziUGP3BHi4ZZk6si4bLc9OwHusH/W4uqufNQGUc7GWsZYNR/2ugLGrYPK2Y/IuTbNWx
+         ocF8GDLevXNUHUAP+S9RN7O/NISFiLxrDiEy4+ZZ/7GaeGMzoIQvLQUzjhwcMEb6xQjS
+         GFVmaUA4Tuo/vGfkt0fsCpn5T74w77WAPuCupdrAq5wpzcctY8fN/XoXodE/YsvedD0a
+         0v6A==
+X-Gm-Message-State: AOAM532+o1o3PB0qgfdwg60wYvQCsPagQHqel0K7+/32C8gpUGzkhywD
+        d8m7o/BRi10LzU2X5WI1pTtuoRpciUOYTtil
+X-Google-Smtp-Source: ABdhPJwtNor6FrZO+2M63XnKFgzRT/k6VXW3jhwqnHCDRjPu1KybXzCzjDFd1YQD8ThE7ACLxJkvoA==
+X-Received: by 2002:a17:90a:134f:: with SMTP id y15mr5317434pjf.158.1636447230229;
+        Tue, 09 Nov 2021 00:40:30 -0800 (PST)
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com. [209.85.210.181])
+        by smtp.gmail.com with ESMTPSA id a13sm1962640pfv.99.2021.11.09.00.40.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Nov 2021 00:40:30 -0800 (PST)
+Received: by mail-pf1-f181.google.com with SMTP id o4so4771059pfp.13;
+        Tue, 09 Nov 2021 00:40:29 -0800 (PST)
+X-Received: by 2002:a05:6102:e82:: with SMTP id l2mr9441005vst.37.1636446824427;
+ Tue, 09 Nov 2021 00:33:44 -0800 (PST)
+MIME-Version: 1.0
+References: <20211108150554.4457-1-conor.dooley@microchip.com> <20211108150554.4457-4-conor.dooley@microchip.com>
+In-Reply-To: <20211108150554.4457-4-conor.dooley@microchip.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 9 Nov 2021 09:33:33 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVx9BgCYHX5-Bwx1TzQzNK1+7cUWoWnOdMX31SJ22sMzg@mail.gmail.com>
+Message-ID: <CAMuHMdVx9BgCYHX5-Bwx1TzQzNK1+7cUWoWnOdMX31SJ22sMzg@mail.gmail.com>
+Subject: Re: [PATCH 03/13] dt-bindings: soc/microchip: update sys ctrlr compat string
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Lewis Hanly <lewis.hanly@microchip.com>,
+        daire.mcnamara@microchip.com, Atish Patra <atish.patra@wdc.com>,
+        ivan.griffin@microchip.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bin Meng <bin.meng@windriver.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In the endpoint interrupt functions
-dwc3_gadget_endpoint_transfer_in_progress() and
-dwc3_gadget_endpoint_trbs_complete() will dereference the endpoint
-descriptor. But it could be cleared in __dwc3_gadget_ep_disable()
-when accessory disconnected. So we need to check whether it is null
-or not before dereferencing it.
+Hi Conor,
 
-Fixes: f09ddcfcb8c5 ("usb: dwc3: gadget: Prevent EP queuing while stopping transfers")
-Signed-off-by: Albert Wang <albertccwang@google.com>
-Reviewed-by: Jack Pham <quic_jackp@quicinc.com>
----
- drivers/usb/dwc3/gadget.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Mon, Nov 8, 2021 at 4:06 PM <conor.dooley@microchip.com> wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+>
+> Update 'compatible' strings for system controller drivers to the
+> approved Microchip name.
+>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 23de2a5a40d6..83c7344888fd 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -3252,6 +3252,9 @@ static bool dwc3_gadget_endpoint_trbs_complete(struct dwc3_ep *dep,
- 	struct dwc3		*dwc = dep->dwc;
- 	bool			no_started_trb = true;
- 
-+	if (!dep->endpoint.desc)
-+		return no_started_trb;
-+
- 	dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
- 
- 	if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
-@@ -3299,6 +3302,9 @@ static void dwc3_gadget_endpoint_transfer_in_progress(struct dwc3_ep *dep,
- {
- 	int status = 0;
- 
-+	if (!dep->endpoint.desc)
-+		return;
-+
- 	if (usb_endpoint_xfer_isoc(dep->endpoint.desc))
- 		dwc3_gadget_endpoint_frame_from_event(dep, event);
- 
--- 
-2.34.0.rc0.344.g81b53c2807-goog
+Thanks for your patch!
 
+> --- a/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml
+> +++ b/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml
+> @@ -11,7 +11,9 @@ maintainers:
+>
+>  properties:
+>    compatible:
+> -    const: microchip,polarfire-soc-mailbox
+> +    enum:
+> +      - microchip,polarfire-soc-mailbox
+> +      - microchip,mpfs-mailbox
+
+Is there any point in keeping the old compatible value?
+Are there any real users? Most of the MPFS upstream DT is still in flux.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
