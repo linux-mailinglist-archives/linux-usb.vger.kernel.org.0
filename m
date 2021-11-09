@@ -2,119 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5399444B048
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Nov 2021 16:23:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B8544B1B3
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Nov 2021 18:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235657AbhKIP0n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Nov 2021 10:26:43 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:19319 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234526AbhKIP0n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Nov 2021 10:26:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1636471437; x=1668007437;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LhDgqmajfz71vOYSGsDh9gMUO7ALBdgAMuleFHkhVRE=;
-  b=TeIK4K0JTNorUsiwPwZwoAGRBmLiCwdqXarvIL6/lsKSeslP7i+DSAm5
-   FOpobIxpW3HemsPqXFd6M7MefewILap3b5pE8Y30QDoDGN810AjLwO9nR
-   ygfAIzZEDO5j876yfLrrtkX+kXNI2C4Z/+KDv0G2y2Y4wsBI57byusRwT
-   Q=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Nov 2021 07:23:57 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2021 07:23:56 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Tue, 9 Nov 2021 07:23:56 -0800
-Received: from qian-HP-Z2-SFF-G5-Workstation (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
- Tue, 9 Nov 2021 07:23:55 -0800
-Date:   Tue, 9 Nov 2021 10:23:52 -0500
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [RFC PATCH] software node: Skip duplicated software_node sysfs
-Message-ID: <YYqSiMwfdYPwQb62@qian-HP-Z2-SFF-G5-Workstation>
-References: <20211101200346.16466-1-quic_qiancai@quicinc.com>
- <CAHp75VcrWPdR8EVGpcsniQedT0J4X700N7thFs6+srTP1MTgwQ@mail.gmail.com>
- <52df4a97-1132-d594-0180-132d0ca714d5@quicinc.com>
- <CAHp75VebOnrce-XZjOnZiivQPz-Cdgq6mor5oiLxK8Y49GiNNg@mail.gmail.com>
- <1269258d-db4c-3922-776b-f11e6a1e338e@quicinc.com>
- <YYlnIpGEmLH5GXft@smile.fi.intel.com>
- <YYn8hpxxmAtw9z5S@qian-HP-Z2-SFF-G5-Workstation>
+        id S240698AbhKIRGn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Nov 2021 12:06:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239427AbhKIRGm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Nov 2021 12:06:42 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEFFC061764;
+        Tue,  9 Nov 2021 09:03:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Content-Transfer-Encoding:
+        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=4ZefLbsNKRWIJeD/uc4IHUZbZRNto2H4EeJCNxjeN1k=; t=1636477436; x=1637687036; 
+        b=Ef2ORtNj/IJpaCmraDm3mwymqpK6VT/SnG19OVTzoU5hiOCXjPJlCcpGQqV7NHaQqsdnTIunWf9
+        LI74SHqp/i2lsdFy6J24TQMrm2wCP1OUmn3Y3fPAjx811LLXF3Y9/NmZr8ybuAn7tNoxfjDIY89x8
+        l6bwMmrSmUEudJsjaOSRgd1/qTGPsjQYP27b6m8mWRAOadr14PAQOXJaN+3cuCRinSTopBckh1TsU
+        WWDLOV+KYzO5ubqOZgmjfADRPygWvReDnwyL9KEaAwo98a6oA/URDZDQi/7uKFK4AOiXsr3FBJ+2w
+        JU/bB1Ict0KeZ/Vf6LvUoIt/tEtOyBE3io/Q==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <benjamin@sipsolutions.net>)
+        id 1mkUXH-00D227-Ev;
+        Tue, 09 Nov 2021 18:03:51 +0100
+Message-ID: <76ff2cb3f687fdf0ca271fe0fe084371c4288c33.camel@sipsolutions.net>
+Subject: Re: Userspace enumeration hang while btusb tries to load firmware
+ of removed device
+From:   Benjamin Berg <benjamin@sipsolutions.net>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Marcel Holtmann <marcel@holtmann.org>
+Cc:     linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org
+Date:   Tue, 09 Nov 2021 18:03:48 +0100
+In-Reply-To: <20211103201138.GC1529362@rowland.harvard.edu>
+References: <df021873788acdb64e1311289e9ca6dc3f169616.camel@sipsolutions.net>
+         <20211103182303.GB1529362@rowland.harvard.edu>
+         <BCD95F43-3C6E-4B50-9228-9F2AD93BBBA4@holtmann.org>
+         <20211103201138.GC1529362@rowland.harvard.edu>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-s4OlCZHD6ZVRueWwyarj"
+User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YYn8hpxxmAtw9z5S@qian-HP-Z2-SFF-G5-Workstation>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+X-malware-bazaar: not-scanned
+X-malware-bazaar-2: OK
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 08, 2021 at 11:43:54PM -0500, Qian Cai wrote:
-> Then, which functions do you suggest to replace with
-> fwnode_create_software_node()? In dwc3_host_init(),
-> 
-> int dwc3_host_init(struct dwc3 *dwc)
-> {
-> 	...
-> 	xhci = platform_device_alloc("xhci-hcd", PLATFORM_DEVID_AUTO);
-> 	...
-> 	ret = platform_device_add(xhci);
-> 
-> I am wondering if that we could solve the problem by avoiding
-> "xhci-hcd" string here which would unfortunately clash with
-> xhci_plat_init() as mentioned before:
 
-Okay, I suppose that name has to be "xhci-hcd" to match the dirver
-name. Otherwise, the below path did not run to create "xhci-hcd"
-either. I noticed that the regression was discussed a few months ago
-and leave it as is.
+--=-s4OlCZHD6ZVRueWwyarj
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-https://lore.kernel.org/lkml/e9bc1397-99b7-a57e-4860-80d146848e2c@nxp.com/
+Hi,
 
-Alternatively, we might revert the commit 434b73e61cc6
-("iommu/arm-smmu-v3: Use device properties for pasid-num-bits")
-started to use device_add_properties() in iort_named_component_init()
-which probably does not look pretty either. I can't think of any other
-ways to avoid refactoring at the moment.
+On Wed, 2021-11-03 at 16:11 -0400, Alan Stern wrote:
+> On Wed, Nov 03, 2021 at 08:31:03PM +0100, Marcel Holtmann wrote:
+> > the problem seems to be that we hitting HCI command timeout. So the=20
+> > firmware download is done via HCI commands. These commands are send to=
+=20
+> > the transport driver btusb.c via hdev->send (as btusb_send_frame).=20
+> > This triggers the usb_submit_urb or queues them via data->deferred=20
+> > anchor. All this reports back the error properly except that nobody=20
+> > does anything with it.
+> >=20
+> > See hci_send_frame() last portion:
+> >=20
+> >         err =3D hdev->send(hdev, skb);
+> >         if (err < 0) {
+> >                 bt_dev_err(hdev, "sending frame failed (%d)", err);
+> >                 kfree_skb(skb);
+> >         }
+> >=20
+> > And that is it. We are not checking for ENODEV or any error here. That=
+=20
+> > means the failure of the HCI command gets only caught via the HCI=20
+> > command timeout. I don=E2=80=99t know how to do this yet, but you would=
+ have=20
+> > to look there to fail HCI command right away instead of waiting for=20
+> > the timeout.
+>=20
+> I have no idea how all the different layers work here.  Clearly=20
+> something has to signal hdev->req_wait_q after setting hdev->req_status=
+=20
+> to some appropriate value.  Can this be done in btusb.c, either when the=
+=20
+> URB is submitted or when it completes?  Or in hci_send_frame?
 
-> 
->   sysfs_create_link
->   software_node_notify
->   device_create_managed_software_node
->   iort_named_component_init
->   iort_iommu_configure_id
->   acpi_dma_configure_id
->   platform_dma_configure
->   really_probe.part.0
->   really_probe
->   __driver_probe_device
->   driver_probe_device
->   __driver_attach
->   bus_for_each_dev
->   driver_attach
->   bus_add_driver
->   driver_register
->   __platform_driver_register
->   xhci_plat_init
->   do_one_initcall
->   kernel_init_freeable
->   kernel_init
->   ret_from_fork
+I submitted
+  https://patchwork.kernel.org/project/bluetooth/list/?series=3D577565
+for this now.
+
+The patchset pretty much calls hci_req_sync_cancel to set req_status
+and signal req_wait_q. Doing this and hooking it up in various location
+appears to work reasonably well for the synchronous commands.
+
+Benjamin
+
+PS: The user now reported that TLP is blocking the rfkill switch after
+resume. So an good workaround is to just not use TLP.
+
+--=-s4OlCZHD6ZVRueWwyarj
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEED2NO4vMS33W8E4AFq6ZWhpmFY3AFAmGKqfQACgkQq6ZWhpmF
+Y3BO8g/+J5w8LRcVVM8jUDu+KP+kJhy9bOXENEmanf2j2QgnMY1nOi/E/VYnQ/jC
+DGFxp49Y/SIDpFOvjQ+xOd9/Q22kiN6Uyz1m1/jV0ubBpkb0FxueoIdl1Kq/vSgF
+sZSVGSNJrNMSgd9NSi1MyZiWI5mm02nSy/XOCrQGNn5qgmIUAYteuRz4x815Hqqd
+ibelL1P5pGVwD19dKSRCH0aW7u4KWrhBKlcMtyOo1RmLQaJZ2bmAtBZoIiENEYTf
+Uqs5EqPFuHLIBWX6hi4wl2r/1XwGNrWQTU9+zmCIDvs9F7NMW6jv36O+686lqSI2
+H0SYV/wOvCM3mzWsCZ06rbRo2v33UhTwlp7w9z8zFPjtNRpz9eWEGFbiyZJWhwha
+8HPR66UmkP9dycJfO4bXg63hKes9HQmMfI8PYHs5Hgw4vOnpIUg7a6WSGo2Ql/ae
+f7d0en34fS0oOW20QEth8g/R3lUjOP9xdoT7XfN8o19yjY8GDHJ5j1RpzISzG7se
+peCyOWQxsIMkbgLfz0kboB52J4QTBAQnPXrodOl5GiEU8nzveOvEJDjEJ/97invr
+svpq4IHz1ztjsf5Fs2G77Fwsr9e6DvFJYhzDU7U5gZ/Bl7YprVWP5O9XU2Ek5Uaz
+AZdAcKcHME5g23jE6FGPAy0XFEm+Vb/rxXDq8Pwmyb5SrlCAMtA=
+=uOcD
+-----END PGP SIGNATURE-----
+
+--=-s4OlCZHD6ZVRueWwyarj--
 
