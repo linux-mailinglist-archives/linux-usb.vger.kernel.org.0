@@ -2,166 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C7444AD8D
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Nov 2021 13:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8382944AE17
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Nov 2021 13:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242023AbhKIMee (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Nov 2021 07:34:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47312 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241539AbhKIMed (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 9 Nov 2021 07:34:33 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A5A8761051;
-        Tue,  9 Nov 2021 12:31:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636461107;
-        bh=S+e5iTV5+Bs/5vsYLLwsUEdlQ/kxNOz+WH4f2I2y4qc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lUGj36gvga6j3IfS8HCJXIrDBSy5v3ZccWpqUKD0snvVZh+ss5GUvorDKHh7wNZzV
-         0d/e+sWcM6e1cf8mbPMQAtDPuRDlruWExtRJiifU4rl8NTMk22LEupndeEpuJzL2Q8
-         Jhyj7SbQ5lNacDNKLdE9pznpcXxAFDmoUQG3XeOb1NmVaYNfLz/MaX3p4CnBa+mqo8
-         bGv5u+w/GYbJCIBG0erySFHKZkbH/khRIeOC3uQgqO93SiqKbYSPDYyjMR6qwgDGMN
-         OizaZFBIoAw1UAyw0eHa5NIgY/2Bm1+BGcadXQ882IVFDTmPiB908zZNvrcpgwcjLR
-         El1OFTkWNgLeg==
-Date:   Tue, 9 Nov 2021 20:31:40 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Qihang Hu <huqihang@oppo.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: gadget: composite: Show warning if function
- driver's descriptors are incomplete.
-Message-ID: <20211109123140.GA5208@Peter>
-References: <20211109101936.397503-1-huqihang@oppo.com>
+        id S240343AbhKIM4V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Nov 2021 07:56:21 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:40066
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242841AbhKIM4K (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Nov 2021 07:56:10 -0500
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3E0773F1B6
+        for <linux-usb@vger.kernel.org>; Tue,  9 Nov 2021 12:53:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1636462402;
+        bh=j5tko5riuXms3JFEWKNcXt/poyacQNf52vuml9R0vAg=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=O6JRxo6dBfipYpSvNoaIBYoID05hGx/gA56XQjZu117joPlyBzp5Vu2sXlJ0cceEi
+         fktSajCu5Ww16aIOG+znuHeN+v0MUuPSTYCabBhGWkiUCioAbbSpX2vg8OW9rzlekg
+         xjwXavLG4UtOx6XWLWnraAwj380xpCtSMXztdseZeE9YIBODrAJunBtQmKX7RGk2O2
+         XloIMvpF7/RjXUHaXon0Ts66rGe5KJ4YNuqojoY72ihZSq+iLjIdt5Bf6t2B+Wu0pC
+         vVFNdk40XnbFWbEXJH+/O2M9JfSWfKxmf6i/0t9ELfTzv/a55XkKNHQX3yTvr1oKH4
+         qe2nXvYCGgY5A==
+Received: by mail-lj1-f199.google.com with SMTP id bn14-20020a05651c178e00b002164a557684so6176483ljb.6
+        for <linux-usb@vger.kernel.org>; Tue, 09 Nov 2021 04:53:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=j5tko5riuXms3JFEWKNcXt/poyacQNf52vuml9R0vAg=;
+        b=5pLlyCU8uD+xPB4di8uSsJl9DuP8+aPszzbrcINAyC6VK03yzfd7caKmUg7Kw7IXyx
+         U+t4LmwfSpoRd3DV5Qt1rUt+chaufM8/2ezlk/+V7RkN725i3xF0KOb1h1cvo+8Obawi
+         WYu4SDtnO6eXqNT/I+s+4tAsX5p/Yf9dGds/S5fVxTQEW5jJ0v7fyfq+Guw5C2PggIFE
+         sZxljvPJfH5zbzhy0RMhuqBePqU6svPEQDbriOo0QoF+1TK3N5nMh4CiX1n/7k18XUBh
+         NGvVhhiWIrXMdcN1V/fjvIaymmyilRBpaMqwW5493/ZEm4AreVQGVL8xuOnR4h7XVTyt
+         EtUA==
+X-Gm-Message-State: AOAM531tbT6iDbi4LGKNvIWi5Bea02T8S5BweX+spUUaZKFAXFajP9VL
+        iba04dbGWyawuoT1bO9XkG8NWTVJIKG0A788i9zGWjnJ06n+mRAD8jbvmjpwr/eZdOhR1ksSAZz
+        MurpaGuEZ2787RcGeCbIL/zyO9cBx70V6FXzidA==
+X-Received: by 2002:a19:9148:: with SMTP id y8mr6510841lfj.512.1636462401696;
+        Tue, 09 Nov 2021 04:53:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxj8OuRHAShyPuiff/xoQ2+ShAhXkJXJ57MKAdkVyp0FJ2HQRhii/EaQs7fi9Q9gr6wclBnKQ==
+X-Received: by 2002:a19:9148:: with SMTP id y8mr6510816lfj.512.1636462401453;
+        Tue, 09 Nov 2021 04:53:21 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id i6sm2136859lfr.163.2021.11.09.04.53.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Nov 2021 04:53:20 -0800 (PST)
+Message-ID: <0d996393-20b9-4f16-cbd0-c9bff2b54112@canonical.com>
+Date:   Tue, 9 Nov 2021 13:53:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211109101936.397503-1-huqihang@oppo.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH 10/13] dt-bindings: spi: add bindings for microchip mpfs
+ spi
+Content-Language: en-US
+To:     Conor.Dooley@microchip.com, robh@kernel.org
+Cc:     robh+dt@kernel.org, gregkh@linuxfoundation.org,
+        linus.walleij@linaro.org, linux-riscv@lists.infradead.org,
+        aou@eecs.berkeley.edu, paul.walmsley@sifive.com,
+        linux-usb@vger.kernel.org, Daire.McNamara@microchip.com,
+        linux-spi@vger.kernel.org, geert@linux-m68k.org,
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-gpio@vger.kernel.org, broonie@kernel.org, palmer@dabbelt.com,
+        bgolaszewski@baylibre.com, jassisinghbrar@gmail.com,
+        linux-crypto@vger.kernel.org, Ivan.Griffin@microchip.com,
+        atish.patra@wdc.com, Lewis.Hanly@microchip.com,
+        bin.meng@windriver.com, alexandre.belloni@bootlin.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        a.zummo@towertech.it
+References: <20211108150554.4457-1-conor.dooley@microchip.com>
+ <20211108150554.4457-11-conor.dooley@microchip.com>
+ <1636430789.935637.743042.nullmailer@robh.at.kernel.org>
+ <96005893-8819-1d76-6dea-7d173655258f@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <96005893-8819-1d76-6dea-7d173655258f@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-11-09 18:19:36, Qihang Hu wrote:
-> In the config_ep_by_speed_and_alt function, select the corresponding
-> descriptor through g->speed. But some unsound function drivers may
+On 09/11/2021 13:16, Conor.Dooley@microchip.com wrote:
+> On 09/11/2021 04:06, Rob Herring wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>
+>> On Mon, 08 Nov 2021 15:05:51 +0000, conor.dooley@microchip.com wrote:
+>>> From: Conor Dooley <conor.dooley@microchip.com>
+>>>
+>>> Add device tree bindings for the {q,}spi controller on
+>>> the Microchip PolarFire SoC.
+>>>
+>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>>> ---
+>>>   .../bindings/spi/microchip,mpfs-spi.yaml      | 72 +++++++++++++++++++
+>>>   1 file changed, 72 insertions(+)
+>>>   create mode 100644 Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+>>>
+>>
+>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>
+>> yamllint warnings/errors:
+>>
+>> dtschema/dtc warnings/errors:
+>> Documentation/devicetree/bindings/spi/microchip,mpfs-spi.example.dts:19:18: fatal error: dt-bindings/clock/microchip,mpfs-clock.h: No such file or directory
+>>     19 |         #include "dt-bindings/clock/microchip,mpfs-clock.h"
+> Rob,
+> Should I drop the header from the example or is there a way for me 
+> specify the dependent patch to pass this check?
 
-But some 'legacy or not well designed' function drivers
+The error has to be fixed, although not necessarily by dropping the
+header, but by posting it. How this can pass on your system? There is no
+such file added in this patchset.
 
-> not support the corresponding speed. So, we can directly display
-> warnings instead of panicking the kernel.
-
-instead of 'causing kernel panic'
-
-> At the same time, it
-> indicates a problem with the function in the warning message.
-
-It indicates the reasons in warning message.
-> 
-> Signed-off-by: Qihang Hu <huqihang@oppo.com>
-> ---
-> Changes in v2:
-> -Add warning message
-> 
-> Changes in v3:
-> -Change commit log
-> -Delete extra blank lines
-> -Modify 'incomplete_desc' to bool type
-
-The latest changelog should be showed at the first.
-
-> ---
->  drivers/usb/gadget/composite.c | 39 ++++++++++++++++++++++------------
->  1 file changed, 26 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-> index 72a9797dbbae..cb9c7edf9bbf 100644
-> --- a/drivers/usb/gadget/composite.c
-> +++ b/drivers/usb/gadget/composite.c
-> @@ -159,6 +159,8 @@ int config_ep_by_speed_and_alt(struct usb_gadget *g,
->  	int want_comp_desc = 0;
->  
->  	struct usb_descriptor_header **d_spd; /* cursor for speed desc */
-> +	struct usb_composite_dev *cdev;
-> +	bool incomplete_desc = false;
->  
->  	if (!g || !f || !_ep)
->  		return -EIO;
-> @@ -167,28 +169,43 @@ int config_ep_by_speed_and_alt(struct usb_gadget *g,
->  	switch (g->speed) {
->  	case USB_SPEED_SUPER_PLUS:
->  		if (gadget_is_superspeed_plus(g)) {
-> -			speed_desc = f->ssp_descriptors;
-> -			want_comp_desc = 1;
-> -			break;
-> +			if (f->ssp_descriptors) {
-> +				speed_desc = f->ssp_descriptors;
-> +				want_comp_desc = 1;
-> +				break;
-> +			}
-> +			incomplete_desc = true;
->  		}
->  		fallthrough;
->  	case USB_SPEED_SUPER:
->  		if (gadget_is_superspeed(g)) {
-> -			speed_desc = f->ss_descriptors;
-> -			want_comp_desc = 1;
-> -			break;
-> +			if (f->ss_descriptors) {
-> +				speed_desc = f->ss_descriptors;
-> +				want_comp_desc = 1;
-> +				break;
-> +			}
-> +			incomplete_desc = true;
->  		}
->  		fallthrough;
->  	case USB_SPEED_HIGH:
->  		if (gadget_is_dualspeed(g)) {
-> -			speed_desc = f->hs_descriptors;
-> -			break;
-> +			if (f->hs_descriptors) {
-> +				speed_desc = f->hs_descriptors;
-> +				break;
-> +			}
-> +			incomplete_desc = true;
->  		}
->  		fallthrough;
->  	default:
->  		speed_desc = f->fs_descriptors;
->  	}
->  
-> +	cdev = get_gadget_data(g);
-> +	if (incomplete_desc)
-> +		WARNING(cdev,
-> +			"%s doesn't hold the descriptors for current speed\n",
-> +			f->name);
-> +
->  	/* find correct alternate setting descriptor */
->  	for_each_desc(speed_desc, d_spd, USB_DT_INTERFACE) {
->  		int_desc = (struct usb_interface_descriptor *)*d_spd;
-> @@ -244,12 +261,8 @@ int config_ep_by_speed_and_alt(struct usb_gadget *g,
->  			_ep->maxburst = comp_desc->bMaxBurst + 1;
->  			break;
->  		default:
-> -			if (comp_desc->bMaxBurst != 0) {
-> -				struct usb_composite_dev *cdev;
-> -
-> -				cdev = get_gadget_data(g);
-> +			if (comp_desc->bMaxBurst != 0)
->  				ERROR(cdev, "ep0 bMaxBurst must be 0\n");
-> -			}
->  			_ep->maxburst = 1;
->  			break;
->  		}
-> -- 
-> 2.25.1
-> 
-
-Except the typo issues, other things are ok for me. It shows an warning
-message for not well designed function driver, instead of panic
-the kernel. It depends on Greg that whether it should be panic directly
-or show warning message to indicate the issue.
-
--- 
-
-Thanks,
-Peter Chen
-
+Best regards,
+Krzysztof
