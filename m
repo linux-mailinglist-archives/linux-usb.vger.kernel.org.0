@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D2944B8BE
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Nov 2021 23:43:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1450544B8B7
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Nov 2021 23:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344905AbhKIWp4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Nov 2021 17:45:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36030 "EHLO mail.kernel.org"
+        id S1346298AbhKIWps (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Nov 2021 17:45:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36040 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346107AbhKIWnn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 9 Nov 2021 17:43:43 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B4C1461881;
-        Tue,  9 Nov 2021 22:24:29 +0000 (UTC)
+        id S1346135AbhKIWnp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 9 Nov 2021 17:43:45 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1F28F61A40;
+        Tue,  9 Nov 2021 22:24:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636496670;
-        bh=yskHZabqsvAjti3StZjV+B4KzqCQCGY0fwXULf/2qd4=;
+        s=k20201202; t=1636496674;
+        bh=9L5S1wNQqgRAGnTg268+P/TH/VccBWxuhv9lCpuuxG8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lWBtg1mNptRRUO83e7z8OR4IN+GhdfBBUwKm2qSuv74mMhw3O+Fms/+07RbQqoSe3
-         r3Xn7rmIwbkRGLU4aFmXQb24p1ouO6hFqMRhyZvSi0oNRDb1u1kZXReK4cLKtnWeS9
-         koGFTxXCr8WYmerQppUP+GKw6GF34JFUZ39Dqb29XMSX7NbtyC5imgvSs0SkMj7MrZ
-         8vkuHZrauAp8cHIBVhmFcvu7bG0d/PfM5TzszDaMkIGIzzEekRVbgiZFsIeKX0jF2Y
-         x8bWSXY7qjwbdKbUBGiDKY+2ZJSnXgj+H/5/30m05BuCZ5Q9JfgulWh7xDxFvNloy9
-         cTV8BDgOCDEoA==
+        b=TLVmEPJtQd7iVmRO46/j4y8RvGbh5B//LlOUSsmgP12odBFjOUk7kN5tDYW3c8QGE
+         1Rltp6EzOWZIweSfbeZd+3JwsFg/23r/LqQJORpOpX6ll+3OEZDTJzaC/XBNGuJOer
+         Bim/yo2uBdTF+oYLpGv0Q7vSsfbcg2i8mANaWIglNxNVsP/2ceDk7EDt2p2jjQTaIB
+         ywV5k17u8mdcbPnes2gSTu6dMwZkbhois4RSaGajooO0V0BEBoiZ/cpOphv8hh6uDJ
+         Ics3CzXls5/35Krmr+JJJXEZx0DRs8ptPYUQ9Gz++Xv+OPhZr8BAcaZk7mFZN92cmI
+         FMrriiXSQDbnA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, balbi@ti.com,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 02/12] usb: musb: tusb6010: check return value after calling platform_get_resource()
-Date:   Tue,  9 Nov 2021 17:24:16 -0500
-Message-Id: <20211109222426.1236575-2-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 05/12] usb: host: ohci-tmio: check return value after calling platform_get_resource()
+Date:   Tue,  9 Nov 2021 17:24:19 -0500
+Message-Id: <20211109222426.1236575-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211109222426.1236575-1-sashal@kernel.org>
 References: <20211109222426.1236575-1-sashal@kernel.org>
@@ -45,35 +45,33 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 14651496a3de6807a17c310f63c894ea0c5d858e ]
+[ Upstream commit 9eff2b2e59fda25051ab36cd1cb5014661df657b ]
 
 It will cause null-ptr-deref if platform_get_resource() returns NULL,
 we need check the return value.
 
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Link: https://lore.kernel.org/r/20210915034925.2399823-1-yangyingliang@huawei.com
+Link: https://lore.kernel.org/r/20211011134920.118477-1-yangyingliang@huawei.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/musb/tusb6010.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/usb/host/ohci-tmio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/musb/tusb6010.c b/drivers/usb/musb/tusb6010.c
-index 85a57385958fd..f4297e5495958 100644
---- a/drivers/usb/musb/tusb6010.c
-+++ b/drivers/usb/musb/tusb6010.c
-@@ -1120,6 +1120,11 @@ static int tusb_musb_init(struct musb *musb)
+diff --git a/drivers/usb/host/ohci-tmio.c b/drivers/usb/host/ohci-tmio.c
+index 9c9e97294c18d..4d42ae3b2fd6d 100644
+--- a/drivers/usb/host/ohci-tmio.c
++++ b/drivers/usb/host/ohci-tmio.c
+@@ -199,7 +199,7 @@ static int ohci_hcd_tmio_drv_probe(struct platform_device *dev)
+ 	if (usb_disabled())
+ 		return -ENODEV;
  
- 	/* dma address for async dma */
- 	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!mem) {
-+		pr_debug("no async dma resource?\n");
-+		ret = -ENODEV;
-+		goto done;
-+	}
- 	musb->async = mem->start;
+-	if (!cell)
++	if (!cell || !regs || !config || !sram)
+ 		return -EINVAL;
  
- 	/* dma address for sync dma */
+ 	if (irq < 0)
 -- 
 2.33.0
 
