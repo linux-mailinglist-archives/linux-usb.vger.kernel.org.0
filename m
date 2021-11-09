@@ -2,122 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A4B449F85
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Nov 2021 01:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB0044A58F
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Nov 2021 05:06:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239230AbhKIAaz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Nov 2021 19:30:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbhKIAay (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Nov 2021 19:30:54 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3DCC061714
-        for <linux-usb@vger.kernel.org>; Mon,  8 Nov 2021 16:28:09 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id b17so13102033qvl.9
-        for <linux-usb@vger.kernel.org>; Mon, 08 Nov 2021 16:28:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PIhh11j64GJB5tkkAYeEUi1he5/a0olDT6t9pDlGgAg=;
-        b=SrewlxLXy5A5oOJK7Vp265kIB4JFYhK/xcDmhcxns65Y6VpUudY8geHbQmEX53jxSn
-         QncDcE/y/hkJNipELIVJZjhy2bcTGXZ0s+akt5WukPtKDQwhVRdNp2eLF9ydsjxKCIng
-         /xX0vFqSrLKtA+aRRZkz/EWCkRw/1TKr54qJg=
+        id S242651AbhKIEJb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Nov 2021 23:09:31 -0500
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:45959 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242505AbhKIEJW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Nov 2021 23:09:22 -0500
+Received: by mail-ot1-f47.google.com with SMTP id l7-20020a0568302b0700b0055ae988dcc8so25778635otv.12;
+        Mon, 08 Nov 2021 20:06:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PIhh11j64GJB5tkkAYeEUi1he5/a0olDT6t9pDlGgAg=;
-        b=5E3JxqFgCZ5M6c7/4BEDJvmJtVBlFlqy+G6GXVwKlgO/Lp7/5cezJSRqMYHkSmdyuk
-         JsVqVV6wAb3HBvZty2tiQ9Dz2byCh1Go6z08U4N+rqRzcUesFoTXXkjUaKYOfMKHsc+0
-         lSQ2OpfPlB2aelQgVS6/VAP4fhDMtjxSd/xMvcYtm0YkghvKi5U/Ydzp47T1HDh5Zdz+
-         z4lUBdOYUYTyhrr+yXW+LwjIDBM7BjOMdBqaoyKnjTKhV9AgdjP4qoN1IPihyZoXd170
-         SgHGG678MilDok7plbH27y/NY9cKgrp/rDOLHvSyGPGcGJWNzSJ7jHdM+wMQhoR7lnHg
-         21VA==
-X-Gm-Message-State: AOAM53319exOYxi1DiRvEdM/IxU0v0E0UCEbG53t8OtM/h22zsizs66p
-        FLejKpDcUon1QJZe/dEIl7pzoX9dVVbZKZ93ZbLmDxzLeSQ=
-X-Google-Smtp-Source: ABdhPJyy7zFreyFzm0oVAJnF+Wv+Xx1CS7ENHrac3M4N9cvTpQpGSxXw+AwFyiXgc0nhR5tLeK5whJdo4uj4i4ezbU0=
-X-Received: by 2002:a05:6214:21ea:: with SMTP id p10mr2981168qvj.67.1636417688528;
- Mon, 08 Nov 2021 16:28:08 -0800 (PST)
-MIME-Version: 1.0
-References: <20211026143352.78387-1-heikki.krogerus@linux.intel.com>
- <20211026143352.78387-3-heikki.krogerus@linux.intel.com> <YXn2zCA9lasDY/Xl@google.com>
- <YXpS58zozw93QXig@kuha.fi.intel.com>
-In-Reply-To: <YXpS58zozw93QXig@kuha.fi.intel.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Mon, 8 Nov 2021 16:27:56 -0800
-Message-ID: <CACeCKaeAV13=o_G6B3nF+4PRv95OzO3j0kSTjdT8Lpzs3-a1bA@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/4] usb: typec: Character device for USB Power
- Delivery devices
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Benson Leung <bleung@google.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        "Gopal, Saranya" <saranya.gopal@intel.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=Oge0EnfKNFQBUdGv4kRxUqctp7bsGqv2hp5zFLIPTz0=;
+        b=OBzP46CGBuNrhPGDSco7YUVITLLFjZ0LwtS/xz8d8cZsfn3uRvmWGXZOZ6nTcvnp+w
+         W7sOHBSNL4b94R2wRvjcBUn6AfJPlMoDCwaJZDU4HrusgB+bSOETXgob436JZCupNnZM
+         S2CzJH/w8zYCWqXpGlTur+pdkheo9pulSULoYRXWbYUC1jEPZ05v04yeqIQlW1dD9Pya
+         RsBJtNDVHmAGyyiSLpgLKzcHE7Lu4YwaHNdKZj8MEEzZ3M6KUuUFWBxC+93N+iSpz5qd
+         L8VzqUjpqufm5PqE4eDQLchKwwr1EZC6nXyhRsdv5iqR4K3HE5vYlrO6aV3JS9HCYeXQ
+         2lFw==
+X-Gm-Message-State: AOAM533+eGf28ix5Tk21cKAjuTll4iPPI/VTQLT/TuH4mirTNZeIn+V9
+        0WHa5P3E88Ei1CKuLlxNtw==
+X-Google-Smtp-Source: ABdhPJyr28faBwelObCcuw2f/7Ua5w6R6abaMd8+HrGQ+LM8ItIlWJVTwTBhSGG0onP7IPs6JktBMg==
+X-Received: by 2002:a05:6830:4cf:: with SMTP id s15mr2725457otd.219.1636430795994;
+        Mon, 08 Nov 2021 20:06:35 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id f25sm5222567oog.44.2021.11.08.20.06.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Nov 2021 20:06:35 -0800 (PST)
+Received: (nullmailer pid 743045 invoked by uid 1000);
+        Tue, 09 Nov 2021 04:06:29 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     conor.dooley@microchip.com
+Cc:     ivan.griffin@microchip.com, jassisinghbrar@gmail.com,
+        geert@linux-m68k.org, lewis.hanly@microchip.com,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        aou@eecs.berkeley.edu, paul.walmsley@sifive.com,
+        broonie@kernel.org, atish.patra@wdc.com,
+        linux-riscv@lists.infradead.org, linux-i2c@vger.kernel.org,
+        palmer@dabbelt.com, gregkh@linuxfoundation.org,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        bin.meng@windriver.com, robh+dt@kernel.org,
+        linux-crypto@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-gpio@vger.kernel.org, bgolaszewski@baylibre.com,
+        a.zummo@towertech.it, linus.walleij@linaro.org,
+        daire.mcnamara@microchip.com, alexandre.belloni@bootlin.com,
+        krzysztof.kozlowski@canonical.com
+In-Reply-To: <20211108150554.4457-12-conor.dooley@microchip.com>
+References: <20211108150554.4457-1-conor.dooley@microchip.com> <20211108150554.4457-12-conor.dooley@microchip.com>
+Subject: Re: [PATCH 11/13] dt-bindings: usb: add bindings for microchip mpfs musb
+Date:   Mon, 08 Nov 2021 22:06:29 -0600
+Message-Id: <1636430789.946637.743044.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+On Mon, 08 Nov 2021 15:05:52 +0000, conor.dooley@microchip.com wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Add device tree bindings for the usb controller on
+> the Microchip PolarFire SoC.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../bindings/usb/microchip,mpfs-usb-host.yaml | 70 +++++++++++++++++++
+>  1 file changed, 70 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/microchip,mpfs-usb-host.yaml
+> 
 
-On Thu, Oct 28, 2021 at 12:36 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi,
->
-> On Wed, Oct 27, 2021 at 06:03:08PM -0700, Prashant Malani wrote:
-> > Why is USBPDDEV_SUBMIT_MESSAGE different from USBPDDEV_SET_MESSAGE?
-> > Shouldn't "setting" a PDO or property automatically "submit" it (using TCPM
-> > or whatever interface is actually performing the PD messaging) if
-> > appropriate (e.g Source Caps?). Is there a situation where one would
-> > want to "set" a property but not "send" it?
-> >
-> > It seems to me that the two can be combined into 1 rather than having
-> > a separate command just for ports.
->
-> USBPDDEV_SUBMIT_MESSAGE you use to send message directly to the partner.
->
-> USBPDDEV_SET_MESSAGE is meant to be used to store the values to a
-> cached message that the port manager should use next time there is
-> communication, but it does not send the message to the partner. So you
-> can use it even when there is no connection with a port, for example,
-> to store the values like the initial USB mode that should be used by
-> setting the EUDO message. Maybe the ioctl should be named
-> USBPDDEV_STORE_MESSAGE... I used "set" because it is sort of a
-> counterpart to USBPDDEV_GET_MESSAGE.
->
-> There is an explanation in include/uapi/linux/usb/pd_dev.h, please
-> check it.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Thanks for the further clarification. I guess I still don't see enough
-need to differentiate SET/STORE
-from SUBMIT; is there a situation where one would want to store the
-source/sink caps for a port,
-but not send/submit them immediately? When a partner is not connected
-to a port, a set would
-automatically just update the cached values and not perform a "submit"
-(since there is nothing to
-submit to). Perhaps there are (situations which require separate store
-and submit), but I'm unable
-to come up with one on the spot.
+yamllint warnings/errors:
 
-I'm curious also what you think about the idea with
-> USBPDDEV_CONFIGURE.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/microchip,mpfs-usb-host.yaml: properties:interrupt-names: 'oneOf' conditional failed, one must be fixed:
+	[{'const': 'dma'}, {'const': 'mc'}] is too long
+	[{'const': 'dma'}, {'const': 'mc'}] is too short
+	False schema does not allow 2
+	1 was expected
+	hint: "minItems" is only needed if less than the "items" list length
+	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/microchip,mpfs-usb-host.yaml: ignoring, error in schema: properties: interrupt-names
+warning: no schema found in file: ./Documentation/devicetree/bindings/usb/microchip,mpfs-usb-host.yaml
+Documentation/devicetree/bindings/usb/microchip,mpfs-usb-host.example.dts:19:18: fatal error: dt-bindings/clock/microchip,mpfs-clock.h: No such file or directory
+   19 |         #include "dt-bindings/clock/microchip,mpfs-clock.h"
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:385: Documentation/devicetree/bindings/usb/microchip,mpfs-usb-host.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1441: dt_binding_check] Error 2
 
-It is indeed interesting. It seems like the specific interface for
-this needs to be fleshed out more (will we
-define a standard set of features which can be represented by the
-|flags| and made configurable?). At present
-I can't think of TCPM features which we'd want to toggle at runtime,
-but I'm looking at it from a Chrome OS
-perspective, so could be missing a bunch of use cases.
+doc reference errors (make refcheckdocs):
 
-BTW, does poll work with this character device?
+See https://patchwork.ozlabs.org/patch/1552389
 
-Best regards,
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
