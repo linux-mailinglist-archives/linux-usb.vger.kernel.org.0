@@ -2,148 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D16244C9DC
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Nov 2021 20:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8CC44CA9F
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Nov 2021 21:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbhKJT42 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Nov 2021 14:56:28 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:42895 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbhKJT4Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Nov 2021 14:56:24 -0500
-Received: by mail-ot1-f43.google.com with SMTP id g91-20020a9d12e4000000b0055ae68cfc3dso5557492otg.9;
-        Wed, 10 Nov 2021 11:53:36 -0800 (PST)
+        id S232287AbhKJUaT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Nov 2021 15:30:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230230AbhKJUaS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Nov 2021 15:30:18 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D15C061764;
+        Wed, 10 Nov 2021 12:27:30 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id z200so3293233wmc.1;
+        Wed, 10 Nov 2021 12:27:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=VCO5uvUOcT27e+DRykZRIen3xP0SFPGTd6Mp1JZTAsY=;
+        b=HThajDrDc6kB1OnizIXhqzZNZZvMfdEHMWtMO4M30i37Pl73wkt59s0uAsKI/RdkPF
+         1wk6JxgmAhSrbRsPWAIvz6B3dIzTqP1/gcXhrAg3Kw18a7B2hIY3mE0EgiG057B8KZUy
+         2r4dyL/l4YIrur+Kn5hq7L8zexNdXLUoevOaZRRL88bHNDHY//iJvBd2HxSsP/+sevHM
+         tY78m10uixmloXgSMDKdn29FiasKIn3plMw6EOexg0Mz5o2pMLWAK4GZFdnnyT0Wr1xo
+         31pw1Ol0dCl/18DjBGfMtfvKMD+VkFS36tRt/sMqI0UGRF8tV70VpN2eqyLFtlwLzfWL
+         U+nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rtQL/sbdzpxz6Lu8ElJAZUiYQnGOPRjAvEo183EhEZQ=;
-        b=Y+G/EpUnkYeRwidEQcxcB/bCKh8UXs/sQt22sSAO1wgkYWmb6nrJ7MuuHhQul2ci8j
-         2CwHUXM2ymOtKrduUBQB+2NKgfo1yAiFZ3j6AQ3PxM07YMklELUttcvWqG0omYwHl/sV
-         yq8ZNsn3uiX3CnIQsK4DPopYdZ06Tq2RKg71EImg75aZyWplCShG2+E4b+BN9TypjKq/
-         mxKnFrAPVWtMfZ5FpoGYvy/PhT51mw5okPo70sezswBDfmXPIo1gcvzoTOUMmdMFJ1J6
-         XUoK7OrbJdyduylqzZ0cXRPntrMYyIIcF9X993qFHhgxve4XP2bRPSjR8QOauLAvH5kc
-         sZwA==
-X-Gm-Message-State: AOAM532SQ0biJ93+S/ljBKB2KNqVAnkdvc6jx23hWkd0WvEF1lIpE4E4
-        TbYwou8v7aIAf5FdWCwmag==
-X-Google-Smtp-Source: ABdhPJzPMoAqV3AUGDDa1G/mcQBg1/+e3vLu75Mv4kA30QovRpmA/hmvXuDtC6I5AysjT0t7pidUQg==
-X-Received: by 2002:a9d:6a4e:: with SMTP id h14mr1449816otn.134.1636574015905;
-        Wed, 10 Nov 2021 11:53:35 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id j7sm129827oon.13.2021.11.10.11.53.32
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=VCO5uvUOcT27e+DRykZRIen3xP0SFPGTd6Mp1JZTAsY=;
+        b=aWsyzI4Qg7XmGLPdepe4Ej//TNIEU7C0N1HicsmVvKeNpN8NKEh91DZq++kTwJWNa/
+         9nLKjOzhAaW3ZDeYkfjGSoUnkDrvZnyQpvDy7m4Zf+7DaJtmkBvHjC51GbEatkuaZEnH
+         dd1kuRQDvEl3p4HckgIGqQVfJdIYTKR9dKMPrrDKtLuLhIBr2PNHIENasWcr3uj93haC
+         zixb0RNucRntybkqzWI51UqDBjuzydxgt0soSOECgslx341/cGySsfxPZeynTIwKY1ZN
+         mRKBwDfljoyrm0zMIdyk/wdXhp65tsyQAOIvp3HhNqEhxK7fsdel+cjAA7U6QObeqfUf
+         4ZJg==
+X-Gm-Message-State: AOAM532E2i5qpsTHZ5DayuOKgDU79SLAT8q0Kccsmt3MzPs5Sbopuvbj
+        hzs56tV7qOeXuzsvtSVlgE0=
+X-Google-Smtp-Source: ABdhPJw4KjDz2RofXLwp2G67jkwH49HdpJCT6V9QEt9aux7cGkvEY9V4DGLIjaCPxROLcjclfo3KDw==
+X-Received: by 2002:a1c:4d13:: with SMTP id o19mr2192192wmh.164.1636576049474;
+        Wed, 10 Nov 2021 12:27:29 -0800 (PST)
+Received: from kista.localnet (cpe-86-58-29-253.static.triera.net. [86.58.29.253])
+        by smtp.gmail.com with ESMTPSA id q123sm6506007wma.30.2021.11.10.12.27.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Nov 2021 11:53:35 -0800 (PST)
-Received: (nullmailer pid 1864115 invoked by uid 1000);
-        Wed, 10 Nov 2021 19:53:32 -0000
-Date:   Wed, 10 Nov 2021 13:53:32 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     patrice.chotard@foss.st.com
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        alexandre torgue <alexandre.torgue@foss.st.com>,
-        jonathan cameron <jic23@kernel.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        olivier moysan <olivier.moysan@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-mtd@lists.infradead.org, linux-watchdog@vger.kernel.org,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        maxime coquelin <mcoquelin.stm32@gmail.com>,
-        Matt Mackall <mpm@selenic.com>, vinod koul <vkoul@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        baolin wang <baolin.wang7@gmail.com>,
-        linux-spi@vger.kernel.org, david airlie <airlied@linux.ie>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        netdev@vger.kernel.org,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        ohad ben-cohen <ohad@wizery.com>, linux-gpio@vger.kernel.org,
-        Jose Abreu <joabreu@synopsys.com>,
-        Le Ray <erwan.leray@foss.st.com>,
-        herbert xu <herbert@gondor.apana.org.au>,
-        michael turquette <mturquette@baylibre.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        linux-serial@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        "david s . miller" <davem@davemloft.net>,
-        Lionel Debieve <lionel.debieve@foss.st.com>,
-        linux-i2c@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        thierry reding <thierry.reding@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        philippe cornu <philippe.cornu@foss.st.com>,
-        linux-rtc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        alsa-devel@alsa-project.org, Zhang Rui <rui.zhang@intel.com>,
-        linux-crypto@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-iio@vger.kernel.org, pascal Paillet <p.paillet@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        linux-pm@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        stephen boyd <sboyd@kernel.org>,
-        dillon min <dillon.minfei@gmail.com>,
-        devicetree@vger.kernel.org,
-        yannick fertre <yannick.fertre@foss.st.com>,
-        linux-kernel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        linux-phy@lists.infradead.org,
-        benjamin gaignard <benjamin.gaignard@linaro.org>,
-        sam ravnborg <sam@ravnborg.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-clk@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Richard Weinberger <richard@nod.at>,
-        Rob Herring <robh+dt@kernel.org>, Marek Vasut <marex@denx.de>,
-        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        dmaengine@vger.kernel.org, linux-media@vger.kernel.org,
-        daniel vetter <daniel@ffwll.ch>, Marc Zyngier <maz@kernel.org>,
-        bjorn andersson <bjorn.andersson@linaro.org>,
-        lars-peter clausen <lars@metafoo.de>
-Subject: Re: [PATCH v3 2/5] dt-bindings: mfd: timers: Update maintainers for
- st,stm32-timers
-Message-ID: <YYwjPAoCtuM6iycz@robh.at.kernel.org>
-References: <20211110150144.18272-1-patrice.chotard@foss.st.com>
- <20211110150144.18272-3-patrice.chotard@foss.st.com>
+        Wed, 10 Nov 2021 12:27:29 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     linux-sunxi@lists.linux.dev,
+        Roman Stratiienko <r.stratiienko@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-usb@vger.kernel.org, wens@csie.org, mripard@kernel.org,
+        b-liu@ti.com, megous@megous.com,
+        Roman Stratiienko <r.stratiienko@gmail.com>
+Subject: Re: [PATCH] usb: musb: sunxi: Don't print error on MUSB_ULPI_BUSCONTROL access
+Date:   Wed, 10 Nov 2021 21:27:23 +0100
+Message-ID: <7984413.T7Z3S40VBb@kista>
+In-Reply-To: <20211019131244.1568560-1-r.stratiienko@gmail.com>
+References: <20211019131244.1568560-1-r.stratiienko@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211110150144.18272-3-patrice.chotard@foss.st.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 10 Nov 2021 16:01:41 +0100, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
+Hi Roman,
+
+sorry for late reply.
+
+Dne torek, 19. oktober 2021 ob 15:12:44 CET je Roman Stratiienko napisal(a):
+> Error message appears during suspend, where musb driver is storing
+> the register state in musb_save_context():
+> ```
+> musb-sunxi 1c19000.usb: Error unknown readb offset 112
+> ```
 > 
-> Benjamin has left the company, remove his name from maintainers.
+> Print warning instead to avoid confusion.
 > 
-> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+> Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
 > ---
->  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml | 1 -
->  1 file changed, 1 deletion(-)
+>  drivers/usb/musb/sunxi.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/usb/musb/sunxi.c b/drivers/usb/musb/sunxi.c
+> index f3f76f2ac63f9b..961c858fb349e1 100644
+> --- a/drivers/usb/musb/sunxi.c
+> +++ b/drivers/usb/musb/sunxi.c
+> @@ -440,6 +440,10 @@ static u8 sunxi_musb_readb(void __iomem *addr, u32 
+offset)
+>  				return 0xde;
+>  
+>  			return readb(addr + SUNXI_MUSB_CONFIGDATA);
+> +		case MUSB_ULPI_BUSCONTROL:
+> +			dev_warn(sunxi_musb->controller->parent,
+> +				"sunxi-musb does not have ULPI bus 
+control register\n");
+
+Since this register doesn't exist, wouldn't be better to print only debug 
+message? Warning would imply something that's out of the ordinary, but in this 
+case it's benign.
+
+> +			return 0;
+>  		/* Offset for these is fixed by sunxi_musb_busctl_offset() 
+*/
+>  		case SUNXI_MUSB_TXFUNCADDR:
+>  		case SUNXI_MUSB_TXHUBADDR:
+> @@ -494,6 +498,10 @@ static void sunxi_musb_writeb(void __iomem *addr, 
+unsigned offset, u8 data)
+>  			return writeb(data, addr + 
+SUNXI_MUSB_TXFIFOSZ);
+>  		case MUSB_RXFIFOSZ:
+>  			return writeb(data, addr + 
+SUNXI_MUSB_RXFIFOSZ);
+> +		case MUSB_ULPI_BUSCONTROL:
+> +			dev_warn(sunxi_musb->controller->parent,
+> +				"sunxi-musb does not have ULPI bus 
+control register\n");
+> +			return;
+>  		/* Offset for these is fixed by sunxi_musb_busctl_offset() 
+*/
+
+Same here.
+
+Best regards,
+Jernej
+
+>  		case SUNXI_MUSB_TXFUNCADDR:
+>  		case SUNXI_MUSB_TXHUBADDR:
+> -- 
+> 2.30.2
+> 
 > 
 
-Lee indicated he was going to pick this one up, so:
 
-Acked-by: Rob Herring <robh@kernel.org>
