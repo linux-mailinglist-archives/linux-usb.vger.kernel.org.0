@@ -2,112 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33E7044D1F0
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Nov 2021 07:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC6044D412
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Nov 2021 10:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbhKKGbn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Nov 2021 01:31:43 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:36286 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229533AbhKKGbm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 11 Nov 2021 01:31:42 -0500
-Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxidEauIxh2SgCAA--.5061S2;
-        Thu, 11 Nov 2021 14:28:48 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     zhuyinbo@loongson.cn
-Subject: [PATCH v3] usb: xhci: add LWP quirk for ensuring uPD720201 into D3 state after S5
-Date:   Thu, 11 Nov 2021 14:28:38 +0800
-Message-Id: <1636612118-32481-1-git-send-email-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-CM-TRANSID: AQAAf9CxidEauIxh2SgCAA--.5061S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7AF1kJw4kGF4DKr1UCrWruFg_yoW5JrWfpF
-        s8Xaya9rs5Kr4Iqr93Ar18Zas5G3ZrZryUKryIk3yqgrWjyrs5KFyUGFW3Ar9xWaykJr1a
-        9F1vgw15WFW7GaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkI14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE-syl42xK
-        82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
-        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48J
-        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
-        IF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+        id S232554AbhKKJc6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Nov 2021 04:32:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58100 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231667AbhKKJcz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 11 Nov 2021 04:32:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 60D1D610F8;
+        Thu, 11 Nov 2021 09:30:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1636623006;
+        bh=kpaVjDNigz+jOaRJxULm4cIpN1ldWoxRAOS0tMCpLf0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dIxVSxgrx1UKb7Z3TVdzN6EMINYjEdul2DB66Vjq29l3xAVtRZROABnnjwHDUBf2r
+         ehRJGAUzBCpZQOASGNvaDQjsZ2IGtQ5e/xWKQWsYEJ2f4+222XaPFbuFHwyESebvLr
+         iCrPblg63YVl5aE+r3zvie7iqOGfsbaGetYko0xQ=
+Date:   Thu, 11 Nov 2021 10:30:04 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB fixes for 5.16-rc1
+Message-ID: <YYzinMsJuzruCN+4@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-After S5, any pci device should into D3 state that if supported, but the
-uPD720201 was not and cause OSPM power consumption is more higher that
-S5 than S4. Due to that uPD720201 firmware behavior was unknown and the
-_PS3 method wasn't implemented in ACPI table which can make device into
-D3, I think xhci HCD can add a quirk ensure it into D3 state after S5
-that is appropriate and this patch was to add the XHCI_LWP_QURIK and set
-PCI_D3hot to uPD720201 pmsc register in xhci_pci_shutdown and
-xhci_pci_remove to fix xhci power consumption issue.
+The following changes since commit 048ff8629e117d8411a787559417c781bcd78d7e:
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
-Change in v3:
-		Add D3 set in xhci_pci_remove function.
+  Merge tag 'usb-5.16-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb (2021-11-04 07:50:43 -0700)
 
- drivers/usb/host/xhci-pci.c | 9 +++++++++
- drivers/usb/host/xhci.h     | 1 +
- 2 files changed, 10 insertions(+)
+are available in the Git repository at:
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 2c9f25c..6258a5a 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -265,6 +265,7 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	    pdev->device == 0x0014) {
- 		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
- 		xhci->quirks |= XHCI_ZERO_64B_REGS;
-+		xhci->quirks |= XHCI_LWP_QUIRK;
- 	}
- 	if (pdev->vendor == PCI_VENDOR_ID_RENESAS &&
- 	    pdev->device == 0x0015) {
-@@ -466,6 +467,10 @@ static void xhci_pci_remove(struct pci_dev *dev)
- 		pci_set_power_state(dev, PCI_D3hot);
- 
- 	usb_hcd_pci_remove(dev);
-+
-+	/* Workaround for decreasing power consumption after S5 */
-+	if (xhci->quirks & XHCI_LWP_QUIRK)
-+		pci_set_power_state(dev, PCI_D3hot);
- }
- 
- #ifdef CONFIG_PM
-@@ -610,6 +615,10 @@ static void xhci_pci_shutdown(struct usb_hcd *hcd)
- 	/* Yet another workaround for spurious wakeups at shutdown with HSW */
- 	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
- 		pci_set_power_state(pdev, PCI_D3hot);
-+
-+	/* Workaround for decreasing power consumption after S5 */
-+	if (xhci->quirks & XHCI_LWP_QUIRK)
-+		pci_set_power_state(pdev, PCI_D3hot);
- }
- #endif /* CONFIG_PM */
- 
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index dca6181..bcd70d1 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1899,6 +1899,7 @@ struct xhci_hcd {
- #define XHCI_SG_TRB_CACHE_SIZE_QUIRK	BIT_ULL(39)
- #define XHCI_NO_SOFT_RETRY	BIT_ULL(40)
- #define XHCI_BROKEN_D3COLD	BIT_ULL(41)
-+#define XHCI_LWP_QUIRK		BIT_ULL(42)
- 
- 	unsigned int		num_active_eps;
- 	unsigned int		limit_active_eps;
--- 
-1.8.3.1
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16-rc1
 
+for you to fetch changes up to e1959faf085b004e6c3afaaaa743381f00e7c015:
+
+  xhci: Fix USB 3.1 enumeration issues by increasing roothub power-on-good delay (2021-11-06 15:41:03 +0100)
+
+----------------------------------------------------------------
+USB fixes for 5.16-rc1
+
+Here are some small reverts and fixes for USB drivers for issues that
+came up during the 5.16-rc1 merge window.
+
+These include:
+	- two reverts of xhci and USB core patches that are causing
+	  problems in many systems.
+	- xhci 3.1 enumeration delay fix for systems that were having
+	  problems.
+
+All 3 of these have been in linux-next all week with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Greg Kroah-Hartman (2):
+      Revert "xhci: Set HCD flag to defer primary roothub registration"
+      Revert "usb: core: hcd: Add support for deferring roothub registration"
+
+Mathias Nyman (1):
+      xhci: Fix USB 3.1 enumeration issues by increasing roothub power-on-good delay
+
+ drivers/usb/core/hcd.c      | 29 ++++++-----------------------
+ drivers/usb/host/xhci-hub.c |  3 ++-
+ drivers/usb/host/xhci.c     |  1 -
+ include/linux/usb/hcd.h     |  2 --
+ 4 files changed, 8 insertions(+), 27 deletions(-)
