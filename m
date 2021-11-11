@@ -2,91 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78FBD44D8EC
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Nov 2021 16:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB53644DE55
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Nov 2021 00:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233947AbhKKPOU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Nov 2021 10:14:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233819AbhKKPOT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Nov 2021 10:14:19 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F606C061766;
-        Thu, 11 Nov 2021 07:11:30 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id t5-20020a17090a4e4500b001a0a284fcc2so4850658pjl.2;
-        Thu, 11 Nov 2021 07:11:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zmF8oaKXdehvlU7w3N66ru34AoYsrAlhOIntXiiS+Ig=;
-        b=DNsXpaoD8pIkk7y1aw7Ej5nRrTbVd0emPHCb9lAINzZTrOvHt3lKTKZV4CAvlkJaCS
-         suAKTAJVBIZc2GlWC5wJ2WGklNZe9oe7SJrH65Yn1VIqnLP1mWdwRmkuxp/3ERUDaTHY
-         kggzoWZi7gv2JLgvmqQa5o12WeHkmoDT5iQnRpgiWnZXVJHhosgxiz+2T3Y5ze851nj8
-         MibYwgm9o/S7R0otE3I4PXgz0KquYJRbilt+CGFlOi7R2aMJAIpZqb3CEBwero6H6pcJ
-         u/tafsvDIsP0nHSCIuYDnByeGVkZOv4N8a48vKqsGtuH1CtyMXDMyo5jCDltQPHHK1kj
-         7zEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zmF8oaKXdehvlU7w3N66ru34AoYsrAlhOIntXiiS+Ig=;
-        b=yuh20ywRjDbKtAcNX1ZblIiHFptwQa4HvHfUmoD6QWuSqQ2NFCUi1Mfn+Doa7tXr1T
-         n/l+74Q0NtsckisCBl6ZoVSrFSjK0PT2d7OivsFJL+w7n92hvXIsJfaw0P+KHJP5D3ej
-         3A4DutVuU9tA1Faz2fxf8hsaqS4imbLeGLoE0AVxR2aq/BPNvYy/DU6ruvy+0FzJJ4/X
-         SP/JdRqlEwaZOPCRswmx7joKYf1pfo1zm7FJnSMj7G1uftHS7QGIxRM4EQtyIED7q6IK
-         t5ILJIF6/YqxVeyr4Rvi1XmiYn32ntU9OvM6nrxtroD4UPY94Ek/ow81qOcwBNOSkf2P
-         xuKg==
-X-Gm-Message-State: AOAM5304JU+82QbqTgsa+S9J4tW/DOzvPh37SfFXyBfSuvSlOS1f04Tw
-        ipOVwOa4GdRIiysuVnFqrvw=
-X-Google-Smtp-Source: ABdhPJxzxk89QuuAs3yQtOJxVIoREnik6aKgPIsAgmMeoBIi6y1rZb7kvBfYz83fidYaj3RY13sRWQ==
-X-Received: by 2002:a17:90b:3ecc:: with SMTP id rm12mr8891072pjb.75.1636643490033;
-        Thu, 11 Nov 2021 07:11:30 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id h25sm2122183pgm.33.2021.11.11.07.11.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Nov 2021 07:11:29 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: luo.penghao@zte.com.cn
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luo penghao <luo.penghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] USB: Delete the useless assignment to "nbytes"
-Date:   Thu, 11 Nov 2021 15:11:24 +0000
-Message-Id: <20211111151124.2659-1-luo.penghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S234435AbhKKXMR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Nov 2021 18:12:17 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37070 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234528AbhKKXMJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 11 Nov 2021 18:12:09 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 79A4F61264;
+        Thu, 11 Nov 2021 23:09:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636672159;
+        bh=Cqw53G4Xk/UW4Qotg5ASvC0BkLdLhxr2lVJo66vsdBk=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=RssrOGzqEU1Qu5clGy9s27YXcueWheb6VIjYDb0zUeIkCyhLg+u2bEYM+vD1d5UE9
+         cq/2xRXn3kA9afO5FUpKB5K7vPts310zpdA6aQbocCmK4d682tRNCJZKr0DyplIAkv
+         zKuKAWaqfZUGEmQDUmBASMAVqH3EsmneYXe6zTMBdctZ4a/hKUW7Sod5v9bfp44fJt
+         qRXW+MYSMsW7KUfbyqQ2UeFLi61Z9y18RQvJqMuVNgVOpx3nesGkPNYGal7QtKE9zg
+         NNU+q6boMx5cnfvyDNVqOrAOBLx32egV7QJlf+a4Ej8Gwn22+g0HEVT1yRw8KtCsvv
+         J0SHRaaX7k62A==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 72C98608FE;
+        Thu, 11 Nov 2021 23:09:19 +0000 (UTC)
+Subject: Re: [GIT PULL] USB fixes for 5.16-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YYzinMsJuzruCN+4@kroah.com>
+References: <YYzinMsJuzruCN+4@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YYzinMsJuzruCN+4@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16-rc1
+X-PR-Tracked-Commit-Id: e1959faf085b004e6c3afaaaa743381f00e7c015
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 5625207d83f6c42b1e66004002404c3eb9f2a682
+Message-Id: <163667215946.13198.16664226383751174509.pr-tracker-bot@kernel.org>
+Date:   Thu, 11 Nov 2021 23:09:19 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: luo penghao <luo.penghao@zte.com.cn>
+The pull request you sent on Thu, 11 Nov 2021 10:30:04 +0100:
 
-The assignment of the local variable "nbytes" in the if statement
-will not be used
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16-rc1
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: luo penghao <luo.penghao@zte.com.cn>
----
- drivers/usb/mon/mon_bin.c | 1 -
- 1 file changed, 1 deletion(-)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/5625207d83f6c42b1e66004002404c3eb9f2a682
 
-diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
-index f48a23a..b8ba0f7 100644
---- a/drivers/usb/mon/mon_bin.c
-+++ b/drivers/usb/mon/mon_bin.c
-@@ -845,7 +845,6 @@ static ssize_t mon_bin_read(struct file *file, char __user *buf,
- 			mutex_unlock(&rp->fetch_lock);
- 			return -EFAULT;
- 		}
--		nbytes -= step_len;
- 		buf += step_len;
- 		rp->b_read += step_len;
- 		done += step_len;
+Thank you!
+
 -- 
-2.15.2
-
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
