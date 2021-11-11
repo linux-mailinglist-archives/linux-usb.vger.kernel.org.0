@@ -2,102 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2420944D668
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Nov 2021 13:13:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F8B44D6A1
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Nov 2021 13:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233243AbhKKMPm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Nov 2021 07:15:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53274 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232855AbhKKMPm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Nov 2021 07:15:42 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D440C061766
-        for <linux-usb@vger.kernel.org>; Thu, 11 Nov 2021 04:12:53 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id x131so5414997pfc.12
-        for <linux-usb@vger.kernel.org>; Thu, 11 Nov 2021 04:12:53 -0800 (PST)
+        id S232818AbhKKMbA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Nov 2021 07:31:00 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:32313 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229946AbhKKMa7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Nov 2021 07:30:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z7Bo+3iEWB/Cyvjdu7SemXkR6Sf83KAE2w7hembhxxA=;
-        b=Fyg+F4sbJUmOXIAbGcDxMnD1ntwrvzKMaMYsiw3RH23P+LKOYvT2cIi8At0ooJzTOY
-         e54h3+CodpJJ6clTPz7tfVdKoluEFKr0MCAzIyGLN3TSkzSQbHa7sXIzFnHiNO7MOrrW
-         2woeJUjkpH52nvIMppo8zOTuM7PJbVmrFLDzsrh+uxyC9aDCOg9SaK9oMeedeLqvd+s+
-         F2oCbE0ttiugJ3pQT37VezQT/HmFUa2w6z6Ve9yfw8ICU/J2t4qvCz5TE9e87y8V90t/
-         41ezC1B5J4Dx1OXgKa96x/Y/sSLJ+UjWRxmhtb4o2rppu6mJA0lXn0RzXbg6X2DS6l7W
-         9NMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z7Bo+3iEWB/Cyvjdu7SemXkR6Sf83KAE2w7hembhxxA=;
-        b=QkCyWPnLfvzNFKK3tPGHZB+Dopnnn9PiYWjC9Z86Ke3jWEFVTH3uWepRT9i3Fpy9zi
-         TeIJqfaQzHoxtbx1cLUcfFDQWe5/DP5ejmA8/m2ps/yp/N51R9ec6mcKRMZMt2/r01oT
-         11OPUmJ6BdmSfSTm+6My8whkMTS1q/peS+6KLlKnsDopE0bl/IImn+8cKs5JpYiTuZJK
-         m/KquLnUbfZMVaeg1RYi0IvQRsm9svUQUeF/nPs6BJCY4z9lfoNoQdxM4yzp/m+BIzMu
-         NiABTRZW7+XmPOLMrN7+xHI7Vwj7oGTA0KHIa+IgrFdqoEBEWmc45DC0KL011WfB8tCD
-         eWBA==
-X-Gm-Message-State: AOAM532nMAFis6H+vhEVPWgDilCRVU98F1ivq2bvDjnw7IcDXTLwWMCX
-        F9uklDnRrqbk1L5GIEU1x6E=
-X-Google-Smtp-Source: ABdhPJwVS1YWBG4MxVknrL0WZfclbYiUIyzhFB0gxpWB9TC7Li39VEzQPhENcFC2hlthTFBaF81WAw==
-X-Received: by 2002:a63:e107:: with SMTP id z7mr4216714pgh.294.1636632772804;
-        Thu, 11 Nov 2021 04:12:52 -0800 (PST)
-Received: from ELIJAHBAI-MB0.tencent.com ([103.7.29.31])
-        by smtp.gmail.com with ESMTPSA id b15sm2949427pfv.48.2021.11.11.04.12.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 11 Nov 2021 04:12:52 -0800 (PST)
-From:   Haimin Zhang <tcs.kernel@gmail.com>
-To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Cc:     Haimin Zhang <tcs.kernel@gmail.com>,
-        TCS Robot <tcs_robot@tencent.com>
-Subject: [PATCH v2] USB: ehci_brcm_hub_control: filter out invalid port index
-Date:   Thu, 11 Nov 2021 20:10:37 +0800
-Message-Id: <20211111121037.34713-1-tcs.kernel@gmail.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1636633691; x=1668169691;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=3KWMODyU440zctzw4TNkkavjfGZfH/lYVnKCK4rgua0=;
+  b=sDjzHJIKE3LU25xqijyBypid6Mg2EHkMT3uutFYlw6wOoGNM+keA5j3p
+   PYXDUjHlTwkG4sj+SQssATr9jrMTUld9VwNfmgx100ohGsMpzpZLAPFwq
+   qMY6WhlCYQNpky/Ue5yUtohOhcia2uQJQBZVHxJ8LWIkzi3QP2OY4Dw89
+   E=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 11 Nov 2021 04:28:10 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2021 04:28:10 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
+ Thu, 11 Nov 2021 04:28:09 -0800
+Received: from quicinc.com (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 11 Nov
+ 2021 04:28:05 -0800
+From:   Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+CC:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Jens Axboe" <axboe@kernel.dk>, Jack Pham <jackp@codeaurora.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2] usb: gadget: f_fs: Use stream_open() for endpoint files
+Date:   Thu, 11 Nov 2021 17:45:56 +0530
+Message-ID: <1636632958-22802-1-git-send-email-quic_pkondeti@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <20211111120636.GA11612@hu-pkondeti-hyd.qualcomm.com>
+References: <20211111120636.GA11612@hu-pkondeti-hyd.qualcomm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Due to (wIndex & 0xff) - 1 can get an integer greater than 0xf, this
-can cause array index to be out of bounds since the size of array
-port_status is 0xf. Remove cases greater than 0xf, because such cases
-are meaningless. It is reasonable to return -EPIPE, the caller
-rh_call_control will check the return value and handle it properly.
-The callee ehci_hub_control also doesn't need to deal with situations
-greater than 0xf. The size of the array port_status determines that
-such situations should not be handled.
+Function fs endpoint files does not have the notion of file position.
+So switch to stream like functionality. This allows concurrent threads
+to be blocked in the ffs read/write operations which use ffs_mutex_lock().
+The ffs mutex lock deploys interruptible wait. Otherwise, threads are
+blocking for the mutex lock in __fdget_pos(). For whatever reason, ff the
+host does not send/receive data for longer time, hung task warnings
+are observed.
 
-Reported-by: TCS Robot <tcs_robot@tencent.com>
-Signed-off-by: Haimin Zhang <tcs.kernel@gmail.com>
+Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
 ---
- drivers/usb/host/ehci-brcm.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+V2:
+- Removed Change-Id tag
 
-diff --git a/drivers/usb/host/ehci-brcm.c b/drivers/usb/host/ehci-brcm.c
-index d3626bfa966b..07e6df336a08 100644
---- a/drivers/usb/host/ehci-brcm.c
-+++ b/drivers/usb/host/ehci-brcm.c
-@@ -63,6 +63,9 @@ static int ehci_brcm_hub_control(
- 	unsigned long flags;
- 	int retval, irq_disabled = 0;
+ drivers/usb/gadget/function/f_fs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index e20c19a..3c584da 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -614,7 +614,7 @@ static int ffs_ep0_open(struct inode *inode, struct file *file)
+ 	file->private_data = ffs;
+ 	ffs_data_opened(ffs);
  
-+	if (!wIndex || wIndex > ports)
-+		return -EPIPE;
-+
- 	status_reg = &ehci->regs->port_status[(wIndex & 0xff) - 1];
+-	return 0;
++	return stream_open(inode, file);
+ }
  
- 	/*
-@@ -70,7 +73,6 @@ static int ehci_brcm_hub_control(
- 	 * of RESUME
- 	 */
- 	if ((typeReq == GetPortStatus) &&
--	    (wIndex && wIndex <= ports) &&
- 	    ehci->reset_done[wIndex-1] &&
- 	    time_after_eq(jiffies, ehci->reset_done[wIndex-1]) &&
- 	    (ehci_readl(ehci, status_reg) & PORT_RESUME)) {
+ static int ffs_ep0_release(struct inode *inode, struct file *file)
+@@ -1154,7 +1154,7 @@ ffs_epfile_open(struct inode *inode, struct file *file)
+ 	file->private_data = epfile;
+ 	ffs_data_opened(epfile->ffs);
+ 
+-	return 0;
++	return stream_open(inode, file);
+ }
+ 
+ static int ffs_aio_cancel(struct kiocb *kiocb)
 -- 
-2.30.1 (Apple Git-130)
+2.7.4
 
