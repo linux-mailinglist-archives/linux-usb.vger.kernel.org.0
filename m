@@ -2,82 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC4944EC3C
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Nov 2021 18:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C589E44EC51
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Nov 2021 18:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235546AbhKLRyn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Nov 2021 12:54:43 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:55143 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S235558AbhKLRym (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Nov 2021 12:54:42 -0500
-Received: (qmail 37610 invoked by uid 1000); 12 Nov 2021 12:51:50 -0500
-Date:   Fri, 12 Nov 2021 12:51:50 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     DocMAX <mail@vacharakis.de>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Issue with UAS and" VIA Labs, Inc. VL817 SATA Adaptor"
-Message-ID: <20211112175150.GA37212@rowland.harvard.edu>
-References: <139f5577-4a0c-a073-6320-a2697eddadc6@vacharakis.de>
- <20211112154052.GB32928@rowland.harvard.edu>
- <c9c65f98-b766-f110-26c0-a4187fe7bb8d@vacharakis.de>
- <20211112162316.GC32928@rowland.harvard.edu>
- <bfc48a4a-9648-dee8-20b0-dadfafa508e7@vacharakis.de>
+        id S235544AbhKLSCp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Nov 2021 13:02:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235348AbhKLSCo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Nov 2021 13:02:44 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B8DC061767
+        for <linux-usb@vger.kernel.org>; Fri, 12 Nov 2021 09:59:53 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id k1so9786376ilo.7
+        for <linux-usb@vger.kernel.org>; Fri, 12 Nov 2021 09:59:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=BKRCO+sPNEEvYF+1R9ZCLe7wHn/hQy/BNfRiIf8HXr0=;
+        b=GoKcKMv9WzfvYS0Gew9fuFsDLEY6puVfcM5rtRtMyEwCbG97SBJnBI+escCTKozSx0
+         2ju/DBJG40QSQ6GDknJJIQmzhdkRAZLFM7FfZlgxdWkG5r9odxrTCPak1lW8WRndPzKg
+         wu9TKgjVYwD+MHCQKsXsJNqW5VeJJen0i4vIE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BKRCO+sPNEEvYF+1R9ZCLe7wHn/hQy/BNfRiIf8HXr0=;
+        b=40u4LCGlwbdwt0tkjW3uueDl70hRo7OTEpr9LBGNDRSr2DGrtYhaWhAPA9THzzyyNG
+         vsicowkMrXxu0PB4J8RkvVXpPZssPofeinSeVNYrI1tq8PEGdbZEQp3XCsGdlHIsUs2K
+         MLBnsaVF7eN6THQiBlaLI5V1+nMAFyaV5Wyi6GDobELGYztGYlXAki59QjQGFgRdoIzE
+         oJoXc2DpgBDGcjKtEgfA8WQiHfg2gvUj6F/YgkZ6lVTw5UrCt2TISk9QOEviNmoSMynR
+         +2zcG/G5r16moZSC+vtW6LyVswyjQYssf+0uQC0XdkO3lJe4cZn5aAnE+tujs0cTVrWJ
+         5J9A==
+X-Gm-Message-State: AOAM530X5s8W0Zw/R5oVD8hr+BeXlqtJl9bBK2zi43Kd1Ud0K87r8L2f
+        OCln2B59d44E8FMQ8woecO9jmA==
+X-Google-Smtp-Source: ABdhPJyXxSU0LADwgxOeny7WaJv1uZzTRo7eRIlVFxQmIhvZQTdL2wSuZhZVjwaaWpmYucKl459Ihg==
+X-Received: by 2002:a05:6e02:17c8:: with SMTP id z8mr10397843ilu.19.1636739992866;
+        Fri, 12 Nov 2021 09:59:52 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id f3sm4104897ilq.13.2021.11.12.09.59.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Nov 2021 09:59:52 -0800 (PST)
+Subject: Re: [PATCH] usb: Remove redundant 'flush_workqueue()' calls
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        peter.chen@kernel.org, gregkh@linuxfoundation.org,
+        balbi@kernel.org, valentina.manea.m@gmail.com, shuah@kernel.org,
+        johan@kernel.org, zhengyongjun3@huawei.com, colin.king@intel.com,
+        trix@redhat.com, Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <563123a8117d6cafae3f134e497587bd2b8bb7f4.1636734453.git.christophe.jaillet@wanadoo.fr>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <7b37c4b8-1bfa-2367-a6ad-6b40f5523934@linuxfoundation.org>
+Date:   Fri, 12 Nov 2021 10:59:51 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bfc48a4a-9648-dee8-20b0-dadfafa508e7@vacharakis.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <563123a8117d6cafae3f134e497587bd2b8bb7f4.1636734453.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 12, 2021 at 05:26:17PM +0100, DocMAX wrote:
-> Sure:
+On 11/12/21 9:30 AM, Christophe JAILLET wrote:
+> 'destroy_workqueue()' already drains the queue before destroying it, so
+> there is no need to flush it explicitly.
 > 
-> Bus 006 Device 006: ID 2109:0715 VIA Labs, Inc. VL817 SATA Adaptor
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               3.10
->   bDeviceClass            0
->   bDeviceSubClass         0
->   bDeviceProtocol         0
->   bMaxPacketSize0         9
->   idVendor           0x2109 VIA Labs, Inc.
->   idProduct          0x0715 VL817 SATA Adaptor
->   bcdDevice            6.14
->   iManufacturer           1 VIA Labs,Inc.
->   iProduct                2 USB3.1 SATA Bridge
->   iSerial                 3 0000000000000004
+> Remove the redundant 'flush_workqueue()' calls.
+> 
+> This was generated with coccinelle:
+> 
+> @@
+> expression E;
+> @@
+> - 	flush_workqueue(E);
+> 	destroy_workqueue(E);
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>   drivers/usb/chipidea/otg.c           | 5 ++---
+>   drivers/usb/gadget/udc/mv_udc_core.c | 4 +---
+>   drivers/usb/host/u132-hcd.c          | 1 -
+>   drivers/usb/phy/phy-mv-usb.c         | 5 +----
+>   drivers/usb/usbip/usbip_event.c      | 1 -
+>   5 files changed, 4 insertions(+), 12 deletions(-)
+> 
 
-Wow.  Judging by the serial number values, you got the first four
-devices of this sort ever made.  (That is, unless they use the same
-serial numbers on all of their devices!)
+> diff --git a/drivers/usb/usbip/usbip_event.c b/drivers/usb/usbip/usbip_event.c
+> index 086ca76dd053..26513540bcdb 100644
+> --- a/drivers/usb/usbip/usbip_event.c
+> +++ b/drivers/usb/usbip/usbip_event.c
+> @@ -137,7 +137,6 @@ int usbip_init_eh(void)
+>   
+>   void usbip_finish_eh(void)
+>   {
+> -	flush_workqueue(usbip_queue);
+>   	destroy_workqueue(usbip_queue);
+>   	usbip_queue = NULL;
+>   }
+> 
 
-Anyway, the patch below should accomplish the same effect as the
-module parameter override you've been using.  Let us know if it works
-properly.
+Might be better to generate per driver patches.
 
-Alan Stern
+Looks good to me. For the usbip change in this patch:
 
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-
-Index: usb-devel/drivers/usb/storage/unusual_devs.h
-===================================================================
---- usb-devel.orig/drivers/usb/storage/unusual_devs.h
-+++ usb-devel/drivers/usb/storage/unusual_devs.h
-@@ -2291,6 +2291,13 @@ UNUSUAL_DEV(  0x2027, 0xa001, 0x0000, 0x
- 		USB_SC_DEVICE, USB_PR_DEVICE, usb_stor_euscsi_init,
- 		US_FL_SCM_MULT_TARG ),
- 
-+/* Reported by DocMAX <mail@vacharakis.de> */
-+UNUSUAL_DEV( 0x2109, 0x0715, 0x0614, 0x0614,
-+		"VIA Labs, Inc.",
-+		"VL817 USB3.1 SATA Bridge",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_UAS),
-+
- UNUSUAL_DEV( 0x2116, 0x0320, 0x0001, 0x0001,
- 		"ST",
- 		"2A",
+thanks,
+-- Shuah
