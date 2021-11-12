@@ -2,93 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F58A44E078
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Nov 2021 03:47:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A29244E0B9
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Nov 2021 04:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234514AbhKLCui (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Nov 2021 21:50:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53400 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbhKLCuh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Nov 2021 21:50:37 -0500
-X-Greylist: delayed 1194 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 11 Nov 2021 18:47:47 PST
-Received: from hz.preining.info (hz.preining.info [IPv6:2a01:4f9:2a:1a08::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF79C061766;
-        Thu, 11 Nov 2021 18:47:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=preining.info; s=201909; h=Content-Type:MIME-Version:Message-ID:Subject:To:
-        From:Date:Sender:Reply-To:Cc:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=jdDMVUa9v4ZQsJJWYzaKZGtSp5X4bWCNZQKo+u6ZTc4=; b=MhRC7wRd41Deq465A2b6mRTpOP
-        wzRyKiu0heDyGXWkbFpFM7FCJIL1eV0TpitnDra55nmfSbP8/vDo5FLpCBrN/3PshjA9GGWaFCpps
-        TU06Bykq9kAinnU9V3BMArh/zhDAt3Day+12ffHpzsAMLKd4ml0L4/FHhVN3+MVuk3zrCATJ3aowp
-        jLoaPI2/IpolkU09JR1TyElRWH8ggelB0S0wheZ9EgZymgqDTDl29ppsFv32BqBSzm/hYUiYkDaP2
-        ah5Aafv4RoglYy07N23I8vItPcWQHeGhj//liu0WPnI1c7/XNiTrC5oHom5BII67UUkuZLEKpDqsz
-        665JjKQQ==;
-Received: from tvk213002.tvk.ne.jp ([180.94.213.2] helo=bulldog.preining.info)
-        by hz.preining.info with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <norbert@preining.info>)
-        id 1mlMIA-0005md-B6; Fri, 12 Nov 2021 02:27:50 +0000
-Received: by bulldog.preining.info (Postfix, from userid 1000)
-        id 225411A383C6E; Fri, 12 Nov 2021 11:27:45 +0900 (JST)
-Date:   Fri, 12 Nov 2021 11:27:45 +0900
-From:   Norbert Preining <norbert@preining.info>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [5.12 - 5.15] xHCI controller dead - not renesas but intel
-Message-ID: <YY3RIdKBbIL3Dw/q@bulldog.preining.info>
+        id S229966AbhKLDUa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Nov 2021 22:20:30 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:27215 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229698AbhKLDU3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Nov 2021 22:20:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1636687060; x=1668223060;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=R+0x19yaXzzJhuzEP8YP4krwjPAk5az9d5FAImXB5CA=;
+  b=xJzRw8t75AjXF5U9CgvPB+bz+6RJH0vAv7zs9fkARJsoKvaTePhKyJGP
+   O3KZDbcKIsbOnnZfbvR925KgdVhg8vCfGVAJ4vO/K/ebTJr6a0y+c7dpQ
+   PyYhM2xi6w/6v8Pu3xFs3dxAsg8OdVwz34jDklqz+oE3nRbpqnDHII1bc
+   E=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 11 Nov 2021 19:17:39 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2021 19:17:39 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7;
+ Thu, 11 Nov 2021 19:17:38 -0800
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 11 Nov 2021 19:17:34 -0800
+Date:   Fri, 12 Nov 2021 08:47:30 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Jack Pham <jackp@codeaurora.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] usb: gadget: f_fs: Use stream_open() for endpoint
+ files
+Message-ID: <20211112031730.GB11612@hu-pkondeti-hyd.qualcomm.com>
+References: <20211111120636.GA11612@hu-pkondeti-hyd.qualcomm.com>
+ <1636632958-22802-1-git-send-email-quic_pkondeti@quicinc.com>
+ <YY0WvD57FGums0a8@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
+In-Reply-To: <YY0WvD57FGums0a8@kroah.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear all,
+Hi Greg,
 
-(please Cc)
+On Thu, Nov 11, 2021 at 02:12:28PM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Nov 11, 2021 at 05:45:56PM +0530, Pavankumar Kondeti wrote:
+> > Function fs endpoint files does not have the notion of file position.
+> > So switch to stream like functionality. This allows concurrent threads
+> > to be blocked in the ffs read/write operations which use ffs_mutex_lock().
+> > The ffs mutex lock deploys interruptible wait. Otherwise, threads are
+> > blocking for the mutex lock in __fdget_pos(). For whatever reason, ff the
+> > host does not send/receive data for longer time, hung task warnings
+> > are observed.
+> 
+> So the current code is broken?  What commit caused it to break?
 
-I see quite some discussion here about hanging USB controls from
-Renesas. Interestingly, I see the very same behaviour with my Intel USB
-controller:
-00:14.0 USB controller: Intel Corporation 100 Series/C230 Series Chipset Family USB 3.0 xHCI Controller (rev 31)
+This is not a serious bug that can affect functionality. if hung_task_panic
+sysctl is not enabled, probably nobody would notice this except an obscure
+warning in the kernel dmesg log. It is all about the task state while
+it is blocked for I/O. The function fs code uses interruptible wait but
+we are not reaching there and getting blocked at VFS layer due to the below
+commit introduced from 3.14 kernel.
 
-It happens again and again that:
-Nov 12 10:57:58 bulldog kernel: xhci_hcd 0000:00:14.0: Abort failed to stop command ring: -110
-Nov 12 10:57:58 bulldog kernel: xhci_hcd 0000:00:14.0: xHCI host controller not responding, assume dead
-Nov 12 10:57:58 bulldog kernel: xhci_hcd 0000:00:14.0: HC died; cleaning up
-Nov 12 10:57:58 bulldog kernel: xhci_hcd 0000:00:14.0: Timeout while waiting for setup device command
+commit 9c225f2655e36a470c4f58dbbc99244c5fc7f2d4
+Author: Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon Mar 3 09:36:58 2014 -0800
 
-and I loose all mouse/kbd access.
+    vfs: atomic f_pos accesses as per POSIX
 
-I have the feeling that it happens more often/at all when I redirect my
-USB webcam to a virtual machine using virt-manager.
-Before the above happened, the log showed
-Nov 12 10:57:06 bulldog kernel: usb 1-12: reset high-speed USB device number 47 using xhci_hcd
-Nov 12 10:57:11 bulldog kernel: usb 1-12: device descriptor read/64, error -110
-Nov 12 10:57:27 bulldog kernel: usb 1-12: device descriptor read/64, error -110
-Nov 12 10:57:27 bulldog kernel: usb 1-12: reset high-speed USB device number 47 using xhci_hcd
-Nov 12 10:57:32 bulldog kernel: usb 1-12: device descriptor read/64, error -110
-Nov 12 10:57:48 bulldog kernel: usb 1-12: device descriptor read/64, error -110
-Nov 12 10:57:48 bulldog kernel: usb 1-12: reset high-speed USB device number 47 using xhci_hcd
+    Our write() system call has always been atomic in the sense that you get
+    the expected thread-safe contiguous write, but we haven't actually
+    guaranteed that concurrent writes are serialized wrt f_pos accesses, so
+    threads (or processes) that share a file descriptor and use "write()"
+    concurrently would quite likely overwrite each others data.
 
-where 
-HD Pro Webcam C920 as /devices/pci0000:00/0000:00:14.0/usb1/1-12/1-12:1.0/input/input40
+We have uncovered this issue via customer bug report which happens very rarely.
+It only happens like when host does not pull the data for a very long time.
+Since function fs does not care about file position, thought stream_open()
+is the right thing to do here.
 
-I am currently running 5.15.1.
+> 
+> Doesn't this change cause a change in behavior for existing userspace
+> tools, or will they still work as-is?
+> 
 
-Is there anything (besides ssh-ing into the machine and unbind/bind the
-pci device) I can provide or do?
+I don't think it affects user space as it just changes the task state from 
+UNINTERRUPTIBLE to INTERRUPTIBLE while waiting for the USB transfers to
+finish. However there is a slight change to the O_NONBLOCK behavior.
+Earlier threads that are using O_NONBLOCK are also getting blocked
+inside fdget_pos(). Now they reach to f_fs and error code is returned. IOW,
+we are actually fixing the non blocking behavior here.
 
-(Please cc)
+PS: I believe you asked these questions since the commit description does not
+cover it. I can happily add all this information to it. Since it is all historical,
+I did not mention it.
 
-Thanks
-
-Norbert
-
---
-PREINING Norbert                              https://www.preining.info
-Fujitsu Research  +  IFMGA Guide  +  TU Wien  +  TeX Live  + Debian Dev
-GPG: 0x860CDC13   fp: F7D8 A928 26E3 16A1 9FA0 ACF0 6CAC A448 860C DC13
+Thanks,
+Pavan
