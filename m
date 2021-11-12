@@ -2,102 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8201244E5AC
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Nov 2021 12:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D98D44EA66
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Nov 2021 16:37:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234815AbhKLLqO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Nov 2021 06:46:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38596 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234144AbhKLLqO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 12 Nov 2021 06:46:14 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EF04960F5B;
-        Fri, 12 Nov 2021 11:43:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1636717403;
-        bh=dKpfDmG6ocfPhcD3bOXlWfj54si9WcvQHXi/ZKCnCf8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sDJOkN0MTf7JFjQriM0IwyWxsDXh8GF3vvnKPEU20hXOhTzeg8g4y7LXkwUVtzuY2
-         3Q6hWTGK93eluvYOAulTCfkmXYVrXMSHovXKeRNTfoOghmQjAoPHmJpcFTO6LUZj9X
-         qTsogP57eL8lPMaEseKceaabTgQpxyH5U6cUSalM=
-Date:   Fri, 12 Nov 2021 12:43:20 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Super Zhang <superzmj@fibocom.corp-partner.google.com>
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add Fibocom FM101-GL variants
-Message-ID: <YY5TWKrX29tHG+Lh@kroah.com>
-References: <20211112110638.751141-1-superzmj@fibocom.corp-partner.google.com>
+        id S235522AbhKLPjq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Nov 2021 10:39:46 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:41505 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S235304AbhKLPjI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Nov 2021 10:39:08 -0500
+Received: (qmail 33489 invoked by uid 1000); 12 Nov 2021 10:36:15 -0500
+Date:   Fri, 12 Nov 2021 10:36:15 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Haimin Zhang <tcs.kernel@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        TCS Robot <tcs_robot@tencent.com>
+Subject: Re: [PATCH v3] USB: ehci_brcm_hub_control: improve port index
+ sanitizing
+Message-ID: <20211112153615.GA32928@rowland.harvard.edu>
+References: <20211112094921.90496-1-tcs.kernel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211112110638.751141-1-superzmj@fibocom.corp-partner.google.com>
+In-Reply-To: <20211112094921.90496-1-tcs.kernel@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 12, 2021 at 07:06:38PM +0800, Super Zhang wrote:
-> Update the USB serial option driver support for the Fibocom
-> FM101-GL Cat.6
-> LTE modules as there are actually several different variants.
-> - VID:PID 2cb7:01a4, FM101-GL for laptop debug M.2 cards(adb
->   interface)
-> - VID:PID 2cb7:01a2, FM101-GL are laptop M.2 cards (with
-> MBIM interfaces for /Linux/Chrome OS)
+On Fri, Nov 12, 2021 at 05:49:21PM +0800, Haimin Zhang wrote:
+> Due to (wIndex & 0xff) - 1 can get an integer greater than 0xf, this
+> can cause array index to be out of bounds since the size of array
+> port_status is 0xf. Using macro function HCS_N_PORTS() can return
+> a valid index less than 15. Macro function HCS_N_PORTS() is used
+> to obtain a valid port index by logical AND 0xf.
 > 
-> T:  Bus=02 Lev=01 Prnt=01 Port=03 Cnt=01 Dev#=  2 Spd=5000
-> MxCh= 0
-> D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-> P:  Vendor=2cb7 ProdID=01a2 Rev= 5.04
-> S:  Manufacturer=Fibocom Wireless Inc.
-> S:  Product=Fibocom FM101-GL Module
-> S:  SerialNumber=86bffe63
-> C:* #Ifs= 7 Cfg#= 1 Atr=a0 MxPwr=896mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00
-> Driver=cdc_mbim
-> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30
-> Driver=(none)
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40
-> Driver=(none)
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40
-> Driver=(none)
-> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40
-> Driver=(none)
-> I:* If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40
-> Driver=(none)
+> Reported-by: TCS Robot <tcs_robot@tencent.com>
+> Signed-off-by: Haimin Zhang <tcs.kernel@gmail.com>
+> ---
+>  drivers/usb/host/ehci-brcm.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
+> diff --git a/drivers/usb/host/ehci-brcm.c b/drivers/usb/host/ehci-brcm.c
+> index d3626bfa966b..d2bf7768349c 100644
+> --- a/drivers/usb/host/ehci-brcm.c
+> +++ b/drivers/usb/host/ehci-brcm.c
+> @@ -62,8 +62,11 @@ static int ehci_brcm_hub_control(
+>  	u32 __iomem	*status_reg;
+>  	unsigned long flags;
+>  	int retval, irq_disabled = 0;
+> +	u32 temp;
+>  
+> -	status_reg = &ehci->regs->port_status[(wIndex & 0xff) - 1];
+> +	temp = (wIndex & 0xff) - 1;
+> +	temp = HCS_N_PORTS(temp);
 
-Any chance you can not line-wrap these lines?
+This is a misuse of the HCS_N_PORTS macro; the fact that it works out 
+okay is just a coincidence.  That macro was intended for extracting the 
+number of ports from the hcs_params word in the EHCI register space.  It 
+should not be used for any other purpose (including forcing a value to 
+be in the range of valid port numbers).
 
+If you want to do this correctly, do something like:
 
-> T:  Bus=02 Lev=01 Prnt=01 Port=03 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
-> D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-> P:  Vendor=2cb7 ProdID=01a4 Rev= 5.04
-> S:  Manufacturer=Fibocom Wireless Inc.
-> S:  Product=Fibocom FM101-GL Module
-> S:  SerialNumber=86bffe63
-> C:* #Ifs= 7 Cfg#= 1 Atr=a0 MxPwr=896mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00
-> Driver=cdc_mbim
-> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30
-> Driver=(none)
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40
-> Driver=(none)
-> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01
-> Driver=(none)
-> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40
-> Driver=(none)
-> I:* If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40
-> Driver=(none)
-> 
-> Signed-off-by: Super Zhang <superzmj@fibocom.corp-partner.google.com>
+	temp = min_t(u32, temp, HCS_N_PORTS_MAX - 1);
 
-This is not a valid email address for you, please use your normal
-corporate address, I doubt google wants to take responsibility for this
-:)
+Or even:
 
-thanks,
+	if (temp >= HCS_N_PORTS_MAX)	/* Force valid port number */
+		temp = 0;
 
-greg k-h
+Alan Stern
+
+> +	status_reg = &ehci->regs->port_status[temp];
+>  
+>  	/*
+>  	 * RESUME is cleared when GetPortStatus() is called 20ms after start
+> -- 
+> 2.30.1 (Apple Git-130)
