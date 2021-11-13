@@ -2,81 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A379144F3D0
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Nov 2021 16:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F114444F404
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Nov 2021 16:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235917AbhKMPJQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 13 Nov 2021 10:09:16 -0500
-Received: from [152.32.141.60] ([152.32.141.60]:54572 "EHLO mail.opaydev.com"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S229668AbhKMPJP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 13 Nov 2021 10:09:15 -0500
-X-Greylist: delayed 14222 seconds by postgrey-1.27 at vger.kernel.org; Sat, 13 Nov 2021 10:09:12 EST
-Received: from localhost (localhost [127.0.0.1])
-        by mail.opaydev.com (Postfix) with ESMTP id 830F7E2EE9A;
-        Sat, 13 Nov 2021 10:25:43 +0100 (WAT)
-Received: from mail.opaydev.com ([127.0.0.1])
-        by localhost (mail.opaydev.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id tw-QaPNPsxxz; Sat, 13 Nov 2021 10:25:43 +0100 (WAT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.opaydev.com (Postfix) with ESMTP id C33E3E2EE9B;
-        Sat, 13 Nov 2021 10:25:41 +0100 (WAT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.opaydev.com C33E3E2EE9B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=opay-ctr.com;
-        s=13A7165E-7DCA-11EB-8D5D-9907FFCED0F4; t=1636795541;
-        bh=9Ya5S5WqJTLJFZUenk8zTzUfa/tlY7tIAXu8D0pRS5I=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=MAr0ysOf0Cn77Mcv7dgQbWAPWFngICFcyW9p1DItMfcgecRIRfAUHcYh+2CYnLzsJ
-         fRKSks+ijR1jjSviFjgmOAYOu0l7bScUjw4R6S+SKQw7TF1bLjENYXMHVY0UFnwxdE
-         SbehhGsA5VnyzejzT9F0FuEjQpvEnx5PwzcCBDLEaEJa1+xXOJhcU2Tp7o6g7grGvj
-         A9pCAVsqbfj0I01Q4EyaRxNrVtFW8D65ZsQOTLLy4HOY2lm/V2dJropeGQxS6wtURi
-         sBnS5KiORj7mSIRjAZvux3+B25HElpuxFuQIqQvdkgmEiN+EuJ6PNebmKKqDfIj52g
-         EnFwJ+otQr3og==
-X-Virus-Scanned: amavisd-new at opaydev.com
-Received: from mail.opaydev.com ([127.0.0.1])
-        by localhost (mail.opaydev.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id mIjrXjcXOjRH; Sat, 13 Nov 2021 10:25:41 +0100 (WAT)
-Received: from [85.62.55.37] (unknown [85.62.55.37])
-        by mail.opaydev.com (Postfix) with ESMTPSA id 182BEE2EE83;
-        Sat, 13 Nov 2021 10:25:37 +0100 (WAT)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S235852AbhKMPnn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 13 Nov 2021 10:43:43 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:48987 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S231880AbhKMPnm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 13 Nov 2021 10:43:42 -0500
+Received: (qmail 58693 invoked by uid 1000); 13 Nov 2021 10:40:49 -0500
+Date:   Sat, 13 Nov 2021 10:40:49 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Haimin Zhang <tcs.kernel@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        TCS Robot <tcs_robot@tencent.com>
+Subject: Re: [PATCH v4] USB: ehci_brcm_hub_control: improve port index
+ sanitizing
+Message-ID: <20211113154049.GA58521@rowland.harvard.edu>
+References: <20211113045714.46373-1-tcs.kernel@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: NOTIFICATION OF PAYMENT.>
-To:     Recipients <user01@opay-ctr.com>
-From:   "Mr. BENJAMIN TARIQ" <user01@opay-ctr.com>
-Date:   Sat, 13 Nov 2021 10:21:16 +0100
-Reply-To: lentmelvin@gmail.com
-Message-Id: <20211113092538.182BEE2EE83@mail.opaydev.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211113045714.46373-1-tcs.kernel@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-FEDERAL RESERVE BANK OF NEW YORK
-33 LIBERTY ST, NEW YORK
-NY 10045, UNITED STATES
+On Sat, Nov 13, 2021 at 12:57:14PM +0800, Haimin Zhang wrote:
+> Due to (wIndex & 0xff) - 1 can get an integer greater than 0xf, this
+> can cause array index to be out of bounds since the size of array
+> port_status is 0xf. This change prevents a possible out-of-bounds
+> pointer computation by forcing the use of a valid port number.
 
-ATTENTION FUND OWNER:
+I would write 15 instead of 0xf.  The size of the array is 15; see the 
+definition of HCS_N_PORTS_MAX.  (Yes, I realize the 0xf is equal to 15, 
+but why force people to go out of their way to translate a hex number 
+into decimal?)
 
-THE FEDERAL RESERVE BANK OF NEW YORK WRITES TO INFORM YOU THAT SOME FUND HA=
-S BEEN APPROVED BY THE WORLD BANK ORGANIZATION AND PRESIDENCY UNION TO BE R=
-ECEIVED BY YOU AS A FORM OF COMPENSATION FOR BEING A SCAM VICTIM IN THE PAS=
-T YEARS OR THE WORLD PANDEMIC AFFECTED.
+> 
+> Reported-by: TCS Robot <tcs_robot@tencent.com>
+> Signed-off-by: Haimin Zhang <tcs.kernel@gmail.com>
+> ---
 
-NOTE: YOU ARE REQUESTED TO CONFIRM YOUR VALID INFORMATION SO AS TO ENABLE T=
-HE BANK TO REACH OUT TO  YOU AND BE SURE WE ARE DEALING WITH THE AFFECTED P=
-ERSON OR THE FAMILY.
+You did not include the version change information here.
 
-CONFIRM THE BELOW INFORMATION;
+>  drivers/usb/host/ehci-brcm.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/ehci-brcm.c b/drivers/usb/host/ehci-brcm.c
+> index d3626bfa966b..2e92918a14dd 100644
+> --- a/drivers/usb/host/ehci-brcm.c
+> +++ b/drivers/usb/host/ehci-brcm.c
+> @@ -62,8 +62,12 @@ static int ehci_brcm_hub_control(
+>  	u32 __iomem	*status_reg;
+>  	unsigned long flags;
+>  	int retval, irq_disabled = 0;
+> +	u32 temp;
+>  
+> -	status_reg = &ehci->regs->port_status[(wIndex & 0xff) - 1];
+> +	temp = (wIndex & 0xff) - 1;
+> +	if (temp >= HCS_N_PORTS_MAX)
+> +		temp = 0;
 
-1) COMPLETE NAME AS STATED ON YOUR ID CARD:
-2) PHONE NUMBER:
-3) ADDRESS:
-4) ID CARD FOR VERIFICATION :
+There ought to be a comment explaining why you are doing this (namely, 
+to avoid an "index out of bounds" warning).  The reason isn't 
+automatically obvious.
 
-YOUR URGENT RESPONSE IS WELCOMED AS WE ARE OPEN TO RECEIVE ANY QUESTION THA=
-T MAY DISTURB YOU.
+Alan Stern
 
-REGARDS
-BENJAMIN TARIQ
+> +	status_reg = &ehci->regs->port_status[temp];
+>  
+>  	/*
+>  	 * RESUME is cleared when GetPortStatus() is called 20ms after start
+> -- 
+> 2.30.1 (Apple Git-130)
+> 
