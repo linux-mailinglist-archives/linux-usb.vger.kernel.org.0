@@ -2,154 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C54144F312
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Nov 2021 13:25:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 343E644F373
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Nov 2021 14:47:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233300AbhKMM2p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 13 Nov 2021 07:28:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40566 "EHLO mail.kernel.org"
+        id S232738AbhKMNuS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 13 Nov 2021 08:50:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55740 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229699AbhKMM2o (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 13 Nov 2021 07:28:44 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5AE2A61075;
-        Sat, 13 Nov 2021 12:25:49 +0000 (UTC)
+        id S231672AbhKMNuR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 13 Nov 2021 08:50:17 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8D83A601FC;
+        Sat, 13 Nov 2021 13:47:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636806352;
-        bh=ez+K7Q6nN+J4K14Z0eLFaOK3VUeeeFzaYOkRWOtmpLA=;
+        s=k20201202; t=1636811245;
+        bh=d2DFsfxjD3VJEdtSd4NR2+6IJc6mbF/tDLoP8GmgU7A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BxHIoKYCpbJqfGTsOTTlPnAtuoRcNOYyUazCOpGB3UY9D6wYSq/FEjIPjgBT3LXow
-         65kUu1EI9p8uY3RHTOASUFqNyVluQzB0qyqGlexN/S7kg98A/Sp09bAbjVAHKNqfFr
-         gI9nIlyW53diNXmtslHAKcbB0AbewFz0gT3Lkzv3mPivjEN0Q6jJndPggIxIigkpvz
-         j9bbW6Z5KIBXJ5QIGhrT8reDdjo8qFPKf8uzAtYjD/m6yBs6jZydYniNMuM4MwkbfQ
-         NKTfWd6f3S2kT5h94gGskBj8mxMpPR9vKGUulxDdN44u/xZswPmFCnJ4ouXIWtYCkq
-         1UzpyYMGc00Dg==
-Date:   Sat, 13 Nov 2021 20:25:44 +0800
+        b=Kaw0NYNyIwKq6ArEmmNpnwdxP8IkADuvA6W+KW6NjYOp2LtnR/ST6dMreGrxGzqT3
+         EM3T2lumAeRTYNM7O1ZL+jeNtdsUeeBbrS98Df8SVzy2d9wqitWz2AJkiiXk5rkPnX
+         ntWGZ+Iog46RDjCKHjjG17sIiCSz4FxjNtDT/Lj/nEc+MAbrbPTRAX2SnL0vfnjbDw
+         f6XxHZoCvtcrPMrLXnQT3rC/1ank9pvdC7mQnAJmtIFsoiB/0RHGs8JiKq173j5OQ5
+         GsoQ6/lInrcS9AM4HnlGdSgJf3mDU/9CoFSin8XW3RZEEk710spu/Q3xWTTb4gfQPW
+         RTDzxnbB1PJew==
+Date:   Sat, 13 Nov 2021 21:47:18 +0800
 From:   Peter Chen <peter.chen@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     gregkh@linuxfoundation.org, balbi@kernel.org,
-        valentina.manea.m@gmail.com, shuah@kernel.org, johan@kernel.org,
-        zhengyongjun3@huawei.com, colin.king@intel.com, trix@redhat.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] usb: Remove redundant 'flush_workqueue()' calls
-Message-ID: <20211113122544.GA3972@Peter>
-References: <563123a8117d6cafae3f134e497587bd2b8bb7f4.1636734453.git.christophe.jaillet@wanadoo.fr>
+To:     Qihang Hu <huqihang@oppo.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] usb: gadget: composite: Show warning if function
+ driver's descriptors are incomplete.
+Message-ID: <20211113134718.GA26550@Peter>
+References: <20211110101129.462357-1-huqihang@oppo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <563123a8117d6cafae3f134e497587bd2b8bb7f4.1636734453.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20211110101129.462357-1-huqihang@oppo.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-11-12 17:30:16, Christophe JAILLET wrote:
-> 'destroy_workqueue()' already drains the queue before destroying it, so
-> there is no need to flush it explicitly.
+On 21-11-10 18:11:29, Qihang Hu wrote:
+> In the config_ep_by_speed_and_alt function, select the corresponding
+> descriptor through g->speed. But some legacy or not well designed
+> function drivers may not support the corresponding speed. So, we can
+> directly display warnings instead of causing kernel panic. At the
+> same time, it indicates the reasons in warning message.
 > 
-> Remove the redundant 'flush_workqueue()' calls.
-> 
-> This was generated with coccinelle:
-> 
-> @@
-> expression E;
-> @@
-> - 	flush_workqueue(E);
-> 	destroy_workqueue(E);
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/usb/chipidea/otg.c           | 5 ++---
+> Signed-off-by: Qihang Hu <huqihang@oppo.com>
 
-Acked-by: Peter Chen <peter.chen@kernel.or> # for chipidea part
->  drivers/usb/gadget/udc/mv_udc_core.c | 4 +---
->  drivers/usb/host/u132-hcd.c          | 1 -
->  drivers/usb/phy/phy-mv-usb.c         | 5 +----
->  drivers/usb/usbip/usbip_event.c      | 1 -
->  5 files changed, 4 insertions(+), 12 deletions(-)
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
+
+Peter
+> ---
+> Changes in v4:
+> -Change commit log
 > 
-> diff --git a/drivers/usb/chipidea/otg.c b/drivers/usb/chipidea/otg.c
-> index 8dd59282827b..7b53274ef966 100644
-> --- a/drivers/usb/chipidea/otg.c
-> +++ b/drivers/usb/chipidea/otg.c
-> @@ -255,10 +255,9 @@ int ci_hdrc_otg_init(struct ci_hdrc *ci)
->   */
->  void ci_hdrc_otg_destroy(struct ci_hdrc *ci)
->  {
-> -	if (ci->wq) {
-> -		flush_workqueue(ci->wq);
-> +	if (ci->wq)
->  		destroy_workqueue(ci->wq);
-> -	}
+> Changes in v3:
+> -Change commit log
+> -Delete extra blank lines
+> -Modify 'incomplete_desc' to bool type
+> 
+> Changes in v2:
+> -Add warning message
+> ---
+>  drivers/usb/gadget/composite.c | 39 ++++++++++++++++++++++------------
+>  1 file changed, 26 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+> index 72a9797dbbae..cb9c7edf9bbf 100644
+> --- a/drivers/usb/gadget/composite.c
+> +++ b/drivers/usb/gadget/composite.c
+> @@ -159,6 +159,8 @@ int config_ep_by_speed_and_alt(struct usb_gadget *g,
+>  	int want_comp_desc = 0;
+>  
+>  	struct usb_descriptor_header **d_spd; /* cursor for speed desc */
+> +	struct usb_composite_dev *cdev;
+> +	bool incomplete_desc = false;
+>  
+>  	if (!g || !f || !_ep)
+>  		return -EIO;
+> @@ -167,28 +169,43 @@ int config_ep_by_speed_and_alt(struct usb_gadget *g,
+>  	switch (g->speed) {
+>  	case USB_SPEED_SUPER_PLUS:
+>  		if (gadget_is_superspeed_plus(g)) {
+> -			speed_desc = f->ssp_descriptors;
+> -			want_comp_desc = 1;
+> -			break;
+> +			if (f->ssp_descriptors) {
+> +				speed_desc = f->ssp_descriptors;
+> +				want_comp_desc = 1;
+> +				break;
+> +			}
+> +			incomplete_desc = true;
+>  		}
+>  		fallthrough;
+>  	case USB_SPEED_SUPER:
+>  		if (gadget_is_superspeed(g)) {
+> -			speed_desc = f->ss_descriptors;
+> -			want_comp_desc = 1;
+> -			break;
+> +			if (f->ss_descriptors) {
+> +				speed_desc = f->ss_descriptors;
+> +				want_comp_desc = 1;
+> +				break;
+> +			}
+> +			incomplete_desc = true;
+>  		}
+>  		fallthrough;
+>  	case USB_SPEED_HIGH:
+>  		if (gadget_is_dualspeed(g)) {
+> -			speed_desc = f->hs_descriptors;
+> -			break;
+> +			if (f->hs_descriptors) {
+> +				speed_desc = f->hs_descriptors;
+> +				break;
+> +			}
+> +			incomplete_desc = true;
+>  		}
+>  		fallthrough;
+>  	default:
+>  		speed_desc = f->fs_descriptors;
+>  	}
+>  
+> +	cdev = get_gadget_data(g);
+> +	if (incomplete_desc)
+> +		WARNING(cdev,
+> +			"%s doesn't hold the descriptors for current speed\n",
+> +			f->name);
 > +
->  	/* Disable all OTG irq and clear status */
->  	hw_write_otgsc(ci, OTGSC_INT_EN_BITS | OTGSC_INT_STATUS_BITS,
->  						OTGSC_INT_STATUS_BITS);
-> diff --git a/drivers/usb/gadget/udc/mv_udc_core.c b/drivers/usb/gadget/udc/mv_udc_core.c
-> index 7f24ce400b59..b6d34dda028b 100644
-> --- a/drivers/usb/gadget/udc/mv_udc_core.c
-> +++ b/drivers/usb/gadget/udc/mv_udc_core.c
-> @@ -2084,10 +2084,8 @@ static int mv_udc_remove(struct platform_device *pdev)
->  
->  	usb_del_gadget_udc(&udc->gadget);
->  
-> -	if (udc->qwork) {
-> -		flush_workqueue(udc->qwork);
-> +	if (udc->qwork)
->  		destroy_workqueue(udc->qwork);
-> -	}
->  
->  	/* free memory allocated in probe */
->  	dma_pool_destroy(udc->dtd_pool);
-> diff --git a/drivers/usb/host/u132-hcd.c b/drivers/usb/host/u132-hcd.c
-> index ae882d76612b..d879d6af5710 100644
-> --- a/drivers/usb/host/u132-hcd.c
-> +++ b/drivers/usb/host/u132-hcd.c
-> @@ -3211,7 +3211,6 @@ static void __exit u132_hcd_exit(void)
->  	platform_driver_unregister(&u132_platform_driver);
->  	printk(KERN_INFO "u132-hcd driver deregistered\n");
->  	wait_event(u132_hcd_wait, u132_instances == 0);
-> -	flush_workqueue(workqueue);
->  	destroy_workqueue(workqueue);
->  }
->  
-> diff --git a/drivers/usb/phy/phy-mv-usb.c b/drivers/usb/phy/phy-mv-usb.c
-> index 576d925af77c..86503b7d695c 100644
-> --- a/drivers/usb/phy/phy-mv-usb.c
-> +++ b/drivers/usb/phy/phy-mv-usb.c
-> @@ -648,10 +648,8 @@ static int mv_otg_remove(struct platform_device *pdev)
->  {
->  	struct mv_otg *mvotg = platform_get_drvdata(pdev);
->  
-> -	if (mvotg->qwork) {
-> -		flush_workqueue(mvotg->qwork);
-> +	if (mvotg->qwork)
->  		destroy_workqueue(mvotg->qwork);
-> -	}
->  
->  	mv_otg_disable(mvotg);
->  
-> @@ -825,7 +823,6 @@ static int mv_otg_probe(struct platform_device *pdev)
->  err_disable_clk:
->  	mv_otg_disable_internal(mvotg);
->  err_destroy_workqueue:
-> -	flush_workqueue(mvotg->qwork);
->  	destroy_workqueue(mvotg->qwork);
->  
->  	return retval;
-> diff --git a/drivers/usb/usbip/usbip_event.c b/drivers/usb/usbip/usbip_event.c
-> index 086ca76dd053..26513540bcdb 100644
-> --- a/drivers/usb/usbip/usbip_event.c
-> +++ b/drivers/usb/usbip/usbip_event.c
-> @@ -137,7 +137,6 @@ int usbip_init_eh(void)
->  
->  void usbip_finish_eh(void)
->  {
-> -	flush_workqueue(usbip_queue);
->  	destroy_workqueue(usbip_queue);
->  	usbip_queue = NULL;
->  }
+>  	/* find correct alternate setting descriptor */
+>  	for_each_desc(speed_desc, d_spd, USB_DT_INTERFACE) {
+>  		int_desc = (struct usb_interface_descriptor *)*d_spd;
+> @@ -244,12 +261,8 @@ int config_ep_by_speed_and_alt(struct usb_gadget *g,
+>  			_ep->maxburst = comp_desc->bMaxBurst + 1;
+>  			break;
+>  		default:
+> -			if (comp_desc->bMaxBurst != 0) {
+> -				struct usb_composite_dev *cdev;
+> -
+> -				cdev = get_gadget_data(g);
+> +			if (comp_desc->bMaxBurst != 0)
+>  				ERROR(cdev, "ep0 bMaxBurst must be 0\n");
+> -			}
+>  			_ep->maxburst = 1;
+>  			break;
+>  		}
 > -- 
-> 2.30.2
+> 2.25.1
 > 
 
 -- 
