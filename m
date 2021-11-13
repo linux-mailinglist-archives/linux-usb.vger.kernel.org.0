@@ -2,82 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D07B44F200
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Nov 2021 08:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F3944F21E
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Nov 2021 09:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234915AbhKMHap (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 13 Nov 2021 02:30:45 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:50496 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229487AbhKMHap (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 13 Nov 2021 02:30:45 -0500
-X-UUID: 664ce49ed7ce428b9d1e858b73644acb-20211113
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=3CcmwmG9wnA+1Z3HaoflW55pO15Lyi+1HRNgCZzfSno=;
-        b=BkpEq3RQi0clhC/VK0HY5AxGgYBbPtuKKeHx5qcx07kG9v+PjH5hRp22F3IfnQmmaEY//PqQs2dO1KAO62NTOE7yaZ2eHyu2BELGHHXBtzYxj8mbayo9wfCAbA0OLLJ0uqij1CpMoFgkJC1lgBWKYG/q6G02bvZIdko8KtXbHio=;
-X-UUID: 664ce49ed7ce428b9d1e858b73644acb-20211113
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1011733850; Sat, 13 Nov 2021 15:27:48 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Sat, 13 Nov 2021 15:27:46 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 13 Nov 2021 15:27:46 +0800
-Message-ID: <24035c4a5cd6f33fded4fb30e2f153013663c403.camel@mediatek.com>
-Subject: Re: [PATCH 1/3] dt-bindings: usb: mtk-xhci: add support ip-sleep
- for mt8195
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Sat, 13 Nov 2021 15:27:46 +0800
-In-Reply-To: <YY6dAT3OHbu0CO/J@robh.at.kernel.org>
-References: <20211102060049.1843-1-chunfeng.yun@mediatek.com>
-         <YY6dAT3OHbu0CO/J@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S235672AbhKMIP7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 13 Nov 2021 03:15:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59442 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230095AbhKMIP6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 13 Nov 2021 03:15:58 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DC6C661051;
+        Sat, 13 Nov 2021 08:13:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1636791187;
+        bh=UDw64XuuUa1V3u5Z9R0hceq2rexQuGFSUo9twxAnXGw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AOrkTcK6y1j6Bce26vurcYAZGaLdBjSO+538p3NqF+Q124RofZYsR5EiENmyer6tN
+         uh7TcRT6Smwk92DM9YGdhi3t2/6/0w3VWT0cYPo5gUbKXOQ1TngBNR2UlBGINQX7Kd
+         qN0O77malERt0/xpttWRy5bX1NlMbxakeOLp8ISk=
+Date:   Sat, 13 Nov 2021 09:13:02 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Haimin Zhang <tcs.kernel@gmail.com>
+Cc:     linux-usb@vger.kernel.org, TCS Robot <tcs_robot@tencent.com>
+Subject: Re: [PATCH v4] USB: ehci_brcm_hub_control: improve port index
+ sanitizing
+Message-ID: <YY9zjom/paGsHJWF@kroah.com>
+References: <20211113045714.46373-1-tcs.kernel@gmail.com>
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211113045714.46373-1-tcs.kernel@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gRnJpLCAyMDIxLTExLTEyIGF0IDEwOjU3IC0wNjAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4g
-T24gVHVlLCBOb3YgMDIsIDIwMjEgYXQgMDI6MDA6NDdQTSArMDgwMCwgQ2h1bmZlbmcgWXVuIHdy
-b3RlOg0KPiA+IFRoZXJlIGFyZSA0IFVTQiBjb250cm9sbGVycyBvbiBNVDgxOTUsIGVhY2ggY29u
-dHJvbGxlcidzIHdha2V1cA0KPiA+IGNvbnRyb2wgaXMNCj4gPiBkaWZmZXJlbnQsIGFkZCBzb21l
-IHNwaWNpZmljIHZlcnNpb25zIGZvciB0aGVtLg0KPiANCj4gc3BlY2lmaWMNCldpbGwgZml4IGl0
-LCB0aGFua3MNCg0KPiANCj4gPiANCj4gPiBTaWduZWQtb2ZmLWJ5OiBDaHVuZmVuZyBZdW4gPGNo
-dW5mZW5nLnl1bkBtZWRpYXRlay5jb20+DQo+ID4gLS0tDQo+ID4gIC4uLi9kZXZpY2V0cmVlL2Jp
-bmRpbmdzL3VzYi9tZWRpYXRlayxtdGsteGhjaS55YW1sICAgICAgICAgIHwgNg0KPiA+ICsrKysr
-LQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+
-ID4gDQo+ID4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91
-c2IvbWVkaWF0ZWssbXRrLQ0KPiA+IHhoY2kueWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJl
-ZS9iaW5kaW5ncy91c2IvbWVkaWF0ZWssbXRrLQ0KPiA+IHhoY2kueWFtbA0KPiA+IGluZGV4IDEx
-ZjdiYWNkNGUyYi4uNDFlZmI1MTYzOGQxIDEwMDY0NA0KPiA+IC0tLSBhL0RvY3VtZW50YXRpb24v
-ZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvbWVkaWF0ZWssbXRrLXhoY2kueWFtbA0KPiA+ICsrKyBi
-L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvbWVkaWF0ZWssbXRrLXhoY2ku
-eWFtbA0KPiA+IEBAIC0xNDYsNyArMTQ2LDExIEBAIHByb3BlcnRpZXM6DQo+ID4gICAgICAgICAg
-ICAgIDIgLSB1c2VkIGJ5IG10MjcxMiBldGMsIHJldmlzaW9uIDIgZm9sbG93aW5nIElQTSBydWxl
-Ow0KPiA+ICAgICAgICAgICAgICAxMDEgLSB1c2VkIGJ5IG10ODE4Mywgc3BlY2lmaWMgMS4wMTsN
-Cj4gPiAgICAgICAgICAgICAgMTAyIC0gdXNlZCBieSBtdDgxOTIsIHNwZWNpZmljIDEuMDI7DQo+
-ID4gLSAgICAgICAgICBlbnVtOiBbMSwgMiwgMTAxLCAxMDJdDQo+ID4gKyAgICAgICAgICAgIDEw
-MyAtIHVzZWQgYnkgbXQ4MTk1LCBJUDAsIHNwZWNpZmljIDEuMDM7DQo+ID4gKyAgICAgICAgICAg
-IDEwNCAtIHVzZWQgYnkgbXQ4MTk1LCBJUDEsIHNwZWNpZmljIDEuMDQ7DQo+ID4gKyAgICAgICAg
-ICAgIDEwNSAtIHVzZWQgYnkgbXQ4MTk1LCBJUDIsIHNwZWNpZmljIDEuMDU7DQo+ID4gKyAgICAg
-ICAgICAgIDEwNiAtIHVzZWQgYnkgbXQ4MTk1LCBJUDMsIHNwZWNpZmljIDEuMDY7DQo+ID4gKyAg
-ICAgICAgICBlbnVtOiBbMSwgMiwgMTAxLCAxMDIsIDEwMywgMTA0LCAxMDUsIDEwNl0NCj4gPiAg
-DQo+ID4gICAgbWVkaWF0ZWssdTNwLWRpcy1tc2s6DQo+ID4gICAgICAkcmVmOiAvc2NoZW1hcy90
-eXBlcy55YW1sIy9kZWZpbml0aW9ucy91aW50MzINCj4gPiAtLSANCj4gPiAyLjE4LjANCj4gPiAN
-Cj4gPiANCg==
+On Sat, Nov 13, 2021 at 12:57:14PM +0800, Haimin Zhang wrote:
+> Due to (wIndex & 0xff) - 1 can get an integer greater than 0xf, this
+> can cause array index to be out of bounds since the size of array
+> port_status is 0xf. This change prevents a possible out-of-bounds
+> pointer computation by forcing the use of a valid port number.
+> 
+> Reported-by: TCS Robot <tcs_robot@tencent.com>
+> Signed-off-by: Haimin Zhang <tcs.kernel@gmail.com>
+> ---
+>  drivers/usb/host/ehci-brcm.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/ehci-brcm.c b/drivers/usb/host/ehci-brcm.c
+> index d3626bfa966b..2e92918a14dd 100644
+> --- a/drivers/usb/host/ehci-brcm.c
+> +++ b/drivers/usb/host/ehci-brcm.c
+> @@ -62,8 +62,12 @@ static int ehci_brcm_hub_control(
+>  	u32 __iomem	*status_reg;
+>  	unsigned long flags;
+>  	int retval, irq_disabled = 0;
+> +	u32 temp;
+>  
+> -	status_reg = &ehci->regs->port_status[(wIndex & 0xff) - 1];
+> +	temp = (wIndex & 0xff) - 1;
+> +	if (temp >= HCS_N_PORTS_MAX)
+> +		temp = 0;
+> +	status_reg = &ehci->regs->port_status[temp];
+>  
+>  	/*
+>  	 * RESUME is cleared when GetPortStatus() is called 20ms after start
+> -- 
+> 2.30.1 (Apple Git-130)
+> 
 
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
