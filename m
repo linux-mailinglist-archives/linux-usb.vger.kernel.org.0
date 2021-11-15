@@ -2,24 +2,24 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D77A3450E64
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Nov 2021 19:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A026C4511A3
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Nov 2021 20:10:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240377AbhKOSPD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Nov 2021 13:15:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49950 "EHLO mail.kernel.org"
+        id S240879AbhKOTMm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Nov 2021 14:12:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39126 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240261AbhKOSH3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Nov 2021 13:07:29 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4D2C0632B1;
-        Mon, 15 Nov 2021 17:44:07 +0000 (UTC)
+        id S244127AbhKOTKZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Nov 2021 14:10:25 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6FF4860E75;
+        Mon, 15 Nov 2021 18:18:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1636998247;
-        bh=iYj7LDWdnHCijr6UPFNlAeNoxf1Zj94NlfgUl4Bx+9o=;
+        s=korg; t=1637000331;
+        bh=NewOX6p9U7y1vzv/hqnyCIclbc9xLMmMqtkeHr/JZJA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fiITdJ9xF2qqg4xgR05mxWAIQnkb4B/dOOq5MxY/I//twK2WM07M/TOo1QY6sFix9
-         pZ8I1QYuOIVLbRFOgNISvLTHs7Ht6c2nNpbrjHIzVdEMgDs91leGII01YgoJqcNu1b
-         J0HSctpAYFNS4w15T9YnhKuAOs5My6Ax785HEi/g=
+        b=rJYr644tUz6XorTDx2VhylI6DWcBiUEjozAMH6UegkqCZPhFs05byXRwtQntqaC9t
+         aTWctE4xJLKuusVyl6pMZLuCSQKU4fHCci+1CS6obTVBG30GdRY80srtLDNzkavi5z
+         dhJo34lBZqzjWYmXESRz0PI257wLgSQMcbWBscZI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -30,12 +30,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Amelie Delaunay <amelie.delaunay@foss.st.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 442/575] usb: typec: STUSB160X should select REGMAP_I2C
-Date:   Mon, 15 Nov 2021 18:02:47 +0100
-Message-Id: <20211115165359.047288444@linuxfoundation.org>
+Subject: [PATCH 5.14 621/849] usb: typec: STUSB160X should select REGMAP_I2C
+Date:   Mon, 15 Nov 2021 18:01:44 +0100
+Message-Id: <20211115165441.266986963@linuxfoundation.org>
 X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211115165343.579890274@linuxfoundation.org>
-References: <20211115165343.579890274@linuxfoundation.org>
+In-Reply-To: <20211115165419.961798833@linuxfoundation.org>
+References: <20211115165419.961798833@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -71,10 +71,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
-index e7f120874c483..0d953c6805f0f 100644
+index a0418f23b4aae..ab480f38523aa 100644
 --- a/drivers/usb/typec/Kconfig
 +++ b/drivers/usb/typec/Kconfig
-@@ -75,9 +75,9 @@ config TYPEC_TPS6598X
+@@ -65,9 +65,9 @@ config TYPEC_HD3SS3220
  
  config TYPEC_STUSB160X
  	tristate "STMicroelectronics STUSB160x Type-C controller driver"
