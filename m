@@ -2,88 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9811450137
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Nov 2021 10:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A662450463
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Nov 2021 13:26:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236450AbhKOJ1g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Nov 2021 04:27:36 -0500
-Received: from mga01.intel.com ([192.55.52.88]:64451 "EHLO mga01.intel.com"
+        id S231135AbhKOM3Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Nov 2021 07:29:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34214 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237574AbhKOJ0Y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Nov 2021 04:26:24 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10168"; a="257156736"
-X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
-   d="scan'208";a="257156736"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 01:21:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
-   d="scan'208";a="644783363"
-Received: from kuha.fi.intel.com ([10.237.72.166])
-  by fmsmga001.fm.intel.com with SMTP; 15 Nov 2021 01:21:32 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 15 Nov 2021 11:21:31 +0200
-Date:   Mon, 15 Nov 2021 11:21:31 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "open list:USB TYPEC PORT CONTROLLER DRIVERS" 
-        <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: typec: fusb302: Fix masking of comparator and
- bc_lvl interrupts
-Message-ID: <YZImm0UIy3os5H6Q@kuha.fi.intel.com>
-References: <20211108102833.2793803-1-megous@megous.com>
- <YZIILh++KIEK/ZA5@kuha.fi.intel.com>
- <20211115085532.xoufihjxkxzhxehv@core>
+        id S230132AbhKOM3M (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Nov 2021 07:29:12 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2253E6324D;
+        Mon, 15 Nov 2021 12:26:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1636979176;
+        bh=7J7CP89TH+bDmrT0xTIz86KRWuGezTtoREshOd7sb6E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QF5PvEPOCuYhFNwfel3BMeLEebCwA4AHZeGE6x8cQA/A6vw6zufJwKlpszMj8iuJy
+         CO6YQe9Y3hmqa2hKgbb3YKM2M3Y36MqEf3s3caJ9zG2CN3JpzFNkETTlaKUNBwIxGB
+         jCrQ+5NOeswL6DnqgS3gbym4tdOb7kUjaVwvzsEw=
+Date:   Mon, 15 Nov 2021 13:26:14 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     stable@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peter Chen <peter.chen@kernel.org>
+Subject: Re: [PATCH stable-4.9] USB: chipidea: fix interrupt deadlock
+Message-ID: <YZJR5p2Zu39sdkap@kroah.com>
+References: <20211115080043.23894-1-johan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211115085532.xoufihjxkxzhxehv@core>
+In-Reply-To: <20211115080043.23894-1-johan@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 09:55:32AM +0100, Ondřej Jirman wrote:
-> On Mon, Nov 15, 2021 at 09:11:42AM +0200, Heikki Krogerus wrote:
-> > On Mon, Nov 08, 2021 at 11:28:32AM +0100, Ondrej Jirman wrote:
-> > > The code that enables either BC_LVL or COMP_CHNG interrupt in tcpm_set_cc
-> > > wrongly assumes that the interrupt is unmasked by writing 1 to the apropriate
-> > > bit in the mask register. In fact, interrupts are enabled when the mask
-> > > is 0, so the tcpm_set_cc enables interrupt for COMP_CHNG when it expects
-> > > BC_LVL interrupt to be enabled.
-> > > 
-> > > This causes inability of the driver to recognize cable unplug events
-> > > in host mode (unplug is recognized only via a COMP_CHNG interrupt).
-> > > 
-> > > In device mode this bug was masked by simultaneous triggering of the VBUS
-> > > change interrupt, because of loss of VBUS when the port peer is providing
-> > > power.
-> > > 
-> > > Fixes: 48242e30532b ("usb: typec: fusb302: Revert "Resolve fixed power role contract setup"")
-> > > Signed-off-by: Ondrej Jirman <megous@megous.com>
-> > > Cc: Hans de Goede <hdegoede@redhat.com>
-> > 
-> > Should this go to stable?
+On Mon, Nov 15, 2021 at 09:00:43AM +0100, Johan Hovold wrote:
+> commit 9aaa81c3366e8393a62374e3a1c67c69edc07b8a upstream.
 > 
-> Without this patch, VBUS is not turned off when I disconnect a hub from the
-> Type-C port (because fusb302 will not notice the disconnect), and it stays on
-> until next plugin of some device, say a normal non PD charger.
+> Chipidea core was calling the interrupt handler from non-IRQ context
+> with interrupts enabled, something which can lead to a deadlock if
+> there's an actual interrupt trying to take a lock that's already held
+> (e.g. the controller lock in udc_irq()).
 > 
-> So I guess for a brief period you can have both sides provide VBUS (until
-> fusb302/tcpm processes the next plugin). It may be a problem if VBUS was more
-> than 5V (not very likely for devices running this driver, I guess).
+> Add a wrapper that can be used to fake interrupts instead of calling the
+> handler directly.
+> 
+> Fixes: 3ecb3e09b042 ("usb: chipidea: Use extcon framework for VBUS and ID detect")
+> Fixes: 876d4e1e8298 ("usb: chipidea: core: add wakeup support for extcon")
+> Cc: Peter Chen <peter.chen@kernel.org>
+> Cc: stable@vger.kernel.org      # 4.4
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> Link: https://lore.kernel.org/r/20211021083447.20078-1-johan@kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> [ johan: backport to 4.9; adjust context ]
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
+> 
+> This one should apply to 4.4 as well.
 
-OK. So this should find it's way to the stable kernel releases as
-well, and it should have the appropriate "Cc: stable@vger.kernel.org"
-tag:
+All now queued up, thanks.
 
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#select-the-recipients-for-your-patch
-
-thanks,
-
--- 
-heikki
+greg k-h
