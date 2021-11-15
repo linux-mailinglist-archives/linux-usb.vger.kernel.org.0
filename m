@@ -2,24 +2,24 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A026C4511A3
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Nov 2021 20:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 137CE451589
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Nov 2021 21:39:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240879AbhKOTMm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Nov 2021 14:12:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39126 "EHLO mail.kernel.org"
+        id S1352048AbhKOUkf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Nov 2021 15:40:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45214 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244127AbhKOTKZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Nov 2021 14:10:25 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6FF4860E75;
-        Mon, 15 Nov 2021 18:18:50 +0000 (UTC)
+        id S1344422AbhKOTYk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Nov 2021 14:24:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DCD996348B;
+        Mon, 15 Nov 2021 18:57:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1637000331;
+        s=korg; t=1637002646;
         bh=NewOX6p9U7y1vzv/hqnyCIclbc9xLMmMqtkeHr/JZJA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rJYr644tUz6XorTDx2VhylI6DWcBiUEjozAMH6UegkqCZPhFs05byXRwtQntqaC9t
-         aTWctE4xJLKuusVyl6pMZLuCSQKU4fHCci+1CS6obTVBG30GdRY80srtLDNzkavi5z
-         dhJo34lBZqzjWYmXESRz0PI257wLgSQMcbWBscZI=
+        b=Oc2uYRCwfGbyV8IGPLpXXuIn74MECTkCrbDbG4Kk1xhWRA6vxpLiNLNaoqhJbNV+C
+         uSoHEtD8gkZsl7qXhABNBYfGTyrbE8+ZFZAaJ0iasarDLME+yo10ZdZH43sR9CvVE2
+         ImWyOxlUiTi3SxutK85QpWqGipAaBisY5MXRjpA0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -30,12 +30,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Amelie Delaunay <amelie.delaunay@foss.st.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.14 621/849] usb: typec: STUSB160X should select REGMAP_I2C
-Date:   Mon, 15 Nov 2021 18:01:44 +0100
-Message-Id: <20211115165441.266986963@linuxfoundation.org>
+Subject: [PATCH 5.15 646/917] usb: typec: STUSB160X should select REGMAP_I2C
+Date:   Mon, 15 Nov 2021 18:02:21 +0100
+Message-Id: <20211115165450.758514061@linuxfoundation.org>
 X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211115165419.961798833@linuxfoundation.org>
-References: <20211115165419.961798833@linuxfoundation.org>
+In-Reply-To: <20211115165428.722074685@linuxfoundation.org>
+References: <20211115165428.722074685@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
