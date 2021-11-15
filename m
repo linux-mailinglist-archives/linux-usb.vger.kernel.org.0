@@ -2,132 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D35451741
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Nov 2021 23:13:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 088B645177B
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Nov 2021 23:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242195AbhKOWQC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Nov 2021 17:16:02 -0500
-Received: from smtp161.vfemail.net ([146.59.185.161]:51569 "EHLO
-        smtp161.vfemail.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352656AbhKOWLf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Nov 2021 17:11:35 -0500
-Received: (qmail 30834 invoked from network); 15 Nov 2021 22:08:30 +0000
-Received: from localhost (HELO nl101-3.vfemail.net) ()
-  by smtpout.vfemail.net with ESMTPS (ECDHE-RSA-AES256-GCM-SHA384 encrypted); 15 Nov 2021 22:08:30 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=vfemail.net; h=date:from
-        :to:cc:subject:message-id:in-reply-to:references:mime-version
-        :content-type:content-transfer-encoding; s=2018; bh=1U3HQA2cAVR9
-        R4PHxpIc1daf4O0wxl3nAXblz5xStV0=; b=soTu/HOI+vyhszPPtEn+ydYKHrw8
-        2/KZNLU4MgfMf4Pi5JYle98XBoj7eemqDAzTqJOllYEdxVl4mA3UUNVTmestOpHQ
-        yJQer86TUGWq2UwqVE9NHmpr/6CQOhkZoJ1fEGNCM9U2i6bbA+TZj0P6XSKXuJrB
-        Pm+rc8EOFR7UxkM=
-Received: (qmail 22847 invoked from network); 15 Nov 2021 22:08:00 -0000
-Received: by simscan 1.4.0 ppid: 22788, pid: 22793, t: 0.3754s
-         scanners:none
-Received: from unknown (HELO bmwxMDEudmZlbWFpbC5uZXQ=) (aGdudGt3aXNAdmZlbWFpbC5uZXQ=@MTkyLjE2OC4xLjE5Mg==)
-  by nl101.vfemail.net with ESMTPA; 15 Nov 2021 22:07:59 -0000
-Date:   Mon, 15 Nov 2021 17:08:25 -0500
-From:   David Niklas <Hgntkwis@vfemail.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        linux-input@vger.kernel.org
-Subject: Re: I need advice with UPS connection. (ping)
-Message-ID: <20211115170825.24a13cf3@Zen-II-x12.niklas.com>
-In-Reply-To: <20211115160918.GB109771@rowland.harvard.edu>
-References: <20201109220000.2ae98fa5@Phenom-II-x6.niklas.com>
-        <20211114144842.72463ccc@Zen-II-x12.niklas.com>
-        <20211114211435.GA87082@rowland.harvard.edu>
-        <20211114220222.31755871@Zen-II-x12.niklas.com>
-        <20211115160918.GB109771@rowland.harvard.edu>
-X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+        id S240668AbhKOW3U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Nov 2021 17:29:20 -0500
+Received: from mga11.intel.com ([192.55.52.93]:18278 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348206AbhKOWSQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Nov 2021 17:18:16 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="231002595"
+X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
+   d="scan'208";a="231002595"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 14:15:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
+   d="scan'208";a="645040431"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Nov 2021 14:15:18 -0800
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
+        kishon@ti.com
+Cc:     hdegoede@redhat.com, chris.chiu@canonical.com,
+        linux-usb@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] usb: hub: Fix usb enumeration issue due to address0 race
+Date:   Tue, 16 Nov 2021 00:16:30 +0200
+Message-Id: <20211115221630.871204-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 15 Nov 2021 11:09:18 -0500
-stern@rowland.harvard.edu wrote:
-> On Sun, Nov 14, 2021 at 10:02:22PM -0500, David Niklas wrote:
-> >
-<snip>
-> Has this device ever worked with any version of Linux?
+xHC hardware can only have one slot in default state with address 0
+waiting for a unique address at a time, otherwise "undefined behavior
+may occur" according to xhci spec 5.4.3.4
 
-I am unaware of this device working on any version of Linux. I assumed
-when I bought it that it would a least be able to connect to the USB port
-correctly. I might then have to make a contribution to add support for it
-to nut or apcupsd.
+The address0_mutex exists to prevent this across both xhci roothubs.
 
-<snip>
-> The kernel sends a Set-Idle request to the device, telling it not to 
-> send any data reports when nothing has changed.  This is done 
-> automatically by the usbhid driver for every USB HID device, including 
-> keyboards and mice as well as your UPS.
-> 
-> ffff93eaa3edad80 2136086737 S Ci:3:009:0 s 81 06 2200 0000 03e4 996 <
-> ffff93eaa3edad80 2136122734 C Ci:3:009:0 0 996 = 05840904 a1010924
-> a1028501 09fe7901 75089501 150026ff 00b12285 0209ff79
-> 
-> The kernel reads the device's HID descriptor.  (The usbmon trace shows 
-> only the first 32 bytes of the 996-byte descriptor.)  Again, this is 
-> normal and necessary for using any HID device.
-> 
-> ffff93e482efb440 2139520170 C Ii:3:001:1 0:2048 1 = 08
-> ffff93e482efb440 2139520180 S Ii:3:001:1 -115:2048 4 <
-> 
-> At this point the USB controller tells the kernel that there has been a 
-> status change on port 3 of bus 3.
-> 
-> ffff93eaa2ff8240 2139520188 S Ci:3:001:0 s a3 00 0000 0003 0004 4 <
-> ffff93eaa2ff8240 2139520197 C Ci:3:001:0 0 4 = 00010100
-> 
-> The kernel reads the port's status and sees that there is a "connection 
-> status change" bit set and the port is no longer connected.  In other 
-> words, the UPS device has disconnected itself electronically from the 
-> USB bus.
-> 
-> ffff93eaa2ff8240 2139520200 S Co:3:001:0 s 23 01 0010 0003 0000 0
-> ffff93eaa2ff8240 2139520203 C Co:3:001:0 0 0
-> 
-> The kernel clears the "connection status change" flag.  Following this 
-> the cycle repeats.
-> 
-> 
-> Out of all this information, the only conclusion I can draw is that the 
-> UPS is not behaving like a normal device.  One possibility is that it 
-> doesn't like the Set-Idle request (although if that is the case, why 
-> did it remain connected long enough to send the HID descriptor?).
+If hub_port_init() fails, it may unlock the mutex and exit with a xhci
+slot in default state. If the other xhci roothub calls hub_port_init()
+at this point we end up with two slots in default state.
 
-Thanks for the detailed breakdown!
+Make sure the address0_mutex protects the slot default state across
+hub_port_init() retries, until slot is addressed or disabled.
 
-> You can test the theory by patching the kernel, if you want.  The code 
-> to change is in the source file drivers/hid/usbhid/hid-core.c, and the 
-> function in question is hid_set_idle() located around line 659 in the 
-> file.  Just change the statement:
-> 
-> 	return usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
-> 		HID_REQ_SET_IDLE, USB_TYPE_CLASS | USB_RECIP_INTERFACE,
-> (idle << 8) | report, ifnum, NULL, 0, USB_CTRL_SET_TIMEOUT);
-> 
-> to:
-> 
-> 	return 0;
-> 
-> to prevent the Set-Idle request from being sent.  If the device still 
-> insists on disconnecting then we'll know that this wasn't the reason.
+Note, one known minor case is not fixed by this patch.
+If device needs to be reset during resume, but fails all hub_port_init()
+retries in usb_reset_and_verify_device(), then it's possible the slot is
+still left in default state when address0_mutex is unlocked.
 
-Will do tomorrow. (I'm busy ATM)
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
+ drivers/usb/core/hub.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-> Also, if you have another system (say, one running Windows) which the 
-> UPS does work properly with, you could try collecting the equivalent of 
-> a usbmon trace from that system for purposes of comparison.  (On 
-> Windows, I believe you can use Wireshark to trace USB communications.)
-> 
-> Alan Stern
-> 
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 86658a81d284..00c3506324e4 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -4700,8 +4700,6 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+ 	if (oldspeed == USB_SPEED_LOW)
+ 		delay = HUB_LONG_RESET_TIME;
+ 
+-	mutex_lock(hcd->address0_mutex);
+-
+ 	/* Reset the device; full speed may morph to high speed */
+ 	/* FIXME a USB 2.0 device may morph into SuperSpeed on reset. */
+ 	retval = hub_port_reset(hub, port1, udev, delay, false);
+@@ -5016,7 +5014,6 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+ 		hub_port_disable(hub, port1, 0);
+ 		update_devnum(udev, devnum);	/* for disconnect processing */
+ 	}
+-	mutex_unlock(hcd->address0_mutex);
+ 	return retval;
+ }
+ 
+@@ -5246,6 +5243,9 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+ 		unit_load = 100;
+ 
+ 	status = 0;
++
++	mutex_lock(hcd->address0_mutex);
++
+ 	for (i = 0; i < PORT_INIT_TRIES; i++) {
+ 
+ 		/* reallocate for each attempt, since references
+@@ -5282,6 +5282,8 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+ 		if (status < 0)
+ 			goto loop;
+ 
++		mutex_unlock(hcd->address0_mutex);
++
+ 		if (udev->quirks & USB_QUIRK_DELAY_INIT)
+ 			msleep(2000);
+ 
+@@ -5370,6 +5372,7 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+ 
+ loop_disable:
+ 		hub_port_disable(hub, port1, 1);
++		mutex_lock(hcd->address0_mutex);
+ loop:
+ 		usb_ep0_reinit(udev);
+ 		release_devnum(udev);
+@@ -5396,6 +5399,8 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+ 	}
+ 
+ done:
++	mutex_unlock(hcd->address0_mutex);
++
+ 	hub_port_disable(hub, port1, 1);
+ 	if (hcd->driver->relinquish_port && !hub->hdev->parent) {
+ 		if (status != -ENOTCONN && status != -ENODEV)
+@@ -5915,6 +5920,8 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
+ 	bos = udev->bos;
+ 	udev->bos = NULL;
+ 
++	mutex_lock(hcd->address0_mutex);
++
+ 	for (i = 0; i < PORT_INIT_TRIES; ++i) {
+ 
+ 		/* ep0 maxpacket size may change; let the HCD know about it.
+@@ -5924,6 +5931,7 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
+ 		if (ret >= 0 || ret == -ENOTCONN || ret == -ENODEV)
+ 			break;
+ 	}
++	mutex_unlock(hcd->address0_mutex);
+ 
+ 	if (ret < 0)
+ 		goto re_enumerate;
+-- 
+2.25.1
 
-I'll have to look into that.
-
-Thanks again!
-David
