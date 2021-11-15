@@ -2,140 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 088B645177B
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Nov 2021 23:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F517451820
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Nov 2021 23:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240668AbhKOW3U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Nov 2021 17:29:20 -0500
-Received: from mga11.intel.com ([192.55.52.93]:18278 "EHLO mga11.intel.com"
+        id S1346044AbhKOWy4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Nov 2021 17:54:56 -0500
+Received: from mga04.intel.com ([192.55.52.120]:45666 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348206AbhKOWSQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Nov 2021 17:18:16 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="231002595"
+        id S1350104AbhKOWlU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Nov 2021 17:41:20 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="232269578"
 X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
-   d="scan'208";a="231002595"
+   d="scan'208";a="232269578"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 14:15:20 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 14:35:46 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
-   d="scan'208";a="645040431"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Nov 2021 14:15:18 -0800
+   d="scan'208";a="645046000"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Nov 2021 14:35:45 -0800
+Subject: Re: [5.12 - 5.15] xHCI controller dead - not renesas but intel
+To:     Norbert Preining <norbert@preining.info>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <YY3RIdKBbIL3Dw/q@bulldog.preining.info>
+Cc:     Norbert Preining <norbert@preining.info>
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
-        kishon@ti.com
-Cc:     hdegoede@redhat.com, chris.chiu@canonical.com,
-        linux-usb@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] usb: hub: Fix usb enumeration issue due to address0 race
-Date:   Tue, 16 Nov 2021 00:16:30 +0200
-Message-Id: <20211115221630.871204-1-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+Message-ID: <8f752efb-e38e-b012-de98-e4b938dde7b7@linux.intel.com>
+Date:   Tue, 16 Nov 2021 00:37:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YY3RIdKBbIL3Dw/q@bulldog.preining.info>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-xHC hardware can only have one slot in default state with address 0
-waiting for a unique address at a time, otherwise "undefined behavior
-may occur" according to xhci spec 5.4.3.4
+On 12.11.2021 4.27, Norbert Preining wrote:
+> Dear all,
+> 
+> (please Cc)
+> 
+> I see quite some discussion here about hanging USB controls from
+> Renesas. Interestingly, I see the very same behaviour with my Intel USB
+> controller:
+> 00:14.0 USB controller: Intel Corporation 100 Series/C230 Series Chipset Family USB 3.0 xHCI Controller (rev 31)
+> 
+> It happens again and again that:
+> Nov 12 10:57:58 bulldog kernel: xhci_hcd 0000:00:14.0: Abort failed to stop command ring: -110
+> Nov 12 10:57:58 bulldog kernel: xhci_hcd 0000:00:14.0: xHCI host controller not responding, assume dead
+> Nov 12 10:57:58 bulldog kernel: xhci_hcd 0000:00:14.0: HC died; cleaning up
+> Nov 12 10:57:58 bulldog kernel: xhci_hcd 0000:00:14.0: Timeout while waiting for setup device command
+> 
+> and I loose all mouse/kbd access.
+> 
+> I have the feeling that it happens more often/at all when I redirect my
+> USB webcam to a virtual machine using virt-manager.
+> Before the above happened, the log showed
+> Nov 12 10:57:06 bulldog kernel: usb 1-12: reset high-speed USB device number 47 using xhci_hcd
+> Nov 12 10:57:11 bulldog kernel: usb 1-12: device descriptor read/64, error -110
+> Nov 12 10:57:27 bulldog kernel: usb 1-12: device descriptor read/64, error -110
+> Nov 12 10:57:27 bulldog kernel: usb 1-12: reset high-speed USB device number 47 using xhci_hcd
+> Nov 12 10:57:32 bulldog kernel: usb 1-12: device descriptor read/64, error -110
+> Nov 12 10:57:48 bulldog kernel: usb 1-12: device descriptor read/64, error -110
+> Nov 12 10:57:48 bulldog kernel: usb 1-12: reset high-speed USB device number 47 using xhci_hcd
+> 
+> where 
+> HD Pro Webcam C920 as /devices/pci0000:00/0000:00:14.0/usb1/1-12/1-12:1.0/input/input40
+> 
+> I am currently running 5.15.1.
+> 
+> Is there anything (besides ssh-ing into the machine and unbind/bind the
+> pci device) I can provide or do?
 
-The address0_mutex exists to prevent this across both xhci roothubs.
+Patch in link below resolved another case with similar log. 
+Does it help in your case?
 
-If hub_port_init() fails, it may unlock the mutex and exit with a xhci
-slot in default state. If the other xhci roothub calls hub_port_init()
-at this point we end up with two slots in default state.
+https://lore.kernel.org/linux-usb/20211115221630.871204-1-mathias.nyman@linux.intel.com/T/#u
 
-Make sure the address0_mutex protects the slot default state across
-hub_port_init() retries, until slot is addressed or disabled.
-
-Note, one known minor case is not fixed by this patch.
-If device needs to be reset during resume, but fails all hub_port_init()
-retries in usb_reset_and_verify_device(), then it's possible the slot is
-still left in default state when address0_mutex is unlocked.
-
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/core/hub.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 86658a81d284..00c3506324e4 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -4700,8 +4700,6 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
- 	if (oldspeed == USB_SPEED_LOW)
- 		delay = HUB_LONG_RESET_TIME;
- 
--	mutex_lock(hcd->address0_mutex);
--
- 	/* Reset the device; full speed may morph to high speed */
- 	/* FIXME a USB 2.0 device may morph into SuperSpeed on reset. */
- 	retval = hub_port_reset(hub, port1, udev, delay, false);
-@@ -5016,7 +5014,6 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
- 		hub_port_disable(hub, port1, 0);
- 		update_devnum(udev, devnum);	/* for disconnect processing */
- 	}
--	mutex_unlock(hcd->address0_mutex);
- 	return retval;
- }
- 
-@@ -5246,6 +5243,9 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
- 		unit_load = 100;
- 
- 	status = 0;
-+
-+	mutex_lock(hcd->address0_mutex);
-+
- 	for (i = 0; i < PORT_INIT_TRIES; i++) {
- 
- 		/* reallocate for each attempt, since references
-@@ -5282,6 +5282,8 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
- 		if (status < 0)
- 			goto loop;
- 
-+		mutex_unlock(hcd->address0_mutex);
-+
- 		if (udev->quirks & USB_QUIRK_DELAY_INIT)
- 			msleep(2000);
- 
-@@ -5370,6 +5372,7 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
- 
- loop_disable:
- 		hub_port_disable(hub, port1, 1);
-+		mutex_lock(hcd->address0_mutex);
- loop:
- 		usb_ep0_reinit(udev);
- 		release_devnum(udev);
-@@ -5396,6 +5399,8 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
- 	}
- 
- done:
-+	mutex_unlock(hcd->address0_mutex);
-+
- 	hub_port_disable(hub, port1, 1);
- 	if (hcd->driver->relinquish_port && !hub->hdev->parent) {
- 		if (status != -ENOTCONN && status != -ENODEV)
-@@ -5915,6 +5920,8 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
- 	bos = udev->bos;
- 	udev->bos = NULL;
- 
-+	mutex_lock(hcd->address0_mutex);
-+
- 	for (i = 0; i < PORT_INIT_TRIES; ++i) {
- 
- 		/* ep0 maxpacket size may change; let the HCD know about it.
-@@ -5924,6 +5931,7 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
- 		if (ret >= 0 || ret == -ENOTCONN || ret == -ENODEV)
- 			break;
- 	}
-+	mutex_unlock(hcd->address0_mutex);
- 
- 	if (ret < 0)
- 		goto re_enumerate;
--- 
-2.25.1
-
+-Mathias
