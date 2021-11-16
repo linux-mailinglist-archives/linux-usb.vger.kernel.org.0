@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E84453AA2
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Nov 2021 21:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D32453AA8
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Nov 2021 21:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240342AbhKPULF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Nov 2021 15:11:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
+        id S240411AbhKPULV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Nov 2021 15:11:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240278AbhKPUKz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Nov 2021 15:10:55 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D412C061570
-        for <linux-usb@vger.kernel.org>; Tue, 16 Nov 2021 12:07:58 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id m15so121615pgu.11
-        for <linux-usb@vger.kernel.org>; Tue, 16 Nov 2021 12:07:58 -0800 (PST)
+        with ESMTP id S240326AbhKPULE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Nov 2021 15:11:04 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE31C061200
+        for <linux-usb@vger.kernel.org>; Tue, 16 Nov 2021 12:07:59 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id o14so147125plg.5
+        for <linux-usb@vger.kernel.org>; Tue, 16 Nov 2021 12:07:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DzxnzMXFGNqMDdChyD7zdxt7eF8uOYjuzwCbU3OGMNs=;
-        b=G4be2AbSMa8RaFnFhndjxcWdMLKVyTqZfbaRPcUdS9Qcb86AWAxerSmg3wgyZccxdJ
-         qPuY5DRuLX0Sm2i86eBmcq6XKy/g6CESymYOHhijkdAJ2ftG1bWrr97ACWsx8FvOvZ4z
-         sNihSA+ZcrvSq0Bvd2WkYMwkOo7eWvf6h//EU=
+        bh=plH00RAHWrUaoDk7ZWe9qkSJhRskMVgl9eoKPnmv1Ls=;
+        b=PKJ1tkbe+EFKv4fXLmzUVqsuS1zwdvwgKdZBeMJiKOcWpxIs30BoE5Jd+bFqCp1cMd
+         AwOiPJBtReIAzQ66lKaPNHP0PZyvJY2Zob31hm2t6rOBE9nelHFumt0Efvwl4dlMZgUZ
+         ZI2Ug3mduH0Tpm1XPkiseMJG93PuWYGqxTMoo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DzxnzMXFGNqMDdChyD7zdxt7eF8uOYjuzwCbU3OGMNs=;
-        b=MGk0IaT6zmvSEgruoxdWOE3/rVEHtdo/eO0CsaCbFtJhN3pa8jVLPBkOckBR25KU6j
-         CuyyoYM3O44fnIZMB3HFjs1llpIdJBvlqn5tPv3Uu4iyrcETl/dlObDTR7eCBcMAIya6
-         aobEaXZk221+n+9i3PkjqfW3t6m8bmL5jYFKdaVwlC4czz1pScA9XJpz5fPj88SptuTs
-         tanXocFhGrcQGO7aEg4DUhyT4hQ2ZTkd7FafFxwHg580ygoxHICDQiTPNxnk+yO/2Qye
-         GqkGTT4cKNDiOgb4iZeAAGA5xCyiffhyVIXWaDH9ml/HlTrBbh6CCxp5W8r1Yhy5CavI
-         rsJQ==
-X-Gm-Message-State: AOAM532N8KQ3CAwtQRIclO3jcGOuBjLsA+G/I7X95xDg5C08Fde7TPLB
-        of5aSsQKfYXldd+VsRGM6ahTWw==
-X-Google-Smtp-Source: ABdhPJwgX6Q9R/0JaYg6gGfltsYbDxKHxsSkPG97acxjzTbozngUooNoyAnwCk1Axx/+EXraFlyZVQ==
-X-Received: by 2002:a63:7141:: with SMTP id b1mr1186952pgn.321.1637093277633;
-        Tue, 16 Nov 2021 12:07:57 -0800 (PST)
+        bh=plH00RAHWrUaoDk7ZWe9qkSJhRskMVgl9eoKPnmv1Ls=;
+        b=g9hl4M9SpfMb3xHHjjSdIuojeqIqm4iDjSg5mLWGNLpdnF938OKSsfjJnx6FOy4KFG
+         r5JZ9PhgGVRchGUWXb9lqcXUuZZPH2+r/julJuyW/JY5Swpo2QgVct4vok/EbUT5F3Cv
+         oAqkqswToP5Z7A5qGbT22B7ByWRu0qYpdgVH6RBVt+MCSJW69PTodCKx3rwALP94RXPJ
+         vGEwDi8e53zOaPRzvTR8n6LSIZ3VwJnac9S/6kbCLotpkcLDfItIKP60ZKZPUKB3DUPU
+         rgGqwji+aDAYnDsJGkgc57rWyjOo6+YxgMh9ZdyhJ0zCF3UzIJl1VhSjEneUknEE4+ui
+         g1dQ==
+X-Gm-Message-State: AOAM532tGi8WSkJmfXKFkStuk5PqG+hZbDKlWLHV9ookClva2PYRjwWU
+        yHTqkKqyp7FDIjOtuQwMrK027g==
+X-Google-Smtp-Source: ABdhPJyRPJG0Ovy0h1+/Gfnv6J5MOuyixdmQ+Q6c7F60s/VmC8GzBGQ8MVO6lwNf1KWE5z3iEjUHzA==
+X-Received: by 2002:a17:902:be12:b0:142:431f:3d1c with SMTP id r18-20020a170902be1200b00142431f3d1cmr48989370pls.32.1637093279401;
+        Tue, 16 Nov 2021 12:07:59 -0800 (PST)
 Received: from localhost ([2620:15c:202:201:54aa:73ab:b480:41e2])
-        by smtp.gmail.com with UTF8SMTPSA id o2sm20474793pfu.206.2021.11.16.12.07.56
+        by smtp.gmail.com with UTF8SMTPSA id o1sm3040031pjs.30.2021.11.16.12.07.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Nov 2021 12:07:57 -0800 (PST)
+        Tue, 16 Nov 2021 12:07:59 -0800 (PST)
 From:   Matthias Kaehlcke <mka@chromium.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
@@ -62,34 +62,21 @@ Cc:     linux-kernel@vger.kernel.org,
         Ravi Chandra Sadineni <ravisadineni@chromium.org>,
         Bastien Nocera <hadess@hadess.net>,
         Matthias Kaehlcke <mka@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mark Brown <broonie@kernel.org>,
-        Olivier Moysan <olivier.moysan@st.com>,
-        Robert Richter <rric@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Lindgren <tony@atomide.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        William Cohen <wcohen@redhat.com>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Nishanth Menon <nm@ti.com>, Shawn Guo <shawnguo@kernel.org>,
+        Will Deacon <will@kernel.org>,
         Zenghui Yu <yuzenghui@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v17 5/7] ARM: configs: Explicitly enable USB_XHCI_PLATFORM where needed
-Date:   Tue, 16 Nov 2021 12:07:37 -0800
-Message-Id: <20211116120642.v17.5.I010d5725652b981ebbafba0b260190fe4b995a40@changeid>
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v17 6/7] arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM
+Date:   Tue, 16 Nov 2021 12:07:38 -0800
+Message-Id: <20211116120642.v17.6.Id45138610b749ff775186ac10b3d01c504ddf4f3@changeid>
 X-Mailer: git-send-email 2.34.0.rc1.387.gb447b232ab-goog
 In-Reply-To: <20211116200739.924401-1-mka@chromium.org>
 References: <20211116200739.924401-1-mka@chromium.org>
@@ -99,104 +86,47 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The dependency of USB_DWC3 and USB_XHCI_MVEBU on USB_XHCI_PLATFORM
-is being changed from 'select' to 'depends on' by another patch.
-With that patch the defconfigs that enable one of these host
-controllers also need to select USB_XHCI_PLATFORM explicitly
-to keep the resulting config unchanged.
+The dependency of USB_DWC3 on USB_XHCI_PLATFORM is being changed
+from 'select' to 'depends on' by another patch. The defconfig selects
+USB_DWC3 and implicitly USB_DWC3_DUAL_ROLE, to keep this unchanged
+USB_XHCI_PLATFORM now needs to be selected explicitly.
 
 Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
 Reviewed-by: Roger Quadros <rogerq@kernel.org>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
 
 Changes in v17:
 - added 'Reviewed-by' tag from Roger
-- added 'Acked-by' tag from Krzysztof
 
 Changes in v16:
+- none
+
+Changes in v15:
+- none
+
+Changes in v14:
+- rebased on v5.14-rc1 (with the rest of the series)
+- added 'Reviewed-by' tag from Doug
+
+Changes in v13:
 - patch added to the series
 
- arch/arm/configs/exynos_defconfig    | 1 +
- arch/arm/configs/keystone_defconfig  | 1 +
- arch/arm/configs/multi_v7_defconfig  | 1 +
- arch/arm/configs/mvebu_v7_defconfig  | 1 +
- arch/arm/configs/omap2plus_defconfig | 1 +
- arch/arm/configs/pxa_defconfig       | 1 +
- 6 files changed, 6 insertions(+)
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/configs/exynos_defconfig b/arch/arm/configs/exynos_defconfig
-index cae09010a799..2e07f5bb352b 100644
---- a/arch/arm/configs/exynos_defconfig
-+++ b/arch/arm/configs/exynos_defconfig
-@@ -256,6 +256,7 @@ CONFIG_SND_SIMPLE_CARD=y
- CONFIG_USB=y
- CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index f2e2b9bdd702..588ab6aef755 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -811,6 +811,7 @@ CONFIG_USB_OTG=y
  CONFIG_USB_XHCI_HCD=y
+ CONFIG_USB_XHCI_PCI=m
+ CONFIG_USB_XHCI_PCI_RENESAS=m
 +CONFIG_USB_XHCI_PLATFORM=y
+ CONFIG_USB_XHCI_TEGRA=y
  CONFIG_USB_EHCI_HCD=y
  CONFIG_USB_EHCI_EXYNOS=y
- CONFIG_USB_OHCI_HCD=y
-diff --git a/arch/arm/configs/keystone_defconfig b/arch/arm/configs/keystone_defconfig
-index 33c917df7b32..4f66c5a5d94d 100644
---- a/arch/arm/configs/keystone_defconfig
-+++ b/arch/arm/configs/keystone_defconfig
-@@ -164,6 +164,7 @@ CONFIG_USB=y
- CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
- CONFIG_USB_MON=y
- CONFIG_USB_XHCI_HCD=y
-+CONFIG_USB_XHCI_PLATFORM=y
- CONFIG_USB_STORAGE=y
- CONFIG_USB_DWC3=y
- CONFIG_NOP_USB_XCEIV=y
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index c951aeed2138..14b339fb4958 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -775,6 +775,7 @@ CONFIG_SND_AUDIO_GRAPH_CARD=m
- CONFIG_USB=y
- CONFIG_USB_OTG=y
- CONFIG_USB_XHCI_HCD=y
-+CONFIG_USB_XHCI_PLATFORM=y
- CONFIG_USB_XHCI_MVEBU=y
- CONFIG_USB_XHCI_TEGRA=m
- CONFIG_USB_EHCI_HCD=y
-diff --git a/arch/arm/configs/mvebu_v7_defconfig b/arch/arm/configs/mvebu_v7_defconfig
-index 7b713c083a2a..4e492afca076 100644
---- a/arch/arm/configs/mvebu_v7_defconfig
-+++ b/arch/arm/configs/mvebu_v7_defconfig
-@@ -101,6 +101,7 @@ CONFIG_SND_SIMPLE_CARD=y
- CONFIG_USB=y
- CONFIG_USB_XHCI_HCD=y
- CONFIG_USB_XHCI_MVEBU=y
-+CONFIG_USB_XHCI_PLATFORM=y
- CONFIG_USB_EHCI_HCD=y
- CONFIG_USB_EHCI_ROOT_HUB_TT=y
- CONFIG_USB_STORAGE=y
-diff --git a/arch/arm/configs/omap2plus_defconfig b/arch/arm/configs/omap2plus_defconfig
-index d933b787d934..2eb85491be03 100644
---- a/arch/arm/configs/omap2plus_defconfig
-+++ b/arch/arm/configs/omap2plus_defconfig
-@@ -563,6 +563,7 @@ CONFIG_USB=m
- CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
- CONFIG_USB_MON=m
- CONFIG_USB_XHCI_HCD=m
-+CONFIG_USB_XHCI_PLATFORM=m
- CONFIG_USB_EHCI_HCD=m
- CONFIG_USB_OHCI_HCD=m
- CONFIG_USB_ACM=m
-diff --git a/arch/arm/configs/pxa_defconfig b/arch/arm/configs/pxa_defconfig
-index 58f4834289e6..510406d6e7a5 100644
---- a/arch/arm/configs/pxa_defconfig
-+++ b/arch/arm/configs/pxa_defconfig
-@@ -523,6 +523,7 @@ CONFIG_USB=m
- CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
- CONFIG_USB_MON=m
- CONFIG_USB_XHCI_HCD=m
-+CONFIG_USB_XHCI_PLATFORM=m
- CONFIG_USB_EHCI_HCD=m
- CONFIG_USB_EHCI_HCD_PLATFORM=m
- CONFIG_USB_ISP116X_HCD=m
 -- 
 2.34.0.rc1.387.gb447b232ab-goog
 
