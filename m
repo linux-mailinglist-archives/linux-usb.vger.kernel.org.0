@@ -2,72 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0FF7453A4D
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Nov 2021 20:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A43453A4E
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Nov 2021 20:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240101AbhKPTnv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Nov 2021 14:43:51 -0500
-Received: from mail-pf1-f170.google.com ([209.85.210.170]:36404 "EHLO
-        mail-pf1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236700AbhKPTnu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Nov 2021 14:43:50 -0500
-Received: by mail-pf1-f170.google.com with SMTP id n26so376161pff.3;
-        Tue, 16 Nov 2021 11:40:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JO81Agbe5WodbQoYIQdT48bZEHg2H9k1d9p6sxf0m3Q=;
-        b=OZGjM31mk5dAKLZBq+u++t/BndM9x6hdWGzugIt6gCbFu7SY9pgHxfCV0gD8P/N0Yl
-         W4vRPQXkJVkxIz2Q+MRd5AX1exkN3wtr5iaqOhcFVpRJ06tXIYBD5o2v3anWPGqaVA5r
-         +HaQddYPpx4JBzdV5aHhuYuI+afKcMmIWVOSlqbmubv1czLbMtlvnBkuOTrnUPk6lTn0
-         lvTWtSikKac1Y9vuxzf+rnAVvFGMPuJHhgC1E8N6/8gtfRkHKh39uVR2BT+GOPfBSaRS
-         HCMQBTCT1VUPjChpLAOT9EpUKmTATtO8aWqdy9NM7rIG9eqEDx+4PdvpJB41V4QrYmte
-         /slg==
-X-Gm-Message-State: AOAM532DwMK4sH1sCItTVo/S7aLmcKqkt2aHeWNVYZrhwXFURaYhKmp0
-        mLkr0sD0SGJuYY6vnCLQ9GLQA34WXGKRY/xi
-X-Google-Smtp-Source: ABdhPJxytwHi1yhH1LA3KhKBGuokPekTGZp76tfLHybYBU0hTJEcef+vxKctSCD27K8Fak7CBSZSSw==
-X-Received: by 2002:a05:6a00:1822:b0:49f:c55b:6235 with SMTP id y34-20020a056a00182200b0049fc55b6235mr1594968pfa.66.1637091653156;
-        Tue, 16 Nov 2021 11:40:53 -0800 (PST)
-Received: from rocinante ([95.155.85.46])
-        by smtp.gmail.com with ESMTPSA id o134sm19183817pfg.1.2021.11.16.11.40.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Nov 2021 11:40:52 -0800 (PST)
-Date:   Tue, 16 Nov 2021 20:40:43 +0100
-From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     sean.v.kelley@linux.intel.com, bugzilla-daemon@bugzilla.kernel.org,
-        linux-usb@vger.kernel.org, linux-pci@vger.kernel.org,
-        Sean V Kelley <seanvk.dev@oregontracks.org>
-Subject: Re: [Bug 214789] ehci-hcd.c ISR
-Message-ID: <YZQJO193uIsM86en@rocinante>
+        id S240107AbhKPTnx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Nov 2021 14:43:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60634 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236700AbhKPTnx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 16 Nov 2021 14:43:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id E6CF363215
+        for <linux-usb@vger.kernel.org>; Tue, 16 Nov 2021 19:40:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637091655;
+        bh=kFNIvcXwiJzf9g6Z5vszVzs7JHtFsWBlyZvJtBHnN3c=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=WCwZjijOSeiLgNFLyS8umwdpD8cD8/+rRY++1rgo54Cv3zimX9ehdVVA1Mu8g89xU
+         tUjrCa3X2GhWr3jf/Zchfy4ue7KoMhLOg+x7l82u/cfKDzkM+ekgupFlOnc6otnNoZ
+         PMNu7uNxdRbQ5LOmiwC5+knaNuey+gORDJoXgbTmVkkM+L/+WrWCk4lAZH3pB4CxU2
+         XDbFBrlZeFyLfMo3+1veYnz4l7q0GIRPahpkA060kSttIrjpTU6Yj0iAygLa48pRfH
+         GohU3UdXtHlFF4jikpQn75EXh+iTum7Llvnk86ch47y8RVoIwLhdpLndvWbmG4jWBd
+         JvIc0CAk/EXog==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id D122960FC4; Tue, 16 Nov 2021 19:40:55 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214789] ehci-hcd.c ISR
+Date:   Tue, 16 Nov 2021 19:40:55 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: kw@linux.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-214789-208809-aQRfqjpPbh@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214789-208809@https.bugzilla.kernel.org/>
 References: <bug-214789-208809@https.bugzilla.kernel.org/>
- <bug-214789-208809-L7vPEsR09B@https.bugzilla.kernel.org/>
- <20211105193942.GA1601081@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211105193942.GA1601081@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214789
+
+--- Comment #25 from Krzysztof Wilczy=C5=84ski (kw@linux.com) ---
 [+CC Sean using his other e-mail address]
 
 Hi Alan,
 
-> > https://bugzilla.kernel.org/show_bug.cgi?id=214789
-> > 
+> > https://bugzilla.kernel.org/show_bug.cgi?id=3D214789
+> >=20
 > > --- Comment #22 from Scott Arnold (scott.c.arnold@nasa.gov) ---
 > > Hello,
 > > This caused problem:
-> > https://patchwork.kernel.org/project/linux-pci/patch/20200214213313.66622-2-sean.v.kelley@linux.intel.com/
+> >
+> https://patchwork.kernel.org/project/linux-pci/patch/20200214213313.66622=
+-2-sean.v.kelley@linux.intel.com/
 > > Scott
-> 
-> This is commit b88bf6c3b6ff ("PCI: Add boot interrupt quirk mechanism 
+>=20
+> This is commit b88bf6c3b6ff ("PCI: Add boot interrupt quirk mechanism=20
 > for Xeon chipsets").
-> 
-> Sean and linux-pci readers, please take a look at this bug report 
+>=20
+> Sean and linux-pci readers, please take a look at this bug report=20
 > (Bugzilla #214789).
 
 Sean might not have been able to see this message, as he is no longer
@@ -75,4 +84,10 @@ working for Intel and his old e-mail would bounce.
 
 I am added Sean using a different one I've found, perhaps it would work.
 
-	Krzysztof
+        Krzysztof
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
