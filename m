@@ -2,68 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBBA45387D
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Nov 2021 18:27:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 283EF45392E
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Nov 2021 19:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238784AbhKPRay (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Nov 2021 12:30:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
+        id S239328AbhKPSKZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Nov 2021 13:10:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238771AbhKPRax (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Nov 2021 12:30:53 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FD8C061746
-        for <linux-usb@vger.kernel.org>; Tue, 16 Nov 2021 09:27:55 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id bf8so56844oib.6
-        for <linux-usb@vger.kernel.org>; Tue, 16 Nov 2021 09:27:55 -0800 (PST)
+        with ESMTP id S236941AbhKPSKP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Nov 2021 13:10:15 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0822FC061570
+        for <linux-usb@vger.kernel.org>; Tue, 16 Nov 2021 10:07:18 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id 136so13695091pgc.0
+        for <linux-usb@vger.kernel.org>; Tue, 16 Nov 2021 10:07:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=KIHiiZE4qjc065wtW57R5JXiYppWDGZbI/VPrSJTidE=;
-        b=kYihH1Ra4VK3KpODsJeR19HES+jp0bNwtPxzx7t2BblGYxfo70yerp8uNTnktl1XGn
-         wxuxGFAvRO8bp0jmnmtCtZo/TDNsptHwee0of9ogaeNZSZM5gd10mQypGhmqkqYhsL/d
-         IFT0GTXWBoVyI5QTwBGAFS1EoZ6UYq265SZQxLJElsp0WNVxqwQBRVTPyWFC6331ckqQ
-         p1Gu/v0iEZpll59Nvnzd4m0vVPD7lQKblCf3f3MCS3p66EByXmo1KbbF/WQIo/UVXOVE
-         Inh78GKSddwrMsahV5FcQVEUZv3c9NP3mBinZan+Xaf+SE8n4mcoRdJG7U77X3Gnv+sa
-         I6qA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dJLPLJIkQPjO7UzbeQTBcB7R7AACxPrWxl+uljB+ks4=;
+        b=MuEc9myys8soSc9S5p/9ZYxQFINzZE+kAA+k/U3FM52jlU+6MJ1sN342xuvi42MyiM
+         ZMBjLooJ7voz/onZnJrPlWcorIIuLCoKkgjvfuvaYADaSZoZDmAMeW84d3xwQVEbocct
+         qdT5YRu1/seNagLz3qhmq16768PfXRj60IRok=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=KIHiiZE4qjc065wtW57R5JXiYppWDGZbI/VPrSJTidE=;
-        b=FXx03acEuZe/XDod1IqnA+39joPJlZ4YVyC+AYwLV1m+goAXfOGbISyEGYrZhcNLdc
-         gbBwev+2q1TVNIk93R/GeP+5dYyWqJtzlyVcHnr4aHyVOHsZwpspe1KM+EYc3fKa8Kgz
-         7p4/YhUNl8C8l6B8cng5YIeuYN7Zpm2XEQctzaPVkWM2nmvxRcTUUDnVISPJMahjimd1
-         9iR4l12r2xXExXYS8u4K2B/sXSp4n/iB9dHnVbKDzs/btXSNToNNGUo59Nm5IS/kT+KH
-         jxcGqXWJLaACMJw6Dld4OPtAjfW3nK+vq+UQeQ2q1AU0LydEXqLf2lagAqHlMUZxKa7E
-         LN3g==
-X-Gm-Message-State: AOAM533+5CF7+U0qcqz5SNsVvO1TXnQUaYnXBSgvgz6IbplwxCtnOvWf
-        yLjPoPOw0sWJ+2Fq3QVnoj/dC9kE96RcaDSVq/c=
-X-Google-Smtp-Source: ABdhPJzySsA8dmkMFaH1Zo1R/GRN7pCjWOvAy9WlPXiggXr9NM87huFixjDUIiA6Ap5wTfxBAdBfI6E6xS8/wvzUGUE=
-X-Received: by 2002:a05:6808:15a:: with SMTP id h26mr7838574oie.36.1637083675252;
- Tue, 16 Nov 2021 09:27:55 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dJLPLJIkQPjO7UzbeQTBcB7R7AACxPrWxl+uljB+ks4=;
+        b=1UqHHpEsdLFYxJtYWRyTykW2x9ViTnJtJlMjR4d5R6OGGuLrm+bwZdjM4ON6PDmtqy
+         g8PSnQJ5U1n/8T0MOqsdh5bJStpndPwkUecgjY3TigtACZmCiVDRrYYhRLhu6XtLoLQk
+         4hTwoDH4swYoAfTxoVUuSx+G4DiYe+07qzBv+1RVMOekSQ5nVnw1wjnQ7tiexKJk3XCB
+         FLwICOS4SBVGkLki2xVKT5X+Zk3/TfpfVl7UVd+AW8ELknXCPwZ7KBOPGwLfCe0rXj4V
+         d4p4xW0uYhEXUkM3CskWeGGZAqIl0cIGdUhDCiS1BWABizGHVTZUYB/IxTlJ8hEoSQTU
+         0Tjg==
+X-Gm-Message-State: AOAM533evzfS0UzbrvGhvYPt/HUdhjMCG5loPc6fAuf6xKWT0Pp5OI4U
+        8OBUJLZmOHyltcN+DHm0LTRGvl0LkxzHFg==
+X-Google-Smtp-Source: ABdhPJwhmpm1yvMfuJzR2UucqZRo6IvMajPPkE5cdkExWK4ezhfJ19WuO6fjzPR4AH6ILz/jpNvTTw==
+X-Received: by 2002:a63:c61:: with SMTP id 33mr552897pgm.415.1637086037631;
+        Tue, 16 Nov 2021 10:07:17 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:54aa:73ab:b480:41e2])
+        by smtp.gmail.com with UTF8SMTPSA id e7sm2315303pgj.11.2021.11.16.10.07.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Nov 2021 10:07:16 -0800 (PST)
+Date:   Tue, 16 Nov 2021 10:07:14 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+        Peter Chen <peter.chen@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Bastien Nocera <hadess@hadess.net>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v16 5/7] usb: Specify dependencies on USB_XHCI_PLATFORM
+ with 'depends on'
+Message-ID: <YZPzUmwWuuiwqJ2b@google.com>
+References: <20210813195228.2003500-1-mka@chromium.org>
+ <20210813125146.v16.5.If248f05613bbb06a44eb0b0909be5d97218f417b@changeid>
+ <CAD=FV=UFUFqojhws0MBqrq41gU9ww1h-T+OjzebFKVwzeC+LYQ@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6830:1d67:0:0:0:0 with HTTP; Tue, 16 Nov 2021 09:27:54
- -0800 (PST)
-Reply-To: jeai2nasri@yahoo.com
-From:   jean nasri <aa7937774@gmail.com>
-Date:   Tue, 16 Nov 2021 18:27:54 +0100
-Message-ID: <CAM8JFBmyAYp4vZLtTTt-zrnfOX57P9xSMcYkhcA4R=iFwkD=WA@mail.gmail.com>
-Subject: Mi amigo por favor confirma
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=UFUFqojhws0MBqrq41gU9ww1h-T+OjzebFKVwzeC+LYQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=20
-Hello
-Voc=C3=AA tem uma conta para receber um dinheiro patrimonial? Por favor res=
-ponda para
-explica=C3=A7=C3=A3o adicional
+On Thu, Nov 11, 2021 at 03:48:06PM -0800, Doug Anderson wrote:
+> Hi,
+> 
+> On Fri, Aug 13, 2021 at 12:52 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+> >
+> >  config USB_DWC3
+> >         tristate "DesignWare USB3 DRD Core Support"
+> > -       depends on (USB || USB_GADGET) && HAS_DMA
+> > -       select USB_XHCI_PLATFORM if USB_XHCI_HCD
+> > +       depends on ((USB && USB_XHCI_PLATFORM) || USB_GADGET) && HAS_DMA
+> 
+> Technically you don't need the "USB &&", right? Since
+> USB_XHCI_PLATFORM is defined in 'usb/host/Kconfig' and that's only
+> even included if USB is defined. So it can be just:
+> 
+> depends on (USB_XHCI_PLATFORM || USB_GADGET) && HAS_DMA
 
-Do you have an account to receive an heritage Money? Please reply for
-further explanation
-Nasri
+True, the dependency on USB isn't strictly needed.
+
+> That's not terribly important, though, so:
+> 
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
+Thanks!
