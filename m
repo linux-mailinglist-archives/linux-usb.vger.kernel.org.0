@@ -2,73 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93CDF454746
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Nov 2021 14:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E82F454786
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Nov 2021 14:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237615AbhKQNfI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Nov 2021 08:35:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47434 "EHLO mail.kernel.org"
+        id S236316AbhKQNji (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Nov 2021 08:39:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50630 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237617AbhKQNfH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 17 Nov 2021 08:35:07 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2E89D61B2B;
-        Wed, 17 Nov 2021 13:32:08 +0000 (UTC)
+        id S229795AbhKQNjf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 17 Nov 2021 08:39:35 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A49476152B;
+        Wed, 17 Nov 2021 13:36:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1637155928;
-        bh=RqhuoZ7YaVo+Q6mLkZ6Y9JXOf35z24ngjYLLZhdDNlQ=;
+        s=korg; t=1637156197;
+        bh=YnDG0MXUI5zY1mjYU3GC0NpmjBAFFfx4W8XlUwroPO0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UEO0+fU+NaFgslnhjjyVMcsMtuT+MrokVCExg1ovve5lSTOhki3Jc/igmRd6WalMR
-         tPRQaX2EHQEwm+1Vd5ocI4AJXzJT2V0XDYZbz3YlO8NNYhE6K7juTJ+btAVW3HGw9A
-         DFHTxrtN6TtwBZsmHOfmUMaQa3Maqqix5pkIO87Y=
-Date:   Wed, 17 Nov 2021 14:32:06 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     cgel.zte@gmail.com
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luo penghao <luo.penghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linux-next] USB: Delete the useless assignment to "nbytes"
-Message-ID: <YZUEVswwxLsNyV04@kroah.com>
-References: <20211111151124.2659-1-luo.penghao@zte.com.cn>
+        b=b0+d7T1sFlBcbZW/DfpTzroXV2o3IFzLkd0A13UaZ3B843z1pF0f0/8I9qSUa7IyJ
+         qS/xCm/dbTKqL689F3mtHr5fi9oyMTDeX0gxJU4XqBh9H9yHRr3QiJyQwPL/MsCeth
+         gEIrtX6+HIQ80oxfUdyKoSUutkZuXFaj6ldEtq4k=
+Date:   Wed, 17 Nov 2021 14:36:34 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     ferlandm@amotus.ca
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: simple: add sierra wireless xm1210 gnss
+ receiver
+Message-ID: <YZUFYsaskqDan6kF@kroah.com>
+References: <20211027200223.72701-1-ferlandm@amotus.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211111151124.2659-1-luo.penghao@zte.com.cn>
+In-Reply-To: <20211027200223.72701-1-ferlandm@amotus.ca>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 11, 2021 at 03:11:24PM +0000, cgel.zte@gmail.com wrote:
-> From: luo penghao <luo.penghao@zte.com.cn>
+On Wed, Oct 27, 2021 at 04:02:23PM -0400, ferlandm@amotus.ca wrote:
+> From: Marc Ferland <ferlandm@amotus.ca>
 > 
-> The assignment of the local variable "nbytes" in the if statement
-> will not be used
+> Add device id for the Sierra Wireless XM1210 Multi-GNSS module.
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: luo penghao <luo.penghao@zte.com.cn>
-> ---
->  drivers/usb/mon/mon_bin.c | 1 -
->  1 file changed, 1 deletion(-)
+> https://www.sierrawireless.com/iot-solutions/products/xm1210/
 > 
-> diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
-> index f48a23a..b8ba0f7 100644
-> --- a/drivers/usb/mon/mon_bin.c
-> +++ b/drivers/usb/mon/mon_bin.c
-> @@ -845,7 +845,6 @@ static ssize_t mon_bin_read(struct file *file, char __user *buf,
->  			mutex_unlock(&rp->fetch_lock);
->  			return -EFAULT;
->  		}
-> -		nbytes -= step_len;
->  		buf += step_len;
->  		rp->b_read += step_len;
->  		done += step_len;
-> -- 
-> 2.15.2
+> $ lsusb -vd 1199:b000
 > 
-> 
+> Bus 002 Device 003: ID 1199:b000 Sierra Wireless, Inc. Sierra Wireless_GNSS
 
-This patch is not correct (it's either wrong, or incomplete).  Please
-fix your "robot" to not send changes that you have not properly
-verified.
+Why doesn't this device work with the qcserial.c driver instead?  Have
+you tried that?
 
 thanks,
 
