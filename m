@@ -2,195 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C62454A25
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Nov 2021 16:40:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8DE454A29
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Nov 2021 16:40:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238228AbhKQPnL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Nov 2021 10:43:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236130AbhKQPnK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Nov 2021 10:43:10 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC982C061570;
-        Wed, 17 Nov 2021 07:40:11 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id i8-20020a7bc948000000b0030db7b70b6bso5162219wml.1;
-        Wed, 17 Nov 2021 07:40:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1e4r35yakqYJ2n3GquiIT5LlL4bu2sXRURIH3oUS4mQ=;
-        b=WVAAwuveo4V2/T3wWMSlA3KMi800D62/2hhAHe7apfG3JlSpCrDIQfQvIzqbLpozAi
-         n2rHwra/qYW+XsqtwO9ta9/JLGi8EsI+uXlfIKcZ5MW/BU4itgWQ5c5GE+8OJRmW1mQX
-         7ANMrdC/wX5UNcG0/nBzBa9uC1WCExVs88ieSatLFNJgVNbatW9miYhqdRJhufmTpwIM
-         jx+GxW6b/t1IzGPoY6gefZ62gmuEFzLxPzbmIHJcCL4MagTsqxVXYzwCjtpVO7EV2EJv
-         JRv8PriNhvCud7egvn0EsovqWaj+RoorvAcGrmLrXa0B2N9UoEbFzFDumYyvxZnKPSJ/
-         s5sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1e4r35yakqYJ2n3GquiIT5LlL4bu2sXRURIH3oUS4mQ=;
-        b=HAFy1OFlP910odECS2tHKLxp8A5vkroP555CAocyhJ4hsZEK0OENsMjAa/c8FLk/pX
-         KG8/Zdf+kA2QDlEUvkrx/Rx8a+ZE6RQTdeu9G7CXlGugawhxdw0W3z2d1ZWYBsSjXBBw
-         9sA9kKlqyL/tyoWQXIRHfELv6oNZpe+fBOjHBX7lHB7oCtR8pIbMO2j7GRvOujjOFyGP
-         xUQ0/34+Zih0F9b5SDSRYLsNwes4sVEFQVvrkaaqWyU2DHAArrhwl7kaz+3uF0/dSM9q
-         RLX18WtJBOYSa4vGdf3v4nRHHRFy9d5MJ27/+yRKjU9bS1RcfYP/BXhl9J3uj2OOsbAy
-         xpDw==
-X-Gm-Message-State: AOAM530Vy/6U67gkqdr2Xx5WMXV429LTL44r4XiQwPsSk4OWJgdOR895
-        EyBX9pWK8Vkw1ePLcystjeY=
-X-Google-Smtp-Source: ABdhPJytjeCYk7JW3WTLZmWodsJn1KrCwCciuY8wezt5sSJT+X/FdsjwSIunHmifRcndZq8qpZU73w==
-X-Received: by 2002:a05:600c:500a:: with SMTP id n10mr763185wmr.136.1637163610353;
-        Wed, 17 Nov 2021 07:40:10 -0800 (PST)
-Received: from [192.168.0.18] (static-160-219-86-188.ipcom.comunitel.net. [188.86.219.160])
-        by smtp.gmail.com with ESMTPSA id i17sm41888wmq.48.2021.11.17.07.40.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Nov 2021 07:40:09 -0800 (PST)
-Message-ID: <9d969ccd-1713-acb5-73ac-655c11086738@gmail.com>
-Date:   Wed, 17 Nov 2021 16:40:08 +0100
+        id S231714AbhKQPnm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Nov 2021 10:43:42 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:32899 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S238502AbhKQPnh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Nov 2021 10:43:37 -0500
+Received: (qmail 173452 invoked by uid 1000); 17 Nov 2021 10:40:36 -0500
+Date:   Wed, 17 Nov 2021 10:40:36 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Ajay Garg <ajaygargnsit@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: Mouse stops working at random intervals in latest kernel
+Message-ID: <20211117154036.GC172151@rowland.harvard.edu>
+References: <CAHP4M8UvwsS6QpV6PX-qf=d2u9Qw35Hafv-BTMGUWeSc0nUBXA@mail.gmail.com>
+ <CAHP4M8V4ow_JUj9gjcrZoyFtnTcqngHqiD2da-v-w4VZ2WL1hg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 3/3] arm64: dts: mediatek: Add USB xHCI controller for
- mt8195
-Content-Language: en-US
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211102060049.1843-1-chunfeng.yun@mediatek.com>
- <20211102060049.1843-3-chunfeng.yun@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20211102060049.1843-3-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHP4M8V4ow_JUj9gjcrZoyFtnTcqngHqiD2da-v-w4VZ2WL1hg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 02/11/2021 07:00, Chunfeng Yun wrote:
-> Add all four USB xHCI controllers for MT8195
+On Wed, Nov 17, 2021 at 08:52:47AM +0530, Ajay Garg wrote:
+> Looping in linux-usb list members.
+> Pasting the original content again, to avoid top-posting visual headaches :)
 > 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-
-Patch lookes good, I'll take it as soon as 1/3 and 2/3 is accepted.
-
-Regards,
-Matthias
-
-> ---
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 79 ++++++++++++++++++++++++
->   1 file changed, 79 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> index a59c0e9d1fc2..263eebfd2ea1 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> @@ -8,6 +8,7 @@
->   #include <dt-bindings/clock/mt8195-clk.h>
->   #include <dt-bindings/interrupt-controller/arm-gic.h>
->   #include <dt-bindings/interrupt-controller/irq.h>
-> +#include <dt-bindings/phy/phy.h>
->   #include <dt-bindings/power/mt8195-power.h>
->   
->   / {
-> @@ -823,6 +824,26 @@
->   			status = "disabled";
->   		};
->   
-> +		xhci0: usb@11200000 {
-> +			compatible = "mediatek,mt8195-xhci", "mediatek,mtk-xhci";
-> +			reg = <0 0x11200000 0 0x1000>, <0 0x11203e00 0 0x0100>;
-> +			reg-names = "mac", "ippc";
-> +			interrupts = <GIC_SPI 129 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			phys = <&u2port0 PHY_TYPE_USB2>, <&u3port0 PHY_TYPE_USB3>;
-> +			assigned-clocks = <&topckgen CLK_TOP_USB_TOP>,
-> +					  <&topckgen CLK_TOP_SSUSB_XHCI>;
-> +			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
-> +						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
-> +			clocks = <&infracfg_ao CLK_INFRA_AO_SSUSB>,
-> +				 <&infracfg_ao CLK_INFRA_AO_SSUSB_XHCI>,
-> +				 <&topckgen CLK_TOP_SSUSB_REF>,
-> +				 <&apmixedsys CLK_APMIXED_USB1PLL>;
-> +			clock-names = "sys_ck", "xhci_ck", "ref_ck", "mcu_ck";
-> +			mediatek,syscon-wakeup = <&pericfg 0x400 103>;
-> +			wakeup-source;
-> +			status = "disabled";
-> +		};
-> +
->   		mmc0: mmc@11230000 {
->   			compatible = "mediatek,mt8195-mmc", "mediatek,mt8192-mmc";
->   			reg = <0 0x11230000 0 0x10000>,
-> @@ -843,6 +864,64 @@
->   			status = "disabled";
->   		};
->   
-> +		xhci1: usb@11290000 {
-> +			compatible = "mediatek,mt8195-xhci", "mediatek,mtk-xhci";
-> +			reg = <0 0x11290000 0 0x1000>, <0 0x11293e00 0 0x0100>;
-> +			reg-names = "mac", "ippc";
-> +			interrupts = <GIC_SPI 530 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			phys = <&u2port1 PHY_TYPE_USB2>;
-> +			assigned-clocks = <&topckgen CLK_TOP_USB_TOP_1P>,
-> +					  <&topckgen CLK_TOP_SSUSB_XHCI_1P>;
-> +			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
-> +						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
-> +			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_1P_BUS>,
-> +				 <&pericfg_ao CLK_PERI_AO_SSUSB_1P_XHCI>,
-> +				 <&topckgen CLK_TOP_SSUSB_P1_REF>,
-> +				 <&apmixedsys CLK_APMIXED_USB1PLL>;
-> +			clock-names = "sys_ck", "xhci_ck", "ref_ck", "mcu_ck";
-> +			mediatek,syscon-wakeup = <&pericfg 0x400 104>;
-> +			wakeup-source;
-> +			status = "disabled";
-> +		};
-> +
-> +		xhci2: usb@112a0000 {
-> +			compatible = "mediatek,mt8195-xhci", "mediatek,mtk-xhci";
-> +			reg = <0 0x112a0000 0 0x1000>, <0 0x112a3e00 0 0x0100>;
-> +			reg-names = "mac", "ippc";
-> +			interrupts = <GIC_SPI 533 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			phys = <&u2port2 PHY_TYPE_USB2>;
-> +			assigned-clocks = <&topckgen CLK_TOP_USB_TOP_2P>,
-> +					  <&topckgen CLK_TOP_SSUSB_XHCI_2P>;
-> +			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
-> +						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
-> +			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_2P_BUS>,
-> +				 <&pericfg_ao CLK_PERI_AO_SSUSB_2P_XHCI>,
-> +				 <&topckgen CLK_TOP_SSUSB_P2_REF>;
-> +			clock-names = "sys_ck", "xhci_ck", "ref_ck";
-> +			mediatek,syscon-wakeup = <&pericfg 0x400 105>;
-> +			status = "disabled";
-> +		};
-> +
-> +		xhci3: usb@112b0000 {
-> +			compatible = "mediatek,mt8195-xhci", "mediatek,mtk-xhci";
-> +			reg = <0 0x112b0000 0 0x1000>, <0 0x112b3e00 0 0x0100>;
-> +			reg-names = "mac", "ippc";
-> +			interrupts = <GIC_SPI 536 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			phys = <&u2port3 PHY_TYPE_USB2>;
-> +			assigned-clocks = <&topckgen CLK_TOP_USB_TOP_3P>,
-> +					  <&topckgen CLK_TOP_SSUSB_XHCI_3P>;
-> +			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
-> +						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
-> +			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_3P_BUS>,
-> +				 <&pericfg_ao CLK_PERI_AO_SSUSB_3P_XHCI>,
-> +				 <&topckgen CLK_TOP_SSUSB_P3_REF>;
-> +			clock-names = "sys_ck", "xhci_ck", "ref_ck";
-> +			mediatek,syscon-wakeup = <&pericfg 0x400 106>;
-> +			wakeup-source;
-> +			usb2-lpm-disable;
-> +			status = "disabled";
-> +		};
-> +
->   		nor_flash: nor@1132c000 {
->   			compatible = "mediatek,mt8195-nor", "mediatek,mt8173-nor";
->   			reg = <0 0x1132c000 0 0x1000>;
+> Hello everyone,
 > 
+> I have been seeing following errors at random times.
+> When this happens, the (wireless-)mouse stops working. The USB-dongle
+> has to be removed, and re-inserted again to get the mouse working
+> again.
+> 
+> This has not happened before, only observing it since last 2-3 days.
+> Kernel is mainline at 8ab774587903771821b59471cc723bba6d893942.
+> 
+> Anyone seeing similar issue?
+> 
+> 
+> ###########################
+> Nov 16 18:15:19 host-x86-64 kernel: [ 5005.107017] usb 2-1.2: reset
+> full-speed USB device number 11 using ehci-pci
+> Nov 16 18:15:19 host-x86-64 kernel: [ 5005.186745] usb 2-1.2: device
+> descriptor read/64, error -32
+> Nov 16 18:15:20 host-x86-64 kernel: [ 5005.374638] usb 2-1.2: device
+> descriptor read/64, error -32
+> Nov 16 18:15:20 host-x86-64 kernel: [ 5005.562650] usb 2-1.2: reset
+> full-speed USB device number 11 using ehci-pci
+> Nov 16 18:15:20 host-x86-64 kernel: [ 5005.642638] usb 2-1.2: device
+> descriptor read/64, error -32
+> Nov 16 18:15:20 host-x86-64 kernel: [ 5005.830670] usb 2-1.2: device
+> descriptor read/64, error -32
+> Nov 16 18:15:20 host-x86-64 kernel: [ 5006.018544] usb 2-1.2: reset
+> full-speed USB device number 11 using ehci-pci
+> Nov 16 18:15:21 host-x86-64 kernel: [ 5006.434527] usb 2-1.2: device
+> not accepting address 11, error -32
+> Nov 16 18:15:21 host-x86-64 kernel: [ 5006.514531] usb 2-1.2: reset
+> full-speed USB device number 11 using ehci-pci
+> Nov 16 18:15:21 host-x86-64 kernel: [ 5006.930613] usb 2-1.2: device
+> not accepting address 11, error -32
+> Nov 16 18:15:21 host-x86-64 kernel: [ 5006.931546] usb 2-1.2: USB
+> disconnect, device number 11
+> Nov 16 18:15:21 host-x86-64 upowerd[1241]: treating change event as
+> add on /sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.2
+> Nov 16 18:15:21 host-x86-64 kernel: [ 5007.102858] usb 2-1.2: new
+> full-speed USB device number 12 using ehci-pci
+> Nov 16 18:15:21 host-x86-64 libvirtd[855]: internal error: Missing
+> udev property 'ID_VENDOR_ID' on '2-1.2'
+> Nov 16 18:15:21 host-x86-64 kernel: [ 5007.182555] usb 2-1.2: device
+> descriptor read/64, error -32
+> Nov 16 18:15:22 host-x86-64 kernel: [ 5007.370518] usb 2-1.2: device
+> descriptor read/64, error -32
+> Nov 16 18:15:22 host-x86-64 kernel: [ 5007.558677] usb 2-1.2: new
+> full-speed USB device number 13 using ehci-pci
+> Nov 16 18:15:22 host-x86-64 kernel: [ 5007.638657] usb 2-1.2: device
+> descriptor read/64, error -32
+> Nov 16 18:15:22 host-x86-64 kernel: [ 5007.826664] usb 2-1.2: device
+> descriptor read/64, error -32
+> Nov 16 18:15:22 host-x86-64 kernel: [ 5007.935063] usb 2-1-port2:
+> attempt power cycle
+> Nov 16 18:15:23 host-x86-64 kernel: [ 5008.538604] usb 2-1.2: new
+> full-speed USB device number 14 using ehci-pci
+> Nov 16 18:15:23 host-x86-64 kernel: [ 5008.956553] usb 2-1.2: device
+> not accepting address 14, error -32
+> Nov 16 18:15:23 host-x86-64 kernel: [ 5009.034629] usb 2-1.2: new
+> full-speed USB device number 15 using ehci-pci
+> Nov 16 18:15:24 host-x86-64 kernel: [ 5009.450570] usb 2-1.2: device
+> not accepting address 15, error -32
+> Nov 16 18:15:24 host-x86-64 kernel: [ 5009.450881] usb 2-1-port2:
+> unable to enumerate USB device
+> #######################################
+
+Going just by your description and the log contents, it sounds like the 
+wireless dongle's firmware is crashing.  Or possibly something has gone 
+wrong with the motherboard's on-board "rate-matching" hub.
+
+To rule out software issues, you could try running an earlier kernel 
+version.  If that doesn't show any problems then you may want to perform 
+a git bisection.
+
+As far as I know there have been no recent changes to ehci-hcd or 
+ehci-pci that could cause this to happen.
+
+Alan Stern
