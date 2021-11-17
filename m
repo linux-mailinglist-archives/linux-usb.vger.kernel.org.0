@@ -2,133 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D824A453D25
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Nov 2021 01:28:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 122D1453D3C
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Nov 2021 01:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231731AbhKQAbS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Nov 2021 19:31:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
+        id S232263AbhKQArk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Nov 2021 19:47:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbhKQAbR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Nov 2021 19:31:17 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128EAC061570
-        for <linux-usb@vger.kernel.org>; Tue, 16 Nov 2021 16:28:20 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id j5-20020a17090a318500b001a6c749e697so3208744pjb.1
-        for <linux-usb@vger.kernel.org>; Tue, 16 Nov 2021 16:28:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0zSan3zyfssZm8glKrNvZwNNqhLypmG9XdxQ4QcrlZk=;
-        b=hESnXBu7LwpYcgkki+GhD88Q/C2HlRb9cEcZxEoCgKLn+8n8bfrX14aDm8tK2Iblkz
-         6lPC96vuwPpTvuqbWQyw0KD1y3oSrXre3XmYSQMdSgU+fKyWmo13u7khesLykgqTT+61
-         mSVuxYxaJk9bdgl6YS6eIJraWGfw5oaJ14J0U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0zSan3zyfssZm8glKrNvZwNNqhLypmG9XdxQ4QcrlZk=;
-        b=2xBPi+UDle+GmGa5Ie6z03mF4meJKDKHV5ifT7PKkkIycgTGxFuQJr0E/b8bCHGJeP
-         z0Jge8114OZMQUxvRGnO/jx0V+Uo5XoW5K8QuEkm2IurzO1btj3AKPc/6fSrIfW4SWrf
-         oK10Yli89ndZAItR14oiwUq1dcNz26IWl8As7UNZTpeHzWNWHHa1O56yDyj/4buAkrJN
-         oHzeItC+ohrtRJUBly8BjiD21TbvWPT4AupVgLP5WpuWIGirOjq3CDZQVbNKL59DGX+8
-         KwBkJvvAZyDV9mWgqU5MzNMKm3WQfvXJwc3Wx/dgjbC80w1QOsI+8rj4nKtp2UpK6PvE
-         eg8w==
-X-Gm-Message-State: AOAM530c2eJSKfHkeTkczze2kHe+rJmmsKrB7xeyV8BBCXk8OMWrJ8PN
-        Yu1RbvRb4zO4Yh5hECza+UqQvg==
-X-Google-Smtp-Source: ABdhPJwR2N+u+K9j7iPM2+1GWglyKrYfKEzX4BOqSiHVzkkl1iHtYSF19I0llUUVQg39c61v6cwhug==
-X-Received: by 2002:a17:90a:c58e:: with SMTP id l14mr4149412pjt.214.1637108899526;
-        Tue, 16 Nov 2021 16:28:19 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:bcd2:b839:9ed:baea])
-        by smtp.gmail.com with ESMTPSA id i11sm3269814pfu.50.2021.11.16.16.28.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Nov 2021 16:28:18 -0800 (PST)
-Date:   Tue, 16 Nov 2021 16:28:16 -0800
-From:   Brian Norris <briannorris@chromium.org>
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-Subject: Re: [PATCH v9 2/5] usb: dwc3: core: Host wake up support from system
- suspend
-Message-ID: <YZRMoNEZTy8XimIx@google.com>
-References: <1635753224-23975-1-git-send-email-quic_c_sanm@quicinc.com>
- <1635753224-23975-3-git-send-email-quic_c_sanm@quicinc.com>
+        with ESMTP id S230034AbhKQArk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Nov 2021 19:47:40 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CADC061570
+        for <linux-usb@vger.kernel.org>; Tue, 16 Nov 2021 16:44:42 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1mn944-0000YV-LH; Wed, 17 Nov 2021 01:44:40 +0100
+Received: from mgr by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1mn943-00Fn63-Om; Wed, 17 Nov 2021 01:44:39 +0100
+From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+To:     linux-usb@vger.kernel.org
+Cc:     balbi@kernel.org, laurent.pinchart@ideasonboard.com,
+        paul.elder@ideasonboard.com, kernel@pengutronix.de
+Subject: [PATCH v2 0/7] usb: gadget: uvc: use configfs entries for negotiation and v4l2 VIDIOCS
+Date:   Wed, 17 Nov 2021 01:44:25 +0100
+Message-Id: <20211117004432.3763306-1-m.grzeschik@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1635753224-23975-3-git-send-email-quic_c_sanm@quicinc.com>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 01, 2021 at 01:23:41PM +0530, Sandeep Maheswaram wrote:
-> Avoiding phy powerdown when wakeup capable devices are connected
-> by checking wakeup property of xhci plat device.
-> Phy should be on to wake up the device from suspend using wakeup capable
-> devices such as keyboard and mouse.
-> 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+This series improves the uvc video gadget by parsing the configfs
+entries. With the configfs data, the driver now is able to negotiate the
+format with the usb host in the kernel and also exports the supported
+frames/formats/intervals via the v4l2 VIDIOC interface.
 
-Because you've now factored in a device_may_wakeup() (which evaluates
-'false' for me), this no longer breaks my Rockchip RK3399 systems
-(previous versions did). So from that angle:
+The uvc userspace stack is also under development. One example is an generic
+v4l2uvcsink gstreamer elemnt, which is currently under duiscussion. [1]
 
-Tested-by: Brian Norris <briannorris@chromium.org>
+[1] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1304
 
-> ---
->  drivers/usb/dwc3/core.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 643239d..a6ad0ed 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1787,7 +1787,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  		dwc3_core_exit(dwc);
->  		break;
->  	case DWC3_GCTL_PRTCAP_HOST:
-> -		if (!PMSG_IS_AUTO(msg)) {
-> +		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(&dwc->xhci->dev)) {
+With the libusbgx library [1] used by the gadget-tool [2] it is now also
+possible to fully describe the configfs layout of the uvc gadget with scheme
+files.
 
-I still find it odd to use device_may_wakeup(), since that's something
-controlled by user space (sysfs) and doesn't fully factor in hardware
-support. But that's what xhci-plat.c is doing, so I guess I see why
-you're imitating it...
-...still, feels wrong to me. But so does a lot of how dwc3 works.
+[2] https://github.com/linux-usb-gadgets/libusbgx/pull/61/commits/53231c76f9d512f59fdc23b65cd5c46b7fb09eb4
 
-Brian
+[3] https://github.com/linux-usb-gadgets/gt/tree/master/examples/systemd
 
->  			dwc3_core_exit(dwc);
->  			break;
->  		}
-> @@ -1848,13 +1848,16 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
->  		spin_unlock_irqrestore(&dwc->lock, flags);
->  		break;
->  	case DWC3_GCTL_PRTCAP_HOST:
-> -		if (!PMSG_IS_AUTO(msg)) {
-> +		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(&dwc->xhci->dev)) {
->  			ret = dwc3_core_init_for_resume(dwc);
->  			if (ret)
->  				return ret;
->  			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
->  			break;
-> +		} else {
-> +			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
->  		}
-> +
->  		/* Restore GUSB2PHYCFG bits that were modified in suspend */
->  		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
->  		if (dwc->dis_u2_susphy_quirk)
-> -- 
-> 2.7.4
-> 
+The bigger picture of these patches is to provide a more versatile interface to
+the uvc gadget. The goal is to simply start a uvc-gadget with the following
+commands:
+
+$ gt load uvc.scheme
+$ gst-launch v4l2src ! v4l2uvcsink
+
+--
+
+v1: https://lore.kernel.org/linux-usb/20210530222239.8793-1-m.grzeschik@pengutronix.de/
+
+Regards,
+Michael
+
+Michael Grzeschik (7):
+  media: v4l: move helper functions for fractions from uvc to
+    v4l2-common
+  media: uvcvideo: move uvc_format_desc to common header
+  usb: gadget: uvc: prevent index variables to start from 0
+  usb: gadget: uvc: move structs to common header
+  usb: gadget: uvc: track frames in format entries
+  usb: gadget: uvc: add VIDIOC function
+  usb: gadget: uvc: add format/frame handling code
+
+ drivers/media/usb/uvc/uvc_ctrl.c           |   1 +
+ drivers/media/usb/uvc/uvc_driver.c         | 281 +---------------
+ drivers/media/usb/uvc/uvc_v4l2.c           |  14 +-
+ drivers/media/usb/uvc/uvcvideo.h           | 144 --------
+ drivers/media/v4l2-core/v4l2-common.c      |  82 +++++
+ drivers/usb/gadget/function/f_uvc.c        | 256 +++++++++++++-
+ drivers/usb/gadget/function/uvc.h          |  33 +-
+ drivers/usb/gadget/function/uvc_configfs.c | 153 +++------
+ drivers/usb/gadget/function/uvc_configfs.h | 125 ++++++-
+ drivers/usb/gadget/function/uvc_queue.c    |   4 +-
+ drivers/usb/gadget/function/uvc_v4l2.c     | 374 ++++++++++++++++++---
+ drivers/usb/gadget/function/uvc_video.c    |  72 +++-
+ include/media/v4l2-common.h                |   4 +
+ include/media/v4l2-uvc.h                   | 351 +++++++++++++++++++
+ 14 files changed, 1291 insertions(+), 603 deletions(-)
+ create mode 100644 include/media/v4l2-uvc.h
+
+-- 
+2.30.2
+
