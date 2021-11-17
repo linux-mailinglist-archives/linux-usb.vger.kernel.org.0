@@ -2,171 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 367EC454B9F
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Nov 2021 18:08:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43DC5454CF8
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Nov 2021 19:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232754AbhKQRLR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Nov 2021 12:11:17 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:50077 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S232645AbhKQRLR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Nov 2021 12:11:17 -0500
-Received: (qmail 176265 invoked by uid 1000); 17 Nov 2021 12:08:17 -0500
-Date:   Wed, 17 Nov 2021 12:08:17 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     David Niklas <Hgntkwis@vfemail.net>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-input@vger.kernel.org
-Subject: Re: I need advice with UPS connection. (ping)
-Message-ID: <20211117170817.GD172151@rowland.harvard.edu>
-References: <20201109220000.2ae98fa5@Phenom-II-x6.niklas.com>
- <20211114144842.72463ccc@Zen-II-x12.niklas.com>
- <20211114211435.GA87082@rowland.harvard.edu>
- <20211114220222.31755871@Zen-II-x12.niklas.com>
- <20211115160918.GB109771@rowland.harvard.edu>
- <20211117002359.03b36ec6@Zen-II-x12.niklas.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211117002359.03b36ec6@Zen-II-x12.niklas.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S239920AbhKQSXZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Nov 2021 13:23:25 -0500
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:59793 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239931AbhKQSXL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Nov 2021 13:23:11 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 3EDD83201464;
+        Wed, 17 Nov 2021 13:20:11 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute3.internal (MEProxy); Wed, 17 Nov 2021 13:20:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=mime-version:message-id:in-reply-to:references:date:from:to
+        :cc:subject:content-type; s=fm3; bh=t6XcJhp+2vBfE6NrxYwXwZsNDc9o
+        GAJ6HShxyu3Uu0M=; b=USsjOfF1YD6OT23l86ZZZ7Ro3ix9fiDQ5Rre/7/yd+g0
+        c+s2FFJJlUvNlYu2b1vJsi2n8I/779VQArh8lJhArx4Kz2Jy5trBbE70N6fVKXjQ
+        TZbAzYKoAMIe9T1C5vdZCi9g4S7ie5qW9ONQyNQQTRozEgLfiHtQ/vMV5qYYhfJz
+        JTlKGAwxMGHfPC5XG2+pHbKkO35NgngwPIm1GBhgZNWtRBKhxfJNyljPpiAm0jzf
+        G0CSc/2tCk4gDo4uslbSRYt5rTp60maNoMbC5PSxbQCnZs7WUJBBLQdCJbkLb6Ez
+        t7/IuldOwq5/Tc/29FQcqinbLhrDKQglUDr2bsT0kQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=t6XcJh
+        p+2vBfE6NrxYwXwZsNDc9oGAJ6HShxyu3Uu0M=; b=coIxL/IodzfoaU8r1N9Inn
+        CESwjNZbOr08aShc8gjxnNnU1g8jugGMXJQKi+9hzAQzG60ldUb2t6QjEtGfZ6kY
+        8km2/DBslArshbykY4KvGRDbJ7EumUkxTo7OBZDty/RqYDk4LzYsWUlXO9yU+8iS
+        Mt/r8JxlKblYAw8B/fc7fsvIpXsgM50Ng4tqZUFwE+Zw1cmxKq/ClKgOlJfWzDCv
+        yAKKq8z/IIwHF8Ul8rWFGRiLF7c53RT2jciM7FZZYiBeHCFrMor3wC4FAmuyxEzT
+        oYp8TtTG2H6uZeK5dQBkp/M8zIciR+muWS3CPk8qSiUNR+uiNB/vbVtP9aWlE3Qw
+        ==
+X-ME-Sender: <xms:2UeVYZDRM8hipnUZM0-b8300EZ211RDqrfbGwbTKYNBsJIwi_x223g>
+    <xme:2UeVYXi2DSVfnqJ8vxA1xWsNlLPzT-NgpevnEf3ejODyWGYS1BG8kc6VV8HEsR3MO
+    gOzdvUSlOJlo8Ygm-Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrfeeggddutdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
+    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
+    htthgvrhhnpefgieegieffuefhtedtjefgteejteefleefgfefgfdvvddtgffhffduhedv
+    feekffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:2UeVYUnZxlaZfT0z9-vgyO-xK-BXGxEF4YoB0TJhiax_Ed24dB6UuA>
+    <xmx:2UeVYTyGEXzk5hO1Y2iyj7Yt0cu2ULN0KJNT9Wvz1tNlENBTC1tqtA>
+    <xmx:2UeVYeTTo5V8B8I-AE2urJs1IoNVFkR4vFCTk1JgZ_CT9X9yOcRv_A>
+    <xmx:2keVYUNWlYQuZ1_yyzMU6uc79H-KqavJONDkQan5SrU-kJKVujyI8g>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id ED4B8274036A; Wed, 17 Nov 2021 13:20:09 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-1371-g2296cc3491-fm-20211109.003-g2296cc34
+Mime-Version: 1.0
+Message-Id: <7bac877d-1929-4caf-be8d-8405c5cfd3ba@www.fastmail.com>
+In-Reply-To: <20211117151450.207168-1-marcan@marcan.st>
+References: <20211117151450.207168-1-marcan@marcan.st>
+Date:   Wed, 17 Nov 2021 19:19:49 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Hector Martin" <marcan@marcan.st>,
+        "Heikki Krogerus" <heikki.krogerus@linux.intel.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     =?UTF-8?Q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>,
+        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] usb: typec: tipd: Fixes for Apple M1 (CD321X) support
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 17, 2021 at 12:23:59AM -0500, David Niklas wrote:
-> On Mon, 15 Nov 2021 11:09:18 -0500
-> stern@rowland.harvard.edu wrote:
-> <snip>
-> > You can test the theory by patching the kernel, if you want.  The code 
-> > to change is in the source file drivers/hid/usbhid/hid-core.c, and the 
-> > function in question is hid_set_idle() located around line 659 in the 
-> > file.  Just change the statement:
-> > 
-> > 	return usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
-> > 		HID_REQ_SET_IDLE, USB_TYPE_CLASS | USB_RECIP_INTERFACE,
-> > (idle << 8) | report, ifnum, NULL, 0, USB_CTRL_SET_TIMEOUT);
-> > 
-> > to:
-> > 
-> > 	return 0;
-> >
-> > to prevent the Set-Idle request from being sent.  If the device still 
-> > insists on disconnecting then we'll know that this wasn't the reason.
-> > 
-> 
-> Ok, so I changed out the line above with "__panic(2);" and now my PC just
-> reboots....    Teasing :D
-> That didn't seem to change anything. I'll attach another dump just in
-> case it reveals more.
+On Wed, Nov 17, 2021, at 16:14, Hector Martin wrote:
+> Hi folks,
+>
+> These two fixes make tipd work properly on Apple M1 devices, in
+> particular in the case where the bootloader hasn't initialized
+> the controllers yet.
+>
+> We normally do it in m1n1 (so the machine can charge and so bootloaders
+> get working USB without needing this driver), but that was causing this
+> codepath to never get properly exercised, so we never caught it. I
 
-It doesn't.  :-(  The Set-Idle request does not appear to be related to 
-the problem.
+My boot process usually is iBoot -> m1n1 on nvme -> m1n1 chainloaded over usb.
+I thought I exercised this path by turning off the init in m1n1. I didn't take
+into account that this would only affect the one loaded over usb and that
+the one on nvme would still intitialize everything.
+Thanks for fixing this!
 
-> > Also, if you have another system (say, one running Windows) which the 
-> > UPS does work properly with, you could try collecting the equivalent of 
-> > a usbmon trace from that system for purposes of comparison.  (On 
-> > Windows, I believe you can use Wireshark to trace USB communications.)
-> > 
-> 
-> Limitations of SW:
-> Wireshark works if you have windows in a virtual environment, but I don't
-> actually own... I mean license, any windowz products. I'm a straight
-> Luser.
-> So borrowed a windowz machine and plugged in the UPS. I then used USBPcap
-> to capture the data after installing the drivers. It has 4 things it can't
-> detect:
-> 
-> Bus states (Suspended, Power ON, Power OFF, Reset, High Speed Detection
-> Handshake)
-> Packet ID (PID)
-> Split transactions (CSPLIT, SSPLIT)
-> Duration of bus state and time used to transfer packet over the wire
-> Transfer speed (Low Speed, Full Speed, High Speed)
-> 
-> I'm 100% certain the last 2 we don't care about. IDK about the others.
+With the Fixes tags feel free to add
 
-I don't think they matter.  In principle the time delays might be 
-important, but I rather doubt it.
+Reviewed-by: Sven Peter <sven@svenpeter.dev>
 
-> Notes:
-> Here's the product page of my UPS.
-> https://www.newegg.com/opti-ups-ts2250b/p/N82E16842107014
-> The main webpage for USBPcap is here:
-> https://desowin.org/usbpcap/index.html
-> I can also try and use SnoopyPro and busdog if the output is undesirable.
-> USBPcap spits out a pcap file which can be analyzed by wireshark
-> using dissectors -- somehow (I really should practice using wireshark.)
+to both patches.
 
-Wireshark on my system has no trouble reading your pcap file.
-
-> Test and capture procedure:
-> When I installed the drivers it asked me where to look for the UPS. I
-> didn't tell it the USB port until after I started USBPcap and then
-> plugged in the UPS. Then the GUI opened up and I could see a lot of cool
-> controls like the battery power, loading, etc. The loading was 132W and
-> the battery was at 100%. Then I ran a self test (There's a button in the
-> GUI) and it worked fine. Then I unplugged the UPS and it crashed. Then I
-> plugged it back in. All --100%-- of this is in the pcap file.
-
-I'm just concentrating on the first part, up to the point where the 
-unwanted disconnects occurred with Linux.  So far as I can see, there 
-are only two significant differences between the usbmon and wireshark 
-traces:
-
-	The Windows system doesn't transfer any of the string 
-	descriptors during initial enumeration, whereas the Linux
-	system does.  While this might be relevant, I don't think it is.
-
-	When the Windows system requests the HID report descriptor from 
-	the device, it asks for 1060 bytes of data.  The Linux system
-	asks for only 996 bytes.  (Note: The descriptor is exactly
-	996 bytes long, and that's how much data the device sends in
-	either case.)
-
-It's entirely possible that this second discrepancy is somehow causing 
-the problem.  You can test this guess by applying the following patch:
-
---- usb-devel.orig/drivers/hid/usbhid/hid-core.c
-+++ usb-devel/drivers/hid/usbhid/hid-core.c
-@@ -667,13 +667,16 @@ static int hid_get_class_descriptor(stru
- 		unsigned char type, void *buf, int size)
- {
- 	int result, retries = 4;
-+	int size2 = size;
- 
-+	if (size == 996)
-+		size2 = 1060;
- 	memset(buf, 0, size);
- 
- 	do {
- 		result = usb_control_msg(dev, usb_rcvctrlpipe(dev, 0),
- 				USB_REQ_GET_DESCRIPTOR, USB_RECIP_INTERFACE | USB_DIR_IN,
--				(type << 8), ifnum, buf, size, USB_CTRL_GET_TIMEOUT);
-+				(type << 8), ifnum, buf, size2, USB_CTRL_GET_TIMEOUT);
- 		retries--;
- 	} while (result < size && retries);
- 	return result;
-
-This will cause the kernel to ask for 1060 bytes rather than 996.  (It's 
-also potentially dangerous, because it asks for 1060 bytes to be stored 
-into a 996-byte buffer; if the device sends more data than expected then 
-the excess will be written beyond the end of the buffer.)
-
-Please send a usbmon trace showing what happens with this patch applied.  
-And you might as well put the Set-Idle request back in, because now we 
-know Windows does send that request.
-
-> Results of:
-> After unplugging the UPS it's battery dropped to 22% and then it turned
-> off. My UPS is 2y and 5m old. It has a 3Y parts warranty. I guess I'll
-> see if they'll honor it.
-> 
-> 
-> 
-> 
-> I'm still interested in talking to it via my Linux PC, of course.
-
-Let's see if the patch will avert the disconnect.
-
-Alan Stern
+Sven
