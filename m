@@ -2,114 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB10D4549AE
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Nov 2021 16:15:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF18454A22
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Nov 2021 16:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233999AbhKQPSi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Nov 2021 10:18:38 -0500
-Received: from marcansoft.com ([212.63.210.85]:33188 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233940AbhKQPSR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 17 Nov 2021 10:18:17 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 5367041F5F;
-        Wed, 17 Nov 2021 15:15:15 +0000 (UTC)
-From:   Hector Martin <marcan@marcan.st>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sven Peter <sven@svenpeter.dev>
-Cc:     Hector Martin <marcan@marcan.st>,
-        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] usb: typec: tipd: Fix initialization sequence for cd321x
-Date:   Thu, 18 Nov 2021 00:14:50 +0900
-Message-Id: <20211117151450.207168-3-marcan@marcan.st>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211117151450.207168-1-marcan@marcan.st>
-References: <20211117151450.207168-1-marcan@marcan.st>
+        id S235967AbhKQPmp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Nov 2021 10:42:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235214AbhKQPmm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Nov 2021 10:42:42 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58446C061570;
+        Wed, 17 Nov 2021 07:39:43 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id 67-20020a1c1946000000b0030d4c90fa87so2464112wmz.2;
+        Wed, 17 Nov 2021 07:39:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AuJQYHplLClloH34kEvglpfeOlJKdLUFL/faIlnURqs=;
+        b=QFpzzjG2UpBSWHUyfseU0Y3i3+rS/0FUnXv8ZUH+iNTzAW9gISyuCz9WmHgP1QenyM
+         hEsUZ5IIvWEwr89kK3BSurRix+yYdgF7rsilPtO43ZaXJPw9kq95OK5LGfq8JTm8FgDh
+         6URuV8ZQweV7PTpPCCOjZszm82Z6BtQTapxpRKwim2Z/zD6+6WDJbnsItmVLAX+/gZ9v
+         1sSIG9ax/YBAI0UR1Xn425LsSNOo9GhO508FkdnCTsm8bt7ODoGXFSUDEwgHwjJgw1jE
+         vdG94jXeSmyPNdxqEMr28+7w/5xUjSYwCrpmVMfDIt6jLelpUSCJRr+LecdN78R993s7
+         vT+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AuJQYHplLClloH34kEvglpfeOlJKdLUFL/faIlnURqs=;
+        b=KiGh/5zAhbvtuBPfQPYGLGXYU/wgGirbhPPa35yo2vblxGwXzjpgRz3jpCAE9bU1ln
+         xnpQpmaN7OFMK4TNsU5g03MvZdWBB2MaQ+aXnDTCRxwPG4/OL/veCMePfB8nU/02zSoO
+         mRdOXu6V+QBGV3AR2cY7TssgkEfsgH+227NdR+gG6X1YV7Vqcwl/pYtMRX+3fmjFujJi
+         AFFYqHMD2o3GuAcsvmZgiSQkeqxppDD5Mq/Y61VKbhJyz+vNikPAjWU/GE45B5I8qGDD
+         nc0lxu01nI7Uhj52QtDQ0jzpT4SrcTNMCvkH7TUK7Aoyt+cQIgXUcSwVpwPmGQz2rgLn
+         lwNw==
+X-Gm-Message-State: AOAM533R/LRoCoQ+vYux9htQyzOJuww+UVGqxhysX+lUjJNsNXqYvllo
+        wNIx2888ooQRr0em+l+d1Q4=
+X-Google-Smtp-Source: ABdhPJxt436RYGl1PlAoi3XeorePlbRfnavbllNp8/73UeAo6VoKeGKr4Dm912w/JIxVDxO3qD/40g==
+X-Received: by 2002:a1c:19c5:: with SMTP id 188mr651161wmz.145.1637163581900;
+        Wed, 17 Nov 2021 07:39:41 -0800 (PST)
+Received: from [192.168.0.18] (static-160-219-86-188.ipcom.comunitel.net. [188.86.219.160])
+        by smtp.gmail.com with ESMTPSA id c4sm220035wrr.37.2021.11.17.07.39.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Nov 2021 07:39:41 -0800 (PST)
+Message-ID: <138878d2-e346-931b-69ee-54277fa5647b@gmail.com>
+Date:   Wed, 17 Nov 2021 16:39:40 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 2/3] usb: xhci-mtk: add support ip-sleep wakeup for mt8195
+Content-Language: en-US
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211102060049.1843-1-chunfeng.yun@mediatek.com>
+ <20211102060049.1843-2-chunfeng.yun@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20211102060049.1843-2-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The power state switch needs to happen first, as that
-kickstarts the firmware into normal mode.
 
-Signed-off-by: Hector Martin <marcan@marcan.st>
----
- drivers/usb/typec/tipd/core.c | 33 ++++++++++++++++-----------------
- 1 file changed, 16 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index 4da5a0b2aed2..6d27a5b5e3ca 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -707,6 +707,7 @@ static int tps6598x_probe(struct i2c_client *client)
- 	u32 conf;
- 	u32 vid;
- 	int ret;
-+	u64 mask1;
- 
- 	tps = devm_kzalloc(&client->dev, sizeof(*tps), GFP_KERNEL);
- 	if (!tps)
-@@ -730,11 +731,6 @@ static int tps6598x_probe(struct i2c_client *client)
- 	if (i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
- 		tps->i2c_protocol = true;
- 
--	/* Make sure the controller has application firmware running */
--	ret = tps6598x_check_mode(tps);
--	if (ret)
--		return ret;
--
- 	if (np && of_device_is_compatible(np, "apple,cd321x")) {
- 		/* Switch CD321X chips to the correct system power state */
- 		ret = cd321x_switch_power_state(tps, TPS_SYSTEM_POWER_STATE_S0);
-@@ -742,24 +738,27 @@ static int tps6598x_probe(struct i2c_client *client)
- 			return ret;
- 
- 		/* CD321X chips have all interrupts masked initially */
--		ret = tps6598x_write64(tps, TPS_REG_INT_MASK1,
--					APPLE_CD_REG_INT_POWER_STATUS_UPDATE |
--					APPLE_CD_REG_INT_DATA_STATUS_UPDATE |
--					APPLE_CD_REG_INT_PLUG_EVENT);
--		if (ret)
--			return ret;
-+		mask1 = APPLE_CD_REG_INT_POWER_STATUS_UPDATE |
-+			APPLE_CD_REG_INT_DATA_STATUS_UPDATE |
-+			APPLE_CD_REG_INT_PLUG_EVENT;
- 
- 		irq_handler = cd321x_interrupt;
- 	} else {
- 		/* Enable power status, data status and plug event interrupts */
--		ret = tps6598x_write64(tps, TPS_REG_INT_MASK1,
--				       TPS_REG_INT_POWER_STATUS_UPDATE |
--				       TPS_REG_INT_DATA_STATUS_UPDATE |
--				       TPS_REG_INT_PLUG_EVENT);
--		if (ret)
--			return ret;
-+		mask1 = TPS_REG_INT_POWER_STATUS_UPDATE |
-+			TPS_REG_INT_DATA_STATUS_UPDATE |
-+			TPS_REG_INT_PLUG_EVENT;
- 	}
- 
-+	/* Make sure the controller has application firmware running */
-+	ret = tps6598x_check_mode(tps);
-+	if (ret)
-+		return ret;
-+
-+	ret = tps6598x_write64(tps, TPS_REG_INT_MASK1, mask1);
-+	if (ret)
-+		return ret;
-+
- 	ret = tps6598x_read32(tps, TPS_REG_STATUS, &status);
- 	if (ret < 0)
- 		return ret;
--- 
-2.33.0
+On 02/11/2021 07:00, Chunfeng Yun wrote:
+> Add support ip-sleep wakeup for mt8195, it's a specific revision for
+> each USB controller, and not following IPM rule.
+> 
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+
+> ---
+>   drivers/usb/host/xhci-mtk.c | 37 +++++++++++++++++++++++++++++++++++++
+>   1 file changed, 37 insertions(+)
+> 
+> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
+> index c53f6f276d5c..63f4b6984667 100644
+> --- a/drivers/usb/host/xhci-mtk.c
+> +++ b/drivers/usb/host/xhci-mtk.c
+> @@ -95,6 +95,19 @@
+>   #define WC0_SSUSB0_CDEN		BIT(6)
+>   #define WC0_IS_SPM_EN		BIT(1)
+>   
+> +/* mt8195 */
+> +#define PERI_WK_CTRL0_8195	0x04
+> +#define WC0_IS_P_95		BIT(30)	/* polarity */
+> +#define WC0_IS_C_95(x)		((u32)(((x) & 0x7) << 27))
+> +#define WC0_IS_EN_P3_95		BIT(26)
+> +#define WC0_IS_EN_P2_95		BIT(25)
+> +#define WC0_IS_EN_P1_95		BIT(24)
+> +
+> +#define PERI_WK_CTRL1_8195	0x20
+> +#define WC1_IS_C_95(x)		((u32)(((x) & 0xf) << 28))
+> +#define WC1_IS_P_95		BIT(12)
+> +#define WC1_IS_EN_P0_95		BIT(6)
+> +
+>   /* mt2712 etc */
+>   #define PERI_SSUSB_SPM_CTRL	0x0
+>   #define SSC_IP_SLEEP_EN	BIT(4)
+> @@ -105,6 +118,10 @@ enum ssusb_uwk_vers {
+>   	SSUSB_UWK_V2,
+>   	SSUSB_UWK_V1_1 = 101,	/* specific revision 1.01 */
+>   	SSUSB_UWK_V1_2,		/* specific revision 1.2 */
+> +	SSUSB_UWK_V1_3,		/* mt8195 IP0 */
+> +	SSUSB_UWK_V1_4,		/* mt8195 IP1 */
+> +	SSUSB_UWK_V1_5,		/* mt8195 IP2 */
+> +	SSUSB_UWK_V1_6,		/* mt8195 IP3 */
+>   };
+>   
+>   /*
+> @@ -307,6 +324,26 @@ static void usb_wakeup_ip_sleep_set(struct xhci_hcd_mtk *mtk, bool enable)
+>   		msk = WC0_SSUSB0_CDEN | WC0_IS_SPM_EN;
+>   		val = enable ? msk : 0;
+>   		break;
+> +	case SSUSB_UWK_V1_3:
+> +		reg = mtk->uwk_reg_base + PERI_WK_CTRL1_8195;
+> +		msk = WC1_IS_EN_P0_95 | WC1_IS_C_95(0xf) | WC1_IS_P_95;
+> +		val = enable ? (WC1_IS_EN_P0_95 | WC1_IS_C_95(0x1)) : 0;
+> +		break;
+> +	case SSUSB_UWK_V1_4:
+> +		reg = mtk->uwk_reg_base + PERI_WK_CTRL0_8195;
+> +		msk = WC0_IS_EN_P1_95 | WC0_IS_C_95(0x7) | WC0_IS_P_95;
+> +		val = enable ? (WC0_IS_EN_P1_95 | WC0_IS_C_95(0x1)) : 0;
+> +		break;
+> +	case SSUSB_UWK_V1_5:
+> +		reg = mtk->uwk_reg_base + PERI_WK_CTRL0_8195;
+> +		msk = WC0_IS_EN_P2_95 | WC0_IS_C_95(0x7) | WC0_IS_P_95;
+> +		val = enable ? (WC0_IS_EN_P2_95 | WC0_IS_C_95(0x1)) : 0;
+> +		break;
+> +	case SSUSB_UWK_V1_6:
+> +		reg = mtk->uwk_reg_base + PERI_WK_CTRL0_8195;
+> +		msk = WC0_IS_EN_P3_95 | WC0_IS_C_95(0x7) | WC0_IS_P_95;
+> +		val = enable ? (WC0_IS_EN_P3_95 | WC0_IS_C_95(0x1)) : 0;
+> +		break;
+>   	case SSUSB_UWK_V2:
+>   		reg = mtk->uwk_reg_base + PERI_SSUSB_SPM_CTRL;
+>   		msk = SSC_IP_SLEEP_EN | SSC_SPM_INT_EN;
+> 
