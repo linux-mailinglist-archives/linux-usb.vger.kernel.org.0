@@ -2,192 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6148245610E
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Nov 2021 18:01:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8426D456148
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Nov 2021 18:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbhKRRE1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Nov 2021 12:04:27 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:47070 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbhKRREZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Nov 2021 12:04:25 -0500
-Received: by mail-il1-f197.google.com with SMTP id a5-20020a92c545000000b0026b54ead1b1so4485659ilj.13
-        for <linux-usb@vger.kernel.org>; Thu, 18 Nov 2021 09:01:24 -0800 (PST)
+        id S234022AbhKRRTR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Nov 2021 12:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234001AbhKRRTR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Nov 2021 12:19:17 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EA9C06173E
+        for <linux-usb@vger.kernel.org>; Thu, 18 Nov 2021 09:16:16 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id u11so5825389plf.3
+        for <linux-usb@vger.kernel.org>; Thu, 18 Nov 2021 09:16:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FndYr0qwU2GRfRJE7/Zc89ZCgTNkWQJ8LHvpWcp9GA0=;
+        b=Ju1LRNiA/W27gB9xy5brMPAbwNd4NIS3O7OF0tQibcdx032Yx3q/JWBgfrbj1EqMkv
+         hv06mzH/wUfCORLxtFPCTXHRUlKNvNmhX5HS15pGodQhDjmbZ6x6SJ7YLG2nKfjSsN7C
+         K3lvdbNgasHvN50bbOnOWjxuF3XPJFtWoTEs8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=AcEQ5AyPDXAvRBlZrRoMQauSLu6R4MYiaS+FBuAr3Ck=;
-        b=Yno+SQt6UsbhEDAhpMLcLS6Oi7DcR6hjttyuGhwODK3CQHn7g2HfbFKUXAnH1BZV0U
-         S7pBh4ZY4rSJNZTe4uf8aIyPu4Iznda95kOsaJfJSUPiTM8NEjyHRyHvG9/BbthR/nBr
-         wc4BEBENJmWG2Dn/b1uz24QhxOokCDe6hWLogwgMg803d4c3ay3N3k5P4dT3OKWV5/D7
-         U34eojNzvmW1jilPHPB8L/jModeL4YMFgCxdV+MLKRGaTYtyY4RVt85CZt7Joh1mzG8n
-         hAwfFtj5RhJ2EZQJ+7hXGHAJpC864EtUTyK5jKjrwhjt2g+q9SCeWxIGq7vNZFhzr4EJ
-         eXmA==
-X-Gm-Message-State: AOAM530YAV5dgCclkQZK9zLG4p4XaSv9mCBk+0dafwf/qkrnqhY22OQD
-        /KpMcc7bVRssZSIGHFiB2QNc2dI7gsm2rJE0g0sEXq0Sef1U
-X-Google-Smtp-Source: ABdhPJz3pYu0fNXBC+ch96afAk1p4GEt0LoPIhRo0LwaTr6/09S/sXp60LRoIBz7OGCSpWQQLJ7MRof0Tg2q8VlaCxIZblNUFAf8
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FndYr0qwU2GRfRJE7/Zc89ZCgTNkWQJ8LHvpWcp9GA0=;
+        b=6IhCQNJVc+s7N6ky+b9udcJmnOWm2KHYJP+RRb+htga3uhhpOGpu/3yMgNuPc7CnWj
+         1OFuL1tAGBni7Y1Gu41auwXrzpAtxx25ij0iReLitQ4spape3C4n4qX0RKBOfkNJcOST
+         pHlm58FbOeO6QlnvnZRc3vV4jLp2AU1rHVQPgirCunJz9ZwDJGOA0ibGE7xiUF/EeZlG
+         MySPJb0KZcD1xvv52UoIexX4i8tUndbDc3+tUpQfSOyGjvdY1IlsP1TSSWVRefGSBT1s
+         /JN8tUBdFNK1lC3E+fAVSMiwB5HHK5cDKrvl4n34qByfR2F2lPpfSbIi8uH2y3AVOrOG
+         HErQ==
+X-Gm-Message-State: AOAM532tt0d0LIAJkXMgMADBaUW2rQDE7b0gIJNgMI9L7a+5btJL1OnJ
+        ou2zbSoC6BCBysywqBVqQgSLkw==
+X-Google-Smtp-Source: ABdhPJy+MBB6lHWPY8+YDrYXHI/xPNJN9EJi9uDlOmPn4pR0RXebX/Mx/tnu+yfFjq9XXjvqeAmu0Q==
+X-Received: by 2002:a17:90b:97:: with SMTP id bb23mr12331985pjb.201.1637255776529;
+        Thu, 18 Nov 2021 09:16:16 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:8ceb:c68a:21af:bebe])
+        by smtp.gmail.com with UTF8SMTPSA id k3sm190564pff.211.2021.11.18.09.16.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Nov 2021 09:16:16 -0800 (PST)
+Date:   Thu, 18 Nov 2021 09:16:14 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Peter Chen <peter.chen@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v17 7/7] usb: Specify dependencies on USB_XHCI_PLATFORM
+ with 'depends on'
+Message-ID: <YZaKXtRW7oO1SNbG@google.com>
+References: <20211116200739.924401-1-mka@chromium.org>
+ <20211116120642.v17.7.If248f05613bbb06a44eb0b0909be5d97218f417b@changeid>
+ <20211117022144.GA158646@rowland.harvard.edu>
 MIME-Version: 1.0
-X-Received: by 2002:a92:d24e:: with SMTP id v14mr365927ilg.55.1637254884388;
- Thu, 18 Nov 2021 09:01:24 -0800 (PST)
-Date:   Thu, 18 Nov 2021 09:01:24 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ca75a205d1131b87@google.com>
-Subject: [syzbot] KASAN: slab-out-of-bounds Read in copy_urb_data_to_user
-From:   syzbot <syzbot+6dc37929ddaf9d677b2b@syzkaller.appspotmail.com>
-To:     g@b4.vu, gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211117022144.GA158646@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Tue, Nov 16, 2021 at 09:21:44PM -0500, Alan Stern wrote:
+> On Tue, Nov 16, 2021 at 12:07:39PM -0800, Matthias Kaehlcke wrote:
+> > Some USB controller drivers that depend on the xhci-plat driver
+> > specify this dependency using 'select' in Kconfig. This is not
+> > recommended for symbols that have other dependencies as it may
+> > lead to invalid configurations. Use 'depends on' to specify the
+> > dependency instead of 'select'.
+> > 
+> > For dwc3 specify the dependency on USB_XHCI_PLATFORM in
+> > USB_DWC3_HOST and USB_DWC3_DUAL_ROLE. Also adjust the
+> > dependencies of USB_DWC3_CORE to make sure that at least one
+> > of USB_DWC3_HOST, USB_DWC3_GADGET or USB_DWC3_DUAL_ROLE can be
+> > selected.
+> > 
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > Reviewed-by: Roger Quadros <rogerq@kernel.org>
+> > Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> > ---
+> > 
+> > Changes in v17:
+> > - removed explicit dependency on USB from USB_DWC3
+> > - added 'Reviewed-by' tags from Roger and Doug
+> > 
+> > Changes in v16:
+> > - none
+> > 
+> > Changes in v15:
+> > - adjusted dependencies of USB_DWC3_CORE to make sure it can only
+> >   be enabled when at least one of USB_DWC3_HOST, USB_DWC3_GADGET
+> >   or USB_DWC3_DUAL_ROLE is selectable
+> > - updated commit message
+> > 
+> > Changes in v14:
+> > - none
+> > 
+> > Changes in v13:
+> > - patch added to the series
+> 
+> > diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+> > index d1d926f8f9c2..e5e612f143a1 100644
+> > --- a/drivers/usb/host/Kconfig
+> > +++ b/drivers/usb/host/Kconfig
+> > @@ -80,7 +80,7 @@ config USB_XHCI_MTK
+> >  
+> >  config USB_XHCI_MVEBU
+> >  	tristate "xHCI support for Marvell Armada 375/38x/37xx"
+> > -	select USB_XHCI_PLATFORM
+> > +	depends on USB_XHCI_PLATFORM
+> >  	depends on HAS_IOMEM
+> >  	depends on ARCH_MVEBU || COMPILE_TEST
+> >  	help
+> > @@ -112,9 +112,9 @@ config USB_EHCI_BRCMSTB
+> >  config USB_BRCMSTB
+> >  	tristate "Broadcom STB USB support"
+> >  	depends on (ARCH_BRCMSTB && PHY_BRCM_USB) || COMPILE_TEST
+> > +	depends on !USB_XHCI_HCD || USB_XHCI_PLATFORM
+> >  	select USB_OHCI_HCD_PLATFORM if USB_OHCI_HCD
+> >  	select USB_EHCI_BRCMSTB if USB_EHCI_HCD
+> > -	select USB_XHCI_PLATFORM if USB_XHCI_HCD
+> >  	help
+> >  	  Enables support for XHCI, EHCI and OHCI host controllers
+> >  	  found in Broadcom STB SoC's.
+> 
+> It should be pointed out that this now requires people with xHCI systems 
+> to actively turn on CONFIG_USB_XHCI_PLATFORM before they can enable 
+> CONFIG_USB_BRCMSTB.  Before, that was not necessary.  Some users might 
+> get confused and not realize what is needed.  Perhaps something should 
+> be added to the "help" text.
 
-syzbot found the following issue on:
+I agree that the change could cause confusion, I'm not sure though if
+adding something to the "help" text is a good mitigation. Users won't see
+the text unless they can select the option, which requires
+CONFIG_USB_XHCI_PLATFORM to be enabled. Also the dependencies are specified
+nearby (and displayed), so it seems similar to a code comment on something
+that the code evidently does (e.g. "initialize foobar with 0").
 
-HEAD commit:    c8c109546a19 Merge tag 'zstd-for-linus-v5.16' of git://git..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17745dd6b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a262045c4c15a9e0
-dashboard link: https://syzkaller.appspot.com/bug?extid=6dc37929ddaf9d677b2b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6dc37929ddaf9d677b2b@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: slab-out-of-bounds in instrument_copy_to_user include/linux/instrumented.h:118 [inline]
-BUG: KASAN: slab-out-of-bounds in _copy_to_user lib/usercopy.c:32 [inline]
-BUG: KASAN: slab-out-of-bounds in _copy_to_user+0xc7/0x150 lib/usercopy.c:26
-Read of size 2 at addr ffff88803545b460 by task syz-executor.0/6756
-
-CPU: 0 PID: 6756 Comm: syz-executor.0 Not tainted 5.15.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0x8d/0x320 mm/kasan/report.c:247
- __kasan_report mm/kasan/report.c:433 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:450
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_copy_to_user include/linux/instrumented.h:118 [inline]
- _copy_to_user lib/usercopy.c:32 [inline]
- _copy_to_user+0xc7/0x150 lib/usercopy.c:26
- copy_to_user include/linux/uaccess.h:200 [inline]
- copy_urb_data_to_user+0x34c/0x400 drivers/usb/core/devio.c:544
- processcompl+0x5ab/0x680 drivers/usb/core/devio.c:2024
- proc_reapurbnonblock drivers/usb/core/devio.c:2101 [inline]
- usbdev_do_ioctl drivers/usb/core/devio.c:2594 [inline]
- usbdev_ioctl+0x2d7/0x36c0 drivers/usb/core/devio.c:2791
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f1326280ae9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f13237d5188 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f1326394020 RCX: 00007f1326280ae9
-RDX: 0000000020000080 RSI: 000000004008550d RDI: 0000000000000004
-RBP: 00007f13262daf6d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007f13268c7b2f R14: 00007f13237d5300 R15: 0000000000022000
- </TASK>
-
-Allocated by task 6748:
- kasan_save_stack+0x1e/0x50 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:46 [inline]
- set_alloc_info mm/kasan/common.c:434 [inline]
- ____kasan_kmalloc mm/kasan/common.c:513 [inline]
- ____kasan_kmalloc mm/kasan/common.c:472 [inline]
- __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:522
- kmalloc include/linux/slab.h:595 [inline]
- proc_do_submiturb+0x2a7d/0x3630 drivers/usb/core/devio.c:1816
- proc_submiturb drivers/usb/core/devio.c:1975 [inline]
- usbdev_do_ioctl drivers/usb/core/devio.c:2671 [inline]
- usbdev_ioctl+0x692/0x36c0 drivers/usb/core/devio.c:2791
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The buggy address belongs to the object at ffff88803545b460
- which belongs to the cache kmalloc-8 of size 8
-The buggy address is located 0 bytes inside of
- 8-byte region [ffff88803545b460, ffff88803545b468)
-The buggy address belongs to the page:
-page:ffffea0000d516c0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x3545b
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffffea000221b6c0 dead000000000002 ffff888010c41280
-raw: 0000000000000000 0000000080660066 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 25813, ts 1988498379208, free_ts 1988486053407
- prep_new_page mm/page_alloc.c:2418 [inline]
- get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4149
- __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5369
- alloc_pages+0x1a7/0x300 mm/mempolicy.c:2191
- alloc_slab_page mm/slub.c:1793 [inline]
- allocate_slab mm/slub.c:1930 [inline]
- new_slab+0x32d/0x4a0 mm/slub.c:1993
- ___slab_alloc+0x918/0xfe0 mm/slub.c:3022
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3109
- slab_alloc_node mm/slub.c:3200 [inline]
- slab_alloc mm/slub.c:3242 [inline]
- __kmalloc_track_caller+0x2e7/0x320 mm/slub.c:4925
- kmemdup+0x23/0x50 mm/util.c:128
- kmemdup include/linux/fortify-string.h:304 [inline]
- ip6_opt_dup net/ipv6/ip6_output.c:1318 [inline]
- ip6_setup_cork+0x686/0x1780 net/ipv6/ip6_output.c:1384
- ip6_make_skb+0x22d/0x550 net/ipv6/ip6_output.c:1983
- udpv6_sendmsg+0x22d6/0x2c40 net/ipv6/udp.c:1541
- inet6_sendmsg+0x99/0xe0 net/ipv6/af_inet6.c:644
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:724
- ____sys_sendmsg+0x331/0x810 net/socket.c:2409
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2463
- __sys_sendmmsg+0x195/0x470 net/socket.c:2549
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1338 [inline]
- free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1389
- free_unref_page_prepare mm/page_alloc.c:3309 [inline]
- free_unref_page+0x19/0x690 mm/page_alloc.c:3388
- mm_free_pgd kernel/fork.c:647 [inline]
- __mmdrop+0xcb/0x3f0 kernel/fork.c:698
- mmdrop include/linux/sched/mm.h:49 [inline]
- __mmput+0x3f1/0x4b0 kernel/fork.c:1123
- mmput+0x56/0x60 kernel/fork.c:1134
- free_bprm+0x65/0x2e0 fs/exec.c:1481
- kernel_execve+0x380/0x460 fs/exec.c:1978
- call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-Memory state around the buggy address:
- ffff88803545b300: fc fc fc fc fa fc fc fc fc fb fc fc fc fc 00 fc
- ffff88803545b380: fc fc fc fa fc fc fc fc fa fc fc fc fc fa fc fc
->ffff88803545b400: fc fc fb fc fc fc fc fa fc fc fc fc 01 fc fc fc
-                                                       ^
- ffff88803545b480: fc 00 fc fc fc fc 00 fc fc fc fc 00 fc fc fc fc
- ffff88803545b500: fa fc fc fc fc fa fc fc fc fc fa fc fc fc fc fa
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+On a different note: I'm considering to break the CONFIG_USB_XHCI_PLATFORM
+related patches out of the onboard_usb_hub series, since the driver
+doesn't any longer depend on xhci_plat. In that sense I'm also open
+to abandon those patches, if they aren't considered an improvement on
+their own.
