@@ -2,170 +2,209 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC0DB455210
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Nov 2021 02:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B274552BC
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Nov 2021 03:28:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242168AbhKRBTR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Nov 2021 20:19:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242162AbhKRBTP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Nov 2021 20:19:15 -0500
-Received: from hz.preining.info (hz.preining.info [IPv6:2a01:4f9:2a:1a08::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A383C061570;
-        Wed, 17 Nov 2021 17:16:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=preining.info; s=201909; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3hXJGY24NI7G4XU0T1oCc+5EesCfCIfsM2ayVoqTu+E=; b=Ald4o4x2LjlweAwuFNXKr0IijF
-        t4NYHA/6KzSyPf8SBZ5VziHZRcDy+raJ0y2GsGEGpjemMSDCvnnpiEaB4lVXbcvmSbuFZzp6SfAl1
-        DD+5fvr5c3rOXXPbCf6BzJAziOEJ3G7nQReusAGEhU7siDZPESOfawMFpX6r7uX1OsJf5rR1+h3Gs
-        L1A52+qNvbpq6PYph5GJCN336al7HJUGuZGUz7K6erWGMW5b7LvA2s37cDHoENUSur0nY2zRxToNw
-        Dw/FSuC3sBTeYNlrow1+Ewee29pewoTN35DPNVmVQw/4C3m8q4mjfXu1Oi9wbuKFAZpiPiOXS0WJr
-        kH2glRVg==;
-Received: from tvk213002.tvk.ne.jp ([180.94.213.2] helo=bulldog.preining.info)
-        by hz.preining.info with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <norbert@preining.info>)
-        id 1mnW29-0004kc-1o; Thu, 18 Nov 2021 01:16:13 +0000
-Received: by bulldog.preining.info (Postfix, from userid 1000)
-        id CBEBD1A5AE695; Thu, 18 Nov 2021 10:16:09 +0900 (JST)
-Date:   Thu, 18 Nov 2021 10:16:09 +0900
-From:   Norbert Preining <norbert@preining.info>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [5.12 - 5.15] xHCI controller dead - not renesas but intel
-Message-ID: <YZWpWZsQ7uu4NvdW@bulldog.preining.info>
-References: <YY3RIdKBbIL3Dw/q@bulldog.preining.info>
- <8f752efb-e38e-b012-de98-e4b938dde7b7@linux.intel.com>
+        id S240630AbhKRCba (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Nov 2021 21:31:30 -0500
+Received: from mga14.intel.com ([192.55.52.115]:11136 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239637AbhKRCb2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 17 Nov 2021 21:31:28 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10171"; a="234337991"
+X-IronPort-AV: E=Sophos;i="5.87,243,1631602800"; 
+   d="scan'208";a="234337991"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2021 18:28:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,243,1631602800"; 
+   d="scan'208";a="736468951"
+Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 17 Nov 2021 18:28:28 -0800
+Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mnXA3-0002ZG-HB; Thu, 18 Nov 2021 02:28:27 +0000
+Date:   Thu, 18 Nov 2021 10:27:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 4616dddcfaf75cfbfbff7ce8a468038c697444ce
+Message-ID: <6195ba2d.WfcAPhV2LsTc4c5+%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8f752efb-e38e-b012-de98-e4b938dde7b7@linux.intel.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias, hi all,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 4616dddcfaf75cfbfbff7ce8a468038c697444ce  usb: typec: ucsi: Expose number of alternate modes in partner
 
-(please cc, thanks)
+elapsed time: 729m
 
-> Patch in link below resolved another case with similar log. 
-> Does it help in your case?
+configs tested: 149
+configs skipped: 3
 
-Unfortunately not, happened again after redirecting a web cam to a
-virtual machine, then removing the redirection and shutting down the VM.
-After that, boom.
-Nov 18 09:49:37 bulldog systemd-machined[1806]: Machine qemu-3-FujitsuWin10 terminated.
-Nov 18 09:49:43 bulldog kernel: xhci_hcd 0000:00:14.0: Abort failed to stop command ring: -110
-Nov 18 09:49:43 bulldog kernel: xhci_hcd 0000:00:14.0: xHCI host controller not responding, assume dead
-Nov 18 09:49:43 bulldog kernel: xhci_hcd 0000:00:14.0: HC died; cleaning up
-Nov 18 09:49:43 bulldog kernel: xhci_hcd 0000:00:14.0: Timeout while waiting for setup device command
-Nov 18 09:49:43 bulldog kernel: xhci_hcd 0000:00:14.0: xHCI host not responding to stop endpoint command.
-Nov 18 09:49:43 bulldog kernel: xhci_hcd 0000:00:14.0: USBSTS: HCHalted EINT
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-After that, I logged into the machine via ssh, and send unbind / bind
-requests:
-        echo -n "0000:14:00.0" > /sys/bus/pci/drivers/xhci_hcd/unbind
-gave
-Nov 18 09:54:48 bulldog kernel: xhci_hcd 0000:00:14.0: remove, state 4
-Nov 18 09:54:48 bulldog kernel: usb usb2: USB disconnect, device number 1
-Nov 18 09:54:48 bulldog kernel: xhci_hcd 0000:00:14.0: USB bus 2 deregistered
-Nov 18 09:54:48 bulldog kernel: xhci_hcd 0000:00:14.0: remove, state 1
-Nov 18 09:54:48 bulldog kernel: usb usb1: USB disconnect, device number 1
-Nov 18 09:54:48 bulldog kernel: xhci_hcd 0000:00:14.0: USB bus 1 deregistered
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211117
+sh                ecovec24-romimage_defconfig
+m68k                          multi_defconfig
+powerpc                 mpc85xx_cds_defconfig
+arm                      jornada720_defconfig
+sh                          rsk7269_defconfig
+riscv                            alldefconfig
+alpha                               defconfig
+powerpc                     stx_gp3_defconfig
+arc                     nsimosci_hs_defconfig
+powerpc                      pasemi_defconfig
+mips                           jazz_defconfig
+mips                malta_qemu_32r6_defconfig
+sparc                       sparc64_defconfig
+i386                                defconfig
+sh                          kfr2r09_defconfig
+riscv                             allnoconfig
+mips                          ath79_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                    ge_imp3a_defconfig
+um                           x86_64_defconfig
+sh                   secureedge5410_defconfig
+s390                             allmodconfig
+mips                      loongson3_defconfig
+sh                   sh7724_generic_defconfig
+mips                      malta_kvm_defconfig
+powerpc                 mpc832x_mds_defconfig
+h8300                    h8300h-sim_defconfig
+m68k                           sun3_defconfig
+sh                          lboxre2_defconfig
+powerpc                     akebono_defconfig
+powerpc                      chrp32_defconfig
+powerpc                mpc7448_hpc2_defconfig
+sh                              ul2_defconfig
+powerpc                    socrates_defconfig
+powerpc                    klondike_defconfig
+sh                          sdk7786_defconfig
+arm                        mvebu_v5_defconfig
+arm                          iop32x_defconfig
+mips                      fuloong2e_defconfig
+ia64                          tiger_defconfig
+csky                             alldefconfig
+csky                                defconfig
+sh                             espt_defconfig
+arm                         lubbock_defconfig
+mips                        bcm47xx_defconfig
+arm                          simpad_defconfig
+um                             i386_defconfig
+powerpc                       holly_defconfig
+xtensa                              defconfig
+arm                            mps2_defconfig
+arm                          collie_defconfig
+sh                        edosk7705_defconfig
+powerpc                      tqm8xx_defconfig
+powerpc                  mpc866_ads_defconfig
+arm                         s3c6400_defconfig
+powerpc                      ppc6xx_defconfig
+powerpc                     tqm8560_defconfig
+mips                           mtx1_defconfig
+parisc                generic-64bit_defconfig
+powerpc                     asp8347_defconfig
+arm                           stm32_defconfig
+arm                        magician_defconfig
+arm                         assabet_defconfig
+mips                         tb0287_defconfig
+powerpc64                           defconfig
+powerpc                      acadia_defconfig
+arm                       versatile_defconfig
+arm                            dove_defconfig
+arm                  randconfig-c002-20211117
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a005-20211117
+x86_64               randconfig-a003-20211117
+x86_64               randconfig-a002-20211117
+x86_64               randconfig-a001-20211117
+x86_64               randconfig-a006-20211117
+x86_64               randconfig-a004-20211117
+i386                 randconfig-a006-20211117
+i386                 randconfig-a003-20211117
+i386                 randconfig-a005-20211117
+i386                 randconfig-a001-20211117
+i386                 randconfig-a004-20211117
+i386                 randconfig-a002-20211117
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-and then
-        echo -n "0000:14:00.0" > /sys/bus/pci/drivers/xhci_hcd/bind
-gave
-Nov 18 09:55:00 bulldog kernel: xhci_hcd 0000:00:14.0: xHCI Host Controller
-Nov 18 09:55:00 bulldog kernel: xhci_hcd 0000:00:14.0: new USB bus registered, assigned bus number 1
-Nov 18 09:55:00 bulldog kernel: xhci_hcd 0000:00:14.0: hcc params 0x200077c1 hci version 0x100 quirks 0x0000000001109810
-...
+clang tested configs:
+x86_64               randconfig-c007-20211117
+i386                 randconfig-c001-20211117
+arm                  randconfig-c002-20211117
+riscv                randconfig-c006-20211117
+powerpc              randconfig-c003-20211117
+s390                 randconfig-c005-20211117
+mips                 randconfig-c004-20211117
+x86_64               randconfig-a015-20211117
+x86_64               randconfig-a013-20211117
+x86_64               randconfig-a011-20211117
+x86_64               randconfig-a012-20211117
+x86_64               randconfig-a016-20211117
+x86_64               randconfig-a014-20211117
+i386                 randconfig-a014-20211117
+i386                 randconfig-a016-20211117
+i386                 randconfig-a012-20211117
+i386                 randconfig-a013-20211117
+i386                 randconfig-a011-20211117
+i386                 randconfig-a015-20211117
+hexagon              randconfig-r045-20211117
+hexagon              randconfig-r041-20211117
+s390                 randconfig-r044-20211117
+riscv                randconfig-r042-20211117
 
-then it adds a few devices without any problem, until it comes to here:
-Nov 18 09:55:01 bulldog kernel: usb 1-11: new high-speed USB device number 4 using xhci_hcd
-Nov 18 09:55:01 bulldog kernel: usb 1-11: New USB device found, idVendor=2109, idProduct=2817, bcdDevice= 6.33
-Nov 18 09:55:01 bulldog kernel: usb 1-11: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-Nov 18 09:55:01 bulldog kernel: usb 1-11: Product: USB2.0 Hub
-Nov 18 09:55:01 bulldog kernel: usb 1-11: Manufacturer: VIA Labs, Inc.
-Nov 18 09:55:01 bulldog kernel: hub 1-11:1.0: USB hub found
-Nov 18 09:55:01 bulldog kernel: hub 1-11:1.0: 4 ports detected
-
-I think this is my monitor (Fujitsu) with integrated USB hub.
-There mouse and kbd are connected, but while doing some stuff it departs
-again into dead land:
-Nov 18 09:55:01 bulldog kernel: usb 1-12: new high-speed USB device number 5 using xhci_hcd
-Nov 18 09:55:07 bulldog kernel: usb 1-12: device descriptor read/64, error -110
-Nov 18 09:55:22 bulldog kernel: usb 1-12: device descriptor read/64, error -110
-Nov 18 09:55:22 bulldog kernel: usb 1-11.1: new high-speed USB device number 6 using xhci_hcd
-Nov 18 09:55:23 bulldog kernel: usb 1-11.1: New USB device found, idVendor=2109, idProduct=2817, bcdDevice= 6.23
-Nov 18 09:55:23 bulldog kernel: usb 1-11.1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-Nov 18 09:55:23 bulldog kernel: usb 1-11.1: Product: USB2.0 Hub
-Nov 18 09:55:23 bulldog kernel: usb 1-11.1: Manufacturer: VIA Labs, Inc.
-Nov 18 09:55:23 bulldog kernel: hub 1-11.1:1.0: USB hub found
-Nov 18 09:55:23 bulldog kernel: hub 1-11.1:1.0: 4 ports detected
-Nov 18 09:55:23 bulldog kernel: usb 1-12: new high-speed USB device number 7 using xhci_hcd
-Nov 18 09:55:28 bulldog kernel: usb 1-12: device descriptor read/64, error -110
-Nov 18 09:55:44 bulldog kernel: usb 1-12: device descriptor read/64, error -110
-Nov 18 09:55:44 bulldog kernel: usb usb1-port12: attempt power cycle
-Nov 18 09:55:44 bulldog kernel: usb 1-11.2: new full-speed USB device number 8 using xhci_hcd
-Nov 18 09:55:44 bulldog kernel: usb 1-11.2: device descriptor read/64, error -32
-Nov 18 09:55:44 bulldog kernel: usb 1-11.2: New USB device found, idVendor=062a, idProduct=4102, bcdDevice= 1.03
-Nov 18 09:55:44 bulldog kernel: usb 1-11.2: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-Nov 18 09:55:44 bulldog kernel: usb 1-11.2: Product: 2.4G Wireless Mouse
-Nov 18 09:55:44 bulldog kernel: usb 1-11.2: Manufacturer: MOSART Semi.
-Nov 18 09:55:44 bulldog kernel: input: MOSART Semi. 2.4G Wireless Mouse as /devices/pci0000:00/0000:00:14.0/usb1/1-11/1-11.2/1-11.2:1.0/>
-Nov 18 09:55:44 bulldog kernel: input: MOSART Semi. 2.4G Wireless Mouse Consumer Control as /devices/pci0000:00/0000:00:14.0/usb1/1-11/1>
-Nov 18 09:55:44 bulldog kernel: input: MOSART Semi. 2.4G Wireless Mouse as /devices/pci0000:00/0000:00:14.0/usb1/1-11/1-11.2/1-11.2:1.0/>
-Nov 18 09:55:44 bulldog kernel: hid-generic 0003:062A:4102.000A: input,hiddev1,hidraw2: USB HID v1.10 Mouse [MOSART Semi. 2.4G Wireless >
-Nov 18 09:55:44 bulldog kernel: usb 1-11.1.2: new high-speed USB device number 9 using xhci_hcd
-Nov 18 09:55:45 bulldog kernel: usb 1-11.1.2: New USB device found, idVendor=0bda, idProduct=8153, bcdDevice=31.01
-Nov 18 09:55:45 bulldog kernel: usb 1-11.1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=6
-Nov 18 09:55:45 bulldog kernel: usb 1-11.1.2: Product: USB 10/100/1000 LAN
-Nov 18 09:55:45 bulldog kernel: usb 1-11.1.2: Manufacturer: Realtek
-Nov 18 09:55:45 bulldog kernel: usb 1-11.1.2: SerialNumber: 101000001
-Nov 18 09:55:45 bulldog kernel: usb 1-12: new high-speed USB device number 10 using xhci_hcd
-Nov 18 09:55:55 bulldog kernel: xhci_hcd 0000:00:14.0: Abort failed to stop command ring: -110
-Nov 18 09:55:55 bulldog kernel: xhci_hcd 0000:00:14.0: xHCI host controller not responding, assume dead
-Nov 18 09:55:55 bulldog kernel: xhci_hcd 0000:00:14.0: HC died; cleaning up
-Nov 18 09:55:55 bulldog kernel: xhci_hcd 0000:00:14.0: Timeout while waiting for setup device command
-Nov 18 09:55:56 bulldog kernel: usb 1-12: device not accepting address 10, error -108
-Nov 18 09:55:56 bulldog kernel: usb usb1-port12: couldn't allocate usb_device
-Nov 18 09:55:56 bulldog kernel: usb 1-3: USB disconnect, device number 2
-Nov 18 09:55:56 bulldog kernel: usb 1-11-port4: couldn't allocate usb_device
-Nov 18 09:55:56 bulldog kernel: usb 1-11.1-port3: couldn't allocate usb_device
-Nov 18 09:55:56 bulldog kernel: usb 1-7: USB disconnect, device number 3
-Nov 18 09:55:56 bulldog kernel: usb 1-11: USB disconnect, device number 4
-Nov 18 09:55:56 bulldog kernel: usb 1-11.1: USB disconnect, device number 6
-Nov 18 09:55:56 bulldog kernel: usb 1-11.1.2: USB disconnect, device number 9
-Nov 18 09:55:56 bulldog kernel: usb 1-11.2: USB disconnect, device number 8
-
-
-More information: when shutting down the system, it failed to turn of
-the computer (systemctl halt), but screen went off, all services
-stopped, and at the end the machine was just brrmmming away with me not
-having an idea what it is doing.
-
-Hard reset.
-
-First reboot gave no useable mouse/kbd.
-
-Shutdown/wait/boot - all back to normal.
-
-Any suggestion? I compile all my kernels (currently 5.15.2), so any
-patch can be tested.
-
-(Please cc, thanks)
-
-Thanks a lot
-
-Norbert
-
---
-PREINING Norbert                              https://www.preining.info
-Fujitsu Research  +  IFMGA Guide  +  TU Wien  +  TeX Live  + Debian Dev
-GPG: 0x860CDC13   fp: F7D8 A928 26E3 16A1 9FA0 ACF0 6CAC A448 860C DC13
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
