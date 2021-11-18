@@ -2,79 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F83D455BBA
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Nov 2021 13:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E7C455C41
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Nov 2021 14:06:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344795AbhKRMtp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Nov 2021 07:49:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344779AbhKRMtk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Nov 2021 07:49:40 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7AFC061570;
-        Thu, 18 Nov 2021 04:46:40 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso10706289ots.6;
-        Thu, 18 Nov 2021 04:46:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zDy1jFSdSdEX9dk2+PJhg/eseApJ7w84/Y/oAH27zQA=;
-        b=dgkWRvbzUNdw83L0KkR2a6ISJEKEbw3Hw10sZfoomU4jo0yXRSL6vil2PC2uGdD0e1
-         X71MEBmzvP3KHi/OmjHZQPqpwbreWVvHuGGz0EmwSgk9wBccdGdt3SgWi6tXL1b5AxKQ
-         1Ie+z7Hwn0CeHu+vBlBEgHEfmU8jZgWfQ0fiIPZ+SDcoKGkBwej/p7ah0XX1cAb9bNr2
-         iDFSAtfJTc9rjGu2r5U0i+hJW1hnrqqskf8P5MWOMXcxHdXyR7GfK2Ky3p3HtVxgIU8F
-         VYyAB5AqOqF1JAXRPlJNhhg5xNzMNvof5li9cAjkY1EaEcSxDonlki9T5/RWne0C+hbQ
-         FcIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zDy1jFSdSdEX9dk2+PJhg/eseApJ7w84/Y/oAH27zQA=;
-        b=ELZu/8PpgpPbixCPRWnqHPa+yDTqHQOyEj4AAlJNwA/7nmpXmgW19KrzgLEsRK9afM
-         CrkKkHH9ql2YcdtH/l7HPaV10fz/KxqXRZ8/XrIGlEZd91PTSC2PtBQHo5Gzuw2KtiLo
-         HZh5m4Bs84xTAacAsk7hbaTYT0HiZ3PgI60ZBa3szhywu2uHRfZ3vHfqZdVSPgvYRKBy
-         O8xx+rKRodyuOTwlTjrMKOEs4ixAK46YliKBHMXCWzwR9wnSdkGjIjPWnGRul3HB3oa2
-         +B5WgMo/Euw6WhSsGlydrZzIBCwM1F8w/SRDiq8kODDdMlxHq+MIFvALXecMLyel8QUA
-         Y40Q==
-X-Gm-Message-State: AOAM5306fvc3JwgRb9qC9DjPsHQHZE9vUmR9tuVTHOHZqz256m8WP4TO
-        Y/j29HXKg35KeCuwmTl519w+wkAP+v2/5UG2x2a78DW9I9A=
-X-Google-Smtp-Source: ABdhPJyXU/MWDnNIlJR8UXymAiR1xubiZGzZ5xsU4aco1Q3a5GCh3CBfWZ/6H3C964FlppmLELSDzxToKwjpiTanub4=
-X-Received: by 2002:a9d:6f0e:: with SMTP id n14mr21115817otq.173.1637239600023;
- Thu, 18 Nov 2021 04:46:40 -0800 (PST)
+        id S229898AbhKRNJV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Nov 2021 08:09:21 -0500
+Received: from mga12.intel.com ([192.55.52.136]:46919 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230024AbhKRNIP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 18 Nov 2021 08:08:15 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10171"; a="214210337"
+X-IronPort-AV: E=Sophos;i="5.87,244,1631602800"; 
+   d="scan'208";a="214210337"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2021 05:05:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,244,1631602800"; 
+   d="scan'208";a="646557254"
+Received: from kuha.fi.intel.com ([10.237.72.166])
+  by fmsmga001.fm.intel.com with SMTP; 18 Nov 2021 05:05:11 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 18 Nov 2021 15:05:10 +0200
+Date:   Thu, 18 Nov 2021 15:05:10 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] usb: typec: tipd: Fix typo in
+ cd321x_switch_power_state
+Message-ID: <YZZPhsN2VqVtM8Yg@kuha.fi.intel.com>
+References: <20211117151450.207168-1-marcan@marcan.st>
+ <20211117151450.207168-2-marcan@marcan.st>
 MIME-Version: 1.0
-References: <CAHP4M8UvwsS6QpV6PX-qf=d2u9Qw35Hafv-BTMGUWeSc0nUBXA@mail.gmail.com>
- <CAHP4M8V4ow_JUj9gjcrZoyFtnTcqngHqiD2da-v-w4VZ2WL1hg@mail.gmail.com> <20211117154036.GC172151@rowland.harvard.edu>
-In-Reply-To: <20211117154036.GC172151@rowland.harvard.edu>
-From:   Ajay Garg <ajaygargnsit@gmail.com>
-Date:   Thu, 18 Nov 2021 18:16:27 +0530
-Message-ID: <CAHP4M8V-wCuDPyhsuefSDCRAS6XzA74tY1naGHqA=X6xTpFeoA@mail.gmail.com>
-Subject: Re: Mouse stops working at random intervals in latest kernel
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211117151450.207168-2-marcan@marcan.st>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thanks Alan for your time.
+On Thu, Nov 18, 2021 at 12:14:49AM +0900, Hector Martin wrote:
+> SPSS should've been SSPS.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 
-> Going just by your description and the log contents, it sounds like the
-> wireless dongle's firmware is crashing.  Or possibly something has gone
-> wrong with the motherboard's on-board "rate-matching" hub.
->
-> To rule out software issues, you could try running an earlier kernel
-> version.  If that doesn't show any problems then you may want to perform
-> a git bisection.
->
-> As far as I know there have been no recent changes to ehci-hcd or
-> ehci-pci that could cause this to happen.
->
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Thanks for the update, this would help me in narrowing down things.
+> ---
+>  drivers/usb/typec/tipd/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index fb8ef12bbe9c..4da5a0b2aed2 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -653,7 +653,7 @@ static int cd321x_switch_power_state(struct tps6598x *tps, u8 target_state)
+>  	if (state == target_state)
+>  		return 0;
+>  
+> -	ret = tps6598x_exec_cmd(tps, "SPSS", sizeof(u8), &target_state, 0, NULL);
+> +	ret = tps6598x_exec_cmd(tps, "SSPS", sizeof(u8), &target_state, 0, NULL);
+>  	if (ret)
+>  		return ret;
+>  
+> -- 
+> 2.33.0
 
-
-Thanks and Regards,
-Ajay
+-- 
+heikki
