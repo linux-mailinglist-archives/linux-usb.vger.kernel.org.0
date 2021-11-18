@@ -2,181 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF1445618F
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Nov 2021 18:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 019204561D3
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Nov 2021 18:52:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234143AbhKRRhH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Nov 2021 12:37:07 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:45692 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232058AbhKRRhH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Nov 2021 12:37:07 -0500
-Received: by mail-io1-f72.google.com with SMTP id ay10-20020a5d9d8a000000b005e238eaeaa9so4025597iob.12
-        for <linux-usb@vger.kernel.org>; Thu, 18 Nov 2021 09:34:07 -0800 (PST)
+        id S229674AbhKRRzb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Nov 2021 12:55:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232921AbhKRRza (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Nov 2021 12:55:30 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F64C061748
+        for <linux-usb@vger.kernel.org>; Thu, 18 Nov 2021 09:52:30 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id o14so5910272plg.5
+        for <linux-usb@vger.kernel.org>; Thu, 18 Nov 2021 09:52:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TtnoYGtAxGPW+9L6edJ2N+GbKnq2mOeeAWUKCB6RQko=;
+        b=PYEEEbkZpq54OWNcaYpvnCzoYdE+vHgsvc8G3jHkXs3dGt+LDkIRK1mFxA+qVUUnOK
+         8k8l2iZfTu00sNd2Mb9Y/efZU3RA7OYSwmBgmBukA3SQ2SkvuzaD/rli/JlDPxtBqVV2
+         6LFZqSjXprrigWpxA7vUTzrHPzhr8y1Lld5bU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=OF23fODAMeOrtXiUL+ALEwubT88aRWMtuuk3jlOduyY=;
-        b=NDAoqFI85C++NgiZbB4+kmnwohNaCrXWm5kX13XFKaz/aynjPyQR91J9NJ8ZBRIfdu
-         zKcYUpv1J7ZNKWoNWXZqXUJfRJVWEN8O1KcNPTBTAgi80cMUbfj+CXSm29Rtre4N3ck1
-         EzFXY4Ss5Nft+IREsB77mYNAPrJ0NCK9ublPb4WVJ7CmJHczEzF4U1vlXtH2EIQiNTxi
-         fSgWpnZpdwIY3y4F1qFNI7Y/KHSt/MPLZRnQ3ysRrKNKdoMwpfeKL2SQJAapmqSXyC32
-         381YMjrgpd2GdZrh+uWKY+i5upWvA7nfnQ2kyqwWk1VLDzHyQAyFQIOfR0YKN9XDdrlO
-         +Vgw==
-X-Gm-Message-State: AOAM530QVHJcoZTwrMRn7knoPB86zien5R5x6VOo5rWvrjnbdkuSajtW
-        yY5icgGEb1mdyLv88pFT3uTupOBA+5kXmF80s8urp4pyVa/v
-X-Google-Smtp-Source: ABdhPJy6MVbMBx5f9JPwLmYvTj/Utwl/N03mYE0HJAZ/aARu9B+khcSVcUDVzffRX4ccRuV11V91OWSAVmAHO+BzZh9wEqlL7w1U
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TtnoYGtAxGPW+9L6edJ2N+GbKnq2mOeeAWUKCB6RQko=;
+        b=W+qOwDcCGTOAWqfj/RoB1G8VMAcb4C3EwPB9sullQbaqiTJNp7bHuD/PHGGbJcx2cB
+         jcW+GHqh9mgfLvoEKGQ2NQ4dEUoP6Sc1fuIbCMalVxBjz2f1Ero8iVeJhhEnTYQ+piDQ
+         ApS4Q8IdBNaY1PgvPE6a6TGZeM3Ujz31zhZSuX4SwPoNt9OpnRZlybgCj9JZSko9MpTk
+         1AT406aNvXj/v4jeJRlxtLbiyomBn+XFSn+fQuxGJgyFJ3iYo3L3atUEPgKwbzi7esgn
+         6kU0ThyeNYEG3Yh7zt4wFyQp7q4VpyHVwD69DLTP9vYNFjbyEksNxZKVhRU1GrlZ5VZs
+         T3bg==
+X-Gm-Message-State: AOAM531Y2cDh/O44/uxN+0Yb2MWfh+jdb0dTsUKWqYt+Pu8aM0FWvgXB
+        tafJhbDgyLXpEONK4uFXLHDwUw==
+X-Google-Smtp-Source: ABdhPJxEksdhN49ug4fA0rYwLkMrniqIXGi6GQjKTL9BIpYpmQbTQ+4El8cL1u7uZGrRNFpWRr1Dfg==
+X-Received: by 2002:a17:902:c78a:b0:142:1b7a:930 with SMTP id w10-20020a170902c78a00b001421b7a0930mr68883923pla.8.1637257950264;
+        Thu, 18 Nov 2021 09:52:30 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:8ceb:c68a:21af:bebe])
+        by smtp.gmail.com with UTF8SMTPSA id f21sm280683pfc.85.2021.11.18.09.52.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Nov 2021 09:52:29 -0800 (PST)
+Date:   Thu, 18 Nov 2021 09:52:28 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Peter Chen <peter.chen@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, Roger Quadros <rogerq@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Bastien Nocera <hadess@hadess.net>
+Subject: Re: [PATCH v17 1/7] usb: misc: Add onboard_usb_hub driver
+Message-ID: <YZaS3NpfUqqg4L+v@google.com>
+References: <20211116200739.924401-1-mka@chromium.org>
+ <20211116120642.v17.1.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
+ <CAD=FV=VnRQzvgjVzTNgx5kaC6VDvFGvTx2njtdTo27LW1zxWJA@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:150e:: with SMTP id g14mr593032iow.166.1637256847028;
- Thu, 18 Nov 2021 09:34:07 -0800 (PST)
-Date:   Thu, 18 Nov 2021 09:34:07 -0800
-In-Reply-To: <208f1478-42b2-9db2-4a81-dc8f64bbabbc@suse.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c5f54305d113905e@google.com>
-Subject: Re: [syzbot] WARNING in usbnet_start_xmit/usb_submit_urb
-From:   syzbot <syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com>
-To:     kuba@kernel.org, linux-usb@vger.kernel.org, oneukum@suse.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=VnRQzvgjVzTNgx5kaC6VDvFGvTx2njtdTo27LW1zxWJA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Wed, Nov 17, 2021 at 04:11:34PM -0800, Doug Anderson wrote:
+> Hi,
+> 
+> On Tue, Nov 16, 2021 at 12:07 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+> >
+> > --- a/drivers/usb/misc/Kconfig
+> > +++ b/drivers/usb/misc/Kconfig
+> > @@ -284,3 +284,20 @@ config BRCM_USB_PINMAP
+> >           This option enables support for remapping some USB external
+> >           signals, which are typically on dedicated pins on the chip,
+> >           to any gpio.
+> > +
+> > +config USB_ONBOARD_HUB
+> > +       tristate "Onboard USB hub support"
+> 
+> Aren't you back to shenanigans now that you're being called straight
+> from the USB core? What if you're a module and the USB core is
+> builtin? It can't call you, right? ...or what if you're builtin but
+> the USB core is a module (yeah, I know that sounds insane but I don't
+> think anything technically prevents it)?
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KASAN: slab-out-of-bounds Read in usbnet_probe
+Indeed, a dependency involving USB host mode is needed, as previously
+with xhci_plat.
 
-usb 4-1: config 0 interface 0 altsetting 0 endpoint 0x2 has an invalid bInterval 87, changing to 10
-usb 4-1: New USB device found, idVendor=0547, idProduct=2727, bcdDevice=e6.98
-usb 4-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 4-1: config 0 descriptor??
-==================================================================
-BUG: KASAN: slab-out-of-bounds in usb_endpoint_xfer_bulk include/uapi/linux/usb/ch9.h:518 [inline]
-BUG: KASAN: slab-out-of-bounds in usb_endpoint_is_bulk_in include/uapi/linux/usb/ch9.h:573 [inline]
-BUG: KASAN: slab-out-of-bounds in usbnet_probe+0x1b6e/0x2760 drivers/net/usb/usbnet.c:1776
-Read of size 1 at addr ffff88811ac09623 by task kworker/1:2/668
+> Can you just add a dependency here such that if the USB core is a
+> module that you're a module and if the USB core is builtin that you're
+> builtin?
 
-CPU: 1 PID: 668 Comm: kworker/1:2 Not tainted 5.15.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0x6c/0x309 mm/kasan/report.c:256
- __kasan_report mm/kasan/report.c:442 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
- usb_endpoint_xfer_bulk include/uapi/linux/usb/ch9.h:518 [inline]
- usb_endpoint_is_bulk_in include/uapi/linux/usb/ch9.h:573 [inline]
- usbnet_probe+0x1b6e/0x2760 drivers/net/usb/usbnet.c:1776
- usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:517 [inline]
- really_probe+0x245/0xcc0 drivers/base/dd.c:596
- __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:751
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:781
- __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:898
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x228/0x4a0 drivers/base/dd.c:969
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xc17/0x1ee0 drivers/base/core.c:3396
- usb_set_configuration+0x113f/0x1910 drivers/usb/core/message.c:2170
- usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
- usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
- call_driver_probe drivers/base/dd.c:517 [inline]
- really_probe+0x245/0xcc0 drivers/base/dd.c:596
- __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:751
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:781
- __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:898
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x228/0x4a0 drivers/base/dd.c:969
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xc17/0x1ee0 drivers/base/core.c:3396
- usb_new_device.cold+0x63f/0x108e drivers/usb/core/hub.c:2563
- hub_port_connect drivers/usb/core/hub.c:5348 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5488 [inline]
- port_event drivers/usb/core/hub.c:5634 [inline]
- hub_event+0x2357/0x4330 drivers/usb/core/hub.c:5716
- process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
- worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
- kthread+0x40b/0x500 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
+I couldn't find a way to specify that in the config options of the driver
+itself. I fear the dependency has to be specified in CONFIG_USB, like it
+was done previously with USB_XHCI_PLATFORM:
 
-Allocated by task 0:
-(stack is not available)
+https://patchwork.kernel.org/project/linux-usb/patch/20210813125146.v16.6.I7a3a7d9d2126c34079b1cab87aa0b2ec3030f9b7@changeid/
 
-The buggy address belongs to the object at ffff88811ac09600
- which belongs to the cache kmalloc-96 of size 96
-The buggy address is located 35 bytes inside of
- 96-byte region [ffff88811ac09600, ffff88811ac09660)
-The buggy address belongs to the page:
-page:ffffea00046b0240 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x11ac09
-flags: 0x200000000000200(slab|node=0|zone=2)
-raw: 0200000000000200 0000000000000000 dead000000000122 ffff888100041780
-raw: 0000000000000000 0000000080200020 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112c40(GFP_NOFS|__GFP_NOWARN|__GFP_NORETRY|__GFP_HARDWALL), pid 1873, ts 80842457098, free_ts 80530458047
- prep_new_page mm/page_alloc.c:2426 [inline]
- get_page_from_freelist+0x1254/0x2980 mm/page_alloc.c:4155
- __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5381
- alloc_pages+0x1a7/0x300 mm/mempolicy.c:2191
- alloc_slab_page mm/slub.c:1770 [inline]
- allocate_slab mm/slub.c:1907 [inline]
- new_slab+0x319/0x490 mm/slub.c:1970
- ___slab_alloc+0x8b9/0xfa0 mm/slub.c:3001
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3088
- slab_alloc_node mm/slub.c:3179 [inline]
- slab_alloc mm/slub.c:3221 [inline]
- __kmalloc+0x2ee/0x310 mm/slub.c:4396
- kmalloc_array include/linux/slab.h:631 [inline]
- kcalloc include/linux/slab.h:660 [inline]
- ext4_find_extent+0xa47/0xd00 fs/ext4/extents.c:865
- ext4_ext_map_blocks+0x1e2/0x6140 fs/ext4/extents.c:4066
- ext4_map_blocks+0x653/0x17d0 fs/ext4/inode.c:637
- ext4_convert_unwritten_extents+0x2db/0x5b0 fs/ext4/extents.c:4773
- ext4_convert_unwritten_io_end_vec+0x122/0x270 fs/ext4/extents.c:4812
- ext4_end_io_end fs/ext4/page-io.c:184 [inline]
- ext4_do_flush_completed_IO fs/ext4/page-io.c:257 [inline]
- ext4_end_io_rsv_work+0x2b3/0x660 fs/ext4/page-io.c:271
- process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
- worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
- kthread+0x40b/0x500 kernel/kthread.c:327
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1340 [inline]
- free_pcp_prepare+0x315/0x710 mm/page_alloc.c:1391
- free_unref_page_prepare mm/page_alloc.c:3317 [inline]
- free_unref_page+0x19/0x580 mm/page_alloc.c:3396
- tlb_batch_list_free mm/mmu_gather.c:61 [inline]
- tlb_finish_mmu+0x24f/0x8c0 mm/mmu_gather.c:343
- unmap_region+0x27f/0x350 mm/mmap.c:2653
- __do_munmap+0x600/0x1260 mm/mmap.c:2884
- __do_sys_brk+0x4b2/0x7d0 mm/mmap.c:255
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+Hope that isn't controversial.
 
-Memory state around the buggy address:
- ffff88811ac09500: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
- ffff88811ac09580: 00 00 00 00 00 00 00 00 00 00 fc fc fc fc fc fc
->ffff88811ac09600: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-                               ^
- ffff88811ac09680: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88811ac09700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
+> > +void onboard_hub_create_pdevs(struct usb_device *parent_hub, struct list_head *pdev_list)
+> > +{
+> > +       int i;
+> > +       struct device_node *np, *npc;
+> > +       struct platform_device *pdev;
+> > +       struct pdev_list_entry *pdle;
+> > +
+> > +       INIT_LIST_HEAD(pdev_list);
+> > +
+> > +       for (i = 1; i <= parent_hub->maxchild; i++) {
+> > +               np = usb_of_get_device_node(parent_hub, i);
+> > +               if (!np)
+> > +                       continue;
+> > +
+> > +               if (!of_is_onboard_usb_hub(np))
+> > +                       goto node_put;
+> > +
+> > +               npc = of_parse_phandle(np, "companion-hub", 0);
+> > +               if (!npc)
+> > +                       goto create_pdev;
+> > +
+> > +               pdev = of_find_device_by_node(npc);
+> > +               of_node_put(npc);
+> > +
+> > +               if (pdev) {
+> > +                       /* the companion hub already has a platform device, nothing to do here */
+> > +                       put_device(&pdev->dev);
+> > +                       goto node_put;
+> > +               }
+> > +
+> > +create_pdev:
+> 
+> I don't really like this "goto". I'd rather just use an "if" test for
+> the few lines even if the indentation gets to be a bit much.
 
-
-Tested on:
-
-commit:         048ff862 Merge tag 'usb-5.16-rc1' of git://git.kernel...
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=11fb14f6b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d6b387bc5d3e50f3
-dashboard link: https://syzkaller.appspot.com/bug?extid=63ee658b9a100ffadbe2
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=103818a1b00000
-
+Ok, I'll remove the "goto" in the next version.
