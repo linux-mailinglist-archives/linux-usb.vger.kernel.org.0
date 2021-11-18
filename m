@@ -2,341 +2,330 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 137F6455A10
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Nov 2021 12:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F7D455A7B
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Nov 2021 12:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343756AbhKRLY0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Nov 2021 06:24:26 -0500
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:51363 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343653AbhKRLWS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Nov 2021 06:22:18 -0500
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20211118111916euoutp010706fd887e17b034ce673ae32763a6a4~4n-kIPWYm3179631796euoutp01f
-        for <linux-usb@vger.kernel.org>; Thu, 18 Nov 2021 11:19:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20211118111916euoutp010706fd887e17b034ce673ae32763a6a4~4n-kIPWYm3179631796euoutp01f
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1637234356;
-        bh=hM8rPM/pYkID2lim/Aw8esf/cOiSPIsJ7suI4QCL4yc=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=lgMWQDDsovhRhXAlEat3xlrX9J3CE0tjYTqVjn3YDtyvTijCmquLtOupWIcuJQXNw
-         3VimXOcbOzche67e8dnzWHL/ipMVmrWNzVc/qdHaKRIjobwj9NQX1JrL87TL1uukSU
-         95rdwbrHH7om0XNBh7Lyx4cZXp3EbjAE1RkgurSI=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20211118111916eucas1p1be23bc6273113c8f97131a79abf212a3~4n-j73L6l2177821778eucas1p16;
-        Thu, 18 Nov 2021 11:19:16 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 9D.B6.10260.4B636916; Thu, 18
-        Nov 2021 11:19:16 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20211118111915eucas1p2cf4a502442e7259c6c347daf0d87259e~4n-jkBiDT1163711637eucas1p28;
-        Thu, 18 Nov 2021 11:19:15 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20211118111915eusmtrp2905e90741cb63487e8280e6bf60f442e~4n-ji1rJb2775127751eusmtrp2i;
-        Thu, 18 Nov 2021 11:19:15 +0000 (GMT)
-X-AuditID: cbfec7f5-bf3ff70000002814-00-619636b4609f
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 9F.15.09404.3B636916; Thu, 18
-        Nov 2021 11:19:15 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20211118111915eusmtip2dcf129c69811780d8119f36ef2dfa6ee~4n-jCrEVn0722207222eusmtip2F;
-        Thu, 18 Nov 2021 11:19:15 +0000 (GMT)
-Message-ID: <f3bfcbc7-f701-c74a-09bd-6491d4c8d863@samsung.com>
-Date:   Thu, 18 Nov 2021 12:19:14 +0100
+        id S1343777AbhKRLhL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Nov 2021 06:37:11 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:20356 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1343640AbhKRLhH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Nov 2021 06:37:07 -0500
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AIB2Bus031723;
+        Thu, 18 Nov 2021 11:32:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=nhUTn6S1O8buFn5Xa3Dk47TjJg+nwkO5vlgzpPLJgSE=;
+ b=SuIVDFTjYL+9nS6Adl2VHU4NCEKf9lC54nWGFZiZq1ToWapQNth4YNmq5xZG6CZQ5FKx
+ mS8Z2N7QiNk+Mbbhfe/X2DRsI7QC1VkHDVB8IlWQnHa/JAmjhE6q+5+P+/DSme2ECHUd
+ faJL0JGyLQYCmxtpxG2pkZbeeYOUAzpc6VXMFMitZQEXyw3DtGFwlcP6tSYiLAmkHPXR
+ 0aIMssDQL2dTAwC7LUC9ht9yZso7iE5EEmE6Q1fyvlTrXARY8cSo+aNMmNjZ8+xfnWxC
+ Xr6qRxaceTTZRU/PRj89kVmZy4/+fu5LZQ2KTHTflejPTrRq4xjg/ozMD9p9Ej9UCbG3 Hg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cd2ajpen4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 18 Nov 2021 11:32:46 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1AIBV363033036;
+        Thu, 18 Nov 2021 11:32:45 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2105.outbound.protection.outlook.com [104.47.55.105])
+        by aserp3020.oracle.com with ESMTP id 3ca568edju-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 18 Nov 2021 11:32:45 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Tk9YZ2jR2cLUm4Z/YZf4ZsemUeOSzKTiIwE+ylLVA7CTDNeiCm0alwzdQuopXZ8/cWamIqH15zOYvZ+p63GQWJu/GvAs6w2yw7vb+kAqPkKEJWCJVDPKjvxaXTkK+5l0Df5CtGV3tSIvgcjml1RXoGVUD4bvPgI29AHT9+JdDeBWdLl0Tn06CwhSzisqeQDB8SlwKfm4aHH0GOFk0GsWSGLiIWgO36Y2rKMfB/W+C80xcY11W7asSU9Jkpd3qqrVs/K6tnVEJiOSu+aIAztak0zlPDX8agO+pbGXMFlTVaNpZtYKISP1zV36hwmdDsFedfupPbezMR+2V07QBPv4Kw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nhUTn6S1O8buFn5Xa3Dk47TjJg+nwkO5vlgzpPLJgSE=;
+ b=i757mMafynh9yKKQoqJSp7Fd46si3k3N6mIDE/CVsaiK4siVxHIMoD0eM2jsKb0mEADAUi9KknpgK/hbIbKb1/RYkqn4NPjZiZtNwdZAyaVPljbLJSYZcbAaxENp41nthySvDBHf22ISDFg/TUZcQ60UNsHmYT7H7ATqILqzkyEghC7f4ooszjzXVC8JrmNUZLjOKWXTCZkA9An4ay28KP4xxzG3XPBAwknUL3jdSxp4vE/qJRnKZa3f1rtYs6bVA3BKPVl/y4BlOX9CMbQIy05Qj710iplobWCy/jZTehlUije8bCOm2O05daf6sOjAp9CxZ5dHfudpVKmrJMcBVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nhUTn6S1O8buFn5Xa3Dk47TjJg+nwkO5vlgzpPLJgSE=;
+ b=AIzZyeTgx1isYANbm/he97jNVrS7Lxo8qAMSzsN8I9VASyB0S4+NydChcbXECX26TAEduA8/uZR+8NMU2WUeMfNOxIKw7z4q5ZhaKTErsBCRn5e2V97Wt1enSKOIYBoBq96cQnEhCNifCQ6J0btkAoIctjMl9nQkzn/+d20qzbM=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by MWHPR10MB1949.namprd10.prod.outlook.com
+ (2603:10b6:300:10c::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.26; Thu, 18 Nov
+ 2021 11:32:43 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::d409:11b5:5eb2:6be9]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::d409:11b5:5eb2:6be9%5]) with mapi id 15.20.4690.016; Thu, 18 Nov 2021
+ 11:32:42 +0000
+Date:   Thu, 18 Nov 2021 14:32:22 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] extcon: fix extcon_get_extcon_dev() error handling
+Message-ID: <20211118113026.GG1147@kili>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-ClientProxiedBy: ZR0P278CA0014.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:16::24) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.3.1
-Subject: Re: [PATCH] usb: hub: Fix usb enumeration issue due to address0
- race
-Content-Language: en-US
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        kishon@ti.com
-Cc:     hdegoede@redhat.com, chris.chiu@canonical.com,
-        linux-usb@vger.kernel.org, stable@vger.kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20211115221630.871204-1-mathias.nyman@linux.intel.com>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJKsWRmVeSWpSXmKPExsWy7djPc7pbzKYlGix/yWxxae1eVovmxevZ
-        LN4cn85kceFpD5vFomWtzBavPzSxWCzY+IjRYsLvC2wOHB6zGnrZPOadDPTYP3cNu8f7fVfZ
-        PGbf/cHocfzGdiaPz5vkAtijuGxSUnMyy1KL9O0SuDLerlnMWjDdo+LI5hPsDYyvbLoYOTkk
-        BEwkvlw9xg5iCwmsYJTYe1Ski5ELyP7CKPF+9TdGiMRnRokvH/lhGpZPu8sEUbScUeL07nZ2
-        COcjo0TDhLtADgcHr4CdxLfPLiANLAKqEl+aP4MN4hUQlDg58wkLiC0qkCRxunUSM4gtLOAv
-        8fX5bVYQm1lAXOLWk/lMILaIQKVE54JONoh4msSOxoVg9WwChhJdb7vA4pwCLhJzD/exQNTI
-        SzRvnc0Mco+EwBcOiVcTDzJCXO0isfziDyYIW1ji1fEt7BC2jMT/nfOZIBqaGSUenlvLDuH0
-        MEpcbpoB1W0tcefcLzaQz5gFNCXW79IHMSUEHCUW7i2CMPkkbrwVhLiBT2LStunMEGFeiY42
-        IYgZahKzjq+D23rwwiXmCYxKs5BCZRaS72ch+WYWwtoFjCyrGMVTS4tz01OLjfNSy/WKE3OL
-        S/PS9ZLzczcxAlPT6X/Hv+5gXPHqo94hRiYOxkOMEhzMSiK8Qg1TE4V4UxIrq1KL8uOLSnNS
-        iw8xSnOwKInzivxpSBQSSE8sSc1OTS1ILYLJMnFwSjUwJZ/46paXX+A071t6gFzz3CnLbz1M
-        rNAI3Cp8ZHv5Re7Y8+uVthYtnLN3nUCmHN9Vo28/3j3girbpZap4K6npwrZsyVK+yudzpoVe
-        y80ut91be7/735efV40Xt/SVzpKZGjH9uKeIYqi5kq4ri2OCNN+9K+ZLS1T91624zqrnM+u5
-        qb/cBJFP7BbXJ2/YyC+WxL5AhpE3q3DLI43YSZp9EYlNM3wu+k5ZrnFidkfp4mCfBauU2UUn
-        utRH7HLRDlrrVmHac+rig0gPxk1uD1Y3ckezNt154vrDU8OiYsUNexWxYrEj61mv2Tdn+MeW
-        /Dz7u20/4w77uv+Vb0od2Y4YH36kv0/C0jJ4ypaNQvOVWIozEg21mIuKEwHpQN7EvAMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLIsWRmVeSWpSXmKPExsVy+t/xe7qbzaYlGvxarWlxae1eVovmxevZ
-        LN4cn85kceFpD5vFomWtzBavPzSxWCzY+IjRYsLvC2wOHB6zGnrZPOadDPTYP3cNu8f7fVfZ
-        PGbf/cHocfzGdiaPz5vkAtij9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX0
-        7WxSUnMyy1KL9O0S9DLerlnMWjDdo+LI5hPsDYyvbLoYOTkkBEwklk+7y9TFyMUhJLCUUWLW
-        is0sEAkZiZPTGlghbGGJP9e62CCK3jNKPNoxCaiIg4NXwE7i22cXkBoWAVWJL82fGUFsXgFB
-        iZMzn4DNERVIkuj/vosZxBYW8JX4/vssWA2zgLjErSfzmUBsEYFKiS2ND5kg4mkSl7Y1sIPY
-        QgLOEmtOtYDNYRMwlOh6C3IDJwengIvE3MN9LBD1ZhJdW7ugZspLNG+dzTyBUWgWkjNmIVk3
-        C0nLLCQtCxhZVjGKpJYW56bnFhvpFSfmFpfmpesl5+duYgTG47ZjP7fsYFz56qPeIUYmDsZD
-        jBIczEoivEINUxOFeFMSK6tSi/Lji0pzUosPMZoCw2Iis5Rocj4wIeSVxBuaGZgamphZGpha
-        mhkrifN6FnQkCgmkJ5akZqemFqQWwfQxcXBKNTCprK46uHp92Qu3IMPOpw6vvxeePxxy5I9L
-        UvMRvtrDwdYm8Svnr0leLHc5qFy6YA3PD3WDZXfXPdLc7nvC8t3m0hcHFqwvC5fivKXSprw7
-        lsH6NaPhhFdz157WaOyJyVu/5Iyv8PGFOW/MLdiebhC3MNqw8bA411/h2jcH7q6ePvV/mFTl
-        g+DkrW9TymvL1gu+6hY0F6/dwL8g9EH45fbuIJlZxxZ/Xajy9VaFkKgIV/HLmfdLbKatzPNq
-        FQ8UvHPxeaj/j+2W/AfezFj3LoR15f/inX2lXxkfmJ1Nce5pS+de82Pzk7xTnYeO2K/Q7P+r
-        H7dipVXCIgGdaA2ndDkb/b/fJ17QyzNdz3EuibVfiaU4I9FQi7moOBEAcwKOilADAAA=
-X-CMS-MailID: 20211118111915eucas1p2cf4a502442e7259c6c347daf0d87259e
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20211118111915eucas1p2cf4a502442e7259c6c347daf0d87259e
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20211118111915eucas1p2cf4a502442e7259c6c347daf0d87259e
-References: <20211115221630.871204-1-mathias.nyman@linux.intel.com>
-        <CGME20211118111915eucas1p2cf4a502442e7259c6c347daf0d87259e@eucas1p2.samsung.com>
+Received: from kili (102.222.70.114) by ZR0P278CA0014.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:16::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.19 via Frontend Transport; Thu, 18 Nov 2021 11:32:32 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0b21c3c8-9732-4634-f5ca-08d9aa872295
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1949:
+X-Microsoft-Antispam-PRVS: <MWHPR10MB19499C99034CC2FA4D8B0E048E9B9@MWHPR10MB1949.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:843;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WplJOR/UyQigLqVjxG6Braew2R5+yP0aSSfAlsGNDcfMSLjJo8C1MmxZgMgr9NKDWdw3NnDbSiKz1DSeEMENIxpaDyXkiim1OQAWpZhpbtfJfjWL6eYJWrkDBv5r3GRL5bguV/Bc+JqpQ+vOD6+s8UoK0EHALs+WtoKD2LU40DkEbyDGoxGhgZF/N7SrmLku0iRGe/UGNJOne6bZMZOI01EHS75qD1NmPNu+i83APqXy8iwI+6G6938qHPYGstjWfsmKLmekDADlo00sVqSQR3MDP5dmgJZ+p2Ua2jfTk9SSZpeIpzYRPzQz8gzqheTEmxjv/F099VOyPvwgEcSHsYBgO7m3bsPGgr3Vbl3+3TSMzL14z/izEeFSUZiVA3hf8NfCaFC82nTU82XUeToteuihnNal+Skad1SrhjTt1RKrin0jOc6XIuBmK3wJBrOMkYVBCTpiRAA2aiwRt6IcI5/tFB3pRR5Lgoa6OBQRzm2uTWeLiiby3oGhqdIPGc21rgZ5s1S8C2SXjbQFLtDi9P7RgmaxQFhy05HfYw9n4Q8l6bitnv1187djNe4QcFYXMlDiMSHt6KoF5wU2RRDu7DAsLCRa6jXAXIXrKvyzhMkDajwnUS00WgDnpaYbUuR0bt7oL7T5qAvdZVH17k+O2+zT5GguljxtX0erLFwewdcBcpg6ygh2eKZmHg/A8uOUR+2GnZ4pvDZHGLzlYiE6RA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(8936002)(2906002)(6666004)(6916009)(33716001)(4326008)(55016002)(54906003)(6496006)(186003)(7416002)(52116002)(5660300002)(33656002)(1076003)(83380400001)(316002)(86362001)(508600001)(956004)(9576002)(38350700002)(66556008)(66476007)(66946007)(38100700002)(26005)(9686003)(44832011)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+dWMIB7P6PCyOu4TIr7AgXtmrCLY5O8befh/Y+PQpheLLHxF76M4d1MH/AFf?=
+ =?us-ascii?Q?3Bs9EA6Uhm5fGhWyAcBwPTNd0Q7UqsB+CpCzeBBEkiPhbfn/ikDsdPt1s0Vo?=
+ =?us-ascii?Q?IssScfwi6+YuJHID0Ox0Cnk25AxoUInueNsC0ngA6bOFpd/mI6l+eOeLhhsS?=
+ =?us-ascii?Q?/RyDAE7K6/iQ6POnqYu4NFO3mrxueQWY29Pn0dEOI3hekfcgTe3MAnd3XvaE?=
+ =?us-ascii?Q?Ut5tzAR5cN8SN7aZx5O33OOCdoeHY7/smHlSpSspk/wU7Zc8nUFq/lPSYEpi?=
+ =?us-ascii?Q?tyWz2aE9NRCTIUv+jtOnG/RSy+qfF0r6HPN8ClUZBfW7kT6lAvCJdCa2oCXd?=
+ =?us-ascii?Q?OI1yXlOKhvQIsOCad1ufZ+0xA8OaGC86O+V0Cwqys3pFLPsuYXRnZiWRQoOy?=
+ =?us-ascii?Q?009kcuirMEOLtc7Adu5JKdR2kNXJE7EU2ybGfX9f/YvgXTMQRbO/6XsDJckd?=
+ =?us-ascii?Q?C88OyGQArns3gvLM336kqEOEZ4PUaTDay3Ovk9JIVwshPLK6sycNfABrhpuH?=
+ =?us-ascii?Q?AM93oteWvW28lDPupNJK27NDLcWIvzhP/LIZfNAzCqbP0G9n73Zl0u5xGTK8?=
+ =?us-ascii?Q?H6uKzfkdqQ8PeQrewzN9IqLC150sBKTxGLEXXx/iMRlQNcqS1d9q9mF23pKf?=
+ =?us-ascii?Q?bt9mjGHDCl/piVWwudc2hBpERFnJKJ+dosgH0LDYdOLXpAo117QBh9Jaktej?=
+ =?us-ascii?Q?4S5mYz2VMoN+x0kyQmRM76nne1yswQO5nkHypzKOQE4VPv18vzUFGK9l+TSW?=
+ =?us-ascii?Q?+YKe7cbGcft9l9wASynRSUaGAFLUYIJ5UQOecAMld+cruhphLBTZ3d9KHdUa?=
+ =?us-ascii?Q?Y+Wt3m3r9V1kFVQuqf1wANS4em7/A+kQm+CablOLlyC1oRv3d9Zs0/p1T17D?=
+ =?us-ascii?Q?02R5SJcbXB2HE70V/gdTIkjCM0YZ1VAcUroJSg6a+yBagCENKx1uB21syQSe?=
+ =?us-ascii?Q?BgGHxhUYKHze5GzjKn2IFVV8QudfP/1sjYZGgEfdrJAGjHC8xQCCn5IL9TTu?=
+ =?us-ascii?Q?miA4K5eM18Yf0udHcsiRSGO+GCfQI1po1QhJWd8TLi/HN96OeQuY2vQ2T/DO?=
+ =?us-ascii?Q?qvBr7KJBNVNsuH3imlfvJDjAziAF+OX1o8KhxfLrCNNZ28KfocKOqg2zIt/G?=
+ =?us-ascii?Q?cSaChrayKS+iMZkOTZ9KnA+8iqlQjIl353gzpjOvCcYqLi92DAyM1WTe43oA?=
+ =?us-ascii?Q?TBIm1TDWU1vLDycFQCjapc63q0aDJKJ18jrdLVNr8iPmzdqlleAyXu7hJ3Lu?=
+ =?us-ascii?Q?SK9z9Ih44ONTrJfcPPXXKoj1o5BdxUe/zSSIfwJLnzslwJ/MBvchms8PWtL9?=
+ =?us-ascii?Q?t0myjp7IvUpvuOG3M79RsvjJB2tYfSiDq10AvIhBIO0vVu5x8UMxy9UzzE1H?=
+ =?us-ascii?Q?/+TfcZ5lM4hma7dvgUvmmscvG2mnbqR+o+iv6qz0n6cmoMp6xHLF2FiELjLi?=
+ =?us-ascii?Q?fZlczGg29GCHgfbYlzAc+xmHnGQ5c5OZ+iRc0Eg8H+IpA+l7cwbdU3+YqkSA?=
+ =?us-ascii?Q?w1kuE5o6hMBWqRTrYpTZR57vdE7YqOtHCeuXlhIyeiqjT/6dDJg6x8HQ7EiK?=
+ =?us-ascii?Q?+SnnrR82/CBufhDIesNGWsE3Ag7iJ7mtVL9EPs1s+LaowjLaeAXY7hj9MBOJ?=
+ =?us-ascii?Q?Gcg/umD4E3vbBRcsrLuCa0IB6F09t/6AmmlRaf7LhsWDHVV561NzUCrRwPkd?=
+ =?us-ascii?Q?efPrO19McT1gqjArGyym9K5rJWE=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0b21c3c8-9732-4634-f5ca-08d9aa872295
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2021 11:32:42.8575
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1pZV/oBlNEfOTo6l31aqKJbBxEGDZ0XoQainqnAIi2qfbTOTBzGDXQLdOKtWDOj3gwqgNczWiB40Zu4/qdxv10/64ft0cf3nhmXgcExeo6Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1949
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10171 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0 mlxscore=0
+ spamscore=0 malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2111180067
+X-Proofpoint-GUID: x1HW4TBj0hBVYk5MbQohNcLHhnWhpkVd
+X-Proofpoint-ORIG-GUID: x1HW4TBj0hBVYk5MbQohNcLHhnWhpkVd
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+The extcon_get_extcon_dev() function returns error pointers on error
+and NULL when it's a -EPROBE_DEFER defer situation.  There are eight
+callers and only two of them handled this correctly.  In the other
+callers an error pointer return would lead to a crash.
 
-On 15.11.2021 23:16, Mathias Nyman wrote:
-> xHC hardware can only have one slot in default state with address 0
-> waiting for a unique address at a time, otherwise "undefined behavior
-> may occur" according to xhci spec 5.4.3.4
->
-> The address0_mutex exists to prevent this across both xhci roothubs.
->
-> If hub_port_init() fails, it may unlock the mutex and exit with a xhci
-> slot in default state. If the other xhci roothub calls hub_port_init()
-> at this point we end up with two slots in default state.
->
-> Make sure the address0_mutex protects the slot default state across
-> hub_port_init() retries, until slot is addressed or disabled.
->
-> Note, one known minor case is not fixed by this patch.
-> If device needs to be reset during resume, but fails all hub_port_init()
-> retries in usb_reset_and_verify_device(), then it's possible the slot is
-> still left in default state when address0_mutex is unlocked.
->
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+What prevents crashes is that errors can only happen in the case of
+a bug in the caller or if CONFIG_EXTCON is disabled.  Six out of
+eight callers use the Kconfig to either depend on or select
+CONFIG_EXTCON.  Thus the real life impact of these bugs is tiny.
 
-This patch landed in linux next-20211118 as commit 6ae6dc22d2d1 ("usb: 
-hub: Fix usb enumeration issue due to address0 race"). On my test 
-systems it triggers the following deplock warning during system 
-suspend/resume cycle:
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+The two callers where the drivers can be built without CONFIG_EXTCON
+are TYPEC_FUSB302 and CHARGER_MAX8997.
 
-======================================================
-WARNING: possible circular locking dependency detected
-5.16.0-rc1-00014-g6ae6dc22d2d1 #4126 Not tainted
-------------------------------------------------------
-kworker/u16:8/738 is trying to acquire lock:
-cf81f738 (hcd->address0_mutex){+.+.}-{3:3}, at: 
-usb_reset_and_verify_device+0xe8/0x3e4
+If we apply this patch, it might be a good idea to send it to -stable
+so that backported code that relies on handling error pointers does
+not break silently.
 
-but task is already holding lock:
-cf80ab3c (&port_dev->status_lock){+.+.}-{3:3}, at: 
-usb_port_resume+0xa0/0x7e8
+ drivers/extcon/extcon.c                |  2 +-
+ drivers/power/supply/axp288_charger.c  | 17 ++++++++++-------
+ drivers/power/supply/charger-manager.c |  7 ++-----
+ drivers/power/supply/max8997_charger.c | 10 +++++-----
+ drivers/usb/dwc3/drd.c                 |  9 ++-------
+ drivers/usb/phy/phy-omap-otg.c         |  4 ++--
+ drivers/usb/typec/tcpm/fusb302.c       |  4 ++--
+ drivers/extcon/extcon-axp288.c         |  4 ++--
+ 8 files changed, 26 insertions(+), 31 deletions(-)
 
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (&port_dev->status_lock){+.+.}-{3:3}:
-        mutex_lock_nested+0x1c/0x24
-        hub_event+0x824/0x1758
-        process_one_work+0x2c8/0x7ec
-        worker_thread+0x50/0x584
-        kthread+0x13c/0x19c
-        ret_from_fork+0x14/0x2c
-        0x0
-
--> #0 (hcd->address0_mutex){+.+.}-{3:3}:
-        lock_acquire+0x2a0/0x42c
-        __mutex_lock+0x94/0xaa8
-        mutex_lock_nested+0x1c/0x24
-        usb_reset_and_verify_device+0xe8/0x3e4
-        usb_port_resume+0x4e0/0x7e8
-        usb_generic_driver_resume+0x18/0x40
-        usb_resume_both+0x120/0x164
-        usb_resume+0x14/0x60
-        usb_dev_resume+0xc/0x10
-        dpm_run_callback+0x98/0x32c
-        device_resume+0xb4/0x258
-        async_resume+0x20/0x64
-        async_run_entry_fn+0x40/0x15c
-        process_one_work+0x2c8/0x7ec
-        worker_thread+0x50/0x584
-        kthread+0x13c/0x19c
-        ret_from_fork+0x14/0x2c
-        0x0
-
-other info that might help us debug this:
-
-  Possible unsafe locking scenario:
-
-        CPU0                    CPU1
-        ----                    ----
-   lock(&port_dev->status_lock);
-                                lock(hcd->address0_mutex);
-lock(&port_dev->status_lock);
-   lock(hcd->address0_mutex);
-
-  *** DEADLOCK ***
-
-4 locks held by kworker/u16:8/738:
-  #0: c1c08ca8 ((wq_completion)events_unbound){+.+.}-{0:0}, at: 
-process_one_work+0x21c/0x7ec
-  #1: cd9cff18 ((work_completion)(&entry->work)){+.+.}-{0:0}, at: 
-process_one_work+0x21c/0x7ec
-  #2: cf810148 (&dev->mutex){....}-{3:3}, at: device_resume+0x60/0x258
-  #3: cf80ab3c (&port_dev->status_lock){+.+.}-{3:3}, at: 
-usb_port_resume+0xa0/0x7e8
-
-stack backtrace:
-CPU: 4 PID: 738 Comm: kworker/u16:8 Not tainted 
-5.16.0-rc1-00014-g6ae6dc22d2d1 #4126
-Hardware name: Samsung Exynos (Flattened Device Tree)
-Workqueue: events_unbound async_run_entry_fn
-[<c01110d0>] (unwind_backtrace) from [<c010cab8>] (show_stack+0x10/0x14)
-[<c010cab8>] (show_stack) from [<c0b7427c>] (dump_stack_lvl+0x58/0x70)
-[<c0b7427c>] (dump_stack_lvl) from [<c0192958>] 
-(check_noncircular+0x144/0x15c)
-[<c0192958>] (check_noncircular) from [<c0195e68>] 
-(__lock_acquire+0x17e4/0x3180)
-[<c0195e68>] (__lock_acquire) from [<c01983ec>] (lock_acquire+0x2a0/0x42c)
-[<c01983ec>] (lock_acquire) from [<c0b7ba80>] (__mutex_lock+0x94/0xaa8)
-[<c0b7ba80>] (__mutex_lock) from [<c0b7c4b0>] (mutex_lock_nested+0x1c/0x24)
-[<c0b7c4b0>] (mutex_lock_nested) from [<c077bf9c>] 
-(usb_reset_and_verify_device+0xe8/0x3e4)
-[<c077bf9c>] (usb_reset_and_verify_device) from [<c077e79c>] 
-(usb_port_resume+0x4e0/0x7e8)
-[<c077e79c>] (usb_port_resume) from [<c07941f0>] 
-(usb_generic_driver_resume+0x18/0x40)
-[<c07941f0>] (usb_generic_driver_resume) from [<c0789a40>] 
-(usb_resume_both+0x120/0x164)
-[<c0789a40>] (usb_resume_both) from [<c078a854>] (usb_resume+0x14/0x60)
-[<c078a854>] (usb_resume) from [<c0777fa0>] (usb_dev_resume+0xc/0x10)
-[<c0777fa0>] (usb_dev_resume) from [<c06ca1b8>] 
-(dpm_run_callback+0x98/0x32c)
-[<c06ca1b8>] (dpm_run_callback) from [<c06ca500>] (device_resume+0xb4/0x258)
-[<c06ca500>] (device_resume) from [<c06ca6c4>] (async_resume+0x20/0x64)
-[<c06ca6c4>] (async_resume) from [<c01548bc>] 
-(async_run_entry_fn+0x40/0x15c)
-[<c01548bc>] (async_run_entry_fn) from [<c0148a68>] 
-(process_one_work+0x2c8/0x7ec)
-[<c0148a68>] (process_one_work) from [<c0148fdc>] (worker_thread+0x50/0x584)
-[<c0148fdc>] (worker_thread) from [<c0151274>] (kthread+0x13c/0x19c)
-[<c0151274>] (kthread) from [<c0100108>] (ret_from_fork+0x14/0x2c)
-Exception stack(0xcd9cffb0 to 0xcd9cfff8)
-ffa0:                                     00000000 00000000 00000000 
-00000000
-ffc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 
-00000000
-ffe0: 00000000 00000000 00000000 00000000 00000013 00000000
-usb 1-1: reset high-speed USB device number 2 using exynos-ehci
-usb 1-1.1: reset high-speed USB device number 3 using exynos-ehci
-usb usb3: root hub lost power or was reset
-usb usb4: root hub lost power or was reset
-s3c-rtc 101e0000.rtc: rtc disabled, re-enabling
-smsc95xx 1-1.1:1.0 eth0: Link is Down
-OOM killer enabled.
-Restarting tasks ... done.
-PM: suspend exit
-
-Reverting it on top of next-20211118 fixes/hides this warning. Let me 
-know if I can help somehow fixing this issue.
-
-> ---
->   drivers/usb/core/hub.c | 14 +++++++++++---
->   1 file changed, 11 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 86658a81d284..00c3506324e4 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -4700,8 +4700,6 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
->   	if (oldspeed == USB_SPEED_LOW)
->   		delay = HUB_LONG_RESET_TIME;
->   
-> -	mutex_lock(hcd->address0_mutex);
-> -
->   	/* Reset the device; full speed may morph to high speed */
->   	/* FIXME a USB 2.0 device may morph into SuperSpeed on reset. */
->   	retval = hub_port_reset(hub, port1, udev, delay, false);
-> @@ -5016,7 +5014,6 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
->   		hub_port_disable(hub, port1, 0);
->   		update_devnum(udev, devnum);	/* for disconnect processing */
->   	}
-> -	mutex_unlock(hcd->address0_mutex);
->   	return retval;
->   }
->   
-> @@ -5246,6 +5243,9 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
->   		unit_load = 100;
->   
->   	status = 0;
-> +
-> +	mutex_lock(hcd->address0_mutex);
-> +
->   	for (i = 0; i < PORT_INIT_TRIES; i++) {
->   
->   		/* reallocate for each attempt, since references
-> @@ -5282,6 +5282,8 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
->   		if (status < 0)
->   			goto loop;
->   
-> +		mutex_unlock(hcd->address0_mutex);
-> +
->   		if (udev->quirks & USB_QUIRK_DELAY_INIT)
->   			msleep(2000);
->   
-> @@ -5370,6 +5372,7 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
->   
->   loop_disable:
->   		hub_port_disable(hub, port1, 1);
-> +		mutex_lock(hcd->address0_mutex);
->   loop:
->   		usb_ep0_reinit(udev);
->   		release_devnum(udev);
-> @@ -5396,6 +5399,8 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
->   	}
->   
->   done:
-> +	mutex_unlock(hcd->address0_mutex);
-> +
->   	hub_port_disable(hub, port1, 1);
->   	if (hcd->driver->relinquish_port && !hub->hdev->parent) {
->   		if (status != -ENOTCONN && status != -ENODEV)
-> @@ -5915,6 +5920,8 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
->   	bos = udev->bos;
->   	udev->bos = NULL;
->   
-> +	mutex_lock(hcd->address0_mutex);
-> +
->   	for (i = 0; i < PORT_INIT_TRIES; ++i) {
->   
->   		/* ep0 maxpacket size may change; let the HCD know about it.
-> @@ -5924,6 +5931,7 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
->   		if (ret >= 0 || ret == -ENOTCONN || ret == -ENODEV)
->   			break;
->   	}
-> +	mutex_unlock(hcd->address0_mutex);
->   
->   	if (ret < 0)
->   		goto re_enumerate;
-
-Best regards
+diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
+index e7a9561a826d..a35e99928807 100644
+--- a/drivers/extcon/extcon.c
++++ b/drivers/extcon/extcon.c
+@@ -876,7 +876,7 @@ struct extcon_dev *extcon_get_extcon_dev(const char *extcon_name)
+ 		if (!strcmp(sd->name, extcon_name))
+ 			goto out;
+ 	}
+-	sd = NULL;
++	sd = ERR_PTR(-EPROBE_DEFER);
+ out:
+ 	mutex_unlock(&extcon_dev_list_lock);
+ 	return sd;
+diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
+index ec41f6cd3f93..4acfeb52a44e 100644
+--- a/drivers/power/supply/axp288_charger.c
++++ b/drivers/power/supply/axp288_charger.c
+@@ -848,17 +848,20 @@ static int axp288_charger_probe(struct platform_device *pdev)
+ 	info->regmap_irqc = axp20x->regmap_irqc;
+ 
+ 	info->cable.edev = extcon_get_extcon_dev(AXP288_EXTCON_DEV_NAME);
+-	if (info->cable.edev == NULL) {
+-		dev_dbg(dev, "%s is not ready, probe deferred\n",
+-			AXP288_EXTCON_DEV_NAME);
+-		return -EPROBE_DEFER;
++	if (IS_ERR(info->cable.edev)) {
++		dev_err_probe(dev, PTR_ERR(info->cable.edev),
++			      "extcon_get_extcon_dev(%s) failed\n",
++			      AXP288_EXTCON_DEV_NAME);
++		return PTR_ERR(info->cable.edev);
+ 	}
+ 
+ 	if (acpi_dev_present(USB_HOST_EXTCON_HID, NULL, -1)) {
+ 		info->otg.cable = extcon_get_extcon_dev(USB_HOST_EXTCON_NAME);
+-		if (info->otg.cable == NULL) {
+-			dev_dbg(dev, "EXTCON_USB_HOST is not ready, probe deferred\n");
+-			return -EPROBE_DEFER;
++		if (IS_ERR(info->otg.cable)) {
++			dev_err_probe(dev, PTR_ERR(info->otg.cable),
++				      "extcon_get_extcon_dev(%s) failed\n",
++				      USB_HOST_EXTCON_NAME);
++			return PTR_ERR(info->otg.cable);
+ 		}
+ 		dev_info(dev, "Using " USB_HOST_EXTCON_HID " extcon for usb-id\n");
+ 	}
+diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
+index d67edb760c94..92db79400a6a 100644
+--- a/drivers/power/supply/charger-manager.c
++++ b/drivers/power/supply/charger-manager.c
+@@ -985,13 +985,10 @@ static int charger_extcon_init(struct charger_manager *cm,
+ 	cable->nb.notifier_call = charger_extcon_notifier;
+ 
+ 	cable->extcon_dev = extcon_get_extcon_dev(cable->extcon_name);
+-	if (IS_ERR_OR_NULL(cable->extcon_dev)) {
++	if (IS_ERR(cable->extcon_dev)) {
+ 		pr_err("Cannot find extcon_dev for %s (cable: %s)\n",
+ 			cable->extcon_name, cable->name);
+-		if (cable->extcon_dev == NULL)
+-			return -EPROBE_DEFER;
+-		else
+-			return PTR_ERR(cable->extcon_dev);
++		return PTR_ERR(cable->extcon_dev);
+ 	}
+ 
+ 	for (i = 0; i < ARRAY_SIZE(extcon_mapping); i++) {
+diff --git a/drivers/power/supply/max8997_charger.c b/drivers/power/supply/max8997_charger.c
+index 25207fe2aa68..634658adf313 100644
+--- a/drivers/power/supply/max8997_charger.c
++++ b/drivers/power/supply/max8997_charger.c
+@@ -248,13 +248,13 @@ static int max8997_battery_probe(struct platform_device *pdev)
+ 		dev_info(&pdev->dev, "couldn't get charger regulator\n");
+ 	}
+ 	charger->edev = extcon_get_extcon_dev("max8997-muic");
+-	if (IS_ERR_OR_NULL(charger->edev)) {
+-		if (!charger->edev)
+-			return -EPROBE_DEFER;
+-		dev_info(charger->dev, "couldn't get extcon device\n");
++	if (IS_ERR(charger->edev)) {
++		dev_err_probe(charger->dev, PTR_ERR(charger->edev),
++			      "couldn't get extcon device: max8997-muic\n");
++		return PTR_ERR(charger->edev);
+ 	}
+ 
+-	if (!IS_ERR(charger->reg) && !IS_ERR_OR_NULL(charger->edev)) {
++	if (!IS_ERR(charger->reg)) {
+ 		INIT_WORK(&charger->extcon_work, max8997_battery_extcon_evt_worker);
+ 		ret = devm_add_action(&pdev->dev, max8997_battery_extcon_evt_stop_work, charger);
+ 		if (ret) {
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index d7f76835137f..a490f79131c1 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -454,13 +454,8 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
+ 	 * This device property is for kernel internal use only and
+ 	 * is expected to be set by the glue code.
+ 	 */
+-	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
+-		edev = extcon_get_extcon_dev(name);
+-		if (!edev)
+-			return ERR_PTR(-EPROBE_DEFER);
+-
+-		return edev;
+-	}
++	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0)
++		return extcon_get_extcon_dev(name);
+ 
+ 	/*
+ 	 * Try to get an extcon device from the USB PHY controller's "port"
+diff --git a/drivers/usb/phy/phy-omap-otg.c b/drivers/usb/phy/phy-omap-otg.c
+index ee0863c6553e..6e6ef8c0bc7e 100644
+--- a/drivers/usb/phy/phy-omap-otg.c
++++ b/drivers/usb/phy/phy-omap-otg.c
+@@ -95,8 +95,8 @@ static int omap_otg_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 
+ 	extcon = extcon_get_extcon_dev(config->extcon);
+-	if (!extcon)
+-		return -EPROBE_DEFER;
++	if (IS_ERR(extcon))
++		return PTR_ERR(extcon);
+ 
+ 	otg_dev = devm_kzalloc(&pdev->dev, sizeof(*otg_dev), GFP_KERNEL);
+ 	if (!otg_dev)
+diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+index 7a2a17866a82..8594b59bd527 100644
+--- a/drivers/usb/typec/tcpm/fusb302.c
++++ b/drivers/usb/typec/tcpm/fusb302.c
+@@ -1706,8 +1706,8 @@ static int fusb302_probe(struct i2c_client *client,
+ 	 */
+ 	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
+ 		chip->extcon = extcon_get_extcon_dev(name);
+-		if (!chip->extcon)
+-			return -EPROBE_DEFER;
++		if (IS_ERR(chip->extcon))
++			return PTR_ERR(chip->extcon);
+ 	}
+ 
+ 	chip->vbus = devm_regulator_get(chip->dev, "vbus");
+diff --git a/drivers/extcon/extcon-axp288.c b/drivers/extcon/extcon-axp288.c
+index 7c6d5857ff25..180be768c215 100644
+--- a/drivers/extcon/extcon-axp288.c
++++ b/drivers/extcon/extcon-axp288.c
+@@ -394,8 +394,8 @@ static int axp288_extcon_probe(struct platform_device *pdev)
+ 		if (adev) {
+ 			info->id_extcon = extcon_get_extcon_dev(acpi_dev_name(adev));
+ 			put_device(&adev->dev);
+-			if (!info->id_extcon)
+-				return -EPROBE_DEFER;
++			if (IS_ERR(info->id_extcon))
++				return PTR_ERR(info->id_extcon);
+ 
+ 			dev_info(dev, "controlling USB role\n");
+ 		} else {
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+2.20.1
 
