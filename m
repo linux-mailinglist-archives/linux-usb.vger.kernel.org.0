@@ -2,188 +2,290 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 165A0455B20
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Nov 2021 13:01:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A593D455B74
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Nov 2021 13:22:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344446AbhKRMEx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Nov 2021 07:04:53 -0500
-Received: from mail-co1nam11on2066.outbound.protection.outlook.com ([40.107.220.66]:20865
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1344416AbhKRMEu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 18 Nov 2021 07:04:50 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MZDxGMJDWe1h97T6GA0LmPHeYxJK1G2ihRdKvR0+hP5mjV6fJqpJnd1OpI2xMBEQFKjeHgBfvB3+/xbvH+g5FpTPEEJfrjXbVBZi6k7sdPqQBBpaT1vWeMMavSH36B5dug17HE590pUbTeAWDxmb1v2HsFSBRiAlvcJnIJgAQ5paRIkzGUQsMWGa2M9wZL8zQMCw1QYJrZpQynugtEjcRv60HOOQR3YUJVi+/0gLcNOn3sSRlhdIa4fmqKbDq3bej58Xa9SQXo8NUpeHYQlztW7hlnVV8PnU/hIgpWC+vEe8UnjibGjHx++GO4bwWoZKslPPHHeqLp+ahQy8A0EZcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ldsqx9Nq8j44eQETQNbCm3M7fKgqZ2v6VdzGUKzlBTY=;
- b=klOAnmM5ppkidMZFAgHkiMjanSTN0498zNArGxVX5cn64hiIPm5PiM8LkfVoby5RzGccwjmO+hkPj+JidcMQeKLWEYtc9qrNAs2CY91M7k+pnALg2fFgBFKcaLuEjxYS6IUQgCYcy2/+AvpN8rZhMClGMVQusBZr2c0xJQFqM4Lh+kpGtZWx3boJDAmXpV4wzosNhGER3Ouk4KBTubPnQ2gX5oXJxuK971ik61YsgZd8zS1VBxs3ymdGWcoE+59W1LT52JD82f/VxE14YBW0+4ZkJzT+ZsCk63ZGRXRGp99/dqXO9zyenvPNGlYIxlznMmQLtxc3GP3CFY9fjOTvFA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ldsqx9Nq8j44eQETQNbCm3M7fKgqZ2v6VdzGUKzlBTY=;
- b=RW/iV8TI9HpgTnpSJ+r0c1BYCqfiHuaAivfjxSO+2BbSIs+pKKMQlSDy47DP8I2hG5LcC2Y1w3llbllmScEsVyNaM+vxC9ert3Rr1UjHZKUBVOIoC1sDL6VBxpN/yP+mRymunPEpFPwOnzsxWbdKANaty4HA6MYcOtmDCias5tM=
-Received: from SA9PR10CA0005.namprd10.prod.outlook.com (2603:10b6:806:a7::10)
- by DM6PR02MB3978.namprd02.prod.outlook.com (2603:10b6:5:98::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.17; Thu, 18 Nov
- 2021 12:01:49 +0000
-Received: from SN1NAM02FT0056.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:a7:cafe::c9) by SA9PR10CA0005.outlook.office365.com
- (2603:10b6:806:a7::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.22 via Frontend
- Transport; Thu, 18 Nov 2021 12:01:49 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0056.mail.protection.outlook.com (10.97.4.111) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4713.19 via Frontend Transport; Thu, 18 Nov 2021 12:01:49 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 18 Nov 2021 04:01:48 -0800
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Thu, 18 Nov 2021 04:01:48 -0800
-Envelope-to: linux-usb@vger.kernel.org,
- shubhrajyoti.datta@gmail.com,
- gregkh@linuxfoundation.org,
- balbi@kernel.org
-Received: from [10.140.6.59] (port=58964 helo=xhdshubhraj40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <shubhrajyoti.datta@xilinx.com>)
-        id 1mng6s-0000rg-On; Thu, 18 Nov 2021 04:01:47 -0800
-From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-To:     <linux-usb@vger.kernel.org>
-CC:     <git-dev@xilinx.com>, <shubhrajyoti.datta@gmail.com>,
-        <gregkh@linuxfoundation.org>, <balbi@kernel.org>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Subject: [PATCH v2] usb: xilinx: Add suspend resume support
-Date:   Thu, 18 Nov 2021 17:31:43 +0530
-Message-ID: <20211118120143.1079-1-shubhrajyoti.datta@xilinx.com>
-X-Mailer: git-send-email 2.17.1
+        id S1344640AbhKRMZi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Nov 2021 07:25:38 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:33268 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344620AbhKRMZe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Nov 2021 07:25:34 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 161A21F46A8F
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1637238152; bh=lYlMXiP4nz1RaOxxaa71KgChCTVevMt+/EYOLvLW4V8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TEqT96HIvd1shHDO25zQEISCjBscB1Kr2Bl/rRR9THeycUsoP0i/9rGmsAD2dh8U4
+         DN78nkkJBcacpMNNdAVirDXc6CAIUuqAXyJL2koX1BNxW2xZnNb81agekWL+F8YYhg
+         yjrouaP6AQwAX003L8BOHpy7/RPasgET0cUCmugSu9z+89ji1IQGi18R3XtCjY2cF/
+         5a1r/qYsikwxuV1BVHciFqDG5wHSic+rXYlm7oANNc/Cf+dNoxXDQ88ldPBKDGI2dE
+         oOhLpFXCicpjW0OBaTNJo35SvP3fOsSMfz3bT7JnUI5wdBOnLLhQFbkdjjUlB22u/T
+         ydIS/diYk0N1w==
+Received: by earth.universe (Postfix, from userid 1000)
+        id E492E3C0F9E; Thu, 18 Nov 2021 13:22:29 +0100 (CET)
+Date:   Thu, 18 Nov 2021 13:22:29 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] extcon: fix extcon_get_extcon_dev() error handling
+Message-ID: <20211118122229.f7zzpiif2k4hr73q@earth.universe>
+References: <20211118113026.GG1147@kili>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d795f298-2108-4c13-602d-08d9aa8b33ab
-X-MS-TrafficTypeDiagnostic: DM6PR02MB3978:
-X-Microsoft-Antispam-PRVS: <DM6PR02MB3978349F09AE31F7CB032A04AA9B9@DM6PR02MB3978.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: avW/jv7kgFaBt/C0Y9co08W+ByvCiKhg8H1U+jUTY+Z8w6vYnPXk9BOUHI144XNF53ZM5+4MX+p55YFjbzMgVQ7S9QH1x9pAjeowp3xYdBZws2Eeo3hpA3yaJTWAPTE1HCcXqZNKO7zr+3UEOHIXwb//4QcOPFioiNrIbbdKoR2CYszstkGoh4io3UnAB3NkuyC0YBMDPt9uxMHKVUazZZOxnUwAYH1viqWLV6514X3cFKInrKvCmRYLPjvy2GOzBuolrbU+bQ3rxJLu/fWOxQO7wGF60IKf5Fs5l3sfGBjeLPTlhWp8781vpazGru+BzWN6GogSl89z72Ceqgwt0lMT9pCaWarzYEQ0cJXdP7UYAF0P4rGaIy2RFH/xmCFHKyxTII4UmKeOktm7e0P+QqVBFVe28MAicUUB18qOjtf31PtOvyRCZEPjzGblKsmcBOK7fX+iikWlu6rqT9K5K8YFMg6M6TIzMRa3/oGW9UswycP2+F8J3vJrn1tLfQcHFVGSc1mx4sZniJmwM9KpIDmSY22OLJBmBmHd/oWjVB2Y046G15+rJSCR0cJLDv74FlBYx+jkUjasGyklG/BoQGylPjFiUY+sJ3xGB2TtyiUxx0o9nPrzkcjdDVONAkC2mTX2MetdsAXqEmjnPqboeAOG4kA+UdnIJk49KufYGsNLyYgk9cq47KfVcahYcOMof4DxQbf9Fcu+DeVhjL5WS+iUGbBBqHnR2P6gyKG0agk=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(36840700001)(46966006)(186003)(1076003)(5660300002)(508600001)(83380400001)(26005)(4326008)(36860700001)(8676002)(2906002)(9786002)(82310400003)(7636003)(70206006)(356005)(107886003)(6666004)(2616005)(316002)(36756003)(426003)(54906003)(7696005)(47076005)(6916009)(8936002)(15650500001)(70586007)(44832011)(336012)(36906005)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2021 12:01:49.2871
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d795f298-2108-4c13-602d-08d9aa8b33ab
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0056.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB3978
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="z5v7lnf7mcpizrt6"
+Content-Disposition: inline
+In-Reply-To: <20211118113026.GG1147@kili>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add suspend resume support. In the suspend udc is suspended
-and it is set to ready at resume for it to be functional.
 
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
----
-v2: Call suspend instead of disconnect
+--z5v7lnf7mcpizrt6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- drivers/usb/gadget/udc/udc-xilinx.c | 56 +++++++++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+Hi,
 
-diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
-index 30070a488c87..a0570b9d722f 100644
---- a/drivers/usb/gadget/udc/udc-xilinx.c
-+++ b/drivers/usb/gadget/udc/udc-xilinx.c
-@@ -2175,6 +2175,61 @@ static int xudc_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+#ifdef CONFIG_PM_SLEEP
-+static int xudc_suspend(struct device *dev)
-+{
-+	struct xusb_udc *udc;
-+	u32 crtlreg;
-+	unsigned long flags;
-+
-+	udc = dev_get_drvdata(dev);
-+
-+	spin_lock_irqsave(&udc->lock, flags);
-+
-+	crtlreg = udc->read_fn(udc->addr + XUSB_CONTROL_OFFSET);
-+	crtlreg &= ~XUSB_CONTROL_USB_READY_MASK;
-+
-+	udc->write_fn(udc->addr, XUSB_CONTROL_OFFSET, crtlreg);
-+
-+	spin_unlock_irqrestore(&udc->lock, flags);
-+	if (udc->driver && udc->driver->suspend)
-+		udc->driver->suspend(&udc->gadget);
-+
-+	clk_disable(udc->clk);
-+
-+	return 0;
-+}
-+
-+static int xudc_resume(struct device *dev)
-+{
-+	struct xusb_udc *udc;
-+	u32 crtlreg;
-+	unsigned long flags;
-+	int ret;
-+
-+	udc = dev_get_drvdata(dev);
-+
-+	ret = clk_enable(udc->clk);
-+	if (ret < 0)
-+		return ret;
-+
-+	spin_lock_irqsave(&udc->lock, flags);
-+
-+	crtlreg = udc->read_fn(udc->addr + XUSB_CONTROL_OFFSET);
-+	crtlreg |= XUSB_CONTROL_USB_READY_MASK;
-+
-+	udc->write_fn(udc->addr, XUSB_CONTROL_OFFSET, crtlreg);
-+
-+	spin_unlock_irqrestore(&udc->lock, flags);
-+
-+	return 0;
-+}
-+#endif /* CONFIG_PM_SLEEP */
-+
-+static const struct dev_pm_ops xudc_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(xudc_suspend, xudc_resume)
-+};
-+
- /* Match table for of_platform binding */
- static const struct of_device_id usb_of_match[] = {
- 	{ .compatible = "xlnx,usb2-device-4.00.a", },
-@@ -2186,6 +2241,7 @@ static struct platform_driver xudc_driver = {
- 	.driver = {
- 		.name = driver_name,
- 		.of_match_table = usb_of_match,
-+		.pm	= &xudc_pm_ops,
- 	},
- 	.probe = xudc_probe,
- 	.remove = xudc_remove,
--- 
-2.17.1
+On Thu, Nov 18, 2021 at 02:32:22PM +0300, Dan Carpenter wrote:
+> The extcon_get_extcon_dev() function returns error pointers on error
+> and NULL when it's a -EPROBE_DEFER defer situation.  There are eight
+> callers and only two of them handled this correctly.  In the other
+> callers an error pointer return would lead to a crash.
+>=20
+> What prevents crashes is that errors can only happen in the case of
+> a bug in the caller or if CONFIG_EXTCON is disabled.  Six out of
+> eight callers use the Kconfig to either depend on or select
+> CONFIG_EXTCON.  Thus the real life impact of these bugs is tiny.
+>=20
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+> The two callers where the drivers can be built without CONFIG_EXTCON
+> are TYPEC_FUSB302 and CHARGER_MAX8997.
+>=20
+> If we apply this patch, it might be a good idea to send it to -stable
+> so that backported code that relies on handling error pointers does
+> not break silently.
+>=20
+>  drivers/extcon/extcon.c                |  2 +-
+>  drivers/power/supply/axp288_charger.c  | 17 ++++++++++-------
+>  drivers/power/supply/charger-manager.c |  7 ++-----
+>  drivers/power/supply/max8997_charger.c | 10 +++++-----
+>  drivers/usb/dwc3/drd.c                 |  9 ++-------
+>  drivers/usb/phy/phy-omap-otg.c         |  4 ++--
+>  drivers/usb/typec/tcpm/fusb302.c       |  4 ++--
+>  drivers/extcon/extcon-axp288.c         |  4 ++--
+>  8 files changed, 26 insertions(+), 31 deletions(-)
 
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com> # for power-s=
+upply
+
+-- Sebastian
+
+>=20
+> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
+> index e7a9561a826d..a35e99928807 100644
+> --- a/drivers/extcon/extcon.c
+> +++ b/drivers/extcon/extcon.c
+> @@ -876,7 +876,7 @@ struct extcon_dev *extcon_get_extcon_dev(const char *=
+extcon_name)
+>  		if (!strcmp(sd->name, extcon_name))
+>  			goto out;
+>  	}
+> -	sd =3D NULL;
+> +	sd =3D ERR_PTR(-EPROBE_DEFER);
+>  out:
+>  	mutex_unlock(&extcon_dev_list_lock);
+>  	return sd;
+> diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply=
+/axp288_charger.c
+> index ec41f6cd3f93..4acfeb52a44e 100644
+> --- a/drivers/power/supply/axp288_charger.c
+> +++ b/drivers/power/supply/axp288_charger.c
+> @@ -848,17 +848,20 @@ static int axp288_charger_probe(struct platform_dev=
+ice *pdev)
+>  	info->regmap_irqc =3D axp20x->regmap_irqc;
+> =20
+>  	info->cable.edev =3D extcon_get_extcon_dev(AXP288_EXTCON_DEV_NAME);
+> -	if (info->cable.edev =3D=3D NULL) {
+> -		dev_dbg(dev, "%s is not ready, probe deferred\n",
+> -			AXP288_EXTCON_DEV_NAME);
+> -		return -EPROBE_DEFER;
+> +	if (IS_ERR(info->cable.edev)) {
+> +		dev_err_probe(dev, PTR_ERR(info->cable.edev),
+> +			      "extcon_get_extcon_dev(%s) failed\n",
+> +			      AXP288_EXTCON_DEV_NAME);
+> +		return PTR_ERR(info->cable.edev);
+>  	}
+> =20
+>  	if (acpi_dev_present(USB_HOST_EXTCON_HID, NULL, -1)) {
+>  		info->otg.cable =3D extcon_get_extcon_dev(USB_HOST_EXTCON_NAME);
+> -		if (info->otg.cable =3D=3D NULL) {
+> -			dev_dbg(dev, "EXTCON_USB_HOST is not ready, probe deferred\n");
+> -			return -EPROBE_DEFER;
+> +		if (IS_ERR(info->otg.cable)) {
+> +			dev_err_probe(dev, PTR_ERR(info->otg.cable),
+> +				      "extcon_get_extcon_dev(%s) failed\n",
+> +				      USB_HOST_EXTCON_NAME);
+> +			return PTR_ERR(info->otg.cable);
+>  		}
+>  		dev_info(dev, "Using " USB_HOST_EXTCON_HID " extcon for usb-id\n");
+>  	}
+> diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/suppl=
+y/charger-manager.c
+> index d67edb760c94..92db79400a6a 100644
+> --- a/drivers/power/supply/charger-manager.c
+> +++ b/drivers/power/supply/charger-manager.c
+> @@ -985,13 +985,10 @@ static int charger_extcon_init(struct charger_manag=
+er *cm,
+>  	cable->nb.notifier_call =3D charger_extcon_notifier;
+> =20
+>  	cable->extcon_dev =3D extcon_get_extcon_dev(cable->extcon_name);
+> -	if (IS_ERR_OR_NULL(cable->extcon_dev)) {
+> +	if (IS_ERR(cable->extcon_dev)) {
+>  		pr_err("Cannot find extcon_dev for %s (cable: %s)\n",
+>  			cable->extcon_name, cable->name);
+> -		if (cable->extcon_dev =3D=3D NULL)
+> -			return -EPROBE_DEFER;
+> -		else
+> -			return PTR_ERR(cable->extcon_dev);
+> +		return PTR_ERR(cable->extcon_dev);
+>  	}
+> =20
+>  	for (i =3D 0; i < ARRAY_SIZE(extcon_mapping); i++) {
+> diff --git a/drivers/power/supply/max8997_charger.c b/drivers/power/suppl=
+y/max8997_charger.c
+> index 25207fe2aa68..634658adf313 100644
+> --- a/drivers/power/supply/max8997_charger.c
+> +++ b/drivers/power/supply/max8997_charger.c
+> @@ -248,13 +248,13 @@ static int max8997_battery_probe(struct platform_de=
+vice *pdev)
+>  		dev_info(&pdev->dev, "couldn't get charger regulator\n");
+>  	}
+>  	charger->edev =3D extcon_get_extcon_dev("max8997-muic");
+> -	if (IS_ERR_OR_NULL(charger->edev)) {
+> -		if (!charger->edev)
+> -			return -EPROBE_DEFER;
+> -		dev_info(charger->dev, "couldn't get extcon device\n");
+> +	if (IS_ERR(charger->edev)) {
+> +		dev_err_probe(charger->dev, PTR_ERR(charger->edev),
+> +			      "couldn't get extcon device: max8997-muic\n");
+> +		return PTR_ERR(charger->edev);
+>  	}
+> =20
+> -	if (!IS_ERR(charger->reg) && !IS_ERR_OR_NULL(charger->edev)) {
+> +	if (!IS_ERR(charger->reg)) {
+>  		INIT_WORK(&charger->extcon_work, max8997_battery_extcon_evt_worker);
+>  		ret =3D devm_add_action(&pdev->dev, max8997_battery_extcon_evt_stop_wo=
+rk, charger);
+>  		if (ret) {
+> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+> index d7f76835137f..a490f79131c1 100644
+> --- a/drivers/usb/dwc3/drd.c
+> +++ b/drivers/usb/dwc3/drd.c
+> @@ -454,13 +454,8 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc=
+3 *dwc)
+>  	 * This device property is for kernel internal use only and
+>  	 * is expected to be set by the glue code.
+>  	 */
+> -	if (device_property_read_string(dev, "linux,extcon-name", &name) =3D=3D=
+ 0) {
+> -		edev =3D extcon_get_extcon_dev(name);
+> -		if (!edev)
+> -			return ERR_PTR(-EPROBE_DEFER);
+> -
+> -		return edev;
+> -	}
+> +	if (device_property_read_string(dev, "linux,extcon-name", &name) =3D=3D=
+ 0)
+> +		return extcon_get_extcon_dev(name);
+> =20
+>  	/*
+>  	 * Try to get an extcon device from the USB PHY controller's "port"
+> diff --git a/drivers/usb/phy/phy-omap-otg.c b/drivers/usb/phy/phy-omap-ot=
+g.c
+> index ee0863c6553e..6e6ef8c0bc7e 100644
+> --- a/drivers/usb/phy/phy-omap-otg.c
+> +++ b/drivers/usb/phy/phy-omap-otg.c
+> @@ -95,8 +95,8 @@ static int omap_otg_probe(struct platform_device *pdev)
+>  		return -ENODEV;
+> =20
+>  	extcon =3D extcon_get_extcon_dev(config->extcon);
+> -	if (!extcon)
+> -		return -EPROBE_DEFER;
+> +	if (IS_ERR(extcon))
+> +		return PTR_ERR(extcon);
+> =20
+>  	otg_dev =3D devm_kzalloc(&pdev->dev, sizeof(*otg_dev), GFP_KERNEL);
+>  	if (!otg_dev)
+> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fu=
+sb302.c
+> index 7a2a17866a82..8594b59bd527 100644
+> --- a/drivers/usb/typec/tcpm/fusb302.c
+> +++ b/drivers/usb/typec/tcpm/fusb302.c
+> @@ -1706,8 +1706,8 @@ static int fusb302_probe(struct i2c_client *client,
+>  	 */
+>  	if (device_property_read_string(dev, "linux,extcon-name", &name) =3D=3D=
+ 0) {
+>  		chip->extcon =3D extcon_get_extcon_dev(name);
+> -		if (!chip->extcon)
+> -			return -EPROBE_DEFER;
+> +		if (IS_ERR(chip->extcon))
+> +			return PTR_ERR(chip->extcon);
+>  	}
+> =20
+>  	chip->vbus =3D devm_regulator_get(chip->dev, "vbus");
+> diff --git a/drivers/extcon/extcon-axp288.c b/drivers/extcon/extcon-axp28=
+8.c
+> index 7c6d5857ff25..180be768c215 100644
+> --- a/drivers/extcon/extcon-axp288.c
+> +++ b/drivers/extcon/extcon-axp288.c
+> @@ -394,8 +394,8 @@ static int axp288_extcon_probe(struct platform_device=
+ *pdev)
+>  		if (adev) {
+>  			info->id_extcon =3D extcon_get_extcon_dev(acpi_dev_name(adev));
+>  			put_device(&adev->dev);
+> -			if (!info->id_extcon)
+> -				return -EPROBE_DEFER;
+> +			if (IS_ERR(info->id_extcon))
+> +				return PTR_ERR(info->id_extcon);
+> =20
+>  			dev_info(dev, "controlling USB role\n");
+>  		} else {
+> --=20
+> 2.20.1
+>=20
+
+--z5v7lnf7mcpizrt6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmGWRX8ACgkQ2O7X88g7
++prY1A/6AlHt9/9Sqs3JZBaDcacgQbuL2hATtIodPI4knAHSG/ZQgpNIoqMnGGuw
+fNHM9uJMaObVolucsxcNTbkcqD5feUu/DObfdUuzydS6B8xJjLNbLHUT6pX2gnmE
+hX2elEzlO1+1Om1Sp2xBkkvx2avHj/tUBv3mBsiyTCdPF8eD4KgFKcArRlpz/IAv
++SRbRVzmx1OpEw4EwBzcNPrY1M/s1PSw7HXz6IHE3DckyJu9IYSlp1F9dal8WTXl
+AytAdo1Rd1ALOfiTX0A8hqJKmwdOUK4FAg+IjHDh8FPRM72/nWPsuH9XJ+q771E1
+d+N1FAAVU6OFfXEUVh1h4/lnThC+isTO5Bj5JTIDcZxu/4AGOqQIIFI6Or39A0Y5
+n3wIbtejOZTEvSUvzLyNkkt50KC0q1lx8KsTqyO75gLyGVOOoRerQ8yfaH2kMVmK
+TR9g3TiTw1eZoFbDzmrVVK3yo5SfNo1ULnpzTz4YqzsMjOIXO6Jk8O3Liqt8DnDE
+FZZYTRxUzKZiLAN5P6XB5P4o4LgzDaVL/rNKMLURBb5u4+gGoDs2gg1ysXdchdyG
+CTfYsRLr1yl8Ocg9rA2gfTIRfr4s8av7/ZY1F6I5rti+AHIRK7AonzaofojPKYGu
+xiy+zua4N3lU63Og+lCY405LMIjNU583I/RrSsK33d1B8USuryE=
+=BXLN
+-----END PGP SIGNATURE-----
+
+--z5v7lnf7mcpizrt6--
