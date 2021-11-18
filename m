@@ -2,126 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DAD455AE0
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Nov 2021 12:46:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 165A0455B20
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Nov 2021 13:01:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344244AbhKRLtg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Nov 2021 06:49:36 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:42455 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344380AbhKRLse (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Nov 2021 06:48:34 -0500
+        id S1344446AbhKRMEx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Nov 2021 07:04:53 -0500
+Received: from mail-co1nam11on2066.outbound.protection.outlook.com ([40.107.220.66]:20865
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1344416AbhKRMEu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 18 Nov 2021 07:04:50 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MZDxGMJDWe1h97T6GA0LmPHeYxJK1G2ihRdKvR0+hP5mjV6fJqpJnd1OpI2xMBEQFKjeHgBfvB3+/xbvH+g5FpTPEEJfrjXbVBZi6k7sdPqQBBpaT1vWeMMavSH36B5dug17HE590pUbTeAWDxmb1v2HsFSBRiAlvcJnIJgAQ5paRIkzGUQsMWGa2M9wZL8zQMCw1QYJrZpQynugtEjcRv60HOOQR3YUJVi+/0gLcNOn3sSRlhdIa4fmqKbDq3bej58Xa9SQXo8NUpeHYQlztW7hlnVV8PnU/hIgpWC+vEe8UnjibGjHx++GO4bwWoZKslPPHHeqLp+ahQy8A0EZcA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ldsqx9Nq8j44eQETQNbCm3M7fKgqZ2v6VdzGUKzlBTY=;
+ b=klOAnmM5ppkidMZFAgHkiMjanSTN0498zNArGxVX5cn64hiIPm5PiM8LkfVoby5RzGccwjmO+hkPj+JidcMQeKLWEYtc9qrNAs2CY91M7k+pnALg2fFgBFKcaLuEjxYS6IUQgCYcy2/+AvpN8rZhMClGMVQusBZr2c0xJQFqM4Lh+kpGtZWx3boJDAmXpV4wzosNhGER3Ouk4KBTubPnQ2gX5oXJxuK971ik61YsgZd8zS1VBxs3ymdGWcoE+59W1LT52JD82f/VxE14YBW0+4ZkJzT+ZsCk63ZGRXRGp99/dqXO9zyenvPNGlYIxlznMmQLtxc3GP3CFY9fjOTvFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1637235935; x=1668771935;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=cISyEGAsMJQM8NdfhvC1TwyQRYsH3j/ZOtqURpc7aUM=;
-  b=NPKRnWEkppeilR9xc5tHjtzx42oavYjA5x3pr4iuoiMA56w3TmFGG1SV
-   LSIYo/gvP9QdBOPJLlcRiIB5XI+HOFJTX4Rksxm/cfx8S0fUK3/2Rc8Nl
-   l00pR/SdYz7o6kcPERXHRer5JVRD64TM8bitpqnq/FdK4ae3ufOz4mwmb
-   M=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 18 Nov 2021 03:45:34 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2021 03:45:33 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 18 Nov 2021 03:45:33 -0800
-Received: from [10.216.28.51] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 18 Nov
- 2021 03:45:28 -0800
-Subject: Re: [PATCH v9 4/5] usb: dwc3: qcom: Change the IRQ flag for DP/DM hs
- phy irq
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>
-References: <1635753224-23975-1-git-send-email-quic_c_sanm@quicinc.com>
- <1635753224-23975-5-git-send-email-quic_c_sanm@quicinc.com>
- <YYAWfSSD7FCXPo8d@ripper>
-From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Message-ID: <0a27ac22-5a80-4885-9344-7e6b9a9480f3@quicinc.com>
-Date:   Thu, 18 Nov 2021 17:15:23 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ldsqx9Nq8j44eQETQNbCm3M7fKgqZ2v6VdzGUKzlBTY=;
+ b=RW/iV8TI9HpgTnpSJ+r0c1BYCqfiHuaAivfjxSO+2BbSIs+pKKMQlSDy47DP8I2hG5LcC2Y1w3llbllmScEsVyNaM+vxC9ert3Rr1UjHZKUBVOIoC1sDL6VBxpN/yP+mRymunPEpFPwOnzsxWbdKANaty4HA6MYcOtmDCias5tM=
+Received: from SA9PR10CA0005.namprd10.prod.outlook.com (2603:10b6:806:a7::10)
+ by DM6PR02MB3978.namprd02.prod.outlook.com (2603:10b6:5:98::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.17; Thu, 18 Nov
+ 2021 12:01:49 +0000
+Received: from SN1NAM02FT0056.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:a7:cafe::c9) by SA9PR10CA0005.outlook.office365.com
+ (2603:10b6:806:a7::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.22 via Frontend
+ Transport; Thu, 18 Nov 2021 12:01:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0056.mail.protection.outlook.com (10.97.4.111) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4713.19 via Frontend Transport; Thu, 18 Nov 2021 12:01:49 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 18 Nov 2021 04:01:48 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Thu, 18 Nov 2021 04:01:48 -0800
+Envelope-to: linux-usb@vger.kernel.org,
+ shubhrajyoti.datta@gmail.com,
+ gregkh@linuxfoundation.org,
+ balbi@kernel.org
+Received: from [10.140.6.59] (port=58964 helo=xhdshubhraj40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <shubhrajyoti.datta@xilinx.com>)
+        id 1mng6s-0000rg-On; Thu, 18 Nov 2021 04:01:47 -0800
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+To:     <linux-usb@vger.kernel.org>
+CC:     <git-dev@xilinx.com>, <shubhrajyoti.datta@gmail.com>,
+        <gregkh@linuxfoundation.org>, <balbi@kernel.org>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Subject: [PATCH v2] usb: xilinx: Add suspend resume support
+Date:   Thu, 18 Nov 2021 17:31:43 +0530
+Message-ID: <20211118120143.1079-1-shubhrajyoti.datta@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <YYAWfSSD7FCXPo8d@ripper>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d795f298-2108-4c13-602d-08d9aa8b33ab
+X-MS-TrafficTypeDiagnostic: DM6PR02MB3978:
+X-Microsoft-Antispam-PRVS: <DM6PR02MB3978349F09AE31F7CB032A04AA9B9@DM6PR02MB3978.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: avW/jv7kgFaBt/C0Y9co08W+ByvCiKhg8H1U+jUTY+Z8w6vYnPXk9BOUHI144XNF53ZM5+4MX+p55YFjbzMgVQ7S9QH1x9pAjeowp3xYdBZws2Eeo3hpA3yaJTWAPTE1HCcXqZNKO7zr+3UEOHIXwb//4QcOPFioiNrIbbdKoR2CYszstkGoh4io3UnAB3NkuyC0YBMDPt9uxMHKVUazZZOxnUwAYH1viqWLV6514X3cFKInrKvCmRYLPjvy2GOzBuolrbU+bQ3rxJLu/fWOxQO7wGF60IKf5Fs5l3sfGBjeLPTlhWp8781vpazGru+BzWN6GogSl89z72Ceqgwt0lMT9pCaWarzYEQ0cJXdP7UYAF0P4rGaIy2RFH/xmCFHKyxTII4UmKeOktm7e0P+QqVBFVe28MAicUUB18qOjtf31PtOvyRCZEPjzGblKsmcBOK7fX+iikWlu6rqT9K5K8YFMg6M6TIzMRa3/oGW9UswycP2+F8J3vJrn1tLfQcHFVGSc1mx4sZniJmwM9KpIDmSY22OLJBmBmHd/oWjVB2Y046G15+rJSCR0cJLDv74FlBYx+jkUjasGyklG/BoQGylPjFiUY+sJ3xGB2TtyiUxx0o9nPrzkcjdDVONAkC2mTX2MetdsAXqEmjnPqboeAOG4kA+UdnIJk49KufYGsNLyYgk9cq47KfVcahYcOMof4DxQbf9Fcu+DeVhjL5WS+iUGbBBqHnR2P6gyKG0agk=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(36840700001)(46966006)(186003)(1076003)(5660300002)(508600001)(83380400001)(26005)(4326008)(36860700001)(8676002)(2906002)(9786002)(82310400003)(7636003)(70206006)(356005)(107886003)(6666004)(2616005)(316002)(36756003)(426003)(54906003)(7696005)(47076005)(6916009)(8936002)(15650500001)(70586007)(44832011)(336012)(36906005)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2021 12:01:49.2871
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d795f298-2108-4c13-602d-08d9aa8b33ab
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0056.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB3978
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Add suspend resume support. In the suspend udc is suspended
+and it is set to ready at resume for it to be functional.
 
-On 11/1/2021 10:01 PM, Bjorn Andersson wrote:
-> On Mon 01 Nov 00:53 PDT 2021, Sandeep Maheswaram wrote:
->
->> Change the IRQ flags for DP/DM hs phy irq to avoid interrupt
->> triggering during system suspend.
->>
-> Why does replacing HIGH with RISING change this behavior, or do you get
-> a RISING interrupt just before hitting suspend which you ignore?
->
-> I think it would be nice to have the commit message for this (or per
-> below request the DTS change) include some details about what's really
-> happening on the irq line.
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+---
+v2: Call suspend instead of disconnect
 
-When we use IRQF_TRIGGER_HIGH we get interrupt during PM suspend and 
-causes resume.
+ drivers/usb/gadget/udc/udc-xilinx.c | 56 +++++++++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-[  119.743083] Resume caused by IRQ 101, qcom_dwc3 DP_HS
+diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
+index 30070a488c87..a0570b9d722f 100644
+--- a/drivers/usb/gadget/udc/udc-xilinx.c
++++ b/drivers/usb/gadget/udc/udc-xilinx.c
+@@ -2175,6 +2175,61 @@ static int xudc_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_PM_SLEEP
++static int xudc_suspend(struct device *dev)
++{
++	struct xusb_udc *udc;
++	u32 crtlreg;
++	unsigned long flags;
++
++	udc = dev_get_drvdata(dev);
++
++	spin_lock_irqsave(&udc->lock, flags);
++
++	crtlreg = udc->read_fn(udc->addr + XUSB_CONTROL_OFFSET);
++	crtlreg &= ~XUSB_CONTROL_USB_READY_MASK;
++
++	udc->write_fn(udc->addr, XUSB_CONTROL_OFFSET, crtlreg);
++
++	spin_unlock_irqrestore(&udc->lock, flags);
++	if (udc->driver && udc->driver->suspend)
++		udc->driver->suspend(&udc->gadget);
++
++	clk_disable(udc->clk);
++
++	return 0;
++}
++
++static int xudc_resume(struct device *dev)
++{
++	struct xusb_udc *udc;
++	u32 crtlreg;
++	unsigned long flags;
++	int ret;
++
++	udc = dev_get_drvdata(dev);
++
++	ret = clk_enable(udc->clk);
++	if (ret < 0)
++		return ret;
++
++	spin_lock_irqsave(&udc->lock, flags);
++
++	crtlreg = udc->read_fn(udc->addr + XUSB_CONTROL_OFFSET);
++	crtlreg |= XUSB_CONTROL_USB_READY_MASK;
++
++	udc->write_fn(udc->addr, XUSB_CONTROL_OFFSET, crtlreg);
++
++	spin_unlock_irqrestore(&udc->lock, flags);
++
++	return 0;
++}
++#endif /* CONFIG_PM_SLEEP */
++
++static const struct dev_pm_ops xudc_pm_ops = {
++	SET_SYSTEM_SLEEP_PM_OPS(xudc_suspend, xudc_resume)
++};
++
+ /* Match table for of_platform binding */
+ static const struct of_device_id usb_of_match[] = {
+ 	{ .compatible = "xlnx,usb2-device-4.00.a", },
+@@ -2186,6 +2241,7 @@ static struct platform_driver xudc_driver = {
+ 	.driver = {
+ 		.name = driver_name,
+ 		.of_match_table = usb_of_match,
++		.pm	= &xudc_pm_ops,
+ 	},
+ 	.probe = xudc_probe,
+ 	.remove = xudc_remove,
+-- 
+2.17.1
 
->> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->> ---
->>   drivers/usb/dwc3/dwc3-qcom.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
->> index 54461f1..356f4f8 100644
->> --- a/drivers/usb/dwc3/dwc3-qcom.c
->> +++ b/drivers/usb/dwc3/dwc3-qcom.c
->> @@ -473,7 +473,7 @@ static int dwc3_qcom_setup_irq(struct platform_device *pdev)
->>   		irq_set_status_flags(irq, IRQ_NOAUTOEN);
->>   		ret = devm_request_threaded_irq(qcom->dev, irq, NULL,
->>   					qcom_dwc3_resume_irq,
->> -					IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
->> +					IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-> IRQF_TRIGGER_* should be omitted from the driver and supplied by the DT.
->
-> The dtbs out there should all have IRQ_TYPE_LEVEL_HIGH at this time, so
-> simply dropping that from this list and updating the dts would be the
-> right thing to do.
->
-> Regards,
-> Bjorn
-Ok. Dropping IRQF_TRIGGER_*  solved the resume issue during PM suspend.
->>   					"qcom_dwc3 DP_HS", qcom);
->>   		if (ret) {
->>   			dev_err(qcom->dev, "dp_hs_phy_irq failed: %d\n", ret);
->> @@ -488,7 +488,7 @@ static int dwc3_qcom_setup_irq(struct platform_device *pdev)
->>   		irq_set_status_flags(irq, IRQ_NOAUTOEN);
->>   		ret = devm_request_threaded_irq(qcom->dev, irq, NULL,
->>   					qcom_dwc3_resume_irq,
->> -					IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
->> +					IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
->>   					"qcom_dwc3 DM_HS", qcom);
->>   		if (ret) {
->>   			dev_err(qcom->dev, "dm_hs_phy_irq failed: %d\n", ret);
->> -- 
->> 2.7.4
->>
