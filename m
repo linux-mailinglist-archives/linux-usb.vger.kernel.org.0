@@ -2,112 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DC44576D5
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Nov 2021 20:00:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B234576FF
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Nov 2021 20:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235363AbhKSTDp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Nov 2021 14:03:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
+        id S232022AbhKSTag (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Nov 2021 14:30:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234568AbhKSTDp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Nov 2021 14:03:45 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC5FC061574
-        for <linux-usb@vger.kernel.org>; Fri, 19 Nov 2021 11:00:43 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id s14so11161628ilv.10
-        for <linux-usb@vger.kernel.org>; Fri, 19 Nov 2021 11:00:43 -0800 (PST)
+        with ESMTP id S230011AbhKSTaf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Nov 2021 14:30:35 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA581C06173E
+        for <linux-usb@vger.kernel.org>; Fri, 19 Nov 2021 11:27:33 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id y8so8888020plg.1
+        for <linux-usb@vger.kernel.org>; Fri, 19 Nov 2021 11:27:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=XAEzHWF08EdlsQ6uHuhyOeYKqmfDnGnJ3ixv4DeJbt8=;
-        b=Ka7RBmI+xAf0noF7sFe4MmKyRwU6YgezCUAaspWLoaAvN82Nnxv8ikGUWY1glj1mEZ
-         XJkQX5IfcG7CDgLSr9fTcQNsqfk1c2D4JAkJk4tBCiE1vTFSRPjHmyNtiVS970Vys9/d
-         wROiK65GkwMfow/yznFt6qPANYpc/L5QAZTeI=
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=lsppzZdzu+Waonf7w8q0N1vP3OgbHGJj0JhrjEEHC0w=;
+        b=sdsdx0ECSB96vcQ3k2RO6euUeTaYzHNHHySgOi1TWAYLU6aP/1JhKuvNFr7RTpC6wb
+         ZJOhnbwQv7hWRqgvDpkXlLfamAhJgZRNEFrqcS7JYOSsCOKUbiJFsxNpTCLytXXsrH8l
+         vjkAxpXsYiBZ6XgtI6NKAP8v2xXKyXzwrJD8j847Oq4q/LAUB2G8I3JOah1ktjceP/YP
+         skeEwcTQ0ANnl6g8jWvtd0oRXQ8o53eGfB/hAYUkotB719+ftf1/zbRFnqM1nfjxzC9V
+         r93Vmx+P5JJ2uT6DMdMHE15dVCbRsEzDYMgS+fZjbP1F5z3/fvnxr5hzvkg1Bw1myizB
+         rE0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XAEzHWF08EdlsQ6uHuhyOeYKqmfDnGnJ3ixv4DeJbt8=;
-        b=EQ8vV4PMGO+BZ/fbwA+8eZn8DbWrtXlJrsW6yQ09LnXDaWr84g2OiViF5DfpeWpt5V
-         QeuJzWmt9ZdyqN7rbCYE76qoKYrgBP7Mw7tTA2IYwg+L/Fd9LDPLGstDIr2N5MRVU/w6
-         yaQxQncOrXbV8KZHv4VJCZ+kAVqhQI2tN6BAk7CWncQT6uCwX0xTT5XLMHlvYJqHwTZU
-         8WBxLVkwr9f3j6JXq5KpCY/c2J7VOVY89GoMJC/KKySwEKwoKyiPLZyALWTPb076hkwo
-         sA8/gIkGvcU97QlKWJWbparIcJto8nSpV24Z+IOQywQM5HjkqUJkbkDhdzAX9xamBDsu
-         BzDA==
-X-Gm-Message-State: AOAM530gCozVesvpkhtFvjVfRdCoFdGkfFi3S/lWw6Y+bnmlcQYGWM1t
-        YwgSeKr7/a19DOUpJXO7kLASxg==
-X-Google-Smtp-Source: ABdhPJw7ioWPueWnUxTkSmpbQuWphBCvPXE2x4ZoFWvASA+XXiZncW3mUeFxmUo5da/vsPByW5gUow==
-X-Received: by 2002:a05:6e02:219c:: with SMTP id j28mr6415980ila.264.1637348442960;
-        Fri, 19 Nov 2021 11:00:42 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id m2sm321083iob.21.2021.11.19.11.00.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Nov 2021 11:00:42 -0800 (PST)
-Subject: Re: [PATCH v1 1/4] tools/usbip: update documentation
-To:     Lars Gunnarsson <gunnarsson.lars@gmail.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211107171514.GA14492@dell-precision-T3610>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <ffecc1ad-2df3-9e9d-6001-b910c82d328c@linuxfoundation.org>
-Date:   Fri, 19 Nov 2021 12:00:42 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=lsppzZdzu+Waonf7w8q0N1vP3OgbHGJj0JhrjEEHC0w=;
+        b=gf6BjY2jEiOgUmNggyHoxpv0UPmM12hjsnuY3qIQZwb8fiE/BBtA4C4OoULlLonxsN
+         bU0pjXpKpuDfD8R4jXifWD7l39+LaUaxHINGl8rPZsDlR7OgmA8XJ296yT0yi+5Ey0K5
+         7HRUMWY3uulW2Yh5n2Sno5iBIExSkGd4PlYfdCHbAx+oxkZsYlg+Z1yIQ91jLyFlDumb
+         39qcVpFccjwKSILoou9CNNviJhoFwCNPHYuK0FW2C3xqqr2JOfuCGcsVnOIq3mgqi62d
+         1cOHeODJe4VtXCK50NNSnETg95toeDR8x2F9wybRyfI6DSYFLHE+xBXt/Sihj2LqhiAy
+         UprQ==
+X-Gm-Message-State: AOAM532bre/fAFBqEgiSkksJM1kUDuZbt4o9cP/HMF3SzlFAo4D//4OW
+        SC/EYQH254iQ5GkkIDqcSTyyZbmXPb66/A==
+X-Google-Smtp-Source: ABdhPJxOo/o7SIb2aVYrZEfxQvdQltW4IlVreuuhSwTq9VHRSiasfHQpkb2LnTZ+qwuAmLwg8QEVFw==
+X-Received: by 2002:a17:902:b28a:b0:142:3e17:38d8 with SMTP id u10-20020a170902b28a00b001423e1738d8mr80719122plr.56.1637350053331;
+        Fri, 19 Nov 2021 11:27:33 -0800 (PST)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id mp12sm11291688pjb.39.2021.11.19.11.27.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Nov 2021 11:27:32 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Cc:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        p.zabel@pengutronix.de, balbi@kernel.org, jbrunet@baylibre.com,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] usb: meson: fix shared reset control use
+In-Reply-To: <20211112162827.128319-1-aouledameur@baylibre.com>
+References: <20211112162827.128319-1-aouledameur@baylibre.com>
+Date:   Fri, 19 Nov 2021 11:27:32 -0800
+Message-ID: <7htug854kb.fsf@baylibre.com>
 MIME-Version: 1.0
-In-Reply-To: <20211107171514.GA14492@dell-precision-T3610>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11/7/21 10:15 AM, Lars Gunnarsson wrote:
-> This patch contains usbip protocol documentation updates for
-> the implementation changes in subsequent patches.
-> 
-> Signed-off-by: Lars Gunnarsson <gunnarsson.lars@gmail.com>
-> ---
-> v1: New patch added in series.
-> 
->   Documentation/usb/usbip_protocol.rst | 61 ++++++++++++++++++++++++----
->   1 file changed, 53 insertions(+), 8 deletions(-)
-> 
-> diff --git a/Documentation/usb/usbip_protocol.rst b/Documentation/usb/usbip_protocol.rst
-> index 0b8541fda4d8..1afe6d297efc 100644
-> --- a/Documentation/usb/usbip_protocol.rst
-> +++ b/Documentation/usb/usbip_protocol.rst
-> @@ -9,6 +9,11 @@ The USB/IP protocol follows a server/client architecture. The server exports the
->   USB devices and the clients import them. The device driver for the exported
->   USB device runs on the client machine.
->   
-> +Initially the server may choose to export any of its available USB devices,
-> +based on the busid. The device will remain exported until it's unplugged or
-> +unbound from the usbip driver. It is also possible to persistently export
-> +devices on a given bus by monitor when they are plugged in.
-> +
+Amjad Ouled-Ameur <aouledameur@baylibre.com> writes:
 
-The current description is mixing export and unbound.
-Let's rephrase this as follows.
+> This patchset fixes a usb suspend warning seen on the libretech-cc by
+> using reset_control_rearm() call of the reset framework API. 
+> This call allows a reset consummer to release the reset line even when 
+> just triggered so that it may be triggered again by other reset
+> consummers.
+>
+> reset_control_(de)assert() calls are called, in some meson usb drivers, 
+> on a shared reset line when reset_control_reset has been used. This is not
+> allowed by the reset framework.
+>
+> Finally the meson usb drivers are updated to use this new call, which
+> solves the suspend issue addressed by the previous reverted 
+> commit 7a410953d1fb ("usb: dwc3: meson-g12a: fix shared reset control
+> use").
 
-"The server may choose to export any of its available USB devices based on their
-busid. These devices will remain exported until they are unplugged or unexported.
-Optionally, it is possible to persistently export the devices on a given bus by
-monitor when they are plugged in"
+Tested-by: Kevin Hilman <khilman@baylibre.com>
 
-I don't see tools/usb/usbip/doc updated to reflect the new commands? Please
-include tools/usb/usbip/doc to both usbipd.8 and usbip.8 to describe how this
-new feature can be used. Also include details on how to reverse persistent
-export. Right now it is a decision made on each boot and there is no need to
-be concerned about exporting devices that should no longer be exported. With
-this feature, it becomes important to make sure there is clear indication that
-devices are being exported in persistent manner.
+Tested suspend/resume on Khadas VIM3 and confirmed that the reset
+warnings are gone.
 
-I would like to see the doc updates - please add them as the second patch in
-this series, so it would be easier for people to review.
-
-thanks,
--- Shuah
+Kevin
