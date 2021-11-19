@@ -2,59 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C214585D6
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Nov 2021 19:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0150458661
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Nov 2021 21:44:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238671AbhKUSNK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Nov 2021 13:13:10 -0500
-Received: from relay.rsaweb.co.za ([41.74.187.155]:44344 "EHLO
-        relay.rsaweb.co.za" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235965AbhKUSNI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Nov 2021 13:13:08 -0500
-X-Greylist: delayed 811 seconds by postgrey-1.27 at vger.kernel.org; Sun, 21 Nov 2021 13:13:05 EST
-Received: from relay.rsaweb.co.za (localhost [127.0.0.1])
-        by relay.rsaweb.co.za (Postfix) with ESMTP id 8BAF23E31EA;
-        Sun, 21 Nov 2021 19:56:02 +0200 (SAST)
-Received: from mailnode1.rsaweb.co.za (unknown [41.74.182.203])
-        by relay.rsaweb.co.za (Postfix) with ESMTP;
-        Sun, 21 Nov 2021 19:56:02 +0200 (SAST)
-Received: from mail.rsaweb.co.za (unknown [10.0.0.112])
-        by mailnode1.rsaweb.co.za (Postfix) with ESMTP id 954025F7F5;
-        Sun, 21 Nov 2021 19:56:10 +0200 (SAST)
+        id S232512AbhKUUry (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Nov 2021 15:47:54 -0500
+Received: from mx07-00227901.pphosted.com ([185.132.182.185]:50190 "EHLO
+        mx08-00227901.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230421AbhKUUry (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Nov 2021 15:47:54 -0500
+X-Greylist: delayed 31417 seconds by postgrey-1.27 at vger.kernel.org; Sun, 21 Nov 2021 15:47:52 EST
+Received: from pps.filterd (m0097675.ppops.net [127.0.0.1])
+        by mx07-.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AJ7xOI5005994;
+        Fri, 19 Nov 2021 10:27:14 +0100
+Received: from zbw2k16ex01.bardusch.net ([185.80.186.174])
+        by mx07-.pphosted.com (PPS) with ESMTPS id 3cdjtyh6e0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Fri, 19 Nov 2021 10:27:14 +0100
+Received: from ZBW2K16EX01.bardusch.net (172.25.1.1) by
+ ZBW2K16EX01.bardusch.net (172.25.1.1) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.2308.20;
+ Fri, 19 Nov 2021 10:27:13 +0100
+Received: from User (172.25.1.131) by ZBW2K16EX01.bardusch.net (172.25.1.1)
+ with Microsoft SMTP Server id 15.1.2308.20 via Frontend Transport; Fri, 19
+ Nov 2021 10:27:03 +0100
+Reply-To: <josechoondak@gmail.com>
+From:   Joseph Choondak <info@ndd.co.mz>
+Subject: I hope this email finds you well.
+Date:   Fri, 19 Nov 2021 01:27:17 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Mon, 22 Nov 2021 01:56:10 +0800
-From:   Josee LAROUCHE <wmerwe@rsaweb.co.za>
-To:     undisclosed-recipients:;
-Subject: Bonjour;
-Organization: Projet
-Reply-To: larouchejoseemme@gmail.com
-Mail-Reply-To: larouchejoseemme@gmail.com
-Message-ID: <c3b7109f30b61c87af46f44caa337cb7@rsaweb.co.za>
-X-Sender: wmerwe@rsaweb.co.za
-User-Agent: Roundcube Webmail/1.3.1 
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <df3f24ed-6571-4db0-afaf-2f1171b46248@ZBW2K16EX01.bardusch.net>
+To:     Undisclosed recipients:;
+X-Proofpoint-ORIG-GUID: 64rehLaKfzm2AOk5eUTzKrlN8apD89hM
+X-Proofpoint-GUID: 64rehLaKfzm2AOk5eUTzKrlN8apD89hM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-19_08,2021-11-17_01,2020-04-07_01
+X-Proofpoint-Spam-Reason: orgsafe
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+May I please ask with considerable urgency for your kind assistance with the following matter.
+I'm a financial person, I think  I have something huge you might be interested in.
+
+Looking forward to hearing from you.
 
 
--- 
-Bonjour
-Je me nomme Josée LAROUCHE née le 27 Mars 1944 d'origine Française.  Je
-suis désolée de vous contacter si brusquement je tiens à vous informer
-que c’est la grâce de Dieu qui m’a dirigée vers vous et je le
-remercie. je viens de choisir votre profil pour vous  faire un don d'une
-somme de 1.000.000 € (Euros) . Mais je ne donne pas cette somme pour que
-vous en bénéficiez tout seul. vous utilisez 55% aux enfants démunis,aux
-profits des handicapés, personnes de troisième âge,orphelins ..etc dans
-votre pays ou autre pays de votre choix . c'est à dire construire des
-orphelinats en mon nom ,construire des restaurants de cœur...etc. j'ai 
-pas
-une raison de vous choisir.c'est Dieu qui a décidé ainsi .Nul n'a le
-droit d'être heureux tout seul. Actuellement  je suis sous observation
-médicale à Manchester. Pour avoir plus de renseignements concernant mon
-projet et moi même veillez me donner votre avis dans ma boîte mail qui
-est:   larouchejoseemme@gmail.com
+Respectfully!!
+Joseph Choondak
+Account Executive.
