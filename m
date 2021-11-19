@@ -2,88 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BDA456C4D
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Nov 2021 10:26:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9F9456C52
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Nov 2021 10:27:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234168AbhKSJ3q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Nov 2021 04:29:46 -0500
-Received: from mga07.intel.com ([134.134.136.100]:61973 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231450AbhKSJ3q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 19 Nov 2021 04:29:46 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10172"; a="297803620"
-X-IronPort-AV: E=Sophos;i="5.87,246,1631602800"; 
-   d="scan'208";a="297803620"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2021 01:25:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,246,1631602800"; 
-   d="scan'208";a="647103204"
-Received: from kuha.fi.intel.com ([10.237.72.166])
-  by fmsmga001.fm.intel.com with SMTP; 19 Nov 2021 01:25:19 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 19 Nov 2021 11:25:18 +0200
-Date:   Fri, 19 Nov 2021 11:25:18 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Xu Yang <xu.yang_2@nxp.com>
-Cc:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Jun Li <jun.li@nxp.com>, dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [EXT] Re: [PATCH] usb: typec: tcpm: fix tcpm unregister port but
- leave a pending timer
-Message-ID: <YZdtfsCkp1hQpglh@kuha.fi.intel.com>
-References: <20211118092352.259748-1-xu.yang_2@nxp.com>
- <YZZSpffDfPd/CJDX@kuha.fi.intel.com>
- <DB8PR04MB68433EAC3FDD82834FDC0E768C9B9@DB8PR04MB6843.eurprd04.prod.outlook.com>
+        id S234405AbhKSJa0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Nov 2021 04:30:26 -0500
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:58288
+        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234371AbhKSJaY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Nov 2021 04:30:24 -0500
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 501193F1A4;
+        Fri, 19 Nov 2021 09:27:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1637314041;
+        bh=xJ4iKt/4xnrMC9w7jpo6aWtfOyahyXvd5hutdfLyHJU=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=Lv7L8nBa3lv1E8sit7vmiheEP3wIzKbS+Kbc69g5y8Bp0RC77qIk3/1jDo+hCtAxo
+         I/5kO3hzjEU6Fo11dY1Ynjx62GC4uudXeFfEnA4g4nLfRRA9BThnrT7aH+9fLesSW5
+         9clj6WKXyXqvWXbK13LPSI85QtfKInNiCrkaKU9HCAiWAj47yDus82OIT9wRRS3OAM
+         2Nj2mhVNHJ7E+EhlYVz944G0ADgpRA0ND5aE15sY7Nxp5QiDeYh29vBgMMLjNVOW9Z
+         gh2zYlwiiNJNWCG5ea+0ELWWQlY8dM87UFDwyiKxHHNlZdmHYbFZFgJPm+uFqdT1Ci
+         rN7qLIrAVIjog==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     mathias.nyman@intel.com
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org (open list:USB XHCI DRIVER),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] xhci: Remove CONFIG_USB_DEFAULT_PERSIST to prevent xHCI from runtime suspending
+Date:   Fri, 19 Nov 2021 17:26:28 +0800
+Message-Id: <20211119092628.677935-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DB8PR04MB68433EAC3FDD82834FDC0E768C9B9@DB8PR04MB6843.eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 18, 2021 at 03:00:16PM +0000, Xu Yang wrote:
-> Hi,
-> 
-> > -----Original Message-----
-> > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Sent: Thursday, November 18, 2021 9:18 PM
-> > To: Xu Yang <xu.yang_2@nxp.com>
-> > Cc: linux@roeck-us.net; gregkh@linuxfoundation.org; linux-
-> > usb@vger.kernel.org; Jun Li <jun.li@nxp.com>; dl-linux-imx <linux-
-> > imx@nxp.com>
-> > Subject: [EXT] Re: [PATCH] usb: typec: tcpm: fix tcpm unregister port but
-> > leave a pending timer
-> > 
-> > Caution: EXT Email
-> > 
-> > Hi,
-> > 
-> > On Thu, Nov 18, 2021 at 05:23:52PM +0800, Xu Yang wrote:
-> > > @@ -6428,6 +6432,9 @@ void tcpm_unregister_port(struct tcpm_port
-> > > *port)  {
-> > >       int i;
-> > 
-> > You need to take the port lock here, no?
-> > 
-> >         mutex_lock(&port->lock);
-> > 
-> > > +     kthread_destroy_worker(port->wq);
-> > > +     port->wq = NULL;
-> > 
-> >         mutex_unlock(&port->lock);
-> 
-> I think we should not take the port lock before kthread_destroy_worker() since
-> a deadlock might occur. Considering a work is pending and tcpm_unregister_port
-> is called at this time, the worker needs to flush all the works after taking
-> the port lock in tcpm_unregister_port(). However, the work can't take the port
-> lock anymore.
+When the xHCI is quirked with XHCI_RESET_ON_RESUME, runtime resume
+routine also resets the controller.
 
-The point is that you create a race with that code. If the port lock
-is not useful in this case, there needs to be something else.
+This is bad for USB drivers without reset_resume callback, because
+there's no subsequent call of usb_dev_complete() ->
+usb_resume_complete() to force rebinding the driver to the device. For
+instance, btusb device stops working after xHCI controller is runtime
+resumed, if the controlled is quirked with XHCI_RESET_ON_RESUME.
 
-thanks,
+So always take XHCI_RESET_ON_RESUME into account to solve the issue.
 
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+ drivers/usb/host/xhci.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 902f410874e8e..af92a9f8ed670 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -3934,7 +3934,6 @@ static void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev)
+ 	struct xhci_slot_ctx *slot_ctx;
+ 	int i, ret;
+ 
+-#ifndef CONFIG_USB_DEFAULT_PERSIST
+ 	/*
+ 	 * We called pm_runtime_get_noresume when the device was attached.
+ 	 * Decrement the counter here to allow controller to runtime suspend
+@@ -3942,7 +3941,6 @@ static void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev)
+ 	 */
+ 	if (xhci->quirks & XHCI_RESET_ON_RESUME)
+ 		pm_runtime_put_noidle(hcd->self.controller);
+-#endif
+ 
+ 	ret = xhci_check_args(hcd, udev, NULL, 0, true, __func__);
+ 	/* If the host is halted due to driver unload, we still need to free the
+@@ -4094,14 +4092,12 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
+ 
+ 	xhci_debugfs_create_slot(xhci, slot_id);
+ 
+-#ifndef CONFIG_USB_DEFAULT_PERSIST
+ 	/*
+ 	 * If resetting upon resume, we can't put the controller into runtime
+ 	 * suspend if there is a device attached.
+ 	 */
+ 	if (xhci->quirks & XHCI_RESET_ON_RESUME)
+ 		pm_runtime_get_noresume(hcd->self.controller);
+-#endif
+ 
+ 	/* Is this a LS or FS device under a HS hub? */
+ 	/* Hub or peripherial? */
 -- 
-heikki
+2.32.0
+
