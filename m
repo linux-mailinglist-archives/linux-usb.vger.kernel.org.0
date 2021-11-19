@@ -2,148 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2BB457036
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Nov 2021 15:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21CDC4574D9
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Nov 2021 17:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235312AbhKSOGk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Nov 2021 09:06:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235173AbhKSOGj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Nov 2021 09:06:39 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7752CC061574
-        for <linux-usb@vger.kernel.org>; Fri, 19 Nov 2021 06:03:37 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id t5so43493614edd.0
-        for <linux-usb@vger.kernel.org>; Fri, 19 Nov 2021 06:03:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=kf5wYCENHo9kPHnuAI/4+RaWR+tef+DcFgJFCp5f50Q=;
-        b=YaG3V/MWWCANXu6okuPNc3QdU4ZiGq5G5yFLlwNWPBWS2/4c1aEOWiniTmCPDo2LTi
-         LLRT0+ytSCDmGDWbXX21QBeSMWHK7kkEK75Jz9iVUk/yjFwohrKUKlVGbo9O1+vsJb5y
-         tOBxpXg9EJg/dVgVCEg2RT7bb3K2cpjpyY1OCnoWn3USkYm7yfRemP/9/IOr4gS1y7HA
-         1FP/iHA6sCfMc7ikaiMQjK8drANpp0il4b6Zsm9+lG4mBPLtanXe4FTpQpcPdZD1+g1Y
-         TOOxXjWAXO3dt79bQU+7+q1tPgN52ZC8QCl9C91D7k9JA3t0QtwteOgU3rDe+G3fTUMU
-         A0PQ==
+        id S236272AbhKSRBc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Nov 2021 12:01:32 -0500
+Received: from mail-oi1-f174.google.com ([209.85.167.174]:43574 "EHLO
+        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232663AbhKSRBc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Nov 2021 12:01:32 -0500
+Received: by mail-oi1-f174.google.com with SMTP id o4so22898507oia.10;
+        Fri, 19 Nov 2021 08:58:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=kf5wYCENHo9kPHnuAI/4+RaWR+tef+DcFgJFCp5f50Q=;
-        b=Qfj4zw2bOpUlpdBvcKU0bppUxbGNmyIzHuwEYsx3DHcVFlAoxfqTtySu7yt2U7w3jd
-         OZhmXFNrDv3goVIM3krDu3mXuwp81L8vYnwLcM5TJvNrFD4CBzgrbO7Ac+Y0cW+H/Wbe
-         +1OqvB28wY8ZtqruUdDthfqFAd4M12+k+qhy8hZlHb860X1pZ+WZOTJqefKw9yPRlutG
-         fbk7XQ6xCzYJGMX4ou2MgRaHoQ2xGsaeccLQWGefk1nTwlb+S6ixD1Ga4gWScpJorBLr
-         +kMzKa5iq6prH116p0wd8uOzlp2TUqdksA7/iHhcaaanT0dgCx4gKtJRxNUhpRdTiuIG
-         rJdQ==
-X-Gm-Message-State: AOAM5333M+u5tW3aWbnDoriIbYDnleVI7MTNdcQ/pQ67IOisujnkAaq0
-        pGmugDmYxf207g92Z18zq0ujWv1P6MU=
-X-Google-Smtp-Source: ABdhPJxmqOV1LPq3C1jrgCNYQ33NrSNACWpOqnKcUAkzFCaVFm/f0zTaUnBUNoIj1/ZZGtyI27PLkA==
-X-Received: by 2002:a05:6402:280b:: with SMTP id h11mr25590489ede.341.1637330615937;
-        Fri, 19 Nov 2021 06:03:35 -0800 (PST)
-Received: from LABNL-ITC-SW01.tmt.telital.com (static-82-85-31-68.clienti.tiscali.it. [82.85.31.68])
-        by smtp.gmail.com with ESMTPSA id hq9sm1290371ejc.119.2021.11.19.06.03.34
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=0/NOpM1se8iPUSGGqq1mJ9QuXVx1LyhbZAK+OdBfRc4=;
+        b=G0jexsU4QUnX3QJKfXz/ztnd24BzhgfGUe3r/3ae+w+kWtx9OpOd3XJeIV0e0DLTCQ
+         H6+jlVN7zebv940d2XsTfoQ2NB7eGQJAWOQRq7Aboj3xQvB3JY6KQjQQ1GMSuPE1GMC2
+         A7Bc9yxjBPUSEyPsWkbnffR4uiMuYT4HgUvI6qxsRQbzn8WIxDI0yXPHBM/ZI2kkhuo3
+         6xUW+VnQ/+ldr9AGxh/s1vjLFEQCd7KJ1sK0rTSP/geMqkPmtv57YYBUpWe8hwMito7N
+         AixRcroouOMbpoQ5XFDHHmpx9b8TJwJ/cXDaEjvKi5wr8s1viAFiiZpgdCalq74AoAaN
+         VziQ==
+X-Gm-Message-State: AOAM530Q2N5lG/LDQTMjI44NFJh/Mlgzs+oAi+izxuTeU0m3Ylv43CVf
+        0zp+6qZrigSrd3LYfuYNDA==
+X-Google-Smtp-Source: ABdhPJxWL5ONrp7p34ohpvA1UkYOCUtg+R+iQzMItICEDQnLrCQYbQ4qprfFuDuwnV7G2+NBN/H8vQ==
+X-Received: by 2002:aca:1b15:: with SMTP id b21mr1086768oib.64.1637341110042;
+        Fri, 19 Nov 2021 08:58:30 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id k4sm63803oij.54.2021.11.19.08.58.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Nov 2021 06:03:35 -0800 (PST)
-From:   Daniele Palmas <dnlplm@gmail.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniele Palmas <dnlplm@gmail.com>
-Subject: [PATCH 1/1] USB: serial: option: add Telit LE910S1 0x9200 composition
-Date:   Fri, 19 Nov 2021 15:03:19 +0100
-Message-Id: <20211119140319.10448-1-dnlplm@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 19 Nov 2021 08:58:26 -0800 (PST)
+Received: (nullmailer pid 4078690 invoked by uid 1000);
+        Fri, 19 Nov 2021 16:58:22 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Manish Narani <manish.narani@xilinx.com>
+Cc:     git@xilinx.com, robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        michal.simek@xilinx.com, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org
+In-Reply-To: <1637329568-31756-1-git-send-email-manish.narani@xilinx.com>
+References: <1637329568-31756-1-git-send-email-manish.narani@xilinx.com>
+Subject: Re: [PATCH] dt-bindings: usb: dwc3-xilinx: Convert USB DWC3 bindings
+Date:   Fri, 19 Nov 2021 10:58:22 -0600
+Message-Id: <1637341102.285159.4078689.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the following Telit LE910S1 composition:
+On Fri, 19 Nov 2021 19:16:08 +0530, Manish Narani wrote:
+> Convert USB DWC3 bindings to DT schema format using json-schema.
+> 
+> Signed-off-by: Manish Narani <manish.narani@xilinx.com>
+> ---
+>  .../devicetree/bindings/usb/dwc3-xilinx.txt        |  56 ----------
+>  .../devicetree/bindings/usb/dwc3-xilinx.yaml       | 119 +++++++++++++++++++++
+>  2 files changed, 119 insertions(+), 56 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+>  create mode 100644 Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> 
 
-0x9200: tty
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
----
-Hello Johan,
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-following the lsusb verbose output:
+Full log is available here: https://patchwork.ozlabs.org/patch/1557119
 
-Bus 003 Device 007: ID 1bc7:9200 Telit Wireless Solutions Telit Download Port
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               1.10
-  bDeviceClass            0 
-  bDeviceSubClass         0 
-  bDeviceProtocol         0 
-  bMaxPacketSize0        64
-  idVendor           0x1bc7 Telit Wireless Solutions
-  idProduct          0x9200 
-  bcdDevice            1.00
-  iManufacturer           1 Marvell
-  iProduct                2 Telit Download Port
-  iSerial                 3 200806006809080000
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0020
-    bNumInterfaces          1
-    bConfigurationValue     1
-    iConfiguration          0 
-    bmAttributes         0xc0
-      Self Powered
-    MaxPower              500mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    255 Vendor Specific Subclass
-      bInterfaceProtocol    255 Vendor Specific Protocol
-      iInterface              7 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
 
-Thanks,
-Daniele
----
- drivers/usb/serial/option.c | 2 ++
- 1 file changed, 2 insertions(+)
+usb@ff9d0000: 'phy-names', 'phys' do not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
+	arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dt.yaml
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index a484ff5e4ebf..0902e79c8493 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1267,6 +1267,8 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = NCTRL(2) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, 0x9010),				/* Telit SBL FN980 flashing device */
- 	  .driver_info = NCTRL(0) | ZLP },
-+	{ USB_DEVICE(TELIT_VENDOR_ID, 0x9200),				/* Telit LE910S1 flashing device */
-+	  .driver_info = NCTRL(0) | ZLP },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, ZTE_PRODUCT_MF622, 0xff, 0xff, 0xff) }, /* ZTE WCDMA products */
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x0002, 0xff, 0xff, 0xff),
- 	  .driver_info = RSVD(1) },
--- 
-2.30.2
+usb@ff9d0000: usb@fe200000:interrupt-names: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1275-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dt.yaml
+
+usb@ff9e0000: 'phy-names', 'phys' do not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
+	arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dt.yaml
+
+usb@ff9e0000: usb@fe300000:interrupt-names: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1275-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dt.yaml
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dt.yaml
 
