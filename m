@@ -2,141 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F80F4562B7
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Nov 2021 19:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A103945691F
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Nov 2021 05:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233907AbhKRSqC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Nov 2021 13:46:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46696 "EHLO
+        id S233001AbhKSE03 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Nov 2021 23:26:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233913AbhKRSqC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Nov 2021 13:46:02 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03CDC06174A
-        for <linux-usb@vger.kernel.org>; Thu, 18 Nov 2021 10:43:01 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id m14so6913389pfc.9
-        for <linux-usb@vger.kernel.org>; Thu, 18 Nov 2021 10:43:01 -0800 (PST)
+        with ESMTP id S231793AbhKSE02 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Nov 2021 23:26:28 -0500
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E942C06175A
+        for <linux-usb@vger.kernel.org>; Thu, 18 Nov 2021 20:23:27 -0800 (PST)
+Received: by mail-io1-xd41.google.com with SMTP id k21so11205124ioh.4
+        for <linux-usb@vger.kernel.org>; Thu, 18 Nov 2021 20:23:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=G1EliypIjbcEW6Z/ACxlA6Dj3vusWb8JvXLauTtA8Ec=;
-        b=V9/M+IhlXdHtPJLjRhHrJbqffe02jTBUk7q5gB83KwHpUfj5QsJbsdlm5bz3sseFcU
-         oS17QB0ghrBpj+QsgVZFjFeloINmuY+zbug5uCrkkEgT5e6Y7kabv3EraLL+joLtPaMN
-         kA8ov8LmyVfvTOTHSgKCIK0Lw0rxgHcPfl8Zo=
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=eTS1GK69RCI4oJxzikNG+dG1kEXvzkq40C70DiSwh3g=;
+        b=cQL4g+H2gJMJP3xWFQe/KzoyGqIo0AawlIVz6HOmgj7H+oswWn1JndJ03Ybadqh/iG
+         GFezuribER5iOwOrdhcpaLRDpEBug17B9goO8697VSiSH7/hueTiocUUiYuEl0npDX+N
+         7dyH4NYh7rX0U9rKSBeHM3T0tr/VTmzWLqZb6dR+9h3OxCcYEbSP6A9trr03z0AdHvvI
+         ahSumHf41Gk0/WiflEL2tp00pjSmNcuzmCnCLHtvda8y92IYt7+31MLaTkWsbzEryIp/
+         PD6PRbns5nLepTYC8LZKXr6gjYxNXB3IFy8QgwmShmHo9WUyNgKaHeXs5AvuxibzX411
+         sWzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=G1EliypIjbcEW6Z/ACxlA6Dj3vusWb8JvXLauTtA8Ec=;
-        b=J07XPyoe5gLnxCs/0/FMcuAAyF+VVCkcN5HaOzb44O3aabNosR7xK4kc3q4Bsx1j3D
-         Ak49vNbwLR/Hgk8zs8lsXcwqy6Q3ml7KSAMPRL1cu8ckVspLmgrcPIF18RORkeMplIg0
-         tZ395k9alRg1GFYBFLGnmDg4HKxNqpGXjVTRa0FGqo6pCR9sABuJyGDY/RjK4yU1iYLU
-         IY1D4QCvQPEFOvAmZOgudqQtl+OXOzN0ihMZcVGFil/yLvPbCFEoEH/PAvgi/Gpx1k+F
-         ktLCe/kK/9EC/uZJqLS146HTAinLQ2qxuXqvLwCkNFzCTjKtWQIghmXzPT8V+m3e6BRa
-         Esyw==
-X-Gm-Message-State: AOAM530KxD6ntUa0N4tIUCp2h/S6eGj5jyCSpxLA5mhowizgwg1B+2bG
-        x2q6sUjHs26yjqTnQrO+r5kGkA==
-X-Google-Smtp-Source: ABdhPJyjhcSmjkykFR9rtVJUgw5bfN+1UgOk97VaGwkkIZiiD0BiGOV4YRXSRFWZWEBsG+gxTFspJw==
-X-Received: by 2002:a63:80c6:: with SMTP id j189mr12585818pgd.200.1637260981486;
-        Thu, 18 Nov 2021 10:43:01 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:8ceb:c68a:21af:bebe])
-        by smtp.gmail.com with UTF8SMTPSA id f21sm352939pfc.85.2021.11.18.10.43.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Nov 2021 10:43:01 -0800 (PST)
-Date:   Thu, 18 Nov 2021 10:43:00 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Peter Chen <peter.chen@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, Roger Quadros <rogerq@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v17 4/7] arm64: dts: qcom: sc7180-trogdor: Add nodes for
- onboard USB hub
-Message-ID: <YZaetDjIyFZPuO6J@google.com>
-References: <20211116200739.924401-1-mka@chromium.org>
- <20211116120642.v17.4.Ie0d2c1214b767bb5551dd4cad38398bd40e4466f@changeid>
- <CAD=FV=WK3uHJTehMxWiA56L5Ly8UqjmCKnJtXBut2aOYEV6C4g@mail.gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=eTS1GK69RCI4oJxzikNG+dG1kEXvzkq40C70DiSwh3g=;
+        b=jOwfFFJrsKf2S7ek4+FJBgHLpvFAGKehg6ac8bM3WCskVLv0nJ1gPjMMBunMV6T2Ri
+         g8qqak4Ikw2JmJMQl+rSe2p/NIc8O6KlSK9TJi7e2Iw0nst7tJOF/wLrlIN/YGWxGmIa
+         FU1o0gk8ixSQ2OBMMfq7a1YNI+7xt3/435INasetoUVLDVsngCgJRub3/MZSQe1YM2X+
+         bU5yl4QZsdSlfeSr4/Jeji17xxDphgD/4mB2iPRrWQQegIkIBIhcxU3BLg1OUlit6C2I
+         QJZ6DozdpqjSqe+EAWDCMMFUjWxMx/J+y+q1j4FOU5fdlceuJQM4qnZhe3obqUUJvtun
+         NBbg==
+X-Gm-Message-State: AOAM531i9t5ZPPQEIHPkti9+ovSqsRD67hCSu9eaOibJ2DJvoVzoJViX
+        2eKkp64yAKvFcy/JSFrECA47k7rcGN3qhue6mbA=
+X-Google-Smtp-Source: ABdhPJyoJdpS7Kf9B+KrNKG19mDCqtighLiNuAqL2cgDQj7eZ+/CBh/r4yLZu32slWVXs7TOdIJDzf3XHUtHh6UYg8Y=
+X-Received: by 2002:a05:6602:164a:: with SMTP id y10mr3074210iow.123.1637295806431;
+ Thu, 18 Nov 2021 20:23:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=WK3uHJTehMxWiA56L5Ly8UqjmCKnJtXBut2aOYEV6C4g@mail.gmail.com>
+Received: by 2002:a05:6602:2f03:0:0:0:0 with HTTP; Thu, 18 Nov 2021 20:23:25
+ -0800 (PST)
+Reply-To: anthonyrrobson@gmail.com
+From:   "Mr. Anthony Robson" <abcudday@gmail.com>
+Date:   Thu, 18 Nov 2021 20:23:25 -0800
+Message-ID: <CADXsGJFbR1Q52ZiBs8f3ijChf5RKGDYxHiXANAhCVcHdcbSS1A@mail.gmail.com>
+Subject: I look forward to hearing from you SOONEST!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 17, 2021 at 04:03:10PM -0800, Doug Anderson wrote:
-> Hi,
-> 
-> On Tue, Nov 16, 2021 at 12:07 PM Matthias Kaehlcke <mka@chromium.org> wrote:
-> >
-> > Add nodes for the onboard USB hub on trogdor devices. Remove the
-> > 'always-on' property from the hub regulator, since the regulator
-> > is now managed by the onboard_usb_hub driver.
-> >
-> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> > ---
-> >
-> > Changes in v17:
-> > - none
-> >
-> > Changes in v16:
-> > - none
-> >
-> > Changes in v15:
-> > - none
-> >
-> > Changes in v14:
-> > - none
-> >
-> > Changes in v13:
-> > - none
-> >
-> > Changes in v12:
-> > - none
-> >
-> > Changes in v11:
-> > - rebased on qcom/arm64-for-5.14 (with the rest of the series)
-> >
-> > Changes in v10:
-> > - keep 'regulator-boot-on' property
-> > - updated commit message
-> >
-> > Changes in v9:
-> > - none
-> >
-> > Changes in v8:
-> > - none
-> >
-> > Changes in v7:
-> > - rebased on qcom/arm64-for-5.13 (with the rest of the series)
-> >
-> > Changes in v6:
-> > - added 'companion-hub' entry to both USB devices
-> > - added 'vdd-supply' also to hub@2
-> >
-> > Changes in v5:
-> > - patch added to the series
-> >
-> >  .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts | 19 ++++++++-----------
-> >  .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts | 12 +++++-------
-> >  .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts | 19 ++++++++-----------
-> >  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  | 19 ++++++++++++++++++-
-> >  4 files changed, 39 insertions(+), 30 deletions(-)
-> 
-> sc7180-trogdor-pompom-r1.dts is missing? It seems to need similar
-> fixups to the early lazor/trogdor borads.
+Hello Friend,
 
-ack, also needs to be done for pompom rev1, thanks for pointing that out!
+Below is the email i sent to you.
+
+I am so sorry for sending you this unsolicited and unexpected email.
+
+I actually got your contact from your country website and i decided to
+contact you directly about this business venture.
+
+I am contacting you in good faith and this business investment
+proposal will be of mutual benefit for us. I have a business proposal
+in huge sum amount of US$800,000 000 00 (Eight Hundred  Million United
+state dollars only} to be transferred to any safe account with your
+assistance.
+
+Contact me back via my email if you are interested in this business
+investment proposal and if you can be trusted for further briefing and
+details.
+I look forward to hearing from you SOONEST!
+
+Kind Regards.
+Mr. Anthony Robson.
