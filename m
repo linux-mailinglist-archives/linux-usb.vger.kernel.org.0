@@ -2,85 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C352458115
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Nov 2021 00:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD28458140
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Nov 2021 00:57:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237820AbhKTX7B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 20 Nov 2021 18:59:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
+        id S234227AbhKUAAt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 20 Nov 2021 19:00:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237582AbhKTX6q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 Nov 2021 18:58:46 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DF2C06173E
-        for <linux-usb@vger.kernel.org>; Sat, 20 Nov 2021 15:55:42 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id bf8so29580560oib.6
-        for <linux-usb@vger.kernel.org>; Sat, 20 Nov 2021 15:55:42 -0800 (PST)
+        with ESMTP id S234714AbhKUAAp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 Nov 2021 19:00:45 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA91C0613E1;
+        Sat, 20 Nov 2021 15:57:21 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id e3so59339026edu.4;
+        Sat, 20 Nov 2021 15:57:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1cyHcdgLfdv1R6sJAzHnEVVywe2LRNmMCsaDuVASIdw=;
-        b=LZxbTSxNSa1DQpZOgCu815OFHSmLNIRLGKVk0I1N3GPaVZ9mVMhHQezrKJ+tFWYXfe
-         cOzGEp7q7Vfzj6PKPU6ysPtLnhqrhT3gYYa0VC+AD0JIKpV7SAain7ra5hJKgLuzHTql
-         2CSorUdEafrPeLPJV7PV6udXCsGCyzlJGVPwNlx07RuJm3jUYZPyLIRRgBty2kjw3PA6
-         EBifhUlC0xiRNKiR4OnJrebhITzWn0DRsWc72EuasS/lpkcZFxpVF4+5JhEv1NVI+D+J
-         L0wL+IL6kxFHGOACwkGwfbb3IhEMzr3EK5BzSL304gESzCMaHphNZQp4hOi2uLGxp/tD
-         wReA==
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=F5sv4rcMTrhYHornG640LvlmFUzYpzF/uMv5wuwnFA4=;
+        b=KqF35IvUaoojoKBQHxLa+EhPGzpcMTC8+x718D5FuVl6VeWd604ugCjjre5otbt5PV
+         bG3m2Jtu/s3Umpi4aFznHxGqyAwh8R+XOy7wAUHfYJoeVcOHOiptPq8aPiYsSsaDkXLw
+         ovvBD+N6g0La0ZsoTNIJY3sVChWs/hUnYDsz99dHyJuqWsHQIfQCjCRdmCAxjn/U/Oel
+         GvbJlryGkJInHx9D9G0UmlQt7ojwP1LjP0AdtQP1nl2nmZrtuUwnhNHRu/N3nVIUDa7P
+         +gp/S9fTBEp9J1D1Ti3vGiA+HLIg3MTLnvcvAlLyocudM67N8QI5G1SIzXeNc/fZ8OZc
+         Ka4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1cyHcdgLfdv1R6sJAzHnEVVywe2LRNmMCsaDuVASIdw=;
-        b=y7so9aooJqIelPlLG7HrU7mfappf/A8goYuw9eVF6MDZlE01F5/qRpQhOY+5cf/XX5
-         NJ/vHrqfkIjcnMnnaEVoOsltKib1huVf8Imbf2/m1LGrVQTmvLiEWFVgR0GUfLsuUwsS
-         4rj/CkrslFpBAYZfE6PIsKcjDl61wr5EoJ/G7ywloo5rJX8tKqR1zvQS66e4HOxLINfm
-         IZiNTPblclklPL0FBX6GOgQJ/10vqncNAZSl5oWOt5lLgYz9jv7c8cVWV/J84/nsEyLk
-         14TDV80t7TrIDh4BXTCic3YIZtLNJfLc777kngyitK282fcwD6a1K97eZLXFBllnOa4B
-         S9Qw==
-X-Gm-Message-State: AOAM533ilHm5Mwo/G9kC86XO7DSJta+hY40OsIcjVTWBBtVEUruzOpMD
-        TelY3QIdCizYuwawXak7xorbFw==
-X-Google-Smtp-Source: ABdhPJw9K/QfqlZf1rCFG17DFELFWItbff1nf8gcAot1DaBJjnNj7O7rgzxBI9joCR52LCECDx/8wg==
-X-Received: by 2002:a05:6808:f87:: with SMTP id o7mr10610301oiw.122.1637452542293;
-        Sat, 20 Nov 2021 15:55:42 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id o26sm828474otj.14.2021.11.20.15.55.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Nov 2021 15:55:41 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        David Heidelberg <david@ixit.cz>
-Cc:     linux-arm-msm@vger.kernel.org, ~okias/devicetree@lists.sr.ht,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: usb: qcom,dwc3: add binding for IPQ4019 and IPQ8064
-Date:   Sat, 20 Nov 2021 17:55:18 -0600
-Message-Id: <163745250541.1078332.6779273361626681636.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211029103340.26828-1-david@ixit.cz>
-References: <20211029103340.26828-1-david@ixit.cz>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=F5sv4rcMTrhYHornG640LvlmFUzYpzF/uMv5wuwnFA4=;
+        b=Yt7rSTVpgcNcZfSJlIIpt03j62SBmJsAhyKNXGK0ujPCp57PMdJRyKnmpGNfQ5H1rq
+         gEeNBOxtWFsQpkqcl0EawtEdQvFx7CybhuaeIkS6p6hfq2QNyORE3ZAfhphmhcOiEihS
+         PaPblv7Ro51eKNs2M3lFTyy3YCi0tGuxzhFC3Y7hdfyu25mJB1NFwcyUk8GzxRrfVUL9
+         YXDJ86LAxns6nlXa9rdia07R0P7e2NjRZzhAkGLsehur5OZ4Z0ZDjm3HfnqMXjAzWhRN
+         poaDos6l/QOe6OyTu9K/d7XuubHp81YAD2vrX8ewrAaerLUz7HpBYPLC8nChYvX0T/dm
+         Q/Xg==
+X-Gm-Message-State: AOAM532zGBdKTsNv3CIwEwgrnyxkR9Ee3PpcUxInfAJX9ZOuVu6C2kpl
+        aGEKwe8f00CU7PPDKuCbNxk03nbOC6kUuqbt8KfQMfffki0=
+X-Google-Smtp-Source: ABdhPJzn8mqm8xib8HnioRMdm0uhJxnJSh9wqmShlbVnLNSL1nB8uBXlhDbcbNqXHaabpnMoro2qzWyD++Zopf4gFpQ=
+X-Received: by 2002:a50:f68c:: with SMTP id d12mr35001969edn.307.1637452640350;
+ Sat, 20 Nov 2021 15:57:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20211112162827.128319-1-aouledameur@baylibre.com> <20211112162827.128319-4-aouledameur@baylibre.com>
+In-Reply-To: <20211112162827.128319-4-aouledameur@baylibre.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sun, 21 Nov 2021 00:57:09 +0100
+Message-ID: <CAFBinCCvOnrvC64sA++5DegZq1g9MmwvnCiYh-WB4dSkoBsCBA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] phy: amlogic: meson8b-usb2: fix shared reset
+ control use
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Cc:     khilman@baylibre.com, p.zabel@pengutronix.de, balbi@kernel.org,
+        jbrunet@baylibre.com, linux-amlogic@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 29 Oct 2021 12:33:38 +0200, David Heidelberg wrote:
-> Add compatible string for Qualcomm IPQ4019 and IPQ8064 SoC.
-> 
-> 
+Hi Amjad,
 
-Applied, thanks!
+Thanks for working on this!
 
-[1/2] dt-bindings: usb: qcom,dwc3: add binding for IPQ4019 and IPQ8064
-      (no commit info)
-[2/2] ARM: dts: qcom: update USB nodes with new platform specific compatible
-      commit: 801cd261718e44adeb033c428390761adc03e2fc
+On Fri, Nov 12, 2021 at 5:33 PM Amjad Ouled-Ameur
+<aouledameur@baylibre.com> wrote:
+[...]
+> +               reset_control_rearm(priv->reset);
+Using priv->reset in this driver currently requires an IS_ERR check beforehand.
+When I wrote the driver originally I used the following code in
+phy_meson8b_usb2_probe:
+  priv->reset = ...
+  if (PTR_ERR(priv->reset) == -EPROBE_DEFER)
+    return PTR_ERR(priv->reset);
+
+That means: priv->reset can (in theory) be an error pointer at runtime.
+Since your patch is valid: can you please add another one (before this
+one) in the series and change the priv->reset error checking to use
+something like:
+  if (IS_ERR(priv->reset))
+    return dev_err_probe(&pdev->dev, PTR_ERR(priv->reset), "Failed to
+get the reset line");
+
+With such a patch you can consider this one as:
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+
 
 Best regards,
--- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+Martin
