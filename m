@@ -2,86 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 672FE457EED
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Nov 2021 16:26:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87FC34580FC
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Nov 2021 00:51:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237654AbhKTP3J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 20 Nov 2021 10:29:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41470 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230038AbhKTP3I (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 20 Nov 2021 10:29:08 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E5B5B60EB6;
-        Sat, 20 Nov 2021 15:26:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637421964;
-        bh=sL04+7/Tziaw15CHiE2bty/Bv6qeql7yB4oQSwHL8Rw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=N35/MX+Bk5IfQeZQiu16BeV4YuD31Ephij5WJvzDmZ2G+K+MjYa+HWqb1ahmMn5Hb
-         8nTHe95BsmdqkyFWylC9DLYJd5w68+maTSegSteQm994SJN2V2euBCo7o5awfS7MX1
-         1EqL1r1uDdGsdYVLkB0LepzAMd/DMg1DnO37cYnq/TOnx6T6gg4l1tr4VYZFrfdNBr
-         fu07uKG0PLQcKTAn5J7IOkR76pmhpIN6NdZJHm5NPKAY2SAGobyGEmgVfnmJURZZPl
-         Ncx/4o043Jc/OWEbZSwAM5dDl3KRkS71kl4wzNRFF/bIFRAmgFMC+aeEM6/O5rxXi9
-         UVuYgRSm1FojA==
-Date:   Sat, 20 Nov 2021 07:26:02 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Peter Chen <peter.chen@kernel.org>
-Cc:     bpf@vger.kernel.org, axboe@kernel.dk,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
-        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, yuq825@gmail.com, robdclark@gmail.com,
-        sean@poorly.run, christian.koenig@amd.com, ray.huang@amd.com,
-        sgoutham@marvell.com, gakula@marvell.com, sbhatta@marvell.com,
-        hkelam@marvell.com, jingoohan1@gmail.com,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, krzysztof.kozlowski@canonical.com,
-        mani@kernel.org, pawell@cadence.com, rogerq@kernel.org,
-        a-govindraju@ti.com, gregkh@linuxfoundation.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sj@kernel.org, akpm@linux-foundation.org,
-        thomas.hellstrom@linux.intel.com, matthew.auld@intel.com,
-        colin.king@intel.com, geert@linux-m68k.org,
-        linux-block@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH bpf] treewide: add missing includes masked by cgroup ->
- bpf dependency
-Message-ID: <20211120072602.22f9e722@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211120073011.GA36650@Peter>
-References: <20211120035253.72074-1-kuba@kernel.org>
-        <20211120073011.GA36650@Peter>
+        id S235971AbhKTXnO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 20 Nov 2021 18:43:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232375AbhKTXnN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 Nov 2021 18:43:13 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7156EC061574;
+        Sat, 20 Nov 2021 15:40:09 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id g14so59220372edb.8;
+        Sat, 20 Nov 2021 15:40:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=65MbiCirE9d1cqOS3f7OshdK8GTlWYGnLliUJ1JW4TI=;
+        b=PeubQnk3Yfliv//Bdzq5DZVf8lnujLcLRhwLW4YrU04aspNKB8vxK0JhVry3TVWcLh
+         LTJrgAyP9buv4LG+ijX8Oc8qVHhEh+1ogkviZodLZhZbOVVf7Et+1p2CrvuKEaniEVyJ
+         SNt28yBZ0lCbHgWdd5/eFNPyH3LrjGxGPf76Dw+whk9IUb5Fz8zAgLzwgU0uev0eiePi
+         G1CIR98OPctQI3DVtKs4dHSY/IS3NAOBYo4VTcJ3kP6bxg2JPeBDS1vEVPt+2URjxDcF
+         CTIWBfX1oqfbyPLnE0nSXzdIfN+PU/pcO6d0Vc/BjLei3r0okEPDOyDcRMOCzk2SflDX
+         aZxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=65MbiCirE9d1cqOS3f7OshdK8GTlWYGnLliUJ1JW4TI=;
+        b=ADiozrf9CNwgOqxgogYGfMgCfAFLvVDr2iwefE0CTp4eTuPookL67NcIshORt93quG
+         InBVc8CRh1AkuT8ZSIVWu0kMc4gHwN+bBv0F/y5ScnVI/UqgvtaDMr7JpBjREJgxjghQ
+         TqgUGM4DbSOvP9PfPPR/z+2SqdlbABxPrbbZvh+KKzgc/VMmL6rUxvGonWk5uLv7UNMf
+         W6GJ8+L/d4yXqhhZP0g6xY79aiegnVp4OXoXl5z34F72Z+nwZjYxJ642tdPY48Nl2Ep4
+         PiYMc9SpAMPOJZvjpYbIpY3A8Wnq8xni5DfPuaF+R5JPg8Zn6TriuIxJUjiM+pMj+QTc
+         tAmQ==
+X-Gm-Message-State: AOAM531TK64kz0MmDuOAg7Cl8A6H4HyJWt0+eIX1O0nMHUEnDghuoVZw
+        i5t6muw516xNk98UFy5U1EWqRQexEteGSHKUSJw=
+X-Google-Smtp-Source: ABdhPJyuw2LGnZSgNbwuV6TKKfWCPeJ20W180C+o72+JnsmMFpFls0G1soAIz58Nf2hd7ZCeO9tiOHQuwjurfIHDNI8=
+X-Received: by 2002:aa7:cb41:: with SMTP id w1mr44250205edt.327.1637451607740;
+ Sat, 20 Nov 2021 15:40:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <20211112162827.128319-1-aouledameur@baylibre.com> <20211112162827.128319-2-aouledameur@baylibre.com>
+In-Reply-To: <20211112162827.128319-2-aouledameur@baylibre.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sun, 21 Nov 2021 00:39:57 +0100
+Message-ID: <CAFBinCA4UHybSkKX=yRvEE3k7oSwFEzYADkZdsMxfMsp-Cmodg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] phy: amlogic: phy-meson-gxl-usb2: fix shared reset
+ controller use
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Cc:     khilman@baylibre.com, p.zabel@pengutronix.de, balbi@kernel.org,
+        jbrunet@baylibre.com, linux-amlogic@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 20 Nov 2021 15:30:11 +0800 Peter Chen wrote:
-> > diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
-> > index 84dadfa726aa..9643b905e2d8 100644
-> > --- a/drivers/usb/cdns3/host.c
-> > +++ b/drivers/usb/cdns3/host.c
-> > @@ -10,6 +10,7 @@
-> >   */
-> > =20
-> >  #include <linux/platform_device.h>
-> > +#include <linux/slab.h> =20
->=20
-> Should be "#include <linux/module.h>"?
-
-Why? Different files are missing different includes, this one needs
-slab.h:
-
-../drivers/usb/cdns3/host.c: In function =E2=80=98__cdns_host_init=E2=80=99:
-../drivers/usb/cdns3/host.c:86:2: error: implicit declaration of function =
-=E2=80=98kfree=E2=80=99; did you mean =E2=80=98vfree=E2=80=99? [-Werror=3Di=
-mplicit-function-declaration]
-  kfree(cdns->xhci_plat_data);
-  ^~~~~
-  vfree
+On Fri, Nov 12, 2021 at 5:33 PM Amjad Ouled-Ameur
+<aouledameur@baylibre.com> wrote:
+>
+> Use reset_control_rearm() call if an error occurs in case
+> phy_meson_gxl_usb2_init() fails after reset() has been called ; or in case
+> phy_meson_gxl_usb2_exit() is called i.e the resource is no longer used
+> and the reset line may be triggered again by other devices.
+>
+> reset_control_rearm() keeps use of triggered_count sane in the reset
+> framework. Therefore, use of reset_control_reset() on shared reset line
+> should be balanced with reset_control_rearm().
+>
+> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> Reported-by: Jerome Brunet <jbrunet@baylibre.com>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
