@@ -2,102 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9424B458B00
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Nov 2021 10:04:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEEAC458B80
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Nov 2021 10:29:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238953AbhKVJHp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Nov 2021 04:07:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbhKVJHo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Nov 2021 04:07:44 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43062C061574;
-        Mon, 22 Nov 2021 01:04:38 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id x15so73664749edv.1;
-        Mon, 22 Nov 2021 01:04:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/n2Vm5z8nFGK+sbMSre7nkEQgLie2yLLJputlZIF0rw=;
-        b=MGM9gXKyZV26D2lbgtxuuQwoJ9UQxDrIdr1g22N9dWWKStYfmVIfWgKcAeTAU2qFoh
-         lkDXU/77a7NYdBZLLfansRByZ6LiJkpl+E6fasDgmtEYZjVwEL8PNuaAZQTBnzXsQxqR
-         LnOX4xT/gYYayGwbXFAQyJoJszrL0txDfx6Xa+XZ0MSlsTYCzt/XHRBckPtKyA24sWCd
-         90UPzxQx/YgyPDPoN5OzKUB5pbkHDVxtTBc6IDV6g/oYocP7F7j3vWm/D0/a9opZnnR6
-         2NfLOThgtZslMgvYFBJEW53hlyu4OC6pDPXaeyA/fghOpmyvsMZ0ofu2q4FDbIqjZWAv
-         PhDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/n2Vm5z8nFGK+sbMSre7nkEQgLie2yLLJputlZIF0rw=;
-        b=ISKbu8c9wTw+f5L0v0DqgHVOzY+RNRKX5m7BrsrxAJCbjL6ZyFDk0jYk2hymZI+8Iu
-         VYleXKMGKOIPxgkza2RaajKKn09X1TebFWr4hGGSG7lLlc8Et++6fPjuw9etbnBwtKH3
-         SFDRGweuYm1U7rzyiPnTDgcbCOe75RklKCQGkB0S9cZiI1cu4H+SGk5uJUympUagKliq
-         A5jQsP/nEzoxLogHE54IVnq/UGTbYuZXbyQVDbYMGKtHRUPMdHxMbDiLWOZLrVdt9iDR
-         kjD5TzgpnxaA4ua4bfefLBZcx+DxDzBoSWKE8UT00aNmnnDMl9GRL/s+/7M41xpK4YM7
-         uxrQ==
-X-Gm-Message-State: AOAM531lTn1csqbf3PJOD7+ViGGU8uVS/LQBbl6f7RIYbOeQ7NUbeUWW
-        n/jDCqsNqkToGANMbqu8ZGAwaSc7Eg9Ob2kZKOA=
-X-Google-Smtp-Source: ABdhPJw1Y/E8hlBCt4M0ZxIE/6dl4jAqFgcMD+6FREtOB29ObDhN9iSjRxOlsQ2zIkKb4HicLv91Qy5jg7lWpWCJE4U=
-X-Received: by 2002:aa7:dbc1:: with SMTP id v1mr62739440edt.49.1637571876741;
- Mon, 22 Nov 2021 01:04:36 -0800 (PST)
+        id S239063AbhKVJci (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Nov 2021 04:32:38 -0500
+Received: from mga05.intel.com ([192.55.52.43]:53776 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230447AbhKVJch (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 22 Nov 2021 04:32:37 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10175"; a="320980423"
+X-IronPort-AV: E=Sophos;i="5.87,254,1631602800"; 
+   d="scan'208";a="320980423"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2021 01:29:31 -0800
+X-IronPort-AV: E=Sophos;i="5.87,254,1631602800"; 
+   d="scan'208";a="508879579"
+Received: from rmcdonax-mobl.ger.corp.intel.com (HELO localhost) ([10.252.19.217])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2021 01:29:13 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org
+Cc:     Jakub Kicinski <kuba@kernel.org>, axboe@kernel.dk,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
+        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
+        yuq825@gmail.com, robdclark@gmail.com, sean@poorly.run,
+        christian.koenig@amd.com, ray.huang@amd.com, sgoutham@marvell.com,
+        gakula@marvell.com, sbhatta@marvell.com, hkelam@marvell.com,
+        jingoohan1@gmail.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        kw@linux.com, bhelgaas@google.com,
+        krzysztof.kozlowski@canonical.com, mani@kernel.org,
+        pawell@cadence.com, peter.chen@kernel.org, rogerq@kernel.org,
+        a-govindraju@ti.com, gregkh@linuxfoundation.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sj@kernel.org, akpm@linux-foundation.org,
+        thomas.hellstrom@linux.intel.com, matthew.auld@intel.com,
+        colin.king@intel.com, geert@linux-m68k.org,
+        linux-block@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, lima@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH bpf] treewide: add missing includes masked by cgroup ->
+ bpf dependency
+In-Reply-To: <20211120035253.72074-1-kuba@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20211120035253.72074-1-kuba@kernel.org>
+Date:   Mon, 22 Nov 2021 11:29:10 +0200
+Message-ID: <87fsroo7x5.fsf@intel.com>
 MIME-Version: 1.0
-References: <20211112162827.128319-1-aouledameur@baylibre.com>
- <20211112162827.128319-3-aouledameur@baylibre.com> <CAFBinCDNMCT4KZjw8HnYer9NJBx09yF=KpguGm8Q4vKw8eBr9A@mail.gmail.com>
-In-Reply-To: <CAFBinCDNMCT4KZjw8HnYer9NJBx09yF=KpguGm8Q4vKw8eBr9A@mail.gmail.com>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Mon, 22 Nov 2021 14:34:26 +0530
-Message-ID: <CANAwSgRoBCao2fh1jgBwb-7r+ng3LabNbH8i4G=kn668uhCasg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] usb: dwc3: meson-g12a: fix shared reset control use
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-amlogic@lists.infradead.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Amjad
+On Fri, 19 Nov 2021, Jakub Kicinski <kuba@kernel.org> wrote:
+> cgroup.h (therefore swap.h, therefore half of the universe)
+> includes bpf.h which in turn includes module.h and slab.h.
+> Since we're about to get rid of that dependency we need
+> to clean things up.
+>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: axboe@kernel.dk
+> CC: maarten.lankhorst@linux.intel.com
+> CC: mripard@kernel.org
+> CC: tzimmermann@suse.de
+> CC: airlied@linux.ie
+> CC: daniel@ffwll.ch
+> CC: jani.nikula@linux.intel.com
+> CC: joonas.lahtinen@linux.intel.com
+> CC: rodrigo.vivi@intel.com
+> CC: yuq825@gmail.com
+> CC: robdclark@gmail.com
+> CC: sean@poorly.run
+> CC: christian.koenig@amd.com
+> CC: ray.huang@amd.com
+> CC: sgoutham@marvell.com
+> CC: gakula@marvell.com
+> CC: sbhatta@marvell.com
+> CC: hkelam@marvell.com
+> CC: jingoohan1@gmail.com
+> CC: lorenzo.pieralisi@arm.com
+> CC: robh@kernel.org
+> CC: kw@linux.com
+> CC: bhelgaas@google.com
+> CC: krzysztof.kozlowski@canonical.com
+> CC: mani@kernel.org
+> CC: pawell@cadence.com
+> CC: peter.chen@kernel.org
+> CC: rogerq@kernel.org
+> CC: a-govindraju@ti.com
+> CC: gregkh@linuxfoundation.org
+> CC: ast@kernel.org
+> CC: daniel@iogearbox.net
+> CC: andrii@kernel.org
+> CC: kafai@fb.com
+> CC: songliubraving@fb.com
+> CC: yhs@fb.com
+> CC: john.fastabend@gmail.com
+> CC: kpsingh@kernel.org
+> CC: sj@kernel.org
+> CC: akpm@linux-foundation.org
+> CC: thomas.hellstrom@linux.intel.com
+> CC: matthew.auld@intel.com
+> CC: colin.king@intel.com
+> CC: geert@linux-m68k.org
+> CC: linux-block@vger.kernel.org
+> CC: dri-devel@lists.freedesktop.org
+> CC: intel-gfx@lists.freedesktop.org
+> CC: lima@lists.freedesktop.org
+> CC: linux-arm-msm@vger.kernel.org
+> CC: freedreno@lists.freedesktop.org
+> CC: linux-pci@vger.kernel.org
+> CC: linux-arm-kernel@lists.infradead.org
+> CC: linux-samsung-soc@vger.kernel.org
+> CC: linux-usb@vger.kernel.org
+> CC: bpf@vger.kernel.org
+> CC: linux-mm@kvack.org
+>
+> Well, let's see if this makes it thru email servers...
+> ---
+>  block/fops.c                                          | 1 +
+>  drivers/gpu/drm/drm_gem_shmem_helper.c                | 1 +
+>  drivers/gpu/drm/i915/gt/intel_gtt.c                   | 1 +
+>  drivers/gpu/drm/i915/i915_request.c                   | 1 +
 
-On Sun, 21 Nov 2021 at 05:21, Martin Blumenstingl
-<martin.blumenstingl@googlemail.com> wrote:
->
-> Hi Amjad,
->
-> +Cc Anand who was also investigating the original issue one year ago
->
-Thanks.
-> On Fri, Nov 12, 2021 at 5:33 PM Amjad Ouled-Ameur
-> <aouledameur@baylibre.com> wrote:
-> >
-> >
-> it seems that there's an extraneous blank line here
->
-> > reset_control_(de)assert() calls are called on a shared reset line when
-> > reset_control_reset has been used. This is not allowed by the reset
-> > framework.
-> >
-> > Use reset_control_rearm() call in suspend() and remove() as a way to state
-> > that the resource is no longer used, hence the shared reset line
-> > may be triggered again by other devices. Use reset_control_rearm() also in
-> > case probe fails after reset() has been called.
-> >
-> > reset_control_rearm() keeps use of triggered_count sane in the reset
-> > framework, use of reset_control_reset() on shared reset line should be
-> > balanced with reset_control_rearm().
-> >
-> > Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> > Reported-by: Jerome Brunet <jbrunet@baylibre.com>
-> Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+For the i915 parts,
 
-Changes fix the warning messages on my odroid n2 during suspend / resume.
-Please add my
-Tested-by: Anand Moon <linux.amoon@gmail.com>
+Acked-by: Jani Nikula <jani.nikula@intel.com>
+
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center
