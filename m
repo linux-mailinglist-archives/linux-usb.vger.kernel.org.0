@@ -2,115 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E96E5458928
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Nov 2021 06:51:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F053445894E
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Nov 2021 07:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbhKVFy0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Nov 2021 00:54:26 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:33658 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbhKVFy0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Nov 2021 00:54:26 -0500
-Received: by mail-io1-f69.google.com with SMTP id i11-20020a056602134b00b005ecba72587bso5447121iov.0
-        for <linux-usb@vger.kernel.org>; Sun, 21 Nov 2021 21:51:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=nFOITYfIEorOXjaj5jZLYtuuKCUZHRkEB2VxdapHdLU=;
-        b=HoNk+8v+3PdEm8u162bXYTsD4h3scBlAbOaJvjPjycDK4qwjMfrEvkGFORTCFqNGaS
-         ddjewmex0CxowemL7hPtMhIxJ/xOd/XinEZkRhw+BJon6bg1u+UXI7qckbMkhM++UZn5
-         LqXpD2Mwf8nfmiGhjwvmJ3NpBwXsojiA3Ol6j4T/x5x0438GewPufiUMfgKq1F6rc1AH
-         6lsv+MNXmNQzkawFcwHhom+y5uYEk4+05kCSGlPNiPA4Hlde+ixGHXnjK+u7cHlLnXPd
-         fKanG0IYZafNvmWKWSaw+sg9wZeziUDep/W+q4gRs1UELzJANQmplmFmh1bHPpxn3Dmf
-         L0ng==
-X-Gm-Message-State: AOAM531yTxSLFtJJDuYFj/LmJMSyLj8OBCd33cEDiZsAQPa3l7B2bKr+
-        5vefy7/TfJk+h+TXWzrgZoQLiPWQ6J/t9IrRjB8m2Jnm+H1i
-X-Google-Smtp-Source: ABdhPJxicFhg4HLWknRZZ4vVOBPtdj/30My/yvGJCYdmUlV2HS06XhYKoFqfYrnHLlTGGFqvs/woyWhn6voWAiL2Tag8Xm5VHloi
+        id S232541AbhKVGb7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Nov 2021 01:31:59 -0500
+Received: from mail-dm3nam07on2069.outbound.protection.outlook.com ([40.107.95.69]:61097
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231419AbhKVGb7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 22 Nov 2021 01:31:59 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LWZwxVRkszMFYJk+2WoIo0RElExKduKSeR8t2i0DR2fZEbsjGVU0z9sHR6K7eSKp3JW/l/Q2n0ugV1Af600YrvGAyKuSyMJw5OXz/bJQyIO2U53mtmwKm5/xX+fSxbNWIwyFqtJBDTLwX+qD/Ynk0wNR7zU28Pj15ramFh3yJUNlKrdu52GuI2d3C11Mw7RjlJYXACW5VGgCFf+dz8CCLGz7s+GV2um/bs3ZcaDJhkBVx5lGjsBJZLtKsiSNXNAnbRtus/eXRoiuRkcVherJAVtbZQ/LUBBhbdnj7VtCSWYUQ9mBX+331lbg158r/faXigZIXZE6tYQUT7h2ITSSqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HcMpELuqOPEU2SZHvpZG+H0PhucP955eYdU2Lo4rCUQ=;
+ b=LhS3BVC41dRts+8dNeAXeH+OgX6tJV45z1Z00rOuIwVwGuCH+oqFrJxVnt1TQTCWrdOrRlBctSvvepqqEP6dG5JUtiWjbcZYEIQyGzLFApF9US5xna1Ec53IC043O12RcP6VDAa+tnvmy7IBKVtGpVQMWidP9GgXQwkOJPS5WgHOmz1L64Z9T0KaQ/NIq3KmA6Bsb8ETDHHOqb+4pHVTNnK2arqVmclP/zzq1zdRwTqhUIDfLedzFrlQVNw6FeeXGQdou4qjZrQItgmn5q+BSzCz2pw8x5saxCj1kzGP5y5Qa5W2//pqr9XACTptx+tlsPhG++z85CDlzglneZnD6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
+ header.from=xilinx.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HcMpELuqOPEU2SZHvpZG+H0PhucP955eYdU2Lo4rCUQ=;
+ b=j0xyFh6dqDF02Whl4573GagHDX3RWIaVJhDnM0hcfodK8tTuo1PIx956wci81TeHwSY1DLZ6h/VofSvDYncVD2mYMKgFEe9+5WLvnn4d55UzPLaFT5sb8qL5u+5536Swsb7WZhAwv5vGU7WB18qtTJbB09evLW3nX+WdkOiEQcc=
+Received: from DM6PR08CA0061.namprd08.prod.outlook.com (2603:10b6:5:1e0::35)
+ by DM6PR02MB6171.namprd02.prod.outlook.com (2603:10b6:5:1d1::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.21; Mon, 22 Nov
+ 2021 06:28:51 +0000
+Received: from DM3NAM02FT012.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:1e0:cafe::60) by DM6PR08CA0061.outlook.office365.com
+ (2603:10b6:5:1e0::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.19 via Frontend
+ Transport; Mon, 22 Nov 2021 06:28:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT012.mail.protection.outlook.com (10.13.5.125) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4713.19 via Frontend Transport; Mon, 22 Nov 2021 06:28:50 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Sun, 21 Nov 2021 22:28:49 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Sun, 21 Nov 2021 22:28:49 -0800
+Envelope-to: git@xilinx.com,
+ gregkh@linuxfoundation.org,
+ robh+dt@kernel.org,
+ mka@chromium.org,
+ ravisadineni@chromium.org,
+ stern@rowland.harvard.edu,
+ alcooperx@gmail.com,
+ linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Received: from [10.140.6.35] (port=53536 helo=xhdsaipava40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <piyush.mehta@xilinx.com>)
+        id 1mp2oq-0001Mv-VJ; Sun, 21 Nov 2021 22:28:49 -0800
+From:   Piyush Mehta <piyush.mehta@xilinx.com>
+To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <mka@chromium.org>, <ravisadineni@chromium.org>,
+        <stern@rowland.harvard.edu>, <alcooperx@gmail.com>,
+        <michal.simek@xilinx.com>
+CC:     <piyush.mehta@xilinx.com>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <git@xilinx.com>, <sgoud@xilinx.com>
+Subject: [PATCH V2 0/2] usb: misc: add support for microchip,usb2244 USB-SD controller
+Date:   Mon, 22 Nov 2021 11:58:32 +0530
+Message-ID: <20211122062834.1812005-1-piyush.mehta@xilinx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:c56c:: with SMTP id b12mr14508825ilj.255.1637560280258;
- Sun, 21 Nov 2021 21:51:20 -0800 (PST)
-Date:   Sun, 21 Nov 2021 21:51:20 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cd9ebf05d15a36ba@google.com>
-Subject: [syzbot] WARNING: bad unlock balance in hub_event
-From:   syzbot <syzbot+423eaf1efaa99fb8ce96@syzkaller.appspotmail.com>
-To:     Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mathias.nyman@linux.intel.com, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 002ebf12-6550-4118-6594-08d9ad815948
+X-MS-TrafficTypeDiagnostic: DM6PR02MB6171:
+X-Microsoft-Antispam-PRVS: <DM6PR02MB617113A0FA3444976F304D85D49F9@DM6PR02MB6171.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ot9H36sXdEIQGnktjaPlWJqvaSkSGMDZsWfZc9RH+yMMr1vpAEPAYL8pRgu+RCAczj1VyqQG+5oyxpl079ll7Yc/Y8s6Mei+vORpa7E/+g5bTUeClruCJm+hibalEGuvg+rDHvP5eD7nLfCN3l4uQgrmz4AZowvZWRoOb3mbdM1bbt4VeFMhz1DGjHlbw+/PRQtgJrf542G/1FK+pJmPP8U3Ai8S1D8tIwtba89cOh5az5e3ofCKSiVGizRgHn0PBiMuppNQQTSBlT3FAUfCUg/aqxszep1wcuJKd2kvLB6P3/azg86Tphsac5A7RBx0hwlcr/8GtnRRGl8hkSxaWgkOHU0XKq8Yc7Nwnke0DCyWXFmwYZt0Orq+dMdFuadliMm4qcZChKomMTfJdglADsiEcSomzZZJ+cbMhaXJoiTVLhpHqUV4oBQwm8eNKk6Ai0V5GLs8JA0b53v2EodjTq1w1510MDaiZ0Hal3zhUG7BvX30vC15JMTO0mboiY2prvcW1e3AMSeI7Jz813SILp34VvISchfTpFucgO/lo2tfH59Qus4bKXiaqVzsM/1OZ7TTizh0nXnLiAu1y41v+jE2LKYD7NLqAyF6qQo7nlV0RoIkjS+xAlPy5pjgPyEBZ5o5/1BB2PYYhs55KiY5ssIBA4AtjgPpWhEUzgAvrG+ZttiGWM3o8ChSg8Ps2QqV81EuVOl9J5oa/nyIMUnPORgFe2Ja2u/LVXVhNZ8cab685rbDEEp8lXmWZqzKhu86tiVhfA14YhBDHmyTp0YlQIji4KLKbde4beCr1tqPrTdWSqw0unxB84tQ6tGDYQtx
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(36840700001)(46966006)(54906003)(83380400001)(36906005)(2616005)(110136005)(6666004)(6636002)(36756003)(70206006)(316002)(4326008)(356005)(70586007)(9786002)(8936002)(8676002)(26005)(1076003)(336012)(966005)(7696005)(508600001)(186003)(426003)(82310400003)(2906002)(36860700001)(5660300002)(47076005)(44832011)(107886003)(7636003)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2021 06:28:50.9029
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 002ebf12-6550-4118-6594-08d9ad815948
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT012.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB6171
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Microchip's USB224x family of Hi-Speed USB 2.0 flash media card
+controllers provide an ultra-fast interface between a USB host
+controller and flash media cards.
 
-syzbot found the following issue on:
+This patch adds a GPIO based usb-sd reset for USB2244 USB2 ultra
+fast SD controller. This usb2244 driver trigger sd reset signal
+after soft reset or core Reset. The SD needs to be resetted after
+completion of phy initialization. After the toggling of gpio,
+controller gets out form reset.
 
-HEAD commit:    5191249f8803 Add linux-next specific files for 20211118
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=102c939eb00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fca39774e64812b0
-dashboard link: https://syzkaller.appspot.com/bug?extid=423eaf1efaa99fb8ce96
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+423eaf1efaa99fb8ce96@syzkaller.appspotmail.com
-
-=====================================
-WARNING: bad unlock balance detected!
-5.16.0-rc1-next-20211118-syzkaller #0 Not tainted
--------------------------------------
-kworker/1:24/10009 is trying to release lock (hcd->address0_mutex) at:
-[<ffffffff856171ad>] hub_port_connect drivers/usb/core/hub.c:5402 [inline]
-[<ffffffff856171ad>] hub_port_connect_change drivers/usb/core/hub.c:5493 [inline]
-[<ffffffff856171ad>] port_event drivers/usb/core/hub.c:5639 [inline]
-[<ffffffff856171ad>] hub_event+0x2a9d/0x4450 drivers/usb/core/hub.c:5721
-but there are no more locks to release!
-
-other info that might help us debug this:
-3 locks held by kworker/1:24/10009:
- #0: ffff888012baf138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888012baf138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff888012baf138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff888012baf138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
- #0: ffff888012baf138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
- #0: ffff888012baf138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269
- #1: ffffc9000b9f7db0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273
- #2: ffff888147b82220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #2: ffff888147b82220 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4450 drivers/usb/core/hub.c:5667
-
-stack backtrace:
-CPU: 1 PID: 10009 Comm: kworker/1:24 Not tainted 5.16.0-rc1-next-20211118-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_unlock_imbalance_bug include/trace/events/lock.h:58 [inline]
- __lock_release kernel/locking/lockdep.c:5316 [inline]
- lock_release.cold+0x34/0x4e kernel/locking/lockdep.c:5657
- __mutex_unlock_slowpath+0x99/0x5e0 kernel/locking/mutex.c:900
- hub_port_connect drivers/usb/core/hub.c:5402 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5493 [inline]
- port_event drivers/usb/core/hub.c:5639 [inline]
- hub_event+0x2a9d/0x4450 drivers/usb/core/hub.c:5721
- process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
- process_scheduled_works kernel/workqueue.c:2361 [inline]
- worker_thread+0x85c/0x11f0 kernel/workqueue.c:2447
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-
-
+As part of the reset, sets the direction of the pin to output before
+toggling the pin. Delay of microseconds is added in between low and
+high to meet the setup and hold time requirement of the reset.
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Changes for V2:
+- Update reset polarity, make reset ACTIVE LOW in the dt-binding document
+  and usb2244 driver.
+- Fix WARNING: msleep < 20ms can sleep for up to 20ms by changing msleep to
+  usleep_range()
+- Addressed Rob Herring review comments
+  - Added usbsd node under the usb controller (usb0) node.
+  - Remove Warning: decoded text below may be mangled, UTF-8 assumed.	
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Review comments:
+Link: https://lore.kernel.org/lkml/20211024180628.2992108-3-piyush.mehta@xilinx.com/t/#m2e146078276051984a144ba074c6cf4eee07b4d0
+---
+Piyush Mehta (2):
+  dt-bindings: usb: misc: Add binding for Microchip usb2244 Controller
+  usb: misc: usb244: add support for USB2 ultra fast sd controller
+
+ .../devicetree/bindings/usb/microchip,usb2244.yaml | 47 +++++++++++++++
+ drivers/usb/misc/Kconfig                           | 10 ++++
+ drivers/usb/misc/Makefile                          |  1 +
+ drivers/usb/misc/usb2244.c                         | 69 ++++++++++++++++++++++
+ 4 files changed, 127 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb2244.yaml
+ create mode 100644 drivers/usb/misc/usb2244.c
+
+-- 
+2.7.4
+
