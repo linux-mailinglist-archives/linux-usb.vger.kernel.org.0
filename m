@@ -2,134 +2,210 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 427D5458E3E
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Nov 2021 13:26:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E525458E49
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Nov 2021 13:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236049AbhKVM3K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Nov 2021 07:29:10 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:57704 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233840AbhKVM3K (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 22 Nov 2021 07:29:10 -0500
-Received: from [10.180.13.93] (unknown [10.180.13.93])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx1tNWjJthJiYAAA--.766S2;
-        Mon, 22 Nov 2021 20:25:58 +0800 (CST)
-Subject: Re: [PATCH v3] usb: xhci: add LWP quirk for ensuring uPD720201 into
- D3 state after S5
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhuyinbo@loongson.cn, linux-kernel@vger.kernel.org
-References: <1636612118-32481-1-git-send-email-zhuyinbo@loongson.cn>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <c330c58f-bb73-d439-d6fa-63eb9cba4313@loongson.cn>
-Date:   Mon, 22 Nov 2021 20:25:57 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S236258AbhKVMa0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Nov 2021 07:30:26 -0500
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:19017 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235993AbhKVMa0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Nov 2021 07:30:26 -0500
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20211122122718euoutp02dd11ee50b7678e8da9d0f4ea51d6b2a6~53gG4_jCV1297812978euoutp02L
+        for <linux-usb@vger.kernel.org>; Mon, 22 Nov 2021 12:27:18 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20211122122718euoutp02dd11ee50b7678e8da9d0f4ea51d6b2a6~53gG4_jCV1297812978euoutp02L
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1637584038;
+        bh=iRB3UxxK1Di6aCE2Ld9HGZTPjw6VdP4WaBATR6RbZAY=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=SUR8jR4RPuAzINL/TbTWk9H/OybVi1/Gb1V0+0tfjIGpFffIa8ETwM1O2V1JWyEAf
+         mA1sUH8Te1lLJ1+sVS6X5hXyx4qzIZz84ij2sZIlpZmKP4tYA5rMJS6RwJh8U1zmD8
+         qLlVoHoXCh/Hu6CLPJ3Yl/MosgMRbMnayD1/mkhI=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20211122122718eucas1p299d54d88fcd74fc00ea1439ab6266657~53gGn8o8I3260632606eucas1p2G;
+        Mon, 22 Nov 2021 12:27:18 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 24.95.09887.5AC8B916; Mon, 22
+        Nov 2021 12:27:18 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20211122122717eucas1p17574c005b04a3c50cb9e94aa729652e8~53gGJpAPz2989829898eucas1p1f;
+        Mon, 22 Nov 2021 12:27:17 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20211122122717eusmtrp207f0989d53e196f9a73a883cc5e0a66c~53gGDN1-g2893128931eusmtrp2H;
+        Mon, 22 Nov 2021 12:27:17 +0000 (GMT)
+X-AuditID: cbfec7f4-45bff7000000269f-86-619b8ca51ec7
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 58.8C.09522.5AC8B916; Mon, 22
+        Nov 2021 12:27:17 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20211122122717eusmtip1b4d2b34c9995dc1266e98900cdf79bee~53gFmBlKU2119121191eusmtip1Q;
+        Mon, 22 Nov 2021 12:27:17 +0000 (GMT)
+Message-ID: <22f12ed7-18f3-9800-3858-9738f9ccd1f2@samsung.com>
+Date:   Mon, 22 Nov 2021 13:27:16 +0100
 MIME-Version: 1.0
-In-Reply-To: <1636612118-32481-1-git-send-email-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.3.1
+Subject: Re: [RFT PATCH] usb: hub: Fix locking issues with address0_mutex
 Content-Language: en-US
-X-CM-TRANSID: AQAAf9Dx1tNWjJthJiYAAA--.766S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZF15Ar47Aw4rtrWUur1kuFg_yoW5XF17pF
-        s5ZaySkrs5tr4Iq3sxZr18ZF95GwnrAryUKry7G34jgrZ0yrs5KFyUGFW3CrZxW3ykJr1a
-        gF1vgr15W3y7CaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
-        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
-        JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
-        vEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2
-        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
-        ZFpf9x0JUywZ7UUUUU=
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        kishon@ti.com
+Cc:     hdegoede@redhat.com, chris.chiu@canonical.com,
+        linux-usb@vger.kernel.org, stable@vger.kernel.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20211122105003.1089218-1-mathias.nyman@linux.intel.com>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNKsWRmVeSWpSXmKPExsWy7djPc7rLemYnGhx9zWRxae1eVovmxevZ
+        LN4cn85kceFpD5vFomWtzBavPzSxWCzY+IjRYsLvC2wOHB6zGnrZPOadDPTYP3cNu8f7fVfZ
+        PGbf/cHocfzGdiaPz5vkAtijuGxSUnMyy1KL9O0SuDIaf05gLNgqW9E1eTNjA+Nq8S5GTg4J
+        AROJtZ+a2EFsIYEVjBKLTsh2MXIB2V8YJc6+usQC4XxmlGjbeYsVpuP36pnMEInljBJdj76z
+        QbR/ZJSYtMkSxOYVsJN403+AGcRmEVCVaHj/lQ0iLihxcuYTFhBbVCBJ4nTrJLAaYQFPib8L
+        r4LFmQXEJW49mc8EYosIVEp0Luhkg4inSexoXAhWzyZgKNH1tgsszingKtH97TpUr7zE9rdz
+        wI6TEHjDIXF/wjw2iKtdJBZcnwf1gbDEq+Nb2CFsGYn/O0GWgTQ0M0o8PLeWHcLpYZS43DSD
+        EaLKWuLOuV9AkziAVmhKrN+lDxF2lJi3ro8dJCwhwCdx460gxBF8EpO2TWeGCPNKdLQJQVSr
+        Scw6vg5u7cELl5gnMCrNQgqWWUjen4XknVkIexcwsqxiFE8tLc5NTy02ykst1ytOzC0uzUvX
+        S87P3cQITE+n/x3/soNx+auPeocYmTgYDzFKcDArifBybJieKMSbklhZlVqUH19UmpNafIhR
+        moNFSZxX5E9DopBAemJJanZqakFqEUyWiYNTqoFJ5LeT5cWHL4vf8/1+W7BT8M2dan+N1ylp
+        oi9Kz8penFm7jb0/dPl+Gd0Vyz8vXf0nz22V11rF1/q2vPt/MCyb6iV/05R91cYDIl+Fb+cq
+        cdXsuirh+/+ruJvrjO2NJxsfP2v/ZPt/oYDRisjut5f6pA9PPijn+uri0TWy0r6t1vN8777h
+        bs9Z0bjn0Lrm8msXTn0NEJqtOC9HpMVPTsogZOnB5rC5Gdl176/XnZBYx6ZSrDbR4M1h5mMO
+        1hPr7pccWqYlUCTLGsgn2b0+lt9uEqvFTfm2/zVP0r2cS3q25De6HmuY81Y6eNabTkGxd9w3
+        1/R/ENi8R9Lm0Xy3tzsVHQ84iyzSbLjs1Jak6nNCiaU4I9FQi7moOBEA9RaBRr4DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPIsWRmVeSWpSXmKPExsVy+t/xu7pLe2YnGpy+IG9xae1eVovmxevZ
+        LN4cn85kceFpD5vFomWtzBavPzSxWCzY+IjRYsLvC2wOHB6zGnrZPOadDPTYP3cNu8f7fVfZ
+        PGbf/cHocfzGdiaPz5vkAtij9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX0
+        7WxSUnMyy1KL9O0S9DIaf05gLNgqW9E1eTNjA+Nq8S5GTg4JAROJ36tnMncxcnEICSxllOi4
+        +40dIiEjcXJaAyuELSzx51oXG0TRe0aJnaffMoMkeAXsJN70HwCzWQRUJRref2WDiAtKnJz5
+        hAXEFhVIkuj/vgusRljAU+LvwqtgcWYBcYlbT+YzgdgiApUSWxofMkHE0yQubWtgh1h2kVHi
+        2uvdYM1sAoYSXW+7wBZwCrhKdH+7DjXITKJraxcjhC0vsf3tHOYJjEKzkNwxC8m+WUhaZiFp
+        WcDIsopRJLW0ODc9t9hQrzgxt7g0L10vOT93EyMwJrcd+7l5B+O8Vx/1DjEycTAeYpTgYFYS
+        4eXYMD1RiDclsbIqtSg/vqg0J7X4EKMpMDAmMkuJJucDk0JeSbyhmYGpoYmZpYGppZmxkjiv
+        Z0FHopBAemJJanZqakFqEUwfEwenVAPT3H1fdu0zK+wTn37pp5RdxU2zffVd692Xhu+0DunV
+        eLlqwf0uhTCZ2RkS3ip9k47sOplj06T+5K7V+syM+kzDvCvPY0MOxwosTGK6cNo2N/7h6SVT
+        1vhtPlFo46RdyM7N1VxQyml6dI79jNvW85xk2DpUNrccULofdLXrpvsCKVeTiwV9hSZWNw8v
+        F3x43NzuucCjHWprX97rP6SzkdVy0auy8isC/GHMt7qLfHef2x9TN5vve73vEu8rN5oTTG6a
+        brnDGt6irsW25Oru/4cM7Wz/rWysYH144bl1wI7LPF4uBe9Dy2qVk3imPQrX2fntwP9fLm9/
+        8M/6e0Cu9OLCdvl9OowOu+TbhG5+6wxUYinOSDTUYi4qTgQA6q1DP1IDAAA=
+X-CMS-MailID: 20211122122717eucas1p17574c005b04a3c50cb9e94aa729652e8
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20211122104844eucas1p193f1cdbe6255ccd2f945726711e719a4
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20211122104844eucas1p193f1cdbe6255ccd2f945726711e719a4
+References: <1d6ef5ff-e5e2-b81e-42be-7876b5bcfd05@linux.intel.com>
+        <CGME20211122104844eucas1p193f1cdbe6255ccd2f945726711e719a4@eucas1p1.samsung.com>
+        <20211122105003.1089218-1-mathias.nyman@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
 
-ÔÚ 2021/11/11 ÏÂÎç2:28, Yinbo Zhu Ð´µÀ:
-> After S5, any pci device should into D3 state that if supported, but the
-> uPD720201 was not and cause OSPM power consumption is more higher that
-> S5 than S4. Due to that uPD720201 firmware behavior was unknown and the
-> _PS3 method wasn't implemented in ACPI table which can make device into
-> D3, I think xhci HCD can add a quirk ensure it into D3 state after S5
-> that is appropriate and this patch was to add the XHCI_LWP_QURIK and set
-> PCI_D3hot to uPD720201 pmsc register in xhci_pci_shutdown and
-> xhci_pci_remove to fix xhci power consumption issue.
+On 22.11.2021 11:50, Mathias Nyman wrote:
+> Fix the circular lock dependency and unbalanced unlock of addess0_mutex
+> introduced when fixing an address0_mutex enumeration retry race in commit
+> ae6dc22d2d1 ("usb: hub: Fix usb enumeration issue due to address0 race")
 >
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> Make sure locking order between port_dev->status_lock and address0_mutex
+> is correct, and that address0_mutex is not unlocked in hub_port_connect
+> "done:" codepath which may be reached without locking address0_mutex
+>
+> Fixes: 6ae6dc22d2d1 ("usb: hub: Fix usb enumeration issue due to address0 race")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+This fixes the issue I've reported here: 
+https://lore.kernel.org/all/f3bfcbc7-f701-c74a-09bd-6491d4c8d863@samsung.com/
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > ---
-> Change in v3:
-> 		Add D3 set in xhci_pci_remove function.
+>   drivers/usb/core/hub.c | 20 ++++++++++++--------
+>   1 file changed, 12 insertions(+), 8 deletions(-)
 >
->   drivers/usb/host/xhci-pci.c | 9 +++++++++
->   drivers/usb/host/xhci.h     | 1 +
->   2 files changed, 10 insertions(+)
->
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 2c9f25c..6258a5a 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -265,6 +265,7 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->   	    pdev->device == 0x0014) {
->   		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
->   		xhci->quirks |= XHCI_ZERO_64B_REGS;
-> +		xhci->quirks |= XHCI_LWP_QUIRK;
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 00c3506324e4..00070a8a6507 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -5188,6 +5188,7 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+>   	struct usb_port *port_dev = hub->ports[port1 - 1];
+>   	struct usb_device *udev = port_dev->child;
+>   	static int unreliable_port = -1;
+> +	bool retry_locked;
+>   
+>   	/* Disconnect any existing devices under this port */
+>   	if (udev) {
+> @@ -5244,10 +5245,10 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+>   
+>   	status = 0;
+>   
+> -	mutex_lock(hcd->address0_mutex);
+> -
+>   	for (i = 0; i < PORT_INIT_TRIES; i++) {
+> -
+> +		usb_lock_port(port_dev);
+> +		mutex_lock(hcd->address0_mutex);
+> +		retry_locked = true;
+>   		/* reallocate for each attempt, since references
+>   		 * to the previous one can escape in various ways
+>   		 */
+> @@ -5255,6 +5256,8 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+>   		if (!udev) {
+>   			dev_err(&port_dev->dev,
+>   					"couldn't allocate usb_device\n");
+> +			mutex_unlock(hcd->address0_mutex);
+> +			usb_unlock_port(port_dev);
+>   			goto done;
+>   		}
+>   
+> @@ -5276,13 +5279,13 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+>   		}
+>   
+>   		/* reset (non-USB 3.0 devices) and get descriptor */
+> -		usb_lock_port(port_dev);
+>   		status = hub_port_init(hub, udev, port1, i);
+> -		usb_unlock_port(port_dev);
+>   		if (status < 0)
+>   			goto loop;
+>   
+>   		mutex_unlock(hcd->address0_mutex);
+> +		usb_unlock_port(port_dev);
+> +		retry_locked = false;
+>   
+>   		if (udev->quirks & USB_QUIRK_DELAY_INIT)
+>   			msleep(2000);
+> @@ -5372,11 +5375,14 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+>   
+>   loop_disable:
+>   		hub_port_disable(hub, port1, 1);
+> -		mutex_lock(hcd->address0_mutex);
+>   loop:
+>   		usb_ep0_reinit(udev);
+>   		release_devnum(udev);
+>   		hub_free_dev(udev);
+> +		if (retry_locked) {
+> +			mutex_unlock(hcd->address0_mutex);
+> +			usb_unlock_port(port_dev);
+> +		}
+>   		usb_put_dev(udev);
+>   		if ((status == -ENOTCONN) || (status == -ENOTSUPP))
+>   			break;
+> @@ -5399,8 +5405,6 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
 >   	}
->   	if (pdev->vendor == PCI_VENDOR_ID_RENESAS &&
->   	    pdev->device == 0x0015) {
-> @@ -466,6 +467,10 @@ static void xhci_pci_remove(struct pci_dev *dev)
->   		pci_set_power_state(dev, PCI_D3hot);
 >   
->   	usb_hcd_pci_remove(dev);
-> +
-> +	/* Workaround for decreasing power consumption after S5 */
-> +	if (xhci->quirks & XHCI_LWP_QUIRK)
-> +		pci_set_power_state(dev, PCI_D3hot);
->   }
->   
->   #ifdef CONFIG_PM
-> @@ -610,6 +615,10 @@ static void xhci_pci_shutdown(struct usb_hcd *hcd)
->   	/* Yet another workaround for spurious wakeups at shutdown with HSW */
->   	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
->   		pci_set_power_state(pdev, PCI_D3hot);
-> +
-> +	/* Workaround for decreasing power consumption after S5 */
-> +	if (xhci->quirks & XHCI_LWP_QUIRK)
-> +		pci_set_power_state(pdev, PCI_D3hot);
->   }
->   #endif /* CONFIG_PM */
->   
-> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-> index dca6181..bcd70d1 100644
-> --- a/drivers/usb/host/xhci.h
-> +++ b/drivers/usb/host/xhci.h
-> @@ -1899,6 +1899,7 @@ struct xhci_hcd {
->   #define XHCI_SG_TRB_CACHE_SIZE_QUIRK	BIT_ULL(39)
->   #define XHCI_NO_SOFT_RETRY	BIT_ULL(40)
->   #define XHCI_BROKEN_D3COLD	BIT_ULL(41)
-> +#define XHCI_LWP_QUIRK		BIT_ULL(42)
->   
->   	unsigned int		num_active_eps;
->   	unsigned int		limit_active_eps;
+>   done:
+> -	mutex_unlock(hcd->address0_mutex);
+> -
+>   	hub_port_disable(hub, port1, 1);
+>   	if (hcd->driver->relinquish_port && !hub->hdev->parent) {
+>   		if (status != -ENOTCONN && status != -ENODEV)
 
-Hi all,
-
-
-Do you have any advice about my patch, if no any question, please you 
-help me merge this patch to upstream.
-
-
-Thanks,
-
-BRs,
-
-Yinbo Zhu.
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
