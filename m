@@ -2,261 +2,327 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 777FB458F3F
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Nov 2021 14:15:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4636845910F
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Nov 2021 16:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbhKVNSl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Nov 2021 08:18:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231697AbhKVNSk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Nov 2021 08:18:40 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57787C061574
-        for <linux-usb@vger.kernel.org>; Mon, 22 Nov 2021 05:15:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=vNKMKziCPCyHZvPppp5Yq9832bkjWxAQ7Kb4G20UBZU=; b=ubJcR
-        TfGQ6GlIuqOrmMAjOJYl5wjWfMPOcC3eAl0rMUsa4rmnbci3eXw71g5DPBxHnQl1Lp6gCCO+WKdme
-        /Dr2U+ouFPOFd4H+uD6KpnwX1Q/i61yYdxCVQ54QNceOZYEoF5m+7ULXb4eLgRTDXIqzwpLDqqKx+
-        ErLp9Cye+GhhwvNe7j3J6O9v6LJx1mkc6XvLcwfKbBixPOBbxWUDSntzOYnwoNH71Sf2xU5B44LmN
-        1ikhdh5XtCRGv1teBD5JSB1PpsUrmlEH4JLlU1wz3Ve5hDTZESwNRLyRpmRRw6t4LfqAlyenA8CEg
-        5dXymrh+WmB9TgOBWrqKw5GR9Vssg==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1mp9AN-0002yh-HT; Mon, 22 Nov 2021 13:15:27 +0000
-Date:   Mon, 22 Nov 2021 13:15:24 +0000
-From:   John Keeping <john@metanate.com>
-To:     Udipto Goswami <quic_ugoswami@quicinc.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>
-Subject: Re: [PATCH v2] usb: f_fs: Fix use-after-free for epfile
-Message-ID: <YZuX7O0V76gCf+b/@donbot>
-References: <1637316529-31605-1-git-send-email-quic_ugoswami@quicinc.com>
+        id S239795AbhKVPPc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Nov 2021 10:15:32 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:45723 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238343AbhKVPPb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Nov 2021 10:15:31 -0500
+Received: by mail-il1-f198.google.com with SMTP id 17-20020a921911000000b00275824e5c5eso10715845ilz.12
+        for <linux-usb@vger.kernel.org>; Mon, 22 Nov 2021 07:12:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=9zfPbTH6EhmbuWX63gHOJAyXkrLkLRUhWK2123YhmQU=;
+        b=dSyhRiR+tewaqtGKryA1maGfeJaFrkO4183nvXmsj5O+3GNesX19gh4O/vkwKPpowR
+         419HywfFwV6jb14qAmf/Sz/xV0SD9EWSlph5VoacqAqb+6I3d0JbbSL2mfrJbXK+o1+I
+         JaSYd4tDtUAmKJCCh5USiRsJjDkX8tATB3r7Uk6eVpghbxQl9h1eQdTSIna6RpcQwmFe
+         DRf3uI/GPqwK1eldtLRTLEPrHmxYVIyw0g799WERXAOEtjMITvoQbCsfihJczd16nqXM
+         zZ9/PAPKjcn22AnGOnxggxEkSM2hK7fxLLgX/Akgw0+VQ4MXaqcBZrEfx3UEP0qfHoI9
+         kzGQ==
+X-Gm-Message-State: AOAM531+8V+38ZVdGjKnR0uljWbcumq2p8G1oefjt8VVxKpNwz69fY8F
+        HauHZJzJsz4kH+SsySmz07JYJiT8Zaev82/zokupOmi4VwAn
+X-Google-Smtp-Source: ABdhPJxpb8fXburtZmWEWzHRgC3xOXswoUcS3J5LPKIv8I1k+S+xlrEillNqV5iwDtaSGP4BvLpQ619CtH7LIplCbVIx0mT+zy1h
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1637316529-31605-1-git-send-email-quic_ugoswami@quicinc.com>
-X-Authenticated: YES
+X-Received: by 2002:a05:6e02:1aa2:: with SMTP id l2mr19554392ilv.114.1637593944927;
+ Mon, 22 Nov 2021 07:12:24 -0800 (PST)
+Date:   Mon, 22 Nov 2021 07:12:24 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005fb57e05d1620da1@google.com>
+Subject: [syzbot] KMSAN: uninit-value in ax88772a_hw_reset
+From:   syzbot <syzbot+8d179821571093c5f928@syzkaller.appspotmail.com>
+To:     andrew@lunn.ch, davem@davemloft.net, glider@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux@rempel-privat.de,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 19, 2021 at 03:38:49PM +0530, Udipto Goswami wrote:
-> Consider a case where ffs_func_eps_disable is called from
-> ffs_func_disable as part of composition switch and at the
-> same time ffs_epfile_release get called from userspace.
-> ffs_epfile_release will free up the read buffer and call
-> ffs_data_closed which in turn destroys ffs->epfiles and
-> mark it as NULL. While this was happening the driver has
-> already initialized the local epfile in ffs_func_eps_disable
-> which is now freed and waiting to acquire the spinlock. Once
-> spinlock is acquired the driver proceeds with the stale value
-> of epfile and tries to free the already freed read buffer
-> causing use-after-free.
-> 
-> Following is the illustration of the race:
-> 
->       CPU1                                  CPU2
-> 
->    ffs_func_eps_disable
->    epfiles (local copy)
-> 					ffs_epfile_release
-> 				  __ffs_epfile_read_buffer_free
-> 					kfree(read_buffers)
-> 					kfree(epfile)
-> (epfiles still accessible
->  since local copy)
-> kfree(read_buffers) <use_after_free>
+Hello,
 
-For added clarity here, it looks like the issue is more like:
+syzbot found the following issue on:
 
-        CPU1                            CPU2
+HEAD commit:    412af9cd936d ioremap.c: move an #include around
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=136fb126b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2d142cdf4204061
+dashboard link: https://syzkaller.appspot.com/bug?extid=8d179821571093c5f928
+compiler:       clang version 14.0.0 (git@github.com:llvm/llvm-project.git 0996585c8e3b3d409494eb5f1cad714b9e1f7fb5), GNU ld (GNU Binutils for Debian) 2.35.2
 
-        ffs_func_eps_disable
-        epfiles (local copy)
-                                        ffs_epfile_release
-                                        ffs_data_closed
-                                        if (last file closed)
-                                            ffs_data_reset
-                                            ffs_data_clear
-                                            ffs_epfiles_destroy
-                                            free(epfiles)
-        spin_lock
-        dereference epfiles
+Unfortunately, I don't have any reproducer for this issue yet.
 
-leading to a use after free, is that correct?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8d179821571093c5f928@syzkaller.appspotmail.com
 
-In this case CPU1 may be called via set_alt() from the UDC code and CPU2
-is from a userspace close().
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0016: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable hardware MII access
+=====================================================
+BUG: KMSAN: uninit-value in ax88772a_hw_reset+0xc2a/0x12c0 drivers/net/usb/asix_devices.c:523
+ ax88772a_hw_reset+0xc2a/0x12c0 drivers/net/usb/asix_devices.c:523
+ ax88772_bind+0x838/0x19b0 drivers/net/usb/asix_devices.c:762
+ usbnet_probe+0x1285/0x40c0 drivers/net/usb/usbnet.c:1745
+ usb_probe_interface+0xf15/0x1530 drivers/usb/core/driver.c:396
+ really_probe+0x66e/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2f0/0x410 drivers/base/bus.c:427
+ __device_attach+0x593/0x8e0 drivers/base/dd.c:969
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:1016
+ bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
+ device_add+0x1d46/0x2400 drivers/base/core.c:3396
+ usb_set_configuration+0x389f/0x3ee0 drivers/usb/core/message.c:2170
+ usb_generic_driver_probe+0x13c/0x300 drivers/usb/core/generic.c:238
+ usb_probe_device+0x309/0x570 drivers/usb/core/driver.c:293
+ really_probe+0x66e/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2f0/0x410 drivers/base/bus.c:427
+ __device_attach+0x593/0x8e0 drivers/base/dd.c:969
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:1016
+ bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
+ device_add+0x1d46/0x2400 drivers/base/core.c:3396
+ usb_new_device+0x1b9a/0x2960 drivers/usb/core/hub.c:2563
+ hub_port_connect drivers/usb/core/hub.c:5348 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5488 [inline]
+ port_event drivers/usb/core/hub.c:5634 [inline]
+ hub_event+0x57cf/0x8690 drivers/usb/core/hub.c:5716
+ process_one_work+0xdc7/0x1760 kernel/workqueue.c:2297
+ worker_thread+0x1101/0x22b0 kernel/workqueue.c:2444
+ kthread+0x66b/0x780 kernel/kthread.c:319
+ ret_from_fork+0x1f/0x30
 
-> Another possibility of user after free is with the read_buffers
-> Currently, ffs_func_eps_disable & ffs_epfile_release can race,
-> if ffs_epfile_release ran in between while ffs_func_eps_disable
-> was executing, due to not being in any lock it can go ahead
-> and free the read buffer, but since ffs_func_eps_disable
-> maintains a local copy of epfiles, it will still be valid here
-> which when tried to free again will cause a user_after_free.
-> Following is the illustration of the case:
->       CPU1				      CPU2
-> 
->    ffs_func_eps_disable
->    spin_lock_irqsave
->    (epfile) local copy
-> 	   				ffs_epfile_release
-> 					__ffs_epfile_read_buffer_free
-> 					kfree(epfile->read_buffer)
->    __ffs_epfile_read_buffer_free
->    kfree(epfile->read_buffer)
->      <<use_after_free>>
+Local variable smsr.i created at:
+ asix_mdio_read_nopm+0xb7/0xab0 drivers/net/usb/asix_common.c:574
+ ax88772a_hw_reset+0x822/0x12c0 drivers/net/usb/asix_devices.c:511
+=====================================================
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0014: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable hardware MII access
+=====================================================
+BUG: KMSAN: uninit-value in ax88772a_hw_reset+0xc37/0x12c0 drivers/net/usb/asix_devices.c:527
+ ax88772a_hw_reset+0xc37/0x12c0 drivers/net/usb/asix_devices.c:527
+ ax88772_bind+0x838/0x19b0 drivers/net/usb/asix_devices.c:762
+ usbnet_probe+0x1285/0x40c0 drivers/net/usb/usbnet.c:1745
+ usb_probe_interface+0xf15/0x1530 drivers/usb/core/driver.c:396
+ really_probe+0x66e/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2f0/0x410 drivers/base/bus.c:427
+ __device_attach+0x593/0x8e0 drivers/base/dd.c:969
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:1016
+ bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
+ device_add+0x1d46/0x2400 drivers/base/core.c:3396
+ usb_set_configuration+0x389f/0x3ee0 drivers/usb/core/message.c:2170
+ usb_generic_driver_probe+0x13c/0x300 drivers/usb/core/generic.c:238
+ usb_probe_device+0x309/0x570 drivers/usb/core/driver.c:293
+ really_probe+0x66e/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2f0/0x410 drivers/base/bus.c:427
+ __device_attach+0x593/0x8e0 drivers/base/dd.c:969
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:1016
+ bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
+ device_add+0x1d46/0x2400 drivers/base/core.c:3396
+ usb_new_device+0x1b9a/0x2960 drivers/usb/core/hub.c:2563
+ hub_port_connect drivers/usb/core/hub.c:5348 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5488 [inline]
+ port_event drivers/usb/core/hub.c:5634 [inline]
+ hub_event+0x57cf/0x8690 drivers/usb/core/hub.c:5716
+ process_one_work+0xdc7/0x1760 kernel/workqueue.c:2297
+ worker_thread+0x1101/0x22b0 kernel/workqueue.c:2444
+ kthread+0x66b/0x780 kernel/kthread.c:319
+ ret_from_fork+0x1f/0x30
 
-I don't see how this race can happen.  __ffs_epfile_read_buffer_free()
-does:
+Local variable smsr.i created at:
+ asix_mdio_read_nopm+0xb7/0xab0 drivers/net/usb/asix_common.c:574
+ ax88772a_hw_reset+0x8af/0x12c0 drivers/net/usb/asix_devices.c:513
+=====================================================
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
+asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
 
-	struct ffs_buffer *buf = xchg(&epfile->read_buffer, READ_BUFFER_DROP);
-	if (buf && buf != READ_BUFFER_DROP)
-		kfree(buf);
 
-so there's no way for both threads to call kfree() on the same buffer
-here.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> Fix this races by taking epfile local copy & assigning it under
-> spinlock and if epfile(local) is null then update it in ffs->epfiles
-> then finally destroy it.
-> 
-> Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
-> Co-developed-by: Udipto Goswami <quic_ugoswami@quicinc.com>
-> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
-> ---
-> v2: Fixed the tags.
-> 
->  drivers/usb/gadget/function/f_fs.c | 44 +++++++++++++++++++++++++++++---------
->  1 file changed, 34 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> index 3c584da..3cdc636 100644
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -1268,10 +1268,13 @@ static int
->  ffs_epfile_release(struct inode *inode, struct file *file)
->  {
->  	struct ffs_epfile *epfile = inode->i_private;
-> +	unsigned long flags;
->  
->  	ENTER();
->  
-> +	spin_lock_irqsave(&epfile->ffs->eps_lock, flags);
->  	__ffs_epfile_read_buffer_free(epfile);
-> +	spin_unlock_irqrestore(&epfile->ffs->eps_lock, flags);
-
-Can you explain why the comment in struct ffs_epfile is wrong about the
-buffer synchronisation?  At the very least, this patch looks like it
-should be updating that comment as well since the locking rules have
-clearly changed.
-
-But I'm not convinced this hunk is necessary - what is guarded here?
-epfile comes from the inode, so no need for eps_lock there and
-__ffs_epfile_read_buffer_free() accesses read_buffer via xchg() as
-described in ffs_epfile, so again no need for the lock.
-
->  	ffs_data_closed(epfile->ffs);
->  
->  	return 0;
-> @@ -1711,16 +1714,23 @@ static void ffs_data_put(struct ffs_data *ffs)
->  
->  static void ffs_data_closed(struct ffs_data *ffs)
->  {
-> +	struct ffs_epfile *epfile;
-
-Should this be epfiles to match the field it is saving?
-
-> +	unsigned long flags;
->  	ENTER();
->  
->  	if (atomic_dec_and_test(&ffs->opened)) {
->  		if (ffs->no_disconnect) {
->  			ffs->state = FFS_DEACTIVATED;
-> -			if (ffs->epfiles) {
-> -				ffs_epfiles_destroy(ffs->epfiles,
-> -						   ffs->eps_count);
-> -				ffs->epfiles = NULL;
-> -			}
-> +			spin_lock_irqsave(&ffs->eps_lock, flags);
-> +			epfile = ffs->epfiles;
-> +			ffs->epfiles = NULL;
-> +			spin_unlock_irqrestore(&ffs->eps_lock,
-> +							flags);
-> +
-> +			if (epfile)
-> +				ffs_epfiles_destroy(epfile,
-> +						 ffs->eps_count);
-> +
->  			if (ffs->setup_state == FFS_SETUP_PENDING)
->  				__ffs_ep0_stall(ffs);
->  		} else {
-> @@ -1767,14 +1777,25 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
->  
->  static void ffs_data_clear(struct ffs_data *ffs)
->  {
-> +	struct ffs_epfile *epfile;
-
-Again, epfiles?
-
-> +	unsigned long flags;
->  	ENTER();
->  
->  	ffs_closed(ffs);
->  
->  	BUG_ON(ffs->gadget);
->  
-> -	if (ffs->epfiles)
-> -		ffs_epfiles_destroy(ffs->epfiles, ffs->eps_count);
-> +	spin_lock_irqsave(&ffs->eps_lock, flags);
-> +	epfile = ffs->epfiles;
-> +	ffs->epfiles = NULL;
-> +	spin_unlock_irqrestore(&ffs->eps_lock, flags);
-> +	/* potential race possible between ffs_func_eps_disable
-> +	 * & ffs_epfile_release therefore maintaining a local
-> +	 * copy of epfile will save us from use-after-free.
-> +	 */
-> +	if (epfile)
-> +		ffs_epfiles_destroy(epfile,
-> +				    ffs->eps_count);
->  
->  	if (ffs->ffs_eventfd)
->  		eventfd_ctx_put(ffs->ffs_eventfd);
-> @@ -1919,12 +1940,15 @@ static void ffs_epfiles_destroy(struct ffs_epfile *epfiles, unsigned count)
->  
->  static void ffs_func_eps_disable(struct ffs_function *func)
->  {
-> -	struct ffs_ep *ep         = func->eps;
-> -	struct ffs_epfile *epfile = func->ffs->epfiles;
-> -	unsigned count            = func->ffs->eps_count;
-> +	struct ffs_ep *ep;
-> +	struct ffs_epfile *epfile;
-
-epfiles?
-
-> +	unsigned short count;
-
-Why change this to "unsigned short"?
-
->  	unsigned long flags;
->  
->  	spin_lock_irqsave(&func->ffs->eps_lock, flags);
-> +	count = func->ffs->eps_count;
-> +	epfile = func->ffs->epfiles;
-> +	ep = func->eps;
->  	while (count--) {
->  		/* pending requests get nuked */
->  		if (ep->ep)
-> -- 
-> 2.7.4
-> 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
