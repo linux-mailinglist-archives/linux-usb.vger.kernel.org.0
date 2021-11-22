@@ -2,179 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 009C8458CF9
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Nov 2021 12:08:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 427D5458E3E
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Nov 2021 13:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234258AbhKVLLG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Nov 2021 06:11:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39480 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230322AbhKVLLB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 22 Nov 2021 06:11:01 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DA4BF60F70;
-        Mon, 22 Nov 2021 11:07:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1637579275;
-        bh=Z825shitYm6qtkJ3iXsmDywvE43bS5y2KH2N15FygKY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Cp0WbjpHXkdBi/kVEoACPhYS/WjY6n6lWgvUzQLIRcD3pH4rjUEZA18nKEgNDeupz
-         21wgV8q1RQOoXJRMQZSP3wDDVwMQlUbtTrqeAO5/dWGCz/WiZKIJp2unUgY0BvAjAg
-         glNdvBL0HJui8CJgAqT5cM11E6YL6VwmCvJxyHIs=
-Date:   Mon, 22 Nov 2021 12:07:52 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Michal Simek <michal.simek@xilinx.com>
-Cc:     Piyush Mehta <piyush.mehta@xilinx.com>, robh+dt@kernel.org,
-        mka@chromium.org, ravisadineni@chromium.org,
-        stern@rowland.harvard.edu, alcooperx@gmail.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, git@xilinx.com, sgoud@xilinx.com
-Subject: Re: [PATCH V2 2/2] usb: misc: usb244: add support for USB2 ultra
- fast sd controller
-Message-ID: <YZt6CMY3IYRJkmcJ@kroah.com>
-References: <20211122062834.1812005-1-piyush.mehta@xilinx.com>
- <20211122062834.1812005-3-piyush.mehta@xilinx.com>
- <YZtAb9lz8WLnWu7E@kroah.com>
- <b4064914-40b5-3789-bebd-793cb27a29cd@xilinx.com>
+        id S236049AbhKVM3K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Nov 2021 07:29:10 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:57704 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233840AbhKVM3K (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 22 Nov 2021 07:29:10 -0500
+Received: from [10.180.13.93] (unknown [10.180.13.93])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx1tNWjJthJiYAAA--.766S2;
+        Mon, 22 Nov 2021 20:25:58 +0800 (CST)
+Subject: Re: [PATCH v3] usb: xhci: add LWP quirk for ensuring uPD720201 into
+ D3 state after S5
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhuyinbo@loongson.cn, linux-kernel@vger.kernel.org
+References: <1636612118-32481-1-git-send-email-zhuyinbo@loongson.cn>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <c330c58f-bb73-d439-d6fa-63eb9cba4313@loongson.cn>
+Date:   Mon, 22 Nov 2021 20:25:57 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b4064914-40b5-3789-bebd-793cb27a29cd@xilinx.com>
+In-Reply-To: <1636612118-32481-1-git-send-email-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf9Dx1tNWjJthJiYAAA--.766S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZF15Ar47Aw4rtrWUur1kuFg_yoW5XF17pF
+        s5ZaySkrs5tr4Iq3sxZr18ZF95GwnrAryUKry7G34jgrZ0yrs5KFyUGFW3CrZxW3ykJr1a
+        gF1vgr15W3y7CaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
+        Y487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
+        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
+        JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
+        vEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2
+        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
+        ZFpf9x0JUywZ7UUUUU=
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 22, 2021 at 12:02:52PM +0100, Michal Simek wrote:
-> 
-> nit: Just spot typo in subject. It is usb2244.
-> 
-> On 11/22/21 08:02, Greg KH wrote:
-> > On Mon, Nov 22, 2021 at 11:58:34AM +0530, Piyush Mehta wrote:
-> > > Microchip's USB224x family of Hi-Speed USB 2.0 flash media card controllers
-> > > provides an ultra-fast interface between a USB host controller and flash
-> > > media cards.
-> > > 
-> > > This patch adds a GPIO based usb-sd reset for USB2244 USB2 ultra fast
-> > > SD controller. This usb2244 driver trigger sd reset signal after soft
-> > > reset or core Reset. The SD needs to be resetted after completion of
-> > > phy initialization. After the toggling of gpio, controller gets out
-> > > form reset. USB2244 is a simple platform device driver.
-> > > 
-> > > As part of the reset, sets the direction of the pin to output before
-> > > toggling the pin. Delay of microseconds is added in between high and
-> > > low to meet the setup and hold time requirement of the reset.
-> > > 
-> > > Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
-> > > ---
-> > > Changes for V2:
-> > > - Update reset polarity, make reset ACTIVE LOW in the usb2244 driver.
-> > > - Fix WARNING: msleep < 20ms can sleep for up to 20ms by changing msleep to
-> > >    usleep_range()
-> > > ---
-> > >   drivers/usb/misc/Kconfig   | 10 +++++++
-> > >   drivers/usb/misc/Makefile  |  1 +
-> > >   drivers/usb/misc/usb2244.c | 69 ++++++++++++++++++++++++++++++++++++++++++++++
-> > 
-> > This isn't really a USB driver, so maybe drivers/misc/ instead?
-> > 
-> > >   3 files changed, 80 insertions(+)
-> > >   create mode 100644 drivers/usb/misc/usb2244.c
-> > > 
-> > > diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-> > > index 8f11443..e1c66a2 100644
-> > > --- a/drivers/usb/misc/Kconfig
-> > > +++ b/drivers/usb/misc/Kconfig
-> > > @@ -215,6 +215,16 @@ config USB_ISIGHTFW
-> > >   	  driver beforehand. Tools for doing so are available at
-> > >   	  http://bersace03.free.fr
-> > > +config USB_USB2244
-> > > +	tristate "Microchip USB2244 Ultra Fast USB 2.0 SD driver"
-> > > +	depends on GPIOLIB
-> > > +	help
-> > > +	  Say Y or M here if you want to reset Microchip USB2244 Ultra Fast
-> > > +	  USB 2.0 SD controller.
-> > > +	  This option enables support for Microchip USB2244 Ultra Fast USB 2.0
-> > > +	  SD controller. This driver reset the gpio pin makes controller out of
-> > > +	  reset.
-> > 
-> > Module name?
-> > 
-> > > +
-> > >   config USB_YUREX
-> > >   	tristate "USB YUREX driver support"
-> > >   	help
-> > > diff --git a/drivers/usb/misc/Makefile b/drivers/usb/misc/Makefile
-> > > index 5f4e598..5b4af7d 100644
-> > > --- a/drivers/usb/misc/Makefile
-> > > +++ b/drivers/usb/misc/Makefile
-> > > @@ -21,6 +21,7 @@ obj-$(CONFIG_USB_LEGOTOWER)		+= legousbtower.o
-> > >   obj-$(CONFIG_USB_TEST)			+= usbtest.o
-> > >   obj-$(CONFIG_USB_EHSET_TEST_FIXTURE)    += ehset.o
-> > >   obj-$(CONFIG_USB_TRANCEVIBRATOR)	+= trancevibrator.o
-> > > +obj-$(CONFIG_USB_USB2244)		+= usb2244.o
-> > >   obj-$(CONFIG_USB_USS720)		+= uss720.o
-> > >   obj-$(CONFIG_USB_SEVSEG)		+= usbsevseg.o
-> > >   obj-$(CONFIG_USB_YUREX)			+= yurex.o
-> > > diff --git a/drivers/usb/misc/usb2244.c b/drivers/usb/misc/usb2244.c
-> > > new file mode 100644
-> > > index 0000000..5a868c2
-> > > --- /dev/null
-> > > +++ b/drivers/usb/misc/usb2244.c
-> > > @@ -0,0 +1,69 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Driver for the Microchip USB2244 Ultra Fast USB 2.0 Multi-Format,
-> > > + * SD/MMC, and MS Flash Media Controllers
-> > > + *
-> > > + * Copyright (c) 2021 Xilinx, Inc.
-> > > + */
-> > > +
-> > > +#include <linux/delay.h>
-> > > +#include <linux/err.h>
-> > > +#include <linux/kernel.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/of_platform.h>
-> > > +#include <linux/gpio/consumer.h>
-> > > +#include <linux/platform_device.h>
-> > > +
-> > > +struct usb2244 {
-> > > +	struct gpio_desc *reset_gpio;
-> > > +};
-> > 
-> > Why is this structure needed?
-> > 
-> > > +
-> > > +static int usb2244_init_hw(struct device *dev, struct usb2244 *data)
-> > > +{
-> > > +	data = devm_kzalloc(dev, sizeof(struct usb2244), GFP_KERNEL);
-> > > +	if (!data)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	data->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
-> > > +	if (IS_ERR(data->reset_gpio)) {
-> > > +		dev_err_probe(dev, PTR_ERR(data->reset_gpio),
-> > > +			      "Failed to request reset GPIO %ld, errcode",
-> > > +			      PTR_ERR(data->reset_gpio));
-> > > +		return PTR_ERR(data->reset_gpio);
-> > > +	}
-> > > +
-> > > +	/* Toggle RESET_N to reset the hub. */
-> > > +	gpiod_set_value_cansleep(data->reset_gpio, 1);
-> > > +	usleep_range(5, 10);
-> > > +	gpiod_set_value_cansleep(data->reset_gpio, 0);
-> > > +	usleep_range(5000, 6000);
-> > 
-> > Why do you need a kernel driver for this at all?  Why not just toggle
-> > the pin from userspace?
-> 
-> It is usb-sd convertor. If you have rootfs on SD you need to get the chip
-> out of reset to be able to access init. There is no way how to do it via
-> userspace.
 
-Ah, ok, that makes more sense.
+ÔÚ 2021/11/11 ÏÂÎç2:28, Yinbo Zhu Ð´µÀ:
+> After S5, any pci device should into D3 state that if supported, but the
+> uPD720201 was not and cause OSPM power consumption is more higher that
+> S5 than S4. Due to that uPD720201 firmware behavior was unknown and the
+> _PS3 method wasn't implemented in ACPI table which can make device into
+> D3, I think xhci HCD can add a quirk ensure it into D3 state after S5
+> that is appropriate and this patch was to add the XHCI_LWP_QURIK and set
+> PCI_D3hot to uPD720201 pmsc register in xhci_pci_shutdown and
+> xhci_pci_remove to fix xhci power consumption issue.
+>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+> Change in v3:
+> 		Add D3 set in xhci_pci_remove function.
+>
+>   drivers/usb/host/xhci-pci.c | 9 +++++++++
+>   drivers/usb/host/xhci.h     | 1 +
+>   2 files changed, 10 insertions(+)
+>
+> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> index 2c9f25c..6258a5a 100644
+> --- a/drivers/usb/host/xhci-pci.c
+> +++ b/drivers/usb/host/xhci-pci.c
+> @@ -265,6 +265,7 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+>   	    pdev->device == 0x0014) {
+>   		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
+>   		xhci->quirks |= XHCI_ZERO_64B_REGS;
+> +		xhci->quirks |= XHCI_LWP_QUIRK;
+>   	}
+>   	if (pdev->vendor == PCI_VENDOR_ID_RENESAS &&
+>   	    pdev->device == 0x0015) {
+> @@ -466,6 +467,10 @@ static void xhci_pci_remove(struct pci_dev *dev)
+>   		pci_set_power_state(dev, PCI_D3hot);
+>   
+>   	usb_hcd_pci_remove(dev);
+> +
+> +	/* Workaround for decreasing power consumption after S5 */
+> +	if (xhci->quirks & XHCI_LWP_QUIRK)
+> +		pci_set_power_state(dev, PCI_D3hot);
+>   }
+>   
+>   #ifdef CONFIG_PM
+> @@ -610,6 +615,10 @@ static void xhci_pci_shutdown(struct usb_hcd *hcd)
+>   	/* Yet another workaround for spurious wakeups at shutdown with HSW */
+>   	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
+>   		pci_set_power_state(pdev, PCI_D3hot);
+> +
+> +	/* Workaround for decreasing power consumption after S5 */
+> +	if (xhci->quirks & XHCI_LWP_QUIRK)
+> +		pci_set_power_state(pdev, PCI_D3hot);
+>   }
+>   #endif /* CONFIG_PM */
+>   
+> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+> index dca6181..bcd70d1 100644
+> --- a/drivers/usb/host/xhci.h
+> +++ b/drivers/usb/host/xhci.h
+> @@ -1899,6 +1899,7 @@ struct xhci_hcd {
+>   #define XHCI_SG_TRB_CACHE_SIZE_QUIRK	BIT_ULL(39)
+>   #define XHCI_NO_SOFT_RETRY	BIT_ULL(40)
+>   #define XHCI_BROKEN_D3COLD	BIT_ULL(41)
+> +#define XHCI_LWP_QUIRK		BIT_ULL(42)
+>   
+>   	unsigned int		num_active_eps;
+>   	unsigned int		limit_active_eps;
 
-So it belongs in drivers/misc/ along with the other "enable some USB
-hardware" platform drivers that we have in there today.
+Hi all,
 
-thanks,
 
-greg k-h
+Do you have any advice about my patch, if no any question, please you 
+help me merge this patch to upstream.
+
+
+Thanks,
+
+BRs,
+
+Yinbo Zhu.
+
