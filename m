@@ -2,88 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F68458AFC
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Nov 2021 10:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9424B458B00
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Nov 2021 10:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238949AbhKVJGb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 22 Nov 2021 04:06:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
+        id S238953AbhKVJHp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Nov 2021 04:07:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238934AbhKVJG3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Nov 2021 04:06:29 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5A5C061574
-        for <linux-usb@vger.kernel.org>; Mon, 22 Nov 2021 01:03:22 -0800 (PST)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mp5EK-0003l5-Mh; Mon, 22 Nov 2021 10:03:16 +0100
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mp5EK-000584-31; Mon, 22 Nov 2021 10:03:16 +0100
-Message-ID: <44f6cc1f52e75cbbb8aebb0d4648c94ae479ef43.camel@pengutronix.de>
-Subject: Re: [PATCH v3 1/3] phy: amlogic: phy-meson-gxl-usb2: fix shared
- reset controller use
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>, khilman@baylibre.com
-Cc:     balbi@kernel.org, jbrunet@baylibre.com,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Date:   Mon, 22 Nov 2021 10:03:16 +0100
-In-Reply-To: <20211112162827.128319-2-aouledameur@baylibre.com>
-References: <20211112162827.128319-1-aouledameur@baylibre.com>
-         <20211112162827.128319-2-aouledameur@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        with ESMTP id S229716AbhKVJHo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Nov 2021 04:07:44 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43062C061574;
+        Mon, 22 Nov 2021 01:04:38 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id x15so73664749edv.1;
+        Mon, 22 Nov 2021 01:04:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/n2Vm5z8nFGK+sbMSre7nkEQgLie2yLLJputlZIF0rw=;
+        b=MGM9gXKyZV26D2lbgtxuuQwoJ9UQxDrIdr1g22N9dWWKStYfmVIfWgKcAeTAU2qFoh
+         lkDXU/77a7NYdBZLLfansRByZ6LiJkpl+E6fasDgmtEYZjVwEL8PNuaAZQTBnzXsQxqR
+         LnOX4xT/gYYayGwbXFAQyJoJszrL0txDfx6Xa+XZ0MSlsTYCzt/XHRBckPtKyA24sWCd
+         90UPzxQx/YgyPDPoN5OzKUB5pbkHDVxtTBc6IDV6g/oYocP7F7j3vWm/D0/a9opZnnR6
+         2NfLOThgtZslMgvYFBJEW53hlyu4OC6pDPXaeyA/fghOpmyvsMZ0ofu2q4FDbIqjZWAv
+         PhDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/n2Vm5z8nFGK+sbMSre7nkEQgLie2yLLJputlZIF0rw=;
+        b=ISKbu8c9wTw+f5L0v0DqgHVOzY+RNRKX5m7BrsrxAJCbjL6ZyFDk0jYk2hymZI+8Iu
+         VYleXKMGKOIPxgkza2RaajKKn09X1TebFWr4hGGSG7lLlc8Et++6fPjuw9etbnBwtKH3
+         SFDRGweuYm1U7rzyiPnTDgcbCOe75RklKCQGkB0S9cZiI1cu4H+SGk5uJUympUagKliq
+         A5jQsP/nEzoxLogHE54IVnq/UGTbYuZXbyQVDbYMGKtHRUPMdHxMbDiLWOZLrVdt9iDR
+         kjD5TzgpnxaA4ua4bfefLBZcx+DxDzBoSWKE8UT00aNmnnDMl9GRL/s+/7M41xpK4YM7
+         uxrQ==
+X-Gm-Message-State: AOAM531lTn1csqbf3PJOD7+ViGGU8uVS/LQBbl6f7RIYbOeQ7NUbeUWW
+        n/jDCqsNqkToGANMbqu8ZGAwaSc7Eg9Ob2kZKOA=
+X-Google-Smtp-Source: ABdhPJw1Y/E8hlBCt4M0ZxIE/6dl4jAqFgcMD+6FREtOB29ObDhN9iSjRxOlsQ2zIkKb4HicLv91Qy5jg7lWpWCJE4U=
+X-Received: by 2002:aa7:dbc1:: with SMTP id v1mr62739440edt.49.1637571876741;
+ Mon, 22 Nov 2021 01:04:36 -0800 (PST)
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+References: <20211112162827.128319-1-aouledameur@baylibre.com>
+ <20211112162827.128319-3-aouledameur@baylibre.com> <CAFBinCDNMCT4KZjw8HnYer9NJBx09yF=KpguGm8Q4vKw8eBr9A@mail.gmail.com>
+In-Reply-To: <CAFBinCDNMCT4KZjw8HnYer9NJBx09yF=KpguGm8Q4vKw8eBr9A@mail.gmail.com>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Mon, 22 Nov 2021 14:34:26 +0530
+Message-ID: <CANAwSgRoBCao2fh1jgBwb-7r+ng3LabNbH8i4G=kn668uhCasg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] usb: dwc3: meson-g12a: fix shared reset control use
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        linux-amlogic@lists.infradead.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Amjad,
+Hi Amjad
 
-On Fri, 2021-11-12 at 17:28 +0100, Amjad Ouled-Ameur wrote:
-> Use reset_control_rearm() call if an error occurs in case
-> phy_meson_gxl_usb2_init() fails after reset() has been called ; or in case
-> phy_meson_gxl_usb2_exit() is called i.e the resource is no longer used
-> and the reset line may be triggered again by other devices.
-> 
-> reset_control_rearm() keeps use of triggered_count sane in the reset
-> framework. Therefore, use of reset_control_reset() on shared reset line
-> should be balanced with reset_control_rearm().
-> 
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> Reported-by: Jerome Brunet <jbrunet@baylibre.com>
-> ---
->  drivers/phy/amlogic/phy-meson-gxl-usb2.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/phy/amlogic/phy-meson-gxl-usb2.c b/drivers/phy/amlogic/phy-meson-gxl-usb2.c
-> index 2b3c0d730f20..9a9c769ecabc 100644
-> --- a/drivers/phy/amlogic/phy-meson-gxl-usb2.c
-> +++ b/drivers/phy/amlogic/phy-meson-gxl-usb2.c
-> @@ -110,8 +110,10 @@ static int phy_meson_gxl_usb2_init(struct phy *phy)
->  	int ret;
+On Sun, 21 Nov 2021 at 05:21, Martin Blumenstingl
+<martin.blumenstingl@googlemail.com> wrote:
 >
->  	ret = reset_control_reset(priv->reset);
-> -	if (ret)
-> +	if (ret) {
-> +		reset_control_rearm(priv->reset);
+> Hi Amjad,
+>
+> +Cc Anand who was also investigating the original issue one year ago
+>
+Thanks.
+> On Fri, Nov 12, 2021 at 5:33 PM Amjad Ouled-Ameur
+> <aouledameur@baylibre.com> wrote:
+> >
+> >
+> it seems that there's an extraneous blank line here
+>
+> > reset_control_(de)assert() calls are called on a shared reset line when
+> > reset_control_reset has been used. This is not allowed by the reset
+> > framework.
+> >
+> > Use reset_control_rearm() call in suspend() and remove() as a way to state
+> > that the resource is no longer used, hence the shared reset line
+> > may be triggered again by other devices. Use reset_control_rearm() also in
+> > case probe fails after reset() has been called.
+> >
+> > reset_control_rearm() keeps use of triggered_count sane in the reset
+> > framework, use of reset_control_reset() on shared reset line should be
+> > balanced with reset_control_rearm().
+> >
+> > Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> > Reported-by: Jerome Brunet <jbrunet@baylibre.com>
+> Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-I don't understand this. If reset_control_reset() returns an error for a
-shared reset, it should have either
-- returned before incrementing triggered_count, or
-- incremented triggered_count, got a failed reset op, decremented
-  triggered_count again
-
-In both cases there should be no need to rearm.
-
-
-regards
-Philipp
+Changes fix the warning messages on my odroid n2 during suspend / resume.
+Please add my
+Tested-by: Anand Moon <linux.amoon@gmail.com>
