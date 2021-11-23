@@ -2,102 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD5E45A12E
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Nov 2021 12:18:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F64545A15C
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Nov 2021 12:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235979AbhKWLVO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Nov 2021 06:21:14 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:42946 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234044AbhKWLVN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Nov 2021 06:21:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1637666286; x=1669202286;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=HB5qI31vucZBGIsfGDW0ofLzI2/3qx6sfULeQp33/J0=;
-  b=HV60vp68cVWaSIVopmqbfImwHWlnbl1LI3Uk3solgHOw5wdUsqXHQmhf
-   txP+j50dgOWdl00prpJlEtkJwrDF/E+sWSByLBNNmYv02dGN1cSlkvOsD
-   HErNCfPG2zpMAVsSXaDv0pSawnqVqckxrC1olaoTL8E7ubNTsiMUtD5NO
-   M=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 23 Nov 2021 03:18:05 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 03:18:05 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 23 Nov 2021 03:18:04 -0800
-Received: from [10.216.40.170] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 23 Nov
- 2021 03:17:59 -0800
-Subject: Re: [PATCH v2 1/3] dt-bindings: usb: usb-xhci: Add bindings for
- usb-skip-phy-init property
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-CC:     Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>
-References: <1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com>
- <1636353710-25582-2-git-send-email-quic_c_sanm@quicinc.com>
- <YY7vAzxj9aR/zBSB@robh.at.kernel.org>
- <3e02ae12-660b-8cf5-d6f8-3a8d1a2abc4e@quicinc.com>
- <20211117052703.GA6511@hu-pkondeti-hyd.qualcomm.com>
-From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Message-ID: <d24178ca-ef62-6cbd-601f-1c9565e10a70@quicinc.com>
-Date:   Tue, 23 Nov 2021 16:47:55 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S236093AbhKWL1b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Nov 2021 06:27:31 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:52222 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234496AbhKWL1a (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Nov 2021 06:27:30 -0500
+Received: from ip5f5b2004.dynamic.kabel-deutschland.de ([95.91.32.4] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1mpTuB-0008Cw-Pk; Tue, 23 Nov 2021 12:24:07 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Conor Dooley <Conor.Dooley@microchip.com>,
+        linux-riscv@lists.infradead.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Lewis Hanly <Lewis.Hanly@microchip.com>,
+        Daire.McNamara@microchip.com, Atish Patra <atish.patra@wdc.com>,
+        Ivan.Griffin@microchip.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bin Meng <bin.meng@windriver.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH 04/13] dt-bindings: riscv: update microchip polarfire binds
+Date:   Tue, 23 Nov 2021 12:24:06 +0100
+Message-ID: <2736394.7QafvNDC63@diego>
+In-Reply-To: <CAMuHMdUs7UnADr2SfHBD4sGs3_giR0cmXnz=6qa4iAP1reDtgA@mail.gmail.com>
+References: <20211108150554.4457-1-conor.dooley@microchip.com> <198eaf69-8f85-50a7-192e-5900776d044b@microchip.com> <CAMuHMdUs7UnADr2SfHBD4sGs3_giR0cmXnz=6qa4iAP1reDtgA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211117052703.GA6511@hu-pkondeti-hyd.qualcomm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Pavan,
+Am Dienstag, 9. November 2021, 14:04:45 CET schrieb Geert Uytterhoeven:
+> Hi Conor,
+> 
+> On Tue, Nov 9, 2021 at 1:08 PM <Conor.Dooley@microchip.com> wrote:
+> > On 09/11/2021 08:34, Geert Uytterhoeven wrote:
+> > > On Mon, Nov 8, 2021 at 4:06 PM <conor.dooley@microchip.com> wrote:
+> > >> From: Conor Dooley <conor.dooley@microchip.com>
+> > >>
+> > >> Add mpfs-soc to clear undocumented binding warning
+> > >>
+> > >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> 
+> > >> --- a/Documentation/devicetree/bindings/riscv/microchip.yaml
+> > >> +++ b/Documentation/devicetree/bindings/riscv/microchip.yaml
+> > >> @@ -21,6 +21,7 @@ properties:
+> > >>         - enum:
+> > >>             - microchip,mpfs-icicle-kit
+> > >>         - const: microchip,mpfs
+> > >> +      - const: microchip,mpfs-soc
+> > >
+> > > Doesn't the "s" in "mpfs" already stand for "soc"?
+> > not wrong, but using mpf-soc would be confusing since "mpf" is the part
+> > name for the non soc fpga. is it fine to just reuse "mpfs" for the dtsi
+> > overall compatible and for the soc subsection?
+> 
+> I really meant: what is the difference between "microchip,mpfs" and
+> "microchip,mpfs-soc"? Can't you just use the former?
 
-On 11/17/2021 10:57 AM, Pavan Kondeti wrote:
-> Hi Sandeep,
->
-> On Tue, Nov 16, 2021 at 04:11:30PM +0530, Sandeep Maheswaram wrote:
->> On 11/13/2021 4:17 AM, Rob Herring wrote:
->>> On Mon, Nov 08, 2021 at 12:11:48PM +0530, Sandeep Maheswaram wrote:
->>>> Adding bindings for usb-skip-phy-init property.
->>>> Runtime suspend of phy drivers was failing from DWC3 driver as
->>>> runtime usage value is 2 because the phy is initialized from
->>>> DWC3 core and HCD core.
->>>> Some controllers like DWC3 and CDNS3 manage phy in their core drivers.
->>>> This property can be set to avoid phy initialization in HCD core.
->>> You already know if you have a DWC3 and CDNS3 controller, so you don't
->>> need more data in DT.
->> We don't have a device tree node for xhci platform device and create xhci
->> platform device from dwc3/host.c
->>
->> So we want to pass this property to check in xhci-plat.c and skip phy
->> initialization.
->>
-> Would not the below condition from your other patch [1] work here too?
->
-> if (of_device_is_compatible(dev->parent->of_node, "snps,dwc3"))
->
-> [1] https://lore.kernel.org/linux-usb/1635753224-23975-2-git-send-email-quic_c_sanm@quicinc.com/
->
-> Thanks,
-> Pavan
-Yes. This condition is working. Will send the new version with this change.
+definitly agreed :-)
+
+Having the board named as
+	compatible = "microchip,mpfs-icicle-kit", "microchip,mpfs"
+sounds the most sensible.
+
+As Conor wrote, "mpfs" is the name of the soc itself - with mpf being
+the fpga part, so that would follow what boards in other parts of the
+kernel do.
+
+Heiko
+
+
