@@ -2,268 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 334B945A66A
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Nov 2021 16:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B02E845A7E5
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Nov 2021 17:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237123AbhKWPXP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Nov 2021 10:23:15 -0500
-Received: from mga04.intel.com ([192.55.52.120]:40674 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234906AbhKWPXP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Nov 2021 10:23:15 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10176"; a="233759768"
-X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
-   d="scan'208";a="233759768"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 07:20:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
-   d="scan'208";a="650089632"
-Received: from kuha.fi.intel.com ([10.237.72.166])
-  by fmsmga001.fm.intel.com with SMTP; 23 Nov 2021 07:20:01 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 23 Nov 2021 17:20:00 +0200
-Date:   Tue, 23 Nov 2021 17:20:00 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH v2] extcon: fix extcon_get_extcon_dev() error handling
-Message-ID: <YZ0GoHn/v9ki5AGm@kuha.fi.intel.com>
-References: <20211123083925.GA3277@kili>
+        id S238857AbhKWQhA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Nov 2021 11:37:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43672 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236086AbhKWQgb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Nov 2021 11:36:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1637685202;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BoyA+jwxTvEgMZccNfuQx4wiO7nO6808AQhUNzYQlss=;
+        b=DlrN9QEHI3v342mFuwm+SPIN8VPZEEcMzAI7nF1ugVMOStvaqCzpn4MjMEuENwnZ17kXjA
+        iJogan/iOBvwfcqN/r38CMLTWFJE/9d8GADOXqACwRTo05Lxjhw+P/CGMihvc+WSd8tykV
+        7e0Vgrg+qiXrWGyanW62n2mAV3EOsEc=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-393-gHkarxkWNFSdEA0FFpG-Rw-1; Tue, 23 Nov 2021 11:33:21 -0500
+X-MC-Unique: gHkarxkWNFSdEA0FFpG-Rw-1
+Received: by mail-pg1-f197.google.com with SMTP id o11-20020a635a0b000000b00320daef2ad6so3338951pgb.3
+        for <linux-usb@vger.kernel.org>; Tue, 23 Nov 2021 08:33:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=BoyA+jwxTvEgMZccNfuQx4wiO7nO6808AQhUNzYQlss=;
+        b=My3JnUzk94OW5evs6BU+xF/Co+q4soBgDd2FzO8OsmNEMEoqn45FHCFf8P9zyNAvUL
+         OmoyimKCmHeJH3GJKxTN7Ukr0PXLzS9u6ioZlR3mNY6Ur/kIT7mpIm6+lZ/rpigHPCNm
+         LRvRQi2pG0mOYDGfpZvzl03UnhlcGuvdzIj9Jm5/DM75GZDmP48EiUzLW6C/33PyzdUJ
+         6j4Dt4AJ+q8pwkg1nvxSdO1AFbSI1zDK2fuMJSn+NnKjqE7EePoLqmtRna3PfOkTZ3K6
+         Iywax09dvrtgYMProQvH4TPErjtXA0eskjl8akhGJ1bra8MVGDbyzlQDgfNfVTHcoQF0
+         UvtA==
+X-Gm-Message-State: AOAM530EUdW0hM9EyENdz8X6dlT3OtXeLiKAk+dr2lTU/4n5zu2tz2hM
+        rLR9s2D6Gkp/WJn9MHy8Gvdf7XrK/y7Q0u11tg/o0/HNn3XMP31+8k/dkqzhM9ZOk9mMayLZPNW
+        shymF5Z4y1DxTJrRpl3a0fXshRvezG+v4mnGr
+X-Received: by 2002:a63:6ece:: with SMTP id j197mr4684509pgc.11.1637685200013;
+        Tue, 23 Nov 2021 08:33:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwXZJPBcvp5/k5wSaRqBRCPhoBB9egRDjfddCQrdiQLgdRI3+bKNzOs50d/NfrCPbN5EVGT1gdDKDpU///ZUhw=
+X-Received: by 2002:a63:6ece:: with SMTP id j197mr4684489pgc.11.1637685199716;
+ Tue, 23 Nov 2021 08:33:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211123083925.GA3277@kili>
+References: <20201109220000.2ae98fa5@Phenom-II-x6.niklas.com>
+ <20211114144842.72463ccc@Zen-II-x12.niklas.com> <20211114211435.GA87082@rowland.harvard.edu>
+ <20211114220222.31755871@Zen-II-x12.niklas.com> <20211115160918.GB109771@rowland.harvard.edu>
+ <20211117002359.03b36ec6@Zen-II-x12.niklas.com> <20211117170817.GD172151@rowland.harvard.edu>
+ <20211119171915.6a8cac47@Zen-II-x12.niklas.com> <YZm03KTcWOwtMtCN@rowland.harvard.edu>
+ <20211122112526.501c5f66@Zen-II-x12.niklas.com> <YZv55KMsuSYanfYp@rowland.harvard.edu>
+ <667c2c8307e0e738ed54e34f6c83ea1df99c7528.camel@archlinux.org>
+In-Reply-To: <667c2c8307e0e738ed54e34f6c83ea1df99c7528.camel@archlinux.org>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Tue, 23 Nov 2021 17:33:08 +0100
+Message-ID: <CAO-hwJJtQ_1S76HTaHK=oUeP1M24QnC6z1J5CvTuU7m=oZe6zg@mail.gmail.com>
+Subject: Re: I need advice with UPS connection. (ping)
+To:     =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@archlinux.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        David Niklas <Hgntkwis@vfemail.net>,
+        Jiri Kosina <jikos@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 11:43:06AM +0300, Dan Carpenter wrote:
-> The extcon_get_extcon_dev() function returns error pointers on error,
-> NULL when it's a -EPROBE_DEFER defer situation, and ERR_PTR(-ENODEV)
-> when the CONFIG_EXTCON option is disabled.  This is very complicated for
-> the callers to handle and a number of them had bugs that would lead to
-> an Oops.
-> 
-> In real life, there are two things which prevented crashes.  First,
-> error pointers would only be returned if there was bug in the caller
-> where they passed a NULL "extcon_name" and none of them do that.
-> Second, only two out of the eight drivers will build when CONFIG_EXTCON
-> is disabled.
-> 
-> The normal way to write this would be to return -EPROBE_DEFER directly
-> when appropriate and return NULL when CONFIG_EXTCON is disabled.  Then
-> the error handling is simple and just looks like:
-> 
-> 	dev->edev = extcon_get_extcon_dev(acpi_dev_name(adev));
-> 	if (IS_ERR(dev->edev))
-> 		return PTR_ERR(dev->edev);
-> 
-> For the two drivers which can build with CONFIG_EXTCON disabled, then
-> extcon_get_extcon_dev() will now return NULL which is not treated as an
-> error and the probe will continue successfully.  Those two drivers are
-> "typec_fusb302" and "max8997-battery".  In the original code, the
-> typec_fusb302 driver had an 800ms hang in tcpm_get_current_limit() but
-> now that function is a no-op.  For the max8997-battery driver everything
-> should continue working as is.
-> 
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+On Mon, Nov 22, 2021 at 10:35 PM Filipe La=C3=ADns <lains@archlinux.org> wr=
+ote:
+>
+> On Mon, 2021-11-22 at 15:13 -0500, Alan Stern wrote:
+> > On Mon, Nov 22, 2021 at 11:25:26AM -0500, David Niklas wrote:
+> > > Ok, I first edited the kernel to return -ENOMEM like you suggested bu=
+t
+> > > the UPS still disconnected. I then edited it again to re-add the 1060
+> > > byte request and the UPS still disconnected.
+> > >
+> > > I'm attaching the usbmon traces.
+> > > If you need any additional info I'll do my best to provide it.
+> >
+> > Holy cow!  I just realized what's going on.  And these little changes
+> > we've been messing around with have nothing to do with it.
+> >
+> > For the first time, I looked at the timestamps in the usbmon traces.  I=
+t
+> > turns out that the disconnects occur several seconds after the kernel
+> > retrieves the HID report descriptor from the device.  Under normal
+> > conditions we would expect to see report packets coming in from the
+> > device, starting just a fraction of a second after the descriptor is
+> > received.  But that isn't happening in the Linux traces, whereas it doe=
+s
+> > happen in the Windows pcap log.
+> >
+> > I would guess that the UPS is programmed to disconnect itself
+> > electronically from the USB bus if it doesn't get any requests for
+> > reports within a couple of seconds.  That certainly would explain what
+> > you've been seeing.  I can't imagine why it would be programmed to
+> > behave this way, but companies have been known to do stranger things.
+> >
+> > As for why the kernel doesn't try to get the reports...  That's a littl=
+e
+> > harder to answer.  Maybe Jiri or Benjamin will know something about it.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+I am not sure exactly what is going on there.
+There are a couple of things that come to my mind:
+- for quite some time now, we don't fetch all reports whenever we
+connect a new device. This was known to be problematic on some devices
+(see all the devices with HID_QUIRK_NOGET or
+HID_QUIRK_NO_INIT_REPORT), and the default to not poll input values on
+plug for devices is actually safer. If you want to revert, we will
+have to have a special driver for this one I guess
+- HID_QUIRK_ALWAYS_POLL *might* be a way to force the device to stay
+with a USB connection up.
 
-> ---
-> v2: return NULL when CONFIG_EXTCON is disabled
-> 
-> If we apply this patch, it might be a good idea to send it to -stable
-> so that backported code that relies on handling error pointers does
-> not break silently.
-> 
->  drivers/extcon/extcon-axp288.c         |    4 ++--
->  drivers/extcon/extcon.c                |    2 +-
->  drivers/power/supply/axp288_charger.c  |   17 ++++++++++-------
->  drivers/power/supply/charger-manager.c |    7 ++-----
->  drivers/power/supply/max8997_charger.c |   10 +++++-----
->  drivers/usb/dwc3/drd.c                 |    9 ++-------
->  drivers/usb/phy/phy-omap-otg.c         |    4 ++--
->  drivers/usb/typec/tcpm/fusb302.c       |    4 ++--
->  include/linux/extcon.h                 |    2 +-
->  9 files changed, 27 insertions(+), 32 deletions(-)
-> 
-> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
-> index e7a9561a826d..a35e99928807 100644
-> --- a/drivers/extcon/extcon.c
-> +++ b/drivers/extcon/extcon.c
-> @@ -876,7 +876,7 @@ struct extcon_dev *extcon_get_extcon_dev(const char *extcon_name)
->  		if (!strcmp(sd->name, extcon_name))
->  			goto out;
->  	}
-> -	sd = NULL;
-> +	sd = ERR_PTR(-EPROBE_DEFER);
->  out:
->  	mutex_unlock(&extcon_dev_list_lock);
->  	return sd;
-> diff --git a/include/linux/extcon.h b/include/linux/extcon.h
-> index 0c19010da77f..685401d94d39 100644
-> --- a/include/linux/extcon.h
-> +++ b/include/linux/extcon.h
-> @@ -296,7 +296,7 @@ static inline void devm_extcon_unregister_notifier_all(struct device *dev,
->  
->  static inline struct extcon_dev *extcon_get_extcon_dev(const char *extcon_name)
->  {
-> -	return ERR_PTR(-ENODEV);
-> +	return NULL;
->  }
->  
->  static inline struct extcon_dev *extcon_find_edev_by_node(struct device_node *node)
-> diff --git a/drivers/extcon/extcon-axp288.c b/drivers/extcon/extcon-axp288.c
-> index 7c6d5857ff25..180be768c215 100644
-> --- a/drivers/extcon/extcon-axp288.c
-> +++ b/drivers/extcon/extcon-axp288.c
-> @@ -394,8 +394,8 @@ static int axp288_extcon_probe(struct platform_device *pdev)
->  		if (adev) {
->  			info->id_extcon = extcon_get_extcon_dev(acpi_dev_name(adev));
->  			put_device(&adev->dev);
-> -			if (!info->id_extcon)
-> -				return -EPROBE_DEFER;
-> +			if (IS_ERR(info->id_extcon))
-> +				return PTR_ERR(info->id_extcon);
->  
->  			dev_info(dev, "controlling USB role\n");
->  		} else {
-> diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
-> index ec41f6cd3f93..4acfeb52a44e 100644
-> --- a/drivers/power/supply/axp288_charger.c
-> +++ b/drivers/power/supply/axp288_charger.c
-> @@ -848,17 +848,20 @@ static int axp288_charger_probe(struct platform_device *pdev)
->  	info->regmap_irqc = axp20x->regmap_irqc;
->  
->  	info->cable.edev = extcon_get_extcon_dev(AXP288_EXTCON_DEV_NAME);
-> -	if (info->cable.edev == NULL) {
-> -		dev_dbg(dev, "%s is not ready, probe deferred\n",
-> -			AXP288_EXTCON_DEV_NAME);
-> -		return -EPROBE_DEFER;
-> +	if (IS_ERR(info->cable.edev)) {
-> +		dev_err_probe(dev, PTR_ERR(info->cable.edev),
-> +			      "extcon_get_extcon_dev(%s) failed\n",
-> +			      AXP288_EXTCON_DEV_NAME);
-> +		return PTR_ERR(info->cable.edev);
->  	}
->  
->  	if (acpi_dev_present(USB_HOST_EXTCON_HID, NULL, -1)) {
->  		info->otg.cable = extcon_get_extcon_dev(USB_HOST_EXTCON_NAME);
-> -		if (info->otg.cable == NULL) {
-> -			dev_dbg(dev, "EXTCON_USB_HOST is not ready, probe deferred\n");
-> -			return -EPROBE_DEFER;
-> +		if (IS_ERR(info->otg.cable)) {
-> +			dev_err_probe(dev, PTR_ERR(info->otg.cable),
-> +				      "extcon_get_extcon_dev(%s) failed\n",
-> +				      USB_HOST_EXTCON_NAME);
-> +			return PTR_ERR(info->otg.cable);
->  		}
->  		dev_info(dev, "Using " USB_HOST_EXTCON_HID " extcon for usb-id\n");
->  	}
-> diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
-> index d67edb760c94..92db79400a6a 100644
-> --- a/drivers/power/supply/charger-manager.c
-> +++ b/drivers/power/supply/charger-manager.c
-> @@ -985,13 +985,10 @@ static int charger_extcon_init(struct charger_manager *cm,
->  	cable->nb.notifier_call = charger_extcon_notifier;
->  
->  	cable->extcon_dev = extcon_get_extcon_dev(cable->extcon_name);
-> -	if (IS_ERR_OR_NULL(cable->extcon_dev)) {
-> +	if (IS_ERR(cable->extcon_dev)) {
->  		pr_err("Cannot find extcon_dev for %s (cable: %s)\n",
->  			cable->extcon_name, cable->name);
-> -		if (cable->extcon_dev == NULL)
-> -			return -EPROBE_DEFER;
-> -		else
-> -			return PTR_ERR(cable->extcon_dev);
-> +		return PTR_ERR(cable->extcon_dev);
->  	}
->  
->  	for (i = 0; i < ARRAY_SIZE(extcon_mapping); i++) {
-> diff --git a/drivers/power/supply/max8997_charger.c b/drivers/power/supply/max8997_charger.c
-> index 25207fe2aa68..634658adf313 100644
-> --- a/drivers/power/supply/max8997_charger.c
-> +++ b/drivers/power/supply/max8997_charger.c
-> @@ -248,13 +248,13 @@ static int max8997_battery_probe(struct platform_device *pdev)
->  		dev_info(&pdev->dev, "couldn't get charger regulator\n");
->  	}
->  	charger->edev = extcon_get_extcon_dev("max8997-muic");
-> -	if (IS_ERR_OR_NULL(charger->edev)) {
-> -		if (!charger->edev)
-> -			return -EPROBE_DEFER;
-> -		dev_info(charger->dev, "couldn't get extcon device\n");
-> +	if (IS_ERR(charger->edev)) {
-> +		dev_err_probe(charger->dev, PTR_ERR(charger->edev),
-> +			      "couldn't get extcon device: max8997-muic\n");
-> +		return PTR_ERR(charger->edev);
->  	}
->  
-> -	if (!IS_ERR(charger->reg) && !IS_ERR_OR_NULL(charger->edev)) {
-> +	if (!IS_ERR(charger->reg)) {
->  		INIT_WORK(&charger->extcon_work, max8997_battery_extcon_evt_worker);
->  		ret = devm_add_action(&pdev->dev, max8997_battery_extcon_evt_stop_work, charger);
->  		if (ret) {
-> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-> index d7f76835137f..a490f79131c1 100644
-> --- a/drivers/usb/dwc3/drd.c
-> +++ b/drivers/usb/dwc3/drd.c
-> @@ -454,13 +454,8 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
->  	 * This device property is for kernel internal use only and
->  	 * is expected to be set by the glue code.
->  	 */
-> -	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
-> -		edev = extcon_get_extcon_dev(name);
-> -		if (!edev)
-> -			return ERR_PTR(-EPROBE_DEFER);
-> -
-> -		return edev;
-> -	}
-> +	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0)
-> +		return extcon_get_extcon_dev(name);
->  
->  	/*
->  	 * Try to get an extcon device from the USB PHY controller's "port"
-> diff --git a/drivers/usb/phy/phy-omap-otg.c b/drivers/usb/phy/phy-omap-otg.c
-> index ee0863c6553e..6e6ef8c0bc7e 100644
-> --- a/drivers/usb/phy/phy-omap-otg.c
-> +++ b/drivers/usb/phy/phy-omap-otg.c
-> @@ -95,8 +95,8 @@ static int omap_otg_probe(struct platform_device *pdev)
->  		return -ENODEV;
->  
->  	extcon = extcon_get_extcon_dev(config->extcon);
-> -	if (!extcon)
-> -		return -EPROBE_DEFER;
-> +	if (IS_ERR(extcon))
-> +		return PTR_ERR(extcon);
->  
->  	otg_dev = devm_kzalloc(&pdev->dev, sizeof(*otg_dev), GFP_KERNEL);
->  	if (!otg_dev)
-> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-> index 72f9001b0792..96c55eaf3f80 100644
-> --- a/drivers/usb/typec/tcpm/fusb302.c
-> +++ b/drivers/usb/typec/tcpm/fusb302.c
-> @@ -1708,8 +1708,8 @@ static int fusb302_probe(struct i2c_client *client,
->  	 */
->  	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
->  		chip->extcon = extcon_get_extcon_dev(name);
-> -		if (!chip->extcon)
-> -			return -EPROBE_DEFER;
-> +		if (IS_ERR(chip->extcon))
-> +			return PTR_ERR(chip->extcon);
->  	}
->  
->  	chip->vbus = devm_regulator_get(chip->dev, "vbus");
+> >
+> > The UPS's vendor ID is 0d9f (POWERCOM) and the product ID is 0004.  Now=
+,
+> > the drivers/hid/hid-quirks.c file contains a quirk entry for 0d9f:0002
+> > (product POWERCOM_UPS), which is probably an earlier model of the same
+> > device, or a very similar device.  This quirk entry is in the
+> > hid_ignore_list; it tells the HID core not to handle the device at all.
+> >
+> > I don't know why that quirk entry is present, and furthermore, it can't
+> > directly affect what is happening with your device because the product
+> > IDs are different.  Still, it is an indication that something strange i=
+s
+> > going on behind the scenes.
+> >
+> > Perhaps there is no kernel driver for these UPS devices?  Perhaps the
+> > intention is that some user program will handle all the communication
+> > when one of them is detected?  A quick search on Google turns up
+> > usbhid-ups, part of Network USB Tools (NUT) -- maybe you need to
+> > install that package in order to use the device.
 
--- 
-heikki
+I don't have enough experience with UPS here to be helpful,
+unfortunately. But What Alan said made a lot of sense. Maybe the NUT
+people will have a better insight.
+
+> >
+> > I don't know what the full story is.  With luck, Jiri or Benjamin can
+> > help more.
+> >
+> > Alan Stern
+>
+> hid-generic should be able to handle these devices, but UPSes are much le=
+ss
+> tested than normal input peripherals, so it's not that surprising that th=
+ere may
+> be some unexpected weirdness. FWIW, I have two UPSes, one works OOTB and =
+the
+> other doesn't, I have been meaning to investigate the issue. However, Dav=
+id's
+> case seems to me like a hardware quirk, but that's just my guess.
+>
+
+Yep, that seems to validate the fact that this UPS needs some care...
+
+Cheers,
+Benjamin
+
