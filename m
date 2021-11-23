@@ -2,97 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF0445A351
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Nov 2021 13:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE0745A39B
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Nov 2021 14:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237029AbhKWMyr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Nov 2021 07:54:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44260 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234548AbhKWMyq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Nov 2021 07:54:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 57D3560F9F;
-        Tue, 23 Nov 2021 12:51:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637671898;
-        bh=wIrWQf7YDEFEE/QQ99FQt/AhMw3wdmvSFHVUP3uKPJM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QGkZLrvRZ8KTMwcjmn6QaI1qSGzu+DoXhu8PQwdm/+cC5pDtmTATs6POIbgvzvvxo
-         dvx+KAr/Q+u+JS9xVPk6U+7MmUsBqP+41x4NGLkHYCxIDvlSTvBzSwwSfjybOfj2nq
-         TWRsQoUsqmsGmFLBAmPGIX/fzXnDaxy9cZciaQXE+GdZ9Q0gggepiKZXZcNrbqfcrR
-         nHkhXzC+DvQ0+sPze3evyAcW6a63+vYer0kxBjG7JGzCBaYsm5sgS1HDHOjsFSlWxO
-         c9lRiHDTKp2sG2VkVB8n9OMhlpaRH11oqA5Gp/3+CBjyqqPEmeO+zBNBu7sa5kiK9F
-         SG13871QjbYqQ==
-Date:   Tue, 23 Nov 2021 20:51:08 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     bpf@vger.kernel.org, axboe@kernel.dk,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
-        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, yuq825@gmail.com, robdclark@gmail.com,
-        sean@poorly.run, christian.koenig@amd.com, ray.huang@amd.com,
-        sgoutham@marvell.com, gakula@marvell.com, sbhatta@marvell.com,
-        hkelam@marvell.com, jingoohan1@gmail.com,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, krzysztof.kozlowski@canonical.com,
-        mani@kernel.org, pawell@cadence.com, rogerq@kernel.org,
-        a-govindraju@ti.com, gregkh@linuxfoundation.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sj@kernel.org, akpm@linux-foundation.org,
-        thomas.hellstrom@linux.intel.com, matthew.auld@intel.com,
-        colin.king@intel.com, geert@linux-m68k.org,
-        linux-block@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH bpf] treewide: add missing includes masked by cgroup ->
- bpf dependency
-Message-ID: <20211123125108.GA4453@Peter>
-References: <20211120035253.72074-1-kuba@kernel.org>
- <20211120073011.GA36650@Peter>
- <20211120072602.22f9e722@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        id S231739AbhKWNYA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Nov 2021 08:24:00 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:35284 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229853AbhKWNX7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Nov 2021 08:23:59 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A120821940;
+        Tue, 23 Nov 2021 13:20:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1637673650; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=7MFKZbNAVdl2EUgQeeUJA5/cSNPz9947JBoucY3tvZA=;
+        b=ldzEZ69g0Qwal/zZhhM52f60Z7cvvWSVyAQPpYuh4bnOgmRkEkBQMMgmvQpcCNp3uGWvuK
+        IV21m8dRP++wTEM9SyEP5tRDzQOY+uxBfjVpPueU9loJR9cb2w5WB9URqB/nOK1EOs5A0I
+        WS4DFXMVoH6UQuEFad+LbeUJ4ySoVjo=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6A6D213DE9;
+        Tue, 23 Nov 2021 13:20:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fPTAGLLqnGH9CgAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 23 Nov 2021 13:20:50 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v7 0/3] xen, usb: support pvUSB frontend driver
+Date:   Tue, 23 Nov 2021 14:20:45 +0100
+Message-Id: <20211123132048.5335-1-jgross@suse.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211120072602.22f9e722@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-11-20 07:26:02, Jakub Kicinski wrote:
-> On Sat, 20 Nov 2021 15:30:11 +0800 Peter Chen wrote:
-> > > diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
-> > > index 84dadfa726aa..9643b905e2d8 100644
-> > > --- a/drivers/usb/cdns3/host.c
-> > > +++ b/drivers/usb/cdns3/host.c
-> > > @@ -10,6 +10,7 @@
-> > >   */
-> > >  
-> > >  #include <linux/platform_device.h>
-> > > +#include <linux/slab.h>  
-> > 
-> > Should be "#include <linux/module.h>"?
-> 
-> Why? Different files are missing different includes, this one needs
-> slab.h:
-> 
-> ../drivers/usb/cdns3/host.c: In function ‘__cdns_host_init’:
-> ../drivers/usb/cdns3/host.c:86:2: error: implicit declaration of function ‘kfree’; did you mean ‘vfree’? [-Werror=implicit-function-declaration]
->   kfree(cdns->xhci_plat_data);
->   ^~~~~
->   vfree
+This series adds XEN guest pvUSB support. With pvUSB it is possible to
+use physical USB devices from a XEN domain.
 
-Oh, my fault.
+Since V4 a lot of time (several years) has passed. This is a revived
+attempt to get the frontend into the kernel.
 
-Acked-by: Peter Chen <peter.chen@kernel.org>
+The support consists of a frontend in form of a virtual hcd driver in
+the unprivileged domU passing I/O-requests to the backend in a driver
+domain (usually Dom0). The backend is not part of this patch series,
+as it is supported via qemu.
+
+The code is taken (and adapted) from the original pvUSB implementation
+done for Linux 2.6 in 2008 by Fujitsu.
+
+Normal operation of USB devices by adding and removing them dynamically
+to/from a domain has been tested using various USB devices (USB 1.1,
+2.0 and 3.0) using the qemu based backend.
+
+Changes in V7:
+- use SPDX header in usbif.h
+
+Changes in V6:
+- add SPDX line to driver
+
+Changes in V5:
+- added interface documentation to patch 1
+- frontend no longer trusts backend to return only sane values
+
+Changes in V4:
+- remove sysfs file from frontend, as it violated the "one value per file"
+  rule and didn't serve any real purpose.
+
+Changes in V3:
+- move frontend to drivers/usb/host and rename it to xen-hcd.
+- changed name prefixes in patch 1 to "xenusb" as requested by Greg
+- use __u<n> types rather than uint<n>_t as requested by Greg
+
+Changes in V2:
+- removed backend, as it can be implemented in user land
+- added some access macros and definitions to the pvUSB interface
+  description to make it independant from linux kernel USB internals
+- adapted frontend to newer kernel version and use new pvUSB
+  interface macros
+- set port status in one chunk as suggested by Oliver Neukum
+
+Juergen Gross (3):
+  usb: Add Xen pvUSB protocol description
+  usb: Introduce Xen pvUSB frontend (xen hcd)
+  xen: add Xen pvUSB maintainer
+
+ MAINTAINERS                      |    8 +
+ drivers/usb/host/Kconfig         |   11 +
+ drivers/usb/host/Makefile        |    1 +
+ drivers/usb/host/xen-hcd.c       | 1606 ++++++++++++++++++++++++++++++
+ include/xen/interface/io/usbif.h |  405 ++++++++
+ 5 files changed, 2031 insertions(+)
+ create mode 100644 drivers/usb/host/xen-hcd.c
+ create mode 100644 include/xen/interface/io/usbif.h
 
 -- 
-
-Thanks,
-Peter Chen
+2.26.2
 
