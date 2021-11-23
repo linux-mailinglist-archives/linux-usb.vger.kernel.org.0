@@ -2,153 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C0445A192
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Nov 2021 12:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 623A545A225
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Nov 2021 13:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236205AbhKWLjA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Nov 2021 06:39:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
+        id S235942AbhKWMFs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Nov 2021 07:05:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235094AbhKWLjA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Nov 2021 06:39:00 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87D1C061714
-        for <linux-usb@vger.kernel.org>; Tue, 23 Nov 2021 03:35:51 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so1918404wmj.5
-        for <linux-usb@vger.kernel.org>; Tue, 23 Nov 2021 03:35:51 -0800 (PST)
+        with ESMTP id S235898AbhKWMFs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Nov 2021 07:05:48 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5191FC061574;
+        Tue, 23 Nov 2021 04:02:40 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id r5so18095814pgi.6;
+        Tue, 23 Nov 2021 04:02:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=eAAW0gxyL3spMyvFzNZU55TiEHcEGOqrLOJJuSa53K4=;
-        b=4DcfipfNqoq+i8lFBnrntKi3GtNw6X6goztOuq6ZWKhQSuytROlnv18WHcqZhYeh7c
-         GVU/3OFgl1BHcS7c/eSK80Hd36UAWzHFaJQ7HvRGjxLRLvpehVgy/qTdPSxdV6jRIKiv
-         KUBmhXNq4YZ4w4kuOliUyM4YnBMkn32OaZgo2ZnT5yRTOGg+SKtgVsnOrk+YNVJYy4lD
-         7TEDEgB7kTo/0ZPFJUO/BGCiAWb/fgXgFHc2FALVFLl/gTQYgATMGes7lqe/uUECmQQU
-         R5HUDVzCCKPG4/3yDD7kX7/tYF3JE3XCuXq1TzyesuDP+b2eYPrk/jOyI/1Nqgi6l4DO
-         DWpg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=PmcU1Ad5hGOKrtctKRq/pbfb3e4GptfnLdKFtOED7KE=;
+        b=fNrEBBUZjfAkxJ0xIyWUWIBF7KQmPCEMe9w7/Ln0+1eh0uQDkrzCvDWFEzAGFUIr/E
+         hbQQaAcruBJ43GIH2mal40NZTPUxAjf4EwXJtB5XjmrNaDxzKeBYCUJKi8LaXJvpfWtc
+         BAL9U8tkK183963DSlz54U5O28mYY1kYzT/38ZjOu7qDa+bbxPtyzEY+4yVyauRXYEJY
+         olBXOronmE6urUFTGxEQ8DN9QasFp9xa6RmwumJSlyPNjxXsWxze/sc6NTyPFk9mqHIT
+         FP4WwsZV7eCkiSVt1iKjx8uFI2h3oq/WuNpzNgG4Wtcup7QZQxEZhM1Y4QI6IbeBiCiJ
+         zX6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=eAAW0gxyL3spMyvFzNZU55TiEHcEGOqrLOJJuSa53K4=;
-        b=Eh42NXaVV+vCJjylWra9YyaTKTxfrrQLATWKORvo9meRVC7KWHUeXTEbFLOR5UiaYT
-         CbSlVYsTPZDzysCgR/7JdiXQO0Y2TpRJSsXsSel339fLpgRmr50+jQ5Not1Ba0cpN6Fa
-         M1QkD9cEpTt86kjB/JojOLDYqFedbLhswrytJp32SkqbK+1zoqP5Ra2WjYXkxwiySUdE
-         zmiDSrc/g9Aa2zgUk0lX7NbOXYFdCVhPfU2y0JMUrL1YD/jcou5ZqlykJI2z5WDBTbFO
-         2Wy/R3WJ9dNdQcwkemKCYTQcmHWc+zLT2nk5SnaNa6Dypba2FLyxReYexrEaS/CfzYVY
-         pELw==
-X-Gm-Message-State: AOAM533cvWHBsP+L+8k7faMzm0Ht54xZn6gx8Hc4kuFVAzxYDHkGO4Zi
-        /yn65LH9cCYZ9qtlA9JzZugnRcYeDSQ/LJfKGOkddw==
-X-Google-Smtp-Source: ABdhPJyDTgRgvUuV98CyCHfOL5hAURr2qDU4kKqY5aPJ10aLAJMLU+4E45XfCOWPhiTSevTsW28+O1m1n9x86/UMTho=
-X-Received: by 2002:a7b:c017:: with SMTP id c23mr2193327wmb.137.1637667350407;
- Tue, 23 Nov 2021 03:35:50 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PmcU1Ad5hGOKrtctKRq/pbfb3e4GptfnLdKFtOED7KE=;
+        b=veqdzWL5k/mVLSEoCDFkwLnQtNpZvJ2ygqOAYTxcZB2Wp2K9kDxZpLHw3pZw2y1+EG
+         X7HOHfOHR5NDHFGOEDekHPizpd9y79xYPzflW9cJmN8FL7ksTopsKA5TskxFAjwpKCY9
+         +gKW+wQOKukXXTkrwTBLWGLlr4jOzOgC/Ddo0MkXo61mT6ZXSvgiJXUOXj1jJE4ux+bx
+         JppMYYnxYj256fNenQEPV2KS1IzVrHD0cfEIy7QCWuWl3QMXMDNLnpQrNRYnddYVdLKz
+         G8lrQcnkGeSVTKwZmS6kXty9wQm+pnzxDC07gd4ModHtpGtXu3SR9LE7kxrFjNRy3e2O
+         67uA==
+X-Gm-Message-State: AOAM5309GS18iCiGm6ieP2AAjzCrkbADnAoBw7cM7H5K/u+1WIU+tVgG
+        TeybhcaqIWSDj6RZNXIx3us=
+X-Google-Smtp-Source: ABdhPJxYzrUOpnn0PyqsxgguDlujgVu/Qf/YMrlsxk9WuXBd8mzK7Qz1Gfoca+w8sswV9jZwB5hCKQ==
+X-Received: by 2002:aa7:93c4:0:b0:49f:a7f5:7f5a with SMTP id y4-20020aa793c4000000b0049fa7f57f5amr4743102pff.8.1637668959018;
+        Tue, 23 Nov 2021 04:02:39 -0800 (PST)
+Received: from [192.168.1.5] ([110.77.218.179])
+        by smtp.googlemail.com with ESMTPSA id m15sm12623825pfk.186.2021.11.23.04.02.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Nov 2021 04:02:38 -0800 (PST)
+Message-ID: <7c32898b-fc65-b624-ea33-c3cc02e15b63@gmail.com>
+Date:   Tue, 23 Nov 2021 19:02:34 +0700
 MIME-Version: 1.0
-References: <20211108150554.4457-1-conor.dooley@microchip.com>
- <20211108150554.4457-2-conor.dooley@microchip.com> <272946671.hFph3VMliC@diego>
-In-Reply-To: <272946671.hFph3VMliC@diego>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Tue, 23 Nov 2021 17:05:38 +0530
-Message-ID: <CAAhSdy2yr+a7=7Crk7s3pAVbVcYjTdOtRfAaQXBkTVsUpfG20g@mail.gmail.com>
-Subject: Re: [PATCH 01/13] dt-bindings: interrupt-controller: create a header
- for RISC-V interrupts
-To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        bgolaszewski@baylibre.com, Rob Herring <robh+dt@kernel.org>,
-        jassisinghbrar@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, broonie@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        lewis.hanly@microchip.com, conor.dooley@microchip.com,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Atish Patra <atish.patra@wdc.com>, ivan.griffin@microchip.com,
-        linux-gpio@vger.kernel.org, DTML <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-i2c@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        krzysztof.kozlowski@canonical.com,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Bin Meng <bin.meng@windriver.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v2] USB: serial: option: add Fibocom FM101-GL variants
+Content-Language: en-US
+To:     Mingjie Zhang <superzmj@fibocom.com>, johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211123082634.21498-1-superzmj@fibocom.com>
+From:   Lars Melin <larsm17@gmail.com>
+In-Reply-To: <20211123082634.21498-1-superzmj@fibocom.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 4:38 PM Heiko St=C3=BCbner <heiko@sntech.de> wrote:
->
-> Am Montag, 8. November 2021, 16:05:42 CET schrieb conor.dooley@microchip.=
-com:
-> > From: Ivan Griffin <ivan.griffin@microchip.com>
-> >
-> > Provide named identifiers for device tree for RISC-V interrupts.
-> >
-> > Licensed under GPL and MIT, as this file may be useful to any OS that
-> > uses device tree.
-> >
-> > Signed-off-by: Ivan Griffin <ivan.griffin@microchip.com>
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> >  .../interrupt-controller/riscv-hart.h         | 19 +++++++++++++++++++
-> >  1 file changed, 19 insertions(+)
-> >  create mode 100644 include/dt-bindings/interrupt-controller/riscv-hart=
-.h
-> >
-> > diff --git a/include/dt-bindings/interrupt-controller/riscv-hart.h b/in=
-clude/dt-bindings/interrupt-controller/riscv-hart.h
-> > new file mode 100644
-> > index 000000000000..e1c32f6090ac
-> > --- /dev/null
-> > +++ b/include/dt-bindings/interrupt-controller/riscv-hart.h
-> > @@ -0,0 +1,19 @@
-> > +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
-> > +/*
-> > + * Copyright (C) 2021 Microchip Technology Inc.  All rights reserved.
-> > + */
-> > +
-> > +#ifndef _DT_BINDINGS_INTERRUPT_CONTROLLER_RISCV_HART_H
-> > +#define _DT_BINDINGS_INTERRUPT_CONTROLLER_RISCV_HART_H
-> > +
-> > +#define HART_INT_U_SOFT   0
-> > +#define HART_INT_S_SOFT   1
-> > +#define HART_INT_M_SOFT   3
-> > +#define HART_INT_U_TIMER  4
-> > +#define HART_INT_S_TIMER  5
-> > +#define HART_INT_M_TIMER  7
-> > +#define HART_INT_U_EXT    8
-> > +#define HART_INT_S_EXT    9
-> > +#define HART_INT_M_EXT    11
->
-> (1) From checking clic doc [0] I see an additional
->         12   CLIC software interrupt
-> defined.
+On 11/23/2021 15:26, Mingjie Zhang wrote:
+> Update the USB serial option driver support for the Fibocom
+> FM101-GL Cat.6
+> LTE modules as there are actually several different variants.
+> - VID:PID 2cb7:01a4, FM101-GL for laptop debug M.2 cards(with
+>    adb interfaces for /Linux/Chrome OS)
+> - VID:PID 2cb7:01a2, FM101-GL are laptop M.2 cards (with
+>    MBIM interfaces for /Linux/Chrome OS)
+> 
+> T:  Bus=02 Lev=01 Prnt=01 Port=03 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
+> D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+> P:  Vendor=2cb7 ProdID=01a2 Rev= 5.04
+> S:  Manufacturer=Fibocom Wireless Inc.
+> S:  Product=Fibocom FM101-GL Module
+> S:  SerialNumber=86bffe63
+> C:* #Ifs= 7 Cfg#= 1 Atr=a0 MxPwr=896mA
+> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
+> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=(none)
+> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=(none)
+> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=(none)
+> 
+> 0x01a2: mbim, tty, tty, diag, gnss
+> 
+The descriptor say 7 interfaces but you have only listed 6 in your v2, 
+there was 7 in your v1.
+I'm also quite sure that the interface with Prot=30 is the diag interface.
 
-Local IRQ #12 is for S-mode guest external interrupts as-per
-the ratified H-extension specification.
+rgds
+Lars
 
-I guess CLIC spec needs to be updated.
 
-Regards,
-Anup
 
->
-> (2) The doc states that the ordering is a recommendation and
->         "not mandatory in all incarnations of the CLIC"
-> Is that clarified somewhere else that this more than recommended?
->
-> Thanks
-> Heiko
->
->
-> [0] https://github.com/riscv/riscv-fast-interrupt/blob/master/clic.adoc
->
-> > +
-> > +#endif /* _DT_BINDINGS_INTERRUPT_CONTROLLER_RISCV_HART_H */
-> >
->
->
->
->
+
