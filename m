@@ -2,137 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABDD9459FE3
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Nov 2021 11:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B9C45A0F4
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Nov 2021 12:08:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235368AbhKWKSx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Nov 2021 05:18:53 -0500
-Received: from mga02.intel.com ([134.134.136.20]:51066 "EHLO mga02.intel.com"
+        id S234680AbhKWLLV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Nov 2021 06:11:21 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:51856 "EHLO gloria.sntech.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235337AbhKWKSx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Nov 2021 05:18:53 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10176"; a="222217864"
-X-IronPort-AV: E=Sophos;i="5.87,257,1631602800"; 
-   d="scan'208";a="222217864"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 02:15:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,257,1631602800"; 
-   d="scan'208";a="590374148"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Nov 2021 02:15:42 -0800
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     m.szyprowski@samsung.com, <stern@rowland.harvard.edu>,
-        kishon@ti.com, hdegoede@redhat.com, chris.chiu@canonical.com,
-        linux-usb@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] usb: hub: Fix locking issues with address0_mutex
-Date:   Tue, 23 Nov 2021 12:16:56 +0200
-Message-Id: <20211123101656.1113518-1-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        id S230471AbhKWLLU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Nov 2021 06:11:20 -0500
+Received: from ip5f5b2004.dynamic.kabel-deutschland.de ([95.91.32.4] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1mpTeV-00086y-0h; Tue, 23 Nov 2021 12:07:55 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        robh+dt@kernel.org, jassisinghbrar@gmail.com,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lewis.hanly@microchip.com,
+        conor.dooley@microchip.com, daire.mcnamara@microchip.com,
+        atish.patra@wdc.com, ivan.griffin@microchip.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
+        bin.meng@windriver.com, conor.dooley@microchip.com
+Subject: Re: [PATCH 01/13] dt-bindings: interrupt-controller: create a header for RISC-V interrupts
+Date:   Tue, 23 Nov 2021 12:07:52 +0100
+Message-ID: <272946671.hFph3VMliC@diego>
+In-Reply-To: <20211108150554.4457-2-conor.dooley@microchip.com>
+References: <20211108150554.4457-1-conor.dooley@microchip.com> <20211108150554.4457-2-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix the circular lock dependency and unbalanced unlock of addess0_mutex
-introduced when fixing an address0_mutex enumeration retry race in commit
-ae6dc22d2d1 ("usb: hub: Fix usb enumeration issue due to address0 race")
+Am Montag, 8. November 2021, 16:05:42 CET schrieb conor.dooley@microchip.com:
+> From: Ivan Griffin <ivan.griffin@microchip.com>
+> 
+> Provide named identifiers for device tree for RISC-V interrupts.
+> 
+> Licensed under GPL and MIT, as this file may be useful to any OS that
+> uses device tree.
+> 
+> Signed-off-by: Ivan Griffin <ivan.griffin@microchip.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../interrupt-controller/riscv-hart.h         | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+>  create mode 100644 include/dt-bindings/interrupt-controller/riscv-hart.h
+> 
+> diff --git a/include/dt-bindings/interrupt-controller/riscv-hart.h b/include/dt-bindings/interrupt-controller/riscv-hart.h
+> new file mode 100644
+> index 000000000000..e1c32f6090ac
+> --- /dev/null
+> +++ b/include/dt-bindings/interrupt-controller/riscv-hart.h
+> @@ -0,0 +1,19 @@
+> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
+> +/*
+> + * Copyright (C) 2021 Microchip Technology Inc.  All rights reserved.
+> + */
+> +
+> +#ifndef _DT_BINDINGS_INTERRUPT_CONTROLLER_RISCV_HART_H
+> +#define _DT_BINDINGS_INTERRUPT_CONTROLLER_RISCV_HART_H
+> +
+> +#define HART_INT_U_SOFT   0
+> +#define HART_INT_S_SOFT   1
+> +#define HART_INT_M_SOFT   3
+> +#define HART_INT_U_TIMER  4
+> +#define HART_INT_S_TIMER  5
+> +#define HART_INT_M_TIMER  7
+> +#define HART_INT_U_EXT    8
+> +#define HART_INT_S_EXT    9
+> +#define HART_INT_M_EXT    11
 
-Make sure locking order between port_dev->status_lock and address0_mutex
-is correct, and that address0_mutex is not unlocked in hub_port_connect
-"done:" codepath which may be reached without locking address0_mutex
+(1) From checking clic doc [0] I see an additional
+	12   CLIC software interrupt
+defined.
 
-Fixes: 6ae6dc22d2d1 ("usb: hub: Fix usb enumeration issue due to address0 race")
-Cc: <stable@vger.kernel.org>
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Acked-by: Hans de Goede <hdegoede@redhat.com>
-Tested-by: Hans de Goede <hdegoede@redhat.com>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/core/hub.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+(2) The doc states that the ordering is a recommendation and
+	"not mandatory in all incarnations of the CLIC"
+Is that clarified somewhere else that this more than recommended?
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 9f0d1af8be6f..e907dfa0ca6d 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -5190,6 +5190,7 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
- 	struct usb_port *port_dev = hub->ports[port1 - 1];
- 	struct usb_device *udev = port_dev->child;
- 	static int unreliable_port = -1;
-+	bool retry_locked;
- 
- 	/* Disconnect any existing devices under this port */
- 	if (udev) {
-@@ -5246,10 +5247,10 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
- 
- 	status = 0;
- 
--	mutex_lock(hcd->address0_mutex);
--
- 	for (i = 0; i < PORT_INIT_TRIES; i++) {
--
-+		usb_lock_port(port_dev);
-+		mutex_lock(hcd->address0_mutex);
-+		retry_locked = true;
- 		/* reallocate for each attempt, since references
- 		 * to the previous one can escape in various ways
- 		 */
-@@ -5257,6 +5258,8 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
- 		if (!udev) {
- 			dev_err(&port_dev->dev,
- 					"couldn't allocate usb_device\n");
-+			mutex_unlock(hcd->address0_mutex);
-+			usb_unlock_port(port_dev);
- 			goto done;
- 		}
- 
-@@ -5278,13 +5281,13 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
- 		}
- 
- 		/* reset (non-USB 3.0 devices) and get descriptor */
--		usb_lock_port(port_dev);
- 		status = hub_port_init(hub, udev, port1, i);
--		usb_unlock_port(port_dev);
- 		if (status < 0)
- 			goto loop;
- 
- 		mutex_unlock(hcd->address0_mutex);
-+		usb_unlock_port(port_dev);
-+		retry_locked = false;
- 
- 		if (udev->quirks & USB_QUIRK_DELAY_INIT)
- 			msleep(2000);
-@@ -5374,11 +5377,14 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
- 
- loop_disable:
- 		hub_port_disable(hub, port1, 1);
--		mutex_lock(hcd->address0_mutex);
- loop:
- 		usb_ep0_reinit(udev);
- 		release_devnum(udev);
- 		hub_free_dev(udev);
-+		if (retry_locked) {
-+			mutex_unlock(hcd->address0_mutex);
-+			usb_unlock_port(port_dev);
-+		}
- 		usb_put_dev(udev);
- 		if ((status == -ENOTCONN) || (status == -ENOTSUPP))
- 			break;
-@@ -5401,8 +5407,6 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
- 	}
- 
- done:
--	mutex_unlock(hcd->address0_mutex);
--
- 	hub_port_disable(hub, port1, 1);
- 	if (hcd->driver->relinquish_port && !hub->hdev->parent) {
- 		if (status != -ENOTCONN && status != -ENODEV)
--- 
-2.25.1
+Thanks
+Heiko
+
+
+[0] https://github.com/riscv/riscv-fast-interrupt/blob/master/clic.adoc
+
+> +
+> +#endif /* _DT_BINDINGS_INTERRUPT_CONTROLLER_RISCV_HART_H */
+> 
+
+
+
 
