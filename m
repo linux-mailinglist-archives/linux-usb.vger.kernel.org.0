@@ -2,22 +2,21 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A8C445CA2F
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Nov 2021 17:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7303E45CA32
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Nov 2021 17:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349080AbhKXQkV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Nov 2021 11:40:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
+        id S1349087AbhKXQkj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Nov 2021 11:40:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232846AbhKXQkV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Nov 2021 11:40:21 -0500
-X-Greylist: delayed 163 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 24 Nov 2021 08:37:11 PST
+        with ESMTP id S232846AbhKXQkj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Nov 2021 11:40:39 -0500
 Received: from osmtp.xiscosoft.net (osmtp.xiscosoft.net [IPv6:2001:41d0:8:c16c::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1055DC061574;
-        Wed, 24 Nov 2021 08:37:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7CEC061574;
+        Wed, 24 Nov 2021 08:37:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=klondike.es;
-        s=xiscosoft_net; t=1637771827; x=1638981427;
-        bh=N5twuKLqFVXVh7rfLMB4pb6X4neyvZEBmhsC0vA+0zE=;
+        s=xiscosoft_net; t=1637771847; x=1638981447;
+        bh=+blum+j0EFw1COstxobLAcwqR1D6Ufkc5Bc7SWwf0Vg=;
         h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
          Content-Language:In-Reply-To:Content-Type:
          Content-Transfer-Encoding:From:Subject:To:Cc:Date:Reply-To:
@@ -29,17 +28,18 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=klondike.es;
          List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:
          List-Archive:Original-Message-ID:Require-Recipient-Valid-Since:
          Solicitation:Organization:Jabber-ID:Auto-Submitted;
-        b=JogUYb0lAg+22Z6CTo+Vmmx50CPcJ2JS+3cDn/hUTmunfVf32KQu60pQY4fVnCuZf
-         Lb+6SALw6CHw25HYHLbgNjoByorAw+eXCTBiiI9GxOlp9zh6BggJQ5JoQiVaBrT90G
-         FurVxLW2cqOS/OEnWXCDLWCJpjQ0Gibz7pJhY82mA3IT/zWE7xxHjF31WxMIg+eEin
-         hBSq/Yq8+Tl/F9kCQHL7StTdiS/XfMkGyPymjAaD2V0oFEaipkW5w3N7S6r7MWSaGq
-         qFKup424MGcqTLfE9BMRH1kCzVMv05kbPzVremR5fE8OLhrt020R16z9mQyYK6Vm5I
-         6zDJnnu+CAjcg==
-Message-ID: <07bd1d90-c95f-0685-e1a8-2211c9dac251@klondike.es>
-Date:   Wed, 24 Nov 2021 17:37:05 +0100
+        b=RcZI8qa50RjlivL1nwppTCf5D8lQFXLSUIsE6wNPdTb7mPweDjZdyCh7dSEHYcUdK
+         VIcDUgOc14IPQb6+cHHK/ZA7U9uRI6l8XN2wOfXPs3qLYqbMiepySaIAae93AkWgRL
+         tlWmZyivCi4TTdFGNrqFHlyVwVELtyZUXVhIj6Q/eqlai7Y/V8iJmhKR2pjGRO4L1W
+         O3pBDVF+OufmbiAjiDesxC6F9U0P+pNyfR0skUV6TTTfIWFCeKGNMqaPSqUu2VKP2C
+         H773S+zGTg1LjHhYfH3nplL358t0Yoid50juU2gSGr8+rlZJ64vown+i5WtxIuUl2x
+         wMV1O8ygXRaVw==
+Message-ID: <af524afd-beb6-8b9d-cc26-4467abc3ab8e@klondike.es>
+Date:   Wed, 24 Nov 2021 17:37:25 +0100
 MIME-Version: 1.0
 From:   "Francisco Blas Izquierdo Riera (klondike)" <klondike@klondike.es>
-Subject: [PATCH 1/2] thunderbolt: allow vendor ID override for NVM programming
+Subject: [PATCH 2/2] Documentation: explain how to override Thunderbolt Vendor
+ ID
 To:     linux-usb@vger.kernel.org
 Cc:     Andreas Noever <andreas.noever@gmail.com>,
         Michael Jamet <michael.jamet@intel.com>,
@@ -61,53 +61,32 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently, the vendor ID reported by the chipset is checked before to
-avoid accidentally programming devices from unsupported vendors with
-a different NVM structure.
-
-Certain Thunderbolt devices store the vendor ID in the NVM, therefore
-if the NVM has become corrrupted the device will report an invalid
-vendor ID and reflashing will be impossible on GNU/Linux even if the
-device can boot in safe mode.
-
-This patch adds a new parameter ``switch_nvm_vendor_override`` which
-can be used to override the vendor ID used for detecting the NVM
-structure allowing to reflash (and authenticate) a new, valid
-image on the device.
+Update the Thunderbolt documentation to explain how to use the
+``switch_nvm_vendor_override`` parameter to be able to reflash
+a Thunderbolt controller's NVM reporting an invalid Vendor ID.
 
 Signed-off-by: Francisco Blas Izquierdo Riera (klondike) <klondike@klondike.es>
 ---
-drivers/thunderbolt/switch.c | 9 ++++++++-
-1 file changed, 8 insertions(+), 1 deletion(-)
+Documentation/admin-guide/thunderbolt.rst | 10 ++++++++++
+1 file changed, 10 insertions(+)
 
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index 3014146081..a7959c3f3f 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -13,6 +13,7 @@
-#include <linux/sched/signal.h>
-#include <linux/sizes.h>
-#include <linux/slab.h>
-+#include <linux/moduleparam.h>
-#include "tb.h"
-@@ -34,6 +35,10 @@ struct nvm_auth_status {
-static LIST_HEAD(nvm_auth_status_cache);
-static DEFINE_MUTEX(nvm_auth_status_lock);
-+static short switch_nvm_vendor_override = -1;
-+module_param(switch_nvm_vendor_override, short, 0440);
-+MODULE_PARM_DESC(switch_nvm_vendor_override, "Override the switch vendor id on the nvm access routines");
+diff --git a/Documentation/admin-guide/thunderbolt.rst b/Documentation/admin-guide/thunderbolt.rst
+index 2ed79f41a4..15c8c73331 100644
+--- a/Documentation/admin-guide/thunderbolt.rst
++++ b/Documentation/admin-guide/thunderbolt.rst
+@@ -296,6 +296,16 @@ information is missing.
+To recover from this mode, one needs to flash a valid NVM image to the
+host controller in the same way it is done in the previous chapter.
++When the NVM image is corrupted, certain host controllers will report
++an invalid Vendor ID preventing the module from exposing the nvm access
++nodes. If so, either load the thunderbolt module with option
++``switch_nvm_vendor_override=vendorID`` or add
++``thunderbolt.switch_nvm_vendor_override=vendorID`` to your boot
++parameters. You need to set ``vendorID`` to the appropriate value.
++On Intel systems, this is likely ``0x8086`` but you should verify this
++before doing anything as otherwise you may cause further damage to your
++controller.
 +
-static struct nvm_auth_status *__nvm_get_auth_status(const struct tb_switch *sw)
-{
-struct nvm_auth_status *st;
-@@ -391,7 +396,9 @@ static int tb_switch_nvm_add(struct tb_switch *sw)
-* relax this in the future when we learn other NVM formats.
-*/
-if (sw->config.vendor_id != PCI_VENDOR_ID_INTEL &&
-- sw->config.vendor_id != 0x8087) {
-+ sw->config.vendor_id != 0x8087 &&
-+ switch_nvm_vendor_override != PCI_VENDOR_ID_INTEL &&
-+ switch_nvm_vendor_override != 0x8087) {
-dev_info(&sw->dev,
-"NVM format of vendor %#x is not known, disabling NVM upgrade\n",
-sw->config.vendor_id);
+Networking over Thunderbolt cable
+---------------------------------
+Thunderbolt technology allows software communication between two hosts
