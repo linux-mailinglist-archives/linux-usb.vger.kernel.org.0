@@ -2,86 +2,234 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F3A45B0DA
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Nov 2021 01:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49BD845B20E
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Nov 2021 03:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbhKXAtz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Nov 2021 19:49:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbhKXAtw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Nov 2021 19:49:52 -0500
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7495BC061574
-        for <linux-usb@vger.kernel.org>; Tue, 23 Nov 2021 16:46:43 -0800 (PST)
-Received: by mail-ua1-x931.google.com with SMTP id w23so1511700uao.5
-        for <linux-usb@vger.kernel.org>; Tue, 23 Nov 2021 16:46:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=dkwyOAxjB4BLYlEe+hztnb6yd1YhcCXkIympAWHIYao=;
-        b=TVD2S5g5pZOQN5ag/deYSLDd5sg90aXdIhwPfUC0FdXXqQWkg3mfCk37ppz4PPcMoY
-         iuX9FNmLZDwsZtVvKXEyhAEfKMAbELWGs6VG7wS6DlVqh+bF+0Eh2Z+qM+eLbyYv5TwL
-         UUjJQuGGEsmyvcwOpToFvAJsXq3xkNrV30EezehgQIyL6U8Mx2eI1Vz7DEWRjYB9AK/g
-         HoAalxVXRjYUfW45lRB87QT49sLDnSaE+3Px8t2fbXUSW7AV9kuBeKh8KbhWbmu+HT0X
-         dX47HEI0ciXLAfGDy+BU+ewHZJTQFvpWyOyWlaXptAQd3KY9V4mccFK3mSfx60cwOxyl
-         z1eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=dkwyOAxjB4BLYlEe+hztnb6yd1YhcCXkIympAWHIYao=;
-        b=QyyUKyBN/pdrlJrcfG9wn+l3N1qA7sbB80nCrYyzsmRYvG+EE5tEfCYdm58Ift5scg
-         zJfpKLF85LozumVDt89hsmD5JigieFHhjm25wMF3TkTlCVL0JwYq01V+eoIlsXpJXD91
-         TTpXS6AkMLYie+AkC4Ay+CzVndjIWG8SzY3L0quuKb3paKxbO3dYC4WwrAqHSweph2xC
-         mg+MXF9vmrKMIWjag3at5iS5urV/1k/1F8ItHNtlB3z6RPhPcFOFXwE+gcFr+zpnQiK3
-         gEaFfkrjRNzOtv21r/wftcmiObVLNFFEcsIPyjOKanwMDTS/FH8kY1NSP+C8Z/Eiy0qk
-         cH7w==
-X-Gm-Message-State: AOAM532NZa7kg31W037/DHoszevfkUAow85Un0JCm8WUoXGTwl6lOCMt
-        vKJBTaSEvXMPS5IMgcsPymi1ZRb8CTCfWx7zrKBChwOfn7k=
-X-Google-Smtp-Source: ABdhPJyoLHCMEtbDZjaP9Mowlwa6igyErH5SC+1CoSwbDjFPghVogwPyWGWg8H1oKXq4Mm1FarlzaSbbsSSmz2yMFo0=
-X-Received: by 2002:ab0:69c5:: with SMTP id u5mr2995865uaq.92.1637714802433;
- Tue, 23 Nov 2021 16:46:42 -0800 (PST)
+        id S238286AbhKXCdj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Nov 2021 21:33:39 -0500
+Received: from mga17.intel.com ([192.55.52.151]:21571 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232450AbhKXCdi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Nov 2021 21:33:38 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10177"; a="215895709"
+X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
+   d="scan'208";a="215895709"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 18:30:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
+   d="scan'208";a="674704336"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 23 Nov 2021 18:30:27 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mpi3G-0004BY-AD; Wed, 24 Nov 2021 02:30:26 +0000
+Date:   Wed, 24 Nov 2021 10:30:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ c4bc515d73b5201d30f78b935accdd9e3988f05e
+Message-ID: <619da3b6.bWyuaWdKhTO0GcOd%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-From:   Jupiter <jupiter.hce@gmail.com>
-Date:   Wed, 24 Nov 2021 11:46:06 +1100
-Message-ID: <CAA=hcWTukyvM0Hz-VgW_NG7Whc3i7GLGySzJ0iGHvxo3O1f5vQ@mail.gmail.com>
-Subject: Kernel 5.10 USB issues
-To:     linux-usb <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: c4bc515d73b5201d30f78b935accdd9e3988f05e  usb: dwc2: gadget: use existing helper
 
-I connected a USB bus between an iMX6ULZ and an 4G LTE modem, it was
-running well in kernel 4.19.75. I've just upgraded kernel to 5.10.59,
-the USB is broken, the USB drivers were disconnected / connected
-repeatedly:
+elapsed time: 721m
 
-[12781.730889] usb 1-1: USB disconnect, device number 84
-[12781.808317] option1 ttyUSB0: GSM modem (1-port) converter now
-disconnected from ttyUSB0
-[12781.839256] option 1-1:1.0: device disconnected
-[12781.959687] option1 ttyUSB1: GSM modem (1-port) converter now
-disconnected from ttyUSB1
-[12782.009476] option 1-1:1.2: device disconnected
-[12785.607012] usb 1-1: new high-speed USB device number 85 using ci_hdrc
-[12785.825218] usb 1-1: New USB device found, idVendor=05c6,
-idProduct=90b2, bcdDevice= 0.00
-[12785.833828] usb 1-1: New USB device strings: Mfr=3, Product=2, SerialNumber=4
-[12785.841222] usb 1-1: Product: Qualcomm CDMA Technologies MSM
-[12785.847049] usb 1-1: Manufacturer: Qualcomm, Incorporated
-[12785.852536] usb 1-1: SerialNumber: 674a1bcf
-[12785.932542] option 1-1:1.0: GSM modem (1-port) converter detected
-[12785.957103] usb 1-1: GSM modem (1-port) converter now attached to ttyUSB0
-[12785.975924] option 1-1:1.2: GSM modem (1-port) converter detected
-[12786.047708] usb 1-1: GSM modem (1-port) converter now attached to ttyUSB1
+configs tested: 174
+configs skipped: 4
 
-What could I be missing in kernel 5?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thank you.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211123
+sh                      rts7751r2d1_defconfig
+sh                        apsh4ad0a_defconfig
+arm                         vf610m4_defconfig
+powerpc                     mpc83xx_defconfig
+mips                         rt305x_defconfig
+arm                         at91_dt_defconfig
+arm                        mvebu_v5_defconfig
+riscv                    nommu_virt_defconfig
+powerpc                       eiger_defconfig
+sh                           se7722_defconfig
+mips                      fuloong2e_defconfig
+powerpc                      bamboo_defconfig
+mips                          ath25_defconfig
+sh                             shx3_defconfig
+powerpc                 mpc836x_mds_defconfig
+arm                           stm32_defconfig
+xtensa                       common_defconfig
+sh                         ecovec24_defconfig
+m68k                        stmark2_defconfig
+mips                           ip27_defconfig
+arm                          gemini_defconfig
+powerpc64                           defconfig
+arm                        magician_defconfig
+mips                       rbtx49xx_defconfig
+powerpc                     pq2fads_defconfig
+powerpc                      pasemi_defconfig
+mips                            ar7_defconfig
+sh                          lboxre2_defconfig
+h8300                     edosk2674_defconfig
+arm                         hackkit_defconfig
+m68k                            q40_defconfig
+arc                            hsdk_defconfig
+mips                       capcella_defconfig
+mips                     cu1830-neo_defconfig
+nios2                         3c120_defconfig
+m68k                       m5249evb_defconfig
+xtensa                    smp_lx200_defconfig
+powerpc                     tqm8555_defconfig
+arm                          badge4_defconfig
+powerpc                       ebony_defconfig
+openrisc                            defconfig
+arc                        nsim_700_defconfig
+powerpc                      acadia_defconfig
+arm                         orion5x_defconfig
+sh                          rsk7264_defconfig
+mips                          rm200_defconfig
+mips                           xway_defconfig
+parisc                generic-32bit_defconfig
+powerpc                     kmeter1_defconfig
+mips                     decstation_defconfig
+mips                      pic32mzda_defconfig
+powerpc                      arches_defconfig
+arm                         s3c2410_defconfig
+powerpc                     kilauea_defconfig
+arc                     haps_hs_smp_defconfig
+sh                          kfr2r09_defconfig
+powerpc                     tqm8548_defconfig
+arm                              alldefconfig
+arm                         cm_x300_defconfig
+powerpc                    ge_imp3a_defconfig
+ia64                          tiger_defconfig
+arm                  colibri_pxa270_defconfig
+sh                              ul2_defconfig
+powerpc                 mpc8540_ads_defconfig
+powerpc                      ppc64e_defconfig
+openrisc                 simple_smp_defconfig
+arm                         axm55xx_defconfig
+powerpc                 mpc832x_mds_defconfig
+powerpc                     pseries_defconfig
+arm                        oxnas_v6_defconfig
+riscv                            allmodconfig
+powerpc                     ppa8548_defconfig
+arm                          imote2_defconfig
+sh                          r7785rp_defconfig
+ia64                        generic_defconfig
+powerpc                   currituck_defconfig
+riscv                          rv32_defconfig
+sh                           se7750_defconfig
+arm                        realview_defconfig
+powerpc                     stx_gp3_defconfig
+um                                  defconfig
+sh                   rts7751r2dplus_defconfig
+arc                     nsimosci_hs_defconfig
+mips                      maltaaprp_defconfig
+sh                           se7206_defconfig
+m68k                         apollo_defconfig
+sh                ecovec24-romimage_defconfig
+mips                    maltaup_xpa_defconfig
+arm                        mvebu_v7_defconfig
+arm                  randconfig-c002-20211123
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a001-20211123
+x86_64               randconfig-a003-20211123
+x86_64               randconfig-a006-20211123
+x86_64               randconfig-a004-20211123
+x86_64               randconfig-a005-20211123
+x86_64               randconfig-a002-20211123
+i386                 randconfig-a001-20211123
+i386                 randconfig-a002-20211123
+i386                 randconfig-a005-20211123
+i386                 randconfig-a006-20211123
+i386                 randconfig-a004-20211123
+i386                 randconfig-a003-20211123
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-Kind regards,
+clang tested configs:
+s390                 randconfig-c005-20211123
+i386                 randconfig-c001-20211123
+powerpc              randconfig-c003-20211123
+arm                  randconfig-c002-20211123
+riscv                randconfig-c006-20211123
+x86_64               randconfig-c007-20211123
+mips                 randconfig-c004-20211123
+x86_64               randconfig-a014-20211123
+x86_64               randconfig-a011-20211123
+x86_64               randconfig-a012-20211123
+x86_64               randconfig-a016-20211123
+x86_64               randconfig-a013-20211123
+x86_64               randconfig-a015-20211123
+i386                 randconfig-a016-20211123
+i386                 randconfig-a015-20211123
+i386                 randconfig-a012-20211123
+i386                 randconfig-a013-20211123
+i386                 randconfig-a014-20211123
+i386                 randconfig-a011-20211123
+hexagon              randconfig-r045-20211123
+s390                 randconfig-r044-20211123
+hexagon              randconfig-r041-20211123
+riscv                randconfig-r042-20211123
 
-- JH
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
