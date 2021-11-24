@@ -2,88 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5AF45B5B0
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Nov 2021 08:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78FF445B809
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Nov 2021 11:07:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbhKXHnX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Nov 2021 02:43:23 -0500
-Received: from cable.insite.cz ([84.242.75.189]:59602 "EHLO cable.insite.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240329AbhKXHnR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 24 Nov 2021 02:43:17 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id CC8CBA1A3D401;
-        Wed, 24 Nov 2021 08:40:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1637739606; bh=RR6fS1gjfUlrQEzKoGRlA/bN1+yJBJngh7CTRgr4QkQ=;
-        h=To:From:Subject:Date:From;
-        b=A+RIR01TV2JeH+q/F3Ny0Gxi9Ypw3vfJLBNhWOFWKNMFeJ5GGts5XbI727pf3mtEC
-         +4bEzFaWVzqoUO4TLg7zuPbGAqCatU7bTHtSVZ2KhXnUGXeMo0swQMvj/Gv/U7xTbv
-         2AK1sV01updND2zCXMMV8Vx2/pHUBy9d/EGmOjnw=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ZNvF64jlRblS; Wed, 24 Nov 2021 08:40:01 +0100 (CET)
-Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 0F2A9A1A3D400;
-        Wed, 24 Nov 2021 08:40:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1637739601; bh=RR6fS1gjfUlrQEzKoGRlA/bN1+yJBJngh7CTRgr4QkQ=;
-        h=To:From:Subject:Date:From;
-        b=FQXLSZ8PLRC1FhuH1JtUDu1ws/1pSdZbIajeq9o+AiDfnPI0IUtYpgJ2gfwTr0Tle
-         0YDt9zbDB5qyy+8lg7+Tp+4o88NJZf49QOrlznHVwT5ixBl71bMtQIMEOvLiOiG1ne
-         jv9kYNhaPzThLg5W2pVjbD72LN5XwzH64lf1QR+4=
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Subject: usb: dwc2: gadget: high-bandwidth (mc > 1) status?
-Message-ID: <ea4697fd-8911-3f79-540b-a03214678ccd@ivitera.com>
-Date:   Wed, 24 Nov 2021 08:39:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S233804AbhKXKKi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Nov 2021 05:10:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230515AbhKXKKh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Nov 2021 05:10:37 -0500
+Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D470C061574
+        for <linux-usb@vger.kernel.org>; Wed, 24 Nov 2021 02:07:28 -0800 (PST)
+Received: by mail-vk1-xa32.google.com with SMTP id b125so1119577vkb.9
+        for <linux-usb@vger.kernel.org>; Wed, 24 Nov 2021 02:07:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hjJ6H/aPkDXkuuq4jQBlpPVE2plVHVx9/+2fQcYfz/c=;
+        b=DxM3mTOrIbFQo5PJvMRYGAQ7CLl6GOzG4UFrLAqZGx1/QeWkCA3jy3rnxwe6NuJuVn
+         BGtgvFgk7Uh2l3Z6WHPBNu6NVNRtmBC40TEe/lNTXz2cFS2PCtMdsF+BQ44xddybuqOW
+         xl2RDQeLvuRxJzFjyG+1vGL6HFfcqW14sb406F0+ftbPKd31ahK92/KsJlAIhSsa5SfE
+         Ylq9vDUhfTseWn9ap7Lnl8RGnVUmEZFng8D73PaeYQrzh6lHH5PMM563fPobtbKk+9x8
+         qub6HvI6gj44GyTccZSpUuw+OdTEuZZqJG7e91vqetzpd4InshiKwaNeu90mvnWdY7b8
+         +jnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hjJ6H/aPkDXkuuq4jQBlpPVE2plVHVx9/+2fQcYfz/c=;
+        b=vmNysvmEWX/jtgZRD/RFX+VnVy1jzYuEeeaGlg3dZjlJa1ggEbGbFLxgxCAvKrDhhl
+         VoreyhrXuJ9LJrVPQa/ivCklCWLiWM3Lgrs/x2revXJcOgRp6PuYQK+vk3I8BkCgIn55
+         ENLaQbpu/bGy7SGjiUdLDd+VhLVXlfk+HVLKTuVXLFDJKwekxayfDBnUUeVze8aX4FSU
+         kMHGT6yencc7xI3+OVbsfN6NRMFmQ+IHHvOrkZNht6Lf1mC6fzI98Z92nuZKU89SvcG7
+         Srl7zNud06F+MxgEau5RA1MHi3A/eNY1WJvakv+3hNR3nceGU/LovghiDpfULaZWsn6r
+         YfIA==
+X-Gm-Message-State: AOAM530xrN1i6W783iSz5j9Ls/LOSd6b0v0WkjDYGzzHdO5X6WrF7QXz
+        XIOrvUCIrJ6XltZuGxgpq68VFV2FknXVTjFqZBLhCRR0U/8=
+X-Google-Smtp-Source: ABdhPJwDOUAH6we0c7aRDNRW2ewF5lx55/F2CZq1gIeBZqpep1Fk8iWKBGLFh/Qn94bNIPCHIg270T+4V6NyBUKCPwU=
+X-Received: by 2002:a05:6122:997:: with SMTP id g23mr24692646vkd.15.1637748447080;
+ Wed, 24 Nov 2021 02:07:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CAA=hcWTukyvM0Hz-VgW_NG7Whc3i7GLGySzJ0iGHvxo3O1f5vQ@mail.gmail.com>
+ <YZ3j9XKE0WjfkcsI@kroah.com>
+In-Reply-To: <YZ3j9XKE0WjfkcsI@kroah.com>
+From:   Jupiter <jupiter.hce@gmail.com>
+Date:   Wed, 24 Nov 2021 21:06:50 +1100
+Message-ID: <CAA=hcWQ+u5QcqJd-ZqZfZd93K0j0f7prxna0yhVi=AWQrxa_UA@mail.gmail.com>
+Subject: Re: Kernel 5.10 USB issues
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Minas at all,
+Thanks Greg.
 
-Please does dwc2 (specifically in BCM2835/RPi) support HS ISOC multiple 
-transactions mc > 1 reliably? I found this condition 
-https://elixir.bootlin.com/linux/v5.16-rc2/source/drivers/usb/dwc2/gadget.c#L4041
+> That is usually a hardware problem, the kernel can not disconnect a
+> device from the bus through software.
 
-	/* High bandwidth ISOC OUT in DDMA not supported */
-	if (using_desc_dma(hsotg) && ep_type == USB_ENDPOINT_XFER_ISOC &&
-	    !dir_in && mc > 1) {
-		dev_err(hsotg->dev,
-			"%s: ISOC OUT, DDMA: HB not supported!\n", __func__);
-		return -EINVAL;
-	}
+Understood, that is why I used the same HW to test both 4.19.75 and
+5.10.59, that should rule out the HW problems, right?
 
-But I do not know how the Descriptor DMA is critical and whether 
-disabling it will affect gadget performance seriously.
+> But, if 4.19 is working, can you use 'git bisect' between the two
+> kernels to find what caused the problem?
 
-I know about the RX FIFO sizing requirement (and TX FIFO too I guess), 
-the current default values can be increased for that particular use case 
-if needed.
+My bad, I have never used git bisect before, a quick google search did
+not help, the following command does not make sense at all, what are
+right commands to check 'git bisect'  to find what caused the problem?
 
-I am trying to learn if it made sense to spend time on adding support 
-for high-bandwidth to the UAC2 audio gadget  to allow using larger 
-bInterval and mc=2,3 at high samplerates/channel counts (sort of "burst 
-mode" similar to UAC3). When doing some CPU-demanding DSP it would help 
-to avoid the time-critical handling every 125us microframe. Both OUT and 
-IN are important.
+For 4.19 kernel
+$ git bisect start
+Already on 'linux-4.19.y'
+Your branch is behind 'origin/linux-4.19.y' by 13117 commits, and can
+be fast-forwarded.
+  (use "git pull" to update your local branch)
 
+For 5.10 kernel
+$  git bisect start
+Already on 'linux-5.10.y'
+Your branch is behind 'origin/linux-5.10.y' by 2311 commits, and can
+be fast-forwarded.
+  (use "git pull" to update your local branch)
 
-Thanks a lot for your expert advice.
+Thank you.
 
-
-Best regards,
-
-
-Pavel.
-
-
+- jh
