@@ -2,165 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A7745B2B4
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Nov 2021 04:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A02C45B4DC
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Nov 2021 08:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbhKXDkQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Nov 2021 22:40:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240852AbhKXDkQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Nov 2021 22:40:16 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253F0C06173E
-        for <linux-usb@vger.kernel.org>; Tue, 23 Nov 2021 19:37:07 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso2183594otf.0
-        for <linux-usb@vger.kernel.org>; Tue, 23 Nov 2021 19:37:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cSojQgWVI70xFELLZ9LKlswFsQwLPJCCjKLcraHpAns=;
-        b=DT6reKslBDazrRcxRvN7xpxlNXt0ujE1ASiyQXjVfRlovHjjtBHcFzok+Ujg4fYhBv
-         ryLGo4w7+JwD5vhQdZw/4NPDyEpeJF++10wr0vm7loxvvW6EMXgIbQcjC/Z1FNvgHvQd
-         eg/ZP9QivEaZ4WLwO0CjMK79P9zm0yt1/MK6PQotF+9Z7Hb6AHBy+Stbd28pT4pphxu1
-         bkmNPsEtqbi9dpnxQr825ScQ/NTI/E+lQ6VVCle/KSM9eYirVfwlcLthEyXrmLigbbja
-         SQcJlJ/7jhRFYqzB/y4YT3qvpz/wLRQ1YsEPMBXedqskO7DuWKHcAD/wUamJa/Ehqhnm
-         GT9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cSojQgWVI70xFELLZ9LKlswFsQwLPJCCjKLcraHpAns=;
-        b=zM6cF+jjDuOOaWFbNLFu1h0ADvsApXDCErvVshGqzkuwT886sPJOesjhrkJFfdFosm
-         5IDRwgLC8zj3dhSFY2X5KQD8fESMWEf0SFg4KbWcGad0DVE3Vd/GP2dUTKVOSMKyIVTL
-         4X9i7Em4k0qFX1duftgXcMF7fUInadOAhdf3HPHQxzJl2B38TJ38EgSStXR46Vvbz+87
-         aaaqpD6+ECy1grA9YtV0t7WSgxXHisvztbX4jrloKrwujCgIcPWBr5z059tSW9+E/kFJ
-         gWd4o3HPjCsS9QMLuxiXcvhk0Y7FKJwxTbTgluXHzjPIvtvsqkvKcsMgyty9SSYWB+VM
-         OtnA==
-X-Gm-Message-State: AOAM530/W+oyCBBx9JMudnnEmHVHwEGVprzEVs9fZg+JfghFe0rtLiD+
-        cnZ7DDXX80RoWFeBhwSx187JLw==
-X-Google-Smtp-Source: ABdhPJzzJsQtWENwW+RRtXMsmysbAYT6Nhcrzvh3DI3n8gae24yorvr4VWITF/xXj/IuFzSRZ68Avw==
-X-Received: by 2002:a9d:61d4:: with SMTP id h20mr9728757otk.202.1637725026311;
-        Tue, 23 Nov 2021 19:37:06 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id bj8sm3020632oib.51.2021.11.23.19.37.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Nov 2021 19:37:05 -0800 (PST)
-Date:   Tue, 23 Nov 2021 19:38:47 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Souradeep Chowdhury <schowdhu@codeaurora.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, pure.logic@nexus-software.ie,
-        greg@kroah.com, linux-kernel@vger.kernel.org, tsoni@codeaurora.org,
-        psodagud@codeaurora.org, satyap@codeaurora.org,
-        pheragu@codeaurora.org, rnayak@codeaurora.org,
-        sibis@codeaurora.org, saiprakash.ranjan@codeaurora.org,
-        quic_schowdhu@quicinc.com
-Subject: Re: [PATCH V1 1/8] dt-bindings: Add the yaml bindings for EUD
-Message-ID: <YZ2zx4/8+yCcls/G@ripper>
-References: <cover.1637639009.git.schowdhu@codeaurora.org>
- <472de38309fd5d773f903f7a0cfb4440ae1dd380.1637639009.git.schowdhu@codeaurora.org>
+        id S239962AbhKXHHg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Nov 2021 02:07:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39466 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230070AbhKXHHf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 24 Nov 2021 02:07:35 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8FB4960231;
+        Wed, 24 Nov 2021 07:04:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1637737466;
+        bh=BahlYYdOYxPLnTgI1Rc+nTu0PEzgJtejclHiwxWA4nU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rVGmrCd6Ti5x3xdRbD0tSNoRycEoQt0ZOg8XOvQ2J2t+HTiVSp+GuUrV96oMjGuik
+         WWfreS5dM+KcLBVvYzRqC95skEmy/TzaABiL6DR431QAxpjM8rBkq+hwNV7Rzu++o0
+         oVNi8gbpqE8B3Lln2GHrVDNQe8z8+KaSdVKUdCYs=
+Date:   Wed, 24 Nov 2021 08:04:21 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jupiter <jupiter.hce@gmail.com>
+Cc:     linux-usb <linux-usb@vger.kernel.org>
+Subject: Re: Kernel 5.10 USB issues
+Message-ID: <YZ3j9XKE0WjfkcsI@kroah.com>
+References: <CAA=hcWTukyvM0Hz-VgW_NG7Whc3i7GLGySzJ0iGHvxo3O1f5vQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <472de38309fd5d773f903f7a0cfb4440ae1dd380.1637639009.git.schowdhu@codeaurora.org>
+In-Reply-To: <CAA=hcWTukyvM0Hz-VgW_NG7Whc3i7GLGySzJ0iGHvxo3O1f5vQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon 22 Nov 20:28 PST 2021, Souradeep Chowdhury wrote:
-
-> Documentation for Embedded USB Debugger(EUD) device tree
-> bindings in yaml format.
+On Wed, Nov 24, 2021 at 11:46:06AM +1100, Jupiter wrote:
+> Hi,
 > 
-> Signed-off-by: Souradeep Chowdhury <schowdhu@codeaurora.org>
-> ---
->  .../devicetree/bindings/soc/qcom/qcom,eud.yaml     | 52 ++++++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+> I connected a USB bus between an iMX6ULZ and an 4G LTE modem, it was
+> running well in kernel 4.19.75. I've just upgraded kernel to 5.10.59,
+> the USB is broken, the USB drivers were disconnected / connected
+> repeatedly:
 > 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
-> new file mode 100644
-> index 0000000..724552c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/soc/qcom/qcom,eud.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Qualcomm Embedded USB Debugger
-> +
-> +maintainers:
-> +  - Souradeep Chowdhury <schowdhu@codeaurora.org>
-> +
-> +description: |
+> [12781.730889] usb 1-1: USB disconnect, device number 84
+> [12781.808317] option1 ttyUSB0: GSM modem (1-port) converter now
+> disconnected from ttyUSB0
 
-The '|' indicates that the formatting is significant, but it's not.
+That is usually a hardware problem, the kernel can not disconnect a
+device from the bus through software.
 
-> +  This binding is used to describe the Qualcomm Embedded USB Debugger, which is
-> +  mini USB-hub implemented on chip to support USB-based debug capabilities.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - qcom,sc7280-eud
-> +      - const: qcom,eud
-> +
-> +  reg:
-> +    items:
-> +      - description: EUD Base Register Region
-> +      - description: EUD Mode Manager Register
-> +
-> +  interrupts:
-> +    description:
-> +      EUD interrupt
-> +
-> +
+But, if 4.19 is working, can you use 'git bisect' between the two
+kernels to find what caused the problem?
 
-Drop one of these two empty lines please.
+thanks,
 
-> +  port:
-> +    description:
-> +      Any connector to the data bus of this controller should be modelled
-> +      using the OF graph bindings specified, if the "usb-role-switch"
-> +      property is used. See graph.txt
-
-This description does unfortunately not help me to understand what to
-point this port to.
-
-What's "the data bus"?
-
-Is usb-role-switch a property to be put in this node? Doesn't it need to
-be mentioned as a valid property?
-
-> +    $ref: /schemas/graph.yaml#/properties/port
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    eud@88e0000 {
-> +           compatible = "qcom,sc7280-eud","qcom,eud";
-> +           reg = <0 0x88e0000 0 0x2000>,
-> +                 <0 0x88e2000 0 0x1000>;
-
-The example is compiled with #address-cells == #size-cells == 1, so drop
-the four lone 0s from the reg.
-
-Regards,
-Bjorn
-
-> +    };
-> -- 
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-> of Code Aurora Forum, hosted by The Linux Foundation
-> 
+greg k-h
