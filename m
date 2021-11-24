@@ -2,92 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E6845A800
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Nov 2021 17:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F3A45B0DA
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Nov 2021 01:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237954AbhKWQh7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Nov 2021 11:37:59 -0500
-Received: from mail-io1-f45.google.com ([209.85.166.45]:46654 "EHLO
-        mail-io1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234175AbhKWQhy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Nov 2021 11:37:54 -0500
-Received: by mail-io1-f45.google.com with SMTP id x6so6946666iol.13;
-        Tue, 23 Nov 2021 08:34:45 -0800 (PST)
+        id S231779AbhKXAtz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Nov 2021 19:49:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230490AbhKXAtw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Nov 2021 19:49:52 -0500
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7495BC061574
+        for <linux-usb@vger.kernel.org>; Tue, 23 Nov 2021 16:46:43 -0800 (PST)
+Received: by mail-ua1-x931.google.com with SMTP id w23so1511700uao.5
+        for <linux-usb@vger.kernel.org>; Tue, 23 Nov 2021 16:46:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=dkwyOAxjB4BLYlEe+hztnb6yd1YhcCXkIympAWHIYao=;
+        b=TVD2S5g5pZOQN5ag/deYSLDd5sg90aXdIhwPfUC0FdXXqQWkg3mfCk37ppz4PPcMoY
+         iuX9FNmLZDwsZtVvKXEyhAEfKMAbELWGs6VG7wS6DlVqh+bF+0Eh2Z+qM+eLbyYv5TwL
+         UUjJQuGGEsmyvcwOpToFvAJsXq3xkNrV30EezehgQIyL6U8Mx2eI1Vz7DEWRjYB9AK/g
+         HoAalxVXRjYUfW45lRB87QT49sLDnSaE+3Px8t2fbXUSW7AV9kuBeKh8KbhWbmu+HT0X
+         dX47HEI0ciXLAfGDy+BU+ewHZJTQFvpWyOyWlaXptAQd3KY9V4mccFK3mSfx60cwOxyl
+         z1eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=S/Nde44oeUhb7hSJ7kbhEXm+wq52G5N4BXF/4ZQG150=;
-        b=wpdNW8Kk6Rp7XvEvl1gtgGwfFWMz6+Wb5QfMEAomZJl1KKHaXuGwhBpg7Ne+9e5/0m
-         6UxbW/WBmXbyLCijHv1jpRnI6FtABPh/G0zXPfYYL2xMn71SNFep7hVHwMxHPVT1KubA
-         QAUkNjNxJzMJ7BFUL1JvzVgmoLnKKlKX5SsKjyyH1gT66AdGPXJLyj1H8uYbK6vi3bjG
-         S7KJNUn3eJyX5o/0GgPD6bYV6LA+r94Ug+FdcTyzl3xFwWXPw1nrWkA8j4LNNPtXdFYG
-         b6OMHOq13J8xC2saJRqXXWz9zypF4iWV0HexIsfQwZ0JnGYiBq7S/+V1cwZ6j1WoBSLD
-         ydMw==
-X-Gm-Message-State: AOAM530vsWbGNAu9Nawd8ZrS8bjSIX0Jh/aMW/imJiMVeM2gFJRDX8FT
-        SWpcrf4OHU34SzSrbLA72w==
-X-Google-Smtp-Source: ABdhPJxY9LI3xE3uj4uGqRDh0ZTL7igLEhH7Y3XAJLEdoLGp1dS+1WAAgwPxTdmQNcb5QXHWLl91qg==
-X-Received: by 2002:a05:6602:3d3:: with SMTP id g19mr942776iov.104.1637685284901;
-        Tue, 23 Nov 2021 08:34:44 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id p14sm8656867ilo.39.2021.11.23.08.34.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Nov 2021 08:34:44 -0800 (PST)
-Received: (nullmailer pid 3442908 invoked by uid 1000);
-        Tue, 23 Nov 2021 16:34:29 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Souradeep Chowdhury <schowdhu@codeaurora.org>
-Cc:     rnayak@codeaurora.org, devicetree@vger.kernel.org,
-        pheragu@codeaurora.org, satyap@codeaurora.org,
-        linux-kernel@vger.kernel.org, sibis@codeaurora.org,
-        pure.logic@nexus-software.ie, psodagud@codeaurora.org,
-        tsoni@codeaurora.org, quic_schowdhu@quicinc.com,
-        linux-usb@vger.kernel.org, saiprakash.ranjan@codeaurora.org,
-        bjorn.andersson@linaro.org, greg@kroah.com,
-        linux-arm-msm@vger.kernel.org
-In-Reply-To: <472de38309fd5d773f903f7a0cfb4440ae1dd380.1637639009.git.schowdhu@codeaurora.org>
-References: <cover.1637639009.git.schowdhu@codeaurora.org> <472de38309fd5d773f903f7a0cfb4440ae1dd380.1637639009.git.schowdhu@codeaurora.org>
-Subject: Re: [PATCH V1 1/8] dt-bindings: Add the yaml bindings for EUD
-Date:   Tue, 23 Nov 2021 09:34:29 -0700
-Message-Id: <1637685269.640239.3442907.nullmailer@robh.at.kernel.org>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=dkwyOAxjB4BLYlEe+hztnb6yd1YhcCXkIympAWHIYao=;
+        b=QyyUKyBN/pdrlJrcfG9wn+l3N1qA7sbB80nCrYyzsmRYvG+EE5tEfCYdm58Ift5scg
+         zJfpKLF85LozumVDt89hsmD5JigieFHhjm25wMF3TkTlCVL0JwYq01V+eoIlsXpJXD91
+         TTpXS6AkMLYie+AkC4Ay+CzVndjIWG8SzY3L0quuKb3paKxbO3dYC4WwrAqHSweph2xC
+         mg+MXF9vmrKMIWjag3at5iS5urV/1k/1F8ItHNtlB3z6RPhPcFOFXwE+gcFr+zpnQiK3
+         gEaFfkrjRNzOtv21r/wftcmiObVLNFFEcsIPyjOKanwMDTS/FH8kY1NSP+C8Z/Eiy0qk
+         cH7w==
+X-Gm-Message-State: AOAM532NZa7kg31W037/DHoszevfkUAow85Un0JCm8WUoXGTwl6lOCMt
+        vKJBTaSEvXMPS5IMgcsPymi1ZRb8CTCfWx7zrKBChwOfn7k=
+X-Google-Smtp-Source: ABdhPJyoLHCMEtbDZjaP9Mowlwa6igyErH5SC+1CoSwbDjFPghVogwPyWGWg8H1oKXq4Mm1FarlzaSbbsSSmz2yMFo0=
+X-Received: by 2002:ab0:69c5:: with SMTP id u5mr2995865uaq.92.1637714802433;
+ Tue, 23 Nov 2021 16:46:42 -0800 (PST)
+MIME-Version: 1.0
+From:   Jupiter <jupiter.hce@gmail.com>
+Date:   Wed, 24 Nov 2021 11:46:06 +1100
+Message-ID: <CAA=hcWTukyvM0Hz-VgW_NG7Whc3i7GLGySzJ0iGHvxo3O1f5vQ@mail.gmail.com>
+Subject: Kernel 5.10 USB issues
+To:     linux-usb <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 23 Nov 2021 09:58:19 +0530, Souradeep Chowdhury wrote:
-> Documentation for Embedded USB Debugger(EUD) device tree
-> bindings in yaml format.
-> 
-> Signed-off-by: Souradeep Chowdhury <schowdhu@codeaurora.org>
-> ---
->  .../devicetree/bindings/soc/qcom/qcom,eud.yaml     | 52 ++++++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
-> 
+Hi,
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+I connected a USB bus between an iMX6ULZ and an 4G LTE modem, it was
+running well in kernel 4.19.75. I've just upgraded kernel to 5.10.59,
+the USB is broken, the USB drivers were disconnected / connected
+repeatedly:
 
-yamllint warnings/errors:
+[12781.730889] usb 1-1: USB disconnect, device number 84
+[12781.808317] option1 ttyUSB0: GSM modem (1-port) converter now
+disconnected from ttyUSB0
+[12781.839256] option 1-1:1.0: device disconnected
+[12781.959687] option1 ttyUSB1: GSM modem (1-port) converter now
+disconnected from ttyUSB1
+[12782.009476] option 1-1:1.2: device disconnected
+[12785.607012] usb 1-1: new high-speed USB device number 85 using ci_hdrc
+[12785.825218] usb 1-1: New USB device found, idVendor=05c6,
+idProduct=90b2, bcdDevice= 0.00
+[12785.833828] usb 1-1: New USB device strings: Mfr=3, Product=2, SerialNumber=4
+[12785.841222] usb 1-1: Product: Qualcomm CDMA Technologies MSM
+[12785.847049] usb 1-1: Manufacturer: Qualcomm, Incorporated
+[12785.852536] usb 1-1: SerialNumber: 674a1bcf
+[12785.932542] option 1-1:1.0: GSM modem (1-port) converter detected
+[12785.957103] usb 1-1: GSM modem (1-port) converter now attached to ttyUSB0
+[12785.975924] option 1-1:1.2: GSM modem (1-port) converter detected
+[12786.047708] usb 1-1: GSM modem (1-port) converter now attached to ttyUSB1
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,eud.example.dt.yaml: example-0: eud@88e0000:reg:0: [0, 143523840, 0, 8192] is too long
-	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/reg.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,eud.example.dt.yaml: example-0: eud@88e0000:reg:1: [0, 143532032, 0, 4096] is too long
-	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/reg.yaml
+What could I be missing in kernel 5?
 
-doc reference errors (make refcheckdocs):
+Thank you.
 
-See https://patchwork.ozlabs.org/patch/1558347
+Kind regards,
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+- JH
