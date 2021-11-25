@@ -2,105 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC92145D47F
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 07:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C4145D484
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 07:04:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346610AbhKYGFg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Nov 2021 01:05:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47762 "EHLO mail.kernel.org"
+        id S1347359AbhKYGHT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Nov 2021 01:07:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48102 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345878AbhKYGDg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Nov 2021 01:03:36 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 24FAE6108F;
-        Thu, 25 Nov 2021 06:00:24 +0000 (UTC)
+        id S1346423AbhKYGFR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Nov 2021 01:05:17 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 36C8F6109D;
+        Thu, 25 Nov 2021 06:02:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1637820025;
-        bh=3ctKRzNkGfDKJL56FA56OZ8Yhk44PDb09vDAtnXuLAo=;
+        s=korg; t=1637820126;
+        bh=Hq2zg3G6gApQm7rRrSncgDSyVbrLu4jCluqs3U/7Weo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bIQ0MHxqaQsVL5k7lRYiC3s76TtwMsSRV3bFb/vxi6rmDEbyA+NdeAfFDrFpVIfjF
-         Mf5SlMoBcoTPs8xx5Y9t3fP3UpwiEHetgxYaKPFJjsj8EueEgtFVNURebt1e9LwrKc
-         7t2PJOqdkVrlspfU5FdYcJtr1KHuU/irIfI/GXms=
-Date:   Thu, 25 Nov 2021 07:00:22 +0100
+        b=G6PG0C3m0+MqEnoXBwDA4tvmsymzaaW9TSxBIAFagkwvHU3tOaAqt2vsNq95v2SvQ
+         Tjcav11hF8Fz05+0Qcji/O2mqCdv+gHi0qED3L3HgHNPFZoxKXGfDCrDxCfT3uba7h
+         M+vB/UEhDQ2xRpC2WiUGZ0pDz5UTN83ZIDnxqTjs=
+Date:   Thu, 25 Nov 2021 07:02:04 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v1] usb: typec: tcpm: Wait in SNK_DEBOUNCED until
- disconnect
-Message-ID: <YZ8mdjPn39ekClLq@kroah.com>
-References: <20211124224036.734679-1-badhri@google.com>
+To:     klondike <klondike@klondike.es>
+Cc:     linux-usb@vger.kernel.org,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Kranthi Kuntala <kranthi.kuntala@intel.com>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        Mario.Limonciello@dell.com, Lukas Wunner <lukas@wunner.de>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 1/2] thunderbolt: allow vendor ID override for NVM
+ programming
+Message-ID: <YZ8m3E/06h/8lZcN@kroah.com>
+References: <8d29b41b-3590-c4b0-a2f8-fa34063bafb3@klondike.es>
+ <07bd1d90-c95f-0685-e1a8-2211c9dac251@klondike.es>
+ <YZ6D7vbyaf50DSCh@kroah.com>
+ <9b8ea990-558b-c2ba-100f-4e06c3a10f69@klondike.es>
+ <YZ6GdhKQgrFqZLyl@kroah.com>
+ <6520dbb5-d842-4ce1-c1e5-ad653eb3deca@klondike.es>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20211124224036.734679-1-badhri@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6520dbb5-d842-4ce1-c1e5-ad653eb3deca@klondike.es>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 24, 2021 at 02:40:36PM -0800, Badhri Jagan Sridharan wrote:
-> Stub from the spec:
-> "4.5.2.2.4.2 Exiting from AttachWait.SNK State
-> A Sink shall transition to Unattached.SNK when the state of both
-> the CC1 and CC2 pins is SNK.Open for at least tPDDebounce.
-> A DRP shall transition to Unattached.SRC when the state of both
-> the CC1 and CC2 pins is SNK.Open for at least tPDDebounce."
+On Wed, Nov 24, 2021 at 07:56:50PM +0100, klondike wrote:
+> El 24/11/21 a las 19:37, Greg Kroah-Hartman escribió:
+> > On Wed, Nov 24, 2021 at 07:32:29PM +0100, klondike wrote:
+> >> El 24/11/21 a las 19:26, Greg Kroah-Hartman escribió:
+> >>> On Wed, Nov 24, 2021 at 05:37:05PM +0100, Francisco Blas Izquierdo Riera (klondike) wrote:
+> >>>> Currently, the vendor ID reported by the chipset is checked before to
+> >>>> avoid accidentally programming devices from unsupported vendors with
+> >>>> a different NVM structure.
+> >>>>
+> >>>> Certain Thunderbolt devices store the vendor ID in the NVM, therefore
+> >>>> if the NVM has become corrrupted the device will report an invalid
+> >>>> vendor ID and reflashing will be impossible on GNU/Linux even if the
+> >>>> device can boot in safe mode.
+> >>>>
+> >>>> This patch adds a new parameter ``switch_nvm_vendor_override`` which
+> >>>> can be used to override the vendor ID used for detecting the NVM
+> >>>> structure allowing to reflash (and authenticate) a new, valid
+> >>>> image on the device.
+> >>>>
+> >>>> Signed-off-by: Francisco Blas Izquierdo Riera (klondike) <klondike@klondike.es>
+> >>>> ---
+> >>>> drivers/thunderbolt/switch.c | 9 ++++++++-
+> >>>> 1 file changed, 8 insertions(+), 1 deletion(-)
+> >>>>
+> >>>> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+> >>>> index 3014146081..a7959c3f3f 100644
+> >>>> --- a/drivers/thunderbolt/switch.c
+> >>>> +++ b/drivers/thunderbolt/switch.c
+> >>>> @@ -13,6 +13,7 @@
+> >>>> #include <linux/sched/signal.h>
+> >>>> #include <linux/sizes.h>
+> >>>> #include <linux/slab.h>
+> >>>> +#include <linux/moduleparam.h>
+> >>>> #include "tb.h"
+> >>>> @@ -34,6 +35,10 @@ struct nvm_auth_status {
+> >>>> static LIST_HEAD(nvm_auth_status_cache);
+> >>>> static DEFINE_MUTEX(nvm_auth_status_lock);
+> >>>> +static short switch_nvm_vendor_override = -1;
+> >>>> +module_param(switch_nvm_vendor_override, short, 0440);
+> >>>> +MODULE_PARM_DESC(switch_nvm_vendor_override, "Override the switch vendor id on the nvm access routines");
+> >>>> +
+> >>>> static struct nvm_auth_status *__nvm_get_auth_status(const struct tb_switch *sw)
+> >>>> {
+> >>>> struct nvm_auth_status *st;
+> >>>> @@ -391,7 +396,9 @@ static int tb_switch_nvm_add(struct tb_switch *sw)
+> >>>> * relax this in the future when we learn other NVM formats.
+> >>>> */
+> >>>> if (sw->config.vendor_id != PCI_VENDOR_ID_INTEL &&
+> >>>> - sw->config.vendor_id != 0x8087) {
+> >>>> + sw->config.vendor_id != 0x8087 &&
+> >>>> + switch_nvm_vendor_override != PCI_VENDOR_ID_INTEL &&
+> >>>> + switch_nvm_vendor_override != 0x8087) {
+> >>>> dev_info(&sw->dev,
+> >>>> "NVM format of vendor %#x is not known, disabling NVM upgrade\n",
+> >>>> sw->config.vendor_id);
+> >>> Patch is corrupted :(
+> >>>
+> >>> Anyway, module parameters are from the 1990's and should stay there.
+> >>> Please use a per-device way to handle this instead, as trying to handle
+> >>> module parameters is very difficult over time.
+> >>>
+> >>> thanks,
+> >>>
+> >>> greg k-h
+> >> Hi Greg!
+> >>
+> >> Thanks for your feedback. I'm a bit uncertain about what you mean with
+> >> a per-device way. Do you mean through the sysfs interface? If so how
+> >> to do so on device discovery time (which is what the Thunderbolt
+> >> driver does)?
+> >>
+> >> I'm surely missing something here so I would really appreciate a
+> >> pointer in the right direction.
+> > Ah, forgot about discovery time, you want this before the device is
+> > probed...
+> >
+> > Then what about the existing "new_id" file for the driver?  That's what
+> > it is there for, right?
+> Hi again Greg!
 > 
-> This change makes TCPM to wait in SNK_DEBOUNCED state until
-> CC1 and CC2 pins is SNK.Open for at least tPDDebounce. Previously,
-> TCPM resets the port if vbus is not present in PD_T_PS_SOURCE_ON.
-> This causes TCPM to loop continuously when connected to a
-> faulty power source that does not present vbus. Waiting in
-> SNK_DEBOUNCED also ensures that TCPM is adherant to
-> "4.5.2.2.4.2 Exiting from AttachWait.SNK State" requirements.
-> 
-> [ 6169.280751] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
-> [ 6169.280759] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
-> [ 6169.280771] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
-> [ 6169.282427] CC1: 0 -> 0, CC2: 5 -> 5 [state SNK_ATTACH_WAIT, polarity 0, connected]
-> [ 6169.450825] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
-> [ 6169.450834] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
-> [ 6169.930892] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
-> [ 6169.931296] disable vbus discharge ret:0
-> [ 6169.931301] Setting usb_comm capable false
-> [ 6169.932783] Setting voltage/current limit 0 mV 0 mA
-> [ 6169.932802] polarity 0
-> [ 6169.933706] Requesting mux state 0, usb-role 0, orientation 0
-> [ 6169.936689] cc:=0
-> [ 6169.936812] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
-> [ 6169.937157] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
-> [ 6170.036880] state change PORT_RESET -> PORT_RESET_WAIT_OFF [delayed 100 ms]
-> [ 6170.036890] state change PORT_RESET_WAIT_OFF -> SNK_UNATTACHED [rev2 NONE_AMS]
-> [ 6170.036896] Start toggling
-> [ 6170.041412] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
-> [ 6170.042973] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
-> [ 6170.042976] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
-> [ 6170.042981] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
-> [ 6170.213014] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
-> [ 6170.213019] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
-> [ 6170.693068] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
-> [ 6170.693304] disable vbus discharge ret:0
-> [ 6170.693308] Setting usb_comm capable false
-> [ 6170.695193] Setting voltage/current limit 0 mV 0 mA
-> [ 6170.695210] polarity 0
-> [ 6170.695990] Requesting mux state 0, usb-role 0, orientation 0
-> [ 6170.701896] cc:=0
-> [ 6170.702181] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
-> [ 6170.703343] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
-> 
-> Fixes: f0690a25a140b8 ("staging: typec: USB Type-C Port Manager (tcpm)")
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 4 ----
->  1 file changed, 4 deletions(-)
+> "new_id" would work well if the blacklisting was for the whole driver, but currently the driver accepts the corrupted controller just fine but disables the nvm flashing functionality for any vendor IDs it considers inappropriate.
 
+Then fix the devices to do not have corrupted ids!  :)
 
-<formletter>
+Seriously, what does other operating systems do with these broken
+devices?
 
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
+> The only other approach I can think off is to add a sysfs entry when
+> the vendor missmatches the use can use to try force enabling flashing
+> for a specific vendor ID and have that create the nvm entries if not
+> already there. Do you think this would be better?
 
-</formletter>
+I think it would be best to fix the firmware in the devices.  What
+prevents that from happening?
+
+thanks,
+
+greg k-h
