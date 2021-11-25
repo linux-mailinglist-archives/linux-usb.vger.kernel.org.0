@@ -2,113 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D823245D86F
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 11:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1DF45D92A
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 12:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354590AbhKYKxK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Nov 2021 05:53:10 -0500
-Received: from mx1.tq-group.com ([93.104.207.81]:10607 "EHLO mx1.tq-group.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349586AbhKYKvJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Nov 2021 05:51:09 -0500
+        id S234144AbhKYL0h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Nov 2021 06:26:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238332AbhKYLYf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Nov 2021 06:24:35 -0500
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E056C0613D7;
+        Thu, 25 Nov 2021 03:16:23 -0800 (PST)
+Received: by mail-ua1-x92d.google.com with SMTP id az37so11462763uab.13;
+        Thu, 25 Nov 2021 03:16:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1637837278; x=1669373278;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=fEkDeqCTQwU1wd12F0TZVBp7DnTrrEhTrR0RRR/DU88=;
-  b=Uv43uCLMTYYrJQ3WPvemel1cYQPNBFpkI+awRABx1l0FOdfrlxZMxFQi
-   dbg36BicCgwizJYh5t+iD6DjOEYfl1B4aIpBHagGquY5ae1nSnMQrg3DY
-   MautTFBdzxZGgrGEzmVZ6RShfUz939s2WH9ctwEGujWIEo8QwzBAmcoYm
-   LL5XTbMvfeDZrZd1G0VKvR7MC6CmCpcRXTyfgKYBbJcdVzEloW7/dOZGU
-   OWRj1mlyi0tn6Zq+hjehMhq5pwgFbQdg6zDeJ0CzkKKWhz3jQ3JshRP9M
-   e6ktj51c6UxR0xQdxVjUuSoLoXh4qd2h59fTZNjJ/qajvDFL4krsUr1fQ
-   w==;
-X-IronPort-AV: E=Sophos;i="5.87,263,1631570400"; 
-   d="scan'208";a="20673323"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 25 Nov 2021 11:47:57 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 25 Nov 2021 11:47:57 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 25 Nov 2021 11:47:57 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1637837277; x=1669373277;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=fEkDeqCTQwU1wd12F0TZVBp7DnTrrEhTrR0RRR/DU88=;
-  b=U6IahE7I/VhZqnhnm9j9eYpwWz+tA7HGcihAW0rY4r1oaiWnylfacI75
-   LwVtl7//lyQIZUvSLitIyfoGYOikndyJ2wzDGQsnaBb4e5n+KNfbJ2jUp
-   wUh4+AURlOrbSe6QLpgmlMAcHOuEccWyaY2SRYxkFHIP1aqh2pN9oYO00
-   TTAAGuR8R4amloKyBXdnYEzJjekPPdh+/N+jhGwE4xY5lYuO2HRgBPCem
-   T5szdxYJe4yPvo10IoHmwgZSRDaVKvaueaJxgEZlVvhzNVwIj32hfl5xG
-   tnB0r2eX6fqCgBz9+wavsxdaaDve/0mSciBkmV5OaeWhc9grQtsqYI9FC
-   g==;
-X-IronPort-AV: E=Sophos;i="5.87,263,1631570400"; 
-   d="scan'208";a="20673322"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 25 Nov 2021 11:47:57 +0100
-Received: from steina-w.tq-net.de (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 285DF280065;
-        Thu, 25 Nov 2021 11:47:57 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH 1/1] usb: dwc3: drd: Add support for usb-conn-gpio based usb-role-switch
-Date:   Thu, 25 Nov 2021 11:47:48 +0100
-Message-Id: <20211125104748.1418934-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.25.1
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=/sJ5B3jXlGyBILLnUHy77HmaGaWwuAA8bSDGuBZ2r1M=;
+        b=NLJj0axX1bPFOQD4ljA9ti4yWQN2TG00NEUMABfCAJWmEZZbY8nuyZODDYjNb1sMGb
+         jI0ah4U1VsTDvxRzxKIvr3UQygTogZvU1FTvIa+apmmfQ7KVMoOs0zSi6Tiou/FAk3tr
+         KsFXlxQ89wgymbYEwO+xNbITP4k3cXsn51dyAhdcWNfskmP0j8RR21SxJgooKKJxmZKC
+         P6HPQdelxKfuJTG9aJXUhNJlYjtsYBhmF1BWcW66BF/AzvTBDQUkcjZKmDbpdMBPCVUO
+         ZAvUy0eB45N3oubNCUY+6zCowLRjACqhCwwxLabC9rPZORI34CEhhOGXW/uJu5gvwXAy
+         xbzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/sJ5B3jXlGyBILLnUHy77HmaGaWwuAA8bSDGuBZ2r1M=;
+        b=ItJoJtiSrn7SLLE2dXEhedbeDiYQxpqDJHGekrP1XCUauAq/3lOpgyYpfDbWL9S9Kw
+         4aTpGZ7kagNbSskoUclfAGftcfSteQEoU9VWteaOR44DtyqetT4igWxYqHjQqfJXi85Z
+         a9JsRzpKmYU+8MCCbNxQYToVjIeKs5G+FBfw+SSy9ZDZjBB/fZqThi6sM4IzMOfQHnP3
+         YYNQflHe9PgyYAF1+CO+GepkkyoFzZf9clWKdmNM96CuO68KVYqvPzV4BtJdj+39cep/
+         14WAC06CMgIBJAdO/+J0MdCxnsccBOw60w1Fji15f1hgFt2BJcnGGMUiqBvLuJoY9v1u
+         NKGA==
+X-Gm-Message-State: AOAM530BV+4nHyhSNHNAqlIOHOqHh0rNtYxETjpDFT/sJmjUikvwCm99
+        2/M+D0rh5tzCX2+oOvFG3HxYixa+dbYh+6vOfZ0=
+X-Google-Smtp-Source: ABdhPJz2Sy6YfkZRX6R5PSTBGald8FDZB5YsRR3m2r+z+Fe2P6LBW+Oo8PoF2CfeAiCsGiYKYv+L0Xx6STxShWUa4Gc=
+X-Received: by 2002:a05:6102:358b:: with SMTP id h11mr7950623vsu.24.1637838982783;
+ Thu, 25 Nov 2021 03:16:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210921113754.767631-1-festevam@gmail.com> <20211125083400.h7qoyj52fcn4khum@pengutronix.de>
+In-Reply-To: <20211125083400.h7qoyj52fcn4khum@pengutronix.de>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 25 Nov 2021 08:16:12 -0300
+Message-ID: <CAOMZO5BXGxXKZAq2jeJ=yRww+Hoft_9=6jUheM92w5majQ1UdQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: chipidea: ci_hdrc_imx: Fix -EPROBE_DEFER handling
+ for phy
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     peter.chen@kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Marek Vasut <marex@denx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Heiko Thiery <heiko.thiery@gmail.com>,
+        Schrempf Frieder <frieder.schrempf@kontron.de>,
+        stable <stable@vger.kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Gavin Schenk <g.schenk@eckelmann.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-usb-conn-gpio devices are a subnode of the USB interface controller, which
-needs to be populated.
-This allows having a non-type-c connector providing dual-role.
+Hi Uwe,
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
-This change is inspired by commit f67213cee2b3 ("phy: tegra: xusb: Add
-usb-role-switch support") for tegras xusb driver, which also does
-populate the connector entry.
+On Thu, Nov 25, 2021 at 5:34 AM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> With an old style device tree using fsl,usbphy
+> devm_usb_get_phy_by_phandle() returning ERR_PTR(-EPROBE_DEFER) results in
+> ci->usb_phy =3D ERR_PTR(-EPROBE_DEFER) in the chipidea driver which then
+> chokes on that with
+>
+>         Unable to handle kernel paging request at virtual address fffffe9=
+3
+>
+> Handle errors other then -ENODEV as was done before v5.15-rc5 in
+> ci_hdrc_imx_probe().
+>
+> Fixes: 8253a34bfae3 ("usb: chipidea: ci_hdrc_imx: Also search for 'phys' =
+phandle")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
+> Hello,
+>
+> this patch became commit 8253a34bfae3278baca52fc1209b7c29270486ca in
+> v5.15-rc5. On an i.MX25 I experience the following fault:
+>
+> [    2.248749] 8<--- cut here ---
+> [    2.259025] Unable to handle kernel paging request at virtual address =
+fffffe93
 
- drivers/usb/dwc3/drd.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Sorry for the breakage.
 
-diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index d7f76835137f..281d8a310c89 100644
---- a/drivers/usb/dwc3/drd.c
-+++ b/drivers/usb/dwc3/drd.c
-@@ -9,6 +9,7 @@
- 
- #include <linux/extcon.h>
- #include <linux/of_graph.h>
-+#include "linux/of_platform.h"
- #include <linux/platform_device.h>
- #include <linux/property.h>
- 
-@@ -559,6 +560,13 @@ static int dwc3_setup_role_switch(struct dwc3 *dwc)
- 	if (IS_ERR(dwc->role_sw))
- 		return PTR_ERR(dwc->role_sw);
- 
-+	/* populate connector entry */
-+	ret = devm_of_platform_populate(dwc->dev);
-+	if (ret) {
-+		dev_err(dwc->dev, "DWC3 platform devices creation failed: %i\n", ret);
-+		return ret;
-+	}
-+
- 	dwc3_set_mode(dwc, mode);
- 	return 0;
- }
--- 
-2.25.1
-
+Dan has sent a fix for this:
+https://www.spinics.net/lists/linux-usb/msg219148.html
