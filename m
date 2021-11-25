@@ -2,227 +2,198 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7DE45DB52
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 14:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7128D45DBA6
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 14:50:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348505AbhKYNm0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Nov 2021 08:42:26 -0500
-Received: from de-smtp-delivery-102.mimecast.com ([194.104.109.102]:30426 "EHLO
-        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345435AbhKYNkY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Nov 2021 08:40:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1637847431;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fNo3YWpW2c563kOARm5PjIPIueQ6JJcH8UrrKQ87xaY=;
-        b=Ss30sxuFyaKBAE/ioxnlSJd3htcoIZixt4LoPOE3RI7eAA3g8j0JI66GFElZqtJp9rtarZ
-        S+5cIGmBUEQEXVCkhaJ75GYKdZ4sd6HAeh1GJEZ6bSPGGg/cDbGiFyMHBgXUo6JDl5RKw+
-        r8bGr+bTv2IcqPGfiHQz+V1pR/hHlD4=
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com
- (mail-db3eur04lp2056.outbound.protection.outlook.com [104.47.12.56]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-31-3DeljtpTNbeygDyR8PPnzA-1; Thu, 25 Nov 2021 14:37:09 +0100
-X-MC-Unique: 3DeljtpTNbeygDyR8PPnzA-1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wp9/1Rn1lIE6hM7LizwVbJslTm8x1BiTNgs3zoerHvZVZO4Jf4uyhMCUhIdQmtuuASaJlvbrFpKjuQYKpjpjBupIKgIzJAVT9z/HvZZm3LWxgJsbcEI74KGDRihGCJ7Xx194W+48hewkC5g7jmkMEN5z0jpJBerfB9/gtmtE2U0S31wri2CA0beDP2uI9AkO2Jok8GbivgzD3v3ycAtTjApQQ1vPNvPKhfbFP6BW2zziI4kCkSWD+AHOKgUyu0Vh77rvnLAHAZesJXFLR1A2xRwHzp2qzTPfscuiGOo1qASJnMo4GdZ1kvYwh20Uh/8vWIsvhxpTma0mgOCyEg8/3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fNo3YWpW2c563kOARm5PjIPIueQ6JJcH8UrrKQ87xaY=;
- b=ZnNsrv/tqsm/YLggSExPQpsU35JCWuGqzF1s0urutcaBdUI/oitEXe6GJ2IJ6OkAqWvTd1jESA3OR1TGq0qpV0k6eaVpADPk/32eVoddK/btUGTenGq8s2TY1klt494pQ7x9kQyvV7MFwvZPcNtcAnTJncKQ7BiTy6YfPW9JxrxQQ5mzSLZ5BhlrrDwCxO/mRe6BaMge+Ar6jlvUjR74j5yKAYMipVe4zg8T6U0YIE81cyW3inc8So2Xpv5yjadS819DtO3hRaPSpctl+Bc/zvtkPbXwTenvkG2jH8TBorscUl2EZyEwCXywlA+uSyiVFQAMzU0HwnnOIeAhfwMVtw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from DB7PR04MB5050.eurprd04.prod.outlook.com (2603:10a6:10:22::23)
- by DB8PR04MB7019.eurprd04.prod.outlook.com (2603:10a6:10:12b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.22; Thu, 25 Nov
- 2021 13:37:08 +0000
-Received: from DB7PR04MB5050.eurprd04.prod.outlook.com
- ([fe80::e9d6:1be9:d046:af1]) by DB7PR04MB5050.eurprd04.prod.outlook.com
- ([fe80::e9d6:1be9:d046:af1%7]) with mapi id 15.20.4734.022; Thu, 25 Nov 2021
- 13:37:08 +0000
-From:   Oliver Neukum <oneukum@suse.com>
-Subject: Re: [syzbot] WARNING in usbnet_start_xmit/usb_submit_urb
-To:     syzbot <syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com>,
-        kuba@kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-References: <000000000000a56e9105d0cec021@google.com>
-Message-ID: <8b395185-b18c-caf9-0418-78e96797b474@suse.com>
-Date:   Thu, 25 Nov 2021 14:37:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
-In-Reply-To: <000000000000a56e9105d0cec021@google.com>
-Content-Type: multipart/mixed;
- boundary="------------A17BA6B9593651BEE9AA1B58"
-Content-Language: en-US
-X-ClientProxiedBy: AS9PR06CA0291.eurprd06.prod.outlook.com
- (2603:10a6:20b:45a::15) To DB7PR04MB5050.eurprd04.prod.outlook.com
- (2603:10a6:10:22::23)
+        id S1355438AbhKYNxY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Nov 2021 08:53:24 -0500
+Received: from mail-io1-f72.google.com ([209.85.166.72]:44808 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349691AbhKYNvY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Nov 2021 08:51:24 -0500
+Received: by mail-io1-f72.google.com with SMTP id 7-20020a6b0107000000b005ed196a2546so6209714iob.11
+        for <linux-usb@vger.kernel.org>; Thu, 25 Nov 2021 05:48:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=U8vFIWHLsJ0UbLdWhsvz0+go7l/V5Qz+kuHc7wY7974=;
+        b=gyQ0MZwkjHvlJfgBVHsdyds7w661DOAiswMqQ2vMwl8EkbzdYJTqHc2wTFnf+zH8bH
+         LQ7Q8a4TKm6luZj4RYQn8ZV55DXqXfiKQ0JgwcCustsViRKxoNMf1gIYo9FoInVcqxQA
+         ZQFVjoChZYI/a85imPHkA7k2/RgotVg4Xh1qbYzX7c7RZME7ARBI95TqPovxWoDzKG7o
+         frLEryVCiE6B2bUIyY+YDKKLhPJP+vuSaleVW7728sEdX/ZMJDENCPc55QLJedYTM6Zo
+         BKhyRwiAPn0hlzraQJkVGaDBidvGdVinprYM/jGZJv+EbmRGCqEGykrB/3WbZSVKvjvA
+         SWrA==
+X-Gm-Message-State: AOAM533W75MkfTRTx15mrClK1qJCgTgnuLByOyVC5eCiUsotIGoNrC4x
+        68IvJSiWH9l0xcOUzmsgoOmsjuzDqbk2y7KR+Jh90rgAsfii
+X-Google-Smtp-Source: ABdhPJxRN3SL61u+kn0LBsOpEgb2xe8nE2f+N+nEeOCNlTB3t3nElcXZ8CcDuXPBqbLP+eM5gfnaUIx2cTo7kHbbrdC4VrrfM+nd
 MIME-Version: 1.0
-Received: from localhost.localdomain (2001:a61:425:1e01:37df:5ff4:225f:85e0) by AS9PR06CA0291.eurprd06.prod.outlook.com (2603:10a6:20b:45a::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22 via Frontend Transport; Thu, 25 Nov 2021 13:37:07 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0011fdc6-cac0-411e-ac40-08d9b018ad0e
-X-MS-TrafficTypeDiagnostic: DB8PR04MB7019:
-X-Microsoft-Antispam-PRVS: <DB8PR04MB7019184F6F30A81EC5A3426CC7629@DB8PR04MB7019.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iIyB8ifZilsAx4xx5pfrt7DnyHewS5GAFJ1SgvPJwiNmuP/cn9YdKigzbYk/AiAp6gYSerM6vJAY4KgqpHV+zT38G70JRwS8KlUmElKerdVxOoJ4xKm38trnXf2hpSsqgdu+1m2H/U0MtaLkKYHkO4X44dRitEbQQW/GYs629is4VsAhqr583H0SB/6aMY3WhLksGrdpDEalyQtedSCoVwmS68AO5Bewh4fCqHR66k8JPrDe6g9JhTqquGYQBusenuJAHONEHoF6G4u63w31q2cTafVeBHv67rvb6gmn5jyehxYCyPzv4Lg3ZD2nnFlYKD+Kg/3+W5zmNLKT4XJvaLCKHxkVRiCPsBSrpN4bYtvaQ0TxGdKyh+73WT32fjvQ5Z7iajRdxR5RJipBVVycKYWx8xL+XhVCHOp+/0L7mFRhmzy3PbKPqSHxhRaE3bloSCbsq8AHtaC36904siMnV3n3y+oGLQVIjOgkathUflGRcFAlt+czAMDgzrTccSL6SW4o/zsfu2/GdYAXCR7x4ffdYMQtFJL1DJPqTUJF0iPdAm3sGWgCnYtomEOPgBgiST0MvLNH5fhckp2PD3TlGEY6gDedEPpHL4RdwUSI6bRG1VEN3i9rJPHsgb4kAvsMWK/AtDyCi6piKVQXJtzHsdLdP0rx5N4zbxxSFZhKqK3PSy40LEZvE2i9x7DKrowu3rBVffdXgXd+WPMH6YaqrMb5hObh6TRewmhkksO2Hxf2neEpQ04tWZPEaW75ehiW8Gs9CoXDK7Ey3ppUs+J+TEAGoOgryko/YcBL20LhLqUuSVXEaOBSXalsbUYI+QumrYMGluPaiHfXoD36a99LziAq4glZ4Pbmx6//TE9/s2PHCbxSrfw6G1icaCy0LYkk
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5050.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(5660300002)(31696002)(966005)(6486002)(316002)(508600001)(31686004)(86362001)(66946007)(8676002)(38100700002)(53546011)(66556008)(6506007)(66476007)(235185007)(6512007)(36756003)(2906002)(186003)(2616005)(8936002)(33964004)(99710200001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z29rck5DazdPNlNkbmMwUktPQVlhdDFwbzRhV1Q0MnA4V25oVjE1YytkM1dC?=
- =?utf-8?B?aWFMdnpwZFpmS0VQSSs1UVI0WDF3b1JqaXdaNWFxZy9MaEtvOXdXOXp6emdt?=
- =?utf-8?B?WmJkdnRLNXFDcDVRa1RXc09QeHZyM0s2ZGI2MlZnRGxxZEU1VnlnR2YyQUhG?=
- =?utf-8?B?Ynd3S3NGaUcrbTdNTXZndzZnMlc5YzJkUnNzMWdmNHl2Zk55MHd1TjhZK3hi?=
- =?utf-8?B?cXVrNGp4Wjh5Wm0zeEpvM0Rhem9zOHcrdGxXMThVTklXZmlqMjRGTW9ZVzZ4?=
- =?utf-8?B?aXhEbFZFaVdzTmE2ZTRwSE1HRGxvUzJlK0MzOHl6aE40cmFkTWlrSnFteE9Y?=
- =?utf-8?B?eEE4NGZJMEZ6ZURnUEZrRVI0c3JWaFczVFpnUjVOUk1tcUtlQk9SUEZtQzRQ?=
- =?utf-8?B?dldKSCtwUTBvbFhhbWhLLzZ0cGxlVG43NC91SzQxWmNJNzBFc2hjVUN6Q01D?=
- =?utf-8?B?TjVPM0hYWlNVMDdwSm1DWi9EblZRaDBqT0RtVDZsa0hFWG1JblBReUhWamFJ?=
- =?utf-8?B?dEZ5dllJT1QyV0RkZEZBTWJrdFd0N001eHNxTmhiNkJ3ajlIVVE1UmJIN3pn?=
- =?utf-8?B?WXkzbmdacW9WQnpVSkN5SG5VTnMzTTBFOFBZaDBoKzhicG1yY0FsWklOZmtK?=
- =?utf-8?B?ZWo2cG5RWVJqM0wwaWgzSGpEbDF4TWphV0ZSWWtzV1VDTHdoa0JlMkJiMEND?=
- =?utf-8?B?dnNIV28weVg5Ymg4QTRRdDFGUWZNRFJCVDZLWFE3UjBkdENrdEQzckkwYWJy?=
- =?utf-8?B?L3BzVTV6N2d5dFhCbXg1Zm1ybVRXVDdyL21RWmlQT3BQSVJ6WStydEdIUEJZ?=
- =?utf-8?B?YTZWNjFyRXFETmQyN0dMbkZUM0kwT3pFRVRiWGZyS2d3YkUwTUFTd0hOdk1B?=
- =?utf-8?B?bUxMa00rR29vQW8rcWNaY1FHS0o3U0s2Y0Z0VWdPZWhSNDFFL2wrZlB4MXZz?=
- =?utf-8?B?Z0pTZEpHYmZGbWlqVUg1YkJUanZKQWNMaElDTm1aRmxsN2s4SEN6L09DWnRh?=
- =?utf-8?B?Y2V4ZU5GYkRVUFJnRnJiVzQ4Q1czYXNJYzJkdEI1YXo4UnZObmRpMHYzWGZE?=
- =?utf-8?B?VDNPbVBKOW1wSWhtdVFsUEI2UjFYZWtFN3dOVE1MMG02UEFNNzlNM0ZVNnpY?=
- =?utf-8?B?SlRrR2pRdWQvdU9UcEE0OWh6Zy82a1BLK2w3UEZ2a2dPdzJuOXdNUGM0all1?=
- =?utf-8?B?RTNwaWhCTnZZeWdNS2N6OXp0OTc3emZTQ2dEWDNFRTFjUGx0b2tpeld3WXAz?=
- =?utf-8?B?YWxuaFZnVDArUUJQakRWaGY2YytsWThEdFNkdGhpaXA2ZCs2Rmw1YmQyN0NG?=
- =?utf-8?B?b1QzS1F4OVk2c05CTWFZdzUwNGgxOTQ0QTMvV3ZlanArb1ZtR1YwaFZZdzZu?=
- =?utf-8?B?L0UrSTdPKzBva2FRRks2WEtrdG5QQ2YyT3V4Y1lYaUh4d2tZQWFsKy8vaCtr?=
- =?utf-8?B?aDh5eDl5aWQxaEZuOHVXTmQ0WlZHWkFsZFhJNUhPZFdCT2lYVWJBcHd3ejNr?=
- =?utf-8?B?TzRCZzlXUm9Wczk4RlJmRXhtWUxLRUU4SEd4TEVTaWxRWE1CckZodDROMkhr?=
- =?utf-8?B?U21NelZpa0h6c1pERThUcXJkcVA4ZjgxelBIMllMMGRqeDNXeWRnWG92Rm9t?=
- =?utf-8?B?eUF0K1BTZUFPUk10ZFl6T1dDS1BnODl6c1cvZnpyTjFwWXFOZDBqanVtQXZU?=
- =?utf-8?B?VzZzL00zRkFXVDZNWVo1OHR1RlRReHRPbXVySERqOXE2L2ZpY3BkTUdJTm9u?=
- =?utf-8?B?cGZnVkRuaGlxa2wrMzRpejJnS0FzYStieVhJRnVxVUpDaUY0ZFo3ZTFhclpM?=
- =?utf-8?B?QkNVdkw1NkpyRFBNb2d6YWtPaHkrS1FYbFMrZEZ6WVBHSmRteUtkK2Y0enlx?=
- =?utf-8?B?RncrcUdtSVBJL0Z3VXhtNGZJc0M3Y2E2OUcxQzNNL1hiSzV4MUF6aHY5eXlJ?=
- =?utf-8?B?Z251SFEyWWE1WG1LRWw0K1dMcmpCbGgyV1RDSi9BR2gxZFcyVUwyT0R2SzVP?=
- =?utf-8?B?SUVMOXNUT1YzZlpMcFZoNnZEQ0pkK3ZMblZ0M012blYrbGdQNFBWMW5JUUlO?=
- =?utf-8?B?eFR4Q0xkbURJTEUxVnFESVIyME9oanlpTG5IaHdZUGwwL2xYanBTcTVpSElP?=
- =?utf-8?B?T2NheXdJbjZZWFVjNXA4cjRoUW9BSUNJMUhUbGNMWFkydWEwQmxFaEFkSkw1?=
- =?utf-8?B?dmpYeml1NEd6N2NCQ0QzbnBTOHhpbW5jOTFWZVdLb1hlQ3RqcXRPem9KeFFO?=
- =?utf-8?Q?mD2VYyFOJMWL3PUO/p1MBOBQSNCb2MvVK9RdojmyaQ=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0011fdc6-cac0-411e-ac40-08d9b018ad0e
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5050.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2021 13:37:08.1657
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NhzsUOHsEDw6HDgeihmKU5jxI+pAVvuLDhuVweE+ediKR8Wwla3Wc2gfjDvC4H5S8Vw2+AA+vVCZ7SuGdUxVWg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7019
+X-Received: by 2002:a02:ceb9:: with SMTP id z25mr29076419jaq.121.1637848093044;
+ Thu, 25 Nov 2021 05:48:13 -0800 (PST)
+Date:   Thu, 25 Nov 2021 05:48:13 -0800
+In-Reply-To: <8b395185-b18c-caf9-0418-78e96797b474@suse.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c8364505d19d390a@google.com>
+Subject: Re: [syzbot] WARNING in usbnet_start_xmit/usb_submit_urb
+From:   syzbot <syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com>
+To:     kuba@kernel.org, linux-usb@vger.kernel.org, oneukum@suse.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---------------A17BA6B9593651BEE9AA1B58
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+Hello,
+
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KASAN: slab-out-of-bounds Read in usbnet_validate_endpoints
+
+usb 6-1: config 0 interface 0 altsetting 0 endpoint 0x2 has an invalid bInterval 87, changing to 10
+usb 6-1: New USB device found, idVendor=0547, idProduct=2727, bcdDevice=e6.98
+usb 6-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 6-1: config 0 descriptor??
+==================================================================
+BUG: KASAN: slab-out-of-bounds in usb_endpoint_xfer_bulk include/uapi/linux/usb/ch9.h:518 [inline]
+BUG: KASAN: slab-out-of-bounds in usb_endpoint_is_bulk_in include/uapi/linux/usb/ch9.h:573 [inline]
+BUG: KASAN: slab-out-of-bounds in usbnet_validate_endpoints+0x22a/0x260 drivers/net/usb/usbnet.c:102
+Read of size 1 at addr ffff88810ded4223 by task kworker/0:0/5
+
+CPU: 0 PID: 5 Comm: kworker/0:0 Not tainted 5.15.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0x6c/0x309 mm/kasan/report.c:256
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ usb_endpoint_xfer_bulk include/uapi/linux/usb/ch9.h:518 [inline]
+ usb_endpoint_is_bulk_in include/uapi/linux/usb/ch9.h:573 [inline]
+ usbnet_validate_endpoints+0x22a/0x260 drivers/net/usb/usbnet.c:102
+ usbnet_probe+0x1ab9/0x2620 drivers/net/usb/usbnet.c:1795
+ usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:517 [inline]
+ really_probe+0x245/0xcc0 drivers/base/dd.c:596
+ __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:751
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:781
+ __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:898
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:969
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xc17/0x1ee0 drivers/base/core.c:3396
+ usb_set_configuration+0x113f/0x1910 drivers/usb/core/message.c:2170
+ usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
+ usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
+ call_driver_probe drivers/base/dd.c:517 [inline]
+ really_probe+0x245/0xcc0 drivers/base/dd.c:596
+ __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:751
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:781
+ __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:898
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:969
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xc17/0x1ee0 drivers/base/core.c:3396
+ usb_new_device.cold+0x63f/0x108e drivers/usb/core/hub.c:2563
+ hub_port_connect drivers/usb/core/hub.c:5348 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5488 [inline]
+ port_event drivers/usb/core/hub.c:5634 [inline]
+ hub_event+0x2357/0x4330 drivers/usb/core/hub.c:5716
+ process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
+ worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
+ kthread+0x40b/0x500 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+
+Allocated by task 0:
+(stack is not available)
+
+The buggy address belongs to the object at ffff88810ded4200
+ which belongs to the cache kmalloc-96 of size 96
+The buggy address is located 35 bytes inside of
+ 96-byte region [ffff88810ded4200, ffff88810ded4260)
+The buggy address belongs to the page:
+page:ffffea000437b500 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x10ded4
+flags: 0x200000000000200(slab|node=0|zone=2)
+raw: 0200000000000200 0000000000000000 dead000000000122 ffff888100041780
+raw: 0000000000000000 0000000080200020 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112c40(GFP_NOFS|__GFP_NOWARN|__GFP_NORETRY|__GFP_HARDWALL), pid 4546, ts 85619489521, free_ts 59365205543
+ prep_new_page mm/page_alloc.c:2426 [inline]
+ get_page_from_freelist+0x1254/0x2980 mm/page_alloc.c:4155
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5381
+ alloc_pages+0x1a7/0x300 mm/mempolicy.c:2191
+ alloc_slab_page mm/slub.c:1770 [inline]
+ allocate_slab mm/slub.c:1907 [inline]
+ new_slab+0x319/0x490 mm/slub.c:1970
+ ___slab_alloc+0x8b9/0xfa0 mm/slub.c:3001
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3088
+ slab_alloc_node mm/slub.c:3179 [inline]
+ slab_alloc mm/slub.c:3221 [inline]
+ __kmalloc+0x2ee/0x310 mm/slub.c:4396
+ kmalloc include/linux/slab.h:596 [inline]
+ kzalloc include/linux/slab.h:721 [inline]
+ tomoyo_encode2.part.0+0xe9/0x3a0 security/tomoyo/realpath.c:45
+ tomoyo_encode2 security/tomoyo/realpath.c:31 [inline]
+ tomoyo_encode+0x28/0x50 security/tomoyo/realpath.c:80
+ tomoyo_realpath_from_path+0x186/0x620 security/tomoyo/realpath.c:288
+ tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+ tomoyo_path_perm+0x21b/0x400 security/tomoyo/file.c:822
+ security_inode_getattr+0xcf/0x140 security/security.c:1334
+ vfs_getattr fs/stat.c:157 [inline]
+ vfs_statx+0x164/0x390 fs/stat.c:225
+ vfs_fstatat fs/stat.c:243 [inline]
+ __do_sys_newfstatat+0x96/0x120 fs/stat.c:412
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1340 [inline]
+ free_pcp_prepare+0x315/0x710 mm/page_alloc.c:1391
+ free_unref_page_prepare mm/page_alloc.c:3317 [inline]
+ free_unref_page+0x19/0x580 mm/page_alloc.c:3396
+ qlink_free mm/kasan/quarantine.c:146 [inline]
+ qlist_free_all+0x5a/0xc0 mm/kasan/quarantine.c:165
+ kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:272
+ __kasan_slab_alloc+0x73/0x80 mm/kasan/common.c:444
+ kasan_slab_alloc include/linux/kasan.h:259 [inline]
+ slab_post_alloc_hook mm/slab.h:519 [inline]
+ slab_alloc_node mm/slub.c:3213 [inline]
+ slab_alloc mm/slub.c:3221 [inline]
+ __kmalloc+0x1d9/0x310 mm/slub.c:4396
+ kmalloc include/linux/slab.h:596 [inline]
+ tomoyo_realpath_from_path+0xc3/0x620 security/tomoyo/realpath.c:254
+ tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+ tomoyo_path_perm+0x21b/0x400 security/tomoyo/file.c:822
+ security_inode_getattr+0xcf/0x140 security/security.c:1334
+ vfs_getattr fs/stat.c:157 [inline]
+ vfs_statx+0x164/0x390 fs/stat.c:225
+ vfs_fstatat fs/stat.c:243 [inline]
+ __do_sys_newfstatat+0x96/0x120 fs/stat.c:412
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Memory state around the buggy address:
+ ffff88810ded4100: 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc fc
+ ffff88810ded4180: 00 00 00 00 00 00 00 00 00 00 fc fc fc fc fc fc
+>ffff88810ded4200: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+                               ^
+ ffff88810ded4280: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88810ded4300: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
 
 
-On 15.11.21 08:28, syzbot wrote:
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    048ff8629e11 Merge tag 'usb-5.16-rc1' of git://git.kernel...
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1480ade1b00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=d6b387bc5d3e50f3
-> dashboard link: https://syzkaller.appspot.com/bug?extid=63ee658b9a100ffadbe2
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1313cb7cb00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16a2f676b00000
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com
->
+Tested on:
 
-#syz test https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-048ff8629e11
-
-
-
-
-
---------------A17BA6B9593651BEE9AA1B58
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-usbnet-sanity-check-for-endpoint-types.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="0001-usbnet-sanity-check-for-endpoint-types.patch"
-
-From 3b37ae884eb41dd5db62946a5c289f86b46195bc Mon Sep 17 00:00:00 2001
-From: Oliver Neukum <oneukum@suse.com>
-Date: Thu, 18 Nov 2021 18:15:03 +0100
-Subject: [PATCH] usbnet: sanity check for endpoint types
-
-A malicious device can pretend to be a device with a known
-configuration of endpoints yet present endpoints of the wrong type.
-
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/net/usb/usbnet.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index 9a6450f796dc..9aa4dc00f64b 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -91,6 +91,26 @@ static const char * const usbnet_event_names[] = {
- 	[EVENT_NO_IP_ALIGN]	   = "EVENT_NO_IP_ALIGN",
- };
- 
-+bool usbnet_validate_endpoints(struct usbnet *dev, struct usb_interface *intf, const struct driver_info *info)
-+{
-+	struct usb_host_interface *alt = intf->cur_altsetting;
-+	struct usb_host_endpoint *e;
-+
-+	e = alt->endpoint + info->in;
-+	if (!e)
-+		return false;
-+	if (!usb_endpoint_is_bulk_in(&e->desc))
-+		return false;
-+
-+	e = alt->endpoint + info->out;
-+	if (!e)
-+		return false;
-+	if (!usb_endpoint_is_bulk_out(&e->desc))
-+		return false;
-+
-+	return true;
-+}
-+
- /* handles CDC Ethernet and many other network "bulk data" interfaces */
- int usbnet_get_endpoints(struct usbnet *dev, struct usb_interface *intf)
- {
-@@ -1772,6 +1792,8 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
- 	} else if (!info->in || !info->out)
- 		status = usbnet_get_endpoints (dev, udev);
- 	else {
-+		if (!usbnet_validate_endpoints(dev, udev, info))
-+			goto out3;
- 		dev->in = usb_rcvbulkpipe (xdev, info->in);
- 		dev->out = usb_sndbulkpipe (xdev, info->out);
- 		if (!(info->flags & FLAG_NO_SETINT))
--- 
-2.26.2
-
-
---------------A17BA6B9593651BEE9AA1B58--
+commit:         048ff862 Merge tag 'usb-5.16-rc1' of git://git.kernel...
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=16cf5845b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d6b387bc5d3e50f3
+dashboard link: https://syzkaller.appspot.com/bug?extid=63ee658b9a100ffadbe2
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14984c09b00000
 
