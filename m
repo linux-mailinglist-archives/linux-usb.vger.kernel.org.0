@@ -2,104 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1DF45D92A
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 12:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2BB45D9BB
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 13:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbhKYL0h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Nov 2021 06:26:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238332AbhKYLYf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Nov 2021 06:24:35 -0500
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E056C0613D7;
-        Thu, 25 Nov 2021 03:16:23 -0800 (PST)
-Received: by mail-ua1-x92d.google.com with SMTP id az37so11462763uab.13;
-        Thu, 25 Nov 2021 03:16:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=/sJ5B3jXlGyBILLnUHy77HmaGaWwuAA8bSDGuBZ2r1M=;
-        b=NLJj0axX1bPFOQD4ljA9ti4yWQN2TG00NEUMABfCAJWmEZZbY8nuyZODDYjNb1sMGb
-         jI0ah4U1VsTDvxRzxKIvr3UQygTogZvU1FTvIa+apmmfQ7KVMoOs0zSi6Tiou/FAk3tr
-         KsFXlxQ89wgymbYEwO+xNbITP4k3cXsn51dyAhdcWNfskmP0j8RR21SxJgooKKJxmZKC
-         P6HPQdelxKfuJTG9aJXUhNJlYjtsYBhmF1BWcW66BF/AzvTBDQUkcjZKmDbpdMBPCVUO
-         ZAvUy0eB45N3oubNCUY+6zCowLRjACqhCwwxLabC9rPZORI34CEhhOGXW/uJu5gvwXAy
-         xbzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/sJ5B3jXlGyBILLnUHy77HmaGaWwuAA8bSDGuBZ2r1M=;
-        b=ItJoJtiSrn7SLLE2dXEhedbeDiYQxpqDJHGekrP1XCUauAq/3lOpgyYpfDbWL9S9Kw
-         4aTpGZ7kagNbSskoUclfAGftcfSteQEoU9VWteaOR44DtyqetT4igWxYqHjQqfJXi85Z
-         a9JsRzpKmYU+8MCCbNxQYToVjIeKs5G+FBfw+SSy9ZDZjBB/fZqThi6sM4IzMOfQHnP3
-         YYNQflHe9PgyYAF1+CO+GepkkyoFzZf9clWKdmNM96CuO68KVYqvPzV4BtJdj+39cep/
-         14WAC06CMgIBJAdO/+J0MdCxnsccBOw60w1Fji15f1hgFt2BJcnGGMUiqBvLuJoY9v1u
-         NKGA==
-X-Gm-Message-State: AOAM530BV+4nHyhSNHNAqlIOHOqHh0rNtYxETjpDFT/sJmjUikvwCm99
-        2/M+D0rh5tzCX2+oOvFG3HxYixa+dbYh+6vOfZ0=
-X-Google-Smtp-Source: ABdhPJz2Sy6YfkZRX6R5PSTBGald8FDZB5YsRR3m2r+z+Fe2P6LBW+Oo8PoF2CfeAiCsGiYKYv+L0Xx6STxShWUa4Gc=
-X-Received: by 2002:a05:6102:358b:: with SMTP id h11mr7950623vsu.24.1637838982783;
- Thu, 25 Nov 2021 03:16:22 -0800 (PST)
+        id S239144AbhKYMJ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Nov 2021 07:09:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33032 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239834AbhKYMHz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Nov 2021 07:07:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 50F2361041;
+        Thu, 25 Nov 2021 12:04:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637841884;
+        bh=rPq2Ad3fHPPBX3XIqL72QUl4mZ3FkBDQpkBLiVEsWqU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=P2yvez169HuqQwUguLlRwzXohUVtZZd5vzTu13kt2HPNHFmL+pxq66biw7tef+iJx
+         qZPyB78duv609Kv0nj8goIeIJ2+mM5/3EOzpecFK6L2/xMDqgtfkzTpAX6lByeaJ9P
+         8j7SALghHJTJC7CIdB4CnfU0Jz4643GzM+/vTb14WWkOMgWDDAVteL9lok19HopIZB
+         0u/o8s1DDXq4RhZD4jyJ7uP+q5rtO+Vu8rVEjHr/Jj3JS0LhZ5u/Bh6fX6T+JQ/MER
+         fZ1OwolLvVWLXNRNZR2299C5+9ah0DUjNBooX9DiHbHnJFf7T0oOKb7wSbCipKFwjo
+         Bi79t+ARDps5A==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mqDUD-00058k-HF; Thu, 25 Nov 2021 13:04:21 +0100
+Date:   Thu, 25 Nov 2021 13:04:21 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB-serial fixes for 5.16-rc3
+Message-ID: <YZ97xbN1Ln83r+hP@hovoldconsulting.com>
 MIME-Version: 1.0
-References: <20210921113754.767631-1-festevam@gmail.com> <20211125083400.h7qoyj52fcn4khum@pengutronix.de>
-In-Reply-To: <20211125083400.h7qoyj52fcn4khum@pengutronix.de>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 25 Nov 2021 08:16:12 -0300
-Message-ID: <CAOMZO5BXGxXKZAq2jeJ=yRww+Hoft_9=6jUheM92w5majQ1UdQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: chipidea: ci_hdrc_imx: Fix -EPROBE_DEFER handling
- for phy
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     peter.chen@kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Marek Vasut <marex@denx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Heiko Thiery <heiko.thiery@gmail.com>,
-        Schrempf Frieder <frieder.schrempf@kontron.de>,
-        stable <stable@vger.kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Gavin Schenk <g.schenk@eckelmann.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Uwe,
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
-On Thu, Nov 25, 2021 at 5:34 AM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> With an old style device tree using fsl,usbphy
-> devm_usb_get_phy_by_phandle() returning ERR_PTR(-EPROBE_DEFER) results in
-> ci->usb_phy =3D ERR_PTR(-EPROBE_DEFER) in the chipidea driver which then
-> chokes on that with
->
->         Unable to handle kernel paging request at virtual address fffffe9=
-3
->
-> Handle errors other then -ENODEV as was done before v5.15-rc5 in
-> ci_hdrc_imx_probe().
->
-> Fixes: 8253a34bfae3 ("usb: chipidea: ci_hdrc_imx: Also search for 'phys' =
-phandle")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> ---
-> Hello,
->
-> this patch became commit 8253a34bfae3278baca52fc1209b7c29270486ca in
-> v5.15-rc5. On an i.MX25 I experience the following fault:
->
-> [    2.248749] 8<--- cut here ---
-> [    2.259025] Unable to handle kernel paging request at virtual address =
-fffffe93
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
-Sorry for the breakage.
+are available in the Git repository at:
 
-Dan has sent a fix for this:
-https://www.spinics.net/lists/linux-usb/msg219148.html
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.16-rc3
+
+for you to fetch changes up to 88459e3e42760abb2299bbf6cb1026491170e02a:
+
+  USB: serial: option: add Fibocom FM101-GL variants (2021-11-24 19:03:31 +0100)
+
+----------------------------------------------------------------
+USB-serial fixes for 5.16-rc3
+
+Here's a fix for a pl2303 type-detection issue and some new modem
+devices ids.
+
+All but the last commit have been in linux-next, and with no reported
+issues.
+
+----------------------------------------------------------------
+Daniele Palmas (1):
+      USB: serial: option: add Telit LE910S1 0x9200 composition
+
+Johan Hovold (1):
+      USB: serial: pl2303: fix GC type detection
+
+Mingjie Zhang (1):
+      USB: serial: option: add Fibocom FM101-GL variants
+
+ drivers/usb/serial/option.c | 5 +++++
+ drivers/usb/serial/pl2303.c | 1 +
+ 2 files changed, 6 insertions(+)
