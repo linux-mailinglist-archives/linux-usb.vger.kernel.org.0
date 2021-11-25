@@ -2,181 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE4C45D39B
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 04:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC92145D47F
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 07:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237551AbhKYDbk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Nov 2021 22:31:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235496AbhKYD3k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Nov 2021 22:29:40 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A530CC0617A2
-        for <linux-usb@vger.kernel.org>; Wed, 24 Nov 2021 19:20:55 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id l16so8342443wrp.11
-        for <linux-usb@vger.kernel.org>; Wed, 24 Nov 2021 19:20:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WxjiNUJy68gL0klua+S0wi7T6cgmLd4NS/9mBaoSKI8=;
-        b=LMd1tkg6a4hm7GhfyNKHPf3nUARGuIN+9NyYKFgJW31jM54GU/qLZRtMMDGtfEgE9r
-         54tDAWdZSSVBTaxnleb+WpfiBmC6pSpMNYc9ki6CgwGa6KdutSCYllGvWo2KeIpL9Xcx
-         UxLbwqEvEbFjWgdHlcz0IfX+SOoR4N8VUymUI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WxjiNUJy68gL0klua+S0wi7T6cgmLd4NS/9mBaoSKI8=;
-        b=KPZPz1b0W5aYyAEPSPsfzXq3ymJYTlbFYuyYBRW+ZNRK9GAJtsXyFbjkiJUYCAmwSo
-         D6WMZ6H7WHbqHYOvPRhkUiySFX7WI/MIKvd5z2pg3cGhCPSI+FeTfR2t4FeuUxKhRp6E
-         pagroQfP+OqGEGqp43QFInQZYZ+egy8gJwLx4QA7cDpzLlV0LIj1JsWS+HROFCaNEmEQ
-         c6BUg22FiDAPDbY+4C59UXhsZI79K0Ceh6r4bD8AeX3CUUmGOZ43XL7CsVQ9b++ptxrP
-         gjWh3h7EmdPWmDAa0iVbTOBIjOZaTEXivPxPbYJ2lcpzB5M0V2qUuYs5fHgAWwgIoK6B
-         ezHA==
-X-Gm-Message-State: AOAM531Ap4UWyFP1Sv0RcyTAzUNIsOTU1hw3EXpISimOIioZAUHj4AGV
-        KsAJKI09k0FVYzmRN1wSHj6a5uHWUMCd7tsRRauHaw==
-X-Google-Smtp-Source: ABdhPJyOHA6IYBcg9GhLCMMTSOi0mWjReHWBBrqjSv0Vs5V6bvDEjtmMYIaQjuWqyMXZtZTOJA7xlLfWlQVb1W0NtTM=
-X-Received: by 2002:adf:ef4f:: with SMTP id c15mr3077743wrp.226.1637810453840;
- Wed, 24 Nov 2021 19:20:53 -0800 (PST)
+        id S1346610AbhKYGFg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Nov 2021 01:05:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47762 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345878AbhKYGDg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Nov 2021 01:03:36 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 24FAE6108F;
+        Thu, 25 Nov 2021 06:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1637820025;
+        bh=3ctKRzNkGfDKJL56FA56OZ8Yhk44PDb09vDAtnXuLAo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bIQ0MHxqaQsVL5k7lRYiC3s76TtwMsSRV3bFb/vxi6rmDEbyA+NdeAfFDrFpVIfjF
+         Mf5SlMoBcoTPs8xx5Y9t3fP3UpwiEHetgxYaKPFJjsj8EueEgtFVNURebt1e9LwrKc
+         7t2PJOqdkVrlspfU5FdYcJtr1KHuU/irIfI/GXms=
+Date:   Thu, 25 Nov 2021 07:00:22 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v1] usb: typec: tcpm: Wait in SNK_DEBOUNCED until
+ disconnect
+Message-ID: <YZ8mdjPn39ekClLq@kroah.com>
+References: <20211124224036.734679-1-badhri@google.com>
 MIME-Version: 1.0
-References: <20211124231028.696982-1-pmalani@chromium.org> <20211124231028.696982-2-pmalani@chromium.org>
-In-Reply-To: <20211124231028.696982-2-pmalani@chromium.org>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Wed, 24 Nov 2021 19:20:42 -0800
-Message-ID: <CACeCKafocHs6P=0b-yOcu2Oqzw_DX6RCzyiowngMkHV2Tgy8LA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] usb: typec: Add port registration notifier
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     wonchung@google.com, bleung@chromium.org,
-        heikki.krogerus@linux.intel.com,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211124224036.734679-1-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 24, 2021 at 3:11 PM Prashant Malani <pmalani@chromium.org> wrote:
->
-> Introduce a blocking notifier to be called when a new Type C port gets
-> registered with the connector class framework.
->
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+On Wed, Nov 24, 2021 at 02:40:36PM -0800, Badhri Jagan Sridharan wrote:
+> Stub from the spec:
+> "4.5.2.2.4.2 Exiting from AttachWait.SNK State
+> A Sink shall transition to Unattached.SNK when the state of both
+> the CC1 and CC2 pins is SNK.Open for at least tPDDebounce.
+> A DRP shall transition to Unattached.SRC when the state of both
+> the CC1 and CC2 pins is SNK.Open for at least tPDDebounce."
+> 
+> This change makes TCPM to wait in SNK_DEBOUNCED state until
+> CC1 and CC2 pins is SNK.Open for at least tPDDebounce. Previously,
+> TCPM resets the port if vbus is not present in PD_T_PS_SOURCE_ON.
+> This causes TCPM to loop continuously when connected to a
+> faulty power source that does not present vbus. Waiting in
+> SNK_DEBOUNCED also ensures that TCPM is adherant to
+> "4.5.2.2.4.2 Exiting from AttachWait.SNK State" requirements.
+> 
+> [ 6169.280751] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+> [ 6169.280759] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
+> [ 6169.280771] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
+> [ 6169.282427] CC1: 0 -> 0, CC2: 5 -> 5 [state SNK_ATTACH_WAIT, polarity 0, connected]
+> [ 6169.450825] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
+> [ 6169.450834] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
+> [ 6169.930892] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
+> [ 6169.931296] disable vbus discharge ret:0
+> [ 6169.931301] Setting usb_comm capable false
+> [ 6169.932783] Setting voltage/current limit 0 mV 0 mA
+> [ 6169.932802] polarity 0
+> [ 6169.933706] Requesting mux state 0, usb-role 0, orientation 0
+> [ 6169.936689] cc:=0
+> [ 6169.936812] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
+> [ 6169.937157] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
+> [ 6170.036880] state change PORT_RESET -> PORT_RESET_WAIT_OFF [delayed 100 ms]
+> [ 6170.036890] state change PORT_RESET_WAIT_OFF -> SNK_UNATTACHED [rev2 NONE_AMS]
+> [ 6170.036896] Start toggling
+> [ 6170.041412] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> [ 6170.042973] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+> [ 6170.042976] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
+> [ 6170.042981] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
+> [ 6170.213014] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
+> [ 6170.213019] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
+> [ 6170.693068] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
+> [ 6170.693304] disable vbus discharge ret:0
+> [ 6170.693308] Setting usb_comm capable false
+> [ 6170.695193] Setting voltage/current limit 0 mV 0 mA
+> [ 6170.695210] polarity 0
+> [ 6170.695990] Requesting mux state 0, usb-role 0, orientation 0
+> [ 6170.701896] cc:=0
+> [ 6170.702181] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
+> [ 6170.703343] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
+> 
+> Fixes: f0690a25a140b8 ("staging: typec: USB Type-C Port Manager (tcpm)")
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 > ---
-> NOTE: typec_port_registration_register_notify() is a bit long,
-> so please let me know if you have any shorter suggestions for naming
-> this function.
->
->  drivers/usb/typec/class.c | 30 ++++++++++++++++++++++++++++++
->  include/linux/usb/typec.h | 13 +++++++++++++
->  2 files changed, 43 insertions(+)
->
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index aeef453aa658..14b82109b0f5 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -16,6 +16,8 @@
->  #include "bus.h"
->  #include "class.h"
->
-> +static BLOCKING_NOTIFIER_HEAD(typec_port_registration_notifier);
-> +
->  static DEFINE_IDA(typec_index_ida);
->
->  struct class typec_class = {
-> @@ -1979,6 +1981,32 @@ void typec_port_register_altmodes(struct typec_port *port,
->  }
->  EXPORT_SYMBOL_GPL(typec_port_register_altmodes);
->
-> +/**
-> + *  typec_port_registration_register_notify - Register a notifier for Type C port registration.
-> + *  @nb: notifier block to signal
-> + *
-> + *  This function allows callers to get a notification when a Type C port is registered with
-> + *  the connector class.
-> + */
-> +int typec_port_registration_register_notify(struct notifier_block *nb)
-> +{
-> +       return blocking_notifier_chain_register(&typec_port_registration_notifier, nb);
-> +}
-> +EXPORT_SYMBOL_GPL(typec_port_registration_register_notify);
-> +
-> +/**
-> + *  typec_port_registration_unregister_notify - Unregister a notifier for Type C port registration.
-> + *  @nb: notifier block to unregister
-> + *
-> + *  This function allows callers to unregister notifiers which were previously registered using
-> + *  typec_port_registration_register_notify().
-> + */
-> +int typec_port_registration_unregister_notify(struct notifier_block *nb)
-> +{
-> +       return blocking_notifier_chain_unregister(&typec_port_registration_notifier, nb);
-> +}
-> +EXPORT_SYMBOL_GPL(typec_port_registration_unregister_notify);
-> +
->  /**
->   * typec_register_port - Register a USB Type-C Port
->   * @parent: Parent device
-> @@ -2086,6 +2114,8 @@ struct typec_port *typec_register_port(struct device *parent,
->         if (ret)
->                 dev_warn(&port->dev, "failed to create symlinks (%d)\n", ret);
->
-> +       blocking_notifier_call_chain(&typec_port_registration_notifier, 0, port);
-> +
->         return port;
->  }
->  EXPORT_SYMBOL_GPL(typec_register_port);
-> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-> index e2e44bb1dad8..398317835f24 100644
-> --- a/include/linux/usb/typec.h
-> +++ b/include/linux/usb/typec.h
-> @@ -3,6 +3,7 @@
->  #ifndef __LINUX_USB_TYPEC_H
->  #define __LINUX_USB_TYPEC_H
->
-> +#include <linux/notifier.h>
->  #include <linux/types.h>
->
->  /* USB Type-C Specification releases */
-> @@ -308,6 +309,8 @@ int typec_get_negotiated_svdm_version(struct typec_port *port);
->  #if IS_REACHABLE(CONFIG_TYPEC)
->  int typec_link_port(struct device *port);
->  void typec_unlink_port(struct device *port);
-> +int typec_port_registration_register_notify(struct notifier_block *nb);
-> +int typec_port_registration_unregister_notify(struct notifier_block *nb);
->  #else
->  static inline int typec_link_port(struct device *port)
->  {
-> @@ -315,6 +318,16 @@ static inline int typec_link_port(struct device *port)
->  }
->
->  static inline void typec_unlink_port(struct device *port) { }
-> +
-> +int typec_port_registration_register_notify(struct notifier_block *nb)
-> +{
-> +       return 0;
-> +}
-> +
-> +int typec_port_registration_unregister_notify(struct notifier_block *nb)
-> +{
-> +       return 0;
-> +}
->  #endif
+>  drivers/usb/typec/tcpm/tcpm.c | 4 ----
+>  1 file changed, 4 deletions(-)
 
-Oops, looks like I forgot to static inline these....
 
-Also, probably better to return -ENODEV for these calls?
+<formletter>
 
-Sorry about that; I'll fix it up and send another version.
+This is not the correct way to submit patches for inclusion in the
+stable kernel tree.  Please read:
+    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+for how to do this properly.
 
-Thanks,
+</formletter>
