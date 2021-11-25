@@ -2,105 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F6345DFFC
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 18:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FD745E292
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 22:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347221AbhKYRwi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Nov 2021 12:52:38 -0500
-Received: from mga12.intel.com ([192.55.52.136]:47148 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1354068AbhKYRuh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Nov 2021 12:50:37 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="215572168"
-X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="215572168"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 09:39:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="650791084"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Nov 2021 09:39:46 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mqIin-0006j3-Mu; Thu, 25 Nov 2021 17:39:45 +0000
-Date:   Fri, 26 Nov 2021 01:39:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Oliver Neukum <oneukum@suse.com>,
-        syzbot <syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com>,
-        kuba@kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Cc:     kbuild-all@lists.01.org
-Subject: Re: [PATCH] usbnet: sanity check for endpoint types
-Message-ID: <202111260112.7MrCT7S6-lkp@intel.com>
-References: <8b395185-b18c-caf9-0418-78e96797b474@suse.com>
+        id S1351101AbhKYVgX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Nov 2021 16:36:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351075AbhKYVeW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Nov 2021 16:34:22 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD2EC0613F2
+        for <linux-usb@vger.kernel.org>; Thu, 25 Nov 2021 13:21:10 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mqMAx-00086M-Rl; Thu, 25 Nov 2021 22:21:03 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mqMAt-0013Fq-1C; Thu, 25 Nov 2021 22:20:58 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mqMAr-0008CR-QS; Thu, 25 Nov 2021 22:20:57 +0100
+Date:   Thu, 25 Nov 2021 22:20:54 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Marek Vasut <marex@denx.de>,
+        Gavin Schenk <g.schenk@eckelmann.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        peter.chen@kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Schrempf Frieder <frieder.schrempf@kontron.de>,
+        stable <stable@vger.kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Heiko Thiery <heiko.thiery@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [PATCH] usb: chipidea: ci_hdrc_imx: Fix -EPROBE_DEFER handling
+ for phy
+Message-ID: <20211125212054.deazlz5jwvt6xgcp@pengutronix.de>
+References: <20210921113754.767631-1-festevam@gmail.com>
+ <20211125083400.h7qoyj52fcn4khum@pengutronix.de>
+ <CAOMZO5BXGxXKZAq2jeJ=yRww+Hoft_9=6jUheM92w5majQ1UdQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ttjarkphnhjgpgh2"
 Content-Disposition: inline
-In-Reply-To: <8b395185-b18c-caf9-0418-78e96797b474@suse.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAOMZO5BXGxXKZAq2jeJ=yRww+Hoft_9=6jUheM92w5majQ1UdQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Oliver,
 
-I love your patch! Perhaps something to improve:
+--ttjarkphnhjgpgh2
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.16-rc2 next-20211125]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On Thu, Nov 25, 2021 at 08:16:12AM -0300, Fabio Estevam wrote:
+> Hi Uwe,
+>=20
+> On Thu, Nov 25, 2021 at 5:34 AM Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> wrote:
+> >
+> > With an old style device tree using fsl,usbphy
+> > devm_usb_get_phy_by_phandle() returning ERR_PTR(-EPROBE_DEFER) results =
+in
+> > ci->usb_phy =3D ERR_PTR(-EPROBE_DEFER) in the chipidea driver which then
+> > chokes on that with
+> >
+> >         Unable to handle kernel paging request at virtual address fffff=
+e93
+> >
+> > Handle errors other then -ENODEV as was done before v5.15-rc5 in
+> > ci_hdrc_imx_probe().
+> >
+> > Fixes: 8253a34bfae3 ("usb: chipidea: ci_hdrc_imx: Also search for 'phys=
+' phandle")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > ---
+> > Hello,
+> >
+> > this patch became commit 8253a34bfae3278baca52fc1209b7c29270486ca in
+> > v5.15-rc5. On an i.MX25 I experience the following fault:
+> >
+> > [    2.248749] 8<--- cut here ---
+> > [    2.259025] Unable to handle kernel paging request at virtual addres=
+s fffffe93
+>=20
+> Sorry for the breakage.
+>=20
+> Dan has sent a fix for this:
+> https://www.spinics.net/lists/linux-usb/msg219148.html
 
-url:    https://github.com/0day-ci/linux/commits/Oliver-Neukum/usbnet-sanity-check-for-endpoint-types/20211125-214053
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 5f53fa508db098c9d372423a6dac31c8a5679cdf
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20211126/202111260112.7MrCT7S6-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/66c033857b47c1dceaaa6d9daacaabc12ab8ee09
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Oliver-Neukum/usbnet-sanity-check-for-endpoint-types/20211125-214053
-        git checkout 66c033857b47c1dceaaa6d9daacaabc12ab8ee09
-        # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross ARCH=arc 
+Ah, I see this is already in next as
+d4d2e5329ae9dfd6742c84d79f7d143d10410f1b via the usb tree. I know why I
+missed that when I looked for fixes, but I spare you from the details.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks and sorry for the noise,
+Uwe
 
-All warnings (new ones prefixed by >>):
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
->> drivers/net/usb/usbnet.c:94:6: warning: no previous prototype for 'usbnet_validate_endpoints' [-Wmissing-prototypes]
-      94 | bool usbnet_validate_endpoints(struct usbnet *dev, struct usb_interface *intf, const struct driver_info *info)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+--ttjarkphnhjgpgh2
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-vim +/usbnet_validate_endpoints +94 drivers/net/usb/usbnet.c
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGf/jMACgkQwfwUeK3K
+7Ako0Qf/VMTREhOOrbdj9i5yAg6O9vj1B9qPj/OwN3ckUMaoyUJn3XrxU0cbt5wj
+X+JuifEZqrOkmrplFc4xog2qVVlE5CMtk22mMqVqpNYVbEGiLVO/myYpvPcvZGcm
+oDG/JuG2c5MOZaSvc6tjYZJmdSKJC272RXRtg6pcvUQ3NfkjncmblMa70uRV7b5q
+phYcS1OxW4YMuoXbQ2uqe0QWqagaKhuEoZZPZaKrmTirG5PeOaJdUS2FrZLKtxnN
+QjWy+10t3ZLLKFgHHKuqJcoWNu4mJm5Dxlb5vCxsHALkTQ+3USS/wN1+E9b+P4a2
+YuT9dUcluc8BJ57JTd7l30nzVvqWZA==
+=+uBJ
+-----END PGP SIGNATURE-----
 
-    93	
-  > 94	bool usbnet_validate_endpoints(struct usbnet *dev, struct usb_interface *intf, const struct driver_info *info)
-    95	{
-    96		struct usb_host_interface *alt = intf->cur_altsetting;
-    97		struct usb_host_endpoint *e;
-    98	
-    99		e = alt->endpoint + info->in;
-   100		if (!e)
-   101			return false;
-   102		if (!usb_endpoint_is_bulk_in(&e->desc))
-   103			return false;
-   104	
-   105		e = alt->endpoint + info->out;
-   106		if (!e)
-   107			return false;
-   108		if (!usb_endpoint_is_bulk_out(&e->desc))
-   109			return false;
-   110	
-   111		return true;
-   112	}
-   113	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--ttjarkphnhjgpgh2--
