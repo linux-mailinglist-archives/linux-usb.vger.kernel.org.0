@@ -2,101 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7574E45D2DD
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 03:04:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC0745D323
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 03:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232122AbhKYCHK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Nov 2021 21:07:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235157AbhKYCFK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Nov 2021 21:05:10 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0C0C061A1A;
-        Wed, 24 Nov 2021 17:39:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:
-        Subject:Sender:Reply-To:Cc:Content-ID:Content-Description;
-        bh=qYw5RIZBYu+7TC3KjriRLSrZwn1E3iMtbuXhHAISxsY=; b=yGbXk3L+x2f8HhRmR6X1X25pSa
-        wGsZIl/Rbsf/xlDcxMSq8Wf94/PcPWJ+9mlpAoJj/EmWa1YSoGFbVKUz+wyn41B583pr36qTKlmEs
-        VO7Kom827tHmWzwmS9yw+mmeSwxmfIoWVmXLK2r5mLDJeKX2NYNT/4i8YKqVF54zBr2PkMz+Pt7qr
-        gSANvH66vibc9Bplw3++VO0sA3X0O2YvhtkyNmrNiM6+g1tgNGK5GCET5YQzLqLCJ5WRf/4n6qGsE
-        uI0L4sp/KfdfmuT4pKXL7WDs/FrcAucukzFICpMEqDDUtXc95SpzeCwZPuzuafV0wd/YLXB4wkXHE
-        m8JMl8Kg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mq3j9-006El5-N1; Thu, 25 Nov 2021 01:39:07 +0000
-Subject: Re: mmotm 2021-11-24-15-49 uploaded (drivers/usb/host/xhci-hub.c)
-To:     akpm@linux-foundation.org, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        linux-usb@vger.kernel.org
-References: <20211124234931.iDJQctzrQ%akpm@linux-foundation.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <2b4fcff8-d7a0-b235-c94d-147e19738d72@infradead.org>
-Date:   Wed, 24 Nov 2021 17:39:06 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S240093AbhKYCZ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Nov 2021 21:25:26 -0500
+Received: from mga03.intel.com ([134.134.136.65]:47795 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231458AbhKYCXY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 24 Nov 2021 21:23:24 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="235364437"
+X-IronPort-AV: E=Sophos;i="5.87,261,1631602800"; 
+   d="scan'208";a="235364437"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2021 18:16:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,261,1631602800"; 
+   d="scan'208";a="554485280"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 24 Nov 2021 18:16:14 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mq4J3-0005c7-DK; Thu, 25 Nov 2021 02:16:13 +0000
+Date:   Thu, 25 Nov 2021 10:15:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, wonchung@google.com, bleung@chromium.org,
+        heikki.krogerus@linux.intel.com,
+        Prashant Malani <pmalani@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 2/4] usb: Use notifier to link Type C ports
+Message-ID: <202111251010.fxed9VtQ-lkp@intel.com>
+References: <20211124231028.696982-3-pmalani@chromium.org>
 MIME-Version: 1.0
-In-Reply-To: <20211124234931.iDJQctzrQ%akpm@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211124231028.696982-3-pmalani@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11/24/21 3:49 PM, akpm@linux-foundation.org wrote:
-> The mm-of-the-moment snapshot 2021-11-24-15-49 has been uploaded to
-> 
->     https://www.ozlabs.org/~akpm/mmotm/
-> 
-> mmotm-readme.txt says
-> 
-> README for mm-of-the-moment:
-> 
-> https://www.ozlabs.org/~akpm/mmotm/
-> 
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
-> 
-> You will need quilt to apply these patches to the latest Linus release (5.x
-> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> https://ozlabs.org/~akpm/mmotm/series
-> 
+Hi Prashant,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on linux/master linus/master peter-chen-usb/for-usb-next v5.16-rc2 next-20211124]
+[cannot apply to balbi-usb/testing/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Prashant-Malani/usb-Use-notifier-for-linking-Type-C-ports/20211125-071439
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20211125/202111251010.fxed9VtQ-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/d56a1c2271ef9c1877e9400fb1adc5adbb278e51
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Prashant-Malani/usb-Use-notifier-for-linking-Type-C-ports/20211125-071439
+        git checkout d56a1c2271ef9c1877e9400fb1adc5adbb278e51
+        # save the config file to linux build tree
+        make W=1 ARCH=i386 
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/usb/core/port.c:12:
+>> include/linux/usb/typec.h:322:5: warning: no previous prototype for 'typec_port_registration_register_notify' [-Wmissing-prototypes]
+     322 | int typec_port_registration_register_notify(struct notifier_block *nb)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/usb/typec.h:327:5: warning: no previous prototype for 'typec_port_registration_unregister_notify' [-Wmissing-prototypes]
+     327 | int typec_port_registration_unregister_notify(struct notifier_block *nb)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-on i386:
+vim +/typec_port_registration_register_notify +322 include/linux/usb/typec.h
 
-../drivers/usb/host/xhci-hub.c: In function ‘xhci_create_usb3x_bos_desc’:
-./../include/linux/compiler_types.h:335:38: error: call to ‘__compiletime_assert_608’ declared with attribute error: FIELD_PREP: value too large for the field
-   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                                       ^
-./../include/linux/compiler_types.h:316:4: note: in definition of macro ‘__compiletime_assert’
-     prefix ## suffix();    \
-     ^~~~~~
-./../include/linux/compiler_types.h:335:2: note: in expansion of macro ‘_compiletime_assert’
-   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-   ^~~~~~~~~~~~~~~~~~~
-../include/linux/build_bug.h:39:37: note: in expansion of macro ‘compiletime_assert’
-  #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                      ^~~~~~~~~~~~~~~~~~
-../include/linux/bitfield.h:49:3: note: in expansion of macro ‘BUILD_BUG_ON_MSG’
-    BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?  \
-    ^~~~~~~~~~~~~~~~
-../include/linux/bitfield.h:94:3: note: in expansion of macro ‘__BF_FIELD_CHECK’
-    __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: "); \
-    ^~~~~~~~~~~~~~~~
-../drivers/usb/host/xhci-hub.c:220:4: note: in expansion of macro ‘FIELD_PREP’
-     FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSM, lane_mantissa));
-     ^~~~~~~~~~
+ed296d8d0a92758 Prashant Malani 2021-11-24  321  
+ed296d8d0a92758 Prashant Malani 2021-11-24 @322  int typec_port_registration_register_notify(struct notifier_block *nb)
+ed296d8d0a92758 Prashant Malani 2021-11-24  323  {
+ed296d8d0a92758 Prashant Malani 2021-11-24  324  	return 0;
+ed296d8d0a92758 Prashant Malani 2021-11-24  325  }
+ed296d8d0a92758 Prashant Malani 2021-11-24  326  
+ed296d8d0a92758 Prashant Malani 2021-11-24 @327  int typec_port_registration_unregister_notify(struct notifier_block *nb)
+ed296d8d0a92758 Prashant Malani 2021-11-24  328  {
+ed296d8d0a92758 Prashant Malani 2021-11-24  329  	return 0;
+ed296d8d0a92758 Prashant Malani 2021-11-24  330  }
+ae196ddb0d3186b Heikki Krogerus 2021-04-07  331  #endif
+ae196ddb0d3186b Heikki Krogerus 2021-04-07  332  
 
-
-$ gcc --version
-gcc (SUSE Linux) 7.5.0
-
-
--- 
-~Randy
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
