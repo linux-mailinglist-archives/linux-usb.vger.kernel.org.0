@@ -2,67 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F69F45DE79
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 17:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F6345DFFC
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 18:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356333AbhKYQSf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Nov 2021 11:18:35 -0500
-Received: from fieber.vanmierlo.com ([84.243.197.177]:57106 "EHLO
-        kerio9.vanmierlo.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233555AbhKYQQe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Nov 2021 11:16:34 -0500
-X-Greylist: delayed 1819 seconds by postgrey-1.27 at vger.kernel.org; Thu, 25 Nov 2021 11:16:31 EST
-X-Footer: dmFubWllcmxvLmNvbQ==
-Received: from roundcube.vanmierlo.com ([192.168.37.37])
-        (authenticated user m.brock@vanmierlo.com)
-        by kerio9.vanmierlo.com (Kerio Connect 9.3.1 patch 1) with ESMTPA;
-        Thu, 25 Nov 2021 16:42:27 +0100
+        id S1347221AbhKYRwi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Nov 2021 12:52:38 -0500
+Received: from mga12.intel.com ([192.55.52.136]:47148 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1354068AbhKYRuh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Nov 2021 12:50:37 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="215572168"
+X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
+   d="scan'208";a="215572168"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 09:39:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
+   d="scan'208";a="650791084"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Nov 2021 09:39:46 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mqIin-0006j3-Mu; Thu, 25 Nov 2021 17:39:45 +0000
+Date:   Fri, 26 Nov 2021 01:39:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Oliver Neukum <oneukum@suse.com>,
+        syzbot <syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com>,
+        kuba@kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Cc:     kbuild-all@lists.01.org
+Subject: Re: [PATCH] usbnet: sanity check for endpoint types
+Message-ID: <202111260112.7MrCT7S6-lkp@intel.com>
+References: <8b395185-b18c-caf9-0418-78e96797b474@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 25 Nov 2021 16:42:27 +0100
-From:   Maarten Brock <m.brock@vanmierlo.com>
-To:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: CP2105 gives kernel error -22 when in modem mode
-Message-ID: <5eb560c81d2ea1a2b4602a92d9f48a89@vanmierlo.com>
-X-Sender: m.brock@vanmierlo.com
-User-Agent: Roundcube Webmail/1.3.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8b395185-b18c-caf9-0418-78e96797b474@suse.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello all,
+Hi Oliver,
 
-When a uart of the CP2105 USB-serial chip is programmed to be in modem 
-mode, all its gpio pins are in alternate use and none are available for 
-gpio. Still the cp210x driver tries to add a gpiochip unconditionally, 
-which results in an error.
+I love your patch! Perhaps something to improve:
 
-> cp210x 1-1.4.4:1.0: cp210x converter detected
-> usb 1-1.4.4: cp210x converter now attached to ttyUSB0
-> cp210x 1-1.4.4:1.1: cp210x converter detected
-> gpio gpiochip2: (cp210x): tried to insert a GPIO chip with zero lines
-> gpiochip_add_data_with_key: GPIOs 0..-1 (cp210x) failed to register, 
-> -22
-> cp210x 1-1.4.4:1.1: GPIO initialisation failed: -22
-> usb 1-1.4.4: cp210x converter now attached to ttyUSB1
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.16-rc2 next-20211125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I propose to add something like the following to cp210x_gpio_init
+url:    https://github.com/0day-ci/linux/commits/Oliver-Neukum/usbnet-sanity-check-for-endpoint-types/20211125-214053
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 5f53fa508db098c9d372423a6dac31c8a5679cdf
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20211126/202111260112.7MrCT7S6-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/66c033857b47c1dceaaa6d9daacaabc12ab8ee09
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Oliver-Neukum/usbnet-sanity-check-for-endpoint-types/20211125-214053
+        git checkout 66c033857b47c1dceaaa6d9daacaabc12ab8ee09
+        # save the config file to linux build tree
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross ARCH=arc 
 
-+	unsigned long valid_mask, altfunc_mask;
-...
-+	altfunc_mask = priv->gpio_altfunc;
-+	bitmap_complement(&valid_mask, &altfunc_mask, priv->gc.ngpio);
-+	if (bitmap_empty(&valid_mask, priv->gc.ngpio))
-+		return 0;
-+
-  	priv->gc.label = "cp210x";
-  	priv->gc.request = cp210x_gpio_request;
-  	priv->gc.get_direction = cp210x_gpio_direction_get;
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I can write a proper patch, but am unsure if and what the Fixes tag 
-should be.
+All warnings (new ones prefixed by >>):
 
-Maarten
+>> drivers/net/usb/usbnet.c:94:6: warning: no previous prototype for 'usbnet_validate_endpoints' [-Wmissing-prototypes]
+      94 | bool usbnet_validate_endpoints(struct usbnet *dev, struct usb_interface *intf, const struct driver_info *info)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+vim +/usbnet_validate_endpoints +94 drivers/net/usb/usbnet.c
+
+    93	
+  > 94	bool usbnet_validate_endpoints(struct usbnet *dev, struct usb_interface *intf, const struct driver_info *info)
+    95	{
+    96		struct usb_host_interface *alt = intf->cur_altsetting;
+    97		struct usb_host_endpoint *e;
+    98	
+    99		e = alt->endpoint + info->in;
+   100		if (!e)
+   101			return false;
+   102		if (!usb_endpoint_is_bulk_in(&e->desc))
+   103			return false;
+   104	
+   105		e = alt->endpoint + info->out;
+   106		if (!e)
+   107			return false;
+   108		if (!usb_endpoint_is_bulk_out(&e->desc))
+   109			return false;
+   110	
+   111		return true;
+   112	}
+   113	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
