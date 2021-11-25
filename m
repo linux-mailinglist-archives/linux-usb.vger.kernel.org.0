@@ -2,127 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7040E45DBE5
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 15:05:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E94FF45DC2A
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 15:17:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355580AbhKYOI4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Nov 2021 09:08:56 -0500
-Received: from mga18.intel.com ([134.134.136.126]:42932 "EHLO mga18.intel.com"
+        id S1355605AbhKYOUg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Nov 2021 09:20:36 -0500
+Received: from mx1.tq-group.com ([93.104.207.81]:39865 "EHLO mx1.tq-group.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239907AbhKYOG4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Nov 2021 09:06:56 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="222390843"
-X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="222390843"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 06:03:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="675272630"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 25 Nov 2021 06:03:42 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mqFLe-0006SP-BB; Thu, 25 Nov 2021 14:03:38 +0000
-Date:   Thu, 25 Nov 2021 22:03:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Felipe Balbi <balbi@kernel.org>,
+        id S1355628AbhKYOSe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Nov 2021 09:18:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1637849722; x=1669385722;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=bX+Fml1ljrIRO6aHJkhfpGDjatAKCqni1JAKL719LsY=;
+  b=p3Sy8OcOhxab/TxnFTMVqMMb9cncANuc2+8l+EYIRoaJXy7eJNLoCw6c
+   /PJL3VEY0jcNRjpDtPv5d5RQ4i5u+7KosznjP8IFXBUkYToDB3m1jjqge
+   lDUkoVgbWQ6V/81/v1pTNGZYXmONoy49TcTl7hgehvAebZakVSoSx3C2r
+   NLSOTg7Eur1N8zSIEJBgnnbq90mWBD93IJLtxq/AS9iqm4KZUE6W9mEb5
+   oNwlGzFztQji1qw6WsxRgjvThC80NxG60dH0zw7I6j+Ds19s2x5fyzVBy
+   qRvMhbpSPJwynW7v+YTEcD25Nm/JEhOUt3SGy6Wjq/5Ib4xMbyQK7LDYh
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.87,263,1631570400"; 
+   d="scan'208";a="20679550"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 25 Nov 2021 15:15:20 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 25 Nov 2021 15:15:20 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 25 Nov 2021 15:15:20 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1637849720; x=1669385720;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=bX+Fml1ljrIRO6aHJkhfpGDjatAKCqni1JAKL719LsY=;
+  b=ZuZXOzQJ5qYleZYwTtFmlDBdssafJMnSakjNDBhZu8DXqHWA7Ob3+xiF
+   1w2ufIfAIYL0wWxXkt/JPYOYtZ1VloIVqH/0yhQSx7hONGr1y0bwCmKO3
+   6Sbez2Bk6LFHjAxP9iNG0pziAX3fkjtveWuD09NiCo9JhzitOHzWwdm1S
+   z/hZA25/tIm1x9mEtMiy9O3aJymUfkLEa3jyJ6J49sYWcuPF7qbgYzgdt
+   nCFJEOzhNFKNrLX0bS3T0HvG2F2r+4LWPHbqRDlMJ9oFE+Ci58va6zaHj
+   nXPpNPhLpIov6Dza+5UpLZAC8rU2KcIQSqkoDyvtbi4D+00Oq3n/tmLyY
+   w==;
+X-IronPort-AV: E=Sophos;i="5.87,263,1631570400"; 
+   d="scan'208";a="20679549"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 25 Nov 2021 15:15:20 +0100
+Received: from steina-w.tq-net.de (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 52FD1280065;
+        Thu, 25 Nov 2021 15:15:20 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild-all@lists.01.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: dwc3: drd: Add support for usb-conn-gpio based
- usb-role-switch
-Message-ID: <202111252223.hSDDVm5l-lkp@intel.com>
-References: <20211125104748.1418934-1-alexander.stein@ew.tq-group.com>
+Subject: [PATCH v2 1/1] usb: dwc3: drd: Add support for usb-conn-gpio based usb-role-switch
+Date:   Thu, 25 Nov 2021 15:15:16 +0100
+Message-Id: <20211125141516.1668633-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211125104748.1418934-1-alexander.stein@ew.tq-group.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alexander,
+usb-conn-gpio devices are a subnode of the USB interface controller, which
+needs to be populated.
+This allows having a non-type-c connector providing dual-role.
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on v5.16-rc2 next-20211125]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Alexander-Stein/usb-dwc3-drd-Add-support-for-usb-conn-gpio-based-usb-role-switch/20211125-185107
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20211125/202111252223.hSDDVm5l-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/4f8eca1973568289a7d33683cda0a0fc3db187ee
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Alexander-Stein/usb-dwc3-drd-Add-support-for-usb-conn-gpio-based-usb-role-switch/20211125-185107
-        git checkout 4f8eca1973568289a7d33683cda0a0fc3db187ee
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash drivers/phy/freescale/ drivers/usb/dwc3/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/usb/dwc3/drd.c: In function 'dwc3_setup_role_switch':
->> drivers/usb/dwc3/drd.c:564:9: error: 'ret' undeclared (first use in this function); did you mean 'net'?
-     564 |         ret = devm_of_platform_populate(dwc->dev);
-         |         ^~~
-         |         net
-   drivers/usb/dwc3/drd.c:564:9: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +564 drivers/usb/dwc3/drd.c
-
-   541	
-   542	static int dwc3_setup_role_switch(struct dwc3 *dwc)
-   543	{
-   544		struct usb_role_switch_desc dwc3_role_switch = {NULL};
-   545		u32 mode;
-   546	
-   547		dwc->role_switch_default_mode = usb_get_role_switch_default_mode(dwc->dev);
-   548		if (dwc->role_switch_default_mode == USB_DR_MODE_HOST) {
-   549			mode = DWC3_GCTL_PRTCAP_HOST;
-   550		} else {
-   551			dwc->role_switch_default_mode = USB_DR_MODE_PERIPHERAL;
-   552			mode = DWC3_GCTL_PRTCAP_DEVICE;
-   553		}
-   554	
-   555		dwc3_role_switch.fwnode = dev_fwnode(dwc->dev);
-   556		dwc3_role_switch.set = dwc3_usb_role_switch_set;
-   557		dwc3_role_switch.get = dwc3_usb_role_switch_get;
-   558		dwc3_role_switch.driver_data = dwc;
-   559		dwc->role_sw = usb_role_switch_register(dwc->dev, &dwc3_role_switch);
-   560		if (IS_ERR(dwc->role_sw))
-   561			return PTR_ERR(dwc->role_sw);
-   562	
-   563		/* populate connector entry */
- > 564		ret = devm_of_platform_populate(dwc->dev);
-   565		if (ret) {
-   566			dev_err(dwc->dev, "DWC3 platform devices creation failed: %i\n", ret);
-   567			return ret;
-   568		}
-   569	
-   570		dwc3_set_mode(dwc, mode);
-   571		return 0;
-   572	}
-   573	#else
-   574	#define ROLE_SWITCH 0
-   575	#define dwc3_setup_role_switch(x) 0
-   576	#endif
-   577	
-
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Changes in v2:
+* Added missing variable declaration
+
+ drivers/usb/dwc3/drd.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index d7f76835137f..8b5ac689b8da 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -9,6 +9,7 @@
+ 
+ #include <linux/extcon.h>
+ #include <linux/of_graph.h>
++#include "linux/of_platform.h"
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+ 
+@@ -542,6 +543,7 @@ static int dwc3_setup_role_switch(struct dwc3 *dwc)
+ {
+ 	struct usb_role_switch_desc dwc3_role_switch = {NULL};
+ 	u32 mode;
++	int ret;
+ 
+ 	dwc->role_switch_default_mode = usb_get_role_switch_default_mode(dwc->dev);
+ 	if (dwc->role_switch_default_mode == USB_DR_MODE_HOST) {
+@@ -559,6 +561,13 @@ static int dwc3_setup_role_switch(struct dwc3 *dwc)
+ 	if (IS_ERR(dwc->role_sw))
+ 		return PTR_ERR(dwc->role_sw);
+ 
++	/* populate connector entry */
++	ret = devm_of_platform_populate(dwc->dev);
++	if (ret) {
++		dev_err(dwc->dev, "DWC3 platform devices creation failed: %i\n", ret);
++		return ret;
++	}
++
+ 	dwc3_set_mode(dwc, mode);
+ 	return 0;
+ }
+-- 
+2.25.1
+
