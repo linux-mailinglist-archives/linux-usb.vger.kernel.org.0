@@ -2,74 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2BB45D9BB
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 13:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3AC45DA11
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 13:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239144AbhKYMJ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Nov 2021 07:09:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33032 "EHLO mail.kernel.org"
+        id S1352506AbhKYMdd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Nov 2021 07:33:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38886 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239834AbhKYMHz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Nov 2021 07:07:55 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 50F2361041;
-        Thu, 25 Nov 2021 12:04:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637841884;
-        bh=rPq2Ad3fHPPBX3XIqL72QUl4mZ3FkBDQpkBLiVEsWqU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=P2yvez169HuqQwUguLlRwzXohUVtZZd5vzTu13kt2HPNHFmL+pxq66biw7tef+iJx
-         qZPyB78duv609Kv0nj8goIeIJ2+mM5/3EOzpecFK6L2/xMDqgtfkzTpAX6lByeaJ9P
-         8j7SALghHJTJC7CIdB4CnfU0Jz4643GzM+/vTb14WWkOMgWDDAVteL9lok19HopIZB
-         0u/o8s1DDXq4RhZD4jyJ7uP+q5rtO+Vu8rVEjHr/Jj3JS0LhZ5u/Bh6fX6T+JQ/MER
-         fZ1OwolLvVWLXNRNZR2299C5+9ah0DUjNBooX9DiHbHnJFf7T0oOKb7wSbCipKFwjo
-         Bi79t+ARDps5A==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mqDUD-00058k-HF; Thu, 25 Nov 2021 13:04:21 +0100
-Date:   Thu, 25 Nov 2021 13:04:21 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        id S1345004AbhKYMbd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Nov 2021 07:31:33 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4C6FA61074;
+        Thu, 25 Nov 2021 12:28:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1637843302;
+        bh=c6XrtSt+7tVxiYxPHL5gzsTXTdIfYjn9rP6f1kfJk7Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mDamCPimpQUp5wCP8aJp9An3+y9xq8r2aiiru7LpRTuRSJi9quedYmHck7JyCzBgA
+         j03+JGiY5bTbQYmsTvi0fzp5sD/6QqiCSDn68CwF+RD2lcdbNMaAs4/1c9xCVeMubJ
+         hYSvkRhIgwaHMNtuhPDWl8683OxG1XOKGQlhPibY=
+Date:   Thu, 25 Nov 2021 13:28:09 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB-serial fixes for 5.16-rc3
-Message-ID: <YZ97xbN1Ln83r+hP@hovoldconsulting.com>
+Subject: Re: [GIT PULL] USB-serial fixes for 5.16-rc3
+Message-ID: <YZ+BWehxNBVbyqfV@kroah.com>
+References: <YZ97xbN1Ln83r+hP@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <YZ97xbN1Ln83r+hP@hovoldconsulting.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+On Thu, Nov 25, 2021 at 01:04:21PM +0100, Johan Hovold wrote:
+> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+> 
+>   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.16-rc3
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+Pulled and pushed out, thanks.
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.16-rc3
-
-for you to fetch changes up to 88459e3e42760abb2299bbf6cb1026491170e02a:
-
-  USB: serial: option: add Fibocom FM101-GL variants (2021-11-24 19:03:31 +0100)
-
-----------------------------------------------------------------
-USB-serial fixes for 5.16-rc3
-
-Here's a fix for a pl2303 type-detection issue and some new modem
-devices ids.
-
-All but the last commit have been in linux-next, and with no reported
-issues.
-
-----------------------------------------------------------------
-Daniele Palmas (1):
-      USB: serial: option: add Telit LE910S1 0x9200 composition
-
-Johan Hovold (1):
-      USB: serial: pl2303: fix GC type detection
-
-Mingjie Zhang (1):
-      USB: serial: option: add Fibocom FM101-GL variants
-
- drivers/usb/serial/option.c | 5 +++++
- drivers/usb/serial/pl2303.c | 1 +
- 2 files changed, 6 insertions(+)
+greg k-h
