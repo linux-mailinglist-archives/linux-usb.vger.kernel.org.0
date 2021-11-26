@@ -2,65 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E134545EAF8
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 11:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20BAE45EBB3
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 11:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346695AbhKZKGI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Nov 2021 05:06:08 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:62704 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343615AbhKZKEH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Nov 2021 05:04:07 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1AQ9aCln042552;
-        Fri, 26 Nov 2021 17:36:12 +0800 (GMT-8)
-        (envelope-from neal_liu@aspeedtech.com)
-Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 26 Nov
- 2021 18:00:28 +0800
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
+        id S1377138AbhKZKgx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Nov 2021 05:36:53 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:48200 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232057AbhKZKex (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Nov 2021 05:34:53 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id D11DC1F46790
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1637922699; bh=H06EdMXymS4zBmamOUkgbxwP59hf5SsyyaBQT8e4hSc=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=P3w+IgB2bojbnEejZcPtLhFEklaVwa+TxNDQ+wPhx6G4l0QlNc7VKNvc3XXjAcatT
+         4OPpLFN0c5JfxqzNXSh+u2OuTdh4oMir4cEFw7LsDHojbsz+TOTJdQs4eQL6dSbYGA
+         btzOqeqMJV4MizPDsRNt/xT56Lonoo11oWLav8TLDY2Mq618hEE46Bn7VSzMAo2mRP
+         rKtNDLjwQNAOVt0p6hF1h75m9nSGVrfHsmdNUUGG1ul/46szMMEE9Vnoi16a24LW2Y
+         SN8iJM+0CYZKx+j3bdBSUeS9oTLOUry5Q7dMNK4/CuHJNRpvzlKYF3eo88pqFkf97h
+         lho9hf+PJcgOA==
+Subject: Re: [PATCH 1/3] dt-bindings: usb: mtk-xhci: add support ip-sleep for
+ mt8195
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Neal Liu <neal_liu@aspeedtech.com>, Tao Ren <rentao.bupt@gmail.com>
-Subject: [PATCH] usb: uhci: add aspeed ast2600 uhci support
-Date:   Fri, 26 Nov 2021 18:00:21 +0800
-Message-ID: <20211126100021.2331024-1-neal_liu@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
+        Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211102060049.1843-1-chunfeng.yun@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <ef3991ab-846d-0d2f-5fde-3677c2f7db9c@collabora.com>
+Date:   Fri, 26 Nov 2021 11:31:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.10.10]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1AQ9aCln042552
+In-Reply-To: <20211102060049.1843-1-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable ast2600 uhci quirks.
+Il 02/11/21 07:00, Chunfeng Yun ha scritto:
+> There are 4 USB controllers on MT8195, each controller's wakeup control is
+> different, add some spicific versions for them.
+> 
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
----
- drivers/usb/host/uhci-platform.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/uhci-platform.c b/drivers/usb/host/uhci-platform.c
-index 70dbd95c3f06..be9e9db7cad1 100644
---- a/drivers/usb/host/uhci-platform.c
-+++ b/drivers/usb/host/uhci-platform.c
-@@ -113,7 +113,8 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
- 				num_ports);
- 		}
- 		if (of_device_is_compatible(np, "aspeed,ast2400-uhci") ||
--		    of_device_is_compatible(np, "aspeed,ast2500-uhci")) {
-+		    of_device_is_compatible(np, "aspeed,ast2500-uhci") ||
-+		    of_device_is_compatible(np, "aspeed,ast2600-uhci")) {
- 			uhci->is_aspeed = 1;
- 			dev_info(&pdev->dev,
- 				 "Enabled Aspeed implementation workarounds\n");
--- 
-2.25.1
-
+Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
