@@ -2,118 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0868C45F366
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 19:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B42145F516
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 20:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237586AbhKZSIm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Nov 2021 13:08:42 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:54620 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238434AbhKZSGm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Nov 2021 13:06:42 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.1)
- id 4f5217c7598b0a93; Fri, 26 Nov 2021 19:03:28 +0100
-Received: from kreacher.localnet (unknown [213.134.181.132])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        id S234300AbhKZTVU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Nov 2021 14:21:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232432AbhKZTTT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Nov 2021 14:19:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB2AC061A1A;
+        Fri, 26 Nov 2021 10:41:30 -0800 (PST)
+Received: from mail.kernel.org (unknown [198.145.29.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 3CEE566ABF7;
-        Fri, 26 Nov 2021 19:03:27 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     linux-usb@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Gil Fine <gil.fine@intel.com>, Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH 1/6] thunderbolt: Runtime PM activate both ends of the device link
-Date:   Fri, 26 Nov 2021 19:03:26 +0100
-Message-ID: <4690965.GXAFRqVoOG@kreacher>
-In-Reply-To: <20211125073733.74902-2-mika.westerberg@linux.intel.com>
-References: <20211125073733.74902-1-mika.westerberg@linux.intel.com> <20211125073733.74902-2-mika.westerberg@linux.intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.181.132
-X-CLIENT-HOSTNAME: 213.134.181.132
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrhedvgddutdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudekuddrudefvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurddufedvpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheplhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepjggvhhgviihkvghlufhhueesghhmrghilhdrtghomhdprhgtphhtthhopehmihgthhgrvghlrdhjrghmvghtsehinhhtvghlrdgtohhmpdhrtghpthhtohepghhilhdrfhhinhgv
- sehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhukhgrshesfihunhhnvghrrdguvgdprhgtphhtthhopegrnhgurhgvrghsrdhnohgvvhgvrhesghhmrghilhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE18B6233B;
+        Fri, 26 Nov 2021 18:35:15 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 727B1600CC;
+        Fri, 26 Nov 2021 18:35:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637951715;
+        bh=NwUL72wAmgp9QJYwcWzRjQb6WRhmvj7RlQ/A6hNL7fA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=LYGLUaC7P+5x2Rm5+VVl3wO13lQze0HJz67vNed7dK6K47WIrEi+AxSs0Qh0NTGsy
+         Kzc2bAl7fTTmOsb83oGFuNqHdgFKARMhtjo62YN26k3cPnVgIZEju1TQQ5yxKsKP7K
+         zgA1TS5MTI7C7rs/URfECZna1cuyEhRes5MZz7G62sbaulpCZYWNWqMmBos7J0Il9L
+         Ne78i1JFqVNNV9f6lG9tLQV0fo2yG7357h8mgBxSwDJRh09/XahqttaFiDSe+jt0bY
+         Ylf58Vyh5+EQs6zHpQvF7w2zKnWeim11HWuxi0l4zc37pgBhaLEkpqizKaRJDh3Wxh
+         EKJjk7YeztUtA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 6D048609D5;
+        Fri, 26 Nov 2021 18:35:15 +0000 (UTC)
+Subject: Re: [GIT PULL] USB fixes for 5.16-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YaD577+IUWacSYBm@kroah.com>
+References: <YaD577+IUWacSYBm@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YaD577+IUWacSYBm@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16-rc1
+X-PR-Tracked-Commit-Id: a88db2ecc2d2c11aa8744be9817d6d249d001cca
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ba2cacc18cb1c2f1bdaf5a1ccae22d16ca6420a0
+Message-Id: <163795171544.22939.15060198008605327852.pr-tracker-bot@kernel.org>
+Date:   Fri, 26 Nov 2021 18:35:15 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thursday, November 25, 2021 8:37:28 AM CET Mika Westerberg wrote:
-> If protocol tunnels are already up when the driver is loaded, for
-> instance if the boot firmware implements connection manager of its own,
-> runtime PM reference count of the consumer devices behind the tunnel
-> might have been increased already before the device link is created but
-> the supplier device runtime PM reference count is not. This leads to a
-> situation where the supplier (the Thunderbolt driver) can runtime
-> suspend even if it should not because the corresponding protocol tunnel
-> needs to be up causing the devices to be removed from the corresponding
-> native bus.
-> 
-> Prevent this from happening by making both sides of the link runtime PM
-> active briefly. The pm_runtime_put() for the consumer (PCIe
-> root/downstream port, xHCI) then allows it to runtime suspend again but
-> keeps the supplier runtime resumed the whole time it is runtime active.
-> 
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+The pull request you sent on Fri, 26 Nov 2021 16:14:55 +0100:
 
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16-rc1
 
-Thanks!
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ba2cacc18cb1c2f1bdaf5a1ccae22d16ca6420a0
 
-> ---
->  drivers/thunderbolt/acpi.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
-> index b67e72d5644b..7c9597a33929 100644
-> --- a/drivers/thunderbolt/acpi.c
-> +++ b/drivers/thunderbolt/acpi.c
-> @@ -7,6 +7,7 @@
->   */
->  
->  #include <linux/acpi.h>
-> +#include <linux/pm_runtime.h>
->  
->  #include "tb.h"
->  
-> @@ -74,8 +75,18 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
->  		 pci_pcie_type(pdev) == PCI_EXP_TYPE_DOWNSTREAM))) {
->  		const struct device_link *link;
->  
-> +		/*
-> +		 * Make them both active first to make sure the NHI does
-> +		 * not runtime suspend before the consumer. The
-> +		 * pm_runtime_put() below then allows the consumer to
-> +		 * runtime suspend again (which then allows NHI runtime
-> +		 * suspend too now that the device link is established).
-> +		 */
-> +		pm_runtime_get_sync(&pdev->dev);
-> +
->  		link = device_link_add(&pdev->dev, &nhi->pdev->dev,
->  				       DL_FLAG_AUTOREMOVE_SUPPLIER |
-> +				       DL_FLAG_RPM_ACTIVE |
->  				       DL_FLAG_PM_RUNTIME);
->  		if (link) {
->  			dev_dbg(&nhi->pdev->dev, "created link from %s\n",
-> @@ -84,6 +95,8 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
->  			dev_warn(&nhi->pdev->dev, "device link creation from %s failed\n",
->  				 dev_name(&pdev->dev));
->  		}
-> +
-> +		pm_runtime_put(&pdev->dev);
->  	}
->  
->  out_put:
-> 
+Thank you!
 
-
-
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
