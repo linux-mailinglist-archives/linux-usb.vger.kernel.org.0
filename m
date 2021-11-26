@@ -2,102 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE0F345EAB6
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 10:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3663D45EAB8
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 10:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376443AbhKZJwy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Nov 2021 04:52:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44466 "EHLO mail.kernel.org"
+        id S238162AbhKZJxV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Nov 2021 04:53:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44576 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229505AbhKZJux (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Nov 2021 04:50:53 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 27138610CA;
-        Fri, 26 Nov 2021 09:47:41 +0000 (UTC)
+        id S234676AbhKZJvO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Nov 2021 04:51:14 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EE51A610FE;
+        Fri, 26 Nov 2021 09:47:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637920061;
-        bh=RmPE7rdsieIifKFC/2nZXzuK2s8nnr82tj6/PHry4Qo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=c/lDHTmQHwvSOh6AakQdNa6DGTUsQ42KJCtqCS62fTP8B4lo3zDaTh2qbGNUhV7dN
-         uSrdTydmu7zWMSs4LJkRh5e8lsly1E+151lx68FXJlMh9xRKEmrswLP6LWYwFw0xzp
-         4wSRTful9VQ07xDWjGHDSREAbG2Cb1TOyFKT9WF1+Rbp7jXZtrLpNDYoF04EuPSk/3
-         K2bHvMC9QxveOOJiDQwPDPOGsWvi+uZJXCG6jnVNtvm47OIGgGbSGB405D8gGo6Y+Y
-         0Cj/YzCrAQofxf4tA6fOT7gj8nHnbnLTGq0jH2otzL8f9kWwmlruI7lzyezORJ0FOu
-         aGFPNZvP8crSA==
+        s=k20201202; t=1637920080;
+        bh=CczF4rEDnw26fu0snuJ/zcLY55iydu7dxE9p8n71ytw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=atNXCgH++8ZYRYZLSScDvYUaK+NKEAAAY6aILO4f0/Wt8gZpdu0vjudsTH7P2BDy0
+         Wnw+xBcM0w5HnsmFg67KolFQIAIcTfT2WODL+/nbhDOKHsKYkEDAnZDaLurZY7ONKx
+         z+VA5T/Z39PG8fJoIBG858dHIgpnNGrBIomXSdENbPL9DFqanrficr4LraUK3R6hdC
+         /xJc1oMyyGFRr41bTkOJa83wIQp/k8wvFaK0k8VxNutiYCDdxr9cllSx8ve0gZozCv
+         ohxWvEinneQA+JN7fjYFhT8mUOfd2/lhES6jyfezuqme1kmHmAn3RiVkdr5ZtzNkJb
+         zoRliqBmagEFA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1mqXpB-0008HL-NS; Fri, 26 Nov 2021 10:47:22 +0100
+        id 1mqXpV-0008HY-OV; Fri, 26 Nov 2021 10:47:41 +0100
+Date:   Fri, 26 Nov 2021 10:47:41 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Maarten Brock <m.brock@vanmierlo.com>, stable@vger.kernel.org,
-        Karoly Pados <pados@pados.hu>
-Subject: [PATCH] USB: serial: cp210x: fix CP2105 GPIO registration
-Date:   Fri, 26 Nov 2021 10:43:48 +0100
-Message-Id: <20211126094348.31698-1-johan@kernel.org>
-X-Mailer: git-send-email 2.32.0
+To:     Maarten Brock <m.brock@vanmierlo.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: CP2105 gives kernel error -22 when in modem mode
+Message-ID: <YaCtPXkQXQIzsuq2@hovoldconsulting.com>
+References: <5eb560c81d2ea1a2b4602a92d9f48a89@vanmierlo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5eb560c81d2ea1a2b4602a92d9f48a89@vanmierlo.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When generalising GPIO support and adding support for CP2102N, the GPIO
-registration for some CP2105 devices accidentally broke. Specifically,
-when all the pins of a port are in "modem" mode, and thus unavailable
-for GPIO use, the GPIO chip would now be registered without having
-initialised the number of GPIO lines. This would in turn be rejected by
-gpiolib and some errors messages would be printed (but importantly probe
-would still succeed).
+On Thu, Nov 25, 2021 at 04:42:27PM +0100, Maarten Brock wrote:
+> Hello all,
+> 
+> When a uart of the CP2105 USB-serial chip is programmed to be in modem 
+> mode, all its gpio pins are in alternate use and none are available for 
+> gpio. Still the cp210x driver tries to add a gpiochip unconditionally, 
+> which results in an error.
+> 
+> > cp210x 1-1.4.4:1.0: cp210x converter detected
+> > usb 1-1.4.4: cp210x converter now attached to ttyUSB0
+> > cp210x 1-1.4.4:1.1: cp210x converter detected
+> > gpio gpiochip2: (cp210x): tried to insert a GPIO chip with zero lines
+> > gpiochip_add_data_with_key: GPIOs 0..-1 (cp210x) failed to register, 
+> > -22
+> > cp210x 1-1.4.4:1.1: GPIO initialisation failed: -22
+> > usb 1-1.4.4: cp210x converter now attached to ttyUSB1
 
-Fix this by initialising the number of GPIO lines before registering the
-GPIO chip.
+Thanks for reporting this.
 
-Note that as for the other device types, and as when all CP2105 pins are
-muxed for LED function, the GPIO chip is registered also when no pins
-are available for GPIO use.
+> I propose to add something like the following to cp210x_gpio_init
+> 
+> +	unsigned long valid_mask, altfunc_mask;
+> ...
+> +	altfunc_mask = priv->gpio_altfunc;
+> +	bitmap_complement(&valid_mask, &altfunc_mask, priv->gc.ngpio);
+> +	if (bitmap_empty(&valid_mask, priv->gc.ngpio))
+> +		return 0;
+> +
+>   	priv->gc.label = "cp210x";
+>   	priv->gc.request = cp210x_gpio_request;
+>   	priv->gc.get_direction = cp210x_gpio_direction_get;
+> 
+> I can write a proper patch, but am unsure if and what the Fixes tag 
+> should be.
 
-Reported-by: Maarten Brock <m.brock@vanmierlo.com>
-Link: https://lore.kernel.org/r/5eb560c81d2ea1a2b4602a92d9f48a89@vanmierlo.com
-Fixes: c8acfe0aadbe ("USB: serial: cp210x: implement GPIO support for CP2102N")
-Cc: stable@vger.kernel.org      # 4.19
-Cc: Karoly Pados <pados@pados.hu>
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/cp210x.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+This was introduced by commit c8acfe0aadbe ("USB: serial: cp210x:
+implement GPIO support for CP2102N") when generalising GPIO support and
+adding support for CP2102N. Before that commit, the GPIO chip would
+indeed never have been registered in this case.
 
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index 7705328034ca..8a60c0d56863 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -1635,6 +1635,8 @@ static int cp2105_gpioconf_init(struct usb_serial *serial)
- 
- 	/*  2 banks of GPIO - One for the pins taken from each serial port */
- 	if (intf_num == 0) {
-+		priv->gc.ngpio = 2;
-+
- 		if (mode.eci == CP210X_PIN_MODE_MODEM) {
- 			/* mark all GPIOs of this interface as reserved */
- 			priv->gpio_altfunc = 0xff;
-@@ -1645,8 +1647,9 @@ static int cp2105_gpioconf_init(struct usb_serial *serial)
- 		priv->gpio_pushpull = (u8)((le16_to_cpu(config.gpio_mode) &
- 						CP210X_ECI_GPIO_MODE_MASK) >>
- 						CP210X_ECI_GPIO_MODE_OFFSET);
--		priv->gc.ngpio = 2;
- 	} else if (intf_num == 1) {
-+		priv->gc.ngpio = 3;
-+
- 		if (mode.sci == CP210X_PIN_MODE_MODEM) {
- 			/* mark all GPIOs of this interface as reserved */
- 			priv->gpio_altfunc = 0xff;
-@@ -1657,7 +1660,6 @@ static int cp2105_gpioconf_init(struct usb_serial *serial)
- 		priv->gpio_pushpull = (u8)((le16_to_cpu(config.gpio_mode) &
- 						CP210X_SCI_GPIO_MODE_MASK) >>
- 						CP210X_SCI_GPIO_MODE_OFFSET);
--		priv->gc.ngpio = 3;
- 	} else {
- 		return -ENODEV;
- 	}
--- 
-2.32.0
+The right fix however is to continue to always register the gpiochip but
+to make sure that the number of lines is initialised before doing so.
+This is how we deal with with the other device types and is also how
+CP2105 is handled when both pins of the CP2105 ECI port are muxed for
+LED function.
 
+I've just posted a fix here:
+
+	https://lore.kernel.org/r/20211126094348.31698-1-johan@kernel.org
+
+Johan
