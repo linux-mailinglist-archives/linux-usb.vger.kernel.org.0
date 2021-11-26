@@ -2,63 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2875345EAE1
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 10:59:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E134545EAF8
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 11:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376509AbhKZKCL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Nov 2021 05:02:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47128 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1376511AbhKZKAK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Nov 2021 05:00:10 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BFF0961107;
-        Fri, 26 Nov 2021 09:56:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1637920618;
-        bh=9OYvcTu2WIu2aXhWr8kWuQT0PFnfR4TkpO1CH3AtbD0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g2JQapHHHBm5no9/x+I9vIg33t2GSTLnZFhZ7KJRqcgAS9DiUh461OXljhVdI9OnT
-         9X+q8ekYjhRZ54xsFrRQG2gOEiPsjfJMaHybxzwLgLtmEZqlhaJLfvHy6o8KtbLT00
-         AyQNaqAH5ToLTLUkmupRxR7S4xfy831s6eyZy01s=
-Date:   Fri, 26 Nov 2021 10:56:54 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Maarten Brock <m.brock@vanmierlo.com>, stable@vger.kernel.org,
-        Karoly Pados <pados@pados.hu>
-Subject: Re: [PATCH] USB: serial: cp210x: fix CP2105 GPIO registration
-Message-ID: <YaCvZl2W4ZkrVPX+@kroah.com>
-References: <20211126094348.31698-1-johan@kernel.org>
+        id S1346695AbhKZKGI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Nov 2021 05:06:08 -0500
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:62704 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343615AbhKZKEH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Nov 2021 05:04:07 -0500
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 1AQ9aCln042552;
+        Fri, 26 Nov 2021 17:36:12 +0800 (GMT-8)
+        (envelope-from neal_liu@aspeedtech.com)
+Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 26 Nov
+ 2021 18:00:28 +0800
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     Neal Liu <neal_liu@aspeedtech.com>, Tao Ren <rentao.bupt@gmail.com>
+Subject: [PATCH] usb: uhci: add aspeed ast2600 uhci support
+Date:   Fri, 26 Nov 2021 18:00:21 +0800
+Message-ID: <20211126100021.2331024-1-neal_liu@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211126094348.31698-1-johan@kernel.org>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.10.10]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 1AQ9aCln042552
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 26, 2021 at 10:43:48AM +0100, Johan Hovold wrote:
-> When generalising GPIO support and adding support for CP2102N, the GPIO
-> registration for some CP2105 devices accidentally broke. Specifically,
-> when all the pins of a port are in "modem" mode, and thus unavailable
-> for GPIO use, the GPIO chip would now be registered without having
-> initialised the number of GPIO lines. This would in turn be rejected by
-> gpiolib and some errors messages would be printed (but importantly probe
-> would still succeed).
-> 
-> Fix this by initialising the number of GPIO lines before registering the
-> GPIO chip.
-> 
-> Note that as for the other device types, and as when all CP2105 pins are
-> muxed for LED function, the GPIO chip is registered also when no pins
-> are available for GPIO use.
-> 
-> Reported-by: Maarten Brock <m.brock@vanmierlo.com>
-> Link: https://lore.kernel.org/r/5eb560c81d2ea1a2b4602a92d9f48a89@vanmierlo.com
-> Fixes: c8acfe0aadbe ("USB: serial: cp210x: implement GPIO support for CP2102N")
-> Cc: stable@vger.kernel.org      # 4.19
-> Cc: Karoly Pados <pados@pados.hu>
-> Signed-off-by: Johan Hovold <johan@kernel.org>
+Enable ast2600 uhci quirks.
 
+Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+---
+ drivers/usb/host/uhci-platform.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+diff --git a/drivers/usb/host/uhci-platform.c b/drivers/usb/host/uhci-platform.c
+index 70dbd95c3f06..be9e9db7cad1 100644
+--- a/drivers/usb/host/uhci-platform.c
++++ b/drivers/usb/host/uhci-platform.c
+@@ -113,7 +113,8 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
+ 				num_ports);
+ 		}
+ 		if (of_device_is_compatible(np, "aspeed,ast2400-uhci") ||
+-		    of_device_is_compatible(np, "aspeed,ast2500-uhci")) {
++		    of_device_is_compatible(np, "aspeed,ast2500-uhci") ||
++		    of_device_is_compatible(np, "aspeed,ast2600-uhci")) {
+ 			uhci->is_aspeed = 1;
+ 			dev_info(&pdev->dev,
+ 				 "Enabled Aspeed implementation workarounds\n");
+-- 
+2.25.1
+
