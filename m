@@ -2,81 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC84C45EA9D
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 10:43:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0F345EAB6
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 10:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376464AbhKZJqw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Nov 2021 04:46:52 -0500
-Received: from mga17.intel.com ([192.55.52.151]:24552 "EHLO mga17.intel.com"
+        id S1376443AbhKZJwy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Nov 2021 04:52:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44466 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238162AbhKZJov (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Nov 2021 04:44:51 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="216348133"
-X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
-   d="scan'208";a="216348133"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 01:40:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
-   d="scan'208";a="650940319"
-Received: from kuha.fi.intel.com ([10.237.72.166])
-  by fmsmga001.fm.intel.com with SMTP; 26 Nov 2021 01:40:45 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 26 Nov 2021 11:40:44 +0200
-Date:   Fri, 26 Nov 2021 11:40:44 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        wonchung@google.com, bleung@chromium.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Rajat Jain <rajatja@google.com>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH 0/4] usb: Use notifier for linking Type C ports.
-Message-ID: <YaCrnMAEXnG+VO6d@kuha.fi.intel.com>
-References: <20211124231028.696982-1-pmalani@chromium.org>
+        id S229505AbhKZJux (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Nov 2021 04:50:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 27138610CA;
+        Fri, 26 Nov 2021 09:47:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637920061;
+        bh=RmPE7rdsieIifKFC/2nZXzuK2s8nnr82tj6/PHry4Qo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=c/lDHTmQHwvSOh6AakQdNa6DGTUsQ42KJCtqCS62fTP8B4lo3zDaTh2qbGNUhV7dN
+         uSrdTydmu7zWMSs4LJkRh5e8lsly1E+151lx68FXJlMh9xRKEmrswLP6LWYwFw0xzp
+         4wSRTful9VQ07xDWjGHDSREAbG2Cb1TOyFKT9WF1+Rbp7jXZtrLpNDYoF04EuPSk/3
+         K2bHvMC9QxveOOJiDQwPDPOGsWvi+uZJXCG6jnVNtvm47OIGgGbSGB405D8gGo6Y+Y
+         0Cj/YzCrAQofxf4tA6fOT7gj8nHnbnLTGq0jH2otzL8f9kWwmlruI7lzyezORJ0FOu
+         aGFPNZvP8crSA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mqXpB-0008HL-NS; Fri, 26 Nov 2021 10:47:22 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Maarten Brock <m.brock@vanmierlo.com>, stable@vger.kernel.org,
+        Karoly Pados <pados@pados.hu>
+Subject: [PATCH] USB: serial: cp210x: fix CP2105 GPIO registration
+Date:   Fri, 26 Nov 2021 10:43:48 +0100
+Message-Id: <20211126094348.31698-1-johan@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211124231028.696982-1-pmalani@chromium.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 24, 2021 at 03:10:06PM -0800, Prashant Malani wrote:
-> This series resolves the cyclic dependency error which was introduced by
-> commit 63cd78617350 ("usb: Link the ports to the connectors they are
-> attached to") which lead to it being reverted. The approach here is to
-> use a notifier to link a new Type C port to pre-existing USB ports
-> instead of calling an iterator of usb ports from the Type C connector
-> class. This allows commit 63cd78617350 ("usb: Link the ports to the
-> connectors they are attached to") to then be submitted without any
-> depmod cyclic dependency error.
-> 
-> The final patch removes the usb port iterator since it is no longer
-> needed.
+When generalising GPIO support and adding support for CP2102N, the GPIO
+registration for some CP2105 devices accidentally broke. Specifically,
+when all the pins of a port are in "modem" mode, and thus unavailable
+for GPIO use, the GPIO chip would now be registered without having
+initialised the number of GPIO lines. This would in turn be rejected by
+gpiolib and some errors messages would be printed (but importantly probe
+would still succeed).
 
-This is not enough. Build the Type-C Class as a module and the USB bus
-statically, and the links will not get created.
+Fix this by initialising the number of GPIO lines before registering the
+GPIO chip.
 
-I'm not sure you actually achieve much with this series, and I'm not
-sure this approach will ever fully solve the problem. As long as we
-have to declare API, we will have the circular dependency issue on our
-hands. But there are ways to avoid that.
+Note that as for the other device types, and as when all CP2105 pins are
+muxed for LED function, the GPIO chip is registered also when no pins
+are available for GPIO use.
 
-There is for example the component framework (drivers/base/component.c)
-that I've been thinking about using here. In this case it would work
-so that you declare the USB Type-C part as your aggregate driver, and
-everything that is connected to it (so USB ports, DisplayPorts, TBT,
-etc.) would then just declare themselves as general components. Could
-you take a look at that?
+Reported-by: Maarten Brock <m.brock@vanmierlo.com>
+Link: https://lore.kernel.org/r/5eb560c81d2ea1a2b4602a92d9f48a89@vanmierlo.com
+Fixes: c8acfe0aadbe ("USB: serial: cp210x: implement GPIO support for CP2102N")
+Cc: stable@vger.kernel.org      # 4.19
+Cc: Karoly Pados <pados@pados.hu>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/serial/cp210x.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-thanks,
-
+diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+index 7705328034ca..8a60c0d56863 100644
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -1635,6 +1635,8 @@ static int cp2105_gpioconf_init(struct usb_serial *serial)
+ 
+ 	/*  2 banks of GPIO - One for the pins taken from each serial port */
+ 	if (intf_num == 0) {
++		priv->gc.ngpio = 2;
++
+ 		if (mode.eci == CP210X_PIN_MODE_MODEM) {
+ 			/* mark all GPIOs of this interface as reserved */
+ 			priv->gpio_altfunc = 0xff;
+@@ -1645,8 +1647,9 @@ static int cp2105_gpioconf_init(struct usb_serial *serial)
+ 		priv->gpio_pushpull = (u8)((le16_to_cpu(config.gpio_mode) &
+ 						CP210X_ECI_GPIO_MODE_MASK) >>
+ 						CP210X_ECI_GPIO_MODE_OFFSET);
+-		priv->gc.ngpio = 2;
+ 	} else if (intf_num == 1) {
++		priv->gc.ngpio = 3;
++
+ 		if (mode.sci == CP210X_PIN_MODE_MODEM) {
+ 			/* mark all GPIOs of this interface as reserved */
+ 			priv->gpio_altfunc = 0xff;
+@@ -1657,7 +1660,6 @@ static int cp2105_gpioconf_init(struct usb_serial *serial)
+ 		priv->gpio_pushpull = (u8)((le16_to_cpu(config.gpio_mode) &
+ 						CP210X_SCI_GPIO_MODE_MASK) >>
+ 						CP210X_SCI_GPIO_MODE_OFFSET);
+-		priv->gc.ngpio = 3;
+ 	} else {
+ 		return -ENODEV;
+ 	}
 -- 
-heikki
+2.32.0
+
