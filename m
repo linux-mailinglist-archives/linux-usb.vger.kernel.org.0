@@ -2,79 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CCB545F1D5
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 17:26:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0868C45F366
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 19:05:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbhKZQ3p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Nov 2021 11:29:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbhKZQ1n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Nov 2021 11:27:43 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54641C0619EB
-        for <linux-usb@vger.kernel.org>; Fri, 26 Nov 2021 08:14:54 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id w1so41060929edc.6
-        for <linux-usb@vger.kernel.org>; Fri, 26 Nov 2021 08:14:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cNwpCfa5vdz5URKXoBoziS8DLa8q/pxzIVcRvP60W6o=;
-        b=LBXbREg2GS+u3BqEAnE9+G2jlIGT0ooShjGgw5RvmMiAwLyOD9YAsSE0kVdXd01LHe
-         ic5u+8hx8vmR4qi+4ZzZG4owjrUfyACtTyvAgu2i9uwiR5QjXDQWknNSOxJ0Xq4sP4ls
-         svh/kQF/cxckLQ9mAOYoTf9Dxe1hI46Qo3hdjqQIKDyILjbX4oOm3X/CwSwMo9uJIFgb
-         CkUcV4zZgHmY/ULr2zWaksDqoCCU1JYedZcEFK/tn4MUN3A/+i631vCDqSKceORC/fE0
-         xOxqc7Xspv23hm7osxclmCgk1uKhNEDO99qzC/T5nGzVkDiTw69jvArE65eD/lQ885s8
-         3Diw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cNwpCfa5vdz5URKXoBoziS8DLa8q/pxzIVcRvP60W6o=;
-        b=ltrFPPOFCs5779+a4gaR0tezmGiPtCTGXB6Tgil2uEhF3+SVmtsa+cZdHT0b/+JLOv
-         L9t/ebgMV20exL/ID6spbN4b6D9UfCXo0d4SEQx1h4I0vct8J8+gbuIemSWJL3Y/QcwR
-         r08++zjtQPmEiNJkAeLk1NZ4NJYTmTXKUA+7v+i3x0cMnq6gzjNcgCQGjCd6zsiyhCmy
-         77P3KdfRFaI9VlDMWJTn1xEpN9pV4sD4r9zLZoAo6m0Wa26mmtru/+FCIIGV3x8hdNbD
-         1EmlcZ7F5uEK5fjSi21PqcTRs6ugW9LL4cgW5kW/gF128iiQXKuZ5xpCJO+bH5Kj1KaB
-         es6A==
-X-Gm-Message-State: AOAM531gkp74aZNo9usOhTK5GRe4FCYjXEGBngcwmJlPjfWOoO0TzE7V
-        neza7fVpn3A7YO+wpW0DatDN/+rJI0NN/Ha//3y4nDEPsBt9gw==
-X-Google-Smtp-Source: ABdhPJyoOsT5yoaKQy81miA4H5WjwfmLOAWHxoCnlvKvigZYt1ztXqCCdC1cHDofBU+NEajsjI0BUczvkjxutknpMMI=
-X-Received: by 2002:a50:d741:: with SMTP id i1mr48131098edj.37.1637943292861;
- Fri, 26 Nov 2021 08:14:52 -0800 (PST)
+        id S237586AbhKZSIm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Nov 2021 13:08:42 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:54620 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238434AbhKZSGm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Nov 2021 13:06:42 -0500
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.1)
+ id 4f5217c7598b0a93; Fri, 26 Nov 2021 19:03:28 +0100
+Received: from kreacher.localnet (unknown [213.134.181.132])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 3CEE566ABF7;
+        Fri, 26 Nov 2021 19:03:27 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     linux-usb@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Gil Fine <gil.fine@intel.com>, Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH 1/6] thunderbolt: Runtime PM activate both ends of the device link
+Date:   Fri, 26 Nov 2021 19:03:26 +0100
+Message-ID: <4690965.GXAFRqVoOG@kreacher>
+In-Reply-To: <20211125073733.74902-2-mika.westerberg@linux.intel.com>
+References: <20211125073733.74902-1-mika.westerberg@linux.intel.com> <20211125073733.74902-2-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
-References: <CAA=hcWTukyvM0Hz-VgW_NG7Whc3i7GLGySzJ0iGHvxo3O1f5vQ@mail.gmail.com>
- <YZ3j9XKE0WjfkcsI@kroah.com> <CAA=hcWQ+u5QcqJd-ZqZfZd93K0j0f7prxna0yhVi=AWQrxa_UA@mail.gmail.com>
- <YZ4QL5CARZAVnaEE@kroah.com> <CAA=hcWQ-Tr5Sn9mmpBoK0Rs0Vgk2fM3X5DaWwXT_dLJWd8ZiGA@mail.gmail.com>
-In-Reply-To: <CAA=hcWQ-Tr5Sn9mmpBoK0Rs0Vgk2fM3X5DaWwXT_dLJWd8ZiGA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 26 Nov 2021 18:14:17 +0200
-Message-ID: <CAHp75VfPQ7Oozzi2Mw46CoBz7WqVtXyCzx7-nFRevTMqOab9PQ@mail.gmail.com>
-Subject: Re: Kernel 5.10 USB issues
-To:     Jupiter <jupiter.hce@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.181.132
+X-CLIENT-HOSTNAME: 213.134.181.132
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrhedvgddutdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudekuddrudefvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurddufedvpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheplhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepjggvhhgviihkvghlufhhueesghhmrghilhdrtghomhdprhgtphhtthhopehmihgthhgrvghlrdhjrghmvghtsehinhhtvghlrdgtohhmpdhrtghpthhtohepghhilhdrfhhinhgv
+ sehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhukhgrshesfihunhhnvghrrdguvgdprhgtphhtthhopegrnhgurhgvrghsrdhnohgvvhgvrhesghhmrghilhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 26, 2021 at 1:04 PM Jupiter <jupiter.hce@gmail.com> wrote:
->
-> Hi Greg,
->
-> Thanks for your patience, here is what I did. I thought I followed the
-> instructions, any useful information?
->
-> > Start working on the "master" branch and do:
+On Thursday, November 25, 2021 8:37:28 AM CET Mika Westerberg wrote:
+> If protocol tunnels are already up when the driver is loaded, for
+> instance if the boot firmware implements connection manager of its own,
+> runtime PM reference count of the consumer devices behind the tunnel
+> might have been increased already before the device link is created but
+> the supplier device runtime PM reference count is not. This leads to a
+> situation where the supplier (the Thunderbolt driver) can runtime
+> suspend even if it should not because the corresponding protocol tunnel
+> needs to be up causing the devices to be removed from the corresponding
+> native bus.
+> 
+> Prevent this from happening by making both sides of the link runtime PM
+> active briefly. The pm_runtime_put() for the consumer (PCIe
+> root/downstream port, xHCI) then allows it to runtime suspend again but
+> keeps the supplier runtime resumed the whole time it is runtime active.
+> 
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-But do you actually _build and run_ kernel each time after running
-`git bisect {good,bad}`? It looks like you simply typed it in a row.
-Also there is a subcommand to `git bisect` which prints log in
-reproducible format (someone else mey run it on their side and
-compare).
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks!
+
+> ---
+>  drivers/thunderbolt/acpi.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
+> index b67e72d5644b..7c9597a33929 100644
+> --- a/drivers/thunderbolt/acpi.c
+> +++ b/drivers/thunderbolt/acpi.c
+> @@ -7,6 +7,7 @@
+>   */
+>  
+>  #include <linux/acpi.h>
+> +#include <linux/pm_runtime.h>
+>  
+>  #include "tb.h"
+>  
+> @@ -74,8 +75,18 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+>  		 pci_pcie_type(pdev) == PCI_EXP_TYPE_DOWNSTREAM))) {
+>  		const struct device_link *link;
+>  
+> +		/*
+> +		 * Make them both active first to make sure the NHI does
+> +		 * not runtime suspend before the consumer. The
+> +		 * pm_runtime_put() below then allows the consumer to
+> +		 * runtime suspend again (which then allows NHI runtime
+> +		 * suspend too now that the device link is established).
+> +		 */
+> +		pm_runtime_get_sync(&pdev->dev);
+> +
+>  		link = device_link_add(&pdev->dev, &nhi->pdev->dev,
+>  				       DL_FLAG_AUTOREMOVE_SUPPLIER |
+> +				       DL_FLAG_RPM_ACTIVE |
+>  				       DL_FLAG_PM_RUNTIME);
+>  		if (link) {
+>  			dev_dbg(&nhi->pdev->dev, "created link from %s\n",
+> @@ -84,6 +95,8 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+>  			dev_warn(&nhi->pdev->dev, "device link creation from %s failed\n",
+>  				 dev_name(&pdev->dev));
+>  		}
+> +
+> +		pm_runtime_put(&pdev->dev);
+>  	}
+>  
+>  out_put:
+> 
+
+
+
+
