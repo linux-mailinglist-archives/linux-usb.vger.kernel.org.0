@@ -2,130 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FD745E292
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Nov 2021 22:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A01D545E39D
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 01:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351101AbhKYVgX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Nov 2021 16:36:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351075AbhKYVeW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Nov 2021 16:34:22 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD2EC0613F2
-        for <linux-usb@vger.kernel.org>; Thu, 25 Nov 2021 13:21:10 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mqMAx-00086M-Rl; Thu, 25 Nov 2021 22:21:03 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mqMAt-0013Fq-1C; Thu, 25 Nov 2021 22:20:58 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mqMAr-0008CR-QS; Thu, 25 Nov 2021 22:20:57 +0100
-Date:   Thu, 25 Nov 2021 22:20:54 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Marek Vasut <marex@denx.de>,
-        Gavin Schenk <g.schenk@eckelmann.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        peter.chen@kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Schrempf Frieder <frieder.schrempf@kontron.de>,
-        stable <stable@vger.kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Heiko Thiery <heiko.thiery@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH] usb: chipidea: ci_hdrc_imx: Fix -EPROBE_DEFER handling
- for phy
-Message-ID: <20211125212054.deazlz5jwvt6xgcp@pengutronix.de>
-References: <20210921113754.767631-1-festevam@gmail.com>
- <20211125083400.h7qoyj52fcn4khum@pengutronix.de>
- <CAOMZO5BXGxXKZAq2jeJ=yRww+Hoft_9=6jUheM92w5majQ1UdQ@mail.gmail.com>
+        id S1346012AbhKZAR7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Nov 2021 19:17:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35434 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237131AbhKZAP7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Nov 2021 19:15:59 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 6F8A560231
+        for <linux-usb@vger.kernel.org>; Fri, 26 Nov 2021 00:12:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637885567;
+        bh=lPuLd4QeF9PfrGbDe+98rSW+PpJ2bYOTTIyBbWPZi+k=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=kRLm0NJg/3pCHCdBoLz4q6nHuFrv0ezFmziWEPBbeMP3MXn+HwLp59UmR/+9HGPzy
+         Y58yphP6Nnn+IwMjyvWwAmq5NwcKbK/xc/YPZK/ylRR+DCoK9wa6QQVOi+c0+IJ+wH
+         aIK2ldWwkbddqzSkHHs1t3oQQI77ZZzm53lABv54+7lsMv0RoSrPLcaX+U2tm+7X+A
+         odS6gagyDnuhc2rQ8mEqyG2cRf/e5Fo6HO+V0+4pq4CqTNqge7p2ioFi1OLAdyv484
+         Ttnv0FqWpVtqjAIrXEbxhsxC1d2BjooYOUeZ3YDvxa8594hfOHYJy8NzdqqUzlWjzT
+         JtNxhoeQvvq/Q==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 5B93660F39; Fri, 26 Nov 2021 00:12:47 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215095] USB ehci error -110 and soft lockup on kernel 5.15.4 as
+ kvm guest
+Date:   Fri, 26 Nov 2021 00:12:47 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: wangyugui@e16-tech.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: CODE_FIX
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-215095-208809-wiXlwgkRVQ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215095-208809@https.bugzilla.kernel.org/>
+References: <bug-215095-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ttjarkphnhjgpgh2"
-Content-Disposition: inline
-In-Reply-To: <CAOMZO5BXGxXKZAq2jeJ=yRww+Hoft_9=6jUheM92w5majQ1UdQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215095
 
---ttjarkphnhjgpgh2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+wangyugui@e16-tech.com (wangyugui@e16-tech.com) changed:
 
-On Thu, Nov 25, 2021 at 08:16:12AM -0300, Fabio Estevam wrote:
-> Hi Uwe,
->=20
-> On Thu, Nov 25, 2021 at 5:34 AM Uwe Kleine-K=F6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
-> >
-> > With an old style device tree using fsl,usbphy
-> > devm_usb_get_phy_by_phandle() returning ERR_PTR(-EPROBE_DEFER) results =
-in
-> > ci->usb_phy =3D ERR_PTR(-EPROBE_DEFER) in the chipidea driver which then
-> > chokes on that with
-> >
-> >         Unable to handle kernel paging request at virtual address fffff=
-e93
-> >
-> > Handle errors other then -ENODEV as was done before v5.15-rc5 in
-> > ci_hdrc_imx_probe().
-> >
-> > Fixes: 8253a34bfae3 ("usb: chipidea: ci_hdrc_imx: Also search for 'phys=
-' phandle")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
-> > Hello,
-> >
-> > this patch became commit 8253a34bfae3278baca52fc1209b7c29270486ca in
-> > v5.15-rc5. On an i.MX25 I experience the following fault:
-> >
-> > [    2.248749] 8<--- cut here ---
-> > [    2.259025] Unable to handle kernel paging request at virtual addres=
-s fffffe93
->=20
-> Sorry for the breakage.
->=20
-> Dan has sent a fix for this:
-> https://www.spinics.net/lists/linux-usb/msg219148.html
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |CODE_FIX
 
-Ah, I see this is already in next as
-d4d2e5329ae9dfd6742c84d79f7d143d10410f1b via the usb tree. I know why I
-missed that when I looked for fixes, but I spare you from the details.
+--- Comment #6 from wangyugui@e16-tech.com (wangyugui@e16-tech.com) ---
+This problem yet not happen on kvm/host 5.15.5. so let's mark it as kvm/host
+problem.
 
-Thanks and sorry for the noise,
-Uwe
+although I checked the patches of 5.15.5, but failed to find out the patch
+which matched this problem directly.
 
 --=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+You may reply to this email to add a comment.
 
---ttjarkphnhjgpgh2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGf/jMACgkQwfwUeK3K
-7Ako0Qf/VMTREhOOrbdj9i5yAg6O9vj1B9qPj/OwN3ckUMaoyUJn3XrxU0cbt5wj
-X+JuifEZqrOkmrplFc4xog2qVVlE5CMtk22mMqVqpNYVbEGiLVO/myYpvPcvZGcm
-oDG/JuG2c5MOZaSvc6tjYZJmdSKJC272RXRtg6pcvUQ3NfkjncmblMa70uRV7b5q
-phYcS1OxW4YMuoXbQ2uqe0QWqagaKhuEoZZPZaKrmTirG5PeOaJdUS2FrZLKtxnN
-QjWy+10t3ZLLKFgHHKuqJcoWNu4mJm5Dxlb5vCxsHALkTQ+3USS/wN1+E9b+P4a2
-YuT9dUcluc8BJ57JTd7l30nzVvqWZA==
-=+uBJ
------END PGP SIGNATURE-----
-
---ttjarkphnhjgpgh2--
+You are receiving this mail because:
+You are watching the assignee of the bug.=
