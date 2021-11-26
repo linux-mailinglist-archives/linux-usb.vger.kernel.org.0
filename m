@@ -2,104 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 258E145EDD9
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 13:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7339645EE2E
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 13:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377420AbhKZM3N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Nov 2021 07:29:13 -0500
-Received: from mga04.intel.com ([192.55.52.120]:43605 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237249AbhKZM1N (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Nov 2021 07:27:13 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="234388665"
-X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
-   d="scan'208";a="234388665"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 04:22:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
-   d="scan'208";a="510623410"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by orsmga008.jf.intel.com with ESMTP; 26 Nov 2021 04:22:17 -0800
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        stable@vger.kernel.org,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Subject: [PATCH 1/1] xhci: Fix commad ring abort, write all 64 bits to CRCR register.
-Date:   Fri, 26 Nov 2021 14:23:40 +0200
-Message-Id: <20211126122340.1193239-2-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211126122340.1193239-1-mathias.nyman@linux.intel.com>
-References: <20211126122340.1193239-1-mathias.nyman@linux.intel.com>
+        id S1377502AbhKZMnx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Nov 2021 07:43:53 -0500
+Received: from fieber.vanmierlo.com ([84.243.197.177]:37831 "EHLO
+        kerio9.vanmierlo.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229760AbhKZMlw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Nov 2021 07:41:52 -0500
+X-Footer: dmFubWllcmxvLmNvbQ==
+Received: from roundcube.vanmierlo.com ([192.168.37.37])
+        (authenticated user m.brock@vanmierlo.com)
+        by kerio9.vanmierlo.com (Kerio Connect 9.3.1 patch 1) with ESMTPA;
+        Fri, 26 Nov 2021 13:37:55 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 26 Nov 2021 13:37:55 +0100
+From:   Maarten Brock <m.brock@vanmierlo.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Karoly Pados <pados@pados.hu>
+Subject: Re: [PATCH] USB: serial: cp210x: fix CP2105 GPIO registration
+In-Reply-To: <20211126094348.31698-1-johan@kernel.org>
+References: <20211126094348.31698-1-johan@kernel.org>
+Message-ID: <bbc0c26db175ec8ec6c10cc695c45f6c@vanmierlo.com>
+X-Sender: m.brock@vanmierlo.com
+User-Agent: Roundcube Webmail/1.3.3
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Turns out some xHC controllers require all 64 bits in the CRCR register
-to be written to execute a command abort.
+On 2021-11-26 10:43, Johan Hovold wrote:
+> When generalising GPIO support and adding support for CP2102N, the GPIO
+> registration for some CP2105 devices accidentally broke. Specifically,
+> when all the pins of a port are in "modem" mode, and thus unavailable
+> for GPIO use, the GPIO chip would now be registered without having
+> initialised the number of GPIO lines. This would in turn be rejected by
+> gpiolib and some errors messages would be printed (but importantly 
+> probe
+> would still succeed).
+> 
+> Fix this by initialising the number of GPIO lines before registering 
+> the
+> GPIO chip.
+> 
+> Note that as for the other device types, and as when all CP2105 pins 
+> are
+> muxed for LED function, the GPIO chip is registered also when no pins
+> are available for GPIO use.
+> 
+> Reported-by: Maarten Brock <m.brock@vanmierlo.com>
+> Link: 
+> https://lore.kernel.org/r/5eb560c81d2ea1a2b4602a92d9f48a89@vanmierlo.com
+> Fixes: c8acfe0aadbe ("USB: serial: cp210x: implement GPIO support for 
+> CP2102N")
+> Cc: stable@vger.kernel.org      # 4.19
+> Cc: Karoly Pados <pados@pados.hu>
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
+>  drivers/usb/serial/cp210x.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+> index 7705328034ca..8a60c0d56863 100644
+> --- a/drivers/usb/serial/cp210x.c
+> +++ b/drivers/usb/serial/cp210x.c
+> @@ -1635,6 +1635,8 @@ static int cp2105_gpioconf_init(struct usb_serial 
+> *serial)
+> 
+>  	/*  2 banks of GPIO - One for the pins taken from each serial port */
+>  	if (intf_num == 0) {
+> +		priv->gc.ngpio = 2;
+> +
+>  		if (mode.eci == CP210X_PIN_MODE_MODEM) {
+>  			/* mark all GPIOs of this interface as reserved */
+>  			priv->gpio_altfunc = 0xff;
+> @@ -1645,8 +1647,9 @@ static int cp2105_gpioconf_init(struct usb_serial 
+> *serial)
+>  		priv->gpio_pushpull = (u8)((le16_to_cpu(config.gpio_mode) &
+>  						CP210X_ECI_GPIO_MODE_MASK) >>
+>  						CP210X_ECI_GPIO_MODE_OFFSET);
+> -		priv->gc.ngpio = 2;
+>  	} else if (intf_num == 1) {
+> +		priv->gc.ngpio = 3;
+> +
+>  		if (mode.sci == CP210X_PIN_MODE_MODEM) {
+>  			/* mark all GPIOs of this interface as reserved */
+>  			priv->gpio_altfunc = 0xff;
+> @@ -1657,7 +1660,6 @@ static int cp2105_gpioconf_init(struct usb_serial 
+> *serial)
+>  		priv->gpio_pushpull = (u8)((le16_to_cpu(config.gpio_mode) &
+>  						CP210X_SCI_GPIO_MODE_MASK) >>
+>  						CP210X_SCI_GPIO_MODE_OFFSET);
+> -		priv->gc.ngpio = 3;
+>  	} else {
+>  		return -ENODEV;
+>  	}
 
-The lower 32 bits containing the command abort bit is written first.
-In case the command ring stops before we write the upper 32 bits then
-hardware may use these upper bits to set the commnd ring dequeue pointer.
-
-Solve this by making sure the upper 32 bits contain a valid command
-ring dequeue pointer.
-
-The original patch that only wrote the first 32 to stop the ring went
-to stable, so this fix should go there as well.
-
-Fixes: ff0e50d3564f ("xhci: Fix command ring pointer corruption while aborting a command")
-Cc: stable@vger.kernel.org
-Tested-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-ring.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 311597bba80e..eaa49aef2935 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -366,7 +366,9 @@ static void xhci_handle_stopped_cmd_ring(struct xhci_hcd *xhci,
- /* Must be called with xhci->lock held, releases and aquires lock back */
- static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
- {
--	u32 temp_32;
-+	struct xhci_segment *new_seg	= xhci->cmd_ring->deq_seg;
-+	union xhci_trb *new_deq		= xhci->cmd_ring->dequeue;
-+	u64 crcr;
- 	int ret;
- 
- 	xhci_dbg(xhci, "Abort command ring\n");
-@@ -375,13 +377,18 @@ static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
- 
- 	/*
- 	 * The control bits like command stop, abort are located in lower
--	 * dword of the command ring control register. Limit the write
--	 * to the lower dword to avoid corrupting the command ring pointer
--	 * in case if the command ring is stopped by the time upper dword
--	 * is written.
-+	 * dword of the command ring control register.
-+	 * Some controllers require all 64 bits to be written to abort the ring.
-+	 * Make sure the upper dword is valid, pointing to the next command,
-+	 * avoiding corrupting the command ring pointer in case the command ring
-+	 * is stopped by the time the upper dword is written.
- 	 */
--	temp_32 = readl(&xhci->op_regs->cmd_ring);
--	writel(temp_32 | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
-+	next_trb(xhci, NULL, &new_seg, &new_deq);
-+	if (trb_is_link(new_deq))
-+		next_trb(xhci, NULL, &new_seg, &new_deq);
-+
-+	crcr = xhci_trb_virt_to_dma(new_seg, new_deq);
-+	xhci_write_64(xhci, crcr | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
- 
- 	/* Section 4.6.1.2 of xHCI 1.0 spec says software should also time the
- 	 * completion of the Command Abort operation. If CRR is not negated in 5
--- 
-2.25.1
+Tested-by: Maarten Brock <m.brock@vanmierlo.com>
 
