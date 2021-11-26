@@ -2,109 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78FD445F0BA
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 16:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CCB545F1D5
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 17:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351608AbhKZPf4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Nov 2021 10:35:56 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:41309 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1344509AbhKZPd4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Nov 2021 10:33:56 -0500
-Received: (qmail 218431 invoked by uid 1000); 26 Nov 2021 10:30:42 -0500
-Date:   Fri, 26 Nov 2021 10:30:42 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andrew Lunn <andrew@lunn.ch>, Rajat Jain <rajatja@google.com>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: core: Avoid doing warm reset on disconnect event
-Message-ID: <YaD9oubkHPzHtSY4@rowland.harvard.edu>
-References: <20211126115652.1134230-1-kai.heng.feng@canonical.com>
+        id S230201AbhKZQ3p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Nov 2021 11:29:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230143AbhKZQ1n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Nov 2021 11:27:43 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54641C0619EB
+        for <linux-usb@vger.kernel.org>; Fri, 26 Nov 2021 08:14:54 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id w1so41060929edc.6
+        for <linux-usb@vger.kernel.org>; Fri, 26 Nov 2021 08:14:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cNwpCfa5vdz5URKXoBoziS8DLa8q/pxzIVcRvP60W6o=;
+        b=LBXbREg2GS+u3BqEAnE9+G2jlIGT0ooShjGgw5RvmMiAwLyOD9YAsSE0kVdXd01LHe
+         ic5u+8hx8vmR4qi+4ZzZG4owjrUfyACtTyvAgu2i9uwiR5QjXDQWknNSOxJ0Xq4sP4ls
+         svh/kQF/cxckLQ9mAOYoTf9Dxe1hI46Qo3hdjqQIKDyILjbX4oOm3X/CwSwMo9uJIFgb
+         CkUcV4zZgHmY/ULr2zWaksDqoCCU1JYedZcEFK/tn4MUN3A/+i631vCDqSKceORC/fE0
+         xOxqc7Xspv23hm7osxclmCgk1uKhNEDO99qzC/T5nGzVkDiTw69jvArE65eD/lQ885s8
+         3Diw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cNwpCfa5vdz5URKXoBoziS8DLa8q/pxzIVcRvP60W6o=;
+        b=ltrFPPOFCs5779+a4gaR0tezmGiPtCTGXB6Tgil2uEhF3+SVmtsa+cZdHT0b/+JLOv
+         L9t/ebgMV20exL/ID6spbN4b6D9UfCXo0d4SEQx1h4I0vct8J8+gbuIemSWJL3Y/QcwR
+         r08++zjtQPmEiNJkAeLk1NZ4NJYTmTXKUA+7v+i3x0cMnq6gzjNcgCQGjCd6zsiyhCmy
+         77P3KdfRFaI9VlDMWJTn1xEpN9pV4sD4r9zLZoAo6m0Wa26mmtru/+FCIIGV3x8hdNbD
+         1EmlcZ7F5uEK5fjSi21PqcTRs6ugW9LL4cgW5kW/gF128iiQXKuZ5xpCJO+bH5Kj1KaB
+         es6A==
+X-Gm-Message-State: AOAM531gkp74aZNo9usOhTK5GRe4FCYjXEGBngcwmJlPjfWOoO0TzE7V
+        neza7fVpn3A7YO+wpW0DatDN/+rJI0NN/Ha//3y4nDEPsBt9gw==
+X-Google-Smtp-Source: ABdhPJyoOsT5yoaKQy81miA4H5WjwfmLOAWHxoCnlvKvigZYt1ztXqCCdC1cHDofBU+NEajsjI0BUczvkjxutknpMMI=
+X-Received: by 2002:a50:d741:: with SMTP id i1mr48131098edj.37.1637943292861;
+ Fri, 26 Nov 2021 08:14:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211126115652.1134230-1-kai.heng.feng@canonical.com>
+References: <CAA=hcWTukyvM0Hz-VgW_NG7Whc3i7GLGySzJ0iGHvxo3O1f5vQ@mail.gmail.com>
+ <YZ3j9XKE0WjfkcsI@kroah.com> <CAA=hcWQ+u5QcqJd-ZqZfZd93K0j0f7prxna0yhVi=AWQrxa_UA@mail.gmail.com>
+ <YZ4QL5CARZAVnaEE@kroah.com> <CAA=hcWQ-Tr5Sn9mmpBoK0Rs0Vgk2fM3X5DaWwXT_dLJWd8ZiGA@mail.gmail.com>
+In-Reply-To: <CAA=hcWQ-Tr5Sn9mmpBoK0Rs0Vgk2fM3X5DaWwXT_dLJWd8ZiGA@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 26 Nov 2021 18:14:17 +0200
+Message-ID: <CAHp75VfPQ7Oozzi2Mw46CoBz7WqVtXyCzx7-nFRevTMqOab9PQ@mail.gmail.com>
+Subject: Re: Kernel 5.10 USB issues
+To:     Jupiter <jupiter.hce@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        linux-usb <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 26, 2021 at 07:56:51PM +0800, Kai-Heng Feng wrote:
-> Unplugging USB device may cause an incorrect warm reset loop:
-> [  143.039019] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x4202c0
-> [  143.039025] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
-> [  143.039051] hub 2-0:1.0: state 7 ports 10 chg 0000 evt 0008
-> [  143.039058] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x4202c0, return 0x4102c0
-> [  143.039092] xhci_hcd 0000:00:14.0: clear port3 connect change, portsc: 0x4002c0
-> [  143.039096] usb usb2-port3: link state change
-> [  143.039099] xhci_hcd 0000:00:14.0: clear port3 link state change, portsc: 0x2c0
-> [  143.039101] usb usb2-port3: do warm reset
-> [  143.096736] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2b0, return 0x2b0
-> [  143.096751] usb usb2-port3: not warm reset yet, waiting 50ms
-> [  143.131500] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link inactive
-> [  143.138260] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x2802a0
-> [  143.138263] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
-> [  143.160756] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2802a0, return 0x3002a0
-> [  143.160798] usb usb2-port3: not warm reset yet, waiting 200ms
-> 
-> The warm reset is due to its PLS is in eSS.Inactive state. However, USB
-> 3.2 spec table 10-13 mentions "Ports can be disabled by either a fault
-> condition (disconnect event or other fault condition)", xHCI 1.2 spec
-> table 5-27 also states that "This flag shall automatically be cleared to
-> ‘0’ by a disconnect event or other fault condition." on PED.
-> 
-> So use CSC = 0 and PED = 0 as indication that device is disconnecting to
-> avoid doing warm reset.
-> 
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
-> v2:
->  - Change the variable type to bool.
-> 
->  drivers/usb/core/hub.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index a9a04ea967019..4f081df70ecf2 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -5564,6 +5564,7 @@ static void port_event(struct usb_hub *hub, int port1)
->  		__must_hold(&port_dev->status_lock)
->  {
->  	int connect_change;
-> +	bool disconnect = false;
->  	struct usb_port *port_dev = hub->ports[port1 - 1];
->  	struct usb_device *udev = port_dev->child;
->  	struct usb_device *hdev = hub->hdev;
-> @@ -5579,6 +5580,9 @@ static void port_event(struct usb_hub *hub, int port1)
->  	if (portchange & USB_PORT_STAT_C_CONNECTION) {
->  		usb_clear_port_feature(hdev, port1, USB_PORT_FEAT_C_CONNECTION);
->  		connect_change = 1;
-> +		if (!(portstatus & USB_PORT_STAT_CONNECTION) &&
-> +		    !(portstatus & USB_PORT_STAT_ENABLE))
-> +			disconnect = true;
->  	}
+On Fri, Nov 26, 2021 at 1:04 PM Jupiter <jupiter.hce@gmail.com> wrote:
+>
+> Hi Greg,
+>
+> Thanks for your patience, here is what I did. I thought I followed the
+> instructions, any useful information?
+>
+> > Start working on the "master" branch and do:
 
-This looks a little strange.  Can there ever be a situation where 
-PORT_STAT_CONNECTION is off and PORT_STAT_ENABLE is on?  (It's not allowed in 
-USB-2.)
+But do you actually _build and run_ kernel each time after running
+`git bisect {good,bad}`? It looks like you simply typed it in a row.
+Also there is a subcommand to `git bisect` which prints log in
+reproducible format (someone else mey run it on their side and
+compare).
 
->  	if (portchange & USB_PORT_STAT_C_ENABLE) {
-> @@ -5647,7 +5651,7 @@ static void port_event(struct usb_hub *hub, int port1)
->  	 * Warm reset a USB3 protocol port if it's in
->  	 * SS.Inactive state.
->  	 */
-> -	if (hub_port_warm_reset_required(hub, port1, portstatus)) {
-> +	if (hub_port_warm_reset_required(hub, port1, portstatus) && !disconnect) {
->  		dev_dbg(&port_dev->dev, "do warm reset\n");
->  		if (!udev || !(portstatus & USB_PORT_STAT_CONNECTION)
->  				|| udev->state == USB_STATE_NOTATTACHED) {
-
-Why is it correct to skip doing a warm reset on a disconnected port here, but not 
-correct to skip doing a warm reset on a disconnected port in all the other places 
-where hub_port_warm_reset_required() gets called?
-
-Alan Stern
+-- 
+With Best Regards,
+Andy Shevchenko
