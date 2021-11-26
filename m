@@ -2,110 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8085B45E40B
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 02:33:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E69245E50F
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 03:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357422AbhKZBgO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Nov 2021 20:36:14 -0500
-Received: from mga04.intel.com ([192.55.52.120]:4010 "EHLO mga04.intel.com"
+        id S1357964AbhKZCjP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Nov 2021 21:39:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48184 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1357333AbhKZBeN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Nov 2021 20:34:13 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="234320315"
-X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="234320315"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 17:31:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
-   d="scan'208";a="675398485"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 25 Nov 2021 17:31:00 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mqQ4p-0007E7-De; Fri, 26 Nov 2021 01:30:59 +0000
-Date:   Fri, 26 Nov 2021 09:30:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- a88db2ecc2d2c11aa8744be9817d6d249d001cca
-Message-ID: <61a0389f.p2djZv7F/4PS1J+h%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1343602AbhKZChO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Nov 2021 21:37:14 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A1886611C7;
+        Fri, 26 Nov 2021 02:32:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637893965;
+        bh=NVYc831lTubR1pDQoit5Z7uxb0b0HMjCDCYurmDIRHg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ecdgmmTu5zav/G6zdY5WCd+5YF/6Z+f6l0hH9NWF0JUFSZ7k53kE6+6zHEyRfqESv
+         UluCky84NMpZ1xLQSO2qdSUvdmNV1yB1rEj/A0W23zDF21MiQKF8MIh3jqAYwoCA8n
+         9geqDEPLFrHubmRvb9RG8cw/7nOUvWLOouJ002O6CsEjQ/ItDYXzn68hLrtlb7i+Dg
+         jHI6leXsJYMOEvtLU00s0GLU9Urmg4q3bPZyR2yP8nIJf0I5o1o9UdMP9m+OGrpQaK
+         WKc6Ttqt0v1x0yH5gC76l24VSjRwWMm2hwa5grvOVpoYo1LeHoFwa0GRkExe8NUtXF
+         DgDnkW+kvgJdg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Aaron Ma <aaron.ma@canonical.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, kuba@kernel.org,
+        hayeswang@realtek.com, tiwai@suse.de, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 23/39] net: usb: r8152: Add MAC passthrough support for more Lenovo Docks
+Date:   Thu, 25 Nov 2021 21:31:40 -0500
+Message-Id: <20211126023156.441292-23-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211126023156.441292-1-sashal@kernel.org>
+References: <20211126023156.441292-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: a88db2ecc2d2c11aa8744be9817d6d249d001cca  Merge tag 'usb-serial-5.16-rc3' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+From: Aaron Ma <aaron.ma@canonical.com>
 
-elapsed time: 732m
+[ Upstream commit f77b83b5bbab53d2be339184838b19ed2c62c0a5 ]
 
-configs tested: 54
-configs skipped: 3
+Like ThinkaPad Thunderbolt 4 Dock, more Lenovo docks start to use the original
+Realtek USB ethernet chip ID 0bda:8153.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Lenovo Docks always use their own IDs for usb hub, even for older Docks.
+If parent hub is from Lenovo, then r8152 should try MAC passthrough.
+Verified on Lenovo TBT3 dock too.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211125
-riscv                            allyesconfig
-mips                             allyesconfig
-um                             i386_defconfig
-mips                             allmodconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                              debian-10.3
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
+Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/net/usb/r8152.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index f329e39100a7d..d3da350777a4d 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -9603,12 +9603,9 @@ static int rtl8152_probe(struct usb_interface *intf,
+ 		netdev->hw_features &= ~NETIF_F_RXCSUM;
+ 	}
+ 
+-	if (le16_to_cpu(udev->descriptor.idVendor) == VENDOR_ID_LENOVO) {
+-		switch (le16_to_cpu(udev->descriptor.idProduct)) {
+-		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
+-		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
+-			tp->lenovo_macpassthru = 1;
+-		}
++	if (udev->parent &&
++			le16_to_cpu(udev->parent->descriptor.idVendor) == VENDOR_ID_LENOVO) {
++		tp->lenovo_macpassthru = 1;
+ 	}
+ 
+ 	if (le16_to_cpu(udev->descriptor.bcdDevice) == 0x3011 && udev->serial &&
+-- 
+2.33.0
+
