@@ -2,104 +2,193 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B503445EE56
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 13:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 113A745EFBC
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Nov 2021 15:16:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235848AbhKZM6w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Nov 2021 07:58:52 -0500
-Received: from fieber.vanmierlo.com ([84.243.197.177]:37946 "EHLO
-        kerio9.vanmierlo.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1377527AbhKZM4w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Nov 2021 07:56:52 -0500
-X-Footer: dmFubWllcmxvLmNvbQ==
-Received: from roundcube.vanmierlo.com ([192.168.37.37])
-        (authenticated user m.brock@vanmierlo.com)
-        by kerio9.vanmierlo.com (Kerio Connect 9.3.1 patch 1) with ESMTPA;
-        Fri, 26 Nov 2021 13:53:19 +0100
+        id S1353591AbhKZOTy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Nov 2021 09:19:54 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:61153 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231996AbhKZORy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Nov 2021 09:17:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1637936081; x=1669472081;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=YI+MR9RnWk4kJzoUFCbNLrdbmEhPzkiZ4Pd5fY17pqw=;
+  b=p6/ZVPKGTQsJjd7MkfLb9MzcmxVpDGHtbNMD98KZviAtDtEVNQwaLXNP
+   xwFEqfKnbRxtwdxrGNcEk5z/imOBMj/Tdq3HMDCI886H02rn9KRALPA8d
+   5YmgQznWC06bpEnHhoqtR0awYk48q4rwyFO0DMN8c8nkvDLot2ksmDC/a
+   g=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 26 Nov 2021 06:14:41 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 06:14:41 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 26 Nov 2021 06:14:40 -0800
+Received: from ugoswami-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 26 Nov 2021 06:14:37 -0800
+From:   Udipto Goswami <quic_ugoswami@quicinc.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John Keeping <john@metanate.com>
+CC:     Udipto Goswami <quic_ugoswami@quicinc.com>,
+        <linux-usb@vger.kernel.org>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>
+Subject: [PATCH v4] usb: f_fs: Fix use-after-free for epfile
+Date:   Fri, 26 Nov 2021 19:44:32 +0530
+Message-ID: <1637936072-32263-1-git-send-email-quic_ugoswami@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 26 Nov 2021 13:53:19 +0100
-From:   Maarten Brock <m.brock@vanmierlo.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: CP2105 gives kernel error -22 when in modem mode
-In-Reply-To: <YaCtPXkQXQIzsuq2@hovoldconsulting.com>
-References: <5eb560c81d2ea1a2b4602a92d9f48a89@vanmierlo.com>
- <YaCtPXkQXQIzsuq2@hovoldconsulting.com>
-Message-ID: <fb6416cc7e07d40b8eb3956ed4fb0a62@vanmierlo.com>
-X-Sender: m.brock@vanmierlo.com
-User-Agent: Roundcube Webmail/1.3.3
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-11-26 10:47, Johan Hovold wrote:
-> On Thu, Nov 25, 2021 at 04:42:27PM +0100, Maarten Brock wrote:
->> Hello all,
->> 
->> When a uart of the CP2105 USB-serial chip is programmed to be in modem
->> mode, all its gpio pins are in alternate use and none are available 
->> for
->> gpio. Still the cp210x driver tries to add a gpiochip unconditionally,
->> which results in an error.
->> 
->> > cp210x 1-1.4.4:1.0: cp210x converter detected
->> > usb 1-1.4.4: cp210x converter now attached to ttyUSB0
->> > cp210x 1-1.4.4:1.1: cp210x converter detected
->> > gpio gpiochip2: (cp210x): tried to insert a GPIO chip with zero lines
->> > gpiochip_add_data_with_key: GPIOs 0..-1 (cp210x) failed to register,
->> > -22
->> > cp210x 1-1.4.4:1.1: GPIO initialisation failed: -22
->> > usb 1-1.4.4: cp210x converter now attached to ttyUSB1
-> 
-> Thanks for reporting this.
-> 
->> I propose to add something like the following to cp210x_gpio_init
->> 
->> +	unsigned long valid_mask, altfunc_mask;
->> ...
->> +	altfunc_mask = priv->gpio_altfunc;
->> +	bitmap_complement(&valid_mask, &altfunc_mask, priv->gc.ngpio);
->> +	if (bitmap_empty(&valid_mask, priv->gc.ngpio))
->> +		return 0;
->> +
->>   	priv->gc.label = "cp210x";
->>   	priv->gc.request = cp210x_gpio_request;
->>   	priv->gc.get_direction = cp210x_gpio_direction_get;
->> 
->> I can write a proper patch, but am unsure if and what the Fixes tag
->> should be.
-> 
-> This was introduced by commit c8acfe0aadbe ("USB: serial: cp210x:
-> implement GPIO support for CP2102N") when generalising GPIO support and
-> adding support for CP2102N. Before that commit, the GPIO chip would
-> indeed never have been registered in this case.
-> 
-> The right fix however is to continue to always register the gpiochip 
-> but
-> to make sure that the number of lines is initialised before doing so.
-> This is how we deal with with the other device types and is also how
-> CP2105 is handled when both pins of the CP2105 ECI port are muxed for
-> LED function.
-> 
-> I've just posted a fix here:
-> 
-> 	https://lore.kernel.org/r/20211126094348.31698-1-johan@kernel.org
-> 
-> Johan
+Consider a case where ffs_func_eps_disable is called from
+ffs_func_disable as part of composition switch and at the
+same time ffs_epfile_release get called from userspace.
+ffs_epfile_release will free up the read buffer and call
+ffs_data_closed which in turn destroys ffs->epfiles and
+mark it as NULL. While this was happening the driver has
+already initialized the local epfile in ffs_func_eps_disable
+which is now freed and waiting to acquire the spinlock. Once
+spinlock is acquired the driver proceeds with the stale value
+of epfile and tries to free the already freed read buffer
+causing use-after-free.
 
-Thanks for the quick solution. That patch seems to be a better fix for 
-this bug and I have acknowledged it with a Tested-by.
+Following is the illustration of the race:
 
-I do however wonder if it is desirable to register a GPIO controller 
-that has no lines. It's not like those lines can become available at any 
-later time. The CP2105 is OTP, but also the other CP210x devices need to 
-be reprogrammed and reenumerated for those lines to become available 
-again. So I would still vote to apply my proposal though not as a bug 
-fix.
+      CPU1                                  CPU2
 
-Thanks again,
-Maarten
+   ffs_func_eps_disable
+   epfiles (local copy)
+					ffs_epfile_release
+					ffs_data_closed
+					if (last file closed)
+					ffs_data_reset
+					ffs_data_clear
+					ffs_epfiles_destroy
+spin_lock
+dereference epfiles
+
+Fix this races by taking epfiles local copy & assigning it under
+spinlock and if epfiles(local) is null then update it in ffs->epfiles
+then finally destroy it.
+
+Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
+Co-developed-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+---
+v4: Fix undeclared epfile error in ffs_func_eps_disable.
+
+ drivers/usb/gadget/function/f_fs.c | 49 +++++++++++++++++++++++++++-----------
+ 1 file changed, 35 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 3c584da..2a634d7 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1711,16 +1711,23 @@ static void ffs_data_put(struct ffs_data *ffs)
+ 
+ static void ffs_data_closed(struct ffs_data *ffs)
+ {
++	struct ffs_epfile *epfiles;
++	unsigned long flags;
+ 	ENTER();
+ 
+ 	if (atomic_dec_and_test(&ffs->opened)) {
+ 		if (ffs->no_disconnect) {
+ 			ffs->state = FFS_DEACTIVATED;
+-			if (ffs->epfiles) {
+-				ffs_epfiles_destroy(ffs->epfiles,
+-						   ffs->eps_count);
+-				ffs->epfiles = NULL;
+-			}
++			spin_lock_irqsave(&ffs->eps_lock, flags);
++			epfiles = ffs->epfiles;
++			ffs->epfiles = NULL;
++			spin_unlock_irqrestore(&ffs->eps_lock,
++							flags);
++
++			if (epfiles)
++				ffs_epfiles_destroy(epfiles,
++						 ffs->eps_count);
++
+ 			if (ffs->setup_state == FFS_SETUP_PENDING)
+ 				__ffs_ep0_stall(ffs);
+ 		} else {
+@@ -1767,14 +1774,25 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
+ 
+ static void ffs_data_clear(struct ffs_data *ffs)
+ {
++	struct ffs_epfile *epfiles;
++	unsigned long flags;
+ 	ENTER();
+ 
+ 	ffs_closed(ffs);
+ 
+ 	BUG_ON(ffs->gadget);
+ 
+-	if (ffs->epfiles)
+-		ffs_epfiles_destroy(ffs->epfiles, ffs->eps_count);
++	spin_lock_irqsave(&ffs->eps_lock, flags);
++	epfiles = ffs->epfiles;
++	ffs->epfiles = NULL;
++	spin_unlock_irqrestore(&ffs->eps_lock, flags);
++	/* potential race possible between ffs_func_eps_disable
++	 * & ffs_epfile_release therefore maintaining a local
++	 * copy of epfile will save us from use-after-free.
++	 */
++	if (epfiles)
++		ffs_epfiles_destroy(epfiles,
++				    ffs->eps_count);
+ 
+ 	if (ffs->ffs_eventfd)
+ 		eventfd_ctx_put(ffs->ffs_eventfd);
+@@ -1919,22 +1937,25 @@ static void ffs_epfiles_destroy(struct ffs_epfile *epfiles, unsigned count)
+ 
+ static void ffs_func_eps_disable(struct ffs_function *func)
+ {
+-	struct ffs_ep *ep         = func->eps;
+-	struct ffs_epfile *epfile = func->ffs->epfiles;
+-	unsigned count            = func->ffs->eps_count;
++	struct ffs_ep *ep;
++	struct ffs_epfile *epfiles;
++	unsigned short count;
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&func->ffs->eps_lock, flags);
++	count = func->ffs->eps_count;
++	epfiles = func->ffs->epfiles;
++	ep = func->eps;
+ 	while (count--) {
+ 		/* pending requests get nuked */
+ 		if (ep->ep)
+ 			usb_ep_disable(ep->ep);
+ 		++ep;
+ 
+-		if (epfile) {
+-			epfile->ep = NULL;
+-			__ffs_epfile_read_buffer_free(epfile);
+-			++epfile;
++		if (epfiles) {
++			epfiles->ep = NULL;
++			__ffs_epfile_read_buffer_free(epfiles);
++			++epfiles;
+ 		}
+ 	}
+ 	spin_unlock_irqrestore(&func->ffs->eps_lock, flags);
+-- 
+2.7.4
 
