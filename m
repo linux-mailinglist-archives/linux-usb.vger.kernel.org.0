@@ -2,23 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C2C45FDAF
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Nov 2021 10:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F078D45FE05
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Nov 2021 11:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353627AbhK0Jnz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 27 Nov 2021 04:43:55 -0500
-Received: from [175.207.13.15] ([175.207.13.15]:33518 "EHLO
-        forestfire.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1350827AbhK0Jlq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 27 Nov 2021 04:41:46 -0500
-X-Greylist: delayed 70896 seconds by postgrey-1.27 at vger.kernel.org; Sat, 27 Nov 2021 04:41:43 EST
-Received: from User (localhost [127.0.0.1])
-        by forestfire.localdomain (Postfix) with SMTP id D64A8DDA708;
-        Fri, 26 Nov 2021 18:38:09 +0900 (KST)
-Reply-To: <hihulwarence@gmail.com>
-From:   "Mrs.Barbara Sharon" <hihulwarence@gmail.com>
-Subject: US. Security Exchange & Commission 
-Date:   Fri, 26 Nov 2021 10:38:44 +0100
+        id S1350097AbhK0KFo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 27 Nov 2021 05:05:44 -0500
+Received: from tk2-403-42713.vs.sakura.ne.jp ([160.16.134.217]:56138 "EHLO
+        tk2-403-42713.vs.sakura.ne.jp" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1353719AbhK0KDo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 27 Nov 2021 05:03:44 -0500
+X-Greylist: delayed 11931 seconds by postgrey-1.27 at vger.kernel.org; Sat, 27 Nov 2021 05:03:44 EST
+Received: from msrv.iwasita.co.jp (unknown [153.122.149.59])
+        by tk2-403-42713.vs.sakura.ne.jp (Postfix) with ESMTP id D1E441C6B8F;
+        Sat, 27 Nov 2021 13:49:18 +0900 (JST)
+Received: from User ([211.104.172.54])
+        (authenticated bits=0)
+        by msrv.iwasita.co.jp (8.14.5/8.14.5) with ESMTP id 1AR4maXM014556;
+        Sat, 27 Nov 2021 13:48:42 +0900
+Message-Id: <202111270448.1AR4maXM014556@msrv.iwasita.co.jp>
+Reply-To: <lambiedavid01@gmail.com>
+From:   "DAVID LAMBERT" <enomoto@otomura.co.jp>
+Subject: FOR YOUR KIND AND IMMEDIATE CONSIDERATION
+Date:   Sat, 27 Nov 2021 05:49:17 +0100
 MIME-Version: 1.0
 Content-Type: text/plain;
         charset="Windows-1251"
@@ -27,44 +32,52 @@ X-Priority: 3
 X-MSMail-Priority: Normal
 X-Mailer: Microsoft Outlook Express 6.00.2600.0000
 X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20211126093809.D64A8DDA708@forestfire.localdomain>
 To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Security Exchange and Commission
-200 Vesey Street, Suite 400.
-New York, NY 10281.
-Tel: +1(716-608-3814
-Emai:SEC.hihulwarence@gmail.com
+
+DAVID LAMBERT
+South Quay Plaza
+183 Marsh Wall
+London
+E14 9SR
+Email: lambiedavid01@gmail.com
+
+Dear Friend,
+
+Do accept my sincere apologies if my mail does not meet your personal
+ethics. I would like to introduce myself, I am David Lambert and I work
+with the staff in the accounts management section of a well-known bank
+here in the United Kingdom.
+
+One of our accounts is holding a balance of GBP48,375,000 (Forty Eight
+million, Three Hundred and Seventy Five Thousand Great British Pounds)
+and has been dormant for some years now. From my investigations and
+confirmations, the owner of this account died on the 16th of February
+1999 in an autocrash in Birmingham, here in the UK.
+
+Since then no one has responded in anyway with regards to claiming the
+funds. As far as we can tell he has no family member that is aware of the
+existence of either the account or the funds. Information from the United
+Kingdom Border Agency also states that he was single on entry into the UK.
+
+I have confidentially discussed this issue with some of the bank officials
+and we have agreed to find a reliable partner to deal with us. We thus
+propose to do business with you, standing in as the next-of-kin. We will
+process these funds from the deceased and release them to you, after due
+processes have been followed.
+
+This transaction is totally risk free as the funds is legitimate and
+devoid of any illegal/illicit activity. Please think this over and should
+you be interested, do let me hear from you ASAP.
 
 
-Attn: Sir,
 
-We are the US.Security Exchange and Commission pay centre point
-attachedwith  the Deutsche Bank branch in New York City hereby contact
-you today to inform you on  the transfer on transit with this bank
-(Bank of America ) in your favour.
+Regards,
 
-Fund worth TEN MILLION, FIVE HUNDRED  THOUSAND US DOLLARS ONLY (US$10.
-500,000.00) You are requested to confirm the ownership so that we can
-proceed with the transaction to transmit your fund to your choice
-account.
+David Lambert
+Email: lambiedavid01@gmail.com
 
-We request you to send any form of Identification which will
-substantiate your claims. We have been Authorised by the Federal
-Government of Nigeria and the United Nations to wire the above funds
-into your account without any further delay or interception kindly get
-back to us as soon as possible to enable the paying bank to process
-the bank Draft on your behalf which was issued by the Federal
-Government of Nigeria.
-
-Thank you.
-
-Yours Faithfully
-Mrs.Barbara Sharon (P.A.)to,
-Mrs. Stephanie Avakian
-Director  US Security Exchange
-and Commission (SEC).
 
