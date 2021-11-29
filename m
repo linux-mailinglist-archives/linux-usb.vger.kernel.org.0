@@ -2,540 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4EF460A3B
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Nov 2021 22:15:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E78460C41
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Nov 2021 02:29:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359029AbhK1VTP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 28 Nov 2021 16:19:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236925AbhK1VRO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 Nov 2021 16:17:14 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1A3C061574
-        for <linux-usb@vger.kernel.org>; Sun, 28 Nov 2021 13:13:55 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id e11so30516942ljo.13
-        for <linux-usb@vger.kernel.org>; Sun, 28 Nov 2021 13:13:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=rZW+krZrU+ABnW+aALny+P/fhfizmGqDBwUt1VeURkA=;
-        b=fjSts18XdN7bnn783xRBeXaYy4HVspC9xZmulZarOMm0mWVLkxW1tzpa7Z2NJ8eZUo
-         5ghlliUKXJcsmlcs5iaks4Y8P2ydENSYBTgZvqzwHRF04uY6K3wckL1BFREkz7V5SZjd
-         JPT/APL2uBovoVSh7OIQ+3GbhEsyGhOKN521xydnq/AXSQDb7hBzURZS/boHLxtZXRUP
-         Lb7dY89fqHSJKohLB3Bc/QDUgX1OVWCW2w0JZyp18oc85p+e4TV9AWbSQvhyr6sC0r4M
-         yxd62k8k45WtadQLJyfcIVQBLwzhDmQ6AAhhkoYR5FFTxs3PR6TQuEEThuOvtt34AiQ2
-         E8RA==
+        id S1351324AbhK2Bcm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 28 Nov 2021 20:32:42 -0500
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:44977 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231465AbhK2Bam (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 Nov 2021 20:30:42 -0500
+Received: by mail-ot1-f45.google.com with SMTP id u18-20020a9d7212000000b00560cb1dc10bso23255768otj.11;
+        Sun, 28 Nov 2021 17:27:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=rZW+krZrU+ABnW+aALny+P/fhfizmGqDBwUt1VeURkA=;
-        b=PdotrPB6XDz/BdqMYGcl4RnYCCLfoZfj/alXiLLtPOZ9/5JVn5BeVhs6wv0WVLYwJQ
-         +PaecM90BH0iL8KwXpbxtWF1hCyjr43RAVtBpySEwzvfxI1jWVJQhI/LHzRe5Efj/9sx
-         2S2bfyiDC6n2hxfYHwqr6n1ZIx5Nv9XZ1/02TB/BbXq0lhDFvYzi4dO6Uav786B+kQse
-         HzwyMGxtpMk8nB8K7fwQUcsjZVQbyA+jZWgNqKzPyqrwJ2w+vEPGsPoFXJGbnS8xR11R
-         4YGIpS7TuFQzF76x4KVeFYuqnhmxYx903JsTwheogBxQVpyQTmwa0se6I8bAd/YiruND
-         TUtw==
-X-Gm-Message-State: AOAM531hPWswf88gD4Mq/3e1oXbahIvCvfb3P63t+gQ+etvV5EyAeOmd
-        EF/FPJG7ubCCOjwaOZak9ZcEbEUgV5g=
-X-Google-Smtp-Source: ABdhPJx3R3qK8SHEbHfVhQUn5tRQhK5IX5jy9vZWLsUcie68jq+8xinOaYt3NZeM154iubuaGWx/mw==
-X-Received: by 2002:a2e:a548:: with SMTP id e8mr43618563ljn.24.1638134033967;
-        Sun, 28 Nov 2021 13:13:53 -0800 (PST)
-Received: from dell-precision-T3610 (h-98-128-167-144.NA.cust.bahnhof.se. [98.128.167.144])
-        by smtp.gmail.com with ESMTPSA id c6sm1105113lfc.37.2021.11.28.13.13.53
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Q/CrGecYUeDdR6r8+yA6oPN9sOdPcqSzyh2oQnkTLSY=;
+        b=uEMJkfwYndC//ME2UkvJdAU74efgXNv48Y94FZYU4UNSpXxA+IEvNcN+qNFN1skwbE
+         FvLFYx+0YiA83o8W0upQEP8knx+tWuP9Sgjym+BsohkjhmhluWCORHBvx75Ckw6lY57n
+         N3XFyI/IKd+HkdGaiVvQEQyrE67iwVoEky6wkpJCfHM01zg28E66jaikKiQokR29pZx0
+         8Q0c8FpnIJm5Ln6VuzwbCXxGgQQcrTf9hLI0+WfdmOowc92cGNfwnFVA1szQgFwZkVUL
+         PHH0TRflYgk860I+RdWlX0efdJsO2etja17pXn7fUSsQfz2WLr06IQflVrbSC563D+Oy
+         byYw==
+X-Gm-Message-State: AOAM5316l+XKyLMcQHjkq5mQK71P9LpEd+8YDMgBD3zArW9JBCRLQxUs
+        rvmZoYViXYkedmLWWYStVQ==
+X-Google-Smtp-Source: ABdhPJxtuA+XfiWbawu7ZYKFsEv0Yo/JLTV8PehfvEcgdrBvReHgoIMJZMl5z7pxb0xzUVz0dkYoPA==
+X-Received: by 2002:a9d:75d7:: with SMTP id c23mr43552829otl.181.1638149244994;
+        Sun, 28 Nov 2021 17:27:24 -0800 (PST)
+Received: from robh.at.kernel.org ([172.58.99.229])
+        by smtp.gmail.com with ESMTPSA id bi20sm2734070oib.29.2021.11.28.17.27.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Nov 2021 13:13:53 -0800 (PST)
-Date:   Sun, 28 Nov 2021 22:13:52 +0100
-From:   Lars Gunnarsson <gunnarsson.lars@gmail.com>
-To:     Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH v4 5/5] tools/usbip: import USB devices on a given bus
- persistently
-Message-ID: <20211128211352.GA37584@dell-precision-T3610>
+        Sun, 28 Nov 2021 17:27:24 -0800 (PST)
+Received: (nullmailer pid 2973705 invoked by uid 1000);
+        Mon, 29 Nov 2021 01:27:20 -0000
+Date:   Sun, 28 Nov 2021 19:27:20 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add Apple dwc3 bindings
+Message-ID: <YaQseO5kF71vABji@robh.at.kernel.org>
+References: <20211108170946.49689-1-sven@svenpeter.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20211108170946.49689-1-sven@svenpeter.dev>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch extends the command "usbip attach" with flag "-p|--persistent".
-When this flag is used, devices on the given remote busid is imported when
-available, instead of returning an error if the device is not exported.
-When the usb device is unplugged, it will start monitor the given remote
-bus again. Increment protocol version to 1.1.2 (0x112) since this patch
-affects both ends: usbipd (server) and command "usbip attach" (client).
+On Mon, Nov 08, 2021 at 06:09:45PM +0100, Sven Peter wrote:
+> Apple Silicon SoCs such as the M1 have multiple USB controllers based on
+> the Synopsys DesignWare USB3 controller.
+> References to the ATC PHY required for SuperSpeed are left out for now
+> until support has been upstreamed as well.
+> 
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> ---
+> v1 -> v2:
+>  - added apple,dwc3 bindings instead of a property for the reset quirk
+>    as requested by robh
+> 
+> I think I have to use GPL-2.0 for this binding since it's based
+> on and references snps,dwc3.yaml which is also only GPL-2.0.
+> Otherwise I'd be fine with the usual GPL/BSD dual license as well.
+> 
+>  .../devicetree/bindings/usb/apple,dwc3.yaml   | 64 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 65 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/apple,dwc3.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/apple,dwc3.yaml b/Documentation/devicetree/bindings/usb/apple,dwc3.yaml
+> new file mode 100644
+> index 000000000000..fb3b3489e6b2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/apple,dwc3.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: GPL-2.0
 
-Signed-off-by: Lars Gunnarsson <gunnarsson.lars@gmail.com>
----
-v2: Change title, fix style warnings, improve feature description, refactor
-    cmdline flag usage.
-v3: Change title and description.
-v4: Fix review comments.
+Dual license please.
 
- tools/usb/usbip/configure.ac          |   2 +-
- tools/usb/usbip/libsrc/usbip_common.c |   1 +
- tools/usb/usbip/libsrc/usbip_common.h |   1 +
- tools/usb/usbip/libsrc/vhci_driver.c  |  16 +++
- tools/usb/usbip/libsrc/vhci_driver.h  |   1 +
- tools/usb/usbip/src/usbip_attach.c    | 134 +++++++++++++++++++-------
- tools/usb/usbip/src/usbip_network.h   |   2 +
- tools/usb/usbip/src/usbipd.c          |  93 ++++++++++++++++--
- 8 files changed, 205 insertions(+), 45 deletions(-)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/apple,dwc3.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Apple Silicon DWC3 USB controller
+> +
+> +maintainers:
+> +  - Sven Peter <sven@svenpeter.dev>
+> +
+> +description:
+> +  On Apple Silicon SoCs such as the M1 each Type-C port has a corresponding
+> +  USB controller based on the Synopsys DesignWare USB3 controller.
+> +
+> +  The common content of this binding is defined in snps,dwc3.yaml.
+> +
+> +allOf:
+> +  - $ref: snps,dwc3.yaml#
+> +
+> +select:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        const: apple,dwc3
 
-diff --git a/tools/usb/usbip/configure.ac b/tools/usb/usbip/configure.ac
-index 607d05c5ccfd..156e42456423 100644
---- a/tools/usb/usbip/configure.ac
-+++ b/tools/usb/usbip/configure.ac
-@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
+This needs to list all possible compatibles except snps,dwc3 so the 
+schema is applied for any incorrect mixture of compatibles.
 
- AC_PREREQ(2.59)
- AC_INIT([usbip-utils], [2.0], [linux-usb@vger.kernel.org])
--AC_DEFINE([USBIP_VERSION], [0x00000111], [binary-coded decimal version number])
-+AC_DEFINE([USBIP_VERSION], [0x00000112], [binary-coded decimal version number])
-
- CURRENT=0
- REVISION=1
-diff --git a/tools/usb/usbip/libsrc/usbip_common.c b/tools/usb/usbip/libsrc/usbip_common.c
-index b8d7d480595a..30efb6a9f76d 100644
---- a/tools/usb/usbip/libsrc/usbip_common.c
-+++ b/tools/usb/usbip/libsrc/usbip_common.c
-@@ -78,6 +78,7 @@ static struct op_common_status_string op_common_status_strings[] = {
- 	{ ST_DEV_ERR,	"Device in error state" },
- 	{ ST_NODEV,	"Device not found" },
- 	{ ST_ERROR,	"Unexpected response" },
-+	{ ST_POLL_TIMEOUT,	"Poll timeout" },
- 	{ 0, NULL}
- };
-
-diff --git a/tools/usb/usbip/libsrc/usbip_common.h b/tools/usb/usbip/libsrc/usbip_common.h
-index 13f1d4ca47c5..3df351877a33 100644
---- a/tools/usb/usbip/libsrc/usbip_common.h
-+++ b/tools/usb/usbip/libsrc/usbip_common.h
-@@ -53,6 +53,7 @@
- #define ST_DEV_ERR	0x03
- #define ST_NODEV	0x04
- #define ST_ERROR	0x05
-+#define ST_POLL_TIMEOUT 0x06
-
- extern int usbip_use_syslog;
- extern int usbip_use_stderr;
-diff --git a/tools/usb/usbip/libsrc/vhci_driver.c b/tools/usb/usbip/libsrc/vhci_driver.c
-index 8159fd98680b..4fc75e8bad66 100644
---- a/tools/usb/usbip/libsrc/vhci_driver.c
-+++ b/tools/usb/usbip/libsrc/vhci_driver.c
-@@ -465,3 +465,19 @@ int usbip_vhci_imported_device_dump(struct usbip_imported_device *idev)
-
- 	return 0;
- }
-+
-+int usbip_vhci_get_local_busid_from(int port, char *local_busid)
-+{
-+	int rc = -1;
-+
-+	for (int i = 0; i < vhci_driver->nports; ++i) {
-+		struct usbip_imported_device *idev = &vhci_driver->idev[i];
-+
-+		if (idev->port == port && strnlen(idev->udev.busid, SYSFS_BUS_ID_SIZE)) {
-+			memcpy(local_busid, idev->udev.busid, SYSFS_BUS_ID_SIZE);
-+			rc = 0;
-+			break;
-+		}
-+	}
-+	return rc;
-+}
-diff --git a/tools/usb/usbip/libsrc/vhci_driver.h b/tools/usb/usbip/libsrc/vhci_driver.h
-index 6c9aca216705..4aecd4013cbe 100644
---- a/tools/usb/usbip/libsrc/vhci_driver.h
-+++ b/tools/usb/usbip/libsrc/vhci_driver.h
-@@ -63,5 +63,6 @@ int usbip_vhci_attach_device(uint8_t port, int sockfd, uint8_t busnum,
- int usbip_vhci_detach_device(uint8_t port);
-
- int usbip_vhci_imported_device_dump(struct usbip_imported_device *idev);
-+int usbip_vhci_get_local_busid_from(int port, char *local_busid);
-
- #endif /* __VHCI_DRIVER_H */
-diff --git a/tools/usb/usbip/src/usbip_attach.c b/tools/usb/usbip/src/usbip_attach.c
-index b4aeb9f1f493..27911d4dba0e 100644
---- a/tools/usb/usbip/src/usbip_attach.c
-+++ b/tools/usb/usbip/src/usbip_attach.c
-@@ -12,6 +12,7 @@
- #include <limits.h>
- #include <stdint.h>
- #include <stdio.h>
-+#include <stdbool.h>
- #include <string.h>
-
- #include <fcntl.h>
-@@ -21,14 +22,23 @@
-
- #include "vhci_driver.h"
- #include "usbip_common.h"
-+#include "usbip_monitor.h"
- #include "usbip_network.h"
- #include "usbip.h"
-
-+struct attach_options {
-+	char *busid;
-+	bool is_persistent;
-+};
-+
- static const char usbip_attach_usage_string[] =
- 	"usbip attach <args>\n"
- 	"    -r, --remote=<host>      The machine with exported USB devices\n"
--	"    -b, --busid=<busid>    Busid of the device on <host>\n"
--	"    -d, --device=<devid>    Id of the virtual UDC on <host>\n";
-+	"    -b, --busid=<busid>      Busid of the device on <host>\n"
-+	"    -d, --device=<devid>     Id of the virtual UDC on <host>\n"
-+	"    -p, --persistent         Persistently monitor the given bus and import\n"
-+	"                             USB devices when available on the remote end\n";
-+
-
- void usbip_attach_usage(void)
- {
-@@ -117,7 +127,7 @@ static int import_device(int sockfd, struct usbip_usb_device *udev)
- 	return -1;
- }
-
--static int query_import_device(int sockfd, char *busid)
-+static int query_import_device(int sockfd, char *busid, bool is_persistent)
- {
- 	int rc;
- 	struct op_import_request request;
-@@ -127,31 +137,35 @@ static int query_import_device(int sockfd, char *busid)
-
- 	memset(&request, 0, sizeof(request));
- 	memset(&reply, 0, sizeof(reply));
--
--	/* send a request */
--	rc = usbip_net_send_op_common(sockfd, OP_REQ_IMPORT, 0);
--	if (rc < 0) {
--		err("send op_common");
--		return -1;
--	}
--
- 	strncpy(request.busid, busid, SYSFS_BUS_ID_SIZE-1);
-+	if (is_persistent) {
-+		request.poll_timeout_ms = 5000;
-+		info("remote device on busid %s: polling", busid);
-+	}
-+	PACK_OP_IMPORT_REQUEST(1, &request);
-
--	PACK_OP_IMPORT_REQUEST(0, &request);
-+	do {
-+		/* send a request */
-+		rc = usbip_net_send_op_common(sockfd, OP_REQ_IMPORT, 0);
-+		if (rc < 0) {
-+			err("send op_common");
-+			return -1;
-+		}
-
--	rc = usbip_net_send(sockfd, (void *) &request, sizeof(request));
--	if (rc < 0) {
--		err("send op_import_request");
--		return -1;
--	}
-+		rc = usbip_net_send(sockfd, (void *) &request, sizeof(request));
-+		if (rc < 0) {
-+			err("send op_import_request");
-+			return -1;
-+		}
-
--	/* receive a reply */
--	rc = usbip_net_recv_op_common(sockfd, &code, &status);
--	if (rc < 0) {
--		err("Attach Request for %s failed - %s\n",
--		    busid, usbip_op_common_status_string(status));
--		return -1;
--	}
-+		/* receive a reply */
-+		rc = usbip_net_recv_op_common(sockfd, &code, &status);
-+		if (status != ST_POLL_TIMEOUT && rc < 0) {
-+			err("Attach Request for %s failed - %s\n",
-+					busid, usbip_op_common_status_string(status));
-+			return -1;
-+		}
-+	} while (status == ST_POLL_TIMEOUT);
-
- 	rc = usbip_net_recv(sockfd, (void *) &reply, sizeof(reply));
- 	if (rc < 0) {
-@@ -171,7 +185,17 @@ static int query_import_device(int sockfd, char *busid)
- 	return import_device(sockfd, &reply.udev);
- }
-
--static int attach_device(char *host, char *busid)
-+static int get_local_busid_from(int port, char *local_busid)
-+{
-+	int rc = usbip_vhci_driver_open();
-+
-+	if (rc == 0)
-+		rc = usbip_vhci_get_local_busid_from(port, local_busid);
-+	usbip_vhci_driver_close();
-+	return rc;
-+}
-+
-+static int attach_device(char *host, struct attach_options opt)
- {
- 	int sockfd;
- 	int rc;
-@@ -183,19 +207,53 @@ static int attach_device(char *host, char *busid)
- 		return -1;
- 	}
-
--	rhport = query_import_device(sockfd, busid);
-+	rhport = query_import_device(sockfd, opt.busid, opt.is_persistent);
- 	if (rhport < 0)
- 		return -1;
-
- 	close(sockfd);
-
--	rc = record_connection(host, usbip_port_string, busid, rhport);
-+	rc = record_connection(host, usbip_port_string, opt.busid, rhport);
- 	if (rc < 0) {
--		err("record connection");
-+		err("Fail occurred when storing imported usbip device");
- 		return -1;
- 	}
-+	info("remote device on busid %s: attach complete", opt.busid);
-+	return rhport;
-+}
-
--	return 0;
-+static void monitor_disconnect(usbip_monitor_t *monitor, char *busid, int rhport)
-+{
-+	// To monitor unbind we must first ensure to be at a bound state. To
-+	// monitor bound state a local busid is needed, which is unknown at this
-+	// moment. Local busid is not available until it's already bound to the usbip
-+	// driver. Thus monitor bind events for any usb device until the busid is
-+	// available for the port.
-+	char local_busid[SYSFS_BUS_ID_SIZE] = {};
-+
-+	while (get_local_busid_from(rhport, local_busid))
-+		usbip_monitor_await_usb_bind(monitor, USBIP_USB_DRV_NAME);
-+	info("remote device on busid %s: monitor disconnect", busid);
-+	usbip_monitor_set_busid(monitor, local_busid);
-+	usbip_monitor_await_usb_unbind(monitor);
-+	usbip_monitor_set_busid(monitor, NULL);
-+}
-+
-+static int attach_device_persistently(char *host, struct attach_options opt)
-+{
-+	int rc = 0;
-+	usbip_monitor_t *monitor = usbip_monitor_new();
-+
-+	while (rc == 0) {
-+		int rhport = attach_device(host, opt);
-+
-+		if (rhport < 0)
-+			rc = -1;
-+		else
-+			monitor_disconnect(monitor, opt.busid, rhport);
-+	}
-+	usbip_monitor_delete(monitor);
-+	return rc;
- }
-
- int usbip_attach(int argc, char *argv[])
-@@ -204,15 +262,16 @@ int usbip_attach(int argc, char *argv[])
- 		{ "remote", required_argument, NULL, 'r' },
- 		{ "busid",  required_argument, NULL, 'b' },
- 		{ "device",  required_argument, NULL, 'd' },
-+		{ "persistent",  no_argument, NULL, 'p' },
- 		{ NULL, 0,  NULL, 0 }
- 	};
- 	char *host = NULL;
--	char *busid = NULL;
-+	struct attach_options options = {};
- 	int opt;
- 	int ret = -1;
-
- 	for (;;) {
--		opt = getopt_long(argc, argv, "d:r:b:", opts, NULL);
-+		opt = getopt_long(argc, argv, "d:r:b:p", opts, NULL);
-
- 		if (opt == -1)
- 			break;
-@@ -223,17 +282,24 @@ int usbip_attach(int argc, char *argv[])
- 			break;
- 		case 'd':
- 		case 'b':
--			busid = optarg;
-+			options.busid = optarg;
-+			break;
-+		case 'p':
-+			options.is_persistent = true;
- 			break;
- 		default:
- 			goto err_out;
- 		}
- 	}
-
--	if (!host || !busid)
-+	if (!host || !options.busid)
- 		goto err_out;
-
--	ret = attach_device(host, busid);
-+	if (options.is_persistent)
-+		ret = attach_device_persistently(host, options);
-+	else
-+		ret = attach_device(host, options);
-+
- 	goto out;
-
- err_out:
-diff --git a/tools/usb/usbip/src/usbip_network.h b/tools/usb/usbip/src/usbip_network.h
-index 83b4c5344f72..1c25d06ab688 100644
---- a/tools/usb/usbip/src/usbip_network.h
-+++ b/tools/usb/usbip/src/usbip_network.h
-@@ -61,6 +61,7 @@ struct op_devinfo_reply {
-
- struct op_import_request {
- 	char busid[SYSFS_BUS_ID_SIZE];
-+	uint32_t poll_timeout_ms;
- } __attribute__((packed));
-
- struct op_import_reply {
-@@ -69,6 +70,7 @@ struct op_import_reply {
- } __attribute__((packed));
-
- #define PACK_OP_IMPORT_REQUEST(pack, request)  do {\
-+	(request)->poll_timeout_ms = usbip_net_pack_uint32_t(pack, (request)->poll_timeout_ms);\
- } while (0)
-
- #define PACK_OP_IMPORT_REPLY(pack, reply)  do {\
-diff --git a/tools/usb/usbip/src/usbipd.c b/tools/usb/usbip/src/usbipd.c
-index 48398a78e88a..36a81345474f 100644
---- a/tools/usb/usbip/src/usbipd.c
-+++ b/tools/usb/usbip/src/usbipd.c
-@@ -22,6 +22,7 @@
- #include <arpa/inet.h>
- #include <sys/socket.h>
- #include <netinet/in.h>
-+#include <stdbool.h>
-
- #ifdef HAVE_LIBWRAP
- #include <tcpd.h>
-@@ -35,6 +36,7 @@
- #include "usbip_host_common.h"
- #include "usbip_device_driver.h"
- #include "usbip_common.h"
-+#include "usbip_monitor.h"
- #include "usbip_network.h"
- #include "list.h"
-
-@@ -88,13 +90,78 @@ static void usbipd_help(void)
- 	printf("%s\n", usbipd_help_string);
- }
-
-+static struct usbip_exported_device *get_exported_device(const char *busid)
-+{
-+	struct usbip_exported_device *exported_dev = NULL;
-+	struct usbip_exported_device *edev = NULL;
-+	struct list_head *i;
-+
-+	list_for_each(i, &driver->edev_list) {
-+		edev = list_entry(i, struct usbip_exported_device, node);
-+		if (!strncmp(busid, edev->udev.busid, SYSFS_BUS_ID_SIZE)) {
-+			exported_dev = edev;
-+			break;
-+		}
-+	}
-+	return exported_dev;
-+}
-+
-+static bool await_requested_device(usbip_monitor_t *monitor,
-+				   struct op_import_request *req)
-+{
-+	usbip_monitor_set_busid(monitor, req->busid);
-+	usbip_monitor_set_timeout(monitor, req->poll_timeout_ms);
-+	return usbip_monitor_await_usb_bind(monitor, "usbip-host");
-+}
-+
-+static int recv_subsequent_poll_request(int sockfd, struct op_import_request *req)
-+{
-+	uint16_t code = OP_UNSPEC;
-+	int status;
-+	int rc = 0;
-+
-+	rc = usbip_net_recv_op_common(sockfd, &code, &status);
-+	if (rc < 0) {
-+		dbg("could not receive opcode: %#0x", code);
-+		return -1;
-+	}
-+	if (code != OP_REQ_IMPORT) {
-+		dbg("Only subsequent OP_REQ_IMPORT allowed when polling");
-+		return -1;
-+	}
-+	rc = usbip_net_recv(sockfd, req, sizeof(struct op_import_request));
-+	if (rc < 0) {
-+		dbg("Failed to receive incoming subsequent OP_REQ_IMPORT request");
-+		return -1;
-+	}
-+	PACK_OP_IMPORT_REQUEST(0, req);
-+	return rc;
-+}
-+
-+static int monitor_requested_busid(int sockfd, struct op_import_request *req)
-+{
-+	int rc = 0;
-+	usbip_monitor_t *monitor = usbip_monitor_new();
-+
-+	while (!await_requested_device(monitor, req)) {
-+		int status = ST_POLL_TIMEOUT;
-+
-+		rc = usbip_net_send_op_common(sockfd, OP_REP_IMPORT, status);
-+		if (rc < 0) {
-+			dbg("usbip_net_send_op_common failed: %#0x", OP_REP_IMPORT);
-+			break;
-+		}
-+		rc = recv_subsequent_poll_request(sockfd, req);
-+	}
-+	usbip_monitor_delete(monitor);
-+	return rc;
-+}
-+
- static int recv_request_import(int sockfd)
- {
- 	struct op_import_request req;
--	struct usbip_exported_device *edev;
-+	struct usbip_exported_device *edev = NULL;
- 	struct usbip_usb_device pdu_udev;
--	struct list_head *i;
--	int found = 0;
- 	int status = ST_OK;
- 	int rc;
-
-@@ -107,16 +174,22 @@ static int recv_request_import(int sockfd)
- 	}
- 	PACK_OP_IMPORT_REQUEST(0, &req);
-
--	list_for_each(i, &driver->edev_list) {
--		edev = list_entry(i, struct usbip_exported_device, node);
--		if (!strncmp(req.busid, edev->udev.busid, SYSFS_BUS_ID_SIZE)) {
--			info("found requested device: %s", req.busid);
--			found = 1;
--			break;
-+	edev = get_exported_device(req.busid);
-+
-+	if (!edev && req.poll_timeout_ms) {
-+		info("Client polling for devices on busid: %s", req.busid);
-+		rc = monitor_requested_busid(sockfd, &req);
-+		if (rc < 0) {
-+			dbg("Fail occurred when monitoring usb to become exported on busid: %s",
-+				req.busid);
-+			return -1;
- 		}
-+		usbip_refresh_device_list(driver);
-+		edev = get_exported_device(req.busid);
- 	}
-
--	if (found) {
-+	if (edev) {
-+		info("found requested device: %s", req.busid);
- 		/* should set TCP_NODELAY for usbip */
- 		usbip_net_set_nodelay(sockfd);
-
---
-2.25.1
-
+> +  required:
+> +    - compatible
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - apple,t8103-dwc3
+> +          - apple,t6000-dwc3
+> +      - const: apple,dwc3
+> +      - const: snps,dwc3
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +unevaluatedProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/apple-aic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    usb@82280000 {
+> +      compatible = "apple,t8103-dwc3", "apple,dwc3", "snps,dwc3";
+> +      reg = <0x82280000 0x10000>;
+> +      interrupts = <AIC_IRQ 777 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +      dr_mode = "otg";
+> +      usb-role-switch;
+> +      role-switch-default-mode = "host";
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 3b79fd441dde..03e7cc48877a 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1724,6 +1724,7 @@ T:	git https://github.com/AsahiLinux/linux.git
+>  F:	Documentation/devicetree/bindings/arm/apple.yaml
+>  F:	Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
+>  F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+> +F:	Documentation/devicetree/bindings/usb/apple,dwc3.yaml
+>  F:	arch/arm64/boot/dts/apple/
+>  F:	drivers/irqchip/irq-apple-aic.c
+>  F:	include/dt-bindings/interrupt-controller/apple-aic.h
+> -- 
+> 2.25.1
+> 
+> 
