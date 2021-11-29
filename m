@@ -2,91 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C85574611F8
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Nov 2021 11:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D6446144C
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Nov 2021 12:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236787AbhK2KXa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Nov 2021 05:23:30 -0500
-Received: from mga05.intel.com ([192.55.52.43]:41774 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229597AbhK2KV3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Nov 2021 05:21:29 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10182"; a="322171887"
-X-IronPort-AV: E=Sophos;i="5.87,272,1631602800"; 
-   d="scan'208";a="322171887"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 02:18:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,272,1631602800"; 
-   d="scan'208";a="652957479"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Nov 2021 02:18:09 -0800
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        gregkh@linuxfoundation.org
-Cc:     stern@rowland.harvard.edu,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andrew Lunn <andrew@lunn.ch>, Rajat Jain <rajatja@google.com>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211126115652.1134230-1-kai.heng.feng@canonical.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v2] usb: core: Avoid doing warm reset on disconnect event
-Message-ID: <745bd358-c34c-9deb-42e6-6f6a54fd3e2e@linux.intel.com>
-Date:   Mon, 29 Nov 2021 12:19:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.8.1
+        id S242999AbhK2L4y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Nov 2021 06:56:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239808AbhK2Lyw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Nov 2021 06:54:52 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888A0C08ED89
+        for <linux-usb@vger.kernel.org>; Mon, 29 Nov 2021 02:57:21 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id j2so40913537ybg.9
+        for <linux-usb@vger.kernel.org>; Mon, 29 Nov 2021 02:57:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=/N2AzXdmQhj8cnrxf6yxwa23/wIatZRqd4goM9Q+IO8=;
+        b=ErhOpdgigBGRX0iOA2ci/LrupvuM6+6c+q9rD2B6x1di+sFL9PVYGmzafYCayO999B
+         Ex51N+if313WKcW+gK1lj/OWtPvwfLDnTT20+eAv8YxxrR4g7rLnHIdzsTIvVAz0SrpQ
+         Ch6axdbEwb+a/M3Dt2tKAFVIFy0Y8iZuOwtZqXl1J60xk4GO/CqIzkuCM++XjDrDX06p
+         089vT34nfrhei7WTrhyk/M1T035mB+FNPNQ5Hd3oBtsviAPMtLS5mvE7ZDcnz+92hK94
+         07sMoak/mgTSYg0TcRsMzWsKiITVk9cvja0ME+E02kwQTfYZNPVDhNnY35dNNYcmygLp
+         iGDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=/N2AzXdmQhj8cnrxf6yxwa23/wIatZRqd4goM9Q+IO8=;
+        b=hc8hHvVbzcKl8CURANBEDoGZgxUWAKVUT6l+ouK7w6zcKxbD/7cR6J3IipGMfk9Mrk
+         xk6s/o5yFuMptZK7L1SJqbzqwhvqk/TYBRVmWs2ny8ka2kEVOfvGQFGS9IXzzGfFtYKZ
+         Uv153+Zcm8xFsdsQ+wX+aua6DqYfvYEe08s6O/orZIsegPE5kGW4BIDQQYHh5VXtDoCS
+         f0DkTgFtO21P/do5cwtboaNqpYeMoUyiYcpdggv6pF3u9y2WykA4fzfkVW3FFI7ix/N4
+         +5X05MwOru+wUBF/8XPuGgjrKRWs2KmzgIsM8/A77x3R53x5a6d9tebb5Gh5Kwnn/uUX
+         AT8A==
+X-Gm-Message-State: AOAM530IV0efu2jvUBYiyVkOl/Hui7CjdhJkXdNsMv9E2WkObB+vbGRy
+        p06ravlQwA8/jWqe8OfAvNlMJHjLBEl8RyV8OY8=
+X-Google-Smtp-Source: ABdhPJwDXAO1KxnCKDkkwiudCJqJuhpArYKiJQTg+eIzhjAbEBRvY4HWTqik/oBHDS4epB1bybFjcLt6vUq4kag2XME=
+X-Received: by 2002:a25:8052:: with SMTP id a18mr5454865ybn.634.1638183440729;
+ Mon, 29 Nov 2021 02:57:20 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211126115652.1134230-1-kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:7010:178c:b0:1df:8029:4655 with HTTP; Mon, 29 Nov 2021
+ 02:57:20 -0800 (PST)
+Reply-To: koffiaya202100@gmail.com
+From:   Koffi Aya <jindaratdaosornprasat2014@gmail.com>
+Date:   Mon, 29 Nov 2021 10:57:20 +0000
+Message-ID: <CAEU+xUtwV2_ndBWAkwUyRuwpTUmaYNsko=VW5FhYtsUrob4E3g@mail.gmail.com>
+Subject: Von Koffi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 26.11.2021 13.56, Kai-Heng Feng wrote:
-> Unplugging USB device may cause an incorrect warm reset loop:
-> [  143.039019] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x4202c0
-> [  143.039025] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
-> [  143.039051] hub 2-0:1.0: state 7 ports 10 chg 0000 evt 0008
-> [  143.039058] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x4202c0, return 0x4102c0
-> [  143.039092] xhci_hcd 0000:00:14.0: clear port3 connect change, portsc: 0x4002c0
-> [  143.039096] usb usb2-port3: link state change
-> [  143.039099] xhci_hcd 0000:00:14.0: clear port3 link state change, portsc: 0x2c0
-> [  143.039101] usb usb2-port3: do warm reset
-> [  143.096736] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2b0, return 0x2b0
-> [  143.096751] usb usb2-port3: not warm reset yet, waiting 50ms
-> [  143.131500] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link inactive
-> [  143.138260] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x2802a0
-> [  143.138263] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
-> [  143.160756] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2802a0, return 0x3002a0
-> [  143.160798] usb usb2-port3: not warm reset yet, waiting 200ms
-> 
-> The warm reset is due to its PLS is in eSS.Inactive state. However, USB
-> 3.2 spec table 10-13 mentions "Ports can be disabled by either a fault
-> condition (disconnect event or other fault condition)", xHCI 1.2 spec
-> table 5-27 also states that "This flag shall automatically be cleared to
-> ‘0’ by a disconnect event or other fault condition." on PED.
-> 
-> So use CSC = 0 and PED = 0 as indication that device is disconnecting to
-> avoid doing warm reset.
+--=20
+Von: Koffi Aya
+Liebste,
+Guten Tag und vielen Dank f=C3=BCr Ihre Aufmerksamkeit. Bitte, ich m=C3=B6c=
+hte, dass
+Sie meine E-Mail sorgf=C3=A4ltig lesen und mir helfen, dieses Projekt zu
+bearbeiten. Ich bin Miss Koffi Aya und m=C3=B6chte Sie in aller Bescheidenh=
+eit
+um Ihre Partnerschaft und Unterst=C3=BCtzung bei der =C3=9Cbertragung und A=
+nlage
+meiner Erbschaftsgelder in H=C3=B6he von 6.500.000,00 US-Dollar (sechs Mill=
+ionen
+f=C3=BCnfhunderttausend US-Dollar) bitten, die mein verstorbener geliebter =
+Vater
+vor seinem Tod bei einer Bank hinterlegt hat.
 
-My understanding is that PED = 0 in case of disconnect, error (PLS=Inactive), or
-during active reset signalling. See xHCI Figure 4-27: USB3 Root Hub Port State Machine.
-signal states (0,0,0,0) are PP,CCS,PED,PR.
+Ich m=C3=B6chte Ihnen versichern, dass dieser Fonds legal von meinem
+verstorbenen Vater erworben wurde und keinen kriminellen Hintergrund hat.
+Mein Vater hat diesen Fonds legal durch ein legitimes Gesch=C3=A4ft erworbe=
+n,
+bevor er w=C3=A4hrend seiner Gesch=C3=A4ftsreise zu Tode vergiftet wurde. D=
+er Tod
+meines Vaters wurde von seinen Verwandten, die ihn w=C3=A4hrend seiner
+Dienstreise begleiteten, vermutet. Denn nach 3 Monaten nach dem Tod meines
+Vaters begannen Seine Verwandten, alle Besitzt=C3=BCmer meines verstorbenen
+Vaters zu beanspruchen und zu verkaufen.
 
-I'm looking at a similar case where Inactive link is reported at disconnect for a while
-before missing terminations are detected and link finally goes to RxDetect.
+Die Verwandten meines verstorbenen Vaters wissen nichts von den
+6.500.000,00 US-Dollar (sechs Millionen f=C3=BCnfhunderttausend US-Dollar),=
+ die
+mein verstorbener Vater auf die Bank eingezahlt hat und mein verstorbener
+Vater sagte mir heimlich, bevor er starb, dass ich in jedem Land nach einem
+ausl=C3=A4ndischen Partner suchen sollte meiner Wahl, wohin ich diese Gelde=
+r f=C3=BCr
+meine eigenen Zwecke =C3=BCberweise.
 
-If the port was reset immediately when Inactive link state was reported the port stays stuck 
-in port reset.
-This might have been related to the address0 locking issues recently fixed.
+Bitte helfen Sie mir, dieses Geld f=C3=BCr gesch=C3=A4ftliche Zwecke in Ihr=
+em Land
+auf Ihr Konto zu =C3=BCberweisen. Ich habe diese Entscheidung getroffen, we=
+il
+ich viele Dem=C3=BCtigungen von den Verwandten meines verstorbenen Vaters
+erlitten habe. Zur Zeit habe ich Kommunikation mit dem Direktor der Bank,
+bei der mein verstorbener Vater dieses Geld hinterlegt hat. Ich habe dem
+Direktor der Bank die Dringlichkeit erkl=C3=A4rt, sicherzustellen, dass das=
+ Geld
+ins Ausland =C3=BCberwiesen wird, damit ich dieses Land zu meiner Sicherhei=
+t
+verlassen kann. Der Direktor der Bank hat mir zugesichert, dass das Geld
+=C3=BCberwiesen wird, sobald ich jemanden vorlege, der den Geldbetrag in me=
+inem
+Namen f=C3=BCr diesen Zweck ehrlich entgegennimmt.
 
-Anyway, to avoid the extra reset of a removed USB3 device I started polling the link state of
-the Inactive link for some time before resetting it. This gives the link time to detect
-missing terminations and go to RxDetect, and driver can skip the reset.
+Seien Sie versichert, dass die Bank den Betrag auf Ihr Konto =C3=BCberweist=
+ und
+es keine Probleme geben wird. Diese Transaktion ist 100% risikofrei und
+legitim. Ich bin bereit, Ihnen nach erfolgreicher =C3=9Cberweisung dieses G=
+eldes
+auf Ihr Konto 30% der Gesamtsumme als Entsch=C3=A4digung f=C3=BCr Ihren Auf=
+wand
+anzubieten. Sie werden mir auch helfen, 10% an Wohlt=C3=A4tigkeitsorganisat=
+ionen
+und Heime f=C3=BCr mutterlose Babys in Ihrem Land zu spenden.
 
-Planning on upstreaming it, patch is here:
-https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=fix_avoid_disconnect_reset&id=72d20c026b7812d096c6b5184a3888894401c829
+Bitte alles, was ich m=C3=B6chte, ist, dass Sie f=C3=BCr mich als mein ausl=
+=C3=A4ndischer
+Partner auftreten, damit die Bank dieses Geld auf Ihr Konto =C3=BCberweist,
+damit ich in diesem Land leben kann. Bitte, ich brauche Ihre dringende
+Hilfe wegen meines jetzigen Zustands. Mit Ihrer vollen Zustimmung, mit mir
+zu diesem Zweck zusammenzuarbeiten, bekunden Sie bitte Ihr Interesse durch
+eine R=C3=BCckantwort an mich, damit ich Ihnen die notwendigen Informatione=
+n und
+die Details zum weiteren Vorgehen gebe. Ich werde Ihnen 30% des Geldes f=C3=
+=BCr
+Ihre Hilfe anbieten und Hilfestellung, damit umzugehen.
 
--Mathias
+Ihre dringende Antwort wird gesch=C3=A4tzt.
+Mit freundlichen Gr=C3=BC=C3=9Fen
+Koffi Aya
