@@ -2,214 +2,527 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C90460EF7
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Nov 2021 07:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4CE460FF3
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Nov 2021 09:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232906AbhK2GxD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Nov 2021 01:53:03 -0500
-Received: from out5-smtp.messagingengine.com ([66.111.4.29]:45027 "EHLO
-        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230501AbhK2GvC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Nov 2021 01:51:02 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id DC3B25C007E;
-        Mon, 29 Nov 2021 01:47:41 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 29 Nov 2021 01:47:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=Z9jR3gvqWtVNJ28wX7yXCdzY9hV
-        Oz2F6MjsGbgqnTcQ=; b=RkXQRhRtJlFMH+tsqYUfrHKW+GUl9f33l8hkju1oHpM
-        MatfSCJYecG87mthnoMWEKL0BaLNzjqwPT6TihICUYjdjmazFTVb5pxupipOtZXI
-        FaRFCKupUGnovT7uxYst5igMN/juZWFb1J1kw5zIE9i68jOIIREtspr8a0TzSmql
-        A3gv63z6IGQlSu0DvVax/0NlxpujMzx22TiQfCvIreH93GtjyIB1SveNYw5WaAYu
-        OAmsz9sOSXtDtz9OzciZGHeQf+1Nr+IsgVEOOooEDDapBw1zRSA80ZObN67j/DP2
-        hhdTPL5iP8JbX/I1i0GeHzYAG9QxZjA7Ab5AuwPCZKQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=Z9jR3g
-        vqWtVNJ28wX7yXCdzY9hVOz2F6MjsGbgqnTcQ=; b=ax+XdnqXhg2CNPi8EBewUO
-        3NQo2AHlf/MQW9sXe3+p10aTB3hJsjYdVbjakhxttj5y75BeYOrlwdAvvLEnq+2s
-        rDLDQZKvNcDdpv02Vsh5HfEa3+Q2uFMZVW8VDmAbbuatwX2MdAFOyDrXvb4mToEk
-        gDQYq7ow/6OMaef53KivdGp5AecFmIU7fy6kn5FYxIPs24tD0ZnMKOvecawF5cia
-        aRUzN7yE6gZSJ5OBcEZMer6IxfPB7Tf0AoF94zDJwPCS4eArqvF6CjcoY3b53vxn
-        7xQKtX3r/Jr6B/di7JQQaiTk+UVhcAWUmvewyRjOeNhbFAJ7ELIA3NrXkCupeXjA
-        ==
-X-ME-Sender: <xms:jXekYcEG5H4r92WpXKdc6iI0WepPWKwkw7_TBUjzuNwIoZ6m0MpxPg>
-    <xme:jXekYVViCsWgtiwAxkQhEKD9C0UJJZeFl6GyEX2DPd3OiRkSOal-xjBlrBHNrR_va
-    pFqiTxTWP3HHQ>
-X-ME-Received: <xmr:jXekYWKUgI07EIa-6m3T67Pq9SveGXeSKggP0tk3idzwHuz3EB5xAh6QnBIUi_4N3Yo-e7VcHZwczLw-UUOwwFlL3-07OuSc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrheekgdefjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
-    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
-    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
-    gtohhm
-X-ME-Proxy: <xmx:jXekYeGlStBHMwIrfZ-oE-lCHrA7QhuIhiO2t51-goJ5nDv5XKA9zg>
-    <xmx:jXekYSWLgAYfA8xuqhXa1NDElCl9--SHC5OJ_yooRY3P_EGBxwg8qg>
-    <xmx:jXekYRMZwR7o_GgoWXrCxykncr2Zr4_2UBmoUTS3ZdMtJDWw2boMQw>
-    <xmx:jXekYUKe1BrFhhU7WVVhv39UhIra-rPJnMikVZLtOYQgIjq5zeZ6iQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 29 Nov 2021 01:47:41 -0500 (EST)
-Date:   Mon, 29 Nov 2021 07:47:38 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Lars Gunnarsson <gunnarsson.lars@gmail.com>
-Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] tools/usbip: update protocol documentation
-Message-ID: <YaR3iqQlR9uo6tTo@kroah.com>
-References: <20211128211202.GA37076@dell-precision-T3610>
+        id S242880AbhK2IZd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Nov 2021 03:25:33 -0500
+Received: from mga05.intel.com ([192.55.52.43]:32218 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231421AbhK2IXd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 29 Nov 2021 03:23:33 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10182"; a="322152194"
+X-IronPort-AV: E=Sophos;i="5.87,272,1631602800"; 
+   d="scan'208";a="322152194"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 00:19:45 -0800
+X-IronPort-AV: E=Sophos;i="5.87,272,1631602800"; 
+   d="scan'208";a="676261010"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 00:19:42 -0800
+Received: by lahna (sSMTP sendmail emulation); Mon, 29 Nov 2021 10:19:39 +0200
+Date:   Mon, 29 Nov 2021 10:19:39 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Gil Fine <gil.fine@intel.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org, lukas@wunner.de
+Subject: Re: [PATCH 1/7] thunderbolt: Add TMU unidirectional mode
+Message-ID: <YaSNGzpGXIWN4fgh@lahna>
+References: <20211125143821.16558-1-gil.fine@intel.com>
+ <20211125143821.16558-2-gil.fine@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211128211202.GA37076@dell-precision-T3610>
+In-Reply-To: <20211125143821.16558-2-gil.fine@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Nov 28, 2021 at 10:12:02PM +0100, Lars Gunnarsson wrote:
-> This patch contains usbip protocol documentation updates for
-> the implementation changes in subsequent patches.
-> 
-> Signed-off-by: Lars Gunnarsson <gunnarsson.lars@gmail.com>
-> ---
-> v1: New patch added in series.
-> v2: Update paragraph according to review comments
-> 
->  Documentation/usb/usbip_protocol.rst | 61 ++++++++++++++++++++++++----
->  1 file changed, 53 insertions(+), 8 deletions(-)
-> 
-> diff --git a/Documentation/usb/usbip_protocol.rst b/Documentation/usb/usbip_protocol.rst
-> index 0b8541fda4d8..2d540fcc4b21 100644
-> --- a/Documentation/usb/usbip_protocol.rst
-> +++ b/Documentation/usb/usbip_protocol.rst
-> @@ -9,6 +9,11 @@ The USB/IP protocol follows a server/client architecture. The server exports the
->  USB devices and the clients import them. The device driver for the exported
->  USB device runs on the client machine.
-> 
-> +The server may choose to export any of its available USB devices based on their
-> +busid. These devices will remain exported until they are unplugged or unexported.
-> +Optionally, it is possible to persistently export the devices on a given bus by
-> +monitor when they are plugged in.
-> +
->  The client may ask for the list of the exported USB devices. To get the list the
->  client opens a TCP/IP connection to the server, and sends an OP_REQ_DEVLIST
->  packet on top of the TCP/IP connection (so the actual OP_REQ_DEVLIST may be sent
-> @@ -31,12 +36,7 @@ TCP/IP connection is closed.
-> 
->  Once the client knows the list of exported USB devices it may decide to use one
->  of them. First the client opens a TCP/IP connection to the server and
-> -sends an OP_REQ_IMPORT packet. The server replies with OP_REP_IMPORT. If the
-> -import was successful the TCP/IP connection remains open and will be used
-> -to transfer the URB traffic between the client and the server. The client may
-> -send two types of packets: the USBIP_CMD_SUBMIT to submit an URB, and
-> -USBIP_CMD_UNLINK to unlink a previously submitted URB. The answers of the
-> -server may be USBIP_RET_SUBMIT and USBIP_RET_UNLINK respectively.
-> +sends an OP_REQ_IMPORT packet. The server replies with OP_REP_IMPORT.
-> 
->  ::
-> 
-> @@ -50,6 +50,47 @@ server may be USBIP_RET_SUBMIT and USBIP_RET_UNLINK respectively.
->            |                  OP_REP_IMPORT                  |
->            | <---------------------------------------------- |
->            |                                                 |
-> +
-> +The client may also request to poll for devices to become exported on a given
-> +busid, instead of immediately receive an error. If no device becomes exported
-> +within the chosen time, the server replies with timeout. The TCP/IP connection
-> +remains open and subsequent poll requests can be sent.
-> +
-> +::
-> +
-> + virtual host controller                                 usb host
-> +      "client"                                           "server"
-> +  (imports USB devices)                             (exports USB devices)
-> +          |                                                 |
-> +          |                  OP_REQ_IMPORT                  |
-> +          | ----------------------------------------------> |
-> +          |                        .                        |
-> +          |                        :                        |
-> +          |                                                 |
-> +          |                  OP_REP_IMPORT                  |
-> +          | <---------------------------------------------- |
-> +          |                                                 |
-> +          |                  OP_REQ_IMPORT                  |
-> +          | ----------------------------------------------> |
-> +          |                        .                        |
-> +          |                        :                        |
-> +          |                                                 |
-> +          |                  OP_REP_IMPORT                  |
-> +          | <---------------------------------------------- |
-> +          |                        .                        |
-> +          |                        :                        |
-> +
-> +If the import was successful the TCP/IP connection remains open and will be used
-> +to transfer the URB traffic between the client and the server. The client may
-> +send two types of packets: the USBIP_CMD_SUBMIT to submit an URB, and
-> +USBIP_CMD_UNLINK to unlink a previously submitted URB. The answers of the
-> +server may be USBIP_RET_SUBMIT and USBIP_RET_UNLINK respectively.
-> +
-> +::
-> +
-> + virtual host controller                                 usb host
-> +      "client"                                           "server"
-> +  (imports USB devices)                             (exports USB devices)
->            |                                                 |
->            |            USBIP_CMD_SUBMIT(seqnum = n)         |
->            | ----------------------------------------------> |
-> @@ -132,8 +173,8 @@ byte (MSB) is stored at the lowest address.
->  Protocol Version
->  ================
-> 
-> -The documented USBIP version is v1.1.1. The binary representation of this
-> -version in message headers is 0x0111.
-> +The documented USBIP version is v1.1.2. The binary representation of this
-> +version in message headers is 0x0112.
-> 
->  This is defined in tools/usb/usbip/configure.ac
-> 
-> @@ -243,6 +284,10 @@ OP_REQ_IMPORT:
->  |           |        |            | A string closed with zero, the unused bytes       |
->  |           |        |            | shall be filled with zeros.                       |
->  +-----------+--------+------------+---------------------------------------------------+
-> +| 40        | 4      |            | poll timeout: instead of returning immediately if |
-> +|           |        |            | device is not available, wait until usb device    |
-> +|           |        |            | becomes exported or a timeout occurs.             |
-> ++-----------+--------+------------+---------------------------------------------------+
-> 
->  OP_REP_IMPORT:
->  	Reply to import (attach) a remote USB device.
-> --
-> 2.25.1
-> 
-
 Hi,
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+On Thu, Nov 25, 2021 at 04:38:15PM +0200, Gil Fine wrote:
+> Up until Titan Ridge (Thunderbolt 3) device, routers only supported
+> bidirectional mode. In this patch, we add to TMU, a unidirectional mode.
+> Unidirectional mode shall be used for enabling of low power state of the link.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Probably should mention here that this is needed to enable CLx-states.
 
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what is needed in order to
-  properly describe the change.
+> The Clx enabling is implemented in the next patch of this series.
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+This line is not necessary.
 
-thanks,
+> Signed-off-by: Gil Fine <gil.fine@intel.com>
+> ---
+>  drivers/thunderbolt/tb.c      |   9 +-
+>  drivers/thunderbolt/tb.h      |  24 ++--
+>  drivers/thunderbolt/tb_regs.h |   2 +
+>  drivers/thunderbolt/tmu.c     | 244 ++++++++++++++++++++++++++++------
+>  4 files changed, 231 insertions(+), 48 deletions(-)
+> 
+> diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+> index a231191b06c6..533fe48e85be 100644
+> --- a/drivers/thunderbolt/tb.c
+> +++ b/drivers/thunderbolt/tb.c
+> @@ -221,7 +221,7 @@ static int tb_enable_tmu(struct tb_switch *sw)
+>  	int ret;
+>  
+>  	/* If it is already enabled in correct mode, don't touch it */
+> -	if (tb_switch_tmu_is_enabled(sw))
+> +	if (tb_switch_tmu_hifi_is_enabled(sw, sw->tmu.unidirect_request))
+>  		return 0;
+>  
+>  	ret = tb_switch_tmu_disable(sw);
+> @@ -669,6 +669,7 @@ static void tb_scan_port(struct tb_port *port)
+>  	tb_switch_lane_bonding_enable(sw);
+>  	/* Set the link configured */
+>  	tb_switch_configure_link(sw);
+> +	tb_switch_tmu_configure(sw, TB_SWITCH_TMU_RATE_HIFI, false);
+>  
+>  	if (tb_enable_tmu(sw))
+>  		tb_sw_warn(sw, "failed to enable TMU\n");
+> @@ -1375,6 +1376,7 @@ static int tb_start(struct tb *tb)
+>  		return ret;
+>  	}
+>  
+> +	tb_switch_tmu_configure(tb->root_switch, TB_SWITCH_TMU_RATE_HIFI, false);
+>  	/* Enable TMU if it is off */
+>  	tb_switch_tmu_enable(tb->root_switch);
+>  	/* Full scan to discover devices added before the driver was loaded. */
+> @@ -1418,6 +1420,11 @@ static void tb_restore_children(struct tb_switch *sw)
+>  	if (sw->is_unplugged)
+>  		return;
+>  
+> +	/*
+> +	 * tb_switch_tmu_configure() was already called when the switch was
+> +	 * added before entering SX/RPM, so no need to call it again
 
-greg k-h's patch email bot
+Nit: I suggest using "system sleep" and "runtime suspend" here or
+similar.
+
+> +	 * before enabling TMU.
+> +	 */
+>  	if (tb_enable_tmu(sw))
+>  		tb_sw_warn(sw, "failed to restore TMU configuration\n");
+>  
+> diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+> index 3fae40670b72..0205361ff89a 100644
+> --- a/drivers/thunderbolt/tb.h
+> +++ b/drivers/thunderbolt/tb.h
+> @@ -89,15 +89,24 @@ enum tb_switch_tmu_rate {
+>   * @cap: Offset to the TMU capability (%0 if not found)
+>   * @has_ucap: Does the switch support uni-directional mode
+>   * @rate: TMU refresh rate related to upstream switch. In case of root
+> - *	  switch this holds the domain rate.
+> + *	  switch this holds the domain rate. Reflects the HW setting.
+>   * @unidirectional: Is the TMU in uni-directional or bi-directional mode
+> - *		    related to upstream switch. Don't case for root switch.
+> + *		    related to upstream switch. Don't care for root switch.
+> + *		    Reflects the HW setting.
+> + * @rate_request: TMU new refresh rate related to upstream switch that is
+> + *		  requested to be set. In case of root switch, this holds
+> + *		  the new domain rate that is requested to be set.
+> + * @unidirect_request: Is the new TMU mode: uni-directional or bi-directional
+> + *		       that is requested to be set. Related to upstream switch.
+> + *		       Don't care for root switch.
+>   */
+>  struct tb_switch_tmu {
+>  	int cap;
+>  	bool has_ucap;
+>  	enum tb_switch_tmu_rate rate;
+>  	bool unidirectional;
+> +	bool unidirect_request;
+> +	enum tb_switch_tmu_rate rate_request;
+>  };
+>  
+>  /**
+> @@ -891,13 +900,10 @@ int tb_switch_tmu_init(struct tb_switch *sw);
+>  int tb_switch_tmu_post_time(struct tb_switch *sw);
+>  int tb_switch_tmu_disable(struct tb_switch *sw);
+>  int tb_switch_tmu_enable(struct tb_switch *sw);
+> -
+> -static inline bool tb_switch_tmu_is_enabled(const struct tb_switch *sw)
+> -{
+> -	return sw->tmu.rate == TB_SWITCH_TMU_RATE_HIFI &&
+> -	       !sw->tmu.unidirectional;
+> -}
+> -
+> +bool tb_switch_tmu_hifi_is_enabled(struct tb_switch *sw, bool unidirect);
+> +void tb_switch_tmu_configure(struct tb_switch *sw,
+> +			     enum tb_switch_tmu_rate rate,
+> +			     bool unidirectional);
+>  int tb_wait_for_port(struct tb_port *port, bool wait_if_unplugged);
+>  int tb_port_add_nfc_credits(struct tb_port *port, int credits);
+>  int tb_port_clear_counter(struct tb_port *port, int counter);
+> diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
+> index d8ab6c820451..38bc15680d06 100644
+> --- a/drivers/thunderbolt/tb_regs.h
+> +++ b/drivers/thunderbolt/tb_regs.h
+> @@ -305,6 +305,8 @@ struct tb_regs_port_header {
+>  /* TMU adapter registers */
+>  #define TMU_ADP_CS_3				0x03
+>  #define TMU_ADP_CS_3_UDM			BIT(29)
+> +#define TMU_ADP_CS_6				0x06
+> +#define TMU_ADP_CS_6_DTS			BIT(1)
+>  
+>  /* Lane adapter registers */
+>  #define LANE_ADP_CS_0				0x00
+> diff --git a/drivers/thunderbolt/tmu.c b/drivers/thunderbolt/tmu.c
+> index 039c42a06000..1374813bfc5c 100644
+> --- a/drivers/thunderbolt/tmu.c
+> +++ b/drivers/thunderbolt/tmu.c
+> @@ -115,6 +115,11 @@ static inline int tb_port_tmu_unidirectional_disable(struct tb_port *port)
+>  	return tb_port_tmu_set_unidirectional(port, false);
+>  }
+>  
+> +static inline int tb_port_tmu_unidirectional_enable(struct tb_port *port)
+> +{
+> +	return tb_port_tmu_set_unidirectional(port, true);
+> +}
+> +
+>  static bool tb_port_tmu_is_unidirectional(struct tb_port *port)
+>  {
+>  	int ret;
+> @@ -128,6 +133,23 @@ static bool tb_port_tmu_is_unidirectional(struct tb_port *port)
+>  	return val & TMU_ADP_CS_3_UDM;
+>  }
+>  
+> +static int tb_port_tmu_time_sync(struct tb_port *port, bool time_sync)
+> +{
+> +	u32 val = time_sync ? TMU_ADP_CS_6_DTS : 0;
+> +
+> +	return tb_port_tmu_write(port, TMU_ADP_CS_6, TMU_ADP_CS_6_DTS, val);
+> +}
+> +
+> +static int tb_port_tmu_time_sync_disable(struct tb_port *port)
+> +{
+> +	return tb_port_tmu_time_sync(port, true);
+> +}
+> +
+> +static int tb_port_tmu_time_sync_enable(struct tb_port *port)
+> +{
+> +	return tb_port_tmu_time_sync(port, false);
+> +}
+> +
+>  static int tb_switch_tmu_set_time_disruption(struct tb_switch *sw, bool set)
+>  {
+>  	int ret;
+> @@ -297,6 +319,9 @@ int tb_switch_tmu_post_time(struct tb_switch *sw)
+>   */
+>  int tb_switch_tmu_disable(struct tb_switch *sw)
+>  {
+> +	struct tb_switch *sw_conf, *parent = tb_switch_parent(sw);
+
+Can you drop this line..
+
+> +	bool unidirect = tb_switch_tmu_hifi_is_enabled(sw, true);
+> +	struct tb_port *up, *down;
+>  	int ret;
+>  
+>  	if (!tb_switch_is_usb4(sw))
+> @@ -306,21 +331,28 @@ int tb_switch_tmu_disable(struct tb_switch *sw)
+>  	if (sw->tmu.rate == TB_SWITCH_TMU_RATE_OFF)
+>  		return 0;
+>  
+> -	if (sw->tmu.unidirectional) {
+> -		struct tb_switch *parent = tb_switch_parent(sw);
+> -		struct tb_port *up, *down;
+> +	up = tb_upstream_port(sw);
+> +	down = tb_port_at(tb_route(sw), parent);
+>  
+> -		up = tb_upstream_port(sw);
+> -		down = tb_port_at(tb_route(sw), parent);
+> +	if (tb_route(sw)) {
+> +		sw_conf = unidirect ? parent : sw;
+> +		tb_switch_tmu_rate_write(sw_conf, TB_SWITCH_TMU_RATE_OFF);
+
+.. and here do
+
+	if (unidirect)
+		tb_switch_tmu_rate_write(parent, TB_SWITCH_TMU_RATE_OFF);
+	else
+		tb_switch_tmu_rate_write(sw, TB_SWITCH_TMU_RATE_OFF);
+
+Also add a comment why we need to configure it in the parent when the
+TMU mode is unidirectional.
+
+>  
+> -		/* The switch may be unplugged so ignore any errors */
+> -		tb_port_tmu_unidirectional_disable(up);
+> -		ret = tb_port_tmu_unidirectional_disable(down);
+> +		tb_port_tmu_time_sync_disable(up);
+> +		ret = tb_port_tmu_time_sync_disable(down);
+>  		if (ret)
+>  			return ret;
+> -	}
+>  
+> -	tb_switch_tmu_rate_write(sw, TB_SWITCH_TMU_RATE_OFF);
+> +		if (unidirect) {
+> +			/* The switch may be unplugged so ignore any errors */
+> +			tb_port_tmu_unidirectional_disable(up);
+> +			ret = tb_port_tmu_unidirectional_disable(down);
+> +			if (ret)
+> +				return ret;
+> +		}
+> +	} else {
+> +		tb_switch_tmu_rate_write(sw, TB_SWITCH_TMU_RATE_OFF);
+> +	}
+>  
+>  	sw->tmu.unidirectional = false;
+>  	sw->tmu.rate = TB_SWITCH_TMU_RATE_OFF;
+> @@ -329,55 +361,191 @@ int tb_switch_tmu_disable(struct tb_switch *sw)
+>  	return 0;
+>  }
+>  
+> -/**
+> - * tb_switch_tmu_enable() - Enable TMU on a switch
+> - * @sw: Switch whose TMU to enable
+> - *
+> - * Enables TMU of a switch to be in bi-directional, HiFi mode. In this mode
+> - * all tunneling should work.
+> +/*
+> + * This function is called when the previous TMU mode was
+> + * TB_SWITCH_TMU_RATE_OFF
+>   */
+> -int tb_switch_tmu_enable(struct tb_switch *sw)
+> +static int __tb_switch_tmu_enable_bidir(struct tb_switch *sw)
+>  {
+> +	struct tb_switch *parent = tb_switch_parent(sw);
+> +	struct tb_port *up, *down;
+>  	int ret;
+>  
+> -	if (!tb_switch_is_usb4(sw))
+> -		return 0;
+> +	up = tb_upstream_port(sw);
+> +	down = tb_port_at(tb_route(sw), parent);
+>  
+> -	if (tb_switch_tmu_is_enabled(sw))
+> -		return 0;
+> +	ret = tb_port_tmu_unidirectional_enable(up);
+> +	if (ret)
+> +		return ret;
+>  
+> -	ret = tb_switch_tmu_set_time_disruption(sw, true);
+> +	ret = tb_port_tmu_unidirectional_enable(down);
+> +	if (ret)
+> +		goto out;
+> +
+> +	ret = tb_switch_tmu_rate_write(parent, TB_SWITCH_TMU_RATE_HIFI);
+> +	if (ret)
+> +		goto out;
+> +
+> +	ret = tb_port_tmu_time_sync_enable(up);
+> +	if (ret)
+> +		goto out;
+> +
+> +	ret = tb_port_tmu_time_sync_enable(down);
+> +	if (ret)
+> +		goto out;
+> +
+> +	return 0;
+> +out:
+> +	/*
+> +	 * In case of any failure in one of the steps, get back to the
+> +	 * TMU configurations in OFF mode. In case of additional failures in
+> +	 * the functions below, ignore them since we already report a failure.
+> +	 */
+> +	tb_port_tmu_time_sync_disable(up);
+> +	tb_switch_tmu_rate_write(parent, TB_SWITCH_TMU_RATE_OFF);
+> +	tb_port_tmu_unidirectional_disable(down);
+> +	tb_port_tmu_unidirectional_disable(up);
+
+Empty line here.
+
+> +	return ret;
+> +}
+> +
+> +/*
+> + * This function is called when the previous TMU mode was
+> + * TB_SWITCH_TMU_RATE_OFF
+
+Add ending '.' to the sentence.
+
+> + */
+> +static int __tb_switch_tmu_enable_uni(struct tb_switch *sw)
+> +{
+> +	struct tb_switch *parent = tb_switch_parent(sw);
+> +	struct tb_port *up, *down;
+> +	int ret;
+> +
+> +	up = tb_upstream_port(sw);
+> +	down = tb_port_at(tb_route(sw), parent);
+> +	ret = tb_switch_tmu_rate_write(parent, TB_SWITCH_TMU_RATE_HIFI);
+>  	if (ret)
+>  		return ret;
+>  
+> -	/* Change mode to bi-directional */
+> -	if (tb_route(sw) && sw->tmu.unidirectional) {
+> -		struct tb_switch *parent = tb_switch_parent(sw);
+> -		struct tb_port *up, *down;
+> +	ret = tb_port_tmu_unidirectional_enable(up);
+> +	if (ret)
+> +		goto out;
+> +
+> +	ret = tb_port_tmu_time_sync_enable(up);
+> +	if (ret)
+> +		goto out;
+>  
+> -		up = tb_upstream_port(sw);
+> -		down = tb_port_at(tb_route(sw), parent);
+> +	ret = tb_port_tmu_unidirectional_enable(down);
+> +	if (ret)
+> +		goto out;
+>  
+> -		ret = tb_port_tmu_unidirectional_disable(down);
+> -		if (ret)
+> -			return ret;
+> +	ret = tb_port_tmu_time_sync_enable(down);
+> +	if (ret)
+> +		goto out;
+>  
+> -		ret = tb_switch_tmu_rate_write(sw, TB_SWITCH_TMU_RATE_HIFI);
+> -		if (ret)
+> -			return ret;
+> +	return 0;
+> +out:
+> +	/*
+> +	 * In case of any failure in one of the steps, get back to the
+> +	 * TMU configurations in OFF mode. In case of additional failures in
+> +	 * the functions below, ignore them since we already report a failure.
+> +	 */
+> +	tb_port_tmu_unidirectional_disable(down);
+> +	tb_port_tmu_time_sync_disable(up);
+> +	tb_port_tmu_unidirectional_disable(up);
+> +	tb_switch_tmu_rate_write(parent, TB_SWITCH_TMU_RATE_OFF);
+
+Empty line.
+
+I wonder if it is better to separate these into own function. So you
+don't need to duplicate them in error paths.
+
+> +	return ret;
+> +}
+>  
+> -		ret = tb_port_tmu_unidirectional_disable(up);
+> -		if (ret)
+> -			return ret;
+> +static int tb_switch_tmu_hifi_enable(struct tb_switch *sw)
+> +{
+> +	bool unidirect = sw->tmu.unidirect_request;
+> +	int ret;
+> +
+> +	if (unidirect && !sw->tmu.has_ucap)
+> +		return -EOPNOTSUPP;
+> +
+> +	if (!tb_switch_is_usb4(sw))
+> +		return 0;
+> +
+> +	if (tb_switch_tmu_hifi_is_enabled(sw, sw->tmu.unidirect_request))
+> +		return 0;
+> +
+> +	ret = tb_switch_tmu_set_time_disruption(sw, true);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (tb_route(sw)) {
+> +		/* The used mode changes are from OFF to HiFi-Uni/HiFi-BiDir */
+> +		if (sw->tmu.rate == TB_SWITCH_TMU_RATE_OFF) {
+> +			ret = unidirect ? __tb_switch_tmu_enable_uni(sw)
+> +					 : __tb_switch_tmu_enable_bidir(sw);
+> +			if (ret)
+> +				return ret;
+
+I think it is better if you avoid the ternary operator here:
+
+	if (unidirect)
+		ret = __tb_switch_tmu_enable_uni(sw);
+	else
+		ret = __tb_switch_tmu_enable_bidir(sw);
+	if (ret)
+		return ret;
+
+
+> +		}
+> +		sw->tmu.unidirectional = unidirect;
+>  	} else {
+> +		/*
+> +		 * Host-router port configurations are written as
+
+Host router
+
+ditto everywhere.
+
+> +		 * configurations for down-stream port of the parent of the
+
+downstream
+
+> +		 * child node - see above.
+> +		 * Here only the host's router rate configuration is written
+
+host routers'
+
+> +		 */
+>  		ret = tb_switch_tmu_rate_write(sw, TB_SWITCH_TMU_RATE_HIFI);
+>  		if (ret)
+>  			return ret;
+>  	}
+>  
+> -	sw->tmu.unidirectional = false;
+>  	sw->tmu.rate = TB_SWITCH_TMU_RATE_HIFI;
+>  	tb_sw_dbg(sw, "TMU: mode set to: %s\n", tb_switch_tmu_mode_name(sw));
+>  
+>  	return tb_switch_tmu_set_time_disruption(sw, false);
+>  }
+> +
+> +/**
+> + * tb_switch_tmu_enable() - Enable TMU on a switch
+> + * @sw: Switch whose TMU to enable
+> + *
+> + * Enables TMU of a switch to be in unidirectional or bidirectional HiFi mode.
+> + * Calling tb_switch_tmu_configure() is required before calling this function,
+> + * to select the mode HiFi and directionality (unidirectional/bidirectional).
+> + * In both modes all tunneling should work. Unidirectional mode is required for
+> + * CLx (Link Low-Power) to work. LowRes mode is not used currently.
+> + */
+> +int tb_switch_tmu_enable(struct tb_switch *sw)
+> +{
+> +	if (sw->tmu.rate_request == TB_SWITCH_TMU_RATE_NORMAL)
+> +		return -EOPNOTSUPP;
+> +
+> +	return tb_switch_tmu_hifi_enable(sw);
+> +}
+> +
+> +/**
+> + * tb_switch_tmu_configure() - Configure the TMU rate and directionality
+> + * @sw: Switch whose mode to change
+> + * @rate: Rate to configure Off/LowRes/HiFi
+> + * @unidirectional: Unidirectionality selection: Unidirectional or Bidirectional
+> + *
+> + * Selects the rate of the TMU (Off, LowRes, HiFi), and Directionality
+> + * (Unidirectional or Bidirectional)
+> + * Shall be called before tb_switch_tmu_enable()
+> + */
+> +void tb_switch_tmu_configure(struct tb_switch *sw,
+> +			     enum tb_switch_tmu_rate rate, bool unidirectional)
+> +{
+> +	sw->tmu.unidirect_request = unidirectional;
+> +	sw->tmu.rate_request = rate;
+> +}
+> +
+> +/**
+> + * tb_switch_tmu_hifi_is_enabled() - Checks if the specified TMU mode
+> + *				     bidir/uni enabled correctly
+> + * @sw: Switch whose TMU mode to check
+> + * @unidirect: Select bidirectional or unidirectional mode to check
+> + *
+> + * Read TMU directionality and rate from HW, and return true,
+> + * if matches to bidirectional/unidirectional HiFi mode settings.
+> + * Otherwise returns false.
+> + */
+> +bool tb_switch_tmu_hifi_is_enabled(struct tb_switch *sw, bool unidirect)
+> +{
+> +	return sw->tmu.rate == TB_SWITCH_TMU_RATE_HIFI &&
+> +			       sw->tmu.unidirectional == unidirect;
+> +}
+> -- 
+> 2.17.1
