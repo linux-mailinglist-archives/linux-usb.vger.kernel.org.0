@@ -2,171 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E78460C41
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Nov 2021 02:29:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB06460EC0
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Nov 2021 07:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351324AbhK2Bcm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 28 Nov 2021 20:32:42 -0500
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:44977 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbhK2Bam (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 Nov 2021 20:30:42 -0500
-Received: by mail-ot1-f45.google.com with SMTP id u18-20020a9d7212000000b00560cb1dc10bso23255768otj.11;
-        Sun, 28 Nov 2021 17:27:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Q/CrGecYUeDdR6r8+yA6oPN9sOdPcqSzyh2oQnkTLSY=;
-        b=uEMJkfwYndC//ME2UkvJdAU74efgXNv48Y94FZYU4UNSpXxA+IEvNcN+qNFN1skwbE
-         FvLFYx+0YiA83o8W0upQEP8knx+tWuP9Sgjym+BsohkjhmhluWCORHBvx75Ckw6lY57n
-         N3XFyI/IKd+HkdGaiVvQEQyrE67iwVoEky6wkpJCfHM01zg28E66jaikKiQokR29pZx0
-         8Q0c8FpnIJm5Ln6VuzwbCXxGgQQcrTf9hLI0+WfdmOowc92cGNfwnFVA1szQgFwZkVUL
-         PHH0TRflYgk860I+RdWlX0efdJsO2etja17pXn7fUSsQfz2WLr06IQflVrbSC563D+Oy
-         byYw==
-X-Gm-Message-State: AOAM5316l+XKyLMcQHjkq5mQK71P9LpEd+8YDMgBD3zArW9JBCRLQxUs
-        rvmZoYViXYkedmLWWYStVQ==
-X-Google-Smtp-Source: ABdhPJxtuA+XfiWbawu7ZYKFsEv0Yo/JLTV8PehfvEcgdrBvReHgoIMJZMl5z7pxb0xzUVz0dkYoPA==
-X-Received: by 2002:a9d:75d7:: with SMTP id c23mr43552829otl.181.1638149244994;
-        Sun, 28 Nov 2021 17:27:24 -0800 (PST)
-Received: from robh.at.kernel.org ([172.58.99.229])
-        by smtp.gmail.com with ESMTPSA id bi20sm2734070oib.29.2021.11.28.17.27.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Nov 2021 17:27:24 -0800 (PST)
-Received: (nullmailer pid 2973705 invoked by uid 1000);
-        Mon, 29 Nov 2021 01:27:20 -0000
-Date:   Sun, 28 Nov 2021 19:27:20 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add Apple dwc3 bindings
-Message-ID: <YaQseO5kF71vABji@robh.at.kernel.org>
-References: <20211108170946.49689-1-sven@svenpeter.dev>
+        id S240262AbhK2Gf1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Nov 2021 01:35:27 -0500
+Received: from mga02.intel.com ([134.134.136.20]:51004 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238716AbhK2Gd1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 29 Nov 2021 01:33:27 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10182"; a="223132681"
+X-IronPort-AV: E=Sophos;i="5.87,272,1631602800"; 
+   d="scan'208";a="223132681"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2021 22:30:10 -0800
+X-IronPort-AV: E=Sophos;i="5.87,272,1631602800"; 
+   d="scan'208";a="600093239"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2021 22:30:06 -0800
+Received: by lahna (sSMTP sendmail emulation); Mon, 29 Nov 2021 08:27:55 +0200
+Date:   Mon, 29 Nov 2021 08:27:55 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Gil Fine <gil.fine@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Andreas Noever <andreas.noever@gmail.com>
+Subject: Re: [PATCH 2/6] thunderbolt: Tear down existing tunnels when
+ resuming from hibernate
+Message-ID: <YaRy6+3rwJx6YcKn@lahna>
+References: <20211125073733.74902-1-mika.westerberg@linux.intel.com>
+ <20211125073733.74902-3-mika.westerberg@linux.intel.com>
+ <20211126200150.GA21796@wunner.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211108170946.49689-1-sven@svenpeter.dev>
+In-Reply-To: <20211126200150.GA21796@wunner.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 08, 2021 at 06:09:45PM +0100, Sven Peter wrote:
-> Apple Silicon SoCs such as the M1 have multiple USB controllers based on
-> the Synopsys DesignWare USB3 controller.
-> References to the ATC PHY required for SuperSpeed are left out for now
-> until support has been upstreamed as well.
-> 
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> ---
-> v1 -> v2:
->  - added apple,dwc3 bindings instead of a property for the reset quirk
->    as requested by robh
-> 
-> I think I have to use GPL-2.0 for this binding since it's based
-> on and references snps,dwc3.yaml which is also only GPL-2.0.
-> Otherwise I'd be fine with the usual GPL/BSD dual license as well.
-> 
->  .../devicetree/bindings/usb/apple,dwc3.yaml   | 64 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 65 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/apple,dwc3.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/apple,dwc3.yaml b/Documentation/devicetree/bindings/usb/apple,dwc3.yaml
-> new file mode 100644
-> index 000000000000..fb3b3489e6b2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/apple,dwc3.yaml
-> @@ -0,0 +1,64 @@
-> +# SPDX-License-Identifier: GPL-2.0
+Hi,
 
-Dual license please.
-
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/apple,dwc3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Apple Silicon DWC3 USB controller
-> +
-> +maintainers:
-> +  - Sven Peter <sven@svenpeter.dev>
-> +
-> +description:
-> +  On Apple Silicon SoCs such as the M1 each Type-C port has a corresponding
-> +  USB controller based on the Synopsys DesignWare USB3 controller.
-> +
-> +  The common content of this binding is defined in snps,dwc3.yaml.
-> +
-> +allOf:
-> +  - $ref: snps,dwc3.yaml#
-> +
-> +select:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: apple,dwc3
-
-This needs to list all possible compatibles except snps,dwc3 so the 
-schema is applied for any incorrect mixture of compatibles.
-
-> +  required:
-> +    - compatible
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - apple,t8103-dwc3
-> +          - apple,t6000-dwc3
-> +      - const: apple,dwc3
-> +      - const: snps,dwc3
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/apple-aic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    usb@82280000 {
-> +      compatible = "apple,t8103-dwc3", "apple,dwc3", "snps,dwc3";
-> +      reg = <0x82280000 0x10000>;
-> +      interrupts = <AIC_IRQ 777 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +      dr_mode = "otg";
-> +      usb-role-switch;
-> +      role-switch-default-mode = "host";
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 3b79fd441dde..03e7cc48877a 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1724,6 +1724,7 @@ T:	git https://github.com/AsahiLinux/linux.git
->  F:	Documentation/devicetree/bindings/arm/apple.yaml
->  F:	Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
->  F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
-> +F:	Documentation/devicetree/bindings/usb/apple,dwc3.yaml
->  F:	arch/arm64/boot/dts/apple/
->  F:	drivers/irqchip/irq-apple-aic.c
->  F:	include/dt-bindings/interrupt-controller/apple-aic.h
-> -- 
-> 2.25.1
+On Fri, Nov 26, 2021 at 09:01:50PM +0100, Lukas Wunner wrote:
+> On Thu, Nov 25, 2021 at 10:37:29AM +0300, Mika Westerberg wrote:
+> > If the boot firmware implements connection manager of its own it may not
+> > create the paths in the same way or order we do. For example it may
+> > create first PCIe tunnel and the USB3 tunnel. When we restore our
+> > tunnels (first de-activating them) we may be doing that over completely
+> > different tunnel and that leaves them possible non-functional. For this
+> > reason we re-use the tunnel discovery functionality and find out all the
+> > existing tunnels, and tear them down. Once that is done we can restore
+> > our tunnels.
 > 
-> 
+> Hm, what if the system is running from a Thunderbolt-attached drive?
+> Will the mount points survive tearing down and re-establishing the
+> tunnels to that drive?
+
+Yes, they should. PCI is waiting for the TBT to resume so it should not
+notice this, and all the data is at point still synced out to the disks.
