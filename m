@@ -2,133 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F254624F7
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Nov 2021 23:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA19462567
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Nov 2021 23:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbhK2Wdf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Nov 2021 17:33:35 -0500
-Received: from mail.mutex.one ([62.77.152.124]:37270 "EHLO mail.mutex.one"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231998AbhK2WdJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:33:09 -0500
-X-Greylist: delayed 1035 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Nov 2021 17:33:09 EST
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.mutex.one (Postfix) with ESMTP id CDC8A16DDFAF;
-        Tue, 30 Nov 2021 00:12:34 +0200 (EET)
-X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
-Received: from mail.mutex.one ([127.0.0.1])
-        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id CgdqX3x226dP; Tue, 30 Nov 2021 00:12:33 +0200 (EET)
-Received:  [127.0.0.1] (localhost [127.0.0.1])nknown [79.112.88.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mutex.one (Postfix) with ESMTPSA id 21B8F16DDF17;
-        Tue, 30 Nov 2021 00:12:33 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
-        t=1638223953; bh=6sv/YtC7HRNVTUOzq8MATmzCdYfyVXcxC85XY1WhJs8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ei0kKSGBhAJPjFIfsMrxMdqnDrUMcUYkca/dahv0dt0jIm1xVrlmCBIJ2VxCoOGSb
-         bfjKGG5+NlyW9vNVhiIVDECTHtLGT9w5eEdwPtLT1GX8tOeVOko4WM/OzCyWWb6+Kg
-         RPc/A7beXgHWJTZiCWNFxDmCJrssxhyIhkytYYNQ=
-From:   Marian Postevca <posteuca@mutex.one>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marian Postevca <posteuca@mutex.one>
-Subject: [PATCH] usb: gadget: u_ether: fix race in setting MAC address in setup phase
-Date:   Tue, 30 Nov 2021 00:12:29 +0200
-Message-Id: <20211129221229.31845-1-posteuca@mutex.one>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S233846AbhK2Wik (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Nov 2021 17:38:40 -0500
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:40415 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231501AbhK2WiF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Nov 2021 17:38:05 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id E9A495C019E;
+        Mon, 29 Nov 2021 17:34:45 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute3.internal (MEProxy); Mon, 29 Nov 2021 17:34:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=mime-version:message-id:in-reply-to:references:date:from:to
+        :cc:subject:content-type; s=fm3; bh=nak5LLj7hhbHiQ3bZxbtQxMEyoqm
+        oK2+u/U9XmUMMoc=; b=THtCY7wkN/LcNfZsiY6qA3Z5wl8SrUNoDQdhre1m32or
+        xXwFlPbIeq4T7sCxkvXWWqLU0wIndzQRo1e3w7X6TPxHrcmbdlN4s9+JP9D+uT+v
+        u5x/ef/5I2XDXd+kkfqh1c8KgGlq/gbEbOCtRFctyliNdfHGxr3kUcgbeGnrx914
+        BzWbLeVdSNNVcE5iAZsZGDCEC0nCMIeVNcctl0Dllk9l36YowjHlHgN5TUqqF1ta
+        ResCWamcVlEQ4k8HTJZLa3MIE3iJlwnmJoiXh8dNKkuMDVq/xW1m+/vhXEhUvJSH
+        jVmeMDwVM/P3a8Tb/2hcaiblzfVnK2V3wcQzW8mpGw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=nak5LL
+        j7hhbHiQ3bZxbtQxMEyoqmoK2+u/U9XmUMMoc=; b=ea2pzyNyhML2wK/z0O8odQ
+        6ude99ahq4hO3z6Kspo4G0O8LWGST+J62JO11HmqUp7CjYjmNFCUjn4Y+sTNJdLn
+        3UjWrq4krZjwSj2Lw1VBrMRloGxNyH3nDYybdfccJ/uYWObptf/OlrTQNimE1JZT
+        EkP1Bru+1a3cGKwBrjVRvIXkVQM4Hzahp651L0hUPTHXrERbGC9zcWjczgMo4T8h
+        nl6Ii051ICABSNgG3jQpj7YLcu71L38xr0Ky7e+LvxmpXbVWZsW79t3am3umfrUF
+        43FhB5ZyBaO0OK3T42FI/blnp8Q+5hdByyiaFBfo9e8OyUzfMnOoaxhGgyvPk4PA
+        ==
+X-ME-Sender: <xms:hVWlYYVr53cB3hUsRMEnoYkT3mph035pFKO1ZloTpfqIZzJTjJjkOQ>
+    <xme:hVWlYclhtLS9EXXK1DDxNQPtCVGB3ytwPjypfL9N_vdIpNlQWuRu6uQ2EaMce2_VK
+    F_THxC0rEAtiG2G77A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrheelgdduieefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
+    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
+    htthgvrhhnpeehtdffledvffegveejgeegvdeujedtteefgfelffehtdetudekteethfet
+    keeuudenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvght
+    vghrrdguvghv
+X-ME-Proxy: <xmx:hVWlYcaQVGukXnjV1thivnYKbqj2kj_VF9BQWNV4mUBNeBEmi4jgug>
+    <xmx:hVWlYXX0fhxwE5auQvj3nId5W7diEzvBj4LmtcbR1vSb3z9gYdLONw>
+    <xmx:hVWlYSn4zj8upU9tYUZ4DZ1CBy_zfTBJWiy33GC_aZWeByA77_ZIkQ>
+    <xmx:hVWlYQa8SoRKcrKDWlE9VIg3rxbbH8S1CISuiDkLp00MAf7QoVIltQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 407A427407A2; Mon, 29 Nov 2021 17:34:45 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4409-g12559b250c-fm-20211129.001-g12559b25
+Mime-Version: 1.0
+Message-Id: <78db7a00-93a4-46de-8071-2801c84bc171@www.fastmail.com>
+In-Reply-To: <YaQseO5kF71vABji@robh.at.kernel.org>
+References: <20211108170946.49689-1-sven@svenpeter.dev>
+ <YaQseO5kF71vABji@robh.at.kernel.org>
+Date:   Mon, 29 Nov 2021 23:34:24 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Rob Herring" <robh@kernel.org>
+Cc:     "Felipe Balbi" <balbi@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Hector Martin" <marcan@marcan.st>,
+        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+        "Mark Kettenis" <mark.kettenis@xs4all.nl>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add Apple dwc3 bindings
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When listening for notifications through netlink of a new interface being
-registered, sporadically, it is possible for the MAC to be read as zero.
-The zero MAC address lasts a short period of time and then switches to a
-valid random MAC address.
+Hi,
 
-This causes problems for netd in Android, which assumes that the interface
-is malfunctioning and will not use it.
+Thanks for the review!
 
-In the good case we get this log:
-InterfaceController::getCfg() ifName usb0
- hwAddr 92:a8:f0:73:79:5b ipv4Addr 0.0.0.0 flags 0x1002
+On Mon, Nov 29, 2021, at 02:27, Rob Herring wrote:
+> On Mon, Nov 08, 2021 at 06:09:45PM +0100, Sven Peter wrote:
+>> Apple Silicon SoCs such as the M1 have multiple USB controllers based on
+>> the Synopsys DesignWare USB3 controller.
+>> References to the ATC PHY required for SuperSpeed are left out for now
+>> until support has been upstreamed as well.
+>> 
+>> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+>> ---
+>> v1 -> v2:
+>>  - added apple,dwc3 bindings instead of a property for the reset quirk
+>>    as requested by robh
+>> 
+>> I think I have to use GPL-2.0 for this binding since it's based
+>> on and references snps,dwc3.yaml which is also only GPL-2.0.
+>> Otherwise I'd be fine with the usual GPL/BSD dual license as well.
+>> 
+>>  .../devicetree/bindings/usb/apple,dwc3.yaml   | 64 +++++++++++++++++++
+>>  MAINTAINERS                                   |  1 +
+>>  2 files changed, 65 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/usb/apple,dwc3.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/usb/apple,dwc3.yaml b/Documentation/devicetree/bindings/usb/apple,dwc3.yaml
+>> new file mode 100644
+>> index 000000000000..fb3b3489e6b2
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/usb/apple,dwc3.yaml
+>> @@ -0,0 +1,64 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>
+> Dual license please.
 
-In the error case we get these logs:
-InterfaceController::getCfg() ifName usb0
- hwAddr 00:00:00:00:00:00 ipv4Addr 0.0.0.0 flags 0x1002
+I'd like to but I'm not sure if I can do that. This binding is based on
+snps,dwc3.yaml and rockchip,dwc3.yaml which are both only GPL-2.0.
 
-netd : interfaceGetCfg("usb0")
-netd : interfaceSetCfg() -> ServiceSpecificException
- (99, "[Cannot assign requested address] : ioctl() failed")
+>
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/usb/apple,dwc3.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Apple Silicon DWC3 USB controller
+>> +
+>> +maintainers:
+>> +  - Sven Peter <sven@svenpeter.dev>
+>> +
+>> +description:
+>> +  On Apple Silicon SoCs such as the M1 each Type-C port has a corresponding
+>> +  USB controller based on the Synopsys DesignWare USB3 controller.
+>> +
+>> +  The common content of this binding is defined in snps,dwc3.yaml.
+>> +
+>> +allOf:
+>> +  - $ref: snps,dwc3.yaml#
+>> +
+>> +select:
+>> +  properties:
+>> +    compatible:
+>> +      contains:
+>> +        const: apple,dwc3
+>
+> This needs to list all possible compatibles except snps,dwc3 so the 
+> schema is applied for any incorrect mixture of compatibles.
 
-The reason for the issue is the order in which the interface is setup,
-it is first registered through register_netdev() and after the MAC
-address is set.
+Makes sense, will do that for the next version.
 
-Fixed by first setting the MAC address of the net_device and after that
-calling register_netdev().
 
-Signed-off-by: Marian Postevca <posteuca@mutex.one>
----
- drivers/usb/gadget/function/u_ether.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index e0ad5aed6ac9..6f5d45ef2e39 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -17,6 +17,7 @@
- #include <linux/etherdevice.h>
- #include <linux/ethtool.h>
- #include <linux/if_vlan.h>
-+#include <linux/etherdevice.h>
- 
- #include "u_ether.h"
- 
-@@ -863,19 +864,23 @@ int gether_register_netdev(struct net_device *net)
- {
- 	struct eth_dev *dev;
- 	struct usb_gadget *g;
--	struct sockaddr sa;
- 	int status;
- 
- 	if (!net->dev.parent)
- 		return -EINVAL;
- 	dev = netdev_priv(net);
- 	g = dev->gadget;
-+
-+	net->addr_assign_type = NET_ADDR_RANDOM;
-+	eth_hw_addr_set(net, dev->dev_mac);
-+
- 	status = register_netdev(net);
- 	if (status < 0) {
- 		dev_dbg(&g->dev, "register_netdev failed, %d\n", status);
- 		return status;
- 	} else {
- 		INFO(dev, "HOST MAC %pM\n", dev->host_mac);
-+		INFO(dev, "MAC %pM\n", dev->dev_mac);
- 
- 		/* two kinds of host-initiated state changes:
- 		 *  - iff DATA transfer is active, carrier is "on"
-@@ -883,15 +888,6 @@ int gether_register_netdev(struct net_device *net)
- 		 */
- 		netif_carrier_off(net);
- 	}
--	sa.sa_family = net->type;
--	memcpy(sa.sa_data, dev->dev_mac, ETH_ALEN);
--	rtnl_lock();
--	status = dev_set_mac_address(net, &sa, NULL);
--	rtnl_unlock();
--	if (status)
--		pr_warn("cannot set self ethernet address: %d\n", status);
--	else
--		INFO(dev, "MAC %pM\n", dev->dev_mac);
- 
- 	return status;
- }
--- 
-2.32.0
+Thanks,
 
+Sven
