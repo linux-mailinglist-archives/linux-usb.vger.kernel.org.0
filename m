@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34825464139
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Nov 2021 23:23:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A60A146413A
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Nov 2021 23:24:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235129AbhK3W05 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Nov 2021 17:26:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53176 "EHLO
+        id S235274AbhK3W1T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Nov 2021 17:27:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233339AbhK3W0z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Nov 2021 17:26:55 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636A6C061574
-        for <linux-usb@vger.kernel.org>; Tue, 30 Nov 2021 14:23:35 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id b40so57589128lfv.10
-        for <linux-usb@vger.kernel.org>; Tue, 30 Nov 2021 14:23:35 -0800 (PST)
+        with ESMTP id S233339AbhK3W1S (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Nov 2021 17:27:18 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44282C061574
+        for <linux-usb@vger.kernel.org>; Tue, 30 Nov 2021 14:23:58 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id b40so57591504lfv.10
+        for <linux-usb@vger.kernel.org>; Tue, 30 Nov 2021 14:23:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=KA8aYl2ckC3zUcyPU2Py5WxF6dGmk94ESXDy31RIzVo=;
-        b=aG9+K2xr5tGaPEiSHq42qt3g1MRSE2R5GSD6OCoYtZkR6j1ReT+Cp7+4H6MxG7uwY9
-         F4UTDfKlX5uzk+GWLxJUuaGb6Iey86vDk1JwGTCOwhGS9bn/kQRKQbzsT7zDdoC+YRTx
-         uQy3REXPRDSEBw509X14+t2HfxuTuULaEoUGpx6upnwDqRyFUBTeAW0GbAR/r6zHzAHf
-         GrYtnqYPcDOUBzXFEu+vhAJn/3U4HwRuIk2BpCtF0D2rgXe+8u3OolGcqq/u8hYN7HKP
-         tTTboePfFJXZUyYnMa++yrbwsBZS7pz3q7vf1Nu9eYkXASgyP96m4+tnE5MR7K3k9xrk
-         JDMA==
+        bh=YsPaNCVxi4FT0+jyNciYDykeuf9gbaBKvmSmSJzba+k=;
+        b=Cw21BcfSNCcaRnK7ry5U74Tvajl7nIDpYhr2nir/FccC6uXaZwCysibwPv14FsBv08
+         fqDg759M9a/b8d6IOMOemZVoIu6+8M8ZBW5KX5MwNAYGHzpn2yl9Q5N9t80A3jdHFWyF
+         LB2upeBsF9hfg8XBS1tmBuvgJitHzJUC1qy6nUg3/OnMsnAylZ2hMVq2o8XqI0Es1iTv
+         4v24w9Xpo0CZXefH6YSgucG/tUGVXShI6fD8efB8ZDwvEK1hmEV40sD264CwcQlS7+xv
+         tOoOsNtZcnwF71IeaXOy6XCUx8/ENAY/MsAPnnx0rlVHuiP/RZNgRsdWT80wOtfVpkPi
+         mosQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:subject:message-id:mime-version
          :content-disposition;
-        bh=KA8aYl2ckC3zUcyPU2Py5WxF6dGmk94ESXDy31RIzVo=;
-        b=WvzL6PowWM7pmDfWQh8c5/qLhp95IT1/AS0JY0UJRD/cORTW3Qn6CVG8SNO6vLQLLs
-         5Xhnxy0vhKRTw6jrn4D+L6fy3SUSYS3TXC1QDGuV7vpCu6AJfO1xFGJ0YvfzJP0KuQVN
-         p9uREasaljq+LxrhkeJ8flwoSNI8h0LXXeQSYrHmyveANY5Vf3YhqzF6/lAVDeit1ToL
-         p3MeDS75DIXbqDTIff1whT2XhC9wMVXQwGVV5+Rx28/202s9F0hE71VTfb2u32xkWpPc
-         3oBJG5BJnrzXlyUY20uyyLC5J2iYXHy0/6/Fl8doe9lVIIU5QeOUzWBBSNH0orkE1+wx
-         y7UQ==
-X-Gm-Message-State: AOAM530fDqc6YBPvzKjnQ7rlSg4IeAa03hvCc5qGgL0Z6JrPskWgKgvw
-        ArFBJCb4w4pM7d4xRI1JQCTwQveucHY=
-X-Google-Smtp-Source: ABdhPJyS5OkEl1EEOcRrTUbxKpD6MZZ2/FMcMB2pSokGSAPsZ3pIZAx6iStRGl6XiKk33/HRfxLNZA==
-X-Received: by 2002:a19:f241:: with SMTP id d1mr1901586lfk.131.1638311013665;
-        Tue, 30 Nov 2021 14:23:33 -0800 (PST)
+        bh=YsPaNCVxi4FT0+jyNciYDykeuf9gbaBKvmSmSJzba+k=;
+        b=s03bGGqukdB4kL369B6GTy0iw9DCsrsZjd0lkkr7rPQj+2DWich/jhSU7z9dUYqdCn
+         MAzc+FoJi7oRN8s+hCCLP1qFQox8aPLoUp2D65JdNV7Q6qUV8aFMeUkB5G6WAOu7by/b
+         MNJNHZL2RSXXC0qg2MJ/A7lxf0Uhzv1iB3Cu6KmfAgmUvVDyooXSJ8AYOhuZ/BJdz56o
+         2GIhxiL4cFSVuLYl501vsTHfYZl4nLA4HvLN+EhhHQxBW3cRvEwwYCaepl2xgS5iTVRH
+         zPHbeMPKf+l5o0jsyJKSIPmi1QlvQgvOp0soN15TjJmFMcVe+H+tF1Pm/AGQZ6zYggmQ
+         5cKA==
+X-Gm-Message-State: AOAM533/ltvRcfxyLjD1BwXy94lAMdpKG0k/JfYJB5b32m1ZXcUbp3gr
+        OVxu2LY0xqEtj3lBq1m1Ias=
+X-Google-Smtp-Source: ABdhPJxrWcEv9us7y94+xQEow+cltiW80fnuwJpQnsahePzsPQM3Z1qFePK+xSKeBQM8czv3Q61Atw==
+X-Received: by 2002:a05:6512:3d88:: with SMTP id k8mr1960912lfv.111.1638311036601;
+        Tue, 30 Nov 2021 14:23:56 -0800 (PST)
 Received: from dell-precision-T3610 (h-98-128-167-144.NA.cust.bahnhof.se. [98.128.167.144])
-        by smtp.gmail.com with ESMTPSA id m10sm1687495lji.11.2021.11.30.14.23.33
+        by smtp.gmail.com with ESMTPSA id m11sm1775472ljc.108.2021.11.30.14.23.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 14:23:33 -0800 (PST)
-Date:   Tue, 30 Nov 2021 23:23:31 +0100
+        Tue, 30 Nov 2021 14:23:56 -0800 (PST)
+Date:   Tue, 30 Nov 2021 23:23:54 +0100
 From:   Lars Gunnarsson <gunnarsson.lars@gmail.com>
 To:     Valentina Manea <valentina.manea.m@gmail.com>,
         Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH v3 1/5] tools/usbip: update protocol documentation
-Message-ID: <20211130222331.GA16471@dell-precision-T3610>
+Subject: [PATCH v2 2/5] tools/usbip: update manual pages
+Message-ID: <20211130222354.GA16493@dell-precision-T3610>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -59,7 +59,7 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch contains usbip protocol documentation updates. It's needed to
+This patch contains usbip manual page updates. It's needed to
 reflect the implementation changes in following subsequent patches:
 - tools/usbip: add usb event monitor into libusbip
 - tools/usbip: export USB devices on a given bus persistently
@@ -68,112 +68,80 @@ reflect the implementation changes in following subsequent patches:
 Signed-off-by: Lars Gunnarsson <gunnarsson.lars@gmail.com>
 ---
 v1: New patch added in series.
-v2: Update paragraph according to review comments
-v3: Improve patch description
+v2: Improve patch description
 
- Documentation/usb/usbip_protocol.rst | 61 ++++++++++++++++++++++++----
- 1 file changed, 53 insertions(+), 8 deletions(-)
+ tools/usb/usbip/doc/usbip.8  | 16 ++++++++++++----
+ tools/usb/usbip/doc/usbipd.8 | 21 +++++++++++++++++++++
+ 2 files changed, 33 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/usb/usbip_protocol.rst b/Documentation/usb/usbip_protocol.rst
-index 0b8541fda4d8..2d540fcc4b21 100644
---- a/Documentation/usb/usbip_protocol.rst
-+++ b/Documentation/usb/usbip_protocol.rst
-@@ -9,6 +9,11 @@ The USB/IP protocol follows a server/client architecture. The server exports the
- USB devices and the clients import them. The device driver for the exported
- USB device runs on the client machine.
+diff --git a/tools/usb/usbip/doc/usbip.8 b/tools/usb/usbip/doc/usbip.8
+index 1f26e4a00638..6f2294cd5e5d 100644
+--- a/tools/usb/usbip/doc/usbip.8
++++ b/tools/usb/usbip/doc/usbip.8
+@@ -44,9 +44,13 @@ then exit.
+ .PP
 
-+The server may choose to export any of its available USB devices based on their
-+busid. These devices will remain exported until they are unplugged or unexported.
-+Optionally, it is possible to persistently export the devices on a given bus by
-+monitor when they are plugged in.
+ .HP
+-\fBattach\fR \-\-remote=<\fIhost\fR> \-\-busid=<\fIbus_id\fR>
++\fBattach\fR \-\-remote=<\fIhost\fR> \-\-busid=<\fIbus_id\fR> [\-\-persistent]
+ .IP
+-Attach a remote USB device.
++Attach a remote USB device. When flag --persistent is used, the commmand will
++remain in the foreground to monitor the remote bus for a device to become
++exported. When the remote usb device is unexported, it will start over and
++monitor the bus again. Press Ctrl + C to exit. The device must then be manually
++detached.
+ .PP
+
+ .HP
+@@ -63,9 +67,13 @@ Detach an imported USB device/gadget.
+ .PP
+
+ .HP
+-\fBbind\fR \-\-busid=<\fIbusid\fR>
++\fBbind\fR \-\-busid=<\fIbusid\fR> [\-\-persistent]
+ .IP
+-Make a device exportable.
++Make a device exportable. When flag --persistent is used, the commmand will
++remain in the foreground to monitor the bus for a device to become plugged in.
++When the usb device is unplugged, it will start over and monitor the bus
++again. Press Ctrl + C to exit. The device must then be manually unexported with
++unbind.
+ .PP
+
+ .HP
+diff --git a/tools/usb/usbip/doc/usbipd.8 b/tools/usb/usbip/doc/usbipd.8
+index d974394f86a1..021df6573aae 100644
+--- a/tools/usb/usbip/doc/usbipd.8
++++ b/tools/usb/usbip/doc/usbipd.8
+@@ -92,6 +92,27 @@ USB/IP client can connect and use exported devices.
+         - A usb device 1-2 is now exportable to other hosts!
+         - Use 'usbip unbind --busid=1-2' when you want to shutdown exporting and use the device locally.
+
++The following example shows the usage of importing and exporting a device persistently.
 +
- The client may ask for the list of the exported USB devices. To get the list the
- client opens a TCP/IP connection to the server, and sends an OP_REQ_DEVLIST
- packet on top of the TCP/IP connection (so the actual OP_REQ_DEVLIST may be sent
-@@ -31,12 +36,7 @@ TCP/IP connection is closed.
-
- Once the client knows the list of exported USB devices it may decide to use one
- of them. First the client opens a TCP/IP connection to the server and
--sends an OP_REQ_IMPORT packet. The server replies with OP_REP_IMPORT. If the
--import was successful the TCP/IP connection remains open and will be used
--to transfer the URB traffic between the client and the server. The client may
--send two types of packets: the USBIP_CMD_SUBMIT to submit an URB, and
--USBIP_CMD_UNLINK to unlink a previously submitted URB. The answers of the
--server may be USBIP_RET_SUBMIT and USBIP_RET_UNLINK respectively.
-+sends an OP_REQ_IMPORT packet. The server replies with OP_REP_IMPORT.
-
- ::
-
-@@ -50,6 +50,47 @@ server may be USBIP_RET_SUBMIT and USBIP_RET_UNLINK respectively.
-           |                  OP_REP_IMPORT                  |
-           | <---------------------------------------------- |
-           |                                                 |
++    server:# modprobe usbip-host
 +
-+The client may also request to poll for devices to become exported on a given
-+busid, instead of immediately receive an error. If no device becomes exported
-+within the chosen time, the server replies with timeout. The TCP/IP connection
-+remains open and subsequent poll requests can be sent.
++    server:# usbipd -D
++        - Start usbip daemon.
 +
-+::
++    server:# usbip bind --busid=1-2 --persistent
++        - Bind usbip-host.ko to the device of busid 1-2, or wait until a device is plugged in.
++        - Usb device 1-2 is now exportable to other hosts!
++        - If device is unplugged, wait until device is plugged in and bind usbip-host.ko to the device.
++        - Usb device 1-2 is now exportable to other hosts again!
++        - Exit with Ctrl + C and use 'usbip unbind --busid=1-2' when you want to shutdown exporting and use the device locally.
 +
-+ virtual host controller                                 usb host
-+      "client"                                           "server"
-+  (imports USB devices)                             (exports USB devices)
-+          |                                                 |
-+          |                  OP_REQ_IMPORT                  |
-+          | ----------------------------------------------> |
-+          |                        .                        |
-+          |                        :                        |
-+          |                                                 |
-+          |                  OP_REP_IMPORT                  |
-+          | <---------------------------------------------- |
-+          |                                                 |
-+          |                  OP_REQ_IMPORT                  |
-+          | ----------------------------------------------> |
-+          |                        .                        |
-+          |                        :                        |
-+          |                                                 |
-+          |                  OP_REP_IMPORT                  |
-+          | <---------------------------------------------- |
-+          |                        .                        |
-+          |                        :                        |
++    client:# modprobe vhci-hcd
 +
-+If the import was successful the TCP/IP connection remains open and will be used
-+to transfer the URB traffic between the client and the server. The client may
-+send two types of packets: the USBIP_CMD_SUBMIT to submit an URB, and
-+USBIP_CMD_UNLINK to unlink a previously submitted URB. The answers of the
-+server may be USBIP_RET_SUBMIT and USBIP_RET_UNLINK respectively.
++    client:# usbip attach --remote=server --busid=1-2 --persistent
++        - Attach the remote usb device, or wait until it becomes exported on the remote end.
++        - If the remote device becomes unexported, wait until it becomes exported and attach the remote usb device again.
++        - Exit with Ctrl + C. The device must be manually detached.
 +
-+::
-+
-+ virtual host controller                                 usb host
-+      "client"                                           "server"
-+  (imports USB devices)                             (exports USB devices)
-           |                                                 |
-           |            USBIP_CMD_SUBMIT(seqnum = n)         |
-           | ----------------------------------------------> |
-@@ -132,8 +173,8 @@ byte (MSB) is stored at the lowest address.
- Protocol Version
- ================
+ The following example shows the usage of device mode
 
--The documented USBIP version is v1.1.1. The binary representation of this
--version in message headers is 0x0111.
-+The documented USBIP version is v1.1.2. The binary representation of this
-+version in message headers is 0x0112.
-
- This is defined in tools/usb/usbip/configure.ac
-
-@@ -243,6 +284,10 @@ OP_REQ_IMPORT:
- |           |        |            | A string closed with zero, the unused bytes       |
- |           |        |            | shall be filled with zeros.                       |
- +-----------+--------+------------+---------------------------------------------------+
-+| 40        | 4      |            | poll timeout: instead of returning immediately if |
-+|           |        |            | device is not available, wait until usb device    |
-+|           |        |            | becomes exported or a timeout occurs.             |
-++-----------+--------+------------+---------------------------------------------------+
-
- OP_REP_IMPORT:
- 	Reply to import (attach) a remote USB device.
+     server:# modprobe usbip-vudc
 --
 2.25.1
 
