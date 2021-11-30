@@ -2,138 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1DB463293
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Nov 2021 12:39:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29FA04632A3
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Nov 2021 12:42:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240849AbhK3LnR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Nov 2021 06:43:17 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:63954 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240812AbhK3LnQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Nov 2021 06:43:16 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1AUBENq1082290;
-        Tue, 30 Nov 2021 19:14:23 +0800 (GMT-8)
-        (envelope-from neal_liu@aspeedtech.com)
-Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 30 Nov
- 2021 19:38:54 +0800
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
+        id S240899AbhK3Lpk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Nov 2021 06:45:40 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:54358 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238396AbhK3Lpj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Nov 2021 06:45:39 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6E992CE1410;
+        Tue, 30 Nov 2021 11:42:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E450FC53FC7;
+        Tue, 30 Nov 2021 11:42:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638272536;
+        bh=1fo5SlI+JcFkyn8y9UYJZhdMEAS3/IN2zErDxlT3R6Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JVgPQwhB+RvX54u6XOyxcbwWihfw2yPIBfCR1wkOqBVwJrIqQdMBlfRao4594Ojk/
+         acG2BOBJXnlIQTf+InAKvIq5l3v6Lvl6ElahcEYhKngk4sEli8Qi6eWI9tZYgT6zb3
+         Ub88TzfjZAzb8QAG8oaVWcxbrv/mIGvg3N/rtFSA=
+Date:   Tue, 30 Nov 2021 12:42:13 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Neal Liu <neal_liu@aspeedtech.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
         Andrew Jeffery <andrew@aj.id.au>,
         Cai Huoqing <caihuoqing@baidu.com>,
         Tao Ren <rentao.bupt@gmail.com>,
         Julia Lawall <julia.lawall@inria.fr>,
-        "kernel test robot" <lkp@intel.com>,
-        Sasha Levin <sashal@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>
-CC:     Neal Liu <neal_liu@aspeedtech.com>, <benh@kernel.crashing.org>,
-        <BMC-SW@aspeedtech.com>
-Subject: [PATCH v2 4/4] usb: aspeed-vhub: support test mode feature
-Date:   Tue, 30 Nov 2021 19:38:47 +0800
-Message-ID: <20211130113847.1405873-5-neal_liu@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211130113847.1405873-1-neal_liu@aspeedtech.com>
+        kernel test robot <lkp@intel.com>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, benh@kernel.crashing.org,
+        BMC-SW@aspeedtech.com
+Subject: Re: [PATCH v2 0/4] Refactor Aspeed USB vhub driver
+Message-ID: <YaYOFTmLLUJpPug1@kroah.com>
 References: <20211130113847.1405873-1-neal_liu@aspeedtech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.10.10]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1AUBENq1082290
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211130113847.1405873-1-neal_liu@aspeedtech.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-+Ben.
----
+On Tue, Nov 30, 2021 at 07:38:43PM +0800, Neal Liu wrote:
+> +Ben.
+> ---
+> 
+> These patch series include 2 parts. One is adding more features
+> to pass USB30CV compliance test, the other is fixing hw issues.
+> More detail descriptions are included below patchsets.
+> 
+> Change since v1:
+> - Remove unnecessary configs for SET_CONFIGURATION.
+> - Separate supporting test mode to new patch.
+> 
+> *** BLURB HERE ***
 
-Support aspeed usb vhub set feature to test mode.
-
-Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
----
- drivers/usb/gadget/udc/aspeed-vhub/dev.c | 18 ++++++++++++++----
- drivers/usb/gadget/udc/aspeed-vhub/hub.c | 22 ++++++++++++++++------
- 2 files changed, 30 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-index d918e8b2af3c..4462f4b73b04 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-@@ -110,15 +110,25 @@ static int ast_vhub_dev_feature(struct ast_vhub_dev *d,
- 				u16 wIndex, u16 wValue,
- 				bool is_set)
- {
-+	u32 val;
-+
- 	DDBG(d, "%s_FEATURE(dev val=%02x)\n",
- 	     is_set ? "SET" : "CLEAR", wValue);
- 
--	if (wValue != USB_DEVICE_REMOTE_WAKEUP)
--		return std_req_driver;
-+	if (wValue == USB_DEVICE_REMOTE_WAKEUP) {
-+		d->wakeup_en = is_set;
-+		return std_req_complete;
- 
--	d->wakeup_en = is_set;
-+	} else if (wValue == USB_DEVICE_TEST_MODE) {
-+		val = readl(d->vhub->regs + AST_VHUB_CTRL);
-+		val &= ~GENMASK(10, 8);
-+		val |= VHUB_CTRL_SET_TEST_MODE((wIndex >> 8) & 0x7);
-+		writel(val, d->vhub->regs + AST_VHUB_CTRL);
- 
--	return std_req_complete;
-+		return std_req_complete;
-+	}
-+
-+	return std_req_driver;
- }
- 
- static int ast_vhub_ep_feature(struct ast_vhub_dev *d,
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/hub.c b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-index 93f27a745760..e52805fbdebd 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-@@ -212,17 +212,27 @@ static int ast_vhub_hub_dev_feature(struct ast_vhub_ep *ep,
- 				    u16 wIndex, u16 wValue,
- 				    bool is_set)
- {
-+	u32 val;
-+
- 	EPDBG(ep, "%s_FEATURE(dev val=%02x)\n",
- 	      is_set ? "SET" : "CLEAR", wValue);
- 
--	if (wValue != USB_DEVICE_REMOTE_WAKEUP)
--		return std_req_stall;
-+	if (wValue == USB_DEVICE_REMOTE_WAKEUP) {
-+		ep->vhub->wakeup_en = is_set;
-+		EPDBG(ep, "Hub remote wakeup %s\n",
-+		      is_set ? "enabled" : "disabled");
-+		return std_req_complete;
- 
--	ep->vhub->wakeup_en = is_set;
--	EPDBG(ep, "Hub remote wakeup %s\n",
--	      is_set ? "enabled" : "disabled");
-+	} else if (wValue == USB_DEVICE_TEST_MODE) {
-+		val = readl(ep->vhub->regs + AST_VHUB_CTRL);
-+		val &= ~GENMASK(10, 8);
-+		val |= VHUB_CTRL_SET_TEST_MODE((wIndex >> 8) & 0x7);
-+		writel(val, ep->vhub->regs + AST_VHUB_CTRL);
- 
--	return std_req_complete;
-+		return std_req_complete;
-+	}
-+
-+	return std_req_stall;
- }
- 
- static int ast_vhub_hub_ep_feature(struct ast_vhub_ep *ep,
--- 
-2.25.1
-
+No blurb?
