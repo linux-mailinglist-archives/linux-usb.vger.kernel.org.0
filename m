@@ -2,195 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57343463E29
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Nov 2021 19:53:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65866463E99
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Nov 2021 20:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245728AbhK3S4X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Nov 2021 13:56:23 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:56946 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245650AbhK3S4T (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Nov 2021 13:56:19 -0500
-Received: from [IPv6:2a00:23c6:c31a:b300:6fc2:a105:df87:d613] (unknown [IPv6:2a00:23c6:c31a:b300:6fc2:a105:df87:d613])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: martyn)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id B55181F45306;
-        Tue, 30 Nov 2021 18:52:58 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638298379; bh=h6Jck+OVdb661JlG/YnbAgqNoPXqRHyILqQCf1lWB3s=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Vs2TAPWMcBGVld/8HbuXSR75a9pAmnW2nQDInBZ8fnkYJUQ7WuKg6m1x8jRUqE6Uj
-         hp+AF8Cm3rk2aplymFBXSaB6FmgrQiBQSSwUsIUOWgZh3v4zNvx6MT8ldGdZopFQbS
-         l3HYI+p/UwzuuLWic4GMixCxQNVS3gOR/xLQk7gbUN6YWZMjCyr7rlc5Xb0B6KSPXg
-         gso9nzzPiwxe35v5VSliMFgmKxmxu0Z+43BLsEqtXA7Od/8AYHZuGchFJp+97drqTt
-         rTgMH/KrgwImMqNkjOd8yvTuyAEZRfw7i1o6R8kjo7X4nWPWYWPd+seViXDqGw/NUc
-         gNcZR/9uGsQ5g==
-Message-ID: <93d3bb50040dd4519a65187d3412973831d2d797.camel@collabora.com>
-Subject: Re: [PATCH] net: usb: Correct PHY handling of smsc95xx
-From:   Martyn Welch <martyn.welch@collabora.com>
-To:     Ferry Toth <fntoth@gmail.com>, netdev@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        UNGLinuxDriver@microchip.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, stable@kernel.org
-Date:   Tue, 30 Nov 2021 18:52:56 +0000
-In-Reply-To: <6a06e3b7-df08-6ec0-6e74-95c21fa43f38@gmail.com>
-References: <20211122184445.1159316-1-martyn.welch@collabora.com>
-         <5cd6fc87-0f8d-0b9b-42be-8180540a94e7@gmail.com>
-         <f8f0eb8f7dd9fdcf0435fd67681ecbb359718e18.camel@collabora.com>
-         <6a06e3b7-df08-6ec0-6e74-95c21fa43f38@gmail.com>
-Organization: Collabora Ltd.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.1-1 
+        id S243183AbhK3Tap (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Nov 2021 14:30:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343490AbhK3Tao (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Nov 2021 14:30:44 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDD8C061574
+        for <linux-usb@vger.kernel.org>; Tue, 30 Nov 2021 11:27:25 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id de30so28109136qkb.0
+        for <linux-usb@vger.kernel.org>; Tue, 30 Nov 2021 11:27:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Zhu7LAAt42GwVCn41NBsaDZ8N7JIc/jb7VBfBfFikEU=;
+        b=SDHRVKj7k6/xlHAutrcHrgGNMusQmEC3xI7Uj41ymQqmDtLpMaOWK17TIrRcpSfs3w
+         1HsVUPEFbRhdWViHysD+HZtOtlSGvprLaaXE1F21wt/Ze/ArNgfW1LYbazRGxRmmA8qg
+         a5z6DoR5sPrQd5qYDFJLVnorIM70MeCxG4G+4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Zhu7LAAt42GwVCn41NBsaDZ8N7JIc/jb7VBfBfFikEU=;
+        b=DhpwxT0XQ95X4DCBjz9BUAxi5tXM5O16b2hek4xl8uT9jLiDzQVD+Ks+ZDlszXKhF6
+         2x5LwvehGuBssP4CC/eJiBIRz8yLz4RDGgfbykNKjzFWE9k5qJXPDhn0OPFQwZ/wKLuq
+         0VWeGygncU8KyEdqp8e7Cep5pVQ61QOZYbx4JuWQH3wKx4g27pB3BZaG5ol2gnpXULfV
+         zVn0WkVV43P4mtLJpcg54KIQH67NcUSJfscGvpJhsdmEE1TLWuosGigK5bcqa9xMj2re
+         eHxh3fI4N0N0vufuFbuUu1R8VDJFLrmr8dt6vwOJRkBCglV0fUqEatY8XsNfy1vUT4IP
+         AcHg==
+X-Gm-Message-State: AOAM532hbr8kbowYim5ZnSYKb2IFoH7QfC9XkjjXmGuzUhOAg1s7+vfF
+        KW+8k7GNvnCDvRb45oeD8fzZ+eNuVT8w2luxbh//0Q==
+X-Google-Smtp-Source: ABdhPJyazy1Oz6rvUCQvBvVD/YoPQmQoxYhYhXwjVjB0k8Scn64cFhpt2+U2tX6ahDW3K+hTRTspgrttW5bmAu401og=
+X-Received: by 2002:a05:620a:468a:: with SMTP id bq10mr1454756qkb.541.1638300444232;
+ Tue, 30 Nov 2021 11:27:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211124231028.696982-1-pmalani@chromium.org> <YaCrnMAEXnG+VO6d@kuha.fi.intel.com>
+ <YaYFDwsw2hKdJrGj@kuha.fi.intel.com>
+In-Reply-To: <YaYFDwsw2hKdJrGj@kuha.fi.intel.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Tue, 30 Nov 2021 11:27:12 -0800
+Message-ID: <CACeCKafjOFvVaPBu7OQS-M30hWjooNBFL9-rzqTz3i1ZKEa7Ew@mail.gmail.com>
+Subject: Re: [PATCH 0/4] usb: Use notifier for linking Type C ports.
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        wonchung@google.com, bleung@chromium.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Rajat Jain <rajatja@google.com>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 2021-11-29 at 15:16 +0100, Ferry Toth wrote:
-> Hi,
-> Op 29-11-2021 om 13:08 schreef Martyn Welch:
->  
-> > On Sat, 2021-11-27 at 18:48 +0100, Ferry Toth wrote:
-> >  
-> > > 
-> > > The patch introduces a new error on each unplug:
-> > > 
-> > > usb 1-1: USB disconnect, device number 2
-> > > usb 1-1.1: USB disconnect, device number 3
-> > > smsc95xx 1-1.1:1.0 eth0: unregister 'smsc95xx' usb-xhci-hcd.1.auto-
-> > > 1.1, 
-> > > smsc95xx USB 2.0 Ethernet
-> > > smsc95xx 1-1.1:1.0 eth0: Link is Down
-> > > smsc95xx 1-1.1:1.0 eth0: Failed to read reg index 0x00000114: -19
-> > > smsc95xx 1-1.1:1.0 eth0: Error reading MII_ACCESS
-> > > smsc95xx 1-1.1:1.0 eth0: __smsc95xx_mdio_read: MII is busy
-> > > smsc95xx 1-1.1:1.0 eth0: Failed to read reg index 0x00000114: -19
-> > > smsc95xx 1-1.1:1.0 eth0: Error reading MII_ACCESS
-> > > smsc95xx 1-1.1:1.0 eth0: __smsc95xx_mdio_read: MII is busy
-> > > smsc95xx 1-1.1:1.0 eth0: hardware isn't capable of remote wakeup
-> > > 
-> > Agh! Somehow missed that. I'm looking into it...
->  That would be great!
->  
+Hi Heikki,
 
-They appear as a result of phy_disconnect() being called in unbind()
-when the hardware has already been disconnected (which is kinda likely
-to physically be the case with USB devices...). The PHY is not going to
-be accessible, but such calls *are* needed for instances where we are
-unbinding without the device having been physically removed and want to
-put the device in a suitable state. Failing with -ENODEV (as it
-currently does) seems to be the right thing to do.
+Thanks for taking a look at the series.
 
-I wonder whether removing some of these error messages might be an
-option? It appears that some of them are present in other drivers, but
-I don't know whether such messages get displayed when that hardware is
-unplugged too or whether I'm missing something that protects against
-that.
+On Tue, Nov 30, 2021 at 3:03 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Hi Prashant,
+>
+> On Fri, Nov 26, 2021 at 11:40:49AM +0200, Heikki Krogerus wrote:
+> > On Wed, Nov 24, 2021 at 03:10:06PM -0800, Prashant Malani wrote:
+> > > This series resolves the cyclic dependency error which was introduced by
+> > > commit 63cd78617350 ("usb: Link the ports to the connectors they are
+> > > attached to") which lead to it being reverted. The approach here is to
+> > > use a notifier to link a new Type C port to pre-existing USB ports
+> > > instead of calling an iterator of usb ports from the Type C connector
+> > > class. This allows commit 63cd78617350 ("usb: Link the ports to the
+> > > connectors they are attached to") to then be submitted without any
+> > > depmod cyclic dependency error.
+> > >
+> > > The final patch removes the usb port iterator since it is no longer
+> > > needed.
+> >
+> > This is not enough. Build the Type-C Class as a module and the USB bus
+> > statically, and the links will not get created.
+> >
 
-> > 
-> >  
-> > > Also as reported earlier, (only) on first plug the more worrying
-> > > but 
-> > > possibly unrelated crash still happens:
-> > > ------------[ cut here ]------------
-> > > DMA-API: xhci-hcd xhci-hcd.1.auto: cacheline tracking EEXIST, 
-> > > overlapping mappings aren't supported
-> > > WARNING: CPU: 0 PID: 23 at kernel/dma/debug.c:570
-> > > add_dma_entry+0x1d9/0x270
-> > > Modules linked in: rfcomm iptable_nat bnep usb_f_uac2 u_audio 
-> > > snd_sof_nocodec usb_f_mass_storage usb_f_eem u_ether
-> > > spi_pxa2xx_platform 
-> > > dw_dmac usb_f_serial u_serial libcomposite intel_mrfld_pwrbtn 
-> > > snd_sof_pci_intel_tng pwm_lpss_pci intel_mrfld_adc pwm_lpss
-> > > snd_sof_pci 
-> > > snd_sof_intel_ipc snd_sof_intel_atom dw_dmac_pci dw_dmac_core
-> > > snd_sof
-> > > snd_sof_xtensa_dsp snd_soc_acpi spi_pxa2xx_pci brcmfmac brcmutil 
-> > > hci_uart leds_gpio btbcm ti_ads7950 industrialio_triggered_buffer
-> > > kfifo_buf tun ledtrig_timer ledtrig_heartbeat mmc_block 
-> > > extcon_intel_mrfld sdhci_pci cqhci sdhci led_class mmc_core 
-> > > intel_soc_pmic_mrfld btrfs libcrc32c xor zstd_compress zlib_deflate
-> > > raid6_pq
-> > > CPU: 0 PID: 23 Comm: kworker/0:1 Not tainted 5.15.1-edison-acpi-
-> > > standard #1
-> > > Hardware name: Intel Corporation Merrifield/BODEGA BAY, BIOS 542 
-> > > 2015.01.21:18.19.48
-> > > Workqueue: usb_hub_wq hub_event
-> > > RIP: 0010:add_dma_entry+0x1d9/0x270
-> > > Code: ff 0f 84 97 00 00 00 4c 8b 67 50 4d 85 e4 75 03 4c 8b 27 e8
-> > > 39
-> > > ff 
-> > > 52 00 48 89 c6 4c 89 e2 48 c7 c7 f0 ab e7 a7 e8 c7 5c b5 00 <0f> 0b
-> > > 48 
-> > > 85 ed 0f 85 a4 b3 b5 00 8b 05 46 38 9f 01 85 c0 0f 85 df
-> > > RSP: 0000:ffffb047400cfac8 EFLAGS: 00010282
-> > > RAX: 0000000000000000 RBX: 00000000ffffffff RCX: ffff9e25fe217478
-> > > RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI: ffff9e25fe217470
-> > > RBP: ffff9e25c12ff780 R08: ffffffffa83359a8 R09: 0000000000009ffb
-> > > R10: 00000000ffffe000 R11: 3fffffffffffffff R12: ffff9e25c8a24040
-> > > R13: 0000000000000001 R14: 0000000000000206 R15: 00000000000f8be4
-> > > FS:  0000000000000000(0000) GS:ffff9e25fe200000(0000)
-> > > knlGS:0000000000000000
-> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > CR2: 00007f62c6d586d8 CR3: 0000000002f3c000 CR4: 00000000001006f0
-> > > Call Trace:
-> > >   dma_map_page_attrs+0xfb/0x250
-> > >   ? usb_hcd_link_urb_to_ep+0x14/0xa0
-> > >   usb_hcd_map_urb_for_dma+0x3b1/0x4e0
-> > >   usb_hcd_submit_urb+0x93/0xbb0
-> > >   ? create_prof_cpu_mask+0x20/0x20
-> > >   ? arch_stack_walk+0x73/0xf0
-> > >   ? usb_hcd_link_urb_to_ep+0x14/0xa0
-> > >   ? prepare_transfer+0xff/0x140
-> > >   usb_start_wait_urb+0x60/0x160
-> > >   usb_control_msg+0xda/0x140
-> > >   hub_ext_port_status+0x82/0x100
-> > >   hub_event+0x1b1/0x1830
-> > >   ? hub_activate+0x58c/0x860
-> > >   process_one_work+0x1d4/0x370
-> > >   worker_thread+0x48/0x3d0
-> > >   ? rescuer_thread+0x360/0x360
-> > >   kthread+0x122/0x140
-> > >   ? set_kthread_struct+0x40/0x40
-> > >   ret_from_fork+0x22/0x30
-> > > ---[ end trace da6ffcd9fad23a74 ]---
-> > > DMA-API: Mapped at:
-> > >   debug_dma_map_page+0x60/0xf0
-> > >   dma_map_page_attrs+0xfb/0x250
-> > >   usb_hcd_map_urb_for_dma+0x3b1/0x4e0
-> > >   usb_hcd_submit_urb+0x93/0xbb0
-> > >   usb_start_wait_urb+0x60/0x160
-> > > usb 1-1.1: new high-speed USB device number 3 using xhci-hcd
-> > > usb 1-1.1: New USB device found, idVendor=0424, idProduct=ec00, 
-> > > bcdDevice= 2.00
-> > > usb 1-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> > > usb 1-1.1: Product: LAN9514
-> > > usb 1-1.1: Manufacturer: SMSC
-> > > usb 1-1.1: SerialNumber: 00951d0d
-> > > 
-> > > 
-> > I'm not seeing that at all, but I've also been developing and testing
-> > on an ARM based device that has the LAN9500A I'm using built into it.
-> > 
-> > I have also recently got a LAN9500A devkit which I've tried on my
-> > Ryzen
-> > laptop and that's not throwing that error either.
-> > 
-> > Martyn
-> Yes I am using the LAN9514 Evaluation board (EVB9514). Plugging the
-> board into my desktop with 5.15 Ubuntu PPA kernel I also don't see this
-> crash.
-> OTOH I'm building vanilla kernel so no idea why this happens. It might
-> be that I have CONFIG_DMA_API_DEBUG and Ubuntu not.
->  
+I see. I suppose it is academic now (given your follow up email about converting
+port-mapper to component framework), but would reversing where the
+notifier block is i.e,
+have usbcore expose the notifier registration API instead of
+typec-class, resolve
+the issue? That would mean the dependency is the same as what it is right now
+in the code, right (typec -> usbcore)
 
-I suspect this is probably unrelated (directly) to the driver then.
+> > I'm not sure you actually achieve much with this series, and I'm not
+> > sure this approach will ever fully solve the problem. As long as we
+> > have to declare API, we will have the circular dependency issue on our
+> > hands. But there are ways to avoid that.
+> >
+> > There is for example the component framework (drivers/base/component.c)
+> > that I've been thinking about using here. In this case it would work
+> > so that you declare the USB Type-C part as your aggregate driver, and
+> > everything that is connected to it (so USB ports, DisplayPorts, TBT,
+> > etc.) would then just declare themselves as general components. Could
+> > you take a look at that?
+>
+> I'm preparing a patch where I store all _PLDs in the ACPI tables, and
+> create list of devices that share it. I can convert port-mapper.c to
+> it and the component framework while at it.
 
-Martyn
+Great, thanks. We can help with testing once you have a patch series
+to share.
 
-> 
+Best regards,
+
+-Prashant
