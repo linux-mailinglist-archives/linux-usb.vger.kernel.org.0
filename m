@@ -2,78 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5B54631AA
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Nov 2021 11:56:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B084631C7
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Nov 2021 12:03:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236478AbhK3LAP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Nov 2021 06:00:15 -0500
-Received: from mga04.intel.com ([192.55.52.120]:4915 "EHLO mga04.intel.com"
+        id S236975AbhK3LHI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Nov 2021 06:07:08 -0500
+Received: from mga04.intel.com ([192.55.52.120]:5376 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235667AbhK3LAO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Nov 2021 06:00:14 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="234914651"
+        id S236879AbhK3LHH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Nov 2021 06:07:07 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="234915673"
 X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="234914651"
+   d="scan'208";a="234915673"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 02:56:55 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 03:03:48 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="654117650"
+   d="scan'208";a="654134689"
 Received: from kuha.fi.intel.com ([10.237.72.166])
-  by fmsmga001.fm.intel.com with SMTP; 30 Nov 2021 02:56:52 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 30 Nov 2021 12:56:52 +0200
-Date:   Tue, 30 Nov 2021 12:56:52 +0200
+  by fmsmga001.fm.intel.com with SMTP; 30 Nov 2021 03:03:44 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 30 Nov 2021 13:03:43 +0200
+Date:   Tue, 30 Nov 2021 13:03:43 +0200
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     steven_syu <steven_syu@asus.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: clear usb_pd flag if change to typec only
- mode
-Message-ID: <YaYDdIJbOyAiiFsY@kuha.fi.intel.com>
-References: <1638241033-12467-1-git-send-email-steven_syu@asus.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        wonchung@google.com, bleung@chromium.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        Rajat Jain <rajatja@google.com>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH 0/4] usb: Use notifier for linking Type C ports.
+Message-ID: <YaYFDwsw2hKdJrGj@kuha.fi.intel.com>
+References: <20211124231028.696982-1-pmalani@chromium.org>
+ <YaCrnMAEXnG+VO6d@kuha.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1638241033-12467-1-git-send-email-steven_syu@asus.com>
+In-Reply-To: <YaCrnMAEXnG+VO6d@kuha.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 10:57:13AM +0800, steven_syu wrote:
-> This patch handle power mode change from PD to Type-C only
-> and the user space unknown power delivery  was turned off
-> by typec driver.
-> 
-> Signed-off-by: steven_syu <steven_syu@asus.com>
-> ---
->  drivers/usb/typec/class.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index aeef453..11e2a98 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -1718,6 +1718,10 @@ void typec_set_pwr_opmode(struct typec_port *port,
->                         partner->usb_pd = 1;
->                         sysfs_notify(&partner_dev->kobj, NULL,
->                                      "supports_usb_power_delivery");
-> +               } else if (opmode != TYPEC_PWR_MODE_PD && partner->usb_pd) {
-> +                       partner->usb_pd = 0;
-> +                       sysfs_notify(&partner_dev->kobj, NULL,
-> +                                    "supports_usb_power_delivery");
->                 }
->                 put_device(partner_dev);
->         }
-> --
-> 2.7.4
-> 
-> ===================================================================================================================================
-> ???K???T This email and any attachments to it contain confidential information and are intended solely for the use of the individual to whom it is addressed.If you are not the intended recipient or receive it accidentally, please immediately notify the sender by e-mail and delete the message and any attachments from your computer system, and destroy all hard copies. If any, please be advised that any unauthorized disclosure, copying, distribution or any action taken or omitted in reliance on this, is illegal and prohibited. Furthermore, any views or opinions expressed are solely those of the author and do not represent those of ASUSTeK. Thank you for your cooperation.
-> ===================================================================================================================================
+Hi Prashant,
 
-Please remove that footer from the next mail.
+On Fri, Nov 26, 2021 at 11:40:49AM +0200, Heikki Krogerus wrote:
+> On Wed, Nov 24, 2021 at 03:10:06PM -0800, Prashant Malani wrote:
+> > This series resolves the cyclic dependency error which was introduced by
+> > commit 63cd78617350 ("usb: Link the ports to the connectors they are
+> > attached to") which lead to it being reverted. The approach here is to
+> > use a notifier to link a new Type C port to pre-existing USB ports
+> > instead of calling an iterator of usb ports from the Type C connector
+> > class. This allows commit 63cd78617350 ("usb: Link the ports to the
+> > connectors they are attached to") to then be submitted without any
+> > depmod cyclic dependency error.
+> > 
+> > The final patch removes the usb port iterator since it is no longer
+> > needed.
+> 
+> This is not enough. Build the Type-C Class as a module and the USB bus
+> statically, and the links will not get created.
+> 
+> I'm not sure you actually achieve much with this series, and I'm not
+> sure this approach will ever fully solve the problem. As long as we
+> have to declare API, we will have the circular dependency issue on our
+> hands. But there are ways to avoid that.
+> 
+> There is for example the component framework (drivers/base/component.c)
+> that I've been thinking about using here. In this case it would work
+> so that you declare the USB Type-C part as your aggregate driver, and
+> everything that is connected to it (so USB ports, DisplayPorts, TBT,
+> etc.) would then just declare themselves as general components. Could
+> you take a look at that?
 
-thanks,
+I'm preparing a patch where I store all _PLDs in the ACPI tables, and
+create list of devices that share it. I can convert port-mapper.c to
+it and the component framework while at it.
+
+
+Br,
 
 -- 
 heikki
