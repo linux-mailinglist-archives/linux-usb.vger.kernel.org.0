@@ -2,136 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1AA462904
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Nov 2021 01:18:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D4846290D
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Nov 2021 01:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233219AbhK3AWF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Nov 2021 19:22:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
+        id S233550AbhK3AZL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Nov 2021 19:25:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbhK3AWE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Nov 2021 19:22:04 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874B4C061574
-        for <linux-usb@vger.kernel.org>; Mon, 29 Nov 2021 16:18:46 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id x1-20020a17090a294100b001a6e7ba6b4eso8749738pjf.9
-        for <linux-usb@vger.kernel.org>; Mon, 29 Nov 2021 16:18:46 -0800 (PST)
+        with ESMTP id S229960AbhK3AZL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Nov 2021 19:25:11 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF58C061574
+        for <linux-usb@vger.kernel.org>; Mon, 29 Nov 2021 16:21:52 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id z5so13998721edd.3
+        for <linux-usb@vger.kernel.org>; Mon, 29 Nov 2021 16:21:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=fqiIppSe7u1NnW3cvLakhtzd+THR0eb6aNRG1jCvBe4=;
-        b=o+uUnHGtT31rOsMLzjD2lzn032LEfjUdq3Sw0top7vsPbr4ClyZZiDG2r3dG12KXzc
-         ddIZgBMBZsAwPqGqU9bjdpTiJedG/w6RUN80tOam1c+EwmoIYC84qpPWyo8DAKaNg+Xe
-         qKhuATpmTHS09T9YDJNAm/NsPa21R9JwQXsuOso97HZMAiyP9szju2Py5OZ5H/hUb8+W
-         nflBKNoZQb5tWpdGPVogs9yATn5g4oB0Iw5Gwd5rp5xu11/6WiycWSVaSih4Q1UCEAU+
-         E705eoE4QC+r0p2RBxl+EnRs2fLyWaxChEttYE3iTo2Zq4GvTfiVnVe2ZUX2eS5YTnAL
-         rrjg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ci94NnhvjNDm0+nVGHKxyhtDjWfoGOaQGIN6N4LSRhE=;
+        b=M53/U3hREszj1yH/KQDRSGJwykb2+3EWcdSwlq3cyn30fQyJARab/+HU0AA6KFg98b
+         yeUUPk+C38qRl87ro4If+M3eLvRet45QNoQudDSuJnoNoe4GcjcBWOG2/XTM/7t4Jg5Z
+         1NPHp3FrTVc4/s8fKGHVk6QKmSmkK2iDxlbWq5yA9hc92hPmVwSX/Ly2XRzEfmZXRDE5
+         G008ZlAoxZdJsFVqPxlMCVj0oHvr4trTGlCExIM8UTFUFKFTifDx77uOJfuBFkudOt3F
+         I7VuzCznctRFvRBmttVZ4yCtOJKLk9pe1Dg2KexAFixqvjuztAUUzZJ02Y/UZskvmnyy
+         9TvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=fqiIppSe7u1NnW3cvLakhtzd+THR0eb6aNRG1jCvBe4=;
-        b=h1nTMZBZKdjDk8Km2F5TwS8wMVW6jwVoGNeZU8pVkFaGUqavNOYFuMdx54PcIlUdjv
-         ofKdJ3Jx9BcOxzLAYPPhBcy7VjlLIVqYy1wN9wRHPALxCwMb/PiwUMGkMR3R3mc8mAuD
-         fUVL/7HX5m6WH3owHkykeO7xq9mJGPOItEMVIERYePpKKnB2srq4AxaE2AeSwAtX66mb
-         JuhQA8qF8Efv3eaunH3EoCidKUDGql/irCsE/txpnaAZRXSNqxVmmEq2zRf6boAnQqZ/
-         SOPvvcpmc3RAtrNJ9hVIXOgCWOALBXTMXwpCLNCj+nXlWS90x1PAX4x/zZvGWXGST7PC
-         F+JQ==
-X-Gm-Message-State: AOAM532VmY0SdJ6n0bfXnY3icQOItC3+7aKFQcrWRy+dcbgnQKZPyV5u
-        w4n0k/yrculOs48vUjk+/sPwEwNplv8=
-X-Google-Smtp-Source: ABdhPJy2g0UQKNf/QdSpzVdCY6bn6T4kSInxTQJ9sAF7rPJyaI+QNeOmoyBpD2Y/QM542UalnyZLBrNmIig=
-X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:ee3f:d2a:7fda:5c6])
- (user=badhri job=sendgmr) by 2002:a05:6a00:8cc:b0:4a8:262:49e1 with SMTP id
- s12-20020a056a0008cc00b004a8026249e1mr27639423pfu.28.1638231525981; Mon, 29
- Nov 2021 16:18:45 -0800 (PST)
-Date:   Mon, 29 Nov 2021 16:18:25 -0800
-Message-Id: <20211130001825.3142830-1-badhri@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
-Subject: [PATCH v2] usb: typec: tcpm: Wait in SNK_DEBOUNCED until disconnect
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ci94NnhvjNDm0+nVGHKxyhtDjWfoGOaQGIN6N4LSRhE=;
+        b=vhpmc/ao+q/8g4iiAZdhrT8f/mSfG0iHDd+diqEzyxeIP0JK/Y0JLkibvF5eEkaJfc
+         1cv0W8DRnNihA0gkalaf+SDwetBz+Jy6ynLv5frncDDboDO+XoBfOqyNQOlu1OxL14gm
+         b+Y2Dq8xL6bu2qDxV9RHrg0LkeYsEqZGb5qH40i7nj8gRdmUuDbmigYLAb1Ja4mW/zlx
+         CD5X27TXEd1eCcKJfd7anE4bi6nEykGStaGD6siIt/o6NYsUcKx75QfjGYVS4+6WwrNg
+         EkQFJdiSwOOPNhpcDQ2V2BrI0H0R7p9zsTFrzbpSqVSr5gg9r2/bBZSMJiVbOxhnDhqD
+         Uu+w==
+X-Gm-Message-State: AOAM531qRxrX8CNRgKr0j4r3QgWI9D29HzDBQxCI6KAZ6A9h7nNdkNv9
+        7N9jaSkocNh3tqe/rUo8PegBle1WsSnc5m1yRbC+QAR4YdOxVA==
+X-Google-Smtp-Source: ABdhPJxvo5fpYlewG0MUn+bdVkv6oDtGOSLMbiJWgjp4wTnepUtGOh+Y+XkgY7WxBRbCSQ8WeTF6WYndljTIlrSWkWU=
+X-Received: by 2002:aa7:c14a:: with SMTP id r10mr77883888edp.122.1638231711210;
+ Mon, 29 Nov 2021 16:21:51 -0800 (PST)
+MIME-Version: 1.0
+References: <20211124224036.734679-1-badhri@google.com> <YZ8mdjPn39ekClLq@kroah.com>
+In-Reply-To: <YZ8mdjPn39ekClLq@kroah.com>
 From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
+Date:   Mon, 29 Nov 2021 16:21:14 -0800
+Message-ID: <CAPTae5LTg20LmAoUZXZYULP4HvX-2DMvp7qq1MwsHce-Y7LynQ@mail.gmail.com>
+Subject: Re: [PATCH v1] usb: typec: tcpm: Wait in SNK_DEBOUNCED until disconnect
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Stub from the spec:
-"4.5.2.2.4.2 Exiting from AttachWait.SNK State
-A Sink shall transition to Unattached.SNK when the state of both
-the CC1 and CC2 pins is SNK.Open for at least tPDDebounce.
-A DRP shall transition to Unattached.SRC when the state of both
-the CC1 and CC2 pins is SNK.Open for at least tPDDebounce."
+Thanks Greg ! Missed the "Cc: stable@vger.kernel.org". Have updated
+the commit message and sent it as V2.
 
-This change makes TCPM to wait in SNK_DEBOUNCED state until
-CC1 and CC2 pins is SNK.Open for at least tPDDebounce. Previously,
-TCPM resets the port if vbus is not present in PD_T_PS_SOURCE_ON.
-This causes TCPM to loop continuously when connected to a
-faulty power source that does not present vbus. Waiting in
-SNK_DEBOUNCED also ensures that TCPM is adherant to
-"4.5.2.2.4.2 Exiting from AttachWait.SNK State" requirements.
+Regards,
+Badhri
 
-[ 6169.280751] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
-[ 6169.280759] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
-[ 6169.280771] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
-[ 6169.282427] CC1: 0 -> 0, CC2: 5 -> 5 [state SNK_ATTACH_WAIT, polarity 0, connected]
-[ 6169.450825] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
-[ 6169.450834] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
-[ 6169.930892] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
-[ 6169.931296] disable vbus discharge ret:0
-[ 6169.931301] Setting usb_comm capable false
-[ 6169.932783] Setting voltage/current limit 0 mV 0 mA
-[ 6169.932802] polarity 0
-[ 6169.933706] Requesting mux state 0, usb-role 0, orientation 0
-[ 6169.936689] cc:=0
-[ 6169.936812] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
-[ 6169.937157] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
-[ 6170.036880] state change PORT_RESET -> PORT_RESET_WAIT_OFF [delayed 100 ms]
-[ 6170.036890] state change PORT_RESET_WAIT_OFF -> SNK_UNATTACHED [rev2 NONE_AMS]
-[ 6170.036896] Start toggling
-[ 6170.041412] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
-[ 6170.042973] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
-[ 6170.042976] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
-[ 6170.042981] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
-[ 6170.213014] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
-[ 6170.213019] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
-[ 6170.693068] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
-[ 6170.693304] disable vbus discharge ret:0
-[ 6170.693308] Setting usb_comm capable false
-[ 6170.695193] Setting voltage/current limit 0 mV 0 mA
-[ 6170.695210] polarity 0
-[ 6170.695990] Requesting mux state 0, usb-role 0, orientation 0
-[ 6170.701896] cc:=0
-[ 6170.702181] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
-[ 6170.703343] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
 
-Cc: stable@vger.kernel.org
-Fixes: f0690a25a140b8 ("staging: typec: USB Type-C Port Manager (tcpm)")
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 7f2f3ff1b391..6010b9901126 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -4110,11 +4110,7 @@ static void run_state_machine(struct tcpm_port *port)
- 				       tcpm_try_src(port) ? SRC_TRY
- 							  : SNK_ATTACHED,
- 				       0);
--		else
--			/* Wait for VBUS, but not forever */
--			tcpm_set_state(port, PORT_RESET, PD_T_PS_SOURCE_ON);
- 		break;
--
- 	case SRC_TRY:
- 		port->try_src_count++;
- 		tcpm_set_cc(port, tcpm_rp_cc(port));
--- 
-2.34.0.rc2.393.gf8c9666880-goog
-
+On Wed, Nov 24, 2021 at 10:00 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Nov 24, 2021 at 02:40:36PM -0800, Badhri Jagan Sridharan wrote:
+> > Stub from the spec:
+> > "4.5.2.2.4.2 Exiting from AttachWait.SNK State
+> > A Sink shall transition to Unattached.SNK when the state of both
+> > the CC1 and CC2 pins is SNK.Open for at least tPDDebounce.
+> > A DRP shall transition to Unattached.SRC when the state of both
+> > the CC1 and CC2 pins is SNK.Open for at least tPDDebounce."
+> >
+> > This change makes TCPM to wait in SNK_DEBOUNCED state until
+> > CC1 and CC2 pins is SNK.Open for at least tPDDebounce. Previously,
+> > TCPM resets the port if vbus is not present in PD_T_PS_SOURCE_ON.
+> > This causes TCPM to loop continuously when connected to a
+> > faulty power source that does not present vbus. Waiting in
+> > SNK_DEBOUNCED also ensures that TCPM is adherant to
+> > "4.5.2.2.4.2 Exiting from AttachWait.SNK State" requirements.
+> >
+> > [ 6169.280751] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+> > [ 6169.280759] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
+> > [ 6169.280771] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
+> > [ 6169.282427] CC1: 0 -> 0, CC2: 5 -> 5 [state SNK_ATTACH_WAIT, polarity 0, connected]
+> > [ 6169.450825] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
+> > [ 6169.450834] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
+> > [ 6169.930892] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
+> > [ 6169.931296] disable vbus discharge ret:0
+> > [ 6169.931301] Setting usb_comm capable false
+> > [ 6169.932783] Setting voltage/current limit 0 mV 0 mA
+> > [ 6169.932802] polarity 0
+> > [ 6169.933706] Requesting mux state 0, usb-role 0, orientation 0
+> > [ 6169.936689] cc:=0
+> > [ 6169.936812] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
+> > [ 6169.937157] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
+> > [ 6170.036880] state change PORT_RESET -> PORT_RESET_WAIT_OFF [delayed 100 ms]
+> > [ 6170.036890] state change PORT_RESET_WAIT_OFF -> SNK_UNATTACHED [rev2 NONE_AMS]
+> > [ 6170.036896] Start toggling
+> > [ 6170.041412] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> > [ 6170.042973] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+> > [ 6170.042976] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
+> > [ 6170.042981] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
+> > [ 6170.213014] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
+> > [ 6170.213019] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
+> > [ 6170.693068] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
+> > [ 6170.693304] disable vbus discharge ret:0
+> > [ 6170.693308] Setting usb_comm capable false
+> > [ 6170.695193] Setting voltage/current limit 0 mV 0 mA
+> > [ 6170.695210] polarity 0
+> > [ 6170.695990] Requesting mux state 0, usb-role 0, orientation 0
+> > [ 6170.701896] cc:=0
+> > [ 6170.702181] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
+> > [ 6170.703343] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
+> >
+> > Fixes: f0690a25a140b8 ("staging: typec: USB Type-C Port Manager (tcpm)")
+> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> > ---
+> >  drivers/usb/typec/tcpm/tcpm.c | 4 ----
+> >  1 file changed, 4 deletions(-)
+>
+>
+> <formletter>
+>
+> This is not the correct way to submit patches for inclusion in the
+> stable kernel tree.  Please read:
+>     https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+> for how to do this properly.
+>
+> </formletter>
