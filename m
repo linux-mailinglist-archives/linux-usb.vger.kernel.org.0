@@ -2,134 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA6146315F
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Nov 2021 11:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A0A34631A5
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Nov 2021 11:56:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235771AbhK3Kqq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Nov 2021 05:46:46 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:43022 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235660AbhK3Kqp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Nov 2021 05:46:45 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1AUAIWAq077388;
-        Tue, 30 Nov 2021 18:18:32 +0800 (GMT-8)
-        (envelope-from neal_liu@aspeedtech.com)
-Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 30 Nov
- 2021 18:43:03 +0800
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Felipe Balbi <balbi@kernel.org>,
+        id S236542AbhK3K7b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Nov 2021 05:59:31 -0500
+Received: from mga14.intel.com ([192.55.52.115]:60349 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236505AbhK3K7a (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Nov 2021 05:59:30 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="236420346"
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="236420346"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 02:56:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="654117467"
+Received: from kuha.fi.intel.com ([10.237.72.166])
+  by fmsmga001.fm.intel.com with SMTP; 30 Nov 2021 02:56:07 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 30 Nov 2021 12:56:06 +0200
+Date:   Tue, 30 Nov 2021 12:56:06 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Tao Ren <rentao.bupt@gmail.com>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        "kernel test robot" <lkp@intel.com>,
-        Sasha Levin <sashal@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>
-CC:     Neal Liu <neal_liu@aspeedtech.com>, <BMC-SW@aspeedtech.com>
-Subject: [PATCH v2 4/4] usb: aspeed-vhub: support test mode feature
-Date:   Tue, 30 Nov 2021 18:42:56 +0800
-Message-ID: <20211130104256.3106797-5-neal_liu@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211130104256.3106797-1-neal_liu@aspeedtech.com>
-References: <20211130104256.3106797-1-neal_liu@aspeedtech.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: tcpm: Wait in SNK_DEBOUNCED until
+ disconnect
+Message-ID: <YaYDRs0uvliAwTJZ@kuha.fi.intel.com>
+References: <20211130001825.3142830-1-badhri@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.10.10]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1AUAIWAq077388
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211130001825.3142830-1-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Support aspeed usb vhub set feature to test mode.
+On Mon, Nov 29, 2021 at 04:18:25PM -0800, Badhri Jagan Sridharan wrote:
+> Stub from the spec:
+> "4.5.2.2.4.2 Exiting from AttachWait.SNK State
+> A Sink shall transition to Unattached.SNK when the state of both
+> the CC1 and CC2 pins is SNK.Open for at least tPDDebounce.
+> A DRP shall transition to Unattached.SRC when the state of both
+> the CC1 and CC2 pins is SNK.Open for at least tPDDebounce."
+> 
+> This change makes TCPM to wait in SNK_DEBOUNCED state until
+> CC1 and CC2 pins is SNK.Open for at least tPDDebounce. Previously,
+> TCPM resets the port if vbus is not present in PD_T_PS_SOURCE_ON.
+> This causes TCPM to loop continuously when connected to a
+> faulty power source that does not present vbus. Waiting in
+> SNK_DEBOUNCED also ensures that TCPM is adherant to
+> "4.5.2.2.4.2 Exiting from AttachWait.SNK State" requirements.
+> 
+> [ 6169.280751] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+> [ 6169.280759] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
+> [ 6169.280771] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
+> [ 6169.282427] CC1: 0 -> 0, CC2: 5 -> 5 [state SNK_ATTACH_WAIT, polarity 0, connected]
+> [ 6169.450825] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
+> [ 6169.450834] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
+> [ 6169.930892] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
+> [ 6169.931296] disable vbus discharge ret:0
+> [ 6169.931301] Setting usb_comm capable false
+> [ 6169.932783] Setting voltage/current limit 0 mV 0 mA
+> [ 6169.932802] polarity 0
+> [ 6169.933706] Requesting mux state 0, usb-role 0, orientation 0
+> [ 6169.936689] cc:=0
+> [ 6169.936812] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
+> [ 6169.937157] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
+> [ 6170.036880] state change PORT_RESET -> PORT_RESET_WAIT_OFF [delayed 100 ms]
+> [ 6170.036890] state change PORT_RESET_WAIT_OFF -> SNK_UNATTACHED [rev2 NONE_AMS]
+> [ 6170.036896] Start toggling
+> [ 6170.041412] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> [ 6170.042973] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+> [ 6170.042976] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
+> [ 6170.042981] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
+> [ 6170.213014] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
+> [ 6170.213019] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
+> [ 6170.693068] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
+> [ 6170.693304] disable vbus discharge ret:0
+> [ 6170.693308] Setting usb_comm capable false
+> [ 6170.695193] Setting voltage/current limit 0 mV 0 mA
+> [ 6170.695210] polarity 0
+> [ 6170.695990] Requesting mux state 0, usb-role 0, orientation 0
+> [ 6170.701896] cc:=0
+> [ 6170.702181] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
+> [ 6170.703343] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: f0690a25a140b8 ("staging: typec: USB Type-C Port Manager (tcpm)")
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
-Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
----
- drivers/usb/gadget/udc/aspeed-vhub/dev.c | 18 ++++++++++++++----
- drivers/usb/gadget/udc/aspeed-vhub/hub.c | 22 ++++++++++++++++------
- 2 files changed, 30 insertions(+), 10 deletions(-)
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-index d918e8b2af3c..4462f4b73b04 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-@@ -110,15 +110,25 @@ static int ast_vhub_dev_feature(struct ast_vhub_dev *d,
- 				u16 wIndex, u16 wValue,
- 				bool is_set)
- {
-+	u32 val;
-+
- 	DDBG(d, "%s_FEATURE(dev val=%02x)\n",
- 	     is_set ? "SET" : "CLEAR", wValue);
- 
--	if (wValue != USB_DEVICE_REMOTE_WAKEUP)
--		return std_req_driver;
-+	if (wValue == USB_DEVICE_REMOTE_WAKEUP) {
-+		d->wakeup_en = is_set;
-+		return std_req_complete;
- 
--	d->wakeup_en = is_set;
-+	} else if (wValue == USB_DEVICE_TEST_MODE) {
-+		val = readl(d->vhub->regs + AST_VHUB_CTRL);
-+		val &= ~GENMASK(10, 8);
-+		val |= VHUB_CTRL_SET_TEST_MODE((wIndex >> 8) & 0x7);
-+		writel(val, d->vhub->regs + AST_VHUB_CTRL);
- 
--	return std_req_complete;
-+		return std_req_complete;
-+	}
-+
-+	return std_req_driver;
- }
- 
- static int ast_vhub_ep_feature(struct ast_vhub_dev *d,
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/hub.c b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-index 93f27a745760..e52805fbdebd 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-@@ -212,17 +212,27 @@ static int ast_vhub_hub_dev_feature(struct ast_vhub_ep *ep,
- 				    u16 wIndex, u16 wValue,
- 				    bool is_set)
- {
-+	u32 val;
-+
- 	EPDBG(ep, "%s_FEATURE(dev val=%02x)\n",
- 	      is_set ? "SET" : "CLEAR", wValue);
- 
--	if (wValue != USB_DEVICE_REMOTE_WAKEUP)
--		return std_req_stall;
-+	if (wValue == USB_DEVICE_REMOTE_WAKEUP) {
-+		ep->vhub->wakeup_en = is_set;
-+		EPDBG(ep, "Hub remote wakeup %s\n",
-+		      is_set ? "enabled" : "disabled");
-+		return std_req_complete;
- 
--	ep->vhub->wakeup_en = is_set;
--	EPDBG(ep, "Hub remote wakeup %s\n",
--	      is_set ? "enabled" : "disabled");
-+	} else if (wValue == USB_DEVICE_TEST_MODE) {
-+		val = readl(ep->vhub->regs + AST_VHUB_CTRL);
-+		val &= ~GENMASK(10, 8);
-+		val |= VHUB_CTRL_SET_TEST_MODE((wIndex >> 8) & 0x7);
-+		writel(val, ep->vhub->regs + AST_VHUB_CTRL);
- 
--	return std_req_complete;
-+		return std_req_complete;
-+	}
-+
-+	return std_req_stall;
- }
- 
- static int ast_vhub_hub_ep_feature(struct ast_vhub_ep *ep,
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 7f2f3ff1b391..6010b9901126 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4110,11 +4110,7 @@ static void run_state_machine(struct tcpm_port *port)
+>  				       tcpm_try_src(port) ? SRC_TRY
+>  							  : SNK_ATTACHED,
+>  				       0);
+> -		else
+> -			/* Wait for VBUS, but not forever */
+> -			tcpm_set_state(port, PORT_RESET, PD_T_PS_SOURCE_ON);
+>  		break;
+> -
+>  	case SRC_TRY:
+>  		port->try_src_count++;
+>  		tcpm_set_cc(port, tcpm_rp_cc(port));
+> -- 
+> 2.34.0.rc2.393.gf8c9666880-goog
+
 -- 
-2.25.1
-
+heikki
