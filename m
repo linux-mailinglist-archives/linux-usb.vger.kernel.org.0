@@ -2,145 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 128554628F7
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Nov 2021 01:15:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1AA462904
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Nov 2021 01:18:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232837AbhK3ASr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Nov 2021 19:18:47 -0500
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:43914 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbhK3ASr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Nov 2021 19:18:47 -0500
-Received: by mail-oi1-f178.google.com with SMTP id o4so37812908oia.10;
-        Mon, 29 Nov 2021 16:15:28 -0800 (PST)
+        id S233219AbhK3AWF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Nov 2021 19:22:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229716AbhK3AWE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Nov 2021 19:22:04 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874B4C061574
+        for <linux-usb@vger.kernel.org>; Mon, 29 Nov 2021 16:18:46 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id x1-20020a17090a294100b001a6e7ba6b4eso8749738pjf.9
+        for <linux-usb@vger.kernel.org>; Mon, 29 Nov 2021 16:18:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=fqiIppSe7u1NnW3cvLakhtzd+THR0eb6aNRG1jCvBe4=;
+        b=o+uUnHGtT31rOsMLzjD2lzn032LEfjUdq3Sw0top7vsPbr4ClyZZiDG2r3dG12KXzc
+         ddIZgBMBZsAwPqGqU9bjdpTiJedG/w6RUN80tOam1c+EwmoIYC84qpPWyo8DAKaNg+Xe
+         qKhuATpmTHS09T9YDJNAm/NsPa21R9JwQXsuOso97HZMAiyP9szju2Py5OZ5H/hUb8+W
+         nflBKNoZQb5tWpdGPVogs9yATn5g4oB0Iw5Gwd5rp5xu11/6WiycWSVaSih4Q1UCEAU+
+         E705eoE4QC+r0p2RBxl+EnRs2fLyWaxChEttYE3iTo2Zq4GvTfiVnVe2ZUX2eS5YTnAL
+         rrjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yTXlF6Gnm/rT0qldVGXfz0tI0LWvoagfDepzULfghYw=;
-        b=jpnIWVJE7+Vl6MZxhVUcuE7ZyqyLEDeJVyeX9k90TgdOhl1+lqn8BN6jmokd1w4A51
-         KeLGGI1R9WNZovBrASPN2gKTAir3U7MX5rc7lH1VRTRs43Xe/SHD+16+OUjsrFsqB13f
-         wjU5SsqgjjpKJsXEx+HkV5P3OQZ02tgu/SrpGArvwCEz6pnqvtrbetwklTJB79rcN+cw
-         ZjL7HjtAcMoC40Tv8SHmtlPwnuIj+oIVpElRdzE3ijyRWh1vnqDFEOMUyGPC8u7p5sXB
-         hSmGsQWA+O21je4oudcuthF7Z6vR6I2IG2Gty0hk73fb/l8+sokwYxAb7tOdjr2gnXh6
-         5eiA==
-X-Gm-Message-State: AOAM533Vjt4GtkjWSWgBKFnsqPKH1UY1lPqkB93dMNe8Sfc8uYyQ3v9T
-        5y64toZEzA1LYVy+CqpZRw==
-X-Google-Smtp-Source: ABdhPJzWvVLBFUM1w9MIGxp1dvanjID+SCvk9UvCvwk3mkyhqzj1CD5wwDV8UPTwhuCcK/jo7SmJvA==
-X-Received: by 2002:a05:6808:1381:: with SMTP id c1mr1161897oiw.129.1638231328337;
-        Mon, 29 Nov 2021 16:15:28 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bg38sm3563993oib.40.2021.11.29.16.15.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 16:15:27 -0800 (PST)
-Received: (nullmailer pid 875053 invoked by uid 1000);
-        Tue, 30 Nov 2021 00:15:26 -0000
-Date:   Mon, 29 Nov 2021 18:15:26 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Manish Narani <manish.narani@xilinx.com>
-Cc:     git@xilinx.com, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        michal.simek@xilinx.com, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH] dt-bindings: usb: dwc3-xilinx: Convert USB DWC3 bindings
-Message-ID: <YaVtHpb5kQk9xduz@robh.at.kernel.org>
-References: <1637329568-31756-1-git-send-email-manish.narani@xilinx.com>
- <1637341102.285159.4078689.nullmailer@robh.at.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1637341102.285159.4078689.nullmailer@robh.at.kernel.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=fqiIppSe7u1NnW3cvLakhtzd+THR0eb6aNRG1jCvBe4=;
+        b=h1nTMZBZKdjDk8Km2F5TwS8wMVW6jwVoGNeZU8pVkFaGUqavNOYFuMdx54PcIlUdjv
+         ofKdJ3Jx9BcOxzLAYPPhBcy7VjlLIVqYy1wN9wRHPALxCwMb/PiwUMGkMR3R3mc8mAuD
+         fUVL/7HX5m6WH3owHkykeO7xq9mJGPOItEMVIERYePpKKnB2srq4AxaE2AeSwAtX66mb
+         JuhQA8qF8Efv3eaunH3EoCidKUDGql/irCsE/txpnaAZRXSNqxVmmEq2zRf6boAnQqZ/
+         SOPvvcpmc3RAtrNJ9hVIXOgCWOALBXTMXwpCLNCj+nXlWS90x1PAX4x/zZvGWXGST7PC
+         F+JQ==
+X-Gm-Message-State: AOAM532VmY0SdJ6n0bfXnY3icQOItC3+7aKFQcrWRy+dcbgnQKZPyV5u
+        w4n0k/yrculOs48vUjk+/sPwEwNplv8=
+X-Google-Smtp-Source: ABdhPJy2g0UQKNf/QdSpzVdCY6bn6T4kSInxTQJ9sAF7rPJyaI+QNeOmoyBpD2Y/QM542UalnyZLBrNmIig=
+X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:ee3f:d2a:7fda:5c6])
+ (user=badhri job=sendgmr) by 2002:a05:6a00:8cc:b0:4a8:262:49e1 with SMTP id
+ s12-20020a056a0008cc00b004a8026249e1mr27639423pfu.28.1638231525981; Mon, 29
+ Nov 2021 16:18:45 -0800 (PST)
+Date:   Mon, 29 Nov 2021 16:18:25 -0800
+Message-Id: <20211130001825.3142830-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
+Subject: [PATCH v2] usb: typec: tcpm: Wait in SNK_DEBOUNCED until disconnect
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 19, 2021 at 10:58:22AM -0600, Rob Herring wrote:
-> On Fri, 19 Nov 2021 19:16:08 +0530, Manish Narani wrote:
-> > Convert USB DWC3 bindings to DT schema format using json-schema.
-> > 
-> > Signed-off-by: Manish Narani <manish.narani@xilinx.com>
-> > ---
-> >  .../devicetree/bindings/usb/dwc3-xilinx.txt        |  56 ----------
-> >  .../devicetree/bindings/usb/dwc3-xilinx.yaml       | 119 +++++++++++++++++++++
-> >  2 files changed, 119 insertions(+), 56 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
-> >  create mode 100644 Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-> > 
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/1557119
-> 
-> 
-> usb@ff9d0000: 'phy-names', 'phys' do not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
-> 	arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dt.yaml
+Stub from the spec:
+"4.5.2.2.4.2 Exiting from AttachWait.SNK State
+A Sink shall transition to Unattached.SNK when the state of both
+the CC1 and CC2 pins is SNK.Open for at least tPDDebounce.
+A DRP shall transition to Unattached.SRC when the state of both
+the CC1 and CC2 pins is SNK.Open for at least tPDDebounce."
 
-Looks like the schema is missing some properties.
+This change makes TCPM to wait in SNK_DEBOUNCED state until
+CC1 and CC2 pins is SNK.Open for at least tPDDebounce. Previously,
+TCPM resets the port if vbus is not present in PD_T_PS_SOURCE_ON.
+This causes TCPM to loop continuously when connected to a
+faulty power source that does not present vbus. Waiting in
+SNK_DEBOUNCED also ensures that TCPM is adherant to
+"4.5.2.2.4.2 Exiting from AttachWait.SNK State" requirements.
 
-> 
-> usb@ff9d0000: usb@fe200000:interrupt-names: 'oneOf' conditional failed, one must be fixed:
-> 	arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1275-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dt.yaml
-> 
-> usb@ff9e0000: 'phy-names', 'phys' do not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
-> 	arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dt.yaml
-> 
-> usb@ff9e0000: usb@fe300000:interrupt-names: 'oneOf' conditional failed, one must be fixed:
-> 	arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1275-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dt.yaml
-> 
-> 
+[ 6169.280751] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+[ 6169.280759] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
+[ 6169.280771] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
+[ 6169.282427] CC1: 0 -> 0, CC2: 5 -> 5 [state SNK_ATTACH_WAIT, polarity 0, connected]
+[ 6169.450825] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
+[ 6169.450834] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
+[ 6169.930892] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
+[ 6169.931296] disable vbus discharge ret:0
+[ 6169.931301] Setting usb_comm capable false
+[ 6169.932783] Setting voltage/current limit 0 mV 0 mA
+[ 6169.932802] polarity 0
+[ 6169.933706] Requesting mux state 0, usb-role 0, orientation 0
+[ 6169.936689] cc:=0
+[ 6169.936812] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
+[ 6169.937157] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
+[ 6170.036880] state change PORT_RESET -> PORT_RESET_WAIT_OFF [delayed 100 ms]
+[ 6170.036890] state change PORT_RESET_WAIT_OFF -> SNK_UNATTACHED [rev2 NONE_AMS]
+[ 6170.036896] Start toggling
+[ 6170.041412] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+[ 6170.042973] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+[ 6170.042976] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
+[ 6170.042981] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
+[ 6170.213014] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
+[ 6170.213019] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
+[ 6170.693068] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
+[ 6170.693304] disable vbus discharge ret:0
+[ 6170.693308] Setting usb_comm capable false
+[ 6170.695193] Setting voltage/current limit 0 mV 0 mA
+[ 6170.695210] polarity 0
+[ 6170.695990] Requesting mux state 0, usb-role 0, orientation 0
+[ 6170.701896] cc:=0
+[ 6170.702181] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
+[ 6170.703343] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
+
+Cc: stable@vger.kernel.org
+Fixes: f0690a25a140b8 ("staging: typec: USB Type-C Port Manager (tcpm)")
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 7f2f3ff1b391..6010b9901126 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -4110,11 +4110,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 				       tcpm_try_src(port) ? SRC_TRY
+ 							  : SNK_ATTACHED,
+ 				       0);
+-		else
+-			/* Wait for VBUS, but not forever */
+-			tcpm_set_state(port, PORT_RESET, PD_T_PS_SOURCE_ON);
+ 		break;
+-
+ 	case SRC_TRY:
+ 		port->try_src_count++;
+ 		tcpm_set_cc(port, tcpm_rp_cc(port));
+-- 
+2.34.0.rc2.393.gf8c9666880-goog
+
