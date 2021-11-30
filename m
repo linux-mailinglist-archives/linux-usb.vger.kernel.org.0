@@ -2,136 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D4846290D
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Nov 2021 01:21:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8371E462A38
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Nov 2021 03:11:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233550AbhK3AZL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Nov 2021 19:25:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59630 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbhK3AZL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Nov 2021 19:25:11 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF58C061574
-        for <linux-usb@vger.kernel.org>; Mon, 29 Nov 2021 16:21:52 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id z5so13998721edd.3
-        for <linux-usb@vger.kernel.org>; Mon, 29 Nov 2021 16:21:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ci94NnhvjNDm0+nVGHKxyhtDjWfoGOaQGIN6N4LSRhE=;
-        b=M53/U3hREszj1yH/KQDRSGJwykb2+3EWcdSwlq3cyn30fQyJARab/+HU0AA6KFg98b
-         yeUUPk+C38qRl87ro4If+M3eLvRet45QNoQudDSuJnoNoe4GcjcBWOG2/XTM/7t4Jg5Z
-         1NPHp3FrTVc4/s8fKGHVk6QKmSmkK2iDxlbWq5yA9hc92hPmVwSX/Ly2XRzEfmZXRDE5
-         G008ZlAoxZdJsFVqPxlMCVj0oHvr4trTGlCExIM8UTFUFKFTifDx77uOJfuBFkudOt3F
-         I7VuzCznctRFvRBmttVZ4yCtOJKLk9pe1Dg2KexAFixqvjuztAUUzZJ02Y/UZskvmnyy
-         9TvA==
+        id S233823AbhK3CPO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Nov 2021 21:15:14 -0500
+Received: from mail-oi1-f181.google.com ([209.85.167.181]:38764 "EHLO
+        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231144AbhK3CPN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Nov 2021 21:15:13 -0500
+Received: by mail-oi1-f181.google.com with SMTP id r26so38265048oiw.5;
+        Mon, 29 Nov 2021 18:11:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ci94NnhvjNDm0+nVGHKxyhtDjWfoGOaQGIN6N4LSRhE=;
-        b=vhpmc/ao+q/8g4iiAZdhrT8f/mSfG0iHDd+diqEzyxeIP0JK/Y0JLkibvF5eEkaJfc
-         1cv0W8DRnNihA0gkalaf+SDwetBz+Jy6ynLv5frncDDboDO+XoBfOqyNQOlu1OxL14gm
-         b+Y2Dq8xL6bu2qDxV9RHrg0LkeYsEqZGb5qH40i7nj8gRdmUuDbmigYLAb1Ja4mW/zlx
-         CD5X27TXEd1eCcKJfd7anE4bi6nEykGStaGD6siIt/o6NYsUcKx75QfjGYVS4+6WwrNg
-         EkQFJdiSwOOPNhpcDQ2V2BrI0H0R7p9zsTFrzbpSqVSr5gg9r2/bBZSMJiVbOxhnDhqD
-         Uu+w==
-X-Gm-Message-State: AOAM531qRxrX8CNRgKr0j4r3QgWI9D29HzDBQxCI6KAZ6A9h7nNdkNv9
-        7N9jaSkocNh3tqe/rUo8PegBle1WsSnc5m1yRbC+QAR4YdOxVA==
-X-Google-Smtp-Source: ABdhPJxvo5fpYlewG0MUn+bdVkv6oDtGOSLMbiJWgjp4wTnepUtGOh+Y+XkgY7WxBRbCSQ8WeTF6WYndljTIlrSWkWU=
-X-Received: by 2002:aa7:c14a:: with SMTP id r10mr77883888edp.122.1638231711210;
- Mon, 29 Nov 2021 16:21:51 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kySY1jLIWmb/d9rGGP7AKU8g2DZOHFlN0dtFDWeAiUQ=;
+        b=Rs1Kg6sMcgLj0r/ZO8hT1PhQ6Bq7MLVnSsiXwd8Iya65cgiyzci4Y/FL00xkSjrJrV
+         TowqPLZTIY0pzZFehAMr1fvbN5qm5sKbGJKZCd6BBY1MO6zc+fZqoUOno9vLQOfjC0ED
+         EFEQE2TiBrFju7uOVTU6g3iEURKQwREQhsa7lFCKubMZgIAW6Tv079viSJYbM7ySP5iK
+         r6W+rdigwaZDM9ldanuc9A10u/QAl1Uz+PhKUHcKpHinhimqQO95Si573Ez26+RXqsaM
+         pk0I0sP3YVUqIyYYHhu6io8vxF5LOmrE4vXh5mhaRiohMEbLFp0YoqfN5gab3Fu1hyGA
+         Mg8g==
+X-Gm-Message-State: AOAM5338QS5SHQDa3mRLxkUhV2S1SgD5TFxQBpkpO73ioM5EYPUySHuU
+        p3nYOB16Zsar+Dqx70Vomv2THHYTWg==
+X-Google-Smtp-Source: ABdhPJydLpwX10OsIdv9y2AqcypFLRjKhiotvNXFIPJ7gTIIzljy6WfKP3TlhTMVJmQVLEWi7xuogQ==
+X-Received: by 2002:a05:6808:f8c:: with SMTP id o12mr1671490oiw.50.1638238315109;
+        Mon, 29 Nov 2021 18:11:55 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id s6sm3621912ois.3.2021.11.29.18.11.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 18:11:54 -0800 (PST)
+Received: (nullmailer pid 1036795 invoked by uid 1000);
+        Tue, 30 Nov 2021 02:11:53 -0000
+Date:   Mon, 29 Nov 2021 20:11:53 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Piyush Mehta <piyush.mehta@xilinx.com>
+Cc:     gregkh@linuxfoundation.org, mka@chromium.org,
+        ravisadineni@chromium.org, stern@rowland.harvard.edu,
+        alcooperx@gmail.com, michal.simek@xilinx.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, git@xilinx.com, sgoud@xilinx.com
+Subject: Re: [PATCH V2 1/2] dt-bindings: usb: misc: Add binding for Microchip
+ usb2244 Controller
+Message-ID: <YaWIafw+XB8tknpJ@robh.at.kernel.org>
+References: <20211122062834.1812005-1-piyush.mehta@xilinx.com>
+ <20211122062834.1812005-2-piyush.mehta@xilinx.com>
 MIME-Version: 1.0
-References: <20211124224036.734679-1-badhri@google.com> <YZ8mdjPn39ekClLq@kroah.com>
-In-Reply-To: <YZ8mdjPn39ekClLq@kroah.com>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Mon, 29 Nov 2021 16:21:14 -0800
-Message-ID: <CAPTae5LTg20LmAoUZXZYULP4HvX-2DMvp7qq1MwsHce-Y7LynQ@mail.gmail.com>
-Subject: Re: [PATCH v1] usb: typec: tcpm: Wait in SNK_DEBOUNCED until disconnect
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211122062834.1812005-2-piyush.mehta@xilinx.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thanks Greg ! Missed the "Cc: stable@vger.kernel.org". Have updated
-the commit message and sent it as V2.
+On Mon, Nov 22, 2021 at 11:58:33AM +0530, Piyush Mehta wrote:
+> Microchip's USB224x family of Hi-Speed USB 2.0 flash media card controllers
+> provides an ultra-fast interface between a USB host controller and flash
+> media cards.
+> 
+> Add dt-bindings documentation for Microchip's usb2244 Controller.
+> USB224x is a USB 2.0 compliant ultra fast USB 2.0 multi-format,
+> SD/MMC, and MS Flash Media Controllers.
+> 
+> Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
+> ---
+> Changes for V2:
+> - Update reset polarity, make reset ACTIVE LOW in the dt-binding document.
+> - Added usbsd node under the usb controller (usb0) node.
+> - Remove Warning: decoded text below may be mangled, UTF-8 assumed.
+> 
+> Review comments:
+> Link: https://lore.kernel.org/lkml/CAL_JsqKu6vr3iCz1G7MtK6gyqAvn4s4mpuLOwPzJDEmyZeROig@mail.gmail.com/
+> ---
+>  .../devicetree/bindings/usb/microchip,usb2244.yaml | 47 ++++++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb2244.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb2244.yaml b/Documentation/devicetree/bindings/usb/microchip,usb2244.yaml
+> new file mode 100644
+> index 0000000..1854313
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/microchip,usb2244.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/usb/microchip,usb2244.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Bindings for the Microchip USB2244 Ultra Fast USB-SD Controller
+> +
+> +description:
+> +  Microchip USB224x is a USB 2.0 compliant, Hi-Speed bulk only mass
+> +  storage class peripheral controller intended for reading and writing
+> +  to popular flash media from the xDPicture Card, Memory Stick (MS),
+> +  Secure Digital (SD), and MultiMediaCard (MMC) families.
+> +
+> +  USB224x is a flash media card reader solution fully compliant with the
+> +  USB 2.0 specification.
+> +
+> +maintainers:
+> +  - Piyush Mehta <piyush.mehta@xilinx.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: microchip,usb2244
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +    description:
+> +      The phandle and specifier for the GPIO that controls the RESET line of
+> +      flash media controller.
+> +
+> +required:
+> +  - compatible
+> +  - reset-gpios
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    usb0 {
+> +        usbsd {
+> +            compatible = "microchip,usb2244";
+> +            reset-gpios = <&gpio 2 GPIO_ACTIVE_LOW>;
+> +        };
 
-Regards,
-Badhri
+This is not how the USB device binding works. See usb-device.yaml.
 
-
-On Wed, Nov 24, 2021 at 10:00 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Nov 24, 2021 at 02:40:36PM -0800, Badhri Jagan Sridharan wrote:
-> > Stub from the spec:
-> > "4.5.2.2.4.2 Exiting from AttachWait.SNK State
-> > A Sink shall transition to Unattached.SNK when the state of both
-> > the CC1 and CC2 pins is SNK.Open for at least tPDDebounce.
-> > A DRP shall transition to Unattached.SRC when the state of both
-> > the CC1 and CC2 pins is SNK.Open for at least tPDDebounce."
-> >
-> > This change makes TCPM to wait in SNK_DEBOUNCED state until
-> > CC1 and CC2 pins is SNK.Open for at least tPDDebounce. Previously,
-> > TCPM resets the port if vbus is not present in PD_T_PS_SOURCE_ON.
-> > This causes TCPM to loop continuously when connected to a
-> > faulty power source that does not present vbus. Waiting in
-> > SNK_DEBOUNCED also ensures that TCPM is adherant to
-> > "4.5.2.2.4.2 Exiting from AttachWait.SNK State" requirements.
-> >
-> > [ 6169.280751] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
-> > [ 6169.280759] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
-> > [ 6169.280771] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
-> > [ 6169.282427] CC1: 0 -> 0, CC2: 5 -> 5 [state SNK_ATTACH_WAIT, polarity 0, connected]
-> > [ 6169.450825] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
-> > [ 6169.450834] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
-> > [ 6169.930892] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
-> > [ 6169.931296] disable vbus discharge ret:0
-> > [ 6169.931301] Setting usb_comm capable false
-> > [ 6169.932783] Setting voltage/current limit 0 mV 0 mA
-> > [ 6169.932802] polarity 0
-> > [ 6169.933706] Requesting mux state 0, usb-role 0, orientation 0
-> > [ 6169.936689] cc:=0
-> > [ 6169.936812] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
-> > [ 6169.937157] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
-> > [ 6170.036880] state change PORT_RESET -> PORT_RESET_WAIT_OFF [delayed 100 ms]
-> > [ 6170.036890] state change PORT_RESET_WAIT_OFF -> SNK_UNATTACHED [rev2 NONE_AMS]
-> > [ 6170.036896] Start toggling
-> > [ 6170.041412] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
-> > [ 6170.042973] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
-> > [ 6170.042976] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
-> > [ 6170.042981] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
-> > [ 6170.213014] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
-> > [ 6170.213019] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
-> > [ 6170.693068] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
-> > [ 6170.693304] disable vbus discharge ret:0
-> > [ 6170.693308] Setting usb_comm capable false
-> > [ 6170.695193] Setting voltage/current limit 0 mV 0 mA
-> > [ 6170.695210] polarity 0
-> > [ 6170.695990] Requesting mux state 0, usb-role 0, orientation 0
-> > [ 6170.701896] cc:=0
-> > [ 6170.702181] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
-> > [ 6170.703343] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
-> >
-> > Fixes: f0690a25a140b8 ("staging: typec: USB Type-C Port Manager (tcpm)")
-> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > ---
-> >  drivers/usb/typec/tcpm/tcpm.c | 4 ----
-> >  1 file changed, 4 deletions(-)
->
->
-> <formletter>
->
-> This is not the correct way to submit patches for inclusion in the
-> stable kernel tree.  Please read:
->     https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-> for how to do this properly.
->
-> </formletter>
+> +    };
+> +
+> +...
+> -- 
+> 2.7.4
+> 
+> 
