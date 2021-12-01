@@ -2,40 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 250784644D0
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Dec 2021 03:17:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9773846457F
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Dec 2021 04:37:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241183AbhLACUd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Nov 2021 21:20:33 -0500
-Received: from mail-sgaapc01on2115.outbound.protection.outlook.com ([40.107.215.115]:13825
+        id S1346440AbhLADkY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Nov 2021 22:40:24 -0500
+Received: from mail-sgaapc01on2114.outbound.protection.outlook.com ([40.107.215.114]:45505
         "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229538AbhLACUc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Nov 2021 21:20:32 -0500
+        id S233370AbhLADkW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Nov 2021 22:40:22 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a5VzScsFFLfAot5zs5c5hkYEJKQa8b6k4gJ0xzHo9V1oIfpPaG5Wq5fQbxWJfRZ+PLEVYES7Q55u5Q0B31dvrLx40zO85bqUyr5iReXpGNbUqIJ5LuGhgX+GiFOtITMaBA2BHKROb+GcQ8yH8TjobiyZRYjqCku9QTvg0O2u5slb2XT9rOGZQRM674N0wJlaOft5IDHw7PZPBq5BX7jKgMVxa7JvMkDPj38mOJc/XBqJ7ILT99i6LOrnEQC5QQnRTLUXTzUBHWvUoKYXEWfWCM4NCsTzz8TPUwFJL+Qx27kG2jo7mWIps2PTkTNiuevBD5+ucAy1BYsxzAHYiBkcjw==
+ b=kNSte6NqoajXhaNw5kQgXcxNfg8eZjjX7JT+ISl1dCySMhwl1eqiHjQ2RNPkk7iUMs+MTyjotcmYSennKh/gHCOdIVu/NZDt6p1uEK5Q2/4U2gsPnW8vbcomLLwuiufWzP9vIhCM69j9XE5bNtN4vYreadRYTc0WIx/rbjQ7tDeGZFhyhmLawqpaNwsaI48FSAUcHWIPSqeOzMxAKLcZsIb6kyTARbaBadG6jQvh9+UIxd0Afh+4CJf/4Ps0eeXG7wAmriAPUBKh7OmHxN9FLXSPySWMZvNCdaXUutfYyA9Xys2uTjk4XNyYCts4OG/EqqywPCfhKmjwJ4wG/uThRw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zyG3o5/6EbxTxGW2bEwPmGb+KN50klqwxaYhZRGB0RE=;
- b=TbbyK+e+m5VTo19eB8T8A/LvikrDPNoAsbCu/Gw0eVZR6JHeAb8jr7csnB0RMEnInsyNo30H/NqYIhn7OG1unH/YiGOQrGzeWC+qULMRKV7PXWzGQ8o/pAsD4TNTa8gB0M+yFFEYavfwhQ53oND0kMp6XB4F1FZnWfgutbF03yqwiU1pWfulv6okzg/OPab1br2gtnVXXUHgnBkK5WrIie0UfrgTDYfrk3fjKvQcfuC9j2uxu2xEIhOeRPAwOYQ6EIgI1XssP919gJk5RnLs22iXExEk6gONUud3/wx+85TPB9pwg2yds6RqsNiHX4EUnJ/NEBYuAimHfq/d3rSAPw==
+ bh=Np5uG3zpqJGku1nFMKUUlFyd/o2EsDIjHK4smnzI968=;
+ b=O1Q/ILvqmpacHQ022aCamLp7vmU3WWm1Qd5I4akpOiYkgQ+V5OOr7i/09MK2pbbTNO0xI+BLUndzr7NTUCPkyYouG6jMEJiku6gFbgvq+IBONDcwyTv/3ErLYeW6nu1HACXzb/1F6FGGIMQ5nmVX3TKPGS4zellGegwptyzHrwCmnGH1IFK0PMC1TyQ4YO31AV4xG1nDx0jegSScAgKTaCFpk66Xx7nr78fG6UZRL2nocG7VVR8nsXmF5uRnb30z+F0VaJU3nnMo7KsJRoys5eVkH5kRC4LRVg3IdcxzJwLI69jG/K89FOuvpXWXd7WdjgbRi47o/0ZCaHBDmi0hWg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
  header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zyG3o5/6EbxTxGW2bEwPmGb+KN50klqwxaYhZRGB0RE=;
- b=mLx04n/rSker8aafnIRs84b8BDt2xyYUhzBBlndCiLpnmnsfDEHJFHckXUCWkr6Fpnz1CUUG7UPEmKxBTT7vooSzHxitkWI32G7Lqm4vZrwXv7WHrXxFoQn5asvhU49oWBvmK+/5rcbzKTT+x2x+G2onPZ+Csd6P+XOYBlYu+q8mEkq8MkLxDpjiXNFg3ebGRoffOB8wTI76gtMu27lu1AW3EZXU0/mztOyFEfUVQutZsse2xzE2W5JPKqhh3MW1NQ9CYarw1ausmrPezhRy8Aat4HnA1RtCZYmVY9p04QnPjHiV/SBIvu1ss6T0kQPqoMxX93U/xMUh5eikJOk4Tg==
+ bh=Np5uG3zpqJGku1nFMKUUlFyd/o2EsDIjHK4smnzI968=;
+ b=cIwvX3tWLctqIJCgKjVNuFSz82TtrvlfqdGy9gM7iG0mygWxb7ofooapPqe5fchdmq3EHLYsZ1vxflVTz/LYuFkxmDkaQMsnLEv4DXpmUobT1by1rPPKx9APmjeY2VRWLr2d1ZhPF+FKUIlv0z+QJ5M8hqxz6XhEASW+5+VuxCxmtfPzVsWX3xdp+pN273A+ZoH0+mQOWmqK2IV9gAoBZaE70bvlRQwh9Jps+Fi2aGkrcjX5TTBETWRqLbYGR/JLUDEy7Hfbc7UpKrhnHQY/iGUlTzr/q4U/dwaQA2BiSBwZQACOPbMNEDb3eNzIJYiyzn0nUO6NG4JiCwKvFbMOyg==
 Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
- by HK2PR0601MB1922.apcprd06.prod.outlook.com (2603:1096:202:b::19) with
+ by HK0PR06MB3651.apcprd06.prod.outlook.com (2603:1096:203:b5::23) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Wed, 1 Dec
- 2021 02:17:01 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Wed, 1 Dec
+ 2021 03:36:59 +0000
 Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
  ([fe80::70c4:b471:2d05:1209]) by HK0PR06MB3202.apcprd06.prod.outlook.com
  ([fe80::70c4:b471:2d05:1209%6]) with mapi id 15.20.4734.024; Wed, 1 Dec 2021
- 02:17:01 +0000
+ 03:36:59 +0000
 From:   Neal Liu <neal_liu@aspeedtech.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
@@ -50,19 +50,16 @@ CC:     Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
         "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Subject: RE: [PATCH v2 3/4] usb: aspeed-vhub: fix ep0 OUT ack received wrong
- length issue
-Thread-Topic: [PATCH v2 3/4] usb: aspeed-vhub: fix ep0 OUT ack received wrong
- length issue
-Thread-Index: AQHX5dcQPlR7FKZMjEu7RLEtATtxIKwb9GyAgADy05A=
-Date:   Wed, 1 Dec 2021 02:17:01 +0000
-Message-ID: <HK0PR06MB32023684D218259A6236C78C80689@HK0PR06MB3202.apcprd06.prod.outlook.com>
+        BMC-SW <BMC-SW@aspeedtech.com>
+Subject: RE: [PATCH v2 4/4] usb: aspeed-vhub: support test mode feature
+Thread-Topic: [PATCH v2 4/4] usb: aspeed-vhub: support test mode feature
+Thread-Index: AQHX5dcRQVG/ybLU/0ajWaHwY+/uR6wb9E4AgAEJVjA=
+Date:   Wed, 1 Dec 2021 03:36:58 +0000
+Message-ID: <HK0PR06MB3202B6ED02866DFDC2037B6280689@HK0PR06MB3202.apcprd06.prod.outlook.com>
 References: <20211130104256.3106797-1-neal_liu@aspeedtech.com>
- <20211130104256.3106797-4-neal_liu@aspeedtech.com>
- <YaYPUfFTNkh+zpqz@kroah.com>
-In-Reply-To: <YaYPUfFTNkh+zpqz@kroah.com>
+ <20211130104256.3106797-5-neal_liu@aspeedtech.com>
+ <YaYPOAB3Anfhh5AA@kroah.com>
+In-Reply-To: <YaYPOAB3Anfhh5AA@kroah.com>
 Accept-Language: en-US
 Content-Language: zh-TW
 X-MS-Has-Attach: 
@@ -70,58 +67,58 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=aspeedtech.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 689677c4-1182-49d5-897b-08d9b470a931
-x-ms-traffictypediagnostic: HK2PR0601MB1922:
-x-microsoft-antispam-prvs: <HK2PR0601MB19221F4895938D4C59076A9080689@HK2PR0601MB1922.apcprd06.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3968;
+x-ms-office365-filtering-correlation-id: aa33ac2e-faa6-4bfd-5c2b-08d9b47bd4a8
+x-ms-traffictypediagnostic: HK0PR06MB3651:
+x-microsoft-antispam-prvs: <HK0PR06MB3651108E73FA058DF23B2B8980689@HK0PR06MB3651.apcprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:576;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JyHX0MfAck4EbK5mZ6MAO+kQud/rxXb68TH6pePuenHGYXonPg38OkLLZb9/fPTUDd86P6xOtdsnbsTRHjfk+BtgThuQj0xiAHPFA82+NRAtV+MQV9T/7QCyF9AM4dG/2ZcEDkdYNLwm09Zfj4avC5MykcNHKMlwdy4zMTE0aASFn9kC0jFJMIUTqbjAQfjQDb0IAEwweSUIUjopNrjsnAgk8C7t+GAiEY0KJ8lkzWS+nXNvDa5riozjumKjjqw98wOOuJhzhY94sTYM/y9xSbs5FElTcRYrn5v/dkX8wAln0g3BFKSYBbMmFU6Nv8PljdeTezBYKktOmUd3fdobQvqy/wU8HELK2YNTQZ5KcI7gNwPvOLZv+DpbvZT9AY1qqEJAwkcDpEdd4zy8Q3uWPQ9xXr/+YEJypDkMBRkNcmXzPWrnTsM3j830iEqomJ0a3m2lXSmfVi6XllUwnlFX3jS2ehYrP3Nei0ChgiNrhDOu2XIjMPl+qbj95rcyLF83r+JW93k++QtpifVz8wLMBD1ZLGG0JIE92lUiEUTzyJT3tate+m2kL7SHfwqSZniLOooxBLJnIv+r6P4/2kdEMYs7JRIwOcFAGhsKmeRKLx9lVHPlMbNhgYhUHUHhs/DGW6SKbxFomC3HW7SBi9J9diKzAW2Rf8VztDMmtVU/wh3ZFZxJ0AEZOhoUgQHPrnEcreKaMTCz2KIEU97ujHaCzw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(39850400004)(366004)(136003)(346002)(376002)(38070700005)(6506007)(9686003)(6916009)(86362001)(55016003)(4326008)(186003)(8936002)(8676002)(5660300002)(53546011)(2906002)(7416002)(7696005)(83380400001)(71200400001)(26005)(33656002)(508600001)(54906003)(122000001)(64756008)(66556008)(66476007)(52536014)(66946007)(66446008)(76116006)(316002)(38100700002);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: ixoHSfpgI6jb3ksNHv2xXusVKBYuNRrmuossftj5xXjgbrXgj2KClYnX7fb6yCg1axis140UJoLycE7w6V3FYYbrGrlDzehU9ekAB4hCGWkc9/er4sd2u6TrrxllCEz+YYR8BytX/Y7e1wLoY+wxjfnZKUk4aRqcdyzlIXSlaj6X4qP+m+LSQrBYxQ8DdcFNP3+ZiIyaqngkifZOGT/41n/AeJIkxf9skF9u3CDTI3JtlNG1c7VvGSZzDyNUcOsF4VucIF10OQZdGowqfrAOsn1hMTRDe2Rn3RnHxX65NSnNZsmhsJfAWH4lzYO+aWUP07ZNsUhFGCUrFy4FvkCeZ7NpIhmRggT2rcxwVzoijSisnb8zvXb+nsfqLyf1uYGonKl/74xyk2Lff43upKhNMIzdtlMWY6EAMoNpa/PclHnhfBqBEvypsOePNiAOZKfpa/9ggKFNsHJkCEPEYINkEGUrwRUnr2J+uqrdO1ToN2WC0ObC4jtbayyfEMqYRK2WZUT8Qi77ePdXVPYIVaNqDvvhGnf6MNTQViusITLLQRc+2a3LYeSs9mb1VFPugQw2Um6lHMZgB2BmogGXk5lGXld/CwLV4GuE6qUNlB/yObIvNL+aW6mfkZeZdLFqjjSzIyqOve5gGPBxVU+LqC/4xQ9N+QeZH3oPGxOgXfAfXKWRFC6OpVufy+ViPGK4CuZnRVW5NBHv8cbhGpi/ZVfMhA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(39850400004)(136003)(366004)(376002)(346002)(9686003)(76116006)(66946007)(54906003)(7416002)(71200400001)(2906002)(86362001)(6506007)(4326008)(38100700002)(53546011)(33656002)(83380400001)(186003)(508600001)(26005)(8676002)(38070700005)(52536014)(55016003)(316002)(66446008)(6916009)(8936002)(66476007)(64756008)(66556008)(122000001)(7696005)(5660300002)(107886003);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?mlJN9IMKSTE/kDmzoKDJ+v7e7ZUqlopU2GnlbWA5wLAtlkkkKimR3PddIrT5?=
- =?us-ascii?Q?dbqWKDcR7xC57Hf1/cAdsS62As5VO5G2JWtZrVeD42gAKrdY/AdpqkEYfwZa?=
- =?us-ascii?Q?Uk5hkKYc3msAuChQE/UPwVTxGieEqST3CiV2uU13q70nfRDVWBdRVpWvMad6?=
- =?us-ascii?Q?JwGaJvvXXcx2KlVhrYEFqDQB73VHv1LQJPVFmm0x8tU2q7hXlNE9VJhs5bRQ?=
- =?us-ascii?Q?f9MOpJwGELvC4KfJvN+Hawm4ticqWx8Sef4JK6rEaSXmJKc9baqB0KVopz4s?=
- =?us-ascii?Q?3BYRXtUHudMEhGyquHZcVOSug2clINWtbpsZfmyUYtuDlj9Frro5P1rbTgFd?=
- =?us-ascii?Q?EL2XoJPjF1e4yAKQpY2rUeSwTFIQx4GS+W7wqBaGcRvVeE1Ixt2Uj9o4ynwQ?=
- =?us-ascii?Q?HiCVC04tPt4E7Cy2AwxujL3uLPX4NptjZMNuiA/6iHqya7aBbTzJEF8Uyt8E?=
- =?us-ascii?Q?0jPRR6Jo69fRnsxdbAmUI4iotoKBoOtAIuYGoD1VLggW0GQahxNspnm9fJ8r?=
- =?us-ascii?Q?w4wWV3kLhkE0Xiy7u6gHf+2FYQmi4EFvzBJk73svX2GROCNzKhAX3TGWLqKR?=
- =?us-ascii?Q?IQQfUuqI/cLjTVJYZqGzXdElujINYN2rAOT2cnv/XZnAAZtQOtRGnl5pHgIV?=
- =?us-ascii?Q?9vYDNThcgFugb6PgRW0TVAEzsX4VBcPu3rcSievHWQ6GmC5hmvjJrYWL5D4u?=
- =?us-ascii?Q?L+PO95Yde0aCwyvDOG31eHBx4ZmYb+bHm2NHKQ3KHSUuRWZBwcbG4CLg3XA5?=
- =?us-ascii?Q?GoeNGOcDtW6y4VBYBco4TrY3IW3ZkAeAsq0gNGEBL2ViNgjVF9I4XVtVz9vN?=
- =?us-ascii?Q?ZFfUfnPNqK5b98K3D3b0lg5/BecvCDr9ZmJLZpBMPth1f6zennY40xozdr0b?=
- =?us-ascii?Q?4uQHFWixF7fqCntyYzG0qU61CfQP3RDEgS+/RsnbYk4IQ76FkoAc4z8L2OS2?=
- =?us-ascii?Q?4bKZOoiEalB3C2ts8MOJ1r95I3bbxNe3ogRWBK7jQxoFgPn7PJerKBPEZb3K?=
- =?us-ascii?Q?ivI9Eg2yhV19XyKGq30jv1gP53Z/92cORmN4W/J2OZCalG3BWpYw5mfF+nFB?=
- =?us-ascii?Q?fgoP/6OprLKC3yGyhs8pyWJA2aPBHxldKJ7eeHaSZHiZlzbf2We838fk9x3X?=
- =?us-ascii?Q?Mb+XS7zIA7+bdVSI+k072AbqRKyFZP0vHQaCTJbWpJYkOd0wxSulrqcMU3uM?=
- =?us-ascii?Q?7rVv7OgDrBks1M2fEKsv+iebGSeDYCy1YGS5ie8vGbFy0wSDj/F1cjsUpzfX?=
- =?us-ascii?Q?WcTNl0eK4O3Q8iTWZu6wzKAERC73R94ho+GaQjPd6RfCRExXLntq4bUbohor?=
- =?us-ascii?Q?rXImB+qaWqnpdLLS0bHw5TR8EJ4wB96U1josfKmuzbqScF9/JxeNX8hN2PSe?=
- =?us-ascii?Q?DXCwXnV6PLFEWYk4+cG6fzG9xaDn6yMiT+pUgIh+fiuooFMG7ZMgOeHRvewz?=
- =?us-ascii?Q?AAUOHjZHCpH9u8wttr0j2ZoSZcxn6Rfg2z3E2E5t4oFSUYMQqI4l9b9UdnKi?=
- =?us-ascii?Q?Kbg5Pjg/pBbipBpSyseloBxaZ4QYGsmTkhvjnW7FHKXhqT58DtzZi140tvTT?=
- =?us-ascii?Q?s2oliwh+cX9QZ8jaWqo/yBAOetuDdrDusvmrgMffdteFy0GUuPZnmc07oOLy?=
- =?us-ascii?Q?ze0QHw1Zq3dTabmmul9rBN4=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?d/PoTZ22pqHpaHTKdnlVmS7WB/gFvpMak3p+3WDUeiFWPShZEyAPzamwZrxB?=
+ =?us-ascii?Q?6PUpr+SdHCrX8QLsIG68roDGB33/7TBrzbJH8XhAUll1phy0JmbJ3zzS1XEO?=
+ =?us-ascii?Q?wYOrobmfqnPz80jojUpsf9kEQFlzY3kLCSQCLlo29yMvbb9vfmQHPDUjJU0u?=
+ =?us-ascii?Q?1sJIErvJBMOGvIjApn53ZxAnpuFojLCv/hZwZIAhS1qF9Hnogb14I3BF61BI?=
+ =?us-ascii?Q?/OfB/eqURK0943KA5nvYq0cSbRjM9gocfQDyCwJcbAfElZKpzZhM+A6KUks+?=
+ =?us-ascii?Q?aQnYTBnFEKvFNsFXrw5NQC/8VMtw33oXG3+Nb6kmE+X2ZIArHH+eS6SUaCDW?=
+ =?us-ascii?Q?mFY7kpSnn/k78oc3aDvxHtFe/mBCNjvx2GHYeifLYtWcyrpy8QqZfPrM1nKc?=
+ =?us-ascii?Q?8ZocaHAhpP9ZBw0/X3Tp55BzBleDwmw6r3DVmlZ5imM/YtOIQflWIJ+wSv3Q?=
+ =?us-ascii?Q?OxWbJkNRTxx0TJiRnX2KgEEimppX1T+v9G3PfL2nYkZ4sW+DLqW4yVJgpjKp?=
+ =?us-ascii?Q?P7ffHzy3+63pVfI5Lc/kcoz39RXIqssoini1HufQw5w8t3JcOaj7nj4Gt+ol?=
+ =?us-ascii?Q?K9D8UG9TrQSc4FrzD88Mmd/WogAY9E9IvAjzkwY/CukhiP+juDrFKG/fiTWB?=
+ =?us-ascii?Q?2HEdWWBKF0xZU821IfdqueZsvSsOkbRP70DC+wUTYtkJnQyNAQ3bpxFsCo5F?=
+ =?us-ascii?Q?t9WcVPWc113MQNL9CDO68cq7jYoyGUQj2jYS6Tso6jhqbKj5422IkX3oIyFV?=
+ =?us-ascii?Q?F+L4MBZxG1a05XLkNiyZvhyUp+uinhZMzd5lsTrz0FLdVcQ3gN4YLZqysMrG?=
+ =?us-ascii?Q?vwqghu3xFXVL7y30tAj+bpnMlloFmUgUboq0gZkY8xcO8DqQZAsNKFTQCk8k?=
+ =?us-ascii?Q?lBSI8KdCcXDvOEUHsJvgO8zJyCzqnUwdlveOLPodkqC2iGjlafM8gkIoc0YQ?=
+ =?us-ascii?Q?DBWP/ms/dD45+S0Y4S70wx0VrP8tnn/h7srAN6r/pLll6H/vBXqw9Q6Ia3jj?=
+ =?us-ascii?Q?s/b6YBlnovvoppVLpiz/YqJOQwjDrHJnzMZeYXKYebF4W2ntblhSJVgJgMlY?=
+ =?us-ascii?Q?GvsljohJu2dZx+kW7XurzQG0gsMI6no9CwxS8dc4dT35TGMdrioFb8RjFWRp?=
+ =?us-ascii?Q?XzAzpgi9/OFErCP9I0VioNmCM1lfiVB8S7sMRmgCu0MKAYXDaBxRq/z2iaDk?=
+ =?us-ascii?Q?gG/dBfrPmpIOJQamczr4EyO8M9q5bSlsLwkaKxnAZ3YPp59EeXEA7Tiawd6Y?=
+ =?us-ascii?Q?cQ7Rgah13twLP2iqG6T/t45S3G2WbcBXsABe0rKcuR+kCywL1B6llGDTFLeN?=
+ =?us-ascii?Q?TOZ+XwNjRtwkrjYa1j1kWdsFB1iCsudX4TQzQz2mPlOtbIXsiF9m73agX6Fr?=
+ =?us-ascii?Q?t4swZBODnzIf7eVX1ECHjL8lz/52fLQhiCAGX0b8INN2ltFvos00fTcdcIdd?=
+ =?us-ascii?Q?FeODr5GHuK+tsk4JOTS8z3+vKZddaEsKaVab91x7QMI5TEULVQHP5j8PSCow?=
+ =?us-ascii?Q?XzE5y2kVPrxR4pA1DsvBb+TDAyjc2Nsz9VmuWfpn5qtCbVe0nqGZ0OduF2Y0?=
+ =?us-ascii?Q?AVOHxjUp6o+8nbgG/JMvNGx0Ev1FabDo5KZ5MYQI69gwcZSlo46K/0sW6QWk?=
+ =?us-ascii?Q?ETzRZLoTxwLY5dk4Tz34Uxc=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: aspeedtech.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 689677c4-1182-49d5-897b-08d9b470a931
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Dec 2021 02:17:01.5989
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa33ac2e-faa6-4bfd-5c2b-08d9b47bd4a8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Dec 2021 03:36:58.9687
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Y43AW5Im5EvobxcqA9t3aeZpf/YMB9SRczhx2OayilSiTgceKoXPH/heQ7ubzV5HkVB6l+MJCSywLKdwFRJZIA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK2PR0601MB1922
+X-MS-Exchange-CrossTenant-userprincipalname: /BHDQW32TvWpNo/4RUQP3Tdk0abrDRl6pRwmBmyiYpquXSRclyu/Vhb9mNgVTXH5K5yZy3K/5uVmr2ZDk3TeDg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB3651
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -139,45 +136,92 @@ t
 > linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org;
 > linux-arm-kernel@lists.infradead.org; linux-aspeed@lists.ozlabs.org; BMC-=
 SW
-> <BMC-SW@aspeedtech.com>; Benjamin Herrenschmidt
-> <benh@kernel.crashing.org>
-> Subject: Re: [PATCH v2 3/4] usb: aspeed-vhub: fix ep0 OUT ack received wr=
-ong
-> length issue
+> <BMC-SW@aspeedtech.com>
+> Subject: Re: [PATCH v2 4/4] usb: aspeed-vhub: support test mode feature
 >=20
-> On Tue, Nov 30, 2021 at 06:42:55PM +0800, Neal Liu wrote:
-> > If multiple devices in vhub are enumerated simultaneously, ep0 OUT ack
-> > might received wrong data length. Using expected data length instead.
+> On Tue, Nov 30, 2021 at 06:42:56PM +0800, Neal Liu wrote:
+> > Support aspeed usb vhub set feature to test mode.
 > >
-> > Acked-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
 > > Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
 > > ---
-> >  drivers/usb/gadget/udc/aspeed-vhub/ep0.c | 7 +++++++
-> >  1 file changed, 7 insertions(+)
+> >  drivers/usb/gadget/udc/aspeed-vhub/dev.c | 18 ++++++++++++++----
+> > drivers/usb/gadget/udc/aspeed-vhub/hub.c | 22 ++++++++++++++++------
+> >  2 files changed, 30 insertions(+), 10 deletions(-)
 > >
-> > diff --git a/drivers/usb/gadget/udc/aspeed-vhub/ep0.c
-> > b/drivers/usb/gadget/udc/aspeed-vhub/ep0.c
-> > index 74ea36c19b1e..bea9cbb191a2 100644
-> > --- a/drivers/usb/gadget/udc/aspeed-vhub/ep0.c
-> > +++ b/drivers/usb/gadget/udc/aspeed-vhub/ep0.c
-> > @@ -251,6 +251,13 @@ static void ast_vhub_ep0_do_receive(struct
-> ast_vhub_ep *ep, struct ast_vhub_req
-> >  		len =3D remain;
-> >  		rc =3D -EOVERFLOW;
-> >  	}
+> > diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
+> > b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
+> > index d918e8b2af3c..4462f4b73b04 100644
+> > --- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
+> > +++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
+> > @@ -110,15 +110,25 @@ static int ast_vhub_dev_feature(struct
+> ast_vhub_dev *d,
+> >  				u16 wIndex, u16 wValue,
+> >  				bool is_set)
+> >  {
+> > +	u32 val;
 > > +
-> > +	/* HW return wrong data len */
+> >  	DDBG(d, "%s_FEATURE(dev val=3D%02x)\n",
+> >  	     is_set ? "SET" : "CLEAR", wValue);
+> >
+> > -	if (wValue !=3D USB_DEVICE_REMOTE_WAKEUP)
+> > -		return std_req_driver;
+> > +	if (wValue =3D=3D USB_DEVICE_REMOTE_WAKEUP) {
+> > +		d->wakeup_en =3D is_set;
+> > +		return std_req_complete;
+> >
+> > -	d->wakeup_en =3D is_set;
+> > +	} else if (wValue =3D=3D USB_DEVICE_TEST_MODE) {
 >=20
-> Please spell out "Hardware"?
+> If you return, no need for an else statement, right?
+>=20
+>=20
+> > +		val =3D readl(d->vhub->regs + AST_VHUB_CTRL);
+> > +		val &=3D ~GENMASK(10, 8);
+> > +		val |=3D VHUB_CTRL_SET_TEST_MODE((wIndex >> 8) & 0x7);
+> > +		writel(val, d->vhub->regs + AST_VHUB_CTRL);
+> >
+> > -	return std_req_complete;
+> > +		return std_req_complete;
+> > +	}
+> > +
+> > +	return std_req_driver;
+> >  }
+> >
+> >  static int ast_vhub_ep_feature(struct ast_vhub_dev *d, diff --git
+> > a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> > b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> > index 93f27a745760..e52805fbdebd 100644
+> > --- a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> > +++ b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> > @@ -212,17 +212,27 @@ static int ast_vhub_hub_dev_feature(struct
+> ast_vhub_ep *ep,
+> >  				    u16 wIndex, u16 wValue,
+> >  				    bool is_set)
+> >  {
+> > +	u32 val;
+> > +
+> >  	EPDBG(ep, "%s_FEATURE(dev val=3D%02x)\n",
+> >  	      is_set ? "SET" : "CLEAR", wValue);
+> >
+> > -	if (wValue !=3D USB_DEVICE_REMOTE_WAKEUP)
+> > -		return std_req_stall;
+> > +	if (wValue =3D=3D USB_DEVICE_REMOTE_WAKEUP) {
+> > +		ep->vhub->wakeup_en =3D is_set;
+> > +		EPDBG(ep, "Hub remote wakeup %s\n",
+> > +		      is_set ? "enabled" : "disabled");
+> > +		return std_req_complete;
+> >
+> > -	ep->vhub->wakeup_en =3D is_set;
+> > -	EPDBG(ep, "Hub remote wakeup %s\n",
+> > -	      is_set ? "enabled" : "disabled");
+> > +	} else if (wValue =3D=3D USB_DEVICE_TEST_MODE) {
+>=20
+> Same here, no need for else.
 >=20
 > thanks,
 >=20
 > greg k-h
 
-Sure, I'll fix it in next patch.
-Thanks
+Okay, I'll fix it in next patch. Thanks
 
-Best Regards,
 -Neal
-
-
