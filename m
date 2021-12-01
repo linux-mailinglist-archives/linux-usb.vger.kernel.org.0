@@ -2,82 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78454464396
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Dec 2021 00:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BCCF4643E7
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Dec 2021 01:19:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237327AbhK3Xq4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Nov 2021 18:46:56 -0500
-Received: from gate.crashing.org ([63.228.1.57]:48193 "EHLO gate.crashing.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230058AbhK3Xqy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Nov 2021 18:46:54 -0500
-Received: from ip6-localhost (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 1AUNbo5u025795;
-        Tue, 30 Nov 2021 17:37:51 -0600
-Message-ID: <5d234a400a89f64ad183020b93b68f478f1addc7.camel@kernel.crashing.org>
-Subject: Re: [PATCH 2/3] usb: aspeed-vhub: support remote wakeup feature
-From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Tao Ren <rentao.bupt@gmail.com>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        kernel test robot <lkp@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>
-Date:   Wed, 01 Dec 2021 10:37:50 +1100
-In-Reply-To: <HK0PR06MB3202A1F0710655B3E8EA709580679@HK0PR06MB3202.apcprd06.prod.outlook.com>
-References: <20211126110954.2677627-1-neal_liu@aspeedtech.com>
-         <20211126110954.2677627-3-neal_liu@aspeedtech.com>
-         <279c42970790787e928ed017149e300835085235.camel@kernel.crashing.org>
-         <HK0PR06MB3202A1F0710655B3E8EA709580679@HK0PR06MB3202.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        id S1345674AbhLAAXH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Nov 2021 19:23:07 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:50824
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345660AbhLAAXG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Nov 2021 19:23:06 -0500
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E0C1F3F1C0
+        for <linux-usb@vger.kernel.org>; Wed,  1 Dec 2021 00:19:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1638317983;
+        bh=01pw2XK9Km906IXwU+bmXOrKNJsVY6W8/67XHtM+5hg=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=efYXkEdh1nKDsXUpUjFbiVw3zKbZ2TAIp/J67qjg6sDQDVrhCQOQA12cMfRL/LJoE
+         6GDxTnwVRL9o+fUS/qJ798ItGvANv8oFeaCpqwVN2ft+IVlCm2ix+bP4Rb6Df9KY+7
+         yZwSSVVdlsVxXopVo7hDHMQsv53RIguhhsZMkOVS0l7ac+vuBCAOIafxtgqYF5gFUj
+         XBjZkxReq8cRPmZ3g12EI3sJ/YMfYl3X2Z9zvKX0bbtOBssBTS1GhX5iXpbX+Tty9Q
+         P97TQIxZZ+5myIvrco9NSb1oHRJOuDS2caUB+HKbizASZZLx8nW1Q4HeDUkgBFa/5t
+         a21CkMGKorSJQ==
+Received: by mail-oi1-f198.google.com with SMTP id k124-20020acaba82000000b002a7401b177cso15048295oif.8
+        for <linux-usb@vger.kernel.org>; Tue, 30 Nov 2021 16:19:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=01pw2XK9Km906IXwU+bmXOrKNJsVY6W8/67XHtM+5hg=;
+        b=4LbmCxPNtbMqwaYhJp5KLPZx5U8Ji3HsmbubwRlSyq5chGn7WjuOE9v4+1eujQoKdZ
+         t6gw0djM7tP1iZsgPSezVLBEEIRIqe20hVonxTnCk56OQ4zHOsa3WXkFkOsEbZUC33Yw
+         R1ht6tnezZwhUOoWyPaUVBMHaO2f050tzN+8l1GrVdVZZklN37+Hw2PpNzaeM0UsrHDN
+         dorcdm1/MD83CcesNfBtRVRvWu8KIwU4EQbnA9q5XGuMc3bVbqM5XIbiPxtjUn4REkwL
+         XyvaOaJvmkxAXfoorJTP/xMXoycGPY286IPOfJB5F6DL3UEp0oQca+1+eRl1nt5s/Jve
+         m4qQ==
+X-Gm-Message-State: AOAM533+S/wfeqYQPy7gJZPyci4Tl7cqJR+NbZht8KdvtyM15vfi+RSK
+        YBm57mWzUC/FNscvx4jQG6AmmKjWvC+FzWqSf2oSdrZfoyeFUvo/T8hpaa9zbUz68cYEam9Kn4S
+        pXJXymB8gbafDcDXJk9xoxBplGCkuUoD8gCeQetW9LGudKSrM9kEBjg==
+X-Received: by 2002:a05:6830:1d87:: with SMTP id y7mr2456761oti.269.1638317982816;
+        Tue, 30 Nov 2021 16:19:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzxPQ6CRshyoOaCaMBhQD/v7gSUzGCZdm4VmA5TtZCiYMZC/ZPvenHXjQ3iqrT8oFQPHC1KquzJl67OnvcNyYM=
+X-Received: by 2002:a05:6830:1d87:: with SMTP id y7mr2456736oti.269.1638317982543;
+ Tue, 30 Nov 2021 16:19:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20211119092628.677935-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20211119092628.677935-1-kai.heng.feng@canonical.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Wed, 1 Dec 2021 08:19:31 +0800
+Message-ID: <CAAd53p4CpEQR0Y5XDN5E7xZ-iw2GG=gGMSm2Vd=V_M1LLEuuCA@mail.gmail.com>
+Subject: Re: [PATCH] xhci: Remove CONFIG_USB_DEFAULT_PERSIST to prevent xHCI
+ from runtime suspending
+To:     mathias.nyman@intel.com
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2021-11-30 at 09:47 +0000, Neal Liu wrote:
-> > Should this  be controlled by d->wakeup_en ? IE, we have a feature for the
-> > host to enable/disable remote wakeup, should we honor it ?
-> 
-> For KVM usage, remote keyboard packet would be sent if user wants to do remote wakeup.
-> In this case, d->wakeup_en is not used.
-> Set VHUB_CTRL_AUTO_REMOTE_WAKEUP to enable HW automatically signaling wakeup if
-> any packet would be transferred.
+On Fri, Nov 19, 2021 at 5:27 PM Kai-Heng Feng
+<kai.heng.feng@canonical.com> wrote:
+>
+> When the xHCI is quirked with XHCI_RESET_ON_RESUME, runtime resume
+> routine also resets the controller.
+>
+> This is bad for USB drivers without reset_resume callback, because
+> there's no subsequent call of usb_dev_complete() ->
+> usb_resume_complete() to force rebinding the driver to the device. For
+> instance, btusb device stops working after xHCI controller is runtime
+> resumed, if the controlled is quirked with XHCI_RESET_ON_RESUME.
+>
+> So always take XHCI_RESET_ON_RESUME into account to solve the issue.
+>
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-Sorry, I don't fully understand your explanation here.
+A gentle ping...
 
-Normally, a USB device will do remote wakeup if it's instructed to do
-so via the appropriate feature being set, which is what wakeup_en
-reflects. I hadn't originally plumbed it in, I forgot why, I think
-something was either not properly documented or not working when I
-wrote that driver.
-
-You seem to want to override the behaviour and always send a remote
-wakeup packet no matter what. I am not sure this is desirable for all
-use cases, and might be something we want to make configurable, no ?
-
-I'm trying to understand your sentence, you seem to imply that the only
-use case here is "KVM" (as in remote USB on a server system) which I
-can probably agree with... mostly.
-
-And you say in that case, we should always do remote wakeup whenever an
-emulated USB device has any activity (keyboard or otherwise),
-regardless of whether the server has enabled the feature or not.
-
-Am I correct ? What's the rationale here ?
-
-Cheers,
-Ben.
-
-
+> ---
+>  drivers/usb/host/xhci.c | 4 ----
+>  1 file changed, 4 deletions(-)
+>
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 902f410874e8e..af92a9f8ed670 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -3934,7 +3934,6 @@ static void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev)
+>         struct xhci_slot_ctx *slot_ctx;
+>         int i, ret;
+>
+> -#ifndef CONFIG_USB_DEFAULT_PERSIST
+>         /*
+>          * We called pm_runtime_get_noresume when the device was attached.
+>          * Decrement the counter here to allow controller to runtime suspend
+> @@ -3942,7 +3941,6 @@ static void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev)
+>          */
+>         if (xhci->quirks & XHCI_RESET_ON_RESUME)
+>                 pm_runtime_put_noidle(hcd->self.controller);
+> -#endif
+>
+>         ret = xhci_check_args(hcd, udev, NULL, 0, true, __func__);
+>         /* If the host is halted due to driver unload, we still need to free the
+> @@ -4094,14 +4092,12 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
+>
+>         xhci_debugfs_create_slot(xhci, slot_id);
+>
+> -#ifndef CONFIG_USB_DEFAULT_PERSIST
+>         /*
+>          * If resetting upon resume, we can't put the controller into runtime
+>          * suspend if there is a device attached.
+>          */
+>         if (xhci->quirks & XHCI_RESET_ON_RESUME)
+>                 pm_runtime_get_noresume(hcd->self.controller);
+> -#endif
+>
+>         /* Is this a LS or FS device under a HS hub? */
+>         /* Hub or peripherial? */
+> --
+> 2.32.0
+>
