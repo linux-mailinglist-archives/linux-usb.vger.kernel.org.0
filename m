@@ -2,129 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE11464B11
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Dec 2021 10:55:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05581464B23
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Dec 2021 11:02:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242577AbhLAJ67 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Dec 2021 04:58:59 -0500
-Received: from mga17.intel.com ([192.55.52.151]:56666 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232736AbhLAJ66 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 Dec 2021 04:58:58 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="217119800"
-X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="217119800"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 01:55:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="654706002"
-Received: from kuha.fi.intel.com ([10.237.72.166])
-  by fmsmga001.fm.intel.com with SMTP; 01 Dec 2021 01:55:13 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 01 Dec 2021 11:55:12 +0200
-Date:   Wed, 1 Dec 2021 11:55:12 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        wonchung@google.com, bleung@chromium.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Rajat Jain <rajatja@google.com>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH 0/4] usb: Use notifier for linking Type C ports.
-Message-ID: <YadGgA4oh7wlZVAJ@kuha.fi.intel.com>
-References: <20211124231028.696982-1-pmalani@chromium.org>
- <YaCrnMAEXnG+VO6d@kuha.fi.intel.com>
- <YaYFDwsw2hKdJrGj@kuha.fi.intel.com>
- <CACeCKafjOFvVaPBu7OQS-M30hWjooNBFL9-rzqTz3i1ZKEa7Ew@mail.gmail.com>
+        id S1348440AbhLAKFk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Dec 2021 05:05:40 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:44518 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229950AbhLAKFk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Dec 2021 05:05:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638352939; x=1669888939;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tka4C/qQG4GxPIkwSGYvi6KGHehlqrc0CkkTseIRnuM=;
+  b=WgWEhTmLdscu2LDZ+kxe73yur2aEEm19ZxJMMajHVmNkBU3xDPUunjE+
+   BSD+OT9n1dHoOD5Lg5uRhioCEy36WCiedwNTRcRlND4IZcu3+9vbkG7U4
+   1BtVKIwrrJakJHDX/EZQgPdVUZe0bRI2tEmG90ePe7EizdIf3POUaXNzJ
+   I=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Dec 2021 02:02:19 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 02:02:19 -0800
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 1 Dec 2021 02:02:19 -0800
+Received: from wcheng-linux.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 1 Dec 2021 02:02:18 -0800
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH] usb: gadget: f_fs: Wake up IO thread during disconnect
+Date:   Wed, 1 Dec 2021 02:02:05 -0800
+Message-ID: <20211201100205.25448-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACeCKafjOFvVaPBu7OQS-M30hWjooNBFL9-rzqTz3i1ZKEa7Ew@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 11:27:12AM -0800, Prashant Malani wrote:
-> Hi Heikki,
-> 
-> Thanks for taking a look at the series.
-> 
-> On Tue, Nov 30, 2021 at 3:03 AM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > Hi Prashant,
-> >
-> > On Fri, Nov 26, 2021 at 11:40:49AM +0200, Heikki Krogerus wrote:
-> > > On Wed, Nov 24, 2021 at 03:10:06PM -0800, Prashant Malani wrote:
-> > > > This series resolves the cyclic dependency error which was introduced by
-> > > > commit 63cd78617350 ("usb: Link the ports to the connectors they are
-> > > > attached to") which lead to it being reverted. The approach here is to
-> > > > use a notifier to link a new Type C port to pre-existing USB ports
-> > > > instead of calling an iterator of usb ports from the Type C connector
-> > > > class. This allows commit 63cd78617350 ("usb: Link the ports to the
-> > > > connectors they are attached to") to then be submitted without any
-> > > > depmod cyclic dependency error.
-> > > >
-> > > > The final patch removes the usb port iterator since it is no longer
-> > > > needed.
-> > >
-> > > This is not enough. Build the Type-C Class as a module and the USB bus
-> > > statically, and the links will not get created.
-> > >
-> 
-> I see. I suppose it is academic now (given your follow up email about converting
-> port-mapper to component framework), but would reversing where the
-> notifier block is i.e,
-> have usbcore expose the notifier registration API instead of
-> typec-class, resolve
-> the issue? That would mean the dependency is the same as what it is right now
-> in the code, right (typec -> usbcore)
+During device disconnect or composition unbind, applications should be
+notified that the endpoints are no longer enabled, so that it can take
+the proper actions to handle its IO threads.  Otherwise, they can be
+left waiting for endpoints until EPs are re-enabled.
 
-Well, then you would have the same issue if you build the Type-C class
-statically and USB as a module, no?
+Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+---
+ drivers/usb/gadget/function/f_fs.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-I'm sure that if we though about this hard enough, we would find a way
-to make the notifiers work, most likely by handling every possible
-scenario separately, but it would still not remove the core problem.
-There is the dependency between these components/drivers. The proper
-solution does not create that dependency.
-
-Although I'm not sure that the component framework is the best (it is
-in the end just a workaround as well, but at least it's there
-available for everybody), by taking advantage of the _PLD we can
-create a solution where both components can live completely
-independently - the order in which they are registered becomes
-irrelevant as well as are they build as modules or not.
-
-> > > I'm not sure you actually achieve much with this series, and I'm not
-> > > sure this approach will ever fully solve the problem. As long as we
-> > > have to declare API, we will have the circular dependency issue on our
-> > > hands. But there are ways to avoid that.
-> > >
-> > > There is for example the component framework (drivers/base/component.c)
-> > > that I've been thinking about using here. In this case it would work
-> > > so that you declare the USB Type-C part as your aggregate driver, and
-> > > everything that is connected to it (so USB ports, DisplayPorts, TBT,
-> > > etc.) would then just declare themselves as general components. Could
-> > > you take a look at that?
-> >
-> > I'm preparing a patch where I store all _PLDs in the ACPI tables, and
-> > create list of devices that share it. I can convert port-mapper.c to
-> > it and the component framework while at it.
-> 
-> Great, thanks. We can help with testing once you have a patch series
-> to share.
-
-OK, cool.
-
-thanks,
-
--- 
-heikki
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 3c584da9118c..0b0747d96378 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -957,10 +957,12 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+ 		if (file->f_flags & O_NONBLOCK)
+ 			return -EAGAIN;
+ 
+-		ret = wait_event_interruptible(
+-				epfile->ffs->wait, (ep = epfile->ep));
++		ret = wait_event_interruptible(epfile->ffs->wait,
++				(ep = epfile->ep) || !epfile->ffs->func);
+ 		if (ret)
+ 			return -EINTR;
++		if (!epfile->ffs->func)
++			return -ENODEV;
+ 	}
+ 
+ 	/* Do we halt? */
+@@ -3292,6 +3294,7 @@ static int ffs_func_set_alt(struct usb_function *f,
+ 	if (alt == (unsigned)-1) {
+ 		ffs->func = NULL;
+ 		ffs_event_add(ffs, FUNCTIONFS_DISABLE);
++		wake_up_interruptible(&ffs->wait);
+ 		return 0;
+ 	}
+ 
