@@ -2,40 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9773846457F
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Dec 2021 04:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1484646CA
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Dec 2021 06:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346440AbhLADkY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Nov 2021 22:40:24 -0500
-Received: from mail-sgaapc01on2114.outbound.protection.outlook.com ([40.107.215.114]:45505
-        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
+        id S230187AbhLAFqv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Dec 2021 00:46:51 -0500
+Received: from mail-psaapc01on2101.outbound.protection.outlook.com ([40.107.255.101]:32780
+        "EHLO APC01-PSA-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233370AbhLADkW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Nov 2021 22:40:22 -0500
+        id S1346789AbhLAFqt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Dec 2021 00:46:49 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kNSte6NqoajXhaNw5kQgXcxNfg8eZjjX7JT+ISl1dCySMhwl1eqiHjQ2RNPkk7iUMs+MTyjotcmYSennKh/gHCOdIVu/NZDt6p1uEK5Q2/4U2gsPnW8vbcomLLwuiufWzP9vIhCM69j9XE5bNtN4vYreadRYTc0WIx/rbjQ7tDeGZFhyhmLawqpaNwsaI48FSAUcHWIPSqeOzMxAKLcZsIb6kyTARbaBadG6jQvh9+UIxd0Afh+4CJf/4Ps0eeXG7wAmriAPUBKh7OmHxN9FLXSPySWMZvNCdaXUutfYyA9Xys2uTjk4XNyYCts4OG/EqqywPCfhKmjwJ4wG/uThRw==
+ b=mBVIyOomhneBkcpEKv1wPXC8A5c6AewE3oorr9DBgW5dCxku6QnBgTuhlDLoSDbgURZOBnqCwYx56mcNBMSOrgJRBEVeEuEXjE/k6/9lcybRRVGj2z9ffbZlPz2hM4dy5aH/f5xM1VTA03YK3kkVJ5RVDR6skmlOq8451v5q86LPskgd7FiJW40pnYq5HDuUGJeBieVDgLVonS2s0ApxhhwpxCzrwrrifz6GyozaMSA2bilXcWBqQhQylF/sh3J3LwB1LVIqm21BdQtn6ZVJRHNtf3LhSj1NV7v4Zpo3vs6YYKliziIKKtCEHmyaTmMaBvekJbjfeVlerc7ElUfs3A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Np5uG3zpqJGku1nFMKUUlFyd/o2EsDIjHK4smnzI968=;
- b=O1Q/ILvqmpacHQ022aCamLp7vmU3WWm1Qd5I4akpOiYkgQ+V5OOr7i/09MK2pbbTNO0xI+BLUndzr7NTUCPkyYouG6jMEJiku6gFbgvq+IBONDcwyTv/3ErLYeW6nu1HACXzb/1F6FGGIMQ5nmVX3TKPGS4zellGegwptyzHrwCmnGH1IFK0PMC1TyQ4YO31AV4xG1nDx0jegSScAgKTaCFpk66Xx7nr78fG6UZRL2nocG7VVR8nsXmF5uRnb30z+F0VaJU3nnMo7KsJRoys5eVkH5kRC4LRVg3IdcxzJwLI69jG/K89FOuvpXWXd7WdjgbRi47o/0ZCaHBDmi0hWg==
+ bh=lzh0MbsURqzy+K6nxZHrUAzXE8yYoezoVd/SBy4XSuk=;
+ b=PWpStbC7lytXErYRkUaU8Ek45Hgf4wjyUtR0ALp3vskXDnGN8NQH2wZICK+M4RB9ycNj2Y37Er2spqa1yAEtzbG9ZngnIkET3yFBLNaj6YxDBC4z56EqS5hQeQAcI/FLUt0lKW3Y3b6QpeJ6xjoejkzMgq5BW7Fgzt09QU49tu/AIp/CZfIdJS8ZRRvl/aQDQqSQeUKBSUGEu1tnM3ENbLUJFiMs4RdXaMVJwZ+oYw+d5NzksI8NvDlOcmaAFTZaIJcQVXlEwiNk3Rh4s1coyMRtfW2dZ46J9hC+dVoM3aP3M1LFydA62n/PycyHr2cBSwr7EcYU8V0aUPBVrIvwlw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
  header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Np5uG3zpqJGku1nFMKUUlFyd/o2EsDIjHK4smnzI968=;
- b=cIwvX3tWLctqIJCgKjVNuFSz82TtrvlfqdGy9gM7iG0mygWxb7ofooapPqe5fchdmq3EHLYsZ1vxflVTz/LYuFkxmDkaQMsnLEv4DXpmUobT1by1rPPKx9APmjeY2VRWLr2d1ZhPF+FKUIlv0z+QJ5M8hqxz6XhEASW+5+VuxCxmtfPzVsWX3xdp+pN273A+ZoH0+mQOWmqK2IV9gAoBZaE70bvlRQwh9Jps+Fi2aGkrcjX5TTBETWRqLbYGR/JLUDEy7Hfbc7UpKrhnHQY/iGUlTzr/q4U/dwaQA2BiSBwZQACOPbMNEDb3eNzIJYiyzn0nUO6NG4JiCwKvFbMOyg==
+ bh=lzh0MbsURqzy+K6nxZHrUAzXE8yYoezoVd/SBy4XSuk=;
+ b=N++mnA/K0rGcU8yZCE/K2gY2mlZ9vnjnyOgBbmJw4I3KD1xz3D3A85x4eCaM7Ao6pVebNVVZLugAvdBzQ7kwN/H27AlhACY7JS7IcEbhypcxBLF6h814hFrzqrVOjOzz8yOYbaEaT4a9y8YwOVzwszxgNX59RxCIrAl8AHekmLAJ6qoMQH6SQQWrl9Qb0upBUp0oRYSY5fvLSozWzRcb8jIl5SGXlkIVTb8wuEbPxaCXcAL7E7XIQ4B1vpFAvxCtKF99jtQ70vRROXHm1p3KviVGHH7Q2wt9C5MUyMyE4u0EikmTlx6OJ+T6cWjCWPey4LLdosEUxbfIXx496pRKXg==
 Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
- by HK0PR06MB3651.apcprd06.prod.outlook.com (2603:1096:203:b5::23) with
+ by HK0PR06MB3377.apcprd06.prod.outlook.com (2603:1096:203:8b::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Wed, 1 Dec
- 2021 03:36:59 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Wed, 1 Dec
+ 2021 05:43:16 +0000
 Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
  ([fe80::70c4:b471:2d05:1209]) by HK0PR06MB3202.apcprd06.prod.outlook.com
  ([fe80::70c4:b471:2d05:1209%6]) with mapi id 15.20.4734.024; Wed, 1 Dec 2021
- 03:36:59 +0000
+ 05:43:16 +0000
 From:   Neal Liu <neal_liu@aspeedtech.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
@@ -51,15 +51,15 @@ CC:     Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
         <linux-arm-kernel@lists.infradead.org>,
         "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
         BMC-SW <BMC-SW@aspeedtech.com>
-Subject: RE: [PATCH v2 4/4] usb: aspeed-vhub: support test mode feature
-Thread-Topic: [PATCH v2 4/4] usb: aspeed-vhub: support test mode feature
-Thread-Index: AQHX5dcRQVG/ybLU/0ajWaHwY+/uR6wb9E4AgAEJVjA=
-Date:   Wed, 1 Dec 2021 03:36:58 +0000
-Message-ID: <HK0PR06MB3202B6ED02866DFDC2037B6280689@HK0PR06MB3202.apcprd06.prod.outlook.com>
+Subject: RE: [PATCH v2 1/4] usb: aspeed-vhub: add qualifier descriptor
+Thread-Topic: [PATCH v2 1/4] usb: aspeed-vhub: add qualifier descriptor
+Thread-Index: AQHX5dcPGG2zpqcQlU+Dys+5o778UKwb870AgAEqPKA=
+Date:   Wed, 1 Dec 2021 05:43:16 +0000
+Message-ID: <HK0PR06MB3202436CA49363FD3F60212380689@HK0PR06MB3202.apcprd06.prod.outlook.com>
 References: <20211130104256.3106797-1-neal_liu@aspeedtech.com>
- <20211130104256.3106797-5-neal_liu@aspeedtech.com>
- <YaYPOAB3Anfhh5AA@kroah.com>
-In-Reply-To: <YaYPOAB3Anfhh5AA@kroah.com>
+ <20211130104256.3106797-2-neal_liu@aspeedtech.com>
+ <YaYOvgCaO4FJ8r+z@kroah.com>
+In-Reply-To: <YaYOvgCaO4FJ8r+z@kroah.com>
 Accept-Language: en-US
 Content-Language: zh-TW
 X-MS-Has-Attach: 
@@ -67,65 +67,65 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=aspeedtech.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: aa33ac2e-faa6-4bfd-5c2b-08d9b47bd4a8
-x-ms-traffictypediagnostic: HK0PR06MB3651:
-x-microsoft-antispam-prvs: <HK0PR06MB3651108E73FA058DF23B2B8980689@HK0PR06MB3651.apcprd06.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:576;
+x-ms-office365-filtering-correlation-id: d61017c3-31c6-477a-7754-08d9b48d792e
+x-ms-traffictypediagnostic: HK0PR06MB3377:
+x-microsoft-antispam-prvs: <HK0PR06MB337769900EB6505FCAE9E99580689@HK0PR06MB3377.apcprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ixoHSfpgI6jb3ksNHv2xXusVKBYuNRrmuossftj5xXjgbrXgj2KClYnX7fb6yCg1axis140UJoLycE7w6V3FYYbrGrlDzehU9ekAB4hCGWkc9/er4sd2u6TrrxllCEz+YYR8BytX/Y7e1wLoY+wxjfnZKUk4aRqcdyzlIXSlaj6X4qP+m+LSQrBYxQ8DdcFNP3+ZiIyaqngkifZOGT/41n/AeJIkxf9skF9u3CDTI3JtlNG1c7VvGSZzDyNUcOsF4VucIF10OQZdGowqfrAOsn1hMTRDe2Rn3RnHxX65NSnNZsmhsJfAWH4lzYO+aWUP07ZNsUhFGCUrFy4FvkCeZ7NpIhmRggT2rcxwVzoijSisnb8zvXb+nsfqLyf1uYGonKl/74xyk2Lff43upKhNMIzdtlMWY6EAMoNpa/PclHnhfBqBEvypsOePNiAOZKfpa/9ggKFNsHJkCEPEYINkEGUrwRUnr2J+uqrdO1ToN2WC0ObC4jtbayyfEMqYRK2WZUT8Qi77ePdXVPYIVaNqDvvhGnf6MNTQViusITLLQRc+2a3LYeSs9mb1VFPugQw2Um6lHMZgB2BmogGXk5lGXld/CwLV4GuE6qUNlB/yObIvNL+aW6mfkZeZdLFqjjSzIyqOve5gGPBxVU+LqC/4xQ9N+QeZH3oPGxOgXfAfXKWRFC6OpVufy+ViPGK4CuZnRVW5NBHv8cbhGpi/ZVfMhA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(39850400004)(136003)(366004)(376002)(346002)(9686003)(76116006)(66946007)(54906003)(7416002)(71200400001)(2906002)(86362001)(6506007)(4326008)(38100700002)(53546011)(33656002)(83380400001)(186003)(508600001)(26005)(8676002)(38070700005)(52536014)(55016003)(316002)(66446008)(6916009)(8936002)(66476007)(64756008)(66556008)(122000001)(7696005)(5660300002)(107886003);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: /As1dgMC2MCj0Ma2pWLnYNPYWLCdcOiutY14aMpvwO03wlRjiCqzFeaQ7+QLQRzVY/KEXGz8wNzwa76MI6Mbh4/jFLGqFTzzws8hUsK69HPNdyHV7i+FriNTMlwAKdFgp+K0LDyASlLXLGMuNsadilV4qzOcxXWs+okkT/vX/lEOZNulDCukraOQ2Ft9g2LhBEemYqluB4yfvkCeV4iZH6RY/39KhOhZxOLKrDbYxO+UiVkhWLVmV2I+nJ7c/736wZonmsR8AOBmqLPBVOFHoubuV6P5NljrVhLoDslLzulOCqtU4e7jaeTKcX5V6nHmdtiK6x73wzUCOltnpokgW6kk2b/jKGE7T3Nif129He/G/sIJ9/w7qZIg0//n/7Q6YgHjG3SHD2rtC0K51whu6HTEwaUne6IgyK+idTZGqKa9tbM3fSmUdR+Z51ZSMgLUWCm3kqqkTDlF+4mSZ9B8ytMtg4A6m64H5K7743ti84a9ExlbBXiIfbnE1GLKXWZ5PdQT5Jtgfw6Bzyp+WhugOgFygmPxgBDWRHJszQkrlOfFLn4g3hvgWB69K36DfeHwKQVd2X7inpkc24ov8Wy4XlVgFcU/Muy18k+M+6+nqpV75FQRVuBlYS3XTJMEN7zvIO9KdRUg7FliANkWoMdDMIB9LZzXY3gn316YDafTQ6iV6u4bCTXGVLXRGnc2A5d94WwwI8GPKEgA2idHT0ijuw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(376002)(346002)(136003)(39840400004)(396003)(508600001)(8936002)(54906003)(64756008)(6916009)(316002)(71200400001)(122000001)(76116006)(38100700002)(53546011)(186003)(38070700005)(86362001)(52536014)(2906002)(26005)(5660300002)(83380400001)(66556008)(66946007)(66476007)(55016003)(6506007)(66446008)(33656002)(4326008)(7416002)(8676002)(7696005)(9686003)(107886003);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?d/PoTZ22pqHpaHTKdnlVmS7WB/gFvpMak3p+3WDUeiFWPShZEyAPzamwZrxB?=
- =?us-ascii?Q?6PUpr+SdHCrX8QLsIG68roDGB33/7TBrzbJH8XhAUll1phy0JmbJ3zzS1XEO?=
- =?us-ascii?Q?wYOrobmfqnPz80jojUpsf9kEQFlzY3kLCSQCLlo29yMvbb9vfmQHPDUjJU0u?=
- =?us-ascii?Q?1sJIErvJBMOGvIjApn53ZxAnpuFojLCv/hZwZIAhS1qF9Hnogb14I3BF61BI?=
- =?us-ascii?Q?/OfB/eqURK0943KA5nvYq0cSbRjM9gocfQDyCwJcbAfElZKpzZhM+A6KUks+?=
- =?us-ascii?Q?aQnYTBnFEKvFNsFXrw5NQC/8VMtw33oXG3+Nb6kmE+X2ZIArHH+eS6SUaCDW?=
- =?us-ascii?Q?mFY7kpSnn/k78oc3aDvxHtFe/mBCNjvx2GHYeifLYtWcyrpy8QqZfPrM1nKc?=
- =?us-ascii?Q?8ZocaHAhpP9ZBw0/X3Tp55BzBleDwmw6r3DVmlZ5imM/YtOIQflWIJ+wSv3Q?=
- =?us-ascii?Q?OxWbJkNRTxx0TJiRnX2KgEEimppX1T+v9G3PfL2nYkZ4sW+DLqW4yVJgpjKp?=
- =?us-ascii?Q?P7ffHzy3+63pVfI5Lc/kcoz39RXIqssoini1HufQw5w8t3JcOaj7nj4Gt+ol?=
- =?us-ascii?Q?K9D8UG9TrQSc4FrzD88Mmd/WogAY9E9IvAjzkwY/CukhiP+juDrFKG/fiTWB?=
- =?us-ascii?Q?2HEdWWBKF0xZU821IfdqueZsvSsOkbRP70DC+wUTYtkJnQyNAQ3bpxFsCo5F?=
- =?us-ascii?Q?t9WcVPWc113MQNL9CDO68cq7jYoyGUQj2jYS6Tso6jhqbKj5422IkX3oIyFV?=
- =?us-ascii?Q?F+L4MBZxG1a05XLkNiyZvhyUp+uinhZMzd5lsTrz0FLdVcQ3gN4YLZqysMrG?=
- =?us-ascii?Q?vwqghu3xFXVL7y30tAj+bpnMlloFmUgUboq0gZkY8xcO8DqQZAsNKFTQCk8k?=
- =?us-ascii?Q?lBSI8KdCcXDvOEUHsJvgO8zJyCzqnUwdlveOLPodkqC2iGjlafM8gkIoc0YQ?=
- =?us-ascii?Q?DBWP/ms/dD45+S0Y4S70wx0VrP8tnn/h7srAN6r/pLll6H/vBXqw9Q6Ia3jj?=
- =?us-ascii?Q?s/b6YBlnovvoppVLpiz/YqJOQwjDrHJnzMZeYXKYebF4W2ntblhSJVgJgMlY?=
- =?us-ascii?Q?GvsljohJu2dZx+kW7XurzQG0gsMI6no9CwxS8dc4dT35TGMdrioFb8RjFWRp?=
- =?us-ascii?Q?XzAzpgi9/OFErCP9I0VioNmCM1lfiVB8S7sMRmgCu0MKAYXDaBxRq/z2iaDk?=
- =?us-ascii?Q?gG/dBfrPmpIOJQamczr4EyO8M9q5bSlsLwkaKxnAZ3YPp59EeXEA7Tiawd6Y?=
- =?us-ascii?Q?cQ7Rgah13twLP2iqG6T/t45S3G2WbcBXsABe0rKcuR+kCywL1B6llGDTFLeN?=
- =?us-ascii?Q?TOZ+XwNjRtwkrjYa1j1kWdsFB1iCsudX4TQzQz2mPlOtbIXsiF9m73agX6Fr?=
- =?us-ascii?Q?t4swZBODnzIf7eVX1ECHjL8lz/52fLQhiCAGX0b8INN2ltFvos00fTcdcIdd?=
- =?us-ascii?Q?FeODr5GHuK+tsk4JOTS8z3+vKZddaEsKaVab91x7QMI5TEULVQHP5j8PSCow?=
- =?us-ascii?Q?XzE5y2kVPrxR4pA1DsvBb+TDAyjc2Nsz9VmuWfpn5qtCbVe0nqGZ0OduF2Y0?=
- =?us-ascii?Q?AVOHxjUp6o+8nbgG/JMvNGx0Ev1FabDo5KZ5MYQI69gwcZSlo46K/0sW6QWk?=
- =?us-ascii?Q?ETzRZLoTxwLY5dk4Tz34Uxc=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?I87LySCuvXwFkQhREjwsNxoVKvVIkGxqMKZfbi5VtNbONzhhoiY5DcV/wjSL?=
+ =?us-ascii?Q?nWV9BTWyhUFJVAlzU5Xjl2cM3UZ24qw7RKQt5qr0TePcEuC4dtRLVM5YI/WX?=
+ =?us-ascii?Q?lCezVXTve6Pj+BQV9vW7rLAXqjGgv0VtoUQLtJWe0/uFmIxwaGXTOANWBXbk?=
+ =?us-ascii?Q?Zc3eWMe6IhEGgSitt/iTe3P01GLW8NJefQIvGgZ32dTjtphAuPNF0p3Goez/?=
+ =?us-ascii?Q?SgIxXgjWwSXf73Ic/X/mAc1Rpt6w62wVow+bi20pveXdr2tB3Tp858RFhijv?=
+ =?us-ascii?Q?rykE7qIuj/lfGa/y5UZhQtDoagrW+C1Y6I3F90Z5sbgtePgWPb4chs4t7n3N?=
+ =?us-ascii?Q?0pPravMScCjPz+npnKJW4ZdTZsCQR6q0umJ63s/uoqYHsfvW6aYVs+dznS2n?=
+ =?us-ascii?Q?Mi88kS8ktQNV8hgsHFbORXbPRsAc1ozWdBi7Yge0nJBbQBPYoYV52pC+tSuJ?=
+ =?us-ascii?Q?9pNSiLJbR5bLH/zsxmsXrvfJt3Kz1SK6+EsIgQwZ2q2m3c3GpzMRkuAvtEWJ?=
+ =?us-ascii?Q?wzp0A46E0hj8jL4tRyXkiH9dWt4DSbjKOWgr6AiyDoDv5RORem4oGTW4T56Y?=
+ =?us-ascii?Q?alZxYO3eR9DIm6Hwk9h1UiO9uEn34uQWPQmtQRZP1FKSCsA9uOiUprkKhKTb?=
+ =?us-ascii?Q?AKzc/kQgC16QRDYqLojTl2tZft9ASNjYc3zBOyz879x7Dkr+UPh/srKtBkDD?=
+ =?us-ascii?Q?T0bIQxCECjV3+ATOsl0c7ySumvMQ0aEiakM0GDXUiAWLVK7NWfTGBO9vGtRc?=
+ =?us-ascii?Q?s+zRarqtuBMqedbLGDarfkgjXDFC/QrvaOP/BEb1on+ozejguYERmtBOPYJQ?=
+ =?us-ascii?Q?zyVcS5jxqjZjTUJjowL74wzWCq2krf9KgF20DIVXuGHhzJzDD4fNxYerVMiH?=
+ =?us-ascii?Q?6tVnq+1f728xrCuYyVzbhNjqdv8C+EkVWbyMjwwoHThP+8hVaCAOVayd2b3v?=
+ =?us-ascii?Q?huIKsdaNi9EiElnkRYcTYPovG6sBdV7sKIbeQh57FxS0KnQyVDQgBGi2tv1B?=
+ =?us-ascii?Q?0kby3rdtpnQ/r3pgmABhytEvoumToKyPJ+doxZNyHldB/42FHkwCUTn4yxoL?=
+ =?us-ascii?Q?rL7bcmv8v/nt4292YwO9jNRNFipByjkQs/moVLPSkJbd3MD+QrVajj07Xedy?=
+ =?us-ascii?Q?fb0nHrASlg5tRNDJGR8/dZz+NY+w++Tuq31GBnSxRMgcs7Wupn5s3xQvh5fV?=
+ =?us-ascii?Q?dnXkq8ZH68tnFN6WLwdJkMtYAuk4tY8VL6GWDA595j3oTMCuWhYWZ6swt72E?=
+ =?us-ascii?Q?zVjqeuw4gu4gFDRRK6RO3ICY8PFdoaUVUVCPFnhkkuhMCPrUqFnQEtLE0eQZ?=
+ =?us-ascii?Q?UUMC9QUzNZ1jK6t39pyMw08B429wAVpxCcpSYKc5YYOuLcRnsOg6b3opU2fw?=
+ =?us-ascii?Q?hkdF0urtZG6YojJNZzqdIF7P5/ERER8Sc/JPDD8wVo2QtUQL7N/btaFLBYbr?=
+ =?us-ascii?Q?QeGL3DZtKD65RQ0sEHhpG7YHaP8Sbh4pPvqQFBZVoi55wbRw9wL+HYN2dK6L?=
+ =?us-ascii?Q?P30Y0S33wfzcgqjMfugsoYkIxYDBdvBKXMVpq+GAE3AxlRzaF5SqycfD4V5V?=
+ =?us-ascii?Q?VmC/xEkycEF2takDiC2o5aPFbnOVsqcx/gpX+jttzKNQKFRDE3GbfNHvStnW?=
+ =?us-ascii?Q?5FPKG5W4f0j3OW4OCF5eJxs=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: aspeedtech.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa33ac2e-faa6-4bfd-5c2b-08d9b47bd4a8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Dec 2021 03:36:58.9687
+X-MS-Exchange-CrossTenant-Network-Message-Id: d61017c3-31c6-477a-7754-08d9b48d792e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Dec 2021 05:43:16.4983
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /BHDQW32TvWpNo/4RUQP3Tdk0abrDRl6pRwmBmyiYpquXSRclyu/Vhb9mNgVTXH5K5yZy3K/5uVmr2ZDk3TeDg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB3651
+X-MS-Exchange-CrossTenant-userprincipalname: KRK6AaQXNdiO1D4YgDN8oi53p9vYZKQgzMcm8Js4AookgRLgPK6oK3W6fvum5POLf5lOLhPHunsKs1fTnkMbrQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB3377
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 > -----Original Message-----
 > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Sent: Tuesday, November 30, 2021 7:47 PM
+> Sent: Tuesday, November 30, 2021 7:45 PM
 > To: Neal Liu <neal_liu@aspeedtech.com>
 > Cc: Felipe Balbi <balbi@kernel.org>; Joel Stanley <joel@jms.id.au>; Andre=
 w
@@ -137,91 +137,68 @@ t
 > linux-arm-kernel@lists.infradead.org; linux-aspeed@lists.ozlabs.org; BMC-=
 SW
 > <BMC-SW@aspeedtech.com>
-> Subject: Re: [PATCH v2 4/4] usb: aspeed-vhub: support test mode feature
+> Subject: Re: [PATCH v2 1/4] usb: aspeed-vhub: add qualifier descriptor
 >=20
-> On Tue, Nov 30, 2021 at 06:42:56PM +0800, Neal Liu wrote:
-> > Support aspeed usb vhub set feature to test mode.
+> On Tue, Nov 30, 2021 at 06:42:53PM +0800, Neal Liu wrote:
+> > Support qualifier descriptor to pass USB30CV compliance test.
+>=20
+> Please provide more information here in this description.  This does not
+> explain what is happening here very well.
+>=20
+> Also, what is "USB30CV"?
+>=20
+
+USB 3 Command Verifier (USB3CV) is the official tool for USB 3 Hub and Devi=
+ce Framework testing.
+The USB3CV tool includes the xHCI Compliance Drivers for use with the USB3C=
+V.
+
+We would like to pass USB3CV - Chapter 9 Test [USB 2 devices] - Device Qual=
+ifier Tests.
+A high-speed capable device that has different device information for full-=
+speed and high-speed
+must have a Device Qualifier Descriptor.
+This patch is to support device qualifier, and the host will retrieve it th=
+rough Get Descriptor request.
+
 > >
 > > Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
 > > ---
-> >  drivers/usb/gadget/udc/aspeed-vhub/dev.c | 18 ++++++++++++++----
-> > drivers/usb/gadget/udc/aspeed-vhub/hub.c | 22 ++++++++++++++++------
-> >  2 files changed, 30 insertions(+), 10 deletions(-)
+> >  drivers/usb/gadget/udc/aspeed-vhub/hub.c  | 24
+> > +++++++++++++++++++++++  drivers/usb/gadget/udc/aspeed-vhub/vhub.h |
+> > 1 +
+> >  2 files changed, 25 insertions(+)
 > >
-> > diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-> > b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-> > index d918e8b2af3c..4462f4b73b04 100644
-> > --- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-> > +++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-> > @@ -110,15 +110,25 @@ static int ast_vhub_dev_feature(struct
-> ast_vhub_dev *d,
-> >  				u16 wIndex, u16 wValue,
-> >  				bool is_set)
-> >  {
-> > +	u32 val;
-> > +
-> >  	DDBG(d, "%s_FEATURE(dev val=3D%02x)\n",
-> >  	     is_set ? "SET" : "CLEAR", wValue);
-> >
-> > -	if (wValue !=3D USB_DEVICE_REMOTE_WAKEUP)
-> > -		return std_req_driver;
-> > +	if (wValue =3D=3D USB_DEVICE_REMOTE_WAKEUP) {
-> > +		d->wakeup_en =3D is_set;
-> > +		return std_req_complete;
-> >
-> > -	d->wakeup_en =3D is_set;
-> > +	} else if (wValue =3D=3D USB_DEVICE_TEST_MODE) {
->=20
-> If you return, no need for an else statement, right?
->=20
->=20
-> > +		val =3D readl(d->vhub->regs + AST_VHUB_CTRL);
-> > +		val &=3D ~GENMASK(10, 8);
-> > +		val |=3D VHUB_CTRL_SET_TEST_MODE((wIndex >> 8) & 0x7);
-> > +		writel(val, d->vhub->regs + AST_VHUB_CTRL);
-> >
-> > -	return std_req_complete;
-> > +		return std_req_complete;
-> > +	}
-> > +
-> > +	return std_req_driver;
-> >  }
-> >
-> >  static int ast_vhub_ep_feature(struct ast_vhub_dev *d, diff --git
-> > a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> > diff --git a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
 > > b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-> > index 93f27a745760..e52805fbdebd 100644
+> > index b9960fdd8a51..93f27a745760 100644
 > > --- a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
 > > +++ b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-> > @@ -212,17 +212,27 @@ static int ast_vhub_hub_dev_feature(struct
-> ast_vhub_ep *ep,
-> >  				    u16 wIndex, u16 wValue,
-> >  				    bool is_set)
-> >  {
-> > +	u32 val;
-> > +
-> >  	EPDBG(ep, "%s_FEATURE(dev val=3D%02x)\n",
-> >  	      is_set ? "SET" : "CLEAR", wValue);
+> > @@ -68,6 +68,18 @@ static const struct usb_device_descriptor
+> ast_vhub_dev_desc =3D {
+> >  	.bNumConfigurations	=3D 1,
+> >  };
 > >
-> > -	if (wValue !=3D USB_DEVICE_REMOTE_WAKEUP)
-> > -		return std_req_stall;
-> > +	if (wValue =3D=3D USB_DEVICE_REMOTE_WAKEUP) {
-> > +		ep->vhub->wakeup_en =3D is_set;
-> > +		EPDBG(ep, "Hub remote wakeup %s\n",
-> > +		      is_set ? "enabled" : "disabled");
-> > +		return std_req_complete;
-> >
-> > -	ep->vhub->wakeup_en =3D is_set;
-> > -	EPDBG(ep, "Hub remote wakeup %s\n",
-> > -	      is_set ? "enabled" : "disabled");
-> > +	} else if (wValue =3D=3D USB_DEVICE_TEST_MODE) {
+> > +static const struct usb_qualifier_descriptor ast_vhub_qual_desc =3D {
+> > +	.bLength =3D 0xA,
+> > +	.bDescriptorType =3D USB_DT_DEVICE_QUALIFIER,
+> > +	.bcdUSB =3D cpu_to_le16(0x0200),
+> > +	.bDeviceClass =3D USB_CLASS_HUB,
+> > +	.bDeviceSubClass =3D 0,
+> > +	.bDeviceProtocol =3D 0,
+> > +	.bMaxPacketSize0 =3D 64,
+> > +	.bNumConfigurations =3D 1,
+> > +	.bRESERVED =3D 0,
 >=20
-> Same here, no need for else.
+> Fields that are to be set to zero do not need to be set here, the compile=
+r does it
+> for you.
 >=20
 > thanks,
 >=20
 > greg k-h
 
-Okay, I'll fix it in next patch. Thanks
+This is more clear that we specify each member's value.
+Thanks
 
 -Neal
