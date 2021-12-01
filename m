@@ -2,78 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77EEC464AC7
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Dec 2021 10:38:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE11464B11
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Dec 2021 10:55:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348291AbhLAJlS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Dec 2021 04:41:18 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:36530 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237675AbhLAJlR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Dec 2021 04:41:17 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6B90CCE1D92
-        for <linux-usb@vger.kernel.org>; Wed,  1 Dec 2021 09:37:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 682FCC53FCC
-        for <linux-usb@vger.kernel.org>; Wed,  1 Dec 2021 09:37:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638351473;
-        bh=q71cDuR8blVwXExx3kTimn5HDzlgXxZmUnbrQjR5vfY=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=au6vl9Pwt3feW2Csl96G5PTvJzeKSeSbSXqbAn00aDQvT1blBqb84gTkyL9YlBMrq
-         7Dtohl5ewdB1j7+sB5hgAbdb7mnNA8TMjqfqwHqPwA2rrs4QA9HXI4LZAGiWzXMBwW
-         who7P2N44ITiQ8gW2q25uE8mlbsAqTyBNhKWUg7UNWw+soBor6QYsrN5WcSxt30hYk
-         /jgFE41wz/ET8HRoEb+DZhuDqxBL+vDzGLa+5jW6QkXhLodLep6iWHvKCIe0vGDz6F
-         Vr+IdUjfkpEiCht8gaNMwWJukC4u3Ek+qWHLbzdtp0D3ocejZMJ6tWOmIQx3OPlej9
-         YwgTe/ZFjbpog==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 5260D60E91; Wed,  1 Dec 2021 09:37:53 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215175] thunderbolt: consistent system freezes with Dell
- U4021QW, general protection fault, probably for non-canonical address
- 0xdead000000000108, Workqueue: events tb_cfg_request_work [thunderbolt]
-Date:   Wed, 01 Dec 2021 09:37:53 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: leho@kraav.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215175-208809-tvBo9Y7LZV@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215175-208809@https.bugzilla.kernel.org/>
-References: <bug-215175-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S242577AbhLAJ67 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Dec 2021 04:58:59 -0500
+Received: from mga17.intel.com ([192.55.52.151]:56666 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232736AbhLAJ66 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Dec 2021 04:58:58 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="217119800"
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="217119800"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 01:55:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="654706002"
+Received: from kuha.fi.intel.com ([10.237.72.166])
+  by fmsmga001.fm.intel.com with SMTP; 01 Dec 2021 01:55:13 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 01 Dec 2021 11:55:12 +0200
+Date:   Wed, 1 Dec 2021 11:55:12 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        wonchung@google.com, bleung@chromium.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        Rajat Jain <rajatja@google.com>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH 0/4] usb: Use notifier for linking Type C ports.
+Message-ID: <YadGgA4oh7wlZVAJ@kuha.fi.intel.com>
+References: <20211124231028.696982-1-pmalani@chromium.org>
+ <YaCrnMAEXnG+VO6d@kuha.fi.intel.com>
+ <YaYFDwsw2hKdJrGj@kuha.fi.intel.com>
+ <CACeCKafjOFvVaPBu7OQS-M30hWjooNBFL9-rzqTz3i1ZKEa7Ew@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACeCKafjOFvVaPBu7OQS-M30hWjooNBFL9-rzqTz3i1ZKEa7Ew@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215175
+On Tue, Nov 30, 2021 at 11:27:12AM -0800, Prashant Malani wrote:
+> Hi Heikki,
+> 
+> Thanks for taking a look at the series.
+> 
+> On Tue, Nov 30, 2021 at 3:03 AM Heikki Krogerus
+> <heikki.krogerus@linux.intel.com> wrote:
+> >
+> > Hi Prashant,
+> >
+> > On Fri, Nov 26, 2021 at 11:40:49AM +0200, Heikki Krogerus wrote:
+> > > On Wed, Nov 24, 2021 at 03:10:06PM -0800, Prashant Malani wrote:
+> > > > This series resolves the cyclic dependency error which was introduced by
+> > > > commit 63cd78617350 ("usb: Link the ports to the connectors they are
+> > > > attached to") which lead to it being reverted. The approach here is to
+> > > > use a notifier to link a new Type C port to pre-existing USB ports
+> > > > instead of calling an iterator of usb ports from the Type C connector
+> > > > class. This allows commit 63cd78617350 ("usb: Link the ports to the
+> > > > connectors they are attached to") to then be submitted without any
+> > > > depmod cyclic dependency error.
+> > > >
+> > > > The final patch removes the usb port iterator since it is no longer
+> > > > needed.
+> > >
+> > > This is not enough. Build the Type-C Class as a module and the USB bus
+> > > statically, and the links will not get created.
+> > >
+> 
+> I see. I suppose it is academic now (given your follow up email about converting
+> port-mapper to component framework), but would reversing where the
+> notifier block is i.e,
+> have usbcore expose the notifier registration API instead of
+> typec-class, resolve
+> the issue? That would mean the dependency is the same as what it is right now
+> in the code, right (typec -> usbcore)
 
---- Comment #2 from Leho Kraav (leho@kraav.com) ---
-Thanks for the tip, I'm running with thunderbolt.dyndbg now.
+Well, then you would have the same issue if you build the Type-C class
+statically and USB as a module, no?
 
-It might take a few days for this corruption to occur again, will post upda=
-tes
-then.
+I'm sure that if we though about this hard enough, we would find a way
+to make the notifiers work, most likely by handling every possible
+scenario separately, but it would still not remove the core problem.
+There is the dependency between these components/drivers. The proper
+solution does not create that dependency.
 
---=20
-You may reply to this email to add a comment.
+Although I'm not sure that the component framework is the best (it is
+in the end just a workaround as well, but at least it's there
+available for everybody), by taking advantage of the _PLD we can
+create a solution where both components can live completely
+independently - the order in which they are registered becomes
+irrelevant as well as are they build as modules or not.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+> > > I'm not sure you actually achieve much with this series, and I'm not
+> > > sure this approach will ever fully solve the problem. As long as we
+> > > have to declare API, we will have the circular dependency issue on our
+> > > hands. But there are ways to avoid that.
+> > >
+> > > There is for example the component framework (drivers/base/component.c)
+> > > that I've been thinking about using here. In this case it would work
+> > > so that you declare the USB Type-C part as your aggregate driver, and
+> > > everything that is connected to it (so USB ports, DisplayPorts, TBT,
+> > > etc.) would then just declare themselves as general components. Could
+> > > you take a look at that?
+> >
+> > I'm preparing a patch where I store all _PLDs in the ACPI tables, and
+> > create list of devices that share it. I can convert port-mapper.c to
+> > it and the component framework while at it.
+> 
+> Great, thanks. We can help with testing once you have a patch series
+> to share.
+
+OK, cool.
+
+thanks,
+
+-- 
+heikki
