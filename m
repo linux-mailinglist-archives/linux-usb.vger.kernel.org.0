@@ -2,68 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3FC2464A42
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Dec 2021 10:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77EEC464AC7
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Dec 2021 10:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348100AbhLAJDX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Dec 2021 04:03:23 -0500
-Received: from mga03.intel.com ([134.134.136.65]:62925 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242056AbhLAJDW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 Dec 2021 04:03:22 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="236361932"
-X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="236361932"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 01:00:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="654693452"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Dec 2021 00:59:58 -0800
-Subject: Re: [PATCH] xhci: Remove CONFIG_USB_DEFAULT_PERSIST to prevent xHCI
- from runtime suspending
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        mathias.nyman@intel.com
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20211119092628.677935-1-kai.heng.feng@canonical.com>
- <CAAd53p4CpEQR0Y5XDN5E7xZ-iw2GG=gGMSm2Vd=V_M1LLEuuCA@mail.gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <b7595524-1041-8b8b-dc61-9ee0acbc8307@linux.intel.com>
-Date:   Wed, 1 Dec 2021 11:01:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.8.1
+        id S1348291AbhLAJlS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Dec 2021 04:41:18 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:36530 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237675AbhLAJlR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Dec 2021 04:41:17 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6B90CCE1D92
+        for <linux-usb@vger.kernel.org>; Wed,  1 Dec 2021 09:37:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 682FCC53FCC
+        for <linux-usb@vger.kernel.org>; Wed,  1 Dec 2021 09:37:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638351473;
+        bh=q71cDuR8blVwXExx3kTimn5HDzlgXxZmUnbrQjR5vfY=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=au6vl9Pwt3feW2Csl96G5PTvJzeKSeSbSXqbAn00aDQvT1blBqb84gTkyL9YlBMrq
+         7Dtohl5ewdB1j7+sB5hgAbdb7mnNA8TMjqfqwHqPwA2rrs4QA9HXI4LZAGiWzXMBwW
+         who7P2N44ITiQ8gW2q25uE8mlbsAqTyBNhKWUg7UNWw+soBor6QYsrN5WcSxt30hYk
+         /jgFE41wz/ET8HRoEb+DZhuDqxBL+vDzGLa+5jW6QkXhLodLep6iWHvKCIe0vGDz6F
+         Vr+IdUjfkpEiCht8gaNMwWJukC4u3Ek+qWHLbzdtp0D3ocejZMJ6tWOmIQx3OPlej9
+         YwgTe/ZFjbpog==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 5260D60E91; Wed,  1 Dec 2021 09:37:53 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215175] thunderbolt: consistent system freezes with Dell
+ U4021QW, general protection fault, probably for non-canonical address
+ 0xdead000000000108, Workqueue: events tb_cfg_request_work [thunderbolt]
+Date:   Wed, 01 Dec 2021 09:37:53 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: leho@kraav.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215175-208809-tvBo9Y7LZV@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215175-208809@https.bugzilla.kernel.org/>
+References: <bug-215175-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <CAAd53p4CpEQR0Y5XDN5E7xZ-iw2GG=gGMSm2Vd=V_M1LLEuuCA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 1.12.2021 2.19, Kai-Heng Feng wrote:
-> On Fri, Nov 19, 2021 at 5:27 PM Kai-Heng Feng
-> <kai.heng.feng@canonical.com> wrote:
->>
->> When the xHCI is quirked with XHCI_RESET_ON_RESUME, runtime resume
->> routine also resets the controller.
->>
->> This is bad for USB drivers without reset_resume callback, because
->> there's no subsequent call of usb_dev_complete() ->
->> usb_resume_complete() to force rebinding the driver to the device. For
->> instance, btusb device stops working after xHCI controller is runtime
->> resumed, if the controlled is quirked with XHCI_RESET_ON_RESUME.
->>
->> So always take XHCI_RESET_ON_RESUME into account to solve the issue.
->>
->> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> 
-> A gentle ping...
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215175
 
-Thanks
-Adding to queue
+--- Comment #2 from Leho Kraav (leho@kraav.com) ---
+Thanks for the tip, I'm running with thunderbolt.dyndbg now.
 
--Mathias
+It might take a few days for this corruption to occur again, will post upda=
+tes
+then.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
