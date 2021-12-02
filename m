@@ -2,112 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A71F44665C8
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Dec 2021 15:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0958466612
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Dec 2021 16:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358799AbhLBOwj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Dec 2021 09:52:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358641AbhLBOwi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Dec 2021 09:52:38 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE3CC06174A;
-        Thu,  2 Dec 2021 06:49:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=TENbFU3VPoZmYB532OJ5heIU8WiCFPnyDoknW+eBIAs=; b=u/RFN
-        igsiYs4KEY8kg4EOvk3QRD+ebpGHt0dj7glb360pL8HLJi8WIhp9GH8G58NU9z5m0uT3joBm/vWD3
-        FebZFiLGB4KoOXlMgL6wO7kHd/S//PefNmB7BpUkweDfy7p+uCV1aklvnVfr1zZbZ4hutZoISh5yg
-        stbSsqaVI3jlvzSepptn36teVgW9Zt5qMc8511JOhu7lJQpzwvaAiWtAusqtdz/pxBGy53VBGrLlL
-        PUO7mZ5gOvCXrH+RNFg/4gF5nvh1q29o6tziahe9ARcB6gHVBFFMQYA/4kgUzhS71B3pyvpLstQ3r
-        ciB7wqki9iwrbCQC4xn81UPOrXXKA==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1msnOY-0000PP-Dh; Thu, 02 Dec 2021 14:49:10 +0000
-Date:   Thu, 2 Dec 2021 14:49:09 +0000
-From:   John Keeping <john@metanate.com>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_jackp@quicinc.com
-Subject: Re: [PATCH] usb: gadget: f_fs: Wake up IO thread during disconnect
-Message-ID: <Yajc5f3LDm+dSji/@donbot>
-References: <20211201100205.25448-1-quic_wcheng@quicinc.com>
- <YaelpmsJXmhTY4A0@donbot>
+        id S1347390AbhLBPFC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Dec 2021 10:05:02 -0500
+Received: from mxout1-he-de.apache.org ([95.216.194.37]:52288 "EHLO
+        mxout1-he-de.apache.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358080AbhLBPFA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Dec 2021 10:05:00 -0500
+X-Greylist: delayed 350 seconds by postgrey-1.27 at vger.kernel.org; Thu, 02 Dec 2021 10:05:00 EST
+Received: from mail.apache.org (mailroute1-lw-us.apache.org [207.244.88.153])
+        by mxout1-he-de.apache.org (ASF Mail Server at mxout1-he-de.apache.org) with SMTP id 8D41160FD6
+        for <linux-usb@vger.kernel.org>; Thu,  2 Dec 2021 14:55:46 +0000 (UTC)
+Received: (qmail 21146 invoked by uid 99); 2 Dec 2021 14:55:46 -0000
+Received: from mailrelay1-he-de.apache.org (HELO mailrelay1-he-de.apache.org) (116.203.21.61)
+    by apache.org (qpsmtpd/0.29) with ESMTP; Thu, 02 Dec 2021 14:55:46 +0000
+Received: from [10.23.2.106] (unknown [51.154.28.112])
+        by mailrelay1-he-de.apache.org (ASF Mail Server at mailrelay1-he-de.apache.org) with ESMTPSA id 3284E3E823;
+        Thu,  2 Dec 2021 14:55:45 +0000 (UTC)
+Message-ID: <35f7428b39f996c793f5b4a6a314772681c73d7a.camel@apache.org>
+Subject: Regression: plugging in USB scanner breaks all USB functionality
+From:   Robert Munteanu <rombert@apache.org>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     tiwai@suse.com, regressions@lists.linux.dev,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 02 Dec 2021 15:55:44 +0100
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YaelpmsJXmhTY4A0@donbot>
-X-Authenticated: YES
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 04:41:10PM +0000, John Keeping wrote:
-> On Wed, Dec 01, 2021 at 02:02:05AM -0800, Wesley Cheng wrote:
-> > During device disconnect or composition unbind, applications should be
-> > notified that the endpoints are no longer enabled, so that it can take
-> > the proper actions to handle its IO threads.  Otherwise, they can be
-> > left waiting for endpoints until EPs are re-enabled.
-> > 
-> > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> > ---
-> >  drivers/usb/gadget/function/f_fs.c | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> > index 3c584da9118c..0b0747d96378 100644
-> > --- a/drivers/usb/gadget/function/f_fs.c
-> > +++ b/drivers/usb/gadget/function/f_fs.c
-> > @@ -957,10 +957,12 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
-> >  		if (file->f_flags & O_NONBLOCK)
-> >  			return -EAGAIN;
-> >  
-> > -		ret = wait_event_interruptible(
-> > -				epfile->ffs->wait, (ep = epfile->ep));
-> > +		ret = wait_event_interruptible(epfile->ffs->wait,
-> > +				(ep = epfile->ep) || !epfile->ffs->func);
+Hi,
 
-I looked at this again, and doesn't this totally break the wait
-condition?
+After updating from kernel 5.14.11 to 5.14.14 I am seeing the following
+problem:
 
-epfile->ep is set to non-null in ffs_func_eps_enable() which is called
-from ffs_func_set_alt() just after ffs->func is set to non-null, and
-then those are also set back to null at the same time.
+When plugging in an USB scanner ( Brother DSMobile DS-740D ) to my
+Lenovo P52 laptop I lose connection to all USB devices. Not only are
+the devices no longer available on the host, but no power is drawn by
+them. Only a reboot fixes the problem.
 
-So the condition boils down to a || !a and this never blocks.  Or am I
-missing something?
+The scanner is the only device that triggers the problem, even when it
+is the only device plugged in. I have a host of other devices,
+connected either directly or via a USB hub in my monitor:
 
-> >  		if (ret)
-> >  			return -EINTR;
-> > +		if (!epfile->ffs->func)
-> > +			return -ENODEV;
-> 
-> This seems strange - we are inside the case where the endpoint is not
-> initially enabled, if we're returning ENODEV here shouldn't that happen
-> in all cases?
-> 
-> Beyond that, there is no locking for accessing ffs->func here;
-> modification happens in gadget callbacks so it's guarded by the gadget
-> core (the existing case in ffs_ep0_ioctl() looks suspicious as well).
-> 
-> But I can't see why this change is necessary - there are event
-> notifications through ep0 when this happens, as can be seen in the hunk
-> below from the ffs_event_add(ffs, FUNCTIONFS_DISABLE) line.  If
-> userspace cares about this, then it can read the events from ep0.
-> 
-> >  	}
-> >  
-> >  	/* Do we halt? */
-> > @@ -3292,6 +3294,7 @@ static int ffs_func_set_alt(struct usb_function *f,
-> >  	if (alt == (unsigned)-1) {
-> >  		ffs->func = NULL;
-> >  		ffs_event_add(ffs, FUNCTIONFS_DISABLE);
-> > +		wake_up_interruptible(&ffs->wait);
-> >  		return 0;
-> >  	}
-> >  
+- keyboard
+- mouse
+- logitech brio webcam
+- yubikey
+- stream deck
+- microphone
+
+None of these cause any issues.
+I have tried the following kernels ( packaged for openSUSE Tumbleweed
+), and none of them fixed the issue:
+
+- 5.15.2
+- 5.15.5
+- 5.16~rc3-1.1.ge8ae228
+
+The problem does not appear if the scanner is connected when the laptop
+is shutdown. It seems to have an init phase of about 6-7 seconds
+(blinking green led) and then stays on. However, it is not detected via
+lsusb or scanimage -L.
+
+The problem does not appear on a desktop class machine ( ASUS Prime
+X470-PRO/Ryzen 3700x).
+
+The relevant parts of the kernel log seem to be:
+
+Nov 22 11:53:18 rombert kernel: xhci_hcd 0000:00:14.0: Abort failed to stop command ring: -110
+Nov 22 11:53:18 rombert kernel: xhci_hcd 0000:00:14.0: xHCI host controller not responding, assume dead
+Nov 22 11:53:18 rombert kernel: xhci_hcd 0000:00:14.0: HC died; cleaning up
+
+I've initially reported this at
+https://bugzilla.opensuse.org/show_bug.cgi?id=1192569 and CC'ed the
+distribution's kernel maintainer.
+
+Please let me know if additional information is needed.
+
+Regards,
+Robert Munteanu
