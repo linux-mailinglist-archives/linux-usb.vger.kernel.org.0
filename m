@@ -2,167 +2,306 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A80466AF5
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Dec 2021 21:35:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7F0466BA1
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Dec 2021 22:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348842AbhLBUjJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Dec 2021 15:39:09 -0500
-Received: from mail-eopbgr10063.outbound.protection.outlook.com ([40.107.1.63]:1762
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1348823AbhLBUjF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 2 Dec 2021 15:39:05 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nqQ+2DlUMablSlnbOVM0nz3of9HfmwQfxi2BqlEtcKczG32HdYjIGiTa5fLe5KL4xalEeX5yUZ8HV+cSIqaQrZi5VBVjP7OaQVNxnxEmBBKxo/BINee9wqXP59/lbXcvya/R5FWzrKtNVRhu25fyOLU4HZc1NRGBC9WwpsyG0TzArbn2a570AmPSz4q6oVEzE+Bg0QcUTwdTTGE7vU2hkdkp5MUP4zXPAn+mjGX/LcKdsMPf+Sv9la97/1IeXQKWGjneayrOlWRC4FqVEgyOUoGX7o1iOdfJXABzrRxSqljjP6SeNab0hjpZ0DpefV3E83kg04Yo78Fr4Mgilg+8rw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qn+zCk43ctQrPa/+QANvBRIJF+LrO8EKuDysZY5WY+E=;
- b=iU0g3cge6/hI8SrrHioP4/y7TXHJTnudPepPwmy0jEOv35sYN8DRqKmGRrsh9XJEFEKi1NOhon2MRXIjZMb4WnZDkgDzXOgV99L+db/QOwHNzAUp+m284UL2L2G9mMl/AKcEwonbgrb3I5aFbihu9xKznS0Wx79LaYwd9mgGTvZe+tQIjEiQO95/jQ/JMGner4xnzRFYh+xjVOUWvmAgGU4maBAjNhnyYB2bHP4GlBzbwB/ZOWnekMk7syY3aYtIdq9cECjpl2hzEMw2qpSksTC32xuDBdCYr5idJdYciUCVyrI/Agm7xgViCfA/DzUm9sAGADiEl/qHPexmNrY3kQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qn+zCk43ctQrPa/+QANvBRIJF+LrO8EKuDysZY5WY+E=;
- b=BhcsYARetnzTtHPGkWjRqtWnNx18IG5q9N10rxhzKKP5iAadVEFnJ5DXEf1hn5ciXuQ9cO96Dd29PZiOJzOrCcsCQ8ibG3zC06sIvr79AFMFwHCEA1np65MvZN0AHzfzn5pqEHTtmjr74QyO1jrbLzS4Dm4vmRba8WkK9uXC0/g=
-Received: from AS8PR04MB8946.eurprd04.prod.outlook.com (2603:10a6:20b:42d::18)
- by AS1PR04MB9503.eurprd04.prod.outlook.com (2603:10a6:20b:4d1::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16; Thu, 2 Dec
- 2021 20:35:40 +0000
-Received: from AS8PR04MB8946.eurprd04.prod.outlook.com
- ([fe80::60be:d568:a436:894b]) by AS8PR04MB8946.eurprd04.prod.outlook.com
- ([fe80::60be:d568:a436:894b%5]) with mapi id 15.20.4755.016; Thu, 2 Dec 2021
- 20:35:40 +0000
-From:   Leo Li <leoyang.li@nxp.com>
-To:     "jocke@infinera.com" <joakim.tjernlund@infinera.com>,
-        "regressions@leemhuis.info" <regressions@leemhuis.info>,
-        "Eugene_Bordenkircher@selinc.com" <Eugene_Bordenkircher@selinc.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "balbi@kernel.org" <balbi@kernel.org>
-Subject: RE: bug: usb: gadget: FSL_UDC_CORE Corrupted request list leads to
- unrecoverable loop.
-Thread-Topic: bug: usb: gadget: FSL_UDC_CORE Corrupted request list leads to
- unrecoverable loop.
-Thread-Index: AdfM5PT/NvfAW0+iTcC+AdIF01azggAtEqGAAKVd5oACc0lYgABIbVXQAbnCUAAA0DL90AAM8XwQAABPhqAAGbtsgAA3RpcAAD9HUaA=
-Date:   Thu, 2 Dec 2021 20:35:40 +0000
-Message-ID: <AS8PR04MB894614C61E57A80EB4FF7C758F699@AS8PR04MB8946.eurprd04.prod.outlook.com>
-References: <MWHPR2201MB152074F47BF142189365627B91879@MWHPR2201MB1520.namprd22.prod.outlook.com>
-         <2c275adc278477e1e512ea6ecc0c1f4dcc46969d.camel@infinera.com>
-         <6659a2c7fd9fffac766b8389244e5885ccbd38bd.camel@infinera.com>
-         <bb5c5d0f-2ae7-8426-0021-baeca8f7dd11@leemhuis.info>
-         <MWHPR2201MB15209AA4F2457934BDD3293B91999@MWHPR2201MB1520.namprd22.prod.outlook.com>
-         <726d3561-1842-72c7-d4cb-9a99211bb05c@leemhuis.info>
-         <MWHPR2201MB1520A85FE05B281DAA30F44A91669@MWHPR2201MB1520.namprd22.prod.outlook.com>
-         <AS8PR04MB89461BF7A3272E5A18ECD0948F669@AS8PR04MB8946.eurprd04.prod.outlook.com>
-         <MWHPR2201MB15205A333F1F610D332038AC91669@MWHPR2201MB1520.namprd22.prod.outlook.com>
-         <d0c52d26742b082f5a953a05630a9d70e0eb1356.camel@infinera.com>
- <527ebc333daa2a1d513ea217e5beb61a5acea3fb.camel@infinera.com>
-In-Reply-To: <527ebc333daa2a1d513ea217e5beb61a5acea3fb.camel@infinera.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b9843075-3042-4db7-8574-08d9b5d34e61
-x-ms-traffictypediagnostic: AS1PR04MB9503:
-x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-x-microsoft-antispam-prvs: <AS1PR04MB950357BAEF1D2A37EF9B85B98F699@AS1PR04MB9503.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EBXwdQhsVkT7eC7uWVefF2yCjLEQd/LjW6/UE/7CLBCCz5IuKcttShNEP+6iAd1SEpJlYui1LpiKd7Iyq0fksjUbkeBdxl5Dva2vT2CAWOWP3UU8uMKn+5hccBlpvAeHwyw8eUussrLv84iryXhfykXB3zNM4WoHFJo2r1v+nAfD02kzyMaluvkPxE4m9WUBWoKWAuv12z81/4wOVGllbN2buajXeLon1kQJLzIdRgMbFIoYS7MHHW/NkrWxZjX3dmHWEugy7LEbBJwHGd22QHk/6L4+tZF5t2ybx2G74xSQgQzr2Hz2QSjhKTISn0QSladR5rcvQaLLzwvS4bsy6DHHwW7dR6k71l5K7ChkI2W+lcgDTvATO2qUlCjw5ILU4S/IQEnfuTCoovDT1xJ02kLeYEGJZARrvwSKXiHrjWJJ00VT6cY3hsS18uFVWk0d18W63vPGMCprAq2XBSLwLZNnSAFR7cXr5QerJ/s81hE5Z2OqNmY6VOueX5tgcueXxhXEl7+PjVuIHjjf97KnGg94E7tKJdddiOClLZAV5wrW7xSPdLnqCzZYuAfOT82OzQwekfsxZ8KUt9SVsheYXscTuCYhwDd/5wwMqF1lbBUFw0yTj2rPBL27uxgMjaXE3jGnfcNd61+MyDuqr8jD8wi0Nz64Y1X/piWSo/DfLe5UTsBmn+vCyhaPSuMuHh+9GBru8pUYXp34VvKFDwPWTuRD29u/5PpPbgk/h+5mrqI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8946.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(83380400001)(33656002)(66556008)(66476007)(38070700005)(55016003)(26005)(38100700002)(52536014)(186003)(76116006)(71200400001)(53546011)(6506007)(66946007)(66446008)(64756008)(316002)(8936002)(8676002)(2906002)(4326008)(86362001)(4001150100001)(7696005)(122000001)(54906003)(5660300002)(508600001)(9686003)(110136005)(491001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SlFDbHZsWnBIMm0zR2RteitvK2hLMnlkbFZYUXQ0RzdpOEwvVUI1MU5UcXg0?=
- =?utf-8?B?Y25nbTBka2JjeGRuSFJjNHk2OU5Fbm1WdWVGUWZjRnpDa2hQMEF0RmErNEFQ?=
- =?utf-8?B?WDJyaGZvdmZ0UjVha0lJUGlkNStzc2RGbzNjYm9pRFYrVHROc09ZTkNrMDN5?=
- =?utf-8?B?NzdwODBocVFPMjlZSXdjOUpkTFhBLzhyeUs3am8rQyt2VWhEQ1l4QXJVT1A0?=
- =?utf-8?B?RmhmdXRXdnoyd0loZEl6NE5JWEZldDQ4bG05Vk5mTndxeHFvOVZ4azdLdU9w?=
- =?utf-8?B?VkJGSkszcGMzWU9hbzdkNDJ0NzBod0JNbjNiM1lWaFVmQkZ4QUR3c2Y2THh3?=
- =?utf-8?B?Z0VUM3ArN28wSElpQVhFcVBIM3lJMHhScDF1UE9zU3NsY0tnRC9veStPTEZu?=
- =?utf-8?B?ZnhWVEdyeWc5dmpBYU5SK0tBeDMwR21vWjNHU1VkQVNPNmU2cENGMkc4SkFQ?=
- =?utf-8?B?MUpwcXJaMGV0UkgrRWFQL0pDc2M1OUN3T2tQZzVVR2x2czFSbVVQaGozVjdI?=
- =?utf-8?B?NlJkZWp4SEFCdUUwNzdoOU40aEhueEJvMUtaa3N2NVF0MGJkOVBuL0tpSnFl?=
- =?utf-8?B?TldYcDFKQWxmdGUzWlh0K0M3Q3NoekQ0eTh6K01pOU45Tm90MW9QRVdaeG5T?=
- =?utf-8?B?bHpHL1JwbnZVZ0dpeWI1SFNjZE5KUmJmK1ptRzA3UFJiaVFmRUk3Uko4N21B?=
- =?utf-8?B?SUFEUG9mb2J6TTQvT2IvZTZRM3dMZ0hyTVR4WkI2MjNyZEtkY0IySDA5T1Qr?=
- =?utf-8?B?UmF5Ym52ZzVoVDVzTG5kcTZSbEVTVWtLREt5Uk5QcEUxTmM1L1hSWVh3Z2p6?=
- =?utf-8?B?cUV2ZTNNaWNYQTFDNmtkSVIvYWxWbUluTCtUWWNpVTdwbUFxR2JVb0JrNWJI?=
- =?utf-8?B?bkhOUHNEUHJvNU9idzk2WDIwbzhJMjE1cG1xS3Nnd0kwUVJyampYRE9EdTdP?=
- =?utf-8?B?T2cwQm8xRlI3RXhhZlFMYXJJU0xOM0RkYU1DTFpsaE1mSWgrNFBlSDdZRTVW?=
- =?utf-8?B?Mk5mVTRYdjAzRDJKeXpGYWdZek5yeDNPM3dtajFYYzRmMWtiMzg5VzNWMlB5?=
- =?utf-8?B?MVplOGViZ2VlNXJ0NUp4MDRlT3RRbzBzRDdncDRHOFJOVnljby9FT3JkVncr?=
- =?utf-8?B?dTZSSzF5S0VhdE5NL2Q2bzBSbFJSMGtXbWluZnREbWYycW9Xa0pIdEdkTFNX?=
- =?utf-8?B?aEJucVJjWkRGMEp5MlV0MlFsOWZnbXp5cVhHMy83WWlzenk0Q0ordzFFVjdN?=
- =?utf-8?B?ZFZjTTEzajh0THRpcHFWdlJxUExyd09mS2VuWHhlQ2lrUVUwSmNyRnJJMW9T?=
- =?utf-8?B?dWVEc3B4R3VVczhWcGhuWURDZWhpajlXMHQ2bkFqbTVZVDNSL0dRUDFJcUUy?=
- =?utf-8?B?U1ROTm5LN2p4Q3V1SmY2V1kwQ1EvMDl3NWZKcnNaWjE2SEFpTG9EWEREdEtn?=
- =?utf-8?B?RDgrZmxJUGFINkx1enRrZnY5enh2aWloc1dTL2lQU21IVTBFQlFiVi9MTC90?=
- =?utf-8?B?cnhjNVRWV1RwZ3lZa3ZOYzJ3SlNrRXYyV1R6dWNEUUxVR3p3NGpvTWhDK21Z?=
- =?utf-8?B?RnpGY01lK21hUzlRNVBWenYyRTNvMmFEWkl1NkZabURQTGdoZ2oxYm04dkpq?=
- =?utf-8?B?VmlnM3lObGM0UHNORm9hdDRCaFFrSWhUWFNybVdDczdrRlVXa2Zpeit2M2U4?=
- =?utf-8?B?NTlnU1VIelhvZ1VVN0NTSU9SM1c5UGFpQXlseXdiemhNRVFLaEpFNjk0QWdR?=
- =?utf-8?B?RzNEYk81c0RSR09HTXlMRnRNTlBRdTlueXVLMUhVeHZwZ1h4ZFRUMmY1MDJj?=
- =?utf-8?B?NWh1MXI5dFI1dzV6WEZJSFZlZ3NMdHFJOVYvWjJNblJQc0V3a0RLcWIxUFNz?=
- =?utf-8?B?VUtxV1hnbVlPM1lRdFQvdWNyQmtOcyt0SW5nL3lwZkN4SExUclJCVFhyVzNh?=
- =?utf-8?B?L2JDWU1UMEp3VGYxRlpld3djV0pxcjcrTkU2QVpmSkJHb050TlE2SmpaZ04z?=
- =?utf-8?B?ZWkxYVREQUk5RDNGSFlRcmUvMEJ6V3JMelZhMWlROC9wZkhUQk1ISGpzMDMr?=
- =?utf-8?B?Vm1TYVdZbm9Lam1MTnN5Y1lqbTVJWGJOV283MG9qNmNqTElpb1ZWWWZVVXlO?=
- =?utf-8?B?NGJ2QURYcVlFZENQUlBxY2h5MUxIaWpmQkFGTlVIN0hMSm5wYlhVVzlMbHVK?=
- =?utf-8?B?c1E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1377076AbhLBV1x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Dec 2021 16:27:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242942AbhLBV1v (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Dec 2021 16:27:51 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9ACC06174A;
+        Thu,  2 Dec 2021 13:24:28 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id p18-20020a17090ad31200b001a78bb52876so3526165pju.3;
+        Thu, 02 Dec 2021 13:24:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+BkUAqxoN5Fy8yjLt+FU0EZ0cX0yYjSMs8+EtuSBhk0=;
+        b=Cd6RK4cQTZRM/IqvHQkZhLCqCs/8jMcF4lppy7tucbr5Vp+FR3+HUnoFq4tqBtf/D1
+         Kev3XDjfu5qg71ZDDrO+4/H+O7T81BV9RXOmklrDVL82HW7YhD/aw26FBAPMTtAlPDcd
+         c6GUG5i/ZaWpi0KH/rW6w/88XjB1cl94v3vN9eKoSMEPaAwHLZNuq/XUPlHCn7AYgx21
+         swoaFqRhA93KhPICqW/XVxobDUglQqVH6mgpQovw3rJOtSbwe2asZcHjLteUP/swflpp
+         9PGMgk31ZwykW6bqfotRQbIgFtc5UD4JJ6J7XrU8U38PzhO+MIoVWG1A10pdfBOFKlT4
+         pRHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+BkUAqxoN5Fy8yjLt+FU0EZ0cX0yYjSMs8+EtuSBhk0=;
+        b=7+4xXSshssLvb+DGgS7Kq0ica3kufMQskUJw+4GP4cLADIw0OdQ2rJEazSURz8lA0D
+         P9KNZ2HMgx+vH00vcNeL6c6AcPBA7zXkYmLKCPrEnK74XN2rUoP1zt0x9nwN8Z48fHhQ
+         vyTG0OAx3++jtsiCDguXEnwdYvQOhBi25yIA1cKH5MvMa8+gvgAAO7tXAPe1MUVUDNDs
+         +G0JGp/PhwE9lESE1KKeJPYCCHwwqa4NW1z1sJjnB8jRaOkMYWZE7/nTGPpDKiKi5W7i
+         LUn01fxkKMghwxgIQGhethM7WSANOeG11FNenRMyvy5yTd8QSq6QLTyVbtWbP1U4D5Y6
+         pjEA==
+X-Gm-Message-State: AOAM532oG9ERPaBB8DsWIMaWCyaq/g96kOxHOI+rml2or8MfbomWlYjY
+        BKIQLRdDewcWl5Hd80nzc/31FveAJMA=
+X-Google-Smtp-Source: ABdhPJzQfHwdite6wq1wX6654rl7VFWnhrkbBLVs9Lw+py7iIKCDVj2Guu8Qn+ylTh2ccdjXn0MrpQ==
+X-Received: by 2002:a17:902:e88a:b0:141:dfde:eed7 with SMTP id w10-20020a170902e88a00b00141dfdeeed7mr18172144plg.17.1638480267230;
+        Thu, 02 Dec 2021 13:24:27 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id mr2sm402399pjb.25.2021.12.02.13.24.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 13:24:26 -0800 (PST)
+Subject: Re: [PATCH 05/14] dt-bindings: gpio: Convert Broadcom STB GPIO to
+ YAML
+To:     Gregory Fong <gregory.0xf0@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     devicetree@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
+        <linux-mmc@vger.kernel.org>,
+        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
+References: <20211201205110.41656-1-f.fainelli@gmail.com>
+ <20211201205110.41656-6-f.fainelli@gmail.com>
+ <CADtm3G7wiNdDq2fagWeSDd_RV_dyfrNy+5e-VL9OKjwGAWzNtg@mail.gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <f96c346a-0d17-6148-0924-72744dd5c34d@gmail.com>
+Date:   Thu, 2 Dec 2021 13:24:23 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8946.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b9843075-3042-4db7-8574-08d9b5d34e61
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2021 20:35:40.6918
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Hfv4hTFms5fgmwmqFI+uzQNt27BnK12XR9yO2QTaG1atHElTqVNotfSZReDY7GpdK09r0cWsvBYxeszhXTH6Kw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9503
+In-Reply-To: <CADtm3G7wiNdDq2fagWeSDd_RV_dyfrNy+5e-VL9OKjwGAWzNtg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSm9ha2ltIFRqZXJubHVu
-ZCA8Sm9ha2ltLlRqZXJubHVuZEBpbmZpbmVyYS5jb20+DQo+IFNlbnQ6IFdlZG5lc2RheSwgRGVj
-ZW1iZXIgMSwgMjAyMSA4OjE5IEFNDQo+IFRvOiByZWdyZXNzaW9uc0BsZWVtaHVpcy5pbmZvOyBM
-ZW8gTGkgPGxlb3lhbmcubGlAbnhwLmNvbT47DQo+IEV1Z2VuZV9Cb3JkZW5raXJjaGVyQHNlbGlu
-Yy5jb207IGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4cHBjLQ0KPiBkZXZAbGlzdHMu
-b3psYWJzLm9yZw0KPiBDYzogZ3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc7IGJhbGJpQGtlcm5l
-bC5vcmcNCj4gU3ViamVjdDogUmU6IGJ1ZzogdXNiOiBnYWRnZXQ6IEZTTF9VRENfQ09SRSBDb3Jy
-dXB0ZWQgcmVxdWVzdCBsaXN0IGxlYWRzIHRvDQo+IHVucmVjb3ZlcmFibGUgbG9vcC4NCj4gDQo+
-IE9uIFR1ZSwgMjAyMS0xMS0zMCBhdCAxMjo1NiArMDEwMCwgSm9ha2ltIFRqZXJubHVuZCB3cm90
-ZToNCj4gPiBPbiBNb24sIDIwMjEtMTEtMjkgYXQgMjM6NDggKzAwMDAsIEV1Z2VuZSBCb3JkZW5r
-aXJjaGVyIHdyb3RlOg0KPiA+ID4gQWdyZWVkLA0KPiA+ID4NCj4gPiA+IFdlIGFyZSBoYXBweSBw
-aWNrIHVwIHRoZSB0b3JjaCBvbiB0aGlzLCBidXQgSSdkIGxpa2UgdG8gdHJ5IGFuZCBoZWFyIGZy
-b20NCj4gSm9ha2ltIGZpcnN0IGJlZm9yZSB3ZSBkby4gIFRoZSBwYXRjaCBzZXQgaXMgaGlzLCBz
-byBJJ2QgbGlrZSB0byBnaXZlIGhpbSB0aGUNCj4gb3Bwb3J0dW5pdHkuICBJIHRoaW5rIGhlJ3Mg
-dGhlIG9ubHkgb25lIHRoYXQgY2FuIGFkZCBhIHRydWx5IHByb3BlciBkZXNjcmlwdGlvbg0KPiBh
-cyB3ZWxsIGJlY2F1c2UgaGUgbWVudGlvbmVkIHRoYXQgdGhpcyBpbmNsdWRlcyBhICJmZXcgbW9y
-ZSBmaXhlcyIgdGhhbiBqdXN0DQo+IHRoZSBvbmUgd2UgcmFuIGludG8uICBJJ2QgcmF0aGVyIGhl
-YXIgZnJvbSBoaW0gdGhhbiB0cnkgdG8gcmV2ZXJzZSBlbmdpbmVlcg0KPiB3aGF0IHdhcyBiZWlu
-ZyBhZGRyZXNzZWQuDQo+ID4gPg0KPiA+ID4gSm9ha2ltLCBpZiB5b3UgYXJlIHN0aWxsIHdhdGNo
-aW5nIHRoZSB0aHJlYWQsIHdvdWxkIHlvdSBsaWtlIHRvIHRha2UgYSBzdGFiDQo+IGF0IGl0PyAg
-SWYgSSBkb24ndCBoZWFyIGZyb20geW91IGluIGEgY291cGxlIGRheXMsIHdlJ2xsIHBpY2sgdXAg
-dGhlIHRvcmNoIGFuZCBkbw0KPiB3aGF0IHdlIGNhbi4NCj4gPiA+DQo+ID4NCj4gPiBJIGFtIGZh
-ciBhd2F5IGZyb20gdGhpcyBub3cgYW5kIHN0aWxsIG9uIDQuMTkuIEkgZG9uJ3QgbWluZCBpZiB5
-b3UgdHdlYWsNCj4gdHdlYWsgdGhlIHBhdGNoZXMgZm9yIGJldHRlciAidXBzdHJlYW1hYmlsaXR5
-Ig0KPiANCj4gRXZlbiBiZXR0ZXIgd291bGQgYmUgdG8gbWlncmF0ZSB0byB0aGUgY2hpcGlkZWEg
-ZHJpdmVyLCBJIGFtIHRvbGQganVzdCBhIGZldw0KPiB0d2Vha3MgYXJlIG5lZWRlZCBidXQgdGhp
-cyBpcyBwcm9iYWJseSBzb21ldGhpbmcgTlhQIHNob3VsZCBkbyBhcyB0aGV5DQo+IGhhdmUgYWNj
-ZXNzIHRvIG90aGVyIFNPQydzIHVzaW5nIGNoaXBpZGVhLg0KDQpJIGFncmVlIHdpdGggdGhpcyBk
-aXJlY3Rpb24gYnV0IHRoZSBwcm9ibGVtIHdhcyB3aXRoIGJhbmR3aWR0aC4gIEFzIHRoaXMgY29u
-dHJvbGxlciB3YXMgb25seSB1c2VkIG9uIGxlZ2FjeSBwbGF0Zm9ybXMsIGl0IGlzIGhhcmRlciB0
-byBqdXN0aWZ5IG5ldyBlZmZvcnQgb24gaXQgbm93Lg0KDQpSZWdhcmRzLA0KTGVvDQoNCg==
+On 12/2/21 8:00 AM, Gregory Fong wrote:
+> Hi Florian,
+> 
+> I haven't kept up with the new yaml format, so not entirely sure I
+> know what I'm talking about yet, but here are a few comments:
+> 
+> On Wed, Dec 1, 2021 at 12:51 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>>
+>> Convert the Broadcom STB GPIO Device Tree binding to YAML to help with
+>> validation.
+>>
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>> ---
+>>  .../bindings/gpio/brcm,brcmstb-gpio.txt       |  83 --------------
+>>  .../bindings/gpio/brcm,brcmstb-gpio.yaml      | 104 ++++++++++++++++++
+>>  MAINTAINERS                                   |   2 +-
+>>  3 files changed, 105 insertions(+), 84 deletions(-)
+>>  delete mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
+>>  create mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
+>> deleted file mode 100644
+>> index 5d468ecd1809..000000000000
+>> --- a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
+>> +++ /dev/null
+>> @@ -1,83 +0,0 @@
+>> [snip]
+>> -
+>> -- interrupts-extended:
+>> -    Alternate form of specifying interrupts and parents that allows for
+>> -    multiple parents.  This takes precedence over 'interrupts' and
+>> -    'interrupt-parent'.  Wakeup-capable GPIO controllers often route their
+>> -    wakeup interrupt lines through a different interrupt controller than the
+>> -    primary interrupt line, making this property necessary.
+> 
+> It looks like interrupts-extended was removed from the new docs, I'm
+> assuming that was intentional?
+
+Yes that is intentional, since this is a core property there is an
+expectation that it is documented and used outside of the scope of this
+binding.
+
+> 
+>> [snip]
+>> diff --git a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
+>> new file mode 100644
+>> index 000000000000..4b7309dc74dc
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
+>> @@ -0,0 +1,104 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/gpio/brcm,brcmstb-gpio.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Broadcom STB "UPG GIO" GPIO controller
+>> +
+>> +description: >
+>> +  The controller's registers are organized as sets of eight 32-bit
+>> +  registers with each set controlling a bank of up to 32 pins.  A single
+>> +  interrupt is shared for all of the banks handled by the controller.
+>> +
+>> +maintainers:
+>> +  - Doug Berger <opendmb@gmail.com>
+>> +  - Florian Fainelli <f.fainelli@gmail.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    oneOf:
+>> +      - items:
+>> +          - enum:
+>> +              - brcm,bcm7445-gpio
+>> +          - const: brcm,brcmstb-gpio
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +    description:
+> 
+> Missing folded block scalar marker ('>') above
+
+Done.
+
+> 
+>> +      Define the base and range of the I/O address space containing
+>> +      the brcmstb GPIO controller registers
+>> +
+>> +  "#gpio-cells":
+>> +    const: 2
+>> +    description: >
+>> +      The first cell is the pin number (within the controller's
+>> +      pin space), and the second is used for the following:
+>> +      bit[0]: polarity (0 for active-high, 1 for active-low)
+>> +
+>> +  gpio-controller: true
+>> +
+>> +  "brcm,gpio-bank-widths":
+>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>> +    description:
+> 
+> Same here
+> 
+>> +      Number of GPIO lines for each bank.  Number of elements must
+>> +      correspond to number of banks suggested by the 'reg' property.
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +    description:
+> 
+> While it's not necessary while this is only one line, consider adding
+> '>' here too.
+> 
+>> +      The interrupt shared by all GPIO lines for this controller.
+>> +
+>> +  "#interrupt-cells":
+>> +    const: 2
+>> +    description: >
+> 
+> This next block could get formatted strangely with '>'; recommend
+> using '|' instead
+
+Yes good point.
+
+> 
+>> +      The first cell is the GPIO number, the second should specify
+>> +      flags.  The following subset of flags is supported:
+>> +      - bits[3:0] trigger type and level flags
+>> +        1 = low-to-high edge triggered
+>> +        2 = high-to-low edge triggered
+>> +        4 = active high level-sensitive
+>> +        8 = active low level-sensitive
+>> +      Valid combinations are 1, 2, 3, 4, 8.
+>> +
+>> +  interrupt-controller: true
+>> +
+>> +  wakeup-source:
+>> +    type: boolean
+>> +    description: >
+>> +      GPIOs for this controller can be used as a wakeup source
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - gpio-controller
+>> +  - "#gpio-cells"
+> 
+> Need to add required property "brcm,gpio-bank-widths"
+
+Indeed, done.
+
+> 
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    upg_gio: gpio@f040a700 {
+>> +        #gpio-cells = <2>;
+>> +        #interrupt-cells = <2>;
+>> +        compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
+>> +        gpio-controller;
+>> +        interrupt-controller;
+>> +        reg = <0xf040a700 0x80>;
+>> +        interrupt-parent = <&irq0_intc>;
+>> +        interrupts = <0x6>;
+>> +        brcm,gpio-bank-widths = <32 32 32 24>;
+>> +    };
+>> +
+>> +    upg_gio_aon: gpio@f04172c0 {
+>> +        #gpio-cells = <2>;
+>> +        #interrupt-cells = <2>;
+>> +        compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
+>> +        gpio-controller;
+>> +        interrupt-controller;
+>> +        reg = <0xf04172c0 0x40>;
+>> +        interrupt-parent = <&irq0_aon_intc>;
+>> +        interrupts = <0x6>;
+>> +        wakeup-source;
+>> +        brcm,gpio-bank-widths = <18 4>;
+>> +    };
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 913856599623..78161abc384f 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -3772,7 +3772,7 @@ BROADCOM BRCMSTB GPIO DRIVER
+>>  M:     Gregory Fong <gregory.0xf0@gmail.com>
+> 
+> Not really related to this patch, but I should probably update this
+> entry to reflect current reality. Should that be you and/or Doug?
+
+If you could add both of us that would be great, thanks!
+-- 
+Florian
