@@ -2,389 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E0C466AEF
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Dec 2021 21:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A80466AF5
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Dec 2021 21:35:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348805AbhLBUhb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Dec 2021 15:37:31 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46882 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233848AbhLBUha (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Dec 2021 15:37:30 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F7F8B82489;
-        Thu,  2 Dec 2021 20:34:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51A98C00446;
-        Thu,  2 Dec 2021 20:34:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638477244;
-        bh=OGLHQ32JwgKHZzKrmPjJfqqk8gyqKgYpHI9CTcL3/s0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XRJPsOaUzWTVA5MQVzm2ff5Sb5SfvTHBaqsWn5jix9eow0/JPyMQ3uWSYhcdNPYMM
-         +g58emIE67qZNe0WF3I7mAkNrQmU+x+XvA2ueE0A/Vbcx8T3gOgpysqoMO/c63pZxg
-         0hFAz6qqVrOKwbNjlvXYHJpIJK32ruN6SFKpaFt0jAtho0oZlaV14xfz6vCyKDfVB+
-         8ianOx+M+72vNHBMsN/uzZnGXe+EaovG8FQxkUmzucFqmaUjY4zFyumXsERiKWSmZW
-         eYmpLWu+sWXN44XPBpHxx0lzYZQ3BpRGCLCbSVaBdtnCYfYnh3UjzlHBqPaFyCcG2I
-         RrAwmdaxHxHzQ==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     bpf@vger.kernel.org
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        SeongJae Park <sj@kernel.org>,
-        Jani Nikula <jani.nikula@intel.com>, axboe@kernel.dk,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
-        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, yuq825@gmail.com, robdclark@gmail.com,
-        sean@poorly.run, christian.koenig@amd.com, ray.huang@amd.com,
-        sgoutham@marvell.com, gakula@marvell.com, sbhatta@marvell.com,
-        hkelam@marvell.com, jingoohan1@gmail.com,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, bhelgaas@google.com,
-        krzysztof.kozlowski@canonical.com, mani@kernel.org,
-        pawell@cadence.com, rogerq@kernel.org, a-govindraju@ti.com,
-        gregkh@linuxfoundation.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        akpm@linux-foundation.org, thomas.hellstrom@linux.intel.com,
-        matthew.auld@intel.com, colin.king@intel.com, geert@linux-m68k.org,
-        linux-block@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH bpf v2] treewide: add missing includes masked by cgroup -> bpf dependency
-Date:   Thu,  2 Dec 2021 12:34:00 -0800
-Message-Id: <20211202203400.1208663-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.31.1
+        id S1348842AbhLBUjJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Dec 2021 15:39:09 -0500
+Received: from mail-eopbgr10063.outbound.protection.outlook.com ([40.107.1.63]:1762
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1348823AbhLBUjF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 2 Dec 2021 15:39:05 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nqQ+2DlUMablSlnbOVM0nz3of9HfmwQfxi2BqlEtcKczG32HdYjIGiTa5fLe5KL4xalEeX5yUZ8HV+cSIqaQrZi5VBVjP7OaQVNxnxEmBBKxo/BINee9wqXP59/lbXcvya/R5FWzrKtNVRhu25fyOLU4HZc1NRGBC9WwpsyG0TzArbn2a570AmPSz4q6oVEzE+Bg0QcUTwdTTGE7vU2hkdkp5MUP4zXPAn+mjGX/LcKdsMPf+Sv9la97/1IeXQKWGjneayrOlWRC4FqVEgyOUoGX7o1iOdfJXABzrRxSqljjP6SeNab0hjpZ0DpefV3E83kg04Yo78Fr4Mgilg+8rw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qn+zCk43ctQrPa/+QANvBRIJF+LrO8EKuDysZY5WY+E=;
+ b=iU0g3cge6/hI8SrrHioP4/y7TXHJTnudPepPwmy0jEOv35sYN8DRqKmGRrsh9XJEFEKi1NOhon2MRXIjZMb4WnZDkgDzXOgV99L+db/QOwHNzAUp+m284UL2L2G9mMl/AKcEwonbgrb3I5aFbihu9xKznS0Wx79LaYwd9mgGTvZe+tQIjEiQO95/jQ/JMGner4xnzRFYh+xjVOUWvmAgGU4maBAjNhnyYB2bHP4GlBzbwB/ZOWnekMk7syY3aYtIdq9cECjpl2hzEMw2qpSksTC32xuDBdCYr5idJdYciUCVyrI/Agm7xgViCfA/DzUm9sAGADiEl/qHPexmNrY3kQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qn+zCk43ctQrPa/+QANvBRIJF+LrO8EKuDysZY5WY+E=;
+ b=BhcsYARetnzTtHPGkWjRqtWnNx18IG5q9N10rxhzKKP5iAadVEFnJ5DXEf1hn5ciXuQ9cO96Dd29PZiOJzOrCcsCQ8ibG3zC06sIvr79AFMFwHCEA1np65MvZN0AHzfzn5pqEHTtmjr74QyO1jrbLzS4Dm4vmRba8WkK9uXC0/g=
+Received: from AS8PR04MB8946.eurprd04.prod.outlook.com (2603:10a6:20b:42d::18)
+ by AS1PR04MB9503.eurprd04.prod.outlook.com (2603:10a6:20b:4d1::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16; Thu, 2 Dec
+ 2021 20:35:40 +0000
+Received: from AS8PR04MB8946.eurprd04.prod.outlook.com
+ ([fe80::60be:d568:a436:894b]) by AS8PR04MB8946.eurprd04.prod.outlook.com
+ ([fe80::60be:d568:a436:894b%5]) with mapi id 15.20.4755.016; Thu, 2 Dec 2021
+ 20:35:40 +0000
+From:   Leo Li <leoyang.li@nxp.com>
+To:     "jocke@infinera.com" <joakim.tjernlund@infinera.com>,
+        "regressions@leemhuis.info" <regressions@leemhuis.info>,
+        "Eugene_Bordenkircher@selinc.com" <Eugene_Bordenkircher@selinc.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "balbi@kernel.org" <balbi@kernel.org>
+Subject: RE: bug: usb: gadget: FSL_UDC_CORE Corrupted request list leads to
+ unrecoverable loop.
+Thread-Topic: bug: usb: gadget: FSL_UDC_CORE Corrupted request list leads to
+ unrecoverable loop.
+Thread-Index: AdfM5PT/NvfAW0+iTcC+AdIF01azggAtEqGAAKVd5oACc0lYgABIbVXQAbnCUAAA0DL90AAM8XwQAABPhqAAGbtsgAA3RpcAAD9HUaA=
+Date:   Thu, 2 Dec 2021 20:35:40 +0000
+Message-ID: <AS8PR04MB894614C61E57A80EB4FF7C758F699@AS8PR04MB8946.eurprd04.prod.outlook.com>
+References: <MWHPR2201MB152074F47BF142189365627B91879@MWHPR2201MB1520.namprd22.prod.outlook.com>
+         <2c275adc278477e1e512ea6ecc0c1f4dcc46969d.camel@infinera.com>
+         <6659a2c7fd9fffac766b8389244e5885ccbd38bd.camel@infinera.com>
+         <bb5c5d0f-2ae7-8426-0021-baeca8f7dd11@leemhuis.info>
+         <MWHPR2201MB15209AA4F2457934BDD3293B91999@MWHPR2201MB1520.namprd22.prod.outlook.com>
+         <726d3561-1842-72c7-d4cb-9a99211bb05c@leemhuis.info>
+         <MWHPR2201MB1520A85FE05B281DAA30F44A91669@MWHPR2201MB1520.namprd22.prod.outlook.com>
+         <AS8PR04MB89461BF7A3272E5A18ECD0948F669@AS8PR04MB8946.eurprd04.prod.outlook.com>
+         <MWHPR2201MB15205A333F1F610D332038AC91669@MWHPR2201MB1520.namprd22.prod.outlook.com>
+         <d0c52d26742b082f5a953a05630a9d70e0eb1356.camel@infinera.com>
+ <527ebc333daa2a1d513ea217e5beb61a5acea3fb.camel@infinera.com>
+In-Reply-To: <527ebc333daa2a1d513ea217e5beb61a5acea3fb.camel@infinera.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b9843075-3042-4db7-8574-08d9b5d34e61
+x-ms-traffictypediagnostic: AS1PR04MB9503:
+x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+x-microsoft-antispam-prvs: <AS1PR04MB950357BAEF1D2A37EF9B85B98F699@AS1PR04MB9503.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: EBXwdQhsVkT7eC7uWVefF2yCjLEQd/LjW6/UE/7CLBCCz5IuKcttShNEP+6iAd1SEpJlYui1LpiKd7Iyq0fksjUbkeBdxl5Dva2vT2CAWOWP3UU8uMKn+5hccBlpvAeHwyw8eUussrLv84iryXhfykXB3zNM4WoHFJo2r1v+nAfD02kzyMaluvkPxE4m9WUBWoKWAuv12z81/4wOVGllbN2buajXeLon1kQJLzIdRgMbFIoYS7MHHW/NkrWxZjX3dmHWEugy7LEbBJwHGd22QHk/6L4+tZF5t2ybx2G74xSQgQzr2Hz2QSjhKTISn0QSladR5rcvQaLLzwvS4bsy6DHHwW7dR6k71l5K7ChkI2W+lcgDTvATO2qUlCjw5ILU4S/IQEnfuTCoovDT1xJ02kLeYEGJZARrvwSKXiHrjWJJ00VT6cY3hsS18uFVWk0d18W63vPGMCprAq2XBSLwLZNnSAFR7cXr5QerJ/s81hE5Z2OqNmY6VOueX5tgcueXxhXEl7+PjVuIHjjf97KnGg94E7tKJdddiOClLZAV5wrW7xSPdLnqCzZYuAfOT82OzQwekfsxZ8KUt9SVsheYXscTuCYhwDd/5wwMqF1lbBUFw0yTj2rPBL27uxgMjaXE3jGnfcNd61+MyDuqr8jD8wi0Nz64Y1X/piWSo/DfLe5UTsBmn+vCyhaPSuMuHh+9GBru8pUYXp34VvKFDwPWTuRD29u/5PpPbgk/h+5mrqI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8946.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(83380400001)(33656002)(66556008)(66476007)(38070700005)(55016003)(26005)(38100700002)(52536014)(186003)(76116006)(71200400001)(53546011)(6506007)(66946007)(66446008)(64756008)(316002)(8936002)(8676002)(2906002)(4326008)(86362001)(4001150100001)(7696005)(122000001)(54906003)(5660300002)(508600001)(9686003)(110136005)(491001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SlFDbHZsWnBIMm0zR2RteitvK2hLMnlkbFZYUXQ0RzdpOEwvVUI1MU5UcXg0?=
+ =?utf-8?B?Y25nbTBka2JjeGRuSFJjNHk2OU5Fbm1WdWVGUWZjRnpDa2hQMEF0RmErNEFQ?=
+ =?utf-8?B?WDJyaGZvdmZ0UjVha0lJUGlkNStzc2RGbzNjYm9pRFYrVHROc09ZTkNrMDN5?=
+ =?utf-8?B?NzdwODBocVFPMjlZSXdjOUpkTFhBLzhyeUs3am8rQyt2VWhEQ1l4QXJVT1A0?=
+ =?utf-8?B?RmhmdXRXdnoyd0loZEl6NE5JWEZldDQ4bG05Vk5mTndxeHFvOVZ4azdLdU9w?=
+ =?utf-8?B?VkJGSkszcGMzWU9hbzdkNDJ0NzBod0JNbjNiM1lWaFVmQkZ4QUR3c2Y2THh3?=
+ =?utf-8?B?Z0VUM3ArN28wSElpQVhFcVBIM3lJMHhScDF1UE9zU3NsY0tnRC9veStPTEZu?=
+ =?utf-8?B?ZnhWVEdyeWc5dmpBYU5SK0tBeDMwR21vWjNHU1VkQVNPNmU2cENGMkc4SkFQ?=
+ =?utf-8?B?MUpwcXJaMGV0UkgrRWFQL0pDc2M1OUN3T2tQZzVVR2x2czFSbVVQaGozVjdI?=
+ =?utf-8?B?NlJkZWp4SEFCdUUwNzdoOU40aEhueEJvMUtaa3N2NVF0MGJkOVBuL0tpSnFl?=
+ =?utf-8?B?TldYcDFKQWxmdGUzWlh0K0M3Q3NoekQ0eTh6K01pOU45Tm90MW9QRVdaeG5T?=
+ =?utf-8?B?bHpHL1JwbnZVZ0dpeWI1SFNjZE5KUmJmK1ptRzA3UFJiaVFmRUk3Uko4N21B?=
+ =?utf-8?B?SUFEUG9mb2J6TTQvT2IvZTZRM3dMZ0hyTVR4WkI2MjNyZEtkY0IySDA5T1Qr?=
+ =?utf-8?B?UmF5Ym52ZzVoVDVzTG5kcTZSbEVTVWtLREt5Uk5QcEUxTmM1L1hSWVh3Z2p6?=
+ =?utf-8?B?cUV2ZTNNaWNYQTFDNmtkSVIvYWxWbUluTCtUWWNpVTdwbUFxR2JVb0JrNWJI?=
+ =?utf-8?B?bkhOUHNEUHJvNU9idzk2WDIwbzhJMjE1cG1xS3Nnd0kwUVJyampYRE9EdTdP?=
+ =?utf-8?B?T2cwQm8xRlI3RXhhZlFMYXJJU0xOM0RkYU1DTFpsaE1mSWgrNFBlSDdZRTVW?=
+ =?utf-8?B?Mk5mVTRYdjAzRDJKeXpGYWdZek5yeDNPM3dtajFYYzRmMWtiMzg5VzNWMlB5?=
+ =?utf-8?B?MVplOGViZ2VlNXJ0NUp4MDRlT3RRbzBzRDdncDRHOFJOVnljby9FT3JkVncr?=
+ =?utf-8?B?dTZSSzF5S0VhdE5NL2Q2bzBSbFJSMGtXbWluZnREbWYycW9Xa0pIdEdkTFNX?=
+ =?utf-8?B?aEJucVJjWkRGMEp5MlV0MlFsOWZnbXp5cVhHMy83WWlzenk0Q0ordzFFVjdN?=
+ =?utf-8?B?ZFZjTTEzajh0THRpcHFWdlJxUExyd09mS2VuWHhlQ2lrUVUwSmNyRnJJMW9T?=
+ =?utf-8?B?dWVEc3B4R3VVczhWcGhuWURDZWhpajlXMHQ2bkFqbTVZVDNSL0dRUDFJcUUy?=
+ =?utf-8?B?U1ROTm5LN2p4Q3V1SmY2V1kwQ1EvMDl3NWZKcnNaWjE2SEFpTG9EWEREdEtn?=
+ =?utf-8?B?RDgrZmxJUGFINkx1enRrZnY5enh2aWloc1dTL2lQU21IVTBFQlFiVi9MTC90?=
+ =?utf-8?B?cnhjNVRWV1RwZ3lZa3ZOYzJ3SlNrRXYyV1R6dWNEUUxVR3p3NGpvTWhDK21Z?=
+ =?utf-8?B?RnpGY01lK21hUzlRNVBWenYyRTNvMmFEWkl1NkZabURQTGdoZ2oxYm04dkpq?=
+ =?utf-8?B?VmlnM3lObGM0UHNORm9hdDRCaFFrSWhUWFNybVdDczdrRlVXa2Zpeit2M2U4?=
+ =?utf-8?B?NTlnU1VIelhvZ1VVN0NTSU9SM1c5UGFpQXlseXdiemhNRVFLaEpFNjk0QWdR?=
+ =?utf-8?B?RzNEYk81c0RSR09HTXlMRnRNTlBRdTlueXVLMUhVeHZwZ1h4ZFRUMmY1MDJj?=
+ =?utf-8?B?NWh1MXI5dFI1dzV6WEZJSFZlZ3NMdHFJOVYvWjJNblJQc0V3a0RLcWIxUFNz?=
+ =?utf-8?B?VUtxV1hnbVlPM1lRdFQvdWNyQmtOcyt0SW5nL3lwZkN4SExUclJCVFhyVzNh?=
+ =?utf-8?B?L2JDWU1UMEp3VGYxRlpld3djV0pxcjcrTkU2QVpmSkJHb050TlE2SmpaZ04z?=
+ =?utf-8?B?ZWkxYVREQUk5RDNGSFlRcmUvMEJ6V3JMelZhMWlROC9wZkhUQk1ISGpzMDMr?=
+ =?utf-8?B?Vm1TYVdZbm9Lam1MTnN5Y1lqbTVJWGJOV283MG9qNmNqTElpb1ZWWWZVVXlO?=
+ =?utf-8?B?NGJ2QURYcVlFZENQUlBxY2h5MUxIaWpmQkFGTlVIN0hMSm5wYlhVVzlMbHVK?=
+ =?utf-8?B?c1E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8946.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b9843075-3042-4db7-8574-08d9b5d34e61
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2021 20:35:40.6918
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Hfv4hTFms5fgmwmqFI+uzQNt27BnK12XR9yO2QTaG1atHElTqVNotfSZReDY7GpdK09r0cWsvBYxeszhXTH6Kw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9503
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-cgroup.h (therefore swap.h, therefore half of the universe)
-includes bpf.h which in turn includes module.h and slab.h.
-Since we're about to get rid of that dependency we need
-to clean things up.
-
-v2: drop the cpu.h include from cacheinfo.h, it's not necessary
-and it makes riscv sensitive to ordering of include files.
-
-Link: https://lore.kernel.org/all/20211120035253.72074-1-kuba@kernel.org/  # v1
-Link: https://lore.kernel.org/all/20211120165528.197359-1-kuba@kernel.org/ # cacheinfo discussion
-Acked-by: Krzysztof Wilczyński <kw@linux.com>
-Acked-by: Peter Chen <peter.chen@kernel.org>
-Acked-by: SeongJae Park <sj@kernel.org>
-Acked-by: Jani Nikula <jani.nikula@intel.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: axboe@kernel.dk
-CC: maarten.lankhorst@linux.intel.com
-CC: mripard@kernel.org
-CC: tzimmermann@suse.de
-CC: airlied@linux.ie
-CC: daniel@ffwll.ch
-CC: jani.nikula@linux.intel.com
-CC: joonas.lahtinen@linux.intel.com
-CC: rodrigo.vivi@intel.com
-CC: yuq825@gmail.com
-CC: robdclark@gmail.com
-CC: sean@poorly.run
-CC: christian.koenig@amd.com
-CC: ray.huang@amd.com
-CC: sgoutham@marvell.com
-CC: gakula@marvell.com
-CC: sbhatta@marvell.com
-CC: hkelam@marvell.com
-CC: jingoohan1@gmail.com
-CC: lorenzo.pieralisi@arm.com
-CC: robh@kernel.org
-CC: kw@linux.com
-CC: bhelgaas@google.com
-CC: krzysztof.kozlowski@canonical.com
-CC: mani@kernel.org
-CC: pawell@cadence.com
-CC: peter.chen@kernel.org
-CC: rogerq@kernel.org
-CC: a-govindraju@ti.com
-CC: gregkh@linuxfoundation.org
-CC: ast@kernel.org
-CC: daniel@iogearbox.net
-CC: andrii@kernel.org
-CC: kafai@fb.com
-CC: songliubraving@fb.com
-CC: yhs@fb.com
-CC: john.fastabend@gmail.com
-CC: kpsingh@kernel.org
-CC: sj@kernel.org
-CC: akpm@linux-foundation.org
-CC: thomas.hellstrom@linux.intel.com
-CC: matthew.auld@intel.com
-CC: colin.king@intel.com
-CC: geert@linux-m68k.org
-CC: linux-block@vger.kernel.org
-CC: dri-devel@lists.freedesktop.org
-CC: intel-gfx@lists.freedesktop.org
-CC: lima@lists.freedesktop.org
-CC: linux-arm-msm@vger.kernel.org
-CC: freedreno@lists.freedesktop.org
-CC: linux-pci@vger.kernel.org
-CC: linux-arm-kernel@lists.infradead.org
-CC: linux-samsung-soc@vger.kernel.org
-CC: linux-usb@vger.kernel.org
-CC: bpf@vger.kernel.org
-CC: linux-mm@kvack.org
----
- block/fops.c                                          | 1 +
- drivers/gpu/drm/drm_gem_shmem_helper.c                | 1 +
- drivers/gpu/drm/i915/gt/intel_gtt.c                   | 1 +
- drivers/gpu/drm/i915/i915_request.c                   | 1 +
- drivers/gpu/drm/lima/lima_device.c                    | 1 +
- drivers/gpu/drm/msm/msm_gem_shrinker.c                | 1 +
- drivers/gpu/drm/ttm/ttm_tt.c                          | 1 +
- drivers/net/ethernet/huawei/hinic/hinic_sriov.c       | 1 +
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_ptp.c | 2 ++
- drivers/pci/controller/dwc/pci-exynos.c               | 1 +
- drivers/pci/controller/dwc/pcie-qcom-ep.c             | 1 +
- drivers/usb/cdns3/host.c                              | 1 +
- include/linux/cacheinfo.h                             | 1 -
- include/linux/device/driver.h                         | 1 +
- include/linux/filter.h                                | 2 +-
- mm/damon/vaddr.c                                      | 1 +
- mm/memory_hotplug.c                                   | 1 +
- mm/swap_slots.c                                       | 1 +
- 18 files changed, 18 insertions(+), 2 deletions(-)
-
-diff --git a/block/fops.c b/block/fops.c
-index ad732a36f9b3..3cb1e81929bc 100644
---- a/block/fops.c
-+++ b/block/fops.c
-@@ -15,6 +15,7 @@
- #include <linux/falloc.h>
- #include <linux/suspend.h>
- #include <linux/fs.h>
-+#include <linux/module.h>
- #include "blk.h"
- 
- static inline struct inode *bdev_file_inode(struct file *file)
-diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-index 7b9f69f21f1e..bca0de92802e 100644
---- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-+++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-@@ -9,6 +9,7 @@
- #include <linux/shmem_fs.h>
- #include <linux/slab.h>
- #include <linux/vmalloc.h>
-+#include <linux/module.h>
- 
- #ifdef CONFIG_X86
- #include <asm/set_memory.h>
-diff --git a/drivers/gpu/drm/i915/gt/intel_gtt.c b/drivers/gpu/drm/i915/gt/intel_gtt.c
-index 67d14afa6623..b67f620c3d93 100644
---- a/drivers/gpu/drm/i915/gt/intel_gtt.c
-+++ b/drivers/gpu/drm/i915/gt/intel_gtt.c
-@@ -6,6 +6,7 @@
- #include <linux/slab.h> /* fault-inject.h is not standalone! */
- 
- #include <linux/fault-inject.h>
-+#include <linux/sched/mm.h>
- 
- #include "gem/i915_gem_lmem.h"
- #include "i915_trace.h"
-diff --git a/drivers/gpu/drm/i915/i915_request.c b/drivers/gpu/drm/i915/i915_request.c
-index 820a1f38b271..89cccefeea63 100644
---- a/drivers/gpu/drm/i915/i915_request.c
-+++ b/drivers/gpu/drm/i915/i915_request.c
-@@ -29,6 +29,7 @@
- #include <linux/sched.h>
- #include <linux/sched/clock.h>
- #include <linux/sched/signal.h>
-+#include <linux/sched/mm.h>
- 
- #include "gem/i915_gem_context.h"
- #include "gt/intel_breadcrumbs.h"
-diff --git a/drivers/gpu/drm/lima/lima_device.c b/drivers/gpu/drm/lima/lima_device.c
-index 65fdca366e41..f74f8048af8f 100644
---- a/drivers/gpu/drm/lima/lima_device.c
-+++ b/drivers/gpu/drm/lima/lima_device.c
-@@ -4,6 +4,7 @@
- #include <linux/regulator/consumer.h>
- #include <linux/reset.h>
- #include <linux/clk.h>
-+#include <linux/slab.h>
- #include <linux/dma-mapping.h>
- #include <linux/platform_device.h>
- 
-diff --git a/drivers/gpu/drm/msm/msm_gem_shrinker.c b/drivers/gpu/drm/msm/msm_gem_shrinker.c
-index 4a1420b05e97..086dacf2f26a 100644
---- a/drivers/gpu/drm/msm/msm_gem_shrinker.c
-+++ b/drivers/gpu/drm/msm/msm_gem_shrinker.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <linux/vmalloc.h>
-+#include <linux/sched/mm.h>
- 
- #include "msm_drv.h"
- #include "msm_gem.h"
-diff --git a/drivers/gpu/drm/ttm/ttm_tt.c b/drivers/gpu/drm/ttm/ttm_tt.c
-index 7e83c00a3f48..79c870a3bef8 100644
---- a/drivers/gpu/drm/ttm/ttm_tt.c
-+++ b/drivers/gpu/drm/ttm/ttm_tt.c
-@@ -34,6 +34,7 @@
- #include <linux/sched.h>
- #include <linux/shmem_fs.h>
- #include <linux/file.h>
-+#include <linux/module.h>
- #include <drm/drm_cache.h>
- #include <drm/ttm/ttm_bo_driver.h>
- 
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_sriov.c b/drivers/net/ethernet/huawei/hinic/hinic_sriov.c
-index a78c398bf5b2..01e7d3c0b68e 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_sriov.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_sriov.c
-@@ -8,6 +8,7 @@
- #include <linux/interrupt.h>
- #include <linux/etherdevice.h>
- #include <linux/netdevice.h>
-+#include <linux/module.h>
- 
- #include "hinic_hw_dev.h"
- #include "hinic_dev.h"
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ptp.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ptp.c
-index 0ef68fdd1f26..61c20907315f 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ptp.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ptp.c
-@@ -5,6 +5,8 @@
-  *
-  */
- 
-+#include <linux/module.h>
-+
- #include "otx2_common.h"
- #include "otx2_ptp.h"
- 
-diff --git a/drivers/pci/controller/dwc/pci-exynos.c b/drivers/pci/controller/dwc/pci-exynos.c
-index c24dab383654..722dacdd5a17 100644
---- a/drivers/pci/controller/dwc/pci-exynos.c
-+++ b/drivers/pci/controller/dwc/pci-exynos.c
-@@ -19,6 +19,7 @@
- #include <linux/platform_device.h>
- #include <linux/phy/phy.h>
- #include <linux/regulator/consumer.h>
-+#include <linux/module.h>
- 
- #include "pcie-designware.h"
- 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-index 7b17da2f9b3f..cfe66bf04c1d 100644
---- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-@@ -18,6 +18,7 @@
- #include <linux/pm_domain.h>
- #include <linux/regmap.h>
- #include <linux/reset.h>
-+#include <linux/module.h>
- 
- #include "pcie-designware.h"
- 
-diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
-index 84dadfa726aa..9643b905e2d8 100644
---- a/drivers/usb/cdns3/host.c
-+++ b/drivers/usb/cdns3/host.c
-@@ -10,6 +10,7 @@
-  */
- 
- #include <linux/platform_device.h>
-+#include <linux/slab.h>
- #include "core.h"
- #include "drd.h"
- #include "host-export.h"
-diff --git a/include/linux/cacheinfo.h b/include/linux/cacheinfo.h
-index 2f909ed084c6..4ff37cb763ae 100644
---- a/include/linux/cacheinfo.h
-+++ b/include/linux/cacheinfo.h
-@@ -3,7 +3,6 @@
- #define _LINUX_CACHEINFO_H
- 
- #include <linux/bitops.h>
--#include <linux/cpu.h>
- #include <linux/cpumask.h>
- #include <linux/smp.h>
- 
-diff --git a/include/linux/device/driver.h b/include/linux/device/driver.h
-index a498ebcf4993..15e7c5e15d62 100644
---- a/include/linux/device/driver.h
-+++ b/include/linux/device/driver.h
-@@ -18,6 +18,7 @@
- #include <linux/klist.h>
- #include <linux/pm.h>
- #include <linux/device/bus.h>
-+#include <linux/module.h>
- 
- /**
-  * enum probe_type - device driver probe type to try
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index b6a216eb217a..2374c452e5e2 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -6,6 +6,7 @@
- #define __LINUX_FILTER_H__
- 
- #include <linux/atomic.h>
-+#include <linux/bpf.h>
- #include <linux/refcount.h>
- #include <linux/compat.h>
- #include <linux/skbuff.h>
-@@ -26,7 +27,6 @@
- 
- #include <asm/byteorder.h>
- #include <uapi/linux/filter.h>
--#include <uapi/linux/bpf.h>
- 
- struct sk_buff;
- struct sock;
-diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
-index 35fe49080ee9..47f47f60440e 100644
---- a/mm/damon/vaddr.c
-+++ b/mm/damon/vaddr.c
-@@ -13,6 +13,7 @@
- #include <linux/mmu_notifier.h>
- #include <linux/page_idle.h>
- #include <linux/pagewalk.h>
-+#include <linux/sched/mm.h>
- 
- #include "prmtv-common.h"
- 
-diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-index 852041f6be41..2a9627dc784c 100644
---- a/mm/memory_hotplug.c
-+++ b/mm/memory_hotplug.c
-@@ -35,6 +35,7 @@
- #include <linux/memblock.h>
- #include <linux/compaction.h>
- #include <linux/rmap.h>
-+#include <linux/module.h>
- 
- #include <asm/tlbflush.h>
- 
-diff --git a/mm/swap_slots.c b/mm/swap_slots.c
-index 16f706c55d92..2b5531840583 100644
---- a/mm/swap_slots.c
-+++ b/mm/swap_slots.c
-@@ -30,6 +30,7 @@
- #include <linux/swap_slots.h>
- #include <linux/cpu.h>
- #include <linux/cpumask.h>
-+#include <linux/slab.h>
- #include <linux/vmalloc.h>
- #include <linux/mutex.h>
- #include <linux/mm.h>
--- 
-2.31.1
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSm9ha2ltIFRqZXJubHVu
+ZCA8Sm9ha2ltLlRqZXJubHVuZEBpbmZpbmVyYS5jb20+DQo+IFNlbnQ6IFdlZG5lc2RheSwgRGVj
+ZW1iZXIgMSwgMjAyMSA4OjE5IEFNDQo+IFRvOiByZWdyZXNzaW9uc0BsZWVtaHVpcy5pbmZvOyBM
+ZW8gTGkgPGxlb3lhbmcubGlAbnhwLmNvbT47DQo+IEV1Z2VuZV9Cb3JkZW5raXJjaGVyQHNlbGlu
+Yy5jb207IGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4cHBjLQ0KPiBkZXZAbGlzdHMu
+b3psYWJzLm9yZw0KPiBDYzogZ3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc7IGJhbGJpQGtlcm5l
+bC5vcmcNCj4gU3ViamVjdDogUmU6IGJ1ZzogdXNiOiBnYWRnZXQ6IEZTTF9VRENfQ09SRSBDb3Jy
+dXB0ZWQgcmVxdWVzdCBsaXN0IGxlYWRzIHRvDQo+IHVucmVjb3ZlcmFibGUgbG9vcC4NCj4gDQo+
+IE9uIFR1ZSwgMjAyMS0xMS0zMCBhdCAxMjo1NiArMDEwMCwgSm9ha2ltIFRqZXJubHVuZCB3cm90
+ZToNCj4gPiBPbiBNb24sIDIwMjEtMTEtMjkgYXQgMjM6NDggKzAwMDAsIEV1Z2VuZSBCb3JkZW5r
+aXJjaGVyIHdyb3RlOg0KPiA+ID4gQWdyZWVkLA0KPiA+ID4NCj4gPiA+IFdlIGFyZSBoYXBweSBw
+aWNrIHVwIHRoZSB0b3JjaCBvbiB0aGlzLCBidXQgSSdkIGxpa2UgdG8gdHJ5IGFuZCBoZWFyIGZy
+b20NCj4gSm9ha2ltIGZpcnN0IGJlZm9yZSB3ZSBkby4gIFRoZSBwYXRjaCBzZXQgaXMgaGlzLCBz
+byBJJ2QgbGlrZSB0byBnaXZlIGhpbSB0aGUNCj4gb3Bwb3J0dW5pdHkuICBJIHRoaW5rIGhlJ3Mg
+dGhlIG9ubHkgb25lIHRoYXQgY2FuIGFkZCBhIHRydWx5IHByb3BlciBkZXNjcmlwdGlvbg0KPiBh
+cyB3ZWxsIGJlY2F1c2UgaGUgbWVudGlvbmVkIHRoYXQgdGhpcyBpbmNsdWRlcyBhICJmZXcgbW9y
+ZSBmaXhlcyIgdGhhbiBqdXN0DQo+IHRoZSBvbmUgd2UgcmFuIGludG8uICBJJ2QgcmF0aGVyIGhl
+YXIgZnJvbSBoaW0gdGhhbiB0cnkgdG8gcmV2ZXJzZSBlbmdpbmVlcg0KPiB3aGF0IHdhcyBiZWlu
+ZyBhZGRyZXNzZWQuDQo+ID4gPg0KPiA+ID4gSm9ha2ltLCBpZiB5b3UgYXJlIHN0aWxsIHdhdGNo
+aW5nIHRoZSB0aHJlYWQsIHdvdWxkIHlvdSBsaWtlIHRvIHRha2UgYSBzdGFiDQo+IGF0IGl0PyAg
+SWYgSSBkb24ndCBoZWFyIGZyb20geW91IGluIGEgY291cGxlIGRheXMsIHdlJ2xsIHBpY2sgdXAg
+dGhlIHRvcmNoIGFuZCBkbw0KPiB3aGF0IHdlIGNhbi4NCj4gPiA+DQo+ID4NCj4gPiBJIGFtIGZh
+ciBhd2F5IGZyb20gdGhpcyBub3cgYW5kIHN0aWxsIG9uIDQuMTkuIEkgZG9uJ3QgbWluZCBpZiB5
+b3UgdHdlYWsNCj4gdHdlYWsgdGhlIHBhdGNoZXMgZm9yIGJldHRlciAidXBzdHJlYW1hYmlsaXR5
+Ig0KPiANCj4gRXZlbiBiZXR0ZXIgd291bGQgYmUgdG8gbWlncmF0ZSB0byB0aGUgY2hpcGlkZWEg
+ZHJpdmVyLCBJIGFtIHRvbGQganVzdCBhIGZldw0KPiB0d2Vha3MgYXJlIG5lZWRlZCBidXQgdGhp
+cyBpcyBwcm9iYWJseSBzb21ldGhpbmcgTlhQIHNob3VsZCBkbyBhcyB0aGV5DQo+IGhhdmUgYWNj
+ZXNzIHRvIG90aGVyIFNPQydzIHVzaW5nIGNoaXBpZGVhLg0KDQpJIGFncmVlIHdpdGggdGhpcyBk
+aXJlY3Rpb24gYnV0IHRoZSBwcm9ibGVtIHdhcyB3aXRoIGJhbmR3aWR0aC4gIEFzIHRoaXMgY29u
+dHJvbGxlciB3YXMgb25seSB1c2VkIG9uIGxlZ2FjeSBwbGF0Zm9ybXMsIGl0IGlzIGhhcmRlciB0
+byBqdXN0aWZ5IG5ldyBlZmZvcnQgb24gaXQgbm93Lg0KDQpSZWdhcmRzLA0KTGVvDQoNCg==
