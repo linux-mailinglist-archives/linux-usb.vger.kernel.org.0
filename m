@@ -2,288 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF2246676D
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Dec 2021 17:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD9546691D
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Dec 2021 18:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359318AbhLBQE1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Dec 2021 11:04:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
+        id S237927AbhLBReR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Dec 2021 12:34:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbhLBQER (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Dec 2021 11:04:17 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AB3C06174A;
-        Thu,  2 Dec 2021 08:00:54 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id n6so56819328uak.1;
-        Thu, 02 Dec 2021 08:00:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=U2sZPQd798weph9knxMPMeinCmRojfS8Pfapl2giXJM=;
-        b=jzpN2txMKcqDve7u5vuRi2+S6p2VzSDwNSmwgr2/5gAHntXTVsO8sG16S0sfqGyEUK
-         i5x27dvhK+nePQ8Yv1FdSGF/aNukodMSRBjErWtEoehmr5hBVhIJR+8fxfg19jP0VmLF
-         kDLyA3Rcf/hL1qOS1mxoSB8r7ot6uNKvV7zfnrN4auV/nXuMVm9ZJkxGibAMDmn/SoBe
-         ROrk7jYNBy4vRtneCuKrpYlAlXLqbg6VPDloVm3HCa7hmqiu7kasCokZzPej4vufQLcm
-         C103EOF/74+rSPWk4wyF6S+J+jQQ02uAbpL/QaSvdMcka5dyzJ3Tk3nenPYbgspH8T3x
-         7IvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U2sZPQd798weph9knxMPMeinCmRojfS8Pfapl2giXJM=;
-        b=HRZ3wB4So2gPSE9p3PGj91dZ32K3lvzrb4NYqR0D3dhitPorDeKlwtxAW7rQW0OMGn
-         aijsNxew002ftVOAutuVn3Z3FFYJAYFmUbZQinOWgZqHA7Ucwjb4DOl7WepV6FdPMsVd
-         2p+ZLCA+JoMVdY9jFkBwvrqCm/AG45qyX5PKTXmYqhzxTVJK8M/utfFs6iEpnIp1Jhoh
-         sjTrwkyU2bhK0o9slrhIt556uW4qUz1DgG36+tjrEwOb14Rd/ZEzvTVcwHKCzeJjotUU
-         yWw28KoWYqhGo4K+MN8+jH7A2MdSxIJL5c/Rf5OpcV0fpXNK0BSaQRZY2E7VIxo0ejTS
-         44RA==
-X-Gm-Message-State: AOAM530hese71zCkqrBBUAZbUNYt/GciqMDW2cJ22x9UMV2CGeebhavF
-        ktIsvDhUevpGeD0FvTfafVp21jofAmoM9laPd60=
-X-Google-Smtp-Source: ABdhPJybAreaEhSuo2y2Tbo1YdlgTaiMlhDNtXg5D8QWfVW6+flBljZULwo/BbqpU2HaLcu7I83aSoQSfdCygG1zQUs=
-X-Received: by 2002:ab0:45a8:: with SMTP id u37mr15834000uau.24.1638460853923;
- Thu, 02 Dec 2021 08:00:53 -0800 (PST)
+        with ESMTP id S233308AbhLBReR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Dec 2021 12:34:17 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFAAC06174A;
+        Thu,  2 Dec 2021 09:30:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=sEWHIxjOWFg80SWER+urzfc9OekftWsOORvg2PEkR3Q=; b=QQGolphIZAwJ+ihBIQIIC1DMsz
+        8QQwZB0gHnsamiiaIhTdRmUs9Q5u4i9eJG4hYrL5Swz/id2UKHfcBprDMjrrvy6OoPTOJK8Ko4ece
+        Oq8zMlyoduL3KEGkk0MkvhXgQOQWqvGkX8fqy7WrE9kd1LHNb+Nf4H+XXLGIJmuoWcwBYrhdK7hxw
+        l95GWNNN9wL4ntvCQlPVRhQgnwfKCIcYOYJWTifhMz/juMaehJKNAY7wqlY4lZeZifIszmBlL15nm
+        pY5z9B5lYmiu7ftOV6v79WDiRj0OOQHExlBRGugq2vUnlR2D4CXz72219omHuatEA1NXRIiHvFqCA
+        SAapKL0Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mspuv-001qkT-UQ; Thu, 02 Dec 2021 17:30:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8D061300728;
+        Thu,  2 Dec 2021 18:30:45 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1537D200C72E7; Thu,  2 Dec 2021 16:22:55 +0100 (CET)
+Date:   Thu, 2 Dec 2021 16:22:55 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     baolu.lu@linux.intel.com
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: earlyprintk=xdbc seems broken
+Message-ID: <YajkzwmWQua3Kh6A@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20211201205110.41656-1-f.fainelli@gmail.com> <20211201205110.41656-6-f.fainelli@gmail.com>
-In-Reply-To: <20211201205110.41656-6-f.fainelli@gmail.com>
-From:   Gregory Fong <gregory.0xf0@gmail.com>
-Date:   Thu, 2 Dec 2021 08:00:00 -0800
-Message-ID: <CADtm3G7wiNdDq2fagWeSDd_RV_dyfrNy+5e-VL9OKjwGAWzNtg@mail.gmail.com>
-Subject: Re: [PATCH 05/14] dt-bindings: gpio: Convert Broadcom STB GPIO to YAML
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     devicetree@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
-        <linux-mmc@vger.kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Florian,
+Hi Lu,
 
-I haven't kept up with the new yaml format, so not entirely sure I
-know what I'm talking about yet, but here are a few comments:
+I was unfortunate enough to need xdbc and can't get my machine to boot
+with earlyprintk=xdbc on the cmdline.
 
-On Wed, Dec 1, 2021 at 12:51 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
->
-> Convert the Broadcom STB GPIO Device Tree binding to YAML to help with
-> validation.
->
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  .../bindings/gpio/brcm,brcmstb-gpio.txt       |  83 --------------
->  .../bindings/gpio/brcm,brcmstb-gpio.yaml      | 104 ++++++++++++++++++
->  MAINTAINERS                                   |   2 +-
->  3 files changed, 105 insertions(+), 84 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
->  create mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
->
-> diff --git a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
-> deleted file mode 100644
-> index 5d468ecd1809..000000000000
-> --- a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
-> +++ /dev/null
-> @@ -1,83 +0,0 @@
-> [snip]
-> -
-> -- interrupts-extended:
-> -    Alternate form of specifying interrupts and parents that allows for
-> -    multiple parents.  This takes precedence over 'interrupts' and
-> -    'interrupt-parent'.  Wakeup-capable GPIO controllers often route their
-> -    wakeup interrupt lines through a different interrupt controller than the
-> -    primary interrupt line, making this property necessary.
+When I boot the target without the earlyprintk=xdbc, but have the cable
+attached, it won't boot because boot gets stuck like:
 
-It looks like interrupts-extended was removed from the new docs, I'm
-assuming that was intentional?
+Dec  2 15:08:10 tigerlake kernel: [   42.043137] usb usb4-port3: Cannot enable. Maybe the USB cable is bad?
+Dec  2 15:08:10 tigerlake kernel: [   42.043227] usb usb4-port3: config error
 
-> [snip]
-> diff --git a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
-> new file mode 100644
-> index 000000000000..4b7309dc74dc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
-> @@ -0,0 +1,104 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/gpio/brcm,brcmstb-gpio.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Broadcom STB "UPG GIO" GPIO controller
-> +
-> +description: >
-> +  The controller's registers are organized as sets of eight 32-bit
-> +  registers with each set controlling a bank of up to 32 pins.  A single
-> +  interrupt is shared for all of the banks handled by the controller.
-> +
-> +maintainers:
-> +  - Doug Berger <opendmb@gmail.com>
-> +  - Florian Fainelli <f.fainelli@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - brcm,bcm7445-gpio
-> +          - const: brcm,brcmstb-gpio
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description:
+However, when I boot without earlyprintk=xdbc, without the cable
+attached, then I can attach the cable and:
 
-Missing folded block scalar marker ('>') above
+$ echo enable > /sys/bus/pci/devices/0000:00:14.0/dbc
 
-> +      Define the base and range of the I/O address space containing
-> +      the brcmstb GPIO controller registers
-> +
-> +  "#gpio-cells":
-> +    const: 2
-> +    description: >
-> +      The first cell is the pin number (within the controller's
-> +      pin space), and the second is used for the following:
-> +      bit[0]: polarity (0 for active-high, 1 for active-low)
-> +
-> +  gpio-controller: true
-> +
-> +  "brcm,gpio-bank-widths":
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    description:
+will actually work, and it shows up on my host system:
 
-Same here
+[1023855.419430] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
+[1023855.419455] usb usb2-port3: config error
+[1023859.491476] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
+[1023859.491487] usb usb2-port3: config error
+[1023861.335436] usb usb2-port3: config error
+[1023861.607476] usb 2-3: new SuperSpeed USB device number 7 using xhci_hcd
+[1023861.627614] usb 2-3: LPM exit latency is zeroed, disabling LPM.
+[1023861.627853] usb 2-3: New USB device found, idVendor=1d6b, idProduct=0010, bcdDevice= 0.10
+[1023861.627855] usb 2-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[1023861.627856] usb 2-3: Product: Linux USB Debug Target
+[1023861.627857] usb 2-3: Manufacturer: Linux Foundation
+[1023861.627858] usb 2-3: SerialNumber: 0001
+[1023861.629344] usb_debug 2-3:1.0: xhci_dbc converter detected
+[1023861.629532] usb 2-3: xhci_dbc converter now attached to ttyUSB0
 
-> +      Number of GPIO lines for each bank.  Number of elements must
-> +      correspond to number of banks suggested by the 'reg' property.
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    description:
 
-While it's not necessary while this is only one line, consider adding
-'>' here too.
+Can you please see if you can repro and fix this?
 
-> +      The interrupt shared by all GPIO lines for this controller.
-> +
-> +  "#interrupt-cells":
-> +    const: 2
-> +    description: >
+This all was with current 5.16-rc3 on a tigerlake nuc.
 
-This next block could get formatted strangely with '>'; recommend
-using '|' instead
-
-> +      The first cell is the GPIO number, the second should specify
-> +      flags.  The following subset of flags is supported:
-> +      - bits[3:0] trigger type and level flags
-> +        1 = low-to-high edge triggered
-> +        2 = high-to-low edge triggered
-> +        4 = active high level-sensitive
-> +        8 = active low level-sensitive
-> +      Valid combinations are 1, 2, 3, 4, 8.
-> +
-> +  interrupt-controller: true
-> +
-> +  wakeup-source:
-> +    type: boolean
-> +    description: >
-> +      GPIOs for this controller can be used as a wakeup source
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - gpio-controller
-> +  - "#gpio-cells"
-
-Need to add required property "brcm,gpio-bank-widths"
-
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    upg_gio: gpio@f040a700 {
-> +        #gpio-cells = <2>;
-> +        #interrupt-cells = <2>;
-> +        compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
-> +        gpio-controller;
-> +        interrupt-controller;
-> +        reg = <0xf040a700 0x80>;
-> +        interrupt-parent = <&irq0_intc>;
-> +        interrupts = <0x6>;
-> +        brcm,gpio-bank-widths = <32 32 32 24>;
-> +    };
-> +
-> +    upg_gio_aon: gpio@f04172c0 {
-> +        #gpio-cells = <2>;
-> +        #interrupt-cells = <2>;
-> +        compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
-> +        gpio-controller;
-> +        interrupt-controller;
-> +        reg = <0xf04172c0 0x40>;
-> +        interrupt-parent = <&irq0_aon_intc>;
-> +        interrupts = <0x6>;
-> +        wakeup-source;
-> +        brcm,gpio-bank-widths = <18 4>;
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 913856599623..78161abc384f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -3772,7 +3772,7 @@ BROADCOM BRCMSTB GPIO DRIVER
->  M:     Gregory Fong <gregory.0xf0@gmail.com>
-
-Not really related to this patch, but I should probably update this
-entry to reflect current reality. Should that be you and/or Doug?
-
->  L:     bcm-kernel-feedback-list@broadcom.com
->  S:     Supported
-> -F:     Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
-> +F:     Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
->  F:     drivers/gpio/gpio-brcmstb.c
->
->  BROADCOM BRCMSTB I2C DRIVER
-> --
-> 2.25.1
->
-
-Best regards,
-Gregory
+Also, perhaps you can update the guide on what sort of setup/cables
+etc.. you need when either the host or the client is a usb3.1 usb-c only
+device.
