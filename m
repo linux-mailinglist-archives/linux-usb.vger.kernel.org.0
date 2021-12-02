@@ -2,246 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF5A465C88
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Dec 2021 04:10:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 785CB465C92
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Dec 2021 04:14:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345104AbhLBDOT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Dec 2021 22:14:19 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:40620
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1355087AbhLBDOS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Dec 2021 22:14:18 -0500
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D488640035
-        for <linux-usb@vger.kernel.org>; Thu,  2 Dec 2021 03:10:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638414653;
-        bh=zHxKgqsz/W5zhDsi0NKZRT7Kt274OKmQEBVDN7k/WW0=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=Zyk1hC7tBaw+cieMiMquna2rP2Z7fBLovc7usdfftJiTWfGmUpJRuex4vBR+tYhCE
-         EJLrK++spiYYlQJBPy2bzOWeEobg2qkdOCd+7FA+mDRV3fM/j0RWsbNWqQvkREcNam
-         AFKETIq4OVpANigBP/ngBaFcbruFiIZqnEoY1Ael67OS19Hwa7hiwmLcFiqXg2sCfE
-         QDuf/7bY7VJWmXjRNkzgpq8fiBU1JVFFAhWN8tKEDo3Se1TwCDaIOhh+nHJ0W1bL+a
-         cg9vxO74EMmVwAFmzK3InwMYeAy61IY77rzVMmw/vHwuXLDfs19wbXTZdKWYk4H/nH
-         MZfPiB2Tre5Dw==
-Received: by mail-ed1-f70.google.com with SMTP id s12-20020a50ab0c000000b003efdf5a226fso16028005edc.10
-        for <linux-usb@vger.kernel.org>; Wed, 01 Dec 2021 19:10:53 -0800 (PST)
+        id S1355087AbhLBDRh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Dec 2021 22:17:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344845AbhLBDRg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Dec 2021 22:17:36 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38545C06174A
+        for <linux-usb@vger.kernel.org>; Wed,  1 Dec 2021 19:14:14 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so7887664oto.13
+        for <linux-usb@vger.kernel.org>; Wed, 01 Dec 2021 19:14:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=7zMm+ptgEod5hAh48HomYw91wMu1T2UC4rpVEv2rrNk=;
+        b=Fw9jEitGYHZ9MdVeYlI7Aw/5NfBFSuzytOiWxt+oI9kBlt0VQ9Kgm2n3b4uPoaQSu+
+         Gw0m4dgPYleREY1uZzEV+BXdeS8bCLkQEi8xXlwE910aZUygXAkModXGNRwX6uUM4IAn
+         27K3Y8syLoF+GEFlrooZ1AtMgL3UwKZp/547A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=zHxKgqsz/W5zhDsi0NKZRT7Kt274OKmQEBVDN7k/WW0=;
-        b=dOydChYnJ1q5Ii5XllzAs0t5YF3aoJ//IkxaWdiRAs+6gWRcjsXMhEzluEgRfA7S7F
-         S/rkj6Unl9+dHopPFVBTIXU/Pg5A5elT26bXqqJiXZTcVbV3ooKs/xxuHejMBnCU+ff+
-         B9beMMaUW0ZhEUNNWUXvZeY5g067paeVoriNJ7qqBuRn1vCBR9ucgQkmvXXUT427falI
-         lgCxcp2EbNmxVFHxzA46kk7gm/7rwuoqOjUBjzEPpOwJe5uvokn1Nysd7rBaMkYAIEOA
-         QDRfpKLeCRgkOuKqO15bEMjxYtgDehgLCUD2Pp/2eMsSrmoth3rqAzF1fJ5Ajzg2iwR9
-         7sGw==
-X-Gm-Message-State: AOAM530DylxfJBsRrgEIGM3HJcO3EWqf2cHoeX1j/mwjj3311xEOuPyZ
-        AfrRPIOIbd9U5VDYGW4XNb5hKfEmnaFn5+hv2EYZw21lSnrczztt5Cin+zG2L13nuZhMKuJTQF5
-        6GQ14PXZhhi+bFMtrq1nU6SPRL6EVfs1pyXrXMMF9PWiI3PXMJuxPdA==
-X-Received: by 2002:a17:906:9bf9:: with SMTP id de57mr12238014ejc.439.1638414653464;
-        Wed, 01 Dec 2021 19:10:53 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwyOBFTMsbG8fXTiDxAUAJ13kta9MR0+K86pko0yW0AJ1x1UHkxH81Aad14LiPdOn7WGbXApQ5c5x1b7CAdKRQ=
-X-Received: by 2002:a17:906:9bf9:: with SMTP id de57mr12237982ejc.439.1638414653175;
- Wed, 01 Dec 2021 19:10:53 -0800 (PST)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=7zMm+ptgEod5hAh48HomYw91wMu1T2UC4rpVEv2rrNk=;
+        b=ySU++8wY5ydRya1QhZ5LWR0Vw6iMAT/5s6QrJBm+fJ0xb4zORHBBvgpT6tzdc0Od3K
+         FzVB+iOcyrQRdxC2tZehJ87IIZG6ZG6yL8Z+O3u445o4ud6LjDf7M3LiBt9wV8CoYgIt
+         CJFICteCKqS0hrg/n7QdTQBx6lGnRqw9lUneUJCXVczbpy1Gi87T3Y5vR4pD05R/h/+9
+         p7+B3J2wBuLAO8Kz2SmUYndLpAJqijPQQwrFVUEtGWg5TPBrs3JAEafnPPZRXycZLKJv
+         fKf8n3IJHE0hgZjYApLLnP0n7AlMZKJ3W4I9yfz1a3xWPPhtL8nwa+Bh/0xLkLwDZn8I
+         WxjQ==
+X-Gm-Message-State: AOAM532aeCb/OlJIjPZgPWN2kyBw9+43nmmd/6q2jnI/edUmHmyd0lgE
+        JLILM5tP2wbyQmKehy9gIaKnCrBmSzTH41mbjVMOeg==
+X-Google-Smtp-Source: ABdhPJz+Dcs8ynFTWKf1YXOMxFfgLJHA+m/s0+m0sTbhrQdtaOenwne657YJ62yojRD9wISiFcrDjFCP9Dr2Ki7lZWU=
+X-Received: by 2002:a9d:70ce:: with SMTP id w14mr9488353otj.77.1638414853549;
+ Wed, 01 Dec 2021 19:14:13 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 1 Dec 2021 19:14:13 -0800
 MIME-Version: 1.0
-References: <20211126115652.1134230-1-kai.heng.feng@canonical.com>
- <745bd358-c34c-9deb-42e6-6f6a54fd3e2e@linux.intel.com> <CAAd53p7ta292yNKYBn3mtav-kPHwtd1GANy9bdCMXL=SPZK+kg@mail.gmail.com>
-In-Reply-To: <CAAd53p7ta292yNKYBn3mtav-kPHwtd1GANy9bdCMXL=SPZK+kg@mail.gmail.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Thu, 2 Dec 2021 11:10:41 +0800
-Message-ID: <CAAd53p7uifYjFL02fh9m97i89BucdHAwAf4SjgOJkw1XiZ5ezw@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: core: Avoid doing warm reset on disconnect event
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andrew Lunn <andrew@lunn.ch>, Rajat Jain <rajatja@google.com>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <1638339338-6731-1-git-send-email-quic_c_sanm@quicinc.com>
+References: <1638339338-6731-1-git-send-email-quic_c_sanm@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Wed, 1 Dec 2021 19:14:13 -0800
+Message-ID: <CAE-0n535-3-dwaJBpfoRhyq_7GiheX3N+CDJM8f84=KAGAmj5g@mail.gmail.com>
+Subject: Re: [PATCH v3] Skip phy initialization for DWC3 USB Controllers
+To:     Doug Anderson <dianders@chromium.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 10:36 AM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
->
-> On Mon, Nov 29, 2021 at 6:18 PM Mathias Nyman
-> <mathias.nyman@linux.intel.com> wrote:
-> >
-> > On 26.11.2021 13.56, Kai-Heng Feng wrote:
-> > > Unplugging USB device may cause an incorrect warm reset loop:
-> > > [  143.039019] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, =
-portsc: 0x4202c0
-> > > [  143.039025] xhci_hcd 0000:00:14.0: handle_port_status: starting us=
-b2 port polling.
-> > > [  143.039051] hub 2-0:1.0: state 7 ports 10 chg 0000 evt 0008
-> > > [  143.039058] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x420=
-2c0, return 0x4102c0
-> > > [  143.039092] xhci_hcd 0000:00:14.0: clear port3 connect change, por=
-tsc: 0x4002c0
-> > > [  143.039096] usb usb2-port3: link state change
-> > > [  143.039099] xhci_hcd 0000:00:14.0: clear port3 link state change, =
-portsc: 0x2c0
-> > > [  143.039101] usb usb2-port3: do warm reset
-> > > [  143.096736] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2b0=
-, return 0x2b0
-> > > [  143.096751] usb usb2-port3: not warm reset yet, waiting 50ms
-> > > [  143.131500] xhci_hcd 0000:00:14.0: Can't queue urb, port error, li=
-nk inactive
-> > > [  143.138260] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, =
-portsc: 0x2802a0
-> > > [  143.138263] xhci_hcd 0000:00:14.0: handle_port_status: starting us=
-b2 port polling.
-> > > [  143.160756] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x280=
-2a0, return 0x3002a0
-> > > [  143.160798] usb usb2-port3: not warm reset yet, waiting 200ms
-> > >
-> > > The warm reset is due to its PLS is in eSS.Inactive state. However, U=
-SB
-> > > 3.2 spec table 10-13 mentions "Ports can be disabled by either a faul=
-t
-> > > condition (disconnect event or other fault condition)", xHCI 1.2 spec
-> > > table 5-27 also states that "This flag shall automatically be cleared=
- to
-> > > =E2=80=980=E2=80=99 by a disconnect event or other fault condition." =
-on PED.
-> > >
-> > > So use CSC =3D 0 and PED =3D 0 as indication that device is disconnec=
-ting to
-> > > avoid doing warm reset.
-> >
-> > My understanding is that PED =3D 0 in case of disconnect, error (PLS=3D=
-Inactive), or
-> > during active reset signalling. See xHCI Figure 4-27: USB3 Root Hub Por=
-t State Machine.
-> > signal states (0,0,0,0) are PP,CCS,PED,PR.
->
-> I think it's 1,0,0,0? So for my case, the port is in Error state (PLS
-> =3D Inactive, 1,0,0,0).
->
-> >
-> > I'm looking at a similar case where Inactive link is reported at discon=
-nect for a while
-> > before missing terminations are detected and link finally goes to RxDet=
-ect.
->
-> So the PLS goes from Inactive to RxDetect after a while?
-> Is the case you are working on also EHL?
->
-> >
-> > If the port was reset immediately when Inactive link state was reported=
- the port stays stuck
-> > in port reset.
-> > This might have been related to the address0 locking issues recently fi=
-xed.
-> >
-> > Anyway, to avoid the extra reset of a removed USB3 device I started pol=
-ling the link state of
-> > the Inactive link for some time before resetting it. This gives the lin=
-k time to detect
-> > missing terminations and go to RxDetect, and driver can skip the reset.
-> >
-> > Planning on upstreaming it, patch is here:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/=
-?h=3Dfix_avoid_disconnect_reset&id=3D72d20c026b7812d096c6b5184a3888894401c8=
-29
->
-> Thanks, let me test this out.
+Quoting Sandeep Maheswaram (2021-11-30 22:15:37)
+> Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
+> Runtime suspend of phy drivers was failing from DWC3 driver as
+> runtime usage value is 2 because the phy is initialized from
+> DWC3 core and HCD core.
+> DWC3 manages phy in their core drivers.
+> Set this quirk to avoid phy initialization in HCD core.
 
-The result is negative, here's the relevant log:
-[  128.219129] xhci_hcd 0000:00:14.0: Port change event, 2-2, id 18,
-portsc: 0x4202c0
-[  128.219143] xhci_hcd 0000:00:14.0: handle_port_status: starting port pol=
-ling.
-[  128.219201] hub 2-0:1.0: state 7 ports 10 chg 0000 evt 0004
-[  128.219217] xhci_hcd 0000:00:14.0: Get port status 2-2 read:
-0x4202c0, return 0x4102c0
-[  128.219244] xhci_hcd 0000:00:14.0: clear port2 connect change,
-portsc: 0x4002c0
-[  128.219256] usb usb2-port2: link state change
-[  128.219264] xhci_hcd 0000:00:14.0: clear port2 link state change,
-portsc: 0x2c0
-[  128.232326] xhci_hcd 0000:00:14.0: xhci_hub_status_data: stopping
-port polling.
-[  128.244356] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2c0,
-return 0x2c0
-[  128.244383] usb usb2-port2: Wait for inactive link disconnect detect
-[  128.272342] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2c0,
-return 0x2c0
-[  128.272370] usb usb2-port2: Wait for inactive link disconnect detect
-[  128.300348] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2c0,
-return 0x2c0
-[  128.300375] usb usb2-port2: Wait for inactive link disconnect detect
-[  128.328342] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2c0,
-return 0x2c0
-[  128.328369] usb usb2-port2: Wait for inactive link disconnect detect
-[  128.356343] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2c0,
-return 0x2c0
-[  128.356370] usb usb2-port2: Wait for inactive link disconnect detect
-[  128.356374] usb usb2-port2: do warm reset, port only
-[  128.377500] xhci_hcd 0000:00:14.0: Port change event, 1-2, id 2,
-portsc: 0x206e1
-[  128.377515] xhci_hcd 0000:00:14.0: handle_port_status: starting port pol=
-ling.
-[  128.377570] hub 1-0:1.0: state 7 ports 16 chg 0000 evt 0004
-[  128.377586] xhci_hcd 0000:00:14.0: Get port status 1-2 read:
-0x206e1, return 0x10101
-[  128.377614] xhci_hcd 0000:00:14.0: clear port2 connect change, portsc: 0=
-x6e1
-[  128.377626] usb usb1-port2: status 0101, change 0001, 12 Mb/s
-[  128.377636] xhci_hcd 0000:00:14.0: Get port status 1-2 read: 0x6e1,
-return 0x101
-[  128.398304] xhci_hcd 0000:00:14.0: Port change event, 1-2, id 2,
-portsc: 0x202a0
-[  128.398319] xhci_hcd 0000:00:14.0: handle_port_status: starting port pol=
-ling.
-[  128.412343] xhci_hcd 0000:00:14.0: Get port status 1-2 read:
-0x202a0, return 0x10100
-[  128.412376] xhci_hcd 0000:00:14.0: clear port2 connect change, portsc: 0=
-x2a0
-[  128.416337] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2b0,
-return 0x2b0
-[  128.416368] usb usb2-port2: not warm reset yet, waiting 50ms
-[  128.448341] xhci_hcd 0000:00:14.0: Get port status 1-2 read: 0x2a0,
-return 0x100
-[  128.476335] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2f0,
-return 0x2f0
-[  128.476366] usb usb2-port2: not warm reset yet, waiting 200ms
-[  128.480332] xhci_hcd 0000:00:14.0: xhci_hub_status_data: stopping
-port polling.
-[  128.484343] xhci_hcd 0000:00:14.0: Get port status 1-2 read: 0x2a0,
-return 0x100
-[  128.520323] xhci_hcd 0000:00:14.0: Get port status 1-2 read: 0x2a0,
-return 0x100
-[  128.556325] xhci_hcd 0000:00:14.0: Get port status 1-2 read: 0x2a0,
-return 0x100
-[  128.556353] usb usb1-port2: debounce total 125ms stable 100ms status 0x1=
-00
-[  128.556366] hub 1-0:1.0: state 7 ports 16 chg 0000 evt 0004
-[  128.556376] xhci_hcd 0000:00:14.0: Get port status 1-2 read: 0x2a0,
-return 0x100
-[  128.684329] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2f0,
-return 0x2f0
-[  128.684360] usb usb2-port2: not warm reset yet, waiting 200ms
-[  128.892325] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2f0,
-return 0x2f0
-[  128.892357] usb usb2-port2: not warm reset yet, waiting 200ms
-[  129.100317] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2f0,
-return 0x2f0
-[  129.100348] usb usb2-port2: not warm reset yet, waiting 200ms
-[  129.100354] hub 2-0:1.0: port_wait_reset: err =3D -16
-[  129.100358] usb usb2-port2: not enabled, trying warm reset again...
-
+Don't think we need a cover letter for a single patch.
 
 >
-> Kai-Heng
+> v3:
+> Dropped the dt property and binding.
+> Checking for dwc3 compatible in xhci to set the quirk XHCI_SKIP_PHY_INIT.
 >
-> >
-> > -Mathias
+> v2:
+> Updated the commit descriptions.
+> Changed subject prefix from dwc to dwc3.
+> Increased props array size.
