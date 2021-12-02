@@ -2,91 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD9546691D
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Dec 2021 18:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B20344668F9
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Dec 2021 18:18:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237927AbhLBReR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Dec 2021 12:34:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
+        id S1376268AbhLBRVV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Dec 2021 12:21:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233308AbhLBReR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Dec 2021 12:34:17 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFAAC06174A;
-        Thu,  2 Dec 2021 09:30:54 -0800 (PST)
+        with ESMTP id S1376259AbhLBRVU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Dec 2021 12:21:20 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4DEC06174A;
+        Thu,  2 Dec 2021 09:17:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=sEWHIxjOWFg80SWER+urzfc9OekftWsOORvg2PEkR3Q=; b=QQGolphIZAwJ+ihBIQIIC1DMsz
-        8QQwZB0gHnsamiiaIhTdRmUs9Q5u4i9eJG4hYrL5Swz/id2UKHfcBprDMjrrvy6OoPTOJK8Ko4ece
-        Oq8zMlyoduL3KEGkk0MkvhXgQOQWqvGkX8fqy7WrE9kd1LHNb+Nf4H+XXLGIJmuoWcwBYrhdK7hxw
-        l95GWNNN9wL4ntvCQlPVRhQgnwfKCIcYOYJWTifhMz/juMaehJKNAY7wqlY4lZeZifIszmBlL15nm
-        pY5z9B5lYmiu7ftOV6v79WDiRj0OOQHExlBRGugq2vUnlR2D4CXz72219omHuatEA1NXRIiHvFqCA
-        SAapKL0Q==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mspuv-001qkT-UQ; Thu, 02 Dec 2021 17:30:46 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8D061300728;
-        Thu,  2 Dec 2021 18:30:45 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1537D200C72E7; Thu,  2 Dec 2021 16:22:55 +0100 (CET)
-Date:   Thu, 2 Dec 2021 16:22:55 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     baolu.lu@linux.intel.com
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: earlyprintk=xdbc seems broken
-Message-ID: <YajkzwmWQua3Kh6A@hirez.programming.kicks-ass.net>
+        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Message-Id:Date:
+        Subject:Cc:To:From:Content-Type:Reply-To:Content-ID:Content-Description:
+        In-Reply-To:References; bh=4WCyM8f8j4d1i+Nq6Vhx0kWZ55WOQmTPNCMfAjx+7fY=; b=RU
+        RUEVHvZhyocL7Ix34Qe79xg1u+DbT2mJBqVppoFfIKhJhrk648SKJ6jjXOWjqrvcf1GrU6b+98/dN
+        9QD3RW6GoipDPDZKBabrdfHotfA1wQdlJGDD+/OzMkZDoF+jh5CMeAJ5oqWyKPCXgnWfhZ9DGi3Tq
+        xp5QjyX0LXxr49T/7jWACwViC/FriIF9Kf381SwTVxqtLU7WvzHXhwGNy9tT+Lgb2ePIuTKPH0Nsl
+        0GJYvo1FPdIFx5D8iOsTpKn6Fa5Hynq/bqBbr7WpNWTZA5vBkqCdtSBEw2AEkWuOxN4xt03r5bRSG
+        dp7bTIT00C50ujcL60YlLXW42HS4waiQ==;
+Received: from [81.174.171.191] (helo=donbot.metanate.com)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1mspiU-0002Tc-L6; Thu, 02 Dec 2021 17:17:54 +0000
+From:   John Keeping <john@metanate.com>
+To:     linux-usb@vger.kernel.org
+Cc:     John Keeping <john@metanate.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Argishti Aleksanyan <Argishti.Aleksanyan@synopsys.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc2: gadget: initialize max_speed from params
+Date:   Thu,  2 Dec 2021 17:17:48 +0000
+Message-Id: <20211202171748.3035874-1-john@metanate.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Lu,
+DWC2 may be paired with a full-speed PHY which is not capable of
+high-speed operation.  Report this correctly to the gadget core by
+setting max_speed from the core parameters.
 
-I was unfortunate enough to need xdbc and can't get my machine to boot
-with earlyprintk=xdbc on the cmdline.
+Prior to commit 5324bad66f09f ("usb: dwc2: gadget: implement
+udc_set_speed()") this didn't cause the hardware to be configured
+incorrectly, although the speed may have been reported incorrectly.  But
+after that commit params.speed is updated based on a value passed in by
+the gadget core which may set it to a faster speed than is supported by
+the hardware.  Initialising the max_speed parameter ensures the speed
+passed to dwc2_gadget_set_speed() will be one supported by the hardware.
 
-When I boot the target without the earlyprintk=xdbc, but have the cable
-attached, it won't boot because boot gets stuck like:
+Fixes: 5324bad66f09f ("usb: dwc2: gadget: implement udc_set_speed()")
+Signed-off-by: John Keeping <john@metanate.com>
+---
+ drivers/usb/dwc2/gadget.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-Dec  2 15:08:10 tigerlake kernel: [   42.043137] usb usb4-port3: Cannot enable. Maybe the USB cable is bad?
-Dec  2 15:08:10 tigerlake kernel: [   42.043227] usb usb4-port3: config error
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index b884a83b26a6e..2bc03f41c70ad 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -4974,7 +4974,18 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
+ 		hsotg->params.g_np_tx_fifo_size);
+ 	dev_dbg(dev, "RXFIFO size: %d\n", hsotg->params.g_rx_fifo_size);
+ 
+-	hsotg->gadget.max_speed = USB_SPEED_HIGH;
++	switch (hsotg->params.speed) {
++	case DWC2_SPEED_PARAM_LOW:
++		hsotg->gadget.max_speed = USB_SPEED_LOW;
++		break;
++	case DWC2_SPEED_PARAM_FULL:
++		hsotg->gadget.max_speed = USB_SPEED_FULL;
++		break;
++	default:
++		hsotg->gadget.max_speed = USB_SPEED_HIGH;
++		break;
++	}
++
+ 	hsotg->gadget.ops = &dwc2_hsotg_gadget_ops;
+ 	hsotg->gadget.name = dev_name(dev);
+ 	hsotg->gadget.otg_caps = &hsotg->params.otg_caps;
+-- 
+2.34.1
 
-However, when I boot without earlyprintk=xdbc, without the cable
-attached, then I can attach the cable and:
-
-$ echo enable > /sys/bus/pci/devices/0000:00:14.0/dbc
-
-will actually work, and it shows up on my host system:
-
-[1023855.419430] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
-[1023855.419455] usb usb2-port3: config error
-[1023859.491476] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
-[1023859.491487] usb usb2-port3: config error
-[1023861.335436] usb usb2-port3: config error
-[1023861.607476] usb 2-3: new SuperSpeed USB device number 7 using xhci_hcd
-[1023861.627614] usb 2-3: LPM exit latency is zeroed, disabling LPM.
-[1023861.627853] usb 2-3: New USB device found, idVendor=1d6b, idProduct=0010, bcdDevice= 0.10
-[1023861.627855] usb 2-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[1023861.627856] usb 2-3: Product: Linux USB Debug Target
-[1023861.627857] usb 2-3: Manufacturer: Linux Foundation
-[1023861.627858] usb 2-3: SerialNumber: 0001
-[1023861.629344] usb_debug 2-3:1.0: xhci_dbc converter detected
-[1023861.629532] usb 2-3: xhci_dbc converter now attached to ttyUSB0
-
-
-Can you please see if you can repro and fix this?
-
-This all was with current 5.16-rc3 on a tigerlake nuc.
-
-Also, perhaps you can update the guide on what sort of setup/cables
-etc.. you need when either the host or the client is a usb3.1 usb-c only
-device.
