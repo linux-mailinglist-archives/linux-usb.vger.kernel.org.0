@@ -2,119 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B7C466A76
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Dec 2021 20:29:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3957F466A9E
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Dec 2021 20:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356092AbhLBTcp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Dec 2021 14:32:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235859AbhLBTco (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Dec 2021 14:32:44 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B005C06174A
-        for <linux-usb@vger.kernel.org>; Thu,  2 Dec 2021 11:29:21 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id r130so544818pfc.1
-        for <linux-usb@vger.kernel.org>; Thu, 02 Dec 2021 11:29:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hqjfXVJglMFd2amgIPEC84S0uybWLeU6WuVwI57Usjk=;
-        b=BlczXAsQsvVkkQ+D5LzJ1NjVLMG/DbL5LmVIxD/0fwQ8A7WHQgaICDL/hAKaE+Fpv+
-         ygd/fTFvLIlrYAHoHDz+yySOrdgfc8iY6PguUzsKg+yjFkW7EPno2+c5T9clAdML1OVN
-         3rHKPtvfVnNL339B/F7U6W38OHSZME/X13EMo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hqjfXVJglMFd2amgIPEC84S0uybWLeU6WuVwI57Usjk=;
-        b=wxzwqUR4nXePOx1hln8ZeFHBwdWsmxlIuPatZIBv/OP1/jppO2cOF3xf+SGFqE7ANy
-         +lxzhonDeIXsmajTHQfu2LaroWzuQgHQrdMXamc9XWpKS2xq4vAngbBYnQGdB6jb4UXl
-         U/u1mHKhyf0CvrYELpfAVVKnexIDV0n2KSeROG/TD4xFPygHvTsSpczW3KtmX3MddyuK
-         AYI58bZlBKy4G/T28n3Jx77d+5fVcRURY6tg3gvDs7p5bHIBfLB/TSEwBG+3ZFfgvX3P
-         Lg11IxQ/eYMkk55u+SgKYBHmgHLTJsxNSDRBvNE+V8iu2H5uqdMQYHs79TZfp5/dGbhN
-         QBIA==
-X-Gm-Message-State: AOAM531ggUsxLNgUs5s/aW0fXCBk2PAFzX/ZN5ZZ5mxSyhCKc+RHMfeU
-        7LeKQY5HF8b8cjaAUOlTktIPIw==
-X-Google-Smtp-Source: ABdhPJzc6qoWc/2+7sb2nt26p984INtuKCo0EqmCZWkJljU74OHmriEsp9uYzbSFLZDNU2l4YyRMug==
-X-Received: by 2002:a63:f954:: with SMTP id q20mr899839pgk.13.1638473360874;
-        Thu, 02 Dec 2021 11:29:20 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:f780:259b:2241:cde0])
-        by smtp.gmail.com with ESMTPSA id j7sm3459929pjf.41.2021.12.02.11.29.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 11:29:20 -0800 (PST)
-Date:   Thu, 2 Dec 2021 11:29:19 -0800
-From:   Prashant Malani <pmalani@chromium.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tobias Schramm <t.schramm@manjaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        bleung@chromium.org
-Subject: Re: PATCH 0/4] usbd: typec: fusb302: Add support for specifying
- supported alternate-modes through devicetree/fwnodes
-Message-ID: <Yakej0+7W+Lk9OWP@google.com>
-References: <20200714113617.10470-1-hdegoede@redhat.com>
+        id S242905AbhLBTwc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Dec 2021 14:52:32 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:50433 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S242742AbhLBTwb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Dec 2021 14:52:31 -0500
+Received: (qmail 399327 invoked by uid 1000); 2 Dec 2021 14:49:08 -0500
+Date:   Thu, 2 Dec 2021 14:49:08 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/4] Docs: usb: update usb_bulk_msg receiving example
+Message-ID: <YakjNGEBFKm9pHCw@rowland.harvard.edu>
+References: <cover.1638152984.git.philipp.g.hortmann@gmail.com>
+ <28a76eedad7027277754cef84ca34810b0cfe6f4.1638152984.git.philipp.g.hortmann@gmail.com>
+ <YaaFNO1t3GIaGFPI@rowland.harvard.edu>
+ <ad2fcdfa-5688-4d09-2c82-c405adeae4ee@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200714113617.10470-1-hdegoede@redhat.com>
+In-Reply-To: <ad2fcdfa-5688-4d09-2c82-c405adeae4ee@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Hans,
+On Thu, Dec 02, 2021 at 05:49:47AM +0100, Philipp Hortmann wrote:
+> On 11/30/21 9:10 PM, Alan Stern wrote:
+> > On Mon, Nov 29, 2021 at 09:21:41PM +0100, Philipp Hortmann wrote:
+> > > Clarification that this example is not in the driver template anymore.
+> > > Update code example so that it fits best to usb-skeleton.c
+> > > 
+> > > Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+> > > ---
+> > >   .../driver-api/usb/writing_usb_driver.rst     | 30 +++++++++----------
+> > >   1 file changed, 15 insertions(+), 15 deletions(-)
+> > > 
+> > > diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
+> > > index b43e1ce49f0e..a9608ad18d77 100644
+> > > --- a/Documentation/driver-api/usb/writing_usb_driver.rst
+> > > +++ b/Documentation/driver-api/usb/writing_usb_driver.rst
+> > > @@ -218,36 +218,36 @@ do very much processing at that time. Our implementation of
+> > >   ``skel_write_bulk_callback`` merely reports if the urb was completed
+> > >   successfully or not and then returns.
+> > > -The read function works a bit differently from the write function in
+> > > +This read function works a bit differently from the write function in
+> > >   that we do not use an urb to transfer data from the device to the
+> > > -driver. Instead we call the :c:func:`usb_bulk_msg` function, which can be used
+> > > +driver. Instead we call `usb_bulk_msg` function, which can be used
+> > >   to send or receive data from a device without having to create urbs and
+> > > -handle urb completion callback functions. We call the :c:func:`usb_bulk_msg`
+> > > +handle urb completion callback functions. We call `usb_bulk_msg`
+> > >   function, giving it a buffer into which to place any data received from
+> > 
+> > The reason for the last two changes above isn't clear.  You removed some of the
+> > markup indicators and made the text ungrammatical.  This does not seem like an
+> > improvement.
+> > 
+> > Alan Stern
+> > 
+> This two changes were made because of an earlier comment to the same
+> document, but may be I understood this wrong:
+> On 10/19/21 11:17 PM, Jonathan Corbet wrote:
+> ...
+> We shouldn't be using :c:func: anymore; just say usb_register() and the
+> right things will happen.  Definitely worth fixing while you are in the
+> neighborhood.
+> ...
+> If you're making this change, take out "the" (as well as :c:func:).
+> ...
+> ___
+> Please find the full email under the link:
+> https://lore.kernel.org/linux-usb/87h7dcsohs.fsf@meer.lwn.net/T/
+> 
+> Please give me an example for the right wording. I am not a native English
+> speaker. Is the article in this case required?
 
-Sorry for posting on an old thread, but I was wondering if there was
-still a plan to submit this? This is something we'd like to use on
-Chrome OS too.
+Okay, now I see what's going on.  You should change it like this:
 
-It sounded like the primary discussion was whether to have an "altmodes"
-property encaspulating the various alt modes, but not sure what the
-final consensus on that was (sounded to me like your current
-implementation was fine for now, and ACPI use cases would be handled
-later?).
+-driver. Instead we call the :c:func:`usb_bulk_msg` function, which can be used
++driver. Instead we call `usb_bulk_msg`, which can be used
+ to send or receive data from a device without having to create urbs and
+-handle urb completion callback functions. We call the :c:func:`usb_bulk_msg`
++handle urb completion callback functions. We call `usb_bulk_msg`,
+ giving it a buffer into which to place any data received from
 
-Best regards,
-
--Prashant
-
-On Tue, Jul 14, 2020 at 01:36:13PM +0200, Hans de Goede wrote:
-> Hi All,
-> 
-> This is a replacement series for an earlier attempt by me for this
-> from quite a while ago:
-> 
-> https://patchwork.kernel.org/patch/11199517/
-> 
-> As discussed there, this series implements an altmodes devicetree-fwnode
-> under the usb-connector node which has 1 child-node per supported
-> altmode and in that child-node the svid and vdo for the supported
-> altmode are specified.
-> 
-> Note this patch-set does not contain any devicetree users of the
-> new bindings. The new support/binding is used on X86 Cherry Trail
-> devices with a fusb302 Type-C controller (special variant of the
-> INT33FE device in ACPI). But this patch should also help getting
-> Display Port altmode to work with the mainline kernel on boards
-> like the Pine RockPro64 and Pinebook Pro, which is why I've added
-> Tobias Schramm to the Cc since he has done mainline devicetree
-> work for the Pinebook Pro in the past.
-> 
-> The 1st patch adds the dt-bindings docs. I'm not sure if this one
-> should go upstream through the USB tree together with patches 2-3 or
-> if this should go upstream separately, Rob ?
-> 
-> Patches 2-3 add support for the new binding to Type-C controller drivers
-> using the tcpm framework, such as the fusb302 driver.
-> 
-> Patch 4 uses swnodes to add the altmode info on the earlier mentioned
-> X86 CHT devices, making DP-altmode work there for the first time.
-> 
-> Regards,
-> 
-> Hans
-> 
+Alan Stern
