@@ -2,85 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 874A6465ED7
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Dec 2021 08:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B731465F06
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Dec 2021 08:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345395AbhLBHrJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Dec 2021 02:47:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
+        id S1352618AbhLBIBb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Dec 2021 03:01:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345486AbhLBHrI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Dec 2021 02:47:08 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8C1C06174A;
-        Wed,  1 Dec 2021 23:43:46 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id i12so27116922pfd.6;
-        Wed, 01 Dec 2021 23:43:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=aYYhLPh4+HbnEt5y+7p1g4uC3CXAQCN2WeTgiask7zE=;
-        b=d8UbdhQWKxTus0ErEdwEtYT/an5mZBaZGPXKBxD8BLqnxXrvQ7bYtt27Od4DpyRC7a
-         wX3rUeqZCIu1O2sabZyhchQhDlCY1ZDQshmQnN36XoSgcJuanX96FULx8vH+dhbDJdGo
-         YtR0U/TNPa0EldA41/dkkvHY8Hf9Cb6mU9WtQ2y0FMKimJCvpqILouNSzzdHxSEtfdx6
-         3l9DoXha11Cfp0O1OTEl1wovLS45BrWyVYZoZk0a6/snb950AzDK0G7wS0crHxJplRW7
-         FYtftwIiNfdDjSE3anKhkYgVljKDToo3YdfuhM5ewLTYWd3M2T26P0WPuGcYucXHK5kX
-         6pbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=aYYhLPh4+HbnEt5y+7p1g4uC3CXAQCN2WeTgiask7zE=;
-        b=iqIWxUTyTPZFSVQ2nl7xLAmkMhdsPuWdI4J9oaZyPK7Urm9/6+ZVREIOu9RtGolDCS
-         GOg4GiVN2J8oYO5EvD2bKKnE0xHRU9ACcSDmUFTkQZLIogLfV6/HnssSbdBcfkSwx61i
-         lkr6cAnAVFTPtvn+v9wL8CPLE5aL2qhCDOvwIAEiyWg1sWEkoRv8SHlgcEZuHWsuM5ZW
-         fRKVtKYpQXW31+ElBXORJ8suFV5xnN4OLUyBwFF6lLkC/JBJqTDHyTo2ve+VHp01UmuY
-         kjzObDLHIn61cM3pL08hAfr2Szwk9/Ew/UzWtaJ3ShyyWSjY7bruCirc/t1nP76yGis7
-         Jp1Q==
-X-Gm-Message-State: AOAM5311u70b9MDsmZmNRs3iAHoaAJbpGd3rP+6PNsIj9sWbl5xylsz9
-        0+ErzYgKGrpx8iV2NEkNk4M=
-X-Google-Smtp-Source: ABdhPJzJz2ZIkK2SHKuvqOMNRpGFKQCcQ/u34pDhggtPphTRPzxNAHQl9e9dQzxzkrOF2xcCU1H7Mw==
-X-Received: by 2002:a63:f410:: with SMTP id g16mr8198631pgi.423.1638431026388;
-        Wed, 01 Dec 2021 23:43:46 -0800 (PST)
-Received: from localhost.localdomain (59-124-112-150.hinet-ip.hinet.net. [59.124.112.150])
-        by smtp.gmail.com with ESMTPSA id d15sm2144973pfl.126.2021.12.01.23.43.44
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 Dec 2021 23:43:45 -0800 (PST)
-From:   Steven Syu <stevensyu7@gmail.com>
-To:     heikki.krogerus@linux.intel.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Steven Syu <stevensyu7@gmail.com>
-Subject: [PATCH v2] usb: typec: clear usb_pd flag if change to typec only mode
-Date:   Thu,  2 Dec 2021 15:43:12 +0800
-Message-Id: <1638430992-15976-1-git-send-email-stevensyu7@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S230274AbhLBIB1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Dec 2021 03:01:27 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAFDC061574;
+        Wed,  1 Dec 2021 23:58:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4D6B0CE2141;
+        Thu,  2 Dec 2021 07:58:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79F8CC00446;
+        Thu,  2 Dec 2021 07:58:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638431881;
+        bh=wyVDICNXjwwo2Cz/7IMhlpu0eRNTYeTr5DjBvE/+C0s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M55Fqkgn9zeBwWERd2qawEbOsJU2rpQWhcLcVqLejZFwLOaPqCeWpREo+0tNb1h+l
+         8177+4ho52pDqeT4/RVrW8UYMr3Qb/9yCAntvGGtiACVIFNEgRwaWzRTKeoC2XQLFE
+         bpUGwk/WTyQTgbq5wAs8xbOHk5sXTmJltV8tBzck=
+Date:   Thu, 2 Dec 2021 08:57:55 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Steven Syu <stevensyu7@gmail.com>
+Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: clear usb_pd flag if change to typec only
+ mode
+Message-ID: <Yah8g87yej08ogMe@kroah.com>
+References: <1638430992-15976-1-git-send-email-stevensyu7@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1638430992-15976-1-git-send-email-stevensyu7@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Set usb_pd to 0 when power operation mode
-leaving power delivery. That can avoid user-sepace
-read "yes" form the supports_usb_power_delivery_show() attribute
-but power operation mode already change form power delivery to
-others mode.
+On Thu, Dec 02, 2021 at 03:43:12PM +0800, Steven Syu wrote:
+> Set usb_pd to 0 when power operation mode
+> leaving power delivery. That can avoid user-sepace
+> read "yes" form the supports_usb_power_delivery_show() attribute
+> but power operation mode already change form power delivery to
+> others mode.
+> 
+> Signed-off-by: Steven Syu <stevensyu7@gmail.com>
+> ---
+>  drivers/usb/typec/class.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index aeef453..2043e07 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -1718,6 +1718,8 @@ void typec_set_pwr_opmode(struct typec_port *port,
+>  			partner->usb_pd = 1;
+>  			sysfs_notify(&partner_dev->kobj, NULL,
+>  				     "supports_usb_power_delivery");
+> +		} else if (opmode != TYPEC_PWR_MODE_PD && partner->usb_pd) {
+> +			partner->usb_pd = 0;
+>  		}
+>  		put_device(partner_dev);
+>  	}
+> -- 
+> 2.7.4
+> 
 
-Signed-off-by: Steven Syu <stevensyu7@gmail.com>
----
- drivers/usb/typec/class.c | 2 ++
- 1 file changed, 2 insertions(+)
+Hi,
 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index aeef453..2043e07 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -1718,6 +1718,8 @@ void typec_set_pwr_opmode(struct typec_port *port,
- 			partner->usb_pd = 1;
- 			sysfs_notify(&partner_dev->kobj, NULL,
- 				     "supports_usb_power_delivery");
-+		} else if (opmode != TYPEC_PWR_MODE_PD && partner->usb_pd) {
-+			partner->usb_pd = 0;
- 		}
- 		put_device(partner_dev);
- 	}
--- 
-2.7.4
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
