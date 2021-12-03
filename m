@@ -2,71 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 894584675BE
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 11:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F79F4675C9
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 11:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380201AbhLCK7b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Dec 2021 05:59:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237898AbhLCK7a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 05:59:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80DEC06173E;
-        Fri,  3 Dec 2021 02:56:06 -0800 (PST)
+        id S1380205AbhLCLAc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Dec 2021 06:00:32 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37690 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237898AbhLCLAb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 06:00:31 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 672A762A02;
-        Fri,  3 Dec 2021 10:56:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD0FBC53FAD;
-        Fri,  3 Dec 2021 10:56:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638528965;
-        bh=xcd6qCvNc9eCZVPRbxRPtVsEptcOqtGydxpUyb81wgE=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5FA7B82673;
+        Fri,  3 Dec 2021 10:57:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6DA6C53FAD;
+        Fri,  3 Dec 2021 10:57:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638529025;
+        bh=oYaJo1Ljpj1D25TR5IWvgEZUmozCy40bktxa1GNxoOQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CORB7spGLCd0A6HhQbRWzCNj6QPsI7hpilW9UKyRafB2hN0mVQGTRM3R34RsyLdFO
-         AJAFZfA16dAna85G8U+Mc+mj6aCTylm9hQ9mc8UKbJR1OsERWF2jiw5CLmIT4y+e1L
-         dA3v3AFkOYFYxsUYZscoRUseJauAQuV2X0r7IGrX8h1y/jWk4REj0mXoM/2ujRXZph
-         81Bd/deu40KudTR+SmhV+B08WwRksQokqxMW9bdorTyl+fDdMl5JIXAC2xe+src+GZ
-         rgNbB7wqAzzn+Nzw+tScnMgEzN4TxxA+AsJgojk52/f14Vys1q1r41calGg/P25CKO
-         fI1MZMQPyURBA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mt6EF-0002Dg-O8; Fri, 03 Dec 2021 11:55:47 +0100
-Date:   Fri, 3 Dec 2021 11:55:47 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] media: uvcvideo: fix division by zero at stream start
-Message-ID: <Yan3s35hsyK0DEGH@hovoldconsulting.com>
-References: <20211026095511.26673-1-johan@kernel.org>
- <163524570516.1184428.14632987312253060787@Monstersaurus>
- <YXfjSJ+fm+LV/m+M@pendragon.ideasonboard.com>
- <YXfvXzgnvPVqwqZs@hovoldconsulting.com>
- <YXh4NqnpzOnPiA5/@pendragon.ideasonboard.com>
- <Yanxc/229JFkuP/v@hovoldconsulting.com>
- <Yan241Kg7O+qgQXG@pendragon.ideasonboard.com>
+        b=LgEvRm6l7hODRETS9vKWL2VumlmoVkQq6LFOAsdg572/oDXnA2mkXO2g67Uhhs1tA
+         F80573jAk3nb6aY5N/lWRlK24TdZgt2nx2qNRtPeHVwaPpwno8F8D4NpirAHQGqVPT
+         dxoEY/V+xENz32WIIYl+90EZWMQuDNuG9QlHpTjw=
+Date:   Fri, 3 Dec 2021 11:57:02 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 3/4] Docs: usb: update comment and code of function
+ skel_delete
+Message-ID: <Yan3/slVnl+tKk1o@kroah.com>
+References: <cover.1638152984.git.philipp.g.hortmann@gmail.com>
+ <76757c4fc1f5001c3285a9a071055e8715985604.1638152984.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yan241Kg7O+qgQXG@pendragon.ideasonboard.com>
+In-Reply-To: <76757c4fc1f5001c3285a9a071055e8715985604.1638152984.git.philipp.g.hortmann@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 12:52:19PM +0200, Laurent Pinchart wrote:
-
-> > I noticed that this one hasn't showed up in linux-next yet. Do you still
-> > have it in your queue or do you want me to resend?
+On Mon, Nov 29, 2021 at 09:21:52PM +0100, Philipp Hortmann wrote:
+> Put skel_delete function in the document typical form
+> Update code according to usb-skeleton.c
 > 
-> It should be in Mauro's queue now:
+> Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+> ---
+>  .../driver-api/usb/writing_usb_driver.rst     | 19 +++++++++----------
+>  1 file changed, 9 insertions(+), 10 deletions(-)
 > 
-> https://lore.kernel.org/all/YacOun3Diggsi05V@pendragon.ideasonboard.com/
+> diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
+> index b16e4e76d472..74bb72a2f0ac 100644
+> --- a/Documentation/driver-api/usb/writing_usb_driver.rst
+> +++ b/Documentation/driver-api/usb/writing_usb_driver.rst
+> @@ -263,18 +263,17 @@ handle smoothly is the fact that the USB device may be removed from the
+>  system at any point in time, even if a program is currently talking to
+>  it. It needs to be able to shut down any current reads and writes and
+>  notify the user-space programs that the device is no longer there. The
+> -following code (function ``skel_delete``) is an example of how to do
+> -this::
+> +`skel_delete` function is an example of how to do this::
 
-Perfect, thanks!
+As pointed out elsewhere this should be:
 
-Johan
+	skel_delete() is an example of how to do this::
+
+thanks,
+
+greg k-h
