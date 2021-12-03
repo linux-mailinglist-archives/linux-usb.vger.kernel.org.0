@@ -2,159 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B53384679A7
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 15:46:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A244679C7
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 15:53:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381548AbhLCOt5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Dec 2021 09:49:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
+        id S1381555AbhLCO4Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Dec 2021 09:56:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381562AbhLCOtw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 09:49:52 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442BCC061751
-        for <linux-usb@vger.kernel.org>; Fri,  3 Dec 2021 06:46:28 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id f186so10011701ybg.2
-        for <linux-usb@vger.kernel.org>; Fri, 03 Dec 2021 06:46:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=PjhwI+CnK9T6aryUKukhix9h2uCKHfEm0SmqIW6SxnM=;
-        b=el6R7rJr6dnwcGPXTANKfBdUm0eRYRhRJR9irFePbfAQ0+qz7yMzTEtbRtj+GU+zAe
-         qJoKlHe2wHYnW24S2qFeIia3BCtnJN6K4hvMolnkLpDN5wkUu4HW5DnHOv5eZP8NhFUL
-         3QARVJ81++o+ldEbSjnpyp1oIevEMYaGCm+sUDcc7CEUmsexGaSrNlMR22zTJvlFWsOR
-         uBu5VMuaDf0vBCnRtTdjAaFWmPbDmmiN0wq3nHFF0AHXsHjNCnyopdl+lwoFFihF6pO5
-         nrGG2Xfn0ZkaIAMYprOqVP9Ma+EPBIV+DzPnVwNhs0cl3Vtz9QRq9Pa9lVQECr7TYdD1
-         Pb5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=PjhwI+CnK9T6aryUKukhix9h2uCKHfEm0SmqIW6SxnM=;
-        b=ekf76wy99x2UE2/8wmgjhpaO93lXpPowO7vRT8aRPykqxIDZAn4xysDvu4j2JTDuEM
-         Sf8mOtTamSZO5VNz5QQdmbUGUJSOnMdbuc3PrdeOhZbtYw2YkhXiwZFQiv6VOUzzXZ6Z
-         7dKd9fbt1dCuKF567juRs2NUU75hInHSSbPhAJeivh8GGmA7cthVDNixWCB7HThm4krF
-         I/thyiADHhOoHRi2AeDDfOg9O0HUyg0WOWuvTSipnTkE/LsSYWCuaVF2UR9zF0+Lto6l
-         I8O+g/P0Zm0OK9gWmsV3RfRtTLrxZER85n4SgduvbKiyPRb2TDFxEu+cAGDyjOMmZDmJ
-         /eCw==
-X-Gm-Message-State: AOAM531L0Caf5yKJxu9Qvtt9A2WVw5bzF/U0SP/XziSGYIspmaDy+gvr
-        1XBligvE166VOrNGgpSMBYBX+O2Q8MopFSnmQck/BelJly8=
-X-Google-Smtp-Source: ABdhPJxCkGGxe+9lEdVCYKxkGMczH40fjOExFA6cD4THF+PhWVYRTtcjBYlcVeh+dQfMLbIpPOSsdOmN1pEzjeS6dpU=
-X-Received: by 2002:a25:68c9:: with SMTP id d192mr22343774ybc.645.1638542787549;
- Fri, 03 Dec 2021 06:46:27 -0800 (PST)
+        with ESMTP id S235792AbhLCO4X (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 09:56:23 -0500
+Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D309C061751;
+        Fri,  3 Dec 2021 06:52:58 -0800 (PST)
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9f:8608:6e64:956a:daea:cf2f])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 1B3Eqn8e033666
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Fri, 3 Dec 2021 15:52:49 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1638543169; bh=0cRGgZgMtLbTFNIr5ua2q8OeGBtFQrzP3yDen7RjQKs=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=VkVnDzMhPxTS8GcsWZjDDBHGV+SMKQtkE1k2EXR6JxOxcxuTDZ+kqpCdXdbe+EMIo
+         ahya8xHVq/YiXHlEBYowVmcojQW8TVgUSaoKiZuV8G5TAe6ymQ3vYgxOfVmhopdoU7
+         50lCk4OFOxpnTx2TXmxnX3ICSzsYLYA+5xzfyD2g=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
+        (envelope-from <bjorn@mork.no>)
+        id 1mt9vc-001jj7-T7; Fri, 03 Dec 2021 15:52:48 +0100
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Oliver Neukum <oliver@neukum.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 1/1] net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset
+ or zero
+Organization: m
+References: <20211202143437.1411410-1-lee.jones@linaro.org>
+Date:   Fri, 03 Dec 2021 15:52:48 +0100
+In-Reply-To: <20211202143437.1411410-1-lee.jones@linaro.org> (Lee Jones's
+        message of "Thu, 2 Dec 2021 14:34:37 +0000")
+Message-ID: <87wnklivun.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-From:   Volodymyr Lisivka <vlisivka@gmail.com>
-Date:   Fri, 3 Dec 2021 16:46:17 +0200
-Message-ID: <CAKjGFBUdjXcZoVV4jdrgTz4rKThTfZAK4CqreKmBZ4KHE+K1GA@mail.gmail.com>
-Subject: Re: BUG: iPNPstring in f_printer USB gadget is reduced by two bytes
-To:     John Keeping <john@metanate.com>
-Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.3 at canardo
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> On Tue, Nov 30, 2021 at 08:01:46PM +0200, Volodymyr Lisivka wrote:
-> > Description:
-> >
-> > Printer USB gadget uses iPNPstring to communicate device name and
-> > command language with host. Linux driver for printer gadget sends
-> > GET_DEVICE_ID response packet without 2 last bytes, which may cause
-> > trouble for the host driver.
-> >
-> > Steps to reproduce:
-> >
-> > Use Raspberry Pi, or an other device with USB OTG plug. Raspberry Pi 4
-> > was used by issue author.
-> > Configure plug to be in peripheral mode, e.g. by adding
-> > dtoverlay=dwc2,dr_mode=peripheral to /boot/config.txt.
-> > Connect OTG port to host and reboot Raspberry Pi.
-> > Load g_printer module using command sudo modprobe g_printer.
-> > Use command ./get-iPNPstring.pl /dev/usb/lp1 to get iPNPstring from
-> > the device. (See get-iPNPstring.pl.gz ). As alternative, kernel usbmon
-> > or WireShark can be used to capture raw USB packet for GET_DEVICE_ID
-> > response.
-> >
-> > Expected result:
-> >
-> > It's expected to receive same string as defined in module:
-> > iPNPstring='MFG:linux;MDL:g_printer;CLS:PRINTER;SN:1;'
-> >
-> > Actual result:
-> >
-> > iPNPstring='MFG:linux;MDL:g_printer;CLS:PRINTER;SN:'
-> >
-> > (Notice that last 2 chars are missing).
-> >
-> > Workarround:
-> >
-> > Just add two space to the end of printer gadget iPNPstring.
-> >
-> > Root cause:
-> >
-> > In drivers/usb/gadget/function/f_printer.c, length of iPNPstring is
-> > used as length of the whole packet, without length of 2 byte size
-> > field.
->
-> If I understand correctly, the length should be inclusive of the two
-> length bytes, but currently this driver encodes it exclusive.
->
-> The USB printer class specification says:
->
-> ... a device ID string that is compatible with IEEE 1284.  See
-> IEEE 1284 for syntax and formatting information
->
-> and goes on to specify that this includes the length in the first two
-> bytes as big endian.
->
-> I don't have access to IEEE 1284, but looking in drivers/parport/probe.c
-> which implements the host side of IEEE 1284, we find
-> parport_read_device_id() with the comment:
->
-> /* Some devices wrongly send LE length, and some send it two
-> * bytes short. Construct a sorted array of lengths to try. */
->
-> and code that assumes the values are inclusive of the length bytes.
->
-> So the patch below looks like it does the right thing to me, although it
-> appears whitespace damaged and it may be clearer to introduce a separate
-> variable for the string length compared to the value.
+Lee Jones <lee.jones@linaro.org> writes:
 
-diff --git a/drivers/usb/gadget/function/f_printer.c
-b/drivers/usb/gadget/function/f_printer.c
-index 236ecc968..403faa05b 100644
---- a/drivers/usb/gadget/function/f_printer.c
-+++ b/drivers/usb/gadget/function/f_printer.c
-@@ -987,6 +987,7 @@ static int printer_func_setup(struct usb_function *f,
-        u16                     wIndex = le16_to_cpu(ctrl->wIndex);
-        u16                     wValue = le16_to_cpu(ctrl->wValue);
-        u16                     wLength = le16_to_cpu(ctrl->wLength);
-+       u16                     pnp_length;
+> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+> index 24753a4da7e60..e303b522efb50 100644
+> --- a/drivers/net/usb/cdc_ncm.c
+> +++ b/drivers/net/usb/cdc_ncm.c
+> @@ -181,6 +181,8 @@ static u32 cdc_ncm_check_tx_max(struct usbnet *dev, u=
+32 new_tx)
+>  		min =3D ctx->max_datagram_size + ctx->max_ndp_size + sizeof(struct usb=
+_cdc_ncm_nth32);
+>=20=20
+>  	max =3D min_t(u32, CDC_NCM_NTB_MAX_SIZE_TX, le32_to_cpu(ctx->ncm_parm.d=
+wNtbOutMaxSize));
+> +	if (max =3D=3D 0)
+> +		max =3D CDC_NCM_NTB_MAX_SIZE_TX; /* dwNtbOutMaxSize not set */
+>=20=20
+>  	/* some devices set dwNtbOutMaxSize too low for the above default */
+>  	min =3D min(min, max);
 
-        DBG(dev, "ctrl req%02x.%02x v%04x i%04x l%d\n",
-                ctrl->bRequestType, ctrl->bRequest, wValue, wIndex, wLength);
-@@ -1003,11 +1004,12 @@ static int printer_func_setup(struct usb_function *f,
-                                value = 0;
-                                break;
-                        }
--                       value = strlen(dev->pnp_string);
-+                       pnp_length = strlen(dev->pnp_string);
-+                       value = pnp_length + 2;
-                        buf[0] = (value >> 8) & 0xFF;
-                        buf[1] = value & 0xFF;
--                       memcpy(buf + 2, dev->pnp_string, value);
--                       DBG(dev, "1284 PNP String: %x %s\n", value,
-+                       memcpy(buf + 2, dev->pnp_string, pnp_length);
-+                       DBG(dev, "1284 PNP String: %x %s\n", pnp_length,
-                            dev->pnp_string);
-                        break;
+I believe this is the best possible fix, considering the regressions
+anything stricter might cause.
+
+We know of at least one MBIM device where dwNtbOutMaxSize is as low as
+2048.
+
+According to the MBIM spec, the minimum and default value for
+wMaxSegmentSize is also 2048.  This implies that the calculated "min"
+value is at least 2076, which is why we need that odd looking
+
+  min =3D min(min, max);
+
+So let's just fix this specific zero case without breaking the
+non-conforming devices.
 
 
-
->
-> Are you interested in working up a proper patch, as described in
-> Documentation/process/submitting-patches.rst ?
->
-
-No. It's my second patch in 15 years. If you have a proper procedure
-for diffing/patching, then make corresponding targets in the top
-Makefile, e.g. `make diff` or `make patch`.
+Reviewed-by: Bj=C3=B8rn Mork <bjorn@mork.no>
