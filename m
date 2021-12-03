@@ -2,65 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF01467B3E
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 17:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA1E467C73
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 18:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352374AbhLCQZv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Dec 2021 11:25:51 -0500
-Received: from mxout1-ec2-va.apache.org ([3.227.148.255]:47744 "EHLO
-        mxout1-ec2-va.apache.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352557AbhLCQZv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 11:25:51 -0500
-Received: from mail.apache.org (mailroute1-lw-us.apache.org [207.244.88.153])
-        by mxout1-ec2-va.apache.org (ASF Mail Server at mxout1-ec2-va.apache.org) with SMTP id 27272440BA
-        for <linux-usb@vger.kernel.org>; Fri,  3 Dec 2021 16:22:03 +0000 (UTC)
-Received: (qmail 18246 invoked by uid 99); 3 Dec 2021 16:22:03 -0000
-Received: from mailrelay1-he-de.apache.org (HELO mailrelay1-he-de.apache.org) (116.203.21.61)
-    by apache.org (qpsmtpd/0.29) with ESMTP; Fri, 03 Dec 2021 16:22:03 +0000
-Received: from [10.23.2.128] (unknown [51.154.28.112])
-        by mailrelay1-he-de.apache.org (ASF Mail Server at mailrelay1-he-de.apache.org) with ESMTPSA id 355083E823;
-        Fri,  3 Dec 2021 16:22:02 +0000 (UTC)
-Message-ID: <3091ef04c6ba6e70977a8d34d47528de866e7536.camel@apache.org>
-Subject: Re: Regression: plugging in USB scanner breaks all USB functionality
-From:   Robert Munteanu <rombert@apache.org>
-To:     Takashi Iwai <tiwai@suse.de>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        tiwai@suse.com, regressions@lists.linux.dev,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 03 Dec 2021 17:22:01 +0100
-In-Reply-To: <s5hzgphsywk.wl-tiwai@suse.de>
-References: <35f7428b39f996c793f5b4a6a314772681c73d7a.camel@apache.org>
-         <a649395b-0b91-a0d2-c510-ea8ec4aef917@linux.intel.com>
-         <s5hzgphsywk.wl-tiwai@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.1 
+        id S1353036AbhLCR2U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Dec 2021 12:28:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37720 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239848AbhLCR2U (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 12:28:20 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7423C061751;
+        Fri,  3 Dec 2021 09:24:55 -0800 (PST)
+Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1mtCIn-0003QH-7t; Fri, 03 Dec 2021 18:24:53 +0100
+Message-ID: <e03ddc81-c60b-bd28-b959-0602142f0efc@leemhuis.info>
+Date:   Fri, 3 Dec 2021 18:24:52 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: Regression: plugging in USB scanner breaks all USB functionality
+ #forregzbot
+Content-Language: en-BS
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <35f7428b39f996c793f5b4a6a314772681c73d7a.camel@apache.org>
+ <3eb9c3f8-6bca-da08-47ec-af2a02d6a485@leemhuis.info>
+To:     regressions@lists.linux.dev
+In-Reply-To: <3eb9c3f8-6bca-da08-47ec-af2a02d6a485@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1638552295;ea523916;
+X-HE-SMSGID: 1mtCIn-0003QH-7t
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 2021-12-03 at 12:36 +0100, Takashi Iwai wrote:
-> > That patch has a fix that is not yet applied, fix can be found
-> > here:
-> > https://lore.kernel.org/linux-usb/20211126122340.1193239-2-mathias.nyman@linux.intel.com/
-> > or
-> > https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=for-usb-linus&id=385b5b09c3546c87cfb730b76abe5f8d73c579a2
-> > 
-> > Does reverting the original patch, or applying the fix help?
+On 02.12.21 16:13, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker speaking.
 > 
-> Thanks!
+> Thanks for the report.
 > 
-> For convenience, I'm building a test 15.5.x kernel for openSUSE TW in
-> OBS home:tiwai:bsc1192569 repo.  Robert, if you have time, please
-> test
-> it later.
+> Top-posting for once, to make this easy accessible to everyone.
+> 
+> FWIW, 5.14 is EOL, so it might not be fixed there. As the problem is in
+> newer kernels as well, I suspect that it was a change applies to 5.15 or
+> 5.16 that got backported. Maybe one of the developers might have an idea
+> which commit causes it. If that's not the case you likely should try a
+> bisection to find the culprit. Performing one between v5.14.11..v5.14.14
+> is likely the easiest and quickest way to find it.
+> 
+> To be sure this issue doesn't fall through the cracks unnoticed, I'm
+> adding it to regzbot, my Linux kernel regression tracking bot:
+> 
+> #regzbot ^introduced v5.14.11..v5.14.14
+> #regzbot title usb: plugging in USB scanner breaks all USB functionality
+> [regression present in 5.15.2 und 5.16-rc3, too]
+> #regzbot ignore-activity
 
-I confirm that building and installing the kernel from the repostiory
-that Takashi has provided fixed the problem for me.
+#regzbot introduced ff0e50d3564f
+#regzbot fixed-by 385b5b09c3546c87cfb730b76abe5f8d73c579a2
 
-Thanks a lot for the help!
+Ciao, Thorsten, your Linux kernel regression tracker
 
-Robert
+P.S.: this mail is primarily send for documentation purposes and for
+regzbot, my Linux kernel regression tracking bot. These mails usually
+contain '#forregzbot' in the subject, to make them easy to spot and filter.
+
+
+
