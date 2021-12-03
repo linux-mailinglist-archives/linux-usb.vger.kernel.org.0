@@ -2,193 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE0A4679A5
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 15:46:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B53384679A7
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 15:46:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352049AbhLCOtw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Dec 2021 09:49:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57340 "EHLO
+        id S1381548AbhLCOt5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Dec 2021 09:49:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381546AbhLCOtp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 09:49:45 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D42C061353
-        for <linux-usb@vger.kernel.org>; Fri,  3 Dec 2021 06:46:20 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id o29so2551515wms.2
-        for <linux-usb@vger.kernel.org>; Fri, 03 Dec 2021 06:46:20 -0800 (PST)
+        with ESMTP id S1381562AbhLCOtw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 09:49:52 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442BCC061751
+        for <linux-usb@vger.kernel.org>; Fri,  3 Dec 2021 06:46:28 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id f186so10011701ybg.2
+        for <linux-usb@vger.kernel.org>; Fri, 03 Dec 2021 06:46:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=v4VOMillbCsUUfD1LU3KOFh8EAHKlb6MpbuMP36w6ao=;
-        b=inODXxOYsLADIcXKLE2foYW49r3909nrLMuTPkHQN16A2nQy6zeLBh/WhPypLO5avJ
-         RmeOJQ3z7jB0b1j9zzIhYBmMcFHvSppx0QIOIO/dVEh3h27BoESwCdouXZSdF4RnhUxv
-         guYkjIx33yIIaVcApfIG4isd0xhugX3UsyOQDIBhxGkt74eKopjU4BxEztqUjohymV6H
-         RvqxZu8kXgpawYu8OqG2Qe4rPXP39Xc32N5nRTKHZc7SDzIe1+ljOnEqKPHzum0G8uIP
-         11UqHSiCZb5w8eH+HcsnLkgBwvR0I0DQp6RKBHX2QIYd/kgapJ0D6XWIzjxtzVk6OcKX
-         +tDg==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=PjhwI+CnK9T6aryUKukhix9h2uCKHfEm0SmqIW6SxnM=;
+        b=el6R7rJr6dnwcGPXTANKfBdUm0eRYRhRJR9irFePbfAQ0+qz7yMzTEtbRtj+GU+zAe
+         qJoKlHe2wHYnW24S2qFeIia3BCtnJN6K4hvMolnkLpDN5wkUu4HW5DnHOv5eZP8NhFUL
+         3QARVJ81++o+ldEbSjnpyp1oIevEMYaGCm+sUDcc7CEUmsexGaSrNlMR22zTJvlFWsOR
+         uBu5VMuaDf0vBCnRtTdjAaFWmPbDmmiN0wq3nHFF0AHXsHjNCnyopdl+lwoFFihF6pO5
+         nrGG2Xfn0ZkaIAMYprOqVP9Ma+EPBIV+DzPnVwNhs0cl3Vtz9QRq9Pa9lVQECr7TYdD1
+         Pb5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=v4VOMillbCsUUfD1LU3KOFh8EAHKlb6MpbuMP36w6ao=;
-        b=dC6SklPqzJ54DE4LYRAwZYYb6LzglfYkomhIkg0Hy6061Vlq4hCx0CHmt1XEKX2scL
-         6Zs/GtbYerujBvL5Z/OpX1B1Q+6r2zFOYo9ZR7sRtli3qRcqP1GRDPZIagUyhuF4vT8K
-         z5pU+TiBshXYzb6vu3dVMfqvbLl2w9tB6v2rUKrEWnrj6vzkgosW6PWKDXX3TLxni1X3
-         PsienFUuKfS1L9bEsdZ4KtyLsnNYXKsO9almasdN8yz99NuGikRm6HjR7I0nTX6o/f5P
-         z3BOFxppZAxBnHJ48MJoTm2u1D37x9GuSlehqrpothcJ6TnI4nFDXAqeEs8CJE8e2mQd
-         MlsQ==
-X-Gm-Message-State: AOAM530c5NvVt99b1xcLJ7X+2pyaH3VGHIA+btGabe9yHBqfhVFUpwnK
-        Lhmtmg6cot1v/FEbeLauEguPZA==
-X-Google-Smtp-Source: ABdhPJzxHqETgoDEVRMGwS14ODKhQckKDbC14Nr5NTWkjBLZu5Oc7PUyGjbcnQSzmO06JsWn84ouUw==
-X-Received: by 2002:a1c:770e:: with SMTP id t14mr15217228wmi.173.1638542779194;
-        Fri, 03 Dec 2021 06:46:19 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id r8sm3667803wrz.43.2021.12.03.06.46.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 06:46:18 -0800 (PST)
-Date:   Fri, 3 Dec 2021 14:46:16 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Cc:     Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/1] net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset
- or zero
-Message-ID: <YaotuB5CkQhWHvpQ@google.com>
-References: <20211202143437.1411410-1-lee.jones@linaro.org>
- <20211202175134.5b463e18@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <87o85yj81l.fsf@miraculix.mork.no>
- <Yan+nvfyS21z7ZUw@google.com>
- <87ilw5kfrm.fsf@miraculix.mork.no>
- <YaoeKfmJrDPhMXWp@google.com>
- <871r2tkb5k.fsf@miraculix.mork.no>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=PjhwI+CnK9T6aryUKukhix9h2uCKHfEm0SmqIW6SxnM=;
+        b=ekf76wy99x2UE2/8wmgjhpaO93lXpPowO7vRT8aRPykqxIDZAn4xysDvu4j2JTDuEM
+         Sf8mOtTamSZO5VNz5QQdmbUGUJSOnMdbuc3PrdeOhZbtYw2YkhXiwZFQiv6VOUzzXZ6Z
+         7dKd9fbt1dCuKF567juRs2NUU75hInHSSbPhAJeivh8GGmA7cthVDNixWCB7HThm4krF
+         I/thyiADHhOoHRi2AeDDfOg9O0HUyg0WOWuvTSipnTkE/LsSYWCuaVF2UR9zF0+Lto6l
+         I8O+g/P0Zm0OK9gWmsV3RfRtTLrxZER85n4SgduvbKiyPRb2TDFxEu+cAGDyjOMmZDmJ
+         /eCw==
+X-Gm-Message-State: AOAM531L0Caf5yKJxu9Qvtt9A2WVw5bzF/U0SP/XziSGYIspmaDy+gvr
+        1XBligvE166VOrNGgpSMBYBX+O2Q8MopFSnmQck/BelJly8=
+X-Google-Smtp-Source: ABdhPJxCkGGxe+9lEdVCYKxkGMczH40fjOExFA6cD4THF+PhWVYRTtcjBYlcVeh+dQfMLbIpPOSsdOmN1pEzjeS6dpU=
+X-Received: by 2002:a25:68c9:: with SMTP id d192mr22343774ybc.645.1638542787549;
+ Fri, 03 Dec 2021 06:46:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <871r2tkb5k.fsf@miraculix.mork.no>
+From:   Volodymyr Lisivka <vlisivka@gmail.com>
+Date:   Fri, 3 Dec 2021 16:46:17 +0200
+Message-ID: <CAKjGFBUdjXcZoVV4jdrgTz4rKThTfZAK4CqreKmBZ4KHE+K1GA@mail.gmail.com>
+Subject: Re: BUG: iPNPstring in f_printer USB gadget is reduced by two bytes
+To:     John Keeping <john@metanate.com>
+Cc:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 03 Dec 2021, Bjørn Mork wrote:
-
-> Lee Jones <lee.jones@linaro.org> writes:
-> > On Fri, 03 Dec 2021, Bjørn Mork wrote:
-> 
-> >> This I don't understand.  If we have for example
-> >> 
-> >>  new_tx = 0
-> >>  max = 0
-> >>  min = 1514(=datagram) + 8(=ndp) + 2(=1+1) * 4(=dpe) + 12(=nth) = 1542
-> >> 
-> >> then
-> >> 
-> >>  max = max(min, max) = 1542
-> >>  val = clamp_t(u32, new_tx, min, max) = 1542
-> >> 
-> >> so we return 1542 and everything is fine.
+> On Tue, Nov 30, 2021 at 08:01:46PM +0200, Volodymyr Lisivka wrote:
+> > Description:
 > >
-> > I don't believe so.
+> > Printer USB gadget uses iPNPstring to communicate device name and
+> > command language with host. Linux driver for printer gadget sends
+> > GET_DEVICE_ID response packet without 2 last bytes, which may cause
+> > trouble for the host driver.
 > >
-> > #define clamp_t(type, val, lo, hi) \
-> >               min_t(type, max_t(type, val, lo), hi)
+> > Steps to reproduce:
 > >
-> > So:
-> >               min_t(u32, max_t(u32, 0, 1542), 0)
-> 
-> 
-> I don't think so.  If we have:
-> 
->  new_tx = 0
->  max = 0
->  min = 1514(=datagram) + 8(=ndp) + 2(=1+1) * 4(=dpe) + 12(=nth) = 1542
->  max = max(min, max) = 1542
-> 
-> Then we have
-> 
->   min_t(u32, max_t(u32, 0, 1542), 1542)
-> 
-> 
-> If it wasn't clear - My proposal was to change this:
-> 
->   - min = min(min, max);
->   + max = max(min, max);
-> 
-> in the original code.
+> > Use Raspberry Pi, or an other device with USB OTG plug. Raspberry Pi 4
+> > was used by issue author.
+> > Configure plug to be in peripheral mode, e.g. by adding
+> > dtoverlay=dwc2,dr_mode=peripheral to /boot/config.txt.
+> > Connect OTG port to host and reboot Raspberry Pi.
+> > Load g_printer module using command sudo modprobe g_printer.
+> > Use command ./get-iPNPstring.pl /dev/usb/lp1 to get iPNPstring from
+> > the device. (See get-iPNPstring.pl.gz ). As alternative, kernel usbmon
+> > or WireShark can be used to capture raw USB packet for GET_DEVICE_ID
+> > response.
+> >
+> > Expected result:
+> >
+> > It's expected to receive same string as defined in module:
+> > iPNPstring='MFG:linux;MDL:g_printer;CLS:PRINTER;SN:1;'
+> >
+> > Actual result:
+> >
+> > iPNPstring='MFG:linux;MDL:g_printer;CLS:PRINTER;SN:'
+> >
+> > (Notice that last 2 chars are missing).
+> >
+> > Workarround:
+> >
+> > Just add two space to the end of printer gadget iPNPstring.
+> >
+> > Root cause:
+> >
+> > In drivers/usb/gadget/function/f_printer.c, length of iPNPstring is
+> > used as length of the whole packet, without length of 2 byte size
+> > field.
+>
+> If I understand correctly, the length should be inclusive of the two
+> length bytes, but currently this driver encodes it exclusive.
+>
+> The USB printer class specification says:
+>
+> ... a device ID string that is compatible with IEEE 1284.  See
+> IEEE 1284 for syntax and formatting information
+>
+> and goes on to specify that this includes the length in the first two
+> bytes as big endian.
+>
+> I don't have access to IEEE 1284, but looking in drivers/parport/probe.c
+> which implements the host side of IEEE 1284, we find
+> parport_read_device_id() with the comment:
+>
+> /* Some devices wrongly send LE length, and some send it two
+> * bytes short. Construct a sorted array of lengths to try. */
+>
+> and code that assumes the values are inclusive of the length bytes.
+>
+> So the patch below looks like it does the right thing to me, although it
+> appears whitespace damaged and it may be clearer to introduce a separate
+> variable for the string length compared to the value.
 
-Oh, I see.  Yes, I missed the reallocation of 'max'.
+diff --git a/drivers/usb/gadget/function/f_printer.c
+b/drivers/usb/gadget/function/f_printer.c
+index 236ecc968..403faa05b 100644
+--- a/drivers/usb/gadget/function/f_printer.c
++++ b/drivers/usb/gadget/function/f_printer.c
+@@ -987,6 +987,7 @@ static int printer_func_setup(struct usb_function *f,
+        u16                     wIndex = le16_to_cpu(ctrl->wIndex);
+        u16                     wValue = le16_to_cpu(ctrl->wValue);
+        u16                     wLength = le16_to_cpu(ctrl->wLength);
++       u16                     pnp_length;
 
-I thought we were using original values and just changing min() to max().
+        DBG(dev, "ctrl req%02x.%02x v%04x i%04x l%d\n",
+                ctrl->bRequestType, ctrl->bRequest, wValue, wIndex, wLength);
+@@ -1003,11 +1004,12 @@ static int printer_func_setup(struct usb_function *f,
+                                value = 0;
+                                break;
+                        }
+-                       value = strlen(dev->pnp_string);
++                       pnp_length = strlen(dev->pnp_string);
++                       value = pnp_length + 2;
+                        buf[0] = (value >> 8) & 0xFF;
+                        buf[1] = value & 0xFF;
+-                       memcpy(buf + 2, dev->pnp_string, value);
+-                       DBG(dev, "1284 PNP String: %x %s\n", value,
++                       memcpy(buf + 2, dev->pnp_string, pnp_length);
++                       DBG(dev, "1284 PNP String: %x %s\n", pnp_length,
+                            dev->pnp_string);
+                        break;
 
-> But looking further I don't think that's a good idea either.  I searched
-> through old email and found this commit:
-> 
-> commit a6fe67087d7cb916e41b4ad1b3a57c91150edb88
-> Author: Bjørn Mork <bjorn@mork.no>
-> Date:   Fri Nov 1 11:17:01 2013 +0100
-> 
->     net: cdc_ncm: no not set tx_max higher than the device supports
->     
->     There are MBIM devices out there reporting
->     
->       dwNtbInMaxSize=2048 dwNtbOutMaxSize=2048
->     
->     and since the spec require a datagram max size of at least
->     2048, this means that a full sized datagram will never fit.
->     
->     Still, sending larger NTBs than the device supports is not
->     going to help.  We do not have any other options than either
->      a) refusing to bindi, or
->      b) respect the insanely low value.
->     
->     Alternative b will at least make these devices work, so go
->     for it.
->     
->     Cc: Alexey Orishko <alexey.orishko@gmail.com>
->     Signed-off-by: Bjørn Mork <bjorn@mork.no>
->     Signed-off-by: David S. Miller <davem@davemloft.net>
-> 
-> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-> index 4531f38fc0e5..11c703337577 100644
-> --- a/drivers/net/usb/cdc_ncm.c
-> +++ b/drivers/net/usb/cdc_ncm.c
-> @@ -159,8 +159,7 @@ static u8 cdc_ncm_setup(struct usbnet *dev)
->         }
->  
->         /* verify maximum size of transmitted NTB in bytes */
-> -       if ((ctx->tx_max < (CDC_NCM_MIN_HDR_SIZE + ctx->max_datagram_size)) ||
-> -           (ctx->tx_max > CDC_NCM_NTB_MAX_SIZE_TX)) {
-> +       if (ctx->tx_max > CDC_NCM_NTB_MAX_SIZE_TX) {
->                 dev_dbg(&dev->intf->dev, "Using default maximum transmit length=%d\n",
->                         CDC_NCM_NTB_MAX_SIZE_TX);
->                 ctx->tx_max = CDC_NCM_NTB_MAX_SIZE_TX;
-> 
-> 
-> 
-> 
-> 
-> So there are real devices depending on a dwNtbOutMaxSize which is too
-> low.  Our calculated minimum for MBIM will not fit.
-> 
-> So let's go back your original test for zero.  It's better than
-> nothing.  I'll just ack that.
 
-Sure, no problem.
 
-Thanks for conversing with me.
+>
+> Are you interested in working up a proper patch, as described in
+> Documentation/process/submitting-patches.rst ?
+>
 
-> > Perhaps we should use max_t() here instead of clamp?
-> 
-> No.  That would allow userspace to set an unlimited buffer size.
-
-Right, I see.
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+No. It's my second patch in 15 years. If you have a proper procedure
+for diffing/patching, then make corresponding targets in the top
+Makefile, e.g. `make diff` or `make patch`.
