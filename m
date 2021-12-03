@@ -2,90 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4164677AC
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 13:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90BCC4677B3
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 13:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380959AbhLCMzJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Dec 2021 07:55:09 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34404 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380953AbhLCMzJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 07:55:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C79D62A30
-        for <linux-usb@vger.kernel.org>; Fri,  3 Dec 2021 12:51:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E005C53FC7;
-        Fri,  3 Dec 2021 12:51:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638535904;
-        bh=6GbrfruxenT6ffNBSvvwPfjlTq6wc/eJ05XODJtbrho=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pcqP99gwmL+wuz4buP+WbJp305prikOu1Bzwem4HaSSMuqbHAhorISfn9wibmqx/5
-         j7ePV4wKNeWFW2cb/u9TL6bZwzo+VUaSulAv0GW43cSnX/Z5ZJxKX6l0Cx+O/3G7fH
-         wdNMSFtdCut3n1i5Fu/vUYK0I1lN43lyLVcRbWl0=
-Date:   Fri, 3 Dec 2021 13:51:41 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sanjeev Chugh <sanjeev_chugh@mentor.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH V1 1/1] usb: hub: introduce delay after usb hub mutex
- release
-Message-ID: <YaoS3RoqkGkf6NFa@kroah.com>
-References: <1638320288-6465-1-git-send-email-sanjeev_chugh@mentor.com>
+        id S1380953AbhLCM6a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Dec 2021 07:58:30 -0500
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:41265 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1380910AbhLCM63 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 07:58:29 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id D68D4580106;
+        Fri,  3 Dec 2021 07:55:04 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Fri, 03 Dec 2021 07:55:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=T/gdT262onMBLVgAhbjdaWayAvj
+        FH/5d9zLA6s4pRb8=; b=l5MYBUm/0bcCftj7SVoyFcu9+7nJopx39PzXivMKcro
+        O12fZeufKaVmKe3ixmxqRQAKVYYaGlRfUYXxb2gGaH23WJK/8zYNL9vZLom9asy9
+        LOTaz9SUjQu2p8rdiKYDMzVuNBSEMdUfM+Mz7RDwsYr3wnhO7/7ZyJkBwcbOnYC1
+        6yCz2zwb9LlwK3A4CiUvKtSPoiy4S20Khrve7b9ZrkaFjWlQN80shGoou8U6Fj9j
+        om/tmnYMEy/+z+YdQ/Uu3C5ms9otheaIjnZkqKD4OHDOAVgQpiyIhuTphCbpkjPv
+        ZgyN7j5Pa4KN5Io+V0cVEgHnclTXYHeIdoNjEvCWvjw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=T/gdT2
+        62onMBLVgAhbjdaWayAvjFH/5d9zLA6s4pRb8=; b=Y7iL/ufxBhzr3UU275WTXd
+        EcyWeESkCtEdaIgZm8kebJ8QEktzUcXleJLXsbluqkiDVWElKG4ER47L/06tLFAp
+        UiUS6Bg/VOkJEaB9QBuqy5aUhr7mAk60TRcBa6IYC1hvm4rvVSKS+S93wZelUvME
+        0ZCKtR7Qk7ytCcY9hE6Jv2WhTVyuMyge9Nut/t1stCJw0Cjclg8E/BeXRBDDZ9sF
+        7zyvNs55cVZ1h2EvrPn65ur/qvwnTr7dFk0zXtuX++34H2HYPv0Xcw0nbc4QQXqp
+        zTfaa4/nERwjxCZBVsm7Ywpub0nKhHh705qRxA1oVk/k2Kj64N0WCgXy7JngBpfw
+        ==
+X-ME-Sender: <xms:qBOqYeW6bDiA6d6_7LFfr2Jflc6icSF45mZ62CJ0pTiFN_GKDrUMIw>
+    <xme:qBOqYaltR9-wDATdX33nz3roGekr_dwdez3VDbKt8hrhxFXq2i0jNGcDxJhyqo7vW
+    D5KcL2pBTCC2w>
+X-ME-Received: <xmr:qBOqYSbfG9v-PHZdhkUQUgLGlS-X_D6izpQz6NGIkmuAj3PAN75090h7-Z-o6YDtI2xwbHGZoDUYQDWjkidATL4x1zTXXnrN>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrieejgdegkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
+    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
+    gtohhm
+X-ME-Proxy: <xmx:qBOqYVWTRUWDzroRa5BiOKjfqEP798cZ3e2RjKBjPI982FGXSRZNBQ>
+    <xmx:qBOqYYndncWPBdG6VRL-Kt5SZ28c7OOXaSMZG8PGw9e86B1-s3enng>
+    <xmx:qBOqYacFc4IMeovJWGB_7QntOQ7N-nRxwv2p13gugxA5nV_plt2xYw>
+    <xmx:qBOqYRfkSrtQoiJOnGl28Tw8jV3h5RCgTot2_NPwbuy3eF5gMbqTCw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 3 Dec 2021 07:55:04 -0500 (EST)
+Date:   Fri, 3 Dec 2021 13:55:01 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
+        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
+        kernel@pengutronix.de
+Subject: Re: [PATCH] usb: gadget: uvc: use pump call conditionally
+Message-ID: <YaoTpQ0nNa+sUQ/y@kroah.com>
+References: <20211202005852.3538102-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1638320288-6465-1-git-send-email-sanjeev_chugh@mentor.com>
+In-Reply-To: <20211202005852.3538102-1-m.grzeschik@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 06:28:08AM +0530, Sanjeev Chugh wrote:
-> Rogue usb sticks can cause endless port connect change events
-> due to unstable electric connection between usb chip and
-> the port. Port connect change will cause device enumeration for
-> the new device connection and new device processing is done with
-> the usb hub mutex acquired. This can cause very short time gap
-> between unlock/lock of hub device mutex. So if some thread is
-> running at low priority than hub_thread, it can face hub device
-> mutex starvation.
+On Thu, Dec 02, 2021 at 01:58:52AM +0100, Michael Grzeschik wrote:
+> Preparing the usb request is not very expensive, when using
+> scatter gather. In that case we can even remove the overhead
+> of the extra pump worker and call the pump function directly.
 > 
-> This commit introduces a sleep of 25ms after the hub device mutex is
-> unlocked in hub_events so that if hub_thread is stuck in a
-> endless loop, all other threads will get fair amount of chance
-> to acquire the usb hub mutex.
-> 
-> Signed-off-by: Sanjeev Chugh <sanjeev_chugh@mentor.com>
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 > ---
->  drivers/usb/core/hub.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+>  drivers/usb/gadget/function/uvc_v4l2.c  |  8 +++++--
+>  drivers/usb/gadget/function/uvc_video.c | 28 +++++++++++++++++++------
+>  drivers/usb/gadget/function/uvc_video.h |  2 ++
+>  3 files changed, 30 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 00070a8..0be2acc 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -5763,6 +5763,17 @@ static void hub_event(struct work_struct *work)
->  out_hdev_lock:
->  	usb_unlock_device(hdev);
+> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+> index a2c78690c5c288..020b4adc7840e0 100644
+> --- a/drivers/usb/gadget/function/uvc_v4l2.c
+> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
+> @@ -169,8 +169,12 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v4l2_buffer *b)
+>  	if (ret < 0)
+>  		return ret;
 >  
-> +	/*
-> +	 * Rogue usb sticks can cause endless device connection
-> +	 * events due to unstable electric connection.
+> -	if (uvc->state == UVC_STATE_STREAMING)
+> -		schedule_work(&video->pump);
+> +	if (uvc->state == UVC_STATE_STREAMING) {
+> +		if (!video->queue.use_sg)
+> +			schedule_work(&video->pump);
+> +		else
+> +			uvcg_video_pump(video);
 
-What is a "usb stick"?  Any usb device could cause this, right?
+Wouldn't it be easier to understand this if you flip the if test around:
+		if (video->queue.use_sg)
+			uvcg_video_pump(video);
+		else
+			schedule_work(&video->pump);
+?
 
-> This
-> +	 * can cause very short time gap between unlock/lock
-> +	 * of hub device mutex thus causing mutex starvation
-> +	 * for some other lower priority thread. Thus sleep
-> +	 * would give fair chance to all other threads to
-> +	 * acquire the usb hub mutex.
-> +	 */
-> +	msleep(25);
+Negagive logic is never fun to read...
 
-What normal code path did you just slow down here?  Why not slow down
-the disconnect path instead of the connect path?
+Also, are you sure that sg really is not expensive on all systems?  What
+did you test this on, and what was the results?
 
 thanks,
 
