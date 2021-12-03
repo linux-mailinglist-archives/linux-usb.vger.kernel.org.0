@@ -2,86 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D01A3467269
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 08:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3D44672A7
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 08:33:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378766AbhLCHPU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Dec 2021 02:15:20 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42888 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345605AbhLCHPS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 02:15:18 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1350630AbhLCHhI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Dec 2021 02:37:08 -0500
+Received: from m43-7.mailgun.net ([69.72.43.7]:45200 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243707AbhLCHhH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 3 Dec 2021 02:37:07 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1638516824; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=N7DGyEQzTk8fyCInGXk90E25CG4IDDnUIzPL/8K1MqQ=; b=mJL8RimOzT5USwmHGa8V1/pCZSV9a9BlDn9VHQBN7g/uRHP4Jef2FfKYtRh6SobvDWDtyGJa
+ BIfoF1TuDU6p/HZ3lXvyWJY8msdhxJ7XM6cGwbtMdfjGr41yJiQ6oZ6gavYLm0/Z1yovkSGY
+ GLPsXzfRJ/j3YKooadzo4F5x7hA=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
+ 61a9c857df12ba53c4a8ab02 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 03 Dec 2021 07:33:43
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 01F95C43616; Fri,  3 Dec 2021 07:33:42 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.8 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.0
+Received: from [10.110.103.27] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3391B81DCB;
-        Fri,  3 Dec 2021 07:11:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60916C53FC7;
-        Fri,  3 Dec 2021 07:11:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638515512;
-        bh=83CYGlqu4IxdxRASAP3V0vFTniV6uzw++7hL/O+6/M0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BiBjhaMFMXTr8yUd30E6nsfplxjABvl7IKlFzvV5/HAjmRAL8iKhBGupVxzXNVTo0
-         jOqXmxMQCMOYsoawohqAxNgqWtK8RkIGAkAAd+KR+iyEHiLsc/hRGO0eV1eTkv3oWR
-         JEW4F8wU1v09/Sc0rHQwH87d6EWoTd7DtXn8fcak=
-Date:   Fri, 3 Dec 2021 08:11:47 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     bpf@vger.kernel.org,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        SeongJae Park <sj@kernel.org>,
-        Jani Nikula <jani.nikula@intel.com>, axboe@kernel.dk,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
-        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, yuq825@gmail.com, robdclark@gmail.com,
-        sean@poorly.run, christian.koenig@amd.com, ray.huang@amd.com,
-        sgoutham@marvell.com, gakula@marvell.com, sbhatta@marvell.com,
-        hkelam@marvell.com, jingoohan1@gmail.com,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, bhelgaas@google.com,
-        krzysztof.kozlowski@canonical.com, mani@kernel.org,
-        pawell@cadence.com, rogerq@kernel.org, a-govindraju@ti.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        akpm@linux-foundation.org, thomas.hellstrom@linux.intel.com,
-        matthew.auld@intel.com, colin.king@intel.com, geert@linux-m68k.org,
-        linux-block@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH bpf v2] treewide: add missing includes masked by cgroup
- -> bpf dependency
-Message-ID: <YanDM7hD9KucIRq6@kroah.com>
-References: <20211202203400.1208663-1-kuba@kernel.org>
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 525F1C4338F;
+        Fri,  3 Dec 2021 07:33:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 525F1C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [PATCH] usb: gadget: f_fs: Wake up IO thread during disconnect
+To:     John Keeping <john@metanate.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_jackp@quicinc.com
+References: <20211201100205.25448-1-quic_wcheng@quicinc.com>
+ <YaelpmsJXmhTY4A0@donbot> <Yajc5f3LDm+dSji/@donbot>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <dcfb2b21-6ae8-6921-663d-85cb71f3f5ae@codeaurora.org>
+Date:   Thu, 2 Dec 2021 23:33:40 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
+In-Reply-To: <Yajc5f3LDm+dSji/@donbot>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211202203400.1208663-1-kuba@kernel.org>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 12:34:00PM -0800, Jakub Kicinski wrote:
-> cgroup.h (therefore swap.h, therefore half of the universe)
-> includes bpf.h which in turn includes module.h and slab.h.
-> Since we're about to get rid of that dependency we need
-> to clean things up.
-> 
-> v2: drop the cpu.h include from cacheinfo.h, it's not necessary
-> and it makes riscv sensitive to ordering of include files.
-> 
-> Link: https://lore.kernel.org/all/20211120035253.72074-1-kuba@kernel.org/  # v1
-> Link: https://lore.kernel.org/all/20211120165528.197359-1-kuba@kernel.org/ # cacheinfo discussion
-> Acked-by: Krzysztof Wilczyński <kw@linux.com>
-> Acked-by: Peter Chen <peter.chen@kernel.org>
-> Acked-by: SeongJae Park <sj@kernel.org>
-> Acked-by: Jani Nikula <jani.nikula@intel.com>
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Hi John,
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On 12/2/2021 6:49 AM, John Keeping wrote:
+> On Wed, Dec 01, 2021 at 04:41:10PM +0000, John Keeping wrote:
+>> On Wed, Dec 01, 2021 at 02:02:05AM -0800, Wesley Cheng wrote:
+>>> During device disconnect or composition unbind, applications should be
+>>> notified that the endpoints are no longer enabled, so that it can take
+>>> the proper actions to handle its IO threads.  Otherwise, they can be
+>>> left waiting for endpoints until EPs are re-enabled.
+>>>
+>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>>> ---
+>>>  drivers/usb/gadget/function/f_fs.c | 7 +++++--
+>>>  1 file changed, 5 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+>>> index 3c584da9118c..0b0747d96378 100644
+>>> --- a/drivers/usb/gadget/function/f_fs.c
+>>> +++ b/drivers/usb/gadget/function/f_fs.c
+>>> @@ -957,10 +957,12 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+>>>  		if (file->f_flags & O_NONBLOCK)
+>>>  			return -EAGAIN;
+>>>  
+>>> -		ret = wait_event_interruptible(
+>>> -				epfile->ffs->wait, (ep = epfile->ep));
+>>> +		ret = wait_event_interruptible(epfile->ffs->wait,
+>>> +				(ep = epfile->ep) || !epfile->ffs->func);
+> 
+> I looked at this again, and doesn't this totally break the wait
+> condition?
+> 
+> epfile->ep is set to non-null in ffs_func_eps_enable() which is called
+> from ffs_func_set_alt() just after ffs->func is set to non-null, and
+> then those are also set back to null at the same time.
+> 
+> So the condition boils down to a || !a and this never blocks.  Or am I
+> missing something?
+
+Thanks for the feedback.  Hmm...yes, I get what you're saying.  The
+EPfiles and func is basically being set/cleared together, so the above
+change wouldn't be any different than checking for ep != epfile->ep.
+Let me see if there's another way we can address the issue this change
+is trying to resolve.
+
+> 
+>>>  		if (ret)
+>>>  			return -EINTR;
+>>> +		if (!epfile->ffs->func)
+>>> +			return -ENODEV;
+>>
+>> This seems strange - we are inside the case where the endpoint is not
+>> initially enabled, if we're returning ENODEV here shouldn't that happen
+>> in all cases?
+>>
+>> Beyond that, there is no locking for accessing ffs->func here;
+>> modification happens in gadget callbacks so it's guarded by the gadget
+>> core (the existing case in ffs_ep0_ioctl() looks suspicious as well).
+>>
+>> But I can't see why this change is necessary - there are event
+>> notifications through ep0 when this happens, as can be seen in the hunk
+>> below from the ffs_event_add(ffs, FUNCTIONFS_DISABLE) line.  If
+>> userspace cares about this, then it can read the events from ep0.
+>>
+In short, the change is basically trying to resolve an issue in an
+application that has a separate thread handling the IO ops.  When the
+USB cable is disconnected, the application would expect for this IO
+thread to be completed and exit gracefully, and restarting it on the
+next connect.  However, since we are stuck in the read() it can not
+proceed further.
+
+I guess in these situations, we should utilize the O_NONBLOCK file
+parameter?
+
+Thanks
+Wesley Cheng
+
+>>>  	}
+>>>  
+>>>  	/* Do we halt? */
+>>> @@ -3292,6 +3294,7 @@ static int ffs_func_set_alt(struct usb_function *f,
+>>>  	if (alt == (unsigned)-1) {
+>>>  		ffs->func = NULL;
+>>>  		ffs_event_add(ffs, FUNCTIONFS_DISABLE);
+>>> +		wake_up_interruptible(&ffs->wait);
+>>>  		return 0;
+>>>  	}
+>>>  
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
