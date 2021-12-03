@@ -2,109 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7F5466F7C
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 03:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E884671A6
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 06:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377560AbhLCCFR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Dec 2021 21:05:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
+        id S1358483AbhLCFeV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Dec 2021 00:34:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237498AbhLCCFR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Dec 2021 21:05:17 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F42C06174A;
-        Thu,  2 Dec 2021 18:01:54 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id k4so1032570plx.8;
-        Thu, 02 Dec 2021 18:01:54 -0800 (PST)
+        with ESMTP id S229931AbhLCFeU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 00:34:20 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31832C06174A
+        for <linux-usb@vger.kernel.org>; Thu,  2 Dec 2021 21:30:57 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id d10so6185291ybn.0
+        for <linux-usb@vger.kernel.org>; Thu, 02 Dec 2021 21:30:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:cc:references:subject:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=CgHkw//Tb4Y6AmT6fyrojRfq8i+wfq/8ig0B7R1qGq0=;
-        b=WqTfXDq0uJeS0vGnCMHUDWO7ztA9mwrz5t4Sy3Fi5jQj1oTkZBd0+dDWx0tMH4Mej8
-         /24RFxn5BBpjRNiAHUreADgdgEjQcIAMCczv+FnQHHL+1JigHSXZMiWU05IsVQ0Lg331
-         TiRKC08SWY5XQUj7CshauRbld7+GaxDEhk17sDmLXlNV235NDfMFmVL9GUrSfsY3CIcm
-         EIksPIbthb3IEL4XI596fiD1hpHncVMA33phs9CFIhFPf6PHsyusvPnv4Her69kICu7w
-         YNqf0j4Qp0J9YEsz9fRQZfJ3UVp0Ox9SMFKmHOiB6jVWw63Zx4eNJ1P9KwVTPt8b1HSg
-         xMcA==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=hOTdve15Y/TQvMZ8AEZQ7xIv4VNA6Qwuk7ARaz8+sfo=;
+        b=fmqUUeKNMATlQ2HybrmVpFB/DsqEQxXu5gawv5f9N67OxJLdiXcjqrLIKMtgZpq51V
+         ZfMr9RU5CzzlwgEqbEaMucJMXo/rNkoVvYjA2SY5dVi5WxVnNXOMTw1I0O/7n7nBu8U7
+         qa5vGzHe5BfgZlZ+x1Qa2Y+LrUTl8mAIWpuAuTXrYty0cfv4jxrZbjG4MGRKtsdOSfrm
+         unatNR6wHJDjmqJrdNNDGd/4iaqgV5u0sIKPoODyfM1IO2z12PV65w2bDPeCMqbpJ8aw
+         V4OmKrBwPOYsXw4pfnTEH8KoUkGmhtvxbZHA1Up6PXOq1lR7m2MXFCZ8GKlVbnCtr84i
+         Y3wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:cc:references:subject:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CgHkw//Tb4Y6AmT6fyrojRfq8i+wfq/8ig0B7R1qGq0=;
-        b=2xojlMVe7jS7hG/DiGh+DEAu+avl3WHzbRjWV3Z7vvKicAn96D3OC1suY89D5g2G7J
-         A4woELR3ehx3uz0QhWHOGZGsPIcLAFbW0oY8Lw68RMVOPYneT4W9Gup/x0MfU4e3YHml
-         YqX71IG9pdptg1HFqJhE4exi0BrBONu02eqJN4zbH7T/JHD42ksBS00NLL1Ufo/OfDr/
-         ocPU4u3/r9dS5iYArXUFO60I08oHfcRxvgMH/y2LjO5XWuJ8TzIipqj+htd3wTCXpUM8
-         FpieuZ0Of0CgAS+j4hDzNPMmA64nDuJYELAu9jB8uhmtSgo+RDaBOxbzLLWM/nW7BBL5
-         hADw==
-X-Gm-Message-State: AOAM532Q6Q5tkEYaVFo6E9eTW5q+10q3fTIKsAwIqnm3EfhI8NDpj0dX
-        lIt61f1tGYLPbt28MBnIC09d5DBf/N8=
-X-Google-Smtp-Source: ABdhPJxzopgp2vGl3JQjz5WU9gs2F9jVt+3oXsxbRTc+QVkzPqRPiKtjkN+4tlJmjL6GeyQ20HZtYQ==
-X-Received: by 2002:a17:902:e74a:b0:142:114c:1f1e with SMTP id p10-20020a170902e74a00b00142114c1f1emr19313839plf.78.1638496913737;
-        Thu, 02 Dec 2021 18:01:53 -0800 (PST)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id b6sm1032370pfm.170.2021.12.02.18.01.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Dec 2021 18:01:53 -0800 (PST)
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <YakjNGEBFKm9pHCw@rowland.harvard.edu>
-Subject: Re: [PATCH 1/4] Docs: usb: update usb_bulk_msg receiving example
-From:   Akira Yokosawa <akiyks@gmail.com>
-Message-ID: <ee94a2f1-2bb5-afca-371f-48825a97641b@gmail.com>
-Date:   Fri, 3 Dec 2021 11:01:49 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=hOTdve15Y/TQvMZ8AEZQ7xIv4VNA6Qwuk7ARaz8+sfo=;
+        b=3b8RLnmA9rkD6RrdszVkQ6xPIWw3W51uwG6FySsYUQxEaSWXiihXFY+sq5qIdFRtNj
+         I89tOWrbCgmK8NRwLQm/Rq8Vj59Rji15ObbDl6eGGJuTXS7YWJ4DzvEBdUgCpbAPUnOG
+         q3uAQ7Siy+9lvBSCzgwjFWV4UbXnn+zbApMprHRlQ1TyTSC9IetDST+PCg4vIyYiKzd4
+         09guw2iSxnY044loDtUWCEV72mZ+B3MAqzCl9XsPzjhLZbCOwd3nLt4gvROtC/ZltC/N
+         8clLx8bqsuK3ociCigPEIC/RK/i9qpRR9PPvrmJCQorLEoNjRD6rhDaS2IMjtydXxEV1
+         r23g==
+X-Gm-Message-State: AOAM532uW+/N3zDjBfKPfyl0SJ0bEQM069eSd548omf6VXvj4GaALSRW
+        sJdeukwg9jjEzI+D0nssnsu+dWK/8fdvJT6P81s=
+X-Google-Smtp-Source: ABdhPJxbmw/WwWlAd+cPFTfPVOzPhik3TMd4feUx4wP7QeiPLdMDz5SlLNY/HabbVTNvRniB8VO8J8fovVHZv+oFrJ8=
+X-Received: by 2002:a05:6902:568:: with SMTP id a8mr22061420ybt.472.1638509456234;
+ Thu, 02 Dec 2021 21:30:56 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YakjNGEBFKm9pHCw@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:6900:33c8:0:0:0:0 with HTTP; Thu, 2 Dec 2021 21:30:55
+ -0800 (PST)
+Reply-To: maddahabdwabbo@gmail.com
+From:   Abd-Jafaari Maddah <shawnmrmack@gmail.com>
+Date:   Thu, 2 Dec 2021 21:30:55 -0800
+Message-ID: <CAGiL-g-Lsz0G9Q54pqcxP8tLMzUKvnvan=7GD5-ZGz++GmPmxA@mail.gmail.com>
+Subject: Why Am Writing You Again
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On Thu, 2 Dec 2021 14:49:08 -0500, Alan Stern wrote:
-> On Thu, Dec 02, 2021 at 05:49:47AM +0100, Philipp Hortmann wrote:
-[...]
->> Please find the full email under the link:
->> https://lore.kernel.org/linux-usb/87h7dcsohs.fsf@meer.lwn.net/T/
->> 
->> Please give me an example for the right wording. I am not a native English
->> speaker. Is the article in this case required?
-> 
-> Okay, now I see what's going on.  You should change it like this:
-> 
-> -driver. Instead we call the :c:func:`usb_bulk_msg` function, which can be used
-> +driver. Instead we call `usb_bulk_msg`, which can be used
->  to send or receive data from a device without having to create urbs and
-> -handle urb completion callback functions. We call the :c:func:`usb_bulk_msg`
-> +handle urb completion callback functions. We call `usb_bulk_msg`,
->  giving it a buffer into which to place any data received from
-
-Well, for function names to be caught by kernel-doc tools,
-you need to say usb_bulk_msg() (without ``, with () appended).
-
-So, the diff should look:
-
--driver. Instead we call the :c:func:`usb_bulk_msg` function, which can be used
-+driver. Instead we call usb_bulk_msg(), which can be used
- to send or receive data from a device without having to create urbs and
--handle urb completion callback functions. We call the :c:func:`usb_bulk_msg`
-+handle urb completion callback functions. We call usb_bulk_msg(),
- giving it a buffer into which to place any data received from
-
-You can find related documentation at:
-
-   https://www.kernel.org/doc/html/latest/doc-guide/kernel-doc.html#cross-referencing-from-restructuredtext
-
-        Thanks, Akira
-
-> 
-> Alan Stern
+-- 
+Dear,
+I had sent you a mail but i don't think you received it that's why am
+writing you again.It is important you get back to me as soon as you
+can.
+Am waiting,
+Abd-Jafaari Maddah
