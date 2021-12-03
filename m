@@ -2,220 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1E1467641
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 12:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5AD46765B
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 12:31:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380431AbhLCL2q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Dec 2021 06:28:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
+        id S243014AbhLCLea (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Dec 2021 06:34:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380405AbhLCL2q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 06:28:46 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1783CC06173E
-        for <linux-usb@vger.kernel.org>; Fri,  3 Dec 2021 03:25:22 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id 77-20020a1c0450000000b0033123de3425so4632560wme.0
-        for <linux-usb@vger.kernel.org>; Fri, 03 Dec 2021 03:25:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=3RjuwLlrhM4RaugB5EqP8K7MgHWl2y/JDvpsw8Kh3Kw=;
-        b=u9sKOqg0RFOM8iEFk5rD0bJttsvjSiLECk8MJ6OqCT+4RDfTQ8BEXuGmr6T6DIv9rG
-         EPOIdbNCga0jxADLP2Kmjok3kywdVdeEIxa7ixv/fhnf+ZYVWBGtFSxGlImyRyVZMpps
-         22wFeafTo7+Lm6cQVWCgAFg3zy2+dU+BQu+WK9N219MT0u1R6fzhV2QUXNv3bwDXkoDl
-         eJbS+OcnTXNQh/N4qCpOZsOy0bk3bFiFQdxjyb7Tufy0EaiSPZcDL482wNAmNMYClb09
-         EQiNFmsFxZ0YKegbeMu8XRouHWvAeqJ8iL6sti0e2VhBrSY0mJhE7edTi5xjnmiO5h93
-         r9XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=3RjuwLlrhM4RaugB5EqP8K7MgHWl2y/JDvpsw8Kh3Kw=;
-        b=jZVI3F/9pFdmjL1uuQZOWjCXskmWDw/QlNf97iLWp/zCwbc5Xup5YNTt9QO33yyTOY
-         NBG8xSIz+u0LlqR65d/+If5ir1/f90uLWKTHplR9To6GjrnY5r+hACL+He5yZNmDOMTh
-         JnrDPGjsD0n4LCQB1UuvAKIbdhH34BLVd5xQOljmXb7bryDmymE//OyfKJ+IEMzLWi2t
-         85218FEuFcFAde7CEXDu+rAw1mWd2E/9nQfCZe8FY3USdfiZPhTxs/bN6XA9Qz+t+weh
-         FfNAVM6zZ3s5GkWasKCxoqByH/HqPjeTbo68pPWygG8jnF1chk75J1wB1+My/GdFrPdN
-         cTaw==
-X-Gm-Message-State: AOAM531TwCwlMGY6e62LMuLVmV9YnLKOmlDsgb9B0HU3ZuYpSG0JGtiw
-        doTXAwcXqQihTEIvJjEunB5Krg==
-X-Google-Smtp-Source: ABdhPJz+cGHOxy5Mt0/jQV/UOWaSpy9XrPsrHUAMDW7DVVzwmjio8rNtLAaEoel4rwUawHO2LQoEwQ==
-X-Received: by 2002:a05:600c:4308:: with SMTP id p8mr13873064wme.132.1638530720576;
-        Fri, 03 Dec 2021 03:25:20 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id c10sm2525955wrb.81.2021.12.03.03.25.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 03:25:20 -0800 (PST)
-Date:   Fri, 3 Dec 2021 11:25:18 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Cc:     Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/1] net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset
- or zero
-Message-ID: <Yan+nvfyS21z7ZUw@google.com>
-References: <20211202143437.1411410-1-lee.jones@linaro.org>
- <20211202175134.5b463e18@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <87o85yj81l.fsf@miraculix.mork.no>
+        with ESMTP id S243546AbhLCLe1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 06:34:27 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C232C06173E;
+        Fri,  3 Dec 2021 03:31:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=0RFYGismENxwP+jaxLHTrZjrtbEuIPpeDDZE6JkcEEE=; b=C94QI
+        6CBtQh9rKmomxNnpS2FUjsmdr7U2vrhKD/4it5rwf8L1UqhI6f+7l8caHcvj4vheFqw3yg+FAYKOt
+        Cb2ET3Mnth7jNKWkqANhYv2Lu3qqaTWZyIXz3d6otAa7bWp9F579UMBPv9/O3ciHga1Ruuk4NhP+Y
+        5xpiYw1GgiQMIW/Q9upcv22KjmvdKmeBe0Uon2elAmlsWwih2zva8mJupnDpaAmnrrF7x8VVstrfg
+        bugii8JK7n8YD2vIF+V25yUwImIrZJ8s2fx+GGn4+YBxUJvy/HGfpHvBDIIYSxtamMHi023JT3ANu
+        8p+CdqGizE7FR8aa2+v5nTsysQQfw==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1mt6mB-0002Sr-Vs; Fri, 03 Dec 2021 11:30:52 +0000
+Date:   Fri, 3 Dec 2021 11:30:50 +0000
+From:   John Keeping <john@metanate.com>
+To:     Wesley Cheng <wcheng@codeaurora.org>
+Cc:     Wesley Cheng <quic_wcheng@quicinc.com>, balbi@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com
+Subject: Re: [PATCH] usb: gadget: f_fs: Wake up IO thread during disconnect
+Message-ID: <Yan/6o/0YsaYuUgr@donbot>
+References: <20211201100205.25448-1-quic_wcheng@quicinc.com>
+ <YaelpmsJXmhTY4A0@donbot>
+ <Yajc5f3LDm+dSji/@donbot>
+ <dcfb2b21-6ae8-6921-663d-85cb71f3f5ae@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87o85yj81l.fsf@miraculix.mork.no>
+In-Reply-To: <dcfb2b21-6ae8-6921-663d-85cb71f3f5ae@codeaurora.org>
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 03 Dec 2021, Bjørn Mork wrote:
+Hi Wesley,
 
-> Hello Lee!
+On Thu, Dec 02, 2021 at 11:33:40PM -0800, Wesley Cheng wrote:
+> On 12/2/2021 6:49 AM, John Keeping wrote:
+> > On Wed, Dec 01, 2021 at 04:41:10PM +0000, John Keeping wrote:
+> >> On Wed, Dec 01, 2021 at 02:02:05AM -0800, Wesley Cheng wrote:
+> >>> During device disconnect or composition unbind, applications should be
+> >>> notified that the endpoints are no longer enabled, so that it can take
+> >>> the proper actions to handle its IO threads.  Otherwise, they can be
+> >>> left waiting for endpoints until EPs are re-enabled.
+> >>>
+> >>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> >>> ---
+> >>>  drivers/usb/gadget/function/f_fs.c | 7 +++++--
+> >>>  1 file changed, 5 insertions(+), 2 deletions(-)
+> >>>
+> >>> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> >>> index 3c584da9118c..0b0747d96378 100644
+> >>> --- a/drivers/usb/gadget/function/f_fs.c
+> >>> +++ b/drivers/usb/gadget/function/f_fs.c
+> >>> @@ -957,10 +957,12 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+> >>>  		if (file->f_flags & O_NONBLOCK)
+> >>>  			return -EAGAIN;
+> >>>  
+> >>> -		ret = wait_event_interruptible(
+> >>> -				epfile->ffs->wait, (ep = epfile->ep));
+> >>> +		ret = wait_event_interruptible(epfile->ffs->wait,
+> >>> +				(ep = epfile->ep) || !epfile->ffs->func);
+> > 
+> > I looked at this again, and doesn't this totally break the wait
+> > condition?
+> > 
+> > epfile->ep is set to non-null in ffs_func_eps_enable() which is called
+> > from ffs_func_set_alt() just after ffs->func is set to non-null, and
+> > then those are also set back to null at the same time.
+> > 
+> > So the condition boils down to a || !a and this never blocks.  Or am I
+> > missing something?
 > 
-> Jakub Kicinski <kuba@kernel.org> writes:
+> Thanks for the feedback.  Hmm...yes, I get what you're saying.  The
+> EPfiles and func is basically being set/cleared together, so the above
+> change wouldn't be any different than checking for ep != epfile->ep.
+> Let me see if there's another way we can address the issue this change
+> is trying to resolve.
 > 
-> > On Thu,  2 Dec 2021 14:34:37 +0000 Lee Jones wrote:
-> >> Currently, due to the sequential use of min_t() and clamp_t() macros,
-> >> in cdc_ncm_check_tx_max(), if dwNtbOutMaxSize is not set, the logic
-> >> sets tx_max to 0.  This is then used to allocate the data area of the
-> >> SKB requested later in cdc_ncm_fill_tx_frame().
-> >> 
-> >> This does not cause an issue presently because when memory is
-> >> allocated during initialisation phase of SKB creation, more memory
-> >> (512b) is allocated than is required for the SKB headers alone (320b),
-> >> leaving some space (512b - 320b = 192b) for CDC data (172b).
-> >> 
-> >> However, if more elements (for example 3 x u64 = [24b]) were added to
-> >> one of the SKB header structs, say 'struct skb_shared_info',
-> >> increasing its original size (320b [320b aligned]) to something larger
-> >> (344b [384b aligned]), then suddenly the CDC data (172b) no longer
-> >> fits in the spare SKB data area (512b - 384b = 128b).
-> >> 
-> >> Consequently the SKB bounds checking semantics fails and panics:
-> >> 
-> >>   skbuff: skb_over_panic: text:ffffffff830a5b5f len:184 put:172   \
-> >>      head:ffff888119227c00 data:ffff888119227c00 tail:0xb8 end:0x80 dev:<NULL>
-> >> 
-> >>   ------------[ cut here ]------------
-> >>   kernel BUG at net/core/skbuff.c:110!
-> >>   RIP: 0010:skb_panic+0x14f/0x160 net/core/skbuff.c:106
-> >>   <snip>
-> >>   Call Trace:
-> >>    <IRQ>
-> >>    skb_over_panic+0x2c/0x30 net/core/skbuff.c:115
-> >>    skb_put+0x205/0x210 net/core/skbuff.c:1877
-> >>    skb_put_zero include/linux/skbuff.h:2270 [inline]
-> >>    cdc_ncm_ndp16 drivers/net/usb/cdc_ncm.c:1116 [inline]
-> >>    cdc_ncm_fill_tx_frame+0x127f/0x3d50 drivers/net/usb/cdc_ncm.c:1293
-> >>    cdc_ncm_tx_fixup+0x98/0xf0 drivers/net/usb/cdc_ncm.c:1514
-> >> 
-> >> By overriding the max value with the default CDC_NCM_NTB_MAX_SIZE_TX
-> >> when not offered through the system provided params, we ensure enough
-> >> data space is allocated to handle the CDC data, meaning no crash will
-> >> occur.
-> 
-> Just out of curiouslity: Is this a real device, or was this the result
-> of fuzzing around?
+> > 
+> >>>  		if (ret)
+> >>>  			return -EINTR;
+> >>> +		if (!epfile->ffs->func)
+> >>> +			return -ENODEV;
+> >>
+> >> This seems strange - we are inside the case where the endpoint is not
+> >> initially enabled, if we're returning ENODEV here shouldn't that happen
+> >> in all cases?
+> >>
+> >> Beyond that, there is no locking for accessing ffs->func here;
+> >> modification happens in gadget callbacks so it's guarded by the gadget
+> >> core (the existing case in ffs_ep0_ioctl() looks suspicious as well).
+> >>
+> >> But I can't see why this change is necessary - there are event
+> >> notifications through ep0 when this happens, as can be seen in the hunk
+> >> below from the ffs_event_add(ffs, FUNCTIONFS_DISABLE) line.  If
+> >> userspace cares about this, then it can read the events from ep0.
+> >>
+> In short, the change is basically trying to resolve an issue in an
+> application that has a separate thread handling the IO ops.  When the
+> USB cable is disconnected, the application would expect for this IO
+> thread to be completed and exit gracefully, and restarting it on the
+> next connect.  However, since we are stuck in the read() it can not
+> proceed further.
 
-This is the result of "fuzzing around" on qemu. :)
+Did you see the other recent thread on FunctionFS [1]?  It seems that
+the separate I/O thread is not required and in fact there is a race here
+in general even using AIO via io_submit().
 
-https://syzkaller.appspot.com/bug?extid=2c9b6751e87ab8706cb3
+[1] https://lore.kernel.org/linux-usb/CAJkDvNk4G3WJuitZa+oPuNhkrCPNiwwG-zyNET+urWVWAda+cw@mail.gmail.com/
 
-> Not that it matters - it's obviously a bug to fix in any case.  Good catch!
-> 
-> (We probably have many more of the same, assuming the device presents
-> semi-sane values in the NCM parameter struct)
-> 
-> >> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-> >> index 24753a4da7e60..e303b522efb50 100644
-> >> --- a/drivers/net/usb/cdc_ncm.c
-> >> +++ b/drivers/net/usb/cdc_ncm.c
-> >> @@ -181,6 +181,8 @@ static u32 cdc_ncm_check_tx_max(struct usbnet *dev, u32 new_tx)
-> >>  		min = ctx->max_datagram_size + ctx->max_ndp_size + sizeof(struct usb_cdc_ncm_nth32);
-> >>  
-> >>  	max = min_t(u32, CDC_NCM_NTB_MAX_SIZE_TX, le32_to_cpu(ctx->ncm_parm.dwNtbOutMaxSize));
-> >> +	if (max == 0)
-> >> +		max = CDC_NCM_NTB_MAX_SIZE_TX; /* dwNtbOutMaxSize not set */
-> >>  
-> >>  	/* some devices set dwNtbOutMaxSize too low for the above default */
-> >>  	min = min(min, max);
-> 
-> It's been a while since I looked at this, so excuse me if I read it
-> wrongly.  But I think we need to catch more illegal/impossible values
-> than just zero here?  Any buffer size which cannot hold a single
-> datagram is pointless.
-> 
-> Trying to figure out what I possible meant to do with that
-> 
->  	min = min(min, max);
-> 
-> I don't think it makes any sense?  Does it?  The "min" value we've
-> carefully calculated allow one max sized datagram and headers. I don't
-> think we should ever continue with a smaller buffer than that
+> I guess in these situations, we should utilize the O_NONBLOCK file
+> parameter?
 
-I was more confused with the comment you added to that code:
+Yes, using O_NONBLOCK does avoid the problems.
 
-   /* some devices set dwNtbOutMaxSize too low for the above default */
-   min = min(min, max);
+I'm not sure what the general solution is - right now I don't see any
+way to resolve the requirements to wait for the host to connect and
+handle disconnection without blocking here.
 
-... which looks as though it should solve the issue of an inadequate
-dwNtbOutMaxSize, but it almost does the opposite.  I initially
-changed this segment to use the max() macro instead, but the
-subsequent clamp_t() macro simply chooses 'max' (0) value over the now
-sane 'min' one.
+The simplest thing would be to refuse epfile I/O when FunctionFS is not
+enabled, which neatly resolves the race in favour of returning an error.
+But it means that applications need to wait for a FUNCTIONFS_ENABLE
+event on ep0 before submitting any transfers on other endpoints, which
+is a change from the current behaviour.  And there's no way to know how
+many applications rely on that.
 
-Which is why I chose 
-> Or are there cases where this is valid?
-
-I'm not an expert on the SKB code, but in my simple view of the world,
-if you wish to use a buffer for any amount of data, you should
-allocate space for it.
-
-> So that really should haven been catching this bug with a
-> 
->   max = max(min, max)
-
-I tried this.  It didn't work either.
-
-See the subsequent clamp_t() call a few lines down.
-
-> or maybe more readable
-> 
->   if (max < min)
->      max = min
-> 
-> What do you think?
-
-So the data that is added to the SKB is ctx->max_ndp_size, which is
-allocated in cdc_ncm_init().  The code that does it looks like:
-
-   if (ctx->is_ndp16)                                                                                         
-        ctx->max_ndp_size = sizeof(struct usb_cdc_ncm_ndp16) +
-	                    (ctx->tx_max_datagrams + 1) *
-			    sizeof(struct usb_cdc_ncm_dpe16);                                                                                               
-    else                                                                                                       
-        ctx->max_ndp_size = sizeof(struct usb_cdc_ncm_ndp32) +
-	                    (ctx->tx_max_datagrams + 1) *
-			    sizeof(struct usb_cdc_ncm_dpe32);  
-
-So this should be the size of the allocation too, right?
-
-Why would the platform ever need to over-ride this?  The platform
-can't make the data area smaller since there won't be enough room.  It
-could perhaps make it bigger, but the min_t() and clamp_t() macros
-will end up choosing the above allocation anyway.
-
-This leaves me feeling a little perplexed.
-
-If there isn't a good reason for over-riding then I could simplify
-cdc_ncm_check_tx_max() greatly.
-
-What do *you* think? :)
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+So I don't think that's an option, at least not without providing some
+way for userspace to opt in to the new behaviour.
