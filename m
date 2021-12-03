@@ -2,157 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3D44672A7
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 08:33:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4280D467302
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 09:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350630AbhLCHhI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Dec 2021 02:37:08 -0500
-Received: from m43-7.mailgun.net ([69.72.43.7]:45200 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243707AbhLCHhH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 3 Dec 2021 02:37:07 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1638516824; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=N7DGyEQzTk8fyCInGXk90E25CG4IDDnUIzPL/8K1MqQ=; b=mJL8RimOzT5USwmHGa8V1/pCZSV9a9BlDn9VHQBN7g/uRHP4Jef2FfKYtRh6SobvDWDtyGJa
- BIfoF1TuDU6p/HZ3lXvyWJY8msdhxJ7XM6cGwbtMdfjGr41yJiQ6oZ6gavYLm0/Z1yovkSGY
- GLPsXzfRJ/j3YKooadzo4F5x7hA=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 61a9c857df12ba53c4a8ab02 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 03 Dec 2021 07:33:43
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 01F95C43616; Fri,  3 Dec 2021 07:33:42 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.0
-Received: from [10.110.103.27] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 525F1C4338F;
-        Fri,  3 Dec 2021 07:33:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 525F1C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [PATCH] usb: gadget: f_fs: Wake up IO thread during disconnect
-To:     John Keeping <john@metanate.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_jackp@quicinc.com
-References: <20211201100205.25448-1-quic_wcheng@quicinc.com>
- <YaelpmsJXmhTY4A0@donbot> <Yajc5f3LDm+dSji/@donbot>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <dcfb2b21-6ae8-6921-663d-85cb71f3f5ae@codeaurora.org>
-Date:   Thu, 2 Dec 2021 23:33:40 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S1379056AbhLCIFB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Dec 2021 03:05:01 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:45552 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1350557AbhLCIFB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 3 Dec 2021 03:05:01 -0500
+Received: from localhost.localdomain (unknown [124.16.138.128])
+        by APP-01 (Coremail) with SMTP id qwCowADn71fDzqlhyu4dAQ--.56664S2;
+        Fri, 03 Dec 2021 16:01:11 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     peter.chen@kernel.org, gregkh@linuxfoundation.org,
+        p.zabel@pengutronix.de
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] usb: chipidea: msm: Handle error codes
+Date:   Fri,  3 Dec 2021 16:01:06 +0800
+Message-Id: <20211203080106.1559983-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <Yajc5f3LDm+dSji/@donbot>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowADn71fDzqlhyu4dAQ--.56664S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZrW7Kw4fAF15tr13AryxZrb_yoWDJrb_CF
+        1xWrWxuFya9F1Skr1DtFW2vrW0kwnY9Fn5WFs2g3WfKa4UZF1xJay09ryxt34UuF4Fyrn8
+        GayvvwsxCFW8CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb48FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r43
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JV
+        WxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjMKZJUUUU
+        U==
+X-Originating-IP: [124.16.138.128]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi John,
+The return value of of_get_next_available_child() and
+of_device_is_compatible() is not always 0.
+To catch the exception in case of the failure.
 
-On 12/2/2021 6:49 AM, John Keeping wrote:
-> On Wed, Dec 01, 2021 at 04:41:10PM +0000, John Keeping wrote:
->> On Wed, Dec 01, 2021 at 02:02:05AM -0800, Wesley Cheng wrote:
->>> During device disconnect or composition unbind, applications should be
->>> notified that the endpoints are no longer enabled, so that it can take
->>> the proper actions to handle its IO threads.  Otherwise, they can be
->>> left waiting for endpoints until EPs are re-enabled.
->>>
->>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->>> ---
->>>  drivers/usb/gadget/function/f_fs.c | 7 +++++--
->>>  1 file changed, 5 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
->>> index 3c584da9118c..0b0747d96378 100644
->>> --- a/drivers/usb/gadget/function/f_fs.c
->>> +++ b/drivers/usb/gadget/function/f_fs.c
->>> @@ -957,10 +957,12 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
->>>  		if (file->f_flags & O_NONBLOCK)
->>>  			return -EAGAIN;
->>>  
->>> -		ret = wait_event_interruptible(
->>> -				epfile->ffs->wait, (ep = epfile->ep));
->>> +		ret = wait_event_interruptible(epfile->ffs->wait,
->>> +				(ep = epfile->ep) || !epfile->ffs->func);
-> 
-> I looked at this again, and doesn't this totally break the wait
-> condition?
-> 
-> epfile->ep is set to non-null in ffs_func_eps_enable() which is called
-> from ffs_func_set_alt() just after ffs->func is set to non-null, and
-> then those are also set back to null at the same time.
-> 
-> So the condition boils down to a || !a and this never blocks.  Or am I
-> missing something?
+Fixes: 47654a162081 ("usb: chipidea: msm: Restore wrapper settings after reset")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/usb/chipidea/ci_hdrc_msm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks for the feedback.  Hmm...yes, I get what you're saying.  The
-EPfiles and func is basically being set/cleared together, so the above
-change wouldn't be any different than checking for ep != epfile->ep.
-Let me see if there's another way we can address the issue this change
-is trying to resolve.
-
-> 
->>>  		if (ret)
->>>  			return -EINTR;
->>> +		if (!epfile->ffs->func)
->>> +			return -ENODEV;
->>
->> This seems strange - we are inside the case where the endpoint is not
->> initially enabled, if we're returning ENODEV here shouldn't that happen
->> in all cases?
->>
->> Beyond that, there is no locking for accessing ffs->func here;
->> modification happens in gadget callbacks so it's guarded by the gadget
->> core (the existing case in ffs_ep0_ioctl() looks suspicious as well).
->>
->> But I can't see why this change is necessary - there are event
->> notifications through ep0 when this happens, as can be seen in the hunk
->> below from the ffs_event_add(ffs, FUNCTIONFS_DISABLE) line.  If
->> userspace cares about this, then it can read the events from ep0.
->>
-In short, the change is basically trying to resolve an issue in an
-application that has a separate thread handling the IO ops.  When the
-USB cable is disconnected, the application would expect for this IO
-thread to be completed and exit gracefully, and restarting it on the
-next connect.  However, since we are stuck in the read() it can not
-proceed further.
-
-I guess in these situations, we should utilize the O_NONBLOCK file
-parameter?
-
-Thanks
-Wesley Cheng
-
->>>  	}
->>>  
->>>  	/* Do we halt? */
->>> @@ -3292,6 +3294,7 @@ static int ffs_func_set_alt(struct usb_function *f,
->>>  	if (alt == (unsigned)-1) {
->>>  		ffs->func = NULL;
->>>  		ffs_event_add(ffs, FUNCTIONFS_DISABLE);
->>> +		wake_up_interruptible(&ffs->wait);
->>>  		return 0;
->>>  	}
->>>  
-
+diff --git a/drivers/usb/chipidea/ci_hdrc_msm.c b/drivers/usb/chipidea/ci_hdrc_msm.c
+index 46105457e1ca..13218f0a2bed 100644
+--- a/drivers/usb/chipidea/ci_hdrc_msm.c
++++ b/drivers/usb/chipidea/ci_hdrc_msm.c
+@@ -246,6 +246,8 @@ static int ci_hdrc_msm_probe(struct platform_device *pdev)
+ 	if (ulpi_node) {
+ 		phy_node = of_get_next_available_child(ulpi_node, NULL);
+ 		ci->hsic = of_device_is_compatible(phy_node, "qcom,usb-hsic-phy");
++		if (!phy_node || !ci->hsic)
++			goto err_mux;
+ 		of_node_put(phy_node);
+ 	}
+ 	of_node_put(ulpi_node);
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.25.1
+
