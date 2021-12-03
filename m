@@ -2,90 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A244679C7
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 15:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA7D467A2E
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 16:23:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381555AbhLCO4Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Dec 2021 09:56:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235792AbhLCO4X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 09:56:23 -0500
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D309C061751;
-        Fri,  3 Dec 2021 06:52:58 -0800 (PST)
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9f:8608:6e64:956a:daea:cf2f])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 1B3Eqn8e033666
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Fri, 3 Dec 2021 15:52:49 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1638543169; bh=0cRGgZgMtLbTFNIr5ua2q8OeGBtFQrzP3yDen7RjQKs=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=VkVnDzMhPxTS8GcsWZjDDBHGV+SMKQtkE1k2EXR6JxOxcxuTDZ+kqpCdXdbe+EMIo
-         ahya8xHVq/YiXHlEBYowVmcojQW8TVgUSaoKiZuV8G5TAe6ymQ3vYgxOfVmhopdoU7
-         50lCk4OFOxpnTx2TXmxnX3ICSzsYLYA+5xzfyD2g=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
-        (envelope-from <bjorn@mork.no>)
-        id 1mt9vc-001jj7-T7; Fri, 03 Dec 2021 15:52:48 +0100
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/1] net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset
- or zero
-Organization: m
-References: <20211202143437.1411410-1-lee.jones@linaro.org>
-Date:   Fri, 03 Dec 2021 15:52:48 +0100
-In-Reply-To: <20211202143437.1411410-1-lee.jones@linaro.org> (Lee Jones's
-        message of "Thu, 2 Dec 2021 14:34:37 +0000")
-Message-ID: <87wnklivun.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S1381730AbhLCP0W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Dec 2021 10:26:22 -0500
+Received: from mga02.intel.com ([134.134.136.20]:59169 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245140AbhLCP0W (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 3 Dec 2021 10:26:22 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="224239467"
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="224239467"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 07:22:57 -0800
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="478352960"
+Received: from lbriscoe-mobl.amr.corp.intel.com (HELO [10.209.18.147]) ([10.209.18.147])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 07:22:57 -0800
+Subject: Re: earlyprintk=xdbc seems broken
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+References: <YajkzwmWQua3Kh6A@hirez.programming.kicks-ass.net>
+ <105f35d2-3c53-b550-bfb4-aa340d31128e@linux.intel.com>
+ <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <972a0e28-ad63-9766-88da-02743f80181b@intel.com>
+Date:   Fri, 3 Dec 2021 07:22:57 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.3 at canardo
-X-Virus-Status: Clean
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Lee Jones <lee.jones@linaro.org> writes:
+On 12/3/21 6:31 AM, Mathias Nyman wrote:
+>>> Can you please see if you can repro and fix this?
+>>>
+>>> This all was with current 5.16-rc3 on a tigerlake nuc.
+>>>
+>>> Also, perhaps you can update the guide on what sort of setup/cables
+>>> etc.. you need when either the host or the client is a usb3.1 usb-c only
+>>> device.
+>>>
+>> + Mathias, maybe he still has a USB 3.0 debugging cable.
+>>
+> Should have at the office, I'll pick it up next week and try it out.
 
-> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-> index 24753a4da7e60..e303b522efb50 100644
-> --- a/drivers/net/usb/cdc_ncm.c
-> +++ b/drivers/net/usb/cdc_ncm.c
-> @@ -181,6 +181,8 @@ static u32 cdc_ncm_check_tx_max(struct usbnet *dev, u=
-32 new_tx)
->  		min =3D ctx->max_datagram_size + ctx->max_ndp_size + sizeof(struct usb=
-_cdc_ncm_nth32);
->=20=20
->  	max =3D min_t(u32, CDC_NCM_NTB_MAX_SIZE_TX, le32_to_cpu(ctx->ncm_parm.d=
-wNtbOutMaxSize));
-> +	if (max =3D=3D 0)
-> +		max =3D CDC_NCM_NTB_MAX_SIZE_TX; /* dwNtbOutMaxSize not set */
->=20=20
->  	/* some devices set dwNtbOutMaxSize too low for the above default */
->  	min =3D min(min, max);
+Is someone at Intel responsible for this thing? get_maintainer.pl
+doesn't think so:
 
-I believe this is the best possible fix, considering the regressions
-anything stricter might cause.
-
-We know of at least one MBIM device where dwNtbOutMaxSize is as low as
-2048.
-
-According to the MBIM spec, the minimum and default value for
-wMaxSegmentSize is also 2048.  This implies that the calculated "min"
-value is at least 2076, which is why we need that odd looking
-
-  min =3D min(min, max);
-
-So let's just fix this specific zero case without breaking the
-non-conforming devices.
-
-
-Reviewed-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+> $ perl scripts/get_maintainer.pl ./drivers/usb/early/xhci-dbc.c
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM)
+> Mike Rapoport <rppt@kernel.org> (commit_signer:1/1=100%,authored:1/1=100%,added_lines:5/5=100%,removed_lines:5/5=100%)
+> Andrew Morton <akpm@linux-foundation.org> (commit_signer:1/1=100%)
+> linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
+> linux-kernel@vger.kernel.org (open list)
