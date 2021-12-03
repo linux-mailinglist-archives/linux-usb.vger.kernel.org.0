@@ -2,235 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C4C4677A7
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 13:50:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4164677AC
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 13:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380951AbhLCMyL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Dec 2021 07:54:11 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:51426 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380953AbhLCMyK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 07:54:10 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        id S1380959AbhLCMzJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Dec 2021 07:55:09 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34404 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380953AbhLCMzJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 07:55:09 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7E5B61FD3F;
-        Fri,  3 Dec 2021 12:50:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638535845; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SKtEJiiVmVjiKuYxlfAWTyTTb/iSm7ZWQwrEhO21/xE=;
-        b=tb8s6wAurXzbDiX3OdN+edOGFXNBgKE2Nl9AU4N/jGYGULm4dicV5mVQOy5jY2xYei5eis
-        cbeHaB5+Awj4heQPFh59gjOEGhEVwbgwbMNeyStEH/rDUahqWg6aTBMl/mhHMioZWax53a
-        hvSFt+vdfvdl1DNag6hNGjfyT+dQK9o=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 592F213DC9;
-        Fri,  3 Dec 2021 12:50:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id yofvE6USqmGHUAAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 03 Dec 2021 12:50:45 +0000
-Subject: Re: [PATCH v7 2/3] usb: Introduce Xen pvUSB frontend (xen hcd)
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211123132048.5335-1-jgross@suse.com>
- <20211123132048.5335-3-jgross@suse.com> <YaoSTnkYyCFXOyvJ@kroah.com>
-From:   Juergen Gross <jgross@suse.com>
-Message-ID: <b43c416e-d81a-7d21-5b92-7bc8329bb296@suse.com>
-Date:   Fri, 3 Dec 2021 13:50:44 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C79D62A30
+        for <linux-usb@vger.kernel.org>; Fri,  3 Dec 2021 12:51:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E005C53FC7;
+        Fri,  3 Dec 2021 12:51:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638535904;
+        bh=6GbrfruxenT6ffNBSvvwPfjlTq6wc/eJ05XODJtbrho=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pcqP99gwmL+wuz4buP+WbJp305prikOu1Bzwem4HaSSMuqbHAhorISfn9wibmqx/5
+         j7ePV4wKNeWFW2cb/u9TL6bZwzo+VUaSulAv0GW43cSnX/Z5ZJxKX6l0Cx+O/3G7fH
+         wdNMSFtdCut3n1i5Fu/vUYK0I1lN43lyLVcRbWl0=
+Date:   Fri, 3 Dec 2021 13:51:41 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Sanjeev Chugh <sanjeev_chugh@mentor.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH V1 1/1] usb: hub: introduce delay after usb hub mutex
+ release
+Message-ID: <YaoS3RoqkGkf6NFa@kroah.com>
+References: <1638320288-6465-1-git-send-email-sanjeev_chugh@mentor.com>
 MIME-Version: 1.0
-In-Reply-To: <YaoSTnkYyCFXOyvJ@kroah.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="x1mYDcVqmz7b5bc8MJK83imoEBOV0AN4c"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1638320288-6465-1-git-send-email-sanjeev_chugh@mentor.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---x1mYDcVqmz7b5bc8MJK83imoEBOV0AN4c
-Content-Type: multipart/mixed; boundary="IrZAaRCDRAW8mmqbSA2GhRkvh41Wxu1ze";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Message-ID: <b43c416e-d81a-7d21-5b92-7bc8329bb296@suse.com>
-Subject: Re: [PATCH v7 2/3] usb: Introduce Xen pvUSB frontend (xen hcd)
-References: <20211123132048.5335-1-jgross@suse.com>
- <20211123132048.5335-3-jgross@suse.com> <YaoSTnkYyCFXOyvJ@kroah.com>
-In-Reply-To: <YaoSTnkYyCFXOyvJ@kroah.com>
+On Wed, Dec 01, 2021 at 06:28:08AM +0530, Sanjeev Chugh wrote:
+> Rogue usb sticks can cause endless port connect change events
+> due to unstable electric connection between usb chip and
+> the port. Port connect change will cause device enumeration for
+> the new device connection and new device processing is done with
+> the usb hub mutex acquired. This can cause very short time gap
+> between unlock/lock of hub device mutex. So if some thread is
+> running at low priority than hub_thread, it can face hub device
+> mutex starvation.
+> 
+> This commit introduces a sleep of 25ms after the hub device mutex is
+> unlocked in hub_events so that if hub_thread is stuck in a
+> endless loop, all other threads will get fair amount of chance
+> to acquire the usb hub mutex.
+> 
+> Signed-off-by: Sanjeev Chugh <sanjeev_chugh@mentor.com>
+> ---
+>  drivers/usb/core/hub.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 00070a8..0be2acc 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -5763,6 +5763,17 @@ static void hub_event(struct work_struct *work)
+>  out_hdev_lock:
+>  	usb_unlock_device(hdev);
+>  
+> +	/*
+> +	 * Rogue usb sticks can cause endless device connection
+> +	 * events due to unstable electric connection.
 
---IrZAaRCDRAW8mmqbSA2GhRkvh41Wxu1ze
-Content-Type: multipart/mixed;
- boundary="------------BE40DD6938C15AA655817C7F"
-Content-Language: en-US
+What is a "usb stick"?  Any usb device could cause this, right?
 
-This is a multi-part message in MIME format.
---------------BE40DD6938C15AA655817C7F
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+> This
+> +	 * can cause very short time gap between unlock/lock
+> +	 * of hub device mutex thus causing mutex starvation
+> +	 * for some other lower priority thread. Thus sleep
+> +	 * would give fair chance to all other threads to
+> +	 * acquire the usb hub mutex.
+> +	 */
+> +	msleep(25);
 
-On 03.12.21 13:49, Greg Kroah-Hartman wrote:
-> On Tue, Nov 23, 2021 at 02:20:47PM +0100, Juergen Gross wrote:
->> Introduces the Xen pvUSB frontend. With pvUSB it is possible for a Xen=
+What normal code path did you just slow down here?  Why not slow down
+the disconnect path instead of the connect path?
 
->> domU to communicate with a USB device assigned to that domU. The
->> communication is all done via the pvUSB backend in a driver domain
->> (usually Dom0) which is owner of the physical device.
->>
->> The pvUSB frontend is a USB hcd for a virtual USB host connector.
->>
->> The code is taken from the pvUSB implementation in Xen done by Fujitsu=
+thanks,
 
->> based on Linux kernel 2.6.18.
->>
->> Changes from the original version are:
->> - port to upstream kernel
->> - put all code in just one source file
->> - move module to appropriate location in kernel tree
->> - adapt to Linux style guide
->> - minor code modifications to increase readability
->>
->> Signed-off-by: Juergen Gross <jgross@suse.com>
->> ---
->>   drivers/usb/host/Kconfig   |   11 +
->>   drivers/usb/host/Makefile  |    1 +
->>   drivers/usb/host/xen-hcd.c | 1606 ++++++++++++++++++++++++++++++++++=
-++
->>   3 files changed, 1618 insertions(+)
->>   create mode 100644 drivers/usb/host/xen-hcd.c
->=20
-> This looks sane to me, but I don't know the HCD interface as well as
-> others on linux-usb do, like Alan Stern.
->=20
-> What tree do you want this to be merged through, my USB one?
-
-Either that, or I can carry it through the Xen tree.
-
-Its your choice. :-)
-
-
-Juergen
-
---------------BE40DD6938C15AA655817C7F
-Content-Type: application/pgp-keys;
- name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Transfer-Encoding: quoted-printable
-Content-Description: OpenPGP public key
-Content-Disposition: attachment;
- filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOBy=
-cWx
-w3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJvedYm8O=
-f8Z
-d621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y=
-9bf
-IhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xq=
-G7/
-377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR=
-3Jv
-c3MgPGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsEFgIDA=
-QIe
-AQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4FUGNQH2lvWAUy+dnyT=
-hpw
-dtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3TyevpB0CA3dbBQp0OW0fgCetToGIQrg0=
-MbD
-1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u+6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbv=
-oPH
-Z8SlM4KWm8rG+lIkGurqqu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v=
-5QL
-+qHI3EIPtyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVyZ=
-2Vu
-IEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJCAcDAgEGFQgCC=
-QoL
-BBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4RF7HoZhPVPogNVbC4YA6lW7Dr=
-Wf0
-teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz78X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC=
-/nu
-AFVGy+67q2DH8As3KPu0344TBDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0Lh=
-ITT
-d9jLzdDad1pQSToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLm=
-XBK
-7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkMnQfvUewRz=
-80h
-SnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMBAgAjBQJTjHDXAhsDBwsJC=
-AcD
-AgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJn=
-FOX
-gMLdBQgBlVPO3/D9R8LtF9DBAFPNhlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1=
-jnD
-kfJZr6jrbjgyoZHiw/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0=
-N51
-N5JfVRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwPOoE+l=
-otu
-fe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK/1xMI3/+8jbO0tsn1=
-tqS
-EUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuZGU+wsB5BBMBAgAjBQJTjHDrA=
-hsD
-BwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3=
-g3O
-ZUEBmDHVVbqMtzwlmNC4k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5=
-dM7
-wRqzgJpJwK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu5=
-D+j
-LRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzBTNh30FVKK1Evm=
-V2x
-AKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37IoN1EblHI//x/e2AaIHpzK5h88N=
-Eaw
-QsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpW=
-nHI
-s98ndPUDpnoxWQugJ6MpMncr0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZR=
-wgn
-BC5mVM6JjQ5xDk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNV=
-bVF
-LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mmwe0icXKLk=
-pEd
-IXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0Iv3OOImwTEe4co3c1mwARA=
-QAB
-wsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMvQ/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEw=
-Tbe
-8YFsw2V/Buv6Z4Mysln3nQK5ZadD534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1=
-vJz
-Q1fOU8lYFpZXTXIHb+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8=
-VGi
-wXvTyJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqcsuylW=
-svi
-uGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5BjR/i1DG86lem3iBDX=
-zXs
-ZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------BE40DD6938C15AA655817C7F--
-
---IrZAaRCDRAW8mmqbSA2GhRkvh41Wxu1ze--
-
---x1mYDcVqmz7b5bc8MJK83imoEBOV0AN4c
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmGqEqQFAwAAAAAACgkQsN6d1ii/Ey83
-nQf+Jd52GN9HgJC6vsgHZCz14Cz5jdkhbcDLc6uQeP3YMSNNGQWKXvJEoKj+tyaHr6gQBp+ipqRJ
-SwdQ3JsneWyp1EY2vXy99hdINWcA/fOa2iiYOFWUQx+T8n2qx3kv1HPZjGGWYDWqXRPmPsFrQEXf
-b6XVRRBp4/7qmMidy58sAcWYmHQwpLL1XvzJ6tdfMCPzFrMgPWBrrtnL9Lu0ADrcJ0hWapdt5h/P
-J34DrhzYJLbdhH2CMUrUBS3Ne5f6kLWOwHcBhj/vsr1P2utnf1BAoZRta7sA1rfZcuKdl7QLezzM
-CG6Z9YJUu4Avwt93fIQvwJG9pi80Lp0H0K3pzQJc0g==
-=OjP3
------END PGP SIGNATURE-----
-
---x1mYDcVqmz7b5bc8MJK83imoEBOV0AN4c--
+greg k-h
