@@ -2,73 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA1E467C73
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 18:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E2DD467DCB
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Dec 2021 20:09:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353036AbhLCR2U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Dec 2021 12:28:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37720 "EHLO
+        id S1353225AbhLCTMu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Dec 2021 14:12:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239848AbhLCR2U (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 12:28:20 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7423C061751;
-        Fri,  3 Dec 2021 09:24:55 -0800 (PST)
-Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1mtCIn-0003QH-7t; Fri, 03 Dec 2021 18:24:53 +0100
-Message-ID: <e03ddc81-c60b-bd28-b959-0602142f0efc@leemhuis.info>
-Date:   Fri, 3 Dec 2021 18:24:52 +0100
+        with ESMTP id S1344093AbhLCTMt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Dec 2021 14:12:49 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B19C061751;
+        Fri,  3 Dec 2021 11:09:25 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id y8so2771388plg.1;
+        Fri, 03 Dec 2021 11:09:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=IoBuVhCiR9BrSiQMh75XUsvklE4yOFaQXUkrNsUI+/Y=;
+        b=o+MayrhIXhy6Tn8p5jFoe3c6UEGzOvhNMOZ3TtvQekj4JCNjdsawVl2u3l5SENbfof
+         TNfIHy73jO38Cwwn82y0/O0BIKnFHjyLPXQJDzy7qycQOBmCsMlzDh1Q2DR/dDfUPV+T
+         r18zoZXJa+kuffykx6WxpgSUqIrRhMh+5seYzmBeIdQgodapeD3BgFIao8z0z3xul5DI
+         zzfBS7ojv+CsTNBmtiL+bcj2r2Be0KmQr05NMIrnRPld2usPWmwa7QKmH4TJixqKzBoT
+         zvPWSf1nPvABpim+20Hg6l+G/t1o5CzzG1XTTa95NmXosfCoW+SB7in29LfUrsF96+Pj
+         5kKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=IoBuVhCiR9BrSiQMh75XUsvklE4yOFaQXUkrNsUI+/Y=;
+        b=ZXaOe5keT66gzNdrFNH1gMj5L8sQA6Ftlox4P2TRU2/0gALcEp1WciHqtWBh1Sa9Fi
+         ufNc6h8CoCnYfeL1C37StgZs3EsJx8J8IdR575YwwB6XgzZIhD5zflkF+ITf+SUPPzmC
+         UTi7yZCO26G8kEDiHucBwqk/rGVQhUH30yhCj84tz7ek2K3DVyMnrbmJ5x9l7abOwEgm
+         HUpRmuLn3w4NYEqt2p9virR+qWYgUDyZhxwNoYeJqlhP/MnQFloeyn6H9L8dJlVpPqDe
+         5ApJEPzDcS2twiz/O/oiFb0Hsky/xqrTSqxjyftDGc6txgrapU/kkvusWCXkG75Mg86R
+         aptQ==
+X-Gm-Message-State: AOAM533bFrv9KdfdKcHhHUbvYgEQLQJNgHT6njgGJyyn5KtgXK0fV20E
+        nNKt4UiJV9grAz9VOMtk8DYfOBNs/ESX4kiQhcE=
+X-Google-Smtp-Source: ABdhPJxZJvNEr3MwGMO10MxWXmKiW1dA8s8jvQruDvE9ccjiUSFfbFTenWOarBOh/3TPJbQ4+kPRDOmSReFhkMMc+GI=
+X-Received: by 2002:a17:90a:17a5:: with SMTP id q34mr15942710pja.122.1638558564703;
+ Fri, 03 Dec 2021 11:09:24 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: Regression: plugging in USB scanner breaks all USB functionality
- #forregzbot
-Content-Language: en-BS
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <35f7428b39f996c793f5b4a6a314772681c73d7a.camel@apache.org>
- <3eb9c3f8-6bca-da08-47ec-af2a02d6a485@leemhuis.info>
-To:     regressions@lists.linux.dev
-In-Reply-To: <3eb9c3f8-6bca-da08-47ec-af2a02d6a485@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1638552295;ea523916;
-X-HE-SMSGID: 1mtCIn-0003QH-7t
+References: <20211202203400.1208663-1-kuba@kernel.org> <YanDM7hD9KucIRq6@kroah.com>
+In-Reply-To: <YanDM7hD9KucIRq6@kroah.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 3 Dec 2021 11:09:13 -0800
+Message-ID: <CAADnVQJXSksytrk5aLGQzgzaoGB9xFWqXWSTj0AmkEWiEs2jWg@mail.gmail.com>
+Subject: Re: [PATCH bpf v2] treewide: add missing includes masked by cgroup ->
+ bpf dependency
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, bpf <bpf@vger.kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        SeongJae Park <sj@kernel.org>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, David Airlie <airlied@linux.ie>,
+        daniel@ffwll.ch, Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>, yuq825@gmail.com,
+        robdclark@gmail.com, sean@poorly.run, christian.koenig@amd.com,
+        ray.huang@amd.com, Sunil Goutham <sgoutham@marvell.com>,
+        gakula@marvell.com, sbhatta@marvell.com, hkelam@marvell.com,
+        jingoohan1@gmail.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        bhelgaas@google.com, krzysztof.kozlowski@canonical.com,
+        mani@kernel.org, pawell@cadence.com, rogerq@kernel.org,
+        a-govindraju@ti.com, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        thomas.hellstrom@linux.intel.com,
+        Matthew Auld <matthew.auld@intel.com>, colin.king@intel.com,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-block@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, lima@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        linux-pci@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-mm <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 02.12.21 16:13, Thorsten Leemhuis wrote:
-> Hi, this is your Linux kernel regression tracker speaking.
-> 
-> Thanks for the report.
-> 
-> Top-posting for once, to make this easy accessible to everyone.
-> 
-> FWIW, 5.14 is EOL, so it might not be fixed there. As the problem is in
-> newer kernels as well, I suspect that it was a change applies to 5.15 or
-> 5.16 that got backported. Maybe one of the developers might have an idea
-> which commit causes it. If that's not the case you likely should try a
-> bisection to find the culprit. Performing one between v5.14.11..v5.14.14
-> is likely the easiest and quickest way to find it.
-> 
-> To be sure this issue doesn't fall through the cracks unnoticed, I'm
-> adding it to regzbot, my Linux kernel regression tracking bot:
-> 
-> #regzbot ^introduced v5.14.11..v5.14.14
-> #regzbot title usb: plugging in USB scanner breaks all USB functionality
-> [regression present in 5.15.2 und 5.16-rc3, too]
-> #regzbot ignore-activity
+On Thu, Dec 2, 2021 at 11:11 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Dec 02, 2021 at 12:34:00PM -0800, Jakub Kicinski wrote:
+> > cgroup.h (therefore swap.h, therefore half of the universe)
+> > includes bpf.h which in turn includes module.h and slab.h.
+> > Since we're about to get rid of that dependency we need
+> > to clean things up.
+> >
+> > v2: drop the cpu.h include from cacheinfo.h, it's not necessary
+> > and it makes riscv sensitive to ordering of include files.
+> >
+> > Link: https://lore.kernel.org/all/20211120035253.72074-1-kuba@kernel.or=
+g/  # v1
+> > Link: https://lore.kernel.org/all/20211120165528.197359-1-kuba@kernel.o=
+rg/ # cacheinfo discussion
+> > Acked-by: Krzysztof Wilczy=C5=84ski <kw@linux.com>
+> > Acked-by: Peter Chen <peter.chen@kernel.org>
+> > Acked-by: SeongJae Park <sj@kernel.org>
+> > Acked-by: Jani Nikula <jani.nikula@intel.com>
+> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-#regzbot introduced ff0e50d3564f
-#regzbot fixed-by 385b5b09c3546c87cfb730b76abe5f8d73c579a2
-
-Ciao, Thorsten, your Linux kernel regression tracker
-
-P.S.: this mail is primarily send for documentation purposes and for
-regzbot, my Linux kernel regression tracking bot. These mails usually
-contain '#forregzbot' in the subject, to make them easy to spot and filter.
-
-
-
+I'm not sure how to test that it helps to reduce build deps,
+but it builds and passes tests, so applied to bpf tree.
+Jakub, you'll soon get it back via bpf tree PR :)
