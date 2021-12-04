@@ -2,68 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0E24685AD
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Dec 2021 15:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C9D468636
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Dec 2021 17:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236421AbhLDOo3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Dec 2021 09:44:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
+        id S1355282AbhLDQid (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Dec 2021 11:38:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234881AbhLDOo3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Dec 2021 09:44:29 -0500
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9931C061751
-        for <linux-usb@vger.kernel.org>; Sat,  4 Dec 2021 06:41:03 -0800 (PST)
-Received: by mail-io1-xd43.google.com with SMTP id m9so7588931iop.0
-        for <linux-usb@vger.kernel.org>; Sat, 04 Dec 2021 06:41:03 -0800 (PST)
+        with ESMTP id S239182AbhLDQid (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Dec 2021 11:38:33 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36416C061751;
+        Sat,  4 Dec 2021 08:35:07 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id d9so12652700wrw.4;
+        Sat, 04 Dec 2021 08:35:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=t+k1vMicazZQGgJua3VBr5ex8kbXiYjORBm2hnGSMD4=;
-        b=oG7ro/ueY5MB03ESnndMCe695JvRhkOFfDUr1tyi4HoMm+bjCaesEIy8Xzo7cLJnkl
-         FHIqYOEV2Gz5GuarXLLxLMVkr13sDNBhAV1arDRHRMD/lxK1erZ0BXiX8ngCHL6k8rAA
-         QI9dWspmF/J83c8hS63U3Eqxvcwk2SFshnSkBeH1vBAXSpEwZLNGU5/Ogiz12H9eVTk3
-         JR+0KSyAhk0ha49CsIYjBv3puu95Exkf8MPZua6df3Xjk93EQDbSm/YEFWYh4HsIV7zo
-         CaA7OxK6HrOj4/GoXYqUoT9doFdmS6Kus9u6ifsjOrRAC6z1cjJzW/8rHTXI7Y1XC8Rd
-         irAQ==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=IFVu1PuPnhIt15rJ74uCpu5RJLk7jJ20O56jMrGMi24=;
+        b=NnTbwLUOLeauIl/AOA9bQhINPrSZoM5h3Oh0pQGZyt7EyZWOPAhZgLv0egY7uka2ol
+         xMP7kKFXtyEbcYOGZ6TdaqT+GA6m3CUqJ6+/+TdmsLD1mJEPahlsusDxCmM7RMVm7Y/A
+         NQLR0kmCa8HDfDMoXAKeArhZiRvBW3X2Ddc2QLtu7fM/tlE4iNhESjwEt9MOmlcqkaTj
+         KhJlj16dWfcHh9Z7OdnxMSd5rxMFli4R0IF9hjWE/iXfa2eER3Tk8Pe5gESCmtVFCHwD
+         IbmE/V6Zic9tqPtAJWqmnlDFpW2nAQRWdZURo6cbqXwOj84dWvXGWpd8Qv+rYhcLfSiP
+         RTfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=t+k1vMicazZQGgJua3VBr5ex8kbXiYjORBm2hnGSMD4=;
-        b=AQTe7Jfp3dgC2eyJHo0PEfnIvk68FoiH9DH7xsvN8lHp+PiVPIU1A/kz2xVbBABIGR
-         gOSDJfs1tzEJOtnn9PRkbP8F4Y2NhHMl3RmwJNvtvvs8oYhpFQPKimBSIc7nJvHvCs3A
-         KbPKCzO1JHGYQIiiNnoDzfwv9Mq6apxFQH4Dua7Syyvpz2dl2xb17hURuEq62yM+xp6f
-         OSAYOHKxFpsPp/9MAhMEoTv4N1USKPrIs9beXcFw73+EdjyI9OnaeP2eerwiQSIfmPV/
-         JXEfqADxrUIALZ4yPgflaEOTvCezQdC1z7ZQTHJYxYFJGEWYjEOMVtwy+yyVyEIZ+Wsc
-         Y1hw==
-X-Gm-Message-State: AOAM531AzgCK3FtdZKbe8LLJiBN++gJjVgf0hG8QGT522fVtVgRz7247
-        UMi8dIvvvfknzpodHO9HJn1VPZa9LJDdAIgF/m4=
-X-Google-Smtp-Source: ABdhPJxf17YoCVRC4wY8AOxwFodDP+vBLoPQBjAA24bH2CVfWQlD5uJeXPn/0oRYbBJuJyO/k/wTtiMq3Xz4CPAERaA=
-X-Received: by 2002:a5d:9053:: with SMTP id v19mr25352152ioq.39.1638628863180;
- Sat, 04 Dec 2021 06:41:03 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=IFVu1PuPnhIt15rJ74uCpu5RJLk7jJ20O56jMrGMi24=;
+        b=34BaR/ziyNlgiiMhOZLqZc7kjk20nWXqe2DdUVkNxivsFwxaKESeYYO4HcLgyiTzyr
+         4rDln0dXNB8tNggj5eI1hCk50Gp3cc+8TyC6cI63Wd75b8qKn4H+SxI8Fd1yWW/g4xmj
+         zFZVp7fTKn6uUDyxdVk/XT4mZWu4VOyKP1lXBJ1t9H9MkBc7Fv26/omi0xzig5jnFx8I
+         fib+H/6XRrIilc70C0/mYgKPnty6kDHc90zpL1y72W+VHozPw/zDptWveoGQWRlR0KJy
+         mHZuXColbL/XcuGkDJX28uS/G2t/xswg7Fky7CKQpBiGMMjbgnnDZRlxagVQat2vPpT/
+         G0BQ==
+X-Gm-Message-State: AOAM532QuSDIZDYd0e2RQkegjecZ4PW6x9+VpglIvEBD50jV/b7qIVM+
+        56RNcyu9g+9xfxfrk08sqnn+E+VBs7mS+Q==
+X-Google-Smtp-Source: ABdhPJybhJZg9DgLmgRtdfPsXwakZKlPE8uyKjdTz5vDl5CosgVARe48rXeUfLuHOZ7asdUZL7lH5w==
+X-Received: by 2002:a5d:4904:: with SMTP id x4mr30345787wrq.139.1638635705882;
+        Sat, 04 Dec 2021 08:35:05 -0800 (PST)
+Received: from matrix-ESPRIMO-P710 (p200300c78f4e0685b3447c22a42fc55e.dip0.t-ipconnect.de. [2003:c7:8f4e:685:b344:7c22:a42f:c55e])
+        by smtp.gmail.com with ESMTPSA id n14sm2908383wrf.69.2021.12.04.08.35.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Dec 2021 08:35:05 -0800 (PST)
+Date:   Sat, 4 Dec 2021 17:35:03 +0100
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org
+Subject: [PATCH v2 0/4] Docs: usb: Code and text updates from usb-skeleton
+Message-ID: <cover.1638630342.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a02:9449:0:0:0:0:0 with HTTP; Sat, 4 Dec 2021 06:41:02 -0800 (PST)
-Reply-To: lindajonathan993@gmail.com
-From:   Miss Linda <mr.sohailahmed111@gmail.com>
-Date:   Sat, 4 Dec 2021 14:41:02 +0000
-Message-ID: <CAEGm23L7X2oihEYBjozO60BgEcjuCkphDDDWDYxNC6H3xfNPPQ@mail.gmail.com>
-Subject: Hi my love
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hey dear
+Explanation and example code updates from usb-skeleton
 
-Nice to meet you, Am Miss Linda I found your email here in google
-search and I picked
-interest to contact you. I've something very important which I would like
-to discuss with you and I would appreciate if you respond back to me
-through my email address as to tell you more
+v2: update patch #1 to #4
+    - corrected format of function names like the following example:
+      "`usb_bulk_msg` function" to "usb_bulk_msg()"
 
-about me with my
-photos, my private email as fellows??   lindajonathan993@gmail.com
+Philipp Hortmann (4):
+  Docs: usb: update usb_bulk_msg receiving example
+  Docs: usb: update comment and code near decrement our usage count for
+    the device
+  Docs: usb: update comment and code of function skel_delete
+  Docs: usb: update explanation for device_present to disconnected
 
-From, Linda
+ .../driver-api/usb/writing_usb_driver.rst     | 73 +++++++++----------
+ 1 file changed, 35 insertions(+), 38 deletions(-)
+
+-- 
+2.25.1
+
