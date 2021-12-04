@@ -2,97 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E93D468728
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Dec 2021 20:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E25BC468722
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Dec 2021 19:47:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346333AbhLDTEA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Dec 2021 14:04:00 -0500
-Received: from mail.mutex.one ([62.77.152.124]:59774 "EHLO mail.mutex.one"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234141AbhLDTEA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 4 Dec 2021 14:04:00 -0500
-X-Greylist: delayed 1057 seconds by postgrey-1.27 at vger.kernel.org; Sat, 04 Dec 2021 14:04:00 EST
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.mutex.one (Postfix) with ESMTP id 4698416C27F2;
-        Sat,  4 Dec 2021 20:42:56 +0200 (EET)
-X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
-Received: from mail.mutex.one ([127.0.0.1])
-        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id oKVK5PS9LakU; Sat,  4 Dec 2021 20:42:55 +0200 (EET)
-Received:  [127.0.0.1] (localhost [127.0.0.1])nknown [79.112.88.78])
+        id S1345757AbhLDSvO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Dec 2021 13:51:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235259AbhLDSvN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Dec 2021 13:51:13 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B45C061751;
+        Sat,  4 Dec 2021 10:47:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.mutex.one (Postfix) with ESMTPSA id D422416C08F2;
-        Sat,  4 Dec 2021 20:42:54 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
-        t=1638643375; bh=52k49UyMB40olKhbEBwyV83YUbOTAqmTQKzOI/7iBGY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=iywXr+OwfC+udFJqLZoJcQVQ41y/OuLapkTtmZqhzmGniQMrbGLltI8gDMjufrwbv
-         9YU2eZcCnh+4XyRrmhrvtKYrdWzpde+m+BpuLYR6SN4091IOwMinpw5Yv+qmu2p/m3
-         uYQJTPngbrh+0Y1pB1lwuwaf5MTzMG/AzpBZTcn4=
-From:   Marian Postevca <posteuca@mutex.one>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8F7E4CE0F02;
+        Sat,  4 Dec 2021 18:47:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03D0FC341C2;
+        Sat,  4 Dec 2021 18:47:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638643663;
+        bh=CnNRK5P/SuPxK21hCYDCHsvfDFSktd4FzF4FEV+llb4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dAAYwCA2T4PYpohFXUEYgL11Hi6cJK4dTvtDu7VBCNzq+cjHQcSyaE22duvNMOIVZ
+         L8+CLSzSqXq9hXZOLvck79WuTIa4+cGLAO7jXUosXyorlMe+qQzfg7YNDg+tai5Q2U
+         6AjSiNixz8MqfsU1+QfEs6wuK9WYveq+e703y6BA=
+Date:   Sat, 4 Dec 2021 19:47:40 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Marian Postevca <posteuca@mutex.one>
 Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: u_ether: fix race in setting MAC address
- in setup phase
-In-Reply-To: <YaoSkbMBk90zr3N7@kroah.com>
+Subject: Re: [PATCH] usb: gadget: u_ether: fix race in setting MAC address in
+ setup phase
+Message-ID: <Yau3zDEdTiLZZkRp@kroah.com>
 References: <20211129221229.31845-1-posteuca@mutex.one>
  <YaoSkbMBk90zr3N7@kroah.com>
-Date:   Sat, 04 Dec 2021 20:42:52 +0200
-Message-ID: <87ee6sxlcj.fsf@mutex.one>
+ <87ee6sxlcj.fsf@mutex.one>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ee6sxlcj.fsf@mutex.one>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+On Sat, Dec 04, 2021 at 08:42:52PM +0200, Marian Postevca wrote:
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+> 
+> > On Tue, Nov 30, 2021 at 12:12:29AM +0200, Marian Postevca wrote:
+> >> When listening for notifications through netlink of a new interface being
+> >> registered, sporadically, it is possible for the MAC to be read as zero.
+> >> The zero MAC address lasts a short period of time and then switches to a
+> >> valid random MAC address.
+> >> 
+> >> This causes problems for netd in Android, which assumes that the interface
+> >> is malfunctioning and will not use it.
+> >> 
+> >> In the good case we get this log:
+> >> InterfaceController::getCfg() ifName usb0
+> >>  hwAddr 92:a8:f0:73:79:5b ipv4Addr 0.0.0.0 flags 0x1002
+> >> 
+> >> In the error case we get these logs:
+> >> InterfaceController::getCfg() ifName usb0
+> >>  hwAddr 00:00:00:00:00:00 ipv4Addr 0.0.0.0 flags 0x1002
+> >> 
+> >> netd : interfaceGetCfg("usb0")
+> >> netd : interfaceSetCfg() -> ServiceSpecificException
+> >>  (99, "[Cannot assign requested address] : ioctl() failed")
+> >> 
+> >> The reason for the issue is the order in which the interface is setup,
+> >> it is first registered through register_netdev() and after the MAC
+> >> address is set.
+> >> 
+> >> Fixed by first setting the MAC address of the net_device and after that
+> >> calling register_netdev().
+> >> 
+> >> Signed-off-by: Marian Postevca <posteuca@mutex.one>
+> >> ---
+> >>  drivers/usb/gadget/function/u_ether.c | 16 ++++++----------
+> >>  1 file changed, 6 insertions(+), 10 deletions(-)
+> >
+> > What commit does this fix?  Should it go to stable kernel releases?
+> >
+> > thanks,
+> >
+> > greg k-h
+> 
+> This fixes bcd4a1c40bee885e ("usb: gadget: u_ether: construct with
+> default values and add setters/getters").
+> 
+> I think it should go to stable kernel releases.
+> 
+> Should I send a second version of the patch with a Fixes tag?
 
-> On Tue, Nov 30, 2021 at 12:12:29AM +0200, Marian Postevca wrote:
->> When listening for notifications through netlink of a new interface being
->> registered, sporadically, it is possible for the MAC to be read as zero.
->> The zero MAC address lasts a short period of time and then switches to a
->> valid random MAC address.
->> 
->> This causes problems for netd in Android, which assumes that the interface
->> is malfunctioning and will not use it.
->> 
->> In the good case we get this log:
->> InterfaceController::getCfg() ifName usb0
->>  hwAddr 92:a8:f0:73:79:5b ipv4Addr 0.0.0.0 flags 0x1002
->> 
->> In the error case we get these logs:
->> InterfaceController::getCfg() ifName usb0
->>  hwAddr 00:00:00:00:00:00 ipv4Addr 0.0.0.0 flags 0x1002
->> 
->> netd : interfaceGetCfg("usb0")
->> netd : interfaceSetCfg() -> ServiceSpecificException
->>  (99, "[Cannot assign requested address] : ioctl() failed")
->> 
->> The reason for the issue is the order in which the interface is setup,
->> it is first registered through register_netdev() and after the MAC
->> address is set.
->> 
->> Fixed by first setting the MAC address of the net_device and after that
->> calling register_netdev().
->> 
->> Signed-off-by: Marian Postevca <posteuca@mutex.one>
->> ---
->>  drivers/usb/gadget/function/u_ether.c | 16 ++++++----------
->>  1 file changed, 6 insertions(+), 10 deletions(-)
->
-> What commit does this fix?  Should it go to stable kernel releases?
->
-> thanks,
->
-> greg k-h
+Yes please, and a cc: stable on the line after the fixes tag.
 
-This fixes bcd4a1c40bee885e ("usb: gadget: u_ether: construct with
-default values and add setters/getters").
+thanks,
 
-I think it should go to stable kernel releases.
-
-Should I send a second version of the patch with a Fixes tag?
-
-Thanks
+greg k-h
