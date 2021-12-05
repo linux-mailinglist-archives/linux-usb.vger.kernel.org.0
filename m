@@ -2,48 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7595E4689BF
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Dec 2021 07:46:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A01468A10
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Dec 2021 09:20:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbhLEGuM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 Dec 2021 01:50:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48358 "EHLO
+        id S232255AbhLEIXt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Dec 2021 03:23:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbhLEGuM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Dec 2021 01:50:12 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBEAC061751
-        for <linux-usb@vger.kernel.org>; Sat,  4 Dec 2021 22:46:45 -0800 (PST)
-Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1mtlIG-0005ZO-CB; Sun, 05 Dec 2021 07:46:40 +0100
-Message-ID: <3a5e7a4d-9986-9862-b601-cd7e8bd06855@leemhuis.info>
-Date:   Sun, 5 Dec 2021 07:46:39 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
+        with ESMTP id S232221AbhLEIXq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Dec 2021 03:23:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AF8C061751
+        for <linux-usb@vger.kernel.org>; Sun,  5 Dec 2021 00:20:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C2E2B80DF3
+        for <linux-usb@vger.kernel.org>; Sun,  5 Dec 2021 08:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79F10C341C4;
+        Sun,  5 Dec 2021 08:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638692417;
+        bh=gpDBuLEBLoqaR2ZbZoYDb4btM9QjBXMg/cagK2sktFU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uQ93preBWkxFn3pjmCGC2jtqN5ANYXAEA1CKgH30MTki6sfAtVZoqPbrPG/R3B1fl
+         N4uljU679tL4BfzSya+QMWVUdMRQ6FCiiyOln0vz692Yov3tt1nqbMLrJp1WpTmE7L
+         u4cfyGIL7CR7zLKGg6upl/HH9vtHH/1nh5zjMQjc=
+Date:   Sun, 5 Dec 2021 09:20:00 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Pavankumar Kondeti <pkondeti@codeaurora.org>,
+        linux-usb <linux-usb@vger.kernel.org>
 Subject: Re: Regression: "xhci: Fix command ring pointer corruption while
  aborting a command" breaks USB on Intel controllers
-Content-Language: en-BS
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Pavankumar Kondeti <pkondeti@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb <linux-usb@vger.kernel.org>
+Message-ID: <Yax2MOuKXECUxzbd@kroah.com>
 References: <0a4d723c-221f-a42a-434c-34283a4cdab7@redhat.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <0a4d723c-221f-a42a-434c-34283a4cdab7@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1638686805;7639619b;
-X-HE-SMSGID: 1mtlIG-0005ZO-CB
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker speaking.
-
-On 04.12.21 15:15, Hans de Goede wrote:
+On Sat, Dec 04, 2021 at 03:15:15PM +0100, Hans de Goede wrote:
 > Hi All,
 > 
 > There are several bug reports (arch and Fedora) about USB problems
@@ -85,22 +88,10 @@ On 04.12.21 15:15, Hans de Goede wrote:
 > All problem reports are people using integrated Intel xHCI controllers
 > which I believe are likely to use a 64 bit data-bus.
 
-FWIW, the commit is known to cause problems, one of them is found here:
+I think this is fixed by 09f736aa9547 ("xhci: Fix commad ring abort,
+write all 64 bits to CRCR register.") in linux-next and I'll be sending
+it to Linus in a few hours.
 
-https://lore.kernel.org/lkml/35f7428b39f996c793f5b4a6a314772681c73d7a.camel@apache.org/
+thanks,
 
-This commit should improve the situation (and afaics hopefully fix all
-problems related to it):
-
-https://lore.kernel.org/stable/20211126122340.1193239-2-mathias.nyman@linux.intel.com/
-
-Greg wants to sent it upstream today:
-
-https://lore.kernel.org/lkml/YatGfEzzniH%2FSrn4@kroah.com/
-
-Guess he soon after will backport it to the stable trees as well.
-
-HTH, Ciao, Thorsten
-
-#regzbot ^backmonitor
-https://lore.kernel.org/lkml/35f7428b39f996c793f5b4a6a314772681c73d7a.camel@apache.org/
+greg k-h
