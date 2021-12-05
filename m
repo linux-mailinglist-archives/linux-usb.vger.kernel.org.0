@@ -2,120 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F476468D89
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Dec 2021 22:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E86C9468DCE
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Dec 2021 23:58:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239627AbhLEWCb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 Dec 2021 17:02:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
+        id S240471AbhLEXBk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Dec 2021 18:01:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239561AbhLEWC3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Dec 2021 17:02:29 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9186BC061751
-        for <linux-usb@vger.kernel.org>; Sun,  5 Dec 2021 13:59:01 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id g14so34674452edb.8
-        for <linux-usb@vger.kernel.org>; Sun, 05 Dec 2021 13:59:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Kg/EoUTvtJCV0eIOzDDw+a6fO7fnDbKWvif2j9QvU1k=;
-        b=0jJjPzSB7Fr9IOmpAWko2usGi6G/gq1tsZf77t3EBt/V8TebTy+bB3tuuQ67tI9A8J
-         W2JmJ5Q+UGzJkQggad7OqTJyJlgGYKegNGa74yG++PRfpu/NbxsjoVCB82YNi6EY9TbI
-         E86uK3wKF4jnatmn7I+qmIXvxkWOJQtWco/OAXUQ1m3HynXc8A1g3s4YUgexmdjy+2Kh
-         G3KNUNGkwm59fvzUsnBSeWaH//I1RwkSSPWI7lS/RuC1Z6HsCYia2tfAj0px6VGxhouM
-         0CVi/KJf2cYmon2jgQ6SahAQrjXsDef7xzqTJzh1wYhiC7h2jxB+hd0kjNx4h12bnPBk
-         vFHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Kg/EoUTvtJCV0eIOzDDw+a6fO7fnDbKWvif2j9QvU1k=;
-        b=vAE6VvS0yMjdR1uU6CTl0kRyE/lt6/1tqwJNPuo1LscJzNFwuFFk/2IJh8IU4g3sp4
-         nkizoHelm6SvQuASxBTZ1btBWOfG4WLXL3D9/1FvewzX5iVcfJcZbcdnJ+OBKaqjYeNh
-         pk8BMl4u4DFNbPUStDat6olF/fGvnKyB3TYhcMr/BMPAyf3lLH0/QRxqIwRgiHpJTZvb
-         86edyhxCIKliR2+VTgOLvBMcLHY7ke+4VQ1kE9N4k68rpAIvC1aUviXngEcdnnCvPX6Q
-         7UlC7JYYr0WdVH7gF1B/ZVOLC7J2qjBL+Q1ATY3gjl7icC4Q1bTbdJ5tG8ts1lNSBjj0
-         RsCw==
-X-Gm-Message-State: AOAM530rxIi6jVKSlD7XmYmfCDs02fUKoEDIvOo3VXf6JmbcfyGpKsEG
-        Q+zvmIem/N8rN+ch2Hlfv3tqHA==
-X-Google-Smtp-Source: ABdhPJwMycCNqTJai4Fogj0S3vU9tnOWsCUMPXRynIPwKaqrJ8Vk7a5yVoJu72xQZYkFI2xyE7u5aQ==
-X-Received: by 2002:a17:907:a0d4:: with SMTP id hw20mr41300607ejc.16.1638741540143;
-        Sun, 05 Dec 2021 13:59:00 -0800 (PST)
-Received: from localhost.localdomain (203.247.120.78.rev.sfr.net. [78.120.247.203])
-        by smtp.googlemail.com with ESMTPSA id nc29sm5724291ejc.3.2021.12.05.13.58.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 13:58:59 -0800 (PST)
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-To:     khilman@baylibre.com
-Cc:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        p.zabel@pengutronix.de, balbi@kernel.org, jbrunet@baylibre.com,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v4 3/3] phy: amlogic: meson8b-usb2: fix shared reset control use
-Date:   Sun,  5 Dec 2021 22:58:46 +0100
-Message-Id: <20211205215846.153703-4-aouledameur@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211205215846.153703-1-aouledameur@baylibre.com>
-References: <20211205215846.153703-1-aouledameur@baylibre.com>
+        with ESMTP id S236422AbhLEXBi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Dec 2021 18:01:38 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA225C061354
+        for <linux-usb@vger.kernel.org>; Sun,  5 Dec 2021 14:58:10 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1mu0SP-0006eH-1K; Sun, 05 Dec 2021 23:58:09 +0100
+Received: from mgr by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1mu0SO-00182E-72; Sun, 05 Dec 2021 23:58:08 +0100
+From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+To:     linux-usb@vger.kernel.org
+Cc:     balbi@kernel.org, laurent.pinchart@ideasonboard.com,
+        paul.elder@ideasonboard.com, kernel@pengutronix.de
+Subject: [PATCH v4 0/7] usb: gadget: uvc: use configfs entries for negotiation and v4l2 VIDIOCS
+Date:   Sun,  5 Dec 2021 23:57:56 +0100
+Message-Id: <20211205225803.268492-1-m.grzeschik@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use reset_control_rearm() call if an error occurs in case
-phy_meson8b_usb2_power_on() fails after reset() has been called, or in
-case phy_meson8b_usb2_power_off() is called i.e the resource is no longer
-used and the reset line may be triggered again by other devices.
+This series improves the uvc video gadget by parsing the configfs
+entries. With the configfs data, the driver now is able to negotiate the
+format with the usb host in the kernel and also exports the supported
+frames/formats/intervals via the v4l2 VIDIOC interface.
 
-reset_control_rearm() keeps use of triggered_count sane in the reset
-framework, use of reset_control_reset() on shared reset line should
-be balanced with reset_control_rearm().
+The uvc userspace stack is also under development. One example is an generic
+v4l2uvcsink gstreamer elemnt, which is currently under duiscussion. [1]
 
-Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Reported-by: Jerome Brunet <jbrunet@baylibre.com>
----
- drivers/phy/amlogic/phy-meson8b-usb2.c | 4 ++++
- 1 file changed, 4 insertions(+)
+[1] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1304
 
-diff --git a/drivers/phy/amlogic/phy-meson8b-usb2.c b/drivers/phy/amlogic/phy-meson8b-usb2.c
-index 77e7e9b1428c..dd96763911b8 100644
---- a/drivers/phy/amlogic/phy-meson8b-usb2.c
-+++ b/drivers/phy/amlogic/phy-meson8b-usb2.c
-@@ -154,6 +154,7 @@ static int phy_meson8b_usb2_power_on(struct phy *phy)
- 	ret = clk_prepare_enable(priv->clk_usb_general);
- 	if (ret) {
- 		dev_err(&phy->dev, "Failed to enable USB general clock\n");
-+		reset_control_rearm(priv->reset);
- 		return ret;
- 	}
- 
-@@ -161,6 +162,7 @@ static int phy_meson8b_usb2_power_on(struct phy *phy)
- 	if (ret) {
- 		dev_err(&phy->dev, "Failed to enable USB DDR clock\n");
- 		clk_disable_unprepare(priv->clk_usb_general);
-+		reset_control_rearm(priv->reset);
- 		return ret;
- 	}
- 
-@@ -199,6 +201,7 @@ static int phy_meson8b_usb2_power_on(struct phy *phy)
- 				dev_warn(&phy->dev, "USB ID detect failed!\n");
- 				clk_disable_unprepare(priv->clk_usb);
- 				clk_disable_unprepare(priv->clk_usb_general);
-+				reset_control_rearm(priv->reset);
- 				return -EINVAL;
- 			}
- 		}
-@@ -218,6 +221,7 @@ static int phy_meson8b_usb2_power_off(struct phy *phy)
- 
- 	clk_disable_unprepare(priv->clk_usb);
- 	clk_disable_unprepare(priv->clk_usb_general);
-+	reset_control_rearm(priv->reset);
- 
- 	/* power off the PHY by putting it into reset mode */
- 	regmap_update_bits(priv->regmap, REG_CTRL, REG_CTRL_POWER_ON_RESET,
+With the libusbgx library [1] used by the gadget-tool [2] it is now also
+possible to fully describe the configfs layout of the uvc gadget with scheme
+files.
+
+[2] https://github.com/linux-usb-gadgets/libusbgx/pull/61/commits/53231c76f9d512f59fdc23b65cd5c46b7fb09eb4
+
+[3] https://github.com/linux-usb-gadgets/gt/tree/master/examples/systemd
+
+The bigger picture of these patches is to provide a more versatile interface to
+the uvc gadget. The goal is to simply start a uvc-gadget with the following
+commands:
+
+$ gt load uvc.scheme
+$ gst-launch v4l2src ! v4l2uvcsink
+
+--
+
+v1: https://lore.kernel.org/linux-usb/20210530222239.8793-1-m.grzeschik@pengutronix.de/
+v2: https://lore.kernel.org/linux-usb/20211117004432.3763306-1-m.grzeschik@pengutronix.de/
+v3: https://lore.kernel.org/linux-usb/20211117122435.2409362-1-m.grzeschik@pengutronix.de/
+
+Regards,
+Michael
+
+Michael Grzeschik (7):
+  media: v4l: move helper functions for fractions from uvc to
+    v4l2-common
+  media: uvcvideo: move uvc_format_desc to common header
+  usb: gadget: uvc: prevent index variables to start from 0
+  usb: gadget: uvc: move structs to common header
+  usb: gadget: uvc: track frames in format entries
+  usb: gadget: uvc: add VIDIOC function
+  usb: gadget: uvc: add format/frame handling code
+
+ drivers/media/usb/uvc/uvc_ctrl.c           |   1 +
+ drivers/media/usb/uvc/uvc_driver.c         | 281 +-------------
+ drivers/media/usb/uvc/uvc_v4l2.c           |  14 +-
+ drivers/media/usb/uvc/uvcvideo.h           | 144 --------
+ drivers/media/v4l2-core/v4l2-common.c      |  82 +++++
+ drivers/usb/gadget/function/f_uvc.c        | 262 +++++++++++++-
+ drivers/usb/gadget/function/uvc.h          |  38 +-
+ drivers/usb/gadget/function/uvc_configfs.c | 148 ++------
+ drivers/usb/gadget/function/uvc_configfs.h | 120 +++++-
+ drivers/usb/gadget/function/uvc_queue.c    |   3 +-
+ drivers/usb/gadget/function/uvc_v4l2.c     | 403 ++++++++++++++++++---
+ drivers/usb/gadget/function/uvc_video.c    |  71 +++-
+ include/media/v4l2-common.h                |   4 +
+ include/media/v4l2-uvc.h                   | 351 ++++++++++++++++++
+ 14 files changed, 1322 insertions(+), 600 deletions(-)
+ create mode 100644 include/media/v4l2-uvc.h
+
 -- 
-2.25.1
+2.30.2
 
