@@ -2,143 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF1F468D7F
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Dec 2021 22:50:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B4B468D83
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Dec 2021 22:59:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239450AbhLEVxc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 Dec 2021 16:53:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46608 "EHLO
+        id S233397AbhLEWC1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Dec 2021 17:02:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232165AbhLEVxc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Dec 2021 16:53:32 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D759C061714
-        for <linux-usb@vger.kernel.org>; Sun,  5 Dec 2021 13:50:04 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1mtzOS-0008US-5X; Sun, 05 Dec 2021 22:50:00 +0100
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1mtzOQ-0005fR-WB; Sun, 05 Dec 2021 22:49:58 +0100
-Date:   Sun, 5 Dec 2021 22:49:58 +0100
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Greg KH <greg@kroah.com>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
-        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
-        kernel@pengutronix.de
-Subject: Re: [PATCH] usb: gadget: uvc: use pump call conditionally
-Message-ID: <20211205214958.GB31430@pengutronix.de>
-References: <20211202005852.3538102-1-m.grzeschik@pengutronix.de>
- <YaoTpQ0nNa+sUQ/y@kroah.com>
+        with ESMTP id S230039AbhLEWC0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Dec 2021 17:02:26 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5F7C061714
+        for <linux-usb@vger.kernel.org>; Sun,  5 Dec 2021 13:58:59 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id e3so35205548edu.4
+        for <linux-usb@vger.kernel.org>; Sun, 05 Dec 2021 13:58:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BxkF5ybR0sSk2Qc7tg8NydRESBO95j6lxDt9gByhy1g=;
+        b=w/G4sML9qUsb7KLbUWLibhRlfiQ80RPjmTxdQ3gAzGDCWFkY393BkGlykTq9AHPlk9
+         pvE7QEZ/DkNJ0UiB02hi9PX7jHkeusq6HShRuJhdg2APdxaehEU9ial5VdD2UUvAKL6o
+         HamHUMqhHG0k13SElimqCk0AY1ERiXlxfNGW1s0nIcf2MUwShPAb30pzzcx//i07Nznv
+         dr0l+mofibJTUpmoM061AXi1E5v8TjQEPV4tvnFzyyUxiW6kYxuaFsDGpY+ZWjEByCc5
+         itjRhNzgluXdhKyTbgJvdWAZHsALFhtOnE304y9Nx0StLWh20tY6cixNzJNlKg7yD+xa
+         FuSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BxkF5ybR0sSk2Qc7tg8NydRESBO95j6lxDt9gByhy1g=;
+        b=G0TC1wDpu1b71GPxEpEO+mbXQYGfV+hrlIMdxmDBuAwHE8NAvk9G3nhtEpJ68WUlLd
+         fG8RiQb9BcKcBM5CrP7Y20s3lwXf4FiQXPh7RUD0HBikkIiSFyn0GvsGNYs4qgkBm1eI
+         UL7FxTy/yLC0d/J6KnCXwpzAWfXJUHg6R4s3FX4twpgWD2JSnI4xW3P0zsDNCTbTlqMS
+         IEAH5XZbNISeTeInINtTQ94FDhdIWqisKOoYG/NfdFvrP9K/e581O6Z3L0vqZ9Mu3dS/
+         P80BvyjR0dAl413PNXSZTqGyccOhfJ8sWrYu8f/HAQj+SOk9Q5qG7OinO86FR0lLYgcg
+         9N3w==
+X-Gm-Message-State: AOAM5338aemId9OANTtXHy50VUf1acTdqgw25ujyhDDOys+u1YTVTTZQ
+        7XcFb2wIUayuFCOlP4ZyDTCWqw==
+X-Google-Smtp-Source: ABdhPJzLotjrC5Ff3Uclo/otA6yvJQAalYclQgEKqqe/Z2wTloRzKQO0F2RjuK9Ctb39xg6oa/xEqQ==
+X-Received: by 2002:a17:907:94c7:: with SMTP id dn7mr40207945ejc.470.1638741537718;
+        Sun, 05 Dec 2021 13:58:57 -0800 (PST)
+Received: from localhost.localdomain (203.247.120.78.rev.sfr.net. [78.120.247.203])
+        by smtp.googlemail.com with ESMTPSA id nc29sm5724291ejc.3.2021.12.05.13.58.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Dec 2021 13:58:57 -0800 (PST)
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+To:     khilman@baylibre.com
+Cc:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        p.zabel@pengutronix.de, balbi@kernel.org, jbrunet@baylibre.com,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v4 0/3] usb: meson: fix shared reset control use
+Date:   Sun,  5 Dec 2021 22:58:43 +0100
+Message-Id: <20211205215846.153703-1-aouledameur@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+g7M9IMkV8truYOl"
-Content-Disposition: inline
-In-Reply-To: <YaoTpQ0nNa+sUQ/y@kroah.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 22:31:26 up 291 days, 55 min, 130 users,  load average: 0.42, 0.21,
- 0.16
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This patchset fixes a usb suspend warning seen on the libretech-cc by
+using reset_control_rearm() call of the reset framework API. 
+This call allows a reset consummer to release the reset line even when 
+just triggered so that it may be triggered again by other reset
+consummers.
 
---+g7M9IMkV8truYOl
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+reset_control_(de)assert() calls are called, in some meson usb drivers, 
+on a shared reset line when reset_control_reset has been used. This is not
+allowed by the reset framework.
 
-On Fri, Dec 03, 2021 at 01:55:01PM +0100, Greg KH wrote:
->On Thu, Dec 02, 2021 at 01:58:52AM +0100, Michael Grzeschik wrote:
->> Preparing the usb request is not very expensive, when using
->> scatter gather. In that case we can even remove the overhead
->> of the extra pump worker and call the pump function directly.
->>
->> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->> ---
->>  drivers/usb/gadget/function/uvc_v4l2.c  |  8 +++++--
->>  drivers/usb/gadget/function/uvc_video.c | 28 +++++++++++++++++++------
->>  drivers/usb/gadget/function/uvc_video.h |  2 ++
->>  3 files changed, 30 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget=
-/function/uvc_v4l2.c
->> index a2c78690c5c288..020b4adc7840e0 100644
->> --- a/drivers/usb/gadget/function/uvc_v4l2.c
->> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
->> @@ -169,8 +169,12 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v=
-4l2_buffer *b)
->>  	if (ret < 0)
->>  		return ret;
->>
->> -	if (uvc->state =3D=3D UVC_STATE_STREAMING)
->> -		schedule_work(&video->pump);
->> +	if (uvc->state =3D=3D UVC_STATE_STREAMING) {
->> +		if (!video->queue.use_sg)
->> +			schedule_work(&video->pump);
->> +		else
->> +			uvcg_video_pump(video);
->
->Wouldn't it be easier to understand this if you flip the if test around:
->		if (video->queue.use_sg)
->			uvcg_video_pump(video);
->		else
->			schedule_work(&video->pump);
->?
->
->Negagive logic is never fun to read...
+Finally the meson usb drivers are updated to use this new call, which
+solves the suspend issue addressed by the previous reverted 
+commit 7a410953d1fb ("usb: dwc3: meson-g12a: fix shared reset control
+use").
 
-Yes, you are not wrong.
+changes since v3:
+- Remove unnecessary reset_control_rearm() after reset_control_reset() 
+failure.
+- Use dev_err_probe().
 
->Also, are you sure that sg really is not expensive on all systems?  What
->did you test this on, and what was the results?
+Amjad Ouled-Ameur (3):
+  phy: amlogic: phy-meson-gxl-usb2: fix shared reset controller use
+  phy: amlogic: meson8b-usb2: Use dev_err_probe()
+  phy: amlogic: meson8b-usb2: fix shared reset control use
 
-I tested it on an zynqmp arm64 machine. I tried to test the sg case on
-an 32 bit IMX with chipidea, but the driver was complaining a lot about
-"not page aligned sg buffers". So if needed, I would first need to find
-a working machine to compare this with.
+ drivers/phy/amlogic/phy-meson-gxl-usb2.c | 1 +
+ drivers/phy/amlogic/phy-meson8b-usb2.c   | 9 +++++++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-However I would think that assigning some pointers on a scatterlist
-instead of doing memcpy of 1024 bytes should be less expensive.
+-- 
+2.25.1
 
-Regards,
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---+g7M9IMkV8truYOl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmGtNAIACgkQC+njFXoe
-LGT+ZhAAmhoEx7d5QzLJng6SDYRh8TTrr4bDZCm3MEBv4Hip0Y0iy5TJZ+8vEKyd
-bkGKI4ZEFYXwOLN5lygu73blsNFu7uDbodnchuKZNIvL8P8HUwVnDsClb9Qe83Vy
-RtvA80mWU9EkXMnmDRMXhXwnWDFt7kRxaQd20MY03lf7qs4yDe1zwkjpnLG1S1bI
-glXZdeY4lqmiPpzLleAO2XgNL4b8Xvyq4CtGdB/cYNoDO216xgSafZ0VBn87oWSp
-bg1u8lx3Hlt9aMSYfnA3v1rTZz9uDX9Fy1gc+7CHI0TGJxmcssBwZBy8RuUWJ/4E
-KXb9jAzGOSh3IWSbzOqmOSCadsgGtYLECTF0+09wBZgSwY/5hloyCISAoRMBfQh7
-jPQO07Pq+g3W2cOLPxNKDa6DwmUrx6l/DdaPTD3BlW2djDfeh9jVNCAfaDObygxR
-z0poXiRBot1TlI8v/xQHCzRT5unfG8oGwGyUTVprLbBJOAtmn85cw6XdCK6oxiTD
-v9HB1IKN5dKuziQg2H6iY+LyCzkJnrIt99ywCyY7dmWspLE8Ed5CVfcHWqWQqvNg
-L5WzU7H3zVBNg8epNLqwKPuzPj6zeRCYeevcailjYbSZnLQlkTXME7H5xi4EN3iK
-AvDF6mda9lOMdC7Epua/yYGvtDondSCB91FfczqafrUVCVEYwQI=
-=lyDt
------END PGP SIGNATURE-----
-
---+g7M9IMkV8truYOl--
