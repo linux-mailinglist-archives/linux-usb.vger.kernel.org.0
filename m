@@ -2,137 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 578684687AC
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Dec 2021 22:49:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 525FA4688EE
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Dec 2021 03:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355779AbhLDVws (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Dec 2021 16:52:48 -0500
-Received: from mail.mutex.one ([62.77.152.124]:33710 "EHLO mail.mutex.one"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231646AbhLDVwr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 4 Dec 2021 16:52:47 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.mutex.one (Postfix) with ESMTP id F3E0A16C27F2;
-        Sat,  4 Dec 2021 23:49:16 +0200 (EET)
-X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
-Received: from mail.mutex.one ([127.0.0.1])
-        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id eMoWQPvIqDML; Sat,  4 Dec 2021 23:49:16 +0200 (EET)
-Received:  [127.0.0.1] (localhost [127.0.0.1])nknown [109.103.89.101])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mutex.one (Postfix) with ESMTPSA id 9D94F16C08F2;
-        Sat,  4 Dec 2021 23:49:15 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
-        t=1638654556; bh=EVhTg8nYuNCbP3r7ALG6+8NWgoFsT6iIYwfUXSTMBzA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Mz7Lx+o60D1QKd4Ke8Rslyqwui25ukjc13FPs/g2VZZuVW/0ZycSp+s908bnzbcG3
-         On7euWIxjhLt+/shYmapUmW1J8uHvRTmJxkPEs01vyFuitg3uER8hY/0WNUZ6b7Y6F
-         BbFlkF3cwoP7b3pgsbncHABJbTyQnpKg/BcLB/aE=
-From:   Marian Postevca <posteuca@mutex.one>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Marian Postevca <posteuca@mutex.one>, stable@vger.kernel.org
-Subject: [PATCH v2] usb: gadget: u_ether: fix race in setting MAC address in setup phase
-Date:   Sat,  4 Dec 2021 23:49:12 +0200
-Message-Id: <20211204214912.17627-1-posteuca@mutex.one>
+        id S231152AbhLECj3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Dec 2021 21:39:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230288AbhLECj3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Dec 2021 21:39:29 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30A9C061751;
+        Sat,  4 Dec 2021 18:36:02 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id v19so4744877plo.7;
+        Sat, 04 Dec 2021 18:36:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eXPP2xHC6+EdRLJclO8i5hHNTg/IHiFgOFmOC116mis=;
+        b=W7MHcHOgO8Kyhsyy6y3b0f9g8CPiK4d5igYkI/KH8cZiJjd9nthrJCCI/xRWpbhzYK
+         a95XG7LnHxoi2jCkdokVBXDOPcUc6q9jsw5Orhssmeh8cKo1je34+2xvZVc1JXfIRA91
+         e2dOBsMSmKY5cKk6LSKFWUJpVBZDP3REkW6nbDXamf2MS//HKnLOcqlE5ugTsUc+kjDW
+         7gn2Zltu2feKhipWDy5HnVUdLeRIfQYykKtjQUOrJoGzMXWamTPJdaVTrMp6OHessnxw
+         W8S2VfoYnJphYeX2Ey9jBGd8XwqE44Z14OEIe3YBRg5SkTk/4Lu48zWRODl75V4HNjH2
+         KGQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eXPP2xHC6+EdRLJclO8i5hHNTg/IHiFgOFmOC116mis=;
+        b=aqtpUqFacxQCzFJ6UFMuZqOfYZhz60gBuF8X/XGxDPvC0b7OiB4afsYbd2y9r5lh1l
+         OsMUornFQf7EQnnp93DNHaGVtNPLnI6Aib5dIVDXYaumoy5TGMb9nb/VqHvjrhl/4pRo
+         HKnLi1/y6YbwhfdtmUK/VmdjR7eFC61G5MNM/4Tz8D2KJbfQCo6APPlfX8tN8j3Y9wfk
+         jDwkwRAriH2jIHiboSFplmvhO/rkQ8qBW9NcsDR+tYfTndiAM5BCB9wbAmLvijalw6fy
+         slfW7+WzHIX19w4v0hpcNCav0O7RR44pDKh4cvB20XRuVkVp0YYmjedqIYJ6b9SfBkdH
+         cHwg==
+X-Gm-Message-State: AOAM532nnsc/A7044PgsvufD5fANoAoMlAryQVK1evwIfgXCORNr11Aq
+        0xVNx7AfVXhF4eqsDMBh6EcBuZiVWz/fVstJ
+X-Google-Smtp-Source: ABdhPJxUZfvhe1514Q/VjaFPxCyuwC/0dyet5Cez3psRHHoFY8Efx5Y7bRWZKnw8npq4W7vm951JIQ==
+X-Received: by 2002:a17:902:b712:b0:143:72b7:4096 with SMTP id d18-20020a170902b71200b0014372b74096mr33894174pls.25.1638671761651;
+        Sat, 04 Dec 2021 18:36:01 -0800 (PST)
+Received: from localhost.localdomain (host-219-71-72-98.dynamic.kbtelecom.net. [219.71.72.98])
+        by smtp.gmail.com with ESMTPSA id c2sm7514493pfl.200.2021.12.04.18.36.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Dec 2021 18:36:01 -0800 (PST)
+From:   Wei Ming Chen <jj251510319013@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, johan@kernel.org,
+        gregkh@linuxfoundation.org,
+        Wei Ming Chen <jj251510319013@gmail.com>
+Subject: [PATCH] usb: core: Fix file path that does not exist
+Date:   Sun,  5 Dec 2021 10:35:29 +0800
+Message-Id: <20211205023529.91165-1-jj251510319013@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When listening for notifications through netlink of a new interface being
-registered, sporadically, it is possible for the MAC to be read as zero.
-The zero MAC address lasts a short period of time and then switches to a
-valid random MAC address.
+Both driver.c and generic.c are not under drivers/usb/, should
+be drivers/usb/core/ instead.
 
-This causes problems for netd in Android, which assumes that the interface
-is malfunctioning and will not use it.
-
-In the good case we get this log:
-InterfaceController::getCfg() ifName usb0
- hwAddr 92:a8:f0:73:79:5b ipv4Addr 0.0.0.0 flags 0x1002
-
-In the error case we get these logs:
-InterfaceController::getCfg() ifName usb0
- hwAddr 00:00:00:00:00:00 ipv4Addr 0.0.0.0 flags 0x1002
-
-netd : interfaceGetCfg("usb0")
-netd : interfaceSetCfg() -> ServiceSpecificException
- (99, "[Cannot assign requested address] : ioctl() failed")
-
-The reason for the issue is the order in which the interface is setup,
-it is first registered through register_netdev() and after the MAC
-address is set.
-
-Fixed by first setting the MAC address of the net_device and after that
-calling register_netdev().
-
-Signed-off-by: Marian Postevca <posteuca@mutex.one>
-Fixes: bcd4a1c40bee885e ("usb: gadget: u_ether: construct with default values and add setters/getters")
-Cc: stable@vger.kernel.org
+Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
 ---
+ drivers/usb/core/driver.c  | 2 +-
+ drivers/usb/core/generic.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-v2: Added Fixes and Cc tags to commit message.
-
- drivers/usb/gadget/function/u_ether.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index e0ad5aed6ac9..6f5d45ef2e39 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -17,6 +17,7 @@
- #include <linux/etherdevice.h>
- #include <linux/ethtool.h>
- #include <linux/if_vlan.h>
-+#include <linux/etherdevice.h>
- 
- #include "u_ether.h"
- 
-@@ -863,19 +864,23 @@ int gether_register_netdev(struct net_device *net)
- {
- 	struct eth_dev *dev;
- 	struct usb_gadget *g;
--	struct sockaddr sa;
- 	int status;
- 
- 	if (!net->dev.parent)
- 		return -EINVAL;
- 	dev = netdev_priv(net);
- 	g = dev->gadget;
-+
-+	net->addr_assign_type = NET_ADDR_RANDOM;
-+	eth_hw_addr_set(net, dev->dev_mac);
-+
- 	status = register_netdev(net);
- 	if (status < 0) {
- 		dev_dbg(&g->dev, "register_netdev failed, %d\n", status);
- 		return status;
- 	} else {
- 		INFO(dev, "HOST MAC %pM\n", dev->host_mac);
-+		INFO(dev, "MAC %pM\n", dev->dev_mac);
- 
- 		/* two kinds of host-initiated state changes:
- 		 *  - iff DATA transfer is active, carrier is "on"
-@@ -883,15 +888,6 @@ int gether_register_netdev(struct net_device *net)
- 		 */
- 		netif_carrier_off(net);
- 	}
--	sa.sa_family = net->type;
--	memcpy(sa.sa_data, dev->dev_mac, ETH_ALEN);
--	rtnl_lock();
--	status = dev_set_mac_address(net, &sa, NULL);
--	rtnl_unlock();
--	if (status)
--		pr_warn("cannot set self ethernet address: %d\n", status);
--	else
--		INFO(dev, "MAC %pM\n", dev->dev_mac);
- 
- 	return status;
- }
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index 072968c40ade..267a134311be 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- * drivers/usb/driver.c - most of the driver model stuff for usb
++ * drivers/usb/core/driver.c - most of the driver model stuff for usb
+  *
+  * (C) Copyright 2005 Greg Kroah-Hartman <gregkh@suse.de>
+  *
+diff --git a/drivers/usb/core/generic.c b/drivers/usb/core/generic.c
+index 26f9fb9f67ca..740342a2812a 100644
+--- a/drivers/usb/core/generic.c
++++ b/drivers/usb/core/generic.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- * drivers/usb/generic.c - generic driver for USB devices (not interfaces)
++ * drivers/usb/core/generic.c - generic driver for USB devices (not interfaces)
+  *
+  * (C) Copyright 2005 Greg Kroah-Hartman <gregkh@suse.de>
+  *
 -- 
-2.32.0
+2.25.1
 
