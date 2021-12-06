@@ -2,110 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C3146A32E
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 18:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AB646A380
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 18:56:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243839AbhLFRor (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Dec 2021 12:44:47 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:40766 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243816AbhLFRon (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 12:44:43 -0500
-Received: by mail-ot1-f43.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so14588500otj.7;
-        Mon, 06 Dec 2021 09:41:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BQ33NtO+h5cZWHcbJoRJUG8vZRwMRqm+nEu5OuGtqj4=;
-        b=3cp2y/HpEhbBHSl1twnkPFD8WgKA7g1r+h/fWGQV6//AObyqUxbWXgqyJrpy6B7Zi3
-         ZZwP7t6Xj8WM1XNfx43jmKlyYpSwRqE27x1qiS9qnfrewsBhD44DpT6a391YS+IY3Wiw
-         emV0YL/hB9hXuDvKkSBl3Qrji0UnD5cZi7LEbuIzTWQxgor7iwBPiQGg576qKExeWLHf
-         bTpuQ29lXx51HsYUd2xCB0CjNfWj6/2lXqkprfve5hIAXYuwzSLDn7WkJmHK0aAd8BNc
-         95GwcXYJNUTAqpDUXD00P+iRFOIHT6amQrXt3jvN5bDo+G2ve8rkPHIUP8j1IrsV+1d6
-         FrqQ==
-X-Gm-Message-State: AOAM5302eamlNvN8cWI6b+d8kBdUr3lkfmyuDw/iUgDm4WP1fshUpg1E
-        J2q++Dr7CSZ9euoJzKnuywLvCKDxSw==
-X-Google-Smtp-Source: ABdhPJx0lG9PCFZcxI7gLJWj+yGSzIhTwjC2Jd33+kjsEJVijXchlmG64wFDVT2jbKUK5mzQevmMiw==
-X-Received: by 2002:a05:6830:928:: with SMTP id v40mr31422669ott.203.1638812474415;
-        Mon, 06 Dec 2021 09:41:14 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id v2sm2310243oto.3.2021.12.06.09.41.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 09:41:13 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: usb: Add missing properties used in examples
-Date:   Mon,  6 Dec 2021 11:41:12 -0600
-Message-Id: <20211206174113.2295616-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        id S1345254AbhLFR7p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Dec 2021 12:59:45 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:51870 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243468AbhLFR7p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 12:59:45 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 46FE2CE175C
+        for <linux-usb@vger.kernel.org>; Mon,  6 Dec 2021 17:56:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 77BA0C341C2
+        for <linux-usb@vger.kernel.org>; Mon,  6 Dec 2021 17:56:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638813373;
+        bh=Z5IwqOoyJ/oiuV/VDZ9gOOfe1TqkYqhF4JPaIHgHZMI=;
+        h=From:To:Subject:Date:From;
+        b=DU9t8F9Td6QNw9jLcJyug04wx1pPRho58ebuetmEIkPFo1WaWnQ+lbFMI0PXDxo6P
+         hgBHZaZ1jMM6uydfRUnvJj583kIzoDm6nYxC4xqdaRjH2PyPzFJ/geprUazgBDE9iz
+         2Jf/FZnJHK2Kax6QEL18B+281eSsg+Nq8x3yYCGDkG6I8IZcelKUNuSHJRwfhQP5tW
+         oRu3aVS/viIXIPfUt2Q3dVHDYPLJCzsYJAIILBZG/IGKZsfiXgf3ZvIuKqqC1bOtlb
+         ZCGWMHzOpBXygedJs2IIlIakr0lxEZ7PjMHkVojUGcHT4TXnrsq7HJvB8p7JE63qvd
+         KGkrfMgkFPlbg==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 56A3761158; Mon,  6 Dec 2021 17:56:13 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215241] New: "usbreset" tool causes hung task on kernel 5.15.3+
+ with Hauppauge WinTV dualHD
+Date:   Mon, 06 Dec 2021 17:56:12 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mabo@elbmurf.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression attachments.created
+Message-ID: <bug-215241-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-With 'unevaluatedProperties' support implemented, the following warnings
-are generated in the usb examples:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215241
 
-Documentation/devicetree/bindings/usb/intel,keembay-dwc3.example.dt.yaml: usb: usb@34000000: Unevaluated properties are not allowed ('reg' was unexpected)
-Documentation/devicetree/bindings/usb/snps,dwc3.example.dt.yaml: usb@4a030000: Unevaluated properties are not allowed ('reg' was unexpected)
+            Bug ID: 215241
+           Summary: "usbreset" tool causes hung task on kernel 5.15.3+
+                    with Hauppauge WinTV dualHD
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.15.3
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: mabo@elbmurf.de
+        Regression: No
 
-Add the missing property definitions.
+Created attachment 299917
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D299917&action=3Dedit
+Dmesg log
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../devicetree/bindings/usb/intel,keembay-dwc3.yaml         | 3 +++
- Documentation/devicetree/bindings/usb/snps,dwc3.yaml        | 6 ++++++
- 2 files changed, 9 insertions(+)
+Hello, I have a Hauppauge WinTV dualHD DVB-T2 USB card and need to use the
+nifty tool usbreset to reset its connection after each standby because else=
+ it
+won=E2=80=99t work. Recently, starting with Linux 5.15.3, usbreset started =
+causing
+severe hangs even to the point of my system being unable to do a proper reb=
+oot
+or shutdown. Same with 5.16.0-rc3. I=E2=80=99m now back on 5.13.2 without t=
+his problem.
+In the attachment you can read a dmesg log. Distro is Arch Linux.
 
-diff --git a/Documentation/devicetree/bindings/usb/intel,keembay-dwc3.yaml b/Documentation/devicetree/bindings/usb/intel,keembay-dwc3.yaml
-index 43b91ab62004..d3511f48cd55 100644
---- a/Documentation/devicetree/bindings/usb/intel,keembay-dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/intel,keembay-dwc3.yaml
-@@ -13,6 +13,9 @@ properties:
-   compatible:
-     const: intel,keembay-dwc3
- 
-+  reg:
-+    maxItems: 1
-+
-   clocks:
-     maxItems: 4
- 
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index 25ac2c93dc6c..d29ffcd27472 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -36,6 +36,9 @@ properties:
-         - const: synopsys,dwc3
-           deprecated: true
- 
-+  reg:
-+    maxItems: 1
-+
-   interrupts:
-     description:
-       It's either a single common DWC3 interrupt (dwc_usb3) or individual
-@@ -65,6 +68,9 @@ properties:
-         - enum: [bus_early, ref, suspend]
-         - true
- 
-+  iommus:
-+    maxItems: 1
-+
-   usb-phy:
-     minItems: 1
-     items:
--- 
-2.32.0
+--=20
+You may reply to this email to add a comment.
 
+You are receiving this mail because:
+You are watching the assignee of the bug.=
