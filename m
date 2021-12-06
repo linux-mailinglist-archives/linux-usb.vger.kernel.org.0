@@ -2,182 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4706469815
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 15:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B394046A0CC
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 17:10:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237080AbhLFOMh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Dec 2021 09:12:37 -0500
-Received: from mga02.intel.com ([134.134.136.20]:33001 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235350AbhLFOMh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 6 Dec 2021 09:12:37 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="224570620"
-X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="224570620"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 06:05:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="461820677"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 06 Dec 2021 06:05:09 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1muEc8-000LKH-Ea; Mon, 06 Dec 2021 14:05:08 +0000
-Date:   Mon, 6 Dec 2021 22:04:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-usb@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, balbi@kernel.org,
-        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v4 7/7] usb: gadget: uvc: add format/frame handling code
-Message-ID: <202112062124.HEJZJ0fR-lkp@intel.com>
-References: <20211205225803.268492-8-m.grzeschik@pengutronix.de>
+        id S1389570AbhLFQOF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Dec 2021 11:14:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1388161AbhLFQN1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 11:13:27 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AFBC08E9B9;
+        Mon,  6 Dec 2021 07:56:01 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id d24so23546139wra.0;
+        Mon, 06 Dec 2021 07:56:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mX/SbYbQRXeq1Xuw1o88w2bN5ZHKdhZTa60t7J17Fac=;
+        b=S6Om9MvDnuVQ/9W5ez8t+9jOVzmiLEcxYJ/MqSekuyxnQmpJQ0JbpUiAtuwME/zVkv
+         PsJlvFevKamOBzq5MFXAnHKz/kIIHA5SX8KKKUVnHPnoBIQ505D0mIBNM1KGarf2eNMP
+         HvcTCD3LkdxNXig09WOxgE4uAkGXPrGUOaGqa9U42N8sKyPUEr0jnqUDnFmKUuCmTexM
+         OaUYzb8ReWpbdH2gUouQtdUoQGnelMimenWvsPFyW77WrjSVSkAgOukaogcJmOOGzh4X
+         dfYvL8VDzkEebeQgoNfic5pHcACMSpGNKQbdmgj0Lq0EqkvXMK1tBYQXOVV2WhuxouSX
+         W3rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mX/SbYbQRXeq1Xuw1o88w2bN5ZHKdhZTa60t7J17Fac=;
+        b=7ZARuzljzZyUUO8qYTfp7Ig+DgDGWaJYFRQIxx0waUkle0B3kIMk5JqzmLZ1fjdQ26
+         powkTj21z3KoIxl44hBiTnpRvwB9WZcLqm0RlWz5W0IFxlSJnXNqgO22zbUwU/suOtB9
+         f0GpRVtvsdTOpVDR3fqWpwpLhhIXui4MCdl4bN4dUhOWsIWlAYOPfB2hg+RLjNetRH3O
+         jWxqmMRzwjEPosjG/i/bXmlzDvr6QRUt3f1H3Eyg5mT3tUO5Mln6AdIwvIHNAthjpwvw
+         +sqLHtNmlHJH1QPzUvSRzYxxSrffSuVlafGZTB3YMeoe41EBbc7bwfKQJQCgVSYd7tGM
+         ZLIQ==
+X-Gm-Message-State: AOAM532mh8A4eaRR0V7xvhzK1pjDBGDS7/yt/8MicNL2yM2ZqnI27UHN
+        ta0Usa/XbQPEjpOA+3K2BGwwwcfkPAo=
+X-Google-Smtp-Source: ABdhPJwiQ2rThzXmbh3xntV+tYVqHTC/PFOalvGAOKAApF6BDQnxpyLQnMQ3bDJvr13OhRc3GQ/JgQ==
+X-Received: by 2002:a05:6000:181:: with SMTP id p1mr44754857wrx.292.1638806160478;
+        Mon, 06 Dec 2021 07:56:00 -0800 (PST)
+Received: from localhost (pd9e51d39.dip0.t-ipconnect.de. [217.229.29.57])
+        by smtp.gmail.com with ESMTPSA id d7sm11383872wrw.87.2021.12.06.07.55.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 07:55:59 -0800 (PST)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Nagarjuna Kristam <nkristam@nvidia.com>,
+        JC Kuo <jckuo@nvidia.com>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH] dt-bindings: usb: tegra-xudc: Document interconnects and iommus properties
+Date:   Mon,  6 Dec 2021 16:55:59 +0100
+Message-Id: <20211206155559.232550-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211205225803.268492-8-m.grzeschik@pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Michael,
+From: Thierry Reding <treding@nvidia.com>
 
-I love your patch! Yet something to improve:
+Add the interconnects, interconnect-names and iommus properties to the
+device tree bindings for the Tegra XUDC controller. These are used to
+describe the device's paths to and from memory.
 
-[auto build test ERROR on media-tree/master]
-[also build test ERROR on usb/usb-testing v5.16-rc4 next-20211206]
-[cannot apply to balbi-usb/testing/next peter-chen-usb/for-usb-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Michael-Grzeschik/usb-gadget-uvc-use-configfs-entries-for-negotiation-and-v4l2-VIDIOCS/20211206-070014
-base:   git://linuxtv.org/media_tree.git master
-config: riscv-randconfig-r024-20211205 (https://download.01.org/0day-ci/archive/20211206/202112062124.HEJZJ0fR-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6e8678903523019903222e4521a5e41af743cab0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/8fdc5cd9a8845e9a061b42155d8d05ddb8514921
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Michael-Grzeschik/usb-gadget-uvc-use-configfs-entries-for-negotiation-and-v4l2-VIDIOCS/20211206-070014
-        git checkout 8fdc5cd9a8845e9a061b42155d8d05ddb8514921
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/usb/gadget/function/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/usb/gadget/function/uvc_v4l2.c:73:2: warning: variable 'uformat' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-           list_for_each_entry(format, &uvc->header->formats, entry) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/list.h:631:7: note: expanded from macro 'list_for_each_entry'
-                !list_entry_is_head(pos, head, member);                    \
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/gadget/function/uvc_v4l2.c:81:9: note: uninitialized use occurs here
-           return uformat;
-                  ^~~~~~~
-   drivers/usb/gadget/function/uvc_v4l2.c:73:2: note: remove the condition if it is always true
-           list_for_each_entry(format, &uvc->header->formats, entry) {
-           ^
-   include/linux/list.h:631:7: note: expanded from macro 'list_for_each_entry'
-                !list_entry_is_head(pos, head, member);                    \
-                ^
-   drivers/usb/gadget/function/uvc_v4l2.c:70:29: note: initialize the variable 'uformat' to silence this warning
-           struct uvcg_format *uformat;
-                                      ^
-                                       = NULL
-   drivers/usb/gadget/function/uvc_v4l2.c:139:2: warning: variable 'uformat' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-           list_for_each_entry(format, &uvc->header->formats, entry) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/list.h:631:7: note: expanded from macro 'list_for_each_entry'
-                !list_entry_is_head(pos, head, member);                    \
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/gadget/function/uvc_v4l2.c:148:9: note: uninitialized use occurs here
-           return uformat;
-                  ^~~~~~~
-   drivers/usb/gadget/function/uvc_v4l2.c:139:2: note: remove the condition if it is always true
-           list_for_each_entry(format, &uvc->header->formats, entry) {
-           ^
-   include/linux/list.h:631:7: note: expanded from macro 'list_for_each_entry'
-                !list_entry_is_head(pos, head, member);                    \
-                ^
-   drivers/usb/gadget/function/uvc_v4l2.c:137:29: note: initialize the variable 'uformat' to silence this warning
-           struct uvcg_format *uformat;
-                                      ^
-                                       = NULL
->> drivers/usb/gadget/function/uvc_v4l2.c:334:14: error: use of undeclared identifier 'video'
-                   spin_lock(&video->frame_lock);
-                              ^
-   drivers/usb/gadget/function/uvc_v4l2.c:339:16: error: use of undeclared identifier 'video'
-                   spin_unlock(&video->frame_lock);
-                                ^
-   2 warnings and 2 errors generated.
-
-
-vim +/video +334 drivers/usb/gadget/function/uvc_v4l2.c
-
-   305	
-   306	static int
-   307	uvc_v4l2_enum_frameintervals(struct file *file, void *fh,
-   308			struct v4l2_frmivalenum *fival)
-   309	{
-   310		struct video_device *vdev = video_devdata(file);
-   311		struct uvc_device *uvc = video_get_drvdata(vdev);
-   312		struct uvcg_format *uformat = NULL;
-   313		struct uvcg_frame *uframe = NULL;
-   314		struct uvcg_frame_ptr *frame;
-   315	
-   316		uformat = find_format_by_pix(uvc, fival->pixel_format);
-   317		if (!uformat)
-   318			return -EINVAL;
-   319	
-   320		list_for_each_entry(frame, &uformat->frames, entry) {
-   321			if (frame->frm->frame.w_width == fival->width &&
-   322			    frame->frm->frame.w_height == fival->height) {
-   323				uframe = frame->frm;
-   324				break;
-   325			}
-   326		}
-   327		if (!uframe)
-   328			return -EINVAL;
-   329	
-   330		if (uvc->streamon) {
-   331			if (fival->index >= 1)
-   332				return -EINVAL;
-   333	
- > 334			spin_lock(&video->frame_lock);
-   335	
-   336			fival->discrete.numerator =
-   337				uframe->dw_frame_interval[uvc->video.cur_ival - 1];
-   338	
-   339			spin_unlock(&video->frame_lock);
-   340		} else {
-   341			if (fival->index >= uframe->frame.b_frame_interval_type)
-   342				return -EINVAL;
-   343	
-   344			fival->discrete.numerator =
-   345				uframe->dw_frame_interval[fival->index];
-   346		}
-   347	
-   348		/* TODO: handle V4L2_FRMIVAL_TYPE_STEPWISE */
-   349		fival->type = V4L2_FRMIVAL_TYPE_DISCRETE;
-   350		fival->discrete.denominator = 10000000;
-   351		v4l2_simplify_fraction(&fival->discrete.numerator,
-   352			&fival->discrete.denominator, 8, 333);
-   353	
-   354		return 0;
-   355	}
-   356	
-
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml  | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+index 8428415896ce..a39c76b89484 100644
+--- a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
++++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+@@ -59,6 +59,19 @@ properties:
+       - const: fs_src
+       - const: hs_src
+ 
++  interconnects:
++    items:
++      - description: memory read client
++      - description: memory write client
++
++  interconnect-names:
++    items:
++      - const: dma-mem # read
++      - const: write
++
++  iommus:
++    maxItems: 1
++
+   power-domains:
+     items:
+       - description: XUSBB(device) power-domain
+-- 
+2.33.1
+
