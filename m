@@ -2,142 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D416346950A
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 12:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2FA46957E
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 13:15:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242467AbhLFLfh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Dec 2021 06:35:37 -0500
-Received: from mga02.intel.com ([134.134.136.20]:22644 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231332AbhLFLfg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 6 Dec 2021 06:35:36 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="224549481"
-X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="224549481"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 03:32:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="678958870"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 06 Dec 2021 03:32:05 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1muCE0-000LDS-CD; Mon, 06 Dec 2021 11:32:04 +0000
-Date:   Mon, 6 Dec 2021 19:31:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-usb@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, balbi@kernel.org,
-        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
+        id S242954AbhLFMTB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Dec 2021 07:19:01 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:53226 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242106AbhLFMTA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 07:19:00 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 336A5EE;
+        Mon,  6 Dec 2021 13:15:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1638792930;
+        bh=4V2NSN18xq4J6EcBKjyUiD749DmCC6TWMh9wjRNnG74=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mgX35wLW6Bx9V1f7DA1K+kWid/QLp+CsYaE+3w+G7wIhHiVks0PlglsybNHEG3cCL
+         1ypsvINz0XTaEO5eSEK9uTG0O1TJkIValrUHIL4toRHEXRxY3lW4Cg+Uwe+7Hk5qXJ
+         w8CB4S/q4thX19Gz2xvv+ngtoDDq975aOovsi38Q=
+Date:   Mon, 6 Dec 2021 14:15:02 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Greg KH <greg@kroah.com>
+Cc:     Michael Grzeschik <mgr@pengutronix.de>, linux-usb@vger.kernel.org,
+        balbi@kernel.org, paul.elder@ideasonboard.com,
         kernel@pengutronix.de
-Subject: Re: [PATCH v4 6/7] usb: gadget: uvc: add VIDIOC function
-Message-ID: <202112061923.TiElYqbE-lkp@intel.com>
-References: <20211205225803.268492-7-m.grzeschik@pengutronix.de>
+Subject: Re: [PATCH] usb: gadget: uvc: use pump call conditionally
+Message-ID: <Ya3+xr8Z4P25l5My@pendragon.ideasonboard.com>
+References: <20211202005852.3538102-1-m.grzeschik@pengutronix.de>
+ <YaoTpQ0nNa+sUQ/y@kroah.com>
+ <20211205214958.GB31430@pengutronix.de>
+ <Ya28+RJGvqT8s8nw@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211205225803.268492-7-m.grzeschik@pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <Ya28+RJGvqT8s8nw@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Michael,
+Hello,
 
-I love your patch! Perhaps something to improve:
+On Mon, Dec 06, 2021 at 08:34:17AM +0100, Greg KH wrote:
+> On Sun, Dec 05, 2021 at 10:49:58PM +0100, Michael Grzeschik wrote:
+> > On Fri, Dec 03, 2021 at 01:55:01PM +0100, Greg KH wrote:
+> > > On Thu, Dec 02, 2021 at 01:58:52AM +0100, Michael Grzeschik wrote:
+> > > > Preparing the usb request is not very expensive, when using
+> > > > scatter gather. In that case we can even remove the overhead
+> > > > of the extra pump worker and call the pump function directly.
+> > > > 
+> > > > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> > > > ---
+> > > >  drivers/usb/gadget/function/uvc_v4l2.c  |  8 +++++--
+> > > >  drivers/usb/gadget/function/uvc_video.c | 28 +++++++++++++++++++------
+> > > >  drivers/usb/gadget/function/uvc_video.h |  2 ++
+> > > >  3 files changed, 30 insertions(+), 8 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+> > > > index a2c78690c5c288..020b4adc7840e0 100644
+> > > > --- a/drivers/usb/gadget/function/uvc_v4l2.c
+> > > > +++ b/drivers/usb/gadget/function/uvc_v4l2.c
+> > > > @@ -169,8 +169,12 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v4l2_buffer *b)
+> > > >  	if (ret < 0)
+> > > >  		return ret;
+> > > > 
+> > > > -	if (uvc->state == UVC_STATE_STREAMING)
+> > > > -		schedule_work(&video->pump);
+> > > > +	if (uvc->state == UVC_STATE_STREAMING) {
+> > > > +		if (!video->queue.use_sg)
+> > > > +			schedule_work(&video->pump);
+> > > > +		else
+> > > > +			uvcg_video_pump(video);
+> > > 
+> > > Wouldn't it be easier to understand this if you flip the if test around:
+> > > 		if (video->queue.use_sg)
+> > > 			uvcg_video_pump(video);
+> > > 		else
+> > > 			schedule_work(&video->pump);
+> > > ?
+> > > 
+> > > Negagive logic is never fun to read...
+> > 
+> > Yes, you are not wrong.
+> > 
+> > > Also, are you sure that sg really is not expensive on all systems?  What
+> > > did you test this on, and what was the results?
+> > 
+> > I tested it on an zynqmp arm64 machine. I tried to test the sg case on
+> > an 32 bit IMX with chipidea, but the driver was complaining a lot about
+> > "not page aligned sg buffers". So if needed, I would first need to find
+> > a working machine to compare this with.
+> > 
+> > However I would think that assigning some pointers on a scatterlist
+> > instead of doing memcpy of 1024 bytes should be less expensive.
+> 
+> Not true on many systems, memcpy can be _very_ fast, especially for
+> small amounts like 1024 bytes.  So please, measure this to be sure.
 
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on usb/usb-testing peter-chen-usb/for-usb-next v5.16-rc4 next-20211206]
-[cannot apply to balbi-usb/testing/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+We've moved memcpy()s to a work queue in the host UVC driver for
+high-bandwidth devices, which brough massive performance improvements
+(if I recall correctly, at least partly due to the parallelization of
+memcpy operations). I'm not sure we have measured performances in the
+gadget driver with the same level of accuracy and care though.
 
-url:    https://github.com/0day-ci/linux/commits/Michael-Grzeschik/usb-gadget-uvc-use-configfs-entries-for-negotiation-and-v4l2-VIDIOCS/20211206-070014
-base:   git://linuxtv.org/media_tree.git master
-config: riscv-randconfig-r024-20211205 (https://download.01.org/0day-ci/archive/20211206/202112061923.TiElYqbE-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6e8678903523019903222e4521a5e41af743cab0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/fddc809d40b686678ad8bea9c47f37b355b3608b
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Michael-Grzeschik/usb-gadget-uvc-use-configfs-entries-for-negotiation-and-v4l2-VIDIOCS/20211206-070014
-        git checkout fddc809d40b686678ad8bea9c47f37b355b3608b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/usb/gadget/function/
+Michael, do you plan to make measurements ?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+-- 
+Regards,
 
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/gadget/function/uvc_v4l2.c:73:2: warning: variable 'uformat' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-           list_for_each_entry(format, &uvc->header->formats, entry) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/list.h:631:7: note: expanded from macro 'list_for_each_entry'
-                !list_entry_is_head(pos, head, member);                    \
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/gadget/function/uvc_v4l2.c:81:9: note: uninitialized use occurs here
-           return uformat;
-                  ^~~~~~~
-   drivers/usb/gadget/function/uvc_v4l2.c:73:2: note: remove the condition if it is always true
-           list_for_each_entry(format, &uvc->header->formats, entry) {
-           ^
-   include/linux/list.h:631:7: note: expanded from macro 'list_for_each_entry'
-                !list_entry_is_head(pos, head, member);                    \
-                ^
-   drivers/usb/gadget/function/uvc_v4l2.c:70:29: note: initialize the variable 'uformat' to silence this warning
-           struct uvcg_format *uformat;
-                                      ^
-                                       = NULL
-   drivers/usb/gadget/function/uvc_v4l2.c:112:2: warning: variable 'uformat' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-           list_for_each_entry(format, &uvc->header->formats, entry) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/list.h:631:7: note: expanded from macro 'list_for_each_entry'
-                !list_entry_is_head(pos, head, member);                    \
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/gadget/function/uvc_v4l2.c:121:9: note: uninitialized use occurs here
-           return uformat;
-                  ^~~~~~~
-   drivers/usb/gadget/function/uvc_v4l2.c:112:2: note: remove the condition if it is always true
-           list_for_each_entry(format, &uvc->header->formats, entry) {
-           ^
-   include/linux/list.h:631:7: note: expanded from macro 'list_for_each_entry'
-                !list_entry_is_head(pos, head, member);                    \
-                ^
-   drivers/usb/gadget/function/uvc_v4l2.c:110:29: note: initialize the variable 'uformat' to silence this warning
-           struct uvcg_format *uformat;
-                                      ^
-                                       = NULL
-   2 warnings generated.
-
-
-vim +73 drivers/usb/gadget/function/uvc_v4l2.c
-
-    66	
-    67	struct uvcg_format *find_format_by_index(struct uvc_device *uvc, int index)
-    68	{
-    69		struct uvcg_format_ptr *format;
-    70		struct uvcg_format *uformat;
-    71		int i = 1;
-    72	
-  > 73		list_for_each_entry(format, &uvc->header->formats, entry) {
-    74			if (index == i) {
-    75				uformat = format->fmt;
-    76				break;
-    77			}
-    78			i++;
-    79		}
-    80	
-    81		return uformat;
-    82	}
-    83	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Laurent Pinchart
