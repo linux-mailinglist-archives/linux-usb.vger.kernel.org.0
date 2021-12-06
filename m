@@ -2,102 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B394046A0CC
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 17:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 837DE46A080
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 17:03:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389570AbhLFQOF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Dec 2021 11:14:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388161AbhLFQN1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 11:13:27 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AFBC08E9B9;
-        Mon,  6 Dec 2021 07:56:01 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id d24so23546139wra.0;
-        Mon, 06 Dec 2021 07:56:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mX/SbYbQRXeq1Xuw1o88w2bN5ZHKdhZTa60t7J17Fac=;
-        b=S6Om9MvDnuVQ/9W5ez8t+9jOVzmiLEcxYJ/MqSekuyxnQmpJQ0JbpUiAtuwME/zVkv
-         PsJlvFevKamOBzq5MFXAnHKz/kIIHA5SX8KKKUVnHPnoBIQ505D0mIBNM1KGarf2eNMP
-         HvcTCD3LkdxNXig09WOxgE4uAkGXPrGUOaGqa9U42N8sKyPUEr0jnqUDnFmKUuCmTexM
-         OaUYzb8ReWpbdH2gUouQtdUoQGnelMimenWvsPFyW77WrjSVSkAgOukaogcJmOOGzh4X
-         dfYvL8VDzkEebeQgoNfic5pHcACMSpGNKQbdmgj0Lq0EqkvXMK1tBYQXOVV2WhuxouSX
-         W3rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mX/SbYbQRXeq1Xuw1o88w2bN5ZHKdhZTa60t7J17Fac=;
-        b=7ZARuzljzZyUUO8qYTfp7Ig+DgDGWaJYFRQIxx0waUkle0B3kIMk5JqzmLZ1fjdQ26
-         powkTj21z3KoIxl44hBiTnpRvwB9WZcLqm0RlWz5W0IFxlSJnXNqgO22zbUwU/suOtB9
-         f0GpRVtvsdTOpVDR3fqWpwpLhhIXui4MCdl4bN4dUhOWsIWlAYOPfB2hg+RLjNetRH3O
-         jWxqmMRzwjEPosjG/i/bXmlzDvr6QRUt3f1H3Eyg5mT3tUO5Mln6AdIwvIHNAthjpwvw
-         +sqLHtNmlHJH1QPzUvSRzYxxSrffSuVlafGZTB3YMeoe41EBbc7bwfKQJQCgVSYd7tGM
-         ZLIQ==
-X-Gm-Message-State: AOAM532mh8A4eaRR0V7xvhzK1pjDBGDS7/yt/8MicNL2yM2ZqnI27UHN
-        ta0Usa/XbQPEjpOA+3K2BGwwwcfkPAo=
-X-Google-Smtp-Source: ABdhPJwiQ2rThzXmbh3xntV+tYVqHTC/PFOalvGAOKAApF6BDQnxpyLQnMQ3bDJvr13OhRc3GQ/JgQ==
-X-Received: by 2002:a05:6000:181:: with SMTP id p1mr44754857wrx.292.1638806160478;
-        Mon, 06 Dec 2021 07:56:00 -0800 (PST)
-Received: from localhost (pd9e51d39.dip0.t-ipconnect.de. [217.229.29.57])
-        by smtp.gmail.com with ESMTPSA id d7sm11383872wrw.87.2021.12.06.07.55.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 07:55:59 -0800 (PST)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>,
-        JC Kuo <jckuo@nvidia.com>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH] dt-bindings: usb: tegra-xudc: Document interconnects and iommus properties
-Date:   Mon,  6 Dec 2021 16:55:59 +0100
-Message-Id: <20211206155559.232550-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        id S1389234AbhLFQE4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Dec 2021 11:04:56 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:48600 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1444071AbhLFQCC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 11:02:02 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B6AQR5W010379;
+        Mon, 6 Dec 2021 16:58:22 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=6j4JfF7PbNsMncG3LrQqk6YgpvQ6hOU4ElFAtx3ffEM=;
+ b=ZM9ZGLVdYE0/DUA5HJ3p9ahKRAbDyOel66t2LdNl1YNPuCcewhYtfNI4SLBXBZD5SyEB
+ p/M5p7cOE8qadKdsur5r389hh/m0as+etEIVgkQjSvjIqVRciYXsvJQDsT1x4bwbzU5l
+ YWhognaGjW22khtobrFlzCw83i5U9xcgB8pZG01Yyg3MUveK3DetQTnEEDE6PWVgMlcB
+ Acpasp71la5dl8R2ZYJrGpB8gta4AnIFJ/041lvvNL0kkzpY+zynQbiKn2tvU/xxUKag
+ FYon4hJx05n5GtaVL3Qfy7J3JT7VA9pnQtg2n4s7UzLnX11hcjs3l2mNeNVE2Zi4a43S 7w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3csb4j3dx1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 16:58:22 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2FA1510002A;
+        Mon,  6 Dec 2021 16:58:21 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 23E6820930D;
+        Mon,  6 Dec 2021 16:58:21 +0100 (CET)
+Received: from localhost (10.75.127.49) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 6 Dec 2021 16:58:20
+ +0100
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+To:     <hminas@synopsys.com>, <gregkh@linuxfoundation.org>,
+        <robh+dt@kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <devicetree@vger.kernel.org>, <amelie.delaunay@foss.st.com>,
+        <fabrice.gasnier@foss.st.com>, <alexandre.torgue@foss.st.com>
+Subject: [PATCH 0/3] usb: dwc2: drd: add support for role-switch-default-mode
+Date:   Mon, 6 Dec 2021 16:56:40 +0100
+Message-ID: <1638806203-6624-1-git-send-email-fabrice.gasnier@foss.st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-06_05,2021-12-06_02,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+This series adds support for the role-switch-default-mode binding, to configure
+the controller default mode, when the role is USB_ROLE_NONE.
 
-Add the interconnects, interconnect-names and iommus properties to the
-device tree bindings for the Tegra XUDC controller. These are used to
-describe the device's paths to and from memory.
+This has been tested on STM32MP15 DK2 board, with:
+ &usbotg_hs {
+ 	phys = <&usbphyc_port1 0>;
+ 	phy-names = "usb2-phy";
+ 	usb-role-switch;
+ 	dr_mode = "peripheral";
+ 	role-switch-default-mode = "peripheral";
+ 	status = "okay";
+ }
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml  | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+Fabrice Gasnier (3):
+  dt-bindings: usb: document role-switch-default-mode property in dwc2
+  usb: dwc2: drd: add role-switch-default-node support
+  usb: dwc2: drd: restore role and overrides upon resume
 
-diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
-index 8428415896ce..a39c76b89484 100644
---- a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
-+++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
-@@ -59,6 +59,19 @@ properties:
-       - const: fs_src
-       - const: hs_src
- 
-+  interconnects:
-+    items:
-+      - description: memory read client
-+      - description: memory write client
-+
-+  interconnect-names:
-+    items:
-+      - const: dma-mem # read
-+      - const: write
-+
-+  iommus:
-+    maxItems: 1
-+
-   power-domains:
-     items:
-       - description: XUSBB(device) power-domain
+ Documentation/devicetree/bindings/usb/dwc2.yaml |  3 ++
+ drivers/usb/dwc2/core.h                         |  3 ++
+ drivers/usb/dwc2/drd.c                          | 51 ++++++++++++++++++++++++-
+ drivers/usb/dwc2/platform.c                     | 10 +++--
+ 4 files changed, 61 insertions(+), 6 deletions(-)
+
 -- 
-2.33.1
+2.7.4
 
