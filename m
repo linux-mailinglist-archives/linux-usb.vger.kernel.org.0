@@ -2,77 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C88246A681
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 21:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A58346A8E2
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 21:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348865AbhLFUHJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Dec 2021 15:07:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
+        id S1343626AbhLFVBT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Dec 2021 16:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245430AbhLFUHI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 15:07:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02E8C061746
-        for <linux-usb@vger.kernel.org>; Mon,  6 Dec 2021 12:03:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9EF0CB81235
-        for <linux-usb@vger.kernel.org>; Mon,  6 Dec 2021 20:03:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 50EDEC341C1
-        for <linux-usb@vger.kernel.org>; Mon,  6 Dec 2021 20:03:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638821017;
-        bh=SpMU1lYx7e1eXKq1CfRFuxBnciX3R7z3J1qEApHmvKQ=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=YaQ5jIdhtjojEKn2KwWyYCzTSY6EF6EplDPGv4elji/kBqsB2Hh9Szo0kmn6dohxY
-         mnGS6VdJhTAhOL87P/txz4MGsEP1FaP5S26SYfjim/WntMkWAOG23ZdkB7G+hQBd4Q
-         2A357j2ypY+pFy9dyYa04VjM6tEOYSCQJRoofNg2bbtNDzmyYg88R/fNLKMSgWClGE
-         55+36/B2JVczUXVtPMZNjN2cNPPu7sLQ2Z6X/Wprsqnz1+ovn0toX7UnP+B2oZxTmE
-         1eaihqixNwRSIMXWJ1YY5EZno5T96oFXM8MAwygnRBPqzJWycgDk6FmQf77Wf4JD6J
-         9qNb+msDTlVWA==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 22F0961106; Mon,  6 Dec 2021 20:03:37 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215241] "usbreset" tool causes hung task on kernel 5.15.3+ with
- Hauppauge WinTV dualHD
-Date:   Mon, 06 Dec 2021 20:03:36 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mabo@elbmurf.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215241-208809-Q8jmL3Jd5f@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215241-208809@https.bugzilla.kernel.org/>
-References: <bug-215241-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S235310AbhLFVBT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 16:01:19 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE64C061746;
+        Mon,  6 Dec 2021 12:57:49 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id d72-20020a1c1d4b000000b00331140f3dc8so752621wmd.1;
+        Mon, 06 Dec 2021 12:57:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=XqvFWwjigRYg/qDFlCbBpyfLDh6E1UzrKYM9j3gZVCQ=;
+        b=Ftn5O0PU35wFEBXLBVckAjE27WQTY4606alcTMJFw3R6Vqf/E2xVyLz9SW3QS+uFLt
+         lMz1uKf3x8dEnG6ez+3zfNwb4Yqim+B+rpAE9KxmrLHxzlyz70gAB5dcHR4vZ4GHX1zz
+         uGtAzitVp4YfLTMOZ9heQs4sIwotW/A/kZDeFCl9ao0S+36882dFXcS1epO+5rSAoTI4
+         tuD43xtEdk0XAmqAoXxIvA5we40SCHpm/+d2jj53MtxP7Y0z9KEst6zHGSd6mSAYUMOX
+         P9ZW3n4m27UibC8C9keBnE6aUY4pyyBlCMQl7g8r8PDghYnwON4MQyZpMgPpY4kjgqF3
+         PjTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=XqvFWwjigRYg/qDFlCbBpyfLDh6E1UzrKYM9j3gZVCQ=;
+        b=DoMQ3bY+oiHnktB5W1LNSMG98ehu8zWHfvQm0hRcFf9boq9Gxq41bSwFTNINKolPz3
+         rRvVCTEeQoXH0I4RBlpfAU0AqgfD69SUY0UVmEui6R8CGG3zasKKwLdvwMy07CTozBpp
+         FUuj1Un1wVrdfON5Za4g6sAiLdnYUn9SqGV5weeCXOpSITSyNR8shgwkKOtqFzrR2wM/
+         zdlyPt+zad/S9ZcDAMwnf5xgKMX1tbpN+48Lsn9dpNA+R63slrGA3SgB8V9g2cpng3CI
+         NYQ3sWLjXbsQaByVFKqnNudrc2ZVbkWyS3necEeCBGWpYoGNSmrZAmR834Mk0zhkLVtg
+         z47A==
+X-Gm-Message-State: AOAM530r6Q8IikvQkBaZ0SWgb4UziHIyahx3C2+mw00FU6qU6jZXVRVt
+        Bdywo85bk8wFYXDmrENvAcM=
+X-Google-Smtp-Source: ABdhPJwTKNdFslxk89avHLfOJP4PsaFEJtAuBbfAqlcBTpeq/8UaSuhpyxREzNwU+lFpuFPTsPg1BA==
+X-Received: by 2002:a05:600c:19cc:: with SMTP id u12mr1293915wmq.24.1638824268224;
+        Mon, 06 Dec 2021 12:57:48 -0800 (PST)
+Received: from matrix-ESPRIMO-P710 (p200300c78f4e06972f325cc5fe1c0146.dip0.t-ipconnect.de. [2003:c7:8f4e:697:2f32:5cc5:fe1c:146])
+        by smtp.gmail.com with ESMTPSA id e3sm12696754wrp.8.2021.12.06.12.57.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 12:57:47 -0800 (PST)
+Date:   Mon, 6 Dec 2021 21:57:45 +0100
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
+Subject: [PATCH v3 0/5] Docs: usb: Code and text updates from usb-skeleton
+Message-ID: <cover.1638771720.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215241
+Explanation and example code updates from usb-skeleton
 
---- Comment #3 from Maximilian B=C3=B6hm (mabo@elbmurf.de) ---
-Ah, it=E2=80=99s counting "v5.1.9, v5.10", what a mess. OK, I=E2=80=99m on =
-it.
+v2: update patch #1 to #4
+    - corrected format of function names like the following example:
+      "`usb_bulk_msg` function" to "usb_bulk_msg()"
+v3: update patch #1 to #4 and created patch #5
+    - moved correction of format of function names to own patch #5
+    - reverted change of variable from retval to rv in patch #1
 
---=20
-You may reply to this email to add a comment.
+Philipp Hortmann (5):
+  Docs: usb: update usb_bulk_msg receiving example
+  Docs: usb: update comment and code near decrement our usage count for
+    the device
+  Docs: usb: update comment and code of function skel_delete
+  Docs: usb: update explanation for device_present to disconnected
+  Docs: usb: correct format of function names in the explanations
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+ .../driver-api/usb/writing_usb_driver.rst     | 69 +++++++++----------
+ 1 file changed, 33 insertions(+), 36 deletions(-)
+
+-- 
+2.25.1
+
