@@ -2,77 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02AD846A3D6
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 19:17:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A209B46A3F3
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 19:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238736AbhLFSUo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Dec 2021 13:20:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
+        id S1346242AbhLFS2v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Dec 2021 13:28:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbhLFSUm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 13:20:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7C9C061746
-        for <linux-usb@vger.kernel.org>; Mon,  6 Dec 2021 10:17:13 -0800 (PST)
+        with ESMTP id S233956AbhLFS2s (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 13:28:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D1BC061746;
+        Mon,  6 Dec 2021 10:25:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 263FAB811C0
-        for <linux-usb@vger.kernel.org>; Mon,  6 Dec 2021 18:17:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C6195C341C7
-        for <linux-usb@vger.kernel.org>; Mon,  6 Dec 2021 18:17:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638814630;
-        bh=CXQjMLQlWfqXv0Yx61Jr4eRU6igY/S47/39LJNsxNBA=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=YxJs2Xqvxn+Kjh/I8I4xlqryxB8DbPkxpAss6BbqJey9nV1pAmjS7YIFrx0X61jGL
-         fxDq8m7tGdP9+pwmnRxaukF6+W8H5z+sHeW59cCufeqHPlRDh/0RFQKN2islwrh5Sr
-         nEneU0zXtD0v+a0PTiDsdIkVwyjaVg6mwiYkNQ2T8VHBXHBYrfiF+7jhrJAHUCo68b
-         WVBhUR8JqBVj8r8GP2b5dVvB4LIiHOBGXQpKl8XC/8qxQYyitO8GL0M47kyjFzhRXL
-         cfGbQxTR1EWqYlir2svc94CxyLE1PnUe1lsDDvNlntiH/rEUgMUVOW0WcFM1axdJbH
-         vb9Q21P9Nlayg==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 9459061106; Mon,  6 Dec 2021 18:17:10 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215241] "usbreset" tool causes hung task on kernel 5.15.3+ with
- Hauppauge WinTV dualHD
-Date:   Mon, 06 Dec 2021 18:17:10 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215241-208809-HwZ5cKdgdB@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215241-208809@https.bugzilla.kernel.org/>
-References: <bug-215241-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        by sin.source.kernel.org (Postfix) with ESMTPS id 39629CE176D;
+        Mon,  6 Dec 2021 18:25:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BC7AC341C5;
+        Mon,  6 Dec 2021 18:25:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638815116;
+        bh=C+LpyN3FeznjnkrZjjleBRY72hCeq5EaNtgU0yH4WMU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MPg8KKuEXYfjgjQObgiJ5hCizRldL5h5LqkxFsdBYbKyu/M6tdBX47Dgm9S+2QtUp
+         ZOaL4e4sR/8224FDWfgApfYhkONXQAdmtwObdCkvDArXsK6wiZdWrr9a6g0rlx5RxC
+         kepcF3CQAyKOuZQlfvtu2GQFADSeUHsw9zNXQOog=
+Date:   Mon, 6 Dec 2021 19:25:09 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: Add missing properties used in examples
+Message-ID: <Ya5VhX8TA0LBn4Qd@kroah.com>
+References: <20211206174113.2295616-1-robh@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206174113.2295616-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215241
+On Mon, Dec 06, 2021 at 11:41:12AM -0600, Rob Herring wrote:
+> With 'unevaluatedProperties' support implemented, the following warnings
+> are generated in the usb examples:
+> 
+> Documentation/devicetree/bindings/usb/intel,keembay-dwc3.example.dt.yaml: usb: usb@34000000: Unevaluated properties are not allowed ('reg' was unexpected)
+> Documentation/devicetree/bindings/usb/snps,dwc3.example.dt.yaml: usb@4a030000: Unevaluated properties are not allowed ('reg' was unexpected)
+> 
+> Add the missing property definitions.
+> 
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/usb/intel,keembay-dwc3.yaml         | 3 +++
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml        | 6 ++++++
+>  2 files changed, 9 insertions(+)
 
---- Comment #1 from Alan Stern (stern@rowland.harvard.edu) ---
-You can try using "git bisect" to find the commit which caused this bad
-behavior.
+Do you want me to take these in my tree?  If not, you can take them in
+yours:
+	Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
---=20
-You may reply to this email to add a comment.
+Which ever is easier for you.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+greg k-h
