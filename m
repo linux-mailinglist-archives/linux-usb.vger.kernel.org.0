@@ -2,131 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 593184690DB
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 08:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 866764690EA
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 08:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238477AbhLFHhx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Dec 2021 02:37:53 -0500
-Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:43067 "EHLO
-        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229652AbhLFHhw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 02:37:52 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id D44622B003E0;
-        Mon,  6 Dec 2021 02:34:22 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 06 Dec 2021 02:34:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=ahVbRPtgK6zyE1CRjavNA8Lh+DG
-        /eli+vLgP5Zg/460=; b=A5rjyKZqxudfeUu4zvNpprGYDDuMqfCZW6HelU52vpr
-        beCEG6u+dxklGFeSFYf6LIYouUNLU5v71DEGk0EaTpJj6Weahbubn4WZG3cTWuaV
-        yZOZRdgkVrpRlNVejypSyuLxBCe6zzWy3F9mvRJ5c0to61/QPJF/h+9bESnhzwlp
-        4A19cLdZZ8Qbk/HxcxU4tB1V5uapMrfWM+Vw7b1ip9kBYecksnBEfYWIIBLOD7g9
-        DG0CNZ+ttkFr10nEtVTvj1Rf1t6wvuljynMgsme8KDqGuldm2nKZ9vrxcOUofr9C
-        t7ik0HPSOSZJ6jRsrG2BLjO0ZPIZbLZr3GBteOCHEjQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=ahVbRP
-        tgK6zyE1CRjavNA8Lh+DG/eli+vLgP5Zg/460=; b=TlbtEzaYC0Q0ToGCUZI5ou
-        bR5yQpGmi1lbeNYvQaS1sdD3ukxr3netwbQ0u1kKHJop0Sno/j/DUbDJZcP695QN
-        3c7jw7T2Kb6MXPMsTX2vjRvwMYYSnnte//lLBw2lkabnscqUnSfSvGq7+9e7Wy6A
-        H9/mZaUTfagMckdz+so0FqSo4pBbLIrN14T2HTaKH6pEG2A2QsFh/yO5wvbbFNIg
-        GSTjWvur0QXbDKNXSvD2/1cII4Xpmjq1syXj72mF/6Y8cYvXM+6ewFZ8j2U+AWyR
-        ONxc7yLkIh5vx41xrPYqT/xHNAYClA062RnrjZP2VMN3IWUfMBDdW3bOHkDXNl3g
-        ==
-X-ME-Sender: <xms:_rytYfzlPd0xqg4x7pA8oV6XFHLqzjBQxGiYYt3jvsSNPLnIexiNAw>
-    <xme:_rytYXRwQaSNfl3xbp7fwwPqhJqEaTNyTlDje6xUEY_P3FjDS9UF54GfumL3VATBu
-    J1R7MCljt4g6g>
-X-ME-Received: <xmr:_rytYZVxNfWiYqZBI-Q14HQl5Cztj9D8HqnL5_9HYJpkZWMJpcGILKU61QrGzxrmR54ierl1H26k0MW2L9wLhdlbvL7IEzDw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrjedvgddutdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:_rytYZimDJyyUssVFPOidy6ZMU4IQRbM3I2tNdXXR4Sq6liWjkeeWQ>
-    <xmx:_rytYRBDc28DA9d1_46gkBlnLmXCykLayE6cipNAALPTRd86tQ56fg>
-    <xmx:_rytYSKK-jXqKE1wLyoKv7fajqjyPb9Ou-cAnqk37jWKhHVPaG3HKQ>
-    <xmx:_rytYV65cCaCG2GrS8zuy_4TyORnEB8jb8X5RiKh9Wij066aOjI-sn36Ieg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 6 Dec 2021 02:34:21 -0500 (EST)
-Date:   Mon, 6 Dec 2021 08:34:17 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Michael Grzeschik <mgr@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
-        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
-        kernel@pengutronix.de
-Subject: Re: [PATCH] usb: gadget: uvc: use pump call conditionally
-Message-ID: <Ya28+RJGvqT8s8nw@kroah.com>
-References: <20211202005852.3538102-1-m.grzeschik@pengutronix.de>
- <YaoTpQ0nNa+sUQ/y@kroah.com>
- <20211205214958.GB31430@pengutronix.de>
+        id S238561AbhLFHvR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Dec 2021 02:51:17 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57328 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237150AbhLFHvR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 02:51:17 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F51C6117B;
+        Mon,  6 Dec 2021 07:47:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EEDAC341C1;
+        Mon,  6 Dec 2021 07:47:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638776868;
+        bh=1tjNuHEY1D3f4gT+xgEa586VTk6XmE+eqdouKLZ1O7A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M7mLgCm6BrAps0JqDF3QLloUkkK/2qsSBCWVCOxZ3GuNCd1EK5Z7JD8JOD/YrDHEO
+         zfhq1z4IMOiEDXPitP7fwLwNJt6J93jcfW7BmDzXrOlGdnhsXQ1jOQkSrg23w2GR2y
+         aY/btjL6KDNuCy281Xi0bUPLDB7Jf9GoKEsaeSD4=
+Date:   Mon, 6 Dec 2021 08:47:43 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] Docs: usb: update usb_bulk_msg receiving example
+Message-ID: <Ya3AHxw48/T3XnPv@kroah.com>
+References: <cover.1638630342.git.philipp.g.hortmann@gmail.com>
+ <0bd9336e18abad338b4967664a4667b96dae6be6.1638630342.git.philipp.g.hortmann@gmail.com>
+ <Yayb6+SrQKUG4bDl@kroah.com>
+ <f3a1b2ba-85fe-e829-0d11-07a4bc4d8756@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211205214958.GB31430@pengutronix.de>
+In-Reply-To: <f3a1b2ba-85fe-e829-0d11-07a4bc4d8756@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Dec 05, 2021 at 10:49:58PM +0100, Michael Grzeschik wrote:
-> On Fri, Dec 03, 2021 at 01:55:01PM +0100, Greg KH wrote:
-> > On Thu, Dec 02, 2021 at 01:58:52AM +0100, Michael Grzeschik wrote:
-> > > Preparing the usb request is not very expensive, when using
-> > > scatter gather. In that case we can even remove the overhead
-> > > of the extra pump worker and call the pump function directly.
+On Sun, Dec 05, 2021 at 06:04:48PM +0100, Philipp Hortmann wrote:
+> On 12/5/21 12:00 PM, Greg KH wrote:
+> > On Sat, Dec 04, 2021 at 05:35:11PM +0100, Philipp Hortmann wrote:
+> > > Clarification that this example is not in the driver template anymore.
+> > > Update code example so that it fits best to usb-skeleton.c
+> > > Update format of function names
 > > > 
-> > > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> > > Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 > > > ---
-> > >  drivers/usb/gadget/function/uvc_v4l2.c  |  8 +++++--
-> > >  drivers/usb/gadget/function/uvc_video.c | 28 +++++++++++++++++++------
-> > >  drivers/usb/gadget/function/uvc_video.h |  2 ++
-> > >  3 files changed, 30 insertions(+), 8 deletions(-)
+> > > V1 -> V2: Added "Update format of function names" to patch description
+> > >            Corrected format of function names like the following example:
+> > >            "`usb_bulk_msg` function" to "usb_bulk_msg()"
+> > > ---
+> > >   .../driver-api/usb/writing_usb_driver.rst     | 32 +++++++++----------
+> > >   1 file changed, 16 insertions(+), 16 deletions(-)
 > > > 
-> > > diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-> > > index a2c78690c5c288..020b4adc7840e0 100644
-> > > --- a/drivers/usb/gadget/function/uvc_v4l2.c
-> > > +++ b/drivers/usb/gadget/function/uvc_v4l2.c
-> > > @@ -169,8 +169,12 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v4l2_buffer *b)
-> > >  	if (ret < 0)
-> > >  		return ret;
-> > > 
-> > > -	if (uvc->state == UVC_STATE_STREAMING)
-> > > -		schedule_work(&video->pump);
-> > > +	if (uvc->state == UVC_STATE_STREAMING) {
-> > > +		if (!video->queue.use_sg)
-> > > +			schedule_work(&video->pump);
-> > > +		else
-> > > +			uvcg_video_pump(video);
+> > > diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
+> > > index b43e1ce49f0e..ed11398837e5 100644
+> > > --- a/Documentation/driver-api/usb/writing_usb_driver.rst
+> > > +++ b/Documentation/driver-api/usb/writing_usb_driver.rst
+> > > @@ -218,36 +218,36 @@ do very much processing at that time. Our implementation of
+> > >   ``skel_write_bulk_callback`` merely reports if the urb was completed
+> > >   successfully or not and then returns.
+> > > -The read function works a bit differently from the write function in
+> > > +This read function works a bit differently from the write function in
+> > >   that we do not use an urb to transfer data from the device to the
+> > > -driver. Instead we call the :c:func:`usb_bulk_msg` function, which can be used
+> > > +driver. Instead we call usb_bulk_msg(), which can be used
+> > >   to send or receive data from a device without having to create urbs and
+> > > -handle urb completion callback functions. We call the :c:func:`usb_bulk_msg`
+> > > -function, giving it a buffer into which to place any data received from
+> > > +handle urb completion callback functions. We call usb_bulk_msg(),
+> > > +giving it a buffer into which to place any data received from
+> > >   the device and a timeout value. If the timeout period expires without
+> > >   receiving any data from the device, the function will fail and return an
+> > >   error message. This can be shown with the following code::
+> > >       /* do an immediate bulk read to get data from the device */
+> > > -    retval = usb_bulk_msg (skel->dev,
+> > > -			   usb_rcvbulkpipe (skel->dev,
+> > > -			   skel->bulk_in_endpointAddr),
+> > > -			   skel->bulk_in_buffer,
+> > > -			   skel->bulk_in_size,
+> > > -			   &count, 5000);
+> > > +    rv = usb_bulk_msg(dev->udev,
 > > 
-> > Wouldn't it be easier to understand this if you flip the if test around:
-> > 		if (video->queue.use_sg)
-> > 			uvcg_video_pump(video);
-> > 		else
-> > 			schedule_work(&video->pump);
-> > ?
-> > 
-> > Negagive logic is never fun to read...
-> 
-> Yes, you are not wrong.
-> 
-> > Also, are you sure that sg really is not expensive on all systems?  What
-> > did you test this on, and what was the results?
-> 
-> I tested it on an zynqmp arm64 machine. I tried to test the sg case on
-> an 32 bit IMX with chipidea, but the driver was complaining a lot about
-> "not page aligned sg buffers". So if needed, I would first need to find
-> a working machine to compare this with.
-> 
-> However I would think that assigning some pointers on a scatterlist
-> instead of doing memcpy of 1024 bytes should be less expensive.
+> > Why are you changing the varible name?  That seems unnecessary.
+> Reason is that retval does not exist in skel_read().
 
-Not true on many systems, memcpy can be _very_ fast, especially for
-small amounts like 1024 bytes.  So please, measure this to be sure.
+Neither does any call to usb_bulk_msg().  So this is not code that is
+from that file at all.  "retval" is easier to understand than "rv".
+
+> > Also, any reason you aren't cc:ing the USB maintainer on these changes?  :)
+> According to:
+> perl scripts/get_maintainer.pl --separator , --nokeywords --nogit
+> --nogit-fallback --norolestats -f
+> Documentation/driver-api/usb/writing_usb_driver.rst
+> Jonathan Corbet
+> <corbet@lwn.net>,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org
+> you are not in charge.
+
+Ah, documentation isn't added to the maintainers entry for USB, I'll go
+fix that up...
+
+But note, my name is at the top of that file still, right?
 
 thanks,
 
