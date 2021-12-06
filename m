@@ -2,113 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 866764690EA
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 08:47:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F5A4692E0
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 10:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238561AbhLFHvR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Dec 2021 02:51:17 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57328 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237150AbhLFHvR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 02:51:17 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F51C6117B;
-        Mon,  6 Dec 2021 07:47:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EEDAC341C1;
-        Mon,  6 Dec 2021 07:47:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638776868;
-        bh=1tjNuHEY1D3f4gT+xgEa586VTk6XmE+eqdouKLZ1O7A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M7mLgCm6BrAps0JqDF3QLloUkkK/2qsSBCWVCOxZ3GuNCd1EK5Z7JD8JOD/YrDHEO
-         zfhq1z4IMOiEDXPitP7fwLwNJt6J93jcfW7BmDzXrOlGdnhsXQ1jOQkSrg23w2GR2y
-         aY/btjL6KDNuCy281Xi0bUPLDB7Jf9GoKEsaeSD4=
-Date:   Mon, 6 Dec 2021 08:47:43 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] Docs: usb: update usb_bulk_msg receiving example
-Message-ID: <Ya3AHxw48/T3XnPv@kroah.com>
-References: <cover.1638630342.git.philipp.g.hortmann@gmail.com>
- <0bd9336e18abad338b4967664a4667b96dae6be6.1638630342.git.philipp.g.hortmann@gmail.com>
- <Yayb6+SrQKUG4bDl@kroah.com>
- <f3a1b2ba-85fe-e829-0d11-07a4bc4d8756@gmail.com>
+        id S241355AbhLFJrI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Dec 2021 04:47:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236288AbhLFJrH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 04:47:07 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC83C061746
+        for <linux-usb@vger.kernel.org>; Mon,  6 Dec 2021 01:43:39 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id m25so10170428qtq.13
+        for <linux-usb@vger.kernel.org>; Mon, 06 Dec 2021 01:43:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=ttyGAnC6DkJUu9yUKghQOutRdQihW4nBSca09uaHzXk=;
+        b=J3QQNo7LYQDVH4LHzkQVwWlfFQHWoeaSe+rVLbZl+FJAWAe6IANiSOuIpP46VSIN7Q
+         rpTLLUlah7UKslEia88Jcz6L8wOsa/KiASXFt3TKY41tMbGK9uRv2DlBLakphHnwSs1Q
+         7fEo/pLm8C2mbEFCo+39qk7ZOUmxoYOai8JENJnwh28irekcrd3VLcusRSizoAx774k5
+         +xPcE1eFaAEVzxhVXbYv21EBKlFBOJWzblhnyM4n1XdNTah15s0WR6BJq1+Ut3jXGoy6
+         a1+jsFrqj3QUyvJYbps/1HQBTS/PkFT/lSBTCeLaqYaLxx/2im/biD2rwzrdFj00ZEEk
+         XsWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=ttyGAnC6DkJUu9yUKghQOutRdQihW4nBSca09uaHzXk=;
+        b=Y6JbIxOvYI76G7tvgYH5XFK87EiAzypgxUYVcTi6JtspuTpUrxz+3XMMVprpdQWFuA
+         M2K5lCkkcy5aaceHqUb1dTqfQEyfQx2OcB00IOxNzRJhdhP8+uQP+GzQ5pmX/hK6/5d1
+         Ujb+DXHqn6PpIMjBf8QFoY5WCqszDLk9ukDTcuv5BIJkyd9mGgxYVVGbqd7sMUgSwGY8
+         Uf4yH8/Wye8ZxbVycW6YQvHwmNsfKhaCGieRWV54vJxLEr7qRiUKiEJ+f9fi0t+5Ck40
+         se5q4nAqw88RmCr9olRpk8pm0v1uD/H+xOfCzh19BehtME98agYNvCAj/Aml2l0YqJFX
+         yAhw==
+X-Gm-Message-State: AOAM530RGl4hAVXF8QJUQKidJHbVR2n6FgKy8lavFiJhZaSj/sAfjPvt
+        tvJJm+21k+F8gjeRazPKtZMyxqdakdNdY8gsTl4=
+X-Google-Smtp-Source: ABdhPJy9NPfZkuZug+hMQhSYmIfa5g6SJRH+rwcGPgM+0ziriZ1Buj80w/vc6xol871nFiD62bzeaYl7mX8kuQvQm1w=
+X-Received: by 2002:ac8:5f93:: with SMTP id j19mr38038026qta.596.1638783818212;
+ Mon, 06 Dec 2021 01:43:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f3a1b2ba-85fe-e829-0d11-07a4bc4d8756@gmail.com>
+Received: by 2002:a05:620a:4053:0:0:0:0 with HTTP; Mon, 6 Dec 2021 01:43:37
+ -0800 (PST)
+Reply-To: mrsbastienmarion@gmail.com
+From:   Mrs Bastien Marion <kaborehamidou727@gmail.com>
+Date:   Mon, 6 Dec 2021 09:43:37 +0000
+Message-ID: <CAPAG0g2GGxARjxYfaOyc_nTJ9V-3oZQcj4T1mf9+gk-A6vq6Kw@mail.gmail.com>
+Subject: Greetings, this is humanitarian work
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Dec 05, 2021 at 06:04:48PM +0100, Philipp Hortmann wrote:
-> On 12/5/21 12:00 PM, Greg KH wrote:
-> > On Sat, Dec 04, 2021 at 05:35:11PM +0100, Philipp Hortmann wrote:
-> > > Clarification that this example is not in the driver template anymore.
-> > > Update code example so that it fits best to usb-skeleton.c
-> > > Update format of function names
-> > > 
-> > > Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
-> > > ---
-> > > V1 -> V2: Added "Update format of function names" to patch description
-> > >            Corrected format of function names like the following example:
-> > >            "`usb_bulk_msg` function" to "usb_bulk_msg()"
-> > > ---
-> > >   .../driver-api/usb/writing_usb_driver.rst     | 32 +++++++++----------
-> > >   1 file changed, 16 insertions(+), 16 deletions(-)
-> > > 
-> > > diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
-> > > index b43e1ce49f0e..ed11398837e5 100644
-> > > --- a/Documentation/driver-api/usb/writing_usb_driver.rst
-> > > +++ b/Documentation/driver-api/usb/writing_usb_driver.rst
-> > > @@ -218,36 +218,36 @@ do very much processing at that time. Our implementation of
-> > >   ``skel_write_bulk_callback`` merely reports if the urb was completed
-> > >   successfully or not and then returns.
-> > > -The read function works a bit differently from the write function in
-> > > +This read function works a bit differently from the write function in
-> > >   that we do not use an urb to transfer data from the device to the
-> > > -driver. Instead we call the :c:func:`usb_bulk_msg` function, which can be used
-> > > +driver. Instead we call usb_bulk_msg(), which can be used
-> > >   to send or receive data from a device without having to create urbs and
-> > > -handle urb completion callback functions. We call the :c:func:`usb_bulk_msg`
-> > > -function, giving it a buffer into which to place any data received from
-> > > +handle urb completion callback functions. We call usb_bulk_msg(),
-> > > +giving it a buffer into which to place any data received from
-> > >   the device and a timeout value. If the timeout period expires without
-> > >   receiving any data from the device, the function will fail and return an
-> > >   error message. This can be shown with the following code::
-> > >       /* do an immediate bulk read to get data from the device */
-> > > -    retval = usb_bulk_msg (skel->dev,
-> > > -			   usb_rcvbulkpipe (skel->dev,
-> > > -			   skel->bulk_in_endpointAddr),
-> > > -			   skel->bulk_in_buffer,
-> > > -			   skel->bulk_in_size,
-> > > -			   &count, 5000);
-> > > +    rv = usb_bulk_msg(dev->udev,
-> > 
-> > Why are you changing the varible name?  That seems unnecessary.
-> Reason is that retval does not exist in skel_read().
+I'AM SUFFERING FROM CANCER OF THE HEART
 
-Neither does any call to usb_bulk_msg().  So this is not code that is
-from that file at all.  "retval" is easier to understand than "rv".
+Dear Friend.
 
-> > Also, any reason you aren't cc:ing the USB maintainer on these changes?  :)
-> According to:
-> perl scripts/get_maintainer.pl --separator , --nokeywords --nogit
-> --nogit-fallback --norolestats -f
-> Documentation/driver-api/usb/writing_usb_driver.rst
-> Jonathan Corbet
-> <corbet@lwn.net>,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org
-> you are not in charge.
+Greetings to you in the name of the Lord God Almighty am Mrs Bastien Marion
+From (Paris) France, but am based in Burkina Faso Africa for eight
+years now as a business woman dealing on gold exportation and cotton
+Sales. But I have been suffering from this deadly disease called
+cancer for long and the doctor just said I have just few weeks to
+live.
 
-Ah, documentation isn't added to the maintainers entry for USB, I'll go
-fix that up...
+I know it will be difficult for you to believe my story now,
+but this is the situation I found myself in, it=E2=80=99s not my desire to =
+be
+on a sick bed today but God knows best,
 
-But note, my name is at the top of that file still, right?
+Now that I am about to end the race like this, without any family
+Members and no child. I have $6.8 Million US DOLLARS in BANK OF AFRICA
+(B.O.A) Burkina Faso it=E2=80=99s all my life savings, I instructed the Ban=
+k
+to give it to St Andrews Missionary and Home Kizito Orphanage in
+Burkina Faso. But my mind is not at rest because i do not trust them,
+I am writing this letter now through the help of my computer beside my
+sick bed.
 
-thanks,
+I will instruct the bank to transfer this fund to you as a foreigner
+but you have to promise me that you will take 40 Percent(%) of the
+total money for your personal use While 60 Percent (%) of the money
+will go to charity, Orphanage and less Privileges" people in the
+street and helping the Needy. I grew up as an Orphan and I don't have
+anybody as my family member, just to Endeavour that the house of God
+is maintained. Am doing this so that God will forgive my sins and
+accept my soul because this sickness has suffered me so much.
 
-greg k-h
+As soon as I receive your reply I shall give you the contact of the
+bank and I will also instruct my Bank Manager to issue you an
+authority letter that will prove you the present beneficiary of the
+money in the bank that is if you assure me that you will act
+accordingly as I Stated herein.
+
+I look forward to getting a reply from you.
+
+Thanks and God bless you,
+Mrs Bastien Marion.
