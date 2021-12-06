@@ -2,133 +2,212 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3EC46A8F9
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 21:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F0F46A933
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 22:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350030AbhLFVBz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Dec 2021 16:01:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350115AbhLFVBr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 16:01:47 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B411C061D60;
-        Mon,  6 Dec 2021 12:58:18 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id i5so25092035wrb.2;
-        Mon, 06 Dec 2021 12:58:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DK4hAvvrL0g/m+zIiQELRMmxA9g3fGN68aSymQFpmw4=;
-        b=ns+q3Q5a/YFhnnV6OVF+Mt3rUmr9uxUqqFynmSsthxdw9baWp1zLvrtmq2p5CHftOV
-         M+7f1l6wrmMQyHblMftzJnSeGXh++0iiymEaqZ9TkqnGyxzpdhZGU7rEj1Zyp5H2FLDc
-         grQd1lN/zGijD2p+r8brP/JZaAB49ZhBkfWIiB+KcQphK2LpzrY9G8XFFQHD8tZqwXY+
-         hycl6tWZMSPLYXpqGHZWA0AJtaIShzSKUmQg917UdzCOe1aMKmUAxc2dhWvVthKSDIkK
-         5em8JyL+2RhW7hQHDVGp1JPG6WVvTXoOM1YqCEvD9GOtMQjEAreFdRs8vAWksKSoQcqu
-         Cmyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DK4hAvvrL0g/m+zIiQELRMmxA9g3fGN68aSymQFpmw4=;
-        b=KvDoR4ODh5Frgnx0+h0+6JSO1xNYp/1qz9U2HzZALkgJ48eGgS4KrBNoUwMFR8oPSF
-         UoK+/MRRwmwMiO2gyl5nW/mxyrWlvLoD8xxpgaLRpqYczjJ0+l3XWULGc7PDlybfApky
-         EFFElAojwFBSDSr/wmOk+4H93qAozaoQ0JOue/MENVaHnO3zvKiUCuVyyYJtJPfR3ZAC
-         Hwg/eGQWGLy+ZDNj66JJnVbx71Rm6IckenHDmgmNMsSgO9ss5q106lA4cSkj4rxFuS5U
-         K8crGVjE3GSB8cRXD5lZjseR4uxbJboSyzXAu3OFH1qfvW34d9odeRwJs/Jn5Ovw+7Ub
-         5GcQ==
-X-Gm-Message-State: AOAM533zOXXq8WepcHatAaaFOGpCVZyWfomh9/PFQ9a1JI8Y9h2T7h1y
-        G+wvgpfRUOxQ+we5AbtVofE=
-X-Google-Smtp-Source: ABdhPJwnO0TTqOoGSYCkB3lOmDvLnLodImOh+yQ3A1lfhP6Q0C/PqnUKVp5NE/Atd4UObejQZ5WWlA==
-X-Received: by 2002:adf:e747:: with SMTP id c7mr46458155wrn.38.1638824297093;
-        Mon, 06 Dec 2021 12:58:17 -0800 (PST)
-Received: from matrix-ESPRIMO-P710 (p200300c78f4e06972f325cc5fe1c0146.dip0.t-ipconnect.de. [2003:c7:8f4e:697:2f32:5cc5:fe1c:146])
-        by smtp.gmail.com with ESMTPSA id az15sm454600wmb.0.2021.12.06.12.58.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 12:58:16 -0800 (PST)
-Date:   Mon, 6 Dec 2021 21:58:14 +0100
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
-Subject: [PATCH v3 5/5] Docs: usb: correct format of function names in the
- explanations
-Message-ID: <6ef296c812baabd973e5ae7b661b1620d5fd45be.1638771720.git.philipp.g.hortmann@gmail.com>
-References: <cover.1638771720.git.philipp.g.hortmann@gmail.com>
+        id S1350188AbhLFVOQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Dec 2021 16:14:16 -0500
+Received: from mga12.intel.com ([192.55.52.136]:45030 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350185AbhLFVOQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 6 Dec 2021 16:14:16 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="217432076"
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="217432076"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 13:10:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="460980570"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 06 Dec 2021 13:10:19 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1muLFb-000Lkg-8U; Mon, 06 Dec 2021 21:10:19 +0000
+Date:   Tue, 07 Dec 2021 05:09:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ d598c3c46ea69ea974f0613a651cd4ef3be0c870
+Message-ID: <61ae7c1e.uegLUDJfUbThC2aG%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1638771720.git.philipp.g.hortmann@gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Correct format of function names like the following example:
-      "`usb_bulk_msg` function" to "usb_bulk_msg()"
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: d598c3c46ea69ea974f0613a651cd4ef3be0c870  Merge 5.16-rc4 into usb-next
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+possible Warning in current branch (please contact us if interested):
+
+drivers/usb/gadget/udc/at91_udc.h:174:42: warning: format '%d' expects argument of type 'int', but argument 3 has type 'struct gpio_desc *' [-Wformat=]
+
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- arm-allmodconfig
+|   `-- drivers-usb-gadget-udc-at91_udc.h:warning:format-d-expects-argument-of-type-int-but-argument-has-type-struct-gpio_desc
+`-- arm-allyesconfig
+    `-- drivers-usb-gadget-udc-at91_udc.h:warning:format-d-expects-argument-of-type-int-but-argument-has-type-struct-gpio_desc
+
+elapsed time: 721m
+
+configs tested: 142
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm64                               defconfig
+arm64                            allyesconfig
+i386                 randconfig-c001-20211206
+arm                             ezx_defconfig
+arc                              alldefconfig
+arm                       multi_v4t_defconfig
+ia64                         bigsur_defconfig
+sh                          r7780mp_defconfig
+powerpc                     tqm5200_defconfig
+powerpc                     asp8347_defconfig
+arm                            xcep_defconfig
+sh                           se7750_defconfig
+powerpc                      chrp32_defconfig
+sh                          urquell_defconfig
+sh                           se7751_defconfig
+mips                            gpr_defconfig
+um                             i386_defconfig
+mips                     cu1830-neo_defconfig
+arm                        magician_defconfig
+riscv                    nommu_virt_defconfig
+arm                       cns3420vb_defconfig
+sparc64                             defconfig
+m68k                            mac_defconfig
+arm                        multi_v5_defconfig
+arm                          ixp4xx_defconfig
+powerpc                      pcm030_defconfig
+powerpc                     pq2fads_defconfig
+mips                     loongson1b_defconfig
+um                                  defconfig
+arm                       imx_v4_v5_defconfig
+arm                           sama7_defconfig
+arm                            zeus_defconfig
+sh                               alldefconfig
+arm                         vf610m4_defconfig
+arm                      integrator_defconfig
+arm                        multi_v7_defconfig
+arc                      axs103_smp_defconfig
+powerpc                     ep8248e_defconfig
+parisc                generic-64bit_defconfig
+microblaze                          defconfig
+xtensa                generic_kc705_defconfig
+arm                           corgi_defconfig
+sh                   sh7724_generic_defconfig
+powerpc               mpc834x_itxgp_defconfig
+arm                           sama5_defconfig
+h8300                    h8300h-sim_defconfig
+arm                         orion5x_defconfig
+sh                   secureedge5410_defconfig
+i386                                defconfig
+sh                           se7705_defconfig
+um                           x86_64_defconfig
+arm                            mps2_defconfig
+openrisc                  or1klitex_defconfig
+powerpc                      ep88xc_defconfig
+arm                         bcm2835_defconfig
+powerpc                      pasemi_defconfig
+powerpc                 mpc8560_ads_defconfig
+mips                        qi_lb60_defconfig
+arm                     eseries_pxa_defconfig
+sh                            hp6xx_defconfig
+mips                          ath79_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                     sh7710voipgw_defconfig
+arm                          collie_defconfig
+arm                  randconfig-c002-20211206
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                             allmodconfig
+s390                                defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allmodconfig
+mips                             allyesconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a016-20211206
+x86_64               randconfig-a011-20211206
+x86_64               randconfig-a013-20211206
+x86_64               randconfig-a014-20211206
+x86_64               randconfig-a012-20211206
+x86_64               randconfig-a015-20211206
+i386                 randconfig-a016-20211206
+i386                 randconfig-a013-20211206
+i386                 randconfig-a011-20211206
+i386                 randconfig-a014-20211206
+i386                 randconfig-a012-20211206
+i386                 randconfig-a015-20211206
+arc                  randconfig-r043-20211206
+riscv                randconfig-r042-20211206
+s390                 randconfig-r044-20211206
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a006-20211206
+x86_64               randconfig-a005-20211206
+x86_64               randconfig-a001-20211206
+x86_64               randconfig-a002-20211206
+x86_64               randconfig-a004-20211206
+x86_64               randconfig-a003-20211206
+i386                 randconfig-a001-20211206
+i386                 randconfig-a005-20211206
+i386                 randconfig-a002-20211206
+i386                 randconfig-a003-20211206
+i386                 randconfig-a006-20211206
+i386                 randconfig-a004-20211206
+hexagon              randconfig-r045-20211206
+hexagon              randconfig-r041-20211206
+
 ---
- .../driver-api/usb/writing_usb_driver.rst     | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
-
-diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
-index 1968cf5c55f6..9f4181cafc41 100644
---- a/Documentation/driver-api/usb/writing_usb_driver.rst
-+++ b/Documentation/driver-api/usb/writing_usb_driver.rst
-@@ -220,10 +220,10 @@ successfully or not and then returns.
- 
- This read function works a bit differently from the write function in
- that we do not use an urb to transfer data from the device to the
--driver. Instead we call the :c:func:`usb_bulk_msg` function, which can be used
-+driver. Instead we call usb_bulk_msg(), which can be used
- to send or receive data from a device without having to create urbs and
--handle urb completion callback functions. We call the :c:func:`usb_bulk_msg`
--function, giving it a buffer into which to place any data received from
-+handle urb completion callback functions. We call usb_bulk_msg(),
-+giving it a buffer into which to place any data received from
- the device and a timeout value. If the timeout period expires without
- receiving any data from the device, the function will fail and return an
- error message. This can be shown with the following code::
-@@ -244,13 +244,13 @@ error message. This can be shown with the following code::
-     }
- 
- 
--The :c:func:`usb_bulk_msg` function can be very useful for doing single reads
-+usb_bulk_msg() can be very useful for doing single reads
- or writes to a device; however, if you need to read or write constantly to
- a device, it is recommended to set up your own urbs and submit them to
- the USB subsystem. The template uses urbs for read and write.
- 
- When the user program releases the file handle that it has been using to
--talk to the device, the release function in the driver is called. In
-+talk to the device, skel_release() in the driver is called. In
- this function we decrement our private usage count and wait for possible
- pending writes::
- 
-@@ -262,9 +262,8 @@ One of the more difficult problems that USB drivers must be able to
- handle smoothly is the fact that the USB device may be removed from the
- system at any point in time, even if a program is currently talking to
- it. It needs to be able to shut down any current reads and writes and
--notify the user-space programs that the device is no longer there. The
--following code (function ``skel_delete``) is an example of how to do
--this::
-+notify the user-space programs that the device is no longer there.
-+skel_delete() is an example of how to do this::
- 
-     static void skel_delete(struct kref *kref)
-     {
-@@ -283,8 +282,8 @@ is initialized and set to false. For every read, write and other
- functions that expect a device to be present, the driver first checks
- this flag to see if the device is still present. If not, a ``-ENODEV``
- error is returned to the user-space program. When the device is
--disconnected, the ``skel_disconnect`` function is called. It sets
--``disconnected`` to true and cleans up.
-+disconnected, skel_disconnect() is called. It sets ``disconnected``
-+to true and cleans up.
- 
- Isochronous Data
- ================
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
