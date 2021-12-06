@@ -2,94 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D26468E37
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 01:14:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7868468E72
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Dec 2021 02:06:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241438AbhLFASL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 Dec 2021 19:18:11 -0500
-Received: from gate.crashing.org ([63.228.1.57]:44188 "EHLO gate.crashing.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229567AbhLFASL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 5 Dec 2021 19:18:11 -0500
-Received: from ip6-localhost (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 1B608gtt022162;
-        Sun, 5 Dec 2021 18:08:44 -0600
-Message-ID: <07472b315d6adecb874f29128e9b5fe3eadad590.camel@kernel.crashing.org>
-Subject: Re: [PATCH 2/3] usb: aspeed-vhub: support remote wakeup feature
-From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Tao Ren <rentao.bupt@gmail.com>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        kernel test robot <lkp@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>
-Cc:     BMC-SW <BMC-SW@aspeedtech.com>
-Date:   Mon, 06 Dec 2021 11:08:42 +1100
-In-Reply-To: <HK0PR06MB3202F55EEE02B9931D9CD4AD80699@HK0PR06MB3202.apcprd06.prod.outlook.com>
-References: <20211126110954.2677627-1-neal_liu@aspeedtech.com>
-         <20211126110954.2677627-3-neal_liu@aspeedtech.com>
-         <279c42970790787e928ed017149e300835085235.camel@kernel.crashing.org>
-         <HK0PR06MB3202A1F0710655B3E8EA709580679@HK0PR06MB3202.apcprd06.prod.outlook.com>
-         <5d234a400a89f64ad183020b93b68f478f1addc7.camel@kernel.crashing.org>
-         <HK0PR06MB3202F55EEE02B9931D9CD4AD80699@HK0PR06MB3202.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        id S234772AbhLFBHo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Dec 2021 20:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242850AbhLFA6S (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Dec 2021 19:58:18 -0500
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A65C0613F8
+        for <linux-usb@vger.kernel.org>; Sun,  5 Dec 2021 16:54:50 -0800 (PST)
+Received: by mail-ua1-x92d.google.com with SMTP id p2so16458417uad.11
+        for <linux-usb@vger.kernel.org>; Sun, 05 Dec 2021 16:54:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=5AsGrA4DlL+PCBChvj92hqjB0hfn92LRQaKu0Z47lw0=;
+        b=WWR5BJbyDNcnl97P/L8mRAjeMZ35ktlBaUQccwas39vc7rvmkTcrErWYaAwYN2mFsx
+         DX8/+w1p9XPodK+WzjGaVGwC4tiN23p1XPTeNNyx9rFpzGY3sAgmvDhYDM45Rd5mIXYC
+         9SG/zT8uynTp95FnN2Wt6turdwsmI0ufKxbDNeiW2J90b916KF5PUB5oHTaZXjc8Gy0W
+         YJJzOi6Od9hSOn7sKespvIr+sef44NjZ5tCudOm3PNCfz9Oi+ynNj1HlGJihY8Mmv/+J
+         6oWgOecpMm6AG75X75IJnMGLW8YOOzditpOosl1LaKOkQrDydgnPf0Y5fNvLsXlPt0u2
+         Vnhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=5AsGrA4DlL+PCBChvj92hqjB0hfn92LRQaKu0Z47lw0=;
+        b=4cA8aH7ifTVHRDmF6lyWj6iLGz5z81Xerj7YmuBPgb3i6VpXbzk+Nmg0VoKjbcM2ha
+         XoNNEHgAcnW66N6SyIYx9Bb6suo4JxpY2qOyzsqYnNVi542MIbUZ/9Wg7Llzg+Slecw2
+         MRtKG1oGHUfFYpleXKKt1H7pEdiomNTWXVBC9bhSRbv1cKJEVGLsiLxBRyBOX7Mtqt1H
+         U+ZE4TmKS3xJE9XLMSVaVx1a9OiuXzhuEFfN4DxluJZA03rsOgbyxIkXGJ4akMBTgTx9
+         tQB2u8+kfUloHkFiyFwJnS5lIJt24W5LmJZ4lTIY8U8o2+qwqy64K+7Zdcc7YD4zmhX0
+         9U8A==
+X-Gm-Message-State: AOAM532yFVtghEM33h7P/h94YzJPU0W4wCfo9gDVPTUKitjRUsgKY3MI
+        1ILNafA2Jl3M0tD2nTBm8STaKx54vE0MLAStDfo=
+X-Google-Smtp-Source: ABdhPJz745Up+31EXZdlxxaeu2kQUKGjCtUnTC5t8M9Jg7kyfeyXE8+1C3o0XrpfcviFHh3WweoYhZYgw5/tHo4VDqU=
+X-Received: by 2002:ab0:3349:: with SMTP id h9mr37668042uap.111.1638752089778;
+ Sun, 05 Dec 2021 16:54:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a59:9e8c:0:b0:23d:e092:9ade with HTTP; Sun, 5 Dec 2021
+ 16:54:49 -0800 (PST)
+Reply-To: mrsbillchantallawrence2@gmail.com
+From:   MRS BILL CHANTAL LAWRANCE <emmanuellaclever32@gmail.com>
+Date:   Sun, 5 Dec 2021 16:54:49 -0800
+Message-ID: <CALWpAgGYP2gcyt9xezGbDyE1L4+73h2AkgNYsJYLEirhPEVY7A@mail.gmail.com>
+Subject: DEAR FRIEND
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2021-12-02 at 03:03 +0000, Neal Liu wrote:
-> > 
-> Let's me describe more details for our hardware behavior and hope you
-> understand.
-> 
-> HUB00[3]: MANUAL_REMOTE_WAKEUP
-> HUB00[4]: AUTO_REMOTE_WAKEUP
-> 
-> Set HUB00[3] implies USB device will do remote wakeup if any write
-> command to vhub register.
-> Set HUB00[4] implies USB device will do remote wakeup. It can only be
-> set in suspend state.
-> 
-> For current design, d->wakeup_en only controls whether HUB00[4] can
-> be set through usb_gadget_ops.wakeup().
-> If some applications (take KVM as example) want to wakeup host by
-> sending a packet, it won't go through sb_gadget_ops.wakeup().
-> We enable HUB00[3] to fix this problem. It won't override above
-> mentioned behavior.
-> If host has enabled the USB_DEVICE_REMOTE_WAKEUP feature, it has 2
-> ways to wakeup host.
-> 1. set srp 1 (/sys/device/platform/xxxxxxxxx/udc/xxxxxx/srp)
-> 2. emulated device has activity
-> If host has disabled the USB_DEVICE_REMOTE_WAKEUP feature, these 2
-> ways still cannot wakeup host even if USB bus is in resume state.
-> Thanks
+dear
 
-So what you are saying is that currently, the various gadgets aren't
-calling usb_gadget_wakeup() ?
+You have been compensated with the sum of 5.1 million dollars in this
+united nation the payment will be Issue into ATM visa card and send to
+you from the Santander bank of Spain we need your address passport and
+your whatsapp number.
+Thanks
 
-Ie. it should be a gadget policy to decide when to wake-up I suppose,
-but it's true that nothing in the core nor the existing gadgets seem to
-handle that.
-
-I think what you propose is a band-aid. The real problem is that the
-gadget drivers should trigger wakeups (or the core should do so on
-activity).
-
-That said, for now, I don't object to adding that "auto" bit, but I
-would prefer if that behaviour was use configurable.
-
-Cheers,
-Ben.
-
+Mrs. bill Chantal
