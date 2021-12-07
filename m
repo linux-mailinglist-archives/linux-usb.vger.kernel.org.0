@@ -2,164 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5BE46C2D6
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 19:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F4C46C3C9
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 20:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240617AbhLGScE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Dec 2021 13:32:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46440 "EHLO
+        id S236356AbhLGTo7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Dec 2021 14:44:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbhLGSbz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Dec 2021 13:31:55 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628A8C061574;
-        Tue,  7 Dec 2021 10:28:25 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id f18-20020a17090aa79200b001ad9cb23022so122953pjq.4;
-        Tue, 07 Dec 2021 10:28:25 -0800 (PST)
+        with ESMTP id S236311AbhLGTo6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Dec 2021 14:44:58 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE06C061748
+        for <linux-usb@vger.kernel.org>; Tue,  7 Dec 2021 11:41:27 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so263986otg.4
+        for <linux-usb@vger.kernel.org>; Tue, 07 Dec 2021 11:41:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3K6TOKmuXzbOyoxK5qeZN6UfLrjbFqLBLFd2or1FY3U=;
-        b=bMn4HZzovqnSsKBYjx7SaX/7/1YnQpwZP0+VKOP4iiLq7LSFfCBZV9AU+pFkzJI1Fd
-         4Nw+zBXs8m4ta8JPlqj4SuV8/lpOYJgqD3XTRBRBtwgX4BBCorP93aKWdbbOvahP9Ieu
-         4fclBZDgT1sK/yI1MCQv9+gKiO4Q/+AVDNEtSgu3P9KKH42p1qdgD0C+JoS/spi52ZUo
-         ayTkva3dvK5bn99tb883HDN9TNA9iomarw6Fl3mB9XdQscrwPuSQfQ5YPdDXW/bEzdm7
-         gfdZZzrQtDoMjwOnx3I48NQchGUqZnOwQMwdOskA8X+RCIW6dMoxHO34UGD6PcdG2kp5
-         8Zjg==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=L3MI+h0u5a63sfoKLcmo7CVjt1c80jtugNXNjUS8/Jk=;
+        b=d7Ya5eg8tOISCP0Ft13/S/sAUgMZ0KecWxiuHO43ptpK5siTHkYek/rSLNzRgz6/g/
+         URILtPjeVdASN+HVq+GmUwIcfNNyLHHW6oQmFbFf31z12fibKMkBrFeh/zceaib9GEAv
+         ejs5691m4x1KZV8lN/7mfGn3gPhSJcQyrP/u4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3K6TOKmuXzbOyoxK5qeZN6UfLrjbFqLBLFd2or1FY3U=;
-        b=FYIYkCnXeyXZ/dOoJ9TEKSeYcsrw8dsikGa+17VCFd3cf06ruBeq4E73eEOcq76mFb
-         l8LziJw/HpAqm9Taf5fWXvlhH7g6bvyQ0RDOEcelCaei4r3fqjvAK7xrljl8vyQaS4RB
-         SG5iR791V+iLKMaH2RV3SvKjxGCgcN+rxYyHMW23E1m+buMCEjzSEoaaKe8QdOL191um
-         IMPqQ1bZOg2Lrxsz8Tw7TJSbu8fyJw5XR5LsbUwEBh1ujq8FVqh7LEec+DVd6wzQrqdI
-         RHOS5B0YJ5tH7yfc3OSW9LEaf/zHTKG2Kkw7jdS6sgP2uBAQaYJhXPon6xQ2GJg8gaLq
-         kpAA==
-X-Gm-Message-State: AOAM5315rzCPKgmcaoSrdFJtdSuay66GpN40qq+1apgp0S4efQ1C2uDn
-        JhhuFovFaWPVRpKMc36B2XM=
-X-Google-Smtp-Source: ABdhPJzn0pfJRBt8YChyiQar1VcDrvcPxcRCu77UgUdlxwGOW7ggxIp8oNfTZO1IIk1I65ugPQuz/A==
-X-Received: by 2002:a17:903:2443:b0:142:1e92:1d19 with SMTP id l3-20020a170903244300b001421e921d19mr53256611pls.24.1638901704865;
-        Tue, 07 Dec 2021 10:28:24 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id l21sm3446135pjt.24.2021.12.07.10.28.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 10:28:24 -0800 (PST)
-Subject: Re: [PATCH v2 12/14] dt-bindings: ata: Convert Broadcom SATA to YAML
-To:     Rob Herring <robh@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-pwm@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-gpio@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        linux-rtc@vger.kernel.org,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Doug Berger <opendmb@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Al Cooper <alcooperx@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-usb@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Ray Jui <rjui@broadcom.com>, linux-pm@vger.kernel.org,
-        Markus Mayer <mmayer@broadcom.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Zhang Rui <rui.zhang@intel.com>, linux-ide@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>, devicetree@vger.kernel.org,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        linux-crypto@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Scott Branden <sbranden@broadcom.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>
-References: <20211206182616.2089677-1-f.fainelli@gmail.com>
- <20211206182616.2089677-13-f.fainelli@gmail.com>
- <1638889090.722845.5803.nullmailer@robh.at.kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <f463f454-943c-e081-9005-c7b4df7304af@gmail.com>
-Date:   Tue, 7 Dec 2021 10:28:19 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=L3MI+h0u5a63sfoKLcmo7CVjt1c80jtugNXNjUS8/Jk=;
+        b=PDwJrs5JEogiAWgTAPU+kabYMSx5t7X2BYOsHm9X8ONLgaoa95Se3BLkFD6SJLOpDK
+         VoxNNt4oVRRXXRJtBuLWXge0W9W/8JheLTbBZARp8hBbv1BdT2EAMy+CnDsVvyz0x8Rs
+         ovc68wAxRE0S9mha7TMAKQpxw52yOgOw2u6LkEuGaF3u3/f9HO/juyhvEKX8bU7KGjBu
+         TCV3X7Rh/W0mOZgfHSeIFaU4R7ng2i/dH7bYmQoBJvA7VqVKA9JM9n+ZO3z7dudmAUg3
+         +kkcT9hgs6i0JGb+2RTW+EURBz8I/0rKyNK5mWi3pwJ7LMiaWS6h5ZHmBCTj5HSQSXrO
+         0eNQ==
+X-Gm-Message-State: AOAM533tY3iDEBgRB3zaviCJ0YUjQxgyrc95DqOpnjlH1ogpkzdbjCIA
+        CIja+J+tD/uJhT8+O9KPy2LcFwTlueyRBYwlq2EFSg==
+X-Google-Smtp-Source: ABdhPJyWKZOZt61oBDBtwA1NmPAv5zfH9arDEDUBhs1KDK1dQBrwuJLt/m0bk+oDxA4rWbR6/PyO+Tok5lhmUB0tq04=
+X-Received: by 2002:a05:6830:30b7:: with SMTP id g23mr36355972ots.159.1638906087317;
+ Tue, 07 Dec 2021 11:41:27 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 7 Dec 2021 14:41:26 -0500
 MIME-Version: 1.0
-In-Reply-To: <1638889090.722845.5803.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20211207094327.1.Ie3cde3443039342e2963262a4c3ac36dc2c08b30@changeid>
+References: <20211207094327.1.Ie3cde3443039342e2963262a4c3ac36dc2c08b30@changeid>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Tue, 7 Dec 2021 14:41:26 -0500
+Message-ID: <CAE-0n53UzgtKop5KmkxvBRroO-zFHDUgmWU3di1=Xomtew2NJg@mail.gmail.com>
+Subject: Re: [PATCH] Revert "usb: dwc3: dwc3-qcom: Enable tx-fifo-resize
+ property by default"
+To:     Douglas Anderson <dianders@chromium.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>, robdclark@chromium.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 12/7/21 6:58 AM, Rob Herring wrote:
-> On Mon, 06 Dec 2021 10:26:14 -0800, Florian Fainelli wrote:
->> Convert the Broadcom SATA3 AHCI controller Device Tree binding to YAML
->> to help with validation.
->>
->> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->> ---
->>  .../bindings/ata/brcm,sata-brcm.txt           | 45 ---------
->>  .../bindings/ata/brcm,sata-brcm.yaml          | 91 +++++++++++++++++++
->>  2 files changed, 91 insertions(+), 45 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
->>  create mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
->>
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/1564108
-> 
-> 
-> ahci@41000: $nodename:0: 'ahci@41000' does not match '^sata(@.*)?$'
-> 	arch/arm/boot/dts/bcm958522er.dt.yaml
-> 	arch/arm/boot/dts/bcm958525er.dt.yaml
-> 	arch/arm/boot/dts/bcm958525xmc.dt.yaml
-> 	arch/arm/boot/dts/bcm958622hr.dt.yaml
-> 	arch/arm/boot/dts/bcm958623hr.dt.yaml
-> 	arch/arm/boot/dts/bcm958625hr.dt.yaml
-> 	arch/arm/boot/dts/bcm958625k.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64w.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx65.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx65w.dt.yaml
-> 	arch/arm/boot/dts/bcm988312hr.dt.yaml
-> 
-> ahci@41000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'dma-coherent', 'sata-port@0', 'sata-port@1' were unexpected)
-> 	arch/arm/boot/dts/bcm958522er.dt.yaml
-> 	arch/arm/boot/dts/bcm958525er.dt.yaml
-> 	arch/arm/boot/dts/bcm958525xmc.dt.yaml
-> 	arch/arm/boot/dts/bcm958622hr.dt.yaml
-> 	arch/arm/boot/dts/bcm958623hr.dt.yaml
-> 	arch/arm/boot/dts/bcm958625hr.dt.yaml
-> 	arch/arm/boot/dts/bcm958625k.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64w.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx65.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx65w.dt.yaml
-> 	arch/arm/boot/dts/bcm988312hr.dt.yaml
-> 
-> ahci@41000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'sata-port@0', 'sata-port@1' were unexpected)
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dt.yaml
-> 
-> sata@a000: compatible: 'oneOf' conditional failed, one must be fixed:
-> 	arch/arm/boot/dts/bcm963138dvt.dt.yaml
+Quoting Douglas Anderson (2021-12-07 09:43:41)
+> This reverts commit cefdd52fa0455c0555c30927386ee466a108b060.
+>
+> On sc7180-trogdor class devices with 'fw_devlink=permissive' and KASAN
+> enabled, you'll see a Use-After-Free reported at bootup.
+>
+> The root of the problem is that dwc3_qcom_of_register_core() is adding
+> a devm-allocated "tx-fifo-resize" property to its device tree node
+> using of_add_property().
+>
+> The issue is that of_add_property() makes a _permanent_ addition to
+> the device tree that lasts until reboot. That means allocating memory
+> for the property using "devm" managed memory is a terrible idea since
+> that memory will be freed upon probe deferral or device unbinding.
+>
+> Let's revert the patch since the system is still functional without
+> it. The fact that of_add_property() makes a permanent change is extra
+> fodder for those folks who were aruging that the device tree isn't
+> really the right way to pass information between parts of the
+> driver. It is an exercise left to the reader to submit a patch
+> re-adding the new feature in a way that makes everyone happier.
+>
+> Fixes: cefdd52fa045 ("usb: dwc3: dwc3-qcom: Enable tx-fifo-resize property by default")
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
 
-All of those fixed in v3.
--- 
-Florian
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
