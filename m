@@ -2,118 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0574846B09E
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 03:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18DEB46B198
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 04:42:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243474AbhLGCff (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Dec 2021 21:35:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47736 "EHLO
+        id S234384AbhLGDp3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Dec 2021 22:45:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234416AbhLGCfe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 21:35:34 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F23C0613F8
-        for <linux-usb@vger.kernel.org>; Mon,  6 Dec 2021 18:32:05 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id bj13so25131389oib.4
-        for <linux-usb@vger.kernel.org>; Mon, 06 Dec 2021 18:32:05 -0800 (PST)
+        with ESMTP id S234282AbhLGDp0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 22:45:26 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4279BC061746;
+        Mon,  6 Dec 2021 19:41:57 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id l24so23994291uak.2;
+        Mon, 06 Dec 2021 19:41:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7yIt0H2BJia1n1RdLgy9XsiVyWHb2gj2JpRcgtxqXlo=;
-        b=pFJa90TXfUzK+34x5n+LqtuDXUXuNklDwQGWBogvco1A+5NE5S/MB8+hE15xeRqggf
-         +hsj4kE8GOXrEQTh4EcQLY13ApN3mC/pFuasgI6VA3+7nuJpg78vBM4w/kj7gVlzcQ7w
-         k908aizran+2sJ3iS9aP+ed/zUqgs6Mwgjxnn2wauCaAjJ9rC9jGWsvPR5h6kOPcc7K5
-         HIbXnYKxnonKq/H1a7Xp/9IB/Ey4lGlVcoyNzaQ6g1EFRmsM9b5rayXyk5nxDMh8k0Ce
-         uF+B5XUz5bDaxpnL4h0CKSFVRFktnXiKRlVXZBsJEtKXcljsAHGjbViYLAdPJ8BLgEB3
-         qvBg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+WjCLq5iyPbhZoOVbo+nvWb9Wp/JdlLnIPR31C337C8=;
+        b=mZiJ1JWBFc1OWU2CphwdToWib2Fs7VeoMvRyd6OGAUdTYE7JuVX3y18pFnbL9d0SYR
+         qnkGAcFy4HWByFCmfen3y9B+gsUBd2Z4vpiAY8cExnT/X6456PRBzYpHz5lzE8xWOBLE
+         /Opn0hwl+/WEjMpD3cFa2zhWfG+2VM8IZAoAwDwKw4uis+328EKo2LCeWhkZKeKEAT9k
+         n3UXrAemi7nOM0I+lBZxbPlnpXZXWks7fOWw21TwqOUg6+DtBOdhLAZp7S1avVtceNWO
+         6hIZiEiJ4irNSwTkZ0WAOuxz06b1U7vebIqVBU87ZImLwZxD31NuI/0Q7jK48HpCxsG6
+         jbJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7yIt0H2BJia1n1RdLgy9XsiVyWHb2gj2JpRcgtxqXlo=;
-        b=3+oUyxoeU9y5rCeocNKxLYK22D9W/G1yWD5p8JHWBj1vCqjZOZunakL6Y8CnAPcIS3
-         /CpgljHVUj56zZfUiLPV3Svk2cI5tQ9fP0+rOESaTfs4+BQXMk0o1Di9G7bd8caQ2H0K
-         IaguniWbcwGp3u9jAPJUB+98CQcxoLe0x/4dLnPSSDwaSPdfC2FxLKB2UbGWOZT60NuA
-         8nj622sUwboQRL3rSZ1gGJ6KPBXVOBOHP7SFubhHX3NTF8JwwNPwqZqdlD715XhQykjh
-         KOYKynuotQw9kAegIwz0on4fbGVIbKrRCO7Gj1fIhzuqBObp49T/rkWR91Ox8zDGOEEZ
-         R9iA==
-X-Gm-Message-State: AOAM530dwb1dkeNBnkPyyHi0HpNq/H15Vj9BOXsakrj8IU+zy1LoM578
-        YeELcrD/aF0iMf5G7wlM/2i9dQ==
-X-Google-Smtp-Source: ABdhPJw5b2Eojwp5CDWYULGnVErVQDMpMC7MfWDggUfrlQeEV1KtPN5iO4llP+D8PSYWDRlntP9Kgg==
-X-Received: by 2002:a05:6808:218b:: with SMTP id be11mr2719314oib.80.1638844324398;
-        Mon, 06 Dec 2021 18:32:04 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id m2sm2556218oop.12.2021.12.06.18.32.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 18:32:03 -0800 (PST)
-Date:   Mon, 6 Dec 2021 18:33:28 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>, robdclark@chromium.org,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: dwc3-qcom: Avoid use-after-free when USB
- defers or unbinds
-Message-ID: <Ya7H+COf/Hbk6g5M@ripper>
-References: <20211206152844.1.I411110cc99c1dd66b01aa9aa25651acf8ff55da1@changeid>
- <CAE-0n50n=JZEqz5aQW4FQwjO9eFN56vTmBrQ6qBWduFY5jNPJA@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+WjCLq5iyPbhZoOVbo+nvWb9Wp/JdlLnIPR31C337C8=;
+        b=5b7/eFbJEOeL9ZNIuyZyAlpO52UWbGZLaf1bg2jfeQ4GVl9evTE4oJzyD9m1cSI9P/
+         DVPyXnB3/68ID+cisJSTq0toGmcK37hgecZUF+s5nTmSNshi7xyjIvERRCANsf5p2Cef
+         yJcC3400mMfT63OzCTqBEdCLqzU8xaCSeUwhc4bGPHFTFKW2b3+ptNWmWBzWiIc0kMa9
+         vZG8GfYGc42M+t896RoqpVEKnJpiKiqgug+D23TQaG32kECWATHpfW8SP/GLfqEUa5hf
+         WwNhY9eNgtRg13me9cjXzUQuEuMd15/WNRvBlpPMtNKPGOv6A2JBl3sGakYnONJo0rIu
+         Ki8w==
+X-Gm-Message-State: AOAM532t6a257QWxIXJkyZ7p6GAsPVSWe/vD+jR6CfEsncfkwhk3ZcV8
+        X+LhJLOcsUU2w0747qhtduReT7g/GebIhBzAkg0d1blr0+c=
+X-Google-Smtp-Source: ABdhPJx6RQZ3n6olyV3sCz9AbKmYBKhNAk0yZ773fOAPjf8R3q9XrHTi0PcC2P6/Zcqz0XN+NMNLS7cMSGYejK/S3F0=
+X-Received: by 2002:ab0:6813:: with SMTP id z19mr46872879uar.28.1638848516162;
+ Mon, 06 Dec 2021 19:41:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE-0n50n=JZEqz5aQW4FQwjO9eFN56vTmBrQ6qBWduFY5jNPJA@mail.gmail.com>
+References: <20211206182616.2089677-1-f.fainelli@gmail.com> <20211206182616.2089677-6-f.fainelli@gmail.com>
+In-Reply-To: <20211206182616.2089677-6-f.fainelli@gmail.com>
+From:   Gregory Fong <gregory.0xf0@gmail.com>
+Date:   Mon, 6 Dec 2021 19:41:29 -0800
+Message-ID: <CADtm3G5Sh5sFhq7ye=aJbzd0v_FiqOPt_RAE3v_qWFQ+jH5bEQ@mail.gmail.com>
+Subject: Re: [PATCH v2 05/14] dt-bindings: gpio: Convert Broadcom STB GPIO to YAML
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     devicetree@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
+        <linux-mmc@vger.kernel.org>,
+        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon 06 Dec 16:37 PST 2021, Stephen Boyd wrote:
-> Quoting Douglas Anderson (2021-12-06 15:28:47)
-[..]
-> > +                       goto node_put;
-> > +               }
-> >
-> > -       prop->name = "tx-fifo-resize";
-> > -       ret = of_add_property(dwc3_np, prop);
-> 
-> I don't understand why we can't tell dwc3 that we want to use
-> tx-fifo-resize without adding a DT property. DT isn't the only way we
-> could probe this qcom dwc3 device, there's also ACPI. And in dwc3 core
-> where we check for this property couldn't we add a compatible check for
-> qcom,dwc3 and then force the property? I see that a lot of this was
-> already discussed when these patches got applied by gregkh directly[1].
-> 
+On Mon, Dec 6, 2021 at 10:26 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> Convert the Broadcom STB GPIO Device Tree binding to YAML to help with
+> validation.
+>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-When the tx-fifo-resize property was introduced I made an effort to
-convince the people involved about the prospect of passing this
-information in the code, rather than using DT as some sort of parameter
-store to pass information between the devices.
-
-And I still would like us to come up with some sort of code-level
-mechanism for passing some state between dwc3-qcom and the dwc3-core,
-because I really want to register some callback with the core so that we
-don't need to duplicate extcon and usb_role_switch in both the core and
-platform glue.
-
-See this discussion:
-https://lore.kernel.org/linux-arm-msm/YSZCmDEedJaJyI0u@ripper/
-
-> Can we revert out this bad code instead?
-> 
-
-You definitely have my vote for that!
-
-Regards,
-Bjorn
-
-> > -       if (ret) {
-> > -               dev_err(dev, "unable to add property\n");
-> > -               goto node_put;
-> > +               prop->name = "tx-fifo-resize";
-> > +               ret = of_add_property(dwc3_np, prop);
-> 
-> [1] https://lore.kernel.org/all/b5917fc0-c916-0a51-dc4c-315d7f02cafa@codeaurora.org/
+Acked-by: Gregory Fong <gregory.0xf0@gmail.com>
