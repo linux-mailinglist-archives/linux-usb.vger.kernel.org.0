@@ -2,130 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16AC146BDF0
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 15:38:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ADE046BDF8
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 15:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238108AbhLGOlp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Dec 2021 09:41:45 -0500
-Received: from mga03.intel.com ([134.134.136.65]:48419 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238110AbhLGOll (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 7 Dec 2021 09:41:41 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237528457"
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="237528457"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 06:38:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="657725171"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Dec 2021 06:38:08 -0800
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] usb: Remove usb_for_each_port()
-Date:   Tue,  7 Dec 2021 17:37:57 +0300
-Message-Id: <20211207143757.21895-6-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211207143757.21895-1-heikki.krogerus@linux.intel.com>
-References: <20211207143757.21895-1-heikki.krogerus@linux.intel.com>
+        id S233553AbhLGOoN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Dec 2021 09:44:13 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43880 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233408AbhLGOoM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Dec 2021 09:44:12 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71785B80782;
+        Tue,  7 Dec 2021 14:40:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5FF8C341CD;
+        Tue,  7 Dec 2021 14:40:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638888040;
+        bh=GS9SqX/7Ke8trVS8oUm0AXdD09BTgGMzdoPgBeW2sew=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AeRAFhKd5dLLwksO+k4RmMAael5JbFIaHTqaO5GV+a2Y/afLT6BaNnTlEj83/uldu
+         PV/gTlOWOHUO57dxwA035ALnn2LW3aB1RR2bHoHrEFahEz1UmoLtaPvTfTtJRoFDf9
+         cupgxGayS7SKF3l/gtCt59sgdqsxKaM5hvhxH92o=
+Date:   Tue, 7 Dec 2021 15:40:37 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guo Zhengkui <guozhengkui@vivo.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, Li Jun <jun.li@nxp.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Peter Chen <peter.chen@nxp.com>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, kernel@vivo.com
+Subject: Re: [PATCH] usb: core: hcd: fix bug: application of sizeof to pointer
+Message-ID: <Ya9yZX3JsuO8OcVJ@kroah.com>
+References: <20211207135401.5507-1-guozhengkui@vivo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211207135401.5507-1-guozhengkui@vivo.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There are no more users for the function.
+On Tue, Dec 07, 2021 at 09:53:47PM +0800, Guo Zhengkui wrote:
+> Fix following error:
+> ./drivers/usb/core/hcd.c:1284:38-44: ERROR:
+> application of sizeof to pointer.
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/core/usb.c | 46 ------------------------------------------
- include/linux/usb.h    |  9 ---------
- 2 files changed, 55 deletions(-)
+What generated this error?
 
-diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-index 62368c4ed37af..2ce3667ec6fae 100644
---- a/drivers/usb/core/usb.c
-+++ b/drivers/usb/core/usb.c
-@@ -398,52 +398,6 @@ int usb_for_each_dev(void *data, int (*fn)(struct usb_device *, void *))
- }
- EXPORT_SYMBOL_GPL(usb_for_each_dev);
- 
--struct each_hub_arg {
--	void *data;
--	int (*fn)(struct device *, void *);
--};
--
--static int __each_hub(struct usb_device *hdev, void *data)
--{
--	struct each_hub_arg *arg = (struct each_hub_arg *)data;
--	struct usb_hub *hub;
--	int ret = 0;
--	int i;
--
--	hub = usb_hub_to_struct_hub(hdev);
--	if (!hub)
--		return 0;
--
--	mutex_lock(&usb_port_peer_mutex);
--
--	for (i = 0; i < hdev->maxchild; i++) {
--		ret = arg->fn(&hub->ports[i]->dev, arg->data);
--		if (ret)
--			break;
--	}
--
--	mutex_unlock(&usb_port_peer_mutex);
--
--	return ret;
--}
--
--/**
-- * usb_for_each_port - interate over all USB ports in the system
-- * @data: data pointer that will be handed to the callback function
-- * @fn: callback function to be called for each USB port
-- *
-- * Iterate over all USB ports and call @fn for each, passing it @data. If it
-- * returns anything other than 0, we break the iteration prematurely and return
-- * that value.
-- */
--int usb_for_each_port(void *data, int (*fn)(struct device *, void *))
--{
--	struct each_hub_arg arg = {data, fn};
--
--	return usb_for_each_dev(&arg, __each_hub);
--}
--EXPORT_SYMBOL_GPL(usb_for_each_port);
--
- /**
-  * usb_release_dev - free a usb device structure when all users of it are finished.
-  * @dev: device that's been disconnected
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 7ccaa76a9a968..200b7b79acb56 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -875,15 +875,6 @@ extern struct usb_host_interface *usb_find_alt_setting(
- 		unsigned int iface_num,
- 		unsigned int alt_num);
- 
--#if IS_REACHABLE(CONFIG_USB)
--int usb_for_each_port(void *data, int (*fn)(struct device *, void *));
--#else
--static inline int usb_for_each_port(void *data, int (*fn)(struct device *, void *))
--{
--	return 0;
--}
--#endif
--
- /* port claiming functions */
- int usb_hub_claim_port(struct usb_device *hdev, unsigned port1,
- 		struct usb_dev_state *owner);
--- 
-2.33.0
+> 
+> Use sizeof(*vaddr) instead.
+> 
+> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+> ---
+>  drivers/usb/core/hcd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> index 4d326ee12c36..996d5273cf60 100644
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+> @@ -1281,7 +1281,7 @@ static int hcd_alloc_coherent(struct usb_bus *bus,
+>  		return -EFAULT;
+>  	}
+>  
+> -	vaddr = hcd_buffer_alloc(bus, size + sizeof(vaddr),
+> +	vaddr = hcd_buffer_alloc(bus, size + sizeof(*vaddr),
 
+I think you just broke the code.
+
+Look at this closer and see what the function is doing with this buffer
+and if you still think your patch is correct, please rewrite the
+changelog text to explain why it is so (hint, just using the output of
+coccinelle isn't ok.)
+
+thanks,
+
+greg k-h
