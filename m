@@ -2,115 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6B646BF02
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 16:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 239D846BFAA
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 16:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbhLGPTW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Dec 2021 10:19:22 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38968 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbhLGPTW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Dec 2021 10:19:22 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AFA97B8181B
-        for <linux-usb@vger.kernel.org>; Tue,  7 Dec 2021 15:15:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D38D4C341C1;
-        Tue,  7 Dec 2021 15:15:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638890149;
-        bh=bo9XQDcZjJpM35NuTmZ4xB9NHpn58lVEbZZKNoWRdYQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K5KpxdZCqZosO5TGF9GKDayf7tojRMxmJb96hGwNzXfLNVGWVHDZVjAkE0Q4cbVv+
-         3kaINfXJXRucn24r/1olqp60TCVMZ1d0sk8okyTwP4CTcJHxsPSG6Nx3Jjo6wqTNki
-         WXLFtMgm4U+ByKfCBJZuhKGOTO9uPBUks6Z2dCjk=
-Date:   Tue, 7 Dec 2021 16:15:46 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Chugh, Sanjeev" <Sanjeev_Chugh@mentor.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH V1 1/1] usb: hub: introduce delay after usb hub mutex
- release
-Message-ID: <Ya96omTSiwDNoRu5@kroah.com>
-References: <1638320288-6465-1-git-send-email-sanjeev_chugh@mentor.com>
- <YaoS3RoqkGkf6NFa@kroah.com>
- <361b7459f1d64f5e8b7bccaa2dd536e5@svr-ies-mbx-01.mgc.mentorg.com>
+        id S238986AbhLGPpN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Dec 2021 10:45:13 -0500
+Received: from mga18.intel.com ([134.134.136.126]:35537 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233215AbhLGPpM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 Dec 2021 10:45:12 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="224468584"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="224468584"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 07:41:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="679485409"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 07 Dec 2021 07:41:39 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D168A15C; Tue,  7 Dec 2021 17:41:45 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] thunderbolt: Do not dereference fwnode in struct device
+Date:   Tue,  7 Dec 2021 17:41:43 +0200
+Message-Id: <20211207154143.11477-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <361b7459f1d64f5e8b7bccaa2dd536e5@svr-ies-mbx-01.mgc.mentorg.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 05:54:06AM +0000, Chugh, Sanjeev wrote:
-> Hello Greg,
-> 
-> > -----Original Message-----
-> > From: Greg KH [mailto:gregkh@linuxfoundation.org]
-> > Sent: Friday, December 3, 2021 6:22 PM
-> > To: Chugh, Sanjeev <Sanjeev_Chugh@mentor.com>
-> > Cc: linux-usb@vger.kernel.org
-> > Subject: Re: [PATCH V1 1/1] usb: hub: introduce delay after usb hub mutex
-> > release
-> > 
-> > On Wed, Dec 01, 2021 at 06:28:08AM +0530, Sanjeev Chugh wrote:
-> > > Rogue usb sticks can cause endless port connect change events due to
-> > > unstable electric connection between usb chip and the port. Port
-> > > connect change will cause device enumeration for the new device
-> > > connection and new device processing is done with the usb hub mutex
-> > > acquired. This can cause very short time gap between unlock/lock of
-> > > hub device mutex. So if some thread is running at low priority than
-> > > hub_thread, it can face hub device mutex starvation.
-> > >
-> > > This commit introduces a sleep of 25ms after the hub device mutex is
-> > > unlocked in hub_events so that if hub_thread is stuck in a endless
-> > > loop, all other threads will get fair amount of chance to acquire the
-> > > usb hub mutex.
-> > >
-> > > Signed-off-by: Sanjeev Chugh <sanjeev_chugh@mentor.com>
-> > > ---
-> > >  drivers/usb/core/hub.c | 11 +++++++++++
-> > >  1 file changed, 11 insertions(+)
-> > >
-> > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c index
-> > > 00070a8..0be2acc 100644
-> > > --- a/drivers/usb/core/hub.c
-> > > +++ b/drivers/usb/core/hub.c
-> > > @@ -5763,6 +5763,17 @@ static void hub_event(struct work_struct *work)
-> > >  out_hdev_lock:
-> > >  	usb_unlock_device(hdev);
-> > >
-> > > +	/*
-> > > +	 * Rogue usb sticks can cause endless device connection
-> > > +	 * events due to unstable electric connection.
-> > 
-> > What is a "usb stick"?  Any usb device could cause this, right?
-> 
-> In my test case, I have used a usb pen drive of Sandisk Make of 32 GB capacity. But yes, any faulty usb device or even faulty usb cable used for the usb device connection can cause this issue.
-> > 
-> > > This
-> > > +	 * can cause very short time gap between unlock/lock
-> > > +	 * of hub device mutex thus causing mutex starvation
-> > > +	 * for some other lower priority thread. Thus sleep
-> > > +	 * would give fair chance to all other threads to
-> > > +	 * acquire the usb hub mutex.
-> > > +	 */
-> > > +	msleep(25);
-> > 
-> > What normal code path did you just slow down here?  Why not slow down the
-> > disconnect path instead of the connect path?
-> > 
-> In case of faulty usb device, USB device enumeration doesn't succeed at all and comes out of hub_port_init() from a failure path. There is no device disconnection path in this flow. Therefore, this delay is added after hub_port_connect_change() is done trying to handle the port connect change event.
+In order to make the underneath API easier to change in the future,
+prevent users from dereferencing fwnode from struct device.
+Instead, use the specific dev_fwnode() API for that.
 
-So you are going to slow down all valid devices just to handle the fact
-that an abusive device can cause the system to slow down?
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/thunderbolt/acpi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-What exactly is the problem if you plug in an abusive device, that you
-are trying to solve?  Is the system still supposed to be running
-properly?  Why not just remove the device or disable the port when
-detected?
+diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
+index b67e72d5644b..861d0fafb1d9 100644
+--- a/drivers/thunderbolt/acpi.c
++++ b/drivers/thunderbolt/acpi.c
+@@ -31,7 +31,7 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+ 		return AE_OK;
+ 
+ 	/* It needs to reference this NHI */
+-	if (nhi->pdev->dev.fwnode != args.fwnode)
++	if (dev_fwnode(&nhi->pdev->dev) != args.fwnode)
+ 		goto out_put;
+ 
+ 	/*
+-- 
+2.33.0
 
-thanks,
-
-greg k-h
