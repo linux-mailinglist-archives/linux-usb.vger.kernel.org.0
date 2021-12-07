@@ -2,124 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5702E46B9FF
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 12:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF98846BAB7
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 13:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235567AbhLGLY0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Dec 2021 06:24:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbhLGLY0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Dec 2021 06:24:26 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C56C061574
-        for <linux-usb@vger.kernel.org>; Tue,  7 Dec 2021 03:20:55 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id a18so28794485wrn.6
-        for <linux-usb@vger.kernel.org>; Tue, 07 Dec 2021 03:20:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=7SnhNwByiawTTcw1MP4TZPPrzNaWp5dA9zL+41P8YmE=;
-        b=ZPaXypHqqQIK8shTaoa+pgZJVWsa6Vpw3WiVp0PVa7RClYDHyW7fjzpbeV/FEz2q9y
-         sJ1lw3jAD1eMOE6PGIRx53FuNOZKzSZGIDJu5jrqjQm2Dvx+sgGNxAKbv3XmqhNMZ8lj
-         gvTJYt7FIaYuLUhk+hjEDJfLT/EGCbzEgzmvBP+lR3IIR1VP0QaP/cfpmYJpET/AbhkI
-         zRtopceXWs+j5tAYYaplTzYj9gzcFi4/X5wJLFk7fhtbP/DZb4iHHzm1srQnU6dkADNL
-         lXnzMmQQC+jm8g0PNu9PwEGfcvBMalK6Ou/2abOGn1Zn1SdP7b8qFfV+wQE0MtaNDoLh
-         0b2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=7SnhNwByiawTTcw1MP4TZPPrzNaWp5dA9zL+41P8YmE=;
-        b=oiLaJis0iLc9toylbIG+g2co2ldg+WtAOZjljsshN+bOTiA3rFg9FTfkwXiWYn+7F2
-         7/kbfUm+4Jdnc8rUO4CA2mNtg6v0DZmwJal2lsbwdaO5qTUVfrNyFfSuG3GC0KYyWhhp
-         w+y7fzyH60zf5oJjhxdf3KuCdrPfhnVlXg24JgNtSvI0FN/0uUChn1gXH+xqWdGMCdLI
-         Ql45hkP2YDo9OcCmrxwb8o5BG29cpQnsICztFtN0Jf4iethqrhi1CgazXroAE2Y1lK2y
-         Mf05f6icCUIatNvNLn/FeYOJDDtQkvnuHhxozYEuLfOnJLShwD5qMhZLo/HhMG8L8rW+
-         /tOQ==
-X-Gm-Message-State: AOAM532pRGQmuEdYtQE9hJ6GfscF/azrNw+u47xw8lIWxqE8W7oEVI98
-        taW71yk+Jq8P8fJhUQK9o+hhAlKvWqFeR0rx
-X-Google-Smtp-Source: ABdhPJzV1KU4uSd4ulFMhhQmpYjFf8+HOXv8bLaVUlLoysp/amdEohmwMiaZLIOsnY1xXY1b7YhJqw==
-X-Received: by 2002:adf:d1e2:: with SMTP id g2mr52092601wrd.105.1638876054507;
-        Tue, 07 Dec 2021 03:20:54 -0800 (PST)
-Received: from [192.168.196.27] (46.172.185.81.rev.sfr.net. [81.185.172.46])
-        by smtp.gmail.com with ESMTPSA id o12sm2600823wmq.12.2021.12.07.03.20.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 03:20:53 -0800 (PST)
-Subject: Re: [PATCH v4 1/3] phy: amlogic: phy-meson-gxl-usb2: fix shared reset
- controller use
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        p.zabel@pengutronix.de
-Cc:     khilman@baylibre.com, balbi@kernel.org, jbrunet@baylibre.com,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20211205215846.153703-1-aouledameur@baylibre.com>
- <20211205215846.153703-2-aouledameur@baylibre.com>
- <CAFBinCDZ2nTg2V_6qxok_y+wXHTVJ6XyyvON59TLJZ9B3fKY3Q@mail.gmail.com>
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Message-ID: <23fd1b50-75e9-25fe-cff1-b25e4f472f8c@baylibre.com>
-Date:   Tue, 7 Dec 2021 12:20:52 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S236115AbhLGMMG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Dec 2021 07:12:06 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:32922 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236110AbhLGMMG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Dec 2021 07:12:06 -0500
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B790Cp5003273;
+        Tue, 7 Dec 2021 13:08:31 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=bNVhcWNGKe71QnGOKZL9SpaPP9zmfeIqYSenMOmT5Gw=;
+ b=kGC14QIQRFb8ZTVSkFZLhHyIWyOCUxpsnxtbQsX1PV4889GmkdL3aypHydnR1Z9ERz1M
+ iwQWn0OnxNd7z7PPTvQQH9mSTGlp+AJJcVCbft+KAFIoodFiHy9+wzv9wVGnj9OwjSIj
+ +V8sPY0BZe7nTc/2+XS8X8lS3RAtUtU8lNGTVYtVH5cmE1L09fakrC3NqeI8wT7Rm1tM
+ ruCO5CZhtpaVfWQMuAzbRsgfP2G88BpEksYW3X9l01Aa5d58dEpg2a2/manFz3EVbPa0
+ 6mLrVd2MSXJejf4VdTQlhU///06koCpWSG0rrd7Bi75gvPLBYmGwVN8PcvV3bTTswWy4 cA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3csmx0myxq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Dec 2021 13:08:31 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B9E4B100034;
+        Tue,  7 Dec 2021 13:08:30 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id ACA1A23BCEB;
+        Tue,  7 Dec 2021 13:08:30 +0100 (CET)
+Received: from localhost (10.75.127.49) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 7 Dec 2021 13:08:30
+ +0100
+From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
+To:     Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>
+Subject: [PATCH 1/1] usb: dwc2: platform: adopt dev_err_probe() to silent probe defer
+Date:   Tue, 7 Dec 2021 13:08:29 +0100
+Message-ID: <20211207120829.266837-1-amelie.delaunay@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAFBinCDZ2nTg2V_6qxok_y+wXHTVJ6XyyvON59TLJZ9B3fKY3Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-07_04,2021-12-06_02,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Martin,
+In case of probe defer, a message is logged for resets and clocks. Use
+dev_err_probe to log the message only when error code is not -517.
+Simplify phy, regulators and drd probe defer handling with dev_err_probe().
+Then, take benefit of devices_deferred debugfs in case of probe deferral.
 
-Thank you for the thorough review.
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+---
+ drivers/usb/dwc2/platform.c | 53 +++++++++++--------------------------
+ 1 file changed, 16 insertions(+), 37 deletions(-)
 
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index c8f18f3ba9e3..a1feaa09be57 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -222,20 +222,16 @@ static int dwc2_lowlevel_hw_init(struct dwc2_hsotg *hsotg)
+ 	int i, ret;
+ 
+ 	hsotg->reset = devm_reset_control_get_optional(hsotg->dev, "dwc2");
+-	if (IS_ERR(hsotg->reset)) {
+-		ret = PTR_ERR(hsotg->reset);
+-		dev_err(hsotg->dev, "error getting reset control %d\n", ret);
+-		return ret;
+-	}
++	if (IS_ERR(hsotg->reset))
++		return dev_err_probe(hsotg->dev, PTR_ERR(hsotg->reset),
++				     "error getting reset control\n");
+ 
+ 	reset_control_deassert(hsotg->reset);
+ 
+ 	hsotg->reset_ecc = devm_reset_control_get_optional(hsotg->dev, "dwc2-ecc");
+-	if (IS_ERR(hsotg->reset_ecc)) {
+-		ret = PTR_ERR(hsotg->reset_ecc);
+-		dev_err(hsotg->dev, "error getting reset control for ecc %d\n", ret);
+-		return ret;
+-	}
++	if (IS_ERR(hsotg->reset_ecc))
++		return dev_err_probe(hsotg->dev, PTR_ERR(hsotg->reset_ecc),
++				     "error getting reset control for ecc\n");
+ 
+ 	reset_control_deassert(hsotg->reset_ecc);
+ 
+@@ -251,11 +247,8 @@ static int dwc2_lowlevel_hw_init(struct dwc2_hsotg *hsotg)
+ 		case -ENOSYS:
+ 			hsotg->phy = NULL;
+ 			break;
+-		case -EPROBE_DEFER:
+-			return ret;
+ 		default:
+-			dev_err(hsotg->dev, "error getting phy %d\n", ret);
+-			return ret;
++			return dev_err_probe(hsotg->dev, ret, "error getting phy\n");
+ 		}
+ 	}
+ 
+@@ -268,12 +261,8 @@ static int dwc2_lowlevel_hw_init(struct dwc2_hsotg *hsotg)
+ 			case -ENXIO:
+ 				hsotg->uphy = NULL;
+ 				break;
+-			case -EPROBE_DEFER:
+-				return ret;
+ 			default:
+-				dev_err(hsotg->dev, "error getting usb phy %d\n",
+-					ret);
+-				return ret;
++				return dev_err_probe(hsotg->dev, ret, "error getting usb phy\n");
+ 			}
+ 		}
+ 	}
+@@ -282,10 +271,8 @@ static int dwc2_lowlevel_hw_init(struct dwc2_hsotg *hsotg)
+ 
+ 	/* Clock */
+ 	hsotg->clk = devm_clk_get_optional(hsotg->dev, "otg");
+-	if (IS_ERR(hsotg->clk)) {
+-		dev_err(hsotg->dev, "cannot get otg clock\n");
+-		return PTR_ERR(hsotg->clk);
+-	}
++	if (IS_ERR(hsotg->clk))
++		return dev_err_probe(hsotg->dev, PTR_ERR(hsotg->clk), "cannot get otg clock\n");
+ 
+ 	/* Regulators */
+ 	for (i = 0; i < ARRAY_SIZE(hsotg->supplies); i++)
+@@ -293,12 +280,9 @@ static int dwc2_lowlevel_hw_init(struct dwc2_hsotg *hsotg)
+ 
+ 	ret = devm_regulator_bulk_get(hsotg->dev, ARRAY_SIZE(hsotg->supplies),
+ 				      hsotg->supplies);
+-	if (ret) {
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(hsotg->dev, "failed to request supplies: %d\n",
+-				ret);
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(hsotg->dev, ret, "failed to request supplies\n");
++
+ 	return 0;
+ }
+ 
+@@ -558,16 +542,12 @@ static int dwc2_driver_probe(struct platform_device *dev)
+ 		hsotg->usb33d = devm_regulator_get(hsotg->dev, "usb33d");
+ 		if (IS_ERR(hsotg->usb33d)) {
+ 			retval = PTR_ERR(hsotg->usb33d);
+-			if (retval != -EPROBE_DEFER)
+-				dev_err(hsotg->dev,
+-					"failed to request usb33d supply: %d\n",
+-					retval);
++			dev_err_probe(hsotg->dev, retval, "failed to request usb33d supply\n");
+ 			goto error;
+ 		}
+ 		retval = regulator_enable(hsotg->usb33d);
+ 		if (retval) {
+-			dev_err(hsotg->dev,
+-				"failed to enable usb33d supply: %d\n", retval);
++			dev_err_probe(hsotg->dev, retval, "failed to enable usb33d supply\n");
+ 			goto error;
+ 		}
+ 
+@@ -579,8 +559,7 @@ static int dwc2_driver_probe(struct platform_device *dev)
+ 
+ 	retval = dwc2_drd_init(hsotg);
+ 	if (retval) {
+-		if (retval != -EPROBE_DEFER)
+-			dev_err(hsotg->dev, "failed to initialize dual-role\n");
++		dev_err_probe(hsotg->dev, retval, "failed to initialize dual-role\n");
+ 		goto error_init;
+ 	}
+ 
+-- 
+2.25.1
 
-On 06/12/2021 22:19, Martin Blumenstingl wrote:
-> Hi Amjad,
->
-> On Sun, Dec 5, 2021 at 10:59 PM Amjad Ouled-Ameur
-> <aouledameur@baylibre.com> wrote:
->> Use reset_control_rearm() call if an error occurs in case
->> phy_meson_gxl_usb2_init() fails after reset() has been called ; or in case
->> phy_meson_gxl_usb2_exit() is called i.e the resource is no longer used
->> and the reset line may be triggered again by other devices.
->>
->> reset_control_rearm() keeps use of triggered_count sane in the reset
->> framework. Therefore, use of reset_control_reset() on shared reset line
->> should be balanced with reset_control_rearm().
->>
->> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->> Reported-by: Jerome Brunet <jbrunet@baylibre.com>
->> ---
->> changes since v3:
->> - Remove unnecessary reset_control_rearm() after reset_control_reset()
->> failure.
-> I double-checked your patch in v3 and Philipp was right:
-> reset_control_rearm() should not be right after reset_control_reset().
-> However, I think reset_control_rearm() is still needed
-> phy_meson_gxl_usb2_init() whenever clk_prepare_enable() fails.
-
-Well seen, reset_control_rearm() should actually be called after
-
-clk_prepare_enable() fails. I will wait for any other potential reviews
-
-before sending next version with this change you suggested.
-
-
-Thank you Martin.
-
-Amjad
-
-> So my suggestion is to add reset_control_rearm() in
-> phy_meson_gxl_usb2_init() if clk_prepare_enable() fails so we are
-> resetting the ref-count for the reset line (just like
-> phy_meson_gxl_usb2_exit() does).
-> The difference compared to the previous version is that the
-> reset_control_rearm() call needs to be placed a few lines down.
->
->
-> Thank you!
-> Martin
