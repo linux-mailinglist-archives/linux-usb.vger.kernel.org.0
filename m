@@ -2,133 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A264446B501
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 09:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DDD46B5AA
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 09:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231920AbhLGIEQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Dec 2021 03:04:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37092 "EHLO
+        id S232439AbhLGI16 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Dec 2021 03:27:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbhLGIEP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Dec 2021 03:04:15 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F321C061746
-        for <linux-usb@vger.kernel.org>; Tue,  7 Dec 2021 00:00:46 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1muVOQ-0007PQ-FL; Tue, 07 Dec 2021 09:00:06 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1muVOM-003B7k-DF; Tue, 07 Dec 2021 09:00:01 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1muVOL-00046X-3Z; Tue, 07 Dec 2021 09:00:01 +0100
-Date:   Tue, 7 Dec 2021 08:59:58 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     devicetree@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
-        <linux-mmc@vger.kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v2 03/14] dt-bindings: pwm: Convert BCM7038 PWM binding
- to YAML
-Message-ID: <20211207075958.fsw6hcvpocnwokot@pengutronix.de>
-References: <20211206182616.2089677-1-f.fainelli@gmail.com>
- <20211206182616.2089677-4-f.fainelli@gmail.com>
+        with ESMTP id S230084AbhLGI16 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Dec 2021 03:27:58 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1BDC061746;
+        Tue,  7 Dec 2021 00:24:28 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id c4so27728252wrd.9;
+        Tue, 07 Dec 2021 00:24:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=CGQxHcZ8H0ueG4j2XagujWeXk5IDBCbZgPJ7D3M94sk=;
+        b=hcZrt4mLTod+gaRghcvCOn+gN6qk72Mwbc5bWLJ0mIiUy5TnYBUBw6xibGCq3H+p9e
+         tdimqn5FyPIvcM0NN7WWs+cr+iJUORqw3waVueUR78fPYSgIp6w48drXLMCtDXtQBSw0
+         MeiKOoTEyWbA/2Hmql0K2b6dDKyQMqHBEGe+YA1osjKOW0ZZCeD9l/ueFYcCV3shLJBB
+         z6hMGJ1GvNBqpwEHema5nL+MLMN8R34RurF5Z5FfO+WOlHJO+as+oHA89ZcyLRVLD6XS
+         Xu2nT1SOndYCzW4YPjHiZ/GuutnB7Er/Nerc/fA2ZYf0xObeUl57QRQMRvOft0OJ9c5U
+         JFig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=CGQxHcZ8H0ueG4j2XagujWeXk5IDBCbZgPJ7D3M94sk=;
+        b=jy13LykogHRmpG+fiuaGYtXbK3aXsJmFLJiTSPIvAYX3TNDilFgINbVHBD9iRUhQcN
+         2rLfNwXbf3bGMz3n5iQ3jcohS36/sdsA+pWK1sf7BV4NK0V+ShtB5vQa9XtRbeVQdANd
+         6nodXEdCnZAoXyIBtvHXkdC3+SFdEdGcWjFLfZe3iaNizzbi3k6cv14+oW1ihupD/oDQ
+         HcZGcnNw+8/JWbXzeNg3TvF2vhG/jdaycg8NrjncsWxC37TKQ1eJC4KGqCWJ0k1PhVAd
+         RD813WMImwIplYlLTgLQFkO7mpBThv6veQgji6LEURaMTweA93kTYbGwXyA18frjAvra
+         q5zQ==
+X-Gm-Message-State: AOAM533pKwhGJrwT3iSaNfvWFo3a5PMLGNXOIucyGwJsj6HDFYBQ8Ixl
+        WIkVHmqx5OheUEcvi3Rdbs+aMz0VUaroAQ==
+X-Google-Smtp-Source: ABdhPJwkXWsAGqdvcqhLLWE4lqaGDbN1J7BWUDOVnXihaVIwVEiMKDkZgPgsHg00MBH7domL/T2xBA==
+X-Received: by 2002:a05:6000:1289:: with SMTP id f9mr47601358wrx.329.1638865466766;
+        Tue, 07 Dec 2021 00:24:26 -0800 (PST)
+Received: from orome.fritz.box ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id g18sm13949473wrv.42.2021.12.07.00.24.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 00:24:25 -0800 (PST)
+Date:   Tue, 7 Dec 2021 09:24:23 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: Add missing properties used in examples
+Message-ID: <Ya8aNy1Mqa6t5OJg@orome.fritz.box>
+References: <20211206174113.2295616-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="icyezc67xbpvw2hr"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="LTXbiCdQlecc6zQr"
 Content-Disposition: inline
-In-Reply-To: <20211206182616.2089677-4-f.fainelli@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20211206174113.2295616-1-robh@kernel.org>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---icyezc67xbpvw2hr
-Content-Type: text/plain; charset=iso-8859-1
+--LTXbiCdQlecc6zQr
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hello,
-
-On Mon, Dec 06, 2021 at 10:26:05AM -0800, Florian Fainelli wrote:
-> Convert the Broadcom STB BCM7038 PWM Device Tree binding to YAML to help
-> with validation.
+On Mon, Dec 06, 2021 at 11:41:12AM -0600, Rob Herring wrote:
+> With 'unevaluatedProperties' support implemented, the following warnings
+> are generated in the usb examples:
 >=20
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> Documentation/devicetree/bindings/usb/intel,keembay-dwc3.example.dt.yaml:=
+ usb: usb@34000000: Unevaluated properties are not allowed ('reg' was unexp=
+ected)
+> Documentation/devicetree/bindings/usb/snps,dwc3.example.dt.yaml: usb@4a03=
+0000: Unevaluated properties are not allowed ('reg' was unexpected)
+>=20
+> Add the missing property definitions.
+>=20
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/usb/intel,keembay-dwc3.yaml         | 3 +++
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml        | 6 ++++++
+>  2 files changed, 9 insertions(+)
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+Reviewed-by: Thierry Reding <treding@nvidia.com>
 
-I assume you intend to take these patches all together via the bcm tree?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---icyezc67xbpvw2hr
+--LTXbiCdQlecc6zQr
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGvFHsACgkQwfwUeK3K
-7Am9zgf9F6D7Bcmxx5leYwqjEfbY0JtJ3JTkZmn3TENEY7kofnBMDZ9DvgsvnamU
-9GlECGVZSlUN/w6jWu1AEVpchAWRj7R+rzlwLuACXqZuhAAQIanbu/OUm3hjyODa
-EsYa/UNfNYPRtb02YYMeMqSbWWHW7QLNahOTlCs0vPYZqY89qGOK3S4fLtPpxMMT
-CXYHUvAxBFFAXV1Vc63YYok++9FYu66Xwx2JAC71ETrejR/OfTQm9ZwHuzu5Fz73
-kSCtdWm96QyJFhkgrkHlon+KkZcFAmR3LG2E3Pe/AQeNZ2h4ZvQ6DAKHwgdOjfQD
-VY3xAxykgM6YmDnYURchttBrwq9bWw==
-=R7jM
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGvGjcACgkQ3SOs138+
+s6HkwQ//cTOM5OZSNCr0s/+vnHIX3lu7vbmULrzt1xFHNi+4N2eqjQiFQ8uy9Z3w
+Rnt1sNFdNLs7MQW06vpMld5RZYHNdunr8cnkfeAMb/WBQjddF7chx4daNrLB0kkT
+yyZtk1yKfurbXJXH0QGbqCj7Z4JKXf8a8usJWx7cqq0ytbQLj48NLRPJYdddF/6c
+8UXQJaOk/FAK+/EFMOuuNxltTUT3fk2+xZu1XQCXlyXoa1UoOEEeQj67V3nvkt9J
+M7S3zDjEqp3R7QlNjeBS4Orw1Y3gm6a+WdJIwg8QXh/xk95kS5y2A37Smzhn7/c5
+AUesIugratVoR0q6pJ9Sp1nMQcD9Yxu2G9YHnKG4SfV126MCDO2gWK5J0u2sX/Ol
+boE6h6qldfFL8rzo6/x+01IBkN20dkr43PvaEwmHKaEKxGu2Fg5G+4UGJsfAl4Qf
+U4g+IPxphiI39t0HZSG4SAqaiYQXdVwOdU0PQSAqw4/xOKE+RFcCP2Qtxrc2IBDc
+F3a0iQpyJBxCDUMlDk9ocsXMDzFVA8wmhCy3qln+w0G5hMXBQ1br5ZhtWTIhxWoN
+MgoqHhkta4JUmXOvBEl/ErIx24nOybMsBuUDQ52vbiXuB3r4Xal9dv0WypmlFZbN
+mgf7YdOUopFb2iIw8LzjPGJjODOJMnDvO0XlWQ7LHNLtiIbt65Y=
+=OQUj
 -----END PGP SIGNATURE-----
 
---icyezc67xbpvw2hr--
+--LTXbiCdQlecc6zQr--
