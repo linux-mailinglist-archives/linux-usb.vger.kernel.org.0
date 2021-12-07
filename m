@@ -2,53 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1715946AEBD
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 01:01:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A8646AF2B
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 01:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357949AbhLGAEy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Dec 2021 19:04:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        id S1354264AbhLGAd0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Dec 2021 19:33:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353884AbhLGAEx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 19:04:53 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D5EC061746
-        for <linux-usb@vger.kernel.org>; Mon,  6 Dec 2021 16:01:23 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so15784742otu.10
-        for <linux-usb@vger.kernel.org>; Mon, 06 Dec 2021 16:01:23 -0800 (PST)
+        with ESMTP id S1344456AbhLGAdZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Dec 2021 19:33:25 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BBAC0613F8
+        for <linux-usb@vger.kernel.org>; Mon,  6 Dec 2021 16:29:55 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id cq22-20020a17090af99600b001a9550a17a5so609386pjb.2
+        for <linux-usb@vger.kernel.org>; Mon, 06 Dec 2021 16:29:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=BMx3q+Kfe+DjuBkGP2gx6f6ECT/xxrr/KpPYeMR6rqY=;
-        b=NFiU+B4iBWL13hKwzLmjIsvkDTb+/PdHPbMX3+qxkC3RPswW1q2PN+IhkSqlyZcDfb
-         QoVRaokY8QUqXMQ7W6c77dsShprJhkTKRGMSSNPv3Bgq7h14tbMa8Ruij5nMzA4CUU/w
-         kCYr27i4BR4lTQjvINB+IJWCet0My1EfN9n9TE01WSTOTIEKNrhYyqkc2QQmXO9EXmsR
-         PB7BmGRHCYrLfLY4rLy4jw8mo1w1RgDlqKB6Uj6HiGe5hPRQ0Q1AC1Nb0sD1zy8uCRVE
-         aFaYYwFo+e+Ub7Xes3ggKNBmnA9ZfHFVkjEjYWyD/K9mJaAVvad+x58SUyqN8rgn6Or1
-         RCeA==
+        bh=JFL3a9BAYZxoPiyJ9z8spwDTdM7PhrtvmEyrxDtZRok=;
+        b=XwgclYJMnSTCpHdW7a228z9KW8jBcv/cslPUgF703S+wkiaP/lUQXC+cGactY7lXeG
+         4SHapoJAU/OSXP3kEYONYNBy9YX08hE/r/Vdz2qC8DrZcHNCK4PZv2nK87ITxsxmpw8A
+         mf42HFfH7FAOSfpyVzn0J/Mod0E9oEK2Z9xhY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=BMx3q+Kfe+DjuBkGP2gx6f6ECT/xxrr/KpPYeMR6rqY=;
-        b=xPj1cM60kSUNl3rDEnwJKsJhe3ZgoNtLWJV1Kw0TmneUCqOkoEDeGcTaT03zqSZch0
-         pv/eTc45L6/Vt8+8WuTnUYzg73stV04vFkvlBPZD1R6rLuGUI+GMoChhJzmUx3R5WM8f
-         mWjz64uF3qQhk1bCNnmVSaeGKrVHw1bKd/thHsIX6a81+d3+gvgsAHRHcB2Lnpe5v1eP
-         tb+m334EEwhlYOgWV+rskHQe00fLHgj7p1lyT6RFC2pLtJ6XibGRYZFSXo+5l4Gy4ux/
-         pKnavzn8JTcG3nKvqFZuWC2eG9rXcQUkyKmBNrV7UpeHUZI7xZoT7u2DQHnH1EMb9GaA
-         oUdA==
-X-Gm-Message-State: AOAM530dNvq+0HshTIAf7Q2RQaQmu/asbkbmLnxZZuEH9BnxzUH9mtgA
-        NNGsOHDG1Xea5ljf9zrnBpE5gxqVHTkAuw==
-X-Google-Smtp-Source: ABdhPJyJVSzNU6F1HqOXYRJMj962C/4c6y+kX4SRPOFBKIuAkiZVa/wrgDOKiuQxf16isJv8mhxR3A==
-X-Received: by 2002:a9d:364b:: with SMTP id w69mr33095589otb.18.1638835282986;
-        Mon, 06 Dec 2021 16:01:22 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id 49sm2443205oti.65.2021.12.06.16.01.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 16:01:22 -0800 (PST)
-Date:   Mon, 6 Dec 2021 16:02:48 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+        bh=JFL3a9BAYZxoPiyJ9z8spwDTdM7PhrtvmEyrxDtZRok=;
+        b=fbrtIm2LiL/OBzOWnWbKHNKH2JFXWcDTrIyJ1xz7UFzurZ9MOH5oTy7ZCuBorMPISl
+         zGW/crL6MP/5zJCkw0PHwxNP/alTR5HEo8BYnbFU+BuTV0n6dOH+Szxwtj2JjJWEFw/1
+         pyyF9zYiuemrUY4rd56urb4pj0MvuBgJQkcA2HjN+o54lqeSbkACo4yA80VuvOa6KYFm
+         wkxXD053zOwebbx34aflYNXay0QzO1gs2GMbmpUnKEKdNZ129fYg0sBZyb9aQXTFHFet
+         vFhUewVegOBlHSrjt4/gPU3J0pBJpIRXFfu7aNWOzQJA01jL7fFAEAwLikOeS0hTy0oT
+         BENA==
+X-Gm-Message-State: AOAM530E4759NLz+FXHjZ6d/ije1kVemF4oZyVerM8h2AR0W5me0kLTk
+        x3+OLveCyvdFYoenfssPbl/bSw==
+X-Google-Smtp-Source: ABdhPJyu2gXkmFVy2jBSwD5NikHxHYUQekaMuJzFF7uNw87YY3rZyctiaHhY1+HGMxIXBEJowJiJ4A==
+X-Received: by 2002:a17:90b:1e0c:: with SMTP id pg12mr2411598pjb.135.1638836995310;
+        Mon, 06 Dec 2021 16:29:55 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:ab1b:c09c:ed69:5925])
+        by smtp.gmail.com with UTF8SMTPSA id mq14sm523121pjb.54.2021.12.06.16.29.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 16:29:54 -0800 (PST)
+Date:   Mon, 6 Dec 2021 16:29:53 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
 To:     Douglas Anderson <dianders@chromium.org>
 Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -56,22 +53,22 @@ Cc:     Felipe Balbi <balbi@kernel.org>,
         swboyd@chromium.org, Wesley Cheng <quic_wcheng@quicinc.com>,
         robdclark@chromium.org, linux-arm-msm@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Wesley Cheng <wcheng@codeaurora.org>,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Subject: Re: [PATCH] usb: dwc3: dwc3-qcom: Avoid use-after-free when USB
  defers or unbinds
-Message-ID: <Ya6kqL3WzxjdtiSG@ripper>
+Message-ID: <Ya6rAVgZ+hSYNaVE@google.com>
 References: <20211206152844.1.I411110cc99c1dd66b01aa9aa25651acf8ff55da1@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 In-Reply-To: <20211206152844.1.I411110cc99c1dd66b01aa9aa25651acf8ff55da1@changeid>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon 06 Dec 15:28 PST 2021, Douglas Anderson wrote:
-
+On Mon, Dec 06, 2021 at 03:28:47PM -0800, Douglas Anderson wrote:
 > On sc7180-trogdor class devices with 'fw_devlink=permissive' and KASAN
 > enabled, you'll see a Use-After-Free reported at bootup.
 > 
@@ -93,63 +90,7 @@ On Mon 06 Dec 15:28 PST 2021, Douglas Anderson wrote:
 > of_remove_property(), which says that properties are never really
 > removed and they're just moved to the side.
 > 
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Regards,
-Bjorn
-
 > Fixes: cefdd52fa045 ("usb: dwc3: dwc3-qcom: Enable tx-fifo-resize property by default")
 > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> 
->  drivers/usb/dwc3/dwc3-qcom.c | 32 +++++++++++++++++++++-----------
->  1 file changed, 21 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 9abbd01028c5..34b054033116 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -658,18 +658,28 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
->  		return -ENODEV;
->  	}
->  
-> -	prop = devm_kzalloc(dev, sizeof(*prop), GFP_KERNEL);
-> -	if (!prop) {
-> -		ret = -ENOMEM;
-> -		dev_err(dev, "unable to allocate memory for property\n");
-> -		goto node_put;
-> -	}
-> +	/*
-> +	 * Permanently add the "tx-fifo-resize" to the device tree. Even if
-> +	 * our device is unregistered this property will still be part
-> +	 * of the device tree until reboot. Because this is a "permanent"
-> +	 * change, we allocate memory _without_ devm. For some context, see
-> +	 * the fact that of_remove_property() doesn't actually remove things.
-> +	 */
-> +	if (!of_find_property(dwc3_np, "tx-fifo-resize", NULL)) {
-> +		prop = kzalloc(sizeof(*prop), GFP_KERNEL);
-> +		if (!prop) {
-> +			ret = -ENOMEM;
-> +			dev_err(dev, "unable to allocate memory for property\n");
-> +			goto node_put;
-> +		}
->  
-> -	prop->name = "tx-fifo-resize";
-> -	ret = of_add_property(dwc3_np, prop);
-> -	if (ret) {
-> -		dev_err(dev, "unable to add property\n");
-> -		goto node_put;
-> +		prop->name = "tx-fifo-resize";
-> +		ret = of_add_property(dwc3_np, prop);
-> +		if (ret) {
-> +			dev_err(dev, "unable to add property\n");
-> +			kfree(prop);
-> +			goto node_put;
-> +		}
->  	}
->  
->  	ret = of_platform_populate(np, NULL, NULL, dev);
-> -- 
-> 2.34.1.400.ga245620fadb-goog
-> 
+
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
