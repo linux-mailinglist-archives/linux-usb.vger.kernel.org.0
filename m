@@ -2,95 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81EFD46BFC4
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 16:47:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B8C46BFDF
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 16:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239054AbhLGPuu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Dec 2021 10:50:50 -0500
-Received: from mga07.intel.com ([134.134.136.100]:22278 "EHLO mga07.intel.com"
+        id S239162AbhLGPyD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Dec 2021 10:54:03 -0500
+Received: from mga02.intel.com ([134.134.136.20]:63716 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239048AbhLGPuu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:50:50 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="300985523"
+        id S239155AbhLGPyC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 Dec 2021 10:54:02 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="224861850"
 X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="300985523"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 07:47:18 -0800
+   d="scan'208";a="224861850"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 07:50:32 -0800
 X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="542835501"
+   d="scan'208";a="461308366"
 Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 07:47:07 -0800
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 07:50:30 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.95)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mucfP-003HBs-3l;
-        Tue, 07 Dec 2021 17:46:07 +0200
-Date:   Tue, 7 Dec 2021 17:46:06 +0200
+        id 1mucig-003HF6-4A;
+        Tue, 07 Dec 2021 17:49:30 +0200
+Date:   Tue, 7 Dec 2021 17:49:29 +0200
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/5] usb: typec: port-mapper: Convert to the component
- framework
-Message-ID: <Ya+BvnS8XqW9NpNc@smile.fi.intel.com>
-References: <20211207143757.21895-1-heikki.krogerus@linux.intel.com>
- <20211207143757.21895-5-heikki.krogerus@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+Subject: Re: [PATCH v1 1/1] thunderbolt: Do not dereference fwnode in struct
+ device
+Message-ID: <Ya+CiaFial3Z+9n2@smile.fi.intel.com>
+References: <20211207154143.11477-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211207143757.21895-5-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20211207154143.11477-1-andriy.shevchenko@linux.intel.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 05:37:56PM +0300, Heikki Krogerus wrote:
-> Instead of trying to keep track of the connections to the
-> USB Type-C connectors separately, letting the component
-> framework take care of that.
-> 
-> From now on every USB Type-C connector will register itself
-> as "aggregate" - component master - and anything that can be
-> connected to it can then simply register itself as a generic
-> component.
-> 
-> The matching of the components and the connector shall rely
-> on ACPI _PLD initially. Before registering itself as the
-> aggregate, the connector will check the list of other
-> devices that share the same ACPI _PLD with it, and add a
-> component match entry for each one of them. Because only
-> ACPI is supported for now, the driver shall only be build
-> when ACPI is supported.
-> 
-> This removes the need for the custom API that the driver
-> exposed. The components and the connector can therefore
-> exist completely independently of each other. The order in
-> which they are registered, as well as are they modules or
-> not, is now irrelevant.
+On Tue, Dec 07, 2021 at 05:41:43PM +0200, Andy Shevchenko wrote:
+> In order to make the underneath API easier to change in the future,
+> prevent users from dereferencing fwnode from struct device.
+> Instead, use the specific dev_fwnode() API for that.
 
 ...
 
-> +static int typec_port_compare(struct device *dev, void *fwnode)
->  {
+>  	/* It needs to reference this NHI */
+> -	if (nhi->pdev->dev.fwnode != args.fwnode)
+> +	if (dev_fwnode(&nhi->pdev->dev) != args.fwnode)
 
-> +	return dev_fwnode(dev) == fwnode;
->  }
+Alternatively:
 
-NIH device_match_fwnode()
+	if (!device_match_fwnode(&nhi->pdev->dev, args.fwnode))
 
-...
+Tell me. which one you prefer.
 
-> +	/* Component match for every device that shares the same _PLD. */
-> +	list_for_each_entry(adev, &location->devices, location_list) {
-
-> +		if (adev == ACPI_COMPANION(&con->dev))
-
-	device_match_acpi_dev()
-
-> +			continue;
+>  		goto out_put;
 
 -- 
 With Best Regards,
