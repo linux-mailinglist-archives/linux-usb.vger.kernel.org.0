@@ -2,96 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAEE046BD53
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 15:11:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B87A46BDE1
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 15:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237613AbhLGOPF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Dec 2021 09:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40220 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232213AbhLGOPE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Dec 2021 09:15:04 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3387EC061574;
-        Tue,  7 Dec 2021 06:11:34 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id u22so27625727lju.7;
-        Tue, 07 Dec 2021 06:11:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=pWSGmOrMwfws0Ucq14Q1XoroBza19gcrEAP48UdsgDM=;
-        b=YYhDl2izG2LKie5W2Be936oRPf21p/xzlvvb6ALY7NhApzL8N7H1F+Pn1xLxQM0TVO
-         y5Y1NYbR1YiAW3T9AHGlHpU2HlSE6d22SJoEfvIV3+aqRp5wJY9qO4ZFZjdyIWlpTgJd
-         pTFGsMgUZnkE9vMaA3Q5DW7Imc7daZGOZ6wHJpKWk0rdCGn6uZPHXkgw6c3htI1nbCF6
-         LCMTJctNf+B+cwzzdPDrvUmW1u8dhbmdvxXtEJqC//Bj3jZ1Pccps1hsRdoXDqlqL4OD
-         G0TxRXOLxoe+gz1fB9guNAxBVfIWUVCrd9eNTZcOGeB37YDWP/VWJeUBprhvRvikv9LR
-         /hqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=pWSGmOrMwfws0Ucq14Q1XoroBza19gcrEAP48UdsgDM=;
-        b=C5SObyk2xYurOjZ5Y1EPK4s4i8gnan+qt10JCfWFqMrdkA4Cb2UDq1RZLKEK7J3cLE
-         oq+ecL5h0eEoXGFrCJdi5T9tpemTepB7nyn+KtaTPvf6Bmq6cGcHziqzsSXnEncBEUgB
-         gKqElbZ+FN0wo2YySiPhTyKu0+efKMrN6DOUHdG5Tf+Uhjf+GZNSJbxh1pEgCy4lQBq/
-         HC4ZvA6ujF9x13roFs1o4YjxlSlYn8PXssWnZWxpFKZ9dkMzwuKAqxA5fWwbpVH4qdns
-         R25avl+t2nwmnKtjIJmSh9MxNzs9Tk3NWHPwmqg06bKJgfL2Shd2tX75DxZISu0IXzx4
-         1B9A==
-X-Gm-Message-State: AOAM533uXGxy6kP6XQa8y0sG+farK7Y48xpjdCO1u10yNU7DkA14FVm/
-        h1SRStWJvbKA2dZI/22ue6by6zasB/4=
-X-Google-Smtp-Source: ABdhPJwmGorNge5TIowflQGYy3HlJeLfrQsqkkf7E3IJwgP7ow7mRYgrNVfYMEHsxjh+2+0qxs2NuA==
-X-Received: by 2002:a2e:a78c:: with SMTP id c12mr41978220ljf.418.1638886291839;
-        Tue, 07 Dec 2021 06:11:31 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id i24sm1813605ljm.135.2021.12.07.06.11.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 06:11:31 -0800 (PST)
-Subject: Re: [PATCH] usb: phy: add missing put_device() call in
- tegra_usb_phy_parse_pmc()
-To:     Qing Wang <wangqing@vivo.com>, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        id S238008AbhLGOl2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Dec 2021 09:41:28 -0500
+Received: from mga03.intel.com ([134.134.136.65]:48397 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237989AbhLGOlZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 Dec 2021 09:41:25 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237528417"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="237528417"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 06:37:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="657725063"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Dec 2021 06:37:51 -0800
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <1638881794-3361-1-git-send-email-wangqing@vivo.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <768ced18-9e47-df7d-786e-dced5f06b0e7@gmail.com>
-Date:   Tue, 7 Dec 2021 17:11:30 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Subject: [PATCH 0/5] acpi: Store _PLD information and convert users
+Date:   Tue,  7 Dec 2021 17:37:52 +0300
+Message-Id: <20211207143757.21895-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <1638881794-3361-1-git-send-email-wangqing@vivo.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-07.12.2021 15:56, Qing Wang пишет:
-> From: Wang Qing <wangqing@vivo.com>
-> 
-> of_find_device_by_node() takes a reference to the embedded struct device 
-> which needs to be dropped when error return.
-> 
-> Add a jump target to fix the exception handling for this 
-> function implementation.
-> 
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> ---
->  drivers/usb/phy/phy-tegra-usb.c | 18 +++++++++++++-----
->  1 file changed, 13 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
-> index 68cd4b6..5678b7f
-> --- a/drivers/usb/phy/phy-tegra-usb.c
-> +++ b/drivers/usb/phy/phy-tegra-usb.c
-> @@ -1300,18 +1300,26 @@ static int tegra_usb_phy_parse_pmc(struct device *dev,
->  	err = devm_add_action_or_reset(dev, tegra_usb_phy_put_pmc_device,
->  				       &pmc_pdev->dev);
+Hi,
 
-This devm_add_action_or_reset() takes care of dropping the reference.
-This patch is incorrect.
+This removes the need for the drivers to always separately evaluate
+the _PLD. With the USB Type-C connector and USB port mapping this
+allows us to start using the component framework and remove the custom
+APIs.
+
+So far the only users of the _PLD information have been the USB
+drivers, but it seems it will be used also at least in some camera
+drivers later. These nevertheless touch mostly USB drivers.
+
+Rafael, is it still OK if Greg takes these?
+
+Prashant, can you test these?
+
+thanks,
+
+Heikki Krogerus (5):
+  acpi: Store the Physical Location of Device (_PLD) information
+  usb: Use the cached ACPI _PLD entry
+  usb: Link the ports to the connectors they are attached to
+  usb: typec: port-mapper: Convert to the component framework
+  usb: Remove usb_for_each_port()
+
+ Documentation/ABI/testing/sysfs-bus-usb |   9 +
+ drivers/acpi/scan.c                     |  79 +++++++
+ drivers/usb/core/port.c                 |  32 +++
+ drivers/usb/core/usb-acpi.c             |  17 +-
+ drivers/usb/core/usb.c                  |  46 ----
+ drivers/usb/typec/Makefile              |   3 +-
+ drivers/usb/typec/class.c               |   2 -
+ drivers/usb/typec/class.h               |  10 +-
+ drivers/usb/typec/port-mapper.c         | 280 +++---------------------
+ include/acpi/acpi_bus.h                 |  14 ++
+ include/linux/usb.h                     |   9 -
+ include/linux/usb/typec.h               |  12 -
+ 12 files changed, 184 insertions(+), 329 deletions(-)
+
+-- 
+2.33.0
+
