@@ -2,183 +2,225 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D58E46B2B7
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 07:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B023C46B2F6
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 07:34:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236528AbhLGGLd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Dec 2021 01:11:33 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:18160 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230094AbhLGGLc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Dec 2021 01:11:32 -0500
+        id S236878AbhLGGhs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Dec 2021 01:37:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236561AbhLGGhr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Dec 2021 01:37:47 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F50AC061746
+        for <linux-usb@vger.kernel.org>; Mon,  6 Dec 2021 22:34:17 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id v19so8722222plo.7
+        for <linux-usb@vger.kernel.org>; Mon, 06 Dec 2021 22:34:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1638857283; x=1670393283;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=C50vMUQCSTWdZAtbvGYHo6lp8bRwpHsLvUxB4enqqvE=;
-  b=GCPmknML1lFQCIN4dH8IAqPpSS6qF9R8zTi8QWbX3czoIjUvYcg/CgPl
-   RNAkTxS/R4E1hX3U6ukD2KYnmC6I1lifR3gFaRq23jdNN5GynrtHH7Yf+
-   tX4IihYy68oDrKUrfy+7qTe0/HkC7EenpPTTptosn+3+xJozdxIqznJDr
-   k=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Dec 2021 22:08:03 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 22:08:02 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 6 Dec 2021 22:08:02 -0800
-Received: from ugoswami-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 6 Dec 2021 22:07:59 -0800
-From:   Udipto Goswami <quic_ugoswami@quicinc.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        John Keeping <john@metanate.com>
-CC:     Udipto Goswami <quic_ugoswami@quicinc.com>,
-        <linux-usb@vger.kernel.org>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>
-Subject: [PATCH v6] usb: f_fs: Fix use-after-free for epfile
-Date:   Tue, 7 Dec 2021 11:37:54 +0530
-Message-ID: <1638857274-24842-1-git-send-email-quic_ugoswami@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Emt2JkswUzgDqf8sxIuCj+2Zu8uEYoGq5UFr0+ay5HA=;
+        b=WbU7Bo1bBi+0M30NcQocYYFYvWJbyD2SKlgPg8opHPZE5xdf8ckwrc923/DyVSkxxz
+         wiHVA7Rl9qycdT4RA/ky6RYmzL57DkvsCI5LZjz5hs/uVFs2gDhpQo6KrhmTjozicHLe
+         iVaL/a87TfTZhcO+uoawWSqHwz0nXd84ny6wQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Emt2JkswUzgDqf8sxIuCj+2Zu8uEYoGq5UFr0+ay5HA=;
+        b=iwvh/NnBxLptWlhOfdZnyzdcC32lC5+31xcCt2XSSFfl5Sdua958dUBGoKBSzYkzPs
+         C3qyOOuDmuyBqICMyBFz3sGJLZ3krftdBvhdhRWT+aaj0OJ+4nK5WjXTZgBErtTzPr37
+         /tI6K3xnDttGxGdBZAPwjTTkwOiDFeik95mUpHlbAjPWCbwwuJFRzvQWvxrOiyTOT7S0
+         rdzmU/QxlAi3HuY4Ax37IlUaYHO7nLFdmLHey136OWmB1PH0HXDDOa76DKKFRXD6psaO
+         RvuN6h6LYgwkJ2YEEqe8Qjh2FO2eYa32lSqOLfv/TltnRm+BrYIoaWNH0KZ8iHigZyhh
+         g+hQ==
+X-Gm-Message-State: AOAM530zcJxIib6P6riOsesecg4iUap32Iixz8thOGG49myLtCjA23ys
+        IMcr9zNqHtpBB2KOjLmrSogX6g==
+X-Google-Smtp-Source: ABdhPJyiiwA2wiGhlQqwZM26X0WYC07uDsFWVWP0yM+rE9SWJ4ijWo4/kPswqvZNJ0M70dYFiLBURQ==
+X-Received: by 2002:a17:903:11cd:b0:143:d220:fdd8 with SMTP id q13-20020a17090311cd00b00143d220fdd8mr48711514plh.79.1638858856978;
+        Mon, 06 Dec 2021 22:34:16 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id e7sm9120984pfv.156.2021.12.06.22.34.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 22:34:16 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Andreas Noever <andreas.noever@gmail.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] thunderbolt: xdomain: Avoid potential stack OOB read
+Date:   Mon,  6 Dec 2021 22:34:13 -0800
+Message-Id: <20211207063413.2698788-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4387; h=from:subject; bh=BIm58zF4mV3fKF2Ss4EiT2c/TJ3cCjC0s1vkTlp0s78=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhrwBl6bk7nUxAvxrQ05Ute7jLqPxYkReEtXtbE01y yQr7vwuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYa8AZQAKCRCJcvTf3G3AJt85EA CZ6aWdb8Vi5rtu0wU4tbc5S5o1pxM40CH1bQQPMrwCGjpjH0T5QJRr2+YdSlOKFsbPWtbPA9ZCEiH0 rL0iuv6zLHJP+5C0HBDpd7PCM44cgKJ5/lzldXijI1gPJLfsJT0LLhFgnG7sdQG7XmyW+fxagC2ang Jd4Gu379X/vg5xDc6Mw3cbSKOYF7yA16LFAujWo2oBwGyYZV3g2iH1U2cW7Y9pfom+iVNyDpTG9fRr O1/mY2kPNh2qPrTtDkP5boz1L8AvwRpIs00yDdj2iKRGYb/etDreuuJetitWWsMGaPyaOdenaet4SC qZWxzWMe7nvxk/OUdkRwFpPUCCnxpO+RtE+EsI9K4fMHASEBnAo0cTbTfW2UxjhUkpKCBTgA2oYNBq vDsCY9x2SHZvtIjsUkZ05CEWysReRqtx2m/uI1xlkALWvtQ5nIra2aQuG2Lzgd01rFyBt1T9aQ+kud QHaZqP9torrBTIoOKsAH58k6ogl9HYd30p7Cu1B37ez6V+CXg32yEQV8Rhe+jATuXI+tEwnSQTvuLy jCZqnisF/79yqyTCLU8eWPbDaPsCaK2YlvmZmXynyb1VBu0x11KnHCwFjsaEoKIh7IadY6ibTQc06C TTniJcFECZx+greYyKuAgR1QVjHEozYUPdt9geTnc2cy8VJG+JvSTeEUt1Lg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Consider a case where ffs_func_eps_disable is called from
-ffs_func_disable as part of composition switch and at the
-same time ffs_epfile_release get called from userspace.
-ffs_epfile_release will free up the read buffer and call
-ffs_data_closed which in turn destroys ffs->epfiles and
-mark it as NULL. While this was happening the driver has
-already initialized the local epfile in ffs_func_eps_disable
-which is now freed and waiting to acquire the spinlock. Once
-spinlock is acquired the driver proceeds with the stale value
-of epfile and tries to free the already freed read buffer
-causing use-after-free.
+tb_xdp_properties_changed_request() was calling tb_xdp_handle_error() with
+a struct tb_xdp_properties_changed_response on the stack, which does not
+have the "error" field present when cast to struct tb_xdp_error_response.
+This was detected when building with -Warray-bounds:
 
-Following is the illustration of the race:
+drivers/thunderbolt/xdomain.c: In function 'tb_xdomain_properties_changed':
+drivers/thunderbolt/xdomain.c:226:22: error: array subscript 'const struct tb_xdp_error_response[0]' is partly outside array bounds of 'struct tb_xdp_properties_changed_response[1]' [-Werror=array-bounds]
+  226 |         switch (error->error) {
+      |                 ~~~~~^~~~~~~
+drivers/thunderbolt/xdomain.c:448:51: note: while referencing 'res'
+  448 |         struct tb_xdp_properties_changed_response res;
+      |                                                   ^~~
 
-      CPU1                                  CPU2
+Add union containing struct tb_xdp_error_response to structures passed
+to tb_xdp_handle_error(), so that the "error" field will be present.
 
-   ffs_func_eps_disable
-   epfiles (local copy)
-					ffs_epfile_release
-					ffs_data_closed
-					if (last file closed)
-					ffs_data_reset
-					ffs_data_clear
-					ffs_epfiles_destroy
-spin_lock
-dereference epfiles
-
-Fix this races by taking epfiles local copy & assigning it under
-spinlock and if epfiles(local) is null then update it in ffs->epfiles
-then finally destroy it.
-
-Reviewed-by: John Keeping <john@metanate.com>
-Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
-Co-developed-by: Udipto Goswami <quic_ugoswami@quicinc.com>
-Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
-v6: Addressing minor code formatting.
+ drivers/thunderbolt/tb_msgs.h | 47 ++++++++++++++++++++++-------------
+ drivers/thunderbolt/xdomain.c | 16 +++++-------
+ 2 files changed, 36 insertions(+), 27 deletions(-)
 
- drivers/usb/gadget/function/f_fs.c | 44 +++++++++++++++++++++++++++++---------
- 1 file changed, 34 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 3c584da..6f23a66 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -1711,16 +1711,24 @@ static void ffs_data_put(struct ffs_data *ffs)
+diff --git a/drivers/thunderbolt/tb_msgs.h b/drivers/thunderbolt/tb_msgs.h
+index bcabfcb2fd03..fe1afa44c56d 100644
+--- a/drivers/thunderbolt/tb_msgs.h
++++ b/drivers/thunderbolt/tb_msgs.h
+@@ -535,15 +535,25 @@ struct tb_xdp_header {
+ 	u32 type;
+ };
  
- static void ffs_data_closed(struct ffs_data *ffs)
++struct tb_xdp_error_response {
++	struct tb_xdp_header hdr;
++	u32 error;
++};
++
+ struct tb_xdp_uuid {
+ 	struct tb_xdp_header hdr;
+ };
+ 
+ struct tb_xdp_uuid_response {
+-	struct tb_xdp_header hdr;
+-	uuid_t src_uuid;
+-	u32 src_route_hi;
+-	u32 src_route_lo;
++	union {
++		struct tb_xdp_error_response err;
++		struct {
++			struct tb_xdp_header hdr;
++			uuid_t src_uuid;
++			u32 src_route_hi;
++			u32 src_route_lo;
++		};
++	};
+ };
+ 
+ struct tb_xdp_properties {
+@@ -555,13 +565,18 @@ struct tb_xdp_properties {
+ };
+ 
+ struct tb_xdp_properties_response {
+-	struct tb_xdp_header hdr;
+-	uuid_t src_uuid;
+-	uuid_t dst_uuid;
+-	u16 offset;
+-	u16 data_length;
+-	u32 generation;
+-	u32 data[0];
++	union {
++		struct tb_xdp_error_response err;
++		struct {
++			struct tb_xdp_header hdr;
++			uuid_t src_uuid;
++			uuid_t dst_uuid;
++			u16 offset;
++			u16 data_length;
++			u32 generation;
++			u32 data[];
++		};
++	};
+ };
+ 
+ /*
+@@ -580,7 +595,10 @@ struct tb_xdp_properties_changed {
+ };
+ 
+ struct tb_xdp_properties_changed_response {
+-	struct tb_xdp_header hdr;
++	union {
++		struct tb_xdp_error_response err;
++		struct tb_xdp_header hdr;
++	};
+ };
+ 
+ enum tb_xdp_error {
+@@ -591,9 +609,4 @@ enum tb_xdp_error {
+ 	ERROR_NOT_READY,
+ };
+ 
+-struct tb_xdp_error_response {
+-	struct tb_xdp_header hdr;
+-	u32 error;
+-};
+-
+ #endif
+diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
+index eff32499610f..01d6b724ca51 100644
+--- a/drivers/thunderbolt/xdomain.c
++++ b/drivers/thunderbolt/xdomain.c
+@@ -214,16 +214,12 @@ static inline void tb_xdp_fill_header(struct tb_xdp_header *hdr, u64 route,
+ 	memcpy(&hdr->uuid, &tb_xdp_uuid, sizeof(tb_xdp_uuid));
+ }
+ 
+-static int tb_xdp_handle_error(const struct tb_xdp_header *hdr)
++static int tb_xdp_handle_error(const struct tb_xdp_error_response *res)
  {
-+	struct ffs_epfile *epfiles;
-+	unsigned long flags;
-+
- 	ENTER();
+-	const struct tb_xdp_error_response *error;
+-
+-	if (hdr->type != ERROR_RESPONSE)
++	if (res->hdr.type != ERROR_RESPONSE)
+ 		return 0;
  
- 	if (atomic_dec_and_test(&ffs->opened)) {
- 		if (ffs->no_disconnect) {
- 			ffs->state = FFS_DEACTIVATED;
--			if (ffs->epfiles) {
--				ffs_epfiles_destroy(ffs->epfiles,
--						   ffs->eps_count);
--				ffs->epfiles = NULL;
--			}
-+			spin_lock_irqsave(&ffs->eps_lock, flags);
-+			epfiles = ffs->epfiles;
-+			ffs->epfiles = NULL;
-+			spin_unlock_irqrestore(&ffs->eps_lock,
-+							flags);
-+
-+			if (epfiles)
-+				ffs_epfiles_destroy(epfiles,
-+						 ffs->eps_count);
-+
- 			if (ffs->setup_state == FFS_SETUP_PENDING)
- 				__ffs_ep0_stall(ffs);
- 		} else {
-@@ -1767,14 +1775,27 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
+-	error = (const struct tb_xdp_error_response *)hdr;
+-
+-	switch (error->error) {
++	switch (res->error) {
+ 	case ERROR_UNKNOWN_PACKET:
+ 	case ERROR_UNKNOWN_DOMAIN:
+ 		return -EIO;
+@@ -257,7 +253,7 @@ static int tb_xdp_uuid_request(struct tb_ctl *ctl, u64 route, int retry,
+ 	if (ret)
+ 		return ret;
  
- static void ffs_data_clear(struct ffs_data *ffs)
- {
-+	struct ffs_epfile *epfiles;
-+	unsigned long flags;
-+
- 	ENTER();
+-	ret = tb_xdp_handle_error(&res.hdr);
++	ret = tb_xdp_handle_error(&res.err);
+ 	if (ret)
+ 		return ret;
  
- 	ffs_closed(ffs);
+@@ -329,7 +325,7 @@ static int tb_xdp_properties_request(struct tb_ctl *ctl, u64 route,
+ 		if (ret)
+ 			goto err;
  
- 	BUG_ON(ffs->gadget);
+-		ret = tb_xdp_handle_error(&res->hdr);
++		ret = tb_xdp_handle_error(&res->err);
+ 		if (ret)
+ 			goto err;
  
--	if (ffs->epfiles)
--		ffs_epfiles_destroy(ffs->epfiles, ffs->eps_count);
-+	spin_lock_irqsave(&ffs->eps_lock, flags);
-+	epfiles = ffs->epfiles;
-+	ffs->epfiles = NULL;
-+	spin_unlock_irqrestore(&ffs->eps_lock, flags);
-+
-+	/*
-+	 * potential race possible between ffs_func_eps_disable
-+	 * & ffs_epfile_release therefore maintaining a local
-+	 * copy of epfile will save us from use-after-free.
-+	 */
-+	if (epfiles)
-+		ffs_epfiles_destroy(epfiles, ffs->eps_count);
+@@ -462,7 +458,7 @@ static int tb_xdp_properties_changed_request(struct tb_ctl *ctl, u64 route,
+ 	if (ret)
+ 		return ret;
  
- 	if (ffs->ffs_eventfd)
- 		eventfd_ctx_put(ffs->ffs_eventfd);
-@@ -1919,12 +1940,15 @@ static void ffs_epfiles_destroy(struct ffs_epfile *epfiles, unsigned count)
+-	return tb_xdp_handle_error(&res.hdr);
++	return tb_xdp_handle_error(&res.err);
+ }
  
- static void ffs_func_eps_disable(struct ffs_function *func)
- {
--	struct ffs_ep *ep         = func->eps;
--	struct ffs_epfile *epfile = func->ffs->epfiles;
--	unsigned count            = func->ffs->eps_count;
-+	struct ffs_ep *ep;
-+	struct ffs_epfile *epfile;
-+	unsigned short count;
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&func->ffs->eps_lock, flags);
-+	count = func->ffs->eps_count;
-+	epfile = func->ffs->epfiles;
-+	ep = func->eps;
- 	while (count--) {
- 		/* pending requests get nuked */
- 		if (ep->ep)
+ static int
 -- 
-2.7.4
+2.30.2
 
