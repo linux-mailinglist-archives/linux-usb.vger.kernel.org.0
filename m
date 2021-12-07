@@ -2,210 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E4D46B273
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 06:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7238346B2B3
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 07:01:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235593AbhLGFk2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Dec 2021 00:40:28 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:28111 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234147AbhLGFk1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Dec 2021 00:40:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1638855418; x=1670391418;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bCDiJ3a4cJkI+J0DxiPo5ciiGY5VxATe2lgLvRM2248=;
-  b=Cekd/TQq3TynTqWf1G5TA7BQ97Aq0faKHK6dCZq2TyVh0WTEcrggiCR9
-   xm0fWbW0De3hNZX30GwMw6vegVGkjV61ZfZ7uYD60/IBOoMZ14Fh0dOGl
-   NVzK9PpNf+/hoBOBBfsDg9F99Ez8Cdg7nA0v92OtK7NFHpOz5k7RejVV6
-   A=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Dec 2021 21:36:57 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 21:36:57 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 6 Dec 2021 21:36:57 -0800
-Received: from [10.216.53.235] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 6 Dec 2021
- 21:36:54 -0800
-Message-ID: <67efc7a5-74b3-9e65-9cf3-67efeda99c99@quicinc.com>
-Date:   Tue, 7 Dec 2021 11:06:50 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v5] usb: f_fs: Fix use-after-free for epfile
+        id S236422AbhLGGEq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 7 Dec 2021 01:04:46 -0500
+Received: from esa2.mentor.iphmx.com ([68.232.141.98]:43372 "EHLO
+        esa2.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230094AbhLGGEq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Dec 2021 01:04:46 -0500
+X-Greylist: delayed 426 seconds by postgrey-1.27 at vger.kernel.org; Tue, 07 Dec 2021 01:04:46 EST
+IronPort-SDR: Qx9nxJzVQ1uM4kgkfp/fJtujYTDSPzu2TkzpXwaKKrwTDELuW48NzKmEWKull8FvKCTVEVDAxD
+ c1D3K1qJjkbRKX6Lwp/94C/XVTj6YOl/9O4o+pwAZ3ifrGgJ1I4j6OtbzNrac0R77BKu7vqqr0
+ j/mplzao5VMg1IxwWAPMWlUUA0RyHLzwJXqIBTdjbDnBGVHSHmUqDzcEVguU/X+GPYwhdVQv0c
+ 8qhN3kHTt090xaceX7jRCS+z2v7bYnlndnQ1oxXWMfsrSCCqZ7dgPNs+ZcwGdWVTUgJCf9944G
+ rNLfEOhwQBqWicbFNQqHDp8K
+X-IronPort-AV: E=Sophos;i="5.87,293,1631606400"; 
+   d="scan'208";a="69361193"
+Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
+  by esa2.mentor.iphmx.com with ESMTP; 06 Dec 2021 21:54:10 -0800
+IronPort-SDR: ajFAqxV1lMnHHp2pvHDBoiDdNHjFjj+e9tQyXCA9kkFeNlCLTTEzmj6VSk69KSqkApiYp0hPRf
+ pBnorFtuc/M7sqBCT9/CL604bUOP8gjH9ZyJe4mBr4XYxEFlzhJDR27uo8Xx6O8YrnaNOIbs2f
+ 44aGldLE8y3kn3Vab8Oegd5x13iy1Yfv/cDP8hfCXVoY0+M67y3cJTKrlub4BoWA9iJkQrnKIw
+ siZcMlu05zeXp7VN93ME2UWVIDSi1pN2DKO8Z/uekvTilw8LBg8+sayYfpyBAJFAbUsEd/FrD8
+ 66M=
+From:   "Chugh, Sanjeev" <Sanjeev_Chugh@mentor.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH V1 1/1] usb: hub: introduce delay after usb hub mutex
+ release
+Thread-Topic: [PATCH V1 1/1] usb: hub: introduce delay after usb hub mutex
+ release
+Thread-Index: AQHX5k6IjsbHRxGuxkKr8PpAjenqEKwgvGyAgAXPsAA=
+Date:   Tue, 7 Dec 2021 05:54:06 +0000
+Message-ID: <361b7459f1d64f5e8b7bccaa2dd536e5@svr-ies-mbx-01.mgc.mentorg.com>
+References: <1638320288-6465-1-git-send-email-sanjeev_chugh@mentor.com>
+ <YaoS3RoqkGkf6NFa@kroah.com>
+In-Reply-To: <YaoS3RoqkGkf6NFa@kroah.com>
+Accept-Language: en-US, en-IE
 Content-Language: en-US
-To:     John Keeping <john@metanate.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>
-References: <1638186777-29540-1-git-send-email-quic_ugoswami@quicinc.com>
- <YaenLIsKSRzF9qew@donbot>
-From:   Udipto Goswami <quic_ugoswami@quicinc.com>
-In-Reply-To: <YaenLIsKSRzF9qew@donbot>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [137.202.0.90]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi John,
+Hello Greg,
 
-Thanks for the review, i'll push v6 with the nits addressed.
+> -----Original Message-----
+> From: Greg KH [mailto:gregkh@linuxfoundation.org]
+> Sent: Friday, December 3, 2021 6:22 PM
+> To: Chugh, Sanjeev <Sanjeev_Chugh@mentor.com>
+> Cc: linux-usb@vger.kernel.org
+> Subject: Re: [PATCH V1 1/1] usb: hub: introduce delay after usb hub mutex
+> release
+> 
+> On Wed, Dec 01, 2021 at 06:28:08AM +0530, Sanjeev Chugh wrote:
+> > Rogue usb sticks can cause endless port connect change events due to
+> > unstable electric connection between usb chip and the port. Port
+> > connect change will cause device enumeration for the new device
+> > connection and new device processing is done with the usb hub mutex
+> > acquired. This can cause very short time gap between unlock/lock of
+> > hub device mutex. So if some thread is running at low priority than
+> > hub_thread, it can face hub device mutex starvation.
+> >
+> > This commit introduces a sleep of 25ms after the hub device mutex is
+> > unlocked in hub_events so that if hub_thread is stuck in a endless
+> > loop, all other threads will get fair amount of chance to acquire the
+> > usb hub mutex.
+> >
+> > Signed-off-by: Sanjeev Chugh <sanjeev_chugh@mentor.com>
+> > ---
+> >  drivers/usb/core/hub.c | 11 +++++++++++
+> >  1 file changed, 11 insertions(+)
+> >
+> > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c index
+> > 00070a8..0be2acc 100644
+> > --- a/drivers/usb/core/hub.c
+> > +++ b/drivers/usb/core/hub.c
+> > @@ -5763,6 +5763,17 @@ static void hub_event(struct work_struct *work)
+> >  out_hdev_lock:
+> >  	usb_unlock_device(hdev);
+> >
+> > +	/*
+> > +	 * Rogue usb sticks can cause endless device connection
+> > +	 * events due to unstable electric connection.
+> 
+> What is a "usb stick"?  Any usb device could cause this, right?
 
-On 01-12-2021 10:17 pm, John Keeping wrote:
-> On Mon, Nov 29, 2021 at 05:22:57PM +0530, Udipto Goswami wrote:
->> Consider a case where ffs_func_eps_disable is called from
->> ffs_func_disable as part of composition switch and at the
->> same time ffs_epfile_release get called from userspace.
->> ffs_epfile_release will free up the read buffer and call
->> ffs_data_closed which in turn destroys ffs->epfiles and
->> mark it as NULL. While this was happening the driver has
->> already initialized the local epfile in ffs_func_eps_disable
->> which is now freed and waiting to acquire the spinlock. Once
->> spinlock is acquired the driver proceeds with the stale value
->> of epfile and tries to free the already freed read buffer
->> causing use-after-free.
->>
->> Following is the illustration of the race:
->>
->>        CPU1                                  CPU2
->>
->>     ffs_func_eps_disable
->>     epfiles (local copy)
->> 					ffs_epfile_release
->> 					ffs_data_closed
->> 					if (last file closed)
->> 					ffs_data_reset
->> 					ffs_data_clear
->> 					ffs_epfiles_destroy
->> spin_lock
->> dereference epfiles
->>
->> Fix this races by taking epfiles local copy & assigning it under
->> spinlock and if epfiles(local) is null then update it in ffs->epfiles
->> then finally destroy it.
->>
->> Change-Id: I84b46f6c07cbf307a2bf92c366b933dc0e83d91a
->> Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
->> Co-developed-by: Udipto Goswami <quic_ugoswami@quicinc.com>
->> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
-> A few formatting nits below, but other than that this is:
->
-> Reviewed-by: John Keeping <john@metanate.com>
->
->> ---
->> v5: Changed the naming of epfile to singular in
->> ffs_func_eps_disable
->>
->>   drivers/usb/gadget/function/f_fs.c | 41 ++++++++++++++++++++++++++++----------
->>   1 file changed, 31 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
->> index 3c584da..f7be222 100644
->> --- a/drivers/usb/gadget/function/f_fs.c
->> +++ b/drivers/usb/gadget/function/f_fs.c
->> @@ -1711,16 +1711,23 @@ static void ffs_data_put(struct ffs_data *ffs)
->>   
->>   static void ffs_data_closed(struct ffs_data *ffs)
->>   {
->> +	struct ffs_epfile *epfiles;
->> +	unsigned long flags;
-> Blank line after variable declarations.
->
->>   	ENTER();
->>   
->>   	if (atomic_dec_and_test(&ffs->opened)) {
->>   		if (ffs->no_disconnect) {
->>   			ffs->state = FFS_DEACTIVATED;
->> -			if (ffs->epfiles) {
->> -				ffs_epfiles_destroy(ffs->epfiles,
->> -						   ffs->eps_count);
->> -				ffs->epfiles = NULL;
->> -			}
->> +			spin_lock_irqsave(&ffs->eps_lock, flags);
->> +			epfiles = ffs->epfiles;
->> +			ffs->epfiles = NULL;
->> +			spin_unlock_irqrestore(&ffs->eps_lock,
->> +							flags);
->> +
->> +			if (epfiles)
->> +				ffs_epfiles_destroy(epfiles,
->> +						 ffs->eps_count);
->> +
->>   			if (ffs->setup_state == FFS_SETUP_PENDING)
->>   				__ffs_ep0_stall(ffs);
->>   		} else {
->> @@ -1767,14 +1774,25 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
->>   
->>   static void ffs_data_clear(struct ffs_data *ffs)
->>   {
->> +	struct ffs_epfile *epfiles;
->> +	unsigned long flags;
-> Again there should be a blank line here.
->
->>   	ENTER();
->>   
->>   	ffs_closed(ffs);
->>   
->>   	BUG_ON(ffs->gadget);
->>   
->> -	if (ffs->epfiles)
->> -		ffs_epfiles_destroy(ffs->epfiles, ffs->eps_count);
->> +	spin_lock_irqsave(&ffs->eps_lock, flags);
->> +	epfiles = ffs->epfiles;
->> +	ffs->epfiles = NULL;
->> +	spin_unlock_irqrestore(&ffs->eps_lock, flags);
->> +	/* potential race possible between ffs_func_eps_disable
->> +	 * & ffs_epfile_release therefore maintaining a local
->> +	 * copy of epfile will save us from use-after-free.
->> +	 */
-> /*
->   * Multi-line comment blocks have the opening "/*" and closing "*/" each
->   * on their own line.  This may benefit from a blank line before the
->   * comment as well.
->   */
->
->> +	if (epfiles)
->> +		ffs_epfiles_destroy(epfiles,
->> +				    ffs->eps_count);
-> This was all one line before and you've made it shorter, so it can
-> probably stay on one line.
->
->>   
->>   	if (ffs->ffs_eventfd)
->>   		eventfd_ctx_put(ffs->ffs_eventfd);
->> @@ -1919,12 +1937,15 @@ static void ffs_epfiles_destroy(struct ffs_epfile *epfiles, unsigned count)
->>   
->>   static void ffs_func_eps_disable(struct ffs_function *func)
->>   {
->> -	struct ffs_ep *ep         = func->eps;
->> -	struct ffs_epfile *epfile = func->ffs->epfiles;
->> -	unsigned count            = func->ffs->eps_count;
->> +	struct ffs_ep *ep;
->> +	struct ffs_epfile *epfile;
->> +	unsigned short count;
->>   	unsigned long flags;
->>   
->>   	spin_lock_irqsave(&func->ffs->eps_lock, flags);
->> +	count = func->ffs->eps_count;
->> +	epfile = func->ffs->epfiles;
->> +	ep = func->eps;
->>   	while (count--) {
->>   		/* pending requests get nuked */
->>   		if (ep->ep)
->> -- 
->> 2.7.4
->>
+In my test case, I have used a usb pen drive of Sandisk Make of 32 GB capacity. But yes, any faulty usb device or even faulty usb cable used for the usb device connection can cause this issue.
+> 
+> > This
+> > +	 * can cause very short time gap between unlock/lock
+> > +	 * of hub device mutex thus causing mutex starvation
+> > +	 * for some other lower priority thread. Thus sleep
+> > +	 * would give fair chance to all other threads to
+> > +	 * acquire the usb hub mutex.
+> > +	 */
+> > +	msleep(25);
+> 
+> What normal code path did you just slow down here?  Why not slow down the
+> disconnect path instead of the connect path?
+> 
+In case of faulty usb device, USB device enumeration doesn't succeed at all and comes out of hub_port_init() from a failure path. There is no device disconnection path in this flow. Therefore, this delay is added after hub_port_connect_change() is done trying to handle the port connect change event.
+
+> thanks,
+> 
+> greg k-h
+
+Thanks !
+
+-Sanjeev
