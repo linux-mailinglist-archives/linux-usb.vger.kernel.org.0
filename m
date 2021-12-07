@@ -2,82 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ADE046BDF8
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 15:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1CCD46BE76
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Dec 2021 15:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233553AbhLGOoN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Dec 2021 09:44:13 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43880 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233408AbhLGOoM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Dec 2021 09:44:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71785B80782;
-        Tue,  7 Dec 2021 14:40:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5FF8C341CD;
-        Tue,  7 Dec 2021 14:40:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638888040;
-        bh=GS9SqX/7Ke8trVS8oUm0AXdD09BTgGMzdoPgBeW2sew=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AeRAFhKd5dLLwksO+k4RmMAael5JbFIaHTqaO5GV+a2Y/afLT6BaNnTlEj83/uldu
-         PV/gTlOWOHUO57dxwA035ALnn2LW3aB1RR2bHoHrEFahEz1UmoLtaPvTfTtJRoFDf9
-         cupgxGayS7SKF3l/gtCt59sgdqsxKaM5hvhxH92o=
-Date:   Tue, 7 Dec 2021 15:40:37 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guo Zhengkui <guozhengkui@vivo.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, Li Jun <jun.li@nxp.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Peter Chen <peter.chen@nxp.com>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, kernel@vivo.com
-Subject: Re: [PATCH] usb: core: hcd: fix bug: application of sizeof to pointer
-Message-ID: <Ya9yZX3JsuO8OcVJ@kroah.com>
-References: <20211207135401.5507-1-guozhengkui@vivo.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207135401.5507-1-guozhengkui@vivo.com>
+        id S238372AbhLGPCK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Dec 2021 10:02:10 -0500
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:42771 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238379AbhLGPBx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Dec 2021 10:01:53 -0500
+Received: by mail-oi1-f177.google.com with SMTP id n66so28109787oia.9;
+        Tue, 07 Dec 2021 06:58:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=+5Z+s+qZr/dqYuPrhwxEsfm4VoIv7raKxg2fSVPXZ1s=;
+        b=xHQOICTa9TFDdai7dyn7nNyifSpUKGxOiCiW3C2SPZoYHQ+RXcnFJ9syWxKMqNP3dc
+         nvj6KKiAphfkzpfoiy4y2YlBQ0P5a+03m4PnZ3xxho5SDcmoNTX1BU80dpRc0CwfvE1g
+         Zl7f0yUp4174Or9MbhiaGVDyO6ehhjIKGoj2Q02m1SC33vwbDfDdwCoNAbgxlyjpUEWn
+         6HJSkQptPRJY7vS9LnStrr8ph1AJNl/feYoHqnY+tEcd4uoCr277e3BoCyD0aD8We4Ok
+         LfE479Ik4GyC7ZZcG4MtUTFgXyZhoLkvcUO8NvIx26+6Jtal82au5ONlY8S/swruJ1bD
+         kCKw==
+X-Gm-Message-State: AOAM5324MyjTZfuHjYcnkULfJZv3SzXU+xoBzPIEx1iVsJO8JQPsCvPZ
+        jDMTFAdwkfIJxOxt3bnjoQ==
+X-Google-Smtp-Source: ABdhPJyPQz8MGdEnpy+dfjpiUez2RQSbPKGqr/ncBa0qgl3Qa9MdN4Hom3+TzcbiAkTw6HJamzmPOA==
+X-Received: by 2002:a54:4104:: with SMTP id l4mr5476582oic.17.1638889102302;
+        Tue, 07 Dec 2021 06:58:22 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id be12sm3524103oib.50.2021.12.07.06.58.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 06:58:21 -0800 (PST)
+Received: (nullmailer pid 5804 invoked by uid 1000);
+        Tue, 07 Dec 2021 14:58:10 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-pwm@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-gpio@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        linux-rtc@vger.kernel.org,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Marc Zyngier <maz@kernel.org>,
+        Doug Berger <opendmb@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Al Cooper <alcooperx@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-usb@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Ray Jui <rjui@broadcom.com>, linux-pm@vger.kernel.org,
+        Markus Mayer <mmayer@broadcom.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Zhang Rui <rui.zhang@intel.com>, linux-ide@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>, devicetree@vger.kernel.org,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        linux-crypto@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Scott Branden <sbranden@broadcom.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>
+In-Reply-To: <20211206182616.2089677-13-f.fainelli@gmail.com>
+References: <20211206182616.2089677-1-f.fainelli@gmail.com> <20211206182616.2089677-13-f.fainelli@gmail.com>
+Subject: Re: [PATCH v2 12/14] dt-bindings: ata: Convert Broadcom SATA to YAML
+Date:   Tue, 07 Dec 2021 08:58:10 -0600
+Message-Id: <1638889090.722845.5803.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 09:53:47PM +0800, Guo Zhengkui wrote:
-> Fix following error:
-> ./drivers/usb/core/hcd.c:1284:38-44: ERROR:
-> application of sizeof to pointer.
-
-What generated this error?
-
+On Mon, 06 Dec 2021 10:26:14 -0800, Florian Fainelli wrote:
+> Convert the Broadcom SATA3 AHCI controller Device Tree binding to YAML
+> to help with validation.
 > 
-> Use sizeof(*vaddr) instead.
-> 
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > ---
->  drivers/usb/core/hcd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../bindings/ata/brcm,sata-brcm.txt           | 45 ---------
+>  .../bindings/ata/brcm,sata-brcm.yaml          | 91 +++++++++++++++++++
+>  2 files changed, 91 insertions(+), 45 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
+>  create mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
 > 
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index 4d326ee12c36..996d5273cf60 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -1281,7 +1281,7 @@ static int hcd_alloc_coherent(struct usb_bus *bus,
->  		return -EFAULT;
->  	}
->  
-> -	vaddr = hcd_buffer_alloc(bus, size + sizeof(vaddr),
-> +	vaddr = hcd_buffer_alloc(bus, size + sizeof(*vaddr),
 
-I think you just broke the code.
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-Look at this closer and see what the function is doing with this buffer
-and if you still think your patch is correct, please rewrite the
-changelog text to explain why it is so (hint, just using the output of
-coccinelle isn't ok.)
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-thanks,
+Full log is available here: https://patchwork.ozlabs.org/patch/1564108
 
-greg k-h
+
+ahci@41000: $nodename:0: 'ahci@41000' does not match '^sata(@.*)?$'
+	arch/arm/boot/dts/bcm958522er.dt.yaml
+	arch/arm/boot/dts/bcm958525er.dt.yaml
+	arch/arm/boot/dts/bcm958525xmc.dt.yaml
+	arch/arm/boot/dts/bcm958622hr.dt.yaml
+	arch/arm/boot/dts/bcm958623hr.dt.yaml
+	arch/arm/boot/dts/bcm958625hr.dt.yaml
+	arch/arm/boot/dts/bcm958625k.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64w.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx65.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx65w.dt.yaml
+	arch/arm/boot/dts/bcm988312hr.dt.yaml
+
+ahci@41000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'dma-coherent', 'sata-port@0', 'sata-port@1' were unexpected)
+	arch/arm/boot/dts/bcm958522er.dt.yaml
+	arch/arm/boot/dts/bcm958525er.dt.yaml
+	arch/arm/boot/dts/bcm958525xmc.dt.yaml
+	arch/arm/boot/dts/bcm958622hr.dt.yaml
+	arch/arm/boot/dts/bcm958623hr.dt.yaml
+	arch/arm/boot/dts/bcm958625hr.dt.yaml
+	arch/arm/boot/dts/bcm958625k.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64w.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx65.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx65w.dt.yaml
+	arch/arm/boot/dts/bcm988312hr.dt.yaml
+
+ahci@41000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'sata-port@0', 'sata-port@1' were unexpected)
+	arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dt.yaml
+
+sata@a000: compatible: 'oneOf' conditional failed, one must be fixed:
+	arch/arm/boot/dts/bcm963138dvt.dt.yaml
+
