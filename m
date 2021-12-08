@@ -2,96 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B66546DDFD
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Dec 2021 23:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4847D46DE02
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Dec 2021 23:07:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240358AbhLHWIb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Dec 2021 17:08:31 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:45109 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S233147AbhLHWIa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Dec 2021 17:08:30 -0500
-Received: (qmail 588686 invoked by uid 1000); 8 Dec 2021 17:04:57 -0500
-Date:   Wed, 8 Dec 2021 17:04:57 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Rajat Jain <rajatja@google.com>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] usb: core: enable remote wakeup function for usb
- controller
-Message-ID: <YbEsCSwYLgQefQxU@rowland.harvard.edu>
-References: <1638956391-20149-1-git-send-email-zhuyinbo@loongson.cn>
- <1638956391-20149-2-git-send-email-zhuyinbo@loongson.cn>
+        id S233375AbhLHWL0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Dec 2021 17:11:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229604AbhLHWL0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Dec 2021 17:11:26 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DFAC061746
+        for <linux-usb@vger.kernel.org>; Wed,  8 Dec 2021 14:07:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A4A24CE23E6
+        for <linux-usb@vger.kernel.org>; Wed,  8 Dec 2021 22:07:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CF944C341C3
+        for <linux-usb@vger.kernel.org>; Wed,  8 Dec 2021 22:07:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639001269;
+        bh=/8k0DkfKwy8ktrrc5H82Enz5sYFNVMDeQcEh1vFxugs=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=E/MZlhkBvGhVuhPZdu/KgtCEWKz2m5EGF4TbpDxBMzteWKSd1Z7NYwi1qAc6CkjE6
+         wNidPuV66bJCdhnIlbYQy2i5zDtvGM9wkNqYOCtPVSuG/2IHnqtbM7ICbQvaJoOdea
+         8/j/hehCKaDyfIZmXlZZvEI8hVkzuBgdMFocAL3fAy81EU7vKyUpfbiyC3p+9fLDBc
+         JmLu6m5uT57XW2H7F8js8ZFQZX8Z9og5IGIXRpkvw0d1Lmztp2KiZJXD8F/poNXGFe
+         nfo9qL7S7sBa4qYM/ywhXU2nzw2AcCb7obKxbHOtxUqqb8dnSAHFtRnw3x6JkgHUkO
+         Ks0wZkwFkj7Iw==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id A6FBD60F41; Wed,  8 Dec 2021 22:07:49 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215241] "usbreset" tool causes hung task on kernel 5.15.3+ with
+ Hauppauge WinTV dualHD
+Date:   Wed, 08 Dec 2021 22:07:49 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215241-208809-5ltq1FwRKi@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215241-208809@https.bugzilla.kernel.org/>
+References: <bug-215241-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1638956391-20149-2-git-send-email-zhuyinbo@loongson.cn>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 05:39:51PM +0800, Yinbo Zhu wrote:
-> The remote wake up function is a regular function on usb device and
-> I think keeping it enabled by default will make the usb application
-> more convenient and usb device remote wake up function keep enabled
-> that ask usb controller remote wake up was enabled at first.
-> 
-> This patch only enable wake up on usb root hub device, among which,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215241
 
-You say the patch only affects root hub devices, but this doesn't appear 
-to be true.
+--- Comment #5 from Alan Stern (stern@rowland.harvard.edu) ---
+You should write to Paul Skripkin, telling him about this problem.  And CC:=
+ all
+the people listed on the Signed-off-by: lines, as well as the
+linux-media@vger.kernel.org list.
 
-> usb3.0 root hub doesn't be set wakeup node property but use command
-> USB_INTRF_FUNC_SUSPEND to enable remote wake up function.
-> 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
->  drivers/usb/core/hub.c | 20 ++++++++++++++++++--
->  include/linux/usb.h    |  4 +++-
->  2 files changed, 21 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 86658a8..cb4b956 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -2509,6 +2509,8 @@ static void set_usb_port_removable(struct usb_device *udev)
->   */
->  int usb_new_device(struct usb_device *udev)
->  {
-> +	struct usb_host_config *config;
-> +	int ncfg;
->  	int err;
->  
->  	if (udev->parent) {
-> @@ -2540,6 +2542,18 @@ int usb_new_device(struct usb_device *udev)
->  	udev->dev.devt = MKDEV(USB_DEVICE_MAJOR,
->  			(((udev->bus->busnum-1) * 128) + (udev->devnum-1)));
->  
-> +	for (ncfg = 0; ncfg < udev->descriptor.bNumConfigurations; ncfg++) {
-> +		config = &udev->config[ncfg];
-> +		if ((config->desc.bmAttributes & (1 << 5)) == 0)
-> +			break;
-> +		if (ncfg + 1 == udev->descriptor.bNumConfigurations) {
-> +			err = usb_enable_remote_wakeup(udev);
-> +			if (err)
-> +				dev_dbg(&udev->dev,
-> +				      "won't remote wakeup, err %d\n", err);
-> +		}
-> +	}
+--=20
+You may reply to this email to add a comment.
 
-I don't see anything in there which treats root hubs differently from 
-other devices.
-
-Besides, enabling wakeup for root hubs is generally a bad idea.  Suppose 
-you closed a laptop's lid and then unplugged a USB device -- with wakeup 
-enabled, the unplug would cause the laptop to wake up again without your 
-knowledge.
-
-Alan Stern
+You are receiving this mail because:
+You are watching the assignee of the bug.=
