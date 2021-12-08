@@ -2,99 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F1946CD3E
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Dec 2021 06:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F6946CD81
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Dec 2021 07:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235398AbhLHFri (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Dec 2021 00:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33400 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbhLHFrh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Dec 2021 00:47:37 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2319C061574;
-        Tue,  7 Dec 2021 21:44:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CA47FCE1F59;
-        Wed,  8 Dec 2021 05:44:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EF16C00446;
-        Wed,  8 Dec 2021 05:44:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638942241;
-        bh=6l8IIS+ZBKS+ywGfrSSiZHpPs+BouFC60URWQVIZZYs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JkoO9JwLN5rEqJ0KgMcEdu0Zc0ZQSvFsPbdQWvB0PZMhPGsWnrRhewFSsxQ561p2b
-         3QsH83ldWGy1DCwOlgkqr+bToOABs/NBDOv56a6iJ5qdvGjARfQjIUfMuR7bMPlQ+A
-         KRSQUGkUkVXJNXswrwBlkwj5/7sKeRhh0qLmCLwA=
-Date:   Wed, 8 Dec 2021 06:43:52 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Guo Zhengkui <guozhengkui@vivo.com>, Li Jun <jun.li@nxp.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Peter Chen <peter.chen@nxp.com>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, kernel@vivo.com
-Subject: Re: [PATCH] usb: core: hcd: fix bug: application of sizeof to pointer
-Message-ID: <YbBGGI9wQenI4kP7@kroah.com>
-References: <20211207135401.5507-1-guozhengkui@vivo.com>
- <Ya9yZX3JsuO8OcVJ@kroah.com>
- <Ya/eUbdN1+ABFVWf@rowland.harvard.edu>
+        id S232416AbhLHGPL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Dec 2021 01:15:11 -0500
+Received: from mailgw9-110.conoha.ne.jp ([150.95.219.110]:17373 "EHLO
+        mailgw9.conoha.ne.jp" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230139AbhLHGPL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Dec 2021 01:15:11 -0500
+X-Greylist: delayed 574 seconds by postgrey-1.27 at vger.kernel.org; Wed, 08 Dec 2021 01:15:10 EST
+Received: from www50.conoha.ne.jp (unknown [172.16.42.105])
+        by mailgw9.conoha.ne.jp (Postfix) with ESMTP id 70F15180068E22
+        for <linux-usb@vger.kernel.org>; Wed,  8 Dec 2021 15:02:03 +0900 (JST)
+Received: by www50.conoha.ne.jp (Postfix, from userid 10349)
+        id 701F948EBB4; Wed,  8 Dec 2021 15:02:03 +0900 (JST)
+To:     linux-usb@vger.kernel.org
+Subject: =?UTF-8?B?44G+44GU44GT44KN44Kw44Or44O844OXICIxdTk1dTc0Ig==?=
+X-PHP-Script: magokoro-ie.net/index.php for 185.220.103.8
+X-PHP-Filename: /home/c5588690/public_html/magokoro-ie.net/index.php REMOTE_ADDR: 185.220.103.8
+Date:   Wed, 8 Dec 2021 06:02:03 +0000
+From:   =?UTF-8?B?44G+44GU44GT44KN44Kw44Or44O844OX?= 
+        <wordpress@magokoro-ie.net>
+Reply-To: info@magokoro-ie.net
+Message-ID: <4JXchcJ9020KltR2BVld6lZHlg5CtGWsviExVwo10@magokoro-ie.net>
+X-Mailer: PHPMailer 6.5.0 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ya/eUbdN1+ABFVWf@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 05:21:05PM -0500, Alan Stern wrote:
-> On Tue, Dec 07, 2021 at 03:40:37PM +0100, Greg Kroah-Hartman wrote:
-> > On Tue, Dec 07, 2021 at 09:53:47PM +0800, Guo Zhengkui wrote:
-> > > Fix following error:
-> > > ./drivers/usb/core/hcd.c:1284:38-44: ERROR:
-> > > application of sizeof to pointer.
-> > 
-> > What generated this error?
-> > 
-> > > 
-> > > Use sizeof(*vaddr) instead.
-> > > 
-> > > Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
-> > > ---
-> > >  drivers/usb/core/hcd.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> > > index 4d326ee12c36..996d5273cf60 100644
-> > > --- a/drivers/usb/core/hcd.c
-> > > +++ b/drivers/usb/core/hcd.c
-> > > @@ -1281,7 +1281,7 @@ static int hcd_alloc_coherent(struct usb_bus *bus,
-> > >  		return -EFAULT;
-> > >  	}
-> > >  
-> > > -	vaddr = hcd_buffer_alloc(bus, size + sizeof(vaddr),
-> > > +	vaddr = hcd_buffer_alloc(bus, size + sizeof(*vaddr),
-> > 
-> > I think you just broke the code.
-> > 
-> > Look at this closer and see what the function is doing with this buffer
-> > and if you still think your patch is correct, please rewrite the
-> > changelog text to explain why it is so (hint, just using the output of
-> > coccinelle isn't ok.)
-> 
-> Although the patch is definitely wrong, the code could stand to be 
-> improved.  The value stored at the end of the buffer is *vaddr_handle 
-> converted to an unsigned long, but the space reserved for this value is 
-> sizeof(vaddr) -- which doesn't make much sense since vaddr is a pointer 
-> to unsigned char.  The code implicitly relies on the fact that unsigned 
-> long takes up the same amount of space as a pointer.
+お名前: ❤️ Alexa liked you! Click Here: http://bit.do/fSPrf?1mdk ❤️ <linux-usb@vger.kernel.org>
+題名: 1u95u74
 
-Linux requires that an unsigned long is the same size as a pointer, so
-this is not a new requirement that is unique to this function :)
+メッセージ本文:
+br2g5t
 
-thanks,
-
-greg k-h
+-- 
+このメールは まごころグループ (https://magokoro-ie.net) のお問い合わせフォームから送信されました
