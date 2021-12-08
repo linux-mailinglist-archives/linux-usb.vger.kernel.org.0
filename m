@@ -2,169 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8121D46CE1E
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Dec 2021 08:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0ADD46CE35
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Dec 2021 08:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244442AbhLHHMT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Dec 2021 02:12:19 -0500
-Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:47164
-        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240004AbhLHHMT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Dec 2021 02:12:19 -0500
-Received: from HP-EliteBook-840-G7.. (1-171-92-157.dynamic-ip.hinet.net [1.171.92.157])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 49B7D3F20D;
-        Wed,  8 Dec 2021 07:08:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638947326;
-        bh=V2KfU/tiWLWnbQJgWG5ko3/L7bssYeTMceufvreLC7w=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=pqa/6Z86l2LPbofs3VS+Toj+eDiXNtnW08fzRqh5aiJe587rZM0BRNr/txX7JDaj6
-         z3UUtCmtdrg5Hx2g58eRYsQALmrCxFtrzB4BW7OIRQ3oKuZugSwtAhDWv4USLrv9ZB
-         sVlmXrETw8K7k0U7msXrmFcLEz8VcaCrgb0lCPKE24trZHL7xu/WaEwrEMg54k00Pb
-         S64xOizPLTy3K5mo4YvY5Jeoe2ydRTK0Q8SUSb5stWLMR/Dzc3zkbGd/pfCI9WQrA9
-         K2jBlQeAewNf1ef7EWO/rqCkN+4TrTVHEDel2RBfXF9rjXpA93nQG3jRgpAtlp4OkR
-         IgefIYO8VF5sA==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     gregkh@linuxfoundation.org
-Cc:     stern@rowland.harvard.edu, mathias.nyman@linux.intel.com,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Bixuan Cui <cuibixuan@huawei.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        Rajat Jain <rajatja@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: hub: Resume hubs to find newly connected device
-Date:   Wed,  8 Dec 2021 15:08:33 +0800
-Message-Id: <20211208070835.8877-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S235856AbhLHHWG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Dec 2021 02:22:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231363AbhLHHWG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Dec 2021 02:22:06 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E062DC061574;
+        Tue,  7 Dec 2021 23:18:34 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id l64so1295160pgl.9;
+        Tue, 07 Dec 2021 23:18:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=WSNq3zJ7WU0qx1y83Y7TKyyXelC9tIaxgdOENA640bs=;
+        b=FFbyCzgpL0sqjwPm0yxnVR6qlLAN79mQpr0fRfVtw3ryV8eBgSxA8yYiUA5iCVxIKp
+         CZzmXoWGFTIZ7stjshKMhzn1cZ3Y3NrI+1aXSkxz1GwFQJ0NAu2k+s36K1btJ2d9v+Pl
+         O033KebN10I623Gs7IsPq5k1piysHB0L+mJb9puxdOKUnJXmIlAUgOky/n+Kf/8EKODm
+         0vmhrB46dXkFYk3wZu8Ds6P1Vby6wsAS1vEuCR59AuZTtwFxsKo/i0Ibd0LG3GZM4MrX
+         xSAiBuIGEBQuYDSkeAmfrMGcIXjAgOGn3htaQKbuKPie1HBKY62hd4ZCjQRdrqTPazKx
+         HzxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=WSNq3zJ7WU0qx1y83Y7TKyyXelC9tIaxgdOENA640bs=;
+        b=bqHUL0FfywqdMlIPvOzzFRPBsKecI9JGs8tgG9EML4V3b6JXO+liI4WTPhJXId5YJv
+         RWlCamqiotwSdzi1N5sRUOj4Zb9PGuwb3uiQ9m/FsRXOFBNYCamruDxKyl9xSfK24j4R
+         Trn9c47LeXmXeimwdu5vgPnQkIjJaf5uB/amyjs5w3fWCxgLWgkvmCAMA9D0h6Fe2RHS
+         5GD56rAE7Fa8EswhQIGdDrOupCTZKanF/fH4+nwEQzmsXDrbbSulTSPgrQy6wZ+jXn4d
+         0E1FL8EV428k+zmlj3SgtbHJ76a5C/CkCASc48GsuSatvXspfItQFRqZnSSbeQ1YE9Bb
+         N4fg==
+X-Gm-Message-State: AOAM532S2576yq5hSxxFTnblZHZwfDcekccKGCcTVhxqv4+mYFGYXSTu
+        675EjnjH7ZuJFM4htIvDvj8=
+X-Google-Smtp-Source: ABdhPJyfzfZS+YrYJhAigzleHWcOoizlWMTuzeO8kwTd8wCbhwZj+Nb9b7DfXbrA6FeNPMC0TukxXQ==
+X-Received: by 2002:a63:1b1c:: with SMTP id b28mr27772608pgb.288.1638947914374;
+        Tue, 07 Dec 2021 23:18:34 -0800 (PST)
+Received: from localhost.localdomain (59-124-112-150.hinet-ip.hinet.net. [59.124.112.150])
+        by smtp.gmail.com with ESMTPSA id k16sm2310767pfu.183.2021.12.07.23.18.32
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 07 Dec 2021 23:18:34 -0800 (PST)
+From:   Steven Syu <stevensyu7@gmail.com>
+X-Google-Original-From: Steven Syu <steven_syu7@gmail.com>
+To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Steven Syu <stevensyu7@gmail.com>
+Subject: [PATCH v3] usb: typec: clear usb_pd flag if change to typec only mode
+Date:   Wed,  8 Dec 2021 15:18:25 +0800
+Message-Id: <1638947905-2502-1-git-send-email-steven_syu7@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When a new USB device gets plugged to nested hubs, the affected hub,
-which connects to usb 2-1.4-port2, doesn't report there's any change,
-hence the nested hubs go back to runtime suspend like nothing happened:
-[  281.032951] usb usb2: usb wakeup-resume
-[  281.032959] usb usb2: usb auto-resume
-[  281.032974] hub 2-0:1.0: hub_resume
-[  281.033011] usb usb2-port1: status 0263 change 0000
-[  281.033077] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
-[  281.049797] usb 2-1: usb wakeup-resume
-[  281.069800] usb 2-1: Waited 0ms for CONNECT
-[  281.069810] usb 2-1: finish resume
-[  281.070026] hub 2-1:1.0: hub_resume
-[  281.070250] usb 2-1-port4: status 0203 change 0000
-[  281.070272] usb usb2-port1: resume, status 0
-[  281.070282] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
-[  281.089813] usb 2-1.4: usb wakeup-resume
-[  281.109792] usb 2-1.4: Waited 0ms for CONNECT
-[  281.109801] usb 2-1.4: finish resume
-[  281.109991] hub 2-1.4:1.0: hub_resume
-[  281.110147] usb 2-1.4-port2: status 0263 change 0000
-[  281.110234] usb 2-1-port4: resume, status 0
-[  281.110239] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
-[  281.110266] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
-[  281.110426] hub 2-1.4:1.0: hub_suspend
-[  281.110565] usb 2-1.4: usb auto-suspend, wakeup 1
-[  281.130998] hub 2-1:1.0: hub_suspend
-[  281.137788] usb 2-1: usb auto-suspend, wakeup 1
-[  281.142935] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
-[  281.177828] usb 2-1: usb wakeup-resume
-[  281.197839] usb 2-1: Waited 0ms for CONNECT
-[  281.197850] usb 2-1: finish resume
-[  281.197984] hub 2-1:1.0: hub_resume
-[  281.198203] usb 2-1-port4: status 0203 change 0000
-[  281.198228] usb usb2-port1: resume, status 0
-[  281.198237] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
-[  281.217835] usb 2-1.4: usb wakeup-resume
-[  281.237834] usb 2-1.4: Waited 0ms for CONNECT
-[  281.237845] usb 2-1.4: finish resume
-[  281.237990] hub 2-1.4:1.0: hub_resume
-[  281.238067] usb 2-1.4-port2: status 0263 change 0000
-[  281.238148] usb 2-1-port4: resume, status 0
-[  281.238152] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
-[  281.238166] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
-[  281.238385] hub 2-1.4:1.0: hub_suspend
-[  281.238523] usb 2-1.4: usb auto-suspend, wakeup 1
-[  281.258076] hub 2-1:1.0: hub_suspend
-[  281.265744] usb 2-1: usb auto-suspend, wakeup 1
-[  281.285976] hub 2-0:1.0: hub_suspend
-[  281.285988] usb usb2: bus auto-suspend, wakeup 1
+From: Steven Syu <stevensyu7@gmail.com>
 
-So in addition to change event, wakes up the port if it's a hub to find
-newly connected device:
-[  232.069881] usb usb2: usb wakeup-resume
-[  232.069889] usb usb2: usb auto-resume
-[  232.069904] hub 2-0:1.0: hub_resume
-[  232.069941] usb usb2-port1: status 0263 change 0000
-[  232.069962] hub 2-1:1.0: state 8 ports 4 chg 0000 evt 0000
-[  232.070034] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
-[  232.112701] usb 2-1: Waited 0ms for CONNECT
-[  232.112711] usb 2-1: finish resume
-[  232.112900] hub 2-1:1.0: hub_resume
-[  232.113218] usb 2-1-port4: status 0203 change 0000
-[  232.113267] hub 2-1.4:1.0: state 8 ports 4 chg 0000 evt 0000
-[  232.152679] usb 2-1.4: Waited 0ms for CONNECT
-[  232.152691] usb 2-1.4: finish resume
-[  232.152829] hub 2-1.4:1.0: hub_resume
-[  232.153057] usb 2-1.4-port2: status 0263 change 0000
-[  232.153094] hub 2-1.4.2:1.0: state 8 ports 3 chg 0000 evt 0000
-[  232.153155] usb 2-1-port4: resume, status 0
-[  232.153160] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
-[  232.153192] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
-[  232.153235] hub 2-1:1.0: state 7 ports 4 chg 0000 evt 0000
-[  232.153244] usb usb2-port1: resume, status 0
-[  232.153274] usb 2-1.4.2: usb auto-resume
-[  232.153444] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
-[  232.220690] usb 2-1.4.2: Waited 0ms for CONNECT
-[  232.220702] usb 2-1.4.2: finish resume
-[  232.220849] hub 2-1.4.2:1.0: hub_resume
-[  232.220870] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
-[  232.220949] usb 2-1.4.2-port2: status 0203 change 0001
-[  232.328747] usb 2-1.4.2-port2: status 0203, change 0000, 5.0 Gb/s
-[  232.408838] usb 2-1.4.2.2: new SuperSpeed USB device number 5 using xhci_hcd
-[  232.429734] usb 2-1.4.2.2: skipped 1 descriptor after endpoint
-[  232.429745] usb 2-1.4.2.2: skipped 1 descriptor after endpoint
-[  232.429827] usb 2-1.4.2.2: default language 0x0409
-[  232.430192] usb 2-1.4.2.2: udev 5, busnum 2, minor = 132
-[  232.430197] usb 2-1.4.2.2: New USB device found, idVendor=0781, idProduct=5581, bcdDevice= 1.00
-[  232.430202] usb 2-1.4.2.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[  232.430206] usb 2-1.4.2.2: Product: Ultra
-[  232.430209] usb 2-1.4.2.2: Manufacturer: SanDisk
-[  232.430212] usb 2-1.4.2.2: SerialNumber: 4C530001170905105491
-[  232.430488] usb 2-1.4.2.2: usb_probe_device
-[  232.430493] usb 2-1.4.2.2: configuration #1 chosen from 1 choice
-[  232.431196] usb 2-1.4.2.2: Disabling U1 link state for device below second-tier hub.
-[  232.431199] usb 2-1.4.2.2: Plug device into first-tier hub to decrease power consumption.
-[  232.431469] usb 2-1.4.2.2: adding 2-1.4.2.2:1.0 (config #1, interface 0)
-[  232.431610] hub 2-1.4.2:1.0: state 7 ports 3 chg 0000 evt 0004
+Set usb_pd to 0 when power operation mode
+leaving power delivery. That can avoid user-sepace
+read "yes" form the supports_usb_power_delivery_show() attribute
+but power operation mode already change form power delivery to
+others mode.
 
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Signed-off-by: Steven Syu <stevensyu7@gmail.com>
 ---
- drivers/usb/core/hub.c | 4 ++++
- 1 file changed, 4 insertions(+)
+changes for v3:
+resubmit and add the changes comment of v1->v2
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 00070a8a65079..0c9442a8eab05 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -1227,6 +1227,10 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
- 						port_resumed))
- 				set_bit(port1, hub->change_bits);
- 
-+			if ((portstatus & USB_PORT_STAT_CONNECTION) &&
-+			    usb_hub_to_struct_hub(udev))
-+				usb_kick_hub_wq(udev);
-+
- 		} else if (udev->persist_enabled) {
- #ifdef CONFIG_PM
- 			udev->reset_resume = 1;
+v1->v2:
+1.remove sysfs_notify(&partner_dev->kobj, NULL, "supports_usb_power_delivery"); when operation mode is not PD.
+2.resubmitted patch by private email for remove footbar in the mail.
+
+ drivers/usb/typec/class.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index aeef453..2043e07 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -1718,6 +1718,8 @@ void typec_set_pwr_opmode(struct typec_port *port,
+ 			partner->usb_pd = 1;
+ 			sysfs_notify(&partner_dev->kobj, NULL,
+ 				     "supports_usb_power_delivery");
++		} else if (opmode != TYPEC_PWR_MODE_PD && partner->usb_pd) {
++			partner->usb_pd = 0;
+ 		}
+ 		put_device(partner_dev);
+ 	}
 -- 
-2.32.0
+2.7.4
 
