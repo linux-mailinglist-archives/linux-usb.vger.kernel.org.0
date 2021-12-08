@@ -2,84 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 232D546D60A
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Dec 2021 15:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 482F346D89B
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Dec 2021 17:36:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235413AbhLHOuo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Dec 2021 09:50:44 -0500
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:39771 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232932AbhLHOun (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Dec 2021 09:50:43 -0500
-Received: by mail-ot1-f51.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso2940546ots.6;
-        Wed, 08 Dec 2021 06:47:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=buknLEPiljUfS2B22B7J//dmCPA4Jy3FaQSdKUP3e+w=;
-        b=gfvODuoQki5aiZbfhpFM8QiFHci1kTE4vAjObHKO+ogc+2aht340k2DokX/Owfwz9I
-         mFr4prjj/b02YSOOXLYm7XSIg/Hf+R79tDv3sQrrm3gplPHfj4RRWW5t5fD5CvDoIriB
-         WAWkdOScjtxrrXQ7Rpa7yrOesEroj/SbgS2+eB0vwdeCwY2FdNAbAmxKuvdlfmVeFv7N
-         +h1PK6ifRnRRDOGLekIJPa+s28G+Q8MgeNK5Ynkv46+ATO5M+QYZ3NwSblShORHpmpam
-         6Sp6xaZJBr03jdfuNKHCSJv9oxSFuhoORGS9yib7JWwgm6ooGx9wjOw8LGC0oH0NImMU
-         YGRw==
-X-Gm-Message-State: AOAM533uiEiKn+FzCCahnZ1bPx/sOZ03L1BogLoLZR0NsEgK0a+tNjk1
-        EuUZ2cvCexm9PU3BxSaE7KtqzUyZ9Q==
-X-Google-Smtp-Source: ABdhPJxs1ghPJ4vN60wkuCNrY9iCYpx7WoaP2dDzxeFkG8VpKJqgcGyVDbMM4iv3QvIYNW/hskCkrA==
-X-Received: by 2002:a9d:4f0e:: with SMTP id d14mr41842978otl.137.1638974831552;
-        Wed, 08 Dec 2021 06:47:11 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id v12sm502385ote.9.2021.12.08.06.47.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 06:47:10 -0800 (PST)
-Received: (nullmailer pid 3986422 invoked by uid 1000);
-        Wed, 08 Dec 2021 14:47:09 -0000
-Date:   Wed, 8 Dec 2021 08:47:09 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: usb: Add missing properties used in examples
-Message-ID: <YbDFbTQW8Cv38fON@robh.at.kernel.org>
-References: <20211206174113.2295616-1-robh@kernel.org>
- <Ya5VhX8TA0LBn4Qd@kroah.com>
+        id S237134AbhLHQjw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Dec 2021 11:39:52 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:54996 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234717AbhLHQjv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Dec 2021 11:39:51 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 570D0CE2209
+        for <linux-usb@vger.kernel.org>; Wed,  8 Dec 2021 16:36:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7AF95C341C6
+        for <linux-usb@vger.kernel.org>; Wed,  8 Dec 2021 16:36:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638981376;
+        bh=XpQUFqVC+/12Hlrsn8ANO1bdt5sEhguabSpK14CXJGA=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=MwS4GDp3zECwixVlvlqEt7XTqxZPLN1kV/3CJJKwt/2maJf1kZ0LadNXtcDDKyVmh
+         jn8u5kQeOC9vhVVRCdbefeTn2Cf/y0kW9t4LhVHTbPlNdptkt5/MzVsSMpVAaI6wJc
+         /+H9Uxn0/yzLF+EZKEDIEVuO1Hlk4wrnjonhdFgqsRJaQUaMaAiknDbAA+IfGvscgH
+         Yc8pkJ5BQBzRPgE8Uh3ksRtBg/DBS+8D7dMz6Wy6fD+JFZsecfyPaCfw6jX8XPkbHG
+         cjcW9A/gZ+w1dYNMiXCB478jP94OHSx+rbXZoW/L0YQhPdJOc4TcBNX4bMOX6n5Cmd
+         feZ4C5/rVPNmw==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 48F4160F14; Wed,  8 Dec 2021 16:36:16 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215241] "usbreset" tool causes hung task on kernel 5.15.3+ with
+ Hauppauge WinTV dualHD
+Date:   Wed, 08 Dec 2021 16:36:16 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mabo@elbmurf.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215241-208809-cfCK1CiGWz@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215241-208809@https.bugzilla.kernel.org/>
+References: <bug-215241-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ya5VhX8TA0LBn4Qd@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 07:25:09PM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Dec 06, 2021 at 11:41:12AM -0600, Rob Herring wrote:
-> > With 'unevaluatedProperties' support implemented, the following warnings
-> > are generated in the usb examples:
-> > 
-> > Documentation/devicetree/bindings/usb/intel,keembay-dwc3.example.dt.yaml: usb: usb@34000000: Unevaluated properties are not allowed ('reg' was unexpected)
-> > Documentation/devicetree/bindings/usb/snps,dwc3.example.dt.yaml: usb@4a030000: Unevaluated properties are not allowed ('reg' was unexpected)
-> > 
-> > Add the missing property definitions.
-> > 
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
-> > Cc: Felipe Balbi <balbi@kernel.org>
-> > Cc: linux-usb@vger.kernel.org
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  .../devicetree/bindings/usb/intel,keembay-dwc3.yaml         | 3 +++
-> >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml        | 6 ++++++
-> >  2 files changed, 9 insertions(+)
-> 
-> Do you want me to take these in my tree?  If not, you can take them in
-> yours:
-> 	Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> Which ever is easier for you.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215241
 
-I'll take them.
+--- Comment #4 from Maximilian B=C3=B6hm (mabo@elbmurf.de) ---
+Hallo again, found the commit:
 
-Rob
+$ git bisect bad
+2899243f272f8801dceb1bb692bd1a3ae3f281c2 is the first bad commit
+commit 2899243f272f8801dceb1bb692bd1a3ae3f281c2
+Author: Pavel Skripkin <paskripkin@gmail.com>
+Date:   Thu Jul 29 22:23:33 2021 +0200
+
+    media: em28xx: add missing em28xx_close_extension
+
+    [ Upstream commit 2c98b8a3458df03abdc6945bbef67ef91d181938 ]
+
+    If em28xx dev has ->dev_next pointer, we need to delete ->dev_next list
+    node from em28xx_extension_devlist on disconnect to avoid UAF bugs and
+    corrupted list bugs, since driver frees this pointer on disconnect.
+
+    Reported-and-tested-by:
+syzbot+a6969ef522a36d3344c9@syzkaller.appspotmail.com
+
+    Fixes: 1a23f81b7dc3 ("V4L/DVB (9979): em28xx: move usb probe code to a
+proper place")
+    Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+    Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+    Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+    Signed-off-by: Sasha Levin <sashal@kernel.org>
+
+ drivers/media/usb/em28xx/em28xx-cards.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+
+What next?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
