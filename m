@@ -2,239 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF76146CE5C
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Dec 2021 08:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D653846CF2D
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Dec 2021 09:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240668AbhLHH3q convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 8 Dec 2021 02:29:46 -0500
-Received: from esa3.mentor.iphmx.com ([68.232.137.180]:63175 "EHLO
-        esa3.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235964AbhLHH3q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Dec 2021 02:29:46 -0500
-IronPort-SDR: Bo6kdNZ+ZkDMGyP05plRallQFANmaNdk8LtDLxONLgqlRBqXcA5wOYJXTWgTxl8w3so5Pq5b+A
- sBBdfJNUZ1xfzKmSyAKFlPPr3a5pH9IMVbiECrGFZ3PBFTuoCNyIf7h2/DG0/1/ZvAynDHCPE1
- a9o+vH2GhJQXebR4apzFRQvUS+evFB5+qTX2n3ewPyiC3vGDxnc0cxxlp61YwddE/Qq6yfSZSn
- tBo+yP0Y22DZ7gZWPxTEyLtncymaV5yw/MmCSQaN10Fz4Cg3Ex1yk4Xrxg7RKoyTcewre0j04a
- cv+GfbDEBgywiWnDJJXhLSgo
-X-IronPort-AV: E=Sophos;i="5.87,296,1631606400"; 
-   d="scan'208";a="69268265"
-Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
-  by esa3.mentor.iphmx.com with ESMTP; 07 Dec 2021 23:26:14 -0800
-IronPort-SDR: h9KDVIbIxWDBN9hqqowJMKv1zD5+aEDEH8tIidYou4vcxQJbSJOeTOnotkIsOMHQ48uUU55YsG
- rQAX9XWL3RhIwC5fwqhf86YJRzdXlfPua/EMsurHKbz7MsYslXuhx88MpFCTEdepRbJhQFcMbB
- wGG3IRzOC8y4CqQTLbaT+qCYn/OoQvY0XKWiE3uYo2sZUzGctKLnnqu68oBzAGMlcHe0cgYUhG
- AMKe8RGqn8hIFxYm6+qL4axJk+fvt5RNDHxuLyjFhe/rfxhDWO3+1eGyY4AN73XecqIYOQ4/qt
- 4oI=
-From:   "Chugh, Sanjeev" <Sanjeev_Chugh@mentor.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH V1 1/1] usb: hub: introduce delay after usb hub mutex
- release
-Thread-Topic: [PATCH V1 1/1] usb: hub: introduce delay after usb hub mutex
- release
-Thread-Index: AQHX5k6IjsbHRxGuxkKr8PpAjenqEKwgvGyAgAXPsACAAKHkAIAA4cswgAAnKoCAAADxsA==
-Date:   Wed, 8 Dec 2021 07:26:08 +0000
-Message-ID: <6871470e531b4d79b02abd1c10a53a5d@svr-ies-mbx-01.mgc.mentorg.com>
-References: <1638320288-6465-1-git-send-email-sanjeev_chugh@mentor.com>
- <YaoS3RoqkGkf6NFa@kroah.com>
- <361b7459f1d64f5e8b7bccaa2dd536e5@svr-ies-mbx-01.mgc.mentorg.com>
- <Ya96omTSiwDNoRu5@kroah.com>
- <f400fe3c8a744203b20aebb6c83a029a@svr-ies-mbx-01.mgc.mentorg.com>
- <YbBY5TWsbjqEgfi2@kroah.com>
-In-Reply-To: <YbBY5TWsbjqEgfi2@kroah.com>
-Accept-Language: en-US, en-IE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [137.202.0.90]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S244826AbhLHIjl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Dec 2021 03:39:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240751AbhLHIjk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Dec 2021 03:39:40 -0500
+Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84287C061746
+        for <linux-usb@vger.kernel.org>; Wed,  8 Dec 2021 00:36:08 -0800 (PST)
+Received: by mail-ua1-x942.google.com with SMTP id 30so3286576uag.13
+        for <linux-usb@vger.kernel.org>; Wed, 08 Dec 2021 00:36:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=8Ztj7EWQ5t5f1IAnCCOuXDpfbxmiXcehQ7Ei8yvyqMM=;
+        b=MeetnrBRs4jJT+BTSSnO2ue/DGD0WTzVcQ2APQoj1Bx6LJk9Rd9Tqyn7Cxec7pv658
+         2jFfLsD8upxuCJEsUMu94nS8lHwdqFZw2RK7Eoh8HPitkJJJ6WcVoGfs0v08Q22MOWCt
+         Qhvr8c4MI1eGWxBigHKuTwiVUHk1npdDesc7cPrVFFuCA+JYJgfF4EUZXWpGYek9FLMe
+         Bsq1NcW0qXXT82F6G8bJZ/RamAH0wLrIZiBK8gJqEZaqkYcQ1XtLsdZ7GZ3HSAcLHwQn
+         UzIeRa003trCG8AGQ2cMtVBrTPiclU87xKJGbryNpfDh8uOh1Qq2MF1puWKpUykyqxYY
+         nKvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=8Ztj7EWQ5t5f1IAnCCOuXDpfbxmiXcehQ7Ei8yvyqMM=;
+        b=STXKSzKL78BVxuojOUen2hx7BGBPmZ2fOxogdnGDitiOgMUaaSbq+BvT5oBwbb0H5F
+         lm0gzX/70MJFljuOPeHJ4pnrQ06zMAawsN62oORUaCiuV7mNQwKHxm5cjyt7h201GnSl
+         HYl+n027EyAydusOg+dgJ1BcS7DjAuHLAidCj2fdrAUqKEgH2Ce5MM9AURbZnCKrEKJ+
+         2HS96Dpz1YVTwCDafdIQYmGXsKlFzNKvRMIiIysAsV1xVe9LSbefmDl04ehfsxf55d0c
+         gA/cycaQiaoafmkUGP7iic0nY+dsgB6qDQDcZzWfIcAR5W3sYpCuGeeEODKVgoFrkpO/
+         BsVA==
+X-Gm-Message-State: AOAM531MarRaRsh6gZCDZPHAnGh3o2zQS3H/w3ZqBC4+AslFzDwqrCXe
+        PWNB7SdpEu3YEBZ3rHSYL/uFRS/Sizie6TJ/CJo=
+X-Google-Smtp-Source: ABdhPJyCTnmtAMy1mesnWzb52rGznqafsNj2NVGkwQmPSCeWYSZuWHODYrSZEp/E3SfEHL4DrsNbsqrcczqZkkGHG/c=
+X-Received: by 2002:ab0:36c4:: with SMTP id v4mr6419341uau.8.1638952567713;
+ Wed, 08 Dec 2021 00:36:07 -0800 (PST)
 MIME-Version: 1.0
+Received: by 2002:a59:a8f2:0:b0:23d:ac47:853f with HTTP; Wed, 8 Dec 2021
+ 00:36:07 -0800 (PST)
+From:   harikunda1001 <harikunda1001@gmail.com>
+Date:   Wed, 8 Dec 2021 00:36:07 -0800
+Message-ID: <CALoMaspei66Z9K_oKBTHwWVDgTTpoOKfMWdb5dt-r9cSd6BeXg@mail.gmail.com>
+Subject: GREETINGS FROM DR AVA SMITH
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-> -----Original Message-----
-> From: Greg KH [mailto:gregkh@linuxfoundation.org]
-> Sent: Wednesday, December 8, 2021 12:34 PM
-> To: Chugh, Sanjeev <Sanjeev_Chugh@mentor.com>
-> Cc: linux-usb@vger.kernel.org
-> Subject: Re: [PATCH V1 1/1] usb: hub: introduce delay after usb hub mutex
-> release
-> 
-> On Wed, Dec 08, 2021 at 06:58:23AM +0000, Chugh, Sanjeev wrote:
-> > Hi Greg,
-> >
-> > > -----Original Message-----
-> > > From: Greg KH [mailto:gregkh@linuxfoundation.org]
-> > > Sent: Tuesday, December 7, 2021 8:46 PM
-> > > To: Chugh, Sanjeev <Sanjeev_Chugh@mentor.com>
-> > > Cc: linux-usb@vger.kernel.org
-> > > Subject: Re: [PATCH V1 1/1] usb: hub: introduce delay after usb hub
-> > > mutex release
-> > >
-> > > On Tue, Dec 07, 2021 at 05:54:06AM +0000, Chugh, Sanjeev wrote:
-> > > > Hello Greg,
-> > > >
-> > > > > -----Original Message-----
-> > > > > From: Greg KH [mailto:gregkh@linuxfoundation.org]
-> > > > > Sent: Friday, December 3, 2021 6:22 PM
-> > > > > To: Chugh, Sanjeev <Sanjeev_Chugh@mentor.com>
-> > > > > Cc: linux-usb@vger.kernel.org
-> > > > > Subject: Re: [PATCH V1 1/1] usb: hub: introduce delay after usb
-> > > > > hub mutex release
-> > > > >
-> > > > > On Wed, Dec 01, 2021 at 06:28:08AM +0530, Sanjeev Chugh wrote:
-> > > > > > Rogue usb sticks can cause endless port connect change events
-> > > > > > due to unstable electric connection between usb chip and the port.
-> > > > > > Port connect change will cause device enumeration for the new
-> > > > > > device connection and new device processing is done with the
-> > > > > > usb hub mutex acquired. This can cause very short time gap
-> > > > > > between unlock/lock of hub device mutex. So if some thread is
-> > > > > > running at low priority than hub_thread, it can face hub device mutex
-> starvation.
-> > > > > >
-> > > > > > This commit introduces a sleep of 25ms after the hub device
-> > > > > > mutex is unlocked in hub_events so that if hub_thread is stuck
-> > > > > > in a endless loop, all other threads will get fair amount of
-> > > > > > chance to acquire the usb hub mutex.
-> > > > > >
-> > > > > > Signed-off-by: Sanjeev Chugh <sanjeev_chugh@mentor.com>
-> > > > > > ---
-> > > > > >  drivers/usb/core/hub.c | 11 +++++++++++
-> > > > > >  1 file changed, 11 insertions(+)
-> > > > > >
-> > > > > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> > > > > > index 00070a8..0be2acc 100644
-> > > > > > --- a/drivers/usb/core/hub.c
-> > > > > > +++ b/drivers/usb/core/hub.c
-> > > > > > @@ -5763,6 +5763,17 @@ static void hub_event(struct
-> > > > > > work_struct
-> > > > > > *work)
-> > > > > >  out_hdev_lock:
-> > > > > >  	usb_unlock_device(hdev);
-> > > > > >
-> > > > > > +	/*
-> > > > > > +	 * Rogue usb sticks can cause endless device connection
-> > > > > > +	 * events due to unstable electric connection.
-> > > > >
-> > > > > What is a "usb stick"?  Any usb device could cause this, right?
-> > > >
-> > > > In my test case, I have used a usb pen drive of Sandisk Make of 32 GB
-> capacity.
-> > > But yes, any faulty usb device or even faulty usb cable used for the
-> > > usb device connection can cause this issue.
-> > > > >
-> > > > > > This
-> > > > > > +	 * can cause very short time gap between unlock/lock
-> > > > > > +	 * of hub device mutex thus causing mutex starvation
-> > > > > > +	 * for some other lower priority thread. Thus sleep
-> > > > > > +	 * would give fair chance to all other threads to
-> > > > > > +	 * acquire the usb hub mutex.
-> > > > > > +	 */
-> > > > > > +	msleep(25);
-> > > > >
-> > > > > What normal code path did you just slow down here?  Why not slow
-> > > > > down the disconnect path instead of the connect path?
-> > > > >
-> > > > In case of faulty usb device, USB device enumeration doesn't
-> > > > succeed at all
-> > > and comes out of hub_port_init() from a failure path. There is no
-> > > device disconnection path in this flow. Therefore, this delay is
-> > > added after
-> > > hub_port_connect_change() is done trying to handle the port connect
-> > > change event.
-> > >
-> > > So you are going to slow down all valid devices just to handle the
-> > > fact that an abusive device can cause the system to slow down?
-> > >
-> > > What exactly is the problem if you plug in an abusive device, that
-> > > you are trying to solve?
-> >
-> > My apologies for not explaining the impact of failure at first place itself.
-> >
-> > Our end product is a car radio. If a faulty usb device(pen drive) is connected to
-> the radio system, unstable electric connection between the usb device and the
-> usb hub port can lead to endless port connect change events notified to the
-> EHCI controller. Thus hub_event() is forced to process all the connection change
-> events with hub device mutex lock acquired in the beginning of the function and
-> released only after event is processed. On every attempt, hub_port_init() fails
-> with usb commands timing out. E.g.
-> >
-> > [ 226.854368] usb 1-1.3: new high-speed USB device number 7 using
-> > ci_hdrc [ 231.934052] usb 1-1.3: device descriptor read/64, error -110
-> > [ 247.124276] usb 1-1.3: device descriptor read/64, error -110 [
-> > 247.494572] usb 1-1.3: new high-speed USB device number 9 using
-> > ci_hdrc [ 252.574226] usb 1-1.3: device descriptor read/64, error -110
-> > [ 267.764276] usb 1-1.3: device descriptor read/64, error -110 [
-> > 268.134641] usb 1-1.3: new high-speed USB device number 11 using
-> > ci_hdrc [ 273.214691] usb 1-1.3: device descriptor read/64, error -110
-> > [ 288.404281] usb 1-1.3: device descriptor read/64, error -110 [
-> > 288.777986] usb 1-1.3: new high-speed USB device number 13 using
-> > ci_hdrc [ 293.857331] usb 1-1.3: device descriptor read/64, error -110
-> > [ 309.044488] usb 1-1.3: device descriptor read/64, error -110 [
-> > 309.414428] usb 1-1.3: new high-speed USB device number 15 using
-> > ci_hdrc [ 314.494496] usb 1-1.3: device descriptor read/64, error -110
-> >
-> > This goes on and on.
-> 
-> You have plenty of time between those events (seconds), so why will a 25msec
-> sleep help out here?
-> 
-
-Well, these seconds are the spent due to usb device descriptor command failing with timeout (5 seconds for one usb device command multiplied by 4 re-tries). This time is spent inside hub_port_init() function when the hub device lock is already taken so how would it help the lock waiter threads ? We need to give the hub driver thread breathing time only after hub device lock is released.
-
-> > Due to quick and endless number of new connection change events, thread
-> running hub_event() function remains busy processing the hub port change
-> events and being frequently scheduled. During this time, any other threads
-> (either low priority or even equal priority) are starved of the hub device mutex.
-> >
-> > Since threads waiting for the hub device mutex lock are in uninterruptible
-> sleep, this leads to kernel hung task detector triggering hung task after
-> 180(hung_task_timeout_secs) seconds of threads waiting for the hub device
-> mutex. And since we have hung_task_panic set to 1, it leads to kernel panic.
-> >
-> > We can reproduce this issue always with a faulty usb device that is capable of
-> sending endless connect status change events due to unstable electric
-> connection between usb device and the hub port.
-> >
-> > > Is the system still supposed to be running properly?  Why not just
-> > > remove the device or disable the port when detected?
-> > >
-> >
-> > I hope you would agree that user of an embedded Linux based product is not
-> always expected to remove the faulty usb device before hung task is triggered. I
-> mean, user just simply won't know.
-> >
-> > If we have to make a decision on disabling the port, we must know for sure
-> that same usb device is being attempted for enumeration. Let say, we want to
-> make a decision to abort enumeration after certain number of re-tries. But for
-> that, how would we know that new port connect change event is for the same
-> usb device that was tried last time ? Because since hub_port_init() function itself
-> fails and till this point, we don't have unique information about the usb device
-> being attached to the hub port that we can compare to know if it's a re-try for
-> the same usb device or it's a new usb device.
-> 
-> I agree, trying to do this type of detection would be hard, but again, as your log
-> points out, you have seconds between events, so why is your change helping?
-> 
-> And again, you are hurting valid devices here by slowing everything down, why
-> not just delay when a disconnect happens?
-> 
-Again, there is no disconnection path because there was no successful connection. So what's happening is, as soon as the thread releases the hub device lock, it's taken again by hub driver thread within microseconds. Think of a scenario where there is a kernel thread running with lower priority requiring hub device mutex and it just won't be allowed because hub driver thread running with high priority demands to run endlessly.
-
-> Or just allow the cpu to reschedule?  Why did you pick "25" for this magic value?
-> 
-Magic value of 25ms was decided to cause as smaller delay as possible that prevents the hung task. We did experiments with the higher delay value but not less than 25ms. We wanted to avoid the too short delay which might convert into busy waiting. I am sure it can be further brought down and I'm willing to test with even smaller delays.
-
-Can you please briefly explain on what do you mean by " just allow the cpu to reschedule" ? Isn't that what delay is doing ?
-
-> thanks,
-> 
-> greg k-h
-
-Thanks !
-
--Sanjeev
+-- 
+Hello Dear,
+My name is Dr Ava Smith from United States.I am a French and American national
+(dual)living in the U.S and sometimes in the U.K for the Purpose of Work.
+I hope you consider my friend request and consider me worthy to be your friend.
+I will share some of my pics and more details about my self when i get
+your response
+Thanks
+With love
+Ava
