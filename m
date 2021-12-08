@@ -2,125 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EDF546D9D3
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Dec 2021 18:33:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FE846DAD4
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Dec 2021 19:14:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237997AbhLHRhR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Dec 2021 12:37:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
+        id S238710AbhLHSRe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Dec 2021 13:17:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237956AbhLHRhO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Dec 2021 12:37:14 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AEDC0617A2;
-        Wed,  8 Dec 2021 09:33:42 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id np3so2409224pjb.4;
-        Wed, 08 Dec 2021 09:33:42 -0800 (PST)
+        with ESMTP id S231643AbhLHSRe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Dec 2021 13:17:34 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693F7C061746;
+        Wed,  8 Dec 2021 10:14:01 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id u1so5481818wru.13;
+        Wed, 08 Dec 2021 10:14:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=j51/wboThEFJzNlTL2/MvStE5Zhc5RgdP9nJ3GHQLi4=;
-        b=SbSD6mZJ015HeEhL/uBJxeceiYhXjXXX8O35V590Ke94L+Ypdy2WwxDQgcz/dz+vI1
-         9iApRbSY2daO38A2/c4VBdCm5/hoAefgOIeLm7P1O52CMdhCW27CIQQo7jkS6qbbrUPO
-         3WKj6PRExiHs43Nuk8VacP7HVUjibVx1bhNJbIiCWvhO4QqWIEn592JcsURU3789agcG
-         ncOxe6HUt2my0cYlDUL8RcSTK9JgX7BPA1pZ7AH8yULqG5uz/ZBHDwvocVsgM8St6ejv
-         1/1FST6raHCiQCFH3cNSEMmx22jHFteyEfVTMXXiJo2nr++5nPj6rqfaXIrTBjcOd4vi
-         jvTw==
+        bh=YAH0/us2xqzbXq7gp3ubTBdl9r4CUX/dnOqdJ3pk+RQ=;
+        b=qbxZaTgi/Gu+bhtDm8OHW7GAQTYAld/WqcbE8s71ZDsGqOQ+pijf4khIqhrz53oGnx
+         mbp9adL26lvJ9O4iFRxiVD50W1AoBGqHWQlEXt8W/Gib83xk9K+IsJFzW9XUomCXqAcH
+         ar0dsw7ZAMq3Rn1y2OQy0MqhMi1urhq6T5GPlP/orMM0z2mlvXj51PK98d7/+BGf+JmW
+         eDOfegbjecwOc+NMa8h2a+S0eolWIsTmt2PQADCl2okC5FeDW3zio6s3i4DSL/nbla+2
+         q1KezWjeJZryk9T+JU0p6qqj54G27z5a/HX6UwLloIVqxXGR+0GgwCrr3n2oPzrHSIVJ
+         +ZsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=j51/wboThEFJzNlTL2/MvStE5Zhc5RgdP9nJ3GHQLi4=;
-        b=2r2ZvMPjWwNnf4Uog3b8BzKL7PsJVAYqvAKUuh6M7dFIo79wT3R+a2XzPFsf4/YBX3
-         gcgsUxl5CIg5fZsESW6futNxVGEN5BrqPZZaN0tHg2VJqAUYuFQuG6+geP/drKtvOwEG
-         wD0FNIdYS2/4NxkO52kyD/QkSMHPkJv3AyGZW9YGLIJ6u0iw5K3OV0fD5F426SuGiXXN
-         80FJQFpxe2VTplfG42OVMyuFvxPnQFTYHWScymghZucYE7ACEN4aQuRH1oqVtxzAleVW
-         urQj5LyEiExxVdiyzNvvQavF3jI6VPlYoTLYiZQ+vVmNdDlXLV1OtRdQ2nu76Fv4kkRP
-         z9qQ==
-X-Gm-Message-State: AOAM530AfHmYwKR5Y/NbxYHgSnWiLWJV8pog4ejg+wA+452uS5wpDKDX
-        AFOLdm10Rps3an3MNx6fkGlpHLhRF9U=
-X-Google-Smtp-Source: ABdhPJyY3AKgLSvRqD8BVr8X+ATPHvvEnFQBIBZfXeEJiyOz1hIwOAXlFSUT2pXiD/r3MLJpe5zcrA==
-X-Received: by 2002:a17:90a:e012:: with SMTP id u18mr8961529pjy.103.1638984821458;
-        Wed, 08 Dec 2021 09:33:41 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id n31sm3801031pfv.176.2021.12.08.09.33.39
+        bh=YAH0/us2xqzbXq7gp3ubTBdl9r4CUX/dnOqdJ3pk+RQ=;
+        b=SYi3hoI4wk1SJ1ZczHee6AbV82O73zy61frqSbqiz7nI0lDsz9wbftmS93L80GRuK4
+         MkbjdwFamA/Ec0G4N9+tVbUtEgoQBDw+WYggzFGYSe2BfO8qkQwc0ERFLBzC8WxkaDi8
+         0eqZ4M+g+9FneLFve31oLCSVrN1kBU+uaXkxcjM8nETo8Y7JWh5ZbkKBmXurkjg9s5F2
+         K3S0LMDWHSiZSvpospc/K9DIO6B6HgLbhbQYhD/NnwNS/c7UTow171ARZChsy631m/PG
+         G5xkfOwoNf9YejUD8LKIfpNREEv9HAbJHx9J2XN150hQIEOunr7+4LTdz7mNifgd/a/1
+         wV9g==
+X-Gm-Message-State: AOAM53117HdrdJ3x0F1kcw3aprxq9oHn4AG0vYJf6Y/2V5SmKR+AsOEs
+        heP87OZbFl7HPvK9XFezuBKz7hjFBnBKjQ==
+X-Google-Smtp-Source: ABdhPJy5CAcukXKPiW4E0q9abTqbPf5N/EaEhK5Tn4S/yK0gIWmcpmpG8W/eyRzbXzbe5YsfmjS1bg==
+X-Received: by 2002:a05:6000:82:: with SMTP id m2mr358251wrx.202.1638987240071;
+        Wed, 08 Dec 2021 10:14:00 -0800 (PST)
+Received: from ?IPv6:2003:c7:8f4e:636:1c76:d6f:eb4:9f5b? (p200300c78f4e06361c760d6f0eb49f5b.dip0.t-ipconnect.de. [2003:c7:8f4e:636:1c76:d6f:eb4:9f5b])
+        by smtp.gmail.com with ESMTPSA id z8sm3532839wrh.54.2021.12.08.10.13.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 09:33:40 -0800 (PST)
-Subject: Re: [PATCH v3 13/15] dt-bindings: ata: Convert Broadcom SATA to YAML
-To:     Rob Herring <robh@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Markus Mayer <mmayer@broadcom.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Ray Jui <rjui@broadcom.com>, Amit Kucheria <amitk@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-ide@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Scott Branden <sbranden@broadcom.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        linux-rtc@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree@vger.kernel.org
-References: <20211208003727.3596577-1-f.fainelli@gmail.com>
- <20211208003727.3596577-14-f.fainelli@gmail.com>
- <1638971068.770579.3857735.nullmailer@robh.at.kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <dd170216-fedd-45a1-a3a5-efc99b9f6197@gmail.com>
-Date:   Wed, 8 Dec 2021 09:33:38 -0800
+        Wed, 08 Dec 2021 10:13:59 -0800 (PST)
+Subject: Re: proposal to delete the skeleton driver
+To:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org, tytso@mit.edu,
+        Greg KH <gregkh@linuxfoundation.org>
+References: <df5bb0a6-e5f5-e062-5c02-e1de612058e2@suse.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Message-ID: <d1797628-9782-ba76-9eff-f400f9aa2446@gmail.com>
+Date:   Wed, 8 Dec 2021 19:13:58 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <1638971068.770579.3857735.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <df5bb0a6-e5f5-e062-5c02-e1de612058e2@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 12/8/21 5:44 AM, Rob Herring wrote:
-> On Tue, 07 Dec 2021 16:37:24 -0800, Florian Fainelli wrote:
->> Convert the Broadcom SATA3 AHCI controller Device Tree binding to YAML
->> to help with validation.
->>
->> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->> ---
->>  .../bindings/ata/brcm,sata-brcm.txt           | 45 ---------
->>  .../bindings/ata/brcm,sata-brcm.yaml          | 98 +++++++++++++++++++
->>  2 files changed, 98 insertions(+), 45 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
->>  create mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
->>
+On 12/7/21 11:16 AM, Oliver Neukum wrote:
+> Hi,
 > 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
+> it seems to me that the method of maintaining an example driver
+> does not work because it will inevitably be
 > 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
+> * untested
 > 
-> Full log is available here: https://patchwork.ozlabs.org/patch/1565011
+> * out of date
+> 
+> Thus our documentation would be improved by replacing its examples
+> with code from drivers for real hardware. Such code wouldn't be pretty
+> or written for text books, but it would be tested.
+> I could do it this week in a first proposal. But I don't want to start
+> if somebody feels that the skeleton driver absolutely has to stay.
+> 
+>      Regards
+> 
+>          Oliver
+> 
 
-Likewise, those indicate that the preceding patch which renames the sata
-controller unit name has not been applied.
--- 
-Florian
+My wish is that it is only deleted when you have something similar as 
+proposed by Ted.
+
+I have tested the driver during the last three month. I used different 
+devices. The best one was a USB to serial adapter, as it has the by the 
+driver expected bulk in and out endpoints. In the skel_open() I was 
+putting in an initialization and was able to set RTS and other signals 
+on the RS232 side. I was also able to test the usb_bulk_msg() receiving 
+example for my patch…
+
+I truly believe that it has issues. But it is usable.
+
+I liked that it is a character device and that it is one file and not 
+distributed among many files.
+
+Regards
+Philipp
