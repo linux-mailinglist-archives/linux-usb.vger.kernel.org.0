@@ -2,607 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8FD46E475
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 09:43:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0720F46E488
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 09:46:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235083AbhLIIrB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Dec 2021 03:47:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37244 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235058AbhLIIrA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 03:47:00 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE643C0617A1
-        for <linux-usb@vger.kernel.org>; Thu,  9 Dec 2021 00:43:26 -0800 (PST)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1mvF1R-0003r3-1i; Thu, 09 Dec 2021 09:43:25 +0100
-Received: from mgr by dude.hi.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1mvF1Q-00BCft-6f; Thu, 09 Dec 2021 09:43:24 +0100
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
-To:     linux-usb@vger.kernel.org
-Cc:     balbi@kernel.org, laurent.pinchart@ideasonboard.com,
-        paul.elder@ideasonboard.com, kernel@pengutronix.de
-Subject: [PATCH v5 7/7] usb: gadget: uvc: add format/frame handling code
-Date:   Thu,  9 Dec 2021 09:43:22 +0100
-Message-Id: <20211209084322.2662616-8-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211209084322.2662616-1-m.grzeschik@pengutronix.de>
-References: <20211209084322.2662616-1-m.grzeschik@pengutronix.de>
+        id S229613AbhLIIuH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Dec 2021 03:50:07 -0500
+Received: from cable.insite.cz ([84.242.75.189]:55292 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229601AbhLIIuH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Dec 2021 03:50:07 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id C6379A1A3D402;
+        Thu,  9 Dec 2021 09:46:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1639039592; bh=M3qwLUTcZQOvSfUmdbdrCnwU4AY9IxGtraIgvNzSiB8=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=OBAXk8ALzH9apkp89TxvQgIxqKlLd/bVL2y3sLM2VIZpUw5jEGhLxlVu1ynfbZ2nH
+         3stEmfr711CUCbVK92JfCNGua+UPfBqMJwhSrbDMBmqouydbzrlPxGBdFZzJdXvRyZ
+         BUUjdbX8oop6QBTlefoMDQo/tP5RKIxlxiqZYrK8=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id AsokzKEiwVno; Thu,  9 Dec 2021 09:46:27 +0100 (CET)
+Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id E42BEA1A3D400;
+        Thu,  9 Dec 2021 09:46:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1639039587; bh=M3qwLUTcZQOvSfUmdbdrCnwU4AY9IxGtraIgvNzSiB8=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=JOPu6rz7O3Gq3+Sn2p+ib6Eb1CwCA1OJrKvY6uqX6TFhvZrWKvjDUJ3oBOOpGCW52
+         VjikV9N+mMczvIhN9Yk+OIRWpZF9vWP1J68d3PJPtLXwdkJHyyXg0WTI90/4Y61xdD
+         kiM9nSHfAVlNMI7wpWBK+kPNPgcF83IESU3heeqc=
+Subject: Re: usb:core: possible bug in wMaxPacketSize validation in config.c?
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <ce5ed936-4325-95a1-cd1c-eece35c4b613@ivitera.com>
+ <YbG4CvLEdf5CmYbc@kroah.com>
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+Message-ID: <65f8eaa8-5606-73da-acfb-4b7322b5b96a@ivitera.com>
+Date:   Thu, 9 Dec 2021 09:46:26 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <YbG4CvLEdf5CmYbc@kroah.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Hostside format selection is currently only done in userspace, as
-the events for SET_CUR and GET_CUR are allways moved to the application
-layer. Since the v4l2 device parses the configfs data, the format
-negotiation can be done in the kernel. This patch adds the functions to
-set the current configuration while continuing to forward all unknown
-events to the userspace level.
+Hi Greg,
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Dne 09. 12. 21 v 9:02 Greg KH napsal(a):
+> On Thu, Dec 09, 2021 at 08:53:37AM +0100, Pavel Hofman wrote:
+>> Hi,
+>>
+>> in
+>> https://elixir.bootlin.com/linux/latest/source/drivers/usb/core/config.c#L409
+>> the initial value of maxp is obtained using function usb_endpoint_maxp.
+>>
+>> maxp = usb_endpoint_maxp(&endpoint->desc);
+>>
+>> This function https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/usb/ch9.h#L647
+>> returns only the bits 0 - 10 of the wMaxPacketSize field, i.e. dropping the
+>> high-bandwidth bits 11 and 12. Yet the subsequent code extracts these bits
+>> from maxp into variable i
+>> https://elixir.bootlin.com/linux/latest/source/drivers/usb/core/config.c#L427
+>> , clears them in maxp, and re-sets back in one of the further checks
+>> https://elixir.bootlin.com/linux/latest/source/drivers/usb/core/config.c#L445
+>>
+>> IMO that means the code requires that initial value of maxp contains the
+>> additional-transactions bits. IMO the code should be fixed with this trivial
+>> patch (tested on my build):
+>>
+>>
+>> ===================================================================
+>> diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+>> --- a/drivers/usb/core/config.c	(revision
+>> 018dd9dd80ab5f3bd988911b1f10255029ffa52d)
+>> +++ b/drivers/usb/core/config.c	(date 1638972286064)
+>> @@ -406,7 +406,7 @@
+>>   	 * the USB-2 spec requires such endpoints to have wMaxPacketSize = 0
+>>   	 * (see the end of section 5.6.3), so don't warn about them.
+>>   	 */
+>> -	maxp = usb_endpoint_maxp(&endpoint->desc);
+>> +	maxp = endpoint->desc.wMaxPacketSize;
+>>   	if (maxp == 0 && !(usb_endpoint_xfer_isoc(d) && asnum == 0)) {
+>>   		dev_warn(ddev, "config %d interface %d altsetting %d endpoint 0x%X has
+>> invalid wMaxPacketSize 0\n",
+>>   		    cfgno, inum, asnum, d->bEndpointAddress);
+>>
+>>
+>> =========================
+>>
+>> I can send a proper patch should the change be approved.
+> 
+> Please always just send a real patch, that makes it easier to discuss.
 
----
-v1 -> v2:
-   - fixed the commit message
-   - changed pr_debug to pr_err in events_process_data
-   - aligned many indentations
-   - simplified uvc_events_process_data
-   - fixed uvc_fill_streaming_control calls in uvcg_video_init
-   - added setup_subcribed to decide if userspace takes over on EOPNOTSUPP
-   - added data_subscribed to decide if userspace takes over on EOPNOTSUPP
-   - removed duplicate send_response
-   - wrting fmt and frm in full
-v2 -> v3:
-   - added find_format_index to set the right probe
-v3 -> v4:
-   - add function find_ival_index and use for cur_ival
-   - fix swapped frame and format in uvc_events_process_data on uvc_fill_streaming_control
-   - set proper resp.length on ep0 complete
-   - dropped setting cur_probe on set_format since function was removed
-   - added locking around getting correspondent cur_{frame,format,ival}
-v4 -> v5:
-   - fixed sparse errors reported by kernel test robot
+> 
+> Anyway, what problem is this solving?  
 
- drivers/usb/gadget/function/f_uvc.c     | 234 +++++++++++++++++++++++-
- drivers/usb/gadget/function/uvc.h       |  19 ++
- drivers/usb/gadget/function/uvc_v4l2.c  |  66 ++++++-
- drivers/usb/gadget/function/uvc_video.c |  12 +-
- 4 files changed, 324 insertions(+), 7 deletions(-)
+The config.c contains several verifications which modify wMaxPacketSize 
+values reported by a device to conform to USB specs. IMO there is a bug 
+in the validation code.
 
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index e081a4e6572ee2..dfdfea13a2cdaf 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -16,7 +16,6 @@
- #include <linux/string.h>
- #include <linux/usb/ch9.h>
- #include <linux/usb/gadget.h>
--#include <linux/usb/g_uvc.h>
- #include <linux/usb/video.h>
- #include <linux/vmalloc.h>
- #include <linux/wait.h>
-@@ -200,16 +199,230 @@ static const struct usb_descriptor_header * const uvc_ss_streaming[] = {
-  * Control requests
-  */
- 
-+void uvc_fill_streaming_control(struct uvc_device *uvc,
-+			   struct uvc_streaming_control *ctrl,
-+			   int iframe, int iformat, unsigned int ival)
-+{
-+	struct uvcg_format *uformat;
-+	struct uvcg_frame *uframe;
-+
-+	/* Restrict the iformat, iframe and ival to valid values. Negative
-+	 * values for ifrmat and iframe will result in the maximum valid value
-+	 * being selected
-+	 */
-+	iformat = clamp((unsigned int)iformat, 1U,
-+			(unsigned int)uvc->header->num_fmt);
-+	uformat = find_format_by_index(uvc, iformat);
-+	if (!uformat)
-+		return;
-+
-+	iframe = clamp((unsigned int)iframe, 1U,
-+		       (unsigned int)uformat->num_frames);
-+	uframe = find_frame_by_index(uvc, uformat, iframe);
-+	if (!uframe)
-+		return;
-+
-+	ival = clamp((unsigned int)ival, 1U,
-+		     (unsigned int)uframe->frame.b_frame_interval_type);
-+	if (!uframe->dw_frame_interval[ival - 1])
-+		return;
-+
-+	memset(ctrl, 0, sizeof(*ctrl));
-+
-+	ctrl->bmHint = 1;
-+	ctrl->bFormatIndex = iformat;
-+	ctrl->bFrameIndex = iframe;
-+	ctrl->dwFrameInterval = uframe->dw_frame_interval[ival - 1];
-+	ctrl->dwMaxVideoFrameSize =
-+		uframe->frame.dw_max_video_frame_buffer_size;
-+
-+	if (uvc->video.ep->desc)
-+		ctrl->dwMaxPayloadTransferSize =
-+			le16_to_cpu(uvc->video.ep->desc->wMaxPacketSize);
-+	ctrl->bmFramingInfo = 3;
-+	ctrl->bPreferedVersion = 1;
-+	ctrl->bMaxVersion = 1;
-+}
-+
-+static int uvc_events_process_data(struct uvc_device *uvc,
-+				   struct usb_request *req)
-+{
-+	struct uvc_video *video = &uvc->video;
-+	struct uvc_streaming_control *target;
-+	struct uvc_streaming_control *ctrl;
-+	struct uvcg_frame *uframe;
-+	struct uvcg_format *uformat;
-+
-+	switch (video->control) {
-+	case UVC_VS_PROBE_CONTROL:
-+		pr_debug("setting probe control, length = %d\n", req->actual);
-+		target = &video->probe;
-+		break;
-+
-+	case UVC_VS_COMMIT_CONTROL:
-+		pr_debug("setting commit control, length = %d\n", req->actual);
-+		target = &video->commit;
-+		break;
-+
-+	default:
-+		pr_err("setting unknown control, length = %d\n", req->actual);
-+		return -EOPNOTSUPP;
-+	}
-+
-+	ctrl = (struct uvc_streaming_control *)req->buf;
-+
-+	uvc_fill_streaming_control(uvc, target, ctrl->bFrameIndex,
-+			   ctrl->bFormatIndex, ctrl->dwFrameInterval);
-+
-+	if (video->control == UVC_VS_COMMIT_CONTROL) {
-+		uformat = find_format_by_index(uvc, target->bFormatIndex);
-+		if (!uformat)
-+			return -EINVAL;
-+
-+		uframe = find_frame_by_index(uvc, uformat, ctrl->bFrameIndex);
-+		if (!uframe)
-+			return -EINVAL;
-+
-+		spin_lock(&video->frame_lock);
-+
-+		video->cur_frame = uframe;
-+		video->cur_format = uformat;
-+		video->cur_ival = find_ival_index(uframe, ctrl->dwFrameInterval);
-+
-+		spin_unlock(&video->frame_lock);
-+	}
-+
-+	return 0;
-+}
-+
-+static void
-+uvc_events_process_streaming(struct uvc_device *uvc, uint8_t req, uint8_t cs,
-+			     struct uvc_request_data *resp)
-+{
-+	struct uvc_streaming_control *ctrl;
-+
-+	pr_debug("streaming request (req %02x cs %02x)\n", req, cs);
-+
-+	if (cs != UVC_VS_PROBE_CONTROL && cs != UVC_VS_COMMIT_CONTROL)
-+		return;
-+
-+	ctrl = (struct uvc_streaming_control *)&resp->data;
-+	resp->length = sizeof(*ctrl);
-+
-+	switch (req) {
-+	case UVC_SET_CUR:
-+		uvc->video.control = cs;
-+		resp->length = 34;
-+		break;
-+
-+	case UVC_GET_CUR:
-+		if (cs == UVC_VS_PROBE_CONTROL)
-+			memcpy(ctrl, &uvc->video.probe, sizeof(*ctrl));
-+		else
-+			memcpy(ctrl, &uvc->video.commit, sizeof(*ctrl));
-+		break;
-+
-+	case UVC_GET_MIN:
-+	case UVC_GET_MAX:
-+	case UVC_GET_DEF:
-+		if (req == UVC_GET_MAX)
-+			uvc_fill_streaming_control(uvc, ctrl, -1, -1, UINT_MAX);
-+		else
-+			uvc_fill_streaming_control(uvc, ctrl, 1, 1, 0);
-+		break;
-+
-+	case UVC_GET_RES:
-+		memset(ctrl, 0, sizeof(*ctrl));
-+		break;
-+
-+	case UVC_GET_LEN:
-+		resp->data[0] = 0x00;
-+		resp->data[1] = 0x22;
-+		resp->length = 2;
-+		break;
-+
-+	case UVC_GET_INFO:
-+		resp->data[0] = 0x03;
-+		resp->length = 1;
-+		break;
-+	}
-+}
-+
-+static int
-+uvc_events_process_class(struct uvc_device *uvc,
-+			 const struct usb_ctrlrequest *ctrl,
-+			 struct uvc_request_data *resp)
-+{
-+	if ((ctrl->bRequestType & USB_RECIP_MASK) != USB_RECIP_INTERFACE)
-+		return -EINVAL;
-+
-+	if (le16_to_cpu(ctrl->wIndex) == uvc->control_intf)
-+		return -EOPNOTSUPP;
-+	else if (le16_to_cpu(ctrl->wIndex) == uvc->streaming_intf)
-+		uvc_events_process_streaming(uvc, ctrl->bRequest,
-+					     le16_to_cpu(ctrl->wValue) >> 8,
-+					     resp);
-+
-+	return 0;
-+}
-+
-+static int
-+uvc_events_process_setup(struct uvc_device *uvc,
-+			 const struct usb_ctrlrequest *ctrl,
-+			 struct uvc_request_data *resp)
-+{
-+	uvc->video.control = 0;
-+
-+	pr_debug("bRequestType %02x bRequest %02x wValue %04x wIndex %04x wLength %04x\n",
-+		ctrl->bRequestType, ctrl->bRequest, ctrl->wValue,
-+		ctrl->wIndex, ctrl->wLength);
-+
-+	switch (ctrl->bRequestType & USB_TYPE_MASK) {
-+	case USB_TYPE_STANDARD:
-+		return -EOPNOTSUPP;
-+
-+	case USB_TYPE_CLASS:
-+		return uvc_events_process_class(uvc, ctrl, resp);
-+
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
- static void
- uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
- {
- 	struct uvc_device *uvc = req->context;
- 	struct v4l2_event v4l2_event;
- 	struct uvc_event *uvc_event = (void *)&v4l2_event.u.data;
-+	struct uvc_request_data resp;
-+	int ret;
- 
- 	if (uvc->event_setup_out) {
- 		uvc->event_setup_out = 0;
- 
-+		memset(&resp, 0, sizeof(resp));
-+		resp.length = -EL2HLT;
-+
-+		ret = uvc_events_process_data(uvc, req);
-+		/* If we have no error on process */
-+		if (!ret) {
-+			resp.length = req->length;
-+			uvc_send_response(uvc, &resp);
-+			return;
-+		}
-+
-+		/* If we have a real error on process */
-+		if (ret != -EOPNOTSUPP)
-+			return;
-+
-+		/* If we have -EOPNOTSUPP */
-+		if (!uvc->data_subscribed)
-+			return;
-+
-+		/* If we have data subscribed */
- 		memset(&v4l2_event, 0, sizeof(v4l2_event));
- 		v4l2_event.type = UVC_EVENT_DATA;
- 		uvc_event->data.length = req->actual;
-@@ -224,6 +437,8 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
- 	struct uvc_device *uvc = to_uvc(f);
- 	struct v4l2_event v4l2_event;
- 	struct uvc_event *uvc_event = (void *)&v4l2_event.u.data;
-+	struct uvc_request_data resp;
-+	int ret = 0;
- 
- 	if ((ctrl->bRequestType & USB_TYPE_MASK) != USB_TYPE_CLASS) {
- 		uvcg_info(f, "invalid request type\n");
-@@ -240,6 +455,23 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
- 	uvc->event_setup_out = !(ctrl->bRequestType & USB_DIR_IN);
- 	uvc->event_length = le16_to_cpu(ctrl->wLength);
- 
-+	memset(&resp, 0, sizeof(resp));
-+	resp.length = -EL2HLT;
-+
-+	ret = uvc_events_process_setup(uvc, ctrl, &resp);
-+	/* If we have no error on process */
-+	if (!ret)
-+		return uvc_send_response(uvc, &resp);
-+
-+	/* If we have a real error on process */
-+	if (ret != -EOPNOTSUPP)
-+		return ret;
-+
-+	/* If we have -EOPNOTSUPP */
-+	if (!uvc->setup_subscribed)
-+		return uvc_send_response(uvc, &resp);
-+
-+	/* If we have setup subscribed */
- 	memset(&v4l2_event, 0, sizeof(v4l2_event));
- 	v4l2_event.type = UVC_EVENT_SETUP;
- 	memcpy(&uvc_event->req, ctrl, sizeof(uvc_event->req));
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index b7246b4bee1d87..a9984d26ebe043 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -13,6 +13,8 @@
- #include <linux/mutex.h>
- #include <linux/spinlock.h>
- #include <linux/usb/composite.h>
-+#include <linux/usb/g_uvc.h>
-+#include <linux/usb/video.h>
- #include <linux/videodev2.h>
- 
- #include <media/v4l2-device.h>
-@@ -93,6 +95,12 @@ struct uvc_video {
- 	unsigned int cur_ival;
- 
- 	struct mutex mutex;	/* protects frame parameters */
-+	spinlock_t frame_lock;
-+
-+	struct uvc_streaming_control probe;
-+	struct uvc_streaming_control commit;
-+
-+	int control;
- 
- 	unsigned int uvc_num_requests;
- 
-@@ -128,6 +136,8 @@ struct uvc_device {
- 	struct usb_function func;
- 	struct uvc_video video;
- 	bool func_connected;
-+	bool setup_subscribed;
-+	bool data_subscribed;
- 
- 	struct uvcg_streaming_header *header;
- 
-@@ -183,5 +193,14 @@ extern struct uvcg_format *find_format_by_index(struct uvc_device *uvc,
- extern struct uvcg_frame *find_frame_by_index(struct uvc_device *uvc,
- 					      struct uvcg_format *uformat,
- 					      int index);
-+extern int find_format_index(struct uvc_device *uvc,
-+			       struct uvcg_format *uformat);
-+extern int find_ival_index(struct uvcg_frame *uframe, int dwFrameInterval);
-+extern void uvc_fill_streaming_control(struct uvc_device *uvc,
-+				       struct uvc_streaming_control *ctrl,
-+				       int iframe, int iformat,
-+				       unsigned int ival);
-+extern int uvc_send_response(struct uvc_device *uvc,
-+			     struct uvc_request_data *data);
- 
- #endif /* _UVC_GADGET_H_ */
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index e4c4884806ce94..fc7a113711c9ba 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -81,6 +81,33 @@ struct uvcg_format *find_format_by_index(struct uvc_device *uvc, int index)
- 	return uformat;
- }
- 
-+int find_format_index(struct uvc_device *uvc, struct uvcg_format *uformat)
-+{
-+	struct uvcg_format_ptr *format;
-+	int i = 1;
-+
-+	list_for_each_entry(format, &uvc->header->formats, entry) {
-+		if (uformat == format->fmt)
-+			return i;
-+		i++;
-+	}
-+
-+	return 0;
-+}
-+
-+int find_ival_index(struct uvcg_frame *uframe, int dwFrameInterval)
-+{
-+	int i;
-+
-+	for (i = 0; i < uframe->frame.b_frame_interval_type; i++) {
-+		if (dwFrameInterval == uframe->dw_frame_interval[i])
-+			return i + 1;
-+	}
-+
-+	/* fallback */
-+	return 1;
-+}
-+
- struct uvcg_frame *find_frame_by_index(struct uvc_device *uvc,
- 				       struct uvcg_format *uformat,
- 				       int index)
-@@ -169,8 +196,7 @@ static struct uvcg_frame *find_closest_frame_by_size(struct uvc_device *uvc,
-  * Requests handling
-  */
- 
--static int
--uvc_send_response(struct uvc_device *uvc, struct uvc_request_data *data)
-+int uvc_send_response(struct uvc_device *uvc, struct uvc_request_data *data)
- {
- 	struct usb_composite_dev *cdev = uvc->func.config->cdev;
- 	struct usb_request *req = uvc->control_req;
-@@ -212,6 +238,8 @@ uvc_v4l2_get_format(struct file *file, void *fh, struct v4l2_format *fmt)
- 	struct uvc_video *video = &uvc->video;
- 	struct uvc_format_desc *fmtdesc;
- 
-+	spin_lock(&video->frame_lock);
-+
- 	fmtdesc = to_uvc_format(video->cur_format);
- 
- 	fmt->fmt.pix.pixelformat = fmtdesc->fcc;
-@@ -225,6 +253,8 @@ uvc_v4l2_get_format(struct file *file, void *fh, struct v4l2_format *fmt)
- 	fmt->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
- 	fmt->fmt.pix.priv = 0;
- 
-+	spin_unlock(&video->frame_lock);
-+
- 	return 0;
- }
- 
-@@ -236,6 +266,7 @@ uvc_v4l2_try_set_fmt(struct file *file, void *fh, struct v4l2_format *fmt)
- 	struct uvc_video *video = &uvc->video;
- 	struct uvcg_format *uformat;
- 	struct uvcg_frame *uframe;
-+	int iformat;
- 	u8 *fcc;
- 
- 	if (fmt->type != video->queue.queue.type)
-@@ -251,6 +282,10 @@ uvc_v4l2_try_set_fmt(struct file *file, void *fh, struct v4l2_format *fmt)
- 	if (!uformat)
- 		return -EINVAL;
- 
-+	iformat = find_format_index(uvc, uformat);
-+	if (!iformat)
-+		return -EINVAL;
-+
- 	uframe = find_closest_frame_by_size(uvc, uformat,
- 				fmt->fmt.pix.width, fmt->fmt.pix.height);
- 	if (!uframe)
-@@ -297,8 +332,12 @@ uvc_v4l2_enum_frameintervals(struct file *file, void *fh,
- 		if (fival->index >= 1)
- 			return -EINVAL;
- 
-+		spin_lock(&video->frame_lock);
-+
- 		fival->discrete.numerator =
- 			uframe->dw_frame_interval[video->cur_ival - 1];
-+
-+		spin_unlock(&video->frame_lock);
- 	} else {
- 		if (fival->index >= uframe->frame.b_frame_interval_type)
- 			return -EINVAL;
-@@ -330,8 +369,12 @@ uvc_v4l2_enum_framesizes(struct file *file, void *fh,
- 		if (fsize->index >= 1)
- 			return -EINVAL;
- 
-+		spin_lock(&video->frame_lock);
-+
- 		uformat = video->cur_format;
- 		uframe = video->cur_frame;
-+
-+		spin_unlock(&video->frame_lock);
- 	} else {
- 		uformat = find_format_by_pix(uvc, fsize->pixel_format);
- 		if (!uformat)
-@@ -365,7 +408,11 @@ uvc_v4l2_enum_fmt(struct file *file, void *fh, struct v4l2_fmtdesc *f)
- 		if (f->index >= 1)
- 			return -EINVAL;
- 
-+		spin_lock(&video->frame_lock);
-+
- 		uformat = video->cur_format;
-+
-+		spin_unlock(&video->frame_lock);
- 	} else {
- 		if (f->index >= uvc->header->num_fmt)
- 			return -EINVAL;
-@@ -489,14 +536,20 @@ uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
- 	if (sub->type < UVC_EVENT_FIRST || sub->type > UVC_EVENT_LAST)
- 		return -EINVAL;
- 
--	if (sub->type == UVC_EVENT_SETUP && uvc->func_connected)
-+	if (sub->type == UVC_EVENT_STREAMON && uvc->func_connected)
- 		return -EBUSY;
- 
- 	ret = v4l2_event_subscribe(fh, sub, 2, NULL);
- 	if (ret < 0)
- 		return ret;
- 
--	if (sub->type == UVC_EVENT_SETUP) {
-+	if (sub->type == UVC_EVENT_SETUP)
-+		uvc->setup_subscribed = true;
-+
-+	if (sub->type == UVC_EVENT_DATA)
-+		uvc->data_subscribed = true;
-+
-+	if (sub->type == UVC_EVENT_STREAMON) {
- 		uvc->func_connected = true;
- 		handle->is_uvc_app_handle = true;
- 		uvc_function_connect(uvc);
-@@ -525,7 +578,10 @@ uvc_v4l2_unsubscribe_event(struct v4l2_fh *fh,
- 	if (ret < 0)
- 		return ret;
- 
--	if (sub->type == UVC_EVENT_SETUP && handle->is_uvc_app_handle) {
-+	if (sub->type == UVC_EVENT_SETUP)
-+		uvc->setup_subscribed = false;
-+
-+	if (sub->type == UVC_EVENT_STREAMON && handle->is_uvc_app_handle) {
- 		uvc_v4l2_disable(uvc);
- 		handle->is_uvc_app_handle = false;
- 	}
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index 9fb2b9c575ed34..7eb5364997028b 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -517,10 +517,11 @@ static int uvc_default_frame_interval(struct uvc_video *video)
-  */
- int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
- {
--	int iframe;
-+	int iframe, iformat;
- 
- 	INIT_LIST_HEAD(&video->req_free);
- 	spin_lock_init(&video->req_lock);
-+	spin_lock_init(&video->frame_lock);
- 	INIT_WORK(&video->pump, uvcg_video_pump);
- 
- 	if (list_empty(&uvc->header->formats))
-@@ -531,6 +532,10 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
- 	if (!video->cur_format)
- 		return -EINVAL;
- 
-+	iformat = find_format_index(uvc, video->cur_format);
-+	if (!iformat)
-+		return -EINVAL;
-+
- 	iframe = uvc_frame_default(video->cur_format);
- 	if (!iframe)
- 		return -EINVAL;
-@@ -541,6 +546,11 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
- 
- 	video->cur_ival = uvc_default_frame_interval(video);
- 
-+	uvc_fill_streaming_control(uvc, &video->probe, iframe, iformat,
-+				   video->cur_ival);
-+	uvc_fill_streaming_control(uvc, &video->commit, iframe, iformat,
-+				   video->cur_ival);
-+
- 	/* Initialize the video buffers queue. */
- 	uvcg_queue_init(&video->queue, uvc->v4l2_dev.dev->parent,
- 			V4L2_BUF_TYPE_VIDEO_OUTPUT, &video->mutex);
--- 
-2.30.2
+> Do you have a device where the > data is calculated incorrectly?
 
+No I don't, I noticed the issue while testing something which involved 
+that part of code.
+
+>  What value in a device is being
+> declared incorrect because of the existing code?
+Please look at the existing code with my comments starting ///////:
+
+
+====================
+
+	/*
+	 * Validate the wMaxPacketSize field.
+	 * Some devices have isochronous endpoints in altsetting 0;
+	 * the USB-2 spec requires such endpoints to have wMaxPacketSize = 0
+	 * (see the end of section 5.6.3), so don't warn about them.
+	 */
+
+////// Here only bits 0 - 10 from endpoint->desc.wMaxPacketSize
+////// are copied to maxp
+	maxp = usb_endpoint_maxp(&endpoint->desc);
+	if (maxp == 0 && !(usb_endpoint_xfer_isoc(d) && asnum == 0)) {
+		dev_warn(ddev, "config %d interface %d altsetting %d endpoint 0x%X has 
+invalid wMaxPacketSize 0\n",
+		    cfgno, inum, asnum, d->bEndpointAddress);
+	}
+
+	/* Find the highest legal maxpacket size for this endpoint */
+	i = 0;		/* additional transactions per microframe */
+	switch (udev->speed) {
+	case USB_SPEED_LOW:
+		maxpacket_maxes = low_speed_maxpacket_maxes;
+		break;
+	case USB_SPEED_FULL:
+		maxpacket_maxes = full_speed_maxpacket_maxes;
+		break;
+	case USB_SPEED_HIGH:
+		/* Bits 12..11 are allowed only for HS periodic endpoints */
+		if (usb_endpoint_xfer_int(d) || usb_endpoint_xfer_isoc(d)) {
+
+///////// Here bits 11 and 12 are extracted from maxp,
+///////// removed from maxp and stored in i.
+///////// They are always 0 due to the usb_endpoint_maxp call.
+			i = maxp & (BIT(12) | BIT(11));
+			maxp &= ~i;
+		}
+		fallthrough;
+	default:
+		maxpacket_maxes = high_speed_maxpacket_maxes;
+		break;
+	case USB_SPEED_SUPER:
+	case USB_SPEED_SUPER_PLUS:
+		maxpacket_maxes = super_speed_maxpacket_maxes;
+		break;
+	}
+	j = maxpacket_maxes[usb_endpoint_type(&endpoint->desc)];
+
+	if (maxp > j) {
+		dev_warn(ddev, "config %d interface %d altsetting %d endpoint 0x%X has 
+invalid maxpacket %d, setting to %d\n",
+		    cfgno, inum, asnum, d->bEndpointAddress, maxp, j);
+
+//////// If maxp > max allowed packet size (the device reports incorrect 
+//////// values in bits 0-10, wMaxPacketSize will use the max allowed 
+//////// packet size for bits 0-10, and the additional-transaction 
+//////// (high-bandwidth) bits stored in i will be set, to allow more 
+//////// packets per frame. But currently i is always = 0 due to the 
+//////// usb_endpoint_maxp call.
+		maxp = j;
+		endpoint->desc.wMaxPacketSize = cpu_to_le16(i | maxp);
+	}
+
+
+
+====================
+
+Thanks a lot for the review.
+
+Pavel.
