@@ -2,76 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0864346EC7D
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 17:04:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9206846ED05
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 17:26:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240736AbhLIQHs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Dec 2021 11:07:48 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:40451 "HELO
+        id S232776AbhLIQaN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Dec 2021 11:30:13 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:36085 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S236629AbhLIQHr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 11:07:47 -0500
-Received: (qmail 607420 invoked by uid 1000); 9 Dec 2021 11:04:13 -0500
-Date:   Thu, 9 Dec 2021 11:04:13 -0500
+        with SMTP id S232040AbhLIQaN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 11:30:13 -0500
+Received: (qmail 608424 invoked by uid 1000); 9 Dec 2021 11:26:38 -0500
+Date:   Thu, 9 Dec 2021 11:26:38 -0500
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Bixuan Cui <cuibixuan@huawei.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        Rajat Jain <rajatja@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: hub: Resume hubs to find newly connected device
-Message-ID: <YbIo/ZBRgK5NDZJb@rowland.harvard.edu>
-References: <20211208070835.8877-1-kai.heng.feng@canonical.com>
- <YbEnf2NUr/BCV4Gb@rowland.harvard.edu>
- <CAAd53p61w-AHBxy05Hx-gwae1rUxZxsaVfmH=--bQUkPxYj8Nw@mail.gmail.com>
+To:     Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: usb:core: possible bug in wMaxPacketSize validation in config.c?
+Message-ID: <YbIuPrQCLtfsx8IH@rowland.harvard.edu>
+References: <ce5ed936-4325-95a1-cd1c-eece35c4b613@ivitera.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAd53p61w-AHBxy05Hx-gwae1rUxZxsaVfmH=--bQUkPxYj8Nw@mail.gmail.com>
+In-Reply-To: <ce5ed936-4325-95a1-cd1c-eece35c4b613@ivitera.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 09:19:24AM +0800, Kai-Heng Feng wrote:
-> On Thu, Dec 9, 2021 at 5:45 AM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Wed, Dec 08, 2021 at 03:08:33PM +0800, Kai-Heng Feng wrote:
-> > > When a new USB device gets plugged to nested hubs, the affected hub,
-> > > which connects to usb 2-1.4-port2, doesn't report there's any change,
-> > > hence the nested hubs go back to runtime suspend like nothing happened:
-> >
-> > That's a bug in the hub.  When there's a change in the connection status
-> > of one of its ports, it should report this change to the kernel.
+On Thu, Dec 09, 2021 at 08:53:37AM +0100, Pavel Hofman wrote:
+> Hi,
 > 
-> I think it should, but when I searched through the USB spec and I
-> can't find anywhere specify hub requires to report it in change
-> status.
-
-USB-2.0 spec, section 11.24.2.7.2.1 (C_PORT_CONNECTION):
-
-	This bit is set when the PORT_CONNECTION bit changes because of an 
-	attach or detach detect event (see Section 7.1.7.3). This bit will be 
-	cleared to zero by a ClearPortFeature(C_PORT_CONNECTION) request or 
-	while the port is in the Powered-off state.
-
-> > So because of this buggy hub, you now want to wake up _every_ hub in the
-> > system whenever any wakeup event occurs?  Is this really a good idea?
-> > Is there a better way to solve the problem, such as a special quirk
-> > flag?
+> in
+> https://elixir.bootlin.com/linux/latest/source/drivers/usb/core/config.c#L409
+> the initial value of maxp is obtained using function usb_endpoint_maxp.
 > 
-> If there's no other activities, the USB hub should go back to suspend
-> immediately, so the impact is minimal.
+> maxp = usb_endpoint_maxp(&endpoint->desc);
+> 
+> This function https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/usb/ch9.h#L647
+> returns only the bits 0 - 10 of the wMaxPacketSize field, i.e. dropping the
+> high-bandwidth bits 11 and 12. Yet the subsequent code extracts these bits
+> from maxp into variable i
+> https://elixir.bootlin.com/linux/latest/source/drivers/usb/core/config.c#L427
+> , clears them in maxp, and re-sets back in one of the further checks
+> https://elixir.bootlin.com/linux/latest/source/drivers/usb/core/config.c#L445
 
-Not immediately, but after a few seconds.  However your patch will affect every 
-hub, not just the one that the new device was plugged into.
+This is clearly wrong.  Good catch.
 
-> I've seen several similar bug reports so I think this solution should
-> be applied for all hubs.
+> IMO that means the code requires that initial value of maxp contains the
+> additional-transactions bits. IMO the code should be fixed with this trivial
+> patch (tested on my build):
+> 
+> 
+> ===================================================================
+> diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+> --- a/drivers/usb/core/config.c	(revision
+> 018dd9dd80ab5f3bd988911b1f10255029ffa52d)
+> +++ b/drivers/usb/core/config.c	(date 1638972286064)
+> @@ -406,7 +406,7 @@
+>  	 * the USB-2 spec requires such endpoints to have wMaxPacketSize = 0
+>  	 * (see the end of section 5.6.3), so don't warn about them.
+>  	 */
+> -	maxp = usb_endpoint_maxp(&endpoint->desc);
+> +	maxp = endpoint->desc.wMaxPacketSize;
 
-Maybe those bug reports all had something in common, such as the type of hub or 
-the bus speed they were running at.  Did you check?
+You need to say: le16_to_cpu(endpoint->desc.wMaxPacketSize).
+
+It also wouldn't hurt to change the line which calculates i.  Replace (BIT(12) | 
+BIT(11)) with USB_EP_MAXP_MULT_MASK, and adjust the preceding comment 
+accordingly.
 
 Alan Stern
