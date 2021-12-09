@@ -2,77 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F1AF46E31B
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 08:22:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E70C46E385
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 08:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbhLIHZ5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Dec 2021 02:25:57 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:47966 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231586AbhLIHZ4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 02:25:56 -0500
-X-UUID: 2955d4a212674aec841c4e37367f8cb0-20211209
-X-UUID: 2955d4a212674aec841c4e37367f8cb0-20211209
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1697608462; Thu, 09 Dec 2021 15:22:20 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 9 Dec 2021 15:22:19 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkcas10.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Thu, 9 Dec 2021 15:22:18 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Eddie Hung" <eddie.hung@mediatek.com>,
-        Yun-Chien Yu <yun-chien.yu@mediatek.com>
-Subject: [PATCH] usb: xhci: skip re-check pending port event if hibernated
-Date:   Thu, 9 Dec 2021 15:22:18 +0800
-Message-ID: <20211209072218.21651-1-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        id S232601AbhLIH5S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Dec 2021 02:57:18 -0500
+Received: from cable.insite.cz ([84.242.75.189]:51811 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232321AbhLIH5R (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Dec 2021 02:57:17 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 0FF3AA1A3D401
+        for <linux-usb@vger.kernel.org>; Thu,  9 Dec 2021 08:53:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1639036423; bh=npEIk1j9V1lC8PH5RLAz09HHt/JUMkFIr710wdkGLEI=;
+        h=From:Subject:To:Date:From;
+        b=VM5IJnYRlDELJn+++CraoVj05HnDRhgZK2DqJj7DSKD9I8mWhs7Z1x0b7oAg3xa0o
+         oFwT6wx0cNWLZ3N8KPTmFpdH/rqpxPbeTAHCdE0osyYp9PD1wZ3rBsX3uftNHGflkL
+         6nJTLmvIl2RF5DXeQjebO6oEN4hby1b23NzdEkwA=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id iRTUKmk17Tt8 for <linux-usb@vger.kernel.org>;
+        Thu,  9 Dec 2021 08:53:37 +0100 (CET)
+Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 8F93CA1A3D400
+        for <linux-usb@vger.kernel.org>; Thu,  9 Dec 2021 08:53:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1639036417; bh=npEIk1j9V1lC8PH5RLAz09HHt/JUMkFIr710wdkGLEI=;
+        h=From:Subject:To:Date:From;
+        b=qtPnAVuDaKEFWZw3n3NxhO+ohUOJAD2ziWkOH59LfLaEejxdG8JdFwnrUg4ngWUCe
+         LitmT06hzbbzxVrOOikx6zsRWnSGXN91A2uaa6Z0Ilp4KYarhoVdbT9B1evOspQYpv
+         0urUE6M64XRZWElecAJkel/Uj0ElsSunZj8Fa+P4=
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+Subject: usb:core: possible bug in wMaxPacketSize validation in config.c?
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Message-ID: <ce5ed936-4325-95a1-cd1c-eece35c4b613@ivitera.com>
+Date:   Thu, 9 Dec 2021 08:53:37 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When xHCI controller hibernated, the root hub lost power, if controller
-support Port Power Control (PPC), PP is not set at xhci_resume() and
-set by hub_reset_resume() later, so no need check pending port event.
-If PPC is not supported, device is disconneced, seems do not send out
-U3 LFPS wake signal, no need re-check again and drop 120ms delay to
-save resume time.
+Hi,
 
-Reported-by: Yun-Chien Yu <yun-chien.yu@mediatek.com>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
- drivers/usb/host/xhci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+in 
+https://elixir.bootlin.com/linux/latest/source/drivers/usb/core/config.c#L409 
+the initial value of maxp is obtained using function usb_endpoint_maxp.
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 902f410874e8..686d8e6f03f6 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1235,7 +1235,7 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
- 		 * the first wake signalling failed, give it that chance.
- 		 */
- 		pending_portevent = xhci_pending_portevent(xhci);
--		if (!pending_portevent) {
-+		if (!pending_portevent && !hibernated) {
- 			msleep(120);
- 			pending_portevent = xhci_pending_portevent(xhci);
- 		}
--- 
-2.18.0
+maxp = usb_endpoint_maxp(&endpoint->desc);
 
+This function 
+https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/usb/ch9.h#L647 
+returns only the bits 0 - 10 of the wMaxPacketSize field, i.e. dropping 
+the high-bandwidth bits 11 and 12. Yet the subsequent code extracts 
+these bits from maxp into variable i 
+https://elixir.bootlin.com/linux/latest/source/drivers/usb/core/config.c#L427 
+, clears them in maxp, and re-sets back in one of the further checks 
+https://elixir.bootlin.com/linux/latest/source/drivers/usb/core/config.c#L445
+
+IMO that means the code requires that initial value of maxp contains the 
+additional-transactions bits. IMO the code should be fixed with this 
+trivial patch (tested on my build):
+
+
+===================================================================
+diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+--- a/drivers/usb/core/config.c	(revision 
+018dd9dd80ab5f3bd988911b1f10255029ffa52d)
++++ b/drivers/usb/core/config.c	(date 1638972286064)
+@@ -406,7 +406,7 @@
+  	 * the USB-2 spec requires such endpoints to have wMaxPacketSize = 0
+  	 * (see the end of section 5.6.3), so don't warn about them.
+  	 */
+-	maxp = usb_endpoint_maxp(&endpoint->desc);
++	maxp = endpoint->desc.wMaxPacketSize;
+  	if (maxp == 0 && !(usb_endpoint_xfer_isoc(d) && asnum == 0)) {
+  		dev_warn(ddev, "config %d interface %d altsetting %d endpoint 0x%X 
+has invalid wMaxPacketSize 0\n",
+  		    cfgno, inum, asnum, d->bEndpointAddress);
+
+
+=========================
+
+I can send a proper patch should the change be approved.
+
+Thanks a lot,
+
+Pavel.
