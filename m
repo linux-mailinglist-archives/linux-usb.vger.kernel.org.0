@@ -2,88 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD8146E135
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 04:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D09B46E157
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 04:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbhLIDSL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Dec 2021 22:18:11 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:60306 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231387AbhLIDSF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Dec 2021 22:18:05 -0500
-X-UUID: 30d56f00a0af4e9f883b2debffb0ab25-20211209
-X-UUID: 30d56f00a0af4e9f883b2debffb0ab25-20211209
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1485629117; Thu, 09 Dec 2021 11:14:28 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 9 Dec 2021 11:14:27 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkcas10.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Thu, 9 Dec 2021 11:14:26 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        "Yuwen Ng" <yuwen.ng@mediatek.com>
-Subject: [PATCH 3/3] usb: mtu3: fix list_head check warning
-Date:   Thu, 9 Dec 2021 11:14:24 +0800
-Message-ID: <20211209031424.17842-3-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211209031424.17842-1-chunfeng.yun@mediatek.com>
-References: <20211209031424.17842-1-chunfeng.yun@mediatek.com>
+        id S231605AbhLIDtN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Dec 2021 22:49:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229790AbhLIDtN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Dec 2021 22:49:13 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351C8C0617A2
+        for <linux-usb@vger.kernel.org>; Wed,  8 Dec 2021 19:45:40 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id o17so4227806qtk.1
+        for <linux-usb@vger.kernel.org>; Wed, 08 Dec 2021 19:45:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qp+fhQqb63jtEJIb0aiVqToUshtJVOsAaFogxfuvcdY=;
+        b=WAqRJ30t793jmukhjFhh/tffATf4sExSXMo6XdQtr/7tlbisCy0hGGjQVOfVV1KeQB
+         EiioaBisTTNnkTusNB0q2JpdNCshwzogMXiRWHqttAeiyCo7yS6nb+IOurcrJRJF9ohC
+         t9zAZOOjhjFhbEOQ4i/04DdYPLr9uPGnPtSj4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qp+fhQqb63jtEJIb0aiVqToUshtJVOsAaFogxfuvcdY=;
+        b=b/ojA6r9YCSDaRVJ/d17UeTI9IF8IrU8zG/rLiko2KpNh40Ev+Ki+JVH6WpEiR8r8K
+         KfS7MZne49wdqubvEkvl4BBz54lqXLHDIX9uavE8iPpn/XAWW/R22akxlLAYsxF5mnkR
+         e7jWTbBNp4X2yRfI4Fktb60S+QU3qORdcE4j6f1cVeA8OA6CGHqzVec/4xKdXM+0z2bK
+         eTTTorr2a2SiY0EPYfIQzNTkgg0USxZrM5WZfSdnV8EyFElKT9qb8hNFEkn7869xjRkn
+         cyg0tIwnDejLsLF2kGgAMevSDbVVe2z4+yRFoLAk4WE4mh845m0vW0OLGbsONkfytbAM
+         J66w==
+X-Gm-Message-State: AOAM530NcfvOO3X6zJqbCLQfcDDutEpyVc/VZ1FAwyGPBAG8un1DoN/Q
+        TiodTytuUSmZ9BsbBBai2nOHlMd1+J8G4Cnh4JiIMA==
+X-Google-Smtp-Source: ABdhPJx6O9m7818KPPCtox6xAOqjmZRE2jJ7uIJUczKPqaLyqP5nbELSNY9udKMJ7DAY/iW7URcRoAoIyj9GNeCC158=
+X-Received: by 2002:a05:622a:120d:: with SMTP id y13mr13465739qtx.155.1639021539383;
+ Wed, 08 Dec 2021 19:45:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+References: <20211207143757.21895-1-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20211207143757.21895-1-heikki.krogerus@linux.intel.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Wed, 8 Dec 2021 19:45:26 -0800
+Message-ID: <CACeCKaf3_sqGbqh22Qe+7xEcajCTZt=WziqtPuzgGxW=-TPXbg@mail.gmail.com>
+Subject: Re: [PATCH 0/5] acpi: Store _PLD information and convert users
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is caused by uninitialization of list_head.
+Hi Heikki,
 
-BUG: KASAN: use-after-free in __list_del_entry_valid+0x34/0xe4
+On Tue, Dec 7, 2021 at 6:37 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Hi,
+>
+> This removes the need for the drivers to always separately evaluate
+> the _PLD. With the USB Type-C connector and USB port mapping this
+> allows us to start using the component framework and remove the custom
+> APIs.
+>
+> So far the only users of the _PLD information have been the USB
+> drivers, but it seems it will be used also at least in some camera
+> drivers later. These nevertheless touch mostly USB drivers.
+>
+> Rafael, is it still OK if Greg takes these?
+>
+> Prashant, can you test these?
 
-Call trace:
-dump_backtrace+0x0/0x298
-show_stack+0x24/0x34
-dump_stack+0x130/0x1a8
-print_address_description+0x88/0x56c
-__kasan_report+0x1b8/0x2a0
-kasan_report+0x14/0x20
-__asan_load8+0x9c/0xa0
-__list_del_entry_valid+0x34/0xe4
-mtu3_req_complete+0x4c/0x300 [mtu3]
-mtu3_gadget_stop+0x168/0x448 [mtu3]
-usb_gadget_unregister_driver+0x204/0x3a0
-unregister_gadget_item+0x44/0xa4
+I've applied the patches to a system with the requisite _PLD entries
+in firmware, and I'm not sure I can see the connectors getting created
+correctly.
 
-Reported-by: Yuwen Ng <yuwen.ng@mediatek.com>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
- drivers/usb/mtu3/mtu3_gadget.c | 1 +
- 1 file changed, 1 insertion(+)
+My setup is:
 
-diff --git a/drivers/usb/mtu3/mtu3_gadget.c b/drivers/usb/mtu3/mtu3_gadget.c
-index c51be015345b..b6c8a4a99c4d 100644
---- a/drivers/usb/mtu3/mtu3_gadget.c
-+++ b/drivers/usb/mtu3/mtu3_gadget.c
-@@ -235,6 +235,7 @@ struct usb_request *mtu3_alloc_request(struct usb_ep *ep, gfp_t gfp_flags)
- 	mreq->request.dma = DMA_ADDR_INVALID;
- 	mreq->epnum = mep->epnum;
- 	mreq->mep = mep;
-+	INIT_LIST_HEAD(&mreq->list);
- 	trace_mtu3_alloc_request(mreq);
- 
- 	return &mreq->request;
--- 
-2.18.0
+Chromebook ------> Dell WD19TB dock (in USB+DisplayPort Alternate
+Mode) ----> USB Thumb drive.
 
+Here is the lsusb -t output before connecting the dock (omitting
+unrelated busses):
+localhost ~ # lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/3p, 10000M/x2
+
+Here is the lsusb -t output (omitting unrelated busses):
+localhost ~ # lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/3p, 10000M/x2
+    |__ Port 2: Dev 15, If 0, Class=Hub, Driver=hub/4p, 10000M
+        |__ Port 3: Dev 16, If 0, Class=Hub, Driver=hub/4p, 5000M
+            |__ Port 3: Dev 18, If 0, Class=Mass Storage,
+Driver=usb-storage, 5000M
+        |__ Port 4: Dev 17, If 0, Class=Vendor Specific Class,
+Driver=r8152, 5000M
+
+I see the connector symlink for the root hub:
+
+localhost ~ # cd /sys/bus/usb/devices
+localhost /sys/bus/usb/devices # ls 2-2/port/connector
+data_role  device  firmware_node  port1-cable  port1-partner  power
+power_operation_mode  power_role  preferred_role  subsystem
+supported_accessory_modes  uevent  usb2-port2  usb3-port2
+usb_power_delivery_revision  usb_typec_revision  vconn_source
+
+But for none of the children devices:
+
+localhost /sys/bus/usb/devices # ls 2-2.3/port/connector
+ls: cannot access '2-2.3/port/connector': No such file or directory
+localhost /sys/bus/usb/devices # ls 2-2.3.3/port/connector
+ls: cannot access '2-2.3.3/port/connector': No such file or directory
+localhost /sys/bus/usb/devices # ls 2-2.3\:1.0/port/connector
+ls: cannot access '2-2.3:1.0/port/connector': No such file or directory
+localhost /sys/bus/usb/devices # ls 2-2.3.3\:1.0/port/connector
+ls: cannot access '2-2.3.3:1.0/port/connector': No such file or directory
+
+Is this as you intended with the series? My interpretation was that
+each connected usb device would get a "connector" symlink, but I may
+have misinterpreted this.
+
+Best regards,
+
+-Prashant
