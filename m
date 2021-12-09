@@ -2,94 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7DF46E5C2
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 10:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C14F146E628
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 11:06:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbhLIJpk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 9 Dec 2021 04:45:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbhLIJpj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 04:45:39 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8639C0617A1
-        for <linux-usb@vger.kernel.org>; Thu,  9 Dec 2021 01:42:06 -0800 (PST)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mvFvk-0001TL-1T; Thu, 09 Dec 2021 10:41:36 +0100
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mvFve-0004Ge-0z; Thu, 09 Dec 2021 10:41:30 +0100
-Message-ID: <ab45adc2e305c79286f6b63fa42cfd78983cb757.camel@pengutronix.de>
-Subject: Re: [PATCH v3 02/15] dt-bindings: reset: Convert Broadcom STB reset
- to YAML
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>, devicetree@vger.kernel.org
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
+        id S232259AbhLIKJp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Dec 2021 05:09:45 -0500
+Received: from mga03.intel.com ([134.134.136.65]:45972 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232080AbhLIKJo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Dec 2021 05:09:44 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="238007233"
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="238007233"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 02:06:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="658709770"
+Received: from kuha.fi.intel.com ([10.237.72.166])
+  by fmsmga001.fm.intel.com with SMTP; 09 Dec 2021 02:06:07 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 09 Dec 2021 12:06:06 +0200
+Date:   Thu, 9 Dec 2021 12:06:06 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
-        <linux-mmc@vger.kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
-Date:   Thu, 09 Dec 2021 10:41:29 +0100
-In-Reply-To: <20211208003727.3596577-3-f.fainelli@gmail.com>
-References: <20211208003727.3596577-1-f.fainelli@gmail.com>
-         <20211208003727.3596577-3-f.fainelli@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] acpi: Store _PLD information and convert users
+Message-ID: <YbHVDikM6eodP/MR@kuha.fi.intel.com>
+References: <20211207143757.21895-1-heikki.krogerus@linux.intel.com>
+ <CACeCKaf3_sqGbqh22Qe+7xEcajCTZt=WziqtPuzgGxW=-TPXbg@mail.gmail.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACeCKaf3_sqGbqh22Qe+7xEcajCTZt=WziqtPuzgGxW=-TPXbg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2021-12-07 at 16:37 -0800, Florian Fainelli wrote:
-> Convert the Broadcom STB SW_INIT style reset controller binding to YAML.
+Hi,
+
+Thanks for testing these..
+
+On Wed, Dec 08, 2021 at 07:45:26PM -0800, Prashant Malani wrote:
+> Hi Heikki,
 > 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> On Tue, Dec 7, 2021 at 6:37 AM Heikki Krogerus
+> <heikki.krogerus@linux.intel.com> wrote:
+> >
+> > Hi,
+> >
+> > This removes the need for the drivers to always separately evaluate
+> > the _PLD. With the USB Type-C connector and USB port mapping this
+> > allows us to start using the component framework and remove the custom
+> > APIs.
+> >
+> > So far the only users of the _PLD information have been the USB
+> > drivers, but it seems it will be used also at least in some camera
+> > drivers later. These nevertheless touch mostly USB drivers.
+> >
+> > Rafael, is it still OK if Greg takes these?
+> >
+> > Prashant, can you test these?
+> 
+> I've applied the patches to a system with the requisite _PLD entries
+> in firmware, and I'm not sure I can see the connectors getting created
+> correctly.
+> 
+> My setup is:
+> 
+> Chromebook ------> Dell WD19TB dock (in USB+DisplayPort Alternate
+> Mode) ----> USB Thumb drive.
+> 
+> Here is the lsusb -t output before connecting the dock (omitting
+> unrelated busses):
+> localhost ~ # lsusb -t
+> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/3p, 10000M/x2
+> 
+> Here is the lsusb -t output (omitting unrelated busses):
+> localhost ~ # lsusb -t
+> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/3p, 10000M/x2
+>     |__ Port 2: Dev 15, If 0, Class=Hub, Driver=hub/4p, 10000M
+>         |__ Port 3: Dev 16, If 0, Class=Hub, Driver=hub/4p, 5000M
+>             |__ Port 3: Dev 18, If 0, Class=Mass Storage,
+> Driver=usb-storage, 5000M
+>         |__ Port 4: Dev 17, If 0, Class=Vendor Specific Class,
+> Driver=r8152, 5000M
+> 
+> I see the connector symlink for the root hub:
+> 
+> localhost ~ # cd /sys/bus/usb/devices
+> localhost /sys/bus/usb/devices # ls 2-2/port/connector
+> data_role  device  firmware_node  port1-cable  port1-partner  power
+> power_operation_mode  power_role  preferred_role  subsystem
+> supported_accessory_modes  uevent  usb2-port2  usb3-port2
+> usb_power_delivery_revision  usb_typec_revision  vconn_source
+> 
+> But for none of the children devices:
+> 
+> localhost /sys/bus/usb/devices # ls 2-2.3/port/connector
+> ls: cannot access '2-2.3/port/connector': No such file or directory
+> localhost /sys/bus/usb/devices # ls 2-2.3.3/port/connector
+> ls: cannot access '2-2.3.3/port/connector': No such file or directory
+> localhost /sys/bus/usb/devices # ls 2-2.3\:1.0/port/connector
+> ls: cannot access '2-2.3:1.0/port/connector': No such file or directory
+> localhost /sys/bus/usb/devices # ls 2-2.3.3\:1.0/port/connector
+> ls: cannot access '2-2.3.3:1.0/port/connector': No such file or directory
+> 
+> Is this as you intended with the series? My interpretation was that
+> each connected usb device would get a "connector" symlink, but I may
+> have misinterpreted this.
 
-Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
+It is as intended. The usb ports on the board will have the connector
+symlink, not the devices attached to them - the firmware is only aware
+of the connectors on the board of course. It looks like this series is
+working as it should.
 
-regards
-Philipp
+If you want to extend this solution so that also every device in the
+usb topology will have the link to the connector on board, then that
+should be now possible, but that is out side of the scope of this
+series. You need to propose that separately.
+
+But I must ask, why can't you just walk down the topology until you
+reach the on-board ports that will have the connector links?
+
+
+thanks,
+
+-- 
+heikki
