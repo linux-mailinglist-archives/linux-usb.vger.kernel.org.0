@@ -2,93 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7403946E3A9
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 09:02:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB2546E477
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 09:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234259AbhLIIF5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Dec 2021 03:05:57 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:44148 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbhLIIF4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 03:05:56 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A8CCACE2457
-        for <linux-usb@vger.kernel.org>; Thu,  9 Dec 2021 08:02:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BA68C004DD;
-        Thu,  9 Dec 2021 08:02:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639036940;
-        bh=5S4Ei8uQMtGfwU/eJgafrccOpbLhkBe6NRoj3nDMu34=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vgLds95CQQ4RpEiwjoHBpvY0bkaqaXzfTQe5y4rkTTcpa0vjrFGyuRONO44zNSVRM
-         CBKNlqiGyOZ6aDw/MvXuqCvVv8xXmtdnzPf8GwjWUO5H237pRsxHr7H7JLeBZpO1Jq
-         6N2GCorz1RUL0bPGdEDsxp6Edtl7CcdOSeiAcvlo=
-Date:   Thu, 9 Dec 2021 09:02:18 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pavel Hofman <pavel.hofman@ivitera.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: usb:core: possible bug in wMaxPacketSize validation in config.c?
-Message-ID: <YbG4CvLEdf5CmYbc@kroah.com>
-References: <ce5ed936-4325-95a1-cd1c-eece35c4b613@ivitera.com>
+        id S235087AbhLIIrC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Dec 2021 03:47:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235068AbhLIIrA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 03:47:00 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B06C061D5E
+        for <linux-usb@vger.kernel.org>; Thu,  9 Dec 2021 00:43:26 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1mvF1R-0003qw-1f; Thu, 09 Dec 2021 09:43:25 +0100
+Received: from mgr by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1mvF1Q-00BCfZ-1D; Thu, 09 Dec 2021 09:43:24 +0100
+From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+To:     linux-usb@vger.kernel.org
+Cc:     balbi@kernel.org, laurent.pinchart@ideasonboard.com,
+        paul.elder@ideasonboard.com, kernel@pengutronix.de
+Subject: [PATCH v5 0/7] usb: gadget: uvc: use configfs entries for negotiation and v4l2 VIDIOCS
+Date:   Thu,  9 Dec 2021 09:43:15 +0100
+Message-Id: <20211209084322.2662616-1-m.grzeschik@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ce5ed936-4325-95a1-cd1c-eece35c4b613@ivitera.com>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 08:53:37AM +0100, Pavel Hofman wrote:
-> Hi,
-> 
-> in
-> https://elixir.bootlin.com/linux/latest/source/drivers/usb/core/config.c#L409
-> the initial value of maxp is obtained using function usb_endpoint_maxp.
-> 
-> maxp = usb_endpoint_maxp(&endpoint->desc);
-> 
-> This function https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/usb/ch9.h#L647
-> returns only the bits 0 - 10 of the wMaxPacketSize field, i.e. dropping the
-> high-bandwidth bits 11 and 12. Yet the subsequent code extracts these bits
-> from maxp into variable i
-> https://elixir.bootlin.com/linux/latest/source/drivers/usb/core/config.c#L427
-> , clears them in maxp, and re-sets back in one of the further checks
-> https://elixir.bootlin.com/linux/latest/source/drivers/usb/core/config.c#L445
-> 
-> IMO that means the code requires that initial value of maxp contains the
-> additional-transactions bits. IMO the code should be fixed with this trivial
-> patch (tested on my build):
-> 
-> 
-> ===================================================================
-> diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
-> --- a/drivers/usb/core/config.c	(revision
-> 018dd9dd80ab5f3bd988911b1f10255029ffa52d)
-> +++ b/drivers/usb/core/config.c	(date 1638972286064)
-> @@ -406,7 +406,7 @@
->  	 * the USB-2 spec requires such endpoints to have wMaxPacketSize = 0
->  	 * (see the end of section 5.6.3), so don't warn about them.
->  	 */
-> -	maxp = usb_endpoint_maxp(&endpoint->desc);
-> +	maxp = endpoint->desc.wMaxPacketSize;
->  	if (maxp == 0 && !(usb_endpoint_xfer_isoc(d) && asnum == 0)) {
->  		dev_warn(ddev, "config %d interface %d altsetting %d endpoint 0x%X has
-> invalid wMaxPacketSize 0\n",
->  		    cfgno, inum, asnum, d->bEndpointAddress);
-> 
-> 
-> =========================
-> 
-> I can send a proper patch should the change be approved.
+This series improves the uvc video gadget by parsing the configfs
+entries. With the configfs data, the driver now is able to negotiate the
+format with the usb host in the kernel and also exports the supported
+frames/formats/intervals via the v4l2 VIDIOC interface.
 
-Please always just send a real patch, that makes it easier to discuss.
+The uvc userspace stack is also under development. One example is an generic
+v4l2uvcsink gstreamer elemnt, which is currently under duiscussion. [1]
 
-Anyway, what problem is this solving?  Do you have a device where the
-data is calculated incorrectly?  What value in a device is being
-declared incorrect because of the existing code?
+[1] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1304
 
-thanks,
+With the libusbgx library [1] used by the gadget-tool [2] it is now also
+possible to fully describe the configfs layout of the uvc gadget with scheme
+files.
 
-greg k-h
+[2] https://github.com/linux-usb-gadgets/libusbgx/pull/61/commits/53231c76f9d512f59fdc23b65cd5c46b7fb09eb4
+
+[3] https://github.com/linux-usb-gadgets/gt/tree/master/examples/systemd
+
+The bigger picture of these patches is to provide a more versatile interface to
+the uvc gadget. The goal is to simply start a uvc-gadget with the following
+commands:
+
+$ gt load uvc.scheme
+$ gst-launch v4l2src ! v4l2uvcsink
+
+--
+
+v1: https://lore.kernel.org/linux-usb/20210530222239.8793-1-m.grzeschik@pengutronix.de/
+v2: https://lore.kernel.org/linux-usb/20211117004432.3763306-1-m.grzeschik@pengutronix.de/
+v3: https://lore.kernel.org/linux-usb/20211117122435.2409362-1-m.grzeschik@pengutronix.de/
+v4: https://lore.kernel.org/linux-usb/20211205225803.268492-1-m.grzeschik@pengutronix.de/
+
+Regards,
+Michael
+
+Michael Grzeschik (7):
+  media: v4l: move helper functions for fractions from uvc to
+    v4l2-common
+  media: uvcvideo: move uvc_format_desc to common header
+  usb: gadget: uvc: prevent index variables to start from 0
+  usb: gadget: uvc: move structs to common header
+  usb: gadget: uvc: track frames in format entries
+  usb: gadget: uvc: add VIDIOC function
+  usb: gadget: uvc: add format/frame handling code
+
+ drivers/media/usb/uvc/uvc_ctrl.c           |   1 +
+ drivers/media/usb/uvc/uvc_driver.c         | 281 +-------------
+ drivers/media/usb/uvc/uvc_v4l2.c           |  14 +-
+ drivers/media/usb/uvc/uvcvideo.h           | 144 --------
+ drivers/media/v4l2-core/v4l2-common.c      |  82 +++++
+ drivers/usb/gadget/function/f_uvc.c        | 263 +++++++++++++-
+ drivers/usb/gadget/function/uvc.h          |  38 +-
+ drivers/usb/gadget/function/uvc_configfs.c | 148 ++------
+ drivers/usb/gadget/function/uvc_configfs.h | 120 +++++-
+ drivers/usb/gadget/function/uvc_queue.c    |   3 +-
+ drivers/usb/gadget/function/uvc_v4l2.c     | 404 ++++++++++++++++++---
+ drivers/usb/gadget/function/uvc_video.c    |  71 +++-
+ include/media/v4l2-common.h                |   4 +
+ include/media/v4l2-uvc.h                   | 351 ++++++++++++++++++
+ 14 files changed, 1324 insertions(+), 600 deletions(-)
+ create mode 100644 include/media/v4l2-uvc.h
+
+-- 
+2.30.2
+
