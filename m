@@ -2,77 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7541A46E64D
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 11:08:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D9346E665
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 11:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233029AbhLIKM0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Dec 2021 05:12:26 -0500
-Received: from mga04.intel.com ([192.55.52.120]:55341 "EHLO mga04.intel.com"
+        id S233588AbhLIKOz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Dec 2021 05:14:55 -0500
+Received: from mga02.intel.com ([134.134.136.20]:4342 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232999AbhLIKMZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Dec 2021 05:12:25 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="236802569"
+        id S232650AbhLIKOz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Dec 2021 05:14:55 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="225327468"
 X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="236802569"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 02:08:52 -0800
+   d="scan'208";a="225327468"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 02:11:21 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="750299273"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 02:08:49 -0800
-Received: by lahna (sSMTP sendmail emulation); Thu, 09 Dec 2021 12:08:47 +0200
-Date:   Thu, 9 Dec 2021 12:08:47 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Chris Chiu <chris.chiu@canonical.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>
-Subject: Re: Discrete Thunderbold Controller 8086:1137 throws DMAR and
- thunderbolt fails to work
-Message-ID: <YbHVryQ+QTnyMmTB@lahna>
-References: <CABTNMG0zcoCqVue8-3cJQ+iTPkJAgjxEN4FB6_ASX2rgXbWunw@mail.gmail.com>
+   d="scan'208";a="658710954"
+Received: from kuha.fi.intel.com ([10.237.72.166])
+  by fmsmga001.fm.intel.com with SMTP; 09 Dec 2021 02:11:19 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 09 Dec 2021 12:11:18 +0200
+Date:   Thu, 9 Dec 2021 12:11:18 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Steven Syu <stevensyu7@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] usb: typec: clear usb_pd flag if change to typec only
+ mode
+Message-ID: <YbHWRgrddFh8IM40@kuha.fi.intel.com>
+References: <1638947905-2502-1-git-send-email-steven_syu7@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABTNMG0zcoCqVue8-3cJQ+iTPkJAgjxEN4FB6_ASX2rgXbWunw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <1638947905-2502-1-git-send-email-steven_syu7@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[+Baolu]
-
 Hi,
 
-On Thu, Dec 09, 2021 at 05:39:41PM +0800, Chris Chiu wrote:
-> Hi,
->     We created a ticket
-> https://bugzilla.kernel.org/show_bug.cgi?id=215265 that is pretty
-> similar to https://bugzilla.kernel.org/show_bug.cgi?id=214259. So I
-> tried the patch on https://lkml.org/lkml/2020/6/17/751 but it doesn't
-> fix the issue. I also tried to boot with the kernel parameter
-> `pci=nocrs` but it changed nothing either. I attached the kernel log
-> with thunderbolt dynamic debug on and lspci output on the ticket. Also
-> tried to disable the intel_iommu, the DMAR failure seems to go away
-> but thunderbolt still fails to work. Can anyone suggest what kind of
-> information is required to help identify the cause of the problem?
-> Thanks
+On Wed, Dec 08, 2021 at 03:18:25PM +0800, Steven Syu wrote:
+> From: Steven Syu <stevensyu7@gmail.com>
+> 
+> Set usb_pd to 0 when power operation mode
+> leaving power delivery. That can avoid user-sepace
+> read "yes" form the supports_usb_power_delivery_show() attribute
+> but power operation mode already change form power delivery to
+> others mode.
 
-At least the RTX370 log seem to have lots of issues, not just
-Thunderbolt. The PCIe root port has AER enabled and it seems to be
-getting errors from the Maple Ridge card. Typically using AER with
-hotpluggable PCIe devices is not a good idea.
+I think you need to add a short explanation about the situation where
+this can happen - where we loose the USB PD contract.
 
-Can you get rid of the patch that adds these:
+> Signed-off-by: Steven Syu <stevensyu7@gmail.com>
+> ---
+> changes for v3:
+> resubmit and add the changes comment of v1->v2
+> 
+> v1->v2:
+> 1.remove sysfs_notify(&partner_dev->kobj, NULL, "supports_usb_power_delivery"); when operation mode is not PD.
+> 2.resubmitted patch by private email for remove footbar in the mail.
+> 
+>  drivers/usb/typec/class.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index aeef453..2043e07 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -1718,6 +1718,8 @@ void typec_set_pwr_opmode(struct typec_port *port,
+>  			partner->usb_pd = 1;
+>  			sysfs_notify(&partner_dev->kobj, NULL,
+>  				     "supports_usb_power_delivery");
+> +		} else if (opmode != TYPEC_PWR_MODE_PD && partner->usb_pd) {
+> +			partner->usb_pd = 0;
+>  		}
+>  		put_device(partner_dev);
+>  	}
+> -- 
+> 2.7.4
 
-  arch_remove_reservations remove e820 region
+thanks,
 
-and boot with "intel_iommu=off", and provide full dmesg? Did not find
-one from the bugzilla bug.
-
-Also does the USB 3.x work? I mean if you have IOMMU enabled and you
-plug in USB 3.x device does that work, or you get similar DMAR faults?
-
-Alos is this a production system and do you have installed the latest
-firmware upgrades?
+-- 
+heikki
