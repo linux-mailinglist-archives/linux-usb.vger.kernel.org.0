@@ -2,61 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0807C46E86C
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 13:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F2846E89D
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 13:46:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbhLIM3o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Dec 2021 07:29:44 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:55882 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbhLIM3m (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 07:29:42 -0500
-Received: by mail-io1-f72.google.com with SMTP id y74-20020a6bc84d000000b005e700290338so6746030iof.22
-        for <linux-usb@vger.kernel.org>; Thu, 09 Dec 2021 04:26:08 -0800 (PST)
+        id S235078AbhLIMu1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Dec 2021 07:50:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:44567 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231372AbhLIMu1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 07:50:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639054013;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+rgwOZXwpAx5YyVASfGnt3zTU62rqVUjO/0XDdwQk1Q=;
+        b=GyTosu2fKWyUaeXRkIfJpMe61coNVLE5+KI5Uw1QC+OPnUK/ZupX1xyUloJB4T7caN0GzJ
+        M9JB3Au42jdBA4UKZoVXLtxSEDKkfplqN4z0uTghWqmdYjDC6QUt7xlJ72WQDnUt+dugwm
+        629+UvRa2xaq78/gT/qGw7w+pJVv1CQ=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-183-Ug_yUsKCN1a3nSA-L2xiZw-1; Thu, 09 Dec 2021 07:46:52 -0500
+X-MC-Unique: Ug_yUsKCN1a3nSA-L2xiZw-1
+Received: by mail-wr1-f71.google.com with SMTP id d3-20020adfa343000000b0018ed6dd4629so1365714wrb.2
+        for <linux-usb@vger.kernel.org>; Thu, 09 Dec 2021 04:46:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=gvM8w3IykPq7/YrG3VY9dYm48Si3t8brH+kVWIJeskM=;
-        b=f9Hl1Owegp4sLNakdSHZOvFFEdW+AcDdMJmFSi3Dbj4Hf2oSlHLFd9Jc45CUuoQx4E
-         8U8Ooc/MctnsSPOPSBMFF6hQRMQF9gzQp26sDnjpRT+QGDntSfSGbfWAH+r15sckq3+s
-         RWEmC9BI5j0crCjzkb/Db4cYMgdE4ywFRIRAuS/dPQs28paVSQoWupCWx/hSmEpEI3Nx
-         q2YbhRgnwuSFP88sjS/OfvsTIPDofvlnG9O2ggQ5EU+oXsEWL8lNkOzWyZr9IKyPGazD
-         NXifXvbvAdzsEqA0O/SxY5Y2kGbUzHOxrLT5xlmSkxIYc3hT4LfByVdDAY6RHCpHd0Rh
-         4JOg==
-X-Gm-Message-State: AOAM530hQq8Fxu0KKK5PwJjmwZAjEil+XcWeCNpQAwGyG9umAmkrgQV5
-        JN5yF6LIWMBKCZFJ7dG2C/J/K4ICh0Wb833gX9lmkMXj3qdN
-X-Google-Smtp-Source: ABdhPJxe9mTYFZqU3p6Pp9GlnqQyBqgVplDJcJoJhySVsNh8W5K3hAPdPPYle7Spm6l+obNHpx85ua4up4ruBQsKDmh1uWV4AWOZ
+        h=x-gm-message-state:message-id:subject:from:to:date:in-reply-to
+         :references:user-agent:mime-version;
+        bh=+rgwOZXwpAx5YyVASfGnt3zTU62rqVUjO/0XDdwQk1Q=;
+        b=P3Wt61UOD8hwPDOeabTITZ+qZH1QZ1UQpm+LCyVLJT6Bro2zdj0gXr91ngZN9F7YgO
+         oK455+O0NBnl0ecCWTtYrp9Ip3PzxmUKcV8q1K0h2DROgZyXmLd1/rd4vwHVtKj0ulvy
+         PbaWrW9EsEpjGn5g/Ty6sNzEizHQGwqGWLoFJ8ktunn+TURzgTrnvyLKPyA9MZzzwKmY
+         ljE/m7zlThm+/wmO1wKvR5BIzQvwv57a0hbbQAWUPkwly8s77lx8F0uP6mSMbWoZ7mY3
+         6EwjD7TT0ZJoj8YOA+0Y5L+ExkDH4u3wlFXYj/go+N/tgacshfiCbc3GkER1XbHwNczA
+         TX9w==
+X-Gm-Message-State: AOAM530LXypAsVqXElB+ireTWUWTQJ2DqvdcN5Fssq9yYQPRk+gfiEa5
+        S4tiWAUJB6w6B41WiHYw8F+tI6RbaTAdLTF6AJh1p8pU/2dWz2pl9/1Rfjg0ypjNoadcH/tfFZV
+        YFwbO8G6CqMldOTPf9S3n
+X-Received: by 2002:adf:f6cf:: with SMTP id y15mr6060758wrp.56.1639054011192;
+        Thu, 09 Dec 2021 04:46:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxcYWp6HpitNPUMAnq1oU8ygzfOdTkel9TMOiRGTFVUC9FyfEIlxxRl1jFiLHUrW8VwlvpPxQ==
+X-Received: by 2002:adf:f6cf:: with SMTP id y15mr6060733wrp.56.1639054010986;
+        Thu, 09 Dec 2021 04:46:50 -0800 (PST)
+Received: from ?IPv6:2003:c4:372a:6fe5:a08b:eb12:3927:3670? (p200300c4372a6fe5a08beb1239273670.dip0.t-ipconnect.de. [2003:c4:372a:6fe5:a08b:eb12:3927:3670])
+        by smtp.gmail.com with ESMTPSA id g19sm8880792wmg.12.2021.12.09.04.46.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 04:46:50 -0800 (PST)
+Message-ID: <14584c1a1e449cc20b5af7918b411ee27cf1570b.camel@redhat.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in
+ hci_cmd_sync_cancel
+From:   Benjamin Berg <bberg@redhat.com>
+To:     Oliver Neukum <oneukum@suse.com>,
+        syzbot <syzbot+485cc00ea7cf41dfdbf1@syzkaller.appspotmail.com>,
+        Thinh.Nguyen@synopsys.com, changbin.du@intel.com,
+        christian.brauner@ubuntu.com, davem@davemloft.net,
+        edumazet@google.com, gregkh@linuxfoundation.org,
+        johan.hedberg@gmail.com, kuba@kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, luiz.dentz@gmail.com,
+        luiz.von.dentz@intel.com, marcel@holtmann.org,
+        mathias.nyman@linux.intel.com, netdev@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
+        yajun.deng@linux.dev
+Date:   Thu, 09 Dec 2021 13:46:47 +0100
+In-Reply-To: <3e8cba55-5d34-eab3-0625-687b66bb9449@suse.com>
+References: <00000000000098464c05d2acf3ba@google.com>
+         <3e8cba55-5d34-eab3-0625-687b66bb9449@suse.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-83lGBtdr6vrReHv5wmRv"
+User-Agent: Evolution 3.42.1 (3.42.1-1.fc35) 
 MIME-Version: 1.0
-X-Received: by 2002:a6b:7006:: with SMTP id l6mr13642369ioc.5.1639052768625;
- Thu, 09 Dec 2021 04:26:08 -0800 (PST)
-Date:   Thu, 09 Dec 2021 04:26:08 -0800
-In-Reply-To: <291da1b9-9f71-0f99-45f4-a25a259c8d6d@suse.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000ac61705d2b5b617@google.com>
-Subject: Re: [syzbot] WARNING in usbnet_start_xmit/usb_submit_urb
-From:   syzbot <syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com>
-To:     kuba@kernel.org, linux-usb@vger.kernel.org, oneukum@suse.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+--=-83lGBtdr6vrReHv5wmRv
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Reported-and-tested-by: syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com
+Hi,
 
-Tested on:
+On Thu, 2021-12-09 at 11:06 +0100, Oliver Neukum wrote:
+> As __cancel_work_timer can be called from hci_cmd_sync_cancel() this is
+> just not
+> an approach you can take. It looks like asynchronously canceling the
+> scheduled work
+> would result in a race, so I would for now just revert.
 
-commit:         048ff862 Merge tag 'usb-5.16-rc1' of git://git.kernel...
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d6b387bc5d3e50f3
-dashboard link: https://syzkaller.appspot.com/bug?extid=63ee658b9a100ffadbe2
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=15103a51b00000
+Right, so this needs to be pushed into a workqueue instead, I suppose.
 
-Note: testing is done by a robot and is best-effort only.
+> What issue exactly is this trying to fix or improve?
+
+The problem is aborting long-running synchronous operations. i.e.
+without this patchset, USB enumeration will hang for 10s if a USB
+bluetooth device disappears during firmware loading. This is because
+even though the USB device is gone and all URB submissions fail, the
+operation will only be aborted after the internal timeout happens.
+
+The device in turn disappears because an rfkill switch is blocked and
+the platform removes it from the bus. Overall, this can lead to
+graphical login to hang as fprintd cannot initialise as it hangs in USB
+enumeration.
+
+Benjamin
+
+--=-83lGBtdr6vrReHv5wmRv
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEED2NO4vMS33W8E4AFq6ZWhpmFY3AFAmGx+rcACgkQq6ZWhpmF
+Y3CJqw/+ONFnidIqlEKcCVDa9JZe01o4i/3PKsHyINaj/XljOCQr1869ewL084xw
+GYdljx03tA+05TDlwnMwaZOE8ozxAB8JInuAhg72BGcmM5HuaB0wMxej0Eyl1yRU
+Es2TLCvJhjRbOtoYnbQ/sMpmuhnAh9ditH7az1UR+dBIWD4/3y7A6wqzqEE1GbJw
+M29xhWuFP6WLn4InqY0PvhAnEiSxE5sWtGfl6gvm9RBtoSpdreFVu5DgYSHSodF6
+FFqg1HorMZP4gBalSe4EOYZiS21pN6aNih7o09TPGmRFfVIEUDbPjODR5z8zsYQx
+wLRHGSaG2O9oeMEJe0YufJyxSC1cZVMi/AzF3RNpX4N89Y4oCfA+TPx3SWqHGYyc
+aaiJkcxudD9Uu7y3EMC3P0J290tLQJkKHeyGrHHwtLPvvc7gS2CidCvAwM+m5qwX
+LTVXlnUX23xt/1ReFVlRBjq09kdxKNUDU4qkt7I0my1BXooCmR7qew1NqHW6c3ex
+lJdVX9y91RivhMVp8udORuT1V0C7K0Mrkr03xJy0q4LTAu94FkqPCjz8O+dRURMX
+jwj3uQ30jP28dwUq5QysHXN+lOrd+Fa2ksmCAIRU2WKBtNKDCXX1uyDjBZMwunvD
+IBrI3O953a1bwgHr+EaBGTgoibSP3f0vmA4P/QLp4/QtX8me5Uk=
+=xPCC
+-----END PGP SIGNATURE-----
+
+--=-83lGBtdr6vrReHv5wmRv--
+
