@@ -2,77 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC7746E5B1
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 10:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7DF46E5C2
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 10:42:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbhLIJn2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Dec 2021 04:43:28 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:51146
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229482AbhLIJn2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 04:43:28 -0500
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 74CC03F31E
-        for <linux-usb@vger.kernel.org>; Thu,  9 Dec 2021 09:39:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639042794;
-        bh=RF8mjWX2rbMrzqrrTOjauOGLhmt2KQwefuBfLZrxSTY=;
-        h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type;
-        b=Mg29YuDIpU++0NK/DBasscUzI9TK/JhppUwSbppL+FfdGFWWFD0jYfFB8UrqHBCZ6
-         EN2T4NOG2DRZKUBAtd7eqovd5djzXekmMQRKzBF9qtvv879t3ny7v9hl7C/0JD8QNx
-         6GiBXcQt7e0qkYgo9IOrIpTwMVQkRYFdUxzGu1qM4hqn+UjSbWs5ss5QI37X8YTEBc
-         348Gvh4J9SkACXwXjvAjfjrS6YozyDu8zZLCRUebM4LOp1QfpziT9UzPC6KNJQVx7x
-         yl36GareBTcfzd0G0hTBKmWuq6Npx+ZMlfVL5qfOH/3Ig/EQb868GQ5t68jaCN9IS4
-         D+20ZhPToCb2w==
-Received: by mail-ot1-f72.google.com with SMTP id m23-20020a05683023b700b0055c8a2dcca0so1838072ots.6
-        for <linux-usb@vger.kernel.org>; Thu, 09 Dec 2021 01:39:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=RF8mjWX2rbMrzqrrTOjauOGLhmt2KQwefuBfLZrxSTY=;
-        b=2ZFY5gJPXJXK3MgYZjlmSCp74LXpqfb/sZGzikW9pyRoxP3MUE4ptBsskCxhzOpsAy
-         8yRQpwPkscilT2uNfzT26uB7j6RTV+8Q2YcDYAB2M7LgfPo6CULq/IYJKSl2DXI7CKc7
-         gd0xAZ/y2n9ocGYXLeHfTn/aCOCGSkaT1wUhxkDBw33vx6dRk30Yu9S6tC7nbnLrP7Rf
-         AAM9fECibFh5YA3TiCXp7JCuCY+48mCsAnbY4sqJ2i/Dvs+x+GBVBSZN1UeoXybqflNM
-         y3g7oFccOcgIQAi/Bg6uHOXUA6F+Ji6b0MfAVF8PN9f8gu5dduH5XTeSQIvDpSZ9dwyD
-         4Wnw==
-X-Gm-Message-State: AOAM533x6jELYsvtxEC9+gU6ryPfgNZFe7HNquK38saMFkSnT6I+46hJ
-        P2ZbmK8Jzd+mDkGNYSt/cwMDG5JvwfMW3o4rMRXpkkCSjNDmK45WwCW/DLI3Sbff45qkA9SBNMR
-        MxIir3D5oQQwIuDZQQvRxnzzg+uYrbELZg2FDJg/YKkFAdt5y/kwtmg==
-X-Received: by 2002:a4a:d54d:: with SMTP id q13mr3110711oos.57.1639042793026;
-        Thu, 09 Dec 2021 01:39:53 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzijRWv9msOal5mU5JmujRGhjr+O8G3yZfQSeAeBzKE7+kFndNM9oPGFr5MLlOYMHsnquDx3ekJWkcRMcIEaoI=
-X-Received: by 2002:a4a:d54d:: with SMTP id q13mr3110689oos.57.1639042792602;
- Thu, 09 Dec 2021 01:39:52 -0800 (PST)
-MIME-Version: 1.0
-From:   Chris Chiu <chris.chiu@canonical.com>
-Date:   Thu, 9 Dec 2021 17:39:41 +0800
-Message-ID: <CABTNMG0zcoCqVue8-3cJQ+iTPkJAgjxEN4FB6_ASX2rgXbWunw@mail.gmail.com>
-Subject: Discrete Thunderbold Controller 8086:1137 throws DMAR and thunderbolt
- fails to work
-To:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
-Cc:     linux-usb@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>
+        id S231187AbhLIJpk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 9 Dec 2021 04:45:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230525AbhLIJpj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 04:45:39 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8639C0617A1
+        for <linux-usb@vger.kernel.org>; Thu,  9 Dec 2021 01:42:06 -0800 (PST)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1mvFvk-0001TL-1T; Thu, 09 Dec 2021 10:41:36 +0100
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1mvFve-0004Ge-0z; Thu, 09 Dec 2021 10:41:30 +0100
+Message-ID: <ab45adc2e305c79286f6b63fa42cfd78983cb757.camel@pengutronix.de>
+Subject: Re: [PATCH v3 02/15] dt-bindings: reset: Convert Broadcom STB reset
+ to YAML
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>, devicetree@vger.kernel.org
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
+        <linux-mmc@vger.kernel.org>,
+        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
+Date:   Thu, 09 Dec 2021 10:41:29 +0100
+In-Reply-To: <20211208003727.3596577-3-f.fainelli@gmail.com>
+References: <20211208003727.3596577-1-f.fainelli@gmail.com>
+         <20211208003727.3596577-3-f.fainelli@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-    We created a ticket
-https://bugzilla.kernel.org/show_bug.cgi?id=215265 that is pretty
-similar to https://bugzilla.kernel.org/show_bug.cgi?id=214259. So I
-tried the patch on https://lkml.org/lkml/2020/6/17/751 but it doesn't
-fix the issue. I also tried to boot with the kernel parameter
-`pci=nocrs` but it changed nothing either. I attached the kernel log
-with thunderbolt dynamic debug on and lspci output on the ticket. Also
-tried to disable the intel_iommu, the DMAR failure seems to go away
-but thunderbolt still fails to work. Can anyone suggest what kind of
-information is required to help identify the cause of the problem?
-Thanks
+On Tue, 2021-12-07 at 16:37 -0800, Florian Fainelli wrote:
+> Convert the Broadcom STB SW_INIT style reset controller binding to YAML.
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Chris
+Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
+
+regards
+Philipp
