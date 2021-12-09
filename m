@@ -2,68 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C27746E577
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 10:23:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC7746E5B1
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 10:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbhLIJ0z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Dec 2021 04:26:55 -0500
-Received: from mxout03.lancloud.ru ([45.84.86.113]:39422 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbhLIJ0z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 04:26:55 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru AFF5020F316E
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Message-ID: <877db647-961f-3882-3d4c-ee2155e39495@omp.ru>
-Date:   Thu, 9 Dec 2021 12:23:09 +0300
+        id S229537AbhLIJn2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Dec 2021 04:43:28 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:51146
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229482AbhLIJn2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 04:43:28 -0500
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 74CC03F31E
+        for <linux-usb@vger.kernel.org>; Thu,  9 Dec 2021 09:39:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639042794;
+        bh=RF8mjWX2rbMrzqrrTOjauOGLhmt2KQwefuBfLZrxSTY=;
+        h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type;
+        b=Mg29YuDIpU++0NK/DBasscUzI9TK/JhppUwSbppL+FfdGFWWFD0jYfFB8UrqHBCZ6
+         EN2T4NOG2DRZKUBAtd7eqovd5djzXekmMQRKzBF9qtvv879t3ny7v9hl7C/0JD8QNx
+         6GiBXcQt7e0qkYgo9IOrIpTwMVQkRYFdUxzGu1qM4hqn+UjSbWs5ss5QI37X8YTEBc
+         348Gvh4J9SkACXwXjvAjfjrS6YozyDu8zZLCRUebM4LOp1QfpziT9UzPC6KNJQVx7x
+         yl36GareBTcfzd0G0hTBKmWuq6Npx+ZMlfVL5qfOH/3Ig/EQb868GQ5t68jaCN9IS4
+         D+20ZhPToCb2w==
+Received: by mail-ot1-f72.google.com with SMTP id m23-20020a05683023b700b0055c8a2dcca0so1838072ots.6
+        for <linux-usb@vger.kernel.org>; Thu, 09 Dec 2021 01:39:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=RF8mjWX2rbMrzqrrTOjauOGLhmt2KQwefuBfLZrxSTY=;
+        b=2ZFY5gJPXJXK3MgYZjlmSCp74LXpqfb/sZGzikW9pyRoxP3MUE4ptBsskCxhzOpsAy
+         8yRQpwPkscilT2uNfzT26uB7j6RTV+8Q2YcDYAB2M7LgfPo6CULq/IYJKSl2DXI7CKc7
+         gd0xAZ/y2n9ocGYXLeHfTn/aCOCGSkaT1wUhxkDBw33vx6dRk30Yu9S6tC7nbnLrP7Rf
+         AAM9fECibFh5YA3TiCXp7JCuCY+48mCsAnbY4sqJ2i/Dvs+x+GBVBSZN1UeoXybqflNM
+         y3g7oFccOcgIQAi/Bg6uHOXUA6F+Ji6b0MfAVF8PN9f8gu5dduH5XTeSQIvDpSZ9dwyD
+         4Wnw==
+X-Gm-Message-State: AOAM533x6jELYsvtxEC9+gU6ryPfgNZFe7HNquK38saMFkSnT6I+46hJ
+        P2ZbmK8Jzd+mDkGNYSt/cwMDG5JvwfMW3o4rMRXpkkCSjNDmK45WwCW/DLI3Sbff45qkA9SBNMR
+        MxIir3D5oQQwIuDZQQvRxnzzg+uYrbELZg2FDJg/YKkFAdt5y/kwtmg==
+X-Received: by 2002:a4a:d54d:: with SMTP id q13mr3110711oos.57.1639042793026;
+        Thu, 09 Dec 2021 01:39:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzijRWv9msOal5mU5JmujRGhjr+O8G3yZfQSeAeBzKE7+kFndNM9oPGFr5MLlOYMHsnquDx3ekJWkcRMcIEaoI=
+X-Received: by 2002:a4a:d54d:: with SMTP id q13mr3110689oos.57.1639042792602;
+ Thu, 09 Dec 2021 01:39:52 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v2 00/10] Fix deferred probing in the USB host/gadget
- drivers
-Content-Language: en-US
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-To:     <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>, Bin Liu <b-liu@ti.com>
-References: <20211208192118.7483-1-s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-In-Reply-To: <20211208192118.7483-1-s.shtylyov@omp.ru>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+From:   Chris Chiu <chris.chiu@canonical.com>
+Date:   Thu, 9 Dec 2021 17:39:41 +0800
+Message-ID: <CABTNMG0zcoCqVue8-3cJQ+iTPkJAgjxEN4FB6_ASX2rgXbWunw@mail.gmail.com>
+Subject: Discrete Thunderbold Controller 8086:1137 throws DMAR and thunderbolt
+ fails to work
+To:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
+Cc:     linux-usb@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 08.12.2021 22:21, Sergey Shtylyov wrote:
+Hi,
+    We created a ticket
+https://bugzilla.kernel.org/show_bug.cgi?id=215265 that is pretty
+similar to https://bugzilla.kernel.org/show_bug.cgi?id=214259. So I
+tried the patch on https://lkml.org/lkml/2020/6/17/751 but it doesn't
+fix the issue. I also tried to boot with the kernel parameter
+`pci=nocrs` but it changed nothing either. I attached the kernel log
+with thunderbolt dynamic debug on and lspci output on the ticket. Also
+tried to disable the intel_iommu, the DMAR failure seems to go away
+but thunderbolt still fails to work. Can anyone suggest what kind of
+information is required to help identify the cause of the problem?
+Thanks
 
-> Here are 10 patches against the 'usb-linus' branch of Greg KH's 'usb.git'
-> repo. The affected host/gadget drivers call platform_get_irq() but override
-> its result in case of error which prevents the deferred probing from working.
-> These patches now logically depend on the previously posted patch:
-> 
-> https://marc.info/?l=linux-kernel&m=163623041902285
-> 
-> Sergey Shtylyov (10):
->    usb: gadget: udc: bcm63xx: fix deferred probing
->    usb: gadget: udc: gr: fix deferred probing
->    usb: gadget: udc: pxa25x: fix deferred probing
->    usb: host: ehci-atmel: fix deferred probing
->    usb: host: ehci-orion: fix deferred probing
->    usb: host: ehci-sh: fix deferred probing
->    usb: host: ohci-da8xx: fix deferred probing
->    usb: host: ohci-nxp: fix deferred probing
->    usb: host: ohci-omap: fix deferred probing
->    usb: musb: core: fix deferred probing
-
-    Ignore this -- I totally forgot I had a feedback to v1. :-/
-
-[...]
-
-MBR, Sergey
+Chris
