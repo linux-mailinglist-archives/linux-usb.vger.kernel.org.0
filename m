@@ -2,51 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEF746EDE1
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 17:54:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1796146F168
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 18:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241470AbhLIQ5f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Dec 2021 11:57:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40622 "EHLO
+        id S239187AbhLIRSV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Dec 2021 12:18:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241425AbhLIQ52 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 11:57:28 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB7CC061353;
-        Thu,  9 Dec 2021 08:53:54 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id p18so4699791wmq.5;
-        Thu, 09 Dec 2021 08:53:54 -0800 (PST)
+        with ESMTP id S232916AbhLIRST (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 12:18:19 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CE9C061746;
+        Thu,  9 Dec 2021 09:14:46 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id j3so10946185wrp.1;
+        Thu, 09 Dec 2021 09:14:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=eywtqqKgEuneXODvjfADOggVoqzsqrYNtKANssdIQ94=;
-        b=lBRxDks09qjqi8+8Rdtd+cWauUcVMKblgJY2hoXEgVVKRStFzuye3gbOayfMPCTyX3
-         t9npRe896zrEytzGVCW7K6Nkg80pXrqyjdmQG1sALZ9aw+6+VNZtcZ2ddr8ovNATkxAQ
-         /Kln5N43MA5MNCcUZETsY/+LebMme0jHnuWHYqMo89HrhLHB9TXrx3sPv4uNIFEnPBVH
-         s0bOleO+pyz9s32uFzN+h+gVke5ZtW9zPEK3YTbz8zyFXPEcMt9bb0vohMfFcafSI1ap
-         lGkqbXVrH/4a98jDw7i1XAxz0xU6f5cpzn1beD28exd73HY2XJfmJTNg3SDcaFGkdGnm
-         H6mg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=1WIvJ0cMOzreLs80b+VI49//n3XG9dDrPeLotL/bUDk=;
+        b=oqzKpfW6ahOYYATVIkEj8+lMiWjswlMB490eQDhQzqTkdBoYBxVz6oCWiFV/xwT5Oh
+         2zwt1J27fHtPih1bTtyzmIb22poeL+8f4G9QFBl2a0IHg88+ro2SVpxfQ3qA/uMyQohk
+         K/Fdko4eX9WIuFgKG3B5fszYGZ85o0k5t+ujX3JW2YpaZYvQtdJeVMiLKhr7iZQ2VOq2
+         qaCorvae4NsYjQos9Ec18lMAjPp/e5srRCLT3OaZebntpm71zDUTVyO/N90+B3hbFuhA
+         2bwQ1pGVg29nqlVEaGEM8jbBwJE8jhNXFhchkQDUHTakaXWTCHjRk7jZxmFhtGnu7Yp9
+         9ikw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=eywtqqKgEuneXODvjfADOggVoqzsqrYNtKANssdIQ94=;
-        b=HWUvbcox+pEKv2UKtRBxIQIMN8jwE7a8Q7X7zOL1p0CYMZcVlg7smqjnNjUBR1Sz8K
-         5avjgHBzcapDUm++bj+ZfklEuMdTT1UElYmNRF2M+6JtpA7Seo1fei7kAgJNUeJ1zQ/0
-         xg5ExhLkkdcUYYGlll8raYZvuK/l7IcFa/ORuy9xc8m2o131MO4/CPnkosetb7Kz2FBd
-         oBSzeIy6L1tZa6hMjiCDLCKEiCsrzG/pNwHM69RBKsK8TWp3OHeGgbboSbMtayxTkVJT
-         bT7a79fqOYUap2P5oTAeyYbOtwIT0Q/zre/4DffOimDmvdoUxNQo+IQ91AI0h4J7xDn8
-         St2g==
-X-Gm-Message-State: AOAM532tIo8oLt5PFV6LL7Y59oaKWtphbgdQPBr9m52A39xZTBBO/ao+
-        2wjkYXBfPrKMEvsq3zAxNHI=
-X-Google-Smtp-Source: ABdhPJypZzNkEHPKJwVfoQNCzhdE2wDrwf0k5S+K14WmQV7sGIeCUwNbLOcNu+D1qq+t/H0Ig7Np/Q==
-X-Received: by 2002:a05:600c:1e26:: with SMTP id ay38mr8684698wmb.14.1639068833120;
-        Thu, 09 Dec 2021 08:53:53 -0800 (PST)
-Received: from localhost ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id v15sm242046wro.35.2021.12.09.08.53.51
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=1WIvJ0cMOzreLs80b+VI49//n3XG9dDrPeLotL/bUDk=;
+        b=4blH4YEd+OcNW/SW1hrUhK6hDHNfg3BGJrOKAK5St0Rzg8VMoBskuwmeYeL89a2Tbj
+         L6ENWB4REZzu33RxHRSKKR7aUS6MpeIuCnZmJgLeX6pG1pslhjo4u7h/ARkLd7Oh/7Me
+         e1Fl22PdYA2x8SklloUllZRHyX6fgV6MucIpU6GA5i6sIU2irpKrVuKRNMp+k7YmlIHC
+         YCMWvt91eR6DXFChA1Qdk6hhH+6absy1AKJxT5eerBkRwYjVHmcXc73UKpxe9GJWooG2
+         LmEAOlD+BK2Hu7qooT6sUyic8il57M72QjwaQehqrHS3IvllAZmiFFIB6UBp6HupR3nd
+         WW/g==
+X-Gm-Message-State: AOAM532v7RPRmlb0FtDP76A2PCnZGu5dly2jO1dLGE+nA3CXi5cSH1V7
+        I5PU7ovrfTtoUx3osy6HzTc=
+X-Google-Smtp-Source: ABdhPJwRktuofTJyEgBTDGYurKcdU9wj/SmOmXpVhXUyg/Sq8RhVLeGQ9B/NPgxX1W3cbakHx1IwjA==
+X-Received: by 2002:adf:f1cc:: with SMTP id z12mr7880445wro.395.1639070084560;
+        Thu, 09 Dec 2021 09:14:44 -0800 (PST)
+Received: from orome ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id u15sm298752wmq.13.2021.12.09.09.14.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 08:53:52 -0800 (PST)
+        Thu, 09 Dec 2021 09:14:43 -0800 (PST)
+Date:   Thu, 9 Dec 2021 18:14:40 +0100
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -54,53 +55,66 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Nagarjuna Kristam <nkristam@nvidia.com>,
         JC Kuo <jckuo@nvidia.com>, devicetree@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH 4/4] dt-bindings: usb: tegra-xudc: Document interconnects and iommus properties
-Date:   Thu,  9 Dec 2021 17:53:39 +0100
-Message-Id: <20211209165339.614498-4-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211209165339.614498-1-thierry.reding@gmail.com>
+Subject: Re: [PATCH 4/4] dt-bindings: usb: tegra-xudc: Document interconnects
+ and iommus properties
+Message-ID: <YbI5gNIitiikI+JF@orome>
 References: <20211209165339.614498-1-thierry.reding@gmail.com>
+ <20211209165339.614498-4-thierry.reding@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="XphOr6ZdSFzXaAAr"
+Content-Disposition: inline
+In-Reply-To: <20211209165339.614498-4-thierry.reding@gmail.com>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
 
-Add the interconnects, interconnect-names and iommus properties to the
-device tree bindings for the Tegra XUDC controller. These are used to
-describe the device's paths to and from memory.
+--XphOr6ZdSFzXaAAr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml  | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+On Thu, Dec 09, 2021 at 05:53:39PM +0100, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
+>=20
+> Add the interconnects, interconnect-names and iommus properties to the
+> device tree bindings for the Tegra XUDC controller. These are used to
+> describe the device's paths to and from memory.
+>=20
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml  | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
-index 8428415896ce..a39c76b89484 100644
---- a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
-+++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
-@@ -59,6 +59,19 @@ properties:
-       - const: fs_src
-       - const: hs_src
- 
-+  interconnects:
-+    items:
-+      - description: memory read client
-+      - description: memory write client
-+
-+  interconnect-names:
-+    items:
-+      - const: dma-mem # read
-+      - const: write
-+
-+  iommus:
-+    maxItems: 1
-+
-   power-domains:
-     items:
-       - description: XUSBB(device) power-domain
--- 
-2.34.1
+Sorry Rob, I realized you already reviewed this one earlier:
 
+	http://patchwork.ozlabs.org/project/linux-tegra/patch/20211206155559.23255=
+0-1-thierry.reding@gmail.com/
+
+so technically:
+
+Acked-by: Rob Herring <robh@kernel.org>
+
+--XphOr6ZdSFzXaAAr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGyOYAACgkQ3SOs138+
+s6FZsRAAgcx3SMFsP4NMdw0V3PGov6oKJS5d1KilhVi55+DsHH1TRPEJgU3xY1/K
+15DCTeDj8vSPSvPLNh92yhkD43B4/i71Sc7dNy4KYycCGRt/UEzKPL0jPahKFnl/
+Z2PzcrUtYDWN2B1AhbHvoRvyWj8oQ8C7BerPGqtFPnfJuML5g1kqcon0PmD9cZB3
+HzJAakuRXjM3SC1RDLxFK0YCQJ7+HIydTtQ2q1/Tglb7wW4sv9FSUgI8PWWbdo1+
+Id7xZT2SWVxaiUtdrYsLFzxdXaEU8EuOi84OdA5ZE25RE9+KhrLi9wlDHS12RZaL
+LNLMkdFm1KKxsUeF4mTlXleH6i17wU2TZbzNxZaEV15chLgJwvDuA0TEPTnU60wW
+JOPb2TUJV7CCaDvbRLc6kKqcnfJCmh/1gHJM2FFaOrzTd3OHNYSPH6cCP0EQfSyM
+Pg9hpx+0iwS54ghSKqIkTWinyyY2llhpSeXIXCMnw6B/iCxGXhJbSmyJR8vZLV4h
+14zNkQp4yhcN4sEbwZVH6WiRtn/yF5MShDNY4KHuLa/UaqzecQlrFf5dmtUGT1R9
+cWevfQ7xuCgzcuC+5Cisuu+oKSo48vqAgQH6ChkbDy+qrdINHVtLB0Fj0gtBFH/y
+2pDwJodmvvm2dT3etM+ukefKkLM7uWldb+A1Ky0IIQeoioBIJpk=
+=72yo
+-----END PGP SIGNATURE-----
+
+--XphOr6ZdSFzXaAAr--
