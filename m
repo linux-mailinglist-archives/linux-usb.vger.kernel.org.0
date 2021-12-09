@@ -2,114 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A62146F2EB
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 19:22:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E09646F438
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 20:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243247AbhLIS0L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Dec 2021 13:26:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
+        id S230471AbhLITtO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Dec 2021 14:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242731AbhLIS0H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 13:26:07 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD845C061A72;
-        Thu,  9 Dec 2021 10:22:33 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id t26so13622738lfk.9;
-        Thu, 09 Dec 2021 10:22:33 -0800 (PST)
+        with ESMTP id S230399AbhLITtN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 14:49:13 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E874C0617A1
+        for <linux-usb@vger.kernel.org>; Thu,  9 Dec 2021 11:45:40 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id g9so6092661qvd.2
+        for <linux-usb@vger.kernel.org>; Thu, 09 Dec 2021 11:45:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=QxWGzwiQK1H9THXhhSK1MS0BSvGH8EGX6peXdw0hns0=;
-        b=O4VpfJBV9bqM4uCF3IFZ9LswiKvtA6fnK9DxckWyYKxCNIrMSW8y8rbDnYNrHlxAOK
-         Mhq8P2Xb8G4zTnv5dn1HrTkdla0a6xhg+iZePUVCKUM8QNBY/gNzJJfUbsYBa/DDaCOj
-         sjSuzKc9JStNjjN3nz8MOwjTt68i3YPRQZJJRcxtB/aQijcI6QInAE8kVvOOdgQgrDa3
-         nnUGFST9r7CrW32JHiMNxpuMnBqeEU/a1xdep1bOBuGRAzQSUDSvbcDcCrkMTz0b1iGo
-         bgoopPQ+V1L0hW/2ETX4hjay8g+fVhvKZQlnugDZfEWwYTDRMTNwik7cNu5k5OtEnsNn
-         /IxQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wvpmIkayqdMprhcCUS7F0gK4w6zIHIrz7QooN+hl7RM=;
+        b=W+0r42S0CsGpyHEjtoj3tMnfoP29cGlOuVGVgGkr9jnO9r5IbEuOxc86Vt06mhf4zV
+         lk1ciG1S9gNJDucFoa0ZpRLTZy6qtcmN54QyZtxhvkYX5BEYC6xrq1cDJEb6Cot/FFwr
+         tI3ZQXGE6FUclTi5uX1VHjRVpvW3e6Hjz4Pog=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QxWGzwiQK1H9THXhhSK1MS0BSvGH8EGX6peXdw0hns0=;
-        b=r8dToj7jHydJ7dxB/7yvzBa5i7eeFftKAIxQXvEAlePVTF69BPL0K9/JDEO2e/FUKj
-         VRCmTZi6bIR8X172G+B0rsXr/YwbmmBaGXmZjpI1aI49Firl/lmSy7MCcyDsHZtmPUHY
-         w8GcaxPEanBssEcBZK/VLxS0yG6QiuDbqk++e+X8+IHCEg3/lCy+YCcvwecANxB5fJGI
-         OplGKkuZUHkxz+4esRNxlA7RayBWh9/szCgH/TVgQmRtSOkRKIjGfrvdwMNvi1Na0MoT
-         BghQPUpBIMhYE7IiJzZ9QxGKpKsWGDqqyMcT89Q/BMkx/xKoa0Hrd99k0APGkA4wjzDH
-         pw/Q==
-X-Gm-Message-State: AOAM530as0E3f00KKplGDf6/varsg/N6nN1rk2uZhJjAN4/Nrc3fm5Vm
-        1qufX8JkzeyRQssl6TrMoOQ=
-X-Google-Smtp-Source: ABdhPJxdnwXbD+UJp67OF+eJClo0r5F/dqDG4cmKZ1p7TKeK+wLIx2/o6A+8ucS2M3od9a+BtNKtLQ==
-X-Received: by 2002:a05:6512:3f27:: with SMTP id y39mr7531588lfa.675.1639074152039;
-        Thu, 09 Dec 2021 10:22:32 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.229.236])
-        by smtp.gmail.com with ESMTPSA id n12sm58025lfq.3.2021.12.09.10.22.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 10:22:31 -0800 (PST)
-Message-ID: <0c116de3-1e55-f888-2b4f-285484082085@gmail.com>
-Date:   Thu, 9 Dec 2021 21:22:29 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wvpmIkayqdMprhcCUS7F0gK4w6zIHIrz7QooN+hl7RM=;
+        b=2zlvKXJlWIq7dquNBt6yzJhFCAzsz81mBJZ0MG6KxQasG8tgV1Asv/maJnGDk3Sq7b
+         q7FfBieQ+peAI6ghrvDPWyS6dO5tVtb3f2XK34VNV5wyjftKDtYYvMgjLMyFJA9NyXJS
+         Kf5IjHbv1uJnAhwRDKiwXT0XYiR+ZSJ4T7lPuPkfgukMUEoYLSaqVi1PwH6SWgrAc1wY
+         HHcY6j9Dv4nVc+SBqdGIgxnx7q5rFhRXi/CWko4Az3mHioY94dNK4h37E75QBUd8ucuS
+         rR/RVUJ79mEdyyH5t/9hdbufTLH6cfygauQOniaFCHPFfhqzr08HznYuVCPqH4n3MGL+
+         LV7A==
+X-Gm-Message-State: AOAM533txEpt/LaqCKhpIErKMcZglWJdoPTWttIPmHAexwPsdwoEaggX
+        DBiHrLNPuPfNJq/LMimk6fxj3BsO6KPBocyZAxjHYQ==
+X-Google-Smtp-Source: ABdhPJzs5sjxRU8nFJVhY9SA3aqJ+0AHPiUMPWexktLZKk76goFLPsJtkDhO3YuXPjKIxWV6Y1ZwWUNO46zO2amVVTU=
+X-Received: by 2002:ad4:5cef:: with SMTP id iv15mr19084182qvb.82.1639079139150;
+ Thu, 09 Dec 2021 11:45:39 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [syzbot] INFO: task hung in r871xu_dev_remove
-Content-Language: en-US
-To:     syzbot <syzbot+f39c1dad0b7db49ca4a8@syzkaller.appspotmail.com>,
-        Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-References: <00000000000042e11e05d2b0b39b@google.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <00000000000042e11e05d2b0b39b@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211207143757.21895-1-heikki.krogerus@linux.intel.com>
+ <CACeCKaf3_sqGbqh22Qe+7xEcajCTZt=WziqtPuzgGxW=-TPXbg@mail.gmail.com> <YbHVDikM6eodP/MR@kuha.fi.intel.com>
+In-Reply-To: <YbHVDikM6eodP/MR@kuha.fi.intel.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Thu, 9 Dec 2021 11:45:27 -0800
+Message-ID: <CACeCKaeYRWxS1kPX6TvQHvn_5H_u-+MKWmdh5XQeCdZ-Wj93Hw@mail.gmail.com>
+Subject: Re: [PATCH 0/5] acpi: Store _PLD information and convert users
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 12/9/21 09:27, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    d598c3c46ea6 Merge 5.16-rc4 into usb-next
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14cf0e55b00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c6df5f09a0b9c823
-> dashboard link: https://syzkaller.appspot.com/bug?extid=f39c1dad0b7db49ca4a8
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+f39c1dad0b7db49ca4a8@syzkaller.appspotmail.com
-> 
-> INFO: task kworker/0:6:4133 blocked for more than 143 seconds.
->        Not tainted 5.16.0-rc4-syzkaller #0
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:kworker/0:6     state:D stack:21848 pid: 4133 ppid:     2 flags:0x00004000
-> Workqueue: usb_hub_wq hub_event
-> Call Trace:
->   <TASK>
->   context_switch kernel/sched/core.c:4972 [inline]
->   __schedule+0x931/0x2320 kernel/sched/core.c:6253
->   schedule+0xd2/0x260 kernel/sched/core.c:6326
->   schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6385
->   __mutex_lock_common kernel/locking/mutex.c:680 [inline]
->   __mutex_lock+0xa32/0x12f0 kernel/locking/mutex.c:740
->   unregister_netdev+0xe/0x20 net/core/dev.c:11138
->   r871xu_dev_remove+0x24f/0x2c0 drivers/staging/rtl8712/usb_intf.c:599
+Hey Heikki,
 
-Seems like syz-executor ddosed the kernel. unregister_netdev() tries to 
-lock rtnl and there are 8 mentions of rtnl_mutex in "Showing all locks 
-held in the system" section.
+On Thu, Dec 9, 2021 at 2:06 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Hi,
+>
+> Thanks for testing these..
+>
+> On Wed, Dec 08, 2021 at 07:45:26PM -0800, Prashant Malani wrote:
+> > Hi Heikki,
+> >
+> > On Tue, Dec 7, 2021 at 6:37 AM Heikki Krogerus
+> > <heikki.krogerus@linux.intel.com> wrote:
+> > >
+> > > Hi,
+> > >
+> > > This removes the need for the drivers to always separately evaluate
+> > > the _PLD. With the USB Type-C connector and USB port mapping this
+> > > allows us to start using the component framework and remove the custom
+> > > APIs.
+> > >
+> > > So far the only users of the _PLD information have been the USB
+> > > drivers, but it seems it will be used also at least in some camera
+> > > drivers later. These nevertheless touch mostly USB drivers.
+> > >
+> > > Rafael, is it still OK if Greg takes these?
+> > >
+> > > Prashant, can you test these?
+> >
+> > I've applied the patches to a system with the requisite _PLD entries
+> > in firmware, and I'm not sure I can see the connectors getting created
+> > correctly.
+> >
+> > My setup is:
+> >
+> > Chromebook ------> Dell WD19TB dock (in USB+DisplayPort Alternate
+> > Mode) ----> USB Thumb drive.
+> >
+> > Here is the lsusb -t output before connecting the dock (omitting
+> > unrelated busses):
+> > localhost ~ # lsusb -t
+> > /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/3p, 10000M/x2
+> >
+> > Here is the lsusb -t output (omitting unrelated busses):
+> > localhost ~ # lsusb -t
+> > /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/3p, 10000M/x2
+> >     |__ Port 2: Dev 15, If 0, Class=Hub, Driver=hub/4p, 10000M
+> >         |__ Port 3: Dev 16, If 0, Class=Hub, Driver=hub/4p, 5000M
+> >             |__ Port 3: Dev 18, If 0, Class=Mass Storage,
+> > Driver=usb-storage, 5000M
+> >         |__ Port 4: Dev 17, If 0, Class=Vendor Specific Class,
+> > Driver=r8152, 5000M
+> >
+> > I see the connector symlink for the root hub:
+> >
+> > localhost ~ # cd /sys/bus/usb/devices
+> > localhost /sys/bus/usb/devices # ls 2-2/port/connector
+> > data_role  device  firmware_node  port1-cable  port1-partner  power
+> > power_operation_mode  power_role  preferred_role  subsystem
+> > supported_accessory_modes  uevent  usb2-port2  usb3-port2
+> > usb_power_delivery_revision  usb_typec_revision  vconn_source
+> >
+> > But for none of the children devices:
+> >
+> > localhost /sys/bus/usb/devices # ls 2-2.3/port/connector
+> > ls: cannot access '2-2.3/port/connector': No such file or directory
+> > localhost /sys/bus/usb/devices # ls 2-2.3.3/port/connector
+> > ls: cannot access '2-2.3.3/port/connector': No such file or directory
+> > localhost /sys/bus/usb/devices # ls 2-2.3\:1.0/port/connector
+> > ls: cannot access '2-2.3:1.0/port/connector': No such file or directory
+> > localhost /sys/bus/usb/devices # ls 2-2.3.3\:1.0/port/connector
+> > ls: cannot access '2-2.3.3:1.0/port/connector': No such file or directory
+> >
+> > Is this as you intended with the series? My interpretation was that
+> > each connected usb device would get a "connector" symlink, but I may
+> > have misinterpreted this.
+>
+> It is as intended. The usb ports on the board will have the connector
+> symlink, not the devices attached to them - the firmware is only aware
+> of the connectors on the board of course. It looks like this series is
+> working as it should.
 
-Looks false-positive to me
+Thanks for clarifying my understanding here.
 
+>
+> If you want to extend this solution so that also every device in the
+> usb topology will have the link to the connector on board, then that
+> should be now possible, but that is out side of the scope of this
+> series. You need to propose that separately.
+>
+> But I must ask, why can't you just walk down the topology until you
+> reach the on-board ports that will have the connector links?
+>
 
+Right, we can certainly do that; having it in each device is just
+convenient. But as you said, that's the subject of another series.
 
+You mentioned there would be a v2, so I'll add my Tested-By then.
 
-With regards,
-Pavel Skripkin
+Best regards,
