@@ -2,44 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6B3446E10C
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 03:54:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6399146E130
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Dec 2021 04:14:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbhLIC6C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Dec 2021 21:58:02 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:55340 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229446AbhLIC6B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Dec 2021 21:58:01 -0500
-X-UUID: a02a5383e5c34f1bb5976d6943a0babf-20211209
-X-UUID: a02a5383e5c34f1bb5976d6943a0babf-20211209
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        id S231362AbhLIDSE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Dec 2021 22:18:04 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:37154 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231363AbhLIDSC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Dec 2021 22:18:02 -0500
+X-UUID: 63ff790bee984ac6b799a6b80d21c9d2-20211209
+X-UUID: 63ff790bee984ac6b799a6b80d21c9d2-20211209
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 667723867; Thu, 09 Dec 2021 10:54:25 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 9 Dec 2021 10:54:24 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 9 Dec
- 2021 10:54:24 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 435789986; Thu, 09 Dec 2021 11:14:27 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 9 Dec 2021 11:14:26 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkcas10.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Thu, 9 Dec 2021 10:54:23 +0800
+ 15.0.1497.2 via Frontend Transport; Thu, 9 Dec 2021 11:14:25 +0800
 From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Ikjoon Jang <ikjn@chromium.org>, <linux-usb@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
-        "Eddie Hung" <eddie.hung@mediatek.com>
-Subject: [PATCH] usb: xhci-mtk: fix list_del warning when enable list debug
-Date:   Thu, 9 Dec 2021 10:54:22 +0800
-Message-ID: <20211209025422.17108-1-chunfeng.yun@mediatek.com>
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Yuwen Ng <yuwen.ng@mediatek.com>
+Subject: [PATCH 1/3] usb: mtu3: fix interval value for intr and isoc
+Date:   Thu, 9 Dec 2021 11:14:22 +0800
+Message-ID: <20211209031424.17842-1-chunfeng.yun@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -49,28 +45,37 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There is warning of 'list_del corruption' when enable list debug
-(CONFIG_DEBUG_LIST=y), fix it by using list_del_init()
+Use the Interval value from isoc/intr endpoint descriptor, no need
+minus one. But the original code doesn't cause transfer error for
+normal cases, due to the interval is less than the host request.
 
-Fixes: 4ce186665e7c ("usb: xhci-mtk: Do not use xhci's virt_dev in drop_endpoint")
 Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
- drivers/usb/host/xhci-mtk-sch.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/mtu3/mtu3_gadget.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
-index 1edef7527c11..edbfa82c6565 100644
---- a/drivers/usb/host/xhci-mtk-sch.c
-+++ b/drivers/usb/host/xhci-mtk-sch.c
-@@ -781,7 +781,7 @@ int xhci_mtk_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
- 
- 	ret = xhci_check_bandwidth(hcd, udev);
- 	if (!ret)
--		INIT_LIST_HEAD(&mtk->bw_ep_chk_list);
-+		list_del_init(&mtk->bw_ep_chk_list);
- 
- 	return ret;
- }
+diff --git a/drivers/usb/mtu3/mtu3_gadget.c b/drivers/usb/mtu3/mtu3_gadget.c
+index a9a65b4bbfed..c51be015345b 100644
+--- a/drivers/usb/mtu3/mtu3_gadget.c
++++ b/drivers/usb/mtu3/mtu3_gadget.c
+@@ -77,7 +77,7 @@ static int mtu3_ep_enable(struct mtu3_ep *mep)
+ 		if (usb_endpoint_xfer_int(desc) ||
+ 				usb_endpoint_xfer_isoc(desc)) {
+ 			interval = desc->bInterval;
+-			interval = clamp_val(interval, 1, 16) - 1;
++			interval = clamp_val(interval, 1, 16);
+ 			if (usb_endpoint_xfer_isoc(desc) && comp_desc)
+ 				mult = comp_desc->bmAttributes;
+ 		}
+@@ -89,7 +89,7 @@ static int mtu3_ep_enable(struct mtu3_ep *mep)
+ 		if (usb_endpoint_xfer_isoc(desc) ||
+ 				usb_endpoint_xfer_int(desc)) {
+ 			interval = desc->bInterval;
+-			interval = clamp_val(interval, 1, 16) - 1;
++			interval = clamp_val(interval, 1, 16);
+ 			mult = usb_endpoint_maxp_mult(desc) - 1;
+ 		}
+ 		break;
 -- 
 2.18.0
 
