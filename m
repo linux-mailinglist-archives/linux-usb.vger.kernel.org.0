@@ -2,82 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 619934702A1
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 15:20:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E8D4703C8
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 16:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239970AbhLJOYX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Dec 2021 09:24:23 -0500
-Received: from mga17.intel.com ([192.55.52.151]:62032 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229978AbhLJOYW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 10 Dec 2021 09:24:22 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="219039683"
-X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
-   d="scan'208";a="219039683"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 06:20:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
-   d="scan'208";a="659588424"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Dec 2021 06:20:38 -0800
-Subject: Re: [PATCH] xhci: Remove CONFIG_USB_DEFAULT_PERSIST to prevent xHCI
- from runtime suspending
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     mathias.nyman@intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20211119092628.677935-1-kai.heng.feng@canonical.com>
- <CAAd53p4CpEQR0Y5XDN5E7xZ-iw2GG=gGMSm2Vd=V_M1LLEuuCA@mail.gmail.com>
- <b7595524-1041-8b8b-dc61-9ee0acbc8307@linux.intel.com>
- <CAAd53p4OOyrLJYbhYVqJSJ2NukmhM26GEf7rM7cV0=6_djhpxw@mail.gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <9e2f77e9-952c-de4d-6efc-3f5c75a6285b@linux.intel.com>
-Date:   Fri, 10 Dec 2021 16:22:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.8.1
+        id S242834AbhLJP1D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Dec 2021 10:27:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234499AbhLJP1C (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 10:27:02 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63886C061D5E
+        for <linux-usb@vger.kernel.org>; Fri, 10 Dec 2021 07:23:25 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id r11so30484940edd.9
+        for <linux-usb@vger.kernel.org>; Fri, 10 Dec 2021 07:23:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CaWHeGP0DuwfkbKXUdYIJmX8F+biVrGWME72+JdzhqU=;
+        b=MgLv3YrA9NlwpapqjGWsPaT057Lv4NTkMge5x9aYIzLu/EWTNZl9PQJ3i9HcLMOx6B
+         B9IguP3K+gzGh6KfKbYSO8oxGj7MjYa00frl0BCd7lnk7OkZoOhbnGk36UU3KzWuB3In
+         ZXMjkVs8K5nE10yvrBZiB/8HDzocgX7Too6WWjeeDpdcoaRlxj/sgAghwl/0IvTuGbeh
+         fAFYqtmGZZZiSOSvOT+oAtgE4HrF1eec+d4mRi7xCG+BmEL2kk0ZRTS2b7waN3H1I0k/
+         3ly7VwemPgrnfSjfL1C507DwBcuWSj3OL9qXJWKAX4/7OLRZbrfLo/DTY1QGnfnvK/nI
+         rVzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CaWHeGP0DuwfkbKXUdYIJmX8F+biVrGWME72+JdzhqU=;
+        b=OcstCyZ2RIy0JZx1kBCAAnK1GqQtrkyHaZJzIE9TOc1xs4ufq/kSmkXsoItKcZZQoz
+         tIIfNjyF49gd7MfJNbN5nw1JKel57n6PbT214g0ZIMRylgT6KfYi5HM95/uhIe4eZGkq
+         5y3Ol2TRVaBXd8IC9CRNafoeTWv/LFHDzZPWzaDTF9PR9tkoCW88Y5ZtEM/nZLLGI8Di
+         XNfvWmrJcZBrRlwwppc9+PZ0XMr5RoPwhANJfyy3q7r7ylLfFGonH0KmJL2YJYrqg5/d
+         h/k3PSNsJwCi/qh+eccIcVGR3VjN1QvQ9qDvy0mB5ysmSqQIfRd25+OvszShBC6F844w
+         clBw==
+X-Gm-Message-State: AOAM530qDD9yPX6WKu+kfH0yxb14eouRR/ic2QgUSNzWYIc7XoVcDonf
+        EY1/JjuNsijaKCswsb0tmUPfYLil0xrXEks44XFZ5A==
+X-Google-Smtp-Source: ABdhPJzwyJoQo5zS+XCmbkGk9eGVm61YMp0R/nIUhpMaAI0dyZLbksovDhkrc3SVhNC+OXjC0RSzQ3wiLRH8X7JDAvI=
+X-Received: by 2002:a05:6402:2805:: with SMTP id h5mr38690255ede.267.1639149780836;
+ Fri, 10 Dec 2021 07:23:00 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAAd53p4OOyrLJYbhYVqJSJ2NukmhM26GEf7rM7cV0=6_djhpxw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211208003727.3596577-1-f.fainelli@gmail.com> <20211208003727.3596577-6-f.fainelli@gmail.com>
+In-Reply-To: <20211208003727.3596577-6-f.fainelli@gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 10 Dec 2021 16:22:50 +0100
+Message-ID: <CAMRc=MdmP5UCi2SJq9Ybhe9evUmM_PhpSUfzRF24yYUiRG+MNg@mail.gmail.com>
+Subject: Re: [PATCH v3 05/15] dt-bindings: gpio: Convert Broadcom STB GPIO to YAML
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     devicetree <devicetree@vger.kernel.org>,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
+        <linux-mmc@vger.kernel.org>,
+        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9.12.2021 8.42, Kai-Heng Feng wrote:
-> On Wed, Dec 1, 2021 at 5:00 PM Mathias Nyman
-> <mathias.nyman@linux.intel.com> wrote:
->>
->> On 1.12.2021 2.19, Kai-Heng Feng wrote:
->>> On Fri, Nov 19, 2021 at 5:27 PM Kai-Heng Feng
->>> <kai.heng.feng@canonical.com> wrote:
->>>>
->>>> When the xHCI is quirked with XHCI_RESET_ON_RESUME, runtime resume
->>>> routine also resets the controller.
->>>>
->>>> This is bad for USB drivers without reset_resume callback, because
->>>> there's no subsequent call of usb_dev_complete() ->
->>>> usb_resume_complete() to force rebinding the driver to the device. For
->>>> instance, btusb device stops working after xHCI controller is runtime
->>>> resumed, if the controlled is quirked with XHCI_RESET_ON_RESUME.
->>>>
->>>> So always take XHCI_RESET_ON_RESUME into account to solve the issue.
->>>>
->>>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->>>
->>> A gentle ping...
->>
->> Thanks
->> Adding to queue
-> 
-> I haven't found this patch in your repo. Can you please push it so I
-> can backport it to downstream kernel?
+On Wed, Dec 8, 2021 at 1:37 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> Convert the Broadcom STB GPIO Device Tree binding to YAML to help with
+> validation.
+>
+> Acked-by: Gregory Fong <gregory.0xf0@gmail.com>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
 
-Patch got shuffled around a bit.
-It's now in my for-usb-linus branch, and sent to Greg
-
-Thanks
--Mathias
-
+Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
