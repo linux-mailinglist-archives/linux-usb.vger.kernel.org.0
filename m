@@ -2,81 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 546EE46FEE9
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 11:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B1746FF07
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 11:50:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238563AbhLJKtK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Dec 2021 05:49:10 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34752 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233090AbhLJKtK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 05:49:10 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9850ECE2A74;
-        Fri, 10 Dec 2021 10:45:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49FADC00446;
-        Fri, 10 Dec 2021 10:45:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639133131;
-        bh=QuYWR3uX/ECWfu+ygs6k08ECNlcn3Z9H/GCcuArN908=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o0EvC7mo/d0yjjrI+kaTgtOyypAjDjWI1DPyz5HwQVlV9LKsGqLr1uYjvprdbzuWW
-         OKf2h8tuyfz7lLvdQfEVG9B1G1EiMTTxDkp6lWzjhnyEOQMwMK33n8YFxiL6/Dl+bh
-         sd0V529EoYohUCFopia3vF1wPgFiLUpAixLloHBU=
-Date:   Fri, 10 Dec 2021 11:45:28 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     zhuyinbo <zhuyinbo@loongson.cn>
-Cc:     Jiri Kosina <jikos@kernel.org>, benjamin.tissoires@redhat.com,
-        Thinh.Nguyen@synopsys.com, mathias.nyman@linux.intel.com,
-        stern@rowland.harvard.edu, rajatja@google.com,
-        chris.chiu@canonical.com, linux-usb@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] HID: usbhid: enable remote wakeup function for
- usbhid device
-Message-ID: <YbMvyK111M/ZVRJG@kroah.com>
-References: <1638956391-20149-1-git-send-email-zhuyinbo@loongson.cn>
- <YbCdTaGSKak1cdSh@kroah.com>
- <cc535d3d-6dcd-e69c-24e7-df54ce63c381@loongson.cn>
+        id S236904AbhLJKyU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Dec 2021 05:54:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236819AbhLJKyU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 05:54:20 -0500
+Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52715C061746;
+        Fri, 10 Dec 2021 02:50:45 -0800 (PST)
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9f:8608:6e64:956a:daea:cf2f])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 1BAAoOd72262583
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Fri, 10 Dec 2021 11:50:24 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1639133425; bh=9IETmGmOqkXosvhm5TAL9lHkV0QlddDMQBQe1qr0tn0=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=lflJp8B7hnNNzWkN5S2ntKfPRqfPUlw676mc3SFr/JQ0j+zbruHEcfKofloHn0PBx
+         /IFbSs6TdMsGk8sTGxacqscRRRcjcutBB+SEYhKQjy4pW71nl4AVUPHb6WaW94y3TG
+         26+r7xEeenibRv6+5tAy1DjtIN+0naxdNjPTA3TM=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
+        (envelope-from <bjorn@mork.no>)
+        id 1mvdTr-000FLx-Lp; Fri, 10 Dec 2021 11:50:23 +0100
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Daniele Palmas <dnlplm@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] net: usb: qmi_wwan: add Telit 0x1070 composition
+Organization: m
+References: <20211210095722.22269-1-dnlplm@gmail.com>
+Date:   Fri, 10 Dec 2021 11:50:23 +0100
+In-Reply-To: <20211210095722.22269-1-dnlplm@gmail.com> (Daniele Palmas's
+        message of "Fri, 10 Dec 2021 10:57:22 +0100")
+Message-ID: <87r1akraxc.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cc535d3d-6dcd-e69c-24e7-df54ce63c381@loongson.cn>
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.3 at canardo
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 05:54:33PM +0800, zhuyinbo wrote:
-> 
-> 
-> 在 2021/12/8 下午7:55, Greg Kroah-Hartman 写道:
-> > On Wed, Dec 08, 2021 at 05:39:50PM +0800, Yinbo Zhu wrote:
-> > > The remote wake-up function is a regular function on usb hid device
-> > > and I think keeping it enabled by default will make usb application
-> > > more convenient. This patch is to enable remote wakeup function for
-> > > usb hid device.
-> > 
-> > How many devices did you test this on?
-> > 
-> > As Oliver said, this will cause problems, there's a reason no operating
-> > system does this :(
-> > 
-> > sorry,
-> > 
-> > greg k-h
-> Hi greg,
-> 
-> About that oliver said that I had expained, and I add this change was
-> according that usb device whether support remote wakeup and if it support
-> wakeup then to enabled it so I think it should be okay for all hid device.
+Daniele Palmas <dnlplm@gmail.com> writes:
 
-Again, what devices did you test this on?
+> Add the following Telit FN990 composition:
+>
+> 0x1070: tty, adb, rmnet, tty, tty, tty, tty
+>
+> Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
 
-And look at other operating systems, as I said, there is a reason that
-no one does this.
-
-thanks,
-
-greg k-h
+Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
