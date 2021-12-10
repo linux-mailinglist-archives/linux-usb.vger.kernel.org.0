@@ -2,63 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E084704FA
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 16:54:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 746A84705A0
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 17:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233796AbhLJP5c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Dec 2021 10:57:32 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:35206 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233285AbhLJP53 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 10:57:29 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3740BCE2A70
-        for <linux-usb@vger.kernel.org>; Fri, 10 Dec 2021 15:53:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC948C00446;
-        Fri, 10 Dec 2021 15:53:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639151630;
-        bh=2dtKDzUAh727IoAxC/iQCFn3F8hIpA14aZ71DLlgbp4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i1zzNizmkOLEaZIGFHMgcWdPY5v0BYz1h91UtaJogdqa/MZqv19M1doaxq0EissY1
-         2qASWnxioHvILbvIrJ4IqSN9cngCYiEK8Ev2Hdm0DedjWFI51aXLO1kgpSmqydp051
-         TLG2cJs4JBq1dl1hUJzlnhKKxSGXBgPmHRnFMaaM=
-Date:   Fri, 10 Dec 2021 16:53:47 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Pavel Hofman <pavel.hofman@ivitera.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/2] usb: core: config: fix validation of wMaxPacketValue
- entries
-Message-ID: <YbN4C7XJ8FU4yMGT@kroah.com>
-References: <20211210085219.16796-1-pavel.hofman@ivitera.com>
- <YbN2xd7DJuULtOUI@rowland.harvard.edu>
+        id S243234AbhLJQbF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Dec 2021 11:31:05 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:55089 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S243154AbhLJQbE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 11:31:04 -0500
+Received: (qmail 643782 invoked by uid 1000); 10 Dec 2021 11:27:28 -0500
+Date:   Fri, 10 Dec 2021 11:27:28 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Bixuan Cui <cuibixuan@huawei.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        Rajat Jain <rajatja@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: hub: Resume hubs to find newly connected device
+Message-ID: <YbN/8AOHHR7fNFGd@rowland.harvard.edu>
+References: <20211208070835.8877-1-kai.heng.feng@canonical.com>
+ <YbEnf2NUr/BCV4Gb@rowland.harvard.edu>
+ <CAAd53p61w-AHBxy05Hx-gwae1rUxZxsaVfmH=--bQUkPxYj8Nw@mail.gmail.com>
+ <YbIo/ZBRgK5NDZJb@rowland.harvard.edu>
+ <CAAd53p5HfGz-D-QvYvPuDY4qLe0nYncY077=n-gvnYym4A8E0w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YbN2xd7DJuULtOUI@rowland.harvard.edu>
+In-Reply-To: <CAAd53p5HfGz-D-QvYvPuDY4qLe0nYncY077=n-gvnYym4A8E0w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 10:48:21AM -0500, Alan Stern wrote:
-> On Fri, Dec 10, 2021 at 09:52:18AM +0100, Pavel Hofman wrote:
-> > The checks performed by commit aed9d65ac327 ("USB: validate
-> > wMaxPacketValue entries in endpoint descriptors") require that initial
-> > value of the maxp variable contains both maximum packet size bits
-> > (10..0) and multiple-transactions bits (12..11). However, the existing
-> > code assings only the maximum packet size bits. This patch assigns all
-> > bits of wMaxPacketSize to the variable.
-> > 
-> > Fixes: aed9d65ac327 ("USB: validate wMaxPacketValue entries in endpoint descriptors")
-> > Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
-> > ---
+On Fri, Dec 10, 2021 at 02:06:10PM +0800, Kai-Heng Feng wrote:
+> On Fri, Dec 10, 2021 at 12:04 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Thu, Dec 09, 2021 at 09:19:24AM +0800, Kai-Heng Feng wrote:
+> > > On Thu, Dec 9, 2021 at 5:45 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > >
+> > > > On Wed, Dec 08, 2021 at 03:08:33PM +0800, Kai-Heng Feng wrote:
+> > > > > When a new USB device gets plugged to nested hubs, the affected hub,
+> > > > > which connects to usb 2-1.4-port2, doesn't report there's any change,
+> > > > > hence the nested hubs go back to runtime suspend like nothing happened:
+> > > >
+> > > > That's a bug in the hub.  When there's a change in the connection status
+> > > > of one of its ports, it should report this change to the kernel.
+> > >
+> > > I think it should, but when I searched through the USB spec and I
+> > > can't find anywhere specify hub requires to report it in change
+> > > status.
+> >
+> > USB-2.0 spec, section 11.24.2.7.2.1 (C_PORT_CONNECTION):
+> >
+> >         This bit is set when the PORT_CONNECTION bit changes because of an
+> >         attach or detach detect event (see Section 7.1.7.3). This bit will be
+> >         cleared to zero by a ClearPortFeature(C_PORT_CONNECTION) request or
+> >         while the port is in the Powered-off state.
 > 
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> 
-> This should have a "CC: <stable@vger.kernel.org>" tag attached.
+> It's indeed set for the hub's downstream facing port, and that's why
+> wake up the hub and check its ports can still find connect event.
+> But I can't find anywhere stats how hub's upstream facing port should be set.
 
-I can add that, thanks.
+It looks like the port status-change bits don't get set in response to a 
+wakeup signal, for SuperSpeed links.  Section C.1.2.3 in the USB-3.1 
+spec says:
 
-greg k-h
+	Note that C_PORT_LINK_STATE is not asserted in the event of a 
+	remote wakeup. As discussed previously, in the event of a
+	Remote Wakeup the associated function sends the host a Function
+	Wake device notification packet.
+
+I don't know if we receive those Function Wake notification packets, or 
+what we do with them.
+
+In any case, section C.1.4.5 says that during remote wakeup, all of the 
+links from the remote wakeup device up to the controlling hub transition 
+to U0.  But your log extract showed:
+
+[  281.110147] usb 2-1.4-port2: status 0263 change 0000
+
+So even though the 2-1.4.2 hub originated a wakeup signal, the upstream 
+link to the 2-1.4 hub remained in U3 according to these status bits.  
+Could it be that we need to include an extra delay, so the link has 
+enough time to get into the U0 state?
+
+Maybe Mathias can help investigate this issue.
+
+Alan Stern
