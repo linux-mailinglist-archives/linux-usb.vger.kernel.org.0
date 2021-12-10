@@ -2,128 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B497B46FA8C
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 07:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3A746FAAC
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 07:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232524AbhLJGKE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Dec 2021 01:10:04 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:44158
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231714AbhLJGKA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 01:10:00 -0500
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CDD203F1AE
-        for <linux-usb@vger.kernel.org>; Fri, 10 Dec 2021 06:06:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639116383;
-        bh=gD558dGTsqZPPqVUuXs9/pBTwBroTzKLjNW1jVNpBk4=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=MSKgQzGHPSSpRLvbIhGCwASFfopYVXdGKWHCL6TGlIYRryT1rBpNIu9CKbXN2VhLe
-         5Udm4jCQix53GjycgCLygDem2TUojKN+YT4vTP2QtuNbcPINoqYwuIewi+FKGhKrYi
-         sptXsfz3/yM3xrGVF+093V/rFKLh781oEHNZ45MhIgK0SZ1cuOMFAAfkqGWIV+d4J3
-         5kXyA5R/RZ2Mk7UYT51AkkTRq/L+HMhcryQqmX9tYddxa2FjCi6o88xGzMXC4rf9r0
-         eRFFCzj5TNQOq1Ik9q3+WHbDkN0iiazX0ddjgfXy4B78h1PQPXKeYPXTXO3PAQyfTu
-         wFVqn9sWhYyZA==
-Received: by mail-ot1-f70.google.com with SMTP id f79-20020a9d03d5000000b0055c7d2f07ffso2931648otf.14
-        for <linux-usb@vger.kernel.org>; Thu, 09 Dec 2021 22:06:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gD558dGTsqZPPqVUuXs9/pBTwBroTzKLjNW1jVNpBk4=;
-        b=Y1fZEhBV50ZKbyXTXvSXN+p7RdVCNy+Oek9Iz6pAPy1891CsduWBQYCWXD5OmoUj6g
-         sYMMNv0wGY2uVkqJINgOUwHWWQOlCKuHsHIAdSWbR76DW7qw3VwSMPrPCbCw9NJINUhn
-         c3ftLLed5bwMTWs+4gQxbsecCHS8r5H+XXeS9HjwSvMhFgTN5zApGTlsmMCrsnKY2ctA
-         F1S/9WoasipQ1ZepUdxqOzStJoshasxNiTt7U2x+WVT22UBc8TOc3H1mi4Ly6HHdqKQ2
-         SSJycYfZXdj1DEiEyoBPKpeubu5ENE4T1WK5PeY6eii+pk9cyxbQpB8yO0BarvIBQVJr
-         7pKA==
-X-Gm-Message-State: AOAM532VjZn7iRcUPXK46I5F4JJ2KhN1QqA4XqsIhMZloe8FbrGA2o+F
-        7HE2cB2Ar4+k7LUloL8JejEPMhEbo97fafL5BLl0GcP7FvX3ZPYdF2sjKAlRVOTHS6UZQHcwkSv
-        G/Wwy3q7plf281SrLQszZXLYwPSAtkAnhGWN5Bq1h+vQAbTZyENNpiA==
-X-Received: by 2002:a05:6830:1f3a:: with SMTP id e26mr9791610oth.233.1639116382621;
-        Thu, 09 Dec 2021 22:06:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJybhcdHJs6z65gxvDmqz0jJ8dw6+/mS/4MLMLTUVjIZYX0zGjN5gmZTu85abimAPCGmSWdsyRqzBVaK43lFBUs=
-X-Received: by 2002:a05:6830:1f3a:: with SMTP id e26mr9791590oth.233.1639116382329;
- Thu, 09 Dec 2021 22:06:22 -0800 (PST)
-MIME-Version: 1.0
-References: <20211208070835.8877-1-kai.heng.feng@canonical.com>
- <YbEnf2NUr/BCV4Gb@rowland.harvard.edu> <CAAd53p61w-AHBxy05Hx-gwae1rUxZxsaVfmH=--bQUkPxYj8Nw@mail.gmail.com>
- <YbIo/ZBRgK5NDZJb@rowland.harvard.edu>
-In-Reply-To: <YbIo/ZBRgK5NDZJb@rowland.harvard.edu>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Fri, 10 Dec 2021 14:06:10 +0800
-Message-ID: <CAAd53p5HfGz-D-QvYvPuDY4qLe0nYncY077=n-gvnYym4A8E0w@mail.gmail.com>
-Subject: Re: [PATCH] usb: hub: Resume hubs to find newly connected device
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Bixuan Cui <cuibixuan@huawei.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        Rajat Jain <rajatja@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        id S237006AbhLJGh2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Dec 2021 01:37:28 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:58314 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S236965AbhLJGh1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 01:37:27 -0500
+X-UUID: 03e3f6f274874ffeba8eaad6e2943839-20211210
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=jW0E6lxQlKNybU5i7eEBZvTV8TnrOogj/3xvDI7n6g4=;
+        b=aPK5cknEUYn+4ZTVgXoG0GjpnifxUqHyK1RFytCov3Mo+xZAJrCRvpl6Z74926CFioLeZtF2/kwmQoTnneUyriiMvzOQmHCc19tCwwcu/zkYfNML69Uj+QO2BCHhzZKQNFvkdw0nsTg4F4UyzbSYVRibxbOHVdtW7q45ApevYLI=;
+X-UUID: 03e3f6f274874ffeba8eaad6e2943839-20211210
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1481594071; Fri, 10 Dec 2021 14:33:49 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 10 Dec 2021 14:33:48 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 10 Dec 2021 14:33:47 +0800
+Message-ID: <d363d5ca3b0059d7085fe1790b7f57bff80147ff.camel@mediatek.com>
+Subject: Re: [PATCH 3/3] arm64: dts: mediatek: Add USB xHCI controller for
+ mt8195
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Date:   Fri, 10 Dec 2021 14:33:48 +0800
+In-Reply-To: <9db3cb96-ac67-151d-5674-b56c5abbe348@collabora.com>
+References: <20211102060049.1843-1-chunfeng.yun@mediatek.com>
+         <20211102060049.1843-3-chunfeng.yun@mediatek.com>
+         <9db3cb96-ac67-151d-5674-b56c5abbe348@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 12:04 AM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Thu, Dec 09, 2021 at 09:19:24AM +0800, Kai-Heng Feng wrote:
-> > On Thu, Dec 9, 2021 at 5:45 AM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > >
-> > > On Wed, Dec 08, 2021 at 03:08:33PM +0800, Kai-Heng Feng wrote:
-> > > > When a new USB device gets plugged to nested hubs, the affected hub,
-> > > > which connects to usb 2-1.4-port2, doesn't report there's any change,
-> > > > hence the nested hubs go back to runtime suspend like nothing happened:
-> > >
-> > > That's a bug in the hub.  When there's a change in the connection status
-> > > of one of its ports, it should report this change to the kernel.
-> >
-> > I think it should, but when I searched through the USB spec and I
-> > can't find anywhere specify hub requires to report it in change
-> > status.
->
-> USB-2.0 spec, section 11.24.2.7.2.1 (C_PORT_CONNECTION):
->
->         This bit is set when the PORT_CONNECTION bit changes because of an
->         attach or detach detect event (see Section 7.1.7.3). This bit will be
->         cleared to zero by a ClearPortFeature(C_PORT_CONNECTION) request or
->         while the port is in the Powered-off state.
+T24gRnJpLCAyMDIxLTExLTI2IGF0IDExOjM2ICswMTAwLCBBbmdlbG9HaW9hY2NoaW5vIERlbCBS
+ZWdubyB3cm90ZToNCj4gSWwgMDIvMTEvMjEgMDc6MDAsIENodW5mZW5nIFl1biBoYSBzY3JpdHRv
+Og0KPiA+IEFkZCBhbGwgZm91ciBVU0IgeEhDSSBjb250cm9sbGVycyBmb3IgTVQ4MTk1DQo+ID4g
+DQo+ID4gU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVuIDxjaHVuZmVuZy55dW5AbWVkaWF0ZWsu
+Y29tPg0KPiA+IC0tLQ0KPiA+ICAgYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxOTUu
+ZHRzaSB8IDc5DQo+ID4gKysrKysrKysrKysrKysrKysrKysrKysrDQo+ID4gICAxIGZpbGUgY2hh
+bmdlZCwgNzkgaW5zZXJ0aW9ucygrKQ0KPiA+IA0KPiANCj4gSGVsbG8hDQo+IFRoYW5rcyBmb3Ig
+dGhlIHBhdGNoISBIb3dldmVyLCB0aGVyZSBpcyBzb21ldGhpbmcgdG8gaW1wcm92ZS4uLg0KPiAN
+Cj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxOTUuZHRz
+aQ0KPiA+IGIvYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxOTUuZHRzaQ0KPiA+IGlu
+ZGV4IGE1OWMwZTlkMWZjMi4uMjYzZWViZmQyZWExIDEwMDY0NA0KPiA+IC0tLSBhL2FyY2gvYXJt
+NjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTk1LmR0c2kNCj4gPiArKysgYi9hcmNoL2FybTY0L2Jv
+b3QvZHRzL21lZGlhdGVrL210ODE5NS5kdHNpDQo+ID4gQEAgLTgsNiArOCw3IEBADQo+ID4gICAj
+aW5jbHVkZSA8ZHQtYmluZGluZ3MvY2xvY2svbXQ4MTk1LWNsay5oPg0KPiA+ICAgI2luY2x1ZGUg
+PGR0LWJpbmRpbmdzL2ludGVycnVwdC1jb250cm9sbGVyL2FybS1naWMuaD4NCj4gPiAgICNpbmNs
+dWRlIDxkdC1iaW5kaW5ncy9pbnRlcnJ1cHQtY29udHJvbGxlci9pcnEuaD4NCj4gPiArI2luY2x1
+ZGUgPGR0LWJpbmRpbmdzL3BoeS9waHkuaD4NCj4gPiAgICNpbmNsdWRlIDxkdC1iaW5kaW5ncy9w
+b3dlci9tdDgxOTUtcG93ZXIuaD4NCj4gPiAgIA0KPiA+ICAgLyB7DQo+ID4gQEAgLTgyMyw2ICs4
+MjQsMjYgQEANCj4gPiAgIAkJCXN0YXR1cyA9ICJkaXNhYmxlZCI7DQo+ID4gICAJCX07DQo+ID4g
+ICANCj4gPiArCQl4aGNpMDogdXNiQDExMjAwMDAwIHsNCj4gPiArCQkJY29tcGF0aWJsZSA9ICJt
+ZWRpYXRlayxtdDgxOTUteGhjaSIsDQo+ID4gIm1lZGlhdGVrLG10ay14aGNpIjsNCj4gPiArCQkJ
+cmVnID0gPDAgMHgxMTIwMDAwMCAwIDB4MTAwMD4sIDwwIDB4MTEyMDNlMDAgMA0KPiA+IDB4MDEw
+MD47DQo+ID4gKwkJCXJlZy1uYW1lcyA9ICJtYWMiLCAiaXBwYyI7DQo+ID4gKwkJCWludGVycnVw
+dHMgPSA8R0lDX1NQSSAxMjkgSVJRX1RZUEVfTEVWRUxfSElHSA0KPiA+IDA+Ow0KPiANCj4gSGVy
+ZSwgYW5kIG9uIHRoZSBvdGhlciB4aGNpIG5vZGVzIChmcm9tIHdoYXQgSSBrbm93LCB4aGNpezAs
+MSwzfSksDQo+IHlvdSBzaG91bGQgdXNlDQo+IGludGVycnVwdHMtZXh0ZW5kZWQgYW5kIGRlY2xh
+cmUgdGhlIHdha2V1cCBpbnRlcnJ1cHQgb24gcGlvLg0KPiANCj4gCQkJaW50ZXJydXB0cy1leHRl
+bmRlZCA9IDwmZ2ljIEdJQ19TUEkgMTI5DQo+IElSUV9UWVBFX0xFVkVMX0hJR0ggMD4sDQo+IA0K
+PiAJCQkJCSAgICAgIDwmcGlvIDIxOQ0KPiBJUlFfVFlQRV9MRVZFTF9MT1c+Ow0KPiANCj4gCQkJ
+aW50ZXJydXB0LW5hbWVzID0gImhvc3QiLCAid2FrZXVwIjsNCk9rLCB0aGlzIHBhdGNoIGRvZXNu
+J3Qgc3VwcG9ydCBydW50aW1lIHN1c3BlbmQsIHdpbGwgYWRkIGl0IGluIG5leHQNCnZlcnNpb24s
+IHRoYW5rcyBhIGxvdA0KDQo+IA0KPiANCj4gPiArCQkJcGh5cyA9IDwmdTJwb3J0MCBQSFlfVFlQ
+RV9VU0IyPiwgPCZ1M3BvcnQwDQo+ID4gUEhZX1RZUEVfVVNCMz47DQo+ID4gKwkJCWFzc2lnbmVk
+LWNsb2NrcyA9IDwmdG9wY2tnZW4gQ0xLX1RPUF9VU0JfVE9QPiwNCj4gPiArCQkJCQkgIDwmdG9w
+Y2tnZW4NCj4gPiBDTEtfVE9QX1NTVVNCX1hIQ0k+Ow0KPiA+ICsJCQlhc3NpZ25lZC1jbG9jay1w
+YXJlbnRzID0gPCZ0b3Bja2dlbg0KPiA+IENMS19UT1BfVU5JVlBMTF9ENV9END4sDQo+ID4gKwkJ
+CQkJCSA8JnRvcGNrZ2VuDQo+ID4gQ0xLX1RPUF9VTklWUExMX0Q1X0Q0PjsNCj4gPiArCQkJY2xv
+Y2tzID0gPCZpbmZyYWNmZ19hbyBDTEtfSU5GUkFfQU9fU1NVU0I+LA0KPiA+ICsJCQkJIDwmaW5m
+cmFjZmdfYW8NCj4gPiBDTEtfSU5GUkFfQU9fU1NVU0JfWEhDST4sDQo+ID4gKwkJCQkgPCZ0b3Bj
+a2dlbiBDTEtfVE9QX1NTVVNCX1JFRj4sDQo+ID4gKwkJCQkgPCZhcG1peGVkc3lzIENMS19BUE1J
+WEVEX1VTQjFQTEw+Ow0KPiA+ICsJCQljbG9jay1uYW1lcyA9ICJzeXNfY2siLCAieGhjaV9jayIs
+ICJyZWZfY2siLA0KPiA+ICJtY3VfY2siOw0KPiA+ICsJCQltZWRpYXRlayxzeXNjb24td2FrZXVw
+ID0gPCZwZXJpY2ZnIDB4NDAwIDEwMz47DQo+ID4gKwkJCXdha2V1cC1zb3VyY2U7DQo+ID4gKwkJ
+CXN0YXR1cyA9ICJkaXNhYmxlZCI7DQo+ID4gKwkJfTsNCj4gPiArDQo+ID4gICAJCW1tYzA6IG1t
+Y0AxMTIzMDAwMCB7DQo+ID4gICAJCQljb21wYXRpYmxlID0gIm1lZGlhdGVrLG10ODE5NS1tbWMi
+LA0KPiA+ICJtZWRpYXRlayxtdDgxOTItbW1jIjsNCj4gPiAgIAkJCXJlZyA9IDwwIDB4MTEyMzAw
+MDAgMCAweDEwMDAwPiwNCj4gPiBAQCAtODQzLDYgKzg2NCw2NCBAQA0KPiA+ICAgCQkJc3RhdHVz
+ID0gImRpc2FibGVkIjsNCj4gPiAgIAkJfTsNCj4gPiAgIA0KPiA+ICsJCXhoY2kxOiB1c2JAMTEy
+OTAwMDAgew0KPiA+ICsJCQljb21wYXRpYmxlID0gIm1lZGlhdGVrLG10ODE5NS14aGNpIiwNCj4g
+PiAibWVkaWF0ZWssbXRrLXhoY2kiOw0KPiA+ICsJCQlyZWcgPSA8MCAweDExMjkwMDAwIDAgMHgx
+MDAwPiwgPDAgMHgxMTI5M2UwMCAwDQo+ID4gMHgwMTAwPjsNCj4gPiArCQkJcmVnLW5hbWVzID0g
+Im1hYyIsICJpcHBjIjsNCj4gPiArCQkJaW50ZXJydXB0cyA9IDxHSUNfU1BJIDUzMCBJUlFfVFlQ
+RV9MRVZFTF9ISUdIDQo+ID4gMD47DQo+IA0KPiAJCQlpbnRlcnJ1cHRzLWV4dGVuZGVkID0gPCZn
+aWMgR0lDX1NQSSA1MzANCj4gSVJRX1RZUEVfTEVWRUxfSElHSCAwPiwNCj4gDQo+IAkJCQkJICAg
+ICAgPCZwaW8gMjE4DQo+IElSUV9UWVBFX0xFVkVMX0xPVz47DQo+IA0KPiA+ICsJCQlwaHlzID0g
+PCZ1MnBvcnQxIFBIWV9UWVBFX1VTQjI+Ow0KPiA+ICsJCQlhc3NpZ25lZC1jbG9ja3MgPSA8JnRv
+cGNrZ2VuDQo+ID4gQ0xLX1RPUF9VU0JfVE9QXzFQPiwNCj4gPiArCQkJCQkgIDwmdG9wY2tnZW4N
+Cj4gPiBDTEtfVE9QX1NTVVNCX1hIQ0lfMVA+Ow0KPiA+ICsJCQlhc3NpZ25lZC1jbG9jay1wYXJl
+bnRzID0gPCZ0b3Bja2dlbg0KPiA+IENMS19UT1BfVU5JVlBMTF9ENV9END4sDQo+ID4gKwkJCQkJ
+CSA8JnRvcGNrZ2VuDQo+ID4gQ0xLX1RPUF9VTklWUExMX0Q1X0Q0PjsNCj4gPiArCQkJY2xvY2tz
+ID0gPCZwZXJpY2ZnX2FvDQo+ID4gQ0xLX1BFUklfQU9fU1NVU0JfMVBfQlVTPiwNCj4gPiArCQkJ
+CSA8JnBlcmljZmdfYW8NCj4gPiBDTEtfUEVSSV9BT19TU1VTQl8xUF9YSENJPiwNCj4gPiArCQkJ
+CSA8JnRvcGNrZ2VuIENMS19UT1BfU1NVU0JfUDFfUkVGPiwNCj4gPiArCQkJCSA8JmFwbWl4ZWRz
+eXMgQ0xLX0FQTUlYRURfVVNCMVBMTD47DQo+ID4gKwkJCWNsb2NrLW5hbWVzID0gInN5c19jayIs
+ICJ4aGNpX2NrIiwgInJlZl9jayIsDQo+ID4gIm1jdV9jayI7DQo+ID4gKwkJCW1lZGlhdGVrLHN5
+c2Nvbi13YWtldXAgPSA8JnBlcmljZmcgMHg0MDAgMTA0PjsNCj4gPiArCQkJd2FrZXVwLXNvdXJj
+ZTsNCj4gPiArCQkJc3RhdHVzID0gImRpc2FibGVkIjsNCj4gPiArCQl9Ow0KPiA+ICsNCj4gPiAr
+CQl4aGNpMjogdXNiQDExMmEwMDAwIHsNCj4gPiArCQkJY29tcGF0aWJsZSA9ICJtZWRpYXRlayxt
+dDgxOTUteGhjaSIsDQo+ID4gIm1lZGlhdGVrLG10ay14aGNpIjsNCj4gPiArCQkJcmVnID0gPDAg
+MHgxMTJhMDAwMCAwIDB4MTAwMD4sIDwwIDB4MTEyYTNlMDAgMA0KPiA+IDB4MDEwMD47DQo+ID4g
+KwkJCXJlZy1uYW1lcyA9ICJtYWMiLCAiaXBwYyI7DQo+ID4gKwkJCWludGVycnVwdHMgPSA8R0lD
+X1NQSSA1MzMgSVJRX1RZUEVfTEVWRUxfSElHSA0KPiA+IDA+Ow0KPiA+ICsJCQlwaHlzID0gPCZ1
+MnBvcnQyIFBIWV9UWVBFX1VTQjI+Ow0KPiA+ICsJCQlhc3NpZ25lZC1jbG9ja3MgPSA8JnRvcGNr
+Z2VuDQo+ID4gQ0xLX1RPUF9VU0JfVE9QXzJQPiwNCj4gPiArCQkJCQkgIDwmdG9wY2tnZW4NCj4g
+PiBDTEtfVE9QX1NTVVNCX1hIQ0lfMlA+Ow0KPiA+ICsJCQlhc3NpZ25lZC1jbG9jay1wYXJlbnRz
+ID0gPCZ0b3Bja2dlbg0KPiA+IENMS19UT1BfVU5JVlBMTF9ENV9END4sDQo+ID4gKwkJCQkJCSA8
+JnRvcGNrZ2VuDQo+ID4gQ0xLX1RPUF9VTklWUExMX0Q1X0Q0PjsNCj4gPiArCQkJY2xvY2tzID0g
+PCZwZXJpY2ZnX2FvDQo+ID4gQ0xLX1BFUklfQU9fU1NVU0JfMlBfQlVTPiwNCj4gPiArCQkJCSA8
+JnBlcmljZmdfYW8NCj4gPiBDTEtfUEVSSV9BT19TU1VTQl8yUF9YSENJPiwNCj4gPiArCQkJCSA8
+JnRvcGNrZ2VuIENMS19UT1BfU1NVU0JfUDJfUkVGPjsNCj4gPiArCQkJY2xvY2stbmFtZXMgPSAi
+c3lzX2NrIiwgInhoY2lfY2siLCAicmVmX2NrIjsNCj4gPiArCQkJbWVkaWF0ZWssc3lzY29uLXdh
+a2V1cCA9IDwmcGVyaWNmZyAweDQwMCAxMDU+Ow0KPiA+ICsJCQlzdGF0dXMgPSAiZGlzYWJsZWQi
+Ow0KPiA+ICsJCX07DQo+ID4gKw0KPiA+ICsJCXhoY2kzOiB1c2JAMTEyYjAwMDAgew0KPiA+ICsJ
+CQljb21wYXRpYmxlID0gIm1lZGlhdGVrLG10ODE5NS14aGNpIiwNCj4gPiAibWVkaWF0ZWssbXRr
+LXhoY2kiOw0KPiA+ICsJCQlyZWcgPSA8MCAweDExMmIwMDAwIDAgMHgxMDAwPiwgPDAgMHgxMTJi
+M2UwMCAwDQo+ID4gMHgwMTAwPjsNCj4gPiArCQkJcmVnLW5hbWVzID0gIm1hYyIsICJpcHBjIjsN
+Cj4gPiArCQkJaW50ZXJydXB0cyA9IDxHSUNfU1BJIDUzNiBJUlFfVFlQRV9MRVZFTF9ISUdIDQo+
+ID4gMD47DQo+IA0KPiAJCQlpbnRlcnJ1cHRzLWV4dGVuZGVkID0gPCZnaWMgR0lDX1NQSSA1MzYN
+Cj4gSVJRX1RZUEVfTEVWRUxfSElHSCAwPiwNCj4gDQo+IAkJCQkJICAgICAgPCZwaW8gMjIxDQo+
+IElSUV9UWVBFX0xFVkVMX0xPVz47DQo+IA0KPiAJCQlpbnRlcnJ1cHRzLW5hbWVzID0gImhvc3Qi
+LCAid2FrZXVwIjsNCj4gDQo+ID4gKwkJCXBoeXMgPSA8JnUycG9ydDMgUEhZX1RZUEVfVVNCMj47
+DQo+ID4gKwkJCWFzc2lnbmVkLWNsb2NrcyA9IDwmdG9wY2tnZW4NCj4gPiBDTEtfVE9QX1VTQl9U
+T1BfM1A+LA0KPiA+ICsJCQkJCSAgPCZ0b3Bja2dlbg0KPiA+IENMS19UT1BfU1NVU0JfWEhDSV8z
+UD47DQo+ID4gKwkJCWFzc2lnbmVkLWNsb2NrLXBhcmVudHMgPSA8JnRvcGNrZ2VuDQo+ID4gQ0xL
+X1RPUF9VTklWUExMX0Q1X0Q0PiwNCj4gPiArCQkJCQkJIDwmdG9wY2tnZW4NCj4gPiBDTEtfVE9Q
+X1VOSVZQTExfRDVfRDQ+Ow0KPiA+ICsJCQljbG9ja3MgPSA8JnBlcmljZmdfYW8NCj4gPiBDTEtf
+UEVSSV9BT19TU1VTQl8zUF9CVVM+LA0KPiA+ICsJCQkJIDwmcGVyaWNmZ19hbw0KPiA+IENMS19Q
+RVJJX0FPX1NTVVNCXzNQX1hIQ0k+LA0KPiA+ICsJCQkJIDwmdG9wY2tnZW4gQ0xLX1RPUF9TU1VT
+Ql9QM19SRUY+Ow0KPiA+ICsJCQljbG9jay1uYW1lcyA9ICJzeXNfY2siLCAieGhjaV9jayIsICJy
+ZWZfY2siOw0KPiA+ICsJCQltZWRpYXRlayxzeXNjb24td2FrZXVwID0gPCZwZXJpY2ZnIDB4NDAw
+IDEwNj47DQo+ID4gKwkJCXdha2V1cC1zb3VyY2U7DQo+ID4gKwkJCXVzYjItbHBtLWRpc2FibGU7
+DQo+ID4gKwkJCXN0YXR1cyA9ICJkaXNhYmxlZCI7DQo+ID4gKwkJfTsNCj4gPiArDQo+ID4gICAJ
+CW5vcl9mbGFzaDogbm9yQDExMzJjMDAwIHsNCj4gPiAgIAkJCWNvbXBhdGlibGUgPSAibWVkaWF0
+ZWssbXQ4MTk1LW5vciIsDQo+ID4gIm1lZGlhdGVrLG10ODE3My1ub3IiOw0KPiA+ICAgCQkJcmVn
+ID0gPDAgMHgxMTMyYzAwMCAwIDB4MTAwMD47DQo+ID4gDQo+IA0KPiBSZWdhcmRzLA0KPiAtIEFu
+Z2Vsbw0K
 
-It's indeed set for the hub's downstream facing port, and that's why
-wake up the hub and check its ports can still find connect event.
-But I can't find anywhere stats how hub's upstream facing port should be set.
-
->
-> > > So because of this buggy hub, you now want to wake up _every_ hub in the
-> > > system whenever any wakeup event occurs?  Is this really a good idea?
-> > > Is there a better way to solve the problem, such as a special quirk
-> > > flag?
-> >
-> > If there's no other activities, the USB hub should go back to suspend
-> > immediately, so the impact is minimal.
->
-> Not immediately, but after a few seconds.  However your patch will affect every
-> hub, not just the one that the new device was plugged into.
-
-Yes, that's the case here.
-
->
-> > I've seen several similar bug reports so I think this solution should
-> > be applied for all hubs.
->
-> Maybe those bug reports all had something in common, such as the type of hub or
-> the bus speed they were running at.  Did you check?
-
-The hub in question is a SuperSpeed hub. Let me scan bug reports on
-Launchpad and see what I can find.
-
-Kai-Heng
-
->
-> Alan Stern
