@@ -2,27 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED533470C08
+	by mail.lfdr.de (Postfix) with ESMTP id 72252470C07
 	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 21:46:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243024AbhLJUuR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Dec 2021 15:50:17 -0500
-Received: from mxout03.lancloud.ru ([45.84.86.113]:41040 "EHLO
+        id S242920AbhLJUuQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Dec 2021 15:50:16 -0500
+Received: from mxout03.lancloud.ru ([45.84.86.113]:41048 "EHLO
         mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238771AbhLJUuP (ORCPT
+        with ESMTP id S236414AbhLJUuP (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 15:50:15 -0500
 Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 642A7208D325
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 10556208D329
 Received: from LanCloud
 Received: from LanCloud
 Received: from LanCloud
 From:   Sergey Shtylyov <s.shtylyov@omp.ru>
 To:     <linux-usb@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-Subject: [PATCH v3 1/6] usb: gadget: udc: gr: fix deferred probing
-Date:   Fri, 10 Dec 2021 23:46:29 +0300
-Message-ID: <20211210204634.8182-2-s.shtylyov@omp.ru>
+        Alan Stern <stern@rowland.harvard.edu>
+CC:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH v3 2/6] usb: host: ehci-atmel: fix deferred probing
+Date:   Fri, 10 Dec 2021 23:46:30 +0300
+Message-ID: <20211210204634.8182-3-s.shtylyov@omp.ru>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20211210204634.8182-1-s.shtylyov@omp.ru>
 References: <20211210204634.8182-1-s.shtylyov@omp.ru>
@@ -44,40 +48,33 @@ can safely ignore it...
 
 Fixes: 9ec36cafe43b ("of/irq: do irq resolution in platform_get_irq")
 Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 ---
 Changes in version 3:
-- corrected the "Fixes:" tag.
+- corrected the "Fixes:" tag;
+- added Alan's ACK.
 
 Changes in version 2:
-- updated the patch description on treating IRQ0.
+- removed the check for IRQ0, updated the patch description accordingly.
 
- drivers/usb/gadget/udc/gr_udc.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/usb/host/ehci-atmel.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/gr_udc.c b/drivers/usb/gadget/udc/gr_udc.c
-index 4b35739d3695..4aa5246a77e5 100644
---- a/drivers/usb/gadget/udc/gr_udc.c
-+++ b/drivers/usb/gadget/udc/gr_udc.c
-@@ -2136,15 +2136,15 @@ static int gr_probe(struct platform_device *pdev)
- 		return PTR_ERR(regs);
+diff --git a/drivers/usb/host/ehci-atmel.c b/drivers/usb/host/ehci-atmel.c
+index 05d41fd65f25..bc3fdb588e6b 100644
+--- a/drivers/usb/host/ehci-atmel.c
++++ b/drivers/usb/host/ehci-atmel.c
+@@ -104,8 +104,8 @@ static int ehci_atmel_drv_probe(struct platform_device *pdev)
+ 	pr_debug("Initializing Atmel-SoC USB Host Controller\n");
  
- 	dev->irq = platform_get_irq(pdev, 0);
--	if (dev->irq <= 0)
--		return -ENODEV;
-+	if (dev->irq < 0)
-+		return dev->irq;
- 
- 	/* Some core configurations has separate irqs for IN and OUT events */
- 	dev->irqi = platform_get_irq(pdev, 1);
- 	if (dev->irqi > 0) {
- 		dev->irqo = platform_get_irq(pdev, 2);
--		if (dev->irqo <= 0)
--			return -ENODEV;
-+		if (dev->irqo < 0)
-+			return dev->irqo;
- 	} else {
- 		dev->irqi = 0;
+ 	irq = platform_get_irq(pdev, 0);
+-	if (irq <= 0) {
+-		retval = -ENODEV;
++	if (irq < 0) {
++		retval = irq;
+ 		goto fail_create_hcd;
  	}
+ 
 -- 
 2.26.3
 
