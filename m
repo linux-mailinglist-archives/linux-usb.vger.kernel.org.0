@@ -2,111 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D47346F8B4
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 02:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E164346F960
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 03:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233668AbhLJBsY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Dec 2021 20:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S236133AbhLJCye (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Dec 2021 21:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233734AbhLJBsX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 20:48:23 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599C8C061A32
-        for <linux-usb@vger.kernel.org>; Thu,  9 Dec 2021 17:44:49 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so8205921otl.3
-        for <linux-usb@vger.kernel.org>; Thu, 09 Dec 2021 17:44:49 -0800 (PST)
+        with ESMTP id S236078AbhLJCyd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 21:54:33 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9D5C0617A1
+        for <linux-usb@vger.kernel.org>; Thu,  9 Dec 2021 18:50:58 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so8303710otj.7
+        for <linux-usb@vger.kernel.org>; Thu, 09 Dec 2021 18:50:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+eO70K6UpvUWOOZ26eI9byqpsVA1ZqLATKw9Ubqfa08=;
-        b=vwyKOTWHjgLrit+GLm9IJ66Zn1fCOfM1L+YBmfjIKF1WCwaK3dzS3Olklz2j83VtRo
-         T4jlfQ0ubaLPKehFAlrC5ij37ETxxxsBxSQnoBTcj8pr2AENLzTyfqQps4Lke9spO05l
-         xk4vf9rHG9Ijo3AkNslw7pY7KKVDKQ5kmk/XOcky9KW+dCp1njcukQO+fH1g5yqUNVkm
-         eq2GwY8m1SEXsiDwtX55G9M3F0XmWaufzrVVBA9fIbADOXtbBGVaLVD7JUHJhraR9vAY
-         ClB67OR58t4WytNRPFup+KydBuZ0oEjeceswc8C+g4c3wFfNF5RQoLM+yd69ac1wWbi1
-         nugg==
+        bh=bIjkLnUs4ytDMRNkIDJbogMxp0jQrojkoozUNc/LbBw=;
+        b=V3RChZflC5h6ijyqt3OnENG037HGQIF3vAfQD0yc1K7IHIZiLn8j3qLWYVFwe3n/n8
+         1o1yONmdzIPQXNezC2BtIIbjV6ze+y8Tt7oZagsUe1kRNFk0i0xdQXLkK2TzW62Aieax
+         ZWu88pPBv3EKvQyDW7SUEgx93TSHiTomuU4U+Z5RkF+aEoUYBoXEhuIPyP1p09F2paUC
+         U/1Ks/sEnYOPYv5zM2qHQZvcgIA0Xq+Zn41I7uppQqIJU8K5G8cFxgKIPzBBJm5dpX/K
+         oi0x4qhNyTGB6K8bD9L6lyUe5DCDgF/g2I3GshnQ3r8sXKiaYgAf3VDSDLD/d91o2mjX
+         nFcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+eO70K6UpvUWOOZ26eI9byqpsVA1ZqLATKw9Ubqfa08=;
-        b=XLlSdT2S/AJY5iachkRfWsrp9DmHRWcrzByXbQIuSY/QOjvDKSZyiQZO/eeY1/ZgIa
-         Xk+0FA+Ug32sx1bHNWwTO7mRBm5bQKlg57Vc0b6Rrs13o7d7MsMD1RwIHFfywMf5O3UN
-         GWmQA8ixAIuDeIX1Yy4nFd2Qo4/RkBwEzhYRRaHwjWNC9ddDxbgfn/3e5sJRNQZas8Wv
-         TXyN1OggPl7orQk0Tz63zpBLJ1HyKFdJhKJowegWhz3KQAzA/2l3wYSmT5HxNv+i7aYK
-         EQIAj/vrWJmhT8fDSJ1m1MUC0GUf/GRUz21R5TJJYHmevnxqgU9AGIeM78MxkYFzB8vj
-         hA3w==
-X-Gm-Message-State: AOAM531V4rnH+rqQqxqUhAquCCuh/67BTQstEC4mMFPnNnGWC1b+Kxny
-        UcJlW+spDcXQRefT7zxSTpr2GShUN8+px/D0s1G2Hg==
-X-Google-Smtp-Source: ABdhPJwGGn/Iig24LM6iz+DDamWnJx6uVjLFPjLZrobVVHzAlLnv6hIu3SxbsvwG+AZSo3Ul47rGkcksDTGd/v0hlu4=
-X-Received: by 2002:a9d:74d0:: with SMTP id a16mr8654576otl.237.1639100688280;
- Thu, 09 Dec 2021 17:44:48 -0800 (PST)
+        bh=bIjkLnUs4ytDMRNkIDJbogMxp0jQrojkoozUNc/LbBw=;
+        b=6xLUQHDpeC8G5XHnXFX2zyULn7D4Y7LHdFPr1F/KI+6H6LfR5EhfJL/mHKT+vOtR+Y
+         TWTG5cLN5pQIvFG+4e0ulMwiGsZeoJXMPBrL1JV6ADyBA2KvIcd87S86E9F5te8FOkc0
+         /BsZ7S5VnnMDMO2OS1YHP0iMikOI1GLMl4yOQjqO+v87DdptLZe5iiuul2ikhr4c6eG0
+         3N7SmE91ivVSYHLaNdiwly9Mj2Necuu20fCLyBuvIFR0jc+qjqGJRHrzyin4ala1ZpFb
+         2P0v0ZqfZS5pusXFpRzmOXlzNca8nyNfqszPyOzt+NgSC3ENdVN+cBfXGb87cewfuWYf
+         ACVg==
+X-Gm-Message-State: AOAM531d/YYksQlrBfY2BidFba6O43OpQs1PLbqSg6yXCWNI3thfDWWU
+        aZG/fMoGukWqKetLYdUOK9MFI8HZbNwGzH8Kdsg20y2C
+X-Google-Smtp-Source: ABdhPJwbt+/behu8xQMgO+XFJW0YRSqBruRjFZ2CU05ep+otoIIrzD9WnJTGYZzA4dUUVL4Wlw6AvrxNZzEW0wlrD5M=
+X-Received: by 2002:a9d:6c14:: with SMTP id f20mr9314711otq.141.1639104657707;
+ Thu, 09 Dec 2021 18:50:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20211208003727.3596577-1-f.fainelli@gmail.com> <20211208003727.3596577-6-f.fainelli@gmail.com>
-In-Reply-To: <20211208003727.3596577-6-f.fainelli@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 10 Dec 2021 02:44:36 +0100
-Message-ID: <CACRpkdYmCT9imMFY_0ZHebAYj40D3m48X+DZnjPUGgAqHEpZqg@mail.gmail.com>
-Subject: Re: [PATCH v3 05/15] dt-bindings: gpio: Convert Broadcom STB GPIO to YAML
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     devicetree@vger.kernel.org, Gregory Fong <gregory.0xf0@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
-        <linux-mmc@vger.kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
+References: <CALgCfKVfzS27XB0AufBUhb8xnfq5dWhESuu1KfxycQ=EnUnp+g@mail.gmail.com>
+ <984b7409-caaa-8ba6-8d5c-beff5f107628@suse.com> <CALgCfKX3rFUFTOfXsbLUaLdfcXA9oALhKLS9zfvtNCu8DemLAw@mail.gmail.com>
+ <672cf564-79f4-f329-0e20-fdcbbcfd0d11@suse.com>
+In-Reply-To: <672cf564-79f4-f329-0e20-fdcbbcfd0d11@suse.com>
+From:   Maggie Maralit <maggie.roxas@gmail.com>
+Date:   Fri, 10 Dec 2021 10:50:50 +0800
+Message-ID: <CALgCfKXNb2=LC3YVJ_WepFuaWp2=HtYVCCE54pHDDg1_=6ipYQ@mail.gmail.com>
+Subject: Re: An inquiry on supporting USB CDC ACM on Host PC as USB Host/Master
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 1:37 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
+Hi Oliver,
 
-> Convert the Broadcom STB GPIO Device Tree binding to YAML to help with
-> validation.
+These are all noted and understood.
+Again, thank you for all your answers on this!
+
+Regards,
+Maggie
+
+On Thu, Dec 9, 2021 at 11:29 PM Oliver Neukum <oneukum@suse.com> wrote:
 >
-> Acked-by: Gregory Fong <gregory.0xf0@gmail.com>
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-
-Looks good to me.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+>
+> On 09.12.21 15:24, Maggie Maralit wrote:
+> Hi,
+> > My questions are:
+> > 1. With CONFIG_USB_ACM very common and useful, why is it not enabled
+> > by default in most platforms with USB ports like the x86_64 (normal
+> > for laptops and Intel NUCs)?
+>
+> The upstream config is supposed to be minimal. Doing optimal
+> configs is a task for distributions or people who compile their own kernel.
+>
+> > 2. Is there any rule or official statement from Linux Kernel
+> > maintainers/experts, highly recommending platform developers (or
+> > specific Ubuntu releases) to support this? (if there is, may I have a
+> > link of the documentation mentioning such?)
+> That is Ubuntu's job.
+> > 3. And is there a possibility for that module to get installed in the
+> > Linux Kernel just by the usual Linux commands (eg, "apt get
+> > update/upgrade")?
+> >
+> That question depends on your distribution. I suppose every sane general
+> purpose Linux distribution will compile and deliver cdc-acm, but I haven't
+> checked.
+>
+> The configuration of your running kernel is in /proc/config.gz and is chosen
+> by the developer's of Ubuntu if you are running their kernel.
+>
+>     HTH
+>         Oliver
+>
