@@ -2,290 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4DB4708CC
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 19:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9EC4709F1
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 20:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245385AbhLJSeT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Dec 2021 13:34:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245419AbhLJSeP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 13:34:15 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93755C061A32
-        for <linux-usb@vger.kernel.org>; Fri, 10 Dec 2021 10:30:40 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id o4so9145079pfp.13
-        for <linux-usb@vger.kernel.org>; Fri, 10 Dec 2021 10:30:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1vbLoZFeX18k2i89+E/2LJ8CE62fO5bOF5Z5zzeYz9Y=;
-        b=dKjcu0tSgEQnn3G+sesO429TiEEhC/e1BrpV9ViYAGZdZ4k5O1J8aU0z7bvuS8I6WT
-         09Ocdk7P7+1DuCwmEyBcnPPfaKsrqAw19nwOA1w/BjpZCmvph6lkuK4sTlIFWqshyrM3
-         wiJLdbXRK+RcikjIeHOudRG4Vr4JxSNeV/xQ4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1vbLoZFeX18k2i89+E/2LJ8CE62fO5bOF5Z5zzeYz9Y=;
-        b=vA6Qbi8R9wciO6lalNKb9pNElaPRzZi1k/CPEsSOONbLAZOa1US2mu4tVEAyLKBUxZ
-         n/LVrpAeRM78tOx5tJhM5e7QPKeqjMCuCUdlZGuGqYTHtViZLk9plQ3WZuN2+tINmkss
-         oyHs/ne0L6jI43Kktqsp2uL9GNlh/PiS5CmnfWOdGIsjs7BZqPMQHvluc2xNhTrzE61j
-         hzdm78vRxp6wLsGQHNeaO8G3kvdOb0rB+BazWBloPKWMGlbS7pVikGFo03O5hikPXvCN
-         sMq9apaMagPltS561veduusVk/a7S+6Q+bZWuTAZo/+FdyM6/57oSd+dyR4r9IabQBuT
-         rP5A==
-X-Gm-Message-State: AOAM531dX3axct2q966qXVIOuwFDntS3iCIQd7MMCqcZZVSqkZAhNosZ
-        EGsdHMzfkTsAQp+ZjRNtv9kS3w==
-X-Google-Smtp-Source: ABdhPJzKbfNUfNrvfamlxPPEgL0lRrazYIHnF+DpjN4vzrxLbzynSp7vd4fDyHEOFVxq3CmBdp2fwQ==
-X-Received: by 2002:a63:6e0c:: with SMTP id j12mr28816807pgc.117.1639161040018;
-        Fri, 10 Dec 2021 10:30:40 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:d386:8bb1:aaa7:a294])
-        by smtp.gmail.com with UTF8SMTPSA id u17sm1811909pfk.179.2021.12.10.10.30.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 10:30:39 -0800 (PST)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     Peter Chen <peter.chen@kernel.org>, linux-kernel@vger.kernel.org,
-        Bastien Nocera <hadess@hadess.net>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v18 5/5] arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
-Date:   Fri, 10 Dec 2021 10:30:21 -0800
-Message-Id: <20211210102923.v18.5.Ie0d2c1214b767bb5551dd4cad38398bd40e4466f@changeid>
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-In-Reply-To: <20211210183021.3500376-1-mka@chromium.org>
-References: <20211210183021.3500376-1-mka@chromium.org>
+        id S232265AbhLJTQ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Dec 2021 14:16:29 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:59919 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S231135AbhLJTQ3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 14:16:29 -0500
+Received: (qmail 648058 invoked by uid 1000); 10 Dec 2021 14:12:53 -0500
+Date:   Fri, 10 Dec 2021 14:12:53 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>
+Subject: Re: [PATCH] usb: hub: avoid warm port reset during USB3 disconnect
+Message-ID: <YbOmtWZueFNO3s0w@rowland.harvard.edu>
+References: <20211210111653.1378381-1-mathias.nyman@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211210111653.1378381-1-mathias.nyman@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add nodes for the onboard USB hub on trogdor devices. Remove the
-'always-on' property from the hub regulator, since the regulator
-is now managed by the onboard_usb_hub driver.
+On Fri, Dec 10, 2021 at 01:16:53PM +0200, Mathias Nyman wrote:
+> During disconnect USB-3 ports often go via SS.Inactive link error state
+> before the missing terminations are noticed, and link finally goes to
+> RxDetect state
+> 
+> Avoid immediately warm-resetting ports in SS.Inactive state.
+> Let ports settle for a while and re-read the link status a few times 20ms
+> apart to see if the ports transitions out of SS.Inactive.
+> 
+> According to USB 3.x spec 7.5.2, a port in SS.Inactive should
+> automatically check for missing far-end receiver termination every
+> 12 ms (SSInactiveQuietTimeout)
+> 
+> The futile multiple warm reset retries of a disconnected device takes
+> a lot of time, also the resetting of a removed devices has caused cases
+> where the reset bit got stuck for a long time on xHCI roothub.
+> This lead to issues in detecting new devices connected to the same port
+> shortly after.
+> 
+> Tested-by: Mark Pearson <markpearson@lenovo.com>
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> ---
+>  drivers/usb/core/hub.c | 24 +++++++++++++++++++-----
+>  1 file changed, 19 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 00070a8a6507..e907dfa0ca6d 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -2777,6 +2777,8 @@ static unsigned hub_is_wusb(struct usb_hub *hub)
+>  #define PORT_INIT_TRIES		4
+>  #endif	/* CONFIG_USB_FEW_INIT_RETRIES */
+>  
+> +#define DETECT_DISCONNECT_TRIES 5
+> +
+>  #define HUB_ROOT_RESET_TIME	60	/* times are in msec */
+>  #define HUB_SHORT_RESET_TIME	10
+>  #define HUB_BH_RESET_TIME	50
+> @@ -5543,6 +5545,7 @@ static void port_event(struct usb_hub *hub, int port1)
+>  	struct usb_device *udev = port_dev->child;
+>  	struct usb_device *hdev = hub->hdev;
+>  	u16 portstatus, portchange;
+> +	int i = 0;
+>  
+>  	connect_change = test_bit(port1, hub->change_bits);
+>  	clear_bit(port1, hub->event_bits);
+> @@ -5619,17 +5622,27 @@ static void port_event(struct usb_hub *hub, int port1)
+>  		connect_change = 1;
+>  
+>  	/*
+> -	 * Warm reset a USB3 protocol port if it's in
+> -	 * SS.Inactive state.
+> +	 * Avoid trying to recover a USB3 SS.Inactive port with a warm reset if
+> +	 * the device was disconnected. A 12ms disconnect detect timer in
+> +	 * SS.Inactive state transitions the port to RxDetect automatically.
+> +	 * SS.Inactive link error state is common during device disconnect.
+>  	 */
+> -	if (hub_port_warm_reset_required(hub, port1, portstatus)) {
+> -		dev_dbg(&port_dev->dev, "do warm reset\n");
+> -		if (!udev || !(portstatus & USB_PORT_STAT_CONNECTION)
+> +	while (hub_port_warm_reset_required(hub, port1, portstatus)) {
+> +		if ((i++ < DETECT_DISCONNECT_TRIES) && udev) {
+> +			u16 unused;
+> +
+> +			msleep(20);
+> +			hub_port_status(hub, port1, &portstatus, &unused);
+> +			dev_dbg(&port_dev->dev, "Wait for inactive link disconnect detect\n");
+> +			continue;
 
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
----
+This may be bikeshedding, and you should feel free to ignore the 
+following suggestion if you dislike it.
 
-Changes in v18:
-- also adjust config for pompom rev1
+Don't you think it would be a lot clearer if the new "while" loop 
+covered only the code above, and the two sections below (port-only or 
+full-device warm reset) came after the end of the loop?  I had to reread 
+the patch a few times to figure out what it was really doing.
 
-Changes in v17:
-- none
+Alan Stern
 
-Changes in v16:
-- none
-
-Changes in v15:
-- none
-
-Changes in v14:
-- none
-
-Changes in v13:
-- none
-
-Changes in v12:
-- none
-
-Changes in v11:
-- rebased on qcom/arm64-for-5.14 (with the rest of the series)
-
-Changes in v10:
-- keep 'regulator-boot-on' property
-- updated commit message
-
-Changes in v9:
-- none
-
-Changes in v8:
-- none
-
-Changes in v7:
-- rebased on qcom/arm64-for-5.13 (with the rest of the series)
-
-Changes in v6:
-- added 'companion-hub' entry to both USB devices
-- added 'vdd-supply' also to hub@2
-
-Changes in v5:
-- patch added to the series
-
- .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts | 19 ++++++++-----------
- .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts | 12 +++++-------
- .../dts/qcom/sc7180-trogdor-pompom-r1.dts     | 11 ++++-------
- .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts | 19 ++++++++-----------
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  | 19 ++++++++++++++++++-
- 5 files changed, 43 insertions(+), 37 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-index 30e3e769d2b4..5fb8e12af1a0 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-@@ -14,17 +14,6 @@ / {
- 	compatible = "google,lazor-rev0", "qcom,sc7180";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
--};
--
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
--};
--
- &sn65dsi86_out {
- 	/*
- 	 * Lane 0 was incorrectly mapped on the cable, but we've now decided
-@@ -33,3 +22,11 @@ &sn65dsi86_out {
- 	 */
- 	lane-polarities = <1 0>;
- };
-+
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-index c2ef06367baf..1dae714250f5 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-@@ -14,13 +14,11 @@ / {
- 	compatible = "google,lazor-rev1", "google,lazor-rev2", "qcom,sc7180";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
-+
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
- 
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
-index 76a130bad60a..c913bb5677e5 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
-@@ -34,13 +34,10 @@ &pm6150_adc_tm {
- 	/delete-node/ charger-thermistor@0;
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
- 
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-index 457c25499863..8477c82c410a 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-@@ -43,17 +43,6 @@ &panel {
- 	compatible = "auo,b116xa01";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
--};
--
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
--};
--
- &sdhc_2 {
- 	status = "okay";
- };
-@@ -62,6 +51,14 @@ &trackpad {
- 	interrupts = <58 IRQ_TYPE_EDGE_FALLING>;
- };
- 
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
- /* PINCTRL - modifications to sc7180-trogdor.dtsi */
- 
- &trackpad_int_1v8_odl {
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-index d4f4441179fc..cd31460b3bd6 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-@@ -202,7 +202,6 @@ pp3300_hub: pp3300-hub {
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&en_pp3300_hub>;
- 
--		regulator-always-on;
- 		regulator-boot-on;
- 
- 		vin-supply = <&pp3300_a>;
-@@ -839,6 +838,24 @@ &usb_1 {
- 
- &usb_1_dwc3 {
- 	dr_mode = "host";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	/* 2.0 hub on port 1 */
-+	usb_hub_2_0: hub@1 {
-+		compatible = "usbbda,5411";
-+		reg = <1>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_3_0>;
-+	};
-+
-+	/* 3.0 hub on port 2 */
-+	usb_hub_3_0: hub@2 {
-+		compatible = "usbbda,411";
-+		reg = <2>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_2_0>;
-+	};
- };
- 
- &usb_1_hsphy {
--- 
-2.34.1.173.g76aa8bc2d0-goog
-
+> +		} else if (!udev || !(portstatus & USB_PORT_STAT_CONNECTION)
+>  				|| udev->state == USB_STATE_NOTATTACHED) {
+> +			dev_dbg(&port_dev->dev, "do warm reset, port only\n");
+>  			if (hub_port_reset(hub, port1, NULL,
+>  					HUB_BH_RESET_TIME, true) < 0)
+>  				hub_port_disable(hub, port1, 1);
+>  		} else {
+> +			dev_dbg(&port_dev->dev, "do warm reset, full device\n");
+>  			usb_unlock_port(port_dev);
+>  			usb_lock_device(udev);
+>  			usb_reset_device(udev);
+> @@ -5637,6 +5650,7 @@ static void port_event(struct usb_hub *hub, int port1)
+>  			usb_lock_port(port_dev);
+>  			connect_change = 0;
+>  		}
+> +		break;
+>  	}
+>  
+>  	if (connect_change)
+> -- 
+> 2.25.1
+> 
