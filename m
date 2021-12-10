@@ -2,78 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1B246FD08
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 09:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DDD146FDB8
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 10:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238757AbhLJI4C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Dec 2021 03:56:02 -0500
-Received: from cable.insite.cz ([84.242.75.189]:52393 "EHLO cable.insite.cz"
+        id S236371AbhLJJaM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Dec 2021 04:30:12 -0500
+Received: from mga17.intel.com ([192.55.52.151]:37032 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231728AbhLJI4C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 10 Dec 2021 03:56:02 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id 5CECFA1A3D403;
-        Fri, 10 Dec 2021 09:52:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1639126346; bh=BfXpO1ramU7Jhp0Tq7qENbdUjofBbAmGHFhS/AXDY88=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L+1WbD7KAD0ZYbH0XaHUkT8PQK0MCInyA9qdPZv1C8kXUOOcQVUUa/hZMm6bi6ucz
-         zBZMlJtOpF+6wfdYQbQ5j3nsKNumL82nOygxFaGiZbVh5CU7JAShtOFwH2gbhWka6O
-         VRbrA6BSAL+a2NvqS1TVLkqxXpx/tB7vvtWXcanY=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xqjp5Xn6CH0h; Fri, 10 Dec 2021 09:52:20 +0100 (CET)
-Received: from precision.doma (dustin.pilsfree.net [81.201.58.138])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 9491FA1A3D402;
-        Fri, 10 Dec 2021 09:52:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1639126340; bh=BfXpO1ramU7Jhp0Tq7qENbdUjofBbAmGHFhS/AXDY88=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o3LW/Y1YkNtMSoYbDu9p5b5hQPwFUd4HgZTwRm/GU2AMImq250Jcdp7Zils/birFC
-         ZvEAEkTSAMAHJ+WN//9k0m2cxRM8LjG9HpnnFGnm6NgV8VaAQ5ymj/dL74nkJ/8t6I
-         LcQF9n+T0Kc/3ZePAqWSunh6SZSJjKXiRvI2SYgE=
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Pavel Hofman <pavel.hofman@ivitera.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 2/2] usb: core: config: using bit mask instead of individual bits
-Date:   Fri, 10 Dec 2021 09:52:19 +0100
-Message-Id: <20211210085219.16796-2-pavel.hofman@ivitera.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211210085219.16796-1-pavel.hofman@ivitera.com>
-References: <20211210085219.16796-1-pavel.hofman@ivitera.com>
+        id S236305AbhLJJaL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 10 Dec 2021 04:30:11 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="219002710"
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="219002710"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 01:26:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="659501299"
+Received: from kuha.fi.intel.com ([10.237.72.166])
+  by fmsmga001.fm.intel.com with SMTP; 10 Dec 2021 01:26:33 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 10 Dec 2021 11:26:32 +0200
+Date:   Fri, 10 Dec 2021 11:26:32 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] acpi: Store _PLD information and convert users
+Message-ID: <YbMdSACYtmH0/UhE@kuha.fi.intel.com>
+References: <20211207143757.21895-1-heikki.krogerus@linux.intel.com>
+ <CACeCKaf3_sqGbqh22Qe+7xEcajCTZt=WziqtPuzgGxW=-TPXbg@mail.gmail.com>
+ <YbHVDikM6eodP/MR@kuha.fi.intel.com>
+ <CACeCKaeYRWxS1kPX6TvQHvn_5H_u-+MKWmdh5XQeCdZ-Wj93Hw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACeCKaeYRWxS1kPX6TvQHvn_5H_u-+MKWmdh5XQeCdZ-Wj93Hw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Using standard USB_EP_MAXP_MULT_MASK instead of individual bits for
-extracting multiple-transactions bits from wMaxPacketSize value.
+On Thu, Dec 09, 2021 at 11:45:27AM -0800, Prashant Malani wrote:
+> Hey Heikki,
+> 
+> On Thu, Dec 9, 2021 at 2:06 AM Heikki Krogerus
+> <heikki.krogerus@linux.intel.com> wrote:
+> >
+> > Hi,
+> >
+> > Thanks for testing these..
+> >
+> > On Wed, Dec 08, 2021 at 07:45:26PM -0800, Prashant Malani wrote:
+> > > Hi Heikki,
+> > >
+> > > On Tue, Dec 7, 2021 at 6:37 AM Heikki Krogerus
+> > > <heikki.krogerus@linux.intel.com> wrote:
+> > > >
+> > > > Hi,
+> > > >
+> > > > This removes the need for the drivers to always separately evaluate
+> > > > the _PLD. With the USB Type-C connector and USB port mapping this
+> > > > allows us to start using the component framework and remove the custom
+> > > > APIs.
+> > > >
+> > > > So far the only users of the _PLD information have been the USB
+> > > > drivers, but it seems it will be used also at least in some camera
+> > > > drivers later. These nevertheless touch mostly USB drivers.
+> > > >
+> > > > Rafael, is it still OK if Greg takes these?
+> > > >
+> > > > Prashant, can you test these?
+> > >
+> > > I've applied the patches to a system with the requisite _PLD entries
+> > > in firmware, and I'm not sure I can see the connectors getting created
+> > > correctly.
+> > >
+> > > My setup is:
+> > >
+> > > Chromebook ------> Dell WD19TB dock (in USB+DisplayPort Alternate
+> > > Mode) ----> USB Thumb drive.
+> > >
+> > > Here is the lsusb -t output before connecting the dock (omitting
+> > > unrelated busses):
+> > > localhost ~ # lsusb -t
+> > > /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/3p, 10000M/x2
+> > >
+> > > Here is the lsusb -t output (omitting unrelated busses):
+> > > localhost ~ # lsusb -t
+> > > /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/3p, 10000M/x2
+> > >     |__ Port 2: Dev 15, If 0, Class=Hub, Driver=hub/4p, 10000M
+> > >         |__ Port 3: Dev 16, If 0, Class=Hub, Driver=hub/4p, 5000M
+> > >             |__ Port 3: Dev 18, If 0, Class=Mass Storage,
+> > > Driver=usb-storage, 5000M
+> > >         |__ Port 4: Dev 17, If 0, Class=Vendor Specific Class,
+> > > Driver=r8152, 5000M
+> > >
+> > > I see the connector symlink for the root hub:
+> > >
+> > > localhost ~ # cd /sys/bus/usb/devices
+> > > localhost /sys/bus/usb/devices # ls 2-2/port/connector
+> > > data_role  device  firmware_node  port1-cable  port1-partner  power
+> > > power_operation_mode  power_role  preferred_role  subsystem
+> > > supported_accessory_modes  uevent  usb2-port2  usb3-port2
+> > > usb_power_delivery_revision  usb_typec_revision  vconn_source
+> > >
+> > > But for none of the children devices:
+> > >
+> > > localhost /sys/bus/usb/devices # ls 2-2.3/port/connector
+> > > ls: cannot access '2-2.3/port/connector': No such file or directory
+> > > localhost /sys/bus/usb/devices # ls 2-2.3.3/port/connector
+> > > ls: cannot access '2-2.3.3/port/connector': No such file or directory
+> > > localhost /sys/bus/usb/devices # ls 2-2.3\:1.0/port/connector
+> > > ls: cannot access '2-2.3:1.0/port/connector': No such file or directory
+> > > localhost /sys/bus/usb/devices # ls 2-2.3.3\:1.0/port/connector
+> > > ls: cannot access '2-2.3.3:1.0/port/connector': No such file or directory
+> > >
+> > > Is this as you intended with the series? My interpretation was that
+> > > each connected usb device would get a "connector" symlink, but I may
+> > > have misinterpreted this.
+> >
+> > It is as intended. The usb ports on the board will have the connector
+> > symlink, not the devices attached to them - the firmware is only aware
+> > of the connectors on the board of course. It looks like this series is
+> > working as it should.
+> 
+> Thanks for clarifying my understanding here.
+> 
+> >
+> > If you want to extend this solution so that also every device in the
+> > usb topology will have the link to the connector on board, then that
+> > should be now possible, but that is out side of the scope of this
+> > series. You need to propose that separately.
+> >
+> > But I must ask, why can't you just walk down the topology until you
+> > reach the on-board ports that will have the connector links?
+> >
+> 
+> Right, we can certainly do that; having it in each device is just
+> convenient. But as you said, that's the subject of another series.
+> 
+> You mentioned there would be a v2, so I'll add my Tested-By then.
 
-Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
----
- drivers/usb/core/config.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Great!
 
-diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
-index 74eb356c8767..00e28456e4cc 100644
---- a/drivers/usb/core/config.c
-+++ b/drivers/usb/core/config.c
-@@ -422,9 +422,9 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
- 		maxpacket_maxes = full_speed_maxpacket_maxes;
- 		break;
- 	case USB_SPEED_HIGH:
--		/* Bits 12..11 are allowed only for HS periodic endpoints */
-+		/* Multiple-transactions bits are allowed only for HS periodic endpoints */
- 		if (usb_endpoint_xfer_int(d) || usb_endpoint_xfer_isoc(d)) {
--			i = maxp & (BIT(12) | BIT(11));
-+			i = maxp & USB_EP_MAXP_MULT_MASK;
- 			maxp &= ~i;
- 		}
- 		fallthrough;
+I don't know does this help you, or if this is exactly what you had in
+mind, but I am planning to link the USB device attached to the
+connector to the USB Type-C partner device that we have (the USB
+device attached to the connector is the Type-C partner).
+
+So in your example, the Dell dock USB hub will have the symlink to
+the Type-C partner device, but the USB mass storage device attached to
+the dock will not (because it's not our USB Type-C partner - the dock
+is our USB Type-C partner).
+
+But I want to do that separately, as the next step in any case.
+
+thanks,
+
 -- 
-2.25.1
-
+heikki
