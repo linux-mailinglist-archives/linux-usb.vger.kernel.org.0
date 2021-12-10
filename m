@@ -2,100 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E164346F960
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 03:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B497B46FA8C
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 07:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236133AbhLJCye (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Dec 2021 21:54:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236078AbhLJCyd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Dec 2021 21:54:33 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9D5C0617A1
-        for <linux-usb@vger.kernel.org>; Thu,  9 Dec 2021 18:50:58 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so8303710otj.7
-        for <linux-usb@vger.kernel.org>; Thu, 09 Dec 2021 18:50:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bIjkLnUs4ytDMRNkIDJbogMxp0jQrojkoozUNc/LbBw=;
-        b=V3RChZflC5h6ijyqt3OnENG037HGQIF3vAfQD0yc1K7IHIZiLn8j3qLWYVFwe3n/n8
-         1o1yONmdzIPQXNezC2BtIIbjV6ze+y8Tt7oZagsUe1kRNFk0i0xdQXLkK2TzW62Aieax
-         ZWu88pPBv3EKvQyDW7SUEgx93TSHiTomuU4U+Z5RkF+aEoUYBoXEhuIPyP1p09F2paUC
-         U/1Ks/sEnYOPYv5zM2qHQZvcgIA0Xq+Zn41I7uppQqIJU8K5G8cFxgKIPzBBJm5dpX/K
-         oi0x4qhNyTGB6K8bD9L6lyUe5DCDgF/g2I3GshnQ3r8sXKiaYgAf3VDSDLD/d91o2mjX
-         nFcA==
+        id S232524AbhLJGKE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Dec 2021 01:10:04 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:44158
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231714AbhLJGKA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 01:10:00 -0500
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CDD203F1AE
+        for <linux-usb@vger.kernel.org>; Fri, 10 Dec 2021 06:06:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639116383;
+        bh=gD558dGTsqZPPqVUuXs9/pBTwBroTzKLjNW1jVNpBk4=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=MSKgQzGHPSSpRLvbIhGCwASFfopYVXdGKWHCL6TGlIYRryT1rBpNIu9CKbXN2VhLe
+         5Udm4jCQix53GjycgCLygDem2TUojKN+YT4vTP2QtuNbcPINoqYwuIewi+FKGhKrYi
+         sptXsfz3/yM3xrGVF+093V/rFKLh781oEHNZ45MhIgK0SZ1cuOMFAAfkqGWIV+d4J3
+         5kXyA5R/RZ2Mk7UYT51AkkTRq/L+HMhcryQqmX9tYddxa2FjCi6o88xGzMXC4rf9r0
+         eRFFCzj5TNQOq1Ik9q3+WHbDkN0iiazX0ddjgfXy4B78h1PQPXKeYPXTXO3PAQyfTu
+         wFVqn9sWhYyZA==
+Received: by mail-ot1-f70.google.com with SMTP id f79-20020a9d03d5000000b0055c7d2f07ffso2931648otf.14
+        for <linux-usb@vger.kernel.org>; Thu, 09 Dec 2021 22:06:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=bIjkLnUs4ytDMRNkIDJbogMxp0jQrojkoozUNc/LbBw=;
-        b=6xLUQHDpeC8G5XHnXFX2zyULn7D4Y7LHdFPr1F/KI+6H6LfR5EhfJL/mHKT+vOtR+Y
-         TWTG5cLN5pQIvFG+4e0ulMwiGsZeoJXMPBrL1JV6ADyBA2KvIcd87S86E9F5te8FOkc0
-         /BsZ7S5VnnMDMO2OS1YHP0iMikOI1GLMl4yOQjqO+v87DdptLZe5iiuul2ikhr4c6eG0
-         3N7SmE91ivVSYHLaNdiwly9Mj2Necuu20fCLyBuvIFR0jc+qjqGJRHrzyin4ala1ZpFb
-         2P0v0ZqfZS5pusXFpRzmOXlzNca8nyNfqszPyOzt+NgSC3ENdVN+cBfXGb87cewfuWYf
-         ACVg==
-X-Gm-Message-State: AOAM531d/YYksQlrBfY2BidFba6O43OpQs1PLbqSg6yXCWNI3thfDWWU
-        aZG/fMoGukWqKetLYdUOK9MFI8HZbNwGzH8Kdsg20y2C
-X-Google-Smtp-Source: ABdhPJwbt+/behu8xQMgO+XFJW0YRSqBruRjFZ2CU05ep+otoIIrzD9WnJTGYZzA4dUUVL4Wlw6AvrxNZzEW0wlrD5M=
-X-Received: by 2002:a9d:6c14:: with SMTP id f20mr9314711otq.141.1639104657707;
- Thu, 09 Dec 2021 18:50:57 -0800 (PST)
+        bh=gD558dGTsqZPPqVUuXs9/pBTwBroTzKLjNW1jVNpBk4=;
+        b=Y1fZEhBV50ZKbyXTXvSXN+p7RdVCNy+Oek9Iz6pAPy1891CsduWBQYCWXD5OmoUj6g
+         sYMMNv0wGY2uVkqJINgOUwHWWQOlCKuHsHIAdSWbR76DW7qw3VwSMPrPCbCw9NJINUhn
+         c3ftLLed5bwMTWs+4gQxbsecCHS8r5H+XXeS9HjwSvMhFgTN5zApGTlsmMCrsnKY2ctA
+         F1S/9WoasipQ1ZepUdxqOzStJoshasxNiTt7U2x+WVT22UBc8TOc3H1mi4Ly6HHdqKQ2
+         SSJycYfZXdj1DEiEyoBPKpeubu5ENE4T1WK5PeY6eii+pk9cyxbQpB8yO0BarvIBQVJr
+         7pKA==
+X-Gm-Message-State: AOAM532VjZn7iRcUPXK46I5F4JJ2KhN1QqA4XqsIhMZloe8FbrGA2o+F
+        7HE2cB2Ar4+k7LUloL8JejEPMhEbo97fafL5BLl0GcP7FvX3ZPYdF2sjKAlRVOTHS6UZQHcwkSv
+        G/Wwy3q7plf281SrLQszZXLYwPSAtkAnhGWN5Bq1h+vQAbTZyENNpiA==
+X-Received: by 2002:a05:6830:1f3a:: with SMTP id e26mr9791610oth.233.1639116382621;
+        Thu, 09 Dec 2021 22:06:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJybhcdHJs6z65gxvDmqz0jJ8dw6+/mS/4MLMLTUVjIZYX0zGjN5gmZTu85abimAPCGmSWdsyRqzBVaK43lFBUs=
+X-Received: by 2002:a05:6830:1f3a:: with SMTP id e26mr9791590oth.233.1639116382329;
+ Thu, 09 Dec 2021 22:06:22 -0800 (PST)
 MIME-Version: 1.0
-References: <CALgCfKVfzS27XB0AufBUhb8xnfq5dWhESuu1KfxycQ=EnUnp+g@mail.gmail.com>
- <984b7409-caaa-8ba6-8d5c-beff5f107628@suse.com> <CALgCfKX3rFUFTOfXsbLUaLdfcXA9oALhKLS9zfvtNCu8DemLAw@mail.gmail.com>
- <672cf564-79f4-f329-0e20-fdcbbcfd0d11@suse.com>
-In-Reply-To: <672cf564-79f4-f329-0e20-fdcbbcfd0d11@suse.com>
-From:   Maggie Maralit <maggie.roxas@gmail.com>
-Date:   Fri, 10 Dec 2021 10:50:50 +0800
-Message-ID: <CALgCfKXNb2=LC3YVJ_WepFuaWp2=HtYVCCE54pHDDg1_=6ipYQ@mail.gmail.com>
-Subject: Re: An inquiry on supporting USB CDC ACM on Host PC as USB Host/Master
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     linux-usb@vger.kernel.org
+References: <20211208070835.8877-1-kai.heng.feng@canonical.com>
+ <YbEnf2NUr/BCV4Gb@rowland.harvard.edu> <CAAd53p61w-AHBxy05Hx-gwae1rUxZxsaVfmH=--bQUkPxYj8Nw@mail.gmail.com>
+ <YbIo/ZBRgK5NDZJb@rowland.harvard.edu>
+In-Reply-To: <YbIo/ZBRgK5NDZJb@rowland.harvard.edu>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Fri, 10 Dec 2021 14:06:10 +0800
+Message-ID: <CAAd53p5HfGz-D-QvYvPuDY4qLe0nYncY077=n-gvnYym4A8E0w@mail.gmail.com>
+Subject: Re: [PATCH] usb: hub: Resume hubs to find newly connected device
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Bixuan Cui <cuibixuan@huawei.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        Rajat Jain <rajatja@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Oliver,
-
-These are all noted and understood.
-Again, thank you for all your answers on this!
-
-Regards,
-Maggie
-
-On Thu, Dec 9, 2021 at 11:29 PM Oliver Neukum <oneukum@suse.com> wrote:
+On Fri, Dec 10, 2021 at 12:04 AM Alan Stern <stern@rowland.harvard.edu> wrote:
 >
->
-> On 09.12.21 15:24, Maggie Maralit wrote:
-> Hi,
-> > My questions are:
-> > 1. With CONFIG_USB_ACM very common and useful, why is it not enabled
-> > by default in most platforms with USB ports like the x86_64 (normal
-> > for laptops and Intel NUCs)?
->
-> The upstream config is supposed to be minimal. Doing optimal
-> configs is a task for distributions or people who compile their own kernel.
->
-> > 2. Is there any rule or official statement from Linux Kernel
-> > maintainers/experts, highly recommending platform developers (or
-> > specific Ubuntu releases) to support this? (if there is, may I have a
-> > link of the documentation mentioning such?)
-> That is Ubuntu's job.
-> > 3. And is there a possibility for that module to get installed in the
-> > Linux Kernel just by the usual Linux commands (eg, "apt get
-> > update/upgrade")?
+> On Thu, Dec 09, 2021 at 09:19:24AM +0800, Kai-Heng Feng wrote:
+> > On Thu, Dec 9, 2021 at 5:45 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > >
+> > > On Wed, Dec 08, 2021 at 03:08:33PM +0800, Kai-Heng Feng wrote:
+> > > > When a new USB device gets plugged to nested hubs, the affected hub,
+> > > > which connects to usb 2-1.4-port2, doesn't report there's any change,
+> > > > hence the nested hubs go back to runtime suspend like nothing happened:
+> > >
+> > > That's a bug in the hub.  When there's a change in the connection status
+> > > of one of its ports, it should report this change to the kernel.
 > >
-> That question depends on your distribution. I suppose every sane general
-> purpose Linux distribution will compile and deliver cdc-acm, but I haven't
-> checked.
+> > I think it should, but when I searched through the USB spec and I
+> > can't find anywhere specify hub requires to report it in change
+> > status.
 >
-> The configuration of your running kernel is in /proc/config.gz and is chosen
-> by the developer's of Ubuntu if you are running their kernel.
+> USB-2.0 spec, section 11.24.2.7.2.1 (C_PORT_CONNECTION):
 >
->     HTH
->         Oliver
+>         This bit is set when the PORT_CONNECTION bit changes because of an
+>         attach or detach detect event (see Section 7.1.7.3). This bit will be
+>         cleared to zero by a ClearPortFeature(C_PORT_CONNECTION) request or
+>         while the port is in the Powered-off state.
+
+It's indeed set for the hub's downstream facing port, and that's why
+wake up the hub and check its ports can still find connect event.
+But I can't find anywhere stats how hub's upstream facing port should be set.
+
 >
+> > > So because of this buggy hub, you now want to wake up _every_ hub in the
+> > > system whenever any wakeup event occurs?  Is this really a good idea?
+> > > Is there a better way to solve the problem, such as a special quirk
+> > > flag?
+> >
+> > If there's no other activities, the USB hub should go back to suspend
+> > immediately, so the impact is minimal.
+>
+> Not immediately, but after a few seconds.  However your patch will affect every
+> hub, not just the one that the new device was plugged into.
+
+Yes, that's the case here.
+
+>
+> > I've seen several similar bug reports so I think this solution should
+> > be applied for all hubs.
+>
+> Maybe those bug reports all had something in common, such as the type of hub or
+> the bus speed they were running at.  Did you check?
+
+The hub in question is a SuperSpeed hub. Let me scan bug reports on
+Launchpad and see what I can find.
+
+Kai-Heng
+
+>
+> Alan Stern
