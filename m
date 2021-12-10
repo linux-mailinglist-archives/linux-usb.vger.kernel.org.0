@@ -2,73 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 182D6470070
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 13:07:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2BC0470184
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 14:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240867AbhLJMLA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Dec 2021 07:11:00 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41850 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235331AbhLJMLA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 07:11:00 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BFEFEB827E9
-        for <linux-usb@vger.kernel.org>; Fri, 10 Dec 2021 12:07:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BDE0C341C6;
-        Fri, 10 Dec 2021 12:07:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639138043;
-        bh=GNkCndZLKtbEnBTxpRrr1Lpw17bDArYTzU0DZUsVe+k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eaoUkgYlkmrkyq+qr4Hea7BZXJokhNg43zB6aIC9amTLjU2scts7usNyQrCMSzN9+
-         zqwFdUlrwNlhgHKI4Ne2OLpF7uxbhNYH6yLaxZyzjmLdW0eTxzwKOUzboMO8HPM4oZ
-         9y7UirOa0Mu6LDxuZI5zayctulgpUlTduDOR37hA=
-Date:   Fri, 10 Dec 2021 13:07:11 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>
-Subject: Re: [PATCH] usb: hub: avoid warm port reset during USB3 disconnect
-Message-ID: <YbNC764D4ESw9cDN@kroah.com>
-References: <20211210111653.1378381-1-mathias.nyman@linux.intel.com>
+        id S241789AbhLJN1w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Dec 2021 08:27:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241793AbhLJN1u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 08:27:50 -0500
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD839C0617A1
+        for <linux-usb@vger.kernel.org>; Fri, 10 Dec 2021 05:24:15 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id l24so16831495uak.2
+        for <linux-usb@vger.kernel.org>; Fri, 10 Dec 2021 05:24:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=2lJlleaQgTOsCM5jHAS3UGS2pjluVEJ3SAgwYv6xgCo=;
+        b=VmFHe/b88v/dkcDpzSJb5FHtDBkvxuetdm9lqaB4hTuAZpuejXSgNi5qSakO7EIeuZ
+         +rNaZ0PBHOPMrJ0RLf58pjwid6huDmmqBXR1NDrytyW19fgjZhGZ4YBFaC63TS3PylH9
+         HCQmA6pWqEDscTTYj6SK7Iyn9GOf+fPk+dZWzdbUbk4IMQQrk0mbJngsdJbW9IjnlAZ0
+         IytMBDwfPZf/FTILfO3ug3tKHtbO4w/vOQAFFTfY7FI02tL+xA0RfnitR3N9oMRKh/xK
+         MfrXF3x69gvCHCgb7N1CS7temd6+Cl8iYY9C+HmTcRUGDQHz80vPnNictubIYqqE2EB4
+         pTaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=2lJlleaQgTOsCM5jHAS3UGS2pjluVEJ3SAgwYv6xgCo=;
+        b=Oz6HD3qHaCwuyt2pjmgNcTyl0/OEjcc4VLWj/SWg2elR+m9DxY39VYIo+GhCiCvQ9f
+         rnPsOo9x9v/kR77BR8PujdMdALy79dU5RoBJIBgSk9tvtdDGRANEoilZed+kp2p1aaO3
+         C0mfuVDW+FAdUJgFuqlSmsJ2ZKksCKVdGXcv84IR3dZ8Yym3VwSOR3odXwGI9tudcK+a
+         ffaSoMUIAewJdfxNvxjhgrZx0mEarntI69Eq0bDBYoUHjq2IztYVcJ5T/hF/Hb7jCeP2
+         FBGY/+PBEp1wIln3e21Zbvwjvwunsoto6yvWWf8Q9zPwefAUWvw8jEmCY96VkSR/+FwO
+         1lOg==
+X-Gm-Message-State: AOAM533YESHtAJOjFxZ+JNm2SC1jI8VPOvt624YrLtkDgfR2yBMrAKYJ
+        /McHSmK23ARMBVACDqevAnGO7el2OBecc0pddhU=
+X-Google-Smtp-Source: ABdhPJw9UxAf3fVSOjRa8iss0hYXvml9GTfcezFzvMrHkU04MkCY3QzWtZmtEdYBvmvePZJ2IHWETz/NQqVXsSJYSys=
+X-Received: by 2002:a67:d31c:: with SMTP id a28mr16114830vsj.20.1639142655111;
+ Fri, 10 Dec 2021 05:24:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210111653.1378381-1-mathias.nyman@linux.intel.com>
+Received: by 2002:a67:2c84:0:0:0:0:0 with HTTP; Fri, 10 Dec 2021 05:24:14
+ -0800 (PST)
+Reply-To: ribeccalawrence@gmail.com
+From:   Rebecca Lawrence <vivianeatandji@gmail.com>
+Date:   Fri, 10 Dec 2021 13:24:14 +0000
+Message-ID: <CAFU1vTNg1gWt8G8wQqcxAUsRouskgCYvVu_GFzo2f0BxHG736g@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 01:16:53PM +0200, Mathias Nyman wrote:
-> During disconnect USB-3 ports often go via SS.Inactive link error state
-> before the missing terminations are noticed, and link finally goes to
-> RxDetect state
-> 
-> Avoid immediately warm-resetting ports in SS.Inactive state.
-> Let ports settle for a while and re-read the link status a few times 20ms
-> apart to see if the ports transitions out of SS.Inactive.
-> 
-> According to USB 3.x spec 7.5.2, a port in SS.Inactive should
-> automatically check for missing far-end receiver termination every
-> 12 ms (SSInactiveQuietTimeout)
-> 
-> The futile multiple warm reset retries of a disconnected device takes
-> a lot of time, also the resetting of a removed devices has caused cases
-> where the reset bit got stuck for a long time on xHCI roothub.
-> This lead to issues in detecting new devices connected to the same port
-> shortly after.
-> 
-> Tested-by: Mark Pearson <markpearson@lenovo.com>
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> ---
->  drivers/usb/core/hub.c | 24 +++++++++++++++++++-----
->  1 file changed, 19 insertions(+), 5 deletions(-)
-
-Does this fix a specific commit, or has it always been this way?  And is
-this for 5.16-final or 5.17-rc1 and/or stable trees?
-
-thanks,
-
-greg k-h
+Hello Dear,
+My name is Rebecca, I am a United States and a military woman who has
+never married with no kids yet. I came across your profile, and I
+personally took interest in being your friend. For confidential
+matters, please contact me back through my private email
+ribeccalawrence@gmail.com to enable me to send you my pictures and
+give you more details about me. I Hope to hear from you soon.
+Regards
+Rebecca.
