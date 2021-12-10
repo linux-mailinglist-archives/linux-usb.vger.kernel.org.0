@@ -2,109 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E8D4703C8
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 16:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B794704E0
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 16:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242834AbhLJP1D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Dec 2021 10:27:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234499AbhLJP1C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 10:27:02 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63886C061D5E
-        for <linux-usb@vger.kernel.org>; Fri, 10 Dec 2021 07:23:25 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id r11so30484940edd.9
-        for <linux-usb@vger.kernel.org>; Fri, 10 Dec 2021 07:23:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CaWHeGP0DuwfkbKXUdYIJmX8F+biVrGWME72+JdzhqU=;
-        b=MgLv3YrA9NlwpapqjGWsPaT057Lv4NTkMge5x9aYIzLu/EWTNZl9PQJ3i9HcLMOx6B
-         B9IguP3K+gzGh6KfKbYSO8oxGj7MjYa00frl0BCd7lnk7OkZoOhbnGk36UU3KzWuB3In
-         ZXMjkVs8K5nE10yvrBZiB/8HDzocgX7Too6WWjeeDpdcoaRlxj/sgAghwl/0IvTuGbeh
-         fAFYqtmGZZZiSOSvOT+oAtgE4HrF1eec+d4mRi7xCG+BmEL2kk0ZRTS2b7waN3H1I0k/
-         3ly7VwemPgrnfSjfL1C507DwBcuWSj3OL9qXJWKAX4/7OLRZbrfLo/DTY1QGnfnvK/nI
-         rVzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CaWHeGP0DuwfkbKXUdYIJmX8F+biVrGWME72+JdzhqU=;
-        b=OcstCyZ2RIy0JZx1kBCAAnK1GqQtrkyHaZJzIE9TOc1xs4ufq/kSmkXsoItKcZZQoz
-         tIIfNjyF49gd7MfJNbN5nw1JKel57n6PbT214g0ZIMRylgT6KfYi5HM95/uhIe4eZGkq
-         5y3Ol2TRVaBXd8IC9CRNafoeTWv/LFHDzZPWzaDTF9PR9tkoCW88Y5ZtEM/nZLLGI8Di
-         XNfvWmrJcZBrRlwwppc9+PZ0XMr5RoPwhANJfyy3q7r7ylLfFGonH0KmJL2YJYrqg5/d
-         h/k3PSNsJwCi/qh+eccIcVGR3VjN1QvQ9qDvy0mB5ysmSqQIfRd25+OvszShBC6F844w
-         clBw==
-X-Gm-Message-State: AOAM530qDD9yPX6WKu+kfH0yxb14eouRR/ic2QgUSNzWYIc7XoVcDonf
-        EY1/JjuNsijaKCswsb0tmUPfYLil0xrXEks44XFZ5A==
-X-Google-Smtp-Source: ABdhPJzwyJoQo5zS+XCmbkGk9eGVm61YMp0R/nIUhpMaAI0dyZLbksovDhkrc3SVhNC+OXjC0RSzQ3wiLRH8X7JDAvI=
-X-Received: by 2002:a05:6402:2805:: with SMTP id h5mr38690255ede.267.1639149780836;
- Fri, 10 Dec 2021 07:23:00 -0800 (PST)
+        id S237452AbhLJPwo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Dec 2021 10:52:44 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:56909 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S240651AbhLJPv5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 10:51:57 -0500
+Received: (qmail 642509 invoked by uid 1000); 10 Dec 2021 10:48:21 -0500
+Date:   Fri, 10 Dec 2021 10:48:21 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 1/2] usb: core: config: fix validation of wMaxPacketValue
+ entries
+Message-ID: <YbN2xd7DJuULtOUI@rowland.harvard.edu>
+References: <20211210085219.16796-1-pavel.hofman@ivitera.com>
 MIME-Version: 1.0
-References: <20211208003727.3596577-1-f.fainelli@gmail.com> <20211208003727.3596577-6-f.fainelli@gmail.com>
-In-Reply-To: <20211208003727.3596577-6-f.fainelli@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 10 Dec 2021 16:22:50 +0100
-Message-ID: <CAMRc=MdmP5UCi2SJq9Ybhe9evUmM_PhpSUfzRF24yYUiRG+MNg@mail.gmail.com>
-Subject: Re: [PATCH v3 05/15] dt-bindings: gpio: Convert Broadcom STB GPIO to YAML
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     devicetree <devicetree@vger.kernel.org>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
-        <linux-mmc@vger.kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211210085219.16796-1-pavel.hofman@ivitera.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 1:37 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
->
-> Convert the Broadcom STB GPIO Device Tree binding to YAML to help with
-> validation.
->
-> Acked-by: Gregory Fong <gregory.0xf0@gmail.com>
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+On Fri, Dec 10, 2021 at 09:52:18AM +0100, Pavel Hofman wrote:
+> The checks performed by commit aed9d65ac327 ("USB: validate
+> wMaxPacketValue entries in endpoint descriptors") require that initial
+> value of the maxp variable contains both maximum packet size bits
+> (10..0) and multiple-transactions bits (12..11). However, the existing
+> code assings only the maximum packet size bits. This patch assigns all
+> bits of wMaxPacketSize to the variable.
+> 
+> Fixes: aed9d65ac327 ("USB: validate wMaxPacketValue entries in endpoint descriptors")
+> Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
 > ---
 
-Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+This should have a "CC: <stable@vger.kernel.org>" tag attached.
+
+
+>  drivers/usb/core/config.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+> index b199eb65f378..74eb356c8767 100644
+> --- a/drivers/usb/core/config.c
+> +++ b/drivers/usb/core/config.c
+> @@ -406,7 +406,7 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
+>  	 * the USB-2 spec requires such endpoints to have wMaxPacketSize = 0
+>  	 * (see the end of section 5.6.3), so don't warn about them.
+>  	 */
+> -	maxp = usb_endpoint_maxp(&endpoint->desc);
+> +	maxp = le16_to_cpu(endpoint->desc.wMaxPacketSize);
+>  	if (maxp == 0 && !(usb_endpoint_xfer_isoc(d) && asnum == 0)) {
+>  		dev_warn(ddev, "config %d interface %d altsetting %d endpoint 0x%X has invalid wMaxPacketSize 0\n",
+>  		    cfgno, inum, asnum, d->bEndpointAddress);
+> -- 
+> 2.25.1
+> 
