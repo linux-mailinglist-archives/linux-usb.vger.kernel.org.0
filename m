@@ -2,17 +2,17 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72252470C07
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 21:46:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7785470C0A
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 21:46:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242920AbhLJUuQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Dec 2021 15:50:16 -0500
-Received: from mxout03.lancloud.ru ([45.84.86.113]:41048 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236414AbhLJUuP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 15:50:15 -0500
+        id S243127AbhLJUuR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Dec 2021 15:50:17 -0500
+Received: from mxout04.lancloud.ru ([45.84.86.114]:59500 "EHLO
+        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239671AbhLJUuQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 15:50:16 -0500
 Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 10556208D329
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru A22AE20A9792
 Received: from LanCloud
 Received: from LanCloud
 Received: from LanCloud
@@ -20,13 +20,9 @@ From:   Sergey Shtylyov <s.shtylyov@omp.ru>
 To:     <linux-usb@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>
-CC:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v3 2/6] usb: host: ehci-atmel: fix deferred probing
-Date:   Fri, 10 Dec 2021 23:46:30 +0300
-Message-ID: <20211210204634.8182-3-s.shtylyov@omp.ru>
+Subject: [PATCH v3 3/6] usb: host: ehci-orion: fix deferred probing
+Date:   Fri, 10 Dec 2021 23:46:31 +0300
+Message-ID: <20211210204634.8182-4-s.shtylyov@omp.ru>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20211210204634.8182-1-s.shtylyov@omp.ru>
 References: <20211210204634.8182-1-s.shtylyov@omp.ru>
@@ -57,22 +53,22 @@ Changes in version 3:
 Changes in version 2:
 - removed the check for IRQ0, updated the patch description accordingly.
 
- drivers/usb/host/ehci-atmel.c | 4 ++--
+ drivers/usb/host/ehci-orion.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/host/ehci-atmel.c b/drivers/usb/host/ehci-atmel.c
-index 05d41fd65f25..bc3fdb588e6b 100644
---- a/drivers/usb/host/ehci-atmel.c
-+++ b/drivers/usb/host/ehci-atmel.c
-@@ -104,8 +104,8 @@ static int ehci_atmel_drv_probe(struct platform_device *pdev)
- 	pr_debug("Initializing Atmel-SoC USB Host Controller\n");
+diff --git a/drivers/usb/host/ehci-orion.c b/drivers/usb/host/ehci-orion.c
+index 3626758b3e2a..36ea4febe29b 100644
+--- a/drivers/usb/host/ehci-orion.c
++++ b/drivers/usb/host/ehci-orion.c
+@@ -222,8 +222,8 @@ static int ehci_orion_drv_probe(struct platform_device *pdev)
+ 	pr_debug("Initializing Orion-SoC USB Host Controller\n");
  
  	irq = platform_get_irq(pdev, 0);
 -	if (irq <= 0) {
--		retval = -ENODEV;
+-		err = -ENODEV;
 +	if (irq < 0) {
-+		retval = irq;
- 		goto fail_create_hcd;
++		err = irq;
+ 		goto err;
  	}
  
 -- 
