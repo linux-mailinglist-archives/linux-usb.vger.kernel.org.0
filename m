@@ -2,66 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BC0470184
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 14:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB534701A9
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Dec 2021 14:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241789AbhLJN1w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Dec 2021 08:27:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241793AbhLJN1u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Dec 2021 08:27:50 -0500
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD839C0617A1
-        for <linux-usb@vger.kernel.org>; Fri, 10 Dec 2021 05:24:15 -0800 (PST)
-Received: by mail-ua1-x935.google.com with SMTP id l24so16831495uak.2
-        for <linux-usb@vger.kernel.org>; Fri, 10 Dec 2021 05:24:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=2lJlleaQgTOsCM5jHAS3UGS2pjluVEJ3SAgwYv6xgCo=;
-        b=VmFHe/b88v/dkcDpzSJb5FHtDBkvxuetdm9lqaB4hTuAZpuejXSgNi5qSakO7EIeuZ
-         +rNaZ0PBHOPMrJ0RLf58pjwid6huDmmqBXR1NDrytyW19fgjZhGZ4YBFaC63TS3PylH9
-         HCQmA6pWqEDscTTYj6SK7Iyn9GOf+fPk+dZWzdbUbk4IMQQrk0mbJngsdJbW9IjnlAZ0
-         IytMBDwfPZf/FTILfO3ug3tKHtbO4w/vOQAFFTfY7FI02tL+xA0RfnitR3N9oMRKh/xK
-         MfrXF3x69gvCHCgb7N1CS7temd6+Cl8iYY9C+HmTcRUGDQHz80vPnNictubIYqqE2EB4
-         pTaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=2lJlleaQgTOsCM5jHAS3UGS2pjluVEJ3SAgwYv6xgCo=;
-        b=Oz6HD3qHaCwuyt2pjmgNcTyl0/OEjcc4VLWj/SWg2elR+m9DxY39VYIo+GhCiCvQ9f
-         rnPsOo9x9v/kR77BR8PujdMdALy79dU5RoBJIBgSk9tvtdDGRANEoilZed+kp2p1aaO3
-         C0mfuVDW+FAdUJgFuqlSmsJ2ZKksCKVdGXcv84IR3dZ8Yym3VwSOR3odXwGI9tudcK+a
-         ffaSoMUIAewJdfxNvxjhgrZx0mEarntI69Eq0bDBYoUHjq2IztYVcJ5T/hF/Hb7jCeP2
-         FBGY/+PBEp1wIln3e21Zbvwjvwunsoto6yvWWf8Q9zPwefAUWvw8jEmCY96VkSR/+FwO
-         1lOg==
-X-Gm-Message-State: AOAM533YESHtAJOjFxZ+JNm2SC1jI8VPOvt624YrLtkDgfR2yBMrAKYJ
-        /McHSmK23ARMBVACDqevAnGO7el2OBecc0pddhU=
-X-Google-Smtp-Source: ABdhPJw9UxAf3fVSOjRa8iss0hYXvml9GTfcezFzvMrHkU04MkCY3QzWtZmtEdYBvmvePZJ2IHWETz/NQqVXsSJYSys=
-X-Received: by 2002:a67:d31c:: with SMTP id a28mr16114830vsj.20.1639142655111;
- Fri, 10 Dec 2021 05:24:15 -0800 (PST)
+        id S241853AbhLJNfQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Dec 2021 08:35:16 -0500
+Received: from mga06.intel.com ([134.134.136.31]:8143 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235759AbhLJNfQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 10 Dec 2021 08:35:16 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="299132712"
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="299132712"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 05:31:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="659578144"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Dec 2021 05:31:38 -0800
+Subject: Re: [PATCH] usb: xhci: skip re-check pending port event if hibernated
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Yun-Chien Yu <yun-chien.yu@mediatek.com>
+References: <20211209072218.21651-1-chunfeng.yun@mediatek.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <c448da77-f2f3-8b79-fc4b-b9dcff727c6e@linux.intel.com>
+Date:   Fri, 10 Dec 2021 15:33:16 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.8.1
 MIME-Version: 1.0
-Received: by 2002:a67:2c84:0:0:0:0:0 with HTTP; Fri, 10 Dec 2021 05:24:14
- -0800 (PST)
-Reply-To: ribeccalawrence@gmail.com
-From:   Rebecca Lawrence <vivianeatandji@gmail.com>
-Date:   Fri, 10 Dec 2021 13:24:14 +0000
-Message-ID: <CAFU1vTNg1gWt8G8wQqcxAUsRouskgCYvVu_GFzo2f0BxHG736g@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211209072218.21651-1-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Dear,
-My name is Rebecca, I am a United States and a military woman who has
-never married with no kids yet. I came across your profile, and I
-personally took interest in being your friend. For confidential
-matters, please contact me back through my private email
-ribeccalawrence@gmail.com to enable me to send you my pictures and
-give you more details about me. I Hope to hear from you soon.
-Regards
-Rebecca.
+On 9.12.2021 9.22, Chunfeng Yun wrote:
+> When xHCI controller hibernated, the root hub lost power, if controller
+> support Port Power Control (PPC), PP is not set at xhci_resume() and
+> set by hub_reset_resume() later, so no need check pending port event.
+> If PPC is not supported, device is disconneced, seems do not send out
+> U3 LFPS wake signal, no need re-check again and drop 120ms delay to
+> save resume time.
+> 
+> Reported-by: Yun-Chien Yu <yun-chien.yu@mediatek.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+
+Thanks, adding
+
+-Mathias
