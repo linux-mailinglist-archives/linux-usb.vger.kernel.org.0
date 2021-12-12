@@ -2,105 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07AB9471A74
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Dec 2021 14:47:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76851471A92
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Dec 2021 15:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbhLLNrf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 Dec 2021 08:47:35 -0500
-Received: from cable.insite.cz ([84.242.75.189]:35254 "EHLO cable.insite.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231218AbhLLNrd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 12 Dec 2021 08:47:33 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id 7F7DDA1A3D405;
-        Sun, 12 Dec 2021 14:47:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1639316851; bh=PtiuHvMgg1v8ovCPLzsPFekDFQtCec7HEe/Qq468zAw=;
-        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
-        b=SfPfwIhYQZEQQlAi8lLuUjWE7mGmYbLh34ZiMRq7BwYcfI4aH4KRR04hWWZmungz8
-         JTt1CdRDCdXRNZKSnw7Gg1RtR9ifYBfSEjUtBnYKNmfQQ0zMXTQLuSaV4cx6ujaked
-         B9/fKACFa+dGguYudRZ+wPwKUNXvQKVgWX6gHlJY=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xlEt1cSF61tE; Sun, 12 Dec 2021 14:47:25 +0100 (CET)
-Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 4E112A1A3D404;
-        Sun, 12 Dec 2021 14:47:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1639316845; bh=PtiuHvMgg1v8ovCPLzsPFekDFQtCec7HEe/Qq468zAw=;
-        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
-        b=IcLkuCWgqw3dt/JGpVjFp3mpzq7UN1pnlU5K9g9zm3S9k6sVRYO2SW4WHxJ/9U2lG
-         n4CehG3/PjWgZrEuwbq3LjpwmuSq6kd0zHeiLCnh2A/7quBzwxNUrCeq2aloC2GLvl
-         RM0APhtbTl3hz/UEVPVTeQw8h+DgbDNJ26pd4/vU=
-Subject: Re: usb: dwc2: Detecting cable disconnection in OTG mode?
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <7cce9f05-d659-1fe8-2862-aeca75693808@ivitera.com>
- <ace0e7e0-bf55-e2e4-a17f-c411de8a5266@ivitera.com>
-Message-ID: <897c79d2-eb88-01f5-95b6-67d5ab12954d@ivitera.com>
-Date:   Sun, 12 Dec 2021 14:47:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S231342AbhLLOLd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Dec 2021 09:11:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37716 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230031AbhLLOLc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Dec 2021 09:11:32 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E0CC061714;
+        Sun, 12 Dec 2021 06:11:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D04CDCE0B6B;
+        Sun, 12 Dec 2021 14:11:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70364C341CA;
+        Sun, 12 Dec 2021 14:11:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639318289;
+        bh=1YaANl1M0R+YI0xtg229PcF3JisYJpSJ1L86JclSVqE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=pmISb5crcGCIJKo/Y5/OAo7GqwfmBtD+EOmGnCr+cwSPMzxlWfJdbxZEg1Wm7ipie
+         7KJcy76eq8k51YfTpvXjnhU5EHDWiBJTetRkWgg7WYxcw7mMXvqNN60kMagPjhv/cw
+         Qks5+FgQ31Xe6J3CupXikHjwcfTopFvrPd2CiaZU=
+Date:   Sun, 12 Dec 2021 15:11:26 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB fixes for 5.16-rc5
+Message-ID: <YbYDDrBFYegNGQ7m@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <ace0e7e0-bf55-e2e4-a17f-c411de8a5266@ivitera.com>
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dne 11. 12. 21 v 10:59 Pavel Hofman napsal(a):
-> Dne 11. 12. 21 v 10:55 Pavel Hofman napsal(a):
->> Hi Minas,
->>
->> I am trying to find if dwc2 in OTG mode can pass information to gadget 
->> functions that the host has been disconnected. I am testing on RPi4. 
->> In a datasheet for a different dwc2 implementation 
->> https://www.mouser.cn/datasheet/2/196/Infineon-xmc4500_rm_v1.6_2016-UM-v01_06-EN-598157.pdf 
->> - chapter "16.8.3 Device Disconnection" I found:
->>
->>
->> ===========
->> The device session ends when the USB cable is disconnected or if the 
->> VBUS is switched off by the host.
->> The device disconnect flow is as follows:
->>
->> 1. When the USB cable is unplugged or when the VBUS is switched off by 
->> the host, the device core triggers GINTSTS.OTGInt [bit 2] interrupt bit
->> ============
->>
->> I put a printk to core_intr.c:dwc2_handle_otg_intr() which is called 
->> only from handling the OTGInt interrupt 
->> https://elixir.bootlin.com/linux/v5.1.9/source/drivers/usb/dwc2/core_intr.c#L803 
->> . But this method is not called at all when disconnecting the USB 
->> cable on RPi4 in gadget mode.
->>
-> 
-> To add, the method dwc2_hsotg_disconnect is called, but after 
-> reconnecting the cable, as part of the gadget reset  when handling reset 
-> interrupts (gintsts & (GINTSTS_USBRST | GINTSTS_RESETDET)) here 
-> https://elixir.bootlin.com/linux/v5.1.9/source/drivers/usb/dwc2/gadget.c#L3653 
-> 
+The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
 
+  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
 
-Maybe the reason for the OTGInt not being thrown at cable disconnect is 
-the fact that RPi4 most likely does not handle USB_OTG_ID signal. I 
-asked about USB_OTG_ID wiring on RPi4 at their forum.
+are available in the Git repository at:
 
-Nevertheless it turns out that DWC2 throws Suspend interrupt 
-GINTSTS_USBSUSP (11) at cable disconnection on the RPi4, and the gadget 
-composite driver calls suspend hook of struct usb_function. I wonder if 
-implementing the suspend handler would be a solution for other dwc2 
-implementations, or if the audio function should implement also some 
-other handler in order to correctly serve the cable disconnection for 
-all dwc2 implementations.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16-rc5
 
-Thanks a lot,
+for you to fetch changes up to ca5737396927afd4d57b133fd2874bbcf3421cdb:
 
-Pavel.
+  usb: core: config: using bit mask instead of individual bits (2021-12-12 13:06:39 +0100)
 
+----------------------------------------------------------------
+USB fixes for 5.16-rc5
 
+Here are some small USB fixes for 5.16-rc5.  They include:
+	- gadget driver fixes for reported issues
+	- xhci fixes for reported problems.
+	- config endpoint parsing fixes for where we got bitfields wrong
 
+Most of these have been in linux-next, the remaining few were not, but
+got lots of local testing in my systems and in some cloud testing
+infrastructures.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Douglas Anderson (1):
+      Revert "usb: dwc3: dwc3-qcom: Enable tx-fifo-resize property by default"
+
+Greg Kroah-Hartman (2):
+      USB: gadget: detect too-big endpoint 0 requests
+      USB: gadget: zero allocate endpoint 0 buffers
+
+Kai-Heng Feng (1):
+      xhci: Remove CONFIG_USB_DEFAULT_PERSIST to prevent xHCI from runtime suspending
+
+Mathias Nyman (1):
+      xhci: avoid race between disable slot command and host runtime suspend
+
+Pavel Hofman (2):
+      usb: core: config: fix validation of wMaxPacketValue entries
+      usb: core: config: using bit mask instead of individual bits
+
+ drivers/usb/core/config.c         |  6 +++---
+ drivers/usb/dwc3/dwc3-qcom.c      | 15 ---------------
+ drivers/usb/gadget/composite.c    | 14 +++++++++++++-
+ drivers/usb/gadget/legacy/dbgp.c  | 15 ++++++++++++++-
+ drivers/usb/gadget/legacy/inode.c | 16 +++++++++++++++-
+ drivers/usb/host/xhci-hub.c       |  1 +
+ drivers/usb/host/xhci-ring.c      |  1 -
+ drivers/usb/host/xhci.c           | 26 +++++++++++++++-----------
+ 8 files changed, 61 insertions(+), 33 deletions(-)
