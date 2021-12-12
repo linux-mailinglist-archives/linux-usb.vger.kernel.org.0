@@ -2,362 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E16E471988
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Dec 2021 10:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B054719E8
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Dec 2021 12:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbhLLJsV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 Dec 2021 04:48:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
+        id S230272AbhLLLze (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Dec 2021 06:55:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbhLLJsV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Dec 2021 04:48:21 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB031C061714
-        for <linux-usb@vger.kernel.org>; Sun, 12 Dec 2021 01:48:20 -0800 (PST)
-Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1mwLSp-00060o-1C; Sun, 12 Dec 2021 10:48:15 +0100
-Message-ID: <3bb113cd-fbf6-6898-6ae3-2f8cb8c64992@leemhuis.info>
-Date:   Sun, 12 Dec 2021 10:48:14 +0100
+        with ESMTP id S229793AbhLLLzd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Dec 2021 06:55:33 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CDEC061714;
+        Sun, 12 Dec 2021 03:55:33 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id n15-20020a17090a160f00b001a75089daa3so12694600pja.1;
+        Sun, 12 Dec 2021 03:55:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hX/ICKtr5gW8yVaOGnXk5ZnAIDwSq2paZmGCJ/xzR3o=;
+        b=FAjhegj3SG+UvdjFvrXS28CX8qHvlvWkpKSnAo6rjTVKJAY1hjVPXZ8m70f95CvkOT
+         2/zjV1M4KIciELPfm/ZJ8RivZ+R3bOHmcgzYuVtwQQNkEhvuHE6PXQ3vvN9QeuoJOZJu
+         0T8clhzo8RfbmYie2hRraJr7Mp1eEGVkdz6ct/TI7CQxiATv2WKAZMUIpbDCujGcS4+M
+         yP1s0xW/4ziupeNaiBlmRz87TOdRd2UGiSF+Gakf2esA4N+g3FWAUNpstJr4y653Xaib
+         +PWHn6TuRuEMB29NyuoDpGqAczb8f3f/OrLjHDrcqE1/HYIavPSU/wkDbZYhwWA83+9a
+         3MuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hX/ICKtr5gW8yVaOGnXk5ZnAIDwSq2paZmGCJ/xzR3o=;
+        b=ervNcpCaF/hFYl/Lhvat6KXy6RC+ytJtyL5epWIrcMDtCqdt4bvsINBbAEDcGYyClF
+         j3ILnMM+Fs5nIMsOQrtNKOdYCiYNIrF0UjgGHmx+xRoBzW8+OHmhunz+zapCEDqQo6uo
+         qoHDgLEM7Wi6n3AikbXn4SPGalcKvKiBeRtbmGgvDcc5EmMtp86n4DY6Lm3t2qlmEzeG
+         4XyI0z8j5/D6JqRfIW9BRb4A+jJOaaar0dtZx02hbV2qRT20DdJGMn8gyZ0gDGm1RB1y
+         ee52iRRn2X9bMZMItNe3UwUc6Sa98DAoOGpENcUbmZM1UJs7hlj7Qv8O08yQUcyAy60O
+         qtBw==
+X-Gm-Message-State: AOAM531Z922jS32TFMKNEhYcGJdX90qrhDvPjYsa8cHfUiXoFdbjqnXK
+        DGMeNY7REUrlZI3FbqJJ9t0=
+X-Google-Smtp-Source: ABdhPJyX3oFAc+HQ//7S+51gGzVlfj9Q3l8O5LkRTdU480ioUaICXeQWuw4FTwGfw2PzHI6TOCaWoQ==
+X-Received: by 2002:a17:90b:1e4f:: with SMTP id pi15mr37052454pjb.181.1639310132658;
+        Sun, 12 Dec 2021 03:55:32 -0800 (PST)
+Received: from localhost.localdomain ([240d:1a:8f0:6c00:89cb:88d1:b6b2:3345])
+        by smtp.gmail.com with ESMTPSA id e14sm9909732pfv.18.2021.12.12.03.55.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Dec 2021 03:55:32 -0800 (PST)
+From:   Alexandre Courbot <gnurou@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org, Alexandre Courbot <gnurou@gmail.com>
+Subject: [PATCH] usb: storage: do not use UAS with Logitec LGB-4BNHUC
+Date:   Sun, 12 Dec 2021 20:55:06 +0900
+Message-Id: <20211212115506.180629-1-gnurou@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-BS
-To:     Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>,
-        regressions@lists.linux.dev,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Cristian Birsan <cristian.birsan@microchip.com>,
-        linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, Jonas Bonn <jonas@norrbonn.se>
-References: <20211211183650.12183-1-marcelo.jimenez@gmail.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: [PATCH] usb: gadget: atmel: Revert regression in USB Gadget
- (atmel_usba_udc)
-In-Reply-To: <20211211183650.12183-1-marcelo.jimenez@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1639302500;a798a483;
-X-HE-SMSGID: 1mwLSp-00060o-1C
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[TLDR: adding this regression to regzbot; most of this mail is compiled
-from a few templates paragraphs some of you might have seen already.]
+This 4-drives USB 3.1 bay gets unhappy when used with UAS:
 
-Hi, this is your Linux kernel regression tracker speaking.
+	sd 10:0:0:0: [sdb] tag#18 uas_eh_abort_handler 0 uas-tag 5 inflight: CMD IN
+	sd 10:0:0:0: [sdb] tag#18 CDB: Read(16) 88 00 00 00 00 00 00 9d 42 30 00 00 04 00 00 00
 
-Top-posting for once, to make this easy accessible to everyone.
+It works perfectly fine as a regular mass-storage device, so prevent UAS
+from being used with it.
 
-Thanks for the report. BTW, if anyone like me wonders what the included
-patch is about: it afaics is the revert of the patch causing the
-problem. Anyway:
+Signed-off-by: Alexandre Courbot <gnurou@gmail.com>
+---
+ drivers/usb/storage/unusual_uas.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-To be sure this issue doesn't fall through the cracks unnoticed, I'm
-adding it to regzbot, my Linux kernel regression tracking bot:
+diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+index b34b858d82a6..9ef09cabef50 100644
+--- a/drivers/usb/storage/unusual_uas.h
++++ b/drivers/usb/storage/unusual_uas.h
+@@ -52,6 +52,12 @@ UNUSUAL_DEV(0x059f, 0x1061, 0x0000, 0x9999,
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
+ 
++UNUSUAL_DEV(0x0789, 0x0296, 0x0000, 0x9999,
++		"Logitec",
++		"LGB-4BNHUC",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_IGNORE_UAS),
++
+ /*
+  * Apricorn USB3 dongle sometimes returns "USBSUSBSUSBS" in response to SCSI
+  * commands in UAS mode.  Observed with the 1.28 firmware; are there others?
+-- 
+2.34.1
 
-#regzbot ^introduced 70a7f8be8598
-#regzbot title usb: gadget: atmel: ethernet over USB Gadget not
-recognized anymore after disconnect and reconnect
-#regzbot ignore-activity
-
-Reminder: when fixing the issue, please add a 'Link:' tag with the URL
-to the report (the parent of this mail), then regzbot will automatically
-mark the regression as resolved once the fix lands in the appropriate
-tree. For more details about regzbot see footer.
-
-Sending this to everyone that got the initial report, to make all aware
-of the tracking. I also hope that messages like this motivate people to
-directly get at least the regression mailing list and ideally even
-regzbot involved when dealing with regressions, as messages like this
-wouldn't be needed then.
-
-Don't worry, I'll send further messages wrt to this regression just to
-the lists (with a tag in the subject so people can filter them away), as
-long as they are intended just for regzbot. With a bit of luck no such
-messages will be needed anyway.
-
-Ciao, Thorsten
-
-P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
-on my table. I can only look briefly into most of them. Unfortunately
-therefore I sometimes will get things wrong or miss something important.
-I hope that's not the case here; if you think it is, don't hesitate to
-tell me about it in a public reply. That's in everyone's interest, as
-what I wrote above might be misleading to everyone reading this; any
-suggestion I gave thus might sent someone reading this down the wrong
-rabbit hole, which none of us wants.
-
-BTW, I have no personal interest in this issue, which is tracked using
-regzbot, my Linux kernel regression tracking bot
-(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
-this mail to get things rolling again and hence don't need to be CC on
-all further activities wrt to this regression.
-
-
-
-On 11.12.21 19:36, Marcelo Roberto Jimenez wrote:
-> The regression occurs on the second time a self powered gadget is
-> connected to the host. In this situation, the gadget no loger accepts
-> an address in the USB enumeration phase.
-> 
-> The regression has been introduced in
-> commit 70a7f8be8598 ("usb: gadget: atmel: support USB suspend")
-> 
-> Signed-off-by: Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>
-> ---
-> 
-> Hi,
-> 
-> I have been using an ACME Arietta board (Microchip AT91SAM9G25 MPU, ARM9@400Mhz) for some years, and from time to time I need to do a kernel upgrade to fix issues or introduce new required features.
-> 
-> I have recently noticed a regression in the ethernet over USB Gadget. The system boots fine and when the device is first connected to a host it is recognized. But upon disconnection, the second time the device is connected to the host, it is no longer recognized. Of course, the gadget is self powered.
-> 
-> I did a "git bisect" and found that the patch introducing the regression is this:
-> 
-> commit 70a7f8be85986a3c2ffc7274c41b89552dfe2ad0
-> Author: Jonas Bonn <jonas@norrbonn.se>
-> Date:   Wed Feb 20 13:20:00 2019 +0100
->     usb: gadget: atmel: support USB suspend
->     This patch adds support for USB suspend to the Atmel UDC.
-> 
-> I understand that supporting USB suspend state is important for power consumption, but something in this patch has broken the hardware behavior, so my suggestion is to revert it until we can figure out what is going wrong.
-> 
-> I have tested and confirm that reverting that patch makes the issue go away.
-> 
-> On the host side, I can see some log messages that indicate that the USB gadget is not accepting a new address in the enumeration phase. The following log shows the successful initial connection and disconnection, and then the failed second connection attempt:
-> 
-> usb 1-4.3: new high-speed USB device number 85 using xhci_hcd
-> usb 1-4.3: New USB device found, idVendor=0525, idProduct=a4a2, bcdDevice= 5.10
-> usb 1-4.3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> usb 1-4.3: Product: RNDIS/Ethernet Gadget
-> usb 1-4.3: Manufacturer: Linux 5.10.80-linux4microchip-2021.10-rc2+ with atmel_usba_udc
-> cdc_subset: probe of 1-4.3:1.0 failed with error -22
-> cdc_ether 1-4.3:1.0 usb0: register 'cdc_ether' at usb-0000:00:14.0-4.3, CDC Ethernet Device, 4a:85:ff:68:fa:82
-> cdc_ether 1-4.3:1.0 enp0s20f0u4u3: renamed from usb0
-> usb 1-4.3: USB disconnect, device number 85
-> cdc_ether 1-4.3:1.0 enp0s20f0u4u3: unregister 'cdc_ether' usb-0000:00:14.0-4.3, CDC Ethernet Device
-> usb 1-4.3: new high-speed USB device number 86 using xhci_hcd
-> usb 1-4.3: device descriptor read/64, error -71
-> usb 1-4.3: device descriptor read/64, error -71
-> usb 1-4.3: new high-speed USB device number 87 using xhci_hcd
-> usb 1-4.3: device descriptor read/64, error -71
-> usb 1-4.3: device descriptor read/64, error -71
-> usb 1-4-port3: attempt power cycle
-> usb 1-4.3: new high-speed USB device number 88 using xhci_hcd
-> usb 1-4.3: Device not responding to setup address.
-> usb 1-4.3: Device not responding to setup address.
-> usb 1-4.3: device not accepting address 88, error -71
-> usb 1-4.3: new high-speed USB device number 89 using xhci_hcd
-> usb 1-4.3: Device not responding to setup address.
-> usb 1-4.3: Device not responding to setup address.
-> usb 1-4.3: device not accepting address 89, error -71
-> usb 1-4-port3: unable to enumerate USB device
-> 
-> The steps to reproduce are very easy:
-> 1. Have both the host and the gadget turned on.
-> 2. Connect the gadget to an USB port.
-> 3. Disconnect the gadget from the USB port.
-> 4. Reconnect the gadget to the USB port.
-> 5. The gadget is no longer recognized.
-> 
-> On a side note, the ACME Arietta board DTD does not use VBUS sensing by default, although the hardware diagram shows a provision to do that using the PB16 GPIO. I have tried to enable that via DTD, but there seems to be a hardware design flaw (assuming that the intention was to provide VBUS sensing) due to a connection with the processor SHDN pin, which is from the processor shutdown controller, and the 3.3 volts voltage regulator enable pin. The problem is that even when the USB is disconnected, the voltage never gets near enough zero to trigger the GPIO interrupt, which I could verify that would indeed happen by a temporary short of the (unconnected) USB VBUS pin to the ground. That was only to say that even without VBUS sensing, the device has always worked, and that enabling VBUS sensing is not a viable solution in the current project.
-> 
-> Best regards,
-> Marcelo.
-> 
-> 
->  drivers/usb/gadget/udc/atmel_usba_udc.c | 55 +++----------------------
->  drivers/usb/gadget/udc/atmel_usba_udc.h |  1 -
->  2 files changed, 6 insertions(+), 50 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.c b/drivers/usb/gadget/udc/atmel_usba_udc.c
-> index 2b893bceea45..54cdea5cc31c 100644
-> --- a/drivers/usb/gadget/udc/atmel_usba_udc.c
-> +++ b/drivers/usb/gadget/udc/atmel_usba_udc.c
-> @@ -1705,9 +1705,6 @@ static void usba_dma_irq(struct usba_udc *udc, struct usba_ep *ep)
->  	}
->  }
->  
-> -static int start_clock(struct usba_udc *udc);
-> -static void stop_clock(struct usba_udc *udc);
-> -
->  static irqreturn_t usba_udc_irq(int irq, void *devid)
->  {
->  	struct usba_udc *udc = devid;
-> @@ -1722,13 +1719,10 @@ static irqreturn_t usba_udc_irq(int irq, void *devid)
->  	DBG(DBG_INT, "irq, status=%#08x\n", status);
->  
->  	if (status & USBA_DET_SUSPEND) {
-> -		usba_writel(udc, INT_CLR, USBA_DET_SUSPEND|USBA_WAKE_UP);
-> -		usba_int_enb_set(udc, USBA_WAKE_UP);
-> -		usba_int_enb_clear(udc, USBA_DET_SUSPEND);
-> -		udc->suspended = true;
->  		toggle_bias(udc, 0);
-> +		usba_writel(udc, INT_CLR, USBA_DET_SUSPEND);
-> +		usba_int_enb_set(udc, USBA_WAKE_UP);
->  		udc->bias_pulse_needed = true;
-> -		stop_clock(udc);
->  		DBG(DBG_BUS, "Suspend detected\n");
->  		if (udc->gadget.speed != USB_SPEED_UNKNOWN
->  				&& udc->driver && udc->driver->suspend) {
-> @@ -1739,17 +1733,14 @@ static irqreturn_t usba_udc_irq(int irq, void *devid)
->  	}
->  
->  	if (status & USBA_WAKE_UP) {
-> -		start_clock(udc);
->  		toggle_bias(udc, 1);
->  		usba_writel(udc, INT_CLR, USBA_WAKE_UP);
-> +		usba_int_enb_clear(udc, USBA_WAKE_UP);
->  		DBG(DBG_BUS, "Wake Up CPU detected\n");
->  	}
->  
->  	if (status & USBA_END_OF_RESUME) {
-> -		udc->suspended = false;
->  		usba_writel(udc, INT_CLR, USBA_END_OF_RESUME);
-> -		usba_int_enb_clear(udc, USBA_WAKE_UP);
-> -		usba_int_enb_set(udc, USBA_DET_SUSPEND);
->  		generate_bias_pulse(udc);
->  		DBG(DBG_BUS, "Resume detected\n");
->  		if (udc->gadget.speed != USB_SPEED_UNKNOWN
-> @@ -1764,8 +1755,6 @@ static irqreturn_t usba_udc_irq(int irq, void *devid)
->  	if (dma_status) {
->  		int i;
->  
-> -		usba_int_enb_set(udc, USBA_DET_SUSPEND);
-> -
->  		for (i = 1; i <= USBA_NR_DMAS; i++)
->  			if (dma_status & (1 << i))
->  				usba_dma_irq(udc, &udc->usba_ep[i]);
-> @@ -1775,8 +1764,6 @@ static irqreturn_t usba_udc_irq(int irq, void *devid)
->  	if (ep_status) {
->  		int i;
->  
-> -		usba_int_enb_set(udc, USBA_DET_SUSPEND);
-> -
->  		for (i = 0; i < udc->num_ep; i++)
->  			if (ep_status & (1 << i)) {
->  				if (ep_is_control(&udc->usba_ep[i]))
-> @@ -1790,9 +1777,7 @@ static irqreturn_t usba_udc_irq(int irq, void *devid)
->  		struct usba_ep *ep0, *ep;
->  		int i;
->  
-> -		usba_writel(udc, INT_CLR,
-> -			USBA_END_OF_RESET|USBA_END_OF_RESUME
-> -			|USBA_DET_SUSPEND|USBA_WAKE_UP);
-> +		usba_writel(udc, INT_CLR, USBA_END_OF_RESET);
->  		generate_bias_pulse(udc);
->  		reset_all_endpoints(udc);
->  
-> @@ -1819,11 +1804,6 @@ static irqreturn_t usba_udc_irq(int irq, void *devid)
->  				| USBA_BF(BK_NUMBER, USBA_BK_NUMBER_ONE)));
->  		usba_ep_writel(ep0, CTL_ENB,
->  				USBA_EPT_ENABLE | USBA_RX_SETUP);
-> -
-> -		/* If we get reset while suspended... */
-> -		udc->suspended = false;
-> -		usba_int_enb_clear(udc, USBA_WAKE_UP);
-> -
->  		usba_int_enb_set(udc, USBA_BF(EPT_INT, 1) |
->  				      USBA_DET_SUSPEND | USBA_END_OF_RESUME);
->  
-> @@ -1896,19 +1876,9 @@ static int usba_start(struct usba_udc *udc)
->  	if (ret)
->  		return ret;
->  
-> -	if (udc->suspended)
-> -		return 0;
-> -
->  	spin_lock_irqsave(&udc->lock, flags);
->  	toggle_bias(udc, 1);
->  	usba_writel(udc, CTRL, USBA_ENABLE_MASK);
-> -	/* Clear all requested and pending interrupts... */
-> -	usba_writel(udc, INT_ENB, 0);
-> -	udc->int_enb_cache = 0;
-> -	usba_writel(udc, INT_CLR,
-> -		USBA_END_OF_RESET|USBA_END_OF_RESUME
-> -		|USBA_DET_SUSPEND|USBA_WAKE_UP);
-> -	/* ...and enable just 'reset' IRQ to get us started */
->  	usba_int_enb_set(udc, USBA_END_OF_RESET);
->  	spin_unlock_irqrestore(&udc->lock, flags);
->  
-> @@ -1919,9 +1889,6 @@ static void usba_stop(struct usba_udc *udc)
->  {
->  	unsigned long flags;
->  
-> -	if (udc->suspended)
-> -		return;
-> -
->  	spin_lock_irqsave(&udc->lock, flags);
->  	udc->gadget.speed = USB_SPEED_UNKNOWN;
->  	reset_all_endpoints(udc);
-> @@ -1949,7 +1916,6 @@ static irqreturn_t usba_vbus_irq_thread(int irq, void *devid)
->  		if (vbus) {
->  			usba_start(udc);
->  		} else {
-> -			udc->suspended = false;
->  			if (udc->driver->disconnect)
->  				udc->driver->disconnect(&udc->gadget);
->  
-> @@ -2028,7 +1994,6 @@ static int atmel_usba_stop(struct usb_gadget *gadget)
->  	if (udc->vbus_pin)
->  		disable_irq(gpiod_to_irq(udc->vbus_pin));
->  
-> -	udc->suspended = false;
->  	usba_stop(udc);
->  
->  	udc->driver = NULL;
-> @@ -2393,7 +2358,6 @@ static int usba_udc_suspend(struct device *dev)
->  	mutex_lock(&udc->vbus_mutex);
->  
->  	if (!device_may_wakeup(dev)) {
-> -		udc->suspended = false;
->  		usba_stop(udc);
->  		goto out;
->  	}
-> @@ -2403,13 +2367,10 @@ static int usba_udc_suspend(struct device *dev)
->  	 * to request vbus irq, assuming always on.
->  	 */
->  	if (udc->vbus_pin) {
-> -		/* FIXME: right to stop here...??? */
->  		usba_stop(udc);
->  		enable_irq_wake(gpiod_to_irq(udc->vbus_pin));
->  	}
->  
-> -	enable_irq_wake(udc->irq);
-> -
->  out:
->  	mutex_unlock(&udc->vbus_mutex);
->  	return 0;
-> @@ -2423,12 +2384,8 @@ static int usba_udc_resume(struct device *dev)
->  	if (!udc->driver)
->  		return 0;
->  
-> -	if (device_may_wakeup(dev)) {
-> -		if (udc->vbus_pin)
-> -			disable_irq_wake(gpiod_to_irq(udc->vbus_pin));
-> -
-> -		disable_irq_wake(udc->irq);
-> -	}
-> +	if (device_may_wakeup(dev) && udc->vbus_pin)
-> +		disable_irq_wake(gpiod_to_irq(udc->vbus_pin));
->  
->  	/* If Vbus is present, enable the controller and wait for reset */
->  	mutex_lock(&udc->vbus_mutex);
-> diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.h b/drivers/usb/gadget/udc/atmel_usba_udc.h
-> index 620472f218bc..b44873148393 100644
-> --- a/drivers/usb/gadget/udc/atmel_usba_udc.h
-> +++ b/drivers/usb/gadget/udc/atmel_usba_udc.h
-> @@ -343,7 +343,6 @@ struct usba_udc {
->  	struct usba_ep *usba_ep;
->  	bool bias_pulse_needed;
->  	bool clocked;
-> -	bool suspended;
->  	bool ep_prealloc;
->  
->  	u16 devstatus;
-> 
