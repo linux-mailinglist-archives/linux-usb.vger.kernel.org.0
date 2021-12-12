@@ -2,96 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B054719E8
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Dec 2021 12:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07AB9471A74
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Dec 2021 14:47:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230272AbhLLLze (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 Dec 2021 06:55:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbhLLLzd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Dec 2021 06:55:33 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CDEC061714;
-        Sun, 12 Dec 2021 03:55:33 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id n15-20020a17090a160f00b001a75089daa3so12694600pja.1;
-        Sun, 12 Dec 2021 03:55:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hX/ICKtr5gW8yVaOGnXk5ZnAIDwSq2paZmGCJ/xzR3o=;
-        b=FAjhegj3SG+UvdjFvrXS28CX8qHvlvWkpKSnAo6rjTVKJAY1hjVPXZ8m70f95CvkOT
-         2/zjV1M4KIciELPfm/ZJ8RivZ+R3bOHmcgzYuVtwQQNkEhvuHE6PXQ3vvN9QeuoJOZJu
-         0T8clhzo8RfbmYie2hRraJr7Mp1eEGVkdz6ct/TI7CQxiATv2WKAZMUIpbDCujGcS4+M
-         yP1s0xW/4ziupeNaiBlmRz87TOdRd2UGiSF+Gakf2esA4N+g3FWAUNpstJr4y653Xaib
-         +PWHn6TuRuEMB29NyuoDpGqAczb8f3f/OrLjHDrcqE1/HYIavPSU/wkDbZYhwWA83+9a
-         3MuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hX/ICKtr5gW8yVaOGnXk5ZnAIDwSq2paZmGCJ/xzR3o=;
-        b=ervNcpCaF/hFYl/Lhvat6KXy6RC+ytJtyL5epWIrcMDtCqdt4bvsINBbAEDcGYyClF
-         j3ILnMM+Fs5nIMsOQrtNKOdYCiYNIrF0UjgGHmx+xRoBzW8+OHmhunz+zapCEDqQo6uo
-         qoHDgLEM7Wi6n3AikbXn4SPGalcKvKiBeRtbmGgvDcc5EmMtp86n4DY6Lm3t2qlmEzeG
-         4XyI0z8j5/D6JqRfIW9BRb4A+jJOaaar0dtZx02hbV2qRT20DdJGMn8gyZ0gDGm1RB1y
-         ee52iRRn2X9bMZMItNe3UwUc6Sa98DAoOGpENcUbmZM1UJs7hlj7Qv8O08yQUcyAy60O
-         qtBw==
-X-Gm-Message-State: AOAM531Z922jS32TFMKNEhYcGJdX90qrhDvPjYsa8cHfUiXoFdbjqnXK
-        DGMeNY7REUrlZI3FbqJJ9t0=
-X-Google-Smtp-Source: ABdhPJyX3oFAc+HQ//7S+51gGzVlfj9Q3l8O5LkRTdU480ioUaICXeQWuw4FTwGfw2PzHI6TOCaWoQ==
-X-Received: by 2002:a17:90b:1e4f:: with SMTP id pi15mr37052454pjb.181.1639310132658;
-        Sun, 12 Dec 2021 03:55:32 -0800 (PST)
-Received: from localhost.localdomain ([240d:1a:8f0:6c00:89cb:88d1:b6b2:3345])
-        by smtp.gmail.com with ESMTPSA id e14sm9909732pfv.18.2021.12.12.03.55.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Dec 2021 03:55:32 -0800 (PST)
-From:   Alexandre Courbot <gnurou@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-kernel@vger.kernel.org, Alexandre Courbot <gnurou@gmail.com>
-Subject: [PATCH] usb: storage: do not use UAS with Logitec LGB-4BNHUC
-Date:   Sun, 12 Dec 2021 20:55:06 +0900
-Message-Id: <20211212115506.180629-1-gnurou@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        id S229889AbhLLNrf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Dec 2021 08:47:35 -0500
+Received: from cable.insite.cz ([84.242.75.189]:35254 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231218AbhLLNrd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 12 Dec 2021 08:47:33 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 7F7DDA1A3D405;
+        Sun, 12 Dec 2021 14:47:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1639316851; bh=PtiuHvMgg1v8ovCPLzsPFekDFQtCec7HEe/Qq468zAw=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=SfPfwIhYQZEQQlAi8lLuUjWE7mGmYbLh34ZiMRq7BwYcfI4aH4KRR04hWWZmungz8
+         JTt1CdRDCdXRNZKSnw7Gg1RtR9ifYBfSEjUtBnYKNmfQQ0zMXTQLuSaV4cx6ujaked
+         B9/fKACFa+dGguYudRZ+wPwKUNXvQKVgWX6gHlJY=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id xlEt1cSF61tE; Sun, 12 Dec 2021 14:47:25 +0100 (CET)
+Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 4E112A1A3D404;
+        Sun, 12 Dec 2021 14:47:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1639316845; bh=PtiuHvMgg1v8ovCPLzsPFekDFQtCec7HEe/Qq468zAw=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=IcLkuCWgqw3dt/JGpVjFp3mpzq7UN1pnlU5K9g9zm3S9k6sVRYO2SW4WHxJ/9U2lG
+         n4CehG3/PjWgZrEuwbq3LjpwmuSq6kd0zHeiLCnh2A/7quBzwxNUrCeq2aloC2GLvl
+         RM0APhtbTl3hz/UEVPVTeQw8h+DgbDNJ26pd4/vU=
+Subject: Re: usb: dwc2: Detecting cable disconnection in OTG mode?
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <7cce9f05-d659-1fe8-2862-aeca75693808@ivitera.com>
+ <ace0e7e0-bf55-e2e4-a17f-c411de8a5266@ivitera.com>
+Message-ID: <897c79d2-eb88-01f5-95b6-67d5ab12954d@ivitera.com>
+Date:   Sun, 12 Dec 2021 14:47:24 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <ace0e7e0-bf55-e2e4-a17f-c411de8a5266@ivitera.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This 4-drives USB 3.1 bay gets unhappy when used with UAS:
+Dne 11. 12. 21 v 10:59 Pavel Hofman napsal(a):
+> Dne 11. 12. 21 v 10:55 Pavel Hofman napsal(a):
+>> Hi Minas,
+>>
+>> I am trying to find if dwc2 in OTG mode can pass information to gadget 
+>> functions that the host has been disconnected. I am testing on RPi4. 
+>> In a datasheet for a different dwc2 implementation 
+>> https://www.mouser.cn/datasheet/2/196/Infineon-xmc4500_rm_v1.6_2016-UM-v01_06-EN-598157.pdf 
+>> - chapter "16.8.3 Device Disconnection" I found:
+>>
+>>
+>> ===========
+>> The device session ends when the USB cable is disconnected or if the 
+>> VBUS is switched off by the host.
+>> The device disconnect flow is as follows:
+>>
+>> 1. When the USB cable is unplugged or when the VBUS is switched off by 
+>> the host, the device core triggers GINTSTS.OTGInt [bit 2] interrupt bit
+>> ============
+>>
+>> I put a printk to core_intr.c:dwc2_handle_otg_intr() which is called 
+>> only from handling the OTGInt interrupt 
+>> https://elixir.bootlin.com/linux/v5.1.9/source/drivers/usb/dwc2/core_intr.c#L803 
+>> . But this method is not called at all when disconnecting the USB 
+>> cable on RPi4 in gadget mode.
+>>
+> 
+> To add, the method dwc2_hsotg_disconnect is called, but after 
+> reconnecting the cable, as part of the gadget reset  when handling reset 
+> interrupts (gintsts & (GINTSTS_USBRST | GINTSTS_RESETDET)) here 
+> https://elixir.bootlin.com/linux/v5.1.9/source/drivers/usb/dwc2/gadget.c#L3653 
+> 
 
-	sd 10:0:0:0: [sdb] tag#18 uas_eh_abort_handler 0 uas-tag 5 inflight: CMD IN
-	sd 10:0:0:0: [sdb] tag#18 CDB: Read(16) 88 00 00 00 00 00 00 9d 42 30 00 00 04 00 00 00
 
-It works perfectly fine as a regular mass-storage device, so prevent UAS
-from being used with it.
+Maybe the reason for the OTGInt not being thrown at cable disconnect is 
+the fact that RPi4 most likely does not handle USB_OTG_ID signal. I 
+asked about USB_OTG_ID wiring on RPi4 at their forum.
 
-Signed-off-by: Alexandre Courbot <gnurou@gmail.com>
----
- drivers/usb/storage/unusual_uas.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+Nevertheless it turns out that DWC2 throws Suspend interrupt 
+GINTSTS_USBSUSP (11) at cable disconnection on the RPi4, and the gadget 
+composite driver calls suspend hook of struct usb_function. I wonder if 
+implementing the suspend handler would be a solution for other dwc2 
+implementations, or if the audio function should implement also some 
+other handler in order to correctly serve the cable disconnection for 
+all dwc2 implementations.
 
-diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index b34b858d82a6..9ef09cabef50 100644
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -52,6 +52,12 @@ UNUSUAL_DEV(0x059f, 0x1061, 0x0000, 0x9999,
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
- 
-+UNUSUAL_DEV(0x0789, 0x0296, 0x0000, 0x9999,
-+		"Logitec",
-+		"LGB-4BNHUC",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_UAS),
-+
- /*
-  * Apricorn USB3 dongle sometimes returns "USBSUSBSUSBS" in response to SCSI
-  * commands in UAS mode.  Observed with the 1.28 firmware; are there others?
--- 
-2.34.1
+Thanks a lot,
+
+Pavel.
+
+
 
