@@ -2,63 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D169473321
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 18:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 701B1473423
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 19:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237897AbhLMRhA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Dec 2021 12:37:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
+        id S241920AbhLMSg2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Dec 2021 13:36:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234226AbhLMRg7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 12:36:59 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19505C061574;
-        Mon, 13 Dec 2021 09:36:59 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id e3so55504061edu.4;
-        Mon, 13 Dec 2021 09:36:59 -0800 (PST)
+        with ESMTP id S241925AbhLMSg1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 13:36:27 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A033AC061748;
+        Mon, 13 Dec 2021 10:36:26 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id t5so54973337edd.0;
+        Mon, 13 Dec 2021 10:36:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=npNJEDwkoOlmwjF9zNsWKMDDzztWN2EkbCA8kte2oyU=;
-        b=OiVA9Gwy/aau1qNb4vNLhEM7HPoyqe5ArGvIec/Neq+JtLUv6T1JXOkG9RsgRNlJH0
-         2Cy+rhjZy8Yc/Uu3/Jo1mPbf44bvix8o+Cc9lwyGQx/ajSX10I3BhxfOSKuMkg2qd2To
-         gZHHluTjrndATYmphJGRLCN2lnmCZV6+QuiiasKvXZJVD9dlg0KzJFWykNUnT6QC+AQh
-         gaFhre9k5kajhI6FZ3jMFow+BPVSyIjFps0+fBfOY71/7KJoFzxxZVJWeMxHj8n/dOun
-         J7ckGoG08zZ2smJ+9nVkSImPFz24mnB8nqaE9u59KJ22Kg5dlI7HI0OsGnaedLiNQ4mc
-         xxhA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D9HDwMRbrHhqS+RAMOtyip5SrGwIhn2OMyxvs6pUsog=;
+        b=GyXp1bRpM5xc7y3ovN+XrgnFL/YT1pQGPbuM+V0usMfizPWpZMmuSZYAm48SNUPOk5
+         g4YgXhpZfg5FO5IE7PXSLpTCOKM8VwCL7KTGTmZwyt+vABMyB5nq+jbR65GcPQMOsJ71
+         n0SXjFiJdEam3BLP/W7+3ujAMM0sTLr5MlW9bk90Na3s719RfbbIcfam7eWlnI2PFmxC
+         P2l2+102sXsKIQEHGmD4JBH424gFi+5cCPStTidN8YBf3vTxbVUNgoet0HCvoI+KkurZ
+         LhLd4utOgmvpR8I7O/ZmUV3t4ERBurWpOlUbMI/yTYBlh797DHDwsO6OPeygpCqpV3Ri
+         9jWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=npNJEDwkoOlmwjF9zNsWKMDDzztWN2EkbCA8kte2oyU=;
-        b=rrOXLZ2bI5SrrP4SM5Of2bI2BnaN0jOx2FLcpk0v2TfNzRYAVSOILTLtkUUs6cegKp
-         6FbQr0QGE4TqlvEUPw3l95suIVSxAYsFphmm9kssW7VVt3RVgp5APkKNZyJaoElTvD4G
-         3/PCOQQCTuExrc4i1MeYWEqLw7VsyGiwhpMFoDU3so6wzjoLFe2z4t3ElvRleJwMRpc1
-         XVhZplaQt6YcXprOdTXHH5FBnWBRXtKNtgm21Yv7E1ORSWUAUdjAy+nUf4jSCzMqmPWR
-         8NqrTYiEV/sbyPc/fqjsuUKi6S3XnH9EBEC4+SxwpmEVybitQiZW2mW0ddFzhWJZKGJQ
-         Il8w==
-X-Gm-Message-State: AOAM530riF7lGUZxMQMUOVHvLSXLuSM/jAptOYg4pft2sw6VUjz/FM0o
-        iz8cK78VKVwl7rDKRUf/7Hs=
-X-Google-Smtp-Source: ABdhPJxbNvbgQGWkqz2J+eJ5C809PVuJgPLm2Wfd8eQFvP8hP3kv6ftgzgIBo9Zo8Ru1V3ZLIrxM0A==
-X-Received: by 2002:a50:d606:: with SMTP id x6mr242372edi.124.1639417017748;
-        Mon, 13 Dec 2021 09:36:57 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D9HDwMRbrHhqS+RAMOtyip5SrGwIhn2OMyxvs6pUsog=;
+        b=vi4o3VkEBYZ1n8zXTZ3l9dOzqRrXgz/wMww8eblZ0SHsMoFHlF4+uFqXpMMFRS/TJL
+         UukluViRbTeDg6Puxc/+gBtjJ5avuvuGoG5n8BFUPVjsmTWEcCZi8mvQKF5WhQEI3N5J
+         pfWg51wKoDHptDcp+t9XAzwUs4pNTPGT7J0BvksW+E3ulrkQ0VgquBdR8kRdQReRn9i6
+         QHzYGChHYNIo1C69u7gekNse2IWaTw8YnLkoSsqwIy4Fg7+lBU++9TNvHjCgHFZVct4C
+         uywKbP5KxGoMaKanOtxaR63+XVNowt5uXZnEHsmBWwWoZLcIgrpZn1Qp+HS8HNIU5DOI
+         Gjrg==
+X-Gm-Message-State: AOAM5305Bn/FP0h1no/kg2FircAot9yQ4plDfXn0Eb6nTBCSqzzM7sUa
+        g94CcWwakQwm67ZG8TgiQeg=
+X-Google-Smtp-Source: ABdhPJyfwLPxKj8REmRfcQVQFjc+QGvFUevReO93kayGymfoGsxl56jpZ2lRWZeE8qQO7S6N+YTIAw==
+X-Received: by 2002:a17:906:9f10:: with SMTP id fy16mr54595ejc.637.1639420585197;
+        Mon, 13 Dec 2021 10:36:25 -0800 (PST)
 Received: from CLU-56K1TB3.ad.garmin.com ([176.223.64.4])
-        by smtp.gmail.com with ESMTPSA id p13sm6632293eds.38.2021.12.13.09.36.57
+        by smtp.gmail.com with ESMTPSA id q17sm6816793edd.10.2021.12.13.10.36.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 09:36:57 -0800 (PST)
+        Mon, 13 Dec 2021 10:36:24 -0800 (PST)
 From:   Razvan Heghedus <heghedus.razvan@gmail.com>
 Cc:     heghedus.razvan@gmail.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Johan Hovold <johan@kernel.org>,
         Wei Ming Chen <jj251510319013@gmail.com>,
+        Peter Chen <peter.chen@nxp.com>,
+        Anant Thazhemadam <anant.thazhemadam@gmail.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: core: Export usb_device_match_id
-Date:   Mon, 13 Dec 2021 19:35:18 +0200
-Message-Id: <20211213173520.4387-2-heghedus.razvan@gmail.com>
+Subject: [PATCH v4 1/2] usb: core: Export usb_device_match_id
+Date:   Mon, 13 Dec 2021 20:36:14 +0200
+Message-Id: <20211213183617.14156-1-heghedus.razvan@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213173520.4387-1-heghedus.razvan@gmail.com>
-References: <20211213173520.4387-1-heghedus.razvan@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 To:     unlisted-recipients:; (no To-header on input)
@@ -71,6 +71,8 @@ usb_device with a table of IDs.
 
 Signed-off-by: Razvan Heghedus <heghedus.razvan@gmail.com>
 ---
+ Changes in v4:
+  - make a patch series
  drivers/usb/core/driver.c | 1 +
  1 file changed, 1 insertion(+)
 
