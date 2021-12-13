@@ -2,76 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11DFF47210C
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 07:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AAAE472110
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 07:29:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232194AbhLMG1b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Dec 2021 01:27:31 -0500
-Received: from out203-205-221-233.mail.qq.com ([203.205.221.233]:45152 "EHLO
-        out203-205-221-233.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232176AbhLMG1b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 01:27:31 -0500
-X-Greylist: delayed 51215 seconds by postgrey-1.27 at vger.kernel.org; Mon, 13 Dec 2021 01:27:30 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1639376849;
-        bh=0Q6VnTr5SGW3kzpVwfmAO+56hCYf2WTdqo4y/9exOXk=;
-        h=In-Reply-To:References:From:To:Cc:Subject:Date;
-        b=GbOK4gqMF5wn1NLzIxjiJthDp4dQB96fpNygSnOEzUBlcaKBkwBCRyeWGhHsdvNSM
-         seLI1F2tjnpZf6vq5hKBVgIKEH53RkfNMwKHfEHhqn29k2y7PT0SOa0RD4i1iDZALj
-         p8jrkxWdb3svpqTYw2Y4lSdUNT7PxSfvOYymGAvw=
-X-QQ-FEAT: oHWrrGTW1dB69m49duS3mdhuyhfj4A9h
-X-QQ-SSF: 00000000000000F000000000000000Z
-X-QQ-XMAILINFO: NitsDAv9uCbJ1ysSWxVlFuoEitg2Y/gWkgppySOi8GZutLDNjbqp0RUjiuiK6y
-         H+aA5Ne4G2rOlX0ZqjXE0qn55G/t/RJo7S+DKnpKp05MKLoj/y3Fu+ANXlTwwjhrVM91Z6tgWixml
-         N5t4jQ0UlixUQfdKCVloh1lALwWr/p/WNosfgh7Xrr397ejz2SWu+TNUM0ffYV2Sfj5BmzbiOUwEz
-         XJ7mcPf2k01LzbHXQtdZM3u7Q2ZGpfW2nkftUe2TQKWNyiJzh+hfpxw3vLP1LygW9qxjzO75R9Xg2
-         ZopRI7MlTE+aK/KTn+9Mk4vuVjTFUjQlZvvLCe92hS8GT1lRur/L4fryE6AIRvw4I+QDBbeWrm+mJ
-         xKL+g3PvDvFeljnCSn/oop26ca+49FAwzk4mykl2MMGKBPz7TSwtiygBXVV9EPQPFjtnYthol8dDS
-         sYjw2UM4lKwJdryzZfJKB+JBcNBvZ4Se6rf1GXfsM6MMPe2h9NCV2saYvzjPBhuKiPy+YqYPk+HLW
-         nBozc3So4svd/Bjr+wdQBkBOI3ocdL9QtxlwzF8VJvA0WlcbhzffFIUk/VmJeDz/nRYKf1W56xJcg
-         /JFK3F5+v4IHp7QppBFp42FIJaf1wMN83aXqhmIWf9EANO9Ws/uGnusoOsUFg77zr/Z5UhrFa9rnx
-         Mnsk0g1wLiIQAUvTG1YjgmPLqkwvZmnNAhhrzZ2lK7ile6Zww+7zV41uNVkrmxea2Et7dXZOBtzPq
-         L3AEvuk00Aip+DfUPAaYKRBzO65zAwb35kwBXsNP0n9sbamBVRJI+SkARIcRrtOT/iyV36ga7R+xJ
-         6u8x9iGoZv1CD+mSBo4lnPxYiKu8h7IOppfV0o+ngdMJPVOiiXNcyAo=
-X-HAS-ATTACH: no
-X-QQ-BUSINESS-ORIGIN: 2
-X-Originating-IP: 223.75.155.17
-In-Reply-To: <Ybbj470ocCf7bj68@kroah.com>
-References: <tencent_1AB342AE1B4723454E78A4D2FD3F33C81306@qq.com>
-        <Ybbj470ocCf7bj68@kroah.com>
-X-QQ-STYLE: 
-X-QQ-mid: webmail813t1639376848t6984519
-From:   "=?ISO-8859-1?B?WGlhb2tlIFdhbmc=?=" <xkernel.wang@foxmail.com>
-To:     "=?ISO-8859-1?B?R3JlZyBLSA==?=" <gregkh@linuxfoundation.org>
-Cc:     "=?ISO-8859-1?B?bGludXgtdXNi?=" <linux-usb@vger.kernel.org>,
-        "=?ISO-8859-1?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>,
-        "=?ISO-8859-1?B?YW5kcmVhcy5ub2V2ZXI=?=" <andreas.noever@gmail.com>,
-        "=?ISO-8859-1?B?bWljaGFlbC5qYW1ldA==?=" <michael.jamet@intel.com>,
-        "=?ISO-8859-1?B?bWlrYS53ZXN0ZXJiZXJn?=" 
-        <mika.westerberg@linux.intel.com>,
-        "=?ISO-8859-1?B?WWVoZXprZWxTaEI=?=" <YehezkelShB@gmail.com>
-Subject: Re: [PATCH] thunderbolt: check the return value of kmemdup()
-Mime-Version: 1.0
-Content-Type: text/plain;
-        charset="ISO-8859-1"
-Content-Transfer-Encoding: base64
-Date:   Mon, 13 Dec 2021 14:27:28 +0800
-X-Priority: 3
-Message-ID: <tencent_D34525AAFF71905A66815C118E0E8A96F007@qq.com>
-X-QQ-MIME: TCMime 1.0 by Tencent
-X-Mailer: QQMail 2.x
-X-QQ-Mailer: QQMail 2.x
+        id S232204AbhLMG3q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Dec 2021 01:29:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230211AbhLMG3p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 01:29:45 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F27EC06173F
+        for <linux-usb@vger.kernel.org>; Sun, 12 Dec 2021 22:29:45 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id k2so22200236lji.4
+        for <linux-usb@vger.kernel.org>; Sun, 12 Dec 2021 22:29:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=eaXI2Z6IE5QKVWXrpgqdjbQdmRYUC+jSX8QGa9PWtE0=;
+        b=qEnNrI0VoL3aQladw9jU/pfey7VDkh2Qjee67oY0SMi7R+mjOc1fqqpWzAjv20dfu2
+         WAAFfox0q4SuyFhJSoS+2/rqZMzQYrgCyJkZpeTI+XamMoKoqotTHnIbse5n92LxSJUs
+         BG2MfUYKZuf5viLTh1e2YH0EhB+9/66P6Ol08EYxT8iKRH7PYHvg7XZusCA2C3OCZFLH
+         Cx5gHFckDLpMRQLp6zWzPrBWq9nRyDB2cbze2slnN/9md1+eck/AvPDuV4R5bZ0e7BSZ
+         CODMQKXZRqdetdIqGOtkRKZYZgdKFA1HPhhqMPduZ/IDv5F8PZrFaqEYW1p7OlIsVmLb
+         58aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=eaXI2Z6IE5QKVWXrpgqdjbQdmRYUC+jSX8QGa9PWtE0=;
+        b=bENssP/dQ8MCaocIyE7RGoiHfXW4e+QrPtve3K0tPB71otm6GCEAEkDYz2TQqtCKQV
+         pgW9W4Nrb4hUvVMIHc9uaTVZYktaBExp6dOVH0XnOHWAqIcjJ6u5x/VRwjDjaNPNamFf
+         UaTrWxQf3B+RtOaeCXMlGD+1L5zPpQZcY6/GAmtg3LBY2Vb4kO0tePWei3Y9SNU4umtn
+         AJsuOCGt//RsJX8CzfgqzAQ3BmGSc8qdUl/RV1kpBPkLSinZrSNo6koqrgofGmALxbgG
+         9n825nB3jjtacwY4BCqnMCT23d2BUjOUAtS/5h04AED9CPpnmQp8vQ2wORmCx8XCiIzJ
+         IiAw==
+X-Gm-Message-State: AOAM531ryxGElhKfPP/R7rj3/2PEywMBK0v8MnHlPg4TmrOqz4pKeulH
+        3PSSexcZBPbh4+O0ezXc/6/mz6EK70jsE2b6bDA=
+X-Google-Smtp-Source: ABdhPJyjk2gJqnVHzG+0NgV40RN4EZXM+fxpYbX1jt0+PhgCTu/ovwKlWtbH1/kF85kPJf3f4qLaMXLB4nTEDhVFh2w=
+X-Received: by 2002:a2e:a28e:: with SMTP id k14mr27763066lja.488.1639376983425;
+ Sun, 12 Dec 2021 22:29:43 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a2e:894e:0:0:0:0:0 with HTTP; Sun, 12 Dec 2021 22:29:42
+ -0800 (PST)
+Reply-To: tsh1179@yahoo.com
+From:   Shiina Terumi <shiinaterumi47@gmail.com>
+Date:   Mon, 13 Dec 2021 13:29:42 +0700
+Message-ID: <CABZgF6m_uDjO+DcYgdnPCDH4P4=RLaufB7+EiUUenFH8B2WyVA@mail.gmail.com>
+Subject: Good Day
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gTW9uLCBEZWMgMTMsIDIwMjEgMDI6MTAgUE0sIEdyZWcgS0ggd3JvdGU6Cj4ga21lbWR1
-cCgpIHJldHVybiBOVUxMIHdoZW4gc29tZSBpbnRlcm5hbCBtZW1vcnkgZXJyb3JzIGhhcHBl
-biwgaXQgaXMKPiBiZXR0ZXIgdG8gY2hlY2sgdGhlIHJldHVybiB2YWx1ZSBvZiBpdC4gT3Ro
-ZXJ3aXNlLCBzb21lIG1lbW9yeSBlcnJvcnMKPiB3aWxsIG5vdCBiZSBjYXRjaGVkIGluIHRp
-bWUgYW5kIG1heSBmdXJ0aGVyIHJlc3VsdCBpbiB3cm9uZyBtZW1vcnk+IGFjY2Vzcy4KPiAK
-PiBTaWduZWQtb2ZmLWJ5OiB4a2VybmVsIDx4a2VybmVsLndhbmdAZm94bWFpbC5jb20+Cj4K
-PiBQbGVhc2UgdXNlIHlvdXIgImZ1bGwiIG5hbWUsIEkgZG91YnQgeW91IHNpZ24gZG9jdW1l
-bnRzIGFzICJ4a2VybmVsIi4gOikKPgo+IHRoYW5rcywKPgo+IGdyZWcgay1oCgpJIGFtIHZl
-cnkgc29ycnkgYWJvdXQgdGhhdCwgbXkgZnVsbCBuYW1lIGlzICJYaWFva2UgV2FuZyIu
+Good Day,
 
+I am Mrs Shiina Terumi, I wish to discuss a very confidential mutual
+beneficial proposition with you, but I want your consent before
+sending details for full explanation.
+
+Kindly get back to me for more details.
+
+Best Regards
+
+Mrs Shiina Terumi
