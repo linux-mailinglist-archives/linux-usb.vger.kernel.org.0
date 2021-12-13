@@ -2,104 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DDA0472EA6
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 15:18:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3895D472EB2
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 15:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238486AbhLMOSR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Dec 2021 09:18:17 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34218 "EHLO
+        id S238800AbhLMOT7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Dec 2021 09:19:59 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34834 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbhLMOSR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 09:18:17 -0500
+        with ESMTP id S232268AbhLMOT6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 09:19:58 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B18CEB81062;
-        Mon, 13 Dec 2021 14:18:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5CBEC34602;
-        Mon, 13 Dec 2021 14:18:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B5E9B80EAF;
+        Mon, 13 Dec 2021 14:19:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3D60C34602;
+        Mon, 13 Dec 2021 14:19:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639405094;
-        bh=NtWdzlEjft5tnQeFaBXUVrmubHd8T7HRkrRLfS+HxKc=;
+        s=korg; t=1639405196;
+        bh=G5oL15r8MfACBMd4Acl40Vokbu2uNByzt91jDIyzlS4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ef4dtFt35n0BNeZHb5cwHF2nWR84NPJ4B4Ej+DcAmvR7/HzogwktH/W/meMnZnx1/
-         Xg3O6A+RredIYQtKTQ5Xmko6sTk52Ckx/QDevDNiQkd9m6eeVOhNiVRfdPIU5wthcz
-         kslBCgGFDpF4EoLzXiuVfEO/wBb1eXc3RIOJDVQs=
-Date:   Mon, 13 Dec 2021 15:18:11 +0100
+        b=r6C7sH9BeXpM3ZWMpbrtz5EUGv4/DvXWFtvpFkVgRwm586OCMYotKuqJUTwqTCk6Q
+         qUhMlv2GlSiDYEVt0oGWwFBWTJdP8GNlJ6MldEJyyd8+fq1tMDX22zCuOjnUfzL2BU
+         BMUyLKuLYe24bbvuLrFQLUx/2Ud4C+Akl9mfkVtg=
+Date:   Mon, 13 Dec 2021 15:19:53 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
 Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
         linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         Eddie Hung <eddie.hung@mediatek.com>,
-        Yuwen Ng <yuwen.ng@mediatek.com>, stable@vger.kernel.org
-Subject: Re: [PATCH 2/3] usb: mtu3: add memory barrier before set GPD's HWO
-Message-ID: <YbdWI5PD3e6uFz8U@kroah.com>
+        Yuwen Ng <yuwen.ng@mediatek.com>
+Subject: Re: [PATCH 3/3] usb: mtu3: fix list_head check warning
+Message-ID: <YbdWiYU+LJHWd4wQ@kroah.com>
 References: <20211209031424.17842-1-chunfeng.yun@mediatek.com>
- <20211209031424.17842-2-chunfeng.yun@mediatek.com>
+ <20211209031424.17842-3-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211209031424.17842-2-chunfeng.yun@mediatek.com>
+In-Reply-To: <20211209031424.17842-3-chunfeng.yun@mediatek.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 11:14:23AM +0800, Chunfeng Yun wrote:
-> There is a seldom issue that the controller access invalid address
-> and trigger devapc or emimpu violation. That is due to memory access
-> is out of order and cause gpd data is not correct.
-> Make sure GPD is fully written before giving it to HW by setting its
-> HWO.
+On Thu, Dec 09, 2021 at 11:14:24AM +0800, Chunfeng Yun wrote:
+> This is caused by uninitialization of list_head.
 > 
-> Fixes: 48e0d3735aa5 ("usb: mtu3: supports new QMU format")
-> Cc: stable@vger.kernel.org
-> Reported-by: Eddie Hung <eddie.hung@mediatek.com>
+> BUG: KASAN: use-after-free in __list_del_entry_valid+0x34/0xe4
+> 
+> Call trace:
+> dump_backtrace+0x0/0x298
+> show_stack+0x24/0x34
+> dump_stack+0x130/0x1a8
+> print_address_description+0x88/0x56c
+> __kasan_report+0x1b8/0x2a0
+> kasan_report+0x14/0x20
+> __asan_load8+0x9c/0xa0
+> __list_del_entry_valid+0x34/0xe4
+> mtu3_req_complete+0x4c/0x300 [mtu3]
+> mtu3_gadget_stop+0x168/0x448 [mtu3]
+> usb_gadget_unregister_driver+0x204/0x3a0
+> unregister_gadget_item+0x44/0xa4
+> 
+> Reported-by: Yuwen Ng <yuwen.ng@mediatek.com>
 > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 > ---
->  drivers/usb/mtu3/mtu3_qmu.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/mtu3/mtu3_qmu.c b/drivers/usb/mtu3/mtu3_qmu.c
-> index 3f414f91b589..34bb5ac67efe 100644
-> --- a/drivers/usb/mtu3/mtu3_qmu.c
-> +++ b/drivers/usb/mtu3/mtu3_qmu.c
-> @@ -273,6 +273,8 @@ static int mtu3_prepare_tx_gpd(struct mtu3_ep *mep, struct mtu3_request *mreq)
->  			gpd->dw3_info |= cpu_to_le32(GPD_EXT_FLAG_ZLP);
->  	}
->  
-> +	/* make sure GPD is fully written before giving it to HW */
-> +	mb();
+>  drivers/usb/mtu3/mtu3_gadget.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-So this means you are using mmio for this structure?  If so, shouldn't
-you be using normal io memory read/write calls as well and not just
-"raw" pointers like this:
-
->  	gpd->dw0_info |= cpu_to_le32(GPD_FLAGS_IOC | GPD_FLAGS_HWO);
-
-Are you sure this is ok?
-
-Sprinkling around mb() calls is almost never the correct solution.
-
-If you need to ensure that a write succeeds, shouldn't you do a read
-from it afterward?  Many busses require this, doesn't yours?
-
-
-
->  
->  	mreq->gpd = gpd;
-> @@ -306,6 +308,8 @@ static int mtu3_prepare_rx_gpd(struct mtu3_ep *mep, struct mtu3_request *mreq)
->  	gpd->next_gpd = cpu_to_le32(lower_32_bits(enq_dma));
->  	ext_addr |= GPD_EXT_NGP(mtu, upper_32_bits(enq_dma));
->  	gpd->dw3_info = cpu_to_le32(ext_addr);
-> +	/* make sure GPD is fully written before giving it to HW */
-> +	mb();
-
-Again, mb(); does not ensure that memory-mapped i/o actually hits the
-HW.  Or if it does on your platform, how?
-
-mb() is a compiler barrier, not a memory write to a bus barrier.  Please
-read Documentation/memory-barriers.txt for more details.
+What commit does this fix?  Should it go to stable kernels?
 
 thanks,
 
