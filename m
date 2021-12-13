@@ -2,91 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB49A472CC1
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 14:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB62472CF0
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 14:13:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237110AbhLMNDM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Dec 2021 08:03:12 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55508 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236001AbhLMNDL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 08:03:11 -0500
+        id S233960AbhLMNNf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Dec 2021 08:13:35 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:58778 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232266AbhLMNNb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 08:13:31 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42802B80EC5;
-        Mon, 13 Dec 2021 13:03:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C859C34602;
-        Mon, 13 Dec 2021 13:03:05 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A4EBBCE101B;
+        Mon, 13 Dec 2021 13:13:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCA35C34601;
+        Mon, 13 Dec 2021 13:13:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639400588;
-        bh=nTxKyHF1jC9M+ChnTa2i7iJGpJ4/W7CueQKrDF9/29o=;
+        s=k20201202; t=1639401207;
+        bh=X4bmoQapJ0I3TPfC8ZUVwe2ESJb201VT5dzLbVKlLUE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eYwrNKS94IVdZlgIRFgwmb08WdKYJBbbGOiryztgbiDvOblRq8IfXRwKTUKQCelU2
-         BmtqcAGNaNyotJwXMmr0L1CK1Zu+sTkN9AXrn86u8wzSPR8joYf9dHfNESrlxOPEnX
-         4OI/ijyfVKeLUxy+l49NTpUp78wI/G54GVaZjJqQBVO7b1YFN7rEB8zM33ea3TFr7F
-         vmzjntRqGuRNYqztKqj01CpzuoE/eUykTyTh7ZLSsJSD59QGVnx9F9qZxPFYK/MNVf
-         /FQaajoCZFvGWLXI+pYTZmj64EP0zTguJtpR0JRfZtMe35VGXdgvCDIqzNJtM2WL2h
-         f0ibZb2sFNT1g==
-Date:   Mon, 13 Dec 2021 21:02:58 +0800
+        b=fLo6I/ChI1VxCsP9vbh4N8wIid9BZqxyg3ASkQb7yUdj8nu1j2LHV7vfW1AMr7eqx
+         CgV3Gl1VcQcl2Gbs+4hXrP6MQoItug+OgVWjGtCp3h6N9q6ASGU6kX4LK2+vnDBPA2
+         PZMqKmCMOYHArRXHzJSB4MQp0pJbyzs/iz8rGSANxH+7vZ52IZoLb7oa9F88q7TCtx
+         GIUpILO3I2zUhMe7qOUypRcydG56hgCDpDFCbxgkSZtgUW8Qsk05gD2T1+9Mkf7gP3
+         Ja4c/FYIeCoEGK3naHg7NgSdonrmqyq02l54MDPPVoxmh4nj1kV2sCsxu80D+zF3PK
+         Baz6LitRWGTRQ==
+Date:   Mon, 13 Dec 2021 21:13:18 +0800
 From:   Peter Chen <peter.chen@kernel.org>
 To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jianhe@ambarella.com" <jianhe@ambarella.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: cdnsp: Fix incorrect status for control request
-Message-ID: <20211213130258.GA5346@Peter>
-References: <20211207091838.39572-1-pawell@gli-login.cadence.com>
- <20211209113408.GA5084@Peter>
- <BYAPR07MB5381415E88BAAC945CB47A93DD709@BYAPR07MB5381.namprd07.prod.outlook.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jianhe@ambarella.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] usb: cdnsp: Fix incorrect calling of cdnsp_died function
+Message-ID: <20211213131318.GB5346@Peter>
+References: <20211210112945.660-1-pawell@gli-login.cadence.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BYAPR07MB5381415E88BAAC945CB47A93DD709@BYAPR07MB5381.namprd07.prod.outlook.com>
+In-Reply-To: <20211210112945.660-1-pawell@gli-login.cadence.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-12-09 12:57:31, Pawel Laszczak wrote:
-> >> From: Pawel Laszczak <pawell@cadence.com>
-> >>
-> >> Patch fixes incorrect status for control request.
-> >> Without this fix all usb_request objects were returned to upper drivers
-> >> with usb_reqest->status field set to -EINPROGRESS.
-> >>
-> >> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> >> Reported-by: Ken (Jian) He <jianhe@ambarella.com>
-> >> cc: <stable@vger.kernel.org>
-> >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> >> ---
-> >>  drivers/usb/cdns3/cdnsp-ring.c | 2 ++
-> >>  1 file changed, 2 insertions(+)
-> >>
-> >> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-> >> index 1b1438457fb0..e8f5ecbb5c75 100644
-> >> --- a/drivers/usb/cdns3/cdnsp-ring.c
-> >> +++ b/drivers/usb/cdns3/cdnsp-ring.c
-> >> @@ -1029,6 +1029,8 @@ static void cdnsp_process_ctrl_td(struct cdnsp_device *pdev,
-> >>  		return;
-> >>  	}
-> >>
-> >> +	*status = 0;
-> >> +
-> >>  	cdnsp_finish_td(pdev, td, event, pep, status);
-> >>  }
-> >>
-> >> --
-> >I think you may move *status = 0 at the beginning of
-> >cdnsp_process_ctrl_td in case you would like to handle some error
-> >conditions during this function.
+On 21-12-10 12:29:45, Pawel Laszczak wrote:
+> From: Pawel Laszczak <pawell@cadence.com>
 > 
-> I don't predict any other status code for control request in this place.
-> I wanted to set this status only once after completion status stage. It was the reason why I put this
-> statement at the end of function.
+> Patch restrict calling of cdnsp_died function during removing modules
+> or software disconnect.
+> This function was called because after transition controller to HALT
+> state the driver starts handling the deferred interrupt.
+> In this case such interrupt can be simple ignored.
+> 
+> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+> cc: <stable@vger.kernel.org>
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> ---
+>  drivers/usb/cdns3/cdnsp-ring.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+> index e8f5ecbb5c75..e45c3d6e1536 100644
+> --- a/drivers/usb/cdns3/cdnsp-ring.c
+> +++ b/drivers/usb/cdns3/cdnsp-ring.c
+> @@ -1525,7 +1525,14 @@ irqreturn_t cdnsp_thread_irq_handler(int irq, void *data)
+>  	spin_lock_irqsave(&pdev->lock, flags);
+>  
+>  	if (pdev->cdnsp_state & (CDNSP_STATE_HALTED | CDNSP_STATE_DYING)) {
+> -		cdnsp_died(pdev);
+> +		/*
+> +		 * While removing or stopping driver there may still be deferred
+> +		 * not handled interrupt which should not be treated as error.
+> +		 * Driver should simply ignore it.
+> +		 */
+> +		if (pdev->gadget_driver)
+> +			cdnsp_died(pdev);
+> +
 
-So, you always consider there is no error for control request handling?
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
 
 -- 
 
