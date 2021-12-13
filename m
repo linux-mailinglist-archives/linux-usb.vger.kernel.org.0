@@ -2,132 +2,193 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD165473159
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 17:13:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F4347331F
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 18:36:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240534AbhLMQNF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Dec 2021 11:13:05 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57170 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240528AbhLMQNE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 11:13:04 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3106B8119A
-        for <linux-usb@vger.kernel.org>; Mon, 13 Dec 2021 16:13:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06150C34604;
-        Mon, 13 Dec 2021 16:13:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639411982;
-        bh=bDtJpkUUflOH9OyKDBTs9uWcYdae19TZjXrDeXtP4ZU=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=FJvhZx7fVJbl3YhNnoxPAFx/TkOpbkJkIram70k6lIh7aHzpiLUCMIEGM3XCAvmq0
-         ac3aQbRtQlT8NANTOYh0GAZ3fh9r2nw4u2YPKmSGZhpm7mptCsTtA8thhhwlzz67GW
-         JLeh9lrcUUxhcYnHeYdzMk6GRPZJk1F3Zzin7m5EtKFBZn2f6tXDaNi7VB+HVCylbf
-         RghnWfjBFoBu+OUIuRNOIPeO14BB+o0W5dqSnGJtDS8YKKjkb6UY8kuQCG4AffUXkR
-         qZwlWrQ0CCFmKZ0aiIUGssYf7pnanfd3eG9eqikfPnNN67DIp7KA2XDWvgJ2cCSeGV
-         HcHGJFyv2K8Ag==
-Subject: Re: usb: dwc2: USB on Agilex platform broken after commit
- 50fb0c128b6e
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dinh.linux@gmail.com
-References: <81f48bdb-c97b-2f7c-293e-941ec44ee941@kernel.org>
- <5e8cbce0-3260-2971-484f-fc73a3b2bd28@synopsys.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-Message-ID: <0fe0ad93-1f17-5e88-e381-94544ac75185@kernel.org>
-Date:   Mon, 13 Dec 2021 10:13:00 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S235635AbhLMRgi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Dec 2021 12:36:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56930 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234226AbhLMRgh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 12:36:37 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1E6C061574;
+        Mon, 13 Dec 2021 09:36:37 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id r11so53885142edd.9;
+        Mon, 13 Dec 2021 09:36:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N5WhQQ2NMuW2ZSHHBeMI3aRKCrpXfG1J97/50R2XHbg=;
+        b=q1hdPntqzPSqP7mviwj3xEj7Pcdf1orTpXrxdd7uzZ5KbEDuq73jY1YzH92C/zQVdP
+         HcBRyCDXT4KESXkIHxD9qjc/sHr0xd8DOhqXICIF9iB8IWlOkdS0qGHII9cZs9SOLnxn
+         arhD0sRjnmTZ/5DwqpbDGQXXnDRHPnoBZd1EHBjyk2eOM5V5Xr1raW3gcDdHK4nKSwvZ
+         04HPS488ysdlugWaHmT+plyvtLN/i3C9sxofdfUGDbGQzOVq/6O/hk3DX+IIV3GgBEti
+         yF5kkLg2T+hm61lXzAKrW3FDwjbu6dyGKBARQdeuSdcbysr6jtrVR6R2WT5ge1501DuP
+         ln8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N5WhQQ2NMuW2ZSHHBeMI3aRKCrpXfG1J97/50R2XHbg=;
+        b=fBodtmxs+wfEEAsDlNswzTKnvRZjK1ALw11xOLa2KbpOsz3ouo6b2vA77U2plkPgow
+         7ffj4+SVEkb9E7GByCljaiP00xDrGYFVxmYaABzp+lb7zs5m8Ak0IyjUwqAjC9D5GGOR
+         TUrFq/2CbhCJmstRUIayWLFIRpNtOJ6b6ccyfVH8ZbaDyKN2AYjFtNwVg0UuQ0HBXvir
+         Z2qRayvv1K7omoBCLtukefl7VCpIttWDEw8BG+xHOEfJCe6l/75lf7jWtENsMebuvwM8
+         cpExdRUuY+UHQh3PQsi/bC/9nffwGyp+7fumocs+Y83DIUqCpuDiU1aEC5TSz+h0fl9S
+         rMoA==
+X-Gm-Message-State: AOAM5302cZs9OVtXZFtgtsxeaRa7HWOWIf6LvQSM88BUF9I1Rj1tcZq8
+        /MpmqYwrHxdxPn0AqPlaWGA=
+X-Google-Smtp-Source: ABdhPJzCZuStsD2ODWYdRtR35SEXfkIc2Ei2/IitJYwZB6w+oB71LlkCVGvwHjP00sQKc8F0Jgg+fw==
+X-Received: by 2002:a17:906:4f17:: with SMTP id t23mr25253341eju.112.1639416995953;
+        Mon, 13 Dec 2021 09:36:35 -0800 (PST)
+Received: from CLU-56K1TB3.ad.garmin.com ([176.223.64.4])
+        by smtp.gmail.com with ESMTPSA id p13sm6632293eds.38.2021.12.13.09.36.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 09:36:35 -0800 (PST)
+From:   Razvan Heghedus <heghedus.razvan@gmail.com>
+Cc:     heghedus.razvan@gmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        Peter Chen <peter.chen@nxp.com>,
+        Anant Thazhemadam <anant.thazhemadam@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] usb: misc: ehset: Rework test mode entry
+Date:   Mon, 13 Dec 2021 19:35:17 +0200
+Message-Id: <20211213173520.4387-1-heghedus.razvan@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <5e8cbce0-3260-2971-484f-fc73a3b2bd28@synopsys.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Minas,
+The USB2.0 spec chapter 11.24.2.13 says that the USB port which is going
+under test needs to be put in suspend state before sending the test
+command. Many hubs, don't enforce this precondition and they work fine
+without this step. We should follow the specification and put the USB
+port in suspend before sending the test command.
 
-Thanks for replying!
+Also there are some "special" hubs, which requires to disable the USB
+port power instead of putting it in suspend. I found out only three hubs
+which requires this step, but if more are found, they can be added to
+the list.
 
-On 12/13/21 3:47 AM, Minas Harutyunyan wrote:
-> Hi Dinh,
-> 
-> On 12/9/2021 1:44 AM, Dinh Nguyen wrote:
->> Hi Arthur,
->>
->> The usb driver is getting this error:
->>
->> [    1.539856] Hardware name: SoCFPGA Agilex SoCDK (DT)
->> [    1.544799] Call trace:
->> [    1.547233]  dump_backtrace+0x0/0x1c0
->> [    1.550897]  show_stack+0x18/0x68
->> [    1.554202]  dump_stack+0xd8/0x134
->> [    1.557597]  __report_bad_irq+0x38/0xf0
->> [    1.561423]  note_interrupt+0x31c/0x3e8
->> [    1.565244]  handle_irq_event_percpu+0x60/0x90
->> [    1.569671]  handle_irq_event+0x48/0xe0
->> [    1.573491]  handle_fasteoi_irq+0xb0/0x138
->> [    1.577574]  generic_handle_irq+0x30/0x48
->> [    1.581567]  __handle_domain_irq+0x60/0xb8
->> [    1.585646]  gic_handle_irq+0xb4/0xd0
->> [    1.589300]  el1_irq+0xb8/0x150
->> [    1.592428]  arch_cpu_idle+0x18/0x28
->> [    1.595992]  default_idle_call+0x24/0x5c
->> [    1.599899]  do_idle+0x1f4/0x290
->> [    1.603118]  cpu_startup_entry+0x28/0x68
->> [    1.607026]  rest_init+0xd8/0xe8
->> [    1.610242]  arch_call_rest_init+0x10/0x1c
->> [    1.614329]  start_kernel+0x50c/0x544
->> [    1.617980] handlers:
->> [    1.620241] [<00000000ae601aac>] dwc2_handle_common_intr
->> [    1.625541] [<00000000255d793a>] dwc2_hsotg_irq
->> [    1.630056] [<000000000bc68ab4>] usb_hcd_irq
->> [    1.634312] Disabling IRQ #33
->>
->> After a git-bisect, the result is this commit:
->>
->>
->> commit 50fb0c128b6e8df62200ba85c05ecd6b1396476d
->> Author: Artur Petrosyan<Arthur.Petrosyan@synopsys.com>
->> Date:   Tue Apr 13 11:37:15 2021 +0400
->>
->>       usb: dwc2: Add clock gating entering flow by system suspend
->>       
->>       If not hibernation nor partial power down are supported,
->>       clock gating is used to save power.
->>       
->>       Adds a new flow of entering clock gating when PC is
->>       suspended.
->>       
->>       Signed-off-by: Artur Petrosyan<Arthur.Petrosyan@synopsys.com>
->>       Link:https://lore.kernel.org/r/20210413073716.30C13A0094@mailhost.synopsys.com
->>       Signed-off-by: Greg Kroah-Hartman<gregkh@linuxfoundation.org>
->>
->> The DWC2 USB version on the Agilex platform is
->> 0x4F54330A
->>
-> Could you please provide HW configuration registers values (GHWCFG1-4).
-> 
+Since this changes the default implementation, it raises the posibility
+of finding other broken hubs which are not compliant with the spec and
+the test command might not work is the port is suspended. If such hubs
+are found, a similar workaround like the disable part can be implemented
+to skip putting the port in suspend.
 
-[    0.987779] dwc2 ffb00000.usb: GHWCFG1    @0xFFFF800012940044 : 
-0x00000000
-[    0.994644] dwc2 ffb00000.usb: GHWCFG2    @0xFFFF800012940048 : 
-0x238FFC90
-[    1.001498] dwc2 ffb00000.usb: GHWCFG3    @0xFFFF80001294004C : 
-0x1F8002E8
-[    1.008350] dwc2 ffb00000.usb: GHWCFG4    @0xFFFF800012940050 : 
-0xFE0F0020
+Signed-off-by: Razvan Heghedus <heghedus.razvan@gmail.com>
+---
+ Changes in v3:
+  - use usb_device_match_id to correctly match the hub based on VID:PID
+  - reword commit message to be more explanatory on what the patch does
+ Changes in v2:
+  - style change regarding multi-line comments and a new black line
+    after local variable definitions
+  - No more corporate email annotation
+ drivers/usb/misc/ehset.c | 58 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
+diff --git a/drivers/usb/misc/ehset.c b/drivers/usb/misc/ehset.c
+index f87890f9cd26..986d6589f053 100644
+--- a/drivers/usb/misc/ehset.c
++++ b/drivers/usb/misc/ehset.c
+@@ -18,6 +18,52 @@
+ #define TEST_SINGLE_STEP_GET_DEV_DESC		0x0107
+ #define TEST_SINGLE_STEP_SET_FEATURE		0x0108
+ 
++extern const struct usb_device_id *usb_device_match_id(struct usb_device *udev,
++						const struct usb_device_id *id);
++
++/*
++ * A list of USB hubs which requires to disable the power
++ * to the port before starting the testing procedures.
++ */
++static const struct usb_device_id ehset_hub_list[] = {
++	{ USB_DEVICE(0x0424, 0x4502) },
++	{ USB_DEVICE(0x0424, 0x4913) },
++	{ USB_DEVICE(0x0451, 0x8027) },
++	{ }
++};
++
++static int ehset_prepare_port_for_testing(struct usb_device *hub_udev, u16 portnum)
++{
++	int ret = 0;
++
++	/*
++	 * The USB2.0 spec chapter 11.24.2.13 says that the USB port which is
++	 * going under test needs to be put in suspend before sending the
++	 * test command. Most hubs don't enforce this precondition, but there
++	 * are some hubs which needs to disable the power to the port before
++	 * starting the test.
++	 */
++	if (usb_device_match_id(hub_udev, ehset_hub_list)) {
++		ret = usb_control_msg_send(hub_udev, 0, USB_REQ_CLEAR_FEATURE,
++					   USB_RT_PORT, USB_PORT_FEAT_ENABLE,
++					   portnum, NULL, 0, 1000, GFP_KERNEL);
++		/*
++		 * Wait for the port to be disabled. It's an arbitrary value
++		 * which worked every time.
++		 */
++		msleep(100);
++	} else {
++		/*
++		 * For the hubs which are compliant with the spec,
++		 * put the port in SUSPEND.
++		 */
++		ret = usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
++					   USB_RT_PORT, USB_PORT_FEAT_SUSPEND,
++					   portnum, NULL, 0, 1000, GFP_KERNEL);
++	}
++	return ret;
++}
++
+ static int ehset_probe(struct usb_interface *intf,
+ 		       const struct usb_device_id *id)
+ {
+@@ -30,24 +76,36 @@ static int ehset_probe(struct usb_interface *intf,
+ 
+ 	switch (test_pid) {
+ 	case TEST_SE0_NAK_PID:
++		ret = ehset_prepare_port_for_testing(hub_udev, portnum);
++		if (!ret)
++			break;
+ 		ret = usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
+ 					   USB_RT_PORT, USB_PORT_FEAT_TEST,
+ 					   (USB_TEST_SE0_NAK << 8) | portnum,
+ 					   NULL, 0, 1000, GFP_KERNEL);
+ 		break;
+ 	case TEST_J_PID:
++		ret = ehset_prepare_port_for_testing(hub_udev, portnum);
++		if (!ret)
++			break;
+ 		ret = usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
+ 					   USB_RT_PORT, USB_PORT_FEAT_TEST,
+ 					   (USB_TEST_J << 8) | portnum, NULL, 0,
+ 					   1000, GFP_KERNEL);
+ 		break;
+ 	case TEST_K_PID:
++		ret = ehset_prepare_port_for_testing(hub_udev, portnum);
++		if (!ret)
++			break;
+ 		ret = usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
+ 					   USB_RT_PORT, USB_PORT_FEAT_TEST,
+ 					   (USB_TEST_K << 8) | portnum, NULL, 0,
+ 					   1000, GFP_KERNEL);
+ 		break;
+ 	case TEST_PACKET_PID:
++		ret = ehset_prepare_port_for_testing(hub_udev, portnum);
++		if (!ret)
++			break;
+ 		ret = usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
+ 					   USB_RT_PORT, USB_PORT_FEAT_TEST,
+ 					   (USB_TEST_PACKET << 8) | portnum,
+-- 
+2.34.1
 
-I did a little debugging, and noticed that the GINTSTS_PRTINT is firing, 
-so the dwc2_handle_common_intr() is getting called continuously. There's 
-doesn't seem to be way to handle the GINTSTS_PRTINT bit, because there's 
-a check for device_mode().
-
-Dinh
