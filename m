@@ -2,71 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A06D1472E44
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 14:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 253AC472E4B
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 14:58:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234363AbhLMN50 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Dec 2021 08:57:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53486 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233782AbhLMN5Z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 08:57:25 -0500
+        id S238542AbhLMN6q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Dec 2021 08:58:46 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34172 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238540AbhLMN6q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 08:58:46 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65EA7B80EDA;
-        Mon, 13 Dec 2021 13:57:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6666C34601;
-        Mon, 13 Dec 2021 13:57:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCD6861016;
+        Mon, 13 Dec 2021 13:58:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD12CC34601;
+        Mon, 13 Dec 2021 13:58:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639403843;
-        bh=uc7ff8Hn/mIN2KD8gQ8R8F4i+r16CAJPxpK3YrEF8DY=;
+        s=korg; t=1639403925;
+        bh=yMuVyc4TVgRet2InLRY+bgIaO+2h9DW64nLLI7Las+0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AS9YYf8Zl53jEKRfD1e/37/b7kd9FWyYjku2I757Csb/hxla6JyKhXTrLUTHOXbwn
-         CCUogiDmXwa1vjqazi9vIBzZHs9QrjBzzz7ijsHyC/hmMGwELgc7gvdBQRP9Z4HsGc
-         Wf/rQ3nRnOyYfa3LYFZVLFJyOc6otJKJGId3vZ4U=
-Date:   Mon, 13 Dec 2021 14:57:20 +0100
+        b=Bkwud4Z4Makhy+9ZYkFe66k9/JDAvnckgNmbHULq1ycFzFIL7Of5hGfSWm1WDtcfk
+         y2GcLA4riMUt9lyo78RXKGWbBgeEd4qd0YWMCz83/JVYkGVfB9Wal86I7MCdRXBQe8
+         5FtwgpWM99YsYiZ5zl/bg7IgkRhFUNse+WsdDFho=
+Date:   Mon, 13 Dec 2021 14:58:42 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-Subject: Re: [PATCH v3] usb: host: xhci-plat: Set XHCI_SKIP_PHY_INIT quirk
- for DWC3 controller
-Message-ID: <YbdRQP6B9Ypee5va@kroah.com>
-References: <1638339338-6731-1-git-send-email-quic_c_sanm@quicinc.com>
- <1638339338-6731-2-git-send-email-quic_c_sanm@quicinc.com>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/3] usb: Introduce Xen pvUSB frontend (xen hcd)
+Message-ID: <YbdRkvW/hOH77liY@kroah.com>
+References: <20211123132048.5335-1-jgross@suse.com>
+ <20211123132048.5335-3-jgross@suse.com>
+ <YaoSTnkYyCFXOyvJ@kroah.com>
+ <b43c416e-d81a-7d21-5b92-7bc8329bb296@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1638339338-6731-2-git-send-email-quic_c_sanm@quicinc.com>
+In-Reply-To: <b43c416e-d81a-7d21-5b92-7bc8329bb296@suse.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 11:45:38AM +0530, Sandeep Maheswaram wrote:
-> Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
-> Runtime suspend of phy drivers was failing from DWC3 driver as
-> runtime usage value is 2 because the phy is initialized from
-> DWC3 core and HCD core.
-> DWC3 manages phy in their core drivers.
-> Set this quirk to avoid phy initialization in HCD core.
+On Fri, Dec 03, 2021 at 01:50:44PM +0100, Juergen Gross wrote:
+> On 03.12.21 13:49, Greg Kroah-Hartman wrote:
+> > On Tue, Nov 23, 2021 at 02:20:47PM +0100, Juergen Gross wrote:
+> > > Introduces the Xen pvUSB frontend. With pvUSB it is possible for a Xen
+> > > domU to communicate with a USB device assigned to that domU. The
+> > > communication is all done via the pvUSB backend in a driver domain
+> > > (usually Dom0) which is owner of the physical device.
+> > > 
+> > > The pvUSB frontend is a USB hcd for a virtual USB host connector.
+> > > 
+> > > The code is taken from the pvUSB implementation in Xen done by Fujitsu
+> > > based on Linux kernel 2.6.18.
+> > > 
+> > > Changes from the original version are:
+> > > - port to upstream kernel
+> > > - put all code in just one source file
+> > > - move module to appropriate location in kernel tree
+> > > - adapt to Linux style guide
+> > > - minor code modifications to increase readability
+> > > 
+> > > Signed-off-by: Juergen Gross <jgross@suse.com>
+> > > ---
+> > >   drivers/usb/host/Kconfig   |   11 +
+> > >   drivers/usb/host/Makefile  |    1 +
+> > >   drivers/usb/host/xen-hcd.c | 1606 ++++++++++++++++++++++++++++++++++++
+> > >   3 files changed, 1618 insertions(+)
+> > >   create mode 100644 drivers/usb/host/xen-hcd.c
+> > 
+> > This looks sane to me, but I don't know the HCD interface as well as
+> > others on linux-usb do, like Alan Stern.
+> > 
+> > What tree do you want this to be merged through, my USB one?
 > 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> ---
->  drivers/usb/host/xhci-plat.c | 3 +++
->  1 file changed, 3 insertions(+)
+> Either that, or I can carry it through the Xen tree.
+> 
+> Its your choice. :-)
 
-What changed from previous versions of this patch?  That goes below the
---- line always, right?
-
-Please fix up and send a v4.
-
-thanks,
+I've grabbed them now, thanks.
 
 greg k-h
