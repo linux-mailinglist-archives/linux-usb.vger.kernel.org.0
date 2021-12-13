@@ -2,83 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C73F94722A3
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 09:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0873847237D
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 10:07:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232970AbhLMI1t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Dec 2021 03:27:49 -0500
-Received: from out162-62-57-49.mail.qq.com ([162.62.57.49]:39853 "EHLO
-        out162-62-57-49.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233056AbhLMI1f (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 03:27:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1639384049;
-        bh=7p4pPkafyJNJzmuyBPsnw4iYFGfavqT7QuzVHimInhc=;
-        h=From:To:Cc:Subject:Date;
-        b=yv0zL2AMS4eNoSc0g4KXLSqRii6yDmynORwzb40Tv55Nw4SIm08CMdmq5PvXt53EO
-         FPq/z80xaLgiphAlDRLbP+/m/nJt5PrTzx9Tmo94dpkDMbYipTx5Wkc8qNe2pjmjnT
-         nk2rdtdoIGjl2y8Ag6h8Ciyxu+5yU2BrJGW9xHQw=
-Received: from localhost.localdomain ([43.227.138.48])
-        by newxmesmtplogicsvrszc11.qq.com (NewEsmtp) with SMTP
-        id 6D99888C; Mon, 13 Dec 2021 16:27:25 +0800
-X-QQ-mid: xmsmtpt1639384045t7h8w8b4o
-Message-ID: <tencent_8268B88CD2F7BF04083AF35D6E2C87158506@qq.com>
-X-QQ-XMAILINFO: OLsBWtCIHsg6NQzGcg/jTkwQ0BUGSpARZTesnJlN3Dhb1AWg5kNt8qW6/DTr5V
-         EGNcHLOqoPjC/B5oGHKDb2F7MqSyZ7BxyDBl1aLrUofxtmsgiecnPe5FDHr7FszA655UcCBHQJtW
-         xFXKoqjGQt6XyI4aOwtnxPwhxBCDm0NZK1ZO5cIovOLcrBjOY3Zyj4k7jJt6E5cdAul+5W8whi4X
-         j1zQA6/aRKHwJWbnKe+lpQdMbwP3IgYfdiKb1GRBk1rrV/JK8CyxNy0Xu1biKrkHzMuq1N9wqB5s
-         WF5PGeAYtFu65QI6w5YxXHy3f2bJRbLXAWs6Q+d4A4Kp8wj3vofrN7NIMFHTgyjFkCMGfTHT+XUe
-         JPZP4AaGPUeFLnb1JGfl7+lgn+Sp9y1AXdUkz6rH8LWOnZlH6xw6UjSWReZO3Os0Qo3HhHHO1HMi
-         aaJakzMPYyxK0kl+uJc/HOxJ8mCGEF6F+1VEE3ZOXcieCbnbEAXvexSwIF9OAKNl50/0DhIS64hr
-         R8XSiTTEaMTxeqg42i4BVu+gb+RQOt32ZNqNybmu/w6Z5I7jomqBgogXCvgQfnufgo8Y/KA5om8v
-         85U9DkUftl4sVhHBORn8KIaF1G9Adru5+e12YBGLc9rrVQjGEEA40J9liceySYKor06586xY2Nd3
-         I7QP+beMOO3Rbx89yX46PJJdEKpWlORTCVZkKqQbUWAkaer7P9p65MQ6kzBSZ27uK3IKjJzPeWLJ
-         mxB7BH4Q/R6e71PvZxZ1exOH9spCT0sSX+9ijY9sfstblbPyPHwg64BXY/rc7K7fHQCewmixCaQb
-         M6gqyahUTKaWpxjtNj3Q1+iooF2eJzKsODhO3kA6DWI9r7IQJvVpNL46bdSWuL+cANHC29q/WXl2
-         lbXOQK3IqWG7SyU4hvBhCJlAD3Cx4IhYxLxT2QL/2ETLa6CfODj33o1FFKyfRrzQ==
-From:   Xiaoke Wang <xkernel.wang@foxmail.com>
-To:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: Re: [PATCH] thunderbolt: check the return value of kmemdup()
-Date:   Mon, 13 Dec 2021 16:27:15 +0800
-X-OQ-MSGID: <20211213082715.4448-1-xkernel.wang@foxmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
+        id S233554AbhLMJHX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Dec 2021 04:07:23 -0500
+Received: from mga09.intel.com ([134.134.136.24]:7099 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233404AbhLMJHX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 13 Dec 2021 04:07:23 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="238508187"
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="238508187"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 01:07:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="660802229"
+Received: from kuha.fi.intel.com ([10.237.72.166])
+  by fmsmga001.fm.intel.com with SMTP; 13 Dec 2021 01:07:20 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 13 Dec 2021 11:07:19 +0200
+Date:   Mon, 13 Dec 2021 11:07:19 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Xu Yang <xu.yang_2@nxp.com>
+Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, jun.li@nxp.com, linux-imx@nxp.com
+Subject: Re: [PATCH V2] usb: typec: tcpm: fix tcpm unregister port but leave
+ a pending timer
+Message-ID: <YbcNR06DkP496qnt@kuha.fi.intel.com>
+References: <20211209101507.499096-1-xu.yang_2@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209101507.499096-1-xu.yang_2@nxp.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Note: Compare with the last email, this one is using my full name.
-kmemdup() return NULL when some internal memory errors happen, it is
-better to check the return value of it. Otherwise, some memory errors
-will not be catched in time and may further result in wrong memory
-access.
+On Thu, Dec 09, 2021 at 06:15:07PM +0800, Xu Yang wrote:
+> In current design, when the tcpm port is unregisterd, the kthread_worker
+> will be destroyed in the last step. Inside the kthread_destroy_worker(),
+> the worker will flush all the works and wait for them to end. However, if
+> one of the works calls hrtimer_start(), this hrtimer will be pending until
+> timeout even though tcpm port is removed. Once the hrtimer timeout, many
+> strange kernel dumps appear.
+> 
+> Thus, we can first complete kthread_destroy_worker(), then cancel all the
+> hrtimers. This will guarantee that no hrtimer is pending at the end.
+> 
+> Fixes: 3ed8e1c2ac99 ("usb: typec: tcpm: Migrate workqueue to RT priority for processing events")
+> cc: <stable@vger.kernel.org>
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/thunderbolt/icm.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Guenter should take a look at this.
 
-diff --git a/drivers/thunderbolt/icm.c b/drivers/thunderbolt/icm.c
-index 6255f1e..fff0c74 100644
---- a/drivers/thunderbolt/icm.c
-+++ b/drivers/thunderbolt/icm.c
-@@ -1741,8 +1741,13 @@ static void icm_handle_event(struct tb *tb, enum tb_cfg_pkg_type type,
- 	if (!n)
- 		return;
- 
--	INIT_WORK(&n->work, icm_handle_notification);
- 	n->pkg = kmemdup(buf, size, GFP_KERNEL);
-+	if (!n->pkg) {
-+		kfree(n);
-+		return;
-+	}
-+
-+	INIT_WORK(&n->work, icm_handle_notification);
- 	n->tb = tb;
- 
- 	queue_work(tb->wq, &n->work);
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+> Changes in V2:
+>  -Introduced a flag "port->registered" to avoid race.
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 18 +++++++++++++-----
+>  1 file changed, 13 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 6010b9901126..59d4fa2443f2 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -324,6 +324,7 @@ struct tcpm_port {
+>  
+>  	bool attached;
+>  	bool connected;
+> +	bool registered;
+>  	bool pd_supported;
+>  	enum typec_port_type port_type;
+>  
+> @@ -6291,7 +6292,8 @@ static enum hrtimer_restart state_machine_timer_handler(struct hrtimer *timer)
+>  {
+>  	struct tcpm_port *port = container_of(timer, struct tcpm_port, state_machine_timer);
+>  
+> -	kthread_queue_work(port->wq, &port->state_machine);
+> +	if (port->registered)
+> +		kthread_queue_work(port->wq, &port->state_machine);
+>  	return HRTIMER_NORESTART;
+>  }
+>  
+> @@ -6299,7 +6301,8 @@ static enum hrtimer_restart vdm_state_machine_timer_handler(struct hrtimer *time
+>  {
+>  	struct tcpm_port *port = container_of(timer, struct tcpm_port, vdm_state_machine_timer);
+>  
+> -	kthread_queue_work(port->wq, &port->vdm_state_machine);
+> +	if (port->registered)
+> +		kthread_queue_work(port->wq, &port->vdm_state_machine);
+>  	return HRTIMER_NORESTART;
+>  }
+>  
+> @@ -6307,7 +6310,8 @@ static enum hrtimer_restart enable_frs_timer_handler(struct hrtimer *timer)
+>  {
+>  	struct tcpm_port *port = container_of(timer, struct tcpm_port, enable_frs_timer);
+>  
+> -	kthread_queue_work(port->wq, &port->enable_frs);
+> +	if (port->registered)
+> +		kthread_queue_work(port->wq, &port->enable_frs);
+>  	return HRTIMER_NORESTART;
+>  }
+>  
+> @@ -6315,7 +6319,8 @@ static enum hrtimer_restart send_discover_timer_handler(struct hrtimer *timer)
+>  {
+>  	struct tcpm_port *port = container_of(timer, struct tcpm_port, send_discover_timer);
+>  
+> -	kthread_queue_work(port->wq, &port->send_discover_work);
+> +	if (port->registered)
+> +		kthread_queue_work(port->wq, &port->send_discover_work);
+>  	return HRTIMER_NORESTART;
+>  }
+>  
+> @@ -6403,6 +6408,7 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+>  	typec_port_register_altmodes(port->typec_port,
+>  				     &tcpm_altmode_ops, port,
+>  				     port->port_altmode, ALTMODE_DISCOVERY_MAX);
+> +	port->registered = true;
+>  
+>  	mutex_lock(&port->lock);
+>  	tcpm_init(port);
+> @@ -6424,6 +6430,9 @@ void tcpm_unregister_port(struct tcpm_port *port)
+>  {
+>  	int i;
+>  
+> +	port->registered = false;
+> +	kthread_destroy_worker(port->wq);
+> +
+>  	hrtimer_cancel(&port->send_discover_timer);
+>  	hrtimer_cancel(&port->enable_frs_timer);
+>  	hrtimer_cancel(&port->vdm_state_machine_timer);
+> @@ -6435,7 +6444,6 @@ void tcpm_unregister_port(struct tcpm_port *port)
+>  	typec_unregister_port(port->typec_port);
+>  	usb_role_switch_put(port->role_sw);
+>  	tcpm_debugfs_exit(port);
+> -	kthread_destroy_worker(port->wq);
+>  }
+>  EXPORT_SYMBOL_GPL(tcpm_unregister_port);
+>  
+> -- 
+> 2.25.1
+
 -- 
+heikki
