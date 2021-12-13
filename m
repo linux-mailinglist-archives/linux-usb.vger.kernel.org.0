@@ -2,95 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 090D0472298
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 09:27:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C73F94722A3
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 09:27:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbhLMI1d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Dec 2021 03:27:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbhLMI1T (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 03:27:19 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09838C061751
-        for <linux-usb@vger.kernel.org>; Mon, 13 Dec 2021 00:27:18 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id v1so49794332edx.2
-        for <linux-usb@vger.kernel.org>; Mon, 13 Dec 2021 00:27:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oedXg2lxmGvWLjE8gS+GIHwgIjgA4Ou1mgFQP0pqkc4=;
-        b=XjxPGaI3AvVgGOYiAgXRlnyAJXWzgvlbPKjDzJim5hV0mBDX+ZAS14uZZscf0UP2Uy
-         M1YBbgcg1lI8wgKZsZwbpQQvPpspIpMzJyD3s5usV47RgEkyONh8x3MWBmP2XZbHXep2
-         rgT79mjWW1IdmAgKx9c9aQy8swbcZj8rS6+LE2I+2Vj2m4GvOiRG63Z5dHJPVg47awEz
-         MbQy8WGQDinSk3CWltw6YwyQCYFJ226oterGrPPBfdlGTNK59VOOSPJj1hWmPBFfCM4J
-         8Ba4pX2gXHa0FVcMe23nG44PhgDcix93UCGeNR7DTe/Rq/tYjWMMi+teiAeKYGNz74Gy
-         RG8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oedXg2lxmGvWLjE8gS+GIHwgIjgA4Ou1mgFQP0pqkc4=;
-        b=4qsX/IP3VvN5rQJ0ALCPqDpxgunK8FkhsSPRwjMURPwAzMS+PYaBHaUJggQGw44ic7
-         0FGavnf9EmPBa42s2rR8lTuTU5qz8JI1ZrUlHBnwkQJ134PxAz89gGp5B0T3LE4ozNBk
-         96WVvIVhCCuuSNhRaz/Qxtq274i0QQUuYQschnr0rXJnUGPwaiqDiwzv9qZsFnzUfNsg
-         dhXQSdylRPIVDFzm7BMXG80X/htFJ42T7CPt+MSQvfEkFfWsElpC+XTxdA7O7kwP8hqh
-         LNNX4Zfpq38kkpMaorPCd6B0V1T1EGBLg8suIoAJjqXeOaHSmAfsfGyluzOpMjY4K0t2
-         vVCA==
-X-Gm-Message-State: AOAM532ArwIzcX7tk+MpauMBKmwx9MPGmOudu9LR3IzSeVTdWZNP8VYP
-        WgjhYHF4ng3OpGrtcMUnwkaExw==
-X-Google-Smtp-Source: ABdhPJyDFbDfxyri6g9cB3e6COym7Bqg0NSm5p0P65g+Yj35yXc+G1fpioiZga2hphDfON6gcI2hKw==
-X-Received: by 2002:a17:906:eda3:: with SMTP id sa3mr43271332ejb.51.1639384036677;
-        Mon, 13 Dec 2021 00:27:16 -0800 (PST)
-Received: from localhost.localdomain ([2a02:a210:20c5:8c80:7d0a:cd68:c339:f426])
-        by smtp.gmail.com with ESMTPSA id b11sm6062432ede.62.2021.12.13.00.27.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 00:27:16 -0800 (PST)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 06/10] dt-bindings: usb: qcom,dwc3: Add SM6350 compatible
-Date:   Mon, 13 Dec 2021 09:26:07 +0100
-Message-Id: <20211213082614.22651-7-luca.weiss@fairphone.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213082614.22651-1-luca.weiss@fairphone.com>
-References: <20211213082614.22651-1-luca.weiss@fairphone.com>
+        id S232970AbhLMI1t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Dec 2021 03:27:49 -0500
+Received: from out162-62-57-49.mail.qq.com ([162.62.57.49]:39853 "EHLO
+        out162-62-57-49.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233056AbhLMI1f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 03:27:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1639384049;
+        bh=7p4pPkafyJNJzmuyBPsnw4iYFGfavqT7QuzVHimInhc=;
+        h=From:To:Cc:Subject:Date;
+        b=yv0zL2AMS4eNoSc0g4KXLSqRii6yDmynORwzb40Tv55Nw4SIm08CMdmq5PvXt53EO
+         FPq/z80xaLgiphAlDRLbP+/m/nJt5PrTzx9Tmo94dpkDMbYipTx5Wkc8qNe2pjmjnT
+         nk2rdtdoIGjl2y8Ag6h8Ciyxu+5yU2BrJGW9xHQw=
+Received: from localhost.localdomain ([43.227.138.48])
+        by newxmesmtplogicsvrszc11.qq.com (NewEsmtp) with SMTP
+        id 6D99888C; Mon, 13 Dec 2021 16:27:25 +0800
+X-QQ-mid: xmsmtpt1639384045t7h8w8b4o
+Message-ID: <tencent_8268B88CD2F7BF04083AF35D6E2C87158506@qq.com>
+X-QQ-XMAILINFO: OLsBWtCIHsg6NQzGcg/jTkwQ0BUGSpARZTesnJlN3Dhb1AWg5kNt8qW6/DTr5V
+         EGNcHLOqoPjC/B5oGHKDb2F7MqSyZ7BxyDBl1aLrUofxtmsgiecnPe5FDHr7FszA655UcCBHQJtW
+         xFXKoqjGQt6XyI4aOwtnxPwhxBCDm0NZK1ZO5cIovOLcrBjOY3Zyj4k7jJt6E5cdAul+5W8whi4X
+         j1zQA6/aRKHwJWbnKe+lpQdMbwP3IgYfdiKb1GRBk1rrV/JK8CyxNy0Xu1biKrkHzMuq1N9wqB5s
+         WF5PGeAYtFu65QI6w5YxXHy3f2bJRbLXAWs6Q+d4A4Kp8wj3vofrN7NIMFHTgyjFkCMGfTHT+XUe
+         JPZP4AaGPUeFLnb1JGfl7+lgn+Sp9y1AXdUkz6rH8LWOnZlH6xw6UjSWReZO3Os0Qo3HhHHO1HMi
+         aaJakzMPYyxK0kl+uJc/HOxJ8mCGEF6F+1VEE3ZOXcieCbnbEAXvexSwIF9OAKNl50/0DhIS64hr
+         R8XSiTTEaMTxeqg42i4BVu+gb+RQOt32ZNqNybmu/w6Z5I7jomqBgogXCvgQfnufgo8Y/KA5om8v
+         85U9DkUftl4sVhHBORn8KIaF1G9Adru5+e12YBGLc9rrVQjGEEA40J9liceySYKor06586xY2Nd3
+         I7QP+beMOO3Rbx89yX46PJJdEKpWlORTCVZkKqQbUWAkaer7P9p65MQ6kzBSZ27uK3IKjJzPeWLJ
+         mxB7BH4Q/R6e71PvZxZ1exOH9spCT0sSX+9ijY9sfstblbPyPHwg64BXY/rc7K7fHQCewmixCaQb
+         M6gqyahUTKaWpxjtNj3Q1+iooF2eJzKsODhO3kA6DWI9r7IQJvVpNL46bdSWuL+cANHC29q/WXl2
+         lbXOQK3IqWG7SyU4hvBhCJlAD3Cx4IhYxLxT2QL/2ETLa6CfODj33o1FFKyfRrzQ==
+From:   Xiaoke Wang <xkernel.wang@foxmail.com>
+To:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: Re: [PATCH] thunderbolt: check the return value of kmemdup()
+Date:   Mon, 13 Dec 2021 16:27:15 +0800
+X-OQ-MSGID: <20211213082715.4448-1-xkernel.wang@foxmail.com>
+X-Mailer: git-send-email 2.33.0.windows.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add devicetree compatible for dwc3 on SM6350 SoC.
+Note: Compare with the last email, this one is using my full name.
+kmemdup() return NULL when some internal memory errors happen, it is
+better to check the return value of it. Otherwise, some memory errors
+will not be catched in time and may further result in wrong memory
+access.
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 ---
- Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/thunderbolt/icm.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index 2bdaba023c01..fb79ea518696 100644
---- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -23,6 +23,7 @@ properties:
-           - qcom,sdx55-dwc3
-           - qcom,sm4250-dwc3
-           - qcom,sm6115-dwc3
-+          - qcom,sm6350-dwc3
-           - qcom,sm8150-dwc3
-           - qcom,sm8250-dwc3
-           - qcom,sm8350-dwc3
+diff --git a/drivers/thunderbolt/icm.c b/drivers/thunderbolt/icm.c
+index 6255f1e..fff0c74 100644
+--- a/drivers/thunderbolt/icm.c
++++ b/drivers/thunderbolt/icm.c
+@@ -1741,8 +1741,13 @@ static void icm_handle_event(struct tb *tb, enum tb_cfg_pkg_type type,
+ 	if (!n)
+ 		return;
+ 
+-	INIT_WORK(&n->work, icm_handle_notification);
+ 	n->pkg = kmemdup(buf, size, GFP_KERNEL);
++	if (!n->pkg) {
++		kfree(n);
++		return;
++	}
++
++	INIT_WORK(&n->work, icm_handle_notification);
+ 	n->tb = tb;
+ 
+ 	queue_work(tb->wq, &n->work);
 -- 
-2.34.1
-
