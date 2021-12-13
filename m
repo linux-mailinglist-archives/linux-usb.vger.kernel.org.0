@@ -2,68 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AAAE472110
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 07:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C6A472111
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 07:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbhLMG3q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Dec 2021 01:29:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
+        id S232278AbhLMGc1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Dec 2021 01:32:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbhLMG3p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 01:29:45 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F27EC06173F
-        for <linux-usb@vger.kernel.org>; Sun, 12 Dec 2021 22:29:45 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id k2so22200236lji.4
-        for <linux-usb@vger.kernel.org>; Sun, 12 Dec 2021 22:29:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=eaXI2Z6IE5QKVWXrpgqdjbQdmRYUC+jSX8QGa9PWtE0=;
-        b=qEnNrI0VoL3aQladw9jU/pfey7VDkh2Qjee67oY0SMi7R+mjOc1fqqpWzAjv20dfu2
-         WAAFfox0q4SuyFhJSoS+2/rqZMzQYrgCyJkZpeTI+XamMoKoqotTHnIbse5n92LxSJUs
-         BG2MfUYKZuf5viLTh1e2YH0EhB+9/66P6Ol08EYxT8iKRH7PYHvg7XZusCA2C3OCZFLH
-         Cx5gHFckDLpMRQLp6zWzPrBWq9nRyDB2cbze2slnN/9md1+eck/AvPDuV4R5bZ0e7BSZ
-         CODMQKXZRqdetdIqGOtkRKZYZgdKFA1HPhhqMPduZ/IDv5F8PZrFaqEYW1p7OlIsVmLb
-         58aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=eaXI2Z6IE5QKVWXrpgqdjbQdmRYUC+jSX8QGa9PWtE0=;
-        b=bENssP/dQ8MCaocIyE7RGoiHfXW4e+QrPtve3K0tPB71otm6GCEAEkDYz2TQqtCKQV
-         pgW9W4Nrb4hUvVMIHc9uaTVZYktaBExp6dOVH0XnOHWAqIcjJ6u5x/VRwjDjaNPNamFf
-         UaTrWxQf3B+RtOaeCXMlGD+1L5zPpQZcY6/GAmtg3LBY2Vb4kO0tePWei3Y9SNU4umtn
-         AJsuOCGt//RsJX8CzfgqzAQ3BmGSc8qdUl/RV1kpBPkLSinZrSNo6koqrgofGmALxbgG
-         9n825nB3jjtacwY4BCqnMCT23d2BUjOUAtS/5h04AED9CPpnmQp8vQ2wORmCx8XCiIzJ
-         IiAw==
-X-Gm-Message-State: AOAM531ryxGElhKfPP/R7rj3/2PEywMBK0v8MnHlPg4TmrOqz4pKeulH
-        3PSSexcZBPbh4+O0ezXc/6/mz6EK70jsE2b6bDA=
-X-Google-Smtp-Source: ABdhPJyjk2gJqnVHzG+0NgV40RN4EZXM+fxpYbX1jt0+PhgCTu/ovwKlWtbH1/kF85kPJf3f4qLaMXLB4nTEDhVFh2w=
-X-Received: by 2002:a2e:a28e:: with SMTP id k14mr27763066lja.488.1639376983425;
- Sun, 12 Dec 2021 22:29:43 -0800 (PST)
+        with ESMTP id S232305AbhLMGcU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 01:32:20 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25CE1C0698C4;
+        Sun, 12 Dec 2021 22:32:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 70A29CE0DE4;
+        Mon, 13 Dec 2021 06:32:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5DE7C341C8;
+        Mon, 13 Dec 2021 06:32:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639377126;
+        bh=wIJOaRCUpxM5XJhKAVLGF6sfIt89cAXKaCYHscYHThc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YfGvXd6AV+eWkskM1NYY/bhcDdqJw+hO4finO/Gp/+3zrofpLlImkSH5j7lVnl5mY
+         ELAqLjhmtJlWpjMTm2UWM5Ci1JhKbQCC8VpILd42IlWdrNhcA4pWERmky1ak0WygXj
+         exVgcZgai16ZzZ52RFtUlsLuEz7Gn9CndEbMFDU0=
+Date:   Mon, 13 Dec 2021 07:31:58 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Xiaoke Wang <xkernel.wang@foxmail.com>
+Cc:     linux-usb <linux-usb@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "andreas.noever" <andreas.noever@gmail.com>,
+        "michael.jamet" <michael.jamet@intel.com>,
+        "mika.westerberg" <mika.westerberg@linux.intel.com>,
+        YehezkelShB <YehezkelShB@gmail.com>
+Subject: Re: [PATCH] thunderbolt: check the return value of kmemdup()
+Message-ID: <Ybbo3qBRpCR2Cl93@kroah.com>
+References: <tencent_1AB342AE1B4723454E78A4D2FD3F33C81306@qq.com>
+ <Ybbj470ocCf7bj68@kroah.com>
+ <tencent_D34525AAFF71905A66815C118E0E8A96F007@qq.com>
 MIME-Version: 1.0
-Received: by 2002:a2e:894e:0:0:0:0:0 with HTTP; Sun, 12 Dec 2021 22:29:42
- -0800 (PST)
-Reply-To: tsh1179@yahoo.com
-From:   Shiina Terumi <shiinaterumi47@gmail.com>
-Date:   Mon, 13 Dec 2021 13:29:42 +0700
-Message-ID: <CABZgF6m_uDjO+DcYgdnPCDH4P4=RLaufB7+EiUUenFH8B2WyVA@mail.gmail.com>
-Subject: Good Day
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_D34525AAFF71905A66815C118E0E8A96F007@qq.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Good Day,
+On Mon, Dec 13, 2021 at 02:27:28PM +0800, Xiaoke Wang wrote:
+> On Mon, Dec 13, 2021 02:10 PM, Greg KH wrote:
+> > kmemdup() return NULL when some internal memory errors happen, it is
+> > better to check the return value of it. Otherwise, some memory errors
+> > will not be catched in time and may further result in wrong memory> access.
+> > 
+> > Signed-off-by: xkernel <xkernel.wang@foxmail.com>
+> >
+> > Please use your "full" name, I doubt you sign documents as "xkernel". :)
+> >
+> > thanks,
+> >
+> > greg k-h
+> 
+> I am very sorry about that, my full name is "Xiaoke Wang".
 
-I am Mrs Shiina Terumi, I wish to discuss a very confidential mutual
-beneficial proposition with you, but I want your consent before
-sending details for full explanation.
+Great, please fix up and resend (also fix the From: line in your email
+client to show that.)
 
-Kindly get back to me for more details.
+thanks,
 
-Best Regards
-
-Mrs Shiina Terumi
+greg k-h
