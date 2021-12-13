@@ -2,180 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 166EF472E89
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 15:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA0B472E8D
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Dec 2021 15:09:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236820AbhLMOJD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Dec 2021 09:09:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbhLMOJD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 09:09:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17494C061574
-        for <linux-usb@vger.kernel.org>; Mon, 13 Dec 2021 06:09:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC96F61044
-        for <linux-usb@vger.kernel.org>; Mon, 13 Dec 2021 14:09:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D124C34602;
-        Mon, 13 Dec 2021 14:09:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639404542;
-        bh=M1RlLx/pHd6hWFsUDvh3Zvav54Z1UhU38Sg6+7qMQ2g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jSCntoy3w2cmMAOS6iY+21Gjpbmi+MXb/PwZnwd+Sb9SInLhTkPSztVZpbEFnX+BD
-         MQysDrmFzunQfHIM8d3CU2DWjloiEdy/kQX+vxrxnt4GujcJWDVIfqhnjfY4IJyJSm
-         to5TrBIsWTlW8P8x+306h/FtjYRFDPxU5bmStUKc=
-Date:   Mon, 13 Dec 2021 15:08:59 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Udipto Goswami <quic_ugoswami@quicinc.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, John Keeping <john@metanate.com>,
-        linux-usb@vger.kernel.org,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>
-Subject: Re: [PATCH v6] usb: f_fs: Fix use-after-free for epfile
-Message-ID: <YbdT+6FkeIuHz55L@kroah.com>
-References: <1638857274-24842-1-git-send-email-quic_ugoswami@quicinc.com>
+        id S238129AbhLMOJ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Dec 2021 09:09:56 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:37687 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231394AbhLMOJ4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Dec 2021 09:09:56 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 59C6E5801C6;
+        Mon, 13 Dec 2021 09:09:55 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 13 Dec 2021 09:09:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=VCeSqHRowXDwNfr8+gvSIOJad9A
+        1kkby+tub0oRqUMQ=; b=bWPevrnPHisRHzc0EJ5cI7uTMLofz4nrrSMW4344ZKH
+        xfhynbf/Fqd82xAb3yDLgC/slsF4p8DikAisNywSNa47XtnvlGuqg0ODtdx+QYw7
+        otTB+jpzJGhyN9AlUQcdoGXh2NEUqEPuMsNZB1mhCRr1td+W0Df312AfIg/nj4KM
+        NS4E2xgWwV0swXvG3F+p4cX+xKYR4GSzlyD+wimJAI4xSjZQ/43yitcEfJFOQlJP
+        TYkcH+OIfWpMCCMMKD+bWy0cw2EuR3d2/vywx5e8hz63v2jRwNBkLYmd8D7kM80d
+        ERrgoipzDc2aNMnhuMlHUv54EA8GF2MmWu8DnkU7Dag==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=VCeSqH
+        RowXDwNfr8+gvSIOJad9A1kkby+tub0oRqUMQ=; b=OiqX2KsdN/fF1azSQuzCP3
+        L2EO9OBCU16JhO6JCgToypOYsiTLRekYe+YBo0IA1+VLs7KOi0AqEK5yeAw61w6e
+        KAuIhYHZ28Lhc1xqXmcA9io6oBw4W0Ia6+dvDEhSWSiuOmJY4uDGUTOu4FcaDnmY
+        sxrsr4JEaVUQkoE55kVidpfDwHwlEEMdzE+cbxir0UiXci2X46d2k9leFyhLk02a
+        +U+poVWNj3yZXOIDplbFXpL7UcbTaHBYA3cXfVVDy6ufJa8l/cns8g1Hf3rQBLvz
+        k/AdYq2ESVJiyaARwYBMgpKJ4cybax4o2/fw/Y2DP+yqH3tyEmmHHDh9YolwyTHA
+        ==
+X-ME-Sender: <xms:MlS3YYj2QWFWZjWsKiSc144qYsu3uTMnCCyDuPBMmTdc3SLygZ7r9w>
+    <xme:MlS3YRBE6ikBnTayE59hqinpvE8uAmaIomGmWgxkPFLguLluRPivjcHf4_n-RDbHc
+    XBG1ZKLXRR-_w>
+X-ME-Received: <xmr:MlS3YQGzBegK2R08UIsPlAHfjjv4pmXDgvab3hU1q51eGAZRC5fwOS06henmMfG2uI5CF-wZjFok6ZI2XC6K-BEeCQa0elZZ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrkeekgdeivdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
+    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
+    gtohhm
+X-ME-Proxy: <xmx:MlS3YZSJDxHmQXDVM-IaciNarVBzUkW-kvoLcB6Wc4-T3r39Q16WYw>
+    <xmx:MlS3YVxQ7KHsCmanBu90ClwHdQsep2oAN6b5CGqGe4d8GCMQVTXvcA>
+    <xmx:MlS3YX57h59iUxwKtLrkFxTh-_dvr9W1uNS3uIxp01004Ouh4v7ToA>
+    <xmx:M1S3YYo9zyFkmuep8Crp71-cdsGVQ91xh05Wzx5FXGhvTgv7CF1Hqw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 13 Dec 2021 09:09:53 -0500 (EST)
+Date:   Mon, 13 Dec 2021 15:09:51 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Xiaoke Wang <xkernel.wang@foxmail.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: check the return value of kmemdup()
+Message-ID: <YbdULyzjOq0hUi8Q@kroah.com>
+References: <tencent_8268B88CD2F7BF04083AF35D6E2C87158506@qq.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1638857274-24842-1-git-send-email-quic_ugoswami@quicinc.com>
+In-Reply-To: <tencent_8268B88CD2F7BF04083AF35D6E2C87158506@qq.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 11:37:54AM +0530, Udipto Goswami wrote:
-> Consider a case where ffs_func_eps_disable is called from
-> ffs_func_disable as part of composition switch and at the
-> same time ffs_epfile_release get called from userspace.
-> ffs_epfile_release will free up the read buffer and call
-> ffs_data_closed which in turn destroys ffs->epfiles and
-> mark it as NULL. While this was happening the driver has
-> already initialized the local epfile in ffs_func_eps_disable
-> which is now freed and waiting to acquire the spinlock. Once
-> spinlock is acquired the driver proceeds with the stale value
-> of epfile and tries to free the already freed read buffer
-> causing use-after-free.
+On Mon, Dec 13, 2021 at 04:27:15PM +0800, Xiaoke Wang wrote:
+> Note: Compare with the last email, this one is using my full name.
+> kmemdup() return NULL when some internal memory errors happen, it is
+> better to check the return value of it. Otherwise, some memory errors
+> will not be catched in time and may further result in wrong memory
+> access.
 > 
-> Following is the illustration of the race:
-> 
->       CPU1                                  CPU2
-> 
->    ffs_func_eps_disable
->    epfiles (local copy)
-> 					ffs_epfile_release
-> 					ffs_data_closed
-> 					if (last file closed)
-> 					ffs_data_reset
-> 					ffs_data_clear
-> 					ffs_epfiles_destroy
-> spin_lock
-> dereference epfiles
-> 
-> Fix this races by taking epfiles local copy & assigning it under
-> spinlock and if epfiles(local) is null then update it in ffs->epfiles
-> then finally destroy it.
-> 
-> Reviewed-by: John Keeping <john@metanate.com>
-> Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
-> Co-developed-by: Udipto Goswami <quic_ugoswami@quicinc.com>
-> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 > ---
-> v6: Addressing minor code formatting.
+>  drivers/thunderbolt/icm.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
->  drivers/usb/gadget/function/f_fs.c | 44 +++++++++++++++++++++++++++++---------
->  1 file changed, 34 insertions(+), 10 deletions(-)
+> diff --git a/drivers/thunderbolt/icm.c b/drivers/thunderbolt/icm.c
+> index 6255f1e..fff0c74 100644
+> --- a/drivers/thunderbolt/icm.c
+> +++ b/drivers/thunderbolt/icm.c
+> @@ -1741,8 +1741,13 @@ static void icm_handle_event(struct tb *tb, enum tb_cfg_pkg_type type,
+>  	if (!n)
+>  		return;
+>  
+> -	INIT_WORK(&n->work, icm_handle_notification);
+>  	n->pkg = kmemdup(buf, size, GFP_KERNEL);
+> +	if (!n->pkg) {
+> +		kfree(n);
+> +		return;
+> +	}
+> +
+> +	INIT_WORK(&n->work, icm_handle_notification);
+>  	n->tb = tb;
+>  
+>  	queue_work(tb->wq, &n->work);
+> -- 
 
-What commit does this fix?
+Hi,
 
-Does this need to go to stable kernel releases?
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
-
-
-> 
-> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> index 3c584da..6f23a66 100644
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -1711,16 +1711,24 @@ static void ffs_data_put(struct ffs_data *ffs)
->  
->  static void ffs_data_closed(struct ffs_data *ffs)
->  {
-> +	struct ffs_epfile *epfiles;
-> +	unsigned long flags;
-> +
->  	ENTER();
->  
->  	if (atomic_dec_and_test(&ffs->opened)) {
->  		if (ffs->no_disconnect) {
->  			ffs->state = FFS_DEACTIVATED;
-> -			if (ffs->epfiles) {
-> -				ffs_epfiles_destroy(ffs->epfiles,
-> -						   ffs->eps_count);
-> -				ffs->epfiles = NULL;
-> -			}
-> +			spin_lock_irqsave(&ffs->eps_lock, flags);
-> +			epfiles = ffs->epfiles;
-> +			ffs->epfiles = NULL;
-> +			spin_unlock_irqrestore(&ffs->eps_lock,
-> +							flags);
-> +
-> +			if (epfiles)
-> +				ffs_epfiles_destroy(epfiles,
-> +						 ffs->eps_count);
-
-You are accessing epfiles outside of the lock.  How is that ok?
-
-> +
->  			if (ffs->setup_state == FFS_SETUP_PENDING)
->  				__ffs_ep0_stall(ffs);
->  		} else {
-> @@ -1767,14 +1775,27 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
->  
->  static void ffs_data_clear(struct ffs_data *ffs)
->  {
-> +	struct ffs_epfile *epfiles;
-> +	unsigned long flags;
-> +
->  	ENTER();
->  
->  	ffs_closed(ffs);
->  
->  	BUG_ON(ffs->gadget);
->  
-> -	if (ffs->epfiles)
-> -		ffs_epfiles_destroy(ffs->epfiles, ffs->eps_count);
-> +	spin_lock_irqsave(&ffs->eps_lock, flags);
-> +	epfiles = ffs->epfiles;
-> +	ffs->epfiles = NULL;
-> +	spin_unlock_irqrestore(&ffs->eps_lock, flags);
-> +
-> +	/*
-> +	 * potential race possible between ffs_func_eps_disable
-> +	 * & ffs_epfile_release therefore maintaining a local
-> +	 * copy of epfile will save us from use-after-free.
-> +	 */
-> +	if (epfiles)
-> +		ffs_epfiles_destroy(epfiles, ffs->eps_count);
-
-How will it save you from a use-after-free as you never increased a
-reference count on the pointer here?
-
-And don't write code with new races.  Or are you trying to say this
-fixes a race?
-
-Just saving off a pointer feels wrong here.  What happens if the lock is
-properly grabbed, then freed, right after you unlock?  You aren't really
-protecting this properly in a normal way that reference counts and locks
-work from what I can tell, only trying to reduce the race window but not
-fixing it.
-
-thanks,
-
-greg k-h
+greg k-h's patch email bot
