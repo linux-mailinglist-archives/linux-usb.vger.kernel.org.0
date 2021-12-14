@@ -2,85 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2198A474162
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Dec 2021 12:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EEC547418D
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Dec 2021 12:37:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233482AbhLNLVG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Dec 2021 06:21:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45218 "EHLO
+        id S233606AbhLNLh3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Dec 2021 06:37:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbhLNLVG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 06:21:06 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E16C061574;
-        Tue, 14 Dec 2021 03:21:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=re+A+VgqWP+VuzBjah9LZeI0kzGTDdBNysKZxjJuNuQ=; b=N7lITvbQDgqsVxtZNfGzciFiiM
-        b+UX7mxnZh4LF+I5narByKnmJvv+zPLGOffFa1x+SIAA4YPV3Ywkhcc9X+Op4aOMrGMK/uo71r0Rd
-        SRNAjhkRywLfYRajb2D798hIyrC+BsJ0Fgx5mX3HB+L8v0Rkn3pvrCRDlAbyAZkduTYw2qJKS7BFu
-        vSVpJYGv0jGv6mH22JSLHUwf/OGPDFUwTrMIvyOYg1uMWubsCGMG8y8HmQ9j3gZ2B1tq4gCNqn6XZ
-        EJTwPmbiHyAPHfi+wOofHq07AU+cF2u1kkg8jNRTPL+lBCIL9TlbcoAp068AG1dxAHR+mjQkLflge
-        idoqGWcw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56270)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1mx5re-0004pu-SQ; Tue, 14 Dec 2021 11:20:58 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1mx5ra-0003Sj-4R; Tue, 14 Dec 2021 11:20:54 +0000
-Date:   Tue, 14 Dec 2021 11:20:54 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Joshua Scott <Joshua.Scott@alliedtelesis.co.nz>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Subject: Re: Unhandled prefetch abort when probing USB flash drive
-Message-ID: <Ybh+FhDYN1CSzXi+@shell.armlinux.org.uk>
-References: <d23175b8312e4b4093943b38c2ed59d2@svr-chch-ex1.atlnz.lc>
+        with ESMTP id S233584AbhLNLh3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 06:37:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2646FC061574;
+        Tue, 14 Dec 2021 03:37:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6AA5B8189C;
+        Tue, 14 Dec 2021 11:37:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40AA7C34601;
+        Tue, 14 Dec 2021 11:37:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639481846;
+        bh=Oappbukov3UQnAjv69yWrBNllmlybdQiKY575a0/fwM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MwoUBIgxhmXvND8+XN4wLT/kAzYYpWUH+pQQWVqul52URFpWpv4lX/PLcWBhO2D00
+         3QfbMRBKJxHPSwyEFE40Yu+MEQt9/hmhf7WGLQQehiCvPqU9m18F2ZjRBxIAIJRt9V
+         50KiisYgFgcoCQxgNyLcNXgTvPOptyl2C2zd2U9Tjm0Fpq+DE5Lvl5ea0agq/+68Sn
+         wWiPspMs3nJsLxlnkSZkX+CBoX43iK7983L61R76TBu1tkKh/rgrVXU2Z+GMrExjQM
+         Uuwpy78SHupNIun6pXiog5+9yqQXWvsbBqnZWnS30v+CrWXo3YtWV8PbKvn2YbdIbt
+         KkgyMle++y9EQ==
+Date:   Tue, 14 Dec 2021 19:37:21 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jianhe@ambarella.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: cdnsp: Fix lack of
+ spin_lock_irqsave/spin_lock_restore
+Message-ID: <20211214113721.GA4527@Peter>
+References: <20211214045527.26823-1-pawell@gli-login.cadence.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d23175b8312e4b4093943b38c2ed59d2@svr-chch-ex1.atlnz.lc>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <20211214045527.26823-1-pawell@gli-login.cadence.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 05:13:20AM +0000, Joshua Scott wrote:
-> Hi,
+On 21-12-14 05:55:27, Pawel Laszczak wrote:
+> From: Pawel Laszczak <pawell@cadence.com>
 > 
-> I have been running into a kernel panic when probing a USB flash drive, and was after some advice or suggestions on what might be going wrong.
+> Patch puts content of cdnsp_gadget_pullup function inside
+> spin_lock_irqsave and spin_lock_restore section.
+> This construction is required here to keep the data consistency,
+> otherwise some data can be changed e.g. from interrupt context.
 > 
-> First up, the details of my setup:
->  * Initially seen on Linux 5.7.19, but I've tested on a vanilla copy of Linux 5.15.0 without any extra modules, and the panic still occurs.
->  * Flash drive (lsusb): Bus 001 Device 002: ID 1005:b113 Apacer Technology, Inc. Handy Steno 2.0/HT203
->  * Our system is based on the Marvell 98DX323x SoC (Arm v7, based on the Armada 370/XP)
+> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+> Reported-by: Ken (Jian) He <jianhe@ambarella.com>
+> cc: <stable@vger.kernel.org>
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 
-Does it work with any kernel? If it doesn't, then I would suspect a
-hardware bug, power supply glitch, or a SDRAM timing issue.
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
 
-Why? These seem somewhat random and spurious. In the example prefetch
-abort, it's weird on two accounts:
-
-1) "external abort on non-linefetch" means that we weren't accessing
-   cached memory, but the kernel is always in cached memory.
-2) prefetch abort means the instruction stream failed to read from
-   this location, but we later see in the Code: line that we have been
-   able to read the instructions into the data cache.
-
-If the system runs fine without the flash drive attached, I would
-suggest it's a power issue. I would suggest trying with an externally
-powered USB hub, so the hub sources the power for the flash drive and
-see whether that makes a difference.
+> --
+> 
+> Changelog:
+> v2:
+> - added disable_irq/enable_irq as sugester by Peter Chen
+> 
+>  drivers/usb/cdns3/cdnsp-gadget.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
+> index f6d231760a6a..e07a65b980af 100644
+> --- a/drivers/usb/cdns3/cdnsp-gadget.c
+> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
+> @@ -1544,15 +1544,27 @@ static int cdnsp_gadget_pullup(struct usb_gadget *gadget, int is_on)
+>  {
+>  	struct cdnsp_device *pdev = gadget_to_cdnsp(gadget);
+>  	struct cdns *cdns = dev_get_drvdata(pdev->dev);
+> +	unsigned long flags;
+>  
+>  	trace_cdnsp_pullup(is_on);
+>  
+> +	/*
+> +	 * Disable events handling while controller is being
+> +	 * enabled/disabled.
+> +	 */
+> +	disable_irq(cdns->dev_irq);
+> +	spin_lock_irqsave(&pdev->lock, flags);
+> +
+>  	if (!is_on) {
+>  		cdnsp_reset_device(pdev);
+>  		cdns_clear_vbus(cdns);
+>  	} else {
+>  		cdns_set_vbus(cdns);
+>  	}
+> +
+> +	spin_unlock_irqrestore(&pdev->lock, flags);
+> +	enable_irq(cdns->dev_irq);
+> +
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.25.1
+> 
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+
+Thanks,
+Peter Chen
+
