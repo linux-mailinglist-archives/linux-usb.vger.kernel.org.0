@@ -2,85 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA98147448F
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Dec 2021 15:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1474744A2
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Dec 2021 15:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234810AbhLNOOn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Dec 2021 09:14:43 -0500
-Received: from mga11.intel.com ([192.55.52.93]:26838 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234799AbhLNOOn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 Dec 2021 09:14:43 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="236516876"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="236516876"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 06:14:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="661394665"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Dec 2021 06:14:42 -0800
-To:     Nikolay Martynov <mar.kolya@gmail.com>, mathias.nyman@intel.com,
-        linux-usb@vger.kernel.org
-References: <20211003001441.28928-1-mar.kolya@gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] Enable trust tx length quirk for Fresco FL11 USB
- controller
-Message-ID: <a7baa570-00e2-3f1f-22dd-0aa01f15c241@linux.intel.com>
-Date:   Tue, 14 Dec 2021 16:16:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.8.1
+        id S234853AbhLNOSM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Dec 2021 09:18:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234849AbhLNOSK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 09:18:10 -0500
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5AEC06173F
+        for <linux-usb@vger.kernel.org>; Tue, 14 Dec 2021 06:18:10 -0800 (PST)
+Received: by mail-ed1-x543.google.com with SMTP id z7so2360098edc.11
+        for <linux-usb@vger.kernel.org>; Tue, 14 Dec 2021 06:18:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=KzLgDz7d2Gll4mrNvllKXj4KFgN8S+Ovisil7/bb6fs=;
+        b=KNdeQjCrgndTL0c1dZk/ospbXyl9Nuz0BNovCOe/U2B0WBL8DtunppiqRoOX/na6KP
+         Lo/hEyvt8U5EqOSypzZcH3FIhDg1PXSc0UyAJUkKilgDkhZrrYdqLngtaXiK6gfgxis3
+         IeDnUtbDBPAUbeCsq4428YhR+lZk8O8q/IBufA8GsCv266Imx0TbeoaG1FarrG+7Avri
+         RyIV60xxMmxQPTl6GqkmtrdW8M//sRla/66Z4Kv4zcSUL6BB7D6HxamXynBqnTTPXMy1
+         +Oilw3VQSgR63V49JsiJefkwLU+5vlc/EOE++3Q3vWyLxnIAA1+kiahCdnkcimCrjuOS
+         NpHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=KzLgDz7d2Gll4mrNvllKXj4KFgN8S+Ovisil7/bb6fs=;
+        b=4R9LfsiUDgWCWNIZnTMQX/PlDMUycYbHichRzM0gnK8WQUvo2KJMmAJPHlztn2Y2dB
+         RzHg7sw9Ej+J6UQw+w3P8eVbxbrxh3K3q9FUKsRA02nBrjvP0ElEkbNn0qPI3Jj9amCJ
+         wRAIda/BXRVPGPE6cCDIw11ZLoTabMm9FtTzWkcP+avLDGYc5ChgNRFL9Cno2ICJ8EyB
+         TzAIInCzg2GY6AOZAKgjWmOrqB1C18DZwb2x7KNaUBF0IM/2tGjNtrrIpQsRonIqYpwk
+         rjC4symgncty844EgrTpCgBz0W8XIsMYW9WDy8bKYTGFTbaNdMnWTm8CeM9tP/NANwv2
+         V0Vg==
+X-Gm-Message-State: AOAM5329hxKEyydJZuqG0Furixrar9q6+j/ybtQ2jKesvfr63y99r9vh
+        WCi6czYQTDaK/guLKxQnp0Yi6djRJmhJeVdPZmo=
+X-Google-Smtp-Source: ABdhPJwgOwwsQX/ehD9f3V3iRpTpn2L+rjApR0KolBVbIGb8PozFpLBsrotl38Us/FfiFZ3on9MlMVFjddobZf+VFmc=
+X-Received: by 2002:a17:906:538d:: with SMTP id g13mr6276216ejo.62.1639491487294;
+ Tue, 14 Dec 2021 06:18:07 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211003001441.28928-1-mar.kolya@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a54:3842:0:0:0:0:0 with HTTP; Tue, 14 Dec 2021 06:18:06
+ -0800 (PST)
+Reply-To: uchennailobitenone@gmail.com
+From:   uchenna <okeyyoyopa@gmail.com>
+Date:   Tue, 14 Dec 2021 06:18:06 -0800
+Message-ID: <CAHTws=LK4rSB2LHiL7P7_fJt5FZzgJmntHr3sQZ=jTuvC1zUrA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3.10.2021 3.14, Nikolay Martynov wrote:
-> Tested on SD5200T TB3 dock which has Fresco Logic FL1100 USB 3.0 Host
-> Controller.
-> Before this patch streaming video from USB cam made mouse and keyboard
-> connected to the same USB bus unusable. Also video was jerky.
-> With this patch streaming video doesn't have any effect on other
-> periferals and video is smooth.
-> 
-> Signed-off-by: Nikolay Martynov <mar.kolya@gmail.com>
-> ---
->  drivers/usb/host/xhci-pci.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 2c9f25ca8edd..2175fac2f259 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -30,6 +30,7 @@
->  #define PCI_VENDOR_ID_FRESCO_LOGIC	0x1b73
->  #define PCI_DEVICE_ID_FRESCO_LOGIC_PDK	0x1000
->  #define PCI_DEVICE_ID_FRESCO_LOGIC_FL1009	0x1009
-> +#define PCI_DEVICE_ID_FRESCO_LOGIC_FL1100	0x1100
->  #define PCI_DEVICE_ID_FRESCO_LOGIC_FL1400	0x1400
->  
->  #define PCI_VENDOR_ID_ETRON		0x1b6f
-> @@ -113,6 +114,7 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->  	/* Look for vendor-specific quirks */
->  	if (pdev->vendor == PCI_VENDOR_ID_FRESCO_LOGIC &&
->  			(pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_PDK ||
-> +			 pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_FL1100 ||
->  			 pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_FL1400)) {
->  		if (pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_PDK &&
->  				pdev->revision == 0x0)
+May the Almighty Lord be with you....
+Am A WIDOW TO LATE MR David HOLLAND,  I AM 59 .YEARS OLD. My name is
+Josephine HOLLAND.  I am married to Late Mr. David HOLLAND, who worked
+in the France Embassy a here in Lome -Togo West Africa for nine years
+before he died in the
+year 2019.
 
+You are chosen to Receive A Donation Cash Grant of my late husband
+that funds $5.7,000,  000,00 (Five Million Seven Hundred Thousand
+United States Dollars) to help the poor and orphanages through your
+sincere help before my death. I am suffering from long time cancer of
+the Breast, from all indication my conditions is really deteriorating
+and it is quite obvious that I wouldn't live any more longer according
+to my doctor because the cancer has gotten to a very bad stage that no
+hope for me to be a living person again, All i need from you is your
+sincerity to use this funds to do this project as i desired and I need
+your information as where My Bank will be sending the funds,
 
-I'm getting reports that this patch causes issues detecting usb drives connected to a dock
-with this Fresco FL1100 xHC.
+such as:
+Receiver's name:_ Address:_ Phone
+number:_ Country:_
 
-This patch adds both XHCI_TRUST_TX_LENGTH and XHCI_BROKEN_MSI quirks, which was probably
-not intended. Removing the BROKEN_MSI quirk solved the issue.
+Please do not be offended by the way or manner I came to you as a
+stranger to do this, it is about the only way I could get to you after
+going through your contacts Id. I shall give you the contacts of the
+bank. For legitimacy with  a letter of authority that will establish
+you as my appointed beneficiary of this money.
 
-Does you setup work normally with just TRUST_TX_LENGTH quirk?  
+I am waiting for your reply.
+From Sister Josephine HOLLAND.
 
--Mathias
+You should contact me through my private email address:
+
+mrsjosephineoneholland@gmail.com
