@@ -2,99 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE097474DBB
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Dec 2021 23:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F04EC474DDC
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Dec 2021 23:23:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232587AbhLNWLw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Dec 2021 17:11:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
+        id S233744AbhLNWXA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Dec 2021 17:23:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbhLNWLv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 17:11:51 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EABC061574;
-        Tue, 14 Dec 2021 14:11:51 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id g19so18990162pfb.8;
-        Tue, 14 Dec 2021 14:11:51 -0800 (PST)
+        with ESMTP id S231132AbhLNWXA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 17:23:00 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F83C061574
+        for <linux-usb@vger.kernel.org>; Tue, 14 Dec 2021 14:22:59 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id k21so26856208ioh.4
+        for <linux-usb@vger.kernel.org>; Tue, 14 Dec 2021 14:22:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wRt3Fh01KA5eeSEw2iv3iHWOrv3eO/SBn/6JbKjZZEE=;
-        b=h9rGd1j8L/8dqrG8q0zTLIbjQHvjSy/P7DrrvztSzKAH+x6p+fLt55yceKseki+Alt
-         /WEvEdLOicqCtB3krTMHJGixoa/SLelPAqRRF3rEZqjx1UetM9yimn8pW1IxKa+KW1W8
-         Mofz622KuoKmnceiI8R0rzCAUpCPMUUJIiMAWyz0bSXkP1oQK5FlRQmKMa+nbRhIOSWm
-         uZqc6XtSj0A/SG3pU/r9DP7dJVGwWU/966EH5et2LjBNUlG+sBHtbFA35tfG9PvdGIpB
-         Q5cGiWD39A9VYPG46CWMgLF7WrB3OpO8CNC/HvPNu0ZCuD4U0s3veKUzGIbjdRdB0+gz
-         yZDQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=nnlbqnmAl5czdkwUK0tzBn9UV5q4GA/8OJN34hPayHs=;
+        b=IRYqSLO9rBYa5e0EmzJCBbBQ9lWIl5Ok+HdYA0mP/xFn/vjyDuIE4oRnuT3ZaWaDWb
+         jGM1Pv64NBseAxL9ZxEyaOxzs5H6F2I2vkLaKBT1Wc0UZLHk/8xRIHhDklZvXDsihPvD
+         ZTEX4qgpjF0o2loURYDuCDlAGWL4B1jXuQTag=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=wRt3Fh01KA5eeSEw2iv3iHWOrv3eO/SBn/6JbKjZZEE=;
-        b=gz7IIInVybz6QeevD3c7Q7hvWBE2u3QqAdH+fI9ZWs2J6+EOZrDYJKK5H9KmzBBGnv
-         3nGdJmHfPOLC4hQVv+MwsNOjuN0uDWQR5cPETXMsVyW104uUjeoNwElLPgyaGXHWiAM2
-         V+wqTFaRQPbcIiJ07Spk+nIVsdRqZtpEi6+1JhPupf/b3ZG74zSOErMLsm0lKPo8hzlZ
-         VQ6uj1PUmo2AnkiGeiHGNIid3zn6N23uILV8vkqnzGxCAZ+i7t49pGZwvlMLvVSiGJqp
-         7pgPuo8dY4cGtMg7OOGWJIDHU3kTpLk2mU7pQqPdovjd03tZ7B0vGAH/LqiJcDZR31jG
-         2rmA==
-X-Gm-Message-State: AOAM532eAUqvlyDX1ggF8fchTwj15OFKOiZ2NvH7TPXdpR8dlJ4jExEa
-        A3eqkiolPkSSsZKzJmuQFnM=
-X-Google-Smtp-Source: ABdhPJxLs3nQOphmY57FIE3V1CmWt0eb1aiFiqi5g4C3nfWbf0ZxtA+Egy99Bm8IZtfn1c3yoeSRXg==
-X-Received: by 2002:a63:131d:: with SMTP id i29mr3515419pgl.493.1639519910996;
-        Tue, 14 Dec 2021 14:11:50 -0800 (PST)
-Received: from devoptiplex ([70.102.108.170])
-        by smtp.gmail.com with ESMTPSA id f4sm84181pfj.61.2021.12.14.14.11.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 14:11:50 -0800 (PST)
-From:   Greg Jesionowski <jesionowskigreg@gmail.com>
-Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Jesionowski <jesionowskigreg@gmail.com>
-Subject: [PATCH] net: usb: lan78xx: add Allied Telesis AT29M2-AF
-Date:   Tue, 14 Dec 2021 15:10:27 -0700
-Message-Id: <20211214221027.305784-1-jesionowskigreg@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=nnlbqnmAl5czdkwUK0tzBn9UV5q4GA/8OJN34hPayHs=;
+        b=jNnFeAjw7hpaWT7AmDGTyGcu3Q89WN8AwvVLSa9wFVTKpDbJWvP3xajLdLVmo9CygB
+         4sWVo+r5QhF5/7Js0zDOa9u0gnAjqcMATTwjP3FVhtRPrRaLVuQ6EEtuC25HwenM6jbr
+         zRdzvILlxGwzpq4fVymrVbQlryOl5DvTF9nHoLNKQMWmuDQx230Yr4IMIV2fIi+h/H6q
+         c3+NlZlz4D2xGLP9AIWYtHE7ugkN5mNVJMzI+K16Xb+wNAX1XN34rI/XEvZ5VymqK7Q9
+         S1ewrPKkQXeszzdB2RxhvxSvkJw8TDAGJY1Slu3S2ACkcOpg1Sv6Jm595kY1+55ZCCBG
+         fLeQ==
+X-Gm-Message-State: AOAM533+Hese2skrvtQKXhpMMHvPPItY40jC8K+rwI9F1BMJqqGXaABD
+        BmG1GWltHZoplqeMTntZIBCC4y4VbOIk/g==
+X-Google-Smtp-Source: ABdhPJzqZ07IOlXH7TN/gbPKBB69jtirzB2rPQJ0LwXxrS4QTy54hnjZXxdkagiJi6c4lW3KMUT6ng==
+X-Received: by 2002:a05:6638:2bc:: with SMTP id d28mr4409189jaq.521.1639520579065;
+        Tue, 14 Dec 2021 14:22:59 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id b13sm40972iof.54.2021.12.14.14.22.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Dec 2021 14:22:58 -0800 (PST)
+Subject: Re: [PATCH v6 0/5] tools/usbip: Patch set summary
+To:     Lars Gunnarsson <gunnarsson.lars@gmail.com>
+Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20211130222254.GA16447@dell-precision-T3610>
+ <ea85cb17-69a1-6f6b-d1ab-a75eb73991e1@linuxfoundation.org>
+ <20211209211134.GA12115@dell-precision-T3610>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <475637fb-6636-aaa5-39e4-ec7eed0ee995@linuxfoundation.org>
+Date:   Tue, 14 Dec 2021 15:22:57 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <20211209211134.GA12115@dell-precision-T3610>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This adds the vendor and product IDs for the AT29M2-AF which is a
-lan7801-based device.
+On 12/9/21 2:11 PM, Lars Gunnarsson wrote:
+> On Mon, Dec 06, 2021 at 01:02:35PM -0700, Shuah Khan wrote:
+>> On 11/30/21 3:22 PM, Lars Gunnarsson wrote:
+>>> To forward a remote usb device over usbip the following steps is required:
+>>>
+>>> 1. Execute "usbip bind" on remote end.
+>>> 2. Execute "usbip attach" on local end.
+>>>
+>>> These steps must be perfomed in above order and after usb device is plugged in.
+>>> If the usb device is unplugged on the remote end the steps above needs to be
+>>> performed again to establish the connection. This patch set implements a feature
+>>> to persistently forward devices on a given bus. When using flag "-p|--persistent"
+>>> on remot end, the USB device becomes exported when plugged in. When using flag
+>>> "-p|--persistent" on local end, the USB device becomes imported when available
+>>> on remote end. Thus it is only required to run the usbip command once on each
+>>> end, in any order, to persistently forward usb devices on a given bus.
+>>>
+>>> This is sent in five separate patches:
+>>>     tools/usbip: update protocol documentation
+>>>     tools/usbip: update manual pages
+>>>     tools/usbip: add usb event monitor into libusbip
+>>>     tools/usbip: export USB devices on a given bus persistently
+>>>     tools/usbip: import USB devices on a given bus persistently
+>>>
+>>
+>> When -p is used, the command stays in foreground. This is a very
+>> different use model compared to current model. In addition, once
+>> persistent flag is set on a bus, all devices even the ones that
+>> are inserted in the future get exported. What happens if one of
+>> the devices shouldn't be exported?
+> 
+> Yes it's conceptually more like exporting/importing the physical usb port,
+> rather than exporting/importing a device plugged into the usb port. Using flag
+> "-p" on both ends will behave like a "virtual" usb hub, a device plugged in on
+> the server (on a chosen bus) will automatically be available on the client.
+> Using flag "-p" has no dependency on the other end though. Using "-p" on one end
+> doesn't enforce usage on the other end. It is only for exporting and importing
+> devices automatically when they become available.
+> 
+> There might be better choices than naming flag to "persistent" for easily
+> communicate this concept. Would "port" be more intuitive?
+> "usbip attach --port 3-3.1" and "usbip bind --port 3-3.1"
+> 
 
-Signed-off-by: Greg Jesionowski <jesionowskigreg@gmail.com>
----
- drivers/net/usb/lan78xx.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Terminology isn't what I am concerned about. My concern is the idea of
+automatically making devices available for export at bus level.
 
-diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-index f20376c1ef3f..474a720e8957 100644
---- a/drivers/net/usb/lan78xx.c
-+++ b/drivers/net/usb/lan78xx.c
-@@ -76,6 +76,8 @@
- #define LAN7801_USB_PRODUCT_ID		(0x7801)
- #define LAN78XX_EEPROM_MAGIC		(0x78A5)
- #define LAN78XX_OTP_MAGIC		(0x78F3)
-+#define AT29M2AF_USB_VENDOR_ID		(0x07C9)
-+#define AT29M2AF_USB_PRODUCT_ID	(0x0012)
- 
- #define	MII_READ			1
- #define	MII_WRITE			0
-@@ -4734,6 +4736,10 @@ static const struct usb_device_id products[] = {
- 	/* LAN7801 USB Gigabit Ethernet Device */
- 	USB_DEVICE(LAN78XX_USB_VENDOR_ID, LAN7801_USB_PRODUCT_ID),
- 	},
-+	{
-+	/* ATM2-AF USB Gigabit Ethernet Device */
-+	USB_DEVICE(AT29M2AF_USB_VENDOR_ID, AT29M2AF_USB_PRODUCT_ID),
-+	},
- 	{},
- };
- MODULE_DEVICE_TABLE(usb, products);
--- 
-2.25.1
+>>
+>> There are several conditions to be thought through:
+>>
+>> - What happens if if the command that is running on the foreground
+>>    is killed on either end?
+> 
+> If "attach" cmd gets killed (client side) it will stop the foreground
+> monitoring. The device will still remain imported if user exit at imported state.
+> The user then needs to manually unimport the device with "detach".
+> 
+> If "bind" cmd gets killed (server side) it will stop the foreground monitoring.
+> The device will still remain exported if exit at exported state. The user then
+> needs to manually unexport the device with "unbind".
+> 
 
+My concern is the persistence nature of these exports/imports through
+reboots. I have to give it some though on how this can be implemented
+addressing my concerns.
+
+>> - What happens when one or more devices are detached?
+> 
+> If user exit from "attach" cmd running in foreground, followed by detaching the
+> device manually, it will work as previously. The device will become available on
+> the server for importing again.
+> 
+> If user running "attach" cmd in foreground, while executing "detach" manually
+> from another terminal or similar, the foreground "attach" command will detect
+> the disconnection and re-establish the import. I don't see any use case for
+> this, it's just for explaining.
+> 
+> If user running "attach" cmd in foreground, while the remote device becomes
+> unexported (or disconnected) it will start polling the usbipd.
+> When a device becomes exported on the chosen bus it gets imported immediately.
+> 
+>> - What happens when one or more devices are unbound from
+>>    the server?
+>>
+>> Let's walk through these scenarios.
+> 
+> If user exit from "bind" cmd running in foreground, followed by unbind the
+> device manually it will work as previous. The usb device will become available
+> on the server again.
+> 
+> If user running "bind" cmd in foreground, while executing "unbind" from another
+> terminal or similar, the foreground "bind" command will detect the unexport
+> and re-establish the export. I don't see any use case for this, it's just for
+> explaining.
+> 
+> If user running "bind" cmd in foreground, while the device becomes unexported
+> or disconnected it will restart monitoring the busid. When a device becomes
+> plugged in on the chosen usb port it gets exported immediately.
+> 
+> One option to consider is to unexport & unimport the device at exit, but this
+> comes with the cost of creating a source code dependency between
+> bind --> unbind and attach --> detach.
+> 
+
+How does this look like in code?
+
+thanks,
+-- Shuah
