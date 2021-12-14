@@ -2,133 +2,272 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE31474B26
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Dec 2021 19:46:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B04474B9D
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Dec 2021 20:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234304AbhLNSqc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Dec 2021 13:46:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbhLNSqb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 13:46:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE828C061574
-        for <linux-usb@vger.kernel.org>; Tue, 14 Dec 2021 10:46:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48587616A9
-        for <linux-usb@vger.kernel.org>; Tue, 14 Dec 2021 18:46:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56DE1C34600;
-        Tue, 14 Dec 2021 18:46:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639507590;
-        bh=k/Dcm6Y93wD6e/B8LExFZTl30XX5Qnin3C4tM+3Ws8I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dSeClCzzQ2EbJ7pmMu4gAHSRPRPumGDlO7cYFkrVeiQN/QERsGR+vwn6fXOvU33xF
-         q8+AJovo5tLRQBJUjVgWTEw15YeUMkkW435KlQmzRaXmytRQMqvAFldU7XtnySFCYS
-         +L4W3P1fBbafZTZj9eTSgGvYXj20bKA9oJUxiADQ=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Szymon Heidrich <szymon.heidrich@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>
-Subject: [PATCH] USB: gadget: bRequestType is a bitfield, not a enum
-Date:   Tue, 14 Dec 2021 19:46:21 +0100
-Message-Id: <20211214184621.385828-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
+        id S237342AbhLNTKo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Dec 2021 14:10:44 -0500
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:43639 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237343AbhLNTKk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 14:10:40 -0500
+Received: by mail-ot1-f41.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so21988085otu.10;
+        Tue, 14 Dec 2021 11:10:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fxhxkz2aoYllAmdfG4616pgL5EaaxJAxwpcl6MIvTl0=;
+        b=lYWi4SHlwCEFkR2PYwJ0hkeRR6CKKAEd27O/ei3RXZuJt9nG/Tcg2oAj5BuzISLsif
+         /oulKgcKy5xNxClErx2+Gl+r/tJ+QckALDZLzfjl3UiL25qVZWLHmls/jGM2hkwV099V
+         nCye69YOBKddKgakiC1SJhy6H5MdTlrQ3qYCa1ATiSDFM17pREw8viHnLkKa+th6IYW2
+         2tJpQ/HZNXlQrrqO/BzKAuTuP93gr0MVP24lu/42bqsmSGuNAvOsVV0YxG6G4KRUjhxO
+         V6a0RxZR1C9qxo3HY/vOaM+aBLxoO5Wllrt86Xb9C+Zc2iyr2HaSUfwbSfYWX0sl22TU
+         bmyQ==
+X-Gm-Message-State: AOAM530UWprJrTX6ddxtRNmMW/WFz0QUUjYTFlUdpQEdAH1fnTDyfZ71
+        IWSSbcZb3HFkzPQ3jz3QdQ==
+X-Google-Smtp-Source: ABdhPJwCUWSkJn72NBbr1bR0cPFzwBKb26YGLLV1cBTZ7fWHeLCqv486JywNBLLSPFL4EvCYXCVqow==
+X-Received: by 2002:a9d:1726:: with SMTP id i38mr5644825ota.176.1639509039052;
+        Tue, 14 Dec 2021 11:10:39 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id x16sm134876otq.47.2021.12.14.11.10.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 11:10:37 -0800 (PST)
+Received: (nullmailer pid 3743254 invoked by uid 1000);
+        Tue, 14 Dec 2021 19:10:35 -0000
+Date:   Tue, 14 Dec 2021 13:10:35 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     devicetree@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
+        <linux-mmc@vger.kernel.org>,
+        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v3 13/15] dt-bindings: ata: Convert Broadcom SATA to YAML
+Message-ID: <YbjsK50twTm0PWj9@robh.at.kernel.org>
+References: <20211208003727.3596577-1-f.fainelli@gmail.com>
+ <20211208003727.3596577-14-f.fainelli@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2952; h=from:subject; bh=k/Dcm6Y93wD6e/B8LExFZTl30XX5Qnin3C4tM+3Ws8I=; b=owGbwMvMwCRo6H6F97bub03G02pJDIk7nlXMmvq1MHLl9977pRZrjCZpmt6J/NQR7/2xa+k8IYPP cr7KHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCRZd4M873kmTMunzlwfaZXsN5tqz V7J+y8Uc4w3121Trp/8W1dP3nn/MTjYfVXGMKfAgA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208003727.3596577-14-f.fainelli@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Szymon rightly pointed out that the previous check for the endpoint
-direction in bRequestType was not looking at only the bit involved, but
-rather the whole value.  Normally this is ok, but for some request
-types, bits other than bit 8 could be set and the check for the endpoint
-length could not stall correctly.
+On Tue, Dec 07, 2021 at 04:37:24PM -0800, Florian Fainelli wrote:
+> Convert the Broadcom SATA3 AHCI controller Device Tree binding to YAML
+> to help with validation.
+> 
+> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  .../bindings/ata/brcm,sata-brcm.txt           | 45 ---------
+>  .../bindings/ata/brcm,sata-brcm.yaml          | 98 +++++++++++++++++++
+>  2 files changed, 98 insertions(+), 45 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
+>  create mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
+> deleted file mode 100644
+> index b9ae4ce4a0a0..000000000000
+> --- a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
+> +++ /dev/null
+> @@ -1,45 +0,0 @@
+> -* Broadcom SATA3 AHCI Controller
+> -
+> -SATA nodes are defined to describe on-chip Serial ATA controllers.
+> -Each SATA controller should have its own node.
+> -
+> -Required properties:
+> -- compatible         : should be one or more of
+> -			"brcm,bcm7216-ahci"
+> -			"brcm,bcm7425-ahci"
+> -			"brcm,bcm7445-ahci"
+> -			"brcm,bcm-nsp-ahci"
+> -			"brcm,sata3-ahci"
+> -			"brcm,bcm63138-ahci"
+> -- reg                : register mappings for AHCI and SATA_TOP_CTRL
+> -- reg-names          : "ahci" and "top-ctrl"
+> -- interrupts         : interrupt mapping for SATA IRQ
+> -
+> -Optional properties:
+> -
+> -- reset: for "brcm,bcm7216-ahci" must be a valid reset phandle
+> -  pointing to the RESCAL reset controller provider node.
+> -- reset-names: for "brcm,bcm7216-ahci", must be "rescal".
+> -
+> -Also see ahci-platform.txt.
+> -
+> -Example:
+> -
+> -	sata@f045a000 {
+> -		compatible = "brcm,bcm7445-ahci", "brcm,sata3-ahci";
+> -		reg = <0xf045a000 0xa9c>, <0xf0458040 0x24>;
+> -		reg-names = "ahci", "top-ctrl";
+> -		interrupts = <0 30 0>;
+> -		#address-cells = <1>;
+> -		#size-cells = <0>;
+> -
+> -		sata0: sata-port@0 {
+> -			reg = <0>;
+> -			phys = <&sata_phy 0>;
+> -		};
+> -
+> -		sata1: sata-port@1 {
+> -			reg = <1>;
+> -			phys = <&sata_phy 1>;
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
+> new file mode 100644
+> index 000000000000..3e24f45c65af
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
+> @@ -0,0 +1,98 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/ata/brcm,sata-brcm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom SATA3 AHCI Controller
+> +
+> +description:
+> +  SATA nodes are defined to describe on-chip Serial ATA controllers.
+> +  Each SATA controller should have its own node.
+> +
+> +maintainers:
+> +  - Florian Fainelli <f.fainelli@gmail.com>
+> +
+> +allOf:
+> +  - $ref: sata-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - brcm,bcm7216-ahci
+> +          - const: brcm,sata3-ahci
+> +      - items:
+> +          - enum:
+> +              - brcm,bcm7445-ahci
+> +          - const: brcm,sata3-ahci
+> +      - items:
+> +          - enum:
+> +              - brcm,bcm7425-ahci
+> +          - const: brcm,sata3-ahci
+> +      - items:
+> +          - const: brcm,bcm-nsp-ahci
+> +      - items:
+> +          - enum:
+> +              - brcm,bcm63138-ahci
+> +          - const: brcm,sata3-ahci
 
-Fix that up by only checking the single bit.
+Is there some reason this is not grouped into 2 oneOf entries? If not, I 
+can fixup.
 
-Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-Fixes: 153a2d7e3350 ("USB: gadget: detect too-big endpoint 0 requests")
-Cc: Felipe Balbi <balbi@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/usb/gadget/composite.c    | 6 +++---
- drivers/usb/gadget/legacy/dbgp.c  | 6 +++---
- drivers/usb/gadget/legacy/inode.c | 6 +++---
- 3 files changed, 9 insertions(+), 9 deletions(-)
+> +
+> +  reg:
+> +    minItems: 2
+> +    maxItems: 2
+> +
+> +  reg-names:
+> +    items:
+> +      - const: ahci
+> +      - const: top-ctrl
+> +
+> +  interrupts: true
 
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index 284eea9f6e4d..3789c329183c 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -1680,14 +1680,14 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
- 	u8				endp;
- 
- 	if (w_length > USB_COMP_EP0_BUFSIZ) {
--		if (ctrl->bRequestType == USB_DIR_OUT) {
--			goto done;
--		} else {
-+		if (ctrl->bRequestType & USB_DIR_IN) {
- 			/* Cast away the const, we are going to overwrite on purpose. */
- 			__le16 *temp = (__le16 *)&ctrl->wLength;
- 
- 			*temp = cpu_to_le16(USB_COMP_EP0_BUFSIZ);
- 			w_length = USB_COMP_EP0_BUFSIZ;
-+		} else {
-+			goto done;
- 		}
- 	}
- 
-diff --git a/drivers/usb/gadget/legacy/dbgp.c b/drivers/usb/gadget/legacy/dbgp.c
-index 355bc7dab9d5..6bcbad382580 100644
---- a/drivers/usb/gadget/legacy/dbgp.c
-+++ b/drivers/usb/gadget/legacy/dbgp.c
-@@ -346,14 +346,14 @@ static int dbgp_setup(struct usb_gadget *gadget,
- 	u16 len = 0;
- 
- 	if (length > DBGP_REQ_LEN) {
--		if (ctrl->bRequestType == USB_DIR_OUT) {
--			return err;
--		} else {
-+		if (ctrl->bRequestType & USB_DIR_IN) {
- 			/* Cast away the const, we are going to overwrite on purpose. */
- 			__le16 *temp = (__le16 *)&ctrl->wLength;
- 
- 			*temp = cpu_to_le16(DBGP_REQ_LEN);
- 			length = DBGP_REQ_LEN;
-+		} else {
-+			return err;
- 		}
- 	}
- 
-diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-index 63150e3889ef..3b58f4fc0a80 100644
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -1334,14 +1334,14 @@ gadgetfs_setup (struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
- 	u16				w_length = le16_to_cpu(ctrl->wLength);
- 
- 	if (w_length > RBUF_SIZE) {
--		if (ctrl->bRequestType == USB_DIR_OUT) {
--			return value;
--		} else {
-+		if (ctrl->bRequestType & USB_DIR_IN) {
- 			/* Cast away the const, we are going to overwrite on purpose. */
- 			__le16 *temp = (__le16 *)&ctrl->wLength;
- 
- 			*temp = cpu_to_le16(RBUF_SIZE);
- 			w_length = RBUF_SIZE;
-+		} else {
-+			return value;
- 		}
- 	}
- 
--- 
-2.34.1
+maxItems: 1 ?
 
+> +
+> +  dma-coherent: true
+> +
+> +if:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        enum:
+> +          - brcm,bcm7216-ahci
+> +          - brcm,bcm63138-ahci
+> +then:
+> +  properties:
+> +    resets:
+> +      maxItems: 1
+> +    reset-names:
+> +      enum:
+> +        - rescal
+> +        - ahci
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    sata@f045a000 {
+> +        compatible = "brcm,bcm7445-ahci", "brcm,sata3-ahci";
+> +        reg = <0xf045a000 0xa9c>, <0xf0458040 0x24>;
+> +        reg-names = "ahci", "top-ctrl";
+> +        interrupts = <0 30 0>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        sata0: sata-port@0 {
+> +            reg = <0>;
+> +            phys = <&sata_phy 0>;
+> +        };
+> +
+> +        sata1: sata-port@1 {
+> +            reg = <1>;
+> +            phys = <&sata_phy 1>;
+> +        };
+> +    };
+> -- 
+> 2.25.1
+> 
+> 
