@@ -2,64 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A64C7473E52
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Dec 2021 09:39:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 722CB47400B
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Dec 2021 11:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231875AbhLNIjZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Dec 2021 03:39:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbhLNIjZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 03:39:25 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C619FC061574
-        for <linux-usb@vger.kernel.org>; Tue, 14 Dec 2021 00:39:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 311C5CE16EC
-        for <linux-usb@vger.kernel.org>; Tue, 14 Dec 2021 08:39:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 631F4C34601;
-        Tue, 14 Dec 2021 08:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639471160;
-        bh=Pw3O5Pl8/NLfq3bge17kg/3NanAhxBpntB+MfixPbFA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lKGbf8vp1sJ3ASoqop/TVZN9jfIcZ0a+jv9tMLSf0w7PXhZZLpTJ2YdANnp9akMvI
-         sBcaUMV4mwvnDHaPra6fRtBlRNwWNSwO0KCLcrwMuEGvtOSQL5BrYvY8S06NSvBmyH
-         0yHiAq8WWn0XCqgdlIUc22jOQWXrk7XZ6FKQQx2tqIxQXRlluOrXVJq6Y00pPrticK
-         yRcslsQyYvXEptCMoFVKrO/agb3UYFjgwNdYYUtcBEwYYNJAo5+hKKnItdnoDF9tgz
-         K9Bw7d5zfQoziSNyCkZAoaFCOWZkr8+SrnJC0KcSZNMFqn6hpeAzc3lB229u0UptP2
-         TlMIKGyBbOuSw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mx3LA-000360-Sd; Tue, 14 Dec 2021 09:39:17 +0100
-Date:   Tue, 14 Dec 2021 09:39:16 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Daniele Palmas <dnlplm@gmail.com>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 1/1] USB: serial: option: add Telit FN990 compositions
-Message-ID: <YbhYNNTEtqyeTNle@hovoldconsulting.com>
-References: <20211210100714.22587-1-dnlplm@gmail.com>
+        id S232807AbhLNKDx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Dec 2021 05:03:53 -0500
+Received: from mga06.intel.com ([134.134.136.31]:44145 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229550AbhLNKDw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 14 Dec 2021 05:03:52 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="299725651"
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="299725651"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 02:03:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="661256722"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Dec 2021 02:03:49 -0800
+To:     Jun Li <lijun.kernel@gmail.com>
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-mediatek@lists.infradead.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Yun-Chien Yu <yun-chien.yu@mediatek.com>
+References: <20211209072218.21651-1-chunfeng.yun@mediatek.com>
+ <c448da77-f2f3-8b79-fc4b-b9dcff727c6e@linux.intel.com>
+ <CAKgpwJXxtLwOjxjg3vFHiqS92j6rx_b1+C-bRwDnp+PBvXCMTg@mail.gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH] usb: xhci: skip re-check pending port event if hibernated
+Message-ID: <e7a6e45e-68ce-54a5-9632-80244dd1e4c7@linux.intel.com>
+Date:   Tue, 14 Dec 2021 12:05:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210100714.22587-1-dnlplm@gmail.com>
+In-Reply-To: <CAKgpwJXxtLwOjxjg3vFHiqS92j6rx_b1+C-bRwDnp+PBvXCMTg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 11:07:14AM +0100, Daniele Palmas wrote:
-> Add the following Telit FN990 compositions:
+On 14.12.2021 10.00, Jun Li wrote:
+> Mathias Nyman <mathias.nyman@linux.intel.com> 于2021年12月11日周六 01:56写道：
+>>
+>> On 9.12.2021 9.22, Chunfeng Yun wrote:
+>>> When xHCI controller hibernated, the root hub lost power, if controller
+>>> support Port Power Control (PPC), PP is not set at xhci_resume() and
+>>> set by hub_reset_resume() later, so no need check pending port event.
+>>> If PPC is not supported, device is disconneced, seems do not send out
+>>> U3 LFPS wake signal, no need re-check again and drop 120ms delay to
+>>> save resume time.
+>>>
+>>> Reported-by: Yun-Chien Yu <yun-chien.yu@mediatek.com>
+>>> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+>>> ---
+>>
+>> Thanks, adding
 > 
-> 0x1070: tty, adb, rmnet, tty, tty, tty, tty
-> 0x1071: tty, adb, mbim, tty, tty, tty, tty
-> 0x1072: rndis, tty, adb, tty, tty, tty, tty
-> 0x1073: tty, adb, ecm, tty, tty, tty, tty
+> Hi Mathias, Chunfeng
 > 
-> Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+> I have a question on this, if there is no any usb devices connected
+> before suspend, do we need this 120ms delay to check again?
+> So do we need one more condition to limit this like?
+> if (!pending_portevent && !hibernated && xhci_has_child_device())
 
-Now applied, thanks.
+The 120ms delay was added to make sure we catch the second wake signal
+from a device in case host missed the first U3 exit LFPS wakeup signal.
 
-Johan
+Even if no devices are connected this might be helpful if a device is
+connected while host is suspended.
+I haven't checked any timing for the link training during enumeration,
+but it also uses LFPS signalling, and connected device isn't visible to
+driver until link is successfully trained.
+
+So the original 120ms delay patch might as a positive side effect ensure
+driver doesn't suspend host mid device enumeration.
+
+Could be looked into more, but I don't think we should this patch by
+Chunfeng
+
+Thanks
+Mathias
