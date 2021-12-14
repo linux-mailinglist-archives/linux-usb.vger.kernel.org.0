@@ -2,17 +2,17 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB317474CC2
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Dec 2021 21:43:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6210F474CC3
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Dec 2021 21:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237694AbhLNUmz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Dec 2021 15:42:55 -0500
-Received: from mxout02.lancloud.ru ([45.84.86.82]:51242 "EHLO
-        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237691AbhLNUmy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 15:42:54 -0500
+        id S237696AbhLNUm4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Dec 2021 15:42:56 -0500
+Received: from mxout03.lancloud.ru ([45.84.86.113]:53656 "EHLO
+        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237693AbhLNUmz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 15:42:55 -0500
 Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 0BB43205BB58
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru B5D23208FDF3
 Received: from LanCloud
 Received: from LanCloud
 Received: from LanCloud
@@ -20,9 +20,10 @@ From:   Sergey Shtylyov <s.shtylyov@omp.ru>
 To:     <linux-usb@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH 3/4] usb: host: ehci-sh: propagate errors from platform_get_irq()
-Date:   Tue, 14 Dec 2021 23:42:46 +0300
-Message-ID: <20211214204247.7172-4-s.shtylyov@omp.ru>
+CC:     <linux-omap@vger.kernel.org>
+Subject: [PATCH 4/4] usb: host: ohci-omap: propagate errors from platform_get_irq()
+Date:   Tue, 14 Dec 2021 23:42:47 +0300
+Message-ID: <20211214204247.7172-5-s.shtylyov@omp.ru>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20211214204247.7172-1-s.shtylyov@omp.ru>
 References: <20211214204247.7172-1-s.shtylyov@omp.ru>
@@ -36,30 +37,28 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver overrides the error codes and IRQ0 returned by platform_get_irq()
-to -ENODEV.  Switch to propagating the error codes upstream.  IRQ0 is no
-longer returned by platform_get_irq(), so we now can safely ignore it...
+The driver overrides the error codes returned by platform_get_irq() to
+-ENXIO for some strange reason.  Switch to propagating the error codes
+upstream.
 
 Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 ---
- drivers/usb/host/ehci-sh.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/host/ohci-omap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/ehci-sh.c b/drivers/usb/host/ehci-sh.c
-index c25c51d26f26..882231b5c382 100644
---- a/drivers/usb/host/ehci-sh.c
-+++ b/drivers/usb/host/ehci-sh.c
-@@ -82,8 +82,8 @@ static int ehci_hcd_sh_probe(struct platform_device *pdev)
- 		return -ENODEV;
+diff --git a/drivers/usb/host/ohci-omap.c b/drivers/usb/host/ohci-omap.c
+index ded9738392e4..45dcf8292072 100644
+--- a/drivers/usb/host/ohci-omap.c
++++ b/drivers/usb/host/ohci-omap.c
+@@ -306,7 +306,7 @@ static int ohci_hcd_omap_probe(struct platform_device *pdev)
  
  	irq = platform_get_irq(pdev, 0);
--	if (irq <= 0) {
--		ret = -ENODEV;
-+	if (irq < 0) {
-+		ret = irq;
- 		goto fail_create_hcd;
+ 	if (irq < 0) {
+-		retval = -ENXIO;
++		retval = irq;
+ 		goto err3;
  	}
- 
+ 	retval = usb_add_hcd(hcd, irq, 0);
 -- 
 2.26.3
 
