@@ -2,115 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC34D474AEC
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Dec 2021 19:29:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE31474B26
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Dec 2021 19:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234438AbhLNS3B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Dec 2021 13:29:01 -0500
-Received: from mail-ot1-f52.google.com ([209.85.210.52]:34420 "EHLO
-        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbhLNS26 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 13:28:58 -0500
-Received: by mail-ot1-f52.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso21893205otj.1;
-        Tue, 14 Dec 2021 10:28:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ec7FIqDV1eh0nWs0ieSF7kRvELIz9yZoti3SZMyr6Z4=;
-        b=Yb8VtNnlDrON1A+So8NwWB0vKHt5rFGe4uGT1nvRq6ewd7x3LZT3aDKMP2OjkOLZxS
-         /xeIMxyHGVT87njQyPDYNHieQl0xnNqbuvFGG28C5Uv14NgjAYXjMkqFvIzcwF5DGo/j
-         HFfFQePw9vOkkKBdDE3aGf/9NK6ax7wfckuMY5xB8C9q+bkaaBLi8Fi0tn54P6TufdP6
-         OGOMfPIVHY8kJEY+wGM5ijXL1VA/dmvcyIVwMn/s7z4mAX2kCjZMhgndVWiqjIgSQw/B
-         uaF4snfVSLwG38V4d93f3yMDjgG8BZSkda3vc5jEouAKEMqS+vEc18NKe6HyNpK0sOXf
-         G9xg==
-X-Gm-Message-State: AOAM533ACC+4r+V3Sf0emdFyEQ3udBmszBdCnn9PrznwU7qQ1uZChgth
-        sCxnR+SA/J8QM6yoHhnkPA==
-X-Google-Smtp-Source: ABdhPJzUem8yjSvP+Lgu17uRUc1SGESD4X7Fx0l1fGs6fceVyZYQPmbVY5NFkIQsvgkwjlyGy+WB2g==
-X-Received: by 2002:a05:6830:4428:: with SMTP id q40mr5526277otv.171.1639506537308;
-        Tue, 14 Dec 2021 10:28:57 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 16sm112932oix.46.2021.12.14.10.28.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 10:28:56 -0800 (PST)
-Received: (nullmailer pid 3683781 invoked by uid 1000);
-        Tue, 14 Dec 2021 18:28:54 -0000
-Date:   Tue, 14 Dec 2021 12:28:54 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Markus Mayer <mmayer@broadcom.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Ray Jui <rjui@broadcom.com>, Amit Kucheria <amitk@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-ide@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Scott Branden <sbranden@broadcom.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        linux-rtc@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 13/15] dt-bindings: ata: Convert Broadcom SATA to YAML
-Message-ID: <YbjiZkK4HpWq90oG@robh.at.kernel.org>
-References: <20211208003727.3596577-1-f.fainelli@gmail.com>
- <20211208003727.3596577-14-f.fainelli@gmail.com>
- <1638971068.770579.3857735.nullmailer@robh.at.kernel.org>
- <dd170216-fedd-45a1-a3a5-efc99b9f6197@gmail.com>
+        id S234304AbhLNSqc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Dec 2021 13:46:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230103AbhLNSqb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 13:46:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE828C061574
+        for <linux-usb@vger.kernel.org>; Tue, 14 Dec 2021 10:46:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48587616A9
+        for <linux-usb@vger.kernel.org>; Tue, 14 Dec 2021 18:46:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56DE1C34600;
+        Tue, 14 Dec 2021 18:46:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639507590;
+        bh=k/Dcm6Y93wD6e/B8LExFZTl30XX5Qnin3C4tM+3Ws8I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dSeClCzzQ2EbJ7pmMu4gAHSRPRPumGDlO7cYFkrVeiQN/QERsGR+vwn6fXOvU33xF
+         q8+AJovo5tLRQBJUjVgWTEw15YeUMkkW435KlQmzRaXmytRQMqvAFldU7XtnySFCYS
+         +L4W3P1fBbafZTZj9eTSgGvYXj20bKA9oJUxiADQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Szymon Heidrich <szymon.heidrich@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: [PATCH] USB: gadget: bRequestType is a bitfield, not a enum
+Date:   Tue, 14 Dec 2021 19:46:21 +0100
+Message-Id: <20211214184621.385828-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dd170216-fedd-45a1-a3a5-efc99b9f6197@gmail.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2952; h=from:subject; bh=k/Dcm6Y93wD6e/B8LExFZTl30XX5Qnin3C4tM+3Ws8I=; b=owGbwMvMwCRo6H6F97bub03G02pJDIk7nlXMmvq1MHLl9977pRZrjCZpmt6J/NQR7/2xa+k8IYPP cr7KHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCRZd4M873kmTMunzlwfaZXsN5tqz V7J+y8Uc4w3121Trp/8W1dP3nn/MTjYfVXGMKfAgA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 09:33:38AM -0800, Florian Fainelli wrote:
-> On 12/8/21 5:44 AM, Rob Herring wrote:
-> > On Tue, 07 Dec 2021 16:37:24 -0800, Florian Fainelli wrote:
-> >> Convert the Broadcom SATA3 AHCI controller Device Tree binding to YAML
-> >> to help with validation.
-> >>
-> >> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> >> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> >> ---
-> >>  .../bindings/ata/brcm,sata-brcm.txt           | 45 ---------
-> >>  .../bindings/ata/brcm,sata-brcm.yaml          | 98 +++++++++++++++++++
-> >>  2 files changed, 98 insertions(+), 45 deletions(-)
-> >>  delete mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
-> >>  create mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
-> >>
-> > 
-> > Running 'make dtbs_check' with the schema in this patch gives the
-> > following warnings. Consider if they are expected or the schema is
-> > incorrect. These may not be new warnings.
-> > 
-> > Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> > This will change in the future.
-> > 
-> > Full log is available here: https://patchwork.ozlabs.org/patch/1565011
-> 
-> Likewise, those indicate that the preceding patch which renames the sata
-> controller unit name has not been applied.
+Szymon rightly pointed out that the previous check for the endpoint
+direction in bRequestType was not looking at only the bit involved, but
+rather the whole value.  Normally this is ok, but for some request
+types, bits other than bit 8 could be set and the check for the endpoint
+length could not stall correctly.
 
-I looked at that, but it was the unevaluated properties I was worried 
-about. However, the example has the same thing, but no errors. I think 
-running with DT_SCHEMA_FILES means sata-common.yaml is not included. 
-I'll have to look into that.
+Fix that up by only checking the single bit.
 
-Rob
+Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+Fixes: 153a2d7e3350 ("USB: gadget: detect too-big endpoint 0 requests")
+Cc: Felipe Balbi <balbi@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/gadget/composite.c    | 6 +++---
+ drivers/usb/gadget/legacy/dbgp.c  | 6 +++---
+ drivers/usb/gadget/legacy/inode.c | 6 +++---
+ 3 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index 284eea9f6e4d..3789c329183c 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -1680,14 +1680,14 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+ 	u8				endp;
+ 
+ 	if (w_length > USB_COMP_EP0_BUFSIZ) {
+-		if (ctrl->bRequestType == USB_DIR_OUT) {
+-			goto done;
+-		} else {
++		if (ctrl->bRequestType & USB_DIR_IN) {
+ 			/* Cast away the const, we are going to overwrite on purpose. */
+ 			__le16 *temp = (__le16 *)&ctrl->wLength;
+ 
+ 			*temp = cpu_to_le16(USB_COMP_EP0_BUFSIZ);
+ 			w_length = USB_COMP_EP0_BUFSIZ;
++		} else {
++			goto done;
+ 		}
+ 	}
+ 
+diff --git a/drivers/usb/gadget/legacy/dbgp.c b/drivers/usb/gadget/legacy/dbgp.c
+index 355bc7dab9d5..6bcbad382580 100644
+--- a/drivers/usb/gadget/legacy/dbgp.c
++++ b/drivers/usb/gadget/legacy/dbgp.c
+@@ -346,14 +346,14 @@ static int dbgp_setup(struct usb_gadget *gadget,
+ 	u16 len = 0;
+ 
+ 	if (length > DBGP_REQ_LEN) {
+-		if (ctrl->bRequestType == USB_DIR_OUT) {
+-			return err;
+-		} else {
++		if (ctrl->bRequestType & USB_DIR_IN) {
+ 			/* Cast away the const, we are going to overwrite on purpose. */
+ 			__le16 *temp = (__le16 *)&ctrl->wLength;
+ 
+ 			*temp = cpu_to_le16(DBGP_REQ_LEN);
+ 			length = DBGP_REQ_LEN;
++		} else {
++			return err;
+ 		}
+ 	}
+ 
+diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
+index 63150e3889ef..3b58f4fc0a80 100644
+--- a/drivers/usb/gadget/legacy/inode.c
++++ b/drivers/usb/gadget/legacy/inode.c
+@@ -1334,14 +1334,14 @@ gadgetfs_setup (struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+ 	u16				w_length = le16_to_cpu(ctrl->wLength);
+ 
+ 	if (w_length > RBUF_SIZE) {
+-		if (ctrl->bRequestType == USB_DIR_OUT) {
+-			return value;
+-		} else {
++		if (ctrl->bRequestType & USB_DIR_IN) {
+ 			/* Cast away the const, we are going to overwrite on purpose. */
+ 			__le16 *temp = (__le16 *)&ctrl->wLength;
+ 
+ 			*temp = cpu_to_le16(RBUF_SIZE);
+ 			w_length = RBUF_SIZE;
++		} else {
++			return value;
+ 		}
+ 	}
+ 
+-- 
+2.34.1
 
