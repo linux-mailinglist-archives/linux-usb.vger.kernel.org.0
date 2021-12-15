@@ -2,134 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0105C475853
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 13:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E92D5475864
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 13:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242263AbhLOMB7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Dec 2021 07:01:59 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:50098
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242261AbhLOMB6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Dec 2021 07:01:58 -0500
-Received: from localhost.localdomain (unknown [10.101.196.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 66F8B41A62;
-        Wed, 15 Dec 2021 12:01:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639569717;
-        bh=No9CB4W4f+mNGovTUGUCiXAnITy6by8y1CFNfwd8CfU=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=FpZCO5ts1w/MybxplbPXLmYAmJSxQ8pmRudNWPW+Tn8C5zrmibxFS+vNocXESGlAk
-         vEMCJWG+fZm6jm8DWbFXppxzpqnBbfPIG1YqEdxY996crpu0i9w52mpopTZ8vVxZCW
-         N5tMETXLEGv48deu+2KX88EOs9TcBBgr7JnzcgN215Rub8HwZ4U+ai5xV9MAMe5Dgb
-         75QI7BakyzsKfk9PHNoQRo9bGLEFlZmw8paXkTxCWuOD+ZmW9r/sEz17kGwSbv1qen
-         MRXRMShKq6BnxO5MQimFzWxIjykJCmRAVrMLz3GRjIlZqnLTPOiAkW7GzxUwKvetbu
-         Y88niffykX3kA==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     gregkh@linuxfoundation.org
-Cc:     stern@rowland.harvard.edu, mathias.nyman@linux.intel.com,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        Bixuan Cui <cuibixuan@huawei.com>,
-        Rajat Jain <rajatja@google.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] usb: hub: Add delay for SuperSpeed hub resume to let links transit to U0
-Date:   Wed, 15 Dec 2021 20:01:06 +0800
-Message-Id: <20211215120108.336597-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.33.1
+        id S242289AbhLOMGj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Dec 2021 07:06:39 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:40129 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236954AbhLOMGj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Dec 2021 07:06:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1639569999; x=1671105999;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fMixDV+hpNbYQgek63SXWJhHVAjFsf+hOokboNZBz2g=;
+  b=eosEveaLkkQruSdc9rBUVdiOKPH/9ggzEoE+wAL9g7+12yPbhHWBfRHx
+   uHskI7Xh3dvjlgHDQIE7LDWudK7n0QZWBrzo5JxjzVJLBqH9PQmpvXOYW
+   Tu/wjonaXvaaPalVQcA/b2KQGpLjrzwbfoUt4h/A3jaHfgfopQUxPxGoF
+   8=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 15 Dec 2021 04:06:38 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 04:06:37 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 15 Dec 2021 04:06:37 -0800
+Received: from [10.50.9.33] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 15 Dec
+ 2021 04:06:31 -0800
+Message-ID: <5ebbc96a-941f-8f64-e6e9-d70d38260b9d@quicinc.com>
+Date:   Wed, 15 Dec 2021 17:36:00 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH V2 4/8] usb: dwc3: drd: Register the eud connector child
+ node for dwc3
+Content-Language: en-CA
+To:     Rob Herring <robh@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
+        <bjorn.andersson@linaro.org>, <greg@kroah.com>,
+        <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
+        <quic_psodagud@quicinc.com>, <quic_satyap@quicinc.com>,
+        <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
+        <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>
+References: <cover.1638430506.git.quic_schowdhu@quicinc.com>
+ <bcb48839a520b8bfc9b09e7a26ba8a8459ab602d.1638430506.git.quic_schowdhu@quicinc.com>
+ <YbenLLPUYVX50CJc@robh.at.kernel.org>
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+In-Reply-To: <YbenLLPUYVX50CJc@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When a new USB device gets plugged to nested hubs, the affected hub,
-which connects to usb 2-1.4-port2, doesn't report there's any change,
-hence the nested hubs go back to runtime suspend like nothing happened:
-[  281.032951] usb usb2: usb wakeup-resume
-[  281.032959] usb usb2: usb auto-resume
-[  281.032974] hub 2-0:1.0: hub_resume
-[  281.033011] usb usb2-port1: status 0263 change 0000
-[  281.033077] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
-[  281.049797] usb 2-1: usb wakeup-resume
-[  281.069800] usb 2-1: Waited 0ms for CONNECT
-[  281.069810] usb 2-1: finish resume
-[  281.070026] hub 2-1:1.0: hub_resume
-[  281.070250] usb 2-1-port4: status 0203 change 0000
-[  281.070272] usb usb2-port1: resume, status 0
-[  281.070282] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
-[  281.089813] usb 2-1.4: usb wakeup-resume
-[  281.109792] usb 2-1.4: Waited 0ms for CONNECT
-[  281.109801] usb 2-1.4: finish resume
-[  281.109991] hub 2-1.4:1.0: hub_resume
-[  281.110147] usb 2-1.4-port2: status 0263 change 0000
-[  281.110234] usb 2-1-port4: resume, status 0
-[  281.110239] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
-[  281.110266] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
-[  281.110426] hub 2-1.4:1.0: hub_suspend
-[  281.110565] usb 2-1.4: usb auto-suspend, wakeup 1
-[  281.130998] hub 2-1:1.0: hub_suspend
-[  281.137788] usb 2-1: usb auto-suspend, wakeup 1
-[  281.142935] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
-[  281.177828] usb 2-1: usb wakeup-resume
-[  281.197839] usb 2-1: Waited 0ms for CONNECT
-[  281.197850] usb 2-1: finish resume
-[  281.197984] hub 2-1:1.0: hub_resume
-[  281.198203] usb 2-1-port4: status 0203 change 0000
-[  281.198228] usb usb2-port1: resume, status 0
-[  281.198237] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
-[  281.217835] usb 2-1.4: usb wakeup-resume
-[  281.237834] usb 2-1.4: Waited 0ms for CONNECT
-[  281.237845] usb 2-1.4: finish resume
-[  281.237990] hub 2-1.4:1.0: hub_resume
-[  281.238067] usb 2-1.4-port2: status 0263 change 0000
-[  281.238148] usb 2-1-port4: resume, status 0
-[  281.238152] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
-[  281.238166] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
-[  281.238385] hub 2-1.4:1.0: hub_suspend
-[  281.238523] usb 2-1.4: usb auto-suspend, wakeup 1
-[  281.258076] hub 2-1:1.0: hub_suspend
-[  281.265744] usb 2-1: usb auto-suspend, wakeup 1
-[  281.285976] hub 2-0:1.0: hub_suspend
-[  281.285988] usb usb2: bus auto-suspend, wakeup 1
 
-USB 3.2 spec, 9.2.5.4 "Changing Function Suspend State" says that "If
-the link is in a non-U0 state, then the device must transition the link
-to U0 prior to sending the remote wake message", but the hub only
-transits the link to U0 after signaling remote wakeup.
+On 12/14/2021 1:33 AM, Rob Herring wrote:
+> On Thu, Dec 02, 2021 at 03:21:23PM +0530, Souradeep Chowdhury wrote:
+>> Register the child node for dwc3 which is the "eud_usb_connector".
+>> The eud driver will be able to switch the usb role from device to
+>> host and vice versa using the role switch property of dwc3 node.
+>>
+>> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/drd.c | 26 ++++++++++++++++++++++++++
+>>   1 file changed, 26 insertions(+)
+>>
+>> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+>> index d7f7683..b4ea55c 100644
+>> --- a/drivers/usb/dwc3/drd.c
+>> +++ b/drivers/usb/dwc3/drd.c
+>> @@ -8,6 +8,7 @@
+>>    */
+>>   
+>>   #include <linux/extcon.h>
+>> +#include <linux/of_platform.h>
+>>   #include <linux/of_graph.h>
+>>   #include <linux/platform_device.h>
+>>   #include <linux/property.h>
+>> @@ -164,6 +165,27 @@ static int dwc3_otg_get_irq(struct dwc3 *dwc)
+>>   	return irq;
+>>   }
+>>   
+>> +static int dwc3_register_eud(struct dwc3 *dwc)
+>> +{
+>> +	struct device		*dev = dwc->dev;
+>> +	struct device_node	*np = dev->of_node;
+>> +	int                     ret;
+>> +
+>> +	of_get_child_by_name(np, "eud_usb_connector");
+> Connector nodes are named 'connector' or possibly 'usb-connector'. If
+> you are creating an ABI with the node name, it should be documented.
+> However, it's preferred to use 'compatible' for identifying nodes rather
+> than a node name.
+Ack.
+>> +	if (!np) {
+>> +		dev_dbg(dev, "no usb_connector child node specified\n");
+>> +		return 0;
+>> +	}
+>> +
+>> +	ret = of_platform_populate(np, NULL, NULL, dev);
+> But why is any of this needed. The connector doesn't have a driver (I
+> expect eventually we will) and the EUD device is not a child.
 
-So be more forgiving and use a 20ms delay to let the link transit to U0
-for remote wakeup.
+Ack. This can be removed as we are no longer mapping EUD as a type C 
+connector.
 
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
-v2:
- - Add a small delay instead of waking up all hubs.
 
- drivers/usb/core/hub.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 00070a8a65079..576fdf2c9f3c8 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -1110,7 +1110,10 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
- 		} else {
- 			hub_power_on(hub, true);
- 		}
--	}
-+	/* Give some time on remote wakeup to let links to transit to U0 */
-+	} else if (hub_is_superspeed(hub->hdev))
-+		msleep(20);
-+
-  init2:
- 
- 	/*
--- 
-2.33.1
-
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to register usb_connector - %d\n", ret);
+>> +		return ret;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   void dwc3_otg_init(struct dwc3 *dwc)
+>>   {
+>>   	u32 reg;
+>> @@ -580,6 +602,10 @@ int dwc3_drd_init(struct dwc3 *dwc)
+>>   		ret = dwc3_setup_role_switch(dwc);
+>>   		if (ret < 0)
+>>   			return ret;
+>> +
+>> +		ret = dwc3_register_eud(dwc);
+>> +		if (ret < 0)
+>> +			return ret;
+>>   	} else if (dwc->edev) {
+>>   		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
+>>   		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
+>> -- 
+>> 2.7.4
+>>
+>>
