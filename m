@@ -2,45 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC64A47663A
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 23:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4592447663E
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 23:56:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbhLOWzU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Dec 2021 17:55:20 -0500
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:37526 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbhLOWzU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Dec 2021 17:55:20 -0500
-Received: by mail-ot1-f44.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so26728182otg.4;
-        Wed, 15 Dec 2021 14:55:20 -0800 (PST)
+        id S231624AbhLOW4y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Dec 2021 17:56:54 -0500
+Received: from mail-oi1-f174.google.com ([209.85.167.174]:41720 "EHLO
+        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231591AbhLOW4y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Dec 2021 17:56:54 -0500
+Received: by mail-oi1-f174.google.com with SMTP id u74so33767661oie.8;
+        Wed, 15 Dec 2021 14:56:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=3zrbQKjDzYylCqTo9oCZVRtxf26IqrQ0mWzvm+HCL2k=;
-        b=Zr2SDY/63Un3KUl8UD6gxsNF5uLrvW+ezgdizjyzpCAj0GEhawEvftEJtH4FqSRlph
-         Ef0pmwYWswZxmhN00jmXSjzDuIPhp081puSmES7OwrKiyPIW9ukScRIYvHclS/pTqXu0
-         vc5/1KtV2DzVJJep/99gTjb8TiBFob50B0TtHc/oDZpIQSe5/UhlxFBPoMVU5Qgpit9d
-         KXhbEAgcicShEWOgrTmr9yPLsGN+SHjYcNo/xKG0LLBITjm089WYtt7irjrUQpc2/qVR
-         qIOTzIRKqZaecCM254csqFFzaxeutvEw7AKWHMvaL/2gmoK6zsLpJLZ3l3J7B9hRBVyV
-         +gEA==
-X-Gm-Message-State: AOAM532aeD6S1i0ZaJZIbu6GKsc82k/8iQc52Zyx6Kurtej67in1gT1J
-        1WAZPTLjm2Bo3JbcFBWVsw==
-X-Google-Smtp-Source: ABdhPJzhzNtE/cffFwhVnJUH+s+CDFtcddzd6P94a3O1rThPeYzdYWj+X7WwN40t6N9gPxfRptz+wA==
-X-Received: by 2002:a9d:6ac7:: with SMTP id m7mr10742613otq.306.1639608919799;
-        Wed, 15 Dec 2021 14:55:19 -0800 (PST)
+        bh=9QWYnfNPP5VkW+LKnhvvtYRz7R6qpsMFPhXYcWwb4Gc=;
+        b=tZ9DJbUW0Uo93oeevakT6jgA4SGTJsSeXlygX+2rSfa7AtV6xyxCmIqCfOkrDe85eg
+         QrIbXDaIVaQ/5CaR3OL9i5Pwg4mOrsPLNwNqox7NbiutrR4BT7egXNbp202YAMvPOaR4
+         N551N6UB+xxGz3V3fR45YKm0Jfc1Fb0dKgW5XOlnlSKrNQdL1P19zqp9RgZbfXEtAZp5
+         NJLPTyeIjm0vHeASa1fSIHli6AKyof1PFjIK8m7MHuNY71SIHNP9tICJDlZ1sF0yi8dV
+         GkzjYtwtZz+U2r+0vXsQdqZ/TIjmoEZm4bIRkU+9hgF92TgR1LzCyQOiy49y2KhKqHPq
+         1UAQ==
+X-Gm-Message-State: AOAM5321cMB517xp0jKrvFiCfK+2p80FtY3IpCysYWlXg3lXgBz5fK3d
+        EJXuy4k/ARE7Oul1IHw8Lw==
+X-Google-Smtp-Source: ABdhPJxVoFjSihy5pYAMp3p3OB0wH6eiXgzJWqb5QOdfgW5Q9JfxZIQdzj7pTk7BEZEMQH8QoMdP1Q==
+X-Received: by 2002:a05:6808:1802:: with SMTP id bh2mr1999500oib.142.1639609013851;
+        Wed, 15 Dec 2021 14:56:53 -0800 (PST)
 Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id m2sm756880oop.12.2021.12.15.14.55.18
+        by smtp.googlemail.com with ESMTPSA id r10sm783172ool.1.2021.12.15.14.56.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 14:55:19 -0800 (PST)
+        Wed, 15 Dec 2021 14:56:53 -0800 (PST)
 From:   Rob Herring <robh@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>,
+To:     Peter Chen <peter.chen@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: ohci-spear: Remove direct access to platform_device resource list
-Date:   Wed, 15 Dec 2021 16:55:09 -0600
-Message-Id: <20211215225509.1995417-1-robh@kernel.org>
+Subject: [PATCH] usb: chipidea: Set the DT node on the child device
+Date:   Wed, 15 Dec 2021 16:56:46 -0600
+Message-Id: <20211215225646.1997946-1-robh@kernel.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,27 +48,29 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The memory resource is already retrieved with platform_get_resource(), so
-let's use it instead of assuming it is the first resource in the array.
+The ChipIdea glue drivers just copy the glue resources to the "ci_hdrc"
+child device. Instead, set the child device's DT node pointer to the
+parent device's node so that platform_get_irq() can find the IRQ
+resources in the DT. This removes the need for statically populating the
+IRQ resources from the DT which has been deprecated for some time.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/usb/host/ohci-spear.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/chipidea/core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/host/ohci-spear.c b/drivers/usb/host/ohci-spear.c
-index b4cd9e6c72fd..9b81f420656d 100644
---- a/drivers/usb/host/ohci-spear.c
-+++ b/drivers/usb/host/ohci-spear.c
-@@ -76,7 +76,7 @@ static int spear_ohci_hcd_drv_probe(struct platform_device *pdev)
- 		goto err_put_hcd;
+diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+index a56f06368d14..5359b2a2e4d2 100644
+--- a/drivers/usb/chipidea/core.c
++++ b/drivers/usb/chipidea/core.c
+@@ -864,6 +864,7 @@ struct platform_device *ci_hdrc_add_device(struct device *dev,
  	}
  
--	hcd->rsrc_start = pdev->resource[0].start;
-+	hcd->rsrc_start = res->start;
- 	hcd->rsrc_len = resource_size(res);
+ 	pdev->dev.parent = dev;
++	device_set_of_node_from_dev(&pdev->dev, dev);
  
- 	sohci_p = to_spear_ohci(hcd);
+ 	ret = platform_device_add_resources(pdev, res, nres);
+ 	if (ret)
 -- 
 2.32.0
 
