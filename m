@@ -2,57 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E95B24756EC
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 11:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 757D84756FC
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 11:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241793AbhLOKvc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Dec 2021 05:51:32 -0500
-Received: from mga09.intel.com ([134.134.136.24]:4958 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241795AbhLOKvc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 15 Dec 2021 05:51:32 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="239012028"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="239012028"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 02:51:31 -0800
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="604941785"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 02:51:28 -0800
-Received: by lahna (sSMTP sendmail emulation); Wed, 15 Dec 2021 12:51:26 +0200
-Date:   Wed, 15 Dec 2021 12:51:26 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Xiaoke Wang <xkernel.wang@foxmail.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: check the return value of kmemdup()
-Message-ID: <YbnIrsQGsjRnksq4@lahna>
-References: <tencent_8268B88CD2F7BF04083AF35D6E2C87158506@qq.com>
+        id S241821AbhLOK4h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Dec 2021 05:56:37 -0500
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:33699 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241810AbhLOK4h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Dec 2021 05:56:37 -0500
+Received: by mail-ot1-f43.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso24496980otf.0;
+        Wed, 15 Dec 2021 02:56:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c+b6o2kT50XjdF2Qu7E5BjAnXipgwhkkAIzs/MBlias=;
+        b=m6voVRwI4246ZqQvAW45aAYJ/+fnritHQxtddZUHDfukKPrbs+uO1ITguZ4ahTkMw2
+         MMXNpSTfbG1igXgz2Qt6IAoJojQw7wJwH2nDBH3a+tqcGz8jOnJVfLZmoynVEYjrzCLk
+         VotlkKEijDNHx+Pfdb4iSp2/CzJAP0VK9SZgUtmknIVHkEp3KaJE64jV6u9dS3bxMhvH
+         L1ZxqCaybVBZTQCpbIdCZ8KKan3P0Of5jhC8ydYEZQzaXWSslLnD788VFXDxmpyWi6mA
+         W+rB1zQCTUEZkSs2kfcTgogcAKVwkxUCN8kDaidGMyUeVpiwgsUFX+ZpnL8qbPWpqWWT
+         76gQ==
+X-Gm-Message-State: AOAM532lz7etEtYMqUV75SdhqiDN9u03UfrISTK8y1h8BJ3ms/1pwvuS
+        t3Yl5u40Clm4FotkUxzVVB+/E2PUxe40LDA33KI5Ffj5
+X-Google-Smtp-Source: ABdhPJzOKBewyc1EJTNidGydsTDLgPpVQPsCNiOckKPdNK5qGAgB5i204gc3Tmoz8yMpWLqqgsXlSdIoPkJ9mhpu2QU=
+X-Received: by 2002:a9d:4c10:: with SMTP id l16mr8244269otf.198.1639565796648;
+ Wed, 15 Dec 2021 02:56:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_8268B88CD2F7BF04083AF35D6E2C87158506@qq.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20211213103243.33657-1-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20211213103243.33657-1-heikki.krogerus@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 15 Dec 2021 11:56:25 +0100
+Message-ID: <CAJZ5v0gFVQanDYwLFe6GFo2uYOHurrXka2c64n_4rvzPPts-MQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] acpi: Store _PLD information and convert users
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Mon, Dec 13, 2021 at 11:32 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Hi,
+>
+> I'm now using the helpers device_match_acpi_dev() and
+> device_match_fwnode() like Andy suggested. No other changes.
+>
+>
+> The original cover letter:
+>
+> This removes the need for the drivers to always separately evaluate
+> the _PLD. With the USB Type-C connector and USB port mapping this
+> allows us to start using the component framework and remove the custom
+> APIs.
+>
+> So far the only users of the _PLD information have been the USB
+> drivers, but it seems it will be used also at least in some camera
+> drivers later. These nevertheless touch mostly USB drivers.
+>
+> Rafael, is it still OK if Greg takes these?
 
-On Mon, Dec 13, 2021 at 04:27:15PM +0800, Xiaoke Wang wrote:
-> Note: Compare with the last email, this one is using my full name.
-
-This should go below the '---' line. Remember this next time, no need to
-resend this one.
-
-> kmemdup() return NULL when some internal memory errors happen, it is
-> better to check the return value of it. Otherwise, some memory errors
-> will not be catched in time and may further result in wrong memory
-> access.
-> 
-> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-
-I sligthly modified the commit message and applied to
-thunderbolt.git/next, thanks!
+It is in general, but let me look at the changes in scan.c in particular.
