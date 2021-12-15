@@ -2,278 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 993D1475810
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 12:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0105C475853
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 13:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236887AbhLOLoB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Dec 2021 06:44:01 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:36517 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbhLOLoA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Dec 2021 06:44:00 -0500
-Received: by mail-ot1-f42.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so24579529otl.3;
-        Wed, 15 Dec 2021 03:44:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FDFurzzW6+axA8XFUcMsrdWmTYDYkQifXI+dGxGlLEE=;
-        b=s9Fw7LEzLnsrbUCrh7VZC0hMm0Vmj9P7rtqCWhuFI32CTbgHpnlhsWvvHcAs2VnbDM
-         jasLq7BCY66lXwY02MwnlmWcf4v8TgHheMvgTucXcqszzuWAY+7sigeBUQ9l5xcp7dfF
-         HtfoljXBHmripP3XjM0bbpvZAu/EALkBW+5aJycQvti+/CoQ+w/Pt8iMrG5UUHEHstqs
-         q9ABAxDEhlCTsLWwi8/zr3J+LTJowZ8J/ArAYzF9vJhCHNg25voPML2p/5LkAoaxuuSY
-         eP7niqcxIEXtMrVvf/6ci+6fLdmGD7SRa2wI9e1wog5wVLFVwQVS6082QhJew8sOvV8t
-         R9lw==
-X-Gm-Message-State: AOAM531xpxFHoIo0o3JIW8RpXxUoGrKwNzDvN3Wat/OQkC1mx0l62peL
-        q/FcXXVu4e/z501Fb9MC1vmZPlACvCFVrqhH1MM=
-X-Google-Smtp-Source: ABdhPJx7ky6VZuxPtC9Phu2oIefILexn2he7PbhjDmo+Nnq4QIJNku8qSMy0Bp5MKla3qm/LGJ6mtoTNItaq4mR3cm4=
-X-Received: by 2002:a05:6830:1e57:: with SMTP id e23mr8183101otj.16.1639568640036;
- Wed, 15 Dec 2021 03:44:00 -0800 (PST)
+        id S242263AbhLOMB7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Dec 2021 07:01:59 -0500
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:50098
+        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242261AbhLOMB6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Dec 2021 07:01:58 -0500
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 66F8B41A62;
+        Wed, 15 Dec 2021 12:01:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639569717;
+        bh=No9CB4W4f+mNGovTUGUCiXAnITy6by8y1CFNfwd8CfU=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=FpZCO5ts1w/MybxplbPXLmYAmJSxQ8pmRudNWPW+Tn8C5zrmibxFS+vNocXESGlAk
+         vEMCJWG+fZm6jm8DWbFXppxzpqnBbfPIG1YqEdxY996crpu0i9w52mpopTZ8vVxZCW
+         N5tMETXLEGv48deu+2KX88EOs9TcBBgr7JnzcgN215Rub8HwZ4U+ai5xV9MAMe5Dgb
+         75QI7BakyzsKfk9PHNoQRo9bGLEFlZmw8paXkTxCWuOD+ZmW9r/sEz17kGwSbv1qen
+         MRXRMShKq6BnxO5MQimFzWxIjykJCmRAVrMLz3GRjIlZqnLTPOiAkW7GzxUwKvetbu
+         Y88niffykX3kA==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     gregkh@linuxfoundation.org
+Cc:     stern@rowland.harvard.edu, mathias.nyman@linux.intel.com,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        Bixuan Cui <cuibixuan@huawei.com>,
+        Rajat Jain <rajatja@google.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: hub: Add delay for SuperSpeed hub resume to let links transit to U0
+Date:   Wed, 15 Dec 2021 20:01:06 +0800
+Message-Id: <20211215120108.336597-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20211213103243.33657-1-heikki.krogerus@linux.intel.com> <20211213103243.33657-2-heikki.krogerus@linux.intel.com>
-In-Reply-To: <20211213103243.33657-2-heikki.krogerus@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 15 Dec 2021 12:43:48 +0100
-Message-ID: <CAJZ5v0jq5ve9+V3k5Vi=vJAheSyQbAsNmi6An9=oKxkyVed5bw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] acpi: Store the Physical Location of Device (_PLD) information
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 11:32 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> This will remove the need for the drivers to always evaluate
-> the _PLD separately.
+When a new USB device gets plugged to nested hubs, the affected hub,
+which connects to usb 2-1.4-port2, doesn't report there's any change,
+hence the nested hubs go back to runtime suspend like nothing happened:
+[  281.032951] usb usb2: usb wakeup-resume
+[  281.032959] usb usb2: usb auto-resume
+[  281.032974] hub 2-0:1.0: hub_resume
+[  281.033011] usb usb2-port1: status 0263 change 0000
+[  281.033077] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
+[  281.049797] usb 2-1: usb wakeup-resume
+[  281.069800] usb 2-1: Waited 0ms for CONNECT
+[  281.069810] usb 2-1: finish resume
+[  281.070026] hub 2-1:1.0: hub_resume
+[  281.070250] usb 2-1-port4: status 0203 change 0000
+[  281.070272] usb usb2-port1: resume, status 0
+[  281.070282] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
+[  281.089813] usb 2-1.4: usb wakeup-resume
+[  281.109792] usb 2-1.4: Waited 0ms for CONNECT
+[  281.109801] usb 2-1.4: finish resume
+[  281.109991] hub 2-1.4:1.0: hub_resume
+[  281.110147] usb 2-1.4-port2: status 0263 change 0000
+[  281.110234] usb 2-1-port4: resume, status 0
+[  281.110239] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
+[  281.110266] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
+[  281.110426] hub 2-1.4:1.0: hub_suspend
+[  281.110565] usb 2-1.4: usb auto-suspend, wakeup 1
+[  281.130998] hub 2-1:1.0: hub_suspend
+[  281.137788] usb 2-1: usb auto-suspend, wakeup 1
+[  281.142935] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
+[  281.177828] usb 2-1: usb wakeup-resume
+[  281.197839] usb 2-1: Waited 0ms for CONNECT
+[  281.197850] usb 2-1: finish resume
+[  281.197984] hub 2-1:1.0: hub_resume
+[  281.198203] usb 2-1-port4: status 0203 change 0000
+[  281.198228] usb usb2-port1: resume, status 0
+[  281.198237] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
+[  281.217835] usb 2-1.4: usb wakeup-resume
+[  281.237834] usb 2-1.4: Waited 0ms for CONNECT
+[  281.237845] usb 2-1.4: finish resume
+[  281.237990] hub 2-1.4:1.0: hub_resume
+[  281.238067] usb 2-1.4-port2: status 0263 change 0000
+[  281.238148] usb 2-1-port4: resume, status 0
+[  281.238152] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
+[  281.238166] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
+[  281.238385] hub 2-1.4:1.0: hub_suspend
+[  281.238523] usb 2-1.4: usb auto-suspend, wakeup 1
+[  281.258076] hub 2-1:1.0: hub_suspend
+[  281.265744] usb 2-1: usb auto-suspend, wakeup 1
+[  281.285976] hub 2-0:1.0: hub_suspend
+[  281.285988] usb usb2: bus auto-suspend, wakeup 1
 
-This seems to hinge on the assumption that _PLD must return the same
-data every time it is evaluated, but that is not required by the
-specification AFAICS.
+USB 3.2 spec, 9.2.5.4 "Changing Function Suspend State" says that "If
+the link is in a non-U0 state, then the device must transition the link
+to U0 prior to sending the remote wake message", but the hub only
+transits the link to U0 after signaling remote wakeup.
 
-If this really is the case, I would mention this assumption here
-explicitly and maybe even in a comment next to the code.
+So be more forgiving and use a 20ms delay to let the link transit to U0
+for remote wakeup.
 
-> Because the _PLD may be shared between devices - for example
-> the USB2 and USB3 ports that share the same connector have
-> always the same _PLD - every unique _PLD that is detected is
-> registered as a single entry and stored in a dedicated list.
-> Then each of those entries will hold a list of devices that
-> share the location - have identical _PLD.
->
-> The location entry can be acquired with a new function
-> acpi_device_get_location(). The location structure that the
-> function returns contrains the _PLD of the device and the
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+v2:
+ - Add a small delay instead of waking up all hubs.
 
-"The location structure returned by this function contains the _PLD
-return package for the device and the list of devices sharing it."
+ drivers/usb/core/hub.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> list the other devices that share it.
->
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
->  drivers/acpi/scan.c     | 79 +++++++++++++++++++++++++++++++++++++++++
->  include/acpi/acpi_bus.h | 14 ++++++++
->  2 files changed, 93 insertions(+)
->
-> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> index 5991dddbc9ceb..9946ca4451ebc 100644
-> --- a/drivers/acpi/scan.c
-> +++ b/drivers/acpi/scan.c
-> @@ -19,6 +19,7 @@
->  #include <linux/dma-map-ops.h>
->  #include <linux/platform_data/x86/apple.h>
->  #include <linux/pgtable.h>
-> +#include <linux/crc32.h>
->
->  #include "internal.h"
->
-> @@ -42,6 +43,8 @@ static LIST_HEAD(acpi_scan_handlers_list);
->  DEFINE_MUTEX(acpi_device_lock);
->  LIST_HEAD(acpi_wakeup_device_list);
->  static DEFINE_MUTEX(acpi_hp_context_lock);
-> +static LIST_HEAD(acpi_location_list);
-> +static DEFINE_MUTEX(acpi_location_lock);
->
->  /*
->   * The UART device described by the SPCR table is the only object which needs
-> @@ -485,6 +488,7 @@ static void acpi_device_del(struct acpi_device *device)
->                         break;
->                 }
->
-> +       list_del(&device->location_list);
->         list_del(&device->wakeup_list);
->         mutex_unlock(&acpi_device_lock);
->
-> @@ -654,6 +658,78 @@ static int acpi_tie_acpi_dev(struct acpi_device *adev)
->         return 0;
->  }
->
-> +static void acpi_store_device_location(struct acpi_device *adev)
-> +{
-> +       struct acpi_device_location *location;
-> +       struct acpi_pld_info *pld;
-> +       acpi_status status;
-> +       u32 crc;
-> +
-> +       status = acpi_get_physical_device_location(adev->handle, &pld);
-> +       if (ACPI_FAILURE(status))
-> +               return;
-> +
-> +       crc = crc32(~0, pld, sizeof(*pld));
-> +
-> +       mutex_lock(&acpi_location_lock);
-> +
-> +       list_for_each_entry(location, &acpi_location_list, node) {
-> +               if (location->pld_crc == crc) {
-> +                       ACPI_FREE(pld);
-> +                       goto out_add_to_location;
-> +               }
-> +       }
-> +
-> +       /* The location does not exist yet so creating it. */
-> +
-> +       location = kzalloc(sizeof(*location), GFP_KERNEL);
-> +       if (!location) {
-> +               acpi_handle_err(adev->handle, "Unable to store location\n");
-> +               goto err_unlock;
-> +       }
-> +
-> +       list_add_tail(&location->node, &acpi_location_list);
-> +       INIT_LIST_HEAD(&location->devices);
-> +       location->pld = pld;
-> +       location->pld_crc = crc;
-> +
-> +out_add_to_location:
-> +       list_add_tail(&adev->location_list, &location->devices);
-> +
-> +err_unlock:
-> +       mutex_unlock(&acpi_location_lock);
-> +}
-> +
-> +/**
-> + * acpi_device_get_location - Get the device location
-> + * @adev: ACPI device handle
-> + *
-> + * Returns the location of @adev when it's known.
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 00070a8a65079..576fdf2c9f3c8 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -1110,7 +1110,10 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+ 		} else {
+ 			hub_power_on(hub, true);
+ 		}
+-	}
++	/* Give some time on remote wakeup to let links to transit to U0 */
++	} else if (hub_is_superspeed(hub->hdev))
++		msleep(20);
++
+  init2:
+ 
+ 	/*
+-- 
+2.33.1
 
-I would write it this way:
-
-"Return a pointer to a struct acpi_device_location object containing
-the location information obtained by evaluating _PLD (Physical
-Location of Device) for @adev when it is available, along with the
-list of devices sharing the same location information (if any), or
-NULL otherwise"
-
-The location is known for all
-> + * ACPI devices that have _PLD (Physical Location of Device). When the location
-> + * is not known, the function returns NULL.
-> + */
-> +struct acpi_device_location *acpi_device_get_location(struct acpi_device *adev)
-> +{
-> +       struct acpi_device_location *location;
-> +       struct list_head *tmp;
-> +
-> +       mutex_lock(&acpi_location_lock);
-> +
-> +       list_for_each_entry(location, &acpi_location_list, node) {
-> +               list_for_each(tmp, &location->devices) {
-> +                       if (tmp == &adev->location_list)
-> +                               goto out_unlock;
-> +               }
-> +       }
-> +       location = NULL;
-> +
-> +out_unlock:
-> +       mutex_unlock(&acpi_location_lock);
-> +
-> +       return location;
-> +}
-> +EXPORT_SYMBOL_GPL(acpi_device_get_location);
-> +
->  static int __acpi_device_add(struct acpi_device *device,
->                              void (*release)(struct device *))
->  {
-> @@ -670,6 +746,7 @@ static int __acpi_device_add(struct acpi_device *device,
->         INIT_LIST_HEAD(&device->wakeup_list);
->         INIT_LIST_HEAD(&device->physical_node_list);
->         INIT_LIST_HEAD(&device->del_list);
-> +       INIT_LIST_HEAD(&device->location_list);
->         mutex_init(&device->physical_node_lock);
->
->         mutex_lock(&acpi_device_lock);
-> @@ -712,6 +789,8 @@ static int __acpi_device_add(struct acpi_device *device,
->         if (device->wakeup.flags.valid)
->                 list_add_tail(&device->wakeup_list, &acpi_wakeup_device_list);
->
-> +       acpi_store_device_location(device);
-> +
->         mutex_unlock(&acpi_device_lock);
->
->         if (device->parent)
-> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-> index d6fe27b695c3d..1a4af747198a4 100644
-> --- a/include/acpi/acpi_bus.h
-> +++ b/include/acpi/acpi_bus.h
-> @@ -354,6 +354,13 @@ struct acpi_device_data {
->         struct list_head subnodes;
->  };
->
-
-This needs to be documented.
-
-> +struct acpi_device_location {
-> +       u32 pld_crc;
-> +       struct acpi_pld_info *pld;
-> +       struct list_head node;
-> +       struct list_head devices;
-> +};
-> +
->  struct acpi_gpio_mapping;
->
->  /* Device */
-> @@ -366,6 +373,7 @@ struct acpi_device {
->         struct list_head node;
->         struct list_head wakeup_list;
->         struct list_head del_list;
-> +       struct list_head location_list;
->         struct acpi_device_status status;
->         struct acpi_device_flags flags;
->         struct acpi_device_pnp pnp;
-> @@ -731,11 +739,17 @@ static inline void acpi_bus_put_acpi_device(struct acpi_device *adev)
->  {
->         acpi_dev_put(adev);
->  }
-> +
-> +struct acpi_device_location *acpi_device_get_location(struct acpi_device *adev);
->  #else  /* CONFIG_ACPI */
->
->  static inline int register_acpi_bus_type(void *bus) { return 0; }
->  static inline int unregister_acpi_bus_type(void *bus) { return 0; }
->
-> +static inline struct acpi_device_location *acpi_device_get_location(struct acpi_device *adev)
-> +{
-> +       return NULL;
-> +}
->  #endif                         /* CONFIG_ACPI */
->
->  #endif /*__ACPI_BUS_H__*/
-> --
-
-One overall problem I see here is that it potentially stores a bunch
-of _PLD buffers that will never be used, which is a waste of memory.
-
-It may be better to make acpi_device_get_location() evaluate _PLD for
-the target device if it cannot be found in the list and either update
-one of the existing entries if the crc matches and return the pld data
-from there, or add a new item to the list and return its pld data.
