@@ -2,125 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA744750BF
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 03:09:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A70047517F
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 04:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234574AbhLOCJw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Dec 2021 21:09:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbhLOCJv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 21:09:51 -0500
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66843C061574;
-        Tue, 14 Dec 2021 18:09:51 -0800 (PST)
-Received: by mail-oo1-xc2f.google.com with SMTP id d1-20020a4a3c01000000b002c2612c8e1eso5459148ooa.6;
-        Tue, 14 Dec 2021 18:09:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=PVdeEwPhqkBs/Pea5KEyA6MfcBeMy0NS692bpZuteEs=;
-        b=ZAMGfcpTtZZb5skT+LP/hwFkLze7fjLO2IOdRL13WrOwGHnMrM3rsxdG0F4VOLBP/r
-         PB+L+R6CdiWt0sFPZwkWyd2VMbDsHncwdaVpeEb+rgwgBFg9iRKoefSFphoWNv/oiK0E
-         Z4H8XzdNcnGD0Q7UVzR09k/hKqthzItnunyEHtlPvhIju03nWAJHRRD2MrswfQPm2iMG
-         5KW1Y8aLIoOYPPPsKukt07gzkWNwr66AT4l/4kVPGedq2JDRhT6p1dZ8hA2uLlwkkADk
-         b8UWcdUk4qVjLmpUZxPwcoNghX3GmpDQ1PYE4MbI/UvAWLz9K3OahOWKBLrkq6z7AP4w
-         ZLtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PVdeEwPhqkBs/Pea5KEyA6MfcBeMy0NS692bpZuteEs=;
-        b=DAjNQGPIXmI0WqNPV00KdOZU+ehEFl0E0hMTABn0WIqfzVTbZNAbBJRxqhG9HPcIC/
-         a3H2qaoKGg3Fg9h7btV/E/bF68r1wENagT5s4ul4rzXp9Y+J/KlsZnIja4v/kb/aTFYl
-         T2yqwHuKfUNE7CUkQ8u3s4+gudUyGZ5EdVWX9DC4XGswQEeu5Fj6DxZTQ6gv+khSHw6D
-         l7CcqpnDUE+qp/ovEgQuMnwCB6HB3LNGM08BWWAKTteEN2KP3DoPKN4wEq6qd9moRPon
-         j1uJTTYdJWd7yzUD4GGmURb597uLnFafvuIqq+x86fa2Nh7YwlQ68IpWIx5hWcrJiEbV
-         SL7A==
-X-Gm-Message-State: AOAM533gpoxh4Tf4vMVwnxQA16kcA+1XO3Kn2jhsK7z9YB/1LLua7tsV
-        VKpO1AWXmbAOzHjs45bDtEbPTPTxJLmQOof5ptM=
-X-Google-Smtp-Source: ABdhPJwqeVw4JEsQNOi4sE1GSdprNp933aEmoicRHAob3sqYfYWzt9wxUzrbXUg0UwNydvXeRVN6q5YVh1bIKGkllak=
-X-Received: by 2002:a4a:a30a:: with SMTP id q10mr5905524ool.40.1639534190791;
- Tue, 14 Dec 2021 18:09:50 -0800 (PST)
+        id S239633AbhLODwT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Dec 2021 22:52:19 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:32921 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235424AbhLODwT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 22:52:19 -0500
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JDLsW6MXfzcbyr;
+        Wed, 15 Dec 2021 11:51:59 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 15 Dec 2021 11:51:50 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 15 Dec
+ 2021 11:51:50 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+CC:     <jgross@suse.com>, <gregkh@linuxfoundation.org>
+Subject: [PATCH -next] usb: host: xen-hcd: add missing unlock in error path
+Date:   Wed, 15 Dec 2021 11:58:05 +0800
+Message-ID: <20211215035805.375244-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211209072218.21651-1-chunfeng.yun@mediatek.com>
- <c448da77-f2f3-8b79-fc4b-b9dcff727c6e@linux.intel.com> <CAKgpwJXxtLwOjxjg3vFHiqS92j6rx_b1+C-bRwDnp+PBvXCMTg@mail.gmail.com>
- <e7a6e45e-68ce-54a5-9632-80244dd1e4c7@linux.intel.com>
-In-Reply-To: <e7a6e45e-68ce-54a5-9632-80244dd1e4c7@linux.intel.com>
-From:   Jun Li <lijun.kernel@gmail.com>
-Date:   Wed, 15 Dec 2021 10:09:39 +0800
-Message-ID: <CAKgpwJXdO8BZPcUH5Lq8AQUkQMDvLUW9h4HsgCm1XLcuP1G1HA@mail.gmail.com>
-Subject: Re: [PATCH] usb: xhci: skip re-check pending port event if hibernated
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek@lists.infradead.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Yun-Chien Yu <yun-chien.yu@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Mathias Nyman <mathias.nyman@linux.intel.com> =E4=BA=8E2021=E5=B9=B412=E6=
-=9C=8814=E6=97=A5=E5=91=A8=E4=BA=8C 18:03=E5=86=99=E9=81=93=EF=BC=9A
->
-> On 14.12.2021 10.00, Jun Li wrote:
-> > Mathias Nyman <mathias.nyman@linux.intel.com> =E4=BA=8E2021=E5=B9=B412=
-=E6=9C=8811=E6=97=A5=E5=91=A8=E5=85=AD 01:56=E5=86=99=E9=81=93=EF=BC=9A
-> >>
-> >> On 9.12.2021 9.22, Chunfeng Yun wrote:
-> >>> When xHCI controller hibernated, the root hub lost power, if controll=
-er
-> >>> support Port Power Control (PPC), PP is not set at xhci_resume() and
-> >>> set by hub_reset_resume() later, so no need check pending port event.
-> >>> If PPC is not supported, device is disconneced, seems do not send out
-> >>> U3 LFPS wake signal, no need re-check again and drop 120ms delay to
-> >>> save resume time.
-> >>>
-> >>> Reported-by: Yun-Chien Yu <yun-chien.yu@mediatek.com>
-> >>> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> >>> ---
-> >>
-> >> Thanks, adding
-> >
-> > Hi Mathias, Chunfeng
-> >
-> > I have a question on this, if there is no any usb devices connected
-> > before suspend, do we need this 120ms delay to check again?
-> > So do we need one more condition to limit this like?
-> > if (!pending_portevent && !hibernated && xhci_has_child_device())
->
-> The 120ms delay was added to make sure we catch the second wake signal
-> from a device in case host missed the first U3 exit LFPS wakeup signal.
->
-> Even if no devices are connected this might be helpful if a device is
-> connected while host is suspended.
+Add the missing unlock before return from function xenhcd_urb_request_done()
+and xenhcd_conn_notify() in the error handling case.
 
-Agree this may also help on this case.
+Fixes: 494ed3997d75 ("usb: Introduce Xen pvUSB frontend (xen hcd)")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/usb/host/xen-hcd.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> I haven't checked any timing for the link training during enumeration,
-> but it also uses LFPS signalling, and connected device isn't visible to
-> driver until link is successfully trained.
->
-> So the original 120ms delay patch might as a positive side effect ensure
-> driver doesn't suspend host mid device enumeration.
+diff --git a/drivers/usb/host/xen-hcd.c b/drivers/usb/host/xen-hcd.c
+index 7801dde6f5ee..be09fd9bac58 100644
+--- a/drivers/usb/host/xen-hcd.c
++++ b/drivers/usb/host/xen-hcd.c
+@@ -942,6 +942,7 @@ static int xenhcd_urb_request_done(struct xenhcd_info *info)
+ 	rp = info->urb_ring.sring->rsp_prod;
+ 	if (RING_RESPONSE_PROD_OVERFLOW(&info->urb_ring, rp)) {
+ 		xenhcd_set_error(info, "Illegal index on urb-ring");
++		spin_unlock_irqrestore(&info->lock, flags);
+ 		return 0;
+ 	}
+ 	rmb(); /* ensure we see queued responses up to "rp" */
+@@ -997,6 +998,7 @@ static int xenhcd_conn_notify(struct xenhcd_info *info)
+ 	rp = info->conn_ring.sring->rsp_prod;
+ 	if (RING_RESPONSE_PROD_OVERFLOW(&info->conn_ring, rp)) {
+ 		xenhcd_set_error(info, "Illegal index on conn-ring");
++		spin_unlock_irqrestore(&info->lock, flags);
+ 		return 0;
+ 	}
+ 	rmb(); /* ensure we see queued responses up to "rp" */
+@@ -1010,6 +1012,7 @@ static int xenhcd_conn_notify(struct xenhcd_info *info)
+ 
+ 		if (xenhcd_rhport_connect(info, portnum, speed)) {
+ 			xenhcd_set_error(info, "Illegal data on conn-ring");
++			spin_unlock_irqrestore(&info->lock, flags);
+ 			return 0;
+ 		}
+ 
+-- 
+2.25.1
 
-Is this unexpected suspend can be prevented by adding auto suspend
-delay?
-
-Thanks
-Li Jun
->
-> Could be looked into more, but I don't think we should this patch by
-> Chunfeng
->
-> Thanks
-> Mathias
