@@ -2,75 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 757D84756FC
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 11:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 385CC475809
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 12:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241821AbhLOK4h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Dec 2021 05:56:37 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:33699 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241810AbhLOK4h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Dec 2021 05:56:37 -0500
-Received: by mail-ot1-f43.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso24496980otf.0;
-        Wed, 15 Dec 2021 02:56:37 -0800 (PST)
+        id S236807AbhLOLlm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Dec 2021 06:41:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230037AbhLOLlm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Dec 2021 06:41:42 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D252C061574;
+        Wed, 15 Dec 2021 03:41:41 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id cf39so30474853lfb.8;
+        Wed, 15 Dec 2021 03:41:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bVoe7yAKZFMYlKyfdTJ++5MCDFft8o/YXQn2x8pFVvM=;
+        b=dakCHQ74Gvvs1ALAu2j5VLqque38l0RQ/M/uOYRdnXlnFwS4BIo0aYMrLPiq2QDdLy
+         zBaNWLxYfygqcLhYvWTsK3fu2iR2xA39S0tDYr1V3sz6gADFAwdkIEyEQ0phK59PIAiU
+         qW1/Oj1vYsVZYj02bLRm4yHGsfBmz8N0uwowkbGy4LerHa8eSWmVdY/wmONCfokjetd4
+         Bql6QcfvhNCJsocP9MSnA1VU78NoRpoEV4IrZIt34S7zLVAUbEXomFCHeFRnw1Hb4UCu
+         5TZEpE/1japTifDqrMIhuivqwdUDtlvHtNUaFYYg2EfQwYGkVs15hRZTbR6Ur+Qqc1tB
+         zMCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=c+b6o2kT50XjdF2Qu7E5BjAnXipgwhkkAIzs/MBlias=;
-        b=m6voVRwI4246ZqQvAW45aAYJ/+fnritHQxtddZUHDfukKPrbs+uO1ITguZ4ahTkMw2
-         MMXNpSTfbG1igXgz2Qt6IAoJojQw7wJwH2nDBH3a+tqcGz8jOnJVfLZmoynVEYjrzCLk
-         VotlkKEijDNHx+Pfdb4iSp2/CzJAP0VK9SZgUtmknIVHkEp3KaJE64jV6u9dS3bxMhvH
-         L1ZxqCaybVBZTQCpbIdCZ8KKan3P0Of5jhC8ydYEZQzaXWSslLnD788VFXDxmpyWi6mA
-         W+rB1zQCTUEZkSs2kfcTgogcAKVwkxUCN8kDaidGMyUeVpiwgsUFX+ZpnL8qbPWpqWWT
-         76gQ==
-X-Gm-Message-State: AOAM532lz7etEtYMqUV75SdhqiDN9u03UfrISTK8y1h8BJ3ms/1pwvuS
-        t3Yl5u40Clm4FotkUxzVVB+/E2PUxe40LDA33KI5Ffj5
-X-Google-Smtp-Source: ABdhPJzOKBewyc1EJTNidGydsTDLgPpVQPsCNiOckKPdNK5qGAgB5i204gc3Tmoz8yMpWLqqgsXlSdIoPkJ9mhpu2QU=
-X-Received: by 2002:a9d:4c10:: with SMTP id l16mr8244269otf.198.1639565796648;
- Wed, 15 Dec 2021 02:56:36 -0800 (PST)
+        bh=bVoe7yAKZFMYlKyfdTJ++5MCDFft8o/YXQn2x8pFVvM=;
+        b=Nt610pw6FZMUX2c+Y/5vHfnoSSxZb6eghDbtIDpcGyttClvMbMddkefRnQAfyiXlsU
+         jBsdKZmaJ3j2N/6rpCD8hl+IQuF2ibNi4DLl/xCpSGaW6JW9GrGbS+Pwp5H0FiTCo0l9
+         sOhNCUikCrpNGdXkWKurHDKMddf8jVd/o6qpbQb2iwhPBkZW1m7b/Ka4lfBTeGirn/vr
+         +BLxH27Z67yvxp+u8ZFjq8lPmTUnL3rUbGzpeGZ8vaalMq3C6nhvQiXPKuWo8MlSs8Dm
+         BDvJ5ujJQN6QpfVmRVScmNH3q/0+Oz4TBPR0qhLP7A2RII0ZfAO21Qudi0GeEp1xycXH
+         fp7w==
+X-Gm-Message-State: AOAM5309cMHUNyJe7YnDjIlbOy0uVBL9LURra1oHabax9+ULIAsPBZRu
+        9vnYQD+wUpeeglpksrtVJ5v2vC2Zs8uJN5z+zOHd2PC+
+X-Google-Smtp-Source: ABdhPJyBZLApEGmOqB7EAmnRubSJb1zz93HrptYM8K8908gJcGN7dTO9mFPJB5AjfhATifQmBj9o5ASzmYy04mvDKMU=
+X-Received: by 2002:a05:6512:1109:: with SMTP id l9mr9219864lfg.181.1639568499742;
+ Wed, 15 Dec 2021 03:41:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20211213103243.33657-1-heikki.krogerus@linux.intel.com>
-In-Reply-To: <20211213103243.33657-1-heikki.krogerus@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 15 Dec 2021 11:56:25 +0100
-Message-ID: <CAJZ5v0gFVQanDYwLFe6GFo2uYOHurrXka2c64n_4rvzPPts-MQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] acpi: Store _PLD information and convert users
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+References: <20211212115506.180629-1-gnurou@gmail.com> <9b20ae5d-be8f-59dd-3136-2a9f7ce216e9@suse.com>
+In-Reply-To: <9b20ae5d-be8f-59dd-3136-2a9f7ce216e9@suse.com>
+From:   Alexandre Courbot <gnurou@gmail.com>
+Date:   Wed, 15 Dec 2021 20:41:25 +0900
+Message-ID: <CAAVeFu+sLzNUztnW4Vyr6ukCyjxTwCT-L4Y2xEWsRx=CPuarPw@mail.gmail.com>
+Subject: Re: [PATCH] usb: storage: do not use UAS with Logitec LGB-4BNHUC
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 11:32 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
+Hi Oliver,
+
+On Tue, Dec 14, 2021 at 4:34 AM Oliver Neukum <oneukum@suse.com> wrote:
 >
+>
+> On 12.12.21 12:55, Alexandre Courbot wrote:
+> > This 4-drives USB 3.1 bay gets unhappy when used with UAS:
+> >
+> >       sd 10:0:0:0: [sdb] tag#18 uas_eh_abort_handler 0 uas-tag 5 inflight: CMD IN
+> >       sd 10:0:0:0: [sdb] tag#18 CDB: Read(16) 88 00 00 00 00 00 00 9d 42 30 00 00 04 00 00 00
+> >
+> > It works perfectly fine as a regular mass-storage device, so prevent UAS
+> > from being used with it.
+> >
 > Hi,
 >
-> I'm now using the helpers device_match_acpi_dev() and
-> device_match_fwnode() like Andy suggested. No other changes.
->
->
-> The original cover letter:
->
-> This removes the need for the drivers to always separately evaluate
-> the _PLD. With the USB Type-C connector and USB port mapping this
-> allows us to start using the component framework and remove the custom
-> APIs.
->
-> So far the only users of the _PLD information have been the USB
-> drivers, but it seems it will be used also at least in some camera
-> drivers later. These nevertheless touch mostly USB drivers.
->
-> Rafael, is it still OK if Greg takes these?
+> this is a big drastic a fix. s it always that command?
+> Have you tried less drastic quirks?
 
-It is in general, but let me look at the changes in scan.c in particular.
+Unfortunately I am not familiar with the storage subsystem so I'm not
+sure which quirks would be good candidates to try, would you have
+suggestions? As for the command, reproduction is rather random and I
+did not keep traces of all instances.
+
+I just noticed that users with similar issues reported that disabling
+UAS fixed the problem and sure enough it did in my case as well. The
+bay is used with a NAS so I'd rather not mess too much with it, but I
+am willing to experiment a bit (after double-checking my backups) if
+you have good leads to suggest.
+
+Cheers,
+Alex.
