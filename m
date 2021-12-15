@@ -2,91 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 902AF475095
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 02:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA744750BF
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 03:09:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238935AbhLOBsk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Dec 2021 20:48:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
+        id S234574AbhLOCJw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Dec 2021 21:09:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbhLOBsk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 20:48:40 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4BE0C061574;
-        Tue, 14 Dec 2021 17:48:39 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id j17so20352497qtx.2;
-        Tue, 14 Dec 2021 17:48:39 -0800 (PST)
+        with ESMTP id S231312AbhLOCJv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 21:09:51 -0500
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66843C061574;
+        Tue, 14 Dec 2021 18:09:51 -0800 (PST)
+Received: by mail-oo1-xc2f.google.com with SMTP id d1-20020a4a3c01000000b002c2612c8e1eso5459148ooa.6;
+        Tue, 14 Dec 2021 18:09:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=G0Tatyf4cSWakgRQn9yIH14VMYHZApGbobtZFOBt3DQ=;
-        b=Uhdqosbe+w9V+S4PJYild7ZI9yZCNHaACLyHGIWViiKxidXV7C5BGrEi22c+1Ko/LL
-         +4qTjJ/H2Wpie7CjDa6yI5kMCZ38lPqwfNhaNpppbS/aEfdprejUL2fnkH6s8gOAW3kG
-         WiFgDd9o31GS/2s1mZsGeYSZ5h3Y+qL3EN1T4e1wawGxhfvGBMNpCo+C9teqGqr5iHwM
-         tLhdv9dQliYlxAsJdFmAeWZUmRr114R4WnpLQBje1vOFYTyh3lllPw9WBVcTlLo1bIkD
-         9p4qQcO/TruW/zRIY4+63LP2cQxWwC96R+mExaRlNoiAkSDW1Pw7tSkDz0ja+k1xjPh9
-         S5rw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=PVdeEwPhqkBs/Pea5KEyA6MfcBeMy0NS692bpZuteEs=;
+        b=ZAMGfcpTtZZb5skT+LP/hwFkLze7fjLO2IOdRL13WrOwGHnMrM3rsxdG0F4VOLBP/r
+         PB+L+R6CdiWt0sFPZwkWyd2VMbDsHncwdaVpeEb+rgwgBFg9iRKoefSFphoWNv/oiK0E
+         Z4H8XzdNcnGD0Q7UVzR09k/hKqthzItnunyEHtlPvhIju03nWAJHRRD2MrswfQPm2iMG
+         5KW1Y8aLIoOYPPPsKukt07gzkWNwr66AT4l/4kVPGedq2JDRhT6p1dZ8hA2uLlwkkADk
+         b8UWcdUk4qVjLmpUZxPwcoNghX3GmpDQ1PYE4MbI/UvAWLz9K3OahOWKBLrkq6z7AP4w
+         ZLtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=G0Tatyf4cSWakgRQn9yIH14VMYHZApGbobtZFOBt3DQ=;
-        b=DqHa2BJYZdlfJaOx31PvrDDiumDJwsJpMF9IyGQcDJ0YdqGHxMGK/+eVzJucY/5b85
-         KZO1+GJBJzq/+VAhcoFkDZiFg/E2TDO4NboeuZYngG7XvRKFZgDO58ssmAhjpF5WWgyV
-         K7nXLTS+zdHxaixTbmn36/WgRLKfm6EfH/q0JenDu7SjPfwEuWN+LuVFZ5MlUeZ8dTpo
-         QKLrGmncVfXrn1YfgZoKRAZ6sRCO1FKitb/ENXFLTQ6+N/75GgWceZ9E/JbnoDGk7eZF
-         KpqajKHaxsQmf58Fl6/BBX0US7/Z6I41sA1tSACnIeUFKJTAN/cjJT7kboDTY8HO7YiY
-         o/9g==
-X-Gm-Message-State: AOAM533ePgLPWHs6lUw/M+sSk348o6NC9jXH5gFRJMP7a8z7h4soz2J4
-        vl/n2J/iPlqT7mjQyMAUDAs=
-X-Google-Smtp-Source: ABdhPJy7UTcIii6zQf70KY9+aO3t3263ql2SFL6BfQ0tJp48oDoibEsQpDFQjlWBRujBsQoBUv3LYw==
-X-Received: by 2002:ac8:7f8b:: with SMTP id z11mr9852530qtj.513.1639532919065;
-        Tue, 14 Dec 2021 17:48:39 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id y10sm304150qkp.128.2021.12.14.17.48.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 17:48:38 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: deng.changcheng@zte.com.cn
-To:     balbi@kernel.org
-Cc:     maze@google.com, deng.changcheng@zte.com.cn, lorenzo@google.com,
-        kuba@kernel.org, manish.narani@xilinx.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] usb: gadget: remove duplicate include
-Date:   Wed, 15 Dec 2021 01:47:54 +0000
-Message-Id: <20211215014754.441065-1-deng.changcheng@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PVdeEwPhqkBs/Pea5KEyA6MfcBeMy0NS692bpZuteEs=;
+        b=DAjNQGPIXmI0WqNPV00KdOZU+ehEFl0E0hMTABn0WIqfzVTbZNAbBJRxqhG9HPcIC/
+         a3H2qaoKGg3Fg9h7btV/E/bF68r1wENagT5s4ul4rzXp9Y+J/KlsZnIja4v/kb/aTFYl
+         T2yqwHuKfUNE7CUkQ8u3s4+gudUyGZ5EdVWX9DC4XGswQEeu5Fj6DxZTQ6gv+khSHw6D
+         l7CcqpnDUE+qp/ovEgQuMnwCB6HB3LNGM08BWWAKTteEN2KP3DoPKN4wEq6qd9moRPon
+         j1uJTTYdJWd7yzUD4GGmURb597uLnFafvuIqq+x86fa2Nh7YwlQ68IpWIx5hWcrJiEbV
+         SL7A==
+X-Gm-Message-State: AOAM533gpoxh4Tf4vMVwnxQA16kcA+1XO3Kn2jhsK7z9YB/1LLua7tsV
+        VKpO1AWXmbAOzHjs45bDtEbPTPTxJLmQOof5ptM=
+X-Google-Smtp-Source: ABdhPJwqeVw4JEsQNOi4sE1GSdprNp933aEmoicRHAob3sqYfYWzt9wxUzrbXUg0UwNydvXeRVN6q5YVh1bIKGkllak=
+X-Received: by 2002:a4a:a30a:: with SMTP id q10mr5905524ool.40.1639534190791;
+ Tue, 14 Dec 2021 18:09:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211209072218.21651-1-chunfeng.yun@mediatek.com>
+ <c448da77-f2f3-8b79-fc4b-b9dcff727c6e@linux.intel.com> <CAKgpwJXxtLwOjxjg3vFHiqS92j6rx_b1+C-bRwDnp+PBvXCMTg@mail.gmail.com>
+ <e7a6e45e-68ce-54a5-9632-80244dd1e4c7@linux.intel.com>
+In-Reply-To: <e7a6e45e-68ce-54a5-9632-80244dd1e4c7@linux.intel.com>
+From:   Jun Li <lijun.kernel@gmail.com>
+Date:   Wed, 15 Dec 2021 10:09:39 +0800
+Message-ID: <CAKgpwJXdO8BZPcUH5Lq8AQUkQMDvLUW9h4HsgCm1XLcuP1G1HA@mail.gmail.com>
+Subject: Re: [PATCH] usb: xhci: skip re-check pending port event if hibernated
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-mediatek@lists.infradead.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Yun-Chien Yu <yun-chien.yu@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Changcheng Deng <deng.changcheng@zte.com.cn>
+Mathias Nyman <mathias.nyman@linux.intel.com> =E4=BA=8E2021=E5=B9=B412=E6=
+=9C=8814=E6=97=A5=E5=91=A8=E4=BA=8C 18:03=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On 14.12.2021 10.00, Jun Li wrote:
+> > Mathias Nyman <mathias.nyman@linux.intel.com> =E4=BA=8E2021=E5=B9=B412=
+=E6=9C=8811=E6=97=A5=E5=91=A8=E5=85=AD 01:56=E5=86=99=E9=81=93=EF=BC=9A
+> >>
+> >> On 9.12.2021 9.22, Chunfeng Yun wrote:
+> >>> When xHCI controller hibernated, the root hub lost power, if controll=
+er
+> >>> support Port Power Control (PPC), PP is not set at xhci_resume() and
+> >>> set by hub_reset_resume() later, so no need check pending port event.
+> >>> If PPC is not supported, device is disconneced, seems do not send out
+> >>> U3 LFPS wake signal, no need re-check again and drop 120ms delay to
+> >>> save resume time.
+> >>>
+> >>> Reported-by: Yun-Chien Yu <yun-chien.yu@mediatek.com>
+> >>> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> >>> ---
+> >>
+> >> Thanks, adding
+> >
+> > Hi Mathias, Chunfeng
+> >
+> > I have a question on this, if there is no any usb devices connected
+> > before suspend, do we need this 120ms delay to check again?
+> > So do we need one more condition to limit this like?
+> > if (!pending_portevent && !hibernated && xhci_has_child_device())
+>
+> The 120ms delay was added to make sure we catch the second wake signal
+> from a device in case host missed the first U3 exit LFPS wakeup signal.
+>
+> Even if no devices are connected this might be helpful if a device is
+> connected while host is suspended.
 
-./drivers/usb/gadget/function/u_ether.c: linux/etherdevice.h is included
-more than once.
+Agree this may also help on this case.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
----
- drivers/usb/gadget/function/u_ether.c | 1 -
- 1 file changed, 1 deletion(-)
+> I haven't checked any timing for the link training during enumeration,
+> but it also uses LFPS signalling, and connected device isn't visible to
+> driver until link is successfully trained.
+>
+> So the original 120ms delay patch might as a positive side effect ensure
+> driver doesn't suspend host mid device enumeration.
 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index 6f5d45ef2e39..3b674f99320b 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -17,7 +17,6 @@
- #include <linux/etherdevice.h>
- #include <linux/ethtool.h>
- #include <linux/if_vlan.h>
--#include <linux/etherdevice.h>
- 
- #include "u_ether.h"
- 
--- 
-2.25.1
+Is this unexpected suspend can be prevented by adding auto suspend
+delay?
 
+Thanks
+Li Jun
+>
+> Could be looked into more, but I don't think we should this patch by
+> Chunfeng
+>
+> Thanks
+> Mathias
