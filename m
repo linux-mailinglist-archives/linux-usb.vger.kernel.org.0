@@ -2,45 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4592447663E
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 23:56:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DE847665A
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Dec 2021 00:16:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbhLOW4y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Dec 2021 17:56:54 -0500
-Received: from mail-oi1-f174.google.com ([209.85.167.174]:41720 "EHLO
-        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231591AbhLOW4y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Dec 2021 17:56:54 -0500
-Received: by mail-oi1-f174.google.com with SMTP id u74so33767661oie.8;
-        Wed, 15 Dec 2021 14:56:54 -0800 (PST)
+        id S231777AbhLOXQK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Dec 2021 18:16:10 -0500
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:44562 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231739AbhLOXQJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Dec 2021 18:16:09 -0500
+Received: by mail-oi1-f172.google.com with SMTP id be32so33818657oib.11;
+        Wed, 15 Dec 2021 15:16:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=9QWYnfNPP5VkW+LKnhvvtYRz7R6qpsMFPhXYcWwb4Gc=;
-        b=tZ9DJbUW0Uo93oeevakT6jgA4SGTJsSeXlygX+2rSfa7AtV6xyxCmIqCfOkrDe85eg
-         QrIbXDaIVaQ/5CaR3OL9i5Pwg4mOrsPLNwNqox7NbiutrR4BT7egXNbp202YAMvPOaR4
-         N551N6UB+xxGz3V3fR45YKm0Jfc1Fb0dKgW5XOlnlSKrNQdL1P19zqp9RgZbfXEtAZp5
-         NJLPTyeIjm0vHeASa1fSIHli6AKyof1PFjIK8m7MHuNY71SIHNP9tICJDlZ1sF0yi8dV
-         GkzjYtwtZz+U2r+0vXsQdqZ/TIjmoEZm4bIRkU+9hgF92TgR1LzCyQOiy49y2KhKqHPq
-         1UAQ==
-X-Gm-Message-State: AOAM5321cMB517xp0jKrvFiCfK+2p80FtY3IpCysYWlXg3lXgBz5fK3d
-        EJXuy4k/ARE7Oul1IHw8Lw==
-X-Google-Smtp-Source: ABdhPJxVoFjSihy5pYAMp3p3OB0wH6eiXgzJWqb5QOdfgW5Q9JfxZIQdzj7pTk7BEZEMQH8QoMdP1Q==
-X-Received: by 2002:a05:6808:1802:: with SMTP id bh2mr1999500oib.142.1639609013851;
-        Wed, 15 Dec 2021 14:56:53 -0800 (PST)
+        bh=++wJQfX9SRKTgDa7iRDm4XjqjWaFak1BGA3bq4SdHY8=;
+        b=amgBVyhB6CrnasIBRdDbSGBtRuFlXBCAxVShCHiDW65cA8AzgtRo50ir4jugdgs0Aq
+         wn4vKhpMjPTY+stSGSUAHTl4DCSeOGVQKdqsqlFnLhiL9dArm5YmRmW94CrFlsrv9Hqy
+         K3jcMTtsoP62AiQvGPvWOiLG7gGtII3bEh+i52+k6uekLttKta0pMMm8g2aUqugF7Xdl
+         xarGT5mhufbdX6ynjj5VL+QyDLPxxJKH7DePL+9+kEIKJoR0VnRM4dIdSjeBkTC9s5mg
+         fVLLWvIkRyGGziJBOzOjS7rtFTUYDQ6iMPb/m8ZcwIYY02DIjW0NRi4anbLX/VAVX93N
+         sTjA==
+X-Gm-Message-State: AOAM530QaZ9Xwa27LI0GkwN+Cnq9+8Zl+eMpgPMK5qfGcxxKXIGZZhr8
+        w9NPYH18G72QK5U53b09UQ==
+X-Google-Smtp-Source: ABdhPJzWb+X8AU9phOzqa3L4kDw+icvNMkXfJyKOKnI6KQnWK5fei15LOQROoLYcH56rzggBqu3/sQ==
+X-Received: by 2002:a05:6808:3a3:: with SMTP id n3mr1972992oie.81.1639610169310;
+        Wed, 15 Dec 2021 15:16:09 -0800 (PST)
 Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id r10sm783172ool.1.2021.12.15.14.56.52
+        by smtp.googlemail.com with ESMTPSA id g7sm740166oon.27.2021.12.15.15.16.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 14:56:53 -0800 (PST)
+        Wed, 15 Dec 2021 15:16:07 -0800 (PST)
 From:   Rob Herring <robh@kernel.org>
-To:     Peter Chen <peter.chen@kernel.org>,
+To:     Matthias Brugger <matthias.bgg@gmail.com>, Bin Liu <b-liu@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: chipidea: Set the DT node on the child device
-Date:   Wed, 15 Dec 2021 16:56:46 -0600
-Message-Id: <20211215225646.1997946-1-robh@kernel.org>
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Paul Cercueil <paul@crapouillou.net>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: [PATCH 0/2] usb: musb resource clean-ups
+Date:   Wed, 15 Dec 2021 17:07:55 -0600
+Message-Id: <20211215230756.2009115-1-robh@kernel.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,29 +52,29 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The ChipIdea glue drivers just copy the glue resources to the "ci_hdrc"
-child device. Instead, set the child device's DT node pointer to the
-parent device's node so that platform_get_irq() can find the IRQ
-resources in the DT. This removes the need for statically populating the
-IRQ resources from the DT which has been deprecated for some time.
+This short series reworks the platform device resources of the musb 
+child device to avoid using static resources. Setting the parent 
+device's DT node on the child device is sufficient for the standard 
+resource functions to work.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- drivers/usb/chipidea/core.c | 1 +
- 1 file changed, 1 insertion(+)
+I ran this thru kernel-ci and didn't see any failures, but I don't know 
+if any tested platform uses MUSB driver or if a failure would show up in 
+the boot log.
 
-diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
-index a56f06368d14..5359b2a2e4d2 100644
---- a/drivers/usb/chipidea/core.c
-+++ b/drivers/usb/chipidea/core.c
-@@ -864,6 +864,7 @@ struct platform_device *ci_hdrc_add_device(struct device *dev,
- 	}
- 
- 	pdev->dev.parent = dev;
-+	device_set_of_node_from_dev(&pdev->dev, dev);
- 
- 	ret = platform_device_add_resources(pdev, res, nres);
- 	if (ret)
+Rob
+
+Rob Herring (2):
+  usb: musb: Drop unneeded resource copying
+  usb: musb: Set the DT node on the child device
+
+ drivers/usb/musb/am35x.c    |  2 ++
+ drivers/usb/musb/da8xx.c    | 20 ++++----------------
+ drivers/usb/musb/jz4740.c   |  1 +
+ drivers/usb/musb/mediatek.c |  2 ++
+ drivers/usb/musb/omap2430.c | 23 ++---------------------
+ drivers/usb/musb/ux500.c    | 18 ++----------------
+ 6 files changed, 13 insertions(+), 53 deletions(-)
+
 -- 
 2.32.0
 
