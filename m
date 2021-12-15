@@ -2,126 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B7447503F
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 02:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 902AF475095
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 02:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239113AbhLOBEj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Dec 2021 20:04:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
+        id S238935AbhLOBsk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Dec 2021 20:48:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239230AbhLOBDr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 20:03:47 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B16EC0698D1
-        for <linux-usb@vger.kernel.org>; Tue, 14 Dec 2021 17:02:34 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso22969830otr.2
-        for <linux-usb@vger.kernel.org>; Tue, 14 Dec 2021 17:02:34 -0800 (PST)
+        with ESMTP id S231237AbhLOBsk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Dec 2021 20:48:40 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4BE0C061574;
+        Tue, 14 Dec 2021 17:48:39 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id j17so20352497qtx.2;
+        Tue, 14 Dec 2021 17:48:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=tAS1Dz9hbso+xED173BAGau2yBWGVtEsqq1M5udA5B4=;
-        b=GhcyDIIM2jm8UKC8uDNBGGtP77QCBxbllbAGtu+WpoWBH3wSVUhxwivFOrME8ST8tl
-         Zca8cebk0sf1py77IcG8U7XyTmZl2CrY3HgsduuvXY4KLAknZShqH4ci1NZFEdEVjVtS
-         qyAfyjgIDXllV3LnagwFoaCUz33TU3k844SXU=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G0Tatyf4cSWakgRQn9yIH14VMYHZApGbobtZFOBt3DQ=;
+        b=Uhdqosbe+w9V+S4PJYild7ZI9yZCNHaACLyHGIWViiKxidXV7C5BGrEi22c+1Ko/LL
+         +4qTjJ/H2Wpie7CjDa6yI5kMCZ38lPqwfNhaNpppbS/aEfdprejUL2fnkH6s8gOAW3kG
+         WiFgDd9o31GS/2s1mZsGeYSZ5h3Y+qL3EN1T4e1wawGxhfvGBMNpCo+C9teqGqr5iHwM
+         tLhdv9dQliYlxAsJdFmAeWZUmRr114R4WnpLQBje1vOFYTyh3lllPw9WBVcTlLo1bIkD
+         9p4qQcO/TruW/zRIY4+63LP2cQxWwC96R+mExaRlNoiAkSDW1Pw7tSkDz0ja+k1xjPh9
+         S5rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=tAS1Dz9hbso+xED173BAGau2yBWGVtEsqq1M5udA5B4=;
-        b=CsdO8/ReetRyMqBdMfGeEqUdYl0JNK8iflPi8mcyg3ajU7/El1qsGU9h7JrcdEO/38
-         D2jb+2S/jueiw1l1ddFsjf073ZJvFM6P8OXcNZsG0axprHyuhzm0Ax3LnGIT3DVcOtLI
-         Y9zbW8sQ17wwzcDyo3ZZlehoN8OukofnB+qbrRwDwZZeTUKjEFxOb0VYOLmbh/vqighQ
-         wIBlyd6rovFMJhQOmHQnSnmGV4GSKuiwvKxBwxdZCqFF4SyWUD/Rnd0zr4JW2GgzQ/N4
-         0MGnyraSCmYXlJceVJkt2OBi707Fo+LiJZZmaFHHElBPkOIBtRj+InsAWlen2M1fOUed
-         Kk2g==
-X-Gm-Message-State: AOAM531kb7zBIexmXLMO/gcJGZ+uJUnQEDAC5ht9T6FAOvCqTu7R9Sxo
-        9wpHIwqM5x/7qnKPmfFukgS6gLdN48FneMsKZGhuuQ==
-X-Google-Smtp-Source: ABdhPJzk2YYgzmM+8WnPv9/YqjRAIl9m1g3mvsykEz3iVPSAuGfqP9Mv76ORVCT7utH3L4rsdcBxx1fWaqPrYYaIpNM=
-X-Received: by 2002:a05:6830:30b7:: with SMTP id g23mr6732732ots.159.1639530153506;
- Tue, 14 Dec 2021 17:02:33 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 15 Dec 2021 02:02:33 +0100
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G0Tatyf4cSWakgRQn9yIH14VMYHZApGbobtZFOBt3DQ=;
+        b=DqHa2BJYZdlfJaOx31PvrDDiumDJwsJpMF9IyGQcDJ0YdqGHxMGK/+eVzJucY/5b85
+         KZO1+GJBJzq/+VAhcoFkDZiFg/E2TDO4NboeuZYngG7XvRKFZgDO58ssmAhjpF5WWgyV
+         K7nXLTS+zdHxaixTbmn36/WgRLKfm6EfH/q0JenDu7SjPfwEuWN+LuVFZ5MlUeZ8dTpo
+         QKLrGmncVfXrn1YfgZoKRAZ6sRCO1FKitb/ENXFLTQ6+N/75GgWceZ9E/JbnoDGk7eZF
+         KpqajKHaxsQmf58Fl6/BBX0US7/Z6I41sA1tSACnIeUFKJTAN/cjJT7kboDTY8HO7YiY
+         o/9g==
+X-Gm-Message-State: AOAM533ePgLPWHs6lUw/M+sSk348o6NC9jXH5gFRJMP7a8z7h4soz2J4
+        vl/n2J/iPlqT7mjQyMAUDAs=
+X-Google-Smtp-Source: ABdhPJy7UTcIii6zQf70KY9+aO3t3263ql2SFL6BfQ0tJp48oDoibEsQpDFQjlWBRujBsQoBUv3LYw==
+X-Received: by 2002:ac8:7f8b:: with SMTP id z11mr9852530qtj.513.1639532919065;
+        Tue, 14 Dec 2021 17:48:39 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id y10sm304150qkp.128.2021.12.14.17.48.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 17:48:38 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     balbi@kernel.org
+Cc:     maze@google.com, deng.changcheng@zte.com.cn, lorenzo@google.com,
+        kuba@kernel.org, manish.narani@xilinx.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] usb: gadget: remove duplicate include
+Date:   Wed, 15 Dec 2021 01:47:54 +0000
+Message-Id: <20211215014754.441065-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <eeeedcb4-d444-5402-2822-0fe942bcb83a@quicinc.com>
-References: <1638339338-6731-1-git-send-email-quic_c_sanm@quicinc.com>
- <1638339338-6731-2-git-send-email-quic_c_sanm@quicinc.com>
- <CAE-0n50YLsHhqoNQDNnGUYhHQSbMc7qnS5nGB-Nk2Z2J13xBVQ@mail.gmail.com> <eeeedcb4-d444-5402-2822-0fe942bcb83a@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Wed, 15 Dec 2021 02:02:33 +0100
-Message-ID: <CAE-0n50sO_HcMiou7nhWTkGRiyG1-yHJmgXexMhS=j+AH2NyfA@mail.gmail.com>
-Subject: Re: [PATCH v3] usb: host: xhci-plat: Set XHCI_SKIP_PHY_INIT quirk for
- DWC3 controller
-To:     Doug Anderson <dianders@chromium.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Sandeep Maheswaram (2021-12-13 20:47:48)
->
-> On 12/2/2021 8:47 AM, Stephen Boyd wrote:
-> > Quoting Sandeep Maheswaram (2021-11-30 22:15:38)
-> >> Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
-> >> Runtime suspend of phy drivers was failing from DWC3 driver as
-> >> runtime usage value is 2 because the phy is initialized from
-> >> DWC3 core and HCD core.
-> >> DWC3 manages phy in their core drivers.
-> > This looks wrapped weirdly.
-> >
-> >> Set this quirk to avoid phy initialization in HCD core.
-> >>
-> >> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > Any Fixes tag?
-> Not sure about the commit id to be used here.
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-Maybe whenever the phy started being initialized twice?
+./drivers/usb/gadget/function/u_ether.c: linux/etherdevice.h is included
+more than once.
 
-> >
-> >> ---
-> >>   drivers/usb/host/xhci-plat.c | 3 +++
-> >>   1 file changed, 3 insertions(+)
-> >>
-> >> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat=
-.c
-> >> index c1edcc9..9bbd939 100644
-> >> --- a/drivers/usb/host/xhci-plat.c
-> >> +++ b/drivers/usb/host/xhci-plat.c
-> >> @@ -327,6 +327,9 @@ static int xhci_plat_probe(struct platform_device =
-*pdev)
-> >>                                           &xhci->imod_interval);
-> >>          }
-> >>
-> >> +       if (of_device_is_compatible(pdev->dev.parent->of_node, "snps,d=
-wc3"))
-> > Are we sure that pdev->dev.parent isn't NULL here?
->
-> +=C2=A0=C2=A0=C2=A0 if (of_device_is_compatible(to_of_node(sysdev->fwnode=
-), "snps,dwc3"))
->
-> Will this be ok ?
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+---
+ drivers/usb/gadget/function/u_ether.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Probably? But I see this function already uses 'sysdev->of_node' so
-that's probably all that's necessary assuming sysdev =3D=3D pdev->dev.paren=
-t
-in this case.
+diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+index 6f5d45ef2e39..3b674f99320b 100644
+--- a/drivers/usb/gadget/function/u_ether.c
++++ b/drivers/usb/gadget/function/u_ether.c
+@@ -17,7 +17,6 @@
+ #include <linux/etherdevice.h>
+ #include <linux/ethtool.h>
+ #include <linux/if_vlan.h>
+-#include <linux/etherdevice.h>
+ 
+ #include "u_ether.h"
+ 
+-- 
+2.25.1
 
-	if (of_device_is_compatible(sysdev->of_node, "snps,dwc3"))
-
->
-> >
-> >> +               xhci->quirks |=3D XHCI_SKIP_PHY_INIT;
-> >> +
-> >>          hcd->usb_phy =3D devm_usb_get_phy_by_phandle(sysdev, "usb-phy=
-", 0);
-> >>          if (IS_ERR(hcd->usb_phy)) {
