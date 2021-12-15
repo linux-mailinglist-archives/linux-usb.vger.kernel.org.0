@@ -2,62 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9900F475B29
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 15:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B4C475C24
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Dec 2021 16:48:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243610AbhLOO52 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Dec 2021 09:57:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56702 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243671AbhLOO5Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Dec 2021 09:57:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73CAC061574
-        for <linux-usb@vger.kernel.org>; Wed, 15 Dec 2021 06:57:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75DFD61880
-        for <linux-usb@vger.kernel.org>; Wed, 15 Dec 2021 14:57:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55251C34604;
-        Wed, 15 Dec 2021 14:57:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639580242;
-        bh=vb5GDA+WtqeA7swpCfAWVETXRpuBBbn/ZtsD55WjfEE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pYwtK6ExHNGpmr8Hnaj8kUhn1UsTlF8nh/T22Fj7np3I8mtIdaUDOYxL8JoKPTqJm
-         RizSaGo+uq7khUp9WxPVr+jfwHbeISf4ZvXV/BXvHQPf/vsKlc69q+JU/6fpioDyaN
-         /hmuNs9buGYWl4U5Gzvkwu2lQyuE1eMDiAxsRa6o=
-Date:   Wed, 15 Dec 2021 15:57:19 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [RFC]How else could a malicious device sabotage endpoints for
- usbnet
-Message-ID: <YboCTzOTp49HuCxa@kroah.com>
-References: <ad1ee829-401a-d051-1da8-f9e01caa7b85@suse.com>
- <YbIlBl8Ay1rIED8p@kroah.com>
- <71bfdff1-61d0-881e-a201-e91920750648@suse.com>
+        id S244099AbhLOPrK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Dec 2021 10:47:10 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:56365 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S244098AbhLOPrF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Dec 2021 10:47:05 -0500
+Received: (qmail 784296 invoked by uid 1000); 15 Dec 2021 10:47:04 -0500
+Date:   Wed, 15 Dec 2021 10:47:04 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        Bixuan Cui <cuibixuan@huawei.com>,
+        Rajat Jain <rajatja@google.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: hub: Add delay for SuperSpeed hub resume to let
+ links transit to U0
+Message-ID: <YboN+GmeyeoypV1D@rowland.harvard.edu>
+References: <20211215120108.336597-1-kai.heng.feng@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <71bfdff1-61d0-881e-a201-e91920750648@suse.com>
+In-Reply-To: <20211215120108.336597-1-kai.heng.feng@canonical.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 03:47:55PM +0100, Oliver Neukum wrote:
+On Wed, Dec 15, 2021 at 08:01:06PM +0800, Kai-Heng Feng wrote:
+> When a new USB device gets plugged to nested hubs, the affected hub,
+> which connects to usb 2-1.4-port2, doesn't report there's any change,
+> hence the nested hubs go back to runtime suspend like nothing happened:
+> [  281.032951] usb usb2: usb wakeup-resume
+> [  281.032959] usb usb2: usb auto-resume
+> [  281.032974] hub 2-0:1.0: hub_resume
+> [  281.033011] usb usb2-port1: status 0263 change 0000
+> [  281.033077] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
+> [  281.049797] usb 2-1: usb wakeup-resume
+> [  281.069800] usb 2-1: Waited 0ms for CONNECT
+> [  281.069810] usb 2-1: finish resume
+> [  281.070026] hub 2-1:1.0: hub_resume
+> [  281.070250] usb 2-1-port4: status 0203 change 0000
+> [  281.070272] usb usb2-port1: resume, status 0
+> [  281.070282] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
+> [  281.089813] usb 2-1.4: usb wakeup-resume
+> [  281.109792] usb 2-1.4: Waited 0ms for CONNECT
+> [  281.109801] usb 2-1.4: finish resume
+> [  281.109991] hub 2-1.4:1.0: hub_resume
+> [  281.110147] usb 2-1.4-port2: status 0263 change 0000
+> [  281.110234] usb 2-1-port4: resume, status 0
+> [  281.110239] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
+> [  281.110266] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
+> [  281.110426] hub 2-1.4:1.0: hub_suspend
+> [  281.110565] usb 2-1.4: usb auto-suspend, wakeup 1
+> [  281.130998] hub 2-1:1.0: hub_suspend
+> [  281.137788] usb 2-1: usb auto-suspend, wakeup 1
+> [  281.142935] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
+> [  281.177828] usb 2-1: usb wakeup-resume
+> [  281.197839] usb 2-1: Waited 0ms for CONNECT
+> [  281.197850] usb 2-1: finish resume
+> [  281.197984] hub 2-1:1.0: hub_resume
+> [  281.198203] usb 2-1-port4: status 0203 change 0000
+> [  281.198228] usb usb2-port1: resume, status 0
+> [  281.198237] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
+> [  281.217835] usb 2-1.4: usb wakeup-resume
+> [  281.237834] usb 2-1.4: Waited 0ms for CONNECT
+> [  281.237845] usb 2-1.4: finish resume
+> [  281.237990] hub 2-1.4:1.0: hub_resume
+> [  281.238067] usb 2-1.4-port2: status 0263 change 0000
+> [  281.238148] usb 2-1-port4: resume, status 0
+> [  281.238152] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
+> [  281.238166] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
+> [  281.238385] hub 2-1.4:1.0: hub_suspend
+> [  281.238523] usb 2-1.4: usb auto-suspend, wakeup 1
+> [  281.258076] hub 2-1:1.0: hub_suspend
+> [  281.265744] usb 2-1: usb auto-suspend, wakeup 1
+> [  281.285976] hub 2-0:1.0: hub_suspend
+> [  281.285988] usb usb2: bus auto-suspend, wakeup 1
 > 
-> On 09.12.21 16:47, Greg KH wrote:
-> >
-> > Why not use usb_find_common_endpoints() and/or the other helper
-> > functions instead? that's what they were created for.
+> USB 3.2 spec, 9.2.5.4 "Changing Function Suspend State" says that "If
+> the link is in a non-U0 state, then the device must transition the link
+> to U0 prior to sending the remote wake message", but the hub only
+> transits the link to U0 after signaling remote wakeup.
 > 
-> Hi,
+> So be more forgiving and use a 20ms delay to let the link transit to U0
+> for remote wakeup.
 > 
-> which one would I use? In this case I already know the endpoints
-> to be verified.
+> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+> v2:
+>  - Add a small delay instead of waking up all hubs.
+> 
+>  drivers/usb/core/hub.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 00070a8a65079..576fdf2c9f3c8 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -1110,7 +1110,10 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+>  		} else {
+>  			hub_power_on(hub, true);
+>  		}
+> -	}
+> +	/* Give some time on remote wakeup to let links to transit to U0 */
+> +	} else if (hub_is_superspeed(hub->hdev))
+> +		msleep(20);
 
-I have no context here so I have no idea, sorry.
+Where did the 20-ms number come from?  Is it mentioned in the spec as 
+the time required for a port to switch from U3 to U0?
 
-greg k-h
+Alan Stern
