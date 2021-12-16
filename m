@@ -2,103 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8C5476BF9
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Dec 2021 09:32:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F40476BB0
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Dec 2021 09:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234782AbhLPIca (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Dec 2021 03:32:30 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:45478 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234747AbhLPIca (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Dec 2021 03:32:30 -0500
-X-UUID: e91765e00fb440f5801d3ce6ef4f0c2b-20211216
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=dmUwalDvL5wMFfVnZd9V2DFI7Cl0Jt//E7VNQ49dQ00=;
-        b=ZmUxca8LvJaqOUf3RUohF2slPBDoKKe89O3ijLciy5//m2Wqljc0caU4mNGfGRNTG1nk0cZ/Pggxb3PbVfm7XNBTNyXj7DfDNn8iscUJiWqYvMp9MTuaOPzuHysL971CQxbtZFLKSjwgUjpNwzza1ImqqdsvRJMRYUYE5aJFjyw=;
-X-UUID: e91765e00fb440f5801d3ce6ef4f0c2b-20211216
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1323285606; Thu, 16 Dec 2021 16:32:26 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 16 Dec 2021 16:32:25 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 16 Dec 2021 16:32:25 +0800
-Message-ID: <aff31f9073b7c0a9a5500ded69ddaab27cd5e879.camel@mediatek.com>
-Subject: Re: [PATCH 2/3] usb: mtu3: add memory barrier before set GPD's HWO
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        "Yuwen Ng" <yuwen.ng@mediatek.com>, <stable@vger.kernel.org>
-Date:   Thu, 16 Dec 2021 16:32:26 +0800
-In-Reply-To: <YbdWI5PD3e6uFz8U@kroah.com>
-References: <20211209031424.17842-1-chunfeng.yun@mediatek.com>
-         <20211209031424.17842-2-chunfeng.yun@mediatek.com>
-         <YbdWI5PD3e6uFz8U@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S229627AbhLPIPM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Dec 2021 03:15:12 -0500
+Received: from mailout1.samsung.com ([203.254.224.24]:14691 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229491AbhLPIPM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Dec 2021 03:15:12 -0500
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20211216081510epoutp014c520e571abdf975644a81c1751896a9~BLiz8I-HX2267522675epoutp01C
+        for <linux-usb@vger.kernel.org>; Thu, 16 Dec 2021 08:15:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20211216081510epoutp014c520e571abdf975644a81c1751896a9~BLiz8I-HX2267522675epoutp01C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1639642510;
+        bh=LMoxrbyqzv20TkTPVfqQqFh9NWqqZbffNlA4jYTh2xI=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=QXK1YQUzXSwT0C5++zF5V7T1d30lDcmHSp+QHcBq5Jhgpo/gWrn2ht67eWOEm/FT9
+         ptD19txcKzwtemDkTw0PF2upP+RW1IGYep8efIsCY+LK1MIoLmaZ1XS3/SrJFP1wgp
+         r9GvR+c4dIHe3OovoFwwy4PaaEy6OvXYbZkcdkFk=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20211216081509epcas1p1e9ead12c5b6fa306927d4bf12bbed6a6~BLizYNhSK1324013240epcas1p1i;
+        Thu, 16 Dec 2021 08:15:09 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.38.234]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4JF4fc61kVz4x9Q6; Thu, 16 Dec
+        2021 08:15:04 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3F.5F.28648.885FAB16; Thu, 16 Dec 2021 17:15:04 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20211216081504epcas1p3ebfe072845fe7cfd4833b2b57199a701~BLiuqPFcm3128431284epcas1p3S;
+        Thu, 16 Dec 2021 08:15:04 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20211216081504epsmtrp28351954c144e9d5dabafad852521baff~BLiupWzCX0525305253epsmtrp2h;
+        Thu, 16 Dec 2021 08:15:04 +0000 (GMT)
+X-AuditID: b6c32a39-813e6a8000006fe8-49-61baf588bc05
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E7.97.29871.785FAB16; Thu, 16 Dec 2021 17:15:03 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20211216081504epsmtip2961137dfcc552c1938690c9107d01b63~BLiuUkrE02233122331epsmtip29;
+        Thu, 16 Dec 2021 08:15:04 +0000 (GMT)
+Subject: Re: [PATCH v2] extcon: fix extcon_get_extcon_dev() error handling
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <c8d18573-5dc1-4d45-f134-2a1dbb7590b6@samsung.com>
+Date:   Thu, 16 Dec 2021 17:38:04 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <20211216080558.GE1978@kadam>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHJsWRmVeSWpSXmKPExsWy7bCmvm7H112JBpcOa1gca3vCbvH633QW
+        i+bF69ks3hyfzmTRtXoni8XWW9IWl3fNYbOYvaSfxeJz7xFGi0XLWpktniw8w2Rxu3EFm8Xp
+        3SUWPw+dZ3Lg89jwaDWrx6ZVnWwe804Geuyfu4bd4+PTWywe7/ddZfPY+b2B3aNvyypGj8+b
+        5AI4o7JtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4BO
+        V1IoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBboFSfmFpfmpevlpZZYGRoYGJkC
+        FSZkZ3Rfm8JWcICv4tHNy6wNjGe5uxg5OSQETCQu3OhlB7GFBHYwSpxc79vFyAVkf2KUuPbs
+        BSOE841RYv2tOewwHZu7trNDJPYySmz7sIwJwnnPKPHx4UNGkCphAS+JrtmH2EBsEQEdicud
+        P8A6mAWuM0v0nd/NBJJgE9CS2P/iBlgRv4CixNUfj8GaeQXsJF7/eQQWZxFQlZjW08QKYosK
+        hEmc3NYCVSMocXLmExYQmxNozpe9h8HizALiEreezGeCsOUltr+dwwyyWELgCYfE/mvX2CB+
+        cJFYP7sP6h9hiVfHt0DZUhKf3+1lg2hYxijxa3InE4SznlHi5axOZogqY4n9SycDJTiAVmhK
+        rN+lDxFWlNj5ey7UFXwS7772sIKUSAjwSnS0CUGUKEtcfnCXCcKWlFjc3sk2gVFpFpJ/ZiH5
+        YRaSH2YhLFvAyLKKUSy1oDg3PbXYsMAUHt/J+bmbGMEJW8tyB+P0tx/0DjEycTAeYpTgYFYS
+        4X0SsStRiDclsbIqtSg/vqg0J7X4EKMpMIQnMkuJJucDc0ZeSbyhiaWBiZmRsYmFoZmhkjjv
+        c//piUIC6YklqdmpqQWpRTB9TBycUg1MXh2CPy6/N76yW0rA7OwSl819SQdEJaKnd1+Xc/2a
+        uytYbIH1KzPN6R+eMt5xcsj8EXDu7b7Nql9XXDkYtqst9rpT/FURLpFPJ67sDtjw8nS3e2Us
+        x4xZ+/bMyrDdte/11+cPv3TrRO8OvTTn+KKgB/Xx4ucXGBw990Oipo/pfUB335pG/slzL1qc
+        5v7r5xlforZqQ+Vr2TvM0fovbHWVpr5fn1XwWImn32xOWtV8O2P2gjMx9vl+/0Tvr3zEeyLs
+        Q7Th/Y2GK38uS5z8zG/y9RfSStE5t/W+yUVsu75EqUGj3nvexL8Cq876vTHavjfFIFgpM7HZ
+        W3LpX+3DBya1F/as0BOZruI0c0fczw9/xZVYijMSDbWYi4oTASnbrTthBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBIsWRmVeSWpSXmKPExsWy7bCSvG77112JBnOPm1sca3vCbvH633QW
+        i+bF69ks3hyfzmTRtXoni8XWW9IWl3fNYbOYvaSfxeJz7xFGi0XLWpktniw8w2Rxu3EFm8Xp
+        3SUWPw+dZ3Lg89jwaDWrx6ZVnWwe804Geuyfu4bd4+PTWywe7/ddZfPY+b2B3aNvyypGj8+b
+        5AI4o7hsUlJzMstSi/TtErgyuq9NYSs4wFfx6OZl1gbGs9xdjJwcEgImEpu7trN3MXJxCAns
+        ZpQ4MXkrK0RCUmLaxaPMXYwcQLawxOHDxRA1b4FqzqwDqxEW8JLomn2IDcQWEdCRuNz5A2wQ
+        s8BtZommY0+YITqWMUkcWLWDGaSKTUBLYv+LG2Ad/AKKEld/PGYEsXkF7CRe/3kEFmcRUJWY
+        1tMEtkFUIExi55LHTBA1ghInZz5hAbE5geZ82XsYrJdZQF3iz7xLzBC2uMStJ/OZIGx5ie1v
+        5zBPYBSehaR9FpKWWUhaZiFpWcDIsopRMrWgODc9t9iwwDAvtVyvODG3uDQvXS85P3cTIzhy
+        tTR3MG5f9UHvECMTB+MhRgkOZiUR3icRuxKFeFMSK6tSi/Lji0pzUosPMUpzsCiJ817oOhkv
+        JJCeWJKanZpakFoEk2Xi4JRqYLIxX61gsu2MvXvbvtg0gcMfTu7VPeP3TqWmwt6oqEjwf97l
+        hQp9idnslRIl334smlWgP3/fXgGno985qyzzCs78lOR2UJ1cbRjFFr+9RNXe5rPhN8nbZx8Y
+        KE3jnqAnUv5EUkVJvNlD+3rr+Rr31ykWO2I1710VcHn0smHqy/N1V6uO6tjbnnGRcClm2Ffb
+        nVJ/qmDVXvPPT/mnOUc7iqyv2r5tk22Rmq2A0Jv34kI8JxM7nC956VzLbbz/YGJzpv1Sy8sN
+        G+03WE/OTVm6TFzsUupZ/lRz28dPEkr9F0cpfZxieXtPwNavGaKT2uu4f91Ml0nacfcIy6Rt
+        hbtnm3V8jNvbyr/9I+fWzPXPlFiKMxINtZiLihMBlgKyGEsDAAA=
+X-CMS-MailID: 20211216081504epcas1p3ebfe072845fe7cfd4833b2b57199a701
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20211123084357epcas1p14833147710153f9606f14941ac8b0d96
+References: <CGME20211123084357epcas1p14833147710153f9606f14941ac8b0d96@epcas1p1.samsung.com>
+        <20211123083925.GA3277@kili>
+        <562b12ff-e395-c818-787e-7fd6ee6d53fb@samsung.com>
+        <20211216075233.GD1978@kadam>
+        <b4d0c326-3122-c5f9-f376-b122f263d92c@samsung.com>
+        <20211216080558.GE1978@kadam>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gTW9uLCAyMDIxLTEyLTEzIGF0IDE1OjE4ICswMTAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3Jv
-dGU6DQo+IE9uIFRodSwgRGVjIDA5LCAyMDIxIGF0IDExOjE0OjIzQU0gKzA4MDAsIENodW5mZW5n
-IFl1biB3cm90ZToNCj4gPiBUaGVyZSBpcyBhIHNlbGRvbSBpc3N1ZSB0aGF0IHRoZSBjb250cm9s
-bGVyIGFjY2VzcyBpbnZhbGlkIGFkZHJlc3MNCj4gPiBhbmQgdHJpZ2dlciBkZXZhcGMgb3IgZW1p
-bXB1IHZpb2xhdGlvbi4gVGhhdCBpcyBkdWUgdG8gbWVtb3J5DQo+ID4gYWNjZXNzDQo+ID4gaXMg
-b3V0IG9mIG9yZGVyIGFuZCBjYXVzZSBncGQgZGF0YSBpcyBub3QgY29ycmVjdC4NCj4gPiBNYWtl
-IHN1cmUgR1BEIGlzIGZ1bGx5IHdyaXR0ZW4gYmVmb3JlIGdpdmluZyBpdCB0byBIVyBieSBzZXR0
-aW5nDQo+ID4gaXRzDQo+ID4gSFdPLg0KPiA+IA0KPiA+IEZpeGVzOiA0OGUwZDM3MzVhYTUgKCJ1
-c2I6IG10dTM6IHN1cHBvcnRzIG5ldyBRTVUgZm9ybWF0IikNCj4gPiBDYzogc3RhYmxlQHZnZXIu
-a2VybmVsLm9yZw0KPiA+IFJlcG9ydGVkLWJ5OiBFZGRpZSBIdW5nIDxlZGRpZS5odW5nQG1lZGlh
-dGVrLmNvbT4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBt
-ZWRpYXRlay5jb20+DQo+ID4gLS0tDQo+ID4gIGRyaXZlcnMvdXNiL210dTMvbXR1M19xbXUuYyB8
-IDcgKysrKysrLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCAxIGRlbGV0
-aW9uKC0pDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL210dTMvbXR1M19xbXUu
-Yw0KPiA+IGIvZHJpdmVycy91c2IvbXR1My9tdHUzX3FtdS5jDQo+ID4gaW5kZXggM2Y0MTRmOTFi
-NTg5Li4zNGJiNWFjNjdlZmUgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvbXR1My9tdHUz
-X3FtdS5jDQo+ID4gKysrIGIvZHJpdmVycy91c2IvbXR1My9tdHUzX3FtdS5jDQo+ID4gQEAgLTI3
-Myw2ICsyNzMsOCBAQCBzdGF0aWMgaW50IG10dTNfcHJlcGFyZV90eF9ncGQoc3RydWN0IG10dTNf
-ZXANCj4gPiAqbWVwLCBzdHJ1Y3QgbXR1M19yZXF1ZXN0ICptcmVxKQ0KPiA+ICAJCQlncGQtPmR3
-M19pbmZvIHw9IGNwdV90b19sZTMyKEdQRF9FWFRfRkxBR19aTFApOw0KPiA+ICAJfQ0KPiA+ICAN
-Cj4gPiArCS8qIG1ha2Ugc3VyZSBHUEQgaXMgZnVsbHkgd3JpdHRlbiBiZWZvcmUgZ2l2aW5nIGl0
-IHRvIEhXICovDQo+ID4gKwltYigpOw0KPiANCj4gU28gdGhpcyBtZWFucyB5b3UgYXJlIHVzaW5n
-IG1taW8gZm9yIHRoaXMgc3RydWN0dXJlPyANCk5vLCBpdCdzIGEgbm9uY2FjaGVkIG1lbW9yeS4N
-Cg0KPiAgSWYgc28sIHNob3VsZG4ndA0KPiB5b3UgYmUgdXNpbmcgbm9ybWFsIGlvIG1lbW9yeSBy
-ZWFkL3dyaXRlIGNhbGxzIGFzIHdlbGwgYW5kIG5vdCBqdXN0DQo+ICJyYXciIHBvaW50ZXJzIGxp
-a2UgdGhpczoNCj4gDQo+ID4gIAlncGQtPmR3MF9pbmZvIHw9IGNwdV90b19sZTMyKEdQRF9GTEFH
-U19JT0MgfCBHUERfRkxBR1NfSFdPKTsNCj4gDQo+IEFyZSB5b3Ugc3VyZSB0aGlzIGlzIG9rPw0K
-PiANCj4gU3ByaW5rbGluZyBhcm91bmQgbWIoKSBjYWxscyBpcyBhbG1vc3QgbmV2ZXIgdGhlIGNv
-cnJlY3Qgc29sdXRpb24uDQo+IA0KPiBJZiB5b3UgbmVlZCB0byBlbnN1cmUgdGhhdCBhIHdyaXRl
-IHN1Y2NlZWRzLCBzaG91bGRuJ3QgeW91IGRvIGEgcmVhZA0KPiBmcm9tIGl0IGFmdGVyd2FyZD8g
-IE1hbnkgYnVzc2VzIHJlcXVpcmUgdGhpcywgZG9lc24ndCB5b3Vycz8NCkl0IHdvcmtzIGZvciBy
-ZWdpc3RlciBhY2Nlc3MuDQpIZXJlIGlzIG5vbmNhY2hlIG1lbW9yeSBhY2Nlc3MsIGFkZCBtYigp
-LCBqdXN0IHdhbnQgdG8gcHJvaGliaXRlIGJvdGgNCnRoZSBjb21waWxlciBhbmQgQ1BVIGZyb20g
-cmVvcmRlcmluZyByZWFkL3dyaXRlcy4NCg0KPiANCj4gDQo+IA0KPiA+ICANCj4gPiAgCW1yZXEt
-PmdwZCA9IGdwZDsNCj4gPiBAQCAtMzA2LDYgKzMwOCw4IEBAIHN0YXRpYyBpbnQgbXR1M19wcmVw
-YXJlX3J4X2dwZChzdHJ1Y3QgbXR1M19lcA0KPiA+ICptZXAsIHN0cnVjdCBtdHUzX3JlcXVlc3Qg
-Km1yZXEpDQo+ID4gIAlncGQtPm5leHRfZ3BkID0gY3B1X3RvX2xlMzIobG93ZXJfMzJfYml0cyhl
-bnFfZG1hKSk7DQo+ID4gIAlleHRfYWRkciB8PSBHUERfRVhUX05HUChtdHUsIHVwcGVyXzMyX2Jp
-dHMoZW5xX2RtYSkpOw0KPiA+ICAJZ3BkLT5kdzNfaW5mbyA9IGNwdV90b19sZTMyKGV4dF9hZGRy
-KTsNCj4gPiArCS8qIG1ha2Ugc3VyZSBHUEQgaXMgZnVsbHkgd3JpdHRlbiBiZWZvcmUgZ2l2aW5n
-IGl0IHRvIEhXICovDQo+ID4gKwltYigpOw0KPiANCj4gQWdhaW4sIG1iKCk7IGRvZXMgbm90IGVu
-c3VyZSB0aGF0IG1lbW9yeS1tYXBwZWQgaS9vIGFjdHVhbGx5IGhpdHMgdGhlDQo+IEhXLiAgT3Ig
-aWYgaXQgZG9lcyBvbiB5b3VyIHBsYXRmb3JtLCBob3c/DQpNYXliZSB0aGUgY29tbWVudCBpcyBt
-aXNsZWFkaW5nLCBJJ2xsIGNoYW5nZSBpdCwgaGVyZSBqdXN0IHdhbnQgdG8NCnByZXZlbnQgcmVv
-cmRlcmluZyBvZiBjb21waWxlciBhbmQgY3B1Lg0KPiANCj4gbWIoKSBpcyBhIGNvbXBpbGVyIGJh
-cnJpZXIsIG5vdCBhIG1lbW9yeSB3cml0ZSB0byBhIGJ1cw0KPiBiYXJyaWVyLiAgUGxlYXNlDQo+
-IHJlYWQgRG9jdW1lbnRhdGlvbi9tZW1vcnktYmFycmllcnMudHh0IGZvciBtb3JlIGRldGFpbHMu
-DQpPaywgSSdsbCBkby4NCg0KVGhhbmtzIGEgbG90DQoNCj4gDQo+IHRoYW5rcywNCj4gDQo+IGdy
-ZWcgay1oDQo=
+On 12/16/21 5:05 PM, Dan Carpenter wrote:
+> On Thu, Dec 16, 2021 at 05:24:30PM +0900, Chanwoo Choi wrote:
+>> On 12/16/21 4:52 PM, Dan Carpenter wrote:
+>>> On Thu, Dec 16, 2021 at 03:39:46PM +0900, Chanwoo Choi wrote:
+>>>> Hi Dan,
+>>>>
+>>>> First of all,  sorry for late reply.
+>>>>
+>>>> There is one issue. About this issue, I already discussed on patch[1]
+>>>> [1] https://lore.kernel.org/lkml/5BEB63C3.1020504@samsung.com/  
+>>>>
+>>>> extcon_get_extcon_dev() is used for anywhere except for probe step.
+>>>> But EPROBE_DEFER is only used on probe step.
+>>>>
+>>>> So that it is not clear to return EPROBE_DEFER from extcon_get_extcon_dev()
+>>>> because extcon_get_extcon_dev() never know either call it on probe function
+>>>> or not.
+>>>
+>>> Currently extcon_get_extcon_dev() is only called from probe so it's not
+>>> an issue.
+>>
+>> Even if extcon_get_extcon_dev() is used on probe until now,
+>> it is possible to use on anywhere as I commented.
+>>
+>> It is difficult to agree this approach without any other solution.
+>>
+>> Basically, the subsystem core never know either probe time or not.
+>> It means that this issue should be handled in each device driver.
+>>
+> 
+> To be honest, I'm not sure how this differs from other functions which
+> return -EPROBE_DEFER.  How do other functions guarantee they will only
+> be called from probe()?
 
+If it is possible to know extcon_get_extcon_dev() will be only callled on probe,
+it is no problem. But, it is not able to guarantee that extcon_get_extcon_dev()
+is called on probe. Because of this reason, this issue should be handled in each device driver.
+
+-EPROBE_DEFER is only for probe step. If return -EPROBE_DEFER except for probe,
+it is wrong return value.
+
+
+
+> 
+> regards,
+> dan carpenter
+> 
+> 
+> 
+
+
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
