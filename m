@@ -2,132 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4449A47738A
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Dec 2021 14:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F358477414
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Dec 2021 15:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234664AbhLPNtv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Dec 2021 08:49:51 -0500
-Received: from mx1.tq-group.com ([93.104.207.81]:49937 "EHLO mx1.tq-group.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232137AbhLPNtu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 16 Dec 2021 08:49:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1639662590; x=1671198590;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=hlRQz3Z9fR6tP+813FA/LrPEPubPmGGr6KQdW55lG4s=;
-  b=Mh0gK5Ync5z/dUAiGHwSxYHEs69e+e6n7NuzTkxXunhq4hTXQcMktoc7
-   CfeCG6BMsIa6cH/nUoAXhjqpqp3Jox8K/K97GNjABCs16c39sXIby9jsb
-   g+grVWntmHmmwL3amcM+d3QZ9fUzL3z9LVrxc5is48yJkVgTBZraFvzJF
-   6lf7To9uD9XubfKAea9ZIDnVksjavFJas0VoBdYRV480vy0OXro1mdiRn
-   bUolRr0onIg9hk20oSQPUWKxhLEyFaGdAMGLli6p8s6P7yUs159Q2cfUU
-   3tjy/5+N4+ZQExjOzCEpX3v1yywScXhdwglFZDe4sX+V8M+E7zCvZ+uAJ
-   w==;
-X-IronPort-AV: E=Sophos;i="5.88,211,1635199200"; 
-   d="scan'208";a="21099063"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 16 Dec 2021 14:49:49 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 16 Dec 2021 14:49:49 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 16 Dec 2021 14:49:49 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1639662589; x=1671198589;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=hlRQz3Z9fR6tP+813FA/LrPEPubPmGGr6KQdW55lG4s=;
-  b=BKvclGdSHJIuVDqmRzjZbzL02C6ZdUlTUSbN2Fn2tsbRklnii4mQouLQ
-   06OeTgGTR/bpaU61V5hPSiqIh/BukAyCzVWH4V/9XPG01Ne8bR58nhaJK
-   ObjnC4Bcux69IwLM9xnuTEwmQscSmDzdJb+FjXbnx+p1rDonTvCCeov8b
-   HzcmMVnuEKaPcdP3TrvATboHNIre+boHcY5Ig4+VEDqsKEJMlDD3LbVqS
-   k68YKbQsmKSaajpSfCbaXARYD+cwwP4H1zfFatlxaI3Z+wkgOq1LSg6Ps
-   n626FBiZW8LAKIzXvuOKpTHvslK2zAo/MiwlnRDEj2Vyf9XeNs4PQPTvq
-   g==;
-X-IronPort-AV: E=Sophos;i="5.88,211,1635199200"; 
-   d="scan'208";a="21099062"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 16 Dec 2021 14:49:49 +0100
-Received: from steina-w.tq-net.de (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        id S237849AbhLPOMd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Dec 2021 09:12:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237816AbhLPOMM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Dec 2021 09:12:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F0BC061401;
+        Thu, 16 Dec 2021 06:12:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 7C944280065;
-        Thu, 16 Dec 2021 14:49:49 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v3 1/1] usb: dwc3: drd: Add support for usb-conn-gpio based usb-role-switch
-Date:   Thu, 16 Dec 2021 14:49:40 +0100
-Message-Id: <20211216134940.487518-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.25.1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBFB661E17;
+        Thu, 16 Dec 2021 14:12:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A67A8C36AE0;
+        Thu, 16 Dec 2021 14:12:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639663931;
+        bh=CV8c399RTrExelFrEwbgFJTuCfFII5DqSO6iqus7l4I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p0EOzlO6VbOwU7cfmNloVeMYrCu2ylYD4KKycrGkc8FIsOGsa6wIgaH7mJQYiS43d
+         pHdmPLkKH30pxLJitVVjDqkGmOh0DvV5x9q6qG2hV6IU3SR07DAlYAcvDfRDloNCoi
+         4f8YmUnSr/BWjm3ieZFvQbd6p8dzIZibAoKfVLzQJNvSdVc30b85Ps10ILfNRAfJ76
+         uXc+iyrGNMG+M/1WScP87U5rdjAoHaD+4qmdvhN8CltTs2C8G/U/a4CMXJ/16zxcZb
+         7njIMDLdtpK7MIJfmCffLQJO3yHTWoAcCiXLq5T3RfLk5FhmckesdjVV1imdOq5Y5w
+         IbDHeUM8LxYdA==
+Date:   Thu, 16 Dec 2021 22:12:03 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: chipidea: Set the DT node on the child device
+Message-ID: <20211216141203.GA6025@Peter>
+References: <20211215225646.1997946-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215225646.1997946-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-usb-conn-gpio devices are a subnode of the USB interface controller, which
-needs to be populated.
-This allows having a non-type-c connector providing dual-role.
+On 21-12-15 16:56:46, Rob Herring wrote:
+> The ChipIdea glue drivers just copy the glue resources to the "ci_hdrc"
+> child device. Instead, set the child device's DT node pointer to the
+> parent device's node so that platform_get_irq() can find the IRQ
+> resources in the DT. This removes the need for statically populating the
+> IRQ resources from the DT which has been deprecated for some time.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
-Greg, thank you for your review.
+Acked-by: Peter Chen <peter.chen@kernel.org>
 
-This was tested on an imx8mp based board (TQMa8MPxL) which uses devicetree.
-Unfortunately I have no non-imx platform available to test this on.
+> ---
+>  drivers/usb/chipidea/core.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+> index a56f06368d14..5359b2a2e4d2 100644
+> --- a/drivers/usb/chipidea/core.c
+> +++ b/drivers/usb/chipidea/core.c
+> @@ -864,6 +864,7 @@ struct platform_device *ci_hdrc_add_device(struct device *dev,
+>  	}
+>  
+>  	pdev->dev.parent = dev;
+> +	device_set_of_node_from_dev(&pdev->dev, dev);
+>  
+>  	ret = platform_device_add_resources(pdev, res, nres);
+>  	if (ret)
+> -- 
+> 2.32.0
+> 
 
-devm_of_platform_populate() _will_ fail on non-OF builds, so do not call this
-on non-OF enabled platforms.
-AFAICS on OF-platforms this call will only fail upon memory allocation errors.
-If there are no subnodes, this call will not fail. So existing platform should
-work as before.
-
-Changes in v3:
-* Unregister role-switch upon populating OF tree error
-* Do not call devm_of_platform_populate() on non-OF platforms
-
-Changes in v2:
-* Added missing variable declaration
-
- drivers/usb/dwc3/drd.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index d7f76835137f..1dcce7a04b41 100644
---- a/drivers/usb/dwc3/drd.c
-+++ b/drivers/usb/dwc3/drd.c
-@@ -9,6 +9,7 @@
- 
- #include <linux/extcon.h>
- #include <linux/of_graph.h>
-+#include "linux/of_platform.h"
- #include <linux/platform_device.h>
- #include <linux/property.h>
- 
-@@ -559,6 +560,18 @@ static int dwc3_setup_role_switch(struct dwc3 *dwc)
- 	if (IS_ERR(dwc->role_sw))
- 		return PTR_ERR(dwc->role_sw);
- 
-+	if (IS_ENABLED(CONFIG_OF)) {
-+		/* populate connector entry */
-+		int ret = devm_of_platform_populate(dwc->dev);
-+
-+		if (ret) {
-+			usb_role_switch_unregister(dwc->role_sw);
-+			dwc->role_sw = NULL;
-+			dev_err(dwc->dev, "DWC3 platform devices creation failed: %i\n", ret);
-+			return ret;
-+		}
-+	}
-+
- 	dwc3_set_mode(dwc, mode);
- 	return 0;
- }
 -- 
-2.25.1
+
+Thanks,
+Peter Chen
 
