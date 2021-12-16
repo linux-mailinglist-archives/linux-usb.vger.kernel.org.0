@@ -2,38 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB5F47772D
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Dec 2021 17:10:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE50A477732
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Dec 2021 17:10:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239022AbhLPQKO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Dec 2021 11:10:14 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:36335 "HELO
+        id S239015AbhLPQKh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Dec 2021 11:10:37 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:37031 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S239033AbhLPQKL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Dec 2021 11:10:11 -0500
-Received: (qmail 819159 invoked by uid 1000); 16 Dec 2021 11:10:10 -0500
-Date:   Thu, 16 Dec 2021 11:10:10 -0500
+        with SMTP id S239023AbhLPQKh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Dec 2021 11:10:37 -0500
+Received: (qmail 819193 invoked by uid 1000); 16 Dec 2021 11:10:36 -0500
+Date:   Thu, 16 Dec 2021 11:10:36 -0500
 From:   Alan Stern <stern@rowland.harvard.edu>
 To:     Rob Herring <robh@kernel.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: uhci: Use platform_get_irq() to get the interrupt
-Message-ID: <Ybtk4qqN2NYQSZKP@rowland.harvard.edu>
-References: <20211215225203.1991003-1-robh@kernel.org>
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: ohci-s3c2410: Use platform_get_irq() to get the
+ interrupt
+Message-ID: <Ybtk/KaLV6h+U9h5@rowland.harvard.edu>
+References: <20211215225358.1993774-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211215225203.1991003-1-robh@kernel.org>
+In-Reply-To: <20211215225358.1993774-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 04:52:03PM -0600, Rob Herring wrote:
+On Wed, Dec 15, 2021 at 04:53:57PM -0600, Rob Herring wrote:
 > Accessing platform device resources directly has long been deprecated for
 > DT as IRQ resources may not be available at device creation time. Drivers
-> continuing to use static IRQ resources is blocking removing the static setup
+> relying on the static IRQ resources is blocking removing the static setup
 > from the DT core code.
 > 
 > Signed-off-by: Rob Herring <robh@kernel.org>
@@ -41,25 +43,38 @@ On Wed, Dec 15, 2021 at 04:52:03PM -0600, Rob Herring wrote:
 
 Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
->  drivers/usb/host/uhci-platform.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+>  drivers/usb/host/ohci-s3c2410.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/usb/host/uhci-platform.c b/drivers/usb/host/uhci-platform.c
-> index 70dbd95c3f06..b854699e9e4e 100644
-> --- a/drivers/usb/host/uhci-platform.c
-> +++ b/drivers/usb/host/uhci-platform.c
-> @@ -132,7 +132,11 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
->  		goto err_rmr;
+> diff --git a/drivers/usb/host/ohci-s3c2410.c b/drivers/usb/host/ohci-s3c2410.c
+> index 1bec9b585e2d..12264c048601 100644
+> --- a/drivers/usb/host/ohci-s3c2410.c
+> +++ b/drivers/usb/host/ohci-s3c2410.c
+> @@ -356,7 +356,7 @@ static int ohci_hcd_s3c2410_probe(struct platform_device *dev)
+>  {
+>  	struct usb_hcd *hcd = NULL;
+>  	struct s3c2410_hcd_info *info = dev_get_platdata(&dev->dev);
+> -	int retval;
+> +	int retval, irq;
+>  
+>  	s3c2410_usb_set_power(info, 1, 1);
+>  	s3c2410_usb_set_power(info, 2, 1);
+> @@ -388,9 +388,15 @@ static int ohci_hcd_s3c2410_probe(struct platform_device *dev)
+>  		goto err_put;
 >  	}
 >  
-> -	ret = usb_add_hcd(hcd, pdev->resource[1].start, IRQF_SHARED);
-> +	ret = platform_get_irq(pdev, 0);
-> +	if (ret < 0)
-> +		goto err_clk;
+> +	irq = platform_get_irq(dev, 0);
+> +	if (irq < 0) {
+> +		retval = irq;
+> +		goto err_put;
+> +	}
 > +
-> +	ret = usb_add_hcd(hcd, ret, IRQF_SHARED);
->  	if (ret)
->  		goto err_clk;
+>  	s3c2410_start_hc(dev, hcd);
+>  
+> -	retval = usb_add_hcd(hcd, dev->resource[1].start, 0);
+> +	retval = usb_add_hcd(hcd, irq, 0);
+>  	if (retval != 0)
+>  		goto err_ioremap;
 >  
 > -- 
 > 2.32.0
