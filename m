@@ -2,179 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F40476BB0
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Dec 2021 09:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84CA9476C19
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Dec 2021 09:43:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbhLPIPM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Dec 2021 03:15:12 -0500
-Received: from mailout1.samsung.com ([203.254.224.24]:14691 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbhLPIPM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Dec 2021 03:15:12 -0500
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20211216081510epoutp014c520e571abdf975644a81c1751896a9~BLiz8I-HX2267522675epoutp01C
-        for <linux-usb@vger.kernel.org>; Thu, 16 Dec 2021 08:15:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20211216081510epoutp014c520e571abdf975644a81c1751896a9~BLiz8I-HX2267522675epoutp01C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1639642510;
-        bh=LMoxrbyqzv20TkTPVfqQqFh9NWqqZbffNlA4jYTh2xI=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=QXK1YQUzXSwT0C5++zF5V7T1d30lDcmHSp+QHcBq5Jhgpo/gWrn2ht67eWOEm/FT9
-         ptD19txcKzwtemDkTw0PF2upP+RW1IGYep8efIsCY+LK1MIoLmaZ1XS3/SrJFP1wgp
-         r9GvR+c4dIHe3OovoFwwy4PaaEy6OvXYbZkcdkFk=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20211216081509epcas1p1e9ead12c5b6fa306927d4bf12bbed6a6~BLizYNhSK1324013240epcas1p1i;
-        Thu, 16 Dec 2021 08:15:09 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.38.234]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4JF4fc61kVz4x9Q6; Thu, 16 Dec
-        2021 08:15:04 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3F.5F.28648.885FAB16; Thu, 16 Dec 2021 17:15:04 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20211216081504epcas1p3ebfe072845fe7cfd4833b2b57199a701~BLiuqPFcm3128431284epcas1p3S;
-        Thu, 16 Dec 2021 08:15:04 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20211216081504epsmtrp28351954c144e9d5dabafad852521baff~BLiupWzCX0525305253epsmtrp2h;
-        Thu, 16 Dec 2021 08:15:04 +0000 (GMT)
-X-AuditID: b6c32a39-813e6a8000006fe8-49-61baf588bc05
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E7.97.29871.785FAB16; Thu, 16 Dec 2021 17:15:03 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20211216081504epsmtip2961137dfcc552c1938690c9107d01b63~BLiuUkrE02233122331epsmtip29;
-        Thu, 16 Dec 2021 08:15:04 +0000 (GMT)
-Subject: Re: [PATCH v2] extcon: fix extcon_get_extcon_dev() error handling
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <c8d18573-5dc1-4d45-f134-2a1dbb7590b6@samsung.com>
-Date:   Thu, 16 Dec 2021 17:38:04 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S234963AbhLPInV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Dec 2021 03:43:21 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:39004 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234961AbhLPInV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Dec 2021 03:43:21 -0500
+X-UUID: 32a734418edb4157a932bece69bcb5f3-20211216
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=H1udBS3aTyDbK3s3oJIROCs2v4Fm/yjfNUh4OxuNKz4=;
+        b=Op0PfH90YkV6I0red8SHQ7d7qOIksVzSaWcqtILkTf78rahYIbNp/WHTpQSEdF/9Zo1KhuxszklzqVqAqpGHIaOV3tSq1+A2JMhPVvzAq57bs/t8UkciXXKedP4Ht23COIlLhWjYQ22TinZMMIK/4FiWyGS8hBIth+26nsmOmuI=;
+X-UUID: 32a734418edb4157a932bece69bcb5f3-20211216
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1335092833; Thu, 16 Dec 2021 16:43:19 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 16 Dec 2021 16:43:18 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 16 Dec
+ 2021 16:43:18 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 16 Dec 2021 16:43:17 +0800
+Message-ID: <09a2c51d7d71d0b6419b470224466efac4ab6afa.camel@mediatek.com>
+Subject: Re: [PATCH 3/3] usb: mtu3: fix list_head check warning
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        "Yuwen Ng" <yuwen.ng@mediatek.com>
+Date:   Thu, 16 Dec 2021 16:43:19 +0800
+In-Reply-To: <YbdWiYU+LJHWd4wQ@kroah.com>
+References: <20211209031424.17842-1-chunfeng.yun@mediatek.com>
+         <20211209031424.17842-3-chunfeng.yun@mediatek.com>
+         <YbdWiYU+LJHWd4wQ@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-In-Reply-To: <20211216080558.GE1978@kadam>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHJsWRmVeSWpSXmKPExsWy7bCmvm7H112JBpcOa1gca3vCbvH633QW
-        i+bF69ks3hyfzmTRtXoni8XWW9IWl3fNYbOYvaSfxeJz7xFGi0XLWpktniw8w2Rxu3EFm8Xp
-        3SUWPw+dZ3Lg89jwaDWrx6ZVnWwe804Geuyfu4bd4+PTWywe7/ddZfPY+b2B3aNvyypGj8+b
-        5AI4o7JtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4BO
-        V1IoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBboFSfmFpfmpevlpZZYGRoYGJkC
-        FSZkZ3Rfm8JWcICv4tHNy6wNjGe5uxg5OSQETCQu3OhlB7GFBHYwSpxc79vFyAVkf2KUuPbs
-        BSOE841RYv2tOewwHZu7trNDJPYySmz7sIwJwnnPKPHx4UNGkCphAS+JrtmH2EBsEQEdicud
-        P8A6mAWuM0v0nd/NBJJgE9CS2P/iBlgRv4CixNUfj8GaeQXsJF7/eQQWZxFQlZjW08QKYosK
-        hEmc3NYCVSMocXLmExYQmxNozpe9h8HizALiEreezGeCsOUltr+dwwyyWELgCYfE/mvX2CB+
-        cJFYP7sP6h9hiVfHt0DZUhKf3+1lg2hYxijxa3InE4SznlHi5axOZogqY4n9SycDJTiAVmhK
-        rN+lDxFWlNj5ey7UFXwS7772sIKUSAjwSnS0CUGUKEtcfnCXCcKWlFjc3sk2gVFpFpJ/ZiH5
-        YRaSH2YhLFvAyLKKUSy1oDg3PbXYsMAUHt/J+bmbGMEJW8tyB+P0tx/0DjEycTAeYpTgYFYS
-        4X0SsStRiDclsbIqtSg/vqg0J7X4EKMpMIQnMkuJJucDc0ZeSbyhiaWBiZmRsYmFoZmhkjjv
-        c//piUIC6YklqdmpqQWpRTB9TBycUg1MXh2CPy6/N76yW0rA7OwSl819SQdEJaKnd1+Xc/2a
-        uytYbIH1KzPN6R+eMt5xcsj8EXDu7b7Nql9XXDkYtqst9rpT/FURLpFPJ67sDtjw8nS3e2Us
-        x4xZ+/bMyrDdte/11+cPv3TrRO8OvTTn+KKgB/Xx4ucXGBw990Oipo/pfUB335pG/slzL1qc
-        5v7r5xlforZqQ+Vr2TvM0fovbHWVpr5fn1XwWImn32xOWtV8O2P2gjMx9vl+/0Tvr3zEeyLs
-        Q7Th/Y2GK38uS5z8zG/y9RfSStE5t/W+yUVsu75EqUGj3nvexL8Cq876vTHavjfFIFgpM7HZ
-        W3LpX+3DBya1F/as0BOZruI0c0fczw9/xZVYijMSDbWYi4oTASnbrTthBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBIsWRmVeSWpSXmKPExsWy7bCSvG77112JBnOPm1sca3vCbvH633QW
-        i+bF69ks3hyfzmTRtXoni8XWW9IWl3fNYbOYvaSfxeJz7xFGi0XLWpktniw8w2Rxu3EFm8Xp
-        3SUWPw+dZ3Lg89jwaDWrx6ZVnWwe804Geuyfu4bd4+PTWywe7/ddZfPY+b2B3aNvyypGj8+b
-        5AI4o7hsUlJzMstSi/TtErgyuq9NYSs4wFfx6OZl1gbGs9xdjJwcEgImEpu7trN3MXJxCAns
-        ZpQ4MXkrK0RCUmLaxaPMXYwcQLawxOHDxRA1b4FqzqwDqxEW8JLomn2IDcQWEdCRuNz5A2wQ
-        s8BtZommY0+YITqWMUkcWLWDGaSKTUBLYv+LG2Ad/AKKEld/PGYEsXkF7CRe/3kEFmcRUJWY
-        1tMEtkFUIExi55LHTBA1ghInZz5hAbE5geZ82XsYrJdZQF3iz7xLzBC2uMStJ/OZIGx5ie1v
-        5zBPYBSehaR9FpKWWUhaZiFpWcDIsopRMrWgODc9t9iwwDAvtVyvODG3uDQvXS85P3cTIzhy
-        tTR3MG5f9UHvECMTB+MhRgkOZiUR3icRuxKFeFMSK6tSi/Lji0pzUosPMUpzsCiJ817oOhkv
-        JJCeWJKanZpakFoEk2Xi4JRqYLIxX61gsu2MvXvbvtg0gcMfTu7VPeP3TqWmwt6oqEjwf97l
-        hQp9idnslRIl334smlWgP3/fXgGno985qyzzCs78lOR2UJ1cbRjFFr+9RNXe5rPhN8nbZx8Y
-        KE3jnqAnUv5EUkVJvNlD+3rr+Rr31ykWO2I1710VcHn0smHqy/N1V6uO6tjbnnGRcClm2Ffb
-        nVJ/qmDVXvPPT/mnOUc7iqyv2r5tk22Rmq2A0Jv34kI8JxM7nC956VzLbbz/YGJzpv1Sy8sN
-        G+03WE/OTVm6TFzsUupZ/lRz28dPEkr9F0cpfZxieXtPwNavGaKT2uu4f91Ml0nacfcIy6Rt
-        hbtnm3V8jNvbyr/9I+fWzPXPlFiKMxINtZiLihMBlgKyGEsDAAA=
-X-CMS-MailID: 20211216081504epcas1p3ebfe072845fe7cfd4833b2b57199a701
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20211123084357epcas1p14833147710153f9606f14941ac8b0d96
-References: <CGME20211123084357epcas1p14833147710153f9606f14941ac8b0d96@epcas1p1.samsung.com>
-        <20211123083925.GA3277@kili>
-        <562b12ff-e395-c818-787e-7fd6ee6d53fb@samsung.com>
-        <20211216075233.GD1978@kadam>
-        <b4d0c326-3122-c5f9-f376-b122f263d92c@samsung.com>
-        <20211216080558.GE1978@kadam>
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 12/16/21 5:05 PM, Dan Carpenter wrote:
-> On Thu, Dec 16, 2021 at 05:24:30PM +0900, Chanwoo Choi wrote:
->> On 12/16/21 4:52 PM, Dan Carpenter wrote:
->>> On Thu, Dec 16, 2021 at 03:39:46PM +0900, Chanwoo Choi wrote:
->>>> Hi Dan,
->>>>
->>>> First of all,  sorry for late reply.
->>>>
->>>> There is one issue. About this issue, I already discussed on patch[1]
->>>> [1] https://lore.kernel.org/lkml/5BEB63C3.1020504@samsung.com/  
->>>>
->>>> extcon_get_extcon_dev() is used for anywhere except for probe step.
->>>> But EPROBE_DEFER is only used on probe step.
->>>>
->>>> So that it is not clear to return EPROBE_DEFER from extcon_get_extcon_dev()
->>>> because extcon_get_extcon_dev() never know either call it on probe function
->>>> or not.
->>>
->>> Currently extcon_get_extcon_dev() is only called from probe so it's not
->>> an issue.
->>
->> Even if extcon_get_extcon_dev() is used on probe until now,
->> it is possible to use on anywhere as I commented.
->>
->> It is difficult to agree this approach without any other solution.
->>
->> Basically, the subsystem core never know either probe time or not.
->> It means that this issue should be handled in each device driver.
->>
-> 
-> To be honest, I'm not sure how this differs from other functions which
-> return -EPROBE_DEFER.  How do other functions guarantee they will only
-> be called from probe()?
+T24gTW9uLCAyMDIxLTEyLTEzIGF0IDE1OjE5ICswMTAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3Jv
+dGU6DQo+IE9uIFRodSwgRGVjIDA5LCAyMDIxIGF0IDExOjE0OjI0QU0gKzA4MDAsIENodW5mZW5n
+IFl1biB3cm90ZToNCj4gPiBUaGlzIGlzIGNhdXNlZCBieSB1bmluaXRpYWxpemF0aW9uIG9mIGxp
+c3RfaGVhZC4NCj4gPiANCj4gPiBCVUc6IEtBU0FOOiB1c2UtYWZ0ZXItZnJlZSBpbiBfX2xpc3Rf
+ZGVsX2VudHJ5X3ZhbGlkKzB4MzQvMHhlNA0KPiA+IA0KPiA+IENhbGwgdHJhY2U6DQo+ID4gZHVt
+cF9iYWNrdHJhY2UrMHgwLzB4Mjk4DQo+ID4gc2hvd19zdGFjaysweDI0LzB4MzQNCj4gPiBkdW1w
+X3N0YWNrKzB4MTMwLzB4MWE4DQo+ID4gcHJpbnRfYWRkcmVzc19kZXNjcmlwdGlvbisweDg4LzB4
+NTZjDQo+ID4gX19rYXNhbl9yZXBvcnQrMHgxYjgvMHgyYTANCj4gPiBrYXNhbl9yZXBvcnQrMHgx
+NC8weDIwDQo+ID4gX19hc2FuX2xvYWQ4KzB4OWMvMHhhMA0KPiA+IF9fbGlzdF9kZWxfZW50cnlf
+dmFsaWQrMHgzNC8weGU0DQo+ID4gbXR1M19yZXFfY29tcGxldGUrMHg0Yy8weDMwMCBbbXR1M10N
+Cj4gPiBtdHUzX2dhZGdldF9zdG9wKzB4MTY4LzB4NDQ4IFttdHUzXQ0KPiA+IHVzYl9nYWRnZXRf
+dW5yZWdpc3Rlcl9kcml2ZXIrMHgyMDQvMHgzYTANCj4gPiB1bnJlZ2lzdGVyX2dhZGdldF9pdGVt
+KzB4NDQvMHhhNA0KPiA+IA0KPiA+IFJlcG9ydGVkLWJ5OiBZdXdlbiBOZyA8eXV3ZW4ubmdAbWVk
+aWF0ZWsuY29tPg0KPiA+IFNpZ25lZC1vZmYtYnk6IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVu
+QG1lZGlhdGVrLmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVycy91c2IvbXR1My9tdHUzX2dhZGdl
+dC5jIHwgMSArDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQ0KPiANCj4gV2hh
+dCBjb21taXQgZG9lcyB0aGlzIGZpeD8gIFNob3VsZCBpdCBnbyB0byBzdGFibGUga2VybmVscz8N
+CkkgYWRkIGl0IGluIG5leHQgdmVyc2lvbiwgdGhhbmtzDQo+IA0KPiB0aGFua3MsDQo+IA0KPiBn
+cmVnIGstaA0K
 
-If it is possible to know extcon_get_extcon_dev() will be only callled on probe,
-it is no problem. But, it is not able to guarantee that extcon_get_extcon_dev()
-is called on probe. Because of this reason, this issue should be handled in each device driver.
-
--EPROBE_DEFER is only for probe step. If return -EPROBE_DEFER except for probe,
-it is wrong return value.
-
-
-
-> 
-> regards,
-> dan carpenter
-> 
-> 
-> 
-
-
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
