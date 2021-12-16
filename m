@@ -2,139 +2,357 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E716A47690C
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Dec 2021 05:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B11D3476A4B
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Dec 2021 07:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbhLPEb2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Dec 2021 23:31:28 -0500
-Received: from mail-bn8nam12on2068.outbound.protection.outlook.com ([40.107.237.68]:59133
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230222AbhLPEb0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 15 Dec 2021 23:31:26 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bfjLzqCn5sf5+nvdFWKsJ8rMXOXFOAwQuZTvepO8L/1QUQiBZWkcwaD5mlsiZHzFXB+Wx0Gfd0WsAcFxjvnYOZE/kYMHSaWUwnhgaPhVBWe/y2DB2YxsdZKNtN7mcr0TMxmWTIKHFiwzbzZ3EdNswFbMOEjS+jjMrzRAvKBDmfD3Ew0B/WSUr8YNET6pWTw8GZc+1ltRJseCPBT2y2cufS1DwvqlXOTtk8DnFNG9ulfXAllyoSmSopLY0ZRnc71UZ7L6h3V+4llovb9+wNYFJ0fSBVGWzdHUuTRFAk2CLcme3bbsMBJ4KJYNB4FZB2FZ1C3pau1iQDqmoU0IPefx/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xx+s/C8Asdym+kWWGTDnDcMZ0e7QZd+Ft0rtBd836iA=;
- b=iu7ZtJ/B9BCJMqVrJMw7lDBoc7I+z1t1fIy9p+klOVzN6QuBEODYnkUAiKRRmU6MhMaw6JmaWUcHX5Kf4yxr7oBOwDAFDoKMmV+cfPXcC+GqZgd6gd6rWoN0/6UdRpOVU7uHaFNBBHD4Y0RJbotHU6bn1ctEHngL8W2KtitjejHTJ0kKX0eGqBFOewwI1gVCHlBOfy/xXqEIaZLWii9LjO058t0U+FAx5DIatVZx1tbuyJ5ud1rlw8L8ObSuuilsgGxujeqQ6+dPbx+MoVvhraMJobwTZNJr9/F7tBX5RZgw2IStEIRU5ImoHyudfPfaf0UrQ8bQIFrNHvm+9IHEPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xx+s/C8Asdym+kWWGTDnDcMZ0e7QZd+Ft0rtBd836iA=;
- b=luePOb3V19FCxHdIdOKeRWgX9fqT2+N4zAsuWSM/kAuAWXaGfhAq4EvTl6B9kJofu/0aU+MSTZpvSiUFzDXCjLr2r1IutsbR6wBO2d4EuDjHoHjjt8xFUPWwQcVMwejJagqb5F1Vj23xmHryNPqRX6Sg85ASke9yi2pqy/rKZeY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4188.namprd12.prod.outlook.com (2603:10b6:5:215::18)
- by DM6PR12MB4281.namprd12.prod.outlook.com (2603:10b6:5:21e::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.14; Thu, 16 Dec
- 2021 04:31:24 +0000
-Received: from DM6PR12MB4188.namprd12.prod.outlook.com
- ([fe80::76:8f86:a56f:38d0]) by DM6PR12MB4188.namprd12.prod.outlook.com
- ([fe80::76:8f86:a56f:38d0%7]) with mapi id 15.20.4801.014; Thu, 16 Dec 2021
- 04:31:23 +0000
-Message-ID: <abd2400e-f47f-b1b2-2f69-deb1e194313f@amd.com>
-Date:   Thu, 16 Dec 2021 10:01:11 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] usb: xhci: Extend support for runtime power management
- for AMD's Yellow carp.
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211215093216.1839065-1-Nehal-Bakulchandra.shah@amd.com>
- <YbpuZV5qcF04PHt8@kroah.com>
-From:   "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
-In-Reply-To: <YbpuZV5qcF04PHt8@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN1PR01CA0108.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c00::24)
- To DM6PR12MB4188.namprd12.prod.outlook.com (2603:10b6:5:215::18)
+        id S234034AbhLPGRE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Dec 2021 01:17:04 -0500
+Received: from mailout1.samsung.com ([203.254.224.24]:20920 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233788AbhLPGRD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Dec 2021 01:17:03 -0500
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20211216061701epoutp0146ecc750175ff630983250b97c3d6383~BJ7qh1WIf0438804388epoutp01X
+        for <linux-usb@vger.kernel.org>; Thu, 16 Dec 2021 06:17:01 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20211216061701epoutp0146ecc750175ff630983250b97c3d6383~BJ7qh1WIf0438804388epoutp01X
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1639635421;
+        bh=vozwc/DCHfEkzOgKi/yoWyZjpKFFde3C0LlhIOuPKo4=;
+        h=From:Subject:To:Cc:Date:In-Reply-To:References:From;
+        b=pDzNLonZ2hWNy0OkXpvzL+bzIKnuJ5UpqwIpQuwOkMUJczdyJkKWfXynzoBzy2A2R
+         a2YD/aeTidFP6oyIWSOHA6hnli0B/2w72VduvF1H/sw3k6lm3f4qyCyw+Amod2C7A8
+         cCPPiR8ux4sMNmfZ1FGaz1t7I95N7HGWgk7X8HPE=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20211216061701epcas1p298768056c73fd031f78b0168791c15d4~BJ7p6-vJb1573815738epcas1p2-;
+        Thu, 16 Dec 2021 06:17:01 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.38.235]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4JF22G3y7Rz4x9QJ; Thu, 16 Dec
+        2021 06:16:54 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        95.F6.64085.5D9DAB16; Thu, 16 Dec 2021 15:16:53 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20211216061645epcas1p31af8f90a37617fcda7ea6dd0ced0a37e~BJ7bqhIJb2515325153epcas1p3a;
+        Thu, 16 Dec 2021 06:16:45 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20211216061645epsmtrp22bc23d79c6074a7a1666ea7854d8d12f~BJ7bpqVSz0074200742epsmtrp2S;
+        Thu, 16 Dec 2021 06:16:45 +0000 (GMT)
+X-AuditID: b6c32a35-9adff7000000fa55-6d-61bad9d55a3a
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D9.FB.08738.DC9DAB16; Thu, 16 Dec 2021 15:16:45 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20211216061645epsmtip2a861342427123840bb771f000920afbe~BJ7bae5Gp1591415914epsmtip2L;
+        Thu, 16 Dec 2021 06:16:45 +0000 (GMT)
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Subject: Re: [PATCH v2] extcon: fix extcon_get_extcon_dev() error handling
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Organization: Samsung Electronics
+Message-ID: <562b12ff-e395-c818-787e-7fd6ee6d53fb@samsung.com>
+Date:   Thu, 16 Dec 2021 15:39:46 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 01fe5e8a-7a4f-4797-c9d9-08d9c04cea84
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4281:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB42815D6BBA3DF6FF23ADEC5DA0779@DM6PR12MB4281.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bpqXQJIrnrq/nTlF3oELFdrYtPFmO3xT1yVIi8AnjaoFOLPDTyzcintgyfuGY2VHo94m0D8b5PtE8ANu4CuhJYYrkvf9ZMHLgMY8b4YEqBzh2111Adlgy5A344B0x/KChZ5Pwntgw7kV4ex/gNUPqVozvTiTQS/ivbBZXoxEm0v7xQgshhsXtCcU8sDRJW+0CixZTjZlST2S0r4ySLPciCfTcfE7+sWGx5lBYuGVYl0JfOs+0nNd7rEeX4+wyquOjU+P8QqwvBhouwDBAM/wD8TYRkz29Sw9S/g07nLrU5QK0FSq0/gLKj/YQa8tS9r8iu+ABRmoo2XJAj4FDHkeekVo+eWUa0ybgeTIGf5t75UnM0aykKTIttAtrYkh5In29v25g894T4pgZF/EQ3pK9AQfXaD8C6cEIZuLqlFWF7etKFk7WmSYzewjxVHTscs4ANnSsZqoiISeLnAjSMgLGZuznJ3gCRx7Yee7gRhJY/F0xUrJK5YuJoIcQfbew7l85zQKudyUCuA3QB1+Ktdiv+xw2l/GNgjPPisodF7GnModptzPswiNaG+SmlmF6kFKZTPiYTAMAjgTE536kdgeywXQJ/ypSsjj4KbdivCZnf3EbaLjUv0nZ7wxsxA1lakc1sah3lx5rM2FIptwjD4uc4BV/QLVWJTMiW32tkKBJCmHSR/oHOKDI/e7Cc38Suv4HWAuoSt22a3jxEsEhl32RPoaLIu1HhgDtp6YauNY6KA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4188.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(26005)(186003)(83380400001)(66556008)(6506007)(38100700002)(6512007)(6486002)(2616005)(31686004)(66476007)(8936002)(86362001)(66946007)(508600001)(2906002)(5660300002)(4744005)(31696002)(6666004)(6916009)(4326008)(316002)(36756003)(53546011)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NDFOQUd5Y3dsTmNreDV0bXZ6ZW1OdDFZeTVXSUlzc0ZtdEtrQmdjQ09tZ1d1?=
- =?utf-8?B?ZjE4Tlp2R0k4ai9MU2hPcERoRklYNGpQUmZMbXRhYjZGNEI1N2VRdXI0b0V6?=
- =?utf-8?B?dzhaQnZQMGx2MmFncHVhNWdtV0h2c2tWUUZwUEJwaXA4dkw0eVI1M1NGVXhR?=
- =?utf-8?B?d2ozQjMwRTJXVWZxYkFNVy9Jd3o1R3NxcVk1VmI3MkJQaXQxUStvckhnWVJa?=
- =?utf-8?B?dHBUUGNud3BzM3RyNVA0bHVCMEhWTnMvWkh0Z2RtRTZTOEZqT3lUc2FwY01u?=
- =?utf-8?B?V0xpRUpQVE84S2pEeDFMRUQrQjFVVUtrSXVGbEZhUFJpYk1HaFl4aE5Oekg0?=
- =?utf-8?B?QzVzZEZuYS8zQ05ZY1FKcHQ2YXBPUVptMndXVHFqVkJVTmJ2R2hjK0J4Tzdl?=
- =?utf-8?B?YTFlNjRwU2UrS3NteG5hSVo2MGQ1VGUxSWVKLzdiczBMREQyU1RLbkw4UFUr?=
- =?utf-8?B?WTB3N0gxWHVOQ1dJYjczQ1lnRWhyS1RMM1MvY2pYZHNVZVlRd3VlMkZCVGNi?=
- =?utf-8?B?c2lnM0JnYWJIU2w5OUhqUHpPK3EvYTAxWmoxSnJQenhrbHVJd1p1WDBYbHhn?=
- =?utf-8?B?U0k1MnRoS0lyaTRhcDY0UDJoMjJEdGFwYStETnYwK1BzU05TeC9reWdJclFJ?=
- =?utf-8?B?aUI2K0lFSytiY2RUeWxwbDJ0YThCL0Q0TGduZ1kwUFVxUVRWY3VWajVYQWFL?=
- =?utf-8?B?bWI2dHJ4RlhxcHdHUWo2SE1hTlR0bE84NFBrZGtSR3lGc0Irb2tOUktxc1Y0?=
- =?utf-8?B?RlI4ZkJjUjVaUnBlMGhBTksrVTRmbUFhcGJ4MVh6WUpZeUpzT1VCT1B2Wlcx?=
- =?utf-8?B?ZWZaaFhWY1UyblZjb0VUTWpsVDJheEFxQ0l4cTRvV2t5dXdyS3pRMWdMRDNF?=
- =?utf-8?B?VEhkOXBCc216Z3UzSUhVbmJMM1VFRGtBY3VZZzdlRi9sVHZ0NjJyM2diSkUz?=
- =?utf-8?B?TTBCclN0c0poV2Z1MU44U245SE9YUWRRQ3REVnFNSC9QOE0wblZybUVWcHVS?=
- =?utf-8?B?KzJYT2ZabHo5dWE0eUlOZ0RKWXMwRk04RXBhcUlPMiswc0Qzem5kR0dWempj?=
- =?utf-8?B?T3c1WXFzVkVRNkxLdnhIQ0tCZ3M1U2VBLzJpcWYzd0dTL2MxNTVqcTJFN211?=
- =?utf-8?B?N2dwQU1tdldqNHgzUStYeFFUMEN2WUdwY0M2YVo3anJBd0xyVjZiOW16cmZP?=
- =?utf-8?B?a3pVS2JHL01mVUNTZ3hCM0NxMlpiTHNwYTFVd1Nza1BrdGFFWUZuZ0N2ak41?=
- =?utf-8?B?N2kyWjI1RStqU1AwRkE1RktYR2gvK0UzOFBVQmcyTU9FNjdOR0RKUk5Ta1BD?=
- =?utf-8?B?T3BJTVNTaGpzZ2lJbDVPd1JKWW14QjZqT3NHdUFzSGpaMWhVc0hPeWhWNUpa?=
- =?utf-8?B?ajFnejE3NUlEUG13ci9yWUd2SHJycStpTUMvOGdudmpmN2tlRVNaZnFTb1Vl?=
- =?utf-8?B?NHd0NVFCSFU3VkJQU09YVmpWc1VIWlIxREZkSDd4S1FoSml1aHZvVDV4Ulkx?=
- =?utf-8?B?VGtCZGZ5UGVlOWptR3RyaUt1ekhTYTZKK2FZbGkwNTdBUGsrc0ZKcTMwSUh1?=
- =?utf-8?B?R291MmRTMDZGR3FQeDRybDdSQ0IrMlZId2hFTmI2QVhpOUZidHZwdDJDYnhL?=
- =?utf-8?B?U3RZbS9tcHQ3NWpSU2lTVDdySllpTGYyblc5UzBhT0F0MnppS3c5WElJWGR2?=
- =?utf-8?B?QTdIVnBHN2YrUzk3ejY3Wk4rdkJhQVhrSHUxWjlNaDQwZUdHdjVUSmVpNHZC?=
- =?utf-8?B?VnRKaEwwTkhIaE1ycE1GeVRLaGhBYWtVZEFrM1ZlVDJqQkVZckdwU3dBZU5V?=
- =?utf-8?B?bzNEOVp0UGRoRXRSZG13ZTI3bXN4VU50VnJOSGk4TnlUUjZNa1ljNWhjdmlm?=
- =?utf-8?B?MnpBV3dnY0tOUG1lYTBHcU52eGd3U2hMUnViWG5IWUZWNStWNzlHVm9PZm91?=
- =?utf-8?B?VGVmTFpKL0JndGtWMVJLeTBDelV2OTFBdzZIc1B2cTBXMXpNUHBtdG9OdEhL?=
- =?utf-8?B?SDdheHVKTFRUd0E2QmozRHpOem5aeXRUNHR4MGFpU0NsYW52aU1tbmY1UGhH?=
- =?utf-8?B?NHdub2llNlY3UVpQYVpkcTRpb1krTGVQZkplelMzVzM5YkNkZzNjRGhBeVdl?=
- =?utf-8?Q?m0FI=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 01fe5e8a-7a4f-4797-c9d9-08d9c04cea84
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4188.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 04:31:23.8003
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wLnydg4H7WPe5FgG3adWFMYiOCTkKqXLacxUH48FfMk6B1CDH4bTP3ifa45wRt5z
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4281
+In-Reply-To: <20211123083925.GA3277@kili>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHJsWRmVeSWpSXmKPExsWy7bCmru7Vm7sSDaZckrY41vaE3eL1v+ks
+        Fs2L17NZvDk+ncmia/VOFoutt6QtLu+aw2Yxe0k/i8Xn3iOMFouWtTJbPFl4hsniduMKNovT
+        u0ssfh46z+TA57Hh0WpWj02rOtk85p0M9Ng/dw27x8ent1g83u+7yuax83sDu0ffllWMHp83
+        yQVwRmXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gCd
+        rqRQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpMC3QK07MLS7NS9fLSy2xMjQwMDIF
+        KkzIzlh2cT9TwTyfihsz17A3MO6062Lk5JAQMJG49+kLWxcjF4eQwA5GidPTW6GcT4wS2xu2
+        s4JUCQl8ZpRomZAM0zF99QVWiKJdQPGdn5khnPeMEhd+32IBqWIT0JLY/+IGG4gtLOAl0TX7
+        EJgtIlAt0T51LVg3s0AHs8T/fevAVvALKEpc/fGYEcTmFbCTuDbnHTOIzSKgKnHx7BuwoaIC
+        YRInt7VA1QhKnJz5BCzOKaAp8b95MVicWUBc4taT+UwQtrzE9rdzwK6TEHjDIbH1YB8bxA8u
+        Ev2TO5ghbGGJV8e3sEPYUhKf3+1lg2hYxijxa3InE4SznlHi5axOqA5jif1LJwMlOIBWaEqs
+        36UPEVaU2Pl7LtQVfBLvvvawgpRICPBKdLQJQZQoS1x+cJcJwpaUWNzeyTaBUWkWkn9mIflh
+        FpIfZiEsW8DIsopRLLWgODc9tdiwwBAe38n5uZsYwQlby3QH48S3H/QOMTJxMB5ilOBgVhLh
+        fRKxK1GINyWxsiq1KD++qDQntfgQoykwhCcyS4km5wNzRl5JvKGJpYGJmZGxiYWhmaGSOO8L
+        /+mJQgLpiSWp2ampBalFMH1MHJxSDUz9QTmJCz5HxbLN+OOS9PmZpZLKjBytjRcY3wlk/r85
+        73XNUjnphn99uSVTM/9rG+9+96dKhjf14cXTvbxPpoWG5xzwivl+lPXx1N7obd9mOrGfyXXt
+        uzfzVihX0rebcz8uNBZRXs0ne+GlsO0NueWBxspn7nplVp1T6DmrkrrI6k9TWEMRw5pcr1sH
+        /Zj+dixyPBq4vPxByPuzs7MqV0y+3P77dnTbu/9hvrWH6vews3Ls/Zf+Rfdu99PQxS+uHJbm
+        OuqQIS+R8OCffFSo4v/Xj3MmLJ2yUWiD5WMZll6VK4zz3vP66q8RmHVT5d+5uTYbqvhOPJGW
+        8F/i8OlB+0/zMlF+8bMpzYZPrac6RnYosRRnJBpqMRcVJwIAVQmD7WEEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOIsWRmVeSWpSXmKPExsWy7bCSvO7Zm7sSDXafN7Q41vaE3eL1v+ks
+        Fs2L17NZvDk+ncmia/VOFoutt6QtLu+aw2Yxe0k/i8Xn3iOMFouWtTJbPFl4hsniduMKNovT
+        u0ssfh46z+TA57Hh0WpWj02rOtk85p0M9Ng/dw27x8ent1g83u+7yuax83sDu0ffllWMHp83
+        yQVwRnHZpKTmZJalFunbJXBlLLu4n6lgnk/FjZlr2BsYd9p1MXJySAiYSExffYG1i5GLQ0hg
+        B6PEtBl32SESkhLTLh5l7mLkALKFJQ4fLoaoecsoMevvKhaQGjYBLYn9L26wgdjCAl4SXbMP
+        gdkiAtUSy1bNZAJpYBboYpbY9OI+2FAhgRqJmScWMYHY/AKKEld/PGYEsXkF7CSuzXnHDGKz
+        CKhKXDz7BmyBqECYxM4lj5kgagQlTs58AhbnFNCU+N+8GKyXWUBd4s+8S8wQtrjErSfzmSBs
+        eYntb+cwT2AUnoWkfRaSlllIWmYhaVnAyLKKUTK1oDg3PbfYsMAoL7Vcrzgxt7g0L10vOT93
+        EyM4brW0djDuWfVB7xAjEwfjIUYJDmYlEd4nEbsShXhTEiurUovy44tKc1KLDzFKc7AoifNe
+        6DoZLySQnliSmp2aWpBaBJNl4uCUamBKl1s44ZGopcqi04m1Bx9V8V39dUFjzaTep9OFM7fL
+        mGncTV+cGHxhoccq7YbdxsIcjyYdnNx86pBKjvOfbzHue+Yr1h5JfVNd4/tG9FZj6IRfBrce
+        u01ed+KDxE0BLeGDE1WWbZ34Nm1Jb4+UeGj3k+nMr6oPrAlfveoMu6NKJleqbVrJjMe7Ff+1
+        T7NMXh56NMb1/4e429ttjDf9tWsWsmaddcK1e21Gjbzos70n/S8fvXdf/Zpk5rvfsqWbl9rN
+        jdbdn13ZwjhHNXj1npL2jwzP6/hn8M3QuZi5/nUFW6XducQH56ZNebTE19bdfomGc/y/ZZqF
+        B7wcDq1T4ZxttfEth6pp3Mx3XJ8Kqz88VWIpzkg01GIuKk4EAEsuT1lKAwAA
+X-CMS-MailID: 20211216061645epcas1p31af8f90a37617fcda7ea6dd0ced0a37e
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20211123084357epcas1p14833147710153f9606f14941ac8b0d96
+References: <CGME20211123084357epcas1p14833147710153f9606f14941ac8b0d96@epcas1p1.samsung.com>
+        <20211123083925.GA3277@kili>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg
-On 12/16/2021 4:08 AM, Greg KH wrote:
-> On Wed, Dec 15, 2021 at 03:02:16PM +0530, Nehal Bakulchandra Shah wrote:
->> AMD's Yellow Carp platform has few more XHCI controllers,
->> enable the runtime power management support for the same.
->>
->> Signed-off-by: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
->> ---
->>   drivers/usb/host/xhci-pci.c | 6 +++++-
->>   1 file changed, 5 insertions(+), 1 deletion(-)
+Hi Dan,
+
+First of all,  sorry for late reply.
+
+There is one issue. About this issue, I already discussed on patch[1]
+[1] https://lore.kernel.org/lkml/5BEB63C3.1020504@samsung.com/
+
+extcon_get_extcon_dev() is used for anywhere except for probe step.
+But EPROBE_DEFER is only used on probe step.
+
+So that it is not clear to return EPROBE_DEFER from extcon_get_extcon_dev()
+because extcon_get_extcon_dev() never know either call it on probe function
+or not.
+
+
+On 11/23/21 5:43 PM, Dan Carpenter wrote:
+> The extcon_get_extcon_dev() function returns error pointers on error,
+> NULL when it's a -EPROBE_DEFER defer situation, and ERR_PTR(-ENODEV)
+> when the CONFIG_EXTCON option is disabled.  This is very complicated for
+> the callers to handle and a number of them had bugs that would lead to
+> an Oops.
 > 
-> Mathias, I can take this now, no need to add it to your queue.
+> In real life, there are two things which prevented crashes.  First,
+> error pointers would only be returned if there was bug in the caller
+> where they passed a NULL "extcon_name" and none of them do that.
+> Second, only two out of the eight drivers will build when CONFIG_EXTCON
+> is disabled.
 > 
-> thanks,
+> The normal way to write this would be to return -EPROBE_DEFER directly
+> when appropriate and return NULL when CONFIG_EXTCON is disabled.  Then
+> the error handling is simple and just looks like:
 > 
-> greg k-h
+> 	dev->edev = extcon_get_extcon_dev(acpi_dev_name(adev));
+> 	if (IS_ERR(dev->edev))
+> 		return PTR_ERR(dev->edev);
+> 
+> For the two drivers which can build with CONFIG_EXTCON disabled, then
+> extcon_get_extcon_dev() will now return NULL which is not treated as an
+> error and the probe will continue successfully.  Those two drivers are
+> "typec_fusb302" and "max8997-battery".  In the original code, the
+> typec_fusb302 driver had an 800ms hang in tcpm_get_current_limit() but
+> now that function is a no-op.  For the max8997-battery driver everything
+> should continue working as is.
+> 
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+> v2: return NULL when CONFIG_EXTCON is disabled
+> 
+> If we apply this patch, it might be a good idea to send it to -stable
+> so that backported code that relies on handling error pointers does
+> not break silently.
+> 
+>  drivers/extcon/extcon-axp288.c         |    4 ++--
+>  drivers/extcon/extcon.c                |    2 +-
+>  drivers/power/supply/axp288_charger.c  |   17 ++++++++++-------
+>  drivers/power/supply/charger-manager.c |    7 ++-----
+>  drivers/power/supply/max8997_charger.c |   10 +++++-----
+>  drivers/usb/dwc3/drd.c                 |    9 ++-------
+>  drivers/usb/phy/phy-omap-otg.c         |    4 ++--
+>  drivers/usb/typec/tcpm/fusb302.c       |    4 ++--
+>  include/linux/extcon.h                 |    2 +-
+>  9 files changed, 27 insertions(+), 32 deletions(-)
+> 
+> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
+> index e7a9561a826d..a35e99928807 100644
+> --- a/drivers/extcon/extcon.c
+> +++ b/drivers/extcon/extcon.c
+> @@ -876,7 +876,7 @@ struct extcon_dev *extcon_get_extcon_dev(const char *extcon_name)
+>  		if (!strcmp(sd->name, extcon_name))
+>  			goto out;
+>  	}
+> -	sd = NULL;
+> +	sd = ERR_PTR(-EPROBE_DEFER);
+>  out:
+>  	mutex_unlock(&extcon_dev_list_lock);
+>  	return sd;
+> diff --git a/include/linux/extcon.h b/include/linux/extcon.h
+> index 0c19010da77f..685401d94d39 100644
+> --- a/include/linux/extcon.h
+> +++ b/include/linux/extcon.h
+> @@ -296,7 +296,7 @@ static inline void devm_extcon_unregister_notifier_all(struct device *dev,
+>  
+>  static inline struct extcon_dev *extcon_get_extcon_dev(const char *extcon_name)
+>  {
+> -	return ERR_PTR(-ENODEV);
+> +	return NULL;
+>  }
+>  
+>  static inline struct extcon_dev *extcon_find_edev_by_node(struct device_node *node)
+> diff --git a/drivers/extcon/extcon-axp288.c b/drivers/extcon/extcon-axp288.c
+> index 7c6d5857ff25..180be768c215 100644
+> --- a/drivers/extcon/extcon-axp288.c
+> +++ b/drivers/extcon/extcon-axp288.c
+> @@ -394,8 +394,8 @@ static int axp288_extcon_probe(struct platform_device *pdev)
+>  		if (adev) {
+>  			info->id_extcon = extcon_get_extcon_dev(acpi_dev_name(adev));
+>  			put_device(&adev->dev);
+> -			if (!info->id_extcon)
+> -				return -EPROBE_DEFER;
+> +			if (IS_ERR(info->id_extcon))
+> +				return PTR_ERR(info->id_extcon);
+>  
+>  			dev_info(dev, "controlling USB role\n");
+>  		} else {
+> diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
+> index ec41f6cd3f93..4acfeb52a44e 100644
+> --- a/drivers/power/supply/axp288_charger.c
+> +++ b/drivers/power/supply/axp288_charger.c
+> @@ -848,17 +848,20 @@ static int axp288_charger_probe(struct platform_device *pdev)
+>  	info->regmap_irqc = axp20x->regmap_irqc;
+>  
+>  	info->cable.edev = extcon_get_extcon_dev(AXP288_EXTCON_DEV_NAME);
+> -	if (info->cable.edev == NULL) {
+> -		dev_dbg(dev, "%s is not ready, probe deferred\n",
+> -			AXP288_EXTCON_DEV_NAME);
+> -		return -EPROBE_DEFER;
+> +	if (IS_ERR(info->cable.edev)) {
+> +		dev_err_probe(dev, PTR_ERR(info->cable.edev),
+> +			      "extcon_get_extcon_dev(%s) failed\n",
+> +			      AXP288_EXTCON_DEV_NAME);
+> +		return PTR_ERR(info->cable.edev);
+>  	}
+>  
+>  	if (acpi_dev_present(USB_HOST_EXTCON_HID, NULL, -1)) {
+>  		info->otg.cable = extcon_get_extcon_dev(USB_HOST_EXTCON_NAME);
+> -		if (info->otg.cable == NULL) {
+> -			dev_dbg(dev, "EXTCON_USB_HOST is not ready, probe deferred\n");
+> -			return -EPROBE_DEFER;
+> +		if (IS_ERR(info->otg.cable)) {
+> +			dev_err_probe(dev, PTR_ERR(info->otg.cable),
+> +				      "extcon_get_extcon_dev(%s) failed\n",
+> +				      USB_HOST_EXTCON_NAME);
+> +			return PTR_ERR(info->otg.cable);
+>  		}
+>  		dev_info(dev, "Using " USB_HOST_EXTCON_HID " extcon for usb-id\n");
+>  	}
+> diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
+> index d67edb760c94..92db79400a6a 100644
+> --- a/drivers/power/supply/charger-manager.c
+> +++ b/drivers/power/supply/charger-manager.c
+> @@ -985,13 +985,10 @@ static int charger_extcon_init(struct charger_manager *cm,
+>  	cable->nb.notifier_call = charger_extcon_notifier;
+>  
+>  	cable->extcon_dev = extcon_get_extcon_dev(cable->extcon_name);
+> -	if (IS_ERR_OR_NULL(cable->extcon_dev)) {
+> +	if (IS_ERR(cable->extcon_dev)) {
+>  		pr_err("Cannot find extcon_dev for %s (cable: %s)\n",
+>  			cable->extcon_name, cable->name);
+> -		if (cable->extcon_dev == NULL)
+> -			return -EPROBE_DEFER;
+> -		else
+> -			return PTR_ERR(cable->extcon_dev);
+> +		return PTR_ERR(cable->extcon_dev);
+>  	}
+>  
+>  	for (i = 0; i < ARRAY_SIZE(extcon_mapping); i++) {
+> diff --git a/drivers/power/supply/max8997_charger.c b/drivers/power/supply/max8997_charger.c
+> index 25207fe2aa68..634658adf313 100644
+> --- a/drivers/power/supply/max8997_charger.c
+> +++ b/drivers/power/supply/max8997_charger.c
+> @@ -248,13 +248,13 @@ static int max8997_battery_probe(struct platform_device *pdev)
+>  		dev_info(&pdev->dev, "couldn't get charger regulator\n");
+>  	}
+>  	charger->edev = extcon_get_extcon_dev("max8997-muic");
+> -	if (IS_ERR_OR_NULL(charger->edev)) {
+> -		if (!charger->edev)
+> -			return -EPROBE_DEFER;
+> -		dev_info(charger->dev, "couldn't get extcon device\n");
+> +	if (IS_ERR(charger->edev)) {
+> +		dev_err_probe(charger->dev, PTR_ERR(charger->edev),
+> +			      "couldn't get extcon device: max8997-muic\n");
+> +		return PTR_ERR(charger->edev);
+>  	}
+>  
+> -	if (!IS_ERR(charger->reg) && !IS_ERR_OR_NULL(charger->edev)) {
+> +	if (!IS_ERR(charger->reg)) {
+>  		INIT_WORK(&charger->extcon_work, max8997_battery_extcon_evt_worker);
+>  		ret = devm_add_action(&pdev->dev, max8997_battery_extcon_evt_stop_work, charger);
+>  		if (ret) {
+> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+> index d7f76835137f..a490f79131c1 100644
+> --- a/drivers/usb/dwc3/drd.c
+> +++ b/drivers/usb/dwc3/drd.c
+> @@ -454,13 +454,8 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
+>  	 * This device property is for kernel internal use only and
+>  	 * is expected to be set by the glue code.
+>  	 */
+> -	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
+> -		edev = extcon_get_extcon_dev(name);
+> -		if (!edev)
+> -			return ERR_PTR(-EPROBE_DEFER);
+> -
+> -		return edev;
+> -	}
+> +	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0)
+> +		return extcon_get_extcon_dev(name);
+>  
+>  	/*
+>  	 * Try to get an extcon device from the USB PHY controller's "port"
+> diff --git a/drivers/usb/phy/phy-omap-otg.c b/drivers/usb/phy/phy-omap-otg.c
+> index ee0863c6553e..6e6ef8c0bc7e 100644
+> --- a/drivers/usb/phy/phy-omap-otg.c
+> +++ b/drivers/usb/phy/phy-omap-otg.c
+> @@ -95,8 +95,8 @@ static int omap_otg_probe(struct platform_device *pdev)
+>  		return -ENODEV;
+>  
+>  	extcon = extcon_get_extcon_dev(config->extcon);
+> -	if (!extcon)
+> -		return -EPROBE_DEFER;
+> +	if (IS_ERR(extcon))
+> +		return PTR_ERR(extcon);
+>  
+>  	otg_dev = devm_kzalloc(&pdev->dev, sizeof(*otg_dev), GFP_KERNEL);
+>  	if (!otg_dev)
+> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+> index 72f9001b0792..96c55eaf3f80 100644
+> --- a/drivers/usb/typec/tcpm/fusb302.c
+> +++ b/drivers/usb/typec/tcpm/fusb302.c
+> @@ -1708,8 +1708,8 @@ static int fusb302_probe(struct i2c_client *client,
+>  	 */
+>  	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
+>  		chip->extcon = extcon_get_extcon_dev(name);
+> -		if (!chip->extcon)
+> -			return -EPROBE_DEFER;
+> +		if (IS_ERR(chip->extcon))
+> +			return PTR_ERR(chip->extcon);
+>  	}
+>  
+>  	chip->vbus = devm_regulator_get(chip->dev, "vbus");
+> 
+> 
 > 
 
-Thanks
-Nehal
+
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
