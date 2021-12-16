@@ -2,111 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 468CE47706E
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Dec 2021 12:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B8A4770D2
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Dec 2021 12:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbhLPLlA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Dec 2021 06:41:00 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:39940 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229845AbhLPLk7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 16 Dec 2021 06:40:59 -0500
-Received: from [10.180.13.92] (unknown [10.180.13.92])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxHNy8JbthNGwBAA--.3500S2;
-        Thu, 16 Dec 2021 19:40:45 +0800 (CST)
-Subject: Re: [PATCH v1 1/2] HID: usbhid: enable remote wakeup function for
- usbhid device
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiri Kosina <jikos@kernel.org>, benjamin.tissoires@redhat.com,
-        Thinh.Nguyen@synopsys.com, mathias.nyman@linux.intel.com,
-        stern@rowland.harvard.edu, rajatja@google.com,
-        chris.chiu@canonical.com, linux-usb@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhuyinbo@loongson.cn, Thinh.Nguyen@synopsys.com,
-        mathias.nyman@linux.intel.com, stern@rowland.harvard.edu,
-        rajatja@google.com, chris.chiu@canonical.com,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1638956391-20149-1-git-send-email-zhuyinbo@loongson.cn>
- <YbCdTaGSKak1cdSh@kroah.com>
- <cc535d3d-6dcd-e69c-24e7-df54ce63c381@loongson.cn>
- <YbMvyK111M/ZVRJG@kroah.com>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <fd08de9d-ab77-bec0-eb30-31803563ac42@loongson.cn>
-Date:   Thu, 16 Dec 2021 19:40:44 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S233351AbhLPLnb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Dec 2021 06:43:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60544 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231406AbhLPLna (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Dec 2021 06:43:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9797FC061574
+        for <linux-usb@vger.kernel.org>; Thu, 16 Dec 2021 03:43:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FA1161A34
+        for <linux-usb@vger.kernel.org>; Thu, 16 Dec 2021 11:43:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AADF7C36AE3
+        for <linux-usb@vger.kernel.org>; Thu, 16 Dec 2021 11:43:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639655009;
+        bh=Zh4YkBh904XN/q2URRfaM6arEfGVg3J2/IrvT7uN4qA=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=YYBmT2PP89X4/RcXFp4qY+4n+h2lBVbn/WxxPzjPzWuOJTrKvS/T6XcF1GepwHCFq
+         GHgn65vi7WAIEVRblDiEmCGBv6N4Wu3qyoEZw5pwzDIBetZmk61BczBynfNDdxI7RM
+         V2GBa8deiQYRIogynTvOlJ/HJcJ3UhurP3HNpZztW92udqAX9033fnoj7S2yKyyfhq
+         WlZ6+hDloAlCvI63w6/IHErUOxw6rCveIlIRR2TgOmUnj5JJUb02x8Vl3BM3PIoc9x
+         /2ZJIJf0HpzPHJ+JHsZJuSP1LYaDweOCvWDx0mJinwtZzO+LNR9IWyGI0i88vKyLnW
+         7BUdzqWwU/qRw==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 7CBBF60F14; Thu, 16 Dec 2021 11:43:29 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215117] ucsi_acpi: kernel NULL pointer dereference
+Date:   Thu, 16 Dec 2021 11:43:28 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: heikki.krogerus@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc attachments.created
+Message-ID: <bug-215117-208809-mCOoNXIoQj@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215117-208809@https.bugzilla.kernel.org/>
+References: <bug-215117-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <YbMvyK111M/ZVRJG@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxHNy8JbthNGwBAA--.3500S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kw45Xw17Kr4rur17tFyxXwb_yoW8Xr4xp3
-        y8A3Z7Kr4DAr9a9wnavr18Kw1ayr4kZ34fZr18A340k3s0va4SyrZ3KFZ8ua4DXr4fXF15
-        Xw4jgry3Za4rAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9K14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I
-        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
-        xVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
-        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
-        cIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
-        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOmhFUUUUU
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215117
 
+Heikki Krogerus (heikki.krogerus@linux.intel.com) changed:
 
-在 2021/12/10 下午6:45, Greg Kroah-Hartman 写道:
-> On Fri, Dec 10, 2021 at 05:54:33PM +0800, zhuyinbo wrote:
->>
->>
->> 在 2021/12/8 下午7:55, Greg Kroah-Hartman 写道:
->>> On Wed, Dec 08, 2021 at 05:39:50PM +0800, Yinbo Zhu wrote:
->>>> The remote wake-up function is a regular function on usb hid device
->>>> and I think keeping it enabled by default will make usb application
->>>> more convenient. This patch is to enable remote wakeup function for
->>>> usb hid device.
->>>
->>> How many devices did you test this on?
->>>
->>> As Oliver said, this will cause problems, there's a reason no operating
->>> system does this :(
->>>
->>> sorry,
->>>
->>> greg k-h
->> Hi greg,
->>
->> About that oliver said that I had expained, and I add this change was
->> according that usb device whether support remote wakeup and if it support
->> wakeup then to enabled it so I think it should be okay for all hid device.
-> 
-> Again, what devices did you test this on?
-Hi greg k-h
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |heikki.krogerus@linux.intel
+                   |                            |.com
 
-mouse device and keyboard device. in hid code that keyboad was enabled 
-on wakeup node by default.
-> 
-> And look at other operating systems, as I said, there is a reason that
-> no one does this.
-System should be do that. otherwise that lid open event was no make 
-sense.  and you need know the order that after lid open then system will 
-be wakeup then system will accept lid open event by input subsystem .
+--- Comment #5 from Heikki Krogerus (heikki.krogerus@linux.intel.com) ---
+Created attachment 300041
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D300041&action=3Dedit
+fix proposal
 
-in addition, whatever that usb wakeup was disabled in bios by default 
-even though after apply my patch.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Most likely regression from commit 6cbe4b2d5a3f ("usb: typec: ucsi: Check t=
+he
+partner alt modes always if there is PD contract").
 
+Can you guys test the patch I attached?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
