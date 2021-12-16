@@ -2,149 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F10B0476663
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Dec 2021 00:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9994766E9
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Dec 2021 01:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbhLOXQ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Dec 2021 18:16:29 -0500
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:46832 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbhLOXQ1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Dec 2021 18:16:27 -0500
-Received: by mail-ot1-f46.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so26723473oto.13;
-        Wed, 15 Dec 2021 15:16:27 -0800 (PST)
+        id S232319AbhLPAXr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Dec 2021 19:23:47 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:39572
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232303AbhLPAXr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Dec 2021 19:23:47 -0500
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0AE653F1AF
+        for <linux-usb@vger.kernel.org>; Thu, 16 Dec 2021 00:23:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639614223;
+        bh=NXEpqs11wJhxLhr2hGFsp1gTWREU+GIpmQhxyJLCwqQ=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=wDxYX7ksFU7BovcMcNLoLPdzrp8jSTdPdYzZAA8nB3Ah28RkIBQUfsEDEK9GAT0ha
+         5+nW1GqtIfYoGCCcSa1W+5VgGbt5PVtul32UlQFeXqLHHPkZJ0inUskT1EYdzv7l/Z
+         yshDyB/V0eqlN2akcXcP7YyJX5V9fVcK9z8dpDNqIxlNN5LGtA1yBu4EsQ/2WudEFi
+         CW/I6UAPbBwChHcEQpJ9wpl+O06l+8MUXYU3E+ssHP2bpUEftF/FAk7+EC6GFFdw8d
+         c/otahGEruB/RqtDbep7rsQH8ncEPMKG6McN8rKqHnxchiXXLGTg0vthqfpoMfRnKn
+         wSXb0dB5UB+jg==
+Received: by mail-oi1-f199.google.com with SMTP id y21-20020aca4b15000000b002a819a3cd6dso14898719oia.15
+        for <linux-usb@vger.kernel.org>; Wed, 15 Dec 2021 16:23:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+NJojSfoVwMgJb/Ja90KiUetfn1vdOAgMVEPVsedxn4=;
-        b=q97GoWmyAzRaPDgA42DeTcGXaAbrgaabtUfcupEFIQl8do7mvhJeuxGC1Tqii9GT1S
-         RFCX5LLjhjV1hkT5PcBiwvQqnWjaQ6GD1hjwY8jRkAntpUxcdIniCmqUR7ZRCyJX05pt
-         CTo8kvXmqDRKq11R+/v26483Zj1GcuNbkG7MWCIZHOwxhygOULtxkvdh70aCjq6W3lZE
-         HFT4hhQuNE68qLbkFpMmVr0UaH3OfQ/ZHHLSyK6j1rk4/PoNnyw0ZSQqvygsR2sQtxAe
-         l/QATmuwEI49hRfmGWqZQFJzS5V605lERUsywrCG95JAu+54Q0arDNpKRSSP+wBsP+8L
-         pTlQ==
-X-Gm-Message-State: AOAM533GMAneZtImqgVWpuND4V6/563k7qi2AM+j7XmT6HSwCzciUvv2
-        xRe/Pm36pbdZfZ/I+UwMtw==
-X-Google-Smtp-Source: ABdhPJxe1D9MH0CKZ4DycjsHFTIJBOoLIjt6AIVTztF3s4fwJK0Y3vM/K0Wz5DMCsalknmREVSwMng==
-X-Received: by 2002:a05:6830:2707:: with SMTP id j7mr10302445otu.354.1639610186803;
-        Wed, 15 Dec 2021 15:16:26 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id g7sm740166oon.27.2021.12.15.15.16.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 15:16:26 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Matthias Brugger <matthias.bgg@gmail.com>, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paul Cercueil <paul@crapouillou.net>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: [PATCH 2/2] usb: musb: Set the DT node on the child device
-Date:   Wed, 15 Dec 2021 17:07:57 -0600
-Message-Id: <20211215230756.2009115-3-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211215230756.2009115-1-robh@kernel.org>
-References: <20211215230756.2009115-1-robh@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NXEpqs11wJhxLhr2hGFsp1gTWREU+GIpmQhxyJLCwqQ=;
+        b=A1grD6A5bd76BX6/s1eiOAK0ySWq1r0Yp8DIQfY/EEQfJdWQRbHW75htawJx9SQJwb
+         5vSIj7T7dUzHWkVQKKuL9U5Hjx9lRytxPUuK9c8mJCBT54eUrD+Ro+JGRXVIydaZlIyD
+         ZmmW5afEckLuMMRTZcvIDX5ud+vP5zELuZjOpOYvt4zRassGnDsslLC1NP3vLRkk8Ix8
+         VS9plT+CV7+KrpB5LvhiDPx9zDitJoqC4+voZRW8sG1FLVH+ZBFaR1DQRJYNaI79HIt8
+         3CJFvo4MwabEI7ns63LlWWxm6V2CtNlLB+BxwVJfGZwbTjmpl2USruDZ5jiUlyuzat9r
+         1Okg==
+X-Gm-Message-State: AOAM532L+ZIJKkPCMZ24qiZU8urdcvsU0g5/KfqhXh0xx5JQhxcBOx+G
+        AdecACgBAW8RLBKqPuR7ads6gqotCbAy17WN/1kiym5P/c8TCrD0TrdMIDEoricSYVkp+dX6mbd
+        cSTz7qm0yQPPOBb14TdCuHJD4ZWaApI2fquhKAVW+zzYZ4BA05Yve4A==
+X-Received: by 2002:a9d:292a:: with SMTP id d39mr10790971otb.11.1639614221819;
+        Wed, 15 Dec 2021 16:23:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzv/g29ju733vLu9DeNRCfIyC6Jv43aGjLqrwu/CBmKeZ3xs9KlDPgDwcOM9akcjDvZAtedKp4MD0nEvspnCGo=
+X-Received: by 2002:a9d:292a:: with SMTP id d39mr10790957otb.11.1639614221546;
+ Wed, 15 Dec 2021 16:23:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211215120108.336597-1-kai.heng.feng@canonical.com> <YboN+GmeyeoypV1D@rowland.harvard.edu>
+In-Reply-To: <YboN+GmeyeoypV1D@rowland.harvard.edu>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Thu, 16 Dec 2021 08:23:29 +0800
+Message-ID: <CAAd53p5thAHXdmmEn9VV7nrWGu7W6UaEsB7hx7k9WYTBMG2GqQ@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: hub: Add delay for SuperSpeed hub resume to let
+ links transit to U0
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        Bixuan Cui <cuibixuan@huawei.com>,
+        Rajat Jain <rajatja@google.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The musb glue drivers just copy the glue resources to the musb child device.
-Instead, set the musb child device's DT node pointer to the parent device's
-node so that platform_get_irq_byname() can find the resources in the DT.
-This removes the need for statically populating the IRQ resources from the
-DT which has been deprecated for some time.
+On Wed, Dec 15, 2021 at 11:47 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Wed, Dec 15, 2021 at 08:01:06PM +0800, Kai-Heng Feng wrote:
+> > When a new USB device gets plugged to nested hubs, the affected hub,
+> > which connects to usb 2-1.4-port2, doesn't report there's any change,
+> > hence the nested hubs go back to runtime suspend like nothing happened:
+> > [  281.032951] usb usb2: usb wakeup-resume
+> > [  281.032959] usb usb2: usb auto-resume
+> > [  281.032974] hub 2-0:1.0: hub_resume
+> > [  281.033011] usb usb2-port1: status 0263 change 0000
+> > [  281.033077] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
+> > [  281.049797] usb 2-1: usb wakeup-resume
+> > [  281.069800] usb 2-1: Waited 0ms for CONNECT
+> > [  281.069810] usb 2-1: finish resume
+> > [  281.070026] hub 2-1:1.0: hub_resume
+> > [  281.070250] usb 2-1-port4: status 0203 change 0000
+> > [  281.070272] usb usb2-port1: resume, status 0
+> > [  281.070282] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
+> > [  281.089813] usb 2-1.4: usb wakeup-resume
+> > [  281.109792] usb 2-1.4: Waited 0ms for CONNECT
+> > [  281.109801] usb 2-1.4: finish resume
+> > [  281.109991] hub 2-1.4:1.0: hub_resume
+> > [  281.110147] usb 2-1.4-port2: status 0263 change 0000
+> > [  281.110234] usb 2-1-port4: resume, status 0
+> > [  281.110239] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
+> > [  281.110266] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
+> > [  281.110426] hub 2-1.4:1.0: hub_suspend
+> > [  281.110565] usb 2-1.4: usb auto-suspend, wakeup 1
+> > [  281.130998] hub 2-1:1.0: hub_suspend
+> > [  281.137788] usb 2-1: usb auto-suspend, wakeup 1
+> > [  281.142935] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
+> > [  281.177828] usb 2-1: usb wakeup-resume
+> > [  281.197839] usb 2-1: Waited 0ms for CONNECT
+> > [  281.197850] usb 2-1: finish resume
+> > [  281.197984] hub 2-1:1.0: hub_resume
+> > [  281.198203] usb 2-1-port4: status 0203 change 0000
+> > [  281.198228] usb usb2-port1: resume, status 0
+> > [  281.198237] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
+> > [  281.217835] usb 2-1.4: usb wakeup-resume
+> > [  281.237834] usb 2-1.4: Waited 0ms for CONNECT
+> > [  281.237845] usb 2-1.4: finish resume
+> > [  281.237990] hub 2-1.4:1.0: hub_resume
+> > [  281.238067] usb 2-1.4-port2: status 0263 change 0000
+> > [  281.238148] usb 2-1-port4: resume, status 0
+> > [  281.238152] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
+> > [  281.238166] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
+> > [  281.238385] hub 2-1.4:1.0: hub_suspend
+> > [  281.238523] usb 2-1.4: usb auto-suspend, wakeup 1
+> > [  281.258076] hub 2-1:1.0: hub_suspend
+> > [  281.265744] usb 2-1: usb auto-suspend, wakeup 1
+> > [  281.285976] hub 2-0:1.0: hub_suspend
+> > [  281.285988] usb usb2: bus auto-suspend, wakeup 1
+> >
+> > USB 3.2 spec, 9.2.5.4 "Changing Function Suspend State" says that "If
+> > the link is in a non-U0 state, then the device must transition the link
+> > to U0 prior to sending the remote wake message", but the hub only
+> > transits the link to U0 after signaling remote wakeup.
+> >
+> > So be more forgiving and use a 20ms delay to let the link transit to U0
+> > for remote wakeup.
+> >
+> > Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ---
+> > v2:
+> >  - Add a small delay instead of waking up all hubs.
+> >
+> >  drivers/usb/core/hub.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > index 00070a8a65079..576fdf2c9f3c8 100644
+> > --- a/drivers/usb/core/hub.c
+> > +++ b/drivers/usb/core/hub.c
+> > @@ -1110,7 +1110,10 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+> >               } else {
+> >                       hub_power_on(hub, true);
+> >               }
+> > -     }
+> > +     /* Give some time on remote wakeup to let links to transit to U0 */
+> > +     } else if (hub_is_superspeed(hub->hdev))
+> > +             msleep(20);
+>
+> Where did the 20-ms number come from?  Is it mentioned in the spec as
+> the time required for a port to switch from U3 to U0?
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- drivers/usb/musb/am35x.c    | 2 ++
- drivers/usb/musb/da8xx.c    | 2 ++
- drivers/usb/musb/jz4740.c   | 1 +
- drivers/usb/musb/mediatek.c | 2 ++
- drivers/usb/musb/omap2430.c | 1 +
- drivers/usb/musb/ux500.c    | 1 +
- 6 files changed, 9 insertions(+)
+The 20ms is the minimal time the device take to bring link back to U0 reliably.
+The spec mentioned device has to transit the link to U0 before
+signaling remote wakeup.
+So do you think this requires a new quirk?
 
-diff --git a/drivers/usb/musb/am35x.c b/drivers/usb/musb/am35x.c
-index 660641ab1545..bf2c0fa6cb32 100644
---- a/drivers/usb/musb/am35x.c
-+++ b/drivers/usb/musb/am35x.c
-@@ -500,6 +500,8 @@ static int am35x_probe(struct platform_device *pdev)
- 	pinfo.num_res = pdev->num_resources;
- 	pinfo.data = pdata;
- 	pinfo.size_data = sizeof(*pdata);
-+	pinfo.fwnode = of_fwnode_handle(pdev->dev.of_node);
-+	pinfo.of_node_reused = true;
- 
- 	glue->musb = musb = platform_device_register_full(&pinfo);
- 	if (IS_ERR(musb)) {
-diff --git a/drivers/usb/musb/da8xx.c b/drivers/usb/musb/da8xx.c
-index e4e0195131da..fd4ae2dd24e5 100644
---- a/drivers/usb/musb/da8xx.c
-+++ b/drivers/usb/musb/da8xx.c
-@@ -563,6 +563,8 @@ static int da8xx_probe(struct platform_device *pdev)
- 	pinfo.num_res = pdev->num_resources;
- 	pinfo.data = pdata;
- 	pinfo.size_data = sizeof(*pdata);
-+	pinfo.fwnode = of_fwnode_handle(np);
-+	pinfo.of_node_reused = true;
- 
- 	glue->musb = platform_device_register_full(&pinfo);
- 	ret = PTR_ERR_OR_ZERO(glue->musb);
-diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
-index 5b7d576bf6ee..417c30bff9ca 100644
---- a/drivers/usb/musb/jz4740.c
-+++ b/drivers/usb/musb/jz4740.c
-@@ -231,6 +231,7 @@ static int jz4740_probe(struct platform_device *pdev)
- 	musb->dev.parent		= dev;
- 	musb->dev.dma_mask		= &musb->dev.coherent_dma_mask;
- 	musb->dev.coherent_dma_mask	= DMA_BIT_MASK(32);
-+	device_set_of_node_from_dev(&musb->dev, dev);
- 
- 	glue->pdev			= musb;
- 	glue->clk			= clk;
-diff --git a/drivers/usb/musb/mediatek.c b/drivers/usb/musb/mediatek.c
-index f5d97eb84cb5..1aeb34dbe24f 100644
---- a/drivers/usb/musb/mediatek.c
-+++ b/drivers/usb/musb/mediatek.c
-@@ -538,6 +538,8 @@ static int mtk_musb_probe(struct platform_device *pdev)
- 	pinfo.num_res = pdev->num_resources;
- 	pinfo.data = pdata;
- 	pinfo.size_data = sizeof(*pdata);
-+	pinfo.fwnode = of_fwnode_handle(np);
-+	pinfo.of_node_reused = true;
- 
- 	glue->musb_pdev = platform_device_register_full(&pinfo);
- 	if (IS_ERR(glue->musb_pdev)) {
-diff --git a/drivers/usb/musb/omap2430.c b/drivers/usb/musb/omap2430.c
-index d2b7e613eb34..7d4d0713f4f0 100644
---- a/drivers/usb/musb/omap2430.c
-+++ b/drivers/usb/musb/omap2430.c
-@@ -327,6 +327,7 @@ static int omap2430_probe(struct platform_device *pdev)
- 	musb->dev.parent		= &pdev->dev;
- 	musb->dev.dma_mask		= &omap2430_dmamask;
- 	musb->dev.coherent_dma_mask	= omap2430_dmamask;
-+	device_set_of_node_from_dev(&musb->dev, &pdev->dev);
- 
- 	glue->dev			= &pdev->dev;
- 	glue->musb			= musb;
-diff --git a/drivers/usb/musb/ux500.c b/drivers/usb/musb/ux500.c
-index 9bce19b5ffd7..8ea62c344328 100644
---- a/drivers/usb/musb/ux500.c
-+++ b/drivers/usb/musb/ux500.c
-@@ -262,6 +262,7 @@ static int ux500_probe(struct platform_device *pdev)
- 	musb->dev.parent		= &pdev->dev;
- 	musb->dev.dma_mask		= &pdev->dev.coherent_dma_mask;
- 	musb->dev.coherent_dma_mask	= pdev->dev.coherent_dma_mask;
-+	device_set_of_node_from_dev(&musb->dev, &pdev->dev);
- 
- 	glue->dev			= &pdev->dev;
- 	glue->musb			= musb;
--- 
-2.32.0
+Kai-Heng
 
+>
+> Alan Stern
