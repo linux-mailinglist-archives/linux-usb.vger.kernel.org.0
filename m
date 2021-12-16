@@ -2,85 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F5B47706B
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Dec 2021 12:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 468CE47706E
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Dec 2021 12:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbhLPLjH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Dec 2021 06:39:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbhLPLjG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Dec 2021 06:39:06 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F5FC061574
-        for <linux-usb@vger.kernel.org>; Thu, 16 Dec 2021 03:39:05 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id a1so4221273qtx.11
-        for <linux-usb@vger.kernel.org>; Thu, 16 Dec 2021 03:39:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
-        b=k9JHnQTKOseel7ZT37tWZiftRlssrXL9Rg5CKoE/Me2mEH7SmkaB5uJpvYJHLLcGrF
-         HrMMYp3j7aTy/J4sjrPtzu6GwzJAbNxkAw2xJrgPnZ3esF0oLEx2U8XthqLevb3g3Ka5
-         4zJ0wu44xRM+LJ2DBhwNytqgV8/BIMY79kDuaEeDXOMPuDpDikcJU+jFieeH/yVaZILc
-         vzPtVE9vqX86vOGnwXB77zUstSriUZiBXDHl4cYtSK5trBwivhBUKTM+b50T53ZGUV1m
-         3Uie/zep1ADrbbF/C5hmiV6S5Kk+ILpsb005qD/EVDPMD5IN8cOP4yVwN1M/jIlh+0af
-         L3mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
-        b=BDofGK9+Wk+UsyNQVh3JYa81jVpAi+4Ns/uN+kna7s5NMNtt+gQoGF4h371irVHE4f
-         qZfKzkc+78xQzU8jfBRrCy3cURMKyzTzsXMH4eAthY6v0EPcDMo4EZnRK1w4NtSx5OuH
-         19OC2BoJ2P2fJdW450r7GASdC02wtJh5w/S4Hiju58eP6vuycVMJ3GDRNp1UpFl1MYAC
-         eZmYaCubzrKuC45A+ZyalpUs4ihNyEHNFiQBpkjiF+J3KBZVv7smdBeAqFrqtAqhck3R
-         5ebt22siWfxhA2V2+aixNDnv4Maq0Em/hpORIbG/fUhPwW3sRJjz4zrhSC2N2CSc8XLL
-         RQoQ==
-X-Gm-Message-State: AOAM532hILW0C27zVJWeq/xpSFQLV2J9LPA7i6ZfgOtWxuK5mcnFKS4s
-        s6N4tah/o2BCUP1fph97+XRIYf6YVkhcOcW6Ib0=
-X-Google-Smtp-Source: ABdhPJzE7RyDDKTgnQhPX3zAQeu8GUYHpkVmv9RCpH8mfhtNxcdeERFiksbggmyXgGFqiuHdmDkCV/Shwq71+Y98qwk=
-X-Received: by 2002:ac8:7f87:: with SMTP id z7mr16478005qtj.86.1639654744821;
- Thu, 16 Dec 2021 03:39:04 -0800 (PST)
+        id S230405AbhLPLlA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Dec 2021 06:41:00 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:39940 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229845AbhLPLk7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Dec 2021 06:40:59 -0500
+Received: from [10.180.13.92] (unknown [10.180.13.92])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxHNy8JbthNGwBAA--.3500S2;
+        Thu, 16 Dec 2021 19:40:45 +0800 (CST)
+Subject: Re: [PATCH v1 1/2] HID: usbhid: enable remote wakeup function for
+ usbhid device
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Kosina <jikos@kernel.org>, benjamin.tissoires@redhat.com,
+        Thinh.Nguyen@synopsys.com, mathias.nyman@linux.intel.com,
+        stern@rowland.harvard.edu, rajatja@google.com,
+        chris.chiu@canonical.com, linux-usb@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhuyinbo@loongson.cn, Thinh.Nguyen@synopsys.com,
+        mathias.nyman@linux.intel.com, stern@rowland.harvard.edu,
+        rajatja@google.com, chris.chiu@canonical.com,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1638956391-20149-1-git-send-email-zhuyinbo@loongson.cn>
+ <YbCdTaGSKak1cdSh@kroah.com>
+ <cc535d3d-6dcd-e69c-24e7-df54ce63c381@loongson.cn>
+ <YbMvyK111M/ZVRJG@kroah.com>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <fd08de9d-ab77-bec0-eb30-31803563ac42@loongson.cn>
+Date:   Thu, 16 Dec 2021 19:40:44 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Received: by 2002:a05:622a:199c:0:0:0:0 with HTTP; Thu, 16 Dec 2021 03:39:04
- -0800 (PST)
-Reply-To: selviasantiago1@gmail.com
-From:   Selvia Santiago <mariamatinez119@gmail.com>
-Date:   Thu, 16 Dec 2021 11:39:04 +0000
-Message-ID: <CAONDhKPia=V-=6u00RZee6dNXgRxzNC4U2YEYWH00DP8n9DxMA@mail.gmail.com>
-Subject: Urgent
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YbMvyK111M/ZVRJG@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9DxHNy8JbthNGwBAA--.3500S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kw45Xw17Kr4rur17tFyxXwb_yoW8Xr4xp3
+        y8A3Z7Kr4DAr9a9wnavr18Kw1ayr4kZ34fZr18A340k3s0va4SyrZ3KFZ8ua4DXr4fXF15
+        Xw4jgry3Za4rAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9K14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I
+        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
+        xVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
+        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
+        cIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
+        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOmhFUUUUU
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
-Urgent
 
-I am Mrs. Selvia Santiago from Abidjan, Cote D'Ivoire, I am a widow
-suffering from long time illness (Cancer), there is funds I inherited
-from my late loving husband Mr. Santiago Carlos, the sum of (US$2.7
-Million Dollars) which he deposited in bank before his death, I need a
-honest and Faithful person that can use these funds for humanity work.
 
-I took this decision because I don't have any child that will inherit
-this money and I don't want a situation where this money will be used
-in an ungodly way. That is why I am taking this decision, and my
-doctor has confirmed to me that I have less than two weeks to live,
-having known my condition I decided to donate this fund to a charity
-or individual that will utilize this money to assist the poor and the
-needy in accordance to my instructions.
+在 2021/12/10 下午6:45, Greg Kroah-Hartman 写道:
+> On Fri, Dec 10, 2021 at 05:54:33PM +0800, zhuyinbo wrote:
+>>
+>>
+>> 在 2021/12/8 下午7:55, Greg Kroah-Hartman 写道:
+>>> On Wed, Dec 08, 2021 at 05:39:50PM +0800, Yinbo Zhu wrote:
+>>>> The remote wake-up function is a regular function on usb hid device
+>>>> and I think keeping it enabled by default will make usb application
+>>>> more convenient. This patch is to enable remote wakeup function for
+>>>> usb hid device.
+>>>
+>>> How many devices did you test this on?
+>>>
+>>> As Oliver said, this will cause problems, there's a reason no operating
+>>> system does this :(
+>>>
+>>> sorry,
+>>>
+>>> greg k-h
+>> Hi greg,
+>>
+>> About that oliver said that I had expained, and I add this change was
+>> according that usb device whether support remote wakeup and if it support
+>> wakeup then to enabled it so I think it should be okay for all hid device.
+> 
+> Again, what devices did you test this on?
+Hi greg k-h
 
-I want you to use 70% of this funds for orphanages, school, church,
-widows, propagating the word and other humanity works,The remaining
-30% should be yours for your efforts as the new beneficiary.
+mouse device and keyboard device. in hid code that keyboad was enabled 
+on wakeup node by default.
+> 
+> And look at other operating systems, as I said, there is a reason that
+> no one does this.
+System should be do that. otherwise that lid open event was no make 
+sense.  and you need know the order that after lid open then system will 
+be wakeup then system will accept lid open event by input subsystem .
 
-Please if you would be able to use these funds for humanity work
-kindly reply me. As soon as I have received your response, I will give
-you further directives on how you are to go about the claims of the
-said funds.
+in addition, whatever that usb wakeup was disabled in bios by default 
+even though after apply my patch.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Remain blessed.
-Mrs Selvia Santiago.
