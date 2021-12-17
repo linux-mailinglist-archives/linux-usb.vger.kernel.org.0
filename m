@@ -2,93 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A54E47894D
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 11:57:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3997C478959
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 12:00:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235139AbhLQK5r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Dec 2021 05:57:47 -0500
-Received: from guitar.tcltek.co.il ([84.110.109.230]:42678 "EHLO mx.tkos.co.il"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235032AbhLQK5r (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 Dec 2021 05:57:47 -0500
-Received: from tarshish (unknown [10.0.8.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx.tkos.co.il (Postfix) with ESMTPS id 21523440636;
-        Fri, 17 Dec 2021 12:57:42 +0200 (IST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
-        s=default; t=1639738662;
-        bh=nXrybOou6I+bLCeC59H2ijJczueTEn33xckeQ5jyN8g=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=b9O/Dzz2ED2+nsOztjgbYw5H4tiGJSaorV1Sgux7ppPJ4+4XYA+PI+Fbn3kjOjgsE
-         Vpbs9ZaTzNUPtArPSfzmXL0jzMeq5gvs4N3tP16D6A9Lq6lxeJDZqC96w0Lw9NfdxG
-         MSMAMhhy6rgC1/EozbWrHICIKhEzSNbqlll4nkZ4DSXRTlw8ZDOiRZho+2l3DmqVOu
-         iNvbipFgJPJ84b0y2EpG3Wvxa2gW3dj6Tkqjv+zfPq6L6FRu3d5YEYS48lXsENFfhU
-         AzB7OSz8aHW7Czxo3eKQGczVztw4wUJNB5a3zx89XDyD2bZuecVXQXzLDafjJ2unAm
-         EkIlQeNBsJJfQ==
-References: <e7ee9012055a4ba9afcb1ffbbeda25f113f171b6.1638701145.git.baruch@tkos.co.il>
- <YbxfO8MQtWrONKvh@kroah.com>
-User-agent: mu4e 1.6.10; emacs 27.1
-From:   Baruch Siach <baruch@tkos.co.il>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Wesley Cheng <wcheng@codeaurora.org>
-Subject: Re: [PATCH] usb: dwc3: dwc3-qcom: Fix registration when
- tx-fifo-resize exists
-Date:   Fri, 17 Dec 2021 12:55:38 +0200
-In-reply-to: <YbxfO8MQtWrONKvh@kroah.com>
-Message-ID: <87zgozlcrb.fsf@tarshish>
+        id S235186AbhLQLAG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Dec 2021 06:00:06 -0500
+Received: from mga12.intel.com ([192.55.52.136]:26872 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235165AbhLQLAG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 17 Dec 2021 06:00:06 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="219746368"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="219746368"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 03:00:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="662813875"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 17 Dec 2021 03:00:03 -0800
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Dave Hansen <dave.hansen@intel.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+References: <YajkzwmWQua3Kh6A@hirez.programming.kicks-ass.net>
+ <105f35d2-3c53-b550-bfb4-aa340d31128e@linux.intel.com>
+ <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
+ <972a0e28-ad63-9766-88da-02743f80181b@intel.com> <Yao35lElOkwtBYEb@kroah.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: earlyprintk=xdbc seems broken
+Message-ID: <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
+Date:   Fri, 17 Dec 2021 13:01:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <Yao35lElOkwtBYEb@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+On 3.12.2021 17.29, Greg KH wrote:
+> On Fri, Dec 03, 2021 at 07:22:57AM -0800, Dave Hansen wrote:
+>> On 12/3/21 6:31 AM, Mathias Nyman wrote:
+>>>>> Can you please see if you can repro and fix this?
+>>>>>
+>>>>> This all was with current 5.16-rc3 on a tigerlake nuc.
+>>>>>
+>>>>> Also, perhaps you can update the guide on what sort of setup/cables
+>>>>> etc.. you need when either the host or the client is a usb3.1 usb-c only
+>>>>> device.
+>>>>>
+>>>> + Mathias, maybe he still has a USB 3.0 debugging cable.
+>>>>
+>>> Should have at the office, I'll pick it up next week and try it out.
+>>
+>> Is someone at Intel responsible for this thing? get_maintainer.pl
+>> doesn't think so:
+>>
+>>> $ perl scripts/get_maintainer.pl ./drivers/usb/early/xhci-dbc.c
+>>> Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM)
+>>> Mike Rapoport <rppt@kernel.org> (commit_signer:1/1=100%,authored:1/1=100%,added_lines:5/5=100%,removed_lines:5/5=100%)
+>>> Andrew Morton <akpm@linux-foundation.org> (commit_signer:1/1=100%)
+>>> linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
+>>> linux-kernel@vger.kernel.org (open list)
+> 
+> Intel is the only one that has this hardware :(
+> 
+> 
 
-On Fri, Dec 17 2021, Greg Kroah-Hartman wrote:
-> On Sun, Dec 05, 2021 at 12:45:45PM +0200, Baruch Siach wrote:
->> Commit cefdd52fa04 ("usb: dwc3: dwc3-qcom: Enable tx-fifo-resize
->> property by default") added the tx-fifo-resize property. But when this
->> property exists already, of_add_property() fails with -EEXIST, thus
->> breaking core registration. This regresses the IPQ6018 platform that has
->> tx-fifo-resize in its device-tree.
->> 
->> Don't fail when tx-fifo-resize exists.
->> 
->> Fixes: cefdd52fa045 ("usb: dwc3: dwc3-qcom: Enable tx-fifo-resize property by default")
->> Cc: Wesley Cheng <wcheng@codeaurora.org>
->> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->> ---
->>  drivers/usb/dwc3/dwc3-qcom.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->> 
->> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
->> index 9abbd01028c5..bbd8e401a82c 100644
->> --- a/drivers/usb/dwc3/dwc3-qcom.c
->> +++ b/drivers/usb/dwc3/dwc3-qcom.c
->> @@ -667,7 +667,7 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
->>  
->>  	prop->name = "tx-fifo-resize";
->>  	ret = of_add_property(dwc3_np, prop);
->> -	if (ret) {
->> +	if (ret && ret != -EEXIST) {
->>  		dev_err(dev, "unable to add property\n");
->>  		goto node_put;
->>  	}
->
-> This commit does not apply to my tree at all.  What tree/branch did you
-> make it against?
+I can reproduce this.
+Looks like problems started when driver converted to readl_poll_timeout_atomic() in:
 
-This is against v5.16-rc3. As of -rc5 commit 6a97cee39d reverted the
-offending commit. So all is good now.
+796eed4b2342 usb: early: convert to readl_poll_timeout_atomic()
 
-Thanks,
-baruch
+Seems to hang when read_poll_timeout_atomic() calls ktime_* functions.
+Maybe  it's too early for ktime.
 
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+After reverting that patch it works again for me.
+
+-Mathias
