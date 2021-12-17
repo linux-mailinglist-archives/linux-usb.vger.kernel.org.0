@@ -2,75 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF3047870A
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 10:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E13BA47871D
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 10:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234118AbhLQJ1C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Dec 2021 04:27:02 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43744 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbhLQJ06 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 04:26:58 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0883262087;
-        Fri, 17 Dec 2021 09:26:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7184DC36AE1;
-        Fri, 17 Dec 2021 09:26:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639733217;
-        bh=zqzHpp8Szzl4sjlKWRVrr59gMWHk2eD5G2vqdLyXgdk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Ln7WB1yf50VS9jZCxqNGy29wGR3OCUFdQN6pVh3inuu2U1266HsrvNcArQpYeorAv
-         dHs01b9iYjNUKecOotcAjSq+BW7vTCZeKitpZGJhQ1Gk1spAOl5a7hTs1zwVGeaOZX
-         k6C5xkqIsoTofkD9BzTUidazncB2uuRLJ7zYf6R0canbiN2t9tr+1TqbY+4+nWEdDX
-         2aTmNJWdS/pd594eJ0udFFxl5mdl8vb8nkcvA0emUSguXV+Xd3ag91AaEkPZGMbeXJ
-         pcG3qssQOPUtQiv/fMGvtSa06HckyaXQOvq++7eY6Zih6bANQ5AfZs2fLrdUkBlNfj
-         Nwf8CSd0Cm/eg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1my9Vt-00019q-DX; Fri, 17 Dec 2021 10:26:53 +0100
-Date:   Fri, 17 Dec 2021 10:26:53 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB-serial fixes for 5.16-rc6
-Message-ID: <YbxX3akVsGBNa+KH@hovoldconsulting.com>
+        id S234145AbhLQJbr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Dec 2021 04:31:47 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:64456 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232622AbhLQJbq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 04:31:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639733506; x=1671269506;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=AiH35vfVR97qjjvR+EuTMqv5QNgWOX0ByCYMdoaTevk=;
+  b=WfVph1qHrXSkv/zn0Lhy3l7YfA/pZ5c5voih1jWzRqicQENGRrFt/0l/
+   qUmWu4RCJ/zfoIFCSehR0OFpp/82NGinp56PQpVVqulJ+1/+bOhYuoAWo
+   lmGNUTT2A+gzg0+r2qsXbsJqPH6OleD2qdrWwqTSV4blK39xBOOYhOGMx
+   WXdlPqmtR+zzJoDIxbjUu+tCmVbSWNjQOTnMuaC6B/KVrbPcfTerI/aTh
+   E8P4kw+LEoYYdvd0XGFY3VIMySukUPMWhr37Em8RYxKyJuqwTALbyUvMQ
+   M5vCgA3saVYZXxHHcOtcLbXy3vtgaLp04CFSsmRaEUFKdBd2lvAmfZQTr
+   w==;
+IronPort-SDR: tqBhz6WjJ9sd7LE5+/I2awnGMCnbhAx3CKjmBsi3iQo9I5sLdEwA3aY+5jrs8XJE83ngcLlnwO
+ QXmpTqdyeKGX4hHiBWbMf6GEtBmtoPu3Ck5VNFXzduDzJT0wRHPn83+qV+3K/yZ02SEpKHgHsc
+ 8eUpPSkMn/winNoKoaG/+kZOu/mlEWWaNgJ51yhZlFvba+TW4TK3T3nHNPxOu6JkM6XtDlLQ07
+ OTBvNGtqSO84zcIoRetla6lbjebJEzxzfZhOhJRw9jjfUE9UdUw7QykCf45asktnjnOL/Ty5QD
+ UGHy7sOdQkJMbQ1CK/jn5Ci5
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="79895886"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Dec 2021 02:31:44 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 17 Dec 2021 02:31:44 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 17 Dec 2021 02:31:38 -0700
+From:   <conor.dooley@microchip.com>
+To:     <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
+        <robh+dt@kernel.org>, <jassisinghbrar@gmail.com>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <broonie@kernel.org>,
+        <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
+        <u.kleine-koenig@pengutronix.de>, <lee.jones@linaro.org>,
+        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-crypto@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
+CC:     <krzysztof.kozlowski@canonical.com>, <geert@linux-m68k.org>,
+        <bin.meng@windriver.com>, <heiko@sntech.de>,
+        <lewis.hanly@microchip.com>, <conor.dooley@microchip.com>,
+        <daire.mcnamara@microchip.com>, <ivan.griffin@microchip.com>,
+        <atish.patra@wdc.com>
+Subject: [PATCH v2 00/17] Update the Icicle Kit device tree
+Date:   Fri, 17 Dec 2021 09:33:08 +0000
+Message-ID: <20211217093325.30612-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 2585cf9dfaaddf00b069673f27bb3f8530e2039c:
+From: Conor Dooley <conor.dooley@microchip.com>
 
-  Linux 5.16-rc5 (2021-12-12 14:53:01 -0800)
+This series updates the Microchip Icicle Kit device tree by adding a
+host of peripherals, and some updates to the memory map. In addition,
+the device tree has been split into a third part, which contains "soft"
+peripherals that are in the fpga fabric.
 
-are available in the Git repository at:
+Several of the entries are for peripherals that have not get had their
+drivers upstreamed, so in those cases the dt bindings are included where
+appropriate in order to avoid as many "DT compatible string <x> appears
+un-documented" errors as possible.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.16-rc6
+Depends on mpfs clock driver series [1] to provide:
+dt-bindings/clock/microchip,mpfs-clock.h
+and on the other changes to the icicle/mpfs device tree (mmc) that are
+already in linux/riscv/for-next.
 
-for you to fetch changes up to 2b503c8598d1b232e7fc7526bce9326d92331541:
+Also depends on Geert's format changes to interrupt grouping etc [2].
 
-  USB: serial: option: add Telit FN990 compositions (2021-12-14 09:22:06 +0100)
+Additionally, the interrupt-extended warnings on the plic/clint are 
+cleared by [3] & [4], which lore appears to have been very confused about.
 
-----------------------------------------------------------------
-USB-serial fixes for 5.16-rc6
+[1] https://lore.kernel.org/linux-clk/20211216140022.16146-1-conor.dooley@microchip.com/T/
+[2] https://lore.kernel.org/linux-riscv/cover.1639660956.git.geert@linux-m68k.org/T/
+[3] https://patchwork.kernel.org/project/linux-riscv/cover/cover.1639662093.git.geert@linux-m68k.org/
+[4] https://patchwork.kernel.org/project/linux-riscv/cover/cover.1639661878.git.geert@linux-m68k.org/
 
-Here's a fix for a reported problem in the cp210x gpio-registration code
-and some more modem device ids.
+Conor Dooley (16):
+  dt-bindings: soc/microchip: update syscontroller compatibles
+  dt-bindings: soc/microchip: make systemcontroller a mfd
+  mailbox: change mailbox-mpfs compatible string
+  dt-bindings: i2c: add bindings for microchip mpfs i2c
+  dt-bindings: rng: add bindings for microchip mpfs rng
+  dt-bindings: rtc: add bindings for microchip mpfs rtc
+  dt-bindings: soc/microchip: add bindings for mpfs system services
+  dt-bindings: gpio: add bindings for microchip mpfs gpio
+  dt-bindings: spi: add bindings for microchip mpfs spi
+  dt-bindings: usb: add bindings for microchip mpfs musb
+  dt-bindings: pwm: add microchip corePWM binding
+  riscv: dts: microchip: use hart and clk defines for icicle kit
+  riscv: dts: microchip: add fpga fabric section to icicle kit
+  riscv: dts: microchip: refactor icicle kit device tree
+  riscv: dts: microchip: update peripherals in icicle kit device tree
+  MAINTAINERS: update riscv/microchip entry
 
-All have been in linux-next with no reported issues.
+Ivan Griffin (1):
+  dt-bindings: interrupt-controller: create a header for RISC-V
+    interrupts
 
-----------------------------------------------------------------
-Daniele Palmas (1):
-      USB: serial: option: add Telit FN990 compositions
+ .../bindings/gpio/microchip,mpfs-gpio.yaml    |  80 +++++
+ .../bindings/i2c/microchip,mpfs-i2c.yaml      |  54 ++++
+ ...ilbox.yaml => microchip,mpfs-mailbox.yaml} |   6 +-
+ .../bindings/pwm/microchip,corepwm.yaml       |  61 ++++
+ .../bindings/rng/microchip,mpfs-rng.yaml      |  29 ++
+ .../bindings/rtc/microchip,mfps-rtc.yaml      |  63 ++++
+ .../microchip,mpfs-generic-service.yaml       |  33 ++
+ .../microchip,mpfs-sys-controller.yaml        |  62 ++++
+ ...icrochip,polarfire-soc-sys-controller.yaml |  35 ---
+ .../bindings/spi/microchip,mpfs-spi.yaml      |  61 ++++
+ .../bindings/usb/microchip,mpfs-musb.yaml     |  61 ++++
+ MAINTAINERS                                   |   2 +
+ .../dts/microchip/microchip-mpfs-fabric.dtsi  |  13 +
+ .../microchip/microchip-mpfs-icicle-kit.dts   | 111 +++++--
+ .../boot/dts/microchip/microchip-mpfs.dtsi    | 295 ++++++++++++++----
+ drivers/mailbox/mailbox-mpfs.c                |   2 +-
+ .../interrupt-controller/riscv-hart.h         |  19 ++
+ 17 files changed, 872 insertions(+), 115 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
+ create mode 100644 Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
+ rename Documentation/devicetree/bindings/mailbox/{microchip,polarfire-soc-mailbox.yaml => microchip,mpfs-mailbox.yaml} (82%)
+ create mode 100644 Documentation/devicetree/bindings/pwm/microchip,corepwm.yaml
+ create mode 100644 Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-generic-service.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+ delete mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml
+ create mode 100644 arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
+ create mode 100644 include/dt-bindings/interrupt-controller/riscv-hart.h
 
-Johan Hovold (1):
-      USB: serial: cp210x: fix CP2105 GPIO registration
+-- 
+2.33.1
 
- drivers/usb/serial/cp210x.c | 6 ++++--
- drivers/usb/serial/option.c | 8 ++++++++
- 2 files changed, 12 insertions(+), 2 deletions(-)
