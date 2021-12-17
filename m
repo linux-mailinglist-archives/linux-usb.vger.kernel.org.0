@@ -2,94 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 926A14790E1
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 17:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3A14790F7
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 17:06:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238806AbhLQQCe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Dec 2021 11:02:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37286 "EHLO
+        id S238842AbhLQQGt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Dec 2021 11:06:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235191AbhLQQCd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 11:02:33 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B863C061574;
-        Fri, 17 Dec 2021 08:02:33 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id z9-20020a17090a7b8900b001b13558eadaso4475705pjc.4;
-        Fri, 17 Dec 2021 08:02:33 -0800 (PST)
+        with ESMTP id S237733AbhLQQGs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 11:06:48 -0500
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798F5C061746
+        for <linux-usb@vger.kernel.org>; Fri, 17 Dec 2021 08:06:48 -0800 (PST)
+Received: by mail-io1-xd41.google.com with SMTP id z26so3584790iod.10
+        for <linux-usb@vger.kernel.org>; Fri, 17 Dec 2021 08:06:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Gd9e5lJ9Xdrc0uDZFZ9we4a9UNXcjMLY1IV8r6XooqU=;
-        b=P/SaAriho7iCKhklzAF4N3rcbn4BTbLLOyk3nzchMsmBlnbpMzJP/FOTJNjiI86sef
-         T08XFDuGp7bGGrDGN7kWELynyg4wRP/M3xZR4ARCh5oWH7gBo+vzM/pxJ7D/R4nFhl/y
-         G//DWFZ6SI5FgPsRnGqGHtzwgaokBklcycF6NBUmsBwBeVCLEzQccEsreR6Mq5BQQEtz
-         5BbxhzsYuNmyQrxnztH+FwGXlP8JvKwFhJbTBGggTIwsMqITcFN7vWjWy3X+0A/hlIel
-         gcBztKtrVXpdisq6XPqJviDcSM3CsZz6SysItEShUAQf+HJB/dmZkI0x29HqKrcqan4A
-         ECIA==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=U+wvXPwvhucTVlxnfZp7fdTxV1dqI6RrlYLlpej7n+A=;
+        b=YUNyl6X1aOuNX0Zbv5o0SSJroo2f7qXWhGWhymmXexL8bFmeCHewg7/nbSEn3kGaCp
+         Yon0xvhF/EpQv1UH0R+YxczwOCH1+8GDnrtroJvu3Y2w2mbLAKf92Uu4IAoaMAeaVLeS
+         SxsnUxhj8R4S3m4M6+XYsZZeEQnLesRVOUB+IV/PgYYToEuJ/T25xS586YHoOzmauq94
+         Hw3z+fs9z4hfRC2JmjJM7NknDu1YwsS4X3yuo7TnWpCCuFbFCO6tJhwThr9PR+Fvx6La
+         /wnSswEeASWp2HeZTq41dInej/PH7y0QEVZQUyZqkjhnC51VamLvQjZVgKeH7jIpMmk1
+         rNPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Gd9e5lJ9Xdrc0uDZFZ9we4a9UNXcjMLY1IV8r6XooqU=;
-        b=pG43LPfCIRCdWtSYfg//NDxbPOdvxAAYInLSWJVQt+lezSYTIhibmSoLuktk8hRhEx
-         03MO+dDz6AlCET9Y6rNiiBm6EA+jtmOHNZbQUGoxzidAPHLIc7kZziGKZuYxjoy3rszv
-         6/zl2x3J5ws2M3kel9HoIDQGRekq/9WAcSuAMss8GotMlJ8h7B3R9ddHpuCTL3EaXIP3
-         ITWmfhNvY6hd4+L8CRExM8/6OWk8KsiSdmgxLqMlA/LkpK4uPc4PfeHoVlZamG5dzeWd
-         +dL2aNtQt+b1ceCJWlXeTfjPFHe83X31F1Locl+l+qdhESrWLIXXGhjDHPIBnDQlJpGe
-         61Nw==
-X-Gm-Message-State: AOAM5310opaz1yRGS5Y8fEtFOx94yWyWeBMpP9pgPQpuQsqSPU0DfiVJ
-        9aK6s9M+4XDnPdBiKXYm6Ro=
-X-Google-Smtp-Source: ABdhPJz+DvgJl6fTwktZZBFCFPYBoNTGmMphKjTjgzXookL36RCV9ukcFuP5K0oNcQ1NRbvXr50XDw==
-X-Received: by 2002:a17:902:6b47:b0:142:82e1:6cf5 with SMTP id g7-20020a1709026b4700b0014282e16cf5mr4125468plt.28.1639756952578;
-        Fri, 17 Dec 2021 08:02:32 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id f21sm10691482pfc.85.2021.12.17.08.02.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 08:02:31 -0800 (PST)
-Message-ID: <23798061-647f-85fd-8e8e-fe50db09599e@gmail.com>
-Date:   Fri, 17 Dec 2021 08:02:27 -0800
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=U+wvXPwvhucTVlxnfZp7fdTxV1dqI6RrlYLlpej7n+A=;
+        b=Zyf4RJF8SjqEvfhfSefNJA50ekF2lZZcz9Mpusnt8sqKcyPQm+slW8PleWU/typbnC
+         106b3y6js40xM6j36ONcAh8IK2Txt+//BZVukv6pBscG1Omdf//ToWIyBUSzDnAiodJS
+         0+O45hrQBQP28F0CTy2jO+JCBkBVMCLBiKliU0FNQu+vnDE/2Tf6B7c8WHem3xjtHDmg
+         DukmD84rmx0XpajXwwOEgsXBoIJ0olscAQrMmFe88seGP/LxN3PIWCPTgqxuLbKGBBRZ
+         lyJsBeyh6HgV9UFc410fzU7G9Rd7YdeAan6AfOUgTPIB5WRSKbPcxKkN28Nk6D+7FwuY
+         SXFQ==
+X-Gm-Message-State: AOAM533mRxOnPHm15YAamn1MMI3b4MKlRPpfBEJviKmQL76NvYhhtH5t
+        b2Grn3VY64oz1oTBTWlKY9qZ+dNnarm9g738bkM=
+X-Google-Smtp-Source: ABdhPJwC2IjTLvVz1uHzGQnUbIInTQPb0xl8fiqsDI0S0ktdEOwbBVR0EWxAEzMHFUxd/w2kVL0WFA6l63VUM0bpwFc=
+X-Received: by 2002:a5e:c645:: with SMTP id s5mr1966693ioo.154.1639757207899;
+ Fri, 17 Dec 2021 08:06:47 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v4 3/6] ARM: dts: NSP: Rename SATA unit name
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>, devicetree@vger.kernel.org
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
-References: <20211217042001.479577-1-f.fainelli@gmail.com>
- <20211217042001.479577-4-f.fainelli@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20211217042001.479577-4-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a5e:c915:0:0:0:0:0 with HTTP; Fri, 17 Dec 2021 08:06:47
+ -0800 (PST)
+Reply-To: mauhin13@gmail.com
+From:   Maureen Hinckley <josephinmnyinge70@gmail.com>
+Date:   Fri, 17 Dec 2021 19:06:47 +0300
+Message-ID: <CAEH2Oo=6bnNwbVkjrKBG99wik6g3ZX8sjiT43mYL-pSy7uQZhg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+--=20
+Hello,
 
+I am Maureen Hinckley and my foundation is donating ($2.2 Million.
+Dollars) to you. Contact us via my email at (mauhin13@gmail.com) for
+further details.
 
-On 12/16/2021 8:19 PM, Florian Fainelli wrote:
-> Rename the SATA controller unit name from ahci to sata in preparation
-> for adding the Broadcom SATA3 controller YAML binding which will bring
-> validation.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-
-Applied to devicetree/next!
--- 
-Florian
+Best Regards,
+Mrs. Maureen Hinckley,
+Copyright =C2=A92021 The Maureen Hinckley Foundation All Rights Reserved.
