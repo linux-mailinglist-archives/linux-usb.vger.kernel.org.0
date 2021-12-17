@@ -2,45 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 154824781F4
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 02:10:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 236704781F6
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 02:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbhLQBKh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Dec 2021 20:10:37 -0500
+        id S231720AbhLQBKo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Dec 2021 20:10:44 -0500
 Received: from mga09.intel.com ([134.134.136.24]:64461 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231668AbhLQBKg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 16 Dec 2021 20:10:36 -0500
+        id S231689AbhLQBKj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Dec 2021 20:10:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639703436; x=1671239436;
+  t=1639703439; x=1671239439;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=+B/Pjk3rHioXV9UWFFc3k1vyEULDgaX2ibGBMc5Cf/c=;
-  b=gc6AXL9OYzRA7mcYksqNnU+W9d9gWtSvSNSI4IDPPVojAM3hhzLH+x3x
-   gVa/ZDjn5hDWvVD3yKreI1wsW88ux3XpwVwcbMCwbt5AFYlDCQsHetjtU
-   5StaR3gGqk8R37hZgyDPmhS9i6Gkf4obMT5dNxRm3Jy/kFCbnX2D5cewu
-   GYZAC9vAbK1G9NKP5GYokdippeQhghVTsmKcbvXPy80rF9j+m1BXK1mdW
-   bU1t+w0nOSpeW37KnLUJwV/9RLYZpcwUIN1Qfh2hlrpqGIBJ4TCSjlHDo
-   iz8t4zU8Sg8lHQ8TrnP1nBrvxNL+jjsv7+ZhQLTWxgvgS9QoThzYisuQL
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="239460895"
+  bh=Ph6anMJDejJhvDxMBukwdoJ2+YMCial6FgA6S9PLhis=;
+  b=TXFvIPYrBd1uAMsDxywDdbWxpXzUWFF299QcatdpX2kuTfKzOqvHDO43
+   s35XWLT6K56FCXrKHwK50ey0/IF/Z8hu9AsEcwwj5NbZrpnP8hWoKq756
+   qu0sBZq0oCsQRY0iDTumPHO39a/sLODaR/Ld8n/XXsaeRmi+2Gdbv4iYr
+   XLMwWDwgWj25BS/0jqO+xg/fm6qHCYzgzuIikF4cp0SUJ68ka6SgoWh2l
+   nfxz1qh6pD42zLw4FaLGC4qRcJqI9gfrOj42CNfmwbhMh8wt+u91hZVfL
+   N8CDszaHkLC7Cnj0bzAzKLKElxnlgv+aMkvbS5aqfUvR3brYyyp2YNQLC
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="239460919"
 X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
-   d="scan'208";a="239460895"
+   d="scan'208";a="239460919"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 17:10:25 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 17:10:28 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
-   d="scan'208";a="605733749"
+   d="scan'208";a="605733771"
 Received: from ccdjpclinux26.jer.intel.com ([10.12.48.253])
-  by FMSMGA003.fm.intel.com with ESMTP; 16 Dec 2021 17:10:23 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Dec 2021 17:10:25 -0800
 From:   Gil Fine <gil.fine@intel.com>
 To:     andreas.noever@gmail.com, michael.jamet@intel.com,
         mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
 Cc:     gil.fine@intel.com, linux-usb@vger.kernel.org, lukas@wunner.de
-Subject: [PATCH v2 5/7] thunderbolt: Rename Intel VSC capability
-Date:   Fri, 17 Dec 2021 03:16:42 +0200
-Message-Id: <20211217011644.21634-6-gil.fine@intel.com>
+Subject: [PATCH v2 6/7] thunderbolt: Enable CL0s for Titan Ridge device
+Date:   Fri, 17 Dec 2021 03:16:43 +0200
+Message-Id: <20211217011644.21634-7-gil.fine@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211217011644.21634-1-gil.fine@intel.com>
 References: <20211217011644.21634-1-gil.fine@intel.com>
@@ -48,27 +48,523 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Rename the VSC capability: TB_VSE_CAP_IECS to TB_VSE_CAP_CP_LP to follow the
-Intel devices namings as appear in the datasheet.
-This capability is used for controlling CLx (Low Power states of the link).
+In this patch we add enabling of CL0s - low power state of the link
+for Titan Ridge device.
+Low power states (called collectively CLx) are used to reduce
+transmitter and receiver power when a high-speed lane is idle.
+For now, we add support only for first low power state - CL0s.
+We enable it, if both sides of the link support it,
+and only for the first hop router.
+(i.e. the first device that connected to the host router).
+That is the most common use-case, that is intended for
+better thermal management, and so helps to improve performance.
 
 Signed-off-by: Gil Fine <gil.fine@intel.com>
 ---
- drivers/thunderbolt/tb_regs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thunderbolt/lc.c      |  27 +++++
+ drivers/thunderbolt/switch.c  | 194 +++++++++++++++++++++++++++++++++-
+ drivers/thunderbolt/tb.c      |   7 ++
+ drivers/thunderbolt/tb.h      |   7 ++
+ drivers/thunderbolt/tb_regs.h |  40 ++++++-
+ drivers/thunderbolt/tmu.c     |  68 +++++++++++-
+ 6 files changed, 336 insertions(+), 7 deletions(-)
 
+diff --git a/drivers/thunderbolt/lc.c b/drivers/thunderbolt/lc.c
+index c178f0d7beab..29ead7d75d9c 100644
+--- a/drivers/thunderbolt/lc.c
++++ b/drivers/thunderbolt/lc.c
+@@ -508,3 +508,30 @@ int tb_lc_force_power(struct tb_switch *sw)
+ 
+ 	return tb_sw_write(sw, &in, TB_CFG_SWITCH, TB_LC_POWER, 1);
+ }
++
++/**
++ * tb_lc_clx_supported() - Check whether CLx is supported by the link
++ * @sw: Port to check
++ *
++ * TB_LC_LINK_ATTR_CPS bit reflects if the link supports CLx including
++ * active cables (if connected on the link).
++ */
++bool tb_lc_clx_supported(struct tb_port *port)
++{
++	struct tb_switch *sw = port->sw;
++	int cap, ret;
++	u32 val;
++
++	if (!tb_switch_is_titan_ridge(sw))
++		return false;
++
++	cap = find_port_lc_cap(port);
++	if (cap < 0)
++		return false;
++
++	ret = tb_sw_read(sw, &val, TB_CFG_SWITCH, cap + TB_LC_LINK_ATTR, 1);
++	if (ret)
++		return false;
++
++	return !!(val & TB_LC_LINK_ATTR_CPS);
++}
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index 278f891e44e0..cd6d16417a80 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -2202,6 +2202,10 @@ struct tb_switch *tb_switch_alloc(struct tb *tb, struct device *parent,
+ 	if (ret > 0)
+ 		sw->cap_lc = ret;
+ 
++	ret = tb_switch_find_vse_cap(sw, TB_VSE_CAP_CP_LP);
++	if (ret > 0)
++		sw->cap_lp = ret;
++
+ 	/* Root switch is always authorized */
+ 	if (!route)
+ 		sw->authorized = true;
+@@ -3008,6 +3012,14 @@ void tb_switch_suspend(struct tb_switch *sw, bool runtime)
+ 
+ 	tb_sw_dbg(sw, "suspending switch\n");
+ 
++	/*
++	 * Actually shall be done only for Titan Ridge,
++	 * but for simplicity can be done for USB4 device too
++	 * as CLx is re-enabled at resume.
++	 */
++	if (tb_switch_disable_clx(sw, TB_CL0S))
++		tb_sw_warn(sw, "failed to disable CLx on upstream port\n");
++
+ 	err = tb_plug_events_active(sw, false);
+ 	if (err)
+ 		return;
+@@ -3326,8 +3338,12 @@ static bool tb_port_clx_supported(struct tb_port *port, enum tb_clx clx)
+ 	if (port->xdomain)
+ 		return false;
+ 
+-	if (!usb4_port_clx_supported(port))
++	if (tb_switch_is_usb4(port->sw) && !usb4_port_clx_supported(port)) {
++		return false;
++	} else if (tb_switch_is_titan_ridge(port->sw) &&
++		   !tb_lc_clx_supported(port)) {
+ 		return false;
++	}
+ 
+ 	switch (clx) {
+ 	case TB_CL0S:
+@@ -3393,7 +3409,7 @@ static int tb_switch_enable_cl0s(struct tb_switch *sw)
+ 	struct tb_port *up, *down;
+ 	int ret;
+ 
+-	if (!tb_switch_is_usb4(sw))
++	if (!tb_switch_clx_supported(sw))
+ 		return 0;
+ 
+ 	/*
+@@ -3434,6 +3450,13 @@ static int tb_switch_enable_cl0s(struct tb_switch *sw)
+ 		return ret;
+ 	}
+ 
++	ret = tb_port_titan_ridge_clx_objection_mask(sw);
++	if (ret) {
++		tb_port_cl0s_disable(up);
++		tb_port_cl0s_disable(down);
++		return ret;
++	}
++
+ 	sw->clx = TB_CL0S;
+ 
+ 	tb_sw_dbg(sw, "enabled CL0s on upstream port\n");
+@@ -3479,7 +3502,7 @@ static int tb_switch_disable_cl0s(struct tb_switch *sw)
+ 	struct tb_port *up, *down;
+ 	int ret;
+ 
+-	if (!tb_switch_is_usb4(sw))
++	if (!tb_switch_clx_supported(sw))
+ 		return 0;
+ 
+ 	/*
+@@ -3550,3 +3573,168 @@ bool tb_switch_is_cl0s_enabled(struct tb_switch *sw)
+ {
+ 	return sw->clx == TB_CL0S;
+ }
++
++/**
++ * tb_switch_clx_supported() - Is CLx supported on this type of switch
++ *
++ * @sw: The switch to check CLx support for
++ */
++bool tb_switch_clx_supported(struct tb_switch *sw)
++{
++	if (tb_switch_is_usb4(sw) || tb_switch_is_titan_ridge(sw))
++		return true;
++	return false;
++}
++
++/**
++ * tb_port_titan_ridge_clx_objection_mask() - Mask CLx objections for a switch
++ * @sw: Switch to mask objections for
++ *
++ * Mask the objections coming from the second depth routers in order
++ * to stop these objections from interfering with the CL states of the first
++ * depth link.
++ */
++int tb_port_titan_ridge_clx_objection_mask(struct tb_switch *sw)
++{
++	int up_port = sw->config.upstream_port_number;
++	u32 offset, val[2], mask_obj, unmask_obj;
++	int ret, i;
++
++	if (!tb_switch_is_titan_ridge(sw))
++		return 0;
++
++	if (!tb_route(sw))
++		return 0;
++
++	/*
++	 * In Titan Ridge there are only 2 dual-lane Thunderbolt ports:
++	 * Port A consists of lane adapters 1,2 and
++	 * Port B consists of lane adapters 3,4
++	 * If upstream port is A, (lanes are 1,2), we mask objections from
++	 * port B (lanes 3,4) and unmask objections from Port A and vice-versa.
++	 */
++	if (up_port == 1) {
++		mask_obj = TB_LOW_PWR_C0_PORT_B_MASK;
++		unmask_obj = TB_LOW_PWR_C1_PORT_A_MASK;
++		offset = TB_LOW_PWR_C1_CL1;
++	} else {
++		mask_obj = TB_LOW_PWR_C1_PORT_A_MASK;
++		unmask_obj = TB_LOW_PWR_C0_PORT_B_MASK;
++		offset = TB_LOW_PWR_C3_CL1;
++	}
++
++	ret = tb_sw_read(sw, &val, TB_CFG_SWITCH,
++			 sw->cap_lp + offset, ARRAY_SIZE(val));
++	if (ret)
++		return ret;
++
++	for (i = 0; i < ARRAY_SIZE(val); i++) {
++		val[i] |= mask_obj;
++		val[i] &= ~unmask_obj;
++	}
++
++	return tb_sw_write(sw, &val, TB_CFG_SWITCH,
++			   sw->cap_lp + offset, ARRAY_SIZE(val));
++}
++
++static unsigned int tb_switch_titan_ridge_pcie_bridge_mask(unsigned int br)
++{
++
++	return BIT(br + TB_PLUG_EVENTS_PCIE_CMD_BR_SHIFT);
++}
++
++/*
++ * Can be used for read/write a specified PCIe bridge for any
++ * Thunderbolt 3 device. For now used only for Titan Ridge.
++ */
++static int tb_switch_titan_ridge_access_pcie_bridge(struct tb_switch *sw,
++						    unsigned int bridge,
++						    unsigned int pcie_offset,
++						    unsigned int *value,
++						    bool write)
++{
++	u32 offset, command, val;
++	int ret;
++
++	if (sw->generation != 3)
++		return -EOPNOTSUPP;
++
++	if (write) {
++		offset = sw->cap_plug_events + TB_PLUG_EVENTS_PCIE_WR_DATA;
++		ret = tb_sw_write(sw, value, TB_CFG_SWITCH, offset, 1);
++		if (ret)
++			return ret;
++	}
++
++	command = pcie_offset & TB_PLUG_EVENTS_PCIE_CMD_DW_OFFSET_MASK;
++	command |= tb_switch_titan_ridge_pcie_bridge_mask(bridge);
++	command |= write ? TB_PLUG_EVENTS_PCIE_CMD_RD_WR_MASK : 0;
++	command |= TB_PLUG_EVENTS_PCIE_CMD_COMMAND_VAL <<
++		   TB_PLUG_EVENTS_PCIE_CMD_COMMAND_SHIFT;
++	command |= TB_PLUG_EVENTS_PCIE_CMD_REQ_ACK_MASK;
++
++	offset = sw->cap_plug_events + TB_PLUG_EVENTS_PCIE_CMD;
++
++	ret = tb_sw_write(sw, &command, TB_CFG_SWITCH, offset, 1);
++	if (ret)
++		return ret;
++
++	ret = tb_switch_wait_for_bit(sw, offset,
++				     TB_PLUG_EVENTS_PCIE_CMD_REQ_ACK_MASK, 0, 100);
++	if (ret)
++		return ret;
++
++	ret = tb_sw_read(sw, &val, TB_CFG_SWITCH, offset, 1);
++	if (ret)
++		return ret;
++
++	if (val & TB_PLUG_EVENTS_PCIE_CMD_TIMEOUT_MASK)
++		return -ETIMEDOUT;
++
++	if (!write) {
++		offset = sw->cap_plug_events + TB_PLUG_EVENTS_PCIE_CMD_RD_DATA;
++		ret = tb_sw_read(sw, value, TB_CFG_SWITCH, offset, 1);
++		if (ret)
++			return ret;
++	}
++
++	return ret;
++}
++
++/**
++ * tb_switch_titan_ridge_pcie_l1_enable() - Enable PCIe link to enter L1 state
++ * @sw: Titan Ridge switch to enable PCIe L1 for
++ *
++ * For Titan Ridge switch to enter CLx state, its PCIe bridges
++ * shall enable entry to PCIe L1 state. Shall be called after
++ * the upstream PCIe tunnel was configured. Due to Intel platforms limitation,
++ * shall be called only for first hop switch.
++ */
++int tb_switch_titan_ridge_pcie_l1_enable(struct tb_switch *sw)
++{
++	struct tb_switch *parent = tb_switch_parent(sw);
++	unsigned int value;
++	int ret;
++
++	if (!tb_route(sw))
++		return 0;
++
++	if (!tb_switch_is_titan_ridge(sw))
++		return 0;
++
++	/* Enable PCIe L1 enable only for first hop router (depth = 1) */
++	if (tb_route(parent))
++		return 0;
++
++	/* Write to Downstream PCIe bridge #5 aka Dn4 */
++	value = 0x0C7806B1;
++	ret = tb_switch_titan_ridge_access_pcie_bridge(sw, 5, 0x143,
++						       &value, true);
++	if (ret)
++		return ret;
++
++	/* Write to Upstream PCIe bridge #0 aka Up0 */
++	value = 0x0C5806B1;
++	return tb_switch_titan_ridge_access_pcie_bridge(sw, 0, 0x143,
++							&value, true);
++}
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index 2d3c8c5baf9f..08dca66ea274 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -1092,6 +1092,13 @@ static int tb_tunnel_pci(struct tb *tb, struct tb_switch *sw)
+ 		return -EIO;
+ 	}
+ 
++	/*
++	 * In case of Titan Ridge CLx shall be enabled, enable PCIe L1 here,
++	 * after PCIe tunnelling was enabled.
++	 */
++	if (tb_switch_titan_ridge_pcie_l1_enable(sw))
++		tb_sw_warn(sw, "failed to enable PCIe L1 for Titan Ridge\n");
++
+ 	list_add_tail(&tunnel->list, &tcm->tunnel_list);
+ 	return 0;
+ }
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index f72f8f9aefda..614fe0a317fa 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -140,6 +140,7 @@ enum tb_clx {
+  * @cap_plug_events: Offset to the plug events capability (%0 if not found)
+  * @cap_vsec_tmu: Offset to the TMU vendor specific capability (%0 if not found)
+  * @cap_lc: Offset to the link controller capability (%0 if not found)
++ * @cap_lp: Offset to the low power (CLx for TBT) capability (%0 if not found)
+  * @is_unplugged: The switch is going away
+  * @drom: DROM of the switch (%NULL if not found)
+  * @nvm: Pointer to the NVM if the switch has one (%NULL otherwise)
+@@ -192,6 +193,7 @@ struct tb_switch {
+ 	int cap_plug_events;
+ 	int cap_vsec_tmu;
+ 	int cap_lc;
++	int cap_lp;
+ 	bool is_unplugged;
+ 	u8 *drom;
+ 	struct tb_nvm *nvm;
+@@ -933,6 +935,10 @@ void tb_switch_tmu_configure(struct tb_switch *sw,
+ int tb_switch_enable_clx(struct tb_switch *sw, enum tb_clx clx);
+ int tb_switch_disable_clx(struct tb_switch *sw, enum tb_clx clx);
+ bool tb_switch_is_clx_enabled(struct tb_switch *sw);
++bool tb_switch_is_cl0s_enabled(struct tb_switch *sw);
++bool tb_switch_clx_supported(struct tb_switch *sw);
++int tb_switch_titan_ridge_pcie_l1_enable(struct tb_switch *sw);
++int tb_port_titan_ridge_clx_objection_mask(struct tb_switch *sw);
+ 
+ int tb_wait_for_port(struct tb_port *port, bool wait_if_unplugged);
+ int tb_port_add_nfc_credits(struct tb_port *port, int credits);
+@@ -1034,6 +1040,7 @@ bool tb_lc_dp_sink_query(struct tb_switch *sw, struct tb_port *in);
+ int tb_lc_dp_sink_alloc(struct tb_switch *sw, struct tb_port *in);
+ int tb_lc_dp_sink_dealloc(struct tb_switch *sw, struct tb_port *in);
+ int tb_lc_force_power(struct tb_switch *sw);
++bool tb_lc_clx_supported(struct tb_port *port);
+ 
+ static inline int tb_route_length(u64 route)
+ {
 diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
-index 0b5e4891567d..7a1b5a06303a 100644
+index 7a1b5a06303a..4e77558ea66b 100644
 --- a/drivers/thunderbolt/tb_regs.h
 +++ b/drivers/thunderbolt/tb_regs.h
-@@ -33,7 +33,7 @@ enum tb_switch_cap {
- enum tb_switch_vse_cap {
- 	TB_VSE_CAP_PLUG_EVENTS		= 0x01, /* also EEPROM */
- 	TB_VSE_CAP_TIME2		= 0x03,
--	TB_VSE_CAP_IECS			= 0x04,
-+	TB_VSE_CAP_CP_LP		= 0x04,
- 	TB_VSE_CAP_LINK_CONTROLLER	= 0x06, /* also IECS */
- };
+@@ -448,8 +448,42 @@ struct tb_regs_hop {
+ } __packed;
+ 
+ /* TMU Thunderbolt 3 registers */
+-#define TB_TIME_VSEC_3_CS_26		0x1a
+-#define TB_TIME_VSEC_3_CS_26_TD		BIT(22)
++#define TB_TIME_VSEC_3_CS_9			0x9
++#define TB_TIME_VSEC_3_CS_9_TMU_OBJ_MASK	GENMASK(17, 16)
++#define TB_TIME_VSEC_3_CS_26			0x1a
++#define TB_TIME_VSEC_3_CS_26_TD			BIT(22)
++
++/*
++ * Used for Titan Ridge only. Bits are part of the same register: TMU_ADP_CS_6
++ * (see above) as in USB4 spec, but these specific bits used for Titan Ridge
++ * only and reserved in USB4 spec.
++ */
++#define TMU_ADP_CS_6_DISABLE_TMU_OBJ_MASK	GENMASK(3, 2)
++#define TMU_ADP_CS_6_DISABLE_TMU_OBJ_CL1	BIT(2)
++#define TMU_ADP_CS_6_DISABLE_TMU_OBJ_CL2	BIT(3)
++
++/* Plug Events registers */
++#define TB_PLUG_EVENTS_PCIE_WR_DATA		0x1b
++#define TB_PLUG_EVENTS_PCIE_CMD			0x1c
++#define TB_PLUG_EVENTS_PCIE_CMD_DW_OFFSET_MASK	GENMASK(9, 0)
++#define TB_PLUG_EVENTS_PCIE_CMD_BR_SHIFT	10
++#define TB_PLUG_EVENTS_PCIE_CMD_BR_MASK		GENMASK(17, 10)
++#define TB_PLUG_EVENTS_PCIE_CMD_RD_WR_MASK	BIT(21)
++#define TB_PLUG_EVENTS_PCIE_CMD_WR		0x1
++#define TB_PLUG_EVENTS_PCIE_CMD_COMMAND_SHIFT	22
++#define TB_PLUG_EVENTS_PCIE_CMD_COMMAND_MASK	GENMASK(24, 22)
++#define TB_PLUG_EVENTS_PCIE_CMD_COMMAND_VAL	0x2
++#define TB_PLUG_EVENTS_PCIE_CMD_REQ_ACK_MASK	BIT(30)
++#define TB_PLUG_EVENTS_PCIE_CMD_TIMEOUT_MASK	BIT(31)
++#define TB_PLUG_EVENTS_PCIE_CMD_RD_DATA		0x1d
++
++/* CP Low Power registers */
++#define TB_LOW_PWR_C1_CL1		0x1
++#define TB_LOW_PWR_C1_CL1_OBJ_MASK	GENMASK(4, 1)
++#define TB_LOW_PWR_C1_CL2_OBJ_MASK	GENMASK(4, 1)
++#define TB_LOW_PWR_C1_PORT_A_MASK	GENMASK(2, 1)
++#define TB_LOW_PWR_C0_PORT_B_MASK	GENMASK(4, 3)
++#define TB_LOW_PWR_C3_CL1		0x3
+ 
+ /* Common link controller registers */
+ #define TB_LC_DESC			0x02
+@@ -485,5 +519,7 @@ struct tb_regs_hop {
+ #define TB_LC_SX_CTRL_SLI		BIT(29)
+ #define TB_LC_SX_CTRL_UPSTREAM		BIT(30)
+ #define TB_LC_SX_CTRL_SLP		BIT(31)
++#define TB_LC_LINK_ATTR			0x97
++#define TB_LC_LINK_ATTR_CPS		BIT(18)
+ 
+ #endif
+diff --git a/drivers/thunderbolt/tmu.c b/drivers/thunderbolt/tmu.c
+index 3a50244f7041..eeba8b9adae9 100644
+--- a/drivers/thunderbolt/tmu.c
++++ b/drivers/thunderbolt/tmu.c
+@@ -337,7 +337,12 @@ int tb_switch_tmu_post_time(struct tb_switch *sw)
+ int tb_switch_tmu_disable(struct tb_switch *sw)
+ {
+ 
+-	if (!tb_switch_is_usb4(sw))
++	/*
++	 * No need to disable TMU on devices that don't support CLx since on
++	 * these devices e.g. Alpine Ridge and earlier, the TMU mode HiFi-BiDir
++	 * is enabled by default and we don't change it.
++	 */
++	if (!tb_switch_clx_supported(sw))
+ 		return 0;
+ 
+ 	/* Already disabled? */
+@@ -450,6 +455,53 @@ static int __tb_switch_tmu_enable_bidir(struct tb_switch *sw)
+ 	return ret;
+ }
+ 
++static int tb_switch_titan_ridge_tmu_objection_mask(struct tb_switch *sw)
++{
++	u32 val;
++	int ret;
++
++	ret = tb_sw_read(sw, &val, TB_CFG_SWITCH,
++			 sw->cap_vsec_tmu + TB_TIME_VSEC_3_CS_9, 1);
++	if (ret)
++		return ret;
++
++	val &= ~TB_TIME_VSEC_3_CS_9_TMU_OBJ_MASK;
++
++	return tb_sw_write(sw, &val, TB_CFG_SWITCH,
++			   sw->cap_vsec_tmu + TB_TIME_VSEC_3_CS_9, 1);
++}
++
++static int tb_switch_titan_ridge_tmu_uni_enable(struct tb_switch *sw)
++{
++	struct tb_port *up;
++
++	if (!sw->tmu.unidirect_request)
++		return 0;
++
++	up = tb_upstream_port(sw);
++	return tb_port_tmu_write(up, TMU_ADP_CS_6,
++				 TMU_ADP_CS_6_DISABLE_TMU_OBJ_MASK,
++				 TMU_ADP_CS_6_DISABLE_TMU_OBJ_MASK);
++}
++
++static int tb_switch_titan_ridge_tmu_enable(struct tb_switch *sw)
++{
++	int ret;
++
++	if (!tb_switch_is_titan_ridge(sw))
++		return 0;
++
++	/* Titan Ridge supports only CL0s */
++	if (!tb_switch_is_cl0s_enabled(sw))
++		return -EOPNOTSUPP;
++
++	ret = tb_switch_titan_ridge_tmu_objection_mask(sw);
++	if (ret)
++		return ret;
++
++	return tb_switch_titan_ridge_tmu_uni_enable(sw);
++}
++
+ /*
+  * This function is called when the previous TMU mode was
+  * TB_SWITCH_TMU_RATE_OFF.
+@@ -496,7 +548,12 @@ static int tb_switch_tmu_hifi_enable(struct tb_switch *sw)
+ 	if (unidirect && !sw->tmu.has_ucap)
+ 		return -EOPNOTSUPP;
+ 
+-	if (!tb_switch_is_usb4(sw))
++	/*
++	 * No need to enable TMU on devices that don't support CLx since on
++	 * these devices e.g. Alpine Ridge and earlier, the TMU mode HiFi-BiDir
++	 * is enabled by default.
++	 */
++	if (!tb_switch_clx_supported(sw))
+ 		return 0;
+ 
+ 	if (tb_switch_tmu_hifi_is_enabled(sw, sw->tmu.unidirect_request))
+@@ -547,9 +604,16 @@ static int tb_switch_tmu_hifi_enable(struct tb_switch *sw)
+  */
+ int tb_switch_tmu_enable(struct tb_switch *sw)
+ {
++	int ret;
++
+ 	if (sw->tmu.rate_request == TB_SWITCH_TMU_RATE_NORMAL)
+ 		return -EOPNOTSUPP;
+ 
++	/* Titan Ridge specific operations to enable CL0s */
++	ret = tb_switch_titan_ridge_tmu_enable(sw);
++	if (ret)
++		return ret;
++
+ 	return tb_switch_tmu_hifi_enable(sw);
+ }
  
 -- 
 2.17.1
