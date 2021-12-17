@@ -2,227 +2,184 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9CE4789E8
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 12:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07AF4478A3A
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 12:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235319AbhLQLaH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Dec 2021 06:30:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbhLQLaG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 06:30:06 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9983FC061574;
-        Fri, 17 Dec 2021 03:30:06 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id v64so5464415ybi.5;
-        Fri, 17 Dec 2021 03:30:06 -0800 (PST)
+        id S235614AbhLQLki (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Dec 2021 06:40:38 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:28890 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233856AbhLQLkg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 06:40:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639741236; x=1671277236;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=HYDvRxcJFMohPkow4mLMWwn2BU3LgtnBa6RvKL3x4dc=;
+  b=b2VzqWu99AHi/Ky0pOed0HcZWbB6IzskRdxGknKzu4KihY7GyMGWdndj
+   cozgj4thErNllzmX/SGZpQngiLHVDCzXppZv63Pg7XKWkDsVP373S4qXM
+   pR/1/C0Tjmk5mvDJ7Yi9PwAZe1mXa87O+gB9l7aq5Mn0N+ca25yhCB/j5
+   Lo9kCnpHZDT6inkTWVeT7412YRh+IVXIguDk+Q1EeovwxASUNRpybd+jJ
+   AJ+qry5FMIljLhP6TubCvzVQlnbNK2uIQOlJH7UQNcOrMZzyaXj5zBQ1C
+   jFjDbOyZJXbH3NPFqICp6bwfPm7H839yWso0a21fRbCQVcSelwiW20HgP
+   g==;
+IronPort-SDR: nJYl4QRDxdnp8VjcT4Z5ErZh+AapD8WROHt+7FMdewXZ/zit5e9JKFSUAvBbtBMX841sC4crRk
+ kONmuaaZKIR0HyXEwZPVovTtN3jULWrjEO+TiYUIuMciNlHetoaUVa6tZ0lgfsbUG1zf95u31k
+ vfnuzR78KJqBS4WdPb6Ycir8aznr8c7U3xplrZ9YGM7svOKMpDm+ojWj8XhoDOp8gSeak8lIht
+ lE2CyifKIBDBL2TcjM3egdaI9lJhPDfyoVNiqtN2X2x/KhA5Tr6ev462ZIIWC8Cq5m62GBXN1V
+ drbFQouMkymxeINkhplAbHsS
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="142756921"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Dec 2021 04:40:35 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 17 Dec 2021 04:40:34 -0700
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Fri, 17 Dec 2021 04:40:34 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nXLusRm7J89RiFBsiawuX9mA7D4JSWn2EbBIbSKc9/3pFyPzAQxAAS+Q79fQVj7GrwALRQjD3BE9BQZBau90U/DCEsZVJQIaZRBzZNQh29dpwRBobgfWk42dBAhFVXRSgxaZF4hM/NbIAE/toQfpHDzb/DFdf6vWt3ivwxHnsq8Jvby5B0dXtUatjSwtvIjA8qkNE8WhdKBf0rhBqz9P92//+PStUTXXxWxvVSJxAMK+884cA0dsrymkw8kYOTp8T260l1UH5KSRWlMrQ4J9cSv4DHE1JYnIw1hhowDZoSAUrf4/2/jIKHfehf8YY24CHUfhzerIJBHFSQOZl0G8+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZzxQQzROenTKd6hsTmpFwA5vtLVA4v8RI62IapKlwdQ=;
+ b=Id3DIl2QiNhQmh5Ra85wDkBCFt2WqJKpyN5s/gdoqBj0ujZ9OSCQ3MaPRVS4h3lZO+GH9jFMdBDahH8Ry0/FmQ7KF/ZaaZdeRdh5aJ+OJMexSJOwRoSpOLNgg1tBEoEF6pcDU7+uZsj5oTHp/vtNOx1TX9kmqEqP2fago63n4hCQ0cmPuWyUiNwRKMeoyznLHliTnfUbs/KdzrlvJMDPX282ydchvupyhJchVQkeu+2YbAkpOSK+OcKGUAQ4BdlE96FB0CEPthg/UIdGgSA8TWZmLIxcXv4iS0QKmpXe6evaDT6ikGR63OWTtOET2wHXNXl/cXMQYcZiWYkBX5rwqg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=aOBPWhZYKzkWKLVOthhY+WUZqiQzKnfV0++kMV9Fubw=;
-        b=HMl1SUR/V4uAidtCVooWbZET7ARV3TI9hoUQp9I+OBKHP6bce2t4PadxH0Q0ZUcADY
-         CPZfYSpO8SP2ZAtvuoZQ3Xb5ZYSQZ6eoAUvEcpdbhjlrb7oMaj/ZnPeMfAFC2tAZCb7u
-         UlFC+AnWS65Ek3Q6T2s1UiGqx1FtjLQB35eEOonj8hilNUx3PDa5ykD17ReowcP0/hTu
-         wLK0pV+aMuFPXkRGRYKuxmzfCCf8EFVQNY8r5TIgKwPcHAr2pFNej4hGXi94XPlktkX1
-         HsO4ieZNwncUi/ME5DlnJ3uI8FIqN3IW8VvLQf9C3ik1mR+6rxoUYc4g+R6FCCam9ukE
-         kT/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=aOBPWhZYKzkWKLVOthhY+WUZqiQzKnfV0++kMV9Fubw=;
-        b=0RutrrlQJYbEzoEuLJdf77Dd544FzQ30gzj1LRsxhs4o3vhSsY0jVPU+dRsxX8gDBW
-         pnwSGpPBp3NscgQC3wKtxOAYgerEkL9esnSwPFW1wccla5jHbvjkqtLkEL9fac0zhIQw
-         k4YeoZbua0/gDG/fHV1ublpxHKa2htUAIXSogVnIQjCE0xzWO+9OUfd1u71eWDGgLP76
-         csyReEA/I+ynKBrnVW/EgktA2uL92g7xwpxcyLjlBuwrnrMC9Gc5ueWK76YfGzPH9paV
-         Y5j2b+8q5NuWpQU9N5M6kShacAU6nUeuR85UjA/NPpoSHDzkfP/3T3y3RFr3kKTZS6DM
-         8W+g==
-X-Gm-Message-State: AOAM533tY4WAgBQY+dlvX77DLwhyiKsbOfbfPeK3VCjgHM4n5wSTvJ1/
-        ZJpu0c6vLNh7/VpIyHOBDYEcQ/s1kxGG5lCzLnw=
-X-Google-Smtp-Source: ABdhPJw06sDmSxIers+PVy3dXC2nJgUu03KM6T+ZT0SLdrUovQPKlRuq3seVJz/qZ1n3UdpBe+t17pX5TiuknVPmwOQ=
-X-Received: by 2002:a25:8b04:: with SMTP id i4mr4070101ybl.663.1639740605811;
- Fri, 17 Dec 2021 03:30:05 -0800 (PST)
-MIME-Version: 1.0
-References: <96948a63d1a33da63b4f226e89ea90d21e9b0f82.1639528369.git.plr.vincent@gmail.com>
- <YbxdmB1gYAiOZrtN@kroah.com>
-In-Reply-To: <YbxdmB1gYAiOZrtN@kroah.com>
-From:   Vincent Pelletier <plr.vincent@gmail.com>
-Date:   Fri, 17 Dec 2021 20:29:54 +0900
-Message-ID: <CAF78GY0pX35672aVZOzgsUdXA5PmnOiydHkmRiiC2=fk+atV7g@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: f_fs: Clear ffs_eventfd in ffs_data_reset.
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Felipe Balbi <balbi@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Salah Triki <salah.triki@gmail.com>,
-        Dean Anderson <dean@sensoray.com>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZzxQQzROenTKd6hsTmpFwA5vtLVA4v8RI62IapKlwdQ=;
+ b=dXaEQfKUVd+p+Lx1VHUJK9raW7gOsNxYdNSaFTxdHTC/6R9cqvPr5u8cnnh3YbgLJNzjwQPIO50B+SXGWVSp5w4TL0TTF6ZIgekhKuZjL1NQ4f47iPlXarVl09dwuzQ7mYEGLs8bj7MzXrTlWAzeu5Kr/B7C5gyj1uLnmr49Qf0=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:95::7)
+ by MW4PR11MB5871.namprd11.prod.outlook.com (2603:10b6:303:188::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Fri, 17 Dec
+ 2021 11:40:29 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::a192:c9ae:1f83:797b]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::a192:c9ae:1f83:797b%9]) with mapi id 15.20.4801.017; Fri, 17 Dec 2021
+ 11:40:29 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <broonie@kernel.org>
+CC:     <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
+        <robh+dt@kernel.org>, <jassisinghbrar@gmail.com>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <u.kleine-koenig@pengutronix.de>,
+        <lee.jones@linaro.org>, <linux-gpio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-crypto@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <krzysztof.kozlowski@canonical.com>,
+        <geert@linux-m68k.org>, <bin.meng@windriver.com>,
+        <heiko@sntech.de>, <Lewis.Hanly@microchip.com>,
+        <Daire.McNamara@microchip.com>, <Ivan.Griffin@microchip.com>,
+        <atish.patra@wdc.com>
+Subject: Re: [PATCH v2 10/17] dt-bindings: spi: add bindings for microchip
+ mpfs spi
+Thread-Topic: [PATCH v2 10/17] dt-bindings: spi: add bindings for microchip
+ mpfs spi
+Thread-Index: AQHX8ykv6sbPo1+d0UqqLmeeX2B3NKw2iOgAgAAHFAA=
+Date:   Fri, 17 Dec 2021 11:40:29 +0000
+Message-ID: <606633c8-6cd6-af3a-4d6a-bb3058a64026@microchip.com>
+References: <20211217093325.30612-1-conor.dooley@microchip.com>
+ <20211217093325.30612-11-conor.dooley@microchip.com>
+ <YbxxrlmYGC3Pg8+j@sirena.org.uk>
+In-Reply-To: <YbxxrlmYGC3Pg8+j@sirena.org.uk>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2c9df332-120c-4b94-2e0d-08d9c15206d9
+x-ms-traffictypediagnostic: MW4PR11MB5871:EE_
+x-microsoft-antispam-prvs: <MW4PR11MB5871CF478CD889DA79D7C65398789@MW4PR11MB5871.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2657;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: f5bKKODXQecemrsOlEZJotowy6ldLN1NXg/dE43/es9eVqRh9FNLuTBdb6xpaDj+tC3RtEsOoRWS+NCQ5HP3pa+0NRjXoEoRyT9YJcO3yo+oLAgdNtjlNjflqeAGcdzgX1neDbXKjZ8AmgCM8Y5ZAMFRqcn1fHxmkoiyI2FqZGNStwRrUHgsOkOMs+8cUlBRQ0tt32FetTRTQz5ev9nFf6Mil1MzwiH57BlepbYLVjcnIQVsGMNHSjpDHIaq9/uXsMQ6/n2ZlfWP3KOs1glbV9xQjHWqXHl588W0fHVW9oqSJyw2EC4sU+CqK69vppVvfFhQU2UpOHz0XAYn3wN7GIZMntL9yqZghi6Tm8sUdvwYNt86W3EtuDtz6Lzuz2598ag7TyvGyVbpWcea5NC4ZRuL08W5NLiST1DD7Yxo1aApL/WWsgb0cJ6VajOD5PI3FjpocYPYvHtrgiGJLaRaBhGLYxAQihds+KwfoHUS2Om3i2iGqr4LhqfFN4Ts4gmuBnmXpfzWwwmiD4iKZj43BG3enXZvAQl5Jvk4o01+GwXSjxn3WfrXQJgJMfTyAJ+IK5HuNkrrEcbv4uMrf+xl7OGcbogd68pV93x+7ajwKFTtFHb4fEeFOmf1tY6sNOefnKePwZvwpyjksXy1IdiVlaN80JqEOouzVEE4s8xCTRocBmmJnGlSvezSY0qakY9w1PvuALWa/NHgGdwyh7OcjYiUjkdXFu+Ofu58YiH+Z7LIAsR2Nkiy5pZNtJoshfhp7+R82zt3o0fKeZOx9TDy9Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(316002)(31696002)(38100700002)(122000001)(86362001)(36756003)(38070700005)(26005)(31686004)(66946007)(64756008)(66476007)(66556008)(66446008)(76116006)(91956017)(2616005)(6506007)(6916009)(186003)(2906002)(508600001)(4744005)(7416002)(54906003)(4326008)(6512007)(8676002)(5660300002)(8936002)(71200400001)(6486002)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?3CrJwfzPLRJAn8s2BtQbHgLCVKgsODp6JbG1OF3r6ENdfraiCcic9H7k?=
+ =?Windows-1252?Q?cC8VwCT9H98S4KFPhakCuara0nUYR7J/fLwD6mEwK6+SSwKHkvi1MlOl?=
+ =?Windows-1252?Q?Enki7JCQ7ZM2EwcXLDz2wEKVpN4L+lZnecTg8Y48/m5Yj5qVSYQEtk4S?=
+ =?Windows-1252?Q?7MXs4LSeOvURPT/ocIg8ERHRhFMs5Y0OULzgUgHs9zg93grS+g6Rc0xl?=
+ =?Windows-1252?Q?8sNBqBAHEqGP4GA7HcXF5+a8PEr2kofNLKJJ2g1saOcMb8Mv5XBvX/yR?=
+ =?Windows-1252?Q?8uv4mJUySTBmOGwaCgdyy4wtiYOiSK5xUKCUtGSsLU33V0RNtQgw25Qi?=
+ =?Windows-1252?Q?jp19+8ioVwZVzxPyadiABXCp/TDuPKO5Hb3achw3ME/zFHPe1KUNdo9W?=
+ =?Windows-1252?Q?UtKhheVl0etGUrr0vpp3j27qjIqLlAJJGvCPLnlnTSqf/NFGoOt0wtYC?=
+ =?Windows-1252?Q?pAmMhxph/rOrw/TTSRHmKosICRdOlB6VhWL2vZek6KIkSLs2Xsk0+PEw?=
+ =?Windows-1252?Q?tMjbjTc2jy3fa2DUi6CSVqTjfub7U/2iO/rjvKWnfGOZbD/VSWfMja3a?=
+ =?Windows-1252?Q?0OlpgWhMzsvPDvaF/4Oxpmxd5Uci6n4bkD+o7esqkZ/xY0dhcR/AIRBR?=
+ =?Windows-1252?Q?uIBAhLPBcvga07hdkdgbUvDjt2aZHi4MWuxyJ2bBl9+I20Xyp0Sg0yzi?=
+ =?Windows-1252?Q?Tb+VeqfGg9uFcTRyT8DWSEVMh5S3Vx+xSUzRaB4O6EtjcZfgNPTLdi5M?=
+ =?Windows-1252?Q?c0i7g8A9nGt5lxuwNs65oQjB27amW78nwiz9Tk/SY5fa6kIaSyRmScVc?=
+ =?Windows-1252?Q?ReAOsLmusIerveA1KZ9vXYHv8/Ypeg4/b6I1csKMec6o0A+ai8Y7aC+w?=
+ =?Windows-1252?Q?ntUp4MR4PMA3uRtV8jNyLSCO9sSnicNw52klfsWB3pKYVt8xxDqAwDUH?=
+ =?Windows-1252?Q?LZQ2mvI0yFORsy61VZzO8vnGoUQOe1Q4LtDwitR/LtFI1Uvgjq5+IAA5?=
+ =?Windows-1252?Q?Q24Txl+3JWxux3ynokcugRbpVfnFnQSMNV1HuFcu8DPajdFJLmFVs6xB?=
+ =?Windows-1252?Q?pJRn8vTY0lPdJnRA9QP98ry4qWmTqjgOpfPQM1TjcKMnr2oMlRjld6GO?=
+ =?Windows-1252?Q?T4JR8i94O7ZUN/vl7rWubYf7nieVeGzhopksUK5eQK3Ng9EuqVfdGkV8?=
+ =?Windows-1252?Q?jfbZqd1YFSHJB0CXO5uPCBqgPHofbUUFaidF0PkNHsvvoSyaYj8FiTqi?=
+ =?Windows-1252?Q?plCDXxW/uUFuqNFYSCknSLcSQY0voLCHjMpGWJOBf0lwDhLc0bAXnDS2?=
+ =?Windows-1252?Q?gmKpqEz9Gj1eoJ8upZruK7SyfKRqJQ2xMcnUNi5R2IzLBvrL9zFZCbh1?=
+ =?Windows-1252?Q?i64H0ywZpMxtstSqMl507DJ/9C8CmZ+ze9+PPIaW0U0D1ThFrTzEH6UK?=
+ =?Windows-1252?Q?HiUbxQxuG1jzxjLLWxWQEvYdSaUBkkIntf/lUnqKwbrm0GTr6fBMDnbY?=
+ =?Windows-1252?Q?/+NwSxK68Nroq2UZKl1wUNqi50jVSi9hbcicdQmCrENGYxSJBejqWbNR?=
+ =?Windows-1252?Q?7MN+fvB4dtlEfg/CpOYTxMlF8mcDjDwwPeZDxgf3fHl+cEFjBIiWSzYN?=
+ =?Windows-1252?Q?dnT4ysT6F8YzXwFml7EHwW8lvFa9V0rqYWO+owcIWeuheh4ReaLnw7OT?=
+ =?Windows-1252?Q?zakKlMYbSrhqka39QJQJvnEInvOuWHexfOedRhT+UtG6cf0bWnshnA3h?=
+ =?Windows-1252?Q?VjtwBE8OOuSQKYxS2LqnCBdsuNI0iiebOAFOuCSBXGO8u0mX4mKJrY0R?=
+ =?Windows-1252?Q?3U8Dzw=3D=3D?=
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <C6E7FFFC24681846BDD92915E023803D@namprd11.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2c9df332-120c-4b94-2e0d-08d9c15206d9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2021 11:40:29.2562
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: TrWmb+L9WbKHTLVhJvKTKpg8WVh6IMdFBZ6urwGpthkurzUCplGVxuSsc9rrEoRMnC0LlfX4l13LBoyGDVv0WMTj1euglWEMFsjQH282j6M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB5871
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 6:51 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Dec 15, 2021 at 12:32:49AM +0000, Vincent Pelletier wrote:
-> > ffs_data_reset is called from both ffs_fs_kill_sb and ffs_ep0_release, =
-so
-> > it ends up being called twice when userland closes ep0 and then unmount=
-s
-> > f_fs. If userland provided an eventfd along with function's USB
-> > descriptors, ffs_data_clear (via ffs_data_reset) ends up calling
-> > eventfd_ctx_put as many times, causing a refcount underflow warning
-> > (as of 5.15 at least). NULL-ify ffs_eventfd to prevent these extraneous
-> > eventfd_ctx_put calls.
-> >
-> > For completeness, ffs_data_clear actually ends up being called thrice, =
-the
-> > last call being before the whole ffs structure gets freed, so when this
-> > specific sequence happens there is a second underflow happening (but no=
-t
-> > being reported):
-> >
-> > /sys/kernel/debug/tracing# modprobe usb_f_fs
-> > /sys/kernel/debug/tracing# echo ffs_data_clear > set_ftrace_filter
-> > /sys/kernel/debug/tracing# echo function > current_tracer
-> > /sys/kernel/debug/tracing# echo 1 > tracing_on
-> > (setup gadget, run and kill function userland process, teardown gadget)
-> > /sys/kernel/debug/tracing# echo 0 > tracing_on
-> > /sys/kernel/debug/tracing# cat trace
-> > # tracer: function
-> > #
-> > # entries-in-buffer/entries-written: 3/3   #P:1
-> > #
-> > #                                _-----=3D> irqs-off
-> > #                               / _----=3D> need-resched
-> > #                              | / _---=3D> hardirq/softirq
-> > #                              || / _--=3D> preempt-depth
-> > #                              ||| / _-=3D> migrate-disable
-> > #                              |||| /     delay
-> > #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-> > #              | |         |   |||||     |         |
-> >  smartcard-openp-436     [000] .....  1946.208786: ffs_data_clear <-ffs=
-_data_closed
-> >  smartcard-openp-431     [000] .....  1946.279147: ffs_data_clear <-ffs=
-_data_closed
-> >  smartcard-openp-431     [000] .n...  1946.905512: ffs_data_clear <-ffs=
-_data_put
-> >
-> > Warning output corresponding to above trace:
-> > [ 1946.284139] WARNING: CPU: 0 PID: 431 at lib/refcount.c:28 refcount_w=
-arn_saturate+0x110/0x15c
-> > [ 1946.293094] refcount_t: underflow; use-after-free.
-> > [ 1946.298164] Modules linked in: usb_f_ncm(E) u_ether(E) usb_f_fs(E) h=
-ci_uart(E) btqca(E) btrtl(E) btbcm(E) btintel(E) bluetooth(E) nls_ascii(E) =
-nls_cp437(E) vfat(E) fat(E) bcm2835_v4l2(CE) bcm2835_mmal_vchiq(CE) videobu=
-f2_vmalloc(E) videobuf2_memops(E) sha512_generic(E) videobuf2_v4l2(E) sha51=
-2_arm(E) videobuf2_common(E) videodev(E) cpufreq_dt(E) snd_bcm2835(CE) brcm=
-fmac(E) mc(E) vc4(E) ctr(E) brcmutil(E) snd_soc_core(E) snd_pcm_dmaengine(E=
-) drbg(E) snd_pcm(E) snd_timer(E) snd(E) soundcore(E) drm_kms_helper(E) cec=
-(E) ansi_cprng(E) rc_core(E) syscopyarea(E) raspberrypi_cpufreq(E) sysfillr=
-ect(E) sysimgblt(E) cfg80211(E) max17040_battery(OE) raspberrypi_hwmon(E) f=
-b_sys_fops(E) regmap_i2c(E) ecdh_generic(E) rfkill(E) ecc(E) bcm2835_rng(E)=
- rng_core(E) vchiq(CE) leds_gpio(E) libcomposite(E) fuse(E) configfs(E) ip_=
-tables(E) x_tables(E) autofs4(E) ext4(E) crc16(E) mbcache(E) jbd2(E) crc32c=
-_generic(E) sdhci_iproc(E) sdhci_pltfm(E) sdhci(E)
-> > [ 1946.399633] CPU: 0 PID: 431 Comm: smartcard-openp Tainted: G        =
- C OE     5.15.0-1-rpi #1  Debian 5.15.3-1
-> > [ 1946.417950] Hardware name: BCM2835
-> > [ 1946.425442] Backtrace:
-> > [ 1946.432048] [<c08d60a0>] (dump_backtrace) from [<c08d62ec>] (show_st=
-ack+0x20/0x24)
-> > [ 1946.448226]  r7:00000009 r6:0000001c r5:c04a948c r4:c0a64e2c
-> > [ 1946.458412] [<c08d62cc>] (show_stack) from [<c08d9ae0>] (dump_stack+=
-0x28/0x30)
-> > [ 1946.470380] [<c08d9ab8>] (dump_stack) from [<c0123500>] (__warn+0xe8=
-/0x154)
-> > [ 1946.482067]  r5:c04a948c r4:c0a71dc8
-> > [ 1946.490184] [<c0123418>] (__warn) from [<c08d6948>] (warn_slowpath_f=
-mt+0xa0/0xe4)
-> > [ 1946.506758]  r7:00000009 r6:0000001c r5:c0a71dc8 r4:c0a71e04
-> > [ 1946.517070] [<c08d68ac>] (warn_slowpath_fmt) from [<c04a948c>] (refc=
-ount_warn_saturate+0x110/0x15c)
-> > [ 1946.535309]  r8:c0100224 r7:c0dfcb84 r6:ffffffff r5:c3b84c00 r4:c24a=
-17c0
-> > [ 1946.546708] [<c04a937c>] (refcount_warn_saturate) from [<c0380134>] =
-(eventfd_ctx_put+0x48/0x74)
-> > [ 1946.564476] [<c03800ec>] (eventfd_ctx_put) from [<bf5464e8>] (ffs_da=
-ta_clear+0xd0/0x118 [usb_f_fs])
-> > [ 1946.582664]  r5:c3b84c00 r4:c2695b00
-> > [ 1946.590668] [<bf546418>] (ffs_data_clear [usb_f_fs]) from [<bf547cc0=
->] (ffs_data_closed+0x9c/0x150 [usb_f_fs])
-> > [ 1946.609608]  r5:bf54d014 r4:c2695b00
-> > [ 1946.617522] [<bf547c24>] (ffs_data_closed [usb_f_fs]) from [<bf547da=
-0>] (ffs_fs_kill_sb+0x2c/0x30 [usb_f_fs])
-> > [ 1946.636217]  r7:c0dfcb84 r6:c3a12260 r5:bf54d014 r4:c229f000
-> > [ 1946.646273] [<bf547d74>] (ffs_fs_kill_sb [usb_f_fs]) from [<c0326d50=
->] (deactivate_locked_super+0x54/0x9c)
-> > [ 1946.664893]  r5:bf54d014 r4:c229f000
-> > [ 1946.672921] [<c0326cfc>] (deactivate_locked_super) from [<c0326df8>]=
- (deactivate_super+0x60/0x64)
-> > [ 1946.690722]  r5:c2a09000 r4:c229f000
-> > [ 1946.698706] [<c0326d98>] (deactivate_super) from [<c0349a28>] (clean=
-up_mnt+0xe4/0x14c)
-> > [ 1946.715553]  r5:c2a09000 r4:00000000
-> > [ 1946.723528] [<c0349944>] (cleanup_mnt) from [<c0349b08>] (__cleanup_=
-mnt+0x1c/0x20)
-> > [ 1946.739922]  r7:c0dfcb84 r6:c3a12260 r5:c3a126fc r4:00000000
-> > [ 1946.750088] [<c0349aec>] (__cleanup_mnt) from [<c0143d10>] (task_wor=
-k_run+0x84/0xb8)
-> > [ 1946.766602] [<c0143c8c>] (task_work_run) from [<c010bdc8>] (do_work_=
-pending+0x470/0x56c)
-> > [ 1946.783540]  r7:5ac3c35a r6:c0d0424c r5:c200bfb0 r4:c200a000
-> > [ 1946.793614] [<c010b958>] (do_work_pending) from [<c01000c0>] (slow_w=
-ork_pending+0xc/0x20)
-> > [ 1946.810553] Exception stack(0xc200bfb0 to 0xc200bff8)
-> > [ 1946.820129] bfa0:                                     00000000 00000=
-000 000000aa b5e21430
-> > [ 1946.837104] bfc0: bef867a0 00000001 bef86840 00000034 bef86838 bef86=
-790 bef86794 bef867a0
-> > [ 1946.854125] bfe0: 00000000 bef86798 b67b7a1c b6d626a4 60000010 b5a23=
-760
-> > [ 1946.865335]  r10:00000000 r9:c200a000 r8:c0100224 r7:00000034 r6:bef=
-86840 r5:00000001
-> > [ 1946.881914]  r4:bef867a0
-> > [ 1946.888793] ---[ end trace 7387f2a9725b28d0 ]---
-> >
-> > Signed-off-by: Vincent Pelletier <plr.vincent@gmail.com>
-> > ---
-> >  drivers/usb/gadget/function/f_fs.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/fu=
-nction/f_fs.c
-> > index e20c19a0f106..437141a11ec6 100644
-> > --- a/drivers/usb/gadget/function/f_fs.c
-> > +++ b/drivers/usb/gadget/function/f_fs.c
-> > @@ -1791,6 +1791,7 @@ static void ffs_data_reset(struct ffs_data *ffs)
-> >       ffs_data_clear(ffs);
-> >
-> >       ffs->epfiles =3D NULL;
-> > +     ffs->ffs_eventfd =3D NULL;
->
-> Shouldn't this be happening in ffs_data_clear() instead?  After the call
-> to eventfd_ctx_put() as that is when the file descriptor is properly
-> dropped.
+On 17/12/2021 11:17, Mark Brown wrote:
+ > EXTERNAL EMAIL: Do not click links or open attachments unless you=20
+know the content is safe
+ > On Fri, Dec 17, 2021 at 09:33:18AM +0000, conor.dooley@microchip.com=20
+wrote:
 
-This was my initial intent while debugging, but when preparing this
-submission I realised epfiles is in the same boat, and
-ffs_data_reset is where it is getting set to NULL.
-So I followed the pattern.
+ > > +  num-cs:
+ > > +    description: |
+ > > +      Number of chip selects used.
+ > > +    $ref: /schemas/types.yaml#/definitions/uint32
+ > > +    minimum: 1
+ > > +    maximum: 8
+ > > +    default: 8
+ >
+ > Why do you need this property in the DT - isn't the number of chip
+ > selects in the IP a fixes property?
+Nope! It's an IP that's intended for use in FPGAs so the number of=20
+selects may (and does) vary based on implementation.
 
-If preferred, I can move both to ffs_data_clear, as I think it would
-make the code more obviously correct (...and it may have made
-this bug more obvious and maybe avoided it entirely).
-The only reason I can think of for the current state is to avoid one
-NULL (two with my change) writes when the structure will be freed
-rigth after, when the caller is ffs_data_put. I don't think this makes
-much of a difference, though.
-
-Regards,
---=20
-Vincent Pelletier
