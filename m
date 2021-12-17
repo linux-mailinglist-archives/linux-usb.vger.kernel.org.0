@@ -2,71 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD71F478CFE
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 15:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 649C2478D1C
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 15:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233556AbhLQODV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Dec 2021 09:03:21 -0500
-Received: from mga11.intel.com ([192.55.52.93]:35425 "EHLO mga11.intel.com"
+        id S236857AbhLQOMf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Dec 2021 09:12:35 -0500
+Received: from mga07.intel.com ([134.134.136.100]:40646 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231337AbhLQODV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 Dec 2021 09:03:21 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="237298559"
+        id S229599AbhLQOMe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 17 Dec 2021 09:12:34 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="303135892"
 X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="237298559"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 06:03:21 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="303135892"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 06:12:34 -0800
 X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="662851196"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Dec 2021 06:03:20 -0800
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] usb: typec: ucsi: Only check the contract if there is a connection
-Date:   Fri, 17 Dec 2021 17:03:27 +0300
-Message-Id: <20211217140327.31921-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+   d="scan'208";a="683401263"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 06:12:31 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1myDxQ-007Rmr-5V;
+        Fri, 17 Dec 2021 16:11:36 +0200
+Date:   Fri, 17 Dec 2021 16:11:35 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] acpi: Store _PLD information and convert users
+Message-ID: <Ybyal+QmjEQWI+hh@smile.fi.intel.com>
+References: <20211217132415.39726-1-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211217132415.39726-1-heikki.krogerus@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver must make sure there is an actual connection
-before checking details about the USB Power Delivery
-contract. Those details are not valid unless there is a
-connection.
+On Fri, Dec 17, 2021 at 04:24:11PM +0300, Heikki Krogerus wrote:
+> Hi,
+> 
+> The _PLD buffer is no longer stored as requested by Rafael, so the
+> drivers will need to continue to evaluate the _PLD if they need it.
+> 
+> The stored locations will therefore only contain the list of other
+> devices that share the location, but that is most important, and in
+> practice the main goal of the series in any case.
+> 
+> 
+> v2 cover letter:
+> 
+> I'm now using the helpers device_match_acpi_dev() and
+> device_match_fwnode() like Andy suggested. No other changes.
+> 
+> 
+> The original cover letter:
+> 
+> This removes the need for the drivers to always separately evaluate
+> the _PLD. With the USB Type-C connector and USB port mapping this
+> allows us to start using the component framework and remove the custom
+> APIs.
+> 
+> So far the only users of the _PLD information have been the USB
+> drivers, but it seems it will be used also at least in some camera
+> drivers later. These nevertheless touch mostly USB drivers.
+> 
+> Rafael, is it still OK if Greg takes these?
+> 
+> Prashant, can you test these?
 
-This fixes NULL pointer dereference that is caused by an
-attempt to register bogus partner alternate mode that the
-firmware on some platform may report before the actual
-connection.
+I guess I have given tag, anyway here we are, FWIW,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Fixes: 6cbe4b2d5a3f ("usb: typec: ucsi: Check the partner alt modes always if there is PD contract")
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215117
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/ucsi/ucsi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+P.S. AFAICS only the first patch was slightly changed.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 9d6b7e02d6efb..f0c2fa19f3e0f 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1164,7 +1164,9 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
- 		ret = 0;
- 	}
- 
--	if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) == UCSI_CONSTAT_PWR_OPMODE_PD) {
-+	if (con->partner &&
-+	    UCSI_CONSTAT_PWR_OPMODE(con->status.flags) ==
-+	    UCSI_CONSTAT_PWR_OPMODE_PD) {
- 		ucsi_get_src_pdos(con);
- 		ucsi_check_altmodes(con);
- 	}
+
+> Heikki Krogerus (4):
+>   acpi: Store the known device locations
+>   usb: Link the ports to the connectors they are attached to
+>   usb: typec: port-mapper: Convert to the component framework
+>   usb: Remove usb_for_each_port()
+> 
+>  Documentation/ABI/testing/sysfs-bus-usb |   9 +
+>  drivers/acpi/scan.c                     |  77 +++++++
+>  drivers/usb/core/port.c                 |  32 +++
+>  drivers/usb/core/usb.c                  |  46 ----
+>  drivers/usb/typec/Makefile              |   3 +-
+>  drivers/usb/typec/class.c               |   2 -
+>  drivers/usb/typec/class.h               |  10 +-
+>  drivers/usb/typec/port-mapper.c         | 280 +++---------------------
+>  include/acpi/acpi_bus.h                 |  19 ++
+>  include/linux/usb.h                     |   9 -
+>  include/linux/usb/typec.h               |  12 -
+>  11 files changed, 180 insertions(+), 319 deletions(-)
+> 
+> -- 
+> 2.34.1
+> 
+
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 
