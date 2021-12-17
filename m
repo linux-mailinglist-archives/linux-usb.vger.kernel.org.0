@@ -2,296 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A92D4479247
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 18:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3DAF4792C9
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 18:25:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239568AbhLQRCB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Dec 2021 12:02:01 -0500
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:46940 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233965AbhLQRCA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 12:02:00 -0500
-Received: by mail-ot1-f44.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so3599400oto.13;
-        Fri, 17 Dec 2021 09:02:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8g5Lsj8WxuGD8LrSO5qJLGi0ggNwHZB9aqoikJwvsGM=;
-        b=KO4uFyORxaMYbXteyVLfmhZ4Js/XvFIlD/sJAjaZVfmqbFTEn1sV6eqMP6Sz/jgNQC
-         GEh8HZ8fzGbye8rGsDyHy2FL1XYNsDLB0D1oluzYS7yKrcD6Yx9rl+3e6E25FkH8AOOx
-         3cXLceYbbnP9vXrAsJxhUBiMBJn7POe5Paj436Qj4EesMLYdr9njtk0sbtnnRUGkbBcx
-         l4/BY0jn6jFiqlCnZPRNc1TB1IzAfj0SWdI9imI8nooFRyPdJtnMzdHRRAoL9BG0ltGV
-         tKstzGUMyVdxTYgMGb2UYYsYmY+AC7+bGO66BO3/J5GwCRd79bhebAgI7Q4d209rsNSe
-         Fs8Q==
-X-Gm-Message-State: AOAM5332aVUNydJRdTMGinSYmVmTgAYgaCf7fP1Tdq0igmAL6zEW3wJ0
-        cuRnkT/qtpaRRkWykl4SpZao4bnXJhybJsIvpuM=
-X-Google-Smtp-Source: ABdhPJwYEwhOV1FAjDGBz5u0mu36ruUQNLhy02Bhf107/bjVVJgot/56+62cFieV+LFNasSTESlUDOc+3LqFR5rbG4I=
-X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr2890397otu.254.1639760519595;
- Fri, 17 Dec 2021 09:01:59 -0800 (PST)
+        id S239794AbhLQRZN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Dec 2021 12:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233875AbhLQRZN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 12:25:13 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4215FC061574
+        for <linux-usb@vger.kernel.org>; Fri, 17 Dec 2021 09:25:13 -0800 (PST)
+Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1myGyl-0001hn-79; Fri, 17 Dec 2021 18:25:11 +0100
+Message-ID: <f1e9d624-100d-d7af-d716-1ca57474aa97@leemhuis.info>
+Date:   Fri, 17 Dec 2021 18:25:09 +0100
 MIME-Version: 1.0
-References: <20211217132415.39726-1-heikki.krogerus@linux.intel.com> <20211217132415.39726-2-heikki.krogerus@linux.intel.com>
-In-Reply-To: <20211217132415.39726-2-heikki.krogerus@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Dec 2021 18:01:48 +0100
-Message-ID: <CAJZ5v0g9HjLr8n3OQwMY0EK5GdCc+8CJnO3mEUXom3g2sz9jXQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] acpi: Store the known device locations
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] usb: typec: ucsi: Only check the contract if there is a
+ connection
+Content-Language: en-BS
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Chris Hixon <linux-kernel-bugs@hixontech.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+References: <20211217140327.31921-1-heikki.krogerus@linux.intel.com>
+ <1d90a23b-fe2f-6892-1641-7a13e38a00dc@leemhuis.info>
+ <YbypYo4Ohii4fSNx@kuha.fi.intel.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <YbypYo4Ohii4fSNx@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1639761913;73a19a97;
+X-HE-SMSGID: 1myGyl-0001hn-79
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 2:24 PM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> This adds a list that will hold all the detected device
-> locations. The location of a device is known if it has
-> Physical Location of Device (_PLD) object within its scope.
 
-This paragraph isn't really accurate any more, because the location
-information is not stored in that list.
 
-To be precise, the new list is a list of entries that each contain a
-list of devices sharing the same physical location information (and
-thus presumably being physically located in the same place or
-physically overlapping so to speak).
+On 17.12.21 16:14, Heikki Krogerus wrote:
+> Hi,
+> 
+> On Fri, Dec 17, 2021 at 03:32:59PM +0100, Thorsten Leemhuis wrote:
+>> Lo! Thx for working out a fix this quickly!
+>>
+>> I'm just the regression tracker, but I think there are a few minor
+>> details to improve here.
+>>
+>> On 17.12.21 15:03, Heikki Krogerus wrote:
+>>> The driver must make sure there is an actual connection
+>>> before checking details about the USB Power Delivery
+>>> contract. Those details are not valid unless there is a
+>>> connection.
+>>>
+>>> This fixes NULL pointer dereference that is caused by an
+>>> attempt to register bogus partner alternate mode that the
+>>> firmware on some platform may report before the actual
+>>> connection.
+>>>
+>>> Fixes: 6cbe4b2d5a3f ("usb: typec: ucsi: Check the partner alt modes always if there is PD contract")
+>>> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215117
+>> BugLink? Is that a tag we really use? Then I'm unaware of it. Greg is
+>> the expert and can likely clarify, but that line afaik needs to replaced
+>> by this:
+> 
+> Although not yet documented, it is the appropriate tag for the link to
+> the bug.
 
-Honestly, I would change the terminology and naming  to reflect that
-concept (see below).
+For you maybe. But it kind of becomes a mess if various people create
+different tags, as they do now (you are just one of them).
 
-> Each entry in the list represents a known location, and each
-> of those locations can then have a list of devices that are
-> currently assigned to those locations.
->
-> The location entry that contains the current location of a
-> device can be acquired with a new function
-> acpi_device_get_location(). The location structure returned
-> by this function contains the list of devices sharing it.
->
-> The knowledge of the other devices that share a location
-> can be used in device drivers that need to know the
-> connections to other components inside a system. USB3 ports
-> will for example always share their location with a USB2
-> port.
->
-> For now, the device locations can not be updated, so they
-> will only contain lists the devices that are initially in
-> those locations. But that can later be easily changed if
-> needed by adding API that can be used to update the
-> locations.
->
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
->  drivers/acpi/scan.c     | 77 +++++++++++++++++++++++++++++++++++++++++
->  include/acpi/acpi_bus.h | 19 ++++++++++
->  2 files changed, 96 insertions(+)
->
-> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> index 5991dddbc9ceb..f147c0ad5f944 100644
-> --- a/drivers/acpi/scan.c
-> +++ b/drivers/acpi/scan.c
-> @@ -19,6 +19,7 @@
->  #include <linux/dma-map-ops.h>
->  #include <linux/platform_data/x86/apple.h>
->  #include <linux/pgtable.h>
-> +#include <linux/crc32.h>
->
->  #include "internal.h"
->
-> @@ -42,6 +43,8 @@ static LIST_HEAD(acpi_scan_handlers_list);
->  DEFINE_MUTEX(acpi_device_lock);
->  LIST_HEAD(acpi_wakeup_device_list);
->  static DEFINE_MUTEX(acpi_hp_context_lock);
-> +static LIST_HEAD(acpi_location_list);
+> It makes it clear that the link is to the bug and not to
+> the discussion on the list.
 
-I would call this "acpi_location_sharing_list".
+I agree that some clarification is needed, that's why I recently
+proposed something:
+https://lore.kernel.org/lkml/cover.1639042966.git.linux@leemhuis.info/
 
-> +static DEFINE_MUTEX(acpi_location_lock);
+Maybe chime in there.
 
-And this "acpi_location_sharing_lock".
+>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215117
+>> Link:
+>> https://lore.kernel.org/linux-usb/bug-215117-208809@https.bugzilla.kernel.org%2F/
+>>
+>> Normally the last line would need a 's!linux-usb!r!', but seems the
+>> kernel.org redirector doesn't work well in this particular case, so I
+>> guess it's better this way than not at all :-/
+>>
+>> The second line will also make the regression tracking bot automatically
+>> close the issue (but I fear it might also fail due to the slash at the
+>> end of the message-id :-/)
+> 
+> Greg will add the "Link" tag to the commit when, and if, he actually
+> takes the patch.
 
->
->  /*
->   * The UART device described by the SPCR table is the only object which needs
-> @@ -485,6 +488,7 @@ static void acpi_device_del(struct acpi_device *device)
->                         break;
->                 }
->
-> +       list_del(&device->location_list);
->         list_del(&device->wakeup_list);
->         mutex_unlock(&acpi_device_lock);
->
-> @@ -654,6 +658,76 @@ static int acpi_tie_acpi_dev(struct acpi_device *adev)
->         return 0;
->  }
->
-> +static void acpi_store_device_location(struct acpi_device *adev)
+No, that is another Link tag. Let me quote
+Documentation/process/submitting-patches.rst:
 
-This can be called "acpi_dev_save_location_sharing_info()".
+```
+If related discussions or any other background information behind the
+change can be found on the web, add 'Link:' tags pointing to it. In case
+your patch fixes a bug, for example, add a tag with a URL referencing
+the report in the mailing list archives or a bug tracker;
+```
 
-> +{
-> +       struct acpi_device_location *location;
-> +       struct acpi_pld_info *pld;
-> +       acpi_status status;
-> +       u32 crc;
-> +
-> +       status = acpi_get_physical_device_location(adev->handle, &pld);
-> +       if (ACPI_FAILURE(status))
-> +               return;
-> +
-> +       crc = crc32(~0, pld, sizeof(*pld));
-> +
-> +       mutex_lock(&acpi_location_lock);
-> +
-> +       list_for_each_entry(location, &acpi_location_list, node)
-> +               if (location->pld_crc == crc)
-> +                       goto out_add_to_location;
-> +
-> +       /* The location does not exist yet so creating it. */
-> +
-> +       location = kzalloc(sizeof(*location), GFP_KERNEL);
-> +       if (!location) {
-> +               acpi_handle_err(adev->handle, "Unable to store location\n");
-> +               goto err_unlock;
-> +       }
-> +
-> +       list_add_tail(&location->node, &acpi_location_list);
-> +       INIT_LIST_HEAD(&location->devices);
-> +       location->pld_crc = crc;
-> +
-> +out_add_to_location:
-> +       list_add_tail(&adev->location_list, &location->devices);
-> +
-> +err_unlock:
-> +       ACPI_FREE(pld);
-> +       mutex_unlock(&acpi_location_lock);
-> +}
-> +
-> +/**
-> + * acpi_device_get_location - Get the device location
-> + * @adev: ACPI device handle
-> + *
-> + * Return a pointer to a struct acpi_device_location object containing the
-> + * location information obtained by evaluating _PLD (Physical Location of
-> + * Device) for @adev when it is available, along with the list of devices
-> + * sharing the same location information (if any), or NULL otherwise.
-> + */
-> +struct acpi_device_location *acpi_device_get_location(struct acpi_device *adev)
+This concept is old, but the text was reworked recently to make this use
+case for the Link: tag clearer.
+For details see: https://git.kernel.org/linus/1f57bd42b77c
 
-And this "acpi_dev_get_location_sharing_info()".
+As the issue was discussed in a bug tracker and on the list, please add
+Link tags to both places.
 
-> +{
-> +       struct acpi_device_location *location;
-> +       struct list_head *tmp;
-> +
-> +       mutex_lock(&acpi_location_lock);
-> +
-> +       list_for_each_entry(location, &acpi_location_list, node) {
-> +               list_for_each(tmp, &location->devices) {
-> +                       if (tmp == &adev->location_list)
-> +                               goto out_unlock;
-> +               }
-> +       }
-> +       location = NULL;
-> +
-> +out_unlock:
-> +       mutex_unlock(&acpi_location_lock);
-> +
-> +       return location;
-> +}
-> +EXPORT_SYMBOL_GPL(acpi_device_get_location);
-> +
->  static int __acpi_device_add(struct acpi_device *device,
->                              void (*release)(struct device *))
->  {
-> @@ -670,6 +744,7 @@ static int __acpi_device_add(struct acpi_device *device,
->         INIT_LIST_HEAD(&device->wakeup_list);
->         INIT_LIST_HEAD(&device->physical_node_list);
->         INIT_LIST_HEAD(&device->del_list);
-> +       INIT_LIST_HEAD(&device->location_list);
->         mutex_init(&device->physical_node_lock);
->
->         mutex_lock(&acpi_device_lock);
-> @@ -712,6 +787,8 @@ static int __acpi_device_add(struct acpi_device *device,
->         if (device->wakeup.flags.valid)
->                 list_add_tail(&device->wakeup_list, &acpi_wakeup_device_list);
->
-> +       acpi_store_device_location(device);
-> +
->         mutex_unlock(&acpi_device_lock);
->
->         if (device->parent)
-> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-> index d6fe27b695c3d..9123884e4e7ec 100644
-> --- a/include/acpi/acpi_bus.h
-> +++ b/include/acpi/acpi_bus.h
-> @@ -354,6 +354,18 @@ struct acpi_device_data {
->         struct list_head subnodes;
->  };
->
-> +/*
-> + * struct acpi_device_location - Device location based on _PLD
-> + * @devices: List of devices that share this location
-> + * @node: Entry in the internal list of locations
-> + * @pld_crc: CRC-32 hash of the _PLD
-> + */
-> +struct acpi_device_location {
+> I do not add it because I do not want any bots to
+> react to the patch before it has actually been accepted.
+> 
+> The bug shouldn't be closed before the fix has really been accepted.
+> 
+>> I think this line should be there as well:
+>>
+>> Reported-by: Chris Hixon <linux-kernel-bugs@hixontech.com>
+> 
+> +Chris
+> 
+> This is true. I'll add the Reported-by tag if it's OK to you Chris?
 
-"acpi_dev_location_sharing_info" ?
+thx!
 
-> +       struct list_head devices;
-> +       struct list_head node;
-> +       u32 pld_crc;
-> +};
-> +
->  struct acpi_gpio_mapping;
->
->  /* Device */
-> @@ -366,6 +378,7 @@ struct acpi_device {
->         struct list_head node;
->         struct list_head wakeup_list;
->         struct list_head del_list;
-> +       struct list_head location_list;
-
-"location_sharing_list" ?
-
->         struct acpi_device_status status;
->         struct acpi_device_flags flags;
->         struct acpi_device_pnp pnp;
-> @@ -731,11 +744,17 @@ static inline void acpi_bus_put_acpi_device(struct acpi_device *adev)
->  {
->         acpi_dev_put(adev);
->  }
-> +
-> +struct acpi_device_location *acpi_device_get_location(struct acpi_device *adev);
->  #else  /* CONFIG_ACPI */
->
->  static inline int register_acpi_bus_type(void *bus) { return 0; }
->  static inline int unregister_acpi_bus_type(void *bus) { return 0; }
->
-> +static inline struct acpi_device_location *acpi_device_get_location(struct acpi_device *adev)
-> +{
-> +       return NULL;
-> +}
->  #endif                         /* CONFIG_ACPI */
->
->  #endif /*__ACPI_BUS_H__*/
-> --
-
-And overall I'm wondering if this can be achieved by storing the
-pld_crc directly in struct acpi_device and doing a
-bus_for_each_dev(&acpi_bus_type, ...) walk every time a list of
-devices sharing a _PLD is needed?
-
-It looks like typec_link_ports() is the only user of this and it can
-easily afford doing a walk like the above if I'm not mistaken.
+Ciao, Thorsten
