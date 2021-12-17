@@ -2,84 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A63747884C
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 10:58:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3973B47887E
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 11:13:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234648AbhLQJ6X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Dec 2021 04:58:23 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57760 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234606AbhLQJ6X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 04:58:23 -0500
+        id S234785AbhLQKNB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Dec 2021 05:13:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234738AbhLQKM6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 05:12:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12DCC061574;
+        Fri, 17 Dec 2021 02:12:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95A05620D3;
-        Fri, 17 Dec 2021 09:58:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ACDEC36AE5;
-        Fri, 17 Dec 2021 09:58:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639735102;
-        bh=fulc/W776dWFoA7dIkj723RIpk0KZ9GyiQRx4gs6NwM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JzlETfY3wid1h1GcHWWxftqymRosrGD5d7bs6XIzsbhcenJlwQwzEOMPqJl/pDggZ
-         USrU4ZQy18Mtfimb42NbvulHcCvCRvf4t0cUTLn17mlMoikxCImJiKcnXF+ANq/EX3
-         MolPtFdyi2dXjj3bJuPN39RkOyw4mDai8iwY9NqA=
-Date:   Fri, 17 Dec 2021 10:58:19 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Baruch Siach <baruch@tkos.co.il>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Wesley Cheng <wcheng@codeaurora.org>
-Subject: Re: [PATCH] usb: dwc3: dwc3-qcom: Fix registration when
- tx-fifo-resize exists
-Message-ID: <YbxfO8MQtWrONKvh@kroah.com>
-References: <e7ee9012055a4ba9afcb1ffbbeda25f113f171b6.1638701145.git.baruch@tkos.co.il>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96E48B82787;
+        Fri, 17 Dec 2021 10:12:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4747BC36AE1;
+        Fri, 17 Dec 2021 10:12:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639735975;
+        bh=Vj3Lsqq1DMV8v0b3cbSCA7WL/NE5Wa/pI0kYsoHgxrY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sik4rgSqEFFom+xJPuVwcQLCuGPlL1e8xemVbEA6+U85WXcwzqrR8I4nH07JPkQ4G
+         RkE9J51Imxu3jjP/rZXF+Ono79/ZxNYteOcDg6gK7tlBopCvmR63MnbV4exYhpWPpK
+         6sVLjRwcoov+iHTg2jCuvLSwzbiFXwNAOz1Y8A5OMYApFC085PMCZS/XkuomRpoumD
+         DtrlIz/cfJMwWdWNzIndkgzZlKr1t+Coe2f7VVv/lrj8f1i60YLwKc3n5kXy8VBxFN
+         s0fHwdTO8m4uFNaiJwp6vNkRXX+F7MvLzjSAIeRi4NBzb7mmQcW/0dy5PsHiKLVza4
+         5tR2DH2m662yQ==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1myAEP-000g65-4M; Fri, 17 Dec 2021 11:12:53 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Wei Xu <xuwei5@hisilicon.com>, Rob Herring <robh+dt@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Yu Chen <chenyu56@huawei.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v2 0/7] DT bindings for Hikey960/970 USB/PCI
+Date:   Fri, 17 Dec 2021 11:12:44 +0100
+Message-Id: <cover.1639735742.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e7ee9012055a4ba9afcb1ffbbeda25f113f171b6.1638701145.git.baruch@tkos.co.il>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Dec 05, 2021 at 12:45:45PM +0200, Baruch Siach wrote:
-> Commit cefdd52fa04 ("usb: dwc3: dwc3-qcom: Enable tx-fifo-resize
-> property by default") added the tx-fifo-resize property. But when this
-> property exists already, of_add_property() fails with -EEXIST, thus
-> breaking core registration. This regresses the IPQ6018 platform that has
-> tx-fifo-resize in its device-tree.
-> 
-> Don't fail when tx-fifo-resize exists.
-> 
-> Fixes: cefdd52fa045 ("usb: dwc3: dwc3-qcom: Enable tx-fifo-resize property by default")
-> Cc: Wesley Cheng <wcheng@codeaurora.org>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 9abbd01028c5..bbd8e401a82c 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -667,7 +667,7 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
->  
->  	prop->name = "tx-fifo-resize";
->  	ret = of_add_property(dwc3_np, prop);
-> -	if (ret) {
-> +	if (ret && ret != -EEXIST) {
->  		dev_err(dev, "unable to add property\n");
->  		goto node_put;
->  	}
-> -- 
-> 2.33.0
-> 
+Thosre are the only missing parts for PCI to work on HiKey970 and
+for USB on HiKey960 and HiKey 970 boards.
 
-This commit does not apply to my tree at all.  What tree/branch did you
-make it against?
+-
 
-thanks,
+v2:
+  - patch 1: fixed port description for the USB hub;
+  - patch 2: added an ack;
+  - patch 3: is now dual-licensed, and had some renames;
+  - patch 4: changed accordingly.
 
-greg k-h
+John Stultz (1):
+  arm64: dts: hisilicon: Add usb mux hub for hikey960
+
+Manivannan Sadhasivam (1):
+  arm64: dts: HiSilicon: Add support for HiKey 970 PCIe controller
+    hardware
+
+Mauro Carvalho Chehab (4):
+  dt-bindings: clock: hi3670-clock.txt: add pmctrl compatible
+  dt-bindings: usb: hisilicon,hi3670-dwc3: add binding for Kirin970
+  arm64: dts: hisilicon: Add support for Hikey 970 USB3 PHY
+  arm64: dts: hisilicon: Add usb mux hub for hikey970
+
+Yu Chen (1):
+  dt-bindings: misc: add schema for USB hub on Kirin devices
+
+ .../bindings/clock/hi3670-clock.txt           |   1 +
+ .../bindings/misc/hisilicon,hikey-usb.yaml    |  84 +++++++++
+ .../bindings/usb/hisilicon,hi3670-dwc3.yaml   | 105 +++++++++++
+ .../boot/dts/hisilicon/hi3660-hikey960.dts    |  35 +++-
+ .../boot/dts/hisilicon/hi3670-hikey970.dts    | 106 ++++++++++++
+ arch/arm64/boot/dts/hisilicon/hi3670.dtsi     | 163 ++++++++++++++++++
+ 6 files changed, 492 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/misc/hisilicon,hikey-usb.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/hisilicon,hi3670-dwc3.yaml
+
+-- 
+2.33.1
+
+
