@@ -2,100 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83DC04787C0
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 10:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 058484787DC
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 10:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232965AbhLQJeT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Dec 2021 04:34:19 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:56762 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234463AbhLQJeE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 04:34:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1639733645; x=1671269645;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TDibzwXp0/AuHXb5O6QBcMvGLoIDWdV4nhrP4ikiYgs=;
-  b=IcJDN+RGDIVzS9VxUo0YVwzZJaPpUvMkGkMripa+z2MZabshIe5SSnqJ
-   IQESsW87UvB6HfglIhN0stn5sSe/31Re2Fr0FZGVpT1kJTUTbbkjAP3Mh
-   IDUoUs0olc0wHQJ9Rn+tB5dovDxGzxEAlEktema0KmfBqh58u+VaUe8wJ
-   FnLFVgfL4YMgN/yjisbKY2U5v9Opws05QhKK2JB7gTbOhoXFEged+HZI5
-   TXayCCe9vhz6hXkxvlW8MNMkJYQWZa4wpfQFpEgqBGoZcLYrrZIqVvVVZ
-   k58AaPy289+TCzDWsHF53S2m70ra5BiPTLrieP5mkbfn27ep4i1HrU2iz
-   A==;
-IronPort-SDR: r1QESrmcOCK5lUf5FF6Gn0Cql1Ju+0e+9pZAOvhWsVIpc52P6vwGhXUymrsWdqF1jX4k/QdndF
- Sy/niIGR57CRxg5z1cy+Nx6swWGhVFT6P4RFjvMFyzx3TvL3T6UO5psIi78fznxYe9q2yzdcpy
- AQ/SWYg0GxxlJgy1IGAmshJykmCdYOlcmUanjXVQTIPsvRWsNpoaccNsP+Idg947VedbAYNMOZ
- rFEtcMMdUtTthvbYj+OHtUwaryWPyPjPgXMhLCSRXX0KHuiqbmvw4k7br64xgN9fXZzAm7ynAC
- JLlvSXfyiW3hjvThwnRZs8P7
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="147002811"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Dec 2021 02:34:03 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 17 Dec 2021 02:34:00 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 17 Dec 2021 02:33:54 -0700
-From:   <conor.dooley@microchip.com>
-To:     <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
-        <robh+dt@kernel.org>, <jassisinghbrar@gmail.com>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <broonie@kernel.org>,
-        <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
-        <u.kleine-koenig@pengutronix.de>, <lee.jones@linaro.org>,
-        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-crypto@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
-CC:     <krzysztof.kozlowski@canonical.com>, <geert@linux-m68k.org>,
-        <bin.meng@windriver.com>, <heiko@sntech.de>,
-        <lewis.hanly@microchip.com>, <conor.dooley@microchip.com>,
-        <daire.mcnamara@microchip.com>, <ivan.griffin@microchip.com>,
-        <atish.patra@wdc.com>
-Subject: [PATCH v2 17/17] MAINTAINERS: update riscv/microchip entry
-Date:   Fri, 17 Dec 2021 09:33:25 +0000
-Message-ID: <20211217093325.30612-18-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211217093325.30612-1-conor.dooley@microchip.com>
-References: <20211217093325.30612-1-conor.dooley@microchip.com>
+        id S233062AbhLQJhc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Dec 2021 04:37:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231765AbhLQJhb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 04:37:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8AF4C061574;
+        Fri, 17 Dec 2021 01:37:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8192EB8276B;
+        Fri, 17 Dec 2021 09:37:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B272BC36AE1;
+        Fri, 17 Dec 2021 09:37:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639733849;
+        bh=6r8T2sdyzJGwgUQDwahngIXT9lHmmrrGeY5d3v0Z6Vg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YnMVDVWcrkBB1bELWT9aba6SQckUMX9p1SBB6dGzE/ZCbRH7r5keISb5fMhqhZumo
+         DMkv4pf4xqttz/RdMYKVQHz7EM+eDzi5I3AWH2wzK890iWwLkTKhOSY5Upf61S98II
+         r4kxhtCBg72HQ08VrgjSaRkoiaNsEXwPDMk/m7gg=
+Date:   Fri, 17 Dec 2021 10:37:24 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] USB-serial fixes for 5.16-rc6
+Message-ID: <YbxaVBsKCgA0a26o@kroah.com>
+References: <YbxX3akVsGBNa+KH@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbxX3akVsGBNa+KH@hovoldconsulting.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+On Fri, Dec 17, 2021 at 10:26:53AM +0100, Johan Hovold wrote:
+> The following changes since commit 2585cf9dfaaddf00b069673f27bb3f8530e2039c:
+> 
+>   Linux 5.16-rc5 (2021-12-12 14:53:01 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.16-rc6
 
-Update the RISC-V/Microchip entry by adding the microchip dts
-directory and myself as maintainer
+Pulled and pushed out, thanks.
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7a2345ce8521..3b1d6be7bd56 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16348,8 +16348,10 @@ K:	riscv
- 
- RISC-V/MICROCHIP POLARFIRE SOC SUPPORT
- M:	Lewis Hanly <lewis.hanly@microchip.com>
-+M:	Conor Dooley <conor.dooley@microchip.com>
- L:	linux-riscv@lists.infradead.org
- S:	Supported
-+F:	arch/riscv/boot/dts/microchip/
- F:	drivers/mailbox/mailbox-mpfs.c
- F:	drivers/soc/microchip/
- F:	include/soc/microchip/mpfs.h
--- 
-2.33.1
-
+greg k-h
