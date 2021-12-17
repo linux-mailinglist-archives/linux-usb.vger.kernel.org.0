@@ -2,184 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5059478645
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 09:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF3047870A
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 10:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233826AbhLQIhP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Dec 2021 03:37:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbhLQIhO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 03:37:14 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911CCC061574;
-        Fri, 17 Dec 2021 00:37:14 -0800 (PST)
-Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1my8jn-0005lO-Tm; Fri, 17 Dec 2021 09:37:12 +0100
-Message-ID: <fc7e6040-b760-02f1-57ef-71aa4b88aea6@leemhuis.info>
-Date:   Fri, 17 Dec 2021 09:37:11 +0100
+        id S234118AbhLQJ1C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Dec 2021 04:27:02 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43744 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232507AbhLQJ06 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 04:26:58 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0883262087;
+        Fri, 17 Dec 2021 09:26:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7184DC36AE1;
+        Fri, 17 Dec 2021 09:26:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639733217;
+        bh=zqzHpp8Szzl4sjlKWRVrr59gMWHk2eD5G2vqdLyXgdk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Ln7WB1yf50VS9jZCxqNGy29wGR3OCUFdQN6pVh3inuu2U1266HsrvNcArQpYeorAv
+         dHs01b9iYjNUKecOotcAjSq+BW7vTCZeKitpZGJhQ1Gk1spAOl5a7hTs1zwVGeaOZX
+         k6C5xkqIsoTofkD9BzTUidazncB2uuRLJ7zYf6R0canbiN2t9tr+1TqbY+4+nWEdDX
+         2aTmNJWdS/pd594eJ0udFFxl5mdl8vb8nkcvA0emUSguXV+Xd3ag91AaEkPZGMbeXJ
+         pcG3qssQOPUtQiv/fMGvtSa06HckyaXQOvq++7eY6Zih6bANQ5AfZs2fLrdUkBlNfj
+         Nwf8CSd0Cm/eg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1my9Vt-00019q-DX; Fri, 17 Dec 2021 10:26:53 +0100
+Date:   Fri, 17 Dec 2021 10:26:53 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB-serial fixes for 5.16-rc6
+Message-ID: <YbxX3akVsGBNa+KH@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: FWD: Holtek mouse stopped working after kernel upgrade from
- 5.15.7 to 5.15.8
-Content-Language: en-BS
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     tlinux@cebula.eu.org, linux-input@vger.kernel.org,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <e4efbf13-bd8d-0370-629b-6c80c0044b15@leemhuis.info>
- <42903605-7e8b-4e84-fcd6-1b23169b8639@redhat.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <42903605-7e8b-4e84-fcd6-1b23169b8639@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1639730234;311c0c03;
-X-HE-SMSGID: 1my8jn-0005lO-Tm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 17.12.21 09:13, Benjamin Tissoires wrote:
-> Hi,
-> 
-> On 12/17/21 08:00, Thorsten Leemhuis wrote:
->> Hi, this is your Linux kernel regression tracker speaking.
->>
->> I noticed a bugreport from Tomasz C. (CCed) that sounds a lot like a
->> regression between v5.15.7..v5.15.8 and likely better dealt with by
->> email:
->>
->> To quote from: https://bugzilla.kernel.org/show_bug.cgi?id=215341
->>
->>> After updating kernel from 5.15.7 to 5.15.8 on ArchLinux
->>> distribution, Holtek USB mouse stopped working.
->>> Exact model:
->>> 04d9:a067 Holtek Semiconductor, Inc. USB Gaming Mouse
->>>
->>> The dmesg output for this device from kernel version 5.15.8:
->>>
->>> [    2.501958] usb 2-1.2.3: new full-speed USB device number 6 using
->>> ehci-pci
->>> [    2.624369] usb 2-1.2.3: New USB device found, idVendor=04d9,
->>> idProduct=a067, bcdDevice= 1.16
->>> [    2.624376] usb 2-1.2.3: New USB device strings: Mfr=1, Product=2,
->>> SerialNumber=0
->>> [    2.624379] usb 2-1.2.3: Product: USB Gaming Mouse
->>> [    2.624382] usb 2-1.2.3: Manufacturer: Holtek
->>>
->>> After disconnecting and connecting the USB:
->>>
->>> [   71.976731] usb 2-1.2.3: USB disconnect, device number 6
->>> [   75.013021] usb 2-1.2.3: new full-speed USB device number 8 using
->>> ehci-pci
->>> [   75.135865] usb 2-1.2.3: New USB device found, idVendor=04d9,
->>> idProduct=a067, bcdDevice= 1.16
->>> [   75.135873] usb 2-1.2.3: New USB device strings: Mfr=1, Product=2,
->>> SerialNumber=0
->>> [   75.135877] usb 2-1.2.3: Product: USB Gaming Mouse
->>> [   75.135880] usb 2-1.2.3: Manufacturer: Holtek
->>>
->>>
->>> On kernel version 5.15.7:
->>>
->>> [    2.280515] usb 2-1.2.3: new full-speed USB device number 6 using
->>> ehci-pci
->>> [    2.379777] usb 2-1.2.3: New USB device found, idVendor=04d9,
->>> idProduct=a067, bcdDevice= 1.16
->>> [    2.379784] usb 2-1.2.3: New USB device strings: Mfr=1, Product=2,
->>> SerialNumber=0
->>> [    2.379787] usb 2-1.2.3: Product: USB Gaming Mouse
->>> [    2.379790] usb 2-1.2.3: Manufacturer: Holtek
->>> [    2.398578] input: Holtek USB Gaming Mouse as
->>> /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.2/2-1.2.3/2-1.2.3:1.0/0003:04D9:A067.0005/input/input11
->>>
->>> [    2.450977] holtek_mouse 0003:04D9:A067.0005: input,hidraw4: USB
->>> HID v1.10 Keyboard [Holtek USB Gaming Mouse] on
->>> usb-0000:00:1d.0-1.2.3/input0
->>> [    2.451013] holtek_mouse 0003:04D9:A067.0006: Fixing up report
->>> descriptor
->>> [    2.452189] input: Holtek USB Gaming Mouse as
->>> /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.2/2-1.2.3/2-1.2.3:1.1/0003:04D9:A067.0006/input/input12
->>>
->>> [    2.468510] usb 2-1.2.4: new high-speed USB device number 7 using
->>> ehci-pci
->>> [    2.503913] holtek_mouse 0003:04D9:A067.0006:
->>> input,hiddev96,hidraw5: USB HID v1.10 Mouse [Holtek USB Gaming Mouse]
->>> on usb-0000:00:1d.0-1.2.3/input1
->>> [    2.504105] holtek_mouse 0003:04D9:A067.0007: hiddev97,hidraw6:
->>> USB HID v1.10 Device [Holtek USB Gaming Mouse] on
->>> usb-0000:00:1d.0-1.2.3/input2
->>>
->>> Rolling back the kernel to version 5.15.7 solves the problem.
-> 
-> Oops, sorry. An overlook from a precedent commit.
-> 
-> Can you confirm the following patch works?
+The following changes since commit 2585cf9dfaaddf00b069673f27bb3f8530e2039c:
 
-Tomasz, could you give it a try please?
+  Linux 5.16-rc5 (2021-12-12 14:53:01 -0800)
 
-> (and also tell me if the
-> links I put are sufficient for regzbot)
+are available in the Git repository at:
 
-They should be, many thx for placing them. But FWIW, by ...
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.16-rc6
 
-> ---
-> rom 8f38596f2620c4b22ff9e2622917ac2b69aa8320 Mon Sep 17 00:00:00 2001
-> From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> Date: Fri, 17 Dec 2021 09:03:32 +0100
-> Subject: [PATCH] HID: holtek: fix mouse probing
-> 
-> An overlook from the previous commit: we don't even parse or start the
-> device, meaning that the device is not presented to user space.
-> 
-> Fixes: 93020953d0fa ("HID: check for valid USB device for many HID
-> drivers")
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215341
-> Link:
-> https://lore.kernel.org/regressions/e4efbf13-bd8d-0370-629b-6c80c0044b15@leemhuis.info/
+for you to fetch changes up to 2b503c8598d1b232e7fc7526bce9326d92331541:
 
-...kernel standards you should use the kernel.org redirector here
-instead by doing a a s!regressions!r! (regzbot doesn't care; I'll
-improve my text templates to make this more obvious).
+  USB: serial: option: add Telit FN990 compositions (2021-12-14 09:22:06 +0100)
 
-Ciao, Thorsten
+----------------------------------------------------------------
+USB-serial fixes for 5.16-rc6
 
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> ---
->  drivers/hid/hid-holtek-mouse.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/drivers/hid/hid-holtek-mouse.c
-> b/drivers/hid/hid-holtek-mouse.c
-> index b7172c48ef9f..7c907939bfae 100644
-> --- a/drivers/hid/hid-holtek-mouse.c
-> +++ b/drivers/hid/hid-holtek-mouse.c
-> @@ -65,8 +65,23 @@ static __u8 *holtek_mouse_report_fixup(struct
-> hid_device *hdev, __u8 *rdesc,
->  static int holtek_mouse_probe(struct hid_device *hdev,
->                    const struct hid_device_id *id)
->  {
-> +    int ret;
-> +
->      if (!hid_is_usb(hdev))
->          return -EINVAL;
-> +
-> +    ret = hid_parse(hdev);
-> +    if (ret) {
-> +        hid_err(hdev, "hid parse failed: %d\n", ret);
-> +        return ret;
-> +    }
-> +
-> +    ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
-> +    if (ret) {
-> +        hid_err(hdev, "hw start failed: %d\n", ret);
-> +        return ret;
-> +    }
-> +
->      return 0;
->  }
->  
+Here's a fix for a reported problem in the cp210x gpio-registration code
+and some more modem device ids.
+
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Daniele Palmas (1):
+      USB: serial: option: add Telit FN990 compositions
+
+Johan Hovold (1):
+      USB: serial: cp210x: fix CP2105 GPIO registration
+
+ drivers/usb/serial/cp210x.c | 6 ++++--
+ drivers/usb/serial/option.c | 8 ++++++++
+ 2 files changed, 12 insertions(+), 2 deletions(-)
