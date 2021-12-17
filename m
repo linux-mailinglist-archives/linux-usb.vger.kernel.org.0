@@ -2,51 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DAF4792C9
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 18:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6254796B1
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 23:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239794AbhLQRZN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Dec 2021 12:25:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233875AbhLQRZN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 12:25:13 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4215FC061574
-        for <linux-usb@vger.kernel.org>; Fri, 17 Dec 2021 09:25:13 -0800 (PST)
-Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1myGyl-0001hn-79; Fri, 17 Dec 2021 18:25:11 +0100
-Message-ID: <f1e9d624-100d-d7af-d716-1ca57474aa97@leemhuis.info>
-Date:   Fri, 17 Dec 2021 18:25:09 +0100
+        id S229736AbhLQWAg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Dec 2021 17:00:36 -0500
+Received: from sender3-op-o12.zoho.com ([136.143.184.12]:17865 "EHLO
+        sender3-op-o12.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229708AbhLQWAf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 17:00:35 -0500
+X-Greylist: delayed 904 seconds by postgrey-1.27 at vger.kernel.org; Fri, 17 Dec 2021 17:00:35 EST
+ARC-Seal: i=1; a=rsa-sha256; t=1639777522; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=m1EN6GlycFuU2k+d2VH33fnbnHpWunxhtidVcx+qtuCUOYsDYsKzCbYzB2+ZaelXDz/hSUcPxlTX6/5xnKtRY5K8y6BKQ3WnQhfuHYNpBaWYPSAsy55vsspLTNkQiSBxEjenCA+N7sVqt6v+7ruBDphQk/r7tanTdRxMT5rzFIo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1639777522; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=kaNebS0UtVoGsOxAchCwqnaBlgK7wVitOc8I0f6hSdw=; 
+        b=njZFRXLGpsvO9WisiqO+gXzSYc8GsOBs+78FK6TTnWZFyT1ILUswduqPfkq4UfDIdARSlFtCyuABxInv07hkMKxZmQnL56vE4f/dJx+CDL1+7ISiYTJWfCfbtcsy6C2nEUeXh+P5n84Ms5ayPKpN9YGdkIBoaJjrsGE6JsyRS0o=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=hixontech.com;
+        spf=pass  smtp.mailfrom=linux-kernel-bugs@hixontech.com;
+        dmarc=pass header.from=<linux-kernel-bugs@hixontech.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1639777522;
+        s=zoho; d=hixontech.com; i=linux-kernel-bugs@hixontech.com;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        bh=kaNebS0UtVoGsOxAchCwqnaBlgK7wVitOc8I0f6hSdw=;
+        b=g1D4VKYdBaTRza6b8g82kpyMur5DtS/HDxAEvizQVXqXReMZjx1aobPCdZsIdfXl
+        Wle3sea1pATrxsRJoY9wh9hX1HZNEL2KGnxrW3VbSfxCb1RPHZIpyXokHp/Dv2sobT2
+        EF7x66cOWegdWrpVDmk8fY8euxLS0n7hh40r6DpU=
+Received: from droplet5.hixontech.com (droplet5.hixontech.com [164.90.159.118]) by mx.zohomail.com
+        with SMTPS id 1639777519811532.2501877550594; Fri, 17 Dec 2021 13:45:19 -0800 (PST)
+Message-ID: <1c569077-86e9-e3ab-1a78-8e0af2e38031@hixontech.com>
+Date:   Fri, 17 Dec 2021 14:45:17 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
 Subject: Re: [PATCH] usb: typec: ucsi: Only check the contract if there is a
  connection
-Content-Language: en-BS
+Content-Language: en-US
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Chris Hixon <linux-kernel-bugs@hixontech.com>
+        Thorsten Leemhuis <regressions@leemhuis.info>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
 References: <20211217140327.31921-1-heikki.krogerus@linux.intel.com>
  <1d90a23b-fe2f-6892-1641-7a13e38a00dc@leemhuis.info>
  <YbypYo4Ohii4fSNx@kuha.fi.intel.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
+From:   Chris Hixon <linux-kernel-bugs@hixontech.com>
 In-Reply-To: <YbypYo4Ohii4fSNx@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1639761913;73a19a97;
-X-HE-SMSGID: 1myGyl-0001hn-79
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 12/17/21 8:14 AM, Heikki Krogerus wrote:
 
-
-On 17.12.21 16:14, Heikki Krogerus wrote:
 > Hi,
-> 
+>
 > On Fri, Dec 17, 2021 at 03:32:59PM +0100, Thorsten Leemhuis wrote:
 >> Lo! Thx for working out a fix this quickly!
 >>
@@ -69,22 +79,10 @@ On 17.12.21 16:14, Heikki Krogerus wrote:
 >> BugLink? Is that a tag we really use? Then I'm unaware of it. Greg is
 >> the expert and can likely clarify, but that line afaik needs to replaced
 >> by this:
-> 
 > Although not yet documented, it is the appropriate tag for the link to
-> the bug.
-
-For you maybe. But it kind of becomes a mess if various people create
-different tags, as they do now (you are just one of them).
-
-> It makes it clear that the link is to the bug and not to
+> the bug. It makes it clear that the link is to the bug and not to
 > the discussion on the list.
-
-I agree that some clarification is needed, that's why I recently
-proposed something:
-https://lore.kernel.org/lkml/cover.1639042966.git.linux@leemhuis.info/
-
-Maybe chime in there.
-
+>
 >> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215117
 >> Link:
 >> https://lore.kernel.org/linux-usb/bug-215117-208809@https.bugzilla.kernel.org%2F/
@@ -96,40 +94,25 @@ Maybe chime in there.
 >> The second line will also make the regression tracking bot automatically
 >> close the issue (but I fear it might also fail due to the slash at the
 >> end of the message-id :-/)
-> 
 > Greg will add the "Link" tag to the commit when, and if, he actually
-> takes the patch.
-
-No, that is another Link tag. Let me quote
-Documentation/process/submitting-patches.rst:
-
-```
-If related discussions or any other background information behind the
-change can be found on the web, add 'Link:' tags pointing to it. In case
-your patch fixes a bug, for example, add a tag with a URL referencing
-the report in the mailing list archives or a bug tracker;
-```
-
-This concept is old, but the text was reworked recently to make this use
-case for the Link: tag clearer.
-For details see: https://git.kernel.org/linus/1f57bd42b77c
-
-As the issue was discussed in a bug tracker and on the list, please add
-Link tags to both places.
-
-> I do not add it because I do not want any bots to
+> takes the patch. I do not add it because I do not want any bots to
 > react to the patch before it has actually been accepted.
-> 
+>
 > The bug shouldn't be closed before the fix has really been accepted.
-> 
+>
 >> I think this line should be there as well:
 >>
 >> Reported-by: Chris Hixon <linux-kernel-bugs@hixontech.com>
-> 
 > +Chris
-> 
+>
 > This is true. I'll add the Reported-by tag if it's OK to you Chris?
+>
+> thanks,
+>
 
-thx!
+Yes, that's fine with me. Please add the tag:
 
-Ciao, Thorsten
+Reported-by: Chris Hixon <linux-kernel-bugs@hixontech.com>
+
+Thanks
+
