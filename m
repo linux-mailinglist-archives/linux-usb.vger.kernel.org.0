@@ -2,23 +2,23 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60177478E34
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 15:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40657478E5E
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 15:47:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237087AbhLQOqC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Dec 2021 09:46:02 -0500
-Received: from mail-m17643.qiye.163.com ([59.111.176.43]:18242 "EHLO
+        id S237490AbhLQOr0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Dec 2021 09:47:26 -0500
+Received: from mail-m17643.qiye.163.com ([59.111.176.43]:19252 "EHLO
         mail-m17643.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232771AbhLQOqB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 09:46:01 -0500
+        with ESMTP id S232771AbhLQOrZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 09:47:25 -0500
 DKIM-Signature: a=rsa-sha256;
-        b=i+XgBhIIKm3biOwni57p1T4yRRwCuDeHBATCR2WaXR0Oxch5tylpd4KGmigadM3tmMV2gtIX65HQ8TWtn97UjuLKnomu0xxwHz8YcCa46a+1IvJdwnOhXyljbGs65+I+kcK1omfYgICWCZa8g7hYu/pkKvk3NLOXWSUcLR+3wIk=;
+        b=FE97xfNiCH2GO6VWAvP27wDcADAiSxzVCbspMp0R2wFATv7wLmU0T4bLjnHChXLqp3zb1zJ4yPXDeo9gRUCIqI5QqP8QMXjWOjx4tdUnrGuURJK/mdtooGMxhQOOMZhvIhck6XLsQHdJ3xxnRv/hvximNfEoS8WaGzQUj3SpRtg=;
         s=default; c=relaxed/relaxed; d=vivo.com; v=1;
         bh=5FMw7kp1HH8RVuayQYlBDiL3oMoktV9Ah1Z/ALYgqdw=;
         h=date:mime-version:subject:message-id:from;
-Received: from vivo-600-G6.vivo.xyz (unknown [58.251.74.232])
-        by mail-m17643.qiye.163.com (Hmail) with ESMTPA id 2854D7E0371;
-        Fri, 17 Dec 2021 22:45:59 +0800 (CST)
+Received: from vivo-600-G6.vivo.xyz (unknown [58.250.176.229])
+        by mail-m17643.qiye.163.com (Hmail) with ESMTPA id 2E6B07E00E9;
+        Fri, 17 Dec 2021 22:47:23 +0800 (CST)
 From:   Yaqin Pan <akingchen@vivo.com>
 To:     robh@kernel.org
 Cc:     akingchen@vivo.com, balbi@kernel.org, devicetree@vger.kernel.org,
@@ -26,18 +26,18 @@ Cc:     akingchen@vivo.com, balbi@kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         s.shtylyov@omp.ru
 Subject: Re: [PATCH 2/2] dt-bindings: usb: document snps,dis_split_quirk property in dwc3
-Date:   Fri, 17 Dec 2021 22:45:44 +0800
-Message-Id: <20211217144544.7147-1-akingchen@vivo.com>
+Date:   Fri, 17 Dec 2021 22:47:09 +0800
+Message-Id: <20211217144709.7194-1-akingchen@vivo.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <YbufNsBtiIzbm+9k@robh.at.kernel.org>
 References: <YbufNsBtiIzbm+9k@robh.at.kernel.org>
 X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
-        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWRpMSUNWSkhIGk8YGBhLQx
-        hMVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWVVLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Pwg6Qio*IT5KHzY*NgkCLCw4
-        N0JPC1FVSlVKTUhCTE5JSE5CTUJKVTMWGhIXVRoQEhUcGBMeFTsNEg0UVRgUFkVZV1kSC1lBWU5D
-        VUlOSlVMT1VJSElZV1kIAVlBSU9NTjcG
-X-HM-Tid: 0a7dc8db5e05d999kuws2854d7e0371
+        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWUMeSUNWHhhLTE1ISEoaH0
+        1OVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWVVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NS46Ezo6Aj5LVjYJNgpCLCwR
+        GE8aCkNVSlVKTUhCTE5JT09ITEhKVTMWGhIXVRoQEhUcGBMeFTsNEg0UVRgUFkVZV1kSC1lBWU5D
+        VUlOS1VKTE1VSUlCWVdZCAFZQUlPTU43Bg++
+X-HM-Tid: 0a7dc8dca64fd999kuws2e6b07e00e9
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
