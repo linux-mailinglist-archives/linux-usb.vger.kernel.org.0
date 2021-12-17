@@ -2,105 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A17C5478D6C
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 15:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A5E478DD6
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 15:33:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237204AbhLQOVh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Dec 2021 09:21:37 -0500
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:46005 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237117AbhLQOVc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 09:21:32 -0500
-Received: by mail-ot1-f53.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso2998237otf.12;
-        Fri, 17 Dec 2021 06:21:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=J/M+2PmsjRymmQB6phu/NDYxaFxAbv7b80JhNIg62vk=;
-        b=NQIWZIgc0UZcX0LuphZnoniUJLFEp7+2pjxBAWCuBBgbYdtVQc6wR2caPrxQH0kWVh
-         fM/NwpEknhteGivxd1gBvv9g/hMkoYxwOBg0m84845oQ9kVMe4c9sbEVfRyWyjjWS7Bm
-         hfanWR6OOBeXdPAfEd0nlGdESv/+L7f09O+Eyv99FHodwAOV/J/8SpmXGU40BP+NK30N
-         1PlncpU+H5ddWioi8i2ssTNnLNFr9wxQOTvuulZPxLvYo9w7PfjxmeOfm7mcFqbdmfOO
-         UK2Jxd9CMQ4iwhFnMTvGpT3+9wXZlqglXS+rBMPicXSJbTMSZkjM05mqA7zx46nVzDWu
-         ys1w==
-X-Gm-Message-State: AOAM531CzH0azIdRDJPBFHpqEmRMtPjzajMLhcmjawFsuCXfJIT2r5YP
-        QCYl40CmQZom6rHsF+pb1A==
-X-Google-Smtp-Source: ABdhPJxSbDeJnwvijqNwXzfBaRn9Hh/PmAL/1NDID3KUpTOZzTZQbR9Dg2FMsfiJTFgvBh57qRNhkw==
-X-Received: by 2002:a05:6830:1d68:: with SMTP id l8mr2311039oti.21.1639750891747;
-        Fri, 17 Dec 2021 06:21:31 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id n26sm1547497ooq.36.2021.12.17.06.21.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 06:21:31 -0800 (PST)
-Received: (nullmailer pid 2814889 invoked by uid 1000);
-        Fri, 17 Dec 2021 14:21:22 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     conor.dooley@microchip.com
-Cc:     linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        a.zummo@towertech.it, bin.meng@windriver.com,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        linux-pwm@vger.kernel.org, alexandre.belloni@bootlin.com,
-        jassisinghbrar@gmail.com, lewis.hanly@microchip.com,
-        palmer@dabbelt.com, gregkh@linuxfoundation.org,
-        bgolaszewski@baylibre.com, paul.walmsley@sifive.com,
-        linux-riscv@lists.infradead.org, aou@eecs.berkeley.edu,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linus.walleij@linaro.org, u.kleine-koenig@pengutronix.de,
-        krzysztof.kozlowski@canonical.com, broonie@kernel.org,
-        atish.patra@wdc.com, geert@linux-m68k.org,
-        linux-usb@vger.kernel.org, heiko@sntech.de,
-        linux-i2c@vger.kernel.org, thierry.reding@gmail.com,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, lee.jones@linaro.org
-In-Reply-To: <20211217093325.30612-12-conor.dooley@microchip.com>
-References: <20211217093325.30612-1-conor.dooley@microchip.com> <20211217093325.30612-12-conor.dooley@microchip.com>
-Subject: Re: [PATCH v2 11/17] dt-bindings: usb: add bindings for microchip mpfs musb
-Date:   Fri, 17 Dec 2021 08:21:22 -0600
-Message-Id: <1639750882.697647.2814888.nullmailer@robh.at.kernel.org>
+        id S235801AbhLQOdD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Dec 2021 09:33:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230248AbhLQOdC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 09:33:02 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4ADC061574
+        for <linux-usb@vger.kernel.org>; Fri, 17 Dec 2021 06:33:02 -0800 (PST)
+Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1myEI7-00059p-Gn; Fri, 17 Dec 2021 15:32:59 +0100
+Message-ID: <1d90a23b-fe2f-6892-1641-7a13e38a00dc@leemhuis.info>
+Date:   Fri, 17 Dec 2021 15:32:59 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] usb: typec: ucsi: Only check the contract if there is a
+ connection
+Content-Language: en-BS
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+References: <20211217140327.31921-1-heikki.krogerus@linux.intel.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20211217140327.31921-1-heikki.krogerus@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1639751582;c85fdf9e;
+X-HE-SMSGID: 1myEI7-00059p-Gn
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 17 Dec 2021 09:33:19 +0000, conor.dooley@microchip.com wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+Lo! Thx for working out a fix this quickly!
+
+I'm just the regression tracker, but I think there are a few minor
+details to improve here.
+
+On 17.12.21 15:03, Heikki Krogerus wrote:
+> The driver must make sure there is an actual connection
+> before checking details about the USB Power Delivery
+> contract. Those details are not valid unless there is a
+> connection.
 > 
-> Add device tree bindings for the usb controller on
-> the Microchip PolarFire SoC.
+> This fixes NULL pointer dereference that is caused by an
+> attempt to register bogus partner alternate mode that the
+> firmware on some platform may report before the actual
+> connection.
 > 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Fixes: 6cbe4b2d5a3f ("usb: typec: ucsi: Check the partner alt modes always if there is PD contract")
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215117
+BugLink? Is that a tag we really use? Then I'm unaware of it. Greg is
+the expert and can likely clarify, but that line afaik needs to replaced
+by this:
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215117
+Link:
+https://lore.kernel.org/linux-usb/bug-215117-208809@https.bugzilla.kernel.org%2F/
+
+Normally the last line would need a 's!linux-usb!r!', but seems the
+kernel.org redirector doesn't work well in this particular case, so I
+guess it's better this way than not at all :-/
+
+The second line will also make the regression tracking bot automatically
+close the issue (but I fear it might also fail due to the slash at the
+end of the message-id :-/)
+
+I think this line should be there as well:
+
+Reported-by: Chris Hixon <linux-kernel-bugs@hixontech.com>
+
+But according to Documentation/process/5.Posting.rst you first need to
+ask Chris if he's okay with that.
+
+Ciao, Thorsten
+
+#regzbot ^backmonitor:
+https://lore.kernel.org/linux-usb/bug-215117-208809@https.bugzilla.kernel.org%2F/
+
+
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 > ---
->  .../bindings/usb/microchip,mpfs-musb.yaml     | 61 +++++++++++++++++++
->  1 file changed, 61 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml
+>  drivers/usb/typec/ucsi/ucsi.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/usb/microchip,mpfs-musb.example.dts:19:18: fatal error: dt-bindings/clock/microchip,mpfs-clock.h: No such file or directory
-   19 |         #include "dt-bindings/clock/microchip,mpfs-clock.h"
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:373: Documentation/devicetree/bindings/usb/microchip,mpfs-musb.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1413: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1569849
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 9d6b7e02d6efb..f0c2fa19f3e0f 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1164,7 +1164,9 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>  		ret = 0;
+>  	}
+>  
+> -	if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) == UCSI_CONSTAT_PWR_OPMODE_PD) {
+> +	if (con->partner &&
+> +	    UCSI_CONSTAT_PWR_OPMODE(con->status.flags) ==
+> +	    UCSI_CONSTAT_PWR_OPMODE_PD) {
+>  		ucsi_get_src_pdos(con);
+>  		ucsi_check_altmodes(con);
+>  	}
+> 
