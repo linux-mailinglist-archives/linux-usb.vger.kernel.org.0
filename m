@@ -2,87 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3997C478959
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 12:00:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0033D478986
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Dec 2021 12:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235186AbhLQLAG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Dec 2021 06:00:06 -0500
-Received: from mga12.intel.com ([192.55.52.136]:26872 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235165AbhLQLAG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 Dec 2021 06:00:06 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="219746368"
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="219746368"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 03:00:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="662813875"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Dec 2021 03:00:03 -0800
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@intel.com>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-References: <YajkzwmWQua3Kh6A@hirez.programming.kicks-ass.net>
- <105f35d2-3c53-b550-bfb4-aa340d31128e@linux.intel.com>
- <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
- <972a0e28-ad63-9766-88da-02743f80181b@intel.com> <Yao35lElOkwtBYEb@kroah.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: earlyprintk=xdbc seems broken
-Message-ID: <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
-Date:   Fri, 17 Dec 2021 13:01:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.8.1
+        id S235262AbhLQLLQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Dec 2021 06:11:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35544 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233227AbhLQLLQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 06:11:16 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3785DB82799
+        for <linux-usb@vger.kernel.org>; Fri, 17 Dec 2021 11:11:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730CFC36AE8;
+        Fri, 17 Dec 2021 11:11:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639739474;
+        bh=ES7uoj4BDiVT2T6oTaN1XzzKHjMtXJGClU2XTDDwPlk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IOEbSYX007zR6T/+VHwGrWMDsYNNRxMziR4e+QmT1EOD1gq5Hbd+2/CGSAFWam88B
+         fIYJoeOZhrlz8E+xV9FaEQK83Eepjh8zrDkgJRfRwRWJwLe9qM5RbNNb8A7cBh/lwY
+         TzmQXLN0q3myjKp+GbgTGd5pSu84qhM1MzXUBpdE=
+Date:   Fri, 17 Dec 2021 12:11:10 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Daniel Mack <daniel@zonque.org>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>, linux-usb@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/4] usb: gadget: udc: pxa25x: propagate errors from
+ platform_get_irq()
+Message-ID: <YbxwTinHZF3Kdmu+@kroah.com>
+References: <20211214204247.7172-1-s.shtylyov@omp.ru>
+ <20211214204247.7172-3-s.shtylyov@omp.ru>
+ <32d35b68-50e9-a280-d0f7-edef8165825a@zonque.org>
 MIME-Version: 1.0
-In-Reply-To: <Yao35lElOkwtBYEb@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <32d35b68-50e9-a280-d0f7-edef8165825a@zonque.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3.12.2021 17.29, Greg KH wrote:
-> On Fri, Dec 03, 2021 at 07:22:57AM -0800, Dave Hansen wrote:
->> On 12/3/21 6:31 AM, Mathias Nyman wrote:
->>>>> Can you please see if you can repro and fix this?
->>>>>
->>>>> This all was with current 5.16-rc3 on a tigerlake nuc.
->>>>>
->>>>> Also, perhaps you can update the guide on what sort of setup/cables
->>>>> etc.. you need when either the host or the client is a usb3.1 usb-c only
->>>>> device.
->>>>>
->>>> + Mathias, maybe he still has a USB 3.0 debugging cable.
->>>>
->>> Should have at the office, I'll pick it up next week and try it out.
->>
->> Is someone at Intel responsible for this thing? get_maintainer.pl
->> doesn't think so:
->>
->>> $ perl scripts/get_maintainer.pl ./drivers/usb/early/xhci-dbc.c
->>> Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM)
->>> Mike Rapoport <rppt@kernel.org> (commit_signer:1/1=100%,authored:1/1=100%,added_lines:5/5=100%,removed_lines:5/5=100%)
->>> Andrew Morton <akpm@linux-foundation.org> (commit_signer:1/1=100%)
->>> linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
->>> linux-kernel@vger.kernel.org (open list)
+On Fri, Dec 17, 2021 at 11:32:58AM +0100, Daniel Mack wrote:
+> On 12/14/21 21:42, Sergey Shtylyov wrote:
+> > The driver overrides the error codes returned by platform_get_irq() to
+> > -ENODEV for some strange reason.  Switch to propagating the error codes
+> > upstream.
+> > 
+> > Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 > 
-> Intel is the only one that has this hardware :(
+> Acked-by: Daniel Mack <daniel@zonque.org>
 > 
-> 
+> Greg, could you take this through your tree?
 
-I can reproduce this.
-Looks like problems started when driver converted to readl_poll_timeout_atomic() in:
+Will do, thanks!
 
-796eed4b2342 usb: early: convert to readl_poll_timeout_atomic()
-
-Seems to hang when read_poll_timeout_atomic() calls ktime_* functions.
-Maybe  it's too early for ktime.
-
-After reverting that patch it works again for me.
-
--Mathias
+greg k-h
