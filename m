@@ -2,135 +2,203 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98407479893
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Dec 2021 05:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F80A479914
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Dec 2021 07:01:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbhLREY3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Dec 2021 23:24:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbhLREY2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Dec 2021 23:24:28 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E36C061574;
-        Fri, 17 Dec 2021 20:24:28 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id kc16so4288780qvb.3;
-        Fri, 17 Dec 2021 20:24:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ow447+V1jLIH/iB1Z6ZgbSFicWsrQtS2HBi18SMymjI=;
-        b=Tm2m6gB0oXXkwYqQqytMLeQSlFoELAY67iY60JFo1kJ9q9FfXeBpPeR0qHPhN9aIoj
-         YCPqeygPHhU1D/n4wusxbrjjJ163RINK/Um1Yim6Bj8vj5TZ08glj3QwfgIfSCgfuazK
-         5NBLqO7TvueKKYsZ4P9J6VnGrH85A5hP6klteGCIFvekOz1DKIW0+vdhByGmn6hD/pD+
-         Zk3hya5XHmuLVzhtYmRgz/xS6iOTROkPT5YxrtT5dIrV8zLVEJi2hrPojImVeGD+c2Zh
-         F6o7pUw+Lbg/OIghrvYT+sSpnsjxqrzUabJxOLjsT5dFZ25TcW8+wEXnZYhoYYMACyfn
-         VhSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ow447+V1jLIH/iB1Z6ZgbSFicWsrQtS2HBi18SMymjI=;
-        b=bwlM2fvbUZ86X3KeLkpWZPJUGxAPMWT+BMcAdjW5pnPkTBkUuRSXYgkv/s0RHsfd8Z
-         HfJOSLCCooaaD2EVpytHGyxSFlKDruu2Zv4VHX5bLGjW77V5vDHtYOoflPN5c+Hbpdgq
-         bBhpVaSbxhHTuSjOxvFeEmE3Z4Yg9NCIPC8wHM6sCCsK/Vpf+cZ4t8WtfAJgAo8SqfFu
-         JjZ387XfthpcClNHG1jFgRfvkDikBf7FN79R4jUd3YKbzwPKQWX5Izey1Smxv2lCh3zN
-         8/rEwDmwv6fLJjX1hD5ab7DIHtKFMdU8MeNmtdjo5o6pi7bcGBnLd6iyE8OjqJr2kNQR
-         rr2A==
-X-Gm-Message-State: AOAM532CiV79B0ToCI2Kc5c/Y6cMW4jB+5bkIaYJUW8lbAnyFyHe63bk
-        OoEH7e1QkbVO72XtvB/fn+NT5ptUSBiTkg==
-X-Google-Smtp-Source: ABdhPJzNtU8NezgXuwPD7NMA6mdzfxgFmGcs3ws8qJb2r9F+tcbyVdWUunGBO0vL8gNmYbk6GS7ayA==
-X-Received: by 2002:a05:6214:8c2:: with SMTP id da2mr5296213qvb.23.1639801466037;
-        Fri, 17 Dec 2021 20:24:26 -0800 (PST)
-Received: from julio.local ([2804:4ec:12c4:7500:e6f3:759c:d652:13f5])
-        by smtp.gmail.com with ESMTPSA id r16sm8393793qta.46.2021.12.17.20.24.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 20:24:25 -0800 (PST)
-From:   Julio Faracco <jcfaracco@gmail.com>
-To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        axboe@kernel.dk, tglx@linutronix.de, damien.lemoal@wdc.com,
-        dkadashev@gmail.com, paul.gortmaker@windriver.com,
-        zhouyanjie@wanyeetech.com, niklas.cassel@wdc.com,
-        penguin-kernel@i-love.sakura.ne.jp, macro@orcam.me.uk,
-        caihuoqing@baidu.com, jcfaracco@gmail.com
-Subject: [PATCH] usb: fixing some clang warnings inside usb host drivers
-Date:   Sat, 18 Dec 2021 01:24:20 -0300
-Message-Id: <20211218042420.28466-1-jcfaracco@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        id S231238AbhLRGBh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Dec 2021 01:01:37 -0500
+Received: from mga07.intel.com ([134.134.136.100]:14347 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230518AbhLRGBh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 18 Dec 2021 01:01:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639807297; x=1671343297;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=clkottYU+Iqb77/oBjZphZZ3LKSQnf9gPktUR++yhcI=;
+  b=Th2Gcr1k2BAOMECgXjcSo8M24Od/zYwjavNK1JyDWMxukLXnrXpmanma
+   aGo31dzOHvX7rdtWwgbAmrU1YonnHQ0JRpfY4A/oxjQdzL/pqiNeRamJ7
+   e7IoYY5kBKTx7Hdef9IC5M/91LnpYEHFa3uUKflJAxuce2OBkt0StXSr+
+   gHpWSUxzvDotLA/EqTf3DZE+HdBQ+bpwtf4NrkjjbRHkSEmlIbR92HAXg
+   f7CvuDrkOutDLyr8yc9WURdWdCT7ePLrupsw2/71QW+yhcYi5jThxlt4t
+   cA8kWaIS1InfRtpQQjr6m905Wb50dZ8Ln366sk/d3tsxTSNEn5zQG7Gdo
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="303267229"
+X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
+   d="scan'208";a="303267229"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 22:01:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
+   d="scan'208";a="756693980"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 17 Dec 2021 22:01:35 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mySmk-0005gN-Lf; Sat, 18 Dec 2021 06:01:34 +0000
+Date:   Sat, 18 Dec 2021 14:00:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ f2b42379c57682d4b127283da109fa1a3317966a
+Message-ID: <61bd7901.cRwyp+Ui++6aILMo%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Clang is reporting some issues related variable values not used and
-other issues inside some USB host drivers. This commit removes some
-trashes and adds some strategies to mitigate those warnings.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: f2b42379c57682d4b127283da109fa1a3317966a  usb: misc: ehset: Rework test mode entry
 
-The most important is the maxpacket not checking for zeros inside both
-functions qtd_fill(). Even if this variable is always higher than zero,
-it should be checked to avoid this kind of verbosity.
+elapsed time: 723m
 
-Signed-off-by: Julio Faracco <jcfaracco@gmail.com>
+configs tested: 132
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm64                               defconfig
+i386                 randconfig-c001-20211216
+sh                          rsk7203_defconfig
+powerpc                    amigaone_defconfig
+arm                            lart_defconfig
+arc                         haps_hs_defconfig
+sh                            titan_defconfig
+xtensa                         virt_defconfig
+powerpc                       ppc64_defconfig
+powerpc                      ppc6xx_defconfig
+microblaze                      mmu_defconfig
+arc                        nsimosci_defconfig
+mips                            ar7_defconfig
+powerpc                 mpc8560_ads_defconfig
+m68k                       bvme6000_defconfig
+powerpc                mpc7448_hpc2_defconfig
+arm                              alldefconfig
+sparc                               defconfig
+arm                       imx_v6_v7_defconfig
+powerpc                      cm5200_defconfig
+arm                   milbeaut_m10v_defconfig
+arm                        multi_v7_defconfig
+powerpc                      tqm8xx_defconfig
+mips                         tb0219_defconfig
+mips                           rs90_defconfig
+arc                           tb10x_defconfig
+nds32                             allnoconfig
+h8300                       h8s-sim_defconfig
+powerpc                       ebony_defconfig
+m68k                            mac_defconfig
+arm                          pxa168_defconfig
+i386                             alldefconfig
+powerpc                     powernv_defconfig
+m68k                         apollo_defconfig
+m68k                        m5407c3_defconfig
+mips                       capcella_defconfig
+mips                  cavium_octeon_defconfig
+powerpc                 mpc832x_mds_defconfig
+mips                    maltaup_xpa_defconfig
+riscv                          rv32_defconfig
+m68k                        stmark2_defconfig
+powerpc                      makalu_defconfig
+powerpc               mpc834x_itxgp_defconfig
+powerpc                      walnut_defconfig
+mips                        omega2p_defconfig
+arm                         lubbock_defconfig
+arm                        magician_defconfig
+sh                           se7721_defconfig
+arm                         s3c6400_defconfig
+mips                      pic32mzda_defconfig
+powerpc                    mvme5100_defconfig
+arm                          iop32x_defconfig
+arm                         vf610m4_defconfig
+arm                         assabet_defconfig
+arm                  randconfig-c002-20211216
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a001-20211216
+x86_64               randconfig-a002-20211216
+x86_64               randconfig-a003-20211216
+x86_64               randconfig-a006-20211216
+x86_64               randconfig-a005-20211216
+x86_64               randconfig-a004-20211216
+i386                 randconfig-a001-20211216
+i386                 randconfig-a002-20211216
+i386                 randconfig-a005-20211216
+i386                 randconfig-a003-20211216
+i386                 randconfig-a006-20211216
+i386                 randconfig-a004-20211216
+i386                 randconfig-a013-20211217
+i386                 randconfig-a011-20211217
+i386                 randconfig-a016-20211217
+i386                 randconfig-a014-20211217
+i386                 randconfig-a015-20211217
+i386                 randconfig-a012-20211217
+arc                  randconfig-r043-20211217
+s390                 randconfig-r044-20211217
+riscv                randconfig-r042-20211217
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+hexagon              randconfig-r045-20211216
+s390                 randconfig-r044-20211216
+riscv                randconfig-r042-20211216
+hexagon              randconfig-r041-20211216
+hexagon              randconfig-r045-20211217
+hexagon              randconfig-r041-20211217
+
 ---
- drivers/usb/host/ehci-dbg.c     | 1 -
- drivers/usb/host/ehci-q.c       | 2 +-
- drivers/usb/host/ohci-dbg.c     | 1 -
- drivers/usb/host/oxu210hp-hcd.c | 2 +-
- 4 files changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/host/ehci-dbg.c b/drivers/usb/host/ehci-dbg.c
-index 0b7f1edd9eec..70b4ff65295a 100644
---- a/drivers/usb/host/ehci-dbg.c
-+++ b/drivers/usb/host/ehci-dbg.c
-@@ -903,7 +903,6 @@ static ssize_t fill_registers_buffer(struct debug_buffer *buf)
- 	temp = scnprintf(next, size, "complete %ld unlink %ld\n",
- 		ehci->stats.complete, ehci->stats.unlink);
- 	size -= temp;
--	next += temp;
- #endif
- 
- done:
-diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
-index 2cbf4f85bff3..98cb44414e78 100644
---- a/drivers/usb/host/ehci-q.c
-+++ b/drivers/usb/host/ehci-q.c
-@@ -64,7 +64,7 @@ qtd_fill(struct ehci_hcd *ehci, struct ehci_qtd *qtd, dma_addr_t buf,
- 		}
- 
- 		/* short packets may only terminate transfers */
--		if (count != len)
-+		if (count != len && maxpacket > 0)
- 			count -= (count % maxpacket);
- 	}
- 	qtd->hw_token = cpu_to_hc32(ehci, (count << 16) | token);
-diff --git a/drivers/usb/host/ohci-dbg.c b/drivers/usb/host/ohci-dbg.c
-index 4f267dc93882..6fc9c46ffe3c 100644
---- a/drivers/usb/host/ohci-dbg.c
-+++ b/drivers/usb/host/ohci-dbg.c
-@@ -561,7 +561,6 @@ static ssize_t fill_periodic_buffer(struct debug_buffer *buf)
- 
- 			} else {
- 				/* we've seen it and what's after */
--				temp = 0;
- 				ed = NULL;
- 			}
- 
-diff --git a/drivers/usb/host/oxu210hp-hcd.c b/drivers/usb/host/oxu210hp-hcd.c
-index e82ff2a49672..8a20d9d3c377 100644
---- a/drivers/usb/host/oxu210hp-hcd.c
-+++ b/drivers/usb/host/oxu210hp-hcd.c
-@@ -1232,7 +1232,7 @@ static int qtd_fill(struct ehci_qtd *qtd, dma_addr_t buf, size_t len,
- 		}
- 
- 		/* short packets may only terminate transfers */
--		if (count != len)
-+		if (count != len && maxpacket > 0)
- 			count -= (count % maxpacket);
- 	}
- 	qtd->hw_token = cpu_to_le32((count << 16) | token);
--- 
-2.31.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
