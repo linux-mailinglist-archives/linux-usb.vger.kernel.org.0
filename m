@@ -2,69 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 810EA479B6E
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Dec 2021 15:39:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC16479BD6
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Dec 2021 17:58:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231975AbhLROj5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Dec 2021 09:39:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbhLROj4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Dec 2021 09:39:56 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E07C061574
-        for <linux-usb@vger.kernel.org>; Sat, 18 Dec 2021 06:39:56 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id k14so3934674ils.12
-        for <linux-usb@vger.kernel.org>; Sat, 18 Dec 2021 06:39:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=UqBwAXp+jiVcmRfq3s5MkguTFzuLmlE5h8oSRRha6r4=;
-        b=obHxJThe1e0Gdu4kRdIIQQUMaxYZRqm5wHHz0FhHWFbtucE/vKvwF/ZcvnlBvzdXfN
-         pqRfMjeGbxopbRsdyxOThv2z0Ui7bTxsyiqrulB3N1rBroaodiBwmvg3Qv1+rRaELqVD
-         FyRKsPCYkBHVwci0hH5HyNG75+KrKimdrSp2vuT6s4kU6AdF9BODYrs9tlAuYnE/pUqd
-         NrqglWh4HRVH0LY5xFrU+x1EepK97460X1aZm7uwOSPcN9+wF7GYkCFmkpepmxv4pW+Q
-         +VGHMdcHFfdh5D1tLgY2yjtsTrsBG5RcPI1Cr7io/s0sJ3y8SdN2+nbwuITPDRC8CNbL
-         I5AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=UqBwAXp+jiVcmRfq3s5MkguTFzuLmlE5h8oSRRha6r4=;
-        b=fe5iOcK190gvpbrX7s0UTcYYMEUyVUx+JGYxi0OeNKeZTXmHmD2pa7utT95xYV4Ddp
-         rnEOJMYliH5VLVxmzW1t3eEGlYDGJmGWcHFfmhOnniWs874E461vcbN/YmRLLr5ME64R
-         8DqXtGeH3BHjY0DPS3z81vGcisP1fc1srCBnr0J8GFR/XasyuCK2kujtW16osaYlx//o
-         QD6S7py2glvJop83vpCaXYMdDAGeIz9K3Mdgz627oy/5mbtHzBb9MLi6QWtQ3ji+Kyj8
-         Sr13TAg1bUDoj3fs/vPOGxNsW6/Bd1/cWYabGsWa2YQdMNgRnAj+SCaF+8ZKJNu5lRqY
-         3VCA==
-X-Gm-Message-State: AOAM531w/A/sZbSMwBCfFdLMH/A5eVd82wtQ1l/Ee3IORUc/6AFCcJIO
-        q3OfwvRjhIod+o2XEce4iHoQpZ1PBFXGUm+nVF4=
-X-Google-Smtp-Source: ABdhPJxBjj+D57cG6wNxdd9dpEb7km30ZH35VcqD19T1PbqwObmq7cFk0UQOcohBzMw6FfH3kECm6sry4mHYjmTPFxg=
-X-Received: by 2002:a05:6e02:b4a:: with SMTP id f10mr1190716ilu.228.1639838395362;
- Sat, 18 Dec 2021 06:39:55 -0800 (PST)
+        id S233685AbhLRQ6d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Dec 2021 11:58:33 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37650 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229552AbhLRQ6c (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Dec 2021 11:58:32 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7AC560B13;
+        Sat, 18 Dec 2021 16:58:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99499C36AE1;
+        Sat, 18 Dec 2021 16:58:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639846711;
+        bh=P++GSd247vKL0+vUiunK84t91Cn/zwqebVvITnJJxl8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mxk/1GTW6nzLdAa1GZ22JGYG0iyb6UO+kBXSzka1BaGsyVHlG+tKcXYwu7N6BJt3Z
+         GRLWDbwNB3nlEvBgNd+gOBm3vE7k5d6fPJyCPSauIOCq5kvVV4Kfo85y+x23fanP8P
+         yzqK9bM506qDfUGdRafFUWXUPlrLtaS9NdJOZtqo=
+Date:   Sat, 18 Dec 2021 17:58:28 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB fixes for 5.16-rc6
+Message-ID: <Yb4TNA/HoeI8NbTx@kroah.com>
 MIME-Version: 1.0
-Received: by 2002:a92:d746:0:0:0:0:0 with HTTP; Sat, 18 Dec 2021 06:39:55
- -0800 (PST)
-Reply-To: mduku5550@gmail.com
-From:   michael <dukumichel09@gmail.com>
-Date:   Sat, 18 Dec 2021 14:39:55 +0000
-Message-ID: <CAJYsJ_H_dcAV92_P3NVAgb=y__33YvLxzFK5n8rT-a4O=nj7Tg@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greetings,
+The following changes since commit 2585cf9dfaaddf00b069673f27bb3f8530e2039c:
 
-With due respect, I make this contact with you as I believe that you
-can be of great assistance to me. I need your cooperation in
-transferring the sum of $11.3million to your private account where
-this money can be shared between us.
+  Linux 5.16-rc5 (2021-12-12 14:53:01 -0800)
 
-By indicating your interest, I will send you the full details on how
-the business will be executed.
+are available in the Git repository at:
 
-Thanks,
-Michael Duku.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16-rc6
+
+for you to fetch changes up to c4d936efa46d8ea183df16c0f3fa4423327da51d:
+
+  Revert "usb: early: convert to readl_poll_timeout_atomic()" (2021-12-17 16:29:11 +0100)
+
+----------------------------------------------------------------
+USB fixes for 5.16-rc6
+
+Here are a number of small USB driver fixes for reported problems for
+5.16-rc6.  They include:
+	- dwc2 driver fixes
+	- xhci driver fixes
+	- cdnsp driver fixes
+	- typec driver fix
+	- gadget u_ether driver fix
+	- new quirk additions
+	- usb gadget endpoint calculation fix
+	- usb serial new device ids
+	- revert of a xhci-dbg change that broke early debug booting
+
+All changes, except for the revert, have been in linux-next with no
+reported problems.  The revert was from yesterday, and it was reported
+by the developers affected that it resolved their problem.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Amelie Delaunay (1):
+      usb: dwc2: fix STM ID/VBUS detection startup delay in dwc2_driver_probe
+
+Chunfeng Yun (1):
+      usb: xhci-mtk: fix list_del warning when enable list debug
+
+Daniele Palmas (1):
+      USB: serial: option: add Telit FN990 compositions
+
+Greg Kroah-Hartman (3):
+      USB: gadget: bRequestType is a bitfield, not a enum
+      Merge tag 'usb-serial-5.16-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+      Revert "usb: early: convert to readl_poll_timeout_atomic()"
+
+Jimmy Wang (1):
+      USB: NO_LPM quirk Lenovo USB-C to Ethernet Adapher(RTL8153-04)
+
+Johan Hovold (1):
+      USB: serial: cp210x: fix CP2105 GPIO registration
+
+Marian Postevca (1):
+      usb: gadget: u_ether: fix race in setting MAC address in setup phase
+
+Nehal Bakulchandra Shah (1):
+      usb: xhci: Extend support for runtime power management for AMD's Yellow carp.
+
+Pawel Laszczak (4):
+      usb: cdnsp: Fix incorrect calling of cdnsp_died function
+      usb: cdnsp: Fix issue in cdnsp_log_ep trace event
+      usb: cdnsp: Fix incorrect status for control request
+      usb: cdnsp: Fix lack of spin_lock_irqsave/spin_lock_restore
+
+Xu Yang (1):
+      usb: typec: tcpm: fix tcpm unregister port but leave a pending timer
+
+ drivers/usb/cdns3/cdnsp-gadget.c      | 12 ++++++++++++
+ drivers/usb/cdns3/cdnsp-ring.c        | 11 ++++++++++-
+ drivers/usb/cdns3/cdnsp-trace.h       |  4 ++--
+ drivers/usb/core/quirks.c             |  3 +++
+ drivers/usb/dwc2/platform.c           |  3 +++
+ drivers/usb/early/xhci-dbc.c          | 15 +++++++++++----
+ drivers/usb/gadget/composite.c        |  6 +++---
+ drivers/usb/gadget/function/u_ether.c | 16 ++++++----------
+ drivers/usb/gadget/legacy/dbgp.c      |  6 +++---
+ drivers/usb/gadget/legacy/inode.c     |  6 +++---
+ drivers/usb/host/xhci-mtk-sch.c       |  2 +-
+ drivers/usb/host/xhci-pci.c           |  6 +++++-
+ drivers/usb/serial/cp210x.c           |  6 ++++--
+ drivers/usb/serial/option.c           |  8 ++++++++
+ drivers/usb/typec/tcpm/tcpm.c         | 18 +++++++++++++-----
+ 15 files changed, 87 insertions(+), 35 deletions(-)
