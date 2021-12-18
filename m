@@ -2,207 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EA61479915
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Dec 2021 07:01:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1DC4799E6
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Dec 2021 10:13:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbhLRGBi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Dec 2021 01:01:38 -0500
-Received: from mga07.intel.com ([134.134.136.100]:14347 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229845AbhLRGBh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 18 Dec 2021 01:01:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639807297; x=1671343297;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CF5Oex5h08lZwX0tnenwLP+r96kyUj4VYuQjlcXdbUg=;
-  b=AlH5mKf2FGAIY3ik/W4QtVZ1CAYg3UQ0oRAop9KXuxDk8LQfPuUuSg22
-   PnQQrhU+Y/gJeeywIGD5VzzdzKsiLMku8nADHnaAoZE+fblRL2IzkEOQT
-   BGDOsL3cE9IkBhSuWBpWJ5bgwb3VEx13s1oKkXZ3TUVjNs6ShhsV811IG
-   0JiIWXZf+bkuIWMDWa/hq98K2imy/2tjV+2JSRX487SPRnbhfO7WGg0ei
-   QxalrJIv/tIJeWzlcDvQVaT1PPwLZkbWcOGoRO98GSnw/sNjJBlDsa2YH
-   ByBFs0OM4+zk17/x+QhoK0tGKdEyJknsljgcDLHz9xqRsMIfHXXBsYVmU
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="303267230"
-X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
-   d="scan'208";a="303267230"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 22:01:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
-   d="scan'208";a="756693981"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 17 Dec 2021 22:01:35 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mySmk-0005gP-M0; Sat, 18 Dec 2021 06:01:34 +0000
-Date:   Sat, 18 Dec 2021 14:00:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- c4d936efa46d8ea183df16c0f3fa4423327da51d
-Message-ID: <61bd7907.NdqeCxfMysZVqUQj%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231402AbhLRJNl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Dec 2021 04:13:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230286AbhLRJNk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Dec 2021 04:13:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87325C061574;
+        Sat, 18 Dec 2021 01:13:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36D71B8075D;
+        Sat, 18 Dec 2021 09:13:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BC97C36AE5;
+        Sat, 18 Dec 2021 09:13:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639818817;
+        bh=3BlsJhspxE/hwfBLonMvlt6Kd4L0FO/CGFZVjahTx8M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZjXp5jYSPp/Vu9yLhUAVhLC6stfS63C6Ictuka54OkkIswz7jJscX9sX3X/0pX7Q3
+         BNpm62AmkIfqGOdfva+1PkBh9tlPuM53cnGE49jnI1OE2VZqc5hu6oh7KZE9qOLRyV
+         rRW77Xo/djx6ipL4O+jLz7L+tUJcGhN+5EciyV+Q=
+Date:   Sat, 18 Dec 2021 10:13:29 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Julio Faracco <jcfaracco@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stern@rowland.harvard.edu, axboe@kernel.dk, tglx@linutronix.de,
+        damien.lemoal@wdc.com, dkadashev@gmail.com,
+        paul.gortmaker@windriver.com, zhouyanjie@wanyeetech.com,
+        niklas.cassel@wdc.com, penguin-kernel@i-love.sakura.ne.jp,
+        macro@orcam.me.uk, caihuoqing@baidu.com
+Subject: Re: [PATCH] usb: fixing some clang warnings inside usb host drivers
+Message-ID: <Yb2mOUHSwE+iUrkm@kroah.com>
+References: <20211218042420.28466-1-jcfaracco@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20211218042420.28466-1-jcfaracco@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: c4d936efa46d8ea183df16c0f3fa4423327da51d  Revert "usb: early: convert to readl_poll_timeout_atomic()"
+On Sat, Dec 18, 2021 at 01:24:20AM -0300, Julio Faracco wrote:
+> Clang is reporting some issues related variable values not used and
+> other issues inside some USB host drivers. This commit removes some
+> trashes and adds some strategies to mitigate those warnings.
+> 
+> The most important is the maxpacket not checking for zeros inside both
+> functions qtd_fill(). Even if this variable is always higher than zero,
+> it should be checked to avoid this kind of verbosity.
+> 
+> Signed-off-by: Julio Faracco <jcfaracco@gmail.com>
 
-elapsed time: 723m
+Please break this up into "one patch per warning" and show the warning
+that is happening as well, as it is not obvious why you are changing
+these files in the way you are doing it.
 
-configs tested: 136
-configs skipped: 3
+thanks,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-i386                 randconfig-c001-20211216
-mips                             allyesconfig
-um                             i386_defconfig
-mips                             allmodconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-riscv                            allyesconfig
-sh                          rsk7203_defconfig
-powerpc                    amigaone_defconfig
-arm                            lart_defconfig
-arc                         haps_hs_defconfig
-sh                            titan_defconfig
-xtensa                         virt_defconfig
-powerpc                       ppc64_defconfig
-powerpc                      ppc6xx_defconfig
-microblaze                      mmu_defconfig
-arc                        nsimosci_defconfig
-mips                            ar7_defconfig
-powerpc                 mpc8560_ads_defconfig
-m68k                       bvme6000_defconfig
-powerpc                mpc7448_hpc2_defconfig
-arm                              alldefconfig
-sparc                               defconfig
-arm                       imx_v6_v7_defconfig
-powerpc                      cm5200_defconfig
-arm                   milbeaut_m10v_defconfig
-arm                        multi_v7_defconfig
-powerpc                      tqm8xx_defconfig
-mips                         tb0219_defconfig
-mips                           rs90_defconfig
-arc                           tb10x_defconfig
-nds32                             allnoconfig
-h8300                       h8s-sim_defconfig
-powerpc                       ebony_defconfig
-m68k                            mac_defconfig
-arm                          pxa168_defconfig
-i386                             alldefconfig
-powerpc                     powernv_defconfig
-m68k                         apollo_defconfig
-m68k                        m5407c3_defconfig
-mips                       capcella_defconfig
-mips                  cavium_octeon_defconfig
-powerpc                 mpc832x_mds_defconfig
-mips                    maltaup_xpa_defconfig
-riscv                          rv32_defconfig
-m68k                        stmark2_defconfig
-powerpc                      makalu_defconfig
-powerpc               mpc834x_itxgp_defconfig
-powerpc                      walnut_defconfig
-mips                        omega2p_defconfig
-arm                         lubbock_defconfig
-arm                        magician_defconfig
-sh                           se7721_defconfig
-arm                         s3c6400_defconfig
-mips                      pic32mzda_defconfig
-powerpc                    mvme5100_defconfig
-arm                          iop32x_defconfig
-arm                         vf610m4_defconfig
-arm                         assabet_defconfig
-arm                  randconfig-c002-20211216
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-i386                 randconfig-a001-20211216
-i386                 randconfig-a002-20211216
-i386                 randconfig-a005-20211216
-i386                 randconfig-a003-20211216
-i386                 randconfig-a006-20211216
-i386                 randconfig-a004-20211216
-i386                 randconfig-a013-20211217
-i386                 randconfig-a011-20211217
-i386                 randconfig-a016-20211217
-i386                 randconfig-a014-20211217
-i386                 randconfig-a015-20211217
-i386                 randconfig-a012-20211217
-x86_64               randconfig-a006-20211216
-x86_64               randconfig-a005-20211216
-x86_64               randconfig-a001-20211216
-x86_64               randconfig-a002-20211216
-x86_64               randconfig-a003-20211216
-x86_64               randconfig-a004-20211216
-arc                  randconfig-r043-20211216
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a001-20211217
-x86_64               randconfig-a002-20211217
-x86_64               randconfig-a003-20211217
-x86_64               randconfig-a004-20211217
-x86_64               randconfig-a005-20211217
-x86_64               randconfig-a006-20211217
-hexagon              randconfig-r045-20211216
-s390                 randconfig-r044-20211216
-riscv                randconfig-r042-20211216
-hexagon              randconfig-r041-20211216
-hexagon              randconfig-r045-20211217
-hexagon              randconfig-r041-20211217
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+greg k-h
