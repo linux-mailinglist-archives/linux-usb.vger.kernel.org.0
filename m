@@ -2,67 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1DC4799E6
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Dec 2021 10:13:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 023AE479A0D
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Dec 2021 10:58:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231402AbhLRJNl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Dec 2021 04:13:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbhLRJNk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Dec 2021 04:13:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87325C061574;
-        Sat, 18 Dec 2021 01:13:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36D71B8075D;
-        Sat, 18 Dec 2021 09:13:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BC97C36AE5;
-        Sat, 18 Dec 2021 09:13:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639818817;
-        bh=3BlsJhspxE/hwfBLonMvlt6Kd4L0FO/CGFZVjahTx8M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZjXp5jYSPp/Vu9yLhUAVhLC6stfS63C6Ictuka54OkkIswz7jJscX9sX3X/0pX7Q3
-         BNpm62AmkIfqGOdfva+1PkBh9tlPuM53cnGE49jnI1OE2VZqc5hu6oh7KZE9qOLRyV
-         rRW77Xo/djx6ipL4O+jLz7L+tUJcGhN+5EciyV+Q=
-Date:   Sat, 18 Dec 2021 10:13:29 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Julio Faracco <jcfaracco@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stern@rowland.harvard.edu, axboe@kernel.dk, tglx@linutronix.de,
-        damien.lemoal@wdc.com, dkadashev@gmail.com,
-        paul.gortmaker@windriver.com, zhouyanjie@wanyeetech.com,
-        niklas.cassel@wdc.com, penguin-kernel@i-love.sakura.ne.jp,
-        macro@orcam.me.uk, caihuoqing@baidu.com
-Subject: Re: [PATCH] usb: fixing some clang warnings inside usb host drivers
-Message-ID: <Yb2mOUHSwE+iUrkm@kroah.com>
-References: <20211218042420.28466-1-jcfaracco@gmail.com>
+        id S232600AbhLRJ6E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Dec 2021 04:58:04 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:36606 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232575AbhLRJ6A (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Dec 2021 04:58:00 -0500
+X-UUID: 32cbd7cb8da34dcd90642820fbf08fe2-20211218
+X-UUID: 32cbd7cb8da34dcd90642820fbf08fe2-20211218
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 643864305; Sat, 18 Dec 2021 17:57:58 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Sat, 18 Dec 2021 17:57:56 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sat, 18 Dec
+ 2021 17:57:56 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkcas10.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Sat, 18 Dec 2021 17:57:55 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Eddie Hung" <eddie.hung@mediatek.com>
+Subject: [PATCH v2 1/4] usb: mtu3: fix interval value for intr and isoc
+Date:   Sat, 18 Dec 2021 17:57:46 +0800
+Message-ID: <20211218095749.6250-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211218042420.28466-1-jcfaracco@gmail.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Dec 18, 2021 at 01:24:20AM -0300, Julio Faracco wrote:
-> Clang is reporting some issues related variable values not used and
-> other issues inside some USB host drivers. This commit removes some
-> trashes and adds some strategies to mitigate those warnings.
-> 
-> The most important is the maxpacket not checking for zeros inside both
-> functions qtd_fill(). Even if this variable is always higher than zero,
-> it should be checked to avoid this kind of verbosity.
-> 
-> Signed-off-by: Julio Faracco <jcfaracco@gmail.com>
+Use the Interval value from isoc/intr endpoint descriptor, no need
+minus one. The original code doesn't cause transfer error for
+normal cases, but it may have side effect with respond time of ERDY
+or tPingTimeout.
 
-Please break this up into "one patch per warning" and show the warning
-that is happening as well, as it is not obvious why you are changing
-these files in the way you are doing it.
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+v2: modify commit message to explain more about the issue to be fixed
+---
+ drivers/usb/mtu3/mtu3_gadget.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-thanks,
+diff --git a/drivers/usb/mtu3/mtu3_gadget.c b/drivers/usb/mtu3/mtu3_gadget.c
+index a9a65b4bbfed..c51be015345b 100644
+--- a/drivers/usb/mtu3/mtu3_gadget.c
++++ b/drivers/usb/mtu3/mtu3_gadget.c
+@@ -77,7 +77,7 @@ static int mtu3_ep_enable(struct mtu3_ep *mep)
+ 		if (usb_endpoint_xfer_int(desc) ||
+ 				usb_endpoint_xfer_isoc(desc)) {
+ 			interval = desc->bInterval;
+-			interval = clamp_val(interval, 1, 16) - 1;
++			interval = clamp_val(interval, 1, 16);
+ 			if (usb_endpoint_xfer_isoc(desc) && comp_desc)
+ 				mult = comp_desc->bmAttributes;
+ 		}
+@@ -89,7 +89,7 @@ static int mtu3_ep_enable(struct mtu3_ep *mep)
+ 		if (usb_endpoint_xfer_isoc(desc) ||
+ 				usb_endpoint_xfer_int(desc)) {
+ 			interval = desc->bInterval;
+-			interval = clamp_val(interval, 1, 16) - 1;
++			interval = clamp_val(interval, 1, 16);
+ 			mult = usb_endpoint_maxp_mult(desc) - 1;
+ 		}
+ 		break;
+-- 
+2.18.0
 
-greg k-h
