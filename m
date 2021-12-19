@@ -2,64 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE72479EA2
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Dec 2021 02:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A520A479EB5
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Dec 2021 02:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232697AbhLSBDK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Dec 2021 20:03:10 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:46856 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232647AbhLSBDK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Dec 2021 20:03:10 -0500
-Received: by mail-io1-f69.google.com with SMTP id z21-20020a5e8615000000b005e22e531c8aso4445850ioj.13
-        for <linux-usb@vger.kernel.org>; Sat, 18 Dec 2021 17:03:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=CI48j3ubhiTdfUyLSvTdm3aMA4INZMzb9ghIYvLpbqM=;
-        b=MbzUAt+lT3TKHSr4eEh+bBGY5yKRdN/l8wG5sv12iHEKGuJPIeLSn3np3RTX0t4vV8
-         Jfnu16A6Wdv+rD0lxqM6/X9VcJRbxzMaYjPI4RBtDBYPiwtp8B8G0IJL15cmZtXbWbnk
-         a0Ak4KsYvu3TGPfjvEMVVCwf4i/gUj4fPKDzziB56pIuwwrxIB5Zwf/GKBxAptNVemZv
-         fXl07K76qX61sZoVNiCV+WztmWNkn4+z98wfnbppIBPiSduU+07pAo6kw9UBer/dH4Na
-         Adi89GJaoWMCJg2S6Qz0mhUvDckfZw7NTGqCeBXkLYC7U+tqoZmAybCA009EWW7HDFdl
-         myWw==
-X-Gm-Message-State: AOAM530MfsnuvfNuxo7qsDygbdd7YrnA+SlS6c44GL+W14mOpPsBCWrI
-        bzTTkq+x5D6w/hctYODtnjDfs2YFs5ifcUZXxWk2bW2ZqGBk
-X-Google-Smtp-Source: ABdhPJyzClBydsueqtINlV1Pw/7cLJZN42JvPu3XVdTZ3uqKoF3ibacyZV2iu4orAFF+rRlqqX+NPfnRwy8brdkqy5vaoryv25Hw
+        id S233872AbhLSBlu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Dec 2021 20:41:50 -0500
+Received: from www262.sakura.ne.jp ([202.181.97.72]:55232 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231693AbhLSBlu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Dec 2021 20:41:50 -0500
+Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 1BJ1f62r060317;
+        Sun, 19 Dec 2021 10:41:06 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
+ Sun, 19 Dec 2021 10:41:06 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 1BJ1f5N7060314
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sun, 19 Dec 2021 10:41:05 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Message-ID: <7c5bbc97-b9dc-96bb-5764-58bebec0178d@i-love.sakura.ne.jp>
+Date:   Sun, 19 Dec 2021 10:41:02 +0900
 MIME-Version: 1.0
-X-Received: by 2002:a02:b707:: with SMTP id g7mr42266jam.86.1639875789559;
- Sat, 18 Dec 2021 17:03:09 -0800 (PST)
-Date:   Sat, 18 Dec 2021 17:03:09 -0800
-In-Reply-To: <13821c8b-c809-c820-04f0-2eadfdef0296@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e99dbc05d3755514@google.com>
-Subject: Re: [syzbot] KMSAN: uninit-value in asix_mdio_read (2)
-From:   syzbot <syzbot+f44badb06036334e867a@syzkaller.appspotmail.com>
-To:     andrew@lunn.ch, davem@davemloft.net, glider@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux@rempel-privat.de,
-        netdev@vger.kernel.org, paskripkin@gmail.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] usb: fixing some clang warnings inside usb host drivers
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Julio Faracco <jcfaracco@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, axboe@kernel.dk, tglx@linutronix.de,
+        damien.lemoal@wdc.com, dkadashev@gmail.com,
+        paul.gortmaker@windriver.com, zhouyanjie@wanyeetech.com,
+        niklas.cassel@wdc.com, macro@orcam.me.uk, caihuoqing@baidu.com
+References: <20211218042420.28466-1-jcfaracco@gmail.com>
+ <Yb4i7LyYIlJi/9fb@rowland.harvard.edu>
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+In-Reply-To: <Yb4i7LyYIlJi/9fb@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On 2021/12/19 3:05, Alan Stern wrote:
+>> diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
+>> index 2cbf4f85bff3..98cb44414e78 100644
+>> --- a/drivers/usb/host/ehci-q.c
+>> +++ b/drivers/usb/host/ehci-q.c
+>> @@ -64,7 +64,7 @@ qtd_fill(struct ehci_hcd *ehci, struct ehci_qtd *qtd, dma_addr_t buf,
+>>  		}
+>>  
+>>  		/* short packets may only terminate transfers */
+>> -		if (count != len)
+>> +		if (count != len && maxpacket > 0)
+>>  			count -= (count % maxpacket);
+> 
+> This is different.  But again, I do not think the extra check should be 
+> added.  If maxpacket is 0, we _want_ the code to fail in a highly 
+> visible manner -- it would mean there is a bug somewhere else in the 
+> kernel.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Some of the callers are passing the return value from usb_maxpacket(), and
+usb_maxpacket() can return 0. But division by 0 bug here becomes visible
+only when len < count in
 
-Reported-and-tested-by: syzbot+f44badb06036334e867a@syzkaller.appspotmail.com
+	count = 0x1000 - (buf & 0x0fff);	/* rest of that page */
+	if (likely (len < count))		/* ... iff needed */
+		count = len;
 
-Tested on:
+is false and count != len in
 
-commit:         b0a8b505 kmsan: core: add dependency on DEBUG_KERNEL
-git tree:       https://github.com/google/kmsan.git master
-kernel config:  https://syzkaller.appspot.com/x/.config?x=46a956fc7a887c60
-dashboard link: https://syzkaller.appspot.com/bug?extid=f44badb06036334e867a
-compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=163c52a5b00000
+		if (count != len)
+			count -= (count % maxpacket);
 
-Note: testing is done by a robot and is best-effort only.
+is true, which may be quite difficult to trigger.
+
+Maybe we should make sure that maxpacket > 0 on the caller side, for e.g.
+
+	/* qh makes control packets use qtd toggle; maybe switch it */
+	if ((maxpacket & (this_qtd_len + (maxpacket - 1))) == 0)
+		token ^= QTD_TOGGLE;
+
+and
+
+	if (usb_pipecontrol (urb->pipe)) {
+		one_more = 1;
+		token ^= 0x0100;	/* "in" <--> "out"  */
+		token |= QTD_TOGGLE;	/* force DATA1 */
+	} else if (usb_pipeout(urb->pipe)
+			&& (urb->transfer_flags & URB_ZERO_PACKET)
+			&& !(urb->transfer_buffer_length % maxpacket)) {
+		one_more = 1;
+	}
+
+are expecting that maxpacket > 0 ?
+
