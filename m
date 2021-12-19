@@ -2,124 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC74E479FD8
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Dec 2021 09:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1363147A022
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Dec 2021 11:14:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235258AbhLSIAO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Dec 2021 03:00:14 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:58067 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231314AbhLSIAM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Dec 2021 03:00:12 -0500
-Received: from fsav111.sakura.ne.jp (fsav111.sakura.ne.jp [27.133.134.238])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 1BJ7xkbl050163;
-        Sun, 19 Dec 2021 16:59:46 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav111.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp);
- Sun, 19 Dec 2021 16:59:46 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 1BJ7xkWE050158
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 19 Dec 2021 16:59:46 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Message-ID: <0804469c-664a-219d-bb6a-b4e5f133edd9@i-love.sakura.ne.jp>
-Date:   Sun, 19 Dec 2021 16:59:44 +0900
+        id S235555AbhLSKOe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Dec 2021 05:14:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229585AbhLSKOd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Dec 2021 05:14:33 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F81C061574;
+        Sun, 19 Dec 2021 02:14:33 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id p8so10938448ljo.5;
+        Sun, 19 Dec 2021 02:14:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=hKGb9w8KG5b73eiq1K1JTU4pcyHL51jKG9VctVhGJnk=;
+        b=f+V0CkkhnztRfIT54g00ZqQAvSLl+KO47996Tdp/Xbuyp/BONbEN3cUVfOPuFaJ7KZ
+         A/fPHKlM3X6cBGT84cxhGyZzyiUqF8HEnlsJf1zX+kfG/mwF1pU72FFqtMTt6+pWaHEX
+         gPEhgcmuPqwrusKFv7FErNaiV6tv8Z++YdmFP0zbJBHFr7Ym6/hJFcNzRPc0zfkDpP1h
+         yLC6rvgTLv+1qNnFCckatJavDMIa6+WWz6JAaYUUKMf9m9bp+s315BlSd0lSb0rn0MH9
+         bA/QqiOLzIR+MvBhwijqjcQy9n/05vmG11m3WknjOxBTALlcZCKMzb+0EzI+iFGdQf6p
+         V8PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=hKGb9w8KG5b73eiq1K1JTU4pcyHL51jKG9VctVhGJnk=;
+        b=Q6IhtulleN11VrasbH7BYsEiF1+0WKItceR3MqV1SvWJStL+HHqkVWIvnl3sMOO6o2
+         09A6aAFSR9P2hR3U/Si6tL3g2dCVYSIjwbRrKqDhlmvNUJHO+jRBE+WuzZ5gdWMjly53
+         hhLpr+TrZ8//NAT8bs/VAR9inZqS1EcD/SXrftvib9AELaWpa7iSEFHSs8DNPXBDID/u
+         R0Z22zgHUzq7IOJQvTAUKh29gOUPhM2XU42khn0yLrgGCDmz+CLhNsBAhNAR99COz8qb
+         mn//L3BdPEtziL7bzHo5KXI+TQ/3vdtmSKD1qtPUiSZuRAIWHWZ7DNClqr7F9t+1VHLC
+         Wz/g==
+X-Gm-Message-State: AOAM530RnNUtiDM07t3rgiMkkWPvVOtxitRaKKBoQZ3M4JpQFJbFFltP
+        TiCzCubfkJBP2wvgOXCeTpU=
+X-Google-Smtp-Source: ABdhPJw2YSsSu09c3sO8K26eMzGbJwXH2EBNbCGZHGfeNhI3hKtXngb2r9yWYq4379t6U+LBk27HEQ==
+X-Received: by 2002:a2e:9703:: with SMTP id r3mr9953312lji.422.1639908870993;
+        Sun, 19 Dec 2021 02:14:30 -0800 (PST)
+Received: from [192.168.1.100] ([178.176.77.193])
+        by smtp.gmail.com with ESMTPSA id h17sm2009168lfv.62.2021.12.19.02.14.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Dec 2021 02:14:30 -0800 (PST)
+Message-ID: <64b9453a-84c5-8d41-26d5-698d1ae9d473@gmail.com>
+Date:   Sun, 19 Dec 2021 13:14:25 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
-Subject: Re: [PATCH] usb: fixing some clang warnings inside usb host drivers
+Subject: Re: [PATCH v2 3/4] usb: mtu3: fix list_head check warning
 Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Julio Faracco <jcfaracco@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        axboe@kernel.dk, tglx@linutronix.de, damien.lemoal@wdc.com,
-        dkadashev@gmail.com, paul.gortmaker@windriver.com,
-        zhouyanjie@wanyeetech.com, niklas.cassel@wdc.com,
-        macro@orcam.me.uk, caihuoqing@baidu.com
-References: <20211218042420.28466-1-jcfaracco@gmail.com>
- <Yb4i7LyYIlJi/9fb@rowland.harvard.edu>
- <7c5bbc97-b9dc-96bb-5764-58bebec0178d@i-love.sakura.ne.jp>
- <Yb6d7tflQeJ+1Et2@rowland.harvard.edu>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-In-Reply-To: <Yb6d7tflQeJ+1Et2@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Eddie Hung <eddie.hung@mediatek.com>, stable@vger.kernel.org,
+        Yuwen Ng <yuwen.ng@mediatek.com>
+References: <20211218095749.6250-1-chunfeng.yun@mediatek.com>
+ <20211218095749.6250-3-chunfeng.yun@mediatek.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+In-Reply-To: <20211218095749.6250-3-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021/12/19 11:50, Alan Stern wrote:
-> You should read this code in usb_submit_urb():
+On 18.12.2021 12:57, Chunfeng Yun wrote:
+
+> This is caused by uninitialization of list_head.
+
+    Again, there's no such word as "uninitialization" (even if it existed, it 
+wouldn't mean what you wanted to say); please replace by "not initializing".
+
+> BUG: KASAN: use-after-free in __list_del_entry_valid+0x34/0xe4
 > 
-> 	max = usb_endpoint_maxp(&ep->desc);
-> 	if (max <= 0) {
-> 		dev_dbg(&dev->dev,
-> 			"bogus endpoint ep%d%s in %s (bad maxpacket %d)\n",
-> 			usb_endpoint_num(&ep->desc), is_out ? "out" : "in",
-> 			__func__, max);
-> 		return -EMSGSIZE;
-> 	}
+> Call trace:
+> dump_backtrace+0x0/0x298
+> show_stack+0x24/0x34
+> dump_stack+0x130/0x1a8
+> print_address_description+0x88/0x56c
+> __kasan_report+0x1b8/0x2a0
+> kasan_report+0x14/0x20
+> __asan_load8+0x9c/0xa0
+> __list_del_entry_valid+0x34/0xe4
+> mtu3_req_complete+0x4c/0x300 [mtu3]
+> mtu3_gadget_stop+0x168/0x448 [mtu3]
+> usb_gadget_unregister_driver+0x204/0x3a0
+> unregister_gadget_item+0x44/0xa4
 > 
-> As far as I know, every code path leading to qtd_fill() has to pass this 
-> test.
+> Fixes: 83374e035b62 ("usb: mtu3: add tracepoints to help debug")
+> Cc: stable@vger.kernel.org
+> Reported-by: Yuwen Ng <yuwen.ng@mediatek.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+[...]
 
-Excuse me, but surely qtd_fill() is using the result from usb_maxpacket()
-
-----------------------------------------
-static struct list_head *
-qh_urb_transaction (
-	struct ehci_hcd		*ehci,
-	struct urb		*urb,
-	struct list_head	*head,
-	gfp_t			flags
-) {
-(...snipped...)
-	maxpacket = usb_maxpacket(urb->dev, urb->pipe, !is_input);
-
-	/*
-	 * buffer gets wrapped in one or more qtds;
-	 * last one may be "short" (including zero len)
-	 * and may serve as a control status ack
-	 */
-	for (;;) {
-		int this_qtd_len;
-
-		this_qtd_len = qtd_fill(ehci, qtd, buf, this_sg_len, token,
-				maxpacket);
-		this_sg_len -= this_qtd_len;
-		len -= this_qtd_len;
-		buf += this_qtd_len;
-(...snipped...)
-}
-----------------------------------------
-
-and usb_maxpacket() may return 0 ?
-
-----------------------------------------
-static inline __u16
-usb_maxpacket(struct usb_device *udev, int pipe, int is_out)
-{
-	struct usb_host_endpoint	*ep;
-	unsigned			epnum = usb_pipeendpoint(pipe);
-
-	if (is_out) {
-		WARN_ON(usb_pipein(pipe));
-		ep = udev->ep_out[epnum];
-	} else {
-		WARN_ON(usb_pipeout(pipe));
-		ep = udev->ep_in[epnum];
-	}
-	if (!ep)
-		return 0;
-
-	/* NOTE:  only 0x07ff bits are for packet size... */
-	return usb_endpoint_maxp(&ep->desc);
-}
-----------------------------------------
-
-If we don't need to care about the possibility of returning 0 (including
-all possible race conditions taken into account), please explain it as a
-comment block.
+MBR, Sergey
