@@ -2,97 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E68947A047
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Dec 2021 12:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE7247A0B4
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Dec 2021 14:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235458AbhLSLAS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Dec 2021 06:00:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34514 "EHLO
+        id S235798AbhLSNj1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Dec 2021 08:39:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbhLSLAR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Dec 2021 06:00:17 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C543C061574;
-        Sun, 19 Dec 2021 03:00:16 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id v15so11140708ljc.0;
-        Sun, 19 Dec 2021 03:00:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=28WUq9Jt90oxX2or2ReiiYs2kHyyTZ89Ut+mmcfXAPQ=;
-        b=MvA2FRT3P60D5yjezwKIFYMSfSHRZp5IRVxMk0BdJWl2zzxHNVkQuwPx184OZ/VIL4
-         inJUvjLQNSa9mu40ePpg2Af/dAMNsQ2LYQ5kgf036j3CgQw65Bd3hBhudnTrSx/xr1AX
-         7heIbvMCVnuesRNta2lfAUhZP80ZRAcoH7wvnixxNPaOOE47xOw5d0pYM3K8RKb5hHJW
-         Q6JdH2vvV6T4bHIJQiGlGqlukSiOlhjDwiLY6TS0SxgIBoE6gIjsB9LMrTerZ0c6yjIG
-         5IWDPvcwnqizBNACYxB67R81bv+3MusJOwhmbciukFs/ZqAwpA3Vo2TibijgUG1fKfgK
-         oj2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=28WUq9Jt90oxX2or2ReiiYs2kHyyTZ89Ut+mmcfXAPQ=;
-        b=si8MFF8rYo9RdD97yi/a9wSAJ+a9xwLGp25WQqUTxe4lmcWdodhrIExEjnfWlSnjP6
-         axHTvGgtuuZfYQJlR77Y2t40jYJpcuEU6EPRpooUH7KKL6+ABV12FlDNtWO2JIpf1JI0
-         fYzRwZ5zRKAdsDizJDA8JzGQuzP9yExxN+JWSkrHyxHp4YOnuDI4fZZ5OnMDo8XcLESc
-         kE/GaeVKAc+Ixnn97wCAPE5bTsgx8U0hm2jYEHJU3if/hoyoxBiM4remcAemPKW2mXvM
-         zUXIzEpE/yPcdorvtDPUFs23v6TCcvoDJnAFr+v/SOPLdH+Q8FvZO0MsAZhymsTbqJ+f
-         4SEQ==
-X-Gm-Message-State: AOAM532R64gKIrIM+Csr0HcQFWxi7g3JC1PbtTgwySpcYA27HSurKIhw
-        WXRDhUj0EWQjwmInROUM7e82Uj7mNd4=
-X-Google-Smtp-Source: ABdhPJy4q1W3IfUk3iv7+OV74YqxVPB6VWyBubwKM1rhmCigLlyhq+AHZfeU8BKn2WNBeKFGCEbnBw==
-X-Received: by 2002:a2e:5c86:: with SMTP id q128mr9866205ljb.245.1639911613992;
-        Sun, 19 Dec 2021 03:00:13 -0800 (PST)
-Received: from [192.168.1.100] ([31.173.85.16])
-        by smtp.gmail.com with ESMTPSA id z28sm2223309ljn.77.2021.12.19.03.00.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Dec 2021 03:00:13 -0800 (PST)
-Message-ID: <9c5417f7-3cd9-472d-5b04-f831135ffd78@gmail.com>
-Date:   Sun, 19 Dec 2021 14:00:09 +0300
+        with ESMTP id S234475AbhLSNj0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Dec 2021 08:39:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3ADBC061574
+        for <linux-usb@vger.kernel.org>; Sun, 19 Dec 2021 05:39:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4222A60C95
+        for <linux-usb@vger.kernel.org>; Sun, 19 Dec 2021 13:39:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A22F8C36AE5
+        for <linux-usb@vger.kernel.org>; Sun, 19 Dec 2021 13:39:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639921165;
+        bh=MBlLPFu9qX6M48ZohkglEvp8sbA2ve5M3lsfx9TRuZs=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=KgsRIErLKTC5ZlXYL9VeNaq5EEjBP9GWpfY/5t1b+jpa/LVgy360RCeOBHbh7Yncm
+         BxheXik0nEF99fcumpgzFVI18Mn2zzINvNz9H7SkIHcWpgYo043gPo286nkWz5zFoJ
+         rEb7o6L7pNF36qIPVVxa2JifnLHpZCHgXc+77VdujKM5DgJRXK8IikbTnA3aLZ3SXX
+         XicPksjYXSJeAiUG/9wfOUyg+Cm6h6UypPDk4FJ4tHRzftErqMhJ/lEoQwL02rdagt
+         +8eDdL5lNTZEr1ekn7kygMNODXOSgcpf9TahXF0juQ45oq/tn36e4kqzwyKbucPCIr
+         SbVCaFwGl2Kxg==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 80897610CD; Sun, 19 Dec 2021 13:39:25 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215175] thunderbolt: consistent system freezes with Dell
+ U4021QW, general protection fault, probably for non-canonical address
+ 0xdead000000000108, Workqueue: events tb_cfg_request_work [thunderbolt]
+Date:   Sun, 19 Dec 2021 13:39:25 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: leho@kraav.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215175-208809-UcsvP9s6Oo@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215175-208809@https.bugzilla.kernel.org/>
+References: <bug-215175-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 3/4] usb: mtu3: fix list_head check warning
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eddie Hung <eddie.hung@mediatek.com>, stable@vger.kernel.org,
-        Yuwen Ng <yuwen.ng@mediatek.com>
-References: <20211218095749.6250-1-chunfeng.yun@mediatek.com>
- <20211218095749.6250-3-chunfeng.yun@mediatek.com>
- <64b9453a-84c5-8d41-26d5-698d1ae9d473@gmail.com> <Yb8MM2zL2Ecfzv1/@kroah.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-In-Reply-To: <Yb8MM2zL2Ecfzv1/@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19.12.2021 13:40, Greg Kroah-Hartman wrote:
-[...]
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215175
 
->>> This is caused by uninitialization of list_head.
->>
->>     Again, there's no such word as "uninitialization" (even if it existed, it
->> wouldn't mean what you wanted to say); please replace by "not initializing".
-> 
-> We are not English language scholars, most of us do not have English as
-> their native language.  We all can understand what is being said here,
-> there's no need for any change, please do not be so critical.
+--- Comment #3 from Leho Kraav (leho@kraav.com) ---
+Surprisingly, I haven't been able to make the system hang recently. Also
+updated to 5.15.7 and 5.15.10. Continuing to keep an eye out for a while
+longer.
 
-    OK, noted...
-    I was just somewhat upset that my 1st comment was ignored. :-/
+--=20
+You may reply to this email to add a comment.
 
-> thanks,
-> 
-> greg k-h
-
-MBR, Sergey
+You are receiving this mail because:
+You are watching the assignee of the bug.=
