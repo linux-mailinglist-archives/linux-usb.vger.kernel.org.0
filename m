@@ -2,106 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94252479FB8
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Dec 2021 07:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC74E479FD8
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Dec 2021 09:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbhLSGOE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Dec 2021 01:14:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbhLSGOD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Dec 2021 01:14:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0F0C061574
-        for <linux-usb@vger.kernel.org>; Sat, 18 Dec 2021 22:14:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0ECD9B80B3F
-        for <linux-usb@vger.kernel.org>; Sun, 19 Dec 2021 06:14:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AA70BC36AE7
-        for <linux-usb@vger.kernel.org>; Sun, 19 Dec 2021 06:14:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639894440;
-        bh=mMGL22xHJUIb/4VDfUCiL428gVfKoeaLOglZPEHngak=;
-        h=From:To:Subject:Date:From;
-        b=tp2dv+uw2praUtkEpqc8s7p7xFw3UqqcJrxASfsIg5TpndMsOOC/9yzTEB+Sg12+y
-         LjwAOi9Q0G6XfP9fiZSGhB/C3x26TFTMoG84PFbNHv9Qzc6Mok56WEerUaVBy9k/rb
-         sySZjGyuydnqjgFHa8txuVWLn3H55wWtuwVVVcne/h3HME0FCuSnq4xcFbLHpfDUeP
-         apQAicnfuzqL1PVFO3K5BqrsKShiqxnU7EaJF68Son5lBO4nPHm2OnU82MkxqNRpUG
-         eDYgfJHGTbLB5az6yAUdhepDrtfZkS0Nj4pQI7F6w3rioI3+gxS6RZWct5OEMLSHjd
-         fc0qwJu3w272Q==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 8704C610A8; Sun, 19 Dec 2021 06:14:00 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215361] New: SL-6000 zaurus USB error - 'bad CDC descriptors'
-Date:   Sun, 19 Dec 2021 06:14:00 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: low
-X-Bugzilla-Who: bids.7405@bigpond.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-215361-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S235258AbhLSIAO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Dec 2021 03:00:14 -0500
+Received: from www262.sakura.ne.jp ([202.181.97.72]:58067 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231314AbhLSIAM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Dec 2021 03:00:12 -0500
+Received: from fsav111.sakura.ne.jp (fsav111.sakura.ne.jp [27.133.134.238])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 1BJ7xkbl050163;
+        Sun, 19 Dec 2021 16:59:46 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav111.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp);
+ Sun, 19 Dec 2021 16:59:46 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 1BJ7xkWE050158
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sun, 19 Dec 2021 16:59:46 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Message-ID: <0804469c-664a-219d-bb6a-b4e5f133edd9@i-love.sakura.ne.jp>
+Date:   Sun, 19 Dec 2021 16:59:44 +0900
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] usb: fixing some clang warnings inside usb host drivers
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Julio Faracco <jcfaracco@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        axboe@kernel.dk, tglx@linutronix.de, damien.lemoal@wdc.com,
+        dkadashev@gmail.com, paul.gortmaker@windriver.com,
+        zhouyanjie@wanyeetech.com, niklas.cassel@wdc.com,
+        macro@orcam.me.uk, caihuoqing@baidu.com
+References: <20211218042420.28466-1-jcfaracco@gmail.com>
+ <Yb4i7LyYIlJi/9fb@rowland.harvard.edu>
+ <7c5bbc97-b9dc-96bb-5764-58bebec0178d@i-love.sakura.ne.jp>
+ <Yb6d7tflQeJ+1Et2@rowland.harvard.edu>
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+In-Reply-To: <Yb6d7tflQeJ+1Et2@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215361
+On 2021/12/19 11:50, Alan Stern wrote:
+> You should read this code in usb_submit_urb():
+> 
+> 	max = usb_endpoint_maxp(&ep->desc);
+> 	if (max <= 0) {
+> 		dev_dbg(&dev->dev,
+> 			"bogus endpoint ep%d%s in %s (bad maxpacket %d)\n",
+> 			usb_endpoint_num(&ep->desc), is_out ? "out" : "in",
+> 			__func__, max);
+> 		return -EMSGSIZE;
+> 	}
+> 
+> As far as I know, every code path leading to qtd_fill() has to pass this 
+> test.
 
-            Bug ID: 215361
-           Summary: SL-6000 zaurus USB error - 'bad CDC descriptors'
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 3/4/5
-          Hardware: All
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: low
-          Priority: P1
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: bids.7405@bigpond.com
-        Regression: No
+Excuse me, but surely qtd_fill() is using the result from usb_maxpacket()
 
-A 'bad CDC descriptors' error occurs when plugging the Sharp SL-6000 zaurus
-into USB. It was working in 2.6.32 but has been broken from kernel 3 onward=
-s.
+----------------------------------------
+static struct list_head *
+qh_urb_transaction (
+	struct ehci_hcd		*ehci,
+	struct urb		*urb,
+	struct list_head	*head,
+	gfp_t			flags
+) {
+(...snipped...)
+	maxpacket = usb_maxpacket(urb->dev, urb->pipe, !is_input);
 
-usb 5-2: new full-speed USB device number 2 using uhci_hcd
-usb 5-2: New USB device found, idVendor=3D04dd, idProduct=3D9032
-usb 5-2: New USB device strings: Mfr=3D1, Product=3D2, SerialNumber=3D0
-usb 5-2: Product: SL-6000
-usb 5-2: Manufacturer: Sharp
-usb 5-2: bad CDC descriptors
-usbcore: registered new interface driver cdc_ether
+	/*
+	 * buffer gets wrapped in one or more qtds;
+	 * last one may be "short" (including zero len)
+	 * and may serve as a control status ack
+	 */
+	for (;;) {
+		int this_qtd_len;
 
-In 2.6.32 the following lines were included in dmesg:
+		this_qtd_len = qtd_fill(ehci, qtd, buf, this_sg_len, token,
+				maxpacket);
+		this_sg_len -= this_qtd_len;
+		len -= this_qtd_len;
+		buf += this_qtd_len;
+(...snipped...)
+}
+----------------------------------------
 
-usb0: register 'zaurus' at usb-0000:00:14.0-2, pseudo-MDLM (BLAN) device,
-fe:1b:05:23:49:7f
-usbcore: registered new interface driver zaurus
+and usb_maxpacket() may return 0 ?
 
---=20
-You may reply to this email to add a comment.
+----------------------------------------
+static inline __u16
+usb_maxpacket(struct usb_device *udev, int pipe, int is_out)
+{
+	struct usb_host_endpoint	*ep;
+	unsigned			epnum = usb_pipeendpoint(pipe);
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+	if (is_out) {
+		WARN_ON(usb_pipein(pipe));
+		ep = udev->ep_out[epnum];
+	} else {
+		WARN_ON(usb_pipeout(pipe));
+		ep = udev->ep_in[epnum];
+	}
+	if (!ep)
+		return 0;
+
+	/* NOTE:  only 0x07ff bits are for packet size... */
+	return usb_endpoint_maxp(&ep->desc);
+}
+----------------------------------------
+
+If we don't need to care about the possibility of returning 0 (including
+all possible race conditions taken into account), please explain it as a
+comment block.
