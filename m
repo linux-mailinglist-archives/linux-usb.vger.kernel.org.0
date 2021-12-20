@@ -2,70 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8F747AB29
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 15:17:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0F247AB34
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 15:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233573AbhLTOQr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 09:16:47 -0500
-Received: from mail-m17643.qiye.163.com ([59.111.176.43]:43060 "EHLO
-        mail-m17643.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233580AbhLTOQq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 09:16:46 -0500
-DKIM-Signature: a=rsa-sha256;
-        b=R9zqtvJhUW6wbOwr/rcpDxVdDEncsssB78Mnjwf/WsGg7R8l16nN7hl0CMp5FqaUQX+gziCS6rOWq3gUhU+zK7wfom0BpKYClVcB5nI1Znxc1xGCiYVJGOUXT/MJrB/DdzdlOcRu+DbMVvFDoWaYCWIBzwTwsHxMorA83wQp1R0=;
-        s=default; c=relaxed/relaxed; d=vivo.com; v=1;
-        bh=+ZGwriAJuyiQ/6DWrKMeVo79MPMyTH9IttdMkKzZ/T4=;
-        h=date:mime-version:subject:message-id:from;
-Received: from vivo-600-G6.vivo.xyz (unknown [58.250.176.229])
-        by mail-m17643.qiye.163.com (Hmail) with ESMTPA id D8AD67E0328;
-        Mon, 20 Dec 2021 22:16:43 +0800 (CST)
-From:   Yaqin Pan <akingchen@vivo.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com, Yaqin Pan <akingchen@vivo.com>
-Subject: [PATCH v2 2/2] dt-bindings: usb: document snps,dis_split_quirk property in dwc3
-Date:   Mon, 20 Dec 2021 22:16:29 +0800
-Message-Id: <20211220141629.14282-3-akingchen@vivo.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211220141629.14282-1-akingchen@vivo.com>
-References: <20211220141629.14282-1-akingchen@vivo.com>
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
-        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWUIZTUlWGENJSkxMS0lDSR
-        gaVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWVVLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OTI6Tzo6GD5LEyoPLUtCLA0Z
-        GjUaCQ9VSlVKTU9LS0tCQ0tPSEJLVTMWGhIXVRoQEhUcGBMeFTsNEg0UVRgUFkVZV1kSC1lBWU5D
-        VUlOS1VKTE1VSUlCWVdZCAFZQUlKQ0g3Bg++
-X-HM-Tid: 0a7dd833a95bd999kuwsd8ad67e0328
+        id S233502AbhLTOUl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 09:20:41 -0500
+Received: from mga09.intel.com ([134.134.136.24]:48901 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229759AbhLTOUl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Dec 2021 09:20:41 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="239981712"
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="239981712"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 06:20:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="663625999"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 20 Dec 2021 06:20:34 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 20 Dec 2021 16:20:33 +0200
+Date:   Mon, 20 Dec 2021 16:20:33 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/4] acpi: Store the known device locations
+Message-ID: <YcCRMUgpSSEhGeug@kuha.fi.intel.com>
+References: <20211217132415.39726-1-heikki.krogerus@linux.intel.com>
+ <20211217132415.39726-2-heikki.krogerus@linux.intel.com>
+ <CAJZ5v0g9HjLr8n3OQwMY0EK5GdCc+8CJnO3mEUXom3g2sz9jXQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0g9HjLr8n3OQwMY0EK5GdCc+8CJnO3mEUXom3g2sz9jXQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add snps,dis_split_quirk property for dwc3 controller
+On Fri, Dec 17, 2021 at 06:01:48PM +0100, Rafael J. Wysocki wrote:
+> And overall I'm wondering if this can be achieved by storing the
+> pld_crc directly in struct acpi_device and doing a
+> bus_for_each_dev(&acpi_bus_type, ...) walk every time a list of
+> devices sharing a _PLD is needed?
+> 
+> It looks like typec_link_ports() is the only user of this and it can
+> easily afford doing a walk like the above if I'm not mistaken.
 
-Signed-off-by: Yaqin Pan <akingchen@vivo.com>
----
- Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+OK. I'll try that out.
 
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index 41416fbd92aa..e9615ca8f447 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -226,6 +226,12 @@ properties:
-       avoid -EPROTO errors with usbhid on some devices (Hikey 970).
-     type: boolean
- 
-+  snps,dis-split-quirk:
-+    description:
-+      When set, change the way host controller schedules transations for a Control transfer.
-+      Avoid failing to enumerate some devices due to usb compatibility issues.
-+    type: boolean
-+
-   snps,is-utmi-l1-suspend:
-     description:
-       True when DWC3 asserts output signal utmi_l1_suspend_n, false when
+thanks,
+
 -- 
-2.17.1
-
+heikki
