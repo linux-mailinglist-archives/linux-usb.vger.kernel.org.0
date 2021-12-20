@@ -2,79 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D827F47B2F3
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 19:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0BB47B31A
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 19:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238527AbhLTShD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 13:37:03 -0500
-Received: from mxout04.lancloud.ru ([45.84.86.114]:33452 "EHLO
-        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233831AbhLTShC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 13:37:02 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 36F1020A6FCC
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH v2 2/2] dt-bindings: usb: document snps,dis_split_quirk
- property in dwc3
-To:     Yaqin Pan <akingchen@vivo.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S240542AbhLTSpB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 13:45:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240536AbhLTSpA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 13:45:00 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9568C061401
+        for <linux-usb@vger.kernel.org>; Mon, 20 Dec 2021 10:44:59 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id o63-20020a17090a0a4500b001b1c2db8145so2846638pjo.5
+        for <linux-usb@vger.kernel.org>; Mon, 20 Dec 2021 10:44:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=WdbWOY03V2kpY7k/lf8oQTo4VEA2Vdp6umA4nuJEIuc=;
+        b=ofClJz4jo3PpFecYdRQZhVP85Bb8PtBQgBwgyp7zglJ53fJ18lBCJ1++xK5e2qbXTZ
+         gdVV854jGh9SJ8Z/7xSAottZKfoeVHL7nYCguLL9UOlLpyNXeNMtWHvVfTUylyVyVn0k
+         Gk3lDmZQ1sNFi9JwvcCeEoIbhcKLw5TktL9R8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=WdbWOY03V2kpY7k/lf8oQTo4VEA2Vdp6umA4nuJEIuc=;
+        b=C7H6Y0/qZl3HO811afUeV6RmSctBeUNvxwle/werjrZpKUMbcEyeJ/6w7XGq8A0baV
+         r+PZdG43vueDEd+oow/98h0Bp1iW+//jocsinPqeFN6o3kNlMBGtiM3gR1A7BoZGRuNn
+         GQwhED4I/7L7yDgsN91z68m4ZTtQZ1JC8h2+AIZRUwE/giRXhPSXkBuOzwAAXwhoUswO
+         0ytD5aNT6+jxQj7DbRDQLh7bnHp/lPVX1Rv/JSorVjvgpLAFtkqkAxGV/h4bhHRxyfTy
+         D/U6ImExwwfY4zDtTKeEbJxzFUKxKpxdPrVXm4nhPecLqd2/jJQ/eNOpJ8FJWglmpSQO
+         m52w==
+X-Gm-Message-State: AOAM532hjvVvzvqiCFz0sdgdznL8sjnkuaYZ+qWYj77azRPDvGY3WbUj
+        T6Wsn6IUX7Be4b4KQ4MF8FHBEQ==
+X-Google-Smtp-Source: ABdhPJyPQrHhFTVe7FBptsBwkry6fep3hyiTtJ3cgtGZkH8eIcRapLjFTx40/3fW35AjMX138/wVXQ==
+X-Received: by 2002:a17:902:e80f:b0:148:a949:93ab with SMTP id u15-20020a170902e80f00b00148a94993abmr17960692plg.113.1640025899153;
+        Mon, 20 Dec 2021 10:44:59 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:b6e8:fca9:3622:591e])
+        by smtp.gmail.com with UTF8SMTPSA id 72sm3775169pfu.70.2021.12.20.10.44.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 10:44:58 -0800 (PST)
+Date:   Mon, 20 Dec 2021 10:44:55 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
         Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <kernel@vivo.com>
-References: <20211220141629.14282-1-akingchen@vivo.com>
- <20211220141629.14282-3-akingchen@vivo.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <cb1c928c-07fa-e6f0-8166-d68596224105@omp.ru>
-Date:   Mon, 20 Dec 2021 21:36:52 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Peter Chen <peter.chen@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v17 7/7] usb: Specify dependencies on USB_XHCI_PLATFORM
+ with 'depends on'
+Message-ID: <YcDPJ1POD5oAqyLj@google.com>
+References: <20211116200739.924401-1-mka@chromium.org>
+ <20211116120642.v17.7.If248f05613bbb06a44eb0b0909be5d97218f417b@changeid>
+ <YbvSNta4jCxizaTa@google.com>
+ <b0b69294-e7fb-5e7a-80f3-466dd4bdc88a@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211220141629.14282-3-akingchen@vivo.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b0b69294-e7fb-5e7a-80f3-466dd4bdc88a@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
-
-On 12/20/21 5:16 PM, Yaqin Pan wrote:
-
-> Add snps,dis_split_quirk property for dwc3 controller
-
-   The name doesn't match the prop itself anymore...
-
+On Fri, Dec 17, 2021 at 03:47:24AM +0300, Dmitry Osipenko wrote:
+> 17.12.2021 02:56, Matthias Kaehlcke пишет:
+> > On Tue, Nov 16, 2021 at 12:07:39PM -0800, Matthias Kaehlcke wrote:
+> >> Some USB controller drivers that depend on the xhci-plat driver
+> >> specify this dependency using 'select' in Kconfig. This is not
+> >> recommended for symbols that have other dependencies as it may
+> >> lead to invalid configurations. Use 'depends on' to specify the
+> >> dependency instead of 'select'.
+> >>
+> >> For dwc3 specify the dependency on USB_XHCI_PLATFORM in
+> >> USB_DWC3_HOST and USB_DWC3_DUAL_ROLE. Also adjust the
+> >> dependencies of USB_DWC3_CORE to make sure that at least one
+> >> of USB_DWC3_HOST, USB_DWC3_GADGET or USB_DWC3_DUAL_ROLE can be
+> >> selected.
+> >>
+> >> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> >> Reviewed-by: Roger Quadros <rogerq@kernel.org>
+> >> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> > 
+> > Note: This patch has been removed from the onboard_usb_hub series,
+> > together with "ARM: configs: Explicitly enable USB_XHCI_PLATFORM
+> > where needed" and "arm64: defconfig: Explicitly enable
+> > USB_XHCI_PLATFORM". These patches aren't any longer needed for the
+> > series. If maintainers think they are useful independently from
+> > the series please pick them or let me know what needs to be
+> > changed to get them landed.
+> > 
 > 
-> Signed-off-by: Yaqin Pan <akingchen@vivo.com>
-> ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
+> Hi,
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index 41416fbd92aa..e9615ca8f447 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -226,6 +226,12 @@ properties:
->        avoid -EPROTO errors with usbhid on some devices (Hikey 970).
->      type: boolean
->  
-> +  snps,dis-split-quirk:
-> +    description:
-> +      When set, change the way host controller schedules transations for a Control transfer.
-> +      Avoid failing to enumerate some devices due to usb compatibility issues.
-> +    type: boolean
-> +
->    snps,is-utmi-l1-suspend:
->      description:
->        True when DWC3 asserts output signal utmi_l1_suspend_n, false when
-> 
+> I don't know what this all is about, perhaps I'm CC'ed semi-randomly
+> because touched that Kconfig once.
 
-MBR, Sergey
+Yes, it seems tools select you based on their heuristics because you
+made changes to that file.
+
+> All I can say here is that the commit message tells us "This is not
+> recommended" and doesn't explain what's the actual problem is being
+> solved. If there is no real problem, why bother?
+
+Earlier versions of the onboard_usb_hub series [1] which had a dependency
+involving USB_XHCI_PLATFORM had an issue with invalid (rand)configs
+that was related with the 'selects'.
+
+The series doesn't depend on USB_XHCI_PLATFORM any longer, hence the
+original issue doesn't exist anymore, however it might re-surface in
+the future.
+
+Personally I have no vested interest at this point in getting the
+config changes landed, I just wanted to make clear what the status
+is (split off from the series, no future versions unless someone
+requests them), rather than abandoning them silently.
+
+[1]: https://patchwork.kernel.org/project/linux-usb/list/?series=531343
