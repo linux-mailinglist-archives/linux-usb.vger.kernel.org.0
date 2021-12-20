@@ -2,230 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B17AE47B365
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 20:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDBC47B422
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 20:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240667AbhLTTFJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 14:05:09 -0500
-Received: from mail-eopbgr660074.outbound.protection.outlook.com ([40.107.66.74]:60169
-        "EHLO CAN01-QB1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233780AbhLTTFJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Dec 2021 14:05:09 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mwkWTfgboMLtz6Jtc9jtmXHWU+zycMcNU5Eour8B/wMWzFh/qiCparx7fyNZaqVylZEksm+v0DlC5p6M6G+xuaPrIH+w3xf6yt+QClddxCxliYrK49yphkQDDo0PHi4dRGfnxPnQTUpQRSML0S75GP/15iMd3whDSgrHxzNY9CEAYC/7ynfa/NmEC9o+mbK1XnQbhXryZpNR7IrjK4Z4aBJwg0CkfuPdm0zHutvjT1hIYxXO4MnEBn7LEWw+CvrScwW0OpOdW55uh26YDAVkjKJKdbZOE4vmF8sStzt9kXEfHIox2XNf5F5GzUPeYOObkyYB0uHen2FMEBZNdIbLXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TOfz/HQyZFY6TbO/ICvzRB0CCQY6+v1vePosF60niyw=;
- b=cQ1TbhRobOX9Rwhhdpu10G5K5JIfNBlbvL5NotD/yd+CrKOABS2E+HTAwhUiI0WFqgSG56dZRuSn2wh+IG+E5lchFmcUuiBR7+BeEtdGQTRf2F9a2BV3S1fDnjvaAUA23vVIUe2Ch6xBOV6oLUudCgH8L/hrmEbNGQoD/b7h/U3AkvLP6Ed3/ddPey1mLFtCdAO9Qxs9IRYWzlU1oKcu2JQWTsdW/vYXVzBwK5YY73oP93KtgBJZ0KJjcdeyK65jAmrEDCSY5XbpK0/BYRJObiuz38k6JFyg2oop3XWgt7NJM+fTvYN20ATZ11rxXuP/1IgKQ4rZVEJlZo5wNXQDWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=dimonoff.com; dmarc=pass action=none header.from=amotus.ca;
- dkim=pass header.d=amotus.ca; arc=none
+        id S234011AbhLTT7a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 14:59:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233312AbhLTT70 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 14:59:26 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055A8C061574;
+        Mon, 20 Dec 2021 11:59:26 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id x21so15965624lfa.5;
+        Mon, 20 Dec 2021 11:59:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=dimonoff.onmicrosoft.com; s=selector2-dimonoff-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TOfz/HQyZFY6TbO/ICvzRB0CCQY6+v1vePosF60niyw=;
- b=e3LXCYRRycdBSMuUuNVjA9JB/CCemeHP4XieaS8oMCGyATmz3bhLB2GHwzYXAXAorv5oRfAgF5MP/sHrHoWNO8/T6YOEojpkSNmsuESZETR1MBMJub7twh4gH9bQZqdPqHigEyxol0+VH2gOIoNB9pDE5efftByorPyC/MNPqCs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amotus.ca;
-Received: from YT1PR01MB4485.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:40::10)
- by YT2PR01MB5021.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:44::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.15; Mon, 20 Dec
- 2021 19:05:05 +0000
-Received: from YT1PR01MB4485.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::44c5:8014:5e2:ab1b]) by YT1PR01MB4485.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::44c5:8014:5e2:ab1b%2]) with mapi id 15.20.4801.020; Mon, 20 Dec 2021
- 19:05:05 +0000
-X-Gm-Message-State: AOAM533k9LK6SGfVi7aBCYZXHBnK3thhISuy3+OntEe44sJUVsImThMg
-        U5i0Wqox9qnXBZkCvYh1WtX3M89ajLu/EJ802DU=
-X-Google-Smtp-Source: ABdhPJyFOUp1sdP1Amu0RTN1qIvI+2ZUFzg3gellpnvTihbn3kjtyXYOPX+urWVLsKLirvuUVOfBG3w4yvSZzTgkhYk=
-X-Received: by 2002:a05:6402:2789:: with SMTP id b9mr16800947ede.28.1640027100820;
- Mon, 20 Dec 2021 11:05:00 -0800 (PST)
-References: <20211220111901.23206-1-johan@kernel.org> <20211220111901.23206-3-johan@kernel.org>
-In-Reply-To: <20211220111901.23206-3-johan@kernel.org>
-From:   Marc Ferland <ferlandm@amotus.ca>
-Date:   Mon, 20 Dec 2021 14:04:49 -0500
-X-Gmail-Original-Message-ID: <CAMRMzCAe1B66vyhXRsiew2=NDM+FbzFU8O9wXsrod64KaYrZ1Q@mail.gmail.com>
-Message-ID: <CAMRMzCAe1B66vyhXRsiew2=NDM+FbzFU8O9wXsrod64KaYrZ1Q@mail.gmail.com>
-Subject: Re: [PATCH 2/2] gnss: usb: add support for Sierra Wireless XM1210
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-ClientProxiedBy: AM0PR06CA0132.eurprd06.prod.outlook.com
- (2603:10a6:208:ab::37) To YT1PR01MB4485.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:40::10)
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=/c/cCfmIiz8eKJQdLJKnFVnoASRqFW42c9fWmmbu56Q=;
+        b=gzWmyxfIjuFmZfUS66iyf1QU2AqUfwsy2R2KEoch30qAuRDtLV/ZP5P65KSbHQYANa
+         OEa6JJm6P/JmQTSr0k/05x3HFWM16RjJoZNKFrmU9wOQu3z37S1HmJxVGb0VBXT73mMC
+         oyvwjEJzQyi35QWurouaXUbLCC92mJc3m8uDjBeJG0EhTHjSHZ8hfMJPELafsjySnNjM
+         JVdGjc//Q4npZh9GmIi3xoCkUiUiLURu65SbRhBgwkhmK2LhI3OnDflQEeLF6yG3oeSa
+         YaBzywEtqyUeugu+miueCoIKqZH6WmIbLEJGPeAfy5u6JdAeIfAaduNMVDpOMhvid3fP
+         GJSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/c/cCfmIiz8eKJQdLJKnFVnoASRqFW42c9fWmmbu56Q=;
+        b=ta7Imycpr8g+1JlX1QCu3TxaBgpM4VhpV1xObOECk0TFkCPQNu8ehcu/7m3hSIc57V
+         4DUlMVZeRfQ5jkSva57cf8Chmad3aLFxuXKvpALSsHtB3TINJwGPwelfKrdtRQsh/5oN
+         fyA7DKGcfBKsq0bKShXGqElmHxZLASbZSi7LbtKtzDhcKSPXHWPRguBIAeAx2IAXd0XL
+         lLYWe6UqFUyFJ9UNOD4G1UevFxR1xfOb5K+K6iD1J8RdE8Gl94gUfAa5rAe7Uqdl5s7c
+         gNP8a08SRIX/9Z2gYakf9cCjX203payXJyGfgLWQHUhQvne7YeByuCKhGsjFG/M7466P
+         RG+A==
+X-Gm-Message-State: AOAM532j3rzfWLl1aYoxIjTxv4jdS/6LMqgWCKkWoLyQkqmvyU1QX40v
+        FonU6+hT9gDUN/7nOz3e/9CGINbfPLU=
+X-Google-Smtp-Source: ABdhPJxrsS5UyUsIwql/oKbVrCA13lTnDKLbJxRls+Mx4JTxS9RqH4/UHQbrokvmG0bDQmjZs4Lbmg==
+X-Received: by 2002:a05:6512:2289:: with SMTP id f9mr16859982lfu.619.1640030364055;
+        Mon, 20 Dec 2021 11:59:24 -0800 (PST)
+Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
+        by smtp.googlemail.com with ESMTPSA id x11sm927290lfr.171.2021.12.20.11.59.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 11:59:23 -0800 (PST)
+Subject: Re: [PATCH v17 7/7] usb: Specify dependencies on USB_XHCI_PLATFORM
+ with 'depends on'
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Peter Chen <peter.chen@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+References: <20211116200739.924401-1-mka@chromium.org>
+ <20211116120642.v17.7.If248f05613bbb06a44eb0b0909be5d97218f417b@changeid>
+ <YbvSNta4jCxizaTa@google.com>
+ <b0b69294-e7fb-5e7a-80f3-466dd4bdc88a@gmail.com>
+ <YcDPJ1POD5oAqyLj@google.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <c38c0a7d-c835-27a6-aeb3-48430c57858a@gmail.com>
+Date:   Mon, 20 Dec 2021 22:59:22 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fff7ef09-06a4-4731-a2c4-08d9c3eba1bc
-X-MS-TrafficTypeDiagnostic: YT2PR01MB5021:EE_
-X-Microsoft-Antispam-PRVS: <YT2PR01MB50216078EFCA70952173F58FA07B9@YT2PR01MB5021.CANPRD01.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3968;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RevJlmTFdnzCvqUdVkPEIeD9cEFWgBomTVR+iSr/Nta4cACwQ3jkynlCSpuxgTY80f7CTMn02Rag1Eu5cKR6lwWiL9CL9YXXI8tPhkkS2BNAfFVne08Z5laaZf1kEc1OHNzjZjYFxFrM/GKmxKjyfMsRVFw21dFHrER+xIgEZffUZlD/ViAno8qwsyu2KyODzFi75PdsNxhTJluSPg9VNMIM632rvBImOs2b3izU4ToJnw6jw6M8zdORS6Adx+AhJCooBwM/obtPhiKYvRXHwJlT/lUuHKqKhP7Px+SwaLxPHZQ9ErV+ushBQ4vR7qdO1rkYuM2ykrvkztUCA+E0jPkYqlUqG/omstsudWut1tmV8xtinpPqZqAbVtfcsYKhLOFXCnr3/rCGswWZGQMsfgZt2d80oZSfRtMADGbqF/o6cFnoNXI2/g5oEdOPsVhHbgysiUJiBRGy6j+LvOE3OHrosD9ZvbLqDEtQy7r1l+mA6L+dqQAv+fc2iawKqQ8VXN/obQk05M8RLx7BcwnL/KQjbOpX+3C0Y4TYoFwb/26UAy+KP0Olld6bV1Kkt0zpE4WjjCoqJeg/LbFQFveNlsjmWNnk2W29fDppSjTLha8YntOiFLdYnRa4zA9U411+btLCsWa6qgzTmekBuxQKYW+3Ya13qqZHqm6YZp8dj0oZB1wfwe+iVl02+Ja5YZXJ0Une75Ox6uUESTrM44SmB2RO5e2YiSqbRREYar2bQXZYtsl2D2HkIpvOKAtB66ux2bW68dHwV6VQHloPjFvex5Yrh1d+NJ1W78BHBOvnVOc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT1PR01MB4485.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(366004)(376002)(39830400003)(396003)(136003)(346002)(66476007)(8936002)(55236004)(8676002)(53546011)(6862004)(52116002)(6506007)(316002)(2906002)(6666004)(83170400001)(66556008)(4326008)(55446002)(38350700002)(66946007)(38100700002)(6486002)(5660300002)(186003)(9686003)(26005)(6512007)(42882007)(966005)(508600001)(450100002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bXBQa010VnFvODMvUGMwNm5CazV6cVZUQXFKck94cSs2ays3eGJ3azVRVmNt?=
- =?utf-8?B?RXI4cUdKL2NTaWV4K0t0RDF6T0ZabTk0NkZIY2FEWngvMDRTTUxrKzU4ZW9a?=
- =?utf-8?B?YjN6ZDNTYlphazVSU0lGVmQyaU4zd3ArcEw0VVhvZUxBL1FyUUo3SzIwWGVw?=
- =?utf-8?B?ZW9YTk9JTVlmT1hINWtiYU1Kc0FiRk9JZHJYZEtNU0FOOUJWdkxVZWVFcSth?=
- =?utf-8?B?K3A2Qi9uT1FaQXJvZkdlc3lpOG9YWWZYRDR5S2k5aWZEK1dGdTJ6ZWFvcEhG?=
- =?utf-8?B?VkVPd2EwZ0lRRUpvV1g2Z1plVkc2S2ZNU0o4ODlWZENwVTJvV2tObk5aYnUv?=
- =?utf-8?B?WEg4bStTdU9EOERwbFgySnJ0dTYzM3VTVVk3UXh5aTk1aGp5blZrKzdYelgw?=
- =?utf-8?B?ams2a3R2U2ZScW1rTXZIRXFsSGxIZ1AwdkRWQVFjVDhhZWlCUEI4RVpLR1FO?=
- =?utf-8?B?R3dqeW1XN0RhRHJBWnYzRkVJdGtoOW9xdFVqQzBaQ1VyeWhMSXZKUVVkVEdV?=
- =?utf-8?B?Q0hsUzF4b3VPdVBJV1AvUW1VdGpHWExmVXhTdFlrNWxzR2pmdmp2QkxKYzEx?=
- =?utf-8?B?Nmk3VEhRS1hybnJPN0JZdWQzNVpHcDllelNrNWN0eUVQNHVuQndnNUpPRHM0?=
- =?utf-8?B?ZWRQSG5Yem1aOWxzdTBHU1ovRWtWbjMydkZ2aWozU3JYS3JnZk11L25XTTVZ?=
- =?utf-8?B?NmNqMFp5a2xGcUdvdHhEem5qOWRHL0c2WDlzdnVaNkpHY2hHcGxrM1k3NVh1?=
- =?utf-8?B?Z0EvNnVGNlMybFRyQitJeDBwTVkwVm9XN21sUVNFYlJvelBla295N0ZVTXNn?=
- =?utf-8?B?dWFjZ0xIOEdoTEZWWnc1TjBXSFQ5NmhERzUwMFl1U3VEODlTR1NNRndmVmxV?=
- =?utf-8?B?Y0lmSjFDUlVOVlZ6ZDAveUhJcU4rWTlYcks3OWtIbmNXN2srQUkvMmN4cVZz?=
- =?utf-8?B?eEU3WUdmSFhERHV5MFl0cFVrZHd1blNWYlUxajd2Qy9LN0VtdVNZY1ltbkRm?=
- =?utf-8?B?ZW9UVlA0dEt5MTU0NWVpY1c0Myt5RlJjMEFxNE55YTlSajkrZXJTeUdPN0po?=
- =?utf-8?B?UE1iZHl0MUtxZDZYRkY3RUhCU0NLbmtRWFV2RlZmVHpDaGFtZG0yMmRuZDV3?=
- =?utf-8?B?cVEwVS9oUkhUS2tZSzdNMjZjbXdLT01pWmI1TVhmM3g1cVAzSG15QU1JRGow?=
- =?utf-8?B?d2pOR21rS2NQclZNaXhoTkNBV2JYUnpwTGhCdjBWNUEzZmk5UDZtejEyblA1?=
- =?utf-8?B?eTBBK2ZjVjRORkI3Y1pFWHdvRHZkQVI2Snl4Wll2NzA2NkV1RWgzaTBwWG8x?=
- =?utf-8?B?N21DZDBkMkx0MDFFNnh2ODdsZUIxUnJUUmM5ZzZFZy84aTVmRzN4UWZtR2Np?=
- =?utf-8?B?NjRQOUxMbW5veUg5bmJObnRucmxoY1JXb2pYNFZxSmpxL0lNNFdqNjFRUVlE?=
- =?utf-8?B?b21sSXhHOEF0ektvTnpJaWNXV3ZTMVZ0S1A0MjBFQVA3dkgweW11c2dVYU1X?=
- =?utf-8?B?cFR1Mlh1M2lmY3dYb1Y1YndWT1h6YmpYWnNsUzJaZll0cVNXM1h5SGNaN1lj?=
- =?utf-8?B?blZ5YVVqajlGcU5EOUV6RHJrSkZFTlhmdXgxc1hMUXJaalVhdUxVSkZBSjBw?=
- =?utf-8?B?Ri84TWFraVFHZGE3eWxET0l2MzZRaFZTNFYyQWpRV29sRUg4b2ViS0pFd3Ri?=
- =?utf-8?B?bE9BQWhQdHNsQVBRdkhOdGhXcnJvK1hXTEMxK1lhaHI1dGZWMmt2YXZOUjg3?=
- =?utf-8?B?T0xKQW82QUt1UWFJUzR0a3NvanJTSUkrVkxXQ3A2c3RyN3U2U3ZDbEh4bGwx?=
- =?utf-8?B?dnh2OFVZcVBNUE1ybTRoY1JlUHlKTWxrMFZHWC9XZXh6cDM1OUhoUWo3QTlH?=
- =?utf-8?B?YXZDVEZmY0YwYjRJbCsxWW1FMk9uQTVOSGl6RW1QTXY2OVYybktjWGh6NTRK?=
- =?utf-8?B?aEVWdWxIeXZIRGIwNDNlZ3JnT3IzUXJjdkdkTExxWnZIY001SXg3K3gyUTZv?=
- =?utf-8?B?ZGVySk1LNVhVNExqaVFYcGUzVEpQVlM3eG93WExmMGJuZnAvK3BQMWVuLzNK?=
- =?utf-8?B?WWI0dVJ2OGZ1dG0vWnM5NFZXcU5hWURCWGRUR0UrL2lSWlV1MkVCV1JCSlJo?=
- =?utf-8?B?VHpjOGd1Rk5zQ25lQkFaZmJFZU43TE1WY0craWhodE50NjdsRWV5NDZwVjVx?=
- =?utf-8?Q?zB1TASsiKzB6gA4D9BIFZ+U=3D?=
-X-OriginatorOrg: amotus.ca
-X-MS-Exchange-CrossTenant-Network-Message-Id: fff7ef09-06a4-4731-a2c4-08d9c3eba1bc
-X-MS-Exchange-CrossTenant-AuthSource: YT1PR01MB4485.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2021 19:05:05.0204
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: c4063547-e5e6-4866-a386-58c3965da102
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BgjU+RPptwNt+hZ5wgnlxQWGzfdq0sqFuPhKqXHfWpl+J2OJbdzKY4QGrn+XWqNDjV+GU672M8xAZzR5xgCERw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB5021
+In-Reply-To: <YcDPJ1POD5oAqyLj@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 6:19 AM Johan Hovold <johan@kernel.org> wrote:
->
-> Add support for the USB interface of the Sierra Wireless XM1210
-> receiver.
->
-> Note that the device only supports NMEA.
->
-> Bus 002 Device 003: ID 1199:b000 Sierra Wireless, Inc. Sierra Wireless_GNSS
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               1.00
->   bDeviceClass            0
->   bDeviceSubClass         0
->   bDeviceProtocol         0
->   bMaxPacketSize0        64
->   idVendor           0x1199 Sierra Wireless, Inc.
->   idProduct          0xb000
->   bcdDevice            0.01
->   iManufacturer           1 Sierra-wireless
->   iProduct                2 Sierra Wireless_GNSS
->   iSerial                 0
->   bNumConfigurations      1
->   Configuration Descriptor:
->     bLength                 9
->     bDescriptorType         2
->     wTotalLength       0x0020
->     bNumInterfaces          1
->     bConfigurationValue     1
->     iConfiguration          0
->     bmAttributes         0xc0
->       Self Powered
->     MaxPower               50mA
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        0
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass         0
->       bInterfaceSubClass      0
->       bInterfaceProtocol      0
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x81  EP 1 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0040  1x 64 bytes
->         bInterval             255
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x01  EP 1 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0040  1x 64 bytes
->         bInterval             255
-> can't get debug descriptor: Resource temporarily unavailable
-> Device Status:     0x0001
->   Self Powered
->
-> Reported-by: Marc Ferland <ferlandm@amotus.ca>
-> Link: https://lore.kernel.org/r/20211027200223.72701-1-ferlandm@amotus.ca
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
->  drivers/gnss/usb.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/gnss/usb.c b/drivers/gnss/usb.c
-> index 5c0251034def..792235a688ea 100644
-> --- a/drivers/gnss/usb.c
-> +++ b/drivers/gnss/usb.c
-> @@ -17,6 +17,7 @@
->  #define GNSS_USB_WRITE_TIMEOUT 1000
->
->  static const struct usb_device_id gnss_usb_id_table[] = {
-> +       { USB_DEVICE(0x1199, 0xb000) },         /* Sierra Wireless XM1210 */
->         { }
->  };
->  MODULE_DEVICE_TABLE(usb, gnss_usb_id_table);
-> --
-> 2.32.0
->
-Thank you Johan! Much appreciated!
+20.12.2021 21:44, Matthias Kaehlcke пишет:
+> On Fri, Dec 17, 2021 at 03:47:24AM +0300, Dmitry Osipenko wrote:
+>> 17.12.2021 02:56, Matthias Kaehlcke пишет:
+>>> On Tue, Nov 16, 2021 at 12:07:39PM -0800, Matthias Kaehlcke wrote:
+>>>> Some USB controller drivers that depend on the xhci-plat driver
+>>>> specify this dependency using 'select' in Kconfig. This is not
+>>>> recommended for symbols that have other dependencies as it may
+>>>> lead to invalid configurations. Use 'depends on' to specify the
+>>>> dependency instead of 'select'.
+>>>>
+>>>> For dwc3 specify the dependency on USB_XHCI_PLATFORM in
+>>>> USB_DWC3_HOST and USB_DWC3_DUAL_ROLE. Also adjust the
+>>>> dependencies of USB_DWC3_CORE to make sure that at least one
+>>>> of USB_DWC3_HOST, USB_DWC3_GADGET or USB_DWC3_DUAL_ROLE can be
+>>>> selected.
+>>>>
+>>>> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+>>>> Reviewed-by: Roger Quadros <rogerq@kernel.org>
+>>>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+>>>
+>>> Note: This patch has been removed from the onboard_usb_hub series,
+>>> together with "ARM: configs: Explicitly enable USB_XHCI_PLATFORM
+>>> where needed" and "arm64: defconfig: Explicitly enable
+>>> USB_XHCI_PLATFORM". These patches aren't any longer needed for the
+>>> series. If maintainers think they are useful independently from
+>>> the series please pick them or let me know what needs to be
+>>> changed to get them landed.
+>>>
+>>
+>> Hi,
+>>
+>> I don't know what this all is about, perhaps I'm CC'ed semi-randomly
+>> because touched that Kconfig once.
+> 
+> Yes, it seems tools select you based on their heuristics because you
+> made changes to that file.
+> 
+>> All I can say here is that the commit message tells us "This is not
+>> recommended" and doesn't explain what's the actual problem is being
+>> solved. If there is no real problem, why bother?
+> 
+> Earlier versions of the onboard_usb_hub series [1] which had a dependency
+> involving USB_XHCI_PLATFORM had an issue with invalid (rand)configs
+> that was related with the 'selects'.
+> 
+> The series doesn't depend on USB_XHCI_PLATFORM any longer, hence the
+> original issue doesn't exist anymore, however it might re-surface in
+> the future.
+> 
+> Personally I have no vested interest at this point in getting the
+> config changes landed, I just wanted to make clear what the status
+> is (split off from the series, no future versions unless someone
+> requests them), rather than abandoning them silently.
+> 
+> [1]: https://patchwork.kernel.org/project/linux-usb/list/?series=531343
+> 
 
-With your patches applied on my platform (featuring the XM1210) , I get:
-
-# lsmod | grep gnss
-gnss_usb 16384 0 - Live 0xffffffffc011b000
-gnss 16384 3 gnss_usb, Live 0xffffffffc0082000
-
-# dmesg | grep gnss
-gnss: GNSS driver registered with major 244
-usbcore: registered new interface driver gnss-usb
-
-# ls -l /dev/gnss0
-crw-rw----    1 root     root      244,   0 Apr  8 08:39 /dev/gnss0
-
-I also tested with gpsd and everything is working as expected, hence:
-
-Tested-by: Marc Ferland <ferlandm@amotus.ca>
-
-Marc
+My point is that you should always explain in a commit message what
+problem is being solved and how it's solved. There is no explanation of
+the problem in the commit of this patch. If there is no real problem and
+patch is a minor improvement, then it also should be explained explicitly.
