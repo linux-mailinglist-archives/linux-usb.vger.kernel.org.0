@@ -2,213 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D33E047AA90
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 14:46:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CADE647AACC
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 15:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbhLTNqV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 08:46:21 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:27664 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232800AbhLTNqV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 08:46:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1640007981; x=1671543981;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=iVRe6fsCl27Ojqo2tcwlK9H93q5OH0MmdUwmGFltg9c=;
-  b=pnLxKJTMWXtEaAKVUE9Xxisug1A7677DMK3oltEUj41ouMlGnltNeocF
-   KT0lo9yhjG0bGUh3DIUFW1ESLQXKzO+3asuCAqEYW+MjDz97jamaxmKjw
-   x8BLLd+ZG0snLELHEq1GnkELF/IpE2FBYSiLkiXMueqIud0J8PPQ+ZnTf
-   U=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Dec 2021 05:46:21 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 05:46:20 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 20 Dec 2021 05:46:20 -0800
-Received: from [10.216.28.95] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 20 Dec
- 2021 05:46:17 -0800
-Message-ID: <35df37e9-226b-c059-a538-581b5d2e53ff@quicinc.com>
-Date:   Mon, 20 Dec 2021 19:16:14 +0530
+        id S233239AbhLTOAp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 20 Dec 2021 09:00:45 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:50106 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232420AbhLTOAo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 09:00:44 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-106-ThBTv8hIOJK8PeJnyhEimg-1; Mon, 20 Dec 2021 14:00:42 +0000
+X-MC-Unique: ThBTv8hIOJK8PeJnyhEimg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Mon, 20 Dec 2021 14:00:40 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Mon, 20 Dec 2021 14:00:40 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Joe Perches' <joe@perches.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "woojung.huh@microchip.com" <woojung.huh@microchip.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "clang-built-linux@googlegroups.com" 
+        <clang-built-linux@googlegroups.com>,
+        "ulli.kroll@googlemail.com" <ulli.kroll@googlemail.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "amitkarwar@gmail.com" <amitkarwar@gmail.com>,
+        "nishants@marvell.com" <nishants@marvell.com>,
+        "gbhat@marvell.com" <gbhat@marvell.com>,
+        "huxinming820@gmail.com" <huxinming820@gmail.com>,
+        "kvalo@codeaurora.org" <kvalo@codeaurora.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Andy Lavr <andy.lavr@gmail.com>
+Subject: RE: [PATCH 4.19 3/6] mwifiex: Remove unnecessary braces from
+ HostCmd_SET_SEQ_NO_BSS_INFO
+Thread-Topic: [PATCH 4.19 3/6] mwifiex: Remove unnecessary braces from
+ HostCmd_SET_SEQ_NO_BSS_INFO
+Thread-Index: AQHX9ZskhY8SD9NuYU2K0YFKH5iuIKw7ZcMg
+Date:   Mon, 20 Dec 2021 14:00:40 +0000
+Message-ID: <5797d1aff9034476afa6827af2bfbce7@AcuMS.aculab.com>
+References: <20211217144119.2538175-1-anders.roxell@linaro.org>
+         <20211217144119.2538175-4-anders.roxell@linaro.org>
+ <bc4a4ba7c07a4077b9790be883fb4205d401804e.camel@perches.com>
+In-Reply-To: <bc4a4ba7c07a4077b9790be883fb4205d401804e.camel@perches.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v6] usb: f_fs: Fix use-after-free for epfile
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Felipe Balbi <balbi@kernel.org>, John Keeping <john@metanate.com>,
-        <linux-usb@vger.kernel.org>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>
-References: <1638857274-24842-1-git-send-email-quic_ugoswami@quicinc.com>
- <YbdT+6FkeIuHz55L@kroah.com>
-From:   Udipto Goswami <quic_ugoswami@quicinc.com>
-In-Reply-To: <YbdT+6FkeIuHz55L@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+From: Joe Perches
+> Sent: 20 December 2021 12:13
+> 
+> On Fri, 2021-12-17 at 15:41 +0100, Anders Roxell wrote:
+> > From: Nathan Chancellor <natechancellor@gmail.com>
+> >
+> > commit 6a953dc4dbd1c7057fb765a24f37a5e953c85fb0 upstream.
+> >
+> > A new warning in clang points out when macro expansion might result in a
+> > GNU C statement expression. There is an instance of this in the mwifiex
+> > driver:
+> >
+> > drivers/net/wireless/marvell/mwifiex/cmdevt.c:217:34: warning: '}' and
+> > ')' tokens terminating statement expression appear in different macro
+> > expansion contexts [-Wcompound-token-split-by-macro]
+> >         host_cmd->seq_num = cpu_to_le16(HostCmd_SET_SEQ_NO_BSS_INFO
+> >                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> []
+> > diff --git a/drivers/net/wireless/marvell/mwifiex/fw.h b/drivers/net/wireless/marvell/mwifiex/fw.h
+> []
+> > @@ -512,10 +512,10 @@ enum mwifiex_channel_flags {
+> >
+> >  #define RF_ANTENNA_AUTO                 0xFFFF
+> >
+> > -#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) {   \
+> > -	(((seq) & 0x00ff) |                             \
+> > -	 (((num) & 0x000f) << 8)) |                     \
+> > -	(((type) & 0x000f) << 12);                  }
+> > +#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) \
+> > +	((((seq) & 0x00ff) |                        \
+> > +	 (((num) & 0x000f) << 8)) |                 \
+> > +	(((type) & 0x000f) << 12))
+> 
+> Perhaps this would be better as a static inline
+> 
+> static inline u16 HostCmd_SET_SEQ_NO_BSS_INFO(u16 seq, u8 num, u8 type)
+> {
+> 	return (type & 0x000f) << 12 | (num & 0x000f) << 8 | (seq & 0x00ff);
+> }
 
-Apologies for the delay, please find the following comments as per my 
-understanding inline.
+Just writing in on one line helps readability!
+It is also used exactly twice, both with a cpu_to_le16().
+I wonder how well the compiler handles that on BE?
+The #define is more likely to be handled better.
 
-On 13-12-2021 07:38 pm, Greg Kroah-Hartman wrote:
-> On Tue, Dec 07, 2021 at 11:37:54AM +0530, Udipto Goswami wrote:
->> Consider a case where ffs_func_eps_disable is called from
->> ffs_func_disable as part of composition switch and at the
->> same time ffs_epfile_release get called from userspace.
->> ffs_epfile_release will free up the read buffer and call
->> ffs_data_closed which in turn destroys ffs->epfiles and
->> mark it as NULL. While this was happening the driver has
->> already initialized the local epfile in ffs_func_eps_disable
->> which is now freed and waiting to acquire the spinlock. Once
->> spinlock is acquired the driver proceeds with the stale value
->> of epfile and tries to free the already freed read buffer
->> causing use-after-free.
->>
->> Following is the illustration of the race:
->>
->>        CPU1                                  CPU2
->>
->>     ffs_func_eps_disable
->>     epfiles (local copy)
->> 					ffs_epfile_release
->> 					ffs_data_closed
->> 					if (last file closed)
->> 					ffs_data_reset
->> 					ffs_data_clear
->> 					ffs_epfiles_destroy
->> spin_lock
->> dereference epfiles
->>
->> Fix this races by taking epfiles local copy & assigning it under
->> spinlock and if epfiles(local) is null then update it in ffs->epfiles
->> then finally destroy it.
-Fixes: a9e6f83c2df (usb: gadget: f_fs: stop sleeping in 
-ffs_func_eps_disable)
->> Reviewed-by: John Keeping <john@metanate.com>
->> Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
->> Co-developed-by: Udipto Goswami <quic_ugoswami@quicinc.com>
->> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
->> ---
->> v6: Addressing minor code formatting.
->>
->>   drivers/usb/gadget/function/f_fs.c | 44 +++++++++++++++++++++++++++++---------
->>   1 file changed, 34 insertions(+), 10 deletions(-)
-> What commit does this fix?
->
-> Does this need to go to stable kernel releases?
->
-> thanks,
->
-> greg k-h
->
-This is fixing Commit:  a9e6f83c2df (usb: gadget: f_fs: stop sleeping in 
-ffs_func_eps_disable)
+I've only made a cursory glance at the code, but I get splitting
+host_cmd->seq_num into two u8 fields would give better code!
 
-Yes this fix is needed for >=5.4 Kernel releases.
+	David
 
->> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
->> index 3c584da..6f23a66 100644
->> --- a/drivers/usb/gadget/function/f_fs.c
->> +++ b/drivers/usb/gadget/function/f_fs.c
->> @@ -1711,16 +1711,24 @@ static void ffs_data_put(struct ffs_data *ffs)
->>   
->>   static void ffs_data_closed(struct ffs_data *ffs)
->>   {
->> +	struct ffs_epfile *epfiles;
->> +	unsigned long flags;
->> +
->>   	ENTER();
->>   
->>   	if (atomic_dec_and_test(&ffs->opened)) {
->>   		if (ffs->no_disconnect) {
->>   			ffs->state = FFS_DEACTIVATED;
->> -			if (ffs->epfiles) {
->> -				ffs_epfiles_destroy(ffs->epfiles,
->> -						   ffs->eps_count);
->> -				ffs->epfiles = NULL;
->> -			}
->> +			spin_lock_irqsave(&ffs->eps_lock, flags);
->> +			epfiles = ffs->epfiles;
->> +			ffs->epfiles = NULL;
->> +			spin_unlock_irqrestore(&ffs->eps_lock,
->> +							flags);
->> +
->> +			if (epfiles)
->> +				ffs_epfiles_destroy(epfiles,
->> +						 ffs->eps_count);
-> You are accessing epfiles outside of the lock.  How is that ok?
-There are 2 parties that are trying to free the ffs->epfiles. We use the 
-lock to serialize which party gets to free the ffs->epfiles. Where we 
-are making it NULL we protected that, The freeing part doesn't need to 
-be inside spinlock because now it is epfiles(local_ variable) with which 
-we are trying to operate now. We removed the ffs->epfiles as the common 
-structure to operate and made the local variable epfiles to do the job.
->
->> +
->>   			if (ffs->setup_state == FFS_SETUP_PENDING)
->>   				__ffs_ep0_stall(ffs);
->>   		} else {
->> @@ -1767,14 +1775,27 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
->>   
->>   static void ffs_data_clear(struct ffs_data *ffs)
->>   {
->> +	struct ffs_epfile *epfiles;
->> +	unsigned long flags;
->> +
->>   	ENTER();
->>   
->>   	ffs_closed(ffs);
->>   
->>   	BUG_ON(ffs->gadget);
->>   
->> -	if (ffs->epfiles)
->> -		ffs_epfiles_destroy(ffs->epfiles, ffs->eps_count);
->> +	spin_lock_irqsave(&ffs->eps_lock, flags);
->> +	epfiles = ffs->epfiles;
->> +	ffs->epfiles = NULL;
->> +	spin_unlock_irqrestore(&ffs->eps_lock, flags);
->> +
->> +	/*
->> +	 * potential race possible between ffs_func_eps_disable
->> +	 * & ffs_epfile_release therefore maintaining a local
->> +	 * copy of epfile will save us from use-after-free.
->> +	 */
->> +	if (epfiles)
->> +		ffs_epfiles_destroy(epfiles, ffs->eps_count);
-> How will it save you from a use-after-free as you never increased a
-> reference count on the pointer here?
- From the above we already serialized the one who gets to free it. So 
-whoever gets to access will mark it NULL so the other function trying to 
-access ffs->epfiles backs off. I think reference count is not applicable 
-here.
->
-> And don't write code with new races.  Or are you trying to say this
-> fixes a race?
-Yes this is for an existing race which we encountered.
->
-> Just saving off a pointer feels wrong here.  What happens if the lock is
-> properly grabbed, then freed, right after you unlock?  You aren't really
-> protecting this properly in a normal way that reference counts and locks
-> work from what I can tell, only trying to reduce the race window but not
-> fixing it.
-This I Doubt because the reference count might not be decremented at 
-anycase.
->
-> thanks,
->
-> greg k-h
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
