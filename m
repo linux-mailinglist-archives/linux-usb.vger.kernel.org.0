@@ -2,59 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F1647AA56
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 14:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E3A47AA67
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 14:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232892AbhLTN0g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 08:26:36 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43510 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbhLTN0g (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 08:26:36 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2848EB80EA4;
-        Mon, 20 Dec 2021 13:26:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4112C36AE8;
-        Mon, 20 Dec 2021 13:26:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640006794;
-        bh=4VYTojJtxt2UikXelqFd6Tayw4q2QDNFfZkN3VoUI+I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iGFur7hAkWQfVQ5g73amaOOrzd936DgYzbIkwY6H5NIZerhYQfNyAAUpLhzUUp7Nm
-         vZadRTY9FL0T62grP0tPtlXohfsmu+aqzGdssBVXBJ/AomgnhztJtClkv6rnyD2F7m
-         wWsYaPZV2zjkPbVENYh6bhpSS+ZGKfmxfpyRShms8ArBchIw6O7rwo2u2qpcY3U+mg
-         sPCEGFZrt7QqtMxDatbfGeZSRW6g1M6qusQxgYyCCyRrfMSjkwUnAaH+bloZES85l5
-         iKj0lDgIy1WHzupp3iZkzOmo2tHwlBwWCQkyi5/B25dwEDAzmH2/1PbTNpSOq7c+5w
-         mq763j6tH2Z3g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mzIgN-0006Nx-Rf; Mon, 20 Dec 2021 14:26:27 +0100
-Date:   Mon, 20 Dec 2021 14:26:27 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Marc Ferland <ferlandm@amotus.ca>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] gnss: add USB support
-Message-ID: <YcCEg0SGIEY7ljDV@hovoldconsulting.com>
-References: <20211220111901.23206-1-johan@kernel.org>
- <YcBz74iw4nJFpV1f@kroah.com>
+        id S232936AbhLTNdI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 08:33:08 -0500
+Received: from mga01.intel.com ([192.55.52.88]:2146 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230176AbhLTNdH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Dec 2021 08:33:07 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="264348002"
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="264348002"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 05:33:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="547332616"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 20 Dec 2021 05:33:05 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 91449190; Mon, 20 Dec 2021 15:33:13 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] tty: tty_io: Switch to vmalloc() fallback in case of TTY_NO_WRITE_SPLIT
+Date:   Mon, 20 Dec 2021 15:32:50 +0200
+Message-Id: <20211220133250.3070-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcBz74iw4nJFpV1f@kroah.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 01:15:43PM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Dec 20, 2021 at 12:18:59PM +0100, Johan Hovold wrote:
-> > This series adds a generic driver for GNSS receivers with a USB
-> > interface and a first device id for the Sierra Wireless XM1210 receiver.
+When TTY_NO_WRITE_SPLIT is set and 64 KiB chunks are used, allow
+vmalloc() fallback. Supply __GFP_RETRY_MAYFAIL to make kmalloc()
+preferable over vmalloc() since we may want a better performance.
 
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Note, both current users copy data to another buffer anyway, so
+the type of our allocation doesn't affect their expectations.
 
-Thanks for reviewing.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/tty/tty_io.c        | 9 +++------
+ drivers/usb/class/cdc-acm.c | 4 ----
+ 2 files changed, 3 insertions(+), 10 deletions(-)
 
-Johan
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index 6616d4a0d41d..8fedfe88dff7 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -170,7 +170,7 @@ static void free_tty_struct(struct tty_struct *tty)
+ {
+ 	tty_ldisc_deinit(tty);
+ 	put_device(tty->dev);
+-	kfree(tty->write_buf);
++	kvfree(tty->write_buf);
+ 	tty->magic = 0xDEADDEAD;
+ 	kfree(tty);
+ }
+@@ -997,9 +997,6 @@ static inline ssize_t do_tty_write(
+ 	 * layer has problems with bigger chunks. It will
+ 	 * claim to be able to handle more characters than
+ 	 * it actually does.
+-	 *
+-	 * FIXME: This can probably go away now except that 64K chunks
+-	 * are too likely to fail unless switched to vmalloc...
+ 	 */
+ 	chunk = 2048;
+ 	if (test_bit(TTY_NO_WRITE_SPLIT, &tty->flags))
+@@ -1014,12 +1011,12 @@ static inline ssize_t do_tty_write(
+ 		if (chunk < 1024)
+ 			chunk = 1024;
+ 
+-		buf_chunk = kmalloc(chunk, GFP_KERNEL);
++		buf_chunk = kvmalloc(chunk, GFP_KERNEL | __GFP_RETRY_MAYFAIL);
+ 		if (!buf_chunk) {
+ 			ret = -ENOMEM;
+ 			goto out;
+ 		}
+-		kfree(tty->write_buf);
++		kvfree(tty->write_buf);
+ 		tty->write_cnt = chunk;
+ 		tty->write_buf = buf_chunk;
+ 	}
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index b3ce7338cb6b..9b9aea24d58c 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -685,10 +685,6 @@ static int acm_port_activate(struct tty_port *port, struct tty_struct *tty)
+ 	if (retval)
+ 		goto error_get_interface;
+ 
+-	/*
+-	 * FIXME: Why do we need this? Allocating 64K of physically contiguous
+-	 * memory is really nasty...
+-	 */
+ 	set_bit(TTY_NO_WRITE_SPLIT, &tty->flags);
+ 	acm->control->needs_remote_wakeup = 1;
+ 
+-- 
+2.34.1
+
