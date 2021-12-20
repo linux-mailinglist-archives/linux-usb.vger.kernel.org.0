@@ -2,265 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6BB47A605
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 09:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC3147A606
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 09:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234304AbhLTI0E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 03:26:04 -0500
-Received: from cable.insite.cz ([84.242.75.189]:43695 "EHLO cable.insite.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234689AbhLTI0B (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Dec 2021 03:26:01 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id E1132A1A3D409;
-        Mon, 20 Dec 2021 09:25:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1639988756; bh=XQRAlk2+V8wj72YNBcUQRGUUNWyTfRhGHm58nuGGSeE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hf1/WLGxAA/WxjpgiwerK81Sf4Ff/wehuNRgXW9aasEJVJ4EUxeHAfOYlovWGBa/E
-         vuki55ZGHaF+gTnGH7rtqJDlYd1pKt9LLmuFCeLxe0snEoyRbN09qUQATM4JKTzsNY
-         u9jRvElB422B5a5ch4o8x9DJ/cTJU4zkJ18bE2iY=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id bzeWrNhfyeWc; Mon, 20 Dec 2021 09:25:50 +0100 (CET)
-Received: from precision.doma (dustin.pilsfree.net [81.201.58.138])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 34B8DA1A3D40B;
-        Mon, 20 Dec 2021 09:25:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1639988747; bh=XQRAlk2+V8wj72YNBcUQRGUUNWyTfRhGHm58nuGGSeE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mX0iXQOql1N5euum0cFXvI5+xD6FCHHTcf7Qzo7V9aFPYsYL8qYBgKvuHkCgos/fr
-         +isiDnW/uu7iUE+wODP9Z9K9gV4vIvxz7eo4jjYC/wm73AC2VVGSw/gtyysNXJw7kv
-         u5uRvsU8iVe5zbWgOzt2wnrmiubuAemSwqW5jOC0=
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Pavel Hofman <pavel.hofman@ivitera.com>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Julian Scheel <julian@jusst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 11/11] usb: gadget: f_uac2: Determining bInterval for HS and SS
-Date:   Mon, 20 Dec 2021 09:25:42 +0100
-Message-Id: <20211220082542.13750-12-pavel.hofman@ivitera.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211220082542.13750-1-pavel.hofman@ivitera.com>
-References: <20211220082542.13750-1-pavel.hofman@ivitera.com>
+        id S232297AbhLTI2b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 03:28:31 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:46086 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231287AbhLTI2a (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 03:28:30 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EB5660C3E
+        for <linux-usb@vger.kernel.org>; Mon, 20 Dec 2021 08:28:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD8AC36AE5;
+        Mon, 20 Dec 2021 08:28:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639988909;
+        bh=vQqw7VdK3nB8t1j6mCgKB6IeVOU/LmwrkAyv/cDTJdc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qi3NeAeVxs+n4TZPEFwkshBJj0zUHblRBSo/8DRvXi8whLqTji94clcE+uUJVlq/e
+         v7MZB99cYAr2kM6afRYImThryH2UCMbcFGtLJthBev9AXiRuYgTSpf0VQt1dBxEOcM
+         BhxVdX31MU+7pRyJBaLWdQV/RXagBIZYUE2Ex3jc=
+Date:   Mon, 20 Dec 2021 09:28:25 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Filip =?utf-8?Q?=C5=BDaludek?= <filip.zaludek@oracle.com>
+Cc:     linux-usb@vger.kernel.org, Konrad Wilk <konrad.wilk@oracle.com>
+Subject: Re: data throttling under load when serial to usb adapter is used
+Message-ID: <YcA+qegbpj0heal4@kroah.com>
+References: <738e20c6-c709-d149-fe48-ee89540fe38a@oracle.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <738e20c6-c709-d149-fe48-ee89540fe38a@oracle.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-So far bInterval for HS and SS was fixed at 4, disallowing faster
-samplerates. The patch determines the largest bInterval (4 to 1) for
-which the required bandwidth of the max samplerate fits the max allowed
-packet size. If the required bandwidth exceeds max bandwidth for
-single-packet mode (ep->mc=1), bInterval is left at 1.
+On Mon, Dec 20, 2021 at 09:11:06AM +0100, Filip Žaludek wrote:
+> 
+> 
+> 
+> Hi,
+>  under load I am experiencing data throttling when serial to usb adapter is used,
+> but only in direction from wires to usb. Opposite direction seems to be robust.
+>  To reproduce plug both ends of usb to serial adapter into same hardware and run
+> attached script. You should see data flowing in both directions, then saturate cpu
+> `stress --cpu #cpus_plus_two`.
+>  Data will be corrupted only in serial to usb direction, usually from beginning,
+> often within first urb. Not seems to be due to flow control.
+>  Even though chopped bytes are received, rx/tx counters are correctly incremented.
+> Script implements data sending in two ways, first utilizing socat and second standard
+> cat command. It is adjusted for RPi4 with miniUART ttyS0, for multiport hardware
+> and/or ttyAMA0 you will need to tailor accordingly.
+> 
+> Rough failure rates observed (former trials with ~32k dmesg):
+> ttyAMA0: 'cat' 20% vs. 'socat'  2%
+> ttyS0  : 'cat' 90% vs. 'socat' 40%
+> 
+> Why to plug both adapter ends into same hardware?
+> - I believe this is sub-issue of two connected devices, but it is hard to reproduce
+> - serial port programming
+> 
+> 
+> 
+> 
+> Regards,
+> Filip Zaludek
+> 
+> 
+> 
+> 
+> Tested chipsets:
+> 
+> ftdi_sio [TTL], Bus 004 Device 003: ID 0403:6001 Future Technology Devices International, Ltd FT232 Serial (UART) IC
+> pl2303 [TTL], Bus 001 Device 005: ID 067b:2303 Prolific Technology, Inc. PL2303 Serial Port / Mobile Action MA-8910P
+> ch341-uart [RS232], Bus 001 Device 006: ID 1a86:7523 QinHeng Electronics CH340 serial converter
 
-The FS mode is left at fixed bInterval=1.
+Using 'cat' is not a good way to ever use a serial port.  Please use a
+tool that can properly detect and use the serial port flow control
+settings, which should prevent the issues you are seeing here.
 
-Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
----
- drivers/usb/gadget/function/f_uac2.c | 90 +++++++++++++++++-----------
- 1 file changed, 55 insertions(+), 35 deletions(-)
+Is socat using flow control?  If so, which settings, hardware or
+software flow control?
 
-diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-index 984f757de5a4..e72f6f42e1b7 100644
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -333,7 +333,7 @@ static struct usb_endpoint_descriptor fs_epout_desc = {
- 	.bEndpointAddress = USB_DIR_OUT,
- 	/* .bmAttributes = DYNAMIC */
- 	/* .wMaxPacketSize = DYNAMIC */
--	.bInterval = 1,
-+	/* .bInterval = DYNAMIC */
- };
- 
- static struct usb_endpoint_descriptor hs_epout_desc = {
-@@ -342,7 +342,7 @@ static struct usb_endpoint_descriptor hs_epout_desc = {
- 
- 	/* .bmAttributes = DYNAMIC */
- 	/* .wMaxPacketSize = DYNAMIC */
--	.bInterval = 4,
-+	/* .bInterval = DYNAMIC */
- };
- 
- static struct usb_endpoint_descriptor ss_epout_desc = {
-@@ -352,7 +352,7 @@ static struct usb_endpoint_descriptor ss_epout_desc = {
- 	.bEndpointAddress = USB_DIR_OUT,
- 	/* .bmAttributes = DYNAMIC */
- 	/* .wMaxPacketSize = DYNAMIC */
--	.bInterval = 4,
-+	/* .bInterval = DYNAMIC */
- };
- 
- static struct usb_ss_ep_comp_descriptor ss_epout_desc_comp = {
-@@ -467,7 +467,7 @@ static struct usb_endpoint_descriptor fs_epin_desc = {
- 	.bEndpointAddress = USB_DIR_IN,
- 	.bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC,
- 	/* .wMaxPacketSize = DYNAMIC */
--	.bInterval = 1,
-+	/* .bInterval = DYNAMIC */
- };
- 
- static struct usb_endpoint_descriptor hs_epin_desc = {
-@@ -476,7 +476,7 @@ static struct usb_endpoint_descriptor hs_epin_desc = {
- 
- 	.bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC,
- 	/* .wMaxPacketSize = DYNAMIC */
--	.bInterval = 4,
-+	/* .bInterval = DYNAMIC */
- };
- 
- static struct usb_endpoint_descriptor ss_epin_desc = {
-@@ -486,7 +486,7 @@ static struct usb_endpoint_descriptor ss_epin_desc = {
- 	.bEndpointAddress = USB_DIR_IN,
- 	.bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC,
- 	/* .wMaxPacketSize = DYNAMIC */
--	.bInterval = 4,
-+	/* .bInterval = DYNAMIC */
- };
- 
- static struct usb_ss_ep_comp_descriptor ss_epin_desc_comp = {
-@@ -659,29 +659,11 @@ static int get_max_srate(const int *srates)
- 	return max_srate;
- }
- 
--static int set_ep_max_packet_size(const struct f_uac2_opts *uac2_opts,
--	struct usb_endpoint_descriptor *ep_desc,
--	enum usb_device_speed speed, bool is_playback)
-+static int get_max_bw_for_binterval(const struct f_uac2_opts *uac2_opts,
-+	u8 binterval, unsigned int factor, bool is_playback)
- {
- 	int chmask, srate, ssize;
--	u16 max_size_bw, max_size_ep;
--	unsigned int factor;
--
--	switch (speed) {
--	case USB_SPEED_FULL:
--		max_size_ep = 1023;
--		factor = 1000;
--		break;
--
--	case USB_SPEED_HIGH:
--	case USB_SPEED_SUPER:
--		max_size_ep = 1024;
--		factor = 8000;
--		break;
--
--	default:
--		return -EINVAL;
--	}
-+	u16 max_size_bw;
- 
- 	if (is_playback) {
- 		chmask = uac2_opts->p_chmask;
-@@ -699,14 +681,52 @@ static int set_ep_max_packet_size(const struct f_uac2_opts *uac2_opts,
- 		srate = srate * (1000 + uac2_opts->fb_max) / 1000;
- 		// updated srate is always bigger, therefore DIV_ROUND_UP always yields +1
- 		max_size_bw = num_channels(chmask) * ssize *
--			(DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1))));
-+			(DIV_ROUND_UP(srate, factor / (1 << (binterval - 1))));
- 	} else {
- 		// adding 1 frame provision for Win10
- 		max_size_bw = num_channels(chmask) * ssize *
--			(DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1))) + 1);
-+			(DIV_ROUND_UP(srate, factor / (1 << (binterval - 1))) + 1);
- 	}
-+	return max_size_bw;
-+}
-+
-+static int set_ep_max_packet_size_bint(const struct f_uac2_opts *uac2_opts,
-+	struct usb_endpoint_descriptor *ep_desc,
-+	enum usb_device_speed speed, bool is_playback)
-+{
-+	u16 max_size_bw, max_size_ep;
-+	u8 binterval;
-+
-+	switch (speed) {
-+	case USB_SPEED_FULL:
-+		max_size_ep = 1023;
-+		// fixed
-+		binterval = 1;
-+		max_size_bw = get_max_bw_for_binterval(uac2_opts, binterval, 1000,
-+			is_playback);
-+		break;
-+
-+	case USB_SPEED_HIGH:
-+	case USB_SPEED_SUPER:
-+		max_size_ep = 1024;
-+		// checking bInterval from 4 (= 1ms) to 1 if the required bandwidth fits
-+		for (binterval = 4; binterval > 0; --binterval) {
-+			max_size_bw = get_max_bw_for_binterval(uac2_opts, binterval, 8000,
-+					is_playback);
-+			if (max_size_bw <= max_size_ep) {
-+				// found largest bInterval/max_size_bw fitting max_size_ep
-+				break;
-+			}
-+		}
-+		break;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+
- 	ep_desc->wMaxPacketSize = cpu_to_le16(min_t(u16, max_size_bw,
- 						    max_size_ep));
-+	ep_desc->bInterval = binterval;
- 
- 	return 0;
- }
-@@ -1119,42 +1139,42 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
- 	}
- 
- 	/* Calculate wMaxPacketSize according to audio bandwidth */
--	ret = set_ep_max_packet_size(uac2_opts, &fs_epin_desc, USB_SPEED_FULL,
-+	ret = set_ep_max_packet_size_bint(uac2_opts, &fs_epin_desc, USB_SPEED_FULL,
- 				     true);
- 	if (ret < 0) {
- 		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
- 		return ret;
- 	}
- 
--	ret = set_ep_max_packet_size(uac2_opts, &fs_epout_desc, USB_SPEED_FULL,
-+	ret = set_ep_max_packet_size_bint(uac2_opts, &fs_epout_desc, USB_SPEED_FULL,
- 				     false);
- 	if (ret < 0) {
- 		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
- 		return ret;
- 	}
- 
--	ret = set_ep_max_packet_size(uac2_opts, &hs_epin_desc, USB_SPEED_HIGH,
-+	ret = set_ep_max_packet_size_bint(uac2_opts, &hs_epin_desc, USB_SPEED_HIGH,
- 				     true);
- 	if (ret < 0) {
- 		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
- 		return ret;
- 	}
- 
--	ret = set_ep_max_packet_size(uac2_opts, &hs_epout_desc, USB_SPEED_HIGH,
-+	ret = set_ep_max_packet_size_bint(uac2_opts, &hs_epout_desc, USB_SPEED_HIGH,
- 				     false);
- 	if (ret < 0) {
- 		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
- 		return ret;
- 	}
- 
--	ret = set_ep_max_packet_size(uac2_opts, &ss_epin_desc, USB_SPEED_SUPER,
-+	ret = set_ep_max_packet_size_bint(uac2_opts, &ss_epin_desc, USB_SPEED_SUPER,
- 				     true);
- 	if (ret < 0) {
- 		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
- 		return ret;
- 	}
- 
--	ret = set_ep_max_packet_size(uac2_opts, &ss_epout_desc, USB_SPEED_SUPER,
-+	ret = set_ep_max_packet_size_bint(uac2_opts, &ss_epout_desc, USB_SPEED_SUPER,
- 				     false);
- 	if (ret < 0) {
- 		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
--- 
-2.25.1
+Also please note that the usb-serial devices you are using here are
+_very_ cheap and not good for huge amounts of data like you seem to want
+to use here.  I would recommend a much more robust usb-serial device if
+you need high data rates and good hardware flow control handling.  Most
+of the time, the devices you have here do not even have any hardware
+flow control support as the manufacturers do not hook up those lines.
+So be careful.
 
+thanks,
+
+greg k-h
