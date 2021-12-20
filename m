@@ -2,78 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE8447A890
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 12:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5135C47A8B8
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 12:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbhLTLZv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 06:25:51 -0500
-Received: from mxout02.lancloud.ru ([45.84.86.82]:37216 "EHLO
-        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbhLTLZv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 06:25:51 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru D4AA2232DC0A
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Message-ID: <d7974f16-74b1-4d8a-2c28-8acb710d6310@omp.ru>
-Date:   Mon, 20 Dec 2021 14:25:42 +0300
+        id S231849AbhLTLam (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 06:30:42 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49944 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231838AbhLTLal (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 06:30:41 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D924B80E0D
+        for <linux-usb@vger.kernel.org>; Mon, 20 Dec 2021 11:30:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F865C36AE7;
+        Mon, 20 Dec 2021 11:30:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639999839;
+        bh=mZmnN313BM3yR1OC4eDy0+j2lR+6sF0yklWcmL1seKE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R2bISzS0FQO2od1pUpVj+useXRfFBxUH+3x6Q2qyMbTa62l8oI+StBiQuO8jzrecD
+         /BHdJAorcU9dDkxlSdV+uWhTwpRPC2ZovkH2Q91aNYfZReHFKudSjzf4xkbpbSNrRN
+         yifBXqK4UXtI6eL1Bt7mg6R1Sfz44oY6j32Q4erfrjvo/N9UbDRNfOTq0Fr1fmbNWf
+         3D34QC8W+tWj4pOb6J0fRSVl8dTm6ySTcafIa52+g3usmeHXhDFbJ4OpkcW1K8LV71
+         i6fq/KtSxcVAYTUb/sZyWRINReU5EyAL49i5q3Anfgvc+OOxrPwFw3heW2C+YwzC0k
+         0db9UKpfOWl1A==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mzGsC-00066s-EI; Mon, 20 Dec 2021 12:30:32 +0100
+Date:   Mon, 20 Dec 2021 12:30:32 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Ralf Beck <musical_snake@gmx.de>, linux-usb@vger.kernel.org
+Subject: Duplicate endpoints (was: Re:)
+Message-ID: <YcBpWMtrk2zQx8mw@hovoldconsulting.com>
+References: <trinity-09ddec50-a8ca-4663-ba91-4331ab43c9e4-1639982794116@3c-app-gmx-bs07>
+ <b1001f8a-df10-a3c7-f715-157f5be16fa4@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] usb: dwc3: qcom: Check for null irq pointer
-Content-Language: en-US
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <balbi@kernel.org>,
-        <gregkh@linuxfoundation.org>, <p.zabel@pengutronix.de>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20211220101520.930658-1-jiasheng@iscas.ac.cn>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-In-Reply-To: <20211220101520.930658-1-jiasheng@iscas.ac.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b1001f8a-df10-a3c7-f715-157f5be16fa4@suse.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20.12.2021 13:15, Jiasheng Jiang wrote:
-
-> The return value of platform_get_irq() needs to be checked.
-> To avoid use of null pointer
-
-   What null pointer, could you please clarify?
-
-in case that there is no irq.
+On Mon, Dec 20, 2021 at 11:01:56AM +0100, Oliver Neukum wrote:
 > 
-> Fixes: 2bc02355f8ba ("usb: dwc3: qcom: Add support for booting with ACPI")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->   drivers/usb/dwc3/dwc3-qcom.c | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 49e6ca94486d..f04fb3f2fb85 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -614,6 +614,11 @@ static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
->   		qcom->acpi_pdata->dwc3_core_base_size;
->   
->   	irq = platform_get_irq(pdev_irq, 0);
-> +	if (!irq) {
+> On 20.12.21 07:46, Ralf Beck wrote
+> > One set with audio class specific interfaces for use by an audi
+> > class driver.  The other set with vendor specific interfaces for use
+> > by the vendor driver.  Obviously the class specific interfaces and
+> > vendor specific interfaces are not intended to be use by a driver
+> > simultaniously.
 
-    This is totally wrong! That function returns negative error codes in case 
-of failure.
+> Such devices are buggy. We usually define quirks for such devices.
 
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
-> +
->   	child_res[1].flags = IORESOURCE_IRQ;
->   	child_res[1].start = child_res[1].end = irq;
+> > There must be another solution to deal with this. It is unacceptable
+> > to request a user of these devices to have to disablethe duplicate
+> > endpoint check and recompile the kernel on every update in order to
+> > be able to use their devices in vendor mode.
 
-MBR, Sergey
+> I suggest you write a patch to introduce a quirk that disables one of the
+> interfaces and disregards disabled interfaces for purposes of the check.
+
+We already have USB_QUIRK_ENDPOINT_IGNORE (previously known as
+USB_QUIRK_ENDPOINT_BLACKLIST) for this. See, for example:
+
+	184eead057cc ("USB: core: Fix regression in Hercules audio card")
+
+and
+
+	bdd1b147b802 ("USB: quirks: blacklist duplicate ep on Sound Devices USBPre2")
+
+Johan
