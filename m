@@ -2,37 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B293647A603
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 09:26:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0640747A604
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 09:26:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232470AbhLTI0D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 03:26:03 -0500
-Received: from cable.insite.cz ([84.242.75.189]:46549 "EHLO cable.insite.cz"
+        id S232760AbhLTI0E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 03:26:04 -0500
+Received: from cable.insite.cz ([84.242.75.189]:47625 "EHLO cable.insite.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234342AbhLTI0A (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Dec 2021 03:26:00 -0500
+        id S234640AbhLTI0B (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Dec 2021 03:26:01 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id A3BC7A1A3D403;
+        by cable.insite.cz (Postfix) with ESMTP id C1A80A1A3D405;
         Mon, 20 Dec 2021 09:25:55 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1639988755; bh=Zb6YZxBSNRSm20rGOOx/GOnHDVc+cQZuyDkHmzq8FeY=;
+        t=1639988755; bh=foDRz/w+gGEj4ZWnc3EnCugl8u/3ze6aN+VG/9SZ+HQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qgJkyn9wsU/scZR67ztUuyBbqBdTOB4RTGiAG85mMswPFmagcFCJ+dK20lx0R7oTY
-         F2aAEFkdZozn/as+zgLwNVGw/0LOOdIw6f5zLB/aLOf2gL8GjEZn2hPUHny/SrpEkR
-         +xyqQZpm6/cBEq8NzUqN3Of9RAe41a2A7zJdkykc=
+        b=et5xwcvhmKNaw1Rw+gTuWOw2rGy9AeQhkpE4Sf95qNRw2CXyOCOyPDb7/cvfbppq+
+         +MkBky5GJWFODR/JQvO5eAZyO3q+TSLpxbmzPnElr4jEvBQD0/umlAiREtIs4cNcKy
+         2c95pT3dlczjjzPM9tKHkbURky4lq+KRZE8uayDg=
 Received: from cable.insite.cz ([84.242.75.189])
         by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id HD1sluq2Bp-3; Mon, 20 Dec 2021 09:25:50 +0100 (CET)
+        with ESMTP id 7BNIyXqMVn-m; Mon, 20 Dec 2021 09:25:50 +0100 (CET)
 Received: from precision.doma (dustin.pilsfree.net [81.201.58.138])
         (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 8AEFAA1A3D409;
+        by cable.insite.cz (Postfix) with ESMTPSA id DA27EA1A3D40A;
         Mon, 20 Dec 2021 09:25:46 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1639988746; bh=Zb6YZxBSNRSm20rGOOx/GOnHDVc+cQZuyDkHmzq8FeY=;
+        t=1639988747; bh=foDRz/w+gGEj4ZWnc3EnCugl8u/3ze6aN+VG/9SZ+HQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZsFgYwZssNwqOWQxxz4+FLEgdyBklfbv5pcf+4DLZr9jcUbslFpdbHZ7VVTvs5dLh
-         exIZS23vbxI7D5hIe+3dbaUE+IHJveEpKxvpIfKD9An5+EMCvtpFN4H5aVZgn8aCRG
-         80xKMfx0ihbNb3Wbz13VcXh5BtSa8zygISUzOt/k=
+        b=jiKg8gHQ1g6ivxIk2NEzPDSC3RzgwfyfNhXcq9ffH5VIXEwRAvRktqffW+o/quVzi
+         pwfmA1/0GQZp+5ojRFLHmCwCB14dfO59taEmLT65FwtFVlOhA8oJOLbrC3oEBIVTGl
+         Bne6wMPErVlcRxQHf0fadVVDegSMQMg6pjZhjyDw=
 From:   Pavel Hofman <pavel.hofman@ivitera.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Pavel Hofman <pavel.hofman@ivitera.com>,
@@ -41,9 +41,9 @@ Cc:     Pavel Hofman <pavel.hofman@ivitera.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
         Julian Scheel <julian@jusst.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 09/11] usb: gadget: f_uac2: Adding suspend callback
-Date:   Mon, 20 Dec 2021 09:25:40 +0100
-Message-Id: <20211220082542.13750-10-pavel.hofman@ivitera.com>
+Subject: [PATCH 10/11] usb: gadget: f_uac1: Adding suspend callback
+Date:   Mon, 20 Dec 2021 09:25:41 +0100
+Message-Id: <20211220082542.13750-11-pavel.hofman@ivitera.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211220082542.13750-1-pavel.hofman@ivitera.com>
 References: <20211220082542.13750-1-pavel.hofman@ivitera.com>
@@ -53,48 +53,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When USB cable gets disconnected, the undergoing playback/capture
-stalls, without any notification to u_audio about the change.
-Experiments with a dwc2 gadget revealed that Suspend interrupt is
-thrown at cable disconnection, which the gadget framework translates to
-calling suspend callback of a function, if it is defined.
-
-This patch adds the suspend callback to f_uac2 function, calling
-corresponding method of u_audio in order to stop the respective PCM
-streams and to notify subscribed clients at cable disconnection.
+Adding suspend callback to f_uac1 function, calling corresponding method
+of u_audio in order to stop the respective PCM streams and to notify
+subscribed clients about the stop.
 
 Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
 ---
- drivers/usb/gadget/function/f_uac2.c | 9 +++++++++
+ drivers/usb/gadget/function/f_uac1.c | 9 +++++++++
  1 file changed, 9 insertions(+)
 
-diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-index ef8e39e80523..984f757de5a4 100644
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -1430,6 +1430,14 @@ afunc_disable(struct usb_function *fn)
- 		usb_ep_disable(uac2->int_ep);
+diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
+index 7fd2b5580374..3eb16f1baf90 100644
+--- a/drivers/usb/gadget/function/f_uac1.c
++++ b/drivers/usb/gadget/function/f_uac1.c
+@@ -961,6 +961,14 @@ static void f_audio_disable(struct usb_function *f)
+ 		usb_ep_disable(uac1->int_ep);
  }
  
 +static void
-+afunc_suspend(struct usb_function *fn)
++f_audio_suspend(struct usb_function *f)
 +{
-+	struct f_uac2 *uac2 = func_to_uac2(fn);
++	struct f_uac1 *uac1 = func_to_uac1(f);
 +
-+	u_audio_suspend(&uac2->g_audio);
++	u_audio_suspend(&uac1->g_audio);
 +}
 +
- static int
- in_rq_cur(struct usb_function *fn, const struct usb_ctrlrequest *cr)
+ /*-------------------------------------------------------------------------*/
+ static struct uac_feature_unit_descriptor *build_fu_desc(int chmask)
  {
-@@ -2047,6 +2055,7 @@ static struct usb_function *afunc_alloc(struct usb_function_instance *fi)
- 	uac2->g_audio.func.set_alt = afunc_set_alt;
- 	uac2->g_audio.func.get_alt = afunc_get_alt;
- 	uac2->g_audio.func.disable = afunc_disable;
-+	uac2->g_audio.func.suspend = afunc_suspend;
- 	uac2->g_audio.func.setup = afunc_setup;
- 	uac2->g_audio.func.free_func = afunc_free;
+@@ -1634,6 +1642,7 @@ static struct usb_function *f_audio_alloc(struct usb_function_instance *fi)
+ 	uac1->g_audio.func.get_alt = f_audio_get_alt;
+ 	uac1->g_audio.func.setup = f_audio_setup;
+ 	uac1->g_audio.func.disable = f_audio_disable;
++	uac1->g_audio.func.suspend = f_audio_suspend;
+ 	uac1->g_audio.func.free_func = f_audio_free;
  
+ 	return &uac1->g_audio.func;
 -- 
 2.25.1
 
