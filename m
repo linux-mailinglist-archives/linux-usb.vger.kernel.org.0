@@ -2,201 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D08F47B450
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 21:26:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 498A047B4B0
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 22:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbhLTU0f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 15:26:35 -0500
-Received: from mga03.intel.com ([134.134.136.65]:56635 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229461AbhLTU0e (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Dec 2021 15:26:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640031994; x=1671567994;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QkGOH9bFv7PKUpKAjWUauZ9C3IGYX7VbYB5hAfh2CZo=;
-  b=kiDHcREaznwhUezkKvMPhirbru8892QPtnW8AaXM/1+NxGHfvniG8e2k
-   m2gd/Nvc/mIfXpd6FhvTZ2p8C/Fqpovo8ni5e4Jta+yJ2ZZLHvvQyBocg
-   uHR8+mcRQg+hCU0GV0kPK+kB8QmlItdr3nvBnvUdF/OqMOoEhJWf0sATo
-   WgT88Pnp7fr47eRJU1Hn5wispDhVQkqLklWuuCXtkqsxjNuhsnEIMdiO9
-   mD+wi9+nqnhgBL4GiljLsE+qFvKK1M9ZhxZaopd11Q7yEn7K6heZJ2Ame
-   t5XjjbKD5F+D8XCnPSU/A3I2sKTWd4vIxiamZqJT5XVoiiNzI/RsCfH26
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="240217584"
-X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
-   d="scan'208";a="240217584"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 12:26:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
-   d="scan'208";a="520957686"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 20 Dec 2021 12:26:31 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzPEj-0008CZ-8P; Mon, 20 Dec 2021 20:26:21 +0000
-Date:   Tue, 21 Dec 2021 04:26:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Pavel Hofman <pavel.hofman@ivitera.com>, linux-usb@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Pavel Hofman <pavel.hofman@ivitera.com>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Julian Scheel <julian@jusst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 04/11] usb: gadget: f_uac1: Support multiple sampling
- rates
-Message-ID: <202112210422.0fC1uDBA-lkp@intel.com>
-References: <20211220082542.13750-5-pavel.hofman@ivitera.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220082542.13750-5-pavel.hofman@ivitera.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S230165AbhLTVGG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 16:06:06 -0500
+Received: from mail-qt1-f173.google.com ([209.85.160.173]:45856 "EHLO
+        mail-qt1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229848AbhLTVF7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 16:05:59 -0500
+Received: by mail-qt1-f173.google.com with SMTP id p19so11006836qtw.12;
+        Mon, 20 Dec 2021 13:05:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=fqRSjSjlVwMx3PCYB3pn/czslzADAGvnpT9c5YDGfOE=;
+        b=WsZua+6VjEG/N4cxVAQwCUoy1L5ukQg8G2mBkszOgwC4ot8hjEuaz1AEojko+IauJw
+         aGoLlJQchG0NntwBHzul+8ytgh82pF64BGQTsommjyRksJl9jUTbZe+V1prgWJysH/vx
+         Dnd35S8xEBCcHzRY2qQvR9/mSTt9HZc4SL3KWRcT1BpIex0pF+os/0VQj2M6NxWNu36f
+         6Nhl3rLkeNWjJASI9RgJDZolPjaeASKDb/7cJWC5sM3npkQX226niUG9RSJ8R2NGNmTO
+         xeKIYTlxOvlRF/pJZ/LP8svp1+BdMFWmG/0/VyeDnHMyQELpM0cbh1uAkhiEf7AB3A9c
+         N/3g==
+X-Gm-Message-State: AOAM532qxqUybUgR2Eo8o0CGJ3UuPW6xR4mq06w6XP3MFRrPImhOkUnT
+        w9pd1Q4lEFR5tRRIyWfKpRYAssvhw1/P
+X-Google-Smtp-Source: ABdhPJyR9q1EP5eXq8kXEDXWr5wln0geOO6zBx9YUws8l8NgUVUVoK5EDZDup9slQkQFdPdCqx91eQ==
+X-Received: by 2002:ac8:5811:: with SMTP id g17mr9286067qtg.535.1640034357899;
+        Mon, 20 Dec 2021 13:05:57 -0800 (PST)
+Received: from robh.at.kernel.org (adsl-72-50-0-33.prtc.net. [72.50.0.33])
+        by smtp.gmail.com with ESMTPSA id o1sm15956979qtw.24.2021.12.20.13.05.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 13:05:57 -0800 (PST)
+Received: (nullmailer pid 3900651 invoked by uid 1000);
+        Mon, 20 Dec 2021 21:05:52 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Yaqin Pan <akingchen@vivo.com>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>, kernel@vivo.com,
+        Rob Herring <robh+dt@kernel.org>
+In-Reply-To: <20211220141629.14282-3-akingchen@vivo.com>
+References: <20211220141629.14282-1-akingchen@vivo.com> <20211220141629.14282-3-akingchen@vivo.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: usb: document snps,dis_split_quirk property in dwc3
+Date:   Mon, 20 Dec 2021 16:05:52 -0500
+Message-Id: <1640034352.478511.3900650.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Pavel,
+On Mon, 20 Dec 2021 22:16:29 +0800, Yaqin Pan wrote:
+> Add snps,dis_split_quirk property for dwc3 controller
+> 
+> Signed-off-by: Yaqin Pan <akingchen@vivo.com>
+> ---
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
 
-Thank you for the patch! Yet something to improve:
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on linus/master v5.16-rc6 next-20211220]
-[cannot apply to balbi-usb/testing/next peter-chen-usb/for-usb-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:229:3: [error] duplication of key "snps,dis-split-quirk" in mapping (key-duplicates)
 
-url:    https://github.com/0day-ci/linux/commits/Pavel-Hofman/usb-gadget-audio-Multiple-rates-dyn-bInterval/20211220-162736
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: riscv-randconfig-r003-20211220 (https://download.01.org/0day-ci/archive/20211221/202112210422.0fC1uDBA-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/2b868f914e557058c0b5e749db604db56b77e353
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Pavel-Hofman/usb-gadget-audio-Multiple-rates-dyn-bInterval/20211220-162736
-        git checkout 2b868f914e557058c0b5e749db604db56b77e353
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash drivers/usb/gadget/legacy/
+dtschema/dtc warnings/errors:
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/usb/snps,dwc3.example.dts'
+Traceback (most recent call last):
+  File "/usr/local/bin/dt-extract-example", line 45, in <module>
+    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
+    return constructor.get_single_data()
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 121, in get_single_data
+    return self.construct_document(node)
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 131, in construct_document
+    for _dummy in generator:
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 674, in construct_yaml_map
+    value = self.construct_mapping(node)
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 445, in construct_mapping
+    return BaseConstructor.construct_mapping(self, node, deep=deep)
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 263, in construct_mapping
+    if self.check_mapping_key(node, key_node, mapping, key, value):
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 294, in check_mapping_key
+    raise DuplicateKeyError(*args)
+ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
+  in "<unicode string>", line 32, column 3
+found duplicate key "snps,dis-split-quirk" with value "{}" (original value: "{}")
+  in "<unicode string>", line 229, column 3
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+To suppress this check see:
+    http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
 
-All errors (new ones prefixed by >>):
+make[1]: *** [Documentation/devicetree/bindings/Makefile:25: Documentation/devicetree/bindings/usb/snps,dwc3.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+schemas/usb/snps,dwc3.yaml: ignoring, error parsing file
+Traceback (most recent call last):
+  File "/usr/local/bin/dt-doc-validate", line 25, in check_doc
+    testtree = dtschema.load(filename, line_number=line_number)
+  File "/usr/local/lib/python3.8/dist-packages/dtschema/lib.py", line 656, in load
+    return yaml.load(f.read())
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
+    return constructor.get_single_data()
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 121, in get_single_data
+    return self.construct_document(node)
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 131, in construct_document
+    for _dummy in generator:
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 674, in construct_yaml_map
+    value = self.construct_mapping(node)
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 445, in construct_mapping
+    return BaseConstructor.construct_mapping(self, node, deep=deep)
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 263, in construct_mapping
+    if self.check_mapping_key(node, key_node, mapping, key, value):
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 294, in check_mapping_key
+    raise DuplicateKeyError(*args)
+ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
+  in "<unicode string>", line 32, column 3
+found duplicate key "snps,dis-split-quirk" with value "{}" (original value: "{}")
+  in "<unicode string>", line 229, column 3
 
-   drivers/usb/gadget/legacy/audio.c: In function 'audio_bind':
->> drivers/usb/gadget/legacy/audio.c:287:25: error: 'p_srates_cnt' undeclared (first use in this function)
-     287 |         for (i = 0; i < p_srates_cnt; ++i)
-         |                         ^~~~~~~~~~~~
-   drivers/usb/gadget/legacy/audio.c:287:25: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/usb/gadget/legacy/audio.c:288:42: error: 'p_srates' undeclared (first use in this function); did you mean 'p_srate'?
-     288 |                 uac1_opts->p_srates[i] = p_srates[i];
-         |                                          ^~~~~~~~
-         |                                          p_srate
->> drivers/usb/gadget/legacy/audio.c:294:25: error: 'c_srates_cnt' undeclared (first use in this function)
-     294 |         for (i = 0; i < c_srates_cnt; ++i)
-         |                         ^~~~~~~~~~~~
->> drivers/usb/gadget/legacy/audio.c:295:42: error: 'c_srates' undeclared (first use in this function); did you mean 'c_srate'?
-     295 |                 uac1_opts->c_srates[i] = c_srates[i];
-         |                                          ^~~~~~~~
-         |                                          c_srate
+To suppress this check see:
+    http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
 
 
-vim +/p_srates_cnt +287 drivers/usb/gadget/legacy/audio.c
+During handling of the above exception, another exception occurred:
 
-   264	
-   265	#ifndef CONFIG_GADGET_UAC1
-   266		uac2_opts = container_of(fi_uac2, struct f_uac2_opts, func_inst);
-   267		uac2_opts->p_chmask = p_chmask;
-   268	
-   269		for (i = 0; i < p_srates_cnt; ++i)
-   270			uac2_opts->p_srates[i] = p_srates[i];
-   271		uac2_opts->p_srate = p_srates[0];
-   272	
-   273		uac2_opts->p_ssize = p_ssize;
-   274		uac2_opts->c_chmask = c_chmask;
-   275	
-   276		for (i = 0; i < c_srates_cnt; ++i)
-   277			uac2_opts->c_srates[i] = c_srates[i];
-   278		uac2_opts->c_srate = c_srates[0];
-   279	
-   280		uac2_opts->c_ssize = c_ssize;
-   281		uac2_opts->req_number = UAC2_DEF_REQ_NUM;
-   282	#else
-   283	#ifndef CONFIG_GADGET_UAC1_LEGACY
-   284		uac1_opts = container_of(fi_uac1, struct f_uac1_opts, func_inst);
-   285		uac1_opts->p_chmask = p_chmask;
-   286	
- > 287		for (i = 0; i < p_srates_cnt; ++i)
- > 288			uac1_opts->p_srates[i] = p_srates[i];
-   289		uac1_opts->p_srate = p_srates[0];
-   290	
-   291		uac1_opts->p_ssize = p_ssize;
-   292		uac1_opts->c_chmask = c_chmask;
-   293	
- > 294		for (i = 0; i < c_srates_cnt; ++i)
- > 295			uac1_opts->c_srates[i] = c_srates[i];
-   296		uac1_opts->c_srate = c_srates[0];
-   297	
-   298		uac1_opts->c_ssize = c_ssize;
-   299		uac1_opts->req_number = UAC1_DEF_REQ_NUM;
-   300	#else /* CONFIG_GADGET_UAC1_LEGACY */
-   301		uac1_opts = container_of(fi_uac1, struct f_uac1_legacy_opts, func_inst);
-   302		uac1_opts->fn_play = fn_play;
-   303		uac1_opts->fn_cap = fn_cap;
-   304		uac1_opts->fn_cntl = fn_cntl;
-   305		uac1_opts->req_buf_size = req_buf_size;
-   306		uac1_opts->req_count = req_count;
-   307		uac1_opts->audio_buf_size = audio_buf_size;
-   308	#endif /* CONFIG_GADGET_UAC1_LEGACY */
-   309	#endif
-   310	
-   311		status = usb_string_ids_tab(cdev, strings_dev);
-   312		if (status < 0)
-   313			goto fail;
-   314		device_desc.iManufacturer = strings_dev[USB_GADGET_MANUFACTURER_IDX].id;
-   315		device_desc.iProduct = strings_dev[USB_GADGET_PRODUCT_IDX].id;
-   316	
-   317		if (gadget_is_otg(cdev->gadget) && !otg_desc[0]) {
-   318			struct usb_descriptor_header *usb_desc;
-   319	
-   320			usb_desc = usb_otg_descriptor_alloc(cdev->gadget);
-   321			if (!usb_desc) {
-   322				status = -ENOMEM;
-   323				goto fail;
-   324			}
-   325			usb_otg_descriptor_init(cdev->gadget, usb_desc);
-   326			otg_desc[0] = usb_desc;
-   327			otg_desc[1] = NULL;
-   328		}
-   329	
-   330		status = usb_add_config(cdev, &audio_config_driver, audio_do_config);
-   331		if (status < 0)
-   332			goto fail_otg_desc;
-   333		usb_composite_overwrite_options(cdev, &coverwrite);
-   334	
-   335		INFO(cdev, "%s, version: %s\n", DRIVER_DESC, DRIVER_VERSION);
-   336		return 0;
-   337	
-   338	fail_otg_desc:
-   339		kfree(otg_desc[0]);
-   340		otg_desc[0] = NULL;
-   341	fail:
-   342	#ifndef CONFIG_GADGET_UAC1
-   343		usb_put_function_instance(fi_uac2);
-   344	#else
-   345		usb_put_function_instance(fi_uac1);
-   346	#endif
-   347		return status;
-   348	}
-   349	
+Traceback (most recent call last):
+  File "/usr/local/bin/dt-doc-validate", line 67, in <module>
+    ret = check_doc(f)
+  File "/usr/local/bin/dt-doc-validate", line 30, in check_doc
+    print(filename + ":", exc.path[-1], exc.message, file=sys.stderr)
+AttributeError: 'DuplicateKeyError' object has no attribute 'path'
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.yaml: ignoring, error parsing file
+warning: no schema found in file: ./Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+make: *** [Makefile:1413: dt_binding_check] Error 2
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1571063
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
