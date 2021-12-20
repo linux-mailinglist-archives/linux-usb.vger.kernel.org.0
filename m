@@ -2,92 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B004647A944
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 13:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E140547A947
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 13:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232328AbhLTMNh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 07:13:37 -0500
-Received: from relay034.a.hostedemail.com ([64.99.140.34]:36372 "EHLO
-        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231173AbhLTMNh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 07:13:37 -0500
-Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay10.hostedemail.com (Postfix) with ESMTP id 796EB1D8;
-        Mon, 20 Dec 2021 12:13:28 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id 533192002C;
-        Mon, 20 Dec 2021 12:13:21 +0000 (UTC)
-Message-ID: <bc4a4ba7c07a4077b9790be883fb4205d401804e.camel@perches.com>
-Subject: Re: [PATCH 4.19 3/6] mwifiex: Remove unnecessary braces from
- HostCmd_SET_SEQ_NO_BSS_INFO
-From:   Joe Perches <joe@perches.com>
-To:     Anders Roxell <anders.roxell@linaro.org>, stable@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, woojung.huh@microchip.com,
-        UNGLinuxDriver@microchip.com, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        clang-built-linux@googlegroups.com, ulli.kroll@googlemail.com,
-        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
-        amitkarwar@gmail.com, nishants@marvell.com, gbhat@marvell.com,
-        huxinming820@gmail.com, kvalo@codeaurora.org,
-        linux-wireless@vger.kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, dmitry.torokhov@gmail.com,
-        ndesaulniers@google.com, nathan@kernel.org,
-        linux-input@vger.kernel.org,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Andy Lavr <andy.lavr@gmail.com>
-Date:   Mon, 20 Dec 2021 04:13:20 -0800
-In-Reply-To: <20211217144119.2538175-4-anders.roxell@linaro.org>
-References: <20211217144119.2538175-1-anders.roxell@linaro.org>
-         <20211217144119.2538175-4-anders.roxell@linaro.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        id S232349AbhLTMOk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 07:14:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229817AbhLTMOk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 07:14:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2014EC061574;
+        Mon, 20 Dec 2021 04:14:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B144960F47;
+        Mon, 20 Dec 2021 12:14:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F4BC36AE7;
+        Mon, 20 Dec 2021 12:14:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640002479;
+        bh=5UkfDTwp4WqfU+BpkynEqDwHwN6hjn/WV7GvjtLIvY0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nNHLyqNYkL9CUrDhjORK7hbtSZ2xqrqL9SZUcYPNssBqgzdIHkKoA+RvINAq+itkl
+         FN4SfdY4C9+da7f8cEkndSWXZD6wfLj/DpPy6iemELBRRDygMPH1oIoDNh9mIJQ6Tp
+         DWiA9i7la3HaNnLs/HooDfW6QdQEg1hQlwCNqxz4=
+Date:   Mon, 20 Dec 2021 13:14:36 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, agross@kernel.org,
+        bjorn.andersson@linaro.org, balbi@kernel.org,
+        p.zabel@pengutronix.de, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: qcom: Check for null irq pointer
+Message-ID: <YcBzrN2Y7++Iephs@kroah.com>
+References: <20211220101520.930658-1-jiasheng@iscas.ac.cn>
+ <d7974f16-74b1-4d8a-2c28-8acb710d6310@omp.ru>
+ <4dcc204a-ba68-ebb8-021d-fd4b54be2729@omp.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 533192002C
-X-Spam-Status: No, score=-1.11
-X-Stat-Signature: 5gayuqe4kzuw64zsi7w1zyzmxgih75tc
-X-Rspamd-Server: rspamout07
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18u6WrSAOpDdNGkNCm15RZg1zit1HkWz44=
-X-HE-Tag: 1640002401-869126
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4dcc204a-ba68-ebb8-021d-fd4b54be2729@omp.ru>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 2021-12-17 at 15:41 +0100, Anders Roxell wrote:
-> From: Nathan Chancellor <natechancellor@gmail.com>
+On Mon, Dec 20, 2021 at 02:48:12PM +0300, Sergey Shtylyov wrote:
+> On 20.12.2021 14:25, Sergey Shtylyov wrote:
 > 
-> commit 6a953dc4dbd1c7057fb765a24f37a5e953c85fb0 upstream.
+> > > The return value of platform_get_irq() needs to be checked.
+> > > To avoid use of null pointer
+> > 
+> >    What null pointer, could you please clarify?
+> > 
+> > > in case that there is no irq.
+> > > 
+> > > Fixes: 2bc02355f8ba ("usb: dwc3: qcom: Add support for booting with ACPI")
+> > > Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 > 
-> A new warning in clang points out when macro expansion might result in a
-> GNU C statement expression. There is an instance of this in the mwifiex
-> driver:
+>    This has already been addressed by this (yet unmerged) patch:
 > 
-> drivers/net/wireless/marvell/mwifiex/cmdevt.c:217:34: warning: '}' and
-> ')' tokens terminating statement expression appear in different macro
-> expansion contexts [-Wcompound-token-split-by-macro]
->         host_cmd->seq_num = cpu_to_le16(HostCmd_SET_SEQ_NO_BSS_INFO
->                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-[]
-> diff --git a/drivers/net/wireless/marvell/mwifiex/fw.h b/drivers/net/wireless/marvell/mwifiex/fw.h
-[]
-> @@ -512,10 +512,10 @@ enum mwifiex_channel_flags {
->  
->  #define RF_ANTENNA_AUTO                 0xFFFF
->  
-> -#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) {   \
-> -	(((seq) & 0x00ff) |                             \
-> -	 (((num) & 0x000f) << 8)) |                     \
-> -	(((type) & 0x000f) << 12);                  }
-> +#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) \
-> +	((((seq) & 0x00ff) |                        \
-> +	 (((num) & 0x000f) << 8)) |                 \
-> +	(((type) & 0x000f) << 12))
+> https://marc.info/?l=linux-usb&m=162854066430255
 
-Perhaps this would be better as a static inline
+Why not wait until that patch is actually merged?  Otherwise all of this
+work is moot.
 
-static inline u16 HostCmd_SET_SEQ_NO_BSS_INFO(u16 seq, u8 num, u8 type)
-{
-	return (type & 0x000f) << 12 | (num & 0x000f) << 8 | (seq & 0x00ff);
-}
-
-
+greg k-h
