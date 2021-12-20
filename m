@@ -2,123 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0601447B0AD
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 16:51:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5996E47B0C4
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 16:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235921AbhLTPvz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 10:51:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
+        id S237804AbhLTP7S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 10:59:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbhLTPvy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 10:51:54 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731E8C061574;
-        Mon, 20 Dec 2021 07:51:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=p6oI7t6a2sP+y+8OnSAo1gKUw6uZD1Gb+30mWCzcviM=; b=TbrO5EIrYsdS1CZXyeUMFR1ZGj
-        igJHlz87ytOr2HT8Scqbk1ZenaFxBIoXwSi/zvAsHkk2d+ZJQ3j0GMVjUdHheawHIz0wKzkFoHyiG
-        T9ZHq9vF1RZ88SgZGZTR8mq0EeULOXJ71RFoWcYTDG4oaBS0c6lOkXXiM3aNnhTAOJ58QlcfngYnQ
-        Ea2XeVCuz89bpJIiroPXhTK2X+LOL1fEazLkOK/y6+b8DXbmPHOum4l5JQIWZP62lH/zC10eCMSP0
-        2J5tqVGEwSetWQTvxHD3/yoqJAKxMFPvuFyZphCUbyDzbwXL51E8KmL9GfZmTaSwL/12WQvi24R9n
-        OzAToDKQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzKww-002X19-7X; Mon, 20 Dec 2021 15:51:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0F38530003C;
-        Mon, 20 Dec 2021 16:51:40 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AB011200E706A; Mon, 20 Dec 2021 16:51:40 +0100 (CET)
-Date:   Mon, 20 Dec 2021 16:51:40 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: Re: earlyprintk=xdbc seems broken
-Message-ID: <YcCmjP8GCD+2qQH0@hirez.programming.kicks-ass.net>
-References: <YajkzwmWQua3Kh6A@hirez.programming.kicks-ass.net>
- <105f35d2-3c53-b550-bfb4-aa340d31128e@linux.intel.com>
- <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
- <972a0e28-ad63-9766-88da-02743f80181b@intel.com>
- <Yao35lElOkwtBYEb@kroah.com>
- <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
- <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
- <3281618b-64df-711e-4360-c74e6165d7ed@linux.intel.com>
+        with ESMTP id S234309AbhLTP7S (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 10:59:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E12C061574;
+        Mon, 20 Dec 2021 07:59:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0A42B80EDE;
+        Mon, 20 Dec 2021 15:59:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43561C36AE7;
+        Mon, 20 Dec 2021 15:59:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640015955;
+        bh=a6D5AcKl2s8KjzQmrDHkkawywm4+FO0HkiMb5d4UetM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YF3VT8hJ7xpTbHhdpaEs+ssZvDYcDDcY25fW8CvAx7tCibqYjbY7lZUX+f7+r71F6
+         31qNSv2KHwJNDnhPM8q6rChY3T8uJdEg1bt+yt85iM2Lv0WnN4/xFOv48yZpyAWM7/
+         d+BSyK99dJc352JMyIaOjD/w9i5G1NwygB5mR5Ck=
+Date:   Mon, 20 Dec 2021 16:59:13 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Patchwork Bot <patchwork-bot@kernel.org>
+Subject: Re: [PATCH v4] usb: ohci: add check for host controller functional
+ states
+Message-ID: <YcCoUb7UBUErfvkm@kroah.com>
+References: <1633957378-39631-1-git-send-email-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3281618b-64df-711e-4360-c74e6165d7ed@linux.intel.com>
+In-Reply-To: <1633957378-39631-1-git-send-email-zhuyinbo@loongson.cn>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 04:34:13PM +0200, Mathias Nyman wrote:
-> On 17.12.2021 15.55, Peter Zijlstra wrote:
-> > On Fri, Dec 17, 2021 at 01:01:43PM +0200, Mathias Nyman wrote:
-> >> I can reproduce this.
-> >> Looks like problems started when driver converted to readl_poll_timeout_atomic() in:
-> >>
-> >> 796eed4b2342 usb: early: convert to readl_poll_timeout_atomic()
-> > 
-> > I can confirm, reverting that solves the boot hang, things aren't quite
-> > working for me though.
-> > 
-> >> Seems to hang when read_poll_timeout_atomic() calls ktime_* functions.
-> >> Maybe  it's too early for ktime.
-> > 
-> > It certainly is, using ktime for delay loops sounds daft to me anyhow.
-> > 
-> >> After reverting that patch it works again for me.
-> > 
-> > [    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-5.16.0-rc3+ root=UUID=a652986c-fbc6-4341-85c3-b4ad4402f130 ro debug ignore_loglevel sysrq_always_enabled usbcore.autosuspend=-1 earlyprintk=xdbc force_early_printk sched_verbose ftrace=nop mitigations=off nokaslr
-> > ...
-> > [    0.000000] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 0
-> > ...
-> > [    3.161367] xhci_dbc:early_xdbc_setup_hardware: failed to setup the connection to host
+On Mon, Oct 11, 2021 at 09:02:58PM +0800, Yinbo Zhu wrote:
+> The usb states of ohci controller include UsbOperational, UsbReset,
+> UsbSuspend and UsbResume. Among them, only the UsbOperational state
+> supports launching the start of frame for host controller according
+> the ohci protocol spec, but in S3 and S4 (suspend to memory/suspend
+> to disk) press test procedure, it may happen that the start of
+> frame was launched in other usb states and cause ohci works failed,
+> that the phenomenon was hc will allways reproduce the SoF interrupt
+> and consider that hc doesn't deal with the ed/td/done list in non-
+> UsbOperational, and this patch was to add check for host controller
+> functional states and if it is not UsbOperational state that need
+> set INTR_SF in intrdisable register to ensure SOF Token generation
+> was been disabled so that it can fix ohci SoF abnormally interrupt.
+
+I do not understand this change.  What commit is this fixing?  What
+devices today do not work with the code as-is?
+
 > 
-> Ok, this is some other issue. I got the boot messages over USB
-> (running minicom at the other end, listening to ttyUSB0)
-
-I have a regular A->A USB3 cable, not the special one with a wire
-missing. Given the dbc thing works, I feel this ought to work too.
-
-> > The machine does boot.. but I *am* getting tons of:
-> > 
-> > [  485.546898] usb usb4-port4: Cannot enable. Maybe the USB cable is bad?
-> > [  485.546963] usb usb4-port4: config error
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+> Change in v4:
+> 		Rework the commit log information.
+> 		Remove the extra unnecessary blank line. 
 > 
-> This is expected when xhci driver takes over after the early dbc driver,
-> xhci driver resets xHC controller, and all ports turn to normal host ports again.
 > 
-> Because of the special cable you now have two hosts connected to each other,
-> both trying to enumerate a device.
+>  drivers/usb/host/ohci-hcd.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
 > 
-> This whole transition from earlyprintk xdbc to normal xhci driver is 
-> not very userfriendly.
+> diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
+> index 1f5e693..4fd59fa 100644
+> --- a/drivers/usb/host/ohci-hcd.c
+> +++ b/drivers/usb/host/ohci-hcd.c
+> @@ -879,7 +879,7 @@ static irqreturn_t ohci_irq (struct usb_hcd *hcd)
+>  {
+>  	struct ohci_hcd		*ohci = hcd_to_ohci (hcd);
+>  	struct ohci_regs __iomem *regs = ohci->regs;
+> -	int			ints;
+> +	int			ints, ctl;
 
-Uhhmm... but but that shouldn't be. What if I want to keep using xdbc as
-console after that point? specifically, I'll probably end up having:
+New line for a new variable please.
 
- earlyprintk=xdbc,keep
+>  
+>  	/* Read interrupt status (and flush pending writes).  We ignore the
+>  	 * optimization of checking the LSB of hcca->done_head; it doesn't
+> @@ -969,9 +969,14 @@ static irqreturn_t ohci_irq (struct usb_hcd *hcd)
+>  	 * when there's still unlinking to be done (next frame).
+>  	 */
+>  	ohci_work(ohci);
+> -	if ((ints & OHCI_INTR_SF) != 0 && !ohci->ed_rm_list
+> -			&& ohci->rh_state == OHCI_RH_RUNNING)
+> +
+> +	ctl = ohci_readl(ohci, &regs->control);
+> +	if (((ints & OHCI_INTR_SF) != 0 && !ohci->ed_rm_list
+> +			&& ohci->rh_state == OHCI_RH_RUNNING) ||
+> +			((ctl & OHCI_CTRL_HCFS) != OHCI_USB_OPER)) {
+>  		ohci_writel (ohci, OHCI_INTR_SF, &regs->intrdisable);
+> +		(void)ohci_readl(ohci, &regs->intrdisable);
 
-once all this starts working. The whole point of early consoles is that
-they're more reliable than regular consoles, not that they're 'early'.
+No need for (void).
 
-> > However, when I do:
-> > 
-> > $ echo enable > /sys/bus/pci/devices/0000:00:14.0/dbc
-> > 
-> 
-> Yes, this works as it turns on the DbC feature on in xHC hardware,
-> which turns the first USB port into a usb device.
+thanks,
 
-But if this works, why isn't earlyprintk working for me?
+greg k-h
