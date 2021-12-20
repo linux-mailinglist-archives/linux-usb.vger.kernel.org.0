@@ -2,71 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F51947B1BE
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 18:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D827F47B2F3
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 19:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233143AbhLTRBe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 12:01:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231579AbhLTRBd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 12:01:33 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B84AC061574;
-        Mon, 20 Dec 2021 09:01:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=sQ7BWNClLWcRoTvAousi7pFg1UZuXIYnl6ojC+f5BuM=; b=ia85Cs9KAcSrA7nOeCBivJsLPf
-        7CDjNGfcKHeuKShrmXHAY2J+S39PDEmQ/N7ExDmfCqjrIIYEb4SH6DgYXfMl48Rzr/o/Xu87GA7tm
-        pbZNkrsfgu4MEz2DZ68Ezb3VYaUH/TS6mf/ptrRlLyEu4Z7o14zPNpJQ3Pm/zbK/HIwDj4HPSlv8K
-        yrrneeznHRLxmxBGtQKG5fTJkt3+fecIBlk9Z1KLywowQF68XpDfV13Yq8rQhrIcLk1z6HhCWyKC5
-        fcgaDRxXrzPRD8x6COeReStFHooE7Ai6+b2qld4/zsrlO0DPng7qVxQI6zMcrM/4dI4Q3yFHnKkcm
-        x16IETmQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzM2G-002XjH-Ql; Mon, 20 Dec 2021 17:01:17 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2737E300347;
-        Mon, 20 Dec 2021 18:01:13 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D2DEC3015F8F7; Mon, 20 Dec 2021 18:01:13 +0100 (CET)
-Date:   Mon, 20 Dec 2021 18:01:13 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: Re: earlyprintk=xdbc seems broken
-Message-ID: <YcC22e6KLq/JiU+O@hirez.programming.kicks-ass.net>
-References: <YajkzwmWQua3Kh6A@hirez.programming.kicks-ass.net>
- <105f35d2-3c53-b550-bfb4-aa340d31128e@linux.intel.com>
- <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
- <972a0e28-ad63-9766-88da-02743f80181b@intel.com>
- <Yao35lElOkwtBYEb@kroah.com>
- <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
- <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
- <YbyqeE39vqE9pEDD@kroah.com>
- <YcCV0TECWE31fYV7@hirez.programming.kicks-ass.net>
- <YcCcCjYcXw6T8LjG@kroah.com>
+        id S238527AbhLTShD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 13:37:03 -0500
+Received: from mxout04.lancloud.ru ([45.84.86.114]:33452 "EHLO
+        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233831AbhLTShC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 13:37:02 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 36F1020A6FCC
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH v2 2/2] dt-bindings: usb: document snps,dis_split_quirk
+ property in dwc3
+To:     Yaqin Pan <akingchen@vivo.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <kernel@vivo.com>
+References: <20211220141629.14282-1-akingchen@vivo.com>
+ <20211220141629.14282-3-akingchen@vivo.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <cb1c928c-07fa-e6f0-8166-d68596224105@omp.ru>
+Date:   Mon, 20 Dec 2021 21:36:52 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcCcCjYcXw6T8LjG@kroah.com>
+In-Reply-To: <20211220141629.14282-3-akingchen@vivo.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 04:06:50PM +0100, Greg KH wrote:
-> Please see c4d936efa46d ("Revert "usb: early: convert to
-> readl_poll_timeout_atomic()"") in Linus's tree.  I already added a
-> comment much like yours.  If that's not sufficient, I'll be glad to
-> re-word it.
+Hello!
 
-Oh, no that's excellent, thanks!
+On 12/20/21 5:16 PM, Yaqin Pan wrote:
+
+> Add snps,dis_split_quirk property for dwc3 controller
+
+   The name doesn't match the prop itself anymore...
+
+> 
+> Signed-off-by: Yaqin Pan <akingchen@vivo.com>
+> ---
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> index 41416fbd92aa..e9615ca8f447 100644
+> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> @@ -226,6 +226,12 @@ properties:
+>        avoid -EPROTO errors with usbhid on some devices (Hikey 970).
+>      type: boolean
+>  
+> +  snps,dis-split-quirk:
+> +    description:
+> +      When set, change the way host controller schedules transations for a Control transfer.
+> +      Avoid failing to enumerate some devices due to usb compatibility issues.
+> +    type: boolean
+> +
+>    snps,is-utmi-l1-suspend:
+>      description:
+>        True when DWC3 asserts output signal utmi_l1_suspend_n, false when
+> 
+
+MBR, Sergey
