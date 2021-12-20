@@ -2,86 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D73A47A7DC
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 11:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D05347A7E1
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 11:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbhLTKpZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 05:45:25 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58104 "EHLO
+        id S229820AbhLTKsH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 05:48:07 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59320 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbhLTKpZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 05:45:25 -0500
+        with ESMTP id S229459AbhLTKsH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 05:48:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE3C1B80E33
-        for <linux-usb@vger.kernel.org>; Mon, 20 Dec 2021 10:45:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D431C36AE8;
-        Mon, 20 Dec 2021 10:45:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639997122;
-        bh=2DzEFjxa8dcWu0VnnSctZJz/fpWAW00zYElRTGpHD+M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Uc/esLT2GMjuKtTOQOve2QW3VzzYnXNJzuhgwrWaiyP4/847uB2yjYKnXcbZuKVd/
-         Vj/kgcdQ3FF8e7mzCeaO2B5/NafGqokYYwI7xaBCuKuVqdOZZf2VXllwUOj5uqbDTD
-         fJMG47P9uOKo5/AzqMbpKVRdRj1r2Rj53gTi1mdw=
-Date:   Mon, 20 Dec 2021 11:45:20 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Filip =?utf-8?Q?=C5=BDaludek?= <filip.zaludek@oracle.com>
-Cc:     linux-usb@vger.kernel.org, Konrad Wilk <konrad.wilk@oracle.com>
-Subject: Re: [External] : Re: data throttling under load when serial to usb
- adapter is used
-Message-ID: <YcBewGmzrjFlVR3y@kroah.com>
-References: <738e20c6-c709-d149-fe48-ee89540fe38a@oracle.com>
- <YcA+qegbpj0heal4@kroah.com>
- <67ff29fb-98cd-1835-ee6e-4eba67ff269c@oracle.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F88DB80E33;
+        Mon, 20 Dec 2021 10:48:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01AFAC36AE8;
+        Mon, 20 Dec 2021 10:48:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639997284;
+        bh=biq3Oji5lH9jv5ZgoieqKXMSnbQGIYrxkITVZ1ZAKtc=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=ZEwAYaU/VDlIdTKT9TuGq57nryAlU7tYBWTUtnkuZF6j+nP2CGF1oVFGF6vLsR0SE
+         wzudqobroQ6jwu65GNCIHpsiYntG4qvS728CaR/1hLW4dNniO0V3jWvG0WBjpRPkpj
+         kOfHbTxnmIrZDfvaizQA4HKNeQ3AhvG/GJ1QhST+H/+N3U65oEiBtUzmLS8+zoHtkW
+         gNjXcrBNCYXHFn4KH0Vu6vDCJNsqkS5QtpkHQFmSxum4B6VK4tPJjwG2OoiGNWMH6j
+         nmp9rAkq+RhHNus39lYBHPoWS7JLjD3N76SosRM/gk48N2kk7XEOsyb+qwaf9PaujB
+         xL806ojzThULg==
+Subject: Re: [PATCH 3/6] usb: dwc3: Drop unneeded calls to
+ platform_get_resource_byname()
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Rui Miguel Silva <rui.silva@linaro.org>,
+        Bin Liu <b-liu@ti.com>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+References: <20211220010411.12075-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211220010411.12075-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Roger Quadros <rogerq@kernel.org>
+Message-ID: <0dce4df3-5c44-62ab-97a4-93a523e08076@kernel.org>
+Date:   Mon, 20 Dec 2021 12:47:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <20211220010411.12075-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <67ff29fb-98cd-1835-ee6e-4eba67ff269c@oracle.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 11:19:03AM +0100, Filip Žaludek wrote:
-> 
-> > 
-> > Using 'cat' is not a good way to ever use a serial port.  Please use a
-> > tool that can properly detect and use the serial port flow control
-> > settings, which should prevent the issues you are seeing here.
-> > 
-> > Is socat using flow control?  If so, which settings, hardware or
-> > software flow control?
-> > 
-> > Also please note that the usb-serial devices you are using here are
-> > _very_ cheap and not good for huge amounts of data like you seem to want
-> > to use here.  I would recommend a much more robust usb-serial device if
-> > you need high data rates and good hardware flow control handling.  Most
-> > of the time, the devices you have here do not even have any hardware
-> > flow control support as the manufacturers do not hook up those lines.
-> > So be careful.
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> > 
-> 
-> 
-> 
->  Yes, you are right! Such gadget hardware is without hw flow control. I am using
-> serial line only to capture console logs. I've tested both commands also with
-> sw flow control ixon, ixoff with similar results.
-> 
->  Hopefully somebody sitting on scarce big iron with both usb port and serial port
-> with proper hw flow control from this list gets attracted to kindly re-test.
-> 
-> Interesting part for me is that only serial to usb direction is failing..
 
-Makes sense, these devices are not designed for lots of high-speed data
-being sent to them.  Please use a device that is designed for that if
-you wish to do this.
+On 20/12/2021 03:04, Lad Prabhakar wrote:
+> Drop unneeded calls to platform_get_resource_byname() from
+> dwc3_host_init(). dwc3_host_init() already calls dwc3_host_get_irq()
+> which gets the irq number, just use this to get the IRQ resource data
+> and fill the xhci_resources[1]
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-thanks,
+Reviewed-by: Roger Quadros <rogerq@kernel.org>
 
-greg k-h
+--
+cheers,
+-roger
