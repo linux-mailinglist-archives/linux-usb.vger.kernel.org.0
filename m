@@ -2,91 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDBDA47A7B9
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 11:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E901247A7D5
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 11:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbhLTKZw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 05:25:52 -0500
-Received: from mail-ua1-f48.google.com ([209.85.222.48]:33286 "EHLO
-        mail-ua1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbhLTKZw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 05:25:52 -0500
-Received: by mail-ua1-f48.google.com with SMTP id a14so16859514uak.0;
-        Mon, 20 Dec 2021 02:25:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z2smqINfKA19iYQ44Bhl9wK+mvghDg0/7q+uBVmH7jA=;
-        b=go53PH3sry0r6BWnC7C1yOtxWzGVXVob4/5nEXqvoiWbZzeUvOa3HG1/zUCi8rujsP
-         6TKl4UlcC4CvC0T7ITwivKBXnzQf7Mz/ps3nX0nwRy3fRLfD1r6volrpoZOSGQt/GXNv
-         /JE9gqjpg2Cox3tq9Yqt5f1VFFyq1fFBihttS1V/MX3XCnta2UOLAFuPLuoAlINBe8X1
-         UKxs5YVJ0ZFeE3VkRVSz2pHEH777RTuBUcNm/qaOlQrunsS482Hbjdsfb8quG1Ro2gMX
-         mRXTrZU4nhGTRRy53jQX0PFNNtXB3tDvfsr66Q8K6cZdCifjmq6yROQ/2SFE0TsoHMlm
-         w5lw==
-X-Gm-Message-State: AOAM5339tCSOcnz3H00GSGOOuL9Me0/pCT2cvSe8nSvxknuHsR9ghezF
-        cIu9IyVlyr5puXClRR+vHrSYj8rFItxZwQ==
-X-Google-Smtp-Source: ABdhPJwK25uF9eY+lek9CiyjkR061l7RamrBXMGhfohfhof3lNbJaG8hKDo917JDbgIFLnrZXmD+DQ==
-X-Received: by 2002:a05:6102:3f04:: with SMTP id k4mr4605188vsv.3.1639995951052;
-        Mon, 20 Dec 2021 02:25:51 -0800 (PST)
-Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com. [209.85.221.173])
-        by smtp.gmail.com with ESMTPSA id u18sm1625313vsi.3.2021.12.20.02.25.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 02:25:50 -0800 (PST)
-Received: by mail-vk1-f173.google.com with SMTP id 70so5795391vkx.7;
-        Mon, 20 Dec 2021 02:25:49 -0800 (PST)
-X-Received: by 2002:a1f:2196:: with SMTP id h144mr5442171vkh.7.1639995949603;
- Mon, 20 Dec 2021 02:25:49 -0800 (PST)
+        id S231336AbhLTKoZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 05:44:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229612AbhLTKoZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 05:44:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB5DC061574;
+        Mon, 20 Dec 2021 02:44:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BEF060F77;
+        Mon, 20 Dec 2021 10:44:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 834D4C36AE8;
+        Mon, 20 Dec 2021 10:44:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639997064;
+        bh=ePsHNzZhYnoHHXDL+Vx0SzMe2c+G0azjlX3WbXHW30E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tqolC68YM3LwXeC/L4SU+II41TPz63VgDAoGtEeGJMrnNIhI3cjRtRaRpZISs7vQQ
+         YMzcwwvAlwDm3hgsJtme69fi3bavQs0My+glEAb86At6RZf0iKkvgg8bqcs7QE353b
+         wYz0QDWAH0Zcqe50nA/9so6yxRU2kDmHq0K+tNtY=
+Date:   Mon, 20 Dec 2021 11:44:21 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, balbi@kernel.org,
+        p.zabel@pengutronix.de, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: qcom: Check for null irq pointer
+Message-ID: <YcBehfPqhHpd/FSK@kroah.com>
+References: <20211220101520.930658-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-References: <20211220010411.12075-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211220010411.12075-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20211220010411.12075-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 20 Dec 2021 11:25:38 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUYagDwtzqZv3WdxM4SXsUqmmQmt_S61taY5nAxLQ4sBA@mail.gmail.com>
-Message-ID: <CAMuHMdUYagDwtzqZv3WdxM4SXsUqmmQmt_S61taY5nAxLQ4sBA@mail.gmail.com>
-Subject: Re: [PATCH 4/6] usb: isp1760: Use platform_get_irq() to get the interrupt
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rui Miguel Silva <rui.silva@linaro.org>,
-        Bin Liu <b-liu@ti.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211220101520.930658-1-jiasheng@iscas.ac.cn>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 10:18 AM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
->
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq(). Also use irq_get_trigger_type to get the
-> IRQ trigger flags.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Mon, Dec 20, 2021 at 06:15:20PM +0800, Jiasheng Jiang wrote:
+> The return value of platform_get_irq() needs to be checked.
+> To avoid use of null pointer in case that there is no irq.
+> 
+> Fixes: 2bc02355f8ba ("usb: dwc3: qcom: Add support for booting with ACPI")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 49e6ca94486d..f04fb3f2fb85 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -614,6 +614,11 @@ static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
+>  		qcom->acpi_pdata->dwc3_core_base_size;
+>  
+>  	irq = platform_get_irq(pdev_irq, 0);
+> +	if (!irq) {
+> +		ret = -EINVAL;
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+That is NOT the proper way to check the return value of this function
+call.
 
-Gr{oetje,eeting}s,
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
