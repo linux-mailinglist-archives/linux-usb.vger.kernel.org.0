@@ -2,118 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7025447A7E8
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 11:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F2A47A800
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 11:56:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbhLTKsf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 05:48:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbhLTKse (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 05:48:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECB3C061574;
-        Mon, 20 Dec 2021 02:48:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EBE31B80E33;
-        Mon, 20 Dec 2021 10:48:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF8C0C36AE8;
-        Mon, 20 Dec 2021 10:48:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639997311;
-        bh=/NSsQes1J6WO5yIuZj0nTzaqt1pu+ZA3HTbUn4zWOmc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=sECi3Batpy9APxumOzMNhpwUC4WcmGcMd+MZnM/nJ3LD60GznYoRjC0TV+RfiOqJ3
-         Muo7dzIrk6/5LF+Tf1FDdDSEuF2NAkrcAFi0JK0VtQXNuFcT2oI2UkU409i2wd5kSN
-         CK//zbHAIcIx1BsBodFeHaqheW8PHQs+2deks7huyz8e2yXs0O90f/zOa4E2IHSWSV
-         aE+foku0FGpTxDNddSUS/xATFeg5e52ZFs5v08RyScZc8l4WH2wxpHw8Yv68UnccC/
-         kRQ/xl6BbMeU7BVbCShPu3dTBUY4GeAKOAN7Rs1BibrgAUpnyGX+pXEizihxS1qHrD
-         UUf2AogLs0Tpg==
-Subject: Re: [PATCH 5/6] usb: cdns3: Use platform_get_irq_byname() to get the
- interrupt
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rui Miguel Silva <rui.silva@linaro.org>,
-        Bin Liu <b-liu@ti.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>
-References: <20211220010411.12075-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211220010411.12075-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Roger Quadros <rogerq@kernel.org>
-Message-ID: <95e016e9-4259-c1d6-f73c-ad79b7cef413@kernel.org>
-Date:   Mon, 20 Dec 2021 12:48:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S229982AbhLTK4m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 05:56:42 -0500
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:40161 "EHLO
+        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229619AbhLTK4m (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 05:56:42 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 690E3580181;
+        Mon, 20 Dec 2021 05:56:41 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Mon, 20 Dec 2021 05:56:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=9AcYE0yu0KZhD7v7tPxMpIY4EGh
+        I9m76hau90FdriAM=; b=HoCN2BIqhNywUybo+xIOXPLbX7P84T+CYEmLAZOIKJ9
+        c83H7+kqtlp3Nx3E+/deJu+Qjke34mCR78u6odtJbdUEvOoSoaAnKi3vUV3kpHuL
+        AY4Ead3yT/T1KRFXsgJn3mR1v5+z4Bx8IkYfoSGc9/BDfBvdihPBq18JeQmkXlyP
+        N1i7BO1m0cNOXYWAthpiMe/R9G09OjMeEJ7OgugAYpxEhs56PEUITrK/a7vWWbeJ
+        Oqp1qf2MLSHGLX74/Q7xtYUVUnZbFfn+SKw4mmN1AJWNQbYz732CzQGdw7tUnOiP
+        iM6KUNcjWxuE/Aq2NYKUGKCFvCbHN1LMFg863XUrq8g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=9AcYE0
+        yu0KZhD7v7tPxMpIY4EGhI9m76hau90FdriAM=; b=Rk5L5LcXg1bgmarW4jCPdP
+        rvyJnMYqy5LpgpCwgZgWG+hRL6ADmLR/MfWsD8k9aBB7RtImv55MqZ7Y4F8vuTx5
+        NKFLuVlWToNYl7gSC35eW9RMEKAE88tjPe86usCKxLW6K6TcEG8qL5RH5SPYBNAN
+        Y3dBGFLF7IpGyI14Iwa76M+pZh6J489SiYRD3O0rUIzH35eAQRczVTxfH3j1wW0t
+        +EHSji4uEIjYG1vbgdK5vVG0nTtOFgLvSI5vrRnC7JdFzjZg/DHTjH1CZwTpxaa/
+        vBd+6BIgtX79T3Bp162Fq9eZc+idLrkCYMH6vGqTRDDgG7jsW1DNRc4hDaLCInkw
+        ==
+X-ME-Sender: <xms:aGHAYWuAnwt8-6iZmqtmblceEtttJyfj92CG0GzMbRbyXeXkCrAcJw>
+    <xme:aGHAYbfr47SkUyvDrQo9_gECgXEi4dPlw-rESlyW-o9uuP_YXlkD4WDOLpbSHemvB
+    SR7V4cZ5mYieA>
+X-ME-Received: <xmr:aGHAYRwf5sCTwbQTX6thYMK_S7GkRBesT01DMSOfX7fHRZsYP8H7ZXij1wGNdwzRbAMGPKusDhIbFdNItta_qjsohErXp5Lq>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddruddtvddgvddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpefgteefff
+    etvdffledtgeduudetffdutdduveefvedtueegueeggfeiteehfeetfeenucffohhmrghi
+    nhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
+X-ME-Proxy: <xmx:aGHAYRPToRypfycYbanRoBLhJwYAQJO0JbIc7iP67zB2MZ6rZ7Hpfg>
+    <xmx:aGHAYW-1UeAtg5aEZ2_Kxybu-Xnu-1UNAuEfKEXuiNR7CIYlmAK6Yw>
+    <xmx:aGHAYZWWBvEkTnj_bDpbSQCkR1sle0t0uStglgypDBqeKTDguiB6OQ>
+    <xmx:aWHAYelmdg3AwCxbYeFPmPuPhpHnqIr955Hp_d_1FQcccQb4o6PVRQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 20 Dec 2021 05:56:40 -0500 (EST)
+Date:   Mon, 20 Dec 2021 11:56:37 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, clang-built-linux@googlegroups.com,
+        ulli.kroll@googlemail.com, linux@armlinux.org.uk,
+        linux-arm-kernel@lists.infradead.org, amitkarwar@gmail.com,
+        nishants@marvell.com, gbhat@marvell.com, huxinming820@gmail.com,
+        kvalo@codeaurora.org, linux-wireless@vger.kernel.org,
+        rostedt@goodmis.org, mingo@redhat.com, dmitry.torokhov@gmail.com,
+        ndesaulniers@google.com, nathan@kernel.org,
+        linux-input@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Andy Lavr <andy.lavr@gmail.com>
+Subject: Re: [PATCH 4.19 3/6] mwifiex: Remove unnecessary braces from
+ HostCmd_SET_SEQ_NO_BSS_INFO
+Message-ID: <YcBhZdeTQfD0Sjtq@kroah.com>
+References: <20211217144119.2538175-1-anders.roxell@linaro.org>
+ <20211217144119.2538175-4-anders.roxell@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20211220010411.12075-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211217144119.2538175-4-anders.roxell@linaro.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 20/12/2021 03:04, Lad Prabhakar wrote:
-> platform_get_resource_byname(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
+On Fri, Dec 17, 2021 at 03:41:16PM +0100, Anders Roxell wrote:
+> From: Nathan Chancellor <natechancellor@gmail.com>
 > 
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq_byname().
+> commit 6a953dc4dbd1c7057fb765a24f37a5e953c85fb0 upstream.
 > 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> A new warning in clang points out when macro expansion might result in a
+> GNU C statement expression. There is an instance of this in the mwifiex
+> driver:
+> 
+> drivers/net/wireless/marvell/mwifiex/cmdevt.c:217:34: warning: '}' and
+> ')' tokens terminating statement expression appear in different macro
+> expansion contexts [-Wcompound-token-split-by-macro]
+>         host_cmd->seq_num = cpu_to_le16(HostCmd_SET_SEQ_NO_BSS_INFO
+>                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/net/wireless/marvell/mwifiex/fw.h:519:46: note: expanded from
+> macro 'HostCmd_SET_SEQ_NO_BSS_INFO'
+>         (((type) & 0x000f) << 12);                  }
+>                                                     ^
+> 
+> This does not appear to be a real issue. Removing the braces and
+> replacing them with parentheses will fix the warning and not change the
+> meaning of the code.
+> 
+> Fixes: 5e6e3a92b9a4 ("wireless: mwifiex: initial commit for Marvell mwifiex driver")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1146
+> Reported-by: Andy Lavr <andy.lavr@gmail.com>
+> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 > ---
->  drivers/usb/cdns3/cdns3-plat.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
-> index 4d0f027e5bd3..dc068e940ed5 100644
-> --- a/drivers/usb/cdns3/cdns3-plat.c
-> +++ b/drivers/usb/cdns3/cdns3-plat.c
-> @@ -13,6 +13,7 @@
->   */
->  
->  #include <linux/module.h>
-> +#include <linux/irq.h>
->  #include <linux/kernel.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
-> @@ -65,13 +66,14 @@ static int cdns3_plat_probe(struct platform_device *pdev)
->  
->  	platform_set_drvdata(pdev, cdns);
->  
-> -	res = platform_get_resource_byname(pdev, IORESOURCE_IRQ, "host");
-> -	if (!res) {
-> -		dev_err(dev, "missing host IRQ\n");
-> -		return -ENODEV;
-> -	}
-> +	ret = platform_get_irq_byname(pdev, "host");
-> +	if (ret < 0)
-> +		return ret;
->  
-> -	cdns->xhci_res[0] = *res;
-> +	cdns->xhci_res[0].start = ret;
-> +	cdns->xhci_res[0].end = ret;
-> +	cdns->xhci_res[0].flags = IORESOURCE_IRQ | irq_get_trigger_type(ret);
-> +	cdns->xhci_res[0].name = "host";
->  
->  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "xhci");
->  	if (!res) {
-> 
+>  drivers/net/wireless/marvell/mwifiex/cmdevt.c | 4 ++--
+>  drivers/net/wireless/marvell/mwifiex/fw.h     | 8 ++++----
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
-
---
-cheers,
--roger
+Also needed in 5.4.y, right?
