@@ -2,73 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A14647A514
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 07:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A0E47A51D
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Dec 2021 07:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237580AbhLTGqf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 01:46:35 -0500
-Received: from mout.gmx.net ([212.227.15.15]:52147 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234258AbhLTGqf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Dec 2021 01:46:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1639982794;
-        bh=2Nl2LaJ3AVazu4emdGuE6HEz4TfBVqejEGlFoWfUqT4=;
-        h=X-UI-Sender-Class:From:To:Date;
-        b=SQBWWvcELYJeAii2OteQpfxGOYjuYXyf+3Mnw8zO++rWCQMCHs7AuEdXC9EFdUV3y
-         W1597vuJgxoGBnfjxTtF/0+FHoSOJFyPa1J2Qk4gWuyAJlUfec8zr2ODIaOA8ZZ8Ev
-         fZ9jrLBNXb8JhD32pBR1leUPbMOTILQrQ39B142Y=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [194.140.113.242] ([194.140.113.242]) by web-mail.gmx.net
- (3c-app-gmx-bs07.server.lan [172.19.170.56]) (via HTTP); Mon, 20 Dec 2021
- 07:46:34 +0100
+        id S237586AbhLTGuI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 01:50:08 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:39018 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234245AbhLTGuI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Dec 2021 01:50:08 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowADX3Z2LJ8BhM+lcBA--.36169S2;
+        Mon, 20 Dec 2021 14:49:49 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     ok@artecdesign.ee, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] USB: host: Check for null res pointer
+Date:   Mon, 20 Dec 2021 14:49:46 +0800
+Message-Id: <20211220064946.817004-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Message-ID: <trinity-09ddec50-a8ca-4663-ba91-4331ab43c9e4-1639982794116@3c-app-gmx-bs07>
-From:   Ralf Beck <musical_snake@gmx.de>
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 20 Dec 2021 07:46:34 +0100
-Importance: normal
-Sensitivity: Normal
-X-Priority: 3
-X-Provags-ID: V03:K1:zIKfgIMCSE36oRYZIEeaIrHtHCMhTf0Ft3eJMXXlQHI2B1q00AUdG+iREqaFM46tIxYhL
- F7GgUlG32cM9s6QsDyBQjnDeZ+K37MeUGCg3kC89sWzf2Yj1IBwSs+f2WNeZPhRjm5MvwjykFRCs
- NJ6MolB2QcPgUAetyJrVCYt/YO2uVKO6NL3ZqkKYSam5zQR4mXF6jkHeGb6j/n+8S/8zA2PmwPIW
- 3xmy26BSFGjbOnD+ColQS5ETpOpd/W4xKcZ5jjVWVn/NxbbkOFKqVsIeNcsMi4avskVjQahXKdr/
- 3o=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:AA+zFzPvssQ=:QNvnf21kW8FhiqoeaEdJn1
- pPFhjnzPd8x7p5f+p8sodoWR+O9EAIQTgwcRcNBSquzZOGYN+UM2d2RTY6u7zrZzTKx+rpx/N
- QrkSa9eBSSOxEap+7QTDqpedXuqCqz7ePJNLdda0w8usLoB0q3aQ34+GDW0FmVqMs5GvEfdXg
- lR1OAQCM7P253R6A/GwORJ+uNhwAOHzK6wTcPmnc3Rm9K676L5ktipOGo6UQDnM/Mojyqu8iB
- r9atgnUY7KsRN0Es2Yw8vjV9Aq8t+iIfRGyYZ/6PCTyd1a/h7FFgvJVAfSzKOGKT7ba0Ogz9W
- BFDd79Tgb87RQ3pO83I1b575Ozlw5uUokWUgZekHviWdT5xdCfRWILF+XGCUv4UyOGc+LVc7Z
- V9wPSQWaAwN18h0t/YDx6YddGGVirN/8xyxkisab49NMMRJ9Eu3aSRHt/s+fXS/ysdBWMFHRe
- /DloWcH6UZc/S8yUzAWr+DsXaNWQZmyoeK6JEGpfYok8CveMLKwlUhZQib4+wX8jKWa03Tw7Y
- y9tVtxHH1fk5Ls2Vrr7M2rPCsgPQiMMFXOlMm+riDigdTs3PregRcb5d0zcmSyg6Cc5JjbOYE
- IWw0HwP1Yh0/4CbMiU9//+zEWk04SwxeShsBcEQV25KrmKKeX0n7p9CouuUAulUbqgKabax0Y
- C0wc6s7j9Dk5giQdEVmpUMlAe/qPCmtdjCsft++BDS5V7+ADy3g4oCb9quZq4rOPHoHKlBP9H
- jTr6GokJMucrpTvmA2Rf2oiSQD3M+AzORzUXQPOTiGYtz8/WWxU/IVIgjBp0W7mYL+NIKoPKg
- l7OLz8/
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowADX3Z2LJ8BhM+lcBA--.36169S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKrW5ZF48KFyxCry3GFy8Krg_yoWDWFg_Cw
+        4F9rn5Kr1DCFn0ya18Ar13C392vwsrWr45u3W8ta4avryjqw17G3yDurWfAF98Xw4DAryD
+        GryDArs3Z345ZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbckFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8AwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU24E_UUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The return value of platform_get_resource() needs to be checked.
+To avoid use of error pointer in case of the failure of alloc.
 
-Currently the usb core is disabling the use of and endpoint, if the endpoint address is present in two different USB interface descriptors within the same USB configuration.
-This behaviour is obviously based on following passage in the USB specification:
+Fixes: 4808a1c02611 ("[PATCH] USB: Add isp116x-hcd USB host controller driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/usb/host/isp116x-hcd.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-"An endpoint is not shared among interfaces within a single configuration unless the endpoint is used by alternate settings of the same interface."
+diff --git a/drivers/usb/host/isp116x-hcd.c b/drivers/usb/host/isp116x-hcd.c
+index 8835f6bd528e..addd2b43a14c 100644
+--- a/drivers/usb/host/isp116x-hcd.c
++++ b/drivers/usb/host/isp116x-hcd.c
+@@ -1541,9 +1541,15 @@ static int isp116x_remove(struct platform_device *pdev)
+ 
+ 	iounmap(isp116x->data_reg);
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
++	if (!res)
++		return -EINVAL;
++
+ 	release_mem_region(res->start, 2);
+ 	iounmap(isp116x->addr_reg);
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res)
++		return -EINVAL;
++
+ 	release_mem_region(res->start, 2);
+ 
+ 	usb_put_hcd(hcd);
+-- 
+2.25.1
 
-However, this behaviour prevents using some interfaces (in my case the Motu AVB audio devices) in their vendor specific mode.
-
-They use a single USB configuration with tqo sets of interfaces, which use the same isochronous entpoint numbers.
-
-One set with audio class specific interfaces for use by an audi class driver.
-The other set with vendor specific interfaces for use by the vendor driver.
-Obviously the class specific interfaces and vendor specific interfaces are not intended to be use by a driver simultaniously.
-
-There must be another solution to deal with this. It is unacceptable to request a user of these devices to have to disablethe duplicate endpoint check and recompile the kernel on every update in order to be able to use their devices in vendor mode.
-
-Sincerly,
-Ralf Beck
