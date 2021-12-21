@@ -2,269 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 213B747C82A
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 21:17:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D90B47C9DA
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Dec 2021 00:50:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232540AbhLUURh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Dec 2021 15:17:37 -0500
-Received: from mga11.intel.com ([192.55.52.93]:5587 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231623AbhLUURh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Dec 2021 15:17:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640117857; x=1671653857;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=eri8pGenN/Lf4Ee8MmCFZA6F3qS1dqQ9zhX3Iat7/qE=;
-  b=bC+ZYTQ30rSJosnkk/gKVwS4q6AfN5vj1b1ec/4sbWcO7/uIFnaONzMP
-   R3cHZHSFapyi7dPD1dsJkORdra/l8i3s/1dgXK1rr6Z24r8KIn/aKMfTB
-   IuRqNPwwVoQnz7arcUsEYjjaIE1uSyYd6ruupTqMcEpUG4/XR/PULQweK
-   OjFMHnVZeeKW7l5tQlqiLHQBdZ3h6ptWCDV9ROR645FC8xXG0qUXQOZBP
-   7fptmiRtNXWzuKHJv9rZymb2r25NuN1TeqqcU4/pXrcgm+nF3Kq/Ql6GH
-   5lIu10kDgTQk0X1tMaw4pshdadIymyNY+PU5QXROfkQOv3O8KcOZQK//N
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="238020507"
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="238020507"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 12:17:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="484531201"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 21 Dec 2021 12:17:16 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzlZT-0009Vq-UD; Tue, 21 Dec 2021 20:17:15 +0000
-Date:   Wed, 22 Dec 2021 04:17:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS WITH WARNING
- ce1d37cb7697abcc3d892558acd33a1333596534
-Message-ID: <61c2363d.gXFGbIQSTW6Q+4XD%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S237810AbhLUXux convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 21 Dec 2021 18:50:53 -0500
+Received: from mail-4022.proton.ch ([185.70.40.22]:32844 "EHLO
+        mail-4022.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237244AbhLUXux (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Dec 2021 18:50:53 -0500
+Date:   Tue, 21 Dec 2021 23:50:47 +0000
+Authentication-Results: mail-4018.proton.ch; dkim=none
+To:     Rob Herring <robh@kernel.org>
+From:   conor dooley <mail@conchuod.ie>
+Cc:     conor.dooley@microchip.com, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, jassisinghbrar@gmail.com,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, broonie@kernel.org,
+        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
+        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        atish.patra@wdc.com
+Reply-To: conor dooley <mail@conchuod.ie>
+Subject: Re: [PATCH v2 03/17] dt-bindings: soc/microchip: make systemcontroller a mfd
+Message-ID: <YfGEPBe6qV6ieFoD_Xk-rEkBwvyWlVDCxk1PNycMfHsRYK1zMpawiDI25G1EZorczGJGj8e-epWgPs_UB8_-DP4keo1ivgfrLOXJNliFRxE=@conchuod.ie>
+In-Reply-To: <YcIVFZSqt/JSuk3J@robh.at.kernel.org>
+References: <20211217093325.30612-1-conor.dooley@microchip.com> <20211217093325.30612-4-conor.dooley@microchip.com> <YcIVFZSqt/JSuk3J@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.0 required=10.0 tests=ALL_TRUSTED shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: ce1d37cb7697abcc3d892558acd33a1333596534  usb: musb: dsps: Use platform_get_irq_byname() to get the interrupt
 
-Warning reports:
+On Tuesday, December 21st, 2021 at 17:55, Rob Herring <robh@kernel.org> wrote:
 
-https://lore.kernel.org/linux-usb/202112211923.EfvDjyKL-lkp@intel.com
+>On Fri, Dec 17, 2021 at 09:33:11AM +0000, conor.dooley@microchip.com wrote:
+>> From: Conor Dooley <conor.dooley@microchip.com>
+>>
+>> Make the system controller on the Polarfire SoC
+>> a "simple,mfd" so that the services can be child
+>> nodes of the system controller node.
+>>
+>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>> ---
+>>  .../microchip,mpfs-sys-controller.yaml        | 33 +++++++++++++++++--
+>>  1 file changed, 30 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml b/>Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+>> index f699772fedf3..014cb44b8f31 100644
+>> --- a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+>> +++ b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+>> @@ -13,13 +13,34 @@ description: |
+>>    The PolarFire SoC system controller is communicated with via a mailbox.
+>>    This document describes the bindings for the client portion of that mailbox.
+>>
+>> -
+>>  properties:
+>>    mboxes:
+>>      maxItems: 1
+>>
+>>    compatible:
+>> -    const: microchip,mpfs-sys-controller
+>> +    items:
+>> +      - const: microchip,mpfs-sys-controller
+>> +      - const: simple-mfd
+>
+>'simple-mfd' means there is zero dependency on the parent for the child
+>nodes. Isn't 'mboxes' a dependency?
 
-Warning in current branch:
+I suppose it is. I was going off what had been done for the bcm2835
+firmware for the rpi its also a mailbox providing "services".
+(arm/bcm/raspberrypi,bcm2835-firmware.yaml)
+>
+>> +
+>> +  hwrandom:
+>> +    type: object
+>> +
+>> +    properties:
+>> +      compatible:
+>> +        const: microchip,mpfs-rng
+>> +
+>> +    required:
+>> +      - compatible
+>> +
+>> +  sysserv:
+>> +    type: object
+>> +
+>> +    properties:
+>> +      compatible:
+>> +        const: microchip,mpfs-generic-service
+>> +
+>> +    required:
+>> +      - compatible
+>
+>There's not really any need to have child nodes which have no resources.
+>The driver for microchip,mpfs-sys-controller can create child devices.
 
-drivers/usb/renesas_usbhs/mod.c:195:13: warning: variable 'intenb0' set but not used [-Wunused-but-set-variable]
+I am assuming by this you mean say, take a list of boolean properties and
+convert those into child devices? There's a fairly decent number of services
+provided by the system controller and these children just represent the
+subset that we've implemented so far.
 
-Warning ids grouped by kconfigs:
+Conor
+>
+>Rob
 
-gcc_recent_errors
-|-- alpha-allmodconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- alpha-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- arc-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- arc-randconfig-r043-20211219
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- arm-allmodconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- arm-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- arm-defconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- arm-randconfig-c002-20211220
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- arm64-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- arm64-defconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- h8300-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- h8300-buildonly-randconfig-r003-20211221
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- ia64-allmodconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- ia64-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- m68k-allmodconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- m68k-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- mips-allmodconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- mips-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- nios2-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- parisc-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- powerpc-allmodconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- powerpc-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- riscv-allmodconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- riscv-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- riscv-randconfig-r042-20211219
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- s390-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- s390-randconfig-p002-20211220
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- s390-randconfig-r044-20211219
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- sh-allmodconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- sh-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- sh-randconfig-r035-20211220
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- sparc-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- sparc-randconfig-r021-20211220
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- sparc64-buildonly-randconfig-r003-20211220
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-`-- xtensa-allyesconfig
-    `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-
-elapsed time: 732m
-
-configs tested: 119
-configs skipped: 3
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                         shannon_defconfig
-mips                        maltaup_defconfig
-mips                           ip32_defconfig
-um                                  defconfig
-mips                       lemote2f_defconfig
-arm                        spear3xx_defconfig
-sh                      rts7751r2d1_defconfig
-arc                     haps_hs_smp_defconfig
-sh                ecovec24-romimage_defconfig
-ia64                        generic_defconfig
-powerpc                 mpc837x_rdb_defconfig
-powerpc                       maple_defconfig
-arm                       imx_v4_v5_defconfig
-sh                           se7712_defconfig
-arm                        vexpress_defconfig
-mips                       bmips_be_defconfig
-powerpc                     tqm8541_defconfig
-m68k                             alldefconfig
-sh                          urquell_defconfig
-sh                             shx3_defconfig
-powerpc                 mpc85xx_cds_defconfig
-arm                         at91_dt_defconfig
-mips                            ar7_defconfig
-powerpc                     tqm8548_defconfig
-sh                        sh7785lcr_defconfig
-sh                           se7722_defconfig
-arm64                            alldefconfig
-arm                            pleb_defconfig
-arm                            xcep_defconfig
-m68k                          amiga_defconfig
-arm                        mvebu_v5_defconfig
-arm                     am200epdkit_defconfig
-mips                          rb532_defconfig
-openrisc                 simple_smp_defconfig
-nios2                         3c120_defconfig
-powerpc                 mpc834x_itx_defconfig
-powerpc                      pmac32_defconfig
-arm                  randconfig-c002-20211220
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a001-20211220
-x86_64               randconfig-a003-20211220
-x86_64               randconfig-a002-20211220
-x86_64               randconfig-a004-20211220
-x86_64               randconfig-a005-20211220
-x86_64               randconfig-a006-20211220
-i386                 randconfig-a006-20211220
-i386                 randconfig-a004-20211220
-i386                 randconfig-a002-20211220
-i386                 randconfig-a003-20211220
-i386                 randconfig-a005-20211220
-i386                 randconfig-a001-20211220
-x86_64               randconfig-a013-20211221
-x86_64               randconfig-a015-20211221
-x86_64               randconfig-a014-20211221
-x86_64               randconfig-a011-20211221
-x86_64               randconfig-a012-20211221
-x86_64               randconfig-a016-20211221
-arc                  randconfig-r043-20211219
-riscv                randconfig-r042-20211219
-s390                 randconfig-r044-20211219
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                    rhel-8.3-kselftests
-
-clang tested configs:
-hexagon              randconfig-r045-20211219
-hexagon              randconfig-r041-20211219
-hexagon              randconfig-r041-20211220
-hexagon              randconfig-r045-20211220
-riscv                randconfig-r042-20211220
-s390                 randconfig-r044-20211220
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
