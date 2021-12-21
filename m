@@ -2,126 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF3A47C594
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 18:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8301B47C79B
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 20:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240782AbhLURzl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Dec 2021 12:55:41 -0500
-Received: from mail-qk1-f171.google.com ([209.85.222.171]:34778 "EHLO
-        mail-qk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240752AbhLURzj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Dec 2021 12:55:39 -0500
-Received: by mail-qk1-f171.google.com with SMTP id t6so13346038qkg.1;
-        Tue, 21 Dec 2021 09:55:39 -0800 (PST)
+        id S241845AbhLUTkF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Dec 2021 14:40:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34514 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237467AbhLUTkD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Dec 2021 14:40:03 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53524C061574;
+        Tue, 21 Dec 2021 11:40:03 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id i31so120909lfv.10;
+        Tue, 21 Dec 2021 11:40:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X+qQ8cOWr3KYDLsqh+E8A3qJbCcPj8hXX9NXQmQghMw=;
+        b=IOh1sSAi35BrRDyT2BlikmB1kEuAJLWXMHKnQ5egM133fsVbRUwZrbL8GzMG1WdWyz
+         lUR/VXFc1/sC4h9Kmv4tH4YXzBue1EEXp8YZTb0sfqQJwIGeap2S4ukbBvtDTnovRsAw
+         kXMvMOJqamHKy/pzrvOF5oR1ZvdflKwSfbrNI8WV+CH0MZ8PA9siP1QiIlLU4/d1Tko3
+         CFVEtDtmUi6kzyss2xIpEkJES7rxOWwFktkFVU8F1q/INoZtj/NQH+pi9rxbM6HxG7DH
+         9YNssPt9pTO9LaNRReO6qlASl6nA9iClNSg4hKKzuogHlmioiKdFq/I9trDBXM6RATHL
+         6A7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4GSGA/qwtNXG0IPZ01RqeQiJyKL3VoAZk2c0sbKkobg=;
-        b=hlfjFvMtD79EiL/LGYq82Z1elOoAOubXKDaCJkEHPoftWwakQIsYns8HVhu/mnQPum
-         2k1ZiIHWFYJYRo1XuE7Ni9+1ToDmJbOMqtJ7gWazRPyS0o0OsE8mFT5ZBwB6WnAryTYt
-         0Aogzc2pbINGNJQavvaoc4eE1/WzLf4de6pG6YL8vIavMjiDgeRedqTlGlAu6zqlGrq0
-         SShn+4CUa0bAvoN/dCtNBwnxUdYSIqdBc1uEFiEuZISrUs/Py5e7HjRIDexdJxhEjwsm
-         cCDzeljhIj/Q8KnwpHOYIQeEhB1wFJx873LVBp1XCjR+mfph2ZMhX45IpiA4k23p3+Or
-         Q/Xg==
-X-Gm-Message-State: AOAM531pTbm2BROPCb0zP4FG6ljA96TPzvJtT390rerLdu1ti+w1gYAk
-        0xHaYFz1lF6FU/pEHWvjWQ==
-X-Google-Smtp-Source: ABdhPJz5vgBn1TjeZtoc2YYKvQ+HmcEPZTFsNL3qHHc8SbteC0W1UmfcNlqbGX3NnNYb5boB3sk4Pg==
-X-Received: by 2002:a05:620a:258e:: with SMTP id x14mr2824830qko.578.1640109338673;
-        Tue, 21 Dec 2021 09:55:38 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id bm35sm14659623qkb.86.2021.12.21.09.55.35
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X+qQ8cOWr3KYDLsqh+E8A3qJbCcPj8hXX9NXQmQghMw=;
+        b=XxL/ZYgTpkyu0jpZuxXIkbbK31QV1VpGpcHwqE12O9XthzsCuGVcsd10FeVbDQ2CuJ
+         F8LkpCnkc7p6UZB5alIZsAEf+LnL9BmccbO2MsRBHMxMGHuaPG9WpF7OqLcCXm+5f1iS
+         ZWcUNXmzJ8BvNSlth0re0V0JqZnyoqb/iiMccsMiN93IE1OufzjyewiVNdqAh36nD7Bk
+         2eY/lGz5MoaM/HRDyetMpr5wcSMagRc+LqCeoG/5rjMitpHzVOAy1n+r8k8OLAU08M+1
+         SKPj0P+ZAsGkjNuFGfP/R14iuMsQZUop6ladOpt3mpwX3rbNPAXXcVi2EXwyqfcRO+Qc
+         E2Dg==
+X-Gm-Message-State: AOAM531eeRoi/s8ksGHO3cQvfIV/EOjIFb2AB9TTuXlJGLMq6qxngYtb
+        zxXt+VtKLAO/U/Aj6VO05Dk=
+X-Google-Smtp-Source: ABdhPJyiWYtCRiDHXtbL3FNBAPDPseFmLc0mG9mUtTOEL9oDneTuykecD30kXs+F2wE2ie8XpjqfXg==
+X-Received: by 2002:a05:6512:3e28:: with SMTP id i40mr4084008lfv.436.1640115601549;
+        Tue, 21 Dec 2021 11:40:01 -0800 (PST)
+Received: from localhost.localdomain ([94.103.235.97])
+        by smtp.gmail.com with ESMTPSA id d5sm662799lfv.83.2021.12.21.11.40.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 09:55:38 -0800 (PST)
-Received: (nullmailer pid 1495705 invoked by uid 1000);
-        Tue, 21 Dec 2021 17:55:33 -0000
-Date:   Tue, 21 Dec 2021 13:55:33 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     conor.dooley@microchip.com
-Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, broonie@kernel.org,
-        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
-        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        atish.patra@wdc.com
-Subject: Re: [PATCH v2 03/17] dt-bindings: soc/microchip: make
- systemcontroller a mfd
-Message-ID: <YcIVFZSqt/JSuk3J@robh.at.kernel.org>
-References: <20211217093325.30612-1-conor.dooley@microchip.com>
- <20211217093325.30612-4-conor.dooley@microchip.com>
+        Tue, 21 Dec 2021 11:40:01 -0800 (PST)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux@rempel-privat.de,
+        andrew@lunn.ch, robert.foss@collabora.com, freddy@asix.com.tw
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+f44badb06036334e867a@syzkaller.appspotmail.com
+Subject: [PATCH 1/2] asix: fix uninit-value in asix_mdio_read()
+Date:   Tue, 21 Dec 2021 22:39:32 +0300
+Message-Id: <bd6a7e1779ba97a300650e8e23b69ecffb3b4236.1640115493.git.paskripkin@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217093325.30612-4-conor.dooley@microchip.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 09:33:11AM +0000, conor.dooley@microchip.com wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Make the system controller on the Polarfire SoC
-> a "simple,mfd" so that the services can be child
-> nodes of the system controller node.
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../microchip,mpfs-sys-controller.yaml        | 33 +++++++++++++++++--
->  1 file changed, 30 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
-> index f699772fedf3..014cb44b8f31 100644
-> --- a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
-> +++ b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
-> @@ -13,13 +13,34 @@ description: |
->    The PolarFire SoC system controller is communicated with via a mailbox.
->    This document describes the bindings for the client portion of that mailbox.
->  
-> -
->  properties:
->    mboxes:
->      maxItems: 1
->  
->    compatible:
-> -    const: microchip,mpfs-sys-controller
-> +    items:
-> +      - const: microchip,mpfs-sys-controller
-> +      - const: simple-mfd
+asix_read_cmd() may read less than sizeof(smsr) bytes and in this case
+smsr will be uninitialized.
 
-'simple-mfd' means there is zero dependency on the parent for the child 
-nodes. Isn't 'mboxes' a dependency?
+Fail log:
+BUG: KMSAN: uninit-value in asix_check_host_enable drivers/net/usb/asix_common.c:82 [inline]
+BUG: KMSAN: uninit-value in asix_check_host_enable drivers/net/usb/asix_common.c:82 [inline] drivers/net/usb/asix_common.c:497
+BUG: KMSAN: uninit-value in asix_mdio_read+0x3c1/0xb00 drivers/net/usb/asix_common.c:497 drivers/net/usb/asix_common.c:497
+ asix_check_host_enable drivers/net/usb/asix_common.c:82 [inline]
+ asix_check_host_enable drivers/net/usb/asix_common.c:82 [inline] drivers/net/usb/asix_common.c:497
+ asix_mdio_read+0x3c1/0xb00 drivers/net/usb/asix_common.c:497 drivers/net/usb/asix_common.c:497
 
-> +
-> +  hwrandom:
-> +    type: object
-> +
-> +    properties:
-> +      compatible:
-> +        const: microchip,mpfs-rng
-> +
-> +    required:
-> +      - compatible
-> +
-> +  sysserv:
-> +    type: object
-> +
-> +    properties:
-> +      compatible:
-> +        const: microchip,mpfs-generic-service
-> +
-> +    required:
-> +      - compatible
+Fixes: d9fe64e51114 ("net: asix: Add in_pm parameter")
+Reported-and-tested-by: syzbot+f44badb06036334e867a@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+---
+ drivers/net/usb/asix_common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-There's not really any need to have child nodes which have no resources. 
-The driver for microchip,mpfs-sys-controller can create child devices.
+diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+index 42ba4af68090..06823d7141b6 100644
+--- a/drivers/net/usb/asix_common.c
++++ b/drivers/net/usb/asix_common.c
+@@ -77,7 +77,7 @@ static int asix_check_host_enable(struct usbnet *dev, int in_pm)
+ 				    0, 0, 1, &smsr, in_pm);
+ 		if (ret == -ENODEV)
+ 			break;
+-		else if (ret < 0)
++		else if (ret < sizeof(smsr))
+ 			continue;
+ 		else if (smsr & AX_HOST_EN)
+ 			break;
+-- 
+2.34.1
 
-Rob
