@@ -2,79 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F08647BA11
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 07:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52ABE47BA95
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 08:17:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233705AbhLUGhg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Dec 2021 01:37:36 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56034 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233730AbhLUGhf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Dec 2021 01:37:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B461613F7;
-        Tue, 21 Dec 2021 06:37:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4065DC36AE7;
-        Tue, 21 Dec 2021 06:37:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640068654;
-        bh=4rdD9gOEHmrr3GLbMUJL0o7fGVv3THCBCwujrR9fBk0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aH9sZY4Nj6ncsGL+SirVD0m7SqrDfKkNMp5Z9TStuUiQP/H9mRnysfr4zyzWlvo7H
-         YSe106NgbSczo2Wa9jL5S3bTWLEYYalff7flK4sB871X19HsvypK9PHSfaP5+mUclc
-         86LYHEB3xqULZKQLMAxlQJ6TI7p7cuuQcT2r3bLM=
-Date:   Tue, 21 Dec 2021 07:37:32 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] usb: early: Fix an error code in xdbc_init()
-Message-ID: <YcF2LCEHcr1PsPaO@kroah.com>
-References: <20211221022036.80706-1-yang.lee@linux.alibaba.com>
+        id S234898AbhLUHRk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Dec 2021 02:17:40 -0500
+Received: from mga12.intel.com ([192.55.52.136]:54945 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229999AbhLUHRk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Dec 2021 02:17:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640071060; x=1671607060;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6zje/X+VZ5ZHiQi7LYboiBDqpvPYTfvlFD10O9V+6dE=;
+  b=QeGKk7oX6HAHBsCxHTd/yNDzaP+H0BcWRF4uRg2hOQBZDuB77dZxOV6o
+   DVshaIBfC5nW5ZklJ1oHGxHS2q7jFyrR908hxwV/azqKMrV2q1OD4KQua
+   V5qzR5rIvrCLu6ws6H0v2L8XSQ9kzbX/iPHXJBcu6bQY4H1vmNsEHi0sR
+   k+Gu5YlHFRlKfhn6b17BCsRbnhP8bYKWodiK44rCcu6qjFGVIM4rf4zN4
+   gOwGlZwWyGKpxUYA9zce7gWA1MSpoS+/Xyqisb39j0uEu7XO5aUVR6sKe
+   d+4VvYEYZ0qrMpfJtuSpVVQRFbWrRenb9oLshy+3aM08/vec7EL95yJcl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="220354089"
+X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
+   d="scan'208";a="220354089"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 23:17:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
+   d="scan'208";a="663867574"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 20 Dec 2021 23:17:34 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 Dec 2021 09:17:34 +0200
+Date:   Tue, 21 Dec 2021 09:17:34 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Chris Hixon <linux-kernel-bugs@hixontech.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ucsi: Only check the contract if there is a
+ connection
+Message-ID: <YcF/jlRxl2uNwo/Z@kuha.fi.intel.com>
+References: <20211217140327.31921-1-heikki.krogerus@linux.intel.com>
+ <1d90a23b-fe2f-6892-1641-7a13e38a00dc@leemhuis.info>
+ <YbypYo4Ohii4fSNx@kuha.fi.intel.com>
+ <YcCXnMKPHAS7qaS+@kroah.com>
+ <YcCkIp1U7YVAK/O3@kuha.fi.intel.com>
+ <YcC1cnyzjoH2bPS9@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211221022036.80706-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <YcC1cnyzjoH2bPS9@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 10:20:36AM +0800, Yang Li wrote:
-> When xdbc_trace("hardware not used anymore\n") is performed,
-> ret should be assigned -ENODEV to indicate this.
+On Mon, Dec 20, 2021 at 05:55:14PM +0100, Greg Kroah-Hartman wrote:
+> > OK... so I don't prepare v2 then.
 > 
-> Clean up smatch warning:
-> drivers/usb/early/xhci-dbc.c:972 xdbc_init() warn: missing error code
-> 'ret'
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  drivers/usb/early/xhci-dbc.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/early/xhci-dbc.c b/drivers/usb/early/xhci-dbc.c
-> index 4502108069cd..fcb05a8948fa 100644
-> --- a/drivers/usb/early/xhci-dbc.c
-> +++ b/drivers/usb/early/xhci-dbc.c
-> @@ -969,6 +969,7 @@ static int __init xdbc_init(void)
->  	if (early_xdbc_console.index == -1 ||
->  	    (early_xdbc_console.flags & CON_BOOT)) {
->  		xdbc_trace("hardware not used anymore\n");
-> +		ret = -ENODEV;
->  		goto free_and_quit;
->  	}
+> No, please do, I will not get to this for another few days because it
+> takes me more work :)
 
-How did you test this?
-
-I think you just broke this, the function should be returning 0 here,
-like it currently is.  Are you SURE smatch is correct?
-
-I'll only accept this if you can prove it is tested.  Do you have this
-hardware?
+OK. I'll send it asap, today.
 
 thanks,
 
-greg k-h
+-- 
+heikki
