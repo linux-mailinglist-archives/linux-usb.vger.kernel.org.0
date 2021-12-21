@@ -2,127 +2,215 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8812F47BF63
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 13:08:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D041447BF62
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 13:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234405AbhLUMH6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Dec 2021 07:07:58 -0500
-Received: from mga04.intel.com ([192.55.52.120]:60098 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230380AbhLUMH6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Dec 2021 07:07:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640088478; x=1671624478;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Z+3UOPNze5WBOvoIzscH9ZGtz5uYzjD08yP9m/w8wEk=;
-  b=nvs1hYrsYbkhJ38eMfULauTMbmLWErLhzsz7/hwoWmJcEHyLg5vTo28C
-   3fDk+Gn2IfqIHZO4WYrjBk89U3fmtNpWnISe0L6Rg0qmrCNhYDDSYhNLE
-   d4R72qWCPfVfrSHCpfbmHEBuBYS0ut46DRNOeJDdnnmfBCG74qfsH/BzN
-   tScmfzSlMsyyQjVEVVt/MJFkwB4gJJ3o2e6JUYiUWpl/HE3FlcxhKw7ok
-   tXqCDlV4XWW0vxv2O61eAyUCseuxTJdbnZMLMs1D+DCQgiAeWrmRaWkzR
-   lLg1quJt5WKPqi/5ZQtVg1ojYUjWyFBdSllCl1v5h0RrR8p00CJaPiGSw
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="239128967"
-X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
-   d="scan'208";a="239128967"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 04:07:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
-   d="scan'208";a="508051990"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 21 Dec 2021 04:07:56 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzdvv-00094I-P8; Tue, 21 Dec 2021 12:07:55 +0000
-Date:   Tue, 21 Dec 2021 20:07:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
+        id S234070AbhLUMHz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Dec 2021 07:07:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230380AbhLUMHz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Dec 2021 07:07:55 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3188C061574
+        for <linux-usb@vger.kernel.org>; Tue, 21 Dec 2021 04:07:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=zkEb4jNYYr47IahRpRQx1S09KeanGz8ip73FMDWB5gs=; b=JspVQ
+        R1RrV/dmU5h9Ts+Xd42rfMdQDhLdN2WLT8F7SDoJA/3CePpKY+O+pWgR7yxNzFzwXUTIO8X8tcRCe
+        2UBahE7NIpmYGPCf3zfl/R+MZ0cUUaSMY29VMCCL4JlI3LN+eUN9o0cOgqI5pM+6u8ugrgWQAQ1v7
+        DW9c59iP2wj+5yReehlNRfrUrWQwCR6EkLazWZlHDFscOdbOPafPoLF+hqFzqngWKRlNG+nKldlR7
+        MzZeOiJnWF9GITrreRDyV8ZkUvSdhiYzYGrD48q6H4RWc4PVhvAr1cGCdXclwmC/g2t+KcSop0sH7
+        aBk0AldGWpqwueFRtgpXIoL3Z59cg==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1mzdvm-0002JD-Du; Tue, 21 Dec 2021 12:07:47 +0000
+Date:   Tue, 21 Dec 2021 12:07:44 +0000
+From:   John Keeping <john@metanate.com>
+To:     Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     linux-usb@vger.kernel.org,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Julian Scheel <julian@jusst.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [usb:usb-testing 5/9] drivers/usb/renesas_usbhs/mod.c:195:13:
- warning: variable 'intenb0' set but not used
-Message-ID: <202112211923.EfvDjyKL-lkp@intel.com>
+Subject: Re: [PATCH v2 06/11] usb: gadget: u_audio: Rate ctl notifies about
+ current srate (0=stopped)
+Message-ID: <YcHDkIdyXnYv2dRt@donbot>
+References: <20211220211130.88590-1-pavel.hofman@ivitera.com>
+ <20211220211130.88590-7-pavel.hofman@ivitera.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211220211130.88590-7-pavel.hofman@ivitera.com>
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-head:   ce1d37cb7697abcc3d892558acd33a1333596534
-commit: 22ae6415c702680b1d3170717ce34ee31656f8b6 [5/9] usb: renesas_usbhs: Use platform_get_irq() to get the interrupt
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20211221/202112211923.EfvDjyKL-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=22ae6415c702680b1d3170717ce34ee31656f8b6
-        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-        git fetch --no-tags usb usb-testing
-        git checkout 22ae6415c702680b1d3170717ce34ee31656f8b6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/usb/renesas_usbhs/
+On Mon, Dec 20, 2021 at 10:11:25PM +0100, Pavel Hofman wrote:
+> The Playback/Capture ctl currently reports rate value set by USB
+> control selector UAC2_CS_CONTROL_SAM_FREQ (fixed for UAC1). When the
+> host has stopped playback/capture, the reported value does not change.
+> The gadget side has no information whether the host has started/stopped
+> capture/playback.
+> 
+> This patch sets the value reported by the respective rate ctl to zero
+> when the host side has stopped playback/capture. Also, it calls
+> snd_ctl_notify when start/stop  occurs, so that a subscribed client can
+> act appropriately.
+> 
+> Tests have confirmed that USB hosts change UAC2_CS_CONTROL_SAM_FREQ
+> before switching altsetting to activate playback/capture, resulting in
+> correct order (params->c/p_srate is set to requested rate before
+> u_audio_start_capture/playback is called).
+> 
+> The gadget rate notifications are used by user-space audio gadget
+> controller gaudio_ctl https://github.com/pavhofman/gaudio_ctl.
+> 
+> Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+> ---
+>  drivers/usb/gadget/function/u_audio.c | 46 ++++++++++++---------------
+>  1 file changed, 21 insertions(+), 25 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+> index e737a104156d..a6293415c071 100644
+> --- a/drivers/usb/gadget/function/u_audio.c
+> +++ b/drivers/usb/gadget/function/u_audio.c
+> @@ -64,6 +64,7 @@ struct uac_rtd_params {
+>    int mute;
+>  
+>  	struct snd_kcontrol *snd_kctl_rate; /* read-only current rate */
+> +	int rep_srate; /* srate reported by snd_kctl_rate */
+>  
+>    spinlock_t lock; /* lock for control transfers */
+>  
+> @@ -496,8 +497,6 @@ static inline void free_ep_fback(struct uac_rtd_params *prm, struct usb_ep *ep)
+>  int u_audio_set_capture_srate(struct g_audio *audio_dev, int srate)
+>  {
+>  	struct uac_params *params = &audio_dev->params;
+> -	struct snd_uac_chip *uac = audio_dev->uac;
+> -	struct uac_rtd_params *prm = &uac->c_prm;
+>  	int i;
+>  
+>  	dev_dbg(&audio_dev->gadget->dev, "%s: srate %d\n", __func__, srate);
+> @@ -516,8 +515,6 @@ EXPORT_SYMBOL_GPL(u_audio_set_capture_srate);
+>  
+>  int u_audio_set_playback_srate(struct g_audio *audio_dev, int srate)
+>  {
+> -	struct snd_uac_chip *uac = audio_dev->uac;
+> -	struct uac_rtd_params *prm = &uac->p_prm;
+>  	struct uac_params *params = &audio_dev->params;
+>  	int i;
+>  
+> @@ -535,6 +532,18 @@ int u_audio_set_playback_srate(struct g_audio *audio_dev, int srate)
+>  }
+>  EXPORT_SYMBOL_GPL(u_audio_set_playback_srate);
+>  
+> +static void set_reported_srate(struct uac_rtd_params *prm, int srate)
+> +{
+> +	struct snd_kcontrol *kctl = prm->snd_kctl_rate;
+> +
+> +	if (prm->rep_srate != srate) {
+> +		prm->rep_srate = srate;
+> +		snd_ctl_notify(prm->uac->card, SNDRV_CTL_EVENT_MASK_VALUE,
+> +				&kctl->id);
+> +		pr_debug("Setting '%s' to %d", kctl->id.name, srate);
+> +	}
+> +}
+> +
+>  int u_audio_start_capture(struct g_audio *audio_dev)
+>  {
+>  	struct snd_uac_chip *uac = audio_dev->uac;
+> @@ -574,6 +583,8 @@ int u_audio_start_capture(struct g_audio *audio_dev)
+>  			dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
+>  	}
+>  
+> +	set_reported_srate(&uac->c_prm, params->c_srate);
+> +
+>  	ep_fback = audio_dev->in_ep_fback;
+>  	if (!ep_fback)
+>  		return 0;
+> @@ -619,6 +630,7 @@ void u_audio_stop_capture(struct g_audio *audio_dev)
+>  {
+>  	struct snd_uac_chip *uac = audio_dev->uac;
+>  
+> +	set_reported_srate(&uac->c_prm, 0);
+>  	if (audio_dev->in_ep_fback)
+>  		free_ep_fback(&uac->c_prm, audio_dev->in_ep_fback);
+>  	free_ep(&uac->c_prm, audio_dev->out_ep);
+> @@ -691,6 +703,8 @@ int u_audio_start_playback(struct g_audio *audio_dev)
+>  			dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
+>  	}
+>  
+> +	set_reported_srate(&uac->p_prm, params->p_srate);
+> +
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(u_audio_start_playback);
+> @@ -699,6 +713,7 @@ void u_audio_stop_playback(struct g_audio *audio_dev)
+>  {
+>  	struct snd_uac_chip *uac = audio_dev->uac;
+>  
+> +	set_reported_srate(&uac->p_prm, 0);
+>  	free_ep(&uac->p_prm, audio_dev->in_ep);
+>  }
+>  EXPORT_SYMBOL_GPL(u_audio_stop_playback);
+> @@ -1001,19 +1016,6 @@ static int get_max_srate(const int *srates)
+>  	return max_srate;
+>  }
+>  
+> -static int get_min_srate(const int *srates)
+> -{
+> -	int i, min_srate = INT_MAX;
+> -
+> -	for (i = 0; i < UAC_MAX_RATES; i++) {
+> -		if (srates[i] == 0)
+> -			break;
+> -		if (srates[i] < min_srate)
+> -			min_srate = srates[i];
+> -	}
+> -	return min_srate;
+> -}
+> -
+>  static int uac_pcm_rate_info(struct snd_kcontrol *kcontrol,
+>  				struct snd_ctl_elem_info *uinfo)
+>  {
+> @@ -1030,7 +1032,7 @@ static int uac_pcm_rate_info(struct snd_kcontrol *kcontrol,
+>  		srates = params->c_srates;
+>  	else
+>  		srates = params->p_srates;
+> -	uinfo->value.integer.min = get_min_srate(srates);
+> +	uinfo->value.integer.min = 0;
+>  	uinfo->value.integer.max = get_max_srate(srates);
+>  	return 0;
+>  }
+> @@ -1039,14 +1041,8 @@ static int uac_pcm_rate_get(struct snd_kcontrol *kcontrol,
+>  						 struct snd_ctl_elem_value *ucontrol)
+>  {
+>  	struct uac_rtd_params *prm = snd_kcontrol_chip(kcontrol);
+> -	struct snd_uac_chip *uac = prm->uac;
+> -	struct g_audio *audio_dev = uac->audio_dev;
+> -	struct uac_params *params = &audio_dev->params;
+>  
+> -	if (prm == &uac->c_prm)
+> -		ucontrol->value.integer.value[0] = params->c_srate;
+> -	else
+> -		ucontrol->value.integer.value[0] = params->p_srate;
+> +	ucontrol->value.integer.value[0] = prm->rep_srate;
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This function was only added in patch 2, wouldn't it be better to add
+the rate to the right place at that point?
 
-All warnings (new ones prefixed by >>):
+I think uac_params is supposed to be the fixed (user selected)
+parameters whereas uac_rtd_params are the varying values that may be
+affected by the host, so the current rate belongs in uac_rtd_params.
 
-   drivers/usb/renesas_usbhs/mod.c: In function 'usbhs_status_get_each_irq':
->> drivers/usb/renesas_usbhs/mod.c:195:13: warning: variable 'intenb0' set but not used [-Wunused-but-set-variable]
-     195 |         u16 intenb0, intenb1;
-         |             ^~~~~~~
-
-
-vim +/intenb0 +195 drivers/usb/renesas_usbhs/mod.c
-
-f1407d5c66240b Kuninori Morimoto  2011-04-04  190  
-697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  191  static int usbhs_status_get_each_irq(struct usbhs_priv *priv,
-f1407d5c66240b Kuninori Morimoto  2011-04-04  192  				     struct usbhs_irq_state *state)
-f1407d5c66240b Kuninori Morimoto  2011-04-04  193  {
-f1407d5c66240b Kuninori Morimoto  2011-04-04  194  	struct usbhs_mod *mod = usbhs_mod_get_current(priv);
-697d5c004e3901 Shimoda, Yoshihiro 2012-08-20 @195  	u16 intenb0, intenb1;
-c4d8199ba1a7aa Yoshihiro Shimoda  2014-08-22  196  	unsigned long flags;
-f1407d5c66240b Kuninori Morimoto  2011-04-04  197  
-c4d8199ba1a7aa Yoshihiro Shimoda  2014-08-22  198  	/********************  spin lock ********************/
-c4d8199ba1a7aa Yoshihiro Shimoda  2014-08-22  199  	usbhs_lock(priv, flags);
-f1407d5c66240b Kuninori Morimoto  2011-04-04  200  	state->intsts0 = usbhs_read(priv, INTSTS0);
-697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  201  	intenb0 = usbhs_read(priv, INTENB0);
-88a25e02f35e56 Nobuhiro Iwamatsu  2015-01-09  202  
-88a25e02f35e56 Nobuhiro Iwamatsu  2015-01-09  203  	if (usbhs_mod_is_host(priv)) {
-88a25e02f35e56 Nobuhiro Iwamatsu  2015-01-09  204  		state->intsts1 = usbhs_read(priv, INTSTS1);
-697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  205  		intenb1 = usbhs_read(priv, INTENB1);
-672bfdaa310004 Arnd Bergmann      2015-05-22  206  	} else {
-672bfdaa310004 Arnd Bergmann      2015-05-22  207  		state->intsts1 = intenb1 = 0;
-88a25e02f35e56 Nobuhiro Iwamatsu  2015-01-09  208  	}
-697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  209  
-5ea68d541df200 Kuninori Morimoto  2011-04-28  210  	/* mask */
-5ea68d541df200 Kuninori Morimoto  2011-04-28  211  	if (mod) {
-f1407d5c66240b Kuninori Morimoto  2011-04-04  212  		state->brdysts = usbhs_read(priv, BRDYSTS);
-f1407d5c66240b Kuninori Morimoto  2011-04-04  213  		state->nrdysts = usbhs_read(priv, NRDYSTS);
-f1407d5c66240b Kuninori Morimoto  2011-04-04  214  		state->bempsts = usbhs_read(priv, BEMPSTS);
-f1407d5c66240b Kuninori Morimoto  2011-04-04  215  
-f1407d5c66240b Kuninori Morimoto  2011-04-04  216  		state->bempsts &= mod->irq_bempsts;
-f1407d5c66240b Kuninori Morimoto  2011-04-04  217  		state->brdysts &= mod->irq_brdysts;
-f1407d5c66240b Kuninori Morimoto  2011-04-04  218  	}
-c4d8199ba1a7aa Yoshihiro Shimoda  2014-08-22  219  	usbhs_unlock(priv, flags);
-c4d8199ba1a7aa Yoshihiro Shimoda  2014-08-22  220  	/********************  spin unlock ******************/
-697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  221  
-697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  222  	return 0;
-5ea68d541df200 Kuninori Morimoto  2011-04-28  223  }
-f1407d5c66240b Kuninori Morimoto  2011-04-04  224  
-
-:::::: The code at line 195 was first introduced by commit
-:::::: 697d5c004e390102efbf9320a5416873679bea81 usb: renesas_usbhs: modify the irq handler for sharing irq
-
-:::::: TO: Shimoda, Yoshihiro <yoshihiro.shimoda.uh@renesas.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>  	return 0;
+>  }
+> -- 
+> 2.25.1
+> 
