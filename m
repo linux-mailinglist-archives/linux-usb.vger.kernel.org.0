@@ -2,127 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 182F647C1AA
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 15:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DB847C1CA
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 15:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235608AbhLUOjH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Dec 2021 09:39:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbhLUOjG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Dec 2021 09:39:06 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70358C061574
-        for <linux-usb@vger.kernel.org>; Tue, 21 Dec 2021 06:39:06 -0800 (PST)
-Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1mzgIC-0001af-Q4; Tue, 21 Dec 2021 15:39:04 +0100
-Message-ID: <2723c9a3-a932-3634-422b-3fbd93550bf8@leemhuis.info>
-Date:   Tue, 21 Dec 2021 15:39:04 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2] usb: typec: ucsi: Only check the contract if there is
- a connection
-Content-Language: en-BS
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        Chris Hixon <linux-kernel-bugs@hixontech.com>
-References: <20211221140352.45501-1-heikki.krogerus@linux.intel.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <20211221140352.45501-1-heikki.krogerus@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1640097546;b4d43ba0;
-X-HE-SMSGID: 1mzgIC-0001af-Q4
+        id S238606AbhLUOqh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Dec 2021 09:46:37 -0500
+Received: from mail-m17643.qiye.163.com ([59.111.176.43]:34298 "EHLO
+        mail-m17643.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232589AbhLUOqg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Dec 2021 09:46:36 -0500
+DKIM-Signature: a=rsa-sha256;
+        b=VY5fRUb86ni5GZJ9N0/dKvpexszqjYn8Qk29RcrNg05Uj/PQE4yOFfQuWd9S2TLIUuNG8wyrHCM81cE8SW+rc6C3EUZxX+tJpggfVE1I+Co4OgmgyaxEOrhd6tKlYW6fVShjSGzxWZTBNTUA6A7huSBUwVsCjezgGIjyQGz5CVw=;
+        s=default; c=relaxed/relaxed; d=vivo.com; v=1;
+        bh=E5eZchx2crf4J/jjmBKQpXaLhNDywtHvB7uoyedsUok=;
+        h=date:mime-version:subject:message-id:from;
+Received: from vivo-600-G6.vivo.xyz (unknown [58.251.74.232])
+        by mail-m17643.qiye.163.com (Hmail) with ESMTPA id 8ACA97E035E;
+        Tue, 21 Dec 2021 22:46:34 +0800 (CST)
+From:   Yaqin Pan <akingchen@vivo.com>
+To:     robh@kernel.org
+Cc:     akingchen@vivo.com, balbi@kernel.org, devicetree@vger.kernel.org,
+        gregkh@linuxfoundation.org, kernel@vivo.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        robh+dt@kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: usb: document snps,dis_split_quirk property in dwc3
+Date:   Tue, 21 Dec 2021 22:45:58 +0800
+Message-Id: <20211221144558.4264-1-akingchen@vivo.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <1640034352.478511.3900650.nullmailer@robh.at.kernel.org>
+References: <1640034352.478511.3900650.nullmailer@robh.at.kernel.org>
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWRoYSUxWQh8fQx9OGhoYSx
+        hOVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWVVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nj46Sww4Tz5LEyg6PBo3PgEf
+        SgwaCxBVSlVKTU9LS0JMQkJOSktNVTMWGhIXVRoQEhUcGBMeFTsNEg0UVRgUFkVZV1kSC1lBWU5D
+        VUlOSlVMT1VJSElZV1kIAVlBSExJTTcG
+X-HM-Tid: 0a7ddd755853d999kuws8aca97e035e
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21.12.21 15:03, Heikki Krogerus wrote:
-> The driver must make sure there is an actual connection
-> before checking details about the USB Power Delivery
-> contract. Those details are not valid unless there is a
-> connection.
-> 
-> This fixes NULL pointer dereference that is caused by an
-> attempt to register bogus partner alternate mode that the
-> firmware on some platform may report before the actual
-> connection.
-> 
-> Reported-by: Chris Hixon <linux-kernel-bugs@hixontech.com>
-> Fixes: 6cbe4b2d5a3f ("usb: typec: ucsi: Check the partner alt modes always if there is PD contract")
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215117
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
-> 
-> Hi,
-> 
-> Instead of using the "BugLink" tag, I'm now using "Link" tag with the
-> link to the bug as requested.
+>> Add snps,dis_split_quirk property for dwc3 controller
+>> 
+>> Signed-off-by: Yaqin Pan <akingchen@vivo.com>
+>> ---
+>>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>> 
+>
+>My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>
+>yamllint warnings/errors:
+>./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:229:3: [error] duplication of key "snps,dis-split-quirk" in mapping (key-duplicates)
+>
+>dtschema/dtc warnings/errors:
+>make[1]: *** Deleting file 'Documentation/devicetree/bindings/usb/snps,dwc3.example.dts'
+>Traceback (most recent call last):
+>  File "/usr/local/bin/dt-extract-example", line 45, in <module>
+>    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
+>  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
+>    return constructor.get_single_data()
+>  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 121, in get_single_data
+>    return self.construct_document(node)
+>  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 131, in construct_document
+>    for _dummy in generator:
+>  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 674, in construct_yaml_map
+>    value = self.construct_mapping(node)
+>  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 445, in construct_mapping
+>    return BaseConstructor.construct_mapping(self, node, deep=deep)
+>  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 263, in construct_mapping
+>    if self.check_mapping_key(node, key_node, mapping, key, value):
+>  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 294, in check_mapping_key
+>    raise DuplicateKeyError(*args)
+>ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
+>  in "<unicode string>", line 32, column 3
+>found duplicate key "snps,dis-split-quirk" with value "{}" (original value: "{}")
+>  in "<unicode string>", line 229, column 3
 
-Thx!
+Sorry, i make a mistake, and the snps,dis_split_quirk should be snps,sprs-ctrl-trans-quirk.
+And i will renew the patch.
 
-> There was a request to have also another Link tag pointing to some
-> other discussion on the mailing list, but I failed to understand what
-> was the point with that - I also didn't find any commits where
-> something like that had been used before.
+>To suppress this check see:
+>    http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
+>
+>make[1]: *** [Documentation/devicetree/bindings/Makefile:25: Documentation/devicetree/bindings/usb/snps,dwc3.example.dts] Error 1
+>make[1]: *** Waiting for unfinished jobs....
 
-There are quite a few commits that use more that two "Link" tags, as
-they should point to "related discussions or any other background
-information behind the change" that "can be found on the web" (Quotes
-from Documentation/process/submitting-patches.rst) -- hence there is no
-limit. That being said:
-
-> I may be mistaken here, but I got the impression that you create the
-> mailing list discussion
-
-You are mistaken: I created it because the bugzilla ticket was ignored
-in bugzilla for weeks and might have forgotten otherwise -- no wonder,
-was bugzilla.kernel.org is not the official place to report USB bugs
-according to the MAINTAINERS file.
-
-> just so you can have the extra Link tag
-> pointing to it, and that Link tag you want only because you have made
-> your scripts rely on it.
-
-They rely on it as almost all subsystems expect bug to be reported by
-mail, as they are instructed by
-Documentation/admin-guide/reporting-issues.rst
-
-> The extra email thread in any case does not seem to contain any real
-> additional information that the bug report does not have, so the extra
-> Link tag pointing to it does not provide any real value on top of the
-> link to bug itself.
-
-In this case that's true, as I have to tell regzbot about the fix then
-manually (the plan it to make regzbot also detect links to
-bugzilla.kernel.org, but I fear I have no time to work on that in the
-next few weeks :-/ ). But in similar cases it's different, as there the
-developers continued discussing the issue by mail -- then it's
-definitely worth linking there as well.
-
-Thx.
-
-Ciao, Thorsten
-
-> --
->  drivers/usb/typec/ucsi/ucsi.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 9d6b7e02d6efb..f0c2fa19f3e0f 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1164,7 +1164,9 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
->  		ret = 0;
->  	}
->  
-> -	if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) == UCSI_CONSTAT_PWR_OPMODE_PD) {
-> +	if (con->partner &&
-> +	    UCSI_CONSTAT_PWR_OPMODE(con->status.flags) ==
-> +	    UCSI_CONSTAT_PWR_OPMODE_PD) {
->  		ucsi_get_src_pdos(con);
->  		ucsi_check_altmodes(con);
->  	}
