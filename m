@@ -2,92 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18EDA47B6FE
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 02:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1B247B719
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 02:58:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231602AbhLUB5V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 20:57:21 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:53084 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231309AbhLUB5U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Dec 2021 20:57:20 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowAC3vlprNMFhm_YUBA--.47305S2;
-        Tue, 21 Dec 2021 09:57:00 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     ok@artecdesign.ee, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v4] USB: host: isp116x: Check for null res pointer
-Date:   Tue, 21 Dec 2021 09:56:58 +0800
-Message-Id: <20211221015658.1002191-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S232320AbhLUB6L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 20:58:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232272AbhLUB6I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 20:58:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CFFC06173E;
+        Mon, 20 Dec 2021 17:58:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 388B161224;
+        Tue, 21 Dec 2021 01:58:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B41F0C36AEA;
+        Tue, 21 Dec 2021 01:58:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640051887;
+        bh=ZQVyKEge9r0FTOEqdE6XH5HRkMOreaMlc6KNk2Oi238=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Xx7ZNwvNkXqWr6oz4Lj8dF/OfrUZp92vw370tQqZaaZCDF1MeDcHy0ckFG47wx8Qt
+         jqltq4XrVyaCkQLQhSoTuJpKbMpNNzsT1HzphLMXXxLBnjo+wDNtjLKxxM31u7hjZj
+         lEQI9ScibD7eCfKBycsCJat4Qkp15hvKoy5e3pF5Xiyx2ANBdZTb7p84zD58/HTYz1
+         R/+37jpj+zib+qfwNdq15c3JzbsBhCZXGXN2DyWrnoW0WfoiVIfni9weHeWoIdkgix
+         /RDRMVNmPzcOhzzm1n6KvFFserX8eBC/+DpgUWWVW5cm4LecfIBNWtpkkksowlj9lt
+         N/m61acg+peOQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Daniele Palmas <dnlplm@gmail.com>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 10/29] net: usb: qmi_wwan: add Telit 0x1070 composition
+Date:   Mon, 20 Dec 2021 20:57:31 -0500
+Message-Id: <20211221015751.116328-10-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211221015751.116328-1-sashal@kernel.org>
+References: <20211221015751.116328-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowAC3vlprNMFhm_YUBA--.47305S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFy7CF4kWF1UAw4rKw1xXwb_yoW8Gw1UpF
-        s7Kayq9r48tF4jvanrGF1UZFZak3WFyrW8WFWxK3sxZa45Jr1UJrZ5tFWFgrsYqrWvqw4Y
-        vFs8tryrCFZ8ZFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVWk
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfU5kucDUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-And I correct my commit message because platform_get_resource returns
-null if fails.
-Here is it.
-The return value of platform_get_resource() could be null when there is
-no suitable resource.
-So it should be better to check it to avoid the use of null pointer in
-release_mem_region().
+From: Daniele Palmas <dnlplm@gmail.com>
 
-Fixes: 4808a1c02611 ("[PATCH] USB: Add isp116x-hcd USB host controller driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+[ Upstream commit 94f2a444f28a649926c410eb9a38afb13a83ebe0 ]
+
+Add the following Telit FN990 composition:
+
+0x1070: tty, adb, rmnet, tty, tty, tty, tty
+
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+Acked-by: Bjørn Mork <bjorn@mork.no>
+Link: https://lore.kernel.org/r/20211210095722.22269-1-dnlplm@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-Changelog:
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-v3 -> v4
-
-*Change 1. Just skip the use of null pointer instead of directly return.
-*Change 2. Add the driver name in the subject line.
-*Change 3. Correct commit message.
----
- drivers/usb/host/isp116x-hcd.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/host/isp116x-hcd.c b/drivers/usb/host/isp116x-hcd.c
-index 8835f6bd528e..aacaf6e2ddca 100644
---- a/drivers/usb/host/isp116x-hcd.c
-+++ b/drivers/usb/host/isp116x-hcd.c
-@@ -1541,10 +1541,13 @@ static int isp116x_remove(struct platform_device *pdev)
- 
- 	iounmap(isp116x->data_reg);
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
--	release_mem_region(res->start, 2);
-+	if (res)
-+		release_mem_region(res->start, 2);
-+
- 	iounmap(isp116x->addr_reg);
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	release_mem_region(res->start, 2);
-+	if (res)
-+		release_mem_region(res->start, 2);
- 
- 	usb_put_hcd(hcd);
- 	return 0;
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 33ada2c59952e..b62489f567e48 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1355,6 +1355,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1040, 2)},	/* Telit LE922A */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1050, 2)},	/* Telit FN980 */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1060, 2)},	/* Telit LN920 */
++	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1070, 2)},	/* Telit FN990 */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1100, 3)},	/* Telit ME910 */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1101, 3)},	/* Telit ME910 dual modem */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1200, 5)},	/* Telit LE920 */
 -- 
-2.25.1
+2.34.1
 
