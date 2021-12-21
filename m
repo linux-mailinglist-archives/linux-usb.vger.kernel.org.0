@@ -2,82 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FF847BB5B
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 08:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00ED247BB64
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 08:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235368AbhLUH5U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Dec 2021 02:57:20 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57438 "EHLO
+        id S235389AbhLUH7L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Dec 2021 02:59:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58042 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbhLUH5T (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Dec 2021 02:57:19 -0500
+        with ESMTP id S235383AbhLUH7L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Dec 2021 02:59:11 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D2F86114A
-        for <linux-usb@vger.kernel.org>; Tue, 21 Dec 2021 07:57:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 067C3C36AE2;
-        Tue, 21 Dec 2021 07:57:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D45761050
+        for <linux-usb@vger.kernel.org>; Tue, 21 Dec 2021 07:59:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1855CC36AE2;
+        Tue, 21 Dec 2021 07:59:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640073438;
-        bh=ppILuB0CoXYhMvF+hSF4aVhpzPoLBxXCFKxCT1hk1pI=;
+        s=korg; t=1640073550;
+        bh=zZYLOB9RD0K6JNSzxpYK+P/GCDi7KtFWcBzZJSWVHYQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xCW8CANdxNnRZIe7QbnVkIsS37QNXG5foeSJt9OjCwPoPBmL6Qowo/GQnZh2M1en4
-         DOxjIEbARPlr+YJLh56AayHeW6ZnK+K7G3OPcNNCf3Evz3XwIJttEYRU+VmOjULxCB
-         lvkqqtxsvXM0+vor0d4D1i8stBFLQwrMIkOlbWNs=
-Date:   Tue, 21 Dec 2021 08:57:16 +0100
+        b=ncG7/gj2fd/bswzI50Wm1cudJubgXFBaaoAeoik+CI+98aXe9w6k1rexHjSEx13Ok
+         bsfTMXEzMmSkeSn0liU9npDXgA+lTmHXGB3nSxfuNqpDHlA5Qn5qGe/CJ9v2pomGP8
+         7gR5yiA5Dj7HKb5gDFyFehv0mKDahEe5mL7ByTDg=
+Date:   Tue, 21 Dec 2021 08:59:08 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] usb: dwc3: drd: Add support for usb-conn-gpio
- based usb-role-switch
-Message-ID: <YcGI3GUzYv51I6Au@kroah.com>
-References: <20211216134940.487518-1-alexander.stein@ew.tq-group.com>
+To:     Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     linux-usb@vger.kernel.org,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Julian Scheel <julian@jusst.de>
+Subject: Re: [PATCH v2 00/11] usb: gadget: audio: Multiple rates, dyn.
+ bInterval
+Message-ID: <YcGJTHA+1zBMvACy@kroah.com>
+References: <20211220211130.88590-1-pavel.hofman@ivitera.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211216134940.487518-1-alexander.stein@ew.tq-group.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211220211130.88590-1-pavel.hofman@ivitera.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 02:49:40PM +0100, Alexander Stein wrote:
-> usb-conn-gpio devices are a subnode of the USB interface controller, which
-> needs to be populated.
-> This allows having a non-type-c connector providing dual-role.
+On Mon, Dec 20, 2021 at 10:11:19PM +0100, Pavel Hofman wrote:
+> Hi all,
 > 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
-> Greg, thank you for your review.
+> This series implements:
+> * Support for multiple rates in the audio gadget
+> * Notification of gadget-side alsa processes about playback/capture
+> start/stop on the host side via Playback/Capture Rate controls.
+> * Detection of the USB cable disconnection by handling SUSPEND call
+> in f_uac1/2. The disconnection generates a stop notification.
+> * Dynamic bInterval calculation for HS and SS
 > 
-> This was tested on an imx8mp based board (TQMa8MPxL) which uses devicetree.
-> Unfortunately I have no non-imx platform available to test this on.
+> Patches for the multirate support, originally authored by Julian Scheel,
+> were rebased and modified for the current code base. Julian has
+> acknowledged the presented patches.
 > 
-> devm_of_platform_populate() _will_ fail on non-OF builds, so do not call this
-> on non-OF enabled platforms.
-> AFAICS on OF-platforms this call will only fail upon memory allocation errors.
-> If there are no subnodes, this call will not fail. So existing platform should
-> work as before.
+> The detection of cable disconnection was discussed with dwc2 maintainer
+> Minas Harutyunyan who confirmed that the suspend event can be used
+> (https://lore.kernel.org/all/5aada8e3-f385-0589-8d58-187abd1a924d@synopsys.com/T/).
+> Tests on dwc2 have confirmed reliable detection, the gadget correctly
+> reports playback/capture stop at cable disconnection.
 > 
-> Changes in v3:
-> * Unregister role-switch upon populating OF tree error
-> * Do not call devm_of_platform_populate() on non-OF platforms
+> The start/stop/current rate notification feature is accompanied by
+> example implementation of audio gadget controller
+> https://github.com/pavhofman/gaudio_ctl. The controller also handles
+> debouncing fast start/stop events when USB host audio driver is loaded
+> and/or audio daemon re/started.
 > 
-> Changes in v2:
-> * Added missing variable declaration
+> Changes:
+> --------
 > 
->  drivers/usb/dwc3/drd.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-> index d7f76835137f..1dcce7a04b41 100644
-> --- a/drivers/usb/dwc3/drd.c
-> +++ b/drivers/usb/dwc3/drd.c
-> @@ -9,6 +9,7 @@
->  
->  #include <linux/extcon.h>
->  #include <linux/of_graph.h>
-> +#include "linux/of_platform.h"
+> v2: Fixed compilation of "usb: gadget: f_uac1: Support multiple sampling
+> rates" - added changes for CONFIG_GADGET_UAC1
 
-Why "" and not <>?
+I get the following build warning and error with this series applied to
+my tree:
 
+drivers/usb/gadget/legacy/audio.c: In function ‘audio_bind’:
+drivers/usb/gadget/legacy/audio.c:251:21: error: unused variable ‘i’ [-Werror=unused-variable]
+  251 |         int status, i;
+      |                     ^
+cc1: all warnings being treated as errors
+
+Please fix up.
+
+thanks,
+
+greg k-h
