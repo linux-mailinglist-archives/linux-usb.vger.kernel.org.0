@@ -2,74 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3CF47BB4E
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 08:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 082B647BB57
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 08:54:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235340AbhLUHv6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Dec 2021 02:51:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbhLUHv6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Dec 2021 02:51:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D7BC061574;
-        Mon, 20 Dec 2021 23:51:58 -0800 (PST)
+        id S235359AbhLUHyd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Dec 2021 02:54:33 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37296 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230519AbhLUHyd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Dec 2021 02:54:33 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95A4661154;
-        Tue, 21 Dec 2021 07:51:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E1B6C36AE7;
-        Tue, 21 Dec 2021 07:51:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60CC8B80EA6
+        for <linux-usb@vger.kernel.org>; Tue, 21 Dec 2021 07:54:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3C3FC36AE2;
+        Tue, 21 Dec 2021 07:54:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640073117;
-        bh=cypPDxSfVxgOOboAL2pFSKiinIHAewVmcNUvWE/4nEo=;
+        s=korg; t=1640073271;
+        bh=/fA8V6JgRiDWkumm/hopQ4pZaBVTRbimgK2Lwl6kfao=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=maexsRSHcmReHiEI7Xjz+5SnMlFU7vOn5qNK5cqeoYgheLb5KMey9m1OJ8JKFBQaN
-         I7gkE0hD7FzEAK5GEhrOatB7utI9xcpT21JNpc9Zqj1nB7Cl7AYiQtxWaggzecUn7C
-         qI9bqezJnHFbmbC0j4tgYSp+JxysYbR7HFEjGkIU=
-Date:   Tue, 21 Dec 2021 08:51:54 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rui Miguel Silva <rui.silva@linaro.org>,
-        Bin Liu <b-liu@ti.com>, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Subject: Re: [PATCH 0/6] usb: sound/soc: Use platform_get_irq*() variants to
- fetch IRQ's
-Message-ID: <YcGHmhDWppgtLcTS@kroah.com>
-References: <20211220010411.12075-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        b=P1Qwd2zroW5yh8t8DOLztoal0WANig7q9yVL8s4+wsSe+pWIL+ryWJQp/ql+YhNHz
+         8ZuuJss1mYqXkiZ07g3Y8g53FV/kuQAH8C6C3BIPeldEolUKHva/q9M2e/3tYOwBWV
+         zv0OOEm4zPyPvnonpvHjrXe83CammY1hJAHRPafs=
+Date:   Tue, 21 Dec 2021 08:54:28 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [RFC]How else could a malicious device sabotage endpoints for
+ usbnet
+Message-ID: <YcGINEZn1NyYbtbD@kroah.com>
+References: <ad1ee829-401a-d051-1da8-f9e01caa7b85@suse.com>
+ <YbIlBl8Ay1rIED8p@kroah.com>
+ <71bfdff1-61d0-881e-a201-e91920750648@suse.com>
+ <YboCTzOTp49HuCxa@kroah.com>
+ <4739899e-54c9-c28a-502c-e3a85118c301@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211220010411.12075-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <4739899e-54c9-c28a-502c-e3a85118c301@suse.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 01:04:05AM +0000, Lad Prabhakar wrote:
-> Hi All,
+On Thu, Dec 16, 2021 at 11:16:26AM +0100, Oliver Neukum wrote:
 > 
-> This patch series aims to drop using platform_get_resource() for IRQ types
-> in preparation for removal of static setup of IRQ resource from DT core
-> code.
+> On 15.12.21 15:57, Greg KH wrote:
+> > On Wed, Dec 15, 2021 at 03:47:55PM +0100, Oliver Neukum wrote:
+> >> On 09.12.21 16:47, Greg KH wrote:
+> >>> Why not use usb_find_common_endpoints() and/or the other helper
+> >>> functions instead? that's what they were created for.
+> >> Hi,
+> >>
+> >> which one would I use? In this case I already know the endpoints
+> >> to be verified.
+> > I have no context here so I have no idea, sorry.
 > 
-> Dropping usage of platform_get_resource() was agreed based on
-> the discussion [0].
+> usbnet has three ways to match the endpoints
 > 
-> [0] https://patchwork.kernel.org/project/linux-renesas-soc/
-> patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> 1) the subdriver provides a method
 > 
-> Note: I have just build tested the patches.
+> 2) a heuristic to find the endpoints is used (that should be converted
+> to the new API)
+> 
+> 3) they are given nummerically by the subdriver
+> 
+> It turns out that #3 needs to verify the endpoints against malicious
+> devices.
+> So the following questions
+> 
+> a) should that verification go into usbcore
 
-I don't think "sound/soc" mattered here in your subject line :)
+the usb_find_common_endpoints() functions are in the usbcore for drivers
+to use for this type of problem.
 
-I'll go queue these up now, thanks.
+> b) what possible ways for a malicious device to spoof us can you come
+> up with
+
+Start with:
+	- invalid endpoint sizes and types
+	- invalid data being sent on valid endpoint types
+and you will catch almost all possible errors.
+
+thanks,
 
 greg k-h
