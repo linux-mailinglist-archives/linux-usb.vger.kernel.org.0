@@ -2,95 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 937DE47B833
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 03:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 728C847B854
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 03:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234736AbhLUCGi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 21:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234490AbhLUCDw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 21:03:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E568C08C5D1;
-        Mon, 20 Dec 2021 18:01:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 232C361362;
-        Tue, 21 Dec 2021 02:01:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A530C36AE5;
-        Tue, 21 Dec 2021 02:01:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640052116;
-        bh=gUYiOe2W9fOWmiSuSneBgJNt6HfaOsj+OcYlnUJjZqQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ejtRzi6070sbWQtLrJ3Plj9TX0RGPX0wMl93bnB9WgJZz6W0TIlMsdyhJsXr0Gncp
-         lyNN89EtWEokfXPYDUkFigPnzzX6HCBQoZ3/llKA3TClDempVPCgAhbEz4+4NItaAu
-         O9L94OXPEeuh6PeHDYp+obaHXqFllQ9WzvKuwMCkKoXECHq0UcJDPNJxcIV1s+SsHA
-         xTkMd1rhukmKNMs1InFJP7AfyI+2AuYsTLUp5YA+kbgNQt3LyFQPoopO41YidOt3Ri
-         5kF4mxkzA/OKc1LlrnsG7RrO4NpsneAkddrBMZqMrx69tQx0Nb9WDsIjdsjHI4mhTW
-         h9o62UpzkbInQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Greg Jesionowski <jesionowskigreg@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, woojung.huh@microchip.com,
-        UNGLinuxDriver@microchip.com, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 8/9] net: usb: lan78xx: add Allied Telesis AT29M2-AF
-Date:   Mon, 20 Dec 2021 21:01:22 -0500
-Message-Id: <20211221020123.117380-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211221020123.117380-1-sashal@kernel.org>
-References: <20211221020123.117380-1-sashal@kernel.org>
+        id S232424AbhLUCUl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 21:20:41 -0500
+Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:60506 "EHLO
+        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230060AbhLUCUk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 21:20:40 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R561e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V.HldxN_1640053238;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V.HldxN_1640053238)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 21 Dec 2021 10:20:38 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] usb: early: Fix an error code in xdbc_init()
+Date:   Tue, 21 Dec 2021 10:20:36 +0800
+Message-Id: <20211221022036.80706-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Greg Jesionowski <jesionowskigreg@gmail.com>
+When xdbc_trace("hardware not used anymore\n") is performed,
+ret should be assigned -ENODEV to indicate this.
 
-[ Upstream commit ef8a0f6eab1ca5d1a75c242c5c7b9d386735fa0a ]
+Clean up smatch warning:
+drivers/usb/early/xhci-dbc.c:972 xdbc_init() warn: missing error code
+'ret'
 
-This adds the vendor and product IDs for the AT29M2-AF which is a
-lan7801-based device.
-
-Signed-off-by: Greg Jesionowski <jesionowskigreg@gmail.com>
-Link: https://lore.kernel.org/r/20211214221027.305784-1-jesionowskigreg@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- drivers/net/usb/lan78xx.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/usb/early/xhci-dbc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-index 838b6fe9dfaaf..dc8afd5575fe2 100644
---- a/drivers/net/usb/lan78xx.c
-+++ b/drivers/net/usb/lan78xx.c
-@@ -74,6 +74,8 @@
- #define LAN7801_USB_PRODUCT_ID		(0x7801)
- #define LAN78XX_EEPROM_MAGIC		(0x78A5)
- #define LAN78XX_OTP_MAGIC		(0x78F3)
-+#define AT29M2AF_USB_VENDOR_ID		(0x07C9)
-+#define AT29M2AF_USB_PRODUCT_ID	(0x0012)
+diff --git a/drivers/usb/early/xhci-dbc.c b/drivers/usb/early/xhci-dbc.c
+index 4502108069cd..fcb05a8948fa 100644
+--- a/drivers/usb/early/xhci-dbc.c
++++ b/drivers/usb/early/xhci-dbc.c
+@@ -969,6 +969,7 @@ static int __init xdbc_init(void)
+ 	if (early_xdbc_console.index == -1 ||
+ 	    (early_xdbc_console.flags & CON_BOOT)) {
+ 		xdbc_trace("hardware not used anymore\n");
++		ret = -ENODEV;
+ 		goto free_and_quit;
+ 	}
  
- #define	MII_READ			1
- #define	MII_WRITE			0
-@@ -4015,6 +4017,10 @@ static const struct usb_device_id products[] = {
- 	/* LAN7801 USB Gigabit Ethernet Device */
- 	USB_DEVICE(LAN78XX_USB_VENDOR_ID, LAN7801_USB_PRODUCT_ID),
- 	},
-+	{
-+	/* ATM2-AF USB Gigabit Ethernet Device */
-+	USB_DEVICE(AT29M2AF_USB_VENDOR_ID, AT29M2AF_USB_PRODUCT_ID),
-+	},
- 	{},
- };
- MODULE_DEVICE_TABLE(usb, products);
 -- 
-2.34.1
+2.20.1.7.g153144c
 
