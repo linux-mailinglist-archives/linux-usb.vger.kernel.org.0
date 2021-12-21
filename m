@@ -2,32 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF9047B74E
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 03:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E139F47B79C
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 03:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233564AbhLUB6u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Dec 2021 20:58:50 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33252 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233327AbhLUB6k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 20:58:40 -0500
+        id S234553AbhLUCAo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Dec 2021 21:00:44 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55268 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233673AbhLUB7t (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Dec 2021 20:59:49 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7F2EB81100;
-        Tue, 21 Dec 2021 01:58:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E82BC36AE9;
-        Tue, 21 Dec 2021 01:58:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74E726134A;
+        Tue, 21 Dec 2021 01:59:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D71BAC36AE5;
+        Tue, 21 Dec 2021 01:59:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640051917;
-        bh=n/rUwWJ3LQB60ekhP9iVKQtgrWaqWVmHs1u2BgQClbk=;
+        s=k20201202; t=1640051987;
+        bh=rMP0bc7nMrZYTAq7itdYID9oTaaKe53xOIDh3bvtKzU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LqEXuhBJE2U2jOXVZajtgcr8ACX453d+/ZEdCUo/Dd4frMWzA+n1qVnFTtFSr1b4P
-         XLAqtIY36vmKgN+Vny/m4uaqni/jiNG7FpRhrn6RFtsegh/5202vUuwJMW+je7sT22
-         ++GEUigU5uFjIPXLNqbEPrYpHsS0nhdlmpsVhAAmwGJSzghJ0Ds4LS/z02uUCmeZN+
-         HZ5T8OxpTnEDc5QfOsRzTEshJ6euSuhn9qYjX6K7IfVRnAqw+5s3jJ2c3FD1X03xer
-         jS7WYEGgbwP4sSqyE0933Eu+0mFJl2nis/EsauZL+QQEP8hkssI2LzZmcSAciVserV
-         QCEA8/zEaF8pw==
+        b=mUTCxet5OjVjp2xC5wmKtviba3HOXydyCJpC8JvsJZucqPF7/krWJmmkjSLykec1z
+         +jwhoL0nXC5LHX9HnhFX+pjCsW/CKKoWD6KUuEByZFy4mpfP7WUs19UK1GzUPIgO8O
+         WNJauQ64C+m6gkuI0qNdpYVg6z4ZPxikbX8RW1yEprVHEj3SWCIHKk1y3iKzXrJf/y
+         iyxmhcPWnUXZdTJZ0Gu9Z34F8nqSzl/J+XcDiWybcIVGpZUvYM8iej5uNGnSiQVnoy
+         ERXZyE5GL6WKA4D3Lw0Sow5vgwIkxxH4BJPGhVH+aWM+K3Euqsi7zvJAA7GOYypk7L
+         0xbTMGsdOWgnA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Jesionowski <jesionowskigreg@gmail.com>,
@@ -35,12 +35,12 @@ Cc:     Greg Jesionowski <jesionowskigreg@gmail.com>,
         Sasha Levin <sashal@kernel.org>, woojung.huh@microchip.com,
         UNGLinuxDriver@microchip.com, davem@davemloft.net,
         netdev@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 21/29] net: usb: lan78xx: add Allied Telesis AT29M2-AF
-Date:   Mon, 20 Dec 2021 20:57:42 -0500
-Message-Id: <20211221015751.116328-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 16/19] net: usb: lan78xx: add Allied Telesis AT29M2-AF
+Date:   Mon, 20 Dec 2021 20:59:11 -0500
+Message-Id: <20211221015914.116767-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211221015751.116328-1-sashal@kernel.org>
-References: <20211221015751.116328-1-sashal@kernel.org>
+In-Reply-To: <20211221015914.116767-1-sashal@kernel.org>
+References: <20211221015914.116767-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -65,10 +65,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+)
 
 diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-index a0401a9dade5b..3e1a83a22fdd6 100644
+index c666e990900b9..6f7b70522d926 100644
 --- a/drivers/net/usb/lan78xx.c
 +++ b/drivers/net/usb/lan78xx.c
-@@ -76,6 +76,8 @@
+@@ -64,6 +64,8 @@
  #define LAN7801_USB_PRODUCT_ID		(0x7801)
  #define LAN78XX_EEPROM_MAGIC		(0x78A5)
  #define LAN78XX_OTP_MAGIC		(0x78F3)
@@ -77,7 +77,7 @@ index a0401a9dade5b..3e1a83a22fdd6 100644
  
  #define	MII_READ			1
  #define	MII_WRITE			0
-@@ -4734,6 +4736,10 @@ static const struct usb_device_id products[] = {
+@@ -4142,6 +4144,10 @@ static const struct usb_device_id products[] = {
  	/* LAN7801 USB Gigabit Ethernet Device */
  	USB_DEVICE(LAN78XX_USB_VENDOR_ID, LAN7801_USB_PRODUCT_ID),
  	},
