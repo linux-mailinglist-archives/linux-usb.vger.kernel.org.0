@@ -2,78 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A8647BD0E
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 10:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7548147BED9
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 12:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236469AbhLUJmA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Dec 2021 04:42:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35994 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbhLUJmA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Dec 2021 04:42:00 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0B1C061574;
-        Tue, 21 Dec 2021 01:42:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QrPDIHV6JKNuTSPi/TN4HuQpSRR4DdA0vk+MOGmkO44=; b=jVQVo1vfLncyRnh+JyueTcmffS
-        kudGfbKBnmC15ob8RkoYAIK63151jaMVntkYbLmn74dx2jhKKAaySCbkmdTcRKoNdI9+RfgjAej9i
-        c2Fy394CEC6yYR0THGvRFl7VIWqeFjdWedrG/SdpTSSxNWDjFd+AiANLVoIRyCXw2Z3lXnrlGrWBK
-        Meb7Rrek2tSWgBNoyjfsaf2eB2wq24/XaxTCD3qNVg2yUtMmWFf/pYzXVrvaLVyGpcfhKFkyUVG0X
-        Ua99fMmzccx0vxFtdIYTqNn6Kl/9fR3O/htcCn/0s6R7Wz2WVIIM2VwF57rDnTcNjo1XdXpDhiMzZ
-        704lt1kQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzbeT-002hq3-T7; Tue, 21 Dec 2021 09:41:46 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 256EC3002BE;
-        Tue, 21 Dec 2021 10:41:45 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 159BB2C9C5155; Tue, 21 Dec 2021 10:41:45 +0100 (CET)
-Date:   Tue, 21 Dec 2021 10:41:45 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: Re: earlyprintk=xdbc seems broken
-Message-ID: <YcGhWRPSbxNC4Qn9@hirez.programming.kicks-ass.net>
-References: <YajkzwmWQua3Kh6A@hirez.programming.kicks-ass.net>
- <105f35d2-3c53-b550-bfb4-aa340d31128e@linux.intel.com>
- <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
- <972a0e28-ad63-9766-88da-02743f80181b@intel.com>
- <Yao35lElOkwtBYEb@kroah.com>
- <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
- <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
- <YcGhIm7yqYPk4Nuu@hirez.programming.kicks-ass.net>
+        id S231550AbhLUL1L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Dec 2021 06:27:11 -0500
+Received: from mga01.intel.com ([192.55.52.88]:34177 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231459AbhLUL1K (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Dec 2021 06:27:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640086030; x=1671622030;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/PBmsyvrLnAz5mQlOvQDkaP1i0ezFpZcS059KYCSU3c=;
+  b=gC7yPy5zIqlvEQhQEND9WBsN1WGeLWLI95B2pmHWjT/EyBiEx+JHnLoH
+   7vKn5VOZgheonsW45Rnjt0gfdsXDvr4sufDcUOxyXsi7GwyTCxhdEILZZ
+   zWt/4LZv8RNmwvrGk0TrcTiHdoIdoXYPapBiYq1VnJa4N0WXdi5/yGCcN
+   coR27t9Ya8doEh0QnVItHQvZ/wmxfi+Uigv1kGUnmymklk68v+wCs3YmD
+   6iE4XZ2EanPb3LAFU+4fXq3SF99zFS4D7wDdyfuoRQWt1kCash5/khw+x
+   +oVtULidehIFDQUjYPxOEdsalt0KD14N99u5lFKrMtuXDsOw3rTPgDxeE
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="264566354"
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="264566354"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 03:27:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="467759706"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by orsmga006.jf.intel.com with ESMTP; 21 Dec 2021 03:27:09 -0800
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/1] xhci fix for usb-linus
+Date:   Tue, 21 Dec 2021 13:28:24 +0200
+Message-Id: <20211221112825.54690-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcGhIm7yqYPk4Nuu@hirez.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 10:40:50AM +0100, Peter Zijlstra wrote:
-> diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-> index 2e076a459a0c..cd8b5cac542a 100644
-> --- a/arch/x86/kernel/tsc.c
-> +++ b/arch/x86/kernel/tsc.c
-> @@ -1485,6 +1485,7 @@ void __init tsc_early_init(void)
->  	loops_per_jiffy = get_loops_per_jiffy();
->  
->  	tsc_enable_sched_clock();
-> +	use_tsc_delay();
->  }
->  
->  void __init tsc_init(void)
+Hi Greg
 
-Thomas, the above hunk seems right to me; should I make a proper patch
-ouf of that or did I overlook something obvious ?
+One small patch, remove an extra quirk set for Fresco FL1100 controllers.
+External docks with this controller have issues enumerating usb devices.
+
+Nice if it could still make 5.16, if not then 5.17 is fine
+
+Thanks
+-Mathias
+
+Mathias Nyman (1):
+  xhci: Fresco FL1100 controller should not have BROKEN_MSI quirk set.
+
+ drivers/usb/host/xhci-pci.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+-- 
+2.25.1
+
