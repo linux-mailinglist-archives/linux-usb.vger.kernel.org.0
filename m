@@ -2,90 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62DB847C1CA
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 15:46:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A04147C22D
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 16:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238606AbhLUOqh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Dec 2021 09:46:37 -0500
-Received: from mail-m17643.qiye.163.com ([59.111.176.43]:34298 "EHLO
-        mail-m17643.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232589AbhLUOqg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Dec 2021 09:46:36 -0500
-DKIM-Signature: a=rsa-sha256;
-        b=VY5fRUb86ni5GZJ9N0/dKvpexszqjYn8Qk29RcrNg05Uj/PQE4yOFfQuWd9S2TLIUuNG8wyrHCM81cE8SW+rc6C3EUZxX+tJpggfVE1I+Co4OgmgyaxEOrhd6tKlYW6fVShjSGzxWZTBNTUA6A7huSBUwVsCjezgGIjyQGz5CVw=;
-        s=default; c=relaxed/relaxed; d=vivo.com; v=1;
-        bh=E5eZchx2crf4J/jjmBKQpXaLhNDywtHvB7uoyedsUok=;
-        h=date:mime-version:subject:message-id:from;
-Received: from vivo-600-G6.vivo.xyz (unknown [58.251.74.232])
-        by mail-m17643.qiye.163.com (Hmail) with ESMTPA id 8ACA97E035E;
-        Tue, 21 Dec 2021 22:46:34 +0800 (CST)
-From:   Yaqin Pan <akingchen@vivo.com>
-To:     robh@kernel.org
-Cc:     akingchen@vivo.com, balbi@kernel.org, devicetree@vger.kernel.org,
-        gregkh@linuxfoundation.org, kernel@vivo.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        robh+dt@kernel.org
-Subject: Re: [PATCH v2 2/2] dt-bindings: usb: document snps,dis_split_quirk property in dwc3
-Date:   Tue, 21 Dec 2021 22:45:58 +0800
-Message-Id: <20211221144558.4264-1-akingchen@vivo.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <1640034352.478511.3900650.nullmailer@robh.at.kernel.org>
-References: <1640034352.478511.3900650.nullmailer@robh.at.kernel.org>
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
-        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWRoYSUxWQh8fQx9OGhoYSx
-        hOVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWVVLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nj46Sww4Tz5LEyg6PBo3PgEf
-        SgwaCxBVSlVKTU9LS0JMQkJOSktNVTMWGhIXVRoQEhUcGBMeFTsNEg0UVRgUFkVZV1kSC1lBWU5D
-        VUlOSlVMT1VJSElZV1kIAVlBSExJTTcG
-X-HM-Tid: 0a7ddd755853d999kuws8aca97e035e
+        id S238887AbhLUPDz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Dec 2021 10:03:55 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47502 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238874AbhLUPDz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Dec 2021 10:03:55 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACEA961630
+        for <linux-usb@vger.kernel.org>; Tue, 21 Dec 2021 15:03:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 921AFC36AE9;
+        Tue, 21 Dec 2021 15:03:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640099034;
+        bh=Eh6aRsQ9T0rFidKKB796GS5k2+IQc4rFHQx50V4B7no=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2rntMbnksqVu5gsvFMfWVqL8FbMj9AQdzVrZlJ7TOJkvU8UBraSrVb4of1OZChE7s
+         qFWB9Sr+NtzsSRabAFkD/Cxvz9OxtqVAEr0uJUDIlBds442m5zHgv0iBb4k/YteHVZ
+         VJsoa0uefzEGqYEn4v1J9LeKvbz+ORCAzFUJ2wz8=
+Date:   Tue, 21 Dec 2021 16:03:51 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org,
+        Chris Hixon <linux-kernel-bugs@hixontech.com>
+Subject: Re: [PATCH v2] usb: typec: ucsi: Only check the contract if there is
+ a connection
+Message-ID: <YcHs11T7q//4FrWo@kroah.com>
+References: <20211221140352.45501-1-heikki.krogerus@linux.intel.com>
+ <2723c9a3-a932-3634-422b-3fbd93550bf8@leemhuis.info>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2723c9a3-a932-3634-422b-3fbd93550bf8@leemhuis.info>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->> Add snps,dis_split_quirk property for dwc3 controller
->> 
->> Signed-off-by: Yaqin Pan <akingchen@vivo.com>
->> ---
->>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 6 ++++++
->>  1 file changed, 6 insertions(+)
->> 
->
->My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->on your patch (DT_CHECKER_FLAGS is new in v5.13):
->
->yamllint warnings/errors:
->./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:229:3: [error] duplication of key "snps,dis-split-quirk" in mapping (key-duplicates)
->
->dtschema/dtc warnings/errors:
->make[1]: *** Deleting file 'Documentation/devicetree/bindings/usb/snps,dwc3.example.dts'
->Traceback (most recent call last):
->  File "/usr/local/bin/dt-extract-example", line 45, in <module>
->    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
->  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
->    return constructor.get_single_data()
->  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 121, in get_single_data
->    return self.construct_document(node)
->  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 131, in construct_document
->    for _dummy in generator:
->  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 674, in construct_yaml_map
->    value = self.construct_mapping(node)
->  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 445, in construct_mapping
->    return BaseConstructor.construct_mapping(self, node, deep=deep)
->  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 263, in construct_mapping
->    if self.check_mapping_key(node, key_node, mapping, key, value):
->  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 294, in check_mapping_key
->    raise DuplicateKeyError(*args)
->ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
->  in "<unicode string>", line 32, column 3
->found duplicate key "snps,dis-split-quirk" with value "{}" (original value: "{}")
->  in "<unicode string>", line 229, column 3
+On Tue, Dec 21, 2021 at 03:39:04PM +0100, Thorsten Leemhuis wrote:
+> On 21.12.21 15:03, Heikki Krogerus wrote:
+> > The driver must make sure there is an actual connection
+> > before checking details about the USB Power Delivery
+> > contract. Those details are not valid unless there is a
+> > connection.
+> > 
+> > This fixes NULL pointer dereference that is caused by an
+> > attempt to register bogus partner alternate mode that the
+> > firmware on some platform may report before the actual
+> > connection.
+> > 
+> > Reported-by: Chris Hixon <linux-kernel-bugs@hixontech.com>
+> > Fixes: 6cbe4b2d5a3f ("usb: typec: ucsi: Check the partner alt modes always if there is PD contract")
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=215117
+> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > ---
+> > 
+> > Hi,
+> > 
+> > Instead of using the "BugLink" tag, I'm now using "Link" tag with the
+> > link to the bug as requested.
+> 
+> Thx!
+> 
+> > There was a request to have also another Link tag pointing to some
+> > other discussion on the mailing list, but I failed to understand what
+> > was the point with that - I also didn't find any commits where
+> > something like that had been used before.
+> 
+> There are quite a few commits that use more that two "Link" tags, as
+> they should point to "related discussions or any other background
+> information behind the change" that "can be found on the web" (Quotes
+> from Documentation/process/submitting-patches.rst) -- hence there is no
+> limit. That being said:
+> 
+> > I may be mistaken here, but I got the impression that you create the
+> > mailing list discussion
+> 
+> You are mistaken: I created it because the bugzilla ticket was ignored
+> in bugzilla for weeks and might have forgotten otherwise -- no wonder,
+> was bugzilla.kernel.org is not the official place to report USB bugs
+> according to the MAINTAINERS file.
+> 
+> > just so you can have the extra Link tag
+> > pointing to it, and that Link tag you want only because you have made
+> > your scripts rely on it.
+> 
+> They rely on it as almost all subsystems expect bug to be reported by
+> mail, as they are instructed by
+> Documentation/admin-guide/reporting-issues.rst
+> 
+> > The extra email thread in any case does not seem to contain any real
+> > additional information that the bug report does not have, so the extra
+> > Link tag pointing to it does not provide any real value on top of the
+> > link to bug itself.
+> 
+> In this case that's true, as I have to tell regzbot about the fix then
+> manually (the plan it to make regzbot also detect links to
+> bugzilla.kernel.org, but I fear I have no time to work on that in the
+> next few weeks :-/ ). But in similar cases it's different, as there the
+> developers continued discussing the issue by mail -- then it's
+> definitely worth linking there as well.
 
-Sorry, i make a mistake, and the snps,dis_split_quirk should be snps,sprs-ctrl-trans-quirk.
-And i will renew the patch.
+So for this case, what type of tag should I add here to get rezbot to
+manually pick this up?
 
->To suppress this check see:
->    http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
->
->make[1]: *** [Documentation/devicetree/bindings/Makefile:25: Documentation/devicetree/bindings/usb/snps,dwc3.example.dts] Error 1
->make[1]: *** Waiting for unfinished jobs....
+confused,
 
+greg k-h
