@@ -2,98 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F1547BF4A
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 13:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8812F47BF63
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Dec 2021 13:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237372AbhLUMEl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Dec 2021 07:04:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237368AbhLUMEl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Dec 2021 07:04:41 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32A2C06173F
-        for <linux-usb@vger.kernel.org>; Tue, 21 Dec 2021 04:04:40 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id v203so38072084ybe.6
-        for <linux-usb@vger.kernel.org>; Tue, 21 Dec 2021 04:04:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=CRvYsPeGacwtMAqnqDt7OdhTYd1/MFAd0Bf8vLmD430=;
-        b=bOVp60YDE/ojr+Ry3lLcpHulnyjHi5PuotRC3qJodw6C2KSe+2O2gXuNGH8FSV0oDG
-         g9WY9Ks9UJ+pjbC4GBUYlzu08CdOSSrIKwEh9sNkSwAVtEP6UP4BTXxeolJ5CsFKVW6B
-         oMSZMTrQICzE/mxPC4nV4RS5Bq79DaWcLria3OlFly9T4C2k/NyX28dPbZm4G2azIBLe
-         /ekXSBNeXQqPJUHytlNjTO7cM1tJTcO1NtaAscY6kD21Z1/2HmLvlPXQ85Gx0a9wxg+y
-         AXZmgRQlQ+fS9NkpAu/o72BjdJrfbQ8oom5HkLFri/A5TrLnHg/ok4u8LNzupYP6pwKT
-         bjnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=CRvYsPeGacwtMAqnqDt7OdhTYd1/MFAd0Bf8vLmD430=;
-        b=yBWmviwK9zYBEpzH9PWGt6oJ1XzoSYfmfuFpnQyVCo+QYJMFwstLUhwxo08tQdn0B4
-         dKhEav1ko2/32zXA3YxiQgmHW9OdTTaNMhCfl3fsY8lNeK0pdzBRLL2XeQUdGK7Jw/wM
-         zV7kHdZg/vfvw1Fko9c/DCx8ROkUkgESIcMz9FooDX1to7oPp4n6TPntAhOIqwk1wu4v
-         gJrlyn+zPo5ruwYQW7UW33L37mduR+uU8fh7mczCronldUyRmTVnPREVV4PSbZKko9v1
-         PaRrF03tw1TQ81uTkiar9OuysMn9EGzXx/9kHoc/VKl57FaU9dJPfU26i61uz4pFQAal
-         kM9Q==
-X-Gm-Message-State: AOAM53383jGejZECyEywr/Xm7S1s5HRtrcqUuamzItNREyHL6Wy6qrZ5
-        n0CAbv0zLY/vrre4TJzydz4A7lGIKq+g8pUwbCM=
-X-Google-Smtp-Source: ABdhPJzjHPDRHXVIF5KIdhdRl4YRL+3FmNr4+oD/Betk4OvoC/uCttGbWzkufIiwOBQTQixSySzM8lP+zAYAyE8r7PM=
-X-Received: by 2002:a25:e692:: with SMTP id d140mr4371029ybh.311.1640088280079;
- Tue, 21 Dec 2021 04:04:40 -0800 (PST)
+        id S234405AbhLUMH6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Dec 2021 07:07:58 -0500
+Received: from mga04.intel.com ([192.55.52.120]:60098 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230380AbhLUMH6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Dec 2021 07:07:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640088478; x=1671624478;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Z+3UOPNze5WBOvoIzscH9ZGtz5uYzjD08yP9m/w8wEk=;
+  b=nvs1hYrsYbkhJ38eMfULauTMbmLWErLhzsz7/hwoWmJcEHyLg5vTo28C
+   3fDk+Gn2IfqIHZO4WYrjBk89U3fmtNpWnISe0L6Rg0qmrCNhYDDSYhNLE
+   d4R72qWCPfVfrSHCpfbmHEBuBYS0ut46DRNOeJDdnnmfBCG74qfsH/BzN
+   tScmfzSlMsyyQjVEVVt/MJFkwB4gJJ3o2e6JUYiUWpl/HE3FlcxhKw7ok
+   tXqCDlV4XWW0vxv2O61eAyUCseuxTJdbnZMLMs1D+DCQgiAeWrmRaWkzR
+   lLg1quJt5WKPqi/5ZQtVg1ojYUjWyFBdSllCl1v5h0RrR8p00CJaPiGSw
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="239128967"
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="239128967"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 04:07:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="508051990"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 21 Dec 2021 04:07:56 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzdvv-00094I-P8; Tue, 21 Dec 2021 12:07:55 +0000
+Date:   Tue, 21 Dec 2021 20:07:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [usb:usb-testing 5/9] drivers/usb/renesas_usbhs/mod.c:195:13:
+ warning: variable 'intenb0' set but not used
+Message-ID: <202112211923.EfvDjyKL-lkp@intel.com>
 MIME-Version: 1.0
-Received: by 2002:a81:5755:0:0:0:0:0 with HTTP; Tue, 21 Dec 2021 04:04:39
- -0800 (PST)
-Reply-To: general.floradarpino50@yahoo.com
-From:   "general.flora" <mr.sohalarfan.latif888@gmail.com>
-Date:   Tue, 21 Dec 2021 04:04:39 -0800
-Message-ID: <CAJLrsjqtmP=Zw7WVSoE+pHX3TYJi9a1uJc1L9Bx5YC75xCodhg@mail.gmail.com>
-Subject: STRICTLY AND CONFIDENT.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Beloved.
-I am General.Flora from the USA working in the US Army but presently
-in Yemen, for a peacekeeping mission, I have something very important
-to discuss with you. Some money in various currencies where discovered
-in barrels at a farm house in the middle East during a rescue
-operation in Iraq  War and it was agreed by Sergeant Kenneth Buff and
-myself that some part of these money be shared between us, I was given
-a total of ($13.5 Million US Dollars) as my own share , I kept this
-money in a security company for a long while now which i declared and
-deposit as my personal and family  treasure and it has been secured
-and protected for years now with the security company.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+head:   ce1d37cb7697abcc3d892558acd33a1333596534
+commit: 22ae6415c702680b1d3170717ce34ee31656f8b6 [5/9] usb: renesas_usbhs: Use platform_get_irq() to get the interrupt
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20211221/202112211923.EfvDjyKL-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=22ae6415c702680b1d3170717ce34ee31656f8b6
+        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+        git fetch --no-tags usb usb-testing
+        git checkout 22ae6415c702680b1d3170717ce34ee31656f8b6
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/usb/renesas_usbhs/
 
-Now, the WAR in Iraq is over, and all possible problems that could
-have emanated from the shared money has been totally cleaned up and
-all files closed, all what was discovered in the Middle East is no
-more discussed, i am ready to retire from active services by the end
-of next month, but, i need a trustworthy person that can help me take
-possession of this funds and keep it safe while i work on my
-retirement letter to join you so that we could discuss possible
-business partnership together with the money. You can confirm the
-genuineness of the findings by clicking on this website.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-http://news.bbc.co.uk/2/hi/middle_east/2988455.stm
+All warnings (new ones prefixed by >>):
 
-I=E2=80=99m seeking your kind assistance to move the sum of($13.5 Million U=
-S
-Dollars) to you as long as you will assure me that the money will be
-safe in your care until I complete my service here in (Yemen) before
-the end of next month. The most important thing is; =E2=80=9CCan I Trust
-you=E2=80=9D?As an officer on  ACTIVE DUTY I am not allowed to have access =
-to
-money, therefore, I have declared the content of the consignment as
-personal and my treasure. I would like to deliver to you. You will be
-rewarded with 30% of this funds for your assistance, all that I
-require is your mutual trust between us. Don=E2=80=99t betray me when you
-receive the consignment.
+   drivers/usb/renesas_usbhs/mod.c: In function 'usbhs_status_get_each_irq':
+>> drivers/usb/renesas_usbhs/mod.c:195:13: warning: variable 'intenb0' set but not used [-Wunused-but-set-variable]
+     195 |         u16 intenb0, intenb1;
+         |             ^~~~~~~
 
-Sincerely,
-General.Flora.
+
+vim +/intenb0 +195 drivers/usb/renesas_usbhs/mod.c
+
+f1407d5c66240b Kuninori Morimoto  2011-04-04  190  
+697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  191  static int usbhs_status_get_each_irq(struct usbhs_priv *priv,
+f1407d5c66240b Kuninori Morimoto  2011-04-04  192  				     struct usbhs_irq_state *state)
+f1407d5c66240b Kuninori Morimoto  2011-04-04  193  {
+f1407d5c66240b Kuninori Morimoto  2011-04-04  194  	struct usbhs_mod *mod = usbhs_mod_get_current(priv);
+697d5c004e3901 Shimoda, Yoshihiro 2012-08-20 @195  	u16 intenb0, intenb1;
+c4d8199ba1a7aa Yoshihiro Shimoda  2014-08-22  196  	unsigned long flags;
+f1407d5c66240b Kuninori Morimoto  2011-04-04  197  
+c4d8199ba1a7aa Yoshihiro Shimoda  2014-08-22  198  	/********************  spin lock ********************/
+c4d8199ba1a7aa Yoshihiro Shimoda  2014-08-22  199  	usbhs_lock(priv, flags);
+f1407d5c66240b Kuninori Morimoto  2011-04-04  200  	state->intsts0 = usbhs_read(priv, INTSTS0);
+697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  201  	intenb0 = usbhs_read(priv, INTENB0);
+88a25e02f35e56 Nobuhiro Iwamatsu  2015-01-09  202  
+88a25e02f35e56 Nobuhiro Iwamatsu  2015-01-09  203  	if (usbhs_mod_is_host(priv)) {
+88a25e02f35e56 Nobuhiro Iwamatsu  2015-01-09  204  		state->intsts1 = usbhs_read(priv, INTSTS1);
+697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  205  		intenb1 = usbhs_read(priv, INTENB1);
+672bfdaa310004 Arnd Bergmann      2015-05-22  206  	} else {
+672bfdaa310004 Arnd Bergmann      2015-05-22  207  		state->intsts1 = intenb1 = 0;
+88a25e02f35e56 Nobuhiro Iwamatsu  2015-01-09  208  	}
+697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  209  
+5ea68d541df200 Kuninori Morimoto  2011-04-28  210  	/* mask */
+5ea68d541df200 Kuninori Morimoto  2011-04-28  211  	if (mod) {
+f1407d5c66240b Kuninori Morimoto  2011-04-04  212  		state->brdysts = usbhs_read(priv, BRDYSTS);
+f1407d5c66240b Kuninori Morimoto  2011-04-04  213  		state->nrdysts = usbhs_read(priv, NRDYSTS);
+f1407d5c66240b Kuninori Morimoto  2011-04-04  214  		state->bempsts = usbhs_read(priv, BEMPSTS);
+f1407d5c66240b Kuninori Morimoto  2011-04-04  215  
+f1407d5c66240b Kuninori Morimoto  2011-04-04  216  		state->bempsts &= mod->irq_bempsts;
+f1407d5c66240b Kuninori Morimoto  2011-04-04  217  		state->brdysts &= mod->irq_brdysts;
+f1407d5c66240b Kuninori Morimoto  2011-04-04  218  	}
+c4d8199ba1a7aa Yoshihiro Shimoda  2014-08-22  219  	usbhs_unlock(priv, flags);
+c4d8199ba1a7aa Yoshihiro Shimoda  2014-08-22  220  	/********************  spin unlock ******************/
+697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  221  
+697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  222  	return 0;
+5ea68d541df200 Kuninori Morimoto  2011-04-28  223  }
+f1407d5c66240b Kuninori Morimoto  2011-04-04  224  
+
+:::::: The code at line 195 was first introduced by commit
+:::::: 697d5c004e390102efbf9320a5416873679bea81 usb: renesas_usbhs: modify the irq handler for sharing irq
+
+:::::: TO: Shimoda, Yoshihiro <yoshihiro.shimoda.uh@renesas.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
