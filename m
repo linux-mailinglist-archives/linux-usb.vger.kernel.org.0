@@ -2,96 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3549E47CCD7
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Dec 2021 07:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9FD47CCDA
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Dec 2021 07:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242689AbhLVGKZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Dec 2021 01:10:25 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:20260 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239218AbhLVGKY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Dec 2021 01:10:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1640153424; x=1671689424;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=aVYPNj9FnpbJdkBdwW17uIxyL8/YiwYGHnGCnoJTjAE=;
-  b=bExXnS7fbo+tEyoUx1dTn5lkilh5+Vvsu8HQV4U3MQ2sIhGDTLozmsyb
-   ScUyFyjaqkwnkKWYeo/gmJbwyoBsC+0508iuE5XJ7jp+ls1Zzljd0L7AT
-   P5qlutWMpnS2RL+oeoAUxdqZFPX3lEWcC0PWQH63NviwaoY4AKprieZml
-   s=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 21 Dec 2021 22:10:23 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 22:10:07 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 21 Dec 2021 22:10:07 -0800
-Received: from c-sanm-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 21 Dec 2021 22:10:02 -0800
-From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: [PATCH v5] usb: host: xhci-plat: Set XHCI_SKIP_PHY_INIT quirk for DWC3 controller
-Date:   Wed, 22 Dec 2021 11:39:43 +0530
-Message-ID: <1640153383-21036-1-git-send-email-quic_c_sanm@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        id S242698AbhLVGKz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Dec 2021 01:10:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242700AbhLVGKv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Dec 2021 01:10:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523D8C06173F;
+        Tue, 21 Dec 2021 22:10:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB91261862;
+        Wed, 22 Dec 2021 06:10:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B69D7C36AE5;
+        Wed, 22 Dec 2021 06:10:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640153449;
+        bh=PRueReowiqN/glmJ/igdfzlq6ZtCOukzZLZI+1fvlK0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kDImUZXPVtH54GwI2E27kxhwJ/V8B4JXrtkWT8/7SDL2CXlqrlVJb4mbSh+N+pf+9
+         UoXrDkf0eZM02Q4twUtaqyUjkzGFzkB4nUas32xL0iGQdSaaK7Ii8KDEJBc6GhDSF1
+         MFtNSRToXv619JdkHgTgCxH4n0KYT+24q/z5L004=
+Date:   Wed, 22 Dec 2021 07:10:44 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH] usb: renesas_usbhs: Fix unused variable warning
+Message-ID: <YcLBZBwIZkhhKxGD@kroah.com>
+References: <20211221171532.29881-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221171532.29881-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
-Runtime suspend of phy drivers was failing from DWC3 driver as runtime
-usage value is 2 because the phy is initialized from DWC3 and HCD core.
-DWC3 manages phy in their core drivers. Set this quirk to avoid phy
-initialization in HCD core.
+On Tue, Dec 21, 2021 at 05:15:32PM +0000, Lad Prabhakar wrote:
+> This patch fixes the below warning:
+> 
+> drivers/usb/renesas_usbhs/mod.c: In function 'usbhs_status_get_each_irq':
+> drivers/usb/renesas_usbhs/mod.c:195:13: warning: variable 'intenb0'
+> set but not used [-Wunused-but-set-variable]
+>   195 |         u16 intenb0, intenb1;
+>       |
+> 
+> Fixes: 33e4245ee919 ("usb: renesas_usbhs: Use platform_get_irq() to get the interrupt")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  drivers/usb/renesas_usbhs/mod.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/renesas_usbhs/mod.c b/drivers/usb/renesas_usbhs/mod.c
+> index f2ea3e1412d2..3919e350b487 100644
+> --- a/drivers/usb/renesas_usbhs/mod.c
+> +++ b/drivers/usb/renesas_usbhs/mod.c
+> @@ -192,13 +192,12 @@ static int usbhs_status_get_each_irq(struct usbhs_priv *priv,
+>  				     struct usbhs_irq_state *state)
+>  {
+>  	struct usbhs_mod *mod = usbhs_mod_get_current(priv);
+> -	u16 intenb0, intenb1;
+>  	unsigned long flags;
+> +	u16 intenb1;
+>  
+>  	/********************  spin lock ********************/
+>  	usbhs_lock(priv, flags);
+>  	state->intsts0 = usbhs_read(priv, INTSTS0);
+> -	intenb0 = usbhs_read(priv, INTENB0);
 
-Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
----
-v5:
-Added comment to explain the change done.
-v4:
-Changed pdev->dev.parent->of_node to sysdev->of_node
+Did you just break the hardware?  Reading is often times needed and
+clang has no idea about hardware issues.  We need proof in the changlog
+that this really is safe to do.
 
- drivers/usb/host/xhci-plat.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+How did you test your change?
 
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index c1edcc9..e6014d4 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -327,6 +327,14 @@ static int xhci_plat_probe(struct platform_device *pdev)
- 					 &xhci->imod_interval);
- 	}
- 
-+	/*
-+	 * Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
-+	 * DWC3 manages phy in their core drivers. Set this quirk to avoid phy
-+	 * initialization in HCD core.
-+	 */
-+	if (of_device_is_compatible(sysdev->of_node, "snps,dwc3"))
-+		xhci->quirks |= XHCI_SKIP_PHY_INIT;
-+
- 	hcd->usb_phy = devm_usb_get_phy_by_phandle(sysdev, "usb-phy", 0);
- 	if (IS_ERR(hcd->usb_phy)) {
- 		ret = PTR_ERR(hcd->usb_phy);
--- 
-2.7.4
+thanks,
 
+greg k-h
