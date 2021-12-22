@@ -2,116 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0AC447CE94
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Dec 2021 10:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E4F747CEEE
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Dec 2021 10:14:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243556AbhLVJBd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Dec 2021 04:01:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
+        id S243808AbhLVJOx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Dec 2021 04:14:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243554AbhLVJBa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Dec 2021 04:01:30 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28FE6C06173F;
-        Wed, 22 Dec 2021 01:01:30 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id e136so4661694ybc.4;
-        Wed, 22 Dec 2021 01:01:30 -0800 (PST)
+        with ESMTP id S243798AbhLVJOv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Dec 2021 04:14:51 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D6FC061574;
+        Wed, 22 Dec 2021 01:14:50 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id o63-20020a17090a0a4500b001b1c2db8145so5198667pjo.5;
+        Wed, 22 Dec 2021 01:14:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ysosXtFfyBojHJLz2B9nDDvXFhZv0++ox9CFVTznA+c=;
-        b=JsUN+RmQivZezcs9oQRRqoXfB599vatZ0Ep+6oVEJ0sx8pgAdz6tqV22dkNqhKeYXJ
-         zTWTgE4Hw53v60oDlu3eK9AGY4MLc8mAKO9uWy6Jn4mYYgm1/4ypeQQOJg5DjOB8zp+l
-         bLAxqDbG4newwic8yL6vKmit9GrPpFA9dET/6J2COBSJCAQYfBXvgge5/u1+YED9TZi5
-         lotcsIMqCDI37QJzDUsUaJESuuHRvp9mYOc/iTVXPgoOD/zlgH8qMoWnkxXK+YXc/9q5
-         p9kzPDt2zzE4gRFeSRYD8p+1eFpTgLddYeeAyWJqLxgcg9Heza2geY+cJy4iHu1AHM6w
-         JINw==
+        h=from:to:cc:subject:date:message-id;
+        bh=OSssIMDDFqUl1GaxKIZoLI2sUJGkDJOGUapWzIMb5/8=;
+        b=Cvr73gx342I4ibMWljPtMFTugqY8eShifSiun7fCw+d657o27NPMycuHCQDePGeYOA
+         jmbL/qL6VhH5kLzKvYZv9gQOHDp+n8b6uZLxwBZpB0uHgWRSnpYLSFnFbpq+01I5W5/K
+         GFmA6sYdHnh5FbiDPCFWlGsx41XepiqH8j8BF8xBTCPKY+e0e+InD3Me+s0qx24auBq+
+         mVsfkgaI56Ga6HU3c4fwPrNyr70UjNtKLqDn8Xy7md0oDLQKOBkbXuf6Wv5kSYyU3vZ7
+         ps1LNINxpSMnxxs3YL6JwnADc1dJ9pyWTnXMRu0zfcEIcMlrBuFNKc0B6Jm/Ut3tQ6rP
+         CVFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ysosXtFfyBojHJLz2B9nDDvXFhZv0++ox9CFVTznA+c=;
-        b=C18/EJHWD4PA4TYJxyVeOkknX4ePBpQYvRggztVlKGKxU0Ts9IysdQh0suTVhZH2HA
-         Ys9aYppTwSLNsPV3WA+plnlHGGkzAaMfGHc1vqAi/IZbxhnh4GVRYhYNfOkV+RQfj55D
-         QuwZZVS7pgRlNQTRQ7VJ+kf7eul7sVDLVih9gjY8jvmOPMlV3LfXUIndJr8vKAMA5y/1
-         jdy3gwCCy1Kh9/s7JJMv8QlJr1Ha5o9vrRN8cVT6/fRNrRVAWyoNMknheTWnMGdw20FA
-         PqgiNU+2ZIhxOytBOmLR8bNDZvrosCBgqfI3Gq2COU2niV9AF9TO+bcWWGJNO32t/dz+
-         r3DA==
-X-Gm-Message-State: AOAM531i7PsoWFP3YaqT6/XoWJ7xTOYgQW10ZWEJ13Vhbvs7O3dJfdlU
-        E5pOV8MYr+pHNKv+5lUuIFKx44qSlAP3RUMxEww=
-X-Google-Smtp-Source: ABdhPJy8SPaXPB+PlYBKclA6Nzp2t6vAeKGWi+UVGwSmqff9B9lRwibzONxW/zvOUq1rv58c9AT9u5fHqQgMa/RYpKc=
-X-Received: by 2002:a25:84c1:: with SMTP id x1mr3018951ybm.690.1640163689302;
- Wed, 22 Dec 2021 01:01:29 -0800 (PST)
-MIME-Version: 1.0
-References: <20211221171532.29881-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <YcLBZBwIZkhhKxGD@kroah.com>
-In-Reply-To: <YcLBZBwIZkhhKxGD@kroah.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 22 Dec 2021 09:01:03 +0000
-Message-ID: <CA+V-a8s1RzonxKf2PbitTmb88WKKW9eSiZPsdHO6=-vxww7LFQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: renesas_usbhs: Fix unused variable warning
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=OSssIMDDFqUl1GaxKIZoLI2sUJGkDJOGUapWzIMb5/8=;
+        b=d/TyWbv590Ivegv4qN2utaBjMS4Cr+H8xJgNvA4C+OqsB1NkVCJfjFN5wIj+tYZlVb
+         MdMCYb08zp+k/nOm1J8jT6BuOUYdz+UMgy0Hsh6vjxz/smSazmpJNhcmWslcYar1DE0e
+         HFDQ/3VYHslMBy4/sr10CtvBxcWgNpkLMgZ5nfwBWLoZ5R6XgDzhW2nvkdcEYyUrxWaf
+         +kFy2dcT6KhMKH9ZYrgU3D/gy8EF0tDIuFzpWgz2/z6QcbSo/h278v0l5MIxzOHRgDzW
+         nqGKJKwUzlRbBf3wcz0uxwyzKqP0e5L6u06Zq8GF4XdvgOF1I+tHgDFyh5d3bywNsVfo
+         geRw==
+X-Gm-Message-State: AOAM533il7q8o/0om1R7nA2LTz/Q6tNo7F6l/Zo+95ptcW1ZL27gl4Co
+        Hey1kTYX0BIGXu9JH8l+I/8=
+X-Google-Smtp-Source: ABdhPJy5hR3/+cKJ6KiI6xkkeErNtWGkKFQ3XJfZrhmJhXWZYQgVOcxzwixbuEfCULkgbhqPkEGweg==
+X-Received: by 2002:a17:902:e5c7:b0:148:dba0:2906 with SMTP id u7-20020a170902e5c700b00148dba02906mr1947995plf.33.1640164490052;
+        Wed, 22 Dec 2021 01:14:50 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id k6sm1918550pff.106.2021.12.22.01.14.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 01:14:49 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc3: qcom: Fix NULL vs IS_ERR checking in dwc3_qcom_probe
+Date:   Wed, 22 Dec 2021 09:14:44 +0000
+Message-Id: <20211222091444.5034-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+Since the acpi_create_platform_device() function may return error
+pointers, dwc3_qcom_create_urs_usb_platdev() function may return errors
+too. Using IS_ERR_OR_NULL() to check the return value to fix this.
 
-Thank you for the review.
+Fixes: c25c210f590e("usb: dwc3: qcom: add URS Host support for sdm845 ACPI boot")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/usb/dwc3/dwc3-qcom.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Wed, Dec 22, 2021 at 6:10 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Dec 21, 2021 at 05:15:32PM +0000, Lad Prabhakar wrote:
-> > This patch fixes the below warning:
-> >
-> > drivers/usb/renesas_usbhs/mod.c: In function 'usbhs_status_get_each_irq':
-> > drivers/usb/renesas_usbhs/mod.c:195:13: warning: variable 'intenb0'
-> > set but not used [-Wunused-but-set-variable]
-> >   195 |         u16 intenb0, intenb1;
-> >       |
-> >
-> > Fixes: 33e4245ee919 ("usb: renesas_usbhs: Use platform_get_irq() to get the interrupt")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> >  drivers/usb/renesas_usbhs/mod.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/usb/renesas_usbhs/mod.c b/drivers/usb/renesas_usbhs/mod.c
-> > index f2ea3e1412d2..3919e350b487 100644
-> > --- a/drivers/usb/renesas_usbhs/mod.c
-> > +++ b/drivers/usb/renesas_usbhs/mod.c
-> > @@ -192,13 +192,12 @@ static int usbhs_status_get_each_irq(struct usbhs_priv *priv,
-> >                                    struct usbhs_irq_state *state)
-> >  {
-> >       struct usbhs_mod *mod = usbhs_mod_get_current(priv);
-> > -     u16 intenb0, intenb1;
-> >       unsigned long flags;
-> > +     u16 intenb1;
-> >
-> >       /********************  spin lock ********************/
-> >       usbhs_lock(priv, flags);
-> >       state->intsts0 = usbhs_read(priv, INTSTS0);
-> > -     intenb0 = usbhs_read(priv, INTENB0);
->
-> Did you just break the hardware?  Reading is often times needed and
-> clang has no idea about hardware issues.  We need proof in the changlog
-> that this really is safe to do.
->
-I introduced this warning in commit 33e4245ee919 ("usb: renesas_usbhs:
-Use platform_get_irq() to get the interrupt'') where
-IORESOURCE_IRQ_SHAREABLE flag handling was dropped and I missed to
-remove this change. As a result I included a fixes tag for this
-commit. Let me know if you want me to update the changelog.
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index 3cb01cdd02c2..df27d903ba98 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -769,9 +769,9 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 
+ 		if (qcom->acpi_pdata->is_urs) {
+ 			qcom->urs_usb = dwc3_qcom_create_urs_usb_platdev(dev);
+-			if (!qcom->urs_usb) {
++			if (IS_ERR_OR_NULL(qcom->urs_usb)) {
+ 				dev_err(dev, "failed to create URS USB platdev\n");
+-				return -ENODEV;
++				return qcom->urs_usb ? PTR_ERR(qcom->urs_usb) : -ENODEV;
+ 			}
+ 		}
+ 	}
+-- 
+2.17.1
 
-> How did you test your change?
->
-I haven't but can test it.
-
-Cheers,
-Prabhakar
