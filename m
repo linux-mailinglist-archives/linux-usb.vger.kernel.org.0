@@ -2,128 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B4047CF62
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Dec 2021 10:36:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 746EA47CFA8
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Dec 2021 11:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243973AbhLVJgm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Dec 2021 04:36:42 -0500
-Received: from mga01.intel.com ([192.55.52.88]:8821 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229987AbhLVJgm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:36:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640165802; x=1671701802;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qPEXBUbe94rfErhQd+lmgtaMAUXWpXgWeaLE4m2ThfI=;
-  b=CzClOOffLqRXz04gFxS8ZxyQVSG1EzeKTcuKUFOK06NhUbRNXRsy5hxx
-   WImM8iQhtTQ9DoTbro5AnlyCBdW7VcobbTedQaE3SCrYHW4AvFAjRUxkz
-   +JLAMxtGa5iJ6VgGzrfSEZg7bBmaWAvUUMyhHNn1cttZHNTEjHUlPhbPz
-   enbTPZ8x4g8Va2hnIlD2z0J6CGgt8mhZID/e4BSCVpFQ2NE5ek/p6dxgJ
-   TkEGhOFxytcG1WIP0ivRnNYZoI8aS4K81E2obyx/tr+eL3Ba3PsgJmUNq
-   FuGKlOm/925RQ+uLcIgv3nqsp1vJrV/lI0WTZ2k6Q/DrARrGpbcG0MYVJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="264781505"
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="264781505"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 01:36:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="468116047"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 22 Dec 2021 01:36:39 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzy34-0000Jx-Na; Wed, 22 Dec 2021 09:36:38 +0000
-Date:   Wed, 22 Dec 2021 17:36:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [usb:usb-next 5/9] drivers/usb/renesas_usbhs/mod.c:195:6: warning:
- variable 'intenb0' set but not used
-Message-ID: <202112221724.CBz2Bjz2-lkp@intel.com>
+        id S236205AbhLVKA3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Dec 2021 05:00:29 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:42214 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234306AbhLVKA3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 Dec 2021 05:00:29 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowAB3fS0n98JhKilHBA--.38819S2;
+        Wed, 22 Dec 2021 18:00:07 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] usb: gadget: udc: mv_udc_core: Check error dma address
+Date:   Wed, 22 Dec 2021 18:00:05 +0800
+Message-Id: <20211222100005.1212589-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowAB3fS0n98JhKilHBA--.38819S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GryfCFyfGF4xCw1fZr4ktFb_yoWDKFbEkr
+        n8Wr17GFWUKw42gw10qa4YkryF93WkZw4vqF1vyFZ3A34jk3W7Zw4jvF95Wr48uF1UWF9x
+        CwsFkayxZwn7XjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbckFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Gw1l
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUgiSdUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-head:   ce1d37cb7697abcc3d892558acd33a1333596534
-commit: 22ae6415c702680b1d3170717ce34ee31656f8b6 [5/9] usb: renesas_usbhs: Use platform_get_irq() to get the interrupt
-config: hexagon-randconfig-r041-20211222 (https://download.01.org/0day-ci/archive/20211222/202112221724.CBz2Bjz2-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project de4e0195ae1c39f1c3b07834b8e32c113f4f20eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=22ae6415c702680b1d3170717ce34ee31656f8b6
-        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-        git fetch --no-tags usb usb-next
-        git checkout 22ae6415c702680b1d3170717ce34ee31656f8b6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/renesas_usbhs/
+Because the dma_map_single() might return error dma address if fails.
+Therefore it might be better to check the address in order to avoid the
+use of error dma address in build_dtd() which is called by req_to_dtd().
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/renesas_usbhs/mod.c:195:6: warning: variable 'intenb0' set but not used [-Wunused-but-set-variable]
-           u16 intenb0, intenb1;
-               ^
-   1 warning generated.
-
-
-vim +/intenb0 +195 drivers/usb/renesas_usbhs/mod.c
-
-f1407d5c66240b Kuninori Morimoto  2011-04-04  190  
-697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  191  static int usbhs_status_get_each_irq(struct usbhs_priv *priv,
-f1407d5c66240b Kuninori Morimoto  2011-04-04  192  				     struct usbhs_irq_state *state)
-f1407d5c66240b Kuninori Morimoto  2011-04-04  193  {
-f1407d5c66240b Kuninori Morimoto  2011-04-04  194  	struct usbhs_mod *mod = usbhs_mod_get_current(priv);
-697d5c004e3901 Shimoda, Yoshihiro 2012-08-20 @195  	u16 intenb0, intenb1;
-c4d8199ba1a7aa Yoshihiro Shimoda  2014-08-22  196  	unsigned long flags;
-f1407d5c66240b Kuninori Morimoto  2011-04-04  197  
-c4d8199ba1a7aa Yoshihiro Shimoda  2014-08-22  198  	/********************  spin lock ********************/
-c4d8199ba1a7aa Yoshihiro Shimoda  2014-08-22  199  	usbhs_lock(priv, flags);
-f1407d5c66240b Kuninori Morimoto  2011-04-04  200  	state->intsts0 = usbhs_read(priv, INTSTS0);
-697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  201  	intenb0 = usbhs_read(priv, INTENB0);
-88a25e02f35e56 Nobuhiro Iwamatsu  2015-01-09  202  
-88a25e02f35e56 Nobuhiro Iwamatsu  2015-01-09  203  	if (usbhs_mod_is_host(priv)) {
-88a25e02f35e56 Nobuhiro Iwamatsu  2015-01-09  204  		state->intsts1 = usbhs_read(priv, INTSTS1);
-697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  205  		intenb1 = usbhs_read(priv, INTENB1);
-672bfdaa310004 Arnd Bergmann      2015-05-22  206  	} else {
-672bfdaa310004 Arnd Bergmann      2015-05-22  207  		state->intsts1 = intenb1 = 0;
-88a25e02f35e56 Nobuhiro Iwamatsu  2015-01-09  208  	}
-697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  209  
-5ea68d541df200 Kuninori Morimoto  2011-04-28  210  	/* mask */
-5ea68d541df200 Kuninori Morimoto  2011-04-28  211  	if (mod) {
-f1407d5c66240b Kuninori Morimoto  2011-04-04  212  		state->brdysts = usbhs_read(priv, BRDYSTS);
-f1407d5c66240b Kuninori Morimoto  2011-04-04  213  		state->nrdysts = usbhs_read(priv, NRDYSTS);
-f1407d5c66240b Kuninori Morimoto  2011-04-04  214  		state->bempsts = usbhs_read(priv, BEMPSTS);
-f1407d5c66240b Kuninori Morimoto  2011-04-04  215  
-f1407d5c66240b Kuninori Morimoto  2011-04-04  216  		state->bempsts &= mod->irq_bempsts;
-f1407d5c66240b Kuninori Morimoto  2011-04-04  217  		state->brdysts &= mod->irq_brdysts;
-f1407d5c66240b Kuninori Morimoto  2011-04-04  218  	}
-c4d8199ba1a7aa Yoshihiro Shimoda  2014-08-22  219  	usbhs_unlock(priv, flags);
-c4d8199ba1a7aa Yoshihiro Shimoda  2014-08-22  220  	/********************  spin unlock ******************/
-697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  221  
-697d5c004e3901 Shimoda, Yoshihiro 2012-08-20  222  	return 0;
-5ea68d541df200 Kuninori Morimoto  2011-04-28  223  }
-f1407d5c66240b Kuninori Morimoto  2011-04-04  224  
-
-:::::: The code at line 195 was first introduced by commit
-:::::: 697d5c004e390102efbf9320a5416873679bea81 usb: renesas_usbhs: modify the irq handler for sharing irq
-
-:::::: TO: Shimoda, Yoshihiro <yoshihiro.shimoda.uh@renesas.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
+Fixes: 90fccb529d24 ("usb: gadget: Gadget directory cleanup - group UDC drivers")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/usb/gadget/udc/mv_udc_core.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/usb/gadget/udc/mv_udc_core.c b/drivers/usb/gadget/udc/mv_udc_core.c
+index 0fb4ef464321..2613dbdc5aba 100644
+--- a/drivers/usb/gadget/udc/mv_udc_core.c
++++ b/drivers/usb/gadget/udc/mv_udc_core.c
+@@ -1472,6 +1472,9 @@ udc_prime_status(struct mv_udc *udc, u8 direction, u16 status, bool empty)
+ 		req->req.dma = dma_map_single(ep->udc->gadget.dev.parent,
+ 				req->req.buf, req->req.length,
+ 				ep_dir(ep) ? DMA_TO_DEVICE : DMA_FROM_DEVICE);
++		retval = dma_mapping_error(ep->udc->gadget.dev.parent, req->req.dma);
++		if (retval)
++			goto out;
+ 		req->mapped = 1;
+ 	}
+ 
+-- 
+2.25.1
+
