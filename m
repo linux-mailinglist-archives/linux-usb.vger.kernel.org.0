@@ -2,163 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 897A347CC12
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Dec 2021 05:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3549E47CCD7
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Dec 2021 07:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242315AbhLVEZf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Dec 2021 23:25:35 -0500
-Received: from mga06.intel.com ([134.134.136.31]:35799 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232658AbhLVEZf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Dec 2021 23:25:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640147135; x=1671683135;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=awW+Gu9kZPTi5wKNIyesJf+U080no3AQ0VFKbi4hfNY=;
-  b=bGYE8LYFXuL1E3mWhQmT9UirlOZgVbBBraETf5FxxwdtI6bI3s0zyo2k
-   vgigqyKLUtrbzR4d5eKqEwUJZmDw0S8cNMWwzQbopyQw6MyOZSRV8D1K6
-   QRNhF7apnjMNGO/MebQkEXY7yDTISKJG37KrjzVj1OgoTN00Ox1848qmv
-   eqpoXItFp2z6ABJQlHI+J3uDPMqgkvydP2clCBcebRoV2QDsXtk93qF/Q
-   sCfyIzw/nugtN20gMvW9HZwVH7d0tQguTa7xFU1AqzriHolSWUiDTv3Ea
-   4xPjdY5GtAfIwtiPBk3AJCe19dkikESpvPVqRoV1llLbdEdH/tKT8U71m
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="301308408"
-X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
-   d="scan'208";a="301308408"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 20:25:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
-   d="scan'208";a="684887734"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 21 Dec 2021 20:25:33 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mztC0-00002x-VP; Wed, 22 Dec 2021 04:25:32 +0000
-Date:   Wed, 22 Dec 2021 12:24:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 3f345e907a8e7c56fdebf7231cd67afc85d02aaa
-Message-ID: <61c2a88c.CuIMUNxkwFDZFB0F%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S242689AbhLVGKZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Dec 2021 01:10:25 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:20260 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239218AbhLVGKY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Dec 2021 01:10:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1640153424; x=1671689424;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=aVYPNj9FnpbJdkBdwW17uIxyL8/YiwYGHnGCnoJTjAE=;
+  b=bExXnS7fbo+tEyoUx1dTn5lkilh5+Vvsu8HQV4U3MQ2sIhGDTLozmsyb
+   ScUyFyjaqkwnkKWYeo/gmJbwyoBsC+0508iuE5XJ7jp+ls1Zzljd0L7AT
+   P5qlutWMpnS2RL+oeoAUxdqZFPX3lEWcC0PWQH63NviwaoY4AKprieZml
+   s=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 21 Dec 2021 22:10:23 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 22:10:07 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 21 Dec 2021 22:10:07 -0800
+Received: from c-sanm-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 21 Dec 2021 22:10:02 -0800
+From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: [PATCH v5] usb: host: xhci-plat: Set XHCI_SKIP_PHY_INIT quirk for DWC3 controller
+Date:   Wed, 22 Dec 2021 11:39:43 +0530
+Message-ID: <1640153383-21036-1-git-send-email-quic_c_sanm@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 3f345e907a8e7c56fdebf7231cd67afc85d02aaa  usb: typec: ucsi: Only check the contract if there is a connection
+Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
+Runtime suspend of phy drivers was failing from DWC3 driver as runtime
+usage value is 2 because the phy is initialized from DWC3 and HCD core.
+DWC3 manages phy in their core drivers. Set this quirk to avoid phy
+initialization in HCD core.
 
-elapsed time: 741m
-
-configs tested: 92
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-sh                             espt_defconfig
-mips                     loongson1c_defconfig
-arm                        realview_defconfig
-powerpc                  storcenter_defconfig
-sh                        edosk7705_defconfig
-nds32                             allnoconfig
-mips                      bmips_stb_defconfig
-sh                            shmin_defconfig
-um                               alldefconfig
-arm                          ixp4xx_defconfig
-sh                           se7206_defconfig
-mips                        jmr3927_defconfig
-mips                       capcella_defconfig
-powerpc                 canyonlands_defconfig
-sh                        dreamcast_defconfig
-mips                           ci20_defconfig
-sh                          urquell_defconfig
-sh                         microdev_defconfig
-arm                            mps2_defconfig
-sh                         ecovec24_defconfig
-arm                      jornada720_defconfig
-arm                  randconfig-c002-20211220
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                             allmodconfig
-s390                                defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-sparc                            allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-powerpc                          allyesconfig
-x86_64               randconfig-a001-20211220
-x86_64               randconfig-a003-20211220
-x86_64               randconfig-a005-20211220
-x86_64               randconfig-a004-20211220
-x86_64               randconfig-a002-20211220
-x86_64               randconfig-a006-20211220
-i386                 randconfig-a002-20211220
-i386                 randconfig-a003-20211220
-i386                 randconfig-a001-20211220
-i386                 randconfig-a004-20211220
-i386                 randconfig-a005-20211220
-i386                 randconfig-a006-20211220
-arc                  randconfig-r043-20211220
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-hexagon              randconfig-r041-20211220
-hexagon              randconfig-r045-20211220
-s390                 randconfig-r044-20211220
-riscv                randconfig-r042-20211220
-
+Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+v5:
+Added comment to explain the change done.
+v4:
+Changed pdev->dev.parent->of_node to sysdev->of_node
+
+ drivers/usb/host/xhci-plat.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index c1edcc9..e6014d4 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -327,6 +327,14 @@ static int xhci_plat_probe(struct platform_device *pdev)
+ 					 &xhci->imod_interval);
+ 	}
+ 
++	/*
++	 * Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
++	 * DWC3 manages phy in their core drivers. Set this quirk to avoid phy
++	 * initialization in HCD core.
++	 */
++	if (of_device_is_compatible(sysdev->of_node, "snps,dwc3"))
++		xhci->quirks |= XHCI_SKIP_PHY_INIT;
++
+ 	hcd->usb_phy = devm_usb_get_phy_by_phandle(sysdev, "usb-phy", 0);
+ 	if (IS_ERR(hcd->usb_phy)) {
+ 		ret = PTR_ERR(hcd->usb_phy);
+-- 
+2.7.4
+
