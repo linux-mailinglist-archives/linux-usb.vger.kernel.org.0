@@ -2,110 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8363B47CF2C
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Dec 2021 10:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8510747CF45
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Dec 2021 10:31:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243902AbhLVJZf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Dec 2021 04:25:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243899AbhLVJZe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Dec 2021 04:25:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908C3C061574;
-        Wed, 22 Dec 2021 01:25:34 -0800 (PST)
+        id S243946AbhLVJb4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Dec 2021 04:31:56 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47352 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243935AbhLVJb4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Dec 2021 04:31:56 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F36FD61940;
-        Wed, 22 Dec 2021 09:25:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E97BC36AE8;
-        Wed, 22 Dec 2021 09:25:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9FDEB81A88;
+        Wed, 22 Dec 2021 09:31:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB2BEC36AE8;
+        Wed, 22 Dec 2021 09:31:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640165133;
-        bh=BNhr6yaAR52+M0GJ5JUkDKxBOuQ2SF9yp85aaKzXNrk=;
+        s=korg; t=1640165513;
+        bh=PSBzTEFohZ3a/CNUDHjTqvnSIemq56UVaT5rgaO9Q3I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j2FzncqI0YBT3hkF1xRTjB90eztT+BtzqFkEPU7/x3QhHRCW35fUxQj4CSecyZ24J
-         vnNlocqgtVrC3pm6ah4zTECU2lva/nPZ1KhYf5+TJzo1K436PwGdLqVJJL9rMGFnq6
-         eIE3DwW6sHmoIpIo5E/6ia0SvhkBK0OTYdXoz8jQ=
-Date:   Wed, 22 Dec 2021 10:25:30 +0100
+        b=1dutxwxqXDJYsLbDCRQsTSi+nyhNDDnwxV01dxrp9sPnVWCVP+Ii4eyLvtW2s1yhS
+         ZNYTgRRdbfiStM/dDjUGNXX+WH/8ZYNiU0//sqUBFeo7BXGZW2w9GKXTM7Eb4dELYq
+         R059O1i7uYLQBkJ/5k330OnP1rGZhgVlnlrDNLB8=
+Date:   Wed, 22 Dec 2021 10:31:51 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: renesas_usbhs: Fix unused variable warning
-Message-ID: <YcLvCtFwxoSeh2zs@kroah.com>
-References: <20211221171532.29881-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <YcLBZBwIZkhhKxGD@kroah.com>
- <CA+V-a8s1RzonxKf2PbitTmb88WKKW9eSiZPsdHO6=-vxww7LFQ@mail.gmail.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: qcom: Fix NULL vs IS_ERR checking in
+ dwc3_qcom_probe
+Message-ID: <YcLwh06Z/1hBG6IY@kroah.com>
+References: <20211222091444.5034-1-linmq006@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+V-a8s1RzonxKf2PbitTmb88WKKW9eSiZPsdHO6=-vxww7LFQ@mail.gmail.com>
+In-Reply-To: <20211222091444.5034-1-linmq006@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 09:01:03AM +0000, Lad, Prabhakar wrote:
-> Hi Greg,
+[note, you got the to: line incorrect...]
+
+On Wed, Dec 22, 2021 at 09:14:44AM +0000, Miaoqian Lin wrote:
+> Since the acpi_create_platform_device() function may return error
+> pointers, dwc3_qcom_create_urs_usb_platdev() function may return errors
+> too. Using IS_ERR_OR_NULL() to check the return value to fix this.
 > 
-> Thank you for the review.
+> Fixes: c25c210f590e("usb: dwc3: qcom: add URS Host support for sdm845 ACPI boot")
+
+Nit, the documentation says this should be:
+Fixes: c25c210f590e ("usb: dwc3: qcom: add URS Host support for sdm845 ACPI boot")
+
+
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> On Wed, Dec 22, 2021 at 6:10 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Tue, Dec 21, 2021 at 05:15:32PM +0000, Lad Prabhakar wrote:
-> > > This patch fixes the below warning:
-> > >
-> > > drivers/usb/renesas_usbhs/mod.c: In function 'usbhs_status_get_each_irq':
-> > > drivers/usb/renesas_usbhs/mod.c:195:13: warning: variable 'intenb0'
-> > > set but not used [-Wunused-but-set-variable]
-> > >   195 |         u16 intenb0, intenb1;
-> > >       |
-> > >
-> > > Fixes: 33e4245ee919 ("usb: renesas_usbhs: Use platform_get_irq() to get the interrupt")
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > ---
-> > >  drivers/usb/renesas_usbhs/mod.c | 3 +--
-> > >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/usb/renesas_usbhs/mod.c b/drivers/usb/renesas_usbhs/mod.c
-> > > index f2ea3e1412d2..3919e350b487 100644
-> > > --- a/drivers/usb/renesas_usbhs/mod.c
-> > > +++ b/drivers/usb/renesas_usbhs/mod.c
-> > > @@ -192,13 +192,12 @@ static int usbhs_status_get_each_irq(struct usbhs_priv *priv,
-> > >                                    struct usbhs_irq_state *state)
-> > >  {
-> > >       struct usbhs_mod *mod = usbhs_mod_get_current(priv);
-> > > -     u16 intenb0, intenb1;
-> > >       unsigned long flags;
-> > > +     u16 intenb1;
-> > >
-> > >       /********************  spin lock ********************/
-> > >       usbhs_lock(priv, flags);
-> > >       state->intsts0 = usbhs_read(priv, INTSTS0);
-> > > -     intenb0 = usbhs_read(priv, INTENB0);
-> >
-> > Did you just break the hardware?  Reading is often times needed and
-> > clang has no idea about hardware issues.  We need proof in the changlog
-> > that this really is safe to do.
-> >
-> I introduced this warning in commit 33e4245ee919 ("usb: renesas_usbhs:
-> Use platform_get_irq() to get the interrupt'') where
-> IORESOURCE_IRQ_SHAREABLE flag handling was dropped and I missed to
-> remove this change. As a result I included a fixes tag for this
-> commit. Let me know if you want me to update the changelog.
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 3cb01cdd02c2..df27d903ba98 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -769,9 +769,9 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  
+>  		if (qcom->acpi_pdata->is_urs) {
+>  			qcom->urs_usb = dwc3_qcom_create_urs_usb_platdev(dev);
+> -			if (!qcom->urs_usb) {
+> +			if (IS_ERR_OR_NULL(qcom->urs_usb)) {
+>  				dev_err(dev, "failed to create URS USB platdev\n");
+> -				return -ENODEV;
+> +				return qcom->urs_usb ? PTR_ERR(qcom->urs_usb) : -ENODEV;
 
-Yes please explain why this change is ok, not just that it is a random
-compiler warning cleanup.
-
-> > How did you test your change?
-> >
-> I haven't but can test it.
-
-Please do.
+Please no ? : if at all possible.  Spell it out as a real if statement.
 
 thanks,
 
