@@ -2,95 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9B947CA37
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Dec 2021 01:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 897A347CC12
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Dec 2021 05:25:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239257AbhLVAYV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Dec 2021 19:24:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbhLVAYU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Dec 2021 19:24:20 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843ADC061574;
-        Tue, 21 Dec 2021 16:24:20 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id i22so1219674wrb.13;
-        Tue, 21 Dec 2021 16:24:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jEyMqzkS51XAJJ1/Omp/HczmnDjl+OSGTWIN9RbcbIo=;
-        b=mSeGdHTUaQ0S3YZbBJMgSn7kybGHB5mdK9Tn1EkiZewutNDlAaBdKmZcbIj0SIbhFB
-         Yau5+h90uCGNsOGZ4qEKDBbqexUdLoca9cflA5q9Qyb0TUxbUaMervI+9AJSqm47mc6n
-         mFXAyCK3Hu8VkEY5YPBt8Pk5H2m2nBUNdzthl58UkZ9Dnyn+UraD2E2nki+yKOLlyF5h
-         KNHwP7Ft+VBU/2CgZz/udV+IhDiEWhShNUjfOIfppUWheCMA+hRKoVrPlO1S65Cg3fAG
-         gAugE3is+ejTjJi4+R9iOf1lGWvjRrmxcqBDBa1iaU4+Q7ML9Q+mB+L12AhmSmiNQkd9
-         L/iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jEyMqzkS51XAJJ1/Omp/HczmnDjl+OSGTWIN9RbcbIo=;
-        b=PpGKycfQft5ACZCf5mAVJS3tZn0e62yi/Uay974uZuBnL3OyPNFdNFrqq+S3n1H83g
-         iX9+MNL9HV77T/cPILi6Dv05ThA6pMjDI1UQXcZKs2P6eKwLz5jawBZsv3LMBmXUgAFe
-         lGNGiW9xr+E7vqQ60b+DxjkUWvKNZFKkDarB7DQVmuXTJgDZvg6nEvVEjiPo++fSJehh
-         PfQE0iIi7FRpmGn/QNf3b9OKusdWGlbxgd4nvlB1p5Jaw3gyGfQ2EGtHD2AyUqRIv11u
-         8auUM8pbliTKR87IXcfEiFYWOmdmOiuP2oBkviJ9K/M6Mzt2Z4EhFpPKaxsJ5iLJS9Lc
-         Q59w==
-X-Gm-Message-State: AOAM533xrmh3GnttM57/Dm3Fc4HrL+n3aUfikG8cA+kWVWyd+dGNuJ7J
-        EoaVDwzrVUAWnDp4sJaeJt7Rf9u9EljMB/F/rkHbXQ==
-X-Google-Smtp-Source: ABdhPJxmZxsECAhaFEZxHz6PaqauHgfvx2vyFr7JtKkfW+FTInG1ukgDnG/mCFvoziQrTNHpYXIG7Q==
-X-Received: by 2002:a5d:6d8c:: with SMTP id l12mr363622wrs.55.1640132659189;
-        Tue, 21 Dec 2021 16:24:19 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id m21sm405504wrb.2.2021.12.21.16.24.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 16:24:18 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: host: u132-hcd: remove redundant variable l
-Date:   Wed, 22 Dec 2021 00:24:18 +0000
-Message-Id: <20211222002418.725999-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        id S242315AbhLVEZf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Dec 2021 23:25:35 -0500
+Received: from mga06.intel.com ([134.134.136.31]:35799 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232658AbhLVEZf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Dec 2021 23:25:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640147135; x=1671683135;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=awW+Gu9kZPTi5wKNIyesJf+U080no3AQ0VFKbi4hfNY=;
+  b=bGYE8LYFXuL1E3mWhQmT9UirlOZgVbBBraETf5FxxwdtI6bI3s0zyo2k
+   vgigqyKLUtrbzR4d5eKqEwUJZmDw0S8cNMWwzQbopyQw6MyOZSRV8D1K6
+   QRNhF7apnjMNGO/MebQkEXY7yDTISKJG37KrjzVj1OgoTN00Ox1848qmv
+   eqpoXItFp2z6ABJQlHI+J3uDPMqgkvydP2clCBcebRoV2QDsXtk93qF/Q
+   sCfyIzw/nugtN20gMvW9HZwVH7d0tQguTa7xFU1AqzriHolSWUiDTv3Ea
+   4xPjdY5GtAfIwtiPBk3AJCe19dkikESpvPVqRoV1llLbdEdH/tKT8U71m
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="301308408"
+X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
+   d="scan'208";a="301308408"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 20:25:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
+   d="scan'208";a="684887734"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 21 Dec 2021 20:25:33 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mztC0-00002x-VP; Wed, 22 Dec 2021 04:25:32 +0000
+Date:   Wed, 22 Dec 2021 12:24:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 3f345e907a8e7c56fdebf7231cd67afc85d02aaa
+Message-ID: <61c2a88c.CuIMUNxkwFDZFB0F%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Variable l is being used to summate w, however the value
-is never used afterwards. The summation is redundant so
-remove variable l.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 3f345e907a8e7c56fdebf7231cd67afc85d02aaa  usb: typec: ucsi: Only check the contract if there is a connection
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+elapsed time: 741m
+
+configs tested: 92
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+sh                             espt_defconfig
+mips                     loongson1c_defconfig
+arm                        realview_defconfig
+powerpc                  storcenter_defconfig
+sh                        edosk7705_defconfig
+nds32                             allnoconfig
+mips                      bmips_stb_defconfig
+sh                            shmin_defconfig
+um                               alldefconfig
+arm                          ixp4xx_defconfig
+sh                           se7206_defconfig
+mips                        jmr3927_defconfig
+mips                       capcella_defconfig
+powerpc                 canyonlands_defconfig
+sh                        dreamcast_defconfig
+mips                           ci20_defconfig
+sh                          urquell_defconfig
+sh                         microdev_defconfig
+arm                            mps2_defconfig
+sh                         ecovec24_defconfig
+arm                      jornada720_defconfig
+arm                  randconfig-c002-20211220
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                             allmodconfig
+s390                                defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+sparc                            allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+powerpc                          allyesconfig
+x86_64               randconfig-a001-20211220
+x86_64               randconfig-a003-20211220
+x86_64               randconfig-a005-20211220
+x86_64               randconfig-a004-20211220
+x86_64               randconfig-a002-20211220
+x86_64               randconfig-a006-20211220
+i386                 randconfig-a002-20211220
+i386                 randconfig-a003-20211220
+i386                 randconfig-a001-20211220
+i386                 randconfig-a004-20211220
+i386                 randconfig-a005-20211220
+i386                 randconfig-a006-20211220
+arc                  randconfig-r043-20211220
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+hexagon              randconfig-r041-20211220
+hexagon              randconfig-r045-20211220
+s390                 randconfig-r044-20211220
+riscv                randconfig-r042-20211220
+
 ---
- drivers/usb/host/u132-hcd.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/drivers/usb/host/u132-hcd.c b/drivers/usb/host/u132-hcd.c
-index d879d6af5710..ea4f66e66372 100644
---- a/drivers/usb/host/u132-hcd.c
-+++ b/drivers/usb/host/u132-hcd.c
-@@ -2335,14 +2335,12 @@ static int u132_urb_enqueue(struct usb_hcd *hcd, struct urb *urb,
- 			char data[30 * 3 + 4];
- 			char *d = data;
- 			int m = (sizeof(data) - 1) / 3;
--			int l = 0;
- 			data[0] = 0;
- 			while (urb_size-- > 0) {
- 				if (i > m) {
- 				} else if (i++ < m) {
- 					int w = sprintf(d, " %02X", *b++);
- 					d += w;
--					l += w;
- 				} else
- 					d += sprintf(d, " ..");
- 			}
--- 
-2.33.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
