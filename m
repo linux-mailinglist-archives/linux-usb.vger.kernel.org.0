@@ -2,99 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D0447D0D3
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Dec 2021 12:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B77D47D19C
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Dec 2021 13:26:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244568AbhLVLSa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Dec 2021 06:18:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240327AbhLVLS3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Dec 2021 06:18:29 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D77C061574;
-        Wed, 22 Dec 2021 03:18:29 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id s15so2082918pfk.6;
-        Wed, 22 Dec 2021 03:18:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=AudhrVtPds+UwnXofwiLV9UBGSO5lD3WwKy0WzfA4bc=;
-        b=mhSvBAqM6Jynn5ZcJKLxMiQ1QgWotix5caEqMK4JyhoK0IcicthOWfRfWRzw4mT+3w
-         cSEXUBbCOrGpkqVb5vyiT2IDRN7+w5jDkwDy8iw+YwttU3kAFbd09bI+hgqPpyX/tVDP
-         Hnlwz+NsbJwxavah970ej3udVZxQJhwkc3Ge3LuLm0iGFjyuONwaAsnhLdjnhyOzd71h
-         f1DCOIhEUQzHTyUkkBGp3S1iHGTyTa2AaZLAHKq+XXtJKprqdDJwRw3y6exOhUDAgKZu
-         a6xuVG54XpJjnTL2w82WIayhx0NlIZa9CL1tLtksYl8Mx5O2LDpcz/NRdNBikE00nXHb
-         9diw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=AudhrVtPds+UwnXofwiLV9UBGSO5lD3WwKy0WzfA4bc=;
-        b=4UYn/FBxA9Vctuan6rTa84SJYpQJ+2liLKV+BLUUSOJjyyvQGtXAZ8OJ9mWkfi9qe3
-         o4CDfsJvDtAb6f5tywjQy/1bIW33EzGjcijR34asze0oYqgEwyKLeHwM3JL+m1jCkaO6
-         jVjoVipFJxXwwDYx+1jqxfGQ9mEzDJUPOUbYvGog9vLPUAGAlo3o7JlCdRGo6HjGAyB7
-         JEYhtRwUHEJlq95py9O/CF8OVMrdBjDrhM7xdvXyHFAOnrxjyIozu4TACpyG9cMAz1Xq
-         u/9cq6imGOloFsQn1dlfGTAaMjehasrmCmW2Mac8xyc2/yCKDzJHCx3DmWGWISH7kceQ
-         ClzQ==
-X-Gm-Message-State: AOAM530dfWqAGTTV55B1E7yXTaZTqgDZoVLwDXuDgP7PYU/L/JANeu/1
-        SJa8nOra5ndCiB3wsmemgV4=
-X-Google-Smtp-Source: ABdhPJzKe6KBOuJOT/xf2DPVJWCeYaxVc0Zf4vagg6iQwXB/52SH6biT9PdfzCtUDiYR1fMPeVyi8g==
-X-Received: by 2002:a62:6042:0:b0:4bb:86a:c05f with SMTP id u63-20020a626042000000b004bb086ac05fmr2432034pfb.64.1640171908910;
-        Wed, 22 Dec 2021 03:18:28 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id ng7sm2230478pjb.41.2021.12.22.03.18.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 03:18:28 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S236070AbhLVM0u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Dec 2021 07:26:50 -0500
+Received: from cable.insite.cz ([84.242.75.189]:60622 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229616AbhLVM0u (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 Dec 2021 07:26:50 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id C0567A1A3D402;
+        Wed, 22 Dec 2021 13:26:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1640176008; bh=w6zQR36wOkiolUaANPH19S5qflbjbUmgJTCD3SAKsC8=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=RcDZxQpAoVe1CYlnGRSFTx91bI+MumISRsX4Sr7L4JOZ6KeTAUevYY+drquJPCnvJ
+         66M0ApAiY4U9JUDbzRXAAzF7vEfzfL12oPsa+ErlgeR4x9xBDuQyeY24CS/c8QkXtm
+         DAT9zXtj68gri1P9+L9EdZBTJU3n8OGkYyDaZX8c=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id o4OsAvLRo_VW; Wed, 22 Dec 2021 13:26:43 +0100 (CET)
+Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 5899CA1A3D400;
+        Wed, 22 Dec 2021 13:26:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1640176003; bh=w6zQR36wOkiolUaANPH19S5qflbjbUmgJTCD3SAKsC8=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=X9bOYRD7dF06ER7apFyqjbmH+8s9Nb93gVcviwpks73XXvMhnf81/py9m8kiN3z6l
+         08FxRd12LFxRPZ4pKJSH/q71eHl/GbKlZRCvG7DD4f64CTostIfHR2IOh/+v1OHm5c
+         kOsCd0B3dPRZekNVCaGsWCmvnnpZYdl93UFAYuNE=
+Subject: Re: [PATCH v2 07/11] usb: gadget: u_audio: Stopping PCM substream at
+ capture/playback stop
+To:     John Keeping <john@metanate.com>
+Cc:     linux-usb@vger.kernel.org,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
         Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] usb: dwc3: qcom: Fix NULL vs IS_ERR checking in dwc3_qcom_probe
-Date:   Wed, 22 Dec 2021 11:18:23 +0000
-Message-Id: <20211222111823.22887-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Julian Scheel <julian@jusst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20211220211130.88590-1-pavel.hofman@ivitera.com>
+ <20211220211130.88590-8-pavel.hofman@ivitera.com> <YcHGD3FxCmA0g6IV@donbot>
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+Message-ID: <b9d2c1ac-2c46-7ad4-179b-1f57c6c8fb41@ivitera.com>
+Date:   Wed, 22 Dec 2021 13:26:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <YcHGD3FxCmA0g6IV@donbot>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since the acpi_create_platform_device() function may return error
-pointers, dwc3_qcom_create_urs_usb_platdev() function may return error
-pointers too. Using IS_ERR_OR_NULL() to check the return value to fix this.
+Dne 21. 12. 21 v 13:18 John Keeping napsal(a):
+> On Mon, Dec 20, 2021 at 10:11:26PM +0100, Pavel Hofman wrote:
+>> When the USB host stops capture/playback, the corresponding PCM
+>> substream (if activated and running) is stopped and drained.
+>>
+>> Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+>> ---
+>>   drivers/usb/gadget/function/u_audio.c | 16 ++++++++++++++++
+>>   1 file changed, 16 insertions(+)
+>>
+>> diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+>> index a6293415c071..9dbce51c2eb7 100644
+>> --- a/drivers/usb/gadget/function/u_audio.c
+>> +++ b/drivers/usb/gadget/function/u_audio.c
+>> @@ -544,6 +544,20 @@ static void set_reported_srate(struct uac_rtd_params *prm, int srate)
+>>   	}
+>>   }
+>>   
+>> +static void stop_substream(struct uac_rtd_params *prm)
+>> +{
+>> +	unsigned long _flags;
+>> +	struct snd_pcm_substream *substream;
+>> +
+>> +	substream = prm->ss;
+>> +	if (substream) {
+>> +		snd_pcm_stream_lock_irqsave(substream, _flags);
+>> +		if (snd_pcm_running(substream))
+>> +			snd_pcm_stop(substream, SNDRV_PCM_STATE_DRAINING);
+> 
+> I'm not sure if this is right (and the series should probably be CC'd to
+> alsa-devel to check the audio side of this).
+> 
+> DRAINING seems to be right for capture, but for playback should this end
+> up in state SETUP?  Does this need to handle resuming a paused stream
+> like snd_pcm_drain() does?
 
-Fixes: c25c210f590e ("usb: dwc3: qcom: add URS Host support for sdm845 ACPI boot")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
-Changes in v3:
-- use if statement instead of ?: .
-- Add space in Fixes info.
----
- drivers/usb/dwc3/dwc3-qcom.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Honestly, I do not know. This code comes from a SPDIF receiver driver 
+where it handles interrupted incoming SPDIF stream. You are right it is 
+related to capture. I will ask the alsa devs about the playback solution 
+specifically.
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 3cb01cdd02c2..b81a9e1c1315 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -769,9 +769,12 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 
- 		if (qcom->acpi_pdata->is_urs) {
- 			qcom->urs_usb = dwc3_qcom_create_urs_usb_platdev(dev);
--			if (!qcom->urs_usb) {
-+			if (IS_ERR_OR_NULL(qcom->urs_usb)) {
- 				dev_err(dev, "failed to create URS USB platdev\n");
--				return -ENODEV;
-+				if (!qcom->urs_usb)
-+					return -ENODEV;
-+				else
-+					return PTR_ERR(qcom->urs_usb);
- 			}
- 		}
- 	}
--- 
-2.17.1
+Yes I will CC the next version to alsa-dev just in case.
 
+> 
+>> +		snd_pcm_stream_unlock_irqrestore(substream, _flags);
+>> +	}
+>> +}
+>> +
+>>   int u_audio_start_capture(struct g_audio *audio_dev)
+>>   {
+>>   	struct snd_uac_chip *uac = audio_dev->uac;
+>> @@ -630,6 +644,7 @@ void u_audio_stop_capture(struct g_audio *audio_dev)
+>>   {
+>>   	struct snd_uac_chip *uac = audio_dev->uac;
+>>   
+>> +	stop_substream(&uac->c_prm);
+>>   	set_reported_srate(&uac->c_prm, 0);
+>>   	if (audio_dev->in_ep_fback)
+>>   		free_ep_fback(&uac->c_prm, audio_dev->in_ep_fback);
+>> @@ -713,6 +728,7 @@ void u_audio_stop_playback(struct g_audio *audio_dev)
+>>   {
+>>   	struct snd_uac_chip *uac = audio_dev->uac;
+>>   
+>> +	stop_substream(&uac->p_prm);
+>>   	set_reported_srate(&uac->p_prm, 0);
+>>   	free_ep(&uac->p_prm, audio_dev->in_ep);
+>>   }
