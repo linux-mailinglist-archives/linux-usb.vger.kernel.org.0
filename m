@@ -2,144 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F7347E060
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Dec 2021 09:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A2847E3B3
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Dec 2021 13:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347223AbhLWIYq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Dec 2021 03:24:46 -0500
-Received: from mga03.intel.com ([134.134.136.65]:35809 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347187AbhLWIY2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Dec 2021 03:24:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640247868; x=1671783868;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=r91At3LZD4Dka+efIxucm5+GDhsdmP3uafoJ8RM7pDw=;
-  b=mFPbj99m6hDFdblry92xhJVS94IjywzvH53bpEvFnuslMgKKK0rkTdAs
-   ATIXwk+67mXVMKR3TcH4q9X7q5J9S6xFjVFhCFnDS09Y7uFpu1SaMXW5P
-   f8ToPuZo5Z7ePqfDzuVvhEI0hfgsRFbycOFIDa4foI49AqyYy2qdOy/CM
-   Xq0Q2tYFrUvJ2QaWTGkTViE4lBX7QOSN8nRgpjU20xBARanpDkswz241t
-   ixhPlOEwQ5bkrYmduvj/U1Vhrcdz+mM5u9BLptmj0JFQe6DW3YkpYFeey
-   FFDthgir4QYqAJYr2jrs5gG82KtPNT06m5lIS2OH/dQoNbVg0/Zk+976i
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="240735641"
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="240735641"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 00:24:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="664517221"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Dec 2021 00:24:23 -0800
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 5/5] usb: Remove usb_for_each_port()
-Date:   Thu, 23 Dec 2021 11:24:32 +0300
-Message-Id: <20211223082432.45653-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211223081620.45479-1-heikki.krogerus@linux.intel.com>
-References: <20211223081620.45479-1-heikki.krogerus@linux.intel.com>
+        id S243478AbhLWMs6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Dec 2021 07:48:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233015AbhLWMs5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Dec 2021 07:48:57 -0500
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46EACC061401
+        for <linux-usb@vger.kernel.org>; Thu, 23 Dec 2021 04:48:57 -0800 (PST)
+Received: by mail-lj1-x244.google.com with SMTP id u22so8901751lju.7
+        for <linux-usb@vger.kernel.org>; Thu, 23 Dec 2021 04:48:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=Qdp0SHs3xmfRjgLIyqNwEa9EGz3sQom2u8TOqtBT/Zc=;
+        b=jzCVbEmo7Mp7lgUQtiFrO8XWd0mYhPpNhMv6S/T+bbov30yrVbsleqkEdNeMRIhwk7
+         T0YPg/m4wh7jB98NYz2VAgEs2nCJ/tX5K5mF5vlF1+KlSA/t7neCnaamsQ0k18/ET8kZ
+         BtmgiYXwB8Om/nP47yuZL5Firns7aQ9Vkp6Zm93xHRzT3IM+vC1Msa0hmxGrAc8KZzHd
+         8edJEzGGDM8oB+AeC3+12dhFoCKKvqlyLlzfa3x9EQFGm9SWy4viKMCrRSiT6kWSTprP
+         FmY6b//kq5HYsF5do2wCtmHWB+uZiam3RZ2yGEHRSsMdMfZ2Rlco849Zvd4WMSCJ8u4o
+         VpOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=Qdp0SHs3xmfRjgLIyqNwEa9EGz3sQom2u8TOqtBT/Zc=;
+        b=fmfz9PptKq2YTBdOXAxFGEMlb1XWGCXGBuzjn3BxqKaavtcwXZVUg417lpwQNQn4XV
+         CXk6B3H2MA8EcUJ4m1s/MQKbLjMPMlfIPh8FAkNdBE/2S/YITBugvyKaQlSnfqnt18au
+         hZYG2a36Q1fqU06PMFYCtjkLuMSE3ddGtGwJ/Y8+DPsL+j/aK/DsrwgY8ED/EECGLt3/
+         0iwvje/nytRfrGmJlQb8duzWVWDgh+BbQ5G3riXsz6xiBU3tZT9WuJJLb5L+DP+S5exK
+         BwTF5sn//C5WVVow+zUeXm1JtQby8BDhrYLLDEq90qhQtDWLUeC5QktROzKElb9Y2rBZ
+         WJhQ==
+X-Gm-Message-State: AOAM5304gOJIDxLTnyVDyrB/8GOP+gperhtXYk/llgs8doO2J1xAncFL
+        SxkWB/B1lT27JJgbsf4GwU35ue2YSvPaJ37fCjg=
+X-Google-Smtp-Source: ABdhPJzQ/WZ5ywZXDnRAykniVUwVeB2dT2/RL0xgKiUcEn58dxqLLlx2NwMtwws7d3bkQf9vZFk6S56IWCaarW205eE=
+X-Received: by 2002:a2e:a78e:: with SMTP id c14mr1666364ljf.162.1640263735364;
+ Thu, 23 Dec 2021 04:48:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Sender: ibrahimabdul2006@gmail.com
+Received: by 2002:a05:651c:1252:0:0:0:0 with HTTP; Thu, 23 Dec 2021 04:48:54
+ -0800 (PST)
+From:   "Mrs.Nicole  Marois" <nicole1563marois@gmail.com>
+Date:   Thu, 23 Dec 2021 12:48:54 +0000
+X-Google-Sender-Auth: E5lq8Vr_yTV8426ZX6zmIWhN0_Q
+Message-ID: <CAN-tx0z5y7xY2RVcuCDcixvnNeYitLKTiuSCNzwQsarjFHSrDA@mail.gmail.com>
+Subject: Hello Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There are no more users for the function.
+Hello Dear,
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/core/usb.c | 46 ------------------------------------------
- include/linux/usb.h    |  9 ---------
- 2 files changed, 55 deletions(-)
+Please do not feel disturbed for contacting you, based on the critical
+condition I find mine self though, it's not financial problem, but my
+health you might have know that cancer is not what to talk home about,
+I am married to Mr.Duclos Marois who worked with Tunisia embassy in
+Burkina Faso for nine years before he died in the year 2012.We were
+married for eleven years without a child. He died after a brief
+illness that lasted for five days.
 
-diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-index 62368c4ed37af..2ce3667ec6fae 100644
---- a/drivers/usb/core/usb.c
-+++ b/drivers/usb/core/usb.c
-@@ -398,52 +398,6 @@ int usb_for_each_dev(void *data, int (*fn)(struct usb_device *, void *))
- }
- EXPORT_SYMBOL_GPL(usb_for_each_dev);
- 
--struct each_hub_arg {
--	void *data;
--	int (*fn)(struct device *, void *);
--};
--
--static int __each_hub(struct usb_device *hdev, void *data)
--{
--	struct each_hub_arg *arg = (struct each_hub_arg *)data;
--	struct usb_hub *hub;
--	int ret = 0;
--	int i;
--
--	hub = usb_hub_to_struct_hub(hdev);
--	if (!hub)
--		return 0;
--
--	mutex_lock(&usb_port_peer_mutex);
--
--	for (i = 0; i < hdev->maxchild; i++) {
--		ret = arg->fn(&hub->ports[i]->dev, arg->data);
--		if (ret)
--			break;
--	}
--
--	mutex_unlock(&usb_port_peer_mutex);
--
--	return ret;
--}
--
--/**
-- * usb_for_each_port - interate over all USB ports in the system
-- * @data: data pointer that will be handed to the callback function
-- * @fn: callback function to be called for each USB port
-- *
-- * Iterate over all USB ports and call @fn for each, passing it @data. If it
-- * returns anything other than 0, we break the iteration prematurely and return
-- * that value.
-- */
--int usb_for_each_port(void *data, int (*fn)(struct device *, void *))
--{
--	struct each_hub_arg arg = {data, fn};
--
--	return usb_for_each_dev(&arg, __each_hub);
--}
--EXPORT_SYMBOL_GPL(usb_for_each_port);
--
- /**
-  * usb_release_dev - free a usb device structure when all users of it are finished.
-  * @dev: device that's been disconnected
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 7ccaa76a9a968..200b7b79acb56 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -875,15 +875,6 @@ extern struct usb_host_interface *usb_find_alt_setting(
- 		unsigned int iface_num,
- 		unsigned int alt_num);
- 
--#if IS_REACHABLE(CONFIG_USB)
--int usb_for_each_port(void *data, int (*fn)(struct device *, void *));
--#else
--static inline int usb_for_each_port(void *data, int (*fn)(struct device *, void *))
--{
--	return 0;
--}
--#endif
--
- /* port claiming functions */
- int usb_hub_claim_port(struct usb_device *hdev, unsigned port1,
- 		struct usb_dev_state *owner);
--- 
-2.34.1
+Since his death I decided not to remarry, When my late husband was
+alive he deposited the sum of US$ 9.2m (Nine million two hundred
+thousand dollars) in a bank in Burkina Faso, Presently this money is
+still in bank. And My Doctor told me that I don't have much time to
+live because of the cancer problem, Having known my condition I
+decided to hand you over this fond to take care of the less-privileged
+people, you will utilize this money the way I am going to instruct
+herein. I want you to take 30 Percent of the total money for your
+personal use While 70% of the money will go to charity" people and
+helping the orphanage.
 
+I don't want my husband's efforts to be used by the Government. I grew
+up as an Orphan and I don't have anybody as my family member,
+
+Regards,
+
+Mrs.Nicole Marois.
+written from Hospital.
