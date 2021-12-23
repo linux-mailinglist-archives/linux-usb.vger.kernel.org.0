@@ -2,152 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6E4547E027
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Dec 2021 09:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BC047E034
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Dec 2021 09:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242825AbhLWIEn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Dec 2021 03:04:43 -0500
-Received: from mga06.intel.com ([134.134.136.31]:27737 "EHLO mga06.intel.com"
+        id S243178AbhLWIQO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Dec 2021 03:16:14 -0500
+Received: from mga01.intel.com ([192.55.52.88]:28533 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242745AbhLWIEn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Dec 2021 03:04:43 -0500
+        id S239315AbhLWIQO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Dec 2021 03:16:14 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640246683; x=1671782683;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i+YD/pNRVPPsMYgsiZ0v66EnAsM8Wm2IxjTw8+56sVQ=;
-  b=eiktmwc+Kbnp4sTdFUComIRiv+UzjUnVQ3HS9uNy7+jBkPmI61Tc/d3c
-   yhSJ79drUIq5lLlfHy+lwpHfWUR9tU3z6h+wOXUw289aJmgGK4N78sIgR
-   IfrccaSNvjVIq9NSwSQpAC53LpLXfkJgT/sXkRlaiCFJ13YtwO7LCat0x
-   QoKgzEhplwGhmETbEgt239+F/W36AArLIpXdkggc1OhmsxZPCabVTe1NB
-   7eWcYn/kKNQIl49sK/3iZCKed6AmD9UROSldllBf9J6BOIiWeFSd7YNHR
-   INdRTpgXP7BI4yhqFGUeN+gDwIg+PU4UebvnzhapQ4E1Wh29SUSopvB5r
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="301544454"
+  t=1640247374; x=1671783374;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=caOSOHFYfroqQvIFz1XFx/aHEFOYI6OG0vAjNDRw6/I=;
+  b=B10z07FVvkX3u2wgO0eOlx+XWhc3tQYyqR0/j2JuaHC56qCTP84MdWQz
+   Z8a6IselC5ZPRvGbtyct85h/cX6a0WCZeTVNgRsC03at1/aVq7yQQl2qC
+   Ma6dueAZBmCUYpHvUjQExqE/w5KboexQK5XLnIWHNpUMPRdpaFRgTtU2e
+   cMa/EaUEVt2alZ/cUI55K+IQPUqhcTTrNf6Cy2/lHx1RBefqXNhK+06o3
+   5Zlfgb1YZ7O+ZLQuJJegEnI7x8dOkGYu4O0J1/GRK4ku+DLmHVBc8yYQ0
+   m52vDGcIHotSbzDkjRbJc+lv/OXXRZj1MXqbydgHatnKyd1F1zIaqIoB3
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="264990656"
 X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="301544454"
+   d="scan'208";a="264990656"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 00:04:42 -0800
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 00:16:14 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="664513558"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 23 Dec 2021 00:04:38 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 23 Dec 2021 10:04:38 +0200
-Date:   Thu, 23 Dec 2021 10:04:38 +0200
+   d="scan'208";a="664515512"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 23 Dec 2021 00:16:11 -0800
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Prashant Malani <pmalani@chromium.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 2/5] acpi: Store CRC-32 hash of the _PLD in struct
- acpi_device
-Message-ID: <YcQtlg5QtrMa4xzz@kuha.fi.intel.com>
-References: <20211222143258.82305-1-heikki.krogerus@linux.intel.com>
- <20211222143258.82305-3-heikki.krogerus@linux.intel.com>
- <CAJZ5v0iJhM2p+GDR+Ta0QZLdsvar=ybef8DnEHV1=-E-swdL0g@mail.gmail.com>
+        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/5] acpi: Store _PLD information and convert users
+Date:   Thu, 23 Dec 2021 11:16:15 +0300
+Message-Id: <20211223081620.45479-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0iJhM2p+GDR+Ta0QZLdsvar=ybef8DnEHV1=-E-swdL0g@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 05:55:32PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Dec 22, 2021 at 3:33 PM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > Storing CRC-32 hash of the Physical Location of Device
-> > object (_PLD) with devices that have it. The hash is stored
-> > to a new struct acpi_device member "pld_crc".
-> >
-> > The hash makes it easier to find devices that share a
-> > location, as there is no need to evaluate the entire object
-> > every time. Knowledge about devices that share a location
-> > can be used in device drivers that need to know the
-> > connections to other components inside a system. USB3 ports
-> > will for example always share their location with a USB2
-> > port.
-> >
-> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > ---
-> >  drivers/acpi/scan.c     | 16 ++++++++++++++++
-> >  include/acpi/acpi_bus.h | 14 +++++++++++++-
-> >  2 files changed, 29 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> > index 7ff55a197a583..113414c46b713 100644
-> > --- a/drivers/acpi/scan.c
-> > +++ b/drivers/acpi/scan.c
-> > @@ -19,6 +19,7 @@
-> >  #include <linux/dma-map-ops.h>
-> >  #include <linux/platform_data/x86/apple.h>
-> >  #include <linux/pgtable.h>
-> > +#include <linux/crc32.h>
-> >
-> >  #include "internal.h"
-> >
-> > @@ -667,6 +668,19 @@ static int acpi_tie_acpi_dev(struct acpi_device *adev)
-> >         return 0;
-> >  }
-> >
-> > +static void acpi_store_pld_crc(struct acpi_device *adev)
-> > +{
-> > +       struct acpi_pld_info *pld;
-> > +       acpi_status status;
-> > +
-> > +       status = acpi_get_physical_device_location(adev->handle, &pld);
-> > +       if (ACPI_FAILURE(status))
-> > +               return;
-> > +
-> > +       adev->pld_crc = crc32(~0, pld, sizeof(*pld));
-> > +       ACPI_FREE(pld);
-> > +}
-> > +
-> >  static int __acpi_device_add(struct acpi_device *device,
-> >                              void (*release)(struct device *))
-> >  {
-> > @@ -725,6 +739,8 @@ static int __acpi_device_add(struct acpi_device *device,
-> >         if (device->wakeup.flags.valid)
-> >                 list_add_tail(&device->wakeup_list, &acpi_wakeup_device_list);
-> >
-> > +       acpi_store_pld_crc(device);
-> > +
-> >         mutex_unlock(&acpi_device_lock);
-> >
-> >         if (device->parent)
-> > diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-> > index 8e87ead2af341..1977db19458ed 100644
-> > --- a/include/acpi/acpi_bus.h
-> > +++ b/include/acpi/acpi_bus.h
-> > @@ -356,10 +356,23 @@ struct acpi_device_data {
-> >         struct list_head subnodes;
-> >  };
-> >
-> > +/*
-> > + * struct acpi_device_location - Device location based on _PLD
-> > + * @devices: List of devices that share this location
-> > + * @node: Entry in the internal list of locations
-> > + * @pld_crc: CRC-32 hash of the _PLD
-> > + */
-> > +struct acpi_device_location {
-> > +       struct list_head devices;
-> > +       struct list_head node;
-> > +       u32 pld_crc;
-> > +};
-> 
-> Does this get used anywhere or is it a leftover from the previous version?
+Hi,
 
-No. I'm sorry that was supposed to be removed. I'll resend.
+The last version (v4) was not properly cleaned up. Should be now OK.
+
+
+v4 cover letter:
+
+Now only storing the crc hash to a new member in struct acpi_device,
+just like proposed by Rafael. In port-mapper.c I'm then scanning the
+acpi bus separately with every port in order to find the matching
+devices.
+
+
+v3 cover letter:
+
+The _PLD buffer is no longer stored as requested by Rafael, so the
+drivers will need to continue to evaluate the _PLD if they need it.
+
+The stored locations will therefore only contain the list of other
+devices that share the location, but that is most important, and in
+practice the main goal of the series in any case.
+
+
+v2 cover letter:
+
+I'm now using the helpers device_match_acpi_dev() and
+device_match_fwnode() like Andy suggested. No other changes.
+
+
+The original cover letter:
+
+This removes the need for the drivers to always separately evaluate
+the _PLD. With the USB Type-C connector and USB port mapping this
+allows us to start using the component framework and remove the custom
+APIs.
+
+So far the only users of the _PLD information have been the USB
+drivers, but it seems it will be used also at least in some camera
+drivers later. These nevertheless touch mostly USB drivers.
 
 thanks,
 
+Heikki Krogerus (5):
+  acpi: Export acpi_bus_type
+  acpi: Store CRC-32 hash of the _PLD in struct acpi_device
+  usb: Link the ports to the connectors they are attached to
+  usb: typec: port-mapper: Convert to the component framework
+  usb: Remove usb_for_each_port()
+
+ Documentation/ABI/testing/sysfs-bus-usb |   9 +
+ drivers/acpi/bus.c                      |   1 +
+ drivers/acpi/scan.c                     |  16 ++
+ drivers/usb/core/port.c                 |  32 +++
+ drivers/usb/core/usb.c                  |  46 ----
+ drivers/usb/typec/Makefile              |   3 +-
+ drivers/usb/typec/class.c               |   2 -
+ drivers/usb/typec/class.h               |  10 +-
+ drivers/usb/typec/port-mapper.c         | 279 ++++--------------------
+ include/acpi/acpi_bus.h                 |   1 +
+ include/linux/usb.h                     |   9 -
+ include/linux/usb/typec.h               |  12 -
+ 12 files changed, 105 insertions(+), 315 deletions(-)
+
 -- 
-heikki
+2.34.1
+
