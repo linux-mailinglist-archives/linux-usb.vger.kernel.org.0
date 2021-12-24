@@ -2,60 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D04EB47E854
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Dec 2021 20:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A2E47EACA
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Dec 2021 04:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244913AbhLWT14 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Dec 2021 14:27:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240572AbhLWT1z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Dec 2021 14:27:55 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD610C061759
-        for <linux-usb@vger.kernel.org>; Thu, 23 Dec 2021 11:27:54 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id bu9so14416568lfb.7
-        for <linux-usb@vger.kernel.org>; Thu, 23 Dec 2021 11:27:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=PA5Eb3SKatYFaqsO/40bx9AAytaL07oA6ydkj8EAbzQ=;
-        b=CBPA4ALIypkAp1JGR53249NWjS2ISum3yTx+qhIi2R0i7JWzCjFjGKT62N6pAbNYuw
-         hCJ+laW2V9hJTUsof1tHYBnpCigPQvWli0wGO+aeZvQWk7moqFR/lFDqzuKrtDlaLFFz
-         2+ktVE3UgAph/DsEp7qLna13OfX4E8o2QNgiagbWnGCkUon3Ebho+zrb1XrDrmXRikcL
-         TWGPDcshijjLNDHuXRdCWd5ZrsrU4+VqwNiFwfFss6SDmbZxfNoRLe/1YFIYEbnc9Xu4
-         lj39pVYpGp68XVpIoExoClPXsdw6wQnna/xMVu3kH3crdB7y3cTWR4AkUgVAKq2whLwu
-         ODNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=PA5Eb3SKatYFaqsO/40bx9AAytaL07oA6ydkj8EAbzQ=;
-        b=Oc3Ami9kx3QDLKUazhlEhMV3jzMCwsQmq3I3H0OCo+9+tGpIsCAqdYvtbXntInHO+A
-         73bE2rUZSXHifxk3r538Ayp5inPnD9dxOaVRGPLat+4ftrqP3X7+fNc3+i9spvXndKfg
-         UEAmVCBlr6PQZDTH6jKnC3P3gUCK7ePfvfXwpQ7AJgaVwMpxcruJt6tfj9worhzubRQr
-         wD78cmdssusMk9KwYLJRxtQPsks7Qi3U0MANg3uIEosqIJ0JzHMSMezN9VgQmBXfSwaI
-         x8uoqTcZg52k2Fia2svwBInmLogauS/eEYORdI5UD+ugmivCiI3y2CSKDT7ShU4+va/L
-         zajA==
-X-Gm-Message-State: AOAM5309YULek/XkOOiWPxhpN7ykZc6swygvqpK1ctMCvJaVqP8GivGj
-        KpVrU1t6V+ws42SEhhHljT6yygJHcSDVwKa/114=
-X-Google-Smtp-Source: ABdhPJwl+N2X5TF9aqmmQwNU5NykOChaz69zL7yPj0EG0oButYrkHL2sx+F1GWdzjTQjR0LAnak1lukH6YKKBwj8Wtg=
-X-Received: by 2002:a05:6512:15a7:: with SMTP id bp39mr1583529lfb.363.1640287672745;
- Thu, 23 Dec 2021 11:27:52 -0800 (PST)
+        id S1351023AbhLXDTC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Dec 2021 22:19:02 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:56336 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1350989AbhLXDTB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Dec 2021 22:19:01 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowAAH6RUTPMVhaMXHBA--.3002S2;
+        Fri, 24 Dec 2021 11:18:43 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     hminas@synopsys.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] usb: dwc2: host: Check for error map
+Date:   Fri, 24 Dec 2021 11:18:42 +0800
+Message-Id: <20211224031842.1564705-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:ab3:73d5:0:0:0:0:0 with HTTP; Thu, 23 Dec 2021 11:27:52
- -0800 (PST)
-Reply-To: revfrpaulwilliams2@gmail.com
-From:   "Rev. Fr. Paul Williams" <melindagatesfoundation84@gmail.com>
-Date:   Fri, 24 Dec 2021 00:57:52 +0530
-Message-ID: <CANLnpRvNsPEZuGysAzb=MJUYuO8bQRDAzFFwzyhTVA-qk6ZT+A@mail.gmail.com>
-Subject: Donation From Williams Foundation.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAAH6RUTPMVhaMXHBA--.3002S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZrWDZF1fCF4UWF45JFW7XFb_yoW8Gr45p3
+        yUKFyFkF1Utrn2vw45tF98XFyrJan3X3sFkrW7C39Y9ws5Xr45GrnxGas8XrW5tF92k3Wa
+        kF47Ar1rCF45JFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
+        GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU0NtcUUU
+        UU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Contact Rev. Fr. Paul Williams Immediately For A Charity Donation Of
-$6,200,000.00 United States Dollars At E-Mail:
-revfrpaulwilliams2@gmail.com
+For the possible failure of the dma_map_single(), it should be better to
+check the return map address by using dma_mapping_error() to guarantee
+the valid of the map address.
+
+Fixes: 197ba5f406cc ("Move DWC2 driver out of staging")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/usb/dwc2/hcd_ddma.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/dwc2/hcd_ddma.c b/drivers/usb/dwc2/hcd_ddma.c
+index a858b5f9c1d6..89ed93a67c8a 100644
+--- a/drivers/usb/dwc2/hcd_ddma.c
++++ b/drivers/usb/dwc2/hcd_ddma.c
+@@ -143,6 +143,7 @@ static void dwc2_desc_list_free(struct dwc2_hsotg *hsotg, struct dwc2_qh *qh)
+ 
+ static int dwc2_frame_list_alloc(struct dwc2_hsotg *hsotg, gfp_t mem_flags)
+ {
++	dma_addr_t addr;
+ 	if (hsotg->frame_list)
+ 		return 0;
+ 
+@@ -151,9 +152,13 @@ static int dwc2_frame_list_alloc(struct dwc2_hsotg *hsotg, gfp_t mem_flags)
+ 	if (!hsotg->frame_list)
+ 		return -ENOMEM;
+ 
+-	hsotg->frame_list_dma = dma_map_single(hsotg->dev, hsotg->frame_list,
+-					       hsotg->frame_list_sz,
+-					       DMA_TO_DEVICE);
++	addr = dma_map_single(hsotg->dev, hsotg->frame_list,
++			      hsotg->frame_list_sz,
++			      DMA_TO_DEVICE);
++	if (dma_mapping_error(hsotg->dev, addr))
++		return -ENOMEM;
++
++	hsotg->frame_list_dma = addr;
+ 
+ 	return 0;
+ }
+-- 
+2.25.1
+
