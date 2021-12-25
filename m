@@ -2,99 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B119447F30D
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Dec 2021 12:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 647E747F34B
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Dec 2021 14:09:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbhLYLQC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Dec 2021 06:16:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231484AbhLYLQC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Dec 2021 06:16:02 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A680EC061401;
-        Sat, 25 Dec 2021 03:16:01 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id x21so24025426lfa.5;
-        Sat, 25 Dec 2021 03:16:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=jD3Ho49ZXVfN6HlbKxzdGSI6sz6nWNyLf9zcGh6i8pk=;
-        b=bvQ1dMcEqw0yfAIAJZhBI4hSQrXQDRvrQdCHqD1vyeg/pceL0cduJSPLXOwW7MDAOx
-         IUIt6P1SmR9bBsd0sDlno33k5NMM/ohOOd6sEnBFldx+lzb5pAItCz/cnlz7FJCUek/o
-         /p12JJStViW5vfzuS1qXXof0SShP1I70C2rGFXJIlM3t52A0nnOs5sTRhBJBlUTbA9f/
-         ms1KuDX+I8v2FUkBH6KgwppAbeg5SysCfzbQiFRmVfRXKUuJl2vei+lVebl5+7tqTj43
-         YxDPoQ9ZUfXcm3g4K0H7Lpv++J+bRM+OqvM9/4FP1ZIPGaDPsvRCvcdNCB2aHeSbjmX0
-         UjZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jD3Ho49ZXVfN6HlbKxzdGSI6sz6nWNyLf9zcGh6i8pk=;
-        b=axvOD2Fp72Te4MlRnPsyrF48TxxZxjSd8lpxRDVWEYO/S6TZEDJiIl+jxiBWgdvgP7
-         21mZMefgZ1YtFA2GdVVMqbqTlSL1Pkc4RHj+ZR+VanaJokoIGpSDh0Igcn1Yl3jzYdxS
-         Cyu6mJR854PMxkQXsSjaJPScCDBR3z+YbZaybYyru4QY9M/MitfXCHnJKaQaqwGz3w4f
-         AJ/VWkEbDcJTooqUp1bGtMnZGls96s3wS20RtxckbF00w+23/Kccw9iYxTmAY15gG24n
-         Rpws00ugzM3lKgHv6QddaZvhQa4mxSXtsgcKK4k/OYAU+ViAt/2nUbfY6SIlsv1Ubkpt
-         V+vQ==
-X-Gm-Message-State: AOAM5326dtnQhIroshZIt5YWKvER1nAVHu5fZmKZHI+0cVvInjd7IwXG
-        ZhYVFzMy/BJuuv035VmMCbw=
-X-Google-Smtp-Source: ABdhPJwvYB0w3n8Ru3efRBiK7m5ojAAr3OM0vWrkkFa2fkcpgQfKuQ3nnAJlFknilSRiF+cdPZVAcw==
-X-Received: by 2002:a05:6512:30f:: with SMTP id t15mr5280604lfp.650.1640430959306;
-        Sat, 25 Dec 2021 03:15:59 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.235.97])
-        by smtp.gmail.com with ESMTPSA id s4sm1016787ljp.40.2021.12.25.03.15.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Dec 2021 03:15:58 -0800 (PST)
-Message-ID: <45e8c415-8aa1-7a2a-c435-3e014f3856eb@gmail.com>
-Date:   Sat, 25 Dec 2021 14:15:57 +0300
+        id S231749AbhLYNJj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Dec 2021 08:09:39 -0500
+Received: from cable.insite.cz ([84.242.75.189]:54661 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231743AbhLYNJi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 25 Dec 2021 08:09:38 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 04FFEA1A3D403;
+        Sat, 25 Dec 2021 14:09:36 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1640437776; bh=UM+aI3WG2Lq9cEtfGGCX2kpzhUcS85UPgVbKukNvb74=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Q2y2NHirT2u2R/NwPDVk2osOrTWG/pgC+OdswbFlcrrChzzszIww8MKWDwbpEyFQr
+         aG3VlPF+cPww49D7MFVRLfIMFhI3NdsVjyJnVxam2IxV+l4dkn9KzXoGvfrZN3Oeoi
+         q7MAkMSiVhbKZfGiTxNntdNkEVR8r0DF8X9Ftn28=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id CqfUZdzNAK54; Sat, 25 Dec 2021 14:09:30 +0100 (CET)
+Received: from precision.doma (dustin.pilsfree.net [81.201.58.138])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id A3161A1A3D400;
+        Sat, 25 Dec 2021 14:09:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1640437770; bh=UM+aI3WG2Lq9cEtfGGCX2kpzhUcS85UPgVbKukNvb74=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hf8YYCKZ5Xqv149Ovv9Qhu+ELpt+twhnahweJl/PbNRLvyI88B3mLfMiPhDvZ9C21
+         +kjHyNrjxKCgGFHrHy/8lmHQAX/6mQH4WsnFWyvNbP5ZpFBSV+JdJDVQsFZ7y97rXh
+         BXMn2dwgj9YXAN6FEjwQ3yfBYUlmuHPuOTiwAR6Q=
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Pavel Hofman <pavel.hofman@ivitera.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH 1/2] docs: ABI: added missing num_requests param to UAC2
+Date:   Sat, 25 Dec 2021 14:09:28 +0100
+Message-Id: <20211225130929.205629-1-pavel.hofman@ivitera.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [syzbot] KMSAN: uninit-value in ax88772a_hw_reset
-Content-Language: en-US
-To:     syzbot <syzbot+8d179821571093c5f928@syzkaller.appspotmail.com>,
-        andrew@lunn.ch, davem@davemloft.net, glider@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux@rempel-privat.de,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <0000000000005fb57e05d1620da1@google.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <0000000000005fb57e05d1620da1@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11/22/21 18:12, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    412af9cd936d ioremap.c: move an #include around
-> git tree:       https://github.com/google/kmsan.git master
-> console output: https://syzkaller.appspot.com/x/log.txt?x=136fb126b00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=2d142cdf4204061
-> dashboard link: https://syzkaller.appspot.com/bug?extid=8d179821571093c5f928
-> compiler:       clang version 14.0.0 (git@github.com:llvm/llvm-project.git 0996585c8e3b3d409494eb5f1cad714b9e1f7fb5), GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+8d179821571093c5f928@syzkaller.appspotmail.com
-> 
-> asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
-> asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
-> asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0016: -71
-> asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
-> asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable hardware MII access
+The existing configfs-usb-gadget-uac2 ABI doc for testing was missing
+the num_requests param. The patch adds the parameter to the document.
 
+Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+---
+ Documentation/ABI/testing/configfs-usb-gadget-uac2 | 2 ++
+ 1 file changed, 2 insertions(+)
 
-#syz fix: asix: fix uninit-value in asix_mdio_read()
+diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uac2 b/Documentation/ABI/testing/configfs-usb-gadget-uac2
+index 244d96650123..9cddadc53e0b 100644
+--- a/Documentation/ABI/testing/configfs-usb-gadget-uac2
++++ b/Documentation/ABI/testing/configfs-usb-gadget-uac2
+@@ -30,4 +30,6 @@ Description:
+ 					(in 1/256 dB)
+ 		p_volume_res		playback volume control resolution
+ 					(in 1/256 dB)
++		req_number	the number of pre-allocated requests for both capture
++					and playback
+ 		=====================	=======================================
+-- 
+2.25.1
 
-
-With regards,
-Pavel Skripkin
