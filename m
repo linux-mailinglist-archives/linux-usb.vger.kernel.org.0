@@ -2,59 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4C447F3FA
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Dec 2021 18:10:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED40D47F499
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Dec 2021 23:37:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232422AbhLYRKi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Dec 2021 12:10:38 -0500
-Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:38479 "EHLO
-        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229517AbhLYRKi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Dec 2021 12:10:38 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V.ix3Go_1640452228;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V.ix3Go_1640452228)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 26 Dec 2021 01:10:36 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     davem@davemloft.net
-Cc:     kuba@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] asix: Use min() instead of doing it manually
-Date:   Sun, 26 Dec 2021 01:08:47 +0800
-Message-Id: <20211225170847.115298-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        id S232973AbhLYWcx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Dec 2021 17:32:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229494AbhLYWcx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Dec 2021 17:32:53 -0500
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B323C061401;
+        Sat, 25 Dec 2021 14:32:52 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1640471568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=bQtXtryogCMjBVY3/k4gfUtoHHlEfbKEdPsvtG8nGX0=;
+        b=NPqwKxmYJQbRt6rRKmYIxtG4GqDaCxsGgEHTjuX+TCJadaQk4JODOBBvtvTLFOGShQOxT0
+        ESEe9QD9pHCCVruUWHtCakoaZfM2uOIABDQH9YqlDnBPlge4QCn4AxZZ/L6Klywp+BpClx
+        Qajc3lgXE1JFJy0L/LzP5yz/oUcp0GI=
+From:   andrey.konovalov@linux.dev
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: raw-gadget: upgrade license identifier
+Date:   Sat, 25 Dec 2021 23:32:36 +0100
+Message-Id: <f55721ade28b2715eaf54b28a1bbfaad7b5adc0d.1640471342.git.andreyknvl@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix following coccicheck warning:
+From: Andrey Konovalov <andreyknvl@gmail.com>
 
-./drivers/net/usb/asix_common.c:545:12-13: WARNING opportunity for
-min().
+Most of the USB gadget modules are licensed as GPL-2.0+. There is no
+reason not to allow using Raw Gadget code under a newer GPL version.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Change SPDX identifier from GPL-2.0 to GPL-2.0+.
+
+Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
+
 ---
- drivers/net/usb/asix_common.c | 2 +-
+
+I don't know whether such license change is possible and what it
+requires.
+
+Initially, when creating raw_gadget.c, I just copied GPL-2.0 from
+somewhere as it didn't seem to matter. Recently, I was looking into
+adding a license to a project that reuses both dummy_hcd.c and
+raw_gadget.c, and I noticed the difference in licensing rules.
+
+Hence this patch.
+---
+ drivers/usb/gadget/legacy/raw_gadget.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
-index 71682970be58..da5a7df312d2 100644
---- a/drivers/net/usb/asix_common.c
-+++ b/drivers/net/usb/asix_common.c
-@@ -542,7 +542,7 @@ static int __asix_mdio_write(struct net_device *netdev, int phy_id, int loc,
- out:
- 	mutex_unlock(&dev->phy_mutex);
- 
--	return ret < 0 ? ret : 0;
-+	return min(ret, 0);
- }
- 
- void asix_mdio_write(struct net_device *netdev, int phy_id, int loc, int val)
+diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+index c5a2c734234a..79d2363cb2b4 100644
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++// SPDX-License-Identifier: GPL-2.0+
+ /*
+  * USB Raw Gadget driver.
+  * See Documentation/usb/raw-gadget.rst for more details.
 -- 
-2.20.1.7.g153144c
+2.25.1
 
