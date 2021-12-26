@@ -2,96 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 051CD47F6F8
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Dec 2021 14:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 193F747F70C
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Dec 2021 15:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233573AbhLZN3n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Dec 2021 08:29:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232345AbhLZN3m (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Dec 2021 08:29:42 -0500
-X-Greylist: delayed 254 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 26 Dec 2021 05:29:42 PST
-Received: from mirix.in-vpn.de (mirix.in-vpn.de [IPv6:2001:67c:1407:a0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE35C06173E;
-        Sun, 26 Dec 2021 05:29:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mirix.org;
-        s=43974b1a7d21b2cf; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
-        Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=htuYveoisK6rglAz8iXUOUxqkcJZuLcbQvz/xoYi8kM=; b=P/A6jJjv0gkVDD+z5y10YSfPaS
-        1SAOT61mHF8RUIQlVxE+TdZNnssy2KBu9fHdxmUhjz9/lfNihojrzHjreU+GsNM6DoW8Pat/RD7ph
-        melBp0FWSfdaw2cly/OU8eOTTWq8Q7agFv9RUCpZ+fl8HAwdFjuROnMPxGRLUAdySJhGCDCvRb1Rw
-        WPyYXL/lyN+i/PwwD6osMuutYwpHv8DGZnU50nUos1NoxaNCa9+ypItfUmLWogg14yD5wAA1Qfrr4
-        25ftZCBqrRR0XIZXzw/R5RtmvZuez16SCW/n432lggFC6sMPJBnXEl6jbw6/3DHCoP+Ak+rEBGNyB
-        TLEzMv7Q==;
-Received: from [::1] (helo=localhost.localdomain)
-        by mirix.in-vpn.de with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim)
-        id 1n1Tal-0005oZ-OR; Sun, 26 Dec 2021 13:29:39 +0000
-From:   Matthias-Christian Ott <ott@mirix.org>
-To:     Petko Manolov <petkan@nucleusys.com>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        Matthias-Christian Ott <ott@mirix.org>
-Subject: [PATCH] net: usb: pegasus: Do not drop long Ethernet frames
-Date:   Sun, 26 Dec 2021 14:29:30 +0100
-Message-Id: <20211226132930.7220-1-ott@mirix.org>
-X-Mailer: git-send-email 2.30.2
+        id S233647AbhLZOCa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Dec 2021 09:02:30 -0500
+Received: from relay038.a.hostedemail.com ([64.99.140.38]:36299 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230035AbhLZOC3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Dec 2021 09:02:29 -0500
+Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay06.hostedemail.com (Postfix) with ESMTP id 1C1D221882;
+        Sun, 26 Dec 2021 14:02:28 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id B753B2002F;
+        Sun, 26 Dec 2021 14:02:20 +0000 (UTC)
+Message-ID: <796577bb0052f4f08f58882dfc86734d72f2aa29.camel@perches.com>
+Subject: Re: [PATCH] usb: raw-gadget: upgrade license identifier
+From:   Joe Perches <joe@perches.com>
+To:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     andrey.konovalov@linux.dev, Felipe Balbi <balbi@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Date:   Sun, 26 Dec 2021 06:02:19 -0800
+In-Reply-To: <CA+fCnZeC8PbDg_E3WWtqGBAwUs65Y7=b5DG=whN-CaOEs5uS7g@mail.gmail.com>
+References: <f55721ade28b2715eaf54b28a1bbfaad7b5adc0d.1640471342.git.andreyknvl@gmail.com>
+         <Ycgi7GiU2udbjF2f@kroah.com>
+         <CA+fCnZeC8PbDg_E3WWtqGBAwUs65Y7=b5DG=whN-CaOEs5uS7g@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: ft5xce35ewnq54qgqq4oa1rx6php6xbt
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: B753B2002F
+X-Spam-Status: No, score=-0.97
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/YVLRXQ1kWJwjA0dugZf74JpeaiVhG8e4=
+X-HE-Tag: 1640527340-980293
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The D-Link DSB-650TX (2001:4002) is unable to receive Ethernet frames
-that are longer than 1518 octets, for example, Ethernet frames that
-contain 802.1Q VLAN tags.
+On Sun, 2021-12-26 at 14:19 +0100, Andrey Konovalov wrote:
+> I wonder if checkpatch could alert about considering GPL-2.0+ when
+> adding new files.
 
-The frames are sent to the pegasus driver via USB but the driver
-discards them because they have the Long_pkt field set to 1 in the
-received status report. The function read_bulk_callback of the pegasus
-driver treats such received "packets" (in the terminology of the
-hardware) as errors but the field simply does just indicate that the
-Ethernet frame (MAC destination to FCS) is longer than 1518 octets.
+No. Licensing is up to the author/submitter.
 
-It seems that in the 1990s there was a distinction between
-"giant" (> 1518) and "runt" (< 64) frames and the hardware includes
-flags to indicate this distinction. It seems that the purpose of the
-distinction "giant" frames was to not allow infinitely long frames due
-to transmission errors and to allow hardware to have an upper limit of
-the frame size. However, the hardware already has such limit with its
-2048 octet receive buffer and, therefore, Long_pkt is merely a
-convention and should not be treated as a receive error.
+One nit checkpatch could warn about is the use of MODULE_LICENSE("GPL v2")
+rather than MODULE_LICENSE("GPL") as that's an unnecessary distinction.
 
-Actually, the hardware is even able to receive Ethernet frames with 2048
-octets which exceeds the claimed limit frame size limit of the driver of
-1536 octets (PEGASUS_MTU).
+See: https://lore.kernel.org/all/alpine.DEB.2.21.1901282105450.1669@nanos.tec.linutronix.de/
 
-Signed-off-by: Matthias-Christian Ott <ott@mirix.org>
+Given there are a several thousand existing uses of "GPL v2" in the
+kernel, do this check only for new patches and not existing files.
 ---
- drivers/net/usb/pegasus.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ scripts/checkpatch.pl | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
-index 140d11ae6688..2582daf23015 100644
---- a/drivers/net/usb/pegasus.c
-+++ b/drivers/net/usb/pegasus.c
-@@ -499,11 +499,11 @@ static void read_bulk_callback(struct urb *urb)
- 		goto goon;
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index b01c36a15d9dd..5b00f1f491aff 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -7418,6 +7418,10 @@ sub process {
+ 				WARN("MODULE_LICENSE",
+ 				     "unknown module license " . $extracted_string . "\n" . $herecurr);
+ 			}
++			if (!$file && $extracted_string eq '"GPL v2"') {
++				WARN("MODULE_LICENSE",
++				     "Prefer \"GPL\" over \"GPL v2\" - see: https://lore.kernel.org/all/alpine.DEB.2.21.1901282105450.1669\@nanos.tec.linutronix.de/\n" . $herecurr);
++			}
+ 		}
  
- 	rx_status = buf[count - 2];
--	if (rx_status & 0x1e) {
-+	if (rx_status & 0x1c) {
- 		netif_dbg(pegasus, rx_err, net,
- 			  "RX packet error %x\n", rx_status);
- 		net->stats.rx_errors++;
--		if (rx_status & 0x06)	/* long or runt	*/
-+		if (rx_status & 0x04)	/* runt	*/
- 			net->stats.rx_length_errors++;
- 		if (rx_status & 0x08)
- 			net->stats.rx_crc_errors++;
--- 
-2.30.2
+ # check for sysctl duplicate constants
+
 
