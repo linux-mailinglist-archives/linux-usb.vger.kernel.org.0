@@ -2,92 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A8447F6F1
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Dec 2021 14:19:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F31BE47F702
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Dec 2021 14:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233355AbhLZNTQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Dec 2021 08:19:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        id S233609AbhLZNhB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Dec 2021 08:37:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232345AbhLZNTQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Dec 2021 08:19:16 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4E5C06173E;
-        Sun, 26 Dec 2021 05:19:15 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id b1so10091973ilj.2;
-        Sun, 26 Dec 2021 05:19:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ca8Aisgix/GZk82j87aGdziJ5JrKmEcmyharhQENfZU=;
-        b=fRtqps8HnJ4GAGhNoR3nkUdmGGsyM40xM8FlmjRoKq/w8a8FGmOph5MPkMNqokZ2Rj
-         25D0ZYz8UKh4bZZ+YEmCCS08kJimOwvxO9uzrdCTyX9M7zNJTCcmXoI7/zeDtTseKe7m
-         ql/AWKN4YxM8vHPbH6e4WWECaeSuNQvI36WvZobJjq/Q0NZAKaBm+pQgs7HK7izrdO9/
-         2GyyCuBmJo9XWP9JtBSupK/tifqmoZPiatXwCWimT6uVsjqqR/PmisE98FPxOD8o26rP
-         jysnpXY/GA7TgOCmUGq4Dd/kPwmTUY4xN1HcLAVmu9Rcnxq2w+SBk+j02jrXL9Qura+F
-         BcQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ca8Aisgix/GZk82j87aGdziJ5JrKmEcmyharhQENfZU=;
-        b=mLo/iaHOCVku8zKqEDeP5ZdHEClYHCk2REdl390sHCnNJzwQH2QfijM3+wO5QxXw1D
-         OsRMkaHySGgnYbYI6PeXdNNvgvC8ER7erATOsCJKNPNe0rd3UL+Zf1TcDmJYh7cbQi7P
-         4RcBybNhNmaF0wfE5P5dZiE8XAIyLcsOGJ+h2OQNDj2CkCTjO8o6xp+qJiTYUFmfjSZP
-         XS7Zy1+1COQbyohCBkixn/aty2G8xq1Etb7GD/RCfRNMjJMh1AfmeCAqQkxIXi0qX5l0
-         bAUAp1qce+swr3kZzhM8mZjvZR42LgJCGCPYijAReDvKNATbfXgkW7HlesM7e0xixLIv
-         W3fg==
-X-Gm-Message-State: AOAM5302+Wtw5sHIY+WikhPNTIfK9WpJma4K0h6R8IPSK5+VAfK8d8Ht
-        x8kVBtdJlBOoyldvDmow4VO0eQx8oNq0gOK/C6fmJ3jAR/4=
-X-Google-Smtp-Source: ABdhPJyNz8OwBngtrRAlXpFx+cXCoXB9vy82xHQ64k8bUNqRL/UzBH5Jk7HtQTdTX7UTv2Q9lmQooNNiOtxzT4Ff1dY=
-X-Received: by 2002:a05:6e02:1bec:: with SMTP id y12mr6357024ilv.233.1640524755174;
- Sun, 26 Dec 2021 05:19:15 -0800 (PST)
+        with ESMTP id S231607AbhLZNhB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Dec 2021 08:37:01 -0500
+Received: from mirix.in-vpn.de (mirix.in-vpn.de [IPv6:2001:67c:1407:a0::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A536C06173E;
+        Sun, 26 Dec 2021 05:37:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mirix.org;
+        s=43974b1a7d21b2cf; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+        Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=PouXeGHk5GCIrvAAQz4A6fu3ENj/uniMqVx6DLVu+M8=; b=Xp7GGAFVmMKjIaAuFHeG69Elkr
+        mPL6uFGFMwjcXRE6zOUQaMzyucx0N3GATJmZ5PGrwJnl076NjZU2+sbmpYfasWv7ltgcYQ2SGbcQq
+        kMDq1M6m9SZs4v/GMeBhQ1fEg5nsLwy2xW891ymMLd8MXrEi5tNIDhYocvPMUNHQ4JtFfiucgIBRX
+        P+S5kDqmkv1xC9KoJZsxFY2KOf+8tqzpAi9MO5VstX96AdwCRwzX9MN0jWwAc1z53henl29Ix5pbl
+        0KyssMWEiRoByLrY5tMWGdgk2KK51Yj+TMpxaaMme7Dp/49GXk/KHjK1dllaWGCqRHJxiK1ifrfLW
+        EZLHnP0A==;
+Received: from [::1] (helo=localhost.localdomain)
+        by mirix.in-vpn.de with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim)
+        id 1n1TWf-0005oP-UU; Sun, 26 Dec 2021 13:25:26 +0000
+From:   Matthias-Christian Ott <ott@mirix.org>
+To:     Petko Manolov <petkan@nucleusys.com>
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        Matthias-Christian Ott <ott@mirix.org>
+Subject: [PATCH] net: usb: pegasus: Request Ethernet FCS from hardware
+Date:   Sun, 26 Dec 2021 14:25:02 +0100
+Message-Id: <20211226132502.7056-1-ott@mirix.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <f55721ade28b2715eaf54b28a1bbfaad7b5adc0d.1640471342.git.andreyknvl@gmail.com>
- <Ycgi7GiU2udbjF2f@kroah.com>
-In-Reply-To: <Ycgi7GiU2udbjF2f@kroah.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Sun, 26 Dec 2021 14:19:04 +0100
-Message-ID: <CA+fCnZeC8PbDg_E3WWtqGBAwUs65Y7=b5DG=whN-CaOEs5uS7g@mail.gmail.com>
-Subject: Re: [PATCH] usb: raw-gadget: upgrade license identifier
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     andrey.konovalov@linux.dev, Felipe Balbi <balbi@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Dec 26, 2021 at 9:08 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Sat, Dec 25, 2021 at 11:32:36PM +0100, andrey.konovalov@linux.dev wrote:
-> > From: Andrey Konovalov <andreyknvl@gmail.com>
-> >
-> > Most of the USB gadget modules are licensed as GPL-2.0+. There is no
-> > reason not to allow using Raw Gadget code under a newer GPL version.
-> >
-> > Change SPDX identifier from GPL-2.0 to GPL-2.0+.
-> >
-> > Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
-> >
-> > ---
-> >
-> > I don't know whether such license change is possible and what it
-> > requires.
->
-> It requires the copyright holder to agree to change the license, as well
-> as anyone who as contributed to it.  If you so desire to do this, please
-> work with them and get the lawyers for those entities to sign off on the
-> patch and I will be glad to take it.
+Commit 1a8deec09d12 ("pegasus: fixes reported packet length") tried to
+configure the hardware to not include the FCS/CRC of Ethernet frames.
+Unfortunately, this does not work with the D-Link DSB-650TX (USB IDs
+2001:4002 and 2001:400b): the transferred "packets" (in the terminology
+of the hardware) still contain 4 additional octets. For IP packets in
+Ethernet this is not a problem as IP packets contain their own lengths
+fields but other protocols also see Ethernet frames that include the FCS
+in the payload which might be a problem for some protocols.
 
-Ah, never mind this patch then. I don't care enough to bother with
-this. I'm not even sure what the difference is, but having less
-restrictions seems better.
+I was not able to open the D-Link DSB-650TX as the case is a very tight
+press fit and opening it would likely destroy it. However, according to
+the source code the earlier revision of the D-Link DSB-650TX (USB ID
+2001:4002) is a Pegasus (possibly AN986) and not Pegasus II (AN8511)
+device. I also tried it with the later revision of the D-Link DSB-650TX
+(USB ID 2001:400b) which is a Pegasus II device according to the source
+code and had the same results. Therefore, I'm not sure whether the RXCS
+(rx_crc_sent) field of the EC0 (Ethernet control_0) register has any
+effect or in which revision of the hardware it is usable and has an
+effect. As a result, it seems best to me to revert commit
+1a8deec09d12 ("pegasus: fixes reported packet length") and to set the
+RXCS (rx_crc_sent) field of the EC0 (Ethernet control_0) register so
+that the FCS/CRC is always included.
 
-I wonder if checkpatch could alert about considering GPL-2.0+ when
-adding new files.
+Fixes: 1a8deec09d12 ("pegasus: fixes reported packet length")
+Signed-off-by: Matthias-Christian Ott <ott@mirix.org>
+---
+ drivers/net/usb/pegasus.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-Thanks!
+diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
+index c4cd40b090fd..140d11ae6688 100644
+--- a/drivers/net/usb/pegasus.c
++++ b/drivers/net/usb/pegasus.c
+@@ -422,7 +422,13 @@ static int enable_net_traffic(struct net_device *dev, struct usb_device *usb)
+ 	ret = read_mii_word(pegasus, pegasus->phy, MII_LPA, &linkpart);
+ 	if (ret < 0)
+ 		goto fail;
+-	data[0] = 0xc8; /* TX & RX enable, append status, no CRC */
++	/* At least two hardware revisions of the D-Link DSB-650TX (USB IDs
++	 * 2001:4002 and 2001:400b) include the Ethernet FCS in the packets,
++	 * even if RXCS is set to 0 in the EC0 register and the hardware is
++	 * instructed to not include the Ethernet FCS in the packet.Therefore,
++	 * it seems best to set RXCS to 1 and later ignore the Ethernet FCS.
++	 */
++	data[0] = 0xc9; /* TX & RX enable, append status, CRC */
+ 	data[1] = 0;
+ 	if (linkpart & (ADVERTISE_100FULL | ADVERTISE_10FULL))
+ 		data[1] |= 0x20;	/* set full duplex */
+@@ -513,6 +519,13 @@ static void read_bulk_callback(struct urb *urb)
+ 		pkt_len = buf[count - 3] << 8;
+ 		pkt_len += buf[count - 4];
+ 		pkt_len &= 0xfff;
++		/* The FCS at the end of the packet is ignored. So subtract
++		 * its length to ignore it.
++		 */
++		pkt_len -= ETH_FCS_LEN;
++		/* Subtract the length of the received status at the end of the
++		 * packet as it is not part of the Ethernet frame.
++		 */
+ 		pkt_len -= 4;
+ 	}
+ 
+-- 
+2.30.2
+
