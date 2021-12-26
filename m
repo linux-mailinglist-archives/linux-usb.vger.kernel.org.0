@@ -2,78 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED40D47F499
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Dec 2021 23:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2F147F5C3
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Dec 2021 09:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232973AbhLYWcx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Dec 2021 17:32:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
+        id S231558AbhLZII0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Dec 2021 03:08:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbhLYWcx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Dec 2021 17:32:53 -0500
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B323C061401;
-        Sat, 25 Dec 2021 14:32:52 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1640471568;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=bQtXtryogCMjBVY3/k4gfUtoHHlEfbKEdPsvtG8nGX0=;
-        b=NPqwKxmYJQbRt6rRKmYIxtG4GqDaCxsGgEHTjuX+TCJadaQk4JODOBBvtvTLFOGShQOxT0
-        ESEe9QD9pHCCVruUWHtCakoaZfM2uOIABDQH9YqlDnBPlge4QCn4AxZZ/L6Klywp+BpClx
-        Qajc3lgXE1JFJy0L/LzP5yz/oUcp0GI=
-From:   andrey.konovalov@linux.dev
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        with ESMTP id S231472AbhLZII0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Dec 2021 03:08:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F28CC06173E;
+        Sun, 26 Dec 2021 00:08:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC26F60DB6;
+        Sun, 26 Dec 2021 08:08:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A821C36AE9;
+        Sun, 26 Dec 2021 08:08:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640506105;
+        bh=YV2p9sKA+D5K8Qe1NnthUg/OzRcqtigFUjBRuoBejUw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pz68rqPx8Fg9DV+4u7lLXVjOMNEF/zliSOHH2MfPFJLZlrEcqeP2WMHHU4oWrLHkB
+         fzwFMievihfgDkYKMrRvpEpAlBAsQlGOALDOVAXOC382EZBOJzBOZB/oqvyQ+5yoCu
+         ZzYqBSHWwrS7xPIl2LiezH5jQdXMGFFOlT5PNUP0=
+Date:   Sun, 26 Dec 2021 09:08:12 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     andrey.konovalov@linux.dev
 Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: raw-gadget: upgrade license identifier
-Date:   Sat, 25 Dec 2021 23:32:36 +0100
-Message-Id: <f55721ade28b2715eaf54b28a1bbfaad7b5adc0d.1640471342.git.andreyknvl@gmail.com>
+Subject: Re: [PATCH] usb: raw-gadget: upgrade license identifier
+Message-ID: <Ycgi7GiU2udbjF2f@kroah.com>
+References: <f55721ade28b2715eaf54b28a1bbfaad7b5adc0d.1640471342.git.andreyknvl@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f55721ade28b2715eaf54b28a1bbfaad7b5adc0d.1640471342.git.andreyknvl@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@gmail.com>
+On Sat, Dec 25, 2021 at 11:32:36PM +0100, andrey.konovalov@linux.dev wrote:
+> From: Andrey Konovalov <andreyknvl@gmail.com>
+> 
+> Most of the USB gadget modules are licensed as GPL-2.0+. There is no
+> reason not to allow using Raw Gadget code under a newer GPL version.
+> 
+> Change SPDX identifier from GPL-2.0 to GPL-2.0+.
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
+> 
+> ---
+> 
+> I don't know whether such license change is possible and what it
+> requires.
 
-Most of the USB gadget modules are licensed as GPL-2.0+. There is no
-reason not to allow using Raw Gadget code under a newer GPL version.
+It requires the copyright holder to agree to change the license, as well
+as anyone who as contributed to it.  If you so desire to do this, please
+work with them and get the lawyers for those entities to sign off on the
+patch and I will be glad to take it.
 
-Change SPDX identifier from GPL-2.0 to GPL-2.0+.
+thanks,
 
-Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
-
----
-
-I don't know whether such license change is possible and what it
-requires.
-
-Initially, when creating raw_gadget.c, I just copied GPL-2.0 from
-somewhere as it didn't seem to matter. Recently, I was looking into
-adding a license to a project that reuses both dummy_hcd.c and
-raw_gadget.c, and I noticed the difference in licensing rules.
-
-Hence this patch.
----
- drivers/usb/gadget/legacy/raw_gadget.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-index c5a2c734234a..79d2363cb2b4 100644
---- a/drivers/usb/gadget/legacy/raw_gadget.c
-+++ b/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  * USB Raw Gadget driver.
-  * See Documentation/usb/raw-gadget.rst for more details.
--- 
-2.25.1
-
+greg k-h
