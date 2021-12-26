@@ -2,77 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2583447F946
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Dec 2021 23:21:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF88347F95E
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Dec 2021 23:28:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234723AbhLZWVZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Dec 2021 17:21:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232727AbhLZWVY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Dec 2021 17:21:24 -0500
-Received: from mirix.in-vpn.de (mirix.in-vpn.de [IPv6:2001:67c:1407:a0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615E9C06173E;
-        Sun, 26 Dec 2021 14:21:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mirix.org;
-        s=43974b1a7d21b2cf; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        id S234743AbhLZW2u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Dec 2021 17:28:50 -0500
+Received: from lan.nucleusys.com ([92.247.61.126]:46628 "EHLO
+        mail.nucleusys.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229792AbhLZW2t (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Dec 2021 17:28:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=nucleusys.com; s=x; h=In-Reply-To:Content-Type:MIME-Version:References:
+        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7De30OQXHXn/EwHrALqoLTxxV5a/BJPIL1qEA+ZZFZw=; b=HlzBxIxra9A5qgDYiHoODsriNI
-        5khyRlJdmCbnXzfK2nc4aXWvRMUh3AJMoO3wSFw/8McSepBm46UksH6odYkk0auBED7XlE6jdlJH8
-        tLosoORDBhnu9104940r+nWV+zmL6ZFXSHdBA4vd/wbj6rlO4g92XRzc40RAEEttwDGGOIkrnio7o
-        J2hN53jg5XxnqlcC0DG+YLiMIxPkFrbsA3TZevqVEANXA26DfoQf1WCQkgYo3mz7o8J8tMd2h5XmT
-        hKBQWZny/5A6wcLamcnDXRH7UDqcZ7YVRiIPSHvNBe++gkPpgBxZXwvu0YnDxnGibbFjkOrb+ItRl
-        SlDWp4XA==;
-Received: from [::1] (helo=localhost.localdomain)
-        by mirix.in-vpn.de with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-        (Exim)
-        id 1n1btJ-00065U-Gl; Sun, 26 Dec 2021 22:21:21 +0000
-Subject: Re: [PATCH] net: usb: pegasus: Do not drop long Ethernet frames
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Petko Manolov <petkan@nucleusys.com>, linux-usb@vger.kernel.org,
+        bh=HI+Qf9u7F/q40qW9UU+ahm2dRDMyORav6QQuDyhvlDo=; b=YERA0znYLwZ+YqRXtqBukRXgSn
+        UdL+D96otXFApuTDrCY7R9xzYg1IjpEEBow0w8Cy8ptSLuY+YpaVAsckiQhTq9cmdPFHs4bYBWSxw
+        NotjFn3JkisJnVUPeLS/wXAD/uP1m447ZpzjWa/kgapddjT1vR/ZVUyBHqspAg5T2eH8=;
+Received: from 78-83-68-78.spectrumnet.bg ([78.83.68.78] helo=karbon.k.g)
+        by mail.nucleusys.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <petkan@nucleusys.com>)
+        id 1n1c0R-001c58-4v; Mon, 27 Dec 2021 00:28:44 +0200
+Date:   Mon, 27 Dec 2021 00:28:42 +0200
+From:   Petko Manolov <petkan@nucleusys.com>
+To:     Matthias-Christian Ott <ott@mirix.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-References: <20211226132930.7220-1-ott@mirix.org> <YciMrJBDk6bA5+Nv@lunn.ch>
- <a87c4ea5-72ef-8dd3-de98-01f799d627ef@mirix.org> <YciY8Useao5hfIAF@lunn.ch>
-From:   Matthias-Christian Ott <ott@mirix.org>
-Message-ID: <e8c4c087-f6f1-eb41-e433-6a73264281b7@mirix.org>
-Date:   Sun, 26 Dec 2021 23:21:19 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Subject: Re: [PATCH] net: usb: pegasus: Do not drop long Ethernet frames
+Message-ID: <YcjsmvZdFsbBLDYK@karbon.k.g>
+Mail-Followup-To: Matthias-Christian Ott <ott@mirix.org>,
+        Andrew Lunn <andrew@lunn.ch>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20211226132930.7220-1-ott@mirix.org>
+ <YciMrJBDk6bA5+Nv@lunn.ch>
+ <a87c4ea5-72ef-8dd3-de98-01f799d627ef@mirix.org>
 MIME-Version: 1.0
-In-Reply-To: <YciY8Useao5hfIAF@lunn.ch>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a87c4ea5-72ef-8dd3-de98-01f799d627ef@mirix.org>
+X-Spam_score: -1.0
+X-Spam_bar: -
+X-Spam_report: Spam detection software, running on the system "zztop",
+ has NOT identified this incoming email as spam.  The original
+ message has been attached to this so you can view it or label
+ similar future email.  If you have any questions, see
+ @@CONTACT_ADDRESS@@ for details.
+ Content preview:  On 21-12-26 17:01:24, Matthias-Christian Ott wrote: > On 26/12/2021
+    16:39, Andrew Lunn wrote: > > On Sun, Dec 26, 2021 at 02:29:30PM +0100, Matthias-Christian
+    Ott wrote: > >> The D-Link DSB-650TX (200 [...] 
+ Content analysis details:   (-1.0 points, 5.0 required)
+  pts rule name              description
+ ---- ---------------------- --------------------------------------------------
+ -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
+  0.0 TVD_RCVD_IP            Message was received from an IP address
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 26/12/2021 17:31, Andrew Lunn wrote:
->>> I've nothing against this patch, but if you are working on the driver,
->>> it would be nice to replace these hex numbers with #defines using BIT,
->>> or FIELD. It will make the code more readable.
->>
->> Replacing the constants with macros is on my list of things that I want
->> to do. In this case, I did not do it because I wanted to a have small
->> patch that gets easily accepted and allows me to figure out the current
->> process to submit patches after years of inactivity.
+On 21-12-26 17:01:24, Matthias-Christian Ott wrote:
+> On 26/12/2021 16:39, Andrew Lunn wrote:
+> > On Sun, Dec 26, 2021 at 02:29:30PM +0100, Matthias-Christian Ott wrote:
+> >> The D-Link DSB-650TX (2001:4002) is unable to receive Ethernet frames that
+> >> are longer than 1518 octets, for example, Ethernet frames that contain
+> >> 802.1Q VLAN tags.
+> >>
+> >> The frames are sent to the pegasus driver via USB but the driver discards
+> >> them because they have the Long_pkt field set to 1 in the received status
+> >> report. The function read_bulk_callback of the pegasus driver treats such
+> >> received "packets" (in the terminology of the hardware) as errors but the
+> >> field simply does just indicate that the Ethernet frame (MAC destination to
+> >> FCS) is longer than 1518 octets.
+> >>
+> >> It seems that in the 1990s there was a distinction between "giant" (> 1518)
+> >> and "runt" (< 64) frames and the hardware includes flags to indicate this
+> >> distinction. It seems that the purpose of the distinction "giant" frames
+> >> was to not allow infinitely long frames due to transmission errors and to
+> >> allow hardware to have an upper limit of the frame size. However, the
+> >> hardware already has such limit with its 2048 octet receive buffer and,
+> >> therefore, Long_pkt is merely a convention and should not be treated as a
+> >> receive error.
+> >>
+> >> Actually, the hardware is even able to receive Ethernet frames with 2048
+> >> octets which exceeds the claimed limit frame size limit of the driver of
+> >> 1536 octets (PEGASUS_MTU).
+> >>
+> >> Signed-off-by: Matthias-Christian Ott <ott@mirix.org>
+> >> ---
+> >>  drivers/net/usb/pegasus.c | 4 ++--
+> >>  1 file changed, 2 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
+> >> index 140d11ae6688..2582daf23015 100644
+> >> --- a/drivers/net/usb/pegasus.c
+> >> +++ b/drivers/net/usb/pegasus.c
+> >> @@ -499,11 +499,11 @@ static void read_bulk_callback(struct urb *urb)
+> >>  		goto goon;
+> >>  
+> >>  	rx_status = buf[count - 2];
+> >> -	if (rx_status & 0x1e) {
+> >> +	if (rx_status & 0x1c) {
+> >>  		netif_dbg(pegasus, rx_err, net,
+> >>  			  "RX packet error %x\n", rx_status);
+> >>  		net->stats.rx_errors++;
+> >> -		if (rx_status & 0x06)	/* long or runt	*/
+> >> +		if (rx_status & 0x04)	/* runt	*/
+> > 
+> > I've nothing against this patch, but if you are working on the driver, it
+> > would be nice to replace these hex numbers with #defines using BIT, or
+> > FIELD. It will make the code more readable.
 > 
-> Agreed, keep fixes simple.
-> 
-> A few other hints. If you consider this a fix which should be back
-> ported, please add a Fixes: tag, where the issue started. This can be
-> back as far as the first commit for the driver. Fixes should also be
-> sent to the net tree, not net-next. See the netdev FAQ about the two
-> different trees.
+> Replacing the constants with macros is on my list of things that I want to do.
+> In this case, I did not do it because I wanted to a have small patch that gets
+> easily accepted and allows me to figure out the current process to submit
+> patches after years of inactivity.
 
-I made a v2 of the patch and also added the prefix flag to indicate that
-the patch is destined for the "next" tree. There is still something that
-can be improved a about it, please let me know. Otherwise, I will also
-resend the other patch that I sent for the driver to indicate that it is
-destined for the "next" tree.
+To be honest, that's due to the fact the original code was submitted more than
+20 years ago, when the driver acceptance criteria were a lot more relaxed than
+they are now.  Ideally, these constants should be replaced with human readable
+macros, something which i never got around doing.
 
-Kind regards,
-Matthias-Christian Ott
+If you are in the mood, you could send two patch series, one that fixes the
+constants and another that fixes the packet size bug.  As is often the case, one
+of them may get mainlined right away, while the other is being debated for a
+while.
+
+
+cheers,
+Petko
