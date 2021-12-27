@@ -2,105 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C9747FBAB
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Dec 2021 10:56:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5FE47FC1A
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Dec 2021 12:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231962AbhL0J4u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Dec 2021 04:56:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45894 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbhL0J4u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Dec 2021 04:56:50 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C181C06173E;
-        Mon, 27 Dec 2021 01:56:49 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id x21so33733854lfa.5;
-        Mon, 27 Dec 2021 01:56:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=9fWHcMAbQHI5xWkUx6lceWEkgpVdlT25SBzMHtgoJuQ=;
-        b=PcjF9f0adWqt2K0TqtF9/SOC0EGi3xlg2BuYA+TsuGheXaGDVE77l81O6CnIvuAWki
-         nhhy/1bLfJiLHfCOGQgqjVC6uRmTum9LV2yE/tEVauZsrAiYybP4Bh4SpG2KsoGeNJ1L
-         8TePxw7UCLXiwX+T0QbRO9C71SGen934CNPJL7Sd2zLHziIORWRvReovpktfZJpeZuhd
-         RWYVQmc+8R0nsINO3uFyAYHfemJBycFDE46rT1t6EJ/RwrJf31PFGWI7XDypx25Qfx1C
-         xBFln0ju7DaVFQc63bclYmVbNM6E1ZxnIe+V3iejDwab4oRaXcOY84Y+8ZedKj4sltuT
-         P13A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=9fWHcMAbQHI5xWkUx6lceWEkgpVdlT25SBzMHtgoJuQ=;
-        b=zX/3iiK6E/ZzFl7BuVdua9ckbLa9unBMuz4fKJNrupAEyuzAS8uV8LNr2pbOJ/+hFb
-         bDbWEz6CgxNCFuzW985m/yS5vw5j4lVq1d97bld8+GDygcY+BO4QQPyAebEd/u2e+gai
-         RTQ+1RZM6Wxuih95ejAJovAzZLOSgdzbSYigYeoIvN1zuPckjDFUqk954YlUdFjH0c5j
-         oTkIaWl5gOgksCXWvEkvaN7xd4OmxtgSOOXK1MD2kTUCjipL9/bNsK0qjTKh2kYi1mHK
-         bNkkKyBN1eESJkUcbgMjutOvtquEPSj5tWGZs3d7dsflDVOr4Gfxs5Zn3sHTjLWQGdew
-         rIfQ==
-X-Gm-Message-State: AOAM530mu4DZ6HHqIbTTQbLnRyqRZgNRD2UcaP3Qr/TiW0BdPdDctz5R
-        DJyZgW4apVS7Qn5EZqhGj5YZBMSyBBs=
-X-Google-Smtp-Source: ABdhPJwhawMF7oBUEgjR2M9jLXUxf5U42a9pnF10LwKNy02G77chpTMStVAFjvntoQ4p4Bb1/MEekQ==
-X-Received: by 2002:a05:6512:308a:: with SMTP id z10mr15046128lfd.594.1640599007838;
-        Mon, 27 Dec 2021 01:56:47 -0800 (PST)
-Received: from [192.168.1.100] ([178.176.79.51])
-        by smtp.gmail.com with ESMTPSA id g11sm1585418lfr.236.2021.12.27.01.56.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Dec 2021 01:56:47 -0800 (PST)
-Message-ID: <36ee5c5c-a03c-c9f5-dd5c-9e3a04b0374a@gmail.com>
-Date:   Mon, 27 Dec 2021 12:56:41 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] net: usb: pegasus: Do not drop long Ethernet frames
-Content-Language: en-US
-To:     Matthias-Christian Ott <ott@mirix.org>,
-        Petko Manolov <petkan@nucleusys.com>
+        id S236308AbhL0LLs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Dec 2021 06:11:48 -0500
+Received: from lan.nucleusys.com ([92.247.61.126]:46730 "EHLO
+        mail.nucleusys.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233404AbhL0LLs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Dec 2021 06:11:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=nucleusys.com; s=x; h=In-Reply-To:Content-Type:MIME-Version:References:
+        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=cs08TYrM1R93Z2rRsqv28gVc3mSRm3OZZCgukFf8y9g=; b=GbRi0d1Aieexvbx6wvYXjzEHqZ
+        HThxOFyXg/v8UbFMxVsWFcpsnHvdFC32x87GgyqAWN4AIGtMA3faewQTXb/8NikTbcB5wlXaBC8uB
+        faHQxOBiiBrdDfSQ+N4C0/d/WLJUdZyBAa92lqfwLBhlFlXHcaSMSzeWaFmIkZ2924jY=;
+Received: from 78-83-68-78.spectrumnet.bg ([78.83.68.78] helo=karbon.k.g)
+        by mail.nucleusys.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <petkan@nucleusys.com>)
+        id 1n1nuo-001cPn-VF; Mon, 27 Dec 2021 13:11:44 +0200
+Date:   Mon, 27 Dec 2021 13:11:41 +0200
+From:   Petko Manolov <petkan@nucleusys.com>
+To:     Matthias-Christian Ott <ott@mirix.org>
 Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org
-References: <20211226132930.7220-1-ott@mirix.org>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-In-Reply-To: <20211226132930.7220-1-ott@mirix.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH net v2] net: usb: pegasus: Do not drop long Ethernet
+ frames
+Message-ID: <YcmfbX5o0XHn1Uhx@karbon.k.g>
+References: <20211226221208.2583-1-ott@mirix.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211226221208.2583-1-ott@mirix.org>
+X-Spam_score: -1.0
+X-Spam_bar: -
+X-Spam_report: Spam detection software, running on the system "zztop",
+ has NOT identified this incoming email as spam.  The original
+ message has been attached to this so you can view it or label
+ similar future email.  If you have any questions, see
+ @@CONTACT_ADDRESS@@ for details.
+ Content preview:  On 21-12-26 23:12:08, Matthias-Christian Ott wrote: > The
+   D-Link DSB-650TX (2001:4002) is unable to receive Ethernet frames that are
+    > longer than 1518 octets, for example, Ethernet frames that contai [...]
+ Content analysis details:   (-1.0 points, 5.0 required)
+  pts rule name              description
+ ---- ---------------------- --------------------------------------------------
+ -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
+  0.0 TVD_RCVD_IP            Message was received from an IP address
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
-
-On 26.12.2021 16:29, Matthias-Christian Ott wrote:
-
-> The D-Link DSB-650TX (2001:4002) is unable to receive Ethernet frames
-> that are longer than 1518 octets, for example, Ethernet frames that
-> contain 802.1Q VLAN tags.
+On 21-12-26 23:12:08, Matthias-Christian Ott wrote:
+> The D-Link DSB-650TX (2001:4002) is unable to receive Ethernet frames that are
+> longer than 1518 octets, for example, Ethernet frames that contain 802.1Q VLAN
+> tags.
 > 
-> The frames are sent to the pegasus driver via USB but the driver
-> discards them because they have the Long_pkt field set to 1 in the
-> received status report. The function read_bulk_callback of the pegasus
-> driver treats such received "packets" (in the terminology of the
-> hardware) as errors but the field simply does just indicate that the
-> Ethernet frame (MAC destination to FCS) is longer than 1518 octets.
+> The frames are sent to the pegasus driver via USB but the driver discards them
+> because they have the Long_pkt field set to 1 in the received status report.
+> The function read_bulk_callback of the pegasus driver treats such received
+> "packets" (in the terminology of the hardware) as errors but the field simply
+> does just indicate that the Ethernet frame (MAC destination to FCS) is longer
+> than 1518 octets.
 > 
-> It seems that in the 1990s there was a distinction between
-> "giant" (> 1518) and "runt" (< 64) frames and the hardware includes
-> flags to indicate this distinction. It seems that the purpose of the
-> distinction "giant" frames was to not allow infinitely long frames due
-> to transmission errors and to allow hardware to have an upper limit of
-> the frame size. However, the hardware already has such limit with its
-> 2048 octet receive buffer and, therefore, Long_pkt is merely a
-> convention and should not be treated as a receive error.
+> It seems that in the 1990s there was a distinction between "giant" (> 1518)
+> and "runt" (< 64) frames and the hardware includes flags to indicate this
+> distinction. It seems that the purpose of the distinction "giant" frames was
+> to not allow infinitely long frames due to transmission errors and to allow
+> hardware to have an upper limit of the frame size. However, the hardware
+> already has such limit with its 2048 octet receive buffer and, therefore,
+> Long_pkt is merely a convention and should not be treated as a receive error.
 > 
 > Actually, the hardware is even able to receive Ethernet frames with 2048
-> octets which exceeds the claimed limit frame size limit of the driver of
-                                    ^^^^^            ^^^^^
-    Too many limits. :-)
+> octets which exceeds the claimed limit frame size limit of the driver of 1536
+> octets (PEGASUS_MTU).
 
-> 1536 octets (PEGASUS_MTU).
-> 
+2048 is not mentioned anywhere in both, adm8511 and adm8515 documents.  In the
+latter I found 1638 as max packet length, but that's not the default.  The
+default is 1528 and i don't feel like changing it without further investigation.
+
+Thus, i assume it is safe to change PEGASUS_MTU to 1528 for the moment.  VLAN
+frames have 4 additional bytes so we aren't breaking neither pegasus I nor
+pegasus II devices.
+
+If you're going to make ver 3 of this change, you might as well modify
+PEGASUS_MTU in pegasus.h as a separate patch within the same series.
+
+
+		Petko
+
+
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 > Signed-off-by: Matthias-Christian Ott <ott@mirix.org>
-[...]
-
-MBR, Sergey
+> ---
+> V1 -> V2: Included "Fixes:" tag
+> 
+>  drivers/net/usb/pegasus.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
+> index 140d11ae6688..2582daf23015 100644
+> --- a/drivers/net/usb/pegasus.c
+> +++ b/drivers/net/usb/pegasus.c
+> @@ -499,11 +499,11 @@ static void read_bulk_callback(struct urb *urb)
+>  		goto goon;
+>  
+>  	rx_status = buf[count - 2];
+> -	if (rx_status & 0x1e) {
+> +	if (rx_status & 0x1c) {
+>  		netif_dbg(pegasus, rx_err, net,
+>  			  "RX packet error %x\n", rx_status);
+>  		net->stats.rx_errors++;
+> -		if (rx_status & 0x06)	/* long or runt	*/
+> +		if (rx_status & 0x04)	/* runt	*/
+>  			net->stats.rx_length_errors++;
+>  		if (rx_status & 0x08)
+>  			net->stats.rx_crc_errors++;
+> -- 
+> 2.30.2
+> 
+> 
