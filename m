@@ -2,186 +2,184 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E2F47F9A3
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Dec 2021 02:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2459C47F9B3
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Dec 2021 03:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234922AbhL0BYR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Dec 2021 20:24:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234919AbhL0BYR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Dec 2021 20:24:17 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1920C06173E;
-        Sun, 26 Dec 2021 17:24:16 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id a9so29451025wrr.8;
-        Sun, 26 Dec 2021 17:24:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l7XaE1ox+EybYQK2y5B/cfNwNeDOTbXqYvl+5XQIXz8=;
-        b=T/9OKp2AOg9HhQCvM2Sp4xnYrs66KRUOqO2U/euyTKbk1tGH4PMxPRCiAGsRkdxbig
-         l/cUpAgd2c/0eltisAEBkmUNB0AuHv2YPVLMt5hgWELPVGlQQC+FtScEHXjlIj2Sv1fi
-         9CORxmbOyPGklz1uRLH8yJHS8wHcdvYacrzjAl+MWC7s16+yBpLA6gr0YEHMJFpsjmjW
-         HrsBowXv/GGpqBDUil7uMhA9zHUcfHFrU9IQoOngIhe0ZKKD1t3LmJQDdmNVQ95F+2xD
-         hfzViUM/m7up6QJKjBilrS1s+BkTkMrgcWnqRnnkp4n2REvKJpMasgyeg3q7DS00BmmL
-         68dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l7XaE1ox+EybYQK2y5B/cfNwNeDOTbXqYvl+5XQIXz8=;
-        b=fJetgztvC0wG64JAJpKqOJCUp17bmHVZowC8JME5kCmGGM3z6Lseg7yZQRp9+mSqKT
-         qzLiIuAjqVv+a4up6f2z6sangxF6hjSv45cP4umLpfrPlk/3RCSeG/D6igGos0+ZzRuV
-         0fyT1E4ur2Umw9Q+XlbW92x2zw7387LfQCZZZsF+BBNsCXpbXGZFtjKnJ95lwxBDwlII
-         NMHwo/DK62EbDqYOvkz7MTpKrOJUPqNnBHFvRmOCnBmMkc91IdIjvIZ1kqnEWO5jby2c
-         P3pAIJuJchvtoBbUwqYLOFVdCB+7Lrxtluq7LspJq5IDGK5YV2//s+wc4wJQ1o0Va6PC
-         AgRQ==
-X-Gm-Message-State: AOAM532aaETwhz5U361CSbDkfK/7ILcBQfMz+kkMGoBf9DgvnTSUc9i2
-        41rlLlRI1FaHu5CLK0smMk4Hen1m7WQ=
-X-Google-Smtp-Source: ABdhPJzehXw034muaUcXaBIHhswRgEv6TPVYwXq5XDXCAG+bmTwOZeUL+D6AuLTP6rGzDfrrGXmezg==
-X-Received: by 2002:a05:6000:124a:: with SMTP id j10mr10838235wrx.110.1640568254699;
-        Sun, 26 Dec 2021 17:24:14 -0800 (PST)
-Received: from morpheus.home.roving-it.com (a.7.4.5.7.2.7.b.4.1.9.2.a.3.0.0.1.8.6.2.1.1.b.f.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:fb11:2681:3a:2914:b727:547a])
-        by smtp.googlemail.com with ESMTPSA id g5sm14066000wru.48.2021.12.26.17.24.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Dec 2021 17:24:14 -0800 (PST)
-From:   Peter Robinson <pbrobinson@gmail.com>
-To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Peter Robinson <pbrobinson@gmail.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [RFC PATCH] gnss: usb: add support for U-Blox NEO-M9N
-Date:   Mon, 27 Dec 2021 01:23:57 +0000
-Message-Id: <20211227012357.788966-1-pbrobinson@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        id S234956AbhL0CHH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Dec 2021 21:07:07 -0500
+Received: from mail-psaapc01on2109.outbound.protection.outlook.com ([40.107.255.109]:56288
+        "EHLO APC01-PSA-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229637AbhL0CHH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 26 Dec 2021 21:07:07 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V7BpJpilRPBYxm0z+OerctMaxZwHtQ85AfoWQM6qpPpB2rDuKVXifcSTko2QkrGevVs6RgoD3bDFoUf4Fh2oXPZ7wHkodh1R/uj2n3mtcfE1BzTh0LkNrzyQNwkou9HwU5TdsrCwoPKRpBWKWuLqtqRcnLM6RSAPLAc4bCOUWI3O4ip0y6WY5DOKdPkyrnqSKqdRt4HtB+JxEf1LsnYT/CnNCa+p0KIsKV3pziC62plD23rSpbqTwHWhc0d/vAlE0QWhlLuOZyCUHUG1RG0Dhc6J9/shbuql34Wnri0+S46PEdJ1pd62T/7gDnvM3r+hTMYmg/PLO8ZzY4UO6PUlbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sae5YwVFMEV9PoQksSLb7bgJlD/R0A4uxVCQfxHJd9g=;
+ b=D20vk7VhgWL3+T5dthNMAb/TT/4DhfXIAVskrTnINoaro9gAh5TtMTtwgmaRT3/RWFBw6ISAwZJ0KBcSYGOORbRaayPzvi2NaR7wTo/qyVAXVlKdSRvjKnCqDwAsyqyaUJLnXri3GvskD1k9uR9H0X6opCfFK+T5MfQjYQJt0BeL0JmRy05dbevpIfLPZPqmTVFt+UbClIKeflwV2+MobvPARBddPKNQbNsHaygu/Yb8B5Uu2xbMQpk4rkiN+rriAUmnPzeQKr0Yn1gmjbBbRa8SfJuwfNHDuQedQwZnOF5no/DdxnvnU3oPDwwgsV2HB728Lrn+86kwyC79VDvqHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sae5YwVFMEV9PoQksSLb7bgJlD/R0A4uxVCQfxHJd9g=;
+ b=LAW3A5bwzoH+8zNjhQD16tF6DtdaIbQKnSKZFmOpL+EjtdP7QZ3SItKQJjCgojNPvltRrEYg6LkwIDKzRbUrcQ8rwg0EFi5A2ClnAmmQq2xo9y2waAdiVVMQNqKYksbsDs2kHs+cIU3I/AvX6UnT5fTqpP9rqLF81iZBEV7XJS0fIrBq8miR+FtNGKi0fZeBMzBmWlJjIdaO2rH+/6VyOEZeCpTECZti3Xh7RK331i/dOHUOP09c0xi1hkBE4g7CilTfLIn/QmaiP6/YnFuWw60FZeePCEFFFIhegV70ztfUbCiUZd7RC1qESWzGCh96E7cjX/PeGcGvJXPYOmo0MQ==
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
+ by HK0PR06MB2577.apcprd06.prod.outlook.com (2603:1096:203:69::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.21; Mon, 27 Dec
+ 2021 02:07:02 +0000
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::6d89:70e9:fcfe:e126]) by HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::6d89:70e9:fcfe:e126%4]) with mapi id 15.20.4823.022; Mon, 27 Dec 2021
+ 02:07:02 +0000
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Tao Ren <rentao.bupt@gmail.com>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        kernel test robot <lkp@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>
+CC:     BMC-SW <BMC-SW@aspeedtech.com>
+Subject: RE: [PATCH v3 2/4] usb: aspeed-vhub: fix remote wakeup failure in
+ iKVM use case
+Thread-Topic: [PATCH v3 2/4] usb: aspeed-vhub: fix remote wakeup failure in
+ iKVM use case
+Thread-Index: AQHX7BszI/63d6+3yEiIx/+xfvXqSKwpSLsAgAAkTICAB+FNgIAJaO9ggAr6yUA=
+Date:   Mon, 27 Dec 2021 02:07:02 +0000
+Message-ID: <HK0PR06MB3202796B4DDF471856149B1480429@HK0PR06MB3202.apcprd06.prod.outlook.com>
+References: <20211208100545.1441397-1-neal_liu@aspeedtech.com>
+         <20211208100545.1441397-3-neal_liu@aspeedtech.com>
+         <391323f136e49387797d43e89b6e42cd95d916c2.camel@kernel.crashing.org>
+         <HK0PR06MB320271524E51BDFA922F070780709@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <0888eb83c8b2bd53d4c3e2355019052d0ab40db6.camel@kernel.crashing.org>
+ <HK0PR06MB3202051E7C15E84006DF55C0807B9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+In-Reply-To: <HK0PR06MB3202051E7C15E84006DF55C0807B9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5f4348c0-57fc-4865-6894-08d9c8dd92e4
+x-ms-traffictypediagnostic: HK0PR06MB2577:EE_
+x-microsoft-antispam-prvs: <HK0PR06MB257771DD7D014DC9A9535C7580429@HK0PR06MB2577.apcprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zXemQ+8EHoxt0pml/twB7aKZJ8tEAiPq02xbkpXTLOgwfImyvg5AybE4MiHjq1+eLJqHKxmEo2iDM8X1/L+NT1iPaavt6txk1NaPBo1tCgE7XbnQWAmG1dLd2pbwwp1rz5dJOBGU8Fujb3qCrVoJETrMB6uRavoRMOMz9B1QJhmzjF3ysst6o7NtKxnyNIBf6+XW+H/P9vf7rNaG5wlHt/fjuppTXyPaYX1M3jDBdXyhRmXVniiISW3s1DMaHfbdX1i7MWHDaDNyp2BW57LzRNnE3yYZuAFLQ0ZPRqabZB+q5b5+bZWbkmRdyDUB71k7SjJGYEcqS5TRnyqnQUpq3A7RgYW4YLicQVlDGK9rrN0yDaTn4DxmfS4FziR35flTdbaBe2nSK5p45uwfixxq5UaDphx5QI8RVyF2xbIrX1TYPdCEgv8H1/xtJjvCRgyjJ+S9Jh0ihMvw2kC/F2ZMm9SmJeBPhKcU9dhcZXyhPS0/2ACbWCh5EptcccI9SsVtjuFegBl2q7D9IqAWak2sBoMeYR7e0EdA/qRElWXlhqi4EbFV3d7zDJZ+dH5XjrGyrG3ceEhY9c6MydAlly1YEZgsIsmSQXagZIX14GfEcn7llV4sjeQJGvW27jMgli+G0MOwcMtyCukMQczQdu6wn5YbQDBFZ5mPmImPBySzt7A9xSmYOyojgM9hz8fQJbWas4aEtJ0n5pRSaBu1XddBFsyObCRI2+8ygBSimVfphZE=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(366004)(39840400004)(136003)(376002)(346002)(86362001)(33656002)(76116006)(83380400001)(38100700002)(122000001)(107886003)(55016003)(38070700005)(4326008)(110136005)(316002)(921005)(66446008)(9686003)(26005)(2906002)(186003)(8936002)(71200400001)(8676002)(64756008)(66946007)(53546011)(52536014)(66556008)(66476007)(6506007)(7416002)(508600001)(7696005)(5660300002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dEdLRWRaSVJrOXgvV09HTDRhWHU1ZzNJenpSNHZrWVZzM21naDFXd29xa3JK?=
+ =?utf-8?B?Y3pzTHVXR0Y5M3BtclVBVWtrZHkrd3M1SU5zcE52YTJHbDBkb3gwTEdpeU5r?=
+ =?utf-8?B?bTQ1Y1BkTTVGOXNpOGpQQk9mdTJYMXF4TXhpTU8zc1BNNHBDZFBYMWZ4TDFH?=
+ =?utf-8?B?Zi9GalN2KzFwR1dTa25LYU9iN1ZPVEhRcGFNREZoQlYvOHBaZ0RtVUNBQVA5?=
+ =?utf-8?B?L3NKblNHN0l6RS9XSmxYS2VHUjZFbXo5RHR4QW1BckFxZzgrU2s3UGtmRjY4?=
+ =?utf-8?B?SlRpcndyOXZ4MU5Rbm9STGVqd0pFcGJhS3UycC9mbm9zaEFPeEVib1dxSWpi?=
+ =?utf-8?B?VktpSWowdTMyUGE2ZWs3RWdTWWZ4Q1JWMnZudEdYaHF1eDkxK3BEYmtKWGJM?=
+ =?utf-8?B?REwydnBGamRvMThlZGZaNXdhdEVxeVB5R0hVenN3ejdtNDVFRWNQeThQNjUr?=
+ =?utf-8?B?Y1RxajhXUVZ4dE1FVWlhR3JjV09EWEdxVHI1SjBQRk9ISWo1OGpJR2R3S05I?=
+ =?utf-8?B?SU4wekVtWTlCTHE5Y09lSE4rc28rUkNiR1FlWjllS1JLZXMvWk8yWVJpOWZv?=
+ =?utf-8?B?YkR6U1BTemZhZi9Udm93Q1JEZGEzeVlYMHNVVVIyN2VBOTZzL0dReVFENUZh?=
+ =?utf-8?B?UjRYK3FTK1p0Y1gzSm5GclRIWHNSZVZWRmZZZzNsNEk2NlQzejBYMTVibjNH?=
+ =?utf-8?B?OXduM3FDZkR1TCtOUVc4Nk9Vak0zc3ZOUGR5QWdLaC8xa0ZSYVFseENpSXJV?=
+ =?utf-8?B?bC9jOEdwaU5Bc3J0V1JqTTdwb01CWUhYYkgwWkVvUktnVEErZGxEaitSSE52?=
+ =?utf-8?B?UHJFaXhpcEU5RGdHWHAxbnMyRkRCUWthV3BhV015S1NSeVZxZEV4RVlzUDZy?=
+ =?utf-8?B?SlRlbWRqcGpVYWo4RnNFYkdxSmduVjRrZ1VmNStaakxLVzgyZW0wSE9EK2R6?=
+ =?utf-8?B?ODMxUnZYN2dQLzY1NlhIYXpIQkxiS0tpRld5T3g2TC85R3plQnVDVzZQUVlj?=
+ =?utf-8?B?aGdsZEtBbWZUQy9jaHY1Z3c2aFhuUFBadi8zUm02c2FMOUh5MzIvcVNQS0po?=
+ =?utf-8?B?SGpZM283ZFZpc1piVFk1eGhLZmZ5M25MSUtBT2lUU0NxZ3duM2ZPTzJhM3Zh?=
+ =?utf-8?B?Vkl0TThLMi94T3hWL2o2L2RqTmZSWUZIUCsyVDlWNThPM1liSFhDVS9tQUpX?=
+ =?utf-8?B?TjhQd3dWbzJyOG9KdjVua1pDVndaa0hEV1dqNTlPQWVOYjdJaDZzSnZPbEVN?=
+ =?utf-8?B?R21ZdE0rYmNUT3FQVTRIbzdqMnErSzZIc25aSU0rV2p4b1IzVHhIUFFNQU8v?=
+ =?utf-8?B?VmZ3ZGloTkFsMWtoZTBxZVFOR3d5UjVwSmhEQUVhdUJJYXR4SE9XaGZmMUxT?=
+ =?utf-8?B?K0VYc2xMWWN4bWNqWEtPbmpSdGpmL0ZJRWI3UUhpdmxYNWZnMlQ1VCttSDMv?=
+ =?utf-8?B?V2F3ZUNEREp2NGNWakhrRTIwL3pPRzJmS2hCT2FvNXkvNDhzY01CZkpOQi9Y?=
+ =?utf-8?B?NnBnaVREY3N5MVRGMUZWbklwTTBUNEhIL00vNVhSWFRTUmc5NnljU2JYZmhh?=
+ =?utf-8?B?WkpUd0JDTEZUNlQwVGN6Qm03Y1BGMUMzVTkwLzBKSmh5eTBYRW1mUlNDckdO?=
+ =?utf-8?B?LzhwQ2xraEw0MjUwTklqWnhoSWtDWHpXZjF5dm1jM2V2MjhHbVJMc0NMZkZO?=
+ =?utf-8?B?M0dRVVFtT3hiUlJXbGtTWVlwMmM2TTVCY3lrc0ljVE42anMvSkgzdDZENEtl?=
+ =?utf-8?B?YjErZVkvWWN1SE5sWXJ1L0hwRW10YWlMNG83TnA4c004M1drN3dOd1A4a3J1?=
+ =?utf-8?B?WnU2VFFETjlWS3hkSWtMQnczcVc4K2JFODJvN2FIMXNLeHlhdWhkcGhPeGIv?=
+ =?utf-8?B?Ny9kdWhHVFhmbUh1ZWpkNHBYZmxWTEpaa2xrWUI2cmxCOWJ5ZDd5TDd2anJQ?=
+ =?utf-8?B?WGNYOUdIZlZScmsrdXZ3a3dqZU02ZFg4WDVGL2xXWXZWMlZYclhxYVEzZUNI?=
+ =?utf-8?B?VmRtbDJCSTZJbGE1YWJkb0xicHFCMm05b3BPd05ndjBRQkRJekxWOU5DUmM3?=
+ =?utf-8?B?R2JWR2NHZkVjYjVMeWFhTHJvMElhVzFWSitUV2c3dXJaKzJxNmxlaGdRSG5J?=
+ =?utf-8?B?NlJha1hTZFJWcVR4MXNsaWFsdCt4UlZqUnhFNkdGSXdyTFpTYnZmOWQ0RThn?=
+ =?utf-8?Q?dIQZF6b3lmAnynecLJehjQA=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f4348c0-57fc-4865-6894-08d9c8dd92e4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Dec 2021 02:07:02.5687
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 8KAnZAV+eeI/v0aec+YJxRSRt9S9cAuTJlngX9En7kPooSy/4silOC8oIPGGwsgTw/Pq8jQXyxxvvpmSPceA5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB2577
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add support for the USB interface of the SparkFun NEO-M9N
-GPS Breakout receiver.
-
-Bus 001 Device 005: ID 1546:01a9 U-Blox AG u-blox GNSS receiver
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               1.10
-  bDeviceClass            2 Communications
-  bDeviceSubClass         0
-  bDeviceProtocol         0
-  bMaxPacketSize0        64
-  idVendor           0x1546 U-Blox AG
-  idProduct          0x01a9
-  bcdDevice            4.04
-  iManufacturer           1 u-blox AG - www.u-blox.com
-  iProduct                2 u-blox GNSS receiver
-  iSerial                 0
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x003e
-    bNumInterfaces          2
-    bConfigurationValue     1
-    iConfiguration          0
-    bmAttributes         0xc0
-      Self Powered
-    MaxPower                0mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass      2 Abstract (modem)
-      bInterfaceProtocol      1 AT-commands (v.25ter)
-      iInterface              0
-      CDC Header:
-        bcdCDC               1.10
-      CDC ACM:
-        bmCapabilities       0x02
-          line coding and serial state
-      CDC Call Management:
-        bmCapabilities       0x03
-          call management
-          use DataInterface
-        bDataInterface          1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval             255
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0
-      bInterfaceProtocol    255 Vendor specific
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-Device Status:     0x0001
-  Self Powered
-
-Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
-Cc: Johan Hovold <johan@kernel.org>
----
-Hi Johan,
-
-I've tested your GNSS USB series with a pair of U-Blox devices, adding
-the above USB ID. Only one included here for feedback to guage your thoughts.
-By defauly The U-Blox devices enumerate with the CDC ACM driver and output
-NMEA data via /dev/ttyACM0. With this patch and cdc_acm blocked I get
-/dev/gnss0 and can cat it to get NMEA data. Is your expectation to move
-these sort of devices over to the usb gnss driver too?
-
-Peter
-
- drivers/gnss/usb.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/gnss/usb.c b/drivers/gnss/usb.c
-index 792235a688ea..775d58c2dbe1 100644
---- a/drivers/gnss/usb.c
-+++ b/drivers/gnss/usb.c
-@@ -18,6 +18,7 @@
- 
- static const struct usb_device_id gnss_usb_id_table[] = {
- 	{ USB_DEVICE(0x1199, 0xb000) },		/* Sierra Wireless XM1210 */
-+	{ USB_DEVICE(0x1546, 0x01a9) },		/* U-Blox NEO-M9N GNSS receiver */
- 	{ }
- };
- MODULE_DEVICE_TABLE(usb, gnss_usb_id_table);
--- 
-2.33.1
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBOZWFsIExpdQ0KPiBTZW50OiBN
+b25kYXksIERlY2VtYmVyIDIwLCAyMDIxIDEwOjIzIEFNDQo+IFRvOiBCZW5qYW1pbiBIZXJyZW5z
+Y2htaWR0IDxiZW5oQGtlcm5lbC5jcmFzaGluZy5vcmc+OyBGZWxpcGUgQmFsYmkNCj4gPGJhbGJp
+QGtlcm5lbC5vcmc+OyBHcmVnIEtyb2FoLUhhcnRtYW4gPGdyZWdraEBsaW51eGZvdW5kYXRpb24u
+b3JnPjsgSm9lbA0KPiBTdGFubGV5IDxqb2VsQGptcy5pZC5hdT47IEFuZHJldyBKZWZmZXJ5IDxh
+bmRyZXdAYWouaWQuYXU+OyBDYWkgSHVvcWluZw0KPiA8Y2FpaHVvcWluZ0BiYWlkdS5jb20+OyBU
+YW8gUmVuIDxyZW50YW8uYnVwdEBnbWFpbC5jb20+OyBKdWxpYSBMYXdhbGwNCj4gPGp1bGlhLmxh
+d2FsbEBpbnJpYS5mcj47IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPjsgU2FzaGEg
+TGV2aW4NCj4gPHNhc2hhbEBrZXJuZWwub3JnPjsgbGludXgtdXNiQHZnZXIua2VybmVsLm9yZzsg
+bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsNCj4gbGludXgtYXJtLWtlcm5lbEBsaXN0cy5p
+bmZyYWRlYWQub3JnOyBsaW51eC1hc3BlZWRAbGlzdHMub3psYWJzLm9yZw0KPiBDYzogQk1DLVNX
+IDxCTUMtU1dAYXNwZWVkdGVjaC5jb20+DQo+IFN1YmplY3Q6IFJFOiBbUEFUQ0ggdjMgMi80XSB1
+c2I6IGFzcGVlZC12aHViOiBmaXggcmVtb3RlIHdha2V1cCBmYWlsdXJlIGluDQo+IGlLVk0gdXNl
+IGNhc2UNCj4gDQo+ID4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gPiBGcm9tOiBCZW5q
+YW1pbiBIZXJyZW5zY2htaWR0IDxiZW5oQGtlcm5lbC5jcmFzaGluZy5vcmc+DQo+ID4gU2VudDog
+VHVlc2RheSwgRGVjZW1iZXIgMTQsIDIwMjEgMTA6MzYgQU0NCj4gPiBUbzogTmVhbCBMaXUgPG5l
+YWxfbGl1QGFzcGVlZHRlY2guY29tPjsgRmVsaXBlIEJhbGJpDQo+ID4gPGJhbGJpQGtlcm5lbC5v
+cmc+OyBHcmVnIEtyb2FoLUhhcnRtYW4gPGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPjsNCj4g
+PiBKb2VsIFN0YW5sZXkgPGpvZWxAam1zLmlkLmF1PjsgQW5kcmV3IEplZmZlcnkgPGFuZHJld0Bh
+ai5pZC5hdT47IENhaQ0KPiA+IEh1b3FpbmcgPGNhaWh1b3FpbmdAYmFpZHUuY29tPjsgVGFvIFJl
+biA8cmVudGFvLmJ1cHRAZ21haWwuY29tPjsgSnVsaWENCj4gPiBMYXdhbGwgPGp1bGlhLmxhd2Fs
+bEBpbnJpYS5mcj47IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPjsNCj4gPiBTYXNo
+YSBMZXZpbiA8c2FzaGFsQGtlcm5lbC5vcmc+OyBsaW51eC11c2JAdmdlci5rZXJuZWwub3JnOw0K
+PiA+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWFybS1rZXJuZWxAbGlzdHMu
+aW5mcmFkZWFkLm9yZzsNCj4gPiBsaW51eC1hc3BlZWRAbGlzdHMub3psYWJzLm9yZw0KPiA+IENj
+OiBCTUMtU1cgPEJNQy1TV0Bhc3BlZWR0ZWNoLmNvbT4NCj4gPiBTdWJqZWN0OiBSZTogW1BBVENI
+IHYzIDIvNF0gdXNiOiBhc3BlZWQtdmh1YjogZml4IHJlbW90ZSB3YWtldXANCj4gPiBmYWlsdXJl
+IGluIGlLVk0gdXNlIGNhc2UNCj4gPg0KPiA+IE9uIFRodSwgMjAyMS0xMi0wOSBhdCAwMjozNyAr
+MDAwMCwgTmVhbCBMaXUgd3JvdGU6DQo+ID4gPiBJJ20gY29uZnVzZWQuIFNpZ25hbGluZyBXYWtl
+dXAgd2hlbiB3YWtldXBfZW4gaXMgc2V0IGlmIGl0IGhhcyBhbnkNCj4gPiA+IGVwIGFjdGl2aXRp
+ZXMgaXMgbm90IGV4YWN0bHkgd2hhdCB5b3Ugc2FpZD8NCj4gPiA+DQo+ID4gPiB3YWtldXBfZW4g
+aXMgc2V0IG9ubHkgaWYgaG9zdCBhbGxvd3MgdGhpcyBkZXZpY2UgaGF2ZSB3YWtldXANCj4gPiA+
+IGNhcGFiaWxpdHkgYW5kIGJ1cyBiZWluZyBzdXNwZW5kZWQuDQo+ID4gPg0KPiA+ID4gTm9ybWFs
+IGVwIGFjdGl2aXRpZXMgd291bGQgbm90IHdyaXRlIHRoZSBNTUlPIGJlY2F1c2Ugd2FrZXVwX2Vu
+IGlzDQo+ID4gPiBub3Qgc2V0Lg0KPiA+DQo+ID4gSHJtLi4uIEkgZGlkbid0IHRoaW5rIHdha2V1
+cF9lbiB3YXMgbGltaXRlZCB0byB0aGUgYnVzIGJlaW5nDQo+ID4gc3VzcGVuZGVkLCBidXQgbWF5
+YmUgSSBtaXNyZW1lbWJlciwgaXQncyBiZWVuIGEgd2hpbGUuDQo+ID4NCj4gPiBDaGVlcnMsDQo+
+ID4gQmVuLg0KPiA+DQo+IA0KPiB3YWtldXBfZW4gaXMgb25seSBzZXQgaW4gdGhlIGNhc2Ugb2Yg
+aG9zdCBzZXQgVVNCX0RFVklDRV9SRU1PVEVfV0FLRVVQDQo+IGZlYXR1cmUgdG8gdmh1YiBkZXZp
+Y2VzLg0KPiBJIHRoaW5rIHRoaXMgYmVoYXZpb3Igb25seSBvY2N1cnMgZHVyaW5nIGhvc3QgaXMg
+Z29pbmcgdG8gc3VzcGVuZCwgYW5kIHNldCB0aGlzDQo+IGZlYXR1cmUgdG8gYW55IGRldmljZSB3
+aGljaCBjYW4gd2FrZXVwIGl0c2VsZiBiZWZvcmUgc2xlZXAuDQo+IFRoYW5rcw0KPiANCj4gLU5l
+YWwNCj4gDQpXb3VsZCB5b3UgbGlrZSB0byB0ZXN0IGl0IGlmIHlvdSBoYXZlIHNvbWUgZnJlZSB0
+aW1lLg0KUGxlYXNlIGZlZWwgZnJlZSBmb3IgYW55IGZlZWRiYWNrLg0KDQotTmVhbA0KDQo=
