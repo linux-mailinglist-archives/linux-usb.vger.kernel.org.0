@@ -2,87 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5418E47FB47
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Dec 2021 10:23:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C9747FBAB
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Dec 2021 10:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232759AbhL0JXF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Dec 2021 04:23:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
+        id S231962AbhL0J4u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Dec 2021 04:56:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbhL0JXE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Dec 2021 04:23:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B365BC06173E
-        for <linux-usb@vger.kernel.org>; Mon, 27 Dec 2021 01:23:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3696B80E52
-        for <linux-usb@vger.kernel.org>; Mon, 27 Dec 2021 09:23:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07FB9C36AE9;
-        Mon, 27 Dec 2021 09:22:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640596980;
-        bh=iTPsOVELJytzGhVS5fb83vk3OwSvZl7ygwHr1IYc+M8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QGuhTWVEzg6tbGVEOkwYqi8D6iaO4AceU9NGK+qF/uDDcikfLwHpPNtwDnUZewAd8
-         58zz2BqQ3CmBXXsES1Weycc0/iO2x2+ar5u90lgM5MO3IGgT3j738dA+QpNe3SmAAP
-         OBlP9wiKujIN4V+QDUVP5UYqKp3yqAaRMlowXyxA=
-Date:   Mon, 27 Dec 2021 10:22:57 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Pavel Hofman <pavel.hofman@ivitera.com>
-Cc:     linux-usb@vger.kernel.org,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>
-Subject: Re: [PATCH] usb: gadget: u_audio: Subdevice 0 for capture ctls
-Message-ID: <YcmF8dFvcTeNdxSW@kroah.com>
-References: <20211227065100.20873-1-pavel.hofman@ivitera.com>
+        with ESMTP id S229734AbhL0J4u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Dec 2021 04:56:50 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C181C06173E;
+        Mon, 27 Dec 2021 01:56:49 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id x21so33733854lfa.5;
+        Mon, 27 Dec 2021 01:56:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=9fWHcMAbQHI5xWkUx6lceWEkgpVdlT25SBzMHtgoJuQ=;
+        b=PcjF9f0adWqt2K0TqtF9/SOC0EGi3xlg2BuYA+TsuGheXaGDVE77l81O6CnIvuAWki
+         nhhy/1bLfJiLHfCOGQgqjVC6uRmTum9LV2yE/tEVauZsrAiYybP4Bh4SpG2KsoGeNJ1L
+         8TePxw7UCLXiwX+T0QbRO9C71SGen934CNPJL7Sd2zLHziIORWRvReovpktfZJpeZuhd
+         RWYVQmc+8R0nsINO3uFyAYHfemJBycFDE46rT1t6EJ/RwrJf31PFGWI7XDypx25Qfx1C
+         xBFln0ju7DaVFQc63bclYmVbNM6E1ZxnIe+V3iejDwab4oRaXcOY84Y+8ZedKj4sltuT
+         P13A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=9fWHcMAbQHI5xWkUx6lceWEkgpVdlT25SBzMHtgoJuQ=;
+        b=zX/3iiK6E/ZzFl7BuVdua9ckbLa9unBMuz4fKJNrupAEyuzAS8uV8LNr2pbOJ/+hFb
+         bDbWEz6CgxNCFuzW985m/yS5vw5j4lVq1d97bld8+GDygcY+BO4QQPyAebEd/u2e+gai
+         RTQ+1RZM6Wxuih95ejAJovAzZLOSgdzbSYigYeoIvN1zuPckjDFUqk954YlUdFjH0c5j
+         oTkIaWl5gOgksCXWvEkvaN7xd4OmxtgSOOXK1MD2kTUCjipL9/bNsK0qjTKh2kYi1mHK
+         bNkkKyBN1eESJkUcbgMjutOvtquEPSj5tWGZs3d7dsflDVOr4Gfxs5Zn3sHTjLWQGdew
+         rIfQ==
+X-Gm-Message-State: AOAM530mu4DZ6HHqIbTTQbLnRyqRZgNRD2UcaP3Qr/TiW0BdPdDctz5R
+        DJyZgW4apVS7Qn5EZqhGj5YZBMSyBBs=
+X-Google-Smtp-Source: ABdhPJwhawMF7oBUEgjR2M9jLXUxf5U42a9pnF10LwKNy02G77chpTMStVAFjvntoQ4p4Bb1/MEekQ==
+X-Received: by 2002:a05:6512:308a:: with SMTP id z10mr15046128lfd.594.1640599007838;
+        Mon, 27 Dec 2021 01:56:47 -0800 (PST)
+Received: from [192.168.1.100] ([178.176.79.51])
+        by smtp.gmail.com with ESMTPSA id g11sm1585418lfr.236.2021.12.27.01.56.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Dec 2021 01:56:47 -0800 (PST)
+Message-ID: <36ee5c5c-a03c-c9f5-dd5c-9e3a04b0374a@gmail.com>
+Date:   Mon, 27 Dec 2021 12:56:41 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227065100.20873-1-pavel.hofman@ivitera.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH] net: usb: pegasus: Do not drop long Ethernet frames
+Content-Language: en-US
+To:     Matthias-Christian Ott <ott@mirix.org>,
+        Petko Manolov <petkan@nucleusys.com>
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org
+References: <20211226132930.7220-1-ott@mirix.org>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+In-Reply-To: <20211226132930.7220-1-ott@mirix.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 07:51:00AM +0100, Pavel Hofman wrote:
-> Both capture and playback alsa devices use subdevice 0. Yet capture-side
-> ctls are defined for subdevice 1. The patch sets subdevice 0 for them.
-> 
-> Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
-> ---
->  drivers/usb/gadget/function/u_audio.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-> index c46400be5464..4f6c0049c534 100644
-> --- a/drivers/usb/gadget/function/u_audio.c
-> +++ b/drivers/usb/gadget/function/u_audio.c
-> @@ -1145,7 +1145,7 @@ int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
->  			}
->  
->  			kctl->id.device = pcm->device;
-> -			kctl->id.subdevice = i;
-> +			kctl->id.subdevice = 0;
->  
->  			err = snd_ctl_add(card, kctl);
->  			if (err < 0)
-> @@ -1168,7 +1168,7 @@ int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
->  			}
->  
->  			kctl->id.device = pcm->device;
-> -			kctl->id.subdevice = i;
-> +			kctl->id.subdevice = 0;
->  
->  
->  			kctl->tlv.c = u_audio_volume_tlv;
-> -- 
-> 2.25.1
-> 
+Hello!
 
-Does this fix a specific bug/issue?  If so, what commit does this fix?
+On 26.12.2021 16:29, Matthias-Christian Ott wrote:
 
-thanks,
+> The D-Link DSB-650TX (2001:4002) is unable to receive Ethernet frames
+> that are longer than 1518 octets, for example, Ethernet frames that
+> contain 802.1Q VLAN tags.
+> 
+> The frames are sent to the pegasus driver via USB but the driver
+> discards them because they have the Long_pkt field set to 1 in the
+> received status report. The function read_bulk_callback of the pegasus
+> driver treats such received "packets" (in the terminology of the
+> hardware) as errors but the field simply does just indicate that the
+> Ethernet frame (MAC destination to FCS) is longer than 1518 octets.
+> 
+> It seems that in the 1990s there was a distinction between
+> "giant" (> 1518) and "runt" (< 64) frames and the hardware includes
+> flags to indicate this distinction. It seems that the purpose of the
+> distinction "giant" frames was to not allow infinitely long frames due
+> to transmission errors and to allow hardware to have an upper limit of
+> the frame size. However, the hardware already has such limit with its
+> 2048 octet receive buffer and, therefore, Long_pkt is merely a
+> convention and should not be treated as a receive error.
+> 
+> Actually, the hardware is even able to receive Ethernet frames with 2048
+> octets which exceeds the claimed limit frame size limit of the driver of
+                                    ^^^^^            ^^^^^
+    Too many limits. :-)
 
-greg k-h
+> 1536 octets (PEGASUS_MTU).
+> 
+> Signed-off-by: Matthias-Christian Ott <ott@mirix.org>
+[...]
+
+MBR, Sergey
