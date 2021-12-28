@@ -2,77 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4F4480763
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Dec 2021 09:26:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF6C480792
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Dec 2021 10:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232566AbhL1I0o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Dec 2021 03:26:44 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38692 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbhL1I0n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Dec 2021 03:26:43 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9CD97B80D97;
-        Tue, 28 Dec 2021 08:26:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D5D3C36AE8;
-        Tue, 28 Dec 2021 08:26:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640679996;
-        bh=Jm+D1iWBu7R1yzoXReCfMiYzW4DAqKUJ4JBX9vgR8oQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FLSklKthTjHedcZTLZXv14S8I4mJOCaIIAB0NdYQz8pqZXFFg+xO0CHNDGovd6Ecd
-         KVqqbaoLiwfCiwgbCVi9wiknkWdrF1QwNmUKALAs6THA2/YwdU4S+UEUXklhdiGHe7
-         NCvQYH3R2/u7y1DzWjMHnYR1zSyXAfhKrE9g5/WI=
-Date:   Tue, 28 Dec 2021 09:26:28 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Puma Hsu <pumahsu@google.com>
-Cc:     mathias.nyman@intel.com, albertccwang@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] xhci: re-initialize the HC during resume if HCE was set
-Message-ID: <YcrKNP4TRXB6nsCI@kroah.com>
-References: <20211228060246.2958070-1-pumahsu@google.com>
+        id S235800AbhL1JFG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Dec 2021 04:05:06 -0500
+Received: from cable.insite.cz ([84.242.75.189]:48326 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235791AbhL1JFF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 28 Dec 2021 04:05:05 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 8A58BA1A3D403;
+        Tue, 28 Dec 2021 10:05:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1640682303; bh=m5QXkA4qOyGAGOj/hIzxpsYgFwHqTjUrIFa/60fDf50=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=iaqUmBc19m+4qgLt/FoGsPI9YeQ5mIkmBoiihsOpB0FTUcuGtBDY3Cf1sa2eMwWeY
+         zGLfB6T4OrD3sm+taxs26s5Z6uLfI/17pW1juMv0rHI8b5queQyUzuy8rY45qTkyl0
+         Rdyvsc2SpZa8Rx636hUktivDYtwBPYHK/NjZwhoA=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id W6lTA5QqHvSl; Tue, 28 Dec 2021 10:04:58 +0100 (CET)
+Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 06167A1A3D402;
+        Tue, 28 Dec 2021 10:04:58 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1640682298; bh=m5QXkA4qOyGAGOj/hIzxpsYgFwHqTjUrIFa/60fDf50=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=T/AN3FRhnWuVv5SxECqGDlUoe8bV8979AQiiI12bwfhiAEpxONlMZjhocl6fhL85+
+         6tNfwsGKeOWX3oq+UbVOuUj26fLJrB19xLAgFSr5gjNZ+fuVd/mu6rJl8y3mc/dpRC
+         QCyPq3JditIHMww7aBDplKOaJREQHrFhJIKvhEGk=
+Subject: Re: [RFC: PATCH v2 07/11] usb: gadget: u_audio: Stopping PCM
+ substream at capture/playback stop
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+To:     John Keeping <john@metanate.com>
+Cc:     linux-usb@vger.kernel.org,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Julian Scheel <julian@jusst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yunhao Tian <t123yh.xyz@gmail.com>,
+        Jack Pham <jackp@codeaurora.org>
+References: <20211220211130.88590-1-pavel.hofman@ivitera.com>
+ <20211220211130.88590-8-pavel.hofman@ivitera.com> <YcHGD3FxCmA0g6IV@donbot>
+ <b9d2c1ac-2c46-7ad4-179b-1f57c6c8fb41@ivitera.com>
+Message-ID: <43f50e2d-887f-8015-d1dc-f282d7523979@ivitera.com>
+Date:   Tue, 28 Dec 2021 10:04:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211228060246.2958070-1-pumahsu@google.com>
+In-Reply-To: <b9d2c1ac-2c46-7ad4-179b-1f57c6c8fb41@ivitera.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 02:02:46PM +0800, Puma Hsu wrote:
-> When HCE(Host Controller Error) is set, it means an internal
-> error condition has been detected. It needs to re-initialize
-> the HC too.
-> 
-> Signed-off-by: Puma Hsu <pumahsu@google.com>
-> ---
->  drivers/usb/host/xhci.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index dc357cabb265..c546d9533410 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -1146,8 +1146,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
->  		temp = readl(&xhci->op_regs->status);
->  	}
->  
-> -	/* If restore operation fails, re-initialize the HC during resume */
-> -	if ((temp & STS_SRE) || hibernated) {
-> +	/* If restore operation fails or HC error is detected, re-initialize the HC during resume */
-> +	if ((temp & STS_SRE) || (temp & STS_HCE) || hibernated) {
->  
->  		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
->  				!(xhci_all_ports_seen_u0(xhci))) {
-> -- 
-> 2.34.1.448.ga2b2bfdf31-goog
-> 
 
-What commit does this fix?  Does it need to be backported to older
-kernels as well?
 
-thanks,
+Dne 22. 12. 21 v 13:26 Pavel Hofman napsal(a):
+> Dne 21. 12. 21 v 13:18 John Keeping napsal(a):
+>> On Mon, Dec 20, 2021 at 10:11:26PM +0100, Pavel Hofman wrote:
+>>> When the USB host stops capture/playback, the corresponding PCM
+>>> substream (if activated and running) is stopped and drained.
+>>>
+>>> Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+>>> ---
+>>>   drivers/usb/gadget/function/u_audio.c | 16 ++++++++++++++++
+>>>   1 file changed, 16 insertions(+)
+>>>
+>>> diff --git a/drivers/usb/gadget/function/u_audio.c 
+>>> b/drivers/usb/gadget/function/u_audio.c
+>>> index a6293415c071..9dbce51c2eb7 100644
+>>> --- a/drivers/usb/gadget/function/u_audio.c
+>>> +++ b/drivers/usb/gadget/function/u_audio.c
+>>> @@ -544,6 +544,20 @@ static void set_reported_srate(struct 
+>>> uac_rtd_params *prm, int srate)
+>>>       }
+>>>   }
+>>> +static void stop_substream(struct uac_rtd_params *prm)
+>>> +{
+>>> +    unsigned long _flags;
+>>> +    struct snd_pcm_substream *substream;
+>>> +
+>>> +    substream = prm->ss;
+>>> +    if (substream) {
+>>> +        snd_pcm_stream_lock_irqsave(substream, _flags);
+>>> +        if (snd_pcm_running(substream))
+>>> +            snd_pcm_stop(substream, SNDRV_PCM_STATE_DRAINING);
+>>
+>> I'm not sure if this is right (and the series should probably be CC'd to
+>> alsa-devel to check the audio side of this).
+>>
+>> DRAINING seems to be right for capture, but for playback should this end
+>> up in state SETUP?  Does this need to handle resuming a paused stream
+>> like snd_pcm_drain() does?
+> 
+> Honestly, I do not know. This code comes from a SPDIF receiver driver 
+> where it handles interrupted incoming SPDIF stream. You are right it is 
+> related to capture. I will ask the alsa devs about the playback solution 
+> specifically.
+> 
+> Yes I will CC the next version to alsa-dev just in case.
 
-greg k-h
+I have not received a response from the alsa devels yet, however based 
+on existing variants in the other drivers in the kernel there are two 
+options:
+
+if (substream) {
+   snd_pcm_stream_lock_irqsave(substream, _flags);
+   if (snd_pcm_running(substream)) {
+     if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+       snd_pcm_stop(substream, SNDRV_PCM_STATE_SETUP);
+     else
+       snd_pcm_stop(substream, SNDRV_PCM_STATE_DRAINING);
+   }
+   snd_pcm_stream_unlock_irqrestore(substream, _flags);
+}
+
+
+When testing playback/capture, sox does not exit with this version (only 
+reporting an error), recovering if playback/capture resume within 
+standard alsa blocking read/write timeout. Aplay/arecord exit.
+
+Another option is
+
+if (substream) {
+   snd_pcm_stream_lock_irqsave(substream, _flags);
+   if (snd_pcm_running(substream))
+     snd_pcm_stop(substream, SNDRV_PCM_STATE_DISCONNECTED);
+   snd_pcm_stream_unlock_irqrestore(substream, _flags);
+}
+
+Here both sox and aplay/arecord exit when the pcm stream is stopped. 
+ From my use case I like this option better.
+
+Or the gadget can use SETUP/DRAINING for host-side playback/capture stop 
+and DISCONNECTED for USB cable unplugging. But I am not sure whether 
+from the gadget side POW there is a any real difference between the host 
+stopping playback/capture and cable disconnection.
+
+Also this patch would change behaviour of the gadget for existing 
+installations, as the existing version just stops data 
+delivery/consumption. Maybe some installations already count on this 
+behaviour. Perhaps the snd_pcm_stop call should be an opt-in via a new 
+configfs parameter?
+
+Please can existing gadget users comment on this?
+
+Thanks a lot,
+
+Pavel.
