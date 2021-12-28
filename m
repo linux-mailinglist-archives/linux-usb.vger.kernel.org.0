@@ -2,281 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD37480C91
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Dec 2021 19:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A43E9480D09
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Dec 2021 21:37:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237079AbhL1SlF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Dec 2021 13:41:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56162 "EHLO
+        id S237279AbhL1Uh2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Dec 2021 15:37:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237070AbhL1SlE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Dec 2021 13:41:04 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCC3C061574
-        for <linux-usb@vger.kernel.org>; Tue, 28 Dec 2021 10:41:04 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso25331843otf.12
-        for <linux-usb@vger.kernel.org>; Tue, 28 Dec 2021 10:41:04 -0800 (PST)
+        with ESMTP id S236038AbhL1Uh1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Dec 2021 15:37:27 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20BAC061574
+        for <linux-usb@vger.kernel.org>; Tue, 28 Dec 2021 12:37:26 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id q14so70433123edi.3
+        for <linux-usb@vger.kernel.org>; Tue, 28 Dec 2021 12:37:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ytv7UO7IYg5u61czRPYEuC/H+doSraYFJMz92/qzQ9Q=;
-        b=U88dPHGwfKlaILL+FCRh+RVWLInnaQDUn70KdsclPUbOzVLIZ1LyS7Crk/50Vvk9p7
-         y+mqaN2zRMBL6ewKVz5qDVRXbAdjDG4jeC66cqw6jU1Xk6hAzaTIVRUepNlsTOP9ldio
-         /XYgis7tg7H4eF3y0F74KREpPvr4l/yA51FwWhBvjtReRZqt+PaBDK+Le9rIXPY2c8aW
-         juefSQEkbZ5U0JK8joJi8VcUhqbywQ0UAMKQ2k5z4TNsmIJFQk+No2tzoy28XyMKITnn
-         2R0VIfvHrgh8WXAsNkLzNwaH2/FOC2/IewAUKxnI3HYevmY8wiWlpPiC4WEYJbWeLvGm
-         pJCw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=M1jtjlYnGEYiwZTtfWk3hJtYxljarxtH2ZHsHZVnN60=;
+        b=YVcGLwJS8KVARlSjlF8xOACz5sWyF1nQreywz70Pdapb2vi90JDHtkw6SRBAR4M2+c
+         +wL9AhxsgB/S2shnUIbObPy/v9edj4tVaQbbgN2NTNumu5+fI5C4mw0lMKZim+VEqyjC
+         6Lw0qe2SfoN7NxmKVjht0fuo//M9kasaVZoDXAYLq1OvDmTgUPGUIgrJVR2GA4dit1fy
+         p6KEU0NlgPQsHKyaVcngrtOohrjkxF7DM/RMzB73spGjt6QBVu0LlP8kydBC2eEPqtut
+         Lq181QE/Pkycp06ffLfMsyRrMotSv1i553m1+J/rpkd5CD3Baj8LQDUwUN0/rMQWYgHS
+         SpFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ytv7UO7IYg5u61czRPYEuC/H+doSraYFJMz92/qzQ9Q=;
-        b=LwbSDTgP/j2qlVT8jaBRbNz+HflTgDK339veLqX+fPFcufVrUUmX6T4SyGsl9Xs5vs
-         V/ne4BimdSsmEn33GZvRUSasn85fFiWugYKfUqv+Quss/jMSQ8boivcE9MBy6Q13uaT4
-         HPAVt0L1T/W2OSolpTUV2WUvIyHXBueh4x5cmjNDpmtCcR00uK6P2/LvQaVBD40D9xiw
-         JZe0GQF20jFPq3iMqXJt3XSNtfJ6389+u86j2gY/fEqtzIK6QeHVVsksSd8upeuxcLWg
-         /RO29dmUCIWUHv9RRVi+/2/vlT2E5UJze7I6nUMoYluUHUH3mErENnLFyNCchig3lV8p
-         I8qQ==
-X-Gm-Message-State: AOAM532vAMhH88wW0C8mwRjMPmgrx88g37spPorwyyptW6ZZ6TPDKw9W
-        SibL9YiKYFuybpfxbiuRJuUoig==
-X-Google-Smtp-Source: ABdhPJzkL0FBam5GErEj/r7t7lctG/vlMztl+fIHp6U9kK6l5DNlNsYTVe+UigxiJBlJGvrP8QI+Ww==
-X-Received: by 2002:a05:6830:1204:: with SMTP id r4mr16015707otp.34.1640716863780;
-        Tue, 28 Dec 2021 10:41:03 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id c139sm2744811oob.31.2021.12.28.10.41.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 10:41:03 -0800 (PST)
-Date:   Tue, 28 Dec 2021 10:42:02 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 3/8] device property: Helper to match multiple connections
-Message-ID: <YctaepSIglPWfJsm@ripper>
-References: <20211228052116.1748443-1-bjorn.andersson@linaro.org>
- <20211228052116.1748443-4-bjorn.andersson@linaro.org>
- <78491489-6b31-c741-8c69-8d52fb614a6c@linaro.org>
- <YctDgaHV8dsR109L@ripper>
- <CAA8EJpqO7-2_xNRvgTzi9nBNEpWwO6G2-97BWKg2tZFZ-WsQKw@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=M1jtjlYnGEYiwZTtfWk3hJtYxljarxtH2ZHsHZVnN60=;
+        b=3Lf0N9HmmJsDlylpnHNH9mr8/HjlVUWq1be0AUyNkZM1+3DIydTBTzaIP3ETCgQGS2
+         Wt3+2+Yj7PBsxAUJj9L2DD/UG89rwF6uzsDXq5dF8HThoHDqwWUg86X8c/aMZDAyTxhc
+         fizK24pQmMhOWwFgb4xum41j8vboyg4WFplWtoq8ou8GhfETgwEVkvwg6hUI9zVTdX10
+         4X+90SHFGngrIAsS7TgiqmhrLnBaOvg8Ky+drS0W9x6xP1MDy4BzCw2KFfrTy5hbVsMJ
+         7dtjvZPhzWYqM103TLPhAxhrggob7hLpDVOwH8NtMfCLRwUU9yxMj4cj7/J81/h+VZvg
+         KRgA==
+X-Gm-Message-State: AOAM533LutPutGphqqKV9SWtDSsxIT39AVivR1VARdtkJydoVXu1vu9C
+        bwzNIRDTP+j8hDJHnkGVlePBUvKxFs0=
+X-Google-Smtp-Source: ABdhPJwqGu2YoGA7LgTf5EmHSyexlLtIoPnlAo/7UvcZA9kNTYpxoCp7VHGojYcGHGIsnfx1Ry4UZQ==
+X-Received: by 2002:a17:907:82a6:: with SMTP id mr38mr17412147ejc.744.1640723845574;
+        Tue, 28 Dec 2021 12:37:25 -0800 (PST)
+Received: from [192.168.178.24] (host-091-097-235-249.ewe-ip-backbone.de. [91.97.235.249])
+        by smtp.gmail.com with ESMTPSA id b73sm7675987edf.37.2021.12.28.12.37.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Dec 2021 12:37:25 -0800 (PST)
+Message-ID: <f8fa9af6-bcd0-3bea-59b9-a698ad2e2bce@gmail.com>
+Date:   Tue, 28 Dec 2021 21:37:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA8EJpqO7-2_xNRvgTzi9nBNEpWwO6G2-97BWKg2tZFZ-WsQKw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: PROBLEM: USB stops working
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+References: <2d6aeefb-97ea-c6e9-0824-a918f6ec5b4c@gmail.com>
+ <083d3bab-df88-d2e2-9334-c8367da39e7b@gmail.com> <Ycs0AJDaRkJwTZI9@kroah.com>
+From:   Christian <tostc6@gmail.com>
+In-Reply-To: <Ycs0AJDaRkJwTZI9@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue 28 Dec 10:24 PST 2021, Dmitry Baryshkov wrote:
+Unfortunately there is no notification if something crashes. Only my USB 
+devices no longer work. To be honest, I haven't looked in the log files 
+for a crash until now. In addition, I could not provoke the complete 
+crash now. For testing I switched from the nvidia driver to the nouveau 
+driver and the problems are gone. Now I have other issues but these are 
+related to the Nouveau driver and the fact that I haven't set it up 
+accordingly. So can I assume that this is not a USB problem, but rather 
+an nvidia problem?
 
-> On Tue, 28 Dec 2021 at 20:03, Bjorn Andersson
-> <bjorn.andersson@linaro.org> wrote:
-> >
-> > On Tue 28 Dec 05:09 PST 2021, Dmitry Baryshkov wrote:
-> >
-> > > On 28/12/2021 08:21, Bjorn Andersson wrote:
-> > > > In some cases multiple connections with the same connection id
-> > > > needs to be resolved from a fwnode graph.
-> > > >
-> > > > One such example is when separate hardware is used for performing muxing and/or
-> > > > orientation switching of the SuperSpeed and SBU lines in a USB-C
-> > > > connector. In this case the connector needs to belong to a graph with
-> > > > multiple matching remote endpoints, and the TypeC controller needs to be
-> > > > able to resolve them both.
-> > > >
-> > > > Add a new API that allows this kind of lookup.
-> > > >
-> > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > > ---
-> > > >   drivers/base/property.c  | 94 ++++++++++++++++++++++++++++++++++++++++
-> > > >   include/linux/property.h |  5 +++
-> > > >   2 files changed, 99 insertions(+)
-> > > >
-> > > > diff --git a/drivers/base/property.c b/drivers/base/property.c
-> > > > index cbe4fa298413..0aa0296fd991 100644
-> > > > --- a/drivers/base/property.c
-> > > > +++ b/drivers/base/property.c
-> > > > @@ -1180,6 +1180,36 @@ fwnode_graph_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
-> > > >     return NULL;
-> > > >   }
-> > > > +static unsigned int fwnode_graph_devcon_matches(struct fwnode_handle *fwnode,
-> > > > +                                           const char *con_id, void *data,
-> > > > +                                           devcon_match_fn_t match,
-> > > > +                                           void **matches,
-> > > > +                                           unsigned int matches_len)
-> > > > +{
-> > > > +   struct fwnode_handle *node;
-> > > > +   struct fwnode_handle *ep;
-> > > > +   unsigned int count = 0;
-> > > > +   void *ret;
-> > > > +
-> > > > +   fwnode_graph_for_each_endpoint(fwnode, ep) {
-> > > > +           if (count >= matches_len) {
-> > > > +                   fwnode_handle_put(ep);
-> > > > +                   return count;
-> > > > +           }
-> > > > +
-> > > > +           node = fwnode_graph_get_remote_port_parent(ep);
-> > > > +           if (!fwnode_device_is_available(node))
-> > > > +                   continue;
-> > > > +
-> > > > +           ret = match(node, con_id, data);
-> > > > +           fwnode_handle_put(node);
-> > > > +
-> > > > +           if (ret)
-> > > > +                   matches[count++] = ret;
-> > > > +   }
-> > > > +   return count;
-> > > > +}
-> > >
-> > > This API doesn't let it's user know if there are more matches found in the
-> > > device tree or not. I'd suggest to add 'count' mode that would return the
-> > > amount of found matches if (matches == NULL) && (matches_len == 0).
-> > >
-> >
-> > Unfortunately in this code path we don't know how to "free" the objects
-> > returned by match(), e.g. see how typec_switch_match() returns wrapper
-> > of a refcounted device.
-> >
-> > So we must return all the match results to the caller to it can free
-> > things up based on its knowledge of what matches[] actually contains..
-> 
-> Ugh. Then we should probably return -E2BIG, -ENOSPC or any other such error.
-> Another option might be to split match into match & map functions,
-> first one returning bool and second one returning actual corresponding
-> object..
-> 
+Your sincerely
 
-If I get an errno back from a function like this I generally expect this
-kind of API to have done the cleanup for me, which can't be done. So I
-fear that it would be more error prone than the current proposal - which
-potentially might (silently) fail to detect that you have 4+ orientation
-switches attached to your USB port.
+Christian Tost
 
-My imagination doesn't isn't able to come up with a large enough
-of_graph where the client would need to provide an matches array that's
-larger than what would fit on the stack. Perhaps someone can provide a
-real use case where it would be necessary to support arbitrary sizes of
-matches[]?
-
-Regards,
-Bjorn
-
-> >
-> > Regards,
-> > Bjorn
-> >
-> > > > +
-> > > >   static void *
-> > > >   fwnode_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
-> > > >                 void *data, devcon_match_fn_t match)
-> > > > @@ -1202,6 +1232,35 @@ fwnode_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
-> > > >     return NULL;
-> > > >   }
-> > > > +static unsigned int fwnode_devcon_matches(struct fwnode_handle *fwnode,
-> > > > +                                     const char *con_id, void *data,
-> > > > +                                     devcon_match_fn_t match,
-> > > > +                                     void **matches,
-> > > > +                                     unsigned int matches_len)
-> > > > +{
-> > > > +   struct fwnode_handle *node;
-> > > > +   unsigned int count = 0;
-> > > > +   void *ret;
-> > > > +   int i;
-> > > > +
-> > > > +   for (i = 0; ; i++) {
-> > > > +           if (count >= matches_len)
-> > > > +                   return count;
-> > > > +
-> > > > +           node = fwnode_find_reference(fwnode, con_id, i);
-> > > > +           if (IS_ERR(node))
-> > > > +                   break;
-> > > > +
-> > > > +           ret = match(node, NULL, data);
-> > > > +           fwnode_handle_put(node);
-> > > > +
-> > > > +           if (ret)
-> > > > +                   matches[count++] = ret;
-> > > > +   }
-> > > > +
-> > > > +   return count;
-> > > > +}
-> > > > +
-> > >
-> > > Same comment applies.
-> > >
-> > > >   /**
-> > > >    * fwnode_connection_find_match - Find connection from a device node
-> > > >    * @fwnode: Device node with the connection
-> > > > @@ -1229,3 +1288,38 @@ void *fwnode_connection_find_match(struct fwnode_handle *fwnode,
-> > > >     return fwnode_devcon_match(fwnode, con_id, data, match);
-> > > >   }
-> > > >   EXPORT_SYMBOL_GPL(fwnode_connection_find_match);
-> > > > +
-> > > > +/**
-> > > > + * fwnode_connection_find_matches - Find connections from a device node
-> > > > + * @fwnode: Device node with the connection
-> > > > + * @con_id: Identifier for the connection
-> > > > + * @data: Data for the match function
-> > > > + * @match: Function to check and convert the connection description
-> > > > + * @matches: Array of pointers to fill with matches
-> > > > + * @matches_len: Length of @matches
-> > > > + *
-> > > > + * Find up to @matches_len connections with unique identifier @con_id between
-> > > > + * @fwnode and other device nodes. @match will be used to convert the
-> > > > + * connection description to data the caller is expecting to be returned
-> > > > + * through the @matches array.
-> > > > + *
-> > > > + * Return: Number of matches resolved, of negative errno.
-> > > > + */
-> > > > +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
-> > > > +                              const char *con_id, void *data,
-> > > > +                              devcon_match_fn_t match,
-> > > > +                              void **matches, unsigned int matches_len)
-> > > > +{
-> > > > +   unsigned int count;
-> > > > +
-> > > > +   if (!fwnode || !match || !matches)
-> > > > +           return -EINVAL;
-> > > > +
-> > > > +   count = fwnode_graph_devcon_matches(fwnode, con_id, data, match,
-> > > > +                                       matches, matches_len);
-> > > > +
-> > > > +   return count + fwnode_devcon_matches(fwnode, con_id, data, match,
-> > > > +                                        matches + count,
-> > > > +                                        matches_len - count);
-> > > > +}
-> > > > +EXPORT_SYMBOL_GPL(fwnode_connection_find_matches);
-> > > > diff --git a/include/linux/property.h b/include/linux/property.h
-> > > > index 16f736c698a2..59484ccb260e 100644
-> > > > --- a/include/linux/property.h
-> > > > +++ b/include/linux/property.h
-> > > > @@ -444,6 +444,11 @@ static inline void *device_connection_find_match(struct device *dev,
-> > > >     return fwnode_connection_find_match(dev_fwnode(dev), con_id, data, match);
-> > > >   }
-> > > > +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
-> > > > +                              const char *con_id, void *data,
-> > > > +                              devcon_match_fn_t match,
-> > > > +                              void **matches, unsigned int matches_len);
-> > > > +
-> > > >   /* -------------------------------------------------------------------------- */
-> > > >   /* Software fwnode support - when HW description is incomplete or missing */
-> > >
-> > >
-> > > --
-> > > With best wishes
-> > > Dmitry
-> 
-> 
-> 
-> -- 
-> With best wishes
-> Dmitry
+Am 28.12.21 um 16:57 schrieb Greg KH:
+> On Tue, Dec 28, 2021 at 04:05:18PM +0100, Christian wrote:
+>> [1.] One line summary of the problem: USB stops working
+>>
+>> [2.] Full description of the problem/report:
+>>
+>> I have this problem when using the Steam client so I'm not sure if this is
+>> kernel related or not, but please see my notice at the end of this section.
+>>
+>> When Steam is only running in the background, my entire system sound usually
+>> cracks. This occurs on both Steam and non-Steam games. All my USB devices
+>> stop working for a second. So when I write something, some letters do not
+>> appear on the screen, and sometimes my mouse clicks are not recognized
+>> either. As soon as I close steam completely, the problems are gone.
+>> Sometimes my entire USB driver crashes so I have to restart my computer to
+>> get it working again.
+> Is there any kernel log messages happening when this occurs?
+>
+> You can look at them by typing 'dmesg' in a console window.
+>
+> You say something crashes, what is the message when that happens?
+>
+> And can you reproduce this without the nvidia drivers loaded?
+>
+> thanks,
+>
+> greg k-h
