@@ -2,72 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BA6480705
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Dec 2021 08:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A93FE480720
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Dec 2021 08:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235341AbhL1HrS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Dec 2021 02:47:18 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:37834 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235333AbhL1HrR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Dec 2021 02:47:17 -0500
-Received: by mail-il1-f197.google.com with SMTP id v3-20020a92c6c3000000b002b3919079d1so11179201ilm.4
-        for <linux-usb@vger.kernel.org>; Mon, 27 Dec 2021 23:47:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to:cc;
-        bh=Uw0HySQnOliUjUKI3r/PFZeo3az9rpmElYd8X6AhRRc=;
-        b=a6DbbuO+KJSCVU0pYmWe+C0pBBX6twDvYwGHbETeF7z7Nu+5KCkmDl7TLxdaktiGq7
-         kMKJWbTbvUolZDvUG/iwrmD2Wx1DZ7Hu1EFuDqD/pwH3GFiNLvZYrOJfgYr9WO03oGTq
-         lb+okgMULKxwfrsP0BGGLCv0VXUSsw9B1WXacbzTHJ6zJywQNePykPmtrleiC8dflmNI
-         qqmkHNMxaks9OeZ0ovJB1iWj69zaO6WX06tfP1N53Z+JMR9VdUhWreDopKCejtz/Ao+b
-         41M6Jn040OeDWH/5a2pghHAZWbTfnahOIvGkrjutxnMl9kdGj0Hftw8FpV9XOgaCJf78
-         ZtGA==
-X-Gm-Message-State: AOAM531/rTBtNUi8W2BLM/uN/ppNSIuSsSO95G7J2xHo3hDSHH5Jeht3
-        KvxZMo7TjyLvAWspl9j9PUmuBzuPDJGf2QPplT+hCONfriDl
-X-Google-Smtp-Source: ABdhPJzzBDBBy/cd8LQS9PQTs66isAN0tM25racBxresrnv1pJK8DlLuL0yS3O/+BJ612+mJNZ8W9lYMUF7fK4TZa/4hMmvqZTBX
+        id S235435AbhL1HxR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Dec 2021 02:53:17 -0500
+Received: from mga02.intel.com ([134.134.136.20]:20929 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235425AbhL1HxR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 28 Dec 2021 02:53:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640677996; x=1672213996;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5TZVoB+V/tX3qFpJap/fHz9uXseltn3wjrQURaeshFg=;
+  b=FKt+K2c4picFLcD0/aP5n8c68DC4uhuFarfzq2wo5F9nZZDgRndy9V0M
+   jRqI0q+BguXWFVCalqUa+P3KL70qAL1i+2naoYdhC0xIIE4YsCKMIbMce
+   1cSJVsSEFlQYiRHj+XOX8y5Ry/dLoeWZz5WnNi78gK7Zy7k87VNbC/6cp
+   jC0FLVuJKgxuKSLaCPwGjTmPd+5I2gwojh79+iu4AzxW0S5D46HmjMAJM
+   rPcoPILN4/9ed316xzp+l18sErcX3eMoY9AVysx3lzg2jfKNdjJVa9yN9
+   GC425mrzt/y5E/k12ZKcxbsKypAfDgD3yhfczZQ5neVmplMen988vhvtR
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="228633475"
+X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
+   d="scan'208";a="228633475"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 23:53:16 -0800
+X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
+   d="scan'208";a="524481772"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 23:53:13 -0800
+Received: by lahna (sSMTP sendmail emulation); Tue, 28 Dec 2021 09:52:07 +0200
+Date:   Tue, 28 Dec 2021 09:52:07 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Gil Fine <gil.fine@intel.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org, lukas@wunner.de
+Subject: Re: [PATCH v2 0/7] thunderbolt: CLx support for USB4 and Titan Ridge
+Message-ID: <YcrCJ+WlUsqKFtsW@lahna>
+References: <20211217011644.21634-1-gil.fine@intel.com>
+ <YcMzwjicgQlDYljP@lahna>
+ <20211227161344.GJ24036@ccdjLinux26>
 MIME-Version: 1.0
-X-Received: by 2002:a02:b11d:: with SMTP id r29mr9712662jah.71.1640677637200;
- Mon, 27 Dec 2021 23:47:17 -0800 (PST)
-Date:   Mon, 27 Dec 2021 23:47:17 -0800
-In-Reply-To: <f78b974a-e36b-6d23-6977-fdf50c05600b@wanadoo.fr>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c1a01605d4300787@google.com>
-Subject: Re: KMSAN: uninit-value in alauda_check_media
-From:   syzbot <syzbot+e7d46eb426883fb97efd@syzkaller.appspotmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     christophe.jaillet@wanadoo.fr, glider@google.com,
-        gregkh@linuxfoundation.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
-        usb-storage@lists.one-eyed-alien.net
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211227161344.GJ24036@ccdjLinux26>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> Hi,
->
-> (2nd try - text only format - sorry for the noise)
->
->
-> first try to use syzbot. I hope I do it right.
-> Discussion about the syz report can be found at 
-> https://lore.kernel.org/linux-kernel/0000000000007d25ff059457342d@google.com/
->
-> This patch only test if alauda_get_media_status() (and its embedded 
-> usb_stor_ctrl_transfer()) before using the data.
-> In case of error, it returns USB_STOR_TRANSPORT_ERROR as done elsewhere.
->
-> #syz test: 
+Hi Gil,
 
-KMSAN bugs can only be tested on https://github.com/google/kmsan.git tree
-because KMSAN tool is not upstreamed yet.
-See https://goo.gl/tpsmEJ#kmsan-bugs for details.
+On Mon, Dec 27, 2021 at 06:13:44PM +0200, Gil Fine wrote:
+> Hi Mika,
+> About latest patches series adding CL0s in thunderbolt/next.git
+> 1.
+> Attached fix for CL0s enabled check - w/o it, the CL0s enabling fails
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
->
-> CJ
->
+Thanks, I folded this to patch "thunderbolt: Enable CL0s for Intel
+Titan Ridge".
+
+> 2.
+> Maybe it is better not to mention "Intel limitation..." about the first-hop
+> router since I am not sure this is correct. Attached patch w/ my proposal.
+
+Well it is targeted only for Intel Titan Ridge so I think we can keep
+it for documentation purposes :)
+
+> 3.
+> Don't we prefer to stay with the name: "tb_switch_titan_ridge_pcie_l1_enable" ?
+> so that it is clear that the function is Titan Ridge specific?
+> If so, sending patch for this
+
+It works with any router (as it specifically checks for Titan Ridge
+before going further), I think we can keep the name more generic too.
