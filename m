@@ -2,140 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 415044807C1
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Dec 2021 10:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE72A480912
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Dec 2021 13:20:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235885AbhL1JVo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Dec 2021 04:21:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbhL1JVo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Dec 2021 04:21:44 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51665C061574;
-        Tue, 28 Dec 2021 01:21:44 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id i8so7026566pgt.13;
-        Tue, 28 Dec 2021 01:21:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XNVkEBxdCwv9W9cWRCtxiTjMYvuTdmDdbez6QkpuIPw=;
-        b=QtYrwol/m+R+wxzXQCU6VdqoKr5ajQhSV15jR3EDMpMeWcgSZPO3Y5msreu52UIP6b
-         cxjcCs8emkjFa+ehM43Vh82EVoVSkHdW21PdAVhqmSnLitGV1c2AOXepDCVDcofBRoib
-         jM5ABNQnxDdL5XSqaFu5o/7Ew1JsWb61+V6Ypx4BoZ/UeQdkTp2ja3sXgrFZapeaxVnc
-         dYZixApOzkKpnHKbhJAMS8EqrA4o79dmhUYoCIx6TnWgmHDpn2LV9NNwfTe82U/exO2h
-         5G4coSV84rEOgVCNDx64TpQRc+HZ9dCRfzmZRz+V7YjinLHexIhLRIXe3eyBur0PFH17
-         uY7A==
+        id S231182AbhL1MUV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Dec 2021 07:20:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22376 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231167AbhL1MUQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Dec 2021 07:20:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640694015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5VvjubQBgQXusD/qnqAa/6+So3MqJfcWXAtQ7MU1qeU=;
+        b=WC1ZZZ6hKJHgh0LP91eQ86qFLDCBX+7j5fVdH1HZZj7CgApjg7Fqrq1CdsWTKlk4V7/vxm
+        8zfCJT5hMYpeA6gAxO1eRLDenpZbdc3u5qcTEGX0Mg7gMzbK/Ee4fIjJeUd20+lJqWeLQ2
+        xRCGWwYLGuTdlvUaHBLjxoll7sImbgI=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-42-uIMQppAbNC6G1w0sf9VQ5w-1; Tue, 28 Dec 2021 07:20:13 -0500
+X-MC-Unique: uIMQppAbNC6G1w0sf9VQ5w-1
+Received: by mail-ed1-f72.google.com with SMTP id ch27-20020a0564021bdb00b003f8389236f8so12898068edb.19
+        for <linux-usb@vger.kernel.org>; Tue, 28 Dec 2021 04:20:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=XNVkEBxdCwv9W9cWRCtxiTjMYvuTdmDdbez6QkpuIPw=;
-        b=DxIRJ+YeBjIm5cGt+DVlBIjge/mVNSbILAOgplTn5k7aDzndnenShmW/ofV8Ohj3F+
-         B3iIjBeun0++BpsuDgTyHOkS9vkbAtsPT8aQkyQH9/vMHDZ4Ma9LpUNsXI3P4OL0Wmdp
-         vWWZkBWJ+QR2b/YusFe67ge5NRNED8UkBDSafS/YYkEFPrm5vS00cNmURZzucIp9qjVc
-         XmhziF1QjN5p8xWclG4hAH8X0qJdsZvUq+REB17GOqFOlr3glsbZsO+QcImYuxkcRdKQ
-         kSSL8n7cUaiLBFcNuDlCkSRXV5OM4gjRYyxQt8/ntsA3CQH84llKlQij4dNwSWKPb39R
-         hNVw==
-X-Gm-Message-State: AOAM530QnVDXOLLeQKAR8P1sLI+H1RfFdDw5uMMGA8Oazh6Rcb+YNsk6
-        /9IzzLHPLe4zDIF56opj6rYEeLl07kf3QyJ7uxk=
-X-Google-Smtp-Source: ABdhPJwgqghqxT+STHVjcpwykm34579nTmVZX96ctHNWtDSg6MlM3nxm1bQybOVaM6RwqOLd1maxiQ==
-X-Received: by 2002:a63:2c06:: with SMTP id s6mr18244960pgs.55.1640683303908;
-        Tue, 28 Dec 2021 01:21:43 -0800 (PST)
-Received: from slim.das-security.cn ([103.84.139.53])
-        by smtp.gmail.com with ESMTPSA id s3sm19226347pfm.0.2021.12.28.01.21.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 01:21:43 -0800 (PST)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org, axboe@kernel.dk,
-        dan.carpenter@oracle.com, jj251510319013@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH] usb: gadget: use after free in dev_config
-Date:   Tue, 28 Dec 2021 17:21:26 +0800
-Message-Id: <20211228092126.29510-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=5VvjubQBgQXusD/qnqAa/6+So3MqJfcWXAtQ7MU1qeU=;
+        b=iaJlv5vXMAxE8KK3FD/EU7DRObk96iAeViCpP3347xU2okjmnBMir/iyyIziS7AibV
+         zykCS9yqa2NiQH2OkvPXg6/rEW5MYoWTiEvMvX01zeY0ZyStMhsz3ShVnTI/blAIXPDU
+         419eAM7NvdWHUqI7M7Mli+73l9GS4Gy8HDZ4lsRo8V7v8idHtFz6IEEbx/KwyvqBOiX8
+         Tp/czPDnfdIhAZ8hpZMWU2ZPMnL/I+ljyWXKg5lLHF9FYtl3U0E16eFs/BqS5tmDW5Dh
+         cx3QVlsdmc7UtccrRutF5h80reAYNWl9/4AD505u0k3viLQbVan7wv+WtcU2KzFg7otk
+         XZtQ==
+X-Gm-Message-State: AOAM531NLIJDjSHT1/6OiU8RM8SxLCp+YRtAz76MtNKtNNpBhyXEbQIO
+        jMnouoAMJts1JUJIpfK6r7JKPXyUMvbLNQ8EjpNrXgp/mebFil5Q/zpsyFgWFjk1wR9O3zPz6qa
+        HPnrRL1lt+qYX1UZRx3qr
+X-Received: by 2002:a17:907:60d6:: with SMTP id hv22mr17260602ejc.478.1640694012554;
+        Tue, 28 Dec 2021 04:20:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx5XdEog79sJL19FCO0DE7mMk8OhXWL3OTKf+yaTjbtWynbAlqQXyYdTwnhqf6+6U8AWbL0Hg==
+X-Received: by 2002:a17:907:60d6:: with SMTP id hv22mr17260594ejc.478.1640694012382;
+        Tue, 28 Dec 2021 04:20:12 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id 14sm6007390ejk.215.2021.12.28.04.20.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Dec 2021 04:20:11 -0800 (PST)
+Message-ID: <279c7bd8-c0bb-e58c-1149-d124102bf8b8@redhat.com>
+Date:   Tue, 28 Dec 2021 13:20:10 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 0/8] typec: mux: Introduce support for multiple TypeC
+ muxes
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20211228052116.1748443-1-bjorn.andersson@linaro.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20211228052116.1748443-1-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There are two bugs:
-dev->buf does not need to be released if it already exists before
-executing dev_config.
-dev->config and dev->hs_config and dev->dev need to be cleaned if
-dev_config fails to avoid UAF.
+Hi Bjorn,
 
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
----
- drivers/usb/gadget/legacy/inode.c | 23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
+On 12/28/21 06:21, Bjorn Andersson wrote:
+> This series introduces a level of indirection between the controller's view of
+> a typec_mux/switch and the implementation and then expands that to support
+> multiple drivers.
+> 
+> This is needed in order to support devices such as the Qualcomm Snapdragon 888
+> HDK, which does muxing and orientation handling in the QMP (USB+DP) PHY and SBU
+> muxing in the external FSA4480 chip.
+> 
+> Additionally integration of typec mux and switch in the QMP PHY is included in
+> the series, as is the new FSA4480 driver. This is done to deal with the
+> renaming of the driver-side typec_mux -> typec_mux_dev.
+> 
+> Bjorn Andersson (8):
+>   dt-bindings: phy: qcom,qmp-usb3-dp: Add altmode/switch properties
+>   phy: qcom-qmp: Register typec mux and orientation switch
+>   device property: Helper to match multiple connections
+>   device property: Use multi-connection matchers for single case
+>   typec: mux: Introduce indirection
+>   typec: mux: Allow multiple mux_devs per mux
+>   dt-bindings: usb: Add binding for fcs,fsa4480
+>   usb: typec: mux: Add On Semi fsa4480 driver
 
-diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-index 3b58f4fc0a80..2ea02887025b 100644
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -1826,8 +1826,9 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 	spin_lock_irq (&dev->lock);
- 	value = -EINVAL;
- 	if (dev->buf) {
-+		spin_unlock_irq(&dev->lock);
- 		kfree(kbuf);
--		goto fail;
-+		return value;
- 	}
- 	dev->buf = kbuf;
- 
-@@ -1835,8 +1836,10 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 	dev->config = (void *) kbuf;
- 	total = le16_to_cpu(dev->config->wTotalLength);
- 	if (!is_valid_config(dev->config, total) ||
--			total > length - USB_DT_DEVICE_SIZE)
-+			total > length - USB_DT_DEVICE_SIZE) {
-+		dev->config = NULL;
- 		goto fail;
-+	}
- 	kbuf += total;
- 	length -= total;
- 
-@@ -1845,8 +1848,11 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 		dev->hs_config = (void *) kbuf;
- 		total = le16_to_cpu(dev->hs_config->wTotalLength);
- 		if (!is_valid_config(dev->hs_config, total) ||
--				total > length - USB_DT_DEVICE_SIZE)
-+				total > length - USB_DT_DEVICE_SIZE) {
-+			dev->config = NULL;
-+			dev->hs_config = NULL;
- 			goto fail;
-+		}
- 		kbuf += total;
- 		length -= total;
- 	} else {
-@@ -1856,13 +1862,20 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 	/* could support multiple configs, using another encoding! */
- 
- 	/* device descriptor (tweaked for paranoia) */
--	if (length != USB_DT_DEVICE_SIZE)
-+	if (length != USB_DT_DEVICE_SIZE) {
-+		dev->config = NULL;
-+		dev->hs_config = NULL;
- 		goto fail;
-+	}
- 	dev->dev = (void *)kbuf;
- 	if (dev->dev->bLength != USB_DT_DEVICE_SIZE
- 			|| dev->dev->bDescriptorType != USB_DT_DEVICE
--			|| dev->dev->bNumConfigurations != 1)
-+			|| dev->dev->bNumConfigurations != 1) {
-+		dev->config = NULL;
-+		dev->hs_config = NULL;
-+		dev->dev = NULL;
- 		goto fail;
-+	}
- 	dev->dev->bcdUSB = cpu_to_le16 (0x0200);
- 
- 	/* triggers gadgetfs_bind(); then we can enumerate. */
--- 
-2.25.1
+Thank you for your series, I will leave commenting on the
+dt-bindings and typec-mux changes to others.
+
+But what I can do is test this on an x86 device using
+a pi3usb30532 mux for USB super-speed and DP-alt-mode
+muxing / orientation switching.
+
+I'm going to wait a bit with doing that till this has had
+some reviews and possibly also some newer versions because
+of those reviews. If you haven't received a Tested-by from me
+when this looks like it is ready for merging please ping me.
+
+Regards,
+
+Hans
+
+
+> 
+>  .../bindings/phy/qcom,qmp-usb3-dp-phy.yaml    |  14 +
+>  .../devicetree/bindings/usb/fcs,fsa4480.yaml  |  72 +++++
+>  drivers/base/property.c                       |  83 ++++--
+>  drivers/phy/qualcomm/phy-qcom-qmp.c           | 176 ++++++++++--
+>  drivers/usb/typec/bus.c                       |   2 +-
+>  drivers/usb/typec/mux.c                       | 257 +++++++++++++-----
+>  drivers/usb/typec/mux.h                       |  12 +-
+>  drivers/usb/typec/mux/Kconfig                 |   9 +
+>  drivers/usb/typec/mux/Makefile                |   1 +
+>  drivers/usb/typec/mux/fsa4480.c               | 220 +++++++++++++++
+>  drivers/usb/typec/mux/intel_pmc_mux.c         |   8 +-
+>  drivers/usb/typec/mux/pi3usb30532.c           |   8 +-
+>  include/linux/property.h                      |   5 +
+>  include/linux/usb/typec_mux.h                 |  22 +-
+>  14 files changed, 762 insertions(+), 127 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+>  create mode 100644 drivers/usb/typec/mux/fsa4480.c
+> 
 
