@@ -2,90 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4954811FF
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Dec 2021 12:26:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 660CC4812F8
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Dec 2021 13:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239922AbhL2L0B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Dec 2021 06:26:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
+        id S238676AbhL2M5n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Dec 2021 07:57:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239918AbhL2L0A (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Dec 2021 06:26:00 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF947C06173E
-        for <linux-usb@vger.kernel.org>; Wed, 29 Dec 2021 03:26:00 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id o67-20020a62cd46000000b004ba4d2f70b5so11447261pfg.16
-        for <linux-usb@vger.kernel.org>; Wed, 29 Dec 2021 03:26:00 -0800 (PST)
+        with ESMTP id S236046AbhL2M5n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Dec 2021 07:57:43 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90DBC061574;
+        Wed, 29 Dec 2021 04:57:42 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id v15so35871909ljc.0;
+        Wed, 29 Dec 2021 04:57:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=e7WgSppgHVTiS0GBY6FQvAHLTqvWZ2JPhKURhagZADA=;
-        b=phMArrDzw+X3VBxeIWtJfMPIByM7/dJOeBoLr6QESQIYE1PK7Z4nuL2ZTE5Mph8Baw
-         Wg19OqARLbBj/MWRBsZ6b78f83N9RdCcXySjaX9c3gAdA41NvnpQF0+tmjdOfa3ZuCJL
-         xHpOpyR7tGcBeHD47PaXL+giTlONVHJad4mERZvdy5m8d+I0uQcMAM5ToXMeAMThykIk
-         tpF7sfHApshEV+h2/cg53SEBeWIkcnzPg4uKkHMa/Ml1+/pA6rajH0kD+yb34hVjYE6+
-         0ydWdHeqTuDPAHu8a5lnJPf8/uHWSS3k1A8AAoSYV1yqcjwFl+sUN+NY+s6/uPODdAfK
-         cESg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ymrcu0NdAYgBRfMD3NZIRZpuT2x6n05Qa8UE3nDq6AY=;
+        b=PjqwIzKFowUjUXAaUK+hQsZm25oNliCOT+bzV5Fa1h1M/+2zCwlKN9GKvoIjI8DSiD
+         6v2wbhAwTNn7qazJozydYiPff3vqEO6XLsYxLB+8xB+xPZFN70KHh5PbyYkNuX4cXPhB
+         DeRHlYlOAhVCPnw6fGrPFLRckvQbODo1pO7OzPWqn/PSvQLuS8WaKBu9A0iYt8ji3M0g
+         npJXjpaFDyNjXo/0aDs3eoOAIDhaq0iUVaf/4TXhcNFEQTn27i3/JrN2kDnFX1gbcL+Z
+         IX3WOzOotTCPHFQGGRpIz6acLDQQ7dft6YZD7jiEvP1Mf0VTWep8w6HpXlddP6hkvK/z
+         hRQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=e7WgSppgHVTiS0GBY6FQvAHLTqvWZ2JPhKURhagZADA=;
-        b=ZzULh4gApmrozwXnvO+8XMsMniddhlZbIE73HufGrhCmHcuB7nWMH8TKbdWR4T3FXz
-         XgZUzisqAlOaDbs2NWO9ijA7TItxtmcXV4Mg8IcepOU8/LCuRB752pZGdl2TebK48wmA
-         gDBHh/lSNe5yYUN/2vwku/pQFyYTWq8P1rfC4XoWidSAdQwzbj52GHRNeeef6Va8h7kP
-         8TMnOgziovbDBwbSQGcWgl1wAMe5yV0SwfbM63QNHpG+4mhjbuQYFwcdXyHJHzXmGO//
-         oT/6tBuK3SKcSCqg2L/IcVwk9pf+3ua/+nzQscPQE7pVWUE2DFxFcptjnPjaIVN+MSIY
-         qTKw==
-X-Gm-Message-State: AOAM5313d/bKy782v52XB5mb7zjAx0CLjKfwvYfddyHO0EKrpc8vXyrl
-        F+W38xWtMdXwkIQH2qLSLsjb2yjjCCCd
-X-Google-Smtp-Source: ABdhPJyN6VDij37BK+e9Kjbzovo54XwINCtUdWdKaDYQ05EUPC55hW+ZbpVRS2lGsCh64h75rVS2jutUb5Qu
-X-Received: from pumahsu.ntc.corp.google.com ([2401:fa00:fc:202:51fc:cf30:243:df6e])
- (user=pumahsu job=sendgmr) by 2002:aa7:8c17:0:b0:4ba:7f42:68de with SMTP id
- c23-20020aa78c17000000b004ba7f4268demr26708635pfd.18.1640777159719; Wed, 29
- Dec 2021 03:25:59 -0800 (PST)
-Date:   Wed, 29 Dec 2021 19:25:51 +0800
-Message-Id: <20211229112551.3483931-1-pumahsu@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
-Subject: [PATCH v3] xhci: re-initialize the HC during resume if HCE was set
-From:   Puma Hsu <pumahsu@google.com>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc:     s.shtylyov@omp.ru, albertccwang@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Puma Hsu <pumahsu@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ymrcu0NdAYgBRfMD3NZIRZpuT2x6n05Qa8UE3nDq6AY=;
+        b=VFuneEQtzbgxDAOwUlPQso2oDbw7imVRjk4RQr9XkVn+UxFSLB7gFCUXFObF0Tb7dy
+         e4XJUVv3g1s1qAo4uNwFw6dchGB6sic5af55hR5q261lu8hmuaAuI0cVfEL8cvDOQYW6
+         g5ZNZgndY1C36+zR9U5zE2lVw7Qs98EY5380tMhVscgjJ8uCLaBIpcj+XUR08LWcJNyh
+         IFKLIEwwpaQdBgAWJ7a+txDNQNeQHRHADlgvkHnQE011y9Sf0ldmX/FgZddByacPwE+w
+         118zWq0CdQFEbBFZRRRntxaHt2NOVmdzn7A5nYkucPgS3aOCvETBQ1+wnKILGUHjv58F
+         35BA==
+X-Gm-Message-State: AOAM532/j+buhRLL5avgqBhJaW3JUpKHc+PGChe0MiEAmXe45Us8F6YX
+        yIFvOUt8iWzRpA66bSU9g2skfdJVoxHwqA==
+X-Google-Smtp-Source: ABdhPJyfju1VKSrobnGp63EhJj/x8pNA64RJqEZfbtxXkj9yq3bGwq1qAxlkGlV8AHrE8ekptBV46w==
+X-Received: by 2002:a05:651c:891:: with SMTP id d17mr10534009ljq.502.1640782660949;
+        Wed, 29 Dec 2021 04:57:40 -0800 (PST)
+Received: from grimoire.. ([178.176.72.189])
+        by smtp.googlemail.com with ESMTPSA id l1sm261525ljq.130.2021.12.29.04.57.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 04:57:40 -0800 (PST)
+From:   Adam Kandur <sys.arch.adam@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Adam Kandur <sys.arch.adam@gmail.com>
+Subject: [PATCH] net/usb: remove goto in ax88772_reset()
+Date:   Wed, 29 Dec 2021 15:57:30 +0300
+Message-Id: <20211229125730.6779-1-sys.arch.adam@gmail.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When HCE(Host Controller Error) is set, it means an internal
-error condition has been detected. It needs to re-initialize
-the HC too.
+goto statements in ax88772_reset() in net/usb/asix_devices.c are used
+to return ret variable. As function by default returns 0 if ret
+variable >= 0 and "out:" only returns ret, I assume goto might be
+removed.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Puma Hsu <pumahsu@google.com>
+Signed-off-by: Adam Kandur <sys.arch.adam@gmail.com>
+
 ---
-v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
-v3: Add stable@vger.kernel.org for stable release.
+ drivers/net/usb/asix_devices.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
- drivers/usb/host/xhci.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index dc357cabb265..ab440ce8420f 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1146,8 +1146,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
- 		temp = readl(&xhci->op_regs->status);
- 	}
+diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+index 4514d35ef..9de5fc53f 100644
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -332,23 +332,20 @@ static int ax88772_reset(struct usbnet *dev)
+ 	ret = asix_write_cmd(dev, AX_CMD_WRITE_NODE_ID, 0, 0,
+ 			     ETH_ALEN, data->mac_addr, 0);
+ 	if (ret < 0)
+-		goto out;
++		return ret;
  
--	/* If restore operation fails, re-initialize the HC during resume */
--	if ((temp & STS_SRE) || hibernated) {
-+	/* If restore operation fails or HC error is detected, re-initialize the HC during resume */
-+	if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
+ 	/* Set RX_CTL to default values with 2k buffer, and enable cactus */
+ 	ret = asix_write_rx_ctl(dev, AX_DEFAULT_RX_CTL, 0);
+ 	if (ret < 0)
+-		goto out;
++		return ret;
  
- 		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
- 				!(xhci_all_ports_seen_u0(xhci))) {
+ 	ret = asix_write_medium_mode(dev, AX88772_MEDIUM_DEFAULT, 0);
+ 	if (ret < 0)
+-		goto out;
++		return ret;
+ 
+ 	phy_start(priv->phydev);
+ 
+ 	return 0;
+-
+-out:
+-	return ret;
+ }
+ 
+ static int ax88772_hw_reset(struct usbnet *dev, int in_pm)
 -- 
-2.34.1.448.ga2b2bfdf31-goog
+2.34.0
 
