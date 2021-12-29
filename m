@@ -2,104 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D863F481132
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Dec 2021 10:12:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C987C481138
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Dec 2021 10:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239479AbhL2JMZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Dec 2021 04:12:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239475AbhL2JMY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Dec 2021 04:12:24 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D6AC061401
-        for <linux-usb@vger.kernel.org>; Wed, 29 Dec 2021 01:12:24 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id y16-20020a17090a6c9000b001b13ffaa625so24048957pjj.2
-        for <linux-usb@vger.kernel.org>; Wed, 29 Dec 2021 01:12:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=65wZg+nw0EC2ckBgLxGJRnozKF0Neae8vMtlYlRMygs=;
-        b=DrKcPO/ocB+rLxv+4dSB4M7wcl2pBRiXO9vd1Pp5gl+9uoESeNwpRZ/70nIdYHf0db
-         R9Wqikl/hTkAXnKOQOGkFDT9hB7XmvCpKXHCoXxMFBLSlB0+L4heLdMx7lg2I2jPQ+28
-         OfrxUGOJ+ZuHLKT/AoNgOVkTpepx8jPo7WIv+nvinWAxkWMoAbXHJ26AwbE8oHUXSTiq
-         aSCIS/jJHn39bfslIj/sjwrvBp0Aj4MCENgB6vaaz5Bf3Bcf0stnWTl1zYztEol7E0Q+
-         CvqWUsJfu1+/6+g2GSFCm2r6XKxnioUmuP7o2F72PpNchZUyqJmRMwrJrECY5/fF3PnJ
-         gkdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=65wZg+nw0EC2ckBgLxGJRnozKF0Neae8vMtlYlRMygs=;
-        b=PlJADguv/IIbvvQQdD/LrBiVPJOTovOa/kA6fEyHvkLNU/+Z9TV+YMzAeXy+nktTre
-         MOrGhA0Xv7tcnnWXKz3K55ugdaTSiM7fBjs6ZA80FLEVVXhr9VdfxUgA9hhyfwc++qpN
-         bLjqOnup6Q1fIqABZ5QmDpoQhY1Zv1rNkWW99VL+Ixlf5wQZoVbbBsXh/JfJR4dK2pcj
-         hUhf0YI8ViD5XJhi9T6zVfZP4cpo+l5+gcKdTEvbT4UDivItxe7RluTpTj7uIRYe6j6o
-         jLSyXCn3IoDQ3xNWVpUEkWm5bfXN09gHcN8wo+8wWHYUBF3rKdPuWPahuELDd4qFkC04
-         TOdA==
-X-Gm-Message-State: AOAM531PQRC4/ZEjTJLXa8/x68w8fIrOcStaTaMuhovJkl93cIxKS1xl
-        b9DHfq571OBDCgJvbMRq4bAxTAKrq3qXsttapnBMHg==
-X-Google-Smtp-Source: ABdhPJwMuiLZ5/tPHer3jJjlmoWxWSHkiXdBvpbwD5UqV2DkvU9or5gYR9apreOuMA2uiyYZRJfpftYRNTURxpxmUZA=
-X-Received: by 2002:a17:902:9b93:b0:149:8ef6:f673 with SMTP id
- y19-20020a1709029b9300b001498ef6f673mr8246338plp.124.1640769143227; Wed, 29
- Dec 2021 01:12:23 -0800 (PST)
+        id S239500AbhL2JQ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Dec 2021 04:16:26 -0500
+Received: from smtp06.smtpout.orange.fr ([80.12.242.128]:61748 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239493AbhL2JQZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Dec 2021 04:16:25 -0500
+Received: from [192.168.1.18] ([86.243.171.122])
+        by smtp.orange.fr with ESMTPA
+        id 2V4InTzq1MxZu2V4InMidO; Wed, 29 Dec 2021 10:16:24 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Wed, 29 Dec 2021 10:16:24 +0100
+X-ME-IP: 86.243.171.122
+Message-ID: <156fb7f1-cf12-e6cb-63c0-5c0413ce2b2e@wanadoo.fr>
+Date:   Wed, 29 Dec 2021 10:16:22 +0100
 MIME-Version: 1.0
-References: <20211228060246.2958070-1-pumahsu@google.com> <YcrKNP4TRXB6nsCI@kroah.com>
- <CAGCq0Lb8ZoGpbkLNhXG=OyWgvz_Qn3ABmq_uvMPJdyEKygMH+Q@mail.gmail.com> <YcwclrVzEXRxgUFa@kroah.com>
-In-Reply-To: <YcwclrVzEXRxgUFa@kroah.com>
-From:   Puma Hsu <pumahsu@google.com>
-Date:   Wed, 29 Dec 2021 17:11:47 +0800
-Message-ID: <CAGCq0LbfWt2xTmRczhdZUXrwFTJdaMH3Zd-y4quqWi7kyaso6Q@mail.gmail.com>
-Subject: Re: [PATCH] xhci: re-initialize the HC during resume if HCE was set
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     mathias.nyman@intel.com, Albert Wang <albertccwang@google.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: KMSAN: uninit-value in alauda_check_media
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     glider@google.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        usb-storage@lists.one-eyed-alien.net,
+        Kernel Janitors <kernel-janitors@vger.kernel.org>
+References: <0000000000007d25ff059457342d@google.com>
+ <f78b974a-e36b-6d23-6977-fdf50c05600b@wanadoo.fr>
+ <YcuUX6BVo+HA1TcI@rowland.harvard.edu>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <YcuUX6BVo+HA1TcI@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 4:30 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> A: http://en.wikipedia.org/wiki/Top_post
-> Q: Were do I find info about this thing called top-posting?
-> A: Because it messes up the order in which people normally read text.
-> Q: Why is top-posting such a bad thing?
-> A: Top-posting.
-> Q: What is the most annoying thing in e-mail?
->
-> A: No.
-> Q: Should I include quotations after my reply?
->
-> http://daringfireball.net/2007/07/on_top
->
-> On Wed, Dec 29, 2021 at 01:53:04PM +0800, Puma Hsu wrote:
-> > This commit is not used to fix a specific commit. We find a condition
-> > that when XHCI runs the resume process but the HCE flag is set, then
-> > the Run/Stop bit of USBCMD cannot be set so that HC would not be
-> > enabled. In fact, HC may already meet a problem at this moment.
-> > Besides, in xHCI requirements specification revision 1.2, Table 5-21
-> > BIT(12) claims that Software should re-initialize the xHC when HCE is
-> > set. Therefore, I think this commit could be the error handling for
-> > HCE.
->
-> So this does not actually fix an issue that you have seen in any device
-> or testing?  So it is not relevant for older kernels but just "nice to
-> have"?
->
-> How did you test this if you can not duplicate the problem?
->
+Le 28/12/2021 à 23:49, Alan Stern a écrit :
+> On Tue, Dec 28, 2021 at 08:47:15AM +0100, Christophe JAILLET wrote:
+>> Hi,
+>>
+>> (2nd try - text only format - sorry for the noise)
+>>
+>>
+>> first try to use syzbot. I hope I do it right.
+>> Discussion about the syz report can be found at
+>> https://lore.kernel.org/linux-kernel/0000000000007d25ff059457342d@google.com/
+>>
+>> This patch only test if alauda_get_media_status() (and its embedded
+>> usb_stor_ctrl_transfer()) before using the data.
+>> In case of error, it returns USB_STOR_TRANSPORT_ERROR as done elsewhere.
+>>
+>> #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>> master
+>>
+>> CJ
+>>
+> 
+>> diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.c
+>> index 20b857e97e60..6c486d964911 100644
+>> --- a/drivers/usb/storage/alauda.c
+>> +++ b/drivers/usb/storage/alauda.c
+>> @@ -318,7 +318,8 @@ static int alauda_get_media_status(struct us_data *us, unsigned char *data)
+>>   	rc = usb_stor_ctrl_transfer(us, us->recv_ctrl_pipe,
+>>   		command, 0xc0, 0, 1, data, 2);
+>>   
+>> -	usb_stor_dbg(us, "Media status %02X %02X\n", data[0], data[1]);
+>> +	if (rc == USB_STOR_XFER_GOOD)
+>> +		usb_stor_dbg(us, "Media status %02X %02X\n", data[0], data[1]);
+> 
+> Instead of adding this test, you could initialize data[0] and data[1]
+> to zero before the call to usb_stor_ctrl_transfer.
 
-Yes, we actually see that the HCE may be detected while running xhci_resume
-on our product platform, so I'm able to verify this commit can fix
-such a condition.
-For older kernels, I'm not sure whether someone had ever met such issue, but I
-believe the Run/Stop bit of USBCMD cannot be set once HCE is raised.
+Well, having the test is cleaner, IMHO.
+If usb_stor_ctrl_transfer() fails, a message explaining the reason is 
+already generated by the same usb_stor_dbg(). Having an error message 
+followed by another one stating that the Media Status is 0x00 0x00 could 
+be confusing I think.
 
-Thanks.
-Puma Hsu
+Let me know if you have a real preference for a memset(data, 0, 2).
+If so, I'll add it.
 
-> thanks,
->
-> greg k-h
+> 
+>>   
+>>   	return rc;
+>>   }
+>> @@ -453,8 +454,11 @@ static int alauda_check_media(struct us_data *us)
+>>   {
+>>   	struct alauda_info *info = (struct alauda_info *) us->extra;
+>>   	unsigned char status[2];
+>> +	int rc;
+>>   
+>> -	alauda_get_media_status(us, status);
+>> +	rc = alauda_get_media_status(us, status);
+>> +	if (rc != USB_STOR_TRANSPORT_GOOD)
+>> +		return USB_STOR_TRANSPORT_ERROR;
+>>   
+>>   	/* Check for no media or door open */
+>>   	if ((status[0] & 0x80) || ((status[0] & 0x1F) == 0x10)
+> 
+> In general this looks fine.  Let us know when you are ready to submit
+> the patch.
+
+I was unsure that this patch would get any interest because the driver 
+looks old. That's why I first tried to play with syzbot :)
+
+In the syzbot history, you also mentioned that 'unsigned char status[2]' 
+should be 'unsigned char *status = us->iobuf;'
+
+This is more a blind fix for me, but it looks consistent with other 
+places that call alauda_get_media_status().
+
+So, once you confirm if you prefer my 'if' or a 'memset', I'll resend a 
+small serie for fixing both issues.
+
+CJ
+
+
+> 
+> Alan Stern
+> 
+
