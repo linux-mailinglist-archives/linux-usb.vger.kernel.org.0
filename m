@@ -2,133 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E6E4813C3
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Dec 2021 15:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 610E7481538
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Dec 2021 17:45:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237217AbhL2OGR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Dec 2021 09:06:17 -0500
-Received: from mga18.intel.com ([134.134.136.126]:32561 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233228AbhL2OGQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 29 Dec 2021 09:06:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640786776; x=1672322776;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=/epgfT/WMtuy1hioNNGKPxuldt+j/exEPJZHHRR4QR8=;
-  b=Ws8Bs0A2A4Ayv77V8TLr5xuz6rKs+oPGh3LMRveHS4hNEnilr/PZY7/A
-   2wGxqU3JnBOcwPcBzT05loZsBm8aoOUOaypyYyK5bqZxb5xu+wzSuLnO+
-   I2fbrtVhsveIxpnLBYY97jIqoE0fNj9SOo8o17ta9vrgMzX8c8U7wCfSO
-   jRxX4i+7Xk+XaYwxvS4rM4f9XkBbO0R/4Uw/NnanFCFDn1bUbXhLgHurN
-   W6YdrhoZbhIA4trKt5twGXtdKmQSwK3KnW0K7KVDV3nr9gbRTxYjZJ1bi
-   NFQCjJmE376dLkXItwSNDlgEJUqdy5g0gKIfT73qUTmtUOxxq+e8vfrxA
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="228351340"
-X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
-   d="scan'208";a="228351340"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 06:06:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
-   d="scan'208";a="619046968"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 29 Dec 2021 06:06:13 -0800
-To:     "Wohl, Tobias" <TWohl@arri.de>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "Thinh.Nguyen@synopsys.com" <Thinh.Nguyen@synopsys.com>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "chunfeng.yun@mediatek.com" <chunfeng.yun@mediatek.com>,
-        "rajatja@google.com" <rajatja@google.com>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "chris.chiu@canonical.com" <chris.chiu@canonical.com>,
-        "Roese, Stefan (extern)" <SRoese.extern@arri.de>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-References: <PR3PR07MB8116BD69B81F774A555615FAB57E9@PR3PR07MB8116.eurprd07.prod.outlook.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: USB3 disconnect takes long and ends up in warm reset loop
-Message-ID: <6e857974-8e10-21b7-8267-569c980d697b@linux.intel.com>
-Date:   Wed, 29 Dec 2021 16:07:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S240805AbhL2Qp0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Dec 2021 11:45:26 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:43629 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S237275AbhL2QpZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Dec 2021 11:45:25 -0500
+Received: (qmail 1096430 invoked by uid 1000); 29 Dec 2021 11:45:24 -0500
+Date:   Wed, 29 Dec 2021 11:45:24 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     glider@google.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        usb-storage@lists.one-eyed-alien.net,
+        Kernel Janitors <kernel-janitors@vger.kernel.org>
+Subject: Re: KMSAN: uninit-value in alauda_check_media
+Message-ID: <YcyQpJGJRxsTKesd@rowland.harvard.edu>
+References: <0000000000007d25ff059457342d@google.com>
+ <f78b974a-e36b-6d23-6977-fdf50c05600b@wanadoo.fr>
+ <YcuUX6BVo+HA1TcI@rowland.harvard.edu>
+ <156fb7f1-cf12-e6cb-63c0-5c0413ce2b2e@wanadoo.fr>
 MIME-Version: 1.0
-In-Reply-To: <PR3PR07MB8116BD69B81F774A555615FAB57E9@PR3PR07MB8116.eurprd07.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <156fb7f1-cf12-e6cb-63c0-5c0413ce2b2e@wanadoo.fr>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23.12.2021 15.26, Wohl, Tobias wrote:
-> Hi all,
-
-Hi
-
+On Wed, Dec 29, 2021 at 10:16:22AM +0100, Christophe JAILLET wrote:
+> Le 28/12/2021 à 23:49, Alan Stern a écrit :
+> > On Tue, Dec 28, 2021 at 08:47:15AM +0100, Christophe JAILLET wrote:
+> > > Hi,
+> > > 
+> > > (2nd try - text only format - sorry for the noise)
+> > > 
+> > > 
+> > > first try to use syzbot. I hope I do it right.
+> > > Discussion about the syz report can be found at
+> > > https://lore.kernel.org/linux-kernel/0000000000007d25ff059457342d@google.com/
+> > > 
+> > > This patch only test if alauda_get_media_status() (and its embedded
+> > > usb_stor_ctrl_transfer()) before using the data.
+> > > In case of error, it returns USB_STOR_TRANSPORT_ERROR as done elsewhere.
+> > > 
+> > > #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> > > master
+> > > 
+> > > CJ
+> > > 
+> > 
+> > > diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.c
+> > > index 20b857e97e60..6c486d964911 100644
+> > > --- a/drivers/usb/storage/alauda.c
+> > > +++ b/drivers/usb/storage/alauda.c
+> > > @@ -318,7 +318,8 @@ static int alauda_get_media_status(struct us_data *us, unsigned char *data)
+> > >   	rc = usb_stor_ctrl_transfer(us, us->recv_ctrl_pipe,
+> > >   		command, 0xc0, 0, 1, data, 2);
+> > > -	usb_stor_dbg(us, "Media status %02X %02X\n", data[0], data[1]);
+> > > +	if (rc == USB_STOR_XFER_GOOD)
+> > > +		usb_stor_dbg(us, "Media status %02X %02X\n", data[0], data[1]);
+> > 
+> > Instead of adding this test, you could initialize data[0] and data[1]
+> > to zero before the call to usb_stor_ctrl_transfer.
 > 
-> I noticed a strange beavior when unplugging USB3 sticks. I'm using a zynq ultrascale + platform and the problem
-> still occured when testing with 5.16-rc6 kernel.
-
-Does older kernels have the same issue?
-
+> Well, having the test is cleaner, IMHO.
+> If usb_stor_ctrl_transfer() fails, a message explaining the reason is
+> already generated by the same usb_stor_dbg(). Having an error message
+> followed by another one stating that the Media Status is 0x00 0x00 could be
+> confusing I think.
 > 
-> In some cases when unplugging  the USB3 stick it takes aroung 10s until the disconnect is detected.
-> Moreover after unplugging the usb driver ends up in a endless loop of trying to perform "warm resets".
-> After replugging the USB stick, the loop stops and everything seems to be fine again. This only happens
-> with USB3 sticks.
+> Let me know if you have a real preference for a memset(data, 0, 2).
+> If so, I'll add it.
 > 
-
-There's been a couple reports like this.
-I saw you noticed the patch in usb-next that solves this by giving the link some time to
-notice the disconnect, and automatically go to RxDetect from inactive state, thus avoiding
-unnecessary warm reset of disconnected devices.
-
-Seems it works for some cases, but not all. 
- 
-
-> The kernel log looks as follows:
+> > 
+> > >   	return rc;
+> > >   }
+> > > @@ -453,8 +454,11 @@ static int alauda_check_media(struct us_data *us)
+> > >   {
+> > >   	struct alauda_info *info = (struct alauda_info *) us->extra;
+> > >   	unsigned char status[2];
+> > > +	int rc;
+> > > -	alauda_get_media_status(us, status);
+> > > +	rc = alauda_get_media_status(us, status);
+> > > +	if (rc != USB_STOR_TRANSPORT_GOOD)
+> > > +		return USB_STOR_TRANSPORT_ERROR;
+> > >   	/* Check for no media or door open */
+> > >   	if ((status[0] & 0x80) || ((status[0] & 0x1F) == 0x10)
+> > 
+> > In general this looks fine.  Let us know when you are ready to submit
+> > the patch.
 > 
-> [ 1831.312566] handle_port_status: xhci-hcd xhci-hcd.0.auto: Port change event, 2-1, id 2, portsc: 0x4012c1
-> [ 1831.312583] handle_port_status: xhci-hcd xhci-hcd.0.auto: handle_port_status: starting port polling.
-> [ 1831.312853] hub_event: hub 2-0:1.0: state 7 ports 1 chg 0000 evt 0002
-> [ 1831.312874] xhci_hub_control: xhci-hcd xhci-hcd.0.auto: Get port status 2-1 read: 0x4012c1, return 0x4002c1
-> [ 1831.312899] port_event: usb usb2-port1: link state change
-> [ 1831.312912] xhci_clear_port_change_bit: xhci-hcd xhci-hcd.0.auto: clear port1 link state change, portsc: 0x12c1
+> I was unsure that this patch would get any interest because the driver looks
+> old. That's why I first tried to play with syzbot :)
 
-12c1 = Connected, Disabled, Link:Inactive
+It is indeed old.  I doubt very many devices of this type are still in 
+use.
 
-> [ 1831.312929] port_event: usb usb2-port1: do warm reset
-...
-> [ 1831.379730] xhci_hub_control: xhci-hcd xhci-hcd.0.auto: Get port status 2-1 read: 0x12b1, return 0x2b1
+> In the syzbot history, you also mentioned that 'unsigned char status[2]'
+> should be 'unsigned char *status = us->iobuf;'
+> 
+> This is more a blind fix for me, but it looks consistent with other places
+> that call alauda_get_media_status().
+> 
+> So, once you confirm if you prefer my 'if' or a 'memset', I'll resend a
+> small serie for fixing both issues.
 
-12b1 = Connected, Disabled, reset asserted, Link: Rx Detect. (Link value is unreliable while reset is asserted)
+"if" and "memset" are both acceptable.  You can use either one.
 
-...
-> [ 1831.447759] hub_port_wait_reset: usb usb2-port1: not warm reset yet, waiting 200ms
-> [ 1831.655731] xhci_hub_control: xhci-hcd xhci-hcd.0.auto: Get port status 2-1 read: 0x12f1, return 0x2f1
-12f1 =  Connected, Disabled, reset asserted, Link: Polling. (Link value is unreliable while reset is asserted)
-
-> [ 1831.863726] xhci_hub_control: xhci-hcd xhci-hcd.0.auto: Get port status 2-1 read: 0x2812e1, return 0x3002e1
-Connected, Disabled, Link: Polling, Warm reset change, reset changed
-
-The odd thing here is that the "connected" bit remains set the whole time.
-Other reports had a bit different symptoms after not detecting disconnect, such as reset asserted
-bit being stuck forever.
-
-In xhci specs 4.19.1.2 "USB3 root hub port" Figure 4-27 it shows that when link goes to
-the Error "link:inactive" state it should drop the connected bit as well.
-
-http://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/extensible-host-controler-interface-usb-xhci.pdf
-
-(four bits in the figure are Port Power(PP), Current Connect status (CCS), Port Enabled/Disabled (PED), and
-Port Reset (PR). Those should be set to (1,0,0,0) once entering the Error "inactive" state.
-
-No idea why CCS bit is still set for you?
-
-Is the device connected to a USB-C port or a "A" port?
-
-Can there be some retimer/redriver mux or something else between port and xHCI that messes up disconnect
-detection?
-
--Mathias 
+Alan Stern
