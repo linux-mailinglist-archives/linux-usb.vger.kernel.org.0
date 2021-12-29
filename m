@@ -2,106 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 477D64811B0
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Dec 2021 11:37:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4954811FF
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Dec 2021 12:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239747AbhL2Kh3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Dec 2021 05:37:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
+        id S239922AbhL2L0B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Dec 2021 06:26:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbhL2Kh2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Dec 2021 05:37:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F5DC061574;
-        Wed, 29 Dec 2021 02:37:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47569B81853;
-        Wed, 29 Dec 2021 10:37:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5778DC36AE7;
-        Wed, 29 Dec 2021 10:37:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640774246;
-        bh=Saf54E+TsW0X/GrHGniSHEIhZq7hY7EkFszXYncEcnc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=olGEBpimCE+KHpaaosSKZXrLonJZ7k1RwflWzsrnk6wWUxpefEWfzR4P5+0eeUFU4
-         XFnD+fNX6ASEy8EmSPyeC5loV5e3vb3fa3G2Hny21L0A6y0wiQtzkVQ+ccSSlf1rzC
-         52P5yfHCd+q3zhCOt7QtfWq2Gpbmq5QCXsjTaGWM=
-Date:   Wed, 29 Dec 2021 11:37:23 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Puma Hsu <pumahsu@google.com>
-Cc:     mathias.nyman@intel.com, Albert Wang <albertccwang@google.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] xhci: re-initialize the HC during resume if HCE was set
-Message-ID: <Ycw6Y8qrLZEat749@kroah.com>
-References: <20211228060246.2958070-1-pumahsu@google.com>
- <YcrKNP4TRXB6nsCI@kroah.com>
- <CAGCq0Lb8ZoGpbkLNhXG=OyWgvz_Qn3ABmq_uvMPJdyEKygMH+Q@mail.gmail.com>
- <YcwclrVzEXRxgUFa@kroah.com>
- <CAGCq0LbfWt2xTmRczhdZUXrwFTJdaMH3Zd-y4quqWi7kyaso6Q@mail.gmail.com>
- <Ycwvm5rdqVW4E27y@kroah.com>
- <CAGCq0LZc9Leh=oEiA2hPrpK9OBO+bnRR6hENr+emgFWGsaB0Yg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGCq0LZc9Leh=oEiA2hPrpK9OBO+bnRR6hENr+emgFWGsaB0Yg@mail.gmail.com>
+        with ESMTP id S239918AbhL2L0A (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Dec 2021 06:26:00 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF947C06173E
+        for <linux-usb@vger.kernel.org>; Wed, 29 Dec 2021 03:26:00 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id o67-20020a62cd46000000b004ba4d2f70b5so11447261pfg.16
+        for <linux-usb@vger.kernel.org>; Wed, 29 Dec 2021 03:26:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=e7WgSppgHVTiS0GBY6FQvAHLTqvWZ2JPhKURhagZADA=;
+        b=phMArrDzw+X3VBxeIWtJfMPIByM7/dJOeBoLr6QESQIYE1PK7Z4nuL2ZTE5Mph8Baw
+         Wg19OqARLbBj/MWRBsZ6b78f83N9RdCcXySjaX9c3gAdA41NvnpQF0+tmjdOfa3ZuCJL
+         xHpOpyR7tGcBeHD47PaXL+giTlONVHJad4mERZvdy5m8d+I0uQcMAM5ToXMeAMThykIk
+         tpF7sfHApshEV+h2/cg53SEBeWIkcnzPg4uKkHMa/Ml1+/pA6rajH0kD+yb34hVjYE6+
+         0ydWdHeqTuDPAHu8a5lnJPf8/uHWSS3k1A8AAoSYV1yqcjwFl+sUN+NY+s6/uPODdAfK
+         cESg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=e7WgSppgHVTiS0GBY6FQvAHLTqvWZ2JPhKURhagZADA=;
+        b=ZzULh4gApmrozwXnvO+8XMsMniddhlZbIE73HufGrhCmHcuB7nWMH8TKbdWR4T3FXz
+         XgZUzisqAlOaDbs2NWO9ijA7TItxtmcXV4Mg8IcepOU8/LCuRB752pZGdl2TebK48wmA
+         gDBHh/lSNe5yYUN/2vwku/pQFyYTWq8P1rfC4XoWidSAdQwzbj52GHRNeeef6Va8h7kP
+         8TMnOgziovbDBwbSQGcWgl1wAMe5yV0SwfbM63QNHpG+4mhjbuQYFwcdXyHJHzXmGO//
+         oT/6tBuK3SKcSCqg2L/IcVwk9pf+3ua/+nzQscPQE7pVWUE2DFxFcptjnPjaIVN+MSIY
+         qTKw==
+X-Gm-Message-State: AOAM5313d/bKy782v52XB5mb7zjAx0CLjKfwvYfddyHO0EKrpc8vXyrl
+        F+W38xWtMdXwkIQH2qLSLsjb2yjjCCCd
+X-Google-Smtp-Source: ABdhPJyN6VDij37BK+e9Kjbzovo54XwINCtUdWdKaDYQ05EUPC55hW+ZbpVRS2lGsCh64h75rVS2jutUb5Qu
+X-Received: from pumahsu.ntc.corp.google.com ([2401:fa00:fc:202:51fc:cf30:243:df6e])
+ (user=pumahsu job=sendgmr) by 2002:aa7:8c17:0:b0:4ba:7f42:68de with SMTP id
+ c23-20020aa78c17000000b004ba7f4268demr26708635pfd.18.1640777159719; Wed, 29
+ Dec 2021 03:25:59 -0800 (PST)
+Date:   Wed, 29 Dec 2021 19:25:51 +0800
+Message-Id: <20211229112551.3483931-1-pumahsu@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
+Subject: [PATCH v3] xhci: re-initialize the HC during resume if HCE was set
+From:   Puma Hsu <pumahsu@google.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     s.shtylyov@omp.ru, albertccwang@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Puma Hsu <pumahsu@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 06:21:05PM +0800, Puma Hsu wrote:
-> On Wed, Dec 29, 2021 at 5:51 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Dec 29, 2021 at 05:11:47PM +0800, Puma Hsu wrote:
-> > > On Wed, Dec 29, 2021 at 4:30 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > A: http://en.wikipedia.org/wiki/Top_post
-> > > > Q: Were do I find info about this thing called top-posting?
-> > > > A: Because it messes up the order in which people normally read text.
-> > > > Q: Why is top-posting such a bad thing?
-> > > > A: Top-posting.
-> > > > Q: What is the most annoying thing in e-mail?
-> > > >
-> > > > A: No.
-> > > > Q: Should I include quotations after my reply?
-> > > >
-> > > > http://daringfireball.net/2007/07/on_top
-> > > >
-> > > > On Wed, Dec 29, 2021 at 01:53:04PM +0800, Puma Hsu wrote:
-> > > > > This commit is not used to fix a specific commit. We find a condition
-> > > > > that when XHCI runs the resume process but the HCE flag is set, then
-> > > > > the Run/Stop bit of USBCMD cannot be set so that HC would not be
-> > > > > enabled. In fact, HC may already meet a problem at this moment.
-> > > > > Besides, in xHCI requirements specification revision 1.2, Table 5-21
-> > > > > BIT(12) claims that Software should re-initialize the xHC when HCE is
-> > > > > set. Therefore, I think this commit could be the error handling for
-> > > > > HCE.
-> > > >
-> > > > So this does not actually fix an issue that you have seen in any device
-> > > > or testing?  So it is not relevant for older kernels but just "nice to
-> > > > have"?
-> > > >
-> > > > How did you test this if you can not duplicate the problem?
-> > > >
-> > >
-> > > Yes, we actually see that the HCE may be detected while running xhci_resume
-> > > on our product platform, so I'm able to verify this commit can fix
-> > > such a condition.
-> >
-> > Given that your product platform is an older kernel version than 5.17, I
-> > think that you also want this in the older kernel releases, so please
-> > mark it for stable backporting.
-> >
-> Thank you for advising.
-> Could I know how to do this? Just add "Cc: <stable@vger.kernel.org>"
-> to the commit message?
+When HCE(Host Controller Error) is set, it means an internal
+error condition has been detected. It needs to re-initialize
+the HC too.
 
-Yes, please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+Cc: stable@vger.kernel.org
+Signed-off-by: Puma Hsu <pumahsu@google.com>
+---
+v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
+v3: Add stable@vger.kernel.org for stable release.
 
-It should describe this well, if not, please let us know.
+ drivers/usb/host/xhci.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-thanks,
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index dc357cabb265..ab440ce8420f 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1146,8 +1146,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+ 		temp = readl(&xhci->op_regs->status);
+ 	}
+ 
+-	/* If restore operation fails, re-initialize the HC during resume */
+-	if ((temp & STS_SRE) || hibernated) {
++	/* If restore operation fails or HC error is detected, re-initialize the HC during resume */
++	if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
+ 
+ 		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
+ 				!(xhci_all_ports_seen_u0(xhci))) {
+-- 
+2.34.1.448.ga2b2bfdf31-goog
 
-greg k-h
