@@ -2,107 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 660CC4812F8
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Dec 2021 13:57:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B733848134D
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Dec 2021 14:15:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238676AbhL2M5n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Dec 2021 07:57:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236046AbhL2M5n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Dec 2021 07:57:43 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90DBC061574;
-        Wed, 29 Dec 2021 04:57:42 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id v15so35871909ljc.0;
-        Wed, 29 Dec 2021 04:57:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ymrcu0NdAYgBRfMD3NZIRZpuT2x6n05Qa8UE3nDq6AY=;
-        b=PjqwIzKFowUjUXAaUK+hQsZm25oNliCOT+bzV5Fa1h1M/+2zCwlKN9GKvoIjI8DSiD
-         6v2wbhAwTNn7qazJozydYiPff3vqEO6XLsYxLB+8xB+xPZFN70KHh5PbyYkNuX4cXPhB
-         DeRHlYlOAhVCPnw6fGrPFLRckvQbODo1pO7OzPWqn/PSvQLuS8WaKBu9A0iYt8ji3M0g
-         npJXjpaFDyNjXo/0aDs3eoOAIDhaq0iUVaf/4TXhcNFEQTn27i3/JrN2kDnFX1gbcL+Z
-         IX3WOzOotTCPHFQGGRpIz6acLDQQ7dft6YZD7jiEvP1Mf0VTWep8w6HpXlddP6hkvK/z
-         hRQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ymrcu0NdAYgBRfMD3NZIRZpuT2x6n05Qa8UE3nDq6AY=;
-        b=VFuneEQtzbgxDAOwUlPQso2oDbw7imVRjk4RQr9XkVn+UxFSLB7gFCUXFObF0Tb7dy
-         e4XJUVv3g1s1qAo4uNwFw6dchGB6sic5af55hR5q261lu8hmuaAuI0cVfEL8cvDOQYW6
-         g5ZNZgndY1C36+zR9U5zE2lVw7Qs98EY5380tMhVscgjJ8uCLaBIpcj+XUR08LWcJNyh
-         IFKLIEwwpaQdBgAWJ7a+txDNQNeQHRHADlgvkHnQE011y9Sf0ldmX/FgZddByacPwE+w
-         118zWq0CdQFEbBFZRRRntxaHt2NOVmdzn7A5nYkucPgS3aOCvETBQ1+wnKILGUHjv58F
-         35BA==
-X-Gm-Message-State: AOAM532/j+buhRLL5avgqBhJaW3JUpKHc+PGChe0MiEAmXe45Us8F6YX
-        yIFvOUt8iWzRpA66bSU9g2skfdJVoxHwqA==
-X-Google-Smtp-Source: ABdhPJyfju1VKSrobnGp63EhJj/x8pNA64RJqEZfbtxXkj9yq3bGwq1qAxlkGlV8AHrE8ekptBV46w==
-X-Received: by 2002:a05:651c:891:: with SMTP id d17mr10534009ljq.502.1640782660949;
-        Wed, 29 Dec 2021 04:57:40 -0800 (PST)
-Received: from grimoire.. ([178.176.72.189])
-        by smtp.googlemail.com with ESMTPSA id l1sm261525ljq.130.2021.12.29.04.57.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 04:57:40 -0800 (PST)
-From:   Adam Kandur <sys.arch.adam@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Adam Kandur <sys.arch.adam@gmail.com>
-Subject: [PATCH] net/usb: remove goto in ax88772_reset()
-Date:   Wed, 29 Dec 2021 15:57:30 +0300
-Message-Id: <20211229125730.6779-1-sys.arch.adam@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        id S239620AbhL2NO6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Dec 2021 08:14:58 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48418 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240418AbhL2NOS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Dec 2021 08:14:18 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E82AE614CA;
+        Wed, 29 Dec 2021 13:14:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07403C36AE9;
+        Wed, 29 Dec 2021 13:14:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640783657;
+        bh=imPdmxzZUglWX07rnNIT1/7x7bo67M5eeIds1Wp26FE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Wk1Hq2Cwb0v4jpW2/Ddn6yI6DkVBVkDo6xP7Y4Q4u7Fn7vPwi96z6AG9oqr6tYmXH
+         9zB4qhHS4ZKRVLEo1LcuW4CKxOgbGCGPSaTYiZw8Nf1kcWnTSa0ZphTfDhZ/iZIKlF
+         J5P0s6CVGKwsukbvMqQo8yG0KFbhGkg+j5p00ojE=
+Date:   Wed, 29 Dec 2021 14:14:14 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Adam Kandur <sys.arch.adam@gmail.com>
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net/usb: remove goto in ax88772_reset()
+Message-ID: <YcxfJjpTBm6Gbiwb@kroah.com>
+References: <20211229125730.6779-1-sys.arch.adam@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211229125730.6779-1-sys.arch.adam@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-goto statements in ax88772_reset() in net/usb/asix_devices.c are used
-to return ret variable. As function by default returns 0 if ret
-variable >= 0 and "out:" only returns ret, I assume goto might be
-removed.
+On Wed, Dec 29, 2021 at 03:57:30PM +0300, Adam Kandur wrote:
+> goto statements in ax88772_reset() in net/usb/asix_devices.c are used
+> to return ret variable. As function by default returns 0 if ret
+> variable >= 0 and "out:" only returns ret, I assume goto might be
+> removed.
+> 
+> Signed-off-by: Adam Kandur <sys.arch.adam@gmail.com>
+> 
+> ---
+>  drivers/net/usb/asix_devices.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+> index 4514d35ef..9de5fc53f 100644
+> --- a/drivers/net/usb/asix_devices.c
+> +++ b/drivers/net/usb/asix_devices.c
+> @@ -332,23 +332,20 @@ static int ax88772_reset(struct usbnet *dev)
+>  	ret = asix_write_cmd(dev, AX_CMD_WRITE_NODE_ID, 0, 0,
+>  			     ETH_ALEN, data->mac_addr, 0);
+>  	if (ret < 0)
+> -		goto out;
+> +		return ret;
+>  
+>  	/* Set RX_CTL to default values with 2k buffer, and enable cactus */
+>  	ret = asix_write_rx_ctl(dev, AX_DEFAULT_RX_CTL, 0);
+>  	if (ret < 0)
+> -		goto out;
+> +		return ret;
+>  
+>  	ret = asix_write_medium_mode(dev, AX88772_MEDIUM_DEFAULT, 0);
+>  	if (ret < 0)
+> -		goto out;
+> +		return ret;
+>  
+>  	phy_start(priv->phydev);
+>  
+>  	return 0;
+> -
+> -out:
+> -	return ret;
+>  }
 
-Signed-off-by: Adam Kandur <sys.arch.adam@gmail.com>
+There is nothing wrong with the goto here, it's the common error path
+style for the kernel.  Why should it be removed?  What is the benefit
+here?
 
----
- drivers/net/usb/asix_devices.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+thanks,
 
-diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-index 4514d35ef..9de5fc53f 100644
---- a/drivers/net/usb/asix_devices.c
-+++ b/drivers/net/usb/asix_devices.c
-@@ -332,23 +332,20 @@ static int ax88772_reset(struct usbnet *dev)
- 	ret = asix_write_cmd(dev, AX_CMD_WRITE_NODE_ID, 0, 0,
- 			     ETH_ALEN, data->mac_addr, 0);
- 	if (ret < 0)
--		goto out;
-+		return ret;
- 
- 	/* Set RX_CTL to default values with 2k buffer, and enable cactus */
- 	ret = asix_write_rx_ctl(dev, AX_DEFAULT_RX_CTL, 0);
- 	if (ret < 0)
--		goto out;
-+		return ret;
- 
- 	ret = asix_write_medium_mode(dev, AX88772_MEDIUM_DEFAULT, 0);
- 	if (ret < 0)
--		goto out;
-+		return ret;
- 
- 	phy_start(priv->phydev);
- 
- 	return 0;
--
--out:
--	return ret;
- }
- 
- static int ax88772_hw_reset(struct usbnet *dev, int in_pm)
--- 
-2.34.0
-
+greg k-h
