@@ -2,92 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74387481E5C
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Dec 2021 17:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A8E481EDF
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Dec 2021 18:55:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240330AbhL3Qw0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Dec 2021 11:52:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235870AbhL3Qw0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Dec 2021 11:52:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EEBC061574;
-        Thu, 30 Dec 2021 08:52:25 -0800 (PST)
+        id S237176AbhL3RzN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Dec 2021 12:55:13 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:52912 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237146AbhL3RzN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Dec 2021 12:55:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D87D61712;
-        Thu, 30 Dec 2021 16:52:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF073C36AE9;
-        Thu, 30 Dec 2021 16:52:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640883144;
-        bh=o/Yzw84CMO1RRStlTxHpA82o1M7bIJG1uP0eVld3PP8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=yHx/sGcC7dyTUsNg5yxHamebPKE7vcn33z4D1bOnp1hx0wVu5vFzUlm1ugFba0Nw9
-         BAyUFpU+KKTiUMIggI/CgiEZvNGQqSnxD42rnmWEqiwZRMwIxsT3DMPiiHo4cr7fDV
-         0sZd10Z0dpTnvyFnYL6N2XGa2Na+2tCg3FqgQesc=
-Date:   Thu, 30 Dec 2021 17:52:21 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A0546173D;
+        Thu, 30 Dec 2021 17:55:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 83E30C36AE9;
+        Thu, 30 Dec 2021 17:55:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640886912;
+        bh=40C0mjquxthFKfYAe6IKTrPEJG1KRvBZkHtr8bHNwmI=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Pd1tRNrhnDac1giRTodsFXrwMkG63U1a2fwG+JdbNL8REz1PhtVvkGwJklDsZgRYx
+         hr90t0GrgymW1ZylPsfbLXi3cFMcC4DZWFGWwQriyESFG3Y6pR7H1AUCSvd7Xb7JKp
+         VOX0fUquFRn7RcKtZNNmV1KXmsugE1BX970lAqKImxNxKKFd+LIVtQ4rb7aoTnp6tG
+         VXkGKKZ58St7KWx7j8ur4JQWDZkkcp1uUi5hhYEve7ZGE3tNRt8BXek2LPo79Dr7OO
+         1RjoWnDUGbg0hNecdJGug4hPVIKbU/pHFPhgKxz6PovEa0QpzZaoVrejRnWBBftm9L
+         va03YpvD/rOtg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 732B3C395DE;
+        Thu, 30 Dec 2021 17:55:12 +0000 (UTC)
+Subject: Re: [GIT PULL] USB fixes for 5.16-final
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Yc3jxXB0JoKOrxb9@kroah.com>
+References: <Yc3jxXB0JoKOrxb9@kroah.com>
+X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Yc3jxXB0JoKOrxb9@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16
+X-PR-Tracked-Commit-Id: 3f345e907a8e7c56fdebf7231cd67afc85d02aaa
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 2d40060bb51fb3b571b57aa9d823ab7fe55b4280
+Message-Id: <164088691246.28006.2638978274095196930.pr-tracker-bot@kernel.org>
+Date:   Thu, 30 Dec 2021 17:55:12 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fixes for 5.16-final
-Message-ID: <Yc3jxXB0JoKOrxb9@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit a7904a538933c525096ca2ccde1e60d0ee62c08e:
+The pull request you sent on Thu, 30 Dec 2021 17:52:21 +0100:
 
-  Linux 5.16-rc6 (2021-12-19 14:14:33 -0800)
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/2d40060bb51fb3b571b57aa9d823ab7fe55b4280
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16
+Thank you!
 
-for you to fetch changes up to 3f345e907a8e7c56fdebf7231cd67afc85d02aaa:
-
-  usb: typec: ucsi: Only check the contract if there is a connection (2021-12-21 16:30:53 +0100)
-
-----------------------------------------------------------------
-USB fixes for 5.16-final
-
-Here are some small USB driver fixes for 5.16 to resolve some reported
-problems:
-	- mtu3 driver fixes
-	- typec ucsi driver fix
-	- xhci driver quirk added
-	- usb gadget f_fs fix for reported crash
-
-All of these have been in linux-next for a while with no reported
-problems.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Chunfeng Yun (4):
-      usb: mtu3: fix interval value for intr and isoc
-      usb: mtu3: add memory barrier before set GPD's HWO
-      usb: mtu3: fix list_head check warning
-      usb: mtu3: set interval of FS intr and isoc endpoint
-
-Heikki Krogerus (1):
-      usb: typec: ucsi: Only check the contract if there is a connection
-
-Mathias Nyman (1):
-      xhci: Fresco FL1100 controller should not have BROKEN_MSI quirk set.
-
-Vincent Pelletier (1):
-      usb: gadget: f_fs: Clear ffs_eventfd in ffs_data_clear.
-
- drivers/usb/gadget/function/f_fs.c |  9 ++++++---
- drivers/usb/host/xhci-pci.c        |  5 ++++-
- drivers/usb/mtu3/mtu3_gadget.c     | 12 ++++++++++--
- drivers/usb/mtu3/mtu3_qmu.c        |  7 ++++++-
- drivers/usb/typec/ucsi/ucsi.c      |  4 +++-
- 5 files changed, 29 insertions(+), 8 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
