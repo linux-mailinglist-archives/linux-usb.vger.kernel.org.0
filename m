@@ -2,65 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A8E481EDF
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Dec 2021 18:55:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19579481FFE
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Dec 2021 20:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237176AbhL3RzN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Dec 2021 12:55:13 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52912 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237146AbhL3RzN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Dec 2021 12:55:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A0546173D;
-        Thu, 30 Dec 2021 17:55:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 83E30C36AE9;
-        Thu, 30 Dec 2021 17:55:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640886912;
-        bh=40C0mjquxthFKfYAe6IKTrPEJG1KRvBZkHtr8bHNwmI=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Pd1tRNrhnDac1giRTodsFXrwMkG63U1a2fwG+JdbNL8REz1PhtVvkGwJklDsZgRYx
-         hr90t0GrgymW1ZylPsfbLXi3cFMcC4DZWFGWwQriyESFG3Y6pR7H1AUCSvd7Xb7JKp
-         VOX0fUquFRn7RcKtZNNmV1KXmsugE1BX970lAqKImxNxKKFd+LIVtQ4rb7aoTnp6tG
-         VXkGKKZ58St7KWx7j8ur4JQWDZkkcp1uUi5hhYEve7ZGE3tNRt8BXek2LPo79Dr7OO
-         1RjoWnDUGbg0hNecdJGug4hPVIKbU/pHFPhgKxz6PovEa0QpzZaoVrejRnWBBftm9L
-         va03YpvD/rOtg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 732B3C395DE;
-        Thu, 30 Dec 2021 17:55:12 +0000 (UTC)
-Subject: Re: [GIT PULL] USB fixes for 5.16-final
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Yc3jxXB0JoKOrxb9@kroah.com>
-References: <Yc3jxXB0JoKOrxb9@kroah.com>
-X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Yc3jxXB0JoKOrxb9@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16
-X-PR-Tracked-Commit-Id: 3f345e907a8e7c56fdebf7231cd67afc85d02aaa
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 2d40060bb51fb3b571b57aa9d823ab7fe55b4280
-Message-Id: <164088691246.28006.2638978274095196930.pr-tracker-bot@kernel.org>
-Date:   Thu, 30 Dec 2021 17:55:12 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+        id S241882AbhL3TqC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Dec 2021 14:46:02 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:58571 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S241810AbhL3TqB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Dec 2021 14:46:01 -0500
+Received: (qmail 1117127 invoked by uid 1000); 30 Dec 2021 14:46:00 -0500
+Date:   Thu, 30 Dec 2021 14:46:00 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, axboe@kernel.dk,
+        jj251510319013@gmail.com, dan.carpenter@oracle.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] usb: gadget: clear related members when goto fail
+Message-ID: <Yc4MeIt6JygZ6CrY@rowland.harvard.edu>
+References: <20211230051132.21056-1-hbh25y@gmail.com>
+ <20211230051132.21056-3-hbh25y@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211230051132.21056-3-hbh25y@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Thu, 30 Dec 2021 17:52:21 +0100:
+On Thu, Dec 30, 2021 at 01:11:32PM +0800, Hangyu Hua wrote:
+> dev->config and dev->hs_config and dev->dev need to be cleaned if
+> dev_config fails to avoid UAF.
+> 
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16
+You must not do this.  I never sent you an Acked-by for this patch; you 
+shouldn't claim that I did.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/2d40060bb51fb3b571b57aa9d823ab7fe55b4280
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> ---
+>  drivers/usb/gadget/legacy/inode.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
+> index eaad03c0252f..d2e88f3b9131 100644
+> --- a/drivers/usb/gadget/legacy/inode.c
+> +++ b/drivers/usb/gadget/legacy/inode.c
+> @@ -1847,7 +1847,7 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
+>  		total = le16_to_cpu(dev->hs_config->wTotalLength);
+>  		if (!is_valid_config(dev->hs_config, total) ||
+>  				total > length - USB_DT_DEVICE_SIZE)
+> -			goto fail;
+> +			goto fail1;
+>  		kbuf += total;
+>  		length -= total;
+>  	} else {
+> @@ -1858,12 +1858,12 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
+>  
+>  	/* device descriptor (tweaked for paranoia) */
+>  	if (length != USB_DT_DEVICE_SIZE)
+> -		goto fail;
+> +		goto fail1;
+>  	dev->dev = (void *)kbuf;
+>  	if (dev->dev->bLength != USB_DT_DEVICE_SIZE
+>  			|| dev->dev->bDescriptorType != USB_DT_DEVICE
+>  			|| dev->dev->bNumConfigurations != 1)
+> -		goto fail;
+> +		goto fail2;
+>  	dev->dev->bcdUSB = cpu_to_le16 (0x0200);
+>  
+>  	/* triggers gadgetfs_bind(); then we can enumerate. */
+> @@ -1875,6 +1875,9 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
+>  
+>  	value = usb_gadget_probe_driver(&gadgetfs_driver);
+>  	if (value != 0) {
+> +		dev->dev = NULL;
+> +		dev->hs_config = NULL;
+> +		dev->config = NULL;
+>  		kfree (dev->buf);
+>  		dev->buf = NULL;
 
-Thank you!
+Why not just grep the lock and goto fail?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+>  	} else {
+> @@ -1892,7 +1895,12 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
+>  	}
+>  	return value;
+>  
+> +fail2:
+> +	dev->dev = NULL;
+> +fail1:
+> +	dev->hs_config = NULL;
+
+It is not necessary to have all these different statement labels.  You 
+can simply have "fail:" clear all three pointers.
+
+>  fail:
+> +	dev->config = NULL;
+>  	spin_unlock_irq (&dev->lock);
+>  	pr_debug ("%s: %s fail %zd, %p\n", shortname, __func__, value, dev);
+>  	kfree (dev->buf);
+
+Alan Stern
