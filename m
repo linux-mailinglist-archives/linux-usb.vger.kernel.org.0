@@ -2,92 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DDEF4819C9
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Dec 2021 06:28:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B54614819FC
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Dec 2021 07:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236206AbhL3F2b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Dec 2021 00:28:31 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:57782
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229455AbhL3F2b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Dec 2021 00:28:31 -0500
-Received: from localhost.localdomain (1-171-85-107.dynamic-ip.hinet.net [1.171.85.107])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id EC7733FFD7;
-        Thu, 30 Dec 2021 05:28:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1640842104;
-        bh=ilWOacWy3+wmYfMNTytyTjyd0g6hoKp0sIxy7P57r1s=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=PgljTcaJPg8iG27azKH0Ur8OZoKxxG+/5JjV4n7LTft8ow2ZhVESN77XK+uYnrTSb
-         3ZEoc5TGmM96ac3bqXJgHhJhFYNaC/7IEQhJhn/VNjAIkEZnOkJDEK2m6nrTxEVR5M
-         O41sDa43n+X3CEz7HqhUx3VoqFTE4IwDM/l6dR3vKnkYquAQi6Zmj3htRQwxtLzdlN
-         teCjeadZSSFn81JdK2qL73Mkff4e5Vui7dWvs8clLudtmBmgKuk0N0XNU+xhyHWFhn
-         sUqpHwYbQvmV8oueE1RYi3SB868AHRslCjanaqLFyFCsyA5EyV0v9+WM2mQP5ZMtad
-         hdpxikTcGTIxg==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     gregkh@linuxfoundation.org
-Cc:     stern@rowland.harvard.edu, mathias.nyman@linux.intel.com,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Bixuan Cui <cuibixuan@huawei.com>,
-        Rajat Jain <rajatja@google.com>, Andrew Lunn <andrew@lunn.ch>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] usb: core: Bail out when port is stuck in reset loop
-Date:   Thu, 30 Dec 2021 13:28:09 +0800
-Message-Id: <20211230052811.650191-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.33.1
+        id S236462AbhL3Gi3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Dec 2021 01:38:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229514AbhL3Gi1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Dec 2021 01:38:27 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A72C061574;
+        Wed, 29 Dec 2021 22:38:27 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id m18so20492295qtk.3;
+        Wed, 29 Dec 2021 22:38:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DHepH6WFdLmTwtF4ySUnxzCwyN0QrtXXmuhORtez5fw=;
+        b=C++FEa4oW/Hj3h4Imvj4O+HA304cNyM39J+rHxY6yVKfUqvg/QvlOi2PvNyQm+chFF
+         RI+9H0RcG4X0wv7pQFf1RNb1DwENR0oT9w0YwVOM5P9Iv/hsaGw4nk2QHhaaKQE70as4
+         cXQFB22wB+58cUeJXohJmb/a0vHSDbx/F/ODvZv6L2z+NAASirnNEautXfxiLU/WJgjO
+         K5DlJ/QfDiMSDV0gnrjur04VrehL2iEy9dDcBBdivgeIowPpp6B1BKBnUCzb0593+/sW
+         7Wnx5PIcZkZJJjxxvtQC7B6bv6YIQfmzyP44+NBHLySil2TCoCnZ6W2tv28Fr5w3ehkQ
+         E/8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DHepH6WFdLmTwtF4ySUnxzCwyN0QrtXXmuhORtez5fw=;
+        b=PeT2QfctpAupvOv5NV2H+8ZLG8IOkuEAqwK3k+1cxrkYQ6Dnzlfz0w+V5P80wekmpF
+         W1vKZNdgGP99f82T8NABlHEkW3ESErxbmlXzM4JqTogwBN2IXl/wdzBF7JAfECnVJqLh
+         uqcRnI4/PHfhduji3G8hiMbrIo93hrdjySYMS+OzSnXpLpzRxXjp+PytclForT7ey06z
+         W/NAE9zSBZEmsu6HvPuoj7Td3GgClqQDcUKC7bn21CZpdskyX1c1FPBYsd0v8lFSkYVy
+         QUj1vnt6gcfj1PAGJS7wqAKJeNYKtGgMuxSQghVxusOVnEmxA6NLHlcAM5hj4f3S7vcp
+         R5HQ==
+X-Gm-Message-State: AOAM531ka7KGPxAkZi/fpFgr00sX/n3cEC5c7NIn4sdGhum8L6oeLUl5
+        GEiz741t/ikLjHwnkss+Wvbodc14qiI=
+X-Google-Smtp-Source: ABdhPJz8s/cHPhanDMG6LppHwvPgDSGzd+eWEAGfrkJk9Fma13DbIqhW16HcBTr81KC2VwGt91qqMA==
+X-Received: by 2002:ac8:5bca:: with SMTP id b10mr25682665qtb.170.1640846306237;
+        Wed, 29 Dec 2021 22:38:26 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id l15sm20505059qtx.77.2021.12.29.22.38.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 22:38:25 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: luo.penghao@zte.com.cn
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org, luo penghao <luo.penghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux] usb-storage: Remove redundant assignments
+Date:   Thu, 30 Dec 2021 06:38:19 +0000
+Message-Id: <20211230063819.586428-1-luo.penghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Unplugging USB device may cause an incorrect warm reset loop and the
-port can no longer be used:
-[  143.039019] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x4202c0
-[  143.039025] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
-[  143.039051] hub 2-0:1.0: state 7 ports 10 chg 0000 evt 0008
-[  143.039058] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x4202c0, return 0x4102c0
-[  143.039092] xhci_hcd 0000:00:14.0: clear port3 connect change, portsc: 0x4002c0
-[  143.039096] usb usb2-port3: link state change
-[  143.039099] xhci_hcd 0000:00:14.0: clear port3 link state change, portsc: 0x2c0
-[  143.039101] usb usb2-port3: do warm reset
-[  143.096736] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2b0, return 0x2b0
-[  143.096751] usb usb2-port3: not warm reset yet, waiting 50ms
-[  143.131500] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link inactive
-[  143.138260] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x2802a0
-[  143.138263] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
-[  143.160756] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2802a0, return 0x3002a0
-[  143.160798] usb usb2-port3: not warm reset yet, waiting 200ms
+From: luo penghao <luo.penghao@zte.com.cn>
 
-The port status is PP=1, CCS=0, PED=0, PLS=Inactive, which is Error
-state per "USB3 Root Hub Port State Machine". It's reasonable to perform
-warm reset several times, but if the port is still not enabled after
-many attempts, consider it's gone and treat it as disconnected.
+The assignments in these two places will be overwritten, so they
+should be deleted.
 
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+The clang_analyzer complains as follows:
+
+drivers/usb/storage/sierra_ms.c:
+
+Value stored to 'retries' is never read
+Value stored to 'result' is never read
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: luo penghao <luo.penghao@zte.com.cn>
 ---
- drivers/usb/core/hub.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/usb/storage/sierra_ms.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 00070a8a65079..f618d86d526d1 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -2979,7 +2979,8 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
- 		}
+diff --git a/drivers/usb/storage/sierra_ms.c b/drivers/usb/storage/sierra_ms.c
+index b9f78ef..0774ba2 100644
+--- a/drivers/usb/storage/sierra_ms.c
++++ b/drivers/usb/storage/sierra_ms.c
+@@ -130,8 +130,6 @@ int sierra_ms_init(struct us_data *us)
+ 	struct swoc_info *swocInfo;
+ 	struct usb_device *udev;
  
- 		/* Check for disconnect or reset */
--		if (status == 0 || status == -ENOTCONN || status == -ENODEV) {
-+		if (status == 0 || status == -ENOTCONN || status == -ENODEV ||
-+		    (status == -EBUSY && i == PORT_RESET_TRIES - 1)) {
- 			usb_clear_port_feature(hub->hdev, port1,
- 					USB_PORT_FEAT_C_RESET);
+-	retries = 3;
+-	result = 0;
+ 	udev = us->pusb_dev;
  
+ 	/* Force Modem mode */
 -- 
-2.33.1
+2.15.2
+
 
