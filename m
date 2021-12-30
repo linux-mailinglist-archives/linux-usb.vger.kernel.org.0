@@ -2,99 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F761481DD2
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Dec 2021 16:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74387481E5C
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Dec 2021 17:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239532AbhL3PsQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Dec 2021 10:48:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
+        id S240330AbhL3Qw0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Dec 2021 11:52:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbhL3PsP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Dec 2021 10:48:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE3DC061574;
-        Thu, 30 Dec 2021 07:48:15 -0800 (PST)
+        with ESMTP id S235870AbhL3Qw0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Dec 2021 11:52:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EEBC061574;
+        Thu, 30 Dec 2021 08:52:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6E48B81B43;
-        Thu, 30 Dec 2021 15:48:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E594EC36AE9;
-        Thu, 30 Dec 2021 15:48:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D87D61712;
+        Thu, 30 Dec 2021 16:52:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF073C36AE9;
+        Thu, 30 Dec 2021 16:52:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640879292;
-        bh=JvVoEwdYgeg3rOYT/Axpw64/dBLzVHDVgTeukJnHDis=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kFDNpcGQICetMqMHefNsgCVFQ6dQczTgcgwqr+RCXCWmqkJZ7QKs7fSxxsKnx7hX6
-         wa3BPGeA1UU3GYuc5sM327c170zmq9oYglXZ0TeA90jYRdpDYc/Ih4UFHmqrFzOoao
-         QoZqQdTZ96H5z4VzwMTmaLooLjPIimjsO/UMRzcs=
-Date:   Thu, 30 Dec 2021 16:48:09 +0100
+        s=korg; t=1640883144;
+        bh=o/Yzw84CMO1RRStlTxHpA82o1M7bIJG1uP0eVld3PP8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=yHx/sGcC7dyTUsNg5yxHamebPKE7vcn33z4D1bOnp1hx0wVu5vFzUlm1ugFba0Nw9
+         BAyUFpU+KKTiUMIggI/CgiEZvNGQqSnxD42rnmWEqiwZRMwIxsT3DMPiiHo4cr7fDV
+         0sZd10Z0dpTnvyFnYL6N2XGa2Na+2tCg3FqgQesc=
+Date:   Thu, 30 Dec 2021 17:52:21 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yaqin Pan <akingchen@vivo.com>
-Cc:     balbi@kernel.org, devicetree@vger.kernel.org, kernel@vivo.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        robh+dt@kernel.org
-Subject: Re: [PATCH v3 1/2] usb: dwc3: Add a quirk to set
- GUCTL.SPRSCTRLTRANSEN bit.
-Message-ID: <Yc3UuSRkgiopJ5jp@kroah.com>
-References: <Yc2+S6u++cXYAnkt@kroah.com>
- <20211230153612.15063-1-akingchen@vivo.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB fixes for 5.16-final
+Message-ID: <Yc3jxXB0JoKOrxb9@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211230153612.15063-1-akingchen@vivo.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 11:36:12PM +0800, Yaqin Pan wrote:
-> On Thu, 30 Dec 2021 15:12:27 +0100 Greg Kroah-Hartman wrote:
-> >> This quirk is only for dwc3 host mode.
-> >> the dwc3 controller can't emurate some devices successfully.
-> >> For example, TF card reader (aaaa:8816):
-> >> failed log
-> >> usb 1-1: new high-speed USB device number 2 using xhci-hcd
-> >> usb 1-1: device descriptor read/all, error -110
-> >> >From the usb analyzer, always return NAK in the data phase.
-> >> if enable the GUCTL.SPRSCTRLTRANSEN bit. then the log is:
-> >> usb 2-1: new high-speed USB device number 3 using xhci-hcd
-> >> usb 2-1: New USB device found, idVendor=aaaa,
-> >> idProduct=8816, bcdDevice=13.08
-> >> usb 2-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> >> usb 2-1: Product: MXT USB Device
-> >> usb 2-1: Manufacturer: MXTronics
-> >> usb 2-1: SerialNumber: 150101v01
-> >> usb 2-1: New USB device found, VID=aaaa, PID=8816
-> >> 
-> >> Some devices are slow in responding to Control transfers.
-> >> Scheduling mulitiple transactions in one microframe/frame
-> >> can cause the devices to misbehave. if this qurik is enabled,
-> >> the host controller schedules transations for a Control transfer
-> >> in defferent microframes/frame.
-> >
-> >If this is needed for all devices (i.e. you do not know what device is
-> >going to be plugged in), why not just enable it for all controllers?
-> >Why whould you NOT want this enabled?
-> >
-> >Or is this a broken hardware device and only specific host controllers
-> >need this?  If so, how do we know which ones need this set and which do
-> >not?
-> 
-> I think not all dwc3 controllers need this. For cell phone,customers may
-> use various usb devices, we can enable this quirk to fix some compatibility
-> issues. For some chip platform of qcom, i encounter this issue, not every
-> platform i encounter this problem.
-> 
-> If enabled for all controllers, it will reduce the speed of Control transfers. 
-> So i think it would be better for user to enable it by their own purposes.
+The following changes since commit a7904a538933c525096ca2ccde1e60d0ee62c08e:
 
-But how do hardware vendors know to enable this?  Can we trigger off of
-PCI ids?  Do we need a list of quirks to show which host controllers are
-broken this way?
+  Linux 5.16-rc6 (2021-12-19 14:14:33 -0800)
 
-Burying something as basic as "reliable device connection" in a DT quirk
-seems very sloppy to me.  We want reliable systems, right?
+are available in the Git repository at:
 
-thanks,
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16
 
-greg k-h
+for you to fetch changes up to 3f345e907a8e7c56fdebf7231cd67afc85d02aaa:
+
+  usb: typec: ucsi: Only check the contract if there is a connection (2021-12-21 16:30:53 +0100)
+
+----------------------------------------------------------------
+USB fixes for 5.16-final
+
+Here are some small USB driver fixes for 5.16 to resolve some reported
+problems:
+	- mtu3 driver fixes
+	- typec ucsi driver fix
+	- xhci driver quirk added
+	- usb gadget f_fs fix for reported crash
+
+All of these have been in linux-next for a while with no reported
+problems.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Chunfeng Yun (4):
+      usb: mtu3: fix interval value for intr and isoc
+      usb: mtu3: add memory barrier before set GPD's HWO
+      usb: mtu3: fix list_head check warning
+      usb: mtu3: set interval of FS intr and isoc endpoint
+
+Heikki Krogerus (1):
+      usb: typec: ucsi: Only check the contract if there is a connection
+
+Mathias Nyman (1):
+      xhci: Fresco FL1100 controller should not have BROKEN_MSI quirk set.
+
+Vincent Pelletier (1):
+      usb: gadget: f_fs: Clear ffs_eventfd in ffs_data_clear.
+
+ drivers/usb/gadget/function/f_fs.c |  9 ++++++---
+ drivers/usb/host/xhci-pci.c        |  5 ++++-
+ drivers/usb/mtu3/mtu3_gadget.c     | 12 ++++++++++--
+ drivers/usb/mtu3/mtu3_qmu.c        |  7 ++++++-
+ drivers/usb/typec/ucsi/ucsi.c      |  4 +++-
+ 5 files changed, 29 insertions(+), 8 deletions(-)
