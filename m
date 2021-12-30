@@ -2,70 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E2C6481CBE
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Dec 2021 15:04:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2EAD481CD2
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Dec 2021 15:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239795AbhL3OEu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Dec 2021 09:04:50 -0500
-Received: from mail-m17657.qiye.163.com ([59.111.176.57]:10718 "EHLO
-        mail-m17657.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239777AbhL3OEr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Dec 2021 09:04:47 -0500
-DKIM-Signature: a=rsa-sha256;
-        b=KUEDStXckAtztTshgFDnh7jDmwNopP7UVG9mB2OULMJB25jtSA+9eNgAeP1+QK2xC6ww/GByqZ6fNeirXkGbjbO0Ccr1Ok4mYLcfXAPT87ydfvYM4SXJ+aCeGEWdvpqkR1h6MN//qO5OQsGSXq9J/SKwwLMnxBhIt6kmn0Uvw3E=;
-        s=default; c=relaxed/relaxed; d=vivo.com; v=1;
-        bh=xpKKS0qqZkQyHog/qbonODBiKgIt7QbYO2CMS+1sO7I=;
-        h=date:mime-version:subject:message-id:from;
-Received: from vivo-600-G6.vivo.xyz (unknown [58.251.74.232])
-        by mail-m17657.qiye.163.com (Hmail) with ESMTPA id 78B822802C1;
-        Thu, 30 Dec 2021 21:59:25 +0800 (CST)
-From:   Yaqin Pan <akingchen@vivo.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com, Yaqin Pan <akingchen@vivo.com>
-Subject: [PATCH v3 2/2] dt-bindings: usb: document snps,sprs-ctrl-trans-quirk property in dwc3
-Date:   Thu, 30 Dec 2021 21:58:31 +0800
-Message-Id: <20211230135832.23005-3-akingchen@vivo.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211230135832.23005-1-akingchen@vivo.com>
+        id S239823AbhL3OMd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Dec 2021 09:12:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233197AbhL3OMd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Dec 2021 09:12:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5419C061574;
+        Thu, 30 Dec 2021 06:12:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71743B81A71;
+        Thu, 30 Dec 2021 14:12:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CE00C36AE9;
+        Thu, 30 Dec 2021 14:12:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640873550;
+        bh=SDWGmvyOLn/L+pfvPdM1ycMOLuAZBXHTBvkwnICj4/o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PM61r4weOAsYUmXoK4aXG8XNsAutO+GTIRxJJe8zrY/3+scY8//HZupJWmNPCynIr
+         zHQygi62PrPjJmASmo8CxDPoMxX+qtNot2GX4JzVH78UDW1W6Ue5KEjlHhc4vEM78u
+         TiZiumAtaRilKJW7luqYdycRKdHREo6P1GBMMKzY=
+Date:   Thu, 30 Dec 2021 15:12:27 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Yaqin Pan <akingchen@vivo.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@vivo.com
+Subject: Re: [PATCH v3 1/2] usb: dwc3: Add a quirk to set
+ GUCTL.SPRSCTRLTRANSEN bit.
+Message-ID: <Yc2+S6u++cXYAnkt@kroah.com>
 References: <20211230135832.23005-1-akingchen@vivo.com>
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
-        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWRoaSxpWHhhIHR9PTxoYSU
-        kdVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWVVLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nio6MRw*PT5KNREtCR0oHyks
-        TQgwCR1VSlVKTU9LQ0xJTE1OQkNPVTMWGhIXVRoQEhUcGBMeFTsNEg0UVRgUFkVZV1kSC1lBWU5D
-        VUlOSlVMT1VJSElZV1kIAVlBSUlLTDcG
-X-HM-Tid: 0a7e0ba3691dda03kuws78b822802c1
+ <20211230135832.23005-2-akingchen@vivo.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211230135832.23005-2-akingchen@vivo.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add snps,sprs-ctrl-trans-quirk property for dwc3 controller
+On Thu, Dec 30, 2021 at 09:58:30PM +0800, Yaqin Pan wrote:
+> This quirk is only for dwc3 host mode.
+> the dwc3 controller can't emurate some devices successfully.
+> For example, TF card reader (aaaa:8816):
+> failed log
+> usb 1-1: new high-speed USB device number 2 using xhci-hcd
+> usb 1-1: device descriptor read/all, error -110
+> >From the usb analyzer, always return NAK in the data phase.
+> if enable the GUCTL.SPRSCTRLTRANSEN bit. then the log is:
+> usb 2-1: new high-speed USB device number 3 using xhci-hcd
+> usb 2-1: New USB device found, idVendor=aaaa,
+> idProduct=8816, bcdDevice=13.08
+> usb 2-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> usb 2-1: Product: MXT USB Device
+> usb 2-1: Manufacturer: MXTronics
+> usb 2-1: SerialNumber: 150101v01
+> usb 2-1: New USB device found, VID=aaaa, PID=8816
+> 
+> Some devices are slow in responding to Control transfers.
+> Scheduling mulitiple transactions in one microframe/frame
+> can cause the devices to misbehave. if this qurik is enabled,
+> the host controller schedules transations for a Control transfer
+> in defferent microframes/frame.
 
-Signed-off-by: Yaqin Pan <akingchen@vivo.com>
----
- Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+If this is needed for all devices (i.e. you do not know what device is
+going to be plugged in), why not just enable it for all controllers?
+Why whould you NOT want this enabled?
 
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index 41416fbd92aa..7a127f0cb530 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -226,6 +226,12 @@ properties:
-       avoid -EPROTO errors with usbhid on some devices (Hikey 970).
-     type: boolean
- 
-+  snps,sprs-ctrl-trans-quirk:
-+    description:
-+      When set, change the way host controller schedules transations for a Control transfer.
-+      Avoid failing to enumerate some devices due to usb compatibility issues.
-+    type: boolean
-+
-   snps,is-utmi-l1-suspend:
-     description:
-       True when DWC3 asserts output signal utmi_l1_suspend_n, false when
--- 
-2.17.1
+Or is this a broken hardware device and only specific host controllers
+need this?  If so, how do we know which ones need this set and which do
+not?
 
+thanks,
+
+greg k-h
