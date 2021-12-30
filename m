@@ -2,129 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADFE5481987
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Dec 2021 06:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DDEF4819C9
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Dec 2021 06:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbhL3FL4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Dec 2021 00:11:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbhL3FLz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Dec 2021 00:11:55 -0500
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15ACC061574;
-        Wed, 29 Dec 2021 21:11:54 -0800 (PST)
-Received: by mail-pj1-x1041.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so22155689pjp.0;
-        Wed, 29 Dec 2021 21:11:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=2qrH/Q7lBhgBs5n1zVO/B/67KzCmyY6Nm+oaWRXQUfQ=;
-        b=HlD8egyoFHZ/+jS6QxT0P/ByOaMcnWZq/oyv7wctNgWnUTtPjFcSgGSoN65LtS2YJb
-         FDPq147Eee2GpuoCuws+6HCODa8oi8MdSnJGXm++KDopoM6CKYK/3tsDHAzrWowAo0cO
-         TCDbaQt+Ij6L9t8laCrvJLoLUsq3xIusWJ5VrbDaQtHr2Oln+lUKDDP8P3CsU5nEb4W3
-         u2K+fXrkXDhHgIIoe22yvxPJmvqP4E8Jmj07yiF99ejYQgwS7n47U1Y6Vo39MR+yJud7
-         evwVQmazSi+/KHtRBcPWMKkbBD6db8TqI+mSqLG2KX4UXDq2or2q+dkWfrDZsmaJJSso
-         2PoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2qrH/Q7lBhgBs5n1zVO/B/67KzCmyY6Nm+oaWRXQUfQ=;
-        b=wE51ZOX3xp+dq8M/egmwJxVX0/lLIsdFLsVa86umI47RkCE6o/OiOVj/4NAjWOX1HY
-         8jY1/5RqFKoP7oQohONHcsm8kj/d2ZBg5+olqlH+y3pT7RNlH5M4Dila1UGF771yDrOw
-         UEeLmu9qdTsVkqLet3SPHx4Q/5iuitYj2K3XIpQWrVFM9DSnDjNn2QvNd/m+92fY3n21
-         F5/Vm2zxfbkbi4KkgXXmhYRDs3ch8dQE0swnzjgY0bqInNlZYJPk+P9NCv6vtG1RsSHw
-         xGRC1hUf4h9kabv2ou3N/pl9Z0EXMEdO9kezmxqZ2hcl8NJ/jWM+QDP3rpxVq2C7gH6l
-         qU/Q==
-X-Gm-Message-State: AOAM530DM/wd8F5eCvNrfXiGxiSrwJ/k4yiAp/Mms8XGl8GGKwxOt8cK
-        8MrudNUGo8uC1Y9pgivsV/w=
-X-Google-Smtp-Source: ABdhPJxtAwmczCvw5kzAiXwk4Avbf6mtvcOWKCOoVnJb5N/Ob2UW/+MTdAD8OznFSZbZcieKZRcm9Q==
-X-Received: by 2002:a17:903:4094:b0:149:8070:1c1b with SMTP id z20-20020a170903409400b0014980701c1bmr17099176plc.152.1640841114381;
-        Wed, 29 Dec 2021 21:11:54 -0800 (PST)
-Received: from slim.das-security.cn ([103.84.139.54])
-        by smtp.gmail.com with ESMTPSA id e21sm10365925pjr.4.2021.12.29.21.11.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 21:11:54 -0800 (PST)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org, axboe@kernel.dk,
-        stern@rowland.harvard.edu, jj251510319013@gmail.com,
-        dan.carpenter@oracle.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH v3 2/2] usb: gadget: clear related members when goto fail
-Date:   Thu, 30 Dec 2021 13:11:32 +0800
-Message-Id: <20211230051132.21056-3-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211230051132.21056-1-hbh25y@gmail.com>
-References: <20211230051132.21056-1-hbh25y@gmail.com>
+        id S236206AbhL3F2b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Dec 2021 00:28:31 -0500
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:57782
+        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229455AbhL3F2b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Dec 2021 00:28:31 -0500
+Received: from localhost.localdomain (1-171-85-107.dynamic-ip.hinet.net [1.171.85.107])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id EC7733FFD7;
+        Thu, 30 Dec 2021 05:28:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640842104;
+        bh=ilWOacWy3+wmYfMNTytyTjyd0g6hoKp0sIxy7P57r1s=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=PgljTcaJPg8iG27azKH0Ur8OZoKxxG+/5JjV4n7LTft8ow2ZhVESN77XK+uYnrTSb
+         3ZEoc5TGmM96ac3bqXJgHhJhFYNaC/7IEQhJhn/VNjAIkEZnOkJDEK2m6nrTxEVR5M
+         O41sDa43n+X3CEz7HqhUx3VoqFTE4IwDM/l6dR3vKnkYquAQi6Zmj3htRQwxtLzdlN
+         teCjeadZSSFn81JdK2qL73Mkff4e5Vui7dWvs8clLudtmBmgKuk0N0XNU+xhyHWFhn
+         sUqpHwYbQvmV8oueE1RYi3SB868AHRslCjanaqLFyFCsyA5EyV0v9+WM2mQP5ZMtad
+         hdpxikTcGTIxg==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     gregkh@linuxfoundation.org
+Cc:     stern@rowland.harvard.edu, mathias.nyman@linux.intel.com,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Bixuan Cui <cuibixuan@huawei.com>,
+        Rajat Jain <rajatja@google.com>, Andrew Lunn <andrew@lunn.ch>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] usb: core: Bail out when port is stuck in reset loop
+Date:   Thu, 30 Dec 2021 13:28:09 +0800
+Message-Id: <20211230052811.650191-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-dev->config and dev->hs_config and dev->dev need to be cleaned if
-dev_config fails to avoid UAF.
+Unplugging USB device may cause an incorrect warm reset loop and the
+port can no longer be used:
+[  143.039019] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x4202c0
+[  143.039025] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
+[  143.039051] hub 2-0:1.0: state 7 ports 10 chg 0000 evt 0008
+[  143.039058] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x4202c0, return 0x4102c0
+[  143.039092] xhci_hcd 0000:00:14.0: clear port3 connect change, portsc: 0x4002c0
+[  143.039096] usb usb2-port3: link state change
+[  143.039099] xhci_hcd 0000:00:14.0: clear port3 link state change, portsc: 0x2c0
+[  143.039101] usb usb2-port3: do warm reset
+[  143.096736] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2b0, return 0x2b0
+[  143.096751] usb usb2-port3: not warm reset yet, waiting 50ms
+[  143.131500] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link inactive
+[  143.138260] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x2802a0
+[  143.138263] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
+[  143.160756] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2802a0, return 0x3002a0
+[  143.160798] usb usb2-port3: not warm reset yet, waiting 200ms
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+The port status is PP=1, CCS=0, PED=0, PLS=Inactive, which is Error
+state per "USB3 Root Hub Port State Machine". It's reasonable to perform
+warm reset several times, but if the port is still not enabled after
+many attempts, consider it's gone and treat it as disconnected.
+
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 ---
- drivers/usb/gadget/legacy/inode.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/usb/core/hub.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-index eaad03c0252f..d2e88f3b9131 100644
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -1847,7 +1847,7 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 		total = le16_to_cpu(dev->hs_config->wTotalLength);
- 		if (!is_valid_config(dev->hs_config, total) ||
- 				total > length - USB_DT_DEVICE_SIZE)
--			goto fail;
-+			goto fail1;
- 		kbuf += total;
- 		length -= total;
- 	} else {
-@@ -1858,12 +1858,12 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 00070a8a65079..f618d86d526d1 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -2979,7 +2979,8 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
+ 		}
  
- 	/* device descriptor (tweaked for paranoia) */
- 	if (length != USB_DT_DEVICE_SIZE)
--		goto fail;
-+		goto fail1;
- 	dev->dev = (void *)kbuf;
- 	if (dev->dev->bLength != USB_DT_DEVICE_SIZE
- 			|| dev->dev->bDescriptorType != USB_DT_DEVICE
- 			|| dev->dev->bNumConfigurations != 1)
--		goto fail;
-+		goto fail2;
- 	dev->dev->bcdUSB = cpu_to_le16 (0x0200);
+ 		/* Check for disconnect or reset */
+-		if (status == 0 || status == -ENOTCONN || status == -ENODEV) {
++		if (status == 0 || status == -ENOTCONN || status == -ENODEV ||
++		    (status == -EBUSY && i == PORT_RESET_TRIES - 1)) {
+ 			usb_clear_port_feature(hub->hdev, port1,
+ 					USB_PORT_FEAT_C_RESET);
  
- 	/* triggers gadgetfs_bind(); then we can enumerate. */
-@@ -1875,6 +1875,9 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 
- 	value = usb_gadget_probe_driver(&gadgetfs_driver);
- 	if (value != 0) {
-+		dev->dev = NULL;
-+		dev->hs_config = NULL;
-+		dev->config = NULL;
- 		kfree (dev->buf);
- 		dev->buf = NULL;
- 	} else {
-@@ -1892,7 +1895,12 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 	}
- 	return value;
- 
-+fail2:
-+	dev->dev = NULL;
-+fail1:
-+	dev->hs_config = NULL;
- fail:
-+	dev->config = NULL;
- 	spin_unlock_irq (&dev->lock);
- 	pr_debug ("%s: %s fail %zd, %p\n", shortname, __func__, value, dev);
- 	kfree (dev->buf);
 -- 
-2.25.1
+2.33.1
 
