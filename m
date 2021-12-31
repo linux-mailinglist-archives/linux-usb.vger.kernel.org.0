@@ -2,81 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B010B4825BE
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Dec 2021 21:30:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3264825CA
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Dec 2021 21:44:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231664AbhLaUas (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Dec 2021 15:30:48 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:57477 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231646AbhLaUas (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Dec 2021 15:30:48 -0500
-Received: (qmail 1137662 invoked by uid 1000); 31 Dec 2021 15:30:47 -0500
-Date:   Fri, 31 Dec 2021 15:30:47 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com>
-Cc:     andreyknvl@google.com, dvyukov@google.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in
- usb_hcd_poll_rh_status (2)
-Message-ID: <Yc9odypVqqB2uMm/@rowland.harvard.edu>
-References: <Yc8+zLP8KTB8gT71@rowland.harvard.edu>
- <000000000000af950605d474b781@google.com>
+        id S231719AbhLaUoG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Dec 2021 15:44:06 -0500
+Received: from mail-io1-f72.google.com ([209.85.166.72]:52841 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231691AbhLaUoG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Dec 2021 15:44:06 -0500
+Received: by mail-io1-f72.google.com with SMTP id k12-20020a0566022a4c00b005ebe737d989so13116870iov.19
+        for <linux-usb@vger.kernel.org>; Fri, 31 Dec 2021 12:44:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=Of3gUYtQNOdGN0VCHZ9V9d8Ng0GEU6SSLufzFHaw2CE=;
+        b=G0xm0iBM+MF8J/W6LMX0mXI8GUvgwjy3G4v+lWCzYI/AhqtqKPg850COOoxJDk8pfS
+         juh+vK+ob2nMx9zhsb2Qiw5G1SmcQb+WcANgfLr7HKSmdSncFcjcEir2el/mLNXEIc4n
+         jUZMPYxQLggFI7chH+pPSdF7jd+5ch8AW3cJ6xvfwx+vRPrT5QTFVt/miUptvOVEVe/U
+         tlksqB5Z7G0hb3DFClFL8MzpX8lOyXJqHX+ZAqa3WuVakbCXTgw5/GxfLag0cs08FxL1
+         A/TOVPwrKJgtfwrJvaH1Q0nPShMHxNbG6XW2kMCr/EAuwKgDDQ3hy7mMFpBxXQyg2Ds3
+         Cx7A==
+X-Gm-Message-State: AOAM530QyBdXJ3Ur4L0b4hYbJdAcd+alNx+sVu4PcOqt23L6TT5XfZgD
+        VmkCtYHCnV1wYRzsVcrSWhawUAJAHqSHPkt1G7WZBvSwagSc
+X-Google-Smtp-Source: ABdhPJxQWiMF5hhNnlmcGcPjirBvBWo3QMc5mLxUHrNzczChFwXxfTMdBa3z+KDIG9Ly8dHMGltuWtoKVX3GmRE2pSoGKqZaQ+Gp
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000af950605d474b781@google.com>
+X-Received: by 2002:a6b:7602:: with SMTP id g2mr16215397iom.37.1640983445917;
+ Fri, 31 Dec 2021 12:44:05 -0800 (PST)
+Date:   Fri, 31 Dec 2021 12:44:05 -0800
+In-Reply-To: <Yc9odypVqqB2uMm/@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000060560805d4773ba0@google.com>
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in usb_hcd_poll_rh_status
+ (2)
+From:   syzbot <syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, dvyukov@google.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 31, 2021 at 09:44:06AM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> KASAN: slab-out-of-bounds Write in usb_hcd_poll_rh_status
-> 
-> vhci_hcd vhci_hcd.0: poll_rh_status: len 2 maxch 0 tblen 1
-> ==================================================================
-> BUG: KASAN: slab-out-of-bounds in memcpy include/linux/fortify-string.h:225 [inline]
-> BUG: KASAN: slab-out-of-bounds in usb_hcd_poll_rh_status+0x5f4/0x780 drivers/usb/core/hcd.c:776
-> Write of size 2 at addr ffff88801da403c0 by task syz-executor133/4062
+Hello,
 
-I think I understand the problem.  This patch is intended to fix it.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Alan Stern
+Reported-and-tested-by: syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ eec4df26e24e
+Tested on:
 
-Index: usb-devel/drivers/usb/core/hcd.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hcd.c
-+++ usb-devel/drivers/usb/core/hcd.c
-@@ -753,6 +753,7 @@ void usb_hcd_poll_rh_status(struct usb_h
- {
- 	struct urb	*urb;
- 	int		length;
-+	int		status;
- 	unsigned long	flags;
- 	char		buffer[6];	/* Any root hubs with > 31 ports? */
- 
-@@ -770,11 +771,17 @@ void usb_hcd_poll_rh_status(struct usb_h
- 		if (urb) {
- 			clear_bit(HCD_FLAG_POLL_PENDING, &hcd->flags);
- 			hcd->status_urb = NULL;
-+			if (urb->transfer_buffer_length >= length) {
-+				status = 0;
-+			} else {
-+				status = -EOVERFLOW;
-+				length = urb->transfer_buffer_length;
-+			}
- 			urb->actual_length = length;
- 			memcpy(urb->transfer_buffer, buffer, length);
- 
- 			usb_hcd_unlink_urb_from_ep(hcd, urb);
--			usb_hcd_giveback_urb(hcd, urb, 0);
-+			usb_hcd_giveback_urb(hcd, urb, status);
- 		} else {
- 			length = 0;
- 			set_bit(HCD_FLAG_POLL_PENDING, &hcd->flags);
+commit:         eec4df26 Merge tag 's390-5.16-6' of git://git.kernel.o..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1a86c22260afac2f
+dashboard link: https://syzkaller.appspot.com/bug?extid=3ae6a2b06f131ab9849f
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=148e8e35b00000
+
+Note: testing is done by a robot and is best-effort only.
