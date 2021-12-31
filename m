@@ -2,102 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2736482560
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Dec 2021 18:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A779482568
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Dec 2021 18:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbhLaRWC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Dec 2021 12:22:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51844 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231481AbhLaRWB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Dec 2021 12:22:01 -0500
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3A2C06173F;
-        Fri, 31 Dec 2021 09:22:01 -0800 (PST)
-Received: by mail-pl1-x641.google.com with SMTP id h1so17336251pls.11;
-        Fri, 31 Dec 2021 09:22:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=nps+WNx8C15ufScj3uNO99ieEChaDSrcgseTuNPXLa4=;
-        b=p9S7kg7ARWTJjp0Er+NBCT3ZYaopx6eiXNjLquQON2byOommzA+wBwlqBHWJf/lynL
-         J+Xb3W+p6k6bYKtsosx6kOMVvFScFYHxpYk+PP49D1Dl0e6dfzHCsMJ8/IHzxnerBXGz
-         4s4IWcRn38hVnSWcuSuXrW/3ZHPvNXT1QAqxGrbjWugEA4IsCva6rPKbFDxvx5j4L+sU
-         PHAXCxPNKzPQ/n8dxEGBKXaF75Qmjfj7VgfjoFn3yfwLAtQjcO3CVGz2JJ4MW1gYPNST
-         51y89CGT037H06052qkiSyhgLavhIDbcmLoVkXkWDNZe06JY1mdkYazXFlvl+ZxnrTOE
-         oCiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=nps+WNx8C15ufScj3uNO99ieEChaDSrcgseTuNPXLa4=;
-        b=bJJXnk54CEHRo8EZVidndy8nwivsi3I3KsM0a7VIRGh7IXTh4YgHhn5JuEDTqWek3I
-         w371Ql7H3k50WgSE2QTmBOK5UrtukCrLevT9H5qhDefFnCGzllsYwzomJVEPeibqcb20
-         /e6S/ve4Jk+RlnI6OzAtbIayxHSoZW07J6K3tqHHJAoE2xO+ApNtheoEBHOlG4196PyJ
-         wepVFiSZ5Dn9iYnSlXA18u7HBj/+u6uuqbbgisJ5WDlaiwcptOnITMBgqKogPBR/ZOaD
-         fzeDsBrPnpVGy2BzZ8ECp2UCAP4LUXiQQrzXYnsCIxpDZ4fMSROWWlr9QY4tlaVCFxid
-         XyqA==
-X-Gm-Message-State: AOAM5339t42O1n2XRSllQTG2RNBd2x4uc/PKDza3wP9p+cNNVklMMv7O
-        QnVrXDYtkqb+2HQLICdyh5E=
-X-Google-Smtp-Source: ABdhPJwYjfKFuXKbcjCgxOZAHWxSFaMYvex4xw0OBOAxFEBZoEdUb8SCRbKykB+Gyet7mRss8pKFBQ==
-X-Received: by 2002:a17:902:6b03:b0:149:7dd8:e56d with SMTP id o3-20020a1709026b0300b001497dd8e56dmr24602229plk.29.1640971320799;
-        Fri, 31 Dec 2021 09:22:00 -0800 (PST)
-Received: from localhost.localdomain ([125.118.132.4])
-        by smtp.gmail.com with ESMTPSA id k141sm30145834pfd.144.2021.12.31.09.21.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Dec 2021 09:22:00 -0800 (PST)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org, axboe@kernel.dk,
-        dan.carpenter@oracle.com, jj251510319013@gmail.com,
-        stern@rowland.harvard.edu
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH v4 2/2] usb: gadget: clear related members when goto fail
-Date:   Sat,  1 Jan 2022 01:21:38 +0800
-Message-Id: <20211231172138.7993-3-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211231172138.7993-1-hbh25y@gmail.com>
-References: <20211231172138.7993-1-hbh25y@gmail.com>
+        id S231447AbhLaRdB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Dec 2021 12:33:01 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:44057 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S231308AbhLaRdB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Dec 2021 12:33:01 -0500
+Received: (qmail 1135077 invoked by uid 1000); 31 Dec 2021 12:33:00 -0500
+Date:   Fri, 31 Dec 2021 12:33:00 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, dvyukov@google.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in
+ usb_hcd_poll_rh_status (2)
+Message-ID: <Yc8+zLP8KTB8gT71@rowland.harvard.edu>
+References: <Yc5rgUo8dyJKX98M@rowland.harvard.edu>
+ <00000000000065d16005d46a614b@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00000000000065d16005d46a614b@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-dev->config and dev->hs_config and dev->dev need to be cleaned if
-dev_config fails to avoid UAF.
+On Thu, Dec 30, 2021 at 09:24:09PM -0800, syzbot wrote:
+> Hello,
+> 
+> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> KASAN: slab-out-of-bounds Write in usb_hcd_poll_rh_status
+> 
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in memcpy include/linux/fortify-string.h:225 [inline]
+> BUG: KASAN: slab-out-of-bounds in usb_hcd_poll_rh_status+0x376/0x780 drivers/usb/core/hcd.c:774
+> Write of size 2 at addr ffff8880127f7028 by task syz-executor029/4082
 
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
----
- drivers/usb/gadget/legacy/inode.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Still not enough information.
 
-diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-index eaad03c0252f..25c8809e0a38 100644
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -1875,8 +1875,8 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
+Alan Stern
+
+
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ eec4df26e24e
+
+Index: usb-devel/drivers/usb/core/devio.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/devio.c
++++ usb-devel/drivers/usb/core/devio.c
+@@ -109,7 +109,7 @@ struct async {
+ 	u8 bulk_status;
+ };
  
- 	value = usb_gadget_probe_driver(&gadgetfs_driver);
- 	if (value != 0) {
--		kfree (dev->buf);
--		dev->buf = NULL;
-+		spin_lock_irq(&dev->lock);
-+		goto fail;
- 	} else {
- 		/* at this point "good" hardware has for the first time
- 		 * let the USB the host see us.  alternatively, if users
-@@ -1893,6 +1893,9 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 	return value;
+-static bool usbfs_snoop;
++static bool usbfs_snoop = true;
+ module_param(usbfs_snoop, bool, S_IRUGO | S_IWUSR);
+ MODULE_PARM_DESC(usbfs_snoop, "true to log all usbfs traffic");
  
- fail:
-+	dev->config = NULL;
-+	dev->hs_config = NULL;
-+	dev->dev = NULL;
- 	spin_unlock_irq (&dev->lock);
- 	pr_debug ("%s: %s fail %zd, %p\n", shortname, __func__, value, dev);
- 	kfree (dev->buf);
--- 
-2.25.1
+Index: usb-devel/drivers/usb/core/hcd.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/hcd.c
++++ usb-devel/drivers/usb/core/hcd.c
+@@ -771,6 +771,8 @@ void usb_hcd_poll_rh_status(struct usb_h
+ 			clear_bit(HCD_FLAG_POLL_PENDING, &hcd->flags);
+ 			hcd->status_urb = NULL;
+ 			urb->actual_length = length;
++			dev_info(hcd->self.controller, "poll_rh_status: len %d maxch %d tblen %d\n",
++					length, urb->dev->maxchild, urb->transfer_buffer_length);
+ 			memcpy(urb->transfer_buffer, buffer, length);
+ 
+ 			usb_hcd_unlink_urb_from_ep(hcd, urb);
+@@ -809,8 +811,10 @@ static int rh_queue_status (struct usb_h
+ 	unsigned	len = 1 + (urb->dev->maxchild / 8);
+ 
+ 	spin_lock_irqsave (&hcd_root_hub_lock, flags);
++	dev_info(hcd->self.controller, "rh_queue_status: len %d maxch %d tblen %d\n",
++			len, urb->dev->maxchild, urb->transfer_buffer_length);
+ 	if (hcd->status_urb || urb->transfer_buffer_length < len) {
+-		dev_dbg (hcd->self.controller, "not queuing rh status urb\n");
++		dev_info(hcd->self.controller, "not queuing rh status urb\n");
+ 		retval = -EINVAL;
+ 		goto done;
+ 	}
 
