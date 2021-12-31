@@ -2,41 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 182A448252A
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Dec 2021 17:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 069B8482531
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Dec 2021 17:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbhLaQch (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Dec 2021 11:32:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbhLaQcg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Dec 2021 11:32:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD33C061574
-        for <linux-usb@vger.kernel.org>; Fri, 31 Dec 2021 08:32:36 -0800 (PST)
+        id S229747AbhLaQfo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Dec 2021 11:35:44 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46564 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229489AbhLaQfo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Dec 2021 11:35:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BFA5617F3
-        for <linux-usb@vger.kernel.org>; Fri, 31 Dec 2021 16:32:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 778E3C36AEB
-        for <linux-usb@vger.kernel.org>; Fri, 31 Dec 2021 16:32:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77806B81D9C
+        for <linux-usb@vger.kernel.org>; Fri, 31 Dec 2021 16:35:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3D6EDC36AEC
+        for <linux-usb@vger.kernel.org>; Fri, 31 Dec 2021 16:35:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640968354;
-        bh=JZRs/eHrPB0NIAmOtDVwIYctAamLhzFncyb9eA6Vlwg=;
+        s=k20201202; t=1640968542;
+        bh=EOfNc0k7XVqdeGjc/w/YJHg9lwvx4MYHJJQduNpzkqo=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Irs5Io7EttnxA0WMjQQW40brFZp0xQ9t4QR5WqIwzSxJ1KVEQcAS1bz7w3dLfyzfG
-         Lu3JfOAQndaWQ8jV6D5NpKC4BRA/cPIULWaG5lmv6lpN/p/Ob8NsDo34EVnhZgs2MK
-         tlCf3NqlgV9z+2VW7vxl84vUdWTfXf0lY7ki6M9dou8MmhkUs08+2Gd2sWpo/L+VRX
-         GyK1so+u1WgFTjJTwFB8H9y7uliXx9NqaPwQa2AS+lLM7iqBD4vgshWaHy2WseaeSr
-         mvJiMMxQhzJOhePnQ+yr9H3/71RFho+0WdbO+Zr+3I4rOJfCKnTQfQCAYrQyRIPeSf
-         vIAI70K5vucyg==
+        b=FPuXS3yMDFNugKKMExX/zIXrRcWDwiuzVYDh89YKrkMWWCDLFTUI+o+WHXKE2r1fu
+         iW5x406AfB0Jxe8Kp/yiKViszjyKWjrsN4Vl4J0d/zAtXpBqQ1iM0hLDZ1BOX/bXNj
+         kL+OAMeCfl1LGvdEd0+cr2FONKZuevRHb1xHzTE6V1vjhbBB3b9GJGxMUb8H3bqmkZ
+         q4Euv9ri6wYTuqF7nCzeSxO0jbBikSjit/7ZMHY+hcjBoc7yRQedYh9RkidxiD+uHw
+         145w27XIPRFQ+dHdYl0nqK6nVUlAbior472b3vXfuAvNBo+bAdZzplH2H7DT4lO9SW
+         JCTBvvo2F3npQ==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 67287C05FCA; Fri, 31 Dec 2021 16:32:34 +0000 (UTC)
+        id 1536DC05FCF; Fri, 31 Dec 2021 16:35:42 +0000 (UTC)
 From:   bugzilla-daemon@bugzilla.kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 213839] XHCI 7 port usb hub does not work correctly
-Date:   Fri, 31 Dec 2021 16:32:34 +0000
+Date:   Fri, 31 Dec 2021 16:35:41 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -51,8 +48,8 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-213839-208809-uhxLKIFWxu@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-213839-208809-vrIt0eUqR4@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-213839-208809@https.bugzilla.kernel.org/>
 References: <bug-213839-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -66,10 +63,12 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D213839
 
---- Comment #8 from Jonathan McDowell (noodles@earth.li) ---
-Created attachment 300190
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D300190&action=3Dedit
-Plugged in under Linux, USB flash drive inserted into port on second hub
+--- Comment #9 from Jonathan McDowell (noodles@earth.li) ---
+Attached files are hopefully helpful. Capture is started, hub is plugged in,
+USB3 flash drive is then plugged into a port off the second hub chip. In the
+Windows case it's detected fine (you can see the flurry of USB Mass Storage
+requests), in the Linux case there's some sort of disconnect/reconnect event
+but the flash drive never appears.
 
 --=20
 You may reply to this email to add a comment.
