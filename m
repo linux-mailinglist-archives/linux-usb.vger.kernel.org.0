@@ -2,49 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 644CF4822A9
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Dec 2021 08:59:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8EAF4822D5
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Dec 2021 09:42:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242777AbhLaH7d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Dec 2021 02:59:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
+        id S230190AbhLaImr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Dec 2021 03:42:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbhLaH7c (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Dec 2021 02:59:32 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1084C061574
-        for <linux-usb@vger.kernel.org>; Thu, 30 Dec 2021 23:59:32 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id w80so5142843oie.9
-        for <linux-usb@vger.kernel.org>; Thu, 30 Dec 2021 23:59:32 -0800 (PST)
+        with ESMTP id S229862AbhLaImq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Dec 2021 03:42:46 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722C5C061574
+        for <linux-usb@vger.kernel.org>; Fri, 31 Dec 2021 00:42:46 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id g79-20020a9d12d5000000b0058f08f31338so35126653otg.2
+        for <linux-usb@vger.kernel.org>; Fri, 31 Dec 2021 00:42:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:in-reply-to:references:from:date:message-id:subject:to
          :cc;
-        bh=o1yKjUtXuqMwfKL+r25vO1BpedxL3qD37kreHXVHa98=;
-        b=dZc/VEmM5CZ3q8BbvEIXM9ph8c8muPWOLKgE07beOeqb3yzJwZ4I6/jU0IFEK7CX7C
-         C53vCX4gtscIHUXqKL1oJNt7FKgFSR9dYjAk/Fyg32Teocrwgn1ftIz93PZkIqjQS1Ge
-         usWGfQD1BLcFS3vl7/Y1h7JV+Zjf02kCAC60i+Q1e2Jf1LoA//In3l1sS5xMB8LRTDHh
-         tV1H+fPiquGEvQuezKyUHVM9JTbdBuZcQQhusbDNEFcV1hYHEtHpMSlghL9bl7c9voxl
-         ml0FNyk3EtE1PtJ7qd+5DUdkuu8FLkTr9d7g6EX0fJfgUVwTocoHSJjqQ0jCkGc0uz7B
-         tiUg==
+        bh=qTOytUq473R+pBT7+h/tdWFbanHJjfdgyn0SV70ZLxw=;
+        b=WAk7AEt47k53kbweFFrPi1oBrHdpUvcBQK7pCuRV2Cr3a0x69eXfJlHANjRH7g+2pW
+         OMAMZcQFHJ6DZkgMezCNOdBir+/7eU+KeNh9IPAkrccTo80tpDq3v/wibvj4lkOdbrEA
+         FYUDYXrOirpFGw0Qbucm83F9QhUa8smYC19jKaxH04hksSdanKN73YRAENsnMZniA/bd
+         +xNXi9XueAGk60Vfe+WarAg9G+Tak21DAJf33yO5pcVUZdatsKRUgVBPn2ePARvKzhwG
+         uCI8YM84YlFcYzVvAlZtmMfHgUIvXyipUIvH4Ua6Qox7xoqIbtWr2zvumRcWdezJlH/7
+         1Ukw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:in-reply-to:references:from:date
          :message-id:subject:to:cc;
-        bh=o1yKjUtXuqMwfKL+r25vO1BpedxL3qD37kreHXVHa98=;
-        b=eaAtK+R1QtaVbd+ltarYRc2y+KpJrQPv+0F0To/+uygUUOh+D1QHfLKWZl9sfF7o8P
-         LY8Nh/+ms0wl0tUXuadxu0tqEoZP0SjI8r5Yy7hzjgIE5tGQRWQ4CJJEBv6c0I9tSsJC
-         Wz7i7UVi8oQKJzCeP2ODS9YHF+NdizCWs+Sa2KF2Xy1NGNGoctNpSBcD00dCvaQk1dUB
-         j0IfCJsakOPiyy/BnP7NP36DnmcpZZG9fYBlg9sV1tUVklSHpYriyLQfQoVQccD6z7r/
-         TNY0HQZslUb4oJIzBRWqksTddMj8sinOo/l7ofZqgWAH8jTZa5tzAQdxMlwGOSkMCf0R
-         mbLw==
-X-Gm-Message-State: AOAM533s8xo/yCWg4QxlKj/UB+lxnuF1StowRRscYZhSoD8ygBelUc/B
-        JbJTS2h1b28lOpxcm0Lo6GH3qd7KafAvwE4h+do=
-X-Google-Smtp-Source: ABdhPJxUqgcInbS1q/hsXg0t+/9sXKiGEyMDFUoAIZ1NNt8jjxUKvRHVKykyB+9blqv7zopJkNKr2khKJ6VbBZ2tTsE=
-X-Received: by 2002:aca:911:: with SMTP id 17mr25685793oij.171.1640937571876;
- Thu, 30 Dec 2021 23:59:31 -0800 (PST)
+        bh=qTOytUq473R+pBT7+h/tdWFbanHJjfdgyn0SV70ZLxw=;
+        b=JYrJf5h1V4Fqo8vI2fM2p3uL3mMKwiIhjNvTup3V+pUjaQQ/XQMrB5NN+g8FuoPMCB
+         IADCW8hht0eBP3VWm7HiiM08NI6pV11pV/X3Adi6uLUXTpXeX1mnF/GslbhSRFfx3tAr
+         6GtgLQpltUscQf7xI2V63BE0hwcQG1he86+5eiXdJzgAi6vFAWZA9MihOyXg5jL3jN9h
+         duqQZBx3obmMp8ehA3yBzvWq+7i1fki6ALm/ehmyxoddYhb3pfnmGTa/XD/9sNA5366L
+         LsTG/XtouslGxaRyegJHnhYss9/tXsZVHWKD3bYl7wt9QRUICiDMfReUMSTNlVHyOcJP
+         Zt9g==
+X-Gm-Message-State: AOAM530175qKHNAeRWPbhuQXXX1MT/MlbPjxH9BPsuYBdtalsXToMbjW
+        15gb0VZlQXdngRdOSIkVKWDsFBlV+CgR5WIyO8I=
+X-Google-Smtp-Source: ABdhPJzNtzO0eqOqFQneCpbuVimy+226rZotvDg7XkhVnoYHP9RcfsniekvKqCYVnMtqiNobFqUbfoA3WYIDodrMh6w=
+X-Received: by 2002:a05:6830:18e5:: with SMTP id d5mr22719216otf.170.1640940165516;
+ Fri, 31 Dec 2021 00:42:45 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a9d:4007:0:0:0:0:0 with HTTP; Thu, 30 Dec 2021 23:59:31
+Received: by 2002:a9d:4007:0:0:0:0:0 with HTTP; Fri, 31 Dec 2021 00:42:44
  -0800 (PST)
 In-Reply-To: <ae6d47c7-68f2-e482-c6ef-d2c63e2a9057@synopsys.com>
 References: <f5bca159-e8de-3c76-c2b4-6f4efa001fd9@linux.intel.com>
@@ -54,8 +54,8 @@ References: <f5bca159-e8de-3c76-c2b4-6f4efa001fd9@linux.intel.com>
  <1d63d954-13fb-f9c6-b2e7-d350ace2aa5a@synopsys.com> <CAOzgRdbgepUHKCmg8wR0s0bvYyuWNachi_EP6c9n_mRvQkXmGw@mail.gmail.com>
  <ae6d47c7-68f2-e482-c6ef-d2c63e2a9057@synopsys.com>
 From:   youling 257 <youling257@gmail.com>
-Date:   Fri, 31 Dec 2021 15:59:31 +0800
-Message-ID: <CAOzgRdaLM-M0K8B=GPK8httVnuXSSPOfD_d5sG_Fkt17jGJiWA@mail.gmail.com>
+Date:   Fri, 31 Dec 2021 16:42:44 +0800
+Message-ID: <CAOzgRdZ7ME2AY4iJq6mXb8TyBcrJLYHEKSAteTVjDPjPRcF9Hg@mail.gmail.com>
 Subject: Re: USB 3.2 Gen 2x2 "Superspeed+20GBps" support for ASM3242
 To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 Cc:     Greg KH <gregkh@linuxfoundation.org>,
@@ -111,16 +111,27 @@ X-Mailing-List: linux-usb@vger.kernel.org
 >
 > 1) Are you using the same application to test on Linux to compare with
 > Windows? (Looks like you're using CrystalDiskMark for your Windows test)
-linux kdiskmark, windows crystaldiskmark
+>
 > 2) If you're using the same application, are you using the same test
 > parameters and version?
-kdiskmark and crystaldiskmark used same parameters, seq1M Q8T1, linux
-500MB/s, windows 1000MB/s.
+>
 > 3) Is your device operating in BOT or UASP in Linux? UAS Protocol is
+my kernel config #CONFIG_USB_UAS is not set.
 > generally faster. Newer device generally uses UASP, and I assume yours
 > is a newer device (check your enclosure). Make sure there's no quirk
 > preventing the device operating in UASP.
->
+CONFIG_USB_UAS=y
+[  524.630081] usb 4-1: new SuperSpeed Plus Gen 2x1 USB device number
+5 using xhci_hcd
+[  524.747496] scsi host9: uas
+[  524.757580] scsi 9:0:0:0: Direct-Access     Realtek  USB 3.2 Device
+  1.00 PQ: 0 ANSI: 6
+Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/1p, 20000M/x2
+    |__ Port 1: Dev 2, If 0, Class=Mass Storage, Driver=uas, 10000M
+
+windows fat32 speed, https://imgur.com/a/eq9qhKj
+linux ext4 speed, https://imgur.com/a/tUAskgV
+
 > If all of those are checked out, you can start capturing logs so others
 > may look into it.
 >
