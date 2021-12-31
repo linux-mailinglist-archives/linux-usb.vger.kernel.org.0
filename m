@@ -2,205 +2,225 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A65148220D
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Dec 2021 05:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51EF3482218
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Dec 2021 06:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242702AbhLaEwt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Dec 2021 23:52:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237595AbhLaEwt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Dec 2021 23:52:49 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55DE2C061574
-        for <linux-usb@vger.kernel.org>; Thu, 30 Dec 2021 20:52:49 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id x10so38153876oix.6
-        for <linux-usb@vger.kernel.org>; Thu, 30 Dec 2021 20:52:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=zdFfgl4bfGXdDlY5mJ6nRAz6XcG501IxlOjVRTmGFjY=;
-        b=PPwJCTFhgYysFQuPVON4VEzEjyFtkLDojGTvCWroOVZiSwR4s4AS/MWKmOVeoyQcCI
-         NtJapW77xP95BADO8QZQ3yd+NQ1ZTln+ohY+zB/gZk2/dzZdfvUrnl0nNLcrQRCsUOGQ
-         OLtioQVRtlL1FoOhuy26zgqxApyfWUh1wjkuMbIoPmUFWi7N/9xE2CA092sUyh21W+Mk
-         +U64KujAR7S+TZRqUb6IaLpGiK9hdI3dtw8bG6WU7t1Phft0uabO6928H2uw4zgpExQj
-         57Acu/anxtjpIbyuoN8O4TW3B1TacZsu1pWyyW7+zj1SWrbXToLYYmW0Yq0gJHGKD/NX
-         315A==
+        id S231335AbhLaFYK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Dec 2021 00:24:10 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:35754 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229530AbhLaFYJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Dec 2021 00:24:09 -0500
+Received: by mail-il1-f197.google.com with SMTP id z17-20020a926511000000b002b43c84f5d3so15311707ilb.2
+        for <linux-usb@vger.kernel.org>; Thu, 30 Dec 2021 21:24:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=zdFfgl4bfGXdDlY5mJ6nRAz6XcG501IxlOjVRTmGFjY=;
-        b=cxda/HAn8TmrfayI+MTaMk2ADhQSxDiFKJ+++v868GLhUySp+TGq9K3wFk3Orczk+Q
-         3AksAKFqfp3x3NUu9wuRz8k5eO7tZ0FVJdWe6CJ/d4OfwsxhYQyzCcoaLhAs6OLdKEYE
-         k4TbzDxoeS8+/pTWKucliaTaJ3d3aEOoYIk2EZlF3QTQz+SkAA1JbAGTRKfXZdE/wb7D
-         3y4WrW07iZALZvsrppW7/09A72AxOtPUOXpN4pRcqVtKQ+mMe1wuQWN9CCdRGVlhKSOJ
-         ANFCHDGKbQkgUISUreKUehxnUGemMX67NkmK88h3Mhi8R0HovOyBk1A3Yv56Mz48RZJk
-         3MGg==
-X-Gm-Message-State: AOAM532kVP06IWeTixPFO/3E6pHQ3Ez6/2st3lCTar+DRyT6Vl5I224M
-        UvkDyTsr1M1ctjlS5hzeW+5ARBX21ER2USsn7SA=
-X-Google-Smtp-Source: ABdhPJwLLbdYY7yjzOYNga/rlzzYgsPc1/u70yXkFk66kmzeFWycSF6iNYOKGYL5pJBV5mL/zGGqmdSS4ZIYWKP85Xk=
-X-Received: by 2002:aca:3015:: with SMTP id w21mr26161281oiw.50.1640926368585;
- Thu, 30 Dec 2021 20:52:48 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=IkitvZIFSTodLJerc5oqUI4seoeb7G2l7EKW1JOQgTc=;
+        b=kNza79k2JdXrlpq85lcoHHCTxKUm7fJ/SZ/J2jsprGGZSwZe/7aOZKQsyXdFkMfxgK
+         wRvavuAqLj7Kxgt5YAyplCDwB+4uxHES2NDkkIly5a7XWYQy+DNm1bkpzacMlIkPoNAn
+         NbOG+8NIIuoOdVAwmug+WPe6cmbq1eMLvrjI1zcPUvwxc+E840FoFG6hlaof7/O+qUcl
+         /+6EU41J29uQ21kQ9yK72jwRzA7kfoik4sbNS9GJ4xuYRda6ojPUcE3+VfqVAd+XfIkm
+         3uEhyzLJqp4AQUNRqlAstvNDdqFR5JyPViLhivpZ/1196gxais1ae55TZ3iwB+OjIZyw
+         yu8A==
+X-Gm-Message-State: AOAM530mB9Bf9hW4yVwaMB8Jp/XMiJVkVLn5SDvSuv/p3/lhBvT+zVt+
+        DfKU1MjLlcPSH/q+iTMTV1np7QcC6ViLVg0q6ZzGwsyufa20
+X-Google-Smtp-Source: ABdhPJy/XyrHPjwaZkRNOAfreAvokHqF9MWRU5nnNdjUFuN4bkRbWnN31us+k1VU2QZuzsozUuc3M+ED3o8sx8YZulmvy+ceYY8+
 MIME-Version: 1.0
-Received: by 2002:a9d:4007:0:0:0:0:0 with HTTP; Thu, 30 Dec 2021 20:52:48
- -0800 (PST)
-In-Reply-To: <1d63d954-13fb-f9c6-b2e7-d350ace2aa5a@synopsys.com>
-References: <f5bca159-e8de-3c76-c2b4-6f4efa001fd9@linux.intel.com>
- <20211230131014.21886-1-youling257@gmail.com> <Yc20WPbIad44/3rd@kroah.com>
- <CAOzgRdbeQ69pWbagFwTvV4ZcYGBE5GkwdqcuxxGFLXBJSy-GMA@mail.gmail.com>
- <6908aa69-469b-8f92-8e19-60685f524f9c@synopsys.com> <CAOzgRdb+Ru8AL=wUquysbqd8uGkNSDzSNfOSW3Fs2Pd6BGxo1w@mail.gmail.com>
- <1d63d954-13fb-f9c6-b2e7-d350ace2aa5a@synopsys.com>
-From:   youling 257 <youling257@gmail.com>
-Date:   Fri, 31 Dec 2021 12:52:48 +0800
-Message-ID: <CAOzgRdbgepUHKCmg8wR0s0bvYyuWNachi_EP6c9n_mRvQkXmGw@mail.gmail.com>
-Subject: Re: USB 3.2 Gen 2x2 "Superspeed+20GBps" support for ASM3242
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "william.allentx@gmail.com" <william.allentx@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+X-Received: by 2002:a05:6638:3454:: with SMTP id q20mr14928132jav.77.1640928249236;
+ Thu, 30 Dec 2021 21:24:09 -0800 (PST)
+Date:   Thu, 30 Dec 2021 21:24:09 -0800
+In-Reply-To: <Yc5rgUo8dyJKX98M@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000065d16005d46a614b@google.com>
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in usb_hcd_poll_rh_status
+ (2)
+From:   syzbot <syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, dvyukov@google.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-2021-12-31 11:46 GMT+08:00, Thinh Nguyen <Thinh.Nguyen@synopsys.com>:
-> Hi,
->
-> youling 257 wrote:
->> test this patch, cat /sys/bus/usb/devices/4-1/speed, 10000
->> [   74.694284] usb 4-1: new SuperSpeed Plus Gen 2x1 USB device number
->> 2 using xhci_hcd
->> [   74.750329] usb-storage 4-1:1.0: USB Mass Storage device detected
->>
->> but speed, pcie to usb3.2 gen2x2, WRITE: bw=642MiB/s (673MB/s),
->> 642MiB/s-642MiB/s (673MB/s-673MB/s), io=1000MiB (1049MB),
->> run=1557-1557msec
->> READ: bw=467MiB/s (490MB/s), 467MiB/s-467MiB/s (490MB/s-490MB/s),
->> io=1000MiB (1049MB), run=2140-2140msec
->>
->> the mainboard usb3.2 gen2x1, WRITE: bw=838MiB/s (878MB/s),
->> 838MiB/s-838MiB/s (878MB/s-878MB/s), io=1000MiB (1049MB),
->> run=1194-1194msec
->> READ: bw=753MiB/s (790MB/s), 753MiB/s-753MiB/s (790MB/s-790MB/s),
->> io=1000MiB (1049MB), run=1328-1328msec
->>
->
-> Let's avoid top-post.
->
-> Some comments:
-> 1) Just because the host is capable of gen2x2, it doesn't mean it will
-> run at gen2x2 speed. Your device can only operate up to gen2x1 speed, so
-> that's the limit. The test speed for gen2x1 above is not unreasonable.
-my device can only operate up to gen2x1 10gbps speed on window, only
-5gbps on linux kernel 5.16rc7.
-> 2) You're comparing 2 different controllers performance. The "mainboard"
-> performs better for the specific setup and specific test that you use.
-> (I'm assuming that the only difference in your test setup is the host
-> controller and rest is the same).
->
-> 3) Find a gen2x2 capable device to test ASmedia gen2x2 speed if that's
-> what you're checking for.
->
-> BR,
-> Thinh
->
->> 2021-12-31 9:39 GMT+08:00, Thinh Nguyen <Thinh.Nguyen@synopsys.com>:
->>> Hi,
->>>
->>> youling 257 wrote:
->>>> 2021-12-30 21:30 GMT+08:00, Greg KH <gregkh@linuxfoundation.org>:
->>>>> On Thu, Dec 30, 2021 at 09:10:14PM +0800, youling257 wrote:
->>>>>> where i can find the series patch?
->>>>>> https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-usb/list/?series=427561__;!!A4F2R9G_pg!M_zXKjO1JtIkz57qZ7BEEL7zjx2QXQTfau26hBNLX7bKEL_vOP-m8Xn1eZ14VRpY-0Ga$
->>>>>>
->>>>>
->>>>> There is nothing at that link.
->>>>>
->>>>> What is the lore.kernel.org link for the patch you are curious about?
->>>>>
->>>>>> when i used maiwo k1690(10gbps) connect to ASM3242 Controller, only
->>>>>> 500MB/s.
->>>>>> cat /sys/devices/pci0000:00/0000:00:01.3/0000:09:00.0/usb3/speed, 480
->>>>>> cat /sys/devices/pci0000:00/0000:00:01.3/0000:09:00.0/usb4/speed,
->>>>>> 20000
->>>>>> maiwo k1690 is on
->>>>>> /sys/devices/pci0000:00/0000:00:01.3/0000:09:00.0/usb4/4-1.
->>>>>> cat /sys/devices/pci0000:00/0000:00:01.3/0000:09:00.0/usb4/4-1/speed,
->>>>>> 5000
->>>>>>
->>>>>>
->>>>>> 01:00.0 USB controller: ASMedia Technology Inc. ASM3242 USB 3.2 Host
->>>>>> Controller (prog-if 30 [XHCI])
->>>>>>         Subsystem: ASMedia Technology Inc. ASM3242 USB 3.2 Host
->>>>>> Controller
->>>>>>
->>>>>> [    0.359281] xhci_hcd 0000:01:00.0: xHCI Host Controller
->>>>>> [    0.359283] xhci_hcd 0000:01:00.0: new USB bus registered,
->>>>>> assigned
->>>>>> bus
->>>>>> number 2
->>>>>> [    0.359285] xhci_hcd 0000:01:00.0: Host supports USB 3.2 Enhanced
->>>>>> SuperSpeed
->>>>>>
->>>>>> [ 1191.734123] usb 4-1: new SuperSpeed USB device number 2 using
->>>>>> xhci_hcd
->>>>>> [ 1191.794767] usb-storage 4-1:1.0: USB Mass Storage device detected
->>>>>> [ 1191.795049] scsi host9: usb-storage 4-1:1.0
->>>>>> [ 1051.051274] scsi 9:0:0:0: Direct-Access     Realtek  USB 3.2
->>>>>> Device
->>>>>> 1.00 PQ: 0 ANSI: 6
->>>>>> [ 1051.051442] sd 9:0:0:0: Attached scsi generic sg0 type 0
->>>>>> [ 1051.054461] sd 9:0:0:0: [sda] 500118192 512-byte logical blocks:
->>>>>> (256
->>>>>> GB/238 GiB)
->>>>>> [ 1051.055068] sd 9:0:0:0: [sda] Write Protect is off
->>>>>> [ 1051.055073] sd 9:0:0:0: [sda] Mode Sense: 37 00 00 08
->>>>>> [ 1051.055716] sd 9:0:0:0: [sda] Write cache: disabled, read cache:
->>>>>> enabled, doesn't support DPO or FUA
->>>>>> [ 1051.072131]  sda: sda1 sda2
->>>>>>
->>>>>> i don't have NVMe to USB 2x2 Enclosure (ASM2364 chipset), i have NVMe
->>>>>> to
->>>>>> USB 2x1 Enclosure (RTL9120B chipset), maiwo k1690, using it on
->>>>>> PciExpress
->>>>>> X4 add in card (ASM3242 chipset), it only 5Gbps speed, should be
->>>>>> 10Gbps.
->>>>>>
->>>>>
->>>>> Are you sure that your hardware can really support this?  Do you have
->>>>> the right cable and the device will support this speed?
->>>> 02:00.0 USB controller: Advanced Micro Devices, Inc. [AMD] 400 Series
->>>> Chipset USB 3.1 XHCI Controller (rev 01) (prog-if 30 [XHCI])
->>>>         Subsystem: ASMedia Technology Inc. 400 Series Chipset USB 3.1
->>>> XHCI Controller
->>>>
->>>> maiwo k1690 connect to mainboard usb3.2 gen2x1 port can 10gbps.
->>>> [ 1049.965556] usb 2-2: new SuperSpeed Plus Gen 2x1 USB device number
->>>> 2 using xhci_hcd
->>>> [ 1050.028280] usb-storage 2-2:1.0: USB Mass Storage device detected
->>>> [ 1050.028560] scsi host9: usb-storage 2-2:1.0
->>>>
->>>> pcie to usb3.2 gen2x2 asm3242 should be compatible usb3.2 gen2x1.
->>>> I don't have windows os to test them, may be 5gbps on windows yet.
->>>> Is there a way to hack them to 10Gbps on linux?
->>>>
->>>>> And most important, what kernel version are you using?
->>>> kernel 5.16 rc7.
->>>>> thanks,
->>>>>
->>>>> greg k-h
->>>>>
->>>
->>> The ASmedia host controller incorrectly reports the speed ID in the
->>> port-status mismatching with its PSI capability for SSP devices. As
->>> a result, the host/hub driver will report the wrong speed.
->>>
->>> To resolve/workaround this, the xHCI driver can capture the device speed
->>> from sublink speed notification of a SSP device. All SSP devices must
->>> send sublink speed device notification, so this method should resolve
->>> your issue.
->>>
->
+Hello,
+
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KASAN: slab-out-of-bounds Write in usb_hcd_poll_rh_status
+
+==================================================================
+BUG: KASAN: slab-out-of-bounds in memcpy include/linux/fortify-string.h:225 [inline]
+BUG: KASAN: slab-out-of-bounds in usb_hcd_poll_rh_status+0x376/0x780 drivers/usb/core/hcd.c:774
+Write of size 2 at addr ffff8880127f7028 by task syz-executor029/4082
+
+CPU: 1 PID: 4082 Comm: syz-executor029 Not tainted 5.16.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0x8d/0x320 mm/kasan/report.c:247
+ __kasan_report mm/kasan/report.c:433 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:450
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ memcpy+0x39/0x60 mm/kasan/shadow.c:66
+ memcpy include/linux/fortify-string.h:225 [inline]
+ usb_hcd_poll_rh_status+0x376/0x780 drivers/usb/core/hcd.c:774
+ call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
+ expire_timers kernel/time/timer.c:1466 [inline]
+ __run_timers.part.0+0x67c/0xa30 kernel/time/timer.c:1734
+ __run_timers kernel/time/timer.c:1715 [inline]
+ run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1747
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+ invoke_softirq kernel/softirq.c:432 [inline]
+ __irq_exit_rcu+0x123/0x180 kernel/softirq.c:637
+ irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
+ sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1097
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:638
+RIP: 0010:__raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:152 [inline]
+RIP: 0010:_raw_spin_unlock_irqrestore+0x38/0x70 kernel/locking/spinlock.c:194
+Code: 74 24 10 e8 aa db 15 f8 48 89 ef e8 62 51 16 f8 81 e3 00 02 00 00 75 25 9c 58 f6 c4 02 75 2d 48 85 db 74 01 fb bf 01 00 00 00 <e8> a3 1b 09 f8 65 8b 05 bc a0 bb 76 85 c0 74 0a 5b 5d c3 e8 d0 02
+RSP: 0018:ffffc9000283f8b0 EFLAGS: 00000206
+RAX: 0000000000000002 RBX: 0000000000000200 RCX: 1ffffffff1b22571
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000001
+RBP: ffffffff8ca3bc60 R08: 0000000000000001 R09: 0000000000000001
+R10: ffffffff817dd258 R11: 0000000000000000 R12: ffff88801cffc240
+R13: ffff88801dba4000 R14: ffff88801dba4180 R15: 0000000000000000
+ spin_unlock_irqrestore include/linux/spinlock.h:404 [inline]
+ rh_queue_status drivers/usb/core/hcd.c:834 [inline]
+ rh_urb_enqueue drivers/usb/core/hcd.c:841 [inline]
+ usb_hcd_submit_urb+0x155c/0x2300 drivers/usb/core/hcd.c:1546
+ usb_submit_urb+0x86d/0x18a0 drivers/usb/core/urb.c:594
+ usbfs_start_wait_urb+0x128/0x3d0 drivers/usb/core/devio.c:1125
+ do_proc_bulk+0x535/0xba0 drivers/usb/core/devio.c:1313
+ proc_bulk drivers/usb/core/devio.c:1351 [inline]
+ usbdev_do_ioctl drivers/usb/core/devio.c:2625 [inline]
+ usbdev_ioctl+0x586/0x36c0 drivers/usb/core/devio.c:2791
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:874 [inline]
+ __se_sys_ioctl fs/ioctl.c:860 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fe659509799
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fffbcc163b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007fe65954d098 RCX: 00007fe659509799
+RDX: 0000000020000240 RSI: 00000000c0185502 RDI: 0000000000000006
+RBP: 00007fffbcc163e0 R08: 00007fffbcc15e30 R09: 0000000000000000
+R10: 000000000000ffff R11: 0000000000000246 R12: 0000000000012b3a
+R13: 00007fffbcc163c4 R14: 00007fffbcc163e0 R15: 00007fffbcc163d0
+ </TASK>
+
+Allocated by task 4082:
+ kasan_save_stack+0x1e/0x50 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:46 [inline]
+ set_alloc_info mm/kasan/common.c:434 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:513 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:472 [inline]
+ __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:522
+ kmalloc include/linux/slab.h:595 [inline]
+ do_proc_bulk+0x2fc/0xba0 drivers/usb/core/devio.c:1292
+ proc_bulk drivers/usb/core/devio.c:1351 [inline]
+ usbdev_do_ioctl drivers/usb/core/devio.c:2625 [inline]
+ usbdev_ioctl+0x586/0x36c0 drivers/usb/core/devio.c:2791
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:874 [inline]
+ __se_sys_ioctl fs/ioctl.c:860 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+The buggy address belongs to the object at ffff8880127f7028
+ which belongs to the cache kmalloc-8 of size 8
+The buggy address is located 0 bytes inside of
+ 8-byte region [ffff8880127f7028, ffff8880127f7030)
+The buggy address belongs to the page:
+page:ffffea000049fdc0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x127f7
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 dead000000000100 dead000000000122 ffff888010c41280
+raw: 0000000000000000 0000000080660066 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 1, ts 2292076002, free_ts 0
+ prep_new_page mm/page_alloc.c:2418 [inline]
+ get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4149
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5369
+ alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2036
+ alloc_pages+0x29f/0x300 mm/mempolicy.c:2185
+ alloc_slab_page mm/slub.c:1793 [inline]
+ allocate_slab mm/slub.c:1930 [inline]
+ new_slab+0x32d/0x4a0 mm/slub.c:1993
+ ___slab_alloc+0x918/0xfe0 mm/slub.c:3022
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3109
+ slab_alloc_node mm/slub.c:3200 [inline]
+ slab_alloc mm/slub.c:3242 [inline]
+ __kmalloc+0x2fb/0x340 mm/slub.c:4419
+ acpi_ns_internalize_name drivers/acpi/acpica/nsutils.c:331 [inline]
+ acpi_ns_internalize_name+0xf2/0x1a1 drivers/acpi/acpica/nsutils.c:312
+ acpi_ns_get_node_unlocked drivers/acpi/acpica/nsutils.c:666 [inline]
+ acpi_ns_get_node_unlocked+0x1d8/0x278 drivers/acpi/acpica/nsutils.c:635
+ acpi_ns_get_node+0x4b/0x6a drivers/acpi/acpica/nsutils.c:726
+ acpi_get_handle+0x129/0x211 drivers/acpi/acpica/nsxfname.c:98
+ acpi_has_method+0x6e/0xb0 drivers/acpi/utils.c:553
+ acpi_is_video_device+0x154/0x210 drivers/acpi/scan.c:1226
+ acpi_set_pnp_ids drivers/acpi/scan.c:1365 [inline]
+ acpi_init_device_object+0xee0/0x1a60 drivers/acpi/scan.c:1747
+ acpi_add_single_object+0xe4/0x1aa0 drivers/acpi/scan.c:1793
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffff8880127f6f00: fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc fc
+ ffff8880127f6f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff8880127f7000: fb fc fc fc fc 01 fc fc fc fc fa fc fc fc fc 00
+                                  ^
+ ffff8880127f7080: fc fc fc fc fa fc fc fc fc fa fc fc fc fc fa fc
+ ffff8880127f7100: fc fc fc fa fc fc fc fc fa fc fc fc fc fa fc fc
+==================================================================
+----------------
+Code disassembly (best guess):
+   0:	74 24                	je     0x26
+   2:	10 e8                	adc    %ch,%al
+   4:	aa                   	stos   %al,%es:(%rdi)
+   5:	db 15 f8 48 89 ef    	fistl  -0x1076b708(%rip)        # 0xef894903
+   b:	e8 62 51 16 f8       	callq  0xf8165172
+  10:	81 e3 00 02 00 00    	and    $0x200,%ebx
+  16:	75 25                	jne    0x3d
+  18:	9c                   	pushfq
+  19:	58                   	pop    %rax
+  1a:	f6 c4 02             	test   $0x2,%ah
+  1d:	75 2d                	jne    0x4c
+  1f:	48 85 db             	test   %rbx,%rbx
+  22:	74 01                	je     0x25
+  24:	fb                   	sti
+  25:	bf 01 00 00 00       	mov    $0x1,%edi
+* 2a:	e8 a3 1b 09 f8       	callq  0xf8091bd2 <-- trapping instruction
+  2f:	65 8b 05 bc a0 bb 76 	mov    %gs:0x76bba0bc(%rip),%eax        # 0x76bba0f2
+  36:	85 c0                	test   %eax,%eax
+  38:	74 0a                	je     0x44
+  3a:	5b                   	pop    %rbx
+  3b:	5d                   	pop    %rbp
+  3c:	c3                   	retq
+  3d:	e8                   	.byte 0xe8
+  3e:	d0 02                	rolb   (%rdx)
+
+
+Tested on:
+
+commit:         eec4df26 Merge tag 's390-5.16-6' of git://git.kernel.o..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+console output: https://syzkaller.appspot.com/x/log.txt?x=12ab1f85b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1a86c22260afac2f
+dashboard link: https://syzkaller.appspot.com/bug?extid=3ae6a2b06f131ab9849f
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14522335b00000
+
