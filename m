@@ -2,47 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CF14825C6
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Dec 2021 21:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B010B4825BE
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Dec 2021 21:30:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231693AbhLaUd4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Dec 2021 15:33:56 -0500
-Received: from mail.osorio.rs.gov.br ([177.73.0.123]:54794 "EHLO
-        mail.osorio.rs.gov.br" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbhLaUdz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Dec 2021 15:33:55 -0500
-Received: by mail.osorio.rs.gov.br (Postfix, from userid 999)
-        id D637648AC97C; Fri, 31 Dec 2021 16:19:07 -0200 (BRST)
-Received: from localhost (nac.osorio.rs.gov.br [127.0.0.1])
-        by nac (Postfix) with SMTP id 3BA064879670;
-        Fri, 31 Dec 2021 15:26:19 -0200 (BRST)
-Received: from User (unknown [84.38.132.16])
-        by mail.osorio.rs.gov.br (Postfix) with ESMTP id 54C49488CF15;
-        Fri, 31 Dec 2021 13:16:01 -0200 (BRST)
-Reply-To: <andbaill228@mail2world.com>
-From:   "Ads" <projetos@gov.br>
-Subject: Very Importante Notice
-Date:   Fri, 31 Dec 2021 16:31:24 +0200
+        id S231664AbhLaUas (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Dec 2021 15:30:48 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:57477 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S231646AbhLaUas (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Dec 2021 15:30:48 -0500
+Received: (qmail 1137662 invoked by uid 1000); 31 Dec 2021 15:30:47 -0500
+Date:   Fri, 31 Dec 2021 15:30:47 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, dvyukov@google.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in
+ usb_hcd_poll_rh_status (2)
+Message-ID: <Yc9odypVqqB2uMm/@rowland.harvard.edu>
+References: <Yc8+zLP8KTB8gT71@rowland.harvard.edu>
+ <000000000000af950605d474b781@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20211231151601.54C49488CF15@mail.osorio.rs.gov.br>
-To:     undisclosed-recipients:;
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000af950605d474b781@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Sir/Madam,
+On Fri, Dec 31, 2021 at 09:44:06AM -0800, syzbot wrote:
+> Hello,
+> 
+> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> KASAN: slab-out-of-bounds Write in usb_hcd_poll_rh_status
+> 
+> vhci_hcd vhci_hcd.0: poll_rh_status: len 2 maxch 0 tblen 1
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in memcpy include/linux/fortify-string.h:225 [inline]
+> BUG: KASAN: slab-out-of-bounds in usb_hcd_poll_rh_status+0x5f4/0x780 drivers/usb/core/hcd.c:776
+> Write of size 2 at addr ffff88801da403c0 by task syz-executor133/4062
 
-Good day to you.
+I think I understand the problem.  This patch is intended to fix it.
 
-I am Dr.Gertjan Vlieghe personal Secretary to Andrew Bailey who double as the Governor, Bank of England (https://en.wikipedia.org/wiki/Andrew_Bailey_%28banker%29). We have an inheritance of a deceased client, who bear the same name  with your surname. kindly contact Andrew Bailey through his personal email (andbaill228@mail2world.com) with your details for more information.
+Alan Stern
 
-Thank you.
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ eec4df26e24e
 
-Dr.Gertjan Vlieghe
+Index: usb-devel/drivers/usb/core/hcd.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/hcd.c
++++ usb-devel/drivers/usb/core/hcd.c
+@@ -753,6 +753,7 @@ void usb_hcd_poll_rh_status(struct usb_h
+ {
+ 	struct urb	*urb;
+ 	int		length;
++	int		status;
+ 	unsigned long	flags;
+ 	char		buffer[6];	/* Any root hubs with > 31 ports? */
+ 
+@@ -770,11 +771,17 @@ void usb_hcd_poll_rh_status(struct usb_h
+ 		if (urb) {
+ 			clear_bit(HCD_FLAG_POLL_PENDING, &hcd->flags);
+ 			hcd->status_urb = NULL;
++			if (urb->transfer_buffer_length >= length) {
++				status = 0;
++			} else {
++				status = -EOVERFLOW;
++				length = urb->transfer_buffer_length;
++			}
+ 			urb->actual_length = length;
+ 			memcpy(urb->transfer_buffer, buffer, length);
+ 
+ 			usb_hcd_unlink_urb_from_ep(hcd, urb);
+-			usb_hcd_giveback_urb(hcd, urb, 0);
++			usb_hcd_giveback_urb(hcd, urb, status);
+ 		} else {
+ 			length = 0;
+ 			set_bit(HCD_FLAG_POLL_PENDING, &hcd->flags);
