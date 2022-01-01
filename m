@@ -2,83 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CC0482841
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Jan 2022 19:51:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1386D482865
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Jan 2022 21:11:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbiAASvp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Jan 2022 13:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiAASvo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jan 2022 13:51:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6319C061574
-        for <linux-usb@vger.kernel.org>; Sat,  1 Jan 2022 10:51:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5701F60B6F
-        for <linux-usb@vger.kernel.org>; Sat,  1 Jan 2022 18:51:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BB585C36AED
-        for <linux-usb@vger.kernel.org>; Sat,  1 Jan 2022 18:51:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641063103;
-        bh=g24k5Tdp5hDcD5Ep+WGVZsQdC0U4WMIPCet/DTyGKjo=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=ouBWnZQDT2eDTKZwMzcrTPA21HFjEG/y+xLDwrmQyzD9eoAmP1g5apYv6Xx9Mr92Y
-         84O5dqRh0hs23RUjh4ENnQNyd2eZ2YnKAmONMOmngQ3nRgxmG0gTwqrUTL+kYuBDGT
-         Q6pKXkGCmgnFKutkW+QE14qMK1vJRptUw+JgD06e3Lmmns8N13IyiDf19X/kBT6fkx
-         Ipibz7pokUf7KMZjjPFjdXQnUibNd4w8yDX2J7uRKPOJNvw6YzKxqtASHPSedbfhIe
-         2/G94lPzits97YU2iGFsVgVkXheFe0dUAJC0o6cck8/o5jwaFxbYln0IqZx4gYejel
-         Qyjsf7/3PtZNQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id A000BC04E57; Sat,  1 Jan 2022 18:51:43 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
+        id S232660AbiAAULY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Jan 2022 15:11:24 -0500
+Received: from fs-relay10.fsi.ne.jp ([219.99.167.74]:56990 "EHLO
+        fs-relay10.fsi.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232578AbiAAULY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jan 2022 15:11:24 -0500
+X-Greylist: delayed 1834 seconds by postgrey-1.27 at vger.kernel.org; Sat, 01 Jan 2022 15:11:24 EST
+Received: from fsi.ne.jp (check09.fsi.ne.jp [219.99.173.15])
+        by fs-relay10.fsi.ne.jp (Postfix) with ESMTP id 1784140F1AC8
+        for <linux-usb@vger.kernel.org>; Sun,  2 Jan 2022 04:40:48 +0900 (JST)
+Received: from check09.fsi.ne.jp (check09.fsi.ne.jp [127.0.0.1])
+        by pps.spam (8.16.0.36/8.16.0.36) with SMTP id 201Jembi020502
+        for <linux-usb@vger.kernel.org>; Sun, 2 Jan 2022 04:40:48 +0900
+Received: from fs-gw01.fsi.ne.jp (fs-gw01.fsi.ne.jp [219.99.161.22])
+        by check09.fsi.ne.jp with ESMTP id 3daruhg9nu-1
+        for <linux-usb@vger.kernel.org>; Sun, 02 Jan 2022 04:40:48 +0900
+Received: from sv2.linxs.co.jp (unknown [219.99.164.152])
+        by fs-gw01.fsi.ne.jp (Postfix) with ESMTP id EA4AA4059AA3
+        for <linux-usb@vger.kernel.org>; Sun,  2 Jan 2022 04:40:47 +0900 (JST)
+Received: by sv2.linxs.co.jp (Postfix, from userid 1116)
+        id E552348AF338D; Sun,  2 Jan 2022 04:40:47 +0900 (JST)
 To:     linux-usb@vger.kernel.org
-Subject: [Bug 213839] XHCI 7 port usb hub does not work correctly
-Date:   Sat, 01 Jan 2022 18:51:43 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: noodles@earth.li
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-213839-208809-oEVs9MjOBW@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-213839-208809@https.bugzilla.kernel.org/>
-References: <bug-213839-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+Subject: =?UTF-8?B?44GK5ZWP44GE5ZCI44KP44Gb44KS5Y+X44GR5LuY44GR44G+44GX44Gf?=
+X-PHP-Originating-Script: 1116:class-phpmailer.php
+Date:   Sat, 1 Jan 2022 19:40:47 +0000
+From:   =?UTF-8?B?44Od44O844K/44Or44K144Kk44OI44K444Ol44Ko44Op44O8?= 
+        <info@linxs.co.jp>
+Message-ID: <8d11d4f6bd143ae642963a8d58adb47f@portalsite-jeweller.com>
+X-Mailer: PHPMailer 5.2.22 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: sevHeQJsoH3PQrgnaoMYIY8bC1tCGPgl
+X-Proofpoint-GUID: sevHeQJsoH3PQrgnaoMYIY8bC1tCGPgl
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.790
+ definitions=2022-01-01_04:2022-01-01,2022-01-01 signatures=0
+X-Proofpoint-Spam-Details: rule=spam policy=default score=100 spamscore=100 malwarescore=0
+ mlxlogscore=-1000 adultscore=0 bulkscore=0 phishscore=0 mlxscore=100
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201010062
+X-NAI-Spam-Level: **********
+X-NAI-Spam-Score: 100
+X-NAI-Spam-Flag: YES
+X-NAI-Spam-Adjust: 0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D213839
+お問い合わせをいただきまして、誠にありがとうございます。
+こちらは自動返信の確認メールです。
 
---- Comment #17 from Jonathan McDowell (noodles@earth.li) ---
-(In reply to Jonathan McDowell from comment #16)
-> Excellent. Your fix appears to make things work fine. Built it on top of
-> 5.12.12, plugged in the hub, plugged flash drive into a port off the seco=
-nd
-> hub chip and it gets detected fine:
+お問合せの種別:
+その他
 
-Er, 5.15.12, i.e. latest stable, I didn't just pick a random kernel version=
- to
-test!
+メールアドレス：
+linux-usb@vger.kernel.org
 
---=20
-You may reply to this email to add a comment.
+お名前：
+❤️ Margie is interested in your profile! Click Here: http://inx.lv/pIaX?lefci ❤️
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+お問い合わせ内容:
+r1x26r
+
