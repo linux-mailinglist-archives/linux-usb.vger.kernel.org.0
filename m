@@ -2,78 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B2B4827B3
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Jan 2022 14:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDFE4827F0
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Jan 2022 17:26:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232428AbiAANX0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Jan 2022 08:23:26 -0500
-Received: from cpanel.namahosting.id ([202.138.226.66]:44678 "EHLO
-        cpanel.namahosting.id" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiAANX0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jan 2022 08:23:26 -0500
-X-Greylist: delayed 4820 seconds by postgrey-1.27 at vger.kernel.org; Sat, 01 Jan 2022 08:23:26 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=borneopintulipat.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-ID:From:Date:Subject:To:Sender:Reply-To:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Utw/mIOAfhkk/PlpubmRzLzosEMRWjWNPD9ZNlvBF3c=; b=JCPd1KFJMvIjffJgLam+pCNhpT
-        M2Wr4P2WLD0HoyAjDE+num7zFzwSxhDun+DbSm4SmVYTwn5XATE5JEDYfF1l9B0rbQrRRINuVOcse
-        l+uYfi3BO+CKzyZfoEEsq4qCkEiigfPsuU2nYYMM7mGKnd7A7Q4PKduRDjEwLCoQsjIbjVwkcAJTs
-        AJ1Lsola5BhK0EnjsKWPAHeSUC/gIY1woOZ4OvTu4tpl0igfBDgYY4qZ8z0b+ak7SSc2HbuL7hKqf
-        1ZYFEf0/d/HiCllnPRaChd+VdlSh+RlWZElWGhku/l/Qp6IOSniY7QYTO+JJZKkuVgbgQSTB/IZU+
-        rEaZIZbg==;
-Received: from borneopintu by cpanel.namahosting.id with local (Exim 4.94.2)
-        (envelope-from <borneopintu@cpanel.namahosting.id>)
-        id 1n3d68-000Z6g-Ly
-        for linux-usb@vger.kernel.org; Sat, 01 Jan 2022 19:02:56 +0700
+        id S232518AbiAAQ01 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Jan 2022 11:26:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230122AbiAAQ00 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jan 2022 11:26:26 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A574C061574
+        for <linux-usb@vger.kernel.org>; Sat,  1 Jan 2022 08:26:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 55597CE091F
+        for <linux-usb@vger.kernel.org>; Sat,  1 Jan 2022 16:26:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 86048C36AE9
+        for <linux-usb@vger.kernel.org>; Sat,  1 Jan 2022 16:26:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641054382;
+        bh=QkrCfXSXJGxu3Z2IOU4h6/uPaaKTDDmEaCPTcd19dXg=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=ZwuUM+OnMYc8GgL4wVNN1hDfLOqMC+1KALrMxoPhQXONjag/d+iIU3KiDRqjg6etD
+         7lcvGumzWOXWgd/ct/Try/I1LZA/RgsLhdbu2Knrz81aud+B+PlZhk1pJQkaKfk2nD
+         1ydzNizKv0NZpok/0TaebeyLf3EfbRJzkgrTzcGtNrBp9Kgj+1ywNiufqJC5VfPRnd
+         Z40LOoi2E49LltMeWyl8bAUwVUiMGgA2bEhfQWAABSaMoO6JjstHMI+mQbFEUCm/bU
+         9nWlM8VKktDpbYW0q0ArxdpLp3rUECNbWS5iJBXiVLPQ68sumtv1y+ZhdZ4CizdyIe
+         9ZcAiesd1gqiQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 6CB4EC05FDD; Sat,  1 Jan 2022 16:26:22 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
 To:     linux-usb@vger.kernel.org
-Subject: Detail Pesanan anda
-X-PHP-Script: borneopintulipat.com/index.php for 91.250.242.12
-X-PHP-Originating-Script: 1035:class-phpmailer.php
-Date:   Sat, 1 Jan 2022 12:02:56 +0000
-From:   "CV. BORNEO MITRA MANDIRI" <>
-Message-ID: <79d015ccfb4539db6da28a19897cfe86@borneopintulipat.com>
-X-Mailer: PHPMailer 5.2.22 (https://github.com/PHPMailer/PHPMailer)
+Subject: [Bug 213839] XHCI 7 port usb hub does not work correctly
+Date:   Sat, 01 Jan 2022 16:26:22 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-213839-208809-oAlvmOr6hb@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-213839-208809@https.bugzilla.kernel.org/>
+References: <bug-213839-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.namahosting.id
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [1035 992] / [47 12]
-X-AntiAbuse: Sender Address Domain - cpanel.namahosting.id
-X-Get-Message-Sender-Via: cpanel.namahosting.id: authenticated_id: borneopintu/primary_hostname/system user
-X-Authenticated-Sender: cpanel.namahosting.id: borneopintu
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D213839
 
-Terima kasih Sdr/i ❤️ Sandy is interested in your profile! Click Here: http://bit.do/fSYTr?ctmot ❤️
+--- Comment #15 from Alan Stern (stern@rowland.harvard.edu) ---
+Created attachment 300199
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D300199&action=3Dedit
+Mark child resume requests in hub->event_bits, not hub->change_bits
 
-INVOICE ID: 0101/CV. BORNEO MITRA MANDIRI/120253
-=====================================
-Belanja       : w65kso3
-Bea Kirim     : b1gab9
---------------------------------------
-TOTAL         : fwitze
+Congratulations on tracking this down.  Later on I will send you a patch to
+disable autosuspend for these hubs, if it turns out to be needed.  But for =
+now,
+I'd like to track down the exact pathway for the problem, if you don't mind.
 
+Can you test the attached patch?  It looks like there is a bug in the hub
+driver's resume handler.  When a resuming hub sees that one of its downstre=
+am
+ports got a resume request from a child device, it sets a corresponding bit=
+ in
+the hub->change_bits variable.  But this variable is meant for connection
+changes, not suspend/resume status changes; which explains why the child hub
+ends up getting reset.  The bit should be set in the hub->event_bits variab=
+le
+instead.  (If you read through port_event() and hub_event(), you'll see how=
+ the
+two variables are handled similarly but not exactly the same.)
 
+This bug wasn't noticed before because non-buggy devices don't change their
+descriptors, and hub_port_connect_change() is careful to check for cases wh=
+ere
+there wasn't a real connection change (i.e., device is still connected, por=
+t is
+still enabled, and device descriptors haven't changed).  But your buggy hub
+does change its config descriptor and so it gets reset.
 
-ALAMAT PENGIRIMAN
-=====================================
-Nama	: ❤️ Sandy is interested in your profile! Click Here: http://bit.do/fSYTr?ctmot ❤️
-Alamat	: 5qje6m , ,  ,  , kode pos  8lb1zbb 
-Telp/Hp	: 333454036486
-Email	: linux-usb@vger.kernel.org
-Ket     : lc3x7l54 
+--=20
+You may reply to this email to add a comment.
 
-
-DETAIL PRODUK 
-=====================================
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
