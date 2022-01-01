@@ -2,94 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B129482775
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Jan 2022 13:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9750C482798
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Jan 2022 13:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbiAAMFs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Jan 2022 07:05:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
+        id S232384AbiAAMX1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Jan 2022 07:23:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232358AbiAAMFq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jan 2022 07:05:46 -0500
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7038C06173F
-        for <linux-usb@vger.kernel.org>; Sat,  1 Jan 2022 04:05:45 -0800 (PST)
-Received: by mail-pl1-x643.google.com with SMTP id w24so21740204ply.12
-        for <linux-usb@vger.kernel.org>; Sat, 01 Jan 2022 04:05:45 -0800 (PST)
+        with ESMTP id S229549AbiAAMX0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jan 2022 07:23:26 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0C8C061574;
+        Sat,  1 Jan 2022 04:23:26 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id g13so36280516ljj.10;
+        Sat, 01 Jan 2022 04:23:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
-        b=aPFCJjmmH4jORuVazNvTAmuM3SzgWIIPSLzOJw3tjt1mp7njN4ixG3I8w7qFmi0OUZ
-         q7qGG3PVK99yRABvjBlFQ7KV31uVqjONYFty6Mojh9Y8OUagM/k1iz4scpM7RnNeWrTi
-         CwVIL2BD7WwZrTGKfb/z3m15rAPOUbHNjOD3GfikzkxgZhWAIg8wMPrHXYGOtOwnorVA
-         tD/8o7Xa258T6VHwIzmR+B26HJoAYpXPZrsrrUxxo9XfUvpHXQKwmtY3uy3NuiWnacY+
-         zu/BWoS5gDfZFNHVQ6AdL1fLZbs/fNSYZB9FXV0WNgLRoujMyIdbtrC6OExOpSYiJF5N
-         0kMA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=/JJSTBWNyDVAnOx6SUMAARmZkCZKH2wbNxZkpQ1FD2k=;
+        b=fnj61BVfjWwJWiHVTvzJTCj3axLOwTYFDaeIXS6WMeR6tJl/Z8IBs2MC9QG6P19hS+
+         KeLK8jQXPOZSC6klPOrfhEmdiLiu+XP0wd/FQ8Vsedx1bpaplLuvv6QIMLGNQELG5Pxq
+         fjug7M15f+aaM9CqSKiU1bMZUrj7B/pqC7txBo9OHPMjxXCSwQqeihub9qISN5M1U0/n
+         dXZhHG0/KZPJzSDyojT45DUUHp9YUxxh+wi9OMYvkiUR2MAdZN7344iMnSDcwtk4ZobS
+         fHDNnDSyaOqoPOGAxfIwTlvuiwanITE9rVdZuxE9Cv1dL0/ugMVLrNBz8i5gCPY2V2wY
+         cLug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
-        b=kOIV0HF1YM0K+NDS+bok2o6IjXVyiJ94DIZsviKGRbCGzuxD6KIlmxFBjBc1DehpER
-         R0ZJSZB569CQz5+HlfEtq8CL1vK1ZRjIBQVuoW0ocZDpWtWX7OyaEuCfVJg1p7Z5wJFu
-         4i5LyaAPYmcmdLw9HIymg8QGv+MpD38TelP2v8HGUFdA48OwH9GwVP97KZiiAQv76f5/
-         2ePWz0FDfLO7V+pXIjBRn4uvX88Cfi1NzTsrqCyoiATnUqIR5OMerPED+fnVOk0/bGW/
-         FtCfQqU35j39cNlLC3oX7Vph/5X0cUMjfv1PPalboJaitDbTa6gGRn2ScUfXjoH2HUML
-         m3Og==
-X-Gm-Message-State: AOAM533QVrGMY/pGnS8KWY2gWikUN25W8IUYiBCriK5E8A1jKvelguUS
-        cXD5tg3kWRpdCVVNWEEyJvY=
-X-Google-Smtp-Source: ABdhPJy3JcPfwyn4I4+THRZvqk1mIndY8hnH55si8kHBeaZd443Qr7WNa88MF0hu7Xz3/GJhTSFZbQ==
-X-Received: by 2002:a17:902:c94d:b0:149:16cb:22e1 with SMTP id i13-20020a170902c94d00b0014916cb22e1mr38407558pla.34.1641038745354;
-        Sat, 01 Jan 2022 04:05:45 -0800 (PST)
-Received: from [192.168.0.153] ([143.244.48.136])
-        by smtp.gmail.com with ESMTPSA id kb1sm33652672pjb.45.2022.01.01.04.05.35
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Sat, 01 Jan 2022 04:05:43 -0800 (PST)
-Message-ID: <61d04397.1c69fb81.e9f32.a168@mx.google.com>
-From:   yalaiibrahim818@gmail.com
-X-Google-Original-From: suport.prilend@gmail.com
-Content-Type: text/plain; charset="iso-8859-1"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/JJSTBWNyDVAnOx6SUMAARmZkCZKH2wbNxZkpQ1FD2k=;
+        b=DnihQpmQMFSrkDEFdPkeakKtj/0CchBVBs6uqezzV56RwiKz4h/GVaSmKzR1555Kbf
+         kjCz1Hz0rNe0D0oDaZEw2FLZrzb8HqCqEu/2oK32MWvgFnNpbtMdqRlh0xAfQQ5WotVQ
+         WQ1xgZHx0cmEl4CEKw1cKs8o1k+Q4YIe5p4cqXZxcFHbC3ODJ5TnYp+GMj4kMhzfnh3O
+         4/u/1yIrORNfKup1imbhHFKmkMpt4SAIdkbD2fIjylmbHThOk9cSxxKbU7vuBsO5n49x
+         NBwN87PUYbMFU7zoa3kr5CHElbGXIURuylS2upFp7rBWWZGgV+ceet6PP9JiEoifaazb
+         i4Tw==
+X-Gm-Message-State: AOAM530wwy0ZL/uIW39iXzaaaIdIJqEbRjq2djaZWUQxxzrs52+J5OpG
+        4GMvUk0x9MYBAjYSmR3IMO+RlhEaz68=
+X-Google-Smtp-Source: ABdhPJw+7aRJBUMLERhDR/yiFux8DTU98PEZNQgwWj6qPbX+MpDbb5nHG2CzmDkbb5hwjWDe7nyCGw==
+X-Received: by 2002:a2e:a0cd:: with SMTP id f13mr26120445ljm.254.1641039804456;
+        Sat, 01 Jan 2022 04:23:24 -0800 (PST)
+Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
+        by smtp.googlemail.com with ESMTPSA id p21sm2179616lfg.98.2022.01.01.04.23.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Jan 2022 04:23:24 -0800 (PST)
+Subject: Re: [PATCH v17 1/7] usb: misc: Add onboard_usb_hub driver
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Peter Chen <peter.chen@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Bastien Nocera <hadess@hadess.net>
+References: <20211116200739.924401-1-mka@chromium.org>
+ <20211116120642.v17.1.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
+ <07781322-3632-7d63-0da8-a651a438a3ff@gmail.com>
+ <Yc4T1qSkcRF2iBVg@google.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <1c37be43-4102-6afe-fb05-4cac21ac4d98@gmail.com>
+Date:   Sat, 1 Jan 2022 15:23:22 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: RE:
-To:     Recipients <suport.prilend@gmail.com>
-Date:   Sat, 01 Jan 2022 14:05:26 +0200
-Reply-To: andres.stemmet1@gmail.com
-X-Mailer: TurboMailer 2
+In-Reply-To: <Yc4T1qSkcRF2iBVg@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I want to confide in you to finalize this transaction of mutual benefits. I=
-t may seem strange to you, but it is real. This is a transaction that has n=
-o risk at all, due process shall be followed and it shall be carried out un=
-der the ambit of the financial laws. Being the Chief Financial Officer, BP =
-Plc. I want to trust and put in your care Eighteen Million British Pounds S=
-terling, The funds were acquired from an over-invoiced payment from a past =
-contract executed in one of my departments. I can't successfully achieve th=
-is transaction without presenting you as foreign contractor who will provid=
-e a bank account to receive the funds.
+30.12.2021 23:17, Matthias Kaehlcke пишет:
+> On Mon, Dec 20, 2021 at 11:05:28PM +0300, Dmitry Osipenko wrote:
+>> 16.11.2021 23:07, Matthias Kaehlcke пишет:
+>>> +static const struct usb_device_id onboard_hub_id_table[] = {
+>>> +	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0411) }, /* RTS0411 USB 3.0 */
+>>> +	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.0 */
+>>> +	{},
+>>> +};
+>>
+>> RTS5411 two times in the comments?
+> 
+> One time, the other is RTS0511
+> 
+>> Internet suggests that RTS5411 is USB 3.0
+> 
+> Correct, however the chip internally has two hubs, one for USB2 and one for
+> USB3:
+> 
+>   Bus 002 Device 002: ID 0bda:0411 Realtek Semiconductor Corp. 4-Port USB 3.1 Hub
+>   Bus 001 Device 002: ID 0bda:5411 Realtek Semiconductor Corp. 4-Port USB 2.1 Hub
 
-Documentation for the claim of the funds will be legally processed and docu=
-mented, so I will need your full cooperation on this matter for our mutual =
-benefits. We will discuss details if you are interested to work with me to =
-secure this funds. I will appreciate your prompt response in every bit of o=
-ur communication. Stay Blessed and Stay Safe.
+Alright, thanks.
 
-Best Regards
+>> Are these hubs expected to be powered-on only when upstream port is
+>> enabled? Shouldn't runtime PM be used for that somehow?
+> 
+> In the general case I would expect that a onboard hub is connected to a port
+> that is enabled. For now I think it's fine to power the hub always when the
+> system is running (which is also the current situation with using always-on
+> regulators). If someone has an actual use case where the upstream port can
+> be disabled they can add support for that later.
+> 
 
+I see that you're handling the wakeup-capable devices during the
+driver's suspend, perhaps it should work okay then.
 
-Tel: +44 7537 185910
-Andres  Stemmet
-Email: andres.stemmet1@gmail.com  =
-
-Chief financial officer
-BP Petroleum p.l.c.
-
-                                                                           =
-                        Copyright =A9 1996-2021
-
+BTW, shouldn't the "companion-hub" need to be turned into a generic USB
+property? The onboard-usb-hub looks like a generic thing, but
+"companion-hub" is specific to the RTS5411 binding.
