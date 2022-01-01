@@ -2,64 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3264825CA
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Dec 2021 21:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24998482645
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Jan 2022 02:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbhLaUoG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Dec 2021 15:44:06 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:52841 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231691AbhLaUoG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Dec 2021 15:44:06 -0500
-Received: by mail-io1-f72.google.com with SMTP id k12-20020a0566022a4c00b005ebe737d989so13116870iov.19
-        for <linux-usb@vger.kernel.org>; Fri, 31 Dec 2021 12:44:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=Of3gUYtQNOdGN0VCHZ9V9d8Ng0GEU6SSLufzFHaw2CE=;
-        b=G0xm0iBM+MF8J/W6LMX0mXI8GUvgwjy3G4v+lWCzYI/AhqtqKPg850COOoxJDk8pfS
-         juh+vK+ob2nMx9zhsb2Qiw5G1SmcQb+WcANgfLr7HKSmdSncFcjcEir2el/mLNXEIc4n
-         jUZMPYxQLggFI7chH+pPSdF7jd+5ch8AW3cJ6xvfwx+vRPrT5QTFVt/miUptvOVEVe/U
-         tlksqB5Z7G0hb3DFClFL8MzpX8lOyXJqHX+ZAqa3WuVakbCXTgw5/GxfLag0cs08FxL1
-         A/TOVPwrKJgtfwrJvaH1Q0nPShMHxNbG6XW2kMCr/EAuwKgDDQ3hy7mMFpBxXQyg2Ds3
-         Cx7A==
-X-Gm-Message-State: AOAM530QyBdXJ3Ur4L0b4hYbJdAcd+alNx+sVu4PcOqt23L6TT5XfZgD
-        VmkCtYHCnV1wYRzsVcrSWhawUAJAHqSHPkt1G7WZBvSwagSc
-X-Google-Smtp-Source: ABdhPJxQWiMF5hhNnlmcGcPjirBvBWo3QMc5mLxUHrNzczChFwXxfTMdBa3z+KDIG9Ly8dHMGltuWtoKVX3GmRE2pSoGKqZaQ+Gp
-MIME-Version: 1.0
-X-Received: by 2002:a6b:7602:: with SMTP id g2mr16215397iom.37.1640983445917;
- Fri, 31 Dec 2021 12:44:05 -0800 (PST)
-Date:   Fri, 31 Dec 2021 12:44:05 -0800
-In-Reply-To: <Yc9odypVqqB2uMm/@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000060560805d4773ba0@google.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in usb_hcd_poll_rh_status
- (2)
-From:   syzbot <syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, dvyukov@google.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
+        id S231846AbiAABtr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Dec 2021 20:49:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231722AbiAABtq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Dec 2021 20:49:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699EDC061574
+        for <linux-usb@vger.kernel.org>; Fri, 31 Dec 2021 17:49:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4BB5B81D57
+        for <linux-usb@vger.kernel.org>; Sat,  1 Jan 2022 01:49:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2FFE7C36AED
+        for <linux-usb@vger.kernel.org>; Sat,  1 Jan 2022 01:49:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641001783;
+        bh=WNThEOjIQkYC/YTmtmXVnU94D2GQf646bcS8fshobxo=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=gYEdsH9Fics9Q5I/DSb2Bmvw/MyNSyv1WIlFi4fyC15p0sDd43F8//rwED0Q9hQHf
+         ILp6uq1lxigah3LH9ZbS1ZuaBy/Vno86Cm/YCa0FsCcAOqAMfcdH1cl3jOLRI076EO
+         Kg9G2eVLCzjcV+F10vejXZXuWh6H93/MPlusv0f1mXCYKzUzHKgCSa6IwggTv9OtCG
+         oQYvJY+5iNteQmQ62EptSvPA+0m8+Gy2cDxwAHRt6Wx1IENenusF6NH5ha7+0Kmr29
+         uPYRZrkWkyyv0zo+seTwz26aAgQvBgeaYNbJKOBb64zUaxy62SbcHdrnNLhfOYeS8M
+         eDu/7x0t/wi4w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 0B19CC05FC8; Sat,  1 Jan 2022 01:49:43 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 213839] XHCI 7 port usb hub does not work correctly
+Date:   Sat, 01 Jan 2022 01:49:42 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-213839-208809-ZAzRDmozII@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-213839-208809@https.bugzilla.kernel.org/>
+References: <bug-213839-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D213839
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+--- Comment #10 from Alan Stern (stern@rowland.harvard.edu) ---
+So far I have only looked at the Linux trace.  It shows two unusual things I
+don't understand.
 
-Reported-and-tested-by: syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com
+One is that some process (I don't know which) re-reads the hub's device and
+configuration descriptors while the second device is being initialized, and
+apparently as a result of this the process decides to reset the hub.  Why d=
+oes
+this happen?
 
-Tested on:
+The second is that when the descriptors are re-read, the hub's config
+descriptor has changed!  The original bmAttributes value is 0xe0, as shown =
+in
+the lsusb output above.  But the bmAttributes value in the trace is 0xc0; t=
+he
+changed bit is the flag for Wakeup support.  Most likely this is a bug in t=
+he
+hub's firmware.
 
-commit:         eec4df26 Merge tag 's390-5.16-6' of git://git.kernel.o..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1a86c22260afac2f
-dashboard link: https://syzkaller.appspot.com/bug?extid=3ae6a2b06f131ab9849f
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=148e8e35b00000
+Perhaps additional debugging information will help.  You can enable dynamic
+debugging and snooping for USB by doing:
 
-Note: testing is done by a robot and is best-effort only.
+  echo 'module usbcore =3Dp' >/sys/kernel/debug/dynamic_debug/control
+  echo 1 >/sys/module/usbcore/parameters/usbfs_snoop
+
+Clear the kernel log buffer by doing:
+
+  dmesg -C
+
+Then plug in the hub and and plug in a device to one of the non-working por=
+ts.=20
+Let's see what the dmesg log shows after that.
+
+Another unusual thing shows up clearly in the trace: The autosuspend_delay_=
+ms
+time is set to a very low value; it looks like 20 ms.  You might get better
+results leaving the delay set to its default value of 2 seconds.  Or turn U=
+SB
+autosuspend off entirely by doing:
+
+  echo -1 >/sys/module/usbcore/parameters/autosuspend
+
+before plugging in the hub.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
