@@ -2,91 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC8F48285F
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Jan 2022 20:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B2A1482860
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Jan 2022 20:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232611AbiAATwP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Jan 2022 14:52:15 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:35811 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S232597AbiAATwP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jan 2022 14:52:15 -0500
-Received: (qmail 1154900 invoked by uid 1000); 1 Jan 2022 14:52:14 -0500
-Date:   Sat, 1 Jan 2022 14:52:14 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <greg@kroah.com>
-Cc:     Jonathan McDowell <noodles@earth.li>,
-        USB mailing list <linux-usb@vger.kernel.org>
-Subject: [PATCH] USB: core: Fix bug in resuming hub's handling of wakeup
- requests
-Message-ID: <YdCw7nSfWYPKWQoD@rowland.harvard.edu>
+        id S232613AbiAATxq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Jan 2022 14:53:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52690 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232597AbiAATxq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jan 2022 14:53:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEE5C061574
+        for <linux-usb@vger.kernel.org>; Sat,  1 Jan 2022 11:53:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90290B80925
+        for <linux-usb@vger.kernel.org>; Sat,  1 Jan 2022 19:53:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 39B79C36AEC
+        for <linux-usb@vger.kernel.org>; Sat,  1 Jan 2022 19:53:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641066823;
+        bh=4Ir7wyr1OHIxWnhu2FJKIwiERQTWcata+BOTARRiSYQ=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=MBddH/NBPUvmNIK7YEyZnhoYG/hbTV/BFUfdnEXHxst4r+5bPhbwuOiU+/7UAye00
+         VP5049bIp3PEPr91LbPzL6RjjLsLnak5MhOWzZZXXz/LZEoEMveXmtYn8f1trqAXH4
+         HqQq9ZMvz3XNmLPYQKyDbEj5XZIBjQ0/fiIpUPw4a07LfCPVwoSYhMJwVFUD5XSD04
+         Q4LS0deZ4FmycL3S5jRaMevEd3ERa0yeAKedN4CieYrXGqC1FCa77++/+T89j1IbIS
+         g2Z9d0Gjr8RFD+c2v6SZUXEs0ycMJdH3u96MY+VJ1H86wWi2QKSea73StkgIkvCpT2
+         LN/PMXAwrM5Nw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 1F0D6CBF85E; Sat,  1 Jan 2022 19:53:43 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 213839] XHCI 7 port usb hub does not work correctly
+Date:   Sat, 01 Jan 2022 19:53:42 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-213839-208809-0kkIhfvMkI@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-213839-208809@https.bugzilla.kernel.org/>
+References: <bug-213839-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Bugzilla #213839 reports a 7-port hub that doesn't work properly when
-devices are plugged into some of the ports; the kernel goes into an
-unending disconnect/reinitialize loop as shown in the bug report.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D213839
 
-This "7-port hub" comprises two four-port hubs with one plugged into
-the other; the failures occur when a device is plugged into one of the
-downstream hub's ports.  (These hubs have other problems too.  For
-example, they bill themselves as USB-2.0 compliant but they only run
-at full speed.)
+--- Comment #18 from Alan Stern (stern@rowland.harvard.edu) ---
+Good news!  I have posted the patch on the linux-usb mailing list; it should
+get merged sometime in the next few weeks.
 
-It turns out that the failures are caused by bugs in both the kernel
-and the hub.  The hub's bug is that it reports a different
-bmAttributes value in its configuration descriptor following a remote
-wakeup (0xe0 before, 0xc0 after -- the wakeup-support bit has
-changed).
+--=20
+You may reply to this email to add a comment.
 
-The kernel's bug is inside the hub driver's resume handler.  When
-hub_activate() sees that one of the hub's downstream ports got a
-wakeup request from a child device, it notes this fact by setting the
-corresponding bit in the hub->change_bits variable.  But this variable
-is meant for connection changes, not wakeup events; setting it causes
-the driver to believe the downstream port has been disconnected and
-then connected again (in addition to having received a wakeup
-request).
-
-Because of this, the hub driver then tries to check whether the device
-currently plugged into the downstream port is the same as the device
-that had been attached there before.  Normally this check succeeds and
-wakeup handling continues with no harm done (which is why the bug
-remained undetected until now).  But with these dodgy hubs, the check
-fails because the config descriptor has changed.  This causes the hub
-driver to reinitialize the child device, leading to the
-disconnect/reinitialize loop described in the bug report.
-
-The proper way to note reception of a downstream wakeup request is
-to set a bit in the hub->event_bits variable instead of
-hub->change_bits.  That way the hub driver will realize that something
-has happened to the port but will not think the port and child device
-have been disconnected.  This patch makes that change.
-
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Tested-by: Jonathan McDowell <noodles@earth.li>
-Cc: <stable@vger.kernel.org>
-
----
-
-
-[as1967]
-
-
-Index: usb-devel/drivers/usb/core/hub.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hub.c
-+++ usb-devel/drivers/usb/core/hub.c
-@@ -1225,7 +1225,7 @@ static void hub_activate(struct usb_hub
- 			 */
- 			if (portchange || (hub_is_superspeed(hub->hdev) &&
- 						port_resumed))
--				set_bit(port1, hub->change_bits);
-+				set_bit(port1, hub->event_bits);
- 
- 		} else if (udev->persist_enabled) {
- #ifdef CONFIG_PM
+You are receiving this mail because:
+You are watching the assignee of the bug.=
