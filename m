@@ -2,69 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1386D482865
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Jan 2022 21:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC8F48285F
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Jan 2022 20:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232660AbiAAULY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Jan 2022 15:11:24 -0500
-Received: from fs-relay10.fsi.ne.jp ([219.99.167.74]:56990 "EHLO
-        fs-relay10.fsi.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232578AbiAAULY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jan 2022 15:11:24 -0500
-X-Greylist: delayed 1834 seconds by postgrey-1.27 at vger.kernel.org; Sat, 01 Jan 2022 15:11:24 EST
-Received: from fsi.ne.jp (check09.fsi.ne.jp [219.99.173.15])
-        by fs-relay10.fsi.ne.jp (Postfix) with ESMTP id 1784140F1AC8
-        for <linux-usb@vger.kernel.org>; Sun,  2 Jan 2022 04:40:48 +0900 (JST)
-Received: from check09.fsi.ne.jp (check09.fsi.ne.jp [127.0.0.1])
-        by pps.spam (8.16.0.36/8.16.0.36) with SMTP id 201Jembi020502
-        for <linux-usb@vger.kernel.org>; Sun, 2 Jan 2022 04:40:48 +0900
-Received: from fs-gw01.fsi.ne.jp (fs-gw01.fsi.ne.jp [219.99.161.22])
-        by check09.fsi.ne.jp with ESMTP id 3daruhg9nu-1
-        for <linux-usb@vger.kernel.org>; Sun, 02 Jan 2022 04:40:48 +0900
-Received: from sv2.linxs.co.jp (unknown [219.99.164.152])
-        by fs-gw01.fsi.ne.jp (Postfix) with ESMTP id EA4AA4059AA3
-        for <linux-usb@vger.kernel.org>; Sun,  2 Jan 2022 04:40:47 +0900 (JST)
-Received: by sv2.linxs.co.jp (Postfix, from userid 1116)
-        id E552348AF338D; Sun,  2 Jan 2022 04:40:47 +0900 (JST)
-To:     linux-usb@vger.kernel.org
-Subject: =?UTF-8?B?44GK5ZWP44GE5ZCI44KP44Gb44KS5Y+X44GR5LuY44GR44G+44GX44Gf?=
-X-PHP-Originating-Script: 1116:class-phpmailer.php
-Date:   Sat, 1 Jan 2022 19:40:47 +0000
-From:   =?UTF-8?B?44Od44O844K/44Or44K144Kk44OI44K444Ol44Ko44Op44O8?= 
-        <info@linxs.co.jp>
-Message-ID: <8d11d4f6bd143ae642963a8d58adb47f@portalsite-jeweller.com>
-X-Mailer: PHPMailer 5.2.22 (https://github.com/PHPMailer/PHPMailer)
+        id S232611AbiAATwP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Jan 2022 14:52:15 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:35811 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S232597AbiAATwP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Jan 2022 14:52:15 -0500
+Received: (qmail 1154900 invoked by uid 1000); 1 Jan 2022 14:52:14 -0500
+Date:   Sat, 1 Jan 2022 14:52:14 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg KH <greg@kroah.com>
+Cc:     Jonathan McDowell <noodles@earth.li>,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: [PATCH] USB: core: Fix bug in resuming hub's handling of wakeup
+ requests
+Message-ID: <YdCw7nSfWYPKWQoD@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: sevHeQJsoH3PQrgnaoMYIY8bC1tCGPgl
-X-Proofpoint-GUID: sevHeQJsoH3PQrgnaoMYIY8bC1tCGPgl
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.790
- definitions=2022-01-01_04:2022-01-01,2022-01-01 signatures=0
-X-Proofpoint-Spam-Details: rule=spam policy=default score=100 spamscore=100 malwarescore=0
- mlxlogscore=-1000 adultscore=0 bulkscore=0 phishscore=0 mlxscore=100
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201010062
-X-NAI-Spam-Level: **********
-X-NAI-Spam-Score: 100
-X-NAI-Spam-Flag: YES
-X-NAI-Spam-Adjust: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-お問い合わせをいただきまして、誠にありがとうございます。
-こちらは自動返信の確認メールです。
+Bugzilla #213839 reports a 7-port hub that doesn't work properly when
+devices are plugged into some of the ports; the kernel goes into an
+unending disconnect/reinitialize loop as shown in the bug report.
 
-お問合せの種別:
-その他
+This "7-port hub" comprises two four-port hubs with one plugged into
+the other; the failures occur when a device is plugged into one of the
+downstream hub's ports.  (These hubs have other problems too.  For
+example, they bill themselves as USB-2.0 compliant but they only run
+at full speed.)
 
-メールアドレス：
-linux-usb@vger.kernel.org
+It turns out that the failures are caused by bugs in both the kernel
+and the hub.  The hub's bug is that it reports a different
+bmAttributes value in its configuration descriptor following a remote
+wakeup (0xe0 before, 0xc0 after -- the wakeup-support bit has
+changed).
 
-お名前：
-❤️ Margie is interested in your profile! Click Here: http://inx.lv/pIaX?lefci ❤️
+The kernel's bug is inside the hub driver's resume handler.  When
+hub_activate() sees that one of the hub's downstream ports got a
+wakeup request from a child device, it notes this fact by setting the
+corresponding bit in the hub->change_bits variable.  But this variable
+is meant for connection changes, not wakeup events; setting it causes
+the driver to believe the downstream port has been disconnected and
+then connected again (in addition to having received a wakeup
+request).
 
-お問い合わせ内容:
-r1x26r
+Because of this, the hub driver then tries to check whether the device
+currently plugged into the downstream port is the same as the device
+that had been attached there before.  Normally this check succeeds and
+wakeup handling continues with no harm done (which is why the bug
+remained undetected until now).  But with these dodgy hubs, the check
+fails because the config descriptor has changed.  This causes the hub
+driver to reinitialize the child device, leading to the
+disconnect/reinitialize loop described in the bug report.
 
+The proper way to note reception of a downstream wakeup request is
+to set a bit in the hub->event_bits variable instead of
+hub->change_bits.  That way the hub driver will realize that something
+has happened to the port but will not think the port and child device
+have been disconnected.  This patch makes that change.
+
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Tested-by: Jonathan McDowell <noodles@earth.li>
+Cc: <stable@vger.kernel.org>
+
+---
+
+
+[as1967]
+
+
+Index: usb-devel/drivers/usb/core/hub.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/hub.c
++++ usb-devel/drivers/usb/core/hub.c
+@@ -1225,7 +1225,7 @@ static void hub_activate(struct usb_hub
+ 			 */
+ 			if (portchange || (hub_is_superspeed(hub->hdev) &&
+ 						port_resumed))
+-				set_bit(port1, hub->change_bits);
++				set_bit(port1, hub->event_bits);
+ 
+ 		} else if (udev->persist_enabled) {
+ #ifdef CONFIG_PM
