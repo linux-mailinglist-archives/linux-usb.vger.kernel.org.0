@@ -2,80 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3DDF482BD7
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Jan 2022 17:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E52A482EF9
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Jan 2022 09:22:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232505AbiABQUL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 2 Jan 2022 11:20:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiABQUL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Jan 2022 11:20:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D662EC061761;
-        Sun,  2 Jan 2022 08:20:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60E0960F28;
-        Sun,  2 Jan 2022 16:20:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C83E7C36AEF;
-        Sun,  2 Jan 2022 16:20:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641140408;
-        bh=OWPAcX5W9YO4VRgLlKi/wh9YuvxFOfDeRVi74HY2SRI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=CsgIuFTgLO3VnRAT5rE6F2aogkuP6Gc6ATSE5Ph8HmOg6zcjvuIK9BXm4J7hkm9Z2
-         wsi1mxcOv5LCotP3D4x0B5vJhKLgy3fjhHkHchkl9oL73rJ9Z7QK8gkTd45anGbsCa
-         Pf6da9wjQrxiI98p2COEddW8H1n8F9zKTn2dNCJFhA2y/M3W7QGBZXMdBFmQCUgtxb
-         orJvBDGeKS6VSICLrNZdOSjln090ZSmEu5CyipMB5LQ6YkVrw3KRiUGAM/gZjOfmt4
-         tsTZE6Xoa823f0QTu2r0/yzEpE6K+/4ChlSMSv1TwiDwk53OXAgSA3SMH60XiII9Oa
-         CZPUtLX/264iQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 991D7C395EA;
-        Sun,  2 Jan 2022 16:20:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S230478AbiACIWI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Jan 2022 03:22:08 -0500
+Received: from cable.insite.cz ([84.242.75.189]:39226 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229623AbiACIWI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 3 Jan 2022 03:22:08 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 6B64CA1A3D405;
+        Mon,  3 Jan 2022 09:22:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1641198126; bh=446Az94D8p2MVaK8LkURn2ovYjNUGjCfOEMaMQF9MHQ=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=AErVYIiwsDOfKNgwWGNYSquDfAyUkTnZcrth/yuY59j9YrT0+hv6YNrmXM3bwMxqU
+         W7MSS3ox1C1hbN5Dn3wl8TZUARLSqNv5fNzRCTQFZ1tRS415cJa+Jds8oPAA1KsHVQ
+         4d0kZOelmBI7d8OOZYpB9UgmXaKlagrr3Jd+OUmM=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id M8pYrGF0flbi; Mon,  3 Jan 2022 09:22:01 +0100 (CET)
+Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id A63A0A1A3D404;
+        Mon,  3 Jan 2022 09:22:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1641198120; bh=446Az94D8p2MVaK8LkURn2ovYjNUGjCfOEMaMQF9MHQ=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=qnd8iZvTRfmUuhg3j7As+WCyTW3hipFZ2qJxF2go2vz6bBVSidU3d0C+Ys+E8y5ux
+         5jd94MTkZALLjjlA2KcIxD53aUdk7fOecad0PXyIbJXw8nAmuGBETePUe1lo3syk9c
+         YcS+iS5yBxHPTP0GVIOnWP0MnI76e2DZVzVQSD3Y=
+Subject: Re: Correct stopping capture and playback substreams?
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+To:     "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
+Cc:     Takashi Iwai <tiwai@suse.de>, John Keeping <john@metanate.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Julian Scheel <julian@jusst.de>,
+        Yunhao Tian <t123yh.xyz@gmail.com>,
+        Jack Pham <jackp@codeaurora.org>
+References: <448e059f-fbac-66ed-204b-f6f9c2c19212@ivitera.com>
+Message-ID: <9635d70f-dc12-f9ed-29f5-ce34a1d4b112@ivitera.com>
+Date:   Mon, 3 Jan 2022 09:22:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <448e059f-fbac-66ed-204b-f6f9c2c19212@ivitera.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] rndis_host: support Hytera digital radios
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164114040862.20715.16025079855839191884.git-patchwork-notify@kernel.org>
-Date:   Sun, 02 Jan 2022 16:20:08 +0000
-References: <20220101172207.129863-1-thomas@toye.io>
-In-Reply-To: <20220101172207.129863-1-thomas@toye.io>
-To:     Thomas Toye <thomas@toye.io>
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Sat,  1 Jan 2022 18:22:07 +0100 you wrote:
-> Hytera makes a range of digital (DMR) radios. These radios can be
-> programmed to a allow a computer to control them over Ethernet over USB,
-> either using NCM or RNDIS.
+Dne 23. 12. 21 v 9:18 Pavel Hofman napsal(a):
+> Hi Takashi,
 > 
-> This commit adds support for RNDIS for Hytera radios. I tested with a
-> Hytera PD785 and a Hytera MD785G. When these radios are programmed to
-> set up a Radio to PC Network using RNDIS, an USB interface will be added
-> with class 2 (Communications), subclass 2 (Abstract Modem Control) and
-> an interface protocol of 255 ("vendor specific" - lsusb even hints "MSFT
-> RNDIS?").
+> I am working on stopping alsa streams of audio USB gadget when USB host 
+> stops capture/playback/USB cable unplugged.
 > 
-> [...]
+> For capture I used code from AK4114 SPDIF receiver 
+> https://elixir.bootlin.com/linux/latest/source/sound/i2c/other/ak4114.c#L590: 
+> 
+> 
+> static void stop_substream(struct uac_rtd_params *prm)
+> {
+>      unsigned long _flags;
+>      struct snd_pcm_substream *substream;
+> 
+>      substream = prm->ss;
+>      if (substream) {
+>          snd_pcm_stream_lock_irqsave(substream, _flags);
+>          if (snd_pcm_running(substream))
+>              // TODO - correct handling for playback substream?
+>              snd_pcm_stop(substream, SNDRV_PCM_STATE_DRAINING);
+>          snd_pcm_stream_unlock_irqrestore(substream, _flags);
+>      }
+> }
+> 
+> For setup I found calling snd_pcm_stop(substream, SNDRV_PCM_STATE_SETUP) 
+> (https://elixir.bootlin.com/linux/latest/source/drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c#L63) 
+>   Or for both capture and playback using SNDRV_PCM_STATE_DISCONNECTED 
+> (https://elixir.bootlin.com/linux/latest/source/sound/core/pcm.c#L1103).
+> 
+> Or perhaps using snd_pcm_dev_disconnect(dev) or snd_pcm_drop(substream)?
+> 
+> Please what is the recommended way?
+> 
 
-Here is the summary with links:
-  - rndis_host: support Hytera digital radios
-    https://git.kernel.org/netdev/net/c/29262e1f773b
+Please can I ask for expert view on this issue? E.g. in SoX stopping the 
+stream with SNDRV_PCM_STATE_SETUP/SNDRV_PCM_STATE_DRAINING does not stop 
+the application, while with SNDRV_PCM_STATE_DISCONNECTED SoX exits with 
+non-recoverable status. I am considering implementing both methods and 
+letting users choose their suitable snd_pcm_stop operation (none 
+(default)/SETUP-DRAINING/DISCONNECTED) for the two events (host 
+playback/capture stop, cable disconnection) with a configfs param. Would 
+this make sense?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks a lot in advance,
 
-
+Pavel.
