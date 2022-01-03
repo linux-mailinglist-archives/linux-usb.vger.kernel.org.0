@@ -2,121 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2BCA48349D
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Jan 2022 17:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 924084835A0
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Jan 2022 18:29:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233977AbiACQPS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Jan 2022 11:15:18 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:56367 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231445AbiACQPR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Jan 2022 11:15:17 -0500
-Received: (qmail 1188656 invoked by uid 1000); 3 Jan 2022 11:15:16 -0500
-Date:   Mon, 3 Jan 2022 11:15:16 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        id S235330AbiACR3Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Jan 2022 12:29:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53134 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235295AbiACR3R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Jan 2022 12:29:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BE3C061761;
+        Mon,  3 Jan 2022 09:29:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07C10B80E81;
+        Mon,  3 Jan 2022 17:29:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF5B6C36AED;
+        Mon,  3 Jan 2022 17:29:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641230954;
+        bh=A8kiksh69T5+Q6DUAVRPG9YYkcbIc+iLjriLRyM4zjE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=iFXP93qtFqI4PhtNB126hicsP4dW9za2yGbKdCDFmtYiOBySceA3APVUOOJa4fONV
+         94nLdZrQTMQSVG1h+sQunKJTaewRObNNLnTWROmMBr0gxtHm8xca2Jg85alk4XjUOz
+         KrelMScUx5OcuZRmhp1DXbivdMTMblwnakp7nEUCV+Ejbp1qJaVQsG+60jIpn8MhtY
+         afn4cUI8AX32fPK5qrucxDK5WH7FL8CXUyiGOhLJXGlRlVxq+qKx5ks3r4Mh0nVhij
+         8T2nXTBIXq7fSqiWawvJO1L81UvkukH7A3LDW8qYZT1QLzTXpl487i8cLzyYydV5+B
+         pWw9WXEWBaDkA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [RFC 31/32] usb: handle HAS_IOPORT dependencies
-Message-ID: <YdMhFKOdBsDvFStt@rowland.harvard.edu>
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
- <20211227164317.4146918-32-schnelle@linux.ibm.com>
- <YcojyRhALdm40gfk@rowland.harvard.edu>
- <8bda347ea30b60f1edb55693ff7509e7f7b1f979.camel@linux.ibm.com>
- <Yc86mvCUe2mHCa57@rowland.harvard.edu>
- <5a271c9e80ee394ecb41297e66d687e035a823ce.camel@linux.ibm.com>
+        Sasha Levin <sashal@kernel.org>, matthias.bgg@gmail.com,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.15 04/16] usb: mtu3: fix interval value for intr and isoc
+Date:   Mon,  3 Jan 2022 12:28:37 -0500
+Message-Id: <20220103172849.1612731-4-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220103172849.1612731-1-sashal@kernel.org>
+References: <20220103172849.1612731-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5a271c9e80ee394ecb41297e66d687e035a823ce.camel@linux.ibm.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 12:35:45PM +0100, Niklas Schnelle wrote:
-> On Fri, 2021-12-31 at 12:15 -0500, Alan Stern wrote:
-> > On Fri, Dec 31, 2021 at 12:06:24PM +0100, Niklas Schnelle wrote:
-> > > On Mon, 2021-12-27 at 15:36 -0500, Alan Stern wrote:
-> > > > On Mon, Dec 27, 2021 at 05:43:16PM +0100, Niklas Schnelle wrote:
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-> > > > > diff --git a/drivers/usb/host/uhci-hcd.h b/drivers/usb/host/uhci-hcd.h
-> > > > > index 8ae5ccd26753..8e30116b6fd2 100644
-> > > > > --- a/drivers/usb/host/uhci-hcd.h
-> > > > > +++ b/drivers/usb/host/uhci-hcd.h
-> > > > > @@ -586,12 +586,14 @@ static inline int uhci_aspeed_reg(unsigned int reg)
-> > > > >  
-> > > > >  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
-> > > > >  {
-> > > > > +#ifdef CONFIG_HAS_IOPORT
-> > > > >  	if (uhci_has_pci_registers(uhci))
-> > > > >  		return inl(uhci->io_addr + reg);
-> > > > > -	else if (uhci_is_aspeed(uhci))
-> > > > > +#endif
-> > > > 
-> > > > Instead of making all these changes (here and in the hunks below), you
-> > > > can simply modify the definition of uhci_has_pci_registers() so that it
-> > > > always gives 0 when CONFIG_HAS_IOPORT is N.
-> > > > 
-> > > > Alan Stern
-> > > 
-> > > I don't think that works, for example in the hunk you quoted returning
-> > > 0 from uhci_has_pci_registers() only skips over the inl() at run-time.
-> > > We're aiming to have inl() undeclared if HAS_IOPORT is unset though.
-> > 
-> > I see.  Do you think the following would be acceptable?  Add:
-> > 
-> > #ifdef CONFIG_HAS_IOPORT
-> > #define UHCI_IN(x)	x
-> > #define UHCI_OUT(x)	x
-> > #else
-> > #define UHCI_IN(x)	0
-> > #define UHCI_OUT(x)
-> > #endif
-> > 
-> > and then replace for example inl(uhci->io_addr + reg) with 
-> > UHCI_IN(inl(uhci->io_addr + reg)).
-> 
-> In principle that looks like a valid approach. Not sure this is better
-> than explicit ifdefs though.
+[ Upstream commit e3d4621c22f90c33321ae6a6baab60cdb8e5a77c ]
 
-The general preference in the kernel is to avoid sprinkling #ifdef's 
-throughout function definitions, and instead encapsulate their effects 
-with macros or inline functions -- like this.
+Use the Interval value from isoc/intr endpoint descriptor, no need
+minus one. The original code doesn't cause transfer error for
+normal cases, but it may have side effect with respond time of ERDY
+or tPingTimeout.
 
->  With this approach one could add
-> UHCI_IN()/UHCI_OUT() calls which end up as nops without realizing it as
-> it would disable any compile time warning for using them without
-> guarding against CONFIG_HAS_IOPORT being undefined.
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Link: https://lore.kernel.org/r/20211218095749.6250-1-chunfeng.yun@mediatek.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/mtu3/mtu3_gadget.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-To help prevent that, we can add
+diff --git a/drivers/usb/mtu3/mtu3_gadget.c b/drivers/usb/mtu3/mtu3_gadget.c
+index a9a65b4bbfede..c51be015345b9 100644
+--- a/drivers/usb/mtu3/mtu3_gadget.c
++++ b/drivers/usb/mtu3/mtu3_gadget.c
+@@ -77,7 +77,7 @@ static int mtu3_ep_enable(struct mtu3_ep *mep)
+ 		if (usb_endpoint_xfer_int(desc) ||
+ 				usb_endpoint_xfer_isoc(desc)) {
+ 			interval = desc->bInterval;
+-			interval = clamp_val(interval, 1, 16) - 1;
++			interval = clamp_val(interval, 1, 16);
+ 			if (usb_endpoint_xfer_isoc(desc) && comp_desc)
+ 				mult = comp_desc->bmAttributes;
+ 		}
+@@ -89,7 +89,7 @@ static int mtu3_ep_enable(struct mtu3_ep *mep)
+ 		if (usb_endpoint_xfer_isoc(desc) ||
+ 				usb_endpoint_xfer_int(desc)) {
+ 			interval = desc->bInterval;
+-			interval = clamp_val(interval, 1, 16) - 1;
++			interval = clamp_val(interval, 1, 16);
+ 			mult = usb_endpoint_maxp_mult(desc) - 1;
+ 		}
+ 		break;
+-- 
+2.34.1
 
-#undef UHCI_IN
-#undef UHCI_OUT
-
-at the end of this section.
-
-> > The definition of uhci_has_pci_registers() should be updated in any 
-> > case; there's no reason for it to do a runtime check of uhci->io_addr 
-> > when HAS_IOPORT is disabled.
-> 
-> Agree. Interestingly same as with the "if
-> (IS_ENABLED(CONFIG_HAS_IOPORT))" it seems having
-> uhci_has_pci_registers() compile-time defined to 0 (I added a
-> defined(CONFIG_HAS_IOPORT) to it) makes the compiler ignore the missing
-> inl() decleration already. But I'm not sure if we should rely on that.
-
-I definitely would not rely on it.
-
-Alan Stern
