@@ -2,32 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0943A4835C9
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Jan 2022 18:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98AB14835E6
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Jan 2022 18:31:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235490AbiACRaV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Jan 2022 12:30:21 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38218 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235488AbiACRaH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Jan 2022 12:30:07 -0500
+        id S235675AbiACRas (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Jan 2022 12:30:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53454 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235469AbiACRaW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Jan 2022 12:30:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE0CC061785;
+        Mon,  3 Jan 2022 09:30:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EE5FB80E66;
-        Mon,  3 Jan 2022 17:30:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82FBCC36AEE;
-        Mon,  3 Jan 2022 17:30:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E6C1611A3;
+        Mon,  3 Jan 2022 17:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03F43C36AED;
+        Mon,  3 Jan 2022 17:30:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641231004;
-        bh=uTWJxd6YdVohd2Y6L/UFfKfbHIuT4KvjE1DEYgZLAUM=;
+        s=k20201202; t=1641231020;
+        bh=FbIKzz13KQM/5QEXBIQ84ND/042tlnZqxVNTfkT/m5U=;
         h=From:To:Cc:Subject:Date:From;
-        b=MD8EJSZ9sArtCX1OOyf64vZigCW/HmqN+5fiTrXU2Li7txmccw82lSJcLdyY520Jj
-         Unafmz6Xah5wGpIZM4AtIJ5UI4a5h/kNkYAzKn6BujgTonh6BAxmgQehYtSGzu5NSJ
-         MdC6pG3mL9PaHz9AHHsFwzmu4ZRiQ27iHsNBeBMwg+kxqotoIK96n8ANdftzDV0/V8
-         hWD28rvvJWfhQcPDEiUtL88YWqVmc9JTPkCkI3iseaOsxtTXRJqZZxNCCVjaC1k1EC
-         bLStN4vdMpwgnxM++ljaPBZmunm39gDNXOIO/ao+vMpB9eFTwT7DhhRM9eYRAYSNYL
-         oDoMiU68ZCyJQ==
+        b=DL59G1Z6w2eh7fOGwQDKIFhP0eJ0iyJ/dxbgsOwqbRWDi+XwuJaUcWi3WY17bVgHL
+         8njJIiur0YX5wWp5oH6iubKM/SHGBRmDsfn/ue66XlZSZFLjeRmbfqYSnYSTNZrD5l
+         nxgpjtkuQgRawSkD3pQzq4MdwixA4BLFprQfQpr4jMTlTuqU+RjVX37jaKSiPk/zd2
+         Pg2zUOHwxjSMHBzm/A+gOtNHnvngVj2Ml0cA66+I4Ad4l9oYcdo0leSRtelVEm4x9s
+         mG0o+J77+1OoxsaXLpxXOPPIYbMxFdPDvDiQ7r21PPU1XwjdGPG4l6sRlosQtIol4R
+         A/G17W+Oxw1Fw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
@@ -35,9 +38,9 @@ Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Sasha Levin <sashal@kernel.org>, matthias.bgg@gmail.com,
         linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.10 1/8] usb: mtu3: fix interval value for intr and isoc
-Date:   Mon,  3 Jan 2022 12:29:54 -0500
-Message-Id: <20220103173001.1613277-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 1/6] usb: mtu3: fix interval value for intr and isoc
+Date:   Mon,  3 Jan 2022 12:30:13 -0500
+Message-Id: <20220103173018.1613394-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-stable: review
@@ -65,10 +68,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/mtu3/mtu3_gadget.c b/drivers/usb/mtu3/mtu3_gadget.c
-index 0b3aa7c65857a..ae480ab1415b9 100644
+index 619c4598e64ea..63f82026cca39 100644
 --- a/drivers/usb/mtu3/mtu3_gadget.c
 +++ b/drivers/usb/mtu3/mtu3_gadget.c
-@@ -77,7 +77,7 @@ static int mtu3_ep_enable(struct mtu3_ep *mep)
+@@ -85,7 +85,7 @@ static int mtu3_ep_enable(struct mtu3_ep *mep)
  		if (usb_endpoint_xfer_int(desc) ||
  				usb_endpoint_xfer_isoc(desc)) {
  			interval = desc->bInterval;
@@ -77,7 +80,7 @@ index 0b3aa7c65857a..ae480ab1415b9 100644
  			if (usb_endpoint_xfer_isoc(desc) && comp_desc)
  				mult = comp_desc->bmAttributes;
  		}
-@@ -89,7 +89,7 @@ static int mtu3_ep_enable(struct mtu3_ep *mep)
+@@ -97,7 +97,7 @@ static int mtu3_ep_enable(struct mtu3_ep *mep)
  		if (usb_endpoint_xfer_isoc(desc) ||
  				usb_endpoint_xfer_int(desc)) {
  			interval = desc->bInterval;
