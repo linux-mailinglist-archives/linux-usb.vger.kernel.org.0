@@ -2,69 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F76484484
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jan 2022 16:27:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56EE24844A4
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jan 2022 16:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233414AbiADP14 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jan 2022 10:27:56 -0500
-Received: from mga02.intel.com ([134.134.136.20]:8859 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231189AbiADP14 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 Jan 2022 10:27:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641310076; x=1672846076;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=slqc+GZKvR4BwvK+tcSNwUuglkJ5OqLCdfP9vfTJWpM=;
-  b=IEincwQx2we5npoQD8k4fPPbg/J0insyrUMIdHR4pf4xo4EXiDmNTtbF
-   BVegL1NIvp/xNc3fr0KfyWaoZVyRyrMm6F1OTod2S9JkEplJEY2ae6V4U
-   119nI9pQINECbcy5w8w1S62TbR1qfS2kltY0lnfDpTtwXWmoQYgou9hb/
-   jU6v3tT5BrLx8g+hSzR/iE0GHspO4PX7FtjceEBbxCYWznw32+7bX4QC0
-   OL8JgM6jctJI0HYHRA7tpElmT7uhRGfzKMoZLjVIvt4lzZ+GuFOTcX+uM
-   OWO/pfYprOmyvdXwJSVZpYhNZMsXwy+aRNVVplT+sSMQqP+m/EyUuS+dA
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="229556293"
-X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
-   d="scan'208";a="229556293"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 07:27:55 -0800
-X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
-   d="scan'208";a="760464912"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 07:27:51 -0800
-Received: by lahna (sSMTP sendmail emulation); Tue, 04 Jan 2022 17:27:48 +0200
-Date:   Tue, 4 Jan 2022 17:27:48 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Alexander Usyskin <alexander.usyskin@intel.com>
-Subject: Re: [PATCH v1 5/5] thunderbolt: Drop duplicate NULL checks around
- nvmem_unregister()
-Message-ID: <YdRndPUqeOfCqQgo@lahna>
-References: <20220104133843.44272-1-andriy.shevchenko@linux.intel.com>
- <20220104133843.44272-5-andriy.shevchenko@linux.intel.com>
+        id S232254AbiADPdE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jan 2022 10:33:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41120 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231202AbiADPdD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jan 2022 10:33:03 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CA8C061761
+        for <linux-usb@vger.kernel.org>; Tue,  4 Jan 2022 07:33:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=oy35XC41/H24vWLCGb4jFDn864yImNmSZZ6NALNtQUs=; b=P41+B
+        uN+eMmOdoRqdmo5Yku2i93all8oQPZpdPWrne1JfbOAf4G1kMk2UNBUaH9IbI5Ojo7nHCSqu1gRls
+        KS12v/zS8FAYhGNiHQ8+Zm9a4azggM/50ZLmHFnqqeBTOGxxoxJyv+GzTyH6JQDgTu1TcBeFcaVF+
+        7BoPHPjW9pqQ43kqFfxROafpsgqTYmNx+oKWSNDxbf+fOeXvgHaJxVPWNyqNZctxBzP5usQBCnpyo
+        Qb+9lj3FnmyO4df+gU0CBvrf7oQ/jFm1qnbQb/dLopv7sMn92C8NrjGI5x8SaUU4JDFp0hCyZV+Cv
+        d6sFSsiYxA/G+rNqDBVTl6HiZuIAA==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1n4lo3-0008LJ-1M; Tue, 04 Jan 2022 15:32:59 +0000
+Date:   Tue, 4 Jan 2022 15:32:53 +0000
+From:   John Keeping <john@metanate.com>
+To:     Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     linux-usb@vger.kernel.org,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Julian Scheel <julian@jusst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2 02/11] usb: gadget: u_audio: Support multiple sampling
+ rates
+Message-ID: <YdRopd4BfUM9ZtbX@donbot>
+References: <20211220211130.88590-1-pavel.hofman@ivitera.com>
+ <20211220211130.88590-3-pavel.hofman@ivitera.com>
+ <YcG8Fa8mBg7VL8sb@donbot>
+ <6392639d-8a6f-8203-e5d0-e862ee1d2654@ivitera.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220104133843.44272-5-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <6392639d-8a6f-8203-e5d0-e862ee1d2654@ivitera.com>
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 03:38:43PM +0200, Andy Shevchenko wrote:
-> Since nvmem_unregister() checks for NULL, no need to repeat in
-> the caller. Drop duplicate NULL checks.
+On Wed, Dec 22, 2021 at 08:13:01AM +0100, Pavel Hofman wrote:
+> Dne 21. 12. 21 v 12:35 John Keeping napsal(a):
+> > On Mon, Dec 20, 2021 at 10:11:21PM +0100, Pavel Hofman wrote:
+> > > From: Julian Scheel <julian@jusst.de>
+> > > 
+> > > Implement support for multiple sampling rates in u_audio part of the
+> > > audio gadget. The currently configured rates are exposed through
+> > > read-only amixer controls 'Capture Rate' and 'Playback Rate'.
+> > > 
+> > > Signed-off-by: Julian Scheel <julian@jusst.de>
+> > > Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+> > > ---
+> > 
+> > > diff --git a/drivers/usb/gadget/function/uac_common.h b/drivers/usb/gadget/function/uac_common.h
+> > > new file mode 100644
+> > > index 000000000000..3ecf89d6e814
+> > > --- /dev/null
+> > > +++ b/drivers/usb/gadget/function/uac_common.h
+> > > @@ -0,0 +1,9 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0+ */
+> > > +/*
+> > > + */
+> > > +
+> > > +#ifndef UAC_COMMON_H
+> > > +#define UAC_COMMON_H
+> > > +
+> > > +#define UAC_MAX_RATES 10 /* maximum number of rates configurable by f_uac1/2 */
+> > 
+> > Why a new header for this - doesn't it belong in u_audio.h?
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> The constant is used in subsequent patches in f_uac1.c, f_uac2.c, their
+> headers u_uac1.h, u_uac2.h, and legacy/audio.c (which already includes
+> u_uac1.h/u_uac2.h as needed). Since all occurences must use the same value,
+> I did not know how to solve this without introducing a common header file,
+> included in the existing headers u_audio.h, u_uac1.h, u_uac2.h. If there is
+> a better way, I will be happy to use it, I do not like the extra common
+> header file either. Thanks a lot for your help.
 
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Ah, right - I hadn't accounted for UAC1.
+
+Do you think anyone is using UAC1 these days?  I wonder if it makes
+sense to just drop those changes and focus on UAC2.
+
+
+John
