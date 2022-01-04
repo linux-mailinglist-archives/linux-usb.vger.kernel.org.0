@@ -2,229 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E862E4845E7
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jan 2022 17:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6CC4846AC
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jan 2022 18:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235244AbiADQVt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jan 2022 11:21:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235242AbiADQVs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jan 2022 11:21:48 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8A8C061784
-        for <linux-usb@vger.kernel.org>; Tue,  4 Jan 2022 08:21:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-ID:Content-Description;
-        bh=Ohq6sYm83V8twpPd4IXfx+XpqjK0CEtfwD38pYOE3Kc=; b=U+eGuKunHaoaXsYYvCmMC/d0d2
-        0/jhYuVZEaHIK1PvmBS9g0myiJE2an7nSuhdeyMtAq6w6lKll/z733QfPdkpXsh+ks+kYhg+ZnqpA
-        Ewd/xh3UFwJDCMunOcuhxFoCUEHi5y55Dqv9eSHjScstL+74NKu9XolDRuGAExmt08L6V0opPbU3d
-        b5JJDKUlaF3p1xYWTnKbGV9GjajMgN90oGdTecOsaZ9jg7SNzbLpCbhaw3XMuHN3P1G5uskTO5lXj
-        BmRJIuM3QaVIUofuCTlkeFQH+yuYdNugFXEDEq1a8yCaepER2F+VhRjrOlrovAgSii18rIa239hwL
-        ngtOAE4w==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1n4mZ5-0000XL-1d; Tue, 04 Jan 2022 16:21:35 +0000
-Date:   Tue, 4 Jan 2022 16:21:33 +0000
-From:   John Keeping <john@metanate.com>
-To:     Pavel Hofman <pavel.hofman@ivitera.com>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.de>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        Julian Scheel <julian@jusst.de>,
-        Jack Pham <jackp@codeaurora.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Yunhao Tian <t123yh.xyz@gmail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-Subject: Re: Correct stopping capture and playback substreams?
-Message-ID: <YdR0DeYefGFU+SVX@donbot>
-References: <448e059f-fbac-66ed-204b-f6f9c2c19212@ivitera.com>
- <9635d70f-dc12-f9ed-29f5-ce34a1d4b112@ivitera.com>
- <baefb4a7-0373-49b0-0247-f70c3c585eaf@perex.cz>
- <fbd19fee-343c-c5c6-d426-02ccaa497f7f@ivitera.com>
- <s5ho84tm2vv.wl-tiwai@suse.de>
- <581f6464-37ef-9ab6-e7e2-657ad645aa9e@perex.cz>
- <86ad951b-29f7-59ef-d369-a6c06f9422a4@ivitera.com>
- <YdRuU5EB+bj/e9F+@donbot>
+        id S232909AbiADRHV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jan 2022 12:07:21 -0500
+Received: from mail-eopbgr150071.outbound.protection.outlook.com ([40.107.15.71]:19562
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230311AbiADRHU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 4 Jan 2022 12:07:20 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DNiYi8e/EbnfWvCEYugDL+5Qc9TcHYo80DFxUY4zgDDe39JxJ7iKWGD9A9XVMjMXjVAphMcNIuy6Ab5NJGok0mXy3PKrcmhTnHQ2fxbu40htZPrbvRJFst0DTFRgGdnAEjOV+KQxBm4WxuxkanUfNK+yTTuky7jV4YyVLOamBRuuXSt/rQgy5au6LpiUfg1BUlv/Dv1KYonb+qeDUcQdhnRdWbpznicQEksimcc8MfjUpsItvPy9qa/eoNWda6IH95ImroybGjLj8nJms6jMX2Hbabt/1cQTlsn+0Pdi3ADfp422+sSwJR15+MSHuaQo1TvCBW/E/DHqta0DbmMD3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CkzOv9FS08M/QQBh/jfjHY5z4Ru3eH9gwXtCrhXlXAw=;
+ b=PdcR6iX9Lth3wViatcoBoGtFZ8CejWgCocnKzw+48ispD3s9mGxzv2cbl6W5vIgeSPwxrukqgpUllvU99Uv/9y8KgyUzan8QyUadFL7nIAHWmi/PI3GRqZPRqj0i8TLobbCHo+Y8ya8hPSBtsIpMrSifC/6S8iesKRp2pZBNwR1J1G9/j/+u4ZYOEYReJsCnx4goE5BilOfE3brfPw3k+o7Ji0CKyPVNnJf7gshrKrsg0BJwv7wVzfYUuUUDcs3IVICPpivZGHQJhrI4JMw4CeCXfiUJQWzgr9Q/Bqyd0esacwMb5+cCFF5SYSDOO7SYRVryiGIeIw2DqKxD0PIn9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.73) smtp.rcpttodomain=kernel.org smtp.mailfrom=siemens.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CkzOv9FS08M/QQBh/jfjHY5z4Ru3eH9gwXtCrhXlXAw=;
+ b=FTlGlDQ83D13SqXDif+KknFa2uQo5cQddyk6Q5by7nXB+lPoB7cGppZlqbxqXAfbGwb57Kg4zgHHXNI5ApJungz5PZPiNnztbstlrsZ+aRLBfMR6mh43GBRCweXL2ofBdX78PWnC8UfcqOm0oj5zDOOpUJHkzpYd9fDUID2rJVtIIJ7HcVvB463adrMi8/p8cPNevToi6BAmne0bYDhHceBn7RVi7IrNI1tASuejYfRSaOWyCYolUgTTTOnGiSL5MaQ7pKxF2NjplR3uI6BEm8UTK/2mVhZcJG18HMnZzsoObHDkn3/e2NF0UuXp8JpuPxHm5Y6GvIXeECPmbWAgPQ==
+Received: from DB9PR06CA0016.eurprd06.prod.outlook.com (2603:10a6:10:1db::21)
+ by DB8PR10MB2809.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:ab::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Tue, 4 Jan
+ 2022 17:07:18 +0000
+Received: from DB5EUR01FT026.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:10:1db:cafe::c4) by DB9PR06CA0016.outlook.office365.com
+ (2603:10a6:10:1db::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14 via Frontend
+ Transport; Tue, 4 Jan 2022 17:07:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.73)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.73 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.73; helo=hybrid.siemens.com;
+Received: from hybrid.siemens.com (194.138.21.73) by
+ DB5EUR01FT026.mail.protection.outlook.com (10.152.5.2) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4844.14 via Frontend Transport; Tue, 4 Jan 2022 17:07:18 +0000
+Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
+ DEMCHDC9SNA.ad011.siemens.net (194.138.21.73) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 4 Jan 2022 18:07:18 +0100
+Received: from md1za8fc.ad001.siemens.net (158.92.8.107) by
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 4 Jan 2022 18:07:17 +0100
+Date:   Tue, 4 Jan 2022 18:07:15 +0100
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     Aaron Ma <aaron.ma@canonical.com>, <davem@davemloft.net>,
+        <hayeswang@realtek.com>, <tiwai@suse.de>,
+        <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] net: usb: r8152: Add MAC passthrough support for more
+ Lenovo Docks
+Message-ID: <20220104180715.7ecb0980@md1za8fc.ad001.siemens.net>
+In-Reply-To: <20220104065326.2a73f674@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+References: <20211116141917.31661-1-aaron.ma@canonical.com>
+        <20220104123814.32bf179e@md1za8fc.ad001.siemens.net>
+        <20220104065326.2a73f674@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YdRuU5EB+bj/e9F+@donbot>
-X-Authenticated: YES
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [158.92.8.107]
+X-ClientProxiedBy: DEMCHDC8A1A.ad011.siemens.net (139.25.226.107) To
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 38753eba-a235-41f5-7dc0-08d9cfa4aa30
+X-MS-TrafficTypeDiagnostic: DB8PR10MB2809:EE_
+X-Microsoft-Antispam-PRVS: <DB8PR10MB2809977A3F4D61CC5CB551A8854A9@DB8PR10MB2809.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VsltuRCghmDkREJ3ArHwczhKY77tb2wTCTwvpu8LuvCEEMN1ocuw6gF73cWzFVvmbiQ+LHGi7kn2xIO6oFivqiaSpd74ITtKUzT0PNJ9stwPL751yXMrf8jSp4X3OUHE3hes6o7+7byf2Nqj5aLI116VKdutRJYF3PSLut74TJRb+MzhTssUU978mKFWJQvckt796eJ59Y7A5rPw7N6UidyWx7LcBb4Ps4LJMosyRo9pOgwNJ8jiGlMWfutGrdKv8fuvCJii0Gc1ukO2mAi2JrHui97y3nEnHvpcBny2BKbULOesM17ED7u7gh69hi8aZmtaB17VqtO2YzuLvkfctndgtA1SN/pnz+a2NQ2u4462Q3EktLMm6C2/168SR2YosxccsauWcfTUAfmprHvpjUogGnytXvVL4TScSaHR/MUP/KTcPbJ/mqe6f39FmjJu82yJmPEooaGTN/4G2pISY4QOYpZxMv0T2ZeyMm9hMkmEBe3y6Nu326mFCN7ZaYpD8nF1dsBZuskCpqP6gQIQZVApuoA9Yaccs4VONMxa1au7ABK1hJgJkHu0HkRT/el/19e4b4eoE04lNWuxF3smSv2ZcnDEln9ST5LtUpFpOIT0zhTM20HaukNbGlY06cZrBFvzVScJGka32NW91aXawhQmKnHyNDv60QeL2k0R8BlQiLR5UcwKKMJ8wRHu9i3lEAyd8a9uWxhpgESC1h495TMA0kE13LSK+eFetQi92PLrORjHX7LhWwKW1/rWEV7GFQjg60znbvnEqDEV+rD+/PCuHmpvkhiSJqHYSUKduVU=
+X-Forefront-Antispam-Report: CIP:194.138.21.73;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(40470700002)(46966006)(26005)(55016003)(83380400001)(9686003)(2906002)(36860700001)(70586007)(70206006)(16526019)(47076005)(186003)(7696005)(54906003)(6916009)(356005)(5660300002)(86362001)(8676002)(82310400004)(1076003)(8936002)(4326008)(40460700001)(956004)(81166007)(336012)(44832011)(498600001)(82960400001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2022 17:07:18.5745
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 38753eba-a235-41f5-7dc0-08d9cfa4aa30
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.73];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT026.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB2809
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 03:57:09PM +0000, John Keeping wrote:
-> On Mon, Jan 03, 2022 at 01:54:13PM +0100, Pavel Hofman wrote:
+Am Tue, 4 Jan 2022 06:53:26 -0800
+schrieb Jakub Kicinski <kuba@kernel.org>:
+
+> On Tue, 4 Jan 2022 12:38:14 +0100 Henning Schild wrote:
+> > This patch is wrong and taking the MAC inheritance way too far. Now
+> > any USB Ethernet dongle connected to a Lenovo USB Hub will go into
+> > inheritance (which is meant for docks).
 > > 
+> > It means that such dongles plugged directly into the laptop will do
+> > that, or travel adaptors/hubs which are not "active docks".
 > > 
-> > Dne 03. 01. 22 v 13:28 Jaroslav Kysela napsal(a):
-> > > On 03. 01. 22 13:15, Takashi Iwai wrote:
-> > > > On Mon, 03 Jan 2022 12:32:53 +0100,
-> > > > Pavel Hofman wrote:
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > Dne 03. 01. 22 v 10:10 Jaroslav Kysela napsal(a):
-> > > > > > On 03. 01. 22 9:22, Pavel Hofman wrote:
-> > > > > > > 
-> > > > > > > Dne 23. 12. 21 v 9:18 Pavel Hofman napsal(a):
-> > > > > > > > Hi Takashi,
-> > > > > > > > 
-> > > > > > > > I am working on stopping alsa streams of audio USB
-> > > > > > > > gadget when USB host
-> > > > > > > > stops capture/playback/USB cable unplugged.
-> > > > > > > > 
-> > > > > > > > For capture I used code from AK4114 SPDIF receiver
-> > > > > > > > https://elixir.bootlin.com/linux/latest/source/sound/i2c/other/ak4114.c#L590:
-> > > > > > > > 
-> > > > > > > > 
-> > > > > > > > 
-> > > > > > > > 
-> > > > > > > > static void stop_substream(struct uac_rtd_params *prm)
-> > > > > > > > {
-> > > > > > > >        unsigned long _flags;
-> > > > > > > >        struct snd_pcm_substream *substream;
-> > > > > > > > 
-> > > > > > > >        substream = prm->ss;
-> > > > > > > >        if (substream) {
-> > > > > > > >            snd_pcm_stream_lock_irqsave(substream, _flags);
-> > > > > > > >            if (snd_pcm_running(substream))
-> > > > > > > >                // TODO - correct handling for playback substream?
-> > > > > > > >                snd_pcm_stop(substream, SNDRV_PCM_STATE_DRAINING);
-> > > > > > > >            snd_pcm_stream_unlock_irqrestore(substream, _flags);
-> > > > > > > >        }
-> > > > > > > > }
-> > > > > > > > 
-> > > > > > > > For setup I found calling snd_pcm_stop(substream,
-> > > > > > > > SNDRV_PCM_STATE_SETUP)
-> > > > > > > > (https://elixir.bootlin.com/linux/latest/source/drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c#L63)
-> > > > > > > > 
-> > > > > > > > 
-> > > > > > > >     Or for both capture and playback using
-> > > > > > > > SNDRV_PCM_STATE_DISCONNECTED
-> > > > > > > > (https://elixir.bootlin.com/linux/latest/source/sound/core/pcm.c#L1103).
-> > > > > > > > 
-> > > > > > > > 
-> > > > > > > > Or perhaps using snd_pcm_dev_disconnect(dev) or
-> > > > > > > > snd_pcm_drop(substream)?
-> > > > > > > > 
-> > > > > > > > Please what is the recommended way?
-> > > > > > > > 
-> > > > > > > 
-> > > > > > > Please can I ask for expert view on this issue? E.g. in
-> > > > > > > SoX stopping the
-> > > > > > > stream with
-> > > > > > > SNDRV_PCM_STATE_SETUP/SNDRV_PCM_STATE_DRAINING does not
-> > > > > > > stop
-> > > > > > > the application, while with SNDRV_PCM_STATE_DISCONNECTED
-> > > > > > > SoX exits with
-> > > > > > > non-recoverable status. I am considering implementing both methods and
-> > > > > > > letting users choose their suitable snd_pcm_stop operation (none
-> > > > > > > (default)/SETUP-DRAINING/DISCONNECTED) for the two events (host
-> > > > > > > playback/capture stop, cable disconnection) with a
-> > > > > > > configfs param. Would
-> > > > > > > this make sense?
-> > > > > > 
-> > > > > > The disconnection state is unrecoverable. It's expected that the
-> > > > > > device will be freed and cannot be reused.
-> > > > > > 
-> > > > > > If you expect to keep the PCM device, we should probably introduce a
-> > > > > > new function which puts the device to the SNDRV_PCM_STATE_OPEN
-> > > > > > state. In this state, all I/O routines will return -EBADFD for the
-> > > > > > applications, so they should close or re-initialize the PCM device
-> > > > > > completely.
-> > > > > > 
-> > > > > > https://elixir.bootlin.com/linux/latest/source/sound/core/pcm_native.c#L794
-> > > > > > 
-> > > > > > 
-> > > > > 
-> > > > > The fact is that after closing the USB host can re-open the device
-> > > > > with different samplerate (and perhaps later on with different
-> > > > > channels count/sample size). That would hint at the need to
-> > > > > re-initialize the gadget side before opening  anyway.
-> > > > > 
-> > > > > As of keeping the device - it's likely some use cases would prefer
-> > > > > keeping the device, to minimize the operations needed to react to the
-> > > > > host-side playback/capture start.
-> > > > > 
-> > > > > A function you describe would make sense for this. IMO from the gadget
-> > > > > POW there is no difference  between the host stopping playback/capture
-> > > > > and cable disconnection, in both cases the data stream is stopped and
-> > > > > next stream can have entirely different parameters. Maybe the gadget
-> > > > > configfs parameter could only toggle between no action (i.e. current
-> > > > > situation) and the new alsa function stopping the stream.
-> > > > > 
-> > > > > Jaroslav, please can you draft such a function? Perhaps both changes
-> > > > > could make it to 5.17.
-> > > > 
-> > > > (Sorry for the delayed response, as I've been on vacation and now
-> > > > catching up the huge pile of backlogs...)
-> > > > 
-> > > > About the change to keep PCM OPEN state: I'm afraid that the
-> > > > disconnection in the host side may happen at any time, and keeping the
-> > > > state OPEN would confuse the things if the host is indeed
-> > > > unrecoverable.
-> > > 
-> > > I don't think so. The SNDRV_PCM_IOCTL_HW_PARAMS must be issued by the
-> > > application (in the PCM_OPEN state) and if the USB bus connection is no
-> > > longer active, it may fail. We can distinguish between host -> device
-> > > disconnection and device -> host one. It is not really a similar thing.
-> > > 
-> > > I think that the idea was to avoid to re-build the whole card / device
-> > > structure for the fixed device allocation.
-> > > 
-> > > Pavel, if the USB host is not connected to the gadget, where the
-> > > playback PCM device fails now ? Is the PCM device created or not ?
-> > > 
+> > I have USB-Ethernet dongles on two desks and both stopped working as
+> > expected because they took the main MAC, even with it being used at
+> > the same time. The inheritance should (if at all) only be done for
+> > clearly identified docks and only for one r8152 instance ... not
+> > all. Maybe even double checking if that main PHY is "plugged" and
+> > monitoring it to back off as soon as it is.
 > > 
-> > The gaudio PCM device is created when the gadget function is activated
-> > (module loaded), regardless whether the USB host is actually connected. The
-> > playback/capture fails after the blocking read/write times out. The data
-> > delivery/consumption method is simply not called when no usb requests get
-> > completed https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/function/u_audio.c#L147
-> > .
+> > With this patch applied users can not use multiple ethernet devices
+> > anymore ... if some of them are r8152 and connected to "Lenovo" ...
+> > which is more than likely!
 > > 
-> > The current code does basically nothing to the alsa pcm stream at
-> > capture/playback start/stop by the host (called when altsetting changes in
-> > the gadget) https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/function/u_audio.c#L468 https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/function/u_audio.c#L557
+> > Reverting that patch solved my problem, but i later went to
+> > disabling that very questionable BIOS feature to disable things for
+> > good without having to patch my kernel.
+> > 
+> > I strongly suggest to revert that. And if not please drop the
+> > defines of 
+> > > -		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
+> > > -		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:    
+> > 
+> > And instead of crapping out with "(unnamed net_device)
+> > (uninitialized): Invalid header when reading pass-thru MAC addr"
+> > when the BIOS feature is turned off, one might want to check
+> > DSDT/WMT1/ITEM/"MACAddressPassThrough" which is my best for asking
+> > the BIOS if the feature is wanted.  
 > 
-> Thinking about it, I think the current behaviour is probably correct.
+> Thank you for the report!
 > 
-> It's not 100% possible to detect when the host stops data transfer - we
-> can detect two scenarios:
-> 
-> 	- Cable disconnected
-> 	- Interface alt 0 selected
-> 
-> but it's equally possible to just leave the device configured as it was
-> and stop sending data.
-> 
-> While resetting state may be necessary when the cable is disconnected,
-> if the host is just stopping and restarting the stream then I don't see
-> why the gadget application should have to reconfigure the PCM device.
-> 
-> It's clearly useful to have some indication of host state, but I'm not
-> at all convinced the PCM state is the best way to provide that.
+> Aaron, will you be able to fix this quickly? 5.16 is about to be
+> released.
 
-D'oh, I totally forgot about the case of changing sample rate here,
-which is the new feature in Pavel's proposed patches.
+If you guys agree with a revert and potentially other actions, i would
+be willing to help. In any case it is not super-urgent since we can
+maybe agree an regression and push it back into stable kernels.
 
-I still think the existing behaviour is correct when the sample rate
-hasn't changed.  But if the sample rate changes, maybe we have to force
-the gadget application to reconfigure the PCM as the available sample
-rate is now different.  And I guess changing the PCM state is necessary
-in that case.
+I first wanted to place the report and see how people would react ...
+if you guys agree that this is a bug and the inheritance is going "way
+too far".
 
-But I'd really like to avoid it for a gadget with only one available
-sample rate (and ideally in the case where a gadget supporting multiple
-sample rates is stopped and re-started at the same rate).
+But i would only do some repairs on the surface, the feature itself is
+horrific to say the least and i am very happy with that BIOS switch to
+ditch it for good. Giving the MAC out is something a dock physically
+blocking the original PHY could do ... but year ... only once and it
+might be pretty hard to say which r8152 is built-in from the hub and
+which is plugged in additionally in that very hub.
+Not to mention multiple hubs of the same type ... in a nice USB-C chain.
 
+MAC spoofing is something NetworkManager and others can take care of,
+or udev ... doing that in the driver is ... spooky.
 
-John
+regards,
+Henning
