@@ -2,128 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8343D48411D
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jan 2022 12:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB30484144
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jan 2022 12:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232521AbiADLos (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jan 2022 06:44:48 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:52654 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232299AbiADLor (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 Jan 2022 06:44:47 -0500
-Received: from [10.180.13.117] (unknown [10.180.13.117])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxL9MKM9Rh47UAAA--.2257S2;
-        Tue, 04 Jan 2022 19:44:11 +0800 (CST)
-Subject: Re: [PATCH v1 1/2] HID: usbhid: enable remote wakeup function for
- usbhid device
-To:     Oliver Neukum <oneukum@suse.com>, gregkh@linuxfoundation.org,
-        Jiri Kosina <jikos@kernel.org>, benjamin.tissoires@redhat.com,
-        Thinh.Nguyen@synopsys.com, mathias.nyman@linux.intel.com,
-        stern@rowland.harvard.edu, rajatja@google.com,
-        chris.chiu@canonical.com, linux-usb@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhuyinbo@loongson.cn, benjamin.tissoires@redhat.com,
-        Thinh.Nguyen@synopsys.com, mathias.nyman@linux.intel.com,
-        stern@rowland.harvard.edu, rajatja@google.com,
-        chris.chiu@canonical.com, linux-usb@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1638956391-20149-1-git-send-email-zhuyinbo@loongson.cn>
- <caf93951-4c63-d0f1-e3f4-d0d49dec6a47@suse.com>
- <d2e4a97a-b89b-eaf4-5aaf-89af22227746@loongson.cn>
- <654e90fb-2f04-1f87-f56c-792757e140a0@suse.com>
- <8ed3dbee-c51c-db54-37b7-182d5a75fff8@loongson.cn>
- <78229065-61e6-3d61-8cf3-3c24c0f96ae2@suse.com>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <a3cffd50-ffb7-ce09-70ab-964e74669e68@loongson.cn>
-Date:   Tue, 4 Jan 2022 19:44:10 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S232689AbiADL7j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jan 2022 06:59:39 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:3679 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230292AbiADL7g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jan 2022 06:59:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1641297576; x=1672833576;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=OP/lvMMVw+0Of1bLjB7oFFNrCpJbfhAYUrbKN8w8Buw=;
+  b=GdmSlTDNAvmAkh19lgc529irUOYGoTjFnCjBNuGLqYQOw4a7d0i33nXJ
+   Aotdl4KVlzcntM1RKoUaJ5S/BuxqWnK1BM67XbSl44Rmhhkt+0wuybbhY
+   0ou2ZmZAR/94GhDKR3uVh/a0d5pLBfP87urafCQ39t3X1MjvDb/7KFNJc
+   M=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 04 Jan 2022 03:59:35 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 03:59:35 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 4 Jan 2022 03:59:34 -0800
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 4 Jan 2022 03:59:30 -0800
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
+        <bjorn.andersson@linaro.org>, <greg@kroah.com>
+CC:     <linux-kernel@vger.kernel.org>, <tsoni@codeaurora.org>,
+        <psodagud@codeaurora.org>, <satyap@codeaurora.org>,
+        <pheragu@codeaurora.org>, <rnayak@codeaurora.org>,
+        <sibis@codeaurora.org>, <saiprakash.ranjan@codeaurora.org>,
+        <quic_schowdhu@quicinc.com>
+Subject: [PATCH V3 0/7] Add Embedded USB Debugger (EUD) driver
+Date:   Tue, 4 Jan 2022 17:28:13 +0530
+Message-ID: <cover.1641288286.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <78229065-61e6-3d61-8cf3-3c24c0f96ae2@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxL9MKM9Rh47UAAA--.2257S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXrWxJF1rJw4xtFyftr17GFg_yoW5Jw43pa
-        10yF409r4DZr9Ykrna9a1xXw15Kr10y3ZxGF90y348ZwsrAry0vr4aqrZY9anrXrs3Cr1Y
-        v3y2qFy0va4kAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9G14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
-        W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbQVy7UUUUU==
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This is a series of patches that implements a driver for the control
+peripheral, EUD (Embedded USB Debugger). The EUD is a mini-USB hub
+implemented on chip to support the USB-based debug and trace capabilities.
+Apart from debug capabilities, EUD has a control peripheral. Control
+Peripheral is on when EUD is on and gets signals like USB attach, pet
+EUD etc. EUD driver listens to events like USB attach or detach and then
+informs the USB about these events via ROLE-SWITCH. At regular intervals,
+the EUD driver receives an interrupt to pet the driver indicating that
+the software is functional.
 
+Changes in V3
 
-在 2021/12/16 下午8:42, Oliver Neukum 写道:
-> 
-> On 16.12.21 11:59, zhuyinbo wrote:
->>
->>
-> Hi,
-> 
-> 
->> if you only talk about wakeup source you can think that usb-wakeup
->> source and acpi-lid wakeup source was different things. but if you
->> talk about laptop and distinguish lid and other event and you shoud
->> know the cannotation why system still continue sleep when lid closed
->> then system by other event wakeup. if you need test usb-wakeup for
->> laptop and that lid shouldn't be closed.
-> I am sorry, I am not sure what you wish to say here. Could you rephrase it?
->>> from the default.
-That connotation lid was closed represent human will not use laptop and 
-system must keep it was sleep and even though the laptop was 
-accidentally awakened.
->>>
->>> In general any HID device must have wakeup capability to be usable for
->>> selective suspend. You cannot draw conclusions from that.
->> you still can has wakeup capability, but it should be keep enabled by
->> default. because the hid device should be convenient for human,
-> 
-> Well, no. We are talking about a kernel default. That needs to be so that it
-> always works on all systems. Convinience is secondary.
-if system can doesn't consider lid open event and ignore the connotation 
-about lid open event I think that system behavior is inappropriate. you 
-don't think my patch was inapproriate that on some system doesn't 
-consider lid open event.
+* Removed the patch for registration of EUD connector as it is no longer
+  required.
+  
+* Added the description to include EUD in usb-connector.yaml  
 
-In additon, if it doesn't include my patch and non-keyboard hid device 
-doesn't make system wakeup by ohci. because ohci driver doesn't export 
-wakeup property for usb slave device.
-> 
-> 
->> if you don't think so and I think HID definition is ridiculous.
-> It does have its weaknesses, in particular with respect to differentiating
-> between events for wakeups. But we cannot change it.
->>
->>
->> In addition, I had said that laptop usb wakeup was disabled in system
->> bios by default and if user want enable usb wakeup that was only by
->> configure bios and doesn't need enable wakeup node if my patch was
->> applied
-> If you deviate from the default, you deviate. That is reducing the number of
-> changes is worth little. The default must be above everything else safe.
-> 
->      Regards
->          Oliver
-bios and kernel was two sets of things and they should has their own 
-indepdent configuration.  if bios enable usb wakeup but wakeup is still 
-not work well. Do you think it is appropriate?
+* Implemented comments on V2 of the patch.
 
-in additon, The keyboard device is enabled by default, and other hid 
-devices should also be enabled. Otherwise, it will be treated differently.
+Changes in V2
 
-> 
+* Fixed the yaml issue and also implemented comments on yaml in V1.
+
+Changes in V1
+
+* EUD has now been mapped as a separate DT node as it is an independent QCOM IP.
+
+* EUD is attached to the connector child of dwc3 via port end point since EUD
+  driver needs the connector for role-switching.
+
+* EUD driver has been moved now to drivers/soc/qcom/qcom_eud.c.
+
+* All the comments from version 0 of the patch has been implemented.
+
+Souradeep Chowdhury (7):
+  dt-bindings: Add the yaml bindings for EUD
+  dt-bindings: connector: Add property for EUD type-C connector
+  bindings: usb: dwc3: Update dwc3 properties for EUD connector
+  soc: qcom: eud: Add driver support for Embedded USB Debugger(EUD)
+  arm64: dts: qcom: sc7280: Add EUD dt node and dwc3 connector
+  arm64: dts: qcom: sc7280: Set the default dr_mode for usb2
+  MAINTAINERS: Add maintainer entry for EUD
+
+ Documentation/ABI/testing/sysfs-driver-eud         |   9 +
+ .../bindings/connector/usb-connector.yaml          |   7 +-
+ .../devicetree/bindings/soc/qcom/qcom,eud.yaml     |  50 ++++
+ .../devicetree/bindings/usb/snps,dwc3.yaml         |   6 +
+ MAINTAINERS                                        |   8 +
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts            |   4 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  25 ++
+ drivers/soc/qcom/Kconfig                           |  10 +
+ drivers/soc/qcom/Makefile                          |   1 +
+ drivers/soc/qcom/qcom_eud.c                        | 260 +++++++++++++++++++++
+ 10 files changed, 379 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-eud
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+ create mode 100644 drivers/soc/qcom/qcom_eud.c
+
+-- 
+2.7.4
 
