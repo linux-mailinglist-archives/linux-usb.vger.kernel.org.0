@@ -2,90 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75CE34843DA
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jan 2022 15:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E73A4843F4
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jan 2022 15:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231504AbiADOx3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jan 2022 09:53:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiADOx3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jan 2022 09:53:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55AC4C061761;
-        Tue,  4 Jan 2022 06:53:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E70CA612E7;
-        Tue,  4 Jan 2022 14:53:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01D2AC36AED;
-        Tue,  4 Jan 2022 14:53:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641308008;
-        bh=0y3hkgpNcGJVZzPYwC7KrnbZbGGnlR7BZtECqLgn7uA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=M4FpgfBHDjWLkSAutnr6OJl0w+HHGWaCjjXRfPZZ0jxQj1VZ4IZ1JuYHJNJhHP/eB
-         +FR8TvC3p8i9iYKYgi/f6AzbwqkBVAagzF8KQVcQuW1J98oGTgmkDEYOsd0qqAQ71K
-         W66bRITleZOgOJJE/G7px0hXfU5K5V+KSLsH7qm09z2rcgKxURjNRS4FBqv2c/7PxE
-         dvwXUkjinEfZD9298/wBDlA+SoTkLEfvY1fGF/hyqPgN5+OtY5z95DuulsU8QEbi14
-         hcEB1nypWwm0EgPzVcaPSUkI095Pqht58e185upg4tjp603k45/5ga3tcygNVdsJfj
-         i9Z4B4PouY5TQ==
-Date:   Tue, 4 Jan 2022 06:53:26 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Henning Schild <henning.schild@siemens.com>,
-        Aaron Ma <aaron.ma@canonical.com>
-Cc:     <davem@davemloft.net>, <hayeswang@realtek.com>, <tiwai@suse.de>,
-        <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: usb: r8152: Add MAC passthrough support for more
- Lenovo Docks
-Message-ID: <20220104065326.2a73f674@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220104123814.32bf179e@md1za8fc.ad001.siemens.net>
-References: <20211116141917.31661-1-aaron.ma@canonical.com>
-        <20220104123814.32bf179e@md1za8fc.ad001.siemens.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S234549AbiADO5L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jan 2022 09:57:11 -0500
+Received: from mail-m17657.qiye.163.com ([59.111.176.57]:59660 "EHLO
+        mail-m17657.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234483AbiADO5G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jan 2022 09:57:06 -0500
+DKIM-Signature: a=rsa-sha256;
+        b=WahZq+y3AikCNe/exLHi/0ybc0w3qC5cqUDbQKJ34IH0g4scsH/3VrVnU07S2VhQa5+pNwYb2J5Gebs179v7ge2CR2Sc0Jdt9B7eDoBFJCnVTuT2psbPnXxg05QUPBrngMU2ZmiB2xWCzeofEd6/RzRNyo344tHLszhpXnEFCzI=;
+        s=default; c=relaxed/relaxed; d=vivo.com; v=1;
+        bh=XTw2N7E7lKxzJ8b3zO8P0M0zLQGt1OIHCzEObglDE0c=;
+        h=date:mime-version:subject:message-id:from;
+Received: from vivo-600-G6.vivo.xyz (unknown [109.244.72.201])
+        by mail-m17657.qiye.163.com (Hmail) with ESMTPA id 824E3280162;
+        Tue,  4 Jan 2022 22:57:01 +0800 (CST)
+From:   Yaqin Pan <akingchen@vivo.com>
+To:     gregkh@linuxfoundation.org
+Cc:     akingchen@vivo.com, balbi@kernel.org, devicetree@vger.kernel.org,
+        kernel@vivo.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH v3 1/2] usb: dwc3: Add a quirk to set GUCTL.SPRSCTRLTRANSEN bit.
+Date:   Tue,  4 Jan 2022 22:56:55 +0800
+Message-Id: <20220104145655.4802-1-akingchen@vivo.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <YdL7iDbNk0cct1Bs@kroah.com>
+References: <YdL7iDbNk0cct1Bs@kroah.com>
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWRofSx1WHUpLQ0pKS0NOSh
+        lLVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWVVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Kww6DQw6LT5WFws*Hx4rTwkr
+        Ni0wFBxVSlVKTU9KSEtDSUlJS0lNVTMWGhIXVRoQEhUcGBMeFTsNEg0UVRgUFkVZV1kSC1lBWUpL
+        QlVJT09VTElVSUtKWVdZCAFZQU9PS0o3Bg++
+X-HM-Tid: 0a7e2597f14cda03kuws824e3280162
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 4 Jan 2022 12:38:14 +0100 Henning Schild wrote:
-> This patch is wrong and taking the MAC inheritance way too far. Now any
-> USB Ethernet dongle connected to a Lenovo USB Hub will go into
-> inheritance (which is meant for docks).
-> 
-> It means that such dongles plugged directly into the laptop will do
-> that, or travel adaptors/hubs which are not "active docks".
-> 
-> I have USB-Ethernet dongles on two desks and both stopped working as
-> expected because they took the main MAC, even with it being used at the
-> same time. The inheritance should (if at all) only be done for clearly
-> identified docks and only for one r8152 instance ... not all. Maybe
-> even double checking if that main PHY is "plugged" and monitoring it to
-> back off as soon as it is.
-> 
-> With this patch applied users can not use multiple ethernet devices
-> anymore ... if some of them are r8152 and connected to "Lenovo" ...
-> which is more than likely!
-> 
-> Reverting that patch solved my problem, but i later went to disabling
-> that very questionable BIOS feature to disable things for good without
-> having to patch my kernel.
-> 
-> I strongly suggest to revert that. And if not please drop the defines of
-> 
-> > -		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
-> > -		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:  
-> 
-> And instead of crapping out with "(unnamed net_device) (uninitialized):
-> Invalid header when reading pass-thru MAC addr" when the BIOS feature
-> is turned off, one might want to check
-> DSDT/WMT1/ITEM/"MACAddressPassThrough" which is my best for asking the
-> BIOS if the feature is wanted.
+On Thu, 2022-01-03 13:35 UTC Greg Kroah-Hartman wrote:
+>On Fri, Dec 31, 2021 at 07:59:31PM +0800, Yaqin Pan wrote:
+>> On Thu, 30 Dec 2021 16:48:09 +0100 Greg Kroah-Hartman wrote:
+>> >On Thu, Dec 30, 2021 at 11:36:12PM +0800, Yaqin Pan wrote:
+>> >> On Thu, 30 Dec 2021 15:12:27 +0100 Greg Kroah-Hartman wrote:
+>> >> >> This quirk is only for dwc3 host mode.
+>> >> >> the dwc3 controller can't emurate some devices successfully.
+>> >> >> For example, TF card reader (aaaa:8816):
+>> >> >> failed log
+>> >> >> usb 1-1: new high-speed USB device number 2 using xhci-hcd
+>> >> >> usb 1-1: device descriptor read/all, error -110
+>> >> >> >From the usb analyzer, always return NAK in the data phase.
+>> >> >> if enable the GUCTL.SPRSCTRLTRANSEN bit. then the log is:
+>> >> >> usb 2-1: new high-speed USB device number 3 using xhci-hcd
+>> >> >> usb 2-1: New USB device found, idVendor=aaaa,
+>> >> >> idProduct=8816, bcdDevice=13.08
+>> >> >> usb 2-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+>> >> >> usb 2-1: Product: MXT USB Device
+>> >> >> usb 2-1: Manufacturer: MXTronics
+>> >> >> usb 2-1: SerialNumber: 150101v01
+>> >> >> usb 2-1: New USB device found, VID=aaaa, PID=8816
+>> >> >> 
+>> >> >> Some devices are slow in responding to Control transfers.
+>> >> >> Scheduling mulitiple transactions in one microframe/frame
+>> >> >> can cause the devices to misbehave. if this qurik is enabled,
+>> >> >> the host controller schedules transations for a Control transfer
+>> >> >> in defferent microframes/frame.
+>> >> >
+>> >> >If this is needed for all devices (i.e. you do not know what device is
+>> >> >going to be plugged in), why not just enable it for all controllers?
+>> >> >Why whould you NOT want this enabled?
+>> >> >
+>> >> >Or is this a broken hardware device and only specific host controllers
+>> >> >need this?  If so, how do we know which ones need this set and which do
+>> >> >not?
+>> >> 
+>> >> I think not all dwc3 controllers need this. For cell phone,customers may
+>> >> use various usb devices, we can enable this quirk to fix some compatibility
+>> >> issues. For some chip platform of qcom, i encounter this issue, not every
+>> >> platform i encounter this problem.
+>> >> 
+>> >> If enabled for all controllers, it will reduce the speed of Control transfers. 
+>> >> So i think it would be better for user to enable it by their own purposes.
+>> >
+>> >But how do hardware vendors know to enable this?  Can we trigger off of
+>> >PCI ids?  Do we need a list of quirks to show which host controllers are
+>> >broken this way?
+>> >
+>> >Burying something as basic as "reliable device connection" in a DT quirk
+>> >seems very sloppy to me.  We want reliable systems, right?
+>> 
+>> Yes, we want reliable systems. But i don't have a good ideal about this issue.
+>> when we meet this problem, and from the dwc-usb3 controller datasheet,we know
+>> enable one bit in dwc-usb3 controller's register can fixed this issue.
+>> 
+>> Of course, i can list the host controllers that i used broken this way if needed.
+>
+>Please have a list of controller that this is needed for, and add the
+>quirk for them only.  Don't require this to be in a DT file as that will
+>never be noticed.
 
-Thank you for the report!
+The dwc3-core i list below:
+qcom,sm8350-dwc3;
+qcom,sm7325-dwc3;
+qcom,sm6225-dwc3;
+....
+And i will try to contact with qcom for further help.
 
-Aaron, will you be able to fix this quickly? 5.16 is about to be
-released.
+thanks,
+
+Yaqin pan
+
