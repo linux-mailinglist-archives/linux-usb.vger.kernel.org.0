@@ -2,79 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 997464841FA
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jan 2022 14:00:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E433B4842A0
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jan 2022 14:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233216AbiADM7y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jan 2022 07:59:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233221AbiADM7x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jan 2022 07:59:53 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336A1C06179B
-        for <linux-usb@vger.kernel.org>; Tue,  4 Jan 2022 04:59:53 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id c4so21851004iln.7
-        for <linux-usb@vger.kernel.org>; Tue, 04 Jan 2022 04:59:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=OcVKYMqD1OAPCy0gYs4jHd1iGD2P0eAuhSWYYDqPTRU=;
-        b=D2lIwKn+0b56wSGQyvR3NdUirOZfHrtXkr/MLSKSXTqFplIs++OEg0JYRZaFOQOLkQ
-         hGekQZKIb1QaUlhAjZ9hwLbvqWcb9NfdcEHXybj9+HZKYmT88qfRtlTrBejXiFkraJXT
-         c/b6ASFEy+wg80d3GRR6/UWWqvLiONhj9b7rhkTVMMx8IKBc8cWtBlGUpTB7KGMY6RkM
-         N08WavIFahxMVU1GOQdd9v4FX/pLjTVPdA8snx3kTaWXip92C+7rbVGk3toRZUQkBrJc
-         lrivlFzScxrY9kCv57ZUoiOWcSmVJ0SksArWGFUnekx1uA4525h867/IEcO2E/1r3cnI
-         2y3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=OcVKYMqD1OAPCy0gYs4jHd1iGD2P0eAuhSWYYDqPTRU=;
-        b=49SNjPatMlyvP22gghjfRkWrTJ0iYjih3wDTeEXaGv/IvzFSejt3poG/09TVJkKW34
-         WEYVvSTOF4gJzNDMal8rXpsGngdy1t7Kpz+CV6bYNB6vU8ZYi63fYComfc+Sm7jy8zhs
-         IiINLpK/orBygozrVglSJHrDLrQacQ/4SiEBLv5jx0VtYkbn9DyU1cVA158+Z2pKFSBh
-         uRj2BzxWI1TeJQoenwxAuJb3kf6rc0+pRXpMPWeMZJvj/71PgyQ9qFdy08pD61TVQdxX
-         m+oPMFylToAIviTPEX5EJDqLKh3x4rzo10g8MYrp+tteQM8pliqGkdH5d7UUCWRNJVUX
-         hFtQ==
-X-Gm-Message-State: AOAM531Mx5nHyzhHAUbPDFTgLHTxhQw5muW2ZhaAttTTDsJON+71JRIV
-        FKjZsXmURNH8bACiUJgQVGaR/kMJnoAGJoPzwtA=
-X-Google-Smtp-Source: ABdhPJwlPFvjyHygZR/+PXwJnuPSGCQ15uipz7bWN/19QbWn6QSO8cDvYwRwQyI8iGE1G4jMNp379LNdYwnutEh19Uo=
-X-Received: by 2002:a05:6e02:1747:: with SMTP id y7mr19204648ill.77.1641301192368;
- Tue, 04 Jan 2022 04:59:52 -0800 (PST)
+        id S233679AbiADNik (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jan 2022 08:38:40 -0500
+Received: from mga14.intel.com ([192.55.52.115]:55154 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233656AbiADNij (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 4 Jan 2022 08:38:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641303519; x=1672839519;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1faGgl1n5RMDy4eY/oAFnPrRhLAJ+Ie+KfhM2G1o9gw=;
+  b=DGssk2yTp8y3WVpLVgil4oiS0/T6QP6I7zO6DwkI6XCgweSZyX+QyBqJ
+   t99UdgHvrgOFtRKDad8yRK94tfAlDxm+7V/DtpZnCUqJS/qC0AduyRS1W
+   2bBlzon9UYbrVuO2nC3hiJqOIm8Drf1Qozm4V/J2nqxISUN6XvxPMmYz+
+   nTlYmen3h12rXJ2O7qF/5c8m2X40AW4hWHEBQrdbZq4ERC/nhBiyG10wb
+   EMIUzpzIrnkID60cRHmkxBpf2sWitcE2bwMW03OeQeu9hOYBUR8N7pyEa
+   bN4Nv2fk0WRJfPGYNRonIis1y6EfyUeFB1npNX/0tmihnyEWJmOdcfGuj
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="242430114"
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="242430114"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 05:38:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="556169291"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 04 Jan 2022 05:38:35 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id CFCB41F8; Tue,  4 Jan 2022 15:38:45 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Alexander Usyskin <alexander.usyskin@intel.com>
+Subject: [PATCH v1 1/5] nvmem: core: Remove unused devm_nvmem_unregister()
+Date:   Tue,  4 Jan 2022 15:38:39 +0200
+Message-Id: <20220104133843.44272-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1d01:0:0:0:0 with HTTP; Tue, 4 Jan 2022 04:59:52
- -0800 (PST)
-Reply-To: mrsaishag45@gmail.com
-From:   Mrs Aisha Al-Qaddafi <mrsaishagaddafi488@gmail.com>
-Date:   Tue, 4 Jan 2022 04:59:52 -0800
-Message-ID: <CAOXivUo-2HF2939XQtGwQ5Jk=9411W4hd=NWwQcUh6PkGzGYYg@mail.gmail.com>
-Subject: Dear Friend,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Dear Friend,
-I came across your e-mail contact prior a private search while in need
-of your assistance. I am Aisha Al-Qaddafi, the only biological
-Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
-single Mother and a Widow with three Children.
+There are no users and seems no will come of the devm_nvmem_unregister().
+Remove the function.
 
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country, may be from there, we can build business relationship in
-the nearest future.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/nvmem/core.c           | 15 ---------------
+ include/linux/nvmem-provider.h |  8 --------
+ 2 files changed, 23 deletions(-)
 
-I am willing to negotiate investment/business profit sharing ratio
-with you base on the future investment earning profits.
-If you are willing to handle this project on my behalf kindly reply
-urgent to enable me provide you more information about the investment
-funds.
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 23a38dcf0fc4..fbf7dec775fb 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -952,21 +952,6 @@ static int devm_nvmem_match(struct device *dev, void *res, void *data)
+ 	return *r == data;
+ }
+ 
+-/**
+- * devm_nvmem_unregister() - Unregister previously registered managed nvmem
+- * device.
+- *
+- * @dev: Device that uses the nvmem device.
+- * @nvmem: Pointer to previously registered nvmem device.
+- *
+- * Return: Will be negative on error or zero on success.
+- */
+-int devm_nvmem_unregister(struct device *dev, struct nvmem_device *nvmem)
+-{
+-	return devres_release(dev, devm_nvmem_release, devm_nvmem_match, nvmem);
+-}
+-EXPORT_SYMBOL(devm_nvmem_unregister);
+-
+ static struct nvmem_device *__nvmem_device_get(void *data,
+ 			int (*match)(struct device *dev, const void *data))
+ {
+diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
+index 98efb7b5660d..99c01c43d7a8 100644
+--- a/include/linux/nvmem-provider.h
++++ b/include/linux/nvmem-provider.h
+@@ -133,8 +133,6 @@ void nvmem_unregister(struct nvmem_device *nvmem);
+ struct nvmem_device *devm_nvmem_register(struct device *dev,
+ 					 const struct nvmem_config *cfg);
+ 
+-int devm_nvmem_unregister(struct device *dev, struct nvmem_device *nvmem);
+-
+ void nvmem_add_cell_table(struct nvmem_cell_table *table);
+ void nvmem_del_cell_table(struct nvmem_cell_table *table);
+ 
+@@ -153,12 +151,6 @@ devm_nvmem_register(struct device *dev, const struct nvmem_config *c)
+ 	return nvmem_register(c);
+ }
+ 
+-static inline int
+-devm_nvmem_unregister(struct device *dev, struct nvmem_device *nvmem)
+-{
+-	return -EOPNOTSUPP;
+-}
+-
+ static inline void nvmem_add_cell_table(struct nvmem_cell_table *table) {}
+ static inline void nvmem_del_cell_table(struct nvmem_cell_table *table) {}
+ 
+-- 
+2.34.1
 
-Your Urgent Reply Will Be Appreciated
-Best Regards
-Mrs Aisha Al-Qaddafi
