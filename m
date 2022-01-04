@@ -2,175 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7779D484101
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jan 2022 12:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8343D48411D
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jan 2022 12:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232402AbiADLiV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jan 2022 06:38:21 -0500
-Received: from mail-eopbgr00046.outbound.protection.outlook.com ([40.107.0.46]:2096
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        id S232521AbiADLos (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jan 2022 06:44:48 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:52654 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230166AbiADLiU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 Jan 2022 06:38:20 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JwgOvSwRw2MRi12vv4xNNAoCKyzUKKZu6q6hJCux/I/pXVKLYRVxkSlGvrJU4az68fk2bd4Tuyrzs9clWvNWWmTMhy4t1usLetp6BPX10yoCps3ZAKPduqVJhtOsTp3zxK0zrY+5kjLIfFHPF3WIGxD3kjE6T+n+UOU3X+9s4kWccJ0A911sRy955zmyFm8PtkxMv3ZbMxZb/D5PZSqMZ4n7zk0+hbfJCnUjZcyPXsvGe6o1dD7QrgVYP1SevF4ettuv1kcr0afb7WFUv4qjcHAGf8aRN2nGAxdhUUnK+u7r7QNFxlUFU9Ysf+csucXWcZsZnW1/0l+GYbDJNjL7/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zJ9F2JqgP+RafjOsIHZdERztQrTtQ02DYxLtaV2SsKI=;
- b=JpC7PLe4bHBRjmC1LnrPBpLyTyEi7IPAF1x2+A9R7vxQVWhloLA+7FFUgaFNj7f0rdj+ClHB9luEBATSxOB95bDKu6Vv2FRP3in3T2LjssAj32plMeIgWicx977NZ50iSfIFMRM9qDdiL5/KZyQguzm7VQCvZoltSR58ILOUqjV+jGnINygDurE3qQOAMCbKq6/XVUbfNbnNQNBuSFmDabxV71Xym62cYUugXBf2OitQdyNqA8wLmiKWffT2EmRqIx0wY2+chAjHVvd6Xiu0TwKX6e/NSkI8Je7Q6c83E7Hz+VR2xDc8yVilRVJyU7TbGLPthi9UFMpyLWXi9xkbvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.71) smtp.rcpttodomain=canonical.com smtp.mailfrom=siemens.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zJ9F2JqgP+RafjOsIHZdERztQrTtQ02DYxLtaV2SsKI=;
- b=AvxGy8nUx+HhCIemWppq9jPxlXP2Av2cEXQK5fIo9w4+MNk4sEIw/OCie2x0ytQIfVhUU3eX8agxnFP6RBMpzskjpbeltH76AkZFKfF2WBuDgTl1a7VKFwfD5Gf7cpgopQav4BnRLAyrAjao/w5QrY80pHpJCzTokqhJ89zbspULpFoaZL1PJtWkM47Ob19pHAAvPV1+3nJ39dSUVd5+ZnCecouu7BbetRXuCc/34W2r7mJNsWLvbFM0YM/AmAYtAv80KscR5DDFNxEgnFJrHfxAFJNIXdW8LSAfGH5H3bzAIRwKfozivYBV3VIit2Cg6CMyRCgQX5wbx496ltofTQ==
-Received: from DB9PR05CA0008.eurprd05.prod.outlook.com (2603:10a6:10:1da::13)
- by AM0PR10MB2370.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:d7::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.13; Tue, 4 Jan
- 2022 11:38:18 +0000
-Received: from DB5EUR01FT038.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:10:1da:cafe::f1) by DB9PR05CA0008.outlook.office365.com
- (2603:10a6:10:1da::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14 via Frontend
- Transport; Tue, 4 Jan 2022 11:38:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.71)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=siemens.com;
-Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.71 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.71; helo=hybrid.siemens.com;
-Received: from hybrid.siemens.com (194.138.21.71) by
- DB5EUR01FT038.mail.protection.outlook.com (10.152.4.191) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4844.14 via Frontend Transport; Tue, 4 Jan 2022 11:38:18 +0000
-Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
- DEMCHDC9SKA.ad011.siemens.net (194.138.21.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 4 Jan 2022 12:38:17 +0100
-Received: from md1za8fc.ad001.siemens.net (167.87.0.7) by
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 4 Jan 2022 12:38:17 +0100
-Date:   Tue, 4 Jan 2022 12:38:14 +0100
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Aaron Ma <aaron.ma@canonical.com>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <hayeswang@realtek.com>,
-        <tiwai@suse.de>, <linux-usb@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: usb: r8152: Add MAC passthrough support for more
- Lenovo Docks
-Message-ID: <20220104123814.32bf179e@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20211116141917.31661-1-aaron.ma@canonical.com>
-References: <20211116141917.31661-1-aaron.ma@canonical.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S232299AbiADLor (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 4 Jan 2022 06:44:47 -0500
+Received: from [10.180.13.117] (unknown [10.180.13.117])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxL9MKM9Rh47UAAA--.2257S2;
+        Tue, 04 Jan 2022 19:44:11 +0800 (CST)
+Subject: Re: [PATCH v1 1/2] HID: usbhid: enable remote wakeup function for
+ usbhid device
+To:     Oliver Neukum <oneukum@suse.com>, gregkh@linuxfoundation.org,
+        Jiri Kosina <jikos@kernel.org>, benjamin.tissoires@redhat.com,
+        Thinh.Nguyen@synopsys.com, mathias.nyman@linux.intel.com,
+        stern@rowland.harvard.edu, rajatja@google.com,
+        chris.chiu@canonical.com, linux-usb@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhuyinbo@loongson.cn, benjamin.tissoires@redhat.com,
+        Thinh.Nguyen@synopsys.com, mathias.nyman@linux.intel.com,
+        stern@rowland.harvard.edu, rajatja@google.com,
+        chris.chiu@canonical.com, linux-usb@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1638956391-20149-1-git-send-email-zhuyinbo@loongson.cn>
+ <caf93951-4c63-d0f1-e3f4-d0d49dec6a47@suse.com>
+ <d2e4a97a-b89b-eaf4-5aaf-89af22227746@loongson.cn>
+ <654e90fb-2f04-1f87-f56c-792757e140a0@suse.com>
+ <8ed3dbee-c51c-db54-37b7-182d5a75fff8@loongson.cn>
+ <78229065-61e6-3d61-8cf3-3c24c0f96ae2@suse.com>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <a3cffd50-ffb7-ce09-70ab-964e74669e68@loongson.cn>
+Date:   Tue, 4 Jan 2022 19:44:10 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.87.0.7]
-X-ClientProxiedBy: DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) To
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 80931c7e-e1fe-435c-c9b4-08d9cf76b404
-X-MS-TrafficTypeDiagnostic: AM0PR10MB2370:EE_
-X-Microsoft-Antispam-PRVS: <AM0PR10MB237002782E044BC4091C4DE3854A9@AM0PR10MB2370.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 68xzEBTXD5Mnenirnyc9WQM2/jO2TWZb6Coew39WsXZXNCoH5zjA3R4XdETdzbAz0VFQSkS7wu5dt3h027K8jC0S3c99GzC2ZgHgoHDai8KzIK4DMcoaN5kmoRioyVyenJNfb//oj8qeZYXtSCxyHU4t2EWIng3qu/0lhZsIJu/u/aSrrAgL3wBZy+yU6YwizrUWryrzXvIoz0+uJD+vABb4N6TX0Fz+PadJRWKDOCsqVsyzEde6VJUQnl59BZs7COQOFXPG0495/LTJdy7bPPgq8ZiKiyYTKanyAtveQopXKvvD3a/xyxHjmMuZ9A/8csQ6QdUo57o4u6tRwOe/QsShnPPVar/JsV/sAzvBQvO+cRLYvTW+Er7HdsJiJp8cvDkLfoeeElfKjW80ZOVYIX75ocbU9IA+K5rO+qIGRbTyvEIRoXEuTHMdal7O6fLFiw2pEY6ktNGAn9rT9borO9TLDx5z/A1hdssnHO3CTxhEVhb8P7Y0I3JtM8VCFh+jh85iB2EkmCKVJqd71/hEFINBCrqtnMUFMHD5qU2mlRvdvyqSBFiBpzBnKyUc8gXPOV4Thd/H9+vgURkY+DehfJZ3YKbJCvocJd0MY1THpEXzTdASagxSDKQZcERq49BKysA98/JsDy9cf5Te2hRi1J3rGKKjmqJUbFo/zLCPm4JjAMNIQVmhSZ6Lzo8IsOQlvAFTqIPkpEYpt7pKFyr1HoNoPUA8hv+aOW1t7mka0TjivxqpA0ZHJvoD2bVpo2JF/5G6BVefSR4Z0w4887w5Y5XY8tabhBip5/zwASqDybE=
-X-Forefront-Antispam-Report: CIP:194.138.21.71;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(40470700002)(36840700001)(46966006)(44832011)(36860700001)(82310400004)(186003)(7696005)(54906003)(8936002)(356005)(83380400001)(81166007)(16526019)(2906002)(26005)(6666004)(9686003)(55016003)(498600001)(47076005)(70206006)(956004)(336012)(40460700001)(70586007)(8676002)(4326008)(5660300002)(82960400001)(86362001)(6916009)(1076003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2022 11:38:18.2157
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 80931c7e-e1fe-435c-c9b4-08d9cf76b404
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.71];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT038.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB2370
+In-Reply-To: <78229065-61e6-3d61-8cf3-3c24c0f96ae2@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9DxL9MKM9Rh47UAAA--.2257S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXrWxJF1rJw4xtFyftr17GFg_yoW5Jw43pa
+        10yF409r4DZr9Ykrna9a1xXw15Kr10y3ZxGF90y348ZwsrAry0vr4aqrZY9anrXrs3Cr1Y
+        v3y2qFy0va4kAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9G14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+        6r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
+        s7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
+        W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbQVy7UUUUU==
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch is wrong and taking the MAC inheritance way too far. Now any
-USB Ethernet dongle connected to a Lenovo USB Hub will go into
-inheritance (which is meant for docks).
 
-It means that such dongles plugged directly into the laptop will do
-that, or travel adaptors/hubs which are not "active docks".
 
-I have USB-Ethernet dongles on two desks and both stopped working as
-expected because they took the main MAC, even with it being used at the
-same time. The inheritance should (if at all) only be done for clearly
-identified docks and only for one r8152 instance ... not all. Maybe
-even double checking if that main PHY is "plugged" and monitoring it to
-back off as soon as it is.
-
-With this patch applied users can not use multiple ethernet devices
-anymore ... if some of them are r8152 and connected to "Lenovo" ...
-which is more than likely!
-
-Reverting that patch solved my problem, but i later went to disabling
-that very questionable BIOS feature to disable things for good without
-having to patch my kernel.
-
-I strongly suggest to revert that. And if not please drop the defines of
-
-> -		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
-> -		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
-
-And instead of crapping out with "(unnamed net_device) (uninitialized):
-Invalid header when reading pass-thru MAC addr" when the BIOS feature
-is turned off, one might want to check
-DSDT/WMT1/ITEM/"MACAddressPassThrough" which is my best for asking the
-BIOS if the feature is wanted.
-
-regards,
-Henning
-
-Am Tue, 16 Nov 2021 22:19:17 +0800
-schrieb Aaron Ma <aaron.ma@canonical.com>:
-
-> Like ThinkaPad Thunderbolt 4 Dock, more Lenovo docks start to use the
-> original Realtek USB ethernet chip ID 0bda:8153.
+在 2021/12/16 下午8:42, Oliver Neukum 写道:
 > 
-> Lenovo Docks always use their own IDs for usb hub, even for older
-> Docks. If parent hub is from Lenovo, then r8152 should try MAC
-> passthrough. Verified on Lenovo TBT3 dock too.
+> On 16.12.21 11:59, zhuyinbo wrote:
+>>
+>>
+> Hi,
 > 
-> Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
-> ---
->  drivers/net/usb/r8152.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index 4a02f33f0643..f9877a3e83ac 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -9603,12 +9603,9 @@ static int rtl8152_probe(struct usb_interface
-> *intf, netdev->hw_features &= ~NETIF_F_RXCSUM;
->  	}
->  
-> -	if (le16_to_cpu(udev->descriptor.idVendor) ==
-> VENDOR_ID_LENOVO) {
-> -		switch (le16_to_cpu(udev->descriptor.idProduct)) {
-> -		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
-> -		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
-> -			tp->lenovo_macpassthru = 1;
-> -		}
-> +	if (udev->parent &&
-> +
-> le16_to_cpu(udev->parent->descriptor.idVendor) == VENDOR_ID_LENOVO) {
-> +		tp->lenovo_macpassthru = 1;
->  	}
->  
->  	if (le16_to_cpu(udev->descriptor.bcdDevice) == 0x3011 &&
-> udev->serial &&
+>> if you only talk about wakeup source you can think that usb-wakeup
+>> source and acpi-lid wakeup source was different things. but if you
+>> talk about laptop and distinguish lid and other event and you shoud
+>> know the cannotation why system still continue sleep when lid closed
+>> then system by other event wakeup. if you need test usb-wakeup for
+>> laptop and that lid shouldn't be closed.
+> I am sorry, I am not sure what you wish to say here. Could you rephrase it?
+>>> from the default.
+That connotation lid was closed represent human will not use laptop and 
+system must keep it was sleep and even though the laptop was 
+accidentally awakened.
+>>>
+>>> In general any HID device must have wakeup capability to be usable for
+>>> selective suspend. You cannot draw conclusions from that.
+>> you still can has wakeup capability, but it should be keep enabled by
+>> default. because the hid device should be convenient for human,
+> 
+> Well, no. We are talking about a kernel default. That needs to be so that it
+> always works on all systems. Convinience is secondary.
+if system can doesn't consider lid open event and ignore the connotation 
+about lid open event I think that system behavior is inappropriate. you 
+don't think my patch was inapproriate that on some system doesn't 
+consider lid open event.
+
+In additon, if it doesn't include my patch and non-keyboard hid device 
+doesn't make system wakeup by ohci. because ohci driver doesn't export 
+wakeup property for usb slave device.
+> 
+> 
+>> if you don't think so and I think HID definition is ridiculous.
+> It does have its weaknesses, in particular with respect to differentiating
+> between events for wakeups. But we cannot change it.
+>>
+>>
+>> In addition, I had said that laptop usb wakeup was disabled in system
+>> bios by default and if user want enable usb wakeup that was only by
+>> configure bios and doesn't need enable wakeup node if my patch was
+>> applied
+> If you deviate from the default, you deviate. That is reducing the number of
+> changes is worth little. The default must be above everything else safe.
+> 
+>      Regards
+>          Oliver
+bios and kernel was two sets of things and they should has their own 
+indepdent configuration.  if bios enable usb wakeup but wakeup is still 
+not work well. Do you think it is appropriate?
+
+in additon, The keyboard device is enabled by default, and other hid 
+devices should also be enabled. Otherwise, it will be treated differently.
+
+> 
 
