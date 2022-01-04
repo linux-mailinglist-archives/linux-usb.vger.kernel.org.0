@@ -2,295 +2,214 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ACCC4844A7
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jan 2022 16:33:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D564845B0
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jan 2022 16:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234790AbiADPdW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jan 2022 10:33:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
+        id S232395AbiADP5f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jan 2022 10:57:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233544AbiADPdV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jan 2022 10:33:21 -0500
+        with ESMTP id S229700AbiADP5f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jan 2022 10:57:35 -0500
 Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D2BC061784
-        for <linux-usb@vger.kernel.org>; Tue,  4 Jan 2022 07:33:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4141C061761
+        for <linux-usb@vger.kernel.org>; Tue,  4 Jan 2022 07:57:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=Afi+Ptr3E/fV1WEq+2mFLajGVlp7taApFIdL+IwPa6U=; b=x+RkH
-        KKX/B3frJ4FgKyRmoxN5bU0UvVTq2i3fgdkbzomJctt6DFseG9/XQ1SG/swWPdqulge08qOpOqQSy
-        2y8aHiLgcEUEV9ehltG5Wo8QV1qxUCE3onvAKBn2rJHHXc6FdCCmvzmAX2JYkpfl5AQhGEdWvRdA4
-        qz528WoZQSkvWCiVkGW6G2LYPkIo0HLYmMCSTyzEjdTaq4bV/PZuJCdUL7e9Jr1NptTHOAU9Pqhfv
-        Z6+JgACjclaMexLTWbgXcd5Y83SSUzjDu9SkgohXjfef0HdoRiYcScgfMIz5NteVqvE9D2Cc33q0c
-        BbNSZT2/xz0Yu2W6jUWN1NI37diqA==;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-ID:Content-Description;
+        bh=a89pblxWIi4O3HuTwJs0ZlxZz4wBijCSXcl12PGuJ0o=; b=wNwUgns5K0sYRpTt3YBNPrdudD
+        v6RYy9K+qYRLpMa5que615+xgG82mwIqA1IQHGCXxA5VzKzk0/wBBCGc75sB/wUNM/a6k/OZaZiuY
+        I5jjGm1cZcib88ukWx1MWrKMcrLQLuxSysE3xCp1NIkrwbsnLKXnaWvYLuMGkiBnVn8xcxv/pRaEM
+        I+3qhmyiSHKCJY9+ccYwSbIi9ZiGCqzwX93bHYg9AxPFko1dU8Z2YtrjIXPDb1G8zhcH9yZiamTTa
+        rPyPVSx6K+iodQaqtlN2G7PlvfRoo19KaMkLmNDp95hWhtLwLWsDRyB6F2ad6jJ0/jVgqNtMcsLZE
+        UoLGo5tg==;
 Received: from [81.174.171.191] (helo=donbot)
         by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <john@metanate.com>)
-        id 1n4loN-0008Ll-1d; Tue, 04 Jan 2022 15:33:19 +0000
-Date:   Tue, 4 Jan 2022 15:33:17 +0000
+        id 1n4mBQ-0000BA-Ob; Tue, 04 Jan 2022 15:57:09 +0000
+Date:   Tue, 4 Jan 2022 15:57:07 +0000
 From:   John Keeping <john@metanate.com>
 To:     Pavel Hofman <pavel.hofman@ivitera.com>
-Cc:     linux-usb@vger.kernel.org,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.de>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
         Julian Scheel <julian@jusst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 11/11] usb: gadget: f_uac2: Determining bInterval for
- HS and SS
-Message-ID: <YdRovSviQ4IQ82zm@donbot>
-References: <20211220211130.88590-1-pavel.hofman@ivitera.com>
- <20211220211130.88590-12-pavel.hofman@ivitera.com>
- <YcHIsR4AFaL9g6N2@donbot>
- <fd9646e9-0d2b-6d53-863e-2184e038476a@ivitera.com>
- <20211222195030.4d37dbc7.john@metanate.com>
- <61fcf11b-51dc-a0b9-6782-eaf4302af3ef@ivitera.com>
+        Jack Pham <jackp@codeaurora.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Yunhao Tian <t123yh.xyz@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>
+Subject: Re: Correct stopping capture and playback substreams?
+Message-ID: <YdRuU5EB+bj/e9F+@donbot>
+References: <448e059f-fbac-66ed-204b-f6f9c2c19212@ivitera.com>
+ <9635d70f-dc12-f9ed-29f5-ce34a1d4b112@ivitera.com>
+ <baefb4a7-0373-49b0-0247-f70c3c585eaf@perex.cz>
+ <fbd19fee-343c-c5c6-d426-02ccaa497f7f@ivitera.com>
+ <s5ho84tm2vv.wl-tiwai@suse.de>
+ <581f6464-37ef-9ab6-e7e2-657ad645aa9e@perex.cz>
+ <86ad951b-29f7-59ef-d369-a6c06f9422a4@ivitera.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <61fcf11b-51dc-a0b9-6782-eaf4302af3ef@ivitera.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <86ad951b-29f7-59ef-d369-a6c06f9422a4@ivitera.com>
 X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 08:09:39AM +0100, Pavel Hofman wrote:
+On Mon, Jan 03, 2022 at 01:54:13PM +0100, Pavel Hofman wrote:
 > 
-> Dne 22. 12. 21 v 20:50 John Keeping napsal(a):
-> > On Wed, 22 Dec 2021 14:35:07 +0100
-> > Pavel Hofman <pavel.hofman@ivitera.com> wrote:
-> > 
-> > > Dne 21. 12. 21 v 13:29 John Keeping napsal(a):
-> > > > On Mon, Dec 20, 2021 at 10:11:30PM +0100, Pavel Hofman wrote:
-> > > > > So far bInterval for HS and SS was fixed at 4, disallowing faster
-> > > > > samplerates. The patch determines the largest bInterval (4 to 1)
-> > > > > for which the required bandwidth of the max samplerate fits the
-> > > > > max allowed packet size. If the required bandwidth exceeds max
-> > > > > bandwidth for single-packet mode (ep->mc=1), bInterval is left at
-> > > > > 1.
+> 
+> Dne 03. 01. 22 v 13:28 Jaroslav Kysela napsal(a):
+> > On 03. 01. 22 13:15, Takashi Iwai wrote:
+> > > On Mon, 03 Jan 2022 12:32:53 +0100,
+> > > Pavel Hofman wrote:
 > > > > 
-> > > > I'm not sure if this is desirable - there are more concerns around
-> > > > the interval than just whether the bandwidth is available.
 > > > > 
-> > > > The nice thing about having the HS/SS interval at 4 when the FS
-> > > > value is 1 is that these both correspond to 1ms, which means the
-> > > > calculations for minimum buffer & period sizes are the same for
-> > > > FS/HS/SS.
+> > > > 
+> > > > Dne 03. 01. 22 v 10:10 Jaroslav Kysela napsal(a):
+> > > > > On 03. 01. 22 9:22, Pavel Hofman wrote:
+> > > > > > 
+> > > > > > Dne 23. 12. 21 v 9:18 Pavel Hofman napsal(a):
+> > > > > > > Hi Takashi,
+> > > > > > > 
+> > > > > > > I am working on stopping alsa streams of audio USB
+> > > > > > > gadget when USB host
+> > > > > > > stops capture/playback/USB cable unplugged.
+> > > > > > > 
+> > > > > > > For capture I used code from AK4114 SPDIF receiver
+> > > > > > > https://elixir.bootlin.com/linux/latest/source/sound/i2c/other/ak4114.c#L590:
+> > > > > > > 
+> > > > > > > 
+> > > > > > > 
+> > > > > > > 
+> > > > > > > static void stop_substream(struct uac_rtd_params *prm)
+> > > > > > > {
+> > > > > > >        unsigned long _flags;
+> > > > > > >        struct snd_pcm_substream *substream;
+> > > > > > > 
+> > > > > > >        substream = prm->ss;
+> > > > > > >        if (substream) {
+> > > > > > >            snd_pcm_stream_lock_irqsave(substream, _flags);
+> > > > > > >            if (snd_pcm_running(substream))
+> > > > > > >                // TODO - correct handling for playback substream?
+> > > > > > >                snd_pcm_stop(substream, SNDRV_PCM_STATE_DRAINING);
+> > > > > > >            snd_pcm_stream_unlock_irqrestore(substream, _flags);
+> > > > > > >        }
+> > > > > > > }
+> > > > > > > 
+> > > > > > > For setup I found calling snd_pcm_stop(substream,
+> > > > > > > SNDRV_PCM_STATE_SETUP)
+> > > > > > > (https://elixir.bootlin.com/linux/latest/source/drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c#L63)
+> > > > > > > 
+> > > > > > > 
+> > > > > > >     Or for both capture and playback using
+> > > > > > > SNDRV_PCM_STATE_DISCONNECTED
+> > > > > > > (https://elixir.bootlin.com/linux/latest/source/sound/core/pcm.c#L1103).
+> > > > > > > 
+> > > > > > > 
+> > > > > > > Or perhaps using snd_pcm_dev_disconnect(dev) or
+> > > > > > > snd_pcm_drop(substream)?
+> > > > > > > 
+> > > > > > > Please what is the recommended way?
+> > > > > > > 
+> > > > > > 
+> > > > > > Please can I ask for expert view on this issue? E.g. in
+> > > > > > SoX stopping the
+> > > > > > stream with
+> > > > > > SNDRV_PCM_STATE_SETUP/SNDRV_PCM_STATE_DRAINING does not
+> > > > > > stop
+> > > > > > the application, while with SNDRV_PCM_STATE_DISCONNECTED
+> > > > > > SoX exits with
+> > > > > > non-recoverable status. I am considering implementing both methods and
+> > > > > > letting users choose their suitable snd_pcm_stop operation (none
+> > > > > > (default)/SETUP-DRAINING/DISCONNECTED) for the two events (host
+> > > > > > playback/capture stop, cable disconnection) with a
+> > > > > > configfs param. Would
+> > > > > > this make sense?
+> > > > > 
+> > > > > The disconnection state is unrecoverable. It's expected that the
+> > > > > device will be freed and cannot be reused.
+> > > > > 
+> > > > > If you expect to keep the PCM device, we should probably introduce a
+> > > > > new function which puts the device to the SNDRV_PCM_STATE_OPEN
+> > > > > state. In this state, all I/O routines will return -EBADFD for the
+> > > > > applications, so they should close or re-initialize the PCM device
+> > > > > completely.
+> > > > > 
+> > > > > https://elixir.bootlin.com/linux/latest/source/sound/core/pcm_native.c#L794
+> > > > > 
+> > > > > 
+> > > > 
+> > > > The fact is that after closing the USB host can re-open the device
+> > > > with different samplerate (and perhaps later on with different
+> > > > channels count/sample size). That would hint at the need to
+> > > > re-initialize the gadget side before opening  anyway.
+> > > > 
+> > > > As of keeping the device - it's likely some use cases would prefer
+> > > > keeping the device, to minimize the operations needed to react to the
+> > > > host-side playback/capture start.
+> > > > 
+> > > > A function you describe would make sense for this. IMO from the gadget
+> > > > POW there is no difference  between the host stopping playback/capture
+> > > > and cable disconnection, in both cases the data stream is stopped and
+> > > > next stream can have entirely different parameters. Maybe the gadget
+> > > > configfs parameter could only toggle between no action (i.e. current
+> > > > situation) and the new alsa function stopping the stream.
+> > > > 
+> > > > Jaroslav, please can you draft such a function? Perhaps both changes
+> > > > could make it to 5.17.
 > > > 
-> > > Please do you see any specific place in u_audio.c where the interval of
-> > > 1ms is assumed?
+> > > (Sorry for the delayed response, as I've been on vacation and now
+> > > catching up the huge pile of backlogs...)
 > > > 
-> > > * Buffer/period size max limits are fixed
-> > > * Bufer min size is calculated from the max_packet_size
-> > > * snd_pcm_period_elapsed() is called when the current request fill
-> > > overlaps the period boundary:
-> > > 
-> > > if ((hw_ptr % snd_pcm_lib_period_bytes(substream)) < req->actual)
-> > > 		snd_pcm_period_elapsed(substream);
-> > > 
-> > > 
-> > > The fixed HS bInterval=4 severely limits the available bandwidth,
-> > > disallowing even the very basic 192kHz/2ch/24bits config.
+> > > About the change to keep PCM OPEN state: I'm afraid that the
+> > > disconnection in the host side may happen at any time, and keeping the
+> > > state OPEN would confuse the things if the host is indeed
+> > > unrecoverable.
 > > 
-> > Yes, but the problem is if the device enumerates as full-speed the
-> > capability is no longer there.
+> > I don't think so. The SNDRV_PCM_IOCTL_HW_PARAMS must be issued by the
+> > application (in the PCM_OPEN state) and if the USB bus connection is no
+> > longer active, it may fail. We can distinguish between host -> device
+> > disconnection and device -> host one. It is not really a similar thing.
 > > 
-> > I agree that is unlikely to be a problem in real use, but I think it
-> > deserves consideration.
+> > I think that the idea was to avoid to re-build the whole card / device
+> > structure for the fixed device allocation.
+> > 
+> > Pavel, if the USB host is not connected to the gadget, where the
+> > playback PCM device fails now ? Is the PCM device created or not ?
+> > 
 > 
-> Please can you elaborate more on that? If the device enumerates as FS, it's
-> automatically limited to bInterval=1 fullspeed frame. Not much more to do,
-> IIUC.
+> The gaudio PCM device is created when the gadget function is activated
+> (module loaded), regardless whether the USB host is actually connected. The
+> playback/capture fails after the blocking read/write times out. The data
+> delivery/consumption method is simply not called when no usb requests get
+> completed https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/function/u_audio.c#L147
+> .
+> 
+> The current code does basically nothing to the alsa pcm stream at
+> capture/playback start/stop by the host (called when altsetting changes in
+> the gadget) https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/function/u_audio.c#L468 https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/function/u_audio.c#L557
 
-Say we have 8 channels of 32-bit audio at 96kHz which requires 3072000
-bytes per second, and IIUC we need bInterval == 2 for this to work at
-HS.
+Thinking about it, I think the current behaviour is probably correct.
 
-But for FS there is no way to provide that bandwidth, so if the gadget
-happens to be connected to a host that is only capable of FS then the
-configuration just doesn't work.  I think what actually happens given
-the current code is that each packet ends up truncated and parts of the
-audio data are just dropped.
+It's not 100% possible to detect when the host stops data transfer - we
+can detect two scenarios:
 
-> > For the last few years I've been using bInterval == 1 but I also have a
-> > hack to disable full-speed operation completely.  In my case this is
-> > because I want to minimise latency and with the 1ms interval for FS the
-> > minimum ALSA period size is too large.
-> > 
-> > Basically, I agree with wanting a smaller bInterval, but I want it for a
-> > different reason and I'd like to see a patch that addresses both our use
-> > cases ;-)
-> > 
-> > > In f_uac2.c both HS/SS the max packet size, async EP OUT feedback value,
-> > > as well as async EP IN momentary packet size calculations already take
-> > > into account the bInterval of the respective endpoint.
-> > > 
-> > > I have been using bInterval < 4 in most of my tests for almost a year,
-> > > testing packet sizes at up to 1024 bytes per 125us uframe, both
-> > > directions, and the gadget has been bitperfect for samplerates up to
-> > > 4MHz (including correctly working async feedback, tested on linux (up to
-> > > 4MHz) and windows 10 WASAPI exclusive (up to 1.5MHz). For larger
-> > > samplerates tests I increased the buffers like in the patch below but I
-> > > did it just in case to minimize probability of xruns. It's not part of
-> > > this patchset and should be configured dynamically too, if actually
-> > > needed at all:
-> > 
-> > This is another case of a different trade-off - I use PREEMPT_RT to
-> > minimise xruns and run with a period of 16 samples.
-> > 
-> > > > How do FS transfers work if the bandwidth requirements necessitate a
-> > > >   smaller interval for HS/SS?  Doesn't that mean the FS transfers
-> > > > must be too big?
-> > > 
-> > > Only UAC2 HS/SS bIntervals are dynamic with this patch, FS stays fixed
-> > > at 1ms. For HS/SS  the max packet size is calculated together with the
-> > > bInterval, so that the largest bInterval possible to fit the ISOC max
-> > > packetsize limits is chosen.
-> > 
-> > I'd really like to see FS mode become unsupported when the packet size
-> > is too big.  This is a slight issue right now (for 1023 vs 1024) but
-> > this patch makes it significantly worse for the high bandwidth case.
-> 
-> I am afraid I do not understand what the patch makes worse. For FS it always
-> yields bInterval=1 and the corresponding maxPacketSize, a calculation of
-> which has not been changed by the patch.
+	- Cable disconnected
+	- Interface alt 0 selected
 
-See my comment above - before the difference was really 1023 vs 1024 so
-it's possible to hit a problematic configuration but it's a smaller
-window.
+but it's equally possible to just leave the device configured as it was
+and stop sending data.
 
-I really think we should avoid a configuration that mostly works but
-fails in surprising ways (for example, working at HS but resulting in
-corrupt data at FS because there just isn't sufficient bandwidth for the
-sample rate, sample size and channel configuration selected).
+While resetting state may be necessary when the cable is disconnected,
+if the host is just stopping and restarting the stream then I don't see
+why the gadget application should have to reconfigure the PCM device.
 
-> > Right now I have this patch which is a hack but does at least result in
-> > an error for the host when trying to enable audio at FS.  It would be
-> > really nice to properly handle this in the composite gadget core so that
-> > the audio function is exposed only at HS/SS with proper
-> > DT_OTHER_SPEED_CONFIG handling, but currently that code assumes that the
-> > same number of descriptors is provided for each speed.
-> > 
-> > -- 8< --
-> > diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-> > index 36fa6ef0581b..b4946409b38a 100644
-> > --- a/drivers/usb/gadget/function/f_uac2.c
-> > +++ b/drivers/usb/gadget/function/f_uac2.c
-> > @@ -1356,6 +1356,9 @@ afunc_set_alt(struct usb_function *fn, unsigned intf, unsigned alt)
-> >   		return 0;
-> >   	}
-> > +	if (gadget->speed < USB_SPEED_HIGH && alt)
-> > +		return -EINVAL;
-> > +
-> >   	if (intf == uac2->as_out_intf) {
-> >   		uac2->as_out_alt = alt;
-> > -- >8 --
-> > 
-> > > > I don't think there has ever been a check that the configured sample
-> > > >   size, channel count and interval actually fit in the max packet
-> > > > size for an endpoint.  Is that something that should be checked to
-> > > > give an error on bind if the configuration can't work?
-> > > 
-> > > The existing code has never had checks for any of that. Actually the
-> > > dynamic bInterval calculation in this patch handles the bInterval and
-> > > packetsize for configured parameters up to maximum ISOC bandwidth. Next
-> > > version of this patch will at least warn about exceeding the overall
-> > > available bandwidth.
-> > > 
-> > > There are many patches to go before the audio gadget becomes fool-proof,
-> > > but at least it should be practically usable with these patches (when
-> > > finalized) and the gaudio controller example implementation.
-> > 
-> > Agreed, and I really appreciate the improvements you're making here.
-> > 
-> > The reason I suggested the new checks here is that it makes a lot of
-> > sense if the bInterval value is exposed as part of the configfs
-> > interface.  It means there's one extra value to set for high bandwidth
-> > operation, rather than having it "just work", but I think the
-> > latency/bandwidth tradeoffs here mean that there's no way for the kernel
-> > to select the right value for all scenarios, so really we need to let
-> > the user tell us what they want.
-> 
-> OK. IMO it could be easily resolved by having the upper bInterval limit for
-> the largest-fitting bInterval check of my patch configurable by new configfs
-> max_bint, defaulting to the existing value of 4. I would leave the default
-> (4), minimizing CPU load, you would set max_bint=1, minimizing latency. Any
-> max_bint value in between would work, while still having available the
-> automated calculation if lower bint value was required for the given
-> parameters.
-> 
-> In addition, the final check dev_warn can be chanched to dev_err + returning
-> EINVAL, providing the discussed sanity check. The check would work for FS as
-> well as for HS/SS.
-> 
-> This change could be split to three patches:
-> 
-> 1. the automated calculation with fixed max_bint=4 - my current patch,
-> dev_warn if max_size_bw > max_size_ep, max_size_bw limited to max_size_ep,
-> no error, only warning.
-> 
-> 2. adding the uac2_opts max_bint, using in set_ep_max_packet_size_bint
-> 
-> 3. turning the sanity check warning to failing error: changing the dev_warn
-> in the final check to dev_err+ returning error.
-> 
-> So the final version could look like this:
+It's clearly useful to have some indication of host state, but I'm not
+at all convinced the PCM state is the best way to provide that.
 
-This sounds good to me.
 
-But I think you'll hit the FS vs HS bandwidth issue described above when
-trying anything that requires a lower bInterval ;-)
-
-I really think the answer to this is an extra patch/series that disables
-operation at full speed when more bandwidth is required.  Ideally that
-would include enhancing the gadget core to support different descriptors
-for different speeds (which is already somewhat supported as other speed
-config descriptors are returned correctly, but IIRC there's an
-assumption that the number of descriptors is the same across all
-speeds).
-
-> static int set_ep_max_packet_size_bint(struct device *dev, const struct
-> f_uac2_opts *uac2_opts,
-> 	struct usb_endpoint_descriptor *ep_desc,
-> 	enum usb_device_speed speed, bool is_playback)
-> {
-> 	u16 max_size_bw, max_size_ep;
-> 	u8 bint;
-> 
-> 	switch (speed) {
-> 	case USB_SPEED_FULL:
-> 		max_size_ep = 1023;
-> 		// fixed
-> 		bint = 1;
-> 		max_size_bw = get_max_bw_for_bint(uac2_opts, bint, 1000, is_playback);
-> 		break;
-> 
-> 	case USB_SPEED_HIGH:
-> 	case USB_SPEED_SUPER:
-> 		max_size_ep = 1024;
-> 		// checking bInterval from max configured bInterval to 1 if the required
-> bandwidth fits
-> 		for (bint = uac2_opts->max_bint; bint > 0; --bint) {
-> 			max_size_bw = get_max_bw_for_bint(uac2_opts, bint, 8000, is_playback);
-> 			if (max_size_bw <= max_size_ep)
-> 				break;
-> 		}
-> 		break;
-> 
-> 	default:
-> 		return -EINVAL;
-> 	}
-> 
-> 	if (max_size_bw > max_size_ep) {
-> 		dev_err(dev,
-> 			"Req. maxpcktsize %d at bInterval 1= > max ISOC %d, cannot comply!\n",
-> 			max_size_bw, max_size_ep);
-> 		return -EINVAL;
-> 	}
-> 
-> 	ep_desc->wMaxPacketSize = cpu_to_le16(max_size_bw);
-> 	ep_desc->bInterval = bint;
-> 
-> 	return 0;
-> }
+John
