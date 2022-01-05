@@ -2,298 +2,192 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F7CF4851CE
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 12:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1B8485214
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 12:55:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239705AbiAELbM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jan 2022 06:31:12 -0500
-Received: from cable.insite.cz ([84.242.75.189]:40559 "EHLO cable.insite.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239701AbiAELbL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 Jan 2022 06:31:11 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id 5B266A1A3D405;
-        Wed,  5 Jan 2022 12:31:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1641382269; bh=5VyrCWUUV1ujXUd+7p/xax3ucw76Qqq5Zn8GncG390c=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=sP0FSQcF7KYnWgHdxeRIByudbE2YZa37LL4LOGXyOjB9dc2RvrxWREjt0MeHvra20
-         oHc6oeNO1qvyW/MOzE40wxW7GNzcFbV1l2g25X30A21UcETyh/ISWD6nSWTLzrANua
-         NHsxH9eGuh4u4jssK0YFM7NyfOyGFC8uJMl/GCT4=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id gVyAaXUhkAof; Wed,  5 Jan 2022 12:31:03 +0100 (CET)
-Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id AD42CA1A3D404;
-        Wed,  5 Jan 2022 12:31:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1641382262; bh=5VyrCWUUV1ujXUd+7p/xax3ucw76Qqq5Zn8GncG390c=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=m6ldDVKSYYMlxOB+jF7mSarx1ThLtUiejlHhvege3ubLbV0MgLh+7hgovcr1fsHlB
-         oGKrZs6d7qbX5KMBbUTDbtfPrNrIwDFBZYRfsjCQqREF6B/N6gQtTsjc6v+e/Lc1pj
-         nhbIIWVNjt48Wc66s9RBRTa7ftEBWFuD6faWx8MU=
-Subject: Re: [PATCH v2 11/11] usb: gadget: f_uac2: Determining bInterval for
- HS and SS
-To:     John Keeping <john@metanate.com>
-Cc:     linux-usb@vger.kernel.org,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Julian Scheel <julian@jusst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20211220211130.88590-1-pavel.hofman@ivitera.com>
- <20211220211130.88590-12-pavel.hofman@ivitera.com> <YcHIsR4AFaL9g6N2@donbot>
- <fd9646e9-0d2b-6d53-863e-2184e038476a@ivitera.com>
- <20211222195030.4d37dbc7.john@metanate.com>
- <61fcf11b-51dc-a0b9-6782-eaf4302af3ef@ivitera.com> <YdRovSviQ4IQ82zm@donbot>
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Message-ID: <8bc1b7cb-1732-9802-bd95-7a298e7a4f49@ivitera.com>
-Date:   Wed, 5 Jan 2022 12:31:01 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S235583AbiAELy5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jan 2022 06:54:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231766AbiAELyz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jan 2022 06:54:55 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABC0C061761
+        for <linux-usb@vger.kernel.org>; Wed,  5 Jan 2022 03:54:54 -0800 (PST)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1n54sX-0004BM-8j; Wed, 05 Jan 2022 12:54:53 +0100
+Received: from mgr by pty.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1n54sV-003fLT-Vs; Wed, 05 Jan 2022 12:54:52 +0100
+Date:   Wed, 5 Jan 2022 12:54:51 +0100
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     linux-usb@vger.kernel.org
+Cc:     balbi@kernel.org, paul.elder@ideasonboard.com,
+        laurent.pinchart@ideasonboard.com, kernel@pengutronix.de
+Subject: Re: [PATCH v5 7/7] usb: gadget: uvc: add format/frame handling code
+Message-ID: <YdWHC29gbI1mKOj7@pengutronix.de>
+References: <20211209084322.2662616-1-m.grzeschik@pengutronix.de>
+ <20211209084322.2662616-8-m.grzeschik@pengutronix.de>
+ <20211212232719.GA3912@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <YdRovSviQ4IQ82zm@donbot>
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="OSOFu+fqREuV3u+8"
+Content-Disposition: inline
+In-Reply-To: <20211212232719.GA3912@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 12:51:51 up 139 days,  4:25, 28 users,  load average: 1.43, 1.20,
+ 0.63
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
-Dne 04. 01. 22 v 16:33 John Keeping napsal(a):
-> On Thu, Dec 23, 2021 at 08:09:39AM +0100, Pavel Hofman wrote:
+--OSOFu+fqREuV3u+8
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Since this series did not get any feedback and the mentioned code needs
+to be fixed I will just start the new year with a fresh v6 series.
+
+On Mon, Dec 13, 2021 at 12:27:19AM +0100, Michael Grzeschik wrote:
+>Ping
+>
+>On Thu, Dec 09, 2021 at 09:43:22AM +0100, Michael Grzeschik wrote:
+>>The Hostside format selection is currently only done in userspace, as
+>>the events for SET_CUR and GET_CUR are allways moved to the application
+>>layer. Since the v4l2 device parses the configfs data, the format
+>>negotiation can be done in the kernel. This patch adds the functions to
+>>set the current configuration while continuing to forward all unknown
+>>events to the userspace level.
 >>
->> Dne 22. 12. 21 v 20:50 John Keeping napsal(a):
->>> On Wed, 22 Dec 2021 14:35:07 +0100
->>> Pavel Hofman <pavel.hofman@ivitera.com> wrote:
->>>
->>>> Dne 21. 12. 21 v 13:29 John Keeping napsal(a):
->>>>> On Mon, Dec 20, 2021 at 10:11:30PM +0100, Pavel Hofman wrote:
->>>>>> So far bInterval for HS and SS was fixed at 4, disallowing faster
->>>>>> samplerates. The patch determines the largest bInterval (4 to 1)
->>>>>> for which the required bandwidth of the max samplerate fits the
->>>>>> max allowed packet size. If the required bandwidth exceeds max
->>>>>> bandwidth for single-packet mode (ep->mc=1), bInterval is left at
->>>>>> 1.
->>>>>
->>>>> I'm not sure if this is desirable - there are more concerns around
->>>>> the interval than just whether the bandwidth is available.
->>>>>
->>>>> The nice thing about having the HS/SS interval at 4 when the FS
->>>>> value is 1 is that these both correspond to 1ms, which means the
->>>>> calculations for minimum buffer & period sizes are the same for
->>>>> FS/HS/SS.
->>>>
->>>> Please do you see any specific place in u_audio.c where the interval of
->>>> 1ms is assumed?
->>>>
->>>> * Buffer/period size max limits are fixed
->>>> * Bufer min size is calculated from the max_packet_size
->>>> * snd_pcm_period_elapsed() is called when the current request fill
->>>> overlaps the period boundary:
->>>>
->>>> if ((hw_ptr % snd_pcm_lib_period_bytes(substream)) < req->actual)
->>>> 		snd_pcm_period_elapsed(substream);
->>>>
->>>>
->>>> The fixed HS bInterval=4 severely limits the available bandwidth,
->>>> disallowing even the very basic 192kHz/2ch/24bits config.
->>>
->>> Yes, but the problem is if the device enumerates as full-speed the
->>> capability is no longer there.
->>>
->>> I agree that is unlikely to be a problem in real use, but I think it
->>> deserves consideration.
+>>Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 >>
->> Please can you elaborate more on that? If the device enumerates as FS, it's
->> automatically limited to bInterval=1 fullspeed frame. Not much more to do,
->> IIUC.
-> 
-> Say we have 8 channels of 32-bit audio at 96kHz which requires 3072000
-> bytes per second, and IIUC we need bInterval == 2 for this to work at
-> HS.
-> 
-> But for FS there is no way to provide that bandwidth, so if the gadget
-> happens to be connected to a host that is only capable of FS then the
-> configuration just doesn't work.  I think what actually happens given
-> the current code is that each packet ends up truncated and parts of the
-> audio data are just dropped.
-
-Yes. The current version will drop data for both FS (inevitably) and HS, 
-eventhough there is no technical reason to drop data for HS as the 
-bandwidth is available.
-
-> 
->>> For the last few years I've been using bInterval == 1 but I also have a
->>> hack to disable full-speed operation completely.  In my case this is
->>> because I want to minimise latency and with the 1ms interval for FS the
->>> minimum ALSA period size is too large.
->>>
->>> Basically, I agree with wanting a smaller bInterval, but I want it for a
->>> different reason and I'd like to see a patch that addresses both our use
->>> cases ;-)
->>>
->>>> In f_uac2.c both HS/SS the max packet size, async EP OUT feedback value,
->>>> as well as async EP IN momentary packet size calculations already take
->>>> into account the bInterval of the respective endpoint.
->>>>
->>>> I have been using bInterval < 4 in most of my tests for almost a year,
->>>> testing packet sizes at up to 1024 bytes per 125us uframe, both
->>>> directions, and the gadget has been bitperfect for samplerates up to
->>>> 4MHz (including correctly working async feedback, tested on linux (up to
->>>> 4MHz) and windows 10 WASAPI exclusive (up to 1.5MHz). For larger
->>>> samplerates tests I increased the buffers like in the patch below but I
->>>> did it just in case to minimize probability of xruns. It's not part of
->>>> this patchset and should be configured dynamically too, if actually
->>>> needed at all:
->>>
->>> This is another case of a different trade-off - I use PREEMPT_RT to
->>> minimise xruns and run with a period of 16 samples.
->>>
->>>>> How do FS transfers work if the bandwidth requirements necessitate a
->>>>>    smaller interval for HS/SS?  Doesn't that mean the FS transfers
->>>>> must be too big?
->>>>
->>>> Only UAC2 HS/SS bIntervals are dynamic with this patch, FS stays fixed
->>>> at 1ms. For HS/SS  the max packet size is calculated together with the
->>>> bInterval, so that the largest bInterval possible to fit the ISOC max
->>>> packetsize limits is chosen.
->>>
->>> I'd really like to see FS mode become unsupported when the packet size
->>> is too big.  This is a slight issue right now (for 1023 vs 1024) but
->>> this patch makes it significantly worse for the high bandwidth case.
+>>---
+>>v1 -> v2:
+>>  - fixed the commit message
+>>  - changed pr_debug to pr_err in events_process_data
+>>  - aligned many indentations
+>>  - simplified uvc_events_process_data
+>>  - fixed uvc_fill_streaming_control calls in uvcg_video_init
+>>  - added setup_subcribed to decide if userspace takes over on EOPNOTSUPP
+>>  - added data_subscribed to decide if userspace takes over on EOPNOTSUPP
+>>  - removed duplicate send_response
+>>  - wrting fmt and frm in full
+>>v2 -> v3:
+>>  - added find_format_index to set the right probe
+>>v3 -> v4:
+>>  - add function find_ival_index and use for cur_ival
+>>  - fix swapped frame and format in uvc_events_process_data on uvc_fill_s=
+treaming_control
+>>  - set proper resp.length on ep0 complete
+>>  - dropped setting cur_probe on set_format since function was removed
+>>  - added locking around getting correspondent cur_{frame,format,ival}
+>>v4 -> v5:
+>>  - fixed sparse errors reported by kernel test robot
 >>
->> I am afraid I do not understand what the patch makes worse. For FS it always
->> yields bInterval=1 and the corresponding maxPacketSize, a calculation of
->> which has not been changed by the patch.
-> 
-> See my comment above - before the difference was really 1023 vs 1024 so
-> it's possible to hit a problematic configuration but it's a smaller
-> window.
-
-For me the problematic configuration is the one which does not work, 
-which this feature actually tries to reduce (for HS).
-
-> 
-> I really think we should avoid a configuration that mostly works but
-> fails in surprising ways (for example, working at HS but resulting in
-> corrupt data at FS because there just isn't sufficient bandwidth for the
-> sample rate, sample size and channel configuration selected).
-
-
-I understand your reasoning. See below.
-
-> 
->>> Right now I have this patch which is a hack but does at least result in
->>> an error for the host when trying to enable audio at FS.  It would be
->>> really nice to properly handle this in the composite gadget core so that
->>> the audio function is exposed only at HS/SS with proper
->>> DT_OTHER_SPEED_CONFIG handling, but currently that code assumes that the
->>> same number of descriptors is provided for each speed.
->>>
->>> -- 8< --
->>> diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
->>> index 36fa6ef0581b..b4946409b38a 100644
->>> --- a/drivers/usb/gadget/function/f_uac2.c
->>> +++ b/drivers/usb/gadget/function/f_uac2.c
->>> @@ -1356,6 +1356,9 @@ afunc_set_alt(struct usb_function *fn, unsigned intf, unsigned alt)
->>>    		return 0;
->>>    	}
->>> +	if (gadget->speed < USB_SPEED_HIGH && alt)
->>> +		return -EINVAL;
->>> +
->>>    	if (intf == uac2->as_out_intf) {
->>>    		uac2->as_out_alt = alt;
->>> -- >8 --
->>>
->>>>> I don't think there has ever been a check that the configured sample
->>>>>    size, channel count and interval actually fit in the max packet
->>>>> size for an endpoint.  Is that something that should be checked to
->>>>> give an error on bind if the configuration can't work?
->>>>
->>>> The existing code has never had checks for any of that. Actually the
->>>> dynamic bInterval calculation in this patch handles the bInterval and
->>>> packetsize for configured parameters up to maximum ISOC bandwidth. Next
->>>> version of this patch will at least warn about exceeding the overall
->>>> available bandwidth.
->>>>
->>>> There are many patches to go before the audio gadget becomes fool-proof,
->>>> but at least it should be practically usable with these patches (when
->>>> finalized) and the gaudio controller example implementation.
->>>
->>> Agreed, and I really appreciate the improvements you're making here.
->>>
->>> The reason I suggested the new checks here is that it makes a lot of
->>> sense if the bInterval value is exposed as part of the configfs
->>> interface.  It means there's one extra value to set for high bandwidth
->>> operation, rather than having it "just work", but I think the
->>> latency/bandwidth tradeoffs here mean that there's no way for the kernel
->>> to select the right value for all scenarios, so really we need to let
->>> the user tell us what they want.
+>>drivers/usb/gadget/function/f_uvc.c     | 234 +++++++++++++++++++++++-
+>>drivers/usb/gadget/function/uvc.h       |  19 ++
+>>drivers/usb/gadget/function/uvc_v4l2.c  |  66 ++++++-
+>>drivers/usb/gadget/function/uvc_video.c |  12 +-
+>>4 files changed, 324 insertions(+), 7 deletions(-)
 >>
->> OK. IMO it could be easily resolved by having the upper bInterval limit for
->> the largest-fitting bInterval check of my patch configurable by new configfs
->> max_bint, defaulting to the existing value of 4. I would leave the default
->> (4), minimizing CPU load, you would set max_bint=1, minimizing latency. Any
->> max_bint value in between would work, while still having available the
->> automated calculation if lower bint value was required for the given
->> parameters.
+>
+>[snip]
+>
+>>static void
+>>uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
+>>{
+>>	struct uvc_device *uvc =3D req->context;
+>>	struct v4l2_event v4l2_event;
+>>	struct uvc_event *uvc_event =3D (void *)&v4l2_event.u.data;
+>>+	struct uvc_request_data resp;
+>>+	int ret;
 >>
->> In addition, the final check dev_warn can be chanched to dev_err + returning
->> EINVAL, providing the discussed sanity check. The check would work for FS as
->> well as for HS/SS.
+>>	if (uvc->event_setup_out) {
+>>		uvc->event_setup_out =3D 0;
 >>
->> This change could be split to three patches:
->>
->> 1. the automated calculation with fixed max_bint=4 - my current patch,
->> dev_warn if max_size_bw > max_size_ep, max_size_bw limited to max_size_ep,
->> no error, only warning.
->>
->> 2. adding the uac2_opts max_bint, using in set_ep_max_packet_size_bint
->>
->> 3. turning the sanity check warning to failing error: changing the dev_warn
->> in the final check to dev_err+ returning error.
->>
->> So the final version could look like this:
-> 
-> This sounds good to me.
-> 
-> But I think you'll hit the FS vs HS bandwidth issue described above when
-> trying anything that requires a lower bInterval ;-)
+>>+		memset(&resp, 0, sizeof(resp));
+>>+		resp.length =3D -EL2HLT;
+>>+
+>>+		ret =3D uvc_events_process_data(uvc, req);
+>>+		/* If we have no error on process */
+>>+		if (!ret) {
+>>+			resp.length =3D req->length;
+>>+			uvc_send_response(uvc, &resp);
+>>+			return;
+>
+>I just found out, that depending on the host implementation, sending a
+>response persisting probe or commit is no valid. I will just keep it
+>aligned with the uvc-gadget implementation and fix it not to send any
+>response in that both cases.
+>
+>>+		}
+>>+
+>>+		/* If we have a real error on process */
+>>+		if (ret !=3D -EOPNOTSUPP)
+>>+			return;
+>>+
+>>+		/* If we have -EOPNOTSUPP */
+>>+		if (!uvc->data_subscribed)
+>>+			return;
+>>+
+>>+		/* If we have data subscribed */
+>>		memset(&v4l2_event, 0, sizeof(v4l2_event));
+>>		v4l2_event.type =3D UVC_EVENT_DATA;
+>>		uvc_event->data.length =3D req->actual;
+>
+>Beside that, I hope somebody would help reviewing this, before I will
+>send v6.
+>
+>Laurant? Do you have any thoughts on that whole stack?
+>
+>Thanks,
+>Michael
+>
+>--=20
+>Pengutronix e.K.                           |                             |
+>Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+>31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+>Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
-Well, the FS bandwidth is just too small, but IMO it's not a reason to 
-limit HS too, as is limited now.
 
-> 
-> I really think the answer to this is an extra patch/series that disables
-> operation at full speed when more bandwidth is required.  Ideally that
-> would include enhancing the gadget core to support different descriptors
-> for different speeds (which is already somewhat supported as other speed
-> config descriptors are returned correctly, but IIRC there's an
-> assumption that the number of descriptors is the same across all
-> speeds).
 
-More patches in that area are certainly required.
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
-What I can do:
+--OSOFu+fqREuV3u+8
+Content-Type: application/pgp-signature; name="signature.asc"
 
-* Separate the maxbandwidth patch series from the 
-multiple-rates/rate-notification series to:
+-----BEGIN PGP SIGNATURE-----
 
-* patch 1 - the automated bint/maxPacketSize calculation with fixed 
-max_bint=4 (for HS/SS), warning if bandwidth exceeded
-* patch 2 - adding the uac2_opts max_bint to allow lower latency (I 
-already have this prepared)
-* patch 3 - failing f_uac2 load when requested params exceed HS/SS 
-limits (for bInterval=1). The calculation method is always called for 
-all FS/HS/SS now, so I cannot fail the FS check as it would break HS/SS.
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmHVhwgACgkQC+njFXoe
+LGRZ0A/9E0O0luP5Nj1Wr/LwhkifNhQ8npBPirzrPZbaQhCqyZO13qkHj/yZfHaz
+C8vaU3ZvL80ul22z9duMG3UqpX2QCI3t5RWlJEJzvRs32FlibiBPUI29A3cdRug5
+aj2y3teoKgQrqOwpju2/52JwiYGN2+6ibX0oXwOJgc8W75IZ4fQ1ThAIv67KiOYm
+yDOn3tRRcbIHgila6SQBsfi9mRLTF58rTq842PqZcCFMHnEJskBfTBY5gmBYtVZS
+sXgWxc/5jXX5k6SsBqZi5kOF4bW6oPmXgcg5zhHITWdV+pALqsra2oSkCtW1l/Nz
+xye6QQr1v5FjtQa7TdBvNsXr/zgTvELppmXD91inDcKeyFc7hD8Ao6W3dqpyg+hT
+mcH8lSmEunFgZ7DCduBtEq9Gr7Gx2ud1C79GovTcbWZuQDKlUD+BAwQDAc0kbUOf
+vvHUctELuUrojUOWtMrdKgvcTxfAHjpCmdGQSEGb7//pDLx5hs1CyT6pDvg3O4kn
+OfY3I8rJsy4dF13rdXbj4cTRkr3q4+wdzl98IMllOLJ7C+G9inW1dL6/w5nCko9s
+/VDvLWeX36/0WnI9rQz3L6P15b7bgIGjb14/fLGSvl5DAAs5qtveDuTio9pVIHE1
+bj19gRsg6C+xPlHUcSegTtcYXGpSiAPrr4AT/zCmIQSRiCkAjHg=
+=LkUl
+-----END PGP SIGNATURE-----
 
-I do not know how (and at what point) to disable operation for FS. 
-Perhaps you could follow up with suitable patch, tested on your 
-FS-capable HW?
-
-Thanks a lot,
-
-Pavel.
+--OSOFu+fqREuV3u+8--
