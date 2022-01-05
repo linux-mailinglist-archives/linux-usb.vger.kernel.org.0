@@ -2,92 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F03484D07
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 05:04:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88579484E46
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 07:19:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234579AbiAEEEv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jan 2022 23:04:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbiAEEEu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jan 2022 23:04:50 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6DAC061761;
-        Tue,  4 Jan 2022 20:04:50 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id lr15-20020a17090b4b8f00b001b19671cbebso5177188pjb.1;
-        Tue, 04 Jan 2022 20:04:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GGDVM9Wmq4oFLcjiD+ySmGciIMxv/fBGZw2/BdEaUGE=;
-        b=SIytwWHi4AAwUUm+hpPuiYo7vy2diwozJjfbBN9t53Fbzd0SzKRy9ZcahgchpObJCI
-         7qKt2eRiFEkVU0PiGyVD8U7d0Dp3DbAG+JJaOJT5BOqVK34Pv5s20ONcs9Z8ecG03u3O
-         ZAUaoGlUbUUaPMlR1aEvIXi2jMwKStA6LCFddp7rRcKPCdJO/kcVvzpUimaIrsNATqUH
-         PgpbdQib243cEtr9GGlHFypCcdsizTFYWdIwqcLil6YUiu3bwhqkuPsZgn3c9z2/zzW+
-         AemyeyXbeuaR9Au/a4p0c9eZZ3nuNMYspmAdhy+vZv2/hwKqol8Mc5XiA+Ko5e7Ii+It
-         xqEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GGDVM9Wmq4oFLcjiD+ySmGciIMxv/fBGZw2/BdEaUGE=;
-        b=wrMI4t5qw3aQo1aY+vWb/JXtH+5VnOW95gYCEuPnCNdtYKGxuUWVDXXPlky2lYBAwb
-         /EKm13gbYsJhVJbPv1g1ax5KN53nTw2ouLcJ0HYcrmG9dMWempbqKRAnANqoaraD+zYT
-         cDNIMWNyjZ3EFPygCKE02Ze7W+KZAFZ5IiyQ8QVLJ48GmBF8aHfHBtylHrjOvKDupkjf
-         iNCPkVteIqT836H2+ymRUs47/fPvL5CYaMtkzEFxAzDlp1wR4iMYuaCWjUtn+BAaPNGS
-         167IIFmquTcl8RT3bDVwBe+VdICAFUWS/d7j1baS8WEVra6SCVCauBEnTCw0unD3wXml
-         TTdg==
-X-Gm-Message-State: AOAM533BRVGQNFAFv/sZs8EtOtEnxdg5jbY5XloN15dFIuiXymY6fK8n
-        GsLrXuKiRHqIAPukxxtBYFWaf0wKPVjgIeQL
-X-Google-Smtp-Source: ABdhPJwU4Typ1gh9eX1es3vr2UbLkFVU2nvcsrKxujawUhwVIBe7+uRRN5qyDGGARCN0BWdbJJbQ3g==
-X-Received: by 2002:a17:902:70c9:b0:149:76f1:47dc with SMTP id l9-20020a17090270c900b0014976f147dcmr42963945plt.130.1641355489927;
-        Tue, 04 Jan 2022 20:04:49 -0800 (PST)
-Received: from localhost.localdomain (39-10-37-45.adsl.fetnet.net. [39.10.37.45])
-        by smtp.gmail.com with ESMTPSA id q19sm44334800pfk.153.2022.01.04.20.04.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 20:04:49 -0800 (PST)
-From:   Wei Ming Chen <jj251510319013@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        balbi@kernel.org, maze@google.com,
-        Wei Ming Chen <jj251510319013@gmail.com>
-Subject: [PATCH] usb: gadget: function: Fix returning incorrect PNP string
-Date:   Wed,  5 Jan 2022 12:04:39 +0800
-Message-Id: <20220105040439.3182-1-jj251510319013@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S231977AbiAEGTA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jan 2022 01:19:00 -0500
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:33450
+        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232071AbiAEGSM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jan 2022 01:18:12 -0500
+Received: from localhost.localdomain (unknown [222.129.35.96])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id B7C9F3F118;
+        Wed,  5 Jan 2022 06:18:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641363491;
+        bh=susPpOXdW3sPmuZ++MaBrHyoO48nzh+p35//AkrGgmY=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=E0BvXRLluxfjiI6ndBfdyeDrkCq3Wd6BMNhIsYCWWdklGWqxObhgIVrRHNAoPolpP
+         inuF3kUOT18W7QkmJKQBZLGdIrOg+qL5FIAqHJo7V9lQka7g5RrUWLARATnM2zxqPR
+         fQ1tgrM7KkHHeMYeHIvhJ/IQGWcm+xPhQd1CRJRSFhdkaH05WYve8Ey5JaG/4lEgjG
+         AgAL/2yaO/iI4li/jm7BLQ1r11Ban1qlIEwsViXf8LEjDAeqd9pgTVL/cpK6ISrzOp
+         EJu6YBzqIH7ajnVcqgp0zsRxyIu/qaoUKHUM7NuYq1lRd3d5PgudihNdUXC7pYDNa7
+         j5DoJoIzNiotw==
+From:   Aaron Ma <aaron.ma@canonical.com>
+To:     aaron.ma@canonical.com, kuba@kernel.org,
+        henning.schild@siemens.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
+Subject: [PATCH] net: usb: r8152: Check used MAC passthrough address
+Date:   Wed,  5 Jan 2022 14:17:47 +0800
+Message-Id: <20220105061747.7104-1-aaron.ma@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There will be 2 leading bytes indicating the total length of
-the PNP string, so I think we should add value by 2, otherwise
-the PNP string copied to user will not contain the last 2 bytes
+When plugin multiple r8152 ethernet dongles to Lenovo Docks
+or USB hub, MAC passthrough address from BIOS should be
+checked if it had been used to avoid using on other dongles.
 
-Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
+Currently builtin r8152 on Dock still can't be identified.
+First detected r8152 will use the MAC passthrough address.
+
+Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
 ---
- drivers/usb/gadget/function/f_printer.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/usb/r8152.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-index abec5c58f525..3fb00fd0b5ee 100644
---- a/drivers/usb/gadget/function/f_printer.c
-+++ b/drivers/usb/gadget/function/f_printer.c
-@@ -1005,9 +1005,11 @@ static int printer_func_setup(struct usb_function *f,
- 				break;
- 			}
- 			value = strlen(dev->pnp_string);
-+			memcpy(buf + 2, dev->pnp_string, value);
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index f9877a3e83ac..77f11b3f847b 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -1605,6 +1605,7 @@ static int vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr *sa)
+ 	char *mac_obj_name;
+ 	acpi_object_type mac_obj_type;
+ 	int mac_strlen;
++	struct net_device *ndev;
+ 
+ 	if (tp->lenovo_macpassthru) {
+ 		mac_obj_name = "\\MACA";
+@@ -1662,6 +1663,15 @@ static int vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr *sa)
+ 		ret = -EINVAL;
+ 		goto amacout;
+ 	}
++	rcu_read_lock();
++	for_each_netdev_rcu(&init_net, ndev) {
++		if (strncmp(buf, ndev->dev_addr, 6) == 0) {
++			rcu_read_unlock();
++			goto amacout;
++		}
++	}
++	rcu_read_unlock();
 +
-+			value += 2;
- 			buf[0] = (value >> 8) & 0xFF;
- 			buf[1] = value & 0xFF;
--			memcpy(buf + 2, dev->pnp_string, value);
- 			DBG(dev, "1284 PNP String: %x %s\n", value,
- 			    dev->pnp_string);
- 			break;
+ 	memcpy(sa->sa_data, buf, 6);
+ 	netif_info(tp, probe, tp->netdev,
+ 		   "Using pass-thru MAC addr %pM\n", sa->sa_data);
 -- 
-2.25.1
+2.30.2
 
