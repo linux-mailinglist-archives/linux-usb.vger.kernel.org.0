@@ -2,236 +2,201 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8346B48540B
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 15:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB8C48542B
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 15:15:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240533AbiAEOFi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jan 2022 09:05:38 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:36467 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240532AbiAEOFe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jan 2022 09:05:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1641391535; x=1672927535;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=lTbKGCNvxFSS0d3GcIbzpHQ7e4M7Q8ISsp0N8PCJ73c=;
-  b=UFAaIWC52LJR7VW/hc7TGZGll9UoQ4hFZAIZkw9IQLMIAwIYXvxBVpet
-   rxMqbGbd9pJhDXOj17TB8Vs3UpMo3BpkQa4zSbG0M6rS0yoM9bs0kuUEQ
-   cprZyHBDLjTUIHKvYlD8hAEBxE8nhR4flVvkFvAVOvVJTF0cAJAVYeufp
-   U=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 05 Jan 2022 06:05:34 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 06:05:33 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 5 Jan 2022 06:05:33 -0800
-Received: from ugoswami-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 5 Jan 2022 06:05:30 -0800
-From:   Udipto Goswami <quic_ugoswami@quicinc.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        John Keeping <john@metanate.com>
-CC:     Udipto Goswami <quic_ugoswami@quicinc.com>,
-        <linux-usb@vger.kernel.org>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>
-Subject: [PATCH v8] usb: f_fs: Fix use-after-free for epfile
-Date:   Wed, 5 Jan 2022 19:35:26 +0530
-Message-ID: <1641391526-8737-1-git-send-email-quic_ugoswami@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        id S240595AbiAEOPs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jan 2022 09:15:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237013AbiAEOPr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jan 2022 09:15:47 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7407C061761
+        for <linux-usb@vger.kernel.org>; Wed,  5 Jan 2022 06:15:47 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1n574n-0001Kb-1G; Wed, 05 Jan 2022 15:15:41 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1n574h-0007uo-SA; Wed, 05 Jan 2022 15:15:35 +0100
+Date:   Wed, 5 Jan 2022 15:15:35 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, linux@rempel-privat.de,
+        andrew@lunn.ch, oneukum@suse.com, robert.foss@collabora.com,
+        freddy@asix.com.tw, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
+Subject: Re: [PATCH RFT] net: asix: add proper error handling of usb read
+ errors
+Message-ID: <20220105141535.GI303@pengutronix.de>
+References: <20220105131952.15693-1-paskripkin@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220105131952.15693-1-paskripkin@gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 15:15:04 up 25 days, 23:00, 79 users,  load average: 1.10, 1.15,
+ 1.20
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Consider a case where ffs_func_eps_disable is called from
-ffs_func_disable as part of composition switch and at the
-same time ffs_epfile_release get called from userspace.
-ffs_epfile_release will free up the read buffer and call
-ffs_data_closed which in turn destroys ffs->epfiles and
-mark it as NULL. While this was happening the driver has
-already initialized the local epfile in ffs_func_eps_disable
-which is now freed and waiting to acquire the spinlock. Once
-spinlock is acquired the driver proceeds with the stale value
-of epfile and tries to free the already freed read buffer
-causing use-after-free.
+On Wed, Jan 05, 2022 at 04:19:52PM +0300, Pavel Skripkin wrote:
+> Syzbot once again hit uninit value in asix driver. The problem still the
+> same -- asix_read_cmd() reads less bytes, than was requested by caller.
+> 
+> Since all read requests are performed via asix_read_cmd() let's catch
+> usb related error there and add __must_check notation to be sure all
+> callers actually check return value.
+> 
+> So, this patch adds sanity check inside asix_read_cmd(), that simply
+> checks if bytes read are not less, than was requested and adds missing
+> error handling of asix_read_cmd() all across the driver code.
+> 
+> Fixes: d9fe64e51114 ("net: asix: Add in_pm parameter")
+> Reported-and-tested-by: syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
 
-Following is the illustration of the race:
+Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-      CPU1                                  CPU2
+Thank you!
 
-   ffs_func_eps_disable
-   epfiles (local copy)
-					ffs_epfile_release
-					ffs_data_closed
-					if (last file closed)
-					ffs_data_reset
-					ffs_data_clear
-					ffs_epfiles_destroy
-spin_lock
-dereference epfiles
+> ---
+>  drivers/net/usb/asix.h         |  4 ++--
+>  drivers/net/usb/asix_common.c  | 19 +++++++++++++------
+>  drivers/net/usb/asix_devices.c | 21 ++++++++++++++++++---
+>  3 files changed, 33 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
+> index 2a1e31defe71..4334aafab59a 100644
+> --- a/drivers/net/usb/asix.h
+> +++ b/drivers/net/usb/asix.h
+> @@ -192,8 +192,8 @@ extern const struct driver_info ax88172a_info;
+>  /* ASIX specific flags */
+>  #define FLAG_EEPROM_MAC		(1UL << 0)  /* init device MAC from eeprom */
+>  
+> -int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+> -		  u16 size, void *data, int in_pm);
+> +int __must_check asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+> +			       u16 size, void *data, int in_pm);
+>  
+>  int asix_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+>  		   u16 size, void *data, int in_pm);
+> diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+> index 71682970be58..524805285019 100644
+> --- a/drivers/net/usb/asix_common.c
+> +++ b/drivers/net/usb/asix_common.c
+> @@ -11,8 +11,8 @@
+>  
+>  #define AX_HOST_EN_RETRIES	30
+>  
+> -int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+> -		  u16 size, void *data, int in_pm)
+> +int __must_check asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+> +			       u16 size, void *data, int in_pm)
+>  {
+>  	int ret;
+>  	int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
+> @@ -27,9 +27,12 @@ int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+>  	ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+>  		 value, index, data, size);
+>  
+> -	if (unlikely(ret < 0))
+> +	if (unlikely(ret < size)) {
+> +		ret = ret < 0 ? ret : -ENODATA;
+> +
+>  		netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
+>  			    index, ret);
+> +	}
+>  
+>  	return ret;
+>  }
+> @@ -79,7 +82,7 @@ static int asix_check_host_enable(struct usbnet *dev, int in_pm)
+>  				    0, 0, 1, &smsr, in_pm);
+>  		if (ret == -ENODEV)
+>  			break;
+> -		else if (ret < sizeof(smsr))
+> +		else if (ret < 0)
+>  			continue;
+>  		else if (smsr & AX_HOST_EN)
+>  			break;
+> @@ -579,8 +582,12 @@ int asix_mdio_read_nopm(struct net_device *netdev, int phy_id, int loc)
+>  		return ret;
+>  	}
+>  
+> -	asix_read_cmd(dev, AX_CMD_READ_MII_REG, phy_id,
+> -		      (__u16)loc, 2, &res, 1);
+> +	ret = asix_read_cmd(dev, AX_CMD_READ_MII_REG, phy_id,
+> +			    (__u16)loc, 2, &res, 1);
+> +	if (ret < 0) {
+> +		mutex_unlock(&dev->phy_mutex);
+> +		return ret;
+> +	}
+>  	asix_set_hw_mii(dev, 1);
+>  	mutex_unlock(&dev->phy_mutex);
+>  
+> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+> index 4514d35ef4c4..6b2fbdf4e0fd 100644
+> --- a/drivers/net/usb/asix_devices.c
+> +++ b/drivers/net/usb/asix_devices.c
+> @@ -755,7 +755,12 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
+>  	priv->phy_addr = ret;
+>  	priv->embd_phy = ((priv->phy_addr & 0x1f) == 0x10);
+>  
+> -	asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1, &chipcode, 0);
+> +	ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1, &chipcode, 0);
+> +	if (ret < 0) {
+> +		netdev_dbg(dev->net, "Failed to read STATMNGSTS_REG: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+>  	chipcode &= AX_CHIPCODE_MASK;
+>  
+>  	ret = (chipcode == AX_AX88772_CHIPCODE) ? ax88772_hw_reset(dev, 0) :
+> @@ -920,11 +925,21 @@ static int ax88178_reset(struct usbnet *dev)
+>  	int gpio0 = 0;
+>  	u32 phyid;
+>  
+> -	asix_read_cmd(dev, AX_CMD_READ_GPIOS, 0, 0, 1, &status, 0);
+> +	ret = asix_read_cmd(dev, AX_CMD_READ_GPIOS, 0, 0, 1, &status, 0);
+> +	if (ret < 0) {
+> +		netdev_dbg(dev->net, "Failed to read GPIOS: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+>  	netdev_dbg(dev->net, "GPIO Status: 0x%04x\n", status);
+>  
+>  	asix_write_cmd(dev, AX_CMD_WRITE_ENABLE, 0, 0, 0, NULL, 0);
+> -	asix_read_cmd(dev, AX_CMD_READ_EEPROM, 0x0017, 0, 2, &eeprom, 0);
+> +	ret = asix_read_cmd(dev, AX_CMD_READ_EEPROM, 0x0017, 0, 2, &eeprom, 0);
+> +	if (ret < 0) {
+> +		netdev_dbg(dev->net, "Failed to read EEPROM: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+>  	asix_write_cmd(dev, AX_CMD_WRITE_DISABLE, 0, 0, 0, NULL, 0);
+>  
+>  	netdev_dbg(dev->net, "EEPROM index 0x17 is 0x%04x\n", eeprom);
+> -- 
+> 2.34.1
+> 
+> 
 
-Fix this races by taking epfiles local copy & assigning it under
-spinlock and if epfiles(local) is null then update it in ffs->epfiles
-then finally destroy it.
-Extending the scope further from the race, protecting the ep related
-structures, and concurrent accesses.
-
-Fixes: a9e6f83c2df (usb: gadget: f_fs: stop sleeping in
-ffs_func_eps_disable)
-Reviewed-by: John Keeping <john@metanate.com>
-Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
-Co-developed-by: Udipto Goswami <quic_ugoswami@quicinc.com>
-Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
----
-v8: Fixed compilation errors from previous version.
-
- drivers/usb/gadget/function/f_fs.c | 60 ++++++++++++++++++++++++++++----------
- 1 file changed, 45 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 3c584da..541a4af 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -1711,16 +1711,24 @@ static void ffs_data_put(struct ffs_data *ffs)
- 
- static void ffs_data_closed(struct ffs_data *ffs)
- {
-+	struct ffs_epfile *epfiles;
-+	unsigned long flags;
-+
- 	ENTER();
- 
- 	if (atomic_dec_and_test(&ffs->opened)) {
- 		if (ffs->no_disconnect) {
- 			ffs->state = FFS_DEACTIVATED;
--			if (ffs->epfiles) {
--				ffs_epfiles_destroy(ffs->epfiles,
--						   ffs->eps_count);
--				ffs->epfiles = NULL;
--			}
-+			spin_lock_irqsave(&ffs->eps_lock, flags);
-+			epfiles = ffs->epfiles;
-+			ffs->epfiles = NULL;
-+			spin_unlock_irqrestore(&ffs->eps_lock,
-+							flags);
-+
-+			if (epfiles)
-+				ffs_epfiles_destroy(epfiles,
-+						 ffs->eps_count);
-+
- 			if (ffs->setup_state == FFS_SETUP_PENDING)
- 				__ffs_ep0_stall(ffs);
- 		} else {
-@@ -1767,14 +1775,27 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
- 
- static void ffs_data_clear(struct ffs_data *ffs)
- {
-+	struct ffs_epfile *epfiles;
-+	unsigned long flags;
-+
- 	ENTER();
- 
- 	ffs_closed(ffs);
- 
- 	BUG_ON(ffs->gadget);
- 
--	if (ffs->epfiles)
--		ffs_epfiles_destroy(ffs->epfiles, ffs->eps_count);
-+	spin_lock_irqsave(&ffs->eps_lock, flags);
-+	epfiles = ffs->epfiles;
-+	ffs->epfiles = NULL;
-+	spin_unlock_irqrestore(&ffs->eps_lock, flags);
-+
-+	/*
-+	 * potential race possible between ffs_func_eps_disable
-+	 * & ffs_epfile_release therefore maintaining a local
-+	 * copy of epfile will save us from use-after-free.
-+	 */
-+	if (epfiles)
-+		ffs_epfiles_destroy(epfiles, ffs->eps_count);
- 
- 	if (ffs->ffs_eventfd)
- 		eventfd_ctx_put(ffs->ffs_eventfd);
-@@ -1790,7 +1811,6 @@ static void ffs_data_reset(struct ffs_data *ffs)
- 
- 	ffs_data_clear(ffs);
- 
--	ffs->epfiles = NULL;
- 	ffs->raw_descs_data = NULL;
- 	ffs->raw_descs = NULL;
- 	ffs->raw_strings = NULL;
-@@ -1870,6 +1890,7 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
- {
- 	struct ffs_epfile *epfile, *epfiles;
- 	unsigned i, count;
-+	unsigned long flags;
- 
- 	ENTER();
- 
-@@ -1895,7 +1916,9 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
- 		}
- 	}
- 
-+	spin_lock_irqsave(&ffs->eps_lock, flags);
- 	ffs->epfiles = epfiles;
-+	spin_unlock_irqrestore(&ffs->eps_lock, flags);
- 	return 0;
- }
- 
-@@ -1919,12 +1942,15 @@ static void ffs_epfiles_destroy(struct ffs_epfile *epfiles, unsigned count)
- 
- static void ffs_func_eps_disable(struct ffs_function *func)
- {
--	struct ffs_ep *ep         = func->eps;
--	struct ffs_epfile *epfile = func->ffs->epfiles;
--	unsigned count            = func->ffs->eps_count;
-+	struct ffs_ep *ep;
-+	struct ffs_epfile *epfile;
-+	unsigned short count;
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&func->ffs->eps_lock, flags);
-+	count = func->ffs->eps_count;
-+	epfile = func->ffs->epfiles;
-+	ep = func->eps;
- 	while (count--) {
- 		/* pending requests get nuked */
- 		if (ep->ep)
-@@ -1942,14 +1968,18 @@ static void ffs_func_eps_disable(struct ffs_function *func)
- 
- static int ffs_func_eps_enable(struct ffs_function *func)
- {
--	struct ffs_data *ffs      = func->ffs;
--	struct ffs_ep *ep         = func->eps;
--	struct ffs_epfile *epfile = ffs->epfiles;
--	unsigned count            = ffs->eps_count;
-+	struct ffs_data *ffs;
-+	struct ffs_ep *ep;
-+	struct ffs_epfile *epfile;
-+	unsigned short count;
- 	unsigned long flags;
- 	int ret = 0;
- 
- 	spin_lock_irqsave(&func->ffs->eps_lock, flags);
-+	ffs = func->ffs;
-+	ep = func->eps;
-+	epfile = ffs->epfiles;
-+	count = ffs->eps_count;
- 	while(count--) {
- 		ep->ep->driver_data = ep;
- 
 -- 
-2.7.4
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
