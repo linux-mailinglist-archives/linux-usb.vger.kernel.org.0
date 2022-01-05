@@ -2,182 +2,299 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD08A48598E
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 20:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C46F485A28
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 21:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243756AbiAETzK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jan 2022 14:55:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60458 "EHLO
+        id S244169AbiAEUmn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jan 2022 15:42:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243691AbiAETzJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jan 2022 14:55:09 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4A3C061245;
-        Wed,  5 Jan 2022 11:55:09 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id lr15-20020a17090b4b8f00b001b19671cbebso122065pjb.1;
-        Wed, 05 Jan 2022 11:55:09 -0800 (PST)
+        with ESMTP id S244159AbiAEUmk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jan 2022 15:42:40 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FA4C0611FD
+        for <linux-usb@vger.kernel.org>; Wed,  5 Jan 2022 12:42:40 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id g79-20020a9d12d5000000b0058f08f31338so753756otg.2
+        for <linux-usb@vger.kernel.org>; Wed, 05 Jan 2022 12:42:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=14FClxpE+aLTMU7fxQEowe4LKw+eJj6sY83c1am50H8=;
-        b=dKsIPzkioADZA6A1gsTvJHjR2h1t5+IlrGOqvFHH45WK2ZNbuRS5l6iDoqSiIdf+QR
-         1IKTrSDZfYRlprvHnz6Tc7drDKV+qrKBM/xO1ecsKVxBlQFYPRbjRUh1tf/0tchvud5H
-         4a4YVKVW9GVEqiPiqXcvfkNdld28VUutSTt762zBmnAlHPFq5Y3YeRCZMI19Jw4WOCW5
-         flKkePop55O5WLqKUmuoWL7Ivd5G8VkszYPEzUFHwrorlZkpRFhnMWr7XVEQWdA2SHd4
-         iEVgxud7ORwl7OWw9q+MCQaCxdWi+0UMKc9g+Q6/Iyc3SIht3vhu7qB8W0F95d79SQac
-         qXVQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=GqKtuhkPiMoPzGt6j5rJjkXpaGOAonB+8jqGdQJ30AU=;
+        b=k5quMqvUgiT2ESX4nHdif3wTGD4JTrRIyVSYUGAUzNuMwItyG7xSG/8T320z4D6/cl
+         QRJAdLwwVTNlyzaokVZczMhAawT9VIhvPnliKhWAAIzDzMTSAopHGcZ0EC6ROlnVHqJ7
+         ymRlqyvN27bEBwDj5TrQ+ZzJyr8Rgddjl3ayfk1BvgtVYh26/S9X8J1r1dKT9mtyc7vD
+         k+99Cyht5XtCpeS6jrEe4bngyOcjLnkOPBIaCx9Js9ZaSyfVcXWIsxsDYA3XjmA7dQeW
+         Co3A6uC9nV8yJgBH2CnhdgTFSCuQxXGu9xXdY905uUZqvbRa1amrD99COlZXiqSog0Uj
+         vyPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=14FClxpE+aLTMU7fxQEowe4LKw+eJj6sY83c1am50H8=;
-        b=CicbYJ7xaPNRvKRDf1Ij95CRmgkLiohFPoACaoDjLQSu7/IDpKZqqVvVsahPvtmZ7A
-         KKEnGuTOaK+rwPZ/wiw3Hl2yB4NO7Zi7paFmk4V5qicWf0/lV3Hd7Xmrb8eT4MTg6MT+
-         itXhbP49ITZBp/99VIRoEXYJ5TjQ3MlR4bFHES2INLsMit5LOB8Tl+Zwii3gU5whu3oy
-         VnhfMrstVDzmty5YyAcUVT0Dh9ryt4AHwia4EW1W3tky181zsVOSZyId75xy6d6m5A/f
-         gf2YcfXkg3bvGceuleRPka5QHWkmS1dTsRWn9ZX8pqyxRR6eF4aBAXSTy/+ytlMEK+tb
-         3G3w==
-X-Gm-Message-State: AOAM533CCQhFWdUFiijZqYOeu/6ohCBknSYiDbn8TVg0eKKLSkh/1AWY
-        yLmySgDH1X4IA3iXBCmK/4rRG6fE9cM=
-X-Google-Smtp-Source: ABdhPJy+tYy19YRWennySufnX8e+cO2ou1bf8Pta8Z59THaGEM+EyL/EZi0Ebx32lI6G147OlZ3RbQ==
-X-Received: by 2002:a17:902:7b96:b0:149:49fc:7de0 with SMTP id w22-20020a1709027b9600b0014949fc7de0mr55032845pll.25.1641412508757;
-        Wed, 05 Jan 2022 11:55:08 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id b13sm44084920pfo.37.2022.01.05.11.55.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jan 2022 11:55:08 -0800 (PST)
-Subject: Re: [PATCH] net: usb: r8152: Check used MAC passthrough address
-To:     Aaron Ma <aaron.ma@canonical.com>,
-        Henning Schild <henning.schild@siemens.com>
-Cc:     kuba@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        hayeswang@realtek.com, tiwai@suse.de
-References: <20220105061747.7104-1-aaron.ma@canonical.com>
- <20220105082355.79d44349@md1za8fc.ad001.siemens.net>
- <20220105083238.4278d331@md1za8fc.ad001.siemens.net>
- <e71f3dfd-5f17-6cdc-8f1b-9b5ad15ca793@canonical.com>
- <20220105085525.31873db2@md1za8fc.ad001.siemens.net>
- <fc72ca69-9043-dc46-6548-dbc3c4d40289@canonical.com>
- <20220105093218.283c9538@md1za8fc.ad001.siemens.net>
- <ba9f12b7-872f-8974-8865-9a2de539e09a@canonical.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <32b9e331-2c1d-6a7d-ca38-57cec50b240c@gmail.com>
-Date:   Wed, 5 Jan 2022 11:55:06 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=GqKtuhkPiMoPzGt6j5rJjkXpaGOAonB+8jqGdQJ30AU=;
+        b=O/lYZ6ujfqZpohd41yWbtGY43ReXKGqBEh2xoI1oQpq3AZfNDvYjgFlZxWgbMOD9iD
+         XUxTcoaVijJY+qzPrv2ME1sC/fbOvKjIubuZbS1wOJbgo42YF7JVzMATrlWwCceQv20b
+         zsF2BJD1piCr5/+mIRSvzyoMH78DPx7oh5GZBZt2G2FhOdHA9Z61aYhtHTrkhPQWLrNw
+         JEe0WkvRqJIjeP15RgZ7RXB+PbUfFZ6uvLK6O6ptuxat9JMRGx1k1IbXfSpyvPRmbqXq
+         6EdgOslZ1h86FPam9uXCAqHMeDTxeX4S8p/R8bU40ZP/7ojk7o5jVorjUfDs/l2kUVfn
+         d/9g==
+X-Gm-Message-State: AOAM530kgu6TdcuVIgVJeTgxOfGZq64SsJ6CYoXaLbluvW2Mlgi2FfYJ
+        TnDA/9aMTwZKa/+HxFefkHIqaw==
+X-Google-Smtp-Source: ABdhPJwn09fZPAkcMlQq+rmMAWcs2U0izBZKiAM3vzg/0ktiMRpswUHye3oJ0Gn5utow2lQjPMgFRQ==
+X-Received: by 2002:a9d:313:: with SMTP id 19mr38383642otv.2.1641415359717;
+        Wed, 05 Jan 2022 12:42:39 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id f27sm8430162otc.16.2022.01.05.12.42.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 12:42:38 -0800 (PST)
+Date:   Wed, 5 Jan 2022 12:43:28 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 3/8] device property: Helper to match multiple connections
+Message-ID: <YdYC8DeF1i9a3RnP@ripper>
+References: <20211228052116.1748443-1-bjorn.andersson@linaro.org>
+ <20211228052116.1748443-4-bjorn.andersson@linaro.org>
+ <Yc17Ssug3neFFXKN@kuha.fi.intel.com>
+ <Yc7I3gZehc1lHn4Z@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <ba9f12b7-872f-8974-8865-9a2de539e09a@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yc7I3gZehc1lHn4Z@paasikivi.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 1/5/22 12:37 AM, Aaron Ma wrote:
-> 
-> 
-> On 1/5/22 16:32, Henning Schild wrote:
->> Am Wed, 5 Jan 2022 16:01:24 +0800
->> schrieb Aaron Ma <aaron.ma@canonical.com>:
->>
->>> On 1/5/22 15:55, Henning Schild wrote:
->>>> Am Wed, 5 Jan 2022 15:38:51 +0800
->>>> schrieb Aaron Ma <aaron.ma@canonical.com>:
->>>>   
->>>>> On 1/5/22 15:32, Henning Schild wrote:
->>>>>> Am Wed, 5 Jan 2022 08:23:55 +0100
->>>>>> schrieb Henning Schild <henning.schild@siemens.com>:
->>>>>>      
->>>>>>> Hi Aaron,
->>>>>>>
->>>>>>> if this or something similar goes in, please add another patch to
->>>>>>> remove the left-over defines.
->>>>>>>      
->>>>>
->>>>> Sure, I will do it.
->>>>>  
->>>>>>> Am Wed,  5 Jan 2022 14:17:47 +0800
->>>>>>> schrieb Aaron Ma <aaron.ma@canonical.com>:
->>>>>>>     
->>>>>>>> When plugin multiple r8152 ethernet dongles to Lenovo Docks
->>>>>>>> or USB hub, MAC passthrough address from BIOS should be
->>>>>>>> checked if it had been used to avoid using on other dongles.
->>>>>>>>
->>>>>>>> Currently builtin r8152 on Dock still can't be identified.
->>>>>>>> First detected r8152 will use the MAC passthrough address.
->>>>>>>>
->>>>>>>> Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
->>>>>>>> ---
->>>>>>>>     drivers/net/usb/r8152.c | 10 ++++++++++
->>>>>>>>     1 file changed, 10 insertions(+)
->>>>>>>>
->>>>>>>> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
->>>>>>>> index f9877a3e83ac..77f11b3f847b 100644
->>>>>>>> --- a/drivers/net/usb/r8152.c
->>>>>>>> +++ b/drivers/net/usb/r8152.c
->>>>>>>> @@ -1605,6 +1605,7 @@ static int
->>>>>>>> vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr
->>>>>>>> *sa) char *mac_obj_name; acpi_object_type mac_obj_type;
->>>>>>>>         int mac_strlen;
->>>>>>>> +    struct net_device *ndev;
->>>>>>>>             if (tp->lenovo_macpassthru) {
->>>>>>>>             mac_obj_name = "\\MACA";
->>>>>>>> @@ -1662,6 +1663,15 @@ static int
->>>>>>>> vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr
->>>>>>>> *sa) ret = -EINVAL; goto amacout;
->>>>>>>>         }
->>>>>>>> +    rcu_read_lock();
->>>>>>>> +    for_each_netdev_rcu(&init_net, ndev) {
->>>>>>>> +        if (strncmp(buf, ndev->dev_addr, 6) == 0) {
->>>>>>>> +            rcu_read_unlock();
->>>>>>>> +            goto amacout;
->>>>>>>
->>>>>>> Since the original PCI netdev will always be there, that would
->>>>>>> disable inheritance would it not?
->>>>>>> I guess a strncmp(MODULE_NAME, info->driver, strlen(MODULE_NAME))
->>>>>>> is needed as well.
->>>>>>>      
->>>>>
->>>>> PCI ethernet could be a builtin one on dock since there will be
->>>>> TBT4 dock.
->>>>
->>>> In my X280 there is a PCI device in the laptop, always there. And
->>>> its MAC is the one found in ACPI. Did not try but i think for such
->>>> devices there would never be inheritance even if one wanted and
->>>> used a Lenovo dock that is supposed to do it.
->>>>    
->>>
->>> There will more TBT4 docks in market, the new ethernet is just the
->>> same as PCI device, connected by thunderbolt.
->>>
->>> For exmaple, connect a TBT4 dock which uses i225 pcie base ethernet,
->>> then connect another TBT3 dock which uses r8152.
->>> If skip PCI check, then i225 and r8152 will use the same MAC.
->>
->> In current 5.15 i have that sort of collision already. All r8152s will
->> happily grab the MAC of the I219. In fact i have only ever seen it with
->> one r8152 at a time but while the I219 was actively in use.
->> While this patch will probably solve that, i bet it would defeat MAC
->> pass-thru altogether. Even when turned on in the BIOS.
->> Or does that iterator take "up"/"down" state into consideration? But
->> even if, the I219 could become "up" any time later.
->>
-> 
-> No, that's different, I219 got MAC from their own space.
-> MAC passthrough got MAC from ACPI "\MACA".
-> 
->> These collisions are simply bound to happen and probably very hard to
->> avoid once you have set your mind on allowing pass-thru in the first
->> place. Not sure whether that even has potential to disturb network
->> equipment like switches.
->>
-> 
-> After check MAC address, it will be more safe.
+On Fri 31 Dec 01:09 PST 2021, Sakari Ailus wrote:
 
-Sorry to just do a drive by review here, but why is passing through the
-MAC a kernel problem and not something that you punt to user-space entirely?
--- 
-Florian
+> Hi Bj�rn,
+> 
+> (And thanks to Heikki for cc'ing me!)
+> 
+> On Thu, Dec 30, 2021 at 11:26:34AM +0200, Heikki Krogerus wrote:
+> > +Andy, Dan and Sakari
+> > 
+> > On Mon, Dec 27, 2021 at 09:21:11PM -0800, Bjorn Andersson wrote:
+> > > In some cases multiple connections with the same connection id
+> > > needs to be resolved from a fwnode graph.
+> > > 
+> > > One such example is when separate hardware is used for performing muxing and/or
+> > > orientation switching of the SuperSpeed and SBU lines in a USB-C
+> > > connector. In this case the connector needs to belong to a graph with
+> > > multiple matching remote endpoints, and the TypeC controller needs to be
+> > > able to resolve them both.
+> > > 
+> > > Add a new API that allows this kind of lookup.
+> > > 
+> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > ---
+> > >  drivers/base/property.c  | 94 ++++++++++++++++++++++++++++++++++++++++
+> > >  include/linux/property.h |  5 +++
+> > >  2 files changed, 99 insertions(+)
+> > > 
+> > > diff --git a/drivers/base/property.c b/drivers/base/property.c
+> > > index cbe4fa298413..0aa0296fd991 100644
+> > > --- a/drivers/base/property.c
+> > > +++ b/drivers/base/property.c
+> > > @@ -1180,6 +1180,36 @@ fwnode_graph_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
+> > >  	return NULL;
+> > >  }
+> > >  
+> > > +static unsigned int fwnode_graph_devcon_matches(struct fwnode_handle *fwnode,
+> > > +						const char *con_id, void *data,
+> > > +						devcon_match_fn_t match,
+> > > +						void **matches,
+> > > +						unsigned int matches_len)
+> > > +{
+> > > +	struct fwnode_handle *node;
+> > > +	struct fwnode_handle *ep;
+> > > +	unsigned int count = 0;
+> > > +	void *ret;
+> > > +
+> > > +	fwnode_graph_for_each_endpoint(fwnode, ep) {
+> > > +		if (count >= matches_len) {
+> > > +			fwnode_handle_put(ep);
+> > > +			return count;
+> > > +		}
+> > > +
+> > > +		node = fwnode_graph_get_remote_port_parent(ep);
+> > > +		if (!fwnode_device_is_available(node))
+> 
+> The reference to node needs to be put here.
+> 
+
+You're right, thanks!
+
+> > > +			continue;
+> > > +
+> > > +		ret = match(node, con_id, data);
+> > > +		fwnode_handle_put(node);
+> > > +
+> > > +		if (ret)
+> > > +			matches[count++] = ret;
+> > > +	}
+> > > +	return count;
+> > > +}
+> > > +
+> > >  static void *
+> > >  fwnode_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
+> > >  		    void *data, devcon_match_fn_t match)
+> > > @@ -1202,6 +1232,35 @@ fwnode_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
+> > >  	return NULL;
+> > >  }
+> > >  
+> > > +static unsigned int fwnode_devcon_matches(struct fwnode_handle *fwnode,
+> > > +					  const char *con_id, void *data,
+> > > +					  devcon_match_fn_t match,
+> > > +					  void **matches,
+> > > +					  unsigned int matches_len)
+> > > +{
+> > > +	struct fwnode_handle *node;
+> > > +	unsigned int count = 0;
+> > > +	void *ret;
+> > > +	int i;
+> 
+> unsigned int, please.
+> 
+
+Sounds good.
+
+> > > +
+> > > +	for (i = 0; ; i++) {
+> > > +		if (count >= matches_len)
+> > > +			return count;
+> > > +
+> > > +		node = fwnode_find_reference(fwnode, con_id, i);
+> > > +		if (IS_ERR(node))
+> > > +			break;
+> > > +
+> > > +		ret = match(node, NULL, data);
+> > > +		fwnode_handle_put(node);
+> > > +
+> > > +		if (ret)
+> > > +			matches[count++] = ret;
+> > > +	}
+> > > +
+> > > +	return count;
+> > > +}
+> > > +
+> > >  /**
+> > >   * fwnode_connection_find_match - Find connection from a device node
+> > >   * @fwnode: Device node with the connection
+> > > @@ -1229,3 +1288,38 @@ void *fwnode_connection_find_match(struct fwnode_handle *fwnode,
+> > >  	return fwnode_devcon_match(fwnode, con_id, data, match);
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(fwnode_connection_find_match);
+> > > +
+> > > +/**
+> > > + * fwnode_connection_find_matches - Find connections from a device node
+> > > + * @fwnode: Device node with the connection
+> > > + * @con_id: Identifier for the connection
+> > > + * @data: Data for the match function
+> > > + * @match: Function to check and convert the connection description
+> > > + * @matches: Array of pointers to fill with matches
+> > > + * @matches_len: Length of @matches
+> > > + *
+> > > + * Find up to @matches_len connections with unique identifier @con_id between
+> > > + * @fwnode and other device nodes. @match will be used to convert the
+> > > + * connection description to data the caller is expecting to be returned
+> > > + * through the @matches array.
+> 
+> If the caller allocates the matches array, how does it know how large it
+> should be? Is there a need to provide a way to count the matches before
+> writing them to an array? Most similar functions do that by just setting the
+> array (matches) to NULL.
+> 
+
+This is a very relevant comment and I did look for ways to handle this
+as I came up with the patch.
+
+I think the typical mechanism would be to allow @matches to be NULL, in
+which case we iterate over objects and return the number of matches, so
+that the caller can allocate an appropriately sized array and call the
+API again.
+
+But the "match" function simply returns a pointer to something and
+looking at the example of the typec_{mux,switch} this pointer points to
+a member of an object which has a struct device which is refcounted.
+
+As such, we can't simply discard the returned object. We have to pass it
+back to the caller, whom knows what "match" did and is able to reverse
+that.
+
+I looked at changing the callback and I looked at using krealloc() to
+grow an array dynamically.
+
+
+But looking at the use case in mind; finding entities that might need to
+react to a USB Type-C event I have a need for 2 matches, and 3 seems
+plausible. Beyond that the largest of_graph I have ever dealt with has 6
+endpoints.
+
+While it isn't relevant to use this API for my 6-endpoint case, it would
+result in @matches having to be 48 bytes of pointers. And once the call
+returns, the actual number of pointers needed is known and the long-term
+storage can be re-allocated as necessary based on the return value.
+
+As such, I dropped the idea of making something fancier and more
+dynamic, for the sake of simplicity. Perhaps I'm missing some cool use
+case where this is infeasible?
+
+Regards,
+Bjorn
+
+> > > + *
+> > > + * Return: Number of matches resolved, of negative errno.
+> > > + */
+> > > +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
+> > > +				   const char *con_id, void *data,
+> > > +				   devcon_match_fn_t match,
+> > > +				   void **matches, unsigned int matches_len)
+> > > +{
+> > > +	unsigned int count;
+> > > +
+> > > +	if (!fwnode || !match || !matches)
+> > > +		return -EINVAL;
+> > > +
+> > > +	count = fwnode_graph_devcon_matches(fwnode, con_id, data, match,
+> > > +					    matches, matches_len);
+> > > +
+> > > +	return count + fwnode_devcon_matches(fwnode, con_id, data, match,
+> > > +					     matches + count,
+> > > +					     matches_len - count);
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(fwnode_connection_find_matches);
+> > > diff --git a/include/linux/property.h b/include/linux/property.h
+> > > index 16f736c698a2..59484ccb260e 100644
+> > > --- a/include/linux/property.h
+> > > +++ b/include/linux/property.h
+> > > @@ -444,6 +444,11 @@ static inline void *device_connection_find_match(struct device *dev,
+> > >  	return fwnode_connection_find_match(dev_fwnode(dev), con_id, data, match);
+> > >  }
+> > >  
+> > > +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
+> > > +				   const char *con_id, void *data,
+> > > +				   devcon_match_fn_t match,
+> > > +				   void **matches, unsigned int matches_len);
+> > > +
+> > >  /* -------------------------------------------------------------------------- */
+> > >  /* Software fwnode support - when HW description is incomplete or missing */
+> > >  
+> 
+> -- 
+> Kind regards,
+> 
+> Sakari Ailus
