@@ -2,318 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DE44852F8
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 13:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF23485302
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 13:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234718AbiAEMo2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jan 2022 07:44:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
+        id S235823AbiAEMta (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jan 2022 07:49:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234151AbiAEMo1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jan 2022 07:44:27 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE21C061761
-        for <linux-usb@vger.kernel.org>; Wed,  5 Jan 2022 04:44:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=PW+b00/5XfJ1JGqHTgUUNnwuenJugYbv76CcMiwJ03c=; b=QIUtv
-        Crk3MsrgJUtj857ObqcU+zdFjwNBwerbVUhdAPsTvFEiJZ3DDSpNOaYkE0bTiKEjEpbS79anQOqeg
-        rxU76gDRFOEkrexh3uPEbGzfy3l/0KkYffUubRhOTuPfbpy6d5exPP/O8cEiUcuWWyE5N4dxP2Yu0
-        3aMKtzbD7Uql6rDWedL710pcyZlxCH3IiGLXpR+b1bzMjjBL2ZmDlXG5QSLfmU6+eVPYwHnNK2tR2
-        Pqg5W6PHWTNYimqV+K/b6pHb1CsRT9cUPPtcN+vLGGoAIn1Vj7wATw6E9xShFoZgaDIbCQ7/pKfBB
-        5/GZggCzNszLUVE6RA/nL39uwr98w==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1n55eS-0003M7-2v; Wed, 05 Jan 2022 12:44:24 +0000
-Date:   Wed, 5 Jan 2022 12:44:22 +0000
-From:   John Keeping <john@metanate.com>
-To:     Pavel Hofman <pavel.hofman@ivitera.com>
-Cc:     linux-usb@vger.kernel.org,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Julian Scheel <julian@jusst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 03/11] usb: gadget: f_uac2: Support multiple sampling
- rates
-Message-ID: <YdWSpo3D5I61rsMI@donbot>
-References: <20211220211130.88590-1-pavel.hofman@ivitera.com>
- <20211220211130.88590-4-pavel.hofman@ivitera.com>
- <YcHBocOvNkrMTnJM@donbot>
- <71a8efe9-e515-fe14-c4ec-34c97a16395e@ivitera.com>
- <YdRouHVKWDjea6D3@donbot>
- <7b135fce-d822-61e4-a2e0-e44ff9558fbd@ivitera.com>
+        with ESMTP id S229485AbiAEMt0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jan 2022 07:49:26 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B4AC061761;
+        Wed,  5 Jan 2022 04:49:25 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id j11so87121472lfg.3;
+        Wed, 05 Jan 2022 04:49:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to;
+        bh=uBxaYOlKR0ToYVXuF/1xoWyiN6Wy6vsyVIMnJ/g5hOI=;
+        b=S9nsO8+C0RflUbe72fWrFhQnZWg5jNMqRbY55wZFgUGkv9u9f7wJOKIdtP84e1SWma
+         owvhOJhJVtATwKGW//nLd6m7KZqSvxV3qyt3/z8Gj05pqwgzykW2j9oKlaIr/4ZK3Qnd
+         fM4/op7oO7qHQAeocgz04rTb4bw89O1jimKi84UmQaSYyHT7BExfUv1g1/KFKMeRCrp1
+         +Xz+o/eoUZ838AVjwzq/PP3i3aEJzlEjkpNkGHvr2QLhgkV+KHh2l6g9+mj9ZCz8pOi/
+         Ve0fXQgEOEFWyw97cpFCW9+vMQI26WuymSFCyweE2xaxZEIe8vuP4/W2mIHuxNjaStxm
+         EUhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to;
+        bh=uBxaYOlKR0ToYVXuF/1xoWyiN6Wy6vsyVIMnJ/g5hOI=;
+        b=nJqMq0OBy4Hths6xCWmBgcJybF4fqe5kaxlpVUVvmMfu5xXAZnoE0oR7p+zSm6eq/c
+         UJZCf5/Oepq+JSEuFV0d/N9K5sTtorFKzX06A/wSPXQm26rXUbeScjKhnnZxyTFU8UAu
+         nwfK0Wyewdzq284r/WQnaNtZdSYYZERll08vnhCJmfgD7dz3d1gzrl2mHfiOVqQ6gztd
+         BlzLHKVAEONkU4lEVE86ReP+Lb5tciev8DzzHqX0YVfBmAxnKV7xjK/HZJwWd+4UCJ8h
+         0crj9gRqgBnyDV9SZnaGaZTO8KH8o/au14534F3dt8BaFwI+bFs9D/vfigbQ91mrmBQz
+         GnvQ==
+X-Gm-Message-State: AOAM533SXCmdb/MJtvrve+/UnTGvoXLaB3aZGDu809v7zaY1tuq3AkE/
+        NYNfrdeHpQQ/8UjLQDb792Y=
+X-Google-Smtp-Source: ABdhPJxcgBCA7/UtpNHWqPqmIlQV3tZp5X+xIxu58RNiQ4V3fYYzrnBBWBl5z3etRgx+TVbTjA1v9g==
+X-Received: by 2002:a05:6512:3b07:: with SMTP id f7mr46453153lfv.567.1641386963530;
+        Wed, 05 Jan 2022 04:49:23 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.235.38])
+        by smtp.gmail.com with ESMTPSA id o19sm3059505ljp.58.2022.01.05.04.49.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jan 2022 04:49:22 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------OozWciv4hOffijXngRVx3KIi"
+Message-ID: <66341bb1-a479-cdc8-0928-3c882ac77712@gmail.com>
+Date:   Wed, 5 Jan 2022 15:49:20 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7b135fce-d822-61e4-a2e0-e44ff9558fbd@ivitera.com>
-X-Authenticated: YES
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [syzbot] KMSAN: uninit-value in ax88178_reset
+Content-Language: en-US
+To:     syzbot <syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com>,
+        andrew@lunn.ch, davem@davemloft.net, glider@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux@rempel-privat.de,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000cf7a2405d4d48d3b@google.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <000000000000cf7a2405d4d48d3b@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 01:20:01PM +0100, Pavel Hofman wrote:
-> Dne 04. 01. 22 v 16:33 John Keeping napsal(a):
-> > On Wed, Dec 22, 2021 at 11:01:16AM +0100, Pavel Hofman wrote:
-> > > 
-> > > Dne 21. 12. 21 v 12:59 John Keeping napsal(a):
-> > > > On Mon, Dec 20, 2021 at 10:11:22PM +0100, Pavel Hofman wrote:
-> > > > > From: Julian Scheel <julian@jusst.de>
-> > > > > 
-> > > > > A list of sampling rates can be specified via configfs. All enabled
-> > > > > sampling rates are sent to the USB host on request. When the host
-> > > > > selects a sampling rate the internal active rate is updated.
-> > > > > 
-> > > > > Config strings with single value stay compatible with the previous version.
-> > > > > 
-> > > > > Multiple samplerates passed as configuration arrays to g_audio module
-> > > > > when built for f_uac2.
-> > > > > 
-> > > > > Signed-off-by: Julian Scheel <julian@jusst.de>
-> > > > > Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
-> > > > > ---
-> > [snip]
-> > > > >    };
-> > > > >    static inline struct f_uac2 *func_to_uac2(struct usb_function *f)
-> > > > > @@ -166,7 +167,7 @@ static struct uac_clock_source_descriptor in_clk_src_desc = {
-> > > > >    	.bDescriptorSubtype = UAC2_CLOCK_SOURCE,
-> > > > >    	/* .bClockID = DYNAMIC */
-> > > > >    	.bmAttributes = UAC_CLOCK_SOURCE_TYPE_INT_FIXED,
-> > > > > -	.bmControls = (CONTROL_RDONLY << CLK_FREQ_CTRL),
-> > > > > +	.bmControls = (CONTROL_RDWR << CLK_FREQ_CTRL),
-> > > > >    	.bAssocTerminal = 0,
-> > > > >    };
-> > > > > @@ -178,7 +179,7 @@ static struct uac_clock_source_descriptor out_clk_src_desc = {
-> > > > >    	.bDescriptorSubtype = UAC2_CLOCK_SOURCE,
-> > > > >    	/* .bClockID = DYNAMIC */
-> > > > >    	.bmAttributes = UAC_CLOCK_SOURCE_TYPE_INT_FIXED,
-> > > > > -	.bmControls = (CONTROL_RDONLY << CLK_FREQ_CTRL),
-> > > > > +	.bmControls = (CONTROL_RDWR << CLK_FREQ_CTRL),
-> > > > >    	.bAssocTerminal = 0,
-> > > > >    };
-> > > > > @@ -635,12 +636,32 @@ struct cntrl_cur_lay3 {
-> > > > >    };
-> > > > >    struct cntrl_range_lay3 {
-> > > > > -	__le16	wNumSubRanges;
-> > > > >    	__le32	dMIN;
-> > > > >    	__le32	dMAX;
-> > > > >    	__le32	dRES;
-> > > > >    } __packed;
-> > > > > +#define ranges_size(c) (sizeof(c.wNumSubRanges) + c.wNumSubRanges \
-> > > > > +		* sizeof(struct cntrl_ranges_lay3))
-> > > > > +
-> > > > > +struct cntrl_ranges_lay3 {
-> > > > > +	__u16	wNumSubRanges;
-> > > > > +	struct cntrl_range_lay3 r[UAC_MAX_RATES];
-> > > > > +} __packed;
-> > > > 
-> > > > These structures are now inconsistent between cntrl_range_lay2 and
-> > > > cntrl_range_lay3.  Would it be better to make these flex arrays?  I
-> > > > guess that will make the code that uses it more complicated, but at the
-> > > > moment it looks like these are trying to be generic while in reality
-> > > > being quite specific to the one place that uses them at the moment.
-> > > 
-> > > I am afraid I do not know exactly how to do that. Please can you post an
-> > > example? The rate control requires u32 (u16 is too small). Thanks a lot.
-> > 
-> > After the change in this patch, we end up with:
-> > 
-> > 	struct cntrl_range_lay2 {
-> > 		__le16	wNumSubRanges;
-> > 		__le16	wMIN;
-> > 		__le16	wMAX;
-> > 		__le16	wRES;
-> > 	} __packed;
-> > 
-> > 	struct cntrl_range_lay3 {
-> > 		__le32	dMIN;
-> > 		__le32	dMAX;
-> > 		__le32	dRES;
-> > 	} __packed;
-> > 
-> > so there are two structures with similar names but totally different
-> > structure, which I think risks confusion in the future.
-> > 
-> > I wonder if DECLARE_UAC2_FEATURE_UNIT_DESCRIPTOR in linux/usb/audio-v2.h
-> > provides inspiration here, so potentially something like:
-> > 
-> > 	#define DECLARE_UAC2_CNTRL_RANGE_LAY3(n)	\
-> > 		struct uac2_cntrl_range_lay3_##n {	\
-> > 			__le16 wNumSubRanges;		\
-> > 			struct cntrl_range_le32 r[n];	\
-> > 		} __packed;
-> > 
-> > 	DECLARE_UAC2_CNTRL_RANGE_LAY3(UAC_MAX_RATES);
-> 
-> Thanks, I will try to follow your suggestion in the next patchset version.
-> 
-> > 
-> > > > > +static int get_max_srate(const int *srates)
-> > > > > +{
-> > > > > +	int i, max_srate = 0;
-> > > > > +
-> > > > > +	for (i = 0; i < UAC_MAX_RATES; i++) {
-> > > > > +		if (srates[i] == 0)
-> > > > > +			break;
-> > > > > +		if (srates[i] > max_srate)
-> > > > > +			max_srate = srates[i];
-> > > > > +	}
-> > > > > +	return max_srate;
-> > > > > +}
-> > > > > +
-> > > > >    static int set_ep_max_packet_size(const struct f_uac2_opts *uac2_opts,
-> > > > >    	struct usb_endpoint_descriptor *ep_desc,
-> > > > >    	enum usb_device_speed speed, bool is_playback)
-> > > > > @@ -667,11 +688,11 @@ static int set_ep_max_packet_size(const struct f_uac2_opts *uac2_opts,
-> > > > >    	if (is_playback) {
-> > > > >    		chmask = uac2_opts->p_chmask;
-> > > > > -		srate = uac2_opts->p_srate;
-> > > > > +		srate = get_max_srate(uac2_opts->p_srates);
-> > > > >    		ssize = uac2_opts->p_ssize;
-> > > > >    	} else {
-> > > > >    		chmask = uac2_opts->c_chmask;
-> > > > > -		srate = uac2_opts->c_srate;
-> > > > > +		srate = get_max_srate(uac2_opts->c_srates);
-> > > > >    		ssize = uac2_opts->c_ssize;
-> > > > >    	}
-> > > > > @@ -912,10 +933,10 @@ static int afunc_validate_opts(struct g_audio *agdev, struct device *dev)
-> > > > >    	} else if ((opts->c_ssize < 1) || (opts->c_ssize > 4)) {
-> > > > >    		dev_err(dev, "Error: incorrect capture sample size\n");
-> > > > >    		return -EINVAL;
-> > > > > -	} else if (!opts->p_srate) {
-> > > > > +	} else if (!opts->p_srates[0]) {
-> > > > >    		dev_err(dev, "Error: incorrect playback sampling rate\n");
-> > > > >    		return -EINVAL;
-> > > > > -	} else if (!opts->c_srate) {
-> > > > > +	} else if (!opts->c_srates[0]) {
-> > > > >    		dev_err(dev, "Error: incorrect capture sampling rate\n");
-> > > > >    		return -EINVAL;
-> > > > >    	}
-> > > > > @@ -1210,7 +1231,8 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
-> > > > >    	agdev->params.p_chmask = uac2_opts->p_chmask;
-> > > > >    	agdev->params.p_srate = uac2_opts->p_srate;
-> > > > > -	agdev->params.p_srates[0] = uac2_opts->p_srate;
-> > > > > +	memcpy(agdev->params.p_srates, uac2_opts->p_srates,
-> > > > > +			sizeof(agdev->params.p_srates));
-> > > > >    	agdev->params.p_ssize = uac2_opts->p_ssize;
-> > > > >    	if (FUIN_EN(uac2_opts)) {
-> > > > >    		agdev->params.p_fu.id = USB_IN_FU_ID;
-> > > > > @@ -1222,7 +1244,8 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
-> > > > >    	}
-> > > > >    	agdev->params.c_chmask = uac2_opts->c_chmask;
-> > > > >    	agdev->params.c_srate = uac2_opts->c_srate;
-> > > > > -	agdev->params.c_srates[0] = uac2_opts->c_srate;
-> > > > > +	memcpy(agdev->params.c_srates, uac2_opts->c_srates,
-> > > > > +			sizeof(agdev->params.c_srates));
-> > > > >    	agdev->params.c_ssize = uac2_opts->c_ssize;
-> > > > >    	if (FUOUT_EN(uac2_opts)) {
-> > > > >    		agdev->params.c_fu.id = USB_OUT_FU_ID;
-> > > > > @@ -1502,28 +1525,39 @@ in_rq_range(struct usb_function *fn, const struct usb_ctrlrequest *cr)
-> > > > >    	u8 entity_id = (w_index >> 8) & 0xff;
-> > > > >    	u8 control_selector = w_value >> 8;
-> > > > >    	int value = -EOPNOTSUPP;
-> > > > > -	int p_srate, c_srate;
-> > > > > -
-> > > > > -	p_srate = opts->p_srate;
-> > > > > -	c_srate = opts->c_srate;
-> > > > >    	if ((entity_id == USB_IN_CLK_ID) || (entity_id == USB_OUT_CLK_ID)) {
-> > > > >    		if (control_selector == UAC2_CS_CONTROL_SAM_FREQ) {
-> > > > > -			struct cntrl_range_lay3 r;
-> > > > > +			struct cntrl_ranges_lay3 rs;
-> > > > > +			int i;
-> > > > > +			int wNumSubRanges = 0;
-> > > > > +			int srate;
-> > > > > +			int *srates;
-> > > > >    			if (entity_id == USB_IN_CLK_ID)
-> > > > > -				r.dMIN = cpu_to_le32(p_srate);
-> > > > > +				srates = opts->p_srates;
-> > > > >    			else if (entity_id == USB_OUT_CLK_ID)
-> > > > > -				r.dMIN = cpu_to_le32(c_srate);
-> > > > > +				srates = opts->c_srates;
-> > > > >    			else
-> > > > >    				return -EOPNOTSUPP;
-> > > > > -
-> > > > > -			r.dMAX = r.dMIN;
-> > > > > -			r.dRES = 0;
-> > > > > -			r.wNumSubRanges = cpu_to_le16(1);
-> > > > > -
-> > > > > -			value = min_t(unsigned int, w_length, sizeof(r));
-> > > > > -			memcpy(req->buf, &r, value);
-> > > > > +			for (i = 0; i < UAC_MAX_RATES; i++) {
-> > > > > +				srate = srates[i];
-> > > > > +				if (srate == 0)
-> > > > > +					break;
-> > > > > +
-> > > > > +				rs.r[wNumSubRanges].dMIN = cpu_to_le32(srate);
-> > > > > +				rs.r[wNumSubRanges].dMAX = cpu_to_le32(srate);
-> > > > > +				rs.r[wNumSubRanges].dRES = 0;
-> > > > > +				wNumSubRanges++;
-> > > > > +				dev_dbg(&agdev->gadget->dev,
-> > > > > +					"%s(): clk %d: rate ID %d: %d\n",
-> > > > > +					__func__, entity_id, wNumSubRanges, srate);
-> > > > > +			}
-> > > > > +			rs.wNumSubRanges = cpu_to_le16(wNumSubRanges);
-> > > > > +			value = min_t(unsigned int, w_length, ranges_size(rs));
-> > > > > +			dev_dbg(&agdev->gadget->dev, "%s(): sending %d rates, size %d\n",
-> > > > > +				__func__, rs.wNumSubRanges, value);
-> > > > > +			memcpy(req->buf, &rs, value);
-> > > > >    		} else {
-> > > > >    			dev_err(&agdev->gadget->dev,
-> > > > >    				"%s:%d control_selector=%d TODO!\n",
-> > > > > @@ -1582,6 +1616,28 @@ ac_rq_in(struct usb_function *fn, const struct usb_ctrlrequest *cr)
-> > > > >    		return -EOPNOTSUPP;
-> > > > >    }
-> > > > > +static void uac2_cs_control_sam_freq(struct usb_ep *ep, struct usb_request *req)
-> > > > > +{
-> > > > > +	struct usb_function *fn = ep->driver_data;
-> > > > > +	struct g_audio *agdev = func_to_g_audio(fn);
-> > > > > +	struct f_uac2 *uac2 = func_to_uac2(fn);
-> > > > > +	struct f_uac2_opts *opts = g_audio_to_uac2_opts(agdev);
-> > > > > +	u32 val;
-> > > > > +
-> > > > > +	if (req->actual != 4)
-> > > > > +		return;
-> > > > > +
-> > > > > +	val = le32_to_cpu(*((u32 *)req->buf));
-> > > > > +	dev_dbg(&agdev->gadget->dev, "%s val: %d.\n", __func__, val);
-> > > > > +	if (uac2->ctl_id == USB_IN_CLK_ID) {
-> > > > > +		opts->p_srate = val;
-> > > > 
-> > > > Don't you need to hold opts->lock to change this?
-> > > > I'm not sure opts should be changed here though - that's the setup phase
-> > > > and this is "current state", so shouldn't it move to struct f_uac2?
-> > > 
-> > > OK. I moved the current p_srate/c_srate from struct opts to f_uac2,
-> > > initialized with first value of opts->p_srates/c_srates[0] in afunc_bind.
-> > > The struct f_uac2 has no lock yet. Should I add the lock mutex to f_uac2 and
-> > > be locking f_uac2 access here in uac2_cs_control_sam_freq?
-> > 
-> > Could we move this into struct uac_rtd_params and use the existing lock
-> > there to guard it?
-> > 
-> > It would need accessor functions as that structure's local to u_audio.c,
-> > but there's already u_audio_set_playback_srate() so that isn't a big
-> > change.
-> 
-> I have already moved p_/c_srate from uac_params to uac_rtd_params in
-> u_audio.c in the next version of the patchset. But IIUC the currently
-> selected playback/capture rate is required within f_uac2 too, in in_rq_cur()
-> in:
-> 
-> if (control_selector == UAC2_CS_CONTROL_SAM_FREQ) {
-> 	...
-> 	if (entity_id == USB_IN_CLK_ID)
-> 		c.dCUR = cpu_to_le32(p_srate);
-> 	else if (entity_id == USB_OUT_CLK_ID)
-> 		c.dCUR = cpu_to_le32(c_srate);
-> 	...
-> }
+This is a multi-part message in MIME format.
+--------------OozWciv4hOffijXngRVx3KIi
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Can this can be u_audio_get_playback_srate(agdev) (and equivalent for
-capture)?
+On 1/5/22 15:04, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    b0a8b5053e8b kmsan: core: add dependency on DEBUG_KERNEL
+> git tree:       https://github.com/google/kmsan.git master
+> console output: https://syzkaller.appspot.com/x/log.txt?x=159cf693b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=46a956fc7a887c60
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6ca9f7867b77c2d316ac
+> compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14413193b00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=127716a3b00000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
+> 
+> asix 1-1:0.0 eth1: Failed to read reg index 0x0000: -32
+> asix 1-1:0.0 eth1: Failed to read reg index 0x0000: -32
+> =====================================================
+> BUG: KMSAN: uninit-value in ax88178_reset+0xfd2/0x1590 drivers/net/usb/asix_devices.c:946 drivers/net/usb/asix_devices.c:946
+>   ax88178_reset+0xfd2/0x1590 drivers/net/usb/asix_devices.c:946 drivers/net/usb/asix_devices.c:946
+>   usbnet_open+0x16d/0x1940 drivers/net/usb/usbnet.c:894 drivers/net/usb/usbnet.c:894
+>   __dev_open+0x920/0xb90 net/core/dev.c:1490 net/core/dev.c:1490
+>   __dev_change_flags+0x4da/0xd40 net/core/dev.c:8796 net/core/dev.c:8796
+>   dev_change_flags+0xf5/0x280 net/core/dev.c:8867 net/core/dev.c:8867
+>   devinet_ioctl+0xfc1/0x3060 net/ipv4/devinet.c:1144 net/ipv4/devinet.c:1144
+>   inet_ioctl+0x59f/0x820 net/ipv4/af_inet.c:969 net/ipv4/af_inet.c:969
+>   sock_do_ioctl net/socket.c:1118 [inline]
+>   sock_do_ioctl net/socket.c:1118 [inline] net/socket.c:1235
+>   sock_ioctl+0xa3f/0x13d0 net/socket.c:1235 net/socket.c:1235
+>   vfs_ioctl fs/ioctl.c:51 [inline]
+>   __do_sys_ioctl fs/ioctl.c:874 [inline]
+>   vfs_ioctl fs/ioctl.c:51 [inline] fs/ioctl.c:860
+>   __do_sys_ioctl fs/ioctl.c:874 [inline] fs/ioctl.c:860
+>   __se_sys_ioctl+0x2df/0x4a0 fs/ioctl.c:860 fs/ioctl.c:860
+>   __x64_sys_ioctl+0xd8/0x110 fs/ioctl.c:860 fs/ioctl.c:860
+>   do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+>   do_syscall_x64 arch/x86/entry/common.c:51 [inline] arch/x86/entry/common.c:82
+>   do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82 arch/x86/entry/common.c:82
+>   entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> Local variable status created at:
+>   ax88178_reset+0x69/0x1590
+>   usbnet_open+0x16d/0x1940 drivers/net/usb/usbnet.c:894 drivers/net/usb/usbnet.c:894
+
+Again usbnet_read_cmd() returns 0.
+
+It seems reasonable to mark asix_read_cmd() as __must_check, so let's do 
+it and add missing error handling
+
+#syz test: https://github.com/google/kmsan.git master
 
 
-John
+
+With regards,
+Pavel Skripkin
+--------------OozWciv4hOffijXngRVx3KIi
+Content-Type: text/plain; charset=UTF-8; name="ph"
+Content-Disposition: attachment; filename="ph"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3VzYi9hc2l4LmggYi9kcml2ZXJzL25ldC91c2Iv
+YXNpeC5oCmluZGV4IDJhMWUzMWRlZmU3MS4uNDMzNGFhZmFiNTlhIDEwMDY0NAotLS0gYS9k
+cml2ZXJzL25ldC91c2IvYXNpeC5oCisrKyBiL2RyaXZlcnMvbmV0L3VzYi9hc2l4LmgKQEAg
+LTE5Miw4ICsxOTIsOCBAQCBleHRlcm4gY29uc3Qgc3RydWN0IGRyaXZlcl9pbmZvIGF4ODgx
+NzJhX2luZm87CiAvKiBBU0lYIHNwZWNpZmljIGZsYWdzICovCiAjZGVmaW5lIEZMQUdfRUVQ
+Uk9NX01BQwkJKDFVTCA8PCAwKSAgLyogaW5pdCBkZXZpY2UgTUFDIGZyb20gZWVwcm9tICov
+CiAKLWludCBhc2l4X3JlYWRfY21kKHN0cnVjdCB1c2JuZXQgKmRldiwgdTggY21kLCB1MTYg
+dmFsdWUsIHUxNiBpbmRleCwKLQkJICB1MTYgc2l6ZSwgdm9pZCAqZGF0YSwgaW50IGluX3Bt
+KTsKK2ludCBfX211c3RfY2hlY2sgYXNpeF9yZWFkX2NtZChzdHJ1Y3QgdXNibmV0ICpkZXYs
+IHU4IGNtZCwgdTE2IHZhbHVlLCB1MTYgaW5kZXgsCisJCQkgICAgICAgdTE2IHNpemUsIHZv
+aWQgKmRhdGEsIGludCBpbl9wbSk7CiAKIGludCBhc2l4X3dyaXRlX2NtZChzdHJ1Y3QgdXNi
+bmV0ICpkZXYsIHU4IGNtZCwgdTE2IHZhbHVlLCB1MTYgaW5kZXgsCiAJCSAgIHUxNiBzaXpl
+LCB2b2lkICpkYXRhLCBpbnQgaW5fcG0pOwpkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvdXNi
+L2FzaXhfY29tbW9uLmMgYi9kcml2ZXJzL25ldC91c2IvYXNpeF9jb21tb24uYwppbmRleCA3
+MTY4Mjk3MGJlNTguLmRmNjM3ZDgyODRhYiAxMDA2NDQKLS0tIGEvZHJpdmVycy9uZXQvdXNi
+L2FzaXhfY29tbW9uLmMKKysrIGIvZHJpdmVycy9uZXQvdXNiL2FzaXhfY29tbW9uLmMKQEAg
+LTExLDggKzExLDggQEAKIAogI2RlZmluZSBBWF9IT1NUX0VOX1JFVFJJRVMJMzAKIAotaW50
+IGFzaXhfcmVhZF9jbWQoc3RydWN0IHVzYm5ldCAqZGV2LCB1OCBjbWQsIHUxNiB2YWx1ZSwg
+dTE2IGluZGV4LAotCQkgIHUxNiBzaXplLCB2b2lkICpkYXRhLCBpbnQgaW5fcG0pCitpbnQg
+X19tdXN0X2NoZWNrIGFzaXhfcmVhZF9jbWQoc3RydWN0IHVzYm5ldCAqZGV2LCB1OCBjbWQs
+IHUxNiB2YWx1ZSwgdTE2IGluZGV4LAorCQkJICAgICAgIHUxNiBzaXplLCB2b2lkICpkYXRh
+LCBpbnQgaW5fcG0pCiB7CiAJaW50IHJldDsKIAlpbnQgKCpmbikoc3RydWN0IHVzYm5ldCAq
+LCB1OCwgdTgsIHUxNiwgdTE2LCB2b2lkICosIHUxNik7CkBAIC0yNyw5ICsyNywxMiBAQCBp
+bnQgYXNpeF9yZWFkX2NtZChzdHJ1Y3QgdXNibmV0ICpkZXYsIHU4IGNtZCwgdTE2IHZhbHVl
+LCB1MTYgaW5kZXgsCiAJcmV0ID0gZm4oZGV2LCBjbWQsIFVTQl9ESVJfSU4gfCBVU0JfVFlQ
+RV9WRU5ET1IgfCBVU0JfUkVDSVBfREVWSUNFLAogCQkgdmFsdWUsIGluZGV4LCBkYXRhLCBz
+aXplKTsKIAotCWlmICh1bmxpa2VseShyZXQgPCAwKSkKKwlpZiAodW5saWtlbHkocmV0IDwg
+c2l6ZSkpIHsKKwkJcmV0ID0gcmV0IDwgMCA/IHJldCA6IC1FTk9EQVRBOworCiAJCW5ldGRl
+dl93YXJuKGRldi0+bmV0LCAiRmFpbGVkIHRvIHJlYWQgcmVnIGluZGV4IDB4JTA0eDogJWRc
+biIsCiAJCQkgICAgaW5kZXgsIHJldCk7CisJfQogCiAJcmV0dXJuIHJldDsKIH0KZGlmZiAt
+LWdpdCBhL2RyaXZlcnMvbmV0L3VzYi9hc2l4X2RldmljZXMuYyBiL2RyaXZlcnMvbmV0L3Vz
+Yi9hc2l4X2RldmljZXMuYwppbmRleCA0NTE0ZDM1ZWY0YzQuLjZiMmZiZGY0ZTBmZCAxMDA2
+NDQKLS0tIGEvZHJpdmVycy9uZXQvdXNiL2FzaXhfZGV2aWNlcy5jCisrKyBiL2RyaXZlcnMv
+bmV0L3VzYi9hc2l4X2RldmljZXMuYwpAQCAtNzU1LDcgKzc1NSwxMiBAQCBzdGF0aWMgaW50
+IGF4ODg3NzJfYmluZChzdHJ1Y3QgdXNibmV0ICpkZXYsIHN0cnVjdCB1c2JfaW50ZXJmYWNl
+ICppbnRmKQogCXByaXYtPnBoeV9hZGRyID0gcmV0OwogCXByaXYtPmVtYmRfcGh5ID0gKChw
+cml2LT5waHlfYWRkciAmIDB4MWYpID09IDB4MTApOwogCi0JYXNpeF9yZWFkX2NtZChkZXYs
+IEFYX0NNRF9TVEFUTU5HU1RTX1JFRywgMCwgMCwgMSwgJmNoaXBjb2RlLCAwKTsKKwlyZXQg
+PSBhc2l4X3JlYWRfY21kKGRldiwgQVhfQ01EX1NUQVRNTkdTVFNfUkVHLCAwLCAwLCAxLCAm
+Y2hpcGNvZGUsIDApOworCWlmIChyZXQgPCAwKSB7CisJCW5ldGRldl9kYmcoZGV2LT5uZXQs
+ICJGYWlsZWQgdG8gcmVhZCBTVEFUTU5HU1RTX1JFRzogJWRcbiIsIHJldCk7CisJCXJldHVy
+biByZXQ7CisJfQorCiAJY2hpcGNvZGUgJj0gQVhfQ0hJUENPREVfTUFTSzsKIAogCXJldCA9
+IChjaGlwY29kZSA9PSBBWF9BWDg4NzcyX0NISVBDT0RFKSA/IGF4ODg3NzJfaHdfcmVzZXQo
+ZGV2LCAwKSA6CkBAIC05MjAsMTEgKzkyNSwyMSBAQCBzdGF0aWMgaW50IGF4ODgxNzhfcmVz
+ZXQoc3RydWN0IHVzYm5ldCAqZGV2KQogCWludCBncGlvMCA9IDA7CiAJdTMyIHBoeWlkOwog
+Ci0JYXNpeF9yZWFkX2NtZChkZXYsIEFYX0NNRF9SRUFEX0dQSU9TLCAwLCAwLCAxLCAmc3Rh
+dHVzLCAwKTsKKwlyZXQgPSBhc2l4X3JlYWRfY21kKGRldiwgQVhfQ01EX1JFQURfR1BJT1Ms
+IDAsIDAsIDEsICZzdGF0dXMsIDApOworCWlmIChyZXQgPCAwKSB7CisJCW5ldGRldl9kYmco
+ZGV2LT5uZXQsICJGYWlsZWQgdG8gcmVhZCBHUElPUzogJWRcbiIsIHJldCk7CisJCXJldHVy
+biByZXQ7CisJfQorCiAJbmV0ZGV2X2RiZyhkZXYtPm5ldCwgIkdQSU8gU3RhdHVzOiAweCUw
+NHhcbiIsIHN0YXR1cyk7CiAKIAlhc2l4X3dyaXRlX2NtZChkZXYsIEFYX0NNRF9XUklURV9F
+TkFCTEUsIDAsIDAsIDAsIE5VTEwsIDApOwotCWFzaXhfcmVhZF9jbWQoZGV2LCBBWF9DTURf
+UkVBRF9FRVBST00sIDB4MDAxNywgMCwgMiwgJmVlcHJvbSwgMCk7CisJcmV0ID0gYXNpeF9y
+ZWFkX2NtZChkZXYsIEFYX0NNRF9SRUFEX0VFUFJPTSwgMHgwMDE3LCAwLCAyLCAmZWVwcm9t
+LCAwKTsKKwlpZiAocmV0IDwgMCkgeworCQluZXRkZXZfZGJnKGRldi0+bmV0LCAiRmFpbGVk
+IHRvIHJlYWQgRUVQUk9NOiAlZFxuIiwgcmV0KTsKKwkJcmV0dXJuIHJldDsKKwl9CisKIAlh
+c2l4X3dyaXRlX2NtZChkZXYsIEFYX0NNRF9XUklURV9ESVNBQkxFLCAwLCAwLCAwLCBOVUxM
+LCAwKTsKIAogCW5ldGRldl9kYmcoZGV2LT5uZXQsICJFRVBST00gaW5kZXggMHgxNyBpcyAw
+eCUwNHhcbiIsIGVlcHJvbSk7Cg==
+
+--------------OozWciv4hOffijXngRVx3KIi--
