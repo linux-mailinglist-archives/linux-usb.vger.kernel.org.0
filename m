@@ -2,127 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02BC1484E74
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 07:43:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B91C484E82
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 07:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237737AbiAEGnH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jan 2022 01:43:07 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:56306 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237734AbiAEGnG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 Jan 2022 01:43:06 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowABXXp7lPdVhJ0bQBQ--.60304S2;
-        Wed, 05 Jan 2022 14:42:46 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] thunderbolt:  Check for null pointer after calling kmemdup
-Date:   Wed,  5 Jan 2022 14:42:44 +0800
-Message-Id: <20220105064244.2316847-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowABXXp7lPdVhJ0bQBQ--.60304S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7AF18Cw47CF1DXw18tw1kXwb_yoW5JFWrpF
-        WUJFyYy3Z5KFyUW3Z2krykAFyYv3s7Ka4jkrW7K39Y93ZIkr4rGFy5Aa4Yvr15GryxtFs3
-        Aan2yFWfWFyqy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r47
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUndb1UUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+        id S237829AbiAEGzX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jan 2022 01:55:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229759AbiAEGzW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jan 2022 01:55:22 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAC8C061761;
+        Tue,  4 Jan 2022 22:55:22 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id o63-20020a17090a0a4500b001b1c2db8145so2536576pjo.5;
+        Tue, 04 Jan 2022 22:55:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=XHxFeGstP+BCXd0DmZ0cI7hC6yOkXgvah7Oc0RjtuNs=;
+        b=GLoFpMGNKiFPL/vgy5ycwpjECekm+ySa0v7tWmHismDoSqyuOyArBKPZxRnCyA9f3R
+         wQtO8jH2azwkhtkiKl5ddARyu+HPpALtEaTmcEk+bEEvRTp3M7Tz1avr1AfsagR71n26
+         xvEZPbe4PlpMyflrYFpJvB63Gupc6olvCsSUapc0dCrQtQa4nGc5U9oo/ZpLyp45ZPbF
+         ba47xQpORylQJig3oPaLNV2hTQ/2jocthGZhRaDZ8jUghbP0t1CDuxBfBUc9rilOmt9z
+         czJbJa+GQmHGDTyfgM4fb/5ZYO94hw2ZavI4lSVTMEJpE2WxXYdhowqRfRzp2OJgCB9S
+         tfIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=XHxFeGstP+BCXd0DmZ0cI7hC6yOkXgvah7Oc0RjtuNs=;
+        b=MqbpwOHIg6NEM+ePeHw5O8FvL/JnVNq6AdFmN1puBnXWpuo4hw15espxmrXxic42pC
+         EHNJuc9nytbe68M7asxOqqAWrHDxpZ6FKtVVH1WoAmXYRBgPXmi02MdScYmcCik6sg1n
+         MMGCsZOHPgCWfgk9NkNaAbQhbGzEvDtg12J0FVP/eJUPsT9Tj4lpbVeSF4UG5F34I9ed
+         afrzjE19Gv9hLZVpf48b024uuYaYoNKHQDDUnnnozYyzl4chTzeczTvxIUBNdWeoiIXG
+         6722kBpV5WabV12kMfEZGRecLARCZYenkAuIhhKqneTSGRL7bh0HG6j1s2EXdCBGibiy
+         19Vg==
+X-Gm-Message-State: AOAM531en2bVWFqQuUXQEsCu17uELyN94J7EDL1SzvLgnZGLRxZ7/W/y
+        bnAhWVQiYkjbLN2sBhLYvZk=
+X-Google-Smtp-Source: ABdhPJxdu+y7yQDhhdgXnDlHYuij2+dsSdeqHjfVdy6OkK31STIiaQ5NIVCcn4sHn4HEaK8+Qu/h4A==
+X-Received: by 2002:a17:902:6a88:b0:149:848f:1e8b with SMTP id n8-20020a1709026a8800b00149848f1e8bmr39768252plk.124.1641365721850;
+        Tue, 04 Jan 2022 22:55:21 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id m16sm46964903pfk.32.2022.01.04.22.55.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 22:55:21 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     vladimir.zapolskiy@linaro.org
+Cc:     agross@kernel.org, balbi@kernel.org, bjorn.andersson@linaro.org,
+        gregkh@linuxfoundation.org, linmq006@gmail.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v2] usb: dwc3: dwc3-qcom: Add missing platform_device_put() in dwc3_qcom_acpi_register_core
+Date:   Wed,  5 Jan 2022 06:55:17 +0000
+Message-Id: <20220105065517.6967-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <83d55401-d8b3-f709-c77a-fa0e09fda27f@linaro.org>
+References: <83d55401-d8b3-f709-c77a-fa0e09fda27f@linaro.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-As the possible failure of the allocation, kmemdup() may return NULL
-pointer.
-Like alloc_switch(), it might be better to check it.
-Therefore, icm_icl_set_uuid() and icm_handle_event() should also check
-the return value of kmemdup().
-As for icm_icl_set_uuid(), which is assigned to icm->set_uuid, the
-return value of icm->set_uuid needs to check.
-And for icm_handle_event(), just free 'n' and directly return is enough,
-same as the way to handle the failure of kmalloc().
+Fix the missing platform_device_put() before return from
+dwc3_qcom_acpi_register_core in the error handling case.
 
-Fixes: 3cdb9446a117 ("thunderbolt: Add support for Intel Ice Lake")
-Fixes: f67cf491175a ("thunderbolt: Add support for Internal Connection Manager (ICM)")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Fixes: 2bc02355f8ba ("usb: dwc3: qcom: Add support for booting with ACPI")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/thunderbolt/icm.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+Changes in v2:
+- add fixes tag.
+- do error handling in a unified way.
+- add necessary blank line.
+---
+ drivers/usb/dwc3/dwc3-qcom.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/thunderbolt/icm.c b/drivers/thunderbolt/icm.c
-index 2f30b816705a..09ab31ea9128 100644
---- a/drivers/thunderbolt/icm.c
-+++ b/drivers/thunderbolt/icm.c
-@@ -109,7 +109,7 @@ struct icm {
- 	int (*driver_ready)(struct tb *tb,
- 			    enum tb_security_level *security_level,
- 			    u8 *proto_version, size_t *nboot_acl, bool *rpm);
--	void (*set_uuid)(struct tb *tb);
-+	int (*set_uuid)(struct tb *tb);
- 	void (*device_connected)(struct tb *tb,
- 				 const struct icm_pkg_header *hdr);
- 	void (*device_disconnected)(struct tb *tb,
-@@ -1643,7 +1643,7 @@ icm_icl_driver_ready(struct tb *tb, enum tb_security_level *security_level,
- 	return 0;
- }
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index 3cb01cdd02c2..f7f4af4c4ce5 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -598,8 +598,10 @@ static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
+ 	qcom->dwc3->dev.coherent_dma_mask = dev->coherent_dma_mask;
  
--static void icm_icl_set_uuid(struct tb *tb)
-+static int icm_icl_set_uuid(struct tb *tb)
- {
- 	struct tb_nhi *nhi = tb->nhi;
- 	u32 uuid[4];
-@@ -1654,6 +1654,10 @@ static void icm_icl_set_uuid(struct tb *tb)
- 	uuid[3] = 0xffffffff;
- 
- 	tb->root_switch->uuid = kmemdup(uuid, sizeof(uuid), GFP_KERNEL);
-+	if (!tb->root_switch->uuid)
-+		return -ENOMEM;
-+
-+	return 0;
- }
- 
- static void
-@@ -1739,6 +1743,11 @@ static void icm_handle_event(struct tb *tb, enum tb_cfg_pkg_type type,
- 
- 	INIT_WORK(&n->work, icm_handle_notification);
- 	n->pkg = kmemdup(buf, size, GFP_KERNEL);
-+	if (!n->pkg) {
-+		kfree(n);
-+		return;
-+	}
-+
- 	n->tb = tb;
- 
- 	queue_work(tb->wq, &n->work);
-@@ -2152,8 +2161,11 @@ static int icm_start(struct tb *tb)
- 	tb->root_switch->no_nvm_upgrade = !icm->can_upgrade_nvm;
- 	tb->root_switch->rpm = icm->rpm;
- 
--	if (icm->set_uuid)
--		icm->set_uuid(tb);
-+	if (icm->set_uuid) {
-+		ret = icm->set_uuid(tb);
-+		if (ret)
-+			return ret;
+ 	child_res = kcalloc(2, sizeof(*child_res), GFP_KERNEL);
+-	if (!child_res)
+-		return -ENOMEM;
++	if (!child_res) {
++		ret = -ENOMEM;
++		goto out;
 +	}
  
- 	ret = tb_switch_add(tb->root_switch);
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	if (!res) {
+@@ -637,9 +639,14 @@ static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
  	if (ret) {
+ 		dev_err(&pdev->dev, "failed to add device\n");
+ 		device_remove_software_node(&qcom->dwc3->dev);
++		goto out;
+ 	}
+ 
++	kfree(child_res);
++	return 0;
++
+ out:
++	platform_device_put(qcom->dwc3);
+ 	kfree(child_res);
+ 	return ret;
+ }
 -- 
-2.25.1
+2.17.1
 
