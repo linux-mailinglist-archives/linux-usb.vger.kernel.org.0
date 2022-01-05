@@ -2,56 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB954855EA
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 16:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5490C485632
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 16:51:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbiAEPeW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jan 2022 10:34:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231684AbiAEPeU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jan 2022 10:34:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BCBC061245;
-        Wed,  5 Jan 2022 07:34:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S241691AbiAEPvW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jan 2022 10:51:22 -0500
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:47864
+        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241661AbiAEPvT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jan 2022 10:51:19 -0500
+Received: from localhost.localdomain (unknown [222.129.35.96])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 505B0B81C27;
-        Wed,  5 Jan 2022 15:34:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C01C8C36AE3;
-        Wed,  5 Jan 2022 15:34:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641396858;
-        bh=77yhxiPBsVwvy/onUduoU4gPKD2EE/6DrFz1KbKsSzI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ur+1dLA6bqx+tlZnx1bSVs1Z6p+6vnFyJ8JzUPbRvua2ZVM0nbJtvePttPBRsO8WQ
-         +5qhKX+KKrCRVEYDRm0X1yJiy94yc/wbocac4lV6ncX4/CPr5PzxpOC99vJl5P7F1w
-         PfRBRCgZHbMZJCreGJiP8yrTiDtMyW4FeKPGHITU=
-Date:   Wed, 5 Jan 2022 16:34:15 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Aaron Ma <aaron.ma@canonical.com>
-Cc:     kuba@kernel.org, henning.schild@siemens.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        hayeswang@realtek.com, tiwai@suse.de
-Subject: Re: [PATCH 3/3] net: usb: r8152: remove unused definition
-Message-ID: <YdW6d0O1hB1dIh5l@kroah.com>
-References: <20220105151427.8373-1-aaron.ma@canonical.com>
- <20220105151427.8373-3-aaron.ma@canonical.com>
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 5EB083FCC6;
+        Wed,  5 Jan 2022 15:51:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641397877;
+        bh=tId8JYRxg2oP+VXE++C2q9o8HqxEgkuCA0qN7l8VohE=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=lTc3OV4gjX9KbR41jGNoIM89Qpd099P0EXLs4dTh92f8cPcXpnZnGVOmJaQjOwRNC
+         5jod4T8nPfUoXCuxdjSKySm3GsiJdiPrKr7tcwizs+x7J+FzV+9at/QBaOWdrRnxHQ
+         eGDP0l4WTpeOuxSlLLhWJllxpRUSbPGhHoyks42MfSPs31Jcv+GkScSou4c6GaDGGC
+         nWmcvx6TE0NnoW/Y1uG6rYaBCGeqCXONY14Xs6AINZRwuujOpm8HYTrw9rDZS9N/hZ
+         zuA9R8Vmqx9BlcYsF0IiNRSqfLlfhGdCHXz60ShYfRLjBXeT1InGWh4osmvwPlQ+Td
+         B6KXQwxIOiqzA==
+From:   Aaron Ma <aaron.ma@canonical.com>
+To:     aaron.ma@canonical.com, kuba@kernel.org,
+        henning.schild@siemens.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
+Subject: [PATCH] Revert "net: usb: r8152: Add MAC passthrough support for more Lenovo Docks"
+Date:   Wed,  5 Jan 2022 23:51:02 +0800
+Message-Id: <20220105155102.8557-1-aaron.ma@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220105151427.8373-3-aaron.ma@canonical.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 11:14:27PM +0800, Aaron Ma wrote:
-> Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
+This reverts commit f77b83b5bbab53d2be339184838b19ed2c62c0a5.
 
-Again, not good, you know better than to not provide a changelog text.
+This change breaks multiple usb to ethernet dongles attached on Lenovo
+USB hub.
 
-thanks,
+Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
+---
+ drivers/net/usb/r8152.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-greg k-h
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index f9877a3e83ac..4a02f33f0643 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -9603,9 +9603,12 @@ static int rtl8152_probe(struct usb_interface *intf,
+ 		netdev->hw_features &= ~NETIF_F_RXCSUM;
+ 	}
+ 
+-	if (udev->parent &&
+-			le16_to_cpu(udev->parent->descriptor.idVendor) == VENDOR_ID_LENOVO) {
+-		tp->lenovo_macpassthru = 1;
++	if (le16_to_cpu(udev->descriptor.idVendor) == VENDOR_ID_LENOVO) {
++		switch (le16_to_cpu(udev->descriptor.idProduct)) {
++		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
++		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
++			tp->lenovo_macpassthru = 1;
++		}
+ 	}
+ 
+ 	if (le16_to_cpu(udev->descriptor.bcdDevice) == 0x3011 && udev->serial &&
+-- 
+2.30.2
+
