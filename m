@@ -2,181 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D151B484EF8
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 09:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 379F5484F4D
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 09:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238277AbiAEIBe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jan 2022 03:01:34 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:52310
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229880AbiAEIBd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jan 2022 03:01:33 -0500
-Received: from [192.168.1.7] (unknown [222.129.35.96])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id A416841938;
-        Wed,  5 Jan 2022 08:01:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641369692;
-        bh=9wD1JxRaWZs6Kc2SP2+CnPTzm85J12Nvcvl6p/eRMLE=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=QjmV1ZULSzSO6nBJ5n+WoUXzcLUNWXQQMJt5gICawmVShOeGp/p4/oOfu2Q66n3xm
-         QuyIlfPjMX9XMbZYKgS5hejabzcRQexZRiFzTyGyEa+MuzNrBbo585BTm9fMlZV9JX
-         ruOZD1cn1NlHDD4ogU9KkXW4U7M2ilsmD0nA8TwuNQZEeZuCTvJg+IGqQrnUv12vXE
-         EOys0dn1Lpi5s3YdWGGY6nV36dVWL8RE/+mLAT4475xX5WJg20M9gOxJBUP30NRKTB
-         8TATsqtuQOVBEadcRlXzl2h+nU9abUIoi8k8rkPpOWxtWEkgjUFNbE8PdKJPUlCE22
-         C1/lOUebDBoLQ==
-Message-ID: <fc72ca69-9043-dc46-6548-dbc3c4d40289@canonical.com>
-Date:   Wed, 5 Jan 2022 16:01:24 +0800
+        id S238491AbiAEI1G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jan 2022 03:27:06 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:54822 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S238495AbiAEI06 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 Jan 2022 03:26:58 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowAC3TaY7VtVhlVTRBQ--.47155S2;
+        Wed, 05 Jan 2022 16:26:35 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     mika.westerberg@linux.intel.com
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] thunderbolt: Check for null pointer after calling kmemdup in icm_handle_event
+Date:   Wed,  5 Jan 2022 16:26:34 +0800
+Message-Id: <20220105082634.2410596-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] net: usb: r8152: Check used MAC passthrough address
-Content-Language: en-US
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     kuba@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        hayeswang@realtek.com, tiwai@suse.de
-References: <20220105061747.7104-1-aaron.ma@canonical.com>
- <20220105082355.79d44349@md1za8fc.ad001.siemens.net>
- <20220105083238.4278d331@md1za8fc.ad001.siemens.net>
- <e71f3dfd-5f17-6cdc-8f1b-9b5ad15ca793@canonical.com>
- <20220105085525.31873db2@md1za8fc.ad001.siemens.net>
-From:   Aaron Ma <aaron.ma@canonical.com>
-In-Reply-To: <20220105085525.31873db2@md1za8fc.ad001.siemens.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAC3TaY7VtVhlVTRBQ--.47155S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtrWxGrWktFyxAFyxCrWDCFg_yoWDCFc_C3
+        s5urnFqw1FkFnakwnrJr15ZayftFWkZr1S9FnY93s3Jr9xAFyru34jvrn8Gr4fJFZ8XF9r
+        CrZFvFWfZrnrWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb48FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r43
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JV
+        WxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbqQ6JUUUU
+        U==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+As the possible failure of the allocation, kmemdup() may return NULL
+pointer.
+Like alloc_switch(), it might be better to check it.
+Therefore, icm_handle_event() should also check the return value of
+kmemdup().
+If fails, just free 'n' and directly return is enough, same as the way
+to handle the failure of kmalloc().
 
+Fixes: f67cf491175a ("thunderbolt: Add support for Internal Connection Manager (ICM)")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/thunderbolt/icm.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-On 1/5/22 15:55, Henning Schild wrote:
-> Am Wed, 5 Jan 2022 15:38:51 +0800
-> schrieb Aaron Ma <aaron.ma@canonical.com>:
-> 
->> On 1/5/22 15:32, Henning Schild wrote:
->>> Am Wed, 5 Jan 2022 08:23:55 +0100
->>> schrieb Henning Schild <henning.schild@siemens.com>:
->>>    
->>>> Hi Aaron,
->>>>
->>>> if this or something similar goes in, please add another patch to
->>>> remove the left-over defines.
->>>>   
->>
->> Sure, I will do it.
->>
->>>> Am Wed,  5 Jan 2022 14:17:47 +0800
->>>> schrieb Aaron Ma <aaron.ma@canonical.com>:
->>>>   
->>>>> When plugin multiple r8152 ethernet dongles to Lenovo Docks
->>>>> or USB hub, MAC passthrough address from BIOS should be
->>>>> checked if it had been used to avoid using on other dongles.
->>>>>
->>>>> Currently builtin r8152 on Dock still can't be identified.
->>>>> First detected r8152 will use the MAC passthrough address.
->>>>>
->>>>> Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
->>>>> ---
->>>>>    drivers/net/usb/r8152.c | 10 ++++++++++
->>>>>    1 file changed, 10 insertions(+)
->>>>>
->>>>> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
->>>>> index f9877a3e83ac..77f11b3f847b 100644
->>>>> --- a/drivers/net/usb/r8152.c
->>>>> +++ b/drivers/net/usb/r8152.c
->>>>> @@ -1605,6 +1605,7 @@ static int
->>>>> vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr
->>>>> *sa) char *mac_obj_name; acpi_object_type mac_obj_type;
->>>>>    	int mac_strlen;
->>>>> +	struct net_device *ndev;
->>>>>    
->>>>>    	if (tp->lenovo_macpassthru) {
->>>>>    		mac_obj_name = "\\MACA";
->>>>> @@ -1662,6 +1663,15 @@ static int
->>>>> vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr
->>>>> *sa) ret = -EINVAL; goto amacout;
->>>>>    	}
->>>>> +	rcu_read_lock();
->>>>> +	for_each_netdev_rcu(&init_net, ndev) {
->>>>> +		if (strncmp(buf, ndev->dev_addr, 6) == 0) {
->>>>> +			rcu_read_unlock();
->>>>> +			goto amacout;
->>>>
->>>> Since the original PCI netdev will always be there, that would
->>>> disable inheritance would it not?
->>>> I guess a strncmp(MODULE_NAME, info->driver, strlen(MODULE_NAME))
->>>> is needed as well.
->>>>   
->>
->> PCI ethernet could be a builtin one on dock since there will be TBT4
->> dock.
-> 
-> In my X280 there is a PCI device in the laptop, always there. And its
-> MAC is the one found in ACPI. Did not try but i think for such devices
-> there would never be inheritance even if one wanted and used a Lenovo
-> dock that is supposed to do it.
-> 
+diff --git a/drivers/thunderbolt/icm.c b/drivers/thunderbolt/icm.c
+index 2f30b816705a..514a77a02985 100644
+--- a/drivers/thunderbolt/icm.c
++++ b/drivers/thunderbolt/icm.c
+@@ -1739,6 +1739,11 @@ static void icm_handle_event(struct tb *tb, enum tb_cfg_pkg_type type,
+ 
+ 	INIT_WORK(&n->work, icm_handle_notification);
+ 	n->pkg = kmemdup(buf, size, GFP_KERNEL);
++	if (!n->pkg) {
++		kfree(n);
++		return;
++	}
++
+ 	n->tb = tb;
+ 
+ 	queue_work(tb->wq, &n->work);
+-- 
+2.25.1
 
-There will more TBT4 docks in market, the new ethernet is just the same as
-PCI device, connected by thunderbolt.
-
-For exmaple, connect a TBT4 dock which uses i225 pcie base ethernet,
-then connect another TBT3 dock which uses r8152.
-If skip PCI check, then i225 and r8152 will use the same MAC.
-
-Aaron
-
-> Maybe i should try the patch but it seems like it defeats inheritance
-> completely. Well depending on probe order ...
-> 
-> regards,
-> Henning
-> 
-> 
->>>> Maybe leave here with
->>>> netif_info()
->>>>   
->>
->> Not good to print in rcu lock.
->>
->>>> And move the whole block up, we can skip the whole ACPI story if we
->>>> find the MAC busy.
->>>
->>> That is wrong, need to know that MAC so can not move up too much.
->>> But maybe above the is_valid_ether_addr
->>
->> The MAC passthough address is read from ACPI.
->> ACPI read only happens once during r8152 driver probe.
->> To keep the lock less time, do it after is_valid_ether_addr.
->>
->>>
->>> Henning
->>>    
->>>>> +		}
->>>>> +	}
->>>>> +	rcu_read_unlock();
->>>>
->>>> Not sure if this function is guaranteed to only run once at a time,
->>>> otherwise i think that is a race. Multiple instances could make it
->>>> to this very point at the same time.
->>>>   
->>
->> Run once for one device.
->> So add a safe lock.
->>
->> Aaron
->>
->>>> Henning
->>>>   
->>>>>    	memcpy(sa->sa_data, buf, 6);
->>>>>    	netif_info(tp, probe, tp->netdev,
->>>>>    		   "Using pass-thru MAC addr %pM\n",
->>>>> sa->sa_data);
->>>>   
->>>    
-> 
