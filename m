@@ -2,259 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A008F485A54
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 21:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48DEA485B10
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 22:51:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244262AbiAEU5X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jan 2022 15:57:23 -0500
-Received: from mail-db8eur05on2073.outbound.protection.outlook.com ([40.107.20.73]:16352
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231742AbiAEU5T (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 Jan 2022 15:57:19 -0500
+        id S244610AbiAEVv1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jan 2022 16:51:27 -0500
+Received: from de-smtp-delivery-102.mimecast.com ([194.104.109.102]:57870 "EHLO
+        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244765AbiAEVuE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jan 2022 16:50:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
+        t=1641419403;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UNglLiJ9ujX90tZZw7fy9GgG6xXkUm8z4InZQQimEfc=;
+        b=Ffxj/MTjD8dK9+jnmOHVajJ5WG1WqGnqeuxgwswdT3PjYO2UfKU0qgIJxvFqAeIksR2HoI
+        wNq5zTzIEX+wGIcGZSIOtkpW5En/bwVwzBasbfBxFUe87tkVB8IyT6Cnbj95h1W7Z8+jKH
+        qj9un6IyxiMdJ1K8PNMOnRYtBipgHsg=
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com
+ (mail-vi1eur04lp2052.outbound.protection.outlook.com [104.47.14.52]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-11-hCSwGQ0kOI2Pq9rpxlNymQ-1; Wed, 05 Jan 2022 22:50:02 +0100
+X-MC-Unique: hCSwGQ0kOI2Pq9rpxlNymQ-1
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KLm5kW2sG34343d0rRPA1uzTjNRssj8Byb+GOtabqlPcdbUrM9QaUAKqLyTagGvdswsXcfT2AkI/1FTKLlNbkbYyxoD3+KWGwHlImhGMJDChG/S573/+U0Ul58b6zv8RdAEJbaPhUd7U2PM4EM/1ylZvC9xhYq41p6d7DdsSz0r2BfADCVKNJn6S9Io1NJklfF5xTR91Y4EXX07oJ3FR78e41OKF9Zbxx5G5Rsb91cnTcDnGhZLLKYSZkpn13fZQbTisLNORwmKmcpZPVlLbQOIy5/tyIE/dx/oQk2wgUJDRn0O87PQKI90lVw/OG39qts2edbV+pBunHgjczXiZaA==
+ b=ZQdAdQNm2UmnaxlDPZvCQJiDMG1fmw/asp3GN+FNGbWs4YVktINRyghGkE4dcgYULEnAEdBVuBk2CuBsEGKetUZIeDLt1b+SJhadnGPmYi4iYd8wKF0AhRYCjlmwgz3WYJbHmpkralNv90i+jlLL9DKzVHfDF7v4e03txnD2/GDXL46Xer/VCOUs/MAWqsGtpB4DAfrnXMs9fY9ZJt0ueorzu/eGWoyF8dNvO9IgdRV3gzsT0pXZgyaThYc/Q80giXyX7uDs14tsAsB8BTvQQAsdLuFgaG8hiuFDiuYHi/WWDw74D6vf4CyCxA8ZG41iUgBnoqYSEpNN1vxj4QnM4A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Bbwa08gtwzEM+VNXhsO6XO8spozRmjPw8fst0aFLrf0=;
- b=atQtBI+J7xvdPHfycLlB2FC4WtxSNKrUo+D6TPPm4xTSmId0vwuERqJ/MWkNJOn7zsxM+koUn1IxwU0sv4gw0PgiKsNQA9uE43GSmlx4GVIUMgSwE59qvH+jtODMSRxw7Aa6fa0o2uwNkculuxmz+FYQ4ECO+oY2CwVTPk5OHqlnhigWFByz6bA/78+Rob6/VyfmmRobyy0PRG3XTlxP125lwDbDApCDGmUJJcLycSs1Aw7BYLIjx0trzydr+lG+hO7qYC1xZBGhrtq9uTfLXat66BKEwldCPr0ocDJhkmHB2cVvWRStT5O7hzffF2vt6mI97etsfYcYf671hHKarw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.73) smtp.rcpttodomain=gmail.com smtp.mailfrom=siemens.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Bbwa08gtwzEM+VNXhsO6XO8spozRmjPw8fst0aFLrf0=;
- b=Ol8Jcvj8MK/NtwpvC8Y+ExnuVrEF+YVyisqHvLbeRTq16f3lOq5OIbXar1WsNo9P6CEcUfKIlFeaeAwLo2z3K7BeWfihmSLcP6ykO5OSG8qtNF+KVvg0cXRKs1ACSwVvyCkAm5h1ngCKugBQ+vPtSAZpW6ACeo2olWkzRsSQ2nCrBczTZ8Bu+O/Gs4aodpwUqi3m5+HmAEgPf6n7L4ZDN4cOMIBgIGTVkULK+DZm3Bpr3jLyb3tL/bcVO4IQD3fprTbKfXX3N8P2XivDa17vGOAXepuqLomo2MlX34G1nk/B8gqVverLsmI7aaWkMZQBrQkcl0j16cWUcPE6w9Fr5w==
-Received: from OL1P279CA0060.NORP279.PROD.OUTLOOK.COM (2603:10a6:e10:15::11)
- by VI1PR10MB3215.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:12f::23) with
+ bh=7gfeDuAfKYKLgcO378LJc9t+B0bMqNW/dfSvF25nLD4=;
+ b=civdlPGcfTcv3ArpCEkztPVwVumalhua0E5OBs7M2Y7UxotwHrQxaXZoxiPOdcEmlT371Tx3Uwp3ZmRpLuE+TQ/rZkxF1exCrb6PBzssgzXmB0seBgnUfSfEkfOPOYQ7FXGabIb0LTlbLMV14gtPWlEtBDQKKD86DpvTG6p2yr6RMF/Jcd+s1pRmehu8Q2BXiRQmfAHugtLKwnsIkIhgV9fenKte6MaT8Pi905PDdFTvgE8SAoU+WzpdsXOJ/hGRrFSW8tNzjKUXWNUrQU8105aLigkhW90+OiCPpYLHi3cASpGCJudLO+h/oxxq3gdg7xMZDVDhh51Djn1/ofV8+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from DB7PR04MB5050.eurprd04.prod.outlook.com (2603:10a6:10:22::23)
+ by DB3PR0402MB3884.eurprd04.prod.outlook.com (2603:10a6:8:f::23) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Wed, 5 Jan
- 2022 20:57:15 +0000
-Received: from HE1EUR01FT004.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:e10:15:cafe::bd) by OL1P279CA0060.outlook.office365.com
- (2603:10a6:e10:15::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7 via Frontend
- Transport; Wed, 5 Jan 2022 20:57:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.73)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=siemens.com;
-Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.73 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.73; helo=hybrid.siemens.com;
-Received: from hybrid.siemens.com (194.138.21.73) by
- HE1EUR01FT004.mail.protection.outlook.com (10.152.1.233) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4867.7 via Frontend Transport; Wed, 5 Jan 2022 20:57:14 +0000
-Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
- DEMCHDC9SNA.ad011.siemens.net (194.138.21.73) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 5 Jan 2022 21:57:13 +0100
-Received: from md1za8fc.ad001.siemens.net (158.92.8.107) by
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 5 Jan 2022 21:57:13 +0100
-Date:   Wed, 5 Jan 2022 21:57:08 +0100
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-CC:     Aaron Ma <aaron.ma@canonical.com>, <kuba@kernel.org>,
-        <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <davem@davemloft.net>,
-        <hayeswang@realtek.com>, <tiwai@suse.de>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        David Chen <david.chen7@dell.com>,
-        "Mario Limonciello" <mario_limonciello@dell.com>
-Subject: Re: [PATCH] net: usb: r8152: Check used MAC passthrough address
-Message-ID: <20220105215708.056faa1f@md1za8fc.ad001.siemens.net>
-In-Reply-To: <32b9e331-2c1d-6a7d-ca38-57cec50b240c@gmail.com>
-References: <20220105061747.7104-1-aaron.ma@canonical.com>
-        <20220105082355.79d44349@md1za8fc.ad001.siemens.net>
-        <20220105083238.4278d331@md1za8fc.ad001.siemens.net>
-        <e71f3dfd-5f17-6cdc-8f1b-9b5ad15ca793@canonical.com>
-        <20220105085525.31873db2@md1za8fc.ad001.siemens.net>
-        <fc72ca69-9043-dc46-6548-dbc3c4d40289@canonical.com>
-        <20220105093218.283c9538@md1za8fc.ad001.siemens.net>
-        <ba9f12b7-872f-8974-8865-9a2de539e09a@canonical.com>
-        <32b9e331-2c1d-6a7d-ca38-57cec50b240c@gmail.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+ 2022 21:50:00 +0000
+Received: from DB7PR04MB5050.eurprd04.prod.outlook.com
+ ([fe80::e9d6:1be9:d046:af1]) by DB7PR04MB5050.eurprd04.prod.outlook.com
+ ([fe80::e9d6:1be9:d046:af1%7]) with mapi id 15.20.4844.017; Wed, 5 Jan 2022
+ 21:49:59 +0000
+Message-ID: <bb6d8bc4-abee-8536-ca5b-bac11d1ecd53@suse.com>
+Date:   Wed, 5 Jan 2022 22:49:56 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 1/3 v3] net: usb: r8152: Check used MAC passthrough
+ address
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>, Aaron Ma <aaron.ma@canonical.com>
+CC:     kuba@kernel.org, henning.schild@siemens.com,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        hayeswang@realtek.com, tiwai@suse.de
+References: <20220105151427.8373-1-aaron.ma@canonical.com>
+ <YdXVoNFB/Asq6bc/@lunn.ch>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <YdXVoNFB/Asq6bc/@lunn.ch>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [158.92.8.107]
-X-ClientProxiedBy: DEMCHDC8A1A.ad011.siemens.net (139.25.226.107) To
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
-X-EOPAttributedMessage: 0
+X-ClientProxiedBy: AM6P193CA0086.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:209:88::27) To DB7PR04MB5050.eurprd04.prod.outlook.com
+ (2603:10a6:10:22::23)
+MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7989b1a2-e9df-43e0-1e5c-08d9d08df3af
-X-MS-TrafficTypeDiagnostic: VI1PR10MB3215:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR10MB3215FFC600C3E1B2C4E3172B854B9@VI1PR10MB3215.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Office365-Filtering-Correlation-Id: 111ab59c-c479-466e-5173-08d9d09551bc
+X-MS-TrafficTypeDiagnostic: DB3PR0402MB3884:EE_
+X-Microsoft-Antispam-PRVS: <DB3PR0402MB3884E2A79C03B154CA1A025DC74B9@DB3PR0402MB3884.eurprd04.prod.outlook.com>
 X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9rsmjvyysTQZ5vRWVnWRFCIXYsTpdzNCy3qit6mKplB+P/s1EdOjr6ReX1GWSKfDI0Kj742eRhY4BrtMtKOtk00BAeFEyGhAnXYXeSuGwEte+QvENChVVS3baS2iHb1zwbJIFDFcdTXqnwneZ+2SQy2KvEQ8qDaVrOWDjJY+T1oxME08WQRhwF1DYZXXbkpUuZIYpRY5UTvqB0jm3nRgAaClGEoty045AER/SPS0VBr2kwEDfKcbrFfzvROL0NorpMsWCtiiUAkMEAXFH2EyZmWFG5ygCR6inCfo4Iwmv/f9l/fiWmFlEfP9GNx8FgGauXpF7Brq97iavqcmWAaZF+DZXZp/sZ8D/yzQAzQh8EnsUZF9wXYWXTrXuX2+UNaQcsXLZQVGMgJ/XsAVTNCLHKfrVZO/M8sKKpuPuZlJUGBP/ptEwYAfmepyW/ac4GUolCmp7nR5cDHVRKUNq8opurZLrjJaT1eTOB4S6Y/MgkJ4Dv31C0OHY+NqnPh8diSwZAB/geoHxVNFOk4rdXDebyDglZsImx9/jDzRlN1FElMjNH/1dGqBJPB253wqU0AVg7FhAzIBI738YLaYyWalnkguYTFLDfSYjMmT/MSmu1JemDCwy3epo83a3gFgYDzg2h0b5+FJrOzlH8y52qrvlqhwZcYvlwWP3xaf15MCuxb8WF2u8IYEjEwnJkjsosvFJ0tSnpB2fuTzR/rQd9wcjLta1IeeOQTDBoTDE10ncTWTLXUZ0MTbPWqBp8UkukycjC0sMZUXlt4EK1GXayRy6x+N6INZsVjyn5EcC7nQqC4=
-X-Forefront-Antispam-Report: CIP:194.138.21.73;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(40470700002)(46966006)(54906003)(82960400001)(8936002)(70586007)(508600001)(4326008)(26005)(7416002)(2906002)(70206006)(186003)(6916009)(1076003)(83380400001)(16526019)(356005)(336012)(8676002)(81166007)(47076005)(5660300002)(86362001)(956004)(53546011)(82310400004)(36860700001)(40460700001)(55016003)(44832011)(9686003)(6666004)(316002)(7696005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 20:57:14.6160
+X-Microsoft-Antispam-Message-Info: w65jSlGXVRVY8b/eySdlWzOIdUOZ1nvLLgzmf5epfnOvw2kaqQj9ysQr8D7ZmAV7HHH/s9mv9lOL7bizzLrrs1NZI6Wyo6w4hxAZxEv1cpgY2IPH2jgZuw8LjWjbeW10yjPp2Vlwa8GI+ubeQARaK7BDOtIKSuevFlQpIqbgpJCS5oRCrLJFkPF6VA6R3+VsQR2+yH1Nk2wMmN9bmyzXlRQlPW0HdSOnKGYyq0hNYI+3YPVoQanBLbKof3hQcHfqKBFJT3qqTMl4w5D8o5xFdAyfbvxWvMjdZx4MirJd+PNM2i0PhQsmz9SAemxDACuaqFCbHpQ8bUCfm3f3D3LF0Vg550/U3r1SJ+f75uImmpDI1T3BAx5OKNeqrNQmSqEW5rxqHNdScvICrPkgkmwr8yYmOQ0MbQsVKcFsMGzXdJWfDTAdmefyhP64bduTQfziqofuHo2uDNnITZ2/ARbbIjDU6IYkG8WYK+K5vgoTlL5eqSJxiOTApc+KNntz0UAGwdoTeBbfNYaf87HMtNSjms14KspCGQHkSDxPBChM/ahGKaE+JEM5Re1vKVyGL2JHm8GbNhy0Y8H7IXxX/hZ5bvMWrDnC02301JVl5NsM4JIjM0yXwutJCEPSLsqKzZBbJl86YIE+ifHUR6YekdVjwsFo/l9N38yQEOG3ebL1J5z85kG8Txcqqkb8K/HF1xHDG0LtbRuhKDrt5CE/4E7/s3ChjVMTy3mgp2gJTNBu5as=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5050.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(6512007)(186003)(110136005)(5660300002)(8936002)(8676002)(38100700002)(31686004)(6666004)(4744005)(2616005)(31696002)(66556008)(508600001)(66476007)(6486002)(2906002)(66946007)(53546011)(6506007)(7416002)(86362001)(316002)(36756003)(4326008)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3JuAMIrmzGyTu9uOjZeoYj/oam562EW1lb6F/fVRxtei9Lk4MhHmsVG8nq2+?=
+ =?us-ascii?Q?6zNavuPTsbtQNumqKtYV9GklfaR4AmFT716vV9mPK5cRjdxWr6mLSVneA7UE?=
+ =?us-ascii?Q?Ds9+ks6PX5hchuwc4BEniSlXtz0+E66nWNSFMfOh4N97W9I2PtNKI8F0BQAf?=
+ =?us-ascii?Q?NS49psufuYfXyPeEWu0g2j56cL0Rg6syvVtMsU2X/BLN8hVos8lu8lPYgpoM?=
+ =?us-ascii?Q?xpVzj/xAoF05yokF1LYlPaheLrH7K0gaQEXdqQRcu/l78CPwTQZV6QoyfzSD?=
+ =?us-ascii?Q?0Ypmn/MG2YaPoMd7y+GEg0NUMzovV4L9nEFsIDbwo65YoxVf+hqLLYV0waaH?=
+ =?us-ascii?Q?h09Y+0gc3d0bfozn9+iuzObknzJ3TMyGQPPeq59DEJ+Ayqqe/2u8qExTduFz?=
+ =?us-ascii?Q?1iM5IZHOXbN+9Ygc9zY9anlYgDEcMNk+6lTJQeZKSkkMG3z5SGaZOMp+chpX?=
+ =?us-ascii?Q?r4G8CgbkJAHsbGYkqLQTAt13znBvOOerRwl2w5ev/N00xXcCxOT3rtzQZVot?=
+ =?us-ascii?Q?XpEeBvjaZrnadzjeZ/77Ka6/BEWw/kBTtGhdsIh2jw4b9cHZWOZsN7GbLcbf?=
+ =?us-ascii?Q?e66EK/7c6R1uBPkyfHRmLnJ90Hk28ogNbr/sM/DUrynONIn6ZJj50OF4Lqli?=
+ =?us-ascii?Q?ko3VG6gXeyoJvHJDG9B+a1Kwb4OBzHVOfcmva6WDvzwbOIVa+BS2Ij0hqKr0?=
+ =?us-ascii?Q?dbuMpnj6aeFM8C8Rwd6VaIvRnbYE8YQ6NbQpqS+03P7gNsaeFqdXlJKaEa4w?=
+ =?us-ascii?Q?LVRm8M4qR/RV37LccrR6OX5ZLw9AS9r5hO1hN2mWRT4X9vum40RzRyYCT7Kl?=
+ =?us-ascii?Q?YbNQZxD1cQ/yfzC3yLJGpjgmBRwe1i3axMIxn9B2w1gKYZuG3rRAKywY8n6F?=
+ =?us-ascii?Q?wbczyaTDise47z76M750Vy6P5Bw/yPlKePBuJtF1rkx44kQMDM8N1THVHu26?=
+ =?us-ascii?Q?P1q7+CWTkatLlS8vMt2WMWY0ijBGZiba0xZi3eC/NLqKWB9qepxwaif0v+M8?=
+ =?us-ascii?Q?eKOSl1MKYiqD3ACszkpQvn/Bze7RG2UtJJOC9MC3diydbH/XQX29wgDEQ3wL?=
+ =?us-ascii?Q?TMRt8pCXGA/xHe0nycIPMmTtq5v7YhdNYGsTBjT48BW4KzOTDlQtywt+WCpg?=
+ =?us-ascii?Q?DXACeASn92tuMbh+qCuYbLqBLy7em8xkjOif+iVXjJK+mdeUbRywoctE2Lr6?=
+ =?us-ascii?Q?dFWBxfffP5AGCyl2epXj8RyvtdRiP7vmUabs8FuAw3LlDrYi2LO/XRgFSmyA?=
+ =?us-ascii?Q?N7Gi2YkOCPFEBA/gohIhx6/eUg3hFwoLeHNJfp3T+pHpnRcCcsm6uBRe21vu?=
+ =?us-ascii?Q?/beIXRogHe6Nv5zW40w4F6Pu2bn1tQZP+E4qolwh17X/bn1Ky1wcmHMRncRg?=
+ =?us-ascii?Q?7EhfYIZydjvYVWiQtjOLfHQ/PYdMY+Yq5kqfeXUInQ7tuyiYTZpQmmWXk8Ew?=
+ =?us-ascii?Q?PzHQEfJzplyOnMP+dDrN1C9GoRa1/YhGYnmV87yrA3771FeE2SJcC9XHcNVt?=
+ =?us-ascii?Q?tOU7O2IgrZWWY8JPVugcGYQj+R3PHoZ+t9Upi308+osrnoPpd4MTHlUCvQb6?=
+ =?us-ascii?Q?LhlmR12Jk5DRRuthZ8HrTSCJgMYp1Q1hDmwbY5f3aYoIx7zYFlErBctzT9kt?=
+ =?us-ascii?Q?JdKU2Oo7oPbdqY3yKWLqJKwiP96YUQZE8x70YpijlwCOf0donVm7YdXGx1eH?=
+ =?us-ascii?Q?NUlwD4aSErMjWvh0bAHqiIRBcIE=3D?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 111ab59c-c479-466e-5173-08d9d09551bc
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5050.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 21:49:59.1855
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7989b1a2-e9df-43e0-1e5c-08d9d08df3af
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.73];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT004.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB3215
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AMRxcawe3JnETCh4fa8+E4KP0+YgHT+jHrb6Bz72p69wM21Q2C4DFBm74sujWWn+yCEdQt3KAVZ7wJPt3yc0Rg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3884
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Wed, 5 Jan 2022 11:55:06 -0800
-schrieb Florian Fainelli <f.fainelli@gmail.com>:
 
-> On 1/5/22 12:37 AM, Aaron Ma wrote:
-> >=20
-> >=20
-> > On 1/5/22 16:32, Henning Schild wrote: =20
-> >> Am Wed, 5 Jan 2022 16:01:24 +0800
-> >> schrieb Aaron Ma <aaron.ma@canonical.com>:
-> >> =20
-> >>> On 1/5/22 15:55, Henning Schild wrote: =20
-> >>>> Am Wed, 5 Jan 2022 15:38:51 +0800
-> >>>> schrieb Aaron Ma <aaron.ma@canonical.com>:
-> >>>> =C2=A0=C2=A0 =20
-> >>>>> On 1/5/22 15:32, Henning Schild wrote: =20
-> >>>>>> Am Wed, 5 Jan 2022 08:23:55 +0100
-> >>>>>> schrieb Henning Schild <henning.schild@siemens.com>:
-> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =20
-> >>>>>>> Hi Aaron,
-> >>>>>>>
-> >>>>>>> if this or something similar goes in, please add another
-> >>>>>>> patch to remove the left-over defines.
-> >>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0  =20
-> >>>>>
-> >>>>> Sure, I will do it.
-> >>>>> =C2=A0 =20
-> >>>>>>> Am Wed,=C2=A0 5 Jan 2022 14:17:47 +0800
-> >>>>>>> schrieb Aaron Ma <aaron.ma@canonical.com>:
-> >>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 =20
-> >>>>>>>> When plugin multiple r8152 ethernet dongles to Lenovo Docks
-> >>>>>>>> or USB hub, MAC passthrough address from BIOS should be
-> >>>>>>>> checked if it had been used to avoid using on other dongles.
-> >>>>>>>>
-> >>>>>>>> Currently builtin r8152 on Dock still can't be identified.
-> >>>>>>>> First detected r8152 will use the MAC passthrough address.
-> >>>>>>>>
-> >>>>>>>> Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
-> >>>>>>>> ---
-> >>>>>>>> =C2=A0=C2=A0=C2=A0 drivers/net/usb/r8152.c | 10 ++++++++++
-> >>>>>>>> =C2=A0=C2=A0=C2=A0 1 file changed, 10 insertions(+)
-> >>>>>>>>
-> >>>>>>>> diff --git a/drivers/net/usb/r8152.c
-> >>>>>>>> b/drivers/net/usb/r8152.c index f9877a3e83ac..77f11b3f847b
-> >>>>>>>> 100644 --- a/drivers/net/usb/r8152.c
-> >>>>>>>> +++ b/drivers/net/usb/r8152.c
-> >>>>>>>> @@ -1605,6 +1605,7 @@ static int
-> >>>>>>>> vendor_mac_passthru_addr_read(struct r8152 *tp, struct
-> >>>>>>>> sockaddr *sa) char *mac_obj_name; acpi_object_type
-> >>>>>>>> mac_obj_type; int mac_strlen;
-> >>>>>>>> +=C2=A0=C2=A0=C2=A0 struct net_device *ndev;
-> >>>>>>>> =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if=
- (tp->lenovo_macpassthru) {
-> >>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 mac_obj_name =3D "\\MACA";
-> >>>>>>>> @@ -1662,6 +1663,15 @@ static int
-> >>>>>>>> vendor_mac_passthru_addr_read(struct r8152 *tp, struct
-> >>>>>>>> sockaddr *sa) ret =3D -EINVAL; goto amacout;
-> >>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> >>>>>>>> +=C2=A0=C2=A0=C2=A0 rcu_read_lock();
-> >>>>>>>> +=C2=A0=C2=A0=C2=A0 for_each_netdev_rcu(&init_net, ndev) {
-> >>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (strncmp(buf, nde=
-v->dev_addr, 6) =3D=3D 0) {
-> >>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 rcu_read_unlock();
-> >>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 goto amacout; =20
-> >>>>>>>
-> >>>>>>> Since the original PCI netdev will always be there, that would
-> >>>>>>> disable inheritance would it not?
-> >>>>>>> I guess a strncmp(MODULE_NAME, info->driver,
-> >>>>>>> strlen(MODULE_NAME)) is needed as well.
-> >>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0  =20
-> >>>>>
-> >>>>> PCI ethernet could be a builtin one on dock since there will be
-> >>>>> TBT4 dock. =20
-> >>>>
-> >>>> In my X280 there is a PCI device in the laptop, always there. And
-> >>>> its MAC is the one found in ACPI. Did not try but i think for
-> >>>> such devices there would never be inheritance even if one wanted
-> >>>> and used a Lenovo dock that is supposed to do it.
-> >>>> =C2=A0=C2=A0  =20
-> >>>
-> >>> There will more TBT4 docks in market, the new ethernet is just the
-> >>> same as PCI device, connected by thunderbolt.
-> >>>
-> >>> For exmaple, connect a TBT4 dock which uses i225 pcie base
-> >>> ethernet, then connect another TBT3 dock which uses r8152.
-> >>> If skip PCI check, then i225 and r8152 will use the same MAC. =20
-> >>
-> >> In current 5.15 i have that sort of collision already. All r8152s
-> >> will happily grab the MAC of the I219. In fact i have only ever
-> >> seen it with one r8152 at a time but while the I219 was actively
-> >> in use. While this patch will probably solve that, i bet it would
-> >> defeat MAC pass-thru altogether. Even when turned on in the BIOS.
-> >> Or does that iterator take "up"/"down" state into consideration?
-> >> But even if, the I219 could become "up" any time later.
-> >> =20
-> >=20
-> > No, that's different, I219 got MAC from their own space.
-> > MAC passthrough got MAC from ACPI "\MACA".
-> >  =20
-> >> These collisions are simply bound to happen and probably very hard
-> >> to avoid once you have set your mind on allowing pass-thru in the
-> >> first place. Not sure whether that even has potential to disturb
-> >> network equipment like switches.
-> >> =20
-> >=20
-> > After check MAC address, it will be more safe. =20
->=20
-> Sorry to just do a drive by review here, but why is passing through
-> the MAC a kernel problem and not something that you punt to
-> user-space entirely?
+On 05.01.22 18:30, Andrew Lunn wrote:
+> On Wed, Jan 05, 2022 at 11:14:25PM +0800, Aaron Ma wrote:
+>> When plugin multiple r8152 ethernet dongles to Lenovo Docks
+>> or USB hub, MAC passthrough address from BIOS should be
+>> checked if it had been used to avoid using on other dongles.
+>>
+>> Currently builtin r8152 on Dock still can't be identified.
+>> First detected r8152 will use the MAC passthrough address.
+> I do have to wonder why you are doing this in the kernel, and not
+> using a udev rule? This seems to be policy, and policy does not belong
+> in the kernel.
+Debatable. An ethernet NIC has to have a MAC. The kernel must
+provide one. That we should always take the one found in the
+device's ROM rather than the host's ROM is already a policy decision.
 
-Agreed and several other people seem to feel the same way about
-pass-thru not deserving a place in the kernel.
+In fact we make up a MAC for devices that do not have one.
 
-This all dates back to 34ee32c9a5696247be405bb0c21f3d1fc6cb5729
-and some other patches that came later
+=C2=A0=C2=A0=C2=A0 Regards
+=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Oliver
 
-9647722befbedcd6735e00655ffec392c05f0c56
-c286909fe5458f69e533c845b757fd2c35064d26
-8e29d23e28ee7fb995a00c1ca7e1a4caf5070b12
-9c27369f4a1393452c17e8708c1b0beb8ac59501
-
-Maybe other drivers are affected as well.
-
-All of the patches should probably be reverted. If people care enough
-they can try and get it into udev.
-
-All patches put policy into the kernel, do weird ACPI lookups and cause
-MAC conflicts with NICs that might be up and running. And will claim too
-many r8512 devices in case there are multiple.
-
-I propose to revert all of this or maybe add a module param (which
-should probably default to "off") just to give people a way to preserve
-their hacks.
-
-If the BIOS did spoof we could try to keep that, but spoofing in the OS
-(at least in the kernel) sound very wrong and caused me to start the
-whole discussion after all my r8521 dongles all of a sudden had the
-same (already busy) MAC when moving to v5.15. That was on a Lenovo
-laptop but i am pretty sure Dell and HP would be affected as well.
-
-When using another NIC you get another MAC, it is that simple. If that
-causes issues with DHCP/PXE deal with it. A MAC does not id a machine,
-maybe x509 radius does. Not a kernel story!
-
-Henning
