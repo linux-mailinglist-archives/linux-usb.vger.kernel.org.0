@@ -2,86 +2,228 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88579484E46
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 07:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 109EE484E66
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 07:32:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbiAEGTA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jan 2022 01:19:00 -0500
-Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:33450
-        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232071AbiAEGSM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jan 2022 01:18:12 -0500
-Received: from localhost.localdomain (unknown [222.129.35.96])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id B7C9F3F118;
-        Wed,  5 Jan 2022 06:18:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641363491;
-        bh=susPpOXdW3sPmuZ++MaBrHyoO48nzh+p35//AkrGgmY=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=E0BvXRLluxfjiI6ndBfdyeDrkCq3Wd6BMNhIsYCWWdklGWqxObhgIVrRHNAoPolpP
-         inuF3kUOT18W7QkmJKQBZLGdIrOg+qL5FIAqHJo7V9lQka7g5RrUWLARATnM2zxqPR
-         fQ1tgrM7KkHHeMYeHIvhJ/IQGWcm+xPhQd1CRJRSFhdkaH05WYve8Ey5JaG/4lEgjG
-         AgAL/2yaO/iI4li/jm7BLQ1r11Ban1qlIEwsViXf8LEjDAeqd9pgTVL/cpK6ISrzOp
-         EJu6YBzqIH7ajnVcqgp0zsRxyIu/qaoUKHUM7NuYq1lRd3d5PgudihNdUXC7pYDNa7
-         j5DoJoIzNiotw==
-From:   Aaron Ma <aaron.ma@canonical.com>
-To:     aaron.ma@canonical.com, kuba@kernel.org,
-        henning.schild@siemens.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
-Subject: [PATCH] net: usb: r8152: Check used MAC passthrough address
-Date:   Wed,  5 Jan 2022 14:17:47 +0800
-Message-Id: <20220105061747.7104-1-aaron.ma@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        id S233053AbiAEGcK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jan 2022 01:32:10 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:59382 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231960AbiAEGcI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jan 2022 01:32:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1641364328; x=1672900328;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=S5ULtCnqJ43WEderne7/4NlqTWS0IzJi2yweblZ6pZg=;
+  b=jyPtdEBFFsEdp4rpOR+ZQH65YWQrsPqqrHL1fs4bGpp/zVsUF84PqnOZ
+   7Wwy6uRhSaV4AYonEMk1/Mb4JDpGDtKmzpfaUKFcCS7ANU/UFmb9AblUp
+   TK0lhxKEX4BrG4lRjbu4CSxn8L/g9mwLaqjclJTOVstCsATiYa1lpk3cQ
+   Q=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 04 Jan 2022 22:32:07 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 22:32:07 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 4 Jan 2022 22:32:06 -0800
+Received: from ugoswami-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 4 Jan 2022 22:32:03 -0800
+From:   Udipto Goswami <quic_ugoswami@quicinc.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John Keeping <john@metanate.com>
+CC:     Udipto Goswami <quic_ugoswami@quicinc.com>,
+        <linux-usb@vger.kernel.org>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>
+Subject: [PATCH v7] usb: f_fs: Fix use-after-free for epfile
+Date:   Wed, 5 Jan 2022 12:01:57 +0530
+Message-ID: <1641364317-11916-1-git-send-email-quic_ugoswami@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When plugin multiple r8152 ethernet dongles to Lenovo Docks
-or USB hub, MAC passthrough address from BIOS should be
-checked if it had been used to avoid using on other dongles.
+Consider a case where ffs_func_eps_disable is called from
+ffs_func_disable as part of composition switch and at the
+same time ffs_epfile_release get called from userspace.
+ffs_epfile_release will free up the read buffer and call
+ffs_data_closed which in turn destroys ffs->epfiles and
+mark it as NULL. While this was happening the driver has
+already initialized the local epfile in ffs_func_eps_disable
+which is now freed and waiting to acquire the spinlock. Once
+spinlock is acquired the driver proceeds with the stale value
+of epfile and tries to free the already freed read buffer
+causing use-after-free.
 
-Currently builtin r8152 on Dock still can't be identified.
-First detected r8152 will use the MAC passthrough address.
+Following is the illustration of the race:
 
-Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
+      CPU1                                  CPU2
+
+   ffs_func_eps_disable
+   epfiles (local copy)
+					ffs_epfile_release
+					ffs_data_closed
+					if (last file closed)
+					ffs_data_reset
+					ffs_data_clear
+					ffs_epfiles_destroy
+spin_lock
+dereference epfiles
+
+Fix this races by taking epfiles local copy & assigning it under
+spinlock and if epfiles(local) is null then update it in ffs->epfiles
+then finally destroy it.
+Extending the scope further from the race, protecting the ep related
+structures, and concurrent accesses.
+
+Fixes: a9e6f83c2df (usb: gadget: f_fs: stop sleeping in
+ffs_func_eps_disable)
+Reviewed-by: John Keeping <john@metanate.com>
+Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
+Co-developed-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
 ---
- drivers/net/usb/r8152.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+v7: Extending the scope to protect epfiles.
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index f9877a3e83ac..77f11b3f847b 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -1605,6 +1605,7 @@ static int vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr *sa)
- 	char *mac_obj_name;
- 	acpi_object_type mac_obj_type;
- 	int mac_strlen;
-+	struct net_device *ndev;
+ drivers/usb/gadget/function/f_fs.c | 59 ++++++++++++++++++++++++++++----------
+ 1 file changed, 44 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 3c584da..83f4eba 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1711,16 +1711,24 @@ static void ffs_data_put(struct ffs_data *ffs)
  
- 	if (tp->lenovo_macpassthru) {
- 		mac_obj_name = "\\MACA";
-@@ -1662,6 +1663,15 @@ static int vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr *sa)
- 		ret = -EINVAL;
- 		goto amacout;
- 	}
-+	rcu_read_lock();
-+	for_each_netdev_rcu(&init_net, ndev) {
-+		if (strncmp(buf, ndev->dev_addr, 6) == 0) {
-+			rcu_read_unlock();
-+			goto amacout;
-+		}
-+	}
-+	rcu_read_unlock();
+ static void ffs_data_closed(struct ffs_data *ffs)
+ {
++	struct ffs_epfile *epfiles;
++	unsigned long flags;
 +
- 	memcpy(sa->sa_data, buf, 6);
- 	netif_info(tp, probe, tp->netdev,
- 		   "Using pass-thru MAC addr %pM\n", sa->sa_data);
+ 	ENTER();
+ 
+ 	if (atomic_dec_and_test(&ffs->opened)) {
+ 		if (ffs->no_disconnect) {
+ 			ffs->state = FFS_DEACTIVATED;
+-			if (ffs->epfiles) {
+-				ffs_epfiles_destroy(ffs->epfiles,
+-						   ffs->eps_count);
+-				ffs->epfiles = NULL;
+-			}
++			spin_lock_irqsave(&ffs->eps_lock, flags);
++			epfiles = ffs->epfiles;
++			ffs->epfiles = NULL;
++			spin_unlock_irqrestore(&ffs->eps_lock,
++							flags);
++
++			if (epfiles)
++				ffs_epfiles_destroy(epfiles,
++						 ffs->eps_count);
++
+ 			if (ffs->setup_state == FFS_SETUP_PENDING)
+ 				__ffs_ep0_stall(ffs);
+ 		} else {
+@@ -1767,14 +1775,27 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
+ 
+ static void ffs_data_clear(struct ffs_data *ffs)
+ {
++	struct ffs_epfile *epfiles;
++	unsigned long flags;
++
+ 	ENTER();
+ 
+ 	ffs_closed(ffs);
+ 
+ 	BUG_ON(ffs->gadget);
+ 
+-	if (ffs->epfiles)
+-		ffs_epfiles_destroy(ffs->epfiles, ffs->eps_count);
++	spin_lock_irqsave(&ffs->eps_lock, flags);
++	epfiles = ffs->epfiles;
++	ffs->epfiles = NULL;
++	spin_unlock_irqrestore(&ffs->eps_lock, flags);
++
++	/*
++	 * potential race possible between ffs_func_eps_disable
++	 * & ffs_epfile_release therefore maintaining a local
++	 * copy of epfile will save us from use-after-free.
++	 */
++	if (epfiles)
++		ffs_epfiles_destroy(epfiles, ffs->eps_count);
+ 
+ 	if (ffs->ffs_eventfd)
+ 		eventfd_ctx_put(ffs->ffs_eventfd);
+@@ -1790,7 +1811,6 @@ static void ffs_data_reset(struct ffs_data *ffs)
+ 
+ 	ffs_data_clear(ffs);
+ 
+-	ffs->epfiles = NULL;
+ 	ffs->raw_descs_data = NULL;
+ 	ffs->raw_descs = NULL;
+ 	ffs->raw_strings = NULL;
+@@ -1895,7 +1915,9 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
+ 		}
+ 	}
+ 
++	spin_lock_irqsave(&ffs->eps_lock, flags);
+ 	ffs->epfiles = epfiles;
++	spin_unlock_irqrestore(&ffs->eps_lock, flags);
+ 	return 0;
+ }
+ 
+@@ -1919,12 +1941,15 @@ static void ffs_epfiles_destroy(struct ffs_epfile *epfiles, unsigned count)
+ 
+ static void ffs_func_eps_disable(struct ffs_function *func)
+ {
+-	struct ffs_ep *ep         = func->eps;
+-	struct ffs_epfile *epfile = func->ffs->epfiles;
+-	unsigned count            = func->ffs->eps_count;
++	struct ffs_ep *ep;
++	struct ffs_epfile *epfile;
++	unsigned short count;
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&func->ffs->eps_lock, flags);
++	count = func->ffs->eps_count;
++	epfile = func->ffs->epfiles;
++	ep = func->eps;
+ 	while (count--) {
+ 		/* pending requests get nuked */
+ 		if (ep->ep)
+@@ -1942,14 +1967,18 @@ static void ffs_func_eps_disable(struct ffs_function *func)
+ 
+ static int ffs_func_eps_enable(struct ffs_function *func)
+ {
+-	struct ffs_data *ffs      = func->ffs;
+-	struct ffs_ep *ep         = func->eps;
+-	struct ffs_epfile *epfile = ffs->epfiles;
+-	unsigned count            = ffs->eps_count;
++	struct ffs_data *ffs;
++	struct ffs_ep *ep;
++	struct ffs_epfile *epfile;
++	unsigned count;
+ 	unsigned long flags;
+ 	int ret = 0;
+ 
+ 	spin_lock_irqsave(&func->ffs->eps_lock, flags);
++	ffs = func->ffs;
++	ep = func->eps;
++	epfiles = ffs->epfiles;
++	count = ffs->eps_count;
+ 	while(count--) {
+ 		ep->ep->driver_data = ep;
+ 
 -- 
-2.30.2
+2.7.4
 
