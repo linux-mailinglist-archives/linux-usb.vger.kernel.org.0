@@ -2,73 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2D9485B99
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jan 2022 23:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C33485DAE
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jan 2022 01:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244929AbiAEW14 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jan 2022 17:27:56 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:53702 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244900AbiAEW1z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 Jan 2022 17:27:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=if/pAO/fr1I+S7a6wrzYbvKUCVdTodjuKQ1vJ7pgDks=; b=kwfd2JeoGnWngB89+ebl9ZaPmS
-        GI6c0vy5NZQLbsMUPiCyXX2JJ0hlklBQ5LIoYld1m5dRu0Pt0fXlu7Ox3mSseedDu8RZUnBtovCkp
-        Ew3XDnVYxflpOk+pKuKryfBIw30ZDYvvjpIUUnZP8upwef9MS8AIooD4BP22/gb2p1iU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1n5El4-000bJJ-Dg; Wed, 05 Jan 2022 23:27:50 +0100
-Date:   Wed, 5 Jan 2022 23:27:50 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Aaron Ma <aaron.ma@canonical.com>, kuba@kernel.org,
-        henning.schild@siemens.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
-Subject: Re: [PATCH 1/3 v3] net: usb: r8152: Check used MAC passthrough
- address
-Message-ID: <YdYbZne6pBZzxSxA@lunn.ch>
-References: <20220105151427.8373-1-aaron.ma@canonical.com>
- <YdXVoNFB/Asq6bc/@lunn.ch>
- <bb6d8bc4-abee-8536-ca5b-bac11d1ecd53@suse.com>
+        id S1344033AbiAFAya (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jan 2022 19:54:30 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:37752 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1344113AbiAFAww (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 Jan 2022 19:52:52 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowAA3FxRIPdZhGtmuBQ--.49966S2;
+        Thu, 06 Jan 2022 08:52:24 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: Re: [PATCH] thunderbolt: Check for null pointer after calling kmemdup in icm_handle_event
+Date:   Thu,  6 Jan 2022 08:52:23 +0800
+Message-Id: <20220106005223.2480738-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bb6d8bc4-abee-8536-ca5b-bac11d1ecd53@suse.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAA3FxRIPdZhGtmuBQ--.49966S2
+X-Coremail-Antispam: 1UD129KBjvdXoW5Kw4kJr1fGFW8ZF15KrWDtwb_yoWxWwcE9r
+        4DGanIyw48GFWFy3W0kF4rXFW2kr42g3yYvw1Fqry3Gr98XaykWF9YgrsYvw1kAF4Sqr9I
+        yr93XFW3X3429jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbckFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
+        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVWD
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JU3DG5UUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 10:49:56PM +0100, Oliver Neukum wrote:
-> 
-> On 05.01.22 18:30, Andrew Lunn wrote:
-> > On Wed, Jan 05, 2022 at 11:14:25PM +0800, Aaron Ma wrote:
-> >> When plugin multiple r8152 ethernet dongles to Lenovo Docks
-> >> or USB hub, MAC passthrough address from BIOS should be
-> >> checked if it had been used to avoid using on other dongles.
-> >>
-> >> Currently builtin r8152 on Dock still can't be identified.
-> >> First detected r8152 will use the MAC passthrough address.
-> > I do have to wonder why you are doing this in the kernel, and not
-> > using a udev rule? This seems to be policy, and policy does not belong
-> > in the kernel.
-> Debatable. An ethernet NIC has to have a MAC. The kernel must
-> provide one. That we should always take the one found in the
-> device's ROM rather than the host's ROM is already a policy decision.
+On Wed, Jan 05, 2022 at 06:21:57PM +0800, Greg KH wrote:
+> I can not understand this changelog text at all, sorry.  Please read the
+> documentation for how to write a good changelog text.
 
-In general, it is a much longer list of places to find the MAC address
-from. It could be in three different places in device tree, it could
-be in ACPI in a similar number of places, it could be in NVMEM,
-pointed to by device tree, the bootloader might of already programmed
-the controller with its MAC address, etc, or if everything else fails,
-it could be random.
+Thanks, I will correct my changelog from now on.
 
-So yes, the kernel will give it one. But if you want the interface to
-have a specific MAC address, you probably should not be trusting the
-kernel, given it has so many options.
+> And most importantly, how did you test this change?
 
-	Andrew
+Actually, all I did is just to read the description of the kmemdup()
+and then add the check.
+I don't think it is necessary to test, for the patch is just to make
+the system more robust, but not to introduce a new function, which is
+needed to test to guarantee the normal operation.
+Anyway, there is a previous patch that has already fixed the bug.
+
+Sincerely thanks,
+Jiang
+
