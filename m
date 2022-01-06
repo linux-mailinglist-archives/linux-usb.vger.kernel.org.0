@@ -2,120 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E70C486D1A
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jan 2022 23:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44742486D27
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jan 2022 23:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244943AbiAFWRq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jan 2022 17:17:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
+        id S244930AbiAFWXe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jan 2022 17:23:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244435AbiAFWRp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jan 2022 17:17:45 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9A1C061245;
-        Thu,  6 Jan 2022 14:17:44 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id j11so8820033lfg.3;
-        Thu, 06 Jan 2022 14:17:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to;
-        bh=XNho6nSdUreQ9C5eMbGL1kMRCu6BZwKVSjLAcvi6y5k=;
-        b=Q1h+TFrwqkn1VpoXLiOlZDMEh5RGBsH7+xIE71LYhxfYAxdJ3dvsfgUPTtWOeqT208
-         jN5yBo3SDbuLhi3+qBmSOlkLKCQclvdBeQN6lFahE6rOcfqwYVeQGe+NA0KKhiY62WNM
-         abGUiQlbI5h9xWlzfgArckHsMnW7pkPBBoFwRhOLE39PsJVrfsJKKti560S2Zl/jzu8l
-         FvDzOJ6FcSttJoZV/u2KS4ze1RX7rTnsMLlUd0tE6SSYELcaA8CAbKf4zey5Ad0b78iF
-         7llFxELOpwCT9hTrZ8vTcXCUZ71QrihyPmynbl4fvJf9/tsQjXzuYypVds0Qo5ymzkjR
-         gIpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to;
-        bh=XNho6nSdUreQ9C5eMbGL1kMRCu6BZwKVSjLAcvi6y5k=;
-        b=PyJ2x1P1eMI84/UDKWlYAPipcKbQfArGAJ2qJuQMRpTkHtlV6AZF2Dve9VmUgLl47z
-         p3MwTv4EEQTeq8Q6BlYcP65/qFT3scVVDuMZPxYgKzsvJBiG2SfS0QWVtH3Pq9Ta4dyb
-         LyQf2ggUfH0iqCVNkjMxxNgzHcBQ7SeGzNHyZHKK+8UeMc2Hucq9AS+n3RZNuUPAwBsd
-         VKDEobUIQiKb+gHs7B4fP6/gNmB2++hnwVCeigxCpb4W33EsV0doph2fL97laV/IxjCA
-         Su8Dvt7B+NYtbof4npClaK2Dx27AhQM7rHIBOgqsRfpJvQvzaXSZnXEmakv3c7Urqzz+
-         VHpQ==
-X-Gm-Message-State: AOAM533aXnJ36WDHYlh5KKqAk/u78Qt2RzntOXP1Bxl+x1hYF5Gi53v6
-        H4IKXpCDoqkjDO52FtqzA+k=
-X-Google-Smtp-Source: ABdhPJwOEuVRxP8RWtF++nWgSy6drYY0+HjpmMlr1TRy3q2Gfi0aFQf5s8Da3E3taPBq5l6Kxifd2A==
-X-Received: by 2002:a2e:81ce:: with SMTP id s14mr49323183ljg.250.1641507463114;
-        Thu, 06 Jan 2022 14:17:43 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.227.53])
-        by smtp.gmail.com with ESMTPSA id i22sm341405ljh.85.2022.01.06.14.17.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jan 2022 14:17:42 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------8H55T9hPyaNqrV0guVBciFzF"
-Message-ID: <60e9caf1-7b9f-c5a4-a3e8-ff9135e16197@gmail.com>
-Date:   Fri, 7 Jan 2022 01:17:41 +0300
+        with ESMTP id S244638AbiAFWXd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jan 2022 17:23:33 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DDCC061245
+        for <linux-usb@vger.kernel.org>; Thu,  6 Jan 2022 14:23:33 -0800 (PST)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1n5bAR-0007vN-FZ; Thu, 06 Jan 2022 23:23:31 +0100
+Received: from mgr by pty.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1n5bAQ-0054Jo-CM; Thu, 06 Jan 2022 23:23:30 +0100
+Date:   Thu, 6 Jan 2022 23:23:30 +0100
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     linux-usb@vger.kernel.org
+Cc:     balbi@kernel.org, paul.elder@ideasonboard.com,
+        laurent.pinchart@ideasonboard.com, kernel@pengutronix.de,
+        nicolas@ndufresne.ca, kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH v6 0/7] usb: gadget: uvc: use configfs entries for
+ negotiation and v4l2 VIDIOCS
+Message-ID: <Yddr4rE05cLSj6TE@pengutronix.de>
+References: <20220105115527.3592860-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [syzbot] KMSAN: kernel-usb-infoleak in usbnet_write_cmd (3)
-Content-Language: en-US
-To:     syzbot <syzbot+003c0a286b9af5412510@syzkaller.appspotmail.com>,
-        glider@google.com, gregkh@linuxfoundation.org, johan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-References: <000000000000be665505d4d9ebd6@google.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <000000000000be665505d4d9ebd6@google.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CsPTRgMF6YWVbUD/"
+Content-Disposition: inline
+In-Reply-To: <20220105115527.3592860-1-m.grzeschik@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 23:10:40 up 140 days, 14:44, 23 users,  load average: 0.54, 0.31,
+ 0.13
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------8H55T9hPyaNqrV0guVBciFzF
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 1/5/22 21:28, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    81c325bbf94e kmsan: hooks: do not check memory in kmsan_in..
-> git tree:       https://github.com/google/kmsan.git master
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14a07163b00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=2d8b9a11641dc9aa
-> dashboard link: https://syzkaller.appspot.com/bug?extid=003c0a286b9af5412510
-> compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=100165dbb00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10c97e77b00000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+003c0a286b9af5412510@syzkaller.appspotmail.com
-> 
+--CsPTRgMF6YWVbUD/
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Heh, I think, more reports like this will appear soon. Syzbot learned 
-how to tweak usb read functions return values, I guess?
+Ccing Nicolas and Kieran.
 
-#syz test: https://github.com/google/kmsan.git master
+BTW: I have some wip patches in my queue to get isoc support running on
+the dummy_hcd driver. With those patches, it is easy to test this series
+on any system (like qemu) without the need of an actual udc device.
 
+If interested, I could improve and send them on the list.
 
+Thanks,
+Michael
 
-With regards,
-Pavel Skripkin
---------------8H55T9hPyaNqrV0guVBciFzF
-Content-Type: text/plain; charset=UTF-8; name="ph"
-Content-Disposition: attachment; filename="ph"
-Content-Transfer-Encoding: base64
+On Wed, Jan 05, 2022 at 12:55:20PM +0100, Michael Grzeschik wrote:
+>This series improves the uvc video gadget by parsing the configfs
+>entries. With the configfs data, the driver now is able to negotiate the
+>format with the usb host in the kernel and also exports the supported
+>frames/formats/intervals via the v4l2 VIDIOC interface.
+>
+>The uvc userspace stack is also under development. One example is an gener=
+ic
+>v4l2uvcsink gstreamer elemnt, which is currently under duiscussion. [1]
+>
+>[1] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/13=
+04
+>
+>With the libusbgx library [1] used by the gadget-tool [2] it is now also
+>possible to fully describe the configfs layout of the uvc gadget with sche=
+me
+>files.
+>
+>[2] https://github.com/linux-usb-gadgets/libusbgx/pull/61/commits/53231c76=
+f9d512f59fdc23b65cd5c46b7fb09eb4
+>
+>[3] https://github.com/linux-usb-gadgets/gt/tree/master/examples/systemd
+>
+>The bigger picture of these patches is to provide a more versatile interfa=
+ce to
+>the uvc gadget. The goal is to simply start a uvc-gadget with the following
+>commands:
+>
+>$ gt load uvc.scheme
+>$ gst-launch v4l2src ! v4l2uvcsink
+>
+>--
+>
+>v1: https://lore.kernel.org/linux-usb/20210530222239.8793-1-m.grzeschik@pe=
+ngutronix.de/
+>v2: https://lore.kernel.org/linux-usb/20211117004432.3763306-1-m.grzeschik=
+@pengutronix.de/
+>v3: https://lore.kernel.org/linux-usb/20211117122435.2409362-1-m.grzeschik=
+@pengutronix.de/
+>v4: https://lore.kernel.org/linux-usb/20211205225803.268492-1-m.grzeschik@=
+pengutronix.de/
+>v5: https://lore.kernel.org/linux-usb/20211209084322.2662616-1-m.grzeschik=
+@pengutronix.de/
+>
+>Regards,
+>Michael
+>
+>Michael Grzeschik (7):
+>  media: v4l: move helper functions for fractions from uvc to
+>    v4l2-common
+>  media: uvcvideo: move uvc_format_desc to common header
+>  usb: gadget: uvc: prevent index variables to start from 0
+>  usb: gadget: uvc: move structs to common header
+>  usb: gadget: uvc: track frames in format entries
+>  usb: gadget: uvc: add VIDIOC function
+>  usb: gadget: uvc: add format/frame handling code
+>
+> drivers/media/usb/uvc/uvc_ctrl.c           |   1 +
+> drivers/media/usb/uvc/uvc_driver.c         | 281 +-------------
+> drivers/media/usb/uvc/uvc_v4l2.c           |  14 +-
+> drivers/media/usb/uvc/uvcvideo.h           | 144 --------
+> drivers/media/v4l2-core/v4l2-common.c      |  82 +++++
+> drivers/usb/gadget/function/f_uvc.c        | 263 +++++++++++++-
+> drivers/usb/gadget/function/uvc.h          |  38 +-
+> drivers/usb/gadget/function/uvc_configfs.c | 148 ++------
+> drivers/usb/gadget/function/uvc_configfs.h | 120 +++++-
+> drivers/usb/gadget/function/uvc_queue.c    |   3 +-
+> drivers/usb/gadget/function/uvc_v4l2.c     | 404 ++++++++++++++++++---
+> drivers/usb/gadget/function/uvc_video.c    |  71 +++-
+> include/media/v4l2-common.h                |   4 +
+> include/media/v4l2-uvc.h                   | 351 ++++++++++++++++++
+> 14 files changed, 1319 insertions(+), 605 deletions(-)
+> create mode 100644 include/media/v4l2-uvc.h
+>
+>--=20
+>2.30.2
+>
+>
+>
 
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3VzYi9tY3M3ODMwLmMgYi9kcml2ZXJzL25ldC91
-c2IvbWNzNzgzMC5jCmluZGV4IDMyNmNjNGU3NDlkOC4uMGRhYWU3ZjE2ZGE5IDEwMDY0NAot
-LS0gYS9kcml2ZXJzL25ldC91c2IvbWNzNzgzMC5jCisrKyBiL2RyaXZlcnMvbmV0L3VzYi9t
-Y3M3ODMwLmMKQEAgLTEwOCw4ICsxMDgsMTYgQEAgc3RhdGljIGNvbnN0IGNoYXIgZHJpdmVy
-X25hbWVbXSA9ICJNT1NDSElQIHVzYi1ldGhlcm5ldCBkcml2ZXIiOwogCiBzdGF0aWMgaW50
-IG1jczc4MzBfZ2V0X3JlZyhzdHJ1Y3QgdXNibmV0ICpkZXYsIHUxNiBpbmRleCwgdTE2IHNp
-emUsIHZvaWQgKmRhdGEpCiB7Ci0JcmV0dXJuIHVzYm5ldF9yZWFkX2NtZChkZXYsIE1DUzc4
-MzBfUkRfQlJFUSwgTUNTNzgzMF9SRF9CTVJFUSwKLQkJCQkweDAwMDAsIGluZGV4LCBkYXRh
-LCBzaXplKTsKKwlpbnQgcmV0OworCisJcmV0ID0gdXNibmV0X3JlYWRfY21kKGRldiwgTUNT
-NzgzMF9SRF9CUkVRLCBNQ1M3ODMwX1JEX0JNUkVRLAorCQkJICAgICAgMHgwMDAwLCBpbmRl
-eCwgZGF0YSwgc2l6ZSk7CisJaWYgKHJldCA8IDApCisJCXJldHVybiByZXQ7CisJZWxzZSBp
-ZiAocmV0IDwgc2l6ZSkKKwkJcmV0dXJuIC1FTk9EQVRBOworCisJcmV0dXJuIDA7CiB9CiAK
-IHN0YXRpYyBpbnQgbWNzNzgzMF9zZXRfcmVnKHN0cnVjdCB1c2JuZXQgKmRldiwgdTE2IGlu
-ZGV4LCB1MTYgc2l6ZSwgY29uc3Qgdm9pZCAqZGF0YSkK
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
---------------8H55T9hPyaNqrV0guVBciFzF--
+--CsPTRgMF6YWVbUD/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmHXa9wACgkQC+njFXoe
+LGSi6A//QcoEbiC0TOSHJIOazyTr9JoCyaJq21eFX+TvDx87ybw5tm5kDKCDXJWV
+fjZtGU3Bw1ePA7auyAkPtIuHUQVEZW4DWg7M3/KclaEPJuxdqiuY0y1JZisIJW06
+Fou0p72Y9olRXPcmBg0SexD9OCWVz0L3qZMgqc0PsxCZ6mlu3sj3wbTUkNLAeJLJ
+QR1CFMXYUKohF+e/crMh2D676YbBsY5d0n8e2ncCnstN1kw4brXj/rx/SVRZhRVD
+TRbfzDWfK+0fk/NbO4VfB8/dR+QCpeOOWsEJ9bt2y07IXhIo19uINhJfQYswopQa
+6g6trG2XVwBaGGSc4mUoeMzwynWM08n6akGUWWvuRE68EItfFJorVZDnXAC8asEo
+jaHgnF/nl2KQfJWPuRm+SJosDdXtYsc5bU8VpELanITL4jzdmPBLtfAMHc8dv5+I
+W7IqFKwU7TpcEjdPsSBGOrM+0/RwkM/I02pifpdq/AFTVnPins1DvxwdnEFnq+08
+ypuBurBeBmqAO0hkqDnkhi8WgVManXw8qaBQHJS3uYQmykb4+sGTCljLWPZbrxMg
+gklkzT4FAEgO39ZOBEGi/oOhV6tORFX9U9LmwS88AvBOxvIRTsn6jVz9EHo2fwL9
+Py/kb3IvM0Kkd1gQcwE8R2hkTktLTSVEzm1Nr2+ZDmJmEC77JWs=
+=3o8h
+-----END PGP SIGNATURE-----
+
+--CsPTRgMF6YWVbUD/--
