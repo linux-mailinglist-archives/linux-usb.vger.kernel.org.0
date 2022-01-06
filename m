@@ -2,88 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99277486A40
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jan 2022 20:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EAD486A49
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jan 2022 20:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243124AbiAFTCu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jan 2022 14:02:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
+        id S243156AbiAFTGN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jan 2022 14:06:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232414AbiAFTCt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jan 2022 14:02:49 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F47BC061245
-        for <linux-usb@vger.kernel.org>; Thu,  6 Jan 2022 11:02:49 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id 30so11529013edv.3
-        for <linux-usb@vger.kernel.org>; Thu, 06 Jan 2022 11:02:49 -0800 (PST)
+        with ESMTP id S243137AbiAFTGM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jan 2022 14:06:12 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D32EC061201
+        for <linux-usb@vger.kernel.org>; Thu,  6 Jan 2022 11:06:12 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id r14-20020a17090b050e00b001b3548a4250so1224100pjz.2
+        for <linux-usb@vger.kernel.org>; Thu, 06 Jan 2022 11:06:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=2jowSkbJNqPinrS3/sgyHCDn8reyTa6LeGm2gWPnh7w=;
-        b=N1fQLhtogoh5AdBQW2rd4NLYNB5E3Q/QuZtVbQZZ4fwQmnXcrw40L9xOI/NkMjEk/S
-         AAUfUSVbDdIN+LmjM6lLAeNw6tcUPpZ0B3kYnT0WoGgbkoROYYzuRgvfvP0edlukv3zb
-         ehOvb0Qzklg4DURH6YDhcBB0FI/ch4a6tnHcHHISA0HX5TtTJZbBshafRr6WhLD1xEHF
-         B1xKNXRBaaXRteXlB/mSB3O1IyfD0N27WbT9lMh4LKtJMqMDgOvnzjP9SOMpfb9B3rkQ
-         mfPGKySf8XuBD/XaVrJ+FgAxhCAvYt2jFknhOsxgECOsxWaasvf0OKT62WKCahZfRMw8
-         4w2g==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=Zsjxxw6pd4DdvZ9ARrFvDZnuIXFpfJxLz7WO0wCernQ=;
+        b=aPDN54U5pkO5HHNN6o/d+Wa46jM8wSiiODG4x4hx33hrw4OfsqihQg6zGV32Nj2zax
+         JanNwsFLN7TQup4lMAwYXzxS84trjw6x7/2pIIngpus6+Hssuuj1jxFjOt1qcbui6bpZ
+         6AmUuehvcx4mr6QOG8ewp7Cb1IlOODwTu/hDVjZ4VR9tvO5+MY+aNXQ0Fo730QUdACHZ
+         Yow2dzJLGzg4AcMPAWd4xVEUGzJVD6GxhcxA90amuZ5C5hseVYIVuBRtwS00ZZe/bpWb
+         lAY4zAiuU3op47BJHysCARxVDHEyM4Xy+uuTB+N6Qiz2ZVnKNLkTCZe7ks1VM2zVWO8x
+         D8aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=2jowSkbJNqPinrS3/sgyHCDn8reyTa6LeGm2gWPnh7w=;
-        b=VmpImVrcJ+rQGIQuNwTuANlM2JE9rA9Fl2ij9px74hxA/fSPQuKoB8ZMiXzWbi5rr3
-         5pzciAz9Rir7zAaLuusCL8e10RxLR2lDtdCwfSb/Y7ZmaYcLereO3mNFB0YpJrqpqloA
-         T4Hzpvxc0psFAJ0r05fQ21/IP66gehTedxuzBPIzfQ/VLEARmC7ik0BzbeeN3PV6uSd8
-         KOyIlTz2rbyJJXFSrn/x3e7PswyRnfXo3nCsE46Tje4Sq7MuPbulDDdvWe/mh0EoUMy0
-         8Df++R5EF2mrMR6Y6M31nx9XOqMI3onOvaf3XnnXJKSeD3O+xH87wjGUIXarsVlTLfu7
-         68LQ==
-X-Gm-Message-State: AOAM530Qq6mqI3Drtcbzi05ik0ShOpEoPljv6S9fZRT6zQ9ZgJTbIJKe
-        S4NFTDRC0YAdgYRjVXvAG+q1TP4C34zA4zScO0tvTE48G9k=
-X-Google-Smtp-Source: ABdhPJxvA7KctlqcrwyD6hmAliVFmOjxroQz+Qk1K+9DvRABJtI4/ZvQidb40uofgQaTPOIu4vKpbcQe4aRmVi0uvhc=
-X-Received: by 2002:a05:6402:41a:: with SMTP id q26mr59689516edv.387.1641495767920;
- Thu, 06 Jan 2022 11:02:47 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=Zsjxxw6pd4DdvZ9ARrFvDZnuIXFpfJxLz7WO0wCernQ=;
+        b=NHXE3pfH3Kf7jM1QzSV84njObsNMsgnTYrhGrGesNVV3+ldx2BH6Db3YHEUwy3uujc
+         iSk7CbPRQluzbIPPLpVhrshuIZXBlOSxq3nfhm1Y5gQ74YYu35AGIzkrhPyupkoBfrmr
+         uTIKknD3i865SRaiJN+hDsG9DnFvGC+O2D1SviwZXon68MC0AjLTQgNwnirrImCMPdYK
+         w/v/E3V6uwF9Fm5So0FkBlRa3RktoVzg81/WTCeC59srXY8cClUIPWnlgFnKYFlb5aKq
+         E/rDZbccBvX1s9vuXpMGgkcc0yCac+wqlh/pgqxwwInXW2vS4L4QkJ7PXZrK1sz2s4Sm
+         wV/A==
+X-Gm-Message-State: AOAM532RR0YrXKYf+GsOdI+wKH8ecHyNkeN1ywiyTrcDFLkJ0daJ7ngN
+        kHi38XBiUAnzHAv8bwDxWUCDeA==
+X-Google-Smtp-Source: ABdhPJyxOxZKTJqgzSxRXlJWQk0gUdFo548NlJxlwKKYwpOb8FAbfo+BhY8W4Pz7mnZZ/bRCO95gCA==
+X-Received: by 2002:a17:903:24d:b0:149:b68f:579 with SMTP id j13-20020a170903024d00b00149b68f0579mr24075313plh.1.1641495971463;
+        Thu, 06 Jan 2022 11:06:11 -0800 (PST)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id z18sm3468833pfe.146.2022.01.06.11.06.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 11:06:10 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Cc:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        p.zabel@pengutronix.de, balbi@kernel.org, jbrunet@baylibre.com,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v5 0/3] usb: meson: fix shared reset control use
+In-Reply-To: <20211212201844.114949-1-aouledameur@baylibre.com>
+References: <20211212201844.114949-1-aouledameur@baylibre.com>
+Date:   Thu, 06 Jan 2022 11:06:10 -0800
+Message-ID: <7hv8ywr8f1.fsf@baylibre.com>
 MIME-Version: 1.0
-From:   Zhi Li <lznuaa@gmail.com>
-Date:   Thu, 6 Jan 2022 13:02:36 -0600
-Message-ID: <CAHrpEqRFvcTdhKq77YtMS1PJE7BYfL+nH4OmY=KE7oxSgP9bFw@mail.gmail.com>
-Subject: cnds suspend crash when enable remote wakeup
-To:     Peter Chen <peter.chen@kernel.org>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Peter:
+Hi Amjad,
 
-resent as plain text.
+Amjad Ouled-Ameur <aouledameur@baylibre.com> writes:
 
-xhci_disable_hub_port_wake access register cause crash because clock
-is turned off by imx cnds run time suspend.
+> This patchset fixes a usb suspend warning seen on the libretech-cc by
+> using reset_control_rearm() call of the reset framework API. 
+> This call allows a reset consummer to release the reset line even when 
+> just triggered so that it may be triggered again by other reset
+> consummers.
+>
+> reset_control_(de)assert() calls are called, in some meson usb drivers, 
+> on a shared reset line when reset_control_reset has been used. This is not
+> allowed by the reset framework.
+>
+> Finally the meson usb drivers are updated to use this new call, which
+> solves the suspend issue addressed by the previous reverted 
+> commit 7a410953d1fb ("usb: dwc3: meson-g12a: fix shared reset control
+> use").
+>
+> changes since v4:
+> - call reset_control_rearm() after clk_prepare_enable() fails
+>
+> Amjad Ouled-Ameur (3):
+>   phy: amlogic: phy-meson-gxl-usb2: fix shared reset controller use
+>   phy: amlogic: meson8b-usb2: Use dev_err_probe()
+>   phy: amlogic: meson8b-usb2: fix shared reset control use
+>
+>  drivers/phy/amlogic/phy-meson-gxl-usb2.c | 5 ++++-
+>  drivers/phy/amlogic/phy-meson8b-usb2.c   | 9 +++++++--
+>  2 files changed, 11 insertions(+), 3 deletions(-)
 
-before Ulf's patch,  power domain will can run time resume before call
-xhci_disable_hub_port_wake
+The cover letter prefix is "usb: meson" but all the patches are for
+drivers/phy.
 
-when disable remote wakeup,  choose_wakeup will call pm_runtime_resume.
-but when enable remote wakeup, choose_wakeup will not call pm_runtime_resume.
+Could you collect the reviewed-by etc tags and resend to the PHY
+maintainers and linux-phy list?
 
-best regards
-Frank Li
+Thanks,
 
-The below commit cause this problem.
-
- commit c1df456d0f06eb9275c1cd4c66548fc5738ea428
-
-Author: Ulf Hansson ulf.hansson@linaro.org
-
-Date:   Thu Mar 4 20:28:43 2021 +0100
+Kevin
 
 
-
-    PM: domains: Don't runtime resume devices at genpd_prepare()
-
-
-
-    Runtime resuming a device upfront in the genpd_prepare() callback,
-
-    to check if there is a wakeup pending for it, seems like an
-
-    unnecessary thing to do.
