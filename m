@@ -2,286 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD0248798F
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 16:14:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E380487A06
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 16:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348054AbiAGPOp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jan 2022 10:14:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348044AbiAGPOp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jan 2022 10:14:45 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF9EC061574
-        for <linux-usb@vger.kernel.org>; Fri,  7 Jan 2022 07:14:45 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id j124so8530877oih.12
-        for <linux-usb@vger.kernel.org>; Fri, 07 Jan 2022 07:14:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=hoW/s0DcuKRkkzOcD//hS7BMlfvE2r9t+HnZfYmtjjI=;
-        b=IVzL8zg7qh111l5P6Unaxg6UD17D1qulF1CZYB5ghokN24BQ5IRwO6l/sn0cl3vGVh
-         UCnnvJpFoOQQ2B1YGjk3FHXy2U3YTYlO9SyXKe7gDrI1nJ5rlNhqKDhD4Dx6TG6VhoH+
-         ZU2Ahy4dg8HtyO1Ee52LWFP0Z0dizAmqbLKn/vQahrD76gFnNTSeJhX1bxkAb3VpRsjN
-         gEOyrhzimOXuW3IHEoMO1oQUmpSgBRkwbD4Kc9J5JleT0NvAbZz08FWrrWhD4UQSkDV7
-         +3856kvrMYO/Qa7xyWejxSvFb8JPO/NFq+uBwvW1Gaq4UApv+U92HFHS9AQPsbWjeEo5
-         LP4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=hoW/s0DcuKRkkzOcD//hS7BMlfvE2r9t+HnZfYmtjjI=;
-        b=TMxGaqArPxBNjxSgZZH1bukIxd4NpDTtUxCLd7ksZuvCTgA3GZheZ98u4FigW4swGp
-         RJyMEIwj/k5fFhHurypetEONt2gTz2kwsxG5k5sV0tV+pOG2WpXEoDdtqmuK//QWpScF
-         kB8s7wtPvMIAW9cOj9j6a/Ip1o0Tw75wX6rJ8ZwGQG5Y2S8IXNFvaUOWH+0EQvtnWzEy
-         hkMP0C2xn1yR5C+XYTkpYZTIdniQHN/TbovDGNUHCsmQ8aVEh5Wq4UYnPITG8CmtW15g
-         CnYvxnw9vuOmDoNIqyWz7Pz8vwQldppGHLonU4zvr/wEa1IaSZkjTU22TnWOVMGPHsqy
-         wTxg==
-X-Gm-Message-State: AOAM533InGY7aS17GyXY4FTqpC7Ec/ccd1tZUmSeUCU3zJIUbh3QPoko
-        +FuBvb8kwabHzJq3xTvh9ZUXJA==
-X-Google-Smtp-Source: ABdhPJyhks2Fazm9yhlWgkK0jTfqI95vyQTiRxh0FVvoGTX2ao1hw+Qg+M68nCKS0/wVdYGUR9MRbQ==
-X-Received: by 2002:a05:6808:3d8:: with SMTP id o24mr10468608oie.119.1641568484294;
-        Fri, 07 Jan 2022 07:14:44 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id a6sm995134oil.6.2022.01.07.07.14.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 07:14:43 -0800 (PST)
-Date:   Fri, 7 Jan 2022 07:15:30 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 3/8] device property: Helper to match multiple connections
-Message-ID: <YdhZEp6LmAxCGDIc@ripper>
-References: <20211228052116.1748443-1-bjorn.andersson@linaro.org>
- <20211228052116.1748443-4-bjorn.andersson@linaro.org>
- <Yc17Ssug3neFFXKN@kuha.fi.intel.com>
- <Yc7I3gZehc1lHn4Z@paasikivi.fi.intel.com>
- <YdYC8DeF1i9a3RnP@ripper>
- <YdhPQ0Wuz63JBKaR@paasikivi.fi.intel.com>
+        id S239764AbiAGP63 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jan 2022 10:58:29 -0500
+Received: from mail-am6eur05on2048.outbound.protection.outlook.com ([40.107.22.48]:6002
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239687AbiAGP63 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 Jan 2022 10:58:29 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EbsU2YYfWdVj5JRkBmlRjF6lbcJLdbKjCVJ9A4qh8wTjVu5kJk6Au+B4cDMt3S3bOElyJMIcoobKJ7zXXyyNzRMepT5BtJEdQOrPw2FYKaOpbY+BqDGOBL3qXrjkj0+mfHNm6JebDMlZUZGY2vzLmy9vsXjlZ5lt8LYOTOCIeSLy/v+OoHnCLvHB1rNpGp78ZtmY8BluLs77G5XZjUGlS4at0tooF8gL1GqfCYlAdKaZqRfkiGMsTBfdBGdvBseS5igq8H8Zd/5cbGBnPxJBA20+OcaHMsj2eTZAei5c4ECxiJOReXn22KZIco8+pzJRxLHtLmWwe2MW7exjC+RXaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k3GVipKWAbnX3RncUIttUdwd5a+GhfAEhnthGs4hIx0=;
+ b=Q5VxRCPUvVjuRJXds3lXsJ3PmtAO1JHech8ntwU3eQhM6UEkTOuywNWNMGgH2ocYLXGDROuG52HTvKzkVZ4/0mW4iwc6BPId21C/J2ekqOdwdKANM1kNnH/f/8SeHGosU3g8xDj/TrLW3Z6ww6mfp/EXxoV9PZjkTXmc+5L17KpdsG8PpWnl70quHIBolMbB46iglBLh4LYI85yPfVuCYpTHkKLJIgd25xp6yiz5kvjDnEbwbgqbjHpyxH/Yumm+j8IAPrPXRipm/siY70Yx51sk27dPx/NAEJe6Ze5qwa9apuruVT2pQO4CG/K2a1OeBWRRVTghGXafWIKiIJCS/g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k3GVipKWAbnX3RncUIttUdwd5a+GhfAEhnthGs4hIx0=;
+ b=rLZl2OeNc4i2WC0MPZi9slA7XqNUuXCgw7D6wl+TxvmV3MhkxLp2fuaWl4nHxg79SFk2MNlywIyggbiKUlO9qOVCwzPSafO13jLwPUE4+thMtoKqAphtPQhZEyz9hjbvKI3/Bb1J/2He1alOiJFessHd4zO0NKZzy5U5G5NZSRU=
+Received: from PAXPR04MB9186.eurprd04.prod.outlook.com (2603:10a6:102:232::18)
+ by PAXPR04MB9089.eurprd04.prod.outlook.com (2603:10a6:102:225::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Fri, 7 Jan
+ 2022 15:58:26 +0000
+Received: from PAXPR04MB9186.eurprd04.prod.outlook.com
+ ([fe80::21ff:7873:e75:7c51]) by PAXPR04MB9186.eurprd04.prod.outlook.com
+ ([fe80::21ff:7873:e75:7c51%8]) with mapi id 15.20.4867.010; Fri, 7 Jan 2022
+ 15:58:26 +0000
+From:   Frank Li <frank.li@nxp.com>
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "mathias.nyman@linux.intel.com" <mathias.nyman@linux.intel.com>
+CC:     "peter.chen@kernel.org" <peter.chen@kernel.org>,
+        Jun Li <jun.li@nxp.com>, Zhi Li <lznuaa@gmail.com>
+Subject: xhci crash at xhci_disable_hub_port_wake when system suspend.
+Thread-Topic: xhci crash at xhci_disable_hub_port_wake when system suspend.
+Thread-Index: AdgD3VfMVBJx3GKFRn+PRgFnr8Fjng==
+Date:   Fri, 7 Jan 2022 15:58:26 +0000
+Message-ID: <PAXPR04MB91861A98BE9D240FFEC1D560884D9@PAXPR04MB9186.eurprd04.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 45bb185f-1461-4f29-bac3-08d9d1f68a6f
+x-ms-traffictypediagnostic: PAXPR04MB9089:EE_
+x-microsoft-antispam-prvs: <PAXPR04MB9089C7AC960AF121A6755057884D9@PAXPR04MB9089.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:568;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 6mvceoyPx8Z1JaAigc2b2x+p58E6ytPAwxmGN9RlSkZ3IblVCCvPOlGrtMdyT5o5bCjG7SIxtyApJlxj2kPFaiHM6F/aliu8ARv6RU51/eOUErc4RHJltuvnMcjxiFL7T4go5YXEBjEJjnKkGCkQN/PE053jgufDEdbRQzppA6j0jqAAUg9SNenFnQuc7wzw2F38fmhtX2f5utZv+WXPnk0IAOHNoKJxlcTmMRAKGwaJncIiHbTxY/djxFTiibhW8yqopDDYGPC9SR9xGWDy9ufy0eUYVhoFQbMQMu/bjgVVpHcDAVZQWTc8IelekVSU7Nmbj1kG/lAj4mqq26C3E3zQz2Wo+sx10oLGYxVGydQgbxubd+UAadbSiUIWPAfkuTI58PtmdCY/9TRiqz157DE9FAJs4cPzFf9iUnjTe87v3qoIDOEh8SIGSyfFUwHMaq26HVW4Zm/5C31JSb41zhJcwEvWq8377UQwJpugxImmloGnvmCijitlQxSiXZ0tHWYWlgM/AiztCTG5wnuQIXc2TyP2S1fdA4buj1XcLyi0AOu5JrtSFuPOfuIyR2wDjxh2teGPO1cvIkBNrOgly2B/bUiXC505cB1q3txMemZbIuaCmXjQHVUjwdCk8qLeioMHfxQdLgfrjJBdrzlx2yH/zcnLW5hhQSgvJkA9dzIzCYc4ie6IgTZX/wqpHO8xLR17459a/jW3LO4LGH6ksA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9186.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(83380400001)(86362001)(122000001)(38070700005)(316002)(9686003)(508600001)(44832011)(54906003)(186003)(55016003)(66556008)(66446008)(6506007)(76116006)(4326008)(66946007)(33656002)(66476007)(64756008)(26005)(8936002)(52536014)(110136005)(5660300002)(71200400001)(7696005)(8676002)(2906002)(15650500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?gb2312?B?TFIxNk0ydWI5OVZ5c2sxUkpubFVIVXB5TGdTNFJCUDcvTFZBWWRxREFrUzc4?=
+ =?gb2312?B?L0huNGd3SlNpdW9vR2FrM2ZlazJoWGpnSkp6TmQ4SDNVN25qT05JL3J5cTNh?=
+ =?gb2312?B?cVIrdWF3YWxtUzNIQU54Rkt6UWdpLzBCb1drU04wMHdJUzA4UlpMTFU5ZS9O?=
+ =?gb2312?B?Rk9UYUk2M0NrQ2VFa2ZtbGtvaW9INERmbGhCU2xENjBrT0JteE1SOWNFZ240?=
+ =?gb2312?B?WUxreWllQ0tFSno0QTlDMFpQcXJjcStjN1M3OHN0NzlRRmE0dG5WTDBTOXV5?=
+ =?gb2312?B?OHZSWklYb1lXMDFYcEdlN0ptLzZSZUdRRjFsQ2ZMbGJvLzB3a1NybE9kdlp1?=
+ =?gb2312?B?OGFybmdVdDE2aGRjMXB1bFZqblB2S3JZMFZjVmtwb0lvNEtCb1FBRzd0d1lq?=
+ =?gb2312?B?RXV1alRIdDJrUkNjdE9RbXVRWHFTa3BnTjdzb1RoaWhHY3cwa3JEbVJ6NWdJ?=
+ =?gb2312?B?eVpFbDdpL0tkd1pBcGw4dGdmc3oxTFpiYWNaUFd1c3JzcTU2NnpIbnQyNThX?=
+ =?gb2312?B?WERYWXp3dEFHaEpUczhlc3hELy9hY09wcjNYdHV3NWQ1ZHg4SUZjTjNYUkU1?=
+ =?gb2312?B?eUlHNE40QmhpRTlMb1Y4L01CVG5CaXpoNzlkSGV6RXJlSUpkbjNlTk1tc1Jq?=
+ =?gb2312?B?WkpiOTlBMmdhUk5sS2szVjBqVUswR2phRlc5L1QyMVNOTy9PalVzQTN5cUQr?=
+ =?gb2312?B?MS9Qa0Y4bmxGeVArdWVqeEVtYUUrSEp5cFBieWV2MXdtY0pPWVJYaTdzaUc3?=
+ =?gb2312?B?Y2U1LzhYdDVjVXRnWWdlSjRJQmRidkx1UFRMdXpTQ1BSTHIvcExGcWUreGgr?=
+ =?gb2312?B?VVdqWGQxUHNMa3N1VzdQL01jQVkxZGhGYU5MVlpBNytTR0E2eGY2L2ZQV1Jl?=
+ =?gb2312?B?TWd1ZUIxNktxWnBxSVBzZFJlb1d6Q0p2cGRUNkJrQ2tkSWpXMStyakJ3blJN?=
+ =?gb2312?B?VXhNRTZ2U0QwNDVPSTBLTTJxcFFMeUNyV1ViQWNEMlF2OFAzSURSUWZkSjFH?=
+ =?gb2312?B?NWhBT2dFWEZHUFpMU2tYd0JzUDFUckZYL1JiNEZHOEJmMVdCenRvT2ZKRmlk?=
+ =?gb2312?B?bW5tQ1N3bmVMdG5ISXpLRUtHNFgrOGVQNkdlSGMxK2FKaVZ6ak11aDRRbzdl?=
+ =?gb2312?B?a3FlWWVOd3FlOHFqZm1hNHpyNzFoYzRFMFpMWW5DUVN1MW5ocTlGWHgvY0pR?=
+ =?gb2312?B?UmdSbVFzUG5BRnNOcVRJRm1YS29NQkw1Y0poRUZFQjgxY2Urdm1XajF5bS9t?=
+ =?gb2312?B?NFZpdkxpbkRaM1FwdTE3eTdWRVlIZVAyYjZUQzFGUGVJWlVBTFBsRXg3b0wz?=
+ =?gb2312?B?eUhRVmdLcExWR2JnQXAxRDRlOHJFTUJzbFdrYW9ObjdmeVV0Uk9Jc1ZRbi8z?=
+ =?gb2312?B?QVowdE5Sa2hWdWlvMnJUZXEvdHhrdmgvL1RGTHlTZDNhOGNxb2tpeTJtSENz?=
+ =?gb2312?B?VVpwVDhJaUpSN3QxTG9MdG8vVFVabnhKd0h5d2hXNnl2TmVXVE56Z21hMkg3?=
+ =?gb2312?B?eVhwS0ZQR3JVbkYvNG91QzVRa0JBalNCaG5FamRVN2loU1lCQVUxU0wwamFZ?=
+ =?gb2312?B?Ukh5YUF4OTlwMCt3NXBON3BFVUJncm9aaERVTDJPNWl2N0N4UC8rTEIvMnNN?=
+ =?gb2312?B?MW51T0tSTThCdGJ6blJFNytOaVNUcVI0V2pQVUhyQXlzRXpJNUcyclh3S0JV?=
+ =?gb2312?B?a3kydXpqYnZpeVJQc0dMWVJjMmFaaTJCOU5xS2x5OXB5MmNCcjFLVWs5MitP?=
+ =?gb2312?B?SHRYRWh5eEo5VVdoVUN6eHMwTGhWMW1wbUVidnNZMmMyZk45RSswekNLaW1I?=
+ =?gb2312?B?Mk9iSVhld3F5eGFlamV3YVp2dUQ0WUJHRTdjUVVya0VZd2hZRnUvQUlrTFlt?=
+ =?gb2312?B?WVZja0g1cWVtdklOS1NQWnJZV1czWGFPaWl3YVhNcllxSGE2dmg0SDFQcjVq?=
+ =?gb2312?B?MGFYRStnd0VMejluWE1CQnk2YVRWVnBEYmM5UWtZdndXbmpxQWZKcHR5NmtF?=
+ =?gb2312?B?enhwQ1hmeGJLZjNsbHZuN3prZkI4cncvQ2xKbGl1dTQrcENZalUrdkxOM1lP?=
+ =?gb2312?B?dWxqUXphMXZGY3NSZlpnaUQwMEEwSjZUTjhTZGYwTWQ1ZldaMzBqbmpwckVS?=
+ =?gb2312?B?L0F1c2dzanYxZXU1ZCtTY3d5TXFKM0ZYT2tja25vSkxhUXd4bWU5djZmeUVL?=
+ =?gb2312?B?aFE9PQ==?=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YdhPQ0Wuz63JBKaR@paasikivi.fi.intel.com>
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9186.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 45bb185f-1461-4f29-bac3-08d9d1f68a6f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jan 2022 15:58:26.3592
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0aPLEt/kEi+1Xx6EVGvbwnwYgCZDQznbmRRXdA7Wgfg/xSCAAj3rMRr0WHOdP+esT+rre2F0QlpMV5OMYt01Ig==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9089
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri 07 Jan 06:33 PST 2022, Sakari Ailus wrote:
-
-> On Wed, Jan 05, 2022 at 12:43:28PM -0800, Bjorn Andersson wrote:
-> > On Fri 31 Dec 01:09 PST 2021, Sakari Ailus wrote:
-> > 
-> > > Hi Björn,
-> > > 
-> > > (And thanks to Heikki for cc'ing me!)
-> > > 
-> > > On Thu, Dec 30, 2021 at 11:26:34AM +0200, Heikki Krogerus wrote:
-> > > > +Andy, Dan and Sakari
-> > > > 
-> > > > On Mon, Dec 27, 2021 at 09:21:11PM -0800, Bjorn Andersson wrote:
-> > > > > In some cases multiple connections with the same connection id
-> > > > > needs to be resolved from a fwnode graph.
-> > > > > 
-> > > > > One such example is when separate hardware is used for performing muxing and/or
-> > > > > orientation switching of the SuperSpeed and SBU lines in a USB-C
-> > > > > connector. In this case the connector needs to belong to a graph with
-> > > > > multiple matching remote endpoints, and the TypeC controller needs to be
-> > > > > able to resolve them both.
-> > > > > 
-> > > > > Add a new API that allows this kind of lookup.
-> > > > > 
-> > > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > > > ---
-> > > > >  drivers/base/property.c  | 94 ++++++++++++++++++++++++++++++++++++++++
-> > > > >  include/linux/property.h |  5 +++
-> > > > >  2 files changed, 99 insertions(+)
-> > > > > 
-> > > > > diff --git a/drivers/base/property.c b/drivers/base/property.c
-> > > > > index cbe4fa298413..0aa0296fd991 100644
-> > > > > --- a/drivers/base/property.c
-> > > > > +++ b/drivers/base/property.c
-> > > > > @@ -1180,6 +1180,36 @@ fwnode_graph_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
-> > > > >  	return NULL;
-> > > > >  }
-> > > > >  
-> > > > > +static unsigned int fwnode_graph_devcon_matches(struct fwnode_handle *fwnode,
-> > > > > +						const char *con_id, void *data,
-> > > > > +						devcon_match_fn_t match,
-> > > > > +						void **matches,
-> > > > > +						unsigned int matches_len)
-> > > > > +{
-> > > > > +	struct fwnode_handle *node;
-> > > > > +	struct fwnode_handle *ep;
-> > > > > +	unsigned int count = 0;
-> > > > > +	void *ret;
-> > > > > +
-> > > > > +	fwnode_graph_for_each_endpoint(fwnode, ep) {
-> > > > > +		if (count >= matches_len) {
-> > > > > +			fwnode_handle_put(ep);
-> > > > > +			return count;
-> > > > > +		}
-> > > > > +
-> > > > > +		node = fwnode_graph_get_remote_port_parent(ep);
-> > > > > +		if (!fwnode_device_is_available(node))
-> > > 
-> > > The reference to node needs to be put here.
-> > > 
-> > 
-> > You're right, thanks!
-> > 
-> > > > > +			continue;
-> > > > > +
-> > > > > +		ret = match(node, con_id, data);
-> > > > > +		fwnode_handle_put(node);
-> > > > > +
-> > > > > +		if (ret)
-> > > > > +			matches[count++] = ret;
-> > > > > +	}
-> > > > > +	return count;
-> > > > > +}
-> > > > > +
-> > > > >  static void *
-> > > > >  fwnode_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
-> > > > >  		    void *data, devcon_match_fn_t match)
-> > > > > @@ -1202,6 +1232,35 @@ fwnode_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
-> > > > >  	return NULL;
-> > > > >  }
-> > > > >  
-> > > > > +static unsigned int fwnode_devcon_matches(struct fwnode_handle *fwnode,
-> > > > > +					  const char *con_id, void *data,
-> > > > > +					  devcon_match_fn_t match,
-> > > > > +					  void **matches,
-> > > > > +					  unsigned int matches_len)
-> > > > > +{
-> > > > > +	struct fwnode_handle *node;
-> > > > > +	unsigned int count = 0;
-> > > > > +	void *ret;
-> > > > > +	int i;
-> > > 
-> > > unsigned int, please.
-> > > 
-> > 
-> > Sounds good.
-> > 
-> > > > > +
-> > > > > +	for (i = 0; ; i++) {
-> > > > > +		if (count >= matches_len)
-> > > > > +			return count;
-> > > > > +
-> > > > > +		node = fwnode_find_reference(fwnode, con_id, i);
-> > > > > +		if (IS_ERR(node))
-> > > > > +			break;
-> > > > > +
-> > > > > +		ret = match(node, NULL, data);
-> > > > > +		fwnode_handle_put(node);
-> > > > > +
-> > > > > +		if (ret)
-> > > > > +			matches[count++] = ret;
-> > > > > +	}
-> > > > > +
-> > > > > +	return count;
-> > > > > +}
-> > > > > +
-> > > > >  /**
-> > > > >   * fwnode_connection_find_match - Find connection from a device node
-> > > > >   * @fwnode: Device node with the connection
-> > > > > @@ -1229,3 +1288,38 @@ void *fwnode_connection_find_match(struct fwnode_handle *fwnode,
-> > > > >  	return fwnode_devcon_match(fwnode, con_id, data, match);
-> > > > >  }
-> > > > >  EXPORT_SYMBOL_GPL(fwnode_connection_find_match);
-> > > > > +
-> > > > > +/**
-> > > > > + * fwnode_connection_find_matches - Find connections from a device node
-> > > > > + * @fwnode: Device node with the connection
-> > > > > + * @con_id: Identifier for the connection
-> > > > > + * @data: Data for the match function
-> > > > > + * @match: Function to check and convert the connection description
-> > > > > + * @matches: Array of pointers to fill with matches
-> > > > > + * @matches_len: Length of @matches
-> > > > > + *
-> > > > > + * Find up to @matches_len connections with unique identifier @con_id between
-> > > > > + * @fwnode and other device nodes. @match will be used to convert the
-> > > > > + * connection description to data the caller is expecting to be returned
-> > > > > + * through the @matches array.
-> > > 
-> > > If the caller allocates the matches array, how does it know how large it
-> > > should be? Is there a need to provide a way to count the matches before
-> > > writing them to an array? Most similar functions do that by just setting the
-> > > array (matches) to NULL.
-> > > 
-> > 
-> > This is a very relevant comment and I did look for ways to handle this
-> > as I came up with the patch.
-> > 
-> > I think the typical mechanism would be to allow @matches to be NULL, in
-> > which case we iterate over objects and return the number of matches, so
-> > that the caller can allocate an appropriately sized array and call the
-> > API again.
-> > 
-> > But the "match" function simply returns a pointer to something and
-> > looking at the example of the typec_{mux,switch} this pointer points to
-> > a member of an object which has a struct device which is refcounted.
-> > 
-> > As such, we can't simply discard the returned object. We have to pass it
-> > back to the caller, whom knows what "match" did and is able to reverse
-> > that.
-> > 
-> > I looked at changing the callback and I looked at using krealloc() to
-> > grow an array dynamically.
-> 
-> krealloc() may also fail...
-> 
-
-Exactly.
-
-> > 
-> > 
-> > But looking at the use case in mind; finding entities that might need to
-> > react to a USB Type-C event I have a need for 2 matches, and 3 seems
-> > plausible. Beyond that the largest of_graph I have ever dealt with has 6
-> > endpoints.
-> > 
-> > While it isn't relevant to use this API for my 6-endpoint case, it would
-> > result in @matches having to be 48 bytes of pointers. And once the call
-> > returns, the actual number of pointers needed is known and the long-term
-> > storage can be re-allocated as necessary based on the return value.
-> > 
-> > As such, I dropped the idea of making something fancier and more
-> > dynamic, for the sake of simplicity. Perhaps I'm missing some cool use
-> > case where this is infeasible?
-> 
-> Another option would be to use a fixed-size array for the purpose. Assuming
-> this will remain a small number, a single global macro could be used to set
-> the maximum number that could be also easily increased if needed.
-> 
-> On the other hand, if this number remains specific to the caller as it
-> would seem, then I guess a caller-set value (as implemented now) remains a
-> fine option, too.
-> 
-
-Sounds good.
-
-I will try to capture these arguments in the commit message as I post
-the next version.
-
-Thanks,
-Bjorn
-
-> -- 
-> Kind regards,
-> 
-> Sakari Ailus
+TWF0aGlhcyBOeW1hbg0KDQoJUmVjZW50bHkgd2UgZm91bmQgYSBjcmFzaCBhdCB4aGNpX2Rpc2Fi
+bGVfaHViX3BvcnRfd2FrZSB3aGVuIHN5c3RlbSBzdXNwZW5kIGlmIGVuYWJsZSByZW1vdGUgd2Fr
+ZSB1cC4NCg0KCUJhc2lhbCBmbG93IGlzLg0KDQoJMS4gcnVuIHRpbWUgc3VzcGVuZCBjYWxsIHho
+Y2lfc3VzcGVuZCwgeGhjaSBwYXJlbnQgZGV2aWNlcyBnYXRlIHRoZSBjbG9jay4gDQoJMi4gZWNo
+byBtZW0gPi9zeXMvcG93ZXIvc3RhdGUsIHN5c3RlbSBfZGV2aWNlX3N1c3BlbmQgY2FsbCB4aGNp
+X3N1c3BlbmQNCgkzLiB4aGNpX3N1c3BlbmQgY2FsbCB4aGNpX2Rpc2FibGVfaHViX3BvcnRfd2Fr
+ZSwgd2hpY2ggYWNjZXNzIHJlZ2lzdGVyLCBidXQgY2xvY2sgYWxyZWFkeSBnYXRlZCBieSBydW4g
+dGltZSBwbS4gDQoNCglXaHkgZmluZCB0aGlzIGlzc3VlIG5vdywgdGhhdCBpcyBiZWNhdXNlIHBy
+ZXZpb3VzIHBvd2VyIGRvbWFpbiBkcml2ZXIgd2lsbCBjYWxsIHJ1biB0aW1lIHJlc3VtZSBiZWZv
+cmUgaXQuIEJ1dCB0aGUgYmVsb3cgY29tbWl0IHJlbW92ZSBpdC4gDQoNCmMxZGY0NTZkMGYwNmVi
+OTI3NWMxY2Q0YzY2NTQ4ZmM1NzM4ZWE0MjgNCkF1dGhvcjogVWxmIEhhbnNzb24gdWxmLmhhbnNz
+b25AbGluYXJvLm9yZw0KRGF0ZTogICBUaHUgTWFyIDQgMjA6Mjg6NDMgMjAyMSArMDEwMA0KDQog
+ICAgUE06IGRvbWFpbnM6IERvbid0IHJ1bnRpbWUgcmVzdW1lIGRldmljZXMgYXQgZ2VucGRfcHJl
+cGFyZSgpDQoNCg0KCQ0KQWNjb3JkaW5nIHRvIEhDRF9GTEFHX0hXX0FDQ0VTU0lCTEUgbG9naWMs
+IHhoY2kgc2hvdWxkIG5vdCBhY2Nlc3MgaGFyZHdhcmUgd2hlbiBzZWNvbmQgdGltZSBjYWxsIHho
+Y2lfc3VzcGVuZCB3aXRob3V0IGNhbGwgeGhjaV9yZXN1bWUuIA0KDQogICAgICAgIHhoY2lfZGlz
+YWJsZV9odWJfcG9ydF93YWtlKHhoY2ksICZ4aGNpLT51c2IzX3JodWIsIGRvX3dha2V1cCk7DQog
+ICAgICAgIHhoY2lfZGlzYWJsZV9odWJfcG9ydF93YWtlKHhoY2ksICZ4aGNpLT51c2IyX3JodWIs
+IGRvX3dha2V1cCk7DQoNCiAgICAgICAgaWYgKCFIQ0RfSFdfQUNDRVNTSUJMRShoY2QpKQ0KICAg
+ICAgICAgICAgICAgIHJldHVybiAwOw0KDQogICAgICAgIC4uLi4uDQogICAgICAgIGNsZWFyX2Jp
+dChIQ0RfRkxBR19IV19BQ0NFU1NJQkxFLCAmaGNkLT5mbGFncyk7DQogICAgICAgIGNsZWFyX2Jp
+dChIQ0RfRkxBR19IV19BQ0NFU1NJQkxFLCAmeGhjaS0+c2hhcmVkX2hjZC0+ZmxhZ3MpOw0KDQpJ
+IGFtIG5vdCBzdXJlIGlmIGl0IGlzIHNhZmUgdG8gbW92ZSB4aGNpX2Rpc2FibGVfaHViX3BvcnRf
+d2FrZSBhZnRlciBIQ0RfSFdfQUNDRVNTSUJMRSBjaGVjaywgT3IgbmVlZCBhZGQgYWRkaXRpb25h
+bCBydW5fdGltZV9yZXN1bWUgYmVmb3JlIGl0LiANCg0KDQpiZXN0IHJlZ2FyZHMNCkZyYW5rIExp
+DQoNCg0KDQo=
