@@ -2,74 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE42D48780E
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 14:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F702487840
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 14:32:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238784AbiAGNPi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jan 2022 08:15:38 -0500
-Received: from cable.insite.cz ([84.242.75.189]:43679 "EHLO cable.insite.cz"
+        id S1347593AbiAGNcg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jan 2022 08:32:36 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:55902 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237898AbiAGNPg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 Jan 2022 08:15:36 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id 0E781A1A3D405;
-        Fri,  7 Jan 2022 14:15:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1641561334; bh=pgAIajoBUbMPehOv9bS7HaXM/m5+TY4PNjYR7VDUUsA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=b7RZZtGdoXx+tAmedjCMysqXV81Y0AyH4NjmgEilnvcR6YEZ2JtKnzuWgDyTMmcgI
-         XeAKCDbF6TUlVgjUNvJZFo7j9c/IXk30ex13C/vqT3TZ+RDY3bOI3/DIub6jQl0ERg
-         AKPPaXpytsOnrYrQGk8DebyggOg3fQRINdwH/ApM=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id hNx2YkQgaUba; Fri,  7 Jan 2022 14:15:28 +0100 (CET)
-Received: from precision.doma (dustin.pilsfree.net [81.201.58.138])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 5B68BA1A3D401;
-        Fri,  7 Jan 2022 14:15:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1641561328; bh=pgAIajoBUbMPehOv9bS7HaXM/m5+TY4PNjYR7VDUUsA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nkAdeVPX+uz/Tjd3dey1vizJkcxICuHHqimVOVD0jUWUMIcHY9Jo2Bq7x07uUW1Bn
-         wwu8dyw89Q8O+vRehuAp8vQEEIWMen1DA5mtjRnWHi6WGxbS5EVqaNjzVwJJICf63u
-         JU2CZFia8esyMTkOfiHVhj8hV1cO7LZf5+uv05YU=
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Pavel Hofman <pavel.hofman@ivitera.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v2] docs: ABI: fixed formatting in configfs-usb-gadget-uac2
-Date:   Fri,  7 Jan 2022 14:15:27 +0100
-Message-Id: <20220107131527.376364-1-pavel.hofman@ivitera.com>
-X-Mailer: git-send-email 2.25.1
+        id S1347584AbiAGNcf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 Jan 2022 08:32:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=zuq22puCatF8YKbcxfFia/s++TKJb1IZ+z9NiVaSWzU=; b=09kVmdnHvMVYu+dp3guCi9uFwG
+        CE7JP5QQV0zMS+Rpl8UoziuSO1V30lbg7jZJcOpcq+Fr/X88aS3XOw5R0VukhOIA+uvJzfMNr9KMT
+        0Iei3NqTn0e7m/ZW/YQU4g60Pax4qE1HdtbzMWljerkiadqgZ1RKOZCmpWzR3D/zWeiI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1n5pM1-000lCb-8O; Fri, 07 Jan 2022 14:32:25 +0100
+Date:   Fri, 7 Jan 2022 14:32:25 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Aaron Ma <aaron.ma@canonical.com>, kuba@kernel.org,
+        henning.schild@siemens.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
+Subject: Re: [PATCH 1/3 v3] net: usb: r8152: Check used MAC passthrough
+ address
+Message-ID: <YdhA6QqOKQ19uKWG@lunn.ch>
+References: <20220105151427.8373-1-aaron.ma@canonical.com>
+ <YdXVoNFB/Asq6bc/@lunn.ch>
+ <bb6d8bc4-abee-8536-ca5b-bac11d1ecd53@suse.com>
+ <YdYbZne6pBZzxSxA@lunn.ch>
+ <CAAd53p52uGFjbiuOWAA-1dN7mTqQ0KFe9PxWvPL+fjfQb9K5vQ@mail.gmail.com>
+ <YdbuXbtc64+Knbhm@lunn.ch>
+ <CAAd53p5YnQZ0fDiwwo-q3bNMVFTJSMLcdkUuH-7=OSaRrW954Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAd53p5YnQZ0fDiwwo-q3bNMVFTJSMLcdkUuH-7=OSaRrW954Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Added missing tab, line breaks.
+> > You should be thinking of this in more general terms. You want to
+> > design a system that will work for any vendors laptop and dock.
+> >
+> > You need to describe the two interfaces using some sort of bus
+> > address, be it PCIe, USB, or a platform device address as used by
+> > device tree etc.
+> >
+> > Let the kernel do whatever it wants with MAC addresses for these two
+> > interfaces. The only requirement you have is that the laptop internal
+> > interface gets the vendor allocated MAC address, and that the dock get
+> > some sort of MAC address, even if it is random.
+> 
+> Those laptops and docks are designed to have duplicated MACs. I don't
+> understand why but that's why Dell/HP/Lenovo did.
 
-Fixes: e3088ebc1b97 ("docs: ABI: added missing num_requests param to UAC2")
-Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- Documentation/ABI/testing/configfs-usb-gadget-uac2 | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+But it also sounds like the design is broken. So the question is, is
+it possible to actually implement it correctly, without breaking
+networking for others with sane laptop/docks/USB dongles.
 
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uac2 b/Documentation/ABI/testing/configfs-usb-gadget-uac2
-index 9cddadc53e0b..7fb3dbe26857 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget-uac2
-+++ b/Documentation/ABI/testing/configfs-usb-gadget-uac2
-@@ -30,6 +30,6 @@ Description:
- 					(in 1/256 dB)
- 		p_volume_res		playback volume control resolution
- 					(in 1/256 dB)
--		req_number	the number of pre-allocated requests for both capture
--					and playback
-+		req_number		the number of pre-allocated requests
-+					for both capture and playback
- 		=====================	=======================================
--- 
-2.25.1
+> What if the kernel just abstract the hardware/firmware as intended, no
+> matter how stupid it is, and let userspace to make the right policy?
 
+Which is exactly what is being suggested here. The kernel gives the
+laptop internal interface its MAC address from ACPI or where ever, and
+the dock which has no MAC address gets a random MAC address. That is
+the normal kernel abstract. Userspace, in the form of udev, can then
+change the MAC addresses in whatever way it wants.
+
+> But power users may also need to use corporate network to work as
+> Aaron mentioned.
+> Packets from unregistered MAC can be filtered under corporate network,
+> and that's why MAC pass-through is a useful feature that many business
+> laptops have.
+
+Depends on the cooperate network, but power users generally know more
+than the IT department, and will just make their machine work, copying
+the 802.3x certificate where ever it needs to go, us ebtables to
+mangle the MAC address, build their own little network with an RPi
+acting as a gateway doing NAT and MAC address translation, etc.
+
+       Andrew
