@@ -2,92 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BCB8487102
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 04:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 884244871E9
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 05:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345476AbiAGDH0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jan 2022 22:07:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiAGDHZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jan 2022 22:07:25 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54853C061245;
-        Thu,  6 Jan 2022 19:07:25 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id p14so3873613plf.3;
-        Thu, 06 Jan 2022 19:07:25 -0800 (PST)
+        id S1346073AbiAGE6I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jan 2022 23:58:08 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:21390 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231868AbiAGE6I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jan 2022 23:58:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=gnH114STT8YnsWgJhc87udMHHLSSILWXx2aVT6ZKp78=;
-        b=IPtQgxNXXye3vrO61LkJ9uDE1W3w/2a5prtcwAumWGMDH716B3ATudCOceRiQIGvVu
-         ClTCAue88GqvjnTOTM/N3WbwI+exZvo3zdgowAkAsPL2PRctIqjiFE2MI2wxVdqXE/lu
-         jz+W6cpabAklUajeNsI2tBV1T9DdwN8MY5rEAACdCkgWlAUwJ06g20jKHfCbcpS31sMu
-         4xls6eLfYI9MF32eqGFhLxSPzKYIV4rTpe92Sy2gMvVxvgMHmAN3t+A9xbAGix973k7P
-         bqQwirW4Ec86gWbMPgV/ZEZRJFtJTV1G5h2NMNRvveodp6hGSGpHA7ohlhHMNgADWvYM
-         GF+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gnH114STT8YnsWgJhc87udMHHLSSILWXx2aVT6ZKp78=;
-        b=JaFCEtDMon1FtjNw54cKoNXIbdHp3uNb0BS0AXGrWUTWPCVcfWgU9TJJm6Gm5iihwt
-         Nvb45+KLZpDNd01DFZfVWAOQCYwnE8VuAR5W14uwY6gegrP/tupLTac/ECPtxm7pgbUm
-         hUI2pS5we9weifRnwgwCxLXaz1Q7rO6ahE838rMOujwo8+LHjCqrv4v92yN0awsPeFxo
-         GvEAp7JJxeWQeYa9tnaUU9GO2ZCtckyFeQlvlD1hstjFkd3nXyJ11Kesu8ILZRcsrpWF
-         cyVkqT3PxHDCdlX1L7SUoMa3q0zQMy2iG3ZvA4zPHuzGIhHdAw64A6yFvTSAQdGLSWze
-         hCYA==
-X-Gm-Message-State: AOAM531Zn0Rywm2bmpAvGCsK2LMRszYm6C+7t2iXQkjOXY1DKYmPDyZA
-        yu3td7HvCZc9oFbXLTIxW8rio2jehs/FH6B1TBo=
-X-Google-Smtp-Source: ABdhPJx/0/4bNwc0VXDEcBX+xyEgn9woQacd0N8S7Y3rirlAECRGPTJF6s8/62NjceRipUETMVA0gg==
-X-Received: by 2002:a17:90b:3a85:: with SMTP id om5mr13434408pjb.145.1641524844899;
-        Thu, 06 Jan 2022 19:07:24 -0800 (PST)
-Received: from VICKYMQLIN-NB1.localdomain ([103.172.116.195])
-        by smtp.gmail.com with ESMTPSA id nk13sm3568005pjb.36.2022.01.06.19.07.22
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 06 Jan 2022 19:07:24 -0800 (PST)
-Date:   Fri, 7 Jan 2022 11:07:19 +0800
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     vladimir.zapolskiy@linaro.org, agross@kernel.org, balbi@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: dwc3: dwc3-qcom: Add missing
- platform_device_put() in dwc3_qcom_acpi_register_core
-Message-ID: <20220107030719.GA1972@VICKYMQLIN-NB1.localdomain>
-References: <83d55401-d8b3-f709-c77a-fa0e09fda27f@linaro.org>
- <20220105065517.6967-1-linmq006@gmail.com>
- <Ydb8LIgZ/xGZ/lYX@kroah.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1641531488; x=1673067488;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=uga+3cVxFTHnol9TYNiQ9BvLxyCVow4Vx6zh3T14HSI=;
+  b=zJjxbUr5LNZk30ADU8tzBDqHxJrp8rHCEF9++vBTwAMIeoRsXsYfyUuu
+   NeU7RLMt4iNTP6JSxXmtcffA5NtHVhkoYuunywSc2Eamz+vMNoGXOg+6T
+   A/p6xEWwQkl+PcjnyIw8uPO0i0rqFk3pHVnqzX6i9m0/WzoQRYob7zpdr
+   c=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Jan 2022 20:58:08 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 20:58:06 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 6 Jan 2022 20:58:06 -0800
+Received: from [10.216.49.32] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 6 Jan 2022
+ 20:58:03 -0800
+Subject: Re: [PATCH v5] usb: host: xhci-plat: Set XHCI_SKIP_PHY_INIT quirk for
+ DWC3 controller
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Doug Anderson" <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>
+References: <1640153383-21036-1-git-send-email-quic_c_sanm@quicinc.com>
+ <Ydb79/twbxLDJB8/@kroah.com>
+From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Message-ID: <d17330f1-d85e-b8c2-9e87-10d109c25abb@quicinc.com>
+Date:   Fri, 7 Jan 2022 10:27:59 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ydb8LIgZ/xGZ/lYX@kroah.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <Ydb79/twbxLDJB8/@kroah.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi greg k-h:
-> > Fixes: 2bc02355f8ba ("usb: dwc3: qcom: Add support for booting with ACPI")
-> > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> > ---
-> > Changes in v2:
-> > - add fixes tag.
-> > - do error handling in a unified way.
-> > - add necessary blank line.
-> > ---
-> >  drivers/usb/dwc3/dwc3-qcom.c | 11 +++++++++--
-> >  1 file changed, 9 insertions(+), 2 deletions(-)
-> 
-> 
-> Does not apply to my tree at all :(
-> 
-> Please rebase and resend.
 
-I see the v1 of this patch has been applied to usb-next branch.
-v2 has some format fixes. I am unsure should I rebase v2 on the top of usb-next?
-I am afraid to introduce more inconvenience.
+On 1/6/2022 7:55 PM, Greg Kroah-Hartman wrote:
+> On Wed, Dec 22, 2021 at 11:39:43AM +0530, Sandeep Maheswaram wrote:
+>> Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
+>> Runtime suspend of phy drivers was failing from DWC3 driver as runtime
+>> usage value is 2 because the phy is initialized from DWC3 and HCD core.
+>> DWC3 manages phy in their core drivers. Set this quirk to avoid phy
+>> initialization in HCD core.
+>>
+>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>> ---
+>> v5:
+>> Added comment to explain the change done.
+>> v4:
+>> Changed pdev->dev.parent->of_node to sysdev->of_node
+>>
+>>   drivers/usb/host/xhci-plat.c | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+>> index c1edcc9..e6014d4 100644
+>> --- a/drivers/usb/host/xhci-plat.c
+>> +++ b/drivers/usb/host/xhci-plat.c
+>> @@ -327,6 +327,14 @@ static int xhci_plat_probe(struct platform_device *pdev)
+>>   					 &xhci->imod_interval);
+>>   	}
+>>   
+>> +	/*
+>> +	 * Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
+>> +	 * DWC3 manages phy in their core drivers. Set this quirk to avoid phy
+>> +	 * initialization in HCD core.
+>> +	 */
+>> +	if (of_device_is_compatible(sysdev->of_node, "snps,dwc3"))
+>> +		xhci->quirks |= XHCI_SKIP_PHY_INIT;
+>> +
+> Why is this function caring about dwc3 stuff?  Shoudn't this be a
+> "generic" device property instead of this device-specific one?
+>
+> thanks,
+>
+> greg k-h
 
-Regards,
-Miaoqian.
+This quirk is set only if required for some controllers (eg: dwc3 & cdns3).
+
+Please check below commit.
+
+https://lore.kernel.org/all/20200918131752.16488-5-mathias.nyman@linux.intel.com/
+
+
+Regards
+
+Sandeep
+
+
