@@ -2,228 +2,212 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D229A487307
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 07:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76760487411
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 09:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbiAGGVo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jan 2022 01:21:44 -0500
-Received: from mga02.intel.com ([134.134.136.20]:8474 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229658AbiAGGVo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 Jan 2022 01:21:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641536504; x=1673072504;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=peUh51/ch4S5Aey4CiEFoGZOCAueaJAeF/t0l0qpJX0=;
-  b=ILmZFo3z3QRzlz00IxcTkh/4W7BRYfsXtGZ2kxlnHoG4qxiTSVhg48aO
-   jyvehDbOhPcAKJz4wCahwDJjuyFosAvIh0kmBgDYSDW20knR9UB52hr7f
-   BdPlsm7s2sgn+iFVaCLBlJrQyjQoPVf0tJt/Nod/Cnv0uX8o8VUTBHv5o
-   TUHGa8MYMxG4cBrVnmdf8B/EQ8FXz+PEMBotp/WCnpEV1258B7+lkPspC
-   WsKUOFneity02AmWaKKCmRHf8jluWd7nO4V4dBVUFhRtPmYUdzMvaZ0Kx
-   SCbYrUUS9Ab2KbCV9t8qTpxgnBQzBCiqE5lXRrzDdZYhUxg/RJK58x+xD
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="230158274"
-X-IronPort-AV: E=Sophos;i="5.88,268,1635231600"; 
-   d="scan'208";a="230158274"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 22:21:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,268,1635231600"; 
-   d="scan'208";a="557174586"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 06 Jan 2022 22:21:42 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n5idB-000IK5-NQ; Fri, 07 Jan 2022 06:21:41 +0000
-Date:   Fri, 07 Jan 2022 14:20:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS WITH WARNING
- 601a5bc1aeef772ab1f47582fd322957799f5ab5
-Message-ID: <61d7dbbb.BcnNoFzWlceVEix+%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1345667AbiAGIWN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jan 2022 03:22:13 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:54114 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236161AbiAGIWN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jan 2022 03:22:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1641543733; x=1673079733;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LfvTOiG0XdYemIQWJcbAv8m5Or6ojIlZCZ9SoiPYxP4=;
+  b=ifBOxEQbyLguaggE7tblIWK5xfiJB1A6dmZPdDqTqcnlsM5XuYnoe3fc
+   W7f1KTNSOvuxQLfzRN4xTmfPBTxd+JzD5gvkgcglrj5x3uVwSZSxbVdWf
+   jwiM3ic57Znj2mxs+UM0e9L5bQbRUtN4JtKXiWTAQofnKN3ohRcrkXsrB
+   g=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 07 Jan 2022 00:22:13 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 00:22:13 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 7 Jan 2022 00:22:12 -0800
+Received: from [10.216.7.60] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Fri, 7 Jan 2022
+ 00:22:09 -0800
+Message-ID: <a2ca96f8-ba41-e861-51f2-3aa051de04b5@quicinc.com>
+Date:   Fri, 7 Jan 2022 13:52:05 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v8] usb: f_fs: Fix use-after-free for epfile
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Felipe Balbi <balbi@kernel.org>, John Keeping <john@metanate.com>,
+        <linux-usb@vger.kernel.org>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>
+References: <1641391526-8737-1-git-send-email-quic_ugoswami@quicinc.com>
+ <Ydb9povYs6YDSIpW@kroah.com>
+From:   Udipto Goswami <quic_ugoswami@quicinc.com>
+In-Reply-To: <Ydb9povYs6YDSIpW@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 601a5bc1aeef772ab1f47582fd322957799f5ab5  usb: gadget: u_audio: Subdevice 0 for capture ctls
+Hi Greg,
 
-Warning reports:
+On 06-01-2022 08:03 pm, Greg Kroah-Hartman wrote:
+> On Wed, Jan 05, 2022 at 07:35:26PM +0530, Udipto Goswami wrote:
+>> Consider a case where ffs_func_eps_disable is called from
+>> ffs_func_disable as part of composition switch and at the
+>> same time ffs_epfile_release get called from userspace.
+>> ffs_epfile_release will free up the read buffer and call
+>> ffs_data_closed which in turn destroys ffs->epfiles and
+>> mark it as NULL. While this was happening the driver has
+>> already initialized the local epfile in ffs_func_eps_disable
+>> which is now freed and waiting to acquire the spinlock. Once
+>> spinlock is acquired the driver proceeds with the stale value
+>> of epfile and tries to free the already freed read buffer
+>> causing use-after-free.
+>>
+>> Following is the illustration of the race:
+>>
+>>        CPU1                                  CPU2
+>>
+>>     ffs_func_eps_disable
+>>     epfiles (local copy)
+>> 					ffs_epfile_release
+>> 					ffs_data_closed
+>> 					if (last file closed)
+>> 					ffs_data_reset
+>> 					ffs_data_clear
+>> 					ffs_epfiles_destroy
+>> spin_lock
+>> dereference epfiles
+>>
+>> Fix this races by taking epfiles local copy & assigning it under
+>> spinlock and if epfiles(local) is null then update it in ffs->epfiles
+>> then finally destroy it.
+>> Extending the scope further from the race, protecting the ep related
+>> structures, and concurrent accesses.
+>>
+>> Fixes: a9e6f83c2df (usb: gadget: f_fs: stop sleeping in
+>> ffs_func_eps_disable)
+> No need to line-wrap this line, the scripts will complain about it :(
+checkpatch didn't give any error for this though.
+>
+>> Reviewed-by: John Keeping <john@metanate.com>
+>> Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
+>> Co-developed-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+>> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+>> ---
+>> v8: Fixed compilation errors from previous version.
+>>
+>>   drivers/usb/gadget/function/f_fs.c | 60 ++++++++++++++++++++++++++++----------
+>>   1 file changed, 45 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+>> index 3c584da..541a4af 100644
+>> --- a/drivers/usb/gadget/function/f_fs.c
+>> +++ b/drivers/usb/gadget/function/f_fs.c
+>> @@ -1711,16 +1711,24 @@ static void ffs_data_put(struct ffs_data *ffs)
+>>   
+>>   static void ffs_data_closed(struct ffs_data *ffs)
+>>   {
+>> +	struct ffs_epfile *epfiles;
+>> +	unsigned long flags;
+>> +
+>>   	ENTER();
+>>   
+>>   	if (atomic_dec_and_test(&ffs->opened)) {
+>>   		if (ffs->no_disconnect) {
+>>   			ffs->state = FFS_DEACTIVATED;
+>> -			if (ffs->epfiles) {
+>> -				ffs_epfiles_destroy(ffs->epfiles,
+>> -						   ffs->eps_count);
+>> -				ffs->epfiles = NULL;
+>> -			}
+>> +			spin_lock_irqsave(&ffs->eps_lock, flags);
+>> +			epfiles = ffs->epfiles;
+>> +			ffs->epfiles = NULL;
+>> +			spin_unlock_irqrestore(&ffs->eps_lock,
+>> +							flags);
+>> +
+>> +			if (epfiles)
+>> +				ffs_epfiles_destroy(epfiles,
+>> +						 ffs->eps_count);
+>> +
+>>   			if (ffs->setup_state == FFS_SETUP_PENDING)
+>>   				__ffs_ep0_stall(ffs);
+>>   		} else {
+>> @@ -1767,14 +1775,27 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
+>>   
+>>   static void ffs_data_clear(struct ffs_data *ffs)
+>>   {
+>> +	struct ffs_epfile *epfiles;
+>> +	unsigned long flags;
+>> +
+>>   	ENTER();
+>>   
+>>   	ffs_closed(ffs);
+>>   
+>>   	BUG_ON(ffs->gadget);
+>>   
+>> -	if (ffs->epfiles)
+>> -		ffs_epfiles_destroy(ffs->epfiles, ffs->eps_count);
+>> +	spin_lock_irqsave(&ffs->eps_lock, flags);
+>> +	epfiles = ffs->epfiles;
+>> +	ffs->epfiles = NULL;
+>> +	spin_unlock_irqrestore(&ffs->eps_lock, flags);
+>> +
+>> +	/*
+>> +	 * potential race possible between ffs_func_eps_disable
+>> +	 * & ffs_epfile_release therefore maintaining a local
+>> +	 * copy of epfile will save us from use-after-free.
+>> +	 */
+>> +	if (epfiles)
+>> +		ffs_epfiles_destroy(epfiles, ffs->eps_count);
+>>   
+>>   	if (ffs->ffs_eventfd)
+>>   		eventfd_ctx_put(ffs->ffs_eventfd);
+>> @@ -1790,7 +1811,6 @@ static void ffs_data_reset(struct ffs_data *ffs)
+>>   
+>>   	ffs_data_clear(ffs);
+>>   
+>> -	ffs->epfiles = NULL;
+>>   	ffs->raw_descs_data = NULL;
+>>   	ffs->raw_descs = NULL;
+>>   	ffs->raw_strings = NULL;
+>> @@ -1870,6 +1890,7 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
+>>   {
+>>   	struct ffs_epfile *epfile, *epfiles;
+>>   	unsigned i, count;
+>> +	unsigned long flags;
+>>   
+>>   	ENTER();
+>>   
+>> @@ -1895,7 +1916,9 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
+>>   		}
+>>   	}
+>>   
+>> +	spin_lock_irqsave(&ffs->eps_lock, flags);
+>>   	ffs->epfiles = epfiles;
+>> +	spin_unlock_irqrestore(&ffs->eps_lock, flags);
+> Why is this lock needed when you set this value?  What is that
+> protecting?
 
-https://lore.kernel.org/linux-usb/202112211923.EfvDjyKL-lkp@intel.com
+Was making it uniform, protection ffs->epfiles all over. Here intention 
+is to protect the operation of epfiles getting assigned to ffs->epfiles 
+so that we protect the ffs->epfiles instance at the time of creation as 
+well.
 
-Warning in current branch:
-
-drivers/usb/renesas_usbhs/mod.c:195:13: warning: variable 'intenb0' set but not used [-Wunused-but-set-variable]
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- arc-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- ia64-allmodconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- ia64-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- riscv-allmodconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- riscv-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- s390-allyesconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-|-- sh-allmodconfig
-|   `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-`-- xtensa-allyesconfig
-    `-- drivers-usb-renesas_usbhs-mod.c:warning:variable-intenb0-set-but-not-used
-
-elapsed time: 869m
-
-configs tested: 130
-configs skipped: 3
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-i386                 randconfig-c001-20220106
-parisc                           alldefconfig
-arm                           stm32_defconfig
-mips                        bcm47xx_defconfig
-powerpc                      ppc40x_defconfig
-s390                       zfcpdump_defconfig
-arm                     eseries_pxa_defconfig
-powerpc                    adder875_defconfig
-sh                        sh7785lcr_defconfig
-sh                        sh7763rdp_defconfig
-sh                            shmin_defconfig
-sh                           se7705_defconfig
-powerpc                      tqm8xx_defconfig
-sh                           se7206_defconfig
-powerpc64                        alldefconfig
-arc                          axs101_defconfig
-powerpc                     taishan_defconfig
-sh                        edosk7705_defconfig
-sh                          r7780mp_defconfig
-mips                      loongson3_defconfig
-ia64                      gensparse_defconfig
-openrisc                    or1ksim_defconfig
-xtensa                  cadence_csp_defconfig
-sh                         ap325rxa_defconfig
-mips                            gpr_defconfig
-arm                  randconfig-c002-20220106
-arm                  randconfig-c002-20220107
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a012-20220106
-x86_64               randconfig-a015-20220106
-x86_64               randconfig-a014-20220106
-x86_64               randconfig-a013-20220106
-x86_64               randconfig-a011-20220106
-x86_64               randconfig-a016-20220106
-i386                 randconfig-a012-20220106
-i386                 randconfig-a016-20220106
-i386                 randconfig-a014-20220106
-i386                 randconfig-a015-20220106
-i386                 randconfig-a011-20220106
-i386                 randconfig-a013-20220106
-s390                 randconfig-r044-20220106
-arc                  randconfig-r043-20220106
-riscv                randconfig-r042-20220106
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-mips                 randconfig-c004-20220106
-arm                  randconfig-c002-20220106
-i386                 randconfig-c001-20220106
-riscv                randconfig-c006-20220106
-powerpc              randconfig-c003-20220106
-x86_64               randconfig-c007-20220106
-s390                 randconfig-c005-20220106
-arm                  colibri_pxa300_defconfig
-mips                       lemote2f_defconfig
-mips                         tb0219_defconfig
-powerpc                 xes_mpc85xx_defconfig
-s390                             alldefconfig
-mips                           ip28_defconfig
-mips                      bmips_stb_defconfig
-i386                 randconfig-a003-20220106
-i386                 randconfig-a005-20220106
-i386                 randconfig-a004-20220106
-i386                 randconfig-a006-20220106
-i386                 randconfig-a002-20220106
-i386                 randconfig-a001-20220106
-x86_64               randconfig-a012-20220107
-x86_64               randconfig-a015-20220107
-x86_64               randconfig-a014-20220107
-x86_64               randconfig-a013-20220107
-x86_64               randconfig-a011-20220107
-x86_64               randconfig-a016-20220107
-x86_64               randconfig-a005-20220106
-x86_64               randconfig-a001-20220106
-x86_64               randconfig-a004-20220106
-x86_64               randconfig-a006-20220106
-x86_64               randconfig-a002-20220106
-x86_64               randconfig-a003-20220106
-s390                 randconfig-r044-20220107
-hexagon              randconfig-r041-20220107
-hexagon              randconfig-r045-20220107
-riscv                randconfig-r042-20220107
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+> thanks,
+>
+> greg k-h
