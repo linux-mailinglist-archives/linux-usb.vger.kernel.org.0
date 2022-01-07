@@ -2,146 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71942487012
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 03:01:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A538487066
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 03:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345330AbiAGCBw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jan 2022 21:01:52 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:38882
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345294AbiAGCBu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jan 2022 21:01:50 -0500
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 8D9A23F17B
-        for <linux-usb@vger.kernel.org>; Fri,  7 Jan 2022 02:01:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641520909;
-        bh=0tdUHwIEzjjxhEbEu8d5q0v4EG4pEmNrosqWtdLydn0=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=ZAJr53YXUUaR2tu7OVrN9GSreHlYI5Ko9TUNNXqLj59sxk8hOBK+/7I0I+hiI8phV
-         Ab/JaQcgqOYHkih8guiImhR21rvdDJFgqnx0J/Qh/gQQf8GOuk51+2lMKrJ1lZ+luD
-         bt70F4aDm2FcdJ4S9hwGSQNeCcZMc0WbmMdNkVzYjpcgmbxH3bZwd+giRF8yc1RDu3
-         iksxaOiEGqRSqSvQWU682qj7GyAGWvn01VN+IcJ0yx/6AK0Qry28CpzBHoZLTixFkC
-         RUSPCQ/hjvFnUjIt5isdLr/ugvpetazWKlxJAhwlQCusqw9g3tMDFLV3+q1EBe0Ekt
-         mthjuKnrteOBg==
-Received: by mail-oi1-f197.google.com with SMTP id t72-20020acaaa4b000000b002c6f0e4294eso3038202oie.6
-        for <linux-usb@vger.kernel.org>; Thu, 06 Jan 2022 18:01:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0tdUHwIEzjjxhEbEu8d5q0v4EG4pEmNrosqWtdLydn0=;
-        b=bYPXnhDmNB4UDRi2Xu4WW/iYrI6C59epl1Ed9daPiuCtGk4IHDqevZOFLqNed0VSco
-         xOYTlPGyPyBVZuiC0SBqsnKl0nguqHhFaDr1sclI2bIK8AJT2Ui0HXTUy/XR3LjHdwkV
-         /iRwA/eSHm9VGS/oVuOsTCaoL2qOVEmplqAX0cURcIyLY6/nC2j8qkKueSPWYkEfNCeg
-         odT/gPwXSa24gPA3sRUku0g+sEJzNTk/P0d4VTPahWKOV7kEcGU6nOtgQglWfvIw6gOm
-         o/HyfFc5FKW0AO0+itnp+nR+AVX7woEsoEP9DiZzjse46DK+e0+lQr68U7al6TrJzVA2
-         k7AQ==
-X-Gm-Message-State: AOAM530KKNCzsmIV5gvW+1rmeyOcDcwzzCTqnJ5yXxQZ4oBo0dwm/JCL
-        P7TmSV6h5jd7jAtNDRAadwERqyPGlCV0wZuNTQuo96IA6eT3JdCgFI5Sy/hniqJinqBSqxqtiU5
-        Gw983FM0l+ON799BhCCvxBhlYeGipUNAVVYOoxse1+3fdXT474ZD/kg==
-X-Received: by 2002:a9d:24e4:: with SMTP id z91mr43366794ota.11.1641520905167;
-        Thu, 06 Jan 2022 18:01:45 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyoKMxqiLZ16B7TmuA/u0QDSkvGiouo9eb0MmzCO53RHn9T1YuaYZSR6xhNxGX/Cs4A4Yrfu/s+WjLnEzx1+Jw=
-X-Received: by 2002:a9d:24e4:: with SMTP id z91mr43366777ota.11.1641520904892;
- Thu, 06 Jan 2022 18:01:44 -0800 (PST)
+        id S1345409AbiAGCbV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jan 2022 21:31:21 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:47483 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345392AbiAGCbU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jan 2022 21:31:20 -0500
+Received: from mail-wm1-f51.google.com ([209.85.128.51]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Md6ZB-1mVV8X2suh-00aALI; Fri, 07 Jan 2022 03:31:18 +0100
+Received: by mail-wm1-f51.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso2175544wme.1;
+        Thu, 06 Jan 2022 18:31:18 -0800 (PST)
+X-Gm-Message-State: AOAM532YdSewgeC5zVPrxViB+szycqARFioOuqPwKzF7DOfngCSxl9qr
+        ux5u6i7e/9Y1tCKBxc/uR9AN+G1ViZPMoFpRC+M=
+X-Google-Smtp-Source: ABdhPJzPjYESERWywY2r/vy27PoJsyUe/sO9mYrCqlCb0tB5N5fglYx3siWs052mww9CA4oxRJdgYwk0eCv1ZWNvEtA=
+X-Received: by 2002:a7b:c190:: with SMTP id y16mr8685720wmi.35.1641522678363;
+ Thu, 06 Jan 2022 18:31:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20220105151427.8373-1-aaron.ma@canonical.com> <YdXVoNFB/Asq6bc/@lunn.ch>
- <bb6d8bc4-abee-8536-ca5b-bac11d1ecd53@suse.com> <YdYbZne6pBZzxSxA@lunn.ch>
- <CAAd53p52uGFjbiuOWAA-1dN7mTqQ0KFe9PxWvPL+fjfQb9K5vQ@mail.gmail.com> <YdbuXbtc64+Knbhm@lunn.ch>
-In-Reply-To: <YdbuXbtc64+Knbhm@lunn.ch>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Fri, 7 Jan 2022 10:01:33 +0800
-Message-ID: <CAAd53p5YnQZ0fDiwwo-q3bNMVFTJSMLcdkUuH-7=OSaRrW954Q@mail.gmail.com>
-Subject: Re: [PATCH 1/3 v3] net: usb: r8152: Check used MAC passthrough address
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Aaron Ma <aaron.ma@canonical.com>, kuba@kernel.org,
-        henning.schild@siemens.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
+References: <20220106225716.7425-1-paskripkin@gmail.com>
+In-Reply-To: <20220106225716.7425-1-paskripkin@gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 6 Jan 2022 21:31:15 -0500
+X-Gmail-Original-Message-ID: <CAK8P3a1tJTcFKfSSXzXRM1NLYacjf=-RYbz54HATxv0WSfu+qw@mail.gmail.com>
+Message-ID: <CAK8P3a1tJTcFKfSSXzXRM1NLYacjf=-RYbz54HATxv0WSfu+qw@mail.gmail.com>
+Subject: Re: [PATCH] net: mcs7830: handle usb read errors properly
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, tanghui20@huawei.com,
+        Andrew Lunn <andrew@lunn.ch>, Oliver Neukum <oneukum@suse.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        syzbot+003c0a286b9af5412510@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:SIguIQGIepHyKd+m+UmjqM0lRVpbV/pQlunQrt5W39xZwXGZejK
+ +pdbkrelzYFXvkwxnV+7keszsCKDfb8zBZ73QcFlEJq35pqY5bBpXX3rNrYWyYlTjwvWQQB
+ BpwLhDpbmw+AuxgzABPWSHKb8rstA19x/hLDG0VjrAQ0pX8IDNfw4hqDPA0CLudaPG6alDA
+ 1x0izyfMDFGCPJQZgmOIw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZtxTtvMqY9U=:tIA7LuSFE3AIcuJ877bcvW
+ g27NHZ1Xb22IAaSdHlqo8g9lgxrsRlRv5uvd+AjlWjJLQTDIj9DzYIMK4NNNXyEdiWPAhEFnm
+ ixlGlP+d1HUeWeBzZufLPtJUe0vc8rQGVtCbyDKzxc85GUY9RwGcskLi8onNGVJXYU1ZcM4MN
+ PPAUEXHjIDhLLUGbTqLcY0yRWlF7azUJEGjyAxRz9G2YDq6sIIIqrzPiZZz/lJFDBe9U9Hsi3
+ 58erfT9fCQG7XvbBFxCGMneqedJERFMcrfLcDcmF0KM4DX0Okaie3zIUT8MvEukfIX/TdonZO
+ 3OPeY/L1M36fKxD/ViykKhw1BDM1MDQPK2tlQV66+OQnMGas33G0fKsazCyGS+nqOrsAl7pyr
+ 8yr6fM3YUZ/6+MiWxYlSfWomCVHvdKjzzZjT/a8rLs3uw9zqBWZXYE/8SM4hyeeYXtO7yUREa
+ kUMyugLDGl+kl2+hOVzWMIzpBCwe6ONi90xWNo4wiHoayd1XIBOjTJgsiACvpeVe5krO5WNQk
+ hNeVSG2OvceUMQK/IhmCE4O0N/ORUMp1xeW3KV9zgm5dV99IM7wMt+wd8RDoL8uyj8GGImMeM
+ RjZIuzhzSc3cbzZaEXaImeeN33QNor03IVbiWPxPpNulyDi6JbDCGZBiZ7iqJmtXgDsy/z/Rz
+ hZN6sR5T+CPq9tDmQNADLtFzH+2/tZ3rHdcP+cGD0LsmcwzxtamtsMGDzLfsFIgSmj7kKr/El
+ ttiwKbEdoIMDxO5qPnkDxZDyB2BNu1JHJl61omPCdQorkLfYjr/qyKYVFtDKWDAedW72cIGzd
+ c0iXHeTZiqzLPScJWWTudMYk0ib3dmCvP+EIsHSYBurfSwMWHs=
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 9:28 PM Andrew Lunn <andrew@lunn.ch> wrote:
+On Thu, Jan 6, 2022 at 5:57 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
 >
-> > Can udev in current form really handle the MAC race? Unless there's a
-> > new uevent right before ndo_open() so udev can decide which MAC to
-> > assign? Even with that, the race can still happen...
+> Syzbot reported uninit value in mcs7830_bind(). The problem was in
+> missing validation check for bytes read via usbnet_read_cmd().
 >
-> There will always be a race, since the kernel can start using the
-> interface before register_netdev() has even finished, before user
-> space is running. Take a look at how NFS root works.
+> usbnet_read_cmd() internally calls usb_control_msg(), that returns
+> number of bytes read. Code should validate that requested number of bytes
+> was actually read.
+>
+> So, this patch adds missing size validation check inside
+> mcs7830_get_reg() to prevent uninit value bugs
+>
+> CC: Arnd Bergmann <arnd@arndb.de>
+> Reported-and-tested-by: syzbot+003c0a286b9af5412510@syzkaller.appspotmail.com
+> Fixes: 2a36d7083438 ("USB: driver for mcs7830 (aka DeLOCK) USB ethernet adapter")
 
-Didn't know that, thanks for the insight.
+Looks good to me.
 
->
-> But in general, you can change the MAC address at any time. Some MAC
-> drivers will return -EBUSY if the interface is up, but that is
-> generally artificial. After a change of MAC address ARP will time out
-> after a while and the link peers will get the new MAC address.
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-I think this makes the whole situation even more complex.
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> ---
+>
+> @Arnd, I am not sure about mcs7830_get_rev() function.
+>
+> Is get_reg(22, 2) == 1 valid read? If so, I think, we should call
+> usbnet_read_cmd() directly here, since other callers care only about
+> negative error values.
 
->
-> >
-> > So what if we keep the existing behavior (i.e. copy MAC from ACPI),
-> > and let userspace daemon like NetworkManager to give the second NIC
-> > (r8152 in this case) a random MAC if the main NIC (I219 in this case)
-> > is already in use? Considering the userspace daemon has the all the
-> > information required and it's the policy maker here.
->
-> You should be thinking of this in more general terms. You want to
-> design a system that will work for any vendors laptop and dock.
->
-> You need to describe the two interfaces using some sort of bus
-> address, be it PCIe, USB, or a platform device address as used by
-> device tree etc.
->
-> Let the kernel do whatever it wants with MAC addresses for these two
-> interfaces. The only requirement you have is that the laptop internal
-> interface gets the vendor allocated MAC address, and that the dock get
-> some sort of MAC address, even if it is random.
+I have no idea, I never had a datasheet for this device, only
+the hardware I bought cheaply and vendor source code I
+found somewhere on the net, and that was 16 years ago.
 
-Those laptops and docks are designed to have duplicated MACs. I don't
-understand why but that's why Dell/HP/Lenovo did.
-What if the kernel just abstract the hardware/firmware as intended, no
-matter how stupid it is, and let userspace to make the right policy?
+I would not expect the hardware to ever return less data than
+was asked for, so any length checking would only have to
+account for attackers that fake this device.
 
->
-> On device creation, udev can check if it now has both interfaces? If
-> the internal interface is up, it is probably in use. Otherwise, take
-> its MAC address and assign it to the dock interface, and give the
-> internal interface a random MAC address, just in case.
->
-> You probably need to delay NetworkManager, systemd-networkkd,
-> /etc/network/interfaces etc, so that they don't do anything until
-> after udevd has settled, indicating all devices have probably been
-> found.
-
-I don't think it's a good idea. On my laptop,
-systemd-udev-settle.service can add extra 5~10 seconds boot time
-delay.
-Furthermore, the external NIC in question is in a USB/Thunderbolt
-dock, it can present pre-boot, or it can be hotplugged at any time.
-
->
-> I suspect you will never get a 100% robust design, but you can
-> probably get it working enough for the cleaning staff and the CEO, who
-> have very simple setups. Power users are going to find all the corner
-> cases and will want to disable the udev rule.
-
-But power users may also need to use corporate network to work as
-Aaron mentioned.
-Packets from unregistered MAC can be filtered under corporate network,
-and that's why MAC pass-through is a useful feature that many business
-laptops have.
-
->
->      Andrew
+         Arnd
