@@ -2,149 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D2B4874A0
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 10:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8133448752D
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 11:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346350AbiAGJZB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jan 2022 04:25:01 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:33666 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbiAGJZB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jan 2022 04:25:01 -0500
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5D7828D7;
-        Fri,  7 Jan 2022 10:24:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1641547499;
-        bh=ZGQxQzksgV3YgZ8qms44B/4BUHwAKeP9hxSX2TQeq2c=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=mJVs8PzVS6A8KQTYSqypXjXuHBN65hJwOcN9oSYsXry6KAjlrKBQhIzkE0gr0brwQ
-         lfzKxGsRvV9oq6HcPQVfWF2Tmaqdx0NwI+UbCdUaWtsFo/wjsBQZVBjYVY536mEOBz
-         iQm8RhlBQJGp2g+KffXKyZEeLgjAd5v3iwp+q0W8=
-Content-Type: text/plain; charset="utf-8"
+        id S1346600AbiAGKEi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jan 2022 05:04:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346595AbiAGKEh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jan 2022 05:04:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D70C061245
+        for <linux-usb@vger.kernel.org>; Fri,  7 Jan 2022 02:04:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3373361EE7
+        for <linux-usb@vger.kernel.org>; Fri,  7 Jan 2022 10:04:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 177DBC36AE0;
+        Fri,  7 Jan 2022 10:04:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641549875;
+        bh=YHZxGaOuK6CLiJfEK3ytcySD08doTB2sKqj+2fLb8ZA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hLXLlwIaesbSjK58eczLK22SDlollE3hPM4vl4QV3+Vc32D/ecVINxeEPauIdRDCc
+         zCjI+tSuDSbKYI1UmcANkfBtiFgW30QhQgjt/nu+eL74skC8M15xl9sM26gPJgi64Y
+         WfWCYfg2AJMYjBruXSRxHM0Apzsx0ldemTNQCF2M=
+Date:   Fri, 7 Jan 2022 11:04:33 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Udipto Goswami <quic_ugoswami@quicinc.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, John Keeping <john@metanate.com>,
+        linux-usb@vger.kernel.org,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>
+Subject: Re: [PATCH v8] usb: f_fs: Fix use-after-free for epfile
+Message-ID: <YdgQMaQtku6jkcHh@kroah.com>
+References: <1641391526-8737-1-git-send-email-quic_ugoswami@quicinc.com>
+ <Ydb9povYs6YDSIpW@kroah.com>
+ <a2ca96f8-ba41-e861-51f2-3aa051de04b5@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <Yddr4rE05cLSj6TE@pengutronix.de>
-References: <20220105115527.3592860-1-m.grzeschik@pengutronix.de> <Yddr4rE05cLSj6TE@pengutronix.de>
-Subject: Re: [PATCH v6 0/7] usb: gadget: uvc: use configfs entries for negotiation and v4l2 VIDIOCS
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     balbi@kernel.org, paul.elder@ideasonboard.com,
-        laurent.pinchart@ideasonboard.com, kernel@pengutronix.de,
-        nicolas@ndufresne.ca
-To:     Michael Grzeschik <mgr@pengutronix.de>, linux-usb@vger.kernel.org
-Date:   Fri, 07 Jan 2022 09:24:57 +0000
-Message-ID: <164154749753.1224575.16682991529695492259@Monstersaurus>
-User-Agent: alot/0.10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a2ca96f8-ba41-e861-51f2-3aa051de04b5@quicinc.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Michael Grzeschik (2022-01-06 22:23:30)
-> Ccing Nicolas and Kieran.
->=20
-> BTW: I have some wip patches in my queue to get isoc support running on
-> the dummy_hcd driver. With those patches, it is easy to test this series
-> on any system (like qemu) without the need of an actual udc device.
->=20
-> If interested, I could improve and send them on the list.
+On Fri, Jan 07, 2022 at 01:52:05PM +0530, Udipto Goswami wrote:
+> Hi Greg,
+> 
+> On 06-01-2022 08:03 pm, Greg Kroah-Hartman wrote:
+> > On Wed, Jan 05, 2022 at 07:35:26PM +0530, Udipto Goswami wrote:
+> > > Consider a case where ffs_func_eps_disable is called from
+> > > ffs_func_disable as part of composition switch and at the
+> > > same time ffs_epfile_release get called from userspace.
+> > > ffs_epfile_release will free up the read buffer and call
+> > > ffs_data_closed which in turn destroys ffs->epfiles and
+> > > mark it as NULL. While this was happening the driver has
+> > > already initialized the local epfile in ffs_func_eps_disable
+> > > which is now freed and waiting to acquire the spinlock. Once
+> > > spinlock is acquired the driver proceeds with the stale value
+> > > of epfile and tries to free the already freed read buffer
+> > > causing use-after-free.
+> > > 
+> > > Following is the illustration of the race:
+> > > 
+> > >        CPU1                                  CPU2
+> > > 
+> > >     ffs_func_eps_disable
+> > >     epfiles (local copy)
+> > > 					ffs_epfile_release
+> > > 					ffs_data_closed
+> > > 					if (last file closed)
+> > > 					ffs_data_reset
+> > > 					ffs_data_clear
+> > > 					ffs_epfiles_destroy
+> > > spin_lock
+> > > dereference epfiles
+> > > 
+> > > Fix this races by taking epfiles local copy & assigning it under
+> > > spinlock and if epfiles(local) is null then update it in ffs->epfiles
+> > > then finally destroy it.
+> > > Extending the scope further from the race, protecting the ep related
+> > > structures, and concurrent accesses.
+> > > 
+> > > Fixes: a9e6f83c2df (usb: gadget: f_fs: stop sleeping in
+> > > ffs_func_eps_disable)
+> > No need to line-wrap this line, the scripts will complain about it :(
+> checkpatch didn't give any error for this though.
 
-I would say, Yes please! Being able to test on a virtual device will
-help in the long run too as automated tests can be set up.
+It's not a checkpatch error, it will show up in the scripts we run on
+commits in our trees.  linux-next will report a problem with this, and
+so I have the same scripts as well.  They were posted to the
+users@kernel.org mailing list a year or so ago if you are curious.  It's
+not a big deal.
 
-And ideally that will then abstract away any hardware / UDC bugs (which
-I have certainly come up against in the past too, when working on UVC).
+> > > Reviewed-by: John Keeping <john@metanate.com>
+> > > Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
+> > > Co-developed-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+> > > Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+> > > ---
+> > > v8: Fixed compilation errors from previous version.
+> > > 
+> > >   drivers/usb/gadget/function/f_fs.c | 60 ++++++++++++++++++++++++++++----------
+> > >   1 file changed, 45 insertions(+), 15 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> > > index 3c584da..541a4af 100644
+> > > --- a/drivers/usb/gadget/function/f_fs.c
+> > > +++ b/drivers/usb/gadget/function/f_fs.c
+> > > @@ -1711,16 +1711,24 @@ static void ffs_data_put(struct ffs_data *ffs)
+> > >   static void ffs_data_closed(struct ffs_data *ffs)
+> > >   {
+> > > +	struct ffs_epfile *epfiles;
+> > > +	unsigned long flags;
+> > > +
+> > >   	ENTER();
+> > >   	if (atomic_dec_and_test(&ffs->opened)) {
+> > >   		if (ffs->no_disconnect) {
+> > >   			ffs->state = FFS_DEACTIVATED;
+> > > -			if (ffs->epfiles) {
+> > > -				ffs_epfiles_destroy(ffs->epfiles,
+> > > -						   ffs->eps_count);
+> > > -				ffs->epfiles = NULL;
+> > > -			}
+> > > +			spin_lock_irqsave(&ffs->eps_lock, flags);
+> > > +			epfiles = ffs->epfiles;
+> > > +			ffs->epfiles = NULL;
+> > > +			spin_unlock_irqrestore(&ffs->eps_lock,
+> > > +							flags);
+> > > +
+> > > +			if (epfiles)
+> > > +				ffs_epfiles_destroy(epfiles,
+> > > +						 ffs->eps_count);
+> > > +
+> > >   			if (ffs->setup_state == FFS_SETUP_PENDING)
+> > >   				__ffs_ep0_stall(ffs);
+> > >   		} else {
+> > > @@ -1767,14 +1775,27 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
+> > >   static void ffs_data_clear(struct ffs_data *ffs)
+> > >   {
+> > > +	struct ffs_epfile *epfiles;
+> > > +	unsigned long flags;
+> > > +
+> > >   	ENTER();
+> > >   	ffs_closed(ffs);
+> > >   	BUG_ON(ffs->gadget);
+> > > -	if (ffs->epfiles)
+> > > -		ffs_epfiles_destroy(ffs->epfiles, ffs->eps_count);
+> > > +	spin_lock_irqsave(&ffs->eps_lock, flags);
+> > > +	epfiles = ffs->epfiles;
+> > > +	ffs->epfiles = NULL;
+> > > +	spin_unlock_irqrestore(&ffs->eps_lock, flags);
+> > > +
+> > > +	/*
+> > > +	 * potential race possible between ffs_func_eps_disable
+> > > +	 * & ffs_epfile_release therefore maintaining a local
+> > > +	 * copy of epfile will save us from use-after-free.
+> > > +	 */
+> > > +	if (epfiles)
+> > > +		ffs_epfiles_destroy(epfiles, ffs->eps_count);
+> > >   	if (ffs->ffs_eventfd)
+> > >   		eventfd_ctx_put(ffs->ffs_eventfd);
+> > > @@ -1790,7 +1811,6 @@ static void ffs_data_reset(struct ffs_data *ffs)
+> > >   	ffs_data_clear(ffs);
+> > > -	ffs->epfiles = NULL;
+> > >   	ffs->raw_descs_data = NULL;
+> > >   	ffs->raw_descs = NULL;
+> > >   	ffs->raw_strings = NULL;
+> > > @@ -1870,6 +1890,7 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
+> > >   {
+> > >   	struct ffs_epfile *epfile, *epfiles;
+> > >   	unsigned i, count;
+> > > +	unsigned long flags;
+> > >   	ENTER();
+> > > @@ -1895,7 +1916,9 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
+> > >   		}
+> > >   	}
+> > > +	spin_lock_irqsave(&ffs->eps_lock, flags);
+> > >   	ffs->epfiles = epfiles;
+> > > +	spin_unlock_irqrestore(&ffs->eps_lock, flags);
+> > Why is this lock needed when you set this value?  What is that
+> > protecting?
+> 
+> Was making it uniform, protection ffs->epfiles all over. Here intention is
+> to protect the operation of epfiles getting assigned to ffs->epfiles so that
+> we protect the ffs->epfiles instance at the time of creation as well.
 
-Thanks
+But it is not needed here, so no need to add it.
 
-Kieran
+thanks,
 
->=20
-> Thanks,
-> Michael
->=20
-> On Wed, Jan 05, 2022 at 12:55:20PM +0100, Michael Grzeschik wrote:
-> >This series improves the uvc video gadget by parsing the configfs
-> >entries. With the configfs data, the driver now is able to negotiate the
-> >format with the usb host in the kernel and also exports the supported
-> >frames/formats/intervals via the v4l2 VIDIOC interface.
-> >
-> >The uvc userspace stack is also under development. One example is an gen=
-eric
-> >v4l2uvcsink gstreamer elemnt, which is currently under duiscussion. [1]
-> >
-> >[1] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/=
-1304
-> >
-> >With the libusbgx library [1] used by the gadget-tool [2] it is now also
-> >possible to fully describe the configfs layout of the uvc gadget with sc=
-heme
-> >files.
-> >
-> >[2] https://github.com/linux-usb-gadgets/libusbgx/pull/61/commits/53231c=
-76f9d512f59fdc23b65cd5c46b7fb09eb4
-> >
-> >[3] https://github.com/linux-usb-gadgets/gt/tree/master/examples/systemd
-> >
-> >The bigger picture of these patches is to provide a more versatile inter=
-face to
-> >the uvc gadget. The goal is to simply start a uvc-gadget with the follow=
-ing
-> >commands:
-> >
-> >$ gt load uvc.scheme
-> >$ gst-launch v4l2src ! v4l2uvcsink
-> >
-> >--
-> >
-> >v1: https://lore.kernel.org/linux-usb/20210530222239.8793-1-m.grzeschik@=
-pengutronix.de/
-> >v2: https://lore.kernel.org/linux-usb/20211117004432.3763306-1-m.grzesch=
-ik@pengutronix.de/
-> >v3: https://lore.kernel.org/linux-usb/20211117122435.2409362-1-m.grzesch=
-ik@pengutronix.de/
-> >v4: https://lore.kernel.org/linux-usb/20211205225803.268492-1-m.grzeschi=
-k@pengutronix.de/
-> >v5: https://lore.kernel.org/linux-usb/20211209084322.2662616-1-m.grzesch=
-ik@pengutronix.de/
-> >
-> >Regards,
-> >Michael
-> >
-> >Michael Grzeschik (7):
-> >  media: v4l: move helper functions for fractions from uvc to
-> >    v4l2-common
-> >  media: uvcvideo: move uvc_format_desc to common header
-> >  usb: gadget: uvc: prevent index variables to start from 0
-> >  usb: gadget: uvc: move structs to common header
-> >  usb: gadget: uvc: track frames in format entries
-> >  usb: gadget: uvc: add VIDIOC function
-> >  usb: gadget: uvc: add format/frame handling code
-> >
-> > drivers/media/usb/uvc/uvc_ctrl.c           |   1 +
-> > drivers/media/usb/uvc/uvc_driver.c         | 281 +-------------
-> > drivers/media/usb/uvc/uvc_v4l2.c           |  14 +-
-> > drivers/media/usb/uvc/uvcvideo.h           | 144 --------
-> > drivers/media/v4l2-core/v4l2-common.c      |  82 +++++
-> > drivers/usb/gadget/function/f_uvc.c        | 263 +++++++++++++-
-> > drivers/usb/gadget/function/uvc.h          |  38 +-
-> > drivers/usb/gadget/function/uvc_configfs.c | 148 ++------
-> > drivers/usb/gadget/function/uvc_configfs.h | 120 +++++-
-> > drivers/usb/gadget/function/uvc_queue.c    |   3 +-
-> > drivers/usb/gadget/function/uvc_v4l2.c     | 404 ++++++++++++++++++---
-> > drivers/usb/gadget/function/uvc_video.c    |  71 +++-
-> > include/media/v4l2-common.h                |   4 +
-> > include/media/v4l2-uvc.h                   | 351 ++++++++++++++++++
-> > 14 files changed, 1319 insertions(+), 605 deletions(-)
-> > create mode 100644 include/media/v4l2-uvc.h
-> >
-> >--=20
-> >2.30.2
-> >
-> >
-> >
->=20
-> --=20
-> Pengutronix e.K.                           |                             |
-> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+greg k-h
