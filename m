@@ -2,212 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76760487411
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 09:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B9E487470
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 10:05:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345667AbiAGIWN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jan 2022 03:22:13 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:54114 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236161AbiAGIWN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jan 2022 03:22:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1641543733; x=1673079733;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=LfvTOiG0XdYemIQWJcbAv8m5Or6ojIlZCZ9SoiPYxP4=;
-  b=ifBOxEQbyLguaggE7tblIWK5xfiJB1A6dmZPdDqTqcnlsM5XuYnoe3fc
-   W7f1KTNSOvuxQLfzRN4xTmfPBTxd+JzD5gvkgcglrj5x3uVwSZSxbVdWf
-   jwiM3ic57Znj2mxs+UM0e9L5bQbRUtN4JtKXiWTAQofnKN3ohRcrkXsrB
-   g=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 07 Jan 2022 00:22:13 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 00:22:13 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Fri, 7 Jan 2022 00:22:12 -0800
-Received: from [10.216.7.60] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Fri, 7 Jan 2022
- 00:22:09 -0800
-Message-ID: <a2ca96f8-ba41-e861-51f2-3aa051de04b5@quicinc.com>
-Date:   Fri, 7 Jan 2022 13:52:05 +0530
+        id S1346336AbiAGJFI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jan 2022 04:05:08 -0500
+Received: from mail-bn1nam07on2073.outbound.protection.outlook.com ([40.107.212.73]:36905
+        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1346331AbiAGJFH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 Jan 2022 04:05:07 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UwiBIclXoLAUHs6GB0otnozO9FVk0S0EF79UZUavExFrx3lopou0a79i8gbH9nAK9zDDqwZJEZ0FJrQvGGCcN0Uz4Yro5ZmDUV1WVpVSbEt5AZqzLLcVDW61dW/DqDhbd360euf0qPjdJsaFRcehczU+zbiQehHzk9JXY+fSyfNzoHLKbzFaa4EGUYXyGlAGWuidukurNOjWBq6x4AuUMuzoiGZzEB/k5Eg4KENagvCrNfQF5ox6K7oG23evRNnthZFnss6puP6YeMlSGr1eAjEp6pa6jUjaltbY8FXVW4DJRkybeMlCwVSqkvqNf/3MnC+MKWrSQtzdfWfd7Lv8Ig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k8AaTW2kKYZg8KNPUH7u1v3H7KwhOqhh642x4E46P7I=;
+ b=AJrfq3TgJCVbP/K+USLKcHAHzeleHuocKliL8dJg0uE9uTT53CBKPKvyD5k4wgZPo/XUqVoIqptgGhAv8uC8vRGBzEI8hRpoRGzNwRX3uetacs+mycHX2+mWPvBheeg9csnM+Pyj+PpTDHeT3iphTUSkT4RHJLxbHaZYJ9tbmm4OfFAZGOdU/8VqySmvfX4e+8mM5TwrfOmIQgK43ppfsdsHfV+hWL9nzVFbES/P0QMcsetxirnEcn0x+nxFDdrIHC4sBvcGcEu4F8VONrrXmSvBg7bFqoHwn/5lQNi8KqJQXNJFJa4qHjvGi7iyrbO8rP0sGKQvHXAqHCnV7OMN3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k8AaTW2kKYZg8KNPUH7u1v3H7KwhOqhh642x4E46P7I=;
+ b=XcNhj+CmwzF9SP5QHMciwov/gHi1/gICByRU7YR9Um5ptGuW9xAI24Sd3Mrzowx4NkHCVkJGQkfSaQsk9p2HmX1IqKJt23Lv6vNluW4dz8SRPbxaOMZRxyps+R5MzgGvTCGx9hZYIQyi5M66mQQyHYxtKoOp452B8qbu2VNazupvArzndRlwIrq7Va4gi26G5Bj5k9nMAeWFySteP5AtuNLZs3XRxboMORNlqSMF6PcWDU43WD/basIdPj3AtHJC+ybZrPa3vez4OFgUTjR1T8ECFEbWxIeLlyW1If+Crxa64Rp33Ne1SSUmlSUNQtFO20iubQ5sl7kKJNFnaDeZ1A==
+Received: from MW4PR04CA0134.namprd04.prod.outlook.com (2603:10b6:303:84::19)
+ by SN1PR12MB2447.namprd12.prod.outlook.com (2603:10b6:802:27::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Fri, 7 Jan
+ 2022 09:05:05 +0000
+Received: from CO1NAM11FT016.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:84:cafe::9a) by MW4PR04CA0134.outlook.office365.com
+ (2603:10b6:303:84::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14 via Frontend
+ Transport; Fri, 7 Jan 2022 09:05:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.235) by
+ CO1NAM11FT016.mail.protection.outlook.com (10.13.175.141) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4867.9 via Frontend Transport; Fri, 7 Jan 2022 09:05:04 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 7 Jan
+ 2022 09:05:03 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 7 Jan
+ 2022 09:05:03 +0000
+Received: from waynec-Precision-5760.nvidia.com (172.20.187.6) by
+ mail.nvidia.com (172.20.187.12) with Microsoft SMTP Server id 15.0.1497.18
+ via Frontend Transport; Fri, 7 Jan 2022 09:05:00 +0000
+From:   Wayne Chang <waynec@nvidia.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>
+CC:     <zhangqilong3@huawei.com>, <yangyingliang@huawei.com>,
+        <rikard.falkeborn@gmail.com>, <chunfeng.yun@mediatek.com>,
+        <waynec@nvidia.com>, <linux-usb@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/1] usb: gadget: tegra-xudc: Do not program SPARAM
+Date:   Fri, 7 Jan 2022 17:04:43 +0800
+Message-ID: <20220107090443.149021-1-waynec@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v8] usb: f_fs: Fix use-after-free for epfile
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Felipe Balbi <balbi@kernel.org>, John Keeping <john@metanate.com>,
-        <linux-usb@vger.kernel.org>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>
-References: <1641391526-8737-1-git-send-email-quic_ugoswami@quicinc.com>
- <Ydb9povYs6YDSIpW@kroah.com>
-From:   Udipto Goswami <quic_ugoswami@quicinc.com>
-In-Reply-To: <Ydb9povYs6YDSIpW@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1d702ae6-3b48-4a5f-d3ba-08d9d1bccb70
+X-MS-TrafficTypeDiagnostic: SN1PR12MB2447:EE_
+X-Microsoft-Antispam-PRVS: <SN1PR12MB2447753A08CE7BFA90081214AF4D9@SN1PR12MB2447.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EOWmW/PX2i18DWnOZoOMwnua0RSYFOXeWlHH94tvkmR8HV8/x4mLaVGn9vRpC3oUr44JzH0XI9aWMGs+JqmGuVguUKdjPeb3BgvthNpWufOzSvXHlFsKbOmAaJDQyRSdTZjfEHNIBCF/qf0BjSwH7NhQKpz3kr6+H6/Pb5J+i/kaHE0UWFotPXlGzVlCSZBSSsH/PaqgLdOhQYlRYMqgb4yGsHDHNqkFnLnhqaBhBP7po6LvuunPv/vilS33i2kTWvt8nvqBYWywAtsKtZ2bIY/O2419Aj0/BOk3pn6L4NTeXWEGCDuqKuYxd6X+8pe5wB+WIfisy49wirvPwaWyoZ6CVhDh5KPf+p7UDV10Tp/1133Fi81EOLI3wkxR33b6THhDWBSI02YEAYrpjENcJNp+MlO8dZjU7sBo1FmwVGSS3ZfnHRlC/OW0Y1LTbVRajcc8T7b7ENcUK56PtFAy14JCDJULg0AS3jk3Lb2hYndDoQsHgpJGpqMBy+geufErNGz+3DjRNWpiKnpuk0cPhqkNXe41VRsbbG2m49ZZjZ+qntfl1AIlKRKM9TXGCmmFbBCgNAATk7LtuiVZCnRBIvtDwj6yf6MCyliUQi9N//Fnu2NrCev/g53MIQzhwge6rnRJYG/E2lInDdWQmqCkUsMYH1+/HO+FmtV550Y0I8YNj6OSxjA5HDVCdk3kspsD1Fi40Tw+meiifuRKwxKNNg0ooE8zZtv5IpOxY4KTjRrmGiK8JAjUb/koGlyp+e8ZyV//yEHitOUujGPxX+CwyWzWhUQNC7ed8ZuvBIu70H8=
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700002)(4326008)(36860700001)(47076005)(83380400001)(5660300002)(6666004)(81166007)(356005)(316002)(36756003)(82310400004)(1076003)(7416002)(26005)(2616005)(86362001)(54906003)(70206006)(336012)(70586007)(2906002)(110136005)(186003)(426003)(6636002)(7696005)(8676002)(40460700001)(8936002)(508600001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2022 09:05:04.5611
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1d702ae6-3b48-4a5f-d3ba-08d9d1bccb70
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT016.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2447
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+According to the Tegra Technical Reference Manual, SPARAM
+is a read-only register and should not be programmed in
+the driver.
 
-On 06-01-2022 08:03 pm, Greg Kroah-Hartman wrote:
-> On Wed, Jan 05, 2022 at 07:35:26PM +0530, Udipto Goswami wrote:
->> Consider a case where ffs_func_eps_disable is called from
->> ffs_func_disable as part of composition switch and at the
->> same time ffs_epfile_release get called from userspace.
->> ffs_epfile_release will free up the read buffer and call
->> ffs_data_closed which in turn destroys ffs->epfiles and
->> mark it as NULL. While this was happening the driver has
->> already initialized the local epfile in ffs_func_eps_disable
->> which is now freed and waiting to acquire the spinlock. Once
->> spinlock is acquired the driver proceeds with the stale value
->> of epfile and tries to free the already freed read buffer
->> causing use-after-free.
->>
->> Following is the illustration of the race:
->>
->>        CPU1                                  CPU2
->>
->>     ffs_func_eps_disable
->>     epfiles (local copy)
->> 					ffs_epfile_release
->> 					ffs_data_closed
->> 					if (last file closed)
->> 					ffs_data_reset
->> 					ffs_data_clear
->> 					ffs_epfiles_destroy
->> spin_lock
->> dereference epfiles
->>
->> Fix this races by taking epfiles local copy & assigning it under
->> spinlock and if epfiles(local) is null then update it in ffs->epfiles
->> then finally destroy it.
->> Extending the scope further from the race, protecting the ep related
->> structures, and concurrent accesses.
->>
->> Fixes: a9e6f83c2df (usb: gadget: f_fs: stop sleeping in
->> ffs_func_eps_disable)
-> No need to line-wrap this line, the scripts will complain about it :(
-checkpatch didn't give any error for this though.
->
->> Reviewed-by: John Keeping <john@metanate.com>
->> Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
->> Co-developed-by: Udipto Goswami <quic_ugoswami@quicinc.com>
->> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
->> ---
->> v8: Fixed compilation errors from previous version.
->>
->>   drivers/usb/gadget/function/f_fs.c | 60 ++++++++++++++++++++++++++++----------
->>   1 file changed, 45 insertions(+), 15 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
->> index 3c584da..541a4af 100644
->> --- a/drivers/usb/gadget/function/f_fs.c
->> +++ b/drivers/usb/gadget/function/f_fs.c
->> @@ -1711,16 +1711,24 @@ static void ffs_data_put(struct ffs_data *ffs)
->>   
->>   static void ffs_data_closed(struct ffs_data *ffs)
->>   {
->> +	struct ffs_epfile *epfiles;
->> +	unsigned long flags;
->> +
->>   	ENTER();
->>   
->>   	if (atomic_dec_and_test(&ffs->opened)) {
->>   		if (ffs->no_disconnect) {
->>   			ffs->state = FFS_DEACTIVATED;
->> -			if (ffs->epfiles) {
->> -				ffs_epfiles_destroy(ffs->epfiles,
->> -						   ffs->eps_count);
->> -				ffs->epfiles = NULL;
->> -			}
->> +			spin_lock_irqsave(&ffs->eps_lock, flags);
->> +			epfiles = ffs->epfiles;
->> +			ffs->epfiles = NULL;
->> +			spin_unlock_irqrestore(&ffs->eps_lock,
->> +							flags);
->> +
->> +			if (epfiles)
->> +				ffs_epfiles_destroy(epfiles,
->> +						 ffs->eps_count);
->> +
->>   			if (ffs->setup_state == FFS_SETUP_PENDING)
->>   				__ffs_ep0_stall(ffs);
->>   		} else {
->> @@ -1767,14 +1775,27 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
->>   
->>   static void ffs_data_clear(struct ffs_data *ffs)
->>   {
->> +	struct ffs_epfile *epfiles;
->> +	unsigned long flags;
->> +
->>   	ENTER();
->>   
->>   	ffs_closed(ffs);
->>   
->>   	BUG_ON(ffs->gadget);
->>   
->> -	if (ffs->epfiles)
->> -		ffs_epfiles_destroy(ffs->epfiles, ffs->eps_count);
->> +	spin_lock_irqsave(&ffs->eps_lock, flags);
->> +	epfiles = ffs->epfiles;
->> +	ffs->epfiles = NULL;
->> +	spin_unlock_irqrestore(&ffs->eps_lock, flags);
->> +
->> +	/*
->> +	 * potential race possible between ffs_func_eps_disable
->> +	 * & ffs_epfile_release therefore maintaining a local
->> +	 * copy of epfile will save us from use-after-free.
->> +	 */
->> +	if (epfiles)
->> +		ffs_epfiles_destroy(epfiles, ffs->eps_count);
->>   
->>   	if (ffs->ffs_eventfd)
->>   		eventfd_ctx_put(ffs->ffs_eventfd);
->> @@ -1790,7 +1811,6 @@ static void ffs_data_reset(struct ffs_data *ffs)
->>   
->>   	ffs_data_clear(ffs);
->>   
->> -	ffs->epfiles = NULL;
->>   	ffs->raw_descs_data = NULL;
->>   	ffs->raw_descs = NULL;
->>   	ffs->raw_strings = NULL;
->> @@ -1870,6 +1890,7 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
->>   {
->>   	struct ffs_epfile *epfile, *epfiles;
->>   	unsigned i, count;
->> +	unsigned long flags;
->>   
->>   	ENTER();
->>   
->> @@ -1895,7 +1916,9 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
->>   		}
->>   	}
->>   
->> +	spin_lock_irqsave(&ffs->eps_lock, flags);
->>   	ffs->epfiles = epfiles;
->> +	spin_unlock_irqrestore(&ffs->eps_lock, flags);
-> Why is this lock needed when you set this value?  What is that
-> protecting?
+The change removes the wrong SPARAM usage.
 
-Was making it uniform, protection ffs->epfiles all over. Here intention 
-is to protect the operation of epfiles getting assigned to ffs->epfiles 
-so that we protect the ffs->epfiles instance at the time of creation as 
-well.
+Signed-off-by: Wayne Chang <waynec@nvidia.com>
+---
+ drivers/usb/gadget/udc/tegra-xudc.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
->
-> thanks,
->
-> greg k-h
+diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
+index 43f1b0d461c1..716d9ab2d2ff 100644
+--- a/drivers/usb/gadget/udc/tegra-xudc.c
++++ b/drivers/usb/gadget/udc/tegra-xudc.c
+@@ -32,9 +32,6 @@
+ #include <linux/workqueue.h>
+ 
+ /* XUSB_DEV registers */
+-#define SPARAM 0x000
+-#define  SPARAM_ERSTMAX_MASK GENMASK(20, 16)
+-#define  SPARAM_ERSTMAX(x) (((x) << 16) & SPARAM_ERSTMAX_MASK)
+ #define DB 0x004
+ #define  DB_TARGET_MASK GENMASK(15, 8)
+ #define  DB_TARGET(x) (((x) << 8) & DB_TARGET_MASK)
+@@ -3295,11 +3292,6 @@ static void tegra_xudc_init_event_ring(struct tegra_xudc *xudc)
+ 	unsigned int i;
+ 	u32 val;
+ 
+-	val = xudc_readl(xudc, SPARAM);
+-	val &= ~(SPARAM_ERSTMAX_MASK);
+-	val |= SPARAM_ERSTMAX(XUDC_NR_EVENT_RINGS);
+-	xudc_writel(xudc, val, SPARAM);
+-
+ 	for (i = 0; i < ARRAY_SIZE(xudc->event_ring); i++) {
+ 		memset(xudc->event_ring[i], 0, XUDC_EVENT_RING_SIZE *
+ 		       sizeof(*xudc->event_ring[i]));
+-- 
+2.25.1
+
