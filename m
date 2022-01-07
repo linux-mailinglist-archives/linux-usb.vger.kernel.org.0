@@ -2,139 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD38D487090
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 03:37:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BCB8487102
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 04:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345481AbiAGCh6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jan 2022 21:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
+        id S1345476AbiAGDH0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jan 2022 22:07:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345477AbiAGCh6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jan 2022 21:37:58 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D59C061245;
-        Thu,  6 Jan 2022 18:37:57 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id p5so5578050ybd.13;
-        Thu, 06 Jan 2022 18:37:57 -0800 (PST)
+        with ESMTP id S229462AbiAGDHZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jan 2022 22:07:25 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54853C061245;
+        Thu,  6 Jan 2022 19:07:25 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id p14so3873613plf.3;
+        Thu, 06 Jan 2022 19:07:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=wypQ1B8KjY0Soft/ehKx+C81O0i047qr+0bKMSezlyE=;
-        b=ZSX0AjZWzsMncHFPoSX4wVtu1ShqU4f2e74sB1+uyHDZK78jKKLH1ISljHHZRTTwTc
-         25HA7V46+Qj8snps1JcRhzt6PKLKnLnCi7Zlw0CdDNrAIXZGPudIYybqRL0bls3RfqHq
-         /Kzegt1a3hUCQ0P5NIENkt5M6O0Vv2ftw4l3GbPZOQ5a0RVu68x8l/NHHNuHJ4Q3if+7
-         s1fMTHNiLdU4QtQ8bhRYKSvLioICBuQIKjJvkRWY35gi/T8u6sUd7LIlqIyQOXGYj+Pb
-         Nd1icj15dEzjRsVPJuJGHxwK3Y0gmsVtNYiG9ecBfV7J7svkunGnj728nIrXZvIe2FvT
-         2ZhQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=gnH114STT8YnsWgJhc87udMHHLSSILWXx2aVT6ZKp78=;
+        b=IPtQgxNXXye3vrO61LkJ9uDE1W3w/2a5prtcwAumWGMDH716B3ATudCOceRiQIGvVu
+         ClTCAue88GqvjnTOTM/N3WbwI+exZvo3zdgowAkAsPL2PRctIqjiFE2MI2wxVdqXE/lu
+         jz+W6cpabAklUajeNsI2tBV1T9DdwN8MY5rEAACdCkgWlAUwJ06g20jKHfCbcpS31sMu
+         4xls6eLfYI9MF32eqGFhLxSPzKYIV4rTpe92Sy2gMvVxvgMHmAN3t+A9xbAGix973k7P
+         bqQwirW4Ec86gWbMPgV/ZEZRJFtJTV1G5h2NMNRvveodp6hGSGpHA7ohlhHMNgADWvYM
+         GF+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wypQ1B8KjY0Soft/ehKx+C81O0i047qr+0bKMSezlyE=;
-        b=4ZWuj0lO6z835oxY9ew72p3n4KD+kxbzoEZJVH84o7hy1jSFZwJkU+Icrprz4xr5xc
-         oN6sBeGvq/a6uDQVHqO0Q8uEq6XdW/3NKylH1cH3VpiQzp2hAjuDekPG86QgDNFmwrti
-         0ZADNBD2ibJJ6CLBaQ8Y87n9aN03gJ95QUl4KMWkgtA2sddfe+oxZHAnjFhLbM5QZ/OT
-         Uu+mU+/k7NhafASt3c5YVam2x3kdA3rS44AmaqEx0qAC9bGgSMO01sl/YdRkbtu8Nasc
-         RT4tQ3baP7bWTSU/5mnU884Rl7mT9+Fu/pE6rZPHjqALWXgrJPasd94M7liorbNVSWXQ
-         R0eA==
-X-Gm-Message-State: AOAM533xZvD2u3hcmdrpnAWQqjiHvFQBtexqgn954iLTuvqYTSc5X0VH
-        eXu8f6PqgV2kqbyWC0sJcmvOwcVlsUGmfyyKJuE=
-X-Google-Smtp-Source: ABdhPJybXPBDx44szVsqBODATOKTyxDlPIW2nev+koeFPjJaw5evJtOELlJDPHAZrh6W02kLH7gbmQMEad0DAT9uxNs=
-X-Received: by 2002:a25:8a:: with SMTP id 132mr63689371yba.738.1641523077116;
- Thu, 06 Jan 2022 18:37:57 -0800 (PST)
-MIME-Version: 1.0
-References: <20220105040439.3182-1-jj251510319013@gmail.com> <Ydb+L+wXfKzXyma9@kroah.com>
-In-Reply-To: <Ydb+L+wXfKzXyma9@kroah.com>
-From:   =?UTF-8?B?6Zmz5YGJ6YqY?= <jj251510319013@gmail.com>
-Date:   Fri, 7 Jan 2022 10:37:19 +0800
-Message-ID: <CAJwFiG+caDOp48R+EMATi9W_hCt-SBoEeeeEK8XGuRWai=bYug@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: function: Fix returning incorrect PNP string
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=gnH114STT8YnsWgJhc87udMHHLSSILWXx2aVT6ZKp78=;
+        b=JaFCEtDMon1FtjNw54cKoNXIbdHp3uNb0BS0AXGrWUTWPCVcfWgU9TJJm6Gm5iihwt
+         Nvb45+KLZpDNd01DFZfVWAOQCYwnE8VuAR5W14uwY6gegrP/tupLTac/ECPtxm7pgbUm
+         hUI2pS5we9weifRnwgwCxLXaz1Q7rO6ahE838rMOujwo8+LHjCqrv4v92yN0awsPeFxo
+         GvEAp7JJxeWQeYa9tnaUU9GO2ZCtckyFeQlvlD1hstjFkd3nXyJ11Kesu8ILZRcsrpWF
+         cyVkqT3PxHDCdlX1L7SUoMa3q0zQMy2iG3ZvA4zPHuzGIhHdAw64A6yFvTSAQdGLSWze
+         hCYA==
+X-Gm-Message-State: AOAM531Zn0Rywm2bmpAvGCsK2LMRszYm6C+7t2iXQkjOXY1DKYmPDyZA
+        yu3td7HvCZc9oFbXLTIxW8rio2jehs/FH6B1TBo=
+X-Google-Smtp-Source: ABdhPJx/0/4bNwc0VXDEcBX+xyEgn9woQacd0N8S7Y3rirlAECRGPTJF6s8/62NjceRipUETMVA0gg==
+X-Received: by 2002:a17:90b:3a85:: with SMTP id om5mr13434408pjb.145.1641524844899;
+        Thu, 06 Jan 2022 19:07:24 -0800 (PST)
+Received: from VICKYMQLIN-NB1.localdomain ([103.172.116.195])
+        by smtp.gmail.com with ESMTPSA id nk13sm3568005pjb.36.2022.01.06.19.07.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 06 Jan 2022 19:07:24 -0800 (PST)
+Date:   Fri, 7 Jan 2022 11:07:19 +0800
+From:   Miaoqian Lin <linmq006@gmail.com>
 To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        balbi@kernel.org,
-        =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc:     vladimir.zapolskiy@linaro.org, agross@kernel.org, balbi@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: dwc3: dwc3-qcom: Add missing
+ platform_device_put() in dwc3_qcom_acpi_register_core
+Message-ID: <20220107030719.GA1972@VICKYMQLIN-NB1.localdomain>
+References: <83d55401-d8b3-f709-c77a-fa0e09fda27f@linaro.org>
+ <20220105065517.6967-1-linmq006@gmail.com>
+ <Ydb8LIgZ/xGZ/lYX@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ydb8LIgZ/xGZ/lYX@kroah.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greg KH <gregkh@linuxfoundation.org> =E6=96=BC 2022=E5=B9=B41=E6=9C=886=E6=
-=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:35=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> On Wed, Jan 05, 2022 at 12:04:39PM +0800, Wei Ming Chen wrote:
-> > There will be 2 leading bytes indicating the total length of
-> > the PNP string, so I think we should add value by 2, otherwise
-> > the PNP string copied to user will not contain the last 2 bytes
-> >
-> > Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
+Hi greg k-h:
+> > Fixes: 2bc02355f8ba ("usb: dwc3: qcom: Add support for booting with ACPI")
+> > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 > > ---
-> >  drivers/usb/gadget/function/f_printer.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadg=
-et/function/f_printer.c
-> > index abec5c58f525..3fb00fd0b5ee 100644
-> > --- a/drivers/usb/gadget/function/f_printer.c
-> > +++ b/drivers/usb/gadget/function/f_printer.c
-> > @@ -1005,9 +1005,11 @@ static int printer_func_setup(struct usb_functio=
-n *f,
-> >                               break;
-> >                       }
-> >                       value =3D strlen(dev->pnp_string);
-> > +                     memcpy(buf + 2, dev->pnp_string, value);
-> > +
-> > +                     value +=3D 2;
-> >                       buf[0] =3D (value >> 8) & 0xFF;
-> >                       buf[1] =3D value & 0xFF;
-> > -                     memcpy(buf + 2, dev->pnp_string, value);
-> >                       DBG(dev, "1284 PNP String: %x %s\n", value,
-> >                           dev->pnp_string);
-> >                       break;
-> > --
-> > 2.25.1
-> >
->
-> Are you sure this is correct?
->
-> How is this related to this recent thread:
->         https://lore.kernel.org/all/CAKjGFBUdjXcZoVV4jdrgTz4rKThTfZAK4Cqr=
-eKmBZ4KHE+K1GA@mail.gmail.com/#t
->
-> your change is different from what is proposed there, why?
+> > Changes in v2:
+> > - add fixes tag.
+> > - do error handling in a unified way.
+> > - add necessary blank line.
+> > ---
+> >  drivers/usb/dwc3/dwc3-qcom.c | 11 +++++++++--
+> >  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> 
+> Does not apply to my tree at all :(
+> 
+> Please rebase and resend.
 
-I didn=E2=80=99t notice this thread before I send this patch, I think the
-concept of my change is similar to Volodymyr Lisivka=E2=80=99s change, he/s=
-he
-introduced a separate variable for the PNP string length, I think it
-may be clearer and more readable than just =E2=80=9Cvalue +=3D 2=E2=80=9D
+I see the v1 of this patch has been applied to usb-next branch.
+v2 has some format fixes. I am unsure should I rebase v2 on the top of usb-next?
+I am afraid to introduce more inconvenience.
 
-
-Another thing that I am not too sure whether I am correct is this line of c=
-ode
-
-DBG(dev, "1284 PNP String: %x %s\n", value,
-                             dev->pnp_string);
-
-What Volodymyr Lisivka changed is like this
-
-DBG(dev, "1284 PNP String: %x %s\n", pnp_length,
-                             dev->pnp_string);
-
-In my change, =E2=80=9Cvalue=E2=80=9D equals to =E2=80=9Cpnp_length + 2=E2=
-=80=9D in Volodymyr
-Lisivka=E2=80=99s change, and I think we should print =E2=80=9Cthe PNP stri=
-ng length +
-2=E2=80=9D instead of =E2=80=9Cthe PNP string length=E2=80=9D?
-
-
->
-> thanks,
->
-> greg k-h
-
-thanks,
-
-Wei Ming Chen
+Regards,
+Miaoqian.
