@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3205486EE2
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 01:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF85486EE4
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jan 2022 01:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344211AbiAGAcx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jan 2022 19:32:53 -0500
-Received: from mx0d-0054df01.pphosted.com ([67.231.150.19]:65349 "EHLO
+        id S1344295AbiAGAc6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jan 2022 19:32:58 -0500
+Received: from mx0d-0054df01.pphosted.com ([67.231.150.19]:28983 "EHLO
         mx0d-0054df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343798AbiAGAcv (ORCPT
+        by vger.kernel.org with ESMTP id S1344140AbiAGAcv (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jan 2022 19:32:51 -0500
 Received: from pps.filterd (m0209000.ppops.net [127.0.0.1])
-        by mx0c-0054df01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 206HU9vm023113;
-        Thu, 6 Jan 2022 19:14:05 -0500
+        by mx0c-0054df01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 206HU9vp023113;
+        Thu, 6 Jan 2022 19:14:06 -0500
 Received: from can01-to1-obe.outbound.protection.outlook.com (mail-to1can01lp2054.outbound.protection.outlook.com [104.47.61.54])
-        by mx0c-0054df01.pphosted.com (PPS) with ESMTPS id 3de4vqg6jm-1
+        by mx0c-0054df01.pphosted.com (PPS) with ESMTPS id 3de4vqg6jm-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 06 Jan 2022 19:14:05 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eaamzldCc07QPTC1Zc384jy+QkMGQpmtxy5V981l5w/SP8bCnP4h5x04WxeUU1m+n6jsBBHvNiZikVm8f2fdBfc2ddHJz9zKt2L6ivdxy2eVQIYIhr0Y9oRM8yPWCXX9Z8chWtaq/ueMTdjvKXGlOT6ulDqFDr4Dc75F1VxRUm4Fwn4Kiq6Q/LH1DwgIKDxr4ebTNtgHAWDhVjjxTyDktAHDZa6Vdr+BYgaWXx0euvBw+vY3Sar3syVB91860jWBk22oCn3f69AzhLmIzgHdI72dIasB68zFVuDuBoHr669zFwoXU8P5lQ01l9TgkrBzs9fm1LldsZf6oxA+Omd5eQ==
+ b=QqZW2Q+4Yn5saMUDwmNSICsi2R2s+V6pZkrzco1tStckf9xsUyjZeV9Avq86NgM+6AFuPBs1WRNX+7jS2vp8QnVRF+fSZWw+i+WdTTcU66PsjH3d+jlOpcjvJ/fc3NAUXKAdd7cuXKSBX1WiXumGcUKkFuAznHARlpqHq1uGgJGP6M/Qqh+Ilu6mLw4gGNK/kr0fXYqqVXhDJNFmeVm4UnyerR4A/WCkDHG8aYBDmqF6i4l9C48pPKCDtKJPxPqHwHhnL2nBzJWWLpJO6uTv4Yl50nADyFQ/3tv9530ACS60+db7MRWMNYCVLdoCqKPzOoWa6WpXguXyx5e/dakHiw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+D3fgwE77//+LJ/u59LDGJ6v9aP+LrJdh8IqVspVkwI=;
- b=fBW+byj6fdqSfGwLVrcG13Ym3jTKe2oKqu5F5KgIL3eDz1wFIcWOFby9lJhaAW8PLbSU5pEjlycTaRju6oEXbW31iYe+ilkyPd/2pjyz4IDtYYcKWTDvGzt2vAFDrZ6+vRRaBZIK0duyijnf8WcCzVxcArESL2fPvUrpLkTWO4uVgGfkwmc4JQ1duZ/c61TcfFJ98s+XzRgYOrp26CaIlsgtbQxQeUp3oDpxORkJorPQNYOHF1+p5rNXW6bEn15ZnafXAS+BJn49A65H9A30g8nlKhhSxXIZm3RB+LfBjmHOCPalHQ8kW98o5QD4tTAJNmGuRLUK97UEyP5zlIWVSA==
+ bh=/I/22Z2oVsG1IyKTu+TUts7zPyN/ZLXHjCb4USg+lXs=;
+ b=JeV9/9jcqrYOC/QSgDHCMJstmTvZq7MJcM75Aypz8SujQgVVUN8V1o+fV0i/ceImbb0frykyzMj+0jAiMfB2a7mEJfKgW63kqxtbOl88P9GBmnqWjiZWrU2qmBhVfzQdlBxuq9g9YqBUH5fTVGBrkDaLHbE2klsL7HJHQ1azs3xM58eDJQrkB1UO6AOISpfCz1Kz9J5fs6IQhy9UmpFa22+Hw0qbTDsC2+ZN3kKc3sB/RH03vZ49WDZmXeHQuUnc0M+B5kVnddX6zkofUtYAeq8LXX6yV31e5nZJ1z4DaRNtIC7998YAr/nOOrMJ876Td6JMB3S2qpBZWn+FGVwwVg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=calian.com; dmarc=pass action=none header.from=calian.com;
  dkim=pass header.d=calian.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=calian.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+D3fgwE77//+LJ/u59LDGJ6v9aP+LrJdh8IqVspVkwI=;
- b=m2H2MkDuxJD2ymTCPMACVBGCAoSFlglBFOwJpXoDTyK/v+jFRAp+tUorcJgn05nexVcvTfPxi9ySnkNDZnm4mS13mq7GTYcm8/0kR4esugugn1igtLXlCw2x3qxVkKZ5CcJaWt3iIVU8iJN/aDEIk3zil4740nYMXc+87CcdPoM=
+ bh=/I/22Z2oVsG1IyKTu+TUts7zPyN/ZLXHjCb4USg+lXs=;
+ b=SyRZYby6nlS8s2j+CvSqY0WHOm1iHmmZFoTByoJl954o4FWPgCRzoUcIaVdKmi+OocerPqJhEuW9HEpcEUCXsXkb3g7xNMDWBjkOTmedTWbP3r+fNLc9zxv0BnNC8hhRXycVVJFrBu/WhJCFJXDnJVq3IxauaJXPqvieLynHk6Q=
 Received: from YT3PR01MB6274.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:6a::19)
  by YT2PR01MB5488.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:53::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Fri, 7 Jan
- 2022 00:14:03 +0000
+ 2022 00:14:05 +0000
 Received: from YT3PR01MB6274.CANPRD01.PROD.OUTLOOK.COM
  ([fe80::d1f6:d9e4:7cc7:af76]) by YT3PR01MB6274.CANPRD01.PROD.OUTLOOK.COM
  ([fe80::d1f6:d9e4:7cc7:af76%5]) with mapi id 15.20.4844.016; Fri, 7 Jan 2022
- 00:14:03 +0000
+ 00:14:05 +0000
 From:   Robert Hancock <robert.hancock@calian.com>
 To:     linux-usb@vger.kernel.org
 Cc:     michal.simek@xilinx.com, balbi@kernel.org,
         gregkh@linuxfoundation.org, mounika.grace.akula@xilinx.com,
         manish.narani@xilinx.com,
         Robert Hancock <robert.hancock@calian.com>
-Subject: [PATCH 1/4] usb: dwc3: xilinx: Fix PIPE clock selection for USB2.0 mode
-Date:   Thu,  6 Jan 2022 18:13:31 -0600
-Message-Id: <20220107001334.991614-2-robert.hancock@calian.com>
+Subject: [PATCH 2/4] usb: dwc3: xilinx: Fix error handling when getting USB3 PHY
+Date:   Thu,  6 Jan 2022 18:13:32 -0600
+Message-Id: <20220107001334.991614-3-robert.hancock@calian.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220107001334.991614-1-robert.hancock@calian.com>
 References: <20220107001334.991614-1-robert.hancock@calian.com>
@@ -61,63 +61,63 @@ X-ClientProxiedBy: CO2PR06CA0066.namprd06.prod.outlook.com
  (2603:10b6:b01:6a::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b1d230ca-efdb-4453-c0f7-08d9d1729c73
+X-MS-Office365-Filtering-Correlation-Id: 8c644122-aaac-4f2a-1fc3-08d9d1729d48
 X-MS-TrafficTypeDiagnostic: YT2PR01MB5488:EE_
-X-Microsoft-Antispam-PRVS: <YT2PR01MB5488DE0DA08BFEEB025C980BEC4D9@YT2PR01MB5488.CANPRD01.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-Microsoft-Antispam-PRVS: <YT2PR01MB54886DA5891212FD7E70C124EC4D9@YT2PR01MB5488.CANPRD01.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gl0Hz2zStaMJ4hiDa8e4Q12QurTd7LExeyBG0hqywsmqIec46ptXAH5ItZeIBD2n1DABDYaTIpwCnYb1Qtf+iV0YZTCjsbc9TScj4GwS04wP8Wk2THovnPVCsTS79VCbJG3CTJmuMGlXd+q7RVpYlTY+lGYPQT3N+J0F+SKWzasb7jBSDT/aIojvLQ5E91ZqZaMH0y4yDigdHJMt4rQj+LimqBuZwLlPRXyK84Q91mEgfDS4DFwHF64YkNqkZKfynl9D6bWb20FFE/f5td/8J/A90EtjkQrWFYWfdcnYTXKZzG/wnMA1lIuEPt6Gm3icMfHB2vaUgMgTcqN0EgfnTwJgDjU91QxtoF9pHkmQvX/qIV2ewqtvlFHETjp2FoHRRRo6+OhKbfoGif0HLpbojpxpwILiYGf2dg3J7CsDsw2ZUfdIdSYWWO9op8WFtWhvmRNK15TIXqPV2aDltUYnODO/6bnXJ2kPqpouk+bPJ10scsB3kwCZ5BbxbHm5RUn0nF/AIRRRr0ZOk8VK/lY5qJ9qt5v8zcR1gBc+npN0DTQI1NirImMFlFznBeiSgpKYU48ocKEA12J8pCvCPDSIHW8gE74ki5xYS7EN8iVjP8p9qmvGyC52NwirxsPO45SJxLuI4e3albrJQm4qqLiyPm/Jhj5+ayib5Kd8sAvrvyOnRNS0XNshw47Ba6+e/JzSYWrZ/OoPTBQkRY6ecijbBg==
+X-Microsoft-Antispam-Message-Info: 9UwhxZZ8vXRQtTcfs8sB2bmxwCDCEkJV5BNsivQywo/Kiih7A+YK9DJzUb7foR6NV3becbpPw9TC8UhOgb6YxSZrR0pfSz2gGkF0B8fvlHLfrXrilEFtvpLytNplIJx/8yqLApyIU2AmU22QDh8MFi8xXBItO+ALr/PqAKe63tZ0WjcSvLN+BTnyJpsw04SzbsIcNspk9PC+ZkJd3RRTI6Www9QLHmxdCpUbNKGc+majksHDZ+ihohNGF+NcwnbGMHZlcqXTheEVTj89/3irBt5kHtLRK/uWM2ArGnoXzZq8dlX9vRM9OLfkqGeqzsnmMPmVCZqPpkJXmzcgw85/NAsAb3lHEoKrcOqUpBjCjtNZHzWgHU6tERhfFRZuWUpFR9VF68p3KEWYjh35PZDsUX92krtCm27v87JPKZIlZwKgfAf26WGOhER/mFBj9ivFmktZCWyBYUrMX7oo6u/jG+7uNZpjecL0tBx9RgJsN6OYUnDcG3cLZHeomBLUw0r0Li7E3/1KLybyiqUkKkdTZ5ZZ7mgClR6QojHtJ3hl9pMdyE6Dg+WnCd2hMKO+mdbkPG7xZ8J7Yfi2BmuP2a1r6F1H26XQW+11YeZ4PVcYfUxCqnqzYsPxfJnj+/cn2oS3xU+yy1TPscVQXByLyNQwjGc23DdXWlfoKm5N/GSnflmsjPgaFiMbWGFEyWPcUv2RlgKbjibhHfA3BqQrGCmohw==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT3PR01MB6274.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(38350700002)(6916009)(38100700002)(508600001)(2616005)(26005)(316002)(6506007)(107886003)(44832011)(66556008)(66476007)(66946007)(6666004)(186003)(86362001)(6486002)(6512007)(4326008)(8936002)(8676002)(36756003)(1076003)(2906002)(52116002)(5660300002)(83380400001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KCYHpNVIEHJ1MOfe0qznwSk96R00HTOQumD/likvPGGgegUqjrlnbXvTg4D5?=
- =?us-ascii?Q?pPB2/dSM7289AB+DhUk+ObyrqzxTjj7pobktFYJJr8c5p2RlOft6qunRZPwe?=
- =?us-ascii?Q?X+DZeKifLogMOhAsNhqlrBXuV8v737iLFlaAZrT72haI8dPpLlLDNhI5s1Aa?=
- =?us-ascii?Q?eNCLVzAUzT6XJYGv9CcbzBx2S9bGeL6squz2Ze/Ei63CrIVJy6BTnI+NRYL/?=
- =?us-ascii?Q?H+htvQIyPa079tR0TMqvGCj0jLtFs20za6PONJklnriKHOphTogeGQWoXaXG?=
- =?us-ascii?Q?/6pFi8dLDSXzCZ8vvqpJR9khscRR2Y46XvfU67/J37BhT0s3pwjDXA3YkLFb?=
- =?us-ascii?Q?NM744D3uRyLj0so3dMWTvs8ct2T0y9VO6D1ya0gQ1Ks+vX2eglEYXv6sEwwn?=
- =?us-ascii?Q?4saQo5YNgwvgBl1MuPdXqycuR9vBkNa7zEi3UOSLgUGOioOC8PvhlmClu/g4?=
- =?us-ascii?Q?t3cQs8a/v7gpz2aNnSR7w6NBm88vtr1w1bNvEzIGVTi7TB646AlBzlsYS3YQ?=
- =?us-ascii?Q?DTQ6lNlz2kwyqa0up3kkFWEX08m4lbqWyb0mmwIKoIeJbR0VRUJ2+jVJtW0M?=
- =?us-ascii?Q?WxfWGbyHPgislM4qDIeUfAXHN/9iWusekqlUcoQU0q/jzJrnMSvWoK3TroCR?=
- =?us-ascii?Q?/kkZ+kcK+eXbvZ70+KcSH3BDBOYKKFv0UXOSnJC5WkaM/Ki0YdRFkOv1l7Dc?=
- =?us-ascii?Q?lQeygO/jqrrQlVW4kf0Wo085/bqdmW0Qhob2AJ5/sTU1PX00dcXXmDJZOOMA?=
- =?us-ascii?Q?ntADOVdhyqF9vT31icaILfbVVEXoYqNooBYjtccm142DofaLQBXBED8hhhup?=
- =?us-ascii?Q?dCOLSPc5VvaLrDmnQfBsLFzNVQ/GH9ev/2DAVIMJaMHxaqrd2CqJvK6QleXn?=
- =?us-ascii?Q?I0TYo4empwi1N0nZMDx41vcZhwLyWY1kjw4X3U31N0/F4jn2O01ggX6ZvMZa?=
- =?us-ascii?Q?UarrLSVk6nrx4cUEE+sjsFP84hdIT1nEmENF2CddD8tURmaiN32SthWxv/wt?=
- =?us-ascii?Q?M+ysr7d2n/r4cQmEMjeldDb6lewTHgrYUyuRQADzdXBV6AVYrURZNbaYh1hS?=
- =?us-ascii?Q?cX2p6T7LsTu2o2cmjnEqpy5lhKscA5/4oILAiRrKNnq2d/CNJpitTwc9+zvn?=
- =?us-ascii?Q?VjgmY5qAMXJB8Ia+krb1Ep+lZYAW2++sfMALaG+1NgARdnip51/wMUo//Yh0?=
- =?us-ascii?Q?X1hF1DeexV/O22wb/HecI/pVOwXx9/iDayjxYVy4+Ge1u4HKlQ3uDKBo+ncB?=
- =?us-ascii?Q?ODEFDveMBDYHDnHDweSBKiTgcGvqQp2WxR7BhJVVCpDoLQEvWpgXEd7nW3dm?=
- =?us-ascii?Q?DJBj3AoFVzUhjiveRcP8UnPI2peGNIotPP5J5QfBqtA9WjN4mn0Ar4qhRu1H?=
- =?us-ascii?Q?1lMF1UPS83CbAXR+pz9vOaibPDSZV82FQXYEMewJYYsPhmm4Z3Wfv55gX/gS?=
- =?us-ascii?Q?Zi87v4Z3ZPwhk7DvTBesWnJyVsoxA9ckXCojRQKurFzXXZ7LxY32GCl0ktKa?=
- =?us-ascii?Q?JMxm6kcMuWqePNWlgz6rJw9JsFhcLTaRWM1uZ/P2JAN4ppn78g5CD/CKY085?=
- =?us-ascii?Q?Rli3DskX5IqBml7UV68SAjst/GqYPELhRehAo4C/qTQI1yM0JsmD/XP2MHY1?=
- =?us-ascii?Q?UYG2INpwsV1bFwNrjZd5f+R0fEpBK4Ifp9UP/oWk3h7YfhoQcQXlSOQB8bCv?=
- =?us-ascii?Q?/F//SA=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jOZ0q2DKUOFGtI6tTgqGTeKN49IRkG0KYyDMxgZqPIxHc5YPmmpklfdKDjVc?=
+ =?us-ascii?Q?CWW+ixRAmFd99FtBgdwEQN/VJJm2KGrc0Om02RHQ8LDpU2SlXNE1cdE7+W4y?=
+ =?us-ascii?Q?iKzqoMJz+JnO+E0l1Y1LhZifVjJkkts5FY8ZN+7ihoMsz/sWlrQPVmHa66Yk?=
+ =?us-ascii?Q?u7sOWrbHFi/P4lzb1zgmBxOZHypC1HApDI1RuVMmet4x/Liz5xSO25MN+LfX?=
+ =?us-ascii?Q?+RSsD56JiFFrtMrfjnFyrEAHbPhXO9LkE3v1n6PtzIH3c2ko4uUYESPrIY4z?=
+ =?us-ascii?Q?FNMRCqHSCySW0SJEPLSiTsLBM2c40/PT9tQArpWFthucTWs6vnCCxp4YjVO9?=
+ =?us-ascii?Q?9ywZLQi0z9OVrUepJgTzwZbFpyqUoEyFA4GF/Zxx5MnbiXzxqOUNVTgK7JPO?=
+ =?us-ascii?Q?Jv5HCmstehiXci+tTXYMRYY+el+w0zjaAaSTKVWuNvBDGSvOhFt1ztfmAKcy?=
+ =?us-ascii?Q?lJHJczbSNcHRR4XVqybe8iX3xlwOAl1wdyiZZ3ZXwyEZ0q5uXQ0cD1CzHkrD?=
+ =?us-ascii?Q?5kwU1LsmWKqeXIhq/17WOm5mdtmC0j9JmA1VSic8jlhAunlvPdzm3Zky+xTT?=
+ =?us-ascii?Q?Kw8Rxzgg7CKfBFH+daQuTAacqaEDGymyy9LWvV9pPY+jk5QIyAFA/WVHlcz5?=
+ =?us-ascii?Q?pxCgwJssAKj8Af2HIVpWfqtS+EPOiUKFzsickA9b7Ib9jdANmgqXovhHfTZO?=
+ =?us-ascii?Q?S0m2au99UvgxkAsdmCWcutxUs9600I1d8MEqhV8Tmqn95lyyGyBPMKEAUnWf?=
+ =?us-ascii?Q?aUIBOHthOHAUdwZ7W237FwE7RwvZmxgivMHpwdEOZQDyplkMlp26GXTaCXTR?=
+ =?us-ascii?Q?IobMKQF8huwf/M56gsGZzjFKI7BMXHdnGDJl7y5dUEBgHHHvVXvACtFjJU+2?=
+ =?us-ascii?Q?b8Br2BZv6OJTfQrrLno1eKOmpQtNfytK0CqC8Q7+k1uLHKKwb0YNedgaTn2Y?=
+ =?us-ascii?Q?wyf5sKCBU5N44h+coEPIJ8EbApt8LI0yYs8CvD5eE036Y1MISy/ieblVHuJp?=
+ =?us-ascii?Q?46P1wFIomQr6yFds1GZUQ38Iak83dll60C/fk7Iu6Y69tlrlInb3S6WNZuG/?=
+ =?us-ascii?Q?E4ZzLMrEQh2GyJE5ZJKqVGVmjdjF3ylhhwWmPnOVmH3/63YTO3SkizYpX5ms?=
+ =?us-ascii?Q?888/LQK698tDdJ5oW5Ob7g+nOOpOOkh1H8s3ASVHk6s5RCrIT19UQUQc8X3R?=
+ =?us-ascii?Q?2TA6LcVIT3LMPAZRI5FhNB3CE+iAPxhf9Na5ATRZokUpDE900blQpj9jx/cd?=
+ =?us-ascii?Q?fvdvNnVgpEh/ebpZ0b+etywPnu818AZFLl4Z31Jc+T/wPVERR/j/M2Dd6Jjq?=
+ =?us-ascii?Q?GCirEsncWBqFa1jFJxtynv3V6dMrYg9kFo6/UmPir0PvcV982QJND6VNEtz3?=
+ =?us-ascii?Q?8yIhNnxHz+6LjQQJmGaUKXv98qqd+ZlESXjyP1KPbwbT/LBLm5sfdUxNBuwG?=
+ =?us-ascii?Q?SPPW2KK6uOhsxtc3lq5XtHmlfvpgp+ewoZtQTzGIBB3hniIxd7gtGbGA1S2n?=
+ =?us-ascii?Q?NVQt3QP4gQj5bZqcXrYPNRwI4PiBizhw04PWOIH8ZwGww89j/fwFZDbvXLOf?=
+ =?us-ascii?Q?E/xGlW8iM8FVOwG9ydZ+M5FnW+TbMNA/z8BOuI1N8UpLsQCVtj1d4VBuMLJz?=
+ =?us-ascii?Q?mmydkIzE3mSWPSFy9dpaz9eAlEKSF62j2oj2yAPbXS+g2M36mj+ejLpXBa+7?=
+ =?us-ascii?Q?Cgyd8g=3D=3D?=
 X-OriginatorOrg: calian.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b1d230ca-efdb-4453-c0f7-08d9d1729c73
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8c644122-aaac-4f2a-1fc3-08d9d1729d48
 X-MS-Exchange-CrossTenant-AuthSource: YT3PR01MB6274.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2022 00:14:03.2818
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2022 00:14:05.1412
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 23b57807-562f-49ad-92c4-3bb0f07a1fdf
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V8PS4oyEf0LNdk9M6a9sXmpqCP3/7MvYIXoZ8kUD1VpG4kUj8SJETYCsAZGFw6TiMhn+H1odKE+L8bw6uSCy5wAjEWipXvWhVzvLbvINddQ=
+X-MS-Exchange-CrossTenant-UserPrincipalName: nlmnJLf95ZQVlL8TFYGfEyOVDrFoXNJdBvb5ewIfbxCjeA96s5fqbLI9vPBzMbMB8FmcUBoAG2HKeOoo7wWqn3ZMX5DiD4zQGielNvXdJWI=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB5488
-X-Proofpoint-GUID: SaSNDWAxP540IjjOYxOUtK312jwgesKW
-X-Proofpoint-ORIG-GUID: SaSNDWAxP540IjjOYxOUtK312jwgesKW
+X-Proofpoint-GUID: JENv24hYfcpODexMlPavyHGAe_p1nFc4
+X-Proofpoint-ORIG-GUID: JENv24hYfcpODexMlPavyHGAe_p1nFc4
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-06_10,2022-01-06_01,2021-12-02_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=880 spamscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ mlxlogscore=602 spamscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
  phishscore=0 priorityscore=1501 clxscore=1015 adultscore=0 bulkscore=0
  malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2201070000
@@ -125,34 +125,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It appears that the PIPE clock should not be selected when only USB 2.0
-is being used in the design and no USB 3.0 reference clock is used. Fix
-to set the correct value depending on whether a USB3 PHY is present.
+The code that looked up the USB3 PHY was ignoring all errors other than
+EPROBE_DEFER in an attempt to handle the PHY not being present. Fix and
+simplify the code by using devm_phy_optional_get and dev_err_probe so
+that a missing PHY is not treated as an error and unexpected errors
+are handled properly.
 
 Fixes: 84770f028fab ("usb: dwc3: Add driver for Xilinx platforms")
 Signed-off-by: Robert Hancock <robert.hancock@calian.com>
 ---
- drivers/usb/dwc3/dwc3-xilinx.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/usb/dwc3/dwc3-xilinx.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
-index 9cc3ad701a29..3bc035376394 100644
+index 3bc035376394..3b16e7610009 100644
 --- a/drivers/usb/dwc3/dwc3-xilinx.c
 +++ b/drivers/usb/dwc3/dwc3-xilinx.c
-@@ -167,8 +167,11 @@ static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *priv_data)
- 	/* Set PIPE Power Present signal in FPD Power Present Register*/
- 	writel(FPD_POWER_PRSNT_OPTION, priv_data->regs + XLNX_USB_FPD_POWER_PRSNT);
+@@ -102,12 +102,12 @@ static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *priv_data)
+ 	int			ret;
+ 	u32			reg;
  
--	/* Set the PIPE Clock Select bit in FPD PIPE Clock register */
--	writel(PIPE_CLK_SELECT, priv_data->regs + XLNX_USB_FPD_PIPE_CLK);
-+	/* Set the PIPE Clock Select bit in FPD PIPE Clock register if a USB3
-+	 * PHY is in use, deselect otherwise
-+	 */
-+	writel(usb3_phy ? PIPE_CLK_SELECT : PIPE_CLK_DESELECT,
-+	       priv_data->regs + XLNX_USB_FPD_PIPE_CLK);
+-	usb3_phy = devm_phy_get(dev, "usb3-phy");
+-	if (PTR_ERR(usb3_phy) == -EPROBE_DEFER) {
+-		ret = -EPROBE_DEFER;
++	usb3_phy = devm_phy_optional_get(dev, "usb3-phy");
++	if (IS_ERR(usb3_phy)) {
++		ret = PTR_ERR(usb3_phy);
++		dev_err_probe(dev, ret,
++			      "failed to get USB3 PHY\n");
+ 		goto err;
+-	} else if (IS_ERR(usb3_phy)) {
+-		usb3_phy = NULL;
+ 	}
  
- 	ret = reset_control_deassert(crst);
- 	if (ret < 0) {
+ 	crst = devm_reset_control_get_exclusive(dev, "usb_crst");
 -- 
 2.31.1
 
