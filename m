@@ -2,48 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3720496D12
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Jan 2022 18:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC32D496F53
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Jan 2022 01:54:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234609AbiAVRW7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sat, 22 Jan 2022 12:22:59 -0500
-Received: from 103.86.160.220.broad.fz.fj.dynamic.163data.com.cn ([220.160.86.103]:37580
-        "EHLO fjxxll.cn" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232018AbiAVRW6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Jan 2022 12:22:58 -0500
-X-Greylist: delayed 89169 seconds by postgrey-1.27 at vger.kernel.org; Sat, 22 Jan 2022 12:22:55 EST
-Received: from Unknown (unknown [179.60.243.38])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by fjxxll.cn (Postfix) with ESMTPSA id 1D1F850D0E9A;
-        Fri, 21 Jan 2022 09:28:56 +0800 (CST)
-Message-ID: <1B1EA8FBF0240AB96560299591CB7AFD@wbavklb>
-Reply-To: "Fredrik Elvebakk" <fcresswell9@gmail.com>
-From:   "Fredrik Elvebakk" <investment@dnb.no>
-Subject: Re:
-Date:   Thu, 20 Jan 2022 17:27:18 -0800
+        id S232572AbiAWAy3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Jan 2022 19:54:29 -0500
+Received: from [36.155.112.122] ([36.155.112.122]:41202 "EHLO
+        ecs-42a4.novalocal" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230326AbiAWAyZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Jan 2022 19:54:25 -0500
+Received: from User (localhost [127.0.0.1])
+        by ecs-42a4.novalocal (Postfix) with SMTP id 127F03045F5;
+        Sun,  9 Jan 2022 13:57:24 +0800 (CST)
+Reply-To: <andbaill228@mail2world.com>
+From:   "Vlieghe" <andbaill228@mail2world.com>
+Subject: Very Importante Notice
+Date:   Sun, 9 Jan 2022 07:55:56 +0200
 MIME-Version: 1.0
 Content-Type: text/plain;
-        format=flowed;
-        charset="windows-1251";
-        reply-type=original
-Content-Transfer-Encoding: 8BIT
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
 X-Priority: 3
 X-MSMail-Priority: Normal
-X-Mailer: Microsoft Windows Live Mail 14.0.8117.416
-X-MimeOLE: Produced By Microsoft MimeOLE V14.0.8117.416
-To:     unlisted-recipients:; (no To-header on input)
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-Id: <20220109055726.127F03045F5@ecs-42a4.novalocal>
+To:     undisclosed-recipients:;
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Sir/Madam,
 
-Am Fredrik Elvebakk an Investment Manager from Norway. I wish to solicit 
-your interest in an investment project that is currently ongoing in my company (DNB); 
-It is a short term investment with good returns. 
-Simply reply for me to confirm the validity of your email so i shall give you comprehensive details about the project.
+Good day to you.
 
-Best Regards,
-Fredrik Elvebakk
-Business Consultant
+I am Dr.Gertjan Vlieghe personal Secretary to Andrew Bailey who double as the Governor, Bank of England (https://en.wikipedia.org/wiki/Andrew_Bailey_%28banker%29). We have an inheritance of a deceased client, who bear the same name  with your surname. kindly contact Andrew Bailey through his personal email ( andbaill228@mail2world.com ) with your details for more information.
+
+Thank you.
+
+Dr.Gertjan Vlieghe
