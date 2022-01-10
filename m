@@ -2,174 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F8A489035
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jan 2022 07:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1166248924C
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jan 2022 08:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235010AbiAJGaw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jan 2022 01:30:52 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:42319 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234930AbiAJGas (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jan 2022 01:30:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1641796248; x=1673332248;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=OIz7WRfGpIudUOSp9YYe8BTOXV0+ho3E9LSlOaYrBis=;
-  b=csNOagkg1RCB+hU50TuRCje9zHiSCQyG+wuUBNq7RvLzNXj6p5ZOKYVn
-   JnZob8Gm+nlmZz6d0Coem/dC9TsQWbNoHiZY9xu+oke1gWVLC3sUnC5NT
-   Zz2PK0uikAJ63Ebtd8VWf7e0pszb9jOFCqZy0SwbjXP3eRxtrggdO/uWs
-   M=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 Jan 2022 22:30:48 -0800
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2022 22:30:48 -0800
-Received: from jackp-linux.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Sun, 9 Jan 2022 22:30:48 -0800
-From:   Jack Pham <quic_jackp@quicinc.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Michal Nazarewicz <mina86@mina86.com>
-CC:     <linux-usb@vger.kernel.org>,
-        Roger Quadros <roger.quadros@nokia.com>,
-        "Jack Pham" <quic_jackp@quicinc.com>
-Subject: [PATCH v2] usb: gadget: f_mass_storage: Make CD-ROM emulation work with Mac OS-X
-Date:   Sun, 9 Jan 2022 22:30:30 -0800
-Message-ID: <20220110063030.12957-1-quic_jackp@quicinc.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20220110062359.5314-2-quic_jackp@quicinc.com>
-References: <20220110062359.5314-2-quic_jackp@quicinc.com>
+        id S240008AbiAJHlv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jan 2022 02:41:51 -0500
+Received: from cable.insite.cz ([84.242.75.189]:58681 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241379AbiAJHhz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 Jan 2022 02:37:55 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 64B16A1A3D40E;
+        Mon, 10 Jan 2022 08:37:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1641800270; bh=E4cuYGXjxJ4RBAN6lIKdf+fs5oP8Ii3xcXgGCs+moSg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=D7YpPZsbd1zFPzPNKjmVqoYoUAG/Kw5mQDuMIi8qccDCnCHOKIKmJEa9ztsBx/tD0
+         YVn91+pLocfddfA4OKBTUcZOT/UipN27gd6NTwKaoBvXVDbHvbnNaj418ozG1iwKvG
+         4OF9khjSRCpFuyICahd26nGA5zjLFITIShfJGv6o=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id RhIdFulj-vv4; Mon, 10 Jan 2022 08:37:43 +0100 (CET)
+Received: from precision.doma (dustin.pilsfree.net [81.201.58.138])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 78105A1A3D400;
+        Mon, 10 Jan 2022 08:37:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1641800263; bh=E4cuYGXjxJ4RBAN6lIKdf+fs5oP8Ii3xcXgGCs+moSg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AQhgLD35UCHH4Qt+58o28tVCMm2g1U26S4kjZAgpgPoscFH34HJqa10Jyb7I7fKr0
+         EJfSR992N9S1FYoTHHJlvPr8HQuFwoTiAiJe2g0AuLbg4dToXAWY16k7KE3bSlXSfn
+         pbzlCFLTIpT/RjFgCoZEsHA+vdNZlSpg1tJkAOW8=
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Pavel Hofman <pavel.hofman@ivitera.com>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Julian Scheel <julian@jusst.de>,
+        John Keeping <john@metanate.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v4 00/10] usb: gadget: audio: Multiple rates, notify
+Date:   Mon, 10 Jan 2022 08:37:32 +0100
+Message-Id: <20220110073742.394237-1-pavel.hofman@ivitera.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+usb:    gadget: audio: Multiple rates, notify
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Roger Quadros <roger.quadros@nokia.com>
+This series implements:
+* Support for multiple rates in the audio gadget
+* Notification of gadget-side alsa processes about playback/capture
+  start/stop on the host side via Playback/Capture Rate controls.
+* Detection of the USB cable disconnection by handling SUSPEND call
+  in f_uac1/2. The disconnection generates a stop notification.
 
-Mac OS-X expects CD-ROM TOC in raw format (i.e. format:2). It also
-sends the READ_TOC CDB in old style SFF8020i format. i.e. 2 format bits
-are encoded in MSBs of CDB byte 9.
+Patches for the multirate support, originally authored by Julian Scheel,
+were rebased and modified for the current code base. Julian has
+acknowledged the presented patches.
 
-This patch will enable CD-ROM emulation to work with Mac OS-X. Tested on
-Mac OS X v10.6.3.
+The detection of cable disconnection was discussed with dwc2 maintainer
+Minas Harutyunyan who confirmed that the suspend event can be used
+(https://lore.kernel.org/all/5aada8e3-f385-0589-8d58-187abd1a924d@synopsys.com/T/).
+Tests on dwc2 have confirmed reliable detection, the gadget correctly
+reports playback/capture stop at cable disconnection.
 
-Signed-off-by: Roger Quadros <roger.quadros@nokia.com>
-Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
----
-v2: Removed Change-Id tag.
+The start/stop/current rate notification feature is accompanied by
+example implementation of audio gadget controller
+https://github.com/pavhofman/gaudio_ctl. The controller also handles
+debouncing fast start/stop events when USB host audio driver is loaded
+and/or audio daemon re/started.
 
- drivers/usb/gadget/function/f_mass_storage.c | 73 +++++++++++++++++++++++-----
- 1 file changed, 61 insertions(+), 12 deletions(-)
+Changes:
+--------
 
-diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-index 73a28f8..1f7f4dd6 100644
---- a/drivers/usb/gadget/function/f_mass_storage.c
-+++ b/drivers/usb/gadget/function/f_mass_storage.c
-@@ -1188,6 +1188,8 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
- 	int		msf = common->cmnd[1] & 0x02;
- 	int		start_track = common->cmnd[6];
- 	u8		*buf = (u8 *)bh->buf;
-+	u8		format;
-+	int		i, len;
- 
- 	if ((common->cmnd[1] & ~0x02) != 0 ||	/* Mask away MSF */
- 			start_track > 1) {
-@@ -1195,18 +1197,65 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
- 		return -EINVAL;
- 	}
- 
--	memset(buf, 0, 20);
--	buf[1] = (20-2);		/* TOC data length */
--	buf[2] = 1;			/* First track number */
--	buf[3] = 1;			/* Last track number */
--	buf[5] = 0x16;			/* Data track, copying allowed */
--	buf[6] = 0x01;			/* Only track is number 1 */
--	store_cdrom_address(&buf[8], msf, 0);
-+	format = common->cmnd[2] & 0xf;
-+	/*
-+	 * Check if CDB is old style SFF-8020i
-+	 * i.e. format is in 2 MSBs of byte 9
-+	 * Mac OS-X host sends us this.
-+	 */
-+	if (format == 0)
-+		format = (common->cmnd[9] >> 6) & 0x3;
-+
-+	switch (format) {
-+	case 0:
-+		/* Formatted TOC */
-+		len = 4 + 2*8;		/* 4 byte header + 2 descriptors */
-+		memset(buf, 0, len);
-+		len -= 2;		/* TOC Length excludes length field */
-+		buf[1] = len;		/* TOC data length */
-+		buf[2] = 1;		/* First track number */
-+		buf[3] = 1;		/* Last track number */
-+		buf[5] = 0x16;		/* Data track, copying allowed */
-+		buf[6] = 0x01;		/* Only track is number 1 */
-+		store_cdrom_address(&buf[8], msf, 0);
-+
-+		buf[13] = 0x16;		/* Lead-out track is data */
-+		buf[14] = 0xAA;		/* Lead-out track number */
-+		store_cdrom_address(&buf[16], msf, curlun->num_sectors);
-+		return len;
-+
-+	case 2:
-+		/* Raw TOC */
-+		len = 4 + 3*11;		/* 4 byte header + 3 descriptors */
-+		memset(buf, 0, len);	/* Header + A0, A1 & A2 descriptors */
-+		len -= 2;		/* TOC Length excludes length field */
-+		buf[1] = len;		/* TOC data length */
-+		buf[2] = 1;		/* First complete session */
-+		buf[3] = 1;		/* Last complete session */
-+
-+		buf += 4;
-+		/* fill in A0, A1 and A2 points */
-+		for (i = 0; i < 3; i++) {
-+			buf[0] = 1;	/* Session number */
-+			buf[1] = 0x16;	/* Data track, copying allowed */
-+			/* 2 - Track number 0 ->  TOC */
-+			buf[3] = 0xA0 + i; /* A0, A1, A2 point */
-+			/* 4, 5, 6 - Min, sec, frame is zero */
-+			buf[8] = 1;	/* Pmin: last track number */
-+			buf += 11;	/* go to next track descriptor */
-+		}
-+		buf -= 11;		/* go back to A2 descriptor */
-+
-+		/* For A2, 7, 8, 9, 10 - zero, Pmin, Psec, Pframe of Lead out */
-+		store_cdrom_address(&buf[7], msf, curlun->num_sectors);
- 
--	buf[13] = 0x16;			/* Lead-out track is data */
--	buf[14] = 0xAA;			/* Lead-out track number */
--	store_cdrom_address(&buf[16], msf, curlun->num_sectors);
--	return 20;
-+		return len;
-+
-+	default:
-+		/* Multi-session, PMA, ATIP, CD-TEXT not supported/required */
-+		curlun->sense_data = SS_INVALID_FIELD_IN_CDB;
-+		return -EINVAL;
-+	}
- }
- 
- static int do_mode_sense(struct fsg_common *common, struct fsg_buffhd *bh)
-@@ -1933,7 +1982,7 @@ static int do_scsi_command(struct fsg_common *common)
- 		common->data_size_from_cmnd =
- 			get_unaligned_be16(&common->cmnd[7]);
- 		reply = check_command(common, 10, DATA_DIR_TO_HOST,
--				      (7<<6) | (1<<1), 1,
-+				      (0xf<<6) | (1<<1), 1,
- 				      "READ TOC");
- 		if (reply == 0)
- 			reply = do_read_toc(common, bh);
+v2:
+* Fixed compilation of "usb: gadget: f_uac1: Support multiple sampling
+  rates" - added changes for CONFIG_GADGET_UAC1
+
+v3:
+* Implemented most of changes suggested by John Keeping
+* Patches for bInterval calculation moved to a separate patch series
+* Patches for stopping substreams moved to a separate patch series
+* audio: Replaced deprecated macro S_IRUGO
+* u_audio: Moved dynamic srate from params to rtd
+* f_uac2: removed current state srates from struct f_uac2_opts, using
+  u_audio_get_playback/capture_srate() instead.
+* f_uac2: Reworked macros for struct cntrl_ranges_lay3_xxx
+
+v4:
+* Fixed the unused-but-set-variable warnings
+* Patch "usb: gadget: f_uac2: Rename Clock Sources to fixed names"
+  squashed to patch "usb: gadget: f_uac2: Support multiple sampling
+  rates"
+
+
+Julian Scheel (3):
+  usb: gadget: u_audio: Support multiple sampling rates
+  usb: gadget: f_uac2: Support multiple sampling rates
+  usb: gadget: f_uac1: Support multiple sampling rates
+
+Pavel Hofman (7):
+  usb: gadget:audio: Replace deprecated macro S_IRUGO
+  usb: gadget: u_audio: Move dynamic srate from params to rtd
+  usb: gadget: u_audio: Add capture/playback srate getter
+  usb: gadget: u_audio: Rate ctl notifies about current srate
+    (0=stopped)
+  usb: gadget: u_audio: Add suspend call
+  usb: gadget: f_uac2: Add suspend callback
+  usb: gadget: f_uac1: Add suspend callback
+
+ .../ABI/testing/configfs-usb-gadget-uac1      |   4 +-
+ .../ABI/testing/configfs-usb-gadget-uac2      |   4 +-
+ Documentation/usb/gadget-testing.rst          |   8 +-
+ drivers/usb/gadget/function/f_uac1.c          | 190 ++++++++++++--
+ drivers/usb/gadget/function/f_uac2.c          | 207 ++++++++++++---
+ drivers/usb/gadget/function/u_audio.c         | 238 ++++++++++++++++--
+ drivers/usb/gadget/function/u_audio.h         |  14 +-
+ drivers/usb/gadget/function/u_uac1.h          |   5 +-
+ drivers/usb/gadget/function/u_uac2.h          |   5 +-
+ drivers/usb/gadget/function/uac_common.h      |   9 +
+ drivers/usb/gadget/legacy/audio.c             |  78 +++---
+ 11 files changed, 632 insertions(+), 130 deletions(-)
+ create mode 100644 drivers/usb/gadget/function/uac_common.h
+
 -- 
-2.7.4
+2.25.1
 
