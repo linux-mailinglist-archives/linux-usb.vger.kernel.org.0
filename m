@@ -2,106 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD77448A204
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jan 2022 22:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E0C948A25A
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jan 2022 23:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244447AbiAJVht (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jan 2022 16:37:49 -0500
-Received: from mga12.intel.com ([192.55.52.136]:2593 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244307AbiAJVhs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Jan 2022 16:37:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641850668; x=1673386668;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=cHVMFsc259zOHaaX5cKlt8hDc8MNMbEOfL8VyHT3ldo=;
-  b=VAN8e6rpX5wBAORAOz12kzeED7+83KvY6hwV5nZOHJrxK5nXNZi3ehSz
-   U2bTKuvI3c2AFRArHTSEuzLq0ED7BcXhadPrRxITnnEnaoD2iNIrB1ZvQ
-   GOXSuBJoyQHGzhvJKsTe81olEV86cUGevKGWte0QS5CyNnjicqCnEdDAo
-   J7Gund7QFCCnZXuDB9WbIUinXn1Bp9gN9mYmqRkTwHt7m+X/AVJvtY+r4
-   4GwUrzzNNCuP0WrDS0uMSwfac0GHCZsfoRhwwWllSFk0MnLRCH1B5m0qS
-   UUXWPamAI5MjtlT7ZYxkcG+VcCQEtnYpf9QH0wsuIhLN0e3ktS0vpe3tk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="223313408"
-X-IronPort-AV: E=Sophos;i="5.88,278,1635231600"; 
-   d="scan'208";a="223313408"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 13:37:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,278,1635231600"; 
-   d="scan'208";a="622813676"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 10 Jan 2022 13:37:45 -0800
-To:     Joe Minor <joe@alujoe.com>, mathias.nyman@intel.com
-Cc:     linux-usb@vger.kernel.org
-References: <YdxKuum3LFJOTSLi@trivial>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: Problem: xhci: devices can not be enumerated due to bandwidth
- issues
-Message-ID: <4c944b85-06a4-dd90-27df-71f35190f189@linux.intel.com>
-Date:   Mon, 10 Jan 2022 23:39:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S1345178AbiAJWF0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jan 2022 17:05:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241786AbiAJWFS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jan 2022 17:05:18 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06B5C061748
+        for <linux-usb@vger.kernel.org>; Mon, 10 Jan 2022 14:05:17 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id u25so59438653edf.1
+        for <linux-usb@vger.kernel.org>; Mon, 10 Jan 2022 14:05:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xG5YQM2soHgltVkLWBjbHR5Qz+VeD3CXossiL42kw8o=;
+        b=gHq4E60gLW4E9HRci3mAQDryUMUxbSPUrzfRwKsmHu0LQO5++Un+hSyzsuOQK0S9Qi
+         K0CJUYHQjk2XAYdLvxaa/gke3RJJLJ9XOFnBBUmIdmfBjzS7zzeXmFu3wT7JiHI8uqGf
+         sDlCglR3xW8q2UPDquEdZ2iM/iMYSCm69mh7Xt0FNNhllIb5HOaPPJ3v7Vd/Zz6gVrKX
+         fJ+r6OhoGw7JzTSEoLsM/oQ5UILTjPZZgHwF1F+/9b65AUi3VyjmbjYw3TLjaAC42HNn
+         pRfG94PEdLR8JKmSEhYcZxgwcFV0LJyglFDe2fLrP7wTzanCePvJKZvXpYTc6iOMGnAW
+         9Jow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xG5YQM2soHgltVkLWBjbHR5Qz+VeD3CXossiL42kw8o=;
+        b=NYUQlb2wgpHoqhM9HrPQdTspL4pqt88n54YCqXPkqf/wW5saT5Y+1t76OXsvtUFXa+
+         rJvORM11KqI5WEWKe6Q/j0iIYmbcdx7dGO9VDItNkXgZI9gCNpyujyZceeP23B7zhWFA
+         QWConxk+ozCt0tth4TwIazpSSrd4zJKOESMb3KNw1BJC1dKJ5EuQRLCYZ5qSI8v7f66B
+         hMwUSnSPQvD/GkI6ZWdMXfiAnIt1P0XmP4IlZyYeS70mqQLobh4imywR9BSFPO4HP8Pe
+         sYGidPqmzB9W0Lz5TtgoRxCeAf4dE65UHhXcMwHU8VEuL78O+DvuCgJ4F9RtUOaGK3J9
+         O6Kw==
+X-Gm-Message-State: AOAM533jVdkAQIdT1va+i74g/9CEmkZdVDmLrx8Wt4XqsPTqW1TExqA9
+        wFivMIGT1EbH26McBcaOYWjbIDKBI0RbW/kZP9bB3wdM
+X-Google-Smtp-Source: ABdhPJyVdCMOnBfuxdOXo7mr++S1KYb0UcW3ChSaGdt7b9E0n1fgEkI2UkTiLpd8VLW7qAN5L0A6mVbWRI2kld1V30o=
+X-Received: by 2002:a17:906:5a4e:: with SMTP id my14mr1342308ejc.302.1641852316140;
+ Mon, 10 Jan 2022 14:05:16 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YdxKuum3LFJOTSLi@trivial>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <822c3852-1d15-2976-8672-e49ae34c328f@synopsys.com>
+ <CAFBinCC_0RpCMsj3AUt9fZrjHi6_qFirQtRR1g5VJcn45GpWAw@mail.gmail.com>
+ <ad475275-eb2c-6309-fc59-494f94bf0605@synopsys.com> <CAFBinCCXioWL+ZGwvC8Ltrmx4y2XpGK03JAm8X=wDB4_dQ+pFA@mail.gmail.com>
+ <20210715014451.GA397753@rowland.harvard.edu> <CAFBinCD0GKcc8veWAkWG=NCban4k8n5E-QdhNfccuH8OXvtA6g@mail.gmail.com>
+ <20210719145322.GA565905@rowland.harvard.edu> <CAFBinCDAXzDugaCcf52ubE+a==7CtDkmHpX2hAeO+DkJWQCNSg@mail.gmail.com>
+ <20210721155817.GC633399@rowland.harvard.edu> <CAFBinCBkUsTsPiMQ2iN5U63NczxXFHv818O-G01WzJXZ36ybeA@mail.gmail.com>
+ <20210803213216.GA376608@rowland.harvard.edu> <CAFBinCAvFbLXoobcTWiOoUrRSFnNzhOdn-=dkxvJOMkeOC+EAg@mail.gmail.com>
+In-Reply-To: <CAFBinCAvFbLXoobcTWiOoUrRSFnNzhOdn-=dkxvJOMkeOC+EAg@mail.gmail.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 10 Jan 2022 23:05:05 +0100
+Message-ID: <CAFBinCAMJXtK4VOknGmfPB0GwHnJNtQ8gSMwQR-8a-gJP6jL6g@mail.gmail.com>
+Subject: Re: ODROID-C1/-C2 USB Detection only triggered by some devices dwc2
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Matt Corallo <oc2udbzfd@mattcorallo.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>,
+        "linux.amoon@gmail.com" <linux.amoon@gmail.com>,
+        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+Hi Minas,
 
-On 10.1.2022 17.03, Joe Minor wrote:
-> Hi,
-> 
-> I use an USB-C dock to connect my laptop to two external monitors and peripherals like mouse, keyboard, headset and webcam.
-> Since upgrading to kernel version 5.14.6, these devices are no longer enumerated after boot.
-> They will however function when plugged in after login.
-> The dock uses the DisplayLink chipset, which requires the evdi kernel module (GitHub: https://github.com/DisplayLink/evdi/).
-> I do not encounter this problem when blacklisting the module (which has the consequence that my monitors no longer work).
-> 
-> Hardware:
->  - Dock: Lenovo ThinkPad Hybrid USB-C with USB-A Dock
->  - Laptop: Microsoft Surface Book 2
-> 
-> The kernel buffer contains these messages per device:
-> [    7.165643] usb 1-1.2.4.2.4: Not enough bandwidth for new device state.
-> [    7.165652] usb 1-1.2.4.2.4: can't set config #1, error -28
-> 
-> The last unaffected kernel version is 5.14.5.
-> I bisected the issue to commit 2847c46c6148 ('Revert "USB: xhci: fix U1/U2 handling for hardware with XHCI_INTEL_HOST quirk set"'), which also mentions xhci bandwidth issues.
+On Sun, Dec 12, 2021 at 5:08 PM Martin Blumenstingl
+<martin.blumenstingl@googlemail.com> wrote:
+[...]
+> On Tue, Aug 3, 2021 at 11:32 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > Minas, you should look at analysis of the usbmon information below.
+> Minas, it would be great if you could take the time to go through
+> Alan's findings.
+> Since it's been a while I am trying to summarize the current state of
+> the findings here.
+Since I sent my last email you were probably on vacation. I hope you
+had a good time!
 
-This change will enable xhci USB Link power management for some devices. 
-It adds a few more items to do during enumeration for them. 
+> In [0] Alan mentioned:
+> > Minas, some of the things noted below may require your attention. In
+> > particular, the usbmon traces don't show the root hub doing what it should,
+> > which leads me to wonder whether the Genesys Logic hub attached to port 1
+> > really is getting suspended and resumed properly.
+>
+> Then in [1] Alan goes through the usbmon traces from my Meson8b
+> Odroid-C1+ and comes to the following conclusion:
+> > [...] the trace shows that the GL hub was never fully suspended!
+> >
+> > So the question is: Why doesn't the port status on the DWC2 root hub
+> > show the suspend feature set, and why doesn't the root hub port get
+> > suspended?  This looks like a bug in the dwc2 driver. [...]
+>
+> Linux 5.16-rc4 is still affected by this issue, meaning that it hasn't
+> been fixed in the meantime.
+>
+> I am happy about any feedback which can help resolve this issue. That
+> means: even if you have an idea (like: flipping bit X in register Y
+> could help) which you are unable to test yourself then please let me
+> know - I can take care of the testing part (and share debug
+> logs/usbmon traces if needed).
+Could you please take out some time to go through Alan's findings and
+let me know if/what you need from my end so we can resolve this issue?
 
-> 
-> My system information is included below. Please let me know how if you need more information or if you want me to run more tests.
-> 
-> Thanks a lot
-> Joe
 
-If you could boot with usb core and xhci dynamic debugging enabled it could show more.
-Add "usbcore.dyndbg=+p xhci_hcd.dyndbg=+p" to your kernel cmdline
-
-Also, could be worth checking if removing XHCI_LPM_SUPPORT from your kernel helps:
-
-
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 5c351970cdf1..7434406be452 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -202,7 +202,6 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
-                xhci->quirks |= XHCI_BROKEN_D3COLD;
- 
-        if (pdev->vendor == PCI_VENDOR_ID_INTEL) {
--               xhci->quirks |= XHCI_LPM_SUPPORT;
-                xhci->quirks |= XHCI_INTEL_HOST;
-                xhci->quirks |= XHCI_AVOID_BEI;
-        }
-
-Thanks
--Mathias
+Thank you!
+Best regards,
+Martin
