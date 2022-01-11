@@ -2,81 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D6448A7EE
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jan 2022 07:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0450848A808
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jan 2022 07:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348290AbiAKGtG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jan 2022 01:49:06 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:33005 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233997AbiAKGtF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jan 2022 01:49:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1641883746; x=1673419746;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tKnoJzErsAHJm+nQCMMaPbpfpKiRq/oaK90dtIuEypY=;
-  b=Hp+plgT04CkEESb6D2vUwflGK5M302A4vj9KrvO/bwsAV4k1MVWcnjES
-   UDrFiofQ8r/f4pB7t79rmC+mqtPmV7N7mBqJqYim2O2hmhqJYb0SMdwjz
-   VLF5BJqnGgp9np+L3GhgQXk+iIc9N2TIAvtLMtVzQL/Y0DqH1Eh0MrxMw
-   g=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 10 Jan 2022 22:49:05 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 22:49:05 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 10 Jan 2022 22:49:05 -0800
-Received: from wcheng-linux.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 10 Jan 2022 22:49:04 -0800
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH] usb: gadget: f_serial: Ensure gserial disconnected during unbind
-Date:   Mon, 10 Jan 2022 22:48:50 -0800
-Message-ID: <20220111064850.24311-1-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.33.1
+        id S1348370AbiAKG7C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jan 2022 01:59:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348344AbiAKG7C (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jan 2022 01:59:02 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83FBC06173F
+        for <linux-usb@vger.kernel.org>; Mon, 10 Jan 2022 22:59:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=BRqJvLC56Vxe+VSbPwmPQzrmCucPR8amgvX4UlaitHQ=; b=WqgUEW8xxEBBHJWSLBwDC8NMUM
+        M4SXVxBkJN2z8GbTWLn1NlLvZE0koVDVM6cKuTKt9pzeqwHaYyHtNCwsK05/A5kxyQzI3iT0mA7ze
+        SBE4G4yoSpMJKctnHGT/X/1F1t99a6KyHLzdXJAdJil5HSdSMPaQ+JJecNwI3gqQY0kfRcsKN68D8
+        XAzkPpyBP7g1N5jQeN1KdtGYghwNP8NDccJjuUv6urE+WomdBDBWKZUWoFJZ3qT6kndLncodhYSUK
+        6/tZqSZtctPAp2svEOrNy8QfUGf40H5ch6UScqLIM7lkyChwtRUFLww9TcML0SnvDSa+QV89uqi43
+        8/iV8ixw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n7B7S-0032Om-B2; Tue, 11 Jan 2022 06:58:58 +0000
+Message-ID: <0895680e-8a4a-7eea-e5c8-f6c29867e563@infradead.org>
+Date:   Mon, 10 Jan 2022 22:58:54 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: no name mouse?
+Content-Language: en-US
+To:     James <bjlockie@lockie.ca>, linux-usb <linux-usb@vger.kernel.org>
+References: <9cb86662-d1f6-5d7e-65a4-c5a071e9b4f1@lockie.ca>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <9cb86662-d1f6-5d7e-65a4-c5a071e9b4f1@lockie.ca>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some UDCs may return an error during pullup disable as part of the
-unbind path for a USB configuration.  This will lead to a scenario
-where the disable() callback is skipped, whereas the unbind() still
-occurs.  If this happens, the u_serial driver will continue to fail
-subsequent binds, due to an already existing entry in the ports array.
-Ensure that gserial_disconnect() is called during the f_serial unbind,
-so the ports entry is properly cleared.
 
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- drivers/usb/gadget/function/f_serial.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/usb/gadget/function/f_serial.c b/drivers/usb/gadget/function/f_serial.c
-index 1ed8ff0ac2d3..a9480b9e312e 100644
---- a/drivers/usb/gadget/function/f_serial.c
-+++ b/drivers/usb/gadget/function/f_serial.c
-@@ -345,6 +345,10 @@ static void gser_free(struct usb_function *f)
- 
- static void gser_unbind(struct usb_configuration *c, struct usb_function *f)
- {
-+	struct f_gser	*gser = func_to_gser(f);
-+
-+	/* Ensure port is disconnected before unbinding */
-+	gserial_disconnect(&gser->port);
- 	usb_free_all_descriptors(f);
- }
- 
+On 1/10/22 18:48, James wrote:
+> $ lsusb -tv
+> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 5000M
+>     ID 1d6b:0003 Linux Foundation 3.0 root hub
+> /:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 480M
+>     ID 1d6b:0002 Linux Foundation 2.0 root hub
+> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 10000M
+>     ID 1d6b:0003 Linux Foundation 3.0 root hub
+>     |__ Port 3: Dev 4, If 0, Class=Mass Storage, Driver=uas, 5000M
+>         ID 0bc2:ab5a Seagate RSS LLC
+>     |__ Port 4: Dev 3, If 0, Class=Mass Storage, Driver=uas, 5000M
+>         ID 0bc2:2321 Seagate RSS LLC Expansion Portable
+> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 480M
+>     ID 1d6b:0002 Linux Foundation 2.0 root hub
+>     |__ Port 5: Dev 4, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+>         ID 04d9:1503 Holtek Semiconductor, Inc. Keyboard
+>     |__ Port 5: Dev 4, If 1, Class=Human Interface Device, Driver=usbhid, 1.5M
+>         ID 04d9:1503 Holtek Semiconductor, Inc. Keyboard
+>     |__ Port 6: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+>         ID 30fa:0400
+> 
+> Port 6 Dev 3 is the mouse I bought from Amazon.
+> Why doesn't have a name beside it?
+
+USB 2.0 spec, section 9.6.7 String (descriptors):
+
+"""
+String descriptors are optional. As noted previously, if a device does not support string descriptors, all
+references to string descriptors within device, configuration, and interface descriptors must be reset to zero.
+"""
+
+so whoever manufactured this device chose to leave it with no Mfr/Product name strings,
+i.e., it's a generic device.
+
+You could look at 'lsusb -v' for that device and then look at these fields:
+(e.g., from a "transceiver" device for a wireless kbd/mouse)
+
+  iManufacturer           1 Dell Computer Corp
+  iProduct                2 Dell Universal Receiver
+  iSerial                 0 
+
+You should see iManufacturer and iProduct set to 0.
+
+-- 
+~Randy
