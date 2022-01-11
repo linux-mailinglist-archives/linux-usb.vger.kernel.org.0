@@ -2,148 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD55F48AA4F
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jan 2022 10:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EECDB48AADC
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jan 2022 10:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349195AbiAKJTD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jan 2022 04:19:03 -0500
-Received: from mga04.intel.com ([192.55.52.120]:1927 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236775AbiAKJTD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 11 Jan 2022 04:19:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641892743; x=1673428743;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EeoQc6pt57l7P58d0yw85g0sKFKZur/luE+GMJh9eX4=;
-  b=P7/lS1X7u2jRTynK98EOYi2oWJHI+YztSLsUsV6fDSQyBjduj1fewJlK
-   KjjcemfedutU3ocEH9mWXNALrwZO6yJGkrtZiQAOoeg3izw92vaHpy3/+
-   5xJMC8lexcwXgHVxrrOMrDSQfyrBQwlKf0LsP1hgpxo0HhG+aE+oT5oUx
-   qyrLtjDruBT9JVKa2xBej6RJ1tPc931LccLUAXMwnRtIeGXHYIqCWepzv
-   75yAoble/Wa3NoHsGLwUMJtaZtya0rBc87qHSSan9tbZPyJmpgBquYvUl
-   agafbzUQFo/c5yMcsurrK8yciTfANy5vBqw6fgDeGNgimjfDZrWFsPmUq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="242255865"
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="242255865"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 01:19:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="669757448"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 11 Jan 2022 01:19:00 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 11 Jan 2022 11:18:59 +0200
-Date:   Tue, 11 Jan 2022 11:18:59 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Xu Yang <xu.yang_2@nxp.com>
-Cc:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Jun Li <jun.li@nxp.com>, dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [EXT] Re: [PATCH] usb: typec: tcpci: don't touch CC line which
- source Vconn
-Message-ID: <Yd1Lg9iSQWFph25W@kuha.fi.intel.com>
-References: <20220106085325.1353591-1-xu.yang_2@nxp.com>
- <YdwlpzR+9+EFyguz@kuha.fi.intel.com>
- <DB8PR04MB6843B12B11964DCFA68F7B518C519@DB8PR04MB6843.eurprd04.prod.outlook.com>
+        id S1347741AbiAKJxR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jan 2022 04:53:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236654AbiAKJxQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jan 2022 04:53:16 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BBCC06173F
+        for <linux-usb@vger.kernel.org>; Tue, 11 Jan 2022 01:53:16 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id h10so21704073wrb.1
+        for <linux-usb@vger.kernel.org>; Tue, 11 Jan 2022 01:53:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hG9rUK4IkVrQ+8ACrhWPxZRakkSjKpRWQoFCkTNn/X8=;
+        b=DFFuwIP1QgjMS3n63C11s7si82MBSKADwXDsS6TttMcsW/l7YvB4ym40GSsD2V+znz
+         ABi6b5LyWhV0M7JYJCuGU2JJCu6YMwDcP6pDnCAGx17QJxSXaptukJviXcrBGtLVx/xT
+         A78CeKN/nP9s3tRxbekgxmuNFJ0BrhKuTEYNYB8UjRPlSz4xw/zhvPqOZoD7ntmFSF45
+         Y4pyJuunlxo09nA9LuD9NzGasP+DTw26KFLJsdMNH+Sg1c+IvLPQAuk33JwLqH047A+4
+         JB3xwuFQXa65G3sRtEwG0YN6YUrarvT3V51QmKVrt7cwPZe8PXvodzzCvEAwOPSppFg1
+         2p3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hG9rUK4IkVrQ+8ACrhWPxZRakkSjKpRWQoFCkTNn/X8=;
+        b=Au1DyGWj5V8DSYy+wMJDsGzwBzQVvp7U43zwWRt+U43jgVucYLN8JvuswMXU5rRBmG
+         TyWCn7om2U4z8uBVAoUiGixAeZ67/JHbBsb25f0lvOCJvV76d3nG4CB8od+7aTayBq+5
+         uYTKt2G0J4BC+qGnWbx0a60XtuysorHk8XDGBOEIT3YAMW5+4kLZxjMY3N1VQaTQsvjY
+         VP+8yJaoRazbGfp5fV/MTTRaRXDRVtAA/6Gq/uhwmfvhTvXMacKOY4iNXZuEAZr3D7vg
+         /+s4hI/9NDwUo/aeKDJPdWMx2TZTpcBJ0HutCWIFNUdPWgTiJsDZ0J6v78npAC1XL+nB
+         avew==
+X-Gm-Message-State: AOAM533WhZuoxJFMnuiqj0ZJHiPmK8n3anV5nqbZD/I94JiF7BpX1UQ1
+        A5aBgeWgUAzlW1je9BxkAsGh2qyI7UdJ1Q==
+X-Google-Smtp-Source: ABdhPJxvFffbttIKz7Na7DPiLiYm3YnyCQTdRoBJ+lM//JF3O1XkLpBPZEnlqZ/8dg6bspbaSdHVAA==
+X-Received: by 2002:a5d:6f18:: with SMTP id ay24mr3114077wrb.694.1641894794812;
+        Tue, 11 Jan 2022 01:53:14 -0800 (PST)
+Received: from localhost.localdomain (203.247.120.78.rev.sfr.net. [78.120.247.203])
+        by smtp.googlemail.com with ESMTPSA id l18sm1248916wms.24.2022.01.11.01.53.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 01:53:14 -0800 (PST)
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+To:     kishon@ti.com
+Cc:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        p.zabel@pengutronix.de, balbi@kernel.org, jbrunet@baylibre.com,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-phy@lists.infradead.org,
+        vkoul@kernel.org, khilman@baylibre.com
+Subject: [PATCH v6 0/3] phy: amlogic: fix shared reset control use
+Date:   Tue, 11 Jan 2022 10:52:52 +0100
+Message-Id: <20220111095255.176141-1-aouledameur@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DB8PR04MB6843B12B11964DCFA68F7B518C519@DB8PR04MB6843.eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 04:43:42AM +0000, Xu Yang wrote:
-> Hi,
-> 
-> > 
-> > I'm sorry, but I did not understand the subject line?
-> > 
-> > On Thu, Jan 06, 2022 at 04:53:25PM +0800, Xu Yang wrote:
-> > > With the AMS and Collision Avoidance, tcpm often needs to change the
-> > CC's
-> > > termination. When one CC line is souring Vconn, if we still change its
-> > > termination, the voltage of the another CC line is likely to be fluctuant
-> > > and unstable.
-> > >
-> > > Therefore, we should verify whether a CC line is soucing Vconn before
-> > > changing its termination. And only changing the termination that is
-> > > not a Vconn line. This can be done by reading the VCONN Present bit of
-> > > POWER_ STATUS register. To determinate the polarity, we can read the
-> > > Plug Orientation bit of TCPC_CONTROL register. Since only if Plug
-> > > Orientation is set, Vconn can be sourced.
-> > >
-> > > Fixes: 0908c5aca31e ("usb: typec: tcpm: AMS and Collision Avoidance")
-> > > cc: <stable@vger.kernel.org>
-> > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> > 
-> > Okay, the commit message does explain what's this about, but could you
-> > still change the subject to "..don't touch the CC line if it's VCONN
-> > source" or something like that?
-> 
-> Sorry for the puzzling title, I will change it in the next formal patch.
-> 
-> > 
-> > > ---
-> > >  drivers/usb/typec/tcpm/tcpci.c | 27 +++++++++++++++++++++++++++
-> > >  drivers/usb/typec/tcpm/tcpci.h |  1 +
-> > >  2 files changed, 28 insertions(+)
-> > >
-> > > diff --git a/drivers/usb/typec/tcpm/tcpci.c
-> > b/drivers/usb/typec/tcpm/tcpci.c
-> > > index 35a1307349a2..0bf4cbfaa21c 100644
-> > > --- a/drivers/usb/typec/tcpm/tcpci.c
-> > > +++ b/drivers/usb/typec/tcpm/tcpci.c
-> > > @@ -75,9 +75,26 @@ static int tcpci_write16(struct tcpci *tcpci, unsigned
-> > int reg, u16 val)
-> > >  static int tcpci_set_cc(struct tcpc_dev *tcpc, enum typec_cc_status cc)
-> > >  {
-> > >       struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-> > > +     bool vconn_pres = false;
-> > > +     enum typec_cc_polarity polarity = TYPEC_POLARITY_CC1;
-> > >       unsigned int reg;
-> > >       int ret;
-> > >
-> > > +     ret = regmap_read(tcpci->regmap, TCPC_POWER_STATUS, &reg);
-> > > +     if (ret < 0)
-> > > +             return ret;
-> > > +
-> > > +     if (reg & TCPC_POWER_STATUS_VCONN_PRES) {
-> > 
-> > Isn't that bit optional? tcpm.c already knows the vconn status, right?
-> > If it does, then maybe it would be safer to change the API so that you
-> > pass also the information about the vconn status to the .set_cc
-> > callback? So in this case:
-> > 
-> > static int tcpci_set_cc(struct tpcp_dev *tcpc, enum typec_cc_status cc, enum
-> > typec_role vconn)
-> > 
-> > That way the support would also be for all the other drivers too, so
-> > not just for tcpci.c.
-> 
-> Yeah, it's better to change the API in the tcpm.c. But from to my observation,
-> other drivers already have their own implementation to set CC's termination. 
-> 
-> For fusb302: 
-> It use chip->cc_polarity to choose which CC line to be changed.
-> 
-> For wcove:
-> It only changes one CC's termination at one time.
-> 
-> So, there is no such a problem for them with the AMS and Collision Avoidance.  
-> In tcpci, this problem appears because two CC's termination are changed at the 
-> same time even though Vconn enabled.
-> 
-> Therefore, I'm not sure the API in tcpm should be changed or only tcpci driver
-> should be changed at this case. Any suggestion for this?
+This patchset fixes a usb suspend warning seen on the libretech-cc by
+using reset_control_rearm() call of the reset framework API. 
+This call allows a reset consummer to release the reset line even when 
+just triggered so that it may be triggered again by other reset
+consummers.
 
-Well, if this is only a problem for tcpci.c, then I guess API change
-would not make much sense. Maybe we can just go with this for now.
+reset_control_(de)assert() calls are called, in some meson usb drivers, 
+on a shared reset line when reset_control_reset has been used. This is not
+allowed by the reset framework.
 
-thanks,
+Finally the meson usb drivers are updated to use this new call, which
+solves the suspend issue addressed by the previous reverted 
+commit 7a410953d1fb ("usb: dwc3: meson-g12a: fix shared reset control
+use").
+
+changes since v5:
+- No changes.
+
+Amjad Ouled-Ameur (3):
+  phy: amlogic: phy-meson-gxl-usb2: fix shared reset controller use
+  phy: amlogic: meson8b-usb2: Use dev_err_probe()
+  phy: amlogic: meson8b-usb2: fix shared reset control use
+
+ drivers/phy/amlogic/phy-meson-gxl-usb2.c | 5 ++++-
+ drivers/phy/amlogic/phy-meson8b-usb2.c   | 9 +++++++--
+ 2 files changed, 11 insertions(+), 3 deletions(-)
 
 -- 
-heikki
+2.25.1
+
