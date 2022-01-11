@@ -2,51 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8AB48A8DB
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jan 2022 08:51:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4081148A8B9
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jan 2022 08:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348705AbiAKHvI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jan 2022 02:51:08 -0500
-Received: from mail.BETTERBIZ.PL ([45.86.209.138]:54856 "EHLO
-        mail.betterbiz.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235901AbiAKHvH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jan 2022 02:51:07 -0500
-Received: by mail.betterbiz.pl (Postfix, from userid 1001)
-        id 6C70482B58; Tue, 11 Jan 2022 02:46:03 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=betterbiz.pl; s=mail;
-        t=1641887467; bh=07NAgW1e0WiNB9zqagiM2BnwZfWBCpNa2E4+ccxBPgw=;
-        h=Date:From:To:Subject:From;
-        b=c5DCJiTaaPWWqPWROaI7v1E2RYqb6AIjNrpzH0Z1pAzO0NDjn9SDfJO7CTUiDZxLE
-         c4PqLrtRDAtWjQK/moQTf+dDDiSxFnUxXG3/4IFvVv81r1o3uMR4myuCw93r0Di4nh
-         0LwNQz/ZIAmyjM/XFOg+osq+RhL6SWYxPunGSlQQEZnHd5z9ZmT2rJ576YivF5mAbZ
-         KkEHMiovFucOv9pXTwxRbPlApFgcjt2Mlmz0YaPtpaJA4yhyYNRAKT19NXwdvvMEKI
-         JwgTOIEGGy9irfl5d3MwBO1cgWLTBY5EH+6IXiIM4o4PvadT07BKqLI/eVBi2cDm42
-         TwXSwjf+x6o4A==
-Received: by mail.betterbiz.pl for <linux-usb@vger.kernel.org>; Tue, 11 Jan 2022 07:45:59 GMT
-Message-ID: <20220111024500-0.1.o.zvv.0.5l0h3odkar@betterbiz.pl>
-Date:   Tue, 11 Jan 2022 07:45:59 GMT
-From:   "Jakub Daroch" <jakub.daroch@betterbiz.pl>
-To:     <linux-usb@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.betterbiz.pl
+        id S1348677AbiAKHsG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jan 2022 02:48:06 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33478 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348682AbiAKHsE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jan 2022 02:48:04 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FD7C614CB;
+        Tue, 11 Jan 2022 07:48:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8BCDC36AEF;
+        Tue, 11 Jan 2022 07:48:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641887282;
+        bh=bst8MtsKlBT1ntZk0xas+PDw1Hr2JI/ZKVMtFJgfm1w=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GLnMhYmjsfpHqorr9zb4hbJNpn4aQcPmXofkv0SSBkxMwm+ABkePN2G8BlnLDwbOf
+         x4islPqNV5/TlXLG/8Ena9YJpYOkn9zeFt5HnINERRxqYX1YaCO7NGsgJBMt/Mq9XW
+         6eHlSMhi7+uFm+H6og9LBdF2I2UiNC7qk1rClptwMEb1j1Wp0kdVrCnwQN5kDUNKu8
+         HBnAm96p2G7qvN8oBwAwOuLBwTavDnY/K6AjqIwEQKKPltUkKAY4Ktghh05pxheTKT
+         0uO4Q9EE1tS17LbmZihbejoAeXhW3oh7SYAmFiYIUU8vUfSoyvHngHt5SPe4T0xWJd
+         Gtc+egLO7r4RA==
+Date:   Tue, 11 Jan 2022 01:54:27 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] usb: host: ehci-sched: Use struct_size() in kzalloc()
+Message-ID: <20220111075427.GA76390@embeddedor>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Make use of the struct_size() helper instead of an open-coded version,
+in order to avoid any potential type mistakes or integer overflows that,
+in the worse scenario, could lead to heap overflows.
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+Also, address the following sparse warning:
+drivers/usb/host/ehci-sched.c:1168:40: warning: using sizeof on a flexible structure
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+Link: https://github.com/KSPP/linux/issues/160
+Link: https://github.com/KSPP/linux/issues/174
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/usb/host/ehci-sched.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
+diff --git a/drivers/usb/host/ehci-sched.c b/drivers/usb/host/ehci-sched.c
+index 0f85aa9b2fb1..bd542b6fc46b 100644
+--- a/drivers/usb/host/ehci-sched.c
++++ b/drivers/usb/host/ehci-sched.c
+@@ -1165,10 +1165,8 @@ static struct ehci_iso_sched *
+ iso_sched_alloc(unsigned packets, gfp_t mem_flags)
+ {
+ 	struct ehci_iso_sched	*iso_sched;
+-	int			size = sizeof(*iso_sched);
+ 
+-	size += packets * sizeof(struct ehci_iso_packet);
+-	iso_sched = kzalloc(size, mem_flags);
++	iso_sched = kzalloc(struct_size(iso_sched, packet, packets), mem_flags);
+ 	if (likely(iso_sched != NULL))
+ 		INIT_LIST_HEAD(&iso_sched->td_list);
+ 
+-- 
+2.27.0
 
-
-Pozdrawiam,
-Jakub Daroch
