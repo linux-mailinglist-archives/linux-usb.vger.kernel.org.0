@@ -2,92 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0450848A808
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jan 2022 07:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF5548A841
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jan 2022 08:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348370AbiAKG7C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jan 2022 01:59:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348344AbiAKG7C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jan 2022 01:59:02 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83FBC06173F
-        for <linux-usb@vger.kernel.org>; Mon, 10 Jan 2022 22:59:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=BRqJvLC56Vxe+VSbPwmPQzrmCucPR8amgvX4UlaitHQ=; b=WqgUEW8xxEBBHJWSLBwDC8NMUM
-        M4SXVxBkJN2z8GbTWLn1NlLvZE0koVDVM6cKuTKt9pzeqwHaYyHtNCwsK05/A5kxyQzI3iT0mA7ze
-        SBE4G4yoSpMJKctnHGT/X/1F1t99a6KyHLzdXJAdJil5HSdSMPaQ+JJecNwI3gqQY0kfRcsKN68D8
-        XAzkPpyBP7g1N5jQeN1KdtGYghwNP8NDccJjuUv6urE+WomdBDBWKZUWoFJZ3qT6kndLncodhYSUK
-        6/tZqSZtctPAp2svEOrNy8QfUGf40H5ch6UScqLIM7lkyChwtRUFLww9TcML0SnvDSa+QV89uqi43
-        8/iV8ixw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n7B7S-0032Om-B2; Tue, 11 Jan 2022 06:58:58 +0000
-Message-ID: <0895680e-8a4a-7eea-e5c8-f6c29867e563@infradead.org>
-Date:   Mon, 10 Jan 2022 22:58:54 -0800
+        id S1348477AbiAKHSV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jan 2022 02:18:21 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:58218 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233066AbiAKHST (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 Jan 2022 02:18:19 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowAB3fp4gL91hlu8pBg--.37098S2;
+        Tue, 11 Jan 2022 15:17:52 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] usb: typec: Check error number after calling ida_simple_get
+Date:   Tue, 11 Jan 2022 15:17:51 +0800
+Message-Id: <20220111071751.590487-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: no name mouse?
-Content-Language: en-US
-To:     James <bjlockie@lockie.ca>, linux-usb <linux-usb@vger.kernel.org>
-References: <9cb86662-d1f6-5d7e-65a4-c5a071e9b4f1@lockie.ca>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <9cb86662-d1f6-5d7e-65a4-c5a071e9b4f1@lockie.ca>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAB3fp4gL91hlu8pBg--.37098S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtFy3XryfZw1fXr17AF43KFg_yoWDJwc_CF
+        sYgrn7Xry5CF93Aw1UJ345ur9Y9a1v9r1UWFsYgan3Ja4DAr18WFWqv3s8X3WxWr48KF98
+        Gr12y3yIgw17ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GF4l
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUekucDUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+If allocation fails, the ida_simple_get() will return error number.
+So altmode_id_get() may return error number.
+And then id will be used in altmode_id_remove, causing the BUG_ON().
+Or it will be assigned to alt->id.
+Therefore, it should be better to check it and return error if fails,
+like the ida_simple_get() in typec_register_port().
 
+Fixes: 8a37d87d72f0 ("usb: typec: Bus type for alternate modes")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/usb/typec/class.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-On 1/10/22 18:48, James wrote:
-> $ lsusb -tv
-> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 5000M
->     ID 1d6b:0003 Linux Foundation 3.0 root hub
-> /:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 480M
->     ID 1d6b:0002 Linux Foundation 2.0 root hub
-> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 10000M
->     ID 1d6b:0003 Linux Foundation 3.0 root hub
->     |__ Port 3: Dev 4, If 0, Class=Mass Storage, Driver=uas, 5000M
->         ID 0bc2:ab5a Seagate RSS LLC
->     |__ Port 4: Dev 3, If 0, Class=Mass Storage, Driver=uas, 5000M
->         ID 0bc2:2321 Seagate RSS LLC Expansion Portable
-> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 480M
->     ID 1d6b:0002 Linux Foundation 2.0 root hub
->     |__ Port 5: Dev 4, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
->         ID 04d9:1503 Holtek Semiconductor, Inc. Keyboard
->     |__ Port 5: Dev 4, If 1, Class=Human Interface Device, Driver=usbhid, 1.5M
->         ID 04d9:1503 Holtek Semiconductor, Inc. Keyboard
->     |__ Port 6: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
->         ID 30fa:0400
-> 
-> Port 6 Dev 3 is the mouse I bought from Amazon.
-> Why doesn't have a name beside it?
-
-USB 2.0 spec, section 9.6.7 String (descriptors):
-
-"""
-String descriptors are optional. As noted previously, if a device does not support string descriptors, all
-references to string descriptors within device, configuration, and interface descriptors must be reset to zero.
-"""
-
-so whoever manufactured this device chose to leave it with no Mfr/Product name strings,
-i.e., it's a generic device.
-
-You could look at 'lsusb -v' for that device and then look at these fields:
-(e.g., from a "transceiver" device for a wireless kbd/mouse)
-
-  iManufacturer           1 Dell Computer Corp
-  iProduct                2 Dell Universal Receiver
-  iSerial                 0 
-
-You should see iManufacturer and iProduct set to 0.
-
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index aeef453aa658..67b3670ede99 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -516,6 +516,9 @@ typec_register_altmode(struct device *parent,
+ 	struct altmode *alt;
+ 	int ret;
+ 
++	if (id < 0)
++		return ERR_PTR(id);
++
+ 	alt = kzalloc(sizeof(*alt), GFP_KERNEL);
+ 	if (!alt) {
+ 		altmode_id_remove(parent, id);
 -- 
-~Randy
+2.25.1
+
