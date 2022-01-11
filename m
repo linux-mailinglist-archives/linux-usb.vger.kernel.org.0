@@ -2,80 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6152548B790
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jan 2022 20:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F73148B926
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jan 2022 22:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238539AbiAKToV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jan 2022 14:44:21 -0500
-Received: from out2.migadu.com ([188.165.223.204]:22599 "EHLO out2.migadu.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238194AbiAKToV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 11 Jan 2022 14:44:21 -0500
-Date:   Tue, 11 Jan 2022 20:44:17 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alujoe.com; s=key1;
-        t=1641930259;
+        id S236787AbiAKVFS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jan 2022 16:05:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245195AbiAKVE6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jan 2022 16:04:58 -0500
+X-Greylist: delayed 371 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Jan 2022 13:04:57 PST
+Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999A3C06173F;
+        Tue, 11 Jan 2022 13:04:57 -0800 (PST)
+Received: from webmail.kmu-office.ch (unknown [IPv6:2a02:418:6a02::a3])
+        by mail.kmu-office.ch (Postfix) with ESMTPSA id 199B85C08F0;
+        Tue, 11 Jan 2022 21:58:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=agner.ch; s=dkim;
+        t=1641934723;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=T4y9MKsyvp6d0yskdqQDAYCk0HpFlPoI6crKQ3Q+lqM=;
-        b=R0urdK7yPbuDzd09dwStTYWX0BpfRCieAY48ceDgbGHM7P8laRBzAtRZQpPlK6Dd23GojT
-        mWI4agsRYsY6zZQWZA2M6pZOigpd1ozWDE1VPPppO3NG5YOSVCn76NfNCcDdROzoS86B5c
-        e2XgivRSdnEUiCyiJ58I7uIOLvl1Alo=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Joe Minor <joe@alujoe.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Problem: xhci: devices can not be enumerated due to bandwidth
- issues
-Message-ID: <Yd3eESRmmlic71q7@trivial>
-References: <YdxKuum3LFJOTSLi@trivial>
- <4c944b85-06a4-dd90-27df-71f35190f189@linux.intel.com>
+        bh=iVvlJDmHXnabUFubsGrlnwqcZ70EOBK8YyJIdSmQOWk=;
+        b=LTCk4AvCHBiMbCEEwHEsQbdFoKOblEc4Zd/Cqag/y2+GKOYOExfdJCjOkEyFogWlgA3R2j
+        qoZOqcQ7PrKEKE3GgxG7NI1AP1htOlV/Pi7kJpGpmtIyTCFrH/foRiis15yj+6xWjuVrTS
+        pfDLoIF41VRRTU98XYXk4iR+VCDBX4Y=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4c944b85-06a4-dd90-27df-71f35190f189@linux.intel.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: alujoe.com
+Date:   Tue, 11 Jan 2022 21:58:42 +0100
+From:   Stefan Agner <stefan@agner.ch>
+To:     Greg KH <greg@kroah.com>
+Cc:     Anders Roxell <anders.roxell@linaro.org>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, woojung.huh@microchip.com,
+        UNGLinuxDriver@microchip.com, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        clang-built-linux@googlegroups.com, ulli.kroll@googlemail.com,
+        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
+        amitkarwar@gmail.com, nishants@marvell.com, gbhat@marvell.com,
+        huxinming820@gmail.com, kvalo@codeaurora.org,
+        linux-wireless@vger.kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, dmitry.torokhov@gmail.com,
+        ndesaulniers@google.com, nathan@kernel.org,
+        linux-input@vger.kernel.org,
+        Russell King <rmk+kernel@armlinux.org.uk>
+Subject: Re: [PATCH 4.19 5/6] ARM: 8788/1: ftrace: remove old mcount support
+In-Reply-To: <YcBhqJMLdwieZa8X@kroah.com>
+References: <20211217144119.2538175-1-anders.roxell@linaro.org>
+ <20211217144119.2538175-6-anders.roxell@linaro.org>
+ <YcBhqJMLdwieZa8X@kroah.com>
+User-Agent: Roundcube Webmail/1.4.9
+Message-ID: <cf6f7b9e8694fa87c3e27bd6be67afd2@agner.ch>
+X-Sender: stefan@agner.ch
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
-
-On Mon, Jan 10, 2022 at 11:39:10PM +0200, Mathias Nyman wrote:
-> > I bisected the issue to commit 2847c46c6148 ('Revert "USB: xhci: fix U1/U2 handling for hardware with XHCI_INTEL_HOST quirk set"'), which also mentions xhci bandwidth issues.
+On 2021-12-20 11:57, Greg KH wrote:
+> On Fri, Dec 17, 2021 at 03:41:18PM +0100, Anders Roxell wrote:
+>> From: Stefan Agner <stefan@agner.ch>
+>>
+>> commit d3c61619568c88d48eccd5e74b4f84faa1440652 upstream.
+>>
+>> Commit cafa0010cd51 ("Raise the minimum required gcc version to 4.6")
+>> raised the minimum GCC version to 4.6. Old mcount is only required for
+>> GCC versions older than 4.4.0. Hence old mcount support can be dropped
+>> too.
+>>
+>> Signed-off-by: Stefan Agner <stefan@agner.ch>
+>> Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
+>> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 > 
-> This change will enable xhci USB Link power management for some devices. 
-> It adds a few more items to do during enumeration for them. 
+> Why is this needed for clang builds in 4.19?
 
-Is this introducing the problem a sign of an issue with hardware or setup?
+As far as I remember, Clang tripped over this part:
 
-> If you could boot with usb core and xhci dynamic debugging enabled it could show more.
-> Add "usbcore.dyndbg=+p xhci_hcd.dyndbg=+p" to your kernel cmdline
+-#ifndef CONFIG_OLD_MCOUNT
+-#if (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 4))
+-#error Ftrace requires CONFIG_FRAME_POINTER=y with GCC older than
+4.4.0.
+-#endif
+-#endif
 
-Here is the output of dmesg | grep -i "usb\|xhci": https://gist.github.com/alujoe/8539793d755ed818da50bac5b2e960a5
-(I did not apply the patch below before capturing the output)
-Does the log include something useful?
+Since mcount support wasn't required upstream at that point, instead of
+fixing it for Clang I just removed it.
 
-> 
-> Also, could be worth checking if removing XHCI_LPM_SUPPORT from your kernel helps:
-> 
-> 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 5c351970cdf1..7434406be452 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -202,7 +202,6 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->                 xhci->quirks |= XHCI_BROKEN_D3COLD;
->  
->         if (pdev->vendor == PCI_VENDOR_ID_INTEL) {
-> -               xhci->quirks |= XHCI_LPM_SUPPORT;
->                 xhci->quirks |= XHCI_INTEL_HOST;
->                 xhci->quirks |= XHCI_AVOID_BEI;
->         }
-> 
-
-The change did help! This might be a viable workaround.
-
-Thanks
-Joe
+--
+Stefan
