@@ -2,122 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD30F48AC3B
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jan 2022 12:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A0148ACD8
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jan 2022 12:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238550AbiAKLNg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jan 2022 06:13:36 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36632 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238339AbiAKLNe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jan 2022 06:13:34 -0500
+        id S238907AbiAKLnR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jan 2022 06:43:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238505AbiAKLnR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jan 2022 06:43:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A92C06173F;
+        Tue, 11 Jan 2022 03:43:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39DF761596;
-        Tue, 11 Jan 2022 11:13:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3CA4C36AE3;
-        Tue, 11 Jan 2022 11:13:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0ABA5615DC;
+        Tue, 11 Jan 2022 11:43:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D113BC36AE3;
+        Tue, 11 Jan 2022 11:43:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641899613;
-        bh=RusBdLJOhe3F0aFWMDF9tfb7pW5/3dAGW6uBUol0si8=;
+        s=korg; t=1641901395;
+        bh=9uyU6D52eqfoTsVr5gmME/6eiaArQyJc5nNnkFnGOz4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=szf2W6SMe/VUssn1AMG+38/z7ptbdg494uvhrrAMsLUEZILBmeX2qddyYtS8b5NJ6
-         yWMpzhwHbHEF4FCHJ2CRDYfUB/O1og1sfjwH3thRAwPTKEKQu5l/EVgSEQVjZqGg5B
-         bzZtZHybNRrtri/gjLIXi2vp+m9+/NKvbuCrzjVE=
-Date:   Tue, 11 Jan 2022 12:13:30 +0100
+        b=2rBsBBij62ZB6NYAvc3wG2R1APyUkNHWblCeKYCmDjqvtTPAjgMoTf5ppwpaV88Ih
+         5fOoVtyTvSVW0QtCBDvKtwQEJLczko9kkGEHCAm0LhCMu/XyKJNEWNUWNCI8n57Bwk
+         PL2xejwKXkw0q1KUkjb122Wbs0azr0mOvl5qfrsg=
+Date:   Tue, 11 Jan 2022 12:43:12 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     "peter.chen@kernel.org" <peter.chen@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: cdnsp: remove not used variables
-Message-ID: <Yd1mWgwk/PKJkZSo@kroah.com>
-References: <20220111085934.44844-1-pawell@gli-login.cadence.com>
- <Yd1KBiRB/ByZ2Kx1@kroah.com>
- <BYAPR07MB53811E109250D3D9C6447847DD519@BYAPR07MB5381.namprd07.prod.outlook.com>
+To:     Puma Hsu <pumahsu@google.com>
+Cc:     mathias.nyman@intel.com, s.shtylyov@omp.ru,
+        albertccwang@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3] xhci: re-initialize the HC during resume if HCE was
+ set
+Message-ID: <Yd1tUKhyZf26OVNQ@kroah.com>
+References: <20211229112551.3483931-1-pumahsu@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BYAPR07MB53811E109250D3D9C6447847DD519@BYAPR07MB5381.namprd07.prod.outlook.com>
+In-Reply-To: <20211229112551.3483931-1-pumahsu@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 10:38:53AM +0000, Pawel Laszczak wrote:
-> >
-> >On Tue, Jan 11, 2022 at 09:59:34AM +0100, Pawel Laszczak wrote:
-> >> From: Pawel Laszczak <pawell@cadence.com>
-> >>
-> >> Patch removes not used variables:
-> >>  - ret from cdnsp_decode_trb function
-> >>  - temp_64 from cdnsp_run function
-> >>
-> >> Reported-by: kernel test robot <lkp@intel.com>
-> >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> >> ---
-> >>  drivers/usb/cdns3/cdnsp-debug.h  | 287 +++++++++++++++----------------
-> >>  drivers/usb/cdns3/cdnsp-gadget.c |   3 -
-> >>  2 files changed, 138 insertions(+), 152 deletions(-)
-> >>
-> >> diff --git a/drivers/usb/cdns3/cdnsp-debug.h b/drivers/usb/cdns3/cdnsp-debug.h
-> >> index a8776df2d4e0..29f3cf7ddbaa 100644
-> >> --- a/drivers/usb/cdns3/cdnsp-debug.h
-> >> +++ b/drivers/usb/cdns3/cdnsp-debug.h
-> >> @@ -182,206 +182,195 @@ static inline const char *cdnsp_decode_trb(char *str, size_t size, u32 field0,
-> >>  	int ep_id = TRB_TO_EP_INDEX(field3) - 1;
-> >>  	int type = TRB_FIELD_TO_TYPE(field3);
-> >>  	unsigned int ep_num;
-> >> -	int ret = 0;
-> >
-> >Please fix this function to properly handle the ret value, as I think it
-> >should be checked, right?
-> 
-> I think that it is not needed. Function is used only in one place in trace point in TP_printk. The buffer is
-> big enough (500 bytes) to accommodate whole string.  In this form function can be directly used in
-> TP_printk. If we will use ret instead of string as return type, then driver will need to format this string before
-> calling trace point function and pass this ass parameter.  This solution will have impact for code size and
-> performance even if we disable tracing
+On Wed, Dec 29, 2021 at 07:25:51PM +0800, Puma Hsu wrote:
+> When HCE(Host Controller Error) is set, it means an internal
+> error condition has been detected. It needs to re-initialize
+> the HC too.
 
-You should check somehow that you do not overflow the buffer, right?  To
-not do so is a bit odd.
+What is "It" in the last sentence?
 
-> >> --- a/drivers/usb/cdns3/cdnsp-gadget.c
-> >> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
-> >> @@ -1243,12 +1243,9 @@ static int cdnsp_run(struct cdnsp_device *pdev,
-> >>  		     enum usb_device_speed speed)
-> >>  {
-> >>  	u32 fs_speed = 0;
-> >> -	u64 temp_64;
-> >>  	u32 temp;
-> >>  	int ret;
-> >>
-> >> -	temp_64 = cdnsp_read_64(&pdev->ir_set->erst_dequeue);
-> >> -	temp_64 &= ~ERST_PTR_MASK;
-> >>  	temp = readl(&pdev->ir_set->irq_control);
-> >>  	temp &= ~IMOD_INTERVAL_MASK;
-> >>  	temp |= ((IMOD_DEFAULT_INTERVAL / 250) & IMOD_INTERVAL_MASK);
-> >> --
-> >> 2.25.1
-> >>
-> >
-> >A separate patch for this.
-> >
-> >Also, are you SURE this is ok to do?  Did you check it on the hardware
-> >that a read is not needed here for it to work properly?
-> >
-> >This type of "warning" is horrible for dealing with hardware devices,
-> >always treat it as incorrect unless you can prove otherwise.
-> >
 > 
-> Yes, I've tested it. I think that it was used in some printk and by mistake has not been removed. 
-> 
-> The warning was reported by Intel kernel test robot and fix are very simple. Patch is little bigger
-> because some code had to be reformatted.  
-> 
-> Do I really need to send this as two separate patches
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Puma Hsu <pumahsu@google.com>
 
-Yes, you are doing two different things here.
+What commit id does this fix?
+
+> ---
+> v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
+> v3: Add stable@vger.kernel.org for stable release.
+> 
+>  drivers/usb/host/xhci.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index dc357cabb265..ab440ce8420f 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -1146,8 +1146,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+>  		temp = readl(&xhci->op_regs->status);
+>  	}
+>  
+> -	/* If restore operation fails, re-initialize the HC during resume */
+> -	if ((temp & STS_SRE) || hibernated) {
+> +	/* If restore operation fails or HC error is detected, re-initialize the HC during resume */
+> +	if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
+
+But if STS_HCE is set on suspend, that means the suspend was broken so
+you wouldn't get here, right?
+
+Or can the error happen between suspend and resume?
+
+This seems like a big hammer for when the host controller throws an
+error.  Why is this the only place that it should be checked for?  What
+caused the error that can now allow it to be fixed?
 
 thanks,
 
