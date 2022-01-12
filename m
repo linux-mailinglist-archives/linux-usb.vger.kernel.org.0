@@ -2,192 +2,226 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBB048C4EA
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jan 2022 14:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F42E48C4F1
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jan 2022 14:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353620AbiALNcp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jan 2022 08:32:45 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:13084 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240715AbiALNcl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jan 2022 08:32:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1641994361; x=1673530361;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=rWoGt7FmykwnP8eWxv1McLtq4rq/Sd5WYZ2tYwwkHuE=;
-  b=Ykdufa+nMbcZhsQVLM2URKTyHM8gyCMa+vSVvJcqBv5bYYIP5DL2AMIc
-   +fVG1kQYxdtkRCE3Bmy4rMw2YrggUoD/F7Wx65JiTkSMOocHuelOvYTqh
-   9N7ajPHXKyvV4w3VoRUp1DJYQ1V44iuSx6U/Sj7XE9s2VP6lnzyqYedxY
-   BLLm3oc8duEoXC/qS2un/zai7UhbroHXW06J6Ws9arWkJaElpKP6S4ZeI
-   zZylw/c0ZV+tV2qGDyBHHeDgwIKD6ZaidwpCemTP4GApP8wNgMolsXA/Q
-   d/m8InwDo/E1KayK2yGh3Ii0QnEWVJvgyUNG8krtvs0iBNGODJRbvSqX9
-   A==;
-IronPort-SDR: qd9RI+JApMeBKOWVweSvtHaa10vyEEukGlg7/4ycFyFgtlP5rPYOVg03CxevI4qBOfJMa/R6ah
- 6pUEuobrfB1Mrg7lSN2h6ZNsAUQ/zX7UWXrWzxeIyRVgN0VC+qKkCfjGupkgBv9XAWondFiDf1
- 719lzNySSikfs+iGgW31TCe4SxsNr8m3pJndX3lSb/3Yg4otHJGY3VYDsozBNmlDBrCCG8cfuh
- bDT/HA8tgjcs1VcJQVlGwPAF+l5aXXHJYjTYOy3+iueAHpD6X5W/D0h9sN2t6fht1HkSl/YNQm
- sKNOTrn34h7dv4iHTNoCPojS
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="145184424"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jan 2022 06:32:40 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 12 Jan 2022 06:32:39 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Wed, 12 Jan 2022 06:32:39 -0700
+        id S1353642AbiALNgJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jan 2022 08:36:09 -0500
+Received: from mail-eopbgr80078.outbound.protection.outlook.com ([40.107.8.78]:52510
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1353635AbiALNgE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 Jan 2022 08:36:04 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WbQ6NCzNYLOpDrjeE5CgHNfpMV6V3/4rbOBhFzE6oATNaHu5qqVdYPDXTo0PjSR4B1EIfv/+64R1VKqNFPZmk7tgBFBm6dBzu7XmLrz1jlpStutyll9Z7n0Lwp+WrcLyyQz+m96CA9RNSRgEWiygB88iofHUnmHB6yAFz8DOSWilLRgCXMbKS3OiugECTVd8aR5GJwHGn3bDo1e5MRtyxyboQL9nfKvhUanwGmLLtPyTmO+u1TE3JkpAPwz1fHll9QAh+uoHrS7ZOINVGHLadTvTEHlEaxydafmKZSEpJ7f1kzyTBgc5aTcy4XLUG/kLOAan+hJ4LbbJb2ncBlEs2A==
+ b=CoXGhpqIUfId1s17xTNdFfLg0fm8oDI2o45/1/MoqWpwvMI2RVlEvlZ8If8OfQ2+9QCYPYDrQ2eSthdHdQrt4dJzJW/bQsWzXmW8AZ4ur+6DDAgGnP14w+RxYpkR5QND4LpbfO3AhkhE8BqoKUBwyEJaaA66Mf2eBPFoaScqVyL00YoTknVoWk45F8uT2Eg67qu3wSVy3+5S1WpPzdoJvxgaXmboAyU8XNNFyWiOxZijN6Iwbr9jWUCAYO5po2q4mI961KwpFHtjoVrravRbx+yyUP+g1jyWUqGjuJR4aKXxiO/WGzkKpY+ooRPP2nJM5ueR+/HYCuCu0Q3Yl03l/A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rWoGt7FmykwnP8eWxv1McLtq4rq/Sd5WYZ2tYwwkHuE=;
- b=ZRlPhubJ73Qs6UzUbyoQJr1AxNuUOELAmZP2Ao1g6JqKEh4px6LfpXBGM8cL59zSLMs7OjPnYzJf4X9uHM4au/XaThzJDZuIJL52iHQHBndM/VUpWPkfhzLSaxSmQeDyrza5geKvE0tGb4tEt9ohWpudQHxEsL1vjlAu2k1PFXn5Lqz+E+X3NCb883Z1pUQoNpQAcH+4DTNH/W6pL7SzzUk4SFEL/N3sGZnp4zukbGMuDp1Rj6wcB4fRP9G7ZeVROheZ1+qtbIfQhOVNDR5deTkDFomrMuFOk29uyBcM5YzadUZE1kuRIv/i/cAIR/CA1q99OBANOn7fLTK/1UGyGQ==
+ bh=UOmhq9ocoKPR6VczQkPTH+d1NcUVBWxl4Qgi6iF9E/8=;
+ b=Gk1cROK9LD2GeiMaYNCX5fRL9cNnsrHWhzqICaSK9cVPxHYYF9t5zYi0SgL0KrRHSn6OjwOQPOGv+bUWi9n6qf/9Z7exiAnaBKprfF4cOSNcuZQslzywVxmEVYnieFBjPwVdy9iLcrCBGFlWiaU40jD6g55L+3BeijNgjFaeAfEDCXkECWIMCrKCDObOHdyV0znb25elWCK3olxbMA0lF3kFJYznoDrBhCJJcLfVCuy4PzUnR+/Yfc+Kcy/I7DvCGX1gUgpX9KJaM0dj3FWx8NovuyV6h6XG+ruJfZwNH4baAB2JwnhSPMfg12PJv823/aPkqcpsPO8xEfyTWkyYZA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rWoGt7FmykwnP8eWxv1McLtq4rq/Sd5WYZ2tYwwkHuE=;
- b=c3z0MGp76f5kodZRHOLktb72YQNS7tFNIHJuSwkhz/zcgAhhgTAQsye9Ur0uCbLdkftzlB436rKUGqUOcqEX1+OzZtf/To/xd8vSsrdjchUnpOkzSBFHsVRH3OxEnuEKevwfYjVOj3vaSehSMucZ3TdYAvQnXwfi2QDHTfI8RXI=
-Received: from DM6PR11MB3770.namprd11.prod.outlook.com (2603:10b6:5:13c::24)
- by DM6PR11MB4186.namprd11.prod.outlook.com (2603:10b6:5:196::18) with
+ bh=UOmhq9ocoKPR6VczQkPTH+d1NcUVBWxl4Qgi6iF9E/8=;
+ b=SxaOjPneNqgJpPvKknG3oMS8hssUEdP91I8Os0EFwj19AU3qdVammz7gg1InrgigWd/l0ioR84FgalAiBbERS+loHgxAPvXf1P+vVlRs8V0G3MiD3+maE5fFJ/8awyWUJlgyg7DIm/m1fBiyL0pLiyhozrM4CDyS5ur0Xq6CU7k=
+Received: from VI1PR04MB4333.eurprd04.prod.outlook.com (2603:10a6:803:49::27)
+ by VI1PR0402MB3565.eurprd04.prod.outlook.com (2603:10a6:803:12::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.10; Wed, 12 Jan
- 2022 13:32:34 +0000
-Received: from DM6PR11MB3770.namprd11.prod.outlook.com
- ([fe80::9572:79db:81c3:3ea5]) by DM6PR11MB3770.namprd11.prod.outlook.com
- ([fe80::9572:79db:81c3:3ea5%3]) with mapi id 15.20.4867.012; Wed, 12 Jan 2022
- 13:32:34 +0000
-From:   <Lewis.Hanly@microchip.com>
-To:     <Conor.Dooley@microchip.com>, <krzysztof.kozlowski@canonical.com>,
-        <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
-        <robh+dt@kernel.org>, <jassisinghbrar@gmail.com>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <broonie@kernel.org>,
-        <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
-        <u.kleine-koenig@pengutronix.de>, <lee.jones@linaro.org>,
-        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-crypto@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
-CC:     <geert@linux-m68k.org>, <bin.meng@windriver.com>,
-        <heiko@sntech.de>, <Daire.McNamara@microchip.com>,
-        <Ivan.Griffin@microchip.com>, <atish.patra@wdc.com>
-Subject: RE: [PATCH v2 17/17] MAINTAINERS: update riscv/microchip entry
-Thread-Topic: [PATCH v2 17/17] MAINTAINERS: update riscv/microchip entry
-Thread-Index: AQHX8ylHYgDeT78tpE6hCjWWceRWEqw2yceAgAlqgYCAH1at0A==
-Date:   Wed, 12 Jan 2022 13:32:34 +0000
-Message-ID: <DM6PR11MB37703C8AA98A9498B88E6F3FE5529@DM6PR11MB3770.namprd11.prod.outlook.com>
-References: <20211217093325.30612-1-conor.dooley@microchip.com>
- <20211217093325.30612-18-conor.dooley@microchip.com>
- <61ae4cfd-a544-96d3-d521-877b8b38b5fc@canonical.com>
- <05d6a273-19f6-2147-75ba-1fff726a0f70@microchip.com>
-In-Reply-To: <05d6a273-19f6-2147-75ba-1fff726a0f70@microchip.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Wed, 12 Jan
+ 2022 13:36:02 +0000
+Received: from VI1PR04MB4333.eurprd04.prod.outlook.com
+ ([fe80::ad9d:c232:8a80:f8f2]) by VI1PR04MB4333.eurprd04.prod.outlook.com
+ ([fe80::ad9d:c232:8a80:f8f2%4]) with mapi id 15.20.4867.012; Wed, 12 Jan 2022
+ 13:36:02 +0000
+From:   Jun Li <jun.li@nxp.com>
+To:     Peter Chen <peter.chen@kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+CC:     Frank Li <frank.li@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Zhi Li <lznuaa@gmail.com>
+Subject: RE: xhci crash at xhci_disable_hub_port_wake when system suspend.
+Thread-Topic: xhci crash at xhci_disable_hub_port_wake when system suspend.
+Thread-Index: AdgD3VfMVBJx3GKFRn+PRgFnr8FjngCQPoUAABHzOAAAUyOhAAABJQXg
+Date:   Wed, 12 Jan 2022 13:36:02 +0000
+Message-ID: <VI1PR04MB4333F89471E833AA5BAEFED389529@VI1PR04MB4333.eurprd04.prod.outlook.com>
+References: <PAXPR04MB91861A98BE9D240FFEC1D560884D9@PAXPR04MB9186.eurprd04.prod.outlook.com>
+ <20220110123350.GA4302@Peter>
+ <3588ae48-e40e-1c9c-c841-cf54f59ad70b@linux.intel.com>
+ <20220112124820.GA3796@Peter>
+In-Reply-To: <20220112124820.GA3796@Peter>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
+ header.d=none;dmarc=none action=none header.from=nxp.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7aa82ecb-1c27-46a8-9e19-08d9d5cffe25
-x-ms-traffictypediagnostic: DM6PR11MB4186:EE_
-x-microsoft-antispam-prvs: <DM6PR11MB41865625FC1064AFEF8D72D1E5529@DM6PR11MB4186.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4303;
+x-ms-office365-filtering-correlation-id: 28fe4018-16b4-4de9-eae0-08d9d5d079ba
+x-ms-traffictypediagnostic: VI1PR0402MB3565:EE_
+x-microsoft-antispam-prvs: <VI1PR0402MB356513008A04C4C6B89539B189529@VI1PR0402MB3565.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2276;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QVaCTXHZjRypIEpAEDsEQumOCrz1e2QdyRxT2+XFeNp+5Jl4hVJ6zw6sW5L4Ncl2TrpDfX55HsckGxDC/kygpDjyAITSn6n8CrNtAVUMdM/98nhFrvPIjksgpPbvS5TbC0WBWQOijid3byM3qEHlCHRndpf+SuKgpr+RD4lTYXSGQGFQIVVQ1w/V0y+tT0MMlqX5ZpCzcjYjtLWJco/UXKov82kSE45OPj9QoPfqaXeMFahFLlsMT19X0mjRMJmRKbon4R++2/esStdj712CVv3M1iMiWjay5sbDbRVyQ/yBjO9iu8CKA4NhtGrAp7oV0z48Wnc6DMTWCYA5Y0454hv/ik9BN6LYT9khq0F+Dpnx2dFM+w3s2f8wdrbaLpqK+90BMUzHFT3ziwAa7Y9UkSIWls7jmlNI8gqkco5z99z5QSXBvcpntOtmFc3LDadbxT6eFe/YpBJXlMDb2lXT6fj3LGXmU5lOklYHCJftSgdSD67WMAKp77Swi8jCwt+Qcx5cSGBbHg62rFGZObZla9HwTWAiviebCPqs5hU0f4tMStHx3uWPTZRQfoj00LCWgj2Uf3US/N0mohakyUChGda1KBmgxuUlqwLiDVcrJPSN7KTtQ0+SN2eoF6PKhb83EHVF4BZNuwDshm5/SRF37d2jz/amZtUyXkfb266zlpv10H9dpQDcHE8Axk8QBwrZsjdiJDmPCwJGXxjp0CETJ/MDjIDGXRl5v+r6E+1YTfg=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3770.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(110136005)(38070700005)(83380400001)(54906003)(33656002)(921005)(55016003)(316002)(86362001)(52536014)(7416002)(2906002)(71200400001)(8676002)(38100700002)(186003)(8936002)(66556008)(66446008)(15650500001)(66946007)(4326008)(76116006)(508600001)(122000001)(9686003)(26005)(5660300002)(7696005)(6506007)(53546011)(64756008)(66476007);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: q3uOB3M5wf73bwVteWnlnLftqe6DpDgmlcvRT6rtv7cHBXn7nT+rtfVfc08b7H/tMhNjU0/3KTHrAFqyIFOgZ+mvLzSMgwkKxkuKewQuXrtU9VBl6Ecabdr8eUdZtuqhQ0b/9POXWxB5p2oyLkNdTc4aoWcUfhJP21npZ/S203bZc0Vc1FOCxDh1b2lL34ybJ4rpRCYFQtYWb3YSzLW5Oqad8Me4JdcagDSjETwvCgL4biaeEPTEFE/YT6sziOrZbVwCuQXyj+Vc1EVpUuHJY+UwVmui/hC+W57pd4aCTLJbiT/uhHAQ8vQ/t3sWTSUfzbUSVTIpEwXQk2jLZR3MpWr7oJeWP3v5jKuw+IP/50+I1h5q9Ly8oEZ0oKlmSnQwvkeWezDqW6XFmukR4Vvfjf4jZE8P8kwdyxuLqhnOUEO5uVLYk8Z67GJ6uGZCdllbrFbXNKiglPi4n8lq5ewFKw7lXBMsqcKzSObXIQZsEblthYOgTTnx0kIcCr89DSrEJI1mUkKCTbiCUUTIktOzVvAj+eBCAocErlFPySvmcHgWIsaIWajvOzBqJNtK4x36bo7GdKDJgJY64E+2B/XZLSP2T4iVDxtvShwXgpkE0k4ATXmwEGuUqa4YDDJbpbaOGJlWZ+whKoKneS9PdzSAfdKed0/d4ZCXVldfz2EmRrmKBB+bWZIKVgosQv2w4oxPY4Uz6upRJsiM8R2lU86OMQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4333.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(64756008)(316002)(66946007)(33656002)(66476007)(55016003)(66556008)(66446008)(9686003)(38100700002)(5660300002)(4326008)(86362001)(52536014)(38070700005)(122000001)(76116006)(54906003)(110136005)(15650500001)(8936002)(186003)(7696005)(71200400001)(44832011)(53546011)(6506007)(26005)(2906002)(83380400001)(8676002)(508600001);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OVkyc0MwT0dMcXlNcDhqTXhrK3lCOFgrZncxbXd0NGQrN2RIWnExSmo2RmNm?=
- =?utf-8?B?NkliUGVOcjJvTk43eUh6Yk5MQTJEQVp4SU5lZENkV3dRc2ZQUHgyT0Nkb3BP?=
- =?utf-8?B?dWxKbzllekttUDJJR1k4TWhpOEtTMDBIaGU5ekpTWnhyQ1c4Z3l4T2QzMysw?=
- =?utf-8?B?Yk45cDBWYitmeTlYZldWaWRsYzhMZ051Ty82Y2JtUUpNN1MwUE9TdG1YTXlN?=
- =?utf-8?B?VHVaZUVaam9QR2Jyb3A0TnRUVmswTm15bzFqdFd0V0NTU29lcnRTMWhVdmlo?=
- =?utf-8?B?UWVFckgrVWo2T2V2K0lCUnR0aU5sVnZNdTFwY3JHOFJnakJ3RFRDZXNDZExv?=
- =?utf-8?B?eG5BUUE1RmVsREtiT2lzU0xGUm9qWGpURHNTanNLNTR0V1VMUDMxaVRrQUxG?=
- =?utf-8?B?eU04UVlXTlJrc2I2ZWxMQ1JJNU5yMkJwTVBpR1VVSzgrbzBUdk1NamoyNm1P?=
- =?utf-8?B?ZUFrNHdRcVV5TVhITEJyNUJ5UlRWamxDaW5CNDdmVEg2dlBlRG5oeXdUalNj?=
- =?utf-8?B?SXE4cVVoTERITkxrWjkzSkV6WlZ5Q1JWbVo0cndiVjFTQzNUa1p2cUgyUXhm?=
- =?utf-8?B?U0RnbDM2c3AxQ2FNMVJqRWduQ29Xd0hjVzZxUmoyVStITFY3d2tCaHpJbmpE?=
- =?utf-8?B?YlFweDlwYkZpaExaOGcrTG1kbWVGenQ4S3hFU1QzTjh3RzN6QzBYeVd5U05B?=
- =?utf-8?B?akZjTmVFOW5CNSttTHhKNWZqdXdvRmd5ajRyRU5NY3k2d3YwUTZWT2NmYlN0?=
- =?utf-8?B?THJoWTNyQTlkTE84dWw2VzE2bHAyOEN0bFY3dmJmbDdzS005U1dQR2paVXZH?=
- =?utf-8?B?eW1sVE1vdVRjZTYvVGp4SDJVaXo0a2dudlBOSExTVEh3L0hoYTZ2YUI1MzI2?=
- =?utf-8?B?WFROL29TbHJMaTlRSzJlb0xVK2FIdnpZQzJzQk1KMFRHLzh3aVdQc0RVOVpm?=
- =?utf-8?B?MUxabys5NzhpSlVaaXVoWGJJcHBIampER0NweUdoOGNKcTFBMG9mRE9KMVRh?=
- =?utf-8?B?eUZQY0tOS25TaHZaSnRXYUVQcUY2TmxnOTg0czNIemlEdnhWcjY5ZkhxSW1K?=
- =?utf-8?B?ckNIYmNNMFJONGdqa3ZZNjZLRDFoUTlEZXlXVEJvMkFHZXlUejdJdkxTZm1P?=
- =?utf-8?B?bElMdCtjNEk1aGRXMmpRaHhIQ1plVC9VUUQ1a0RrSHV6OTdNQmF6YUFEZDBu?=
- =?utf-8?B?YzJ5OVNlYWNLVmlHMXg4S3NyNzlsMjZuM1V6cUxCQkZRODZBc0h0ZUdpS3Js?=
- =?utf-8?B?VGEyTkhDNzhHWC9QbVFZRG42TGoramNLSlVwb0VZUEIvZWx4MVpHOFdCckhJ?=
- =?utf-8?B?NGlkbUVKSjVGTlR1UWNId1F1bVJ3dmNncVFkYVJtQisvVDRqWTJMb2d4c1B1?=
- =?utf-8?B?VkpVMDMzK1VGVm0rVGtwWHE0UG8yV25SS0w0RnVId3VYUVNPQytqcXcySzAr?=
- =?utf-8?B?a2dzb3hBaDV3WlVlS05OZ2dYR3lHODdaVFR4MWJoTkdwUVpaaFZLU1plL2cz?=
- =?utf-8?B?NGxqRjcxM25rako0dmNpTjNhbUxYNlpQZDk1Z1lkVEFNeTZ3OUtnTk50RUdz?=
- =?utf-8?B?MFBHYWkzWjFJVHF1eGxJeE1CZG1QR3ZYb3FhUzlhMCsrQ3M4M3E4OHA4a0JP?=
- =?utf-8?B?ajFEWUs5aFIzUzZUaE51VmFhVnZuUXlnTjZIMWhiQjNxMk5SZW1EYXF6bElm?=
- =?utf-8?B?b2xkekpKQUF2eDZobHhGK0prd0tyWW9PYUVLV01ZRkVmZ3FGbHRLemI2SllW?=
- =?utf-8?B?NWs2WWYrZGVvNk0vUjR0dnlYNVBlODI5dnZlRWdEVlJoaFJHNDQ0YnA2cXlh?=
- =?utf-8?B?M1BqL1NIOHRwSWYwZC8ybFJBSnJ3NGNpeDJzQXprZVB1dzJTd2V5UThJcmZx?=
- =?utf-8?B?QUs4Vmc4ZTk5OUtTT012SFNybG5QZlloSXprR3FNUVAzOWJSZU56SWNXTVUw?=
- =?utf-8?B?TzR3cEJGMUpTWVg1SEhlZHhqVXhmWGxXQmhTTHE1N2JIaTdaS0NMaE1DM0Jt?=
- =?utf-8?B?UUx4YTlpS0xDQlVGcUU2SEo1NnpOZFpEM1JMaEUzTHBrUWc0TEtmaDdVU0c4?=
- =?utf-8?B?Z3pYL3pwZXVZYS9teFhlaXJXSWkxNitLTFpxSCt4TDAySGNkOVMwenZSY3Vh?=
- =?utf-8?B?QkVtTmREeDZHaWVzUkcxVHZyVEJudHpmWGtNdjdTWnpPOUErbTFMSERNZ0NY?=
- =?utf-8?B?aXFwdDg2OHJtRCt6U1hBc2V5WGdNaVVqQ3h2TklUcVByY0tpNldYaFZiM0xo?=
- =?utf-8?B?ZVZrTEVCV093VHFabW0vQmR2RGNBPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?jdcpOBwnQa4xw4TteUe39fM65IQHOZAA3rFyvIUAoWnFvG2sMRfI5E3nbmog?=
+ =?us-ascii?Q?JpSMG8ju+2/bXgEsUPxDAy4RED8MAxoxyYKIyNn1CZZIIfZQBnFKhGfZmbSS?=
+ =?us-ascii?Q?3oOP6cRqO6ug0MsqJsdauNt58ovFyisDf9vA5STg4TKFJwahkUuhA3sKSpeL?=
+ =?us-ascii?Q?fyEy5FWTVLmXH2JQyUzs5vye8ylQKNbiOFyZboc7P3AUeDOK57SJQI6VOoRL?=
+ =?us-ascii?Q?20OpDV3JCHa2K1N3/ivNfCq9dnlwUCKWwQwUDMml7U/uLCuxTAVdX1f7feOh?=
+ =?us-ascii?Q?h7Xcxy5ad/jamcF37YKNS+mJ5bwkLvcoUN20ySXPXvcACuc6RrsqZByswD4Q?=
+ =?us-ascii?Q?x2kcmOVlkPx2VAlojiyL6lnp0bFdc0R9KiJz3i4ql9UGtHCLx8/5EjJMhwQZ?=
+ =?us-ascii?Q?UlERaitjjyNapUz8RbNc8VTuWVLQDRKMZi54TTWzcmaxuWEVZdmH1iA8pJYV?=
+ =?us-ascii?Q?KtZ654hF7KAEpjMRc/WZ9GsIQdKqitb0WD77WoPMFEe6vfm1LWFly8F+DYRe?=
+ =?us-ascii?Q?vwagWIxov1IsF3naPIIjR3ioCbDYoP6Uehk7R5AY8cdDdhww72WLJNt2xsRi?=
+ =?us-ascii?Q?6mMoSCU6gncBJXqypKTjYgV2GhU/UXiMTL4D1QBvML8YhXC9psYejd4eSGhT?=
+ =?us-ascii?Q?kthR7Ac/iT7ve3ZB9wVwoBitKb4XPLU127s1ACs44hv+MCSjt1niuOgxHX3E?=
+ =?us-ascii?Q?gYxpts9CxSQrSirxrNnDIjr8md/KqGolCUpjwlAfV05BmfjlNCOyXMl9NsFo?=
+ =?us-ascii?Q?ZD/JqzFaoRCkTyRuN9rlTLOYIibOmjdJR3CR/yqOfvQRkHr08kmHfF7z9q6S?=
+ =?us-ascii?Q?XcrJSDWVWXdPePhNGKDDrGajVWglhfDcN7ruf9k3q3sdgVryF+dnR8m7jSTp?=
+ =?us-ascii?Q?HUPv8D6bEitTfDOz5Ge0Xj6lQs1i3ewxOdkkXrb9G0bUSQqca4y1j5DkFO+B?=
+ =?us-ascii?Q?xO6esqD65HagSs26DC0gFD3Cm2aAuDdHfVPBNUp7zBJiI1Xof5poAwFkePM2?=
+ =?us-ascii?Q?Dd2oxlk53xbd83pLY3KL/JzmZpy2XGFKpScHHFqWjgbZNSrZ1tXrLEvT/aPn?=
+ =?us-ascii?Q?ehATSupvRZ8oOeIy9FdH4DgQNj7E1VcXV7iE/zZ4vSWWik4zK3lPyVNLVUC1?=
+ =?us-ascii?Q?9YcCwSlERrak6OyxeF83O33wlKuckB9vM0dYm2Tyi0ORetu1pK4D6LIIIIfU?=
+ =?us-ascii?Q?IaNqBFSNs7hrM7gBnJjWE53Z7f//A7DLJjgUKiM0OMe2R2rK2Mo7Q2KW9JpR?=
+ =?us-ascii?Q?Z6/cFrOQDcNPv15N7RDu9NLTRgQWI0ZKYF5Bw7LzYeU3NMSx8YqDVfWAkd2M?=
+ =?us-ascii?Q?/mY7gp+dS3VSx05nLjXCKdBqDrVOR+Ko/uFJmQCZE5KRAwQHzan7JGmrOUI+?=
+ =?us-ascii?Q?3ol9nKBOsC0s7os1piUnmiP1R6Y3bLVlAue6jTETREm9slOaJYy00atbq/OP?=
+ =?us-ascii?Q?YFwDILF2exdWP4ffm+TvOqhp1ynH9/uSX/Nf5uS3zXi1UhTXxT4wXbO0fx6Y?=
+ =?us-ascii?Q?3y6wBulhxhqvlTlZ+T7hG6QlrOBfhyl8fcoX8RZw19OmjEv0rgLe+utDPw?=
+ =?us-ascii?Q?=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3770.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7aa82ecb-1c27-46a8-9e19-08d9d5cffe25
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jan 2022 13:32:34.6898
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4333.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28fe4018-16b4-4de9-eae0-08d9d5d079ba
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jan 2022 13:36:02.1061
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GHgIgKZJ5/Q7sARINwwV1Dx8hoI/9gyn97TPyGV6BZL6BtwlVUZZEPHmBHhDImLinUioWCx74NSUIY/Qgfx1qZvv5CuY/zfWG48Zo9c82JI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4186
+X-MS-Exchange-CrossTenant-userprincipalname: wPYdo7Ax+XhRCLI47eqv7LkqaIcjIL176o/+4uogve/h+qybEHyTeXqszTt48JVO
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3565
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQpPbiAxNy8xMi8yMDIxIDE1OjA5LCBLcnp5c3p0b2YgS296bG93c2tpIHdyb3RlOg0KPiBFWFRF
-Uk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNz
-IHlvdSBrbm93IA0KPiB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBPbiAxNy8xMi8yMDIxIDEw
-OjMzLCBjb25vci5kb29sZXlAbWljcm9jaGlwLmNvbSB3cm90ZToNCj4+IEZyb206IENvbm9yIERv
-b2xleSA8Y29ub3IuZG9vbGV5QG1pY3JvY2hpcC5jb20+DQo+Pg0KPj4gVXBkYXRlIHRoZSBSSVND
-LVYvTWljcm9jaGlwIGVudHJ5IGJ5IGFkZGluZyB0aGUgbWljcm9jaGlwIGR0cyANCj4+IGRpcmVj
-dG9yeSBhbmQgbXlzZWxmIGFzIG1haW50YWluZXINCj4+DQo+PiBTaWduZWQtb2ZmLWJ5OiBDb25v
-ciBEb29sZXkgPGNvbm9yLmRvb2xleUBtaWNyb2NoaXAuY29tPg0KUmV2aWV3ZWQtYnk6IExld2lz
-IEhhbmx5IDxsZXdpcy5oYW5seUBtaWNyb2NoaXAuY29tPg0KPj4gLS0tDQo+PiAgIE1BSU5UQUlO
-RVJTIHwgMiArKw0KPj4gICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspDQo+Pg0KPj4g
-ZGlmZiAtLWdpdCBhL01BSU5UQUlORVJTIGIvTUFJTlRBSU5FUlMgaW5kZXggDQo+PiA3YTIzNDVj
-ZTg1MjEuLjNiMWQ2YmU3YmQ1NiAxMDA2NDQNCj4+IC0tLSBhL01BSU5UQUlORVJTDQo+PiArKysg
-Yi9NQUlOVEFJTkVSUw0KPj4gQEAgLTE2MzQ4LDggKzE2MzQ4LDEwIEBAIEs6ICAgcmlzY3YNCj4+
-DQo+PiAgIFJJU0MtVi9NSUNST0NISVAgUE9MQVJGSVJFIFNPQyBTVVBQT1JUDQo+PiAgIE06ICAg
-TGV3aXMgSGFubHkgPGxld2lzLmhhbmx5QG1pY3JvY2hpcC5jb20+DQo+PiArTTogICBDb25vciBE
-b29sZXkgPGNvbm9yLmRvb2xleUBtaWNyb2NoaXAuY29tPg0KPj4gICBMOiAgIGxpbnV4LXJpc2N2
-QGxpc3RzLmluZnJhZGVhZC5vcmcNCj4+ICAgUzogICBTdXBwb3J0ZWQNCj4+ICtGOiAgIGFyY2gv
-cmlzY3YvYm9vdC9kdHMvbWljcm9jaGlwLw0KPj4gICBGOiAgIGRyaXZlcnMvbWFpbGJveC9tYWls
-Ym94LW1wZnMuYw0KPj4gICBGOiAgIGRyaXZlcnMvc29jL21pY3JvY2hpcC8NCj4+ICAgRjogICBp
-bmNsdWRlL3NvYy9taWNyb2NoaXAvbXBmcy5oDQo+Pg0KPiANCj4gR29vZCB0byBoYXZlIHRoZSBE
-VFMgY292ZXJlZCwgc28gRldJVzoNCj4gQWNrZWQtYnk6IEtyenlzenRvZiBLb3psb3dza2kgPGty
-enlzenRvZi5rb3psb3dza2lAY2Fub25pY2FsLmNvbT4NCj4gDQo+IFlvdSBzdGlsbCBzaG91bGQg
-Z2V0IExld2lzJyBhY2sgKHVubGVzcyBoZSBtZXJnZXMgaXQpDQpBeWUsIGl0J2xsIGJlIGFuIGFj
-ay4gV2UgZG9uJ3QgY3VycmVudGx5IGhhdmUgYSB0cmVlICYgd291bGQgcmF0aGVyIGRvIHRoaXMg
-dmlhIHJpc2MtdiB0aGFuIHRoZSBhdDkxL3NhbSBhcm0gc29jIHRyZWUuDQo+IA0KPiBCZXN0IHJl
-Z2FyZHMsDQo+IEtyenlzenRvZg0KPiANCg0K
+
+
+> -----Original Message-----
+> From: Peter Chen <peter.chen@kernel.org>
+> Sent: Wednesday, January 12, 2022 8:48 PM
+> To: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Cc: Frank Li <frank.li@nxp.com>; linux-usb@vger.kernel.org; Jun Li
+> <jun.li@nxp.com>; Zhi Li <lznuaa@gmail.com>
+> Subject: Re: xhci crash at xhci_disable_hub_port_wake when system suspend=
+.
+>=20
+> On 22-01-10 23:07:48, Mathias Nyman wrote:
+> > On 10.1.2022 14.33, Peter Chen wrote:
+> > > On 22-01-07 15:58:26, Frank Li wrote:
+> > >> Mathias Nyman
+> > >>
+> > >> 	Recently we found a crash at xhci_disable_hub_port_wake when system
+> suspend if enable remote wake up.
+> > >>
+> > >> 	Basial flow is.
+> > >>
+> > >> 	1. run time suspend call xhci_suspend, xhci parent devices gate the
+> clock.
+> > >> 	2. echo mem >/sys/power/state, system _device_suspend call
+> xhci_suspend
+> > >> 	3. xhci_suspend call xhci_disable_hub_port_wake, which access
+> register, but clock already gated by run time pm.
+> > >>
+> > >> 	Why find this issue now, that is because previous power domain driv=
+er
+> will call run time resume before it. But the below commit remove it.
+> > >>
+> > >> c1df456d0f06eb9275c1cd4c66548fc5738ea428
+> > >> Author: Ulf Hansson ulf.hansson@linaro.org
+> > >> Date:   Thu Mar 4 20:28:43 2021 +0100
+> > >>
+> > >>     PM: domains: Don't runtime resume devices at genpd_prepare()
+> > >>
+> > >>
+> > >>
+> > >> According to HCD_FLAG_HW_ACCESSIBLE logic, xhci should not access
+> hardware when second time call xhci_suspend without call xhci_resume.
+> > >>
+> > >>         xhci_disable_hub_port_wake(xhci, &xhci->usb3_rhub,
+> do_wakeup);
+> > >>         xhci_disable_hub_port_wake(xhci, &xhci->usb2_rhub,
+> > >> do_wakeup);
+> > >>
+> > >>         if (!HCD_HW_ACCESSIBLE(hcd))
+> > >>                 return 0;
+> > >>
+> > >>         .....
+> > >>         clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
+> > >>         clear_bit(HCD_FLAG_HW_ACCESSIBLE,
+> > >> &xhci->shared_hcd->flags);
+> > >>
+> > >> I am not sure if it is safe to move xhci_disable_hub_port_wake after
+> HCD_HW_ACCESSIBLE check, Or need add additional run_time_resume before it=
+.
+> >
+> > We probably need to runtime resume first in case we need to adjust the
+> > wakeup settings
+> >
+> > >
+> > > Frank, I prefer adding runtime resume at xhci-plat.c like below,
+> > > let's see what Mathias says.
+> > >
+> > >
+> > > diff --git a/drivers/usb/host/xhci-plat.c
+> > > b/drivers/usb/host/xhci-plat.c index c1edcc9b13ce..47a5a10381a7
+> > > 100644
+> > > --- a/drivers/usb/host/xhci-plat.c
+> > > +++ b/drivers/usb/host/xhci-plat.c
+> > > @@ -440,6 +440,9 @@ static int __maybe_unused xhci_plat_suspend(struc=
+t
+> device *dev)
+> > >  	ret =3D xhci_priv_suspend_quirk(hcd);
+> > >  	if (ret)
+> > >  		return ret;
+> > > +
+> > > +	if (pm_runtime_suspended(dev))
+> > > +		pm_runtime_resume(dev);
+> > >  	/*
+> > >  	 * xhci_suspend() needs `do_wakeup` to know whether host is allowed
+> > >  	 * to do wakeup during suspend.
+> > >
+> >
+> > Yes, looks like a solution to me.
+> > Just checked that driver-api/pm/devices.rst also suggest calling
+> > pm_runtime_resume() in ->suspend callback if device needs to adjust
+> > wakeup capabilities.
+> >
+> > Frank Li, does this work for you?
+> >
+> > Peter, if we now make sure xhci host is not runtime suspended at
+> > system suspend, does it mean that the !HCD_HW_ACCESSIBLE(hcd) check
+> > you added to xhci_suspend() is no longer needed?
+>=20
+> Yes, it is no longer needed if xhci host is not runtime suspended.
+
+Looks like existing non xhci-plat user(xhci-tegra) is also calling xhci_res=
+ume()
+before calling xhci_suspend(), so it's safe to remove it.
+
+Li Jun
+=20
+>=20
+> --
+>=20
+> Thanks,
+> Peter Chen
+
