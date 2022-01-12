@@ -2,119 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C04F48BA8C
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jan 2022 23:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D52CF48BC10
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jan 2022 01:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345959AbiAKWMS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jan 2022 17:12:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53198 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345948AbiAKWMQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jan 2022 17:12:16 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCF1C061748;
-        Tue, 11 Jan 2022 14:12:16 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id s30so1538889lfo.7;
-        Tue, 11 Jan 2022 14:12:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Tfx1WUFnevfKDPJ6flTJKUckxRcAPYOxlOVGm+YrEN4=;
-        b=hbXTjjxuVzjhu9TnoPHQ+ZrJfABV3baYlKeZgdLZKyBQ9C5SBtCXvNsC4TSu7BPjdR
-         MDRisfgd5AFaZDc2DSl+LbgQnWkpnTcYbpXoY+i/iX32BFcPwAZWUVCEB5AqsNAN6t38
-         Z1EkeLt3sMQVtmdgYMGaiYRwWTKcyVxMdj/abGBqasnvS2qAfBz3Ur0qR7a8Ebu2EKQP
-         27tYPA0O1kUZsYNSb56oK3pqrNmztUXBr+mLqh9EVL6mC/0yW9MBiwpr34rR2hkXd1SL
-         2dWwRXn80RpxDLXdCjQV6DAUQZqmIDd2MvnZ7f1ozZ/yropwZQo0eMOXzWt5yoOmGbzR
-         h7PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Tfx1WUFnevfKDPJ6flTJKUckxRcAPYOxlOVGm+YrEN4=;
-        b=GHH2kGleiydjzchpl059KYlVGTlY77EfRPugKehL5YTtfFdYZsBa1rMnCmabGJMaWq
-         /Na7p3HdLBmzC2f+D2ezC1qgGygpsKvJiFIvzX6aLQLWzGwCvol803vs9+9IOuBQwi+D
-         uQLSxU4WGdOP2Rx3ZWW+V2fHw6Rd0FuIsr1s8VKywZcEzoOR9PzEID3z/NI/qZwzhjyK
-         AjkVr5HGWFdpsgsMmxgCSZjjzLc0vn5tHX35KS/dSkaQIm+8B1rdQQiqUhxRSvStve1q
-         UxhqDFNmvv0Lrg3KT4zgZRbkPDNeTigKfFa1TJOtx3qPKwaw9j83zjQTU0JrHOUV8czF
-         ZSLw==
-X-Gm-Message-State: AOAM532FlurOJMSUg5jZFFG6OpWD7Vlj97NWAqMmylUh6u2KkqU9bkrT
-        5NVTk3R3zSG/z5uBkvuQo6e/+Jaqw4k=
-X-Google-Smtp-Source: ABdhPJx9V1KKizTvicTEjlQbVuDAFGaVdJoi8XukjBhI4EvenZ/89vaEsnNLAfkOiRoH4jRZ+46E4g==
-X-Received: by 2002:a2e:a30f:: with SMTP id l15mr4157157lje.493.1641939134557;
-        Tue, 11 Jan 2022 14:12:14 -0800 (PST)
-Received: from WBEC678.wbe.local (xt27d8.stansat.pl. [83.243.39.216])
-        by smtp.gmail.com with ESMTPSA id c16sm1462125lfv.29.2022.01.11.14.12.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 14:12:14 -0800 (PST)
-From:   Pawel Dembicki <paweldembicki@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Pawel Dembicki <paweldembicki@gmail.com>,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: serial: option: add ZTE MF286D modem
-Date:   Tue, 11 Jan 2022 23:12:05 +0100
-Message-Id: <20220111221205.14662-1-paweldembicki@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S1343866AbiALA4C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jan 2022 19:56:02 -0500
+Received: from titan58.planetwebservers.net ([51.79.1.102]:53885 "EHLO
+        titan58.planetwebservers.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234143AbiALA4C (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jan 2022 19:56:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lockie.ca;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=rAkwdHwQcR/AuHEuW9POvj85ztH2y7gapNX73ynPM+4=; b=ZPJ1QCLyD3t9/L9ARGQju8Es0L
+        b/+IwX2anBsS3FMSeBR3Bhp2nHxPsJLAP8Vj1g7R7s819iD0U06KUdatSPF1ChTZjPYY09Lw10hMM
+        q7ziHUJQymnsM7FO9uYeWvnsYpUxOPrIwcAwRq1CzvvnQlum6YczCLA2QSrURgih/5kvO4DMmYNZV
+        Om67VTeU9htlQHE1uFw99xsI+ZU+OLw3hdfNoIRY5ZiPfrIU8sDLNzDwV5JdertkujUkofpgSfU8M
+        OlpYWw73lHRK2xZ/bjRdzyX1EFVSpwT7azOiMn8DnwlpVNOqlBfr6/K0be8+LH6f4TmXLyIMjxPMS
+        tdlsv7DQ==;
+Received: from [185.245.86.55] (port=42402 helo=[10.5.0.2])
+        by titan.planetwebservers.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <bjlockie@lockie.ca>)
+        id 1n7Rvm-0004e8-Tp
+        for linux-usb@vger.kernel.org; Wed, 12 Jan 2022 11:56:01 +1100
+Message-ID: <4f903a1b-61e4-9433-2e04-39bbb5f6401a@lockie.ca>
+Date:   Tue, 11 Jan 2022 19:56:00 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: no name mouse?
+Content-Language: en-US
+To:     linux-usb <linux-usb@vger.kernel.org>
+References: <9cb86662-d1f6-5d7e-65a4-c5a071e9b4f1@lockie.ca>
+ <0895680e-8a4a-7eea-e5c8-f6c29867e563@infradead.org>
+From:   James <bjlockie@lockie.ca>
+In-Reply-To: <0895680e-8a4a-7eea-e5c8-f6c29867e563@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - titan.planetwebservers.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lockie.ca
+X-Get-Message-Sender-Via: titan.planetwebservers.net: authenticated_id: bjlockie@lockie.ca
+X-Authenticated-Sender: titan.planetwebservers.net: bjlockie@lockie.ca
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-From-Rewrite: unmodified, already matched
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Modem from ZTE MF286D is an Qualcomm MDM9250 based 3G/4G modem.
 
-T:  Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
-D:  Ver= 3.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-P:  Vendor=19d2 ProdID=1485 Rev=52.87
-S:  Manufacturer=ZTE,Incorporated
-S:  Product=ZTE Technologies MSM
-S:  SerialNumber=MF286DZTED000000
-C:* #Ifs= 7 Cfg#= 1 Atr=80 MxPwr=896mA
-A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
-I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=02 Prot=ff Driver=rndis_host
-E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-E:  Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=89(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-
-Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
----
- drivers/usb/serial/option.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 42420bfc983c..962e9943fc20 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1649,6 +1649,8 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(2) },
- 	{ USB_DEVICE_INTERFACE_CLASS(ZTE_VENDOR_ID, 0x1476, 0xff) },	/* GosunCn ZTE WeLink ME3630 (ECM/NCM mode) */
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1481, 0xff, 0x00, 0x00) }, /* ZTE MF871A */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1485, 0xff, 0xff, 0xff),  /* ZTE MF286D */
-+	  .driver_info = RSVD(5) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1533, 0xff, 0xff, 0xff) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1534, 0xff, 0xff, 0xff) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1535, 0xff, 0xff, 0xff) },
--- 
-2.25.1
-
+> You could look at 'lsusb -v' for that device and then look at these fields:
+> (e.g., from a "transceiver" device for a wireless kbd/mouse)
+>
+>    iManufacturer           1 Dell Computer Corp
+>    iProduct                2 Dell Universal Receiver
+>    iSerial                 0
+>
+> You should see iManufacturer and iProduct set to 0.
+>
+iManufacturer           0
+iProduct                1 USB OPTICAL MOUSE
