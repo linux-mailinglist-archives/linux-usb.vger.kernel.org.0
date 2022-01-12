@@ -2,226 +2,410 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F42E48C4F1
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jan 2022 14:36:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA7348C54E
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jan 2022 14:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353642AbiALNgJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jan 2022 08:36:09 -0500
-Received: from mail-eopbgr80078.outbound.protection.outlook.com ([40.107.8.78]:52510
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1353635AbiALNgE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 Jan 2022 08:36:04 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CoXGhpqIUfId1s17xTNdFfLg0fm8oDI2o45/1/MoqWpwvMI2RVlEvlZ8If8OfQ2+9QCYPYDrQ2eSthdHdQrt4dJzJW/bQsWzXmW8AZ4ur+6DDAgGnP14w+RxYpkR5QND4LpbfO3AhkhE8BqoKUBwyEJaaA66Mf2eBPFoaScqVyL00YoTknVoWk45F8uT2Eg67qu3wSVy3+5S1WpPzdoJvxgaXmboAyU8XNNFyWiOxZijN6Iwbr9jWUCAYO5po2q4mI961KwpFHtjoVrravRbx+yyUP+g1jyWUqGjuJR4aKXxiO/WGzkKpY+ooRPP2nJM5ueR+/HYCuCu0Q3Yl03l/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UOmhq9ocoKPR6VczQkPTH+d1NcUVBWxl4Qgi6iF9E/8=;
- b=Gk1cROK9LD2GeiMaYNCX5fRL9cNnsrHWhzqICaSK9cVPxHYYF9t5zYi0SgL0KrRHSn6OjwOQPOGv+bUWi9n6qf/9Z7exiAnaBKprfF4cOSNcuZQslzywVxmEVYnieFBjPwVdy9iLcrCBGFlWiaU40jD6g55L+3BeijNgjFaeAfEDCXkECWIMCrKCDObOHdyV0znb25elWCK3olxbMA0lF3kFJYznoDrBhCJJcLfVCuy4PzUnR+/Yfc+Kcy/I7DvCGX1gUgpX9KJaM0dj3FWx8NovuyV6h6XG+ruJfZwNH4baAB2JwnhSPMfg12PJv823/aPkqcpsPO8xEfyTWkyYZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UOmhq9ocoKPR6VczQkPTH+d1NcUVBWxl4Qgi6iF9E/8=;
- b=SxaOjPneNqgJpPvKknG3oMS8hssUEdP91I8Os0EFwj19AU3qdVammz7gg1InrgigWd/l0ioR84FgalAiBbERS+loHgxAPvXf1P+vVlRs8V0G3MiD3+maE5fFJ/8awyWUJlgyg7DIm/m1fBiyL0pLiyhozrM4CDyS5ur0Xq6CU7k=
-Received: from VI1PR04MB4333.eurprd04.prod.outlook.com (2603:10a6:803:49::27)
- by VI1PR0402MB3565.eurprd04.prod.outlook.com (2603:10a6:803:12::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Wed, 12 Jan
- 2022 13:36:02 +0000
-Received: from VI1PR04MB4333.eurprd04.prod.outlook.com
- ([fe80::ad9d:c232:8a80:f8f2]) by VI1PR04MB4333.eurprd04.prod.outlook.com
- ([fe80::ad9d:c232:8a80:f8f2%4]) with mapi id 15.20.4867.012; Wed, 12 Jan 2022
- 13:36:02 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     Peter Chen <peter.chen@kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-CC:     Frank Li <frank.li@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Zhi Li <lznuaa@gmail.com>
-Subject: RE: xhci crash at xhci_disable_hub_port_wake when system suspend.
-Thread-Topic: xhci crash at xhci_disable_hub_port_wake when system suspend.
-Thread-Index: AdgD3VfMVBJx3GKFRn+PRgFnr8FjngCQPoUAABHzOAAAUyOhAAABJQXg
-Date:   Wed, 12 Jan 2022 13:36:02 +0000
-Message-ID: <VI1PR04MB4333F89471E833AA5BAEFED389529@VI1PR04MB4333.eurprd04.prod.outlook.com>
-References: <PAXPR04MB91861A98BE9D240FFEC1D560884D9@PAXPR04MB9186.eurprd04.prod.outlook.com>
- <20220110123350.GA4302@Peter>
- <3588ae48-e40e-1c9c-c841-cf54f59ad70b@linux.intel.com>
- <20220112124820.GA3796@Peter>
-In-Reply-To: <20220112124820.GA3796@Peter>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 28fe4018-16b4-4de9-eae0-08d9d5d079ba
-x-ms-traffictypediagnostic: VI1PR0402MB3565:EE_
-x-microsoft-antispam-prvs: <VI1PR0402MB356513008A04C4C6B89539B189529@VI1PR0402MB3565.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2276;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: q3uOB3M5wf73bwVteWnlnLftqe6DpDgmlcvRT6rtv7cHBXn7nT+rtfVfc08b7H/tMhNjU0/3KTHrAFqyIFOgZ+mvLzSMgwkKxkuKewQuXrtU9VBl6Ecabdr8eUdZtuqhQ0b/9POXWxB5p2oyLkNdTc4aoWcUfhJP21npZ/S203bZc0Vc1FOCxDh1b2lL34ybJ4rpRCYFQtYWb3YSzLW5Oqad8Me4JdcagDSjETwvCgL4biaeEPTEFE/YT6sziOrZbVwCuQXyj+Vc1EVpUuHJY+UwVmui/hC+W57pd4aCTLJbiT/uhHAQ8vQ/t3sWTSUfzbUSVTIpEwXQk2jLZR3MpWr7oJeWP3v5jKuw+IP/50+I1h5q9Ly8oEZ0oKlmSnQwvkeWezDqW6XFmukR4Vvfjf4jZE8P8kwdyxuLqhnOUEO5uVLYk8Z67GJ6uGZCdllbrFbXNKiglPi4n8lq5ewFKw7lXBMsqcKzSObXIQZsEblthYOgTTnx0kIcCr89DSrEJI1mUkKCTbiCUUTIktOzVvAj+eBCAocErlFPySvmcHgWIsaIWajvOzBqJNtK4x36bo7GdKDJgJY64E+2B/XZLSP2T4iVDxtvShwXgpkE0k4ATXmwEGuUqa4YDDJbpbaOGJlWZ+whKoKneS9PdzSAfdKed0/d4ZCXVldfz2EmRrmKBB+bWZIKVgosQv2w4oxPY4Uz6upRJsiM8R2lU86OMQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4333.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(64756008)(316002)(66946007)(33656002)(66476007)(55016003)(66556008)(66446008)(9686003)(38100700002)(5660300002)(4326008)(86362001)(52536014)(38070700005)(122000001)(76116006)(54906003)(110136005)(15650500001)(8936002)(186003)(7696005)(71200400001)(44832011)(53546011)(6506007)(26005)(2906002)(83380400001)(8676002)(508600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?jdcpOBwnQa4xw4TteUe39fM65IQHOZAA3rFyvIUAoWnFvG2sMRfI5E3nbmog?=
- =?us-ascii?Q?JpSMG8ju+2/bXgEsUPxDAy4RED8MAxoxyYKIyNn1CZZIIfZQBnFKhGfZmbSS?=
- =?us-ascii?Q?3oOP6cRqO6ug0MsqJsdauNt58ovFyisDf9vA5STg4TKFJwahkUuhA3sKSpeL?=
- =?us-ascii?Q?fyEy5FWTVLmXH2JQyUzs5vye8ylQKNbiOFyZboc7P3AUeDOK57SJQI6VOoRL?=
- =?us-ascii?Q?20OpDV3JCHa2K1N3/ivNfCq9dnlwUCKWwQwUDMml7U/uLCuxTAVdX1f7feOh?=
- =?us-ascii?Q?h7Xcxy5ad/jamcF37YKNS+mJ5bwkLvcoUN20ySXPXvcACuc6RrsqZByswD4Q?=
- =?us-ascii?Q?x2kcmOVlkPx2VAlojiyL6lnp0bFdc0R9KiJz3i4ql9UGtHCLx8/5EjJMhwQZ?=
- =?us-ascii?Q?UlERaitjjyNapUz8RbNc8VTuWVLQDRKMZi54TTWzcmaxuWEVZdmH1iA8pJYV?=
- =?us-ascii?Q?KtZ654hF7KAEpjMRc/WZ9GsIQdKqitb0WD77WoPMFEe6vfm1LWFly8F+DYRe?=
- =?us-ascii?Q?vwagWIxov1IsF3naPIIjR3ioCbDYoP6Uehk7R5AY8cdDdhww72WLJNt2xsRi?=
- =?us-ascii?Q?6mMoSCU6gncBJXqypKTjYgV2GhU/UXiMTL4D1QBvML8YhXC9psYejd4eSGhT?=
- =?us-ascii?Q?kthR7Ac/iT7ve3ZB9wVwoBitKb4XPLU127s1ACs44hv+MCSjt1niuOgxHX3E?=
- =?us-ascii?Q?gYxpts9CxSQrSirxrNnDIjr8md/KqGolCUpjwlAfV05BmfjlNCOyXMl9NsFo?=
- =?us-ascii?Q?ZD/JqzFaoRCkTyRuN9rlTLOYIibOmjdJR3CR/yqOfvQRkHr08kmHfF7z9q6S?=
- =?us-ascii?Q?XcrJSDWVWXdPePhNGKDDrGajVWglhfDcN7ruf9k3q3sdgVryF+dnR8m7jSTp?=
- =?us-ascii?Q?HUPv8D6bEitTfDOz5Ge0Xj6lQs1i3ewxOdkkXrb9G0bUSQqca4y1j5DkFO+B?=
- =?us-ascii?Q?xO6esqD65HagSs26DC0gFD3Cm2aAuDdHfVPBNUp7zBJiI1Xof5poAwFkePM2?=
- =?us-ascii?Q?Dd2oxlk53xbd83pLY3KL/JzmZpy2XGFKpScHHFqWjgbZNSrZ1tXrLEvT/aPn?=
- =?us-ascii?Q?ehATSupvRZ8oOeIy9FdH4DgQNj7E1VcXV7iE/zZ4vSWWik4zK3lPyVNLVUC1?=
- =?us-ascii?Q?9YcCwSlERrak6OyxeF83O33wlKuckB9vM0dYm2Tyi0ORetu1pK4D6LIIIIfU?=
- =?us-ascii?Q?IaNqBFSNs7hrM7gBnJjWE53Z7f//A7DLJjgUKiM0OMe2R2rK2Mo7Q2KW9JpR?=
- =?us-ascii?Q?Z6/cFrOQDcNPv15N7RDu9NLTRgQWI0ZKYF5Bw7LzYeU3NMSx8YqDVfWAkd2M?=
- =?us-ascii?Q?/mY7gp+dS3VSx05nLjXCKdBqDrVOR+Ko/uFJmQCZE5KRAwQHzan7JGmrOUI+?=
- =?us-ascii?Q?3ol9nKBOsC0s7os1piUnmiP1R6Y3bLVlAue6jTETREm9slOaJYy00atbq/OP?=
- =?us-ascii?Q?YFwDILF2exdWP4ffm+TvOqhp1ynH9/uSX/Nf5uS3zXi1UhTXxT4wXbO0fx6Y?=
- =?us-ascii?Q?3y6wBulhxhqvlTlZ+T7hG6QlrOBfhyl8fcoX8RZw19OmjEv0rgLe+utDPw?=
- =?us-ascii?Q?=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S241649AbiALN45 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jan 2022 08:56:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241015AbiALN4u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jan 2022 08:56:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9718C061748;
+        Wed, 12 Jan 2022 05:56:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78E226190C;
+        Wed, 12 Jan 2022 13:56:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 786A2C36AE5;
+        Wed, 12 Jan 2022 13:56:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641995808;
+        bh=qrtJywSoWq2A3DUpZiXLa179d7xdDv4wfltTscP03l0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=IhYpTobhQNqY6qw/Xa45OCwy2/oo4KFG2cnF8pxIItXIWUjvu+YJydGEwL8sPQ7Ek
+         zbzUuV6j7kYAKAliPUlNg3ZQUV8FkOL7YntlMy9zDgNkvCkv2L0KDPAKlnqZd3nUCD
+         f6xwso3EksNOpMZO0zDdbbok9VuZzI/PgVRQBPlE=
+Date:   Wed, 12 Jan 2022 14:56:46 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB changes for 5.17-rc1
+Message-ID: <Yd7eHm8EDkYETMw8@kroah.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4333.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 28fe4018-16b4-4de9-eae0-08d9d5d079ba
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jan 2022 13:36:02.1061
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wPYdo7Ax+XhRCLI47eqv7LkqaIcjIL176o/+4uogve/h+qybEHyTeXqszTt48JVO
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3565
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The following changes since commit c9e6606c7fe92b50a02ce51dda82586ebdf99b48:
 
+  Linux 5.16-rc8 (2022-01-02 14:23:25 -0800)
 
-> -----Original Message-----
-> From: Peter Chen <peter.chen@kernel.org>
-> Sent: Wednesday, January 12, 2022 8:48 PM
-> To: Mathias Nyman <mathias.nyman@linux.intel.com>
-> Cc: Frank Li <frank.li@nxp.com>; linux-usb@vger.kernel.org; Jun Li
-> <jun.li@nxp.com>; Zhi Li <lznuaa@gmail.com>
-> Subject: Re: xhci crash at xhci_disable_hub_port_wake when system suspend=
-.
->=20
-> On 22-01-10 23:07:48, Mathias Nyman wrote:
-> > On 10.1.2022 14.33, Peter Chen wrote:
-> > > On 22-01-07 15:58:26, Frank Li wrote:
-> > >> Mathias Nyman
-> > >>
-> > >> 	Recently we found a crash at xhci_disable_hub_port_wake when system
-> suspend if enable remote wake up.
-> > >>
-> > >> 	Basial flow is.
-> > >>
-> > >> 	1. run time suspend call xhci_suspend, xhci parent devices gate the
-> clock.
-> > >> 	2. echo mem >/sys/power/state, system _device_suspend call
-> xhci_suspend
-> > >> 	3. xhci_suspend call xhci_disable_hub_port_wake, which access
-> register, but clock already gated by run time pm.
-> > >>
-> > >> 	Why find this issue now, that is because previous power domain driv=
-er
-> will call run time resume before it. But the below commit remove it.
-> > >>
-> > >> c1df456d0f06eb9275c1cd4c66548fc5738ea428
-> > >> Author: Ulf Hansson ulf.hansson@linaro.org
-> > >> Date:   Thu Mar 4 20:28:43 2021 +0100
-> > >>
-> > >>     PM: domains: Don't runtime resume devices at genpd_prepare()
-> > >>
-> > >>
-> > >>
-> > >> According to HCD_FLAG_HW_ACCESSIBLE logic, xhci should not access
-> hardware when second time call xhci_suspend without call xhci_resume.
-> > >>
-> > >>         xhci_disable_hub_port_wake(xhci, &xhci->usb3_rhub,
-> do_wakeup);
-> > >>         xhci_disable_hub_port_wake(xhci, &xhci->usb2_rhub,
-> > >> do_wakeup);
-> > >>
-> > >>         if (!HCD_HW_ACCESSIBLE(hcd))
-> > >>                 return 0;
-> > >>
-> > >>         .....
-> > >>         clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
-> > >>         clear_bit(HCD_FLAG_HW_ACCESSIBLE,
-> > >> &xhci->shared_hcd->flags);
-> > >>
-> > >> I am not sure if it is safe to move xhci_disable_hub_port_wake after
-> HCD_HW_ACCESSIBLE check, Or need add additional run_time_resume before it=
-.
-> >
-> > We probably need to runtime resume first in case we need to adjust the
-> > wakeup settings
-> >
-> > >
-> > > Frank, I prefer adding runtime resume at xhci-plat.c like below,
-> > > let's see what Mathias says.
-> > >
-> > >
-> > > diff --git a/drivers/usb/host/xhci-plat.c
-> > > b/drivers/usb/host/xhci-plat.c index c1edcc9b13ce..47a5a10381a7
-> > > 100644
-> > > --- a/drivers/usb/host/xhci-plat.c
-> > > +++ b/drivers/usb/host/xhci-plat.c
-> > > @@ -440,6 +440,9 @@ static int __maybe_unused xhci_plat_suspend(struc=
-t
-> device *dev)
-> > >  	ret =3D xhci_priv_suspend_quirk(hcd);
-> > >  	if (ret)
-> > >  		return ret;
-> > > +
-> > > +	if (pm_runtime_suspended(dev))
-> > > +		pm_runtime_resume(dev);
-> > >  	/*
-> > >  	 * xhci_suspend() needs `do_wakeup` to know whether host is allowed
-> > >  	 * to do wakeup during suspend.
-> > >
-> >
-> > Yes, looks like a solution to me.
-> > Just checked that driver-api/pm/devices.rst also suggest calling
-> > pm_runtime_resume() in ->suspend callback if device needs to adjust
-> > wakeup capabilities.
-> >
-> > Frank Li, does this work for you?
-> >
-> > Peter, if we now make sure xhci host is not runtime suspended at
-> > system suspend, does it mean that the !HCD_HW_ACCESSIBLE(hcd) check
-> > you added to xhci_suspend() is no longer needed?
->=20
-> Yes, it is no longer needed if xhci host is not runtime suspended.
+are available in the Git repository at:
 
-Looks like existing non xhci-plat user(xhci-tegra) is also calling xhci_res=
-ume()
-before calling xhci_suspend(), so it's safe to remove it.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.17-rc1
 
-Li Jun
-=20
->=20
-> --
->=20
-> Thanks,
-> Peter Chen
+for you to fetch changes up to cbb4f5f435995a56ef770e35bfafb4bcff8f0ada:
 
+  docs: ABI: fixed formatting in configfs-usb-gadget-uac2 (2022-01-08 15:48:52 +0100)
+
+----------------------------------------------------------------
+USB/Thunderbolt changes for 5.17-rc1
+
+Here is the big set of USB and Thunderbolt driver changes for 5.17-rc1.
+
+Nothing major in here, just lots of little updates and cleanups.  These
+include:
+	- some USB header fixes picked from Ingo's header-splitup work
+	- more USB4/Thunderbolt hardware support added
+	- USB gadget driver updates and additions
+	- USB typec additions (includes some acpi changes, which were
+	  acked by the ACPI maintainer)
+	- core USB fixes as found by syzbot that were too late for
+	  5.16-final
+	- USB dwc3 driver updates
+	- USB dwc2 driver updates
+	- platform_get_irq() conversions of some USB drivers
+	- other minor USB driver updates and additions
+
+All of these have been in linux-next for a while with no reported
+issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Alan Stern (2):
+      USB: Fix "slab-out-of-bounds Write" bug in usb_hcd_poll_rh_status
+      USB: core: Fix bug in resuming hub's handling of wakeup requests
+
+Amelie Delaunay (1):
+      usb: dwc2: platform: adopt dev_err_probe() to silent probe defer
+
+Amjad Ouled-Ameur (1):
+      usb: dwc3: meson-g12a: fix shared reset control use
+
+Andy Shevchenko (1):
+      thunderbolt: Do not dereference fwnode in struct device
+
+Balamanikandan Gunasundar (1):
+      usb: gadget: at91_udc: Convert to GPIO descriptors
+
+Changcheng Deng (1):
+      xhci: use max() to make code cleaner
+
+Christophe JAILLET (2):
+      usb: Remove redundant 'flush_workqueue()' calls
+      usb: dwc2: Simplify a bitmap declaration
+
+Chunfeng Yun (2):
+      usb: xhci-mtk: remove unnecessary error check
+      usb: xhci-mtk: fix random remote wakeup
+
+Dan Carpenter (1):
+      usb: hub: make wait_for_connected() take an int instead of a pointer to int
+
+David Heidelberg (1):
+      dt-bindings: usb: qcom,dwc3: add binding for IPQ4019 and IPQ8064
+
+Dinh Nguyen (1):
+      usb: dwc2: do not gate off the hardware if it does not support clock gating
+
+Dongliang Mu (1):
+      usb: bdc: fix error handling code in bdc_resume
+
+Fabrice Gasnier (4):
+      dt-bindings: usb: dwc2: document the port when usb-role-switch is used
+      dt-bindings: usb: document role-switch-default-mode property in dwc2
+      usb: dwc2: drd: add role-switch-default-node support
+      usb: dwc2: drd: restore role and overrides upon resume
+
+Gil Fine (7):
+      thunderbolt: Add TMU uni-directional mode
+      thunderbolt: Add CL0s support for USB4 routers
+      thunderbolt: Move usb4_switch_wait_for_bit() to switch.c
+      thunderbolt: Implement TMU time disruption for Intel Titan Ridge
+      thunderbolt: Rename Intel TB_VSE_CAP_IECS capability
+      thunderbolt: Enable CL0s for Intel Titan Ridge
+      thunderbolt: Add module parameter for CLx disabling
+
+Greg Kroah-Hartman (8):
+      Merge 5.16-rc3 into usb-next
+      Merge 5.16-rc4 into usb-next
+      Merge 5.16-rc5 into usb-next
+      Merge 5.16-rc6 into usb-next
+      Revert "usb: host: ehci-sh: propagate errors from platform_get_irq()"
+      Merge 5.16-rc8 into usb-next
+      Merge tag 'thunderbolt-for-v5.17-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
+      USB: common: debug: add needed kernel.h include
+
+Guo Zhengkui (1):
+      usb: core: hcd: change sizeof(vaddr) to sizeof(unsigned long)
+
+Haimin Zhang (1):
+      USB: ehci_brcm_hub_control: Improve port index sanitizing
+
+Hangyu Hua (2):
+      usb: gadget: don't release an existing dev->buf
+      usb: gadget: clear related members when goto fail
+
+Heikki Krogerus (5):
+      acpi: Export acpi_bus_type
+      acpi: Store CRC-32 hash of the _PLD in struct acpi_device
+      usb: Link the ports to the connectors they are attached to
+      usb: typec: port-mapper: Convert to the component framework
+      usb: Remove usb_for_each_port()
+
+Ingo Molnar (4):
+      headers/prep: usb: gadget: Fix namespace collision
+      headers/prep: Fix non-standard header section: drivers/usb/cdns3/core.h
+      headers/prep: Fix non-standard header section: drivers/usb/host/ohci-tmio.c
+      headers/deps: USB: Optimize <linux/usb/ch9.h> dependencies, remove <linux/device.h>
+
+Jason Wang (1):
+      usb: cdnsp: Remove unneeded semicolon after `}'
+
+John Keeping (4):
+      usb: gadget: f_midi: allow resetting index option
+      usb: dwc2: gadget: use existing helper
+      usb: dwc2: gadget: initialize max_speed from params
+      usb: gadget: u_audio: fix calculations for small bInterval
+
+Juergen Gross (3):
+      usb: Add Xen pvUSB protocol description
+      usb: Introduce Xen pvUSB frontend (xen hcd)
+      xen: add Xen pvUSB maintainer
+
+Kai-Heng Feng (1):
+      usb: hub: Add delay for SuperSpeed hub resume to let links transit to U0
+
+Kees Cook (1):
+      thunderbolt: xdomain: Avoid potential stack OOB read
+
+Lad Prabhakar (6):
+      usb: host: fotg210: Use platform_get_irq() to get the interrupt
+      usb: renesas_usbhs: Use platform_get_irq() to get the interrupt
+      usb: dwc3: Drop unneeded calls to platform_get_resource_byname()
+      usb: isp1760: Use platform_get_irq() to get the interrupt
+      usb: cdns3: Use platform_get_irq_byname() to get the interrupt
+      usb: musb: dsps: Use platform_get_irq_byname() to get the interrupt
+
+Linyu Yuan (4):
+      usb: gadget: configfs: simplify os_desc_item_to_gadget_info() helper
+      usb: gadget: configfs: remove os_desc_attr_release()
+      usb: gadget: configfs: use to_config_usb_cfg() in os_desc_link()
+      usb: gadget: configfs: use to_usb_function_instance() in cfg (un)link func
+
+Luca Weiss (1):
+      dt-bindings: usb: qcom,dwc3: Add SM6350 compatible
+
+Lukas Bulwahn (1):
+      MAINTAINERS: remove typo from XEN PVUSB DRIVER section
+
+Manish Narani (1):
+      dt-bindings: usb: dwc3-xilinx: Convert USB DWC3 bindings
+
+Mathias Nyman (1):
+      usb: hub: avoid warm port reset during USB3 disconnect
+
+Miaoqian Lin (2):
+      usb: dwc3: dwc3-qcom: Add missing platform_device_put() in dwc3_qcom_acpi_register_core
+      usb: dwc3: qcom: Fix NULL vs IS_ERR checking in dwc3_qcom_probe
+
+Mika Westerberg (6):
+      thunderbolt: Runtime PM activate both ends of the device link
+      thunderbolt: Tear down existing tunnels when resuming from hibernate
+      thunderbolt: Runtime resume USB4 port when retimers are scanned
+      thunderbolt: Do not allow subtracting more NFC credits than configured
+      thunderbolt: Do not program path HopIDs for USB4 routers
+      thunderbolt: Add debug logging of DisplayPort resource allocation
+
+Neal Liu (4):
+      usb: uhci: add aspeed ast2600 uhci support
+      usb: aspeed-vhub: add qualifier descriptor
+      usb: aspeed-vhub: fix ep0 OUT ack received wrong length issue
+      usb: aspeed-vhub: support test mode feature
+
+Pavankumar Kondeti (1):
+      usb: gadget: f_fs: Use stream_open() for endpoint files
+
+Pavel Hofman (4):
+      docs: ABI: added missing num_requests param to UAC2
+      docs: ABI: fixed req_number desc in UAC1
+      usb: gadget: u_audio: Subdevice 0 for capture ctls
+      docs: ABI: fixed formatting in configfs-usb-gadget-uac2
+
+Philipp Hortmann (3):
+      Docs: usb: update err() to pr_err() and replace __FILE__
+      Docs: usb: update comment and code near increment usage count
+      Docs: usb: update writesize, copy_from_user, usb_fill_bulk_urb, usb_submit_urb
+
+Qihang Hu (1):
+      usb: gadget: composite: Show warning if function driver's descriptors are incomplete.
+
+Razvan Heghedus (2):
+      usb: core: Export usb_device_match_id
+      usb: misc: ehset: Rework test mode entry
+
+Rob Herring (6):
+      usb: ohci-spear: Remove direct access to platform_device resource list
+      usb: ohci-s3c2410: Use platform_get_irq() to get the interrupt
+      usb: uhci: Use platform_get_irq() to get the interrupt
+      usb: chipidea: Set the DT node on the child device
+      usb: musb: Drop unneeded resource copying
+      usb: musb: Set the DT node on the child device
+
+Saranya Gopal (1):
+      usb: typec: ucsi: Expose number of alternate modes in partner
+
+Sergey Shtylyov (4):
+      usb: gadget: udc: bcm63xx: propagate errors from platform_get_irq()
+      usb: gadget: udc: pxa25x: propagate errors from platform_get_irq()
+      usb: host: ehci-sh: propagate errors from platform_get_irq()
+      usb: host: ohci-omap: propagate errors from platform_get_irq()
+
+Shubhrajyoti Datta (1):
+      usb: xilinx: Add suspend resume support
+
+Thierry Reding (1):
+      dt-bindings: usb: tegra-xudc: Document interconnects and iommus properties
+
+Thinh Nguyen (4):
+      usb: dwc3: gadget: Skip checking Update Transfer status
+      usb: dwc3: gadget: Ignore Update Transfer cmd params
+      usb: dwc3: gadget: Skip reading GEVNTSIZn
+      usb: dwc3: gadget: Support Multi-Stream Transfer
+
+Vinod Koul (1):
+      dt-bindings: usb: qcom,dwc3: add binding for SM8450
+
+Wei Ming Chen (1):
+      usb: core: Fix file path that does not exist
+
+Wei Yongjun (1):
+      usb: ftdi-elan: fix memory leak on device disconnect
+
+Xiaoke Wang (1):
+      thunderbolt: Check return value of kmemdup() in icm_handle_event()
+
+Yang Yingliang (1):
+      usb: host: xen-hcd: add missing unlock in error path
+
+luo penghao (1):
+      usb-storage: Remove redundant assignments
+
+ Documentation/ABI/testing/configfs-usb-gadget-uac1 |    2 +-
+ Documentation/ABI/testing/configfs-usb-gadget-uac2 |    2 +
+ Documentation/ABI/testing/sysfs-bus-usb            |    9 +
+ Documentation/devicetree/bindings/usb/dwc2.yaml    |   13 +
+ .../devicetree/bindings/usb/dwc3-xilinx.txt        |   56 -
+ .../devicetree/bindings/usb/dwc3-xilinx.yaml       |  131 ++
+ .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml |   13 +
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         |    4 +
+ .../driver-api/usb/writing_usb_driver.rst          |   32 +-
+ Documentation/usb/gadget-testing.rst               |    2 +-
+ MAINTAINERS                                        |    8 +
+ drivers/acpi/bus.c                                 |    1 +
+ drivers/acpi/scan.c                                |   16 +
+ drivers/thunderbolt/acpi.c                         |   15 +-
+ drivers/thunderbolt/icm.c                          |    7 +-
+ drivers/thunderbolt/lc.c                           |   24 +
+ drivers/thunderbolt/path.c                         |   42 +-
+ drivers/thunderbolt/retimer.c                      |   28 +-
+ drivers/thunderbolt/switch.c                       |  493 +++++-
+ drivers/thunderbolt/tb.c                           |   91 +-
+ drivers/thunderbolt/tb.h                           |  106 +-
+ drivers/thunderbolt/tb_msgs.h                      |   47 +-
+ drivers/thunderbolt/tb_regs.h                      |  113 +-
+ drivers/thunderbolt/tmu.c                          |  337 +++-
+ drivers/thunderbolt/tunnel.c                       |   27 +-
+ drivers/thunderbolt/tunnel.h                       |    9 +-
+ drivers/thunderbolt/usb4.c                         |   52 +-
+ drivers/thunderbolt/xdomain.c                      |   16 +-
+ drivers/usb/cdns3/cdns3-plat.c                     |   14 +-
+ drivers/usb/cdns3/cdnsp-gadget.c                   |    2 +-
+ drivers/usb/cdns3/core.h                           |    6 +-
+ drivers/usb/chipidea/core.c                        |    1 +
+ drivers/usb/chipidea/otg.c                         |    5 +-
+ drivers/usb/common/debug.c                         |    1 +
+ drivers/usb/core/driver.c                          |    3 +-
+ drivers/usb/core/generic.c                         |    2 +-
+ drivers/usb/core/hcd.c                             |   11 +-
+ drivers/usb/core/hub.c                             |   37 +-
+ drivers/usb/core/port.c                            |   32 +
+ drivers/usb/core/usb.c                             |   46 -
+ drivers/usb/dwc2/core.h                            |    6 +-
+ drivers/usb/dwc2/drd.c                             |   51 +-
+ drivers/usb/dwc2/gadget.c                          |   17 +-
+ drivers/usb/dwc2/hcd.c                             |    7 +-
+ drivers/usb/dwc2/platform.c                        |   63 +-
+ drivers/usb/dwc3/core.h                            |    9 +
+ drivers/usb/dwc3/dwc3-meson-g12a.c                 |   17 +-
+ drivers/usb/dwc3/dwc3-qcom.c                       |   15 +-
+ drivers/usb/dwc3/gadget.c                          |   59 +-
+ drivers/usb/dwc3/host.c                            |   45 +-
+ drivers/usb/gadget/composite.c                     |   39 +-
+ drivers/usb/gadget/configfs.c                      |   39 +-
+ drivers/usb/gadget/function/f_fs.c                 |    4 +-
+ drivers/usb/gadget/function/f_midi.c               |   48 +-
+ drivers/usb/gadget/function/u_audio.c              |   28 +-
+ drivers/usb/gadget/legacy/inode.c                  |   18 +-
+ drivers/usb/gadget/udc/aspeed-vhub/dev.c           |   19 +-
+ drivers/usb/gadget/udc/aspeed-vhub/ep0.c           |    7 +
+ drivers/usb/gadget/udc/aspeed-vhub/hub.c           |   47 +-
+ drivers/usb/gadget/udc/aspeed-vhub/vhub.h          |    1 +
+ drivers/usb/gadget/udc/at91_udc.c                  |   67 +-
+ drivers/usb/gadget/udc/at91_udc.h                  |    8 +-
+ drivers/usb/gadget/udc/bcm63xx_udc.c               |    8 +-
+ drivers/usb/gadget/udc/bdc/bdc_core.c              |    1 +
+ drivers/usb/gadget/udc/mv_udc_core.c               |    4 +-
+ drivers/usb/gadget/udc/pxa25x_udc.c                |    2 +-
+ drivers/usb/gadget/udc/udc-xilinx.c                |   56 +
+ drivers/usb/host/Kconfig                           |   11 +
+ drivers/usb/host/Makefile                          |    1 +
+ drivers/usb/host/ehci-brcm.c                       |    6 +-
+ drivers/usb/host/fotg210-hcd.c                     |   11 +-
+ drivers/usb/host/ohci-omap.c                       |    2 +-
+ drivers/usb/host/ohci-s3c2410.c                    |   10 +-
+ drivers/usb/host/ohci-spear.c                      |    2 +-
+ drivers/usb/host/ohci-tmio.c                       |    5 -
+ drivers/usb/host/u132-hcd.c                        |    1 -
+ drivers/usb/host/uhci-platform.c                   |    9 +-
+ drivers/usb/host/xen-hcd.c                         | 1609 ++++++++++++++++++++
+ drivers/usb/host/xhci-mtk.c                        |   16 +-
+ drivers/usb/host/xhci.c                            |    6 +-
+ drivers/usb/isp1760/isp1760-if.c                   |   16 +-
+ drivers/usb/misc/ehset.c                           |   58 +
+ drivers/usb/misc/ftdi-elan.c                       |    1 +
+ drivers/usb/musb/am35x.c                           |    2 +
+ drivers/usb/musb/da8xx.c                           |   20 +-
+ drivers/usb/musb/jz4740.c                          |    1 +
+ drivers/usb/musb/mediatek.c                        |    2 +
+ drivers/usb/musb/musb_dsps.c                       |   15 +-
+ drivers/usb/musb/omap2430.c                        |   23 +-
+ drivers/usb/musb/ux500.c                           |   18 +-
+ drivers/usb/phy/phy-mv-usb.c                       |    5 +-
+ drivers/usb/renesas_usbhs/common.c                 |   14 +-
+ drivers/usb/renesas_usbhs/common.h                 |    1 -
+ drivers/usb/renesas_usbhs/mod.c                    |   14 +-
+ drivers/usb/storage/sierra_ms.c                    |    2 -
+ drivers/usb/typec/Makefile                         |    3 +-
+ drivers/usb/typec/class.c                          |    2 -
+ drivers/usb/typec/class.h                          |   10 +-
+ drivers/usb/typec/port-mapper.c                    |  279 +---
+ drivers/usb/typec/ucsi/ucsi.c                      |   16 +-
+ drivers/usb/usbip/usbip_event.c                    |    1 -
+ include/acpi/acpi_bus.h                            |    1 +
+ include/linux/usb.h                                |    9 -
+ include/linux/usb/ch9.h                            |    3 +-
+ include/linux/usb/typec.h                          |   12 -
+ include/xen/interface/io/usbif.h                   |  405 +++++
+ 106 files changed, 4185 insertions(+), 978 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+ create mode 100644 drivers/usb/host/xen-hcd.c
+ create mode 100644 include/xen/interface/io/usbif.h
