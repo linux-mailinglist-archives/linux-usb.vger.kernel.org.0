@@ -2,100 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 833E648BEC5
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jan 2022 08:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D77C48BED0
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jan 2022 08:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351078AbiALHDB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jan 2022 02:03:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
+        id S1351106AbiALHHa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jan 2022 02:07:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232181AbiALHC6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jan 2022 02:02:58 -0500
+        with ESMTP id S237328AbiALHHa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jan 2022 02:07:30 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E446C06173F
-        for <linux-usb@vger.kernel.org>; Tue, 11 Jan 2022 23:02:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8230C06173F;
+        Tue, 11 Jan 2022 23:07:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB9C1B818BD
-        for <linux-usb@vger.kernel.org>; Wed, 12 Jan 2022 07:02:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC0E9C36AEA;
-        Wed, 12 Jan 2022 07:02:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8EE83B8196F;
+        Wed, 12 Jan 2022 07:07:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE1CC36AEA;
+        Wed, 12 Jan 2022 07:07:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641970975;
-        bh=7JDA4k0zxJuMnbVH8EHiieDOvbm3seUgtaLOgeDkXOA=;
+        s=korg; t=1641971247;
+        bh=lBeYJcwOlBUNUCtLY7rniM4aBmILYhIJMmfAyuOSK7I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rQKKYmHGAwBUG17q02R5fBdSLthS6VjmxwV46n5IwRcFNXmHplpQiLFRrNVbRwASp
-         Nj3XvmrRqkZ4zMv3bXdEpyQjkhERstY12dpUE72aI+6yQ/jiUsOo4fP2uIDpR9tvxR
-         ihbgzIze1f893u4Ajif7p/5YIC6skiau2BTLkZXM=
-Date:   Wed, 12 Jan 2022 08:02:52 +0100
+        b=N8I+xk/BRnXBuc1KlsDm4/2VzECMqq8l4ncrAK3yWNUX67kwE7GFNrBY898w/shFo
+         00i0HbNX1EtS2m/COkY39+6Wag/ekrU5RSTBzpokHkpnzyefxAxPWV96N77AAAbwmx
+         gEO/DelN+Iyd8UuoK4UIVwaJcedlSkcaUoNxGQp4=
+Date:   Wed, 12 Jan 2022 08:07:24 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     James <bjlockie@lockie.ca>
-Cc:     linux-usb <linux-usb@vger.kernel.org>
-Subject: Re: problem with USB-C
-Message-ID: <Yd59HLmparwNaok9@kroah.com>
-References: <830aa508-5c20-c7c9-5ba9-04bcf5ac7178@lockie.ca>
+To:     Wayne Chang <waynec@nvidia.com>
+Cc:     heikki.krogerus@linux.intel.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, singhanc@nvidia.com
+Subject: Re: [PATCH v3 1/1] ucsi_ccg: Check DEV_INT bit only when starting
+ CCG4
+Message-ID: <Yd5+LJD1ey+vygA9@kroah.com>
+References: <20220112032100.610146-1-waynec@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <830aa508-5c20-c7c9-5ba9-04bcf5ac7178@lockie.ca>
+In-Reply-To: <20220112032100.610146-1-waynec@nvidia.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 07:56:53PM -0500, James wrote:
-> $ lsusb -tv
-> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 5000M
->     ID 1d6b:0003 Linux Foundation 3.0 root hub
-> /:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 480M
->     ID 1d6b:0002 Linux Foundation 2.0 root hub
-> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 10000M
->     ID 1d6b:0003 Linux Foundation 3.0 root hub
-> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 480M
->     ID 1d6b:0002 Linux Foundation 2.0 root hub
->     |__ Port 5: Dev 2, If 0, Class=Human Interface Device, Driver=usbhid,
-> 1.5M
->         ID 04d9:1503 Holtek Semiconductor, Inc. Keyboard
->     |__ Port 5: Dev 2, If 1, Class=Human Interface Device, Driver=usbhid,
-> 1.5M
->         ID 04d9:1503 Holtek Semiconductor, Inc. Keyboard
->     |__ Port 6: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid,
-> 1.5M
->         ID 30fa:0400
+On Wed, Jan 12, 2022 at 11:21:00AM +0800, Wayne Chang wrote:
+> From: Sing-Han Chen <singhanc@nvidia.com>
 > 
-> With my USB3 drive plugged in to the USB-C port which is supposed to be
-> USB3.1.
-> https://asrock.com/MB/AMD/B450M%20Pro4/index.us.asp
+> after driver sending the UCSI_START cmd, CCGx would
+> clear Bit 0:Device Interrupt in the INTR_REG if CCGX
+> reset successfully.
 > 
-> $ lsusb -tv
-> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 5000M
->     ID 1d6b:0003 Linux Foundation 3.0 root hub
-> /:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 480M
->     ID 1d6b:0002 Linux Foundation 2.0 root hub
-> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 10000M
->     ID 1d6b:0003 Linux Foundation 3.0 root hub
-> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 480M
->     ID 1d6b:0002 Linux Foundation 2.0 root hub
->     |__ Port 1: Dev 4, If 0, Class=Mass Storage, Driver=uas, 480M
->         ID 0bc2:2321 Seagate RSS LLC Expansion Portable
->     |__ Port 5: Dev 2, If 0, Class=Human Interface Device, Driver=usbhid,
-> 1.5M
->         ID 04d9:1503 Holtek Semiconductor, Inc. Keyboard
->     |__ Port 5: Dev 2, If 1, Class=Human Interface Device, Driver=usbhid,
-> 1.5M
->         ID 04d9:1503 Holtek Semiconductor, Inc. Keyboard
->     |__ Port 6: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid,
-> 1.5M
->         ID 30fa:0400
+> however, there might be a chance that other bits in
+> INTR_REG are not cleared due to internal data queued
+> in PPM and cause the driver thinks CCGx reset failed.
 > 
+> the commit checks bit 0 in INTR_REG and ignore other
+> bits. ucsi driver would reset PPM later.
 > 
-> Why are the hubs listed as Linux Foundation 3.0 root hubs and not 3.1 root
-> hubs?
+> Fixes: 247c554a14aa16ca ("usb: typec: ucsi: add support for Cypress CCGx")
+> Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> ---
+>  drivers/usb/typec/ucsi/ucsi_ccg.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> index bff96d64dddf..6db7c8ddd51c 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> @@ -325,7 +325,7 @@ static int ucsi_ccg_init(struct ucsi_ccg *uc)
+>  		if (status < 0)
+>  			return status;
+>  
+> -		if (!data)
+> +		if (!(data & DEV_INT))
+>  			return 0;
+>  
+>  		status = ccg_write(uc, CCGX_RAB_INTR_REG, &data, sizeof(data));
+> -- 
+> 2.25.1
+> 
 
-Because your devices do not advertise themselves as a USB 3.1 root hub.
-Perhaps the documentation is incorrect?
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot
