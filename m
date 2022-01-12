@@ -2,130 +2,217 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D80A248BD9C
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jan 2022 04:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 620DE48BDE3
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jan 2022 05:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349162AbiALDVO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jan 2022 22:21:14 -0500
-Received: from mail-dm6nam12on2046.outbound.protection.outlook.com ([40.107.243.46]:46653
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1348321AbiALDVM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 11 Jan 2022 22:21:12 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RwXRGhWX0k1ckmB6/9MrqnUCahvsvXRtgtBRbmgMQOAGEgJkCzgrCGxKlh+raUZWL5rHbOPUmrKOwayheZUQaQPAfaUHIjfuJTt6lUZkDfqfZRBfNp47JGHY1EU4STG8fmUJVCGCw8Xizmjui247xbVJWhAwMUOggwtmICMUVS2b8DkxatTmYypkjTVPvr0L2Nr7I/F99E4RChXDMDHSpKM7Z0kt0OtlJYi3zxC8WTstuiDqqF73D34j+KcujioaMlRNDiNfl2pQzUL1/MSYH5buefnXUmVzpVJS1CqS+eXU7Okfy39S0yREcNHDeB+Tqj1KDvlQHGP1wyXU+KVqfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EeCBl07NE4L2YwHYzPiE4DJyexpLUeV8M+WBF//R5p4=;
- b=fEFWjB5fFGzJEJDQls4SATEHXdYqsfxFsreedKYnWjXxslRAbx2MajutBXTrnXTe87qFSGVRUqvNgG5O2ya9zGYLqvvX49gGEpQGRlkzY31Jeu5MVueS7abQzEbdL5SvwwhLXoes0L0iqvlxsWTZAXDADQFqUIG7eu2qY2HrT0lJ4uonQaTmr0S7iVhc0QA4bvm8yjjtRPKitfd4r+q6tT3NwdynXr0q7rU3GgB8IyCyPZPPBW5omqdlJBBa2SbSuLY7JW88bEo9r7OWYDLdQ/q19N4X4jgP1DVk13Ho6SzrqoUwogAipFuIF4HSCod9wDaxX2nbXFsIOI2MzBdSGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EeCBl07NE4L2YwHYzPiE4DJyexpLUeV8M+WBF//R5p4=;
- b=g/niX0GgMlslUntwo/Q3814rKPdK27VppMSA65tI6y5hShirXC04w4k5qeUPTuWxjOwD34OBF+lyC4bSG+RC3QlASd9wSIi5NLR7LxtqojRRbmjYqTFIx4AfvwPlnL5eXSqsYmQs3KDWaaUfmerM8MTk76fHfTsyeJRE32p5kqwDuEVyKk/TbeCKST9P062+3KNy6/u+rk4IK4VCVFFxdQ9sOLRaEzZoxOQv4nglXb+ugi9yGuyq5pCrMDa9qZcPQAZZGSaBCZIy8x/IpEnQRflFIEqBuYE4+79Omgwz4orE6j9zw3zZVuDSBcY+AXgpgCUCIWrXZHBdksYCAJYCVQ==
-Received: from DM5PR13CA0023.namprd13.prod.outlook.com (2603:10b6:3:23::33) by
- DM5PR12MB1500.namprd12.prod.outlook.com (2603:10b6:4:11::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4867.11; Wed, 12 Jan 2022 03:21:10 +0000
-Received: from DM6NAM11FT039.eop-nam11.prod.protection.outlook.com
- (2603:10b6:3:23:cafe::bc) by DM5PR13CA0023.outlook.office365.com
- (2603:10b6:3:23::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.4 via Frontend
- Transport; Wed, 12 Jan 2022 03:21:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.234) by
- DM6NAM11FT039.mail.protection.outlook.com (10.13.172.83) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4867.7 via Frontend Transport; Wed, 12 Jan 2022 03:21:10 +0000
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 12 Jan
- 2022 03:21:04 +0000
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 12 Jan
- 2022 03:21:04 +0000
-Received: from waynec-Precision-5760.nvidia.com (10.127.8.13) by
- mail.nvidia.com (172.20.187.13) with Microsoft SMTP Server id 15.0.1497.18
- via Frontend Transport; Wed, 12 Jan 2022 03:21:03 +0000
-From:   Wayne Chang <waynec@nvidia.com>
-To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <singhanc@nvidia.com>, <waynec@nvidia.com>
-Subject: [PATCH v3 1/1] ucsi_ccg: Check DEV_INT bit only when starting CCG4
-Date:   Wed, 12 Jan 2022 11:21:00 +0800
-Message-ID: <20220112032100.610146-1-waynec@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+        id S1350707AbiALEcp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jan 2022 23:32:45 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:45170 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231799AbiALEcn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jan 2022 23:32:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1641961963; x=1673497963;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=835NtutfIfHTDN3CKXR+FGOoOJyAXHDDR7Fo9Z4L18c=;
+  b=zBImb/Cq0730veru6962f1Whp5hW18BF5l0uvxG0gameA92dlBzcJFdq
+   f3OsB0exjrDihPFTOyFbGYPJQariWNvP2tl/aLUdQIDNY6ciW79GsfpTD
+   2VGG08krD82kuPfYEIcjnOF9DdJsapMk02YeiBDO8X+Dg0jSV10MOx6Zg
+   Y=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 11 Jan 2022 20:32:43 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 20:32:43 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 11 Jan 2022 20:32:43 -0800
+Received: from ugoswami-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 11 Jan 2022 20:32:40 -0800
+From:   Udipto Goswami <quic_ugoswami@quicinc.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John Keeping <john@metanate.com>
+CC:     Udipto Goswami <quic_ugoswami@quicinc.com>,
+        <linux-usb@vger.kernel.org>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>
+Subject: [PATCH v9] usb: f_fs: Fix use-after-free for epfile
+Date:   Wed, 12 Jan 2022 10:02:36 +0530
+Message-ID: <1641961956-30641-1-git-send-email-quic_ugoswami@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: eb762c27-f6a9-4aa0-6255-08d9d57a94b0
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1500:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB150030626A89968018AF7A3FAF529@DM5PR12MB1500.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V0GvoyPZmgjbFpec8gQAKKg/jx1fUzsoeUaFhPv452k3Ny1r4lnwJbUfs6wsRQOj8IqPi75SccPc9zgisvCMEVqYbgRUBIiaxEbDASqiX27Rftigps2KFh32zMdMa4wF5w156tAbh9LDk7St++haGOAIq3+swGkkA+rrJpF0ySYfpQqUq/0LOue0cGGab2QBqylrNnKkv07tCZAIoZktddhKqWN2xgmx9dABPMEtz7mYdJm8I5+m/1GoH0M+yyaEmnKWI7uJ94zm6iZ1yhUpsREB6/Ms5O+kSj+1drZJoa2+t5PNjIP0ImHXFbOqla2uvetd559cnTG//LHI/QTRoWK9oZQsYr4IiJq/8eOyPrkBPYvOcW3Ekyq0TVar++X1wI3GtQdd09QBc6IidAwPiECDDGteDoVnl761Y/YTL7Knv0nSfbGtBMDvz2SCGBr6wI4v1/qf3J2+T/eOXUwr4Zs1SNAIu7RNankX9CjAE/85/m2mEJI+KA1JUTUd910hHtXdsBaxbvT/oEvtrOfb6oiP/++/Jhvq6W0VDU76XqlC3q1aDwcDO/a7mialFzn0VnnkqpOkzLYj3U2w8SR79+YmM1iSNKtt12S99H+tqD2lVgjl/0iOz4X6MzXALqzxZ8AMhrIjKRxgNPp6V0Ww925xRYb1Cu+ba5TlnvOAE1u6boQdKls+ZUliezOHzwFwWMMkILaguMznyft/LfAj2uBBa7G5L2zYwq8DpmqBd9byi6d+1fG9Gko5NBxNfLhNAT7keiJjUapr8QzdwIdcYswoHMqITUy2Dl779Fm3n1E=
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(40470700002)(46966006)(36840700001)(54906003)(316002)(8676002)(110136005)(36756003)(82310400004)(40460700001)(2906002)(2616005)(4326008)(8936002)(356005)(508600001)(83380400001)(107886003)(426003)(81166007)(70586007)(47076005)(5660300002)(26005)(70206006)(36860700001)(186003)(1076003)(336012)(86362001)(7696005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2022 03:21:10.5387
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb762c27-f6a9-4aa0-6255-08d9d57a94b0
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT039.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1500
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Sing-Han Chen <singhanc@nvidia.com>
+Consider a case where ffs_func_eps_disable is called from
+ffs_func_disable as part of composition switch and at the
+same time ffs_epfile_release get called from userspace.
+ffs_epfile_release will free up the read buffer and call
+ffs_data_closed which in turn destroys ffs->epfiles and
+mark it as NULL. While this was happening the driver has
+already initialized the local epfile in ffs_func_eps_disable
+which is now freed and waiting to acquire the spinlock. Once
+spinlock is acquired the driver proceeds with the stale value
+of epfile and tries to free the already freed read buffer
+causing use-after-free.
 
-after driver sending the UCSI_START cmd, CCGx would
-clear Bit 0:Device Interrupt in the INTR_REG if CCGX
-reset successfully.
+Following is the illustration of the race:
 
-however, there might be a chance that other bits in
-INTR_REG are not cleared due to internal data queued
-in PPM and cause the driver thinks CCGx reset failed.
+      CPU1                                  CPU2
 
-the commit checks bit 0 in INTR_REG and ignore other
-bits. ucsi driver would reset PPM later.
+   ffs_func_eps_disable
+   epfiles (local copy)
+					ffs_epfile_release
+					ffs_data_closed
+					if (last file closed)
+					ffs_data_reset
+					ffs_data_clear
+					ffs_epfiles_destroy
+spin_lock
+dereference epfiles
 
-Fixes: 247c554a14aa16ca ("usb: typec: ucsi: add support for Cypress CCGx")
-Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
+Fix this races by taking epfiles local copy & assigning it under
+spinlock and if epfiles(local) is null then update it in ffs->epfiles
+then finally destroy it.
+Extending the scope further from the race, protecting the ep related
+structures, and concurrent accesses.
+
+Fixes: a9e6f83c2df (usb: gadget: f_fs: stop sleeping in ffs_func_eps_disable)
+Reviewed-by: John Keeping <john@metanate.com>
+Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
+Co-developed-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
 ---
- drivers/usb/typec/ucsi/ucsi_ccg.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v9: Removed unnecessary spinlock from epfiles_create.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index bff96d64dddf..6db7c8ddd51c 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -325,7 +325,7 @@ static int ucsi_ccg_init(struct ucsi_ccg *uc)
- 		if (status < 0)
- 			return status;
+ drivers/usb/gadget/function/f_fs.c | 57 ++++++++++++++++++++++++++++----------
+ 1 file changed, 42 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 3c584da..10294ca 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1711,16 +1711,24 @@ static void ffs_data_put(struct ffs_data *ffs)
  
--		if (!data)
-+		if (!(data & DEV_INT))
- 			return 0;
+ static void ffs_data_closed(struct ffs_data *ffs)
+ {
++	struct ffs_epfile *epfiles;
++	unsigned long flags;
++
+ 	ENTER();
  
- 		status = ccg_write(uc, CCGX_RAB_INTR_REG, &data, sizeof(data));
+ 	if (atomic_dec_and_test(&ffs->opened)) {
+ 		if (ffs->no_disconnect) {
+ 			ffs->state = FFS_DEACTIVATED;
+-			if (ffs->epfiles) {
+-				ffs_epfiles_destroy(ffs->epfiles,
+-						   ffs->eps_count);
+-				ffs->epfiles = NULL;
+-			}
++			spin_lock_irqsave(&ffs->eps_lock, flags);
++			epfiles = ffs->epfiles;
++			ffs->epfiles = NULL;
++			spin_unlock_irqrestore(&ffs->eps_lock,
++							flags);
++
++			if (epfiles)
++				ffs_epfiles_destroy(epfiles,
++						 ffs->eps_count);
++
+ 			if (ffs->setup_state == FFS_SETUP_PENDING)
+ 				__ffs_ep0_stall(ffs);
+ 		} else {
+@@ -1767,14 +1775,27 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
+ 
+ static void ffs_data_clear(struct ffs_data *ffs)
+ {
++	struct ffs_epfile *epfiles;
++	unsigned long flags;
++
+ 	ENTER();
+ 
+ 	ffs_closed(ffs);
+ 
+ 	BUG_ON(ffs->gadget);
+ 
+-	if (ffs->epfiles)
+-		ffs_epfiles_destroy(ffs->epfiles, ffs->eps_count);
++	spin_lock_irqsave(&ffs->eps_lock, flags);
++	epfiles = ffs->epfiles;
++	ffs->epfiles = NULL;
++	spin_unlock_irqrestore(&ffs->eps_lock, flags);
++
++	/*
++	 * potential race possible between ffs_func_eps_disable
++	 * & ffs_epfile_release therefore maintaining a local
++	 * copy of epfile will save us from use-after-free.
++	 */
++	if (epfiles)
++		ffs_epfiles_destroy(epfiles, ffs->eps_count);
+ 
+ 	if (ffs->ffs_eventfd)
+ 		eventfd_ctx_put(ffs->ffs_eventfd);
+@@ -1790,7 +1811,6 @@ static void ffs_data_reset(struct ffs_data *ffs)
+ 
+ 	ffs_data_clear(ffs);
+ 
+-	ffs->epfiles = NULL;
+ 	ffs->raw_descs_data = NULL;
+ 	ffs->raw_descs = NULL;
+ 	ffs->raw_strings = NULL;
+@@ -1919,12 +1939,15 @@ static void ffs_epfiles_destroy(struct ffs_epfile *epfiles, unsigned count)
+ 
+ static void ffs_func_eps_disable(struct ffs_function *func)
+ {
+-	struct ffs_ep *ep         = func->eps;
+-	struct ffs_epfile *epfile = func->ffs->epfiles;
+-	unsigned count            = func->ffs->eps_count;
++	struct ffs_ep *ep;
++	struct ffs_epfile *epfile;
++	unsigned short count;
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&func->ffs->eps_lock, flags);
++	count = func->ffs->eps_count;
++	epfile = func->ffs->epfiles;
++	ep = func->eps;
+ 	while (count--) {
+ 		/* pending requests get nuked */
+ 		if (ep->ep)
+@@ -1942,14 +1965,18 @@ static void ffs_func_eps_disable(struct ffs_function *func)
+ 
+ static int ffs_func_eps_enable(struct ffs_function *func)
+ {
+-	struct ffs_data *ffs      = func->ffs;
+-	struct ffs_ep *ep         = func->eps;
+-	struct ffs_epfile *epfile = ffs->epfiles;
+-	unsigned count            = ffs->eps_count;
++	struct ffs_data *ffs;
++	struct ffs_ep *ep;
++	struct ffs_epfile *epfile;
++	unsigned short count;
+ 	unsigned long flags;
+ 	int ret = 0;
+ 
+ 	spin_lock_irqsave(&func->ffs->eps_lock, flags);
++	ffs = func->ffs;
++	ep = func->eps;
++	epfile = ffs->epfiles;
++	count = ffs->eps_count;
+ 	while(count--) {
+ 		ep->ep->driver_data = ep;
+ 
 -- 
-2.25.1
+2.7.4
 
