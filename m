@@ -2,97 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0FA48BF6A
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jan 2022 09:02:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2806648BF6D
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jan 2022 09:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351350AbiALICu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jan 2022 03:02:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237577AbiALICq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jan 2022 03:02:46 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D502BC06173F;
-        Wed, 12 Jan 2022 00:02:45 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id g2so1682844qkp.1;
-        Wed, 12 Jan 2022 00:02:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fEPQyCI2iAGnV/flpHmxN8cgiikDpxO3IF0QpPNhHt8=;
-        b=Qv8pzXgpnahAZ2tocraw2jBKKW13lGm8sSUL1rp8X9HElta0D7lWdhip9BZEbcoATb
-         FK58lWytLL6bBM2TBkS2i9+T5sCUiDp2VegN5tnjchfGH3nYAVvGve0C0yV+29KwYdWo
-         lln5i691UN4vUP3UApxfO99BMZYs2S/YFIUvdwskovoKL27w6UWBFYNh5QVjGNsE5pr8
-         in0mhVNJsY2BHCQfM4pzbG6cStBNdaYTOp62bdx0DLg59tzQbstw0COhJBtgqaysMB0l
-         D2DzalC8gfsF4QH4cZLz+NmturZ6GwU3/cU6o7HdH6CRNVbObu6sIXPX8AR0F1FzvSnZ
-         iv4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fEPQyCI2iAGnV/flpHmxN8cgiikDpxO3IF0QpPNhHt8=;
-        b=j1GRBUh2hlqu8YBl0HeUybv9qrjcDXU1dFdQ/bQwl14S09bYT/YtFZALRo4Y0noEpc
-         D7nkdFiwzBCGnNzY1hnlLz4s6RAY9jHUeJXsSx9awsYGeCSp4TPjMSYAdHdOPqOilQWS
-         XtfkZJFaLnvG9/weXuF0rX0poElUeCqvqSG0ruOD+csV9EAVFly+JeoJurt/zAZdn3rH
-         omQfeTg75nv63BmKm7swdvecNJw2l2gZ02UKmaw9RJtyNE+D4DKHXhD+/CF5eWIjTRv0
-         FroDLG4XLugDW5+CwSn3DZKhOFfQdYwpNzY8d8Lx1v6FKe7PmAbVJpx/htLa7YaZXnN1
-         zwUg==
-X-Gm-Message-State: AOAM5317ahC4WEFmIiYJuAXjsmRqeyqAkgLh9EFPf/6fKYKm5Tf0kqSM
-        LBxVRiWbRl3fnJRPQXW4Yf/ie6LRKRE=
-X-Google-Smtp-Source: ABdhPJwqqFZfp2eYqPdYqUcLz07ftrZhspenPI+mT+uQmPCNwVbZOaDzbJsJWJ3FWPV/wjCBNerE6w==
-X-Received: by 2002:a05:620a:24c1:: with SMTP id m1mr5592354qkn.373.1641974564774;
-        Wed, 12 Jan 2022 00:02:44 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id ay15sm4262587qkb.63.2022.01.12.00.02.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 00:02:44 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     davem@davemloft.net
-Cc:     kuba@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
-Subject: [PATCH] drivers/net/usb: remove redundant ret variable
-Date:   Wed, 12 Jan 2022 08:02:38 +0000
-Message-Id: <20220112080238.666933-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        id S237926AbiALIDh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jan 2022 03:03:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56936 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237577AbiALIDh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jan 2022 03:03:37 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F671B81E00
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jan 2022 08:03:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0982FC36AE9
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jan 2022 08:03:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641974615;
+        bh=DbC1sleRt6iD0xhRApLMBXQ5rIzZjcdeNXG2tG8UxF4=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=W+kSWi0+bYNsKsunymRvCyj6BkZ6jmAP+wSxdymhtMAhqWfwmisO//IhoVtcvtCR0
+         Yz3X/n8PjxA6Sl/KaK4i/UubNUnl5DkBnS33TMSs8b26sIycicsbd3zSh/tZjTcHNJ
+         R9imLz7Ff61KSR4ZU41z4HEkfGhDLVMpiDJa+SDZRWGjOXCqRbxUnAJru8m2NeC4in
+         UbWvgAv8QndssOTN41fdADWIoPi1e+DBwRv9k/GHgmV6k/fxN5LHvUtPwfdeEiF3ab
+         NQ83QQ/k28SLPdyeTun6W9jYeVxYphc3iLkKq3mcEP5sbg0irl9/MUys5z+L2BGKQP
+         sPrA2uXQRsFHw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id DCE06CC13A9; Wed, 12 Jan 2022 08:03:34 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215475] RMNET data connection speed would be reduced to about
+ 80-100Mb/s from 150Mb/s  if try to re-connect it
+Date:   Wed, 12 Jan 2022 08:03:34 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: slark_xiao@163.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215475-208809-TGUyHg4aYE@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215475-208809@https.bugzilla.kernel.org/>
+References: <bug-215475-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215475
 
-Return value from __aqc111_write_cmd() directly instead
-of taking this in another redundant variable.
+--- Comment #2 from slark_xiao@163.com ---
+Hi Greg,
+  Yes, it also happen on 5.16. I tried it with 5.16-rc8.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
----
- drivers/net/usb/aqc111.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+  May I know what do you mean of 'usb trances'? USB protocol analyzer log or
+tcpdump packages?
+  Actually, I do the same test with another Qualcomm modem device (not the =
+same
+serials), and issue can't be reproduced with that device. Seems issue comes
+from firmware of device. But we can't explain the difference beween Windows=
+ and
+Linux.
 
-diff --git a/drivers/net/usb/aqc111.c b/drivers/net/usb/aqc111.c
-index ea06d10e1c21..22b5d84abe3c 100644
---- a/drivers/net/usb/aqc111.c
-+++ b/drivers/net/usb/aqc111.c
-@@ -110,12 +110,8 @@ static int __aqc111_write_cmd(struct usbnet *dev, u8 cmd, u8 reqtype,
- static int aqc111_write_cmd_nopm(struct usbnet *dev, u8 cmd, u16 value,
- 				 u16 index, u16 size, void *data)
- {
--	int ret;
--
--	ret = __aqc111_write_cmd(dev, cmd, USB_DIR_OUT | USB_TYPE_VENDOR |
-+	return  __aqc111_write_cmd(dev, cmd, USB_DIR_OUT | USB_TYPE_VENDOR |
- 				 USB_RECIP_DEVICE, value, index, size, data);
--
--	return ret;
- }
- 
- static int aqc111_write_cmd(struct usbnet *dev, u8 cmd, u16 value,
--- 
-2.25.1
+  So do you have any advice to confirm whether the issue relate with the dr=
+iver
+or not?
 
+Thanks!
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
