@@ -2,91 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF93F48CC21
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jan 2022 20:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 055B948CC24
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jan 2022 20:41:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357412AbiALTkQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jan 2022 14:40:16 -0500
-Received: from titan58.planetwebservers.net ([51.79.1.102]:42225 "EHLO
-        titan58.planetwebservers.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1356569AbiALTjW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jan 2022 14:39:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lockie.ca;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=fIpZdAI12RK+Nd6TXHz1uRa0jEh0MXzV+n+QdF+v1O4=; b=iFpfFVHcHRmL67ObCzG4DPvp1j
-        UihMgjg+Rk0si85Ekyd5IWkHhuuFAsulscuFjXCRRMWPwu7YVPCJv0YMkNifiikfvpbk1LJpV61mS
-        Y113RPYuBSeoMuD1ZtYicCgIxNOuHtYG1Me+ieaNp/BZOZkNLhZFFjZDU7J1KHbrsHRU383EQsGlq
-        pMDh948lXgjXxpcwSAn6UklGMoDIM58C4rHWjTZy2OKJyu9IKeSYqJPUpZp+mRkklQTj2liJH11+j
-        hI6/abYop1K3ZKO/qgMFMmuGSGHYVSzWrd1o+SiQl21MmQyBml1qSRk4SA3qcLjkcoEzGE0cDcP9X
-        XER4xYKg==;
-Received: from [66.79.250.116] (port=57076 helo=[192.168.68.65])
-        by titan.planetwebservers.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <bjlockie@lockie.ca>)
-        id 1n7jSs-0000Ly-8S
-        for linux-usb@vger.kernel.org; Thu, 13 Jan 2022 06:39:21 +1100
-Message-ID: <8855e8db-8913-d7e0-5b26-341bae5c5eee@lockie.ca>
-Date:   Wed, 12 Jan 2022 14:39:20 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: problem with USB-C
-Content-Language: en-US
-Cc:     linux-usb <linux-usb@vger.kernel.org>
-References: <830aa508-5c20-c7c9-5ba9-04bcf5ac7178@lockie.ca>
- <Yd59HLmparwNaok9@kroah.com> <Yd72gTFL0BsC7vtR@rowland.harvard.edu>
-From:   James <bjlockie@lockie.ca>
-In-Reply-To: <Yd72gTFL0BsC7vtR@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - titan.planetwebservers.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lockie.ca
-X-Get-Message-Sender-Via: titan.planetwebservers.net: authenticated_id: bjlockie@lockie.ca
-X-Authenticated-Sender: titan.planetwebservers.net: bjlockie@lockie.ca
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-From-Rewrite: unmodified, already matched
-To:     unlisted-recipients:; (no To-header on input)
+        id S1357326AbiALTke (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jan 2022 14:40:34 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33990 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357381AbiALTkJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jan 2022 14:40:09 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DA89B820DE;
+        Wed, 12 Jan 2022 19:40:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6B33CC36AE9;
+        Wed, 12 Jan 2022 19:40:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642016406;
+        bh=cZHp4t4jfOk5RLn3HA3euMv+VEJ90LZ/G+6ow4Uyzc0=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=ecgO1aQosprlXLNgCH2xuVfgeGom/oy4Zom4wlsowvVHYJ8w1RJEIoOV3bO5dYVXK
+         5jHbhvNUQowU/X/shK2vuYbqt/K/Ru17vxr8Um+ZPjv4MvW/tvB/qDP3cS1hSZaiVB
+         yEB8fJzrWLWUQDSt3K8dZl1iVzeWucT9H46DFJXp2TrieOfNch6cgNBaB5vucLurD9
+         UFz7SNy3VpaZqxMjss6UR3cKK+rMC1TFRrMySIWXFSAMJef+qz97Sz8YmdiAZl5gfB
+         5V7KKiPaMXoDpvmF/GrV8FnOnZ1E2QCh4WPCWykyV5MzZ50Zi1S3+LZGz/r8pWGHeo
+         FN3zDzKa9Cn/w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5971AF60796;
+        Wed, 12 Jan 2022 19:40:06 +0000 (UTC)
+Subject: Re: [GIT PULL] USB changes for 5.17-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Yd7eHm8EDkYETMw8@kroah.com>
+References: <Yd7eHm8EDkYETMw8@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Yd7eHm8EDkYETMw8@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.17-rc1
+X-PR-Tracked-Commit-Id: cbb4f5f435995a56ef770e35bfafb4bcff8f0ada
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 57ea81971b7296b42fc77424af44c5915d3d4ae2
+Message-Id: <164201640636.24328.4553918353897796750.pr-tracker-bot@kernel.org>
+Date:   Wed, 12 Jan 2022 19:40:06 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The pull request you sent on Wed, 12 Jan 2022 14:56:46 +0100:
 
-> Is that Seagate storage device really supposed to be USB-3.1?  It is
-> connected at only USB-2 speed!  Maybe something is wrong with the drive
-> or the cable.
-I suspect the cable for USB-C.
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.17-rc1
 
-The USB-C cable:
-$ lsusb -tv
-/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 480M
-     ID 1d6b:0002 Linux Foundation 2.0 root hub
-     |__ Port 1: Dev 2, If 0, Class=Mass Storage, Driver=uas, 480M
-         ID 0bc2:2321 Seagate RSS LLC Expansion Portable
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/57ea81971b7296b42fc77424af44c5915d3d4ae2
 
-This is with it connected with a USB3-A cable:
-$ lsusb -tv
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 10000M
-     ID 1d6b:0003 Linux Foundation 3.0 root hub
-     |__ Port 2: Dev 2, If 0, Class=Mass Storage, Driver=uas, 5000M
-         ID 0bc2:2321 Seagate RSS LLC Expansion Portable
+Thank you!
 
-A newer drive in the USB-C port:
-$ lsusb -tv
-/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 480M
-     ID 1d6b:0002 Linux Foundation 2.0 root hub
-     |__ Port 1: Dev 5, If 0, Class=Mass Storage, Driver=uas, 480M
-         ID 0bc2:ab5a Seagate RSS LLC
-> Another possibility is for the hardware database entry for product 0x0003
-> to be changed simply to "Linux Foundation USB-3 root hub", so that it
-> doesn't specify 3.0, 3.1, or 3.2.
->
-I like that idea.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
