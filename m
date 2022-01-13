@@ -2,121 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2185748D579
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jan 2022 11:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C4748D81F
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jan 2022 13:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbiAMKNR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jan 2022 05:13:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiAMKNP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jan 2022 05:13:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B62C06173F;
-        Thu, 13 Jan 2022 02:13:15 -0800 (PST)
+        id S234648AbiAMMkL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jan 2022 07:40:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33072 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233055AbiAMMkK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jan 2022 07:40:10 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDF5C61B77;
-        Thu, 13 Jan 2022 10:13:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76821C36AE3;
-        Thu, 13 Jan 2022 10:13:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 803D761C18;
+        Thu, 13 Jan 2022 12:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DF2A1C36AEC;
+        Thu, 13 Jan 2022 12:40:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642068794;
-        bh=ijdFSU0tzgbikdiQ4EWHXgHfcS6vqCI0UuxTBUw4W9s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C2fK+bIjUxWYxYBb9nvhY8+rSIgYzTw9h+wGOuaNdP3zJjS+caEui876bQSejC7lF
-         0XArfr/GLDNt2m4mIyMBmTi4gNtNGKL1DU0DU3v3kaeXpw9IZnCk+Bw24iJNaXoBg7
-         V3/AixbWHwZDFnUytl4q2Gnc+snkzm3W1G57c/3dOlxK50e5PqgQuWtYbE19AEbBCR
-         Xf/8GM6nb7ZVNlpV2hL7oxzs96vOrtIz3awBL0L/1Oh1EWHNOf0c3USVhRtn92ZAfr
-         n8dzmt4rOTAEA8SvZN/izu5vPPLAc7Mvts+Vnkk87nkiappaVWay+mt7ch/W/e8CtP
-         KuclZGw63F0hQ==
-Date:   Thu, 13 Jan 2022 12:13:09 +0200
-From:   Abel Vesa <abelvesa@kernel.org>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        peter.chen@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lznuaa@gmail.com
-Subject: Re: [PATCH 1/1] usb: xhci-plat: fix crash when suspend if remote
- wake enable
-Message-ID: <Yd/7NQLgoEU17TzI@abelvesa>
-References: <20220110172738.31686-1-Frank.Li@nxp.com>
+        s=k20201202; t=1642077609;
+        bh=188HWT1CkxrwlSeVx4VHEbaaD4KJ+ccLjOYC5mXrvY4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=AISn/NZ6B27ZlACncbGXBr4gRX6qLlhoSQODl95aWH80M3n97WupOPafhF/YUsLuB
+         nt3S1EVYA/C/TMvtoCgr1ZxHNP1mtOlytCJ8z+WE2gaaPHqz6OTP1NsCceQ5DTFoc3
+         V6x7dtcG2KNoUeK4eoRwtmIQv2cNJSmx2wW2LPjAZWtKebiyK0gB3saJ3vJZ7uacuV
+         CyQWB6K5ClMFTIoZARkg29EvB/yBwiMYvhSM1nRzWf5Ghb8N5lnTq+uIW3CYtg2z4S
+         FP80fkqe8ZfcpSNCXHyR88YuGWYBTz8zTupWIyV9XxSxKjOmNGkXkoo4+5GDwbD4GW
+         4ltfDIeuv4Mng==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C7A0CF6078E;
+        Thu, 13 Jan 2022 12:40:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220110172738.31686-1-Frank.Li@nxp.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: qmi_wwan: add ZTE MF286D modem 19d2:1485
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164207760981.15302.4251167681503025563.git-patchwork-notify@kernel.org>
+Date:   Thu, 13 Jan 2022 12:40:09 +0000
+References: <20220111221132.14586-1-paweldembicki@gmail.com>
+In-Reply-To: <20220111221132.14586-1-paweldembicki@gmail.com>
+To:     Pawel Dembicki <paweldembicki@gmail.com>
+Cc:     linux-usb@vger.kernel.org, bjorn@mork.no, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 22-01-10 11:27:38, Frank Li wrote:
-> Crashed at i.mx8qm platform when suspend if enable remote wakeup
-> 
-> Internal error: synchronous external abort: 96000210 [#1] PREEMPT SMP
-> Modules linked in:
-> CPU: 2 PID: 244 Comm: kworker/u12:6 Not tainted 5.15.5-dirty #12
-> Hardware name: Freescale i.MX8QM MEK (DT)
-> Workqueue: events_unbound async_run_entry_fn
-> pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : xhci_disable_hub_port_wake.isra.62+0x60/0xf8
-> lr : xhci_disable_hub_port_wake.isra.62+0x34/0xf8
-> sp : ffff80001394bbf0
-> x29: ffff80001394bbf0 x28: 0000000000000000 x27: ffff00081193b578
-> x26: ffff00081193b570 x25: 0000000000000000 x24: 0000000000000000
-> x23: ffff00081193a29c x22: 0000000000020001 x21: 0000000000000001
-> x20: 0000000000000000 x19: ffff800014e90490 x18: 0000000000000000
-> x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-> x14: 0000000000000000 x13: 0000000000000002 x12: 0000000000000000
-> x11: 0000000000000000 x10: 0000000000000960 x9 : ffff80001394baa0
-> x8 : ffff0008145d1780 x7 : ffff0008f95b8e80 x6 : 000000001853b453
-> x5 : 0000000000000496 x4 : 0000000000000000 x3 : ffff00081193a29c
-> x2 : 0000000000000001 x1 : 0000000000000000 x0 : ffff000814591620
-> Call trace:
->  xhci_disable_hub_port_wake.isra.62+0x60/0xf8
->  xhci_suspend+0x58/0x510
->  xhci_plat_suspend+0x50/0x78
->  platform_pm_suspend+0x2c/0x78
->  dpm_run_callback.isra.25+0x50/0xe8
->  __device_suspend+0x108/0x3c0
-> 
-> The basic flow:
-> 	1. run time suspend call xhci_suspend, xhci parent devices gate the clock.
->         2. echo mem >/sys/power/state, system _device_suspend call xhci_suspend
->         3. xhci_suspend call xhci_disable_hub_port_wake, which access register,
-> 	   but clock already gated by run time suspend.
-> 
-> This problem was hidden by power domain driver, which call run time resume before it.
-> 
-> But the below commit remove it and make this issue happen.
-> 	commit c1df456d0f06e ("PM: domains: Don't runtime resume devices at genpd_prepare()")
-> 
-> This patch call run time resume before suspend to make sure clock is on
-> before access register.
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+Hello:
 
-Tested on i.MX8QM.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Testeb-by: Abel Vesa <abel.vesa@nxp.com>
+On Tue, 11 Jan 2022 23:11:32 +0100 you wrote:
+> Modem from ZTE MF286D is an Qualcomm MDM9250 based 3G/4G modem.
+> 
+> T:  Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
+> D:  Ver= 3.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+> P:  Vendor=19d2 ProdID=1485 Rev=52.87
+> S:  Manufacturer=ZTE,Incorporated
+> S:  Product=ZTE Technologies MSM
+> S:  SerialNumber=MF286DZTED000000
+> C:* #Ifs= 7 Cfg#= 1 Atr=80 MxPwr=896mA
+> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
+> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=02 Prot=ff Driver=rndis_host
+> E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+> I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+> E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+> E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+> E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
+> E:  Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=89(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> 
+> [...]
 
-> ---
->  drivers/usb/host/xhci-plat.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> index c6b791a83ad18..7d2f665271310 100644
-> --- a/drivers/usb/host/xhci-plat.c
-> +++ b/drivers/usb/host/xhci-plat.c
-> @@ -442,6 +442,9 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
->  	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
->  	int ret;
->  
-> +	if (pm_runtime_suspended(dev))
-> +		pm_runtime_resume(dev);
-> +
->  	ret = xhci_priv_suspend_quirk(hcd);
->  	if (ret)
->  		return ret;
-> -- 
-> 2.24.0.rc1
-> 
+Here is the summary with links:
+  - net: qmi_wwan: add ZTE MF286D modem 19d2:1485
+    https://git.kernel.org/netdev/net/c/078c6a1cbd4c
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
