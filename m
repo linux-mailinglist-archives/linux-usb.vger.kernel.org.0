@@ -2,188 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9325B48DA98
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jan 2022 16:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42DD548DABD
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jan 2022 16:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236067AbiAMPUS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jan 2022 10:20:18 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:37963 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S236053AbiAMPUS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jan 2022 10:20:18 -0500
-Received: (qmail 265338 invoked by uid 1000); 13 Jan 2022 10:20:16 -0500
-Date:   Thu, 13 Jan 2022 10:20:16 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jack Pham <quic_jackp@quicinc.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Michal Nazarewicz <mina86@mina86.com>,
-        linux-usb@vger.kernel.org, Roger Quadros <roger.quadros@nokia.com>
-Subject: Re: [PATCH v2] usb: gadget: f_mass_storage: Make CD-ROM emulation
- work with Mac OS-X
-Message-ID: <YeBDMDfghatTGrI8@rowland.harvard.edu>
-References: <20220110062359.5314-2-quic_jackp@quicinc.com>
- <20220110063030.12957-1-quic_jackp@quicinc.com>
- <Yd80j0vjR0f9TCtN@rowland.harvard.edu>
- <20220113052253.GF3221@jackp-linux.qualcomm.com>
+        id S236155AbiAMPgb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jan 2022 10:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51322 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236142AbiAMPg3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jan 2022 10:36:29 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C2DC06173E
+        for <linux-usb@vger.kernel.org>; Thu, 13 Jan 2022 07:36:29 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id u21so24522249edd.5
+        for <linux-usb@vger.kernel.org>; Thu, 13 Jan 2022 07:36:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=XHQEo9fqyrDZ/5pi9gXVVtH309S9YPpH8gy7JyNdDZw=;
+        b=n9FfjuP2bLhZ4H2O1TCdlrOQM2oQfDk+FqT32mA/qVE2T6zFXeDYiBh3gFi0NKqumU
+         lRgZ35xiOyX2qN1EQCJQUrokfDCN/q1oRI6jayDyoSRm0oRGDCsJz6FwjG/JiShj7xU4
+         YZbzA02kF8lDvETrvzBtl0AYUkdbqYJ34aBgBH34kIzkiq+gL6+hAx5Pf9DfxxzqRMkM
+         DhCPxauQmPv4K8+EoJTug03CWyN2vb7sW5ZU10Eikl1kIKvOikiashtEYmkLM8Ch5//t
+         CpjK2cI4kMvNAcvWz7qIWXcOetuetZWI8YXR5buD9akTba6eHqb8jA5JwMVb2AoKNgA/
+         Y+Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=XHQEo9fqyrDZ/5pi9gXVVtH309S9YPpH8gy7JyNdDZw=;
+        b=KI/8wE1u35uX69/MddaSW90epiParecTHZRXcoiZon++kMmQnDbs6Eh8G5oSY1mskR
+         QexPWMO/Yr/pOGWNep55ZIiFbVuk+nsVoUUSV3RuHNcEKcf+0NvpYAZX6qISUrQonwof
+         T/QKMnpJVuPONuwow2umEjGG0WjV5qTXvXqBiz13khNV4/EuJHTXrOlzNI5lcjBVCw4c
+         jmgCkF6CneK9hqMCgYIbFqwg16cqHAWxc9CeBllzezkQMtU+6Xd2BfdSUwAXsjmM8n0T
+         RMvcOaqNltIgXPnQ2i56U6QfAWfPpqHx+4RIYvFmtflQCExVVxafdog7YT6bP53dV41R
+         TYlw==
+X-Gm-Message-State: AOAM531SZoa1JiB6zci056azNUTYuEZD89uUU7+onS+YCQLcPGvuicfy
+        /K5uO4BaG1CdQHCUhomMgF9ezevQEtpIvonqmGo=
+X-Google-Smtp-Source: ABdhPJz6uz7scSCbFh7ox39AaVp8nDxjEESf2m4mb8GDT8yiOikEVP4Gy+aRLDxS9NFPTD5E/vKUcUMih4PeJeVtlH8=
+X-Received: by 2002:a05:6402:42c4:: with SMTP id i4mr4823241edc.408.1642088187635;
+ Thu, 13 Jan 2022 07:36:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220113052253.GF3221@jackp-linux.qualcomm.com>
+Received: by 2002:a17:907:9691:0:0:0:0 with HTTP; Thu, 13 Jan 2022 07:36:27
+ -0800 (PST)
+Reply-To: rco.ben189@outlook.fr
+From:   "Mrs. Susan Dansuki" <peteronyekachi077@gmail.com>
+Date:   Thu, 13 Jan 2022 07:36:27 -0800
+Message-ID: <CAB6=xyYh_Th1nx0Kce8yCW1RD-VOGJB5UWk-gXL+yQNXE40pFg@mail.gmail.com>
+Subject: Re: COVID-19 RELIEF FUND WORTH $1,500,000.00 USD
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 09:22:53PM -0800, Jack Pham wrote:
-> Hi Alan,
-> 
-> On Wed, Jan 12, 2022 at 03:05:35PM -0500, Alan Stern wrote:
-> > On Sun, Jan 09, 2022 at 10:30:30PM -0800, Jack Pham wrote:
-> > > From: Roger Quadros <roger.quadros@nokia.com>
-> > > 
-> > > Mac OS-X expects CD-ROM TOC in raw format (i.e. format:2). It also
-> > > sends the READ_TOC CDB in old style SFF8020i format. i.e. 2 format bits
-> > > are encoded in MSBs of CDB byte 9.
-> > > 
-> > > This patch will enable CD-ROM emulation to work with Mac OS-X. Tested on
-> > > Mac OS X v10.6.3.
-> > > 
-> > > Signed-off-by: Roger Quadros <roger.quadros@nokia.com>
-> > > Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
-> > > ---
-> > > v2: Removed Change-Id tag.
-> > > 
-> > >  drivers/usb/gadget/function/f_mass_storage.c | 73 +++++++++++++++++++++++-----
-> > >  1 file changed, 61 insertions(+), 12 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-> > > index 73a28f8..1f7f4dd6 100644
-> > > --- a/drivers/usb/gadget/function/f_mass_storage.c
-> > > +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> > > @@ -1188,6 +1188,8 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
-> > >  	int		msf = common->cmnd[1] & 0x02;
-> > >  	int		start_track = common->cmnd[6];
-> > >  	u8		*buf = (u8 *)bh->buf;
-> > > +	u8		format;
-> > > +	int		i, len;
-> > >  
-> > >  	if ((common->cmnd[1] & ~0x02) != 0 ||	/* Mask away MSF */
-> > >  			start_track > 1) {
-> > > @@ -1195,18 +1197,65 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
-> > >  		return -EINVAL;
-> > >  	}
-> > >  
-> > > -	memset(buf, 0, 20);
-> > > -	buf[1] = (20-2);		/* TOC data length */
-> > > -	buf[2] = 1;			/* First track number */
-> > > -	buf[3] = 1;			/* Last track number */
-> > > -	buf[5] = 0x16;			/* Data track, copying allowed */
-> > > -	buf[6] = 0x01;			/* Only track is number 1 */
-> > > -	store_cdrom_address(&buf[8], msf, 0);
-> > > +	format = common->cmnd[2] & 0xf;
-> > 
-> > Hmmm.  According to this part later on:
-> > 
-> > > @@ -1933,7 +1982,7 @@ static int do_scsi_command(struct fsg_common *common)
-> > >  		common->data_size_from_cmnd =
-> > >  			get_unaligned_be16(&common->cmnd[7]);
-> > >  		reply = check_command(common, 10, DATA_DIR_TO_HOST,
-> > > -				      (7<<6) | (1<<1), 1,
-> > > +				      (0xf<<6) | (1<<1), 1,
-> > >  				      "READ TOC");
-> > 
-> > common->cmnd[2] can never be anything other than 0.
-> 
-> Ah, that is true.  So to allow for cmnd[2] (as well as cmnd[9] as
-> intended by the patch) to be non-zero, the "mask" argument should rather
-> be:
-> 
->  (0xf<<6) | (3<<1)
+--=20
+Attention: Beneficiary,
 
-Indeed.
+I am  Mrs. Susan Dansuki, the current Director of the Centers for
+Disease Control and Prevention. In the wake of the global COVID-19
+Pandemic, I wish to bring you the good news of hope. Be officially
+inform that the United Nations organization department for disaster
+management in conjunction with IMF, World Bank, is giving out Covid-19
+stimulus package worth $1,500, 000.00 USD, and your e-mail address
+were selected among other's to receive this stimulus package.
 
-> In other words a bitmask of 0x3c6, corresponding to command data bytes
-> 1, 2, 6, 7, 8 and 9.  Is my understanding correct?
+The United Nations COVID-19 Response and Recovery Fund is a UN
+inter-agency fund mechanism established by the UN Secretary-General to
+help support low- and middle-income people(s) to respond to the
+pandemic and its impacts, including an unprecedented socio-economic
+shock. The Fund=E2=80=99s assistance targets those most vulnerable to econo=
+mic
+hardship and social disruption around the world.
 
-Yes, that's right.
+We are delighted to inform you that due to mixed up of names and
+numbers, your email attached to approved number UN6MM020/COVID-19,
+which consequently fall on our Chapter, therefore, you are advised to
+contact the United Nations Covid-19 Relief Fund Coordinator ( Mr.
+Robert TAIWO ), to claim your $1,500, 000.00 USD.
 
-> > So this computation and the test immediately below are pointless --
-> > unless you change the argument to check_command().
-> 
-> If you are referring to the "if (format == 0)" check, then I believe you
-> are right.
-> 
-> > > +	/*
-> > > +	 * Check if CDB is old style SFF-8020i
-> > > +	 * i.e. format is in 2 MSBs of byte 9
-> > > +	 * Mac OS-X host sends us this.
-> > > +	 */
-> > > +	if (format == 0)
-> > > +		format = (common->cmnd[9] >> 6) & 0x3;
-> 
-> It seems this is the gist of the patch.  Without changing the mask
-> parameter to check_command() above, we know we can only reach here if
-> format = common->cmnd[2] is 0.  However this snippet is then reassigning
-> format from the upper bits of the 9th byte which could be non-zero, at
-> least in the case of MacOS.
-> 
-> So this patch does seem a bit incomplete as you point out and maybe
-> updating the mask as above should help to allow both fields to determine
-> the format for any non-zero TOC type.
-> 
-> But I was trying to confirm these details from the SFF-8020i spec as
-> mentioned in the original comment above.  I was only able to find a
-> draft copy [1] from a web search which stated:
-> 
-> 	"Format field definition: When Format in Byte 2 is zero, then
-> 	Byte 9 is used. Other values for this field are reserved for
-> 	definition in MMC."
-> 
-> 	Note: The Format field in Byte 9 is a vendor-specific area and
-> 	will be removed in subsequent versions of this specification.
-> 	Functionality is moving to Byte 2."
-> 
-> However when trying to look up the latest official release of SFF-8020
-> the SNIA website [2] lists it as having been expired and incorporated
-> into the SCSI MMC specification.  Consequently, I haven't yet been able
-> to look further into the SCSI MMC spec itself as it seems it is only
-> available for a fee from the ANSI/INCITS website [3].  I'm hoping you or
-> maybe somebody on this list might have more knowledge on these details.
+Name: Mr.  Robert Taiwo
+Email:   mr.roberttaiwo73@qq.com
+Telephone:  +229 965 483 88
 
-I thought I had a copy of the old SFF8020i spec somewhere, but now I 
-can't find it.  :-(
+Confirm the following information as soon as possible.
 
-> So I'm left wondering whether the Format field in Byte 9 is even
-> standardized, or if it is a remnant of an older or possibly
-> draft/non-final specification.  Yet we clearly have a host that is
-> relying on this behavior, so there is utility in this patch.
-> 
-> FWIW, here are the raw bytes of the READ TOC request transaction as
-> issued by the MacOS host, obtained from a bus analyzer trace, which this
-> patch is purportedly fixing:
-> 
->  55 53 42 43 19 00 00 00 FE FF 00 00 80 00 0A 43
->                                               ^^
->                                               cmnd[0] i.e. OpCode
->  02 00 00 00 00 00 FF FE 80 00 00 00 00 00 00
->     ^^                   ^^
->     cmnd[2]==0           ||
->                          cmnd[9], upper 2 bits == 0x2
+1. Full Name :
+2. Address :
+3. Nationality :
+4. Direct Telephone #:
 
-Well, there are really just two things we need to worry about:
+NOTE: that the amount to be paid to you is ( $1,500, 000.00 USD ), we
+are expecting your urgent response to this email to enable us monitor
+the transaction effectively.
 
-	The driver must continue to work properly on all the systems
-	that are using it now.
-
-	The driver should be able to work with Mac OS-X.
-
-I think if you simply change the mask value then we'll be okay.
-
-Alan Stern
-
-> Thanks,
-> Jack
-> 
-> [1] https://www.bswd.com/sff8020i.pdf
-> [2] https://www.snia.org/technology-communities/sff/specifications
-> [3] https://webstore.ansi.org/standards/incits/ansiincits4302007
+Best Regards
+Mrs. Susan Dansuki
+Director of the Centers for Disease Control and Prevention.
