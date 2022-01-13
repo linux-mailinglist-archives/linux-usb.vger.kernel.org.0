@@ -2,85 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F23048D3BB
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jan 2022 09:40:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C58E48D4BA
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jan 2022 10:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbiAMIkL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jan 2022 03:40:11 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44434 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiAMIkK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jan 2022 03:40:10 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        id S232414AbiAMJHW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jan 2022 04:07:22 -0500
+Received: from asav21.altibox.net ([109.247.116.8]:54480 "EHLO
+        asav21.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232404AbiAMJHW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jan 2022 04:07:22 -0500
+X-Greylist: delayed 535 seconds by postgrey-1.27 at vger.kernel.org; Thu, 13 Jan 2022 04:07:21 EST
+Received: from canardo.mork.no (207.51-175-193.customer.lyse.net [51.175.193.207])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C833DB82186
-        for <linux-usb@vger.kernel.org>; Thu, 13 Jan 2022 08:40:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13552C36AE9;
-        Thu, 13 Jan 2022 08:40:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642063208;
-        bh=jBZHfE3i85F6o71aaXOLHmk6zI0ZjME/z1gF64/RCZk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tLRK2jWtqZWEdu29g1tdBNX5BvWiAL1VhpeMogjbQIL5D+i9IHr2IQkKsnnpsU4q6
-         bD1GDw/E8qDYUg2hGFzpZAdILTzkZMsv+A0nudyPoDpCBZdAl7ADfUP63ejiXdZuCj
-         krCyL5HRNt2oRFlY0u9hkJjZaUmpmeZq4ICqC91I=
-Date:   Thu, 13 Jan 2022 09:40:05 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     James <bjlockie@lockie.ca>, linux-usb <linux-usb@vger.kernel.org>
-Subject: Re: problem with USB-C
-Message-ID: <Yd/lZVRPgcLUqTrn@kroah.com>
-References: <830aa508-5c20-c7c9-5ba9-04bcf5ac7178@lockie.ca>
- <Yd59HLmparwNaok9@kroah.com>
- <Yd72gTFL0BsC7vtR@rowland.harvard.edu>
+        (Authenticated sender: bmork@altiboxmail.no)
+        by asav21.altibox.net (Postfix) with ESMTPSA id 2359A80146;
+        Thu, 13 Jan 2022 09:58:25 +0100 (CET)
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9f:8602:8cd5:a7b0:d07:d516])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 20D8wODU374231
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Thu, 13 Jan 2022 09:58:24 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1642064304; bh=yl54sanNDUWMM+AQIqqbrLuI+gS3uSjsOTBkYc4iasQ=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=EVIM26CSPcEzIGBEUXhAABRkH+4CGL3T01Kx8lanZ+U3coHcbP6cnhsik96ZOgQ00
+         QQDxfFrVYJhBw+Gb1eVMsIj18u8Ej1cII98XBrVHJwYQsBZgITVxXuM9Y6Uz6w9Erz
+         jm9OFa5LUKFddcPQI6ckzgl61yhpwpQdpzH7ax+U=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
+        (envelope-from <bjorn@mork.no>)
+        id 1n7vw8-001bMp-Et; Thu, 13 Jan 2022 09:58:24 +0100
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Pawel Dembicki <paweldembicki@gmail.com>
+Cc:     linux-usb@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: qmi_wwan: add ZTE MF286D modem 19d2:1485
+Organization: m
+References: <20220111221132.14586-1-paweldembicki@gmail.com>
+Date:   Thu, 13 Jan 2022 09:58:24 +0100
+In-Reply-To: <20220111221132.14586-1-paweldembicki@gmail.com> (Pawel
+        Dembicki's message of "Tue, 11 Jan 2022 23:11:32 +0100")
+Message-ID: <871r1cxb9r.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yd72gTFL0BsC7vtR@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.3 at canardo
+X-Virus-Status: Clean
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=ZLv5Z0zb c=1 sm=1 tr=0
+        a=XJwvrae2Z7BQDql8RrqA4w==:117 a=XJwvrae2Z7BQDql8RrqA4w==:17
+        a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=DghFqjY3_ZEA:10 a=M51BFTxLslgA:10
+        a=rWqaOqVXLpn30FgQbZwA:9 a=QEXdDO2ut3YA:10 a=3la3ztWH3XQaG4dFsChN:22
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 10:40:49AM -0500, Alan Stern wrote:
-> > >     |__ Port 5: Dev 2, If 0, Class=Human Interface Device, Driver=usbhid,
-> > > 1.5M
-> > >         ID 04d9:1503 Holtek Semiconductor, Inc. Keyboard
-> > >     |__ Port 5: Dev 2, If 1, Class=Human Interface Device, Driver=usbhid,
-> > > 1.5M
-> > >         ID 04d9:1503 Holtek Semiconductor, Inc. Keyboard
-> > >     |__ Port 6: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid,
-> > > 1.5M
-> > >         ID 30fa:0400
-> > > 
-> > > 
-> > > Why are the hubs listed as Linux Foundation 3.0 root hubs and not 3.1 root
-> > > hubs?
-> > 
-> > Because your devices do not advertise themselves as a USB 3.1 root hub.
-> > Perhaps the documentation is incorrect?
-> 
-> No, that's not it at all.
-> 
-> The reason why the root hubs for buses 2 and 4 above are both listed as 
-> "Linux Foundation 3.0 root hub" is because in hcd.c, the 
-> usb31_rh_dev_descriptor and usb3_rh_dev_descriptor structures both set 
-> their idProduct values to 0x03, 0x00 (0x0003 in little-endian form).  
-> Therefore the hardware database can't distinguish between them.
-
-Ah, right, I totally missed that.  I saw the two different definitions,
-but missed the device number.
-
-> One possibility would be for the usb31_rh_dev_descriptor to use 0x04, 
-> 0x00 (with the corresponding update to the udev hardware database).  
-> Another possibility is for the hardware database entry for product 0x0003
-> to be changed simply to "Linux Foundation USB-3 root hub", so that it 
-> doesn't specify 3.0, 3.1, or 3.2.
-
-I can do that.  Should only take a few years to trickle out to the
-slower distros :)
-
-thanks,
-
-greg k-h
+Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
