@@ -2,80 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A875E48DED8
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jan 2022 21:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06FC748DF2D
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jan 2022 21:47:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233179AbiAMUYl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jan 2022 15:24:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232597AbiAMUYl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jan 2022 15:24:41 -0500
-X-Greylist: delayed 1238 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Jan 2022 12:24:40 PST
-Received: from wp126.webpack.hosteurope.de (wp126.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8485::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88499C061574;
-        Thu, 13 Jan 2022 12:24:40 -0800 (PST)
-Received: from p5098d998.dip0.t-ipconnect.de ([80.152.217.152] helo=hermes.fivetechno.de); authenticated
-        by wp126.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1n86KF-0006EQ-11; Thu, 13 Jan 2022 21:03:59 +0100
-X-Virus-Scanned: by amavisd-new 2.12.1 using newest ClamAV at
-        linuxbbg.five-lan.de
-Received: from odroid-x2.fritz.box (pd9e89d11.dip0.t-ipconnect.de [217.232.157.17])
-        (authenticated bits=0)
-        by hermes.fivetechno.de (8.15.2/8.16.1/SUSE Linux 0.8) with ESMTPSA id 20DK3shg011127
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Thu, 13 Jan 2022 21:03:55 +0100
-From:   Markus Reichl <m.reichl@fivetechno.de>
-To:     Steve Glendinning <steve.glendinning@shawell.net>,
-        UNGLinuxDriver@microchip.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Martyn Welch <martyn.welch@collabora.com>
-Cc:     Markus Reichl <m.reichl@fivetechno.de>,
-        Gabriel Hojda <ghojda@yo2urs.ro>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: usb: Correct reset handling of smsc95xx
-Date:   Thu, 13 Jan 2022 21:01:11 +0100
-Message-Id: <20220113200113.30702-1-m.reichl@fivetechno.de>
-X-Mailer: git-send-email 2.30.2
+        id S234648AbiAMUrr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jan 2022 15:47:47 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:34921 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S230515AbiAMUrq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jan 2022 15:47:46 -0500
+Received: (qmail 276775 invoked by uid 1000); 13 Jan 2022 15:47:45 -0500
+Date:   Thu, 13 Jan 2022 15:47:45 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jack Pham <quic_jackp@quicinc.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Michal Nazarewicz <mina86@mina86.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3] usb: gadget: f_mass_storage: Make CD-ROM emulation
+ work with Mac OS-X
+Message-ID: <YeCP8c+IXVRurILA@rowland.harvard.edu>
+References: <20220113175916.10090-1-quic_jackp@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;m.reichl@fivetechno.de;1642105480;11327132;
-X-HE-SMSGID: 1n86KF-0006EQ-11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220113175916.10090-1-quic_jackp@quicinc.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On boards with LAN9514 and no preconfigured MAC address we don't get an
-ip address from DHCP after commit a049a30fc27c ("net: usb: Correct PHY handling
-of smsc95xx") anymore. Adding an explicit reset before starting the phy
-fixes the issue.
+On Thu, Jan 13, 2022 at 09:59:16AM -0800, Jack Pham wrote:
+> From: Roger Quadros <roger.quadros@nokia.com>
+> 
+> Mac OS-X expects CD-ROM TOC in raw format (i.e. format:2). It also
+> sends the READ_TOC CDB in old style SFF8020i format. i.e. 2 format bits
+> are encoded in MSBs of CDB byte 9.
+> 
+> This patch will enable CD-ROM emulation to work with Mac OS-X. Tested on
+> Mac OS X v10.6.3.
+> 
+> Signed-off-by: Roger Quadros <roger.quadros@nokia.com>
+> Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
+> ---
+> v3: Updated command mask to allow for non-zero byte 2
+> v2: Removed Change-Id
+> v1: Resurrected original change [1] and consolidated into single patch
+> 
+> [1] https://lore.kernel.org/lkml/1302015569-9668-1-git-send-email-roger.quadros@nokia.com/T/#u
 
-[1]
-https://lore.kernel.org/netdev/199eebbd6b97f52b9119c9fa4fd8504f8a34de18.camel@collabora.com/
-
-From: Gabriel Hojda <ghojda@yo2urs.ro>
-Fixes: a049a30fc27c ("net: usb: Correct PHY handling of smsc95xx")
-Signed-off-by: Gabriel Hojda <ghojda@yo2urs.ro>
-Signed-off-by: Markus Reichl <m.reichl@fivetechno.de>
----
- drivers/net/usb/smsc95xx.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-index abe0149ed917..bc1e3dd67c04 100644
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -1962,7 +1962,8 @@ static const struct driver_info smsc95xx_info = {
- 	.bind		= smsc95xx_bind,
- 	.unbind		= smsc95xx_unbind,
- 	.link_reset	= smsc95xx_link_reset,
--	.reset		= smsc95xx_start_phy,
-+	.reset		= smsc95xx_reset,
-+	.check_connect	= smsc95xx_start_phy,
- 	.stop		= smsc95xx_stop,
- 	.rx_fixup	= smsc95xx_rx_fixup,
- 	.tx_fixup	= smsc95xx_tx_fixup,
--- 
-2.30.2
-
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
