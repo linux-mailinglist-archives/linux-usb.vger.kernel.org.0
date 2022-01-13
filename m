@@ -2,192 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BE148D508
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jan 2022 10:50:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2185748D579
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jan 2022 11:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbiAMJbb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jan 2022 04:31:31 -0500
-Received: from mail-eopbgr70082.outbound.protection.outlook.com ([40.107.7.82]:51354
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231216AbiAMJba (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 Jan 2022 04:31:30 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eUmE5JsM/PNSYoJEX/fvRuxSNKT7hNqEW34A/4d84+YzIT1f4jsWy2srav5RcxJD8b18ZxnP2QWaUypCCkUJvqGSYF6B3evJFb6srCUoQ/D2bYuFBMyUcuNaNFrNs1uqZjzj0K1jSgAy24EzLd3ZXMz7Ts3CKkNGRqc2US7Ita87Piy3ZgsULXeVeswaoRj9lqgq/xjkkOPHkD3VmDFqE2Pdj9XIY2Cvgkdmq4oo6OuWNI1MUfjzOPuGlfqlus4sCdmOmkqtMkkNPiN5ATsp0OP1NuH+146vU2guAe8md3uDBIFbdELVh/rLQMx45EKsneP+OIlSyaOjQ2yoo57WXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aJTKCCa3p5RIIQ1jX7p6y53WbqrfAI8Ie6yJ5RAFCFQ=;
- b=eOOBc6n58bGVCVRA7YrWrtxV5cZpIb2kE6FEpcP9qsxlaPsR1yJNQEtpVeyQFScdxdUTA4f33+H6d8VgYw255BWcRglhWtvY24q3mPl9n9pCD6ux0iuMJ944WBp64dr1wykmsgQfz9A6MnHkt/jlz0ZzrY+cV4DMAn8kwhrhBfBaEjeLJSEiwzEd24JBWLqGZgTBgBNy/TylSqB2wSZ6L3QzFPNgkwORcpUGhjxxc/7GRWbij8O1nkvBwsxoXXYAusFCB3NoN7iZbRr+e4nGznRSwV3f3yAr7aDgKBGmqEeuSyQ84Y0u/iphrzIbJohdhs2WStxrauSggMu9JpFuuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aJTKCCa3p5RIIQ1jX7p6y53WbqrfAI8Ie6yJ5RAFCFQ=;
- b=YvH0k0RRXSdMScwGs5sOE5+pHrivyt11DOdGKYxaomSIeMsxuHMi1F0rlkM9twx3erEOP4pwntmaqpWMmlepRicb7UFloWCP0z5pFQDbmpo8qZKahwYrP4+Bl83s6KcHn6zWW/CrfzjzXIbkX4Rk3W/cP7FUau9joR0hqaluR2k=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DB8PR04MB6843.eurprd04.prod.outlook.com (2603:10a6:10:11b::14)
- by AM7PR04MB7093.eurprd04.prod.outlook.com (2603:10a6:20b:11d::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Thu, 13 Jan
- 2022 09:31:27 +0000
-Received: from DB8PR04MB6843.eurprd04.prod.outlook.com
- ([fe80::9934:6146:9a64:1e51]) by DB8PR04MB6843.eurprd04.prod.outlook.com
- ([fe80::9934:6146:9a64:1e51%8]) with mapi id 15.20.4888.011; Thu, 13 Jan 2022
- 09:31:27 +0000
-From:   Xu Yang <xu.yang_2@nxp.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        jun.li@nxp.com, linux-imx@nxp.com
-Subject: [PATCH v3] usb: typec: tcpci: don't touch CC line if it's Vconn source
-Date:   Thu, 13 Jan 2022 17:29:43 +0800
-Message-Id: <20220113092943.752372-1-xu.yang_2@nxp.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR04CA0003.apcprd04.prod.outlook.com
- (2603:1096:4:197::23) To DB8PR04MB6843.eurprd04.prod.outlook.com
- (2603:10a6:10:11b::14)
+        id S229778AbiAMKNR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jan 2022 05:13:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229536AbiAMKNP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jan 2022 05:13:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B62C06173F;
+        Thu, 13 Jan 2022 02:13:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDF5C61B77;
+        Thu, 13 Jan 2022 10:13:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76821C36AE3;
+        Thu, 13 Jan 2022 10:13:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642068794;
+        bh=ijdFSU0tzgbikdiQ4EWHXgHfcS6vqCI0UuxTBUw4W9s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=C2fK+bIjUxWYxYBb9nvhY8+rSIgYzTw9h+wGOuaNdP3zJjS+caEui876bQSejC7lF
+         0XArfr/GLDNt2m4mIyMBmTi4gNtNGKL1DU0DU3v3kaeXpw9IZnCk+Bw24iJNaXoBg7
+         V3/AixbWHwZDFnUytl4q2Gnc+snkzm3W1G57c/3dOlxK50e5PqgQuWtYbE19AEbBCR
+         Xf/8GM6nb7ZVNlpV2hL7oxzs96vOrtIz3awBL0L/1Oh1EWHNOf0c3USVhRtn92ZAfr
+         n8dzmt4rOTAEA8SvZN/izu5vPPLAc7Mvts+Vnkk87nkiappaVWay+mt7ch/W/e8CtP
+         KuclZGw63F0hQ==
+Date:   Thu, 13 Jan 2022 12:13:09 +0200
+From:   Abel Vesa <abelvesa@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        peter.chen@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lznuaa@gmail.com
+Subject: Re: [PATCH 1/1] usb: xhci-plat: fix crash when suspend if remote
+ wake enable
+Message-ID: <Yd/7NQLgoEU17TzI@abelvesa>
+References: <20220110172738.31686-1-Frank.Li@nxp.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f6788668-04ae-40e8-ed9b-08d9d6777917
-X-MS-TrafficTypeDiagnostic: AM7PR04MB7093:EE_
-X-Microsoft-Antispam-PRVS: <AM7PR04MB7093F21ED9ECDD07D942C4628C539@AM7PR04MB7093.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:363;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QXPlrAHf/A/AlxbqYNQDK5SJx/TpPfcbLg56pbTkCmLBl7ykb8VOuN1CQw8BK1XGxF+MZuXFSHhK20+VXRC33JlUIT0iASlxuIY07cgWzsMb4cWI9eoHsa/rgSaZQWijQ1Xmw+4ZPu+Q5QTFtJ9JUbEwQNcp+IM5yXmXEIkptCuYjx+QGJhzFlnh1bzVbMJWZOWWgrMRLdQTrGdKQEPLHmNedaXJ98UTwjYfm6Lhg2DgB6vvMj2wairi1JDyWUGgzzjwNFeKecYQl5fYsoR9/OKHpiAbUsrVrn3MJIlPVdD3QZPdfqD3BFKpQlc5N1MqDFVNo0Z8/ouQwBngZtIRMVunJB21MUNIdT4qmr/sbWU6YnR7VEgArvJyivQIgGpe/FS3J21GtWDtBw0OqMoWJOzuW4Ke1bsTf9zikG6elAhgmCrZcBEj+4VWHCdjq6fTYOnh38TWsf8Imq9RK0K/TD7duAtUDly/A5wi3w8a9oVNG57Zdy50fOoN4tfNPAIXBbA+/3lCgk9q5pXOjgk0g/9xOaxNwQk0qe2UvsJn7YgCzXrxVjvjhLx1eCh3Zozffn4Es5vu7W4TpJh0XK5AoTpSRx+BzA2W0nl1cYE0YKmTWtfPHwPc/4gxqcHr5xBaaUEJkLmdWYOqvxq0X3G62oktE83N8VXQtzbU0kr/Oy7Hf+PPOx2Un18s2M1oVFG0
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6843.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(316002)(66946007)(8676002)(6506007)(8936002)(6512007)(26005)(508600001)(5660300002)(52116002)(4326008)(86362001)(2906002)(66476007)(36756003)(186003)(38100700002)(38350700002)(2616005)(66556008)(6486002)(6666004)(1076003)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nYG+NADpQn34utiLYk+NHmUU6P7mbNwhWGrZelOMKsEIqumhPM6LO2UpU/iz?=
- =?us-ascii?Q?ZG4XBWxbJz0Cjqm2kNxGSkBHUWsoUeiQlv6w8pOiQ7H1TAIUN4OFIrr04hKV?=
- =?us-ascii?Q?/Kb2rSJfJnAPkbxbCwBf01JZC+Jtts3ghTmf74DUqxHfEPpmpX8eBHE+1Y3E?=
- =?us-ascii?Q?VJ04qX7fPQbh4g8MvrMrHwWjSg4tjerE5L2PIR3JNrTQ3/w6AwCSIas0rBtB?=
- =?us-ascii?Q?lZbpDnnghX3wCOqfSq3ZCHWH2i68tftsAsAqeO0yA7+jZ3buQH6J0kVCjjWM?=
- =?us-ascii?Q?ruI5bBlUmCe0kXqpXJgtA3UCX4vadO3NFTejKN+Rs4SdmrKC0YOditCcSCXO?=
- =?us-ascii?Q?fLRS2VIoU7ueoPdb1r9lpjlFuabnq/tVb20PmnEGnr4JtN6TEff33QSjefSG?=
- =?us-ascii?Q?fI6P73KbjWy5U+Ib74AUlXrKervPS1rIdgN79H2kCKjHywgnFgbaQeWmOhpB?=
- =?us-ascii?Q?4WbXoxL91SnLqc2n3B9jDkB/aoiPPmjjlHRspg8yjm3QGygI5E5P7SoS83Hn?=
- =?us-ascii?Q?2k0sse/4l7xV1hrxKi4zZ0lM9o2Jmjm5oXNPcMkOcv0BSxWEHe5E3V1TgMMx?=
- =?us-ascii?Q?05IyGsJ2txuTrh+e7nligVxq0szYnz9AgGt+0OmKCk2apkG9M54pII/m/f1L?=
- =?us-ascii?Q?PyGXC020Gs4WK9hD8mJkpji9vb1d555kl62H9wzKW0htP5sX9S2MgFQBR//I?=
- =?us-ascii?Q?fMGYoZSFvhkJRWcM8UUc6dISTOnTDN2KasEkn+0d0Y2hgrzqgwV6sLBuo0YB?=
- =?us-ascii?Q?GoXMa9u7Taoq80lOPhI4D83k8C/Dfua2nt7uGdltPrF973mhnFA9SVCRvEtu?=
- =?us-ascii?Q?SUoion1UTtjLSDeHRbLPWUCDsxWWylw1wZXHD1PtnAmkTiWTQE2Cz/Q+lkcP?=
- =?us-ascii?Q?oT/UCBH9LWmII+McxbwVXRdlvfVgVGdFs1wSY2Q69IfBJfs7GwYjLmXSG0Kf?=
- =?us-ascii?Q?v5jS+11Ys9VM1JHO0+3tpR9nreQOcx8nlGZ1qyQYp0kWpVXlRkXfjVX88NFu?=
- =?us-ascii?Q?Mdnj+kYBJxOCY9sLQjEsfFB1LTV5qMOg+WvVB2DzsjYHRR9sY6yv2Gdsy/SC?=
- =?us-ascii?Q?BQBrG+Cn4Btp1EEetLUyirzeIbPaegsBakZlnwUlsYsT4OWwneqpjWydTfUq?=
- =?us-ascii?Q?Ace9jRIVTtZ0wO2vbXBLxOqO+UuXWLhlCs08LrS/ZqBu5RPiTZFLnx1MXUL6?=
- =?us-ascii?Q?MgsDizk7yCy7ypSYGq113UnGwKMUQfLQQYwELJUdgJXjEjVWAtZR6J6VN7EK?=
- =?us-ascii?Q?VE0ALzU37noN6OidGLACxeaP0pQuIqYjjqZkqGBtG6Od27Aerf34BLkoYOv/?=
- =?us-ascii?Q?RmXzdqhkX9r+HH4y5VcknDjiQ0LR9NZSQZoAKclR82ZYins7qh1+D+aBuJ6/?=
- =?us-ascii?Q?DCuPs7n1OufpRXDLIeTPV+hN8QCDigJ+8nqw/4JhJZ4YhFmTAlo9WwikdQXA?=
- =?us-ascii?Q?vnBdU3Z1f+qzQA1N+vSlReAVvUxF9OuXZFon4NqSqGlI3DVJEd9Ei6szs0aV?=
- =?us-ascii?Q?SG9VPOXxWBE+z5rPZp1M1Yl7LSfiyIxfGwnzcKggnDKFxLNTmyr9gajbR1Nn?=
- =?us-ascii?Q?+1ANt2mwdGqCuF4PEWyconRwhC2u+l2HwUKaQcTJaTkncUX6RMswR8cpNbfm?=
- =?us-ascii?Q?o5LB8d6FS0AjjMpLvtUGgcs=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6788668-04ae-40e8-ed9b-08d9d6777917
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6843.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2022 09:31:27.4761
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WgYglYkISPXWmvsQrzQkhg7dytCMaYVvYusTx3FiulBLOBdHS4ixdsRAv5WfXwx0OuroHs93K0PM4H35e71S7w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7093
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220110172738.31686-1-Frank.Li@nxp.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-With the AMS and Collision Avoidance, tcpm often needs to change the CC's
-termination. When one CC line is sourcing Vconn, if we still change its
-termination, the voltage of the another CC line is likely to be fluctuant
-and unstable.
+On 22-01-10 11:27:38, Frank Li wrote:
+> Crashed at i.mx8qm platform when suspend if enable remote wakeup
+> 
+> Internal error: synchronous external abort: 96000210 [#1] PREEMPT SMP
+> Modules linked in:
+> CPU: 2 PID: 244 Comm: kworker/u12:6 Not tainted 5.15.5-dirty #12
+> Hardware name: Freescale i.MX8QM MEK (DT)
+> Workqueue: events_unbound async_run_entry_fn
+> pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> pc : xhci_disable_hub_port_wake.isra.62+0x60/0xf8
+> lr : xhci_disable_hub_port_wake.isra.62+0x34/0xf8
+> sp : ffff80001394bbf0
+> x29: ffff80001394bbf0 x28: 0000000000000000 x27: ffff00081193b578
+> x26: ffff00081193b570 x25: 0000000000000000 x24: 0000000000000000
+> x23: ffff00081193a29c x22: 0000000000020001 x21: 0000000000000001
+> x20: 0000000000000000 x19: ffff800014e90490 x18: 0000000000000000
+> x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+> x14: 0000000000000000 x13: 0000000000000002 x12: 0000000000000000
+> x11: 0000000000000000 x10: 0000000000000960 x9 : ffff80001394baa0
+> x8 : ffff0008145d1780 x7 : ffff0008f95b8e80 x6 : 000000001853b453
+> x5 : 0000000000000496 x4 : 0000000000000000 x3 : ffff00081193a29c
+> x2 : 0000000000000001 x1 : 0000000000000000 x0 : ffff000814591620
+> Call trace:
+>  xhci_disable_hub_port_wake.isra.62+0x60/0xf8
+>  xhci_suspend+0x58/0x510
+>  xhci_plat_suspend+0x50/0x78
+>  platform_pm_suspend+0x2c/0x78
+>  dpm_run_callback.isra.25+0x50/0xe8
+>  __device_suspend+0x108/0x3c0
+> 
+> The basic flow:
+> 	1. run time suspend call xhci_suspend, xhci parent devices gate the clock.
+>         2. echo mem >/sys/power/state, system _device_suspend call xhci_suspend
+>         3. xhci_suspend call xhci_disable_hub_port_wake, which access register,
+> 	   but clock already gated by run time suspend.
+> 
+> This problem was hidden by power domain driver, which call run time resume before it.
+> 
+> But the below commit remove it and make this issue happen.
+> 	commit c1df456d0f06e ("PM: domains: Don't runtime resume devices at genpd_prepare()")
+> 
+> This patch call run time resume before suspend to make sure clock is on
+> before access register.
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
 
-Therefore, we should verify whether a CC line is sourcing Vconn before
-changing its termination and only change the termination that is not
-a Vconn line. This can be done by reading the Vconn Present bit of
-POWER_ STATUS register. To determine the polarity, we can read the
-Plug Orientation bit of TCPC_CONTROL register. Since Vconn can only be
-sourced if Plug Orientation is set.
+Tested on i.MX8QM.
 
-Fixes: 0908c5aca31e ("usb: typec: tcpm: AMS and Collision Avoidance")
-cc: <stable@vger.kernel.org>
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+Testeb-by: Abel Vesa <abel.vesa@nxp.com>
 
----
-v2: changed subject line
-v3: optimized the commit message and code according to Guenter's suggestions
----
- drivers/usb/typec/tcpm/tcpci.c | 26 ++++++++++++++++++++++++++
- drivers/usb/typec/tcpm/tcpci.h |  1 +
- 2 files changed, 27 insertions(+)
-
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index 35a1307349a2..e07d26a3cd8e 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -75,9 +75,25 @@ static int tcpci_write16(struct tcpci *tcpci, unsigned int reg, u16 val)
- static int tcpci_set_cc(struct tcpc_dev *tcpc, enum typec_cc_status cc)
- {
- 	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-+	bool vconn_pres;
-+	enum typec_cc_polarity polarity = TYPEC_POLARITY_CC1;
- 	unsigned int reg;
- 	int ret;
- 
-+	ret = regmap_read(tcpci->regmap, TCPC_POWER_STATUS, &reg);
-+	if (ret < 0)
-+		return ret;
-+
-+	vconn_pres = !!(reg & TCPC_POWER_STATUS_VCONN_PRES);
-+	if (vconn_pres) {
-+		ret = regmap_read(tcpci->regmap, TCPC_TCPC_CTRL, &reg);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (reg & TCPC_TCPC_CTRL_ORIENTATION)
-+			polarity = TYPEC_POLARITY_CC2;
-+	}
-+
- 	switch (cc) {
- 	case TYPEC_CC_RA:
- 		reg = (TCPC_ROLE_CTRL_CC_RA << TCPC_ROLE_CTRL_CC1_SHIFT) |
-@@ -112,6 +128,16 @@ static int tcpci_set_cc(struct tcpc_dev *tcpc, enum typec_cc_status cc)
- 		break;
- 	}
- 
-+	if (vconn_pres) {
-+		if (polarity == TYPEC_POLARITY_CC2) {
-+			reg &= ~(TCPC_ROLE_CTRL_CC1_MASK << TCPC_ROLE_CTRL_CC1_SHIFT);
-+			reg |= (TCPC_ROLE_CTRL_CC_OPEN << TCPC_ROLE_CTRL_CC1_SHIFT);
-+		} else {
-+			reg &= ~(TCPC_ROLE_CTRL_CC2_MASK << TCPC_ROLE_CTRL_CC2_SHIFT);
-+			reg |= (TCPC_ROLE_CTRL_CC_OPEN << TCPC_ROLE_CTRL_CC2_SHIFT);
-+		}
-+	}
-+
- 	ret = regmap_write(tcpci->regmap, TCPC_ROLE_CTRL, reg);
- 	if (ret < 0)
- 		return ret;
-diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
-index 2be7a77d400e..b2edd45f13c6 100644
---- a/drivers/usb/typec/tcpm/tcpci.h
-+++ b/drivers/usb/typec/tcpm/tcpci.h
-@@ -98,6 +98,7 @@
- #define TCPC_POWER_STATUS_SOURCING_VBUS	BIT(4)
- #define TCPC_POWER_STATUS_VBUS_DET	BIT(3)
- #define TCPC_POWER_STATUS_VBUS_PRES	BIT(2)
-+#define TCPC_POWER_STATUS_VCONN_PRES	BIT(1)
- #define TCPC_POWER_STATUS_SINKING_VBUS	BIT(0)
- 
- #define TCPC_FAULT_STATUS		0x1f
--- 
-2.25.1
-
+> ---
+>  drivers/usb/host/xhci-plat.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> index c6b791a83ad18..7d2f665271310 100644
+> --- a/drivers/usb/host/xhci-plat.c
+> +++ b/drivers/usb/host/xhci-plat.c
+> @@ -442,6 +442,9 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
+>  	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+>  	int ret;
+>  
+> +	if (pm_runtime_suspended(dev))
+> +		pm_runtime_resume(dev);
+> +
+>  	ret = xhci_priv_suspend_quirk(hcd);
+>  	if (ret)
+>  		return ret;
+> -- 
+> 2.24.0.rc1
+> 
