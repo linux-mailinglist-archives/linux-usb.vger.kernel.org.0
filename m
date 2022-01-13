@@ -2,266 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0FA48D1D7
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jan 2022 06:22:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D6648D236
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jan 2022 07:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiAMFW5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jan 2022 00:22:57 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:27768 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiAMFW5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jan 2022 00:22:57 -0500
+        id S231216AbiAMGFL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jan 2022 01:05:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231205AbiAMGFK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jan 2022 01:05:10 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD46FC06173F
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jan 2022 22:05:10 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso5142143otf.12
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jan 2022 22:05:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642051377; x=1673587377;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Pmvnzf4Tl9aMMBrrCo5CMXd3IlmA2831nzVh88c0cr4=;
-  b=ihay5kQNnp/3ZNmL2Flyv4RgyPgZfMtB09UsjjNmxbPYtPoJoH0JfUY2
-   1eN05nSrgB/ckodi3f7TRHe/k2MepsyvXUDc2DcqfqMWhaf90g1P98qdu
-   6n22r0d+m8nlFd1vL/r3EF1YEyyXXM/vYEwUrg0ocvCqgelPa+Pn40xQG
-   A=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 12 Jan 2022 21:22:56 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 21:22:55 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 12 Jan 2022 21:22:55 -0800
-Received: from jackp-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 12 Jan 2022 21:22:55 -0800
-Date:   Wed, 12 Jan 2022 21:22:53 -0800
-From:   Jack Pham <quic_jackp@quicinc.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Greg KH <gregkh@linuxfoundation.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Michal Nazarewicz <mina86@mina86.com>,
-        <linux-usb@vger.kernel.org>,
-        "Roger Quadros" <roger.quadros@nokia.com>
-Subject: Re: [PATCH v2] usb: gadget: f_mass_storage: Make CD-ROM emulation
- work with Mac OS-X
-Message-ID: <20220113052253.GF3221@jackp-linux.qualcomm.com>
-References: <20220110062359.5314-2-quic_jackp@quicinc.com>
- <20220110063030.12957-1-quic_jackp@quicinc.com>
- <Yd80j0vjR0f9TCtN@rowland.harvard.edu>
+        d=gmail.com; s=20210112;
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+         :cc;
+        bh=BChg/ZjGSmVo+tNZuM4tHfafJLsJ0QETebSKjrXSb6E=;
+        b=WVP226Sb+7X3GV+0qfSDvegvefPLZrSZ2h5gBw/WTeQg3kczSdEn8aZuxxrRZ+a8s3
+         L6QfQxGS5OT3dXJ08gae1305WAXTK7BL4YWcevgoEzpxSnXPNFUtvD6yUAVvTYIptK6i
+         6FaXPveVWrAEP1IxsCs35+g7ChbhqD6pLqjR/6qxm1Fa9K7/4E/IhRxS7RdJyW/ZQWS0
+         G8Z5y+x34SwsH4R1hkocGszE0mAv30+q7Fpk4hJIqgPXq8A8EiwdvKAOE82S0FwYx/ka
+         D17oY3M57+bAcR1GMlufK+wPtiMPeuLOOE5CFOvCwJYAUAm50RdWSflNNR/Hl2oeNKXl
+         JaTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+         :message-id:subject:to:cc;
+        bh=BChg/ZjGSmVo+tNZuM4tHfafJLsJ0QETebSKjrXSb6E=;
+        b=JWeYQk5euJIAH1ouTQ8t+9/XTmwh2vCUUAgeD96kWcDWzV6OpEe8GtwLiM7m9qjcQ2
+         pTIqof+DBhXgN6h31xVkku2PenXo5CHfkI5q8KVa8E6o7u4maraIGWaIPjDLjd3e2T0j
+         YDqkhkpeqHcm5aUNkJhnoWX1CvRiUASkwrVBDQVaukOEIub3JFTz0KV21BdYccsgYZaw
+         g8THQ7a6Wqwta83Wd2SFMUGDrkdC0T0WCPOuJjNTplLSMydKc7p4cgjEiL0RtzBITaGU
+         oglK9tavyiymF2IKazJeZjSHfk7U0QT9Ktb8+/86NjMyI6hIm272k25oYxyl9gR0qzMd
+         sSZA==
+X-Gm-Message-State: AOAM532MSjoy2RVyb3Bx20XxO2KU/ZOaxkwOpXFEuycp/XZsSTmZS355
+        GvXrJ+GV6AjqscPduy542Ltg2amvR2NcpKrbQFk=
+X-Google-Smtp-Source: ABdhPJzgN2IT5FdPRU2DBtSjQPmCvytXJNQo+rgPXP73008JUKTZalX9LlPthVvHFQ68/Ys8bj98SK19uAxv+CDz0/4=
+X-Received: by 2002:a05:6830:2366:: with SMTP id r6mr2170020oth.376.1642053909932;
+ Wed, 12 Jan 2022 22:05:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Yd80j0vjR0f9TCtN@rowland.harvard.edu>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Received: by 2002:a05:6830:1008:0:0:0:0 with HTTP; Wed, 12 Jan 2022 22:05:09
+ -0800 (PST)
+In-Reply-To: <03f5743d-0aa5-7006-be67-0598f909eeac@synopsys.com>
+References: <f5bca159-e8de-3c76-c2b4-6f4efa001fd9@linux.intel.com>
+ <20211230131014.21886-1-youling257@gmail.com> <Yc20WPbIad44/3rd@kroah.com>
+ <CAOzgRdbeQ69pWbagFwTvV4ZcYGBE5GkwdqcuxxGFLXBJSy-GMA@mail.gmail.com>
+ <6908aa69-469b-8f92-8e19-60685f524f9c@synopsys.com> <CAOzgRdb+Ru8AL=wUquysbqd8uGkNSDzSNfOSW3Fs2Pd6BGxo1w@mail.gmail.com>
+ <1d63d954-13fb-f9c6-b2e7-d350ace2aa5a@synopsys.com> <CAOzgRdbgepUHKCmg8wR0s0bvYyuWNachi_EP6c9n_mRvQkXmGw@mail.gmail.com>
+ <ae6d47c7-68f2-e482-c6ef-d2c63e2a9057@synopsys.com> <CAOzgRdZ7ME2AY4iJq6mXb8TyBcrJLYHEKSAteTVjDPjPRcF9Hg@mail.gmail.com>
+ <03f5743d-0aa5-7006-be67-0598f909eeac@synopsys.com>
+From:   youling 257 <youling257@gmail.com>
+Date:   Thu, 13 Jan 2022 14:05:09 +0800
+Message-ID: <CAOzgRdajcFuX+k=9OAMpnsTak0vWttMD4k4G0bXJdw8GexVaOQ@mail.gmail.com>
+Subject: Re: USB 3.2 Gen 2x2 "Superspeed+20GBps" support for ASM3242
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "william.allentx@gmail.com" <william.allentx@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
+2022-01-13 9:41 GMT+08:00, Thinh Nguyen <Thinh.Nguyen@synopsys.com>:
+> youling 257 wrote:
+>> 2021-12-31 15:02 GMT+08:00, Thinh Nguyen <Thinh.Nguyen@synopsys.com>:
+>>> youling 257 wrote:
+>>>> 2021-12-31 11:46 GMT+08:00, Thinh Nguyen <Thinh.Nguyen@synopsys.com>:
+>>>>> Hi,
+>>>>>
+>>>>> youling 257 wrote:
+>>>>>> test this patch, cat /sys/bus/usb/devices/4-1/speed, 10000
+>>>>>> [   74.694284] usb 4-1: new SuperSpeed Plus Gen 2x1 USB device number
+>>>>>> 2 using xhci_hcd
+>>>>>> [   74.750329] usb-storage 4-1:1.0: USB Mass Storage device detected
+>>>>>>
+>>>>>> but speed, pcie to usb3.2 gen2x2, WRITE: bw=642MiB/s (673MB/s),
+>>>>>> 642MiB/s-642MiB/s (673MB/s-673MB/s), io=1000MiB (1049MB),
+>>>>>> run=1557-1557msec
+>>>>>> READ: bw=467MiB/s (490MB/s), 467MiB/s-467MiB/s (490MB/s-490MB/s),
+>>>>>> io=1000MiB (1049MB), run=2140-2140msec
+>>>>>>
+>>>>>> the mainboard usb3.2 gen2x1, WRITE: bw=838MiB/s (878MB/s),
+>>>>>> 838MiB/s-838MiB/s (878MB/s-878MB/s), io=1000MiB (1049MB),
+>>>>>> run=1194-1194msec
+>>>>>> READ: bw=753MiB/s (790MB/s), 753MiB/s-753MiB/s (790MB/s-790MB/s),
+>>>>>> io=1000MiB (1049MB), run=1328-1328msec
+>>>>>>
+>>>>>
+>>>>> Let's avoid top-post.
+>>>>>
+>>>>> Some comments:
+>>>>> 1) Just because the host is capable of gen2x2, it doesn't mean it will
+>>>>> run at gen2x2 speed. Your device can only operate up to gen2x1 speed,
+>>>>> so
+>>>>> that's the limit. The test speed for gen2x1 above is not unreasonable.
+>>>
+>>>> my device can only operate up to gen2x1 10gbps speed on window, only
+>>>> 5gbps on linux kernel 5.16rc7.
+>>>
+>>> With the change I provided, you were able to run test at gen2x1, albeit
+>>> slower than expect. (i.e. write speed at 673MB/s for ASmedia host must
+>>> be SSP). The issue with device unable to operate at SSP is at least
+>>> answered.
+>>>
+>>> If you're looking to find out why the performance is slow, confirm these
+>>> items first:
+>>>
+>>> 1) Are you using the same application to test on Linux to compare with
+>>> Windows? (Looks like you're using CrystalDiskMark for your Windows test)
+>>>
+>>> 2) If you're using the same application, are you using the same test
+>>> parameters and version?
+>>>
+>>> 3) Is your device operating in BOT or UASP in Linux? UAS Protocol is
+>
+>> my kernel config #CONFIG_USB_UAS is not set.
+>
+> Ok.
+>
+>>> generally faster. Newer device generally uses UASP, and I assume yours
+>>> is a newer device (check your enclosure). Make sure there's no quirk
+>>> preventing the device operating in UASP.
+>> CONFIG_USB_UAS=y
+>> [  524.630081] usb 4-1: new SuperSpeed Plus Gen 2x1 USB device number
+>> 5 using xhci_hcd
+>> [  524.747496] scsi host9: uas
+>> [  524.757580] scsi 9:0:0:0: Direct-Access     Realtek  USB 3.2 Device
+>>   1.00 PQ: 0 ANSI: 6
+>> Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/1p, 20000M/x2
+>>     |__ Port 1: Dev 2, If 0, Class=Mass Storage, Driver=uas, 10000M
+>>
+>> windows fat32 speed,
+>> https://urldefense.com/v3/__https://imgur.com/a/eq9qhKj__;!!A4F2R9G_pg!OkYlXXf1Zw-EMemp22NTRgqOnOxlP-Xp95WYBJvguF9b4iyS4SX_y4Z5pAe_IaB7ZNtb$
+>>
+>> linux ext4 speed,
+>> https://urldefense.com/v3/__https://imgur.com/a/tUAskgV__;!!A4F2R9G_pg!OkYlXXf1Zw-EMemp22NTRgqOnOxlP-Xp95WYBJvguF9b4iyS4SX_y4Z5pAe_IcQVJqNn$
+>>
+>>
+>
+> I can't view the "windows" image, but it seems like it's running in high
+> performance in Linux as UASP device now right? (I see ~1GB/s)
 
-On Wed, Jan 12, 2022 at 03:05:35PM -0500, Alan Stern wrote:
-> On Sun, Jan 09, 2022 at 10:30:30PM -0800, Jack Pham wrote:
-> > From: Roger Quadros <roger.quadros@nokia.com>
-> > 
-> > Mac OS-X expects CD-ROM TOC in raw format (i.e. format:2). It also
-> > sends the READ_TOC CDB in old style SFF8020i format. i.e. 2 format bits
-> > are encoded in MSBs of CDB byte 9.
-> > 
-> > This patch will enable CD-ROM emulation to work with Mac OS-X. Tested on
-> > Mac OS X v10.6.3.
-> > 
-> > Signed-off-by: Roger Quadros <roger.quadros@nokia.com>
-> > Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
-> > ---
-> > v2: Removed Change-Id tag.
-> > 
-> >  drivers/usb/gadget/function/f_mass_storage.c | 73 +++++++++++++++++++++++-----
-> >  1 file changed, 61 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-> > index 73a28f8..1f7f4dd6 100644
-> > --- a/drivers/usb/gadget/function/f_mass_storage.c
-> > +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> > @@ -1188,6 +1188,8 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
-> >  	int		msf = common->cmnd[1] & 0x02;
-> >  	int		start_track = common->cmnd[6];
-> >  	u8		*buf = (u8 *)bh->buf;
-> > +	u8		format;
-> > +	int		i, len;
-> >  
-> >  	if ((common->cmnd[1] & ~0x02) != 0 ||	/* Mask away MSF */
-> >  			start_track > 1) {
-> > @@ -1195,18 +1197,65 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
-> >  		return -EINVAL;
-> >  	}
-> >  
-> > -	memset(buf, 0, 20);
-> > -	buf[1] = (20-2);		/* TOC data length */
-> > -	buf[2] = 1;			/* First track number */
-> > -	buf[3] = 1;			/* Last track number */
-> > -	buf[5] = 0x16;			/* Data track, copying allowed */
-> > -	buf[6] = 0x01;			/* Only track is number 1 */
-> > -	store_cdrom_address(&buf[8], msf, 0);
-> > +	format = common->cmnd[2] & 0xf;
-> 
-> Hmmm.  According to this part later on:
-> 
-> > @@ -1933,7 +1982,7 @@ static int do_scsi_command(struct fsg_common *common)
-> >  		common->data_size_from_cmnd =
-> >  			get_unaligned_be16(&common->cmnd[7]);
-> >  		reply = check_command(common, 10, DATA_DIR_TO_HOST,
-> > -				      (7<<6) | (1<<1), 1,
-> > +				      (0xf<<6) | (1<<1), 1,
-> >  				      "READ TOC");
-> 
-> common->cmnd[2] can never be anything other than 0.
+right.
 
-Ah, that is true.  So to allow for cmnd[2] (as well as cmnd[9] as
-intended by the patch) to be non-zero, the "mask" argument should rather
-be:
-
- (0xf<<6) | (3<<1)
-
-In other words a bitmask of 0x3c6, corresponding to command data bytes
-1, 2, 6, 7, 8 and 9.  Is my understanding correct?
-
-> So this computation and the test immediately below are pointless --
-> unless you change the argument to check_command().
-
-If you are referring to the "if (format == 0)" check, then I believe you
-are right.
-
-> > +	/*
-> > +	 * Check if CDB is old style SFF-8020i
-> > +	 * i.e. format is in 2 MSBs of byte 9
-> > +	 * Mac OS-X host sends us this.
-> > +	 */
-> > +	if (format == 0)
-> > +		format = (common->cmnd[9] >> 6) & 0x3;
-
-It seems this is the gist of the patch.  Without changing the mask
-parameter to check_command() above, we know we can only reach here if
-format = common->cmnd[2] is 0.  However this snippet is then reassigning
-format from the upper bits of the 9th byte which could be non-zero, at
-least in the case of MacOS.
-
-So this patch does seem a bit incomplete as you point out and maybe
-updating the mask as above should help to allow both fields to determine
-the format for any non-zero TOC type.
-
-But I was trying to confirm these details from the SFF-8020i spec as
-mentioned in the original comment above.  I was only able to find a
-draft copy [1] from a web search which stated:
-
-	"Format field definition: When Format in Byte 2 is zero, then
-	Byte 9 is used. Other values for this field are reserved for
-	definition in MMC."
-
-	Note: The Format field in Byte 9 is a vendor-specific area and
-	will be removed in subsequent versions of this specification.
-	Functionality is moving to Byte 2."
-
-However when trying to look up the latest official release of SFF-8020
-the SNIA website [2] lists it as having been expired and incorporated
-into the SCSI MMC specification.  Consequently, I haven't yet been able
-to look further into the SCSI MMC spec itself as it seems it is only
-available for a fee from the ANSI/INCITS website [3].  I'm hoping you or
-maybe somebody on this list might have more knowledge on these details.
-
-So I'm left wondering whether the Format field in Byte 9 is even
-standardized, or if it is a remnant of an older or possibly
-draft/non-final specification.  Yet we clearly have a host that is
-relying on this behavior, so there is utility in this patch.
-
-FWIW, here are the raw bytes of the READ TOC request transaction as
-issued by the MacOS host, obtained from a bus analyzer trace, which this
-patch is purportedly fixing:
-
- 55 53 42 43 19 00 00 00 FE FF 00 00 80 00 0A 43
-                                              ^^
-                                              cmnd[0] i.e. OpCode
- 02 00 00 00 00 00 FF FE 80 00 00 00 00 00 00
-    ^^                   ^^
-    cmnd[2]==0           ||
-                         cmnd[9], upper 2 bits == 0x2
-
-Thanks,
-Jack
-
-[1] https://www.bswd.com/sff8020i.pdf
-[2] https://www.snia.org/technology-communities/sff/specifications
-[3] https://webstore.ansi.org/standards/incits/ansiincits4302007
-
-> > +
-> > +	switch (format) {
-> > +	case 0:
-> > +		/* Formatted TOC */
-> > +		len = 4 + 2*8;		/* 4 byte header + 2 descriptors */
-> > +		memset(buf, 0, len);
-> > +		len -= 2;		/* TOC Length excludes length field */
-> > +		buf[1] = len;		/* TOC data length */
-> > +		buf[2] = 1;		/* First track number */
-> > +		buf[3] = 1;		/* Last track number */
-> > +		buf[5] = 0x16;		/* Data track, copying allowed */
-> > +		buf[6] = 0x01;		/* Only track is number 1 */
-> > +		store_cdrom_address(&buf[8], msf, 0);
-> > +
-> > +		buf[13] = 0x16;		/* Lead-out track is data */
-> > +		buf[14] = 0xAA;		/* Lead-out track number */
-> > +		store_cdrom_address(&buf[16], msf, curlun->num_sectors);
-> > +		return len;
-> > +
-> > +	case 2:
-> > +		/* Raw TOC */
-> > +		len = 4 + 3*11;		/* 4 byte header + 3 descriptors */
-> > +		memset(buf, 0, len);	/* Header + A0, A1 & A2 descriptors */
-> > +		len -= 2;		/* TOC Length excludes length field */
-> > +		buf[1] = len;		/* TOC data length */
-> > +		buf[2] = 1;		/* First complete session */
-> > +		buf[3] = 1;		/* Last complete session */
-> > +
-> > +		buf += 4;
-> > +		/* fill in A0, A1 and A2 points */
-> > +		for (i = 0; i < 3; i++) {
-> > +			buf[0] = 1;	/* Session number */
-> > +			buf[1] = 0x16;	/* Data track, copying allowed */
-> > +			/* 2 - Track number 0 ->  TOC */
-> > +			buf[3] = 0xA0 + i; /* A0, A1, A2 point */
-> > +			/* 4, 5, 6 - Min, sec, frame is zero */
-> > +			buf[8] = 1;	/* Pmin: last track number */
-> > +			buf += 11;	/* go to next track descriptor */
-> > +		}
-> > +		buf -= 11;		/* go back to A2 descriptor */
-> > +
-> > +		/* For A2, 7, 8, 9, 10 - zero, Pmin, Psec, Pframe of Lead out */
-> > +		store_cdrom_address(&buf[7], msf, curlun->num_sectors);
-> >  
-> > -	buf[13] = 0x16;			/* Lead-out track is data */
-> > -	buf[14] = 0xAA;			/* Lead-out track number */
-> > -	store_cdrom_address(&buf[16], msf, curlun->num_sectors);
-> > -	return 20;
-> > +		return len;
-> > +
-> > +	default:
-> > +		/* Multi-session, PMA, ATIP, CD-TEXT not supported/required */
-> > +		curlun->sense_data = SS_INVALID_FIELD_IN_CDB;
-> > +		return -EINVAL;
-> > +	}
-> >  }
-> >  
-> >  static int do_mode_sense(struct fsg_common *common, struct fsg_buffhd *bh)
-> > @@ -1933,7 +1982,7 @@ static int do_scsi_command(struct fsg_common *common)
-> >  		common->data_size_from_cmnd =
-> >  			get_unaligned_be16(&common->cmnd[7]);
-> >  		reply = check_command(common, 10, DATA_DIR_TO_HOST,
-> > -				      (7<<6) | (1<<1), 1,
-> > +				      (0xf<<6) | (1<<1), 1,
-> >  				      "READ TOC");
-> >  		if (reply == 0)
-> >  			reply = do_read_toc(common, bh);
-> > -- 
-> > 2.7.4
-> > 
+> BR,
+> Thinh
+>
