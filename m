@@ -2,101 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C4748D81F
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jan 2022 13:40:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE8948D9BE
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jan 2022 15:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234648AbiAMMkL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jan 2022 07:40:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33072 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233055AbiAMMkK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jan 2022 07:40:10 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 803D761C18;
-        Thu, 13 Jan 2022 12:40:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DF2A1C36AEC;
-        Thu, 13 Jan 2022 12:40:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642077609;
-        bh=188HWT1CkxrwlSeVx4VHEbaaD4KJ+ccLjOYC5mXrvY4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=AISn/NZ6B27ZlACncbGXBr4gRX6qLlhoSQODl95aWH80M3n97WupOPafhF/YUsLuB
-         nt3S1EVYA/C/TMvtoCgr1ZxHNP1mtOlytCJ8z+WE2gaaPHqz6OTP1NsCceQ5DTFoc3
-         V6x7dtcG2KNoUeK4eoRwtmIQv2cNJSmx2wW2LPjAZWtKebiyK0gB3saJ3vJZ7uacuV
-         CyQWB6K5ClMFTIoZARkg29EvB/yBwiMYvhSM1nRzWf5Ghb8N5lnTq+uIW3CYtg2z4S
-         FP80fkqe8ZfcpSNCXHyR88YuGWYBTz8zTupWIyV9XxSxKjOmNGkXkoo4+5GDwbD4GW
-         4ltfDIeuv4Mng==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C7A0CF6078E;
-        Thu, 13 Jan 2022 12:40:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S235669AbiAMOgL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jan 2022 09:36:11 -0500
+Received: from mail-4316.protonmail.ch ([185.70.43.16]:12965 "EHLO
+        mail-4316.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230043AbiAMOgL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jan 2022 09:36:11 -0500
+Date:   Thu, 13 Jan 2022 14:36:05 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail2; t=1642084569;
+        bh=XLqkgVqjC5To3INRuaegxGa4dj9umVCTqdlVrXLHRek=;
+        h=Date:To:From:Reply-To:Subject:Message-ID:From:To:Cc;
+        b=OFQz84q4H8WHKIauPMSAoDYGTStJl0X/YlJAzW9N1TOQAWyBtDX+BD6xSGzdAS0zq
+         I479+XvhmQ3CL3KmWVz6asVanB0JWv7bVK6rptDuuFJj3mdPycIAfH4I4WqTDSJvbG
+         KwGuCveVyFOSPvBFuqedTo54fc7SesM/ndC44xOHXigNYjFEDiYWx2VGWxG1qBqYfj
+         t1XZs/xTPCgNooMFvUzRzbBnKQthBot5TnpIREQQn9vNl8vbM7t1HRk3VfFYw0Uj/8
+         7Vrkb+tG9Y1dwvoAKtsg9yYjKz++yqWEUerNMTNdRa2XpwLnFADDg4kA4IXMCTH8r0
+         xRW/7pMiULOnw==
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+From:   Christopher Rutherford <chrisrutherford@protonmail.com>
+Reply-To: Christopher Rutherford <chrisrutherford@protonmail.com>
+Subject: Neoway Technology N27 NB-IoT/eMTC/EGPRS module
+Message-ID: <KX3y23_c5OPlneretDRhw4_4oqxJ1tXAwYfYb99nLhF8jWCLgWNuhotDR3ehKZ7bPqfDP4aocSpkn8IHccmKt6flhO4CqVxtR9wbidlaTEQ=@protonmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: qmi_wwan: add ZTE MF286D modem 19d2:1485
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164207760981.15302.4251167681503025563.git-patchwork-notify@kernel.org>
-Date:   Thu, 13 Jan 2022 12:40:09 +0000
-References: <20220111221132.14586-1-paweldembicki@gmail.com>
-In-Reply-To: <20220111221132.14586-1-paweldembicki@gmail.com>
-To:     Pawel Dembicki <paweldembicki@gmail.com>
-Cc:     linux-usb@vger.kernel.org, bjorn@mork.no, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
+Hi,
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+As per the dmesg log, please add the Neoway N27 to a proper driver.
 
-On Tue, 11 Jan 2022 23:11:32 +0100 you wrote:
-> Modem from ZTE MF286D is an Qualcomm MDM9250 based 3G/4G modem.
-> 
-> T:  Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
-> D:  Ver= 3.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-> P:  Vendor=19d2 ProdID=1485 Rev=52.87
-> S:  Manufacturer=ZTE,Incorporated
-> S:  Product=ZTE Technologies MSM
-> S:  SerialNumber=MF286DZTED000000
-> C:* #Ifs= 7 Cfg#= 1 Atr=80 MxPwr=896mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=02 Prot=ff Driver=rndis_host
-> E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-> E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-> E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-> E:  Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=89(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> 
-> [...]
+lsusb
+Bus 001 Device 014: ID 2949:8620 Qualcomm, Incorporated Qualcomm CDMA Techn=
+ologies MSM
 
-Here is the summary with links:
-  - net: qmi_wwan: add ZTE MF286D modem 19d2:1485
-    https://git.kernel.org/netdev/net/c/078c6a1cbd4c
+sudo modprobe usbserial vendor=3D0x2949 product=3D0x8620
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+[1989329.151331] usbcore: registered new interface driver usbserial_generic
+[1989329.151336] usbserial: USB Serial support registered for generic
+[1989329.151346] usbserial_generic 1-11:1.0: The "generic" usb-serial drive=
+r is only for testing and one-off prototypes.
+[1989329.151347] usbserial_generic 1-11:1.0: Tell linux-usb@vger.kernel.org=
+ to add your device to a proper driver.
+[1989329.151348] usbserial_generic 1-11:1.0: generic converter detected
+[1989329.151429] usb 1-11: generic converter now attached to ttyUSB0
+[1989329.151451] usbserial_generic 1-11:1.1: The "generic" usb-serial drive=
+r is only for testing and one-off prototypes.
+[1989329.151451] usbserial_generic 1-11:1.1: Tell linux-usb@vger.kernel.org=
+ to add your device to a proper driver.
+[1989329.151452] usbserial_generic 1-11:1.1: generic converter detected
+[1989329.151486] usb 1-11: generic converter now attached to ttyUSB1
+[1989329.151499] usbserial_generic 1-11:1.2: The "generic" usb-serial drive=
+r is only for testing and one-off prototypes.
+[1989329.151500] usbserial_generic 1-11:1.2: Tell linux-usb@vger.kernel.org=
+ to add your device to a proper driver.
+[1989329.151501] usbserial_generic 1-11:1.2: generic converter detected
+[1989329.151526] usb 1-11: generic converter now attached to ttyUSB2
+[1989329.151536] usbserial_generic 1-11:1.3: The "generic" usb-serial drive=
+r is only for testing and one-off prototypes.
+[1989329.151537] usbserial_generic 1-11:1.3: Tell linux-usb@vger.kernel.org=
+ to add your device to a proper driver.
+[1989329.151538] usbserial_generic 1-11:1.3: generic converter detected
+[1989329.151567] usb 1-11: generic converter now attached to ttyUSB3
 
+miniterm  /dev/ttyUSB1
+--- Miniterm on /dev/ttyUSB1  9600,8,N,1 ---
+--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
+at
+OK
+at
+OK
 
+Best regards,
+
+Christopher
