@@ -2,126 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F339648D37C
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jan 2022 09:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F23048D3BB
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jan 2022 09:40:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232941AbiAMIVY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jan 2022 03:21:24 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55734 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232930AbiAMIVX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jan 2022 03:21:23 -0500
+        id S230159AbiAMIkL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jan 2022 03:40:11 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44434 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229573AbiAMIkK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jan 2022 03:40:10 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DCC261C1D;
-        Thu, 13 Jan 2022 08:21:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F2EC36AE3;
-        Thu, 13 Jan 2022 08:21:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C833DB82186
+        for <linux-usb@vger.kernel.org>; Thu, 13 Jan 2022 08:40:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13552C36AE9;
+        Thu, 13 Jan 2022 08:40:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642062082;
-        bh=fX/nWZScQTmUqIw2Cq7C1GzYpE8hxVmOiMEjPokZ9v0=;
+        s=korg; t=1642063208;
+        bh=jBZHfE3i85F6o71aaXOLHmk6zI0ZjME/z1gF64/RCZk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wfkto1UK/V1x9kr+AQ6EhVxlBTp9ZBgPZZ6ca+y+RE3Biw+CgVzCMgQGIWeDZnmmi
-         T18Q3RzRDxTbTHbgsbhlEYvbvAfk/n1FZyvmj0kwXVz9H2prSpdtLUCQ24uvT7K7N9
-         508+wgFvVzB8OD/xB8kU6JOinJCdzLkxJ5h/VhdE=
-Date:   Thu, 13 Jan 2022 09:21:19 +0100
+        b=tLRK2jWtqZWEdu29g1tdBNX5BvWiAL1VhpeMogjbQIL5D+i9IHr2IQkKsnnpsU4q6
+         bD1GDw/E8qDYUg2hGFzpZAdILTzkZMsv+A0nudyPoDpCBZdAl7ADfUP63ejiXdZuCj
+         krCyL5HRNt2oRFlY0u9hkJjZaUmpmeZq4ICqC91I=
+Date:   Thu, 13 Jan 2022 09:40:05 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Puma Hsu <pumahsu@google.com>
-Cc:     mathias.nyman@intel.com, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Albert Wang <albertccwang@google.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v3] xhci: re-initialize the HC during resume if HCE was
- set
-Message-ID: <Yd/g/ywBWZG7gF8v@kroah.com>
-References: <20211229112551.3483931-1-pumahsu@google.com>
- <Yd1tUKhyZf26OVNQ@kroah.com>
- <CAGCq0LZb8nQDvcz=LswWi4qKd-65ys6iPjTKh=46dVtYLDEUVw@mail.gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     James <bjlockie@lockie.ca>, linux-usb <linux-usb@vger.kernel.org>
+Subject: Re: problem with USB-C
+Message-ID: <Yd/lZVRPgcLUqTrn@kroah.com>
+References: <830aa508-5c20-c7c9-5ba9-04bcf5ac7178@lockie.ca>
+ <Yd59HLmparwNaok9@kroah.com>
+ <Yd72gTFL0BsC7vtR@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAGCq0LZb8nQDvcz=LswWi4qKd-65ys6iPjTKh=46dVtYLDEUVw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yd72gTFL0BsC7vtR@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 03:54:27PM +0800, Puma Hsu wrote:
-> On Tue, Jan 11, 2022 at 7:43 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Dec 29, 2021 at 07:25:51PM +0800, Puma Hsu wrote:
-> > > When HCE(Host Controller Error) is set, it means an internal
-> > > error condition has been detected. It needs to re-initialize
-> > > the HC too.
-> >
-> > What is "It" in the last sentence?
+On Wed, Jan 12, 2022 at 10:40:49AM -0500, Alan Stern wrote:
+> > >     |__ Port 5: Dev 2, If 0, Class=Human Interface Device, Driver=usbhid,
+> > > 1.5M
+> > >         ID 04d9:1503 Holtek Semiconductor, Inc. Keyboard
+> > >     |__ Port 5: Dev 2, If 1, Class=Human Interface Device, Driver=usbhid,
+> > > 1.5M
+> > >         ID 04d9:1503 Holtek Semiconductor, Inc. Keyboard
+> > >     |__ Port 6: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid,
+> > > 1.5M
+> > >         ID 30fa:0400
+> > > 
+> > > 
+> > > Why are the hubs listed as Linux Foundation 3.0 root hubs and not 3.1 root
+> > > hubs?
+> > 
+> > Because your devices do not advertise themselves as a USB 3.1 root hub.
+> > Perhaps the documentation is incorrect?
 > 
-> Maybe I can change "It" to "Software", xHCI specification uses
-> "Software" when describing this.
-
-Please change it to something better :)
-
-> > >
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Puma Hsu <pumahsu@google.com>
-> >
-> > What commit id does this fix?
+> No, that's not it at all.
 > 
-> This commit is not used to fix a specific commit. We find a condition
-> that when XHCI runs the resume process but the HCE flag is set, then
-> the Run/Stop bit of USBCMD cannot be set so that HC would not be
-> enabled. In fact, HC may already meet a problem at this moment.
-> Besides, in xHCI requirements specification revision 1.2, Table 5-21
-> BIT(12) claims that Software should re-initialize the xHC when HCE is
-> set. Therefore, I think this commit could be the error handling for
-> HCE.
+> The reason why the root hubs for buses 2 and 4 above are both listed as 
+> "Linux Foundation 3.0 root hub" is because in hcd.c, the 
+> usb31_rh_dev_descriptor and usb3_rh_dev_descriptor structures both set 
+> their idProduct values to 0x03, 0x00 (0x0003 in little-endian form).  
+> Therefore the hardware database can't distinguish between them.
 
-So this problem has been there since the driver was first added to the
-kernel?  Should it go to stable kernels as well?  If so, how far back in
-time?
+Ah, right, I totally missed that.  I saw the two different definitions,
+but missed the device number.
 
-> > > ---
-> > > v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
-> > > v3: Add stable@vger.kernel.org for stable release.
-> > >
-> > >  drivers/usb/host/xhci.c | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> > > index dc357cabb265..ab440ce8420f 100644
-> > > --- a/drivers/usb/host/xhci.c
-> > > +++ b/drivers/usb/host/xhci.c
-> > > @@ -1146,8 +1146,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
-> > >               temp = readl(&xhci->op_regs->status);
-> > >       }
-> > >
-> > > -     /* If restore operation fails, re-initialize the HC during resume */
-> > > -     if ((temp & STS_SRE) || hibernated) {
-> > > +     /* If restore operation fails or HC error is detected, re-initialize the HC during resume */
-> > > +     if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
-> >
-> > But if STS_HCE is set on suspend, that means the suspend was broken so
-> > you wouldn't get here, right?
-> 
-> In xhci_suspend(), it seems doesn't really check whether STS_HCE is
-> set and then break the suspend(The only case for checking HCE is when
-> STS_SAVE setting failed). So suspend function may be still able to
-> finish even if HCE is set? Then xhci_resume will still be called.
+> One possibility would be for the usb31_rh_dev_descriptor to use 0x04, 
+> 0x00 (with the corresponding update to the udev hardware database).  
+> Another possibility is for the hardware database entry for product 0x0003
+> to be changed simply to "Linux Foundation USB-3 root hub", so that it 
+> doesn't specify 3.0, 3.1, or 3.2.
 
-Is this a problem?
-
-> > Or can the error happen between suspend and resume?
-> >
-> > This seems like a big hammer for when the host controller throws an
-> > error.  Why is this the only place that it should be checked for?  What
-> > caused the error that can now allow it to be fixed?
-> 
-> I believe this is not the only place that the host controller may set
-> HCE, the host controller may set HCE anytime it sees an error in my
-> opinion, not only in suspend or resume.
-
-Then where else should it be checked?  Where else will your silicon set
-this bit as part of the normal operating process?
+I can do that.  Should only take a few years to trickle out to the
+slower distros :)
 
 thanks,
 
