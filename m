@@ -2,79 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 194F648E92A
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jan 2022 12:30:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE58048E97B
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jan 2022 12:53:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240117AbiANLaQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Jan 2022 06:30:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
+        id S240893AbiANLxA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Jan 2022 06:53:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240808AbiANLaO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jan 2022 06:30:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4974C06161C;
-        Fri, 14 Jan 2022 03:30:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3197B825C6;
-        Fri, 14 Jan 2022 11:30:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7940BC36AEA;
-        Fri, 14 Jan 2022 11:30:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642159810;
-        bh=78rT9scg6j0SsJnKWtdXTkNU8eZ1HwPLWL6gwgB5vM4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=UTiCDAKLUfNJY5axjWJOIdf1r1BkY++eaexAFgL+jg1s4vHDbzBDTLFypyUc0kuuZ
-         cIfySnQ2strdImdRN/1VCnG7hy1Xtd2izjqpCa9HkfO3XHwofH+1KfM5urmAievGdn
-         aFNxwWfgTBXcaaj2v6R0EellNcUoIZmfr8SUZYuSZHXUY6F1q4cTmX0RXCGoBvuiXB
-         9533f2E1src2bf1lqTfnTkEDGTofluntGn3eEiz6yzLS+xK38JYqaJGQwM1q2JMNv0
-         HXBondE6rx4fqDeJ5IdPbQ7DuggDsIuttvFt5lv/WnpEoL7ouq2dbkpCLsIl69kl6E
-         YmQsbzPXUI8QQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5CE1CF6079A;
-        Fri, 14 Jan 2022 11:30:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S234325AbiANLw7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jan 2022 06:52:59 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAAFC061574
+        for <linux-usb@vger.kernel.org>; Fri, 14 Jan 2022 03:52:59 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id a18so1753069ilq.6
+        for <linux-usb@vger.kernel.org>; Fri, 14 Jan 2022 03:52:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=ggggXvDyaBR0LJCyxzdnWq5ifz2qZOeKg76j6fFCWZQ=;
+        b=YbtpZwNvRaeMXIKqoTeacmat+cE9nkjOlK9yVQK+2CeT158jIlSGnxqYhXYYcO89P4
+         fmi1rsyhw+fOrMKwTKlhD1QabiPjqgnwIQTNcwrLatiERKp2ZqRMV8axr4EniTHMWMvO
+         5bBmVT8HN9XBFrANOTll8O3IkcIkMkUbjK9I6WZeJfymbWxgKVM/6MKxIAXpvgtG1qcu
+         6UjXBqedvW/7DKvrv28pO0K+EC8fo1op8ht/b44KMAodQ41dAjx5n9EE5vGzRLVYIjX2
+         NyiRrZWTUfiD26eARF4SCGw+DHWj9wjJS1uEYnfYqGRlhbbhsQLFFIGoL4BOgxtCG0ev
+         mQUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=ggggXvDyaBR0LJCyxzdnWq5ifz2qZOeKg76j6fFCWZQ=;
+        b=nv+YggWSJw1Eq1358+o50kP2MJpjwlDC0J9oQrsxnjcMCtrxprwfqI9kLr0ujaXkEi
+         ZkFdgfHAPXGG4mDDX7ArLEzW6b1g4/l61UsxH9RwFmSgLQzk5ZI+BNyA6r/Fhj8o9Qks
+         Jz0DOdozlh763r4JScammZpfi6c9O2VsA09spMKLcnxPI9h7yI/WzybsX5y4T+59Caxv
+         bbgKuZ6WrLmNcXi0yALSASx8tgbO08X96ptEUecTAeU3bCkJzrx2u0AmFdYu6JYg+2XH
+         lyXuZ1q6UpaQSWJdVvlMCL6pqLU2WjJtIJ7njHSQh7Uet150jjPJnGud4I/asEpxLhJ2
+         Jfhw==
+X-Gm-Message-State: AOAM5318ECWEUfeQoY9/cN9n5Jo/kdHcurHIi6f/DtH5oqm7ur/qG9jA
+        L+biHasU13bFxpBiuGjxqxTzLqvnPW3YRIbHfuA=
+X-Google-Smtp-Source: ABdhPJyIfpffn/j7lZEFwWw3znB9txoiIIZfyBWlqrP05OiiFUJwAsA7h/d65jcHrXd2ieM7e/OInQmmZ273reoqu9s=
+X-Received: by 2002:a92:6406:: with SMTP id y6mr4552420ilb.179.1642161178812;
+ Fri, 14 Jan 2022 03:52:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: usb: Correct reset handling of smsc95xx
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164215981037.30922.12998188270283713363.git-patchwork-notify@kernel.org>
-Date:   Fri, 14 Jan 2022 11:30:10 +0000
-References: <20220113200113.30702-1-m.reichl@fivetechno.de>
-In-Reply-To: <20220113200113.30702-1-m.reichl@fivetechno.de>
-To:     Markus Reichl <m.reichl@fivetechno.de>
-Cc:     steve.glendinning@shawell.net, UNGLinuxDriver@microchip.com,
-        davem@davemloft.net, kuba@kernel.org, martyn.welch@collabora.com,
-        ghojda@yo2urs.ro, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Received: by 2002:a05:6602:2a4c:0:0:0:0 with HTTP; Fri, 14 Jan 2022 03:52:58
+ -0800 (PST)
+Reply-To: mrsbillchantal2022@mail.com
+From:   "Mrs. Bill Chantal" <km78646342@gmail.com>
+Date:   Fri, 14 Jan 2022 12:52:58 +0100
+Message-ID: <CAOhgQkeL=UZQXVLGS4_5cV-n3FQ72csqukODf74onwDPvY+RzQ@mail.gmail.com>
+Subject: Dear Friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
+DEAR FRIEND
+You have been compensated with the sum of 5.4 million dollars in this
+united nation the payment will be Issue into ATM visa card and send to
+you from the bank,we need your address, passport and your WhatsApp
+Number.
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+Thanks
 
-On Thu, 13 Jan 2022 21:01:11 +0100 you wrote:
-> On boards with LAN9514 and no preconfigured MAC address we don't get an
-> ip address from DHCP after commit a049a30fc27c ("net: usb: Correct PHY handling
-> of smsc95xx") anymore. Adding an explicit reset before starting the phy
-> fixes the issue.
-> 
-> [1]
-> https://lore.kernel.org/netdev/199eebbd6b97f52b9119c9fa4fd8504f8a34de18.camel@collabora.com/
-> 
-> [...]
-
-Here is the summary with links:
-  - net: usb: Correct reset handling of smsc95xx
-    https://git.kernel.org/netdev/net/c/0bf3885324a8
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Mrs.Bill Chantal
