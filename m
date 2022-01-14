@@ -2,101 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D417348E905
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jan 2022 12:18:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 194F648E92A
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jan 2022 12:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240518AbiANLSF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Jan 2022 06:18:05 -0500
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:34636 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232873AbiANLSF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jan 2022 06:18:05 -0500
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20E5Cio0005698;
-        Fri, 14 Jan 2022 05:18:02 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=R33BElVQupXFbTDN+OsGp/VAy1tSFbXhIXhIS2yYmTc=;
- b=AHo2x28qFcQNanfL+B3lUEoPUbaKNtSFHrd4C7wleElnIpYoMw9jrNQGAcci1Q/BmI5D
- yRie9nU9fqYmbqK54jcNWPQWzIeg+NVKjCPPvrUe49HXNf8yr8M+Tks8CC7EmJ6X2e9U
- UNQ2HSfgOuAZRrA48SvflSzesuqResPlakkGBXMemTX/zr8vHkkFpAdCoGs8jh3eDOZ7
- jJpWZERs1Jb2uCoFO5BDARjmFrdQb8Mx7dP0NM8ODPOlAIWYB5Cc3oVbjWvayQntJhTL
- 69Eys0+1ZHUX98+0Lj07qhvNdQz5ktczE82+gdvoTkQhWmFRNWIf60YoZH6E98yMKK9/ sg== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3djma115bt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 14 Jan 2022 05:18:02 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 14 Jan
- 2022 11:18:00 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Fri, 14 Jan 2022 11:18:00 +0000
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8878E11D7;
-        Fri, 14 Jan 2022 11:18:00 +0000 (UTC)
-Date:   Fri, 14 Jan 2022 11:18:00 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     <robh@kernel.org>
-CC:     <peter.chen@kernel.org>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: ChipIdea USB regression
-Message-ID: <20220114111800.GL18506@ediswmail.ad.cirrus.com>
-References: <20220114105620.GK18506@ediswmail.ad.cirrus.com>
+        id S240117AbiANLaQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Jan 2022 06:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240808AbiANLaO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jan 2022 06:30:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4974C06161C;
+        Fri, 14 Jan 2022 03:30:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D3197B825C6;
+        Fri, 14 Jan 2022 11:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7940BC36AEA;
+        Fri, 14 Jan 2022 11:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642159810;
+        bh=78rT9scg6j0SsJnKWtdXTkNU8eZ1HwPLWL6gwgB5vM4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=UTiCDAKLUfNJY5axjWJOIdf1r1BkY++eaexAFgL+jg1s4vHDbzBDTLFypyUc0kuuZ
+         cIfySnQ2strdImdRN/1VCnG7hy1Xtd2izjqpCa9HkfO3XHwofH+1KfM5urmAievGdn
+         aFNxwWfgTBXcaaj2v6R0EellNcUoIZmfr8SUZYuSZHXUY6F1q4cTmX0RXCGoBvuiXB
+         9533f2E1src2bf1lqTfnTkEDGTofluntGn3eEiz6yzLS+xK38JYqaJGQwM1q2JMNv0
+         HXBondE6rx4fqDeJ5IdPbQ7DuggDsIuttvFt5lv/WnpEoL7ouq2dbkpCLsIl69kl6E
+         YmQsbzPXUI8QQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5CE1CF6079A;
+        Fri, 14 Jan 2022 11:30:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220114105620.GK18506@ediswmail.ad.cirrus.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: WYqIB65Cdgw84DO7D3IsWwxrzukvmPPq
-X-Proofpoint-ORIG-GUID: WYqIB65Cdgw84DO7D3IsWwxrzukvmPPq
-X-Proofpoint-Spam-Reason: safe
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: usb: Correct reset handling of smsc95xx
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164215981037.30922.12998188270283713363.git-patchwork-notify@kernel.org>
+Date:   Fri, 14 Jan 2022 11:30:10 +0000
+References: <20220113200113.30702-1-m.reichl@fivetechno.de>
+In-Reply-To: <20220113200113.30702-1-m.reichl@fivetechno.de>
+To:     Markus Reichl <m.reichl@fivetechno.de>
+Cc:     steve.glendinning@shawell.net, UNGLinuxDriver@microchip.com,
+        davem@davemloft.net, kuba@kernel.org, martyn.welch@collabora.com,
+        ghojda@yo2urs.ro, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 10:56:20AM +0000, Charles Keepax wrote:
-> Hi guys,
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 13 Jan 2022 21:01:11 +0100 you wrote:
+> On boards with LAN9514 and no preconfigured MAC address we don't get an
+> ip address from DHCP after commit a049a30fc27c ("net: usb: Correct PHY handling
+> of smsc95xx") anymore. Adding an explicit reset before starting the phy
+> fixes the issue.
 > 
-> My Zynq based board stopped booting today, a bisect points to this
-> patch:
+> [1]
+> https://lore.kernel.org/netdev/199eebbd6b97f52b9119c9fa4fd8504f8a34de18.camel@collabora.com/
 > 
-> commit 0f153a1b8193 ("usb: chipidea: Set the DT node on the child device")
-> 
-> It looks like it gets stuck in some sort of boot loop of doom:
+> [...]
 
-Ok so poking that a little more, I think I can see what happens,
-the USB DT node looks like this:
+Here is the summary with links:
+  - net: usb: Correct reset handling of smsc95xx
+    https://git.kernel.org/netdev/net/c/0bf3885324a8
 
-usb0: usb@e0002000 {
-	compatible = "xlnx,zynq-usb-2.20a", "chipidea,usb2";
-	status = "disabled";
-	clocks = <&clkc 28>;
-	interrupt-parent = <&intc>;
-	interrupts = <0 21 4>;
-	reg = <0xe0002000 0x1000>;
-	phy_type = "ulpi";
-};
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-&usb0 {
-	status = "okay";
 
-	dr_mode = "host";
-	usb-phy = <&usb_phy0>;
-};
-
-So when that patch copies the DT node to the new platform device
-in ci_hdrc_add_device it copies the compatible stuff as well as
-the IRQ stuff it was targeting, this presumably causes the kernel
-to bind a new copy of the driver to that new device, which probes
-and calls ci_hdrc_add_device again repeating the process until
-it dies.
-
-Kinda looks to me like the best solution might just be to revert
-the patch, I am not sure I see how that copy of the DT is supposed
-to work?
-
-Thanks,
-Charles
