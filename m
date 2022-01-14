@@ -2,128 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9ABF48E7C6
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jan 2022 10:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1939948E804
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jan 2022 11:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240074AbiANJql (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Jan 2022 04:46:41 -0500
-Received: from mx1.tq-group.com ([93.104.207.81]:5167 "EHLO mx1.tq-group.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229785AbiANJqk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 14 Jan 2022 04:46:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1642153600; x=1673689600;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NNHPlTD0ftd7Yo4ZkVXD/Gn+srTlO5apnHVNSJQo2B8=;
-  b=lrOjnFoEAQd2pTzpTHiRuJ6lC69NAkEWne9iyx9K24HzBc+xzaB6l1Tr
-   CCvidFMKncewl2UdJYGTg8xgOzdO6tRbpEbqysTdZtE0z/ZomdpX1v7tZ
-   8mgUSRfkXqrSJYJMqmtLTrBqT2KfkUr46sALGYIRUijYjlZG95JisZRM7
-   FBJQcvhJNbiEozNzWi8rlhTReeEtOQVpxmZSQo+34p5CRqn1GERCX2iWT
-   cJpN8KmHMcIv0D08g1ccHwTS0ZpWSELBLdbesMcNlGPImSJfx7dDVhyLm
-   8CyaX6T3dv1LMiDW5EdXUReCR21e8dfBWq6OC/BAz1Qf3wShQxNEgtw6k
-   g==;
-X-IronPort-AV: E=Sophos;i="5.88,288,1635199200"; 
-   d="scan'208";a="21502572"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 14 Jan 2022 10:46:39 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 14 Jan 2022 10:46:39 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Fri, 14 Jan 2022 10:46:39 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1642153599; x=1673689599;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NNHPlTD0ftd7Yo4ZkVXD/Gn+srTlO5apnHVNSJQo2B8=;
-  b=XmH3xUwV8P37+HKt9OalpH9XzYJRsNr6i4PkhGoMUQtzIDfOwVCgQYzn
-   NkW344cf1M3I73f1xkZ9dz32vTmfWEewYGJEWEqxeAHDjgCObHPvBmwf1
-   Wl98uasJbrTMMakM2U9vb0qbHLNNsujhzAnxt8LE5cZR0N5S1uyXUMR5G
-   9ZVfRMI+8znpaz14wRQo7C3QeM/NFQtoldcs4zPfcQnYca684iKYuTfbh
-   3XHwmuTimjiBmhz69VMic8bQ48haxgUQ8QTPTTOxFBwHL58iffP0SlD7H
-   EY32LZyDliGcvQVxW02fpxxIMJxXkqju1nnJrPeTYhm32VNnavtAaAdRH
-   A==;
-X-IronPort-AV: E=Sophos;i="5.88,288,1635199200"; 
-   d="scan'208";a="21502571"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 14 Jan 2022 10:46:39 +0100
-Received: from steina-w.localnet (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id B843E280065;
-        Fri, 14 Jan 2022 10:46:38 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Steve Glendinning <steve.glendinning@shawell.net>,
-        UNGLinuxDriver@microchip.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Markus Reichl <m.reichl@fivetechno.de>
-Cc:     Markus Reichl <m.reichl@fivetechno.de>,
-        Gabriel Hojda <ghojda@yo2urs.ro>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usb: Correct reset handling of smsc95xx
-Date:   Fri, 14 Jan 2022 10:46:38 +0100
-Message-ID: <3127264.ElGaqSPkdT@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20220113200113.30702-1-m.reichl@fivetechno.de>
-References: <20220113200113.30702-1-m.reichl@fivetechno.de>
+        id S240207AbiANKC1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Jan 2022 05:02:27 -0500
+Received: from mail-mw2nam10on2050.outbound.protection.outlook.com ([40.107.94.50]:10101
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230329AbiANKCZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 14 Jan 2022 05:02:25 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Bpg62Bu5e3JNObL+FoT1oWLdwijtm/tmLt6nbYnqXm5y7uMrZHefb/WQ8edixpUzifvPSHcQN0E/FZ3OI6o5ScWwSgpHuxodWLvWGwo0flv05hlBkN7vZLwrsLfLzYvvFyoIl8QC+2Vfau2IKhBifrySTalclz3BBFFZodA4bXqKI1mB5qdUiAd74ceR8Ik2S00jSdtAdera11zf2kxtvvgvClaZqGB3uTAED9xszOV0wHXRPiwor6oWNo3gcnPKwc3zYSIcgzUrGShZBJUnoSw7EG2bhk9eFEBC4QUwWvdk8MvZdv5pA2M5pQHGbGJDfnUFtl2VXAMWqix1fKLiGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=635GWRb8oEgugdj7wfSSTmegZKq0nQe9AneCKh/6UGE=;
+ b=JlzKUBv/wuzEKBuqZ7EygRFb58onxnuRf23tcCKv6vjPt0C2tcbWj/4aLeL3nHkT/M27opQcN9wkcvV/PkNSIKuOkXvOQ4hOjPwEiYSHL7I43jP5Z/wBrRCm3vegzwNVlV7tzzpOvnbWCAUzxLTJG1BBWiiN5KuH1+Wr7cINxfGWWPdZ1OQApgj0ltmRIEitZGPpJSINnwnLbmrIH1Sbwr/+BiL8UqaFqKNQNM6gBMSIdDDqYHaghlO+K6OiZD52kqN5CFbqCAXhvELZcLZG+JsUlmXu6m4ldjG+BKx3r/Apk2Pcn38+I0baGdVRiW1bvpX7usIx2+t4Dlz0vThtWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.234) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=635GWRb8oEgugdj7wfSSTmegZKq0nQe9AneCKh/6UGE=;
+ b=K4VLJwTQutn5QSbXcYcaw+9T3R56QcgGH+cw4aeNo2VoOK/wJNJ4wNWmDx8EZqXT8nRwmdKCauBzaZeLhtnsspJnLGTBqZ6EZkdsT+wokBtCLIlgIQ1TnluD0bwfcfWQLMNZm9nbdGjqKLZmFzNMw5yA1SzK6X0zI2g9Galj0+IQHBTjAUuP3qkzH8huJ5nX+ziWtN0MINOlGl1XVDOPAhHQOqxzHvd1ErjZAWPvp/ffW3LRjTUIvQGQ/+pdumxvTiQKp1JhGXo4AR6SUsp08cvfQzltH8CX7O+ZqUpW9QBIJovJOauBYCiXmGTnw3z0DYtaOwPRcqa+DNVAg84w3g==
+Received: from DM5PR04CA0040.namprd04.prod.outlook.com (2603:10b6:3:12b::26)
+ by DM5PR12MB1594.namprd12.prod.outlook.com (2603:10b6:4:e::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4888.11; Fri, 14 Jan 2022 10:02:23 +0000
+Received: from DM6NAM11FT014.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:3:12b:cafe::bb) by DM5PR04CA0040.outlook.office365.com
+ (2603:10b6:3:12b::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9 via Frontend
+ Transport; Fri, 14 Jan 2022 10:02:23 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.234; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.234) by
+ DM6NAM11FT014.mail.protection.outlook.com (10.13.173.132) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4888.9 via Frontend Transport; Fri, 14 Jan 2022 10:02:23 +0000
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by DRHQMAIL101.nvidia.com
+ (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 14 Jan
+ 2022 10:02:22 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 14 Jan
+ 2022 10:02:22 +0000
+Received: from moonraker.nvidia.com (10.127.8.11) by mail.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Fri, 14 Jan 2022 10:02:20 +0000
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, Jon Hunter <jonathanh@nvidia.com>
+Subject: [PATCH] usb: common: ulpi: Fix crash in ulpi_match()
+Date:   Fri, 14 Jan 2022 10:02:17 +0000
+Message-ID: <20220114100217.59541-1-jonathanh@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1e011d1c-d56a-4423-fe6d-08d9d744f605
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1594:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB1594F1501AAE07464978EED0D9549@DM5PR12MB1594.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: szR0NZyeVOqZED8j3YE2UMy8lGzPeArmhowaOTn+2JeL1ttVBrgzjYHxKNHKmPJ2/9a7Kp/nJQhTPqUyrTCA8TDq2tLpbFFnpofwjLQ8uJ9EL2DmwwnJCEQmb3+TZz60KkcSZ+gYRWlKpYoo7l74C9/qva/pjcGfxFs0r3ROn8vQyDF6cZ8s3+E32wg1PfMidldR0aXAl+pzsSuwr4BLJUkPsmRpgSGkkMiwIraIepo0YuT6AY48NOVCrDyqsCCusq4s1jy/2RIiyCrUQSG7HW3lT//vWouXGlIVXg41esPu2xmugjAul0S3sqEaMPbXXxTz5ArUpBCgOT+sIFOqf6lGV7hC0RREHlp8+vhs9sOtNKoqVYbAqmARZ1T439u8qrjE2seeXMRJU6b7TvfTS0uMgpgYn1Bs0fgspDk/69DoRWQx+f12oaKsIatxjEOGaNU+lsqZe2qofPcPb1/luCHy+AcoHJvO0V7oTMXXaAaMFr9UXHflnV74g3RL6ZFYpbnUT++wJikCPhgAodeulpu2OxfWB1KB6wSFYjUkSXME65/DiitfWRI2l+s9XG2+blK4KX2DHD8ZVgLismOirIHkmhOj1ey51ZUCbXSN6k2Iw5gcZzoSwANGySEjZT7AIMVdm+QIOcn/zB3aFhS6y/I9MYPvYj/FpLgkEp3JRUnhVJRTxFUEb0buSrw+58zZdybmmmpBOb4plICbXep1eGEr6t66AXQ7/NhGWMBmaXUE441GJ+F8xueL5hYFV5VDZEuzjMN7tEgCA9K8uaz0QSjE0pNS5BJczUaQOzc4+MY=
+X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(40470700002)(36840700001)(46966006)(6666004)(8936002)(336012)(186003)(8676002)(4326008)(1076003)(316002)(40460700001)(70206006)(26005)(36756003)(426003)(2616005)(107886003)(82310400004)(70586007)(110136005)(83380400001)(47076005)(81166007)(7696005)(36860700001)(86362001)(2906002)(54906003)(5660300002)(356005)(508600001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jan 2022 10:02:23.3878
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e011d1c-d56a-4423-fe6d-08d9d744f605
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT014.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1594
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Markus,
+Commit 7495af930835 ("ARM: multi_v7_defconfig: Enable drivers for
+DragonBoard 410c") enables the CONFIG_PHY_QCOM_USB_HS for the ARM
+multi_v7_defconfig. Enabling this Kconfig is causing the kernel to crash
+on the Tegra20 Ventana platform in the ulpi_match() function.
 
-Am Donnerstag, 13. Januar 2022, 21:01:11 CET schrieb Markus Reichl:
-> On boards with LAN9514 and no preconfigured MAC address we don't get an
-> ip address from DHCP after commit a049a30fc27c ("net: usb: Correct PHY
-> handling of smsc95xx") anymore. Adding an explicit reset before starting
-> the phy fixes the issue.
-> 
-> [1]
-> https://lore.kernel.org/netdev/199eebbd6b97f52b9119c9fa4fd8504f8a34de18.came
-> l@collabora.com/
-> 
-> From: Gabriel Hojda <ghojda@yo2urs.ro>
-> Fixes: a049a30fc27c ("net: usb: Correct PHY handling of smsc95xx")
-> Signed-off-by: Gabriel Hojda <ghojda@yo2urs.ro>
-> Signed-off-by: Markus Reichl <m.reichl@fivetechno.de>
-> ---
->  drivers/net/usb/smsc95xx.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-> index abe0149ed917..bc1e3dd67c04 100644
-> --- a/drivers/net/usb/smsc95xx.c
-> +++ b/drivers/net/usb/smsc95xx.c
-> @@ -1962,7 +1962,8 @@ static const struct driver_info smsc95xx_info = {
->  	.bind		= smsc95xx_bind,
->  	.unbind		= smsc95xx_unbind,
->  	.link_reset	= smsc95xx_link_reset,
-> -	.reset		= smsc95xx_start_phy,
-> +	.reset		= smsc95xx_reset,
-> +	.check_connect	= smsc95xx_start_phy,
->  	.stop		= smsc95xx_stop,
->  	.rx_fixup	= smsc95xx_rx_fixup,
->  	.tx_fixup	= smsc95xx_tx_fixup,
+The Qualcomm USB HS PHY driver that is enabled by CONFIG_PHY_QCOM_USB_HS,
+registers a ulpi_driver but this driver does not provide an 'id_table',
+so when ulpi_match() is called on the Tegra20 Ventana platform, it
+crashes when attempting to deference the id_table pointer which is not
+valid. The Qualcomm USB HS PHY driver uses device-tree for matching the
+ULPI driver with the device and so fix this crash by using device-tree
+for matching if the id_table is not valid.
 
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+---
+ drivers/usb/common/ulpi.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-This should go into stable-5.15!
-
-Tested on a TQMa6x on MBa6 which uses a SMSC9500 as a second ethernet 
-interface.
-For the record: I noticed the problem as ARP replies were sent from the wrong 
-interface. Thus my PC got the wrong MAC address which failed ping in the end.
-
-Best regards,
-Alexander
-
-
+diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+index 4169cf40a03b..8f8405b0d608 100644
+--- a/drivers/usb/common/ulpi.c
++++ b/drivers/usb/common/ulpi.c
+@@ -39,8 +39,11 @@ static int ulpi_match(struct device *dev, struct device_driver *driver)
+ 	struct ulpi *ulpi = to_ulpi_dev(dev);
+ 	const struct ulpi_device_id *id;
+ 
+-	/* Some ULPI devices don't have a vendor id so rely on OF match */
+-	if (ulpi->id.vendor == 0)
++	/*
++	 * Some ULPI devices don't have a vendor id
++	 * or provide an id_table so rely on OF match.
++	 */
++	if (ulpi->id.vendor == 0 || !drv->id_table)
+ 		return of_driver_match_device(dev, driver);
+ 
+ 	for (id = drv->id_table; id->vendor; id++)
+-- 
+2.25.1
 
