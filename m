@@ -2,136 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1939948E804
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jan 2022 11:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F9E448E8B0
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jan 2022 11:56:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240207AbiANKC1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Jan 2022 05:02:27 -0500
-Received: from mail-mw2nam10on2050.outbound.protection.outlook.com ([40.107.94.50]:10101
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230329AbiANKCZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 14 Jan 2022 05:02:25 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Bpg62Bu5e3JNObL+FoT1oWLdwijtm/tmLt6nbYnqXm5y7uMrZHefb/WQ8edixpUzifvPSHcQN0E/FZ3OI6o5ScWwSgpHuxodWLvWGwo0flv05hlBkN7vZLwrsLfLzYvvFyoIl8QC+2Vfau2IKhBifrySTalclz3BBFFZodA4bXqKI1mB5qdUiAd74ceR8Ik2S00jSdtAdera11zf2kxtvvgvClaZqGB3uTAED9xszOV0wHXRPiwor6oWNo3gcnPKwc3zYSIcgzUrGShZBJUnoSw7EG2bhk9eFEBC4QUwWvdk8MvZdv5pA2M5pQHGbGJDfnUFtl2VXAMWqix1fKLiGA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=635GWRb8oEgugdj7wfSSTmegZKq0nQe9AneCKh/6UGE=;
- b=JlzKUBv/wuzEKBuqZ7EygRFb58onxnuRf23tcCKv6vjPt0C2tcbWj/4aLeL3nHkT/M27opQcN9wkcvV/PkNSIKuOkXvOQ4hOjPwEiYSHL7I43jP5Z/wBrRCm3vegzwNVlV7tzzpOvnbWCAUzxLTJG1BBWiiN5KuH1+Wr7cINxfGWWPdZ1OQApgj0ltmRIEitZGPpJSINnwnLbmrIH1Sbwr/+BiL8UqaFqKNQNM6gBMSIdDDqYHaghlO+K6OiZD52kqN5CFbqCAXhvELZcLZG+JsUlmXu6m4ldjG+BKx3r/Apk2Pcn38+I0baGdVRiW1bvpX7usIx2+t4Dlz0vThtWA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=635GWRb8oEgugdj7wfSSTmegZKq0nQe9AneCKh/6UGE=;
- b=K4VLJwTQutn5QSbXcYcaw+9T3R56QcgGH+cw4aeNo2VoOK/wJNJ4wNWmDx8EZqXT8nRwmdKCauBzaZeLhtnsspJnLGTBqZ6EZkdsT+wokBtCLIlgIQ1TnluD0bwfcfWQLMNZm9nbdGjqKLZmFzNMw5yA1SzK6X0zI2g9Galj0+IQHBTjAUuP3qkzH8huJ5nX+ziWtN0MINOlGl1XVDOPAhHQOqxzHvd1ErjZAWPvp/ffW3LRjTUIvQGQ/+pdumxvTiQKp1JhGXo4AR6SUsp08cvfQzltH8CX7O+ZqUpW9QBIJovJOauBYCiXmGTnw3z0DYtaOwPRcqa+DNVAg84w3g==
-Received: from DM5PR04CA0040.namprd04.prod.outlook.com (2603:10b6:3:12b::26)
- by DM5PR12MB1594.namprd12.prod.outlook.com (2603:10b6:4:e::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4888.11; Fri, 14 Jan 2022 10:02:23 +0000
-Received: from DM6NAM11FT014.eop-nam11.prod.protection.outlook.com
- (2603:10b6:3:12b:cafe::bb) by DM5PR04CA0040.outlook.office365.com
- (2603:10b6:3:12b::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9 via Frontend
- Transport; Fri, 14 Jan 2022 10:02:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.234) by
- DM6NAM11FT014.mail.protection.outlook.com (10.13.173.132) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4888.9 via Frontend Transport; Fri, 14 Jan 2022 10:02:23 +0000
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 14 Jan
- 2022 10:02:22 +0000
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 14 Jan
- 2022 10:02:22 +0000
-Received: from moonraker.nvidia.com (10.127.8.11) by mail.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Fri, 14 Jan 2022 10:02:20 +0000
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, Jon Hunter <jonathanh@nvidia.com>
-Subject: [PATCH] usb: common: ulpi: Fix crash in ulpi_match()
-Date:   Fri, 14 Jan 2022 10:02:17 +0000
-Message-ID: <20220114100217.59541-1-jonathanh@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+        id S240592AbiANK4Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Jan 2022 05:56:25 -0500
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:36024 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240580AbiANK4Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jan 2022 05:56:24 -0500
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20E7Rpol007927;
+        Fri, 14 Jan 2022 04:56:22 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=PODMain02222019;
+ bh=vcj94tszLeuIxqQwMLbDyTnJ/235NTOVKqL7o/ZSjEI=;
+ b=K8I9YeiqAnQtBMaPcKaxVSBXouTq+KQs77I6w3WZ9h6Agt4XW+JB8qvjO84ET58Ey91o
+ qz72u6G84AERRG3IHAmdyEeyQ2vLltbg1LhViEfh77jWZQes6jNLqOo+bc6WD1iB78rn
+ 7pJ+u78dqovq4eMGiY3yhXw6+9HvdhQzVL13IxDOZg9rd7pRz574JfjtA5mFA7WFI64h
+ VlsQZqWIdJ3ToknaaKmhU1E7Gzvzgh6yPxXKT8gHekJhkoTd74NCtVTlpT1Zk+zeZ20B
+ W5ttycdWrW010l79kJkCZPsybGyxjkeKOEL21FhLrznkU0Lpx2+tpaMwQv7G8vucqcEj sA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3djqcb0uya-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 14 Jan 2022 04:56:22 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 14 Jan
+ 2022 10:56:20 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Fri, 14 Jan 2022 10:56:20 +0000
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 56C562A9;
+        Fri, 14 Jan 2022 10:56:20 +0000 (UTC)
+Date:   Fri, 14 Jan 2022 10:56:20 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <robh@kernel.org>
+CC:     <peter.chen@kernel.org>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: ChipIdea USB regression
+Message-ID: <20220114105620.GK18506@ediswmail.ad.cirrus.com>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1e011d1c-d56a-4423-fe6d-08d9d744f605
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1594:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB1594F1501AAE07464978EED0D9549@DM5PR12MB1594.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: szR0NZyeVOqZED8j3YE2UMy8lGzPeArmhowaOTn+2JeL1ttVBrgzjYHxKNHKmPJ2/9a7Kp/nJQhTPqUyrTCA8TDq2tLpbFFnpofwjLQ8uJ9EL2DmwwnJCEQmb3+TZz60KkcSZ+gYRWlKpYoo7l74C9/qva/pjcGfxFs0r3ROn8vQyDF6cZ8s3+E32wg1PfMidldR0aXAl+pzsSuwr4BLJUkPsmRpgSGkkMiwIraIepo0YuT6AY48NOVCrDyqsCCusq4s1jy/2RIiyCrUQSG7HW3lT//vWouXGlIVXg41esPu2xmugjAul0S3sqEaMPbXXxTz5ArUpBCgOT+sIFOqf6lGV7hC0RREHlp8+vhs9sOtNKoqVYbAqmARZ1T439u8qrjE2seeXMRJU6b7TvfTS0uMgpgYn1Bs0fgspDk/69DoRWQx+f12oaKsIatxjEOGaNU+lsqZe2qofPcPb1/luCHy+AcoHJvO0V7oTMXXaAaMFr9UXHflnV74g3RL6ZFYpbnUT++wJikCPhgAodeulpu2OxfWB1KB6wSFYjUkSXME65/DiitfWRI2l+s9XG2+blK4KX2DHD8ZVgLismOirIHkmhOj1ey51ZUCbXSN6k2Iw5gcZzoSwANGySEjZT7AIMVdm+QIOcn/zB3aFhS6y/I9MYPvYj/FpLgkEp3JRUnhVJRTxFUEb0buSrw+58zZdybmmmpBOb4plICbXep1eGEr6t66AXQ7/NhGWMBmaXUE441GJ+F8xueL5hYFV5VDZEuzjMN7tEgCA9K8uaz0QSjE0pNS5BJczUaQOzc4+MY=
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(40470700002)(36840700001)(46966006)(6666004)(8936002)(336012)(186003)(8676002)(4326008)(1076003)(316002)(40460700001)(70206006)(26005)(36756003)(426003)(2616005)(107886003)(82310400004)(70586007)(110136005)(83380400001)(47076005)(81166007)(7696005)(36860700001)(86362001)(2906002)(54906003)(5660300002)(356005)(508600001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jan 2022 10:02:23.3878
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e011d1c-d56a-4423-fe6d-08d9d744f605
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT014.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1594
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: FP5WiD8EWYA-jLLOFixC6QpjY7Qaoaew
+X-Proofpoint-ORIG-GUID: FP5WiD8EWYA-jLLOFixC6QpjY7Qaoaew
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit 7495af930835 ("ARM: multi_v7_defconfig: Enable drivers for
-DragonBoard 410c") enables the CONFIG_PHY_QCOM_USB_HS for the ARM
-multi_v7_defconfig. Enabling this Kconfig is causing the kernel to crash
-on the Tegra20 Ventana platform in the ulpi_match() function.
+Hi guys,
 
-The Qualcomm USB HS PHY driver that is enabled by CONFIG_PHY_QCOM_USB_HS,
-registers a ulpi_driver but this driver does not provide an 'id_table',
-so when ulpi_match() is called on the Tegra20 Ventana platform, it
-crashes when attempting to deference the id_table pointer which is not
-valid. The Qualcomm USB HS PHY driver uses device-tree for matching the
-ULPI driver with the device and so fix this crash by using device-tree
-for matching if the id_table is not valid.
+My Zynq based board stopped booting today, a bisect points to this
+patch:
 
-Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
----
- drivers/usb/common/ulpi.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+commit 0f153a1b8193 ("usb: chipidea: Set the DT node on the child device")
 
-diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
-index 4169cf40a03b..8f8405b0d608 100644
---- a/drivers/usb/common/ulpi.c
-+++ b/drivers/usb/common/ulpi.c
-@@ -39,8 +39,11 @@ static int ulpi_match(struct device *dev, struct device_driver *driver)
- 	struct ulpi *ulpi = to_ulpi_dev(dev);
- 	const struct ulpi_device_id *id;
- 
--	/* Some ULPI devices don't have a vendor id so rely on OF match */
--	if (ulpi->id.vendor == 0)
-+	/*
-+	 * Some ULPI devices don't have a vendor id
-+	 * or provide an id_table so rely on OF match.
-+	 */
-+	if (ulpi->id.vendor == 0 || !drv->id_table)
- 		return of_driver_match_device(dev, driver);
- 
- 	for (id = drv->id_table; id->vendor; id++)
--- 
-2.25.1
+It looks like it gets stuck in some sort of boot loop of doom:
 
+48 locks held by swapper/0/1:
+#0: 42a2c0d8 (&dev->mutex){....}-{3:3}, at: __driver_attach+0x12c/0x15c
+#1: 42a41cd8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x2c/0x164
+#2: 42abdcd8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x2c/0x164
+#3: 42abd8d8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x2c/0x164
+#4: 42abd4d8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x2c/0x164
+#5: 42abd0d8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x2c/0x164
+#6: 42b00cd8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x2c/0x164
+#7: 42b008d8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x2c/0x164
+<snip>
+[<40100af4>] (__irq_svc) from [<40920270>] (_raw_spin_unlock_irqrestore+0x30/0x5c)
+[<40920270>] (_raw_spin_unlock_irqrestore) from [<40433238>] (klist_next+0x84/0xac)
+[<40433238>] (klist_next) from [<40503a5c>] (bus_for_each_drv+0x60/0xbc)
+[<40503a5c>] (bus_for_each_drv) from [<40505ea8>] (__device_attach+0xc4/0x164)
+[<40505ea8>] (__device_attach) from [<405047e0>] (bus_probe_device+0x28/0x84)
+[<405047e0>] (bus_probe_device) from [<405022b8>] (device_add+0x590/0x7c4)
+[<405022b8>] (device_add) from [<4050835c>] (platform_device_add+0xa8/0x1f0)
+[<4050835c>] (platform_device_add) from [<405f329c>] (ci_hdrc_add_device+0x3b4/0x434)
+[<405f329c>] (ci_hdrc_add_device) from [<405f5f0c>] (ci_hdrc_usb2_probe+0x130/0x180)
+[<405f5f0c>] (ci_hdrc_usb2_probe) from [<40507e60>] (platform_probe+0x58/0xa8)
+[<40507e60>] (platform_probe) from [<4050584c>] (really_probe+0x1d8/0x418)
+[<4050584c>] (really_probe) from [<40505c44>] (__driver_probe_device+0x1b8/0x1f0)
+[<40505c44>] (__driver_probe_device) from [<40505ca0>] (driver_probe_device+0x24/0xa4)
+[<40505ca0>] (driver_probe_device) from [<405060b0>] (__device_attach_driver+0xbc/0x110)
+[<405060b0>] (__device_attach_driver) from [<40503aa4>] (bus_for_each_drv+0xa8/0xbc)
+[<40503aa4>] (bus_for_each_drv) from [<40505ea8>] (__device_attach+0xc4/0x164)
+[<40505ea8>] (__device_attach) from [<405047e0>] (bus_probe_device+0x28/0x84)
+[<405047e0>] (bus_probe_device) from [<405022b8>] (device_add+0x590/0x7c4)
+[<405022b8>] (device_add) from [<4050835c>] (platform_device_add+0xa8/0x1f0)
+[<4050835c>] (platform_device_add) from [<405f329c>] (ci_hdrc_add_device+0x3b4/0x434)
+[<405f329c>] (ci_hdrc_add_device) from [<405f5f0c>] (ci_hdrc_usb2_probe+0x130/0x180)
+[<405f5f0c>] (ci_hdrc_usb2_probe) from [<40507e60>] (platform_probe+0x58/0xa8)
+[<40507e60>] (platform_probe) from [<4050584c>] (really_probe+0x1d8/0x418)
+[<4050584c>] (really_probe) from [<40505c44>] (__driver_probe_device+0x1b8/0x1f0)
+[<40505c44>] (__driver_probe_device) from [<40505ca0>] (driver_probe_device+0x24/0xa4)
+[<40505ca0>] (driver_probe_device) from [<405060b0>] (__device_attach_driver+0xbc/0x110)
+[<405060b0>] (__device_attach_driver) from [<40503aa4>] (bus_for_each_drv+0xa8/0xbc)
+[<40503aa4>] (bus_for_each_drv) from [<40505ea8>] (__device_attach+0xc4/0x164)
+[<40505ea8>] (__device_attach) from [<405047e0>] (bus_probe_device+0x28/0x84)
+[<405047e0>] (bus_probe_device) from [<405022b8>] (device_add+0x590/0x7c4)
+[<405022b8>] (device_add) from [<4050835c>] (platform_device_add+0xa8/0x1f0)
+[<4050835c>] (platform_device_add) from [<405f329c>] (ci_hdrc_add_device+0x3b4/0x434)
+[<405f329c>] (ci_hdrc_add_device) from [<405f5f0c>] (ci_hdrc_usb2_probe+0x130/0x180)
+[<405f5f0c>] (ci_hdrc_usb2_probe) from [<40507e60>] (platform_probe+0x58/0xa8)
+[<40507e60>] (platform_probe) from [<4050584c>] (really_probe+0x1d8/0x418)
+[<4050584c>] (really_probe) from [<40505c44>] (__driver_probe_device+0x1b8/0x1f0)
+[<40505c44>] (__driver_probe_device) from [<40505ca0>] (driver_probe_device+0x24/0xa4)
+[<40505ca0>] (driver_probe_device) from [<405060b0>] (__device_attach_driver+0xbc/0x110)
+[<405060b0>] (__device_attach_driver) from [<40503aa4>] (bus_for_each_drv+0xa8/0xbc)
+[<40503aa4>] (bus_for_each_drv) from [<40505ea8>] (__device_attach+0xc4/0x164)
+[<40505ea8>] (__device_attach) from [<405047e0>] (bus_probe_device+0x28/0x84)
+[<405047e0>] (bus_probe_device) from [<405022b8>] (device_add+0x590/0x7c4)
+
+I will keep poking it today to see if I can figure out more of
+what is actually going wrong, but if any of you guys had any
+thoughts/suggestions or if you want me to provide any additional
+info all of those would be greatly appreciated.
+
+Thanks,
+Charles
