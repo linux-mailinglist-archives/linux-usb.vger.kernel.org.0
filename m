@@ -2,94 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9178148E442
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jan 2022 07:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3C648E6CC
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jan 2022 09:48:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239372AbiANG3w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Jan 2022 01:29:52 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:56850 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239342AbiANG3v (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jan 2022 01:29:51 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 20E6TS830017157, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 20E6TS830017157
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 14 Jan 2022 14:29:29 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 14 Jan 2022 14:29:28 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 14 Jan 2022 14:29:28 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e]) by
- RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e%5]) with mapi id
- 15.01.2308.020; Fri, 14 Jan 2022 14:29:28 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     Jakub Kicinski <kuba@kernel.org>, Ryan Lahfa <ryan@lahfa.xyz>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Andreas Seiderer <x64multicore@googlemail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: RTL8156(A|B) chip requires r8156 to be force loaded to operate
-Thread-Topic: RTL8156(A|B) chip requires r8156 to be force loaded to operate
-Thread-Index: AQHYCP2fosFQONoaMEaqk304BTUmfaxiChPg
-Date:   Fri, 14 Jan 2022 06:29:28 +0000
-Message-ID: <1e6d7b8c3af444ae900fd4248f2a9d35@realtek.com>
-References: <20211224203018.z2n7sylht47ownga@Thors>
-        <20211227182124.5cbc0d07@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <20211230000338.6q6zlj7ibvuz7yqt@Thors>
- <20220113201720.3aa6cb0f@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220113201720.3aa6cb0f@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.177.203]
-x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEvMTQg5LiK5Y2IIDA0OjQzOjAw?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S237838AbiANIsA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Jan 2022 03:48:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233954AbiANIr7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jan 2022 03:47:59 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA80C061574;
+        Fri, 14 Jan 2022 00:47:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=aQfD5GKz9bWzncLC4xptw+tsOF5qGfNZ6C5SakVX528=; b=TYlEPOvKvJNQjd8poLzSIb7AYR
+        BzKqI+ZG2q+OsXutWYlctjA0Op4JKteJP5Aef59/UFf7sVYtVPhJiiZL216jofRGJmSB+1nycza1q
+        bQKg7C+IkWimB0gyIrCC+bshTPicJvUEsghan2P8xSQfr4dftP9xPoDY4X0iHiqx3e+jMV47r7+xL
+        qM0/iGgge8uFybYJBJqTONKFYhxhlYdNOEaNGq8yzFoNGNn1Frr6/5+Uz4Df0P1nBbZg0H5F0xxSB
+        yMTQLqcgx/b+msA3p3I9/7NuQSWKGK1emzkUyDI/0UeyxNIYvNZDNivdS8ujqtTgWAxheq2FNmUW/
+        2+rQ51QQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n8IFM-0017AP-NF; Fri, 14 Jan 2022 08:47:44 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6B7503002C1;
+        Fri, 14 Jan 2022 09:47:42 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4BE82266305C3; Fri, 14 Jan 2022 09:47:42 +0100 (CET)
+Date:   Fri, 14 Jan 2022 09:47:42 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: Re: earlyprintk=xdbc seems broken
+Message-ID: <YeE4rtq6t73OxOi+@hirez.programming.kicks-ass.net>
+References: <YajkzwmWQua3Kh6A@hirez.programming.kicks-ass.net>
+ <105f35d2-3c53-b550-bfb4-aa340d31128e@linux.intel.com>
+ <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
+ <972a0e28-ad63-9766-88da-02743f80181b@intel.com>
+ <Yao35lElOkwtBYEb@kroah.com>
+ <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
+ <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
+ <YcGhIm7yqYPk4Nuu@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YcGhIm7yqYPk4Nuu@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SmFrdWIgS2ljaW5za2kgPGt1YmFAa2VybmVsLm9yZz4NCj4gU2VudDogRnJpZGF5LCBKYW51YXJ5
-IDE0LCAyMDIyIDEyOjE3IFBNDQpbLi4uXQ0KPiBEdW5ubyBtdWNoIGFib3V0IFVTQiBidXQgaXQg
-c2VlbXMgdGhlIGRyaXZlciBtYXRjaGVzOg0KPiANCj4gCVVTQl9ERVZJQ0VfSU5URVJGQUNFX0NM
-QVNTKHZlbmQsIHByb2QsIFVTQl9DTEFTU19WRU5ET1JfU1BFQyksDQo+IFwNCj4gDQo+IGFuZA0K
-PiANCj4gCVVTQl9ERVZJQ0VfQU5EX0lOVEVSRkFDRV9JTkZPKHZlbmQsIHByb2QsIFVTQl9DTEFT
-U19DT01NLCBcDQo+IAkJCVVTQl9DRENfU1VCQ0xBU1NfRVRIRVJORVQsIFVTQl9DRENfUFJPVE9f
-Tk9ORSksIFwNCj4gDQo+IEJvdGggb2YgdGhlc2Ugc2hvdWxkIG1hdGNoLiBGb3JtZXIgYmVjYXVz
-ZToNCj4gDQo+IEJ1cyAwMDIgRGV2aWNlIDAwMjogSUQgMGJkYTo4MTU2IFJlYWx0ZWsgU2VtaWNv
-bmR1Y3RvciBDb3JwLiBVU0INCj4gMTAvMTAwLzFHLzIuNUcgTEFODQo+IFsuLi5dDQo+ICDCoMKg
-wqAgSW50ZXJmYWNlIERlc2NyaXB0b3I6DQo+ICDCoMKgwqDCoMKgIGJMZW5ndGjCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCA5DQo+ICDCoMKgwqDCoMKgIGJEZXNjcmlwdG9yVHlwZcKg
-wqDCoMKgwqDCoMKgwqAgNA0KPiAgwqDCoMKgwqDCoCBiSW50ZXJmYWNlTnVtYmVywqDCoMKgwqDC
-oMKgwqAgMA0KPiAgwqDCoMKgwqDCoCBiQWx0ZXJuYXRlU2V0dGluZ8KgwqDCoMKgwqDCoCAwDQo+
-ICDCoMKgwqDCoMKgIGJOdW1FbmRwb2ludHPCoMKgwqDCoMKgwqDCoMKgwqDCoCAzDQo+ICDCoMKg
-wqDCoMKgIGJJbnRlcmZhY2VDbGFzc8KgwqDCoMKgwqDCoCAyNTUgVmVuZG9yIFNwZWNpZmljIENs
-YXNzDQo+ICDCoMKgwqDCoMKgIGJJbnRlcmZhY2VTdWJDbGFzc8KgwqDCoCAyNTUgVmVuZG9yIFNw
-ZWNpZmljIFN1YmNsYXNzDQo+IA0KPiBBbmQgdGhlIGxhdHRlciBiZWNhdXNlIG9mIGFub3RoZXIg
-Y29uZmlnIHdpdGg6DQo+IA0KPiAgwqDCoMKgwqDCoCBiSW50ZXJmYWNlQ2xhc3PCoMKgwqDCoMKg
-wqDCoMKgIDIgQ29tbXVuaWNhdGlvbnMNCj4gIMKgwqDCoMKgwqAgYkludGVyZmFjZVN1YkNsYXNz
-wqDCoMKgwqDCoCA2IEV0aGVybmV0IE5ldHdvcmtpbmcNCj4gIMKgwqDCoMKgwqAgYkludGVyZmFj
-ZVByb3RvY29swqDCoMKgwqDCoCAwDQoNClRoZXJlIGFyZSB0aHJlZSBjb25maWd1cmF0aW9ucyBm
-b3IgUlRMODE1Ni4NCgljb25maWcgIzE6IHZlbmRvciBtb2RlIChyODE1MikNCgljb25maWcgIzI6
-IE5DTSBtb2RlIChjZGNfbmNtKQ0KCWNvbmZpZyAjMzogRUNNIG1vZGUgKGNkY19ldGhlcikNCg0K
-VGhlIFVTQiBjb3JlIHNlbGVjdHMgY29uZmlnICMyIGZvciBkZWZhdWx0LCBzbyBjZGNfbmNtIGlz
-IGxvYWRlZC4NCklmIHlvdSBwbGFuIHRvIHVzZSB2ZW5kb3IgbW9kZSwgeW91IGhhdmUgdG8gc3dp
-dGNoIHRoZSBjb25maWd1cmF0aW9uDQp0byBjb25maWcgIzEuIEZvciBleGFtcGxlLA0KDQoJZWNo
-byAxID4gL3N5cy9idXMvdXNiL2RldmljZXMvMi03L2JDb25maWd1cmF0aW9uVmFsdWUNCg0KQmVz
-dCBSZWdhcmRzLA0KSGF5ZXMNCg0K
+On Tue, Dec 21, 2021 at 10:40:50AM +0100, Peter Zijlstra wrote:
+> On Fri, Dec 17, 2021 at 02:55:07PM +0100, Peter Zijlstra wrote:
+> > On Fri, Dec 17, 2021 at 01:01:43PM +0200, Mathias Nyman wrote:
+> > > I can reproduce this.
+> > > Looks like problems started when driver converted to readl_poll_timeout_atomic() in:
+> > > 
+> > > 796eed4b2342 usb: early: convert to readl_poll_timeout_atomic()
+> > 
+> > I can confirm, reverting that solves the boot hang, things aren't quite
+> > working for me though.
+> 
+> I've been poking at this a little, find debug patch and full dmesg
+> below. The TL;DR version of the dmesg seems to be:
+> 
+> [    4.984148] xhci_dbc:xdbc_start: waiting for connection timed out
+> [    4.984149] xhci_dbc:early_xdbc_setup_hardware: failed to setup the connection to host
+> 
+> Initially I thought this was due to delay not being set up properly, but
+> I 'fixed' that, and I've ran out of ideas. I really don't know anything
+> about USB :/
+
+Any thoughts on this? I'd really like to be able to use this machine but
+can't due to lack of console.
