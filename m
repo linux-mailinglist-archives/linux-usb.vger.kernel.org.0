@@ -2,1094 +2,232 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C91C348F395
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Jan 2022 01:56:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5472048F3BE
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Jan 2022 02:04:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231648AbiAOA4r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Jan 2022 19:56:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231642AbiAOA4q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jan 2022 19:56:46 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B641CC06161C;
-        Fri, 14 Jan 2022 16:56:46 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id x20so4094406pgk.1;
-        Fri, 14 Jan 2022 16:56:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=BGymlSCYveV70zOkRTbwcXx6QvMg0Oa2VIc2SYulpn0=;
-        b=kSQ3HChjhGI4BxvSuwU6326QN+zB5G3sANUH8knY0omHjh4hojm0XEBOGW5mHzdTSK
-         6qTs1WpjwxHLXTDxui5ob5OU1GwfhJDwT0Y4D5JdKXpxXQ/UeOobrUUQ2hZtrX3BJaw/
-         5OzrgG+xf6MlHig5SoEMVroRoThTA1WwWzFvCe8tF7D/aoxqTMPnupYMriKEEspYGmSs
-         kLFEoZILf4QycF/yclXbMdLA0YO3OgzaroRfG21A1H8jXAhYT32rc2eztHZ0dE8EqfUQ
-         c+9bLkA0FkkoXnye0GQCrT7i0ksYV4z7D4T9FPcaF1IpUH2+ufKxb10fPtyHjYYEVb24
-         s+7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=BGymlSCYveV70zOkRTbwcXx6QvMg0Oa2VIc2SYulpn0=;
-        b=qzojkBK1jBfHZN1WbgdkGxUI//eklIeX1KAqJdE5hdEnNISCuqxc3LPtQPBVzXlJS8
-         ci2005X/AqSRBXgnCeYDkWXpu/3SeXdcWXevgOpakhSZOoozAD/Li2hND9OPP30H6mbW
-         a6xm+19YvV/sPYd7vhZApc8/1aUJOJi+lOBfCqfjf66MWsZlSilcYNR26DEiWO2R33Dm
-         VeD+wqZdAgG087e6IX9w0e1xmiuH1aZuBTVmPkl6KGQn+cBrkfo68vtrXjP2ZgevdxBm
-         sTBFks8x8w/qe2Rqd7jwlTddYrBQFsZh6FwPwBaDc5Xrdom9B/UTHPjJks5oRoScubfI
-         O+/Q==
-X-Gm-Message-State: AOAM530GvwH78BnLu6ptfThtOdXQvG8wXbS/IKCcUAk0BC8bIK/mzXGB
-        SKek2wud7FkBk9KMcFUiTDY0U+7hn0M=
-X-Google-Smtp-Source: ABdhPJyHBDI0QToqJxah8e3gGvfHR8WbR+GlhIAQdqw4cEnebAGQ5V6yo3gcs7PRzwMM9n3W0xsRew==
-X-Received: by 2002:a05:6a00:10d5:b0:4be:d3f9:c329 with SMTP id d21-20020a056a0010d500b004bed3f9c329mr3954085pfu.2.1642208205966;
-        Fri, 14 Jan 2022 16:56:45 -0800 (PST)
-Received: from localhost.localdomain (1-171-7-64.dynamic-ip.hinet.net. [1.171.7.64])
-        by smtp.gmail.com with ESMTPSA id j18sm5335570pgb.27.2022.01.14.16.56.43
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 14 Jan 2022 16:56:45 -0800 (PST)
-From:   cy_huang <u0084500@gmail.com>
-To:     robh+dt@kernel.org, heikki.krogerus@linux.intel.com
-Cc:     gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cy_huang@richtek.com
-Subject: [PATCH v2 2/2] usb: typec: rt1719: Add support for Richtek RT1719
-Date:   Sat, 15 Jan 2022 08:56:31 +0800
-Message-Id: <1642208191-7254-3-git-send-email-u0084500@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1642208191-7254-1-git-send-email-u0084500@gmail.com>
-References: <1642208191-7254-1-git-send-email-u0084500@gmail.com>
+        id S231732AbiAOBEy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Jan 2022 20:04:54 -0500
+Received: from mx0d-0054df01.pphosted.com ([67.231.150.19]:53851 "EHLO
+        mx0d-0054df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229534AbiAOBEy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jan 2022 20:04:54 -0500
+Received: from pps.filterd (m0209000.ppops.net [127.0.0.1])
+        by mx0c-0054df01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20F0gHo6027204;
+        Fri, 14 Jan 2022 20:04:38 -0500
+Received: from can01-qb1-obe.outbound.protection.outlook.com (mail-qb1can01lp2059.outbound.protection.outlook.com [104.47.60.59])
+        by mx0c-0054df01.pphosted.com (PPS) with ESMTPS id 3dkb510aae-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Jan 2022 20:04:37 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LkrnxD/vVJ8uOYNPpVUVZqyOqctLmWXC00HktVPbtmSVBOis5nL/lbzJkxNUV20ImTiVKDm/ookiqRT/8vMa7uoSysWUZZ7QluqfAOwHegtbtpK5aPwjbIBqhpQ6QAAD68W8MaFScgulmk7/RabHA2Iy9Z0aCLzkK8eXpJat1zKpjyrNPNIAbxrKqssVUXx8dCZwLCOzsOHygt9LcREVYwM8kqCydl37x6f8iF3rQwxljDD+tu++rFwLJ1XXdp94FkU15WPa0hiWcOUxZWwP0EiBQvS46YYkMXktpAooZWq3MO9ekLCFwgBC1CGmVeuhrs40CZiJjEvZGMf6/bDNxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/f8p52HmSTLGkylyXEPATtNhSBlvlZ47Z0gugzUygd0=;
+ b=VkKKBvnv7zHvRfnswNy0ddnkx5g2fNS41+y8DBi+a4WfPpUTCvQrnHr9qINiA7vM9wB8VRmj5wVB19imh85DPIaXePrrVg0VVAOsXDy9c7ezqvK+Hfarja7p5Eg3NBSp74DBaDJn0geTItnsDmMnBzzOfKePcgFZgQrny/D/f4kCeZU65yTYDgxA+h8VTLnfgmp6aRy2LQhG+qpcHneiscuAnCEJJWp0sBqJRTydQRRZv2or3//Ffimju1VF4gkdFdWzEJFSnl/qZiNBu1Bd2vczE7RhdMBxlYjVO9UAIck3SUIcEA7TGVaSE0QDc+35/Cz7jhT5ye+JHO69KTP1mg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=calian.com; dmarc=pass action=none header.from=calian.com;
+ dkim=pass header.d=calian.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=calian.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/f8p52HmSTLGkylyXEPATtNhSBlvlZ47Z0gugzUygd0=;
+ b=slWZUQUOZ4AQn9M7px4uTGJSoJ/Dld0Yvepj1BzW2kaYUUWMVdxn5PpLebmCBsn2xo4r90LfUH70tqtCZ7t+JVqHt5e/JIC6JpIUM+MqnPz2H3SnSEPrJY5sLO4QKX77vITq4jmVrSKt761y40yM8ZAAtVXrGDZnXbhyeZQkeq0=
+Received: from YT3PR01MB6274.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:6a::19)
+ by YTBPR01MB2413.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:23::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Sat, 15 Jan
+ 2022 01:04:36 +0000
+Received: from YT3PR01MB6274.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6929:c39f:d893:b6c8]) by YT3PR01MB6274.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6929:c39f:d893:b6c8%2]) with mapi id 15.20.4888.012; Sat, 15 Jan 2022
+ 01:04:36 +0000
+From:   Robert Hancock <robert.hancock@calian.com>
+To:     "sean.anderson@seco.com" <sean.anderson@seco.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bjagadee@codeaurora.org" <bjagadee@codeaurora.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "baruch@tkos.co.il" <baruch@tkos.co.il>
+Subject: Re: [PATCH 2/6] usb: dwc3: Get clocks individually
+Thread-Topic: [PATCH 2/6] usb: dwc3: Get clocks individually
+Thread-Index: AQHYCZ/51ULp2A+cK0awdGV6N1scf6xjRHiA
+Date:   Sat, 15 Jan 2022 01:04:36 +0000
+Message-ID: <1c242d0114554b72f8f0b1f6507973a0dea50b3d.camel@calian.com>
+References: <20220114233904.907918-1-sean.anderson@seco.com>
+         <20220114233904.907918-3-sean.anderson@seco.com>
+In-Reply-To: <20220114233904.907918-3-sean.anderson@seco.com>
+Accept-Language: en-CA, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 73de943b-1a6e-47af-599c-08d9d7c2ffa5
+x-ms-traffictypediagnostic: YTBPR01MB2413:EE_
+x-microsoft-antispam-prvs: <YTBPR01MB2413C9B03859BFA88415095EEC559@YTBPR01MB2413.CANPRD01.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ZOFIcFsOBLfG73o3naZakmrDxm6lxvtTvTt6J8nrvdVMuSFyx9zC6aiGt1JRVZSIawjHIFRhEbYZf5R0iisHSW4L9Jo4BkbBOmU0bxuc0BGnTIjdEeiAEFFFOc6nT4wGMwAml7UBBMd/E2kRtTspqbfALAiWS95fWAOpfwVXgXM6I2bqWGR6VC0ZK+HTZT0ZQPKV3n6bsY4zAvOWmEyRnFC9XWwPhPoMxv2qHMo3OAMnDpYEW/J/mhepIPIkbvhPFG4X6FOiRuAvpOSlkFO0d/CAP6WoOQ2C79eJ3MXAqb3P/ze3XQOKPsTWTfxQ8kIgwKBu5qESEvq9WN+Vg6W8Na94I9hfV94SdJTFg9lVJ0mESoytbUvE4hKu6EGvigdETMSwlBFrWLRMKptagiQp99vhhnPiVHZfXi4FQQqRtLOwLxDR9Ii8YOFBziOgfvrOv5QjGRcGPibODT5hvI5dGYeFTc2N+0TO1t5o8riQEq38HNTIdFmK5UG9Bvc36Cg+iC/6PG5C2cArZq+SW0p5GcT1Rr9awPWc1ibLHDZNwS1XyQSbCvv19CF55g6CrGghdXMB6OFwoSw5rYMj7aibA64mOINjXI/TJV/SeVuZneobeiMVIZ6TjfoOmiy9DpP51D6pSwonH75uKLH4vRjc20N9viUjgLVUQuRANSeq018Twy+uVSsor3nhOlLmxExNOgKdFm2j7qpsFtM76M1sA2oct4b/fJNNO3yl8KvH3xAHE3iHoXX3P3Ruul9cTX7b28ppwuB3DaVrhbCntwt4e4yVRjVU5L3nEkmJwL/Lhpfv1gjKIFvXuLfVjJXeePtsxY7ij9JmzdW7gvUmNk6ynA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT3PR01MB6274.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(110136005)(6512007)(316002)(83380400001)(15974865002)(66476007)(36756003)(508600001)(44832011)(186003)(5660300002)(66446008)(64756008)(86362001)(66946007)(91956017)(4326008)(76116006)(2906002)(38070700005)(6486002)(2616005)(6506007)(8676002)(66556008)(71200400001)(122000001)(38100700002)(54906003)(8936002)(26005)(99106002)(18886075002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SFRURkZMSUtkQ0xnbTdMTkhJcWlML3ZIQ2NUcisyMnlXUDRBOEJybDh0YStP?=
+ =?utf-8?B?YitzdmJFeDNzZG1CczFTQU9lNFAwY1ByZWxpb25zN2J6MFYvVHVESmE1VDFM?=
+ =?utf-8?B?cXNMVnNxMXFmNmJjeks5b1JRZ2ljbVZHQUYzN1M0ZHhRK3orbUNVc3JTSWxi?=
+ =?utf-8?B?VXQvRGpJVHRVTncvNlFwcCtlQk1mYkg5cmRnMldzTW41VWwxUkpMNUpSSEJI?=
+ =?utf-8?B?cjhYY2xPck1acmJkYUFobjk2U0lPaVdMZ3I5OFlhck1yQTc2Y3RwcmI4Wito?=
+ =?utf-8?B?UWFibFYxMStZY29XNU1YYW50QmpCWmJjNjhRdGZZTEUxUThqSm5XSW1hM2F3?=
+ =?utf-8?B?M2pDYXdPdy9RZTFoakN3a0s1NUNXUWlKbnlIVExBZ3VXWCtxT2FMUDkvbzBy?=
+ =?utf-8?B?cG9tN3E5VldrWjd6dDIxTHczRGwza2dDSjlnZ0pnT1hKRjJRY3NjaGVTdFJq?=
+ =?utf-8?B?K3NGV3FmdUZpcDJkRHQ3UnV5UHVHWHJHMHZneE0zdDVpZnVHdUEvcGJyQ2dz?=
+ =?utf-8?B?SmROMnkyVW9POHFpb3pRMi9icms2YUs0eWt5RGJRUm9WOGtPUVg0azNCaW1r?=
+ =?utf-8?B?TWNKakhZQmt6d3JpOHRUckQxdnA5djZKRUxaZHphOWNab3NxZDRJQXhmelNz?=
+ =?utf-8?B?Mk4yRlFyM3F2YzJOVHJzcURRSzBxOU1MenhBS24zeVdEZkNxU0hpWlF2V0F1?=
+ =?utf-8?B?Wkg0L0YyMVhDOTBXZStYMHg1VVpGa1psTXVCa0dsU0t1NHlOaVk3dU1oVER0?=
+ =?utf-8?B?djVLWTJ4OFFhVm9wTmMrWHR4N2hsaEtPRFNYNUZCWjZueE5NVFZqdWllME4w?=
+ =?utf-8?B?a042TU42akFiYy9Bak9JYzBoNEx2Z3VZTkxtQXp5NmVEZ3Z2dDc5UGRoWmI4?=
+ =?utf-8?B?anlxTWZPcnh1RGx6ZWxQNFp3TENRc3FraXBiRTFrZTZ4V1lVRGJ2NDd6cDR3?=
+ =?utf-8?B?VnZCR2c0WVdNYzlmOUFyTmVjSHZRRUNpeWJRRTFydUhFNEcyNTdjbDhJakV4?=
+ =?utf-8?B?ZFVNUWw0cE1RZkNMc09IaDVub1BOWVljUm5sME1rZytZU2l1bXFYZFVFMkVU?=
+ =?utf-8?B?M25QdGNmNWhlTnNsVHpncUk5ZVpqdk1tZGxhSFJESTZXYUtIMmNhN3REUklo?=
+ =?utf-8?B?SVlQTlBJU0c2UGQvVjVrNStVWmp5Um92SXBiUWkyOU9jRnhXT1pWRThVcVJv?=
+ =?utf-8?B?WkczSHp6RHZsZ01rUmxGMkpDM2Q4Qk1ZaWdhb1ErZndnZGUySVpMYU5Ga3BU?=
+ =?utf-8?B?WVErcXZmTFFLcERpaDY0OXZHTmVrbXBrS2o3Zi9EVGFKUHEyZE95Vkx4YWJU?=
+ =?utf-8?B?MTQ5aDdVUXVtWXByc2l2NkNnM2dDR054WDFPL0J2cUIwaFQ0bk0vejdHWmJi?=
+ =?utf-8?B?dTNmSldIS1k1MnYwZFJxTjdGdGpLUjNreFpSc0FBd2ZMaGQzM0xDc28vb0ts?=
+ =?utf-8?B?RnZhL0tlSkozNnFROEhMS0J5THIzWWQwNEVpSEZ5RUF6RTR5NTVUdjR2UDRF?=
+ =?utf-8?B?eUE5Z2R3VFpGcUp1Qk8yWWpObEp4dHV1Z1lRTlVjVHZBTStWUGs3YU40VlRj?=
+ =?utf-8?B?SklMU3loNFovUnh4QnZLaGJLeXlWY0NmV2N4WEVnN1hGYjdidzlsc3dlVit2?=
+ =?utf-8?B?SE5YK0Z1NW1XK0tCRlpwV1hNcUpYdTVweXphc1Y1Vzd0QTNwYnhySFplQktO?=
+ =?utf-8?B?UTZmQWp3cFVGZmZWR0JWaVNuREZKRHZwTUlyZDR0K3RnSGhYOXY2akJLNWFX?=
+ =?utf-8?B?dWFvSGhrZlU3eXU4VHc4NGc3eVBCMGlYQi9GQnhnc0tzYlV6V2F2QTVlM3o4?=
+ =?utf-8?B?aDJLYjlFL1pUT25IaC9yNnltTUg2dDFyTXVUUzJjckNRRkRqRHdvd1d5aDlo?=
+ =?utf-8?B?bGtuTDFiTVgwdklkeUJ1Y1BKVHdMeE9VVzRNcDcrdUUrUzgxUnc3TWFDTmFa?=
+ =?utf-8?B?OHlmajB2YUpQL29MZWZkcVNZMDZiTjZDRUw3bzhiaXB3Qmp0ZmhXa05Gb0Ex?=
+ =?utf-8?B?dFZnNG9KYmpyUS8xMGFNSnRiWE5lSXZBVENVZXRWSHdFVHNRZjRacEIxSjdw?=
+ =?utf-8?B?RUJncXNNeU5tL01UeUtNOXRBeGswT1ZnMVJjaWRaN3VCZE95amZlUzRFTFBp?=
+ =?utf-8?B?R3huR2RndHlUUk9mck1rZ20yaXNHZERqbUs0elRtTGpISVRsNHBKTFMyZUxO?=
+ =?utf-8?B?dVlpWlpJVkVEWVZHazFPRmQ5S3gwRGNlR2NrSHpmbkJoY1RXQ3ZYZWk4REpI?=
+ =?utf-8?Q?qSx0UeLq9plNy5lu2CKRl1p+4zKshF/fUQkmpgeBGY=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0950E81F83627E478AC85470D7D23393@CANPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: calian.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: YT3PR01MB6274.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73de943b-1a6e-47af-599c-08d9d7c2ffa5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jan 2022 01:04:36.1664
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 23b57807-562f-49ad-92c4-3bb0f07a1fdf
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /SSqzMLxSVOStcWTGqrEwB9UpQwCB29SdjwRivJGLxMzlNOy9DjvP7EQsMldLCSeAKiYH5MaylzI3K/jwue0+wluC1EhZlKP/Is4pZfUvoM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YTBPR01MB2413
+X-Proofpoint-GUID: IWqsgTQCkqFvM4WeLt7ZUk33b3LDHaZ0
+X-Proofpoint-ORIG-GUID: IWqsgTQCkqFvM4WeLt7ZUk33b3LDHaZ0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-14_07,2022-01-14_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ clxscore=1011 suspectscore=0 priorityscore=1501 mlxlogscore=999
+ adultscore=0 impostorscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201150002
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
-
-Richtek RT1719 is a sink-only Type-C PD controller it complies with
-latest USB Type-C and PD standards. It integrates the physical layer of
-USB power delivery protocol to allow up to 100W of power.
-
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
- drivers/usb/typec/Kconfig  |  12 +
- drivers/usb/typec/Makefile |   1 +
- drivers/usb/typec/rt1719.c | 976 +++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 989 insertions(+)
- create mode 100644 drivers/usb/typec/rt1719.c
-
-diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
-index ab480f3..bc918ca 100644
---- a/drivers/usb/typec/Kconfig
-+++ b/drivers/usb/typec/Kconfig
-@@ -52,6 +52,18 @@ source "drivers/usb/typec/ucsi/Kconfig"
- 
- source "drivers/usb/typec/tipd/Kconfig"
- 
-+config TYPEC_RT1719
-+	tristate "Richtek RT1719 Sink Only Type-C controller driver"
-+	depends on USB_ROLE_SWITCH || !USB_ROLE_SWITCH
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  Say Y or M here if your system has Richtek RT1719 sink only
-+	  Type-C port controller driver.
-+
-+	  If you choose to build this driver as a dynamically linked module, the
-+	  module will be called rt1719.ko
-+
- config TYPEC_HD3SS3220
- 	tristate "TI HD3SS3220 Type-C DRP Port controller driver"
- 	depends on I2C
-diff --git a/drivers/usb/typec/Makefile b/drivers/usb/typec/Makefile
-index 57870a2..441dd6c 100644
---- a/drivers/usb/typec/Makefile
-+++ b/drivers/usb/typec/Makefile
-@@ -9,4 +9,5 @@ obj-$(CONFIG_TYPEC_TPS6598X)	+= tipd/
- obj-$(CONFIG_TYPEC_HD3SS3220)	+= hd3ss3220.o
- obj-$(CONFIG_TYPEC_QCOM_PMIC)	+= qcom-pmic-typec.o
- obj-$(CONFIG_TYPEC_STUSB160X) 	+= stusb160x.o
-+obj-$(CONFIG_TYPEC_RT1719)	+= rt1719.o
- obj-$(CONFIG_TYPEC)		+= mux/
-diff --git a/drivers/usb/typec/rt1719.c b/drivers/usb/typec/rt1719.c
-new file mode 100644
-index 00000000..9da65ee
---- /dev/null
-+++ b/drivers/usb/typec/rt1719.c
-@@ -0,0 +1,976 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bitfield.h>
-+#include <linux/completion.h>
-+#include <linux/i2c.h>
-+#include <linux/interrupt.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/power_supply.h>
-+#include <linux/regmap.h>
-+#include <linux/usb/pd.h>
-+#include <linux/usb/role.h>
-+#include <linux/usb/typec.h>
-+
-+#define RT1719_REG_TXCTRL1	0x03
-+#define RT1719_REG_TXCTRL2	0x04
-+#define RT1719_REG_POLICYINFO	0x0E
-+#define RT1719_REG_SRCPDO1	0x11
-+#define RT1719_REG_MASKS	0x2D
-+#define RT1719_REG_EVENTS	0x33
-+#define RT1719_REG_STATS	0x37
-+#define RT1719_REG_PSELINFO	0x3C
-+#define RT1719_REG_USBSETINFO	0x3E
-+#define RT1719_REG_VENID	0x82
-+
-+#define RT1719_UNIQUE_PID	0x1719
-+#define RT1719_REQDRSWAP_MASK	BIT(7)
-+#define RT1719_EVALMODE_MASK	BIT(4)
-+#define RT1719_REQSRCPDO_MASK	GENMASK(2, 0)
-+#define RT1719_TXSPDOREQ_MASK	BIT(7)
-+#define RT1719_INT_DRSW_ACCEPT	BIT(23)
-+#define RT1719_INT_RX_SRCCAP	BIT(21)
-+#define RT1719_INT_VBUS_DCT	BIT(6)
-+#define RT1719_INT_VBUS_PRESENT	BIT(5)
-+#define RT1719_INT_PE_SNK_RDY	BIT(2)
-+#define RT1719_CC1_STAT		GENMASK(9, 8)
-+#define RT1719_CC2_STAT		GENMASK(11, 10)
-+#define RT1719_POLARITY_MASK	BIT(23)
-+#define RT1719_DATAROLE_MASK	BIT(22)
-+#define RT1719_PDSPECREV_MASK	GENMASK(21, 20)
-+#define RT1719_SPDOSEL_MASK	GENMASK(18, 16)
-+#define RT1719_SPDONUM_MASK	GENMASK(15, 13)
-+#define RT1719_ATTACH_VBUS	BIT(12)
-+#define RT1719_ATTACH_DBG	BIT(10)
-+#define RT1719_ATTACH_SNK	BIT(9)
-+#define RT1719_ATTACHDEV_MASK	(RT1719_ATTACH_VBUS | RT1719_ATTACH_DBG | \
-+				 RT1719_ATTACH_SNK)
-+#define RT1719_PE_EXP_CONTRACT	BIT(2)
-+#define RT1719_PSEL_SUPPORT	BIT(15)
-+#define RT1719_TBLSEL_MASK	BIT(6)
-+#define RT1719_LATPSEL_MASK	GENMASK(5, 0)
-+#define RT1719_USBINFO_MASK	GENMASK(1, 0)
-+#define RT1719_USB_DFPUFP	3
-+#define RT1719_MAX_SRCPDO	7
-+
-+enum {
-+	SNK_PWR_OPEN = 0,
-+	SNK_PWR_DEF,
-+	SNK_PWR_1P5A,
-+	SNK_PWR_3A
-+};
-+
-+enum {
-+	USBPD_SPECREV_1_0 = 0,
-+	USBPD_SPECREV_2_0,
-+	USBPD_SPECREV_3_0
-+};
-+
-+enum rt1719_snkcap {
-+	RT1719_SNKCAP_5V = 0,
-+	RT1719_SNKCAP_9V,
-+	RT1719_SNKCAP_12V,
-+	RT1719_SNKCAP_15V,
-+	RT1719_SNKCAP_20V,
-+	RT1719_MAX_SNKCAP
-+};
-+
-+struct rt1719_psel_cap {
-+	u8 lomask;
-+	u8 himask;
-+	u32 milliwatt;
-+	u32 milliamp;
-+};
-+
-+struct rt1719_data {
-+	struct device *dev;
-+	struct regmap *regmap;
-+	struct typec_port *port;
-+	struct usb_role_switch *role_sw;
-+	struct power_supply *psy;
-+	struct typec_partner *partner;
-+	struct power_supply_desc psy_desc;
-+	struct usb_pd_identity partner_ident;
-+	struct typec_partner_desc partner_desc;
-+	struct completion req_completion;
-+	enum power_supply_usb_type usb_type;
-+	bool attached;
-+	bool pd_capable;
-+	bool drswap_support;
-+	u32 voltage;
-+	u32 req_voltage;
-+	u32 max_current;
-+	u32 op_current;
-+	u32 spdos[RT1719_MAX_SRCPDO];
-+	u16 snkcaps[RT1719_MAX_SNKCAP];
-+	int spdo_num;
-+	int spdo_sel;
-+	u32 conn_info;
-+	u16 conn_stat;
-+};
-+
-+static const enum power_supply_usb_type rt1719_psy_usb_types[] = {
-+	POWER_SUPPLY_USB_TYPE_C,
-+	POWER_SUPPLY_USB_TYPE_PD,
-+	POWER_SUPPLY_USB_TYPE_PD_PPS
-+};
-+
-+static const enum power_supply_property rt1719_psy_properties[] = {
-+	POWER_SUPPLY_PROP_ONLINE,
-+	POWER_SUPPLY_PROP_USB_TYPE,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+	POWER_SUPPLY_PROP_CURRENT_MAX,
-+	POWER_SUPPLY_PROP_CURRENT_NOW
-+};
-+
-+static int rt1719_read16(struct rt1719_data *data, unsigned int reg, u16 *val)
-+{
-+	__le16 regval;
-+	int ret;
-+
-+	ret = regmap_raw_read(data->regmap, reg, &regval, sizeof(regval));
-+	if (ret)
-+		return ret;
-+
-+	*val = le16_to_cpu(regval);
-+	return 0;
-+}
-+
-+static int rt1719_read32(struct rt1719_data *data, unsigned int reg, u32 *val)
-+{
-+	__le32 regval;
-+	int ret;
-+
-+	ret = regmap_raw_read(data->regmap, reg, &regval, sizeof(regval));
-+	if (ret)
-+		return ret;
-+
-+	*val = le32_to_cpu(regval);
-+	return 0;
-+}
-+
-+static int rt1719_write32(struct rt1719_data *data, unsigned int reg, u32 val)
-+{
-+	__le32 regval = cpu_to_le32(val);
-+
-+	return regmap_raw_write(data->regmap, reg, &regval, sizeof(regval));
-+}
-+
-+static enum typec_pwr_opmode rt1719_get_pwr_opmode(u32 conn, u16 stat)
-+{
-+	u16 cc1, cc2, cc_stat;
-+
-+	cc1 = FIELD_GET(RT1719_CC1_STAT, stat);
-+	cc2 = FIELD_GET(RT1719_CC2_STAT, stat);
-+
-+	if (conn & RT1719_ATTACH_SNK) {
-+		if (conn & RT1719_POLARITY_MASK)
-+			cc_stat = cc2;
-+		else
-+			cc_stat = cc1;
-+
-+		switch (cc_stat) {
-+		case SNK_PWR_3A:
-+			return TYPEC_PWR_MODE_3_0A;
-+		case SNK_PWR_1P5A:
-+			return TYPEC_PWR_MODE_1_5A;
-+		}
-+	} else if (conn & RT1719_ATTACH_DBG) {
-+		if ((cc1 == SNK_PWR_1P5A && cc2 == SNK_PWR_DEF) ||
-+		    (cc1 == SNK_PWR_DEF && cc2 == SNK_PWR_1P5A))
-+			return TYPEC_PWR_MODE_1_5A;
-+		else if ((cc1 == SNK_PWR_3A && cc2 == SNK_PWR_DEF) ||
-+			 (cc1 == SNK_PWR_DEF && cc2 == SNK_PWR_3A))
-+			return TYPEC_PWR_MODE_3_0A;
-+	}
-+
-+	return TYPEC_PWR_MODE_USB;
-+}
-+
-+static enum typec_data_role rt1719_get_data_role(u32 conn)
-+{
-+	if (conn & RT1719_DATAROLE_MASK)
-+		return TYPEC_HOST;
-+	return TYPEC_DEVICE;
-+}
-+
-+static void rt1719_set_data_role(struct rt1719_data *data,
-+				 enum typec_data_role data_role,
-+				 bool attached)
-+{
-+	enum usb_role usb_role = USB_ROLE_NONE;
-+
-+	if (attached) {
-+		if (data_role == TYPEC_HOST)
-+			usb_role = USB_ROLE_HOST;
-+		else
-+			usb_role = USB_ROLE_DEVICE;
-+	}
-+
-+	usb_role_switch_set_role(data->role_sw, usb_role);
-+	typec_set_data_role(data->port, data_role);
-+}
-+
-+static void rt1719_update_data_role(struct rt1719_data *data)
-+{
-+	if (!data->attached)
-+		return;
-+
-+	rt1719_set_data_role(data, rt1719_get_data_role(data->conn_info), true);
-+}
-+
-+static void rt1719_register_partner(struct rt1719_data *data)
-+{
-+	u16 spec_rev = 0;
-+
-+	if (data->pd_capable) {
-+		u32 rev;
-+
-+		rev = FIELD_GET(RT1719_PDSPECREV_MASK, data->conn_info);
-+		switch (rev) {
-+		case USBPD_SPECREV_3_0:
-+			spec_rev = 0x0300;
-+			break;
-+		case USBPD_SPECREV_2_0:
-+			spec_rev = 0x0200;
-+			break;
-+		default:
-+			spec_rev = 0x0100;
-+			break;
-+		}
-+	}
-+
-+	/* Just to prevent multiple times attach */
-+	if (data->partner)
-+		typec_unregister_partner(data->partner);
-+
-+	memset(&data->partner_ident, 0, sizeof(data->partner_ident));
-+	data->partner_desc.usb_pd = data->pd_capable;
-+	data->partner_desc.pd_revision = spec_rev;
-+
-+	if (data->conn_info & RT1719_ATTACH_DBG)
-+		data->partner_desc.accessory = TYPEC_ACCESSORY_DEBUG;
-+	else
-+		data->partner_desc.accessory = TYPEC_ACCESSORY_NONE;
-+
-+	data->partner = typec_register_partner(data->port, &data->partner_desc);
-+}
-+
-+static void rt1719_attach(struct rt1719_data *data)
-+{
-+	enum typec_pwr_opmode pwr_opmode;
-+	enum typec_data_role data_role;
-+	u32 volt = 5000, curr = 500;
-+
-+	if (!(data->conn_info & RT1719_ATTACHDEV_MASK))
-+		return;
-+
-+	pwr_opmode = rt1719_get_pwr_opmode(data->conn_info, data->conn_stat);
-+	data_role = rt1719_get_data_role(data->conn_info);
-+
-+	typec_set_pwr_opmode(data->port, pwr_opmode);
-+	rt1719_set_data_role(data, data_role, true);
-+
-+	if (data->conn_info & RT1719_ATTACH_SNK)
-+		rt1719_register_partner(data);
-+
-+	if (pwr_opmode == TYPEC_PWR_MODE_3_0A)
-+		curr = 3000;
-+	else if (pwr_opmode == TYPEC_PWR_MODE_1_5A)
-+		curr = 1500;
-+
-+	data->voltage = volt * 1000;
-+	data->max_current = data->op_current = curr * 1000;
-+	data->attached = true;
-+
-+	power_supply_changed(data->psy);
-+}
-+
-+static void rt1719_detach(struct rt1719_data *data)
-+{
-+	if (!data->attached || (data->conn_info & RT1719_ATTACHDEV_MASK))
-+		return;
-+
-+	typec_unregister_partner(data->partner);
-+	data->partner = NULL;
-+
-+	typec_set_pwr_opmode(data->port, TYPEC_PWR_MODE_USB);
-+	rt1719_set_data_role(data, TYPEC_DEVICE, false);
-+
-+	memset32(data->spdos, 0, RT1719_MAX_SRCPDO);
-+	data->spdo_num = 0;
-+	data->voltage = data->max_current = data->op_current = 0;
-+	data->attached = data->pd_capable = false;
-+
-+	data->usb_type = POWER_SUPPLY_USB_TYPE_C;
-+
-+	power_supply_changed(data->psy);
-+}
-+
-+static void rt1719_update_operating_status(struct rt1719_data *data)
-+{
-+	enum power_supply_usb_type usb_type = POWER_SUPPLY_USB_TYPE_PD;
-+	u32 voltage, max_current, op_current;
-+	int i, snk_sel;
-+
-+	for (i = 0; i < data->spdo_num; i++) {
-+		u32 pdo = data->spdos[i];
-+		enum pd_pdo_type type = pdo_type(pdo);
-+
-+		if (type == PDO_TYPE_APDO) {
-+			usb_type = POWER_SUPPLY_USB_TYPE_PD_PPS;
-+			break;
-+		}
-+	}
-+
-+	data->spdo_sel = FIELD_GET(RT1719_SPDOSEL_MASK, data->conn_info);
-+	if (data->spdo_sel <= 0)
-+		return;
-+
-+	data->usb_type = usb_type;
-+
-+	voltage = pdo_fixed_voltage(data->spdos[data->spdo_sel -1]);
-+	max_current = pdo_max_current(data->spdos[data->spdo_sel - 1]);
-+
-+	switch (voltage) {
-+	case 5000:
-+		snk_sel = RT1719_SNKCAP_5V;
-+		break;
-+	case 9000:
-+		snk_sel = RT1719_SNKCAP_9V;
-+		break;
-+	case 12000:
-+		snk_sel = RT1719_SNKCAP_12V;
-+		break;
-+	case 15000:
-+		snk_sel = RT1719_SNKCAP_15V;
-+		break;
-+	case 20000:
-+		snk_sel = RT1719_SNKCAP_20V;
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	op_current = min(max_current, pdo_max_current(data->snkcaps[snk_sel]));
-+
-+	/* covert mV/mA to uV/uA */
-+	data->voltage = voltage * 1000;
-+	data->max_current = max_current * 1000;
-+	data->op_current = op_current * 1000;
-+
-+	power_supply_changed(data->psy);
-+}
-+
-+static void rt1719_update_pwr_opmode(struct rt1719_data *data)
-+{
-+	if (!data->attached)
-+		return;
-+
-+	if (!data->pd_capable) {
-+		data->pd_capable = true;
-+
-+		typec_set_pwr_opmode(data->port, TYPEC_PWR_MODE_PD);
-+		rt1719_register_partner(data);
-+	}
-+
-+	rt1719_update_operating_status(data);
-+}
-+
-+static void rt1719_update_source_pdos(struct rt1719_data *data)
-+{
-+	int spdo_num = FIELD_GET(RT1719_SPDONUM_MASK, data->conn_info);
-+	__le32 src_pdos[RT1719_MAX_SRCPDO] = { };
-+	int i, ret;
-+
-+	if (!data->attached)
-+		return;
-+
-+	ret = regmap_raw_read(data->regmap, RT1719_REG_SRCPDO1, src_pdos,
-+			      sizeof(__le32) * spdo_num);
-+	if (ret)
-+		return;
-+
-+	data->spdo_num = spdo_num;
-+	for (i = 0; i < spdo_num; i++)
-+		data->spdos[i] = le32_to_cpu(src_pdos[i]);
-+}
-+
-+static int rt1719_dr_set(struct typec_port *port, enum typec_data_role role)
-+{
-+	struct rt1719_data *data = typec_get_drvdata(port);
-+	enum typec_data_role cur_role;
-+	int ret;
-+
-+	if (!data->attached || !data->pd_capable || !data->drswap_support)
-+		return -EINVAL;
-+
-+	if (data->spdo_num > 0 && !(data->spdos[0] & PDO_FIXED_DATA_SWAP))
-+		return -EINVAL;
-+
-+	cur_role = rt1719_get_data_role(data->conn_info);
-+	if (cur_role == role)
-+		return 0;
-+
-+	ret = regmap_update_bits(data->regmap, RT1719_REG_TXCTRL1,
-+				 RT1719_REQDRSWAP_MASK, RT1719_REQDRSWAP_MASK);
-+	if (ret)
-+		return ret;
-+
-+	reinit_completion(&data->req_completion);
-+	ret = wait_for_completion_timeout(&data->req_completion,
-+					  msecs_to_jiffies(400));
-+	if (ret == 0)
-+		return -ETIMEDOUT;
-+
-+	cur_role = rt1719_get_data_role(data->conn_info);
-+	if (cur_role != role)
-+		return -ENOTSUPP;
-+
-+	rt1719_set_data_role(data, role, true);
-+	return 0;
-+}
-+
-+static const struct typec_operations rt1719_port_ops = {
-+	.dr_set = rt1719_dr_set,
-+};
-+
-+static int rt1719_usbpd_request_voltage(struct rt1719_data *data)
-+{
-+	u32 src_voltage;
-+	int snk_sel, src_sel = -1;
-+	int i, ret;
-+
-+	if (!data->attached || !data->pd_capable || data->spdo_sel <= 0)
-+		return -EINVAL;
-+
-+	src_voltage = pdo_fixed_voltage(data->spdos[data->spdo_sel - 1]);
-+	if (src_voltage == data->req_voltage)
-+		return 0;
-+
-+	switch (data->req_voltage) {
-+	case 5000:
-+		snk_sel = RT1719_SNKCAP_5V;
-+		break;
-+	case 9000:
-+		snk_sel = RT1719_SNKCAP_9V;
-+		break;
-+	case 12000:
-+		snk_sel = RT1719_SNKCAP_12V;
-+		break;
-+	case 15000:
-+		snk_sel = RT1719_SNKCAP_15V;
-+		break;
-+	case 20000:
-+		snk_sel = RT1719_SNKCAP_20V;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	if (!(data->snkcaps[snk_sel] & RT1719_PSEL_SUPPORT))
-+		return -EINVAL;
-+
-+	for (i = 0; i < data->spdo_num; i++) {
-+		enum pd_pdo_type type = pdo_type(data->spdos[i]);
-+
-+		if (type != PDO_TYPE_FIXED)
-+			continue;
-+
-+		src_voltage = pdo_fixed_voltage(data->spdos[i]);
-+		if (src_voltage == data->req_voltage) {
-+			src_sel = i;
-+			break;
-+		}
-+	}
-+
-+	if (src_sel == -1)
-+		return -ENOTSUPP;
-+
-+	ret = regmap_update_bits(data->regmap, RT1719_REG_TXCTRL1,
-+				 RT1719_EVALMODE_MASK | RT1719_REQSRCPDO_MASK,
-+				 RT1719_EVALMODE_MASK | (src_sel + 1));
-+	ret |= regmap_update_bits(data->regmap, RT1719_REG_TXCTRL2,
-+				  RT1719_TXSPDOREQ_MASK, RT1719_TXSPDOREQ_MASK);
-+	if (ret)
-+		return ret;
-+
-+	reinit_completion(&data->req_completion);
-+	ret = wait_for_completion_timeout(&data->req_completion,
-+					  msecs_to_jiffies(400));
-+	if (!ret)
-+		return -ETIMEDOUT;
-+
-+	return 0;
-+}
-+
-+static int rt1719_psy_set_property(struct power_supply *psy,
-+				   enum power_supply_property psp,
-+				   const union power_supply_propval *val)
-+{
-+	struct rt1719_data *data = power_supply_get_drvdata(psy);
-+	int ret = -ENOTSUPP;
-+
-+	if (psp == POWER_SUPPLY_PROP_VOLTAGE_NOW) {
-+		data->req_voltage = val->intval / 1000;
-+		ret = rt1719_usbpd_request_voltage(data);
-+	}
-+
-+	return ret;
-+}
-+
-+static int rt1719_psy_get_property(struct power_supply *psy,
-+				   enum power_supply_property psp,
-+				   union power_supply_propval *val)
-+{
-+	struct rt1719_data *data = power_supply_get_drvdata(psy);
-+	int ret = 0;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		val->intval = data->attached ? 1 : 0;
-+		break;
-+	case POWER_SUPPLY_PROP_USB_TYPE:
-+		val->intval = data->usb_type;
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-+		val->intval = data->voltage;
-+		break;
-+	case POWER_SUPPLY_PROP_CURRENT_MAX:
-+		val->intval = data->max_current;
-+		break;
-+	case POWER_SUPPLY_PROP_CURRENT_NOW:
-+		val->intval = data->op_current;
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static int rt1719_psy_property_is_writeable(struct power_supply *psy,
-+					    enum power_supply_property psp)
-+{
-+	if (psp == POWER_SUPPLY_PROP_VOLTAGE_NOW)
-+		return 1;
-+	return 0;
-+}
-+
-+static int devm_rt1719_psy_register(struct rt1719_data *data)
-+{
-+	static const char *rt1719_psy_name_prefix = "rt1719-source-psy-";
-+	const char *port_dev_name = dev_name(data->dev);
-+	struct power_supply_config psy_cfg = { };
-+	size_t psy_name_len = strlen(rt1719_psy_name_prefix) +
-+				       strlen(port_dev_name) + 1;
-+	char *psy_name;
-+
-+	psy_cfg.fwnode = dev_fwnode(data->dev);
-+	psy_cfg.drv_data = data;
-+
-+	psy_name = devm_kzalloc(data->dev, psy_name_len, GFP_KERNEL);
-+	if (!psy_name)
-+		return -ENOMEM;
-+
-+	snprintf(psy_name, psy_name_len, "%s%s", rt1719_psy_name_prefix,
-+		 port_dev_name);
-+	data->psy_desc.name = psy_name;
-+	data->psy_desc.type = POWER_SUPPLY_TYPE_USB;
-+	data->psy_desc.usb_types = rt1719_psy_usb_types;
-+	data->psy_desc.num_usb_types = ARRAY_SIZE(rt1719_psy_usb_types);
-+	data->psy_desc.properties = rt1719_psy_properties;
-+	data->psy_desc.num_properties = ARRAY_SIZE(rt1719_psy_properties);
-+	data->psy_desc.get_property = rt1719_psy_get_property;
-+	data->psy_desc.set_property = rt1719_psy_set_property;
-+	data->psy_desc.property_is_writeable = rt1719_psy_property_is_writeable;
-+
-+	data->usb_type = POWER_SUPPLY_USB_TYPE_C;
-+
-+	data->psy = devm_power_supply_register(data->dev, &data->psy_desc,
-+					       &psy_cfg);
-+
-+	return PTR_ERR_OR_ZERO(data->psy);
-+}
-+
-+static irqreturn_t rt1719_irq_handler(int irq, void *priv)
-+{
-+	struct rt1719_data *data = priv;
-+	u32 events, conn_info;
-+	u16 conn_stat;
-+	int ret;
-+
-+	ret = rt1719_read32(data, RT1719_REG_EVENTS, &events);
-+	ret |= rt1719_read32(data, RT1719_REG_POLICYINFO, &conn_info);
-+	ret |= rt1719_read16(data, RT1719_REG_STATS, &conn_stat);
-+	if (ret)
-+		return IRQ_NONE;
-+
-+	data->conn_info = conn_info;
-+	data->conn_stat = conn_stat;
-+
-+	events &= (RT1719_INT_DRSW_ACCEPT | RT1719_INT_RX_SRCCAP |
-+		   RT1719_INT_VBUS_PRESENT | RT1719_INT_VBUS_DCT |
-+		   RT1719_INT_PE_SNK_RDY);
-+
-+	if (events & RT1719_INT_DRSW_ACCEPT)
-+		rt1719_update_data_role(data);
-+
-+	if (events & RT1719_INT_VBUS_PRESENT)
-+		rt1719_attach(data);
-+
-+	if (events & RT1719_INT_VBUS_DCT)
-+		rt1719_detach(data);
-+
-+	if (events & RT1719_INT_RX_SRCCAP)
-+		rt1719_update_source_pdos(data);
-+
-+	if (events & RT1719_INT_PE_SNK_RDY) {
-+		complete(&data->req_completion);
-+		rt1719_update_pwr_opmode(data);
-+	}
-+
-+	/* Write 1 to clear already handled events */
-+	rt1719_write32(data, RT1719_REG_EVENTS, events);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int rt1719_irq_init(struct rt1719_data *data)
-+{
-+	struct i2c_client *i2c = to_i2c_client(data->dev);
-+	u32 irq_enable;
-+	int ret;
-+
-+	irq_enable = RT1719_INT_DRSW_ACCEPT | RT1719_INT_RX_SRCCAP |
-+		     RT1719_INT_VBUS_DCT | RT1719_INT_VBUS_PRESENT |
-+		     RT1719_INT_PE_SNK_RDY;
-+
-+	ret = rt1719_write32(data, RT1719_REG_MASKS, irq_enable);
-+	if (ret) {
-+		dev_err(&i2c->dev, "Failed to config irq enable\n");
-+		return ret;
-+	}
-+
-+	return devm_request_threaded_irq(&i2c->dev, i2c->irq, NULL,
-+					 rt1719_irq_handler, IRQF_ONESHOT,
-+					 dev_name(&i2c->dev), data);
-+}
-+
-+static int rt1719_init_attach_state(struct rt1719_data *data)
-+{
-+	u32 conn_info, irq_clear;
-+	u16 conn_stat;
-+	int ret;
-+
-+	irq_clear = RT1719_INT_DRSW_ACCEPT | RT1719_INT_RX_SRCCAP |
-+		    RT1719_INT_VBUS_DCT | RT1719_INT_VBUS_PRESENT |
-+		    RT1719_INT_PE_SNK_RDY;
-+
-+	ret = rt1719_read32(data, RT1719_REG_POLICYINFO, &conn_info);
-+	ret |= rt1719_read16(data, RT1719_REG_STATS, &conn_stat);
-+	ret |= rt1719_write32(data, RT1719_REG_EVENTS, irq_clear);
-+	if (ret)
-+		return ret;
-+
-+	data->conn_info = conn_info;
-+	data->conn_stat = conn_stat;
-+
-+	if (conn_info & RT1719_ATTACHDEV_MASK)
-+		rt1719_attach(data);
-+
-+	if (conn_info & RT1719_PE_EXP_CONTRACT) {
-+		rt1719_update_source_pdos(data);
-+		rt1719_update_pwr_opmode(data);
-+	}
-+
-+	return 0;
-+}
-+
-+#define RT1719_PSEL_CAPINFO(_lomask, _milliwatt, _himask, _milliamp) { \
-+	.lomask		= _lomask, \
-+	.milliwatt	= _milliwatt, \
-+	.himask		= _himask, \
-+	.milliamp	= _milliamp, \
-+}
-+
-+static const struct rt1719_psel_cap rt1719_psel_caps[] = {
-+	RT1719_PSEL_CAPINFO(0x18, 75000, 0x10, 5000),
-+	RT1719_PSEL_CAPINFO(0x18, 60000, 0x10, 4500),
-+	RT1719_PSEL_CAPINFO(0x18, 45000, 0x10, 4000),
-+	RT1719_PSEL_CAPINFO(0x18, 30000, 0x10, 3500),
-+	RT1719_PSEL_CAPINFO(0x18, 25000, 0x10, 3000),
-+	RT1719_PSEL_CAPINFO(0x18, 20000, 0x10, 2500),
-+	RT1719_PSEL_CAPINFO(0x18, 15000, 0x10, 2000),
-+	RT1719_PSEL_CAPINFO(0x18, 10000, 0x10, 1000),
-+	RT1719_PSEL_CAPINFO(0x1C, 60000, 0x1F, 5000),
-+	RT1719_PSEL_CAPINFO(0x1C, 45000, 0x1F, 4500),
-+	RT1719_PSEL_CAPINFO(0x1C, 30000, 0x1F, 4000),
-+	RT1719_PSEL_CAPINFO(0x1C, 24000, 0x1F, 3500),
-+	RT1719_PSEL_CAPINFO(0x1C, 15000, 0x1F, 3000),
-+	RT1719_PSEL_CAPINFO(0x1C, 10000, 0x1F, 2500),
-+	RT1719_PSEL_CAPINFO(0x0C, 60000, 0x1F, 2000),
-+	RT1719_PSEL_CAPINFO(0x0C, 45000, 0x1F, 1000),
-+	RT1719_PSEL_CAPINFO(0x0C, 36000, 0x08, 5000),
-+	RT1719_PSEL_CAPINFO(0x0C, 30000, 0x08, 4500),
-+	RT1719_PSEL_CAPINFO(0x0C, 24000, 0x08, 4000),
-+	RT1719_PSEL_CAPINFO(0x0C, 15000, 0x08, 3500),
-+	RT1719_PSEL_CAPINFO(0x0C, 10000, 0x08, 3000),
-+	RT1719_PSEL_CAPINFO(0x1E, 45000, 0x08, 2500),
-+	RT1719_PSEL_CAPINFO(0x1E, 36000, 0x08, 2000),
-+	RT1719_PSEL_CAPINFO(0x1E, 27000, 0x08, 1500),
-+	RT1719_PSEL_CAPINFO(0x1E, 20000, 0x08, 1000),
-+	RT1719_PSEL_CAPINFO(0x1E, 15000, 0x0F, 5000),
-+	RT1719_PSEL_CAPINFO(0x1E, 9000, 0x0F, 4500),
-+	RT1719_PSEL_CAPINFO(0x0E, 45000, 0x0F, 4000),
-+	RT1719_PSEL_CAPINFO(0x0E, 36000, 0x0F, 3500),
-+	RT1719_PSEL_CAPINFO(0x0E, 27000, 0x0F, 3000),
-+	RT1719_PSEL_CAPINFO(0x0E, 20000, 0x0F, 2500),
-+	RT1719_PSEL_CAPINFO(0x0E, 15000, 0x0F, 2000),
-+	RT1719_PSEL_CAPINFO(0x0E, 9000, 0x0F, 1500),
-+	RT1719_PSEL_CAPINFO(0x06, 45000, 0x0F, 1000),
-+	RT1719_PSEL_CAPINFO(0x06, 36000, 0x0F, 500),
-+	RT1719_PSEL_CAPINFO(0x06, 27000, 0x04, 5000),
-+	RT1719_PSEL_CAPINFO(0x06, 24000, 0x04, 4500),
-+	RT1719_PSEL_CAPINFO(0x06, 18000, 0x04, 4000),
-+	RT1719_PSEL_CAPINFO(0x06, 12000, 0x04, 3500),
-+	RT1719_PSEL_CAPINFO(0x06, 9000, 0x04, 3000),
-+	RT1719_PSEL_CAPINFO(0x1F, 25000, 0x04, 2500),
-+	RT1719_PSEL_CAPINFO(0x1F, 20000, 0x04, 2000),
-+	RT1719_PSEL_CAPINFO(0x1F, 15000, 0x04, 1500),
-+	RT1719_PSEL_CAPINFO(0x1F, 10000, 0x04, 1000),
-+	RT1719_PSEL_CAPINFO(0x1F, 7500, 0x07, 5000),
-+	RT1719_PSEL_CAPINFO(0x0F, 25000, 0x07, 4500),
-+	RT1719_PSEL_CAPINFO(0x0F, 20000, 0x07, 4000),
-+	RT1719_PSEL_CAPINFO(0x0F, 15000, 0x07, 3500),
-+	RT1719_PSEL_CAPINFO(0x0F, 10000, 0x07, 3000),
-+	RT1719_PSEL_CAPINFO(0x0F, 7500, 0x07, 2500),
-+	RT1719_PSEL_CAPINFO(0x07, 25000, 0x07, 2000),
-+	RT1719_PSEL_CAPINFO(0x07, 20000, 0x07, 1500),
-+	RT1719_PSEL_CAPINFO(0x07, 15000, 0x07, 1000),
-+	RT1719_PSEL_CAPINFO(0x07, 10000, 0x07, 500),
-+	RT1719_PSEL_CAPINFO(0x07, 7500, 0x03, 5000),
-+	RT1719_PSEL_CAPINFO(0x03, 25000, 0x03, 4500),
-+	RT1719_PSEL_CAPINFO(0x03, 20000, 0x03, 4000),
-+	RT1719_PSEL_CAPINFO(0x03, 15000, 0x03, 3500),
-+	RT1719_PSEL_CAPINFO(0x03, 10000, 0x03, 3000),
-+	RT1719_PSEL_CAPINFO(0x03, 7500, 0x03, 2500),
-+	RT1719_PSEL_CAPINFO(0x01, 15000, 0x03, 2000),
-+	RT1719_PSEL_CAPINFO(0x01, 10000, 0x03, 1500),
-+	RT1719_PSEL_CAPINFO(0x01, 7500, 0x03, 1000),
-+	RT1719_PSEL_CAPINFO(0x01, 2500, 0x03, 500)
-+};
-+
-+static u16 rt1719_gen_snkcap_by_current(const struct rt1719_psel_cap *psel_cap,
-+					enum rt1719_snkcap capsel)
-+{
-+	u16 cap = RT1719_PSEL_SUPPORT;
-+
-+	if (!(psel_cap->himask & BIT(capsel)))
-+		return 0;
-+
-+	cap |= psel_cap->milliamp / 10;
-+	return cap;
-+}
-+
-+static u16 rt1719_gen_snkcap_by_watt(const struct rt1719_psel_cap *psel_cap,
-+				     enum rt1719_snkcap capsel)
-+{
-+	u32 volt_div[RT1719_MAX_SNKCAP] = { 5, 9, 12, 15, 20 };
-+	u16 cap = RT1719_PSEL_SUPPORT;
-+
-+	if (!(psel_cap->lomask & BIT(capsel)))
-+		return 0;
-+
-+	cap |= min(psel_cap->milliwatt / volt_div[capsel], (u32)5000) / 10;
-+	return cap;
-+}
-+
-+static u16 rt1719_gen_snkcap(unsigned int pselinfo, enum rt1719_snkcap capsel)
-+{
-+	int psel = FIELD_GET(RT1719_LATPSEL_MASK, pselinfo);
-+	const struct rt1719_psel_cap *psel_cap;
-+	bool by_current = false;
-+
-+	if (pselinfo & RT1719_TBLSEL_MASK)
-+		by_current = true;
-+
-+	psel_cap = rt1719_psel_caps + psel;
-+	if (by_current)
-+		return rt1719_gen_snkcap_by_current(psel_cap, capsel);
-+
-+	return rt1719_gen_snkcap_by_watt(psel_cap, capsel);
-+}
-+
-+static int rt1719_get_caps(struct rt1719_data *data)
-+{
-+	unsigned int pselinfo, usbinfo;
-+	int i, ret;
-+
-+	ret = regmap_read(data->regmap, RT1719_REG_PSELINFO, &pselinfo);
-+	ret |= regmap_read(data->regmap, RT1719_REG_USBSETINFO, &usbinfo);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < RT1719_MAX_SNKCAP; i++)
-+		data->snkcaps[i] = rt1719_gen_snkcap(pselinfo, i);
-+
-+	usbinfo = FIELD_GET(RT1719_USBINFO_MASK, usbinfo);
-+	if (usbinfo == RT1719_USB_DFPUFP)
-+		data->drswap_support = true;
-+
-+	return 0;
-+}
-+
-+static int rt1719_check_exist(struct rt1719_data *data)
-+{
-+	u16 pid;
-+	int ret;
-+
-+	ret = rt1719_read16(data, RT1719_REG_VENID, &pid);
-+	if (ret)
-+		return ret;
-+
-+	if (pid != RT1719_UNIQUE_PID) {
-+		dev_err(data->dev, "Incorrect PID 0x%04x\n", pid);
-+		return -ENODEV;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct regmap_config rt1719_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = 0xff,
-+};
-+
-+static int rt1719_probe(struct i2c_client *i2c)
-+{
-+	struct rt1719_data *data;
-+	struct fwnode_handle *fwnode;
-+	struct typec_capability typec_cap = { };
-+	int ret;
-+
-+	data = devm_kzalloc(&i2c->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->dev = &i2c->dev;
-+	init_completion(&data->req_completion);
-+
-+	data->regmap = devm_regmap_init_i2c(i2c, &rt1719_regmap_config);
-+	if (IS_ERR(data->regmap)) {
-+		ret = PTR_ERR(data->regmap);
-+		dev_err(&i2c->dev, "Failed to init regmap (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	ret = rt1719_check_exist(data);
-+	if (ret)
-+		return ret;
-+
-+	ret = rt1719_get_caps(data);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * This fwnode has a "compatible" property, but is never populated as a
-+	 * struct device. Instead we simply parse it to read the properties.
-+	 * This it breaks fw_devlink=on. To maintain backward compatibility
-+	 * with existing DT files, we work around this by deleting any
-+	 * fwnode_links to/from this fwnode.
-+	 */
-+	fwnode = device_get_named_child_node(&i2c->dev, "connector");
-+	if (!fwnode)
-+		return -ENODEV;
-+
-+	fw_devlink_purge_absent_suppliers(fwnode);
-+
-+	data->role_sw = fwnode_usb_role_switch_get(fwnode);
-+	if (IS_ERR(data->role_sw)) {
-+		ret = PTR_ERR(data->role_sw);
-+		dev_err(&i2c->dev, "Failed to get usb role switch (%d)\n", ret);
-+		goto err_fwnode_put;
-+	}
-+
-+	ret = devm_rt1719_psy_register(data);
-+	if (ret) {
-+		dev_err(&i2c->dev, "Failed to register psy (%d)\n", ret);
-+		goto err_role_put;
-+	}
-+
-+	typec_cap.revision = USB_TYPEC_REV_1_2;
-+	typec_cap.pd_revision = 0x300;	/* USB-PD spec release 3.0 */
-+	typec_cap.type = TYPEC_PORT_SNK;
-+	typec_cap.data = TYPEC_PORT_DRD;
-+	typec_cap.ops = &rt1719_port_ops;
-+	typec_cap.fwnode = fwnode;
-+	typec_cap.driver_data = data;
-+	typec_cap.accessory[0] = TYPEC_ACCESSORY_DEBUG;
-+
-+	data->partner_desc.identity = &data->partner_ident;
-+
-+	data->port = typec_register_port(&i2c->dev, &typec_cap);
-+	if (IS_ERR(data->port)) {
-+		ret = PTR_ERR(data->port);
-+		dev_err(&i2c->dev, "Failed to register typec port (%d)\n", ret);
-+		goto err_role_put;
-+	}
-+
-+	ret = rt1719_init_attach_state(data);
-+	if (ret) {
-+		dev_err(&i2c->dev, "Failed to init attach state (%d)\n", ret);
-+		goto err_role_put;
-+	}
-+
-+	ret = rt1719_irq_init(data);
-+	if (ret) {
-+		dev_err(&i2c->dev, "Failed to init irq\n");
-+		goto err_role_put;
-+	}
-+
-+	fwnode_handle_put(fwnode);
-+
-+	i2c_set_clientdata(i2c, data);
-+
-+	return 0;
-+
-+err_role_put:
-+	usb_role_switch_put(data->role_sw);
-+err_fwnode_put:
-+	fwnode_handle_put(fwnode);
-+
-+	return ret;
-+}
-+
-+static int rt1719_remove(struct i2c_client *i2c)
-+{
-+	struct rt1719_data *data = i2c_get_clientdata(i2c);
-+
-+	typec_unregister_port(data->port);
-+	usb_role_switch_put(data->role_sw);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id __maybe_unused rt1719_device_table[] = {
-+	{ .compatible = "richtek,rt1719", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, rt1719_device_table);
-+
-+static struct i2c_driver rt1719_driver = {
-+	.driver = {
-+		.name = "rt1719",
-+		.of_match_table = rt1719_device_table,
-+	},
-+	.probe_new = rt1719_probe,
-+	.remove = rt1719_remove,
-+};
-+module_i2c_driver(rt1719_driver);
-+
-+MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
-+MODULE_DESCRIPTION("Richtek RT1719 Sink Only USBPD Controller Driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.7.4
-
+T24gRnJpLCAyMDIyLTAxLTE0IGF0IDE4OjM5IC0wNTAwLCBTZWFuIEFuZGVyc29uIHdyb3RlOg0K
+PiBJbnN0ZWFkIG9mIGdyYWJiaW5nIGFsbCBjbG9ja3MgaW4gYnVsaywgZ3JhYiB0aGVtIGluZGl2
+aWR1YWxseS4gVGhpcyB3aWxsDQo+IGFsbG93IHVzIHRvIGdldCB0aGUgZnJlcXVlbmN5IG9yIG90
+aGVyd2lzZSBkZWFsIHdpdGggZGlzY3JldGUgY2xvY2tzLiBUaGlzDQo+IG1heSBicmVhayBzb21l
+IHBsYXRmb3JtcyBpZiB0aGV5IHVzZSBhIGNsb2NrIHdoaWNoIGRvZXNuJ3QgdXNlIG9uZSBvZiB0
+aGUNCj4gZG9jdW1lbnRlZCBuYW1lcy4NCg0KQW5vdGhlciBhcHByb2FjaCB3b3VsZCBiZSB0byBr
+ZWVwIHRoZSBidWxrIGdldCBhbmQgcHJlcGFyZV9lbmFibGUgYW5kIGp1c3QNCnNlYXJjaCB0aHJv
+dWdoIHRoZSBjbG9ja3MgaW4gdGhlIGJ1bGsgZGF0YSB0byBmaW5kIHRoZSAicmVmIiBjbG9jaywg
+aS5lLg0Kc29tZXRoaW5nIGxpa2U6DQoNCgkJZm9yIChpID0gMDsgaSA8IGR3Yy0+bnVtX2Nsa3M7
+ICsraSkNCgkJCWlmICghc3RyY21wKCJyZWYiLCBkd2MtPmNsa3NbaV0uaWQpKSB7DQoJCQkJcmVm
+X2Nsa19yYXRlID0gY2xrX2dldF9yYXRlKGR3Yy0+Y2xrc1tpXS5jbGspOw0KCQkJCWJyZWFrOw0K
+CQkJfQ0KDQpUaGF0J3MgcHJvYmFibHkgc2ltcGxlciB0aGFuIGFsbCB0aGUgZXh0cmEgY29tcGxl
+eGl0eSB0byBnZXQgZWFjaCBvZiB0aGUgY2xvY2tzDQppbmRpdmlkdWFsbHkgYW5kIHJlbGVhc2Ug
+dGhlbSBpbiB0aGUgcmlnaHQgb3JkZXIuDQoNCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFNlYW4gQW5k
+ZXJzb24gPHNlYW4uYW5kZXJzb25Ac2Vjby5jb20+DQo+IC0tLQ0KPiANCj4gIGRyaXZlcnMvdXNi
+L2R3YzMvY29yZS5jIHwgNjIgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0t
+LS0NCj4gIGRyaXZlcnMvdXNiL2R3YzMvY29yZS5oIHwgIDUgKystLQ0KPiAgMiBmaWxlcyBjaGFu
+Z2VkLCA1MyBpbnNlcnRpb25zKCspLCAxNCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQg
+YS9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuYyBiL2RyaXZlcnMvdXNiL2R3YzMvY29yZS5jDQo+IGlu
+ZGV4IGY0YzA5OTUxYjUxNy4uNjk5YWI5YWJkYzQ3IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3Vz
+Yi9kd2MzL2NvcmUuYw0KPiArKysgYi9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuYw0KPiBAQCAtNzQ1
+LDYgKzc0NSwzOCBAQCBzdGF0aWMgaW50IGR3YzNfcGh5X3NldHVwKHN0cnVjdCBkd2MzICpkd2Mp
+DQo+ICAJcmV0dXJuIDA7DQo+ICB9DQo+ICANCj4gK3N0YXRpYyBpbnQgZHdjM19jbGtfZW5hYmxl
+KHN0cnVjdCBkd2MzICpkd2MpDQo+ICt7DQo+ICsJaW50IHJldDsNCj4gKw0KPiArCXJldCA9IGNs
+a19wcmVwYXJlX2VuYWJsZShkd2MtPmJ1c19jbGspOw0KPiArCWlmIChyZXQpDQo+ICsJCXJldHVy
+biByZXQ7DQo+ICsNCj4gKwlyZXQgPSBjbGtfcHJlcGFyZV9lbmFibGUoZHdjLT5yZWZfY2xrKTsN
+Cj4gKwlpZiAocmV0KQ0KPiArCQlnb3RvIGRpc2FibGVfYnVzX2NsazsNCj4gKw0KPiArCXJldCA9
+IGNsa19wcmVwYXJlX2VuYWJsZShkd2MtPnN1c3BfY2xrKTsNCj4gKwlpZiAocmV0KQ0KPiArCQln
+b3RvIGRpc2FibGVfcmVmX2NsazsNCj4gKw0KPiArCXJldHVybiAwOw0KPiArDQo+ICtkaXNhYmxl
+X3JlZl9jbGs6DQo+ICsJY2xrX2Rpc2FibGVfdW5wcmVwYXJlKGR3Yy0+cmVmX2Nsayk7DQo+ICtk
+aXNhYmxlX2J1c19jbGs6DQo+ICsJY2xrX2Rpc2FibGVfdW5wcmVwYXJlKGR3Yy0+YnVzX2Nsayk7
+DQo+ICsJcmV0dXJuIHJldDsNCj4gK30NCj4gKw0KPiArc3RhdGljIHZvaWQgZHdjM19jbGtfZGlz
+YWJsZShzdHJ1Y3QgZHdjMyAqZHdjKQ0KPiArew0KPiArCWNsa19kaXNhYmxlX3VucHJlcGFyZShk
+d2MtPnN1c3BfY2xrKTsNCj4gKwljbGtfZGlzYWJsZV91bnByZXBhcmUoZHdjLT5yZWZfY2xrKTsN
+Cj4gKwljbGtfZGlzYWJsZV91bnByZXBhcmUoZHdjLT5idXNfY2xrKTsNCj4gK30NCj4gKw0KPiAg
+c3RhdGljIHZvaWQgZHdjM19jb3JlX2V4aXQoc3RydWN0IGR3YzMgKmR3YykNCj4gIHsNCj4gIAlk
+d2MzX2V2ZW50X2J1ZmZlcnNfY2xlYW51cChkd2MpOw0KPiBAQCAtNzU4LDcgKzc5MCw3IEBAIHN0
+YXRpYyB2b2lkIGR3YzNfY29yZV9leGl0KHN0cnVjdCBkd2MzICpkd2MpDQo+ICAJdXNiX3BoeV9z
+ZXRfc3VzcGVuZChkd2MtPnVzYjNfcGh5LCAxKTsNCj4gIAlwaHlfcG93ZXJfb2ZmKGR3Yy0+dXNi
+Ml9nZW5lcmljX3BoeSk7DQo+ICAJcGh5X3Bvd2VyX29mZihkd2MtPnVzYjNfZ2VuZXJpY19waHkp
+Ow0KPiAtCWNsa19idWxrX2Rpc2FibGVfdW5wcmVwYXJlKGR3Yy0+bnVtX2Nsa3MsIGR3Yy0+Y2xr
+cyk7DQo+ICsJZHdjM19jbGtfZGlzYWJsZShkd2MpOw0KPiAgCXJlc2V0X2NvbnRyb2xfYXNzZXJ0
+KGR3Yy0+cmVzZXQpOw0KPiAgfQ0KPiAgDQo+IEBAIC0xNjA1LDI1ICsxNjM3LDMxIEBAIHN0YXRp
+YyBpbnQgZHdjM19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgCQlyZXR1
+cm4gUFRSX0VSUihkd2MtPnJlc2V0KTsNCj4gIA0KPiAgCWlmIChkZXYtPm9mX25vZGUpIHsNCj4g
+LQkJcmV0ID0gZGV2bV9jbGtfYnVsa19nZXRfYWxsKGRldiwgJmR3Yy0+Y2xrcyk7DQo+IC0JCWlm
+IChyZXQgPT0gLUVQUk9CRV9ERUZFUikNCj4gLQkJCXJldHVybiByZXQ7DQo+ICAJCS8qDQo+ICAJ
+CSAqIENsb2NrcyBhcmUgb3B0aW9uYWwsIGJ1dCBuZXcgRFQgcGxhdGZvcm1zIHNob3VsZCBzdXBw
+b3J0IGFsbA0KPiAgCQkgKiBjbG9ja3MgYXMgcmVxdWlyZWQgYnkgdGhlIERULWJpbmRpbmcuDQo+
+ICAJCSAqLw0KPiAtCQlpZiAocmV0IDwgMCkNCj4gLQkJCWR3Yy0+bnVtX2Nsa3MgPSAwOw0KPiAt
+CQllbHNlDQo+IC0JCQlkd2MtPm51bV9jbGtzID0gcmV0Ow0KPiArCQlkd2MtPmJ1c19jbGsgPSBk
+ZXZtX2Nsa19nZXRfb3B0aW9uYWwoZGV2LCAiYnVzX2Vhcmx5Iik7DQo+ICsJCWlmIChJU19FUlIo
+ZHdjLT5idXNfY2xrKSkNCj4gKwkJCXJldHVybiBkZXZfZXJyX3Byb2JlKGRldiwgUFRSX0VSUihk
+d2MtPmJ1c19jbGspLA0KPiArCQkJCQkgICAgICJjb3VsZCBub3QgZ2V0IGJ1cyBjbG9ja1xuIik7
+DQo+ICANCj4gKwkJZHdjLT5yZWZfY2xrID0gZGV2bV9jbGtfZ2V0X29wdGlvbmFsKGRldiwgInJl
+ZiIpOw0KPiArCQlpZiAoSVNfRVJSKGR3Yy0+cmVmX2NsaykpDQo+ICsJCQlyZXR1cm4gZGV2X2Vy
+cl9wcm9iZShkZXYsIFBUUl9FUlIoZHdjLT5yZWZfY2xrKSwNCj4gKwkJCQkJICAgICAiY291bGQg
+bm90IGdldCByZWYgY2xvY2tcbiIpOw0KPiArDQo+ICsJCWR3Yy0+c3VzcF9jbGsgPSBkZXZtX2Ns
+a19nZXRfb3B0aW9uYWwoZGV2LCAic3VzcGVuZCIpOw0KPiArCQlpZiAoSVNfRVJSKGR3Yy0+c3Vz
+cF9jbGspKQ0KPiArCQkJcmV0dXJuIGRldl9lcnJfcHJvYmUoZGV2LCBQVFJfRVJSKGR3Yy0+c3Vz
+cF9jbGspLA0KPiArCQkJCQkgICAgICJjb3VsZCBub3QgZ2V0IHN1c3BlbmQgY2xvY2tcbiIpOw0K
+PiAgCX0NCj4gIA0KPiAgCXJldCA9IHJlc2V0X2NvbnRyb2xfZGVhc3NlcnQoZHdjLT5yZXNldCk7
+DQo+ICAJaWYgKHJldCkNCj4gIAkJcmV0dXJuIHJldDsNCj4gIA0KPiAtCXJldCA9IGNsa19idWxr
+X3ByZXBhcmVfZW5hYmxlKGR3Yy0+bnVtX2Nsa3MsIGR3Yy0+Y2xrcyk7DQo+ICsJcmV0ID0gZHdj
+M19jbGtfZW5hYmxlKGR3Yyk7DQo+ICAJaWYgKHJldCkNCj4gIAkJZ290byBhc3NlcnRfcmVzZXQ7
+DQo+ICANCj4gQEAgLTE3MTEsNyArMTc0OSw3IEBAIHN0YXRpYyBpbnQgZHdjM19wcm9iZShzdHJ1
+Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgCXBtX3J1bnRpbWVfZGlzYWJsZSgmcGRldi0+
+ZGV2KTsNCj4gIA0KPiAgZGlzYWJsZV9jbGtzOg0KPiAtCWNsa19idWxrX2Rpc2FibGVfdW5wcmVw
+YXJlKGR3Yy0+bnVtX2Nsa3MsIGR3Yy0+Y2xrcyk7DQo+ICsJZHdjM19jbGtfZGlzYWJsZShkd2Mp
+Ow0KPiAgYXNzZXJ0X3Jlc2V0Og0KPiAgCXJlc2V0X2NvbnRyb2xfYXNzZXJ0KGR3Yy0+cmVzZXQp
+Ow0KPiAgDQo+IEBAIC0xNzU1LDcgKzE3OTMsNyBAQCBzdGF0aWMgaW50IGR3YzNfY29yZV9pbml0
+X2Zvcl9yZXN1bWUoc3RydWN0IGR3YzMgKmR3YykNCj4gIAlpZiAocmV0KQ0KPiAgCQlyZXR1cm4g
+cmV0Ow0KPiAgDQo+IC0JcmV0ID0gY2xrX2J1bGtfcHJlcGFyZV9lbmFibGUoZHdjLT5udW1fY2xr
+cywgZHdjLT5jbGtzKTsNCj4gKwlyZXQgPSBkd2MzX2Nsa19lbmFibGUoZHdjKTsNCj4gIAlpZiAo
+cmV0KQ0KPiAgCQlnb3RvIGFzc2VydF9yZXNldDsNCj4gIA0KPiBAQCAtMTc2Niw3ICsxODA0LDcg
+QEAgc3RhdGljIGludCBkd2MzX2NvcmVfaW5pdF9mb3JfcmVzdW1lKHN0cnVjdCBkd2MzICpkd2Mp
+DQo+ICAJcmV0dXJuIDA7DQo+ICANCj4gIGRpc2FibGVfY2xrczoNCj4gLQljbGtfYnVsa19kaXNh
+YmxlX3VucHJlcGFyZShkd2MtPm51bV9jbGtzLCBkd2MtPmNsa3MpOw0KPiArCWR3YzNfY2xrX2Rp
+c2FibGUoZHdjKTsNCj4gIGFzc2VydF9yZXNldDoNCj4gIAlyZXNldF9jb250cm9sX2Fzc2VydChk
+d2MtPnJlc2V0KTsNCj4gIA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZHdjMy9jb3JlLmgg
+Yi9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuaA0KPiBpbmRleCBlMWNjM2Y3Mzk4ZmIuLjMyZGZjZjNh
+ODNkNSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy91c2IvZHdjMy9jb3JlLmgNCj4gKysrIGIvZHJp
+dmVycy91c2IvZHdjMy9jb3JlLmgNCj4gQEAgLTExMzQsOCArMTEzNCw5IEBAIHN0cnVjdCBkd2Mz
+IHsNCj4gIAlzdHJ1Y3QgdXNiX2dhZGdldAkqZ2FkZ2V0Ow0KPiAgCXN0cnVjdCB1c2JfZ2FkZ2V0
+X2RyaXZlciAqZ2FkZ2V0X2RyaXZlcjsNCj4gIA0KPiAtCXN0cnVjdCBjbGtfYnVsa19kYXRhCSpj
+bGtzOw0KPiAtCWludAkJCW51bV9jbGtzOw0KPiArCXN0cnVjdCBjbGsJCSpidXNfY2xrOw0KPiAr
+CXN0cnVjdCBjbGsJCSpyZWZfY2xrOw0KPiArCXN0cnVjdCBjbGsJCSpzdXNwX2NsazsNCj4gIA0K
+PiAgCXN0cnVjdCByZXNldF9jb250cm9sCSpyZXNldDsNCj4gIA0KLS0gDQpSb2JlcnQgSGFuY29j
+aw0KU2VuaW9yIEhhcmR3YXJlIERlc2lnbmVyLCBDYWxpYW4gQWR2YW5jZWQgVGVjaG5vbG9naWVz
+DQp3d3cuY2FsaWFuLmNvbQ0K
