@@ -2,71 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D1F490B93
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jan 2022 16:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CBFA490B9E
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jan 2022 16:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240553AbiAQPkL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jan 2022 10:40:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54496 "EHLO
+        id S240581AbiAQPlz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jan 2022 10:41:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237314AbiAQPkK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jan 2022 10:40:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7B4C061574;
-        Mon, 17 Jan 2022 07:40:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34CD1B810F5;
-        Mon, 17 Jan 2022 15:40:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3063FC36AEF;
-        Mon, 17 Jan 2022 15:40:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642434007;
-        bh=uX1Nzu6ud1l1C70Ts3ffEy/I1QZlKKPuL/lL0tIjKdQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qYBnWKV4AgjvJESWAfOjRKk5KGWyNBt9fAj+rhJzvIx08u8qTzS9ZGvhlQw+tNG52
-         xlX2Ngv7quLX26fT4VYiTAqfPx9n0dM2TJFtIuBIs6lkGiKZryObvKa6jmUA6yw7VF
-         BH7oO4EOxnY6XvuazDHedKVCXfYJDT2aiC9ccO9I=
-Date:   Mon, 17 Jan 2022 16:40:04 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH V2] usb: common: ulpi: Fix crash in ulpi_match()
-Message-ID: <YeWN1Hb0tpjDzn+C@kroah.com>
-References: <20220117150039.44058-1-jonathanh@nvidia.com>
+        with ESMTP id S237309AbiAQPly (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jan 2022 10:41:54 -0500
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7DFC06161C
+        for <linux-usb@vger.kernel.org>; Mon, 17 Jan 2022 07:41:53 -0800 (PST)
+Received: by mail-qk1-x744.google.com with SMTP id z10so15598010qkf.7
+        for <linux-usb@vger.kernel.org>; Mon, 17 Jan 2022 07:41:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=vIF0HCtULT8/Hj4oEOKhM3wVM2dbK4vAQWbMA06NHEs=;
+        b=Ee31WhcSAoh/lxM0irPYoAatwbf63kBeieGEdHORtlk+FH+RzPqx0HW1M5D75HhS0Y
+         WkDaVhuGLUikIxZPsh2bEyRaVnVk8lZODnEPPdl8bvabQuWQYeUJ/pmaoctt9TU7iCUU
+         Hkfm12hyVs4noaQw2MRgIsBkSl8u40wVVMMM4SzFW1H5weh51Ch+WmCA1ewqPfMpaJNd
+         bsxELhISZ8GVAzaoiYqI40J7qmQuU+p3M5l14TJHX6VdpT4DJzr0RJwe+C8jJ4Kph+HY
+         la313MOjxvEwsw++1LDbhe+iQ2Cls/ivVCX4TI6ffI8nuLvh6IpTgP5t54bZPoNChalK
+         iLSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=vIF0HCtULT8/Hj4oEOKhM3wVM2dbK4vAQWbMA06NHEs=;
+        b=yvtDQlyuLn5jxc8iTOPFeHvG2Ps8QPYOmc/7sjKC39rL5kgkF634/NlRe/4ktb4p9r
+         jApnX8SRsLuQJR4zIlaejLEvdkFY1ufz3dW/ItRXj3DMA4HVXToa7BdNWICXRz5fOwDd
+         G+bv0SXZ3e5HmqSq52hEIhx3Ui2DIhsgqvpyj6qSrC5Ln2nhGsCczQg321V/VZVBuHbF
+         nn53h4mK1JfZIM8R22XzYIG4UOPdXg+FukET+bp0kNc5MKdoTylJYugEY+kka3wrS/Lx
+         hFwotf0Zgk2CgAoOsVweQZqq1R0TxdrP23fIbPIxHe4nMJfK5C77egzDkiaeWk6UKDo8
+         u6PQ==
+X-Gm-Message-State: AOAM530T+JUZCE9ijPMux28TQgP1SxIT8qPG0bV+Hm5sT4S4mrxNgxPB
+        X93fCTL9FNKFP2Und0OC/VMkK05w4m99n4KWJ7U=
+X-Google-Smtp-Source: ABdhPJxKAldfShhC8wZdY2Htq9hJGgXreaXEjiB1miYL4bVcqXdK1BUQ46o5M7iSwz6vWn6VdAI2GEFwVYsTwqDnwxw=
+X-Received: by 2002:a05:620a:4450:: with SMTP id w16mr14879837qkp.189.1642434112813;
+ Mon, 17 Jan 2022 07:41:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220117150039.44058-1-jonathanh@nvidia.com>
+Reply-To: salkavar2@gmail.com
+Sender: carolineregt@gmail.com
+Received: by 2002:ae9:ed0c:0:0:0:0:0 with HTTP; Mon, 17 Jan 2022 07:41:52
+ -0800 (PST)
+From:   "Mr.Sal kavar" <salkavar2@gmail.com>
+Date:   Mon, 17 Jan 2022 16:41:52 +0100
+X-Google-Sender-Auth: Rmg3t_RMlCbbQyliM2-B1b_cilM
+Message-ID: <CA+sSZD+g206m+jZKhkMPB+Df1YqxeSYunccMHKX4ky3Aub4hGw@mail.gmail.com>
+Subject: Yours Faithful,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 03:00:39PM +0000, Jon Hunter wrote:
-> Commit 7495af930835 ("ARM: multi_v7_defconfig: Enable drivers for
-> DragonBoard 410c") enables the CONFIG_PHY_QCOM_USB_HS for the ARM
-> multi_v7_defconfig. Enabling this Kconfig is causing the kernel to crash
-> on the Tegra20 Ventana platform in the ulpi_match() function.
-> 
-> The Qualcomm USB HS PHY driver that is enabled by CONFIG_PHY_QCOM_USB_HS,
-> registers a ulpi_driver but this driver does not provide an 'id_table',
-> so when ulpi_match() is called on the Tegra20 Ventana platform, it
-> crashes when attempting to deference the id_table pointer which is not
-> valid. The Qualcomm USB HS PHY driver uses device-tree for matching the
-> ULPI driver with the device and so fix this crash by using device-tree
-> for matching if the id_table is not valid.
-> 
-> Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
-> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+I assume you and your family are in good health. I am the foreign
+operations Manager
 
-No cc: of stable since this is a bug going back to 4.11?
+This being a wide world in which it can be difficult to make new
+acquaintances and because it is virtually impossible to know who is
+trustworthy and who can be believed, i have decided to repose
+confidence in you after much fasting and prayer. It is only because of
+this that I have decided to confide in you and to share with you this
+confidential business.
 
-thanks,
+overdue and unclaimed sum of $15.5m, (Fifteen Million Five Hundred
+Thousand Dollars Only) when the account holder suddenly passed on, he
+left no beneficiary who would be entitled to the receipt of this fund.
+For this reason, I have found it expedient to transfer this fund to a
+trustworthy individual with capacity to act as foreign business
+partner.
 
-greg k-h
+Thus i humbly request your assistance to claim this fund. Upon the
+transfer of this fund in your account, you will take 45% as your share
+from the total fund, 10% will be shared to Charity Organizations in
+both country and 45% will be for me.
+
+Yours Faithful,
+Mr.Sal Kavar.
