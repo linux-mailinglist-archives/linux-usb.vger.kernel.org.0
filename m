@@ -2,122 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 857F049076D
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jan 2022 12:52:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34895490895
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jan 2022 13:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236688AbiAQLwO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jan 2022 06:52:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58648 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233818AbiAQLwO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jan 2022 06:52:14 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDD9C061574;
-        Mon, 17 Jan 2022 03:52:13 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id k9so2663435qvv.9;
-        Mon, 17 Jan 2022 03:52:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W6hXXL8mWv5GPh/P7bia7mTJEIDbamCBVNF8AerKYLU=;
-        b=IPLMgGuS+1UjluWsmuEHT2OaUU67wTfGSvPbx9hAcWXbS+enlwgTazh/02MniWvPHg
-         wtBft3uLM9tqgF5w76wxg1jxilmXKdE/R+i/a06kF2Gw3xgZYhMmM+SjF0ltxus3qfTx
-         Fr4h3NXjHIrKt21+UvuK1RdlIcJXWRIUQHD47LRAH531hbleEwQoMOqzeE0tyJuJCLH4
-         V1sAmhIQofFOG+GnxFrP2lDi5DRqhImENDCxyngQlx/+mnlN4NPvsz8z1/yTMGrU+ozt
-         o/IWAfHFCtyZAWVyxvr6BDA/2oO1HCq4ZUvk+pvqHSKa7ncoloT+AQ2AeUVvaRUbU5BL
-         Cy4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W6hXXL8mWv5GPh/P7bia7mTJEIDbamCBVNF8AerKYLU=;
-        b=YMkwuzqrcPHi5KjHeO0D5g07BXKYOIGrRyox0FORi64yaVpdE88csk/nFLRxGJcrpz
-         djAJi/zekPPpFnubSypGPkMlDR9tgYAahPaDN31yalydlr70hlUpuvbk98oJUXp+rGTm
-         vdGzj44RWMy/GlJoupSYk24vIwKX501SOvlLTwuv2UivXCCf6mWQsP97Y4uvPfoWBELZ
-         b6hozY2JeHReEkTgyd6ShiWCLnaBGwy3saPOavagFHoNT4y6wq4eZur/qDFHXb30vumH
-         NdjgjiAluciT9bD3ghX50Rm9SC9bJFLIHKS7wzdz4epyyLoId8zRDERAZX+O4kkj5gsY
-         XpDg==
-X-Gm-Message-State: AOAM533ofRXKBIib7/Uj/SOjEH3NNb9mhf8E3lbN8RBGP+DDEySScRB6
-        9ii9FakiMRTfLNZ8m/ITCr57YWg/gB8U4J17ghDoLP7L9V4=
-X-Google-Smtp-Source: ABdhPJwnjXgkRURCg4ZgaWtHhVV5jaYYzQ0xFci9AJZCm9KfbMKc/MQsnmT4DzE77FRogVfqa0jxFsosgHleT5QaXkU=
-X-Received: by 2002:a05:6214:2528:: with SMTP id gg8mr18130557qvb.62.1642420332804;
- Mon, 17 Jan 2022 03:52:12 -0800 (PST)
-MIME-Version: 1.0
-References: <CABXGCsNb22JCJ4AyR1sYqFtF4QUnvM3B2zQcc1svcm2mquWxoA@mail.gmail.com>
- <YeUvvIaVJnJrrpYe@kuha.fi.intel.com> <CABXGCsO5PYBuZ11YR16NLLa0H07Jom1JQhWHFuETfotfBfzkMw@mail.gmail.com>
- <YeVQsRp7aDMcQKs7@kuha.fi.intel.com>
-In-Reply-To: <YeVQsRp7aDMcQKs7@kuha.fi.intel.com>
-From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Date:   Mon, 17 Jan 2022 16:52:02 +0500
-Message-ID: <CABXGCsMWXFFQY3L8ixK9K-gYX41_gTjqHRBXNp6gDpUgdnvFfg@mail.gmail.com>
-Subject: Re: [Bug][5.17-rc0] Between commits daadb3bd0e8d and 455e73a07f6e,
- the kernel stops loading on my devices.
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+        id S239833AbiAQMV4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jan 2022 07:21:56 -0500
+Received: from mga14.intel.com ([192.55.52.115]:35878 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239831AbiAQMV4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 Jan 2022 07:21:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642422116; x=1673958116;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7hL98B8VHA8BYC2ePlx10Jl7+f4j5WgTIvH4DR1v8/A=;
+  b=Dj2XJEjNH2WR1p0OE/MqIeNDn+vwwD+anX8ggMhtzdxvST7zO37PlwCC
+   qFZEgO2MVZjapuj9apO/0ZNvgicTXMwoT89Exv+8/7yrKLOtZ97nYzKSq
+   0Bn5KBX5tC/h1uHn3jfk/+fudF6UOd7WtRNt5IIRcgyNuUmC3m4lUNBzW
+   jwXLoHRknZPeKdvPhyDDwXvNwioOR9l+ciC8/Zgd3mTPVFh+DgnIbfNEo
+   o2C5zFC3RhggVoTJwtJVKAPaxC9Nopn4o82LGVuGXUBsNcNzCRwXXaJgJ
+   L3PwoMgNvz7tRaPAgbWBN9CpzjZHM+paMPJI2jGyK3sZSakTqcgGHG/tC
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="244810538"
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="244810538"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 04:21:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="671544346"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 17 Jan 2022 04:21:53 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 17 Jan 2022 14:21:52 +0200
+Date:   Mon, 17 Jan 2022 14:21:52 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
 Cc:     Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
         rafael.j.wysocki@intel.com, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [Bug][5.17-rc0] Between commits daadb3bd0e8d and 455e73a07f6e,
+ the kernel stops loading on my devices.
+Message-ID: <YeVfYOhxGTgg8VpZ@kuha.fi.intel.com>
+References: <CABXGCsNb22JCJ4AyR1sYqFtF4QUnvM3B2zQcc1svcm2mquWxoA@mail.gmail.com>
+ <YeUvvIaVJnJrrpYe@kuha.fi.intel.com>
+ <CABXGCsO5PYBuZ11YR16NLLa0H07Jom1JQhWHFuETfotfBfzkMw@mail.gmail.com>
+ <YeVQsRp7aDMcQKs7@kuha.fi.intel.com>
+ <CABXGCsMWXFFQY3L8ixK9K-gYX41_gTjqHRBXNp6gDpUgdnvFfg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABXGCsMWXFFQY3L8ixK9K-gYX41_gTjqHRBXNp6gDpUgdnvFfg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 17 Jan 2022 at 16:19, Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
+On Mon, Jan 17, 2022 at 04:52:02PM +0500, Mikhail Gavrilov wrote:
+> On Mon, 17 Jan 2022 at 16:19, Heikki Krogerus
+> <heikki.krogerus@linux.intel.com> wrote:
+> 
+> > I don't know which tree you are working on top of, but the patch
+> > applies just fine on top of Linus' latest master branch:
+> > git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> >
+> 
+> Same here.
+> 
+> $ git remote -v
+> origin    git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> (fetch)
+> origin    git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> (push)
+> 
+> $ git show
+> commit 0c947b893d69231a9add855939da7c66237ab44f (HEAD -> master,
+> origin/master, origin/HEAD)
+> Merge: a6097180d884 9bbf8662a27b
+> Author: Linus Torvalds <torvalds@linux-foundation.org>
+> Date:   Mon Jan 17 09:53:21 2022 +0200
+> 
+>     Merge tag '5.17-rc-part1-smb3-fixes' of git://git.samba.org/sfrench/cifs-2.6
+> 
+>     Pull cifs updates from Steve French:
+> 
+>      - multichannel patches mostly related to improving reconnect behavior
+> 
+>      - minor cleanup patches
+> 
+>     * tag '5.17-rc-part1-smb3-fixes' of git://git.samba.org/sfrench/cifs-2.6:
+>       cifs: fix FILE_BOTH_DIRECTORY_INFO definition
+>       cifs: move superblock magic defitions to magic.h
+>       cifs: Fix smb311_update_preauth_hash() kernel-doc comment
+>       cifs: avoid race during socket reconnect between send and recv
+>       cifs: maintain a state machine for tcp/smb/tcon sessions
+>       cifs: fix hang on cifs_get_next_mid()
+>       cifs: take cifs_tcp_ses_lock for status checks
+>       cifs: reconnect only the connection and not smb session where possible
+>       cifs: add WARN_ON for when chan_count goes below minimum
+>       cifs: adjust DebugData to use chans_need_reconnect for conn status
+>       cifs: use the chans_need_reconnect bitmap for reconnect status
+>       cifs: track individual channel status using chans_need_reconnect
+>       cifs: remove redundant assignment to pointer p
+> 
+> $ cat 0001-usb-typec-Test-fix.patch | git apply
+> error: patch failed: drivers/usb/typec/port-mapper.c:56
+> error: drivers/usb/typec/port-mapper.c: patch does not apply
 
-> I don't know which tree you are working on top of, but the patch
-> applies just fine on top of Linus' latest master branch:
-> git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->
+Have you modified the file, or something else that you have not
+committed yet?
 
-Same here.
+        % git status
 
-$ git remote -v
-origin    git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-(fetch)
-origin    git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-(push)
+Checkout the file, and then try to apply the patch:
 
-$ git show
-commit 0c947b893d69231a9add855939da7c66237ab44f (HEAD -> master,
-origin/master, origin/HEAD)
-Merge: a6097180d884 9bbf8662a27b
-Author: Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon Jan 17 09:53:21 2022 +0200
+        % git checkout drivers/usb/typec/port-mapper.c
+        % git apply -v 0001-usb-typec-Test-fix.patch
 
-    Merge tag '5.17-rc-part1-smb3-fixes' of git://git.samba.org/sfrench/cifs-2.6
-
-    Pull cifs updates from Steve French:
-
-     - multichannel patches mostly related to improving reconnect behavior
-
-     - minor cleanup patches
-
-    * tag '5.17-rc-part1-smb3-fixes' of git://git.samba.org/sfrench/cifs-2.6:
-      cifs: fix FILE_BOTH_DIRECTORY_INFO definition
-      cifs: move superblock magic defitions to magic.h
-      cifs: Fix smb311_update_preauth_hash() kernel-doc comment
-      cifs: avoid race during socket reconnect between send and recv
-      cifs: maintain a state machine for tcp/smb/tcon sessions
-      cifs: fix hang on cifs_get_next_mid()
-      cifs: take cifs_tcp_ses_lock for status checks
-      cifs: reconnect only the connection and not smb session where possible
-      cifs: add WARN_ON for when chan_count goes below minimum
-      cifs: adjust DebugData to use chans_need_reconnect for conn status
-      cifs: use the chans_need_reconnect bitmap for reconnect status
-      cifs: track individual channel status using chans_need_reconnect
-      cifs: remove redundant assignment to pointer p
-
-$ cat 0001-usb-typec-Test-fix.patch | git apply
-error: patch failed: drivers/usb/typec/port-mapper.c:56
-error: drivers/usb/typec/port-mapper.c: patch does not apply
-
-> Thanks. I can see UCSI in your laptop dump, but not in the workstation
-> dump. The laptop has the device nodes also for the ports as expected.
->
-> Which machine is failing?
-
-Both.
+thanks,
 
 -- 
-Best Regards,
-Mike Gavrilov.
+heikki
