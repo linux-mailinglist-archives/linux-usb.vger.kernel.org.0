@@ -2,178 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E6A490121
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jan 2022 06:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B638490199
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jan 2022 06:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbiAQFYq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jan 2022 00:24:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
+        id S232840AbiAQFkJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jan 2022 00:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbiAQFYi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jan 2022 00:24:38 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08517C061768
-        for <linux-usb@vger.kernel.org>; Sun, 16 Jan 2022 21:24:38 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id s15so3442885pgs.1
-        for <linux-usb@vger.kernel.org>; Sun, 16 Jan 2022 21:24:37 -0800 (PST)
+        with ESMTP id S229986AbiAQFkI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jan 2022 00:40:08 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EC2C061574
+        for <linux-usb@vger.kernel.org>; Sun, 16 Jan 2022 21:40:08 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id p127-20020a254285000000b0061222917b37so4111122yba.9
+        for <linux-usb@vger.kernel.org>; Sun, 16 Jan 2022 21:40:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ISpM5IrkTHsOLgNJIWuzTE0806bOg7B0Sd40UWe36MY=;
-        b=mEmWRcI8rpsg6TVZzLXBc4yugerwYpj+1EEmNn/rJ8cJt+cMEF4GiUnb9KyxiUw+SW
-         1aO3wa1dG9ddyVopK+OCJ+xArSKONuiiRSGgDkmALA1ArRsBK43EGeeaxLFpXOlgWcwp
-         Y5ZwP0DkQ3D3dq/NaX3RjrKvPGzSr9GFTP6xLSBJ51dHQo2/RSBmexvFPgcsMuW6a2qV
-         0svRY0qCbO6zl2v+JziGGW/GOWm4VVaBZvpwjP28z6hrOq8bjRuj4jYKOSbF9ZqNNDhl
-         ZBLFWxERjjWjHnKOsoUx6Llwjjm/kgmrNOBdJj3gOxivQZU/186xYQO7jlfwZTiRIbO/
-         R2iw==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=kHrC0ZNtdAjmUJmpQtal/sFEceDq2usB7n488HtzJyU=;
+        b=FoZScfXDQtIvSINxhwpNPqr2wc4+9o3tgZ/tO5pDjpWmrSWp42+eeYjppN+aSiNv9U
+         kCNvac2PojYKLVlQ1j1aS/lUX8C5R9b2T0ah9mMXlRWXPGSdSO4TNa8FTmHcf6L4cVVN
+         XZQ5/rzLIfYHk0Y8I8peVe9yjflucydPmjMa5wZefbcbq+IBZAEShCoMTlgXiLhTKBzH
+         UtNREaEyhOIYCzRBZOdrrMM/6qB9uUNxYik69csUd01f6LYUmYTbooF6CUm/gQ/h/fj2
+         9jEs5Oox3RLtIjxK1/Pbn3Ax3MROwHid70HBjtaWPwgHuSZstOGrLjdFdhzXuHezne7b
+         fehw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ISpM5IrkTHsOLgNJIWuzTE0806bOg7B0Sd40UWe36MY=;
-        b=Po9gELDHM3q/TrHahAKmHwD93Zeaqh9vC7vBdmlsltPRMVglEgb6ZdjOnKCz6l7kJV
-         32ZWfVs7+BLuOk95dk3eW9F7LQ/AthUqQUgMfyQR7wE1pvzU2vdhLl+/PUU7uT8U+1MY
-         4DiqM3kUFfd977/LO9GQtEDRyirFSkY9VgS3AYcTGzVzVyZ1jrs8ooNNnmydNboJ93cA
-         dbTWyWVzXpweglzfDgfEpdnkktbWOo2IgC6hmsGuzTTCWm8figpZP+yjnkwR/jsPtpuN
-         AMdkEWyZtVLyGF+Ov1a2aLQLolop1pX1TF3Y8FL1vRa4kE5kxZR+1tKD3QDBu6fvf3jZ
-         lp0Q==
-X-Gm-Message-State: AOAM533u/85uItisAU8cHyDE/xRYpuhXtOQit/eBpZNKA+8btN9PE3BH
-        EgGzh2CjadH6duqPgkiIJ7cQoY4qUCMmmh5FULayLA==
-X-Google-Smtp-Source: ABdhPJxKwUr6Mj0BEDwdpy+SnRUQVHpSe65h55GAGFLd+Tz4e10Ihr4mDyeK2km1qRM342NbayRDmXZ3esgEpKlX8Gk=
-X-Received: by 2002:a63:fe47:: with SMTP id x7mr5625761pgj.415.1642397077062;
- Sun, 16 Jan 2022 21:24:37 -0800 (PST)
-MIME-Version: 1.0
-References: <20211229112551.3483931-1-pumahsu@google.com> <Yd1tUKhyZf26OVNQ@kroah.com>
- <CAGCq0LZb8nQDvcz=LswWi4qKd-65ys6iPjTKh=46dVtYLDEUVw@mail.gmail.com> <Yd/g/ywBWZG7gF8v@kroah.com>
-In-Reply-To: <Yd/g/ywBWZG7gF8v@kroah.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=kHrC0ZNtdAjmUJmpQtal/sFEceDq2usB7n488HtzJyU=;
+        b=Cdv/cpvRKmcLMPRL7rs5XpD3XpdtBqZDrrqHubmSn6wlbuuJt0o0/XmsJy7E/mXRmZ
+         4d1iUKSA9uWGd2XaceM/A5LvnAqAnSW27WeS07w2lLQSpftvySt3sPoW+YMyUjSB1Z5k
+         GWpsSXUjXRSY9sID6eXB71Ea7WF8LRlDg98NEjJdfkPPF/U3CkNtkd1y0kr4bwaWTebZ
+         kBATXXiwuBBwRrQEZso2cRZB2rzwR1jftJXO9gftUawf+vd9z4wA6zkAbqtcY6O2X/s7
+         S4r0QDq4aPBVPPmrrs3FOA9jS/ClYHnuCT4Aua9N7CxMf7jaSS2QmJyH+59TcCYN0xSs
+         Yw1w==
+X-Gm-Message-State: AOAM533S61Noe7c8LxkwV9RF0vZFgiOUy5Xe1tATTMJFbnQKpVtBeD1B
+        Q+Ds7+9xlZaow+3jEKAptRA3mxfmUktl
+X-Google-Smtp-Source: ABdhPJzBnaI/zy/gt36IQozw7qOVqf4D5D6Z89ZgclkVag0otV1hW+5BOVZjfLcikEKcWEg+uSXZlzRQtYzU
+X-Received: from pumahsu.ntc.corp.google.com ([2401:fa00:fc:202:e7:3de8:f33d:ca1c])
+ (user=pumahsu job=sendgmr) by 2002:a25:6d06:: with SMTP id
+ i6mr24525004ybc.216.1642398007387; Sun, 16 Jan 2022 21:40:07 -0800 (PST)
+Date:   Mon, 17 Jan 2022 13:39:18 +0800
+Message-Id: <20220117053918.671399-1-pumahsu@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+Subject: [PATCH v4] xhci: re-initialize the HC during resume if HCE was set
 From:   Puma Hsu <pumahsu@google.com>
-Date:   Mon, 17 Jan 2022 13:24:01 +0800
-Message-ID: <CAGCq0LZ3i8VaMfRWNKvH_-ms0TgNqKA6f+Zx7M=iz1t_-smW+g@mail.gmail.com>
-Subject: Re: [PATCH v3] xhci: re-initialize the HC during resume if HCE was set
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     mathias.nyman@intel.com, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Albert Wang <albertccwang@google.com>,
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     s.shtylyov@omp.ru, albertccwang@google.com,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
+        Puma Hsu <pumahsu@google.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 4:21 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Jan 13, 2022 at 03:54:27PM +0800, Puma Hsu wrote:
-> > On Tue, Jan 11, 2022 at 7:43 PM Greg KH <gregkh@linuxfoundation.org> wr=
-ote:
-> > >
-> > > On Wed, Dec 29, 2021 at 07:25:51PM +0800, Puma Hsu wrote:
-> > > > When HCE(Host Controller Error) is set, it means an internal
-> > > > error condition has been detected. It needs to re-initialize
-> > > > the HC too.
-> > >
-> > > What is "It" in the last sentence?
-> >
-> > Maybe I can change "It" to "Software", xHCI specification uses
-> > "Software" when describing this.
->
-> Please change it to something better :)
+When HCE(Host Controller Error) is set, it means an internal
+error condition has been detected. Software needs to re-initialize
+the HC, so add this check in xhci resume.
 
-I will fix it in next patch version.
+Cc: stable@vger.kernel.org
+Signed-off-by: Puma Hsu <pumahsu@google.com>
+---
+v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
+v3: Add stable@vger.kernel.org for stable release.
+v4: Refine the commit message.
 
-> > > >
-> > > > Cc: stable@vger.kernel.org
-> > > > Signed-off-by: Puma Hsu <pumahsu@google.com>
-> > >
-> > > What commit id does this fix?
-> >
-> > This commit is not used to fix a specific commit. We find a condition
-> > that when XHCI runs the resume process but the HCE flag is set, then
-> > the Run/Stop bit of USBCMD cannot be set so that HC would not be
-> > enabled. In fact, HC may already meet a problem at this moment.
-> > Besides, in xHCI requirements specification revision 1.2, Table 5-21
-> > BIT(12) claims that Software should re-initialize the xHC when HCE is
-> > set. Therefore, I think this commit could be the error handling for
-> > HCE.
->
-> So this problem has been there since the driver was first added to the
-> kernel?  Should it go to stable kernels as well?  If so, how far back in
-> time?
+ drivers/usb/host/xhci.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I think XHCI hasn=E2=80=99t handled HCE, so yes this may be a long problem.
-I have cced stable@vger.kernel.org for stable backporting, but I=E2=80=99m =
-not sure
-how far it should backport since it seems this might be a rare case if no o=
-ne
-reported this issue?
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index dc357cabb265..ab440ce8420f 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1146,8 +1146,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+ 		temp = readl(&xhci->op_regs->status);
+ 	}
+ 
+-	/* If restore operation fails, re-initialize the HC during resume */
+-	if ((temp & STS_SRE) || hibernated) {
++	/* If restore operation fails or HC error is detected, re-initialize the HC during resume */
++	if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
+ 
+ 		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
+ 				!(xhci_all_ports_seen_u0(xhci))) {
+-- 
+2.34.1.703.g22d0c6ccf7-goog
 
-> > > > ---
-> > > > v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
-> > > > v3: Add stable@vger.kernel.org for stable release.
-> > > >
-> > > >  drivers/usb/host/xhci.c | 4 ++--
-> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> > > > index dc357cabb265..ab440ce8420f 100644
-> > > > --- a/drivers/usb/host/xhci.c
-> > > > +++ b/drivers/usb/host/xhci.c
-> > > > @@ -1146,8 +1146,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool h=
-ibernated)
-> > > >               temp =3D readl(&xhci->op_regs->status);
-> > > >       }
-> > > >
-> > > > -     /* If restore operation fails, re-initialize the HC during re=
-sume */
-> > > > -     if ((temp & STS_SRE) || hibernated) {
-> > > > +     /* If restore operation fails or HC error is detected, re-ini=
-tialize the HC during resume */
-> > > > +     if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
-> > >
-> > > But if STS_HCE is set on suspend, that means the suspend was broken s=
-o
-> > > you wouldn't get here, right?
-> >
-> > In xhci_suspend(), it seems doesn't really check whether STS_HCE is
-> > set and then break the suspend(The only case for checking HCE is when
-> > STS_SAVE setting failed). So suspend function may be still able to
-> > finish even if HCE is set? Then xhci_resume will still be called.
->
-> Is this a problem?
-
-It could be, but I'm not sure and I think it may be not so serious if
-HCE was raised
-while suspend, because host controller doesn=E2=80=99t have job while suspe=
-nd.
-And we are
-trying to recover it while resume.
-
-> > > Or can the error happen between suspend and resume?
-> > >
-> > > This seems like a big hammer for when the host controller throws an
-> > > error.  Why is this the only place that it should be checked for?  Wh=
-at
-> > > caused the error that can now allow it to be fixed?
-> >
-> > I believe this is not the only place that the host controller may set
-> > HCE, the host controller may set HCE anytime it sees an error in my
-> > opinion, not only in suspend or resume.
->
-> Then where else should it be checked?  Where else will your silicon set
-> this bit as part of the normal operating process?
-
-We observed this flag while resume in our silicon so far. According to the =
-XHCI
-specification 4.24.1, =E2=80=9CSoftware should implement an algorithm for c=
-hecking the
-HCE flag if the xHC is not responding.=E2=80=9D, so maybe it would be bette=
-r
-to implement
-a new API to recover host controller whenever the driver side finds no resp=
-onse
-from host controller in the future.
-
-> thanks,
->
-> greg k-h
