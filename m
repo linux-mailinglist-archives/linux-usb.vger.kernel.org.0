@@ -2,81 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C4F4909D8
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jan 2022 14:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6A8490A1E
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jan 2022 15:14:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236024AbiAQNzO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jan 2022 08:55:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235891AbiAQNzO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jan 2022 08:55:14 -0500
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BA6C06161C
-        for <linux-usb@vger.kernel.org>; Mon, 17 Jan 2022 05:55:14 -0800 (PST)
-Received: by mail-oi1-x241.google.com with SMTP id q186so23480444oih.8
-        for <linux-usb@vger.kernel.org>; Mon, 17 Jan 2022 05:55:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=KalP7pqUldn0owlfQ20Q8VvgpD4qNB4+Il7bEQ6jfBE=;
-        b=aZs/ZGcz5LVCQKjKDrcHm2WQvDBkAB0PB/5zF5l6r+N38dkPp9I3s5tO7W6cun57T2
-         KGPFKYGYHvnyWJBvKWDsG3UNQf/jxXLLS8bG+6pm5nRfFT5RVBgN+5L77tTPLGaq2Okj
-         UwmPZ1wEUICqTHMCC3q+ZOBtWgQyU+bipop5dyoRaqn2wRxoX+5pmHCizmdxjqh1Noqs
-         kuDmJuKeq0K28b2GbKuvuniOxAtbkeyY3YINZAl2twrgc3pQa59VPdeBnr1DTN71kG8B
-         oPU4KwJ7ekNdoKSx00J8DLK/jbrqXhYiZecGT7YrTn6kpz9fTpnO3vNZTivvdw498Nvj
-         wckQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=KalP7pqUldn0owlfQ20Q8VvgpD4qNB4+Il7bEQ6jfBE=;
-        b=7hP7tsjxwEmD3ifhL7LQnw1NpXk8Jn7d2pH1LXU8Jb1aD81bTc/XrhKDcibJvQ5HdV
-         ytI00POjaEbAgZZUw1ms1V1kKsr7eEBeIc9OI9beiBz4W8wGYTPYorNi7y7wKT3S2A/8
-         p9EVV6HYjhmoe6dQjg0Cb2eF1in5CdDvHwvlgM178QYd8Cr4X2rupxDWwI4/wLdwEbKG
-         fYIOE6ZUqJDlKsX9F5VGLXb5mWAfgKhVuXgy5vYhmDZ0WQn9V35yVJM5YJrnlhL70QBI
-         +akgB7S+Ny0oheLkZm4YyGF+bOdZIMHTM5qFbE09lmMPWJZjEWvS9ETjqj9zmoBeAv1R
-         LFWg==
-X-Gm-Message-State: AOAM531deFy1ywRqDKojwS8o+14/1Y6QAjsf5zOuHEPq0OzJIzUy6w/9
-        O//5awHD5caoF/dPWmoP+Te0oTYpxwBZ3enZFWc=
-X-Google-Smtp-Source: ABdhPJwYSo/7Ep0cMj5ymsBYVumoh1PXeBtIKEQY+KZh+YUg/E009Lk9NR6wk/Lqhi5mc1rHZk6liNDiICAzvGZBJQw=
-X-Received: by 2002:a05:6808:618:: with SMTP id y24mr7784962oih.127.1642427713286;
- Mon, 17 Jan 2022 05:55:13 -0800 (PST)
+        id S234456AbiAQOOd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jan 2022 09:14:33 -0500
+Received: from mga09.intel.com ([134.134.136.24]:55398 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232040AbiAQOOb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 Jan 2022 09:14:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642428871; x=1673964871;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dpdDCUgIFGr2FuwMabXwCtN6FdEIwM7gKE2hLUmGplQ=;
+  b=I96sjmSgw4oe3wkv++h1RNQ9mKPLYX7q5I0SYBHqXU32XBhKecQKohLE
+   ipyANRe8K0C6FVAbSyDbdGHI5nZbJR8MyWId9SJHP8jNHM9edFEf1iXoi
+   NWDYUVIErlLyxvQaXxe72C6RzRZvGRwgqLIUZBdGA48vdpunxDDyTw0N9
+   8HoPVoT/wP+lz75mX8lfmlwzDBUWv1kWqb/yQXmAxBqCvw5D9R4KZwrmZ
+   rlnJXe1hYqsWHJEebo1nhYmCSAe/UUjv74caqBUR/VmG+gKgzw57ksJVp
+   bsQrmL77qOENiphhcy3U230ngljFMgsRkCu22+Q4/SHhKNgJyQX5eLMXu
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="244429786"
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="244429786"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 06:10:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="671568402"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 17 Jan 2022 06:10:52 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 17 Jan 2022 16:10:51 +0200
+Date:   Mon, 17 Jan 2022 16:10:51 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] usb: common: ulpi: Fix crash in ulpi_match()
+Message-ID: <YeV466hTEyDwvmyL@kuha.fi.intel.com>
+References: <20220114100217.59541-1-jonathanh@nvidia.com>
 MIME-Version: 1.0
-Received: by 2002:a4a:c18d:0:0:0:0:0 with HTTP; Mon, 17 Jan 2022 05:55:12
- -0800 (PST)
-Reply-To: mrsaishag45@gmail.com
-From:   Mrs Aisha Al-Qaddafi <mrsaishag09@gmail.com>
-Date:   Mon, 17 Jan 2022 05:55:12 -0800
-Message-ID: <CA+ATk24o-gEi=_tbZ7CTc3=ah13JPwS4zFNwq4SPxjmNLOERtg@mail.gmail.com>
-Subject: Dear Friend,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220114100217.59541-1-jonathanh@nvidia.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Friend,
+Hi Jon,
 
-I came across your e-mail contact prior a private search while in need
-of your assistance. My name is Aisha Gaddafi a single
+On Fri, Jan 14, 2022 at 10:02:17AM +0000, Jon Hunter wrote:
+> Commit 7495af930835 ("ARM: multi_v7_defconfig: Enable drivers for
+> DragonBoard 410c") enables the CONFIG_PHY_QCOM_USB_HS for the ARM
+> multi_v7_defconfig. Enabling this Kconfig is causing the kernel to crash
+> on the Tegra20 Ventana platform in the ulpi_match() function.
+> 
+> The Qualcomm USB HS PHY driver that is enabled by CONFIG_PHY_QCOM_USB_HS,
+> registers a ulpi_driver but this driver does not provide an 'id_table',
+> so when ulpi_match() is called on the Tegra20 Ventana platform, it
+> crashes when attempting to deference the id_table pointer which is not
+> valid. The Qualcomm USB HS PHY driver uses device-tree for matching the
+> ULPI driver with the device and so fix this crash by using device-tree
+> for matching if the id_table is not valid.
+> 
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
 
-Mother and a Widow with three Children. I am the only biological
-Daughter of late Libyan President (Late Colonel Muammar
+So is this fixing commit 7495af930835, or perhaps commit ef6a7bcfb01c
+("usb: ulpi: Support device discovery via DT")?
 
-Gaddafi).
+I would assume ef6a7bcfb01c ("usb: ulpi: Support device discovery via
+DT"). Please include the appropriate Fixes tag.
 
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar ($27.500.000.00 ) and i need a
+> ---
+>  drivers/usb/common/ulpi.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+> index 4169cf40a03b..8f8405b0d608 100644
+> --- a/drivers/usb/common/ulpi.c
+> +++ b/drivers/usb/common/ulpi.c
+> @@ -39,8 +39,11 @@ static int ulpi_match(struct device *dev, struct device_driver *driver)
+>  	struct ulpi *ulpi = to_ulpi_dev(dev);
+>  	const struct ulpi_device_id *id;
+>  
+> -	/* Some ULPI devices don't have a vendor id so rely on OF match */
+> -	if (ulpi->id.vendor == 0)
+> +	/*
+> +	 * Some ULPI devices don't have a vendor id
+> +	 * or provide an id_table so rely on OF match.
+> +	 */
+> +	if (ulpi->id.vendor == 0 || !drv->id_table)
+>  		return of_driver_match_device(dev, driver);
+>  
+>  	for (id = drv->id_table; id->vendor; id++)
+> -- 
+> 2.25.1
 
-trusted investment Manager/Partner because of my current refugee
-status, however, I am interested in you for investment
+thanks,
 
-project assistance in your country, may be from there, we can build
-business relationship in the nearest future.
-
-I am willing to negotiate investment/business profit sharing ratio
-with you base on the future investment earning profits.
-If you are willing to handle this project on my behalf kindly reply
-urgent to enable me provide you more information about
-Mrs Aisha Gaddafi
+-- 
+heikki
