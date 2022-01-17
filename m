@@ -2,128 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6424908B4
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jan 2022 13:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C4F4909D8
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jan 2022 14:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239887AbiAQMaQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jan 2022 07:30:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
+        id S236024AbiAQNzO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jan 2022 08:55:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbiAQMaP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jan 2022 07:30:15 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D01C061574;
-        Mon, 17 Jan 2022 04:30:15 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id 60-20020a9d0142000000b0059103eb18d4so19509217otu.2;
-        Mon, 17 Jan 2022 04:30:15 -0800 (PST)
+        with ESMTP id S235891AbiAQNzO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jan 2022 08:55:14 -0500
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BA6C06161C
+        for <linux-usb@vger.kernel.org>; Mon, 17 Jan 2022 05:55:14 -0800 (PST)
+Received: by mail-oi1-x241.google.com with SMTP id q186so23480444oih.8
+        for <linux-usb@vger.kernel.org>; Mon, 17 Jan 2022 05:55:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Xp4+4+Wf5tUKljhMRbkkPD6L+kcOJd/sxyMiSoMO1F8=;
-        b=OfdJFKiAlYwn1IT48NdRrcoE/gTwmk3XVMQFUqA2U8dTNaQ3/elLCLqDvlU2ojCIMa
-         L4E8269GygXEjsMK4aBgOBHW6TX9+T2vNFN5YHdkNz3TwOW+22AtOVfoWG1IA5JN2Mvz
-         scVHgGfrfq1LSUGg6ggMA0yJL7BVpjqChodCUmojEOW8lpgz0AYfbL2BKc3I7WrLZpb9
-         1NkCiiNxcOp9aeox2XZhcDqgJGS5hxs5D9jqylZ4hB9GSOTfiqglHBddjnSfonod+XmM
-         Q47X3ZmlC1pu6XqHKqsD4TPs/jmbAXvsCpDswjQVyQjbXN+Ft8XM0J5PgIpRD3ZTlcYQ
-         zG1Q==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=KalP7pqUldn0owlfQ20Q8VvgpD4qNB4+Il7bEQ6jfBE=;
+        b=aZs/ZGcz5LVCQKjKDrcHm2WQvDBkAB0PB/5zF5l6r+N38dkPp9I3s5tO7W6cun57T2
+         KGPFKYGYHvnyWJBvKWDsG3UNQf/jxXLLS8bG+6pm5nRfFT5RVBgN+5L77tTPLGaq2Okj
+         UwmPZ1wEUICqTHMCC3q+ZOBtWgQyU+bipop5dyoRaqn2wRxoX+5pmHCizmdxjqh1Noqs
+         kuDmJuKeq0K28b2GbKuvuniOxAtbkeyY3YINZAl2twrgc3pQa59VPdeBnr1DTN71kG8B
+         oPU4KwJ7ekNdoKSx00J8DLK/jbrqXhYiZecGT7YrTn6kpz9fTpnO3vNZTivvdw498Nvj
+         wckQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Xp4+4+Wf5tUKljhMRbkkPD6L+kcOJd/sxyMiSoMO1F8=;
-        b=N1AGXRB8k+J3CJhSZGa3LixdiSQLswXA96lqZ55ZbMSss1gyPpJZC8D8jHwHzxGZ+M
-         KkOzL1sCJheMz6XCknDsZLyrTCBxhu8NzIJCMXF9DJWy/IOiNsU0Ojyp/ZFo1H65EnmJ
-         0cgoCyjz0lSvhOytjHh1XT7kDxLtuHED3Gd6jcWpZFAyw8atdF/ZbWtufx6ufs/QqjXd
-         iIpXwHIeJHyER0/1EYd02xh5kYg7qhihNVowDarSHqGt2Q7RJJddSP/04UD6Wxa+Fnp9
-         wXrw0S3stzAT8LvSA/WlUT1iuE11O2jI94NJRHnsGbqerB7cj+0UoxCgCsQMbcrNlwoo
-         3C5g==
-X-Gm-Message-State: AOAM531/i5UzM9+PSKzxrPimthc8AZmHNLgVUfIGWx3E6hwE8J9Ossgs
-        tXJrR677PVEz1TvDYiRaBkgx3Ge2nSTDwJq0UW4r9/5UdUM=
-X-Google-Smtp-Source: ABdhPJz4HHHPGxTLEZqNI3Bi+FfcVyBZCrg7v/hyl0ovPK3zpRfgk4Sncfbh/+u+Jqouz2UpX4d5AOHo5YavyfgWfis=
-X-Received: by 2002:a9d:d08:: with SMTP id 8mr16850521oti.334.1642422614470;
- Mon, 17 Jan 2022 04:30:14 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=KalP7pqUldn0owlfQ20Q8VvgpD4qNB4+Il7bEQ6jfBE=;
+        b=7hP7tsjxwEmD3ifhL7LQnw1NpXk8Jn7d2pH1LXU8Jb1aD81bTc/XrhKDcibJvQ5HdV
+         ytI00POjaEbAgZZUw1ms1V1kKsr7eEBeIc9OI9beiBz4W8wGYTPYorNi7y7wKT3S2A/8
+         p9EVV6HYjhmoe6dQjg0Cb2eF1in5CdDvHwvlgM178QYd8Cr4X2rupxDWwI4/wLdwEbKG
+         fYIOE6ZUqJDlKsX9F5VGLXb5mWAfgKhVuXgy5vYhmDZ0WQn9V35yVJM5YJrnlhL70QBI
+         +akgB7S+Ny0oheLkZm4YyGF+bOdZIMHTM5qFbE09lmMPWJZjEWvS9ETjqj9zmoBeAv1R
+         LFWg==
+X-Gm-Message-State: AOAM531deFy1ywRqDKojwS8o+14/1Y6QAjsf5zOuHEPq0OzJIzUy6w/9
+        O//5awHD5caoF/dPWmoP+Te0oTYpxwBZ3enZFWc=
+X-Google-Smtp-Source: ABdhPJwYSo/7Ep0cMj5ymsBYVumoh1PXeBtIKEQY+KZh+YUg/E009Lk9NR6wk/Lqhi5mc1rHZk6liNDiICAzvGZBJQw=
+X-Received: by 2002:a05:6808:618:: with SMTP id y24mr7784962oih.127.1642427713286;
+ Mon, 17 Jan 2022 05:55:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20220114233904.907918-1-sean.anderson@seco.com>
-In-Reply-To: <20220114233904.907918-1-sean.anderson@seco.com>
-From:   Jun Li <lijun.kernel@gmail.com>
-Date:   Mon, 17 Jan 2022 20:30:03 +0800
-Message-ID: <CAKgpwJUMXk--4EaYOxAAtLJT85mDHRHMihr6n7y1HECN+gmBBw@mail.gmail.com>
-Subject: Re: [PATCH 0/6] usb: dwc3: Calculate REFCLKPER et. al. from reference clock
-To:     Sean Anderson <sean.anderson@seco.com>, Li Jun <jun.li@nxp.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Felipe Balbi <balbi@kernel.org>,
-        Balaji Prakash J <bjagadee@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org
+Received: by 2002:a4a:c18d:0:0:0:0:0 with HTTP; Mon, 17 Jan 2022 05:55:12
+ -0800 (PST)
+Reply-To: mrsaishag45@gmail.com
+From:   Mrs Aisha Al-Qaddafi <mrsaishag09@gmail.com>
+Date:   Mon, 17 Jan 2022 05:55:12 -0800
+Message-ID: <CA+ATk24o-gEi=_tbZ7CTc3=ah13JPwS4zFNwq4SPxjmNLOERtg@mail.gmail.com>
+Subject: Dear Friend,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Sean Anderson <sean.anderson@seco.com> =E4=BA=8E2022=E5=B9=B41=E6=9C=8815=
-=E6=97=A5=E5=91=A8=E5=85=AD 10:11=E5=86=99=E9=81=93=EF=BC=9A
->
-> This is a rework of patches 3-5 of [1]. It attempts to correctly program
-> REFCLKPER and REFCLK_FLADJ based on the reference clock frequency. Since
-> we no longer need a special property duplicating this configuration,
-> snps,ref-clock-period-ns is deprecated.
->
-> Please test this! Patches 3/4 in this series have the effect of
-> programming REFCLKPER and REFCLK_FLADJ on boards which already configure
-> the "ref" clock. I have build tested, but not much else.
+Dear Friend,
 
-DWC3 databook states a *condition* for program those settings:
+I came across your e-mail contact prior a private search while in need
+of your assistance. My name is Aisha Gaddafi a single
 
-This field must be programmed to a non-zero value only if
-GFLADJ_REFCLK_LPM_SEL is set to '1' or GCTL.SOFITPSYNC is set to '1'.
-The value is derived as follows:
-FLADJ_REF_CLK_FLADJ=3D((125000/ref_clk_period_integer)-(125000/ref_clk_peri=
-od))
-* ref_clk_period where
-=E2=96=A0 the ref_clk_period_integer is the integer value of the ref_clk
-period got by truncating the decimal (fractional) value that is
-programmed in the GUCTL.REF_CLK_PERIOD field.
-=E2=96=A0 the ref_clk_period is the ref_clk period including the fractional=
- value.
+Mother and a Widow with three Children. I am the only biological
+Daughter of late Libyan President (Late Colonel Muammar
 
-So you may need a condition check, with that, only required users
-are effected even with "ref" clock specified.
+Gaddafi).
 
-Li Jun
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar ($27.500.000.00 ) and i need a
 
->
-> [1] https://lore.kernel.org/linux-usb/20220114044230.2677283-1-robert.han=
-cock@calian.com/
->
->
-> Sean Anderson (6):
->   dt-bindings: usb: dwc3: Deprecate snps,ref-clock-period-ns
->   usb: dwc3: Get clocks individually
->   usb: dwc3: Calculate REFCLKPER based on reference clock
->   usb: dwc3: Handle fractional reference clocks
->   arm64: dts: zynqmp: Move USB clocks to dwc3 node
->   arm64: dts: ipq6018: Use reference clock to set dwc3 period
->
->  .../devicetree/bindings/usb/snps,dwc3.yaml    |  7 +-
->  arch/arm64/boot/dts/qcom/ipq6018.dtsi         |  3 +-
->  .../arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi |  4 +-
->  arch/arm64/boot/dts/xilinx/zynqmp.dtsi        |  4 +-
->  drivers/usb/dwc3/core.c                       | 98 ++++++++++++++++---
->  drivers/usb/dwc3/core.h                       |  6 +-
->  6 files changed, 98 insertions(+), 24 deletions(-)
->
-> --
-> 2.25.1
->
+trusted investment Manager/Partner because of my current refugee
+status, however, I am interested in you for investment
+
+project assistance in your country, may be from there, we can build
+business relationship in the nearest future.
+
+I am willing to negotiate investment/business profit sharing ratio
+with you base on the future investment earning profits.
+If you are willing to handle this project on my behalf kindly reply
+urgent to enable me provide you more information about
+Mrs Aisha Gaddafi
