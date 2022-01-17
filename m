@@ -2,147 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2F949010D
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jan 2022 06:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E6A490121
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jan 2022 06:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiAQFMd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jan 2022 00:12:33 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:23919 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiAQFMc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jan 2022 00:12:32 -0500
+        id S231864AbiAQFYq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jan 2022 00:24:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232004AbiAQFYi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jan 2022 00:24:38 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08517C061768
+        for <linux-usb@vger.kernel.org>; Sun, 16 Jan 2022 21:24:38 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id s15so3442885pgs.1
+        for <linux-usb@vger.kernel.org>; Sun, 16 Jan 2022 21:24:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642396352; x=1673932352;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5+i3OFZvbJvxEhERitXVmUI0MC3HAKYJToPu9J4JaZw=;
-  b=a8iHXuiAmkMLZ2+N+Y+EZJ9uHjm2d6WO3kEx2i1x+mRQpCrJ7xKTRqDr
-   R8IGMZ8LP3jnoAY9qdnie6HFoWj8wtGxsFs8umwlZ8OnIv6Ies/ZdBiwE
-   tUJo7R/57cyTZEitFP3x+AJozgxtA0KKLpG5Tc6+CRTEqvAoX1YH0fRPJ
-   w=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 16 Jan 2022 21:12:32 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 21:12:32 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Sun, 16 Jan 2022 21:12:31 -0800
-Received: from [10.50.10.143] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Sun, 16 Jan
- 2022 21:12:25 -0800
-Message-ID: <ffda32f9-85ff-b6d2-0736-6c36d6c709ec@quicinc.com>
-Date:   Mon, 17 Jan 2022 10:42:20 +0530
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ISpM5IrkTHsOLgNJIWuzTE0806bOg7B0Sd40UWe36MY=;
+        b=mEmWRcI8rpsg6TVZzLXBc4yugerwYpj+1EEmNn/rJ8cJt+cMEF4GiUnb9KyxiUw+SW
+         1aO3wa1dG9ddyVopK+OCJ+xArSKONuiiRSGgDkmALA1ArRsBK43EGeeaxLFpXOlgWcwp
+         Y5ZwP0DkQ3D3dq/NaX3RjrKvPGzSr9GFTP6xLSBJ51dHQo2/RSBmexvFPgcsMuW6a2qV
+         0svRY0qCbO6zl2v+JziGGW/GOWm4VVaBZvpwjP28z6hrOq8bjRuj4jYKOSbF9ZqNNDhl
+         ZBLFWxERjjWjHnKOsoUx6Llwjjm/kgmrNOBdJj3gOxivQZU/186xYQO7jlfwZTiRIbO/
+         R2iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ISpM5IrkTHsOLgNJIWuzTE0806bOg7B0Sd40UWe36MY=;
+        b=Po9gELDHM3q/TrHahAKmHwD93Zeaqh9vC7vBdmlsltPRMVglEgb6ZdjOnKCz6l7kJV
+         32ZWfVs7+BLuOk95dk3eW9F7LQ/AthUqQUgMfyQR7wE1pvzU2vdhLl+/PUU7uT8U+1MY
+         4DiqM3kUFfd977/LO9GQtEDRyirFSkY9VgS3AYcTGzVzVyZ1jrs8ooNNnmydNboJ93cA
+         dbTWyWVzXpweglzfDgfEpdnkktbWOo2IgC6hmsGuzTTCWm8figpZP+yjnkwR/jsPtpuN
+         AMdkEWyZtVLyGF+Ov1a2aLQLolop1pX1TF3Y8FL1vRa4kE5kxZR+1tKD3QDBu6fvf3jZ
+         lp0Q==
+X-Gm-Message-State: AOAM533u/85uItisAU8cHyDE/xRYpuhXtOQit/eBpZNKA+8btN9PE3BH
+        EgGzh2CjadH6duqPgkiIJ7cQoY4qUCMmmh5FULayLA==
+X-Google-Smtp-Source: ABdhPJxKwUr6Mj0BEDwdpy+SnRUQVHpSe65h55GAGFLd+Tz4e10Ihr4mDyeK2km1qRM342NbayRDmXZ3esgEpKlX8Gk=
+X-Received: by 2002:a63:fe47:: with SMTP id x7mr5625761pgj.415.1642397077062;
+ Sun, 16 Jan 2022 21:24:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH V3 1/7] dt-bindings: Add the yaml bindings for EUD
-Content-Language: en-CA
-To:     Rob Herring <robh@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
-        <bjorn.andersson@linaro.org>, <greg@kroah.com>,
-        <linux-kernel@vger.kernel.org>, <tsoni@codeaurora.org>,
-        <psodagud@codeaurora.org>, <satyap@codeaurora.org>,
-        <pheragu@codeaurora.org>, <rnayak@codeaurora.org>,
-        <sibis@codeaurora.org>, <saiprakash.ranjan@codeaurora.org>
-References: <cover.1641288286.git.quic_schowdhu@quicinc.com>
- <5d9491693870b5dde757959f4491296503d22f70.1641288286.git.quic_schowdhu@quicinc.com>
- <Yd4qD7ziPNgAQNHG@robh.at.kernel.org>
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <Yd4qD7ziPNgAQNHG@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+References: <20211229112551.3483931-1-pumahsu@google.com> <Yd1tUKhyZf26OVNQ@kroah.com>
+ <CAGCq0LZb8nQDvcz=LswWi4qKd-65ys6iPjTKh=46dVtYLDEUVw@mail.gmail.com> <Yd/g/ywBWZG7gF8v@kroah.com>
+In-Reply-To: <Yd/g/ywBWZG7gF8v@kroah.com>
+From:   Puma Hsu <pumahsu@google.com>
+Date:   Mon, 17 Jan 2022 13:24:01 +0800
+Message-ID: <CAGCq0LZ3i8VaMfRWNKvH_-ms0TgNqKA6f+Zx7M=iz1t_-smW+g@mail.gmail.com>
+Subject: Re: [PATCH v3] xhci: re-initialize the HC during resume if HCE was set
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     mathias.nyman@intel.com, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Albert Wang <albertccwang@google.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, Jan 13, 2022 at 4:21 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Jan 13, 2022 at 03:54:27PM +0800, Puma Hsu wrote:
+> > On Tue, Jan 11, 2022 at 7:43 PM Greg KH <gregkh@linuxfoundation.org> wr=
+ote:
+> > >
+> > > On Wed, Dec 29, 2021 at 07:25:51PM +0800, Puma Hsu wrote:
+> > > > When HCE(Host Controller Error) is set, it means an internal
+> > > > error condition has been detected. It needs to re-initialize
+> > > > the HC too.
+> > >
+> > > What is "It" in the last sentence?
+> >
+> > Maybe I can change "It" to "Software", xHCI specification uses
+> > "Software" when describing this.
+>
+> Please change it to something better :)
 
-On 1/12/2022 6:38 AM, Rob Herring wrote:
-> On Tue, Jan 04, 2022 at 05:28:14PM +0530, Souradeep Chowdhury wrote:
->> Documentation for Embedded USB Debugger(EUD) device tree
->> bindings in yaml format.
-> I agree with Bjorn's comments.
-Ack
+I will fix it in next patch version.
+
+> > > >
+> > > > Cc: stable@vger.kernel.org
+> > > > Signed-off-by: Puma Hsu <pumahsu@google.com>
+> > >
+> > > What commit id does this fix?
+> >
+> > This commit is not used to fix a specific commit. We find a condition
+> > that when XHCI runs the resume process but the HCE flag is set, then
+> > the Run/Stop bit of USBCMD cannot be set so that HC would not be
+> > enabled. In fact, HC may already meet a problem at this moment.
+> > Besides, in xHCI requirements specification revision 1.2, Table 5-21
+> > BIT(12) claims that Software should re-initialize the xHC when HCE is
+> > set. Therefore, I think this commit could be the error handling for
+> > HCE.
 >
->> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
->> ---
->>   .../devicetree/bindings/soc/qcom/qcom,eud.yaml     | 50 ++++++++++++++++++++++
->>   1 file changed, 50 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
->> new file mode 100644
->> index 0000000..3523932
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
->> @@ -0,0 +1,50 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: "http://devicetree.org/schemas/soc/qcom/qcom,eud.yaml#"
->> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->> +
->> +title: Qualcomm Embedded USB Debugger
->> +
->> +maintainers:
->> +  - Souradeep Chowdhury <quic_schowdhu@quicinc.com>
->> +
->> +description:
->> +  This binding is used to describe the Qualcomm Embedded USB Debugger, which is
->> +  mini USB-hub implemented on chip to support USB-based debug capabilities.
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - qcom,sc7280-eud
->> +      - const: qcom,eud
->> +
->> +  reg:
->> +    items:
->> +      - description: EUD Base Register Region
->> +      - description: EUD Mode Manager Register
->> +
->> +  interrupts:
->> +    description:
->> +      EUD interrupt
-> Just 'maxItems: 1' is sufficient here.
-Ack
+> So this problem has been there since the driver was first added to the
+> kernel?  Should it go to stable kernels as well?  If so, how far back in
+> time?
+
+I think XHCI hasn=E2=80=99t handled HCE, so yes this may be a long problem.
+I have cced stable@vger.kernel.org for stable backporting, but I=E2=80=99m =
+not sure
+how far it should backport since it seems this might be a rare case if no o=
+ne
+reported this issue?
+
+> > > > ---
+> > > > v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
+> > > > v3: Add stable@vger.kernel.org for stable release.
+> > > >
+> > > >  drivers/usb/host/xhci.c | 4 ++--
+> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > > > index dc357cabb265..ab440ce8420f 100644
+> > > > --- a/drivers/usb/host/xhci.c
+> > > > +++ b/drivers/usb/host/xhci.c
+> > > > @@ -1146,8 +1146,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool h=
+ibernated)
+> > > >               temp =3D readl(&xhci->op_regs->status);
+> > > >       }
+> > > >
+> > > > -     /* If restore operation fails, re-initialize the HC during re=
+sume */
+> > > > -     if ((temp & STS_SRE) || hibernated) {
+> > > > +     /* If restore operation fails or HC error is detected, re-ini=
+tialize the HC during resume */
+> > > > +     if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
+> > >
+> > > But if STS_HCE is set on suspend, that means the suspend was broken s=
+o
+> > > you wouldn't get here, right?
+> >
+> > In xhci_suspend(), it seems doesn't really check whether STS_HCE is
+> > set and then break the suspend(The only case for checking HCE is when
+> > STS_SAVE setting failed). So suspend function may be still able to
+> > finish even if HCE is set? Then xhci_resume will still be called.
 >
->> +
->> +  port:
-> Based on Bjorn's comment, you will need 2 port nodes.
-Ack
+> Is this a problem?
+
+It could be, but I'm not sure and I think it may be not so serious if
+HCE was raised
+while suspend, because host controller doesn=E2=80=99t have job while suspe=
+nd.
+And we are
+trying to recover it while resume.
+
+> > > Or can the error happen between suspend and resume?
+> > >
+> > > This seems like a big hammer for when the host controller throws an
+> > > error.  Why is this the only place that it should be checked for?  Wh=
+at
+> > > caused the error that can now allow it to be fixed?
+> >
+> > I believe this is not the only place that the host controller may set
+> > HCE, the host controller may set HCE anytime it sees an error in my
+> > opinion, not only in suspend or resume.
 >
->> +    description:
->> +      This port is to be attached to the endpoint of the connector child of
->> +      DWC3 controller node. The controller has the "usb-role-switch" property.
->> +    $ref: /schemas/graph.yaml#/properties/port
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    eud@88e0000 {
->> +           compatible = "qcom,sc7280-eud","qcom,eud";
->> +           reg = <0x88e0000 0x2000>,
->> +                 <0x88e2000 0x1000>;
-> Are the ports really optional?
-Ack. Will make them mandatory.
+> Then where else should it be checked?  Where else will your silicon set
+> this bit as part of the normal operating process?
+
+We observed this flag while resume in our silicon so far. According to the =
+XHCI
+specification 4.24.1, =E2=80=9CSoftware should implement an algorithm for c=
+hecking the
+HCE flag if the xHC is not responding.=E2=80=9D, so maybe it would be bette=
+r
+to implement
+a new API to recover host controller whenever the driver side finds no resp=
+onse
+from host controller in the future.
+
+> thanks,
 >
->> +    };
->> -- 
->> 2.7.4
->>
->>
+> greg k-h
