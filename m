@@ -2,83 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CBFA490B9E
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jan 2022 16:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 160F0490C24
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jan 2022 17:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240581AbiAQPlz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jan 2022 10:41:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237309AbiAQPly (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jan 2022 10:41:54 -0500
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7DFC06161C
-        for <linux-usb@vger.kernel.org>; Mon, 17 Jan 2022 07:41:53 -0800 (PST)
-Received: by mail-qk1-x744.google.com with SMTP id z10so15598010qkf.7
-        for <linux-usb@vger.kernel.org>; Mon, 17 Jan 2022 07:41:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=vIF0HCtULT8/Hj4oEOKhM3wVM2dbK4vAQWbMA06NHEs=;
-        b=Ee31WhcSAoh/lxM0irPYoAatwbf63kBeieGEdHORtlk+FH+RzPqx0HW1M5D75HhS0Y
-         WkDaVhuGLUikIxZPsh2bEyRaVnVk8lZODnEPPdl8bvabQuWQYeUJ/pmaoctt9TU7iCUU
-         Hkfm12hyVs4noaQw2MRgIsBkSl8u40wVVMMM4SzFW1H5weh51Ch+WmCA1ewqPfMpaJNd
-         bsxELhISZ8GVAzaoiYqI40J7qmQuU+p3M5l14TJHX6VdpT4DJzr0RJwe+C8jJ4Kph+HY
-         la313MOjxvEwsw++1LDbhe+iQ2Cls/ivVCX4TI6ffI8nuLvh6IpTgP5t54bZPoNChalK
-         iLSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=vIF0HCtULT8/Hj4oEOKhM3wVM2dbK4vAQWbMA06NHEs=;
-        b=yvtDQlyuLn5jxc8iTOPFeHvG2Ps8QPYOmc/7sjKC39rL5kgkF634/NlRe/4ktb4p9r
-         jApnX8SRsLuQJR4zIlaejLEvdkFY1ufz3dW/ItRXj3DMA4HVXToa7BdNWICXRz5fOwDd
-         G+bv0SXZ3e5HmqSq52hEIhx3Ui2DIhsgqvpyj6qSrC5Ln2nhGsCczQg321V/VZVBuHbF
-         nn53h4mK1JfZIM8R22XzYIG4UOPdXg+FukET+bp0kNc5MKdoTylJYugEY+kka3wrS/Lx
-         hFwotf0Zgk2CgAoOsVweQZqq1R0TxdrP23fIbPIxHe4nMJfK5C77egzDkiaeWk6UKDo8
-         u6PQ==
-X-Gm-Message-State: AOAM530T+JUZCE9ijPMux28TQgP1SxIT8qPG0bV+Hm5sT4S4mrxNgxPB
-        X93fCTL9FNKFP2Und0OC/VMkK05w4m99n4KWJ7U=
-X-Google-Smtp-Source: ABdhPJxKAldfShhC8wZdY2Htq9hJGgXreaXEjiB1miYL4bVcqXdK1BUQ46o5M7iSwz6vWn6VdAI2GEFwVYsTwqDnwxw=
-X-Received: by 2002:a05:620a:4450:: with SMTP id w16mr14879837qkp.189.1642434112813;
- Mon, 17 Jan 2022 07:41:52 -0800 (PST)
+        id S240885AbiAQQKG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jan 2022 11:10:06 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:60483 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S240863AbiAQQKD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jan 2022 11:10:03 -0500
+Received: (qmail 40593 invoked by uid 1000); 17 Jan 2022 11:10:02 -0500
+Date:   Mon, 17 Jan 2022 11:10:02 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Bixuan Cui <cuibixuan@huawei.com>,
+        Rajat Jain <rajatja@google.com>, Andrew Lunn <andrew@lunn.ch>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] usb: core: Bail out when port is stuck in reset loop
+Message-ID: <YeWU2ido11JzbDe6@rowland.harvard.edu>
+References: <20211230052811.650191-1-kai.heng.feng@canonical.com>
+ <CAAd53p6ev+yQT+jf32UrTMWQXwDPYtmZSrW0zCQnKuUaBbtXUg@mail.gmail.com>
 MIME-Version: 1.0
-Reply-To: salkavar2@gmail.com
-Sender: carolineregt@gmail.com
-Received: by 2002:ae9:ed0c:0:0:0:0:0 with HTTP; Mon, 17 Jan 2022 07:41:52
- -0800 (PST)
-From:   "Mr.Sal kavar" <salkavar2@gmail.com>
-Date:   Mon, 17 Jan 2022 16:41:52 +0100
-X-Google-Sender-Auth: Rmg3t_RMlCbbQyliM2-B1b_cilM
-Message-ID: <CA+sSZD+g206m+jZKhkMPB+Df1YqxeSYunccMHKX4ky3Aub4hGw@mail.gmail.com>
-Subject: Yours Faithful,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAd53p6ev+yQT+jf32UrTMWQXwDPYtmZSrW0zCQnKuUaBbtXUg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I assume you and your family are in good health. I am the foreign
-operations Manager
+On Mon, Jan 17, 2022 at 11:00:05AM +0800, Kai-Heng Feng wrote:
+> On Thu, Dec 30, 2021 at 1:28 PM Kai-Heng Feng
+> <kai.heng.feng@canonical.com> wrote:
+> >
+> > Unplugging USB device may cause an incorrect warm reset loop and the
+> > port can no longer be used:
+> > [  143.039019] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x4202c0
+> > [  143.039025] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
+> > [  143.039051] hub 2-0:1.0: state 7 ports 10 chg 0000 evt 0008
+> > [  143.039058] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x4202c0, return 0x4102c0
+> > [  143.039092] xhci_hcd 0000:00:14.0: clear port3 connect change, portsc: 0x4002c0
+> > [  143.039096] usb usb2-port3: link state change
+> > [  143.039099] xhci_hcd 0000:00:14.0: clear port3 link state change, portsc: 0x2c0
+> > [  143.039101] usb usb2-port3: do warm reset
+> > [  143.096736] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2b0, return 0x2b0
+> > [  143.096751] usb usb2-port3: not warm reset yet, waiting 50ms
+> > [  143.131500] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link inactive
+> > [  143.138260] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x2802a0
+> > [  143.138263] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
+> > [  143.160756] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2802a0, return 0x3002a0
+> > [  143.160798] usb usb2-port3: not warm reset yet, waiting 200ms
+> >
+> > The port status is PP=1, CCS=0, PED=0, PLS=Inactive, which is Error
+> > state per "USB3 Root Hub Port State Machine". It's reasonable to perform
+> > warm reset several times, but if the port is still not enabled after
+> > many attempts, consider it's gone and treat it as disconnected.
+> >
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> 
+> A gentle ping...
+> 
+> > ---
+> >  drivers/usb/core/hub.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > index 00070a8a65079..f618d86d526d1 100644
+> > --- a/drivers/usb/core/hub.c
+> > +++ b/drivers/usb/core/hub.c
+> > @@ -2979,7 +2979,8 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
+> >                 }
+> >
+> >                 /* Check for disconnect or reset */
+> > -               if (status == 0 || status == -ENOTCONN || status == -ENODEV) {
+> > +               if (status == 0 || status == -ENOTCONN || status == -ENODEV ||
+> > +                   (status == -EBUSY && i == PORT_RESET_TRIES - 1)) {
 
-This being a wide world in which it can be difficult to make new
-acquaintances and because it is virtually impossible to know who is
-trustworthy and who can be believed, i have decided to repose
-confidence in you after much fasting and prayer. It is only because of
-this that I have decided to confide in you and to share with you this
-confidential business.
+How about modifying the comment so that people will know what this 
+extra test is trying to do?  The original comment no longer gives an 
+accurate description of the test.
 
-overdue and unclaimed sum of $15.5m, (Fifteen Million Five Hundred
-Thousand Dollars Only) when the account holder suddenly passed on, he
-left no beneficiary who would be entitled to the receipt of this fund.
-For this reason, I have found it expedient to transfer this fund to a
-trustworthy individual with capacity to act as foreign business
-partner.
+Alan Stern
 
-Thus i humbly request your assistance to claim this fund. Upon the
-transfer of this fund in your account, you will take 45% as your share
-from the total fund, 10% will be shared to Charity Organizations in
-both country and 45% will be for me.
-
-Yours Faithful,
-Mr.Sal Kavar.
+> >                         usb_clear_port_feature(hub->hdev, port1,
+> >                                         USB_PORT_FEAT_C_RESET);
+> >
+> > --
+> > 2.33.1
+> >
