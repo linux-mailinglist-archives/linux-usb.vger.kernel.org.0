@@ -2,82 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6935249225F
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jan 2022 10:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 341654922D6
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jan 2022 10:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345453AbiARJQO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jan 2022 04:16:14 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44070 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240550AbiARJQM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jan 2022 04:16:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78FB7B81256;
-        Tue, 18 Jan 2022 09:16:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84F23C00446;
-        Tue, 18 Jan 2022 09:16:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642497370;
-        bh=HOOeZJnmlX+xWzYaqQwJS/wp3FB2EuV2kUQrtVs5OQ8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f9SZH2rN8+DeAbYLS/0Qx9HLYYI17t7gQwaaduyRFKqBcFNf1WSqLi8v4aMTiR2/u
-         0M6J5lTUqmk+KNl3YZHxjVitOVGdAph7mGjv/UZKQcbQiWn+gZOy4hP9JhdzleW86p
-         QCho4xj48bIHAyj0dCW1bMXBCM5awxkV2X95t3z8=
-Date:   Tue, 18 Jan 2022 10:16:07 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH V2] usb: common: ulpi: Fix crash in ulpi_match()
-Message-ID: <YeaFVypshfTRmQvQ@kroah.com>
-References: <20220117150039.44058-1-jonathanh@nvidia.com>
- <YeWN1Hb0tpjDzn+C@kroah.com>
- <ae60ab9f-2fd7-b706-3584-ef8ab6bc39de@nvidia.com>
+        id S1344595AbiARJgS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jan 2022 04:36:18 -0500
+Received: from mga09.intel.com ([134.134.136.24]:22223 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240673AbiARJgS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Jan 2022 04:36:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642498578; x=1674034578;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KOITIXo9rTTKwEPZruFQPM233i/+GJkiKbootFZI4Yk=;
+  b=dCnX/rjWjXqd+Oq7IjcTE/TuNFmeA7fkbzVF4Lm0pfCzp7mvh1te/2Yz
+   4WrmvKcqrBvWvlKzYbNfGtJ1WbDLTKgJxX7xtw0YB1ZC6b9/gqKP8zbLc
+   wg6Xi4hFiO1b5EyfckInLFTnnmWxPePm94FxRO/DX8HxLoibQ4uSSW7us
+   Llmew3Yt7FGhRYqAuX8gg8xYvo3/fcG/xv7uJ83FWhiHGXlwLLizitjIc
+   IL248D2JrCi8Uu0nQH+CmrVINVz359+h4KYMVqb3kYZa9JcZKXCDSCZpc
+   WSglrx1tdcrktHjrFP27PcDzV8FDZBcPtM7kaeDZWG9KmFNo6/qXh062q
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="244572557"
+X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
+   d="scan'208";a="244572557"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 01:36:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
+   d="scan'208";a="671790221"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 18 Jan 2022 01:36:15 -0800
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Robert=20=C5=9Awi=C4=99cki?= <robert@swiecki.net>,
+        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Subject: [PATCH] usb: typec: Only attempt to link USB ports if there is fwnode
+Date:   Tue, 18 Jan 2022 12:36:27 +0300
+Message-Id: <20220118093627.74098-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ae60ab9f-2fd7-b706-3584-ef8ab6bc39de@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 09:02:36AM +0000, Jon Hunter wrote:
-> 
-> On 17/01/2022 15:40, Greg KH wrote:
-> > On Mon, Jan 17, 2022 at 03:00:39PM +0000, Jon Hunter wrote:
-> > > Commit 7495af930835 ("ARM: multi_v7_defconfig: Enable drivers for
-> > > DragonBoard 410c") enables the CONFIG_PHY_QCOM_USB_HS for the ARM
-> > > multi_v7_defconfig. Enabling this Kconfig is causing the kernel to crash
-> > > on the Tegra20 Ventana platform in the ulpi_match() function.
-> > > 
-> > > The Qualcomm USB HS PHY driver that is enabled by CONFIG_PHY_QCOM_USB_HS,
-> > > registers a ulpi_driver but this driver does not provide an 'id_table',
-> > > so when ulpi_match() is called on the Tegra20 Ventana platform, it
-> > > crashes when attempting to deference the id_table pointer which is not
-> > > valid. The Qualcomm USB HS PHY driver uses device-tree for matching the
-> > > ULPI driver with the device and so fix this crash by using device-tree
-> > > for matching if the id_table is not valid.
-> > > 
-> > > Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
-> > > Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-> > 
-> > No cc: of stable since this is a bug going back to 4.11?
-> 
-> 
-> Yes good point.
-> 
-> Heikki, let me know if you want me to resend or if you can add the stable
-> tag?
+The code that creates the links to the USB ports attached to
+a connector inside the system assumed that the ACPI nodes
+(fwnodes) always exist for the connectors, but it can not do
+that.
 
-I can add it myself.  I'll do so after 5.17-rc1 is out, when I can apply
-things to my tree.
+There is no guarantee that every USB Type-C connector has
+ACPI device node representing it in the ACPI tables, and
+even if there are the nodes in the ACPI tables, the _STA
+method in those nodes may still return 0 (which means the
+device does not exist from ACPI PoW).
+
+This fixes NULL pointer dereference that happens if the
+nodes are missing.
+
+Reported-and-tested-by: Robert Święcki <robert@swiecki.net>
+Reported-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Fixes: 730b49aac426 ("usb: typec: port-mapper: Convert to the component framework")
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+Hi guys,
+
+Mikhail, I got confirmation from Robert that the patch fixes the
+issue.
 
 thanks,
+---
+ drivers/usb/typec/port-mapper.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-greg k-h
+diff --git a/drivers/usb/typec/port-mapper.c b/drivers/usb/typec/port-mapper.c
+index 07d307418b470..b6e0c6acc628c 100644
+--- a/drivers/usb/typec/port-mapper.c
++++ b/drivers/usb/typec/port-mapper.c
+@@ -56,6 +56,9 @@ int typec_link_ports(struct typec_port *con)
+ {
+ 	struct each_port_arg arg = { .port = con, .match = NULL };
+ 
++	if (!has_acpi_companion(&con->dev))
++		return 0;
++
+ 	bus_for_each_dev(&acpi_bus_type, NULL, &arg, typec_port_match);
+ 
+ 	/*
+@@ -74,5 +77,6 @@ int typec_link_ports(struct typec_port *con)
+ 
+ void typec_unlink_ports(struct typec_port *con)
+ {
+-	component_master_del(&con->dev, &typec_aggregate_ops);
++	if (has_acpi_companion(&con->dev))
++		component_master_del(&con->dev, &typec_aggregate_ops);
+ }
+-- 
+2.34.1
+
