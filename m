@@ -2,54 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5E9491F57
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jan 2022 07:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD08491F61
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jan 2022 07:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241682AbiARGUX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jan 2022 01:20:23 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57406 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241475AbiARGUW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jan 2022 01:20:22 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 841A6B81223
-        for <linux-usb@vger.kernel.org>; Tue, 18 Jan 2022 06:20:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC819C00446;
-        Tue, 18 Jan 2022 06:20:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642486820;
-        bh=to6fpQ8h1LjAPqVUsKYItfWdFQPDTheotReAJ9Ayvr0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vlW8mJsgZQL7rSksJI2bw9NLvnZpSKDhGQYyShCw8m2crnNImhGf7cwvZV6oM9myg
-         MS71U+/kwxYxr/QhKMtvALuvQ2Jt5wRirelvM/Fxtyhwf8/1/+LiQ2PlBXAgdB7kbW
-         6Ggyb7AA/V1j9CWtQmOa89v+J8A9WxEbLmfFtklA=
-Date:   Tue, 18 Jan 2022 07:20:17 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Chuck Kamas <ckamas@dslextreme.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Debugging crash in kernel module usbip-host
-Message-ID: <YeZcISwRLAt8a4mO@kroah.com>
-References: <04f3e890-3e6f-4ad2-bfa8-f4cb0e672487@dslextreme.com>
- <5700736a-1ba4-9752-e73e-9d54829ce7bf@dslextreme.com>
+        id S241994AbiARGae (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jan 2022 01:30:34 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:42414 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230233AbiARGae (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jan 2022 01:30:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642487434; x=1674023434;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=2a1Q/XsJ/2DmbTXvI7kKmXTY8vws9/nNbl2erRZ0zOk=;
+  b=HgwXvcxcahgETreTRuspYs8D2VMeMrLrEkVY9Y5OI4uBk0oNlteEVpdq
+   G7P3Jj3O9hqvHNArEiCp+FiCmMTV7DcE7EWLAlsKr7gofZKCVcwf3Dfum
+   hCbGijaDeuFkKKdeSKaayiY3m3f2somOVR03dLXCi1IKnskC78NqvO8eS
+   w=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 17 Jan 2022 22:30:34 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 22:30:33 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 17 Jan 2022 22:30:33 -0800
+Received: from [10.216.36.108] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 17 Jan
+ 2022 22:30:20 -0800
+Subject: Re: [PATCH v10 6/6] usb: dwc3: qcom: Enable the interrupts during
+ probe
+To:     Steev Klimaszewski <steev@kali.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>
+References: <1642398248-21753-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1642398248-21753-7-git-send-email-quic_c_sanm@quicinc.com>
+ <93b68251-7e7e-ac92-fb47-346c410744b2@kali.org>
+From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Message-ID: <bd9992de-3cd7-d07e-f8e3-e4f7a1e37cfc@quicinc.com>
+Date:   Tue, 18 Jan 2022 12:00:15 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <93b68251-7e7e-ac92-fb47-346c410744b2@kali.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <5700736a-1ba4-9752-e73e-9d54829ce7bf@dslextreme.com>
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 04:49:06PM -0800, Chuck Kamas wrote:
-> �sysname��� Linux
-> �release��� 5.4.72-v7
-> �version��� #1 SMP Mon Oct 19 11:12:20 UTC 2020
+Hi Steev,
 
-That is a very old and obsolete and known-buggy kernel, can you please
-try 5.16?
+On 1/18/2022 11:42 AM, Steev Klimaszewski wrote:
+>
+> On 1/16/22 11:44 PM, Sandeep Maheswaram wrote:
+>> Enable the interrupts during probe and remove the disable interrupts
+>> function.
+>>
+>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/dwc3-qcom.c | 28 ++++------------------------
+>>   1 file changed, 4 insertions(+), 24 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+>> index 54dc3d3..7c5e636 100644
+>> --- a/drivers/usb/dwc3/dwc3-qcom.c
+>> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+>> @@ -306,25 +306,7 @@ static void dwc3_qcom_enable_wakeup_irq(int irq)
+>>       enable_irq_wake(irq);
+>>   }
+>>   -static void dwc3_qcom_disable_wakeup_irq(int irq)
+>> -{
+>> -    if (!irq)
+>> -        return;
+>> -
+>> -    disable_irq_wake(irq);
+>> -    disable_irq_nosync(irq);
+>> -}
+>>   -static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
+>> -{
+>> -    dwc3_qcom_disable_wakeup_irq(qcom->hs_phy_irq);
+>> -
+>> -    dwc3_qcom_disable_wakeup_irq(qcom->dp_hs_phy_irq);
+>> -
+>> -    dwc3_qcom_disable_wakeup_irq(qcom->dm_hs_phy_irq);
+>> -
+>> -    dwc3_qcom_disable_wakeup_irq(qcom->ss_phy_irq);
+>> -}
+>>     static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
+>>   {
+>> @@ -356,9 +338,6 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
+>>       if (ret)
+>>           dev_warn(qcom->dev, "failed to disable interconnect: %d\n", 
+>> ret);
+>>   -    if (device_may_wakeup(qcom->dev))
+>> -        dwc3_qcom_enable_interrupts(qcom);
+>> -
+>>       qcom->is_suspended = true;
+>>         return 0;
+>> @@ -372,9 +351,6 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
+>>       if (!qcom->is_suspended)
+>>           return 0;
+>>   -    if (device_may_wakeup(qcom->dev))
+>> -        dwc3_qcom_disable_interrupts(qcom);
+>> -
+>>       for (i = 0; i < qcom->num_clocks; i++) {
+>>           ret = clk_prepare_enable(qcom->clks[i]);
+>>           if (ret < 0) {
+>> @@ -832,6 +808,10 @@ static int dwc3_qcom_probe(struct 
+>> platform_device *pdev)
+>>       genpd->flags |= GENPD_FLAG_ALWAYS_ON;
+>>         device_init_wakeup(&pdev->dev, 1);
+>> +
+>> +    if (device_may_wakeup(qcom->dev))
+>> +        dwc3_qcom_enable_interrupts(qcom);
+>> +
+>>       qcom->is_suspended = false;
+>>       pm_runtime_set_active(dev);
+>>       pm_runtime_enable(dev);
+>
+> Hi Sandeep,
+>
+> I was testing this series on my Lenovo Yoga C630, and with this patch 
+> in particular applied, my system will no longer boot. Unfortunately I 
+> don't get any sort of good output at all, I just get hung tasks when 
+> trying to probe things it would seem.
+>
+>
+> With the other 5 patches in the series applied, the system still boots 
+> and works correctly.
+>
+>
+> -- Steev
+>
+Will check this. Is your controller in host mode or device mode?
 
-thanks,
+Regards
 
-greg k-h
+Sandeep
+
