@@ -2,49 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF57491B8A
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jan 2022 04:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CA12491B88
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jan 2022 04:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354597AbiARDHI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jan 2022 22:07:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
+        id S1354610AbiARDHJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jan 2022 22:07:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350872AbiARCwa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jan 2022 21:52:30 -0500
+        with ESMTP id S1344866AbiARC5K (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jan 2022 21:57:10 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E5EC0613A7;
-        Mon, 17 Jan 2022 18:43:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95AEC03542F;
+        Mon, 17 Jan 2022 18:44:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF2E1B81261;
-        Tue, 18 Jan 2022 02:43:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54B79C36AE3;
-        Tue, 18 Jan 2022 02:43:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64B49B81259;
+        Tue, 18 Jan 2022 02:44:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996F1C36AE3;
+        Tue, 18 Jan 2022 02:44:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473796;
-        bh=brpzhLUhLFRJOeCxUEixkhbcVwCLQNme/nx5sX5OqbE=;
+        s=k20201202; t=1642473892;
+        bh=DAO4tYwqdARcTANi8ZVt/gONjK/k/ESqgOqBbagLP1I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UISeHBjka7nIy2K9TqnExbvgVyGdt61ih+yeC3mhe6lEsbDEJRQZX90sNT6Ryd8Q6
-         /Ggp3K/aLcsRtC1ZWXbkkMIyoVRCuogtR8iPPx7v8JPyxHvDMQpEuDRZ6OUeg1aqn+
-         goIrT4PVRt/O8PWgLtenMkY4qm+XdR33hhJg3/OXnjlmpJNcCOkFLgzFIMIrMO+o4Y
-         z225N47XBh5VAS5BB+lkx7gZuFjqCD1qwJphb/tZMefKlFVfhdLlovknB5fvnMFvVF
-         o0paRjyAeKZ6uaXY9u19ECpQDB5sVHyHV2Pri7y6JZjMu3ItrY84t7WLHvs6L2Tszo
-         ZXe0q2oBQnb8w==
+        b=fTslFEKu2nVJ/dvWR9T/d81tEynE+IbmPLcNl56wspO6Cka8l8ay0zhZGSiOQOFQb
+         uCJOP/pvcZB3HEWijawcmpAfhOtscJaeF6DldS9e5TzjmJ67klC3aEdVhQ0nzb525v
+         B7V9ff+w/fVQplqUBkQPc2GEd2IPtfBjJsTE0MbZdFMagAOHhoqEk4/ES9a71ic4cr
+         mMdEp8BEDj4nZpkb6N+0qLztttk1pPBzndeP1X9CmtFQcKgtVQzYXeTEBMPGw0iUGb
+         dcetuYeUE3UjALUodQnG8TpezEWcjCrIG9NrwMilWAaOFQSjz/coS5HkQe94nBIx1C
+         X2PBsOjnphzkQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
+Cc:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        John Keeping <john@metanate.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, mathias.nyman@linux.intel.com,
-        Thinh.Nguyen@synopsys.com, rajatja@google.com,
-        chris.chiu@canonical.com, andrew@lunn.ch, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 076/116] usb: hub: Add delay for SuperSpeed hub resume to let links transit to U0
-Date:   Mon, 17 Jan 2022 21:39:27 -0500
-Message-Id: <20220118024007.1950576-76-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, balbi@kernel.org,
+        axboe@kernel.dk, djwong@kernel.org, andrew_gabbasov@mentor.com,
+        wcheng@codeaurora.org, lkp@intel.com, jj251510319013@gmail.com,
+        plr.vincent@gmail.com, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 09/73] usb: gadget: f_fs: Use stream_open() for endpoint files
+Date:   Mon, 17 Jan 2022 21:43:28 -0500
+Message-Id: <20220118024432.1952028-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118024007.1950576-1-sashal@kernel.org>
-References: <20220118024007.1950576-1-sashal@kernel.org>
+In-Reply-To: <20220118024432.1952028-1-sashal@kernel.org>
+References: <20220118024432.1952028-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -53,94 +54,63 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+From: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
 
-[ Upstream commit 00558586382891540c59c9febc671062425a6e47 ]
+[ Upstream commit c76ef96fc00eb398c8fc836b0eb2f82bcc619dc7 ]
 
-When a new USB device gets plugged to nested hubs, the affected hub,
-which connects to usb 2-1.4-port2, doesn't report there's any change,
-hence the nested hubs go back to runtime suspend like nothing happened:
-[  281.032951] usb usb2: usb wakeup-resume
-[  281.032959] usb usb2: usb auto-resume
-[  281.032974] hub 2-0:1.0: hub_resume
-[  281.033011] usb usb2-port1: status 0263 change 0000
-[  281.033077] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
-[  281.049797] usb 2-1: usb wakeup-resume
-[  281.069800] usb 2-1: Waited 0ms for CONNECT
-[  281.069810] usb 2-1: finish resume
-[  281.070026] hub 2-1:1.0: hub_resume
-[  281.070250] usb 2-1-port4: status 0203 change 0000
-[  281.070272] usb usb2-port1: resume, status 0
-[  281.070282] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
-[  281.089813] usb 2-1.4: usb wakeup-resume
-[  281.109792] usb 2-1.4: Waited 0ms for CONNECT
-[  281.109801] usb 2-1.4: finish resume
-[  281.109991] hub 2-1.4:1.0: hub_resume
-[  281.110147] usb 2-1.4-port2: status 0263 change 0000
-[  281.110234] usb 2-1-port4: resume, status 0
-[  281.110239] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
-[  281.110266] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
-[  281.110426] hub 2-1.4:1.0: hub_suspend
-[  281.110565] usb 2-1.4: usb auto-suspend, wakeup 1
-[  281.130998] hub 2-1:1.0: hub_suspend
-[  281.137788] usb 2-1: usb auto-suspend, wakeup 1
-[  281.142935] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
-[  281.177828] usb 2-1: usb wakeup-resume
-[  281.197839] usb 2-1: Waited 0ms for CONNECT
-[  281.197850] usb 2-1: finish resume
-[  281.197984] hub 2-1:1.0: hub_resume
-[  281.198203] usb 2-1-port4: status 0203 change 0000
-[  281.198228] usb usb2-port1: resume, status 0
-[  281.198237] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
-[  281.217835] usb 2-1.4: usb wakeup-resume
-[  281.237834] usb 2-1.4: Waited 0ms for CONNECT
-[  281.237845] usb 2-1.4: finish resume
-[  281.237990] hub 2-1.4:1.0: hub_resume
-[  281.238067] usb 2-1.4-port2: status 0263 change 0000
-[  281.238148] usb 2-1-port4: resume, status 0
-[  281.238152] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
-[  281.238166] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
-[  281.238385] hub 2-1.4:1.0: hub_suspend
-[  281.238523] usb 2-1.4: usb auto-suspend, wakeup 1
-[  281.258076] hub 2-1:1.0: hub_suspend
-[  281.265744] usb 2-1: usb auto-suspend, wakeup 1
-[  281.285976] hub 2-0:1.0: hub_suspend
-[  281.285988] usb usb2: bus auto-suspend, wakeup 1
+Function fs endpoint file operations are synchronized via an interruptible
+mutex wait. However we see threads that do ep file operations concurrently
+are getting blocked for the mutex lock in __fdget_pos(). This is an
+uninterruptible wait and we see hung task warnings and kernel panic
+if hung_task_panic systcl is enabled if host does not send/receive
+the data for long time.
 
-USB 3.2 spec, 9.2.5.4 "Changing Function Suspend State" says that "If
-the link is in a non-U0 state, then the device must transition the link
-to U0 prior to sending the remote wake message", but the hub only
-transits the link to U0 after signaling remote wakeup.
+The reason for threads getting blocked in __fdget_pos() is due to
+the file position protection introduced by the commit 9c225f2655e3
+("vfs: atomic f_pos accesses as per POSIX"). Since function fs
+endpoint files does not have the notion of the file position, switch
+to the stream mode. This will bypass the file position mutex and
+threads will be blocked in interruptible state for the function fs
+mutex.
 
-So be more forgiving and use a 20ms delay to let the link transit to U0
-for remote wakeup.
+It should not affects user space as we are only changing the task state
+changes the task state from UNINTERRUPTIBLE to INTERRUPTIBLE while waiting
+for the USB transfers to be finished. However there is a slight change to
+the O_NONBLOCK behavior. Earlier threads that are using O_NONBLOCK are also
+getting blocked inside fdget_pos(). Now they reach to function fs and error
+code is returned. The non blocking behavior is actually honoured now.
 
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Link: https://lore.kernel.org/r/20211215120108.336597-1-kai.heng.feng@canonical.com
+Reviewed-by: John Keeping <john@metanate.com>
+Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Link: https://lore.kernel.org/r/1636712682-1226-1-git-send-email-quic_pkondeti@quicinc.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/core/hub.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/usb/gadget/function/f_fs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 3f406519da58d..8af06a933e289 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -1109,7 +1109,10 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
- 		} else {
- 			hub_power_on(hub, true);
- 		}
--	}
-+	/* Give some time on remote wakeup to let links to transit to U0 */
-+	} else if (hub_is_superspeed(hub->hdev))
-+		msleep(20);
-+
-  init2:
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 3f5c21f7f9905..2bea33b41553b 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -614,7 +614,7 @@ static int ffs_ep0_open(struct inode *inode, struct file *file)
+ 	file->private_data = ffs;
+ 	ffs_data_opened(ffs);
  
- 	/*
+-	return 0;
++	return stream_open(inode, file);
+ }
+ 
+ static int ffs_ep0_release(struct inode *inode, struct file *file)
+@@ -1156,7 +1156,7 @@ ffs_epfile_open(struct inode *inode, struct file *file)
+ 	file->private_data = epfile;
+ 	ffs_data_opened(epfile->ffs);
+ 
+-	return 0;
++	return stream_open(inode, file);
+ }
+ 
+ static int ffs_aio_cancel(struct kiocb *kiocb)
 -- 
 2.34.1
 
