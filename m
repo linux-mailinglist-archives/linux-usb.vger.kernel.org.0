@@ -2,30 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A484926E7
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jan 2022 14:16:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0404926EA
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jan 2022 14:16:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241597AbiARNQi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jan 2022 08:16:38 -0500
+        id S241893AbiARNQj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jan 2022 08:16:39 -0500
 Received: from mx1.tq-group.com ([93.104.207.81]:30777 "EHLO mx1.tq-group.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241360AbiARNQi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 Jan 2022 08:16:38 -0500
+        id S236141AbiARNQj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Jan 2022 08:16:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1642511798; x=1674047798;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=xcxwltqj3Z3qwj5uaSZAvScK+hD+/n+ucY4Xd51S4Ck=;
-  b=aUddZDWqE9zEWTWqWUvux0AU2Mfki1tS9cOKGwEoVW+jKqgDcAgIXov9
-   WLk0OE3o2zsCXAGXmMv8U+Al9JWol18SSud2qAy7CDBvbX4rd6u8MdpJc
-   MFfxhKmGHwA87TgeHatoewPdYe56vaNSNowQeNs/EEPaeTXtP9pvNBR2L
-   cWwDEqTkYEDfOnfqLX/RqLimJoApXeOHIAVAWFbaIMnLKRWpevRRjwNMt
-   P0iQqR9yvd3LUo2wJYsdK7VizjZEqppqugyVSq49jSiWJMtzBK3/imm9h
-   UFo/d20tXkjjr8wJAp+px72elH9WGbWLeKSeuU4/ACZ1PBHmUKOC3q6Hs
+  t=1642511799; x=1674047799;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=6DdLsqqroNMKr6Xyes2xsy1sE+X7bKTqbAbUFZzzPF8=;
+  b=KRbbWasGygE1RUVUhxmFczbVCWH4jaqnmy2RWbx6FVqHBMB+fwcflR3F
+   6fzMZCco/3uXS2cr6Ar084RPq8uYNcuHBS57TeJq2I/6LsL2Jbo0NkEET
+   Ekt9VU2Jra0X4ncBrnsVKrqn5lYfDkGC6TQ2wAQud7t1D6a0AHyAJJ3C+
+   ZLcDnTHoygqIFK2wCejvzOY01hz9MdE27ABRkR2DuDoClcB1eb5TaxqCO
+   d7HU7Evg5xAAssXdeV5t/k0NQh/lNwn/6cbC0PVayiKTKXUiot5Jk4ARd
+   pQUyqx7ZalozVvmCVvd7OYMqxkLeCv+exYrESpBMRjm4UgvJxc54YvVLs
    Q==;
 X-IronPort-AV: E=Sophos;i="5.88,297,1635199200"; 
-   d="scan'208";a="21564683"
+   d="scan'208";a="21564685"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
   by mx1-pgp.tq-group.com with ESMTP; 18 Jan 2022 14:16:36 +0100
 Received: from mx1.tq-group.com ([192.168.6.7])
@@ -36,24 +36,24 @@ X-PGP-Universal: processed;
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
   t=1642511796; x=1674047796;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=xcxwltqj3Z3qwj5uaSZAvScK+hD+/n+ucY4Xd51S4Ck=;
-  b=lJPs+PgAnD5Pt3ByC03GKFEFKT7Tjyt3814HRPd/1Ir1NvI89r/3vP/0
-   m//6BwdR9XK3S4kKKZxJzbkzlrplHFY4CfO7LIFtv7gOjwzLsKfemVmde
-   Ko9Tgnd32Wm5P5yJ7Ga/cxBICFo+glTamtp/+ctJbi1sFpIhGocXgEv2e
-   5ngNBZdMzn67U4+zW4HaHGf1iBPFmqGWm3GUJfaxKzw+xMQsUx/6yACiX
-   +HDV4xH+tYvTf2wzANoAisAz+jqvQ04uZRskmhBzfjJh18hgcrJExpQWl
-   tHyv+efTzWeen+IMRf9oZ2QCQoHhLR9E30oeAOG0mtbzossAZlJXeON+B
-   Q==;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=6DdLsqqroNMKr6Xyes2xsy1sE+X7bKTqbAbUFZzzPF8=;
+  b=NGJq9N7X45RTy/1mX6sj0MQxihw8T3rlZU+EydPy6tH3GGgfM88OpF4S
+   Xdocyg5+p5Z66YB4SoNJUyYp7IqoJi5FDThQnYLwLQjz7GQBsuPdFlf1k
+   OMvsrqUNgYGwAxfUJeMe/+sXMRZZvHtWJOJPNjzG9+aMu0tDb8Q/59S96
+   fs6owTGQZmtIrNVwwXRs9FNkZg/udCSyUoc38e1jDrf8C0iIKLPQ0lI6n
+   +sqrZEALnsn34ZSRo61LtRH7INj2wMQHDjxw8ig0AlKy4LA7NHPM/Z+s0
+   m+aJUzVbfXqJsdK/x6r46DlB9i7Vi+Mm7fbAzkud0PBBxDWMA5ZFaDsof
+   g==;
 X-IronPort-AV: E=Sophos;i="5.88,297,1635199200"; 
-   d="scan'208";a="21564682"
+   d="scan'208";a="21564684"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 18 Jan 2022 14:16:36 +0100
 Received: from steina-w.tq-net.de (unknown [10.123.49.12])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 228A2280065;
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 5793B280075;
         Tue, 18 Jan 2022 14:16:36 +0100 (CET)
 From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -65,45 +65,82 @@ Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, Li Jun <jun.li@nxp.com>
-Subject: [PATCH v3 0/4] i.MX8MP: more USB3 glue layer feature support
-Date:   Tue, 18 Jan 2022 14:16:22 +0100
-Message-Id: <20220118131626.926394-1-alexander.stein@ew.tq-group.com>
+Subject: [PATCH v3 1/4] usb: dwc3: imx8mp: rename iomem base pointer
+Date:   Tue, 18 Jan 2022 14:16:23 +0100
+Message-Id: <20220118131626.926394-2-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220118131626.926394-1-alexander.stein@ew.tq-group.com>
+References: <20220118131626.926394-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thanks everyone for the rfeedback on v2 [1].
+Until now the iomem used is not USB glue as the name suggests, but
+HSIO BLK_CTL. Rename the struct member accordingly. This is a preparing
+patch for when USB glue is actually used.
 
-This patchset aims to support flags for e.g. over-current active low or port
-permanantly attached which are provided in the USB3 glue layer.
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+ drivers/usb/dwc3/dwc3-imx8mp.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-In v3 the implementation is moved from USB PHY driver to USB DWC3 glue for
-i.MX8MP. The confusing part is that the existing dwc3-imx8mp.c driver references
-glue everywhere but is actually using HSIO BLK_CTL, which is a different
-hardware block.
-The implementation is still backward compatible and be used with device trees
-where neither PHY clock nor (new) glue layer base address is provided.
-
-Changes in v3:
-* Rename existing member for clarity
-* Moved feature implementation from phy-fsl-imx8mq-usb.c to dwc3-imx8mp.c
-
-[1] https://lore.kernel.org/linux-arm-kernel/2245006.irdbgypaU6@steina-w/T/
-
-Alexander Stein (4):
-  usb: dwc3: imx8mp: rename iomem base pointer
-  dt-bindings: usb: dwc3-imx8mp: Add imx8mp specific flags
-  usb: dwc3: imx8mp: Add support for setting SOC specific flags
-  arm64: dts: imx8mp: Add memory for USB3 glue layer to usb3 nodes
-
- .../bindings/usb/fsl,imx8mp-dwc3.yaml         | 38 ++++++--
- arch/arm64/boot/dts/freescale/imx8mp.dtsi     | 20 ++--
- drivers/usb/dwc3/dwc3-imx8mp.c                | 95 +++++++++++++++++--
- 3 files changed, 134 insertions(+), 19 deletions(-)
-
+diff --git a/drivers/usb/dwc3/dwc3-imx8mp.c b/drivers/usb/dwc3/dwc3-imx8mp.c
+index d328d20abfbc..1c8fe657b3a9 100644
+--- a/drivers/usb/dwc3/dwc3-imx8mp.c
++++ b/drivers/usb/dwc3/dwc3-imx8mp.c
+@@ -39,7 +39,7 @@
+ struct dwc3_imx8mp {
+ 	struct device			*dev;
+ 	struct platform_device		*dwc3;
+-	void __iomem			*glue_base;
++	void __iomem			*hsio_blk_base;
+ 	struct clk			*hsio_clk;
+ 	struct clk			*suspend_clk;
+ 	int				irq;
+@@ -55,7 +55,7 @@ static void dwc3_imx8mp_wakeup_enable(struct dwc3_imx8mp *dwc3_imx)
+ 	if (!dwc3)
+ 		return;
+ 
+-	val = readl(dwc3_imx->glue_base + USB_WAKEUP_CTRL);
++	val = readl(dwc3_imx->hsio_blk_base + USB_WAKEUP_CTRL);
+ 
+ 	if ((dwc3->current_dr_role == DWC3_GCTL_PRTCAP_HOST) && dwc3->xhci)
+ 		val |= USB_WAKEUP_EN | USB_WAKEUP_SS_CONN |
+@@ -64,16 +64,16 @@ static void dwc3_imx8mp_wakeup_enable(struct dwc3_imx8mp *dwc3_imx)
+ 		val |= USB_WAKEUP_EN | USB_WAKEUP_VBUS_EN |
+ 		       USB_WAKEUP_VBUS_SRC_SESS_VAL;
+ 
+-	writel(val, dwc3_imx->glue_base + USB_WAKEUP_CTRL);
++	writel(val, dwc3_imx->hsio_blk_base + USB_WAKEUP_CTRL);
+ }
+ 
+ static void dwc3_imx8mp_wakeup_disable(struct dwc3_imx8mp *dwc3_imx)
+ {
+ 	u32 val;
+ 
+-	val = readl(dwc3_imx->glue_base + USB_WAKEUP_CTRL);
++	val = readl(dwc3_imx->hsio_blk_base + USB_WAKEUP_CTRL);
+ 	val &= ~(USB_WAKEUP_EN | USB_WAKEUP_EN_MASK);
+-	writel(val, dwc3_imx->glue_base + USB_WAKEUP_CTRL);
++	writel(val, dwc3_imx->hsio_blk_base + USB_WAKEUP_CTRL);
+ }
+ 
+ static irqreturn_t dwc3_imx8mp_interrupt(int irq, void *_dwc3_imx)
+@@ -115,9 +115,9 @@ static int dwc3_imx8mp_probe(struct platform_device *pdev)
+ 
+ 	dwc3_imx->dev = dev;
+ 
+-	dwc3_imx->glue_base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(dwc3_imx->glue_base))
+-		return PTR_ERR(dwc3_imx->glue_base);
++	dwc3_imx->hsio_blk_base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(dwc3_imx->hsio_blk_base))
++		return PTR_ERR(dwc3_imx->hsio_blk_base);
+ 
+ 	dwc3_imx->hsio_clk = devm_clk_get(dev, "hsio");
+ 	if (IS_ERR(dwc3_imx->hsio_clk)) {
 -- 
 2.25.1
 
