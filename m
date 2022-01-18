@@ -2,176 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8668549274A
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jan 2022 14:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B945492897
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jan 2022 15:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242453AbiARNd6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jan 2022 08:33:58 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:37052 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242325AbiARNd4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jan 2022 08:33:56 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 276141F43EF3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642512835;
-        bh=dyzC6UDmMXDPgDAbF5EHytgo8xi3QjCJwOmX3JXKm64=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eNT0A23wVjHpGk/5uTLMZb/Z5SEaGBovtyUKak0cbUjmQaoRa+JHGaytB3jNQf98l
-         V4s3OoxyFz0EBHnK8+9tBXLY7LOleKZGV38LiHMoZciuXbaJFw6XJmk6iLtyeukKY8
-         hlzQDxF7zBpcGhm7HWNjY1DE3dr9wPVZhLJ6Dn41eZ8u7YYvgqeI+xUWQT7XGce/fi
-         LOguWwYGY36i4OKW2syBzyNQbSbXAtYEOz1WKZUotbvtN+v6GG2uEqoEt13Ocj7G8h
-         Y28t5/nzv1CEHdFC6pGozlab8NYL69ArYOZMtQQlgR5aHjXjJ8Mv4LAhQYD7ITgqsI
-         FKeDu/gV/2j3A==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     chunfeng.yun@mediatek.com
-Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        matthias.bgg@gmail.com, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH] usb: host: xhci-mtk: Simplify supplies handling with regulator_bulk
-Date:   Tue, 18 Jan 2022 14:33:48 +0100
-Message-Id: <20220118133348.111860-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.33.1
+        id S241478AbiAROkM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jan 2022 09:40:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231658AbiAROkM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jan 2022 09:40:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9A2C061574;
+        Tue, 18 Jan 2022 06:40:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50BB2B816B0;
+        Tue, 18 Jan 2022 14:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FA0EC340E5;
+        Tue, 18 Jan 2022 14:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642516809;
+        bh=YwXVko3UDBGinWHl2wzLD2CoOggJH2y/i7m5Z9CE92E=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JjpmrWKS1VrR22nGwO1EF19v/EThe4LTRetS2KJwNKyhnFtb6trWNqrIVb5aiwiiN
+         I70VIWmORaumvX56P1j8KOy0vVtdBwIZpgxLMGYso8eL6Awt5ffVp8FnIFUk8sXMqq
+         3SjFcDblhOTkElY0nT5a7M6o3It4xh3XjRjodvuKjvsaS8ambVE7DLRlFr/Puz7QCx
+         8eD4vnR5AcSPRf36GKoEyU90x80Nkt9mqzK2Uc+Dy1AeWZIvE6XXhbBfribTxiqHlN
+         TfLoDiSVGAtaWXYziMNs5io4OplFkaPoUdrZlv2J0rSsv6UOGSOD2YZjuZYu/SAB0A
+         oCZvlV3KHr2ag==
+Received: by mail-ed1-f48.google.com with SMTP id j7so32020669edr.4;
+        Tue, 18 Jan 2022 06:40:09 -0800 (PST)
+X-Gm-Message-State: AOAM532qlmrAtPEBXFtDKX2e0/lZRGCTHiQKt4CqqOMTtmCSHqIHrGEQ
+        sxlSOtQBUolWjr2PKH385JcwWYHvLCfRGjTIBw==
+X-Google-Smtp-Source: ABdhPJxZXEv/F70l/2F763cGopBlndK4NcrE6a3K6sVwU3w5bmG4m+b1gOrc5zCuCPM6dB2m4JpTGoOi5Bf6LB/f2gk=
+X-Received: by 2002:a05:6402:4315:: with SMTP id m21mr26177288edc.67.1642516807391;
+ Tue, 18 Jan 2022 06:40:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220114105620.GK18506@ediswmail.ad.cirrus.com>
+ <20220114111800.GL18506@ediswmail.ad.cirrus.com> <CAL_JsqKWMLi69kXp0fcdqLD039eSPwi=NPkPpOWKy=va1+YXow@mail.gmail.com>
+ <20220117092656.GM18506@ediswmail.ad.cirrus.com> <20220117095559.GN18506@ediswmail.ad.cirrus.com>
+In-Reply-To: <20220117095559.GN18506@ediswmail.ad.cirrus.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 18 Jan 2022 08:39:55 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+x-q_xOctCCVmzNSwGbWa_uipJ84xa1NCZnjhWSn1vVg@mail.gmail.com>
+Message-ID: <CAL_Jsq+x-q_xOctCCVmzNSwGbWa_uipJ84xa1NCZnjhWSn1vVg@mail.gmail.com>
+Subject: Re: ChipIdea USB regression
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Tony Lindgren <tony@atomide.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Remove the custom functions xhci_mtk_ldos_{enable,disable}() by
-switching to using regulator_bulk to perform the very same thing,
-as the regulators are always either both enabled or both disabled.
+On Mon, Jan 17, 2022 at 3:56 AM Charles Keepax
+<ckeepax@opensource.cirrus.com> wrote:
+>
+> On Mon, Jan 17, 2022 at 09:26:56AM +0000, Charles Keepax wrote:
+> > On Sat, Jan 15, 2022 at 09:55:23AM -0600, Rob Herring wrote:
+> > > On Fri, Jan 14, 2022 at 5:18 AM Charles Keepax
+> > > <ckeepax@opensource.cirrus.com> wrote:
+> > > > On Fri, Jan 14, 2022 at 10:56:20AM +0000, Charles Keepax wrote:
+> > > > So when that patch copies the DT node to the new platform device
+> > > > in ci_hdrc_add_device it copies the compatible stuff as well as
+> > > > the IRQ stuff it was targeting, this presumably causes the kernel
+> > > > to bind a new copy of the driver to that new device, which probes
+> > > > and calls ci_hdrc_add_device again repeating the process until
+> > > > it dies.
+> > > >
+> > > > Kinda looks to me like the best solution might just be to revert
+> > > > the patch, I am not sure I see how that copy of the DT is supposed
+> > > > to work?
+> > >
+> > > It's not copying the DT, but yes AFAICT it does match and bind the
+> > > child device on the parent driver using the compatible match instead
+> > > of matching on driver name. I think we can use the of_reuse_node flag
+> > > to avoid this in the match, but that needs some more investigation.
+> >
+> > Assuming you mean the of_node_reused flag, looks like it already
+> > being set, your code does this:
+> >
+> > @@ -864,6 +864,7 @@ struct platform_device *ci_hdrc_add_device(struct device *dev,
+> >       pdev->dev.parent = dev;
+> >       + device_set_of_node_from_dev(&pdev->dev, dev);
+> >
+> > And that function does this:
+> >
+> > void device_set_of_node_from_dev(struct device *dev, const struct device *dev2)
+> > {
+> >       of_node_put(dev->of_node);
+> >       dev->of_node = of_node_get(dev2->of_node);
+> >       dev->of_node_reused = true;
+> > }
+> > EXPORT_SYMBOL_GPL(device_set_of_node_from_dev);
+> >
+> > I guess maybe that flag doesn't do what it is supposed to for
+> > some reason?
+> >
+>
+> Ah ok it seems that flag is only currently used by the pinctrl
+> subsystem, didn't realise that was quite so new and not used
+> anywhere. I guess we probably need to add something to the
+> platform device code to use that flag too, if that is the way we
+> want to run with this.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/usb/host/xhci-mtk.c | 56 ++++++++++++-------------------------
- drivers/usb/host/xhci-mtk.h |  4 +--
- 2 files changed, 20 insertions(+), 40 deletions(-)
+I pushed a patch[1] for kernel-ci to test if you want to give it a try, too.
 
-diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-index 62c835d446be..3b81931e5b77 100644
---- a/drivers/usb/host/xhci-mtk.c
-+++ b/drivers/usb/host/xhci-mtk.c
-@@ -395,31 +395,6 @@ static int xhci_mtk_clks_get(struct xhci_hcd_mtk *mtk)
- 	return devm_clk_bulk_get_optional(mtk->dev, BULK_CLKS_NUM, clks);
- }
- 
--static int xhci_mtk_ldos_enable(struct xhci_hcd_mtk *mtk)
--{
--	int ret;
--
--	ret = regulator_enable(mtk->vbus);
--	if (ret) {
--		dev_err(mtk->dev, "failed to enable vbus\n");
--		return ret;
--	}
--
--	ret = regulator_enable(mtk->vusb33);
--	if (ret) {
--		dev_err(mtk->dev, "failed to enable vusb33\n");
--		regulator_disable(mtk->vbus);
--		return ret;
--	}
--	return 0;
--}
--
--static void xhci_mtk_ldos_disable(struct xhci_hcd_mtk *mtk)
--{
--	regulator_disable(mtk->vbus);
--	regulator_disable(mtk->vusb33);
--}
--
- static void xhci_mtk_quirks(struct device *dev, struct xhci_hcd *xhci)
- {
- 	struct usb_hcd *hcd = xhci_to_hcd(xhci);
-@@ -475,6 +450,10 @@ static int xhci_mtk_setup(struct usb_hcd *hcd)
- 	return ret;
- }
- 
-+static const char * const xhci_mtk_supply_names[] = {
-+	"vusb33", "vbus",
-+};
-+
- static const struct xhci_driver_overrides xhci_mtk_overrides __initconst = {
- 	.reset = xhci_mtk_setup,
- 	.add_endpoint = xhci_mtk_add_ep,
-@@ -507,17 +486,18 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	mtk->dev = dev;
--	mtk->vbus = devm_regulator_get(dev, "vbus");
--	if (IS_ERR(mtk->vbus)) {
--		dev_err(dev, "fail to get vbus\n");
--		return PTR_ERR(mtk->vbus);
--	}
-+	mtk->num_supplies = ARRAY_SIZE(xhci_mtk_supply_names);
-+	mtk->supplies = devm_kcalloc(dev, mtk->num_supplies,
-+				     sizeof(*mtk->supplies), GFP_KERNEL);
-+	if (!mtk->supplies)
-+		return -ENOMEM;
- 
--	mtk->vusb33 = devm_regulator_get(dev, "vusb33");
--	if (IS_ERR(mtk->vusb33)) {
--		dev_err(dev, "fail to get vusb33\n");
--		return PTR_ERR(mtk->vusb33);
--	}
-+	regulator_bulk_set_supply_names(mtk->supplies, xhci_mtk_supply_names,
-+					mtk->num_supplies);
-+
-+	ret = devm_regulator_bulk_get(dev, mtk->num_supplies, mtk->supplies);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to get regulators\n");
- 
- 	ret = xhci_mtk_clks_get(mtk);
- 	if (ret)
-@@ -558,7 +538,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 	pm_runtime_enable(dev);
- 	pm_runtime_get_sync(dev);
- 
--	ret = xhci_mtk_ldos_enable(mtk);
-+	ret = regulator_bulk_enable(mtk->num_supplies, mtk->supplies);
- 	if (ret)
- 		goto disable_pm;
- 
-@@ -667,7 +647,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
- 
- disable_ldos:
--	xhci_mtk_ldos_disable(mtk);
-+	regulator_bulk_disable(mtk->num_supplies, mtk->supplies);
- 
- disable_pm:
- 	pm_runtime_put_noidle(dev);
-@@ -695,7 +675,7 @@ static int xhci_mtk_remove(struct platform_device *pdev)
- 	usb_put_hcd(hcd);
- 	xhci_mtk_sch_exit(mtk);
- 	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
--	xhci_mtk_ldos_disable(mtk);
-+	regulator_bulk_disable(mtk->num_supplies, mtk->supplies);
- 
- 	pm_runtime_disable(dev);
- 	pm_runtime_put_noidle(dev);
-diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
-index 4b1ea89f959a..9b78cd2ba0ac 100644
---- a/drivers/usb/host/xhci-mtk.h
-+++ b/drivers/usb/host/xhci-mtk.h
-@@ -150,9 +150,9 @@ struct xhci_hcd_mtk {
- 	int num_u3_ports;
- 	int u2p_dis_msk;
- 	int u3p_dis_msk;
--	struct regulator *vusb33;
--	struct regulator *vbus;
- 	struct clk_bulk_data clks[BULK_CLKS_NUM];
-+	struct regulator_bulk_data *supplies;
-+	u8 num_supplies;
- 	unsigned int has_ippc:1;
- 	unsigned int lpm_support:1;
- 	unsigned int u2_lpm_disable:1;
--- 
-2.33.1
+Rob
 
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/log/?h=for-kernelci
