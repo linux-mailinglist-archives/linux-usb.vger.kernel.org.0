@@ -2,86 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7FB492AF8
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jan 2022 17:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48ADF492B38
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jan 2022 17:31:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347619AbiARQRQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jan 2022 11:17:16 -0500
-Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:30554 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1347583AbiARQRC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jan 2022 11:17:02 -0500
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20I6vO3X001618;
-        Tue, 18 Jan 2022 10:16:54 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=fShaulMOHUWz8tEKI+rd+K1ckl8jtOigfm2wqjfeUcU=;
- b=ei9xBm9i+mZNGvTSvs5qadq5EFNq+G27HHCfEFLoPIwE35VfHp/H8WfBVzw8LZQx+48n
- yfF54jRpf0HfaYXBYvmGZjq/VDmSSZ+0DdlTVn8gjXH51iY0ZXxtvgiwOHCjn3HMhw0a
- tEj+5CtINNcVplv1FrLOlz3GP3S+XoX9G71ZKpSDECOXepptLI4DSA60hNFYh9sXZShm
- iyWTvlEdRAZlrCrreztM/Ni2immjXk0HBonP0TFR98xI63eWUN6uAObbkyHb5xHFSRTC
- vAwUygH66WVrMl0pmViImtLPX4iM5sgNu2wQgBITqIV3Dj+e6ChDPFKy5bAmOZ32em8h +A== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3dn8k2sca8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 18 Jan 2022 10:16:53 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 18 Jan
- 2022 16:16:51 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Tue, 18 Jan 2022 16:16:51 +0000
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A32C27C;
-        Tue, 18 Jan 2022 16:16:51 +0000 (UTC)
-Date:   Tue, 18 Jan 2022 16:16:51 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Tony Lindgren <tony@atomide.com>
-Subject: Re: ChipIdea USB regression
-Message-ID: <20220118161651.GO18506@ediswmail.ad.cirrus.com>
-References: <20220114105620.GK18506@ediswmail.ad.cirrus.com>
- <20220114111800.GL18506@ediswmail.ad.cirrus.com>
- <CAL_JsqKWMLi69kXp0fcdqLD039eSPwi=NPkPpOWKy=va1+YXow@mail.gmail.com>
- <20220117092656.GM18506@ediswmail.ad.cirrus.com>
- <20220117095559.GN18506@ediswmail.ad.cirrus.com>
- <CAL_Jsq+x-q_xOctCCVmzNSwGbWa_uipJ84xa1NCZnjhWSn1vVg@mail.gmail.com>
+        id S242313AbiARQbQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jan 2022 11:31:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233718AbiARQbP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jan 2022 11:31:15 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D77C061574
+        for <linux-usb@vger.kernel.org>; Tue, 18 Jan 2022 08:31:14 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id g81so57601542ybg.10
+        for <linux-usb@vger.kernel.org>; Tue, 18 Jan 2022 08:31:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ALBUN8vRLlHiByKH1QxwRG2sNf2Mz64GgW8Wu6xET/I=;
+        b=HUqe0M2XfMlyyBs+oWmpjDPkVW3eQxr6rT/WA+Af3HuvuHuKKeRO4DZ5IXFM/WCIWm
+         MqU3IgsL3Z0nitjsXgSbbuNN24I5ps2x1NQGuiBV6ZdCyN8gXYktDntJNBU8vusgA59Y
+         o6KEdKY1aR4ATszgcmkRa+nIaYCIEey6zCxbT/X8CezLvpvNAtOT+FXaFuNIM/MggJBi
+         3vyMjPtOFselRdybOCr+2pAqy9r026aLcyvx9WMwpCsTzR+hBRW3N36nBe6lRzbIisFm
+         Kq+3DXBaOkwDqKpXzlTMBe3GLumdqnb7cKdLC/pqp8MyVy2j9Q6jGSGCFKNiraFXCANZ
+         mElQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ALBUN8vRLlHiByKH1QxwRG2sNf2Mz64GgW8Wu6xET/I=;
+        b=6iDHjacVdRn1gmBdTdMU1uZeky2QE9O7gcO72bGYG/NuKWpzvXbme+AsbGNcCYl0lQ
+         JCfDcRO4mx+icj89FOuHTVEaYgzdBWjADJccU7sMBV4x+yd21oyNOguUUI5nq3uQFIv2
+         /5uLhix1FjJLYQrBfzbwXVY0mhMBwe1css0U9rFdql4K8C3uXa5OOSAAu0Mc7Iv7M41E
+         QUyAzC2IwY1BQkFuuE5MPBH8ikKPCC6Xj/1vNDEuQ43/qChyXGyhFGXsTuxB3u9gG0QQ
+         wTeXfcJBP6rHSC6iPtM1SC0zxcWyup/O3toe04Xhou6CiaCSx7cvyZ5xWtj1nw94vAUH
+         enGg==
+X-Gm-Message-State: AOAM532f5fso/NgUPCsgqHqqu+9H1Vr0/1WUWiRll7sekxlblK4Ec/nd
+        2elgRco2KiuufpNzj6y3kfq5dSJ1kOAF7Mp1tcY=
+X-Google-Smtp-Source: ABdhPJyRVXRb/MHu48KJQQdWye21Zv/B7JW8OxArSMPgM8Uferx54rNCUNvjZo8ApWJVZOSv3FxpuTvqDyOoe+JNOsM=
+X-Received: by 2002:a5b:68d:: with SMTP id j13mr35507066ybq.764.1642523473947;
+ Tue, 18 Jan 2022 08:31:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAL_Jsq+x-q_xOctCCVmzNSwGbWa_uipJ84xa1NCZnjhWSn1vVg@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: NFuhysMocACvjf6yPN9y8teefl0L9bl4
-X-Proofpoint-ORIG-GUID: NFuhysMocACvjf6yPN9y8teefl0L9bl4
-X-Proofpoint-Spam-Reason: safe
+References: <CAD039W71Hf06Bw4H_qjm7bRg__BjHfG=p-E7HXL62g0Yc7txBA@mail.gmail.com>
+ <YeUYQB4neDz8Z0Tb@kroah.com> <CAD039W5ZmTcYErXsnSpdksc6k2L3fNwry1uP2Kr96Uo04fO9PQ@mail.gmail.com>
+ <YeWNYUkOYBWXjBFw@kroah.com>
+In-Reply-To: <YeWNYUkOYBWXjBFw@kroah.com>
+From:   Rajaram Regupathy <rajaram.regupathy@gmail.com>
+Date:   Tue, 18 Jan 2022 22:01:02 +0530
+Message-ID: <CAD039W41ds-1xi0owBTRPCweB-tt=7gL7uH4FmUSOyEdgrq77g@mail.gmail.com>
+Subject: Re: [ANNOUNCE] libtypec_0.1/lstypec_0.1 is released
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, heikki.krogerus@linux.intel.com,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>, jthies@google.com,
+        saranya.gopal@intel.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 08:39:55AM -0600, Rob Herring wrote:
-> On Mon, Jan 17, 2022 at 3:56 AM Charles Keepax > <ckeepax@opensource.cirrus.com> wrote:
-> > On Mon, Jan 17, 2022 at 09:26:56AM +0000, Charles Keepax wrote:
-> > > On Sat, Jan 15, 2022 at 09:55:23AM -0600, Rob Herring wrote:
-> > > > On Fri, Jan 14, 2022 at 5:18 AM Charles Keepax > > > > <ckeepax@opensource.cirrus.com> wrote:
-> > Ah ok it seems that flag is only currently used by the pinctrl
-> > subsystem, didn't realise that was quite so new and not used
-> > anywhere. I guess we probably need to add something to the
-> > platform device code to use that flag too, if that is the way we
-> > want to run with this.
-> 
-> I pushed a patch[1] for kernel-ci to test if you want to give it a try, too.
+On Mon, Jan 17, 2022 at 9:08 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Jan 17, 2022 at 08:07:58PM +0530, Rajaram Regupathy wrote:
+> > On Mon, Jan 17, 2022 at 12:48 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Sun, Jan 16, 2022 at 08:49:47PM +0530, Rajaram Regupathy wrote:
+> > > > HI
+> > > >
+> > > > libtypec
+> > > > ++++++
+> > > >
+> > > > USB-Type C and USB Power Delivery systems are with multiple
+> > > > specification versions, platform designs and microcontroller vendors
+> > > > for managing  data, power and display.
+> > > >
+> > > > libtypec is aimed to provide a generic way for userspace System
+> > > > Software on Linux, Android, Chrome OS or Other OSes to build developer
+> > > > tools or
+> > > > other management applications for USB-Type C and USB Power Delivery
+> > > > class devices.
+> > >
+> > > Great, can we add this to the usbutils package, and `lsusb`?
+> > Thanks. Yes, the goal is to have it in usbutils package.  The thought
+> > to have  lstypec outside lsusb is as follows :
+> >
+> > "lsusb" displays USB device details based on the USB device's "descriptors'' .
+> > lstypec is for displaying usb-c "port capability" and the usb-c
+> > partner "port/plug capabilities' ' and
+> > the information is agnostic to USB descriptor topology or USB bus.
+> > Ex: usb-c power adapters or usb-c display dongle or a usb-c e-cable etc..
+> >
+> > Open to hear your recommendations.
+>
+> It's fine to keep it as a separate program to type, or you can make it
+> an option for 'lsusb' to output "lsusb --ports" or something?
+>
+> As your code is pretty tiny, and only reads from sysfs, it shouldn't be
+> hard to integrate.  But you do need to fix the license issue :)
+>
 
-Awesome thanks. This seems to fix the issue on my system and
-doesn't obviously cause any new issues.
+Yes, I will add the license files separately and come back.
 
-Tested-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> > > > Features
+> > > > ======
+> > > > - libtypec - get method for port and port-partner capabilities
+> > > > -  utils/lstypec -  displaying information about USB typec class
+> > > > devices in the system and the devices connected to them
+> > > >
+> > > > Release:
+> > > > =======
+> > > >
+> > > > Binary : https://github.com/Rajaram-Regupathy/libtypec/releases/download/libtypec_v0.1/libtypec_0.1.tar.xz
+> > > > Source : https://github.com/Rajaram-Regupathy/libtypec/archive/refs/tags/libtypec_v0.1.tar.gz
+> > >
+> > > Like was pointed out, there is no license listed for this code, so no
+> > > one can use it.
+> > >
+> > > Also, it doesn't build for me:
+> >
+> > Could you please follow  the Readme steps..?
+> >
+> > >         $ make
+> > >          50%] Building C object CMakeFiles/lstypec.dir/lstypec.c.o
+> > >         100%] Linking C executable lstypec
+> > >         usr/bin/ld: /home/gregkh/tmp/libtypec/bin/liblibtypec.a(libtypec.c.o):(.bss+0x0): multiple definition of `__packed'; CMakeFiles/lstypec.dir/lstypec.c.o:(.bss+0x0): first defined here
+> > >         usr/bin/ld: /home/gregkh/tmp/libtypec/bin/liblibtypec.a(libtypec_sysfs_ops.c.o):(.bss+0x0): multiple definition of `__packed'; CMakeFiles/lstypec.dir/lstypec.c.o:(.bss+0x0): first defined here
+> > >         ollect2: error: ld returned 1 exit status
+> > >         ake[2]: *** [CMakeFiles/lstypec.dir/build.make:98: lstypec] Error 1
+> > >         ake[1]: *** [CMakeFiles/Makefile2:839: CMakeFiles/lstypec.dir/all] Error 2
+> > >         ake: *** [Makefile:121: all] Error 2
+>
+> I did follow the readme steps, what did I miss?
+>
+> If I delete the one instance of "__packed" from the project, it does
+> build for me.  Perhaps you need to make sure that is defined in your
+> compiler flags?
+>
+I cloned and checked. Will double check and comeback
 
-Thanks,
-Charles
+> > > Why does this need to be a library at all?
+>
+> Again, why does this have to be a library?
+>
+The aim of having a library is to abstract application(s) from OS,
+platform, PD Controller or Embedded Controller protocols ambiguities
+and provide common methods. The methods will be similar/closer to UCSI
+standard.
+
+> thanks,
+>
+> greg k-h
