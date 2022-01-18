@@ -2,134 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F23524926F0
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jan 2022 14:16:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E97492748
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jan 2022 14:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242186AbiARNQo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jan 2022 08:16:44 -0500
-Received: from mx1.tq-group.com ([93.104.207.81]:30788 "EHLO mx1.tq-group.com"
+        id S242157AbiARNdg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jan 2022 08:33:36 -0500
+Received: from mga17.intel.com ([192.55.52.151]:20237 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236141AbiARNQk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 Jan 2022 08:16:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1642511800; x=1674047800;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=SZIx2UUKyccq9b4BJo1ObjbdH1RlvdPaczN/UfYCdfk=;
-  b=e/zjBlSIP/r2n1BQrGKu6+RCWcHZhld5vYzvG6J3ttWWq0iOnfLW+dHg
-   g59XVZlTpepCsRBkRlnph65EZ6vN7+qgb7d1BBK3q7zZpD1/qnpLhxBmB
-   fbB1duMhjHL0Z4N5+sLCt5wahlWTHIapqtaYtfprZsnI8I4zxmBALyvXq
-   0GZf8yJoAdWX8Dyo06Xbs2oWagocPdPZ20LUSaJGVVzmyTYnniojqVxXk
-   XvqDNC47YdD7ipmZeOTjwXfllnSfovuRu1FGevooNo1ZUUsvrEUj2qNYX
-   LbSo+DN/zI7LkPJgVmH1t73FkqN8uyTRbqcojIPoX5ySFHpk6AiRAiXez
-   A==;
-X-IronPort-AV: E=Sophos;i="5.88,297,1635199200"; 
-   d="scan'208";a="21564691"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 18 Jan 2022 14:16:37 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 18 Jan 2022 14:16:37 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 18 Jan 2022 14:16:37 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1642511797; x=1674047797;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=SZIx2UUKyccq9b4BJo1ObjbdH1RlvdPaczN/UfYCdfk=;
-  b=ktOFLDOZWGrQRCsEs8VYKEwby9Z8ywSqB4djYKXbd29oHwwNchkjhrb9
-   hoeLmTYYJ7KZtJMq8slQRmJ3x/r4H+zsRMMlfKmxCXHDolXu7DOVihKc5
-   eEDFA2OKPfBVyvLf2GES6yqE6opHymalaC9BPbY2nTvg/i9ycKci2ci21
-   dDb/vZRmFStyA0EcMJoIH+ciMo9lpWD2i2/9DBOaEhQGyk7LD6fdH+iZT
-   43qrb8Wxt2unT3zwxmjiEhJZY+t63YTAIEesHTj7D8/aDLqZ3rjAPf84L
-   E+1nkUJKa1SyrhyF97kEf7SUvUJw22fPwJDhPv7m4mEmjHtRXsYC8fc6z
+        id S229659AbiARNdg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Jan 2022 08:33:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642512816; x=1674048816;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=r12jMZqW3/WnUriCyz5HZN5FFe5jtdoU3x0kjbYDskE=;
+  b=G68f3MLGTdNdm88aRRyVd9ID8cSTf4QpmOdxXX5YcoVYnurntZtoRuGr
+   BH8lUfNLDFNyxW79uNVKllXIArYnB6H12EyWitOnE5lRFGPugzw8FfnCr
+   ezAvh5OKk57BemsXP54eDs2XxsGUFYA1WGypq9JHK5b4rCJ6HDwI/d3eS
+   3U5bJ8GGKaMgEL05xzdZ6/xEowV8f8djWE0G6gZrGhobN52uwHG9ptMvI
+   bpABLbyvwiqNiMYv5FI55Ajas1rrY3dZXpiUSEYBuwGEObSLoYvjPCvHy
+   dsa0ydE02df2ejSY7BTjSClRDb8I6WwdJoOU4EjLgPVBqCQiLR0YKx9fY
    Q==;
-X-IronPort-AV: E=Sophos;i="5.88,297,1635199200"; 
-   d="scan'208";a="21564690"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 18 Jan 2022 14:16:37 +0100
-Received: from steina-w.tq-net.de (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 09B88280065;
-        Tue, 18 Jan 2022 14:16:37 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Li Jun <jun.li@nxp.com>
-Subject: [PATCH v3 4/4] arm64: dts: imx8mp: Add memory for USB3 glue layer to usb3 nodes
-Date:   Tue, 18 Jan 2022 14:16:26 +0100
-Message-Id: <20220118131626.926394-5-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220118131626.926394-1-alexander.stein@ew.tq-group.com>
-References: <20220118131626.926394-1-alexander.stein@ew.tq-group.com>
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="225492554"
+X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
+   d="scan'208,223";a="225492554"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 05:33:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
+   d="scan'208,223";a="671839651"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 18 Jan 2022 05:33:32 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 18 Jan 2022 15:33:31 +0200
+Date:   Tue, 18 Jan 2022 15:33:31 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc:     Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        rafael.j.wysocki@intel.com, linux-usb@vger.kernel.org
+Subject: Re: [Bug][5.17-rc0] Between commits daadb3bd0e8d and 455e73a07f6e,
+ the kernel stops loading on my devices.
+Message-ID: <YebBq/WDeYCIvwYw@kuha.fi.intel.com>
+References: <CABXGCsNb22JCJ4AyR1sYqFtF4QUnvM3B2zQcc1svcm2mquWxoA@mail.gmail.com>
+ <YeUvvIaVJnJrrpYe@kuha.fi.intel.com>
+ <CABXGCsO5PYBuZ11YR16NLLa0H07Jom1JQhWHFuETfotfBfzkMw@mail.gmail.com>
+ <YeVQsRp7aDMcQKs7@kuha.fi.intel.com>
+ <CABXGCsMWXFFQY3L8ixK9K-gYX41_gTjqHRBXNp6gDpUgdnvFfg@mail.gmail.com>
+ <YeVfYOhxGTgg8VpZ@kuha.fi.intel.com>
+ <CABXGCsOwsP7NJ67oyK3HPs2EarSJKLB9EVW7oEh+8bAFihSa8g@mail.gmail.com>
+ <Yea8p1b/sZYKNGaB@kuha.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="MxjOsjrC21eCMA0L"
+Content-Disposition: inline
+In-Reply-To: <Yea8p1b/sZYKNGaB@kuha.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The USB3 glue layer has 2 areas in the register set, see RM Rev.1
-section 11.2.5.2.1 GLUE_usb3 memory map:
-* USB3 control/status
-* PHY control/status
 
-Provide the memory area to the usb3 nodes for accessing the features
-in the USB3 control area.
+--MxjOsjrC21eCMA0L
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
- arch/arm64/boot/dts/freescale/imx8mp.dtsi | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+On Tue, Jan 18, 2022 at 03:12:10PM +0200, Heikki Krogerus wrote:
+> Hi Mikhail,
+> 
+> On Tue, Jan 18, 2022 at 04:26:27PM +0500, Mikhail Gavrilov wrote:
+> > On Mon, 17 Jan 2022 at 17:21, Heikki Krogerus
+> > <heikki.krogerus@linux.intel.com> wrote:
+> > >
+> > > Have you modified the file, or something else that you have not
+> > > committed yet?
+> > >
+> > >         % git status
+> > >
+> > > Checkout the file, and then try to apply the patch:
+> > >
+> > >         % git checkout drivers/usb/typec/port-mapper.c
+> > >         % git apply -v 0001-usb-typec-Test-fix.patch
+> > >
+> > 
+> > I understood why the patch was not applied. The "Window line endings"
+> > in the attached file were.
+> > 
+> > $ dos2unix 0001-usb-typec-Test-fix.patch
+> > dos2unix: converting file 0001-usb-typec-Test-fix.patch to Unix format...
+> > $ git apply -v 0001-usb-typec-Test-fix.patch
+> > Checking patch drivers/usb/typec/port-mapper.c...
+> > Applied patch drivers/usb/typec/port-mapper.c cleanly.
+> 
+> Oh, I'm sorry. Something corrupted the patch, which is a bit alarming,
+> but good that you managed to test it in any case.
+> 
+> > Unfortunately the attached patch didn't fix the issue.
+> > 
+> >  BUG: kernel NULL pointer dereference, address: 0000000000000008
+> >  #PF: supervisor read access in kernel mode
+> >  #PF: error_code(0x0000) - not-present page
+> >  PGD 0 P4D 0
+> >  Oops: 0000 [#1] PREEMPT SMP NOPTI
+> >  CPU: 10 PID: 459 Comm: kworker/10:2 Not tainted
+> > 5.16.0-patched-455e73a07f6e+ #26
+> >  Hardware name: ASUSTeK COMPUTER INC. ROG Strix G513QY_G513QY/G513QY,
+> > BIOS G513QY.316 11/29/2021
+> >  Workqueue: events_long ucsi_init_work [typec_ucsi]
+> >  RIP: 0010:component_master_add_with_match+0x14/0x110
+> >  Code: 72 d7 48 89 ef 5b 5d e9 1a 5c 9f ff 66 2e 0f 1f 84 00 00 00 00
+> > 00 0f 1f 44 00 00 41 55 49 89 fd 41 54 49 89 f4 55 53 48 89 d3 <48> 8b
+> > 72 08 48 3b 32 74 10 48 89 d7 e8 4b fd ff ff 85 c0 0f 85 bb
+> >  RSP: 0018:ffffba4581837d90 EFLAGS: 00010282
+> >  RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> >  RDX: 0000000000000000 RSI: ffffffffc04f58d0 RDI: ffff9c5afe43a808
+> >  RBP: ffff9c5a81076358 R08: 0000000000000001 R09: 0000000000000001
+> >  R10: 0000000000000001 R11: 0000000000000000 R12: ffffffffc04f58d0
+> >  R13: ffff9c5afe43a808 R14: ffff9c5afe43a808 R15: ffff9c5a832c4010
+> >  FS:  0000000000000000(0000) GS:ffff9c5d88a00000(0000) knlGS:0000000000000000
+> >  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >  CR2: 0000000000000008 CR3: 00000002e5028000 CR4: 0000000000750ee0
+> >  PKRU: 55555554
+> >  Call Trace:
+> >   <TASK>
+> >   typec_link_ports+0x5d/0x70 [typec]
+> >   typec_register_port+0x1e6/0x2e0 [typec]
+> >   ucsi_init_work+0x463/0x840 [typec_ucsi]
+> >   process_one_work+0x2bb/0x600
+> >   worker_thread+0x55/0x3b0
+> >   ? process_one_work+0x600/0x600
+> >   kthread+0x17c/0x1a0
+> >   ? set_kthread_struct+0x40/0x40
+> >   ret_from_fork+0x22/0x30
+> >   </TASK>
+> 
+> This is not the same issue, this is another bug :-(. The original
+> issue does seem to be fixed.
+> 
+> I can reproduce this one by simply not creating the component list in
+> the code. That function - component_master_add_with_match() - can't
+> handle situation where the list is empty. I'll prepare the fix.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-index 6b840c05dd77..baaa49b419fa 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-@@ -921,10 +921,14 @@ usb3_phy0: usb-phy@381f0040 {
- 
- 		usb3_0: usb@32f10100 {
- 			compatible = "fsl,imx8mp-dwc3";
--			reg = <0x32f10100 0x8>;
-+			reg = <0x32f10100 0x8>,
-+			      <0x381f0000 0x20>;
- 			clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
--				 <&clk IMX8MP_CLK_USB_ROOT>;
--			clock-names = "hsio", "suspend";
-+				 <&clk IMX8MP_CLK_USB_ROOT>,
-+				 <&clk IMX8MP_CLK_USB_PHY_ROOT>;
-+			clock-names = "hsio", "suspend", "phy";
-+			assigned-clocks = <&clk IMX8MP_CLK_USB_PHY_REF>;
-+			assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
- 			interrupts = <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-@@ -962,10 +966,14 @@ usb3_phy1: usb-phy@382f0040 {
- 
- 		usb3_1: usb@32f10108 {
- 			compatible = "fsl,imx8mp-dwc3";
--			reg = <0x32f10108 0x8>;
-+			reg = <0x32f10108 0x8>,
-+			      <0x382f0000 0x20>;
- 			clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
--				 <&clk IMX8MP_CLK_USB_ROOT>;
--			clock-names = "hsio", "suspend";
-+				 <&clk IMX8MP_CLK_USB_ROOT>,
-+				 <&clk IMX8MP_CLK_USB_PHY_ROOT>;
-+			clock-names = "hsio", "suspend", "phy";
-+			assigned-clocks = <&clk IMX8MP_CLK_USB_PHY_REF>;
-+			assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
- 			interrupts = <GIC_SPI 149 IRQ_TYPE_LEVEL_HIGH>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
+I'm again attaching the proposed fix, just to see if it also gets
+corrupted. Can you test does it fix this issue?
+You need to apply it on top of the previous one.
+
+thanks,
+
 -- 
-2.25.1
+heikki
 
+--MxjOsjrC21eCMA0L
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-usb-typec-Don-t-try-to-register-component-master-wit.patch"
+
+From acae81528b4c2bd0b461a4c3bd66b9df10947ac9 Mon Sep 17 00:00:00 2001
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Date: Tue, 18 Jan 2022 16:15:37 +0300
+Subject: [PATCH] usb: typec: Don't try to register component master without
+ components
+
+This fixes NULL pointer dereference that happens if
+component master is registered with empty component match
+list.
+
+Reported-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Fixes: 730b49aac426 ("usb: typec: port-mapper: Convert to the component framework")
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/typec/port-mapper.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/typec/port-mapper.c b/drivers/usb/typec/port-mapper.c
+index b6e0c6acc628c..a7d507802509f 100644
+--- a/drivers/usb/typec/port-mapper.c
++++ b/drivers/usb/typec/port-mapper.c
+@@ -60,6 +60,8 @@ int typec_link_ports(struct typec_port *con)
+ 		return 0;
+ 
+ 	bus_for_each_dev(&acpi_bus_type, NULL, &arg, typec_port_match);
++	if (!arg.match)
++		return 0;
+ 
+ 	/*
+ 	 * REVISIT: Now each connector can have only a single component master.
+-- 
+2.34.1
+
+
+--MxjOsjrC21eCMA0L--
