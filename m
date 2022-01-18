@@ -2,30 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A848E4926EF
+	by mail.lfdr.de (Postfix) with ESMTP id F23524926F0
 	for <lists+linux-usb@lfdr.de>; Tue, 18 Jan 2022 14:16:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242138AbiARNQn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jan 2022 08:16:43 -0500
-Received: from mx1.tq-group.com ([93.104.207.81]:30777 "EHLO mx1.tq-group.com"
+        id S242186AbiARNQo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jan 2022 08:16:44 -0500
+Received: from mx1.tq-group.com ([93.104.207.81]:30788 "EHLO mx1.tq-group.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241721AbiARNQk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S236141AbiARNQk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
         Tue, 18 Jan 2022 08:16:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
   t=1642511800; x=1674047800;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=n2wi0VyDHml3t8zyGPZu/XZ547LV3Cu4QkPHY8CA61U=;
-  b=PZvIGzEk9qXFhEZ5YoEqoQaYFALAJ/mppu6ioR4UBEA2R4mOMMXZwfya
-   QrQh5+OMMA8B9f0ie8pgN9HgJkzTtLhXYw3whg3Kq5xvtXfkDzrW0WPzh
-   p4nl87morWnKVHyK/O5V3Bxcdvkwm5kqWVao7thP1BYhSpD8Ygntfjnx1
-   Dwei66Eai2h6gNQB4akvXM/WP5i3OS+YLxZnRWjyeP6lsm/U4vwl9DnK8
-   ZcC4lsaqGxfwX91vOMc7P59bjSu9gafX8wTCFrN7RQHIavFAT/YsjDRFY
-   Oyeuh0SjykVmwtR/mZgHr7IHFThsBlDdg71GhHVhy12kbtkR5sT+rdmdb
-   g==;
+  bh=SZIx2UUKyccq9b4BJo1ObjbdH1RlvdPaczN/UfYCdfk=;
+  b=e/zjBlSIP/r2n1BQrGKu6+RCWcHZhld5vYzvG6J3ttWWq0iOnfLW+dHg
+   g59XVZlTpepCsRBkRlnph65EZ6vN7+qgb7d1BBK3q7zZpD1/qnpLhxBmB
+   fbB1duMhjHL0Z4N5+sLCt5wahlWTHIapqtaYtfprZsnI8I4zxmBALyvXq
+   0GZf8yJoAdWX8Dyo06Xbs2oWagocPdPZ20LUSaJGVVzmyTYnniojqVxXk
+   XvqDNC47YdD7ipmZeOTjwXfllnSfovuRu1FGevooNo1ZUUsvrEUj2qNYX
+   LbSo+DN/zI7LkPJgVmH1t73FkqN8uyTRbqcojIPoX5ySFHpk6AiRAiXez
+   A==;
 X-IronPort-AV: E=Sophos;i="5.88,297,1635199200"; 
-   d="scan'208";a="21564689"
+   d="scan'208";a="21564691"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
   by mx1-pgp.tq-group.com with ESMTP; 18 Jan 2022 14:16:37 +0100
 Received: from mx1.tq-group.com ([192.168.6.7])
@@ -38,23 +38,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   t=1642511797; x=1674047797;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=n2wi0VyDHml3t8zyGPZu/XZ547LV3Cu4QkPHY8CA61U=;
-  b=FgVJ8OK5d5qd3jRNM8IX+w7SnaGGlHDAbqvNayy+CLwHmeKiZPOn1uOm
-   MZIVnvBLMhvCajaNxPL6AYaH4j0JwwHZw8yMuqCtKHDO8GkH/6qzjk/nG
-   oWm12KptzewH6lBwRP+z193vofH1OZ17l6gN+Bdm14zGzReBMvv5BWZZf
-   ByYcKpCkKIL40DoP4tUSqFj9TFw+lHkFasLwPy7OJ/qBEA4ElzWJIMDmf
-   4HkCVdN+uaqdtD+rWnwEQJunniCzr60dthKFTXOpDIfsH2cAcboUjS/UC
-   pFC2PIVH+xLt7BmT+VQaeD300+hPayVpvpM7BUSYNwqILjfsVhC0F8VUO
-   w==;
+  bh=SZIx2UUKyccq9b4BJo1ObjbdH1RlvdPaczN/UfYCdfk=;
+  b=ktOFLDOZWGrQRCsEs8VYKEwby9Z8ywSqB4djYKXbd29oHwwNchkjhrb9
+   hoeLmTYYJ7KZtJMq8slQRmJ3x/r4H+zsRMMlfKmxCXHDolXu7DOVihKc5
+   eEDFA2OKPfBVyvLf2GES6yqE6opHymalaC9BPbY2nTvg/i9ycKci2ci21
+   dDb/vZRmFStyA0EcMJoIH+ciMo9lpWD2i2/9DBOaEhQGyk7LD6fdH+iZT
+   43qrb8Wxt2unT3zwxmjiEhJZY+t63YTAIEesHTj7D8/aDLqZ3rjAPf84L
+   E+1nkUJKa1SyrhyF97kEf7SUvUJw22fPwJDhPv7m4mEmjHtRXsYC8fc6z
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.88,297,1635199200"; 
-   d="scan'208";a="21564688"
+   d="scan'208";a="21564690"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 18 Jan 2022 14:16:37 +0100
 Received: from steina-w.tq-net.de (unknown [10.123.49.12])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id C33BA280075;
-        Tue, 18 Jan 2022 14:16:36 +0100 (CET)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 09B88280065;
+        Tue, 18 Jan 2022 14:16:37 +0100 (CET)
 From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -65,9 +65,9 @@ Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, Li Jun <jun.li@nxp.com>
-Subject: [PATCH v3 3/4] usb: dwc3: imx8mp: Add support for setting SOC specific flags
-Date:   Tue, 18 Jan 2022 14:16:25 +0100
-Message-Id: <20220118131626.926394-4-alexander.stein@ew.tq-group.com>
+Subject: [PATCH v3 4/4] arm64: dts: imx8mp: Add memory for USB3 glue layer to usb3 nodes
+Date:   Tue, 18 Jan 2022 14:16:26 +0100
+Message-Id: <20220118131626.926394-5-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220118131626.926394-1-alexander.stein@ew.tq-group.com>
 References: <20220118131626.926394-1-alexander.stein@ew.tq-group.com>
@@ -77,159 +77,59 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The i.MX8MP glue layer has support for the following flags:
-* over-current polarity
-* PWR pad polarity
-* controlling PPC flag in HCCPARAMS register
-* permanent port attach for usb2 & usb3 port
+The USB3 glue layer has 2 areas in the register set, see RM Rev.1
+section 11.2.5.2.1 GLUE_usb3 memory map:
+* USB3 control/status
+* PHY control/status
 
-Allow setting these flags by supporting specific flags in the glue node.
-In order to get this to work an additional IORESOURCE_MEM and clock is
-necessary. For backward compatibility this is purely optional.
+Provide the memory area to the usb3 nodes for accessing the features
+in the USB3 control area.
 
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
- drivers/usb/dwc3/dwc3-imx8mp.c | 81 ++++++++++++++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-imx8mp.c b/drivers/usb/dwc3/dwc3-imx8mp.c
-index 1c8fe657b3a9..3df4313b3740 100644
---- a/drivers/usb/dwc3/dwc3-imx8mp.c
-+++ b/drivers/usb/dwc3/dwc3-imx8mp.c
-@@ -36,17 +36,66 @@
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+index 6b840c05dd77..baaa49b419fa 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+@@ -921,10 +921,14 @@ usb3_phy0: usb-phy@381f0040 {
  
- #define USB_WAKEUP_EN_MASK		GENMASK(5, 0)
+ 		usb3_0: usb@32f10100 {
+ 			compatible = "fsl,imx8mp-dwc3";
+-			reg = <0x32f10100 0x8>;
++			reg = <0x32f10100 0x8>,
++			      <0x381f0000 0x20>;
+ 			clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
+-				 <&clk IMX8MP_CLK_USB_ROOT>;
+-			clock-names = "hsio", "suspend";
++				 <&clk IMX8MP_CLK_USB_ROOT>,
++				 <&clk IMX8MP_CLK_USB_PHY_ROOT>;
++			clock-names = "hsio", "suspend", "phy";
++			assigned-clocks = <&clk IMX8MP_CLK_USB_PHY_REF>;
++			assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
+ 			interrupts = <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+@@ -962,10 +966,14 @@ usb3_phy1: usb-phy@382f0040 {
  
-+/* USB glue registers */
-+#define USB_CTRL0		0x00
-+#define USB_CTRL1		0x04
-+
-+#define USB_CTRL0_PORTPWR_EN	BIT(12) /* 1 - PPC enabled (default) */
-+#define USB_CTRL0_USB3_FIXED	BIT(22) /* 1 - USB3 permanent attached */
-+#define USB_CTRL0_USB2_FIXED	BIT(23) /* 1 - USB2 permanent attached */
-+
-+#define USB_CTRL1_OC_POLARITY	BIT(16) /* 0 - HIGH / 1 - LOW */
-+#define USB_CTRL1_PWR_POLARITY	BIT(17) /* 0 - HIGH / 1 - LOW */
-+
- struct dwc3_imx8mp {
- 	struct device			*dev;
- 	struct platform_device		*dwc3;
- 	void __iomem			*hsio_blk_base;
-+	void __iomem			*glue_base;
- 	struct clk			*hsio_clk;
- 	struct clk			*suspend_clk;
-+	struct clk			*phy_clk;
- 	int				irq;
- 	bool				pm_suspended;
- 	bool				wakeup_pending;
- };
- 
-+static void imx8mp_configure_glue(struct dwc3_imx8mp *dwc3_imx)
-+{
-+	struct device *dev = dwc3_imx->dev;
-+	u32 value;
-+
-+	if ((!dwc3_imx->glue_base) || (!dwc3_imx->phy_clk))
-+		return;
-+
-+	value = readl(dwc3_imx->glue_base + USB_CTRL0);
-+
-+	if (device_property_read_bool(dev, "fsl,permanently-attached"))
-+		value |= (USB_CTRL0_USB2_FIXED | USB_CTRL0_USB3_FIXED);
-+	else
-+		value &= ~(USB_CTRL0_USB2_FIXED | USB_CTRL0_USB3_FIXED);
-+
-+	if (device_property_read_bool(dev, "fsl,disable-port-power-control"))
-+		value &= ~(USB_CTRL0_PORTPWR_EN);
-+	else
-+		value |= USB_CTRL0_PORTPWR_EN;
-+
-+	writel(value, dwc3_imx->glue_base + USB_CTRL0);
-+
-+	value = readl(dwc3_imx->glue_base + USB_CTRL1);
-+	if (device_property_read_bool(dev, "fsl,over-current-active-low"))
-+		value |= USB_CTRL1_OC_POLARITY;
-+	else
-+		value &= ~USB_CTRL1_OC_POLARITY;
-+
-+	if (device_property_read_bool(dev, "fsl,power-active-low"))
-+		value |= USB_CTRL1_PWR_POLARITY;
-+	else
-+		value &= ~USB_CTRL1_PWR_POLARITY;
-+
-+	writel(value, dwc3_imx->glue_base + USB_CTRL1);
-+}
-+
- static void dwc3_imx8mp_wakeup_enable(struct dwc3_imx8mp *dwc3_imx)
- {
- 	struct dwc3	*dwc3 = platform_get_drvdata(dwc3_imx->dwc3);
-@@ -100,6 +149,7 @@ static int dwc3_imx8mp_probe(struct platform_device *pdev)
- 	struct device		*dev = &pdev->dev;
- 	struct device_node	*dwc3_np, *node = dev->of_node;
- 	struct dwc3_imx8mp	*dwc3_imx;
-+	struct resource		*res;
- 	int			err, irq;
- 
- 	if (!node) {
-@@ -119,6 +169,15 @@ static int dwc3_imx8mp_probe(struct platform_device *pdev)
- 	if (IS_ERR(dwc3_imx->hsio_blk_base))
- 		return PTR_ERR(dwc3_imx->hsio_blk_base);
- 
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-+	if (!res) {
-+		dev_warn(dev, "Base address for glue layer missing. Continuing without, some features are missing though.");
-+	} else {
-+		dwc3_imx->glue_base = devm_ioremap_resource(dev, res);
-+		if (IS_ERR(dwc3_imx->glue_base))
-+			return PTR_ERR(dwc3_imx->glue_base);
-+	}
-+
- 	dwc3_imx->hsio_clk = devm_clk_get(dev, "hsio");
- 	if (IS_ERR(dwc3_imx->hsio_clk)) {
- 		err = PTR_ERR(dwc3_imx->hsio_clk);
-@@ -145,6 +204,24 @@ static int dwc3_imx8mp_probe(struct platform_device *pdev)
- 		goto disable_hsio_clk;
- 	}
- 
-+	dwc3_imx->phy_clk = devm_clk_get(dev, "phy");
-+	if (PTR_ERR(dwc3_imx->phy_clk) == -ENOENT) {
-+		dev_warn(dev, "PHY clock missing. Continuing without, some features are missing though.");
-+		dwc3_imx->phy_clk = NULL;
-+	} else if (IS_ERR(dwc3_imx->phy_clk)) {
-+		err = PTR_ERR(dwc3_imx->phy_clk);
-+		dev_err(dev, "Failed to get phy clk, err=%d\n", err);
-+		goto disable_suspend_clk;
-+	}
-+
-+	if (dwc3_imx->phy_clk) {
-+		err = clk_prepare_enable(dwc3_imx->phy_clk);
-+		if (err) {
-+			dev_err(dev, "Failed to enable phy clk, err=%d\n", err);
-+			goto disable_suspend_clk;
-+		}
-+	}
-+
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0) {
- 		err = irq;
-@@ -152,6 +229,8 @@ static int dwc3_imx8mp_probe(struct platform_device *pdev)
- 	}
- 	dwc3_imx->irq = irq;
- 
-+	imx8mp_configure_glue(dwc3_imx);
-+
- 	pm_runtime_set_active(dev);
- 	pm_runtime_enable(dev);
- 	err = pm_runtime_get_sync(dev);
-@@ -199,6 +278,8 @@ static int dwc3_imx8mp_probe(struct platform_device *pdev)
- 	pm_runtime_disable(dev);
- 	pm_runtime_put_noidle(dev);
- disable_clks:
-+	clk_disable_unprepare(dwc3_imx->phy_clk);
-+disable_suspend_clk:
- 	clk_disable_unprepare(dwc3_imx->suspend_clk);
- disable_hsio_clk:
- 	clk_disable_unprepare(dwc3_imx->hsio_clk);
+ 		usb3_1: usb@32f10108 {
+ 			compatible = "fsl,imx8mp-dwc3";
+-			reg = <0x32f10108 0x8>;
++			reg = <0x32f10108 0x8>,
++			      <0x382f0000 0x20>;
+ 			clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
+-				 <&clk IMX8MP_CLK_USB_ROOT>;
+-			clock-names = "hsio", "suspend";
++				 <&clk IMX8MP_CLK_USB_ROOT>,
++				 <&clk IMX8MP_CLK_USB_PHY_ROOT>;
++			clock-names = "hsio", "suspend", "phy";
++			assigned-clocks = <&clk IMX8MP_CLK_USB_PHY_REF>;
++			assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
+ 			interrupts = <GIC_SPI 149 IRQ_TYPE_LEVEL_HIGH>;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
 -- 
 2.25.1
 
