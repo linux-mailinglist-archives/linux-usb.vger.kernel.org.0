@@ -2,127 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 029F1493D8C
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jan 2022 16:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C186493DB3
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jan 2022 16:52:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355900AbiASPpy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jan 2022 10:45:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242199AbiASPps (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jan 2022 10:45:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF250C061574;
-        Wed, 19 Jan 2022 07:45:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97A37B81A0D;
-        Wed, 19 Jan 2022 15:45:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1238AC004E1;
-        Wed, 19 Jan 2022 15:45:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642607145;
-        bh=lGvpU5SU2oeO2Gj2gUOdONvIDUBxvoCyLVrP9LdAyK0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uFHSCn+eRhus5s0gMFtlk4M/7JhocnfANlW1cVHA0G6W01cpJd8F+h8fndGiFBKZn
-         nCZZCtAQC4k7abNvVhvbVvzHZ7dwbuD74/T+NiX/IT3CWwnmAbzJ0EI/MN3ouRA4NK
-         JcMa2vYnHRlxojVgmRVHQy8kAseKCb6RYvwbbz/tuDQ+FYrQPMEKinDs+/J/QCmOle
-         OH44fC1gV0pSNhO5CC8MUprlf5WJ73QIy9YW2JqYDexDIA+m9Gz2JyKjFMMikgheJ8
-         PhLYlTQI+6mhi8SuY2B8vNy7F68ziMiWUL/NDEe4veZOx2TcwQKBwmk2W+zhD/Bwkn
-         UzTQKF64F/eMw==
-Date:   Wed, 19 Jan 2022 15:45:29 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
-        linux-pm@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Improve phandle-array schemas
-Message-ID: <YegyGbGcwSNo49gY@sirena.org.uk>
-References: <20220119015038.2433585-1-robh@kernel.org>
+        id S1355972AbiASPwB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jan 2022 10:52:01 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:26250 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355970AbiASPv7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jan 2022 10:51:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642607519; x=1674143519;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=XIxmgk0xsE5Ynu3qEoXGiIkU8u/hPZNmziCPdHmNVpI=;
+  b=VFSKTKCbqtjxrtoRibbHMjW8YbRaDAaRmzUYCCT8u29+dH/hUH5dwGZW
+   xv1taVL4qG2ejXtrSpWZyxNXGcVGF0LTtaG3efWx6W9t7qsSQmGMoZTjJ
+   36nzIlyzgpExXp3mwa8cQw1Cq9EaiLe0vFnW8YZc+i8FQ/GjjYbnXNOt+
+   8=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 19 Jan 2022 07:51:59 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 07:51:59 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 19 Jan 2022 07:51:58 -0800
+Received: from ppratap-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 19 Jan 2022 07:51:55 -0800
+From:   Pratham Pratap <quic_ppratap@quicinc.com>
+To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>
+CC:     <linux-usb@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_mrana@quicinc.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>
+Subject: [PATCH v1] usb: hub: Power cycle root hub if CSC is set during hub_port_reset
+Date:   Wed, 19 Jan 2022 21:21:38 +0530
+Message-ID: <1642607498-8458-1-git-send-email-quic_ppratap@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="czK8d+IES+j+3Pl3"
-Content-Disposition: inline
-In-Reply-To: <20220119015038.2433585-1-robh@kernel.org>
-X-Cookie: This bag is recyclable.
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+When a FS device is following a suspend-reset-enumeration-data
+transfer sequence, sometimes it goes back in suspend just after reset
+without the link entering L0. This is seen in only when the following
+scenarios are met:
+- SOF and EOR happens at the same clock cycle
+- UTMI line state should transition from SE0 to K at the same clock
+cycle(if the UTMI line state transition from SE0 to J at the same
+clock cycle then problem is not seen)
 
---czK8d+IES+j+3Pl3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Attemting a power cycle of the root hub recovers the problem described.
+To identify the issue, PLS goes to disabled state followed by CSC bit
+being set(because of CCS status change).
 
-On Tue, Jan 18, 2022 at 07:50:38PM -0600, Rob Herring wrote:
-> The 'phandle-array' type is a bit ambiguous. It can be either just an
-> array of phandles or an array of phandles plus args. Many schemas for
-> phandle-array properties aren't clear in the schema which case applies
-> though the description usually describes it.
+Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
+---
+v1:
+Problem is seen on core emulation setup with eUSB2 PHY test chip.
+This failure is seen only in full speed host mode usecase with all
+available eUSB2 repeater randomly in 1 out of 5000 to 6000 iterations.
+As of now, we don't have any SOC with eUSB2 PHY on which this fix can
+be tested.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+ drivers/usb/core/hub.c        | 34 ++++++++++++++++++++++++++--------
+ drivers/usb/host/xhci-plat.c  |  3 +++
+ include/linux/usb/hcd.h       |  1 +
+ include/uapi/linux/usb/ch11.h |  1 +
+ 4 files changed, 31 insertions(+), 8 deletions(-)
 
---czK8d+IES+j+3Pl3
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 47a1c8b..6a65092 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -2834,10 +2834,20 @@ static bool hub_port_warm_reset_required(struct usb_hub *hub, int port1,
+ 		|| link_state == USB_SS_PORT_LS_COMP_MOD;
+ }
+ 
++static void usb_hub_port_power_cycle(struct usb_device *hdev, struct usb_hub *hub, int port1)
++{
++	dev_info(&hub->ports[port1 - 1]->dev, "attempt power cycle\n");
++	usb_hub_set_port_power(hdev, hub, port1, false);
++	msleep(2 * hub_power_on_good_delay(hub));
++	usb_hub_set_port_power(hdev, hub, port1, true);
++	msleep(hub_power_on_good_delay(hub));
++}
++
+ static int hub_port_wait_reset(struct usb_hub *hub, int port1,
+ 			struct usb_device *udev, unsigned int delay, bool warm)
+ {
+ 	int delay_time, ret;
++	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
+ 	u16 portstatus;
+ 	u16 portchange;
+ 	u32 ext_portstatus = 0;
+@@ -2887,8 +2897,21 @@ static int hub_port_wait_reset(struct usb_hub *hub, int port1,
+ 		return -ENOTCONN;
+ 
+ 	/* Device went away? */
+-	if (!(portstatus & USB_PORT_STAT_CONNECTION))
++	if (!(portstatus & USB_PORT_STAT_CONNECTION)) {
++		/*
++		 * When a FS device is following a suspend-reset-enumeration-data_transfer
++		 * sequence, sometimes it goes back in suspend just after reset without the
++		 * link entering L0. To fix this when CSC bit is set(because of CCS status
++		 * change) power cycle the root hub.
++		 */
++		if (udev->reset_resume && (!udev->parent && hcd->fs_suspend_reset) &&
++				(portstatus & USB_PORT_STAT_CSC)) {
++			usb_hub_port_power_cycle(hdev, hub, port1);
++			return -EAGAIN;
++		}
++
+ 		return -ENOTCONN;
++	}
+ 
+ 	/* Retry if connect change is set but status is still connected.
+ 	 * A USB 3.0 connection may bounce if multiple warm resets were issued,
+@@ -5393,13 +5416,8 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+ 			break;
+ 
+ 		/* When halfway through our retry count, power-cycle the port */
+-		if (i == (PORT_INIT_TRIES - 1) / 2) {
+-			dev_info(&port_dev->dev, "attempt power cycle\n");
+-			usb_hub_set_port_power(hdev, hub, port1, false);
+-			msleep(2 * hub_power_on_good_delay(hub));
+-			usb_hub_set_port_power(hdev, hub, port1, true);
+-			msleep(hub_power_on_good_delay(hub));
+-		}
++		if (i == (PORT_INIT_TRIES - 1) / 2)
++			usb_hub_port_power_cycle(hdev, hub, port1);
+ 	}
+ 	if (hub->hdev->parent ||
+ 			!hcd->driver->port_handed_over ||
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index c1edcc9..607c4f0 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -342,6 +342,9 @@ static int xhci_plat_probe(struct platform_device *pdev)
+ 	hcd->tpl_support = of_usb_host_tpl_support(sysdev->of_node);
+ 	xhci->shared_hcd->tpl_support = hcd->tpl_support;
+ 
++	hcd->fs_suspend_reset = of_property_read_bool(sysdev->of_node, "fs-suspend-reset");
++	xhci->shared_hcd->fs_suspend_reset = hcd->fs_suspend_reset;
++
+ 	if (priv) {
+ 		ret = xhci_priv_plat_setup(hcd);
+ 		if (ret)
+diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+index 548a028..05ccbc8 100644
+--- a/include/linux/usb/hcd.h
++++ b/include/linux/usb/hcd.h
+@@ -172,6 +172,7 @@ struct usb_hcd {
+ 	unsigned		tpl_support:1; /* OTG & EH TPL support */
+ 	unsigned		cant_recv_wakeups:1;
+ 			/* wakeup requests from downstream aren't received */
++	unsigned		fs_suspend_reset:1; /* fs suspend reset bug */
+ 
+ 	unsigned int		irq;		/* irq allocated */
+ 	void __iomem		*regs;		/* device memory/io */
+diff --git a/include/uapi/linux/usb/ch11.h b/include/uapi/linux/usb/ch11.h
+index fb0cd24..576bbf9 100644
+--- a/include/uapi/linux/usb/ch11.h
++++ b/include/uapi/linux/usb/ch11.h
+@@ -135,6 +135,7 @@ struct usb_port_status {
+ #define USB_PORT_STAT_TEST              0x0800
+ #define USB_PORT_STAT_INDICATOR         0x1000
+ /* bits 13 to 15 are reserved */
++#define USB_PORT_STAT_CSC		0x20000
+ 
+ /*
+  * Additions to wPortStatus bit field from USB 3.0
+-- 
+2.7.4
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHoMhgACgkQJNaLcl1U
-h9AndQf6AqqY9YG2aSYiiYYVIPZoOOjUX2h6CnkvjYCVewt5gN+SxENXpgaLc0p7
-vUq1Rp5AXTu7uFjL2ebgJ8UZPO5cjNIcj81k5OTqRYCvRBqWrPJpsacwSvuNAIUC
-wrrUMNkFdRa0zaMGhMzVeaIAH9o5nqER6z2qXqGG9ccVbPBok8wg6W1xQCDlmyp8
-wzYMD1gLPXMihGy7mzkZd/BHFVdUjKVmYlGiUNl7GI9MVp6v8wt8BbDP4qng30Yz
-BLjhS3YyPDXdeYumU5Mvht+JzYmhn8Ihggw6dbQf6dO/UjwL+5ApN6em8mMhc0VH
-9cXSuI+tv6I8BrIvDkVLV+hVCpjdBg==
-=GpmZ
------END PGP SIGNATURE-----
-
---czK8d+IES+j+3Pl3--
