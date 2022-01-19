@@ -2,77 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E31874932B6
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jan 2022 03:09:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED8549335C
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jan 2022 04:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348326AbiASCI7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jan 2022 21:08:59 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:35102 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1348213AbiASCI5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jan 2022 21:08:57 -0500
-X-UUID: ac524a30fcce437b86ab5caa99937360-20220119
-X-UUID: ac524a30fcce437b86ab5caa99937360-20220119
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 769824493; Wed, 19 Jan 2022 10:08:54 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 19 Jan 2022 10:08:52 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 19 Jan 2022 10:08:52 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Balamanikandan Gunasundar 
-        <balamanikandan.gunasundar@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Dan Sneddon <dan.sneddon@microchip.com>
-CC:     <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        "Miles Chen" <miles.chen@mediatek.com>
-Subject: [PATCH] usb: gadget: at91_udc: fix incorrect print type
-Date:   Wed, 19 Jan 2022 10:08:49 +0800
-Message-ID: <20220119020849.25732-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        id S1351191AbiASDKh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jan 2022 22:10:37 -0500
+Received: from mail-ot1-f51.google.com ([209.85.210.51]:40844 "EHLO
+        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238949AbiASDKf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jan 2022 22:10:35 -0500
+Received: by mail-ot1-f51.google.com with SMTP id x31-20020a056830245f00b00599111c8b20so1227152otr.7;
+        Tue, 18 Jan 2022 19:10:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MS2fURrf1nnAP7sSkdeRoaX+N07h6MHgI/yoTSDi19c=;
+        b=UfrMsJ14YKgsKcU8aP2mL40pUw735Uu2MthHF0twUe8XmCrlrhqFcd9PgQZ7H1/f/z
+         G/0NYh9OUW1Et/RgUfeQZZyLP/xIN8vax2PdSY5RASDAhxjsgR39vQG81Mt753g/nTRG
+         piUSWCR+7UAX5lz9xZxaMaaTdwoiVtsoKAZ/gQXr0ZvpdqJ/3N9np3/LcYGwSQp1oHYL
+         5UAks8SKfB6kRpQl7YgHpCkUNb1OiZI62U6mahIv33BNeapibkZijmkoH2EdWVRGveaU
+         GfYk29TViWD44YwquDvMtbktixKkeVwAua5iWccm9CtbJNn8CJmL/eyI4Ik9LGRit0YY
+         f8dw==
+X-Gm-Message-State: AOAM531MRPS4OcX8z9yfSgf7dYo5aMCdLg0n3WltwQg0ZeBAjHl5M7Zz
+        qmOyQ6qWEa0ptBmgTgIZiA==
+X-Google-Smtp-Source: ABdhPJyZL7Pc5y5Wxqi8b6iBReEOkkhPbvIJQQDOpLQ7RrJ4fK7SIMgpc6ViWZt+LZWYVq80y2yjhA==
+X-Received: by 2002:a9d:3f1:: with SMTP id f104mr652207otf.28.1642561834561;
+        Tue, 18 Jan 2022 19:10:34 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id be4sm5860001oib.56.2022.01.18.19.10.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 19:10:33 -0800 (PST)
+Received: (nullmailer pid 2563196 invoked by uid 1000);
+        Wed, 19 Jan 2022 03:10:32 -0000
+Date:   Tue, 18 Jan 2022 21:10:32 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     conor.dooley@microchip.com
+Cc:     palmer@dabbelt.com, u.kleine-koenig@pengutronix.de,
+        aou@eecs.berkeley.edu, broonie@kernel.org,
+        jassisinghbrar@gmail.com, linus.walleij@linaro.org,
+        linux-gpio@vger.kernel.org, geert@linux-m68k.org,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        robh+dt@kernel.org, atishp@rivosinc.com, bgolaszewski@baylibre.com,
+        lewis.hanly@microchip.com, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org,
+        ivan.griffin@microchip.com, bin.meng@windriver.com,
+        alexandre.belloni@bootlin.com, a.zummo@towertech.it,
+        linux-crypto@vger.kernel.org, thierry.reding@gmail.com,
+        linux-usb@vger.kernel.org, daire.mcnamara@microchip.com,
+        devicetree@vger.kernel.org, paul.walmsley@sifive.com,
+        heiko@sntech.de, gregkh@linuxfoundation.org,
+        linux-rtc@vger.kernel.org, krzysztof.kozlowski@canonical.com,
+        lee.jones@linaro.org
+Subject: Re: [PATCH v4 03/14] dt-bindings: i2c: add bindings for microchip
+ mpfs i2c
+Message-ID: <YeeBKAHgEcHTAfQY@robh.at.kernel.org>
+References: <20220117110755.3433142-1-conor.dooley@microchip.com>
+ <20220117110755.3433142-4-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220117110755.3433142-4-conor.dooley@microchip.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix a build error observed with ARCH=arm DEFCONFIG=allmodconfig build.
+On Mon, 17 Jan 2022 11:07:44 +0000, conor.dooley@microchip.com wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Add device tree bindings for the i2c controller on
+> the Microchip PolarFire SoC.
+> 
+> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../bindings/i2c/microchip,mpfs-i2c.yaml      | 55 +++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
+> 
 
-drivers/usb/gadget/udc/at91_udc.h:174:42: error: format '%d' expects argument of type 'int', but argument 3 has type 'struct gpio_desc *' [-Werror=format=]
-
-Fixes: 4a555f2b8d31 ("usb: gadget: at91_udc: Convert to GPIO descriptors")
-Signed-off-by: Miles Chen <miles.chen@mediatek.com>
----
- drivers/usb/gadget/udc/at91_udc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/udc/at91_udc.c b/drivers/usb/gadget/udc/at91_udc.c
-index dd0819df096e..9040a0561466 100644
---- a/drivers/usb/gadget/udc/at91_udc.c
-+++ b/drivers/usb/gadget/udc/at91_udc.c
-@@ -1895,7 +1895,7 @@ static int at91udc_probe(struct platform_device *pdev)
- 					at91_vbus_irq, 0, driver_name, udc);
- 			if (retval) {
- 				DBG("request vbus irq %d failed\n",
--				    udc->board.vbus_pin);
-+				    desc_to_gpio(udc->board.vbus_pin));
- 				goto err_unprepare_iclk;
- 			}
- 		}
--- 
-2.18.0
-
+Reviewed-by: Rob Herring <robh@kernel.org>
