@@ -2,175 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F40F493643
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jan 2022 09:25:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9537B493649
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jan 2022 09:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352376AbiASIY5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jan 2022 03:24:57 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42970 "EHLO
+        id S1352408AbiASIZq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jan 2022 03:25:46 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43568 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346595AbiASIYx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jan 2022 03:24:53 -0500
+        with ESMTP id S1348696AbiASIZp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jan 2022 03:25:45 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 579E5B81906;
-        Wed, 19 Jan 2022 08:24:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A35DAC004E1;
-        Wed, 19 Jan 2022 08:24:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B344B8182E
+        for <linux-usb@vger.kernel.org>; Wed, 19 Jan 2022 08:25:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91B90C004E1;
+        Wed, 19 Jan 2022 08:25:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642580689;
-        bh=+aAjJqYgCB6wYsQ+TkHIz5BRkQQLBlav51rmak29+GE=;
+        s=korg; t=1642580743;
+        bh=ZXrdQcXTTZV/het9fXM78u4bFsHveNpMZzruG2+WmX4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cHtItM4mbfYOPuPhhPbkJhoJxiHZDumIyowKutBRkwdRAonHQ67rICg6LsPDCfHbA
-         QZbjt+9O/l+cvixjJDghPIFQOSzFWgJIJvP8UJlpTRsxxWB39t3m3AvKMSAFq8CBPt
-         bRA3U40sQfvuaUThRuNLKopLBDpeH18K4EpKopH4=
-Date:   Wed, 19 Jan 2022 09:24:45 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
-        linux-pm@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Improve phandle-array schemas
-Message-ID: <YefKzYIDUFC3NW7e@kroah.com>
-References: <20220119015038.2433585-1-robh@kernel.org>
+        b=e4o9oeNOihQf3bBenTRJuNADFTF/cEfYBmYGiAY1b8dlfd2VFKS1YzxXKEmTC6AvC
+         IZuLUw8XRFiuJ+0hbnkuI+cD2nXX8OeqWg147WNrhaB/RTe8n5DrnPrYy5RN2ZVNu8
+         ZQZAzgvDBIdTuHP1ZzF5DISVpR99iNhZRczJkSNk=
+Date:   Wed, 19 Jan 2022 09:25:40 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "ckamas dslextreme.com" <ckamas@dslextreme.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Debugging crash in kernel module usbip-host
+Message-ID: <YefLBBwm1pB9JSUJ@kroah.com>
+References: <04f3e890-3e6f-4ad2-bfa8-f4cb0e672487@dslextreme.com>
+ <5700736a-1ba4-9752-e73e-9d54829ce7bf@dslextreme.com>
+ <YeZcISwRLAt8a4mO@kroah.com>
+ <1959797703.662115317.1642549727537.JavaMail.zimbra@dslextreme.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220119015038.2433585-1-robh@kernel.org>
+In-Reply-To: <1959797703.662115317.1642549727537.JavaMail.zimbra@dslextreme.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 07:50:38PM -0600, Rob Herring wrote:
-> The 'phandle-array' type is a bit ambiguous. It can be either just an
-> array of phandles or an array of phandles plus args. Many schemas for
-> phandle-array properties aren't clear in the schema which case applies
-> though the description usually describes it.
+On Tue, Jan 18, 2022 at 06:48:47PM -0500, ckamas dslextreme.com wrote:
+> Greg,
 > 
-> The array of phandles case boils down to needing:
+> Thanks for the feedback. I will update the kernel to 5.16 and verify the crash there too.
 > 
-> items:
->   maxItems: 1
+> In the meantime, can you point me to where I can learn more about how these "stub" functions are generated?
 > 
-> The phandle plus args cases should typically take this form:
+> Thanks,
+> Chuck
 > 
-> items:
->   - items:
->       - description: A phandle
->       - description: 1st arg cell
->       - description: 2nd arg cell
 > 
-> With this change, some examples need updating so that the bracketing of
-> property values matches the schema.
 > 
-> Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Georgi Djakov <djakov@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Joerg Roedel <joro@8bytes.org>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Daniel Thompson <daniel.thompson@linaro.org>
-> Cc: Jingoo Han <jingoohan1@gmail.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: Andrew Lunn <andrew@lunn.ch>
-> Cc: Vivien Didelot <vivien.didelot@gmail.com>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Vladimir Oltean <olteanv@gmail.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: Viresh Kumar <vireshk@kernel.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Kevin Hilman <khilman@kernel.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: linux-ide@vger.kernel.org
-> Cc: linux-crypto@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: dmaengine@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: iommu@lists.linux-foundation.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-can@vger.kernel.org
-> Cc: linux-wireless@vger.kernel.org
-> Cc: linux-phy@lists.infradead.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-riscv@lists.infradead.org
-> Cc: linux-remoteproc@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+>  0) + 14.167 us   |  stub_complete [usbip_host]();
+>  ------------------------------------------
+>  0)    <idle>-0    =>  stub_tx-300  
+>  ------------------------------------------
+> 
+>  0)               |    stub_send_ret_submit [usbip_host]() {
+>  0)   6.250 us    |      stub_free_priv_and_urb [usbip_host]();
+>  0) ! 130.781 us  |    }
+>  0)   7.135 us    |    stub_send_ret_unlink [usbip_host]();
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+These are functions in the drivers/usb/usbip/stub_rx.c file.
+
