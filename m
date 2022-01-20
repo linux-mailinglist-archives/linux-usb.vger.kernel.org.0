@@ -2,63 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF6F494928
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jan 2022 09:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D674949A5
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jan 2022 09:36:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358610AbiATILL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Jan 2022 03:11:11 -0500
-Received: from mail-io1-f70.google.com ([209.85.166.70]:56954 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358561AbiATILK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jan 2022 03:11:10 -0500
-Received: by mail-io1-f70.google.com with SMTP id d125-20020a6bb483000000b006051f7a8573so3376429iof.23
-        for <linux-usb@vger.kernel.org>; Thu, 20 Jan 2022 00:11:10 -0800 (PST)
+        id S1359219AbiATIg0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Jan 2022 03:36:26 -0500
+Received: from mail-ua1-f43.google.com ([209.85.222.43]:44026 "EHLO
+        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234250AbiATIgZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jan 2022 03:36:25 -0500
+Received: by mail-ua1-f43.google.com with SMTP id 2so9420095uax.10;
+        Thu, 20 Jan 2022 00:36:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=BJlzqqjrs17SVp97ypy2bLlCbjlSXkVkZRZti+CfRQs=;
-        b=CJ3D8Yb5153OHRYBWW1M+rFGgbZIFAlBADO44j7Z0B1xxx6kOcBQqtW5+IPHbll5Qw
-         T7WawoCLoSaXuswnFvAHyitRdQFJUAX08Jv9tvWE7XzpTD24DuvvqjWhO3w+gHLnJI0A
-         9cKhUClPa1PbuMuiNwy/45Udk7wjX01GtEuPQQeAtvic7d0vMl7gf1Xqw0twx/u0TPqt
-         lkSEfPdV/d4yLuddTY17LjdIkI6d+Y9b4Xr7275PVAGYfKSxKcEWB60HkpA11jpgUF4Z
-         ecQZVpMWJr3E4hmXyfah5S/9yZDY69skxMhTFPYPiaOfNHKShW9ykLHktTabwiuO3nk2
-         w4wQ==
-X-Gm-Message-State: AOAM533MnFSwrniDLzfnLJH+TA2wNNwZwdZ9WvTwIXfxQIDP5E0CQhhg
-        GPLT6f47bWtOtZxuEjTLFf68ofMMybRwE4m1qcCW35S4/zWK
-X-Google-Smtp-Source: ABdhPJwWlG4sbAoREBXQf9F9/dCtvTwajJXGqo5aO+aMprHZaFCbq/ikMbuPBBCk9mxPfSNhZNclzSCRxhsfveOKGgaEQPUJOpu1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rjpWEc8ofW9Ln+ZzVM/iDZ8qr5vzNcJvKqxioEzCZGY=;
+        b=K8E1eXzycKiQIRWxj6qfUFajLTr2sy1dSiMuVac4Ojo2F6egeEaTWG9ZbEsgSkDSEw
+         qRqO5uQssP45mWIaWpG7nVB3Q97Z1Jr6E/38JLbdq15EI8lBonmLG/R6A0L2wQywHdjM
+         tlbG4o+STxkRss/G4WwK4qJM73GTuEXEIIUh6QnfAQP1F4VZPE5JUYse+fcFqMZoHYGf
+         ZafxGxjyuI5ZOlCI72DNOr278MsPXFnFRVZNTSTswiks1K2dV8F/xbDEQ2JSlTgfnhoE
+         hGKLjtKpj5enGPziEdb98hFXbm2BZ4uB/Zgol/rIMf2zdXs4p+1IuBSGQGYYFahsa+z3
+         ATDw==
+X-Gm-Message-State: AOAM5316YKeuEQHWPMSP3XHEStDeK+5+1EWFv3Cbk15N8tilVELLYVbW
+        GecERymnasaq70RxfNTmqifMrUS2CgMjdQ==
+X-Google-Smtp-Source: ABdhPJxGe1OsDYfyTFLeqMrnaPPS7g1NHd4Hi0o7FeKUu5n/kYgAXhvWwHI1mDzEE/HawGiFuMYvRg==
+X-Received: by 2002:a05:6102:3a68:: with SMTP id bf8mr13173693vsb.63.1642667783746;
+        Thu, 20 Jan 2022 00:36:23 -0800 (PST)
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
+        by smtp.gmail.com with ESMTPSA id bj23sm432855vkb.23.2022.01.20.00.36.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 00:36:23 -0800 (PST)
+Received: by mail-ua1-f47.google.com with SMTP id r15so9486981uao.3;
+        Thu, 20 Jan 2022 00:36:23 -0800 (PST)
+X-Received: by 2002:a1f:a2d3:: with SMTP id l202mr4847687vke.7.1642667418540;
+ Thu, 20 Jan 2022 00:30:18 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a02:29c1:: with SMTP id p184mr15858242jap.301.1642666270090;
- Thu, 20 Jan 2022 00:11:10 -0800 (PST)
-Date:   Thu, 20 Jan 2022 00:11:10 -0800
-In-Reply-To: <20220120080020.2619-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000836a4805d5ff0b2b@google.com>
-Subject: Re: [syzbot] INFO: task hung in hub_port_init (2)
-From:   syzbot <syzbot+76629376e06e2c2ad626@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, hdanton@sina.com, johan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        paskripkin@gmail.com, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
+References: <20220117110755.3433142-1-conor.dooley@microchip.com> <20220117110755.3433142-4-conor.dooley@microchip.com>
+In-Reply-To: <20220117110755.3433142-4-conor.dooley@microchip.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 20 Jan 2022 09:30:07 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXwe3_F8NeePnoFrLwyzKUwnHtmETC=ambgsC2N3w_h8A@mail.gmail.com>
+Message-ID: <CAMuHMdXwe3_F8NeePnoFrLwyzKUwnHtmETC=ambgsC2N3w_h8A@mail.gmail.com>
+Subject: Re: [PATCH v4 03/14] dt-bindings: i2c: add bindings for microchip
+ mpfs i2c
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bin Meng <bin.meng@windriver.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Lewis Hanly <lewis.hanly@microchip.com>,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        Atish Patra <atishp@rivosinc.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi Conor,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+On Mon, Jan 17, 2022 at 12:06 PM <conor.dooley@microchip.com> wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+>
+> Add device tree bindings for the i2c controller on
+> the Microchip PolarFire SoC.
+>
+> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-Reported-and-tested-by: syzbot+76629376e06e2c2ad626@syzkaller.appspotmail.com
+Thanks for your patch!
 
-Tested on:
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
+> @@ -0,0 +1,55 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/microchip,mpfs-i2c.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip MPFS I2C Controller Device Tree Bindings
+> +
+> +maintainers:
+> +  - Daire McNamara <daire.mcnamara@microchip.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
+> +      - microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
 
-commit:         6f59bc24 Add linux-next specific files for 20220118
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=94e8da4df9ab6319
-dashboard link: https://syzkaller.appspot.com/bug?extid=76629376e06e2c2ad626
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=101ba7efb00000
+Wouldn't it be more logical to have:
 
-Note: testing is done by a robot and is best-effort only.
+    items:
+      - const: microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
+      - const: microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
+
+?
+
+If the IP core is reused, it can become:
+
+    items:
+      - enum:
+          - microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
+          - microchip,<foo>-i2c # ...
+      - const: microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
+
+That way the driver can just match on the second (fallback) value,
+and no further driver changes will be needed (until v8 or later).
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
