@@ -2,117 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2099495338
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jan 2022 18:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7219A495370
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jan 2022 18:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbiATR2s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Jan 2022 12:28:48 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:45907 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231694AbiATR2n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jan 2022 12:28:43 -0500
-Received: (qmail 157157 invoked by uid 1000); 20 Jan 2022 12:28:42 -0500
-Date:   Thu, 20 Jan 2022 12:28:42 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+76629376e06e2c2ad626@syzkaller.appspotmail.com>
-Cc:     gregkh@linuxfoundation.org, hdanton@sina.com, johan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        paskripkin@gmail.com, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] INFO: task hung in hub_port_init (2)
-Message-ID: <YembypBPqEXg+YB+@rowland.harvard.edu>
-References: <20220120080020.2619-1-hdanton@sina.com>
- <000000000000836a4805d5ff0b2b@google.com>
+        id S231840AbiATRjy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Jan 2022 12:39:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229629AbiATRjx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jan 2022 12:39:53 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A476C061574
+        for <linux-usb@vger.kernel.org>; Thu, 20 Jan 2022 09:39:53 -0800 (PST)
+Date:   Thu, 20 Jan 2022 18:39:51 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1642700391;
+        bh=CcRgGeN4Ce/oxXreVHIp5FfJJVUUkwXbQgU/0Pexly4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Rm7c32p86INLIEvWWhSFqwHNLKEaLj9L3BWPq9CWHNQ1iY7fvwSZyELGUBCKOHQAm
+         sdrM+swbeu8wSrmmjHCgnY6sPsw39rgSrWaPFumsQfqXFs4mu7D4NxkMK2N/PfDtjY
+         ZbWBjfPCU//Qh1AuNQBxBY5nk6AxuRnjzrJWJqTs=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, DocMAX <mail@vacharakis.de>
+Subject: Re: Issue with UAS and" VIA Labs, Inc. VL817 SATA Adaptor"
+Message-ID: <d92b2a69-d464-43b7-a234-f3d685419ad0@t-8ch.de>
+References: <40eecdd0-93bc-40c6-b8c0-f4ad4c6ffe59@t-8ch.de>
+ <Yel0ztTJ8Fiim+h4@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <000000000000836a4805d5ff0b2b@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yel0ztTJ8Fiim+h4@rowland.harvard.edu>
+Jabber-ID: thomas@t-8ch.de
+X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
+X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 12:11:10AM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-> 
-> Reported-and-tested-by: syzbot+76629376e06e2c2ad626@syzkaller.appspotmail.com
-> 
-> Tested on:
-> 
-> commit:         6f59bc24 Add linux-next specific files for 20220118
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=94e8da4df9ab6319
-> dashboard link: https://syzkaller.appspot.com/bug?extid=76629376e06e2c2ad626
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=101ba7efb00000
-> 
-> Note: testing is done by a robot and is best-effort only.
+Hi Alan,
 
-Attempted fix.
+On 2022-01-20 09:42-0500, Alan Stern wrote:
+> On Thu, Jan 20, 2022 at 08:28:30AM +0100, Thomas Weißschuh wrote:
+> > Hi Alan,
+> > 
+> > I hava a IcyBox IB-3740-C31 [0], this device seems to be identical to the one
+> > here.
+> 
+> When you say "described here", do you mean "described earlier in this 
+> email thread"?  I ask because from the way you wrote that sentence, it 
+> looks like you mean that the device described in [0] seems to be 
+> identical to the one you have.
 
-Alan Stern
+I meant the one described in this thread. I have the one sold at [0], which
+looks identical except for the logo to the one described in the thread.
+>
+> >  It has the same USB IDs and case design.
+> > It also has the serial number "4".
+> > The only difference it seems is the field bcdDevice which is "1.36" and the
+> > reported name is different (see the patch below).
+> > 
+> > So I adapted the patch slightly to also match that bcdDevice.
+> > I also changed the productName field but that does not seem to be used anyways.
+> > 
+> > Using the quirk flags "fgkm" as mentioned in [1] did not help.
+> > 
+> > FYI while there are many reports that UAS does not work with these devices,
+> > there also are a few that report it working. For example [2].
+> 
+> That's odd.  And I don't really want to change the kernel in a way that 
+> will cause those working devices to stop working with UAS.
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/ 6f59bc24
+This is why I brought it up. There are however many more reports online for
+those devices where UAS does not work.
 
-Index: usb-devel/drivers/usb/core/hcd.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hcd.c
-+++ usb-devel/drivers/usb/core/hcd.c
-@@ -1563,6 +1563,12 @@ int usb_hcd_submit_urb (struct urb *urb,
- 		urb->hcpriv = NULL;
- 		INIT_LIST_HEAD(&urb->urb_list);
- 		atomic_dec(&urb->use_count);
-+		/*
-+		 * Order the write of urb->use_count above against the read of
-+		 * urb->reject below.  Pairs with the memory barriers in
-+		 * usb_kill_urb() and usb_poison_urb().
-+		 */
-+		smp_mb__after_atomic();
- 		atomic_dec(&urb->dev->urbnum);
- 		if (atomic_read(&urb->reject))
- 			wake_up(&usb_kill_urb_queue);
-@@ -1665,6 +1671,13 @@ static void __usb_hcd_giveback_urb(struc
- 
- 	usb_anchor_resume_wakeups(anchor);
- 	atomic_dec(&urb->use_count);
-+	/*
-+	 * Order the write of urb->use_count above against the read of
-+	 * urb->reject below.  Pairs with the memory barriers in
-+	 * usb_kill_urb() and usb_poison_urb().
-+	 */
-+	smp_mb__after_atomic();
-+
- 	if (unlikely(atomic_read(&urb->reject)))
- 		wake_up(&usb_kill_urb_queue);
- 	usb_put_urb(urb);
-Index: usb-devel/drivers/usb/core/urb.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/urb.c
-+++ usb-devel/drivers/usb/core/urb.c
-@@ -715,6 +715,12 @@ void usb_kill_urb(struct urb *urb)
- 	if (!(urb && urb->dev && urb->ep))
- 		return;
- 	atomic_inc(&urb->reject);
-+	/*
-+	 * Order the write of urb->reject above against the read of
-+	 * urb->use_count below.  Pairs with the barriers in
-+	 * __usb_hcd_giveback_urb() and usb_hcd_submit_urb().
-+	 */
-+	smp_mb__after_atomic();
- 
- 	usb_hcd_unlink_urb(urb, -ENOENT);
- 	wait_event(usb_kill_urb_queue, atomic_read(&urb->use_count) == 0);
-@@ -756,6 +762,12 @@ void usb_poison_urb(struct urb *urb)
- 	if (!urb)
- 		return;
- 	atomic_inc(&urb->reject);
-+	/*
-+	 * Order the write of urb->reject above against the read of
-+	 * urb->use_count below.  Pairs with the barriers in
-+	 * __usb_hcd_giveback_urb() and usb_hcd_submit_urb().
-+	 */
-+	smp_mb__after_atomic();
- 
- 	if (!urb->dev || !urb->ep)
- 		return;
+> > diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
+> > index 29191d33c0e3..53e8249644b2 100644
+> > --- a/drivers/usb/storage/unusual_devs.h
+> > +++ b/drivers/usb/storage/unusual_devs.h
+> > @@ -2301,6 +2301,19 @@ UNUSUAL_DEV(  0x2027, 0xa001, 0x0000, 0x9999,
+> >                 USB_SC_DEVICE, USB_PR_DEVICE, usb_stor_euscsi_init,
+> >                 US_FL_SCM_MULT_TARG ),
+> > 
+> > +UNUSUAL_DEV( 0x2109, 0x0715, 0x0000, 0x9999,
+> > +               "VIA Labs, Inc.",
+> > +               "VL817 SATA Adaptor",
+> > +               USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> > +               US_FL_IGNORE_UAS),
+> 
+> Does the new patch fix your problem?
 
+Yes it does. As does disabling UAS via the usb-storage quirk parameter.
+
+> Alan Stern
+> 
+> > This is the exact issue:
+> > 
+> > [ 3606.231973] scsi host14: uas_eh_device_reset_handler start
+> > [ 3606.232149] sd 14:0:0:0: [sdg] tag#2 uas_zap_pending 0 uas-tag 1 inflight: CMD
+> > [ 3606.232154] sd 14:0:0:0: [sdg] tag#2 CDB: Write(16) 8a 00 00 00 00 00 18 0c c9 80 00 00 00 80 00 00
+> > [ 3606.306257] usb 4-4.4: reset SuperSpeed Plus Gen 2x1 USB device number 11 using xhci_hcd
+> > [ 3606.328584] scsi host14: uas_eh_device_reset_handler success
+> > 
+> > For this patch:
+> > 
+> > Tested-by: Thomas Weißschuh <linux@weissschuh.net>
+> > 
+> > Thomas
+> > 
+> > [0] https://icybox.de/en/product.php?id=155
+> > [1] https://lore.kernel.org/linux-usb/c4b4aa34-12d9-7000-6398-d94a7ebffdfc@suse.com/
+> > [2] https://spod.cx/blog/enabling_trim_support_via_VL817_usb_sata_adaptor.shtml
+
+Thomas
