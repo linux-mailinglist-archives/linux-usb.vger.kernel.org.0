@@ -2,117 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5124953A3
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jan 2022 18:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B89524955EA
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jan 2022 22:25:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233145AbiATR4Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Jan 2022 12:56:16 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:33547 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S233152AbiATR4L (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jan 2022 12:56:11 -0500
-Received: (qmail 158091 invoked by uid 1000); 20 Jan 2022 12:56:09 -0500
-Date:   Thu, 20 Jan 2022 12:56:09 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     linux-usb@vger.kernel.org, DocMAX <mail@vacharakis.de>
-Subject: Re: Issue with UAS and" VIA Labs, Inc. VL817 SATA Adaptor"
-Message-ID: <YemiORE5xD+O6CFA@rowland.harvard.edu>
-References: <40eecdd0-93bc-40c6-b8c0-f4ad4c6ffe59@t-8ch.de>
- <Yel0ztTJ8Fiim+h4@rowland.harvard.edu>
- <d92b2a69-d464-43b7-a234-f3d685419ad0@t-8ch.de>
+        id S1377826AbiATVY5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Jan 2022 16:24:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347775AbiATVY5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jan 2022 16:24:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67910C06161C;
+        Thu, 20 Jan 2022 13:24:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0637B60018;
+        Thu, 20 Jan 2022 21:24:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E5ACC340E5;
+        Thu, 20 Jan 2022 21:24:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642713896;
+        bh=hHa2vsWqZope6dE5BM2dTH63C6nTwIElUo+CDUVb3Vs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fn3W2BEfiC+mCMp8OUuAvEWXUn55FurdT4wdFl9zaZfJ10KfHcHQGzn7x12AnpJ3E
+         vkqNSkN8COcHEHipYoa+D48mYYhM+DMsSlorf0Hgwg0Ohw57n1Lxr8K/RyMx3uzIxE
+         vi7QY/hup/Utf1+e6yGi5Gm0Un+PliO/aeVJ8GQ7sZkdZlsAmvEC4yf2gvrR+4dD9f
+         j2pUyP2v2W7usBXU7x3fAqcBs9jIAcxTtlPKleWq01pe+AsNTZ3It/rluxIeQhVU8V
+         mhJMzKu8W/ymSVnSrVXxcE8LKFIAiaBcOSiqva3wh9MMA3HQzVuO+QpMS78/7/lau2
+         wmPaOR/wjNCUA==
+Date:   Thu, 20 Jan 2022 15:31:31 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] USB: serial: ti_usb_3410_5052: Use struct_size()
+ helper in ti_write_byte()
+Message-ID: <20220120213131.GA32119@embeddedor>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d92b2a69-d464-43b7-a234-f3d685419ad0@t-8ch.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 06:39:51PM +0100, Thomas Weiﬂschuh wrote:
-> Hi Alan,
-> 
-> On 2022-01-20 09:42-0500, Alan Stern wrote:
-> > On Thu, Jan 20, 2022 at 08:28:30AM +0100, Thomas Weiﬂschuh wrote:
-> > > Hi Alan,
-> > > 
-> > > I hava a IcyBox IB-3740-C31 [0], this device seems to be identical to the one
-> > > here.
-> > 
-> > When you say "described here", do you mean "described earlier in this 
-> > email thread"?  I ask because from the way you wrote that sentence, it 
-> > looks like you mean that the device described in [0] seems to be 
-> > identical to the one you have.
-> 
-> I meant the one described in this thread. I have the one sold at [0], which
-> looks identical except for the logo to the one described in the thread.
-> >
-> > >  It has the same USB IDs and case design.
-> > > It also has the serial number "4".
-> > > The only difference it seems is the field bcdDevice which is "1.36" and the
-> > > reported name is different (see the patch below).
-> > > 
-> > > So I adapted the patch slightly to also match that bcdDevice.
-> > > I also changed the productName field but that does not seem to be used anyways.
-> > > 
-> > > Using the quirk flags "fgkm" as mentioned in [1] did not help.
-> > > 
-> > > FYI while there are many reports that UAS does not work with these devices,
-> > > there also are a few that report it working. For example [2].
-> > 
-> > That's odd.  And I don't really want to change the kernel in a way that 
-> > will cause those working devices to stop working with UAS.
-> 
-> This is why I brought it up. There are however many more reports online for
-> those devices where UAS does not work.
+Make use of the struct_size() helper instead of an open-coded version,
+in order to avoid any potential type mistakes or integer overflows that,
+in the worst scenario, could lead to heap overflows.
 
-It's a bad situation.  It would be nice if we could figure out why some 
-of them work and others don't.  Also, do these same devices work with UAS 
-in Windows or Mac OSX?
+Also, address the following sparse warnings:
+drivers/usb/serial/ti_usb_3410_5052.c:1521:16: warning: using sizeof on a flexible structure
 
+Link: https://github.com/KSPP/linux/issues/174
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/usb/serial/ti_usb_3410_5052.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> > > diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-> > > index 29191d33c0e3..53e8249644b2 100644
-> > > --- a/drivers/usb/storage/unusual_devs.h
-> > > +++ b/drivers/usb/storage/unusual_devs.h
-> > > @@ -2301,6 +2301,19 @@ UNUSUAL_DEV(  0x2027, 0xa001, 0x0000, 0x9999,
-> > >                 USB_SC_DEVICE, USB_PR_DEVICE, usb_stor_euscsi_init,
-> > >                 US_FL_SCM_MULT_TARG ),
-> > > 
-> > > +UNUSUAL_DEV( 0x2109, 0x0715, 0x0000, 0x9999,
-> > > +               "VIA Labs, Inc.",
-> > > +               "VL817 SATA Adaptor",
-> > > +               USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> > > +               US_FL_IGNORE_UAS),
-> > 
-> > Does the new patch fix your problem?
-> 
-> Yes it does. As does disabling UAS via the usb-storage quirk parameter.
+diff --git a/drivers/usb/serial/ti_usb_3410_5052.c b/drivers/usb/serial/ti_usb_3410_5052.c
+index 18c0bd853392..03f98e61626f 100644
+--- a/drivers/usb/serial/ti_usb_3410_5052.c
++++ b/drivers/usb/serial/ti_usb_3410_5052.c
+@@ -1512,13 +1512,13 @@ static int ti_write_byte(struct usb_serial_port *port,
+ 			 u8 mask, u8 byte)
+ {
+ 	int status;
+-	unsigned int size;
++	size_t size;
+ 	struct ti_write_data_bytes *data;
+ 
+ 	dev_dbg(&port->dev, "%s - addr 0x%08lX, mask 0x%02X, byte 0x%02X\n", __func__,
+ 		addr, mask, byte);
+ 
+-	size = sizeof(struct ti_write_data_bytes) + 2;
++	size = struct_size(data, bData, 2);
+ 	data = kmalloc(size, GFP_KERNEL);
+ 	if (!data)
+ 		return -ENOMEM;
+-- 
+2.27.0
 
-All right.  I will submit the revised patch after the current merge 
-window is over.
-
-Alan Stern
-
-> > Alan Stern
-> > 
-> > > This is the exact issue:
-> > > 
-> > > [ 3606.231973] scsi host14: uas_eh_device_reset_handler start
-> > > [ 3606.232149] sd 14:0:0:0: [sdg] tag#2 uas_zap_pending 0 uas-tag 1 inflight: CMD
-> > > [ 3606.232154] sd 14:0:0:0: [sdg] tag#2 CDB: Write(16) 8a 00 00 00 00 00 18 0c c9 80 00 00 00 80 00 00
-> > > [ 3606.306257] usb 4-4.4: reset SuperSpeed Plus Gen 2x1 USB device number 11 using xhci_hcd
-> > > [ 3606.328584] scsi host14: uas_eh_device_reset_handler success
-> > > 
-> > > For this patch:
-> > > 
-> > > Tested-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> > > 
-> > > Thomas
-> > > 
-> > > [0] https://icybox.de/en/product.php?id=155
-> > > [1] https://lore.kernel.org/linux-usb/c4b4aa34-12d9-7000-6398-d94a7ebffdfc@suse.com/
-> > > [2] https://spod.cx/blog/enabling_trim_support_via_VL817_usb_sata_adaptor.shtml
-> 
-> Thomas
