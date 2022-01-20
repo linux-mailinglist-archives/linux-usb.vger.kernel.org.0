@@ -2,148 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D674949A5
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jan 2022 09:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F5B494A19
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jan 2022 09:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359219AbiATIg0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Jan 2022 03:36:26 -0500
-Received: from mail-ua1-f43.google.com ([209.85.222.43]:44026 "EHLO
-        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234250AbiATIgZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jan 2022 03:36:25 -0500
-Received: by mail-ua1-f43.google.com with SMTP id 2so9420095uax.10;
-        Thu, 20 Jan 2022 00:36:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rjpWEc8ofW9Ln+ZzVM/iDZ8qr5vzNcJvKqxioEzCZGY=;
-        b=K8E1eXzycKiQIRWxj6qfUFajLTr2sy1dSiMuVac4Ojo2F6egeEaTWG9ZbEsgSkDSEw
-         qRqO5uQssP45mWIaWpG7nVB3Q97Z1Jr6E/38JLbdq15EI8lBonmLG/R6A0L2wQywHdjM
-         tlbG4o+STxkRss/G4WwK4qJM73GTuEXEIIUh6QnfAQP1F4VZPE5JUYse+fcFqMZoHYGf
-         ZafxGxjyuI5ZOlCI72DNOr278MsPXFnFRVZNTSTswiks1K2dV8F/xbDEQ2JSlTgfnhoE
-         hGKLjtKpj5enGPziEdb98hFXbm2BZ4uB/Zgol/rIMf2zdXs4p+1IuBSGQGYYFahsa+z3
-         ATDw==
-X-Gm-Message-State: AOAM5316YKeuEQHWPMSP3XHEStDeK+5+1EWFv3Cbk15N8tilVELLYVbW
-        GecERymnasaq70RxfNTmqifMrUS2CgMjdQ==
-X-Google-Smtp-Source: ABdhPJxGe1OsDYfyTFLeqMrnaPPS7g1NHd4Hi0o7FeKUu5n/kYgAXhvWwHI1mDzEE/HawGiFuMYvRg==
-X-Received: by 2002:a05:6102:3a68:: with SMTP id bf8mr13173693vsb.63.1642667783746;
-        Thu, 20 Jan 2022 00:36:23 -0800 (PST)
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
-        by smtp.gmail.com with ESMTPSA id bj23sm432855vkb.23.2022.01.20.00.36.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 00:36:23 -0800 (PST)
-Received: by mail-ua1-f47.google.com with SMTP id r15so9486981uao.3;
-        Thu, 20 Jan 2022 00:36:23 -0800 (PST)
-X-Received: by 2002:a1f:a2d3:: with SMTP id l202mr4847687vke.7.1642667418540;
- Thu, 20 Jan 2022 00:30:18 -0800 (PST)
+        id S1359498AbiATIvp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Jan 2022 03:51:45 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:41322 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1359476AbiATIvk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 20 Jan 2022 03:51:40 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowAA3P5+GIulh4OCnBg--.5508S2;
+        Thu, 20 Jan 2022 16:51:19 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: Re: [PATCH] usb: typec: Check error number after calling ida_simple_get
+Date:   Thu, 20 Jan 2022 16:51:13 +0800
+Message-Id: <20220120085113.1854945-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220117110755.3433142-1-conor.dooley@microchip.com> <20220117110755.3433142-4-conor.dooley@microchip.com>
-In-Reply-To: <20220117110755.3433142-4-conor.dooley@microchip.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 20 Jan 2022 09:30:07 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXwe3_F8NeePnoFrLwyzKUwnHtmETC=ambgsC2N3w_h8A@mail.gmail.com>
-Message-ID: <CAMuHMdXwe3_F8NeePnoFrLwyzKUwnHtmETC=ambgsC2N3w_h8A@mail.gmail.com>
-Subject: Re: [PATCH v4 03/14] dt-bindings: i2c: add bindings for microchip
- mpfs i2c
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lewis Hanly <lewis.hanly@microchip.com>,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        Atish Patra <atishp@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAA3P5+GIulh4OCnBg--.5508S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWr48JrykWF1xJFyxKr17ZFb_yoW5XFWUpr
+        W7KFWjkrs5tFW2g3Z7Xw4rXFZ8Gw4kA3y5JrZag3s2vwsIvF1xtrW8tw4F9rWkCw4kW3Wj
+        vrWUA3W3G3yDAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r43
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU04E_DUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Conor,
-
-On Mon, Jan 17, 2022 at 12:06 PM <conor.dooley@microchip.com> wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Tue, Jan 11, 2022 at 04:39:13PM +0800, Greg KH wrote:
+>> If allocation fails, the ida_simple_get() will return error number.
 >
-> Add device tree bindings for the i2c controller on
-> the Microchip PolarFire SoC.
+> How can allocation fail?  Have you been able to trigger this?
+
+Thanks for your advice.
+I have already tested the altmode_id_get() by kunit and qemu-system-x86_64.
+Firstly I used qemu to create a virtual machine with only 32M memory.
+And then I wrote a kunit test that trying to make altmode_id_get() fail.
+The test continually allocates memory until the memory doesn't have
+enough space allocated for 8 bytes at first.
+Then it will call the altmode_id_get() and use KUNIT_EXPECT_EQ() to
+test whether the return value is -ENOMEM.
+Because it is tested under extremely harsh conditions, I close the OOM
+killer, in order to prevent the automatically killing for the process
+which will make the memory deadlock.
+To be convenient, I used '__GFP_NORETRY' when allocation instead of
+the above setting, as it can achieve the same goal that the allocation
+will not retry that causing the OOM killer.
+As a result, the test passed which means that altmode_id_get()
+really returned -ENOMEM.
+
+>> So altmode_id_get() may return error number.
+>> And then id will be used in altmode_id_remove, causing the BUG_ON().
+>> Or it will be assigned to alt->id.
+>> Therefore, it should be better to check it and return error if fails,
+>> like the ida_simple_get() in typec_register_port().
+>> 
+>> Fixes: 8a37d87d72f0 ("usb: typec: Bus type for alternate modes")
+>> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+>> ---
+>>  drivers/usb/typec/class.c | 3 +++
+>>  1 file changed, 3 insertions(+)
+>> 
+>> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+>> index aeef453aa658..67b3670ede99 100644
+>> --- a/drivers/usb/typec/class.c
+>> +++ b/drivers/usb/typec/class.c
+>> @@ -516,6 +516,9 @@ typec_register_altmode(struct device *parent,
+>>  	struct altmode *alt;
+>>  	int ret;
+>>  
+>> +	if (id < 0)
+>> +		return ERR_PTR(id);
+>> +
+>>  	alt = kzalloc(sizeof(*alt), GFP_KERNEL);
+>>  	if (!alt) {
+>>  		altmode_id_remove(parent, id);
+>> -- 
+>> 2.25.1
+>> 
 >
-> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> How did you test that this change will work properly?
 
-Thanks for your patch!
+And this time I also use the kunit to test the patch.
+I added the check 'if (id < 0) return;' between the altmode_id_get()
+and KUNIT_FAIL().
+As a result the kunit test passed, which means that the patch works properly.
 
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
-> @@ -0,0 +1,55 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/microchip,mpfs-i2c.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip MPFS I2C Controller Device Tree Bindings
-> +
-> +maintainers:
-> +  - Daire McNamara <daire.mcnamara@microchip.com>
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
-> +      - microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
+Therefore, I think it is true that the allocation can fail and
+altmode_id_get() will return -ENOMEM under the conditions that
+the freed memory is lower that 8 bytes and OOM killer is closed.
 
-Wouldn't it be more logical to have:
+Moreover, there is a check for the allocation of 'alt' in the
+same function.
+To maintain the code consistency, it should be better to add the
+check for 'id' too.
 
-    items:
-      - const: microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
-      - const: microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
+Sincerely thanks,
+Jiang
 
-?
-
-If the IP core is reused, it can become:
-
-    items:
-      - enum:
-          - microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
-          - microchip,<foo>-i2c # ...
-      - const: microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
-
-That way the driver can just match on the second (fallback) value,
-and no further driver changes will be needed (until v8 or later).
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
