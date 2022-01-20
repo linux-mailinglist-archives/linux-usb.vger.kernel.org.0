@@ -2,101 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B284947D7
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jan 2022 08:07:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A0949483D
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jan 2022 08:28:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358855AbiATHHF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Jan 2022 02:07:05 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:49570
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238319AbiATHHF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jan 2022 02:07:05 -0500
-Received: from localhost.localdomain (1-171-82-176.dynamic-ip.hinet.net [1.171.82.176])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 054D03FFD7;
-        Thu, 20 Jan 2022 07:06:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642662423;
-        bh=72nGpADfxgK4Nve+O/dO1ys2ePMCOitFFinvFZ3dsOQ=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=XmtaNQbxfZ2a7aSYfWJajSKkvWvUW43YRIKdmrMZedMCCk2xuW62ZQZhAUMX7w/i0
-         A7zyRfeWxeBKveNWNRJtQiCTxJriHGNM/BE7ZBJDUBV+G9gZYp9bDaOMfej/Vykar/
-         fNAGziepIQGo/c2E08xJCfuhWgeBRLmRIq0i7XGV+29aNTFceGnC5BDXD1eRM4XdIv
-         eCLGgECp38e4PyJyvELJbghoo97BV0YnxRKhkjZKMKtviWdc0szpWLNpyzV91oDl76
-         fp5h/dGuHWJsJ/9dp8QLGHg9/lon0uGyyvSI8GMAmLYqWIHoOU7QrBwmKFJNfEhhF6
-         kfB1av78ssenQ==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     gregkh@linuxfoundation.org
-Cc:     stern@rowland.harvard.edu, mathias.nyman@linux.intel.com,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Bixuan Cui <cuibixuan@huawei.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        Rajat Jain <rajatja@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4] usb: core: Bail out when port is stuck in reset loop
-Date:   Thu, 20 Jan 2022 15:05:16 +0800
-Message-Id: <20220120070518.1643873-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.33.1
+        id S1358636AbiATH2f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Jan 2022 02:28:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229804AbiATH2e (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jan 2022 02:28:34 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BFFC061574
+        for <linux-usb@vger.kernel.org>; Wed, 19 Jan 2022 23:28:34 -0800 (PST)
+Date:   Thu, 20 Jan 2022 08:28:30 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1642663711;
+        bh=hcFmP64TQUq5n4dvqxgQHWX+qKGyKCQCMBYfwYVzb3Y=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KOCQErNqBJooVaawiuAqjE+brGAAGOUFaRtQ2ViouSmsomvso0sdlt+mLkbd2zQSZ
+         kyZSTQ9Bc/KsQO/5JFEVA89GbCjfijXOYbaGEzo/+xBQAHuLmqWjZK8V1QhDaiDkgP
+         zQDQbHRYHxPkCY5pQ3dGEM/nO1wSOCbkHdVT53yM=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, DocMAX <mail@vacharakis.de>
+Subject: Re: Issue with UAS and" VIA Labs, Inc. VL817 SATA Adaptor"
+Message-ID: <40eecdd0-93bc-40c6-b8c0-f4ad4c6ffe59@t-8ch.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+Jabber-ID: thomas@t-8ch.de
+X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
+X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Unplugging USB device may cause an incorrect warm reset loop and the
-port can no longer be used:
-[  143.039019] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x4202c0
-[  143.039025] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
-[  143.039051] hub 2-0:1.0: state 7 ports 10 chg 0000 evt 0008
-[  143.039058] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x4202c0, return 0x4102c0
-[  143.039092] xhci_hcd 0000:00:14.0: clear port3 connect change, portsc: 0x4002c0
-[  143.039096] usb usb2-port3: link state change
-[  143.039099] xhci_hcd 0000:00:14.0: clear port3 link state change, portsc: 0x2c0
-[  143.039101] usb usb2-port3: do warm reset
-[  143.096736] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2b0, return 0x2b0
-[  143.096751] usb usb2-port3: not warm reset yet, waiting 50ms
-[  143.131500] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link inactive
-[  143.138260] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x2802a0
-[  143.138263] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
-[  143.160756] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2802a0, return 0x3002a0
-[  143.160798] usb usb2-port3: not warm reset yet, waiting 200ms
+Hi Alan,
 
-The port status is PP=1, CCS=0, PED=0, PLS=Inactive, which is Error
-state per "USB3 Root Hub Port State Machine". It's reasonable to perform
-warm reset several times, but if the port is still not enabled after
-many attempts, consider it's gone and treat it as disconnected.
+I hava a IcyBox IB-3740-C31 [0], this device seems to be identical to the one
+here. It has the same USB IDs and case design.
+It also has the serial number "4".
+The only difference it seems is the field bcdDevice which is "1.36" and the
+reported name is different (see the patch below).
 
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
-v4:
- - Add correct comment.
+So I adapted the patch slightly to also match that bcdDevice.
+I also changed the productName field but that does not seem to be used anyways.
 
- drivers/usb/core/hub.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Using the quirk flags "fgkm" as mentioned in [1] did not help.
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 47a1c8bddf869..83b5aff25dd69 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -2983,8 +2983,12 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
- 						status);
- 		}
- 
--		/* Check for disconnect or reset */
--		if (status == 0 || status == -ENOTCONN || status == -ENODEV) {
-+		/*
-+		 * Check for disconnect or reset, and bail out after several
-+		 * reset attempts to avoid warm reset loop.
-+		 */
-+		if (status == 0 || status == -ENOTCONN || status == -ENODEV ||
-+		    (status == -EBUSY && i == PORT_RESET_TRIES - 1)) {
- 			usb_clear_port_feature(hub->hdev, port1,
- 					USB_PORT_FEAT_C_RESET);
- 
--- 
-2.33.1
+FYI while there are many reports that UAS does not work with these devices,
+there also are a few that report it working. For example [2].
 
+diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
+index 29191d33c0e3..53e8249644b2 100644
+--- a/drivers/usb/storage/unusual_devs.h
++++ b/drivers/usb/storage/unusual_devs.h
+@@ -2301,6 +2301,19 @@ UNUSUAL_DEV(  0x2027, 0xa001, 0x0000, 0x9999,
+                USB_SC_DEVICE, USB_PR_DEVICE, usb_stor_euscsi_init,
+                US_FL_SCM_MULT_TARG ),
+
++UNUSUAL_DEV( 0x2109, 0x0715, 0x0000, 0x9999,
++               "VIA Labs, Inc.",
++               "VL817 SATA Adaptor",
++               USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++               US_FL_IGNORE_UAS),
+
+This is the exact issue:
+
+[ 3606.231973] scsi host14: uas_eh_device_reset_handler start
+[ 3606.232149] sd 14:0:0:0: [sdg] tag#2 uas_zap_pending 0 uas-tag 1 inflight: CMD
+[ 3606.232154] sd 14:0:0:0: [sdg] tag#2 CDB: Write(16) 8a 00 00 00 00 00 18 0c c9 80 00 00 00 80 00 00
+[ 3606.306257] usb 4-4.4: reset SuperSpeed Plus Gen 2x1 USB device number 11 using xhci_hcd
+[ 3606.328584] scsi host14: uas_eh_device_reset_handler success
+
+For this patch:
+
+Tested-by: Thomas Weißschuh <linux@weissschuh.net>
+
+Thomas
+
+[0] https://icybox.de/en/product.php?id=155
+[1] https://lore.kernel.org/linux-usb/c4b4aa34-12d9-7000-6398-d94a7ebffdfc@suse.com/
+[2] https://spod.cx/blog/enabling_trim_support_via_VL817_usb_sata_adaptor.shtml
