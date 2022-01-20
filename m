@@ -2,148 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D833449513C
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jan 2022 16:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E3E49515A
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jan 2022 16:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376549AbiATPRQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Jan 2022 10:17:16 -0500
-Received: from mpx2.rcs-rds.ro ([212.54.125.6]:39361 "EHLO mpx2.rcs-rds.ro"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346406AbiATPRO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 20 Jan 2022 10:17:14 -0500
-X-Greylist: delayed 535 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 Jan 2022 10:17:13 EST
-Received: from [10.252.93.157] (unknown [10.252.93.157])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mpx2.rcs-rds.ro (Postfix) with ESMTPSA id 08BD91C02D2
-        for <linux-usb@vger.kernel.org>; Thu, 20 Jan 2022 17:08:15 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rcs-rds.ro;
-        s=MailProxy; t=1642691296;
-        bh=CK87CjM2xBXzojOeP34LgSYFnd1pY6PbUggQqeSZ3Ms=;
-        h=Subject:To:References:From:Date:In-Reply-To;
-        b=ZIO5Xr3Y5FyAYecAMZ2VfBUKdy2OKCi1FW73ZE4+5gM2cWi1roaC3aJnbQUSkktae
-         ufqbZJrk0Z92UnGrJXrI0j7XLrQCoCRGEoEMfDdi3VNMpDHdxxNLRnGSLSwT9Um/BQ
-         c9V87yQBZJvpXuSX8PkXgpdcIXmaMiHaHI2I5yto=
-Subject: Bug report for pl2303 converter (ATEN USB to serial Bridge,
- idVendor=067b, idProduct=23a3, bcdDevice= 1.05)
-To:     linux-usb@vger.kernel.org
-References: <10d4dbe9-4b17-aeb5-0abe-bf0829173c1d@rcs-rds.ro>
-From:   Eduard-Bogdan Budai <eduard.budai@rcs-rds.ro>
-Organization: IT Hardware RCS&RDS Cluj
-Message-ID: <e85bac58-6d40-b61a-b217-8c4ee3c5853e@rcs-rds.ro>
-Date:   Thu, 20 Jan 2022 17:08:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101
- Thunderbird/45.8.0
+        id S1346328AbiATPZJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Jan 2022 10:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242889AbiATPZI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jan 2022 10:25:08 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8CEC061574
+        for <linux-usb@vger.kernel.org>; Thu, 20 Jan 2022 07:25:07 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id w204so5878155pfc.7
+        for <linux-usb@vger.kernel.org>; Thu, 20 Jan 2022 07:25:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=T7OdeqOh/hYOdmsOERk4ttPSqRwGUsuSca3zIJoFRvk=;
+        b=IBAL99ZzYREy7JHtv1lmFvHKqsXGFzf5NXKu90I0AL82ZlUKkcuaHbyzTuotmmO9uu
+         qIpFgemyHTjTr9ZejzkM9LYMtSTa+lkkwT1qo0u7hwcF+cKb3RsiW1iEJ7G6/YPGcGvI
+         4ZVsQlRzAjFVZT42km8HCHpXW6a2TSkMK5jDA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=T7OdeqOh/hYOdmsOERk4ttPSqRwGUsuSca3zIJoFRvk=;
+        b=d08i3tX5TlUSFnzRLe3wzjliBMu5f4UJ0Wi0wIYvEwbVmld6HUXJf+OuOrmuqSmtQu
+         QC4mLZDOrJvArkMBeDOc8NbHU+TKapsHkcRf2Nd7WFLgSiHIAzH+eTGvwJ8HEE1YixIW
+         muLjvmMN2vrQLJvdJUp07la1Z0BjBHblNDS6Nszw349Sd+Ql4VBaqMyiWuzWoorMy695
+         YKoR0mUb4QvF23Sdlp17sLJMAH0XRUn872weOdNBUSZyePs8Dzvq8DU3tVGiuOkA4w/7
+         1SRi6BgXZL4fJ6WyBuO2+cjAqhpAklVotccG7ppnQPckn7t+tuUaAFWG7vWEoPUEvoiX
+         q2Eg==
+X-Gm-Message-State: AOAM530Dtha4RdGsF4DNP3vxbDt/AIgKsAOtMT44Xr1LUHssY7maqyzW
+        UWudtRiNVnmT1O6LudqYrCv6LlXduGbttw==
+X-Google-Smtp-Source: ABdhPJyxQbCNaPrGeV7g+T7OdlC2+QvGUHcpTRbjzOg6lVffnnyVUPT8nwczFmXyPqYdZsfaA0QnCg==
+X-Received: by 2002:a62:f90a:0:b0:4c6:7794:6f29 with SMTP id o10-20020a62f90a000000b004c677946f29mr2416610pfh.1.1642692307464;
+        Thu, 20 Jan 2022 07:25:07 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:ae15:a305:99de:b81e])
+        by smtp.gmail.com with UTF8SMTPSA id p17sm9562312pjo.37.2022.01.20.07.25.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 07:25:06 -0800 (PST)
+Date:   Thu, 20 Jan 2022 07:25:04 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-usb@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v20 2/5] driver core: Export device_is_bound()
+Message-ID: <Yel+0DrtWm5I9JrL@google.com>
+References: <20220119204345.3769662-1-mka@chromium.org>
+ <20220119124327.v20.2.Ie1de382686d61909e17fa8def2b83899256e8f5d@changeid>
+ <YekPTh/G1IkvpSiI@infradead.org>
+ <YekTFMnXK87MNMh3@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <10d4dbe9-4b17-aeb5-0abe-bf0829173c1d@rcs-rds.ro>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YekTFMnXK87MNMh3@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Sirs,
+On Thu, Jan 20, 2022 at 08:45:24AM +0100, Greg Kroah-Hartman wrote:
+> On Wed, Jan 19, 2022 at 11:29:18PM -0800, Christoph Hellwig wrote:
+> > On Wed, Jan 19, 2022 at 12:43:42PM -0800, Matthias Kaehlcke wrote:
+> > > Export device_is_bound() to enable its use by drivers that are
+> > > built as modules.
+> > > 
+> > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > > Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> > > Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> > 
+> > Didn't Greg clearly NAK this the last few times it came up?
+> 
+> Yes, which is why this series is _WAY_ on the bottom of my list for
+> reviews...
 
-Today, when a USB-RJ45 adapter was conected to a cumputer running Ubuntu 
-20.04.3 in its dmesg appeared:
+I wasn't aware of that prior discussion, it would have helped to know
+that this is a major concern for you ...
 
-[Thu Jan 20 15:24:17 2022] usb 1-3.1: new full-speed USB device number 7 
-using xhci_hcd
-[Thu Jan 20 15:24:17 2022] usb 1-3.1: New USB device found, 
-idVendor=067b, idProduct=23a3, bcdDevice= 1.05
-[Thu Jan 20 15:24:17 2022] usb 1-3.1: New USB device strings: Mfr=1, 
-Product=2, SerialNumber=0
-[Thu Jan 20 15:24:17 2022] usb 1-3.1: Product: ATEN USB to Serial Bridge
-[Thu Jan 20 15:24:17 2022] usb 1-3.1: Manufacturer: Prolific Technology Inc.
-[Thu Jan 20 15:24:17 2022] pl2303 1-3.1:1.0: pl2303 converter detected
-[Thu Jan 20 15:24:17 2022] pl2303 1-3.1:1.0: unknown device type, please 
-report to linux-usb@vger.kernel.org
-
-The kernel version is 5.13.0-27-generic #29~20.04.1-Ubuntu.
-
-The output of lsusb -v for this adapter is:
-
-Bus 001 Device 007: ID 067b:23a3 Prolific Technology, Inc. Lenovo USB 
-Optical Mouse
-Device Descriptor:
-   bLength                18
-   bDescriptorType         1
-   bcdUSB               2.00
-   bDeviceClass            0
-   bDeviceSubClass         0
-   bDeviceProtocol         0
-   bMaxPacketSize0        64
-   idVendor           0x067b Prolific Technology, Inc.
-   idProduct          0x23a3
-   bcdDevice            1.05
-   iManufacturer           1 Prolific Technology Inc.
-   iProduct                2 ATEN USB to Serial Bridge
-   iSerial                 0
-   bNumConfigurations      1
-   Configuration Descriptor:
-     bLength                 9
-     bDescriptorType         2
-     wTotalLength       0x0027
-     bNumInterfaces          1
-     bConfigurationValue     1
-     iConfiguration          0
-     bmAttributes         0xbf
-       (Bus Powered)
-       Remote Wakeup
-       Battery Powered
-     MaxPower              100mA
-     Interface Descriptor:
-       bLength                 9
-       bDescriptorType         4
-       bInterfaceNumber        0
-       bAlternateSetting       0
-       bNumEndpoints           3
-       bInterfaceClass       255 Vendor Specific Class
-       bInterfaceSubClass      0
-       bInterfaceProtocol      0
-       iInterface              0
-       Endpoint Descriptor:
-         bLength                 7
-         bDescriptorType         5
-         bEndpointAddress     0x81  EP 1 IN
-         bmAttributes            3
-           Transfer Type            Interrupt
-           Synch Type               None
-           Usage Type               Data
-         wMaxPacketSize     0x000a  1x 10 bytes
-         bInterval               1
-       Endpoint Descriptor:
-         bLength                 7
-         bDescriptorType         5
-         bEndpointAddress     0x02  EP 2 OUT
-         bmAttributes            2
-           Transfer Type            Bulk
-           Synch Type               None
-           Usage Type               Data
-         wMaxPacketSize     0x0040  1x 64 bytes
-         bInterval               0
-       Endpoint Descriptor:
-         bLength                 7
-         bDescriptorType         5
-         bEndpointAddress     0x83  EP 3 IN
-         bmAttributes            2
-           Transfer Type            Bulk
-           Synch Type               None
-           Usage Type               Data
-         wMaxPacketSize     0x0040  1x 64 bytes
-         bInterval               0
-Device Status:     0x0000
-   (Bus Powered)
-
-Thank you in advance for any help and/or answer. :)
-
--- 
-Eduard-Bogdan Budai
-.............................................................................
-mobile: 0770/064481
-office: 0364/400427
-e-mail:eduard.budai@rcs-rds.ro
-.............................................................................
-Privileged/Confidential Information may be contained in this message. If you are not in the addresses indicated in this message (or responsible for delivery of the message to such person), you may not copy or deliver this message to anyone. In such a case, you should destroy this message and kindly notify the sender by reply e-mail.
-.............................................................................
-
+If using device_is_bound() is a no-go then _find_onboard_hub() of
+the onboard_hub driver could make it's decision based on the
+presence (or absence) of drvdata, which is what the function ultimately
+returns.
