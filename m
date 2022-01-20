@@ -2,302 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A75D349420C
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jan 2022 21:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B15E49450C
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jan 2022 01:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357362AbiASUoo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jan 2022 15:44:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357407AbiASUoH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jan 2022 15:44:07 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF3BC061749
-        for <linux-usb@vger.kernel.org>; Wed, 19 Jan 2022 12:44:07 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id g9-20020a17090a67c900b001b4f1d71e4fso3736803pjm.4
-        for <linux-usb@vger.kernel.org>; Wed, 19 Jan 2022 12:44:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tJ5lLLdSCeNvt2ZI1+v6LXdLP5izzC+/ppZtPbMuaA4=;
-        b=KJsVAkJVn8mblr6TPMU3BOXA4T+7aZr39DS6lCyx8RF3S+HhylJtXcMcid2oGCfJ5K
-         xM9xaUr9ZWW2Hs8a6ypHfBYZuiWoHTa1SZbEKijYdafaWkgrc4N04+SGGvUR6bNNhbBO
-         ng0wD4dKX2tEm0t8QEcL7yUnETpDCGqiaQj/I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tJ5lLLdSCeNvt2ZI1+v6LXdLP5izzC+/ppZtPbMuaA4=;
-        b=OTXJWnUwJw1WwShRtvqtu2XbMeJTlllxiirBLRgRs9i5lZn4VWtpjuXvkan9inNym7
-         BqiVE2VsY5DLeU70gnoEd0iYY9B4MpHab3x6FevJwf404XrLGGXHFo20cJJoyg7s32zP
-         VkuVmVU+nLvsOQf2KiXG++GuaMeoAucxADNbkj+XDEfvCESLIgunnD3Sesi26Ja+sPl2
-         eswo0sjUZSboRCNm0SdOEaUDIPLsrSoRolfrAd8EMR60yMMPlI7A4EA03e4/rE+HFYNg
-         iBg1raYbhYRY7Wv5vuWB2V5jA52lMGbCDD4LmMLIUMIBdQ4FxMdVjh+U/SMWLi7ukUmV
-         UOPQ==
-X-Gm-Message-State: AOAM531oUYkYDK29SDnQ1d6m6YrpYuh+HlIctFGtAy0jpviqZICc8ZJN
-        E24lZjuaCV0M0M5WJGgsEKLnIw==
-X-Google-Smtp-Source: ABdhPJwWK14isWM3EDWa4Tamw/urSWdvnGdT3e9EN1ZzbjaY8+j0Gom4jp2zN/ek+vUhhmoPCBs69A==
-X-Received: by 2002:a17:902:f54a:b0:14a:6827:8d01 with SMTP id h10-20020a170902f54a00b0014a68278d01mr34880338plf.127.1642625046836;
-        Wed, 19 Jan 2022 12:44:06 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:618e:efc:c014:d89c])
-        by smtp.gmail.com with UTF8SMTPSA id k17sm566753pff.25.2022.01.19.12.44.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 12:44:06 -0800 (PST)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-usb@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v20 5/5] arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
-Date:   Wed, 19 Jan 2022 12:43:45 -0800
-Message-Id: <20220119124327.v20.5.Ie0d2c1214b767bb5551dd4cad38398bd40e4466f@changeid>
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-In-Reply-To: <20220119204345.3769662-1-mka@chromium.org>
-References: <20220119204345.3769662-1-mka@chromium.org>
+        id S1357879AbiATAsl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jan 2022 19:48:41 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:47094 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345135AbiATAsl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jan 2022 19:48:41 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 54977CE1F62;
+        Thu, 20 Jan 2022 00:48:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76843C004E1;
+        Thu, 20 Jan 2022 00:48:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642639717;
+        bh=O5FhCiqGotWkfKuDJzbML+belVqsTNSDZFAhG2uKTxI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=O6UsfJaBweTRb3E3PL6BEQkoHr3kW3cWWhSip+v/0YG/LgbVC2IC/yo1nyygZS07Y
+         XEEVSuL1eJAM+ZfR7DwV5czgR4uojE6Vmmima7k9PXH5SgtWqOzZcHPJ46DxqfJy5M
+         KhXHYam7I2JqZmtLuWFCI+5IHmMTfL+/Bb5a3Wq/b+5wNil77kxiCW3vXuxwoX4rKG
+         gBqbrlGr3tW0Lfg6qUNYfayK/jfk8Py0GD9nUSPu25tkl6cd+bhX053wHrLnpxIGoI
+         dktVFQd7LfFvNqGrApnNy+H6xHvVP0g7vsTSkkNBGOTYKyRA5it8OcA8V8xHSnyjxR
+         V4oBicQ8D/Kgw==
+Date:   Wed, 19 Jan 2022 18:55:12 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] USB: serial: garmin_gps: Use struct_size() and
+ flex_array_size() helpers in pkt_add()
+Message-ID: <20220120005512.GA72984@embeddedor>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add nodes for the onboard USB hub on trogdor devices. Remove the
-'always-on' property from the hub regulator, since the regulator
-is now managed by the onboard_usb_hub driver.
+Make use of the struct_size() and flex_array_size() helpers instead of
+an open-coded version, in order to avoid any potential type mistakes
+or integer overflows that, in the worst scenario, could lead to heap
+overflows.
 
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Also, address the following sparse warnings:
+drivers/usb/serial/garmin_gps.c:270:31: warning: using sizeof on a flexible structure
+
+Link: https://github.com/KSPP/linux/issues/160
+Link: https://github.com/KSPP/linux/issues/174
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
+ drivers/usb/serial/garmin_gps.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Changes in v20:
-- renamed hub labels to 'usb_hub_2/3_x'
-- added comment for 'regulator-boot-on' of 'pp3300_hub'
-- added 'Reviewed-by' tags from Stephen and Doug
-
-Changes in v19:
-- none
-
-Changes in v18:
-- also adjust config for pompom rev1
-
-Changes in v17:
-- none
-
-Changes in v16:
-- none
-
-Changes in v15:
-- none
-
-Changes in v14:
-- none
-
-Changes in v13:
-- none
-
-Changes in v12:
-- none
-
-Changes in v11:
-- rebased on qcom/arm64-for-5.14 (with the rest of the series)
-
-Changes in v10:
-- keep 'regulator-boot-on' property
-- updated commit message
-
-Changes in v9:
-- none
-
-Changes in v8:
-- none
-
-Changes in v7:
-- rebased on qcom/arm64-for-5.13 (with the rest of the series)
-
-Changes in v6:
-- added 'companion-hub' entry to both USB devices
-- added 'vdd-supply' also to hub@2
-
-Changes in v5:
-- patch added to the series
-
- .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts | 19 ++++++++----------
- .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts | 12 +++++------
- .../dts/qcom/sc7180-trogdor-pompom-r1.dts     | 11 ++++------
- .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts | 19 ++++++++----------
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  | 20 ++++++++++++++++++-
- 5 files changed, 44 insertions(+), 37 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-index 30e3e769d2b4..b69590a17cab 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-@@ -14,17 +14,6 @@ / {
- 	compatible = "google,lazor-rev0", "qcom,sc7180";
- };
+diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
+index e5c75944ebb7..1d806c108efb 100644
+--- a/drivers/usb/serial/garmin_gps.c
++++ b/drivers/usb/serial/garmin_gps.c
+@@ -267,13 +267,12 @@ static int pkt_add(struct garmin_data *garmin_data_p,
  
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
--};
--
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
--};
--
- &sn65dsi86_out {
- 	/*
- 	 * Lane 0 was incorrectly mapped on the cable, but we've now decided
-@@ -33,3 +22,11 @@ &sn65dsi86_out {
- 	 */
- 	lane-polarities = <1 0>;
- };
-+
-+&usb_hub_2_x {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
-+&usb_hub_3_x {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-index c2ef06367baf..25f178c3c6eb 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-@@ -14,13 +14,11 @@ / {
- 	compatible = "google,lazor-rev1", "google,lazor-rev2", "qcom,sc7180";
- };
+ 	/* process only packets containing data ... */
+ 	if (data_length) {
+-		pkt = kmalloc(sizeof(struct garmin_packet)+data_length,
+-								GFP_ATOMIC);
++		pkt = kmalloc(struct_size(pkt, data, data_length), GFP_ATOMIC);
+ 		if (!pkt)
+ 			return 0;
  
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
-+
-+&usb_hub_2_x {
-+	 vdd-supply = <&pp3300_l7c>;
- };
+ 		pkt->size = data_length;
+-		memcpy(pkt->data, data, data_length);
++		memcpy(pkt->data, data, flex_array_size(pkt, data, pkt->size));
  
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
-+&usb_hub_3_x {
-+	 vdd-supply = <&pp3300_l7c>;
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
-index 76a130bad60a..8467ff41e6d5 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
-@@ -34,13 +34,10 @@ &pm6150_adc_tm {
- 	/delete-node/ charger-thermistor@0;
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
-+&usb_hub_2_x {
-+	 vdd-supply = <&pp3300_l7c>;
- };
- 
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
-+&usb_hub_3_x {
-+	 vdd-supply = <&pp3300_l7c>;
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-index 457c25499863..0cbb7a68d58b 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-@@ -43,17 +43,6 @@ &panel {
- 	compatible = "auo,b116xa01";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
--};
--
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
--};
--
- &sdhc_2 {
- 	status = "okay";
- };
-@@ -62,6 +51,14 @@ &trackpad {
- 	interrupts = <58 IRQ_TYPE_EDGE_FALLING>;
- };
- 
-+&usb_hub_2_x {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
-+&usb_hub_3_x {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
- /* PINCTRL - modifications to sc7180-trogdor.dtsi */
- 
- &trackpad_int_1v8_odl {
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-index d4f4441179fc..be06938872ca 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-@@ -202,7 +202,7 @@ pp3300_hub: pp3300-hub {
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&en_pp3300_hub>;
- 
--		regulator-always-on;
-+		/* The BIOS leaves this regulator on */
- 		regulator-boot-on;
- 
- 		vin-supply = <&pp3300_a>;
-@@ -839,6 +839,24 @@ &usb_1 {
- 
- &usb_1_dwc3 {
- 	dr_mode = "host";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	/* 2.x hub on port 1 */
-+	usb_hub_2_x: hub@1 {
-+		compatible = "usbbda,5411";
-+		reg = <1>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_3_x>;
-+	};
-+
-+	/* 3.x hub on port 2 */
-+	usb_hub_3_x: hub@2 {
-+		compatible = "usbbda,411";
-+		reg = <2>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_2_x>;
-+	};
- };
- 
- &usb_1_hsphy {
+ 		spin_lock_irqsave(&garmin_data_p->lock, flags);
+ 		garmin_data_p->flags |= FLAGS_QUEUING;
 -- 
-2.34.1.703.g22d0c6ccf7-goog
+2.27.0
 
