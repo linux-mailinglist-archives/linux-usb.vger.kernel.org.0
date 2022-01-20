@@ -2,79 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 979E64945A8
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jan 2022 02:55:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1FB2494684
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jan 2022 05:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358126AbiATBzX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jan 2022 20:55:23 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46728 "EHLO
+        id S1358514AbiATEjI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jan 2022 23:39:08 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35036 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232742AbiATBzX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jan 2022 20:55:23 -0500
+        with ESMTP id S233536AbiATEjA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jan 2022 23:39:00 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BFD3DB81C97;
-        Thu, 20 Jan 2022 01:55:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53833C004E1;
-        Thu, 20 Jan 2022 01:55:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F266B81A7F;
+        Thu, 20 Jan 2022 04:38:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88872C340E0;
+        Thu, 20 Jan 2022 04:38:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642643720;
-        bh=UBA9EAgXb+ndoEEnlylpF1zO8z2g96V3hPj15HRcAfo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=hTAD6NZzQUZRVWlrg08cB/oSXOrRYxSxV43MFikx9DTJBxdy2ucAbg84idFWkdNRV
-         B/RDhzWSaiRnbsCVaoksK6xFGqjGYypV3fgghZqQ8a3pV+b3yM3C3odylOF+l5UT8P
-         3I31vwTMa9reYVdt0tVbUKM6tXyDkgcuhE/Lahh6VX/WId8kWRRsAwUQYRCWiFa9IN
-         g1DuJawcjB8ViBxapaF4dYorah58Z9hSOtigQWJ/rIjYVtPHoz/Y2/LyF4b0b8aPyI
-         X3Cegww/ufVf8wgpbvKbHT0QanEPrE/oVOY71G75SRvz5PL2pmtUmvEjAp5fcHnooN
-         545XOG3Iz5T2g==
-Date:   Wed, 19 Jan 2022 20:01:55 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] usb: gadget: f_phonet: Use struct_size() helper in
- kzalloc()
-Message-ID: <20220120020155.GA76981@embeddedor>
+        s=k20201202; t=1642653535;
+        bh=htKcbIrjG0vVOoiPk/qRtlgHN478W8928ENhwhjbOV8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tcjQQaQOiKyW2rup4+boNuKbOg3E4wRGo65VzR07gC+38qSCzvueDNKsXw0qo25YC
+         FSd0ZcH2wQg6ndifOdoQOkK2AJmdoc/+4rI6MmV2c/JFq5Pexryrmw1KB1d/0gPVBl
+         sWawaQ0ExefWlf40mUq9Bc8b+b0Qb2Q5qMv7yPvuNl/Oofe4bBEX/PiYiXEeBZKR0X
+         EjFvQKQ1CgVK+xoQIHG870JcNdkXhCEh0WjV8YV/fIr1+Jk++MmTcC3rf6PE8hP7MQ
+         G3IiXEurawyW3OC2zMo29dGuuRnBtF45ciDi4rN7el/r42r9B4pcaecJpdXwaUbl+p
+         usDTqhZxOraiQ==
+Date:   Thu, 20 Jan 2022 10:08:51 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Georgi Djakov <djakov@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
+        linux-pm@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Improve phandle-array schemas
+Message-ID: <YejnW2sEV4Rc8GVO@matsya>
+References: <20220119015038.2433585-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220119015038.2433585-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Make use of the struct_size() helper instead of an open-coded version,
-in order to avoid any potential type mistakes or integer overflows that,
-in the worst scenario, could lead to heap overflows.
+On 18-01-22, 19:50, Rob Herring wrote:
+> The 'phandle-array' type is a bit ambiguous. It can be either just an
+> array of phandles or an array of phandles plus args. Many schemas for
+> phandle-array properties aren't clear in the schema which case applies
+> though the description usually describes it.
+> 
+> The array of phandles case boils down to needing:
+> 
+> items:
+>   maxItems: 1
+> 
+> The phandle plus args cases should typically take this form:
+> 
+> items:
+>   - items:
+>       - description: A phandle
+>       - description: 1st arg cell
+>       - description: 2nd arg cell
+> 
+> With this change, some examples need updating so that the bracketing of
+> property values matches the schema.
 
-Also, address the following sparse warnings:
-drivers/usb/gadget/function/f_phonet.c:673:16: warning: using sizeof on a flexible structure
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
-Link: https://github.com/KSPP/linux/issues/160
-Link: https://github.com/KSPP/linux/issues/174
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/usb/gadget/function/f_phonet.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_phonet.c b/drivers/usb/gadget/function/f_phonet.c
-index 068ed8417e5a..0bebbdf3f213 100644
---- a/drivers/usb/gadget/function/f_phonet.c
-+++ b/drivers/usb/gadget/function/f_phonet.c
-@@ -668,10 +668,8 @@ static struct usb_function *phonet_alloc(struct usb_function_instance *fi)
- {
- 	struct f_phonet *fp;
- 	struct f_phonet_opts *opts;
--	int size;
- 
--	size = sizeof(*fp) + (phonet_rxq_size * sizeof(struct usb_request *));
--	fp = kzalloc(size, GFP_KERNEL);
-+	fp = kzalloc(struct_size(fp, out_reqv, phonet_rxq_size), GFP_KERNEL);
- 	if (!fp)
- 		return ERR_PTR(-ENOMEM);
- 
 -- 
-2.27.0
-
+~Vinod
