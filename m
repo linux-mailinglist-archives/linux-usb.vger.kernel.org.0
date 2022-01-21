@@ -2,139 +2,201 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFBC9495878
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jan 2022 04:06:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A08884959CF
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jan 2022 07:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbiAUDGK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Jan 2022 22:06:10 -0500
-Received: from mail-dm3nam07on2102.outbound.protection.outlook.com ([40.107.95.102]:63265
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        id S1378640AbiAUGTU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Jan 2022 01:19:20 -0500
+Received: from mail-dm6nam10on2137.outbound.protection.outlook.com ([40.107.93.137]:15136
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231283AbiAUDGJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 20 Jan 2022 22:06:09 -0500
+        id S234126AbiAUGTT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 21 Jan 2022 01:19:19 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NRxwn2lgfBDQrp/9jw9Adw/LKPKw799hd63FTBwbqHxSmpR2bDktiRuwSUbocCR6f7HZfNdmu1y7OwkAGAlgbPy+sJpHa8QMBXBEmByONouZsvvbyn4WFpU+RVT8meY65CJXKS2IVRwoRDwKqJZwWme7k/X9v2F4+q8sf/8SGaA0CT88YYTTohRlM4n+Mo3nqnR4YfM/ug9ZhhjvK0w8islAbmM7LOA7V8LwFMRnuGQqIoWhv11ezt271MFYsUdfwesOG8M4VlErRQkyxB9BEx/8gZbRNtUKZM0EvsMVaHXT61+ECYZ6eVaVdAzQRVVkvpi1c8NxKR9eM9GMJXeEKQ==
+ b=M1sQs+dMOq2SE8BEhll75wcMYBIX1lJJKExHf855+IW3L/B+t3IImXOC+0/YqN6xvh1GbfdeajFQ1//S/5+Wil9YBpJVNuB0HGP7qfSSW863ErF4sDElD75WRzZJ4SqyvIXXH20inQ47cJZO3ECLWo6zgWB+5D6cMqZczi+KkaUmSKg281CRF8CMVf1t/3eGhJ/HFugwXr7mjrFsBivlaU4/IaX0lX8klBM++9VzApP8V/VZ1Sa1cWlQIFpS+iozhcSzOpOirICtiiJZemwYv5N/ZfbBRn281a8KQq/OwTCnaQwgoDhNeQbhT7G7WG8lhvQBJqNlroALmu2Xp/KC/A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MwuqnJJw8Z6RlgCqjP1t1RXSNCwpNtlAVRob/w3bxeg=;
- b=gB6GaLlvOeuCgBtyI2sR4MsfLAC42mhySYIbAFEHVBW2djzUja9b0hqn8QniaKYSxo2YYvT2DweU31YUoXH6KMUjutAdsriPYL/AgwPBAEdVRjSf02cYsPBSzZdRteQgcivti1trAh3KqlpfQRotuFe7RtfakYvTrq2N461mj+5bZGyHEncmOgQBO4IeEUwrkkp0Qto6W4d8097TLo2YUaoLkqR7uwpHQw4Dy8fV1CisBpb5lqmprm4btd3uY7CgbDg2xkyd3KhRUYFnBvTDFRaCU/1b6DO6fLyeYCfsqb2n2V8sswEE5x5zXXxsXFSjIjpL0NhQYbmPAY8wzKjQ6w==
+ bh=o9MW4bqoImvx+fxKvPf3M10JcKtmBGlmTCpQUF2ucyg=;
+ b=l2DrNISiarmMFSaXYA6pkcNahvN94ygf/jF9ZUXxp09ARWN/NsKxbd60rvsQNEsNugl8FE7YLXSBpWsuVcgyRXrGpgbaIo72vRBqlpvGWZHzuvXG5urEsGhY1GKRTy48VcLo6NwhOdrhRsZTbOd+sgTf3tWMGZvh40Gh3FxD5PW9K+IOpV3DT1ug0fzVcwGBmqBfEs1IV34D1PX1upjWp7LPRQCzNUdWg4lkp/t0kHpmic4xWkFihoIwM4VfGseXwJnFXKnghDI1eAlstgvQeyX/XwLeMcCwm9a97/gARI4i9q3gwiyfTws1KoDCbYfrARUcwcJ/pwpYgB7QoCGcLg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MwuqnJJw8Z6RlgCqjP1t1RXSNCwpNtlAVRob/w3bxeg=;
- b=jWrNQpRU4FWD0BVvT4im0sm2b4NmNuD3randyIB2ELPEd4vLnpFCYV2r9rGyAskICrC2N+tcDmFLwYlUMMbRCxQvI2M/M9R/tkasjriy8V5pHO8+nbEAco/ZRb7SNYunybxBoXo2Fb/sMDlyTjONejuJm5zZldH3YAJpE88dtYI=
+ bh=o9MW4bqoImvx+fxKvPf3M10JcKtmBGlmTCpQUF2ucyg=;
+ b=d6GcLaMlZQrRQIDN8hstBl/MkPk9rbECLT+wkfXLTldBgnq8hgfBCxkaLF/OkCelWvBRL0OU7wxCYmoo11t51ewF1oXT4cP+JVa4fJ55+A9z4Fs0hCHz3qsfnsBUkfBwr+xE9Q05IyFxRjtCmJKILVmJsdiQ6bJ/Y926zJWLsyc=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=analogixsemi.com;
 Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
- by BL0PR04MB4530.namprd04.prod.outlook.com (2603:10b6:208:4d::33) with
+ by BL0PR04MB6579.namprd04.prod.outlook.com (2603:10b6:208:17c::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Fri, 21 Jan
- 2022 03:06:03 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Fri, 21 Jan
+ 2022 06:19:18 +0000
 Received: from BY5PR04MB6739.namprd04.prod.outlook.com
  ([fe80::8c2c:1b0f:8516:a941]) by BY5PR04MB6739.namprd04.prod.outlook.com
  ([fe80::8c2c:1b0f:8516:a941%7]) with mapi id 15.20.4909.011; Fri, 21 Jan 2022
- 03:06:03 +0000
-Date:   Fri, 21 Jan 2022 11:05:55 +0800
+ 06:19:18 +0000
 From:   Xin Ji <xji@analogixsemi.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, kernel test robot <lkp@intel.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] usb: typec: anx7411: Add Analogix PD ANX7411
- support
-Message-ID: <20220121030555.GA2034002@anxtwsw-Precision-3640-Tower>
-References: <20220120093615.2026590-1-xji@analogixsemi.com>
- <20220120093615.2026590-2-xji@analogixsemi.com>
- <YekyOVAjI0EE7VYz@kroah.com>
- <20220120103137.GA2026944@anxtwsw-Precision-3640-Tower>
- <YelNrzuYajCZ7agG@kroah.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YelNrzuYajCZ7agG@kroah.com>
-X-ClientProxiedBy: HK2PR04CA0058.apcprd04.prod.outlook.com
- (2603:1096:202:14::26) To BY5PR04MB6739.namprd04.prod.outlook.com
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>, Xin Ji <xji@analogixsemi.com>
+Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/2] dt-bindings: usb: Add analogix anx7411 PD binding
+Date:   Fri, 21 Jan 2022 14:18:55 +0800
+Message-Id: <20220121061856.2038958-1-xji@analogixsemi.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0018.apcprd02.prod.outlook.com
+ (2603:1096:3:17::30) To BY5PR04MB6739.namprd04.prod.outlook.com
  (2603:10b6:a03:229::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c654477c-844c-4a4f-1975-08d9dc8af50b
-X-MS-TrafficTypeDiagnostic: BL0PR04MB4530:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR04MB45304E6F21E9170445D97C1BC75B9@BL0PR04MB4530.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:597;
+X-MS-Office365-Filtering-Correlation-Id: 8d865cb0-22c1-4b83-f986-08d9dca5f491
+X-MS-TrafficTypeDiagnostic: BL0PR04MB6579:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR04MB6579DC8D86919157450BB07BC75B9@BL0PR04MB6579.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:296;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TKwgoRRmRSAl+Rh2uBnR0Kqpuku71zd4sTKVPns7ncM0dQt4RCyQjBFPzvGZrylCkrqSPZ4vW9BqZySANVci8YYq8ZgDS8vLFR18fKBZSXjnF6dp/Z3fbDJ0bnNgL2pAZ2GH5MDeR/j+2oRNfx+KHzhhLTVk7eUMh+LMYNWmtcZm3m+70KkXK8cvwS/l0GRIoUdG/m5fGzXUuWzJHoZSh7op6pGHrhNrsybvwLcT+06Xa2rA1H6HExJoHfMhtfpONINTfn1Q7yrYx/YfZkyjuvSm7nvvy8cqWKqVxyoK8dwdQxONCb5dgdRDVgs2ypZ/qzZI+s4oXkAzzLPpvUSj8718cq4ntkQpUfhmMQc7wPbmM+KJ97HL4DjYy4I1R/mYSADqw8jRpF8CIEDlSg64fhDfVJh02xpF8f6y3uHXw7gkaGCywxwCZ54nXtpWCCDAQM9eirqDiSfMUDjjNWPpG3ynsoG7/Dr0wEW3ifniziXeEDK+UjYG1k5Flql9jdbbQvjK5hHtqd2dLykm64KTunbRio8zraTk+j5Lh2TEmfihHgeu1soDZ0kcQirgqRum266fqMGeMUH7PPs7UAeBULfIim1PjKm/BbyDCzqaMAfa6GoBSEEUGtWVQlw7nCQ73/arA7m0KQMxNgaTXmtFFv4GdgUfB7R++LTt2rtZatUQ2WzWAStCWR9IpBdrF0xcGmOOJCD6i5PgZo8X0z0NkUMsl/V4rhlVhwoxco9zrrF0hZbGXt/AeEDvT0iaVJdPfLuyCnn4s4Fe04HdVs++cv44BDRG9WhAobW/LtCbMqk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(4326008)(38350700002)(38100700002)(83380400001)(6512007)(9686003)(6486002)(8936002)(33656002)(316002)(33716001)(508600001)(45080400002)(86362001)(2906002)(8676002)(966005)(54906003)(52116002)(6666004)(66556008)(66476007)(66946007)(5660300002)(6506007)(55236004)(186003)(26005)(1076003)(6916009);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: M/YyMXmwir0CZ7xYZ66jwYkK6I147xJNyno+YSWjtz4w1trXnncGsCaN0AYCm3vJ4sNe5v1RI81iDVsUJlPHCfifGAjX2bkl2ilzFDMGYpgoubF49U/eLNFIkd7OH9xgSZV2zTWa9L+On9w8FpQIDXHQxj1hJulVccoAK/r0cEJOYEXSbtKejfOMxTx84UaqpMr8bH1VsNX2eBWTUL1VqYEzuC0DDinUJXFACd28j8NSDqNrrgjvH5f7T1yQCescaJyAWQ2z7Vxd7VQPW/lLY21ehiaHIsATAMfQxLqTMnj83r5FtjQGU/+DZ4JoVPh5DZlA15huZdg5mbd523voT8ISv924VVOFf1OuQxKVfC+Weob3oi0vhVGiX91xWpJimQw6PUjGaXM3TxvYcCiUBSGJGu4JwzsdqDcAwd/j3tiWZU6IkQUKaLiUQ1m5hWeFkQPQFfzgaSe1X10bSo8XNEk8JpMUwM81Ngz5Sw/8lg68gOaQL0bvX54ylRAJqlF/reIfDR+U3Z2X+ijLKb9DPcCCeAyVW3yJEgSAa8+d5rMertiZu6thbBJOJU1nYOM8yUKcQ4AEXPtVRj/ppV1PbqpdoKLr6oQjcaF8K26JMH4AyRg0yOU1o9eXLHgYfTxN/QWhXuBv+NuVlOpzsUroFCAZh2VzKzYdxq2fBLMVK3/O0wBGZRm7VGkn6aWng/URFYyDFJge1i8qcklGZZGrt9yku/7khC1FMeTgQO1cjJt6SOKV8gLWwaaJy6K0RRuxawhwO7mIhodVMhocse1zoyOQskg9+vH0682SsIg5HZY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(2616005)(38350700002)(38100700002)(66556008)(66476007)(36756003)(508600001)(86362001)(66946007)(52116002)(1076003)(55236004)(6506007)(6512007)(186003)(26005)(110136005)(8936002)(316002)(6486002)(5660300002)(7049001)(8676002)(2906002)(6666004)(4326008);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?o8JdV0K/gDElWjsc4sMV0vXbkZClaycrennvCA3d0+qGPauUeHdF5CdbyhJ/?=
- =?us-ascii?Q?DNZ0QhHbuG+/G8Yg2i6OrPTWox5cPa7lO0AQBUKHMb9iUtwCbrxnHGlX9Dnz?=
- =?us-ascii?Q?RfsjpTcBmLC5/gNBkM69kczgEAmhIn6m/9pI5Cif340VKpuC6uqhRUwO9Ksc?=
- =?us-ascii?Q?BYjWYBWOSRrmjQJ3G2ZCa+GfWo8EvRASdumS4fynueW+tmHPd2LC7w462k5U?=
- =?us-ascii?Q?+1ewfBt/e3lk3deIwB+WTALZCy8hgy5dJTVLS8HAVdpq9dArOd4fjvaibMlL?=
- =?us-ascii?Q?p/id+U9CkRZFnPdHSZMKjgs7wR+KY0D1f3PFa06yueH9cfNVejKte/iU+gc2?=
- =?us-ascii?Q?2k+9QHIGw14cA3GW172QJzOyqAnjN1xWfDuogojXZNEQGnOfzKHKNJ+MgE97?=
- =?us-ascii?Q?c04/WQQolijDP6jcHsEdgUqAlmlkEzUDDRZgkBPAWcuh5KTwvXoktkTgh+1c?=
- =?us-ascii?Q?+qvrOiTWy6mf2OJjIMrvSKDvMD8l93sW2p83jrCH0u3rnYWTl5pUjLGThgqX?=
- =?us-ascii?Q?8x7tA6GdldxR4fz0NvVRmzkGfYO9SaIqive+QvbCvoBu0cT67S/JRuEtQ/q6?=
- =?us-ascii?Q?3y4Bj9oDrwb0IKVxuIBu3NDj99zNhnVTxoRcz2bhB8GQHRT6pp9WkcXrNVgA?=
- =?us-ascii?Q?gL/lEeQPybtPPFDced8UKEGAcutDI388lLVn1zy16CiO3SeDGUvBAVZZwV3w?=
- =?us-ascii?Q?5LziN+bTo0Lc303iv5wz0eVdi5F4/0+LbWRDau2wJ8fF+pbnVINGWAlu6csR?=
- =?us-ascii?Q?+mpYEzZ8M8CfwZoWFVnMNw+oHKIKUZfAoDAlzpaGLw6lon+h1voxayAuNkLS?=
- =?us-ascii?Q?Y9x6vFZyOm183CuGhx1K288GPvcFbOrRYd+Et+SZURw0Eb2A841h839P2LjT?=
- =?us-ascii?Q?SqfEwMJCgTLIL8PVXQ4v4GZPC4WFqNgXn2ML6BpuZC5nFW5Kn8DCtpxzLdr2?=
- =?us-ascii?Q?hPEKBfI1T5bLTpBmb/OQz+f9Q1A751IViWiVb15tajM1icKQunudbTmI4Qxb?=
- =?us-ascii?Q?CLz9p0LM3DgamyT0/1Ttn8nLy1NCXSkWENwBX9enrB+wdgq9QrDSwfOuPuDz?=
- =?us-ascii?Q?MO+gZResdIXPYIIsuUd1044iWOTyCYcf3V4LFNmDvpA0xY355q3gPCELgnNQ?=
- =?us-ascii?Q?jvFaoMV/JrI0Z103KtavmQPVQfrSTsHl//fKToUQNBx8qEUPetquZV6taYWI?=
- =?us-ascii?Q?o8oplw2KYPIVIK/9Dl+sh/D3fImhPzxSqZo/46rvF76/YS9s2be6SwGEUzVi?=
- =?us-ascii?Q?qQIUMkFjdTtlDqNA93GctuJLZytauXdnRPROdj39eGS6Jz9jmibDVdZkqoTx?=
- =?us-ascii?Q?MEOu86SKoAAZPI9sM8fnxn2HenYurpB3epI3ctph3RODGi6uqlUbQdUL/Fh/?=
- =?us-ascii?Q?bxN7hkpyz8svW9PH6M8E9/aefjf+bhCISDVTZuIvZ4Yoqn0CpV0iRDP1oTlF?=
- =?us-ascii?Q?PXECI1f2lpk0RSE65yFR9c823V0DIkOeWUUxjON2C8OFaUQvmnczap3yWspA?=
- =?us-ascii?Q?f1+gVpJWCyJVmBMzEIuCaDNBtveplCMIvhRk1qgK8yZxjXlsSTqzkh4qN1fG?=
- =?us-ascii?Q?3mzsMIdt0yAzgKmQVFKXAbhMt5P4/q5pxpXOXaEK5N5des8k1i/0wLH3OuXM?=
- =?us-ascii?Q?aP24aakDme5zYes1tu87D1Q=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2ZSvBtN05OVuzFCp7vPvzz72/rOaVKEuk5sjFN3QCqxmGKXDiMOaA/jgyW+k?=
+ =?us-ascii?Q?/hVVdfzmbVlfnikaPRvRUFGONKWMGMgkbfq26MhiwrxRcFs6IdKgf34++zAr?=
+ =?us-ascii?Q?hZT/Vo0DAmd1l1srUyWbZ1ZDz6U+U17FK+aw8aj8neBDDNJHSU/UyLonICQq?=
+ =?us-ascii?Q?QrlXnw109czjfD7rAKfj9fzePSxlRLQREH1gj9EvcF1SCJPx3htnuQtB6Q/W?=
+ =?us-ascii?Q?z1mX49nLv1zPGo6b3ieHZP4/Lcl2SMEvYrZNLC0ig/MsQVlrdE6ax9Zfhlgt?=
+ =?us-ascii?Q?0RvDv1l+Yqhw6vH1XQr2Ho2tpd36Hgb3eYQzd8BfWWB+3O8dshW3fLd633Qj?=
+ =?us-ascii?Q?HZQ2nU+jm24GhagfrhgGis7k2Azd4mFa2hwXZ5R/ngfsb5NaaXoSOauMFxDe?=
+ =?us-ascii?Q?GsXi2YuW7fCHtUswYpHsFsWOLpMLAXBrivvxFsvJPNNFUyVUz8lCboe0hvJj?=
+ =?us-ascii?Q?ntvKrtzBJYcJvosI0n9SIpBLxyzDtaHa2z/0OrcVm98FwewsFSY+HBhA3Uk+?=
+ =?us-ascii?Q?rcUkosPddZW/XcsOzhtopEXhDsmJbgG7H9jhqWCFQ4+91NpMWSXkVrikXmVl?=
+ =?us-ascii?Q?KQlWQHSU0fK3CdvdoV3o8odHevXecaCOtFYfbZzoiABxYOQuq4jwEYKsX9g2?=
+ =?us-ascii?Q?oAc0Yf89UOIFFGWdaU82qB2wrUoC42XSC8YOemHAbZzFrz2S8AVqIhtMuqwW?=
+ =?us-ascii?Q?lsab0nbDRnJJn5c1hBCQtE58NMCYI1eOYyqJ2MpofXUzrejPSWt2jW1j+req?=
+ =?us-ascii?Q?hkfyjra4Mktbo32BL9+XlTXfFmiha88iRMCAvX+DhFjulClIc52hXFymmWSW?=
+ =?us-ascii?Q?YQLD3DahD1j7TOsK1fLoX9kJTsIjQTKbIpyUVfO48Cn0ZNT3Y+dL/5luTVYp?=
+ =?us-ascii?Q?L98k7KNLSP+VDRMlgpZz214WYPGLwrveNpxa/nPbyv9qRJaRSBV/vOJwfLI6?=
+ =?us-ascii?Q?5HU0vRU7Etu0pkrDW5pxcAj9jH+jVz9uQ36FJOEWmPmsK2qLC4mAp1ACN9Qt?=
+ =?us-ascii?Q?nYm3tMYjNj1eKnNQGGaBxhgeOwbkhC9VfUDJfAJ9tBLAAbYPD/xjNOpaRD8l?=
+ =?us-ascii?Q?Q6sev2980G+vi7yeDyJ3Qvw5xECSN4YT/9Ik9HSu92Qkh3UCtiA8NeDQ25ZJ?=
+ =?us-ascii?Q?6BO1i0Uz8C9h28QqW3VgZLy/J4gwJzqe2oN2d8zYlu1uJtfqZyA0mGSNEl9J?=
+ =?us-ascii?Q?uVKi64FmCn4HbYJcyn02uECA1zIdJC9rlVqnA8yYutTv1i+m+9HL1RNrGgH5?=
+ =?us-ascii?Q?2NB885JQaNrp49UuklnwIyy7aAnnDwVxdAXzwTCzungGO01vEshkoeFjw+UK?=
+ =?us-ascii?Q?hp+VyJhqCwH21YbJ7ymMjIKyEPcb3aB1BVWaayNjVQST7XkNvwHEpcMsvjCd?=
+ =?us-ascii?Q?ggW1RG9du8UZa1sLvEUKEKanquOj9BSua+X4voFzcROUiRyiTUCBrT+6oqT9?=
+ =?us-ascii?Q?UsV4aA8Eb/9O2Ic6Ns7xUqoMBVaTCmues08ruq1a40EmsKN6SRBGL/M8pVoU?=
+ =?us-ascii?Q?gFDHU8coCNZwFXGyjzszGxpAipLFnEJY2jlbQ8HKZhWQMq52elGt4JNM5GvH?=
+ =?us-ascii?Q?1BlaczHAm33JYY16gWI4Is8lkqmKX63KZvkiEjcOwIjEE/Xt0/yH7XJn/n/u?=
+ =?us-ascii?Q?3Rt+OCQw3WHOG311FzdG7Vs=3D?=
 X-OriginatorOrg: analogixsemi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c654477c-844c-4a4f-1975-08d9dc8af50b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d865cb0-22c1-4b83-f986-08d9dca5f491
 X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2022 03:06:02.8752
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2022 06:19:18.2276
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gQ56db9bK4eHwOY7KCYCtIeOUrw70PVqddeDMRUZfsqRepRGgZW5RW+wnq17+z0I1WtXHkjbWigHnn8cw7u6Bw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR04MB4530
+X-MS-Exchange-CrossTenant-UserPrincipalName: UaYqL2b12tO9vODQKUEirdI9ER8vQeo4zEw9mtR7pQrh+/e0uyS7c2AvXdHqCZuSY0NebhPpjyYnemv5FB0bGw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR04MB6579
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 12:55:27PM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Jan 20, 2022 at 06:31:37PM +0800, Xin Ji wrote:
-> > On Thu, Jan 20, 2022 at 10:58:17AM +0100, Greg Kroah-Hartman wrote:
-> > > On Thu, Jan 20, 2022 at 05:36:15PM +0800, Xin Ji wrote:
-> > > > Add driver for analogix ANX7411 USB Type-C DRP port controller.
-> > > > 
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > 
-> > > The test robot did not report this to ask for a new driver :(
-> > Hi Greg, test robot ask me to fix the compile warning issue,
-> > https://nam10.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatchwork.kernel.org%2Fproject%2Flinux-usb%2Fpatch%2F20220119110141.1020452-2-xji%40analogixsemi.com%2F&amp;data=04%7C01%7Cxji%40analogixsemi.com%7Cd94f0560432b4f5af2d108d9dc0bc41d%7Cb099b0b4f26c4cf59a0fd5be9acab205%7C0%7C0%7C637782765372551598%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=zOtehvul8zxKJgFK3wk0rZtaDDfH41Gc1pADwQV5LkM%3D&amp;reserved=0
-> > so I think need upstream v2 after fixed the issue. I'll remove the test
-> > robot tag in the next serial.
-> > 
-> > BTW, your robot ask me to add more log at commit message, do I need
-> > upstream v3 after do that?
-> 
-> Of course, I can't take this as-is.
-Hi Greg k-h, OK, I'll updata v3.
-Thanks,
-Xin
-> 
-> thanks,
-> 
-> greg k-h
+Add analogix PD chip anx7411 device binding
+
+Signed-off-by: Xin Ji <xji@analogixsemi.com>
+---
+ .../bindings/usb/analogix,anx7411.yaml        | 76 +++++++++++++++++++
+ 1 file changed, 76 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+
+diff --git a/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+new file mode 100644
+index 000000000000..c5c6d5a9dc17
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+@@ -0,0 +1,76 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/usb/analogix,anx7411.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Analogix ANX7411 Type-C controller bindings
++
++maintainers:
++  - Xin Ji <xji@analogixsemi.com>
++
++properties:
++  compatible:
++    enum:
++      - analogix,anx7411
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  connector:
++    type: object
++
++    allOf:
++      - $ref: ../connector/usb-connector.yaml
++
++    properties:
++      compatible:
++        const: usb-c-connector
++
++      power-role: true
++
++      data-role: true
++
++      try-power-role: true
++
++    required:
++      - compatible
++
++required:
++  - compatible
++  - reg
++  - connector
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c1 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        typec: anx7411@2C {
++            compatible = "analogix,anx7411";
++            reg = <0x2C>;
++            interrupts = <8 IRQ_TYPE_EDGE_FALLING>;
++            interrupt-parent = <&gpio0>;
++
++            typec_con: connector {
++                compatible = "usb-c-connector";
++                power-role = "dual";
++                data-role = "dual";
++                try-power-role = "source";
++
++                port {
++                    typec_con_ep: endpoint {
++                        remote-endpoint = <&usbotg_hs_ep>;
++                    };
++                };
++            };
++        };
++    };
++...
+-- 
+2.25.1
+
