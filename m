@@ -2,89 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73107496022
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jan 2022 14:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB204960ED
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jan 2022 15:31:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380873AbiAUN4C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Jan 2022 08:56:02 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:6828 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1380874AbiAUN4A (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jan 2022 08:56:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642773360; x=1674309360;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=/tJxn3aegN2u9McR6qwjkE21gbqdzXpJZKU6OYmDMns=;
-  b=T3qoZ7Dx3zeimP67JAWv1jr9TtMWMbwcEHxHeP+zYhwHi+RRZZg+Z3gX
-   67Et6dkSYCwESF6sCnyPibrUcQWyWlu6CbDzZQ+SqkJ0Z3HvQoB3SIp61
-   qLsZNvnCg4RidnSDv82Se+7AsI3Xe+7ZwD4MCxcgNFsZnhwQUF+g3IL5M
-   0=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 21 Jan 2022 05:55:59 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 05:55:59 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Fri, 21 Jan 2022 05:55:59 -0800
-Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Fri, 21 Jan 2022 05:55:53 -0800
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
-        <bjorn.andersson@linaro.org>, <greg@kroah.com>, <robh@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
-        <quic_psodagud@quicinc.com>, <quic_satyap@quicinc.com>,
-        <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
-        <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>,
-        <quic_schowdhu@quicinc.com>
-Subject: [PATCH V4 6/6] MAINTAINERS: Add maintainer entry for EUD
-Date:   Fri, 21 Jan 2022 19:23:51 +0530
-Message-ID: <d8079cb1001675cd876f1e051647a65a7733b81c.1642768837.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1642768837.git.quic_schowdhu@quicinc.com>
-References: <cover.1642768837.git.quic_schowdhu@quicinc.com>
+        id S1351020AbiAUObR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Jan 2022 09:31:17 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33594 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348810AbiAUObQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jan 2022 09:31:16 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D07466179B;
+        Fri, 21 Jan 2022 14:31:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADE93C340E1;
+        Fri, 21 Jan 2022 14:31:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642775475;
+        bh=9UX5OxtUvEMfbi9ErdAxUjq/gpyFFn0Z8Jngw+epl0o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oSv297ad+o2QzmoyWh21/Y9xupD8jpy4rneolPDSg/REJjB4mkoO5c9L1C2axFNhp
+         cfSp1BH+8l14oHNf0a8anxfLmYi7l2wCvoWsb0p4D55qAnbFDhsZ2vWxW8D4WfmE4+
+         5hFQYMJrRbOZs0iixaFQRde77FlBnRFSFHn0tjoE=
+Date:   Fri, 21 Jan 2022 15:31:12 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_sourcesink: Fix isoc transfer for
+ USB_SPEED_SUPER_PLUS
+Message-ID: <YerDsJKn0vAHEIAC@kroah.com>
+References: <1642764684-26060-1-git-send-email-quic_pkondeti@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1642764684-26060-1-git-send-email-quic_pkondeti@quicinc.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the entry for maintainer for EUD driver
-and other associated files.
+On Fri, Jan 21, 2022 at 05:01:24PM +0530, Pavankumar Kondeti wrote:
+> Currently when gadget enumerates in super speed plus, the isoc
+> endpoint request buffer size is not calculated correctly. Fix
+> this by checking the gadget speed against USB_SPEED_SUPER_PLUS
+> and update the request buffer size.
+> 
+> Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
 
-Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+What commit id does this fix?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b84e2d5..0fa9d54 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7227,6 +7227,14 @@ F:	include/uapi/linux/mdio.h
- F:	include/uapi/linux/mii.h
- F:	net/core/of_net.c
- 
-+QCOM EMBEDDED USB DEBUGGER(EUD)
-+M:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-+L:	linux-arm-msm@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/ABI/testing/sysfs-driver-eud
-+F:	Documentation/devicetree/bindings/arm/msm/qcom,eud.yaml
-+F:	drivers/usb/common/qcom_eud.c
-+
- EXEC & BINFMT API
- R:	Eric Biederman <ebiederm@xmission.com>
- R:	Kees Cook <keescook@chromium.org>
--- 
-2.7.4
+thanks,
 
+greg k-h
