@@ -2,96 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFB4496263
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jan 2022 16:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99914496345
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jan 2022 17:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381721AbiAUPx0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Jan 2022 10:53:26 -0500
-Received: from cable.insite.cz ([84.242.75.189]:39078 "EHLO cable.insite.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1381701AbiAUPxY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 21 Jan 2022 10:53:24 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id CA5F1A1A3D40B;
-        Fri, 21 Jan 2022 16:53:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1642780402; bh=Kdv0naRxb7M8NzaoViDKR1YD2IHC8/Sx0jHEGDf47rA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eOV34ctSRGsglJxbJqkZtLtcQylrp29souqSXHXjy12VEygIQEimazOYO+0kzRUno
-         vIX2YKaTJ6M7URO/iB6P6fssErSCh4kyflQagHS4ADj4idWxM4lWzny/27k0DEud/Q
-         igw2xHvlmyZuyrRL9aIyJC1ohqstPn4s371ElXbY=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id tMZ1dGSSn33T; Fri, 21 Jan 2022 16:53:17 +0100 (CET)
-Received: from precision.insite.cz (dustin.pilsfree.net [81.201.58.138])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 1386FA1A3D40C;
-        Fri, 21 Jan 2022 16:53:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1642780394; bh=Kdv0naRxb7M8NzaoViDKR1YD2IHC8/Sx0jHEGDf47rA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aYddEvDJe7GRu9PR8uTro3gb9adCYIMCISQogNHFUJ1hY+MYQpOERFpMvB1Ysq3wN
-         4cSCnldlj6BL3piSsmZrYlEGIS+xOnAPMHibY98vhe1uC4kKi0RSQg4uBbAltmLveU
-         SdlwVe9DenEkJWIEVyMTlp9jlwuu402ZdSQBpd6o=
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Pavel Hofman <pavel.hofman@ivitera.com>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Julian Scheel <julian@jusst.de>,
-        John Keeping <john@metanate.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v5 10/10] usb: gadget: f_uac1: Add suspend callback
-Date:   Fri, 21 Jan 2022 16:53:08 +0100
-Message-Id: <20220121155308.48794-11-pavel.hofman@ivitera.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220121155308.48794-1-pavel.hofman@ivitera.com>
-References: <20220121155308.48794-1-pavel.hofman@ivitera.com>
+        id S1345127AbiAUQ5A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Jan 2022 11:57:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379874AbiAUQ4t (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jan 2022 11:56:49 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B246C06176C;
+        Fri, 21 Jan 2022 08:55:39 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id q13-20020a9d4b0d000000b0059b1209d708so12478481otf.10;
+        Fri, 21 Jan 2022 08:55:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Z6NMdJmJY0918lK7MEwP90+HahbtL5bkAvsIK2mROkA=;
+        b=ALwBxRoNLaUVojdxu1UguTgJFEO/82SZFhkbgYEuonAQegmTYzNFfsRNgj6/ZT+Awt
+         vSjyx55OfaySiDO8ebcX2PhLzpDQGFCCho3P/uPLnwZtBp/YTrKrOrUm4/4q0NQefk4S
+         LfAXU+3oyS0do27wY18gbjge/cVfM8d27+dP7A/ZPV3rPVS4cFhvlvx2qGdz1WeXRW7L
+         SZ/djoWj/kvENVc8jGiWNz1C9BlYw7XbgvrCkWoZdTlkEQJyUzZJn+vAOf7Raf2p6QSR
+         EfI/DsoiRkf0xrgCrRNT2Da9yRHnJXLCl8jRkKppUVYAdaz1YBisZl5C0wFK/CcDFHKY
+         vlLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Z6NMdJmJY0918lK7MEwP90+HahbtL5bkAvsIK2mROkA=;
+        b=4fA6o1nQydvYzZTAXAE67lvDgS1T/rHWi8TvC9m8Lii3+/SZQPJJ+V+qDSk0RozUed
+         jC0JMy6rBr7i5qoehZCppePmjAdjmn0bu+b5aL1XP6H6T5e0FzrZNElO/Xb3u8knfALv
+         wOlhcfoodxT8yuZ4qvC1FSXjZY4xhSH4n5fkxssrfAi/bR7fDRE09A0qX/gAirLFdi4L
+         UZgqxnm3d5tSKsMgGcQq2vcI728Gd/pJXDECxWRbau8LmrHQExvWXJ6+2AmQ+Q6DhBSP
+         aUVANv8z9sHsGyAkAk7C7wh4zGm8ZRqnB81495SfKVKyn7qwslsQCiu64L124fROpreW
+         yqtw==
+X-Gm-Message-State: AOAM533HEsVI/Ouyx/8US5+WS0f2JWLUBa9bsxOGucO3vTXpa/kjAzRj
+        pgXvAPWXodvzezeKVsnrr5jwWmakUkU=
+X-Google-Smtp-Source: ABdhPJy/hpy/QZlbs/qzPqVwNjr+5RZEo6fmAPgo+WXiKx1V4audpzhkpeR32y92eA/k8WW86Plb2g==
+X-Received: by 2002:a05:6830:60a:: with SMTP id w10mr3376814oti.111.1642784138528;
+        Fri, 21 Jan 2022 08:55:38 -0800 (PST)
+Received: from thinkpad.localdomain ([2804:14d:5cd1:5d03:cf72:4317:3105:f6e5])
+        by smtp.gmail.com with ESMTPSA id y8sm1089271oou.23.2022.01.21.08.55.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 08:55:38 -0800 (PST)
+From:   Luiz Sampaio <sampaio.ime@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Luiz Sampaio <sampaio.ime@gmail.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 23/31] usb: core: changing LED_* from enum led_brightness to actual value
+Date:   Fri, 21 Jan 2022 13:54:28 -0300
+Message-Id: <20220121165436.30956-24-sampaio.ime@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220121165436.30956-1-sampaio.ime@gmail.com>
+References: <20220121165436.30956-1-sampaio.ime@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add suspend callback to f_uac1 function, calling corresponding method
-of u_audio in order to stop the respective PCM streams and to notify
-subscribed clients about the stop.
-
-Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+The enum led_brightness, which contains the declaration of LED_OFF,
+LED_ON, LED_HALF and LED_FULL is obsolete, as the led class now supports
+max_brightness.
 ---
-v3: fixed commit title and msg
----
- drivers/usb/gadget/function/f_uac1.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/usb/core/ledtrig-usbport.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
-index 73df76a6fbe0..1484e5c231d3 100644
---- a/drivers/usb/gadget/function/f_uac1.c
-+++ b/drivers/usb/gadget/function/f_uac1.c
-@@ -961,6 +961,14 @@ static void f_audio_disable(struct usb_function *f)
- 		usb_ep_disable(uac1->int_ep);
+diff --git a/drivers/usb/core/ledtrig-usbport.c b/drivers/usb/core/ledtrig-usbport.c
+index ba371a24ff78..85fa5699bb3d 100644
+--- a/drivers/usb/core/ledtrig-usbport.c
++++ b/drivers/usb/core/ledtrig-usbport.c
+@@ -73,7 +73,7 @@ static void usbport_trig_update_count(struct usbport_trig_data *usbport_data)
+ 
+ 	usbport_data->count = 0;
+ 	usb_for_each_dev(usbport_data, usbport_trig_usb_dev_check);
+-	led_set_brightness(led_cdev, usbport_data->count ? LED_FULL : LED_OFF);
++	led_set_brightness(led_cdev, usbport_data->count ? 255 : 0);
  }
  
-+static void
-+f_audio_suspend(struct usb_function *f)
-+{
-+	struct f_uac1 *uac1 = func_to_uac1(f);
-+
-+	u_audio_suspend(&uac1->g_audio);
-+}
-+
- /*-------------------------------------------------------------------------*/
- static struct uac_feature_unit_descriptor *build_fu_desc(int chmask)
- {
-@@ -1691,6 +1699,7 @@ static struct usb_function *f_audio_alloc(struct usb_function_instance *fi)
- 	uac1->g_audio.func.get_alt = f_audio_get_alt;
- 	uac1->g_audio.func.setup = f_audio_setup;
- 	uac1->g_audio.func.disable = f_audio_disable;
-+	uac1->g_audio.func.suspend = f_audio_suspend;
- 	uac1->g_audio.func.free_func = f_audio_free;
+ /***************************************
+@@ -287,12 +287,12 @@ static int usbport_trig_notify(struct notifier_block *nb, unsigned long action,
+ 	case USB_DEVICE_ADD:
+ 		usbport_trig_add_usb_dev_ports(usb_dev, usbport_data);
+ 		if (observed && usbport_data->count++ == 0)
+-			led_set_brightness(led_cdev, LED_FULL);
++			led_set_brightness(led_cdev, 255);
+ 		return NOTIFY_OK;
+ 	case USB_DEVICE_REMOVE:
+ 		usbport_trig_remove_usb_dev_ports(usbport_data, usb_dev);
+ 		if (observed && --usbport_data->count == 0)
+-			led_set_brightness(led_cdev, LED_OFF);
++			led_set_brightness(led_cdev, 0);
+ 		return NOTIFY_OK;
+ 	}
  
- 	return &uac1->g_audio.func;
 -- 
-2.25.1
+2.34.1
 
