@@ -2,158 +2,2171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 347CD496572
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jan 2022 20:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F186249659C
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jan 2022 20:29:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbiAUTGd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Jan 2022 14:06:33 -0500
-Received: from mail-eopbgr00077.outbound.protection.outlook.com ([40.107.0.77]:3558
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231367AbiAUTGd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 21 Jan 2022 14:06:33 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iGLNIaoqBbS6Qrdu15j6/eXpqQZl7gCIwHYe2U44cCnnAuVrkz6N4isKB2tPER9NFr+PqJ5MWj0YCrI0VMgOf0GHf9XC8WBVHrHj4PcQfcSryDBKpPrMPZhX6XbVWHo9yFC8I6VxWqhtkDnRUsPPD4sVK/bKuhF4qOmEbpN+0yvpOCcbP89V3tfuEuzsUrlnuMvHOhnTH9kCKne26dPgj3/xHVT/hJbM/oJC8DNYAc4a/p3Zxq9iaU2xMY+8H9at6C140YTszeC6hcspF4pmibmZIJVwMIfWtPdC7El65nGNzleNFhMyV6YIANuStAjOsTkf8h34BoWdGV4/MBFVjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pbOpXpgReQL610G9kNyN7c03+1WVGTHpCN0R8rBGa2U=;
- b=PjUjGYDdeXGDA5/LphV9mYfRomlPB94iNneC/baAi3hQWlYYeEQcHXRNYNB00ySQrbYqnIRXX4S5nAsrSOZ5yJTCJG9tKnQhzhk5g727sMOQ+VhGJ037+rwlCJ4GVhE/jOicefvrbxlupaV7EXgAdr699vKemyKUtayV8L83hj6mms1dd5aBdu9kh1G7zhmopToBGSjBWO+5SBISJ+sJewp+BbKmmsToBrM6j9jZBxLs++r3RXUefPLylI9V2y2uCck0tSEh1r8hmQuKLNGeTHvsp2JuLObUVIieyV1DRZFUX+1t1M25aSrNuo85grvtICqM6sAqKEJjB7oqtq3hYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pbOpXpgReQL610G9kNyN7c03+1WVGTHpCN0R8rBGa2U=;
- b=AsSCTsDjBz0i7uRqVwtPk2T0e3Km3Ed0bfOhbMKpHIPC66RausWRDw0cwkFZKh41Kwva+kBJ82obfbtAk07XsRHTgFw5Y3mswcIo4oDc/HTng8dTS75TOoz6kZF9QSpUKaIt4aVPoZb/YVM08lQGILtbsqPBSG287LHsNz4vuApF8hyhWB4AKgGwnndfDOjcG+n30x0aSvh05OSBLxy94SYuS2aeior8mGoZO4dMR1pqXEbHtEi088W9UCNObQ0v1esz6kqGf0mC5d9zUEkz5z9+Ae1FtihfM8623/CKyw3cyMyhB2/RI9ebvb7VX7GnqHrpeyvBgyMeFEBE2zWUkw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4523.eurprd03.prod.outlook.com (2603:10a6:10:19::27)
- by AM6PR03MB3637.eurprd03.prod.outlook.com (2603:10a6:209:2f::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.12; Fri, 21 Jan
- 2022 19:06:29 +0000
-Received: from DB7PR03MB4523.eurprd03.prod.outlook.com
- ([fe80::2d1f:654e:f946:1a95]) by DB7PR03MB4523.eurprd03.prod.outlook.com
- ([fe80::2d1f:654e:f946:1a95%5]) with mapi id 15.20.4909.011; Fri, 21 Jan 2022
- 19:06:29 +0000
-Subject: Re: [PATCH v6 0/2] Xilinx ZynqMP USB fixes
-To:     Robert Hancock <robert.hancock@calian.com>,
-        linux-usb@vger.kernel.org
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        michal.simek@xilinx.com, manish.narani@xilinx.com
-References: <20220121181841.2331225-1-robert.hancock@calian.com>
-From:   Sean Anderson <sean.anderson@seco.com>
-Message-ID: <e59121d8-0636-b6b4-53e8-b4a62e67941c@seco.com>
-Date:   Fri, 21 Jan 2022 14:06:25 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <20220121181841.2331225-1-robert.hancock@calian.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S232381AbiAUT3N convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 21 Jan 2022 14:29:13 -0500
+Received: from usmailhost21.kioxia.com ([12.0.68.226]:45919 "EHLO
+        SJSMAIL01.us.kioxia.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232521AbiAUT3D (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jan 2022 14:29:03 -0500
+X-Greylist: delayed 902 seconds by postgrey-1.27 at vger.kernel.org; Fri, 21 Jan 2022 14:29:03 EST
+Received: from SJSMAIL01.us.kioxia.com (10.90.133.90) by
+ SJSMAIL01.us.kioxia.com (10.90.133.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Fri, 21 Jan 2022 11:13:59 -0800
+Received: from SJSMAIL01.us.kioxia.com ([fe80::115a:2c13:209c:d3d8]) by
+ SJSMAIL01.us.kioxia.com ([fe80::115a:2c13:209c:d3d8%3]) with mapi id
+ 15.01.2176.014; Fri, 21 Jan 2022 11:13:59 -0800
+From:   Rory Bolt <Rory.Bolt@kioxia.com>
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Possible big endian bug in latest stable kernel
+Thread-Topic: Possible big endian bug in latest stable kernel
+Thread-Index: AdgO93IcwEacojGPT46Tv4ONpRnSbw==
+Date:   Fri, 21 Jan 2022 19:13:59 +0000
+Message-ID: <d3d0caf19d974ed2bdc25bcd1202b087@kioxia.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0254.namprd13.prod.outlook.com
- (2603:10b6:208:2ba::19) To DB7PR03MB4523.eurprd03.prod.outlook.com
- (2603:10a6:10:19::27)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.93.77.127]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 396b5369-95cc-4549-57ce-08d9dd112190
-X-MS-TrafficTypeDiagnostic: AM6PR03MB3637:EE_
-X-Microsoft-Antispam-PRVS: <AM6PR03MB3637099CF71188480914419A965B9@AM6PR03MB3637.eurprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QpEtrZot7xA6lcM9aQ+ZDRdhd5AISBqW+ztNEIKCiYxFrQbtDbbKi4oaFRGcHObQ8lLmk2VN3bIUAazteOuqPl+x0wrc3ClOltI0AQT9ww2KxFTrN5QXnY767ge06MN4eK4f/n3mC5D+9kNWMLi87m9fVIGzh7RFjz0KxuhNGxjHF4rVOh6V0l67kIlckUStPpPtP9u4qdtoQn0ZHo3m1BcK7xl8Vr9/T88aRhd0ylQPjHVo4VHELiJPmjtkKEUC67Ly5uxNvP+iJH5rH+CvZ3xixGiTIdDeKVbSJ6SUnTQXKZi84/NyenGGS8yDdApB+QcIH1h/pxfaTf9VeSOhHZgd+k4Ce4YolYxkyuUEQqsOPTUDIdxyIuLPIVv40I+o137Eu0Sd4KFwbGqkrrHJgaDBGYb9svVAulYymj6BizecT0+IonPgyuQ796DhbGKcQtPMKJ2nmX8KHZtCOB4DbyBh9pCpWD8RCUAGCM/Yk6cX23XX69l7GFkBjI6541ONXiFxnVvKbN36jrIq5Qw2OlN/bAJqhHd6B+yObD3UM/ztiFABSmz1Hh4RjC1SRtGeEwV74iCvXq+k3WKZ7kYwdfNFNsPESsdJ52DhwQVOUjhr7OYqttzEVcv0t1T6R+7yua+ngJxqc385m5LzzFS7u1xei1FciniagKfJWt3SEwtl2wJrYsFZxTXnHw05ZG5FCrDEx80ZcHdfTpzEGH6eQ0UCVGAqHqVrijoOVte5QIG+UwVrdjzUOXQPhmho7COTKTr9fZYSo0ISCBHl0LpLiQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4523.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(26005)(2906002)(4326008)(66476007)(66556008)(8676002)(8936002)(2616005)(6666004)(44832011)(83380400001)(508600001)(31696002)(66946007)(52116002)(86362001)(53546011)(31686004)(6512007)(5660300002)(6506007)(6486002)(316002)(38350700002)(38100700002)(36756003)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WVhWVGtrSEZJSkkxYW9ZYnFKQm0vdnMyMk5SRzRaVXBCd0VxM1psN0tIQVNl?=
- =?utf-8?B?NUtod1lod0xiZnVxVFV2VCtUWFB1VzQ2bXBrWkpyRU5zYXlMeGhMbysvNjFh?=
- =?utf-8?B?S0ZPaXJqcXkrbStwc2diNGtOTUd3ekkvQUJtZ0FnY2JNZ09iU3pwUTdtUFUy?=
- =?utf-8?B?c09ldWdxY2dBM3dlZ1Vvb011d1NoSDlHSDF5dnhILzE1RCsrVW04eGtGaStC?=
- =?utf-8?B?YWJnMGZYenVPTys1VGJjVHJYNEtXeDhxVDJqREh2YVZvVFB2OU5hUGFCbVZz?=
- =?utf-8?B?L3k4aEsrQmFFa0hMQ1VIN1dqbU5RTWZyYWExRGpKcUUzMEo3cFp3a1ZjQ1BC?=
- =?utf-8?B?NVlWcmpJUVFpUVdkeUN3N0tLN1FaL3Jub1VaNkdLZ2ppZ1hUNVM3OFdpN3hL?=
- =?utf-8?B?bmhTSXl3S1pRbTUwNm5aQUk4MDNOSDM2WHFXbGxVZmROalF3U3FWbkRsdm16?=
- =?utf-8?B?SGY4TDlGTlphOTQyRll1ZDF3ai9zMG5ZZzFOMndQS2xiTjhvdkpGWFF3cUZl?=
- =?utf-8?B?bDFONVF6MmtWYkVnbzZHS1YxZFpwMUt0bUF3UDhjWjZoU2FRU1Qxc29EaFBv?=
- =?utf-8?B?aTU0NTlSeURzbGdYNEFaeHkrMWMveFg4R3ExWVZZd2NuQmVUWDRyUmxoODJP?=
- =?utf-8?B?SHJnQVZVMTlNSHdaalBCa2hiQmVVN05tV1BtSng0UWJkVTZzWUJ4YU1yNlBp?=
- =?utf-8?B?K2dPaGZJY2NqN0QybGYzdmc3M25oM1RucTFIQzV0VWQ0ZzFoRDlLRTQ1aGdu?=
- =?utf-8?B?blp6MU5rRExwbkJJdVB3UHEzbDF4WmQ3a3ZSZE5XL2t4eUJ2eHVjMUJ2a1V4?=
- =?utf-8?B?Z2ZYOWNzNnM0NFJEWCtJd3llSnZXZnVRdmRWRGhGMnZnUmVOMDcyOWVRZUsr?=
- =?utf-8?B?ZHVjZnh2TmY3ZG5vcHowbFVyYVpuRlZLVlUyY3l1aHpkbjJyT2ZKWlpERzls?=
- =?utf-8?B?bE45VmtQOUdRSWdEaUhOejl1a1dZWnp5Zkx2QUhLSXFjVWp0dWFtdVY2dmRG?=
- =?utf-8?B?b1dIbzZtNjcydUp2akdXdGtJY1R4eFZpUG1NRWxIRWZYblBlbDZTL1hNdEFN?=
- =?utf-8?B?SEE0TWJhR25zaHNrWDRvOS9FMXllSHpwY291bUNxNVlSZ0J0VnRkSER5eDRt?=
- =?utf-8?B?TXUvZjBUS2czaHZHbG4xT1ZMV1hicG1CblVDUmpJZlV3Z1lmbVB0M3lrbjkx?=
- =?utf-8?B?SDE5S1I4SnEwY2pxN1JNN3pEcWZId3RaSXdpSnJCSVU1a2VHRllpRlEva0Ix?=
- =?utf-8?B?Zkw5MzBqbWVDbHZlUGI4R2d4OTRWQlJqZGRjcUtKMEcraTNidUpVc21FZUkr?=
- =?utf-8?B?bmVDd2luRG1YQjFsYkhLSGQwUko1ZzkySEtiU2doRUdkRG5paldvVVFlRzlM?=
- =?utf-8?B?aXpydW84c1VUS2VMSlJpMUtINXZ2eWxjN2lGUTNyeGNzNXZUQk9jWmJSb2lI?=
- =?utf-8?B?NTRUalNNMG93bWh1QTdZWXBaNGVneU1tZm9ERmxSWE55SzNQd2V5Y1RpZ3VW?=
- =?utf-8?B?RkYxYVE4citqemZQSm1rbmhtQW4yQjdJQjNGQVI3aDRLNTBVK0VSSHVibmpM?=
- =?utf-8?B?bUFqSlllNS84REhuZ1RMSE03elpCMXBnMW9La3krOXFFcFJONjJ3cjRJa3hx?=
- =?utf-8?B?a0JDR2tiNWZUdEsrZ2dBZUQ3bS84SGJ0T1Y1MzhwYTA0MFVZdisxSk45eGNE?=
- =?utf-8?B?UGRrZzYvYWpUMVVDRGtHTXZCTkVpY2pBRUhFQ0ZQbmxxQlZoS0cyeUNiWCtB?=
- =?utf-8?B?QWlXdUxsUnZYY1QzQ01DbDdpZ1YwWURadjdOSlN4dFRFTkRZVzlwNVNuMzgw?=
- =?utf-8?B?YWI0RnFxL3h2STFibFRBRHk1MExaNU5zZlVCYW51L29XdHBib2NDdFJRT3ZC?=
- =?utf-8?B?RzVsUmRCMHdvNCtVS3E4KzhqalRVQzR6UnM3RVV6SFUxVTNNVzNlYUZMS3JU?=
- =?utf-8?B?UDNRUUExcGNKN0ZWZjIwNmFJWTdFTzVGNnU5Y2xLZk9xMTcrUk5EOVVTMTY2?=
- =?utf-8?B?MTBSSGh5TXVXR2hHbk0xM3JLYUlGQlFZbGkxUGwrQjVMbDZrMytYRkJFTDhy?=
- =?utf-8?B?d1RHZ2dITUV1ZitpMm5KMkNnanJYb3NNUmt4STRJKzFkMTJISjdQc1pFY21t?=
- =?utf-8?B?ekJkL25MdFRsaE9QZ29LZElmUnlCM2dWUWdmM0R1ek5wOXNoWll4Rnl1KzJ0?=
- =?utf-8?Q?gJOMY9hR4b+N4Fk0/9N3Gts=3D?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 396b5369-95cc-4549-57ce-08d9dd112190
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4523.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2022 19:06:29.8332
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Aa4BKOfzMLJvsoqozyKFG941m5XYliprh/AdzLgEd3TSzcZMnZW/YAD5fg47f7zaToDbJtDQygWvpNhe2mh4nA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR03MB3637
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Robert,
+Hello,
 
-On 1/21/22 1:18 PM, Robert Hancock wrote:
-> Some fixes related to the Xilinx ZynqMP DWC3 wrapper driver to allow
-> ZynqMP USB to work properly when the hardware is configured in USB
-> 2.0-only mode.
-> 
-> Changes since v5:
-> -code formatting fixes, no functional change
-> 
-> Changes since v4:
-> -dropped DWC3 core patches as they are superseded by Sean Anderson's
-> patchset "usb: dwc3: Calculate REFCLKPER et. al. from reference clock",
-> ZynqMP-specific patches unchanged
-> 
-> Changes since v3:
-> -fixed DT schema dt-doc-validate error
-> 
-> Changes since v2:
-> -additional kerneldoc fixes
-> 
-> Changes since v1:
-> -added DT binding documentation for new attribute
-> -kerneldoc formatting and reworded comments
-> 
-> 
-> Robert Hancock (2):
->    usb: dwc3: xilinx: Fix PIPE clock selection for USB2.0 mode
->    usb: dwc3: xilinx: Fix error handling when getting USB3 PHY
-> 
->   drivers/usb/dwc3/dwc3-xilinx.c | 17 ++++++++++-------
->   1 file changed, 10 insertions(+), 7 deletions(-)
-> 
+I am working on a big endian port to test endian cleanness on our NVMe device drivers and software. I originally performed this port on a RockPro64 with kernel 5.10.88 and the USB subsystem performed flawlessly in both big and little endian modes. Hurray!
 
-Looks like this got my usb working, thanks!
+When I upgraded to 5.15.11 (and subsequently 5.15.14 and 5.15.16) I ran into problems that appear to be endian. If I boot the exact same board/firmware/kernel in little endian mode, the USB system works correctly. If I switch to big endian, my USB attached disks are no longer usable (they are detected, read capacity commands work, but read operations time out). Interestingly, if I unplug and replug the USB attached disk, it will begin working correctly with the newer kernels in big endian mode. Looking at the output of lsusb -v, it appears there are two changes between the 5.10 and 5.15 USB stacks:
 
-For ZynqMP,
+1) Enumeration order is different. I do not believe this is a problem at all.
+2) Link speed. The 5.10 kernels negotiate 5000M in both little and big endian configurations. The 5.15 kernels negotiate 5000M in little endian mode, but 480M in big endian mode if the device is plugged in at boot time. In big endian mode, if the device has incorrectly negotiated 480M at boot time, if I unplug and replug the drive it will negotiate 5000M and begin working.
 
-Tested-by: Sean Anderson <sean.anderson@seco.com>
+This all leads me to suspect that during initialization, when the USB ports are being scanned, there is a big-endian error in the latest kernels. I will happily test any patches if the cause of this is obvious. I am not versed in USB or I would investigate further myself.
+
+Below are three lsusb -v outputs:
+
+5.10.88 in big endian mode
+5.15.11 in the big endian "bad state" where the device is connected at 480M
+5.15.11 in the big endian "good state" achieved by transitioning out of the "bad state" by unplugging and re-plugging the drive.
+
+5.10.88 GOOD start-------------------------------------------------------------------------------------------------------
+Bus 007 Device 001: ID 1d6b:0002 Linux 5.10.88-gentoo-dist xhci-hcd xHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         1
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0002
+  bcdDevice            5.10
+  iManufacturer           3 Linux 5.10.88-gentoo-dist xhci-hcd
+  iProduct                2 xHCI Host Controller
+  iSerial                 1 xhci-hcd.2.auto
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+    TT think time 8 FS bits
+  bPwrOn2PwrGood       10 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0100 power
+Device Status:     0x0001
+  Self Powered
+
+Bus 002 Device 001: ID 1d6b:0002 Linux 5.10.88-gentoo-dist ehci_hcd EHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0002
+  bcdDevice            5.10
+  iManufacturer           3 Linux 5.10.88-gentoo-dist ehci_hcd
+  iProduct                2 EHCI Host Controller
+  iSerial                 1 fe3c0000.usb
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x0009
+    Per-port power switching
+    Per-port overcurrent protection
+  bPwrOn2PwrGood       10 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0100 power
+Device Status:     0x0001
+  Self Powered
+
+Bus 004 Device 001: ID 1d6b:0001 Linux 5.10.88-gentoo-dist ohci_hcd Generic Platform OHCI controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               1.10
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0001
+  bcdDevice            5.10
+  iManufacturer           3 Linux 5.10.88-gentoo-dist ohci_hcd
+  iProduct                2 Generic Platform OHCI controller
+  iSerial                 1 fe3e0000.usb
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0002  1x 2 bytes
+        bInterval             255
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+  bPwrOn2PwrGood        2 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0100 power
+Device Status:     0x0001
+  Self Powered
+
+Bus 006 Device 001: ID 1d6b:0003 Linux 5.10.88-gentoo-dist xhci-hcd xHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         3
+  bMaxPacketSize0         9
+  idVendor           0x1d6b
+  idProduct          0x0003
+  bcdDevice            5.10
+  iManufacturer           3 Linux 5.10.88-gentoo-dist xhci-hcd
+  iProduct                2 xHCI Host Controller
+  iSerial                 1 xhci-hcd.1.auto
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x001f
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+        bMaxBurst               0
+Hub Descriptor:
+  bLength              12
+  bDescriptorType      42
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+  bPwrOn2PwrGood       50 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  bHubDecLat          0.0 micro seconds
+  wHubDelay             0 nano seconds
+  DeviceRemovable    0x00
+ Hub Port Status:
+   Port 1: 0000.0280 5Gbps power SS.disabled
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x000f
+  bNumDeviceCaps          1
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x02
+      Latency Tolerance Messages (LTM) Supported
+    wSpeedsSupported   0x0008
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   3
+      Lowest fully-functional device speed is SuperSpeed (5Gbps)
+    bU1DevExitLat           0 micro seconds
+    bU2DevExitLat           0 micro seconds
+Device Status:     0x0001
+  Self Powered
+
+Bus 008 Device 002: ID 174c:55aa asmedia ASMT1051
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.10
+  bDeviceClass            0
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0         9
+  idVendor           0x174c
+  idProduct          0x55aa
+  bcdDevice            1.00
+  iManufacturer           2 asmedia
+  iProduct                3 ASMT1051
+  iSerial                 1 12345679B623
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0079
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xc0
+      Self Powered
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass         8
+      bInterfaceSubClass      6
+      bInterfaceProtocol     80
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst              15
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst              15
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       1
+      bNumEndpoints           4
+      bInterfaceClass         8
+      bInterfaceSubClass      6
+      bInterfaceProtocol     98
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst              15
+        MaxStreams             32
+        Data-in pipe (0x03)
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst              15
+        MaxStreams             32
+        Data-out pipe (0x04)
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst              15
+        MaxStreams             32
+        Status pipe (0x02)
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x04  EP 4 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+        Command pipe (0x01)
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x002a
+  bNumDeviceCaps          3
+  USB 2.0 Extension Device Capability:
+    bLength                 7
+    bDescriptorType        16
+    bDevCapabilityType      2
+    bmAttributes   0x0000f41e
+      BESL Link Power Management (LPM) Supported
+    BESL value     1024 us
+    Deep BESL value    61440 us
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x00
+    wSpeedsSupported   0x000e
+      Device can operate at Full Speed (12Mbps)
+      Device can operate at High Speed (480Mbps)
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   1
+      Lowest fully-functional device speed is Full Speed (12Mbps)
+    bU1DevExitLat          10 micro seconds
+    bU2DevExitLat        2047 micro seconds
+  SuperSpeedPlus USB Device Capability:
+    bLength                20
+    bDescriptorType        16
+    bDevCapabilityType     10
+    bmAttributes         0x00000001
+      Sublink Speed Attribute count 1
+      Sublink Speed ID count 0
+    wFunctionalitySupport   0x1100
+    bmSublinkSpeedAttr[0]   0x000a4030
+      Speed Attribute ID: 0 10Gb/s Symmetric RX SuperSpeedPlus
+    bmSublinkSpeedAttr[1]   0x000a40b0
+      Speed Attribute ID: 0 10Gb/s Symmetric TX SuperSpeedPlus
+Device Status:     0x0001
+  Self Powered
+
+Bus 008 Device 001: ID 1d6b:0003 Linux 5.10.88-gentoo-dist xhci-hcd xHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         3
+  bMaxPacketSize0         9
+  idVendor           0x1d6b
+  idProduct          0x0003
+  bcdDevice            5.10
+  iManufacturer           3 Linux 5.10.88-gentoo-dist xhci-hcd
+  iProduct                2 xHCI Host Controller
+  iSerial                 1 xhci-hcd.2.auto
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x001f
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+        bMaxBurst               0
+Hub Descriptor:
+  bLength              12
+  bDescriptorType      42
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+  bPwrOn2PwrGood       50 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  bHubDecLat          0.0 micro seconds
+  wHubDelay             0 nano seconds
+  DeviceRemovable    0x00
+ Hub Port Status:
+   Port 1: 0000.0203 5Gbps power U0 enable connect
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x000f
+  bNumDeviceCaps          1
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x02
+      Latency Tolerance Messages (LTM) Supported
+    wSpeedsSupported   0x0008
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   3
+      Lowest fully-functional device speed is SuperSpeed (5Gbps)
+    bU1DevExitLat           0 micro seconds
+    bU2DevExitLat           0 micro seconds
+Device Status:     0x0001
+  Self Powered
+
+Bus 001 Device 001: ID 1d6b:0002 Linux 5.10.88-gentoo-dist ehci_hcd EHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0002
+  bcdDevice            5.10
+  iManufacturer           3 Linux 5.10.88-gentoo-dist ehci_hcd
+  iProduct                2 EHCI Host Controller
+  iSerial                 1 fe380000.usb
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x0009
+    Per-port power switching
+    Per-port overcurrent protection
+  bPwrOn2PwrGood       10 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0100 power
+Device Status:     0x0001
+  Self Powered
+
+Bus 003 Device 001: ID 1d6b:0001 Linux 5.10.88-gentoo-dist ohci_hcd Generic Platform OHCI controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               1.10
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0001
+  bcdDevice            5.10
+  iManufacturer           3 Linux 5.10.88-gentoo-dist ohci_hcd
+  iProduct                2 Generic Platform OHCI controller
+  iSerial                 1 fe3a0000.usb
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0002  1x 2 bytes
+        bInterval             255
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+  bPwrOn2PwrGood        2 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0100 power
+Device Status:     0x0001
+  Self Powered
+
+Bus 005 Device 001: ID 1d6b:0002 Linux 5.10.88-gentoo-dist xhci-hcd xHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         1
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0002
+  bcdDevice            5.10
+  iManufacturer           3 Linux 5.10.88-gentoo-dist xhci-hcd
+  iProduct                2 xHCI Host Controller
+  iSerial                 1 xhci-hcd.1.auto
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+    TT think time 8 FS bits
+  bPwrOn2PwrGood       10 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0100 power
+Device Status:     0x0001
+  Self Powered
+5.10.88 GOOD end -------------------------------------------------------------------------------------------------------
+5.15.11 BAD start -------------------------------------------------------------------------------------------------------
+Bus 007 Device 002: ID 174c:55aa asmedia ASMT1051
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.10
+  bDeviceClass            0
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x174c
+  idProduct          0x55aa
+  bcdDevice            1.00
+  iManufacturer           2 asmedia
+  iProduct                3 ASMT1051
+  iSerial                 1 12345679B623
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0055
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xc0
+      Self Powered
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass         8
+      bInterfaceSubClass      6
+      bInterfaceProtocol     80
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       1
+      bNumEndpoints           4
+      bInterfaceClass         8
+      bInterfaceSubClass      6
+      bInterfaceProtocol     98
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+        Data-in pipe (0x03)
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+        Data-out pipe (0x04)
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+        Status pipe (0x02)
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x04  EP 4 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+        Command pipe (0x01)
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x002a
+  bNumDeviceCaps          3
+  USB 2.0 Extension Device Capability:
+    bLength                 7
+    bDescriptorType        16
+    bDevCapabilityType      2
+    bmAttributes   0x0000f41e
+      BESL Link Power Management (LPM) Supported
+    BESL value     1024 us
+    Deep BESL value    61440 us
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x00
+    wSpeedsSupported   0x000e
+      Device can operate at Full Speed (12Mbps)
+      Device can operate at High Speed (480Mbps)
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   1
+      Lowest fully-functional device speed is Full Speed (12Mbps)
+    bU1DevExitLat          10 micro seconds
+    bU2DevExitLat        2047 micro seconds
+  SuperSpeedPlus USB Device Capability:
+    bLength                20
+    bDescriptorType        16
+    bDevCapabilityType     10
+    bmAttributes         0x00000001
+      Sublink Speed Attribute count 1
+      Sublink Speed ID count 0
+    wFunctionalitySupport   0x1100
+    bmSublinkSpeedAttr[0]   0x000a4030
+      Speed Attribute ID: 0 10Gb/s Symmetric RX SuperSpeedPlus
+    bmSublinkSpeedAttr[1]   0x000a40b0
+      Speed Attribute ID: 0 10Gb/s Symmetric TX SuperSpeedPlus
+Device Status:     0x0001
+  Self Powered
+
+Bus 007 Device 001: ID 1d6b:0002 Linux 5.15.11-gentoo-dist xhci-hcd xHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         1
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0002
+  bcdDevice            5.15
+  iManufacturer           3 Linux 5.15.11-gentoo-dist xhci-hcd
+  iProduct                2 xHCI Host Controller
+  iSerial                 1 xhci-hcd.2.auto
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+    TT think time 8 FS bits
+  bPwrOn2PwrGood       10 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0503 highspeed power enable connect
+Device Status:     0x0001
+  Self Powered
+
+Bus 002 Device 001: ID 1d6b:0001 Linux 5.15.11-gentoo-dist ohci_hcd Generic Platform OHCI controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               1.10
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0001
+  bcdDevice            5.15
+  iManufacturer           3 Linux 5.15.11-gentoo-dist ohci_hcd
+  iProduct                2 Generic Platform OHCI controller
+  iSerial                 1 fe3e0000.usb
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0002  1x 2 bytes
+        bInterval             255
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+  bPwrOn2PwrGood        2 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0100 power
+Device Status:     0x0001
+  Self Powered
+
+Bus 004 Device 001: ID 1d6b:0002 Linux 5.15.11-gentoo-dist xhci-hcd xHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         1
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0002
+  bcdDevice            5.15
+  iManufacturer           3 Linux 5.15.11-gentoo-dist xhci-hcd
+  iProduct                2 xHCI Host Controller
+  iSerial                 1 xhci-hcd.1.auto
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+    TT think time 8 FS bits
+  bPwrOn2PwrGood       10 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0100 power
+Device Status:     0x0001
+  Self Powered
+
+Bus 006 Device 001: ID 1d6b:0003 Linux 5.15.11-gentoo-dist xhci-hcd xHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         3
+  bMaxPacketSize0         9
+  idVendor           0x1d6b
+  idProduct          0x0003
+  bcdDevice            5.15
+  iManufacturer           3 Linux 5.15.11-gentoo-dist xhci-hcd
+  iProduct                2 xHCI Host Controller
+  iSerial                 1 xhci-hcd.1.auto
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x001f
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+        bMaxBurst               0
+Hub Descriptor:
+  bLength              12
+  bDescriptorType      42
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+  bPwrOn2PwrGood       50 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  bHubDecLat          0.0 micro seconds
+  wHubDelay             0 nano seconds
+  DeviceRemovable    0x00
+ Hub Port Status:
+   Port 1: 0000.0280 5Gbps power SS.disabled
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x000f
+  bNumDeviceCaps          1
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x02
+      Latency Tolerance Messages (LTM) Supported
+    wSpeedsSupported   0x0008
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   1
+      Lowest fully-functional device speed is Full Speed (12Mbps)
+    bU1DevExitLat           0 micro seconds
+    bU2DevExitLat           0 micro seconds
+Device Status:     0x0001
+  Self Powered
+
+Bus 008 Device 001: ID 1d6b:0003 Linux 5.15.11-gentoo-dist xhci-hcd xHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         3
+  bMaxPacketSize0         9
+  idVendor           0x1d6b
+  idProduct          0x0003
+  bcdDevice            5.15
+  iManufacturer           3 Linux 5.15.11-gentoo-dist xhci-hcd
+  iProduct                2 xHCI Host Controller
+  iSerial                 1 xhci-hcd.2.auto
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x001f
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+        bMaxBurst               0
+Hub Descriptor:
+  bLength              12
+  bDescriptorType      42
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+  bPwrOn2PwrGood       50 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  bHubDecLat          0.0 micro seconds
+  wHubDelay             0 nano seconds
+  DeviceRemovable    0x00
+ Hub Port Status:
+   Port 1: 0000.02a0 5Gbps power Rx.Detect
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x000f
+  bNumDeviceCaps          1
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x02
+      Latency Tolerance Messages (LTM) Supported
+    wSpeedsSupported   0x0008
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   1
+      Lowest fully-functional device speed is Full Speed (12Mbps)
+    bU1DevExitLat           0 micro seconds
+    bU2DevExitLat           0 micro seconds
+Device Status:     0x0001
+  Self Powered
+
+Bus 001 Device 001: ID 1d6b:0001 Linux 5.15.11-gentoo-dist ohci_hcd Generic Platform OHCI controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               1.10
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0001
+  bcdDevice            5.15
+  iManufacturer           3 Linux 5.15.11-gentoo-dist ohci_hcd
+  iProduct                2 Generic Platform OHCI controller
+  iSerial                 1 fe3a0000.usb
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0002  1x 2 bytes
+        bInterval             255
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+  bPwrOn2PwrGood        2 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0100 power
+Device Status:     0x0001
+  Self Powered
+
+Bus 003 Device 001: ID 1d6b:0002 Linux 5.15.11-gentoo-dist ehci_hcd EHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0002
+  bcdDevice            5.15
+  iManufacturer           3 Linux 5.15.11-gentoo-dist ehci_hcd
+  iProduct                2 EHCI Host Controller
+  iSerial                 1 fe380000.usb
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x0009
+    Per-port power switching
+    Per-port overcurrent protection
+  bPwrOn2PwrGood       10 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0100 power
+Device Status:     0x0001
+  Self Powered
+
+Bus 005 Device 001: ID 1d6b:0002 Linux 5.15.11-gentoo-dist ehci_hcd EHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0002
+  bcdDevice            5.15
+  iManufacturer           3 Linux 5.15.11-gentoo-dist ehci_hcd
+  iProduct                2 EHCI Host Controller
+  iSerial                 1 fe3c0000.usb
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x0009
+    Per-port power switching
+    Per-port overcurrent protection
+  bPwrOn2PwrGood       10 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0100 power
+Device Status:     0x0001
+  Self Powered
+5.15.11 BAD end -------------------------------------------------------------------------------------------------------
+5.15.11 GOOD start -------------------------------------------------------------------------------------------------------
+Bus 007 Device 001: ID 1d6b:0002 Linux 5.15.11-gentoo-dist xhci-hcd xHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         1
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0002
+  bcdDevice            5.15
+  iManufacturer           3 Linux 5.15.11-gentoo-dist xhci-hcd
+  iProduct                2 xHCI Host Controller
+  iSerial                 1 xhci-hcd.2.auto
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+    TT think time 8 FS bits
+  bPwrOn2PwrGood       10 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0100 power
+Device Status:     0x0001
+  Self Powered
+
+Bus 002 Device 001: ID 1d6b:0001 Linux 5.15.11-gentoo-dist ohci_hcd Generic Platform OHCI controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               1.10
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0001
+  bcdDevice            5.15
+  iManufacturer           3 Linux 5.15.11-gentoo-dist ohci_hcd
+  iProduct                2 Generic Platform OHCI controller
+  iSerial                 1 fe3e0000.usb
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0002  1x 2 bytes
+        bInterval             255
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+  bPwrOn2PwrGood        2 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0100 power
+Device Status:     0x0001
+  Self Powered
+
+Bus 004 Device 001: ID 1d6b:0002 Linux 5.15.11-gentoo-dist xhci-hcd xHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         1
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0002
+  bcdDevice            5.15
+  iManufacturer           3 Linux 5.15.11-gentoo-dist xhci-hcd
+  iProduct                2 xHCI Host Controller
+  iSerial                 1 xhci-hcd.1.auto
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+    TT think time 8 FS bits
+  bPwrOn2PwrGood       10 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0100 power
+Device Status:     0x0001
+  Self Powered
+
+Bus 006 Device 001: ID 1d6b:0003 Linux 5.15.11-gentoo-dist xhci-hcd xHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         3
+  bMaxPacketSize0         9
+  idVendor           0x1d6b
+  idProduct          0x0003
+  bcdDevice            5.15
+  iManufacturer           3 Linux 5.15.11-gentoo-dist xhci-hcd
+  iProduct                2 xHCI Host Controller
+  iSerial                 1 xhci-hcd.1.auto
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x001f
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+        bMaxBurst               0
+Hub Descriptor:
+  bLength              12
+  bDescriptorType      42
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+  bPwrOn2PwrGood       50 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  bHubDecLat          0.0 micro seconds
+  wHubDelay             0 nano seconds
+  DeviceRemovable    0x00
+ Hub Port Status:
+   Port 1: 0000.0280 5Gbps power SS.disabled
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x000f
+  bNumDeviceCaps          1
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x02
+      Latency Tolerance Messages (LTM) Supported
+    wSpeedsSupported   0x0008
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   1
+      Lowest fully-functional device speed is Full Speed (12Mbps)
+    bU1DevExitLat           0 micro seconds
+    bU2DevExitLat           0 micro seconds
+Device Status:     0x0001
+  Self Powered
+
+Bus 008 Device 002: ID 174c:55aa asmedia ASMT1051
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.10
+  bDeviceClass            0
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0         9
+  idVendor           0x174c
+  idProduct          0x55aa
+  bcdDevice            1.00
+  iManufacturer           2 asmedia
+  iProduct                3 ASMT1051
+  iSerial                 1 12345679B623
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0079
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xc0
+      Self Powered
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass         8
+      bInterfaceSubClass      6
+      bInterfaceProtocol     80
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst              15
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst              15
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       1
+      bNumEndpoints           4
+      bInterfaceClass         8
+      bInterfaceSubClass      6
+      bInterfaceProtocol     98
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst              15
+        MaxStreams             32
+        Data-in pipe (0x03)
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst              15
+        MaxStreams             32
+        Data-out pipe (0x04)
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst              15
+        MaxStreams             32
+        Status pipe (0x02)
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x04  EP 4 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+        Command pipe (0x01)
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x002a
+  bNumDeviceCaps          3
+  USB 2.0 Extension Device Capability:
+    bLength                 7
+    bDescriptorType        16
+    bDevCapabilityType      2
+    bmAttributes   0x0000f41e
+      BESL Link Power Management (LPM) Supported
+    BESL value     1024 us
+    Deep BESL value    61440 us
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x00
+    wSpeedsSupported   0x000e
+      Device can operate at Full Speed (12Mbps)
+      Device can operate at High Speed (480Mbps)
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   1
+      Lowest fully-functional device speed is Full Speed (12Mbps)
+    bU1DevExitLat          10 micro seconds
+    bU2DevExitLat        2047 micro seconds
+  SuperSpeedPlus USB Device Capability:
+    bLength                20
+    bDescriptorType        16
+    bDevCapabilityType     10
+    bmAttributes         0x00000001
+      Sublink Speed Attribute count 1
+      Sublink Speed ID count 0
+    wFunctionalitySupport   0x1100
+    bmSublinkSpeedAttr[0]   0x000a4030
+      Speed Attribute ID: 0 10Gb/s Symmetric RX SuperSpeedPlus
+    bmSublinkSpeedAttr[1]   0x000a40b0
+      Speed Attribute ID: 0 10Gb/s Symmetric TX SuperSpeedPlus
+Device Status:     0x0001
+  Self Powered
+
+Bus 008 Device 001: ID 1d6b:0003 Linux 5.15.11-gentoo-dist xhci-hcd xHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         3
+  bMaxPacketSize0         9
+  idVendor           0x1d6b
+  idProduct          0x0003
+  bcdDevice            5.15
+  iManufacturer           3 Linux 5.15.11-gentoo-dist xhci-hcd
+  iProduct                2 xHCI Host Controller
+  iSerial                 1 xhci-hcd.2.auto
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x001f
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+        bMaxBurst               0
+Hub Descriptor:
+  bLength              12
+  bDescriptorType      42
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+  bPwrOn2PwrGood       50 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  bHubDecLat          0.0 micro seconds
+  wHubDelay             0 nano seconds
+  DeviceRemovable    0x00
+ Hub Port Status:
+   Port 1: 0000.0203 5Gbps power U0 enable connect
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x000f
+  bNumDeviceCaps          1
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x02
+      Latency Tolerance Messages (LTM) Supported
+    wSpeedsSupported   0x0008
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   1
+      Lowest fully-functional device speed is Full Speed (12Mbps)
+    bU1DevExitLat           0 micro seconds
+    bU2DevExitLat           0 micro seconds
+Device Status:     0x0001
+  Self Powered
+
+Bus 001 Device 001: ID 1d6b:0001 Linux 5.15.11-gentoo-dist ohci_hcd Generic Platform OHCI controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               1.10
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0001
+  bcdDevice            5.15
+  iManufacturer           3 Linux 5.15.11-gentoo-dist ohci_hcd
+  iProduct                2 Generic Platform OHCI controller
+  iSerial                 1 fe3a0000.usb
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0002  1x 2 bytes
+        bInterval             255
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+  bPwrOn2PwrGood        2 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0100 power
+Device Status:     0x0001
+  Self Powered
+
+Bus 003 Device 001: ID 1d6b:0002 Linux 5.15.11-gentoo-dist ehci_hcd EHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0002
+  bcdDevice            5.15
+  iManufacturer           3 Linux 5.15.11-gentoo-dist ehci_hcd
+  iProduct                2 EHCI Host Controller
+  iSerial                 1 fe380000.usb
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x0009
+    Per-port power switching
+    Per-port overcurrent protection
+  bPwrOn2PwrGood       10 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0100 power
+Device Status:     0x0001
+  Self Powered
+
+Bus 005 Device 001: ID 1d6b:0002 Linux 5.15.11-gentoo-dist ehci_hcd EHCI Host Controller
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            9
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x1d6b
+  idProduct          0x0002
+  bcdDevice            5.15
+  iManufacturer           3 Linux 5.15.11-gentoo-dist ehci_hcd
+  iProduct                2 EHCI Host Controller
+  iSerial                 1 fe3c0000.usb
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+Hub Descriptor:
+  bLength               9
+  bDescriptorType      41
+  nNbrPorts             1
+  wHubCharacteristic 0x0009
+    Per-port power switching
+    Per-port overcurrent protection
+  bPwrOn2PwrGood       10 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  DeviceRemovable    0x00
+  PortPwrCtrlMask    0xff
+ Hub Port Status:
+   Port 1: 0000.0100 power
+Device Status:     0x0001
+  Self Powered
+5.15.11 GOOD end -------------------------------------------------------------------------------------------------------
+
+Rory Bolt | Principal Architect, Sr. Fellow
+
+KIOXIA America, Inc. | formerly Toshiba Memory America, Inc.
+
+
+
+
+
