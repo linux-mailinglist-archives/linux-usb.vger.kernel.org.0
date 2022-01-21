@@ -2,37 +2,25 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB204960ED
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jan 2022 15:31:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 877C94961BC
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jan 2022 16:09:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351020AbiAUObR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Jan 2022 09:31:17 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33594 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348810AbiAUObQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jan 2022 09:31:16 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D07466179B;
-        Fri, 21 Jan 2022 14:31:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADE93C340E1;
-        Fri, 21 Jan 2022 14:31:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642775475;
-        bh=9UX5OxtUvEMfbi9ErdAxUjq/gpyFFn0Z8Jngw+epl0o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oSv297ad+o2QzmoyWh21/Y9xupD8jpy4rneolPDSg/REJjB4mkoO5c9L1C2axFNhp
-         cfSp1BH+8l14oHNf0a8anxfLmYi7l2wCvoWsb0p4D55qAnbFDhsZ2vWxW8D4WfmE4+
-         5hFQYMJrRbOZs0iixaFQRde77FlBnRFSFHn0tjoE=
-Date:   Fri, 21 Jan 2022 15:31:12 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        id S1381488AbiAUPJC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Jan 2022 10:09:02 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:58445 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S238192AbiAUPJC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jan 2022 10:09:02 -0500
+Received: (qmail 17761 invoked by uid 1000); 21 Jan 2022 10:09:00 -0500
+Date:   Fri, 21 Jan 2022 10:09:00 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
 To:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] usb: gadget: f_sourcesink: Fix isoc transfer for
  USB_SPEED_SUPER_PLUS
-Message-ID: <YerDsJKn0vAHEIAC@kroah.com>
+Message-ID: <YerMjGG8VQkI85bB@rowland.harvard.edu>
 References: <1642764684-26060-1-git-send-email-quic_pkondeti@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -49,9 +37,29 @@ On Fri, Jan 21, 2022 at 05:01:24PM +0530, Pavankumar Kondeti wrote:
 > and update the request buffer size.
 > 
 > Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+> ---
+>  drivers/usb/gadget/function/f_sourcesink.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/function/f_sourcesink.c b/drivers/usb/gadget/function/f_sourcesink.c
+> index 1abf08e..0a423ba 100644
+> --- a/drivers/usb/gadget/function/f_sourcesink.c
+> +++ b/drivers/usb/gadget/function/f_sourcesink.c
+> @@ -584,6 +584,8 @@ static int source_sink_start_ep(struct f_sourcesink *ss, bool is_in,
+>  
+>  	if (is_iso) {
+>  		switch (speed) {
+> +		case USB_SPEED_SUPER_PLUS:
+> +			fallthrough;
 
-What commit id does this fix?
+There's no need for this "fallthough" line.  You're allowed to have 
+multiple case labels for a single block of code.
 
-thanks,
+Alan Stern
 
-greg k-h
+>  		case USB_SPEED_SUPER:
+>  			size = ss->isoc_maxpacket *
+>  					(ss->isoc_mult + 1) *
+> -- 
+> 2.7.4
+> 
