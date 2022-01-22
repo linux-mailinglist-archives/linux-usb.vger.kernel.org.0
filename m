@@ -2,95 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DAB496C46
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Jan 2022 13:11:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C27A496CEB
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Jan 2022 17:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234484AbiAVMLM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Jan 2022 07:11:12 -0500
-Received: from out2-smtp.messagingengine.com ([66.111.4.26]:42697 "EHLO
-        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229514AbiAVMLL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Jan 2022 07:11:11 -0500
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id B99D95C0156;
-        Sat, 22 Jan 2022 07:11:10 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sat, 22 Jan 2022 07:11:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm2; bh=0
-        4G5CcShqixtcjS9thUwmKtBaIQAOrFakrRTKIPU5XM=; b=p7rxeKUCduyoHqPhq
-        f9z9kD5ijspgCCznlN59UWqNAXji8fhgetnhHRr5E2ndOgKjo0W9RpCecVQ1U/dF
-        OVuqhSZQ7VJY/HfVC8TXFP7RH1y4GPn4XWKSXKVAdxRYSM0Uug5+nH+UZnkb/qbx
-        gDMpY0Qp9PVmwmlhrdxZfk8ggi4CNC34ujltU5bKCdz+oPpF4NEzkI6LvLVaieaW
-        M54kCS50/JzrxEyN4cM//1t68+ChQJeC1WN/UUu4c4/JTnfzbTW3rtsXdeufeX2M
-        XSouxBUu6odeosNO+U77kdEe0owUMIZPPUD4cdwpx8suM89HUFcyneclSh7gfpV3
-        Gd+Kg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=04G5CcShqixtcjS9thUwmKtBaIQAOrFakrRTKIPU5
-        XM=; b=L0hoen79Xjy7xYQE7ifQ79XUxE6SfVpibsB5e4yb2kfCoCK4O2LBw0B6s
-        iFMFFfVTOzFLmjQSAcnBujZrXQpi78fRbU585bAoDGL3Odf0oJc3VCTqe+kZkFqO
-        ZQWzIhPsY+FkG15BpIoj6UhC+/c6UMfmgxnZMrx34ZaqtXMt1RNZJX7z92lFOXBQ
-        2D3U7lYYTlZf8XyO6kUvcIgwEnV0sC3QOYNs1WBgsulrY9eAkaK+k3JRCiIPtHWl
-        b4xc4EBV8+nXAag4OW7aGWgOc7OAZDf2r3x5k8iW88JnuAWVJp7QLAZGyvlJ8DIk
-        FvpouSzxmwUVO7FODwMw/CoeL4m7Q==
-X-ME-Sender: <xms:XvTrYRvUcCfpfayTccUsdsaHJcmB536FUUp5tGYR7sj8v1RMHtrcPA>
-    <xme:XvTrYaetdGSP2WB2DR4ExO5ZcsmG0ZU0SqTZgeor3nO0IpY501w7qxWbXDDU2_f_R
-    h0z0l9kdoUe0A>
-X-ME-Received: <xmr:XvTrYUxSBnki2IoxhfS8YwaSJRY5AaINchRDi5m_2-BNk80ktnhJkD3Nk3AG1DbHMOzVn6MqiBu_mf_77ERdtnx0kr_gx9U0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvddvgdefjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkgggtugesthdtredttddtvdenucfhrhhomhepifhrvghgucfmjfcu
-    oehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepvedugeeuffelge
-    ekhfehtdefhfekffdtgedvteeitddvieduhfekheekueehleelnecuffhomhgrihhnpehk
-    rhhorghhrdgtohhmpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:XvTrYYO-lECTGUMp4a14vAtnYKaczzR7Ta_lRpR2V4Y_QSWy3oiCag>
-    <xmx:XvTrYR-Uhpny-kMD6g0aZof6gWaMR4Yz1s3CsupcPQCtrhTwewAg2g>
-    <xmx:XvTrYYWH2zapvMCH2ntvdMwnNh9nLm3qpwJMCVA73uc-fWiPyajtHA>
-    <xmx:XvTrYdbvtcUNoRzk0RcqTjCs-RQaQYRczwx_GyJe-Cmbw-rLUhSr6g>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 22 Jan 2022 07:11:09 -0500 (EST)
-Date:   Sat, 22 Jan 2022 13:11:08 +0100
-From:   Greg KH <greg@kroah.com>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Matthias Gerstner <mgerstner@suse.de>
-Subject: usbview 3.0 release
-Message-ID: <Yev0XJ7qs6xTNQQ9@kroah.com>
+        id S234538AbiAVQhI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Jan 2022 11:37:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51078 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234470AbiAVQhH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Jan 2022 11:37:07 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40EEC061401
+        for <linux-usb@vger.kernel.org>; Sat, 22 Jan 2022 08:37:07 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id l64-20020a9d1b46000000b005983a0a8aaaso16020398otl.3
+        for <linux-usb@vger.kernel.org>; Sat, 22 Jan 2022 08:37:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=nQfnDsNAwBhiTzvcCVWAW+CtmC1+ndx2xo4KA92H/eA=;
+        b=lOvmxgmq9GpbTSQfd+ZMOUCrgP2Z9ebtFKrmDF53dJYX/c8icafiNfu59uSvoiRP+z
+         r7/hjR0alstPoPV+L4rI8i7DP05RowYcJzdW3a8KGKOYCkeqmbt22FJJ7iHOE/HCHAka
+         DTIb66/8K+Mfo/fk7Hu5LFZPIPWpZtjW8jD8WfoQTJokDY82ulKFPJLLGMOWJ/DjAH5K
+         2mI2lg/2FIU5yG2bgvH/a5v136ZvJEbt4rTCTLFJpSNBAIhV2b1VyDaKBZIkPPL2ZEo0
+         NjL6qI/s/1hStAug11rd5vhsFgbFq8zV8BXks3AOPk2uRhE00UCLALehecChc+3YEiUE
+         Vh8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=nQfnDsNAwBhiTzvcCVWAW+CtmC1+ndx2xo4KA92H/eA=;
+        b=IkNwXoVXvgSBRXs5RKVbJhGdUxFJYYJaO2xjXah64mHqEobfxKQk2/hZxBktxhaLDt
+         gisevadJaPuJe/ppI46AnUEoAExcx8QwKEow2dmmn2ekXtqMh0c24MF26hwzxwaZbAjP
+         P9APqBQ5yi9w4444Www18QXu+yrf1qxEewVgTzuE5ioxTnav4zyJhuRklo0z9L9Ds4l4
+         5XtDBMfEGvBYi7zdL3pBvTSPgIgdfvucbnlsbsjW/TC9VdQIuaTwEzV8STenrCNIJGCX
+         AeFGLbmuTo7P1yLGRIVveKvs/Mi6VEGdAIkT1co7po/w+r4SfN5AiOJZoQGXpV1DD5p8
+         7toQ==
+X-Gm-Message-State: AOAM5322iUGnSZkTDFgELZ4ycG9cmGXT9IA8D7Ls14M530BFwrVXI/tY
+        oiR1wIL8akjNmpkSmzfgTU+KELmgowcVRtBoPxQ=
+X-Google-Smtp-Source: ABdhPJy45GdFGFWqtDRRnY6spEsR1CPXS4Ge8WGwaFz4ageK291v+0ix2Hyj3ZAvMWfg7wze84c8x70U1VKXNRrbU2I=
+X-Received: by 2002:a9d:6e94:: with SMTP id a20mr6245428otr.378.1642869426734;
+ Sat, 22 Jan 2022 08:37:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Received: by 2002:ac9:56d7:0:0:0:0:0 with HTTP; Sat, 22 Jan 2022 08:37:06
+ -0800 (PST)
+Reply-To: nelsonbile450@gmail.com
+From:   Nelson Bile <addamss.petter19@gmail.com>
+Date:   Sat, 22 Jan 2022 17:37:06 +0100
+Message-ID: <CA+gU1v3=xjMo0tNZUVw-rNnwrhRsAhkGsc5s-KmgBxTVM5F2Eg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hot on the heels of the 2.2 release, here is "3.0", with an entirely
-rewritten back-end where the USB data is read from.  No longer is
-debugfs access needed, all of the information is taken directly from
-sysfs as normal user permissions.
-
-This should allow distros and packagers to no longer need polkit
-policies at all, and hopefully remove any potential future problems in
-the tool.
-
-The package can be downloaded at:
-	http://www.kroah.com/linux/usb/usbview-3.0.tar.gz
-and the git tree can be found at:
-	http://github.com/gregkh/usbview
-
-thanks,
-
-greg k-h
-
--------
-
-version 3.0
-	- remove need for debugfs/usbdevfs/usbfs file entirely, rely only on
-	  sysfs now.  This removes the need to run the program as root, which
-	  should have never happened.
-	- added SPDX identifiers and .spdx file to make packaging easier for
-	  others.
+Greetings I sent you an email a few days ago. Did you receive my
+message? urgent response please
