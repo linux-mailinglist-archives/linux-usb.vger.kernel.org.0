@@ -2,113 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2060496A8E
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Jan 2022 08:22:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EEC496A90
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Jan 2022 08:24:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbiAVHWT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Jan 2022 02:22:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43744 "EHLO
+        id S233534AbiAVHYB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Jan 2022 02:24:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiAVHWT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Jan 2022 02:22:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A9DC06173B;
-        Fri, 21 Jan 2022 23:22:19 -0800 (PST)
+        with ESMTP id S229586AbiAVHYB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Jan 2022 02:24:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFAE4C06173B
+        for <linux-usb@vger.kernel.org>; Fri, 21 Jan 2022 23:24:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 199696077B;
-        Sat, 22 Jan 2022 07:22:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD0CC004E1;
-        Sat, 22 Jan 2022 07:22:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FDE4B81FBE
+        for <linux-usb@vger.kernel.org>; Sat, 22 Jan 2022 07:23:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5242EC340E2;
+        Sat, 22 Jan 2022 07:23:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642836137;
-        bh=NcI62+HAnm5vi94iD0LrdVqZ7/x8PFoezOP3K1j5Is4=;
+        s=korg; t=1642836238;
+        bh=KbznLGf3y6bAQ6PQGW9OSS4acK6vkvrT/ZluC2r1Z/o=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xzuKNT0/inz/x5ZqZ14wligy+F7SyEPpNB6oPNbjo6Q4qqWTlSEK6lR19GLh6FkG7
-         FnT+oH9bo8ib4WRH+Mpq3c0pZOb4HjCSowID63HtjpeT/zZ0inFV4Nj/8+MhKzt0Zh
-         aiGnK+Aqu2L6OmEQ3J0eQZ6Py0fcyhZUpmdzbjBw=
-Date:   Sat, 22 Jan 2022 08:22:10 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Luiz Sampaio <sampaio.ime@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 23/31] usb: core: changing LED_* from enum led_brightness
- to actual value
-Message-ID: <Yeuwou0Hs9+JQmMv@kroah.com>
-References: <20220121165436.30956-1-sampaio.ime@gmail.com>
- <20220121165436.30956-24-sampaio.ime@gmail.com>
+        b=qtKVTnggSAsgTHbpj9NTT7IgLAPWAQR+ByjLUaf/zcujOc4mhwmVQWOjW/uc/56wI
+         7Jgm/BghitAYYGyXwtHKDlXzsczB9GzXapRZzvtasL40qsWbyX/Iaqbtgr1ZNCqmXS
+         jiS5zuQWe48qjPguc1x5DlNSqiMXp1g6hvEtf9mE=
+Date:   Sat, 22 Jan 2022 08:23:50 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Rory Bolt <Rory.Bolt@kioxia.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: Possible big endian bug in latest stable kernel
+Message-ID: <YeuxBhAx/Z5eU9pP@kroah.com>
+References: <d3d0caf19d974ed2bdc25bcd1202b087@kioxia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220121165436.30956-24-sampaio.ime@gmail.com>
+In-Reply-To: <d3d0caf19d974ed2bdc25bcd1202b087@kioxia.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 01:54:28PM -0300, Luiz Sampaio wrote:
-> The enum led_brightness, which contains the declaration of LED_OFF,
-> LED_ON, LED_HALF and LED_FULL is obsolete, as the led class now supports
-> max_brightness.
-> ---
->  drivers/usb/core/ledtrig-usbport.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+On Fri, Jan 21, 2022 at 07:13:59PM +0000, Rory Bolt wrote:
+> Hello,
 > 
-> diff --git a/drivers/usb/core/ledtrig-usbport.c b/drivers/usb/core/ledtrig-usbport.c
-> index ba371a24ff78..85fa5699bb3d 100644
-> --- a/drivers/usb/core/ledtrig-usbport.c
-> +++ b/drivers/usb/core/ledtrig-usbport.c
-> @@ -73,7 +73,7 @@ static void usbport_trig_update_count(struct usbport_trig_data *usbport_data)
->  
->  	usbport_data->count = 0;
->  	usb_for_each_dev(usbport_data, usbport_trig_usb_dev_check);
-> -	led_set_brightness(led_cdev, usbport_data->count ? LED_FULL : LED_OFF);
-> +	led_set_brightness(led_cdev, usbport_data->count ? 255 : 0);
->  }
->  
->  /***************************************
-> @@ -287,12 +287,12 @@ static int usbport_trig_notify(struct notifier_block *nb, unsigned long action,
->  	case USB_DEVICE_ADD:
->  		usbport_trig_add_usb_dev_ports(usb_dev, usbport_data);
->  		if (observed && usbport_data->count++ == 0)
-> -			led_set_brightness(led_cdev, LED_FULL);
-> +			led_set_brightness(led_cdev, 255);
->  		return NOTIFY_OK;
->  	case USB_DEVICE_REMOVE:
->  		usbport_trig_remove_usb_dev_ports(usbport_data, usb_dev);
->  		if (observed && --usbport_data->count == 0)
-> -			led_set_brightness(led_cdev, LED_OFF);
-> +			led_set_brightness(led_cdev, 0);
->  		return NOTIFY_OK;
->  	}
->  
-> -- 
-> 2.34.1
+> I am working on a big endian port to test endian cleanness on our NVMe device drivers and software. I originally performed this port on a RockPro64 with kernel 5.10.88 and the USB subsystem performed flawlessly in both big and little endian modes. Hurray!
+> 
+> When I upgraded to 5.15.11 (and subsequently 5.15.14 and 5.15.16) I ran into problems that appear to be endian. If I boot the exact same board/firmware/kernel in little endian mode, the USB system works correctly. If I switch to big endian, my USB attached disks are no longer usable (they are detected, read capacity commands work, but read operations time out). Interestingly, if I unplug and replug the USB attached disk, it will begin working correctly with the newer kernels in big endian mode. Looking at the output of lsusb -v, it appears there are two changes between the 5.10 and 5.15 USB stacks:
+> 
+> 1) Enumeration order is different. I do not believe this is a problem at all.
+> 2) Link speed. The 5.10 kernels negotiate 5000M in both little and big endian configurations. The 5.15 kernels negotiate 5000M in little endian mode, but 480M in big endian mode if the device is plugged in at boot time. In big endian mode, if the device has incorrectly negotiated 480M at boot time, if I unplug and replug the drive it will negotiate 5000M and begin working.
+> 
+> This all leads me to suspect that during initialization, when the USB ports are being scanned, there is a big-endian error in the latest kernels. I will happily test any patches if the cause of this is obvious. I am not versed in USB or I would investigate further myself.
+> 
+> Below are three lsusb -v outputs:
+> 
+> 5.10.88 in big endian mode
+> 5.15.11 in the big endian "bad state" where the device is connected at 480M
+> 5.15.11 in the big endian "good state" achieved by transitioning out of the "bad state" by unplugging and re-plugging the drive.
 > 
 
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- Your patch does not have a Signed-off-by: line.  Please read the
-  kernel file, Documentation/SubmittingPatches and resend it after
-  adding that line.  Note, the line needs to be in the body of the
-  email, before the patch, not at the bottom of the patch or in the
-  email signature.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+Can you use 'git bisect' between the good and bad kernel versions to
+track down the offending commit here?  As you can easily reproduce this,
+that would be the simplest thing to do.
 
 thanks,
 
-greg k-h's patch email bot
+greg k-h
