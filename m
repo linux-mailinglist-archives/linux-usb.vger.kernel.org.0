@@ -2,56 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC85497110
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Jan 2022 12:16:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28686497118
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Jan 2022 12:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236212AbiAWLQu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Jan 2022 06:16:50 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:55958
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236162AbiAWLQu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Jan 2022 06:16:50 -0500
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
+        id S236253AbiAWLQ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Jan 2022 06:16:58 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:38368
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236162AbiAWLQv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Jan 2022 06:16:51 -0500
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id BE3513F1C1
-        for <linux-usb@vger.kernel.org>; Sun, 23 Jan 2022 11:16:48 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 645B13F4B6
+        for <linux-usb@vger.kernel.org>; Sun, 23 Jan 2022 11:16:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642936608;
-        bh=T1/sJNIrmDZDbqUoHlf4OrUfADwkzHPJVM35idTFftM=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=W7CqGgEm47DOE81po+P8i7VxjpaXIeR6ut9Z2Mx3WcsmUtiSDGMDPUSTxKHB9vRZv
-         dGdDVCTh/CXFePZnqveTmCdaiHSPx/VULH6NqckZeSTa3grvIX+kPksJu1p7DtFstR
-         M18NiV8+3/foDPjsmFSrjUMR8KnaMtyg+uSUGTMREV/zObL1zMrJ6dScD9zj+Gw+2a
-         ctEMVFeVJnydmZi6D0c9rGEM7DUgJ1jigH3NTRmfy3ySXnM74GaLwFMsXAFCPyzuN7
-         5w5oBEEpmNjt6jyGjxxSrmt4ReFxiA/jJ+l2sIC6lTieImzm9ZTvUGwKDghf7U16pd
-         fp+EHldvghEkg==
-Received: by mail-wm1-f70.google.com with SMTP id b4-20020a7bc244000000b0034f4c46217cso1510312wmj.0
-        for <linux-usb@vger.kernel.org>; Sun, 23 Jan 2022 03:16:48 -0800 (PST)
+        s=20210705; t=1642936610;
+        bh=XKeSGyC9ItmJqAyykgNV42LPM38fJ31nboSTLUTfyvc=;
+        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=h7yL0qChX2eUu0cQ2CZurKPxVblH61lAvQNPufdWPVCCNjMrQTSz3L+MJz+bhOnpQ
+         ntRAHlO6iPhM05USzFNMZZUC+rC4u8I5SMEbyAqdEWREPcJNVxZWC5kbWK8unqWCg1
+         oQmMXa6gglxtp26kyFJiQOYd3Xk1kCWc1k69M9VKvVBzqHjKj6xtxuAQp+lf75XQmr
+         gP7go+yW9EocBVWJ+w+Wu2Nqjv+BX7gQ4j5cq+IgYH8OGIw5nyqvx/Zs9EiJUOzOE5
+         FlMIimZGCydpgLKut4yM59bqQo8GNG5ICPAvDzhYJvhQLeRBRhrwsRtOsuwN5qkMSJ
+         jl2hf8iPsPXzA==
+Received: by mail-wm1-f71.google.com with SMTP id w5-20020a1cf605000000b0034b8cb1f55eso12953507wmc.0
+        for <linux-usb@vger.kernel.org>; Sun, 23 Jan 2022 03:16:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=T1/sJNIrmDZDbqUoHlf4OrUfADwkzHPJVM35idTFftM=;
-        b=XaiD9DrX3RdKGahFr6ufzm4RSDC+E54x5YSWD9JN7u51tAPrm0E8irDEk/znOqqY2G
-         KjYcgnGAcO3JWCLAFvg9c3YJGdphnyAHADxJTCOqz7lucrxjf+GICLw9fNBIVeiva6aU
-         CFbZM4kkJpxU/FEgGlfDj2g2LogHIt8PDqU+nDaDIqXnti+H+zJD6/JQS2O24Nd87lwX
-         767hcVjThP4u12YfKHueZTYIvsjIURTbLNZBnBU9O7zlszxRdl95w30/pPEDJwh/GC+l
-         ol9fDgolQYoePg+o/XOL6Heca1/arJs8Xi3e9CzcAdKK7g0lt3xkTzrCUJOVwL62sjPg
-         CUJQ==
-X-Gm-Message-State: AOAM533hwgyMW3KFrLhE/ss28eBmJ817D3BQL/sgWFyJdrIE6tVGhbZr
-        x7qAJRIFeM3e9vDl/fFEvSXwqWA5luG7HvVH4slcBNHnuK7sHa08ube8AgEfyAX+fNo79AQXvI4
-        vItWuukGbFaX2Gp1v7wxWJqvZGuGfbdx3BDLxcg==
-X-Received: by 2002:a05:6000:381:: with SMTP id u1mr10177659wrf.451.1642936608302;
-        Sun, 23 Jan 2022 03:16:48 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxgVsVZWODhwq/uXh4NOF8eTHsw3cQNa0zg5QWq4nkKUxlc731vjVtIU/jlG95afPKvbbAcMg==
-X-Received: by 2002:a05:6000:381:: with SMTP id u1mr10177645wrf.451.1642936608063;
-        Sun, 23 Jan 2022 03:16:48 -0800 (PST)
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=XKeSGyC9ItmJqAyykgNV42LPM38fJ31nboSTLUTfyvc=;
+        b=KG0Rz3UVzTbbsAnn7tWjFYaqJRTnNxv9L8NCsD/fQPekQtJUzvYVp/Af95NVww9usq
+         HrVuXSRCtEj/rBfWv1aahU5ZbFUq38RYzckJ+ofQ/cZBZs7FeK2JOI1euh9ei66Y6FuO
+         BXVTNR4RH/CwzQzIWBaFatEIdNv+Y9tmU9YNH++hvcgHK1MNZ7yox93Ga3VHx2+kU+vb
+         AD+jW75lJUsoPwqisalNidcme6nXyu8NaCOFxYIfGvxbjUBk1QcuE/ICSChm0Dv9vk5T
+         SW99xRfd8ltXWhbbGCy2WEu8HGUhP+88j3XeglWCo5QCHyO/55bFGuM4pCGvbjS2QMqC
+         JUsA==
+X-Gm-Message-State: AOAM533nvx8k3wc11L534+f+DOyoYcyDkVo0h5XddBt+izkYgR7LPDRJ
+        5nuWGvsN3S0D4nvdAhcAxXrZ1EmfDMLtzGo6IYfvOEO3kATT0IaRcEj5Mem/0Am0CIltzRsbFHc
+        wxv18DsdrApK4JBKMczCRZVGiGUbnbNNeuKjTmw==
+X-Received: by 2002:adf:f686:: with SMTP id v6mr9080078wrp.568.1642936609610;
+        Sun, 23 Jan 2022 03:16:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwQBteHKoyyNnf4rlz2MD505Wn16oOqHwd91HINqnK/froSXkyccBpxKSM0tEJs7mrQYEKfxw==
+X-Received: by 2002:adf:f686:: with SMTP id v6mr9080070wrp.568.1642936609419;
+        Sun, 23 Jan 2022 03:16:49 -0800 (PST)
 Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id m5sm10143729wms.4.2022.01.23.03.16.47
+        by smtp.gmail.com with ESMTPSA id m5sm10143729wms.4.2022.01.23.03.16.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 03:16:47 -0800 (PST)
+        Sun, 23 Jan 2022 03:16:48 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -59,63 +60,60 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 00/12] usb: dt-bindings: samsung: convert to dtschema
-Date:   Sun, 23 Jan 2022 12:16:32 +0100
-Message-Id: <20220123111644.25540-1-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 01/12] arm64: dts: exynos: add USB DWC3 supplies to Espresso board
+Date:   Sun, 23 Jan 2022 12:16:33 +0100
+Message-Id: <20220123111644.25540-2-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220123111644.25540-1-krzysztof.kozlowski@canonical.com>
+References: <20220123111644.25540-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Add required voltage regulators for USB DWC3 block on Exynos7 Espresso
+board.  Due to lack of schematics of Espresso board, the choice of
+regulators is approximate.  What bindings call VDD10, for Exynos7 should
+be actually called VDD09 (0.9 V).  Use regulators with a matching
+voltage range based on vendor sources for Meizu Pro 5 M576 handset (also
+with Exynos7420).
 
-Dependencies
-============
-None.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ arch/arm64/boot/dts/exynos/exynos7-espresso.dts | 5 +++++
+ arch/arm64/boot/dts/exynos/exynos7.dtsi         | 2 +-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-The DTS patches are independent and I will take them via Samsung SoC tree.
-I am including them here just so automatic robot checks won't complain about
-DTS differences against newly dtschema.
-
-Best regards,
-Krzysztof
-
-Krzysztof Kozlowski (12):
-  arm64: dts: exynos: add USB DWC3 supplies to Espresso board
-  ARM: dts: exynos: add USB DWC3 supplies to Arndale
-  ARM: dts: exynos: add USB DWC3 supplies to SMDK5250
-  ARM: dts: exynos: add USB DWC3 supplies to Chromebook Snow
-  ARM: dts: exynos: add USB DWC3 supplies to Chromebook Spring
-  ARM: dts: exynos: add USB DWC3 supplies to ArndaleOcta
-  ARM: dts: exynos: add USB DWC3 supplies to Chromebook Peach Pit
-  ARM: dts: exynos: add USB DWC3 supplies to Chromebook Peach Pi
-  ARM: dts: exynos: add USB DWC3 supplies to SMDK5420
-  ARM: dts: exynos: add fake USB DWC3 supplies to SMDK5410
-  dt-bindings: usb: samsung,exynos-dwc3: convert to dtschema
-  dt-bindings: usb: samsung,exynos-usb2: convert to dtschema
-
- .../devicetree/bindings/usb/exynos-usb.txt    | 115 ----------------
- .../bindings/usb/samsung,exynos-dwc3.yaml     | 129 ++++++++++++++++++
- .../bindings/usb/samsung,exynos-usb2.yaml     | 117 ++++++++++++++++
- arch/arm/boot/dts/exynos5250-arndale.dts      |   5 +
- arch/arm/boot/dts/exynos5250-smdk5250.dts     |   5 +
- arch/arm/boot/dts/exynos5250-snow-common.dtsi |   5 +
- arch/arm/boot/dts/exynos5250-spring.dts       |   5 +
- arch/arm/boot/dts/exynos5250.dtsi             |   2 +-
- arch/arm/boot/dts/exynos5410-smdk5410.dts     |  23 ++++
- arch/arm/boot/dts/exynos5420-arndale-octa.dts |  10 ++
- arch/arm/boot/dts/exynos5420-peach-pit.dts    |  10 ++
- arch/arm/boot/dts/exynos5420-smdk5420.dts     |  10 ++
- arch/arm/boot/dts/exynos5800-peach-pi.dts     |  10 ++
- .../boot/dts/exynos/exynos7-espresso.dts      |   5 +
- arch/arm64/boot/dts/exynos/exynos7.dtsi       |   2 +-
- 15 files changed, 336 insertions(+), 117 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/exynos-usb.txt
- create mode 100644 Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
- create mode 100644 Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml
-
+diff --git a/arch/arm64/boot/dts/exynos/exynos7-espresso.dts b/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
+index 125c03f351d9..4c45e689d34a 100644
+--- a/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
++++ b/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
+@@ -412,6 +412,11 @@ &ufs {
+ 	status = "okay";
+ };
+ 
++&usbdrd {
++	vdd10-supply = <&ldo4_reg>;
++	vdd33-supply = <&ldo6_reg>;
++};
++
+ &usbdrd_phy {
+ 	vbus-supply = <&usb30_vbus_reg>;
+ 	vbus-boost-supply = <&usb3drd_boost_5v>;
+diff --git a/arch/arm64/boot/dts/exynos/exynos7.dtsi b/arch/arm64/boot/dts/exynos/exynos7.dtsi
+index c3efbc8add38..01b4210d8b62 100644
+--- a/arch/arm64/boot/dts/exynos/exynos7.dtsi
++++ b/arch/arm64/boot/dts/exynos/exynos7.dtsi
+@@ -672,7 +672,7 @@ usbdrd_phy: phy@15500000 {
+ 			#phy-cells = <1>;
+ 		};
+ 
+-		usbdrd3 {
++		usbdrd: usb {
+ 			compatible = "samsung,exynos7-dwusb3";
+ 			clocks = <&clock_fsys0 ACLK_USBDRD300>,
+ 			       <&clock_fsys0 SCLK_USBDRD300_SUSPENDCLK>,
 -- 
 2.32.0
 
