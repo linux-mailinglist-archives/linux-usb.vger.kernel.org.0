@@ -2,88 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A37497485
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Jan 2022 19:41:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD46497615
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Jan 2022 23:44:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239833AbiAWSk6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Jan 2022 13:40:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53580 "EHLO
+        id S231199AbiAWWok (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Jan 2022 17:44:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239625AbiAWSkn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Jan 2022 13:40:43 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E1BC061744;
-        Sun, 23 Jan 2022 10:40:38 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id bg19-20020a05600c3c9300b0034565e837b6so10686219wmb.1;
-        Sun, 23 Jan 2022 10:40:38 -0800 (PST)
+        with ESMTP id S229944AbiAWWok (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Jan 2022 17:44:40 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D519DC06173B
+        for <linux-usb@vger.kernel.org>; Sun, 23 Jan 2022 14:44:39 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id bb37so22702786oib.1
+        for <linux-usb@vger.kernel.org>; Sun, 23 Jan 2022 14:44:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Q/0EoSGGxiZheENQx8vu+lEDidbqKZoQ7scM3xHmiOA=;
-        b=O+Kf5RiyxUVhGdsbQVZkzdwZxWyWQcgnYMidtGRdVSKwvn9hsvnL26XNnfUOEx0t6P
-         vLngeNLWKbOgtvxDbU9J0UpLObOekcz1gGjK4ROw1uXnyaienlOHg2DFyK5OUjNKgLZC
-         bo/mPjBkwfYqVFXiW9lHLj65C55ugenwZ6TcjgQgb0EKFlPh29aSXJsv+f2QVZ9q7Gxf
-         EGMCxxqCdw01ov7xwhV2nSQUCMrDbLf218+7eNcpPPtz4ngZfAK+gL8DVnMcM1RArTu8
-         lAz8Om1roMz9czYHZQ7iRPRjrsBYAXS+jZq0sVlplhR7VKUw5PxMJwgu1exr04tjHmI7
-         Wh6w==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=s9IGPqOTuFEFxKMxMPq1P/MfyJrhGXNasZNiCUUGkGw=;
+        b=lBO77NgEyUbA5FeN7Ju3TqhHRhjGCFVpvSQbnSXvkYjqdSHiBUh9jwu7VOgwEJ25yD
+         gKLQUzXbcxxIIsSoQS2I2YNMkKNaVzWzegp2KzPTjfJrYwjdtblhwnrK57nLfaoDBseT
+         WMsdpTR1wv3CQV2RPxArxgybg2hKxrKq5fkSGR+qhCqQpFFQzQU8nCxAgnc2X3Ikw9Bm
+         qEA5L1FJrlf2TBuFTvuEj3lQgF6CGR3+VrgP1te8WRmVRNFLrcAkMBRocSfpTeKOYYiV
+         loek4dhlNmtk55gwFvpGVUqWL6EC1i6IaUbAea+PKyux72OeW0O/gwnLTPd2tQC/gNk8
+         FVHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Q/0EoSGGxiZheENQx8vu+lEDidbqKZoQ7scM3xHmiOA=;
-        b=FADSu6GiYBWPpTr9T8taL8q6/u6ragO5HmbOMG9P8ANWESQxsGOIpGOabKDFehYYoJ
-         uv4tPJfw5cTfm495FuT0IouwQf1ENe4ope6ZgrqVrEa4y+HGqibpNuBvtqu1Pb2bZ1VI
-         RaQLyy6MNdz2hfHOydABA9OJzV9KfhePegvYuz7mYd3oPPqinlXl2wzsK+4sSsHYB/VD
-         9b5UnSHP8Is47RM3lTy6hDaObLgJVXSQTYPe6X83NkU7WXWCk9IEsjRUUQyk5rzlFYhU
-         862x+PXh/fJnOeHtBPa57sgP4Okdym7f1OJpzTuyPTzSNUfrS6l9VubsF4ufFxDhw/Xj
-         BRLQ==
-X-Gm-Message-State: AOAM531zM4CQvBJIcFtz3ijllUNfHr0+htIYkoMeOAigqzU8RmLbtAgS
-        9OdfNlqSZTYlkTUEG4uf/gw=
-X-Google-Smtp-Source: ABdhPJwwrWFNQAMgjIlpLcOihRvDCG3iOlaR6bE951uOm6yRBbo5Oyhd8NWqdd0Ip6SYmqGCCaZo5Q==
-X-Received: by 2002:a7b:cf31:: with SMTP id m17mr8741032wmg.183.1642963236844;
-        Sun, 23 Jan 2022 10:40:36 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id n15sm9938604wrf.37.2022.01.23.10.40.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 10:40:36 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: usb: asix: remove redundant assignment to variable reg
-Date:   Sun, 23 Jan 2022 18:40:35 +0000
-Message-Id: <20220123184035.112785-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=s9IGPqOTuFEFxKMxMPq1P/MfyJrhGXNasZNiCUUGkGw=;
+        b=tAswAwnSq8PBlU7ncy4Pyg/8AgeJVTAYqSvcZe3Ga3iuS97MJRoGXA66LDY0SlsN8Y
+         Pkhck2MU4Gle/9PJO1L62927NERxbRd9ilxvUHnKDeJqzC6/oKe6HziStkClg4kS3/1V
+         h59CNDwAUQZrlDRnaMXNcMdftmtGJECRWvCzI0eqAzkupwyc66zL6eDqtPDBnJLAy/fo
+         2wIikJlnW05e9RwPC54H/Y4ztx7zwnrk48rs2UU3ZI7GxC5jsbzj0TT0kGQjuG+9iC5J
+         WZSnSr3q7V3AIEHXwggu7ro67aKsSAKssEhfbi4kLsuIn+SRJ1LM/9Yb43zUh6TtPWyD
+         0VWg==
+X-Gm-Message-State: AOAM530H0jl5y/eCFxc8R33Z31l5mEkXHLo8BBJL74Xscpqb2hO8edaZ
+        i/648GxerfvC2/D7YVLNf23TaJnRC58e/8M06Ho=
+X-Google-Smtp-Source: ABdhPJxvci7UPSXIXlDwsES57lFymegNJjKZycdQsWzqrvXr2Jibyym9K8MnNs8sBNgWUrTGJ28e4EOJpafsbFqgTDk=
+X-Received: by 2002:a54:469a:: with SMTP id k26mr7642109oic.147.1642977879175;
+ Sun, 23 Jan 2022 14:44:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6838:f808:0:0:0:0 with HTTP; Sun, 23 Jan 2022 14:44:38
+ -0800 (PST)
+Reply-To: lawrencetansanco.y@gmail.com
+From:   Lawrence Tansanco Y <mmzee006@gmail.com>
+Date:   Sun, 23 Jan 2022 22:44:38 +0000
+Message-ID: <CAFmpBSjMA997-7rJfjoK0zX7w1KAQPjJ5jEO5in6-PYFkqtDfw@mail.gmail.com>
+Subject: THANKS FOR YOUR RESPONSE AND GOD BLESS
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Variable reg is being masked however the variable is never read
-after this. The assignment is redundant and can be removed.
+.
+I will like to disclose something very important to you,
+get back for more details please.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/net/usb/asix_devices.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-index 4514d35ef4c4..9b72334aabb6 100644
---- a/drivers/net/usb/asix_devices.c
-+++ b/drivers/net/usb/asix_devices.c
-@@ -858,7 +858,6 @@ static int marvell_phy_init(struct usbnet *dev)
- 		reg = asix_mdio_read(dev->net, dev->mii.phy_id,
- 			MII_MARVELL_LED_CTRL);
- 		netdev_dbg(dev->net, "MII_MARVELL_LED_CTRL (2) = 0x%04x\n", reg);
--		reg &= 0xfc0f;
- 	}
- 
- 	return 0;
--- 
-2.33.1
-
+Regards.
+Mr Lawrence Tansanco Y.
