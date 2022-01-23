@@ -2,295 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C51249714B
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Jan 2022 12:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 724C0497161
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Jan 2022 13:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232906AbiAWL16 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Jan 2022 06:27:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiAWL15 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Jan 2022 06:27:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58C0C06173B;
-        Sun, 23 Jan 2022 03:27:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F30DB80CAD;
-        Sun, 23 Jan 2022 11:27:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D0F5C340E2;
-        Sun, 23 Jan 2022 11:27:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642937274;
-        bh=7TDyT2ov/pUJEShDBdQyFwxCKcd+j+fZvAVRuyVngh0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BfqZem12Uv5Qrzbf4hJqG5a+grzVRhBjjF13Y6ShThNyc9Pypg0hLlZgh4M75lHFt
-         Ab0pSIRNIZ+sUUaYa5y8xt6qC+kgAwx5yb471AV0nVVXHat70/az+sdwNUfZn8bzi0
-         TDhb24a7hz4Iw5trjSy6i2MM0MhJb5u4CvIZG9Eo=
-Date:   Sun, 23 Jan 2022 12:27:51 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     linux-usb@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: ulpi: Add debugfs support
-Message-ID: <Ye07t/O8oOQRILyZ@kroah.com>
-References: <20220114163947.790078-1-sean.anderson@seco.com>
+        id S236243AbiAWMAb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Jan 2022 07:00:31 -0500
+Received: from mout.gmx.net ([212.227.17.21]:37673 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231757AbiAWMAa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 23 Jan 2022 07:00:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1642939228;
+        bh=Z7wOwgI8SPP+xCgir3nh+T10zSZ6RFwc+dMQGuX1KlI=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=ZV6pPtdIdsERwSIT8/PbreQ5pJfIK9fZ5fdkiKXQMqUtw2P5l+ZOUbOC6czFuoMZV
+         A7CCVWR/NVdIJ1rhSLP5hSKYqR3MeEs4P1yzYDLkts6AS3Bpq66e3yuN5N48LGVPIR
+         4X8hydmEeSAamJLExt1hd847agCX4M4LM29/21uU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.169.228]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1McpNy-1md5o62pmc-00ZuTk; Sun, 23
+ Jan 2022 13:00:28 +0100
+Message-ID: <2ce0e792-ac09-a973-6751-6ed187b6fae6@gmx.de>
+Date:   Sun, 23 Jan 2022 12:59:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220114163947.790078-1-sean.anderson@seco.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: kernel crash/disc errors when unbinding USB devices
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        Linux Kernel Development <linux-kernel@vger.kernel.org>
+References: <7865ae26-2df0-892b-eb65-ce341eb9daea@gmx.de>
+ <Ye03Cz7fHFJ3bPmO@kroah.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <Ye03Cz7fHFJ3bPmO@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:9xLA//lmeicqarTUmaS/svC3jYoRb2dUYDYEgGZWbvqCVXtHhRN
+ JFbHqCfYjdnMsLk61ppIk/MEW0GltH/pZLQejFEvR00br3W97PadfKeWtePn3bKX3/I1NlT
+ aUvQBaceogSNfOpeoX1yv18HuW9t38bPFzHhagE22NJSXPqYr7ECUrqmKRhyB+Zdi45ZFU2
+ BvOiBzWdHgfjMUyXF5VDA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZeE+APYT5bE=:+fxOZ61O5CqhMyyhbKyPQ3
+ 4lpsP6IEWsrhSPUD9f3cHqYyJF1/W2KkFbPZZwR/z4mySqLDlAG5Og5nmN8m6qJAhTWmbb/Jv
+ mp9D388VDCB6zH12Lw3Rf8JtW67+H8sgB+TQXj4LaY33clqJYaY9sAkjuGcg+lrtsbM0Nh/8b
+ Gem1eyswFwo6T1ovfmr9HfUU+KyDzlMzfTpfZ5GMF0fUTPnCfXjbcmZWR4fssxHNn3J+CEepe
+ SZLW3MmYDsq7mTlzkWUXd73RMlg7s/8wMJnptk0aH4u0S8INcmAOBvCJQw9NUua0f3IGCtqgm
+ gkQbutPaSfg92C+1ZKyjZt6lH2LCYoLYQPxZdLkRO/x4cRIOx7bkQDaTuaHpXtiFo0HlgHkSu
+ mA5AY4BIJfkJc0TQsTWwXJOie50gnV4dpiw4hP1YPXyK+xnA7l+0JdWBrBDCIXP5KdSGRu18u
+ sqXTkAR0AbjADxdAU9TnJszv+CaoKxhn5Ew7cJsZdtBkg8QO4mP7NpWNBk18YYN/Gtizg3X+C
+ SJfjrrWV9okBS8jzK9VL0C0YAM1JwwdBQIYW6WFbSRVL3WfpCOjzqi6/1o00opTapPAF8bvuC
+ mJ2R+1IMzo3yGNN0a2zG0JyhAmYo/e2UPCaF81407eMKRnQinKMpBHlJy+mjbZlQVVglvrwOM
+ yAzj3sAOwhLRIouwOO9xQEtLFrGPmJ8bQEkr4X0xfCIl634t4dWQWrmsY60qXrr5TRfFwT519
+ arqQZ/Bvr8gn4AD0KMUbEBUDAlZ2eRgV97AWyn8HIqnbXznDYY+qcVTBghqF9ndpE3StgG8Ub
+ 6Bd2TTVV87tBBi45gf6ZByC7K7wO3RSYaFkae1EWppy7s4DEVnn06rFoSVKfoG/qytY78O1Cd
+ dusWnSiN6SpIiy+ExkB+QZ2zn54cP8mHnqjxL3HJQtJmlfueABu+q0YYvKHllTCqgGa8pla3l
+ Dp2E3vghYWmihSElxICupDovsAxNGyubd7STYrwuCXaWK2K0QztXCcHtwygh4CpEoT65pcEaj
+ AhKBaT9ep4g3Yb7/nWLkkKJT7QsZerxFVcFmVJPSL+JFGcwa3qIAxelHoXXusbYHywPDHvMs4
+ bcR8wuwG8ydpUc=
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 11:39:47AM -0500, Sean Anderson wrote:
-> This adds a debugfs file for ULPI devices which contains a dump of their
-> registers. This is useful for debugging basic connectivity problems. The
-> file is created in ulpi_register because many devices will never have a
-> driver bound (as they are managed in hardware by the USB controller
-> device).
-> 
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> ---
-> 
->  drivers/usb/common/ulpi.c   | 100 ++++++++++++++++++++++++++++++++++--
->  include/linux/ulpi/driver.h |   3 ++
->  2 files changed, 99 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
-> index 4169cf40a03b..a39c48e04013 100644
-> --- a/drivers/usb/common/ulpi.c
-> +++ b/drivers/usb/common/ulpi.c
-> @@ -13,6 +13,7 @@
->  #include <linux/module.h>
->  #include <linux/slab.h>
->  #include <linux/acpi.h>
-> +#include <linux/debugfs.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
->  #include <linux/clk/clk-conf.h>
-> @@ -228,9 +229,64 @@ static int ulpi_read_id(struct ulpi *ulpi)
->  	return 0;
->  }
->  
-> +static int __maybe_unused ulpi_regs_read(struct seq_file *seq, void *data)
-> +{
-> +	struct ulpi *ulpi = seq->private;
-> +
-> +#define ulpi_print(name, reg) do { \
-> +	int ret = ulpi_read(ulpi, reg); \
-> +	if (ret < 0) \
-> +		return ret; \
-> +	seq_printf(seq, name " %.02x\n", ret); \
-> +} while (0)
-> +
-> +	ulpi_print("Vendor ID Low               ", ULPI_VENDOR_ID_LOW);
-> +	ulpi_print("Vendor ID High              ", ULPI_VENDOR_ID_HIGH);
-> +	ulpi_print("Product ID Low              ", ULPI_PRODUCT_ID_LOW);
-> +	ulpi_print("Product ID High             ", ULPI_PRODUCT_ID_HIGH);
-> +	ulpi_print("Function Control            ", ULPI_FUNC_CTRL);
-> +	ulpi_print("Interface Control           ", ULPI_IFC_CTRL);
-> +	ulpi_print("OTG Control                 ", ULPI_OTG_CTRL);
-> +	ulpi_print("USB Interrupt Enable Rising ", ULPI_USB_INT_EN_RISE);
-> +	ulpi_print("USB Interrupt Enable Falling", ULPI_USB_INT_EN_FALL);
-> +	ulpi_print("USB Interrupt Status        ", ULPI_USB_INT_STS);
-> +	ulpi_print("USB Interrupt Latch         ", ULPI_USB_INT_LATCH);
-> +	ulpi_print("Debug                       ", ULPI_DEBUG);
-> +	ulpi_print("Scratch Register            ", ULPI_SCRATCH);
-> +	ulpi_print("Carkit Control              ", ULPI_CARKIT_CTRL);
-> +	ulpi_print("Carkit Interrupt Delay      ", ULPI_CARKIT_INT_DELAY);
-> +	ulpi_print("Carkit Interrupt Enable     ", ULPI_CARKIT_INT_EN);
-> +	ulpi_print("Carkit Interrupt Status     ", ULPI_CARKIT_INT_STS);
-> +	ulpi_print("Carkit Interrupt Latch      ", ULPI_CARKIT_INT_LATCH);
-> +	ulpi_print("Carkit Pulse Control        ", ULPI_CARKIT_PLS_CTRL);
-> +	ulpi_print("Transmit Positive Width     ", ULPI_TX_POS_WIDTH);
-> +	ulpi_print("Transmit Negative Width     ", ULPI_TX_NEG_WIDTH);
-> +	ulpi_print("Receive Polarity Recovery   ", ULPI_POLARITY_RECOVERY);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused ulpi_regs_open(struct inode *inode, struct file *f)
-> +{
-> +	struct ulpi *ulpi = inode->i_private;
-> +
-> +	return single_open(f, ulpi_regs_read, ulpi);
-> +}
-> +
-> +static const struct file_operations __maybe_unused ulpi_regs_ops = {
-> +	.owner = THIS_MODULE,
-> +	.open = ulpi_regs_open,
-> +	.release = single_release,
-> +	.read = seq_read,
-> +	.llseek = seq_lseek
-> +};
-> +
-> +static struct dentry *ulpi_root = (void *)-EPROBE_DEFER;
+On 1/23/22 12:07, Greg Kroah-Hartman wrote:
+> On Sun, Jan 23, 2022 at 11:40:01AM +0100, Helge Deller wrote:
+>> On all kernels 5.15.x and 5.16.x I noticed that resetting
+>> the USB devices with this shell script:
+>>
+>>        for i in $(ls /sys/bus/pci/drivers/ahci/|grep :)
+>>          do
+>>          echo $i
+>>          echo $i >/sys/bus/pci/drivers/ahci/unbind
+>>          sleep 1
+>>          echo $i >/sys/bus/pci/drivers/ahci/bind
+>>         done
+>
+> That is dangerous to do, why do this?  All of your block devices might
+> have disappeard.
+>
+>>         # reseting USB3 ports (if there none you'll get errors)
+>>         for i in $(ls /sys/bus/pci/drivers/xhci_hcd/|grep :)
+>>          do
+>>          echo $i
+>>          echo $i >/sys/bus/pci/drivers/xhci_hcd/unbind
+>>          sleep 1
+>>          echo $i >/sys/bus/pci/drivers/xhci_hcd/bind
+>>         done
+>
+> Again, why do this at all?
 
-There is no need for this variable, nor is there ever a need to set this
-to an error value like this.  If you need to find the root, just look it
-up!
+I need to reset some of the USB devices after a suspend/resume cycle.
+The problem is, that some of the USB devices are
+handed over into a running VirtualBox VM and after
+the suspend/resume they need to be virtually plugged out/in
+so that the running Windows VM will reconnect them.
 
-> +
->  static int ulpi_register(struct device *dev, struct ulpi *ulpi)
->  {
->  	int ret;
-> +	struct dentry *regs;
->  
->  	ulpi->dev.parent = dev; /* needed early for ops */
->  	ulpi->dev.bus = &ulpi_bus;
-> @@ -245,16 +301,39 @@ static int ulpi_register(struct device *dev, struct ulpi *ulpi)
->  
->  	ret = ulpi_read_id(ulpi);
->  	if (ret)
-> -		return ret;
-> +		goto err_of;
->  
->  	ret = device_register(&ulpi->dev);
->  	if (ret)
-> -		return ret;
-> +		goto err_of;
-> +
-> +	if (IS_ENABLED(CONFIG_DEBUG_FS)) {
+If you search in the internet, you will find many places
+where this unbind/bind process is mentioned, e.g.:
+https://askubuntu.com/questions/645/how-do-you-reset-a-usb-device-from-the=
+-command-line
+This procedure did worked in the past.
 
-This check is not needed, the compiler will handle it all for your
-automatically.
+I think the main problem is, that it's somehow unexpected that
+the SATA controllers are logically attached to the USB
+controllers.
+So, if you believe to unbind "just" the USB devices you
+suddenly unbind SATA controllers too.
 
-> +		ulpi->root = debugfs_create_dir(dev_name(dev), ulpi_root);
-> +		if (IS_ERR(ulpi->root)) {
+>> immediately leads to a non-functional system, because the discs
+>> face I/O errors and will switch to read-only mode.
+>
+> Sure, the disks are gone, this is expected.
 
-No need to check this, just keep moving on.  debugfs return values
-shoudl NEVER be checked as your code should not care what happens.
+Ok.
 
-> +			ret = PTR_ERR(ulpi->root);
-> +			goto err_dev;
-> +		}
-> +
-> +		regs = debugfs_create_file("regs", 0444, ulpi->root, ulpi,
-> +					   &ulpi_regs_ops);
+>> Effectively I have to reboot the machine.
+>
+> I'm amazed it keeps working at all.
 
-Also, there is no need to save the dentry of "root", just make that a
-local variable and look it up when you want to remove it.
+:-)
 
-> +		if (IS_ERR(regs)) {
+>> It's reproduceable for me on two completely different x86 machines with
+>> different USB devices.
+>
+> What do you expect this to do instead?  You just disabled all block
+> controllers in your system, followed by all USB controllers.  And then
+> attempted to add them back, but given that the old devices still had
+> userspace references on them, the devices will come back with different
+> names and so you need to mount them again.
+>
+> So this looks like it is working as intended.  Just don't do this :)
 
-Again, no need to check this at all.
+Ok, sure, but I think it's unexpected that the SATA ports are listed
+beneath the USB controllers, beside USB devices.
+If I run "lsusb", the SATA controllers don't show up either.
+They are listed when I run "lspci".
+Shouldn't they maybe show up somewhere else, e.g.
+/sys/bus/pci/drivers/sata/*
 
-> +			ret = PTR_ERR(regs);
-> +			goto err_debugfs;
-> +		}
-> +	}
-
-All of this logic here can be reduced to 2 lines of code and one
-variable:
-	struct dentry *dir;
-
-	...
-
-	dir = debugfs_create_dir(dev_name(dev),
-			         debugfs_lookup(KBUILD_MODULE_NAME, NULL));
-	debugfs_create_file("regs", 0444, dir, ulpi, &ulpi_regs_ops);
-
-and that's it.
-
-
-
->  
->  	dev_dbg(&ulpi->dev, "registered ULPI PHY: vendor %04x, product %04x\n",
->  		ulpi->id.vendor, ulpi->id.product);
->  
->  	return 0;
-> +
-> +err_debugfs:
-> +	debugfs_remove(ulpi->root);
-
-debugfs_remove_recursive()?
-
-> +err_dev:
-> +	device_unregister(&ulpi->dev);
-> +err_of:
-> +	of_node_put(ulpi->dev.of_node);
-> +	return ret;
->  }
->  
->  /**
-> @@ -296,8 +375,9 @@ EXPORT_SYMBOL_GPL(ulpi_register_interface);
->   */
->  void ulpi_unregister_interface(struct ulpi *ulpi)
->  {
-> -	of_node_put(ulpi->dev.of_node);
-> +	debugfs_remove_recursive(ulpi->root);
-
-again, look up the name you want to remove, no need to store it around
-anywhere:
-	debugfs_remove_recursive(debugfs_lookup(dev_name(ulpi->dev), debugfs_lookup(KBUILD_MODULE_NAME, NULL)));
-
->  	device_unregister(&ulpi->dev);
-> +	of_node_put(ulpi->dev.of_node);
->  }
->  EXPORT_SYMBOL_GPL(ulpi_unregister_interface);
->  
-> @@ -305,13 +385,25 @@ EXPORT_SYMBOL_GPL(ulpi_unregister_interface);
->  
->  static int __init ulpi_init(void)
->  {
-> -	return bus_register(&ulpi_bus);
-> +	int ret;
-> +
-> +	if (IS_ENABLED(CONFIG_DEBUG_FS)) {
-
-Again, no need to check
-
-> +		ulpi_root = debugfs_create_dir("ulpi", NULL);
-
-Again, no need to keep this, it can just be:
-	debugfs_create_dir(KBUILD_MODULE_NAME, NULL);
-
-> +		if (IS_ERR(ulpi_root))
-> +			return PTR_ERR(ulpi_root);
-> +	}
-> +
-> +	ret = bus_register(&ulpi_bus);
-> +	if (ret)
-> +		debugfs_remove(ulpi_root);
-> +	return ret;
->  }
->  subsys_initcall(ulpi_init);
->  
->  static void __exit ulpi_exit(void)
->  {
->  	bus_unregister(&ulpi_bus);
-> +	debugfs_remove(ulpi_root);
-
-	debugfs_remove_recursive(debugfs_lookup(KBUILD_MODULE_NAME, NULL));
-
->  }
->  module_exit(ulpi_exit);
->  
-> diff --git a/include/linux/ulpi/driver.h b/include/linux/ulpi/driver.h
-> index c7a1810373e3..083ea2d2e873 100644
-> --- a/include/linux/ulpi/driver.h
-> +++ b/include/linux/ulpi/driver.h
-> @@ -6,6 +6,7 @@
->  
->  #include <linux/device.h>
->  
-> +struct dentry;
->  struct ulpi_ops;
->  
->  /**
-> @@ -13,10 +14,12 @@ struct ulpi_ops;
->   * @id: vendor and product ids for ULPI device
->   * @ops: I/O access
->   * @dev: device interface
-> + * @root: root directory for debugfs files
-
-No need for this, as pointed out above.
-
-This should make you patch a _lot_ smaller.
-
-thanks,
-
-greg k-h
+Helge
