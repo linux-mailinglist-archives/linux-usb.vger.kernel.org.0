@@ -2,212 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC8049790E
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jan 2022 07:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 841E9497914
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jan 2022 08:04:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235779AbiAXGzs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jan 2022 01:55:48 -0500
-Received: from mail-dm6nam11on2051.outbound.protection.outlook.com ([40.107.223.51]:57569
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        id S235812AbiAXHEB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jan 2022 02:04:01 -0500
+Received: from mail-eopbgr80130.outbound.protection.outlook.com ([40.107.8.130]:22611
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229788AbiAXGzr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 Jan 2022 01:55:47 -0500
+        id S235642AbiAXHEA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 Jan 2022 02:04:00 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c2xY/S+u7SqhHsUE+PLw3eivmh6VOx4bQOUWfYn5GIzzFlOFzL0hdXeeFIl92KjSRaMWQAXCh0d7YDZ59n/9UttwRXLEps9sbywRaGidbEvp5C1Rt8lDGYGrEkJQkO2G2GgTlduNu3ztVSUlTpu4T93d2OaYyu3h0KSJfJss9qHx0QchbdGX5IO9eQaEa+xwsDDyiuxb7s7buyWAcw3YN2Q3DP9qB9AdHWnp12NGM1ALWV6Zkn+hOnX4WugGIjs5kFqz5/TImTRACm/U9FpMhJfO57FFws07pkYU9amOtuqCcuFPcib6D3uKWg5i5gnLizqa0R5s3aoC2xrBINV3bA==
+ b=HXVzZgdyVp74IA3bvjbLA+CP3cIWmZHo0hyjPEi0UemLszIquyazm/1ze8BZ9CEkK+SaGeTaqapDH/ZDe29odkieP4u1svYLTjZwXCxxN4PpMEuncB6lAqYzLrv9DNBoLUojZwF/feNx14NtSE4iZFDQ2aYCT0oxmZoYpuYkwahDHuO1Ku9GVtRMX5rEkQS3Ruq2BkkjjBIA3UY1tK1sHXvj+TUzTfdWxB27tXxH+Lc45S7NlxtvFZoHelcYP5bDx22lah765mYhx45wor5/xhbMHRtIh+Vv7l2h/PD8ZrKsQxJCvuKVvkACUHJqj/Ro4XVubr5gO8bgKFXJFOXP/Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S6VBScJqHdG8AbWQoPUYTuTbnJXIgqVnDSINd5ujMVE=;
- b=CTGLFhfySqH3Q2Kjc1yYyMFpsSknZI4fJoZ2gPpYgLVaq2nJlgEAR6HLsK1o7BIWrK2yBI1qRNgaOpyN1T42KsxeXFbUqW6Qw1D3rjHLlUIEvkHgm2+5yl+kddV5x8CgiQZQRFVF1v9xcCJTdEHh5eAhz6j7E65jOh0Vw67/MCDTPO/5XPO0Nkg9swxkjZOPQ7gQfoI280iIi/EWn9VcirMyXF8HpqwNW1sqXbYCF6eDtnXQXrGAugS7igdJsDQJy6nh4gd8AoYuISFrq/diSbn80zADoVZ4/kyP2SMjHa+SuB8L4uDisijRt+f1V/97gXvwQkSOVaI71aIu7nd6rA==
+ bh=xo50id+3dD23nZjycA/aMPACMEZTY1TY6SJRJN6MZxI=;
+ b=ThFB1bIGEduK6msI5JjvJzoCTUtCs7cMrRhQyZWGCUpyAy30viffoehaP0SCBfliqg/cUnnel4IQ0WCTWiSJPPZw8a7thaMylsBGT10F/zXrOawkIc4dMsXt5M4Cze0g2wzBoBBO5D6dwbIzDz6uu+p2xpQMACH0k/fA8AiaNh8/x2Pt3zCrfKNYFivbtIxuN8cZvfkB8plo+/6m7w4c99xvtxd2LyKp4sRxUanri2nP2qV5cwGr8WNFr53OAjuE/9boNzvWypega8FGZWC+d0bG+pAPAO0pbEADq9WOet/HlCveCg8m4Lu9yeTlqJ0aUzy5KuV0bvuIqs2KaXCaOg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=skidata.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S6VBScJqHdG8AbWQoPUYTuTbnJXIgqVnDSINd5ujMVE=;
- b=adr5tboFxMGN/YnMk5Y8D4J6E80zhS0SW7B2Mb9/aTHf3ELP2kImmef8AHbPhw2sq7sk9t3Y/qukQ2RFKRrbtpBodZWOxe8v3T3lBLPlMT002rs4ZP1l4KKKkqAOt/M62XWIjQI+PaA0aZhaUVxOLaDqUI0QRo6qeubD4Qz61QQ=
-Received: from DM6PR02MB4235.namprd02.prod.outlook.com (2603:10b6:5:a0::24) by
- BN6PR02MB2513.namprd02.prod.outlook.com (2603:10b6:404:55::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4909.7; Mon, 24 Jan 2022 06:55:44 +0000
-Received: from DM6PR02MB4235.namprd02.prod.outlook.com
- ([fe80::c9d1:b3bb:8a64:899d]) by DM6PR02MB4235.namprd02.prod.outlook.com
- ([fe80::c9d1:b3bb:8a64:899d%4]) with mapi id 15.20.4909.017; Mon, 24 Jan 2022
- 06:55:44 +0000
-From:   Manish Narani <MNARANI@xilinx.com>
-To:     Robert Hancock <robert.hancock@calian.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-CC:     "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Michal Simek <michals@xilinx.com>,
-        "sean.anderson@seco.com" <sean.anderson@seco.com>
-Subject: RE: [PATCH v6 1/2] usb: dwc3: xilinx: Fix PIPE clock selection for
- USB2.0 mode
-Thread-Topic: [PATCH v6 1/2] usb: dwc3: xilinx: Fix PIPE clock selection for
- USB2.0 mode
-Thread-Index: AQHYDvNjAmjuHbEM50maPkpIkWficqxxs3mg
-Date:   Mon, 24 Jan 2022 06:55:44 +0000
-Message-ID: <DM6PR02MB42352135D31E17ED63A95D64C15E9@DM6PR02MB4235.namprd02.prod.outlook.com>
-References: <20220121181841.2331225-1-robert.hancock@calian.com>
- <20220121181841.2331225-2-robert.hancock@calian.com>
-In-Reply-To: <20220121181841.2331225-2-robert.hancock@calian.com>
-Accept-Language: en-IN, en-US
+ bh=xo50id+3dD23nZjycA/aMPACMEZTY1TY6SJRJN6MZxI=;
+ b=VkqN0eJIS53MN+62UhConUnN2ayyl3TdwJYVdCAlYAHDoD45iK1k4sGktxKS64imTr9pypEugTTcqfw6+B0DnK57LtylUtaqmriT87JpRWEGWsvbGNht4C6zu4oqO/C64FFrlk6W/QFGwdl7g5VyjupoFPPpWGR7apPv1GITf7NRRcXtK2A65brltGczNRwr1F1d9Jd6Jsf7Sx6v2xlAFn2vt6VTV5PrBSfMcpnQmMjCTZh6GLTDAtzqNPD3++RWG33Qc7ItfKIj9LFNSAi8HdQ8J9ZyRTPaGSnoIZ0tSMKyoauavcxxBNlwDX0FZrZJ295hUQuEDxNJ8xcV/bGt2g==
+Received: from VE1PR05MB7376.eurprd05.prod.outlook.com (2603:10a6:800:1b3::19)
+ by VI1PR05MB4702.eurprd05.prod.outlook.com (2603:10a6:802:5b::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.17; Mon, 24 Jan
+ 2022 07:03:57 +0000
+Received: from VE1PR05MB7376.eurprd05.prod.outlook.com
+ ([fe80::f4af:914e:469b:9d8d]) by VE1PR05MB7376.eurprd05.prod.outlook.com
+ ([fe80::f4af:914e:469b:9d8d%7]) with mapi id 15.20.4909.013; Mon, 24 Jan 2022
+ 07:03:57 +0000
+From:   Richard Leitner - SKIDATA <Richard.Leitner@skidata.com>
+To:     Tommaso Merciai <tomm.merciai@gmail.com>
+CC:     "linuxfancy@googlegroups.com" <linuxfancy@googlegroups.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "richard.leitner@linux.dev" <richard.leitner@linux.dev>
+Subject: Re: [PATCH] usb: usb251xb: add boost-up property support
+Thread-Topic: [PATCH] usb: usb251xb: add boost-up property support
+Thread-Index: AQHYDx5q1AjLtgKN40yeFGB3Voog7KxxwtcA
+Date:   Mon, 24 Jan 2022 07:03:57 +0000
+Message-ID: <Ye5PUpp9eMX9jSRe@ltleri2>
+References: <20220121232612.7283-1-tomm.merciai@gmail.com>
+In-Reply-To: <20220121232612.7283-1-tomm.merciai@gmail.com>
+Accept-Language: en-AT, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
 X-MS-TNEF-Correlator: 
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=xilinx.com;
-x-ms-exchange-messagesentrepresentingtype: 1
+ header.d=none;dmarc=none action=none header.from=skidata.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 50743cd0-5206-4adb-9f2f-08d9df068b34
-x-ms-traffictypediagnostic: BN6PR02MB2513:EE_
-x-microsoft-antispam-prvs: <BN6PR02MB2513CB0038FD1A22CB5E561BC15E9@BN6PR02MB2513.namprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-ms-office365-filtering-correlation-id: 067a7669-30a4-4431-5511-08d9df07b0f1
+x-ms-traffictypediagnostic: VI1PR05MB4702:EE_
+x-microsoft-antispam-prvs: <VI1PR05MB4702D290980226ECACAC0826F05E9@VI1PR05MB4702.eurprd05.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jHLRuX0IaoaoxrfSd12IGuRXDAb106zE/NZfeIkESjSb3rBrGFV3cZQ6za/0LEJw+UkY7UbmTM9BEqI6/aijOkdNCP0l/a4x0k5OemGLG0FSGnGu5DDjsjVUbZ0FFl9LVC6a+zXx3H6rVEfYyaAdg0Q0nGZ20eboGQQ82xNo82jd7AHPjK+FIeFB5rBU06zNA72z1ZpL7r/OZ50/uO3pW05j6HDriEQJUm3m6Z6l2Sr9TjdhTDBb1mqCoBWO7D6Bl9nu1kCcN7uHDMwXq6DxhYIn13cm5SOSZNZCiMDmkJL4lRA9eMSfSF4ciHh7ocQDGWE5TSKfnrTRvGJY9sy03twjPO+zFiILWYwm+tT7a0JTl8O6CIDd6F0ycon6/q6nk3vUpjiLWn7NVZh3+gLZ9i7tvAugjZekZjYnf+aojW8YwtMIHiI5q0O6MQGIO/6iqMxjYTyV490GdVRP1Cbdvr9/MKDSIGlAV7IuvMeSpkzeJFar/iHdOlCBEMcbQzykmgZ0ujrcpfzQU3rsgNdfujPX7RicK5+sawmN0KPHVL5WWwoovkGX4R9f2kJPw9sPuOJ0c2eYx4nLeo0JEx6l77xaKIEWzaKiGsGa0bSxx4G7e3/BrPtVOnMhEjFeyHXbhq5HjjRONV9a3U5QbpktqtV8Rl7FV+gGHospOmxS0iq5GYaxUuXiLEOj694sT2iKw4SqMWnhUGggNqB2jfJ7+g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR02MB4235.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66946007)(8676002)(4326008)(55016003)(33656002)(186003)(508600001)(44832011)(6506007)(66446008)(8936002)(64756008)(54906003)(66556008)(110136005)(316002)(7696005)(66476007)(76116006)(38070700005)(52536014)(71200400001)(53546011)(38100700002)(83380400001)(122000001)(5660300002)(2906002)(9686003)(26005);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: m2IRKIdfYJAPpbCP8yewqkq3ll+Sm7YSWjyrWq8BfAbYY+Ud4GfreMEp9VusAa+7lNoK3uAmW7L8EapEZlsRg59AG0evov+y3Q3uFQguyh5XHt4H6XHgRjSvtfmcGgG1xi3ISbUqkx2V70rObM9igyPZLcF3khl8k/dWjIGqtH2jEamzgglbmoalHZPzfAo7y4hQ2iqg9LliSAQ5cYMGzgOa2RTpwbDMoI7NTkX+mIA5agz9rVJ8viknDYt0dPmtxgUgtNeT9+lkdI1CgfhkUesz0tdNC7/EFFmhyHCGL5RRQfHTOGbnMNsn+sW62c5Nolpworksr6Gr6gUHKrdtkMQx/XtIAKJLkwg46Je+6ev7Wa0LljqVfQfTrIlxrRkae0E0BrEzU+M55zafEPKb68Emn1FzmyTmEox28p7GhqquqLvHUzlkOBYNFwyFyaaMFoV+40yPJTJgQmfxQPgI7xqtT/fCeeOlwjyr01rNSjLEF/uMkcg+fpyC9xwSu9cF/l9sDA0k9GiJrXiJqe8humrq6fCq+71wTiCOswgP2DcEXG3L4P3MrMvV0sw9y6kTy9ip0R5EXRfPivTFxqKgPqiSLEnmVWQHgYjQg3TRPX1hQ4YsdPs70CjFicYImB6xR3bslVt2IqBU5zGg5JWOZjgb7JHAgz4ZdR5TiDYPgINjTYkXQpL3HIYzc+kJGrQjCpS3VV+ktNUa+WTmV+ru6Wigkd8+gYQ/uS/1LbZe7b/DaCqz3gmg3c89s7SIhYG5PXWSgdyv05uPdhFI3JSUn0XA4/ViC0y4f2XwYSnUyBRgcER9eyPF7ONiE5W8l+Qf
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR05MB7376.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(366004)(66476007)(8676002)(54906003)(6916009)(91956017)(76116006)(64756008)(66446008)(66556008)(66946007)(5660300002)(4326008)(38070700005)(38100700002)(6512007)(6486002)(86362001)(316002)(8936002)(33716001)(26005)(2906002)(9686003)(186003)(508600001)(122000001)(6506007)(966005)(71200400001)(83380400001)(562404015);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/7wySLJBCL3EvcjM4rT8o+Nnx27jGvclw5BfGl7oqGePVt6ZjvQbnyl7VC8i?=
- =?us-ascii?Q?9+QVYDMeiaDK5cLbu6Fn2d2bK8zKZPsdxY0kuBvvjqQvf5M2kD3HjFKP1mLG?=
- =?us-ascii?Q?Fvjmgj8JkzGUNm2r2fzamGNf5Nrcq/AHFJpwt6g/YWgaDlysVoCt2BjBV9W1?=
- =?us-ascii?Q?gzOWW5JG3hy+/JiJZbfxGo3qqTw5Jzry8qLiPGXhJohx2VkQT8Ui1h2PrLtb?=
- =?us-ascii?Q?Sr9IVWm2VNdnVRISEjrk6dYNsxkQFboJ3w+PKqqAhrXxzHN/F/VCZWSwCxY0?=
- =?us-ascii?Q?SOb0se35n8rY3stW9Tjzxkms+oo4X56+t0h9Uat1DkNF65emBa6GsPMqCVZf?=
- =?us-ascii?Q?7pOiGL7CmOjI8zGaXeNjzDM6VsqN5welD56y91Nc6uP5ywuXoO5b0fL80J6+?=
- =?us-ascii?Q?yQxr43RmIto0ZHXjC+UHQog6CxNwMpQhymYbB8gIMpKSR/y9XqcunaX2P7+E?=
- =?us-ascii?Q?035dZV6OcoeiK6RH3Sq4WKxRoNIxcF4BntE76WRchF7Td5nwm12LmUQ42RWW?=
- =?us-ascii?Q?vSiyrUjyD52NYehtoMzA6C2a61nagsvwMd+DtIv+zY6ob83z4uQpEd+N1Q04?=
- =?us-ascii?Q?N0E1xeVfSjXmQveec+NIQocL9xe26CuU2V5gD8EkxswSujKTF1rXvEoGkRgz?=
- =?us-ascii?Q?4N+fA9Mf2mNtWUHas6uzQvMclS6UUuV+NzSX4XJiyPMZUoUT9ZyiPK2/yIIl?=
- =?us-ascii?Q?gEVsD3SU5PQEV0b6Oemb1x7GmnkIVAq626DtbR7vi+SZQ+U7XMFSQkU2WvwZ?=
- =?us-ascii?Q?aybxN3VRdQ21X/OAu5FLoi3dC8ycBG1OwNdWLq7OcctwJBCtjk83Wv5ZnZH1?=
- =?us-ascii?Q?BfQYK9G/WpNt/bOjn4fPJ6o0Il/QtsGYnvdpaf3Zx3hfxAfk3rFXJ3ICo11J?=
- =?us-ascii?Q?Ie1NZ1Rg7qkTJ5WBJCRwvkCv7H2veF8QVJkRItFWkRQhEi1PP4QqW4A1t+ow?=
- =?us-ascii?Q?WZ7ctqek3xT7F/kiXHnLPaNQsv7pZaigQ8wvQen3gvO5gRKYxVPgbnd/wdc8?=
- =?us-ascii?Q?zJYwecpXIE+10J6zn0StN4WdbJ3AboPGsvNrLBBySn78XGF2y2ne4Pag3bxA?=
- =?us-ascii?Q?Po5W4kEaEb5obGQs+iRj4i23KJdbSSY0R2XyJrxoXZkjoFDkuTqorC9IKuvp?=
- =?us-ascii?Q?z8xlP+jOyimZZdfgSxKeRzd0TwA8UFgz0YkNkJMTHWiABUNVR0PH8ewNDoK7?=
- =?us-ascii?Q?fufhSizJMOwbBO43iPpjaYP4O2kEJY7kurwdvmdycpY02AThIGc44+wZW3sO?=
- =?us-ascii?Q?Z4E+I2HcocbIzpFQCYENtQxD/jOvefubNHw27q5T6Om/GWemIQVwcvnjkIJE?=
- =?us-ascii?Q?GrLHWe5Z3VptvcdrNya/R8G5KeCP12DJgteVuIgXkMUO21oZ5Kq0k5P0kVMa?=
- =?us-ascii?Q?RGaOG/gyuQs26vGSxWcO1uW6uUzypNyGcBFkqWvhn9Cy9W2c/6yZtWnpI6xj?=
- =?us-ascii?Q?3ETbwX9hMv9ehIqT5jjaWTW3a/cxk9IFIhwtHmSQBVEmqZffoj4yu5Yb/Jbw?=
- =?us-ascii?Q?joUerUX4n1qT5j+8wCy6VkBnV0IpIdh5LqqGE3EztQ4DH0Sw1+Ev3OVKqzIK?=
- =?us-ascii?Q?LBOebe5qmnv5+pxZLD3hlyh93AsbsH5Y47ocu/ScZ3gTeBPFy4s9lx0NNUSs?=
- =?us-ascii?Q?UGcRO7wCEsZR4yTZpQypqQU=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hURAXG52R/PC5LPNmoLDYpzQGnn0f9t2vyQCvR0U9M29HgpWMgMlvXmEIxZd?=
+ =?us-ascii?Q?OHiBfy3WxLw3l9Zxfs+rwnV+DzRbX6l1Buq9yWHW1eUL1nsv64BEZSPxFqyg?=
+ =?us-ascii?Q?ml6yHcJbBEo0pjzp6FM42CUXyHXpAqbv8evXl5pwzSDZQbYvX0HFSk2DmNrQ?=
+ =?us-ascii?Q?fuiIHnUt/dq/oTa/wCvaqSW8heYVOnLHi4LQntcIw9sro7+5qxba93QMkYrl?=
+ =?us-ascii?Q?z9LIkdq2Phu9+GJ2gCrxBfl6SgdtOWzMYIwQRQNfGn/0uT4758XK46dmM9dr?=
+ =?us-ascii?Q?CYuHPAeSsZLdO/6iDapaUhlQqOjBsYJpyX9prWCTH5orKG2/eq14w5RONnLw?=
+ =?us-ascii?Q?ULgdtALIpdQTYKUVGDOiiQTwUIPXTwfA+i5ZmH97LIXwtCWojpsxIOlSgP/o?=
+ =?us-ascii?Q?720zMHeIrsRHMvubiFEO2u8YELQdRgzISp2CWDvLOW5z2+Dxzn6ntWY/dp5l?=
+ =?us-ascii?Q?qZdTNfPZCdJpP5IxBc9/HLWzJwAoAfEGPNYJJquxRyDxvlUDVwPEqXkl7R2z?=
+ =?us-ascii?Q?gcf6HvcZnUAAzjB3mYCBmpvOVCRw+1e2rDPrmPThEW3yna+3SEfTYCqS8+oM?=
+ =?us-ascii?Q?eOoiKJlE9ZKgri4d6YIibcxqyb5qGtAhp++hK73f6cj8nc5XYPxQLaPocecO?=
+ =?us-ascii?Q?Lni25IhTBcM8SEhRS7yHxfEUb6T/s6ce613K1rjPNI70T6PwZvtdStUhl5lf?=
+ =?us-ascii?Q?i8QU4r/jqe0LP5CFtk/HKanqj3fgHalrxa6YIX5t+YDbqkEJdP/4xWYxi+wa?=
+ =?us-ascii?Q?37gSsUIIZzY2SxFYxMR1ZRY33kokS6MIEIJfI7c8qjidhJ0oYlgeZulY3Lg1?=
+ =?us-ascii?Q?5hnvLtMfUpsOehyrtTJ8U1Bzy2kNkeBMQRcqcHvnV+eBnRmBCDTVrZ9/ACVz?=
+ =?us-ascii?Q?3jQ7zsBH5kcbS/Pu3uTI3eYz63d3Cnvdb/2nxmbn9m7pkiNYWsmBwpAOJU35?=
+ =?us-ascii?Q?e571uTBeyvCzUpuYyM+1CL7Fi+ie/LWsj/a1BeERx0IXw4B0esoDj9b0A0T6?=
+ =?us-ascii?Q?g6U4drTYlNc5HrHgSkUdCrGssKqQcdHh7AfKseuctLyK5yniURLT1VXNixK1?=
+ =?us-ascii?Q?+9fAKtKc3zwuoRbVipJwkUcww8JHJfbPx7YKNSgvTACkka4ZPegR7HiyrQRa?=
+ =?us-ascii?Q?WUxOXu5xbZ/Jkp0edP5NASc274xDQ4VGFvJ2M5Pd8xZCXik4aTHTHxwe4L8r?=
+ =?us-ascii?Q?q8M7adlQ8YozmpAjL3sNEigdoU6GvOoS7y4tdBqCcv0alYGw/JGxndPFoJsp?=
+ =?us-ascii?Q?s+sTO3cTKTkZYX8M8zTx9kd30YdkhORTVBc5VbliR64Jv+/c9MJNJNuA3U6w?=
+ =?us-ascii?Q?jnQwO3kXYlVlgVxMzUuTwxQVGA2wdDXQPPk252Dt+Oly9INs43NVI4Xl1jGE?=
+ =?us-ascii?Q?d7ZI8D5l1zOsqZ+tcSA9Q950JUVdk1s7P2Kz/ox3ZrQTJQgTyGDWtjY06jmv?=
+ =?us-ascii?Q?ykbTbIVrG6HUP51FZtkrC9BBaUIHADnv78rk8c8PjLEQxmk/L6oPAYE2nGgb?=
+ =?us-ascii?Q?eBJdQzGcO14OcmGRfhVOfltrjmqPWOKCUdltTWSYt1dZ6r6XkbhaSpalgoIt?=
+ =?us-ascii?Q?VtIZ2ObCuHRamCzxFQGqYvhSFexWkflyPTxPt67EtEOYze2lU9x2W8+lERTL?=
+ =?us-ascii?Q?IJ7tlM5L5Q8AZkYhSJb/yl6l87jfxfNIqi3DgAgipuwHFVRZ435yfsXlfAJe?=
+ =?us-ascii?Q?r6xEMLuqgwc+hgPWiCI0wqXuB1o=3D?=
 Content-Type: text/plain; charset="us-ascii"
+Content-ID: <D3BAA30692F48142B70BB94722813B3E@eurprd05.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: xilinx.com
+X-OriginatorOrg: skidata.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR02MB4235.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50743cd0-5206-4adb-9f2f-08d9df068b34
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jan 2022 06:55:44.7290
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR05MB7376.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 067a7669-30a4-4431-5511-08d9df07b0f1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jan 2022 07:03:57.4601
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-id: e5733095-4425-4f08-b6ba-487b9a46a425
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zLWqsEizaxGDCvz94O6nsnzCE8vnS6+xlFhYyD5Xvg9c2f+LR0pvd00WHkRr5P6oZb+IcrD5zIS7La6cMekpBA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB2513
+X-MS-Exchange-CrossTenant-userprincipalname: Qo5IDNHdt2OildJRHCvBzBKI8OMzrmgAnrG1Io5gDSDiHVHGaGZIwiah3X/xUl5X95Grn3O0ZRIMejWeZmnLZEHy9p89eU/pp745+Nj+7a0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR05MB4702
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Robert,
+Hi Tommaso,
 
-Thanks for the patch! Please see my comments below inline!
+thanks for implementing the boost up register.
 
-> -----Original Message-----
-> From: Robert Hancock <robert.hancock@calian.com>
-> Sent: Friday, January 21, 2022 11:49 PM
-> To: linux-usb@vger.kernel.org
-> Cc: balbi@kernel.org; gregkh@linuxfoundation.org; Michal Simek
-> <michals@xilinx.com>; Manish Narani <MNARANI@xilinx.com>;
-> sean.anderson@seco.com; Robert Hancock <robert.hancock@calian.com>
-> Subject: [PATCH v6 1/2] usb: dwc3: xilinx: Fix PIPE clock selection for U=
-SB2.0
-> mode
+On Sat, Jan 22, 2022 at 12:26:12AM +0100, Tommaso Merciai wrote:
+> Add u8 property to support boost-up register of usb251xb hub.
+> boost-up property control USB electrical drive strenght
+> This register can be set:
 >=20
-> It appears that the PIPE clock should not be selected when only USB 2.0
-> is being used in the design and no USB 3.0 reference clock is used. Fix
-> to set the correct value depending on whether a USB3 PHY is present.
+>  - Normal mode -> 0x00
+>  - Low         -> 0x01
+>  - Medium      -> 0x10
+>  - High        -> 0x11
 >=20
-> Fixes: 84770f028fab ("usb: dwc3: Add driver for Xilinx platforms")
-> Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+> (Normal Default)
+>=20
+> References:
+>  - http://www.mouser.com/catalog/specsheets/2514.pdf p29
+>=20
+> Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
 > ---
->  drivers/usb/dwc3/dwc3-xilinx.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+>  drivers/usb/misc/usb251xb.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 >=20
-> diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilin=
-x.c
-> index 9cc3ad701a29..dd6218d05159 100644
-> --- a/drivers/usb/dwc3/dwc3-xilinx.c
-> +++ b/drivers/usb/dwc3/dwc3-xilinx.c
-> @@ -167,8 +167,12 @@ static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx
-> *priv_data)
->  	/* Set PIPE Power Present signal in FPD Power Present Register*/
->  	writel(FPD_POWER_PRSNT_OPTION, priv_data->regs +
-> XLNX_USB_FPD_POWER_PRSNT);
->=20
-> -	/* Set the PIPE Clock Select bit in FPD PIPE Clock register */
-> -	writel(PIPE_CLK_SELECT, priv_data->regs +
-> XLNX_USB_FPD_PIPE_CLK);
-> +	/*
-> +	 * Set the PIPE Clock Select bit in FPD PIPE Clock register if a USB3
-> +	 * PHY is in use, deselect otherwise
-> +	 */
-> +	writel(usb3_phy ? PIPE_CLK_SELECT : PIPE_CLK_DESELECT,
-> +	       priv_data->regs + XLNX_USB_FPD_PIPE_CLK);
+> diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
+> index 507deef1f709..74fd8ac0c303 100644
+> --- a/drivers/usb/misc/usb251xb.c
+> +++ b/drivers/usb/misc/usb251xb.c
+> @@ -402,6 +402,7 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
+>  	struct device_node *np =3D dev->of_node;
+>  	int len, err;
+>  	u32 property_u32 =3D 0;
+> +	u8 property_u8 =3D 0;
+>  	const char *cproperty_char;
+>  	char str[USB251XB_STRING_BUFSIZE / 2];
+> =20
+> @@ -543,6 +544,12 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
+>  	if (of_property_read_u16_array(np, "language-id", &hub->lang_id, 1))
+>  		hub->lang_id =3D USB251XB_DEF_LANGUAGE_ID;
+> =20
+> +	if (!of_property_read_u8(np, "boost-up", &property_u8)){
+> +		hub->boost_up =3D property_u8;
 
-When USB3.0 is enabled in the design, FSBL will set this bit to PIPE_CLK_SE=
-LECT
-And it's state will be persistent till Linux stage. When this driver finds =
-the usb3-phy property
-In the device tree, it will again set this bit.
-But in case if the usb3-phy is not present in the device tree and design ha=
-s
-USB3.0 enabled, then this will clear this bit and ultimately it will fail.
+IMHO we don't need the property_u8 var here as you could pass
+&hub->boost_up directly to of_property_read_u8() ?
 
-It will be better to skip touching that bit in case the device tree does no=
-t have the usb3-phy property.
-This will skip the whole sequence of PHY initialization (reset assert/deass=
-ert are done in order to help initialize PHY).
-Something like below should work.
----
-        int                     ret;
-        u32                     reg;
-=20
--       usb3_phy =3D devm_phy_get(dev, "usb3-phy");
--       if (PTR_ERR(usb3_phy) =3D=3D -EPROBE_DEFER) {
--               ret =3D -EPROBE_DEFER;
-+       usb3_phy =3D devm_phy_optional_get(dev, "usb3-phy");
-+       if (IS_ERR(usb3_phy)) {
-+               ret =3D PTR_ERR(usb3_phy);
-+               dev_err_probe(dev, ret, "failed to get USB3 PHY\n");
-                goto err;
--       } else if (IS_ERR(usb3_phy)) {
--               usb3_phy =3D NULL;
-        }
-=20
-+       if (!usb3_phy)
-+               goto skip_usb3_phy;
-+
-        crst =3D devm_reset_control_get_exclusive(dev, "usb_crst");
-        if (IS_ERR(crst)) {
-                ret =3D PTR_ERR(crst);
-@@ -188,6 +190,7 @@ static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *priv=
-_data)
-                goto err;
-        }
-=20
-+skip_usb3_phy:
-        /*
-         * This routes the USB DMA traffic to go through FPD path instead
-         * of reaching DDR directly. This traffic routing is needed to
----
-
-Thanks,
-Manish
+regards;rl=
