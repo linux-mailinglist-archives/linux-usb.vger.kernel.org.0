@@ -2,80 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D08497AEF
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jan 2022 10:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CEF497B21
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jan 2022 10:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236480AbiAXJCX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jan 2022 04:02:23 -0500
-Received: from mga11.intel.com ([192.55.52.93]:18482 "EHLO mga11.intel.com"
+        id S242605AbiAXJLX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jan 2022 04:11:23 -0500
+Received: from mail.portyid.pl ([192.36.61.58]:51270 "EHLO mail.portyid.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236425AbiAXJCV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 Jan 2022 04:02:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643014941; x=1674550941;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=3Rovh4/lKcqg1XxFNXgd6wxamVJA43dqc0CU4uCld5I=;
-  b=GR0s8vzTpOUcWzwJErqw+uw1sMl6QZagzqc1rMw69vzdDvUMkPXfg3fv
-   +gdelPFDfkWN6Qi8g6kW19UElda/xuQ+I/WxlPC8kJCXQhl0OCSwTjmWq
-   mqzjfJAuz0ucY+eQE09k/CviVo+COAsgGKPWYZ1/MbQfCiwBNJzObwuKL
-   YkkJwyZtoNh32+E2QvH7ympUl4e+8t0aQ4cd3flTxnehrC/UFTovmVw55
-   xMbK6LqoB6IoH986y1XrGNxUBRsVA4CjlTHgGIyfbe1EXdjfTWH/9TZXA
-   J7+yUB9d6h7EL5H6gA9xiLVShAhejJYa+TRdGOqnorv8M3joFy5tLwrKN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="243596455"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="243596455"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 01:02:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="673561141"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Jan 2022 01:02:18 -0800
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
-        John Stultz <john.stultz@linaro.org>
-Subject: [PATCH 2/2] usb: typec: Don't try to register component master without components
-Date:   Mon, 24 Jan 2022 12:02:28 +0300
-Message-Id: <20220124090228.41396-3-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124090228.41396-1-heikki.krogerus@linux.intel.com>
-References: <20220124090228.41396-1-heikki.krogerus@linux.intel.com>
+        id S242595AbiAXJLV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 Jan 2022 04:11:21 -0500
+Received: by mail.portyid.pl (Postfix, from userid 1001)
+        id 4CFA3413E6; Mon, 24 Jan 2022 10:11:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=portyid.pl; s=mail;
+        t=1643015475; bh=+PMi7irkA4XlRgpdW2HqpqcJeZNxKGysf407T0katTE=;
+        h=Date:From:To:Subject:From;
+        b=0ipMcuZXBt3l9HiWzAWSK7LXpn5kFKnk6i1xbFx9sQMN4P/x40a4+jOxO0P7scOub
+         wvvEDS4ukZ6i6G7npNyOUY3LW+l8oaoZj+bRLTWzqQCaGeOYUmgS98eI7TOzhlwB8T
+         k6aLL+V6Oi1/hra9IlH/zJPOOkB7o3A0RslBvXD9w9L3S6tgET/738RXSVciDJKTJA
+         385lyapzfA9QAlFygWzEmYiwT1XW/bWy1hcbccNo4Cn29jwV8Eyk3QI66KXs1pacF3
+         042Y9qOtYH3o76WsxeY+jCS0YFCgQ1jECg7nSaBdDboMspXCTBcadvPTSCj3EIyvSM
+         bh2E+jl35TdIg==
+Received: by mail.portyid.pl for <linux-usb@vger.kernel.org>; Mon, 24 Jan 2022 09:11:00 GMT
+Message-ID: <20220124084500-0.1.1b.5flv.0.nb3sj5ax15@portyid.pl>
+Date:   Mon, 24 Jan 2022 09:11:00 GMT
+From:   =?UTF-8?Q? "Pawe=C5=82_Jasi=C5=84ski" ?= 
+        <pawel.jasinski@portyid.pl>
+To:     <linux-usb@vger.kernel.org>
+Subject: Fotowoltaika - nowe warunki
+X-Mailer: mail.portyid.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This fixes NULL pointer dereference that happens if
-component master is registered with empty component match
-list.
+Dzie=C5=84 dobry,
 
-Reported-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Tested-by: John Stultz <john.stultz@linaro.org>
-Fixes: 730b49aac426 ("usb: typec: port-mapper: Convert to the component framework")
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/port-mapper.c | 2 ++
- 1 file changed, 2 insertions(+)
+jeszcze w pierwszej po=C5=82owie 2022 roku wzrosn=C4=85 ceny za wykup ene=
+rgii dla posiadaczy fotowoltaiki.=20
 
-diff --git a/drivers/usb/typec/port-mapper.c b/drivers/usb/typec/port-mapper.c
-index b6e0c6acc628c..a7d507802509f 100644
---- a/drivers/usb/typec/port-mapper.c
-+++ b/drivers/usb/typec/port-mapper.c
-@@ -60,6 +60,8 @@ int typec_link_ports(struct typec_port *con)
- 		return 0;
- 
- 	bus_for_each_dev(&acpi_bus_type, NULL, &arg, typec_port_match);
-+	if (!arg.match)
-+		return 0;
- 
- 	/*
- 	 * REVISIT: Now each connector can have only a single component master.
--- 
-2.34.1
+Aby unikn=C4=85=C4=87 umowy na nowych zasadach trzeba zdecydowa=C4=87 si=C4=
+=99 na instalacj=C4=99 paneli PV do ko=C5=84ca marca.=20
 
+Jako firma specjalizuj=C4=85ca si=C4=99 w monta=C5=BCu i serwisie fotowol=
+taiki ch=C4=99tnie podejmiemy si=C4=99 realizacji ca=C5=82ego projektu. S=
+=C4=85 Pa=C5=84stwo zainteresowani?
+
+
+Pozdrawiam
+Pawe=C5=82 Jasi=C5=84ski
