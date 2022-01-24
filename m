@@ -2,186 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C45449A23D
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jan 2022 02:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DAF449AAAC
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jan 2022 05:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2361066AbiAXXi7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jan 2022 18:38:59 -0500
-Received: from mail-am6eur05on2072.outbound.protection.outlook.com ([40.107.22.72]:63073
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1384512AbiAXXO6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:14:58 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DXsIk5W/4OczmSw+TZPLWYdiqieE1ScWkz2VPmdxkyhbQa3h4XtPpv2KFDRJ4GaRpGtgpGop6OpLMyF0waJCJv7eAW5qWpMcdUiCbOXfPbuIFbT6uXJDaLNy3fHLDwt+9vYAlS2J+6OXGvOCtk6YRLhtlhK5UI2LTWHq+gb3Glj9Ll4i3xijtWoAPtrX1bFadjGsMm5v4rf44dgjAFQdbBGyty49v5MpPi+8uwVetC1AfxMBTTb7wTXcjDhi3q/mW7xqv6FDqOAG6l9/zN8T4TA3JEUg1haFIXXKpbqb0A+0/+bHxWnqQes7LywzQKDQizJtKmqQef1+6widx8ixdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=N1L5DnUBSNJZdfdh5//JaJM3c2zRAa/3IVJ88XXnw+M=;
- b=f9yeYFxUGEWPaEvCke6wm0aNnEGL8drt4cIq8+sahZBeK35BDe5SgTYzAGueo2FSwVshZ2leRAXCgRB5QBiD3Nc2YkAGChjkgRvyoEx6DyA5SJ3347GwA4ughtZaElcygYg1v6O4ZdIlhFuK49Rpi9nKkXPWJUb6FuGFJpixdmAo1z7uREeN67RnNc0cne6i1KDriV2/DCREj0E3t/yxyiwaOJ90IHtHJZ9CxZfe/AvVSO8uqu6tspayeWlcIQPvwO2RMc9hxmnctCrcO8HIJ5f1xecwDgOWlVud8d5lcjlW6/17Ha7cMADCpKaedNnuCnbLndGZzeM3GmFc9lpdIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N1L5DnUBSNJZdfdh5//JaJM3c2zRAa/3IVJ88XXnw+M=;
- b=Bj21D8BEOwxmIEJLRiMzex/PWX3kfp8eYduVWQZaHeCtYDHEJ9EYiSULXdoBSGGm9M2/tSnMe5P4l0RvDnc1M0MS3EmF57wkqa/GubeL9s+rRw295/bMU2IttOdVD7m0UUbyhcUXLiMcx/fSb6P3jKpGV+xOrKp4vMdURS7e1z7NpQgiW08P4AxgzazWqouHOV6eR9BTQz/rtwKg+0cTJB8Pevw1H+H5LJlwOqMVsUL4rBk0QxMJKCE7rI/Vi0OihMWlLMezyg7GprM+DI+1qh9t2F5rQIUkdjKYohQe9O/2rXoNDAKPhXsCepmEcK3TJElHN34RJbzNKQgHRRzi0g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4523.eurprd03.prod.outlook.com (2603:10a6:10:19::27)
- by AM4PR0302MB2612.eurprd03.prod.outlook.com (2603:10a6:200:8e::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.17; Mon, 24 Jan
- 2022 23:14:55 +0000
-Received: from DB7PR03MB4523.eurprd03.prod.outlook.com
- ([fe80::2d1f:654e:f946:1a95]) by DB7PR03MB4523.eurprd03.prod.outlook.com
- ([fe80::2d1f:654e:f946:1a95%6]) with mapi id 15.20.4909.017; Mon, 24 Jan 2022
- 23:14:54 +0000
-Subject: Re: [PATCH v2 5/7] usb: dwc3: Add snps,ref-clock-frequency-hz
- property for ACPI
-From:   Sean Anderson <sean.anderson@seco.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Balaji Prakash J <bjagadee@codeaurora.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Baruch Siach <baruch@tkos.co.il>, Rob Herring <robh@kernel.org>
-References: <20220119002438.106079-1-sean.anderson@seco.com>
- <20220119002438.106079-6-sean.anderson@seco.com>
- <5275ea80-400e-d1de-f03e-c2ea81f959dc@synopsys.com>
- <e808f3e2-55ad-e8bb-097c-81e4a82d0bb2@seco.com>
-Message-ID: <6ffae12d-3116-c4f2-09c3-32e448bb4717@seco.com>
-Date:   Mon, 24 Jan 2022 18:14:51 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <e808f3e2-55ad-e8bb-097c-81e4a82d0bb2@seco.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR08CA0029.namprd08.prod.outlook.com
- (2603:10b6:208:239::34) To DB7PR03MB4523.eurprd03.prod.outlook.com
- (2603:10a6:10:19::27)
+        id S1350930AbiAYDot (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jan 2022 22:44:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S3414978AbiAYAyv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jan 2022 19:54:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D6AC095436
+        for <linux-usb@vger.kernel.org>; Mon, 24 Jan 2022 14:37:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 286A5B81255
+        for <linux-usb@vger.kernel.org>; Mon, 24 Jan 2022 22:37:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D6076C340E5
+        for <linux-usb@vger.kernel.org>; Mon, 24 Jan 2022 22:37:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643063862;
+        bh=dPC/wnagXgx2586ZCqthw2ps4345tZlVTGn2+/E4sJ0=;
+        h=From:To:Subject:Date:From;
+        b=FMUrWQt+Nk72iAPAQ96fxR2UNPcX3DBCx42pHjFKU6nv40MFs51gGyiqaF5GC/u/P
+         VqF8Yqw8Kprm2bPR961FbTt1qw9HLdej+lp0Y5vqVIJ8SY/ynK04cJC9VJefW/3M2k
+         aPNPwnAM4pKa7tI2BdMRjhPq15lWuI5B9rMX8k7Ts+ADoYFRSAEUd8b8PowzpWS/nH
+         RpsJeHHjuX0r7bzojWsJag5MPniIquuae8WBxzirZ2Qal1qOjQJqf2J+qM/74ONrGI
+         8UrccubewcXXTyw/kMo5ubsay2tC34u9oT2khO5mquv6vOve8gkzOEVZzZo/Vju85Y
+         +X0OZt6mhYbSw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id B2894CC13B0; Mon, 24 Jan 2022 22:37:42 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215529] New: REGRESSION kernel NULL pointer crash in
+ typec_link_ports
+Date:   Mon, 24 Jan 2022 22:37:42 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: lenb@kernel.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression attachments.created
+Message-ID: <bug-215529-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 53683a96-2983-4c93-dd8b-08d9df8f54f1
-X-MS-TrafficTypeDiagnostic: AM4PR0302MB2612:EE_
-X-Microsoft-Antispam-PRVS: <AM4PR0302MB26123B69ABF81D7F4D3736CC965E9@AM4PR0302MB2612.eurprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2512;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JEC5qFoifW64wi5zSkJ0p0yoSgNrVzQLa5GqNJ1JfLGTkjR2lDYw4mzwG1WOE9ly6OPfdeHslzi/RQ75A+i/B8/5lEel197WLxHvyRrbGEdtFybqDi9DXGVQfKccOx23MDGnIIHGOWhrEr7snTOD/rUQyK0NDFIs8lDIzSHW3wvAdlSETqpX6pA8vor9KVRsNQo8Uuq7knc7ohu9V2aTlIpiWx80zdbnMLGdavgqhNTOeuHP9uIe3abpCngRsyYpJSPXzzcwRjeRh4GkIMtdxPJafm763WZDbp9fOJav/xz6a6BQyGn+fkPKrLLYTonyLXNAX5XSjjMUx4HBN3MwnYyhzMkNTGEgVcWRt3JgD+wWIQUIwmqo5vzEQA/gUx7xzVJtn4uayOcGGzoc+U4LHPRhoh/LOpZGdphvJ2Qt2ZJ6CpAq6UMSlNa9XQBKAUK24Zs9QgjJeD9yv/hs7kW3+0Bz0ppr3F+iXuFVRGPtdzD5pruNXLQqzVHIZCLMdK4/Zj7z/Et5OkXZ3g3t5MRzgsDxLT/oVfyaptKu5h6I8mDnnTbJ5EuRvNoD1wSy3aG/fbpna9ULYopOeBUf/sJiIr45qcveQ13+LL3nEtAxhG9VYbPYujnPh56ANfg89V3RckhrE6++9rJ/hKeUke+LhC0K8mvGsZV+hgwMiMqp8qwyYPLPZDjeVE1in8Rd+t4oGstwZ2+pyaeujf5ffqDTmB7g2zy2nAnnlrwZLirb+NpZ7s9Dl5azx7s861dY/gc1EB1YAqEKVcVDTsyrhkAIK5IbCiAnnEIAn+wbaaNDE9P4uBxzFNEBd3LZb8ZFZrP+PDQmyoq6BEPygqFl+nGafYxZw0UXIe+qdIdHpmXyTvw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4523.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(6486002)(54906003)(5660300002)(110136005)(31686004)(86362001)(66946007)(316002)(66476007)(508600001)(6506007)(6512007)(8936002)(186003)(2906002)(966005)(52116002)(66556008)(38100700002)(38350700002)(26005)(36756003)(44832011)(2616005)(53546011)(31696002)(6666004)(83380400001)(4326008)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WHg2M003SkdFeEtXYnVmcnVqSFU1dUdZOUY4Z2NyUHVkbkErNEdFcXBWWkFh?=
- =?utf-8?B?ckdoNFpBMDdFQzJKRXpCc0RBa2puNXA3NFV3bnArSHRxQldXS0lvTjArQWQz?=
- =?utf-8?B?a2tDWElQRXBMMy9nMzNmeWNkbm9MNzV0K1VKZFhHODV5bjNVMU93eUxrRERG?=
- =?utf-8?B?eWlXdS9oWGdUOTFJNzNicnZMYlhPbDhOblRUWmduaVJLTUF0YVgrNXc4dmFK?=
- =?utf-8?B?TXVwQllHa2YrUDJ4OElXL3AxbHBGWERiamFyLzAyWlNJOHlqRThOWUoxUmVC?=
- =?utf-8?B?TEZDV3VlMGF3bzAyQkZhdFY3SmlzMzROREh4dkdUeW5vMmM5VGtVS0s4NE5M?=
- =?utf-8?B?RE9iam1oNGlHQ3BaeHowcHJuTGovUkM1Rnd0YWR6TEJaMWJJMkpZR1NrVFoz?=
- =?utf-8?B?cDk1ODNNZHF1eTdqQnhMNTlPQWh5TG5FRzJsTnFFV1ljNVgzNDVRNlFWb2Y0?=
- =?utf-8?B?VG9iNVNHRDQrTktHd3k5QURVbWtHYkRiWnNBVy9Eamw1NkRvZ0VWTnFyZE5E?=
- =?utf-8?B?dXNKM0ZYd2NKcVhCTEVPdEoycVZ6NG1hR2tnT3hIYk9aMU9sUG1CM0dhcVFH?=
- =?utf-8?B?cW1SU29SWm1RYk9yd1hrUUNza3pOY040T2JtT0ZwY2s2dGhhdkF0b28wdy94?=
- =?utf-8?B?SVRMUmdsMFZSandzZXBidEtGdXJYRTBkNlFTdTlMZlVNemJLV0FWMHdMdWha?=
- =?utf-8?B?WVZNMXFQMWYxNHRwTXRmekI2OHVCZmkvNXRISTl3ZVNzaGNOK3MybTUzRFFx?=
- =?utf-8?B?dDE3UyttUk9SOWo2MmIvT0g2RzJnRXFmMnBHRjB3a2FzNUU2ODNyRkJ1VVZ1?=
- =?utf-8?B?Q1daeVdaYmNCNTM2TThON2gvN0djK2pSZU1ESVkydVJZWXMwakZueDhoSTVw?=
- =?utf-8?B?dVhZZUF3Q0NVWElGdUpETGFFTUliR0JKNENVM0Y5OXBkb0F2KzdacHE5ZDJY?=
- =?utf-8?B?MmdzWGlHeVF5ajdJSmZxRG9CSWJ5eTdYbTZhZjlaTG5Pbk9sOGhkZ01yeXpi?=
- =?utf-8?B?M2hqRzNqRjZGQmRGRUNPQ3ViMmpoZW84VVhRa3U5bzRoS2JuTGVJL1pnYjBr?=
- =?utf-8?B?V3FtZUNldHlsTmZQMUJ0MW5QdUdndlJ5R2VVQmhERm5vR2cvYlZtUW9xc0VH?=
- =?utf-8?B?ZURJNW9odjFrTmV1azd4VWJFUG5tYlIzalhhd2wwUEtOaHJIVUxIQVdRemV6?=
- =?utf-8?B?cjJDa1o4ZllHdHRMUDZjeVRqYnFQMVg5N08rUzYxR0FtVG9rbGxYTUQ3dzA1?=
- =?utf-8?B?K1NMZ1BzdE1OaUJaaEVzN2RyeDdLZXdZR0hXRUcyRXpFMkI1dkN2MVhGNDZ3?=
- =?utf-8?B?NmJIcEtRb0lIcndaL2RWb1RzeVNCZmsreXo4YkJnNTM1ZDA1RkJVd3lpM3VE?=
- =?utf-8?B?SUZ3UnlHRmZuV0drcXVheDAxOEdyNExHYkdrYWtRVjM0NERrUDhlTWpLZlJB?=
- =?utf-8?B?QVMwalF0ODZaMHIxU2h3MVVqckZ4TUJ5a2V6RXNQNnNoRmlJM0gxNGpkL3g0?=
- =?utf-8?B?WmNlRWxqWDQvWTh0b0hYNmRzYWVLNE85SDl4SmhiNGhyc1U0dGh1ODMxbTUv?=
- =?utf-8?B?TVJwcFlSVE5YV0JmZXZkS3E5TC91Rno1c3NMV0xRUE9YclZ2NDRqcCs2S2RU?=
- =?utf-8?B?L0xpdFk4WTdCWWVyTU9UTSs2OFNqK01VR0dtd2VKMENwSmdidmV6ZkVCWHpV?=
- =?utf-8?B?bWZQcFg3OWVBSHZrK05Xd25Tenl3YThoUlFjdXNLK2lHc1RZNVM1Uk95azgz?=
- =?utf-8?B?REswazBrUnhBWDRTSk5EbXZKVVpjbnlocHRDcDhHNCttR0hmcHAyRVFZSW03?=
- =?utf-8?B?S1pkSTh2OE1OMXpWWlNreE9WanpaTjhnd0dnTHVUeXI2U0tWcXl4N25oK0E2?=
- =?utf-8?B?ZnVLOHhPcWhjUWRGcHgvbzRlNmRnNlpHaU9iblhZT2RhOW93dHNXT0xGWXFP?=
- =?utf-8?B?SzlGaHBwdTlVMHBBYVpsUUpyckVaQU9TbVVlbFZiTWdLNFNHajdLWE9jVUxx?=
- =?utf-8?B?anpJOFVzd0VHVnNnd3Rxc2h1amRkVjdVb042RXoxc004emxiTldWTUJERmZh?=
- =?utf-8?B?YUprL3pteS9LZzB1ZDNvZitwcmlWNmZkK2hVam50RUtNMkpKUGsvRkxQd08z?=
- =?utf-8?B?SEl0UEVrdHpwcGVIdE9EYWt2aEtoNDV3SDZ2NzEzck85bEZrd3JrRzRnVklS?=
- =?utf-8?Q?9Ctf1JOQAo74BSG3nUfzUHI=3D?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53683a96-2983-4c93-dd8b-08d9df8f54f1
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4523.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2022 23:14:54.9340
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PXNc2hS1PxNTt9WCOg1SIZOG477G4CyJPayL85+/V3PZDddz8aPVzHBIm9dcbWZ51uMoo+Eti+rzv1wrwmKoUA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM4PR0302MB2612
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215529
 
+            Bug ID: 215529
+           Summary: REGRESSION kernel NULL pointer crash in
+                    typec_link_ports
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.17.0-rc1-00032-gdd81e1c7d5fb
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: lenb@kernel.org
+        Regression: No
 
-On 1/24/22 6:07 PM, Sean Anderson wrote:
-> On 1/24/22 5:44 PM, Thinh Nguyen wrote:
->> Sean Anderson wrote:
->>> This property allows setting the reference clock frequency properly for
->>> ACPI-based systems. It is not documented under dt-bindings, since it is
->>> not intended for use on DT-based systems. DT-based systems should use
->>> the clocks property instead.
->>> 
->>> Frequency is preferred over period since it has greater precision when
->>> used in calculations.
->>> 
->>> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
->>> ---
->>> 
->>> Changes in v2:
->>> - New
->>> 
->>>  drivers/usb/dwc3/core.c | 6 ++++--
->>>  drivers/usb/dwc3/core.h | 4 +++-
->>>  2 files changed, 7 insertions(+), 3 deletions(-)
->>> 
->>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->>> index 883e119377f0..5f3dc5f6cbcb 100644
->>> --- a/drivers/usb/dwc3/core.c
->>> +++ b/drivers/usb/dwc3/core.c
->>> @@ -350,8 +350,8 @@ static void dwc3_ref_clk_period(struct dwc3 *dwc)
->>>  	u32 reg;
->>>  	unsigned long decr, fladj, rate, period;
->>>  
->>> -	if (dwc->ref_clk) {
->>> -		rate = clk_get_rate(dwc->ref_clk);
->>> +	if (dwc->ref_clk || dwc->ref_clk_freq) {
->>> +		rate = clk_get_rate(dwc->ref_clk) ?: dwc->ref_clk_freq;
->>>  		if (!rate)
->>>  			return;
->>>  		period = NSEC_PER_SEC / rate;
->>> @@ -1492,6 +1492,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->>>  				 &dwc->fladj);
->>>  	device_property_read_u32(dev, "snps,ref-clock-period-ns",
->>>  				 &dwc->ref_clk_per);
->>> +	device_property_read_u32(dev, "snps,ref-clock-frequency-hz",
->>> +				 &dwc->ref_clk_freq);
->> 
->> Please also document in dwc3 DT file whenever we add a new property.
-> 
-> This is intentionally undocumented, as noted in the commit message. 
-> Rob Herring has said that dt-bindings should only document properties
-> intended for device-tree.
+Created attachment 300311
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D300311&action=3Dedit
+typec patch from lkml that does NOT help
 
-context: https://lore.kernel.org/all/20181219202734.GA31178@bogus/
+Booting 5.17-rc1 (plus a couple of commits) fails on two of my systems,
 
-This patch was later resubmitted as 24bc6e68efa0 ("serial: sc16is7xx: 
-Respect clock-frequency property") without the dt-bindings documentation.
+Dell XPS 13 9360 (FWIW, Linux Torvalds has one of these)
+Dell XPS 13 9310 (Intel's latest Tiger Lake system)
 
-+CC Rob if he wants to comment on this specific situation.
+[    2.965017] ath11k_pci 0000:72:00.0 wlp114s0: renamed from wlan0
+[    3.046448] systemd-journald[302]: File
+/var/log/journal/5ce4de201d294a6db31ace17ae52adb8/user-1000.journal corrupt=
+ed
+or uncleanly shut down, renaming and replacing.
+[    3.111468] BUG: kernel NULL pointer dereference, address: 0000000000000=
+008
+[    3.111472] #PF: supervisor read access in kernel mode
+[    3.111474] #PF: error_code(0x0000) - not-present page
+[    3.111475] PGD 0 P4D 0
+[    3.111477] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[    3.111479] CPU: 4 PID: 314 Comm: kworker/4:2 Not tainted
+5.17.0-rc1-00032-gdd81e1c7d5fb-dirty #10
+[    3.111481] Hardware name: Dell Inc. XPS 13 9310/0202R4, BIOS 3.2.0
+09/30/2021
+[    3.111483] Workqueue: events_long ucsi_init_work [typec_ucsi]
+[    3.111489] RIP: 0010:component_master_add_with_match+0x19/0x100
+[    3.111494] Code: 5b 41 5c 5d c3 66 66 2e 0f 1f 84 00 00 00 00 00 90 0f =
+1f
+44 00 00 55 48 89 e5 41 56 49 89 fe 41 55 49 89 d5 41 54 53 48 89 f3 <48> 8=
+b 72
+08 48 3b 32 74 10 48 89 d7 e8 06 fd ff ff 85 c0 0f 85 a0
+[    3.111496] RSP: 0018:ffffb26080a57d88 EFLAGS: 00010296
+[    3.111498] RAX: 0000000000000000 RBX: ffffffffc03dea30 RCX:
+0000000000000000
+[    3.111499] RDX: 0000000000000000 RSI: ffffffffc03dea30 RDI:
+ffff932988db7808
+[    3.111500] RBP: ffffb26080a57da8 R08: ffff9329802aaaa0 R09:
+ffff932981f8f030
+[    3.111502] R10: ffff93299e85b000 R11: 0000000000000000 R12:
+ffff932988db7800
+[    3.111503] R13: 0000000000000000 R14: ffff932988db7808 R15:
+ffff932988db7808
+[    3.111504] FS:  0000000000000000(0000) GS:ffff9330ef700000(0000)
+knlGS:0000000000000000
+[    3.111505] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    3.111507] CR2: 0000000000000008 CR3: 0000000256e10002 CR4:
+0000000000770ee0
+[    3.111508] PKRU: 55555554
+[    3.111509] Call Trace:
+[    3.111511]  <TASK>
+[    3.111514]  typec_link_ports+0x6f/0x90 [typec]
+[    3.111520]  typec_register_port+0x1d4/0x2d0 [typec]
+[    3.111525]  ucsi_init_work+0x401/0x720 [typec_ucsi]
+[    3.111529]  process_one_work+0x21a/0x3f0
+[    3.111533]  worker_thread+0x50/0x3d0
+[    3.111535]  ? rescuer_thread+0x360/0x360
+[    3.111537]  kthread+0xfa/0x120
+[    3.111539]  ? kthread_complete_and_exit+0x20/0x20
+[    3.111541]  ret_from_fork+0x1f/0x30
+[    3.111545]  </TASK>
 
---Sean
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
