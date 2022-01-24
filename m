@@ -2,92 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 372444982C0
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jan 2022 15:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FF8498332
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jan 2022 16:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238675AbiAXOx4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jan 2022 09:53:56 -0500
-Received: from mga01.intel.com ([192.55.52.88]:63871 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231403AbiAXOxz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 Jan 2022 09:53:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643036035; x=1674572035;
-  h=to:cc:references:from:subject:message-id:date:
+        id S240570AbiAXPLk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jan 2022 10:11:40 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:48123 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235253AbiAXPLk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jan 2022 10:11:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643037099; x=1674573099;
+  h=subject:to:cc:references:from:message-id:date:
    mime-version:in-reply-to:content-transfer-encoding;
-  bh=HsIRnM64QqAoEu0GEH2hXeq3tAM799zncK8DTVzxh58=;
-  b=By3dSiN0tpelwrSV7D/j0O/mTJUaZLy3RIrBh5l656tcH+6/IlyqmTlJ
-   KiDlp9mAmkartjqljfSDpPbbRfYHfVmclDOsEsNt/z2cw554VHAw4TQCy
-   D9sHhp1JrIka+L3MjfV5Q/RMchDqjfusioZWbMscrCga2b2jbYf22EnNk
-   ujEJGMwflAMZtrfhsQ7NP2mGswIJEYT8PjH/VJPpjk0gcIlny3UNiv1KQ
-   R9IkjYjmj3nb8QCIMhpUErM+BGj1ZhwxUEFbLZtmTZWOcUpf8/kr93JAL
-   U/pHp9sJVKNHDU52sG9bhSCZnddY01FT6q0tYFyTibyT4rKuxtwLFbHhe
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="270496511"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="270496511"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 06:53:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="562677786"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 24 Jan 2022 06:53:52 -0800
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-References: <YajkzwmWQua3Kh6A@hirez.programming.kicks-ass.net>
- <105f35d2-3c53-b550-bfb4-aa340d31128e@linux.intel.com>
- <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
- <972a0e28-ad63-9766-88da-02743f80181b@intel.com> <Yao35lElOkwtBYEb@kroah.com>
- <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
- <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
- <YcGhIm7yqYPk4Nuu@hirez.programming.kicks-ass.net>
- <YeE4rtq6t73OxOi+@hirez.programming.kicks-ass.net>
- <cd534ff9-e500-c7ea-426a-347ac2b0830b@linux.intel.com>
- <YeLxE3zQ7Vexk3gv@hirez.programming.kicks-ass.net>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: earlyprintk=xdbc seems broken
-Message-ID: <dfb311e3-1a83-31a2-3c82-fd982c0757f6@linux.intel.com>
-Date:   Mon, 24 Jan 2022 16:55:22 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+  bh=/YcoCW22K4Bj4d7gqCROWQEd7ONJm4N2eOylT8ZKqls=;
+  b=NCMz68fEKoIs+pYgGx+7LX5UtQX2wv/3qBtQ3KR3G8wutN2pPs8RSq5x
+   hP3AsCWw25fAx584oKFwi7U3nZ1NDEnAQnvGDWrDknjmWqrC8Zq8OalLI
+   0VtdG1A3gI+QQAI0+wcDs1bM09rnZkCjYoEy9sITLov0NYcGewgBTr7vr
+   E=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 Jan 2022 07:11:39 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 07:11:38 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 24 Jan 2022 07:11:38 -0800
+Received: from [10.50.44.136] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 24 Jan
+ 2022 07:11:31 -0800
+Subject: Re: [PATCH v2 0/7] usb: dwc3: Calculate REFCLKPER et. al. from
+ reference clock
+To:     Baruch Siach <baruch@tkos.co.il>,
+        Kathiravan T <kathirav@codeaurora.org>
+CC:     Sean Anderson <sean.anderson@seco.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "Balaji Prakash J" <bjagadee@codeaurora.org>,
+        <linux-kernel@vger.kernel.org>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        "Rob Herring" <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>
+References: <20220119002438.106079-1-sean.anderson@seco.com>
+ <87ee53fv01.fsf@tarshish> <1965fc315525b8ab26cf9f71f939c24d@codeaurora.org>
+ <871r12g0j2.fsf@tarshish>
+From:   Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+Message-ID: <e1309c23-530b-c698-b7ba-4f1a5226fe8c@quicinc.com>
+Date:   Mon, 24 Jan 2022 20:41:26 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <YeLxE3zQ7Vexk3gv@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <871r12g0j2.fsf@tarshish>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
- 
-> [    0.000000] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 0
-> [    4.984106] xhci_dbc:xdbc_start: waiting for connection timed out, DCPORTSC:0xa0
-> [    9.946159] xhci_dbc:xdbc_start: waiting for connection timed out, DCPORTSC:0xa0
-> [    9.946163] xhci_dbc:early_xdbc_setup_hardware: failed to setup the connection to host
+Hi Baruch,
+
+On 1/20/2022 3:59 PM, Baruch Siach wrote:
+> Hi Kathiravan,
 >
-> [   12.818364] xhci_hcd 0000:00:0d.0: xHCI Host Controller
-> [   12.818373] xhci_hcd 0000:00:0d.0: new USB bus registered, assigned bus number 1
-> [   12.820360] xhci_hcd 0000:00:0d.0: xHCI Host Controller
-> [   12.820363] xhci_hcd 0000:00:0d.0: new USB bus registered, assigned bus number 2
-> [   12.821036] xhci_hcd 0000:00:14.0: xHCI Host Controller
-> [   12.821040] xhci_hcd 0000:00:14.0: new USB bus registered, assigned bus number 3
-> [   12.823451] xhci_hcd 0000:00:14.0: xHCI Host Controller
-> [   12.823453] xhci_hcd 0000:00:14.0: new USB bus registered, assigned bus number 4
-> [   17.115089] usb usb4-port4: Cannot enable. Maybe the USB cable is bad?
-> [   17.115163] usb usb4-port4: config error
+> On Thu, Jan 20 2022, Kathiravan T wrote:
+>> On 2022-01-19 23:44, Baruch Siach wrote:
+>>> Hi Sean,
+>>> On Tue, Jan 18 2022, Sean Anderson wrote:
+>>>> This is a rework of patches 3-5 of [1]. It attempts to correctly program
+>>>> REFCLKPER and REFCLK_FLADJ based on the reference clock frequency. Since
+>>>> we no longer need a special property duplicating this configuration,
+>>>> snps,ref-clock-period-ns is deprecated.
+>>>> Please test this! Patches 3/4 in this series have the effect of
+>>>> programming REFCLKPER and REFCLK_FLADJ on boards which already configure
+>>>> the "ref" clock. I have build tested, but not much else.
+>>> Tested here on IPQ6010 based system. USB still works. But the with
+>>> "ref"
+>>> clock at 24MHz, period is calculated as 0x29. Previous
+>>> snps,ref-clock-period-ns value used to be 0x32.
+>>> Is that expected?
+>> Yes, it is 0x29 for IPQ60xx based SoCs. In downstream it was wrongly mentioned
+>> as 0x32, which was corrected recently.
+> Thanks for the update. This needs fixing in upstream kernel. I'll send a
+> patch.
+>
+> For some reason USB appears to work here with both values. Is it because
+> I only use USB2 signals? If this is the case them I can not actually
+> test this series on my system.
 
-Ok, I see it now.
-Your setup has two xhci controllers, earlypringk=dbc enables dbc on the first xhci
-it finds, which would be at 0000:00:0d.0.
-Your cable is connected to the second xhci host at 0000:00:14.0
+I could recollect we did see some issue on USB2.0 port as well, but it 
+wasn't fatal one. Anyways it is better to test it.
 
-does using "earlyprintk=xdbc1" work?
+Thanks,
 
-Thanks
--Mathias
+Kathiravan T.
+
+>
+> Thanks,
+> baruch
+>
+>>>> [1]
+>>>> https://lore.kernel.org/linux-usb/20220114044230.2677283-1-robert.hancock@calian.com/
+>>>> Changes in v2:
+>>>> - Document clock members
+>>>> - Also program GFLADJ.240MHZDECR
+>>>> - Don't program GFLADJ if the version is < 2.50a
+>>>> - Add snps,ref-clock-frequency-hz property for ACPI
+>>>> Sean Anderson (7):
+>>>>    dt-bindings: usb: dwc3: Deprecate snps,ref-clock-period-ns
+>>>>    usb: dwc3: Get clocks individually
+>>>>    usb: dwc3: Calculate REFCLKPER based on reference clock
+>>>>    usb: dwc3: Program GFLADJ
+>>>>    usb: dwc3: Add snps,ref-clock-frequency-hz property for ACPI
+>>>>    arm64: dts: zynqmp: Move USB clocks to dwc3 node
+>>>>    arm64: dts: ipq6018: Use reference clock to set dwc3 period
+>>>>   .../devicetree/bindings/usb/snps,dwc3.yaml    |   7 +-
+>>>>   arch/arm64/boot/dts/qcom/ipq6018.dtsi         |   3 +-
+>>>>   .../arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi |   4 +-
+>>>>   arch/arm64/boot/dts/xilinx/zynqmp.dtsi        |   4 +-
+>>>>   drivers/usb/dwc3/core.c                       | 112 +++++++++++++++---
+>>>>   drivers/usb/dwc3/core.h                       |  17 ++-
+>>>>   6 files changed, 120 insertions(+), 27 deletions(-)
+>
