@@ -2,180 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B099F498420
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jan 2022 17:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A78449841C
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jan 2022 17:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240814AbiAXQCl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jan 2022 11:02:41 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:30739 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240811AbiAXQCk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jan 2022 11:02:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643040160; x=1674576160;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UwX6flT1SGieW7wRKJioB6QhKIWkUj3HuSLBX50FmI0=;
-  b=XPQd9Tu/8R1rNO7jFEfvFscHeQC+sTgn+YZ1XAk9caP/wflrrYcHQs2N
-   JVGoQfc6fDB4yoDKeMBuZOaYrTEHpt+tDTT9ayFQijxqVxoC0Z1ZqT63T
-   4vzYVpMgmBrJW7Yudi6J3I/iUvMXxKOWwYnhdpRO4qdXO3YPlReF7w02J
-   g=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 Jan 2022 08:02:40 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 08:02:40 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 24 Jan 2022 08:02:39 -0800
-Received: from jackp-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 24 Jan 2022 08:02:39 -0800
-From:   Jack Pham <quic_jackp@quicinc.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        "Michal Nazarewicz" <mina86@mina86.com>
-CC:     <linux-usb@vger.kernel.org>,
-        Roger Quadros <roger.quadros@nokia.com>,
-        Jack Pham <quic_jackp@quicinc.com>
-Subject: [PATCH v4] usb: gadget: f_mass_storage: Make CD-ROM emulation work with Mac OS-X
-Date:   Mon, 24 Jan 2022 08:01:50 -0800
-Message-ID: <20220124160150.19499-1-quic_jackp@quicinc.com>
-X-Mailer: git-send-email 2.24.0
+        id S240872AbiAXQCL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jan 2022 11:02:11 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:42541 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S240846AbiAXQCL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jan 2022 11:02:11 -0500
+Received: (qmail 78238 invoked by uid 1000); 24 Jan 2022 11:02:07 -0500
+Date:   Mon, 24 Jan 2022 11:02:07 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        syzbot <syzbot+48a2d3f5d7c977bc22d7@syzkaller.appspotmail.com>
+Cc:     gregkh@linuxfoundation.org, jun.li@nxp.com, kishon@ti.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        peter.chen@nxp.com, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] BUG: corrupted list in usb_hcd_link_urb_to_ep (2)
+Message-ID: <Ye7Nf1FSi34rs3GJ@rowland.harvard.edu>
+References: <000000000000307c7d05d655b0da@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000307c7d05d655b0da@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Roger Quadros <roger.quadros@nokia.com>
+On Mon, Jan 24, 2022 at 07:33:20AM -0800, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    dd81e1c7d5fb Merge tag 'powerpc-5.17-2' of git://git.kerne..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=126d2170700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=36924ae974256627
+> dashboard link: https://syzkaller.appspot.com/bug?extid=48a2d3f5d7c977bc22d7
+> compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1312815bb00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13804918700000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+48a2d3f5d7c977bc22d7@syzkaller.appspotmail.com
+> 
+> input: CM109 USB driver as /devices/platform/dummy_hcd.4/usb5/5-1/5-1:0.0/input/input1176
+> list_add double add: new=ffff888013fffd18, prev=ffff888013fffd18, next=ffff8880244c9070.
+> ------------[ cut here ]------------
+> kernel BUG at lib/list_debug.c:31!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 140 Comm: kworker/0:2 Not tainted 5.17.0-rc1-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Workqueue: usb_hub_wq hub_event
+> RIP: 0010:__list_add_valid+0x8a/0xc0 lib/list_debug.c:29
+> Code: 74 11 4d 39 f7 74 0c b0 01 5b 41 5c 41 5d 41 5e 41 5f c3 48 c7 c7 80 5a d6 8a 4c 89 fe 4c 89 e2 4c 89 f1 31 c0 e8 3e 3c 53 fd <0f> 0b 48 c7 c7 40 59 d6 8a 4c 89 e6 4c 89 f1 31 c0 e8 28 3c 53 fd
+> RSP: 0018:ffffc9000282e680 EFLAGS: 00010046
+> RAX: 0000000000000058 RBX: ffff8880244c9078 RCX: 1c7d44314f50cc00
+> RDX: 0000000000000000 RSI: 0000000080000002 RDI: 0000000000000000
+> RBP: ffff8880244c9078 R08: ffffffff816affd2 R09: ffffed1017344f24
+> R10: ffffed1017344f24 R11: 0000000000000000 R12: ffff888013fffd18
+> R13: dffffc0000000000 R14: ffff8880244c9070 R15: ffff888013fffd18
+> FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fff0109a9f8 CR3: 000000001fd14000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  __list_add include/linux/list.h:69 [inline]
+>  list_add_tail include/linux/list.h:102 [inline]
+>  usb_hcd_link_urb_to_ep+0x1ae/0x300 drivers/usb/core/hcd.c:1181
+>  dummy_urb_enqueue+0x2a9/0x750 drivers/usb/gadget/udc/dummy_hcd.c:1284
+>  usb_hcd_submit_urb+0x2be/0x5f0 drivers/usb/core/hcd.c:1555
+>  cm109_input_open+0x1eb/0x460 drivers/input/misc/cm109.c:572
+>  input_open_device+0x184/0x2d0 drivers/input/input.c:629
+>  kbd_connect+0xe5/0x120 drivers/tty/vt/keyboard.c:1593
+>  input_attach_handler drivers/input/input.c:1035 [inline]
+>  input_register_device+0xd95/0x1140 drivers/input/input.c:2335
+>  cm109_usb_probe+0x11bf/0x16c0 drivers/input/misc/cm109.c:806
+>  usb_probe_interface+0x633/0xb40 drivers/usb/core/driver.c:396
 
-Mac OS-X expects CD-ROM TOC in raw format (i.e. format:2). It also
-sends the READ_TOC CDB in old style SFF8020i format. i.e. 2 format bits
-are encoded in MSBs of CDB byte 9.
+Dmitry:
 
-This patch will enable CD-ROM emulation to work with Mac OS-X. Tested on
-Mac OS X v10.6.3.
+It looks like the cm109 driver has a logic bug.   
+cm109_urb_irq_callback() doesn't check dev->ctl_urb_pending before 
+setting it and trying to submit the control URB.
 
-Signed-off-by: Roger Quadros <roger.quadros@nokia.com>
-Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
----
-v4: Updated return length as I had inadvertently applied an earlier version of
-    Roger's patch which had the same mistake [2]
-v3: Updated command mask to allow for non-zero byte 2
-v2: Removed Change-Id
-v1: Resurrected original change [1] and consolidated into single patch
+I don't know anything about how this driver is meant to work, and this 
+apparent bug may be unrelated to what syzbot found.  Could you please 
+take a look at it?
 
-[1] https://lore.kernel.org/lkml/1302015569-9668-1-git-send-email-roger.quadros@nokia.com/T/#u
-[2] https://lore.kernel.org/lkml/4D876ECA.4010503@nokia.com/
-
- drivers/usb/gadget/function/f_mass_storage.c | 70 ++++++++++++++++----
- 1 file changed, 58 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-index 752439690fda..988cbc8cec7a 100644
---- a/drivers/usb/gadget/function/f_mass_storage.c
-+++ b/drivers/usb/gadget/function/f_mass_storage.c
-@@ -1188,6 +1188,8 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
- 	int		msf = common->cmnd[1] & 0x02;
- 	int		start_track = common->cmnd[6];
- 	u8		*buf = (u8 *)bh->buf;
-+	u8		format;
-+	int		i, len;
- 
- 	if ((common->cmnd[1] & ~0x02) != 0 ||	/* Mask away MSF */
- 			start_track > 1) {
-@@ -1195,18 +1197,62 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
- 		return -EINVAL;
- 	}
- 
--	memset(buf, 0, 20);
--	buf[1] = (20-2);		/* TOC data length */
--	buf[2] = 1;			/* First track number */
--	buf[3] = 1;			/* Last track number */
--	buf[5] = 0x16;			/* Data track, copying allowed */
--	buf[6] = 0x01;			/* Only track is number 1 */
--	store_cdrom_address(&buf[8], msf, 0);
-+	format = common->cmnd[2] & 0xf;
-+	/*
-+	 * Check if CDB is old style SFF-8020i
-+	 * i.e. format is in 2 MSBs of byte 9
-+	 * Mac OS-X host sends us this.
-+	 */
-+	if (format == 0)
-+		format = (common->cmnd[9] >> 6) & 0x3;
-+
-+	switch (format) {
-+	case 0:
-+		/* Formatted TOC */
-+		len = 4 + 2*8;		/* 4 byte header + 2 descriptors */
-+		memset(buf, 0, len);
-+		buf[1] = len - 2;	/* TOC Length excludes length field */
-+		buf[2] = 1;		/* First track number */
-+		buf[3] = 1;		/* Last track number */
-+		buf[5] = 0x16;		/* Data track, copying allowed */
-+		buf[6] = 0x01;		/* Only track is number 1 */
-+		store_cdrom_address(&buf[8], msf, 0);
-+
-+		buf[13] = 0x16;		/* Lead-out track is data */
-+		buf[14] = 0xAA;		/* Lead-out track number */
-+		store_cdrom_address(&buf[16], msf, curlun->num_sectors);
-+		return len;
-+
-+	case 2:
-+		/* Raw TOC */
-+		len = 4 + 3*11;		/* 4 byte header + 3 descriptors */
-+		memset(buf, 0, len);	/* Header + A0, A1 & A2 descriptors */
-+		buf[1] = len - 2;	/* TOC Length excludes length field */
-+		buf[2] = 1;		/* First complete session */
-+		buf[3] = 1;		/* Last complete session */
-+
-+		buf += 4;
-+		/* fill in A0, A1 and A2 points */
-+		for (i = 0; i < 3; i++) {
-+			buf[0] = 1;	/* Session number */
-+			buf[1] = 0x16;	/* Data track, copying allowed */
-+			/* 2 - Track number 0 ->  TOC */
-+			buf[3] = 0xA0 + i; /* A0, A1, A2 point */
-+			/* 4, 5, 6 - Min, sec, frame is zero */
-+			buf[8] = 1;	/* Pmin: last track number */
-+			buf += 11;	/* go to next track descriptor */
-+		}
-+		buf -= 11;		/* go back to A2 descriptor */
- 
--	buf[13] = 0x16;			/* Lead-out track is data */
--	buf[14] = 0xAA;			/* Lead-out track number */
--	store_cdrom_address(&buf[16], msf, curlun->num_sectors);
--	return 20;
-+		/* For A2, 7, 8, 9, 10 - zero, Pmin, Psec, Pframe of Lead out */
-+		store_cdrom_address(&buf[7], msf, curlun->num_sectors);
-+		return len;
-+
-+	default:
-+		/* Multi-session, PMA, ATIP, CD-TEXT not supported/required */
-+		curlun->sense_data = SS_INVALID_FIELD_IN_CDB;
-+		return -EINVAL;
-+	}
- }
- 
- static int do_mode_sense(struct fsg_common *common, struct fsg_buffhd *bh)
-@@ -1944,7 +1990,7 @@ static int do_scsi_command(struct fsg_common *common)
- 		common->data_size_from_cmnd =
- 			get_unaligned_be16(&common->cmnd[7]);
- 		reply = check_command(common, 10, DATA_DIR_TO_HOST,
--				      (7<<6) | (1<<1), 1,
-+				      (0xf<<6) | (3<<1), 1,
- 				      "READ TOC");
- 		if (reply == 0)
- 			reply = do_read_toc(common, bh);
--- 
-2.24.0
-
+Alan Stern
