@@ -2,71 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C715A49820A
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jan 2022 15:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 372444982C0
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jan 2022 15:53:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237811AbiAXOZI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jan 2022 09:25:08 -0500
-Received: from mga03.intel.com ([134.134.136.65]:63763 "EHLO mga03.intel.com"
+        id S238675AbiAXOx4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jan 2022 09:53:56 -0500
+Received: from mga01.intel.com ([192.55.52.88]:63871 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238109AbiAXOZG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 Jan 2022 09:25:06 -0500
+        id S231403AbiAXOxz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 Jan 2022 09:53:55 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643034306; x=1674570306;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sfjkK22NlOUo/XJ4kG04bQhmoPnIkhf2ZWI38Fc2OVg=;
-  b=d29WbpZiD+hx8RUikC7umeIl9uefHO+RJChKWMc8+C5gShOMqNlM8XHp
-   UE3aBs9eqgiJcn8Ya9xZOdBqMOx/iRIiC7oewxl7X7CcKrDvt7VfOafBX
-   mAWgYGtk0s3CMhYOjQbhj1GOEw1954jM63E7ww2COxkm9mW1u0+pdtHXQ
-   t41/P/MscwKKeScWE0LDbqmEa2JCntq3GF4XPUe2rTxPieK9EGasdQ9eK
-   6+n813inj+4cApbTjq1t/XpYugY23X6LliyWCrDfAj5WZva88KuGOH9xI
-   9TCUEjgmRUyVDkDAxvuDtp9u4fdTHgN9Bm9EZWvNiaBQEJ80TdNbYzGg0
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="246000553"
+  t=1643036035; x=1674572035;
+  h=to:cc:references:from:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=HsIRnM64QqAoEu0GEH2hXeq3tAM799zncK8DTVzxh58=;
+  b=By3dSiN0tpelwrSV7D/j0O/mTJUaZLy3RIrBh5l656tcH+6/IlyqmTlJ
+   KiDlp9mAmkartjqljfSDpPbbRfYHfVmclDOsEsNt/z2cw554VHAw4TQCy
+   D9sHhp1JrIka+L3MjfV5Q/RMchDqjfusioZWbMscrCga2b2jbYf22EnNk
+   ujEJGMwflAMZtrfhsQ7NP2mGswIJEYT8PjH/VJPpjk0gcIlny3UNiv1KQ
+   R9IkjYjmj3nb8QCIMhpUErM+BGj1ZhwxUEFbLZtmTZWOcUpf8/kr93JAL
+   U/pHp9sJVKNHDU52sG9bhSCZnddY01FT6q0tYFyTibyT4rKuxtwLFbHhe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="270496511"
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="246000553"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 06:25:05 -0800
+   d="scan'208";a="270496511"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 06:53:55 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="534242458"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 06:25:03 -0800
-Received: by lahna (sSMTP sendmail emulation); Mon, 24 Jan 2022 16:22:49 +0200
-Date:   Mon, 24 Jan 2022 16:22:49 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Remove useless DMA-32 fallback configuration
-Message-ID: <Ye62OesXyIDhBEyy@lahna>
-References: <4b40fc065771fadc1a5187d533bd760e034ece58.1641732679.git.christophe.jaillet@wanadoo.fr>
+   d="scan'208";a="562677786"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga001.jf.intel.com with ESMTP; 24 Jan 2022 06:53:52 -0800
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+References: <YajkzwmWQua3Kh6A@hirez.programming.kicks-ass.net>
+ <105f35d2-3c53-b550-bfb4-aa340d31128e@linux.intel.com>
+ <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
+ <972a0e28-ad63-9766-88da-02743f80181b@intel.com> <Yao35lElOkwtBYEb@kroah.com>
+ <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
+ <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
+ <YcGhIm7yqYPk4Nuu@hirez.programming.kicks-ass.net>
+ <YeE4rtq6t73OxOi+@hirez.programming.kicks-ass.net>
+ <cd534ff9-e500-c7ea-426a-347ac2b0830b@linux.intel.com>
+ <YeLxE3zQ7Vexk3gv@hirez.programming.kicks-ass.net>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: earlyprintk=xdbc seems broken
+Message-ID: <dfb311e3-1a83-31a2-3c82-fd982c0757f6@linux.intel.com>
+Date:   Mon, 24 Jan 2022 16:55:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4b40fc065771fadc1a5187d533bd760e034ece58.1641732679.git.christophe.jaillet@wanadoo.fr>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <YeLxE3zQ7Vexk3gv@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jan 09, 2022 at 01:51:31PM +0100, Christophe JAILLET wrote:
-> As stated in [1], dma_set_mask() with a 64-bit mask never fails if
-> dev->dma_mask is non-NULL.
-> So, if it fails, the 32 bits case will also fail for the same reason.
-> 
-> Simplify code and remove some dead code accordingly.
-> 
-> 
-> While at it, include directly <linux/dma-mapping.h> instead on relying on
-> indirect inclusion.
-> 
-> [1]: https://lkml.org/lkml/2021/6/7/398
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+ 
+> [    0.000000] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 0
+> [    4.984106] xhci_dbc:xdbc_start: waiting for connection timed out, DCPORTSC:0xa0
+> [    9.946159] xhci_dbc:xdbc_start: waiting for connection timed out, DCPORTSC:0xa0
+> [    9.946163] xhci_dbc:early_xdbc_setup_hardware: failed to setup the connection to host
+>
+> [   12.818364] xhci_hcd 0000:00:0d.0: xHCI Host Controller
+> [   12.818373] xhci_hcd 0000:00:0d.0: new USB bus registered, assigned bus number 1
+> [   12.820360] xhci_hcd 0000:00:0d.0: xHCI Host Controller
+> [   12.820363] xhci_hcd 0000:00:0d.0: new USB bus registered, assigned bus number 2
+> [   12.821036] xhci_hcd 0000:00:14.0: xHCI Host Controller
+> [   12.821040] xhci_hcd 0000:00:14.0: new USB bus registered, assigned bus number 3
+> [   12.823451] xhci_hcd 0000:00:14.0: xHCI Host Controller
+> [   12.823453] xhci_hcd 0000:00:14.0: new USB bus registered, assigned bus number 4
+> [   17.115089] usb usb4-port4: Cannot enable. Maybe the USB cable is bad?
+> [   17.115163] usb usb4-port4: config error
 
-Applied, thanks!
+Ok, I see it now.
+Your setup has two xhci controllers, earlypringk=dbc enables dbc on the first xhci
+it finds, which would be at 0000:00:0d.0.
+Your cable is connected to the second xhci host at 0000:00:14.0
+
+does using "earlyprintk=xdbc1" work?
+
+Thanks
+-Mathias
