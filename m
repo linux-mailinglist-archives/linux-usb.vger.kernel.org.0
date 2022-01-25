@@ -2,72 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2D849ACFA
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jan 2022 08:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F82849AE5C
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jan 2022 09:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348819AbiAYHFt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jan 2022 02:05:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46212 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352578AbiAYHDj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jan 2022 02:03:39 -0500
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7973C02B756
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jan 2022 21:41:52 -0800 (PST)
-Received: by mail-ua1-x92d.google.com with SMTP id u6so35454232uaq.0
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jan 2022 21:41:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
-        b=omchJdYJcVvbnbx3iWDsqNfzfvgFxRY5UV8d5JFHFd0Qxp4Fs99oOTWbnsLJvmkGLO
-         KJ9h0aIZipzZCxLYUC1EbKJQXjsTnrYD4skWPu5L6KEa7WwksJ/DgfAKn2I//FvNz16e
-         yvRSMjBJIkfJOiN7QosmIFzfX6t0OymUxXq/kzoldmt5Tk4SMXy3poAlzZfnj4tLqkCO
-         r1uVZjBjIcfKcTHUm4yIRwmNGijXGA0OAhFYRol/6hiAAZJ37V1K6a3bLM+XpGdFXGos
-         hPiIHyT9XSW8aiVFGjIdHRgRcnWLHkX21ZW87GvspRwlXlL9xuI6dXFZXWxBZnRTJWgA
-         Bk5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
-        b=hLlysglg0JdkTQcutbjVTY55e3eOON0eMscCtP6zvzN+N/qF72OnCJyZUwHGVyR6Jx
-         ppy92LvXlyw8G6KihTviRtLg9+RfP1LQ8Fpz1U8DJg/CCrrmldHZ2RE5dTcza7GaO8ZB
-         rGBYL7TrDv9k5uA30QJQDqPuiGXpEnuapcZcOwc80ywUtqy7t2BM9ujx/iFGaDfyZKY2
-         /JA6gbtmkZcbPc1WVF2xBGP2XNCACTtAAQeLoOKRa1A2XdiHrKyDVg2EYjIq3yWOEg4y
-         nKIoB3NqbbEtvronzMgsWVFFcDFukxoX9HFBsdf8JdQZzAgbvwcV4Cj3kR63M+5XGuB0
-         VPGQ==
-X-Gm-Message-State: AOAM530JZ3Fqf3B6TtXh0YasecIP72DPGXp+Wdb2sPfxzuo8BPh1Eung
-        PKyB5Wzkldjk5ON/okyE0Qeh1c8wBJo66hByoEByYk2d13Y=
-X-Google-Smtp-Source: ABdhPJwywiwyTtOCXfovmJIEM7Vqt+PFDzMW3tzxRj90P3fJDPhIlV2jOd/vI9WPw47eCab8Z7S4n4qldrLRD5Ly+Sc=
-X-Received: by 2002:a25:d783:: with SMTP id o125mr27594671ybg.710.1643089301256;
- Mon, 24 Jan 2022 21:41:41 -0800 (PST)
+        id S1379397AbiAYIsT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jan 2022 03:48:19 -0500
+Received: from mga05.intel.com ([192.55.52.43]:3576 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1452098AbiAYIpa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 25 Jan 2022 03:45:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643100329; x=1674636329;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yQ7GGbQ6YDW3oSMj6icbaNxTlAvHdxcNnTTpnvf2jR4=;
+  b=Es1WmWid8Rpq1a6pCTF8Z0mC+fJUYkPhWSfA0ku9RE5yVp6HF65ykT/U
+   dzLUKzkSvdrdIaNgjnZF5fjrZp/cEQpj0DfUKjFk3YAjJ1fFDBuLvDJgX
+   QEHDzWrTCNtX4ZTNJIcdfwCdkttV0l7Wp7aA5ouH/ZkHU+bnIAj/+xl2/
+   nwWzMRv7DgHVJJah2p8M0DnzzsQ7R/t+ZpmnA8Pg9FXxYNxUyYDCDCSBK
+   cwnoEVdDeJXpBs5tCefFJMiKzpwoip0spkUDGsAVX2EaoeK8OC1DVwr4H
+   lkCMNP44YaPNBrBcNcDzka2dRT2n5XS9L6qRU9lYMzZqmk9md/PzJdYYJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="332609112"
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="332609112"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 00:43:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="673923145"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 25 Jan 2022 00:43:31 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 25 Jan 2022 10:43:30 +0200
+Date:   Tue, 25 Jan 2022 10:43:30 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Len Brown <lenb@kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        rafael.j.wysocki@intel.com, linux-usb@vger.kernel.org,
+        YongQin Liu <yongqin.liu@linaro.org>
+Subject: Re: [Bug][5.17-rc0] Between commits daadb3bd0e8d and 455e73a07f6e,
+ the kernel stops loading on my devices.
+Message-ID: <Ye+4MpCFeWScLBEr@kuha.fi.intel.com>
+References: <YeUvvIaVJnJrrpYe@kuha.fi.intel.com>
+ <CABXGCsO5PYBuZ11YR16NLLa0H07Jom1JQhWHFuETfotfBfzkMw@mail.gmail.com>
+ <YeVQsRp7aDMcQKs7@kuha.fi.intel.com>
+ <CABXGCsMWXFFQY3L8ixK9K-gYX41_gTjqHRBXNp6gDpUgdnvFfg@mail.gmail.com>
+ <YeVfYOhxGTgg8VpZ@kuha.fi.intel.com>
+ <CABXGCsOwsP7NJ67oyK3HPs2EarSJKLB9EVW7oEh+8bAFihSa8g@mail.gmail.com>
+ <Yea8p1b/sZYKNGaB@kuha.fi.intel.com>
+ <YebBq/WDeYCIvwYw@kuha.fi.intel.com>
+ <CANcMJZDrs418aUoVS4CijQFqgAW3pCbfm_NUCmx+T7HNoiMVnQ@mail.gmail.com>
+ <CAJvTdKnMKdQ6KJe63phZ87kJz2SjeQoNTHqajSfv4RJo6+Y6jw@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7000:ad9d:0:0:0:0 with HTTP; Mon, 24 Jan 2022 21:41:40
- -0800 (PST)
-Reply-To: danielseyba@yahoo.com
-From:   Seyba Daniel <mrssuzaramaling19@gmail.com>
-Date:   Tue, 25 Jan 2022 06:41:40 +0100
-Message-ID: <CAKN-9XgQjuMspSnu-F01fv+Bgr6eZEygpsR3pZ-5cF=m78av-Q@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJvTdKnMKdQ6KJe63phZ87kJz2SjeQoNTHqajSfv4RJo6+Y6jw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Mon, Jan 24, 2022 at 06:00:24PM -0500, Len Brown wrote:
+> Tested-by: Len Brown <len.brown@intelcom>
+> 
+> The typec_link_ports crash goes away w/ the 2nd patch.
+> 
+> https://bugzilla.kernel.org/show_bug.cgi?id=215529
 
-I am so sorry contacting you in this means especially when we have never
-met before. I urgently seek your service to represent me in investing in
-your region / country and you will be rewarded for your service without
-affecting your present job with very little time invested in it.
+That patch was already sent out:
+https://lore.kernel.org/linux-usb/20220124090228.41396-3-heikki.krogerus@linux.intel.com/
 
-My interest is in buying real estate, private schools or companies with
-potentials for rapid growth in long terms.
+thanks,
 
-So please confirm interest by responding back.
+> On Fri, Jan 21, 2022 at 4:33 PM John Stultz <john.stultz@linaro.org> wrote:
+> >
+> > On Thu, Jan 20, 2022 at 3:27 AM Heikki Krogerus
+> > <heikki.krogerus@linux.intel.com> wrote:
+> > > On Tue, Jan 18, 2022 at 03:12:10PM +0200, Heikki Krogerus wrote:
+> > > > I can reproduce this one by simply not creating the component list in
+> > > > the code. That function - component_master_add_with_match() - can't
+> > > > handle situation where the list is empty. I'll prepare the fix.
+> > >
+> > > I'm again attaching the proposed fix, just to see if it also gets
+> > > corrupted. Can you test does it fix this issue?
+> > > You need to apply it on top of the previous one.
+> >
+> > We've been hitting the null pointer crash from
+> > component_master_add_with_match() regression as well on the hikey960
+> > board.
+> >
+> > The patch you attached resolves the issue. It would be great to see it
+> > merged upstream soon!
+> >
+> > Tested-by: John Stultz <john.stultz@linaro.org>
+> >
+> > thanks
+> > -john
+> 
+> -- 
+> Len Brown, Intel Open Source Technology Center
 
-My dearest regards
-
-Seyba Daniel
+-- 
+heikki
