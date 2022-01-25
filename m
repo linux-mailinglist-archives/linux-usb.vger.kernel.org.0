@@ -2,119 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A00F049B5A3
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jan 2022 15:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8069E49B5C4
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jan 2022 15:10:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1577673AbiAYOEg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jan 2022 09:04:36 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:10054 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244466AbiAYOCA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jan 2022 09:02:00 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20PDa1B1026888;
-        Tue, 25 Jan 2022 14:01:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=hM+U2dlqP46OUo4fwxEPEJfGWMF4re/nYmzSS2JOeRc=;
- b=hZCiJ2CAWduSzQpBnyHIC33rqkEsePodhpbctvVzBHdarFOvdKVcjQ25zxq+UuskPeYX
- cP/LFODS+jLGf8G7mQvfJCjjM1OdRQs4b0e11EU7kRIb+gCSg6OsUVfR2N8RlVKG3d2y
- P2gR/7qPM9zRqc6bChkHBf90Ujawqt3Gtqi0b/ykT1JIVLXOQTl2Q1l4dohHYN8bzBSB
- YypXC+oaCk+KKRjYU1SQxF253PlFOL9lgIig7Tvze5Opln/ZYwMfjENF9OF9ZwtXTuSt
- Q3JY+cObvrKsaYnIFVyHbXZnmBwNqcurivUyT5HqMI6n5AHbyFMltFWTY+evXnORzAHp FA== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dthxvrvuy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 14:01:41 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20PDwLK9020971;
-        Tue, 25 Jan 2022 14:01:39 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06ams.nl.ibm.com with ESMTP id 3dr96jetbv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 14:01:39 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20PE1aLX42860816
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Jan 2022 14:01:37 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D0E7742047;
-        Tue, 25 Jan 2022 14:01:36 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 930654204B;
-        Tue, 25 Jan 2022 14:01:36 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 25 Jan 2022 14:01:36 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: Re: earlyprintk=xdbc seems broken
-References: <Yao35lElOkwtBYEb@kroah.com>
-        <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
-        <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
-        <YcGhIm7yqYPk4Nuu@hirez.programming.kicks-ass.net>
-        <YeE4rtq6t73OxOi+@hirez.programming.kicks-ass.net>
-        <cd534ff9-e500-c7ea-426a-347ac2b0830b@linux.intel.com>
-        <YeLxE3zQ7Vexk3gv@hirez.programming.kicks-ass.net>
-        <dfb311e3-1a83-31a2-3c82-fd982c0757f6@linux.intel.com>
-        <Ye/w/lOf4f8+8fDt@hirez.programming.kicks-ass.net>
-        <yt9dbl00rmgx.fsf@linux.ibm.com>
-        <YfAA+age1zo3lxIB@hirez.programming.kicks-ass.net>
-Date:   Tue, 25 Jan 2022 15:01:36 +0100
-In-Reply-To: <YfAA+age1zo3lxIB@hirez.programming.kicks-ass.net> (Peter
-        Zijlstra's message of "Tue, 25 Jan 2022 14:54:01 +0100")
-Message-ID: <yt9dh79rnccf.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        id S1386395AbiAYOKc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jan 2022 09:10:32 -0500
+Received: from mga01.intel.com ([192.55.52.88]:34418 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1578027AbiAYOIZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 25 Jan 2022 09:08:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643119705; x=1674655705;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XgfYTpAKCUjsVgEWndslqumPAtQ3LFT5BEWLwncUR10=;
+  b=KFvdTrXcfZS+/+Ks3U5nreMdxBo8uXt4h7ZXI5fZdfrqcCW+u8cqayOK
+   42AmSrp5f2KxJxeK3m3uKJJ16GZCqU1hfqwBD5364OohARCVyLKHUlikt
+   zDitERCgaQsXuDwEOrRYqXceFxGauAV+D0kBlD5BSldQbln/JqRZZk/fQ
+   hCpBbaLpQa3bngiXiE7wRY2mVIPxvCRl8cowFhqUfW3+lzRWZczQJgjfw
+   rj8f8lX8jQGTsrR5308lrkw7S0seuO42Oh7CuYPqqVJ0dthhREs2dPj5T
+   1Tm84Twr+Czg+xiNgigl19ofiIp7b1M/MzoWzFIfxlIvpc8HAwh7QWWkH
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="270752320"
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="270752320"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 06:05:22 -0800
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="580757906"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 06:05:18 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nCMQd-00EGe2-Nv;
+        Tue, 25 Jan 2022 16:04:11 +0200
+Date:   Tue, 25 Jan 2022 16:04:11 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+Subject: Re: [PATCH v2 1/5] nvmem: core: Remove unused devm_nvmem_unregister()
+Message-ID: <YfADW9YZ8Hbt8Phq@smile.fi.intel.com>
+References: <20220124180040.50660-1-andriy.shevchenko@linux.intel.com>
+ <11caff0e-6bf3-9d66-6312-c2c2a6fc862a@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: iYUsxqAKHKiGZOdJeA37eLFAyGmJX0Zv
-X-Proofpoint-ORIG-GUID: iYUsxqAKHKiGZOdJeA37eLFAyGmJX0Zv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-25_02,2022-01-25_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- mlxscore=0 bulkscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0
- priorityscore=1501 clxscore=1015 suspectscore=0 impostorscore=0
- mlxlogscore=765 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201250092
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <11caff0e-6bf3-9d66-6312-c2c2a6fc862a@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Peter Zijlstra <peterz@infradead.org> writes:
+On Tue, Jan 25, 2022 at 10:35:24AM +0000, Srinivas Kandagatla wrote:
+> On 24/01/2022 18:00, Andy Shevchenko wrote:
+> > There are no users and seems no will come of the devm_nvmem_unregister().
+> > Remove the function and remove the unused devm_nvmem_match() along with it.
 
-> On Tue, Jan 25, 2022 at 02:09:18PM +0100, Sven Schnelle wrote:
->> Peter Zijlstra <peterz@infradead.org> writes:
->> 
->> > Now the documentation states we need this super speed A<->A cable, but
->> > could you also update the documentation for usb-c ? There's a fair
->> > number of usb-c only devices out there now.
->> 
->> Stupid beginners question: Would every USB3 A-A cable work, or are the
->> debug cables special? I've read the RX/TX pairs have to be swapped, but
->> to me it looks like that's always the case?
->
-> I'm using a random USB3 A-A cable (it came with an HDMI frame grabber of
-> of AliExpress). The official one has a wire missing I think, to avoid
-> ground loops or something like that.
->
-> The easiest thing to do is try the runtime DBC option:
->
->   echo enable > /sys/bus/pci/devices/0000:00:14.0/dbc
->
-> If that works you can see what it takes to make the earlyprintk one
-> working. This thread seems to have much of that covered.
-
-Thanks, the sysfs test works for me. I have two A-A cables, one is from
-a cheap PCI-e extender, the other one from a KVM switch. Both work,
-which is great. So i assume that most A-A cable would work. I'm building
-a new kernel now with the patch on top, lets see.
+> Applied 1/5, 2/5 and 3/5 patches.
 
 Thanks!
+
+> Others can go via there own subsystems as I do not see any dependencies.
+
+They are dependent on the patch 3 ("nvmem: core: Check input parameter for
+NULL in nvmem_unregister()"). Since there are tags, can you apply them as
+well?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
