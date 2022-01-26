@@ -2,56 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 537F649C26D
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 05:05:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F16EE49C279
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 05:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237451AbiAZEE5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jan 2022 23:04:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
+        id S237464AbiAZEGw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jan 2022 23:06:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237444AbiAZEEz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jan 2022 23:04:55 -0500
+        with ESMTP id S237500AbiAZEGu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jan 2022 23:06:50 -0500
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330B2C06173B
-        for <linux-usb@vger.kernel.org>; Tue, 25 Jan 2022 20:04:55 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id 127-20020a250f85000000b00611ab6484abso45753089ybp.23
-        for <linux-usb@vger.kernel.org>; Tue, 25 Jan 2022 20:04:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8BAC061744
+        for <linux-usb@vger.kernel.org>; Tue, 25 Jan 2022 20:06:50 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id d65-20020a256844000000b00614359972a6so36749265ybc.16
+        for <linux-usb@vger.kernel.org>; Tue, 25 Jan 2022 20:06:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=zGpZZqA59lqSjncOCUawbzrH4HoG3Or+e1TiGHQxkQc=;
-        b=Iwo2PQAnRuvpnA8d+vAOQ+gIHT4EAKob+ueQr407aKW0mDbIbw2bVnb5cTAymh1/N8
-         djckblVAT9v4WCSGgzGir7Q0xquNsn6gZaOXLLtn7bV2/jUjmPA8H9UPk9nsPa0Os+dn
-         8BRhFpy25P6AHYJRLiEyIxiAD/cuaq6O9PqlJLAy0sDn8M726cwerB7TqTXA/50FHpa8
-         UpMeCE6ZNTQGo0RUCyr3wa16OisDJ9jdSlrCw36nJzVOycbPq7KuPtVbDKBKTjWmIT13
-         2Q1O2NN56Jzh6knC/YdAmYo7B/7S+ILZC9UaWNcQqOxvVM1B+zoaitS84vglwGepyWLe
-         F76g==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=HkfPmpCPhI4ODIe5DoaH45p7aAixzF8Mvfn5ikpABY8=;
+        b=PcqY+kCDb8UqpK1dbw2lWC2guuzF7QDxlHNXlojxEspoAt0IsvZMUY/4+w4Zmk2i7H
+         POj4/X0fq5WzuXP6mk+hQtEf0PUQa2Yf8EKH0vx+XfAv6bl9dKa30vWtUxA//FgLKQEQ
+         tImo3owgB2h2Tj16PS+IuY35CKVIox2JQKQdtfrVFZPbOdxiLB9o2mlDv58G32ktakfZ
+         dJpgZcSxYPczZyqbguctBdp2G43VJbXeduU9q1rloZxYfNpf9OU7iayZUta38sbS1eHY
+         S3/YGLFmbW/to6LyAKj15/7wbl8jWonI+XP5ZbfPGb7scPT8ySAGRhw4Yx1Wi+EhmVWS
+         vP6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=zGpZZqA59lqSjncOCUawbzrH4HoG3Or+e1TiGHQxkQc=;
-        b=kRXdgPRxpIMCocyMMFqfe9mpRFWcYo5QHB/QFfM3CeecqhPlHUmSh33lz6BwlBC6AC
-         uPd8+ZwQ0Xr918lgy74gY2/4K5gCfANswUQ7674RSiwqd5eVJgjcoXN+5ej3/Rqd641i
-         MxPCs/UPnodFEZuWAO+Q4K1X8wMj2idKx47D7ebyL+uMSBrZ6XHgtVEQuePzkYf7q+ZL
-         R1aNF37g3yTeheSyJg3nZoo3RJDRmTCjSwXjWrfJHsusPLaJmJ7/Rzu5xBYPKejanKCj
-         za+XxGvRRNgYxoDtQNfc+Exv75JKwtcNLh8zlaNLzt+oAV8YF5ID3i1TrYN6zCWY6a9z
-         4kdQ==
-X-Gm-Message-State: AOAM530cV0a+irUYwEPFsemqRAbnfdgpWjBy/4BLbkxbVNkWsKofE9ru
-        uVit9uJvRpjGL/tAsr6okSOJZBb7d0s=
-X-Google-Smtp-Source: ABdhPJz71lD3YVAeXHyQ9Wjx7IfVwseXh5k7ip5PRnaw73GHBvxrwC/ROS7a5J0XL3Z96bpibFXgvyN6y8U=
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=HkfPmpCPhI4ODIe5DoaH45p7aAixzF8Mvfn5ikpABY8=;
+        b=FQS14bpUA02qVGx6xZe8ymn2rvd9KwU1tFfF2INWZbRb+Xe9F2f888LHC6/AUzex2Z
+         TKV7G3VgONoh+ypbVdDmTIV71ZESeJ786yZv6sWkljtilBCX99Ytmanx8ZN/72dQONM1
+         Ex/f8jtLSFYm2uBFEaD8qMXFStIj903AVHSRUxlLfMQ/RDuEGNIplSaaFAQt8+wUzbv0
+         68DAgRIDycu1NoER7gGVZLV8DPg6/WioyHTJ20NRq9oRc8uXDWnw4yoehej8EQ6zUoI3
+         Pq8awJdxKGPALl/QA5UAHfJGZLuuyq6GiKeXg3vnfmMWZzIfWNvWAivEXv6SMj2c46CT
+         8tlA==
+X-Gm-Message-State: AOAM533hx3Wj2zSTPKso8iP6ns74M18w/UNU3xPTCarvNaWoMlNgmSmC
+        1KHWbN7hzCbfjL24dYnD0Li+NR9Wjx4=
+X-Google-Smtp-Source: ABdhPJzb2Oy2KHD7blNoWFU+7dfaY6NUQZhgukPyDaqmXS3SPggM6Y8slRYZ4fbK8cld6zYI5O1x1+SGBYk=
 X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:f4a7:8e16:f301:160])
- (user=badhri job=sendgmr) by 2002:a81:23ce:0:b0:2ca:287c:6c3d with SMTP id
- 00721157ae682-2ca33e99465mr6881017b3.226.1643169893957; Tue, 25 Jan 2022
- 20:04:53 -0800 (PST)
-Date:   Tue, 25 Jan 2022 20:04:47 -0800
-In-Reply-To: <20220126040447.3186233-1-badhri@google.com>
-Message-Id: <20220126040447.3186233-2-badhri@google.com>
+ (user=badhri job=sendgmr) by 2002:a25:b94b:: with SMTP id s11mr34233129ybm.439.1643170009692;
+ Tue, 25 Jan 2022 20:06:49 -0800 (PST)
+Date:   Tue, 25 Jan 2022 20:06:45 -0800
+Message-Id: <20220126040645.3187200-1-badhri@google.com>
 Mime-Version: 1.0
-References: <20220126040447.3186233-1-badhri@google.com>
 X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH v2 2/2] usb: typec: tcpm: Do not disconnect when receiving VSAFE0V
+Subject: [PATCH v3 2/2] usb: typec: tcpm: Do not disconnect when receiving VSAFE0V
 From:   Badhri Jagan Sridharan <badhri@google.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -94,6 +89,8 @@ Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
 Changes since v1:
 - Fix typos stated by Guenter Roeck.
+Changes since v2:
+- Add reviewed-by/acked-by tags
 ---
  drivers/usb/typec/tcpm/tcpm.c | 4 ++++
  1 file changed, 4 insertions(+)
