@@ -2,84 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B13E49D515
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 23:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6658949D51B
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 23:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233143AbiAZWLL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jan 2022 17:11:11 -0500
-Received: from mail-oo1-f45.google.com ([209.85.161.45]:34415 "EHLO
-        mail-oo1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233015AbiAZWLD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 17:11:03 -0500
-Received: by mail-oo1-f45.google.com with SMTP id k23-20020a4abd97000000b002ebc94445a0so243205oop.1;
-        Wed, 26 Jan 2022 14:11:03 -0800 (PST)
+        id S232003AbiAZWMx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jan 2022 17:12:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229591AbiAZWMx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 17:12:53 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2639C06161C;
+        Wed, 26 Jan 2022 14:12:52 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id z199so1319568iof.10;
+        Wed, 26 Jan 2022 14:12:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rhXHrSPTLOS4pRVESabVF3pQQP/mJ2JTnR9miTNwFf4=;
+        b=VzXocjntTph7UWrJ1xKum5qjVkrdp2soC0a+SXb5VKfiPnPi3lGU3f1Bu3rromCSW7
+         OxnWAkPwNeEbw/Kb9TBF9mTImyJ6g+LrriUC4/HFH+jeYCwYpjJNjeqB8iFrQj9MxDey
+         ZQVC11TqXw2fta1LTPfCFi+81IOvaLR52dO4lW+GlDOL7QupkTv5QKvREYUaf4r8TFLR
+         gmiT2fiWI2+fYuSIr45Qo5mRTMbcbFiuhgh2vvTRRlGjT897LzkYDbSH0N6NVE/Eh0MV
+         QqIESGjv+IzcUuUTj1c5e5tnP9ZR/P97/+T+gwvj7Xm3ldFVPms+nmapc+ZdnT5qETdR
+         ty5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=PyoxfZGTJHnSSgja7CgCHJDWwlWV6zGYhZibK9aIenY=;
-        b=vRgSC0IrBjsmE9wdBFJYHGTmL264Az0Cm48CY5Aq695fy9rqRfZAab7kxJ/Kb28Roh
-         Z5aWsLloNaA1XKWFBbuxH6pjjb+tw6MYX5IchaZK1MbuQSp693LulpUNhSbqMhUMduUX
-         3bk7r2alcluFuCmIWaFjAZzKYEk2zd9RuCs4M5YTzRZB9cks+fqxYbrzqzji0RfBHC46
-         nAWpnfpHDeBVaONZxEwSZ2W1malMfu9btxF0oZtsR5AUa7EFpla5ZBX8Fd0e+mGi8a+R
-         yQFgMBGjLfGPLzcdYpulVJFWlcOUfHwytNJs/ScRF0rsUIdDyGPYGgxcgCpVN5+qlslO
-         jY5A==
-X-Gm-Message-State: AOAM531CCvxmEL3iFaYjP6bd91mW6r0AfScjkIA5CAEPwU6A+3gWjMtF
-        HpkTAjReS3UyCDnz86EZzg==
-X-Google-Smtp-Source: ABdhPJz/Dilkw/1wtEGnhJWvZgCXyXppDcjnrxL3IwFlEu/b4Xc7usNrXLHH6TbDkqFGOjkBI0aYSw==
-X-Received: by 2002:a05:6820:353:: with SMTP id m19mr600954ooe.36.1643235063236;
-        Wed, 26 Jan 2022 14:11:03 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id s12sm3808628ooi.46.2022.01.26.14.11.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 14:11:02 -0800 (PST)
-Received: (nullmailer pid 1535104 invoked by uid 1000);
-        Wed, 26 Jan 2022 22:10:52 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-usb@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, Li Jun <jun.li@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>
-In-Reply-To: <20220126141340.234125-3-alexander.stein@ew.tq-group.com>
-References: <20220126141340.234125-1-alexander.stein@ew.tq-group.com> <20220126141340.234125-3-alexander.stein@ew.tq-group.com>
-Subject: Re: [PATCH v4 2/4] dt-bindings: usb: dwc3-imx8mp: Add imx8mp specific flags
-Date:   Wed, 26 Jan 2022 16:10:52 -0600
-Message-Id: <1643235052.902207.1535103.nullmailer@robh.at.kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rhXHrSPTLOS4pRVESabVF3pQQP/mJ2JTnR9miTNwFf4=;
+        b=VNobSp5JVXSnC+4/K+31dgVgRRmo3b5LKMGEJZVD6YQ7H409sBLPPEjLxzP8sf/7qQ
+         1SdZ1AQoeXVSdlUoOuGYS/GjrlceQYxk/UM27o6BnAR5glBgkJGXItsrVjCza6AGAY7T
+         65EiIYe9z4wwiH2eTgqiIdxmjKvOepiOq8Vd33LL+IFGZdAVLv2lAKRPaO2WYuI29JDE
+         P3Lr52bzYnyBt9NzCaDOJiGd8P0T+uFsopcH1OoOfnjeOR/NgI5KTqph0dtihvRBmifn
+         ++yhQNl7f9ZJoO+6ijaK6Lnvfwm0FUA942933JK7zB/0MsiuJIBSu07hl5qRLpRDx4fx
+         l9jQ==
+X-Gm-Message-State: AOAM530Txdsi+KwByt020m1MIARiI6VQz4wR4EZuMHldfpa078I0xEcI
+        4TWSWK5CHnX51apiK7UC1w3SMVnRiPek/xpGuzY=
+X-Google-Smtp-Source: ABdhPJwrr3Hq8ZddbuK7p5tL6bFDcjE2tqdDKLW9pRG65b27MoTJTSf/Eyj+GHkDBsEjzAmfR74d9HdwxSw4F2Ddgak=
+X-Received: by 2002:a05:6638:516:: with SMTP id i22mr417959jar.71.1643235172226;
+ Wed, 26 Jan 2022 14:12:52 -0800 (PST)
+MIME-Version: 1.0
+References: <20220126205214.2149936-1-jannh@google.com>
+In-Reply-To: <20220126205214.2149936-1-jannh@google.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Wed, 26 Jan 2022 23:12:41 +0100
+Message-ID: <CA+fCnZe_p+JwUWwumgGm185vWSdAK_z-UFDp7-HWKANB4YjA=g@mail.gmail.com>
+Subject: Re: [PATCH] usb: raw-gadget: fix handling of dual-direction-capable endpoints
+To:     Jann Horn <jannh@google.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 26 Jan 2022 15:13:38 +0100, Alexander Stein wrote:
-> This adds bindings for features in the USB glue block. They allow
-> setting polarity of PWR and OC as well as disabling port power control.
-> Also permanently attached can be annotated as well.
-> Additional IO address and clock are needed.
-> 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+On Wed, Jan 26, 2022 at 9:52 PM Jann Horn <jannh@google.com> wrote:
+>
+> Under dummy_hcd, every available endpoint is *either* IN or OUT capable.
+> But with some real hardware, there are endpoints that support both IN and
+> OUT. In particular, the PLX 2380 has four available endpoints that each
+> support both IN and OUT.
+>
+> raw-gadget currently gets confused and thinks that any endpoint that is
+> usable as an IN endpoint can never be used as an OUT endpoint.
+>
+> Fix it by looking at the direction in the configured endpoint descriptor
+> instead of looking at the hardware capabilities.
+>
+> With this change, I can use the PLX 2380 with raw-gadget.
+>
+> Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface")
+> Signed-off-by: Jann Horn <jannh@google.com>
 > ---
->  .../bindings/usb/fsl,imx8mp-dwc3.yaml         | 31 ++++++++++++++++---
->  1 file changed, 27 insertions(+), 4 deletions(-)
-> 
+>  drivers/usb/gadget/legacy/raw_gadget.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+> index c5a2c734234a..d86c3a36441e 100644
+> --- a/drivers/usb/gadget/legacy/raw_gadget.c
+> +++ b/drivers/usb/gadget/legacy/raw_gadget.c
+> @@ -1004,7 +1004,7 @@ static int raw_process_ep_io(struct raw_dev *dev, struct usb_raw_ep_io *io,
+>                 ret = -EBUSY;
+>                 goto out_unlock;
+>         }
+> -       if ((in && !ep->ep->caps.dir_in) || (!in && ep->ep->caps.dir_in)) {
+> +       if (in != usb_endpoint_dir_in(ep->ep->desc)) {
+>                 dev_dbg(&dev->gadget->dev, "fail, wrong direction\n");
+>                 ret = -EINVAL;
+>                 goto out_unlock;
+>
+> base-commit: 0280e3c58f92b2fe0e8fbbdf8d386449168de4a8
+> --
+> 2.35.0.rc0.227.g00780c9af4-goog
+>
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+Awesome! Thanks for finding this!
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+What do you think about using
 
-Full log is available here: https://patchwork.ozlabs.org/patch/1584490
+if ((in && !ep->ep->caps.dir_in) || (!in && !ep->ep->caps.dir_out))
 
+instead?
 
-usb@32f10100: reg: [[854655232, 8]] is too short
-	arch/arm64/boot/dts/freescale/imx8mp-evk.dt.yaml
-	arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-rdk.dt.yaml
+It looks less cryptic: if (in and no in caps) or (out and no out caps) => fail.
 
-usb@32f10108: reg: [[854655240, 8]] is too short
-	arch/arm64/boot/dts/freescale/imx8mp-evk.dt.yaml
-	arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-rdk.dt.yaml
+FTR, I tested both changes with the net2280 hardware that I have, and
+they work. At least gadget.c from the test suite enumerates properly.
+Most of the tests still fail. But with g_zero, even more of them fail.
 
+P.S. I wonder why everyone suddenly got interested in Raw Gadget lately? :)
