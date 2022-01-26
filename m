@@ -2,79 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C7A49C64D
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 10:28:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5AA49C652
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 10:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239149AbiAZJ2U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jan 2022 04:28:20 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34002 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239117AbiAZJ2P (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 04:28:15 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14BC2B81AD3
-        for <linux-usb@vger.kernel.org>; Wed, 26 Jan 2022 09:28:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DCC37C340E7
-        for <linux-usb@vger.kernel.org>; Wed, 26 Jan 2022 09:28:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643189292;
-        bh=78TZ17HtDyJN6vJdYJZL2Etnjc8j/LVPwwa6bjyc7Yc=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=MDxamSKK7L4zZH6kjeGl3t50UvB1u/AmG2NTnNrT3u1P/ptWze0LYdVqXe/GtHXrg
-         tveORMQkBqlkvas9U5kul6/2nWM2cyt+GGZSZH9acfuSlA4igg5yfuIBx1ikfDYROk
-         WT6QUyR12E8Tv/KIvBKXOJnX4yVhQEya3Gjg+CmGyBM6BKrDO/P9BhrvH+gVBaqIF8
-         lLCbcYVWpJ7ySSbImyJfSHNrQKr1PdDD9dFpNcxKMb7erHQOMQTjJym4thWvUPbsjO
-         EZp+DzyZDyk8s6V3k4pJj2peBQAaKZA47XRUF5rnLhXyMjyC64pNY6egt1DG2tTx3L
-         iWL9Fru/b9n1Q==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id B7481CC13A7; Wed, 26 Jan 2022 09:28:12 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215530] typec kernel error
-Date:   Wed, 26 Jan 2022 09:28:12 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: hi2@n101n.xyz
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215530-208809-L5IcdeFYuH@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215530-208809@https.bugzilla.kernel.org/>
-References: <bug-215530-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S239165AbiAZJaO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jan 2022 04:30:14 -0500
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:40161 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231742AbiAZJaN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 04:30:13 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id EEF6058044A;
+        Wed, 26 Jan 2022 04:30:12 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 26 Jan 2022 04:30:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=zmX5h2jV3EHx3yzNE12hU7F6WuB4iwZH2e1xCG
+        J9lzs=; b=XzCwmHYomZaj4oeGGDLIa5U9L4jNa4gHNnQze5oUFWo4p1T6gZoRBv
+        f0GTimCbIcNENLLJrWnzEhKr2q0tlR9XlXG/+vBA+mlvpKKPgqJ5FELbWuxM8L9p
+        7OG+mNvk34ScZ4RvGWzpXoOPWBDvd/0r6hOiCZjRGFycvLdxxvkO3NBEr122w/tk
+        I9hPL392fiPRPl0BCfwMi3CJy4iKyxn0ryyvOgLw0MzJGwEEjqpiXviEExKBuuaZ
+        oh7soEv74bhGF/H0+OJh6eVHmsmLQ/UPMChXra+6YKyf3RPq57uSg0Wnha6y1HiB
+        Mfb2I4YPyJouL390ZgV/j5SKhgovc2oA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=zmX5h2jV3EHx3yzNE
+        12hU7F6WuB4iwZH2e1xCGJ9lzs=; b=PG8tgOisD2oLuFl/GOdEAQv9cSlxtsGbn
+        qsy3UyDqykILHXZsMmBGTsSH7Y9SOsdYUjm1k2fITRdZ3l34QZjYTZ6y5WwbBGO9
+        2ot5b46otnvVGFvGJWXScvAh1Q6IZkzz93wl/pDJgwDkWZYfyWiCFUTw3tSLGrPO
+        GfgGYEBanxwZ/PnPpWkzFL5P691cWJcDJd/Fj3gTKrwAK9VukU0fbouwWUxb4y9d
+        IJ6kCpxX7ObSDXN4dfprBNhiWRfpGJWJGiqsyinaPXzw/7EPcD3wTGS+QGvxTQtx
+        x9+QCBxEfbvapaRuvMYVI2UmFp9x3vSEBEpUWOy8kC+QUE4cGG8nA==
+X-ME-Sender: <xms:oxTxYRzZwawrAUjoPg_qIwd37LDc53-NANfS3zcqqW3seesLcbCwlg>
+    <xme:oxTxYRS1Xm2WdQifiJJa-_2ac_YNz76T6spL4NwOUi4DWfBGCX9y-JyIi8uEynwsD
+    dBvFKIDDYITvg>
+X-ME-Received: <xmr:oxTxYbVp0-URbNATHgMFwMz10bTCN1BcoKsxUhzTu1-rEEjLcf9LrfUxMU6tyDj4rzJznSJiEuf6_Za0a7_J2v4Ov_6a7vYh>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfedugddtgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvffukfhfgggtuggjsehttdertd
+    dttddvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeen
+    ucggtffrrghtthgvrhhnpeevueehjefgfffgiedvudekvdektdelleelgefhleejieeuge
+    egveeuuddukedvteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
+    fhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:oxTxYTgMvHlsz3Nna5o3Te1JC5vmOWlXnVny60ws5sKN2NXhhjEfUA>
+    <xmx:oxTxYTBI79cBfAaK14fD4YI_KEblxua0qBwKgIrqoytGCiTgauiw6Q>
+    <xmx:oxTxYcJ445hJ8Kw2ejgG0O9xae5rYybhJUwiUvl2z0iYuTOF0U9l1A>
+    <xmx:pBTxYUtBQqC4XDTe8D-dzXYEdzEW1SCGwRTJT3lCr_bGo4Qu05lRkg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 26 Jan 2022 04:30:10 -0500 (EST)
+Date:   Wed, 26 Jan 2022 10:30:02 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, pure.logic@nexus-software.ie,
+        bjorn.andersson@linaro.org, robh@kernel.org,
+        linux-kernel@vger.kernel.org, quic_tsoni@quicinc.com,
+        quic_psodagud@quicinc.com, quic_satyap@quicinc.com,
+        quic_pheragu@quicinc.com, quic_rjendra@quicinc.com,
+        quic_sibis@quicinc.com, quic_saipraka@quicinc.com
+Subject: Re: [PATCH V4 3/6] soc: qcom: eud: Add driver support for Embedded
+ USB Debugger(EUD)
+Message-ID: <YfEUmuglZluWwsg2@kroah.com>
+References: <cover.1642768837.git.quic_schowdhu@quicinc.com>
+ <7ccee5ae484e6917f5838c8abde368680ec63d05.1642768837.git.quic_schowdhu@quicinc.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7ccee5ae484e6917f5838c8abde368680ec63d05.1642768837.git.quic_schowdhu@quicinc.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215530
+On Fri, Jan 21, 2022 at 07:23:48PM +0530, Souradeep Chowdhury wrote:
+> Add support for control peripheral of EUD (Embedded USB Debugger) to
+> listen to events such as USB attach/detach, pet EUD to indicate software
+> is functional.Reusing the platform device kobj, sysfs entry 'enable' is
+> created to enable or disable EUD.
+> 
+> To enable the eud the following needs to be done
+> echo 1 > /sys/bus/platform/.../enable
+> 
+> To disable eud, following is the command
+> echo 0 > /sys/bus/platform/.../enable
+> 
+> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> ---
+>  Documentation/ABI/testing/sysfs-driver-eud |   9 ++
+>  drivers/soc/qcom/Kconfig                   |  10 ++
+>  drivers/soc/qcom/Makefile                  |   1 +
+>  drivers/soc/qcom/qcom_eud.c                | 250 +++++++++++++++++++++++++++++
 
---- Comment #2 from neoe (hi2@n101n.xyz) ---
-(In reply to The Linux kernel's regression tracker (Thorsten Leemhuis) from
-comment #1)
-> I'm not involved here, but I wonder if this will help:=20
->=20
-> https://lore.kernel.org/linux-usb/20220124090228.41396-3-heikki.
-> krogerus@linux.intel.com/
+This should go under drivers/usb/ as it's creating a USB generic
+user/kernel api that all future devices of this type must follow.
 
-Thank you for the information. I also tried that patch, but not work for me.
+thanks,
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+greg k-h
