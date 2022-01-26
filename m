@@ -2,52 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCCDC49C26A
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 05:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 537F649C26D
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 05:05:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237436AbiAZEEx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jan 2022 23:04:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55422 "EHLO
+        id S237451AbiAZEE5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jan 2022 23:04:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233800AbiAZEEw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jan 2022 23:04:52 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465E4C06161C
-        for <linux-usb@vger.kernel.org>; Tue, 25 Jan 2022 20:04:52 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id d65-20020a256844000000b00614359972a6so36741714ybc.16
-        for <linux-usb@vger.kernel.org>; Tue, 25 Jan 2022 20:04:52 -0800 (PST)
+        with ESMTP id S237444AbiAZEEz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jan 2022 23:04:55 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330B2C06173B
+        for <linux-usb@vger.kernel.org>; Tue, 25 Jan 2022 20:04:55 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id 127-20020a250f85000000b00611ab6484abso45753089ybp.23
+        for <linux-usb@vger.kernel.org>; Tue, 25 Jan 2022 20:04:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=QwxLJwmoqd07JuSH9SLqDQX7ullgrCcHXvI+bgIzrTE=;
-        b=lDIeDFzJ80jBeA928G8m+g6sPzt76PBYaMG4kwfZwWmpqXzoO8rlpE9Al9VBhO4d6K
-         0mA9KeVOktB41epEOvrl6JMuVxG2lq8gJ8H8nxYndsVVF0o+gS5LIz4wxOx0X0pjLZx6
-         JOdO/+j9TegK2nxxHZ/GFz1hmyUpaLIYsR82jrZmtSj1d+lly5ShCA/npI6LMrvsvjgo
-         JnDaoUzy2D7OB2rCBrpWx0xeGdp2vvoA58MH6LLFzfv0gx/pDj/EYL39EuX4+f5ZTXBV
-         XxUWb5Q/sBxQyYLbuuui8n+7Fvq80ccDM+LpRCTNZ4UGkxJ3M3bcS0J4i2MfSOoavJhB
-         Mddw==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=zGpZZqA59lqSjncOCUawbzrH4HoG3Or+e1TiGHQxkQc=;
+        b=Iwo2PQAnRuvpnA8d+vAOQ+gIHT4EAKob+ueQr407aKW0mDbIbw2bVnb5cTAymh1/N8
+         djckblVAT9v4WCSGgzGir7Q0xquNsn6gZaOXLLtn7bV2/jUjmPA8H9UPk9nsPa0Os+dn
+         8BRhFpy25P6AHYJRLiEyIxiAD/cuaq6O9PqlJLAy0sDn8M726cwerB7TqTXA/50FHpa8
+         UpMeCE6ZNTQGo0RUCyr3wa16OisDJ9jdSlrCw36nJzVOycbPq7KuPtVbDKBKTjWmIT13
+         2Q1O2NN56Jzh6knC/YdAmYo7B/7S+ILZC9UaWNcQqOxvVM1B+zoaitS84vglwGepyWLe
+         F76g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=QwxLJwmoqd07JuSH9SLqDQX7ullgrCcHXvI+bgIzrTE=;
-        b=nujELVEQQSMJR66eEPGtu/+HVqL9DOG6ywziVNNOiDTUX0m5aKqDdGn3nrMzIlq7pU
-         txlrQFzIV/cDqfxF9Ef+UAruQVI9s8bbUQd1q2vAtbPrem4RhI9icJdo4E4UP8BEPS+d
-         4AnqcgmlHaMbqn/YWRcR4P8VIsOgLBkJaxv3dHuYKm9Ke/KcZ15iuq/1eX0WvTzXfOv9
-         0S+1DnBD2uiZgGDRkQFpu4f3Ld3UvEa0I0G0iQBvVKqHAMj1hdmQxhd6z7U6wxXWLNsF
-         NV5mjFcpCCjQHHR6xX7k505Hptza/02ZFqQCsVdUqz1FYLXf9IPTASkYTmByMcnTZJw/
-         dz1g==
-X-Gm-Message-State: AOAM533JxxVWFiCn+2L3nqnocOEEwcCFoJAHXr/fswppcWa9wMnqK01c
-        hhJqa+TKM339juhjtaUJTtnBP2Ukn2Q=
-X-Google-Smtp-Source: ABdhPJwUITrNjvxxgsP8hNxO6pG8m3zBJSqTIPlHqDPOOp0LmmLatYe2TYN1ocTktSm6IrB3QJ5bJKvtUuc=
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=zGpZZqA59lqSjncOCUawbzrH4HoG3Or+e1TiGHQxkQc=;
+        b=kRXdgPRxpIMCocyMMFqfe9mpRFWcYo5QHB/QFfM3CeecqhPlHUmSh33lz6BwlBC6AC
+         uPd8+ZwQ0Xr918lgy74gY2/4K5gCfANswUQ7674RSiwqd5eVJgjcoXN+5ej3/Rqd641i
+         MxPCs/UPnodFEZuWAO+Q4K1X8wMj2idKx47D7ebyL+uMSBrZ6XHgtVEQuePzkYf7q+ZL
+         R1aNF37g3yTeheSyJg3nZoo3RJDRmTCjSwXjWrfJHsusPLaJmJ7/Rzu5xBYPKejanKCj
+         za+XxGvRRNgYxoDtQNfc+Exv75JKwtcNLh8zlaNLzt+oAV8YF5ID3i1TrYN6zCWY6a9z
+         4kdQ==
+X-Gm-Message-State: AOAM530cV0a+irUYwEPFsemqRAbnfdgpWjBy/4BLbkxbVNkWsKofE9ru
+        uVit9uJvRpjGL/tAsr6okSOJZBb7d0s=
+X-Google-Smtp-Source: ABdhPJz71lD3YVAeXHyQ9Wjx7IfVwseXh5k7ip5PRnaw73GHBvxrwC/ROS7a5J0XL3Z96bpibFXgvyN6y8U=
 X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:f4a7:8e16:f301:160])
- (user=badhri job=sendgmr) by 2002:a25:8550:: with SMTP id f16mr32238494ybn.319.1643169891564;
- Tue, 25 Jan 2022 20:04:51 -0800 (PST)
-Date:   Tue, 25 Jan 2022 20:04:46 -0800
-Message-Id: <20220126040447.3186233-1-badhri@google.com>
+ (user=badhri job=sendgmr) by 2002:a81:23ce:0:b0:2ca:287c:6c3d with SMTP id
+ 00721157ae682-2ca33e99465mr6881017b3.226.1643169893957; Tue, 25 Jan 2022
+ 20:04:53 -0800 (PST)
+Date:   Tue, 25 Jan 2022 20:04:47 -0800
+In-Reply-To: <20220126040447.3186233-1-badhri@google.com>
+Message-Id: <20220126040447.3186233-2-badhri@google.com>
 Mime-Version: 1.0
+References: <20220126040447.3186233-1-badhri@google.com>
 X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH v3 1/2] usb: typec: tcpm: Do not disconnect while receiving
- VBUS off
+Subject: [PATCH v2 2/2] usb: typec: tcpm: Do not disconnect when receiving VSAFE0V
 From:   Badhri Jagan Sridharan <badhri@google.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -61,11 +65,11 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 With some chargers, vbus might momentarily raise above VSAFE5V and fall
-back to 0V before tcpm gets to read port->tcpc->get_vbus. This will
-report a VBUS off event causing TCPM to transition to SNK_UNATTACHED
-where it should be waiting in either SNK_ATTACH_WAIT or SNK_DEBOUNCED
-state. This patch makes TCPM avoid vbus off events while in
-SNK_ATTACH_WAIT or SNK_DEBOUNCED state.
+back to 0V causing VSAFE0V to be triggered. This will report a VBUS off
+event causing TCPM to transition to SNK_UNATTACHED state where it
+should be waiting in either SNK_ATTACH_WAIT or SNK_DEBOUNCED state.
+This patch makes TCPM avoid VSAFE0V events while in SNK_ATTACH_WAIT
+or SNK_DEBOUNCED state.
 
 Stub from the spec:
     "4.5.2.2.4.2 Exiting from AttachWait.SNK State
@@ -90,26 +94,25 @@ Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
 Changes since v1:
 - Fix typos stated by Guenter Roeck.
-Changes since v2:
-- Added reviewed/acked-by tags
 ---
- drivers/usb/typec/tcpm/tcpm.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/usb/typec/tcpm/tcpm.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 59d4fa2443f2..3bf79f52bd34 100644
+index 3bf79f52bd34..0e0985355a14 100644
 --- a/drivers/usb/typec/tcpm/tcpm.c
 +++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -5156,7 +5156,8 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
- 	case SNK_TRYWAIT_DEBOUNCE:
+@@ -5264,6 +5264,10 @@ static void _tcpm_pd_vbus_vsafe0v(struct tcpm_port *port)
+ 	case PR_SWAP_SNK_SRC_SOURCE_ON:
+ 		/* Do nothing, vsafe0v is expected during transition */
  		break;
- 	case SNK_ATTACH_WAIT:
--		tcpm_set_state(port, SNK_UNATTACHED, 0);
++	case SNK_ATTACH_WAIT:
 +	case SNK_DEBOUNCED:
-+		/* Do nothing, as TCPM is still waiting for vbus to reach VSAFE5V to connect */
- 		break;
- 
- 	case SNK_NEGOTIATE_CAPABILITIES:
++		/* Do nothing, still waiting for VSAFE5V to connect */
++		break;
+ 	default:
+ 		if (port->pwr_role == TYPEC_SINK && port->auto_vbus_discharge_enabled)
+ 			tcpm_set_state(port, SNK_UNATTACHED, 0);
 -- 
 2.35.0.rc0.227.g00780c9af4-goog
 
