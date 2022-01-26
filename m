@@ -2,77 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8A149C7F9
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 11:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ECCD49C81B
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 11:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240229AbiAZKvN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jan 2022 05:51:13 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52592 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240215AbiAZKvN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 05:51:13 -0500
+        id S240335AbiAZKye (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jan 2022 05:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36056 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233548AbiAZKyd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 05:54:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365DEC06161C;
+        Wed, 26 Jan 2022 02:54:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5BB061835;
-        Wed, 26 Jan 2022 10:51:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4684BC340E3;
-        Wed, 26 Jan 2022 10:51:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643194272;
-        bh=qKqDdH8fT1bUejTXj94PeLOWoPEeCNsRZYLJVmoIVZU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F1TA3Fcfce6HRDQ5yBJSd5XVUB4aTXjaBpL05mQUO84PsMzxgIF0C05gzHR+HFS6w
-         fB+OyK/zU/SZpbAvAMjrpONvDyOm0mOhMw2f8MhoOUvmtpKNtb77kkrX8FaiZPdM2y
-         uBNhCMqxmjkQOQ9z0pPVM2JxFH7LByxMDWXaObq4=
-Date:   Wed, 26 Jan 2022 11:51:09 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Neal Liu <neal_liu@aspeedtech.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Chen Lin <chen.lin5@zte.com.cn>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Cai Huoqing <caihuoqing@baidu.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        BMC-SW@aspeedtech.com
-Subject: Re: [PATCH] usb: gadget: mass_storage: add READ_TOC cmd mask check
-Message-ID: <YfEnnWuL1cC6airb@kroah.com>
-References: <20220126100856.3680716-1-neal_liu@aspeedtech.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id F3F00B81C10;
+        Wed, 26 Jan 2022 10:54:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECEC5C340E3;
+        Wed, 26 Jan 2022 10:54:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643194470;
+        bh=zXGVW3VwZfxtH955/nyzBSwsLMj5oubdhnKlttWifU8=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=Aou75n6LThZjv5SpeuOZm+fom5lhyY0whllTbNWWkuCROQRtBsExup8mRo9mxJZCu
+         yztplbbP7sNPHH8U5b/ddwSRK4Bk6YZFZOTyMToMDzyg7Hjp2DoyDdvBWorJ+WMNqS
+         wgeApisoYAs+03masRLgBQn4yHETuTRyoDQWxKzXf0KIH1/1lcOH656BCQnm04TG/j
+         W7aHjHvkweRaQ/shjLYrISkP/zjd4lrLw4UeS34JTzqW3W+X/zTtFbrezXZm+gnSTV
+         eApeWmxe5ZVq9ux7pPUfJlmMEPoKLmevth/YbRS+GhGWbDAXls98p6xXfSQ1jX+7ko
+         5FRk7y6qN0R3A==
+References: <20220119002438.106079-1-sean.anderson@seco.com>
+ <20220119002438.106079-5-sean.anderson@seco.com>
+ <4696c5a4-5921-f7cb-196c-5ad956e696f9@synopsys.com>
+ <f528aeb5-6155-a75e-9d35-9bf473e0bbc7@seco.com>
+ <3ca6fb9e-94cf-6483-26a6-ae2682d1f55e@synopsys.com>
+ <2831e216-737f-41b2-1aa0-4af56615e3b7@seco.com>
+User-agent: mu4e 1.6.10; emacs 28.0.90
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Balaji Prakash J <bjagadee@codeaurora.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Baruch Siach <baruch@tkos.co.il>
+Subject: Re: [PATCH v2 4/7] usb: dwc3: Program GFLADJ
+Date:   Wed, 26 Jan 2022 12:53:28 +0200
+In-reply-to: <2831e216-737f-41b2-1aa0-4af56615e3b7@seco.com>
+Message-ID: <87mtji7onx.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126100856.3680716-1-neal_liu@aspeedtech.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 06:08:56PM +0800, Neal Liu wrote:
-> READ_TOC cmnd[2] specifies Format Field which is defined
-> in SCSI-3 spec. Add command mask to avoid marking this
-> sense data as invalid.
-> 
-> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-> ---
->  drivers/usb/gadget/function/f_mass_storage.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-> index 46dd11dcb3a8..14d51695b8ae 100644
-> --- a/drivers/usb/gadget/function/f_mass_storage.c
-> +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> @@ -1944,7 +1944,7 @@ static int do_scsi_command(struct fsg_common *common)
->  		common->data_size_from_cmnd =
->  			get_unaligned_be16(&common->cmnd[7]);
->  		reply = check_command(common, 10, DATA_DIR_TO_HOST,
-> -				      (7<<6) | (1<<1), 1,
-> +				      (7<<6) | (1<<1) | (1<<2), 1,
 
-Can we have real names here instead of magic numbers?
+Hi,
 
-And what commit does this fix?  Is it a regression or has it always
-never worked properly?
+Sean Anderson <sean.anderson@seco.com> writes:
 
-thanks,
+> On 1/24/22 9:11 PM, Thinh Nguyen wrote:
+>>>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>>>>> index 5214daceda86..883e119377f0 100644
+>>>>> --- a/drivers/usb/dwc3/core.c
+>>>>> +++ b/drivers/usb/dwc3/core.c
+>>>>> @@ -348,7 +348,7 @@ static void dwc3_frame_length_adjustment(struct dwc3 *dwc)
+>>>>>  static void dwc3_ref_clk_period(struct dwc3 *dwc)
+>>>>>  {
+>>>>>  	u32 reg;
+>>>>> -	unsigned long rate, period;
+>>>>> +	unsigned long decr, fladj, rate, period;
+>>>>
+>>>> Minor style nit: Felipe prefers to keep the declaration on separate
+>>>> lines, let's keep it consistent with the rest in this driver.
+>>> 
+>>> So 
+>>> 
+>>> unsigned int decr;
+>>> unsigned int fladj;
+>>> unsigned int rate;
+>>> unsigned int period;
+>>> 
+>>> ?
+>>> 
+>>> Frankly that seems rather verbose.
+>> 
+>> A couple of the benefits of having it like this is to help with viewing
+>> git-blame if we introduce new variables and help with backporting fix
+>> patch a bit simpler. Mainly I'm just following Felipe's style and keep
+>> it consistent in this driver, but I don't think it's a big deal.
+>
+> *shrug*
+>
+> If it's the subsystem style I will rewrite it.
+>
+> (btw is this documented anywhere for future contributors?)
 
-greg k-h
+https://www.kernel.org/doc/html/latest/process/coding-style.html#commenting
+
+"To this end, use just one data declaration per line (no commas for
+multiple data declarations)"
+
+-- 
+balbi
