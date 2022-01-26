@@ -2,91 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24EF849C9B8
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 13:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92ADD49C9DD
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 13:37:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241331AbiAZMcH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jan 2022 07:32:07 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52738 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241329AbiAZMcE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 07:32:04 -0500
+        id S241415AbiAZMhb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jan 2022 07:37:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241407AbiAZMha (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 07:37:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA9BC06173B
+        for <linux-usb@vger.kernel.org>; Wed, 26 Jan 2022 04:37:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1464B81B99
-        for <linux-usb@vger.kernel.org>; Wed, 26 Jan 2022 12:32:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 90CC6C340E3
-        for <linux-usb@vger.kernel.org>; Wed, 26 Jan 2022 12:32:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643200322;
-        bh=cLvuDbxja3RZBTZcmb5KVhAsg74K0yetHVbytfw5M8A=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=u3uXk3jW8D8YLS1N0ar3e5UcjA8CW2c+xDOCcNLflfQrYUQ8fs4aVc4I9V8pZqsYb
-         gyxtZehUnvEu4yo0LolnV++cPwBDTFScHWLbDFFSlA4YiX22Cbdc2erIW71ZypHV55
-         5BVPc1IuJhzvVr9sI2JxOl7bLpQXFmM7ewGds0+ftd6tR2G+yQ6X0qcBQ39MsYn3kO
-         u8+vto+k4f0XYAq+0/ANIZbwoXrjG7k0AafilJBXdL2vICefvUTYUhtNXoUnczmU0c
-         yciURgvpDXxKi1tzgNefpchx25lHTopjr8POX2MjOMj+krf5g1DYKLdFdoFhyzae07
-         ukVsdmyJJ8Hqg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 74F2BCC13AE; Wed, 26 Jan 2022 12:32:02 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215361] SL-6000 zaurus USB error - 'bad CDC descriptors'
-Date:   Wed, 26 Jan 2022 12:32:02 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: low
-X-Bugzilla-Who: greg@kroah.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215361-208809-kxBgKhuoRY@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215361-208809@https.bugzilla.kernel.org/>
-References: <bug-215361-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50722B81B99
+        for <linux-usb@vger.kernel.org>; Wed, 26 Jan 2022 12:37:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BCEEC340E6;
+        Wed, 26 Jan 2022 12:37:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643200648;
+        bh=QTG/TAweLFNRqCK/sgXVOjQ0mizCjgq2LcFw1XRjIm4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zTBWszPiQYerK2szfitfLhCKUHav4ejDTCj+C+AfeG6w3GZOfdJS9bqJs81ZUT4mB
+         LKPY/GePpDXMAQ20gRSlKEDm27FAAH5ESrFW8QoRutcm+E8jmgGkD2BcT7kVGsMva9
+         LMIfz/CTZlOK48t9tQlSVd87F98lvxuOysDCWpK8=
+Date:   Wed, 26 Jan 2022 13:37:25 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jack Pham <quic_jackp@quicinc.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Roger Quadros <rogerq@kernel.org>,
+        Michal Nazarewicz <mina86@mina86.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4] usb: gadget: f_mass_storage: Make CD-ROM emulation
+ work with Mac OS-X
+Message-ID: <YfFAhez1altQSiMq@kroah.com>
+References: <20220124160150.19499-1-quic_jackp@quicinc.com>
+ <20220126012154.GH3221@jackp-linux.qualcomm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126012154.GH3221@jackp-linux.qualcomm.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215361
+On Tue, Jan 25, 2022 at 05:21:54PM -0800, Jack Pham wrote:
+> On Mon, Jan 24, 2022 at 08:01:50AM -0800, Jack Pham wrote:
+> > From: Roger Quadros <roger.quadros@nokia.com>
+> > 
+> > Mac OS-X expects CD-ROM TOC in raw format (i.e. format:2). It also
+> > sends the READ_TOC CDB in old style SFF8020i format. i.e. 2 format bits
+> > are encoded in MSBs of CDB byte 9.
+> > 
+> > This patch will enable CD-ROM emulation to work with Mac OS-X. Tested on
+> > Mac OS X v10.6.3.
+> > 
+> > Signed-off-by: Roger Quadros <roger.quadros@nokia.com>
+> > Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
+> > ---
+> > v4: Updated return length as I had inadvertently applied an earlier version of
+> >     Roger's patch which had the same mistake [2]
+> 
+> Hi Alan, if this looks fine to you would you please mind providing your
+> Acked-by again?
+> 
+> Also, if there are no objections, I think this patch can qualify as a
+> bugfix and I can send a v5 Cc'ed to stable with a Fixes tag of commit
+> d5e2b67aae79 ("USB: g_mass_storage: template f_mass_storage.c file
+> created") -- basically this has been around for as long as
+> f_mass_storage.c itself (if not even before when CD-ROM emulation was
+> first introduced to the former file_storage gadget).
 
---- Comment #7 from Greg Kroah-Hartman (greg@kroah.com) ---
-On Sun, Jan 16, 2022 at 04:23:55AM +0000, bugzilla-daemon@bugzilla.kernel.o=
-rg
-wrote:
-> https://bugzilla.kernel.org/show_bug.cgi?id=3D215361
->=20
-> --- Comment #6 from Ross Maynard (bids.7405@bigpond.com) ---
-> Hi Greg,
->=20
-> I found the patch:
->=20
-> Bisecting: 0 revisions left to test after this (roughly 0 steps)
-> [16adf5d07987d93675945f3cecf0e33706566005] usbnet: Remove over-broad=20
-> module alias from zaurus.
-
-Great, can you send this information to the linux-usb mailing list so we
-know what id to add to the driver?
-
-thanks,
-
-greg k-h
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+It's a new feature, not a bugfix :)
