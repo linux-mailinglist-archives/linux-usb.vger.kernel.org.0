@@ -2,77 +2,213 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92ADD49C9DD
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 13:37:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 157E049C9E9
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 13:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241415AbiAZMhb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jan 2022 07:37:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241407AbiAZMha (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 07:37:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA9BC06173B
-        for <linux-usb@vger.kernel.org>; Wed, 26 Jan 2022 04:37:30 -0800 (PST)
+        id S241435AbiAZMlI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jan 2022 07:41:08 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50118 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234178AbiAZMlH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 07:41:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50722B81B99
-        for <linux-usb@vger.kernel.org>; Wed, 26 Jan 2022 12:37:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BCEEC340E6;
-        Wed, 26 Jan 2022 12:37:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50EAD61A18
+        for <linux-usb@vger.kernel.org>; Wed, 26 Jan 2022 12:41:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 209A5C340E3;
+        Wed, 26 Jan 2022 12:41:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643200648;
-        bh=QTG/TAweLFNRqCK/sgXVOjQ0mizCjgq2LcFw1XRjIm4=;
+        s=korg; t=1643200866;
+        bh=3mdOCOWCBMciG+9ebxVBY1B3Rb0MUf7XOnLdZPksA2Q=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zTBWszPiQYerK2szfitfLhCKUHav4ejDTCj+C+AfeG6w3GZOfdJS9bqJs81ZUT4mB
-         LKPY/GePpDXMAQ20gRSlKEDm27FAAH5ESrFW8QoRutcm+E8jmgGkD2BcT7kVGsMva9
-         LMIfz/CTZlOK48t9tQlSVd87F98lvxuOysDCWpK8=
-Date:   Wed, 26 Jan 2022 13:37:25 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jack Pham <quic_jackp@quicinc.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Roger Quadros <rogerq@kernel.org>,
-        Michal Nazarewicz <mina86@mina86.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4] usb: gadget: f_mass_storage: Make CD-ROM emulation
- work with Mac OS-X
-Message-ID: <YfFAhez1altQSiMq@kroah.com>
-References: <20220124160150.19499-1-quic_jackp@quicinc.com>
- <20220126012154.GH3221@jackp-linux.qualcomm.com>
+        b=1tjskUOgEaRlHCKAHlDfw/HBbBIdL4B642x2tPIZA+dazT3Yvi/+T/CYAMjq20mum
+         F5qjuuCU8ryPI756JEXrEtN5LQg6WAAF5dkQruD/xXWz6cclpiH4szMJv0YBmQKnn7
+         lF8vR3KnZjjOLqGj6q3tRfQFpU606fqv6bIB7Qq8=
+Date:   Wed, 26 Jan 2022 13:41:03 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Udipto Goswami <quic_ugoswami@quicinc.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, John Keeping <john@metanate.com>,
+        linux-usb@vger.kernel.org,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>
+Subject: Re: [PATCH v9] usb: f_fs: Fix use-after-free for epfile
+Message-ID: <YfFBXw5FhWupqday@kroah.com>
+References: <1641961956-30641-1-git-send-email-quic_ugoswami@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220126012154.GH3221@jackp-linux.qualcomm.com>
+In-Reply-To: <1641961956-30641-1-git-send-email-quic_ugoswami@quicinc.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 05:21:54PM -0800, Jack Pham wrote:
-> On Mon, Jan 24, 2022 at 08:01:50AM -0800, Jack Pham wrote:
-> > From: Roger Quadros <roger.quadros@nokia.com>
-> > 
-> > Mac OS-X expects CD-ROM TOC in raw format (i.e. format:2). It also
-> > sends the READ_TOC CDB in old style SFF8020i format. i.e. 2 format bits
-> > are encoded in MSBs of CDB byte 9.
-> > 
-> > This patch will enable CD-ROM emulation to work with Mac OS-X. Tested on
-> > Mac OS X v10.6.3.
-> > 
-> > Signed-off-by: Roger Quadros <roger.quadros@nokia.com>
-> > Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
-> > ---
-> > v4: Updated return length as I had inadvertently applied an earlier version of
-> >     Roger's patch which had the same mistake [2]
+On Wed, Jan 12, 2022 at 10:02:36AM +0530, Udipto Goswami wrote:
+> Consider a case where ffs_func_eps_disable is called from
+> ffs_func_disable as part of composition switch and at the
+> same time ffs_epfile_release get called from userspace.
+> ffs_epfile_release will free up the read buffer and call
+> ffs_data_closed which in turn destroys ffs->epfiles and
+> mark it as NULL. While this was happening the driver has
+> already initialized the local epfile in ffs_func_eps_disable
+> which is now freed and waiting to acquire the spinlock. Once
+> spinlock is acquired the driver proceeds with the stale value
+> of epfile and tries to free the already freed read buffer
+> causing use-after-free.
 > 
-> Hi Alan, if this looks fine to you would you please mind providing your
-> Acked-by again?
+> Following is the illustration of the race:
 > 
-> Also, if there are no objections, I think this patch can qualify as a
-> bugfix and I can send a v5 Cc'ed to stable with a Fixes tag of commit
-> d5e2b67aae79 ("USB: g_mass_storage: template f_mass_storage.c file
-> created") -- basically this has been around for as long as
-> f_mass_storage.c itself (if not even before when CD-ROM emulation was
-> first introduced to the former file_storage gadget).
+>       CPU1                                  CPU2
+> 
+>    ffs_func_eps_disable
+>    epfiles (local copy)
+> 					ffs_epfile_release
+> 					ffs_data_closed
+> 					if (last file closed)
+> 					ffs_data_reset
+> 					ffs_data_clear
+> 					ffs_epfiles_destroy
+> spin_lock
+> dereference epfiles
+> 
+> Fix this races by taking epfiles local copy & assigning it under
+> spinlock and if epfiles(local) is null then update it in ffs->epfiles
+> then finally destroy it.
+> Extending the scope further from the race, protecting the ep related
+> structures, and concurrent accesses.
+> 
+> Fixes: a9e6f83c2df (usb: gadget: f_fs: stop sleeping in ffs_func_eps_disable)
+> Reviewed-by: John Keeping <john@metanate.com>
+> Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
+> Co-developed-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+> ---
+> v9: Removed unnecessary spinlock from epfiles_create.
+> 
+>  drivers/usb/gadget/function/f_fs.c | 57 ++++++++++++++++++++++++++++----------
+>  1 file changed, 42 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index 3c584da..10294ca 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -1711,16 +1711,24 @@ static void ffs_data_put(struct ffs_data *ffs)
+>  
+>  static void ffs_data_closed(struct ffs_data *ffs)
+>  {
+> +	struct ffs_epfile *epfiles;
+> +	unsigned long flags;
+> +
+>  	ENTER();
+>  
+>  	if (atomic_dec_and_test(&ffs->opened)) {
+>  		if (ffs->no_disconnect) {
+>  			ffs->state = FFS_DEACTIVATED;
+> -			if (ffs->epfiles) {
+> -				ffs_epfiles_destroy(ffs->epfiles,
+> -						   ffs->eps_count);
+> -				ffs->epfiles = NULL;
+> -			}
+> +			spin_lock_irqsave(&ffs->eps_lock, flags);
+> +			epfiles = ffs->epfiles;
+> +			ffs->epfiles = NULL;
+> +			spin_unlock_irqrestore(&ffs->eps_lock,
+> +							flags);
+> +
+> +			if (epfiles)
+> +				ffs_epfiles_destroy(epfiles,
+> +						 ffs->eps_count);
+> +
+>  			if (ffs->setup_state == FFS_SETUP_PENDING)
+>  				__ffs_ep0_stall(ffs);
+>  		} else {
+> @@ -1767,14 +1775,27 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
+>  
+>  static void ffs_data_clear(struct ffs_data *ffs)
+>  {
+> +	struct ffs_epfile *epfiles;
+> +	unsigned long flags;
+> +
+>  	ENTER();
+>  
+>  	ffs_closed(ffs);
+>  
+>  	BUG_ON(ffs->gadget);
+>  
+> -	if (ffs->epfiles)
+> -		ffs_epfiles_destroy(ffs->epfiles, ffs->eps_count);
+> +	spin_lock_irqsave(&ffs->eps_lock, flags);
+> +	epfiles = ffs->epfiles;
+> +	ffs->epfiles = NULL;
+> +	spin_unlock_irqrestore(&ffs->eps_lock, flags);
+> +
+> +	/*
+> +	 * potential race possible between ffs_func_eps_disable
+> +	 * & ffs_epfile_release therefore maintaining a local
+> +	 * copy of epfile will save us from use-after-free.
+> +	 */
+> +	if (epfiles)
+> +		ffs_epfiles_destroy(epfiles, ffs->eps_count);
+>  
+>  	if (ffs->ffs_eventfd)
+>  		eventfd_ctx_put(ffs->ffs_eventfd);
+> @@ -1790,7 +1811,6 @@ static void ffs_data_reset(struct ffs_data *ffs)
+>  
+>  	ffs_data_clear(ffs);
+>  
+> -	ffs->epfiles = NULL;
+>  	ffs->raw_descs_data = NULL;
+>  	ffs->raw_descs = NULL;
+>  	ffs->raw_strings = NULL;
+> @@ -1919,12 +1939,15 @@ static void ffs_epfiles_destroy(struct ffs_epfile *epfiles, unsigned count)
+>  
+>  static void ffs_func_eps_disable(struct ffs_function *func)
+>  {
+> -	struct ffs_ep *ep         = func->eps;
+> -	struct ffs_epfile *epfile = func->ffs->epfiles;
+> -	unsigned count            = func->ffs->eps_count;
+> +	struct ffs_ep *ep;
+> +	struct ffs_epfile *epfile;
+> +	unsigned short count;
+>  	unsigned long flags;
+>  
+>  	spin_lock_irqsave(&func->ffs->eps_lock, flags);
+> +	count = func->ffs->eps_count;
+> +	epfile = func->ffs->epfiles;
+> +	ep = func->eps;
+>  	while (count--) {
+>  		/* pending requests get nuked */
+>  		if (ep->ep)
+> @@ -1942,14 +1965,18 @@ static void ffs_func_eps_disable(struct ffs_function *func)
+>  
+>  static int ffs_func_eps_enable(struct ffs_function *func)
+>  {
+> -	struct ffs_data *ffs      = func->ffs;
+> -	struct ffs_ep *ep         = func->eps;
+> -	struct ffs_epfile *epfile = ffs->epfiles;
+> -	unsigned count            = ffs->eps_count;
+> +	struct ffs_data *ffs;
+> +	struct ffs_ep *ep;
+> +	struct ffs_epfile *epfile;
+> +	unsigned short count;
+>  	unsigned long flags;
+>  	int ret = 0;
+>  
+>  	spin_lock_irqsave(&func->ffs->eps_lock, flags);
+> +	ffs = func->ffs;
+> +	ep = func->eps;
+> +	epfile = ffs->epfiles;
+> +	count = ffs->eps_count;
+>  	while(count--) {
+>  		ep->ep->driver_data = ep;
+>  
+> -- 
+> 2.7.4
+> 
 
-It's a new feature, not a bugfix :)
+This does not apply against 5.17-rc1.  Can you please rebase and resend?
+
+thanks,
+
+greg k-h
