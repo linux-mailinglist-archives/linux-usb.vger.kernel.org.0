@@ -2,79 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7823149C980
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 13:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C2549C981
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 13:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241199AbiAZMU5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jan 2022 07:20:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56354 "EHLO
+        id S241203AbiAZMVh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jan 2022 07:21:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241194AbiAZMU4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 07:20:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E276FC06161C
-        for <linux-usb@vger.kernel.org>; Wed, 26 Jan 2022 04:20:55 -0800 (PST)
+        with ESMTP id S241194AbiAZMVh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 07:21:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC71C06161C;
+        Wed, 26 Jan 2022 04:21:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 881D5619C6
-        for <linux-usb@vger.kernel.org>; Wed, 26 Jan 2022 12:20:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30225C340E3;
-        Wed, 26 Jan 2022 12:20:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62381B81CBB;
+        Wed, 26 Jan 2022 12:21:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84CCBC340E6;
+        Wed, 26 Jan 2022 12:21:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643199655;
-        bh=sZjGa3dGorj95weNZQqtjE22p76KZEq/1FM60Y+97tE=;
+        s=korg; t=1643199694;
+        bh=EVVNFMBmRDZrmd8r75px+PJ5SYyURniMHufo4K/7jfM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gaGaLP34BNmfLoNEGx8HfvvMKDDaqd/04j3cf0Qllo91jamM/m9cdwXk0damecVyv
-         YPfKR/TJsOn52iyTG2x6a1hVuuuPMEicE8TWQMs0FJAN5YfptPKJZ13kC7AhbVA9N4
-         xL00KOrqKwPPtkgefpnYNE19q4r63jTlp50Sspl8=
-Date:   Wed, 26 Jan 2022 13:20:47 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>,
-        regressions@lists.linux.dev,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Cristian Birsan <cristian.birsan@microchip.com>,
-        linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Jonas Bonn <jonas@norrbonn.se>
-Subject: Re: [PATCH] usb: gadget: atmel: Revert regression in USB Gadget
- (atmel_usba_udc)
-Message-ID: <YfE8nyH1lW/I8NTV@kroah.com>
-References: <20211211183650.12183-1-marcelo.jimenez@gmail.com>
- <3bb113cd-fbf6-6898-6ae3-2f8cb8c64992@leemhuis.info>
+        b=yhbbSDyHm6glrzoBDNTPUrFwriA2sJXg8gNGYLm+2xfigHsfOLVdcBC9/NGnxXtxS
+         238VXm/GIWTCt6z1fnvw7loVpIFzFI10Ss/YSVtQ1dcYZcesIBx/HiWfqYZ0fJgymj
+         FnN3AbPi735t1kZLZX2xe/W6ywu5qr4mJc2bhSYA=
+Date:   Wed, 26 Jan 2022 13:21:31 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     =?utf-8?B?6Zmz5YGJ6YqY?= <jj251510319013@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        balbi@kernel.org,
+        Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>
+Subject: Re: [PATCH] usb: gadget: function: Fix returning incorrect PNP string
+Message-ID: <YfE8y8xpJIwC8Ojo@kroah.com>
+References: <20220105040439.3182-1-jj251510319013@gmail.com>
+ <Ydb+L+wXfKzXyma9@kroah.com>
+ <CAJwFiG+caDOp48R+EMATi9W_hCt-SBoEeeeEK8XGuRWai=bYug@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <3bb113cd-fbf6-6898-6ae3-2f8cb8c64992@leemhuis.info>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJwFiG+caDOp48R+EMATi9W_hCt-SBoEeeeEK8XGuRWai=bYug@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Dec 12, 2021 at 10:48:14AM +0100, Thorsten Leemhuis wrote:
-> [TLDR: adding this regression to regzbot; most of this mail is compiled
-> from a few templates paragraphs some of you might have seen already.]
+On Fri, Jan 07, 2022 at 10:37:19AM +0800, 陳偉銘 wrote:
+> Greg KH <gregkh@linuxfoundation.org> 於 2022年1月6日 週四 下午10:35寫道：
+> >
+> > On Wed, Jan 05, 2022 at 12:04:39PM +0800, Wei Ming Chen wrote:
+> > > There will be 2 leading bytes indicating the total length of
+> > > the PNP string, so I think we should add value by 2, otherwise
+> > > the PNP string copied to user will not contain the last 2 bytes
+> > >
+> > > Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
+> > > ---
+> > >  drivers/usb/gadget/function/f_printer.c | 4 +++-
+> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
+> > > index abec5c58f525..3fb00fd0b5ee 100644
+> > > --- a/drivers/usb/gadget/function/f_printer.c
+> > > +++ b/drivers/usb/gadget/function/f_printer.c
+> > > @@ -1005,9 +1005,11 @@ static int printer_func_setup(struct usb_function *f,
+> > >                               break;
+> > >                       }
+> > >                       value = strlen(dev->pnp_string);
+> > > +                     memcpy(buf + 2, dev->pnp_string, value);
+> > > +
+> > > +                     value += 2;
+> > >                       buf[0] = (value >> 8) & 0xFF;
+> > >                       buf[1] = value & 0xFF;
+> > > -                     memcpy(buf + 2, dev->pnp_string, value);
+> > >                       DBG(dev, "1284 PNP String: %x %s\n", value,
+> > >                           dev->pnp_string);
+> > >                       break;
+> > > --
+> > > 2.25.1
+> > >
+> >
+> > Are you sure this is correct?
+> >
+> > How is this related to this recent thread:
+> >         https://lore.kernel.org/all/CAKjGFBUdjXcZoVV4jdrgTz4rKThTfZAK4CqreKmBZ4KHE+K1GA@mail.gmail.com/#t
+> >
+> > your change is different from what is proposed there, why?
 > 
-> Hi, this is your Linux kernel regression tracker speaking.
+> I didn’t notice this thread before I send this patch, I think the
+> concept of my change is similar to Volodymyr Lisivka’s change, he/she
+> introduced a separate variable for the PNP string length, I think it
+> may be clearer and more readable than just “value += 2”
 > 
-> Top-posting for once, to make this easy accessible to everyone.
 > 
-> Thanks for the report. BTW, if anyone like me wonders what the included
-> patch is about: it afaics is the revert of the patch causing the
-> problem. Anyway:
+> Another thing that I am not too sure whether I am correct is this line of code
 > 
-> To be sure this issue doesn't fall through the cracks unnoticed, I'm
-> adding it to regzbot, my Linux kernel regression tracking bot:
+> DBG(dev, "1284 PNP String: %x %s\n", value,
+>                              dev->pnp_string);
 > 
-> #regzbot ^introduced 70a7f8be8598
-> #regzbot title usb: gadget: atmel: ethernet over USB Gadget not
-> recognized anymore after disconnect and reconnect
-> #regzbot ignore-activity
+> What Volodymyr Lisivka changed is like this
+> 
+> DBG(dev, "1284 PNP String: %x %s\n", pnp_length,
+>                              dev->pnp_string);
+> 
+> In my change, “value” equals to “pnp_length + 2” in Volodymyr
+> Lisivka’s change, and I think we should print “the PNP string length +
+> 2” instead of “the PNP string length”?
+> 
 
-How do I say "this isn't a regression, it's a broken board
-configuration" and get regzbot to stop tracking this?
+I do not know, I suggest you two work together to get the correct fix
+submitted.
 
 thanks,
 
