@@ -2,450 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6AE049C2C1
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 05:47:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D971249C3F3
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 07:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232915AbiAZErh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jan 2022 23:47:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
+        id S237523AbiAZG7h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jan 2022 01:59:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232466AbiAZErg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jan 2022 23:47:36 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB9AC061747
-        for <linux-usb@vger.kernel.org>; Tue, 25 Jan 2022 20:47:36 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id x193so35487677oix.0
-        for <linux-usb@vger.kernel.org>; Tue, 25 Jan 2022 20:47:36 -0800 (PST)
+        with ESMTP id S237495AbiAZG7h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 01:59:37 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CCBC06161C;
+        Tue, 25 Jan 2022 22:59:36 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id 9so10951369iou.2;
+        Tue, 25 Jan 2022 22:59:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qg4dufdEZxAYOTkMHdGZGgR0NpNiD5ib05dJ5SVtPDg=;
-        b=nfac7OYaBWv5VZ8RUZvJUZWAQp0W0d7XJdchWNckgzZToA8lUNeLdMLQ+GcURSU4vR
-         PdyvkJih2lu2JILKhdwcAZEPDP7sEZEcl8LLqTU8vsuRj32zyAk8/droH6hew2zWABjf
-         gcQNVg9BjFiA/GShYp3wBJpObGrvxhmaMCqB4VdVrXpp9+i+9ydukx+Tw8gm//n9ZBdb
-         3FQ8NvKC1U5ANgxj96G848Ltx3VRo7AgKxUf4WqAtR9XCkqxYfPSBtCKMNsdxGS/L8Fu
-         8otdKpsY+Hqiu0MTLFlRJ5Mc0pWjxc1SoVapIp1jX0fluIa1wSoY18UF9unPuZnffCSX
-         kSbw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2Na4bm+cu7JRGTZPOYGd5r2oVbdD8v05hD0YB/g3W3g=;
+        b=fOOft803n9fgdy7aF/y5gakAQhDLHIdmXki9Cb0hbawX9JEetg5GJfDf7YdyH7eBWh
+         y5U4SJTxnZPXJtIdv5CgQ/1eFJBAmsW3Y/dyUi6aU3BGNrveRctxGJXlzacnzjw5ZfCZ
+         otUPRGBF9bjEr3UfFkYYkeSwet4VAroGMT9ZfbzwWTUaYkDaTp3UdXxmzn6Q/VsQVREy
+         pfI9m897eAcm7S7XobxjsfuV4ZVRRcEcTv89fjCpV6GvFriCUKBVIxebrlhoWSdK0zix
+         Wvrg3M5h6+V4mBI7ISHt5VZPb77+oXKdU0fiUVmONZz9DUe6wl3Cao899JGeKQ5iEGCo
+         VIQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qg4dufdEZxAYOTkMHdGZGgR0NpNiD5ib05dJ5SVtPDg=;
-        b=7QsLcsbtUzrMAUCrHRZnxJLGNLLvSzAfp/BP+Am/+osIiO6ewIKhOUZYyKEpXixR09
-         MirbXg9WlVz0TRSQCglzKMKCJ4YrACfUVQaG00flLbfhqBWsuWBWV3tAsOeHqM1UpPSA
-         MJ2vVGXRaAbJismtD6DvnSuD0o22WXMeHsQd3O+SfYKz+BNkNmFhT87VkjM49mihmXJA
-         B9SXjHYpvoVIIWSrSEMh8NjZKv6N4WKnZBmMzsq7fHlnl+yNQLGqCogUZw9Ou7Sd0OPS
-         mhwVsM5SQgonxNX5YoGe3ub2GwYunvBFvPaI9pITN1JthRiTcsFwFUFGjcBehYEFJbjy
-         oQSg==
-X-Gm-Message-State: AOAM532Lt8fYB3RvILGV5bh+weIkYiMLpe2P41Dy5UBZ+cBARyZTSHkC
-        dq6mngW+dg/d6/L99qC+ueXyTw==
-X-Google-Smtp-Source: ABdhPJxycrRi7qg11Zdf87PblHTB9MYDeyhENdy5YuP/sLV3MbPv+ZOGgNviTuB62eAcSYp6AkwyCA==
-X-Received: by 2002:a05:6808:1829:: with SMTP id bh41mr2679219oib.249.1643172455650;
-        Tue, 25 Jan 2022 20:47:35 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id i10sm8068839otf.72.2022.01.25.20.47.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 20:47:35 -0800 (PST)
-Date:   Tue, 25 Jan 2022 22:47:33 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, pure.logic@nexus-software.ie,
-        greg@kroah.com, robh@kernel.org, linux-kernel@vger.kernel.org,
-        quic_tsoni@quicinc.com, quic_psodagud@quicinc.com,
-        quic_satyap@quicinc.com, quic_pheragu@quicinc.com,
-        quic_rjendra@quicinc.com, quic_sibis@quicinc.com,
-        quic_saipraka@quicinc.com
-Subject: Re: [PATCH V4 3/6] soc: qcom: eud: Add driver support for Embedded
- USB Debugger(EUD)
-Message-ID: <YfDSZTZOryQuWIlJ@builder.lan>
-References: <cover.1642768837.git.quic_schowdhu@quicinc.com>
- <7ccee5ae484e6917f5838c8abde368680ec63d05.1642768837.git.quic_schowdhu@quicinc.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2Na4bm+cu7JRGTZPOYGd5r2oVbdD8v05hD0YB/g3W3g=;
+        b=58cD41qjYDw0tWgt9gS8XUlsCEGwG3kaoeKiytFCOfefABL+4eurzxFrHRokKckBrm
+         nJQoWt6I2vkp4W+WQZS5aJWgUMv04htI4c0d0j/3pc4G2bxZ2IS3IufkZUmSjnPyz8lN
+         42cDruFInQd2f9RUw8+mMc80nbRcTXP/ebFAx6Xs3TbgLQrRsdEugcp1xE+gB8wowvZr
+         aziTKw9wWJOAp7UogFBDMCq3DRC2Mw7QlCsxih4rIS4F9b5wqJXK2EseAeeU9swwmtpX
+         drDXEipIfziXbIDNtsrI7j/0dp7p0Bd48lkaCU71RvfcEgLziTtstezUfG5jxHxT9VKm
+         5v7Q==
+X-Gm-Message-State: AOAM533hl7qs7djoCnuPp82kHDqIdwxwOQ6MReVMHcA8h3I/aJ9fLW78
+        QT65vXK75Cnw5GQyZmadSuQag46aTL+nSTC6cDj8odhr
+X-Google-Smtp-Source: ABdhPJzhSvgHHbLS6s5b3LYGE00xQIeldKoFNGqxmHcPsbN4RqhbBNrYKUdM5Xc9wUq5C7GWdTKYPupU8AsIyLE2PeE=
+X-Received: by 2002:a5d:9d86:: with SMTP id ay6mr1080738iob.130.1643180376162;
+ Tue, 25 Jan 2022 22:59:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7ccee5ae484e6917f5838c8abde368680ec63d05.1642768837.git.quic_schowdhu@quicinc.com>
+References: <20220123111644.25540-1-krzysztof.kozlowski@canonical.com> <20220123111644.25540-2-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220123111644.25540-2-krzysztof.kozlowski@canonical.com>
+From:   Alim Akhtar <alim.akhtar@gmail.com>
+Date:   Wed, 26 Jan 2022 12:28:58 +0530
+Message-ID: <CAGOxZ51zavNVpvUv0C17Cit+pdkERC70m5Ez3ELGpFh8tGDozQ@mail.gmail.com>
+Subject: Re: [PATCH 01/12] arm64: dts: exynos: add USB DWC3 supplies to
+ Espresso board
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri 21 Jan 07:53 CST 2022, Souradeep Chowdhury wrote:
+Hi Krzysztof
 
-> Add support for control peripheral of EUD (Embedded USB Debugger) to
-> listen to events such as USB attach/detach, pet EUD to indicate software
-> is functional.Reusing the platform device kobj, sysfs entry 'enable' is
-> created to enable or disable EUD.
-> 
-> To enable the eud the following needs to be done
-> echo 1 > /sys/bus/platform/.../enable
-> 
-> To disable eud, following is the command
-> echo 0 > /sys/bus/platform/.../enable
-> 
-> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+On Mon, Jan 24, 2022 at 1:34 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> Add required voltage regulators for USB DWC3 block on Exynos7 Espresso
+> board.  Due to lack of schematics of Espresso board, the choice of
+> regulators is approximate.  What bindings call VDD10, for Exynos7 should
+> be actually called VDD09 (0.9 V).  Use regulators with a matching
+> voltage range based on vendor sources for Meizu Pro 5 M576 handset (also
+> with Exynos7420).
+>
+
+I checked Espresso board schematic, it is 0.9V for the USB and supplied by LDO4
+
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  Documentation/ABI/testing/sysfs-driver-eud |   9 ++
->  drivers/soc/qcom/Kconfig                   |  10 ++
->  drivers/soc/qcom/Makefile                  |   1 +
->  drivers/soc/qcom/qcom_eud.c                | 250 +++++++++++++++++++++++++++++
->  4 files changed, 270 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-driver-eud
->  create mode 100644 drivers/soc/qcom/qcom_eud.c
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-eud b/Documentation/ABI/testing/sysfs-driver-eud
-> new file mode 100644
-> index 0000000..2381552
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-driver-eud
-> @@ -0,0 +1,9 @@
-> +What:		/sys/bus/platform/drivers/eud/.../enable
-> +Date:           January 2022
-> +Contact:        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-> +Description:
-> +		The Enable/Disable sysfs interface for Embedded
-> +		USB Debugger(EUD). This enables and disables the
-> +		EUD based on a 1 or a 0 value. By enabling EUD,
-> +		the user is able to activate the mini-usb hub of
-> +		EUD for debug and trace capabilities.
-> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-> index e718b87..abc6be0 100644
-> --- a/drivers/soc/qcom/Kconfig
-> +++ b/drivers/soc/qcom/Kconfig
-> @@ -42,6 +42,16 @@ config QCOM_CPR
->  	  To compile this driver as a module, choose M here: the module will
->  	  be called qcom-cpr
-> 
-> +config QCOM_EUD
-> +        tristate "QCOM Embedded USB Debugger(EUD) Driver"
-
-The indentation looks off here.
-
-> +	select USB_ROLE_SWITCH
-> +	help
-> +	  This module enables support for Qualcomm Technologies, Inc.
-> +	  Embedded USB Debugger (EUD). The EUD is a control peripheral
-> +	  which reports VBUS attach/detach events and has USB-based
-> +	  debug and trace capabilities. On selecting m, the module name
-> +	  that is built is qcom_eud.ko
-> +
->  config QCOM_GENI_SE
->  	tristate "QCOM GENI Serial Engine Driver"
->  	depends on ARCH_QCOM || COMPILE_TEST
-> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-> index 70d5de6..e0c7d2d 100644
-> --- a/drivers/soc/qcom/Makefile
-> +++ b/drivers/soc/qcom/Makefile
-> @@ -4,6 +4,7 @@ obj-$(CONFIG_QCOM_AOSS_QMP) +=	qcom_aoss.o
->  obj-$(CONFIG_QCOM_GENI_SE) +=	qcom-geni-se.o
->  obj-$(CONFIG_QCOM_COMMAND_DB) += cmd-db.o
->  obj-$(CONFIG_QCOM_CPR)		+= cpr.o
-> +obj-$(CONFIG_QCOM_EUD)          += qcom_eud.o
->  obj-$(CONFIG_QCOM_GSBI)	+=	qcom_gsbi.o
->  obj-$(CONFIG_QCOM_MDT_LOADER)	+= mdt_loader.o
->  obj-$(CONFIG_QCOM_OCMEM)	+= ocmem.o
-> diff --git a/drivers/soc/qcom/qcom_eud.c b/drivers/soc/qcom/qcom_eud.c
-> new file mode 100644
-> index 0000000..a538645
-> --- /dev/null
-> +++ b/drivers/soc/qcom/qcom_eud.c
-> @@ -0,0 +1,250 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2015-2021, The Linux Foundation. All rights reserved.
-> + */
-> +
-> +#include <linux/bitops.h>
-> +#include <linux/err.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +#include <linux/sysfs.h>
-> +#include <linux/usb/role.h>
-> +
-> +#define EUD_REG_INT1_EN_MASK	0x0024
-> +#define EUD_REG_INT_STATUS_1	0x0044
-> +#define EUD_REG_CTL_OUT_1	0x0074
-> +#define EUD_REG_VBUS_INT_CLR	0x0080
-> +#define EUD_REG_CSR_EUD_EN	0x1014
-> +#define EUD_REG_SW_ATTACH_DET	0x1018
-> +#define EUD_REG_EUD_EN2         0x0000
-> +
-> +#define EUD_ENABLE		BIT(0)
-> +#define EUD_INT_PET_EUD		BIT(0)
-> +#define EUD_INT_VBUS		BIT(2)
-> +#define EUD_INT_SAFE_MODE	BIT(4)
-> +#define EUD_INT_ALL		(EUD_INT_VBUS|EUD_INT_SAFE_MODE)
-> +
-> +struct eud_chip {
-> +	struct device			*dev;
-> +	struct usb_role_switch		*role_sw;
-> +	void __iomem			*base;
-> +	void __iomem			*mode_mgr;
-> +	unsigned int			int_status;
-> +	int				irq;
-> +	bool				enabled;
-> +	bool				usb_attached;
+>  arch/arm64/boot/dts/exynos/exynos7-espresso.dts | 5 +++++
+>  arch/arm64/boot/dts/exynos/exynos7.dtsi         | 2 +-
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/boot/dts/exynos/exynos7-espresso.dts b/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
+> index 125c03f351d9..4c45e689d34a 100644
+> --- a/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
+> +++ b/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
+> @@ -412,6 +412,11 @@ &ufs {
+>         status = "okay";
+>  };
+>
+> +&usbdrd {
+> +       vdd10-supply = <&ldo4_reg>;
+> +       vdd33-supply = <&ldo6_reg>;
 > +};
 > +
-> +static int enable_eud(struct eud_chip *priv)
-> +{
-> +	writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
-> +	writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
-> +			priv->base + EUD_REG_INT1_EN_MASK);
-> +	writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
-> +
-> +	return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
-
-So we won't get EUD_INT_VBUS when we enable the EUD and can rely on the
-irq handler to set the role?
-
-> +}
-> +
-> +static void disable_eud(struct eud_chip *priv)
-> +{
-> +	writel(0, priv->base + EUD_REG_CSR_EUD_EN);
-> +	writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
-> +}
-> +
-> +static ssize_t enable_show(struct device *dev,
-> +		struct device_attribute *attr, char *buf)
-> +{
-> +	struct eud_chip *chip = dev_get_drvdata(dev);
-> +
-> +	return sysfs_emit(buf, "%d\n", chip->enabled);
-> +}
-> +
-> +static ssize_t enable_store(struct device *dev,
-> +		struct device_attribute *attr,
-> +		const char *buf, size_t count)
-> +{
-> +	struct eud_chip *chip = dev_get_drvdata(dev);
-> +	bool enable;
-> +	int ret;
-> +
-> +	if (kstrtobool(buf, &enable))
-> +		return -EINVAL;
-> +
-> +	if (enable) {
-> +		ret = enable_eud(chip);
-> +		if (!ret)
-> +			chip->enabled = enable;
-> +		else
-> +			disable_eud(chip);
-> +	} else {
-> +		disable_eud(chip);
-> +	}
-> +
-> +	return count;
-> +}
-> +
-> +static DEVICE_ATTR_RW(enable);
-> +
-> +static struct attribute *eud_attrs[] = {
-> +	&dev_attr_enable.attr,
-> +	NULL,
-> +};
-> +ATTRIBUTE_GROUPS(eud);
-> +
-> +static void usb_attach_detach(struct eud_chip *chip)
-> +{
-> +	u32 reg;
-> +
-> +	/* read ctl_out_1[4] to find USB attach or detach event */
-> +	reg = readl(chip->base + EUD_REG_CTL_OUT_1);
-> +	chip->usb_attached = reg & EUD_INT_SAFE_MODE;
-> +}
-> +
-> +static void pet_eud(struct eud_chip *chip)
-> +{
-> +	u32 reg;
-> +	int ret;
-> +
-> +	/* When the EUD_INT_PET_EUD in SW_ATTACH_DET is set, the cable has been
-> +	 * disconnected and we need to detach the pet to check if EUD is in safe
-> +	 * mode before attaching again.
-> +	 */
-> +	reg = readl(chip->base + EUD_REG_SW_ATTACH_DET);
-> +	if (reg & EUD_INT_PET_EUD) {
-> +		/* Detach & Attach pet for EUD */
-> +		writel(0, chip->base + EUD_REG_SW_ATTACH_DET);
-> +		/* Delay to make sure detach pet is done before attach pet */
-> +		ret = readl_poll_timeout(chip->base + EUD_REG_SW_ATTACH_DET,
-> +					reg, (reg == 0), 1, 100);
-> +		if (ret) {
-> +			dev_err(chip->dev, "Detach pet failed\n");
-> +			return;
-> +		}
-> +	}
-> +	/* Attach pet for EUD */
-> +	writel(EUD_INT_PET_EUD, chip->base +EUD_REG_SW_ATTACH_DET);
-> +}
-> +
-> +static irqreturn_t handle_eud_irq(int irq, void *data)
-> +{
-> +	struct eud_chip *chip = data;
-> +	u32 reg;
-> +
-> +	reg = readl(chip->base + EUD_REG_INT_STATUS_1);
-> +	switch (reg & EUD_INT_ALL) {
-> +	case EUD_INT_VBUS:
-> +		chip->int_status = EUD_INT_VBUS;
-
-The first time that reg & EUD_INT_VBUS is set, you assign int_status
-EUD_INT_VBUS, you never clear it again.
-
-This is also the only path where you wake up the thread, so int_status
-will always be EUD_INT_VBUS when you reach handle_eud_irq_thread().
-
-Which means that int_status serves no purpose and if you're happy with
-how this implementation currently works you can just drop "int_status"
-and the conditional below.
-
-> +		usb_attach_detach(chip);
-> +		return IRQ_WAKE_THREAD;
-> +	case EUD_INT_SAFE_MODE:
-> +		pet_eud(chip);
-> +		return IRQ_HANDLED;
-> +	default:
-> +		return IRQ_NONE;
-> +	}
-> +}
-> +
-> +static irqreturn_t handle_eud_irq_thread(int irq, void *data)
-> +{
-> +	struct eud_chip *chip = data;
-> +	int ret;
-> +
-> +	if (chip->int_status == EUD_INT_VBUS) {
-> +		if (chip->usb_attached)
-> +			ret = usb_role_switch_set_role(chip->role_sw, USB_ROLE_DEVICE);
-> +		else
-> +			ret = usb_role_switch_set_role(chip->role_sw, USB_ROLE_HOST);
-> +		if (ret)
-> +			dev_err(chip->dev, "failed to set role switch\n");
-> +	}
-> +
-> +	/* set and clear vbus_int_clr[0] to clear interrupt */
-> +	writel(BIT(0), chip->base + EUD_REG_VBUS_INT_CLR);
-> +	writel(0, chip->base + EUD_REG_VBUS_INT_CLR);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int eud_probe(struct platform_device *pdev)
-> +{
-> +	struct eud_chip *chip;
-> +	struct fwnode_handle *fwnode = pdev->dev.fwnode, *dwc3;
-> +	int ret;
-> +
-> +	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
-> +	if (!chip)
-> +		return -ENOMEM;
-> +
-> +	chip->dev = &pdev->dev;
-> +
-> +	dwc3 = fwnode_graph_get_next_endpoint(fwnode, NULL);
-
-This will pick the first endpoint, but if you instead use
-
-    chip->role_sw = usb_role_switch_get(&pdev->dev);
-
-you should get whichever port that points to a usb-role-switch node,
-without having to do the fwnode dance (and refcounting, which you forgot
-to release).
-
-> +	if (!dwc3)
-> +		return -ENODEV;
-> +
-> +	chip->role_sw = fwnode_usb_role_switch_get(dwc3);
-> +	if (IS_ERR(chip->role_sw)) {
-> +		ret = PTR_ERR(chip->role_sw);
-> +		usb_role_switch_put(chip->role_sw);
-
-You don't need to return the role_sw if it's IS_ERR().
-
-> +		return dev_err_probe(chip->dev, ret,
-> +					"failed to get role switch\n");
-> +	}
-> +
-> +	chip->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(chip->base))
-
-You're not usb_role_switch_put() your role_sw here, or below return
-cases. I would recommend devm_add_action_or_reset() to avoid the hassle
-of adding the necessary cleanup logic.
-
-> +		return PTR_ERR(chip->base);
-> +
-> +	chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
-> +	if (IS_ERR(chip->mode_mgr))
-> +		return PTR_ERR(chip->mode_mgr);
-> +
-> +	chip->irq = platform_get_irq(pdev, 0);
-> +	ret = devm_request_threaded_irq(&pdev->dev, chip->irq, handle_eud_irq,
-> +			handle_eud_irq_thread, IRQF_ONESHOT, NULL, chip);
-> +	if (ret)
-> +		return dev_err_probe(chip->dev, ret, "failed to allocate irq\n");
-> +
-> +	enable_irq_wake(chip->irq);
-> +
-> +	platform_set_drvdata(pdev, chip);
-> +
-> +	return 0;
-
-Per the updated binding, the EUD would now be a usb-role-switch as well
-and when not enabled should simply propagate the incoming requests. So I
-was expecting this to register as a usb_role_switch as well...
-
-> +}
-> +
-> +static int eud_remove(struct platform_device *pdev)
-> +{
-> +	struct eud_chip *chip = platform_get_drvdata(pdev);
-> +
-> +	if (chip->enabled)
-> +		disable_eud(chip);
-> +
-> +	device_init_wakeup(&pdev->dev, false);
-> +	disable_irq_wake(chip->irq);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id eud_dt_match[] = {
-> +	{ .compatible = "qcom,sc7280-eud" },
-
-Do you see any reason for not just adding qcom,eud here? Are there any
-differences from other platforms that has this block that means that we
-need per-platform driver support (the dts should have both
-compatibles still)?
-
-Regards,
-Bjorn
-
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, eud_dt_match);
-> +
-> +static struct platform_driver eud_driver = {
-> +	.probe	= eud_probe,
-> +	.remove	= eud_remove,
-> +	.driver	= {
-> +		.name = "qcom_eud",
-> +		.dev_groups = eud_groups,
-> +		.of_match_table = eud_dt_match,
-> +	},
-> +};
-> +module_platform_driver(eud_driver);
-> +
-> +MODULE_DESCRIPTION("QTI EUD driver");
-> +MODULE_LICENSE("GPL v2");
+>  &usbdrd_phy {
+>         vbus-supply = <&usb30_vbus_reg>;
+>         vbus-boost-supply = <&usb3drd_boost_5v>;
+> diff --git a/arch/arm64/boot/dts/exynos/exynos7.dtsi b/arch/arm64/boot/dts/exynos/exynos7.dtsi
+> index c3efbc8add38..01b4210d8b62 100644
+> --- a/arch/arm64/boot/dts/exynos/exynos7.dtsi
+> +++ b/arch/arm64/boot/dts/exynos/exynos7.dtsi
+> @@ -672,7 +672,7 @@ usbdrd_phy: phy@15500000 {
+>                         #phy-cells = <1>;
+>                 };
+>
+> -               usbdrd3 {
+> +               usbdrd: usb {
+>                         compatible = "samsung,exynos7-dwusb3";
+>                         clocks = <&clock_fsys0 ACLK_USBDRD300>,
+>                                <&clock_fsys0 SCLK_USBDRD300_SUSPENDCLK>,
 > --
-> 2.7.4
-> 
+> 2.32.0
+>
+
+
+-- 
+Regards,
+Alim
