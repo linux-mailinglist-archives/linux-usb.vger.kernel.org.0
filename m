@@ -2,85 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BDF49C9B7
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 13:32:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EF849C9B8
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 13:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241328AbiAZMcA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jan 2022 07:32:00 -0500
-Received: from out2-smtp.messagingengine.com ([66.111.4.26]:41929 "EHLO
-        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234212AbiAZMcA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 07:32:00 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7E5085C0101;
-        Wed, 26 Jan 2022 07:31:59 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 26 Jan 2022 07:31:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=Z54iN+sJjLK45jxxBnsEGwxzVRc+ECRK0p/Xms
-        cFfQg=; b=CQPgh1DhPXLQMDzw3x5a8vHJNSQCh3nG5GXh410ceRlsSbFZs9Atjc
-        1ywyUKKTqBh4QafdRc1+RRWdJgS0yOqm2ysxq+WZ+x25H4nUprKCzRXVfsQ7G6sa
-        eHPuDm18/GPucz1UjSORIRcX7oEVnjrBjdoUFQatww1Bhm6ZIMFniOdI5r3ir8SX
-        sEv/Oi7CH6t5PqulPliQCxowIQcdmhglDTZfqnMBcqXGDD4wv90X9ifn8phKdH9y
-        iapJu6XmO+hZpRPpGTcFqm+nuYBykGGkl0OTBGvtM/sPlJ8nKhM86wHmsZDx4tof
-        RaGAffYfuWLq1ZLTE+ohpkglzVrtNHDQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=Z54iN+sJjLK45jxxB
-        nsEGwxzVRc+ECRK0p/XmscFfQg=; b=BWOjmnuNhCj3ChbbPHahHuTaYYrCcswrR
-        ObslKhJBRaJIRPiXPk4lF5F/cBzj7HvSdcLrngFRVS+2qYfrBD9Ffr/2KPOeEX1m
-        UspfgChEIwAGITDbNz4Ab+B74/Uqn47LD5JqynQRdX6BBTu0uTjFK4p62DVBDa8+
-        Y7wNsdwdN0mGN9uKiRH3D/tPB7IyuO6mEiUsZpLZXTXIRroLLtn0ZOu2vlKuc5/C
-        7R/q9XFpCq6c2ezcgt2gNOE42UoEYhnAn8F7fDrOsHIjLuFdcqTueWKsnS5tr3B3
-        27pUEwXIts47OHvsq2e1s3dm35oxKncmvprbcdXfa9GzdCodDc40g==
-X-ME-Sender: <xms:Pz_xYT0dRjUsuqQTORA-T755aEsIJh6L4b_WQJCo8aPChEIoQCqbkA>
-    <xme:Pz_xYSFdUc-45HgBL8hyhC_CUPs_RTMsDaAWupMNP8les34LFRPv6cIH_GyZpVHUh
-    hb4mVNw5w0j5g>
-X-ME-Received: <xmr:Pz_xYT6lHM_BOQXq_klJkNh7ZM9Hnh8KdGjyQRo8ycen22ogcMczLTb03vr5K64Ww6RHlEh48Rs7XmiB5L9pocljxCa0rhuy>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfedugdegtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvffukfhfgggtuggjsehttdertd
-    dttddvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeen
-    ucggtffrrghtthgvrhhnpeeuleeltdehkeeltefhleduuddvhfffuedvffduveegheekge
-    eiffevheegfeetgfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgv
-    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
-    gtohhm
-X-ME-Proxy: <xmx:Pz_xYY17s0kgW1-2cdSWPtbBO7Sa34Olc8Gpa8CnGK66VumS3HvhkA>
-    <xmx:Pz_xYWENrAqxR4ijB3tOu6Ci3qNY5cHIDQyWYqIQecGh1FP3lsm1Yw>
-    <xmx:Pz_xYZ90mRMck-dGMuq1lwqRbrbw6XJHMAKUhsKXIKzFhGpQqs8qVw>
-    <xmx:Pz_xYbQFTSf-WAdQ4gp1w0FoHdMWvVsLxN164KFxXVkI9oNQhKZ3zA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 26 Jan 2022 07:31:58 -0500 (EST)
-Date:   Wed, 26 Jan 2022 13:31:56 +0100
-From:   Greg KH <greg@kroah.com>
-To:     bugzilla-daemon@bugzilla.kernel.org
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [Bug 215361] SL-6000 zaurus USB error - 'bad CDC descriptors'
-Message-ID: <YfE/PNf/khUD1ZYi@kroah.com>
+        id S241331AbiAZMcH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jan 2022 07:32:07 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52738 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241329AbiAZMcE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 07:32:04 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1464B81B99
+        for <linux-usb@vger.kernel.org>; Wed, 26 Jan 2022 12:32:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 90CC6C340E3
+        for <linux-usb@vger.kernel.org>; Wed, 26 Jan 2022 12:32:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643200322;
+        bh=cLvuDbxja3RZBTZcmb5KVhAsg74K0yetHVbytfw5M8A=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=u3uXk3jW8D8YLS1N0ar3e5UcjA8CW2c+xDOCcNLflfQrYUQ8fs4aVc4I9V8pZqsYb
+         gyxtZehUnvEu4yo0LolnV++cPwBDTFScHWLbDFFSlA4YiX22Cbdc2erIW71ZypHV55
+         5BVPc1IuJhzvVr9sI2JxOl7bLpQXFmM7ewGds0+ftd6tR2G+yQ6X0qcBQ39MsYn3kO
+         u8+vto+k4f0XYAq+0/ANIZbwoXrjG7k0AafilJBXdL2vICefvUTYUhtNXoUnczmU0c
+         yciURgvpDXxKi1tzgNefpchx25lHTopjr8POX2MjOMj+krf5g1DYKLdFdoFhyzae07
+         ukVsdmyJJ8Hqg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 74F2BCC13AE; Wed, 26 Jan 2022 12:32:02 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215361] SL-6000 zaurus USB error - 'bad CDC descriptors'
+Date:   Wed, 26 Jan 2022 12:32:02 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: low
+X-Bugzilla-Who: greg@kroah.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215361-208809-kxBgKhuoRY@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215361-208809@https.bugzilla.kernel.org/>
 References: <bug-215361-208809@https.bugzilla.kernel.org/>
- <bug-215361-208809-e4bAGJUzcD@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bug-215361-208809-e4bAGJUzcD@https.bugzilla.kernel.org/>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jan 16, 2022 at 04:23:55AM +0000, bugzilla-daemon@bugzilla.kernel.org wrote:
-> https://bugzilla.kernel.org/show_bug.cgi?id=215361
-> 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215361
+
+--- Comment #7 from Greg Kroah-Hartman (greg@kroah.com) ---
+On Sun, Jan 16, 2022 at 04:23:55AM +0000, bugzilla-daemon@bugzilla.kernel.o=
+rg
+wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=3D215361
+>=20
 > --- Comment #6 from Ross Maynard (bids.7405@bigpond.com) ---
 > Hi Greg,
-> 
+>=20
 > I found the patch:
-> 
+>=20
 > Bisecting: 0 revisions left to test after this (roughly 0 steps)
-> [16adf5d07987d93675945f3cecf0e33706566005] usbnet: Remove over-broad 
+> [16adf5d07987d93675945f3cecf0e33706566005] usbnet: Remove over-broad=20
 > module alias from zaurus.
 
 Great, can you send this information to the linux-usb mailing list so we
@@ -89,3 +84,9 @@ know what id to add to the driver?
 thanks,
 
 greg k-h
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
