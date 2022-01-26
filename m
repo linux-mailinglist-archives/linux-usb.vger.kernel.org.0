@@ -2,113 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D5849C59E
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 09:56:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A598049C600
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 10:15:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238628AbiAZI4U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jan 2022 03:56:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36154 "EHLO
+        id S231569AbiAZJPk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jan 2022 04:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232392AbiAZI4T (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 03:56:19 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEF4C06161C;
-        Wed, 26 Jan 2022 00:56:19 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id j16so11204901plx.4;
-        Wed, 26 Jan 2022 00:56:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4S4SnCn9eD0g7xG9Mm2dDQNDBGBOG83eXlCYQPAFPMo=;
-        b=BbDEwgQg73det4KtLGRLbJfcaV0orlyeGNNbyJk616IVmVqvm1L2GO6wkDJju6tHfv
-         MAYRx7shj7JLtcjWEocPjmdLS1odmSRwyJpEWMV+v+ySCv4dznRZoYMTy+5VfFPB9xZ3
-         0adomHh/vNK9pRdifKuqr4Xrz84N1HkA7m2CkdZ7rr0I1W71ez15OZ4IsIG2+6hHC1/R
-         9wbRZ0if/FyOUqDALupg6fOkA/K8Gsw/G2GFYWqb5Z6/oC/tam/M9FfqmT30UWsE6r6d
-         S718753DU22ldFpAlx6YPS7JsYbTKKB+/jvPmEW4TzKW836VZEQIVvWkXtRMon13L5/t
-         N1sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4S4SnCn9eD0g7xG9Mm2dDQNDBGBOG83eXlCYQPAFPMo=;
-        b=sZI+WaE9AevW9hMTSFx3s/q7nNZe/5EwCXbzHyUJjw9Riw/jFD/XYfcOWbcOGh53bA
-         /2NoC1vrR7S2tuwxkkIafHB6bEsWlRsZbw51Xt+eS38jBgl5lGgflWlJsDr+C+8j4nzD
-         6Og8nDlFCq3BvoBxSgaacpTwtz2WCbaJs62w+g46l+xiTH5VYYOw3ARnS3XZanUNyPBy
-         mYw/GO+Yq7w7P0BgxXY4SgwVK0BFP/M7DIRht+okrrhpEqoqMchm4jpz70L7TDzzIb0s
-         HvBe8IT27imdQLkYa0hh3YpRTE12zDSoaPkItcmS4RqwG6/E/0u3ajBfXSDknh8Iqrap
-         OxDQ==
-X-Gm-Message-State: AOAM531869jcC1oVvNKOLnxmn2oZS9dbi6KBx1Mdp3arExg6J2Jfyc49
-        cICpEGavCr2iFZ0UnRbnJxU=
-X-Google-Smtp-Source: ABdhPJwpbeWRvM+2nZ+Pu+ml/h90hyno+84Gtllq3DX3a/THRde9rb53S+zUQyuSArnKHV6f2hD0sg==
-X-Received: by 2002:a17:90a:50f:: with SMTP id h15mr7776060pjh.78.1643187379196;
-        Wed, 26 Jan 2022 00:56:19 -0800 (PST)
-Received: from jason-ThinkPad-T14-Gen-1.lan ([66.187.5.142])
-        by smtp.gmail.com with ESMTPSA id mn2sm2400977pjb.38.2022.01.26.00.56.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 00:56:18 -0800 (PST)
-From:   Hongyu Xie <xy521521@gmail.com>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        sarah.a.sharp@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Hongyu Xie <xiehongyu1@kylinos.cn>, stable@vger.kernel.org
-Subject: [PATCH -next] xhci: fix two places when dealing with return value of function xhci_check_args
-Date:   Wed, 26 Jan 2022 16:56:09 +0800
-Message-Id: <20220126085609.918452-1-xy521521@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S238911AbiAZJPf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 04:15:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA0EC06161C
+        for <linux-usb@vger.kernel.org>; Wed, 26 Jan 2022 01:15:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 49CE361586
+        for <linux-usb@vger.kernel.org>; Wed, 26 Jan 2022 09:15:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A38F3C340E3
+        for <linux-usb@vger.kernel.org>; Wed, 26 Jan 2022 09:15:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643188534;
+        bh=5NTVciHrVgMp+1yIP2K8F+9GaWxYMB2i3oBxED29iTo=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=fTADUOR7hQ7vcztkU9uV5BBRHo4pBt0buH02mmQ46UQ6znBe3v8xwkIM/x+KfwoJr
+         WreO0XcipiJhI4dLLrzcEGJ32n0/c9G1z0UbxudrZp8meRUbNv5+VtRj5Ou01cotYz
+         UHHgqX+ezs7zYuEwY2RzvtZLNzrvKJxAFwl4i8aE6awXOvqwGpDR3LOP9wKDhXiuBP
+         B8Z0hJ9ULEE98eQ2X+y/BIYQ0liN1g5MLB6oI48tOKaGZyGzNMsOK1vZSrujAI23ie
+         ckmrlEBeTsE7qDKgJywMXPZYtg6xGh0RmmAB24BkllFNv4flhckcdS38yj+4xMkzs0
+         QSZeCLVN/N1dg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 87159CC13AC; Wed, 26 Jan 2022 09:15:34 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215530] typec kernel error
+Date:   Wed, 26 Jan 2022 09:15:34 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: regressions@leemhuis.info
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-215530-208809-5FRjAg9Hs4@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215530-208809@https.bugzilla.kernel.org/>
+References: <bug-215530-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Hongyu Xie <xiehongyu1@kylinos.cn>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215530
 
-xhci_check_args returns 4 types of value, -ENODEV, -EINVAL, 1 and 0.
-xhci_urb_enqueue and xhci_check_streams_endpoint return -EINVAL if
-the return value of xhci_check_args <= 0.
-This will cause a problem.
-For example, r8152_submit_rx calling usb_submit_urb in
-drivers/net/usb/r8152.c.
-r8152_submit_rx will never get -ENODEV after submiting an urb
-when xHC is halted,
-because xhci_urb_enqueue returns -EINVAL in the very beginning.
+The Linux kernel's regression tracker (Thorsten Leemhuis) (regressions@leem=
+huis.info) changed:
 
-Fixes: 203a86613fb3 ("xhci: Avoid NULL pointer deref when host dies.")
-Cc: stable@vger.kernel.org
-Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
----
- drivers/usb/host/xhci.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |regressions@leemhuis.info
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index dc357cabb265..a7a55dd206fe 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1604,9 +1604,12 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
- 	struct urb_priv	*urb_priv;
- 	int num_tds;
- 
--	if (!urb || xhci_check_args(hcd, urb->dev, urb->ep,
--					true, true, __func__) <= 0)
-+	if (!urb)
- 		return -EINVAL;
-+	ret = xhci_check_args(hcd, urb->dev, urb->ep,
-+					true, true, __func__);
-+	if (ret <= 0)
-+		return ret;
- 
- 	slot_id = urb->dev->slot_id;
- 	ep_index = xhci_get_endpoint_index(&urb->ep->desc);
-@@ -3323,7 +3326,7 @@ static int xhci_check_streams_endpoint(struct xhci_hcd *xhci,
- 		return -EINVAL;
- 	ret = xhci_check_args(xhci_to_hcd(xhci), udev, ep, 1, true, __func__);
- 	if (ret <= 0)
--		return -EINVAL;
-+		return ret;
- 	if (usb_ss_max_streams(&ep->ss_ep_comp) == 0) {
- 		xhci_warn(xhci, "WARN: SuperSpeed Endpoint Companion"
- 				" descriptor for ep 0x%x does not support streams\n",
--- 
-2.25.1
+--- Comment #1 from The Linux kernel's regression tracker (Thorsten Leemhui=
+s) (regressions@leemhuis.info) ---
+I'm not involved here, but I wonder if this will help:=20
 
+https://lore.kernel.org/linux-usb/20220124090228.41396-3-heikki.krogerus@li=
+nux.intel.com/
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
