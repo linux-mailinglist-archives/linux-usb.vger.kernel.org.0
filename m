@@ -2,182 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6754649CAAE
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 14:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A824049CAF6
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jan 2022 14:37:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238875AbiAZNXC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jan 2022 08:23:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238940AbiAZNXA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 08:23:00 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E01C06173B
-        for <linux-usb@vger.kernel.org>; Wed, 26 Jan 2022 05:23:00 -0800 (PST)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nCiGJ-0001gV-0u; Wed, 26 Jan 2022 14:22:59 +0100
-Received: from mgr by dude.hi.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nCiGI-0091lD-2X; Wed, 26 Jan 2022 14:22:58 +0100
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
-To:     kieran.bingham@ideasonboard.com, linux-usb@vger.kernel.org
-Cc:     balbi@kernel.org, paul.elder@ideasonboard.com,
-        laurent.pinchart@ideasonboard.com, kernel@pengutronix.de,
-        nicolas@ndufresne.ca
-Subject: [PATCH] dummy_hcd: add isoc support
-Date:   Wed, 26 Jan 2022 14:22:49 +0100
-Message-Id: <20220126132249.2133168-1-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <164154749753.1224575.16682991529695492259@Monstersaurus>
-References: <164154749753.1224575.16682991529695492259@Monstersaurus>
+        id S235135AbiAZNhy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jan 2022 08:37:54 -0500
+Received: from mga12.intel.com ([192.55.52.136]:16346 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240349AbiAZNhs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 26 Jan 2022 08:37:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643204268; x=1674740268;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mmK1OypQwozk6Z81aB2x4jSDvUEaSiuWsKWVh06ZKE4=;
+  b=gOnwGs2+M6yxfHhcg0XbJo0y+2K0N+DBJJzyiThFIaYeamwKnGHezoSJ
+   zeZJtzg/YLPN3jqUZQ1wb8Jh0ITdrdkBfEGKfrErnFfKajwjSe4sy22dI
+   G4ooxUJqJcnxwYKztzllWCZ6TTXZKpFx6H23dc5JQs4QuMpWH/bCR7T9Q
+   ZsG6TYuz0bWkziy5NsqAkbz1FKoSCPAySWx6NCeDxxFjpY/IQ6OBrIFQB
+   13fl6212xhv9NaEOFJHSmG+mKB+C7w5wZkKpW6zW8dw2aNE544NsDRIDl
+   k7ZCJm7/c5K0ZjdOjjeCQ3pWMUhyts0uFCRW25n/d9wcABSHeV/TIQTEH
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="226525587"
+X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
+   d="scan'208";a="226525587"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 05:37:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
+   d="scan'208";a="674357166"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 26 Jan 2022 05:37:45 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 26 Jan 2022 15:37:45 +0200
+Date:   Wed, 26 Jan 2022 15:37:45 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] usb: ulpi: Call of_node_put correctly
+Message-ID: <YfFOqXDjwUriOXR1@kuha.fi.intel.com>
+References: <20220124173344.874885-1-sean.anderson@seco.com>
+ <20220124173344.874885-2-sean.anderson@seco.com>
+ <Ye/AUUlnuHBoGxab@kuha.fi.intel.com>
+ <dc30490b-15e8-1b10-beb2-eaaa10190649@seco.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dc30490b-15e8-1b10-beb2-eaaa10190649@seco.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-With this patch, the dummy_hcd gains first support for isoc transfers.
-It will complete the whole urb with all packages. Even if the gadget
-side did not enqueue any request, the urb will be handled.
+Hi Sean,
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+On Tue, Jan 25, 2022 at 11:53:58AM -0500, Sean Anderson wrote:
+> Hi Heikki,
+> 
+> On 1/25/22 4:18 AM, Heikki Krogerus wrote:
+> > On Mon, Jan 24, 2022 at 12:33:44PM -0500, Sean Anderson wrote:
+> >> of_node_put should always be called on device nodes gotten from
+> >> of_get_*. Additionally, it should only be called after there are no
+> >> remaining users. To address the first issue, call of_node_put if later
+> >> steps in ulpi_register fail. To address the latter, call of_node_put
+> >> only after calling device_unregister.
+> > 
+> > This looks like a fix, but you don't have the fix tag.
+> 
+> You're right this should have
+> 
+> Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
+> 
+> >> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> >> ---
+> >> 
+> >> Changes in v2:
+> >> - New
+> >> 
+> >>  drivers/usb/common/ulpi.c | 10 +++++++---
+> >>  1 file changed, 7 insertions(+), 3 deletions(-)
+> >> 
+> >> diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+> >> index 87deb514eb78..c6ba72544f2b 100644
+> >> --- a/drivers/usb/common/ulpi.c
+> >> +++ b/drivers/usb/common/ulpi.c
+> >> @@ -301,11 +301,11 @@ static int ulpi_register(struct device *dev, struct ulpi *ulpi)
+> >>  
+> >>  	ret = ulpi_read_id(ulpi);
+> >>  	if (ret)
+> >> -		return ret;
+> >> +		goto err;
+> >>  
+> >>  	ret = device_register(&ulpi->dev);
+> >>  	if (ret)
+> >> -		return ret;
+> >> +		goto err;
+> > 
+> > I think there is another bug in the code here. Missing put_device().
+> 
+> So what is the correct way to create a device? Shouldn't device_register
+> be paired with device_unregister? And from what I can tell,
+> device_unregister does not put the of_node.
 
----
+I think this is best explained in the documentation. Check the "Rule
+of thumb is" section (device_register() is really just a wrapper that
+can only fail if device_add() fails):
+https://docs.kernel.org/driver-api/infrastructure.html?highlight=device_add#c.device_add
 
-With this patch it is possible to test the series [1] on any device
-using the uvc-gadget code [2].
+So you just want to drop the reference if device_register() fails.
+That will make sure ulpi_dev_release() is called also in this case.
 
-I added some patches on top of uvc-gadget to prove that it is now
-possible to completely remove the configfs parsing and DATA/SETUP event
-handling from userspace [3].
+> > If you first fix that, you should then be able to call
+> > fwnode_handle_put() (instead of of_node_put())
+> 
+> Well, we currently only have a ulpi_of_register, so I don't think we
+> will have a fwnode here. But I can use that if you wish.
+> 
+> --Sean
+> 
+> > from
+> > ulpi_dev_release(), and that should cover all cases.
+> > 
+> >>  	root = debugfs_create_dir(dev_name(dev), ULPI_ROOT);
+> >>  	debugfs_create_file("regs", 0444, root, ulpi, &ulpi_regs_ops);
+> >> @@ -314,6 +314,10 @@ static int ulpi_register(struct device *dev, struct ulpi *ulpi)
+> >>  		ulpi->id.vendor, ulpi->id.product);
+> >>  
+> >>  	return 0;
+> >> +
+> >> +err:
+> >> +	of_node_put(ulpi->dev.of_node);
+> >> +	return ret;
+> > 
+> > So no need for that.
+> > 
+> >>  }
+> >>  
+> >>  /**
+> >> @@ -357,8 +361,8 @@ void ulpi_unregister_interface(struct ulpi *ulpi)
+> >>  {
+> >>  	debugfs_remove_recursive(debugfs_lookup(dev_name(&ulpi->dev),
+> >>  						ULPI_ROOT));
+> >> -	of_node_put(ulpi->dev.of_node);
+> >>  	device_unregister(&ulpi->dev);
+> >> +	of_node_put(ulpi->dev.of_node);
+> >>  }
+> > 
+> > And here you can just remove that of_node_put() call.
 
-To test the gadget, just fill the uvc configfs setup with some script
-[4] or even use the modern (but optional) way with gt (gadget-tool) [5]
-including libusbgx (uvc/configfs) [6] support and a scheme file
-describing the gadget.
+Note. Just by calling device_unregister() does not guarantee that
+there are no more users left. We can be certain that the last user is
+gone only when ulpi_dev_release() is called, so that's the place
+where you want to release the fwnode (of_node).
 
-[1] https://lore.kernel.org/linux-usb/20220105115527.3592860-1-m.grzeschik@pengutronix.de/
+thanks,
 
-[2] https://git.ideasonboard.org/uvc-gadget.git
-
-[3] https://git.pengutronix.de/cgit/mgr/uvc-gadget/log/?h=ml
-
-[4] https://git.ideasonboard.org/uvc-gadget.git/blob/HEAD:/scripts/uvc-gadget.sh
-
-[5] https://github.com/linux-usb-gadgets/libusbgx
-
-[6] https://github.com/linux-usb-gadgets/gt
-
- drivers/usb/gadget/udc/dummy_hcd.c | 34 +++++++++++++++++++++---------
- 1 file changed, 24 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
-index a2d956af42a23c..aff5f1fa4feef9 100644
---- a/drivers/usb/gadget/udc/dummy_hcd.c
-+++ b/drivers/usb/gadget/udc/dummy_hcd.c
-@@ -147,36 +147,30 @@ static const struct {
- 		USB_EP_CAPS(USB_EP_CAPS_TYPE_BULK, USB_EP_CAPS_DIR_IN)),
- 	EP_INFO("ep2out-bulk",
- 		USB_EP_CAPS(USB_EP_CAPS_TYPE_BULK, USB_EP_CAPS_DIR_OUT)),
--/*
- 	EP_INFO("ep3in-iso",
- 		USB_EP_CAPS(USB_EP_CAPS_TYPE_ISO, USB_EP_CAPS_DIR_IN)),
- 	EP_INFO("ep4out-iso",
- 		USB_EP_CAPS(USB_EP_CAPS_TYPE_ISO, USB_EP_CAPS_DIR_OUT)),
--*/
- 	EP_INFO("ep5in-int",
- 		USB_EP_CAPS(USB_EP_CAPS_TYPE_INT, USB_EP_CAPS_DIR_IN)),
- 	EP_INFO("ep6in-bulk",
- 		USB_EP_CAPS(USB_EP_CAPS_TYPE_BULK, USB_EP_CAPS_DIR_IN)),
- 	EP_INFO("ep7out-bulk",
- 		USB_EP_CAPS(USB_EP_CAPS_TYPE_BULK, USB_EP_CAPS_DIR_OUT)),
--/*
- 	EP_INFO("ep8in-iso",
- 		USB_EP_CAPS(USB_EP_CAPS_TYPE_ISO, USB_EP_CAPS_DIR_IN)),
- 	EP_INFO("ep9out-iso",
- 		USB_EP_CAPS(USB_EP_CAPS_TYPE_ISO, USB_EP_CAPS_DIR_OUT)),
--*/
- 	EP_INFO("ep10in-int",
- 		USB_EP_CAPS(USB_EP_CAPS_TYPE_INT, USB_EP_CAPS_DIR_IN)),
- 	EP_INFO("ep11in-bulk",
- 		USB_EP_CAPS(USB_EP_CAPS_TYPE_BULK, USB_EP_CAPS_DIR_IN)),
- 	EP_INFO("ep12out-bulk",
- 		USB_EP_CAPS(USB_EP_CAPS_TYPE_BULK, USB_EP_CAPS_DIR_OUT)),
--/*
- 	EP_INFO("ep13in-iso",
- 		USB_EP_CAPS(USB_EP_CAPS_TYPE_ISO, USB_EP_CAPS_DIR_IN)),
- 	EP_INFO("ep14out-iso",
- 		USB_EP_CAPS(USB_EP_CAPS_TYPE_ISO, USB_EP_CAPS_DIR_OUT)),
--*/
- 	EP_INFO("ep15in-int",
- 		USB_EP_CAPS(USB_EP_CAPS_TYPE_INT, USB_EP_CAPS_DIR_IN)),
- 
-@@ -1402,6 +1396,7 @@ static int transfer(struct dummy_hcd *dum_hcd, struct urb *urb,
- 	struct dummy		*dum = dum_hcd->dum;
- 	struct dummy_request	*req;
- 	int			sent = 0;
-+	int			count = 0;
- 
- top:
- 	/* if there's no request queued, the device is NAKing; return */
-@@ -1459,6 +1454,13 @@ static int transfer(struct dummy_hcd *dum_hcd, struct urb *urb,
- 				sent += len;
- 				urb->actual_length += len;
- 				req->req.actual += len;
-+				if (usb_pipetype(urb->pipe) == PIPE_ISOCHRONOUS) {
-+					if (count <= urb->number_of_packets) {
-+						urb->iso_frame_desc[count].actual_length = len;
-+						urb->iso_frame_desc[count].status = 0;
-+						count++;
-+					}
-+				}
- 			}
- 		}
- 
-@@ -1527,6 +1529,17 @@ static int transfer(struct dummy_hcd *dum_hcd, struct urb *urb,
- 		if (rescan)
- 			goto top;
- 	}
-+
-+	if (usb_pipetype(urb->pipe) == PIPE_ISOCHRONOUS) {
-+		int i;
-+
-+		for (i = count; i < urb->number_of_packets; ++i) {
-+			urb->iso_frame_desc[i].actual_length = 0;
-+			urb->iso_frame_desc[i].status = 0;
-+		}
-+		*status = 0;
-+	}
-+
- 	return sent;
- }
- 
-@@ -1950,13 +1963,14 @@ static void dummy_timer(struct timer_list *t)
- 			 * here are some of the issues we'd have to face:
- 			 *
- 			 * Is it urb->interval since the last xfer?
--			 * Use urb->iso_frame_desc[i].
--			 * Complete whether or not ep has requests queued.
- 			 * Report random errors, to debug drivers.
- 			 */
- 			limit = max(limit, periodic_bytes(dum, ep));
--			status = -EINVAL;	/* fail all xfers */
--			break;
-+			ep->last_io = jiffies;
-+			total -= transfer(dum_hcd, urb, ep, limit, &status);
-+			if (status == -EINPROGRESS)
-+				continue;
-+			goto return_urb;
- 
- 		case PIPE_INTERRUPT:
- 			/* FIXME is it urb->interval since the last xfer?
 -- 
-2.30.2
-
+heikki
