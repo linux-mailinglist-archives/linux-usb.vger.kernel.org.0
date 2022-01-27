@@ -2,101 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7457D49D807
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 03:26:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A505F49D87C
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 03:51:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235076AbiA0C0A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jan 2022 21:26:00 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46888 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiA0CZ7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 21:25:59 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S229625AbiA0Cvx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jan 2022 21:51:53 -0500
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:41090
+        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229484AbiA0Cvx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jan 2022 21:51:53 -0500
+Received: from [192.168.1.9] (unknown [222.129.35.96])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99B4B60C93
-        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 02:25:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E82AC340E7
-        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 02:25:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643250359;
-        bh=R/U4sOt4ogVDTdOUB7UTtaEBiJZYKKFtr3GjwEwRTKo=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=GleMFCEbSp9P9BZk7d7WR1VpiqgeQK92wyQJPp+k+MOpEe0WlCtacXJGOBjJnnrj+
-         6rgMbv/FDNrsxWAZPGyjer+j50TGnZj7eYCg3QowTchploL4VdSsZIXmUTLp4uNBDm
-         1LmTYepeGA5RFneavTsYQrxvj8f0Pshm53jpgL1Hl6yMguCtQ8fqAvtBrLLzPigz1k
-         LnJx3+mMTsihFNlhIE6VkoUd/Jfz21WXC+Gm6s2hBOw8+a9aObXvLgXTRSbY8UuD54
-         +NVkhph4ahjWR1X6G5ePtJyEL3WtDNpQsVi60qLlE6/gnftG3R8Zxpgz6V3A5Hdn4e
-         YNy0m67gA2abg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id E979ACC13B1; Thu, 27 Jan 2022 02:25:58 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215361] SL-6000 zaurus USB error - 'bad CDC descriptors'
-Date:   Thu, 27 Jan 2022 02:25:58 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: low
-X-Bugzilla-Who: bids.7405@bigpond.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215361-208809-s3aHARBDD4@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215361-208809@https.bugzilla.kernel.org/>
-References: <bug-215361-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id EC3E03F129;
+        Thu, 27 Jan 2022 02:51:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643251911;
+        bh=LBUehqk8gQpUGcdbarOarHEa02BgvqMCfwJk3piGG0A=;
+        h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+         In-Reply-To:Content-Type;
+        b=iJkLGf4/IaaV6AdTc7epeqN3+ZVmADHYh/N2CnsTin84SdwB/H4kQPy7z2xGWxVf2
+         7pyhyDAJqS0WGP5zlG0VAiU5eP1Z+s2vSuFzH1kTBSzAbzCRbNj7TYXCKfA6S5nOYv
+         v7ifhGzId8blIMhIr4vJdXJ/gSbSODe+jQWRLa1s1RJcj+/KVOesnMzYUfQLqyR2KN
+         PgVu1GLIrzXra8GCDu3iQZAo++WFtYakA3CN5C7VDOhbb34EELqpJN1kap2gOfvzFd
+         gZ6Xgk8j3JKoYZo3Ra3h9EgLCsck1rD9gT4X/bTwcIrfYZZzVzb1PtKqyuj+TXtkTy
+         6f9sDd5r33S4w==
+Message-ID: <edff6219-b1f7-dec5-22ea-0bde9a3e0efb@canonical.com>
+Date:   Thu, 27 Jan 2022 10:51:43 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/3 v3] net: usb: r8152: Check used MAC passthrough
+ address
+Content-Language: en-US
+From:   Aaron Ma <aaron.ma@canonical.com>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Henning Schild <henning.schild@siemens.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Andrew Lunn <andrew@lunn.ch>, Oliver Neukum <oneukum@suse.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "hayeswang@realtek.com" <hayeswang@realtek.com>,
+        "tiwai@suse.de" <tiwai@suse.de>
+References: <20220105151427.8373-1-aaron.ma@canonical.com>
+ <CAAd53p5YnQZ0fDiwwo-q3bNMVFTJSMLcdkUuH-7=OSaRrW954Q@mail.gmail.com>
+ <20220106183145.54b057c3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CAAd53p7egh8G=fPMcua_FTHrA3HA6Dp85FqVhvcSbuO2y8Xz9A@mail.gmail.com>
+ <20220110085110.3902b6d4@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <CAAd53p5mSq_bZdsZ=-RweiVLgAYU5+=Uje7TmYtAbBzZ7XCPUA@mail.gmail.com>
+ <ec2aaeb0-995e-0259-7eca-892d0c878e19@amd.com>
+ <20220111082653.02050070@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <3f258c23-c844-7b48-fffb-2fbf5d6d7475@amd.com>
+ <20220111084348.7e897af9@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <2b779fef-459f-79bb-4005-db4fd3fd057f@amd.com>
+ <20220111090648.511e95e8@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <5411b3a0-7e36-fa75-5c5c-eb2fda9273b1@amd.com>
+ <20220112202125.105d4c58@md1za8fc.ad001.siemens.net>
+ <DM4PR12MB516889A458A16D89D4562CA7E2529@DM4PR12MB5168.namprd12.prod.outlook.com>
+ <de684c19-7a84-ac7c-0019-31c253d89a5f@canonical.com>
+In-Reply-To: <de684c19-7a84-ac7c-0019-31c253d89a5f@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215361
+Hi all,
 
---- Comment #8 from Ross Maynard (bids.7405@bigpond.com) ---
-Hi Greg,
+Realtek 8153BL can be identified by the following code from Realtek Outbox driver:
+} else if (tp->version == RTL_VER_09 && (ocp_data & BL_MASK)) {
 
-I have sent an email to linux-usb@vger.kernel.org.
+I will suggest Realtek to send out this change for review.
 
-Thanks
+Thanks,
+Aaron
 
-On 26/1/22 11:32 pm, bugzilla-daemon@bugzilla.kernel.org wrote:
-> https://bugzilla.kernel.org/show_bug.cgi?id=3D215361
->
-> --- Comment #7 from Greg Kroah-Hartman (greg@kroah.com) ---
-> On Sun, Jan 16, 2022 at 04:23:55AM +0000, bugzilla-daemon@bugzilla.kernel=
-.org
-> wrote:
->> https://bugzilla.kernel.org/show_bug.cgi?id=3D215361
->>
->> --- Comment #6 from Ross Maynard (bids.7405@bigpond.com) ---
->> Hi Greg,
->>
->> I found the patch:
->>
->> Bisecting: 0 revisions left to test after this (roughly 0 steps)
->> [16adf5d07987d93675945f3cecf0e33706566005] usbnet: Remove over-broad
->> module alias from zaurus.
-> Great, can you send this information to the linux-usb mailing list so we
-> know what id to add to the driver?
->
-> thanks,
->
-> greg k-h
->
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+On 1/13/22 11:23, Aaron Ma wrote:
+> Before made that patch I already discussed with Lenovo.
+> And didn't get any other opinion. The solution is from a discussion with them.
+> 
+> This info had been forward to them too.
