@@ -2,97 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEEE49E3C6
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 14:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4160649E407
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 15:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233736AbiA0NnP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 08:43:15 -0500
-Received: from mga04.intel.com ([192.55.52.120]:11195 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229602AbiA0NnO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Jan 2022 08:43:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643290994; x=1674826994;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=T3jge4M1H+sDr7MteSE5XID5ZBBUEb8nGJFq+vwNK+8=;
-  b=Jvfadtvq6PDSKXbLx0zdAb9eLY8UYuNGSAH/f3TIbh8W+BcCdRbvjQYO
-   QbuCIc8xwJIY/iCjvm+9TlKzLTkSqHqWfNGQLSv0dHJh61w2yF0mxAVkI
-   PBOEcwxx5BDwxbrtF2laUbGggRZLHmJ/cXF+QvvWsT1egDzHwzfqhtV1c
-   ce+lE/n0g59DWp+nUpEOEVsmWPzmD6yM0tqgnA6tpH9HXDauayFnnoBxM
-   krViHLXwOeQQXrf89Hn1hVAJe1HYsIgu4TXtVYn4J2+AcKAc0UoGP4EhZ
-   i3toALQ+22MdWWRHKM6Z5Baq4wV/dsbWJADzXaNqMuZmKVsW3bLMdtODP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="245688934"
-X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="245688934"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 05:43:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="563786907"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 27 Jan 2022 05:43:11 -0800
-Subject: Re: [PATCH v5] xhci: re-initialize the HC during resume if HCE was
- set
-To:     Puma Hsu <pumahsu@google.com>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org
-Cc:     s.shtylyov@omp.ru, albertccwang@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20220119064013.1381172-1-pumahsu@google.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <e2baf3c5-0d80-9143-5fec-98a9e1474068@linux.intel.com>
-Date:   Thu, 27 Jan 2022 15:44:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S241913AbiA0OBW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 09:01:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233274AbiA0OBW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 09:01:22 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1D0C06173B
+        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 06:01:21 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1nD5Kx-0008DX-0C; Thu, 27 Jan 2022 15:01:19 +0100
+Message-ID: <6ef3a2bbae4ae92943cc66972c945a6543706883.camel@pengutronix.de>
+Subject: Re: [PATCH net-next v1 4/4] usbnet: add support for label from
+ device tree
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de,
+        Jakub Kicinski <kuba@kernel.org>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Date:   Thu, 27 Jan 2022 15:01:16 +0100
+In-Reply-To: <YfKcYXjfhVKUKfzY@kroah.com>
+References: <20220127104905.899341-1-o.rempel@pengutronix.de>
+         <20220127104905.899341-5-o.rempel@pengutronix.de>
+         <YfJ6lhZMAEmetdad@kroah.com> <20220127112305.GC9150@pengutronix.de>
+         <YfKCTG7N86yy74q+@kroah.com> <20220127120039.GE9150@pengutronix.de>
+         <YfKcYXjfhVKUKfzY@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-In-Reply-To: <20220119064013.1381172-1-pumahsu@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19.1.2022 8.40, Puma Hsu wrote:
-> When HCE(Host Controller Error) is set, it means an internal
-> error condition has been detected. Software needs to re-initialize
-> the HC, so add this check in xhci resume.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Puma Hsu <pumahsu@google.com>
-> ---
-> v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
-> v3: Add stable@vger.kernel.org for stable release.
-> v4: Refine the commit message.
-> v5: Add a debug log. Follow Mathias Nyman <mathias.nyman@linux.intel.com>'s comment.
-> 
->  drivers/usb/host/xhci.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index dc357cabb265..41f594f0f73f 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -1146,8 +1146,10 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
->  		temp = readl(&xhci->op_regs->status);
->  	}
->  
-> -	/* If restore operation fails, re-initialize the HC during resume */
-> -	if ((temp & STS_SRE) || hibernated) {
-> +	/* If restore operation fails or HC error is detected, re-initialize the HC during resume */
-> +	if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
-> +		xhci_warn(xhci, "re-initialize HC during resume, USBSTS:%s\n",
-> +			  xhci_decode_usbsts(str, temp));
->  
->  		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
->  				!(xhci_all_ports_seen_u0(xhci))) {
-> 
+Hi Greg,
 
-Tried to compile, something is missing in this patch:
+Am Donnerstag, dem 27.01.2022 um 14:21 +0100 schrieb Greg KH:
+> On Thu, Jan 27, 2022 at 01:00:39PM +0100, Oleksij Rempel wrote:
+> > On Thu, Jan 27, 2022 at 12:30:20PM +0100, Greg KH wrote:
+> > > On Thu, Jan 27, 2022 at 12:23:05PM +0100, Oleksij Rempel wrote:
+> > > > On Thu, Jan 27, 2022 at 11:57:26AM +0100, Greg KH wrote:
+> > > > > On Thu, Jan 27, 2022 at 11:49:05AM +0100, Oleksij Rempel wrote:
+> > > > > > Similar to the option to set a netdev name in device tree for switch
+> > > > > > ports by using the property "label" in the DSA framework, this patch
+> > > > > > adds this functionality to the usbnet infrastructure.
+> > > > > > 
+> > > > > > This will help to name the interfaces properly throughout supported
+> > > > > > devices. This provides stable interface names which are useful
+> > > > > > especially in embedded use cases.
+> > > > > 
+> > > > > Stable interface names are for userspace to set, not the kernel.
+> > > > > 
+> > > > > Why would USB care about this?  If you need something like this, get it
+> > > > > from the USB device itself, not DT, which should have nothing to do with
+> > > > > USB as USB is a dynamic, self-describing, bus.  Unlike DT.
+> > > > > 
+> > > > > So I do not think this is a good idea.
+> > > > 
+> > > > This is needed for embedded devices with integrated USB Ethernet
+> > > > controller. Currently I have following use cases to solve:
+> > > > - Board with one or multiple USB Ethernet controllers with external PHY.
+> > > >   The PHY need devicetree to describe IRQ, clock sources, label on board, etc.
+> > > 
+> > > The phy is for the USB controller, not the Ethernet controller, right?
+> > > If for the ethernet controller, ugh, that's a crazy design and I would
+> > > argue a broken one.  But whatever, DT should not be used to describe a
+> > > USB device itself.
+> > > 
+> > > > - Board with USB Ethernet controller with DSA switch. The USB ethernet
+> > > >   controller is attached to the CPU port of DSA switch. In this case,
+> > > >   DSA switch is the sub-node of the USB device.
+> > > 
+> > > What do you mean exactly by "sub node"?  USB does not have such a term.
+> > 
+> > Here are some examples:
+> > 
+> >   - |
+> >     usb@11270000 {
+> >         reg = <0x11270000 0x1000>;
+> 
+> How can a USB device have a register?
+> 
+> And what does 11270000 mean?
+> 
+> 
+> >         #address-cells = <1>;
+> >         #size-cells = <0>;
+> > 
+> >         ethernet@1 {
+> >             compatible = "usb424,ec00";
+> >             reg = <1>;
+> >             label = "LAN0";
+> 
+> Where did that come from?  That should be added in userspace, not from
+> the kernel.
+> 
+> > 	    // there is no internal eeprom, so MAC address is taken from
+> > 	    // NVMEM of the SoC.
+> >             local-mac-address = [00 00 00 00 00 00];
+> > 
+> >             mdio {
+> > 		ethernet-phy@4 {
+> > 			reg = <4>;
+> > 			// Interrupt is attached to the SoC or the GPIO
+> > 			// controller of the same USB devices.
+> > 			interrupts-extended = <&gpio1 28 IRQ_TYPE_LEVEL_LOW>;
+> > 			// same about reset. It is attached to the SoC
+> > 			// or GPIO controller of the USB device.
+> > 			reset-gpios = <&gpio3 31 GPIO_ACTIVE_LOW>;
+> > 			reset-assert-us = <10000>;
+> > 			reset-deassert-us = <1000>;
+> > 			// some external clock provider
+> > 			clocks = <&clk>
+> > 			qca,smarteee-tw-us-1g = <24>;
+> > 			qca,clk-out-frequency = <125000000>;
+> 
+> So this device does not follow the spec for this driver in that you have
+> to get the values for the phy from DT and not the device itself?  Why
+> not fix the firmware in the device to report this?
+> 
+> Anyway, this feels really wrong, USB should not be involved in DT by
+> virtue of how the bus was designed.
 
-drivers/usb/host/xhci.c:1152:25: error: ‘str’ undeclared (first use in this function); did you mean ‘qstr’?
+While one can argue about the kind of information provided here, it is
+well defined how DT can augment the information about a device on a
+runtime discoverable bus like USB. There is even a DT binding that
+lists you as the maintainer of this standard:
+Documentation/devicetree/bindings/usb/usb-device.yaml
 
--Mathias
+USB is not special here, PCI has the same way for DT to augment runtime
+discovered device information and that is even covered by the ancient
+IEEE 1275 Open Firmware standard.
+
+Regards,
+Lucas
+
