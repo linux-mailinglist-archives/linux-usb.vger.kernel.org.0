@@ -2,76 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5776149E6A5
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 16:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C0A49E76C
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 17:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243222AbiA0Puv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 10:50:51 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44420 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242857AbiA0Puu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 10:50:50 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3AB4B8013C
-        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 15:50:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8CEC2C340EB
-        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 15:50:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643298648;
-        bh=HxWR5AORA2Qb81TJY6BTV8I4RsUqDK6LYUkd+At/VXk=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=DaE20O5Bv4DUC68STBkYDVOgVw77YHmhw72XgPa8US0k9H81pg9Xpt+oBG0q7EeTU
-         gS+9ShZTx+VqGcTvclEeOM3qXHEyJPqe2TK9/ZZfezYDbYx4CQRKQnPPZ94b2BFS2x
-         0lz8PHnFaeEH4jMt1+wWOqbzJWbjlXpnEvmkwUeTb109SIUmP4iqRJ/CM8sNoYehx9
-         wB08rUNHapRnnO6F/dsAiEH/yfwypjUzTb1VWoaEhZRgLV/wTCSz9dXXUMhEYNK7S+
-         35MD0HFAq3VgBoTJt/N/3X8TqpHmxlR25Cc5MtbtTX1Ii6IeCuL4wb86xdgvHNrOGb
-         ZLNaYgsw0MkFw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 6F4D3CC13A6; Thu, 27 Jan 2022 15:50:48 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215361] SL-6000 zaurus USB error - 'bad CDC descriptors'
-Date:   Thu, 27 Jan 2022 15:50:48 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: low
-X-Bugzilla-Who: oliver@neukum.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-215361-208809-9KLBHJUf2h@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215361-208809@https.bugzilla.kernel.org/>
-References: <bug-215361-208809@https.bugzilla.kernel.org/>
+        id S243657AbiA0QYt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 11:24:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48524 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243640AbiA0QYs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 11:24:48 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451B2C06173B
+        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 08:24:48 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id c10so10403727ybb.2
+        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 08:24:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=GUGMKOXoeh+DsxEq/mythQWeBs2PTApaRiGCR6ELsyQ=;
+        b=M8Ei78c6rWLxCnLUfGitRLwe0XeOIf6XsTgFItI4JdVB+QxZEQzLgikpyO3egRV+Xh
+         nDkXm5N0B5WzGZhIZKsB8lpqynkWz2yPIb4XWpzKVARBacgGmj8ne+5ldSUHREGMdIJT
+         /JvIZ1Z7VCgqRzjwBdyvr+QB3l6YVO03uGHRpY7RdKFedg1dyzcAEuiEudJgvoDz74to
+         3TVX5L+cNXdRHh39+GajSmWya5srt8bl0vcb+hVxa3H0UaN4Xu1nXamQmYAaAKcaX+Pu
+         1lgBpFuD9k5I+SmI2nlQJp4fxKzd4JHmBCjU6cuiwhcIMksrRZzrLBTbSfi5bnwjgM2w
+         ZWYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=GUGMKOXoeh+DsxEq/mythQWeBs2PTApaRiGCR6ELsyQ=;
+        b=Vz/l8gNVKDIySk9qZt+1BWk9D7UaFjhLIo12RFVSiSQ1XE1t73Kl0MG3tRsyiB9b48
+         A3YkedVeovCV6K1ZV6GrvsxkBaOmNHoWcElid0NZnBX1Bu2bUMrWHxZy13cibGg61zJp
+         Zd0NJ+MN2zZH+Rqz5tPFgEM6h4IiAf+Lp980K8XTXpeGs+8mFR3bkTg8LyEYkApSD1gT
+         v2tnShOHSbg7RReUUtEVk/gpgOsxGb3w3zraFig8QVSvAKpHWhuFD5LcgOhMgIkdmKbB
+         d1OOHjN/7m9p/eO0HOrHyjaS1u63fyxsdFPNnPXAtoRQ4OWw7NZk8U9SrrKdLRy1xZKl
+         lDOQ==
+X-Gm-Message-State: AOAM531KTRf4/xteVBadUnwDAG1ISTYChaAw3l0tSSkOp2xCywo0hEp3
+        NxAZHJOxRguObMOMEuQ40XmQxPdifk2uewhBxPM=
+X-Google-Smtp-Source: ABdhPJxt6mYcqbhxh9WVoyD34aoCfk9ORTMQ3f8RKyJryulHtYe2If8yyALSytdvgTxsZu6oGBFXTjmHyu+J9kyglnk=
+X-Received: by 2002:a25:8082:: with SMTP id n2mr6840913ybk.605.1643300687491;
+ Thu, 27 Jan 2022 08:24:47 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a05:7000:cf0b:0:0:0:0 with HTTP; Thu, 27 Jan 2022 08:24:47
+ -0800 (PST)
+Reply-To: abrahammorrison443@gmail.com
+From:   Abraham Morrison <mysecretary00001@gmail.com>
+Date:   Thu, 27 Jan 2022 08:24:47 -0800
+Message-ID: <CAFpE+swCbACLEQBZ5pipFfEj4ARy7WKwPkuR6vJuOXg=8tN5Jw@mail.gmail.com>
+Subject: Good day!
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215361
+Jak si=C4=99 masz? Mam nadziej=C4=99, =C5=BCe jeste=C5=9B zdrowy i zdrowy? =
+Informuj=C4=99, =C5=BCe
+pomy=C5=9Blnie zako=C5=84czy=C5=82em transakcj=C4=99 z pomoc=C4=85 nowego p=
+artnera. W
+mi=C4=99dzyczasie postanowi=C5=82em zrekompensowa=C4=87 ci kwot=C4=99 500 0=
+00 USD z powodu
+twoich wcze=C5=9Bniejszych wysi=C5=82k=C3=B3w, chocia=C5=BC rozczarowa=C5=
+=82e=C5=9B mnie po drodze.
 
---- Comment #11 from Oliver Neukum (oliver@neukum.org) ---
-Created attachment 300340
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D300340&action=3Dedit
-another special case
+Radz=C4=99 skontaktowa=C4=87 si=C4=99 z moj=C4=85 sekretark=C4=85 w sprawie=
+ karty bankomatowej
+o warto=C5=9Bci 500.000,00 $, kt=C3=B3r=C4=85 zachowa=C5=82em dla Ciebie.
 
-Please try this patch
+Skontaktuj si=C4=99 z ni=C4=85, podaj=C4=85c poni=C5=BCsze informacje.
+Imi=C4=99: Linda Koffi
+E-mail: koffilinda785@gmail.com
 
---=20
-You may reply to this email to add a comment.
+Popro=C5=9B j=C4=85, aby przes=C5=82a=C5=82a Ci ca=C5=82kowit=C4=85 sum=C4=
+=99 (500.000.00 dolar=C3=B3w) karty
+bankomatowej, kt=C3=B3r=C4=85 zachowa=C5=82em dla Ciebie.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Pan Abraham Morrison
