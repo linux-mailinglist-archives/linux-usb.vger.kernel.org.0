@@ -2,108 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 967CB49DCB3
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 09:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3533649DE45
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 10:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237856AbiA0In7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 03:43:59 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:53425 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbiA0In6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 03:43:58 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 20R8gwA73008070, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 20R8gwA73008070
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 27 Jan 2022 16:42:58 +0800
-Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 27 Jan 2022 16:42:58 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 27 Jan 2022 16:42:58 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e]) by
- RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e%5]) with mapi id
- 15.01.2308.020; Thu, 27 Jan 2022 16:42:58 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     Aaron Ma <aaron.ma@canonical.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Henning Schild <henning.schild@siemens.com>
-CC:     Jakub Kicinski <kuba@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Andrew Lunn <andrew@lunn.ch>, Oliver Neukum <oneukum@suse.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "tiwai@suse.de" <tiwai@suse.de>
-Subject: RE: [PATCH 1/3 v3] net: usb: r8152: Check used MAC passthrough address
-Thread-Topic: [PATCH 1/3 v3] net: usb: r8152: Check used MAC passthrough
- address
-Thread-Index: AQHYAkb+XWXmurlfvUCud8k7wjo3mqxUKRoAgABIlgCAAAqXAIAAPjsAgAC9QoCAANKOgIAACHCAgATH5wCAAN82AIAAluGAgADbvICAABjvgIAAAeSAgAAC1gCAAAMVAIAAA1gAgAABIwCAAbbOgIAAAcsAgACE9wCAFfeygIAA2/Vg//996wCAAIngEA==
-Date:   Thu, 27 Jan 2022 08:42:57 +0000
-Message-ID: <fe97d50054484f4f8299bc340166a625@realtek.com>
-References: <20220105151427.8373-1-aaron.ma@canonical.com>
- <CAAd53p7egh8G=fPMcua_FTHrA3HA6Dp85FqVhvcSbuO2y8Xz9A@mail.gmail.com>
- <20220110085110.3902b6d4@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <CAAd53p5mSq_bZdsZ=-RweiVLgAYU5+=Uje7TmYtAbBzZ7XCPUA@mail.gmail.com>
- <ec2aaeb0-995e-0259-7eca-892d0c878e19@amd.com>
- <20220111082653.02050070@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <3f258c23-c844-7b48-fffb-2fbf5d6d7475@amd.com>
- <20220111084348.7e897af9@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <2b779fef-459f-79bb-4005-db4fd3fd057f@amd.com>
- <20220111090648.511e95e8@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <5411b3a0-7e36-fa75-5c5c-eb2fda9273b1@amd.com>
- <20220112202125.105d4c58@md1za8fc.ad001.siemens.net>
- <DM4PR12MB516889A458A16D89D4562CA7E2529@DM4PR12MB5168.namprd12.prod.outlook.com>
- <de684c19-7a84-ac7c-0019-31c253d89a5f@canonical.com>
- <edff6219-b1f7-dec5-22ea-0bde9a3e0efb@canonical.com>
- <5b94f064bd5c48589ea856f68ac0e930@realtek.com>
- <e52f8155-61a8-0cea-b96c-a05b83cdfff9@canonical.com>
-In-Reply-To: <e52f8155-61a8-0cea-b96c-a05b83cdfff9@canonical.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.177.203]
-x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEvMjcg5LiK5Y2IIDA0OjA1OjAw?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S238725AbiA0JmI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 04:42:08 -0500
+Received: from mga05.intel.com ([192.55.52.43]:47056 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238735AbiA0JmH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Jan 2022 04:42:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643276527; x=1674812527;
+  h=to:cc:references:from:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=djY3xch7vPOo6t9rLWfXPw5PY5fSqNMg5UzbPQHL0bc=;
+  b=Fr5gtKAf4egwCp/ODryu8C4mpCG5mmbFIlN+R7vX09BQd9Qo8KtJ/RNi
+   p0CcQZ0fvsWFYsSDkjuHW4B00l8n9F8h0rD4tFMMGUmRKTNnJibkHI8u5
+   /5++fNmgi5+eE/PjZcag2P/J59BiZJ8erRA63kIBquOP7wigtFAaNNiK0
+   V0/e52a7Jvg2Q64bxaZZcjVu5s2x1aUXF/P/UefFplZ17EC4YvrQHLP7H
+   HJW+2OsSt8WHKZWtqPiawoWosEO+BzWrXfy8nSvI+fjDWT4jg33BOXo8T
+   SBdidxnv7DKDEx3Z4wcVejJaOVxaECmPqqy/1oNsyURsWydgc0r19x2FQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="333156716"
+X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
+   d="scan'208";a="333156716"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 01:42:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
+   d="scan'208";a="563725468"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga001.jf.intel.com with ESMTP; 27 Jan 2022 01:42:01 -0800
+To:     Hongyu Xie <xiehongyu1@kylinos.cn>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Hongyu Xie <xy521521@gmail.com>, mathias.nyman@intel.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        125707942@qq.com, stable@vger.kernel.org
+References: <20220126094126.923798-1-xy521521@gmail.com>
+ <YfEZFtf9K8pFC8Mw@kroah.com>
+ <c7f6a8bb-76b6-cd2d-7551-b599a8276f5c@kylinos.cn>
+ <YfEnbRW3oU0ouGqH@kroah.com>
+ <e86972d3-e4a0-ad81-45ea-21137e3bfcb6@kylinos.cn>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH -next] xhci: fix two places when dealing with return value
+ of function xhci_check_args
+Message-ID: <7af5b318-b1ac-0c74-1782-04ba50a3b5fa@linux.intel.com>
+Date:   Thu, 27 Jan 2022 11:43:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+In-Reply-To: <e86972d3-e4a0-ad81-45ea-21137e3bfcb6@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-QWFyb24gTWEgPGFhcm9uLm1hQGNhbm9uaWNhbC5jb20+DQo+IFNlbnQ6IFRodXJzZGF5LCBKYW51
-YXJ5IDI3LCAyMDIyIDQ6MTMgUE0NClsuLi5dDQo+ID4gSSBkb24ndCB0aGluayB0aGUgZmVhdHVy
-ZSBvZiBNQUMgcGFzc3Rocm91Z2ggYWRkcmVzcyBpcyBtYWludGFpbmVkDQo+ID4gYnkgUmVhbHRl
-ay4gRXNwZWNpYWxseSwgdGhlcmUgaXMgbm8gdW5pZm9ybSB3YXkgYWJvdXQgaXQuIFRoZQ0KPiA+
-IGRpZmZlcmVudCBjb21wYW5pZXMgaGF2ZSB0byBtYWludGFpbiB0aGVpciBvd24gd2F5cyBieSB0
-aGVtc2VsdmVzLg0KPiA+DQo+ID4gUmVhbHRlayBjb3VsZCBwcm92aWRlIHRoZSBtZXRob2Qgb2Yg
-ZmluZGluZyBvdXQgdGhlIHNwZWNpZmljIGRldmljZQ0KPiA+IGZvciBMZW5vdm8uIFlvdSBjb3Vs
-ZCBjaGVjayBVU0IgT0NQIDB4RDgxRiBiaXQgMy4gRm9yIGV4YW1wbGUsDQo+ID4NCj4gPiAJb2Nw
-X2RhdGEgPSBvY3BfcmVhZF9ieXRlKHRwLCBNQ1VfVFlQRV9VU0IsIFVTQl9NSVNDXzEpOw0KPiA+
-IAlpZiAodHAtPnZlcnNpb24gPT0gUlRMX1ZFUl8wOSAmJiAob2NwX2RhdGEgJiBCSVQoMykpKSB7
-DQo+ID4gCQkvKiBUaGlzIGlzIHRoZSBSVEw4MTUzQiBmb3IgTGVub3ZvLiAqLw0KPiA+IAl9DQo+
-ID4NCj4gDQo+IE1heSBJIHVzZSB0aGUgY29kZSBmcm9tIFJlYWx0ZWsgT3V0Ym94IGRyaXZlciB0
-byBpbXBsZW1lbnQgdGhlIE1BUFQ/DQo+IA0KPiBJZiBzbywgYWxsb3cgbWUgdG8gd3JpdGUgYSBw
-YXRjaCBhbmQgc2VuZCBoZXJlIHRvIHJldmlldy4NCg0KU3VyZS4NCg0KSG93ZXZlciwgdGhlIG91
-dGJveCBkcml2ZXIgaGFzIGEgbWlzdGFrZS4NClRoZSBtYWNfb2JqX25hbWUgd2l0aCAiXFxfU0Iu
-QU1BQyIgaXMgdXNlZCBieSBEZWxsLg0KSSB0aGluayB0aGUgZGV2aWNlIG9mIExlbm92byBzaG91
-bGQgdXNlICJcXE1BQ0EiIG9ubHkuIFJpZ2h0Pw0KDQpUaGUgZWFzaWVzdCB3YXkgaXMgdG8gc2V0
-IHRwLT5sZW5vdm9fbWFjcGFzc3RocnUgZm9yIFJUTDgxNTNCTC4NCkZvciBleGFtcGxlLA0KDQoJ
-b2NwX2RhdGEgPSBvY3BfcmVhZF9ieXRlKHRwLCBNQ1VfVFlQRV9VU0IsIFVTQl9NSVNDXzEpOw0K
-CWlmICh0cC0+dmVyc2lvbiA9PSBSVExfVkVSXzA5ICYmIChvY3BfZGF0YSAmIEJJVCgzKSkpDQoJ
-CXRwLT5sZW5vdm9fbWFjcGFzc3RocnUgPSAxOw0KDQpCZXN0IFJlZ2FyZHMsDQpIYXllcw0KDQoN
-Cg==
+On 26.1.2022 14.49, Hongyu Xie wrote:
+
+>> Anyway, why is this unique to this one driver?  Why does it not show up
+>> for any other driver?
+> The whole thing is not about a particular driver. The thing is xhci_urb_enqueue shouldn't change the return value of xhci_check_args from -ENODEV to -EINVAL. Many other drivers only check if the return value of xchi_check_args is <= 0.
+
+Agree, lets return -ENODEV when appropriate.
+
+>>
+>>> The whole point is, if xhci_check_args returns value A, xhci_urb_enqueque
+>>> shouldn't return any
+>>> other value, because that will change some driver's behavior(like r8152.c).
+>> But you are changing how the code currently works.  Are you sure you
+>> want to have this "succeed" if this is on a root hub?
+> Yes, I'm changing how the code currently works but not on a root hub.
+>>
+>>> 2."So if 0 is returned, you will now return that here, is that ok?
+>>> That is a change in functionality.
+>>> But this can only ever be the case for a root hub, is that ok?"
+>>>
+>>> It's the same logic, but now xhci_urb_enqueue can return -ENODEV if xHC is
+>>> halted.
+>>> If it happens on a root hub,  xhci_urb_enqueue won't be called.
+>>>
+>>> 3."Again, this means all is good?  Why is this being called for a root hub?"
+>>>
+>>> It is the same logic with the old one, but now xhci_check_streams_endpoint
+>>> can return -ENODEV if xHC is halted.
+>> This still feels wrong to me, but I'll let the maintainer decide, as I
+>> don't understand why a root hub is special here.
+> 
+> Thanks please. usb_submit_urb will call usb_hcd_submit_urb. And usb_hcd_submit_urb will call rh_urb_enqueue if it's on a root hub instead of calling hcd->driver->urb_enqueue(which is xhci_urb_enqueue in this case).
+
+xhci_urb_enqueue() shouldn't be called for roothub urbs, but if it is then we
+should continue to return -EINVAL 
+
+xhci_check_args() should be rewritten later, but first we want a targeted fix
+that can go to stable.
+
+Your original patch would be ok after following modification:
+if (ret <= 0)
+	return ret ? ret : -EINVAL;
+
+Thanks
+-Mathias
