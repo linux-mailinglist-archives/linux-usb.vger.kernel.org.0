@@ -2,96 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CDB49DFC7
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 11:49:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B02A149DFE9
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 11:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239685AbiA0KtW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 05:49:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        id S239780AbiA0K5u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 05:57:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239650AbiA0KtR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 05:49:17 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A4BC061747
-        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 02:49:17 -0800 (PST)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nD2Kz-0007ko-3G; Thu, 27 Jan 2022 11:49:09 +0100
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nD2Kx-003lzO-RJ; Thu, 27 Jan 2022 11:49:07 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Oliver Neukum <oneukum@suse.com>,
+        with ESMTP id S239773AbiA0K5i (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 05:57:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8658C06173B;
+        Thu, 27 Jan 2022 02:57:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CB50B821EE;
+        Thu, 27 Jan 2022 10:57:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AE7DC340E4;
+        Thu, 27 Jan 2022 10:57:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643281055;
+        bh=gbW+XTNZXr9hGyQb+2cyWJjlqaEnavG1SF4dDnxcuVI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=btVtwLIntJO6tkL3JKU7gbqQ9LN+0exFu0/1DBbxsFef+RuCqQzQ9mWR954qGAIit
+         z60Pb47rocP0pc4n6smGTCdkIh0RvA3UpNKdmB3EemOhUXZ41/sTtBqYh5P7d0q1QU
+         +WLYS/eXZ/7Ow0p0ZIr2AmWDU+NuBx4eNtQShQAQ=
+Date:   Thu, 27 Jan 2022 11:57:26 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Oliver Neukum <oneukum@suse.com>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH net-next v1 4/4] usbnet: add support for label from device tree
-Date:   Thu, 27 Jan 2022 11:49:05 +0100
-Message-Id: <20220127104905.899341-5-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220127104905.899341-1-o.rempel@pengutronix.de>
+Subject: Re: [PATCH net-next v1 4/4] usbnet: add support for label from
+ device tree
+Message-ID: <YfJ6lhZMAEmetdad@kroah.com>
 References: <20220127104905.899341-1-o.rempel@pengutronix.de>
+ <20220127104905.899341-5-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127104905.899341-5-o.rempel@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Similar to the option to set a netdev name in device tree for switch
-ports by using the property "label" in the DSA framework, this patch
-adds this functionality to the usbnet infrastructure.
+On Thu, Jan 27, 2022 at 11:49:05AM +0100, Oleksij Rempel wrote:
+> Similar to the option to set a netdev name in device tree for switch
+> ports by using the property "label" in the DSA framework, this patch
+> adds this functionality to the usbnet infrastructure.
+> 
+> This will help to name the interfaces properly throughout supported
+> devices. This provides stable interface names which are useful
+> especially in embedded use cases.
 
-This will help to name the interfaces properly throughout supported
-devices. This provides stable interface names which are useful
-especially in embedded use cases.
+Stable interface names are for userspace to set, not the kernel.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/usb/usbnet.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Why would USB care about this?  If you need something like this, get it
+from the USB device itself, not DT, which should have nothing to do with
+USB as USB is a dynamic, self-describing, bus.  Unlike DT.
 
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index 9a6450f796dc..3fdca0cfda88 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -33,6 +33,7 @@
- #include <linux/slab.h>
- #include <linux/kernel.h>
- #include <linux/pm_runtime.h>
-+#include <linux/of.h>
- 
- /*-------------------------------------------------------------------------*/
- 
-@@ -1762,6 +1763,20 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
- 		if ((dev->driver_info->flags & FLAG_WWAN) != 0)
- 			strscpy(net->name, "wwan%d", sizeof(net->name));
- 
-+		if (IS_ENABLED(CONFIG_OF)) {
-+			const char *label = NULL;
-+
-+			/* try reading label from device tree node */
-+			if (xdev->dev.of_node)
-+				label = of_get_property(xdev->dev.of_node,
-+							"label", NULL);
-+			if (label) {
-+				strscpy(net->name, label, sizeof(net->name));
-+				dev_info(&udev->dev, "netdev name from dt: %s\n",
-+					 net->name);
-+			}
-+		}
-+
- 		/* devices that cannot do ARP */
- 		if ((dev->driver_info->flags & FLAG_NOARP) != 0)
- 			net->flags |= IFF_NOARP;
--- 
-2.30.2
+So I do not think this is a good idea.
 
+greg k-h
