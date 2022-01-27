@@ -2,63 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 826C449DB0B
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 07:56:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A6949DB49
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 08:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236994AbiA0G4R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 01:56:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56084 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiA0G4R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 01:56:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8132C061714;
-        Wed, 26 Jan 2022 22:56:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85DE8B81EDD;
-        Thu, 27 Jan 2022 06:56:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4F01C340E4;
-        Thu, 27 Jan 2022 06:56:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643266574;
-        bh=Bk/ODDsDukInU2AbtJrdGihYhKViotZzVIRZSDiAAZQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a2ULnNAWI/jgz5yl4AbaijDYmReI+YvOOHvJ9bILRbSw79Kdiquxyni1VMUpSii43
-         5Ba58KaDGsuBRVxdGfhw9BgDItq/OCdIWCu4Vg1F7olfy8Cyuz6dNJ1LpW5uqOzkVt
-         FmyBtUkiymestYCsswyzCXqrCvp3d7Lv4It48uC4=
-Date:   Thu, 27 Jan 2022 07:56:05 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     tangmeng <tangmeng@uniontech.com>
-Cc:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        airlied@linux.ie, daniel@ffwll.ch, jsarha@ti.com,
-        tomi.valkeinen@ti.com, linux@dominikbrodowski.net,
-        Peter.Chen@nxp.com, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] drivers: Fix typo in comment
-Message-ID: <YfJCBZuc9mOZkIVJ@kroah.com>
-References: <20220127065156.22372-1-tangmeng@uniontech.com>
+        id S237206AbiA0HQp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 02:16:45 -0500
+Received: from smtpbguseast3.qq.com ([54.243.244.52]:41422 "EHLO
+        smtpbguseast3.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230251AbiA0HQf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 02:16:35 -0500
+X-QQ-mid: bizesmtp14t1643267787tzf13wi9
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 27 Jan 2022 15:16:21 +0800 (CST)
+X-QQ-SSF: 0140000000000090E000000A0000000
+X-QQ-FEAT: G+mSt178IQrJBHnxSZvES1j4qrJ+NGxhGYzW1xWPkjrC+2mDO3yDXx/OatzsP
+        rpFzB65yG8K96v0yHlz7OjzrsifQuZypfOFE97MwElGHAOZfXtaTHS8Xk9qSdTwdMHglGcc
+        KwGEsDeoLtsqRuXZmiZTAhYXd6OmLxYWE3nXl3F3GUkheEWU+3pT8lTLOb6ZbEGcjip0s9W
+        wptkp1q5CCd+dQFm3sqPY1mEXI5Ub+PYrKgz7o6yLT8dYGsw9+FPgaUosi2PwpxHUMO8AsS
+        pHImjPHS9H89Odjs5YU72qQIfj9AJF3TPMsqZK/D3POE43nPF3Vjz2Y5lI/Kjdr8aQjpk3V
+        AqMiae0vKwzi1j1E6OHUmCO4NLI9g==
+X-QQ-GoodBg: 1
+From:   tangmeng <tangmeng@uniontech.com>
+To:     Peter.Chen@nxp.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     tangmeng <tangmeng@uniontech.com>
+Subject: [PATCH] usb: udc: Fix typo in comment
+Date:   Thu, 27 Jan 2022 15:16:19 +0800
+Message-Id: <20220127071619.31812-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127065156.22372-1-tangmeng@uniontech.com>
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign2
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 02:51:56PM +0800, tangmeng wrote:
-> Replace disbale with disable and replace unavaibale with unavailable.
-> 
-> Signed-off-by: tangmeng <tangmeng@uniontech.com>
-> ---
->  drivers/gpu/drm/amd/amdgpu/mxgpu_vi.c | 2 +-
->  drivers/gpu/drm/tilcdc/tilcdc_crtc.c  | 2 +-
->  drivers/pcmcia/rsrc_nonstatic.c       | 2 +-
->  drivers/usb/chipidea/udc.c            | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
+Replace disbale with disable
 
-This needs to be broken up per-subsystem, thanks.
+Signed-off-by: tangmeng <tangmeng@uniontech.com>
+---
+ drivers/usb/chipidea/udc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-greg k-h
+diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+index f9ca5010f65b..dc6c96e04bcf 100644
+--- a/drivers/usb/chipidea/udc.c
++++ b/drivers/usb/chipidea/udc.c
+@@ -2152,7 +2152,7 @@ static void udc_id_switch_for_host(struct ci_hdrc *ci)
+ {
+ 	/*
+ 	 * host doesn't care B_SESSION_VALID event
+-	 * so clear and disbale BSV irq
++	 * so clear and disable BSV irq
+ 	 */
+ 	if (ci->is_otg)
+ 		hw_write_otgsc(ci, OTGSC_BSVIE | OTGSC_BSVIS, OTGSC_BSVIS);
+-- 
+2.20.1
+
+
+
