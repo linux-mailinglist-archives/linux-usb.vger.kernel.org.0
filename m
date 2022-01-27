@@ -2,50 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB49049DC55
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 09:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 967CB49DCB3
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 09:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237687AbiA0INi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 03:13:38 -0500
-Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:52388
-        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231533AbiA0INh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 03:13:37 -0500
-Received: from [192.168.1.9] (unknown [222.129.35.96])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 0A3D13F165;
-        Thu, 27 Jan 2022 08:13:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643271215;
-        bh=hw3lkqK/LDZ3HCWjOQelAYLaXklxekttKsCZttUwteA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=GlONunEpY2/s9MVJacq+kLXgcHFQwYHDi/b+yMSnr0XU3dGFOic1B4jc6iGRPrpJh
-         o36B8UpyomY2ZzMgAPc6H76RsvczBbAckEF4MilgywAL6aSZK8tLGGQEryiNt5FkJ9
-         S9oIFDLuOYQbt1xMh5Gm9/69RyLMBWOLsxwyftgqATgR29cQGyfuV6m4uMGxZ+4viO
-         Tvhv+fI+ZYCHsNG8YmgkFdhUR9grHJ3JJNChzcGsvb5GpYJcA0Ym0gDZ8HOq4QrsY6
-         1NK9/1eLMpMfc25C3XNq3CB/MY3YHdgSqT/5qh8qTXnZQdXkIRkQc7bVrUtCpbijzG
-         92IAghEebDMqw==
-Message-ID: <e52f8155-61a8-0cea-b96c-a05b83cdfff9@canonical.com>
-Date:   Thu, 27 Jan 2022 16:13:24 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/3 v3] net: usb: r8152: Check used MAC passthrough
- address
-Content-Language: en-US
-To:     Hayes Wang <hayeswang@realtek.com>,
+        id S237856AbiA0In7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 03:43:59 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:53425 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231428AbiA0In6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 03:43:58 -0500
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 20R8gwA73008070, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 20R8gwA73008070
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 27 Jan 2022 16:42:58 +0800
+Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
+ RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 27 Jan 2022 16:42:58 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 27 Jan 2022 16:42:58 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e]) by
+ RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e%5]) with mapi id
+ 15.01.2308.020; Thu, 27 Jan 2022 16:42:58 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Aaron Ma <aaron.ma@canonical.com>,
         "Limonciello, Mario" <Mario.Limonciello@amd.com>,
         Henning Schild <henning.schild@siemens.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
+CC:     Jakub Kicinski <kuba@kernel.org>,
         Kai-Heng Feng <kai.heng.feng@canonical.com>,
         Andrew Lunn <andrew@lunn.ch>, Oliver Neukum <oneukum@suse.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "davem@davemloft.net" <davem@davemloft.net>,
         "tiwai@suse.de" <tiwai@suse.de>
+Subject: RE: [PATCH 1/3 v3] net: usb: r8152: Check used MAC passthrough address
+Thread-Topic: [PATCH 1/3 v3] net: usb: r8152: Check used MAC passthrough
+ address
+Thread-Index: AQHYAkb+XWXmurlfvUCud8k7wjo3mqxUKRoAgABIlgCAAAqXAIAAPjsAgAC9QoCAANKOgIAACHCAgATH5wCAAN82AIAAluGAgADbvICAABjvgIAAAeSAgAAC1gCAAAMVAIAAA1gAgAABIwCAAbbOgIAAAcsAgACE9wCAFfeygIAA2/Vg//996wCAAIngEA==
+Date:   Thu, 27 Jan 2022 08:42:57 +0000
+Message-ID: <fe97d50054484f4f8299bc340166a625@realtek.com>
 References: <20220105151427.8373-1-aaron.ma@canonical.com>
  <CAAd53p7egh8G=fPMcua_FTHrA3HA6Dp85FqVhvcSbuO2y8Xz9A@mail.gmail.com>
  <20220110085110.3902b6d4@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
@@ -62,35 +61,49 @@ References: <20220105151427.8373-1-aaron.ma@canonical.com>
  <de684c19-7a84-ac7c-0019-31c253d89a5f@canonical.com>
  <edff6219-b1f7-dec5-22ea-0bde9a3e0efb@canonical.com>
  <5b94f064bd5c48589ea856f68ac0e930@realtek.com>
-From:   Aaron Ma <aaron.ma@canonical.com>
-In-Reply-To: <5b94f064bd5c48589ea856f68ac0e930@realtek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <e52f8155-61a8-0cea-b96c-a05b83cdfff9@canonical.com>
+In-Reply-To: <e52f8155-61a8-0cea-b96c-a05b83cdfff9@canonical.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.203]
+x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEvMjcg5LiK5Y2IIDA0OjA1OjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 1/27/22 16:06, Hayes Wang wrote:
-> I don't think the feature of MAC passthrough address is maintained
-> by Realtek. Especially, there is no uniform way about it. The
-> different companies have to maintain their own ways by themselves.
-> 
-> Realtek could provide the method of finding out the specific device
-> for Lenovo. You could check USB OCP 0xD81F bit 3. For example,
-> 
-> 	ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, USB_MISC_1);
-> 	if (tp->version == RTL_VER_09 && (ocp_data & BIT(3))) {
-> 		/* This is the RTL8153B for Lenovo. */
-> 	}
-> 
-
-May I use the code from Realtek Outbox driver to implement the MAPT?
-
-If so, allow me to write a patch and send here to review.
-
-Thanks,
-Aaron
-
-
-> Best Regards,
-> Hayes
+QWFyb24gTWEgPGFhcm9uLm1hQGNhbm9uaWNhbC5jb20+DQo+IFNlbnQ6IFRodXJzZGF5LCBKYW51
+YXJ5IDI3LCAyMDIyIDQ6MTMgUE0NClsuLi5dDQo+ID4gSSBkb24ndCB0aGluayB0aGUgZmVhdHVy
+ZSBvZiBNQUMgcGFzc3Rocm91Z2ggYWRkcmVzcyBpcyBtYWludGFpbmVkDQo+ID4gYnkgUmVhbHRl
+ay4gRXNwZWNpYWxseSwgdGhlcmUgaXMgbm8gdW5pZm9ybSB3YXkgYWJvdXQgaXQuIFRoZQ0KPiA+
+IGRpZmZlcmVudCBjb21wYW5pZXMgaGF2ZSB0byBtYWludGFpbiB0aGVpciBvd24gd2F5cyBieSB0
+aGVtc2VsdmVzLg0KPiA+DQo+ID4gUmVhbHRlayBjb3VsZCBwcm92aWRlIHRoZSBtZXRob2Qgb2Yg
+ZmluZGluZyBvdXQgdGhlIHNwZWNpZmljIGRldmljZQ0KPiA+IGZvciBMZW5vdm8uIFlvdSBjb3Vs
+ZCBjaGVjayBVU0IgT0NQIDB4RDgxRiBiaXQgMy4gRm9yIGV4YW1wbGUsDQo+ID4NCj4gPiAJb2Nw
+X2RhdGEgPSBvY3BfcmVhZF9ieXRlKHRwLCBNQ1VfVFlQRV9VU0IsIFVTQl9NSVNDXzEpOw0KPiA+
+IAlpZiAodHAtPnZlcnNpb24gPT0gUlRMX1ZFUl8wOSAmJiAob2NwX2RhdGEgJiBCSVQoMykpKSB7
+DQo+ID4gCQkvKiBUaGlzIGlzIHRoZSBSVEw4MTUzQiBmb3IgTGVub3ZvLiAqLw0KPiA+IAl9DQo+
+ID4NCj4gDQo+IE1heSBJIHVzZSB0aGUgY29kZSBmcm9tIFJlYWx0ZWsgT3V0Ym94IGRyaXZlciB0
+byBpbXBsZW1lbnQgdGhlIE1BUFQ/DQo+IA0KPiBJZiBzbywgYWxsb3cgbWUgdG8gd3JpdGUgYSBw
+YXRjaCBhbmQgc2VuZCBoZXJlIHRvIHJldmlldy4NCg0KU3VyZS4NCg0KSG93ZXZlciwgdGhlIG91
+dGJveCBkcml2ZXIgaGFzIGEgbWlzdGFrZS4NClRoZSBtYWNfb2JqX25hbWUgd2l0aCAiXFxfU0Iu
+QU1BQyIgaXMgdXNlZCBieSBEZWxsLg0KSSB0aGluayB0aGUgZGV2aWNlIG9mIExlbm92byBzaG91
+bGQgdXNlICJcXE1BQ0EiIG9ubHkuIFJpZ2h0Pw0KDQpUaGUgZWFzaWVzdCB3YXkgaXMgdG8gc2V0
+IHRwLT5sZW5vdm9fbWFjcGFzc3RocnUgZm9yIFJUTDgxNTNCTC4NCkZvciBleGFtcGxlLA0KDQoJ
+b2NwX2RhdGEgPSBvY3BfcmVhZF9ieXRlKHRwLCBNQ1VfVFlQRV9VU0IsIFVTQl9NSVNDXzEpOw0K
+CWlmICh0cC0+dmVyc2lvbiA9PSBSVExfVkVSXzA5ICYmIChvY3BfZGF0YSAmIEJJVCgzKSkpDQoJ
+CXRwLT5sZW5vdm9fbWFjcGFzc3RocnUgPSAxOw0KDQpCZXN0IFJlZ2FyZHMsDQpIYXllcw0KDQoN
+Cg==
