@@ -2,80 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0BAB49DA62
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 07:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B8049DA92
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 07:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236382AbiA0GAO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 01:00:14 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43520 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233578AbiA0GAN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 01:00:13 -0500
+        id S236534AbiA0GXK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 01:23:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233650AbiA0GXK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 01:23:10 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B46C061714;
+        Wed, 26 Jan 2022 22:23:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA5ADB82036
-        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 06:00:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8D545C340E4
-        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 06:00:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643263211;
-        bh=M46eHP4wBxQYiKEycza+zg9obpAi+86wPg9N0v6HcDU=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=DQWjl6H8qsRIX7dp6MBL0dLjt00Iy0wSVF79MGWZb5K+LyR5TLLbAk/pRUZ8OxMWd
-         8SG28obLnOVXFJ/9/8eDfxkVVJf2igc9jtCEphUCDeLirzpHUyQ5cWzCQXs6iaF19e
-         GBOz66twRhTnb4V0lF7ugCj6Pis0JO3wUO0m/vln5I5g7RBBXha9+D1DmKmbP3bNV8
-         1ULFR93bL26s4JOqPmm9IqQ68QoimDnGG5l1YFhO0a62VR5SCAOVM6Bf5tl19LxGEP
-         Kk7lfCR/2GqMDSbv4jzGscVfAjBY+5exCLyztYoFlqFF8gRB6G90szdOMQInDY8C27
-         Kd8BfNkj1eKRQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 30DA2CC13AA; Thu, 27 Jan 2022 06:00:11 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215361] SL-6000 zaurus USB error - 'bad CDC descriptors'
-Date:   Thu, 27 Jan 2022 06:00:10 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: low
-X-Bugzilla-Who: oliver@neukum.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-215361-208809-PIBgBR5rQt@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215361-208809@https.bugzilla.kernel.org/>
-References: <bug-215361-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        by sin.source.kernel.org (Postfix) with ESMTPS id 483A7CE2030;
+        Thu, 27 Jan 2022 06:23:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA8C0C340E4;
+        Thu, 27 Jan 2022 06:23:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643264586;
+        bh=B58zBIa5L1VQWEgOaaZ3OhQmnqz1yN4j+5wV0UStBAg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sYlAmJiwKrUobS69raN15IgOlBwsPEoGuVBGCtd3NoBD9nf/kfgKGUaaVzTVzvFuZ
+         6r/HkV855hBTIbPTpNdBcqV/H2QJcGb0cF6PlKy1CEFyGLiBgsgLWAQhm5nheAV6Si
+         lY+/RL0MpMcE13SuhE1m5oeE0p/Nr0ERzb+1uPGs=
+Date:   Thu, 27 Jan 2022 07:22:58 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     davidcomponentone@gmail.com
+Cc:     bhelgaas@google.com, yang.guang5@zte.com.cn, rajatja@google.com,
+        Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] usb: core: replace snprintf with sysfs_emit
+Message-ID: <YfI6Qj+oIsNQYPJ2@kroah.com>
+References: <e205c334a8c65c03702a94ee382ec488bcc1d019.1643183299.git.yang.guang5@zte.com.cn>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e205c334a8c65c03702a94ee382ec488bcc1d019.1643183299.git.yang.guang5@zte.com.cn>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215361
+On Thu, Jan 27, 2022 at 07:54:54AM +0800, davidcomponentone@gmail.com wrote:
+> From: Yang Guang <yang.guang5@zte.com.cn>
+> 
+> coccinelle report:
+> ./drivers/usb/core/sysfs.c:921:8-16:
+> WARNING: use scnprintf or sprintf
+> ./drivers/usb/core/sysfs.c:730:8-16:
+> WARNING: use scnprintf or sprintf
+> 
+> Use sysfs_emit instead of scnprintf or sprintf makes more sense.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
 
-Oliver Neukum (oliver@neukum.org) changed:
+Again, no, this did not report this.  I'll keep ignoring changes like
+this that get this wrong.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |oliver@neukum.org
+> Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+> Signed-off-by: David Yang <davidcomponentone@gmail.com>
+> ---
+>  drivers/usb/core/sysfs.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
+> index fa2e49d432ff..6387c0dfe30e 100644
+> --- a/drivers/usb/core/sysfs.c
+> +++ b/drivers/usb/core/sysfs.c
+> @@ -727,7 +727,7 @@ static ssize_t authorized_show(struct device *dev,
+>  			       struct device_attribute *attr, char *buf)
+>  {
+>  	struct usb_device *usb_dev = to_usb_device(dev);
+> -	return snprintf(buf, PAGE_SIZE, "%u\n", usb_dev->authorized);
+> +	return sysfs_emit(buf, "%u\n", usb_dev->authorized);
+>  }
+>  
+>  /*
+> @@ -918,7 +918,7 @@ static ssize_t authorized_default_show(struct device *dev,
+>  	struct usb_hcd *hcd;
+>  
+>  	hcd = bus_to_hcd(usb_bus);
+> -	return snprintf(buf, PAGE_SIZE, "%u\n", hcd->dev_policy);
+> +	return sysfs_emit(buf, "%u\n", hcd->dev_policy);
+>  }
+>  
+>  static ssize_t authorized_default_store(struct device *dev,
+> -- 
+> 2.30.2
+> 
 
---- Comment #9 from Oliver Neukum (oliver@neukum.org) ---
-The SL-6000 is explicitly listed with the device and vendor IDs given here.
-Looks like multiple versions of the same device. Please give the output of
-'lsusb -v' for your device.
+Also this change is not correct, why are you only doing this for 2 sysfs
+files and not all of them?  Is there anything incorrect about the
+current sysfs handling in this file that requires them to be changed to
+use the new api?
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+greg k-h
