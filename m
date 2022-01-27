@@ -2,272 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B5749E78D
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 17:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 625B449E7ED
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 17:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243710AbiA0Qbq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 11:31:46 -0500
-Received: from mail-am6eur05on2061.outbound.protection.outlook.com ([40.107.22.61]:7021
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        id S244086AbiA0Qpg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 11:45:36 -0500
+Received: from mail-eopbgr50073.outbound.protection.outlook.com ([40.107.5.73]:49883
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231582AbiA0Qbp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Jan 2022 11:31:45 -0500
+        id S229699AbiA0Qpd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Jan 2022 11:45:33 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b5gY1bEMVWBNBDREqpSr1yeCnphbzjjk9msCCf79CCDav3W6Jzebc6+e/G6GJgvNIqtOxwsoR/3Ri5KOb8zB8M77QCmaUsYCNCiAK2CR9o/VshybYZ99o83YdaPX4Q6mGnDdqC2oV9a36jAlBZoB/+YF6x4aDh5pNOTPcvGUoJ7PD5zqQ4mST6rdAS6SZC49CDUsrtZO0qLNT89pqTCSDGpTaXCqz9XY0Ba/CMbqScTVoIMQHptCrAH/WNJ1hDM+9RtgnHot759VoCGjzcWbasDeXCvEHFig8wbZoZlty3v5G6hDDsnbRIzZytx6Y2Y7YO0JmWOtZBJlkEmXabNtTA==
+ b=oBf7a/Uf4Gr5jnSbGQc2NIPSWW/BkXf61B3V5esqAo6ohkX8edgQ7bb9pO5Uh/3vqlHJ50RMpmn0mjGbcfPGZbwS/tkzqbI+93IrHVy8mit3H8MqC89rPuHnImPx0w3wxdioQrbXc9Xj7fUHf3o31RFaUebUbG2YufcoXiJpobTWvcOyuT/nXqJaorxOnAODpljQUZ6dUp71b9LFyfiboxi8cdFdMlXkxea9n9WOOBfhNN8g5T1vKcU7mM/QQE/c9zGNLv3UQqEEhx0PkuMXQfxw+22cR+K4SOVfJAXP0cmBWNbUddjMw1eNu4UREEyB1KPGhJ6nIhgoZAGCsu5MdA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TCCka6hsxYute1qAGEek2BhCbCbUg4LDEl+ofKkVVV0=;
- b=cMDGGfioGHGEJdJx6zEBYDaGmCTnDv6EPm5C1smkNCyt//4jM3g02BZ0x2XcZR2YnBubRSomL8up5Fvmj/RkeoMACRxrfrAGkInlkTODSrGW2eFT0bUjE+rXFVmlkLbt/gYpPx5bgGExsOzrpHYTVFeGt36GEDgt2JGZEfr2xCeVkLFoGEqYJSRLKk8IoTsewwgsrsnGrOp8fLoC3huqxQPFo7EEHyKncHn090CRd6nX8qnrFzlfqktkniBV5EZj2ffF4b/28A90XboBFEAe5m5mi5bCacxtbiR3fpLD4V/s788ZSJeoUZ3uazDrA0uu/viKIExmXKG5oU3OwO6/gw==
+ bh=e1oB7JpD7fur8UkwsXOJy9crbGj4biUvBS0Mx47Rkks=;
+ b=hCEFNyzIZ++iknqT6HAmalC2kIas4IVlfGQ9hcKkhsNLhnad2fa83ML5Kmt+wdN0hfcmwTJoeB/Pv8qtT2CiXhdmrBduEjbbySK1Yy6kmeq6QrtyJCYkHv42s8S3lwhgkJp12+yiMoHBUfRIVY4u6vaFh0kp0RuvT16FtmH5k1Vb4rEHpYbkcLE3hmiZ1a1nhVWrnVBBq6Q7MumNIFrPt+EGhCJMw6IiWFOu8cLZa3mRr+M6CNeMjZL367XkuWz3e9CKhDFKzdJj/0TVxjs6Y2rElP1jRd48RmZ3Fx7J/rDTRjiJesS6dhKo3PkbDGzB8N584UQ4tki57o7bit1DBQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TCCka6hsxYute1qAGEek2BhCbCbUg4LDEl+ofKkVVV0=;
- b=ti9GGnhze7GddLfLVm+p8YRpW12IGWdZRdhRMJcErMkhzb+AeBQ6cKWZaoWeiuF2+99fkV1nFWXDM3UVjpzKyX0SzcQqKvcWDF5cPjrn5827+6bnh4GHen9z1ImP3XwNbmffE8TfUQlQDC3fY1vy8eCYT4mTvoIXM+EOLX4TxaLXHy2QawfRo8RSPPl1C4tLVQFHxtSxniqI+LUSYFRcAFyeegMQIe2T7MF/6LyzS3Ws0BQ19OIvgWPpJQCItXxpFOdJ8mgarC7u56CE6yzzZV+n6lA870desrJCajj9JXj00IGz+4lsLj+Opsb5ZTDdxHp1GXJWzhZdYhFAporAfg==
+ bh=e1oB7JpD7fur8UkwsXOJy9crbGj4biUvBS0Mx47Rkks=;
+ b=Uy2mnsyWaAM+xHgAZZ85Z61U6cuxVwSt6bFxHIry4Evz9sc650cRxVkEFUXcRudQOu7eIcqcVXuLg6hX9q436KkAj4K8Fyn0vNdD+7t3cQEfMm5OQ3RqX3wd3lUppzsgcjmob1kNRSrTwWjYLerzQwHei5rhckHGzv1r+vpJBMYOvAj46oGBj1vPhJUbHVKpEicYZT92oyRG/aqJkryLsaK6TKCQmGY8ES/uQccZ2WlyhPr0P7ls0w0wzbMM5K9bIKGlG+UHRpRw319S3r2b9zFnk1iU6nvzkMEPqJi7MPP4XaAmAX6Bk+QtfQMCae8MBxB2195hxAUGe6ei3g4x2g==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=seco.com;
 Received: from DB7PR03MB4523.eurprd03.prod.outlook.com (2603:10a6:10:19::27)
- by PA4PR03MB7055.eurprd03.prod.outlook.com (2603:10a6:102:ea::15) with
+ by AM0PR03MB4484.eurprd03.prod.outlook.com (2603:10a6:208:c4::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17; Thu, 27 Jan
- 2022 16:31:36 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.17; Thu, 27 Jan
+ 2022 16:45:30 +0000
 Received: from DB7PR03MB4523.eurprd03.prod.outlook.com
  ([fe80::2d1f:654e:f946:1a95]) by DB7PR03MB4523.eurprd03.prod.outlook.com
  ([fe80::2d1f:654e:f946:1a95%6]) with mapi id 15.20.4930.015; Thu, 27 Jan 2022
- 16:31:36 +0000
-Subject: Re: [PATCH v2 1/2] usb: ulpi: Add debugfs support
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-References: <20220124173344.874885-1-sean.anderson@seco.com>
- <YfFHFnPYeW0H8+/Y@kroah.com>
+ 16:45:30 +0000
+Subject: Re: [PATCH v2 4/7] usb: dwc3: Program GFLADJ
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Balaji Prakash J <bjagadee@codeaurora.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Baruch Siach <baruch@tkos.co.il>
+References: <20220119002438.106079-1-sean.anderson@seco.com>
+ <20220119002438.106079-5-sean.anderson@seco.com>
+ <4696c5a4-5921-f7cb-196c-5ad956e696f9@synopsys.com>
+ <f528aeb5-6155-a75e-9d35-9bf473e0bbc7@seco.com>
+ <3ca6fb9e-94cf-6483-26a6-ae2682d1f55e@synopsys.com>
+ <2831e216-737f-41b2-1aa0-4af56615e3b7@seco.com> <87mtji7onx.fsf@kernel.org>
 From:   Sean Anderson <sean.anderson@seco.com>
-Message-ID: <725f1031-02eb-998f-46d4-0dd616a35d6a@seco.com>
-Date:   Thu, 27 Jan 2022 11:31:32 -0500
+Message-ID: <5756b3c4-02eb-8156-f973-bd592fa139ef@seco.com>
+Date:   Thu, 27 Jan 2022 11:45:25 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
-In-Reply-To: <YfFHFnPYeW0H8+/Y@kroah.com>
+In-Reply-To: <87mtji7onx.fsf@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL0PR02CA0099.namprd02.prod.outlook.com
- (2603:10b6:208:51::40) To DB7PR03MB4523.eurprd03.prod.outlook.com
+X-ClientProxiedBy: MN2PR22CA0010.namprd22.prod.outlook.com
+ (2603:10b6:208:238::15) To DB7PR03MB4523.eurprd03.prod.outlook.com
  (2603:10a6:10:19::27)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 23397bf8-b124-4421-b5f8-08d9e1b27c8f
-X-MS-TrafficTypeDiagnostic: PA4PR03MB7055:EE_
-X-Microsoft-Antispam-PRVS: <PA4PR03MB705546F2D5BDA26A73A5C07696219@PA4PR03MB7055.eurprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Office365-Filtering-Correlation-Id: c076a276-5a0c-4991-8d8e-08d9e1b46dd1
+X-MS-TrafficTypeDiagnostic: AM0PR03MB4484:EE_
+X-Microsoft-Antispam-PRVS: <AM0PR03MB44841D0C5C6B6C6B099D519696219@AM0PR03MB4484.eurprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ruiznEapxlXcZVzNpBC2DmflQRlHYGrNhEbucV7H8XDqrK1ShMYipMM6fo8SeKlz/t4H15mIVo80rE7GXiztnWkYa/mTIUStOrh5zs71wmjXI/DgvDmWU6PgylQ1IOWiychE37pDYrVn+NXv/MN1bFz/lBkD+Ud4402zNFU8H5uEqlr4Ge4lWh5fgX/OnZc78ZjgrbwTlmwRddgzL1MubsydHwlMrWvqEsDNkoFuoFmmfclXDhyZKXg8ShhumWDmCP0oTMF9t52ckYcNAZfKYnUsZiRDQjFH3bGdMI1xKSMJMy5ZoIZSxXKEl0OGlNGE9XJU6Kx0nycxOcqqnGl0jKfS4jSURjoNmR1gNYssRQaxuVRPRKWCoHWLQmlvq3EOqhDBhMZtG4dgvvDEIUw7pLu8/FTNFpVq8L1M36A2AVSPEs9PW2Kv28RP33kqk22ahAsxKRtHO5CE3HK353i92BHv/d3C8bM+9YLCSVGuLw++Q2MQibshZPwDwv6ZmRGfm6J4o7ltSAhAzowGOK/QxIzuIkVXmKEZQoBnUpbdppqRWCyBoyMp/oAQqX62fmHTpbzBI7FPHca44vdhL8xPrJBfKGLPWV+Dcr70MkRo6M8lN/CCPn5wsE1uIhIze/s7j/ApDhsk+O1E4W7H5u16COJVaOUOj6VZXJefelZOFW8YXRTGHxWBsPzZoprW2Gyeot9dBHNbyZvwO9WWCiwOIgXzO1VOq9hxBrEA0FDRr9E90te/4JxyOYnWTHYs48Hs5Iiphkm7hB1im+RblUnkzA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4523.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(26005)(186003)(2616005)(66476007)(66556008)(66946007)(8936002)(2906002)(83380400001)(4326008)(8676002)(36756003)(31696002)(86362001)(5660300002)(38350700002)(31686004)(6666004)(6916009)(44832011)(508600001)(6486002)(316002)(38100700002)(6506007)(52116002)(53546011)(6512007)(45980500001)(43740500002)(20210929001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: D1BeA4RRPRitvRGmB26N915RAQrAaeHBVlIu0sfOOAKb9x8ZrKjj+oSjKktaIiMQQQXPBjkLZ3jOdnT5FVGMipgHooQrRvVGT0+p/IjJcb6QWObxerMDvzN46HDfFXbIXMN0KJ3JZ82KZjvGgDNiKDEVc6B/6iQrnn1CWp+8OYetwjX3+b7QKWgHvC6U03f9xohgp/08p6aZEYSRASHTvbt9gkMFXRZksOn3OuBjUmE022q20Af4wwQop2p9lbtoG9RtztuUELT121cx9i2sP+qjq8UEd7V7twxpsfzl2vf3Bu0/iq6X3RUt4H4lRU71fTkegf9CzZUUz4oktTtEn/bAHzaH+/Dzu5ByhWjNJO4T8/j+ZgJYXrKCDOpWdjpobZL5AqGeRjuRJg0niu/RjQqq49F166fKZj82cXHKehJVivuV3F1RLrFMpZXYTDJjUJJTrOMzkxykvJO/iH2K9K5hYvB3TvlkjTJTlJmUhFTWj+DijmqNRfzYRCEanj/EYeIklTC+ms8Y11NUe6SEyUnxvULVJWbg8/ERDFzNJ+cu5tfRJcDmqxcyIbP/1vhWWUxwOJuNNJ+58KzTVibcmWA79glqxOQjNZ3VktkGMqPTWa1svmdHpcZjA4As5Tcp6DznzxEI1fgHjL2L9hgxzkSuX4VK5652YdNbyziuklBDHb5x7oeSliSopNB/9YG2pCDks6MQ2GrDp9Y5KCxzmYAeDj5ehkfY2mUw1VuoiZrQMqdBQgR6bMHoMfCQA4H7JB6Yxkiy/ooFEXgflwCA5mwWRVGMwtVHVfrtBW/42LsSRa4qVgE8RzaRD1M4/2tu0IjYJdvR1k8HdunvvdERIjebVJvMiKBz31RKIjeQzRU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4523.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(8676002)(6512007)(8936002)(86362001)(52116002)(31696002)(2906002)(966005)(6506007)(66946007)(186003)(66556008)(66476007)(31686004)(44832011)(6916009)(54906003)(508600001)(6666004)(36756003)(2616005)(6486002)(5660300002)(26005)(4326008)(38350700002)(53546011)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZFRRUjhXNjQ2WDBlNytBZU5UaHhMZlBwYVljRVhTWEVyRjlXcXBaaldTbGxr?=
- =?utf-8?B?K2JXdElUdUtKYWQyVHBvZEZLVkpxM1pOSXJDc056NUlvdE1BL3hmWDRkUmhU?=
- =?utf-8?B?Q09KelFCRllNUmQwNkhYczNHUFVHVlVjaWo3M3ZpcC94SVJFZDdGTjg1OWtK?=
- =?utf-8?B?bHdObFk1UVJaMU80Vk1GcjV6dFV6Tkk3Z3YwemUreVBvdGRzbGxZMnZ6ZHlK?=
- =?utf-8?B?bjJxbWI2eDFZQmZqU3lINlh2Qk1IdXEzNXAzb0tDM0ZWQVVMQ1V5WmtSQ0JE?=
- =?utf-8?B?ZXBoNXBCaVVvUnlEeS9OSHpxa0xLV3lIN2RmU0c2Q3I0Z3FPaWRGay9QV3RC?=
- =?utf-8?B?VXY3elJmNkRDRjZyQ3FUSHBvbTdoZXBBWkpCcGFLRDBPcGhxelc5ejFkNTRp?=
- =?utf-8?B?WUxQa2E5SGJSRlhrNTFwa0RnRlVMUWlkMmNRYjBoODUrNGViRGNCcmZDZWd2?=
- =?utf-8?B?bFZraTZOMCtxSy9PczE5MHNhQ3VEeFlvME4reG1rZ21SYkdOVmRGYTB1S2NM?=
- =?utf-8?B?ZzM3NEkrTnRaRFlGZ1g0ekM5d0RrWUhRcVhWZ1lkamZRNlhPUCs2TElYTVgy?=
- =?utf-8?B?ZFlwY3M4RWpCclJTWHlrQ1RnSk9hVWswMDkvYTBRbzdyVlFkQXkxajJnRVJk?=
- =?utf-8?B?REN3YllTU1JReVp5VGhvOThiOUpxQzZHcUdORmxseTVzbHR3emJkQTFkOFRa?=
- =?utf-8?B?aVBpK0Z1TUJzeTgwTVVaOVZMTEp6dFlqWm9RZWRUUjdTZDlzMFpBZ3NiZHQ0?=
- =?utf-8?B?RVdmSkMySU5ZS28xWlYzV3pCenVNQ05UUXdPSDdhMW95cTRpVE5ldnZ3VFNy?=
- =?utf-8?B?WEdiVnBwRndGOWxpRVp6Q3VXWUlnSFFLK0ZaV2pOSUtiM2NoQmYrUENSWGl3?=
- =?utf-8?B?NCtKWmJHQlNlV1ZRUUl2OWxNbHh3eWpGc1FmU0dnOE5BM2xLcUhXU0NSNVhv?=
- =?utf-8?B?dGJUOEo0Qmwwb1FUL3RoZ3YzZEU0Y29oYkJzU0tpWm5YL3FZdVNWSEpBZ3pp?=
- =?utf-8?B?c2pNaGRLRGpzaFFIdHZLVHB0c2YwWlNxZEFqcjdmRzkvdVdtUWpaV3RRNVdF?=
- =?utf-8?B?eXZTTXRSUy82NC9paUFaODV5cnFuUjJCWTU1bzh6MTRTYXRhZlhaUUp2b1NH?=
- =?utf-8?B?ZUVmbEppaGZyd21HSUREYUlLOEUwbDJtRG5ja2QzbitzYTFEVVZpNjJhK2gr?=
- =?utf-8?B?bFNtNFIvWktMNS9zS0wxYnMxcUdodDdnWGh6UDk5cXh2S21kYUxFQ3N0bHBW?=
- =?utf-8?B?V2lDY0Vaa3hJUnBsbzlHQ3JYVVNyVjlnOStWTUc3MmJSdjZySmhUakx4MXZR?=
- =?utf-8?B?Wkk2Z1BhYk90ZVlaODNCTjF6UFZqcVQvVk1RSUY5cm5RalY1OW1zTVo4Z2Z1?=
- =?utf-8?B?WnRVYlFSUUdNVUR4b1BjZXplUVROS2U2MEVDNHg5eEJ5cEZpeENFODZSWjNX?=
- =?utf-8?B?Qkx0bFlmK2FmNlRyQ1pUeXZrNVNzK1hWUTAwNERPd1MvTkttYmkzYk4vUExD?=
- =?utf-8?B?OEhGbEROME1yTVhuNDV1VnBCT24rMWdMRWpnRUw5YW55Ti9IR0s4bktDNVk5?=
- =?utf-8?B?dzVUMlQyN0VnaXNQd0E3VENlY1YreGhvWlZlM0dZQ05vYjBSU01LNHJjYjNq?=
- =?utf-8?B?SnNZcnR4NEpmaWpsaFRtUk5MWUdkNUVKbHdNMis5cjN3Y21rcjJUV0I1S092?=
- =?utf-8?B?aUZ5WWJQa0tsZ0VnU05ub0p6RitMSERGdVZITUh2ZXBjYU1TbmovazNIek42?=
- =?utf-8?B?eWlmYUZiTjRHTmhtcUFCakdRNkdtL0JvMmJIZXlzMS8zS0F6dzNXeUVzRnYx?=
- =?utf-8?B?Wm5zR2h1MXd2aG9hK2RaZmcyTTY3S1g3TmJucVMrTzQxNnhqN1R6OFJMQXZn?=
- =?utf-8?B?cWEzTi91Ty9MOWVvVzJhVWllZW1ZeU1Xa0ozbXowTnNKMEluNm11d21JMlJ0?=
- =?utf-8?B?bkhHV3BzMjlJVTIyYm5RM1JpVUtEbExhRTB1aG4zRVU5OTBoZ1U3L28rbEZv?=
- =?utf-8?B?a2JONllmYXVNd0hPU3VZVENZSk1oaWVHMlBzY1BwRGpiOEc3T3E3clRndmRW?=
- =?utf-8?B?OVlUd2ZxdzMzTHZ0d1hKWTViSUhhYi95eENDVVVPNTJESDZJRCtUdnUzRWFl?=
- =?utf-8?B?Q0tTcGx5VVdmQStjWlhVbWpNK3dtajZhQ3ZrYWJVMzVHSFNtanoxNkxMTUor?=
- =?utf-8?Q?M1xXWkHKBJs9ptrT/wBr1ak=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d3hZMUJ5VWVJc0xFZ3MvR0NzL2M3cElOV2swdUlmbHd4YUlVMTFMQ2NuaGU5?=
+ =?utf-8?B?VlpVSDdiQ2FGbzZRci91RmZnZWlUZERMK01lNGp3RkhCNFRKM0lweW1yVnJI?=
+ =?utf-8?B?MmJVSXpVTDFzcEhvTU5lZ3BLcmhhOEtrTVBReEZCSHNHSG5oQSt6OUtmZDUr?=
+ =?utf-8?B?ckpVSjFXV2V6VFg2aVF2VldKOEFvR3FSVkd0Und2cEdWQ1VSMEZxYnFEakx6?=
+ =?utf-8?B?YXpuNmErR2V2RllQeEhSV3JYOVdyWEtMS1EvRlJMdVB5YnlFT1Evalh0MEl1?=
+ =?utf-8?B?b0lNZUZrZXBkNjIrR3ltVm9YelZnRVNkUno5SVUyelc3V3BkTTFSZHd3VlV6?=
+ =?utf-8?B?L1VnMEZKb0ZRZDB2TGJXTk0wQm5kdFh5QXluMzM5OWxmRlpmUzEvc0Z2bElO?=
+ =?utf-8?B?Y1EwUWk4dVFnbFVsSlJzWVhNbGdHUEg2Qm5iOGJHeE5OV3UvQTlCSjh6SmRO?=
+ =?utf-8?B?YXVON0dJVW11SUY5blUvQUx6dFBtUUdMVnhNUnQ2ZWw1dnBkdHNLWmlWbENW?=
+ =?utf-8?B?VTlsNm1ReXhZT09CU210S0oyaXY2SlRJUEphRTVOL1RML3ZERzkvYTZEOUUr?=
+ =?utf-8?B?bGlObDRKRVRlUWFzQjhYcGdWN0NhMncyY2NHeFhRN1dxS0dKN1ZQeDBLY0dG?=
+ =?utf-8?B?K2xrRC8vMUJJc05MdVhXUHBubmdQYWp2R3BYNEJrMmE4cVlGeDFSTWRkdkRW?=
+ =?utf-8?B?cllZbkw2aTdCYWZCejFmN3ZGOU4rUWxpQ1RFWnRVQW4xNGxZajZ5QUxpM2x2?=
+ =?utf-8?B?V1BTRGNPZnE4QXEvMURyeC9RS2ZmMlhnRU45NzdCQUNEMlIxVlB5TXhibjhy?=
+ =?utf-8?B?QnJkWHQ1WmxveFh0STF0MXRQNlpVdXNDRFQvMHZxOXkyQi90Tnl0NlBjWk4z?=
+ =?utf-8?B?a2ovTTRYYjhjWHZVWWtTaCswemlYN2lNWGx3eWg2WmlCUTA1ait5T1RqR1Zx?=
+ =?utf-8?B?SWJkall3RG9acTJMSWZWSllQTDM2TjRxeW43TTVvUVYyNWZlTENPejg5cFcw?=
+ =?utf-8?B?cWI2QnRQWW1zcFBJVzlQbjgxdE9WbHEzUER5Rk9EUjJKT0dlTk1rZWZSUkI3?=
+ =?utf-8?B?TTliWXdWczRWaGJISXczOVBVT2ROUDZmNTNtVzdqVGdvUXVxMVBHY3Y1ZXhP?=
+ =?utf-8?B?NFZBTURlNHVleDFkc3RWeGxVSEpVNEpCeEZRZm5kd0JwaTdzVklYVU5XcnJG?=
+ =?utf-8?B?NUVEanZPMUUyM3lQcGpMNmdLV3UyT1A3ZkFnNEhTME9aWC84WDZYRys0dEZC?=
+ =?utf-8?B?Q0RORmdUTStrWWY5U0NNZFZ0djI2aTFFRDgzZHFGSGpCRDFtWkVnbDBVVWRW?=
+ =?utf-8?B?WlJVZzdkZ0ZMWFhMRGdMZzFoZFZsL2Q3VnByZVBqbGpBVnhvZ0RFa0lpWFZD?=
+ =?utf-8?B?SlFOTlBiakg4dFY3MGhzNkpLblgrNys4V1I5STB2MVQzR28ySW55aUJZTTZ5?=
+ =?utf-8?B?d3ptemwrY3EwWitTYTVHeURWZ3YwTDNpeUluVnE0TE5QS1FzN3NvYkNYZkJB?=
+ =?utf-8?B?WEdMVG0xaDg1anh3Wk9TTldXOU1neXBMSU9FV2lCeW0rM3pRczNUZC9pZWg4?=
+ =?utf-8?B?OXB3dkRpbXhlSXJPdHdqMGVDV1cyVUNDajZpbThhU0o4TnN6cGNydUp5TjJj?=
+ =?utf-8?B?aDAvQi9PeXJudEJCUXUwRDNtN2toY1YraXpSeGszMXRpWlFZQmhUSWl0QXpZ?=
+ =?utf-8?B?TzlWVVdVOTVtYjlIZ01vWVdZMExkVDVCYkEvdG02TU1WSThERHhFMTBBaDJh?=
+ =?utf-8?B?cmFEWVAwYlVtN2xYVG5JcSt5WmxKU2QyaGtwMmNiTC9yK09BODd5NHJvTUU2?=
+ =?utf-8?B?OVRkSXFvV3JndmFJODRyU2hRcHJpMWE3ZndjSEZGbzNPZG9QNlF1ZEJsUkJp?=
+ =?utf-8?B?SmZaSExqWlVsclo0bklHSzdGYXBoZUVDWVB0cURYdGVFR3U4Ym4zRVo0RktV?=
+ =?utf-8?B?S24rU2JyTmprY3lHYmMrUVM3dW9wOUlKSUkwak5YRElhOXJiUjNDSDVKcU5E?=
+ =?utf-8?B?cU1SWFVpQkdPY0VSQ3NFVmxRVHlqQ0NmZ0h6NVhIYUFaTzlPTG5DdEFPUmFy?=
+ =?utf-8?B?Y3AxeW9rTVB2WXpQbzQwemhjZFA3MHpBOThYaEl6RFpVc09ISUgzRmxNSWhC?=
+ =?utf-8?B?UmJ5WXBEUUdzRUQrWmVQN2hFMFVuUCtPNEpCelBNVjI5bzd1NkdrK2NlN3FD?=
+ =?utf-8?Q?q/NgbMoCwnnhb6yM/RNdFmM=3D?=
 X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23397bf8-b124-4421-b5f8-08d9e1b27c8f
+X-MS-Exchange-CrossTenant-Network-Message-Id: c076a276-5a0c-4991-8d8e-08d9e1b46dd1
 X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4523.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 16:31:36.0794
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 16:45:30.3385
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: E8N/162wVQig2ZIcarZdJgXuJCu4Ns4qWCS3TXWz+zSl+byUoN8TpXSTlyZ7+7U97rc15KiFWWFrNG3wi13peQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR03MB7055
+X-MS-Exchange-CrossTenant-UserPrincipalName: TcCC/eRzjG0Ydb4Ru0voBeuUhXMYvqNJN9CowAlZImwv/g6vBkaxHxO3wwbmiFRa8egYJGlmRoq5K+iUCTUtkA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR03MB4484
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On 1/26/22 8:05 AM, Greg Kroah-Hartman wrote:
-> On Mon, Jan 24, 2022 at 12:33:43PM -0500, Sean Anderson wrote:
->> This adds a debugfs file for ULPI devices which contains a dump of their
->> registers. This is useful for debugging basic connectivity problems. The
->> file is created in ulpi_register because many devices will never have a
->> driver bound (as they are managed in hardware by the USB controller
->> device).
->> 
->> This also modifies the error handling in ulpi_register a bit to ensure
->> that ulpi->dev.of_node is always put.
->> 
->> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
->> ---
->> 
->> Changes in v2:
->> - Always create debugfs files and ignore errors
->> - Look up dentries dynamically
->> 
->>  drivers/usb/common/ulpi.c | 71 ++++++++++++++++++++++++++++++++++++++-
->>  1 file changed, 70 insertions(+), 1 deletion(-)
->> 
->> diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
->> index 4169cf40a03b..87deb514eb78 100644
->> --- a/drivers/usb/common/ulpi.c
->> +++ b/drivers/usb/common/ulpi.c
->> @@ -13,6 +13,7 @@
->>  #include <linux/module.h>
->>  #include <linux/slab.h>
->>  #include <linux/acpi.h>
->> +#include <linux/debugfs.h>
->>  #include <linux/of.h>
->>  #include <linux/of_device.h>
->>  #include <linux/clk/clk-conf.h>
->> @@ -228,9 +229,64 @@ static int ulpi_read_id(struct ulpi *ulpi)
->>  	return 0;
->>  }
->>  
->> +static int ulpi_regs_read(struct seq_file *seq, void *data)
->> +{
->> +	struct ulpi *ulpi = seq->private;
->> +
->> +#define ulpi_print(name, reg) do { \
->> +	int ret = ulpi_read(ulpi, reg); \
->> +	if (ret < 0) \
->> +		return ret; \
->> +	seq_printf(seq, name " %.02x\n", ret); \
->> +} while (0)
->> +
->> +	ulpi_print("Vendor ID Low               ", ULPI_VENDOR_ID_LOW);
->> +	ulpi_print("Vendor ID High              ", ULPI_VENDOR_ID_HIGH);
->> +	ulpi_print("Product ID Low              ", ULPI_PRODUCT_ID_LOW);
->> +	ulpi_print("Product ID High             ", ULPI_PRODUCT_ID_HIGH);
->> +	ulpi_print("Function Control            ", ULPI_FUNC_CTRL);
->> +	ulpi_print("Interface Control           ", ULPI_IFC_CTRL);
->> +	ulpi_print("OTG Control                 ", ULPI_OTG_CTRL);
->> +	ulpi_print("USB Interrupt Enable Rising ", ULPI_USB_INT_EN_RISE);
->> +	ulpi_print("USB Interrupt Enable Falling", ULPI_USB_INT_EN_FALL);
->> +	ulpi_print("USB Interrupt Status        ", ULPI_USB_INT_STS);
->> +	ulpi_print("USB Interrupt Latch         ", ULPI_USB_INT_LATCH);
->> +	ulpi_print("Debug                       ", ULPI_DEBUG);
->> +	ulpi_print("Scratch Register            ", ULPI_SCRATCH);
->> +	ulpi_print("Carkit Control              ", ULPI_CARKIT_CTRL);
->> +	ulpi_print("Carkit Interrupt Delay      ", ULPI_CARKIT_INT_DELAY);
->> +	ulpi_print("Carkit Interrupt Enable     ", ULPI_CARKIT_INT_EN);
->> +	ulpi_print("Carkit Interrupt Status     ", ULPI_CARKIT_INT_STS);
->> +	ulpi_print("Carkit Interrupt Latch      ", ULPI_CARKIT_INT_LATCH);
->> +	ulpi_print("Carkit Pulse Control        ", ULPI_CARKIT_PLS_CTRL);
->> +	ulpi_print("Transmit Positive Width     ", ULPI_TX_POS_WIDTH);
->> +	ulpi_print("Transmit Negative Width     ", ULPI_TX_NEG_WIDTH);
->> +	ulpi_print("Receive Polarity Recovery   ", ULPI_POLARITY_RECOVERY);
->> +
->> +	return 0;
->> +}
->> +
->> +static int ulpi_regs_open(struct inode *inode, struct file *f)
->> +{
->> +	struct ulpi *ulpi = inode->i_private;
->> +
->> +	return single_open(f, ulpi_regs_read, ulpi);
->> +}
->> +
->> +static const struct file_operations ulpi_regs_ops = {
->> +	.owner = THIS_MODULE,
->> +	.open = ulpi_regs_open,
->> +	.release = single_release,
->> +	.read = seq_read,
->> +	.llseek = seq_lseek
->> +};
->> +
->> +#define ULPI_ROOT debugfs_lookup(KBUILD_MODNAME, NULL)
->> +
->>  static int ulpi_register(struct device *dev, struct ulpi *ulpi)
->>  {
->>  	int ret;
->> +	struct dentry *root;
->>  
->>  	ulpi->dev.parent = dev; /* needed early for ops */
->>  	ulpi->dev.bus = &ulpi_bus;
->> @@ -251,6 +307,9 @@ static int ulpi_register(struct device *dev, struct ulpi *ulpi)
->>  	if (ret)
->>  		return ret;
->>  
->> +	root = debugfs_create_dir(dev_name(dev), ULPI_ROOT);
->> +	debugfs_create_file("regs", 0444, root, ulpi, &ulpi_regs_ops);
->> +
->>  	dev_dbg(&ulpi->dev, "registered ULPI PHY: vendor %04x, product %04x\n",
->>  		ulpi->id.vendor, ulpi->id.product);
->>  
->> @@ -296,6 +355,8 @@ EXPORT_SYMBOL_GPL(ulpi_register_interface);
->>   */
->>  void ulpi_unregister_interface(struct ulpi *ulpi)
->>  {
->> +	debugfs_remove_recursive(debugfs_lookup(dev_name(&ulpi->dev),
->> +						ULPI_ROOT));
->>  	of_node_put(ulpi->dev.of_node);
->>  	device_unregister(&ulpi->dev);
->>  }
->> @@ -305,13 +366,21 @@ EXPORT_SYMBOL_GPL(ulpi_unregister_interface);
->>  
->>  static int __init ulpi_init(void)
->>  {
->> -	return bus_register(&ulpi_bus);
->> +	int ret;
->> +	struct dentry *root;
->> +
->> +	root = debugfs_create_dir(KBUILD_MODNAME, NULL);
+On 1/26/22 5:53 AM, Felipe Balbi wrote:
 > 
-> The file could be accesed now, but you don't register the bus until
-> after this returns:
+> Hi,
 > 
->> +	ret = bus_register(&ulpi_bus);
->> +	if (ret)
->> +		debugfs_remove(root);
+> Sean Anderson <sean.anderson@seco.com> writes:
 > 
-> Can you flip the order around please?
+>> On 1/24/22 9:11 PM, Thinh Nguyen wrote:
+>>>>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>>>>>> index 5214daceda86..883e119377f0 100644
+>>>>>> --- a/drivers/usb/dwc3/core.c
+>>>>>> +++ b/drivers/usb/dwc3/core.c
+>>>>>> @@ -348,7 +348,7 @@ static void dwc3_frame_length_adjustment(struct dwc3 *dwc)
+>>>>>>  static void dwc3_ref_clk_period(struct dwc3 *dwc)
+>>>>>>  {
+>>>>>>  	u32 reg;
+>>>>>> -	unsigned long rate, period;
+>>>>>> +	unsigned long decr, fladj, rate, period;
+>>>>>
+>>>>> Minor style nit: Felipe prefers to keep the declaration on separate
+>>>>> lines, let's keep it consistent with the rest in this driver.
+>>>> 
+>>>> So 
+>>>> 
+>>>> unsigned int decr;
+>>>> unsigned int fladj;
+>>>> unsigned int rate;
+>>>> unsigned int period;
+>>>> 
+>>>> ?
+>>>> 
+>>>> Frankly that seems rather verbose.
+>>> 
+>>> A couple of the benefits of having it like this is to help with viewing
+>>> git-blame if we introduce new variables and help with backporting fix
+>>> patch a bit simpler. Mainly I'm just following Felipe's style and keep
+>>> it consistent in this driver, but I don't think it's a big deal.
+>>
+>> *shrug*
+>>
+>> If it's the subsystem style I will rewrite it.
+>>
+>> (btw is this documented anywhere for future contributors?)
+> 
+> https://www.kernel.org/doc/html/latest/process/coding-style.html#commenting
+> 
+> "To this end, use just one data declaration per line (no commas for
+> multiple data declarations)"
+> 
 
-This is just registering the holding directory. To ensure that we
-don't race like
-
-CPU 1			CPU 2
-
-bus_register()
-			ulpi_register_interface()
-			debugfs_lookup() /* whoops, no directory */
-
-debugfs_create_dir()
-
-By registering the directory first, we ensure that devices added
-will always have a directory to put their debugfs files under.
+This is just if you want to add comments.
 
 --Sean
