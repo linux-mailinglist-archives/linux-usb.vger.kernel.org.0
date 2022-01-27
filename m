@@ -2,112 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C69C649E51E
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 15:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBEC149E670
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 16:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234609AbiA0OvQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 09:51:16 -0500
-Received: from vulcan.natalenko.name ([104.207.131.136]:36798 "EHLO
-        vulcan.natalenko.name" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbiA0OvP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 09:51:15 -0500
-X-Greylist: delayed 627 seconds by postgrey-1.27 at vger.kernel.org; Thu, 27 Jan 2022 09:51:15 EST
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 38C73D8B248;
-        Thu, 27 Jan 2022 15:41:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1643294486;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xRfG6qv9eNrmVk+OrljXkrc5mg43YFh2rdY8MzYAUgM=;
-        b=XIOCTcxRxoBYbF1ZVSNa4whYzYj/UVLtiCZawfTGuczIfGj78m+V4SJ5+IBZ+Z8Phvp9A8
-        QQ05YD6gW3L+FqdvakRaKsGakD8q5PwvErpFM6qO7KrgkNw237gy9Qx8SUTiS7E9ZN0BAw
-        rRcK6E3kv+X1jImpCrFsDULfv+iRfng=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Michael Below <below@judiz.de>,
-        Salvatore Bonaccorso <carnil@debian.org>
-Subject: Re: [PATCH 2/7] i2c: core: Use generic_handle_irq_safe() in i2c_handle_smbus_host_notify().
-Date:   Thu, 27 Jan 2022 15:41:24 +0100
-Message-ID: <4929165.31r3eYUQgx@natalenko.name>
-In-Reply-To: <20220127113303.3012207-3-bigeasy@linutronix.de>
-References: <20220127113303.3012207-1-bigeasy@linutronix.de> <20220127113303.3012207-3-bigeasy@linutronix.de>
+        id S243024AbiA0PoA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 10:44:00 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:58116 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234341AbiA0PoA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Jan 2022 10:44:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=NRNfjci1BUqMB7hhJHAezNYkKercVodV9D1Lc98O3ZE=; b=yF5nFX+LAKzUnFrdwhYrQ29vb+
+        LLgfv6kPaZAiKmc165TT20rHGLoi8fVqSLClhC6jJAK5KgqJLYPX6HgCgNjlIePdLjiuTokqh8KDW
+        SDI/cgY78nVbw9WCgvblLjTvp/P5rZUqlIC/L0k81APy44gHNX/nFnxUmAEou686GbcU=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nD6wD-0030do-4Y; Thu, 27 Jan 2022 16:43:53 +0100
+Date:   Thu, 27 Jan 2022 16:43:53 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v1 1/1] usbnet: add devlink support
+Message-ID: <YfK9uV0BviEiemDi@lunn.ch>
+References: <20220127110742.922752-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127110742.922752-1-o.rempel@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello.
+On Thu, Jan 27, 2022 at 12:07:42PM +0100, Oleksij Rempel wrote:
+> The weakest link of usbnet devices is the USB cable. Currently there is
+> no way to automatically detect cable related issues except of analyzing
+> kernel log, which would differ depending on the USB host controller.
+> 
+> The Ethernet packet counter could potentially show evidence of some USB
+> related issues, but can be Ethernet related problem as well.
 
-On =C4=8Dtvrtek 27. ledna 2022 12:32:58 CET Sebastian Andrzej Siewior wrote:
-> The i2c-i801 driver invokes i2c_handle_smbus_host_notify() from his
-> interrupt service routine. On PREEMPT_RT i2c-i801's handler is forced
-> threaded with enabled interrupts which leads to a warning by
-> handle_irq_event_percpu() assuming that irq_default_primary_handler()
-> enabled interrupts.
->=20
-> i2c-i801's interrupt handler can't be made non-threaded because the
-> interrupt line is shared with other devices.
->=20
-> Use generic_handle_irq_safe() which can invoked with disabled and enabled
-> interrupts.
->=20
-> Reported-by: Michael Below <below@judiz.de>
-> Link: https://bugs.debian.org/1002537
-> Cc: Salvatore Bonaccorso <carnil@debian.org>
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> ---
->  drivers/i2c/i2c-core-base.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index 2c59dd748a49f..3f9e5303b6163 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -1424,7 +1424,7 @@ int i2c_handle_smbus_host_notify(struct i2c_adapter=
- *adap, unsigned short addr)
->  	if (irq <=3D 0)
->  		return -ENXIO;
-> =20
-> -	generic_handle_irq(irq);
-> +	generic_handle_irq_safe(irq);
-> =20
->  	return 0;
->  }
->=20
+I don't know the usbnet drivers very well. A quick look suggests they
+don't support statistics via ethtool -S. So you could make use of that
+to return statistics about USB error events.
 
-Reviewed-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+However, GregKH point still stands, maybe such statistics should be
+made for all USB devices, and be available in /sys/bus/usb/devices/*
 
-Worth linking [1] [2] and [3] as well maybe?
-
-[1] https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1873673
-[2] https://bugzilla.kernel.org/show_bug.cgi?id=3D202453
-[3] https://lore.kernel.org/lkml/20201204201930.vtvitsq6xcftjj3o@spock.loca=
-ldomain/
-
-=2D-=20
-Oleksandr Natalenko (post-factum)
-
-
+     Andrew
