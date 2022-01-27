@@ -2,128 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B66149DEA4
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 11:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF6749DEB8
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 11:06:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238856AbiA0KBV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 05:01:21 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:54716
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229956AbiA0KBU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 05:01:20 -0500
-Received: from localhost.localdomain (unknown [222.129.35.96])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 2E62B3F1DF;
-        Thu, 27 Jan 2022 10:01:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643277678;
-        bh=8qVk/8nENltG8922gM4GA2ePp8dmOnZ8REpGta3pnW4=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=L5Cnh0OTboKGL+6Vxh4m5nGetvgvZIbJcTcobTZ7uCIYYh/olN26oewMJX/JJM9Tc
-         zPMbmaUSEv0ygDUA01peWmDueGVKOD5BPpBFE6Y8eQQRzzwY1TQcSgRcH5eQMCfQB0
-         CCkxRCfqKUj5vs62Welpuz0URvSslXlAw6q5PYOjoPtqrhYAQbrXkgA7oQPLSV6yiA
-         YuFVjAAemSP72Z0GHp7xnVSZLDwx5kh+oNVRhS39EFptaeFhWktxYpDnQpVmkaG1F2
-         mX51oUWTJkcvKykCrGV9E5JFg0Yov1ktr0eHESd4OyvV0ZytdH35dMgKH22mzO/LTx
-         iawH2w1GMSu+w==
-From:   Aaron Ma <aaron.ma@canonical.com>
-To:     Mario.Limonciello@amd.com, aaron.ma@canonical.com, kuba@kernel.org,
-        henning.schild@siemens.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
-Subject: [PATCH] net: usb: r8152: Add MAC passthrough support for RTL8153BL
-Date:   Thu, 27 Jan 2022 18:01:09 +0800
-Message-Id: <20220127100109.12979-1-aaron.ma@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        id S238909AbiA0KGa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 05:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238228AbiA0KG3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 05:06:29 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B681BC06173B
+        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 02:06:28 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id k18so3685621wrg.11
+        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 02:06:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iCPc9S/xqKutjtG576RySPC5c4MhlsxdAcWvoCriPRI=;
+        b=UXS0cNb0r6A21/Yr+t8ULc7eUWYnKfSr2Xz7F/W4kBv4PxDY2V8IiKS9AVKzoL/A4c
+         2QXelZZmI0IvcYButMcGhtQiIwQeVSto8F0tLQS/0i6E39oVBJb4ONuB1wxShRLVAjEd
+         qBQfBDs5FDzwXhh+3CWdQE+EinE2wHefcKrMA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=iCPc9S/xqKutjtG576RySPC5c4MhlsxdAcWvoCriPRI=;
+        b=2JkTwPpLonB5qR9WTrO7syaf4rTR5B6PYsXwQkTgN0dl9cMVpfcaF0weymY33V7rYG
+         Thhcho9j+sHG9++B5bAN84lwdczpHmibBHkR9cKxWOM4Q0rDuOvB+dfZhcqb/KSNvTOd
+         P35cVK10kohNNt0LG3CqCyX0phQ2r7aRNgl8Sr0g+nMeC2p1FSI9tgYX/U1/yP+maILx
+         rkFhSb51qCAU+UcmnHASe1x7pYrgEmiz9Qmg9huxH+JYgYI66jQgpa8Q3zZUQOWySWLP
+         7j3hXmOwUNYBD1V9jZOvnUdXwEk5pZeUV4q/WAENPOiFbNtpRqkLfLbbMc/Vx+iLz38D
+         ESBA==
+X-Gm-Message-State: AOAM531RsbnZkVSf/I8+6QsKzCefNSrEF7mFFwjdG57Hux0EFyVRndms
+        X9gpH+/Bu3kYpiwwJ+ZiRmQ58w==
+X-Google-Smtp-Source: ABdhPJxbmhEnlOI80raqLeqmBjMueB3L0ut5WVsnvXgW4cJU2nUFg7KyFIWNlDJldrhPELeM37AAEQ==
+X-Received: by 2002:adf:fe01:: with SMTP id n1mr2448712wrr.141.1643277987361;
+        Thu, 27 Jan 2022 02:06:27 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id d6sm1681780wrs.85.2022.01.27.02.06.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 02:06:26 -0800 (PST)
+Date:   Thu, 27 Jan 2022 11:06:24 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     tangmeng <tangmeng@uniontech.com>, alexander.deucher@amd.com,
+        christian.koenig@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        jsarha@ti.com, tomi.valkeinen@ti.com, linux@dominikbrodowski.net,
+        Peter.Chen@nxp.com, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] drivers: Fix typo in comment
+Message-ID: <YfJuoHfKnwm6LmuY@phenom.ffwll.local>
+Mail-Followup-To: Greg KH <gregkh@linuxfoundation.org>,
+        tangmeng <tangmeng@uniontech.com>, alexander.deucher@amd.com,
+        christian.koenig@amd.com, airlied@linux.ie, jsarha@ti.com,
+        tomi.valkeinen@ti.com, linux@dominikbrodowski.net,
+        Peter.Chen@nxp.com, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20220127065156.22372-1-tangmeng@uniontech.com>
+ <YfJCBZuc9mOZkIVJ@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YfJCBZuc9mOZkIVJ@kroah.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-RTL8153-BL is used in Lenovo Thunderbolt4 dock.
-Add the support of MAC passthrough.
-This is ported from Realtek Outbox driver r8152.53.56-2.15.0.
+On Thu, Jan 27, 2022 at 07:56:05AM +0100, Greg KH wrote:
+> On Thu, Jan 27, 2022 at 02:51:56PM +0800, tangmeng wrote:
+> > Replace disbale with disable and replace unavaibale with unavailable.
+> > 
+> > Signed-off-by: tangmeng <tangmeng@uniontech.com>
+> > ---
+> >  drivers/gpu/drm/amd/amdgpu/mxgpu_vi.c | 2 +-
+> >  drivers/gpu/drm/tilcdc/tilcdc_crtc.c  | 2 +-
+> >  drivers/pcmcia/rsrc_nonstatic.c       | 2 +-
+> >  drivers/usb/chipidea/udc.c            | 2 +-
+> >  4 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> This needs to be broken up per-subsystem, thanks.
 
-There are 2 kinds of rules for MAC passthrough of Lenovo products,
-1st USB vendor ID belongs to Lenovo, 2nd the chip of RTL8153-BL
-is dedicated for Lenovo. Check the ocp data first then set ACPI object
-names.
-
-Suggested-by: Hayes Wang <hayeswang@realtek.com>
-Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
----
- drivers/net/usb/r8152.c | 44 ++++++++++++++++++++++-------------------
- 1 file changed, 24 insertions(+), 20 deletions(-)
-
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index ee41088c5251..df997b330ee4 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -718,6 +718,7 @@ enum spd_duplex {
- #define AD_MASK			0xfee0
- #define BND_MASK		0x0004
- #define BD_MASK			0x0001
-+#define BL_MASK                 BIT(3)
- #define EFUSE			0xcfdb
- #define PASS_THRU_MASK		0x1
- 
-@@ -1606,31 +1607,34 @@ static int vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr *sa)
- 	acpi_object_type mac_obj_type;
- 	int mac_strlen;
- 
-+	/* test for -AD variant of RTL8153 */
-+	ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_MISC_0);
-+	if ((ocp_data & AD_MASK) == 0x1000) {
-+		/* test for MAC address pass-through bit */
-+		ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, EFUSE);
-+		if ((ocp_data & PASS_THRU_MASK) != 1) {
-+			netif_dbg(tp, probe, tp->netdev,
-+					"No efuse for RTL8153-AD MAC pass through\n");
-+			return -ENODEV;
-+		}
-+	} else {
-+		ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, USB_MISC_1);
-+		if (tp->version == RTL_VER_09 && (ocp_data & BL_MASK)) {
-+			/* test for RTL8153BL for Lenovo */
-+			tp->lenovo_macpassthru = 1;
-+		} else if ((ocp_data & BND_MASK) == 0 && (ocp_data & BD_MASK) == 0) {
-+			/* test for RTL8153-BND and RTL8153-BD */
-+			netif_dbg(tp, probe, tp->netdev,
-+					"Invalid variant for MAC pass through\n");
-+			return -ENODEV;
-+		}
-+	}
-+
- 	if (tp->lenovo_macpassthru) {
- 		mac_obj_name = "\\MACA";
- 		mac_obj_type = ACPI_TYPE_STRING;
- 		mac_strlen = 0x16;
- 	} else {
--		/* test for -AD variant of RTL8153 */
--		ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_MISC_0);
--		if ((ocp_data & AD_MASK) == 0x1000) {
--			/* test for MAC address pass-through bit */
--			ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, EFUSE);
--			if ((ocp_data & PASS_THRU_MASK) != 1) {
--				netif_dbg(tp, probe, tp->netdev,
--						"No efuse for RTL8153-AD MAC pass through\n");
--				return -ENODEV;
--			}
--		} else {
--			/* test for RTL8153-BND and RTL8153-BD */
--			ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, USB_MISC_1);
--			if ((ocp_data & BND_MASK) == 0 && (ocp_data & BD_MASK) == 0) {
--				netif_dbg(tp, probe, tp->netdev,
--						"Invalid variant for MAC pass through\n");
--				return -ENODEV;
--			}
--		}
--
- 		mac_obj_name = "\\_SB.AMAC";
- 		mac_obj_type = ACPI_TYPE_BUFFER;
- 		mac_strlen = 0x17;
+For drm please also split it per-driver, so one patch per file you change
+here.
+-Daniel
 -- 
-2.32.0
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
