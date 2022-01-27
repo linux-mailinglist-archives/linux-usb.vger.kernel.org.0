@@ -2,58 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBEC149E670
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 16:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5776149E6A5
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 16:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243024AbiA0PoA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 10:44:00 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:58116 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234341AbiA0PoA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Jan 2022 10:44:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=NRNfjci1BUqMB7hhJHAezNYkKercVodV9D1Lc98O3ZE=; b=yF5nFX+LAKzUnFrdwhYrQ29vb+
-        LLgfv6kPaZAiKmc165TT20rHGLoi8fVqSLClhC6jJAK5KgqJLYPX6HgCgNjlIePdLjiuTokqh8KDW
-        SDI/cgY78nVbw9WCgvblLjTvp/P5rZUqlIC/L0k81APy44gHNX/nFnxUmAEou686GbcU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nD6wD-0030do-4Y; Thu, 27 Jan 2022 16:43:53 +0100
-Date:   Thu, 27 Jan 2022 16:43:53 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v1 1/1] usbnet: add devlink support
-Message-ID: <YfK9uV0BviEiemDi@lunn.ch>
-References: <20220127110742.922752-1-o.rempel@pengutronix.de>
+        id S243222AbiA0Puv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 10:50:51 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44420 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242857AbiA0Puu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 10:50:50 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D3AB4B8013C
+        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 15:50:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8CEC2C340EB
+        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 15:50:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643298648;
+        bh=HxWR5AORA2Qb81TJY6BTV8I4RsUqDK6LYUkd+At/VXk=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=DaE20O5Bv4DUC68STBkYDVOgVw77YHmhw72XgPa8US0k9H81pg9Xpt+oBG0q7EeTU
+         gS+9ShZTx+VqGcTvclEeOM3qXHEyJPqe2TK9/ZZfezYDbYx4CQRKQnPPZ94b2BFS2x
+         0lz8PHnFaeEH4jMt1+wWOqbzJWbjlXpnEvmkwUeTb109SIUmP4iqRJ/CM8sNoYehx9
+         wB08rUNHapRnnO6F/dsAiEH/yfwypjUzTb1VWoaEhZRgLV/wTCSz9dXXUMhEYNK7S+
+         35MD0HFAq3VgBoTJt/N/3X8TqpHmxlR25Cc5MtbtTX1Ii6IeCuL4wb86xdgvHNrOGb
+         ZLNaYgsw0MkFw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 6F4D3CC13A6; Thu, 27 Jan 2022 15:50:48 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215361] SL-6000 zaurus USB error - 'bad CDC descriptors'
+Date:   Thu, 27 Jan 2022 15:50:48 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: low
+X-Bugzilla-Who: oliver@neukum.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-215361-208809-9KLBHJUf2h@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215361-208809@https.bugzilla.kernel.org/>
+References: <bug-215361-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127110742.922752-1-o.rempel@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 12:07:42PM +0100, Oleksij Rempel wrote:
-> The weakest link of usbnet devices is the USB cable. Currently there is
-> no way to automatically detect cable related issues except of analyzing
-> kernel log, which would differ depending on the USB host controller.
-> 
-> The Ethernet packet counter could potentially show evidence of some USB
-> related issues, but can be Ethernet related problem as well.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215361
 
-I don't know the usbnet drivers very well. A quick look suggests they
-don't support statistics via ethtool -S. So you could make use of that
-to return statistics about USB error events.
+--- Comment #11 from Oliver Neukum (oliver@neukum.org) ---
+Created attachment 300340
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D300340&action=3Dedit
+another special case
 
-However, GregKH point still stands, maybe such statistics should be
-made for all USB devices, and be available in /sys/bus/usb/devices/*
+Please try this patch
 
-     Andrew
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
